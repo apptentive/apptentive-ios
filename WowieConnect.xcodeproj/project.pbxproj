@@ -1,0 +1,465 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		804F39D612C008CF009ABA05 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 804F39D512C008CF009ABA05 /* UIKit.framework */; };
+		804F39D812C008CF009ABA05 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 804F39D712C008CF009ABA05 /* Foundation.framework */; };
+		804F39DA12C008CF009ABA05 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 804F39D912C008CF009ABA05 /* CoreGraphics.framework */; };
+		804F39DF12C008CF009ABA05 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 804F39DD12C008CF009ABA05 /* InfoPlist.strings */; };
+		804F39E112C008CF009ABA05 /* WowieConnect-main.m in Sources */ = {isa = PBXBuildFile; fileRef = 804F39E012C008CF009ABA05 /* WowieConnect-main.m */; };
+		804F39E412C008CF009ABA05 /* WowieConnectAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 804F39E312C008CF009ABA05 /* WowieConnectAppDelegate.m */; };
+		804F39E712C008CF009ABA05 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 804F39E512C008CF009ABA05 /* MainWindow.xib */; };
+		804F39EA12C008CF009ABA05 /* WowieConnectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 804F39E912C008CF009ABA05 /* WowieConnectViewController.m */; };
+		804F39ED12C008CF009ABA05 /* WowieConnectViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 804F39EB12C008CF009ABA05 /* WowieConnectViewController.xib */; };
+		804F39F512C008CF009ABA05 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 804F39D512C008CF009ABA05 /* UIKit.framework */; };
+		804F39F612C008CF009ABA05 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 804F39D712C008CF009ABA05 /* Foundation.framework */; };
+		804F39F712C008CF009ABA05 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 804F39D912C008CF009ABA05 /* CoreGraphics.framework */; };
+		804F39FB12C008CF009ABA05 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 804F39FA12C008CF009ABA05 /* InfoPlist.strings */; };
+		804F39FD12C008CF009ABA05 /* WowieConnectTests.h in Resources */ = {isa = PBXBuildFile; fileRef = 804F39FC12C008CF009ABA05 /* WowieConnectTests.h */; };
+		804F39FF12C008CF009ABA05 /* WowieConnectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 804F39FE12C008CF009ABA05 /* WowieConnectTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		804F39D212C008CF009ABA05 /* WowieConnect.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WowieConnect.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		804F39D512C008CF009ABA05 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		804F39D712C008CF009ABA05 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		804F39D912C008CF009ABA05 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		804F39DB12C008CF009ABA05 /* WowieConnect-Info.plist */ = {isa = PBXFileReference; path = "WowieConnect-Info.plist"; sourceTree = "<group>"; };
+		804F39DC12C008CF009ABA05 /* WowieConnect-Prefix.pch */ = {isa = PBXFileReference; path = "WowieConnect-Prefix.pch"; sourceTree = "<group>"; };
+		804F39DE12C008CF009ABA05 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		804F39E012C008CF009ABA05 /* WowieConnect-main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "WowieConnect-main.m"; sourceTree = "<group>"; };
+		804F39E212C008CF009ABA05 /* WowieConnectAppDelegate.h */ = {isa = PBXFileReference; path = WowieConnectAppDelegate.h; sourceTree = "<group>"; };
+		804F39E312C008CF009ABA05 /* WowieConnectAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WowieConnectAppDelegate.m; sourceTree = "<group>"; };
+		804F39E612C008CF009ABA05 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		804F39E812C008CF009ABA05 /* WowieConnectViewController.h */ = {isa = PBXFileReference; path = WowieConnectViewController.h; sourceTree = "<group>"; };
+		804F39E912C008CF009ABA05 /* WowieConnectViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WowieConnectViewController.m; sourceTree = "<group>"; };
+		804F39EC12C008CF009ABA05 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/WowieConnectViewController.xib; sourceTree = "<group>"; };
+		804F39F412C008CF009ABA05 /* WowieConnectTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WowieConnectTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		804F39F812C008CF009ABA05 /* WowieConnectTests-Info.plist */ = {isa = PBXFileReference; path = "WowieConnectTests-Info.plist"; sourceTree = "<group>"; };
+		804F39F912C008CF009ABA05 /* WowieConnectTests-Prefix.pch */ = {isa = PBXFileReference; path = "WowieConnectTests-Prefix.pch"; sourceTree = "<group>"; };
+		804F39FA12C008CF009ABA05 /* InfoPlist.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = en.lproj/WowieConnectTests/InfoPlist.strings; sourceTree = "<group>"; };
+		804F39FC12C008CF009ABA05 /* WowieConnectTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WowieConnectTests.h; sourceTree = "<group>"; };
+		804F39FE12C008CF009ABA05 /* WowieConnectTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WowieConnectTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		804F39CF12C008CF009ABA05 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				804F39D612C008CF009ABA05 /* UIKit.framework in Frameworks */,
+				804F39D812C008CF009ABA05 /* Foundation.framework in Frameworks */,
+				804F39DA12C008CF009ABA05 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		804F39F012C008CF009ABA05 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				804F39F512C008CF009ABA05 /* UIKit.framework in Frameworks */,
+				804F39F612C008CF009ABA05 /* Foundation.framework in Frameworks */,
+				804F39F712C008CF009ABA05 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		804F39C312C008CF009ABA05 = {
+			isa = PBXGroup;
+			children = (
+				804F39CA12C008CF009ABA05 /* Classes */,
+				804F39CB12C008CF009ABA05 /* Other Sources */,
+				804F39CC12C008CF009ABA05 /* Resources */,
+				804F39CD12C008CF009ABA05 /* Frameworks */,
+				804F39D312C008CF009ABA05 /* Products */,
+				804F39EE12C008CF009ABA05 /* Tests */,
+			);
+			sourceTree = "<group>";
+		};
+		804F39CA12C008CF009ABA05 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				804F39E212C008CF009ABA05 /* WowieConnectAppDelegate.h */,
+				804F39E312C008CF009ABA05 /* WowieConnectAppDelegate.m */,
+				804F39E812C008CF009ABA05 /* WowieConnectViewController.h */,
+				804F39E912C008CF009ABA05 /* WowieConnectViewController.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		804F39CB12C008CF009ABA05 /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				804F39DC12C008CF009ABA05 /* WowieConnect-Prefix.pch */,
+				804F39E012C008CF009ABA05 /* WowieConnect-main.m */,
+				804F39F912C008CF009ABA05 /* WowieConnectTests-Prefix.pch */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		804F39CC12C008CF009ABA05 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				804F39DB12C008CF009ABA05 /* WowieConnect-Info.plist */,
+				804F39DD12C008CF009ABA05 /* InfoPlist.strings */,
+				804F39E512C008CF009ABA05 /* MainWindow.xib */,
+				804F39EB12C008CF009ABA05 /* WowieConnectViewController.xib */,
+				804F39F812C008CF009ABA05 /* WowieConnectTests-Info.plist */,
+				804F39FA12C008CF009ABA05 /* InfoPlist.strings */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		804F39CD12C008CF009ABA05 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				804F39D512C008CF009ABA05 /* UIKit.framework */,
+				804F39D712C008CF009ABA05 /* Foundation.framework */,
+				804F39D912C008CF009ABA05 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		804F39D312C008CF009ABA05 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				804F39D212C008CF009ABA05 /* WowieConnect.app */,
+				804F39F412C008CF009ABA05 /* WowieConnectTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		804F39EE12C008CF009ABA05 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				804F39FC12C008CF009ABA05 /* WowieConnectTests.h */,
+				804F39FE12C008CF009ABA05 /* WowieConnectTests.m */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		804F39D112C008CF009ABA05 /* WowieConnect */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 804F3A0412C008CF009ABA05 /* Build configuration list for PBXNativeTarget "WowieConnect" */;
+			buildPhases = (
+				804F39CE12C008CF009ABA05 /* Sources */,
+				804F39CF12C008CF009ABA05 /* Frameworks */,
+				804F39D012C008CF009ABA05 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WowieConnect;
+			productName = WowieConnect;
+			productReference = 804F39D212C008CF009ABA05 /* WowieConnect.app */;
+			productType = "com.apple.product-type.application";
+		};
+		804F39F312C008CF009ABA05 /* WowieConnectTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 804F3A0712C008CF009ABA05 /* Build configuration list for PBXNativeTarget "WowieConnectTests" */;
+			buildPhases = (
+				804F39EF12C008CF009ABA05 /* Sources */,
+				804F39F012C008CF009ABA05 /* Frameworks */,
+				804F39F112C008CF009ABA05 /* Resources */,
+				804F39F212C008CF009ABA05 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WowieConnectTests;
+			productName = WowieConnectTests;
+			productReference = 804F39F412C008CF009ABA05 /* WowieConnectTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		804F39C512C008CF009ABA05 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 804F39C812C008CF009ABA05 /* Build configuration list for PBXProject "WowieConnect" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 804F39C312C008CF009ABA05;
+			productRefGroup = 804F39D312C008CF009ABA05 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				804F39D112C008CF009ABA05 /* WowieConnect */,
+				804F39F312C008CF009ABA05 /* WowieConnectTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		804F39D012C008CF009ABA05 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				804F39DF12C008CF009ABA05 /* InfoPlist.strings in Resources */,
+				804F39E712C008CF009ABA05 /* MainWindow.xib in Resources */,
+				804F39ED12C008CF009ABA05 /* WowieConnectViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		804F39F112C008CF009ABA05 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				804F39FB12C008CF009ABA05 /* InfoPlist.strings in Resources */,
+				804F39FD12C008CF009ABA05 /* WowieConnectTests.h in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		804F39F212C008CF009ABA05 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		804F39CE12C008CF009ABA05 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				804F39E112C008CF009ABA05 /* WowieConnect-main.m in Sources */,
+				804F39E412C008CF009ABA05 /* WowieConnectAppDelegate.m in Sources */,
+				804F39EA12C008CF009ABA05 /* WowieConnectViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		804F39EF12C008CF009ABA05 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				804F39FF12C008CF009ABA05 /* WowieConnectTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		804F39DD12C008CF009ABA05 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				804F39DE12C008CF009ABA05 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		804F39E512C008CF009ABA05 /* MainWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				804F39E612C008CF009ABA05 /* en */,
+			);
+			name = MainWindow.xib;
+			sourceTree = "<group>";
+		};
+		804F39EB12C008CF009ABA05 /* WowieConnectViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				804F39EC12C008CF009ABA05 /* en */,
+			);
+			name = WowieConnectViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		804F3A0012C008CF009ABA05 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				PREBINDING = NO;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		804F3A0112C008CF009ABA05 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PREBINDING = NO;
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		804F3A0212C008CF009ABA05 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		804F3A0312C008CF009ABA05 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		804F3A0512C008CF009ABA05 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "WowieConnect-Prefix.pch";
+				INFOPLIST_FILE = "WowieConnect-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		804F3A0612C008CF009ABA05 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "WowieConnect-Prefix.pch";
+				INFOPLIST_FILE = "WowieConnect-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		804F3A0812C008CF009ABA05 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "WowieConnectTests-Prefix.pch";
+				INFOPLIST_FILE = "WowieConnectTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SenTestingKit,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		804F3A0912C008CF009ABA05 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "WowieConnectTests-Prefix.pch";
+				INFOPLIST_FILE = "WowieConnectTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SenTestingKit,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+		804F3A0A12C008CF009ABA05 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = WowieConnectTests;
+			};
+			name = Debug;
+		};
+		804F3A0B12C008CF009ABA05 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				PRODUCT_NAME = WowieConnectTests;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		804F39C812C008CF009ABA05 /* Build configuration list for PBXProject "WowieConnect" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				804F3A0012C008CF009ABA05 /* Debug */,
+				804F3A0112C008CF009ABA05 /* Release */,
+				804F3A0212C008CF009ABA05 /* Debug */,
+				804F3A0312C008CF009ABA05 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		804F3A0412C008CF009ABA05 /* Build configuration list for PBXNativeTarget "WowieConnect" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				804F3A0512C008CF009ABA05 /* Debug */,
+				804F3A0612C008CF009ABA05 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		804F3A0712C008CF009ABA05 /* Build configuration list for PBXNativeTarget "WowieConnectTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				804F3A0812C008CF009ABA05 /* Debug */,
+				804F3A0912C008CF009ABA05 /* Release */,
+				804F3A0A12C008CF009ABA05 /* Debug */,
+				804F3A0B12C008CF009ABA05 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 804F39C512C008CF009ABA05 /* Project object */;
+}

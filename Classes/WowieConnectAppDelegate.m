@@ -9,18 +9,21 @@
 #import "WowieConnectAppDelegate.h"
 
 #import "WowieConnectViewController.h"
+#import "WowieConnect.h"
 
 @implementation WowieConnectAppDelegate
 
 
 @synthesize window;
-
 @synthesize viewController;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
     // Override point for customization after application launch.
      
+    [WowieConnect sharedInstanceWithAppKey:@"foo" andSecret:@"bar"];
+    NSLog(@"done setting app key");
+    
     [window addSubview:viewController.view];
     [window makeKeyAndVisible];
     return YES;

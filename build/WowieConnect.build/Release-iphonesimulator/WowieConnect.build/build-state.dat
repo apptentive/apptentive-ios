@@ -1,0 +1,1504 @@
+TWowieConnect
+v7
+r0
+t316116502.837484
+cCheck dependencies
+cProcessInfoPlistFile "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/Info.plist" WowieConnect-Info.plist
+cProcessPCH /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch.gch WowieConnect-Prefix.pch normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/WowieConnect-main.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/WowieConnect-main.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/WowieConnectAppDelegate.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnectAppDelegate.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/WowieConnectViewController.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnectViewController.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/FeedbackButtonViewController.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackButtonViewController.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/WowieConnect.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnect.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/FeedbackViewController.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackViewController.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/Connection.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/Connection.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/ConnectionDelegate.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/ConnectionDelegate.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSHTTPURLResponse+Error.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSHTTPURLResponse+Error.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSMutableURLRequest+ResponseType.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSMutableURLRequest+ResponseType.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+ObjectiveResource.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSObject+ObjectiveResource.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSString+InflectionSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/Inflections/NSString+InflectionSupport.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSData+Additions.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSData+Additions.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+PropertySupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSObject+PropertySupport.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSString+GSub.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSString+GSub.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/ObjectiveResourceDateFormatter.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/ObjectiveResourceDateFormatter.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+SBJSON.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/NSObject+SBJSON.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSString+SBJSON.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/NSString+SBJSON.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/SBJSON.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/SBJSON.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSArray+JSONSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSArray+JSONSerializableSupport.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSDictionary+JSONSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSDictionary+JSONSerializableSupport.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+JSONSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSObject+JSONSerializableSupport.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSDate+Serialize.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSDate+Serialize.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSDictionary+KeyTranslation.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSDictionary+KeyTranslation.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+Serialize.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSObject+Serialize.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSString+Serialize.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSString+Serialize.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/FromXMLElementDelegate.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/FromXMLElementDelegate.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSArray+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSArray+XMLSerializableSupport.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSDate+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSDate+XMLSerializableSupport.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSDictionary+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSDictionary+XMLSerializableSupport.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSNull+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSNull+XMLSerializableSupport.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSNumber+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSNumber+XMLSerializableSupport.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSObject+XMLSerializableSupport.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSString+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSString+XMLSerializableSupport.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/ObjectiveResourceConfig.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/ObjectiveResourceConfig.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/Response.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/Response.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/Feedback.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Feedback.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cLd "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/WowieConnect" normal i386
+cGenerateDSYMFile "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app.dSYM" "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/WowieConnect"
+cCopyStringsFile "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/en.lproj/InfoPlist.strings" en.lproj/InfoPlist.strings
+cCompileXIB "/Users/msaffitz/Documents/XCode Projects/WowieConnect/en.lproj/MainWindow.xib"
+cCompileXIB "/Users/msaffitz/Documents/XCode Projects/WowieConnect/en.lproj/WowieConnectViewController.xib"
+cCompileXIB "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackButtonViewController.xib"
+cCompileXIB "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackViewController.xib"
+cTouch "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app"
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk
+c000000004C6C2BEF0000000000000110
+t1282157551
+s272
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics
+c000000004BD1CD90000000000026F020
+t1272040848
+s2551840
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/Foundation.framework/Foundation
+c000000004BD1FFC200000000002A96A0
+t1272053698
+s2791072
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h
+c000000004BD1FF9E0000000000001355
+t1272053662
+s4949
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIKit.h
+c000000004BD20412000000000000098F
+t1272054802
+s2447
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/UIKit.framework/UIKit
+c000000004BD20471000000000222E640
+t1272054897
+s35841600
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/usr/include/Availability.h
+c000000004BD1CFC10000000000001A1A
+t1272041409
+s6682
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/usr/include/objc/runtime.h
+c000000004BD1FE3C00000000000053F9
+t1272053308
+s21497
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk
+c000000004C6C2BFA0000000000000132
+t1282157562
+s306
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics
+c000000004BFDFE39000000000027C7D0
+t1274936889
+s2607056
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk/System/Library/Frameworks/Foundation.framework/Foundation
+c000000004BFDFE7C000000000029D5D0
+t1274936956
+s2741712
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h
+c000000004BFDFE6E0000000000001466
+t1274936942
+s5222
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIKit.h
+c000000004C0470BB00000000000009CD
+t1275359419
+s2509
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk/System/Library/Frameworks/UIKit.framework/UIKit
+c000000004C0471620000000001D47210
+t1275359586
+s30700048
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk/usr/include/Availability.h
+c000000004BF4CBF90000000000001A3B
+t1274334201
+s6715
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk/usr/include/objc/runtime.h
+c000000004BFDF9F400000000000053F9
+t1274935796
+s21497
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackButtonViewController.h
+c000000004D1244AA00000000000001F3
+t1293042858
+s499
+i<UIKit/UIKit.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackButtonViewController.m
+c000000004D124965000000000000087E
+t1293044069
+s2174
+i"FeedbackButtonViewController.h"
+i"WowieConnect.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackButtonViewController.xib
+c000000004D0FF969000000000000172B
+t1292892521
+s5931
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackViewController.h
+c000000004D27562F00000000000002EC
+t1294423599
+s748
+i<UIKit/UIKit.h>
+i"Feedback.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackViewController.m
+c000000004D27561C0000000000000B47
+t1294423580
+s2887
+i"FeedbackViewController.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackViewController.xib
+c000000004D2754880000000000007BE0
+t1294423176
+s31712
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnect.h
+c000000004D12534C0000000000000279
+t1293046604
+s633
+i<Foundation/Foundation.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnect.m
+c000000004D12605200000000000007E7
+t1293049938
+s2023
+i"WowieConnect.h"
+i"FeedbackViewController.h"
+i"FeedbackButtonViewController.h"
+i"ObjectiveResource.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnectAppDelegate.h
+c000000004D0FD14F0000000000000201
+t1292882255
+s513
+i<UIKit/UIKit.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnectAppDelegate.m
+c000000004D1249270000000000000343
+t1293044007
+s835
+i"WowieConnectAppDelegate.h"
+i"WowieConnectViewController.h"
+i"WowieConnect.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnectViewController.h
+c000000004D12412D000000000000012F
+t1293041965
+s303
+i<UIKit/UIKit.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnectViewController.m
+c000000004D2756940000000000000854
+t1294423700
+s2132
+i"WowieConnectViewController.h"
+i"WowieConnect.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Feedback.h
+c000000004D125DCD000000000000026E
+t1293049293
+s622
+i<Foundation/Foundation.h>
+i"ObjectiveResource.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Feedback.m
+c000000004D125DD2000000000000013D
+t1293049298
+s317
+i"Feedback.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/WowieConnect-Prefix.pch
+c000000004D0FD14F000000000000014A
+t1292882255
+s330
+i<Availability.h>
+i<UIKit/UIKit.h>
+i<Foundation/Foundation.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/WowieConnect-main.m
+c000000004D0FD14F000000000000017A
+t1292882255
+s378
+i<UIKit/UIKit.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app
+t1294423701
+s272
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app.dSYM
+t1294423701
+s102
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/FeedbackButtonViewController.nib
+t1294423190
+s2090
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/FeedbackViewController.nib
+t1294423190
+s5499
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/Info.plist
+t1294423187
+s606
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/PkgInfo
+t1294423187
+s8
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/WowieConnect
+t1294423701
+s144604
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/en.lproj/InfoPlist.strings
+t1293050165
+s42
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/en.lproj/MainWindow.nib
+t1294423189
+s1691
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/en.lproj/WowieConnectViewController.nib
+t1294423190
+s3391
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/Connection.o
+t1293050578
+s23652
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/ConnectionDelegate.o
+t1293050578
+s19260
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/Feedback.o
+t1293050580
+s10868
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/FeedbackButtonViewController.o
+t1293050577
+s39728
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/FeedbackViewController.o
+t1294423600
+s47196
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/FromXMLElementDelegate.o
+t1293050580
+s26468
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSArray+JSONSerializableSupport.o
+t1293050579
+s8276
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSArray+XMLSerializableSupport.o
+t1293050579
+s9168
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSData+Additions.o
+t1293050578
+s14284
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSDate+Serialize.o
+t1293050579
+s7632
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSDate+XMLSerializableSupport.o
+t1293050579
+s9168
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSDictionary+JSONSerializableSupport.o
+t1293050579
+s8360
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSDictionary+KeyTranslation.o
+t1293050579
+s6732
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSDictionary+XMLSerializableSupport.o
+t1293050580
+s9152
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSHTTPURLResponse+Error.o
+t1293050578
+s9720
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSMutableURLRequest+ResponseType.o
+t1293050578
+s8676
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSNull+XMLSerializableSupport.o
+t1293050580
+s6376
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSNumber+XMLSerializableSupport.o
+t1293050580
+s7660
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+JSONSerializableSupport.o
+t1293050579
+s19480
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+ObjectiveResource.o
+t1293050578
+s40720
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+PropertySupport.o
+t1293050578
+s13532
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+SBJSON.o
+t1293050578
+s8296
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+Serialize.o
+t1293050579
+s6452
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+XMLSerializableSupport.o
+t1293050580
+s20672
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSString+GSub.o
+t1293050578
+s7820
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSString+InflectionSupport.o
+t1293050578
+s13972
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSString+SBJSON.o
+t1293050579
+s8260
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSString+Serialize.o
+t1293050579
+s6552
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSString+XMLSerializableSupport.o
+t1293050580
+s9424
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/ObjectiveResourceConfig.o
+t1293050580
+s12276
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/ObjectiveResourceDateFormatter.o
+t1293050578
+s13340
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/Response.o
+t1293050580
+s18276
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/SBJSON.o
+t1293050579
+s49376
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/WowieConnect-main.o
+t1293050577
+s6344
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/WowieConnect.LinkFileList
+c000000004D126128000000000000183A
+t1293050152
+s6202
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/WowieConnect.o
+t1294423600
+s41452
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/WowieConnectAppDelegate.o
+t1293050577
+s45572
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/WowieConnectViewController.o
+t1294423701
+s36304
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/en.lproj/InfoPlist.strings
+c000000004D0FD14F000000000000002D
+t1292882255
+s45
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/en.lproj/MainWindow.xib
+c000000004D0FD14F0000000000004E65
+t1292882255
+s20069
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/en.lproj/WowieConnectViewController.xib
+c000000004D125D110000000000002CC4
+t1293049105
+s11460
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/Connection.h
+c0000000049AC07A60000000000000315
+t1236010918
+s789
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/Connection.m
+c0000000049AC07A60000000000001574
+t1236010918
+s5492
+i"Connection.h"
+i"Response.h"
+i"NSData+Additions.h"
+i"NSMutableURLRequest+ResponseType.h"
+i"ConnectionDelegate.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/ConnectionDelegate.h
+c0000000049AC07A6000000000000024A
+t1236010918
+s586
+i<Foundation/Foundation.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/ConnectionDelegate.m
+c0000000049AC07A600000000000007E6
+t1236010918
+s2022
+i"ConnectionDelegate.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSHTTPURLResponse+Error.h
+c0000000049AC07A6000000000000011E
+t1236010918
+s286
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSHTTPURLResponse+Error.m
+c0000000049AC07A6000000000000039A
+t1236010918
+s922
+i"NSHTTPURLResponse+Error.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSMutableURLRequest+ResponseType.h
+c0000000049AC07A60000000000000129
+t1236010918
+s297
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSMutableURLRequest+ResponseType.m
+c0000000049AC07A6000000000000041A
+t1236010918
+s1050
+i"NSMutableURLRequest+ResponseType.h"
+i"ObjectiveResource.h"
+i"Connection.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSObject+ObjectiveResource.h
+c0000000049AC07A60000000000000A57
+t1236010918
+s2647
+i<Foundation/Foundation.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSObject+ObjectiveResource.m
+c000000004D0FBF010000000000002637
+t1292877569
+s9783
+i"NSObject+ObjectiveResource.h"
+i"Connection.h"
+i"Response.h"
+i"CoreSupport.h"
+i"XMLSerializableSupport.h"
+i"JSONSerializableSupport.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/ObjectiveResource.h
+c0000000049AC07A600000000000000D1
+t1236010918
+s209
+i"NSObject+ObjectiveResource.h"
+i"ObjectiveResourceConfig.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/ObjectiveResourceConfig.h
+c0000000049AC07A600000000000002F6
+t1236010918
+s758
+i"ObjectiveResource.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/ObjectiveResourceConfig.m
+c0000000049AC07A6000000000000053B
+t1236010918
+s1339
+i"ObjectiveResourceConfig.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/Response.h
+c0000000049AC07A6000000000000033C
+t1236010918
+s828
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/Response.m
+c0000000049AC07A600000000000005F7
+t1236010918
+s1527
+i"Response.h"
+i"NSHTTPURLResponse+Error.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/CoreSupport.h
+c0000000049AC07A600000000000000E6
+t1236010918
+s230
+i"NSString+GSub.h"
+i"NSString+InflectionSupport.h"
+i"NSObject+PropertySupport.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/Inflections/NSString+InflectionSupport.h
+c0000000049AC07A60000000000000378
+t1236010918
+s888
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/Inflections/NSString+InflectionSupport.m
+c0000000049AC07A6000000000000097F
+t1236010918
+s2431
+i"NSString+InflectionSupport.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSData+Additions.h
+c0000000049AC07A6000000000000019D
+t1236010918
+s413
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSData+Additions.m
+c0000000049AC07A6000000000000114F
+t1236010918
+s4431
+i"NSData+Additions.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSObject+PropertySupport.h
+c0000000049AC07A600000000000002A0
+t1236010918
+s672
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSObject+PropertySupport.m
+c000000004D1257DF0000000000000948
+t1293047775
+s2376
+i"objc/runtime.h"
+i"NSObject+PropertySupport.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSString+GSub.h
+c0000000049AC07A600000000000001B5
+t1236010918
+s437
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSString+GSub.m
+c0000000049AC07A6000000000000024C
+t1236010918
+s588
+i"NSString+GSub.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/ObjectiveResourceDateFormatter.h
+c0000000049AC07A60000000000000260
+t1236010918
+s608
+i<Foundation/Foundation.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/ObjectiveResourceDateFormatter.m
+c0000000049AC07A6000000000000082C
+t1236010918
+s2092
+i"ObjectiveResourceDateFormatter.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/ObjectiveSupport.h
+c0000000049AC07A600000000000000E4
+t1236010918
+s228
+i"CoreSupport.h"
+i"XMLSerializableSupport.h"
+i"JSONSerializableSupport.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/JSONSerializable.h
+c0000000049AC07A600000000000009F0
+t1236010918
+s2544
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/JSONSerializableSupport.h
+c0000000049AC07A6000000000000005D
+t1236010918
+s93
+i"NSObject+JSONSerializableSupport.h"
+i"NSDictionary+JSONSerializableSupport.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSArray+JSONSerializableSupport.h
+c0000000049AC07A60000000000000179
+t1236010918
+s377
+i<UIKit/UIKit.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSArray+JSONSerializableSupport.m
+c0000000049AC07A60000000000000352
+t1236010918
+s850
+i"JSONFramework.h"
+i"NSObject+JSONSerializableSupport.h"
+i"NSArray+JSONSerializableSupport.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSDictionary+JSONSerializableSupport.h
+c0000000049AC07A60000000000000161
+t1236010918
+s353
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSDictionary+JSONSerializableSupport.m
+c0000000049AC07A600000000000003B8
+t1236010918
+s952
+i"JSONFramework.h"
+i"NSDictionary+KeyTranslation.h"
+i"NSDictionary+JSONSerializableSupport.h"
+i"ObjectiveSupport.h"
+i"Serialize.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSObject+JSONSerializableSupport.h
+c0000000049AC07A6000000000000031B
+t1236010918
+s795
+i<Foundation/Foundation.h>
+i"JSONSerializable.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSObject+JSONSerializableSupport.m
+c0000000049AC07A60000000000000FEE
+t1236010918
+s4078
+i"NSObject+JSONSerializableSupport.h"
+i"NSDictionary+JSONSerializableSupport.h"
+i"Serialize.h"
+i"JSONFramework.h"
+i"ObjectiveSupport.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSDate+Serialize.h
+c0000000049AC07A600000000000000F7
+t1236010918
+s247
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSDate+Serialize.m
+c0000000049AC07A600000000000001E6
+t1236010918
+s486
+i"NSDate+Serialize.h"
+i"ObjectiveResourceDateFormatter.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSDictionary+KeyTranslation.h
+c0000000049AC07A60000000000000149
+t1236010918
+s329
+i<UIKit/UIKit.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSDictionary+KeyTranslation.m
+c0000000049AC07A600000000000001BB
+t1236010918
+s443
+i"NSDictionary+KeyTranslation.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSObject+Serialize.h
+c0000000049AC07A600000000000000ED
+t1236010918
+s237
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSObject+Serialize.m
+c0000000049AC07A60000000000000136
+t1236010918
+s310
+i"NSObject+Serialize.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSString+Serialize.h
+c0000000049AC07A600000000000000FE
+t1236010918
+s254
+i<UIKit/UIKit.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSString+Serialize.m
+c0000000049AC07A6000000000000013E
+t1236010918
+s318
+i"NSString+Serialize.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/Serialize.h
+c0000000049AC07A600000000000000E9
+t1236010918
+s233
+i"NSObject+Serialize.h"
+i"NSDate+Serialize.h"
+i"NSString+Serialize.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/FromXMLElementDelegate.h
+c0000000049AC07A600000000000004F9
+t1236010918
+s1273
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/FromXMLElementDelegate.m
+c0000000049AC07A60000000000001BF0
+t1236010918
+s7152
+i"FromXMLElementDelegate.h"
+i"XMLSerializableSupport.h"
+i"CoreSupport.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSArray+XMLSerializableSupport.h
+c0000000049AC07A600000000000000FE
+t1236010918
+s254
+i<Foundation/Foundation.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSArray+XMLSerializableSupport.m
+c0000000049AC07A600000000000003BA
+t1236010918
+s954
+i"NSArray+XMLSerializableSupport.h"
+i"NSObject+XMLSerializableSupport.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSDate+XMLSerializableSupport.h
+c0000000049AC07A6000000000000014B
+t1236010918
+s331
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSDate+XMLSerializableSupport.m
+c0000000049AC07A600000000000003E5
+t1236010918
+s997
+i"NSDate+XMLSerializableSupport.h"
+i"NSObject+XMLSerializableSupport.h"
+i"ObjectiveResourceDateFormatter.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSDictionary+XMLSerializableSupport.h
+c0000000049AC07A6000000000000020D
+t1236010918
+s525
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSDictionary+XMLSerializableSupport.m
+c0000000049AC07A600000000000004E5
+t1236010918
+s1253
+i"NSObject+XMLSerializableSupport.h"
+i"NSDictionary+KeyTranslation.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSNull+XMLSerializableSupport.h
+c0000000049AC07A600000000000000DD
+t1236010918
+s221
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSNull+XMLSerializableSupport.m
+c0000000049AC07A6000000000000011F
+t1236010918
+s287
+i"NSNull+XMLSerializableSupport.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSNumber+XMLSerializableSupport.h
+c0000000049AC07A600000000000000F0
+t1236010918
+s240
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSNumber+XMLSerializableSupport.m
+c0000000049AC07A6000000000000027E
+t1236010918
+s638
+i"NSObject+XMLSerializableSupport.h"
+i"NSNumber+XMLSerializableSupport.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSObject+XMLSerializableSupport.h
+c0000000049AC07A6000000000000064F
+t1236010918
+s1615
+i"XMLSerializable.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSObject+XMLSerializableSupport.m
+c0000000049AC07A60000000000001161
+t1236010918
+s4449
+i"NSObject+XMLSerializableSupport.h"
+i"NSDictionary+XMLSerializableSupport.h"
+i"CoreSupport.h"
+i"FromXMLElementDelegate.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSString+XMLSerializableSupport.h
+c0000000049AC07A600000000000001C9
+t1236010918
+s457
+i<UIKit/UIKit.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSString+XMLSerializableSupport.m
+c0000000049AC07A6000000000000044E
+t1236010918
+s1102
+i"NSString+XMLSerializableSupport.h"
+i"NSObject+XMLSerializableSupport.h"
+i"NSString+GSub.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/XMLSerializable.h
+c0000000049AC07A60000000000000A26
+t1236010918
+s2598
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/XMLSerializableSupport.h
+c0000000049AC07A6000000000000016B
+t1236010918
+s363
+i"XMLSerializable.h"
+i"CoreSupport.h"
+i"NSObject+XMLSerializableSupport.h"
+i"NSNull+XMLSerializableSupport.h"
+i"NSDate+XMLSerializableSupport.h"
+i"NSString+XMLSerializableSupport.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/JSONFramework.h
+c0000000049AC07A600000000000000D9
+t1236010918
+s217
+i"SBJSON.h"
+i"NSObject+SBJSON.h"
+i"NSString+SBJSON.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/NSObject+SBJSON.h
+c0000000049AC07A60000000000000888
+t1236010918
+s2184
+i<Foundation/Foundation.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/NSObject+SBJSON.m
+c0000000049AC07A60000000000000821
+t1236010918
+s2081
+i"NSObject+SBJSON.h"
+i"SBJSON.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/NSString+SBJSON.h
+c0000000049AC07A60000000000000705
+t1236010918
+s1797
+i<Foundation/Foundation.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/NSString+SBJSON.m
+c0000000049AC07A600000000000007DA
+t1236010918
+s2010
+i"NSString+SBJSON.h"
+i"SBJSON.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/SBJSON.h
+c0000000049AC07A600000000000013CF
+t1236010918
+s5071
+i<Foundation/Foundation.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/SBJSON.m
+c0000000049AC07A60000000000005A98
+t1236010918
+s23192
+i"SBJSON.h"
+
+N/var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch.gch
+t1293050576
+s14941200
+
+N/var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-hkeqsbkrkyqwesardenapnonwxoo/WowieConnect-Prefix.pch.gch
+t1293050157
+s13567888
+
+NWowieConnect-Info.plist
+c000000004D0FD14F00000000000003D2
+t1292882255
+s978
+
+CCheck dependencies
+r0
+lSLF07#2@18"Check dependencies316116502#316116502#0(0"0(0#1#0"8636817408#0"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/Connection.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/Connection.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743377.959748
+e314743378.209133
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/Connection.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/Connection.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@93"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/Connection.m314743377#314743378#0(0"0(0#0#85"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/Connection.m8641418912#2280"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/Connection.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/Connection.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/ConnectionDelegate.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/ConnectionDelegate.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743378.118090
+e314743378.264993
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/ConnectionDelegate.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/ConnectionDelegate.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@101"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/ConnectionDelegate.m314743378#314743378#0(0"0(0#0#93"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/ConnectionDelegate.m8617477408#2296"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/ConnectionDelegate.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/ConnectionDelegate.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/Feedback.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Feedback.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743380.381157
+e314743380.481980
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/Feedback.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/Feedback.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@72"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/Feedback.m314743380#314743380#0(0"0(0#0#64"/Users/msaffitz/Documents/XCode Projects/WowieConnect/Feedback.m8643294880#2257"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Feedback.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/Feedback.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/FeedbackButtonViewController.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackButtonViewController.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743377.777959
+e314743377.937500
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/FeedbackButtonViewController.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackButtonViewController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@100"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackButtonViewController.m314743377#314743377#0(0"0(0#0#92"/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackButtonViewController.m8642241664#2305"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackButtonViewController.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/FeedbackButtonViewController.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/FeedbackViewController.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackViewController.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s316116400.007543
+e316116400.219244
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/FeedbackViewController.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackViewController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@94"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackViewController.m316116400#316116400#0(0"0(0#0#86"/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackViewController.m8636916960#2293"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackViewController.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/FeedbackViewController.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/FromXMLElementDelegate.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/FromXMLElementDelegate.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743379.659229
+e314743380.107775
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/FromXMLElementDelegate.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/FromXMLElementDelegate.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@141"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/FromXMLElementDelegate.m314743379#314743380#0(0"0(0#0#133"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/FromXMLElementDelegate.m8625402464#2340"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/FromXMLElementDelegate.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/FromXMLElementDelegate.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSArray+JSONSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSArray+JSONSerializableSupport.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743379.018564
+e314743379.102597
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSArray+JSONSerializableSupport.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSArray+JSONSerializableSupport.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@151"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSArray+JSONSerializableSupport.m314743379#314743379#0(0"0(0#0#143"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSArray+JSONSerializableSupport.m8639817888#2359"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSArray+JSONSerializableSupport.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSArray+JSONSerializableSupport.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSArray+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSArray+XMLSerializableSupport.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743379.702451
+e314743379.816024
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSArray+XMLSerializableSupport.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSArray+XMLSerializableSupport.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@149"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSArray+XMLSerializableSupport.m314743379#314743379#0(0"0(0#0#141"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSArray+XMLSerializableSupport.m8642589408#2356"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSArray+XMLSerializableSupport.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSArray+XMLSerializableSupport.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSData+Additions.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSData+Additions.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743378.504874
+e314743378.655752
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSData+Additions.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSData+Additions.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@122"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSData+Additions.m314743378#314743378#0(0"0(0#0#114"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSData+Additions.m8642764544#2315"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSData+Additions.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSData+Additions.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSDate+Serialize.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSDate+Serialize.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743379.360177
+e314743379.427839
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSDate+Serialize.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSDate+Serialize.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@131"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSDate+Serialize.m314743379#314743379#0(0"0(0#0#123"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSDate+Serialize.m8639976448#2324"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSDate+Serialize.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSDate+Serialize.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSDate+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSDate+XMLSerializableSupport.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743379.816132
+e314743379.886621
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSDate+XMLSerializableSupport.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSDate+XMLSerializableSupport.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@148"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSDate+XMLSerializableSupport.m314743379#314743379#0(0"0(0#0#140"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSDate+XMLSerializableSupport.m8643575776#2354"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSDate+XMLSerializableSupport.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSDate+XMLSerializableSupport.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSDictionary+JSONSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSDictionary+JSONSerializableSupport.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743379.102837
+e314743379.191638
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSDictionary+JSONSerializableSupport.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSDictionary+JSONSerializableSupport.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@156"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSDictionary+JSONSerializableSupport.m314743379#314743379#0(0"0(0#0#148"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSDictionary+JSONSerializableSupport.m8632923712#2369"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSDictionary+JSONSerializableSupport.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSDictionary+JSONSerializableSupport.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSDictionary+KeyTranslation.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSDictionary+KeyTranslation.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743379.427953
+e314743379.503525
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSDictionary+KeyTranslation.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSDictionary+KeyTranslation.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@142"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSDictionary+KeyTranslation.m314743379#314743379#0(0"0(0#0#134"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSDictionary+KeyTranslation.m8632852384#2346"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSDictionary+KeyTranslation.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSDictionary+KeyTranslation.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSDictionary+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSDictionary+XMLSerializableSupport.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743379.886734
+e314743380.016269
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSDictionary+XMLSerializableSupport.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSDictionary+XMLSerializableSupport.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@154"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSDictionary+XMLSerializableSupport.m314743379#314743380#0(0"0(0#0#146"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSDictionary+XMLSerializableSupport.m8640052576#2366"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSDictionary+XMLSerializableSupport.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSDictionary+XMLSerializableSupport.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSHTTPURLResponse+Error.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSHTTPURLResponse+Error.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743378.209248
+e314743378.298717
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSHTTPURLResponse+Error.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSHTTPURLResponse+Error.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@106"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSHTTPURLResponse+Error.m314743378#314743378#0(0"0(0#0#98"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSHTTPURLResponse+Error.m8643642464#2306"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSHTTPURLResponse+Error.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSHTTPURLResponse+Error.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSMutableURLRequest+ResponseType.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSMutableURLRequest+ResponseType.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743378.265109
+e314743378.361747
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSMutableURLRequest+ResponseType.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSMutableURLRequest+ResponseType.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@115"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSMutableURLRequest+ResponseType.m314743378#314743378#0(0"0(0#0#107"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSMutableURLRequest+ResponseType.m8641583712#2324"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSMutableURLRequest+ResponseType.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSMutableURLRequest+ResponseType.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSNull+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSNull+XMLSerializableSupport.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743380.016383
+e314743380.102669
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSNull+XMLSerializableSupport.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSNull+XMLSerializableSupport.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@148"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSNull+XMLSerializableSupport.m314743380#314743380#0(0"0(0#0#140"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSNull+XMLSerializableSupport.m8642245760#2354"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSNull+XMLSerializableSupport.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSNull+XMLSerializableSupport.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSNumber+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSNumber+XMLSerializableSupport.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743380.102962
+e314743380.200610
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSNumber+XMLSerializableSupport.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSNumber+XMLSerializableSupport.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@150"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSNumber+XMLSerializableSupport.m314743380#314743380#0(0"0(0#0#142"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSNumber+XMLSerializableSupport.m8639488640#2358"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSNumber+XMLSerializableSupport.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSNumber+XMLSerializableSupport.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+JSONSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSObject+JSONSerializableSupport.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743379.191754
+e314743379.360067
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+JSONSerializableSupport.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSObject+JSONSerializableSupport.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@152"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSObject+JSONSerializableSupport.m314743379#314743379#0(0"0(0#0#144"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSObject+JSONSerializableSupport.m8639520704#2361"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSObject+JSONSerializableSupport.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+JSONSerializableSupport.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+ObjectiveResource.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSObject+ObjectiveResource.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743378.298833
+e314743378.702151
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+ObjectiveResource.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSObject+ObjectiveResource.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@109"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSObject+ObjectiveResource.m314743378#314743378#0(0"0(0#0#101"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSObject+ObjectiveResource.m8624589408#2312"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSObject+ObjectiveResource.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+ObjectiveResource.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+PropertySupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSObject+PropertySupport.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743378.655864
+e314743378.794198
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+PropertySupport.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSObject+PropertySupport.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@130"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSObject+PropertySupport.m314743378#314743378#0(0"0(0#0#122"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSObject+PropertySupport.m8631871712#2331"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSObject+PropertySupport.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+PropertySupport.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+SBJSON.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/NSObject+SBJSON.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743378.830173
+e314743378.913586
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+SBJSON.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/NSObject+SBJSON.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@131"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/NSObject+SBJSON.m314743378#314743378#0(0"0(0#0#123"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/NSObject+SBJSON.m8620563936#2323"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/NSObject+SBJSON.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+SBJSON.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+Serialize.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSObject+Serialize.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743379.503639
+e314743379.576395
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+Serialize.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSObject+Serialize.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@133"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSObject+Serialize.m314743379#314743379#0(0"0(0#0#125"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSObject+Serialize.m8642359008#2328"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSObject+Serialize.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+Serialize.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSObject+XMLSerializableSupport.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743380.109825
+e314743380.366271
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+XMLSerializableSupport.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSObject+XMLSerializableSupport.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+o/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSObject+XMLSerializableSupport.m: In function '+[NSObject(XMLSerializableSupport) fromXMLData:]':
+o/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSObject+XMLSerializableSupport.m:116: warning: class 'FromXMLElementDelegate' does not implement the 'NSXMLParserDelegate' protocol
+lSLF07#2@150"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSObject+XMLSerializableSupport.m314743380#314743380#0(450"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSObject+XMLSerializableSupport.m: In function '+[NSObject(XMLSerializableSupport) fromXMLData:]':/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSObject+XMLSerializableSupport.m:116: warning: class 'FromXMLElementDelegate' does not implement the 'NSXMLParserDelegate' protocol1(22@84"Class 'FromXMLElementDelegate' does not implement the 'NSXMLParserDelegate' protocol314743380#208#242#0(6@142"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSObject+XMLSerializableSupport.m257703718#116#0#116#0#45"class '*' does not implement the '*' protocol0(0#0#142"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSObject+XMLSerializableSupport.m8643549344#2358"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSObject+XMLSerializableSupport.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSObject+XMLSerializableSupport.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSString+GSub.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSString+GSub.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743378.702268
+e314743378.830059
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSString+GSub.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSString+GSub.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@119"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSString+GSub.m314743378#314743378#0(0"0(0#0#111"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSString+GSub.m8610497760#2309"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSString+GSub.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSString+GSub.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSString+InflectionSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/Inflections/NSString+InflectionSupport.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743378.361868
+e314743378.504754
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSString+InflectionSupport.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/Inflections/NSString+InflectionSupport.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@144"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/Inflections/NSString+InflectionSupport.m314743378#314743378#0(0"0(0#0#136"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/Inflections/NSString+InflectionSupport.m8590455648#2347"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/Inflections/NSString+InflectionSupport.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSString+InflectionSupport.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSString+SBJSON.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/NSString+SBJSON.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743378.916940
+e314743379.018432
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSString+SBJSON.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/NSString+SBJSON.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@131"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/NSString+SBJSON.m314743378#314743379#0(0"0(0#0#123"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/NSString+SBJSON.m8625556704#2323"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/NSString+SBJSON.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSString+SBJSON.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSString+Serialize.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSString+Serialize.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743379.576509
+e314743379.659120
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSString+Serialize.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSString+Serialize.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@133"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSString+Serialize.m314743379#314743379#0(0"0(0#0#125"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSString+Serialize.m8633004832#2328"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSString+Serialize.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSString+Serialize.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSString+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSString+XMLSerializableSupport.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743380.200719
+e314743380.271989
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSString+XMLSerializableSupport.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSString+XMLSerializableSupport.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@150"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSString+XMLSerializableSupport.m314743380#314743380#0(0"0(0#0#142"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSString+XMLSerializableSupport.m8635381920#2358"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSString+XMLSerializableSupport.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/NSString+XMLSerializableSupport.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/ObjectiveResourceConfig.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/ObjectiveResourceConfig.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743380.272106
+e314743380.381044
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/ObjectiveResourceConfig.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/ObjectiveResourceConfig.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@106"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/ObjectiveResourceConfig.m314743380#314743380#0(0"0(0#0#98"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/ObjectiveResourceConfig.m8643818816#2306"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/ObjectiveResourceConfig.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/ObjectiveResourceConfig.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/ObjectiveResourceDateFormatter.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/ObjectiveResourceDateFormatter.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743378.794311
+e314743378.913775
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/ObjectiveResourceDateFormatter.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/ObjectiveResourceDateFormatter.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@136"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/ObjectiveResourceDateFormatter.m314743378#314743378#0(0"0(0#0#128"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/ObjectiveResourceDateFormatter.m8635497024#2343"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/ObjectiveResourceDateFormatter.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/ObjectiveResourceDateFormatter.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/Response.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/Response.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743380.366381
+e314743380.518209
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/Response.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/Response.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@91"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/Response.m314743380#314743380#0(0"0(0#0#83"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/Response.m8643513664#2276"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/Response.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/Response.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/SBJSON.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/SBJSON.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743378.918621
+e314743379.702344
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/SBJSON.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/SBJSON.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@122"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/SBJSON.m314743378#314743379#0(0"0(0#0#114"/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/SBJSON.m8624960544#2305"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/SBJSON.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/SBJSON.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/WowieConnect-main.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/WowieConnect-main.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743377.578560
+e314743377.736114
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/WowieConnect-main.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/WowieConnect-main.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@81"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/WowieConnect-main.m314743377#314743377#0(0"0(0#0#73"/Users/msaffitz/Documents/XCode Projects/WowieConnect/WowieConnect-main.m8644410944#2275"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/WowieConnect-main.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/WowieConnect-main.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/WowieConnect.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnect.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s316116400.006305
+e316116400.166852
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/WowieConnect.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnect.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@84"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnect.m316116400#316116400#0(0"0(0#0#76"/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnect.m8637588320#2273"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnect.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/WowieConnect.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/WowieConnectAppDelegate.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnectAppDelegate.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743377.579680
+e314743377.777833
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/WowieConnectAppDelegate.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnectAppDelegate.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@95"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnectAppDelegate.m314743377#314743377#0(0"0(0#0#87"/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnectAppDelegate.m8625199968#2295"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnectAppDelegate.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/WowieConnectAppDelegate.o"0#
+
+CCompileC build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/WowieConnectViewController.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnectViewController.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s316116500.986995
+e316116501.150227
+r1
+xCompileC
+xbuild/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/WowieConnectViewController.o
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnectViewController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@98"Compile /Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnectViewController.m316116500#316116501#0(0"0(0#0#90"/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnectViewController.m8638638944#2301"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -include /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnectViewController.m" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/WowieConnectViewController.o"0#
+
+CCompileXIB "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackButtonViewController.xib"
+s316115989.980797
+e316115990.421078
+r1
+xCompileXIB
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackButtonViewController.xib
+oCouldn't open shared capabilities memory GSCapabilities (No such file or directory)
+lSLF07#2@51"CompileXIB Classes/FeedbackButtonViewController.xib316115989#316115990#0(84"Couldn't open shared capabilities memory GSCapabilities (No such file or directory)0(0#0#94"/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackButtonViewController.xib8630555456#672"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv IBC_MINIMUM_COMPATIBILITY_VERSION 2.0    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/usr/bin/ibtool --errors --warnings --notices --output-format human-readable-text --compile "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/FeedbackButtonViewController.nib" "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackButtonViewController.xib" --sdk /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk0#
+
+CCompileXIB "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackViewController.xib"
+s316115990.126204
+e316115990.653601
+r1
+xCompileXIB
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackViewController.xib
+oCouldn't open shared capabilities memory GSCapabilities (No such file or directory)
+oCouldn't open shared capabilities memory GSCapabilities (No such file or directory)
+lSLF07#2@45"CompileXIB Classes/FeedbackViewController.xib316115990#316115990#0(168"Couldn't open shared capabilities memory GSCapabilities (No such file or directory)Couldn't open shared capabilities memory GSCapabilities (No such file or directory)0(0#0#88"/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackViewController.xib8630212192#660"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv IBC_MINIMUM_COMPATIBILITY_VERSION 2.0    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/usr/bin/ibtool --errors --warnings --notices --output-format human-readable-text --compile "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/FeedbackViewController.nib" "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackViewController.xib" --sdk /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk0#
+
+CCompileXIB "/Users/msaffitz/Documents/XCode Projects/WowieConnect/en.lproj/MainWindow.xib"
+s316115989.495520
+e316115989.980691
+r1
+xCompileXIB
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/en.lproj/MainWindow.xib
+oCouldn't open shared capabilities memory GSCapabilities (No such file or directory)
+lSLF07#2@34"CompileXIB en.lproj/MainWindow.xib316115989#316115989#0(84"Couldn't open shared capabilities memory GSCapabilities (No such file or directory)0(0#0#77"/Users/msaffitz/Documents/XCode Projects/WowieConnect/en.lproj/MainWindow.xib8631113376#646"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv IBC_MINIMUM_COMPATIBILITY_VERSION 2.0    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/usr/bin/ibtool --errors --warnings --notices --output-format human-readable-text --compile "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/en.lproj/MainWindow.nib" "/Users/msaffitz/Documents/XCode Projects/WowieConnect/en.lproj/MainWindow.xib" --sdk /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk0#
+
+CCompileXIB "/Users/msaffitz/Documents/XCode Projects/WowieConnect/en.lproj/WowieConnectViewController.xib"
+s316115989.497458
+e316115990.126107
+r1
+xCompileXIB
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/en.lproj/WowieConnectViewController.xib
+oCouldn't open shared capabilities memory GSCapabilities (No such file or directory)
+lSLF07#2@50"CompileXIB en.lproj/WowieConnectViewController.xib316115989#316115990#0(84"Couldn't open shared capabilities memory GSCapabilities (No such file or directory)0(0#0#93"/Users/msaffitz/Documents/XCode Projects/WowieConnect/en.lproj/WowieConnectViewController.xib8630884128#678"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv IBC_MINIMUM_COMPATIBILITY_VERSION 2.0    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/usr/bin/ibtool --errors --warnings --notices --output-format human-readable-text --compile "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/en.lproj/WowieConnectViewController.nib" "/Users/msaffitz/Documents/XCode Projects/WowieConnect/en.lproj/WowieConnectViewController.xib" --sdk /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk0#
+
+CCopyStringsFile "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/en.lproj/InfoPlist.strings" en.lproj/InfoPlist.strings
+s314742963.312672
+e314742965.208591
+r1
+xCopyStringsFile
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/en.lproj/InfoPlist.strings
+xen.lproj/InfoPlist.strings
+lSLF07#2@31"Copy en.lproj/InfoPlist.strings314742963#314742965#0(0"0(0#0#80"/Users/msaffitz/Documents/XCode Projects/WowieConnect/en.lproj/InfoPlist.strings8622345984#524"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv ICONV /usr/bin/iconv    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/Xcode/Plug-ins/CoreBuildTasks.xcplugin/Contents/Resources/copystrings --validate --inputencoding utf-8 --outputencoding binary en.lproj/InfoPlist.strings --outdir "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/en.lproj"0#
+
+CGenerateDSYMFile "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app.dSYM" "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/WowieConnect"
+s316116501.201795
+e316116501.236495
+r1
+xGenerateDSYMFile
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app.dSYM
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/WowieConnect
+lSLF07#2@128"GenerateDSYMFile build/Release-iphonesimulator/WowieConnect.app.dSYM build/Release-iphonesimulator/WowieConnect.app/WowieConnect316116501#316116501#0(0"0(0#0#113"/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/WowieConnect8638000192#453"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/usr/bin/dsymutil "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/WowieConnect" -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app.dSYM"0#
+
+CLd "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/WowieConnect" normal i386
+s316116501.150327
+e316116501.201682
+r1
+xLd
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/WowieConnect
+xnormal
+xi386
+lSLF07#2@118"Link /Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/WowieConnect316116501#316116501#0(0"0(0#0#0"8637449920#1018"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv MACOSX_DEPLOYMENT_TARGET 10.6    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -arch i386 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk "-L/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" -filelist "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/Objects-normal/i386/WowieConnect.LinkFileList" -mmacosx-version-min=10.6 -Xlinker -objc_abi_version -Xlinker 2 -framework UIKit -framework Foundation -framework CoreGraphics -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/WowieConnect"0#
+
+CProcessInfoPlistFile "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/Info.plist" WowieConnect-Info.plist
+s316115987.090417
+e316115987.124255
+r1
+xProcessInfoPlistFile
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/Info.plist
+xWowieConnect-Info.plist
+lSLF07#2@31"Process WowieConnect-Info.plist316115987#316115987#0(0"0(0#0#77"/Users/msaffitz/Documents/XCode Projects/WowieConnect/WowieConnect-Info.plist8631264320#549"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    builtin-infoPlistUtility WowieConnect-Info.plist -genpkginfo "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/PkgInfo" -expandbuildsettings -format binary -platform iphonesimulator -o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app/Info.plist"0#
+
+CProcessPCH /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch.gch WowieConnect-Prefix.pch normal i386 objective-c com.apple.compilers.gcc.4_2
+s314743371.731372
+e314743377.578379
+r1
+xProcessPCH
+x/var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch.gch
+xWowieConnect-Prefix.pch
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@34"Precompile WowieConnect-Prefix.pch314743371#314743377#0(0"0(0#0#77"/Users/msaffitz/Documents/XCode Projects/WowieConnect/WowieConnect-Prefix.pch8622618080#2117"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c-header -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/WowieConnect-Prefix.pch" -o /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-agmhltnzviqpzpfpqinllasyrkym/WowieConnect-Prefix.pch.gch0#
+
+CProcessPCH /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-hkeqsbkrkyqwesardenapnonwxoo/WowieConnect-Prefix.pch.gch WowieConnect-Prefix.pch normal i386 objective-c com.apple.compilers.gcc.4_2
+s314742953.024131
+e314742958.333739
+r1
+xProcessPCH
+x/var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-hkeqsbkrkyqwesardenapnonwxoo/WowieConnect-Prefix.pch.gch
+xWowieConnect-Prefix.pch
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@34"Precompile WowieConnect-Prefix.pch314742953#314742958#0(0"0(0#0#77"/Users/msaffitz/Documents/XCode Projects/WowieConnect/WowieConnect-Prefix.pch8629365792#2117"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c-header -arch i386 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -mdynamic-no-pic -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-generated-files.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-own-target-headers.hmap" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-all-target-headers.hmap" -iquote "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/WowieConnect-project-headers.hmap" "-F/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/include" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources/i386" "-I/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Release-iphonesimulator/WowieConnect.build/DerivedSources" -DNS_BLOCK_ASSERTIONS=1 -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/WowieConnect-Prefix.pch" -o /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-hkeqsbkrkyqwesardenapnonwxoo/WowieConnect-Prefix.pch.gch0#
+
+CTouch "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app"
+s316116501.236902
+e316116501.241126
+r1
+xTouch
+x/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app
+lSLF07#2@106"Touch /Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app316116501#316116501#0(0"0(0#0#0"8636769088#319"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /usr/bin/touch -c "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Release-iphonesimulator/WowieConnect.app"0#
+

@@ -1,0 +1,92 @@
+TWowieConnect
+v7
+r1
+cCheck dependencies
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackButtonViewController.xib
+c000000004D0FF969000000000000172B
+t1292892521
+s5931
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackViewController.xib
+c000000004D1238BF0000000000001CC6
+t1293039807
+s7366
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug/WowieConnect.app
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug/WowieConnect.app/Contents/Info.plist
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug/WowieConnect.app/Contents/PkgInfo
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug/WowieConnect.app/Contents/Resources/FeedbackButtonViewController.nib
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug/WowieConnect.app/Contents/Resources/FeedbackViewController.nib
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug/WowieConnect.app/Contents/Resources/en.lproj/InfoPlist.strings
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug/WowieConnect.app/Contents/Resources/en.lproj/MainWindow.nib
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug/WowieConnect.app/Contents/Resources/en.lproj/WowieConnectViewController.nib
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/en.lproj/InfoPlist.strings
+c000000004D0FD14F000000000000002D
+t1292882255
+s45
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/en.lproj/MainWindow.xib
+c000000004D0FD14F0000000000004E65
+t1292882255
+s20069
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/en.lproj/WowieConnectViewController.xib
+c000000004D0FD37B0000000000001FFF
+t1292882811
+s8191
+
+NWowieConnect-Info.plist
+c000000004D0FD14F00000000000003D2
+t1292882255
+s978
+
+CCheck dependencies
+r0
+lSLF07#2@18"Check dependencies314732777#314732777#0(63"[BEROR]error: There is no SDK with the name or path 'iphoneos'1(4@55"error: There is no SDK with the name or path 'iphoneos'314732777#18446744073709551615#0#0(1@0"0(0#1#0"27866456492998768#0"0#
+
+CCompileXIB "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackButtonViewController.xib"
+r0
+
+CCompileXIB "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackViewController.xib"
+r0
+
+CCompileXIB "/Users/msaffitz/Documents/XCode Projects/WowieConnect/en.lproj/MainWindow.xib"
+r0
+
+CCompileXIB "/Users/msaffitz/Documents/XCode Projects/WowieConnect/en.lproj/WowieConnectViewController.xib"
+r0
+
+CCopyStringsFile "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug/WowieConnect.app/Contents/Resources/en.lproj/InfoPlist.strings" en.lproj/InfoPlist.strings
+r0
+
+CProcessInfoPlistFile "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug/WowieConnect.app/Contents/Info.plist" WowieConnect-Info.plist
+r0
+
+CTouch "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug/WowieConnect.app"
+r0
+

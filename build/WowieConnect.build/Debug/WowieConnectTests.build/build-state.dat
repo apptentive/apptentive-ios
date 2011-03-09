@@ -1,0 +1,55 @@
+TWowieConnectTests
+v7
+r1
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Tests/WowieConnectTests.h
+c000000004D0FD14F0000000000000107
+t1292882255
+s263
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug/WowieConnectTests.octest
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug/WowieConnectTests.octest/Contents/Info.plist
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug/WowieConnectTests.octest/Contents/Resources/InfoPlist.strings
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug/WowieConnectTests.octest/Contents/Resources/WowieConnectTests.h
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug/WowieConnectTests.build/Script-804F39F212C008CF009ABA05.sh
+c00000000000000000000000000000000
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/en.lproj/WowieConnectTests/InfoPlist.strings
+c000000004D0FD14F000000000000002D
+t1292882255
+s45
+
+NWowieConnectTests-Info.plist
+c000000004D0FD14F00000000000002E9
+t1292882255
+s745
+
+CCopyStringsFile "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug/WowieConnectTests.octest/Contents/Resources/InfoPlist.strings" en.lproj/WowieConnectTests/InfoPlist.strings
+r0
+
+CCpResource build/Debug/WowieConnectTests.octest/Contents/Resources/WowieConnectTests.h Tests/WowieConnectTests.h
+r0
+
+CPhaseScriptExecution "Run Script" "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug/WowieConnectTests.build/Script-804F39F212C008CF009ABA05.sh"
+r0
+
+CProcessInfoPlistFile "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug/WowieConnectTests.octest/Contents/Info.plist" WowieConnectTests-Info.plist
+r0
+
+CTouch "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug/WowieConnectTests.octest"
+r0
+

@@ -1,0 +1,684 @@
+// !$*UTF8*$!
+{
+	803CEAAF12D784AF0025BFB0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 804F39DE12C008CF009ABA05 /* en */;
+		name = "InfoPlist.strings: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 45;
+		vrLoc = 0;
+	};
+	803CEACF12D78C4C0025BFB0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 80591C7F12C28A5B0069A294 /* NSObject+XMLSerializableSupport.m */;
+		name = "NSObject+XMLSerializableSupport.m: 126";
+		rLen = 0;
+		rLoc = 4360;
+		rType = 0;
+		vrLen = 994;
+		vrLoc = 184;
+	};
+	803CEAD012D78C4C0025BFB0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8055EFE712C2681E0075EB11 /* WowieConnect.h */;
+		name = "WowieConnect.h: 25";
+		rLen = 0;
+		rLoc = 626;
+		rType = 0;
+		vrLen = 633;
+		vrLoc = 0;
+	};
+	803CEAD112D78C4C0025BFB0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8055EFE812C2681E0075EB11 /* WowieConnect.m */;
+		name = "WowieConnect.m: 45";
+		rLen = 0;
+		rLoc = 1783;
+		rType = 0;
+		vrLen = 1393;
+		vrLoc = 630;
+	};
+	803CEAE212D78DB00025BFB0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8055EFEC12C269030075EB11 /* FeedbackViewController.m */;
+		name = "FeedbackViewController.m: 43";
+		rLen = 112;
+		rLoc = 1014;
+		rType = 0;
+		vrLen = 1050;
+		vrLoc = 903;
+	};
+	803CEAF512D78E170025BFB0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8055EFEB12C269030075EB11 /* FeedbackViewController.h */;
+		name = "FeedbackViewController.h: 25";
+		rLen = 0;
+		rLoc = 741;
+		rType = 0;
+		vrLen = 748;
+		vrLoc = 0;
+	};
+	803CEAF612D78E170025BFB0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 804F39E812C008CF009ABA05 /* WowieConnectViewController.h */;
+		name = "WowieConnectViewController.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 303;
+		vrLoc = 0;
+	};
+	803CEAF712D78E170025BFB0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 804CADC212C01766009FBBC4 /* FeedbackButtonViewController.h */;
+		name = "FeedbackButtonViewController.h: 16";
+		rLen = 0;
+		rLoc = 297;
+		rType = 0;
+		vrLen = 499;
+		vrLoc = 0;
+	};
+	803CEAF812D78E170025BFB0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 804CADC312C01766009FBBC4 /* FeedbackButtonViewController.m */;
+		name = "FeedbackButtonViewController.m: 20";
+		rLen = 82;
+		rLoc = 390;
+		rType = 0;
+		vrLen = 1102;
+		vrLoc = 231;
+	};
+	8044BB4312D65397001F7078 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 804F39E212C008CF009ABA05 /* WowieConnectAppDelegate.h */;
+		name = "WowieConnectAppDelegate.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 513;
+		vrLoc = 0;
+	};
+	8044BB4412D65397001F7078 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 804F39E312C008CF009ABA05 /* WowieConnectAppDelegate.m */;
+		name = "WowieConnectAppDelegate.m: 26";
+		rLen = 0;
+		rLoc = 583;
+		rType = 0;
+		vrLen = 671;
+		vrLoc = 159;
+	};
+	8044BB4712D65397001F7078 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 80591CB512C28AFA0069A294 /* Feedback.m */;
+		name = "Feedback.m: 18";
+		rLen = 0;
+		rLoc = 303;
+		rType = 0;
+		vrLen = 317;
+		vrLoc = 0;
+	};
+	8044BB4812D65397001F7078 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 80591CB412C28AFA0069A294 /* Feedback.h */;
+		name = "Feedback.h: 24";
+		rLen = 0;
+		rLoc = 608;
+		rType = 0;
+		vrLen = 622;
+		vrLoc = 0;
+	};
+	8044BB4B12D65397001F7078 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 80591C4612C28A5B0069A294 /* NSObject+ObjectiveResource.m */;
+		name = "NSObject+ObjectiveResource.m: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 884;
+		vrLoc = 0;
+	};
+	8044BB4C12D65397001F7078 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 80591C4512C28A5B0069A294 /* NSObject+ObjectiveResource.h */;
+		name = "NSObject+ObjectiveResource.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 951;
+		vrLoc = 0;
+	};
+	8044BB4D12D65397001F7078 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 80591C5012C28A5B0069A294 /* NSObject+PropertySupport.m */;
+		name = "NSObject+PropertySupport.m: 29";
+		rLen = 0;
+		rLoc = 662;
+		rType = 0;
+		vrLen = 1078;
+		vrLoc = 162;
+	};
+	8044BB4E12D65397001F7078 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 80591C4D12C28A5B0069A294 /* NSData+Additions.h */;
+		name = "NSData+Additions.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 413;
+		vrLoc = 0;
+	};
+	8044BB4F12D65397001F7078 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 80591C4E12C28A5B0069A294 /* NSData+Additions.m */;
+		name = "NSData+Additions.m: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1128;
+		vrLoc = 0;
+	};
+	8044BB5012D65397001F7078 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 80591C4F12C28A5B0069A294 /* NSObject+PropertySupport.h */;
+		name = "NSObject+PropertySupport.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 669;
+		vrLoc = 3;
+	};
+	8044BB5112D65397001F7078 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 80591C5512C28A5B0069A294 /* ObjectiveSupport.h */;
+		name = "ObjectiveSupport.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 228;
+		vrLoc = 0;
+	};
+	804CADC212C01766009FBBC4 /* FeedbackButtonViewController.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {871, 405}}";
+			sepNavSelRange = "{297, 0}";
+			sepNavVisRange = "{0, 499}";
+		};
+	};
+	804CADC312C01766009FBBC4 /* FeedbackButtonViewController.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1146, 988}}";
+			sepNavSelRange = "{390, 82}";
+			sepNavVisRange = "{231, 1102}";
+			sepNavWindowFrame = "{{37, 55}, {1225, 698}}";
+		};
+	};
+	804F39C512C008CF009ABA05 /* Project object */ = {
+		activeBuildConfigurationName = Release;
+		activeExecutable = 80591A7212C270A40069A294 /* WowieConnect */;
+		activeSDKPreference = iphoneos3.2;
+		activeTarget = 804F39D112C008CF009ABA05 /* WowieConnect */;
+		addToTargets = (
+			804F39D112C008CF009ABA05 /* WowieConnect */,
+		);
+		breakpoints = (
+			80591BE312C284EB0069A294 /* FeedbackViewController.m:72 */,
+			80591C2D12C289BA0069A294 /* FeedbackViewController.m:38 */,
+			80591D1C12C28EA40069A294 /* NSObject+XMLSerializableSupport.m:97 */,
+			80591D6312C296100069A294 /* FeedbackViewController.m:23 */,
+		);
+		codeSenseManager = 80591A8012C270AF0069A294 /* Code sense */;
+		executables = (
+			80591A7212C270A40069A294 /* WowieConnect */,
+		);
+		perUserDictionary = {
+			"PBXConfiguration.PBXBreakpointsDataSource.v1:1CA1AED706398EBD00589147" = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXBreakpointsDataSource_BreakpointID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					20,
+					198,
+					20,
+					99,
+					99,
+					29,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXBreakpointsDataSource_ActionID,
+					PBXBreakpointsDataSource_TypeID,
+					PBXBreakpointsDataSource_BreakpointID,
+					PBXBreakpointsDataSource_UseID,
+					PBXBreakpointsDataSource_LocationID,
+					PBXBreakpointsDataSource_ConditionID,
+					PBXBreakpointsDataSource_IgnoreCountID,
+					PBXBreakpointsDataSource_ContinueID,
+				);
+			};
+			PBXConfiguration.PBXFileTableDataSource3.PBXExecutablesDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXExecutablesDataSource_NameID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					22,
+					300,
+					581,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXExecutablesDataSource_ActiveFlagID,
+					PBXExecutablesDataSource_NameID,
+					PBXExecutablesDataSource_CommentsID,
+				);
+			};
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					693,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXConfiguration.PBXTargetDataSource.PBXTargetDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					653,
+					60,
+					20,
+					48,
+					43,
+					43,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXTargetDataSource_PrimaryAttribute,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 316118400;
+			PBXWorkspaceStateSaveDate = 316118400;
+		};
+		perUserProjectItems = {
+			803CEAAF12D784AF0025BFB0 /* PBXTextBookmark */ = 803CEAAF12D784AF0025BFB0 /* PBXTextBookmark */;
+			803CEACF12D78C4C0025BFB0 /* PBXTextBookmark */ = 803CEACF12D78C4C0025BFB0 /* PBXTextBookmark */;
+			803CEAD012D78C4C0025BFB0 /* PBXTextBookmark */ = 803CEAD012D78C4C0025BFB0 /* PBXTextBookmark */;
+			803CEAD112D78C4C0025BFB0 /* PBXTextBookmark */ = 803CEAD112D78C4C0025BFB0 /* PBXTextBookmark */;
+			803CEAE212D78DB00025BFB0 /* PBXTextBookmark */ = 803CEAE212D78DB00025BFB0 /* PBXTextBookmark */;
+			803CEAF512D78E170025BFB0 /* PBXTextBookmark */ = 803CEAF512D78E170025BFB0 /* PBXTextBookmark */;
+			803CEAF612D78E170025BFB0 /* PBXTextBookmark */ = 803CEAF612D78E170025BFB0 /* PBXTextBookmark */;
+			803CEAF712D78E170025BFB0 /* PBXTextBookmark */ = 803CEAF712D78E170025BFB0 /* PBXTextBookmark */;
+			803CEAF812D78E170025BFB0 /* PBXTextBookmark */ = 803CEAF812D78E170025BFB0 /* PBXTextBookmark */;
+			8044BB4312D65397001F7078 /* PBXTextBookmark */ = 8044BB4312D65397001F7078 /* PBXTextBookmark */;
+			8044BB4412D65397001F7078 /* PBXTextBookmark */ = 8044BB4412D65397001F7078 /* PBXTextBookmark */;
+			8044BB4712D65397001F7078 /* PBXTextBookmark */ = 8044BB4712D65397001F7078 /* PBXTextBookmark */;
+			8044BB4812D65397001F7078 /* PBXTextBookmark */ = 8044BB4812D65397001F7078 /* PBXTextBookmark */;
+			8044BB4B12D65397001F7078 /* PBXTextBookmark */ = 8044BB4B12D65397001F7078 /* PBXTextBookmark */;
+			8044BB4C12D65397001F7078 /* PBXTextBookmark */ = 8044BB4C12D65397001F7078 /* PBXTextBookmark */;
+			8044BB4D12D65397001F7078 /* PBXTextBookmark */ = 8044BB4D12D65397001F7078 /* PBXTextBookmark */;
+			8044BB4E12D65397001F7078 /* PBXTextBookmark */ = 8044BB4E12D65397001F7078 /* PBXTextBookmark */;
+			8044BB4F12D65397001F7078 /* PBXTextBookmark */ = 8044BB4F12D65397001F7078 /* PBXTextBookmark */;
+			8044BB5012D65397001F7078 /* PBXTextBookmark */ = 8044BB5012D65397001F7078 /* PBXTextBookmark */;
+			8044BB5112D65397001F7078 /* PBXTextBookmark */ = 8044BB5112D65397001F7078 /* PBXTextBookmark */;
+			80591CBA12C28B3E0069A294 /* PBXTextBookmark */ = 80591CBA12C28B3E0069A294 /* PBXTextBookmark */;
+			80C6DEED12D7965600A34564 /* PBXTextBookmark */ = 80C6DEED12D7965600A34564 /* PBXTextBookmark */;
+			80C6DEEE12D7965600A34564 /* PBXTextBookmark */ = 80C6DEEE12D7965600A34564 /* PBXTextBookmark */;
+			80F89E6312D7949E0060B41D /* PBXTextBookmark */ = 80F89E6312D7949E0060B41D /* PBXTextBookmark */;
+			80F89E6412D7949E0060B41D /* PBXTextBookmark */ = 80F89E6412D7949E0060B41D /* PBXTextBookmark */;
+		};
+		sourceControlManager = 80591A7F12C270AF0069A294 /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	804F39D112C008CF009ABA05 /* WowieConnect */ = {
+		activeExec = 0;
+		executables = (
+			80591A7212C270A40069A294 /* WowieConnect */,
+		);
+	};
+	804F39DE12C008CF009ABA05 /* en */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {871, 405}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 45}";
+		};
+	};
+	804F39E212C008CF009ABA05 /* WowieConnectAppDelegate.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {871, 434}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 513}";
+		};
+	};
+	804F39E312C008CF009ABA05 /* WowieConnectAppDelegate.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {871, 559}}";
+			sepNavSelRange = "{583, 0}";
+			sepNavVisRange = "{159, 671}";
+			sepNavWindowFrame = "{{15, 75}, {1225, 698}}";
+		};
+	};
+	804F39E812C008CF009ABA05 /* WowieConnectViewController.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {871, 405}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 303}";
+		};
+	};
+	804F39E912C008CF009ABA05 /* WowieConnectViewController.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {871, 1027}}";
+			sepNavSelRange = "{226, 0}";
+			sepNavVisRange = "{0, 832}";
+			sepNavWindowFrame = "{{15, 75}, {1225, 698}}";
+		};
+	};
+	804F39F312C008CF009ABA05 /* WowieConnectTests */ = {
+		activeExec = 0;
+	};
+	8055EFE712C2681E0075EB11 /* WowieConnect.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {871, 405}}";
+			sepNavSelRange = "{626, 0}";
+			sepNavVisRange = "{0, 633}";
+		};
+	};
+	8055EFE812C2681E0075EB11 /* WowieConnect.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1069, 676}}";
+			sepNavSelRange = "{1783, 0}";
+			sepNavVisRange = "{630, 1393}";
+			sepNavWindowFrame = "{{15, 75}, {1225, 698}}";
+		};
+	};
+	8055EFEB12C269030075EB11 /* FeedbackViewController.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {871, 405}}";
+			sepNavSelRange = "{741, 0}";
+			sepNavVisRange = "{0, 748}";
+			sepNavWindowFrame = "{{38, 54}, {1225, 698}}";
+		};
+	};
+	8055EFEC12C269030075EB11 /* FeedbackViewController.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1166, 1287}}";
+			sepNavSelRange = "{617, 0}";
+			sepNavVisRange = "{194, 1265}";
+			sepNavWindowFrame = "{{55, 61}, {1225, 698}}";
+		};
+	};
+	80591A7212C270A40069A294 /* WowieConnect */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		dataTipCustomDataFormattersEnabled = 1;
+		dataTipShowTypeColumn = 1;
+		dataTipSortType = 0;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = WowieConnect;
+		savedGlobals = {
+		};
+		showTypeColumn = 0;
+		sourceDirectories = (
+		);
+		variableFormatDictionary = {
+		};
+	};
+	80591A7F12C270AF0069A294 /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+			repositoryNamesForRoots = {
+				"" = "";
+			};
+		};
+	};
+	80591A8012C270AF0069A294 /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	80591BE312C284EB0069A294 /* FeedbackViewController.m:72 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 8055EFEC12C269030075EB11 /* FeedbackViewController.m */;
+		functionName = "-viewDidLoad";
+		hitCount = 1;
+		ignoreCount = 0;
+		lineNumber = 72;
+		location = WowieConnect;
+		modificationTime = 314742306.6341701;
+		originalNumberOfMultipleMatches = 1;
+		state = 1;
+	};
+	80591C2D12C289BA0069A294 /* FeedbackViewController.m:38 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 8055EFEC12C269030075EB11 /* FeedbackViewController.m */;
+		functionName = "-touchesEnded:withEvent:";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 38;
+		location = WowieConnect;
+		modificationTime = 314742305.062847;
+		originalNumberOfMultipleMatches = 1;
+		state = 1;
+	};
+	80591C3E12C28A5B0069A294 /* Connection.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {950, 2119}}";
+			sepNavSelRange = "{906, 108}";
+			sepNavVisRange = "{688, 332}";
+			sepNavWindowFrame = "{{15, 75}, {1225, 698}}";
+		};
+	};
+	80591C4512C28A5B0069A294 /* NSObject+ObjectiveResource.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {871, 1040}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 951}";
+		};
+	};
+	80591C4612C28A5B0069A294 /* NSObject+ObjectiveResource.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {871, 4225}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 884}";
+		};
+	};
+	80591C4D12C28A5B0069A294 /* NSData+Additions.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {871, 434}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 413}";
+		};
+	};
+	80591C4E12C28A5B0069A294 /* NSData+Additions.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {871, 2028}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 1128}";
+		};
+	};
+	80591C4F12C28A5B0069A294 /* NSObject+PropertySupport.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {871, 468}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{3, 669}";
+		};
+	};
+	80591C5012C28A5B0069A294 /* NSObject+PropertySupport.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {871, 1105}}";
+			sepNavSelRange = "{662, 0}";
+			sepNavVisRange = "{162, 1078}";
+		};
+	};
+	80591C5512C28A5B0069A294 /* ObjectiveSupport.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {871, 434}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 228}";
+		};
+	};
+	80591C7912C28A5B0069A294 /* NSDictionary+XMLSerializableSupport.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {817, 558}}";
+			sepNavSelRange = "{813, 0}";
+			sepNavVisRange = "{0, 1253}";
+		};
+	};
+	80591C7F12C28A5B0069A294 /* NSObject+XMLSerializableSupport.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1048, 1768}}";
+			sepNavSelRange = "{3993, 0}";
+			sepNavVisRange = "{40, 473}";
+		};
+	};
+	80591CB412C28AFA0069A294 /* Feedback.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {871, 434}}";
+			sepNavSelRange = "{608, 0}";
+			sepNavVisRange = "{0, 622}";
+			sepNavWindowFrame = "{{38, 54}, {1225, 698}}";
+		};
+	};
+	80591CB512C28AFA0069A294 /* Feedback.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {871, 434}}";
+			sepNavSelRange = "{303, 0}";
+			sepNavVisRange = "{0, 317}";
+		};
+	};
+	80591CBA12C28B3E0069A294 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 80591C3E12C28A5B0069A294 /* Connection.m */;
+		name = "Connection.m: 44";
+		rLen = 108;
+		rLoc = 906;
+		rType = 0;
+		vrLen = 1335;
+		vrLoc = 479;
+	};
+	80591D1C12C28EA40069A294 /* NSObject+XMLSerializableSupport.m:97 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 80591C7F12C28A5B0069A294 /* NSObject+XMLSerializableSupport.m */;
+		functionName = "-toXMLElementAs:excludingInArray:withTranslations:";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 97;
+		location = WowieConnect;
+		modificationTime = 314742305.0633;
+		originalNumberOfMultipleMatches = 1;
+		state = 1;
+	};
+	80591D6312C296100069A294 /* FeedbackViewController.m:23 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 8055EFEC12C269030075EB11 /* FeedbackViewController.m */;
+		functionName = "-sendFeedback:";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 23;
+		location = WowieConnect;
+		modificationTime = 314742305.063781;
+		originalNumberOfMultipleMatches = 1;
+		state = 1;
+	};
+	80C6DEED12D7965600A34564 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 804F39E912C008CF009ABA05 /* WowieConnectViewController.m */;
+		name = "WowieConnectViewController.m: 10";
+		rLen = 0;
+		rLoc = 226;
+		rType = 0;
+		vrLen = 832;
+		vrLoc = 0;
+	};
+	80C6DEEE12D7965600A34564 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8055EFEC12C269030075EB11 /* FeedbackViewController.m */;
+		name = "FeedbackViewController.m: 28";
+		rLen = 0;
+		rLoc = 617;
+		rType = 0;
+		vrLen = 1265;
+		vrLoc = 194;
+	};
+	80F89E6312D7949E0060B41D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 804F39E912C008CF009ABA05 /* WowieConnectViewController.m */;
+		name = "WowieConnectViewController.m: 10";
+		rLen = 0;
+		rLoc = 226;
+		rType = 0;
+		vrLen = 833;
+		vrLoc = 3;
+	};
+	80F89E6412D7949E0060B41D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8055EFEC12C269030075EB11 /* FeedbackViewController.m */;
+		name = "FeedbackViewController.m: 28";
+		rLen = 0;
+		rLoc = 617;
+		rType = 0;
+		vrLen = 1347;
+		vrLoc = 195;
+	};
+}

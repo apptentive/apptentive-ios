@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>files</key>
+	<dict>
+		<key>FeedbackButtonViewController.nib</key>
+		<data>
+		p07o8LQB5zAldtSLA0SEyIWqhlI=
+		</data>
+		<key>FeedbackViewController.nib</key>
+		<data>
+		LvoQOJ2/D8uUninQnkxPw6SnYwM=
+		</data>
+		<key>PkgInfo</key>
+		<data>
+		n57qDP4tZfLD1rCS43W0B4LQjzE=
+		</data>
+		<key>embedded.mobileprovision</key>
+		<data>
+		cHS/eZvaXpZy5L0YkmzNIxUrIW4=
+		</data>
+		<key>en.lproj/InfoPlist.strings</key>
+		<data>
+		zmV6UqBSo6r1NOz798vd5O4zTBA=
+		</data>
+		<key>en.lproj/MainWindow.nib</key>
+		<data>
+		8rtHFwFHDR4R1yBUUvB3NRFrsOE=
+		</data>
+		<key>en.lproj/WowieConnectViewController.nib</key>
+		<data>
+		aBZrTGSAmQS8G3m8vaYmfa1axzo=
+		</data>
+	</dict>
+	<key>rules</key>
+	<dict>
+		<key>.*</key>
+		<true/>
+		<key>Info.plist</key>
+		<dict>
+			<key>omit</key>
+			<true/>
+			<key>weight</key>
+			<real>10</real>
+		</dict>
+		<key>ResourceRules.plist</key>
+		<dict>
+			<key>omit</key>
+			<true/>
+			<key>weight</key>
+			<real>100</real>
+		</dict>
+	</dict>
+</dict>
+</plist>

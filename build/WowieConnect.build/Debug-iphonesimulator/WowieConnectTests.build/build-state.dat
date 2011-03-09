@@ -1,0 +1,168 @@
+TWowieConnectTests
+v7
+r1
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk
+c000000004C6C2BEF0000000000000110
+t1282157551
+s272
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/Developer/Library/Frameworks/SenTestingKit.framework/Headers/SenTestingKit.h
+c000000004BD1D4F600000000000007E1
+t1272042742
+s2017
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics
+c000000004BD1CD90000000000026F020
+t1272040848
+s2551840
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/Foundation.framework/Foundation
+c000000004BD1FFC200000000002A96A0
+t1272053698
+s2791072
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIKit.h
+c000000004BD20412000000000000098F
+t1272054802
+s2447
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/UIKit.framework/UIKit
+c000000004BD20471000000000222E640
+t1272054897
+s35841600
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk
+c000000004C6C2BFA0000000000000132
+t1282157562
+s306
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk/Developer/Library/Frameworks/SenTestingKit.framework/Headers/SenTestingKit.h
+c000000004BFE177E00000000000008A5
+t1274943358
+s2213
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics
+c000000004BFDFE39000000000027C7D0
+t1274936889
+s2607056
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk/System/Library/Frameworks/Foundation.framework/Foundation
+c000000004BFDFE7C000000000029D5D0
+t1274936956
+s2741712
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIKit.h
+c000000004C0470BB00000000000009CD
+t1275359419
+s2509
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.0.sdk/System/Library/Frameworks/UIKit.framework/UIKit
+c000000004C0471620000000001D47210
+t1275359586
+s30700048
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Tests/WowieConnectTests.h
+c000000004D0FD14F0000000000000107
+t1292882255
+s263
+i<SenTestingKit/SenTestingKit.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Tests/WowieConnectTests.m
+c000000004D0FD14F0000000000000173
+t1292882255
+s371
+i"WowieConnectTests.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/WowieConnectTests-Prefix.pch
+c000000004D0FD14F00000000000000A5
+t1292882255
+s165
+i<UIKit/UIKit.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphonesimulator/WowieConnectTests.octest
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphonesimulator/WowieConnectTests.octest.dSYM
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphonesimulator/WowieConnectTests.octest/Info.plist
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphonesimulator/WowieConnectTests.octest/InfoPlist.strings
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphonesimulator/WowieConnectTests.octest/WowieConnectTests
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphonesimulator/WowieConnectTests.octest/WowieConnectTests.h
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphonesimulator/WowieConnectTests.build/Objects-normal/i386/WowieConnectTests.LinkFileList
+c00000000000000000000000000000000
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphonesimulator/WowieConnectTests.build/Objects-normal/i386/WowieConnectTests.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphonesimulator/WowieConnectTests.build/Script-804F39F212C008CF009ABA05.sh
+c00000000000000000000000000000000
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/en.lproj/WowieConnectTests/InfoPlist.strings
+c000000004D0FD14F000000000000002D
+t1292882255
+s45
+
+N/var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnectTests-Prefix-egnuzzuozaqdrugomhcxyoakfpnc/WowieConnectTests-Prefix.pch.gch
+t2
+s0
+
+N/var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnectTests-Prefix-fjbwxpsvconphkftzsmmhgllaowi/WowieConnectTests-Prefix.pch.gch
+t2
+s0
+
+NWowieConnectTests-Info.plist
+c000000004D0FD14F00000000000002E9
+t1292882255
+s745
+
+CCompileC build/WowieConnect.build/Debug-iphonesimulator/WowieConnectTests.build/Objects-normal/i386/WowieConnectTests.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Tests/WowieConnectTests.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCopyStringsFile "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphonesimulator/WowieConnectTests.octest/InfoPlist.strings" en.lproj/WowieConnectTests/InfoPlist.strings
+r0
+
+CCpResource build/Debug-iphonesimulator/WowieConnectTests.octest/WowieConnectTests.h Tests/WowieConnectTests.h
+r0
+
+CGenerateDSYMFile "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphonesimulator/WowieConnectTests.octest.dSYM" "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphonesimulator/WowieConnectTests.octest/WowieConnectTests"
+r0
+
+CLd "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphonesimulator/WowieConnectTests.octest/WowieConnectTests" normal i386
+r0
+
+CPhaseScriptExecution "Run Script" "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphonesimulator/WowieConnectTests.build/Script-804F39F212C008CF009ABA05.sh"
+r0
+
+CProcessInfoPlistFile "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphonesimulator/WowieConnectTests.octest/Info.plist" WowieConnectTests-Info.plist
+r0
+
+CProcessPCH /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnectTests-Prefix-egnuzzuozaqdrugomhcxyoakfpnc/WowieConnectTests-Prefix.pch.gch WowieConnectTests-Prefix.pch normal i386 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CProcessPCH /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnectTests-Prefix-fjbwxpsvconphkftzsmmhgllaowi/WowieConnectTests-Prefix.pch.gch WowieConnectTests-Prefix.pch normal i386 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CTouch "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphonesimulator/WowieConnectTests.octest"
+r0
+

@@ -1,0 +1,1 @@
+/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/UninstalledProducts/WowieConnect.app

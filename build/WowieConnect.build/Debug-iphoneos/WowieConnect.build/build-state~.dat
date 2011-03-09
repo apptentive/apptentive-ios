@@ -1,0 +1,1254 @@
+TWowieConnect
+v7
+r1
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS3.2.sdk
+c000000004C6C2BDE0000000000000110
+t1282157534
+s272
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS3.2.sdk/ResourceRules.plist
+c000000004C06E99F00000000000001E5
+t1275521439
+s485
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS3.2.sdk/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics
+c000000004C005A1C00000000003B4B70
+t1275091484
+s3885936
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS3.2.sdk/System/Library/Frameworks/Foundation.framework/Foundation
+c000000004C005A45000000000036A640
+t1275091525
+s3581504
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS3.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h
+c000000004C005A310000000000001355
+t1275091505
+s4949
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS3.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIKit.h
+c000000004C00642C000000000000098F
+t1275094060
+s2447
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS3.2.sdk/System/Library/Frameworks/UIKit.framework/UIKit
+c000000004C0064A60000000002703220
+t1275094182
+s40907296
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS3.2.sdk/usr/include/Availability.h
+c000000004B9F27C60000000000001A1A
+t1268721606
+s6682
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS3.2.sdk/usr/include/objc/runtime.h
+c000000004C004D6200000000000053F9
+t1275088226
+s21497
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackButtonViewController.h
+c000000004D1244AA00000000000001F3
+t1293042858
+s499
+i<UIKit/UIKit.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackButtonViewController.m
+c000000004D124965000000000000087E
+t1293044069
+s2174
+i"FeedbackButtonViewController.h"
+i"WowieConnect.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackButtonViewController.xib
+c000000004D0FF969000000000000172B
+t1292892521
+s5931
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackViewController.h
+c000000004D125CD8000000000000027B
+t1293049048
+s635
+i<UIKit/UIKit.h>
+i"Feedback.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackViewController.m
+c000000004D261B5E0000000000000924
+t1294343006
+s2340
+i"FeedbackViewController.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackViewController.xib
+c000000004D12600700000000000054EC
+t1293049863
+s21740
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnect.h
+c000000004D12534C0000000000000279
+t1293046604
+s633
+i<Foundation/Foundation.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnect.m
+c000000004D12605200000000000007E7
+t1293049938
+s2023
+i"WowieConnect.h"
+i"FeedbackViewController.h"
+i"FeedbackButtonViewController.h"
+i"ObjectiveResource.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnectAppDelegate.h
+c000000004D0FD14F0000000000000201
+t1292882255
+s513
+i<UIKit/UIKit.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnectAppDelegate.m
+c000000004D1249270000000000000343
+t1293044007
+s835
+i"WowieConnectAppDelegate.h"
+i"WowieConnectViewController.h"
+i"WowieConnect.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnectViewController.h
+c000000004D12412D000000000000012F
+t1293041965
+s303
+i<UIKit/UIKit.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnectViewController.m
+c000000004D1249350000000000000832
+t1293044021
+s2098
+i"WowieConnectViewController.h"
+i"WowieConnect.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Feedback.h
+c000000004D125DCD000000000000026E
+t1293049293
+s622
+i<Foundation/Foundation.h>
+i"ObjectiveResource.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/Feedback.m
+c000000004D125DD2000000000000013D
+t1293049298
+s317
+i"Feedback.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/WowieConnect-Prefix.pch
+c000000004D0FD14F000000000000014A
+t1292882255
+s330
+i<Availability.h>
+i<UIKit/UIKit.h>
+i<Foundation/Foundation.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/WowieConnect-main.m
+c000000004D0FD14F000000000000017A
+t1292882255
+s378
+i<UIKit/UIKit.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphoneos/WowieConnect.app
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphoneos/WowieConnect.app.dSYM
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphoneos/WowieConnect.app/FeedbackButtonViewController.nib
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphoneos/WowieConnect.app/FeedbackViewController.nib
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphoneos/WowieConnect.app/Info.plist
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphoneos/WowieConnect.app/PkgInfo
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphoneos/WowieConnect.app/ResourceRules.plist
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphoneos/WowieConnect.app/WowieConnect
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphoneos/WowieConnect.app/en.lproj/InfoPlist.strings
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphoneos/WowieConnect.app/en.lproj/MainWindow.nib
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphoneos/WowieConnect.app/en.lproj/WowieConnectViewController.nib
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/Connection.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/ConnectionDelegate.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/Feedback.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/FeedbackButtonViewController.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/FeedbackViewController.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/FromXMLElementDelegate.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSArray+JSONSerializableSupport.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSArray+XMLSerializableSupport.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSData+Additions.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSDate+Serialize.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSDate+XMLSerializableSupport.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSDictionary+JSONSerializableSupport.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSDictionary+KeyTranslation.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSDictionary+XMLSerializableSupport.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSHTTPURLResponse+Error.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSMutableURLRequest+ResponseType.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSNull+XMLSerializableSupport.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSNumber+XMLSerializableSupport.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSObject+JSONSerializableSupport.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSObject+ObjectiveResource.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSObject+PropertySupport.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSObject+SBJSON.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSObject+Serialize.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSObject+XMLSerializableSupport.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSString+GSub.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSString+InflectionSupport.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSString+SBJSON.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSString+Serialize.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSString+XMLSerializableSupport.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/ObjectiveResourceConfig.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/ObjectiveResourceDateFormatter.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/Response.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/SBJSON.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/WowieConnect
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/WowieConnect-main.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/WowieConnect.LinkFileList
+c00000000000000000000000000000000
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/WowieConnect.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/WowieConnectAppDelegate.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/WowieConnectViewController.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/Connection.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/ConnectionDelegate.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/Feedback.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/FeedbackButtonViewController.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/FeedbackViewController.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/FromXMLElementDelegate.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSArray+JSONSerializableSupport.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSArray+XMLSerializableSupport.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSData+Additions.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSDate+Serialize.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSDate+XMLSerializableSupport.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSDictionary+JSONSerializableSupport.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSDictionary+KeyTranslation.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSDictionary+XMLSerializableSupport.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSHTTPURLResponse+Error.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSMutableURLRequest+ResponseType.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSNull+XMLSerializableSupport.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSNumber+XMLSerializableSupport.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSObject+JSONSerializableSupport.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSObject+ObjectiveResource.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSObject+PropertySupport.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSObject+SBJSON.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSObject+Serialize.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSObject+XMLSerializableSupport.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSString+GSub.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSString+InflectionSupport.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSString+SBJSON.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSString+Serialize.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSString+XMLSerializableSupport.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/ObjectiveResourceConfig.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/ObjectiveResourceDateFormatter.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/Response.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/SBJSON.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/WowieConnect
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/WowieConnect-main.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/WowieConnect.LinkFileList
+c00000000000000000000000000000000
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/WowieConnect.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/WowieConnectAppDelegate.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/WowieConnectViewController.o
+t2
+s0
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/en.lproj/InfoPlist.strings
+c000000004D0FD14F000000000000002D
+t1292882255
+s45
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/en.lproj/MainWindow.xib
+c000000004D0FD14F0000000000004E65
+t1292882255
+s20069
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/en.lproj/WowieConnectViewController.xib
+c000000004D125D110000000000002CC4
+t1293049105
+s11460
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/Connection.h
+c0000000049AC07A60000000000000315
+t1236010918
+s789
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/Connection.m
+c0000000049AC07A60000000000001574
+t1236010918
+s5492
+i"Connection.h"
+i"Response.h"
+i"NSData+Additions.h"
+i"NSMutableURLRequest+ResponseType.h"
+i"ConnectionDelegate.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/ConnectionDelegate.h
+c0000000049AC07A6000000000000024A
+t1236010918
+s586
+i<Foundation/Foundation.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/ConnectionDelegate.m
+c0000000049AC07A600000000000007E6
+t1236010918
+s2022
+i"ConnectionDelegate.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSHTTPURLResponse+Error.h
+c0000000049AC07A6000000000000011E
+t1236010918
+s286
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSHTTPURLResponse+Error.m
+c0000000049AC07A6000000000000039A
+t1236010918
+s922
+i"NSHTTPURLResponse+Error.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSMutableURLRequest+ResponseType.h
+c0000000049AC07A60000000000000129
+t1236010918
+s297
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSMutableURLRequest+ResponseType.m
+c0000000049AC07A6000000000000041A
+t1236010918
+s1050
+i"NSMutableURLRequest+ResponseType.h"
+i"ObjectiveResource.h"
+i"Connection.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSObject+ObjectiveResource.h
+c0000000049AC07A60000000000000A57
+t1236010918
+s2647
+i<Foundation/Foundation.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSObject+ObjectiveResource.m
+c000000004D0FBF010000000000002637
+t1292877569
+s9783
+i"NSObject+ObjectiveResource.h"
+i"Connection.h"
+i"Response.h"
+i"CoreSupport.h"
+i"XMLSerializableSupport.h"
+i"JSONSerializableSupport.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/ObjectiveResource.h
+c0000000049AC07A600000000000000D1
+t1236010918
+s209
+i"NSObject+ObjectiveResource.h"
+i"ObjectiveResourceConfig.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/ObjectiveResourceConfig.h
+c0000000049AC07A600000000000002F6
+t1236010918
+s758
+i"ObjectiveResource.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/ObjectiveResourceConfig.m
+c0000000049AC07A6000000000000053B
+t1236010918
+s1339
+i"ObjectiveResourceConfig.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/Response.h
+c0000000049AC07A6000000000000033C
+t1236010918
+s828
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/Response.m
+c0000000049AC07A600000000000005F7
+t1236010918
+s1527
+i"Response.h"
+i"NSHTTPURLResponse+Error.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/CoreSupport.h
+c0000000049AC07A600000000000000E6
+t1236010918
+s230
+i"NSString+GSub.h"
+i"NSString+InflectionSupport.h"
+i"NSObject+PropertySupport.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/Inflections/NSString+InflectionSupport.h
+c0000000049AC07A60000000000000378
+t1236010918
+s888
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/Inflections/NSString+InflectionSupport.m
+c0000000049AC07A6000000000000097F
+t1236010918
+s2431
+i"NSString+InflectionSupport.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSData+Additions.h
+c0000000049AC07A6000000000000019D
+t1236010918
+s413
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSData+Additions.m
+c0000000049AC07A6000000000000114F
+t1236010918
+s4431
+i"NSData+Additions.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSObject+PropertySupport.h
+c0000000049AC07A600000000000002A0
+t1236010918
+s672
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSObject+PropertySupport.m
+c000000004D1257DF0000000000000948
+t1293047775
+s2376
+i"objc/runtime.h"
+i"NSObject+PropertySupport.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSString+GSub.h
+c0000000049AC07A600000000000001B5
+t1236010918
+s437
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSString+GSub.m
+c0000000049AC07A6000000000000024C
+t1236010918
+s588
+i"NSString+GSub.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/ObjectiveResourceDateFormatter.h
+c0000000049AC07A60000000000000260
+t1236010918
+s608
+i<Foundation/Foundation.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/ObjectiveResourceDateFormatter.m
+c0000000049AC07A6000000000000082C
+t1236010918
+s2092
+i"ObjectiveResourceDateFormatter.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/ObjectiveSupport.h
+c0000000049AC07A600000000000000E4
+t1236010918
+s228
+i"CoreSupport.h"
+i"XMLSerializableSupport.h"
+i"JSONSerializableSupport.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/JSONSerializable.h
+c0000000049AC07A600000000000009F0
+t1236010918
+s2544
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/JSONSerializableSupport.h
+c0000000049AC07A6000000000000005D
+t1236010918
+s93
+i"NSObject+JSONSerializableSupport.h"
+i"NSDictionary+JSONSerializableSupport.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSArray+JSONSerializableSupport.h
+c0000000049AC07A60000000000000179
+t1236010918
+s377
+i<UIKit/UIKit.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSArray+JSONSerializableSupport.m
+c0000000049AC07A60000000000000352
+t1236010918
+s850
+i"JSONFramework.h"
+i"NSObject+JSONSerializableSupport.h"
+i"NSArray+JSONSerializableSupport.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSDictionary+JSONSerializableSupport.h
+c0000000049AC07A60000000000000161
+t1236010918
+s353
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSDictionary+JSONSerializableSupport.m
+c0000000049AC07A600000000000003B8
+t1236010918
+s952
+i"JSONFramework.h"
+i"NSDictionary+KeyTranslation.h"
+i"NSDictionary+JSONSerializableSupport.h"
+i"ObjectiveSupport.h"
+i"Serialize.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSObject+JSONSerializableSupport.h
+c0000000049AC07A6000000000000031B
+t1236010918
+s795
+i<Foundation/Foundation.h>
+i"JSONSerializable.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSObject+JSONSerializableSupport.m
+c0000000049AC07A60000000000000FEE
+t1236010918
+s4078
+i"NSObject+JSONSerializableSupport.h"
+i"NSDictionary+JSONSerializableSupport.h"
+i"Serialize.h"
+i"JSONFramework.h"
+i"ObjectiveSupport.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSDate+Serialize.h
+c0000000049AC07A600000000000000F7
+t1236010918
+s247
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSDate+Serialize.m
+c0000000049AC07A600000000000001E6
+t1236010918
+s486
+i"NSDate+Serialize.h"
+i"ObjectiveResourceDateFormatter.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSDictionary+KeyTranslation.h
+c0000000049AC07A60000000000000149
+t1236010918
+s329
+i<UIKit/UIKit.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSDictionary+KeyTranslation.m
+c0000000049AC07A600000000000001BB
+t1236010918
+s443
+i"NSDictionary+KeyTranslation.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSObject+Serialize.h
+c0000000049AC07A600000000000000ED
+t1236010918
+s237
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSObject+Serialize.m
+c0000000049AC07A60000000000000136
+t1236010918
+s310
+i"NSObject+Serialize.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSString+Serialize.h
+c0000000049AC07A600000000000000FE
+t1236010918
+s254
+i<UIKit/UIKit.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSString+Serialize.m
+c0000000049AC07A6000000000000013E
+t1236010918
+s318
+i"NSString+Serialize.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/Serialize.h
+c0000000049AC07A600000000000000E9
+t1236010918
+s233
+i"NSObject+Serialize.h"
+i"NSDate+Serialize.h"
+i"NSString+Serialize.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/FromXMLElementDelegate.h
+c0000000049AC07A600000000000004F9
+t1236010918
+s1273
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/FromXMLElementDelegate.m
+c0000000049AC07A60000000000001BF0
+t1236010918
+s7152
+i"FromXMLElementDelegate.h"
+i"XMLSerializableSupport.h"
+i"CoreSupport.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSArray+XMLSerializableSupport.h
+c0000000049AC07A600000000000000FE
+t1236010918
+s254
+i<Foundation/Foundation.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSArray+XMLSerializableSupport.m
+c0000000049AC07A600000000000003BA
+t1236010918
+s954
+i"NSArray+XMLSerializableSupport.h"
+i"NSObject+XMLSerializableSupport.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSDate+XMLSerializableSupport.h
+c0000000049AC07A6000000000000014B
+t1236010918
+s331
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSDate+XMLSerializableSupport.m
+c0000000049AC07A600000000000003E5
+t1236010918
+s997
+i"NSDate+XMLSerializableSupport.h"
+i"NSObject+XMLSerializableSupport.h"
+i"ObjectiveResourceDateFormatter.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSDictionary+XMLSerializableSupport.h
+c0000000049AC07A6000000000000020D
+t1236010918
+s525
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSDictionary+XMLSerializableSupport.m
+c0000000049AC07A600000000000004E5
+t1236010918
+s1253
+i"NSObject+XMLSerializableSupport.h"
+i"NSDictionary+KeyTranslation.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSNull+XMLSerializableSupport.h
+c0000000049AC07A600000000000000DD
+t1236010918
+s221
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSNull+XMLSerializableSupport.m
+c0000000049AC07A6000000000000011F
+t1236010918
+s287
+i"NSNull+XMLSerializableSupport.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSNumber+XMLSerializableSupport.h
+c0000000049AC07A600000000000000F0
+t1236010918
+s240
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSNumber+XMLSerializableSupport.m
+c0000000049AC07A6000000000000027E
+t1236010918
+s638
+i"NSObject+XMLSerializableSupport.h"
+i"NSNumber+XMLSerializableSupport.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSObject+XMLSerializableSupport.h
+c0000000049AC07A6000000000000064F
+t1236010918
+s1615
+i"XMLSerializable.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSObject+XMLSerializableSupport.m
+c0000000049AC07A60000000000001161
+t1236010918
+s4449
+i"NSObject+XMLSerializableSupport.h"
+i"NSDictionary+XMLSerializableSupport.h"
+i"CoreSupport.h"
+i"FromXMLElementDelegate.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSString+XMLSerializableSupport.h
+c0000000049AC07A600000000000001C9
+t1236010918
+s457
+i<UIKit/UIKit.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSString+XMLSerializableSupport.m
+c0000000049AC07A6000000000000044E
+t1236010918
+s1102
+i"NSString+XMLSerializableSupport.h"
+i"NSObject+XMLSerializableSupport.h"
+i"NSString+GSub.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/XMLSerializable.h
+c0000000049AC07A60000000000000A26
+t1236010918
+s2598
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/XMLSerializableSupport.h
+c0000000049AC07A6000000000000016B
+t1236010918
+s363
+i"XMLSerializable.h"
+i"CoreSupport.h"
+i"NSObject+XMLSerializableSupport.h"
+i"NSNull+XMLSerializableSupport.h"
+i"NSDate+XMLSerializableSupport.h"
+i"NSString+XMLSerializableSupport.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/JSONFramework.h
+c0000000049AC07A600000000000000D9
+t1236010918
+s217
+i"SBJSON.h"
+i"NSObject+SBJSON.h"
+i"NSString+SBJSON.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/NSObject+SBJSON.h
+c0000000049AC07A60000000000000888
+t1236010918
+s2184
+i<Foundation/Foundation.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/NSObject+SBJSON.m
+c0000000049AC07A60000000000000821
+t1236010918
+s2081
+i"NSObject+SBJSON.h"
+i"SBJSON.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/NSString+SBJSON.h
+c0000000049AC07A60000000000000705
+t1236010918
+s1797
+i<Foundation/Foundation.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/NSString+SBJSON.m
+c0000000049AC07A600000000000007DA
+t1236010918
+s2010
+i"NSString+SBJSON.h"
+i"SBJSON.h"
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/SBJSON.h
+c0000000049AC07A600000000000013CF
+t1236010918
+s5071
+i<Foundation/Foundation.h>
+
+N/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/SBJSON.m
+c0000000049AC07A60000000000005A98
+t1236010918
+s23192
+i"SBJSON.h"
+
+N/var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-bcoxpuuryulhpiapnwnirnjlnsze/WowieConnect-Prefix.pch.gch
+t2
+s0
+
+N/var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-flcmuzunvuwlfjadtblqnmllrmkl/WowieConnect-Prefix.pch.gch
+t2
+s0
+
+NWowieConnect-Info.plist
+c000000004D0FD14F00000000000003D2
+t1292882255
+s978
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/Connection.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/Connection.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/ConnectionDelegate.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/ConnectionDelegate.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/Feedback.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Feedback.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/FeedbackButtonViewController.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackButtonViewController.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/FeedbackViewController.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackViewController.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/FromXMLElementDelegate.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/FromXMLElementDelegate.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSArray+JSONSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSArray+JSONSerializableSupport.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSArray+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSArray+XMLSerializableSupport.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSData+Additions.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSData+Additions.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSDate+Serialize.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSDate+Serialize.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSDate+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSDate+XMLSerializableSupport.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSDictionary+JSONSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSDictionary+JSONSerializableSupport.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSDictionary+KeyTranslation.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSDictionary+KeyTranslation.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSDictionary+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSDictionary+XMLSerializableSupport.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSHTTPURLResponse+Error.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSHTTPURLResponse+Error.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSMutableURLRequest+ResponseType.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSMutableURLRequest+ResponseType.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSNull+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSNull+XMLSerializableSupport.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSNumber+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSNumber+XMLSerializableSupport.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSObject+JSONSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSObject+JSONSerializableSupport.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSObject+ObjectiveResource.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSObject+ObjectiveResource.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSObject+PropertySupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSObject+PropertySupport.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSObject+SBJSON.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/NSObject+SBJSON.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSObject+Serialize.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSObject+Serialize.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSObject+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSObject+XMLSerializableSupport.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSString+GSub.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSString+GSub.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSString+InflectionSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/Inflections/NSString+InflectionSupport.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSString+SBJSON.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/NSString+SBJSON.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSString+Serialize.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSString+Serialize.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/NSString+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSString+XMLSerializableSupport.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/ObjectiveResourceConfig.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/ObjectiveResourceConfig.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/ObjectiveResourceDateFormatter.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/ObjectiveResourceDateFormatter.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/Response.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/Response.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/SBJSON.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/SBJSON.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/WowieConnect-main.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/WowieConnect-main.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/WowieConnect.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnect.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/WowieConnectAppDelegate.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnectAppDelegate.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/WowieConnectViewController.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnectViewController.m" normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/Connection.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/Connection.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/ConnectionDelegate.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/ConnectionDelegate.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/Feedback.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Feedback.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/FeedbackButtonViewController.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackButtonViewController.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/FeedbackViewController.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackViewController.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/FromXMLElementDelegate.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/FromXMLElementDelegate.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSArray+JSONSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSArray+JSONSerializableSupport.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSArray+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSArray+XMLSerializableSupport.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSData+Additions.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSData+Additions.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSDate+Serialize.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSDate+Serialize.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSDate+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSDate+XMLSerializableSupport.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSDictionary+JSONSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSDictionary+JSONSerializableSupport.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSDictionary+KeyTranslation.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSDictionary+KeyTranslation.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSDictionary+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSDictionary+XMLSerializableSupport.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSHTTPURLResponse+Error.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSHTTPURLResponse+Error.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSMutableURLRequest+ResponseType.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSMutableURLRequest+ResponseType.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSNull+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSNull+XMLSerializableSupport.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSNumber+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSNumber+XMLSerializableSupport.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSObject+JSONSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/JSON/NSObject+JSONSerializableSupport.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSObject+ObjectiveResource.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/NSObject+ObjectiveResource.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSObject+PropertySupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSObject+PropertySupport.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSObject+SBJSON.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/NSObject+SBJSON.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSObject+Serialize.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSObject+Serialize.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSObject+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSObject+XMLSerializableSupport.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSString+GSub.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/NSString+GSub.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSString+InflectionSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/Inflections/NSString+InflectionSupport.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSString+SBJSON.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/NSString+SBJSON.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSString+Serialize.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/NSString+Serialize.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/NSString+XMLSerializableSupport.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Serialization/XML/NSString+XMLSerializableSupport.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/ObjectiveResourceConfig.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/ObjectiveResourceConfig.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/ObjectiveResourceDateFormatter.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/Core/ObjectiveResourceDateFormatter.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/Response.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/Response.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/SBJSON.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/objective_resource/objective_support/json-framework/SBJSON.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/WowieConnect-main.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/WowieConnect-main.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/WowieConnect.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnect.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/WowieConnectAppDelegate.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnectAppDelegate.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/WowieConnectViewController.o "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/WowieConnectViewController.m" normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileXIB "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackButtonViewController.xib"
+r0
+
+CCompileXIB "/Users/msaffitz/Documents/XCode Projects/WowieConnect/Classes/FeedbackViewController.xib"
+r0
+
+CCompileXIB "/Users/msaffitz/Documents/XCode Projects/WowieConnect/en.lproj/MainWindow.xib"
+r0
+
+CCompileXIB "/Users/msaffitz/Documents/XCode Projects/WowieConnect/en.lproj/WowieConnectViewController.xib"
+r0
+
+CCopyStringsFile "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphoneos/WowieConnect.app/en.lproj/InfoPlist.strings" en.lproj/InfoPlist.strings
+r0
+
+CCpResource build/Debug-iphoneos/WowieConnect.app/ResourceRules.plist /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS3.2.sdk/ResourceRules.plist
+r0
+
+CCreateUniversalBinary "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphoneos/WowieConnect.app/WowieConnect" normal "armv6 armv7"
+r0
+
+CGenerateDSYMFile "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphoneos/WowieConnect.app.dSYM" "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphoneos/WowieConnect.app/WowieConnect"
+r0
+
+CLd "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv6/WowieConnect" normal armv6
+r0
+
+CLd "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/Objects-normal/armv7/WowieConnect" normal armv7
+r0
+
+CProcessInfoPlistFile "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphoneos/WowieConnect.app/Info.plist" WowieConnect-Info.plist
+r0
+
+CProcessPCH /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-bcoxpuuryulhpiapnwnirnjlnsze/WowieConnect-Prefix.pch.gch WowieConnect-Prefix.pch normal armv7 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CProcessPCH /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/WowieConnect-Prefix-flcmuzunvuwlfjadtblqnmllrmkl/WowieConnect-Prefix.pch.gch WowieConnect-Prefix.pch normal armv6 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CTouch "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphoneos/WowieConnect.app"
+r0
+

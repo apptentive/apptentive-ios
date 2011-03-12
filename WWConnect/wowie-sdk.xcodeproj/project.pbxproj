@@ -1,0 +1,427 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		49382888132BFD510094D41D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49382887132BFD510094D41D /* Foundation.framework */; };
+		49382893132BFD510094D41D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49382892132BFD510094D41D /* UIKit.framework */; };
+		49382894132BFD510094D41D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49382887132BFD510094D41D /* Foundation.framework */; };
+		49382896132BFD510094D41D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49382895132BFD510094D41D /* CoreGraphics.framework */; };
+		49382899132BFD510094D41D /* libWWConnect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49382884132BFD510094D41D /* libWWConnect.a */; };
+		4938289F132BFD520094D41D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4938289D132BFD520094D41D /* InfoPlist.strings */; };
+		493828A2132BFD520094D41D /* WWConnectTests.h in Resources */ = {isa = PBXBuildFile; fileRef = 493828A1132BFD520094D41D /* WWConnectTests.h */; };
+		493828A4132BFD520094D41D /* WWConnectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 493828A3132BFD520094D41D /* WWConnectTests.m */; };
+		493828C3132C03090094D41D /* WWConnect.h in Headers */ = {isa = PBXBuildFile; fileRef = 493828C1132C03090094D41D /* WWConnect.h */; };
+		493828C4132C03090094D41D /* WWConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 493828C2132C03090094D41D /* WWConnect.m */; };
+		493828D2132C05C90094D41D /* WWFeedbackController.h in Headers */ = {isa = PBXBuildFile; fileRef = 493828CF132C05C80094D41D /* WWFeedbackController.h */; };
+		493828D3132C05C90094D41D /* WWFeedbackController.m in Sources */ = {isa = PBXBuildFile; fileRef = 493828D0132C05C80094D41D /* WWFeedbackController.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		49382897132BFD510094D41D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4938287B132BFD510094D41D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 49382883132BFD510094D41D;
+			remoteInfo = WWConnect;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		49382884132BFD510094D41D /* libWWConnect.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libWWConnect.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		49382887132BFD510094D41D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		4938288B132BFD510094D41D /* WWConnect-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WWConnect-Prefix.pch"; sourceTree = "<group>"; };
+		49382891132BFD510094D41D /* WWConnectTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WWConnectTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		49382892132BFD510094D41D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		49382895132BFD510094D41D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		4938289C132BFD520094D41D /* WWConnectTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "WWConnectTests-Info.plist"; sourceTree = "<group>"; };
+		4938289E132BFD520094D41D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		493828A0132BFD520094D41D /* WWConnectTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WWConnectTests-Prefix.pch"; sourceTree = "<group>"; };
+		493828A1132BFD520094D41D /* WWConnectTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WWConnectTests.h; sourceTree = "<group>"; };
+		493828A3132BFD520094D41D /* WWConnectTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WWConnectTests.m; sourceTree = "<group>"; };
+		493828B4132BFEC90094D41D /* WWResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = WWResources.bundle; sourceTree = "<group>"; };
+		493828C1132C03090094D41D /* WWConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWConnect.h; sourceTree = "<group>"; };
+		493828C2132C03090094D41D /* WWConnect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWConnect.m; sourceTree = "<group>"; };
+		493828CF132C05C80094D41D /* WWFeedbackController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWFeedbackController.h; sourceTree = "<group>"; };
+		493828D0132C05C80094D41D /* WWFeedbackController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWFeedbackController.m; sourceTree = "<group>"; };
+		493828D1132C05C80094D41D /* WWFeedbackController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WWFeedbackController.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		49382881132BFD510094D41D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49382888132BFD510094D41D /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4938288D132BFD510094D41D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49382893132BFD510094D41D /* UIKit.framework in Frameworks */,
+				49382894132BFD510094D41D /* Foundation.framework in Frameworks */,
+				49382896132BFD510094D41D /* CoreGraphics.framework in Frameworks */,
+				49382899132BFD510094D41D /* libWWConnect.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		49382879132BFD510094D41D = {
+			isa = PBXGroup;
+			children = (
+				49382889132BFD510094D41D /* WWConnect */,
+				4938289A132BFD510094D41D /* WWConnectTests */,
+				49382886132BFD510094D41D /* Frameworks */,
+				49382885132BFD510094D41D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		49382885132BFD510094D41D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				49382884132BFD510094D41D /* libWWConnect.a */,
+				49382891132BFD510094D41D /* WWConnectTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		49382886132BFD510094D41D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				49382887132BFD510094D41D /* Foundation.framework */,
+				49382892132BFD510094D41D /* UIKit.framework */,
+				49382895132BFD510094D41D /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		49382889132BFD510094D41D /* WWConnect */ = {
+			isa = PBXGroup;
+			children = (
+				493828B4132BFEC90094D41D /* WWResources.bundle */,
+				493828C0132C02EA0094D41D /* Classes */,
+				4938288A132BFD510094D41D /* Supporting Files */,
+			);
+			path = WWConnect;
+			sourceTree = "<group>";
+		};
+		4938288A132BFD510094D41D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4938288B132BFD510094D41D /* WWConnect-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4938289A132BFD510094D41D /* WWConnectTests */ = {
+			isa = PBXGroup;
+			children = (
+				493828A1132BFD520094D41D /* WWConnectTests.h */,
+				493828A3132BFD520094D41D /* WWConnectTests.m */,
+				4938289B132BFD520094D41D /* Supporting Files */,
+			);
+			path = WWConnectTests;
+			sourceTree = "<group>";
+		};
+		4938289B132BFD520094D41D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4938289C132BFD520094D41D /* WWConnectTests-Info.plist */,
+				4938289D132BFD520094D41D /* InfoPlist.strings */,
+				493828A0132BFD520094D41D /* WWConnectTests-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		493828C0132C02EA0094D41D /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				493828C1132C03090094D41D /* WWConnect.h */,
+				493828C2132C03090094D41D /* WWConnect.m */,
+				493828CF132C05C80094D41D /* WWFeedbackController.h */,
+				493828D0132C05C80094D41D /* WWFeedbackController.m */,
+				493828D1132C05C80094D41D /* WWFeedbackController.xib */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		49382882132BFD510094D41D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				493828C3132C03090094D41D /* WWConnect.h in Headers */,
+				493828D2132C05C90094D41D /* WWFeedbackController.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		49382883132BFD510094D41D /* WWConnect */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 493828A7132BFD520094D41D /* Build configuration list for PBXNativeTarget "WWConnect" */;
+			buildPhases = (
+				49382880132BFD510094D41D /* Sources */,
+				49382881132BFD510094D41D /* Frameworks */,
+				49382882132BFD510094D41D /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WWConnect;
+			productName = WWConnect;
+			productReference = 49382884132BFD510094D41D /* libWWConnect.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		49382890132BFD510094D41D /* WWConnectTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 493828AA132BFD520094D41D /* Build configuration list for PBXNativeTarget "WWConnectTests" */;
+			buildPhases = (
+				4938288C132BFD510094D41D /* Sources */,
+				4938288D132BFD510094D41D /* Frameworks */,
+				4938288E132BFD510094D41D /* Resources */,
+				4938288F132BFD510094D41D /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				49382898132BFD510094D41D /* PBXTargetDependency */,
+			);
+			name = WWConnectTests;
+			productName = WWConnectTests;
+			productReference = 49382891132BFD510094D41D /* WWConnectTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4938287B132BFD510094D41D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				ORGANIZATIONNAME = "Uncorked Apps LLC";
+			};
+			buildConfigurationList = 4938287E132BFD510094D41D /* Build configuration list for PBXProject "wowie-sdk" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 49382879132BFD510094D41D;
+			productRefGroup = 49382885132BFD510094D41D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				49382883132BFD510094D41D /* WWConnect */,
+				49382890132BFD510094D41D /* WWConnectTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4938288E132BFD510094D41D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4938289F132BFD520094D41D /* InfoPlist.strings in Resources */,
+				493828A2132BFD520094D41D /* WWConnectTests.h in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4938288F132BFD510094D41D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		49382880132BFD510094D41D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				493828C4132C03090094D41D /* WWConnect.m in Sources */,
+				493828D3132C05C90094D41D /* WWFeedbackController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4938288C132BFD510094D41D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				493828A4132BFD520094D41D /* WWConnectTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		49382898132BFD510094D41D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 49382883132BFD510094D41D /* WWConnect */;
+			targetProxy = 49382897132BFD510094D41D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		4938289D132BFD520094D41D /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4938289E132BFD520094D41D /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		493828A5132BFD520094D41D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		493828A6132BFD520094D41D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		493828A8132BFD520094D41D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DSTROOT = /tmp/WWConnect.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "WWConnect/WWConnect-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		493828A9132BFD520094D41D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DSTROOT = /tmp/WWConnect.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "WWConnect/WWConnect-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		493828AB132BFD520094D41D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "WWConnectTests/WWConnectTests-Prefix.pch";
+				INFOPLIST_FILE = "WWConnectTests/WWConnectTests-Info.plist";
+				OTHER_LDFLAGS = (
+					"-framework",
+					SenTestingKit,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		493828AC132BFD520094D41D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "WWConnectTests/WWConnectTests-Prefix.pch";
+				INFOPLIST_FILE = "WWConnectTests/WWConnectTests-Info.plist";
+				OTHER_LDFLAGS = (
+					"-framework",
+					SenTestingKit,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4938287E132BFD510094D41D /* Build configuration list for PBXProject "wowie-sdk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				493828A5132BFD520094D41D /* Debug */,
+				493828A6132BFD520094D41D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		493828A7132BFD520094D41D /* Build configuration list for PBXNativeTarget "WWConnect" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				493828A8132BFD520094D41D /* Debug */,
+				493828A9132BFD520094D41D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		493828AA132BFD520094D41D /* Build configuration list for PBXNativeTarget "WWConnectTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				493828AB132BFD520094D41D /* Debug */,
+				493828AC132BFD520094D41D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4938287B132BFD510094D41D /* Project object */;
+}

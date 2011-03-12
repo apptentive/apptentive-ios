@@ -1,36 +1,0 @@
-TBuild WowieConnect with configuration Debug
-v7
-r0
-t316117763.242164
-cCheck dependencies
-cExternalBuildToolExecution "Build WowieConnect with configuration Debug"
-
-N/var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Tmp-/80F89E2412D793010060B41D
-c000000004D275BF20000000000000054
-t1294425074
-s84
-
-CCheck dependencies
-r0
-lSLF07#2@18"Check dependencies316117761#316117761#0(0"0(0#1#0"8246126542038525952#0"0#
-
-CExternalBuildToolExecution "Build WowieConnect with configuration Debug"
-s316117761.552103
-e316117763.241995
-r1
-xExternalBuildToolExecution
-xBuild WowieConnect with configuration Debug
-o
-o=== BUILD NATIVE TARGET WowieConnect OF PROJECT WowieConnect WITH CONFIGURATION Debug ===
-oCheck dependencies
-oCodeSign build/Debug-iphoneos/WowieConnect.app
-o    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"
-o    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-o    setenv _CODESIGN_ALLOCATE_ /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/codesign_allocate
-o    /usr/bin/codesign -f -s "iPhone Developer: Michael Saffitz (588QKK939W)" "--resource-rules=/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphoneos/WowieConnect.app/ResourceRules.plist" --entitlements "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/WowieConnect.xcent" "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphoneos/WowieConnect.app"
-o
-o/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphoneos/WowieConnect.app: replacing existing signature
-o** BUILD SUCCEEDED **
-o
-lSLF07#2@23"Run external build tool316117761#316117763#0(1066"=== BUILD NATIVE TARGET WowieConnect OF PROJECT WowieConnect WITH CONFIGURATION Debug ===Check dependenciesCodeSign build/Debug-iphoneos/WowieConnect.app    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    setenv _CODESIGN_ALLOCATE_ /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/codesign_allocate    /usr/bin/codesign -f -s "iPhone Developer: Michael Saffitz (588QKK939W)" "--resource-rules=/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphoneos/WowieConnect.app/ResourceRules.plist" --entitlements "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/WowieConnect.xcent" "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphoneos/WowieConnect.app"/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphoneos/WowieConnect.app: replacing existing signature** BUILD SUCCEEDED **9(13@90"=== BUILD NATIVE TARGET WowieConnect OF PROJECT WowieConnect WITH CONFIGURATION Debug ===316117762#1#90#0(1@0"0(13@19"Check dependencies316117762#91#19#0(1@0"0(13@47"CodeSign build/Debug-iphoneos/WowieConnect.app316117762#110#47#0(1@0"0(13@63"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"316117762#157#63#0(1@0"0(13@143"    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"316117762#220#143#0(1@0"0(13@106"    setenv _CODESIGN_ALLOCATE_ /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/codesign_allocate316117762#363#106#0(1@0"0(13@451"    /usr/bin/codesign -f -s "iPhone Developer: Michael Saffitz (588QKK939W)" "--resource-rules=/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphoneos/WowieConnect.app/ResourceRules.plist" --entitlements "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/WowieConnect.build/Debug-iphoneos/WowieConnect.build/WowieConnect.xcent" "/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphoneos/WowieConnect.app"316117762#469#451#0(1@0"0(13@122"/Users/msaffitz/Documents/XCode Projects/WowieConnect/build/Debug-iphoneos/WowieConnect.app: replacing existing signature316117762#921#122#0(1@0"0(13@22"** BUILD SUCCEEDED **316117763#1043#22#0(1@0"0(0#0#0"8295753032397060096#161"    cd "/Users/msaffitz/Documents/XCode Projects/WowieConnect"    setenv ACTION     /var/folders/k8/k8RQUFAkE446kHYpGRyJvk+++TI/-Tmp-/80F89E2412D793010060B41D0#
-

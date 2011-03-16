@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		491917F9133145CC00EEACFC /* ATFeedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 491917F8133145CA00EEACFC /* ATFeedback.m */; };
+		4919180713314A2300EEACFC /* ATDefaultTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4919180613314A1D00EEACFC /* ATDefaultTextView.m */; };
 		493828E6132C0E270094D41D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 493828E5132C0E270094D41D /* UIKit.framework */; };
 		493828E8132C0E270094D41D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 493828E7132C0E270094D41D /* Foundation.framework */; };
 		493828EA132C0E270094D41D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 493828E9132C0E270094D41D /* CoreGraphics.framework */; };
@@ -42,6 +43,8 @@
 /* Begin PBXFileReference section */
 		491917F7133145C900EEACFC /* ATFeedback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATFeedback.h; sourceTree = "<group>"; };
 		491917F8133145CA00EEACFC /* ATFeedback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATFeedback.m; sourceTree = "<group>"; };
+		4919180513314A1C00EEACFC /* ATDefaultTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATDefaultTextView.h; sourceTree = "<group>"; };
+		4919180613314A1D00EEACFC /* ATDefaultTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATDefaultTextView.m; sourceTree = "<group>"; };
 		493828E1132C0E270094D41D /* DemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		493828E5132C0E270094D41D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		493828E7132C0E270094D41D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -191,6 +194,8 @@
 				49382970132C33A70094D41D /* WWFeedbackController.xib */,
 				491917F7133145C900EEACFC /* ATFeedback.h */,
 				491917F8133145CA00EEACFC /* ATFeedback.m */,
+				4919180513314A1C00EEACFC /* ATDefaultTextView.h */,
+				4919180613314A1D00EEACFC /* ATDefaultTextView.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -311,6 +316,7 @@
 				49382973132C33A70094D41D /* WWConnect.m in Sources */,
 				49382974132C33A70094D41D /* WWFeedbackController.m in Sources */,
 				491917F9133145CC00EEACFC /* ATFeedback.m in Sources */,
+				4919180713314A2300EEACFC /* ATDefaultTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

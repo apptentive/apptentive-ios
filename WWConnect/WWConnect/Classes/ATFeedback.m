@@ -17,6 +17,7 @@
     self.name = nil;
     self.email = nil;
     self.phone = nil;
+    [super dealloc];
 }
 
 - (NSDictionary *)dictionary {

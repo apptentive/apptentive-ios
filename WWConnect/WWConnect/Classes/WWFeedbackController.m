@@ -7,13 +7,11 @@
 //
 
 #import "WWFeedbackController.h"
+#import "ATDefaultTextView.h"
 
 
 @interface WWFeedbackController (Private)
-- (void)scrollToFirstResponder;
-- (void)scrollToView:(UIView *)view;
 - (BOOL)shouldReturn:(UIView *)view;
-- (NSString *)feedbackFooterHTML;
 - (void)setup;
 - (void)teardown;
 - (void)keyboardWillShow:(NSNotification *)notification;
@@ -29,7 +27,6 @@
 
 - (void)dealloc {
     [self teardown];
-    [submitCell release];
     [super dealloc];
 }
 
@@ -43,6 +40,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setup];
+    [nameField becomeFirstResponder];
 }
 
 - (void)viewDidUnload {
@@ -58,58 +56,12 @@
     [self dismissModalViewControllerAnimated:YES];
 }
 
-- (IBAction)submitFeedback:(id)sender {
-    //TODO
+- (IBAction)nextStep:(id)sender {
+    // TODO
     [self cancelFeedback:sender];
 }
 
-#pragma mark UITableViewDelegate
-- (CGFloat)tableView:(UITableView *)aTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    CGFloat height = 0;
-    if (indexPath.section == kFeedbackFeedbackSection) {
-        if (indexPath.row == kFeedbackFeedbackCell) {
-            height = feedbackCell.frame.size.height;
-        }
-    }
-    return height;
-}
-
-
-- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-}
-
-#pragma mark UITableViewDataSource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return kFeedbackSectionCount;
-}
-
-- (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
-    if (section == kFeedbackFeedbackSection) {
-        return kFeedbackCellCount;
-    }
-    return 0;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = nil;
-    if (indexPath.section == kFeedbackFeedbackSection) {
-        if (indexPath.row == kFeedbackFeedbackCell) {
-            cell = feedbackCell;
-        }
-    }
-    return cell;
-}
-
-#pragma mark UITextViewDelegate
-- (void)textViewDidBeginEditing:(UITextView *)textView {
-    [self scrollToView:textView];
-}
-
 #pragma mark UITextFieldDelegate
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-    [self scrollToView:textField];
-}
-
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     return [self shouldReturn:textField];
 }
@@ -117,71 +69,30 @@
 
 
 @implementation WWFeedbackController (Private)
-- (void)scrollToFirstResponder {
-    if (nameField.editing) {
-        [self scrollToView:nameField];
-    }
-    if (phoneField.editing) {
-        [self scrollToView:phoneField];
-    }
-    if (emailField.editing) {
-        [self scrollToView:emailField];
-    }
-}
-
-- (void)scrollToView:(UIView *)view {
-    CGRect adjustedFrame = [view convertRect:view.bounds toView:tableView];
-    adjustedFrame = CGRectInset(adjustedFrame, 0.0, 4.0);
-    [tableView scrollRectToVisible:adjustedFrame animated:YES];
-}
-
 - (BOOL)shouldReturn:(UIView *)view {
-    if (view == emailField || view == nameField) {
-        UIView *next = emailField;
-        if (view == emailField) {
-            next = phoneField;
-        }
-        [next becomeFirstResponder];
+    if (view == nameField) {
+        [feedbackView becomeFirstResponder];
+        return NO;
     }
     return YES;
 }
 
-- (NSString *)feedbackFooterHTML {
-    NSString *result = nil;
-    NSBundle *bundle = [NSBundle mainBundle];
-    NSString *path = [bundle pathForResource:@"WWResources.bundle/ww_feedback_footer" ofType:@"html"];
-    if (path) {
-        result = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
-    }
-    return result;
-}
-
 - (void)setup {
-    NSString *html = [self feedbackFooterHTML];
-    [footerWebView loadHTMLString:html baseURL:nil];
-    tableView.delegate = self;
-    tableView.dataSource = self;
-    //tableView.tableFooterView = footerWebView;
-    
+    NSLog(@"navigationController: %@", self.navigationController);
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(nameChanged:) name:UITextFieldTextDidChangeNotification object:nameField];
+    nextButton.enabled = NO;
+    feedbackView.placeholder = NSLocalizedString(@"Feedback (optional)", nil);
 }
 
 - (void)teardown {
-    [tableView release];
-    tableView = nil;
-    [feedbackCell release];
-    feedbackCell = nil;
-    [submitCell release];
-    submitCell = nil;
-    [footerWebView release];
-    footerWebView = nil;
+    [feedbackView release];
+    feedbackView = nil;
     [nameField release];
     nameField = nil;
-    [phoneField release];
-    phoneField = nil;
-    [emailField release];
-    emailField = nil;
+    [nextButton release];
+    nextButton = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -192,17 +103,17 @@
     keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
     
     CGFloat keyboardTop = keyboardRect.origin.y;
-    CGRect newFrame = tableView.frame;
-    newFrame.size.height = keyboardTop - tableView.frame.origin.y;
+    CGRect newFrame = feedbackView.frame;
+    newFrame.size.height = keyboardTop - feedbackView.frame.origin.y;
     
     NSTimeInterval duration;
     [(NSValue *)[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&duration];
     
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:duration];
-    tableView.frame = newFrame;
+    feedbackView.frame = newFrame;
     [UIView commitAnimations];
-    [self performSelector:@selector(scrollToFirstResponder) withObject:nil afterDelay:duration + 0.1];
+    [feedbackView flashScrollIndicators];
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification {
@@ -214,8 +125,14 @@
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:animationDuration];
     
-    tableView.frame = self.view.bounds;
+    feedbackView.frame = self.view.bounds;
     
     [UIView commitAnimations];
+}
+
+- (void)nameChanged:(NSNotification *)notification {
+    if (notification.object == nameField) {
+        nextButton.enabled = ![@"" isEqualToString:nameField.text];
+    }
 }
 @end

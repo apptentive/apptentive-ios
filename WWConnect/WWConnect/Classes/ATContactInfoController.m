@@ -118,7 +118,10 @@
         imageControl.layer.shadowRadius = 40.0;
         imageControl.layer.shadowColor = [UIColor blackColor].CGColor;
         imageControl.layer.shadowOpacity = 0.5;
-        imageControl.frame = CGRectInset(self.view.frame, 20.0, 20.0);
+        CGSize newSize = CGSizeMake(floor(feedback.screenshot.size.width * 0.8), floor(feedback.screenshot.size.height * 0.8));
+        CGSize diff = CGSizeMake(floor((self.view.frame.size.width - newSize.width)/2.0), floor((self.view.frame.size.height - newSize.height)/2.0));
+        CGRect newFrame = CGRectMake(diff.width, diff.height, newSize.width, newSize.height);
+        imageControl.frame = newFrame;
         [UIView commitAnimations];
     }
 }

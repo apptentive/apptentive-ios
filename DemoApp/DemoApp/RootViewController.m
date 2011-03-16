@@ -7,19 +7,19 @@
 //
 
 #import "RootViewController.h"
+#import "WWConnect.h"
 
 @implementation RootViewController
 
 
 - (IBAction)showFeedback:(id)sender {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Feedback" message:@"Feedback goes here!" delegate:nil cancelButtonTitle:@"Done" otherButtonTitles:nil];
-    [alert show];
-    [alert release];
-    alert = nil;
+    WWFeedbackController *controller = [[WWFeedbackController alloc] init];
+    [self presentModalViewController:controller animated:YES];
+    [controller release];
+    controller = nil;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     UIBarButtonItem *feedbackButton = [[UIBarButtonItem alloc] initWithTitle:@"Feedback" style:UIBarButtonItemStylePlain target:self action:@selector(showFeedback:)];
     self.navigationItem.rightBarButtonItem = feedbackButton;
     [feedbackButton release];

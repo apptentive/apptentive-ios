@@ -9,10 +9,11 @@
 #import <UIKit/UIKit.h>
 
 
-@interface WWFeedbackController : UIViewController {
-    IBOutlet UITableView *tableView;
-    IBOutlet UITableViewCell *feedbackCell;
-    IBOutlet UITableViewCell *nameCell;
+@interface WWFeedbackController : UINavigationController {
+    IBOutlet UITextField *nameField;
+    IBOutlet UITextView *feedbackView;
 }
-
+- (id)init;
+- (IBAction)cancelFeedback:(id)sender;
+- (IBAction)nextStep:(id)sender;
 @end

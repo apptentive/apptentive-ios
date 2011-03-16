@@ -6,11 +6,9 @@
 //  Copyright 2011 Planetary Scale LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
+#import <UIKit/UIKit.h>
+#import "WWFeedbackController.h"
 
 @interface WWConnect : NSObject {
-    
 }
-
 @end

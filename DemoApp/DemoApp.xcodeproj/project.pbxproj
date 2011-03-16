@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		491917F9133145CC00EEACFC /* ATFeedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 491917F8133145CA00EEACFC /* ATFeedback.m */; };
 		493828E6132C0E270094D41D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 493828E5132C0E270094D41D /* UIKit.framework */; };
 		493828E8132C0E270094D41D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 493828E7132C0E270094D41D /* Foundation.framework */; };
 		493828EA132C0E270094D41D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 493828E9132C0E270094D41D /* CoreGraphics.framework */; };
@@ -22,6 +23,10 @@
 		49382910132C0E280094D41D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4938290E132C0E280094D41D /* InfoPlist.strings */; };
 		49382913132C0E280094D41D /* DemoAppTests.h in Resources */ = {isa = PBXBuildFile; fileRef = 49382912132C0E280094D41D /* DemoAppTests.h */; };
 		49382915132C0E280094D41D /* DemoAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49382914132C0E280094D41D /* DemoAppTests.m */; };
+		49382973132C33A70094D41D /* WWConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 4938296D132C33A70094D41D /* WWConnect.m */; };
+		49382974132C33A70094D41D /* WWFeedbackController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4938296F132C33A70094D41D /* WWFeedbackController.m */; };
+		49382975132C33A70094D41D /* WWFeedbackController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49382970132C33A70094D41D /* WWFeedbackController.xib */; };
+		49382976132C33A70094D41D /* WWResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 49382972132C33A70094D41D /* WWResources.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +40,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		491917F7133145C900EEACFC /* ATFeedback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATFeedback.h; sourceTree = "<group>"; };
+		491917F8133145CA00EEACFC /* ATFeedback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATFeedback.m; sourceTree = "<group>"; };
 		493828E1132C0E270094D41D /* DemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		493828E5132C0E270094D41D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		493828E7132C0E270094D41D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -55,6 +62,13 @@
 		49382911132C0E280094D41D /* DemoAppTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DemoAppTests-Prefix.pch"; sourceTree = "<group>"; };
 		49382912132C0E280094D41D /* DemoAppTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoAppTests.h; sourceTree = "<group>"; };
 		49382914132C0E280094D41D /* DemoAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoAppTests.m; sourceTree = "<group>"; };
+		4938296C132C33A70094D41D /* WWConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWConnect.h; sourceTree = "<group>"; };
+		4938296D132C33A70094D41D /* WWConnect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWConnect.m; sourceTree = "<group>"; };
+		4938296E132C33A70094D41D /* WWFeedbackController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWFeedbackController.h; sourceTree = "<group>"; };
+		4938296F132C33A70094D41D /* WWFeedbackController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWFeedbackController.m; sourceTree = "<group>"; };
+		49382970132C33A70094D41D /* WWFeedbackController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WWFeedbackController.xib; sourceTree = "<group>"; };
+		49382971132C33A70094D41D /* WWConnect-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WWConnect-Prefix.pch"; sourceTree = "<group>"; };
+		49382972132C33A70094D41D /* WWResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = WWResources.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +98,7 @@
 		493828D6132C0E270094D41D = {
 			isa = PBXGroup;
 			children = (
+				4938296A132C33A70094D41D /* WWConnect */,
 				493828EB132C0E270094D41D /* DemoApp */,
 				4938290B132C0E280094D41D /* DemoAppTests */,
 				493828E4132C0E270094D41D /* Frameworks */,
@@ -153,6 +168,31 @@
 				49382911132C0E280094D41D /* DemoAppTests-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4938296A132C33A70094D41D /* WWConnect */ = {
+			isa = PBXGroup;
+			children = (
+				4938296B132C33A70094D41D /* Classes */,
+				49382971132C33A70094D41D /* WWConnect-Prefix.pch */,
+				49382972132C33A70094D41D /* WWResources.bundle */,
+			);
+			name = WWConnect;
+			path = ../WWConnect/WWConnect;
+			sourceTree = "<group>";
+		};
+		4938296B132C33A70094D41D /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				4938296C132C33A70094D41D /* WWConnect.h */,
+				4938296D132C33A70094D41D /* WWConnect.m */,
+				4938296E132C33A70094D41D /* WWFeedbackController.h */,
+				4938296F132C33A70094D41D /* WWFeedbackController.m */,
+				49382970132C33A70094D41D /* WWFeedbackController.xib */,
+				491917F7133145C900EEACFC /* ATFeedback.h */,
+				491917F8133145CA00EEACFC /* ATFeedback.m */,
+			);
+			path = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -228,6 +268,8 @@
 				493828F0132C0E270094D41D /* InfoPlist.strings in Resources */,
 				493828F9132C0E270094D41D /* MainWindow.xib in Resources */,
 				493828FF132C0E270094D41D /* RootViewController.xib in Resources */,
+				49382975132C33A70094D41D /* WWFeedbackController.xib in Resources */,
+				49382976132C33A70094D41D /* WWResources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,6 +308,9 @@
 				493828F3132C0E270094D41D /* main.m in Sources */,
 				493828F6132C0E270094D41D /* DemoAppAppDelegate.m in Sources */,
 				493828FC132C0E270094D41D /* RootViewController.m in Sources */,
+				49382973132C33A70094D41D /* WWConnect.m in Sources */,
+				49382974132C33A70094D41D /* WWFeedbackController.m in Sources */,
+				491917F9133145CC00EEACFC /* ATFeedback.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -446,6 +491,7 @@
 				4938291A132C0E280094D41D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4938291B132C0E280094D41D /* Build configuration list for PBXNativeTarget "DemoAppTests" */ = {
 			isa = XCConfigurationList;
@@ -454,6 +500,7 @@
 				4938291D132C0E280094D41D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

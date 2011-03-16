@@ -7,8 +7,9 @@
 //
 
 #import "WWFeedbackController.h"
+#import "ATContactInfoController.h"
 #import "ATDefaultTextView.h"
-
+#import "ATFeedback.h"
 
 @interface WWFeedbackController (Private)
 - (BOOL)shouldReturn:(UIView *)view;
@@ -19,6 +20,7 @@
 @end
 
 @implementation WWFeedbackController
+@synthesize feedback;
 
 - (id)init {
     self = [self initWithNibName:@"WWFeedbackController" bundle:nil];
@@ -58,7 +60,13 @@
 
 - (IBAction)nextStep:(id)sender {
     // TODO
-    [self cancelFeedback:sender];
+    feedback.name = nameField.text;
+    feedback.text = feedbackView.text;
+    
+    ATContactInfoController *vc = [[ATContactInfoController alloc] init];
+    vc.feedback = self.feedback;
+    [self.navigationController pushViewController:vc animated:YES];
+    [vc release];
 }
 
 #pragma mark UITextFieldDelegate
@@ -78,21 +86,25 @@
 }
 
 - (void)setup {
-    NSLog(@"navigationController: %@", self.navigationController);
+    if (!feedback) {
+        self.feedback = [[[ATFeedback alloc] init] autorelease];
+    }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(nameChanged:) name:UITextFieldTextDidChangeNotification object:nameField];
-    nextButton.enabled = NO;
     feedbackView.placeholder = NSLocalizedString(@"Feedback (optional)", nil);
+    self.title = NSLocalizedString(@"Give Feedback", nil);
+    self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelFeedback:)] autorelease];
+    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Next Step", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(nextStep:)] autorelease];
+    self.navigationItem.rightBarButtonItem.enabled = NO;
 }
 
 - (void)teardown {
+    self.feedback = nil;
     [feedbackView release];
     feedbackView = nil;
     [nameField release];
     nameField = nil;
-    [nextButton release];
-    nextButton = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -102,9 +114,8 @@
     CGRect keyboardRect = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
     
-    CGFloat keyboardTop = keyboardRect.origin.y;
     CGRect newFrame = feedbackView.frame;
-    newFrame.size.height = keyboardTop - feedbackView.frame.origin.y;
+    newFrame.size.height -= keyboardRect.size.height;
     
     NSTimeInterval duration;
     [(NSValue *)[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&duration];
@@ -121,18 +132,22 @@
     
     NSTimeInterval animationDuration;
     [(NSValue *)[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
+    CGRect keyboardRect = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
     
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:animationDuration];
     
-    feedbackView.frame = self.view.bounds;
+    CGRect newFrame = feedbackView.frame;
+    newFrame.size.height += keyboardRect.size.height;
+    feedbackView.frame = newFrame;
     
     [UIView commitAnimations];
 }
 
 - (void)nameChanged:(NSNotification *)notification {
     if (notification.object == nameField) {
-        nextButton.enabled = ![@"" isEqualToString:nameField.text];
+        self.navigationItem.rightBarButtonItem.enabled = ![@"" isEqualToString:nameField.text];
     }
 }
 @end

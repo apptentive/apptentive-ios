@@ -9,12 +9,13 @@
 #import <UIKit/UIKit.h>
 
 @class ATDefaultTextView;
+@class ATFeedback;
 
 @interface WWFeedbackController : UIViewController {
     IBOutlet UITextField *nameField;
     IBOutlet ATDefaultTextView *feedbackView;
-    IBOutlet UIBarButtonItem *nextButton;
 }
+@property (nonatomic, retain) ATFeedback *feedback;
 - (id)init;
 - (IBAction)cancelFeedback:(id)sender;
 - (IBAction)nextStep:(id)sender;

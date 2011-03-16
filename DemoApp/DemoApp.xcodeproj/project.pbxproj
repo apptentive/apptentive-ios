@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		491917F9133145CC00EEACFC /* ATFeedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 491917F8133145CA00EEACFC /* ATFeedback.m */; };
 		4919180713314A2300EEACFC /* ATDefaultTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4919180613314A1D00EEACFC /* ATDefaultTextView.m */; };
+		491918171331591300EEACFC /* ATContactInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49191815133158EE00EEACFC /* ATContactInfoController.m */; };
+		491918181331591300EEACFC /* ATContactInfoController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49191816133158FB00EEACFC /* ATContactInfoController.xib */; };
 		493828E6132C0E270094D41D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 493828E5132C0E270094D41D /* UIKit.framework */; };
 		493828E8132C0E270094D41D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 493828E7132C0E270094D41D /* Foundation.framework */; };
 		493828EA132C0E270094D41D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 493828E9132C0E270094D41D /* CoreGraphics.framework */; };
@@ -45,6 +47,9 @@
 		491917F8133145CA00EEACFC /* ATFeedback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATFeedback.m; sourceTree = "<group>"; };
 		4919180513314A1C00EEACFC /* ATDefaultTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATDefaultTextView.h; sourceTree = "<group>"; };
 		4919180613314A1D00EEACFC /* ATDefaultTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATDefaultTextView.m; sourceTree = "<group>"; };
+		49191814133158E900EEACFC /* ATContactInfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATContactInfoController.h; sourceTree = "<group>"; };
+		49191815133158EE00EEACFC /* ATContactInfoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATContactInfoController.m; sourceTree = "<group>"; };
+		49191816133158FB00EEACFC /* ATContactInfoController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATContactInfoController.xib; sourceTree = "<group>"; };
 		493828E1132C0E270094D41D /* DemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		493828E5132C0E270094D41D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		493828E7132C0E270094D41D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -196,6 +201,9 @@
 				491917F8133145CA00EEACFC /* ATFeedback.m */,
 				4919180513314A1C00EEACFC /* ATDefaultTextView.h */,
 				4919180613314A1D00EEACFC /* ATDefaultTextView.m */,
+				49191814133158E900EEACFC /* ATContactInfoController.h */,
+				49191815133158EE00EEACFC /* ATContactInfoController.m */,
+				49191816133158FB00EEACFC /* ATContactInfoController.xib */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -275,6 +283,7 @@
 				493828FF132C0E270094D41D /* RootViewController.xib in Resources */,
 				49382975132C33A70094D41D /* WWFeedbackController.xib in Resources */,
 				49382976132C33A70094D41D /* WWResources.bundle in Resources */,
+				491918181331591300EEACFC /* ATContactInfoController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -317,6 +326,7 @@
 				49382974132C33A70094D41D /* WWFeedbackController.m in Sources */,
 				491917F9133145CC00EEACFC /* ATFeedback.m in Sources */,
 				4919180713314A2300EEACFC /* ATDefaultTextView.m in Sources */,
+				491918171331591300EEACFC /* ATContactInfoController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

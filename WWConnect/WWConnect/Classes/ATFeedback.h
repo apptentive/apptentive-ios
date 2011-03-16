@@ -15,6 +15,7 @@
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *email;
 @property (nonatomic, retain) NSString *phone;
+@property (nonatomic, retain) UIImage *screenshot;
 
 - (NSDictionary *)dictionary;
 @end

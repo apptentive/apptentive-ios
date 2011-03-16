@@ -10,7 +10,8 @@
 
 
 @interface ATDefaultTextView ()
-@property (nonatomic, retain) UIColor *originalTextColor;
+@property (nonatomic, copy) UIColor *originalTextColor;
+@property (nonatomic, copy) UIColor *placeholderTextColor;
 @end
 
 @interface ATDefaultTextView (Private)
@@ -22,7 +23,7 @@
 
 @implementation ATDefaultTextView
 @synthesize placeholder;
-@synthesize originalTextColor;
+@synthesize originalTextColor, placeholderTextColor;
 
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
@@ -53,12 +54,19 @@
     }
 }
 
+- (void)setTextColor:(UIColor *)newTextColor {
+    [super setTextColor:newTextColor];
+    if (![self.textColor isEqual:self.placeholderTextColor] && ![self.textColor isEqual:self.originalTextColor]) {
+        self.originalTextColor = self.textColor;
+    }
+}
 @end
 
 
 @implementation ATDefaultTextView (Private)
 
 - (void)setup {
+    self.placeholderTextColor = [UIColor lightGrayColor];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(beganEditing:) name:UITextViewTextDidBeginEditingNotification object:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(endedEditing:) name:UITextViewTextDidEndEditingNotification object:self];
     [self setupPlaceholder];
@@ -66,15 +74,17 @@
 
 - (void)setupPlaceholder {
     self.text = self.placeholder;
-    self.originalTextColor = self.textColor;
-    self.textColor = [UIColor lightGrayColor];
+    if (!self.originalTextColor) {
+        self.originalTextColor = self.textColor;
+    }
+    self.textColor = self.placeholderTextColor;
 }
 
 - (void)beganEditing:(NSNotification *)notification {
     if (notification.object == self) {
         if (self.text && self.placeholder && [self.placeholder isEqualToString:self.text]) {
             self.text = @"";
-            self.textColor = self.originalTextColor;
+            self.textColor = [[self.originalTextColor copy] autorelease];
         }
     }
 }

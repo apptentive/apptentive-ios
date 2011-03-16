@@ -10,17 +10,18 @@
 
 
 @implementation ATFeedback
-@synthesize text, name, email, phone;
+@synthesize text, name, email, phone, screenshot;
 
 - (void)dealloc {
     self.text = nil;
     self.name = nil;
     self.email = nil;
     self.phone = nil;
+    self.screenshot = nil;
     [super dealloc];
 }
 
 - (NSDictionary *)dictionary {
-    return [NSDictionary dictionaryWithObjectsAndKeys:self.text, @"text", self.name, @"name", self.email, @"email", self.phone, @"phone", nil];
+    return [NSDictionary dictionaryWithObjectsAndKeys:self.text, @"text", self.name, @"name", self.email, @"email", self.phone, @"phone", self.screenshot, @"screenshot", nil];
 }
 @end

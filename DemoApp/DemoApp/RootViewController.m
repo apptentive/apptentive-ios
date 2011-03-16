@@ -13,10 +13,7 @@
 
 
 - (IBAction)showFeedback:(id)sender {
-    WWFeedbackController *controller = [[WWFeedbackController alloc] init];
-    [self presentModalViewController:controller animated:YES];
-    [controller release];
-    controller = nil;
+    [WWConnect presentFeedbackControllerFromViewController:self];
 }
 
 - (void)viewDidLoad {

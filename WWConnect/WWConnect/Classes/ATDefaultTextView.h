@@ -12,6 +12,7 @@
 @interface ATDefaultTextView : UITextView {
 @private
     UIColor *originalTextColor;
+    UIColor *placeholderTextColor;
 }
 @property (nonatomic, retain) NSString *placeholder;
 @end

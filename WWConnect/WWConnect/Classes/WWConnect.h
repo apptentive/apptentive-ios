@@ -11,4 +11,5 @@
 
 @interface WWConnect : NSObject {
 }
++ (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController;
 @end

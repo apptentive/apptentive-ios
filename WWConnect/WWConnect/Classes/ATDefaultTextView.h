@@ -15,4 +15,5 @@
     UIColor *placeholderTextColor;
 }
 @property (nonatomic, retain) NSString *placeholder;
+- (BOOL)isDefault;
 @end

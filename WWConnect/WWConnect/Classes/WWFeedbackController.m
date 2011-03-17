@@ -14,6 +14,7 @@
 @interface WWFeedbackController (Private)
 - (BOOL)shouldReturn:(UIView *)view;
 - (void)setup;
+- (void)setupFeedback;
 - (void)teardown;
 - (void)keyboardWillShow:(NSNotification *)notification;
 - (void)keyboardWillHide:(NSNotification *)notification;
@@ -36,6 +37,15 @@
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
+}
+
+- (void)setFeedback:(ATFeedback *)newFeedback {
+    if (feedback != newFeedback) {
+        [feedback release];
+        feedback = nil;
+        feedback = [newFeedback retain];
+        [self setupFeedback];
+    }
 }
 
 #pragma mark - View lifecycle
@@ -90,6 +100,8 @@
     if (!feedback) {
         self.feedback = [[[ATFeedback alloc] init] autorelease];
     }
+    [self setupFeedback];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackChanged:) name:UITextViewTextDidChangeNotification object:feedbackView];
@@ -99,6 +111,15 @@
     self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelFeedback:)] autorelease];
     self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Next Step", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(nextStep:)] autorelease];
     self.navigationItem.rightBarButtonItem.enabled = NO;
+}
+
+- (void)setupFeedback {
+    if (nameField && (!nameField.text || [@"" isEqualToString:nameField.text]) && feedback.name) {
+        nameField.text = feedback.name;
+    }
+    if (feedbackView && [feedbackView isDefault] && feedback.text) {
+        feedbackView.text = feedback.text;
+    }
 }
 
 - (void)teardown {

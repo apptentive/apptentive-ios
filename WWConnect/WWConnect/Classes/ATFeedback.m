@@ -8,9 +8,13 @@
 
 #import "ATFeedback.h"
 
-
 @implementation ATFeedback
 @synthesize text, name, email, phone, screenshot;
+- (id)init {
+    if ((self = [super init])) {
+    }
+    return self;
+}
 
 - (void)dealloc {
     self.text = nil;

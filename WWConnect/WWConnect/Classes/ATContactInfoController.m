@@ -13,6 +13,7 @@
 @interface ATContactInfoController (Private)
 - (BOOL)shouldReturn:(UIView *)view;
 - (void)setup;
+- (void)setupFeedback;
 - (void)teardown;
 @end
 
@@ -50,6 +51,7 @@
         feedback = [newFeedback retain];
         screenshotView.image = feedback.screenshot;
         [feedback addObserver:self forKeyPath:@"screenshot" options:0 context:NULL];
+        [self setupFeedback];
     }
 }
 
@@ -149,6 +151,16 @@
     self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Submit", nil) style:UIBarButtonItemStyleDone target:self action:@selector(nextStep:)] autorelease];
     [imageControl setUserInteractionEnabled:YES];
     [imageControl setEnabled:YES];
+    [self setupFeedback];
+}
+
+- (void)setupFeedback {
+    if (emailField && (!emailField.text || [@"" isEqualToString:emailField.text]) && feedback.email) {
+        emailField.text = feedback.email;
+    }
+    if (phoneField && (!phoneField.text || [@"" isEqualToString:phoneField.text]) && feedback.phone) {
+        phoneField.text = feedback.phone;
+    }
 }
 
 - (void)teardown {

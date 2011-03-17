@@ -60,6 +60,13 @@
         self.originalTextColor = self.textColor;
     }
 }
+
+- (BOOL)isDefault {
+    if (!self.text) return YES;
+    if ([@"" isEqualToString:self.text]) return YES;
+    if ([self.placeholder isEqualToString:self.text]) return YES;
+    return NO;
+}
 @end
 
 

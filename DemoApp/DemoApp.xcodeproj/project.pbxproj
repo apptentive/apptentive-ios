@@ -11,6 +11,9 @@
 		4919180713314A2300EEACFC /* ATDefaultTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4919180613314A1D00EEACFC /* ATDefaultTextView.m */; };
 		491918171331591300EEACFC /* ATContactInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49191815133158EE00EEACFC /* ATContactInfoController.m */; };
 		491918181331591300EEACFC /* ATContactInfoController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49191816133158FB00EEACFC /* ATContactInfoController.xib */; };
+		4919182A1331971100EEACFC /* ATFeedbackController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 491918291331971000EEACFC /* ATFeedbackController_iPad.xib */; };
+		4919182D1331984500EEACFC /* ATContactInfoController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4919182C1331984300EEACFC /* ATContactInfoController_iPad.xib */; };
+		49191833133198F200EEACFC /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49191831133198F200EEACFC /* MainWindow-iPad.xib */; };
 		493828E6132C0E270094D41D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 493828E5132C0E270094D41D /* UIKit.framework */; };
 		493828E8132C0E270094D41D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 493828E7132C0E270094D41D /* Foundation.framework */; };
 		493828EA132C0E270094D41D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 493828E9132C0E270094D41D /* CoreGraphics.framework */; };
@@ -50,6 +53,9 @@
 		49191814133158E900EEACFC /* ATContactInfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATContactInfoController.h; sourceTree = "<group>"; };
 		49191815133158EE00EEACFC /* ATContactInfoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATContactInfoController.m; sourceTree = "<group>"; };
 		49191816133158FB00EEACFC /* ATContactInfoController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATContactInfoController.xib; sourceTree = "<group>"; };
+		491918291331971000EEACFC /* ATFeedbackController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATFeedbackController_iPad.xib; sourceTree = "<group>"; };
+		4919182C1331984300EEACFC /* ATContactInfoController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATContactInfoController_iPad.xib; sourceTree = "<group>"; };
+		49191832133198F200EEACFC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "iPad/en.lproj/MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		493828E1132C0E270094D41D /* DemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		493828E5132C0E270094D41D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		493828E7132C0E270094D41D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -103,6 +109,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		49191830133198EF00EEACFC /* iPad */ = {
+			isa = PBXGroup;
+			children = (
+				49191831133198F200EEACFC /* MainWindow-iPad.xib */,
+			);
+			name = iPad;
+			sourceTree = "<group>";
+		};
 		493828D6132C0E270094D41D = {
 			isa = PBXGroup;
 			children = (
@@ -136,6 +150,7 @@
 		493828EB132C0E270094D41D /* DemoApp */ = {
 			isa = PBXGroup;
 			children = (
+				49191830133198EF00EEACFC /* iPad */,
 				493828F4132C0E270094D41D /* DemoAppAppDelegate.h */,
 				493828F5132C0E270094D41D /* DemoAppAppDelegate.m */,
 				493828F7132C0E270094D41D /* MainWindow.xib */,
@@ -196,6 +211,7 @@
 				4938296D132C33A70094D41D /* WWConnect.m */,
 				4938296E132C33A70094D41D /* WWFeedbackController.h */,
 				4938296F132C33A70094D41D /* WWFeedbackController.m */,
+				491918291331971000EEACFC /* ATFeedbackController_iPad.xib */,
 				49382970132C33A70094D41D /* WWFeedbackController.xib */,
 				491917F7133145C900EEACFC /* ATFeedback.h */,
 				491917F8133145CA00EEACFC /* ATFeedback.m */,
@@ -204,6 +220,7 @@
 				49191814133158E900EEACFC /* ATContactInfoController.h */,
 				49191815133158EE00EEACFC /* ATContactInfoController.m */,
 				49191816133158FB00EEACFC /* ATContactInfoController.xib */,
+				4919182C1331984300EEACFC /* ATContactInfoController_iPad.xib */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -284,6 +301,9 @@
 				49382975132C33A70094D41D /* WWFeedbackController.xib in Resources */,
 				49382976132C33A70094D41D /* WWResources.bundle in Resources */,
 				491918181331591300EEACFC /* ATContactInfoController.xib in Resources */,
+				4919182A1331971100EEACFC /* ATFeedbackController_iPad.xib in Resources */,
+				4919182D1331984500EEACFC /* ATContactInfoController_iPad.xib in Resources */,
+				49191833133198F200EEACFC /* MainWindow-iPad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -349,6 +369,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		49191831133198F200EEACFC /* MainWindow-iPad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				49191832133198F200EEACFC /* en */,
+			);
+			name = "MainWindow-iPad.xib";
+			sourceTree = "<group>";
+		};
 		493828EE132C0E270094D41D /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -425,7 +453,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DemoApp/DemoApp-Prefix.pch";
 				INFOPLIST_FILE = "DemoApp/DemoApp-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -438,7 +468,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DemoApp/DemoApp-Prefix.pch";
 				INFOPLIST_FILE = "DemoApp/DemoApp-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};

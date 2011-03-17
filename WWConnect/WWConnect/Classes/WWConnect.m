@@ -66,7 +66,13 @@
     vc.feedback = [[[ATFeedback alloc] init] autorelease];
     vc.feedback.screenshot = screenshot;
     UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
-    [viewController presentModalViewController:nc animated:YES];
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        [viewController presentModalViewController:nc animated:YES];
+    } else {
+        nc.modalPresentationStyle = UIModalPresentationFormSheet;
+        [viewController presentModalViewController:nc animated:YES];
+    }
     [nc release];
     [vc release];
 }

@@ -21,7 +21,11 @@
 @synthesize feedback, screenshotView;
 
 - (id)init {
-    self = [super initWithNibName:@"ATContactInfoController" bundle:nil];
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        self = [super initWithNibName:@"ATContactInfoController" bundle:nil];
+    } else {
+        self = [super initWithNibName:@"ATContactInfoController_iPad" bundle:nil];
+    }
     return self;
 }
 

@@ -25,7 +25,11 @@
 @synthesize feedback;
 
 - (id)init {
-    self = [self initWithNibName:@"WWFeedbackController" bundle:nil];
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        self = [super initWithNibName:@"WWFeedbackController" bundle:nil];
+    } else {
+        self = [super initWithNibName:@"ATFeedbackController_iPad" bundle:nil];
+    }
     return self;
 }
 

@@ -145,7 +145,7 @@
 }
 
 - (void)setup {
-    self.title = NSLocalizedString(@"Privacy", nil);
+    self.title = NSLocalizedString(@"Info", nil);
     self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Submit", nil) style:UIBarButtonItemStyleDone target:self action:@selector(nextStep:)] autorelease];
     [imageControl setUserInteractionEnabled:YES];
     [imageControl setEnabled:YES];

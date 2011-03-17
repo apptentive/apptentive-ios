@@ -17,6 +17,7 @@
 - (void)teardown;
 - (void)keyboardWillShow:(NSNotification *)notification;
 - (void)keyboardWillHide:(NSNotification *)notification;
+- (void)feedbackChanged:(NSNotification *)notification;
 @end
 
 @implementation WWFeedbackController
@@ -91,9 +92,10 @@
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(nameChanged:) name:UITextFieldTextDidChangeNotification object:nameField];
-    feedbackView.placeholder = NSLocalizedString(@"Feedback (optional)", nil);
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackChanged:) name:UITextViewTextDidChangeNotification object:feedbackView];
+    feedbackView.placeholder = NSLocalizedString(@"Feedback", nil);
     self.title = NSLocalizedString(@"Give Feedback", nil);
+    self.navigationItem.backBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Feedback", nil) style:UIBarButtonItemStylePlain target:nil action:nil] autorelease];
     self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelFeedback:)] autorelease];
     self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Next Step", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(nextStep:)] autorelease];
     self.navigationItem.rightBarButtonItem.enabled = NO;
@@ -145,9 +147,9 @@
     [UIView commitAnimations];
 }
 
-- (void)nameChanged:(NSNotification *)notification {
-    if (notification.object == nameField) {
-        self.navigationItem.rightBarButtonItem.enabled = ![@"" isEqualToString:nameField.text];
+- (void)feedbackChanged:(NSNotification *)notification {
+    if (notification.object == feedbackView) {
+        self.navigationItem.rightBarButtonItem.enabled = ![@"" isEqualToString:feedbackView.text];
     }
 }
 @end

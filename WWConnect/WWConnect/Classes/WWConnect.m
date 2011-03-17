@@ -31,7 +31,7 @@
     {
         if (![window respondsToSelector:@selector(screen)] || [window screen] == [UIScreen mainScreen])
         {
-            CGFloat yOffset = [UIApplication sharedApplication].statusBarHidden ? 0 : -20;
+            CGRect applicationFrame = [[UIScreen mainScreen] applicationFrame];
             // -renderInContext: renders in the coordinate space of the layer,
             // so we must first apply the layer's geometry to the graphics context
             CGContextSaveGState(context);
@@ -42,7 +42,7 @@
             // Offset by the portion of the bounds left of and above the anchor point
             CGContextTranslateCTM(context,
                                   -[window bounds].size.width * [[window layer] anchorPoint].x,
-                                  -[window bounds].size.height * [[window layer] anchorPoint].y + yOffset);
+                                  -[window bounds].size.height * [[window layer] anchorPoint].y - applicationFrame.origin.y);
             
             // Render the layer hierarchy to the current context
             [[window layer] renderInContext:context];

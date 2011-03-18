@@ -1,0 +1,532 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		496DC3B81333D36E00743F65 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3B71333D36E00743F65 /* UIKit.framework */; };
+		496DC3BA1333D36E00743F65 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3B91333D36E00743F65 /* Foundation.framework */; };
+		496DC3BC1333D36E00743F65 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3BB1333D36E00743F65 /* CoreGraphics.framework */; };
+		496DC3C21333D36E00743F65 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 496DC3C01333D36E00743F65 /* InfoPlist.strings */; };
+		496DC3C51333D36E00743F65 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 496DC3C41333D36E00743F65 /* main.m */; };
+		496DC3C81333D36E00743F65 /* FedbackDemoAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 496DC3C71333D36E00743F65 /* FedbackDemoAppDelegate.m */; };
+		496DC3CB1333D36E00743F65 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 496DC3C91333D36E00743F65 /* MainWindow.xib */; };
+		496DC3CE1333D36E00743F65 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 496DC3CD1333D36E00743F65 /* RootViewController.m */; };
+		496DC3D11333D36E00743F65 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 496DC3CF1333D36E00743F65 /* RootViewController.xib */; };
+		496DC3D81333D36E00743F65 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3B71333D36E00743F65 /* UIKit.framework */; };
+		496DC3D91333D36E00743F65 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3B91333D36E00743F65 /* Foundation.framework */; };
+		496DC3DA1333D36E00743F65 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3BB1333D36E00743F65 /* CoreGraphics.framework */; };
+		496DC3E21333D36E00743F65 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 496DC3E01333D36E00743F65 /* InfoPlist.strings */; };
+		496DC3E51333D36E00743F65 /* FedbackDemoTests.h in Resources */ = {isa = PBXBuildFile; fileRef = 496DC3E41333D36E00743F65 /* FedbackDemoTests.h */; };
+		496DC3E71333D36E00743F65 /* FedbackDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 496DC3E61333D36E00743F65 /* FedbackDemoTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		496DC3DB1333D36E00743F65 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 496DC3AA1333D36E00743F65 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 496DC3B21333D36E00743F65;
+			remoteInfo = FedbackDemo;
+		};
+		496DC4271333D67000743F65 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 496DC41F1333D66F00743F65 /* ApptentiveConnect.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 496DC37F1333D35600743F65;
+			remoteInfo = ApptentiveConnect;
+		};
+		496DC4291333D67000743F65 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 496DC41F1333D66F00743F65 /* ApptentiveConnect.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 496DC38C1333D35600743F65;
+			remoteInfo = ApptentiveConnectTests;
+		};
+		496DC42B1333D68600743F65 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 496DC41F1333D66F00743F65 /* ApptentiveConnect.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 496DC37E1333D35600743F65;
+			remoteInfo = ApptentiveConnect;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		496DC3B31333D36E00743F65 /* FedbackDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FedbackDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		496DC3B71333D36E00743F65 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		496DC3B91333D36E00743F65 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		496DC3BB1333D36E00743F65 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		496DC3BF1333D36E00743F65 /* FedbackDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FedbackDemo-Info.plist"; sourceTree = "<group>"; };
+		496DC3C11333D36E00743F65 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		496DC3C31333D36E00743F65 /* FedbackDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FedbackDemo-Prefix.pch"; sourceTree = "<group>"; };
+		496DC3C41333D36E00743F65 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		496DC3C61333D36E00743F65 /* FedbackDemoAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FedbackDemoAppDelegate.h; sourceTree = "<group>"; };
+		496DC3C71333D36E00743F65 /* FedbackDemoAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FedbackDemoAppDelegate.m; sourceTree = "<group>"; };
+		496DC3CA1333D36E00743F65 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		496DC3CC1333D36E00743F65 /* RootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
+		496DC3CD1333D36E00743F65 /* RootViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
+		496DC3D01333D36E00743F65 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RootViewController.xib; sourceTree = "<group>"; };
+		496DC3D71333D36E00743F65 /* FedbackDemoTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FedbackDemoTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		496DC3DF1333D36E00743F65 /* FedbackDemoTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FedbackDemoTests-Info.plist"; sourceTree = "<group>"; };
+		496DC3E11333D36E00743F65 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		496DC3E31333D36E00743F65 /* FedbackDemoTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FedbackDemoTests-Prefix.pch"; sourceTree = "<group>"; };
+		496DC3E41333D36E00743F65 /* FedbackDemoTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FedbackDemoTests.h; sourceTree = "<group>"; };
+		496DC3E61333D36E00743F65 /* FedbackDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FedbackDemoTests.m; sourceTree = "<group>"; };
+		496DC41F1333D66F00743F65 /* ApptentiveConnect.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ApptentiveConnect.xcodeproj; path = ../ApptentiveConnect/ApptentiveConnect.xcodeproj; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		496DC3B01333D36E00743F65 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				496DC3B81333D36E00743F65 /* UIKit.framework in Frameworks */,
+				496DC3BA1333D36E00743F65 /* Foundation.framework in Frameworks */,
+				496DC3BC1333D36E00743F65 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		496DC3D31333D36E00743F65 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				496DC3D81333D36E00743F65 /* UIKit.framework in Frameworks */,
+				496DC3D91333D36E00743F65 /* Foundation.framework in Frameworks */,
+				496DC3DA1333D36E00743F65 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		496DC3A81333D36E00743F65 = {
+			isa = PBXGroup;
+			children = (
+				496DC41F1333D66F00743F65 /* ApptentiveConnect.xcodeproj */,
+				496DC3BD1333D36E00743F65 /* FedbackDemo */,
+				496DC3DD1333D36E00743F65 /* FedbackDemoTests */,
+				496DC3B61333D36E00743F65 /* Frameworks */,
+				496DC3B41333D36E00743F65 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		496DC3B41333D36E00743F65 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				496DC3B31333D36E00743F65 /* FedbackDemo.app */,
+				496DC3D71333D36E00743F65 /* FedbackDemoTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		496DC3B61333D36E00743F65 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				496DC3B71333D36E00743F65 /* UIKit.framework */,
+				496DC3B91333D36E00743F65 /* Foundation.framework */,
+				496DC3BB1333D36E00743F65 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		496DC3BD1333D36E00743F65 /* FedbackDemo */ = {
+			isa = PBXGroup;
+			children = (
+				496DC3C61333D36E00743F65 /* FedbackDemoAppDelegate.h */,
+				496DC3C71333D36E00743F65 /* FedbackDemoAppDelegate.m */,
+				496DC3C91333D36E00743F65 /* MainWindow.xib */,
+				496DC3CC1333D36E00743F65 /* RootViewController.h */,
+				496DC3CD1333D36E00743F65 /* RootViewController.m */,
+				496DC3CF1333D36E00743F65 /* RootViewController.xib */,
+				496DC3BE1333D36E00743F65 /* Supporting Files */,
+			);
+			path = FedbackDemo;
+			sourceTree = "<group>";
+		};
+		496DC3BE1333D36E00743F65 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				496DC3BF1333D36E00743F65 /* FedbackDemo-Info.plist */,
+				496DC3C01333D36E00743F65 /* InfoPlist.strings */,
+				496DC3C31333D36E00743F65 /* FedbackDemo-Prefix.pch */,
+				496DC3C41333D36E00743F65 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		496DC3DD1333D36E00743F65 /* FedbackDemoTests */ = {
+			isa = PBXGroup;
+			children = (
+				496DC3E41333D36E00743F65 /* FedbackDemoTests.h */,
+				496DC3E61333D36E00743F65 /* FedbackDemoTests.m */,
+				496DC3DE1333D36E00743F65 /* Supporting Files */,
+			);
+			path = FedbackDemoTests;
+			sourceTree = "<group>";
+		};
+		496DC3DE1333D36E00743F65 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				496DC3DF1333D36E00743F65 /* FedbackDemoTests-Info.plist */,
+				496DC3E01333D36E00743F65 /* InfoPlist.strings */,
+				496DC3E31333D36E00743F65 /* FedbackDemoTests-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		496DC4201333D66F00743F65 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				496DC4281333D67000743F65 /* libApptentiveConnect.a */,
+				496DC42A1333D67000743F65 /* ApptentiveConnectTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		496DC3B21333D36E00743F65 /* FedbackDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 496DC3EA1333D36E00743F65 /* Build configuration list for PBXNativeTarget "FedbackDemo" */;
+			buildPhases = (
+				496DC3AF1333D36E00743F65 /* Sources */,
+				496DC3B01333D36E00743F65 /* Frameworks */,
+				496DC3B11333D36E00743F65 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				496DC42C1333D68600743F65 /* PBXTargetDependency */,
+			);
+			name = FedbackDemo;
+			productName = FedbackDemo;
+			productReference = 496DC3B31333D36E00743F65 /* FedbackDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		496DC3D61333D36E00743F65 /* FedbackDemoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 496DC3ED1333D36E00743F65 /* Build configuration list for PBXNativeTarget "FedbackDemoTests" */;
+			buildPhases = (
+				496DC3D21333D36E00743F65 /* Sources */,
+				496DC3D31333D36E00743F65 /* Frameworks */,
+				496DC3D41333D36E00743F65 /* Resources */,
+				496DC3D51333D36E00743F65 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				496DC3DC1333D36E00743F65 /* PBXTargetDependency */,
+			);
+			name = FedbackDemoTests;
+			productName = FedbackDemoTests;
+			productReference = 496DC3D71333D36E00743F65 /* FedbackDemoTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		496DC3AA1333D36E00743F65 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				ORGANIZATIONNAME = "Planetary Scale LLC";
+			};
+			buildConfigurationList = 496DC3AD1333D36E00743F65 /* Build configuration list for PBXProject "FedbackDemo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 496DC3A81333D36E00743F65;
+			productRefGroup = 496DC3B41333D36E00743F65 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 496DC4201333D66F00743F65 /* Products */;
+					ProjectRef = 496DC41F1333D66F00743F65 /* ApptentiveConnect.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				496DC3B21333D36E00743F65 /* FedbackDemo */,
+				496DC3D61333D36E00743F65 /* FedbackDemoTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		496DC4281333D67000743F65 /* libApptentiveConnect.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libApptentiveConnect.a;
+			remoteRef = 496DC4271333D67000743F65 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		496DC42A1333D67000743F65 /* ApptentiveConnectTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ApptentiveConnectTests.octest;
+			remoteRef = 496DC4291333D67000743F65 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		496DC3B11333D36E00743F65 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				496DC3C21333D36E00743F65 /* InfoPlist.strings in Resources */,
+				496DC3CB1333D36E00743F65 /* MainWindow.xib in Resources */,
+				496DC3D11333D36E00743F65 /* RootViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		496DC3D41333D36E00743F65 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				496DC3E21333D36E00743F65 /* InfoPlist.strings in Resources */,
+				496DC3E51333D36E00743F65 /* FedbackDemoTests.h in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		496DC3D51333D36E00743F65 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		496DC3AF1333D36E00743F65 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				496DC3C51333D36E00743F65 /* main.m in Sources */,
+				496DC3C81333D36E00743F65 /* FedbackDemoAppDelegate.m in Sources */,
+				496DC3CE1333D36E00743F65 /* RootViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		496DC3D21333D36E00743F65 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				496DC3E71333D36E00743F65 /* FedbackDemoTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		496DC3DC1333D36E00743F65 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 496DC3B21333D36E00743F65 /* FedbackDemo */;
+			targetProxy = 496DC3DB1333D36E00743F65 /* PBXContainerItemProxy */;
+		};
+		496DC42C1333D68600743F65 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ApptentiveConnect;
+			targetProxy = 496DC42B1333D68600743F65 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		496DC3C01333D36E00743F65 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				496DC3C11333D36E00743F65 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		496DC3C91333D36E00743F65 /* MainWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				496DC3CA1333D36E00743F65 /* en */,
+			);
+			name = MainWindow.xib;
+			sourceTree = "<group>";
+		};
+		496DC3CF1333D36E00743F65 /* RootViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				496DC3D01333D36E00743F65 /* en */,
+			);
+			name = RootViewController.xib;
+			sourceTree = "<group>";
+		};
+		496DC3E01333D36E00743F65 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				496DC3E11333D36E00743F65 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		496DC3E81333D36E00743F65 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		496DC3E91333D36E00743F65 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		496DC3EB1333D36E00743F65 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FedbackDemo/FedbackDemo-Prefix.pch";
+				INFOPLIST_FILE = "FedbackDemo/FedbackDemo-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		496DC3EC1333D36E00743F65 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FedbackDemo/FedbackDemo-Prefix.pch";
+				INFOPLIST_FILE = "FedbackDemo/FedbackDemo-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		496DC3EE1333D36E00743F65 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FedbackDemo.app/FedbackDemo";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FedbackDemoTests/FedbackDemoTests-Prefix.pch";
+				INFOPLIST_FILE = "FedbackDemoTests/FedbackDemoTests-Info.plist";
+				OTHER_LDFLAGS = (
+					"-framework",
+					SenTestingKit,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		496DC3EF1333D36E00743F65 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FedbackDemo.app/FedbackDemo";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FedbackDemoTests/FedbackDemoTests-Prefix.pch";
+				INFOPLIST_FILE = "FedbackDemoTests/FedbackDemoTests-Info.plist";
+				OTHER_LDFLAGS = (
+					"-framework",
+					SenTestingKit,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		496DC3AD1333D36E00743F65 /* Build configuration list for PBXProject "FedbackDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				496DC3E81333D36E00743F65 /* Debug */,
+				496DC3E91333D36E00743F65 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		496DC3EA1333D36E00743F65 /* Build configuration list for PBXNativeTarget "FedbackDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				496DC3EB1333D36E00743F65 /* Debug */,
+				496DC3EC1333D36E00743F65 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		496DC3ED1333D36E00743F65 /* Build configuration list for PBXNativeTarget "FedbackDemoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				496DC3EE1333D36E00743F65 /* Debug */,
+				496DC3EF1333D36E00743F65 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 496DC3AA1333D36E00743F65 /* Project object */;
+}

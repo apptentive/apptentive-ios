@@ -1,0 +1,407 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		496DC3831333D35600743F65 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3821333D35600743F65 /* Foundation.framework */; };
+		496DC38E1333D35600743F65 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC38D1333D35600743F65 /* UIKit.framework */; };
+		496DC38F1333D35600743F65 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3821333D35600743F65 /* Foundation.framework */; };
+		496DC3911333D35600743F65 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3901333D35600743F65 /* CoreGraphics.framework */; };
+		496DC3941333D35600743F65 /* libApptentiveConnect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC37F1333D35600743F65 /* libApptentiveConnect.a */; };
+		496DC39A1333D35600743F65 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 496DC3981333D35600743F65 /* InfoPlist.strings */; };
+		496DC39D1333D35600743F65 /* ApptentiveConnectTests.h in Resources */ = {isa = PBXBuildFile; fileRef = 496DC39C1333D35600743F65 /* ApptentiveConnectTests.h */; };
+		496DC39F1333D35600743F65 /* ApptentiveConnectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 496DC39E1333D35600743F65 /* ApptentiveConnectTests.m */; };
+		496DC4041333D5A400743F65 /* MyClass.h in Headers */ = {isa = PBXBuildFile; fileRef = 496DC4021333D5A400743F65 /* MyClass.h */; };
+		496DC4051333D5A400743F65 /* MyClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 496DC4031333D5A400743F65 /* MyClass.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		496DC3921333D35600743F65 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 496DC3761333D35600743F65 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 496DC37E1333D35600743F65;
+			remoteInfo = ApptentiveConnect;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		496DC37F1333D35600743F65 /* libApptentiveConnect.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libApptentiveConnect.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		496DC3821333D35600743F65 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		496DC3861333D35600743F65 /* ApptentiveConnect-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ApptentiveConnect-Prefix.pch"; sourceTree = "<group>"; };
+		496DC38C1333D35600743F65 /* ApptentiveConnectTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApptentiveConnectTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		496DC38D1333D35600743F65 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		496DC3901333D35600743F65 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		496DC3971333D35600743F65 /* ApptentiveConnectTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ApptentiveConnectTests-Info.plist"; sourceTree = "<group>"; };
+		496DC3991333D35600743F65 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		496DC39B1333D35600743F65 /* ApptentiveConnectTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ApptentiveConnectTests-Prefix.pch"; sourceTree = "<group>"; };
+		496DC39C1333D35600743F65 /* ApptentiveConnectTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApptentiveConnectTests.h; sourceTree = "<group>"; };
+		496DC39E1333D35600743F65 /* ApptentiveConnectTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ApptentiveConnectTests.m; sourceTree = "<group>"; };
+		496DC4021333D5A400743F65 /* MyClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyClass.h; sourceTree = "<group>"; };
+		496DC4031333D5A400743F65 /* MyClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyClass.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		496DC37C1333D35600743F65 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				496DC3831333D35600743F65 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		496DC3881333D35600743F65 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				496DC38E1333D35600743F65 /* UIKit.framework in Frameworks */,
+				496DC38F1333D35600743F65 /* Foundation.framework in Frameworks */,
+				496DC3911333D35600743F65 /* CoreGraphics.framework in Frameworks */,
+				496DC3941333D35600743F65 /* libApptentiveConnect.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		496DC3741333D35600743F65 = {
+			isa = PBXGroup;
+			children = (
+				496DC3841333D35600743F65 /* ApptentiveConnect */,
+				496DC3951333D35600743F65 /* ApptentiveConnectTests */,
+				496DC3811333D35600743F65 /* Frameworks */,
+				496DC3801333D35600743F65 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		496DC3801333D35600743F65 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				496DC37F1333D35600743F65 /* libApptentiveConnect.a */,
+				496DC38C1333D35600743F65 /* ApptentiveConnectTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		496DC3811333D35600743F65 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				496DC3821333D35600743F65 /* Foundation.framework */,
+				496DC38D1333D35600743F65 /* UIKit.framework */,
+				496DC3901333D35600743F65 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		496DC3841333D35600743F65 /* ApptentiveConnect */ = {
+			isa = PBXGroup;
+			children = (
+				496DC3851333D35600743F65 /* Supporting Files */,
+				496DC4021333D5A400743F65 /* MyClass.h */,
+				496DC4031333D5A400743F65 /* MyClass.m */,
+			);
+			path = ApptentiveConnect;
+			sourceTree = "<group>";
+		};
+		496DC3851333D35600743F65 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				496DC3861333D35600743F65 /* ApptentiveConnect-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		496DC3951333D35600743F65 /* ApptentiveConnectTests */ = {
+			isa = PBXGroup;
+			children = (
+				496DC39C1333D35600743F65 /* ApptentiveConnectTests.h */,
+				496DC39E1333D35600743F65 /* ApptentiveConnectTests.m */,
+				496DC3961333D35600743F65 /* Supporting Files */,
+			);
+			path = ApptentiveConnectTests;
+			sourceTree = "<group>";
+		};
+		496DC3961333D35600743F65 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				496DC3971333D35600743F65 /* ApptentiveConnectTests-Info.plist */,
+				496DC3981333D35600743F65 /* InfoPlist.strings */,
+				496DC39B1333D35600743F65 /* ApptentiveConnectTests-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		496DC37D1333D35600743F65 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				496DC4041333D5A400743F65 /* MyClass.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		496DC37E1333D35600743F65 /* ApptentiveConnect */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 496DC3A21333D35600743F65 /* Build configuration list for PBXNativeTarget "ApptentiveConnect" */;
+			buildPhases = (
+				496DC37B1333D35600743F65 /* Sources */,
+				496DC37C1333D35600743F65 /* Frameworks */,
+				496DC37D1333D35600743F65 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ApptentiveConnect;
+			productName = ApptentiveConnect;
+			productReference = 496DC37F1333D35600743F65 /* libApptentiveConnect.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		496DC38B1333D35600743F65 /* ApptentiveConnectTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 496DC3A51333D35600743F65 /* Build configuration list for PBXNativeTarget "ApptentiveConnectTests" */;
+			buildPhases = (
+				496DC3871333D35600743F65 /* Sources */,
+				496DC3881333D35600743F65 /* Frameworks */,
+				496DC3891333D35600743F65 /* Resources */,
+				496DC38A1333D35600743F65 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				496DC3931333D35600743F65 /* PBXTargetDependency */,
+			);
+			name = ApptentiveConnectTests;
+			productName = ApptentiveConnectTests;
+			productReference = 496DC38C1333D35600743F65 /* ApptentiveConnectTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		496DC3761333D35600743F65 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				ORGANIZATIONNAME = "Planetary Scale LLC";
+			};
+			buildConfigurationList = 496DC3791333D35600743F65 /* Build configuration list for PBXProject "ApptentiveConnect" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 496DC3741333D35600743F65;
+			productRefGroup = 496DC3801333D35600743F65 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				496DC37E1333D35600743F65 /* ApptentiveConnect */,
+				496DC38B1333D35600743F65 /* ApptentiveConnectTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		496DC3891333D35600743F65 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				496DC39A1333D35600743F65 /* InfoPlist.strings in Resources */,
+				496DC39D1333D35600743F65 /* ApptentiveConnectTests.h in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		496DC38A1333D35600743F65 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		496DC37B1333D35600743F65 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				496DC4051333D5A400743F65 /* MyClass.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		496DC3871333D35600743F65 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				496DC39F1333D35600743F65 /* ApptentiveConnectTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		496DC3931333D35600743F65 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 496DC37E1333D35600743F65 /* ApptentiveConnect */;
+			targetProxy = 496DC3921333D35600743F65 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		496DC3981333D35600743F65 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				496DC3991333D35600743F65 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		496DC3A01333D35600743F65 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		496DC3A11333D35600743F65 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		496DC3A31333D35600743F65 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DSTROOT = /tmp/ApptentiveConnect.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ApptentiveConnect/ApptentiveConnect-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		496DC3A41333D35600743F65 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DSTROOT = /tmp/ApptentiveConnect.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ApptentiveConnect/ApptentiveConnect-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		496DC3A61333D35600743F65 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ApptentiveConnectTests/ApptentiveConnectTests-Prefix.pch";
+				INFOPLIST_FILE = "ApptentiveConnectTests/ApptentiveConnectTests-Info.plist";
+				OTHER_LDFLAGS = (
+					"-framework",
+					SenTestingKit,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		496DC3A71333D35600743F65 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ApptentiveConnectTests/ApptentiveConnectTests-Prefix.pch";
+				INFOPLIST_FILE = "ApptentiveConnectTests/ApptentiveConnectTests-Info.plist";
+				OTHER_LDFLAGS = (
+					"-framework",
+					SenTestingKit,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		496DC3791333D35600743F65 /* Build configuration list for PBXProject "ApptentiveConnect" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				496DC3A01333D35600743F65 /* Debug */,
+				496DC3A11333D35600743F65 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		496DC3A21333D35600743F65 /* Build configuration list for PBXNativeTarget "ApptentiveConnect" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				496DC3A31333D35600743F65 /* Debug */,
+				496DC3A41333D35600743F65 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		496DC3A51333D35600743F65 /* Build configuration list for PBXNativeTarget "ApptentiveConnectTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				496DC3A61333D35600743F65 /* Debug */,
+				496DC3A71333D35600743F65 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 496DC3761333D35600743F65 /* Project object */;
+}

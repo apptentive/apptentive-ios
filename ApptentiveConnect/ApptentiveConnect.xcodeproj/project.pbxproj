@@ -12,11 +12,27 @@
 		496DC38F1333D35600743F65 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3821333D35600743F65 /* Foundation.framework */; };
 		496DC3911333D35600743F65 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3901333D35600743F65 /* CoreGraphics.framework */; };
 		496DC3941333D35600743F65 /* libApptentiveConnect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC37F1333D35600743F65 /* libApptentiveConnect.a */; };
-		496DC39A1333D35600743F65 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 496DC3981333D35600743F65 /* InfoPlist.strings */; };
-		496DC39D1333D35600743F65 /* ApptentiveConnectTests.h in Resources */ = {isa = PBXBuildFile; fileRef = 496DC39C1333D35600743F65 /* ApptentiveConnectTests.h */; };
-		496DC39F1333D35600743F65 /* ApptentiveConnectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 496DC39E1333D35600743F65 /* ApptentiveConnectTests.m */; };
-		496DC4051333D5A400743F65 /* MyClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 496DC4031333D5A400743F65 /* MyClass.m */; };
-		49C002791333F2110071F088 /* MyClass.h in Headers */ = {isa = PBXBuildFile; fileRef = 496DC4021333D5A400743F65 /* MyClass.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		49C0028D1334137E0071F088 /* ApptentiveConnectTests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 49C002871334137E0071F088 /* ApptentiveConnectTests-Info.plist */; };
+		49C0028E1334137E0071F088 /* ApptentiveConnectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C0028A1334137E0071F088 /* ApptentiveConnectTests.m */; };
+		49C0028F1334137E0071F088 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49C0028B1334137E0071F088 /* InfoPlist.strings */; };
+		49C002A1133413BB0071F088 /* ApptentiveConnect-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 49C00296133413BB0071F088 /* ApptentiveConnect-Prefix.pch */; };
+		49C002A2133413BB0071F088 /* ATConnect.h in Headers */ = {isa = PBXBuildFile; fileRef = 49C00297133413BB0071F088 /* ATConnect.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		49C002A3133413BB0071F088 /* ATConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C00298133413BB0071F088 /* ATConnect.m */; };
+		49C002A4133413BB0071F088 /* ATContactInfoController.h in Headers */ = {isa = PBXBuildFile; fileRef = 49C00299133413BB0071F088 /* ATContactInfoController.h */; settings = {ATTRIBUTES = (); }; };
+		49C002A5133413BB0071F088 /* ATContactInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C0029A133413BB0071F088 /* ATContactInfoController.m */; };
+		49C002A6133413BB0071F088 /* ATDefaultTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 49C0029B133413BB0071F088 /* ATDefaultTextView.h */; settings = {ATTRIBUTES = (); }; };
+		49C002A7133413BB0071F088 /* ATDefaultTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C0029C133413BB0071F088 /* ATDefaultTextView.m */; };
+		49C002A8133413BB0071F088 /* ATFeedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 49C0029D133413BB0071F088 /* ATFeedback.h */; settings = {ATTRIBUTES = (); }; };
+		49C002A9133413BB0071F088 /* ATFeedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C0029E133413BB0071F088 /* ATFeedback.m */; };
+		49C002AA133413BB0071F088 /* ATFeedbackController.h in Headers */ = {isa = PBXBuildFile; fileRef = 49C0029F133413BB0071F088 /* ATFeedbackController.h */; settings = {ATTRIBUTES = (); }; };
+		49C002AB133413BB0071F088 /* ATFeedbackController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C002A0133413BB0071F088 /* ATFeedbackController.m */; };
+		49D1118D13341A7C00603373 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC38D1333D35600743F65 /* UIKit.framework */; };
+		49D1118E13341A7C00603373 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3821333D35600743F65 /* Foundation.framework */; };
+		49D1118F13341A7C00603373 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3901333D35600743F65 /* CoreGraphics.framework */; };
+		49D111A113341A9D00603373 /* ATContactInfoController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49C00291133413AA0071F088 /* ATContactInfoController.xib */; };
+		49D111A213341A9D00603373 /* ATContactInfoController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49C00292133413AA0071F088 /* ATContactInfoController_iPad.xib */; };
+		49D111A313341A9D00603373 /* ATFeedbackController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49C00293133413AA0071F088 /* ATFeedbackController.xib */; };
+		49D111A413341A9D00603373 /* ATFeedbackController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49C00294133413AA0071F088 /* ATFeedbackController_iPad.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,17 +48,34 @@
 /* Begin PBXFileReference section */
 		496DC37F1333D35600743F65 /* libApptentiveConnect.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libApptentiveConnect.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		496DC3821333D35600743F65 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		496DC3861333D35600743F65 /* ApptentiveConnect-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ApptentiveConnect-Prefix.pch"; sourceTree = "<group>"; };
 		496DC38C1333D35600743F65 /* ApptentiveConnectTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApptentiveConnectTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		496DC38D1333D35600743F65 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		496DC3901333D35600743F65 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		496DC3971333D35600743F65 /* ApptentiveConnectTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ApptentiveConnectTests-Info.plist"; sourceTree = "<group>"; };
-		496DC3991333D35600743F65 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		496DC39B1333D35600743F65 /* ApptentiveConnectTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ApptentiveConnectTests-Prefix.pch"; sourceTree = "<group>"; };
-		496DC39C1333D35600743F65 /* ApptentiveConnectTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApptentiveConnectTests.h; sourceTree = "<group>"; };
-		496DC39E1333D35600743F65 /* ApptentiveConnectTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ApptentiveConnectTests.m; sourceTree = "<group>"; };
-		496DC4021333D5A400743F65 /* MyClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyClass.h; sourceTree = "<group>"; };
-		496DC4031333D5A400743F65 /* MyClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyClass.m; sourceTree = "<group>"; };
+		49C002871334137E0071F088 /* ApptentiveConnectTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ApptentiveConnectTests-Info.plist"; sourceTree = "<group>"; };
+		49C002881334137E0071F088 /* ApptentiveConnectTests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ApptentiveConnectTests-Prefix.pch"; sourceTree = "<group>"; };
+		49C002891334137E0071F088 /* ApptentiveConnectTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveConnectTests.h; sourceTree = "<group>"; };
+		49C0028A1334137E0071F088 /* ApptentiveConnectTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveConnectTests.m; sourceTree = "<group>"; };
+		49C0028C1334137E0071F088 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		49C00291133413AA0071F088 /* ATContactInfoController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATContactInfoController.xib; sourceTree = "<group>"; };
+		49C00292133413AA0071F088 /* ATContactInfoController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATContactInfoController_iPad.xib; sourceTree = "<group>"; };
+		49C00293133413AA0071F088 /* ATFeedbackController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATFeedbackController.xib; sourceTree = "<group>"; };
+		49C00294133413AA0071F088 /* ATFeedbackController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATFeedbackController_iPad.xib; sourceTree = "<group>"; };
+		49C00296133413BB0071F088 /* ApptentiveConnect-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ApptentiveConnect-Prefix.pch"; sourceTree = "<group>"; };
+		49C00297133413BB0071F088 /* ATConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATConnect.h; sourceTree = "<group>"; };
+		49C00298133413BB0071F088 /* ATConnect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATConnect.m; sourceTree = "<group>"; };
+		49C00299133413BB0071F088 /* ATContactInfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATContactInfoController.h; sourceTree = "<group>"; };
+		49C0029A133413BB0071F088 /* ATContactInfoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATContactInfoController.m; sourceTree = "<group>"; };
+		49C0029B133413BB0071F088 /* ATDefaultTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATDefaultTextView.h; sourceTree = "<group>"; };
+		49C0029C133413BB0071F088 /* ATDefaultTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATDefaultTextView.m; sourceTree = "<group>"; };
+		49C0029D133413BB0071F088 /* ATFeedback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATFeedback.h; sourceTree = "<group>"; };
+		49C0029E133413BB0071F088 /* ATFeedback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATFeedback.m; sourceTree = "<group>"; };
+		49C0029F133413BB0071F088 /* ATFeedbackController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATFeedbackController.h; sourceTree = "<group>"; };
+		49C002A0133413BB0071F088 /* ATFeedbackController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATFeedbackController.m; sourceTree = "<group>"; };
+		49C003471334195D0071F088 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		49C0034A1334195D0071F088 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		49C0034B1334195D0071F088 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		49C0034C1334195D0071F088 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		49D1118C13341A7C00603373 /* ApptentiveResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApptentiveResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,14 +98,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		49D1118813341A7C00603373 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49D1118D13341A7C00603373 /* UIKit.framework in Frameworks */,
+				49D1118E13341A7C00603373 /* Foundation.framework in Frameworks */,
+				49D1118F13341A7C00603373 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		496DC3741333D35600743F65 = {
 			isa = PBXGroup;
 			children = (
-				496DC3841333D35600743F65 /* ApptentiveConnect */,
-				496DC3951333D35600743F65 /* ApptentiveConnectTests */,
+				49C00295133413BB0071F088 /* source */,
+				49C00290133413AA0071F088 /* xibs */,
+				49C002861334137E0071F088 /* tests */,
 				496DC3811333D35600743F65 /* Frameworks */,
 				496DC3801333D35600743F65 /* Products */,
 			);
@@ -83,6 +127,7 @@
 			children = (
 				496DC37F1333D35600743F65 /* libApptentiveConnect.a */,
 				496DC38C1333D35600743F65 /* ApptentiveConnectTests.octest */,
+				49D1118C13341A7C00603373 /* ApptentiveResources.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -93,46 +138,61 @@
 				496DC3821333D35600743F65 /* Foundation.framework */,
 				496DC38D1333D35600743F65 /* UIKit.framework */,
 				496DC3901333D35600743F65 /* CoreGraphics.framework */,
+				49C003471334195D0071F088 /* Cocoa.framework */,
+				49C003491334195D0071F088 /* Other Frameworks */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		496DC3841333D35600743F65 /* ApptentiveConnect */ = {
+		49C002861334137E0071F088 /* tests */ = {
 			isa = PBXGroup;
 			children = (
-				496DC3851333D35600743F65 /* Supporting Files */,
-				496DC4021333D5A400743F65 /* MyClass.h */,
-				496DC4031333D5A400743F65 /* MyClass.m */,
+				49C002871334137E0071F088 /* ApptentiveConnectTests-Info.plist */,
+				49C002881334137E0071F088 /* ApptentiveConnectTests-Prefix.pch */,
+				49C002891334137E0071F088 /* ApptentiveConnectTests.h */,
+				49C0028A1334137E0071F088 /* ApptentiveConnectTests.m */,
+				49C0028B1334137E0071F088 /* InfoPlist.strings */,
 			);
-			path = ApptentiveConnect;
+			path = tests;
 			sourceTree = "<group>";
 		};
-		496DC3851333D35600743F65 /* Supporting Files */ = {
+		49C00290133413AA0071F088 /* xibs */ = {
 			isa = PBXGroup;
 			children = (
-				496DC3861333D35600743F65 /* ApptentiveConnect-Prefix.pch */,
+				49C00291133413AA0071F088 /* ATContactInfoController.xib */,
+				49C00292133413AA0071F088 /* ATContactInfoController_iPad.xib */,
+				49C00293133413AA0071F088 /* ATFeedbackController.xib */,
+				49C00294133413AA0071F088 /* ATFeedbackController_iPad.xib */,
 			);
-			name = "Supporting Files";
+			path = xibs;
 			sourceTree = "<group>";
 		};
-		496DC3951333D35600743F65 /* ApptentiveConnectTests */ = {
+		49C00295133413BB0071F088 /* source */ = {
 			isa = PBXGroup;
 			children = (
-				496DC39C1333D35600743F65 /* ApptentiveConnectTests.h */,
-				496DC39E1333D35600743F65 /* ApptentiveConnectTests.m */,
-				496DC3961333D35600743F65 /* Supporting Files */,
+				49C00296133413BB0071F088 /* ApptentiveConnect-Prefix.pch */,
+				49C00297133413BB0071F088 /* ATConnect.h */,
+				49C00298133413BB0071F088 /* ATConnect.m */,
+				49C00299133413BB0071F088 /* ATContactInfoController.h */,
+				49C0029A133413BB0071F088 /* ATContactInfoController.m */,
+				49C0029B133413BB0071F088 /* ATDefaultTextView.h */,
+				49C0029C133413BB0071F088 /* ATDefaultTextView.m */,
+				49C0029D133413BB0071F088 /* ATFeedback.h */,
+				49C0029E133413BB0071F088 /* ATFeedback.m */,
+				49C0029F133413BB0071F088 /* ATFeedbackController.h */,
+				49C002A0133413BB0071F088 /* ATFeedbackController.m */,
 			);
-			path = ApptentiveConnectTests;
+			path = source;
 			sourceTree = "<group>";
 		};
-		496DC3961333D35600743F65 /* Supporting Files */ = {
+		49C003491334195D0071F088 /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				496DC3971333D35600743F65 /* ApptentiveConnectTests-Info.plist */,
-				496DC3981333D35600743F65 /* InfoPlist.strings */,
-				496DC39B1333D35600743F65 /* ApptentiveConnectTests-Prefix.pch */,
+				49C0034A1334195D0071F088 /* AppKit.framework */,
+				49C0034B1334195D0071F088 /* CoreData.framework */,
+				49C0034C1334195D0071F088 /* Foundation.framework */,
 			);
-			name = "Supporting Files";
+			name = "Other Frameworks";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -142,7 +202,12 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49C002791333F2110071F088 /* MyClass.h in Headers */,
+				49C002A2133413BB0071F088 /* ATConnect.h in Headers */,
+				49C002A1133413BB0071F088 /* ApptentiveConnect-Prefix.pch in Headers */,
+				49C002A8133413BB0071F088 /* ATFeedback.h in Headers */,
+				49C002AA133413BB0071F088 /* ATFeedbackController.h in Headers */,
+				49C002A6133413BB0071F088 /* ATDefaultTextView.h in Headers */,
+				49C002A4133413BB0071F088 /* ATContactInfoController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -185,6 +250,24 @@
 			productReference = 496DC38C1333D35600743F65 /* ApptentiveConnectTests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
+		49D1118B13341A7C00603373 /* ApptentiveResources */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 49D1119B13341A7C00603373 /* Build configuration list for PBXNativeTarget "ApptentiveResources" */;
+			buildPhases = (
+				49D1118713341A7C00603373 /* Sources */,
+				49D1118813341A7C00603373 /* Frameworks */,
+				49D1118913341A7C00603373 /* Resources */,
+				49D1118A13341A7C00603373 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ApptentiveResources;
+			productName = ApptentiveResources;
+			productReference = 49D1118C13341A7C00603373 /* ApptentiveResources.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -207,6 +290,7 @@
 			targets = (
 				496DC37E1333D35600743F65 /* ApptentiveConnect */,
 				496DC38B1333D35600743F65 /* ApptentiveConnectTests */,
+				49D1118B13341A7C00603373 /* ApptentiveResources */,
 			);
 		};
 /* End PBXProject section */
@@ -216,8 +300,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				496DC39A1333D35600743F65 /* InfoPlist.strings in Resources */,
-				496DC39D1333D35600743F65 /* ApptentiveConnectTests.h in Resources */,
+				49C0028D1334137E0071F088 /* ApptentiveConnectTests-Info.plist in Resources */,
+				49C0028F1334137E0071F088 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49D1118913341A7C00603373 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49D111A113341A9D00603373 /* ATContactInfoController.xib in Resources */,
+				49D111A213341A9D00603373 /* ATContactInfoController_iPad.xib in Resources */,
+				49D111A313341A9D00603373 /* ATFeedbackController.xib in Resources */,
+				49D111A413341A9D00603373 /* ATFeedbackController_iPad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,6 +332,19 @@
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
 		};
+		49D1118A13341A7C00603373 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -244,7 +352,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				496DC4051333D5A400743F65 /* MyClass.m in Sources */,
+				49C002A3133413BB0071F088 /* ATConnect.m in Sources */,
+				49C002A5133413BB0071F088 /* ATContactInfoController.m in Sources */,
+				49C002A7133413BB0071F088 /* ATDefaultTextView.m in Sources */,
+				49C002A9133413BB0071F088 /* ATFeedback.m in Sources */,
+				49C002AB133413BB0071F088 /* ATFeedbackController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -252,7 +364,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				496DC39F1333D35600743F65 /* ApptentiveConnectTests.m in Sources */,
+				49C0028E1334137E0071F088 /* ApptentiveConnectTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49D1118713341A7C00603373 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,10 +386,10 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		496DC3981333D35600743F65 /* InfoPlist.strings */ = {
+		49C0028B1334137E0071F088 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				496DC3991333D35600743F65 /* en */,
+				49C0028C1334137E0071F088 /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -313,7 +432,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				DSTROOT = /tmp/ApptentiveConnect.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "ApptentiveConnect/ApptentiveConnect-Prefix.pch";
+				GCC_PREFIX_HEADER = "source/ApptentiveConnect-Prefix.pch";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -325,7 +444,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				DSTROOT = /tmp/ApptentiveConnect.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "ApptentiveConnect/ApptentiveConnect-Prefix.pch";
+				GCC_PREFIX_HEADER = "source/ApptentiveConnect-Prefix.pch";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -371,6 +490,38 @@
 			};
 			name = Release;
 		};
+		49D1119C13341A7C00603373 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ApptentiveResources/ApptentiveResources-Prefix.pch";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		49D1119D13341A7C00603373 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ApptentiveResources/ApptentiveResources-Prefix.pch";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -400,6 +551,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		49D1119B13341A7C00603373 /* Build configuration list for PBXNativeTarget "ApptentiveResources" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				49D1119C13341A7C00603373 /* Debug */,
+				49D1119D13341A7C00603373 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

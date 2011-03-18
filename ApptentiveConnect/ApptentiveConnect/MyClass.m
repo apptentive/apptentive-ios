@@ -11,4 +11,7 @@
 
 @implementation MyClass
 
++ (NSString *)foo {
+    return @"Hello Blurld!";
+}
 @end

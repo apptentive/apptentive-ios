@@ -15,8 +15,8 @@
 		496DC39A1333D35600743F65 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 496DC3981333D35600743F65 /* InfoPlist.strings */; };
 		496DC39D1333D35600743F65 /* ApptentiveConnectTests.h in Resources */ = {isa = PBXBuildFile; fileRef = 496DC39C1333D35600743F65 /* ApptentiveConnectTests.h */; };
 		496DC39F1333D35600743F65 /* ApptentiveConnectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 496DC39E1333D35600743F65 /* ApptentiveConnectTests.m */; };
-		496DC4041333D5A400743F65 /* MyClass.h in Headers */ = {isa = PBXBuildFile; fileRef = 496DC4021333D5A400743F65 /* MyClass.h */; };
 		496DC4051333D5A400743F65 /* MyClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 496DC4031333D5A400743F65 /* MyClass.m */; };
+		49C002791333F2110071F088 /* MyClass.h in Headers */ = {isa = PBXBuildFile; fileRef = 496DC4021333D5A400743F65 /* MyClass.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -142,7 +142,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				496DC4041333D5A400743F65 /* MyClass.h in Headers */,
+				49C002791333F2110071F088 /* MyClass.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

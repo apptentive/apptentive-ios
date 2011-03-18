@@ -8,9 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface MyClass : NSObject {
     
 }
-
++ (NSString *)foo;
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "FedbackDemoAppDelegate.h"
+#import "MyClass.h"
 
 @implementation FedbackDemoAppDelegate
 
@@ -21,6 +22,7 @@
     // Add the navigation controller's view to the window and display.
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
+    NSLog(@"%@", [MyClass foo]);
     return YES;
 }
 

@@ -1,5 +1,5 @@
 //
-//  WWConnect.h
+//  ATConnect.h
 //  wowie-sdk
 //
 //  Created by Andrew Wooster on 3/12/11.
@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "WWFeedbackController.h"
+#import "ATFeedbackController.h"
 
-@interface WWConnect : NSObject {
+@interface ATConnect : NSObject {
 }
 + (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController;
 @end

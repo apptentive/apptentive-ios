@@ -1,16 +1,16 @@
 //
-//  WWConnect.m
+//  ATConnect.m
 //  wowie-sdk
 //
 //  Created by Andrew Wooster on 3/12/11.
 //  Copyright 2011 Planetary Scale LLC. All rights reserved.
 //
 
-#import "WWConnect.h"
+#import "ATConnect.h"
 #import <QuartzCore/QuartzCore.h>
 #import "ATFeedback.h"
 
-@implementation WWConnect
+@implementation ATConnect
 
 // From QA1703:
 // http://developer.apple.com/library/ios/#qa/qa1703/_index.html
@@ -61,8 +61,8 @@
 }
 
 + (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController {
-    UIImage *screenshot = [WWConnect screenshot];
-    WWFeedbackController *vc = [[WWFeedbackController alloc] init];
+    UIImage *screenshot = [ATConnect screenshot];
+    ATFeedbackController *vc = [[ATFeedbackController alloc] init];
     vc.feedback = [[[ATFeedback alloc] init] autorelease];
     vc.feedback.screenshot = screenshot;
     UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];

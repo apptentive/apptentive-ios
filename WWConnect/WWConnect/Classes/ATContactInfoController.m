@@ -98,6 +98,13 @@
     [UIView commitAnimations];
 }
 
+- (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
+    if ([animationID isEqualToString:@"imageViewToBack"]) {
+        [imageControl removeFromSuperview];
+        [self.view addSubview:imageControl];
+        imageControl.frame = screenshotFrame;
+    }
+}
 
 - (IBAction)imageControlTapped:(id)sender {
     if ([emailField isEditing]) {
@@ -110,22 +117,35 @@
     
     if (previewingImage) {
         previewingImage = NO;
+        
+        UIWindow *window = self.view.window;
+        CGRect targetFrame = [window convertRect:screenshotFrame fromView:self.view];
+        
         [UIView beginAnimations:@"imageViewToBack" context:NULL];
         [UIView setAnimationDuration:0.3];
-        imageControl.frame = screenshotFrame;
+        [UIView setAnimationDelegate:self];
+        imageControl.frame = targetFrame;
         imageControl.layer.shadowRadius = 0.0;
         imageControl.layer.shadowOpacity = 0.0;
         [UIView commitAnimations];
     } else {
         previewingImage = YES;
         screenshotFrame = [imageControl frame];
+        
+        // Move screenshot from our view to the window.
+        UIWindow *window = self.view.window;
+        CGRect newOriginatingFrame = [self.view convertRect:imageControl.frame toView:window];
+        [imageControl removeFromSuperview];
+        [window addSubview:imageControl];
+        imageControl.frame = newOriginatingFrame;
+        
         [UIView beginAnimations:@"imageViewToFront" context:NULL];
         [UIView setAnimationDuration:0.3];
         imageControl.layer.shadowRadius = 40.0;
         imageControl.layer.shadowColor = [UIColor blackColor].CGColor;
         imageControl.layer.shadowOpacity = 0.5;
         CGSize newSize = CGSizeMake(floor(feedback.screenshot.size.width * 0.8), floor(feedback.screenshot.size.height * 0.8));
-        CGSize diff = CGSizeMake(floor((self.view.frame.size.width - newSize.width)/2.0), floor((self.view.frame.size.height - newSize.height)/2.0));
+        CGSize diff = CGSizeMake(floor((imageControl.superview.frame.size.width - newSize.width)/2.0), floor((imageControl.superview.frame.size.height - newSize.height)/2.0));
         CGRect newFrame = CGRectMake(diff.width, diff.height, newSize.width, newSize.height);
         imageControl.frame = newFrame;
         [UIView commitAnimations];

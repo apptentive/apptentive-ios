@@ -1,5 +1,5 @@
 //
-//  WWFeedbackController.h
+//  ATFeedbackController.h
 //  wowie-sdk
 //
 //  Created by Andrew Wooster on 3/12/11.
@@ -11,7 +11,7 @@
 @class ATDefaultTextView;
 @class ATFeedback;
 
-@interface WWFeedbackController : UIViewController {
+@interface ATFeedbackController : UIViewController {
     IBOutlet UITextField *nameField;
     IBOutlet ATDefaultTextView *feedbackView;
 }

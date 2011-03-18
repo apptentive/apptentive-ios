@@ -1,17 +1,17 @@
 //
-//  WWFeedbackController.m
+//  ATFeedbackController.m
 //  wowie-sdk
 //
 //  Created by Andrew Wooster on 3/12/11.
 //  Copyright 2011 Uncorked Apps LLC. All rights reserved.
 //
 
-#import "WWFeedbackController.h"
+#import "ATFeedbackController.h"
 #import "ATContactInfoController.h"
 #import "ATDefaultTextView.h"
 #import "ATFeedback.h"
 
-@interface WWFeedbackController (Private)
+@interface ATFeedbackController (Private)
 - (BOOL)shouldReturn:(UIView *)view;
 - (void)setup;
 - (void)setupFeedback;
@@ -21,12 +21,12 @@
 - (void)feedbackChanged:(NSNotification *)notification;
 @end
 
-@implementation WWFeedbackController
+@implementation ATFeedbackController
 @synthesize feedback;
 
 - (id)init {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        self = [super initWithNibName:@"WWFeedbackController" bundle:nil];
+        self = [super initWithNibName:@"ATFeedbackController" bundle:nil];
     } else {
         self = [super initWithNibName:@"ATFeedbackController_iPad" bundle:nil];
     }
@@ -91,7 +91,7 @@
 @end
 
 
-@implementation WWFeedbackController (Private)
+@implementation ATFeedbackController (Private)
 - (BOOL)shouldReturn:(UIView *)view {
     if (view == nameField) {
         [feedbackView becomeFirstResponder];

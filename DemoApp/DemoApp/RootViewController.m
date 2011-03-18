@@ -7,13 +7,13 @@
 //
 
 #import "RootViewController.h"
-#import "WWConnect.h"
+#import "ATConnect.h"
 
 @implementation RootViewController
 
 
 - (IBAction)showFeedback:(id)sender {
-    [WWConnect presentFeedbackControllerFromViewController:self];
+    [ATConnect presentFeedbackControllerFromViewController:self];
 }
 
 - (void)viewDidLoad {

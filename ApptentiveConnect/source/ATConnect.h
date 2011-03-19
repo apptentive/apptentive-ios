@@ -10,6 +10,16 @@
 
 @interface ATConnect : NSObject {
 }
+/*! 
+ * Presents a feedback controller from the given view controller. The feedback
+ * controller will be presented with 
+ * [viewController presentModalViewController:…].
+ */
 + (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController;
+
+/*!
+ * Returns the NSBundle corresponding to the bundle containing ATConnect's
+ * images, xibs, strings files, etc.
+ */
 + (NSBundle *)resourceBundle;
 @end

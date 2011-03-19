@@ -80,7 +80,6 @@
 
 + (NSBundle *)resourceBundle {
     NSBundle *bundle = [[NSBundle alloc] initWithPath:@"ApptentiveResources.bundle"];
-    NSLog(@"bundle is: %@", bundle);
     return [bundle autorelease];
 }
 @end

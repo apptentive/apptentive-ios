@@ -13,4 +13,5 @@
 }
 + (UIImage *)imageByTakingScreenshot;
 + (NSString *)stringByEscapingForURLArguments:(NSString *)string;
++ (NSString *)randomStringOfLength:(NSUInteger)length;
 @end

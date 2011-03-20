@@ -63,4 +63,14 @@
     CFStringRef result = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)string, NULL, (CFStringRef)@"%:/?#[]@!$&'()*+,;=", kCFStringEncodingUTF8);
     return NSMakeCollectable(result);
 }
+
+
++ (NSString *)randomStringOfLength:(NSUInteger)length {
+    static NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    NSMutableString *result = [NSMutableString stringWithString:@""];
+    for (NSUInteger i = 0; i < length; i++) {
+        [result appendFormat:@"%c", [letters characterAtIndex:rand()%[letters length]]];
+    }
+    return result;
+}
 @end

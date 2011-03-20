@@ -227,6 +227,74 @@
 	[cm start];
 }
 
+- (void)post:(NSURL *)theURL withFileData:(NSData *)data ofMimeType:(NSString *)mimeType parameters:(NSDictionary *)parameters {
+    
+    ATConnectionManager *cm = [ATConnectionManager sharedSingleton];
+    ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL delegate:self];
+    conn.timeoutInterval = self.timeoutInterval * 10.0;
+    [self addAPIHeaders:conn];
+    [conn setHTTPMethod:@"POST"];
+    
+    NSDictionary *postParameters = [NSMutableDictionary dictionaryWithDictionary:parameters];
+    
+    // Figure out boundary string.
+    NSString *boundary = nil;
+    while (YES) {
+        boundary = [ATUtilities randomStringOfLength:20];
+        NSData *boundaryData = [boundary dataUsingEncoding:NSUTF8StringEncoding];
+        BOOL found = NO;
+        for (NSString *key in [postParameters allKeys]) {
+            id value = [postParameters objectForKey:key];
+            if ([value isKindOfClass:[NSString class]]) {
+                if ([(NSString *)value rangeOfString:boundary].location != NSNotFound) {
+                    found = YES;
+                    break;
+                }
+            } else if ([value isKindOfClass:[NSData class]]) {
+                if ([(NSData *)value rangeOfData:boundaryData options:0 range:NSMakeRange(0, [(NSData *)value length])].location != NSNotFound) {
+                    found = YES;
+                    break;
+                }
+            } else {
+                NSString *className = @"id";
+                if ([value isKindOfClass:[NSObject class]]) {
+                    className = [NSString stringWithCString:object_getClassName((NSObject *)value) encoding:NSUTF8StringEncoding];
+                }
+                @throw [NSException exceptionWithName:@"ATWebClientException" reason:[NSString stringWithFormat:@"Can't encode form data of class: %@", className] userInfo:nil];
+            }
+        }
+        if (found) {
+            break;
+        }
+    }
+    
+    NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; charset=utf-8; boundary=%@", boundary];
+    [conn setValue:contentType forHTTPHeaderField:@"Content-Type"];
+    
+    
+    NSMutableData *multipartEncodedData = [NSMutableData data];
+    [postParameters setValue:data forKey:@"filedata"];
+    
+    for (NSString *key in [postParameters allKeys]) {
+        id value = [postParameters objectForKey:key];
+        if ([value isKindOfClass:[NSString class]]) {
+            [multipartEncodedData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", key] dataUsingEncoding:NSUTF8StringEncoding]];
+            [multipartEncodedData appendData:[(NSString *)value dataUsingEncoding:NSUTF8StringEncoding]];
+        } else if ([value isKindOfClass:[NSData class]]) {
+            [multipartEncodedData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", key, [ATUtilities randomStringOfLength:10]] dataUsingEncoding:NSUTF8StringEncoding]];
+            [multipartEncodedData appendData:[[NSString stringWithFormat:@"Content-Type: %@\r\n", mimeType] dataUsingEncoding:NSUTF8StringEncoding]];
+            [multipartEncodedData appendData:[@"Content-Transfer-Encoding: binary\r\n\r\n" dataUsingEncoding:NSASCIIStringEncoding]];
+            [multipartEncodedData appendData:(NSData *)value];
+        } // else Should be handled above.
+        [multipartEncodedData appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    }
+    [conn setHTTPBody:multipartEncodedData];
+    
+	[cm addConnection:conn toChannel:self.channelName];
+	[conn release];
+	[cm start];
+}
+
 
 - (void)addAPIHeaders:(ATURLConnection *)conn {
 	[conn setValue:kUserAgent forHTTPHeaderField:@"User-Agent"];

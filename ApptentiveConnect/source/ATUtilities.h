@@ -12,4 +12,5 @@
     
 }
 + (UIImage *)imageByTakingScreenshot;
++ (NSString *)stringByEscapingForURLArguments:(NSString *)string;
 @end

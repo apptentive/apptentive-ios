@@ -12,7 +12,7 @@
 @private
     NSString *apiKey;
 }
-- (ATConnect *)initWithAPIKey:(NSString *)apiKey;
++ (ATConnect *)sharedConnectionWithAPIKey:(NSString *)apiKey;
 
 /*! 
  * Presents a feedback controller from the given view controller. The feedback

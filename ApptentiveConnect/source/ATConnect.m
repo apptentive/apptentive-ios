@@ -7,6 +7,7 @@
 //
 
 #import "ATConnect.h"
+#import "ATBackend.h"
 #import "ATFeedback.h"
 #import "ATFeedbackController.h"
 #import "ATUtilities.h"
@@ -15,19 +16,34 @@
 @property (nonatomic, retain) NSString *apiKey;
 @end
 
+static ATConnect *sharedConnection = nil;
+
 @implementation ATConnect
 @synthesize apiKey;
 
-- (ATConnect *)initWithAPIKey:(NSString *)anApiKey {
-    if ((self = [super init])) {
-        self.apiKey = anApiKey;
++ (ATConnect *)sharedConnectionWithAPIKey:(NSString *)anAPIKey {
+    @synchronized(self) {
+        if (sharedConnection == nil) {
+            sharedConnection = [[ATConnect alloc] init];
+            sharedConnection.apiKey = anAPIKey;
+        }
     }
-    return self;
+    return sharedConnection;
 }
 
 - (void)dealloc {
     self.apiKey = nil;
     [super dealloc];
+}
+
+
+- (void)setApiKey:(NSString *)anAPIKey {
+    if (apiKey != anAPIKey) {
+        [apiKey release];
+        apiKey = nil;
+        apiKey = [anAPIKey retain];
+        [[ATBackend sharedBackend] updateAPIKey:self.apiKey];
+    }
 }
 
 - (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController {

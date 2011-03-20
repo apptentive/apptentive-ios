@@ -47,6 +47,10 @@
 		49D1122B1335963D00603373 /* ATWebClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D112291335963D00603373 /* ATWebClient.m */; };
 		49D1123C13359BA000603373 /* NSData+ATBase64.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D1123A13359BA000603373 /* NSData+ATBase64.h */; };
 		49D1123D13359BA000603373 /* NSData+ATBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D1123B13359BA000603373 /* NSData+ATBase64.m */; };
+		49D1124F13368CC200603373 /* ATTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D1124D13368CC200603373 /* ATTask.h */; };
+		49D1125013368CC200603373 /* ATTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D1124E13368CC200603373 /* ATTask.m */; };
+		49D1125313368CEF00603373 /* ATFeedbackTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D1125113368CEE00603373 /* ATFeedbackTask.h */; };
+		49D1125413368CEF00603373 /* ATFeedbackTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D1125213368CEF00603373 /* ATFeedbackTask.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,6 +108,10 @@
 		49D112291335963D00603373 /* ATWebClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATWebClient.m; sourceTree = "<group>"; };
 		49D1123A13359BA000603373 /* NSData+ATBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "NSData+ATBase64.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		49D1123B13359BA000603373 /* NSData+ATBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "NSData+ATBase64.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		49D1124D13368CC200603373 /* ATTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATTask.h; sourceTree = "<group>"; };
+		49D1124E13368CC200603373 /* ATTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATTask.m; sourceTree = "<group>"; };
+		49D1125113368CEE00603373 /* ATFeedbackTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATFeedbackTask.h; sourceTree = "<group>"; };
+		49D1125213368CEF00603373 /* ATFeedbackTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATFeedbackTask.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -214,6 +222,7 @@
 				49C002A0133413BB0071F088 /* ATFeedbackController.m */,
 				49D111DB1335847700603373 /* ATUtilities.h */,
 				49D111DC1335847700603373 /* ATUtilities.m */,
+				49D1124C13368CA800603373 /* Tasks */,
 				49D111FA1335878400603373 /* URL  Loading */,
 			);
 			path = source;
@@ -253,6 +262,17 @@
 			path = ext;
 			sourceTree = "<group>";
 		};
+		49D1124C13368CA800603373 /* Tasks */ = {
+			isa = PBXGroup;
+			children = (
+				49D1124D13368CC200603373 /* ATTask.h */,
+				49D1124E13368CC200603373 /* ATTask.m */,
+				49D1125113368CEE00603373 /* ATFeedbackTask.h */,
+				49D1125213368CEF00603373 /* ATFeedbackTask.m */,
+			);
+			path = Tasks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -273,6 +293,8 @@
 				49D1120A13358B2300603373 /* ATBackend.h in Headers */,
 				49D1122A1335963D00603373 /* ATWebClient.h in Headers */,
 				49D1123C13359BA000603373 /* NSData+ATBase64.h in Headers */,
+				49D1124F13368CC200603373 /* ATTask.h in Headers */,
+				49D1125313368CEF00603373 /* ATFeedbackTask.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -429,6 +451,8 @@
 				49D1120B13358B2300603373 /* ATBackend.m in Sources */,
 				49D1122B1335963D00603373 /* ATWebClient.m in Sources */,
 				49D1123D13359BA000603373 /* NSData+ATBase64.m in Sources */,
+				49D1125013368CC200603373 /* ATTask.m in Sources */,
+				49D1125413368CEF00603373 /* ATFeedbackTask.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

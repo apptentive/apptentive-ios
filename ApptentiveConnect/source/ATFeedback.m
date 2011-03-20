@@ -8,6 +8,8 @@
 
 #import "ATFeedback.h"
 
+#define kFeedbackCodingVersion 1
+
 @implementation ATFeedback
 @synthesize text, name, email, phone, screenshot;
 - (id)init {
@@ -23,6 +25,32 @@
     self.phone = nil;
     self.screenshot = nil;
     [super dealloc];
+}
+
+- (id)initWithCoder:(NSCoder *)coder {
+    if ((self = [super init])) {
+        int version = [coder decodeIntForKey:@"version"];
+        if (version == kFeedbackCodingVersion) {
+            self.text = [coder decodeObjectForKey:@"text"];
+            self.name = [coder decodeObjectForKey:@"name"];
+            self.email = [coder decodeObjectForKey:@"email"];
+            self.phone = [coder decodeObjectForKey:@"phone"];
+            self.screenshot = [coder decodeObjectForKey:@"screenshot"];
+        } else {
+            [self release];
+            return nil;
+        }
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder {
+    [coder encodeInt:kFeedbackCodingVersion forKey:@"version"];
+    [coder encodeObject:self.text forKey:@"text"];
+    [coder encodeObject:self.name forKey:@"name"];
+    [coder encodeObject:self.email forKey:@"email"];
+    [coder encodeObject:self.phone forKey:@"phone"];
+    [coder encodeObject:self.screenshot forKey:@"screenshot"];
 }
 
 - (NSDictionary *)dictionary {

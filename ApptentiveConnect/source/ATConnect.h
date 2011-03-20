@@ -9,13 +9,17 @@
 #import <UIKit/UIKit.h>
 
 @interface ATConnect : NSObject {
+@private
+    NSString *apiKey;
 }
+- (ATConnect *)initWithAPIKey:(NSString *)apiKey;
+
 /*! 
  * Presents a feedback controller from the given view controller. The feedback
  * controller will be presented with 
  * [viewController presentModalViewController:…].
  */
-+ (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController;
+- (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController;
 
 /*!
  * Returns the NSBundle corresponding to the bundle containing ATConnect's

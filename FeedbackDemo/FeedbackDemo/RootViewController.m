@@ -8,15 +8,17 @@
 
 #import "RootViewController.h"
 #import "ATConnect.h"
+#import "defines.h"
 
 @implementation RootViewController
 
 - (IBAction)showFeedback:(id)sender {
-    [ATConnect presentFeedbackControllerFromViewController:self];
+    ATConnect *apptentive = [[ATConnect alloc] initWithAPIKey:kApptentiveAPIKey];
+    [apptentive presentFeedbackControllerFromViewController:self];
+    [apptentive release];
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     UIBarButtonItem *feedbackButton = [[UIBarButtonItem alloc] initWithTitle:@"Feedback" style:UIBarButtonItemStylePlain target:self action:@selector(showFeedback:)];
     self.navigationItem.rightBarButtonItem = feedbackButton;
     [feedbackButton release];

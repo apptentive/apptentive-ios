@@ -24,6 +24,10 @@ In your target's _Build Settings_ section, add the following path to your
 _Header Search Paths_ settings:
 
     $(BUILT_PRODUCTS_DIR)/usr/local/include
+    
+Also add the following to your _Other Linker Flags_ settings:
+
+    -ObjC -all_load
 
 In your target's _Build Phases_ section, add the _ApptentiveResources_ and
 _ApptentiveConnect_ targets to your _Target Dependencies_.

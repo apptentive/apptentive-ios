@@ -11,12 +11,15 @@
 #import "ATTask.h"
 
 #define kATTaskQueueCodingVersion 1
+// Retry period in seconds.
+#define kATTaskQueueRetryPeriod 10.0
 
 static ATTaskQueue *sharedTaskQueue = nil;
 
 @interface ATTaskQueue (Private)
 - (void)setup;
 - (void)teardown;
+- (void)unsetActiveTask;
 @end
 
 @implementation ATTaskQueue
@@ -34,19 +37,20 @@ static ATTaskQueue *sharedTaskQueue = nil;
     @synchronized(self) {
         if (sharedTaskQueue == nil) {
             if ([ATTaskQueue serializedQueueExists]) {
-                sharedTaskQueue = [NSKeyedUnarchiver unarchiveObjectWithFile:[ATTaskQueue taskQueuePath]];
-                if (!sharedTaskQueue) {
-                    sharedTaskQueue = [[ATTaskQueue alloc] init];
-                }
+                sharedTaskQueue = [[NSKeyedUnarchiver unarchiveObjectWithFile:[ATTaskQueue taskQueuePath]] retain];
+            }
+            if (!sharedTaskQueue) {
+                sharedTaskQueue = [[ATTaskQueue alloc] init];
             }
         }
     }
     return sharedTaskQueue;
 }
 
-+ (void)destroySharedTaskQueue {
++ (void)releaseSharedTaskQueue {
     @synchronized(self) {
         if (sharedTaskQueue != nil) {
+            [NSKeyedArchiver archiveRootObject:sharedTaskQueue toFile:[ATTaskQueue taskQueuePath]];
             [sharedTaskQueue release];
             sharedTaskQueue = nil;
         }
@@ -64,7 +68,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
     if ((self = [super init])) {
         int version = [coder decodeIntForKey:@"version"];
         if (version == kATTaskQueueCodingVersion) {
-            tasks = [coder decodeObjectForKey:@"tasks"];
+            tasks = [[coder decodeObjectForKey:@"tasks"] retain];
         } else {
             [self release];
             return nil;
@@ -84,43 +88,72 @@ static ATTaskQueue *sharedTaskQueue = nil;
 }
 
 
+- (void)addTask:(ATTask *)task {
+    @synchronized(self) {
+        [tasks addObject:task];
+    }
+    [self start];
+}
+
 - (void)start {
-    if (activeTask) return;
-    
-    if ([tasks count]) {
-        activeTask = [tasks objectAtIndex:0];
-        [self observeValueForKeyPath:@"finished" ofObject:activeTask change:NSKeyValueObservingOptionNew context:NULL];
-        [activeTask start];
+    @synchronized(self) {
+        if (activeTask) return;
+        
+        if ([tasks count]) {
+            activeTask = [tasks objectAtIndex:0];
+            [activeTask addObserver:self forKeyPath:@"finished" options:NSKeyValueObservingOptionNew context:NULL];
+            [activeTask addObserver:self forKeyPath:@"failed" options:NSKeyValueObservingOptionNew context:NULL];
+            [activeTask start];
+        }
     }
 }
 
 - (void)stop {
-    if (activeTask) {
+    @synchronized(self) {
         [activeTask stop];
-        [activeTask removeObserver:self forKeyPath:@"finished"];
-        activeTask = nil;
+        [self unsetActiveTask];
     }
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-	if ([keyPath isEqual:@"finished"] && [(ATTask *)object finished]) {
-		[object removeObserver:self forKeyPath:@"finished"];
-        activeTask = nil;
-        [tasks removeObject:object];
-        [self start];
-	}
+    @synchronized(self) {
+        if (object != activeTask) return;
+        if ([keyPath isEqualToString:@"finished"] && [(ATTask *)object finished]) {
+            [self unsetActiveTask];
+            [tasks removeObject:object];
+            [self start];
+        } else if ([keyPath isEqualToString:@"failed"] && [(ATTask *)object failed]) {
+            [self stop];
+            [self performSelector:@selector(start) withObject:nil afterDelay:kATTaskQueueRetryPeriod];
+        }
+    }
 }
 @end
 
 @implementation ATTaskQueue (Private)
 - (void)setup {
-    tasks = [[NSMutableArray alloc] init];
+    @synchronized(self) {
+        tasks = [[NSMutableArray alloc] init];
+    }
 }
 
 - (void)teardown {
-    [self stop];
-    [tasks release];
-    tasks = nil;
+    @synchronized(self) {
+        [self stop];
+        [tasks release];
+        tasks = nil;
+        [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    }
+}
+
+- (void)unsetActiveTask {
+    @synchronized(self) {
+        if (activeTask) {
+            [activeTask removeObserver:self forKeyPath:@"finished"];
+            [activeTask removeObserver:self forKeyPath:@"failed"];
+            activeTask = nil;
+        }
+    }
 }
 @end
 

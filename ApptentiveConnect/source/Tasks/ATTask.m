@@ -12,6 +12,7 @@
 
 @implementation ATTask
 @synthesize finished;
+@synthesize failed;
 
 - (id)initWithCoder:(NSCoder *)coder {
     if ((self = [super init])) {

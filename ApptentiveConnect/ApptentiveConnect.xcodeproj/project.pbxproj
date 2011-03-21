@@ -53,6 +53,8 @@
 		49D1125413368CEF00603373 /* ATFeedbackTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D1125213368CEF00603373 /* ATFeedbackTask.m */; };
 		49D112731337CC9F00603373 /* ATTaskQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D112711337CC9E00603373 /* ATTaskQueue.h */; };
 		49D112741337CC9F00603373 /* ATTaskQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D112721337CC9F00603373 /* ATTaskQueue.m */; };
+		49D1128E1338050200603373 /* ATContactStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D1128C133804DE00603373 /* ATContactStorage.h */; };
+		49D1128F1338050200603373 /* ATContactStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D1128D133804ED00603373 /* ATContactStorage.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -116,6 +118,8 @@
 		49D1125213368CEF00603373 /* ATFeedbackTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATFeedbackTask.m; sourceTree = "<group>"; };
 		49D112711337CC9E00603373 /* ATTaskQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATTaskQueue.h; sourceTree = "<group>"; };
 		49D112721337CC9F00603373 /* ATTaskQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATTaskQueue.m; sourceTree = "<group>"; };
+		49D1128C133804DE00603373 /* ATContactStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATContactStorage.h; sourceTree = "<group>"; };
+		49D1128D133804ED00603373 /* ATContactStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATContactStorage.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -216,6 +220,8 @@
 				49C00298133413BB0071F088 /* ATConnect.m */,
 				49D1120813358B2200603373 /* ATBackend.h */,
 				49D1120913358B2300603373 /* ATBackend.m */,
+				49D1128C133804DE00603373 /* ATContactStorage.h */,
+				49D1128D133804ED00603373 /* ATContactStorage.m */,
 				49C00299133413BB0071F088 /* ATContactInfoController.h */,
 				49C0029A133413BB0071F088 /* ATContactInfoController.m */,
 				49C0029B133413BB0071F088 /* ATDefaultTextView.h */,
@@ -302,6 +308,7 @@
 				49D1124F13368CC200603373 /* ATTask.h in Headers */,
 				49D1125313368CEF00603373 /* ATFeedbackTask.h in Headers */,
 				49D112731337CC9F00603373 /* ATTaskQueue.h in Headers */,
+				49D1128E1338050200603373 /* ATContactStorage.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -461,6 +468,7 @@
 				49D1125013368CC200603373 /* ATTask.m in Sources */,
 				49D1125413368CEF00603373 /* ATFeedbackTask.m in Sources */,
 				49D112741337CC9F00603373 /* ATTaskQueue.m in Sources */,
+				49D1128F1338050200603373 /* ATContactStorage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

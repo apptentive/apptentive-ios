@@ -8,8 +8,15 @@
 
 #import "ATFeedbackTask.h"
 #import "ATFeedback.h"
+#import "ATWebClient.h"
 
 #define kATFeedbackTaskCodingVersion 1
+
+@interface ATFeedbackTask (Private)
+- (void)setup;
+- (void)teardown;
+- (void)feedbackDidLoad:(ATWebClient *)sender result:(id)result;
+@end
 
 @implementation ATFeedbackTask
 @synthesize feedback;
@@ -30,5 +37,52 @@
 - (void)encodeWithCoder:(NSCoder *)coder {
     [coder encodeInt:kATFeedbackTaskCodingVersion forKey:@"version"];
     [coder encodeObject:self.feedback forKey:@"feedback"];
+}
+
+- (void)dealloc {
+    [self teardown];
+    [super dealloc];
+}
+
+- (void)start {
+    if (!client) {
+        client = [[ATWebClient alloc] initWithTarget:self action:@selector(feedbackDidLoad:result:)];
+        [client postFeedback:self.feedback];
+    }
+    
+}
+
+- (void)stop {
+    if (client) {
+        [client cancel];
+        [client release];
+        client = nil;
+    }
+}
+@end
+
+@implementation ATFeedbackTask (Private)
+- (void)setup {
+    
+}
+
+- (void)teardown {
+    if (client) {
+        [client cancel];
+        [client release];
+        client = nil;
+    }
+}
+
+- (void)feedbackDidLoad:(ATWebClient *)sender result:(id)result {
+	@synchronized (self) {
+        if (sender.failed) {
+            self.failed = YES;
+            NSLog(@"Request failed: %@", result);
+            [self stop];
+        } else {
+            self.finished = YES;
+        }
+	}
 }
 @end

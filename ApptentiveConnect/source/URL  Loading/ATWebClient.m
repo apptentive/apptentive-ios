@@ -10,13 +10,17 @@
 #if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
 #endif
+#import "ATBackend.h"
 #import "ATConnectionManager.h"
+#import "ATFeedback.h"
 #import "ATURLConnection.h"
 #import "ATUtilities.h"
 
 #ifdef SUPPORT_JSON
 #import "JSON.h"
 #endif
+
+#import "NSData+ATBase64.h"
 
 #define kCommonChannelName (@"ATWebClient")
 #define kUserAgent (@"ApptentiveConnect/1.0 (iOS)")
@@ -54,6 +58,12 @@
 	@synchronized(self) {
 		cancelled = YES;
 	}
+}
+
+- (void)postFeedback:(ATFeedback *)feedback {
+    NSDictionary *postData = [NSDictionary dictionaryWithObjectsAndKeys:feedback.uuid, @"uuid", feedback.name, @"name", feedback.email, @"email_address", feedback.phone, @"phone_number", feedback.model, @"model", feedback.os_version, @"os_version", feedback.carrier, @"carrier", nil];
+    NSString *url = [NSString stringWithFormat:@"http://www.apptentive.com/apps/feedback/%@", [[ATBackend sharedBackend] appID]];
+    [self post:[NSURL URLWithString:url] withFileData:UIImagePNGRepresentation(feedback.screenshot) ofMimeType:@"image/png" parameters:postData];
 }
 
 - (NSString *)stringForParameters:(NSDictionary *)parameters {
@@ -228,7 +238,6 @@
 }
 
 - (void)post:(NSURL *)theURL withFileData:(NSData *)data ofMimeType:(NSString *)mimeType parameters:(NSDictionary *)parameters {
-    
     ATConnectionManager *cm = [ATConnectionManager sharedSingleton];
     ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL delegate:self];
     conn.timeoutInterval = self.timeoutInterval * 10.0;
@@ -246,12 +255,15 @@
         for (NSString *key in [postParameters allKeys]) {
             id value = [postParameters objectForKey:key];
             if ([value isKindOfClass:[NSString class]]) {
-                if ([(NSString *)value rangeOfString:boundary].location != NSNotFound) {
+                NSLog(@"%d != %d", [(NSString *)value rangeOfString:boundary].location, NSNotFound);
+                NSRange range = [(NSString *)value rangeOfString:boundary];
+                if (range.location != NSNotFound) {
                     found = YES;
                     break;
                 }
             } else if ([value isKindOfClass:[NSData class]]) {
-                if ([(NSData *)value rangeOfData:boundaryData options:0 range:NSMakeRange(0, [(NSData *)value length])].location != NSNotFound) {
+                NSRange range = [(NSData *)value rangeOfData:boundaryData options:0 range:NSMakeRange(0, [(NSData *)value length])];
+                if (range.location != NSNotFound) {
                     found = YES;
                     break;
                 }
@@ -263,7 +275,7 @@
                 @throw [NSException exceptionWithName:@"ATWebClientException" reason:[NSString stringWithFormat:@"Can't encode form data of class: %@", className] userInfo:nil];
             }
         }
-        if (found) {
+        if (!found) {
             break;
         }
     }
@@ -299,11 +311,19 @@
 - (void)addAPIHeaders:(ATURLConnection *)conn {
 	[conn setValue:kUserAgent forHTTPHeaderField:@"User-Agent"];
 	[conn setValue: @"gzip" forHTTPHeaderField: @"Accept-Encoding"];
+    NSString *apiKey = [[ATBackend sharedBackend] apiKey];
+    if (apiKey) {
+        NSData *apiKeyData = [apiKey dataUsingEncoding:NSUTF8StringEncoding];
+        NSString *value = [NSString stringWithFormat:@"Basic %@", [apiKeyData at_base64EncodedString]];
+        [conn setValue:value forHTTPHeaderField:@"Authorization"];
+    }
 }
 
 #pragma mark Memory Management
 - (void)dealloc {
     delegate = nil;
+    ATConnectionManager *cm = [ATConnectionManager sharedSingleton];
+    [cm cancelAllConnectionsInChannel:channelName];
 	[errorTitle release];
 	[errorMessage release];
 	[channelName release];

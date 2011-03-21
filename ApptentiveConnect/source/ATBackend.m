@@ -7,7 +7,9 @@
 //
 
 #import "ATBackend.h"
+#import "ATContactStorage.h"
 #import "ATFeedback.h"
+#import "ATFeedbackTask.h"
 #import "ATTaskQueue.h"
 
 static ATBackend *sharedBackend = nil;
@@ -24,7 +26,7 @@ static ATBackend *sharedBackend = nil;
 @end
 
 @implementation ATBackend
-@synthesize working;
+@synthesize apiKey, appID, working;
 
 + (ATBackend *)sharedBackend {
     @synchronized(self) {
@@ -47,12 +49,33 @@ static ATBackend *sharedBackend = nil;
     [super dealloc];
 }
 
-- (void)updateAPIKey:(NSString *)newAPIKey {
-    //TODO
+- (void)setApiKey:(NSString *)anAPIKey {
+    if (apiKey != anAPIKey) {
+        [apiKey release];
+        apiKey = nil;
+        apiKey = [anAPIKey retain];
+        if (apiKey == nil) {
+            self.working = NO;
+        } else {
+            self.working = NO;
+            self.working = YES;
+        }
+    }
 }
 
 - (void)sendFeedback:(ATFeedback *)feedback {
-    //TODO
+    ATContactStorage *contact = [ATContactStorage sharedContactStorage];
+    contact.name = feedback.name;
+    contact.email = feedback.email;
+    contact.phone = feedback.phone;
+    [ATContactStorage releaseSharedContactStorage];
+    contact = nil;
+    
+    ATFeedbackTask *task = [[ATFeedbackTask alloc] init];
+    task.feedback = feedback;
+    [[ATTaskQueue sharedTaskQueue] addTask:task];
+    [task release];
+    task = nil;
 }
 
 - (NSString *)supportDirectoryPath {
@@ -79,7 +102,7 @@ static ATBackend *sharedBackend = nil;
             [[ATTaskQueue sharedTaskQueue] start];
         } else {
             [[ATTaskQueue sharedTaskQueue] stop];
-            [ATTaskQueue destroySharedTaskQueue];
+            [ATTaskQueue releaseSharedTaskQueue];
         }
     }
 }
@@ -96,6 +119,8 @@ static ATBackend *sharedBackend = nil;
 
 - (void)teardown {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    self.apiKey = nil;
+    self.appID = nil;
 }
 
 #pragma mark Notification Handling

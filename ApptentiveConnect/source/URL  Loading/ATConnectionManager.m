@@ -25,7 +25,7 @@ static ATConnectionManager *sharedSingleton = nil;
 }
 
 - (id)init {
-	if (self = [super init]) {
+	if ((self = [super init])) {
 		channels = [[NSMutableDictionary alloc] init];
 		return self;
 	}

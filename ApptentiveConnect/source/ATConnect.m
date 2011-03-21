@@ -8,24 +8,20 @@
 
 #import "ATConnect.h"
 #import "ATBackend.h"
+#import "ATContactStorage.h"
 #import "ATFeedback.h"
 #import "ATFeedbackController.h"
 #import "ATUtilities.h"
 
-@interface ATConnect ()
-@property (nonatomic, retain) NSString *apiKey;
-@end
-
 static ATConnect *sharedConnection = nil;
 
 @implementation ATConnect
-@synthesize apiKey;
+@synthesize apiKey, appID;
 
-+ (ATConnect *)sharedConnectionWithAPIKey:(NSString *)anAPIKey {
++ (ATConnect *)sharedConnection {
     @synchronized(self) {
         if (sharedConnection == nil) {
             sharedConnection = [[ATConnect alloc] init];
-            sharedConnection.apiKey = anAPIKey;
         }
     }
     return sharedConnection;
@@ -33,16 +29,25 @@ static ATConnect *sharedConnection = nil;
 
 - (void)dealloc {
     self.apiKey = nil;
+    self.appID = nil;
     [super dealloc];
 }
-
 
 - (void)setApiKey:(NSString *)anAPIKey {
     if (apiKey != anAPIKey) {
         [apiKey release];
         apiKey = nil;
         apiKey = [anAPIKey retain];
-        [[ATBackend sharedBackend] updateAPIKey:self.apiKey];
+        [[ATBackend sharedBackend] setApiKey:self.apiKey];
+    }
+}
+
+- (void)setAppID:(NSString *)newAppID {
+    if (appID != newAppID) {
+        [appID release];
+        appID = nil;
+        appID = [newAppID retain];
+        [[ATBackend sharedBackend] setAppID:self.appID];
     }
 }
 
@@ -50,6 +55,16 @@ static ATConnect *sharedConnection = nil;
     UIImage *screenshot = [ATUtilities imageByTakingScreenshot];
     ATFeedbackController *vc = [[ATFeedbackController alloc] init];
     vc.feedback = [[[ATFeedback alloc] init] autorelease];
+    ATContactStorage *contact = [ATContactStorage sharedContactStorage];
+    if (contact.name) {
+        vc.feedback.name = contact.name;
+    }
+    if (contact.phone) {
+        vc.feedback.phone = contact.phone;
+    }
+    if (contact.email) {
+        vc.feedback.email = contact.email;
+    }
     vc.feedback.screenshot = screenshot;
     UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
     
@@ -64,7 +79,9 @@ static ATConnect *sharedConnection = nil;
 }
 
 + (NSBundle *)resourceBundle {
-    NSBundle *bundle = [[NSBundle alloc] initWithPath:@"ApptentiveResources.bundle"];
+    NSString *path = [[NSBundle mainBundle] bundlePath];
+    NSString *bundlePath = [path stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
+    NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
     return [bundle autorelease];
 }
 @end

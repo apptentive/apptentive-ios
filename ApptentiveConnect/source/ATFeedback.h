@@ -11,11 +11,16 @@
 
 @interface ATFeedback : NSObject {
 }
+@property (nonatomic, retain) NSString *type;
 @property (nonatomic, retain) NSString *text;
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *email;
 @property (nonatomic, retain) NSString *phone;
 @property (nonatomic, retain) UIImage *screenshot;
+@property (nonatomic, retain) NSString *uuid;
+@property (nonatomic, retain) NSString *model;
+@property (nonatomic, retain) NSString *os_version;
+@property (nonatomic, retain) NSString *carrier;
 
 - (NSDictionary *)dictionary;
 @end

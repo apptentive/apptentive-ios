@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "ATURLConnection.h"
 
+@class ATFeedback;
 
 typedef enum {
 	ATWebClientReturnTypeData,
@@ -43,6 +44,8 @@ typedef enum {
 - (void)showAlert;
 - (void)cancel;
 
+- (void)postFeedback:(ATFeedback *)feedback;
+
 #pragma mark Query Parameter Encoding
 - (NSString *)stringForParameters:(NSDictionary *)parameters;
 - (NSString *)stringForParameter:(id)value;
@@ -53,4 +56,5 @@ typedef enum {
 - (void)post:(NSURL *)theURL JSON:(NSString *)body;
 - (void)post:(NSURL *)theURL body:(NSString *)body;
 - (void)addAPIHeaders:(ATURLConnection *)conn;
+- (void)post:(NSURL *)theURL withFileData:(NSData *)data ofMimeType:(NSString *)mimeType parameters:(NSDictionary *)parameters;
 @end

@@ -8,6 +8,7 @@
 
 #import "ATContactInfoController.h"
 #import <QuartzCore/QuartzCore.h>
+#import "ATBackend.h"
 #import "ATConnect.h"
 #import "ATFeedback.h"
 
@@ -88,7 +89,7 @@
     if (!screenshotSwitch.on) {
         feedback.screenshot = nil;
     }
-    //TODO
+    [[ATBackend sharedBackend] sendFeedback:feedback];
     [self dismissModalViewControllerAnimated:YES];
 }
 

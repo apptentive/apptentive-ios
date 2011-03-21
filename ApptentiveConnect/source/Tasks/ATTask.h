@@ -12,6 +12,7 @@
 @interface ATTask : NSObject <NSCoding> {
 }
 @property (nonatomic, assign) BOOL finished;
+@property (nonatomic, assign) BOOL failed;
 - (void)start;
 - (void)stop;
 @end

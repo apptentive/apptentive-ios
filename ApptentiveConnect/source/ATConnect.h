@@ -9,10 +9,11 @@
 #import <UIKit/UIKit.h>
 
 @interface ATConnect : NSObject {
-@private
-    NSString *apiKey;
 }
-+ (ATConnect *)sharedConnectionWithAPIKey:(NSString *)apiKey;
+@property (nonatomic, retain) NSString *apiKey;
+@property (nonatomic, retain) NSString *appID;
+
++ (ATConnect *)sharedConnection;
 
 /*! 
  * Presents a feedback controller from the given view controller. The feedback

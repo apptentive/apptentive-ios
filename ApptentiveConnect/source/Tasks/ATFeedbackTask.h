@@ -7,11 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ATTask.h"
 
+@class ATWebClient;
 @class ATFeedback;
 
-@interface ATFeedbackTask : NSObject {
-    
+@interface ATFeedbackTask : ATTask {
+@private
+    ATWebClient *client;
 }
 @property (nonatomic, retain) ATFeedback *feedback;
 

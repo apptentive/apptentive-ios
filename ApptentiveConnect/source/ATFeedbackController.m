@@ -9,6 +9,7 @@
 #import "ATFeedbackController.h"
 #import "ATConnect.h"
 #import "ATContactInfoController.h"
+#import "ATContactStorage.h"
 #import "ATDefaultTextView.h"
 #import "ATFeedback.h"
 
@@ -58,7 +59,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setup];
-    [nameField becomeFirstResponder];
+    if (self.feedback.name) {
+        [feedbackView becomeFirstResponder];
+    } else {
+        [nameField becomeFirstResponder];
+    }
 }
 
 - (void)viewDidUnload {

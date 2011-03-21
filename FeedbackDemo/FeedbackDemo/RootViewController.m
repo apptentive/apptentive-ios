@@ -13,7 +13,11 @@
 @implementation RootViewController
 
 - (IBAction)showFeedback:(id)sender {
-    [[ATConnect sharedConnectionWithAPIKey:kApptentiveAPIKey] presentFeedbackControllerFromViewController:self];
+    ATConnect *connection = [ATConnect sharedConnection];
+    connection.apiKey = kApptentiveAPIKey;
+    connection.appID = kApptentiveAppID;
+    
+    [connection presentFeedbackControllerFromViewController:self];
 }
 
 - (void)viewDidLoad {

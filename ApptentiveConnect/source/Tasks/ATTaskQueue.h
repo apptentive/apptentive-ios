@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+@class ATTask;
 
 @interface ATTaskQueue : NSObject <NSCoding> {
 @private
@@ -17,8 +18,9 @@
 + (NSString *)taskQueuePath;
 + (BOOL)serializedQueueExists;
 + (ATTaskQueue *)sharedTaskQueue;
-+ (void)destroySharedTaskQueue;
++ (void)releaseSharedTaskQueue;
 
+- (void)addTask:(ATTask *)task;
 - (void)start;
 - (void)stop;
 

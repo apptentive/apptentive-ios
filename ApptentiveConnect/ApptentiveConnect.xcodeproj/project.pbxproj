@@ -51,6 +51,8 @@
 		49D1125013368CC200603373 /* ATTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D1124E13368CC200603373 /* ATTask.m */; };
 		49D1125313368CEF00603373 /* ATFeedbackTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D1125113368CEE00603373 /* ATFeedbackTask.h */; };
 		49D1125413368CEF00603373 /* ATFeedbackTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D1125213368CEF00603373 /* ATFeedbackTask.m */; };
+		49D112731337CC9F00603373 /* ATTaskQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D112711337CC9E00603373 /* ATTaskQueue.h */; };
+		49D112741337CC9F00603373 /* ATTaskQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D112721337CC9F00603373 /* ATTaskQueue.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,6 +114,8 @@
 		49D1124E13368CC200603373 /* ATTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATTask.m; sourceTree = "<group>"; };
 		49D1125113368CEE00603373 /* ATFeedbackTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATFeedbackTask.h; sourceTree = "<group>"; };
 		49D1125213368CEF00603373 /* ATFeedbackTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATFeedbackTask.m; sourceTree = "<group>"; };
+		49D112711337CC9E00603373 /* ATTaskQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATTaskQueue.h; sourceTree = "<group>"; };
+		49D112721337CC9F00603373 /* ATTaskQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATTaskQueue.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -269,6 +273,8 @@
 				49D1124E13368CC200603373 /* ATTask.m */,
 				49D1125113368CEE00603373 /* ATFeedbackTask.h */,
 				49D1125213368CEF00603373 /* ATFeedbackTask.m */,
+				49D112711337CC9E00603373 /* ATTaskQueue.h */,
+				49D112721337CC9F00603373 /* ATTaskQueue.m */,
 			);
 			path = Tasks;
 			sourceTree = "<group>";
@@ -295,6 +301,7 @@
 				49D1123C13359BA000603373 /* NSData+ATBase64.h in Headers */,
 				49D1124F13368CC200603373 /* ATTask.h in Headers */,
 				49D1125313368CEF00603373 /* ATFeedbackTask.h in Headers */,
+				49D112731337CC9F00603373 /* ATTaskQueue.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -453,6 +460,7 @@
 				49D1123D13359BA000603373 /* NSData+ATBase64.m in Sources */,
 				49D1125013368CC200603373 /* ATTask.m in Sources */,
 				49D1125413368CEF00603373 /* ATFeedbackTask.m in Sources */,
+				49D112741337CC9F00603373 /* ATTaskQueue.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,6 +11,7 @@
 #define kATTaskCodingVersion 1
 
 @implementation ATTask
+@synthesize finished;
 
 - (id)initWithCoder:(NSCoder *)coder {
     if ((self = [super init])) {
@@ -28,11 +29,11 @@
     [coder encodeInt:kATTaskCodingVersion forKey:@"version"];
 }
 
-- (void)save {
+- (void)start {
     
 }
 
-- (void)resume {
+- (void)stop {
     
 }
 @end

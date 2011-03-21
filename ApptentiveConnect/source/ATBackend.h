@@ -12,9 +12,9 @@
 
 /*! Handles all of the backend activities, such as sending feedback. */
 @interface ATBackend : NSObject {
-    
 }
 + (ATBackend *)sharedBackend;
 - (void)updateAPIKey:(NSString *)newAPIKey;
 - (void)sendFeedback:(ATFeedback *)feedback;
+- (NSString *)supportDirectoryPath;
 @end

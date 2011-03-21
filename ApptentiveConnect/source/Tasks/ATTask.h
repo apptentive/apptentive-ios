@@ -10,8 +10,8 @@
 
 
 @interface ATTask : NSObject <NSCoding> {
-    
 }
-- (void)save;
-- (void)resume;
+@property (nonatomic, assign) BOOL finished;
+- (void)start;
+- (void)stop;
 @end

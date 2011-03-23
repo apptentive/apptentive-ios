@@ -78,7 +78,7 @@
 	@synchronized (self) {
         if (sender.failed) {
             self.failed = YES;
-            NSLog(@"Request failed: %@", result);
+            NSLog(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
             [self stop];
         } else {
             self.finished = YES;

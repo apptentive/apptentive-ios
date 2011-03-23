@@ -258,7 +258,6 @@
         for (NSString *key in [postParameters allKeys]) {
             id value = [postParameters objectForKey:key];
             if ([value isKindOfClass:[NSString class]]) {
-                NSLog(@"%d != %d", [(NSString *)value rangeOfString:boundary].location, NSNotFound);
                 NSRange range = [(NSString *)value rangeOfString:boundary];
                 if (range.location != NSNotFound) {
                     found = YES;

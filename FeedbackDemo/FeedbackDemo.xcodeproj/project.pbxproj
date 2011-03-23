@@ -223,8 +223,8 @@
 			buildRules = (
 			);
 			dependencies = (
-				49D111A613341AE300603373 /* PBXTargetDependency */,
 				49C00331133417740071F088 /* PBXTargetDependency */,
+				49D111A613341AE300603373 /* PBXTargetDependency */,
 			);
 			name = FeedbackDemo;
 			productName = FeedbackDemo;

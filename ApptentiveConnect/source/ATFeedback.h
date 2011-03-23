@@ -23,4 +23,5 @@
 @property (nonatomic, retain) NSString *carrier;
 
 - (NSDictionary *)dictionary;
+- (NSDictionary *)apiDictionary;
 @end

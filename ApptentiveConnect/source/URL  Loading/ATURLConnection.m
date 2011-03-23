@@ -125,7 +125,6 @@
 		}
 		self.executing = NO;
 		self.cancelled = YES;
-		self.finished = YES;
 	}
 }
 

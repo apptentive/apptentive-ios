@@ -74,4 +74,27 @@
 - (NSDictionary *)dictionary {
     return [NSDictionary dictionaryWithObjectsAndKeys:self.text, @"text", self.name, @"name", self.email, @"email", self.phone, @"phone", self.screenshot, @"screenshot", nil];
 }
+
+- (NSDictionary *)apiDictionary {
+    NSMutableDictionary *d = [NSMutableDictionary dictionary];
+    if (self.uuid) [d setObject:self.uuid forKey:@"feedback[uuid]"];
+    if (self.name) [d setObject:self.name forKey:@"feedback[name]"];
+    if (self.email) [d setObject:self.email forKey:@"feedback[email_address]"];
+    if (self.phone) [d setObject:self.phone forKey:@"feedback[phone_number]"];
+    if (self.model) [d setObject:self.model forKey:@"feedback[model]"];
+    if (self.os_version) [d setObject:self.os_version forKey:@"feedback[os_version]"];
+    if (self.carrier) [d setObject:self.carrier forKey:@"feedback[carrier]"];
+    if (self.text) [d setObject:self.text forKey:@"feedback[feedback]"];
+    //TODO: Need to make this a parameter.
+    [d setObject:@"bug" forKey:@"feedback[feedback_type]"];
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"MM/dd/yyyy hh:mma"];
+    NSString *date = [formatter stringFromDate:[NSDate date]];
+    [formatter release];
+    
+    [d setObject:date forKey:@"feedback[feedback_date]"];
+    
+    return d;
+}
 @end

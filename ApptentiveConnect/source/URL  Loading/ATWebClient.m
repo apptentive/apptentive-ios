@@ -61,9 +61,11 @@
 }
 
 - (void)postFeedback:(ATFeedback *)feedback {
-    NSDictionary *postData = [NSDictionary dictionaryWithObjectsAndKeys:feedback.uuid, @"uuid", feedback.name, @"name", feedback.email, @"email_address", feedback.phone, @"phone_number", feedback.model, @"model", feedback.os_version, @"os_version", feedback.carrier, @"carrier", nil];
-    NSString *url = [NSString stringWithFormat:@"http://www.apptentive.com/apps/feedback/%@", [[ATBackend sharedBackend] appID]];
-    [self post:[NSURL URLWithString:url] withFileData:UIImagePNGRepresentation(feedback.screenshot) ofMimeType:@"image/png" parameters:postData];
+    NSDictionary *postData = [feedback apiDictionary];
+    //!!TODO: Need to include screenshot data:
+    // /*UIImagePNGRepresentation(feedback.screenshot)*/
+    NSString *url = @"http://www.apptentive.com/feedback";
+    [self post:[NSURL URLWithString:url] withFileData:nil ofMimeType:@"image/png" parameters:postData];
 }
 
 - (NSString *)stringForParameters:(NSDictionary *)parameters {
@@ -110,6 +112,7 @@
 	BOOL readData = NO;
 	switch (statusCode) {
 		case 200:
+        case 201:
 		case 400: // rate limit reached
 		case 403: // whatevs, probably private feed
 			readData = YES;
@@ -285,10 +288,14 @@
     
     
     NSMutableData *multipartEncodedData = [NSMutableData data];
-    [postParameters setValue:data forKey:@"filedata"];
+    if (data) {
+        [postParameters setValue:data forKey:@"filedata"];
+    }
     
+    [multipartEncodedData appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     for (NSString *key in [postParameters allKeys]) {
         id value = [postParameters objectForKey:key];
+        [multipartEncodedData appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
         if ([value isKindOfClass:[NSString class]]) {
             [multipartEncodedData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", key] dataUsingEncoding:NSUTF8StringEncoding]];
             [multipartEncodedData appendData:[(NSString *)value dataUsingEncoding:NSUTF8StringEncoding]];
@@ -298,9 +305,15 @@
             [multipartEncodedData appendData:[@"Content-Transfer-Encoding: binary\r\n\r\n" dataUsingEncoding:NSASCIIStringEncoding]];
             [multipartEncodedData appendData:(NSData *)value];
         } // else Should be handled above.
-        [multipartEncodedData appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     }
+    [multipartEncodedData appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     [conn setHTTPBody:multipartEncodedData];
+    
+    /*
+    NSLog(@"wtf parameters: %@", parameters);
+    NSLog(@"-length: %d", [multipartEncodedData length]);
+    NSLog(@"-data: %@", [NSString stringWithUTF8String:[multipartEncodedData bytes]]);
+     */
     
 	[cm addConnection:conn toChannel:self.channelName];
 	[conn release];
@@ -311,6 +324,8 @@
 - (void)addAPIHeaders:(ATURLConnection *)conn {
 	[conn setValue:kUserAgent forHTTPHeaderField:@"User-Agent"];
 	[conn setValue: @"gzip" forHTTPHeaderField: @"Accept-Encoding"];
+	[conn setValue: @"text/xml" forHTTPHeaderField: @"Accept"];
+	[conn setValue: @"utf-8" forHTTPHeaderField: @"Accept-Charset"];
     NSString *apiKey = [[ATBackend sharedBackend] apiKey];
     if (apiKey) {
         NSData *apiKeyData = [apiKey dataUsingEncoding:NSUTF8StringEncoding];

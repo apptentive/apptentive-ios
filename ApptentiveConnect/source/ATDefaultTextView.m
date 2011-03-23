@@ -8,22 +8,14 @@
 
 #import "ATDefaultTextView.h"
 
-
-@interface ATDefaultTextView ()
-@property (nonatomic, copy) UIColor *originalTextColor;
-@property (nonatomic, copy) UIColor *placeholderTextColor;
-@end
-
 @interface ATDefaultTextView (Private)
 - (void)setup;
 - (void)setupPlaceholder;
-- (void)beganEditing:(NSNotification *)notification;
-- (void)endedEditing:(NSNotification *)notification;
+- (void)didEdit:(NSNotification *)notification;
 @end
 
 @implementation ATDefaultTextView
 @synthesize placeholder;
-@synthesize originalTextColor, placeholderTextColor;
 
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
@@ -38,8 +30,10 @@
 }
 
 - (void)dealloc {
-    self.originalTextColor = nil;
     self.placeholder = nil;
+    [placeholderLabel removeFromSuperview];
+    [placeholderLabel release];
+    placeholderLabel = nil;
     [super dealloc];
 }
 
@@ -48,23 +42,12 @@
         [placeholder release];
         placeholder = nil;
         placeholder = [newPlaceholder retain];
-        if (!self.text || [@"" isEqualToString:self.text]) {
-            [self setupPlaceholder];
-        }
-    }
-}
-
-- (void)setTextColor:(UIColor *)newTextColor {
-    [super setTextColor:newTextColor];
-    if (![self.textColor isEqual:self.placeholderTextColor] && ![self.textColor isEqual:self.originalTextColor]) {
-        self.originalTextColor = self.textColor;
+        [self setupPlaceholder];
     }
 }
 
 - (BOOL)isDefault {
-    if (!self.text) return YES;
-    if ([@"" isEqualToString:self.text]) return YES;
-    if ([self.placeholder isEqualToString:self.text]) return YES;
+    if (!self.text || [self.text length] == 0) return YES;
     return NO;
 }
 @end
@@ -73,34 +56,37 @@
 @implementation ATDefaultTextView (Private)
 
 - (void)setup {
-    self.placeholderTextColor = [UIColor lightGrayColor];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(beganEditing:) name:UITextViewTextDidBeginEditingNotification object:self];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(endedEditing:) name:UITextViewTextDidEndEditingNotification object:self];
+    self.text = @"";
+    placeholderLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    placeholderLabel.userInteractionEnabled = NO;
+    placeholderLabel.backgroundColor = [UIColor clearColor];
+    placeholderLabel.opaque = NO;
+    placeholderLabel.textColor = [UIColor lightGrayColor];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEdit:) name:UITextViewTextDidBeginEditingNotification object:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEdit:) name:UITextViewTextDidChangeNotification object:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEdit:) name:UITextViewTextDidEndEditingNotification object:self];
     [self setupPlaceholder];
 }
 
 - (void)setupPlaceholder {
-    self.text = self.placeholder;
-    if (!self.originalTextColor) {
-        self.originalTextColor = self.textColor;
+    if ([self isDefault]) {
+        placeholderLabel.text = self.placeholder;
+        placeholderLabel.font = self.font;
+        placeholderLabel.textAlignment = self.textAlignment;
+        [placeholderLabel sizeToFit];
+        [self addSubview:placeholderLabel];
+        CGRect f = placeholderLabel.frame;
+        f.origin = CGPointMake(8.0, 8.0);
+        placeholderLabel.frame = f;
+        [self sendSubviewToBack:placeholderLabel];
+    } else {
+        [placeholderLabel removeFromSuperview];
     }
-    self.textColor = self.placeholderTextColor;
 }
 
-- (void)beganEditing:(NSNotification *)notification {
+- (void)didEdit:(NSNotification *)notification {
     if (notification.object == self) {
-        if (self.text && self.placeholder && [self.placeholder isEqualToString:self.text]) {
-            self.text = @"";
-            self.textColor = [[self.originalTextColor copy] autorelease];
-        }
-    }
-}
-
-- (void)endedEditing:(NSNotification *)notification {
-    if (notification.object == self) {
-        if (self.placeholder && [@"" isEqualToString:self.text]) {
-            [self setupPlaceholder];
-        }
+        [self setupPlaceholder];
     }
 }
 @end

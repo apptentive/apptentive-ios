@@ -11,8 +11,7 @@
 
 @interface ATDefaultTextView : UITextView {
 @private
-    UIColor *originalTextColor;
-    UIColor *placeholderTextColor;
+    UILabel *placeholderLabel;
 }
 @property (nonatomic, retain) NSString *placeholder;
 - (BOOL)isDefault;

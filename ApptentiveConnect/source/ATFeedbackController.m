@@ -21,6 +21,7 @@
 - (void)teardown;
 - (void)keyboardWillShow:(NSNotification *)notification;
 - (void)keyboardWillHide:(NSNotification *)notification;
+- (void)nameChanged:(NSNotification *)notification;
 - (void)feedbackChanged:(NSNotification *)notification;
 - (void)contactInfoChanged:(NSNotification *)notification;
 @end
@@ -117,6 +118,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackChanged:) name:UITextViewTextDidChangeNotification object:feedbackView];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(nameChanged:) name:UITextFieldTextDidChangeNotification object:nameField];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contactInfoChanged:) name:ATContactUpdaterFinished object:nil];
     feedbackView.placeholder = NSLocalizedString(@"Feedback", nil);
     self.title = NSLocalizedString(@"Give Feedback", nil);
@@ -181,6 +183,12 @@
     [UIView commitAnimations];
 }
 
+- (void)nameChanged:(NSNotification *)notification {
+    if (notification.object == nameField) {
+        nameIsDirtied = YES;
+    }
+}
+
 - (void)feedbackChanged:(NSNotification *)notification {
     if (notification.object == feedbackView) {
         self.navigationItem.rightBarButtonItem.enabled = ![@"" isEqualToString:feedbackView.text];
@@ -189,8 +197,9 @@
 
 - (void)contactInfoChanged:(NSNotification *)notification {
     ATContactStorage *contact = [ATContactStorage sharedContactStorage];
-    if (![feedback.name isEqualToString:nameField.text] && contact.name) {
+    if (!nameIsDirtied && contact.name) {
         nameField.text = contact.name;
+        [feedbackView becomeFirstResponder];
     }
     if (contact.phone) {
         feedback.phone = contact.phone;

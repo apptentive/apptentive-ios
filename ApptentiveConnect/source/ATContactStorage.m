@@ -11,6 +11,10 @@
 
 #define kATContactStorageVersion 1
 
+// Interval, in seconds, after which we'll update the contact storage from the
+// server, if it hasn't been modified locally.
+#define kATContactStorageUpdateInterval (60*60*24*7)
+
 static ATContactStorage *sharedContactStorage = nil;
 
 @interface ATContactStorage (Private)
@@ -55,9 +59,31 @@ static ATContactStorage *sharedContactStorage = nil;
     }
 }
 
-- (BOOL)localCopyExists {
-    NSFileManager *fm = [NSFileManager defaultManager];
-    return [fm fileExistsAtPath:[ATContactStorage contactStoragePath]];
+- (BOOL)shouldCheckForUpdate {
+    BOOL result = NO;
+    
+    do { // once
+        NSFileManager *fm = [NSFileManager defaultManager];
+        NSString *path = [ATContactStorage contactStoragePath];
+        
+        NSError *error = nil;
+        NSDictionary *attrs = [fm attributesOfItemAtPath:path error:&error];
+        if (!attrs) {
+            break;
+        }
+        
+        NSDate *modificationDate = [attrs fileModificationDate];
+        if (!modificationDate) {
+            break;
+        }
+        
+        NSTimeInterval interval = [modificationDate timeIntervalSince1970];
+        if (interval > kATContactStorageUpdateInterval) {
+            result = YES;
+        }
+    } while (NO);
+    
+    return result;
 }
 
 - (void)save {

@@ -14,6 +14,8 @@
 @interface ATFeedbackController : UIViewController {
     IBOutlet UITextField *nameField;
     IBOutlet ATDefaultTextView *feedbackView;
+@private
+    BOOL nameIsDirtied;
 }
 @property (nonatomic, retain) ATFeedback *feedback;
 - (id)init;

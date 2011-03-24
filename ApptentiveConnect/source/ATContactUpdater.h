@@ -9,21 +9,31 @@
 #import <Foundation/Foundation.h>
 
 @class ATWebClient;
+@class ATContactParser;
 
 NSString * const ATContactUpdaterFinished;
 
-@interface ATContactUpdater : NSObject <NSXMLParserDelegate> {
+@interface ATContactUpdater : NSObject {
 @private
     ATWebClient *client;
+    ATContactParser *parser;
+}
+- (void)update;
+- (void)cancel;
+@end
+
+
+@interface ATContactParser : NSObject <NSXMLParserDelegate> {
+@private
     NSXMLParser *parser;
     BOOL parseInsideItem;
     NSString *parseCurrentElementName;
 	NSMutableString *parseCurrentString;
-    
-    NSString *name;
-    NSString *phone;
-    NSString *email;
 }
-- (void)update;
-- (void)cancel;
+@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSString *phone;
+@property (nonatomic, retain) NSString *email;
+- (BOOL)parse:(NSData *)xmlData;
+- (void)abortParsing;
+- (NSError *)parserError;
 @end

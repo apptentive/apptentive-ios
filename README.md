@@ -37,8 +37,10 @@ Then, add _libApptentiveConnect.a_ to _Link Binary With Libraries_
 Finally, add a _Run Script_ build phase with the contents:
 
     #!/bin/sh
-    rm -rf "$BUILT_PRODUCTS_DIR/FeedbackDemo.app/ApptentiveResources.bundle"
-    mv "$BUILT_PRODUCTS_DIR/ApptentiveResources.bundle" "$BUILT_PRODUCTS_DIR/FeedbackDemo.app/"
+    if [ -d "$BUILT_PRODUCTS_DIR/FeedbackDemo.app/ApptentiveResources.bundle" ]; then
+        rm -rf "$BUILT_PRODUCTS_DIR/FeedbackDemo.app/ApptentiveResources.bundle"
+        mv "$BUILT_PRODUCTS_DIR/ApptentiveResources.bundle" "$BUILT_PRODUCTS_DIR/FeedbackDemo.app/"
+    fi
 
 This will copy the _ApptentiveResources.bundle_ resource bundle into your
 application bundle.
@@ -67,6 +69,3 @@ BUGS TO BE AWARE OF
 Xcode 4 won't correctly rebuild static libraries inside a workspace when the source has changed. If you change the source of _ApptentiveConnect_ when
 working on your app, you must do a _Product > Clean_ before building and
 running your app.
-
-
-

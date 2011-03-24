@@ -353,7 +353,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\nrm -rf \"$BUILT_PRODUCTS_DIR/FeedbackDemo.app/ApptentiveResources.bundle\"\nmv \"$BUILT_PRODUCTS_DIR/ApptentiveResources.bundle\" \"$BUILT_PRODUCTS_DIR/FeedbackDemo.app/\"";
+			shellScript = "#!/bin/sh\nif [ -d \"$BUILT_PRODUCTS_DIR/FeedbackDemo.app/ApptentiveResources.bundle\" ]; then\n    rm -rf \"$BUILT_PRODUCTS_DIR/FeedbackDemo.app/ApptentiveResources.bundle\"\n    mv \"$BUILT_PRODUCTS_DIR/ApptentiveResources.bundle\" \"$BUILT_PRODUCTS_DIR/FeedbackDemo.app/\"\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 

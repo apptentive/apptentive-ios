@@ -14,6 +14,7 @@
 		496DC3941333D35600743F65 /* libApptentiveConnect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC37F1333D35600743F65 /* libApptentiveConnect.a */; };
 		4982ECA3133AAB9300B91781 /* ATContactUpdater.h in Headers */ = {isa = PBXBuildFile; fileRef = 4982ECA1133AAB8B00B91781 /* ATContactUpdater.h */; };
 		4982ECA4133AAB9300B91781 /* ATContactUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 4982ECA2133AAB8F00B91781 /* ATContactUpdater.m */; };
+		4982ECC7133BF49000B91781 /* ApptentiveContactUpdaterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4982ECC6133BF49000B91781 /* ApptentiveContactUpdaterTests.m */; };
 		49C0028D1334137E0071F088 /* ApptentiveConnectTests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 49C002871334137E0071F088 /* ApptentiveConnectTests-Info.plist */; };
 		49C0028E1334137E0071F088 /* ApptentiveConnectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C0028A1334137E0071F088 /* ApptentiveConnectTests.m */; };
 		49C0028F1334137E0071F088 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49C0028B1334137E0071F088 /* InfoPlist.strings */; };
@@ -77,6 +78,8 @@
 		496DC3901333D35600743F65 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		4982ECA1133AAB8B00B91781 /* ATContactUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATContactUpdater.h; sourceTree = "<group>"; };
 		4982ECA2133AAB8F00B91781 /* ATContactUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATContactUpdater.m; sourceTree = "<group>"; };
+		4982ECC5133BF49000B91781 /* ApptentiveContactUpdaterTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveContactUpdaterTests.h; sourceTree = "<group>"; };
+		4982ECC6133BF49000B91781 /* ApptentiveContactUpdaterTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveContactUpdaterTests.m; sourceTree = "<group>"; };
 		49C002871334137E0071F088 /* ApptentiveConnectTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ApptentiveConnectTests-Info.plist"; sourceTree = "<group>"; };
 		49C002881334137E0071F088 /* ApptentiveConnectTests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ApptentiveConnectTests-Prefix.pch"; sourceTree = "<group>"; };
 		49C002891334137E0071F088 /* ApptentiveConnectTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveConnectTests.h; sourceTree = "<group>"; };
@@ -201,6 +204,8 @@
 				49C002891334137E0071F088 /* ApptentiveConnectTests.h */,
 				49C0028A1334137E0071F088 /* ApptentiveConnectTests.m */,
 				49C0028B1334137E0071F088 /* InfoPlist.strings */,
+				4982ECC5133BF49000B91781 /* ApptentiveContactUpdaterTests.h */,
+				4982ECC6133BF49000B91781 /* ApptentiveContactUpdaterTests.m */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -485,6 +490,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				49C0028E1334137E0071F088 /* ApptentiveConnectTests.m in Sources */,
+				4982ECC7133BF49000B91781 /* ApptentiveContactUpdaterTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -579,8 +585,8 @@
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "ApptentiveConnectTests/ApptentiveConnectTests-Prefix.pch";
-				INFOPLIST_FILE = "ApptentiveConnectTests/ApptentiveConnectTests-Info.plist";
+				GCC_PREFIX_HEADER = "tests/ApptentiveConnectTests-Prefix.pch";
+				INFOPLIST_FILE = "tests/ApptentiveConnectTests-Info.plist";
 				OTHER_LDFLAGS = (
 					"-framework",
 					SenTestingKit,
@@ -599,8 +605,8 @@
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "ApptentiveConnectTests/ApptentiveConnectTests-Prefix.pch";
-				INFOPLIST_FILE = "ApptentiveConnectTests/ApptentiveConnectTests-Info.plist";
+				GCC_PREFIX_HEADER = "tests/ApptentiveConnectTests-Prefix.pch";
+				INFOPLIST_FILE = "tests/ApptentiveConnectTests-Info.plist";
 				OTHER_LDFLAGS = (
 					"-framework",
 					SenTestingKit,

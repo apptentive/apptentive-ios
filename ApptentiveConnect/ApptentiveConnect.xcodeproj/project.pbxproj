@@ -15,7 +15,6 @@
 		4982ECA3133AAB9300B91781 /* ATContactUpdater.h in Headers */ = {isa = PBXBuildFile; fileRef = 4982ECA1133AAB8B00B91781 /* ATContactUpdater.h */; };
 		4982ECA4133AAB9300B91781 /* ATContactUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 4982ECA2133AAB8F00B91781 /* ATContactUpdater.m */; };
 		4982ECC7133BF49000B91781 /* ApptentiveContactUpdaterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4982ECC6133BF49000B91781 /* ApptentiveContactUpdaterTests.m */; };
-		49C0028D1334137E0071F088 /* ApptentiveConnectTests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 49C002871334137E0071F088 /* ApptentiveConnectTests-Info.plist */; };
 		49C0028E1334137E0071F088 /* ApptentiveConnectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C0028A1334137E0071F088 /* ApptentiveConnectTests.m */; };
 		49C0028F1334137E0071F088 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49C0028B1334137E0071F088 /* InfoPlist.strings */; };
 		49C002A1133413BB0071F088 /* ApptentiveConnect-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 49C00296133413BB0071F088 /* ApptentiveConnect-Prefix.pch */; };
@@ -413,7 +412,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49C0028D1334137E0071F088 /* ApptentiveConnectTests-Info.plist in Resources */,
 				49C0028F1334137E0071F088 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

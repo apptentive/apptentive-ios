@@ -16,7 +16,7 @@
 static ATConnect *sharedConnection = nil;
 
 @implementation ATConnect
-@synthesize apiKey, appID;
+@synthesize apiKey;
 
 + (ATConnect *)sharedConnection {
     @synchronized(self) {
@@ -29,7 +29,6 @@ static ATConnect *sharedConnection = nil;
 
 - (void)dealloc {
     self.apiKey = nil;
-    self.appID = nil;
     [super dealloc];
 }
 
@@ -39,15 +38,6 @@ static ATConnect *sharedConnection = nil;
         apiKey = nil;
         apiKey = [anAPIKey retain];
         [[ATBackend sharedBackend] setApiKey:self.apiKey];
-    }
-}
-
-- (void)setAppID:(NSString *)newAppID {
-    if (appID != newAppID) {
-        [appID release];
-        appID = nil;
-        appID = [newAppID retain];
-        [[ATBackend sharedBackend] setAppID:self.appID];
     }
 }
 

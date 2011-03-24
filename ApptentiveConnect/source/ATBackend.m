@@ -28,7 +28,7 @@ static ATBackend *sharedBackend = nil;
 @end
 
 @implementation ATBackend
-@synthesize apiKey, appID, working;
+@synthesize apiKey, working;
 
 + (ATBackend *)sharedBackend {
     @synchronized(self) {
@@ -143,7 +143,6 @@ static ATBackend *sharedBackend = nil;
     [contactUpdater release];
     contactUpdater = nil;
     self.apiKey = nil;
-    self.appID = nil;
 }
 
 #pragma mark Notification Handling

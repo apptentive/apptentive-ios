@@ -55,12 +55,10 @@ Now, you can show the Apptentive feedback UI from a _UIViewController_ with:
     
     ATConnect *connection = [ATConnect sharedConnection];
     connection.apiKey = kApptentiveAPIKey;
-    connection.appID = kApptentiveAppID;
     
     [connection presentFeedbackControllerFromViewController:self];
 
-Where _kApptentiveAPIKey_ is an _NSString_ containing your API key and 
-_kApptentiveAppID_ is an _NSString_ containing your application's id.
+Where _kApptentiveAPIKey_ is an _NSString_ containing your API key.
     
 Easy!
 

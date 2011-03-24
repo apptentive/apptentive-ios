@@ -7,4 +7,3 @@
 //
 
 #define kApptentiveAPIKey @"Ed9Kaw2UzCBp4G0cyPIS"
-#define kApptentiveAppID @"4d85279954092f04c8000004"

@@ -15,7 +15,6 @@
 - (IBAction)showFeedback:(id)sender {
     ATConnect *connection = [ATConnect sharedConnection];
     connection.apiKey = kApptentiveAPIKey;
-    connection.appID = kApptentiveAppID;
     
     [connection presentFeedbackControllerFromViewController:self];
 }

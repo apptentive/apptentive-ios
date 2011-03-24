@@ -11,7 +11,6 @@
 @interface ATConnect : NSObject {
 }
 @property (nonatomic, retain) NSString *apiKey;
-@property (nonatomic, retain) NSString *appID;
 
 + (ATConnect *)sharedConnection;
 

@@ -18,7 +18,6 @@
     BOOL userDataWasUpdated;
 }
 @property (nonatomic, retain) NSString *apiKey;
-@property (nonatomic, retain) NSString *appID;
 
 + (ATBackend *)sharedBackend;
 - (void)sendFeedback:(ATFeedback *)feedback;

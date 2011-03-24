@@ -8,6 +8,7 @@
 
 #import "ATBackend.h"
 #import "ATContactStorage.h"
+#import "ATContactUpdater.h"
 #import "ATFeedback.h"
 #import "ATFeedbackTask.h"
 #import "ATTaskQueue.h"
@@ -19,6 +20,7 @@ static ATBackend *sharedBackend = nil;
 - (void)teardown;
 - (void)stopWorking:(NSNotification *)notification;
 - (void)startWorking:(NSNotification *)notification;
+- (void)contactUpdaterFinished:(NSNotification *)notification;
 @end
 
 @interface ATBackend ()
@@ -78,6 +80,16 @@ static ATBackend *sharedBackend = nil;
     task = nil;
 }
 
+- (void)updateUserData {
+    if (contactUpdater) {
+        [contactUpdater cancel];
+        [contactUpdater release];
+        contactUpdater = nil;
+    }
+    contactUpdater = [[ATContactUpdater alloc] init];
+    [contactUpdater update];
+}
+
 - (NSString *)supportDirectoryPath {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString *path = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
@@ -94,12 +106,19 @@ static ATBackend *sharedBackend = nil;
     return newPath;
 }
 
+- (NSString *)deviceUUID {
+    return [[UIDevice currentDevice] uniqueIdentifier];
+}
+
 #pragma mark Accessors
 - (void)setWorking:(BOOL)newWorking {
     if (working != newWorking) {
         working = newWorking;
         if (working) {
             [[ATTaskQueue sharedTaskQueue] start];
+            if (!userDataWasUpdated) {
+                [self updateUserData];
+            }
         } else {
             [[ATTaskQueue sharedTaskQueue] stop];
             [ATTaskQueue releaseSharedTaskQueue];
@@ -115,10 +134,14 @@ static ATBackend *sharedBackend = nil;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWorking:) name:UIApplicationDidBecomeActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWorking:) name:UIApplicationWillEnterForegroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contactUpdaterFinished:) name:ATContactUpdaterFinished object:nil];
 }
 
 - (void)teardown {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [contactUpdater cancel];
+    [contactUpdater release];
+    contactUpdater = nil;
     self.apiKey = nil;
     self.appID = nil;
 }
@@ -130,5 +153,13 @@ static ATBackend *sharedBackend = nil;
 
 - (void)startWorking:(NSNotification *)notification {
     self.working = YES;
+}
+
+- (void)contactUpdaterFinished:(NSNotification *)notification {
+    if (contactUpdater) {
+        [contactUpdater release];
+        contactUpdater = nil;
+    }
+    userDataWasUpdated = YES;
 }
 @end

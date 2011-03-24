@@ -60,9 +60,16 @@
 	}
 }
 
+- (void)getContactInfo {
+    NSString *uuid = [[ATBackend sharedBackend] deviceUUID];
+    NSDictionary *parameters = [NSDictionary dictionaryWithObject:uuid forKey:@"uuid"];
+    NSString *urlString = [NSString stringWithFormat:@"http://www.apptentive.com/feedback/fetch?%@", [self stringForParameters:parameters]];
+    [self get:[NSURL URLWithString:urlString]];
+}
+
+//!!!TODO: Need to include screenshot data:
 - (void)postFeedback:(ATFeedback *)feedback {
     NSDictionary *postData = [feedback apiDictionary];
-    //!!TODO: Need to include screenshot data:
     // /*UIImagePNGRepresentation(feedback.screenshot)*/
     NSString *url = @"http://www.apptentive.com/feedback";
     [self post:[NSURL URLWithString:url] withFileData:nil ofMimeType:@"image/png" parameters:postData];
@@ -109,13 +116,11 @@
 		if (cancelled) return;
 	}
 	int statusCode = sender.statusCode;
-	BOOL readData = NO;
 	switch (statusCode) {
 		case 200:
         case 201:
 		case 400: // rate limit reached
 		case 403: // whatevs, probably private feed
-			readData = YES;
 			break;
 		case 401:
 			self.failed = YES;
@@ -133,8 +138,6 @@
 	
 	id result = nil;
 	do { // once
-		//if (!readData) break;
-		
 		NSData *d = [sender responseData];
 		if (!d) break;
 		if (self.returnType == ATWebClientReturnTypeData) {

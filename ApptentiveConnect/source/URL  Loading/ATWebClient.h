@@ -44,6 +44,7 @@ typedef enum {
 - (void)showAlert;
 - (void)cancel;
 
+- (void)getContactInfo;
 - (void)postFeedback:(ATFeedback *)feedback;
 
 #pragma mark Query Parameter Encoding

@@ -47,6 +47,7 @@
 - (void)start {
     if (!client) {
         client = [[ATWebClient alloc] initWithTarget:self action:@selector(feedbackDidLoad:result:)];
+        client.returnType = ATWebClientReturnTypeString;
         [client postFeedback:self.feedback];
     }
     

@@ -61,7 +61,7 @@
 
 + (NSString *)stringByEscapingForURLArguments:(NSString *)string {
     CFStringRef result = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)string, NULL, (CFStringRef)@"%:/?#[]@!$&'()*+,;=", kCFStringEncodingUTF8);
-    return NSMakeCollectable(result);
+    return [NSMakeCollectable(result) autorelease];
 }
 
 

@@ -10,6 +10,7 @@
 #import "ATConnect.h"
 #import "ATContactInfoController.h"
 #import "ATContactStorage.h"
+#import "ATContactUpdater.h"
 #import "ATDefaultTextView.h"
 #import "ATFeedback.h"
 
@@ -21,6 +22,7 @@
 - (void)keyboardWillShow:(NSNotification *)notification;
 - (void)keyboardWillHide:(NSNotification *)notification;
 - (void)feedbackChanged:(NSNotification *)notification;
+- (void)contactInfoChanged:(NSNotification *)notification;
 @end
 
 @implementation ATFeedbackController
@@ -115,6 +117,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackChanged:) name:UITextViewTextDidChangeNotification object:feedbackView];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contactInfoChanged:) name:ATContactUpdaterFinished object:nil];
     feedbackView.placeholder = NSLocalizedString(@"Feedback", nil);
     self.title = NSLocalizedString(@"Give Feedback", nil);
     self.navigationItem.backBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Feedback", nil) style:UIBarButtonItemStylePlain target:nil action:nil] autorelease];
@@ -181,6 +184,19 @@
 - (void)feedbackChanged:(NSNotification *)notification {
     if (notification.object == feedbackView) {
         self.navigationItem.rightBarButtonItem.enabled = ![@"" isEqualToString:feedbackView.text];
+    }
+}
+
+- (void)contactInfoChanged:(NSNotification *)notification {
+    ATContactStorage *contact = [ATContactStorage sharedContactStorage];
+    if (![feedback.name isEqualToString:nameField.text] && contact.name) {
+        nameField.text = contact.name;
+    }
+    if (contact.phone) {
+        feedback.phone = contact.phone;
+    }
+    if (contact.email) {
+        feedback.email = contact.email;
     }
 }
 @end

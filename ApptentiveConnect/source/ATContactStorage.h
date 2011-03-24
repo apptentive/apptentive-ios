@@ -17,4 +17,6 @@
 + (ATContactStorage *)sharedContactStorage;
 + (void)releaseSharedContactStorage;
 
+- (BOOL)localCopyExists;
+- (void)save;
 @end

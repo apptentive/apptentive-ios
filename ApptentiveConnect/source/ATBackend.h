@@ -8,15 +8,21 @@
 
 #import <Foundation/Foundation.h>
 
+@class ATContactUpdater;
 @class ATFeedback;
 
 /*! Handles all of the backend activities, such as sending feedback. */
 @interface ATBackend : NSObject {
+@private
+    ATContactUpdater *contactUpdater;
+    BOOL userDataWasUpdated;
 }
 @property (nonatomic, retain) NSString *apiKey;
 @property (nonatomic, retain) NSString *appID;
 
 + (ATBackend *)sharedBackend;
 - (void)sendFeedback:(ATFeedback *)feedback;
+- (void)updateUserData;
 - (NSString *)supportDirectoryPath;
+- (NSString *)deviceUUID;
 @end

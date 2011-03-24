@@ -7,6 +7,7 @@
 //
 
 #import "ATFeedback.h"
+#import "ATBackend.h"
 
 #define kFeedbackCodingVersion 1
 
@@ -15,7 +16,7 @@
 - (id)init {
     if ((self = [super init])) {
         self.type = @"Feedback"; // TODO
-        self.uuid = [[UIDevice currentDevice] uniqueIdentifier];
+        self.uuid = [[ATBackend sharedBackend] deviceUUID];
         self.model = [[UIDevice currentDevice] model];
     }
     return self;

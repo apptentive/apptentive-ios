@@ -48,10 +48,21 @@ static ATContactStorage *sharedContactStorage = nil;
 + (void)releaseSharedContactStorage {
     @synchronized(self) {
         if (sharedContactStorage != nil) {
-            [NSKeyedArchiver archiveRootObject:sharedContactStorage toFile:[ATContactStorage contactStoragePath]];
+            [sharedContactStorage save];
             [sharedContactStorage release];
             sharedContactStorage = nil;
         }
+    }
+}
+
+- (BOOL)localCopyExists {
+    NSFileManager *fm = [NSFileManager defaultManager];
+    return [fm fileExistsAtPath:[ATContactStorage contactStoragePath]];
+}
+
+- (void)save {
+    @synchronized(self) {
+        [NSKeyedArchiver archiveRootObject:sharedContactStorage toFile:[ATContactStorage contactStoragePath]];
     }
 }
 

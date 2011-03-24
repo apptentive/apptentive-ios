@@ -49,6 +49,24 @@ Now, you can show the Apptentive feedback UI from a _UIViewController_ with:
 
     #include "ATConnect.h"
     …
-    [ATConnect presentFeedbackControllerFromViewController:yourViewController];
+    
+    
+    ATConnect *connection = [ATConnect sharedConnection];
+    connection.apiKey = kApptentiveAPIKey;
+    connection.appID = kApptentiveAppID;
+    
+    [connection presentFeedbackControllerFromViewController:self];
+
+Where _kApptentiveAPIKey_ is an _NSString_ containing your API key and 
+_kApptentiveAppID_ is an _NSString_ containing your application's id.
     
 Easy!
+
+BUGS TO BE AWARE OF
+-------------------
+Xcode 4 won't correctly rebuild static libraries inside a workspace when the source has changed. If you change the source of _ApptentiveConnect_ when
+working on your app, you must do a _Product > Clean_ before building and
+running your app.
+
+
+

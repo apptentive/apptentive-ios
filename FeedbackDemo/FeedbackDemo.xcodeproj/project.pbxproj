@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4982ECE6133C2DCF00B91781 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4982ECE4133C2DCF00B91781 /* MainWindow-iPad.xib */; };
 		49C002EC1334172E0071F088 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C002EB1334172E0071F088 /* UIKit.framework */; };
 		49C002EE1334172F0071F088 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C002ED1334172F0071F088 /* Foundation.framework */; };
 		49C002F01334172F0071F088 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C002EF1334172F0071F088 /* CoreGraphics.framework */; };
@@ -71,6 +72,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4982ECE5133C2DCF00B91781 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "iPad/en.lproj/MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		49C002E71334172E0071F088 /* FeedbackDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FeedbackDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49C002EB1334172E0071F088 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		49C002ED1334172F0071F088 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -159,6 +161,7 @@
 				49C002FA1334172F0071F088 /* FeedbackDemoAppDelegate.h */,
 				49C002FB1334172F0071F088 /* FeedbackDemoAppDelegate.m */,
 				49C002FD1334172F0071F088 /* MainWindow.xib */,
+				4982ECE4133C2DCF00B91781 /* MainWindow-iPad.xib */,
 				49C003001334172F0071F088 /* RootViewController.h */,
 				49C003011334172F0071F088 /* RootViewController.m */,
 				49C003031334172F0071F088 /* RootViewController.xib */,
@@ -314,6 +317,7 @@
 				49C002F61334172F0071F088 /* InfoPlist.strings in Resources */,
 				49C002FF1334172F0071F088 /* MainWindow.xib in Resources */,
 				49C003051334172F0071F088 /* RootViewController.xib in Resources */,
+				4982ECE6133C2DCF00B91781 /* MainWindow-iPad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,6 +401,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		4982ECE4133C2DCF00B91781 /* MainWindow-iPad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4982ECE5133C2DCF00B91781 /* en */,
+			);
+			name = "MainWindow-iPad.xib";
+			sourceTree = "<group>";
+		};
 		49C002F41334172F0071F088 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -475,6 +487,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FeedbackDemo/FeedbackDemo-Prefix.pch";
 				INFOPLIST_FILE = "FeedbackDemo/FeedbackDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -484,6 +497,7 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -496,6 +510,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FeedbackDemo/FeedbackDemo-Prefix.pch";
 				INFOPLIST_FILE = "FeedbackDemo/FeedbackDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -505,6 +520,7 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};

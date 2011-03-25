@@ -7,10 +7,13 @@
 //
 
 #import "ATWebClient.h"
+
 #if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
 #endif
+
 #import "ATBackend.h"
+#import "ATConnect.h"
 #import "ATConnectionManager.h"
 #import "ATFeedback.h"
 #import "ATURLConnection.h"
@@ -23,7 +26,11 @@
 #import "NSData+ATBase64.h"
 
 #define kCommonChannelName (@"ATWebClient")
-#define kUserAgent (@"ApptentiveConnect/1.0 (iOS)")
+#define kUserAgentFormat (@"ApptentiveConnect/%@ (%@)")
+
+@interface ATWebClient (Private)
+- (NSString *)userAgentString;
+@end
 
 @implementation ATWebClient
 @synthesize returnType;
@@ -324,7 +331,7 @@
 
 
 - (void)addAPIHeaders:(ATURLConnection *)conn {
-	[conn setValue:kUserAgent forHTTPHeaderField:@"User-Agent"];
+	[conn setValue:[self userAgentString] forHTTPHeaderField:@"User-Agent"];
 	[conn setValue: @"gzip" forHTTPHeaderField: @"Accept-Encoding"];
 	[conn setValue: @"text/xml" forHTTPHeaderField: @"Accept"];
 	[conn setValue: @"utf-8" forHTTPHeaderField: @"Accept-Charset"];
@@ -345,5 +352,12 @@
 	[errorMessage release];
 	[channelName release];
 	[super dealloc];
+}
+@end
+
+
+@implementation ATWebClient (Private)
+- (NSString *)userAgentString {
+    return [NSString stringWithFormat:kUserAgentFormat, kATConnectVersionString, kATConnectPlatformString];
 }
 @end

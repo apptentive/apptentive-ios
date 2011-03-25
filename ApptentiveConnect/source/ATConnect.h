@@ -8,9 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+#define kATConnectVersionString @"1.0"
+#define kATConnectPlatformString @"iOS"
+
 @interface ATConnect : NSObject {
 }
 @property (nonatomic, retain) NSString *apiKey;
+@property (nonatomic, assign) BOOL showKeyboardAccessory;
 
 + (ATConnect *)sharedConnection;
 

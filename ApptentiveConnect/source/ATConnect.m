@@ -16,7 +16,7 @@
 static ATConnect *sharedConnection = nil;
 
 @implementation ATConnect
-@synthesize apiKey;
+@synthesize apiKey, showKeyboardAccessory;
 
 + (ATConnect *)sharedConnection {
     @synchronized(self) {
@@ -25,6 +25,13 @@ static ATConnect *sharedConnection = nil;
         }
     }
     return sharedConnection;
+}
+
+- (id)init {
+    if ((self = [super init])) {
+        self.showKeyboardAccessory = YES;
+    }
+    return self;
 }
 
 - (void)dealloc {

@@ -13,13 +13,16 @@
 #import "ATContactUpdater.h"
 #import "ATDefaultTextView.h"
 #import "ATFeedback.h"
+#import "ATKeyboardAccessoryView.h"
 
 @interface ATFeedbackController (Private)
 - (BOOL)shouldReturn:(UIView *)view;
 - (void)setup;
 - (void)setupFeedback;
+- (void)setupKeyboardAccessory;
 - (void)teardown;
 - (void)keyboardWillShow:(NSNotification *)notification;
+- (void)keyboardDidShow:(NSNotification *)notification;
 - (void)keyboardWillHide:(NSNotification *)notification;
 - (void)nameChanged:(NSNotification *)notification;
 - (void)feedbackChanged:(NSNotification *)notification;
@@ -114,17 +117,19 @@
         self.feedback = [[[ATFeedback alloc] init] autorelease];
     }
     [self setupFeedback];
+    [self setupKeyboardAccessory];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackChanged:) name:UITextViewTextDidChangeNotification object:feedbackView];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(nameChanged:) name:UITextFieldTextDidChangeNotification object:nameField];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contactInfoChanged:) name:ATContactUpdaterFinished object:nil];
-    feedbackView.placeholder = NSLocalizedString(@"Feedback", nil);
-    self.title = NSLocalizedString(@"Give Feedback", nil);
-    self.navigationItem.backBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Feedback", nil) style:UIBarButtonItemStylePlain target:nil action:nil] autorelease];
+    feedbackView.placeholder = NSLocalizedString(@"Feedback", @"Placeholder text for user feedback field.");
+    self.title = NSLocalizedString(@"Give Feedback", @"Title of feedback screen.");
+    self.navigationItem.backBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Feedback", @"Title of back button which takes user back to feedback screen.") style:UIBarButtonItemStylePlain target:nil action:nil] autorelease];
     self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelFeedback:)] autorelease];
-    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Next Step", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(nextStep:)] autorelease];
+    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Next Step", @"Title of button which takes user from feedback to contact info/screenshot screen.") style:UIBarButtonItemStyleBordered target:self action:@selector(nextStep:)] autorelease];
     self.navigationItem.rightBarButtonItem.enabled = NO;
 }
 
@@ -146,18 +151,29 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)keyboardWillShow:(NSNotification *)notification {
+- (CGRect)newFeedbackFrameWithNotification:(NSNotification *)notification {
     NSDictionary *userInfo = [notification userInfo];
     
     CGRect keyboardRect = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
+    CGRect feedbackRect = [feedbackView.superview convertRect:feedbackView.frame toView:nil];
+    CGRect windowBounds = feedbackView.window.bounds;
+    CGFloat newHeight = windowBounds.size.height - keyboardRect.size.height - feedbackRect.origin.y;
     
     CGRect newFrame = feedbackView.frame;
-    newFrame.size.height -= keyboardRect.size.height;
+    newFrame.size.height = newHeight;
+    
+    return newFrame;
+}
+
+// Helper to get the frame of the feedbackView when a keyboard is shown.
+- (void)keyboardWillShow:(NSNotification *)notification {
+    if (!feedbackView.window) return;
+    
+    NSDictionary *userInfo = [notification userInfo];
+    CGRect newFrame = [self newFeedbackFrameWithNotification:notification];
     
     NSTimeInterval duration;
     [(NSValue *)[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&duration];
-    
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:duration];
     feedbackView.frame = newFrame;
@@ -165,21 +181,34 @@
     [feedbackView flashScrollIndicators];
 }
 
+// Need this on iPad, where modal dialogs are not layouted yet when
+// when keyboardWillShow: is called.
+- (void)keyboardDidShow:(NSNotification *)notification {
+    if (!feedbackView.window) return;
+    CGRect newFrame = [self newFeedbackFrameWithNotification:notification];
+    feedbackView.frame = newFrame;
+}
+
 - (void)keyboardWillHide:(NSNotification *)notification {
+    if (!feedbackView.window) return;
+    
     NSDictionary *userInfo = [notification userInfo];
     
     NSTimeInterval animationDuration;
     [(NSValue *)[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
-    CGRect keyboardRect = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
+    CGRect viewRect = [feedbackView.superview.superview convertRect:feedbackView.superview.frame toView:nil];
+    CGRect windowBounds = feedbackView.window.bounds;
+    CGRect feedbackRect = [feedbackView.superview convertRect:feedbackView.frame toView:nil];
+    
+    CGFloat bottomSpacing = windowBounds.size.height - (viewRect.origin.y + viewRect.size.height);
+    CGFloat newHeight = windowBounds.size.height - feedbackRect.origin.y - bottomSpacing;
+    
+    CGRect newFrame = feedbackView.frame;
+    newFrame.size.height = newHeight;
     
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:animationDuration];
-    
-    CGRect newFrame = feedbackView.frame;
-    newFrame.size.height += keyboardRect.size.height;
     feedbackView.frame = newFrame;
-    
     [UIView commitAnimations];
 }
 
@@ -206,6 +235,13 @@
     }
     if (contact.email) {
         feedback.email = contact.email;
+    }
+}
+
+- (void)setupKeyboardAccessory {
+    if ([[ATConnect sharedConnection] showKeyboardAccessory]) {
+        nameField.inputAccessoryView = [[[ATKeyboardAccessoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 20.0)] autorelease];
+        feedbackView.inputAccessoryView = [[[ATKeyboardAccessoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 20.0)] autorelease];
     }
 }
 @end

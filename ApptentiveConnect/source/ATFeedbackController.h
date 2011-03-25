@@ -10,6 +10,7 @@
 
 @class ATDefaultTextView;
 @class ATFeedback;
+@class ATKeyboardAccessoryView;
 
 @interface ATFeedbackController : UIViewController {
     IBOutlet UITextField *nameField;

@@ -15,6 +15,8 @@
 		4982ECA3133AAB9300B91781 /* ATContactUpdater.h in Headers */ = {isa = PBXBuildFile; fileRef = 4982ECA1133AAB8B00B91781 /* ATContactUpdater.h */; };
 		4982ECA4133AAB9300B91781 /* ATContactUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 4982ECA2133AAB8F00B91781 /* ATContactUpdater.m */; };
 		4982ECC7133BF49000B91781 /* ApptentiveContactUpdaterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4982ECC6133BF49000B91781 /* ApptentiveContactUpdaterTests.m */; };
+		4982ECEA133C31C100B91781 /* ATKeyboardAccessoryView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4982ECE8133C317100B91781 /* ATKeyboardAccessoryView.h */; };
+		4982ECEB133C31C100B91781 /* ATKeyboardAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4982ECE9133C317D00B91781 /* ATKeyboardAccessoryView.m */; };
 		49C0028E1334137E0071F088 /* ApptentiveConnectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C0028A1334137E0071F088 /* ApptentiveConnectTests.m */; };
 		49C0028F1334137E0071F088 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49C0028B1334137E0071F088 /* InfoPlist.strings */; };
 		49C002A1133413BB0071F088 /* ApptentiveConnect-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 49C00296133413BB0071F088 /* ApptentiveConnect-Prefix.pch */; };
@@ -79,6 +81,8 @@
 		4982ECA2133AAB8F00B91781 /* ATContactUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATContactUpdater.m; sourceTree = "<group>"; };
 		4982ECC5133BF49000B91781 /* ApptentiveContactUpdaterTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveContactUpdaterTests.h; sourceTree = "<group>"; };
 		4982ECC6133BF49000B91781 /* ApptentiveContactUpdaterTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveContactUpdaterTests.m; sourceTree = "<group>"; };
+		4982ECE8133C317100B91781 /* ATKeyboardAccessoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATKeyboardAccessoryView.h; sourceTree = "<group>"; };
+		4982ECE9133C317D00B91781 /* ATKeyboardAccessoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATKeyboardAccessoryView.m; sourceTree = "<group>"; };
 		49C002871334137E0071F088 /* ApptentiveConnectTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ApptentiveConnectTests-Info.plist"; sourceTree = "<group>"; };
 		49C002881334137E0071F088 /* ApptentiveConnectTests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ApptentiveConnectTests-Prefix.pch"; sourceTree = "<group>"; };
 		49C002891334137E0071F088 /* ApptentiveConnectTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveConnectTests.h; sourceTree = "<group>"; };
@@ -99,8 +103,6 @@
 		49C0029E133413BB0071F088 /* ATFeedback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATFeedback.m; sourceTree = "<group>"; };
 		49C0029F133413BB0071F088 /* ATFeedbackController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATFeedbackController.h; sourceTree = "<group>"; };
 		49C002A0133413BB0071F088 /* ATFeedbackController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATFeedbackController.m; sourceTree = "<group>"; };
-		49C003471334195D0071F088 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		49C0034A1334195D0071F088 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		49C0034B1334195D0071F088 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		49C0034C1334195D0071F088 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		49D1118C13341A7C00603373 /* ApptentiveResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApptentiveResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -189,7 +191,6 @@
 				496DC3821333D35600743F65 /* Foundation.framework */,
 				496DC38D1333D35600743F65 /* UIKit.framework */,
 				496DC3901333D35600743F65 /* CoreGraphics.framework */,
-				49C003471334195D0071F088 /* Cocoa.framework */,
 				49C003491334195D0071F088 /* Other Frameworks */,
 			);
 			name = Frameworks;
@@ -226,6 +227,8 @@
 				49C00296133413BB0071F088 /* ApptentiveConnect-Prefix.pch */,
 				49C00297133413BB0071F088 /* ATConnect.h */,
 				49C00298133413BB0071F088 /* ATConnect.m */,
+				4982ECE8133C317100B91781 /* ATKeyboardAccessoryView.h */,
+				4982ECE9133C317D00B91781 /* ATKeyboardAccessoryView.m */,
 				49D1120813358B2200603373 /* ATBackend.h */,
 				49D1120913358B2300603373 /* ATBackend.m */,
 				49D1128C133804DE00603373 /* ATContactStorage.h */,
@@ -251,7 +254,6 @@
 		49C003491334195D0071F088 /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				49C0034A1334195D0071F088 /* AppKit.framework */,
 				49C0034B1334195D0071F088 /* CoreData.framework */,
 				49C0034C1334195D0071F088 /* Foundation.framework */,
 			);
@@ -320,6 +322,7 @@
 				49D112731337CC9F00603373 /* ATTaskQueue.h in Headers */,
 				49D1128E1338050200603373 /* ATContactStorage.h in Headers */,
 				4982ECA3133AAB9300B91781 /* ATContactUpdater.h in Headers */,
+				4982ECEA133C31C100B91781 /* ATKeyboardAccessoryView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -480,6 +483,7 @@
 				49D112741337CC9F00603373 /* ATTaskQueue.m in Sources */,
 				49D1128F1338050200603373 /* ATContactStorage.m in Sources */,
 				4982ECA4133AAB9300B91781 /* ATContactUpdater.m in Sources */,
+				4982ECEB133C31C100B91781 /* ATKeyboardAccessoryView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,11 +11,13 @@
 #import "ATBackend.h"
 #import "ATConnect.h"
 #import "ATFeedback.h"
+#import "ATKeyboardAccessoryView.h"
 
 @interface ATContactInfoController (Private)
 - (BOOL)shouldReturn:(UIView *)view;
 - (void)setup;
 - (void)setupFeedback;
+- (void)setupKeyboardAccessory;
 - (void)teardown;
 @end
 
@@ -173,11 +175,12 @@
 }
 
 - (void)setup {
-    self.title = NSLocalizedString(@"Info", nil);
-    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Submit", nil) style:UIBarButtonItemStyleDone target:self action:@selector(nextStep:)] autorelease];
+    self.title = NSLocalizedString(@"Info", @"Title of contact information screen.");
+    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Submit", @"Label of button for submitting feedback.") style:UIBarButtonItemStyleDone target:self action:@selector(nextStep:)] autorelease];
     [imageControl setUserInteractionEnabled:YES];
     [imageControl setEnabled:YES];
     [self setupFeedback];
+    [self setupKeyboardAccessory];
 }
 
 - (void)setupFeedback {
@@ -186,6 +189,13 @@
     }
     if (phoneField && (!phoneField.text || [@"" isEqualToString:phoneField.text]) && feedback.phone) {
         phoneField.text = feedback.phone;
+    }
+}
+
+- (void)setupKeyboardAccessory {
+    if ([[ATConnect sharedConnection] showKeyboardAccessory]) {
+        emailField.inputAccessoryView = [[[ATKeyboardAccessoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 20.0)] autorelease];
+        phoneField.inputAccessoryView = [[[ATKeyboardAccessoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 20.0)] autorelease];
     }
 }
 

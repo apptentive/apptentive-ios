@@ -70,7 +70,7 @@
 - (void)getContactInfo {
     NSString *uuid = [[ATBackend sharedBackend] deviceUUID];
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:uuid forKey:@"uuid"];
-    NSString *urlString = [NSString stringWithFormat:@"http://www.apptentive.com/feedback/fetch?%@", [self stringForParameters:parameters]];
+    NSString *urlString = [NSString stringWithFormat:@"http://www.apptentive.com/feedback/fetch_contact?%@", [self stringForParameters:parameters]];
     [self get:[NSURL URLWithString:urlString]];
 }
 

@@ -8,6 +8,8 @@
 
 #import "ATFeedback.h"
 #import "ATBackend.h"
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
+#import <CoreTelephony/CTCarrier.h>
 
 #define kFeedbackCodingVersion 1
 
@@ -18,6 +20,14 @@
         self.type = @"Feedback"; // TODO
         self.uuid = [[ATBackend sharedBackend] deviceUUID];
         self.model = [[UIDevice currentDevice] model];
+        self.os_version = [NSString stringWithFormat:@"%@ %@", [[UIDevice currentDevice] systemName], [[UIDevice currentDevice] systemVersion]];
+        
+        CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
+        CTCarrier *c = [netInfo subscriberCellularProvider];
+        if (c.carrierName) {
+            self.carrier = c.carrierName;
+        }
+        [netInfo release];
     }
     return self;
 }
@@ -28,6 +38,10 @@
     self.email = nil;
     self.phone = nil;
     self.screenshot = nil;
+    self.uuid = nil;
+    self.model = nil;
+    self.os_version = nil;
+    self.carrier = nil;
     [super dealloc];
 }
 

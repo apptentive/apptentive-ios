@@ -8,15 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		496DC3831333D35600743F65 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3821333D35600743F65 /* Foundation.framework */; };
-		496DC38E1333D35600743F65 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC38D1333D35600743F65 /* UIKit.framework */; };
 		496DC38F1333D35600743F65 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3821333D35600743F65 /* Foundation.framework */; };
-		496DC3911333D35600743F65 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3901333D35600743F65 /* CoreGraphics.framework */; };
 		496DC3941333D35600743F65 /* libApptentiveConnect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC37F1333D35600743F65 /* libApptentiveConnect.a */; };
 		4982ECA3133AAB9300B91781 /* ATContactUpdater.h in Headers */ = {isa = PBXBuildFile; fileRef = 4982ECA1133AAB8B00B91781 /* ATContactUpdater.h */; };
 		4982ECA4133AAB9300B91781 /* ATContactUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 4982ECA2133AAB8F00B91781 /* ATContactUpdater.m */; };
 		4982ECC7133BF49000B91781 /* ApptentiveContactUpdaterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4982ECC6133BF49000B91781 /* ApptentiveContactUpdaterTests.m */; };
 		4982ECEA133C31C100B91781 /* ATKeyboardAccessoryView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4982ECE8133C317100B91781 /* ATKeyboardAccessoryView.h */; };
 		4982ECEB133C31C100B91781 /* ATKeyboardAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4982ECE9133C317D00B91781 /* ATKeyboardAccessoryView.m */; };
+		49B3D96B133E6D6400B5A5CD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D968133E6D6400B5A5CD /* CoreGraphics.framework */; };
+		49B3D96C133E6D6400B5A5CD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D969133E6D6400B5A5CD /* QuartzCore.framework */; };
+		49B3D96D133E6D6400B5A5CD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D96A133E6D6400B5A5CD /* UIKit.framework */; };
+		49B3D96F133E6DE700B5A5CD /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D96E133E6DE700B5A5CD /* CoreTelephony.framework */; };
 		49C0028E1334137E0071F088 /* ApptentiveConnectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C0028A1334137E0071F088 /* ApptentiveConnectTests.m */; };
 		49C0028F1334137E0071F088 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49C0028B1334137E0071F088 /* InfoPlist.strings */; };
 		49C002A1133413BB0071F088 /* ApptentiveConnect-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 49C00296133413BB0071F088 /* ApptentiveConnect-Prefix.pch */; };
@@ -30,9 +32,7 @@
 		49C002A9133413BB0071F088 /* ATFeedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C0029E133413BB0071F088 /* ATFeedback.m */; };
 		49C002AA133413BB0071F088 /* ATFeedbackController.h in Headers */ = {isa = PBXBuildFile; fileRef = 49C0029F133413BB0071F088 /* ATFeedbackController.h */; settings = {ATTRIBUTES = (); }; };
 		49C002AB133413BB0071F088 /* ATFeedbackController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C002A0133413BB0071F088 /* ATFeedbackController.m */; };
-		49D1118D13341A7C00603373 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC38D1333D35600743F65 /* UIKit.framework */; };
 		49D1118E13341A7C00603373 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3821333D35600743F65 /* Foundation.framework */; };
-		49D1118F13341A7C00603373 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3901333D35600743F65 /* CoreGraphics.framework */; };
 		49D111A113341A9D00603373 /* ATContactInfoController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49C00291133413AA0071F088 /* ATContactInfoController.xib */; };
 		49D111A213341A9D00603373 /* ATContactInfoController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49C00292133413AA0071F088 /* ATContactInfoController_iPad.xib */; };
 		49D111A313341A9D00603373 /* ATFeedbackController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49C00293133413AA0071F088 /* ATFeedbackController.xib */; };
@@ -75,14 +75,16 @@
 		496DC37F1333D35600743F65 /* libApptentiveConnect.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libApptentiveConnect.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		496DC3821333D35600743F65 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		496DC38C1333D35600743F65 /* ApptentiveConnectTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApptentiveConnectTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		496DC38D1333D35600743F65 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		496DC3901333D35600743F65 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		4982ECA1133AAB8B00B91781 /* ATContactUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATContactUpdater.h; sourceTree = "<group>"; };
 		4982ECA2133AAB8F00B91781 /* ATContactUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATContactUpdater.m; sourceTree = "<group>"; };
 		4982ECC5133BF49000B91781 /* ApptentiveContactUpdaterTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveContactUpdaterTests.h; sourceTree = "<group>"; };
 		4982ECC6133BF49000B91781 /* ApptentiveContactUpdaterTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveContactUpdaterTests.m; sourceTree = "<group>"; };
 		4982ECE8133C317100B91781 /* ATKeyboardAccessoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATKeyboardAccessoryView.h; sourceTree = "<group>"; };
 		4982ECE9133C317D00B91781 /* ATKeyboardAccessoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATKeyboardAccessoryView.m; sourceTree = "<group>"; };
+		49B3D968133E6D6400B5A5CD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		49B3D969133E6D6400B5A5CD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		49B3D96A133E6D6400B5A5CD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		49B3D96E133E6DE700B5A5CD /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		49C002871334137E0071F088 /* ApptentiveConnectTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ApptentiveConnectTests-Info.plist"; sourceTree = "<group>"; };
 		49C002881334137E0071F088 /* ApptentiveConnectTests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ApptentiveConnectTests-Prefix.pch"; sourceTree = "<group>"; };
 		49C002891334137E0071F088 /* ApptentiveConnectTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveConnectTests.h; sourceTree = "<group>"; };
@@ -135,6 +137,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49B3D96F133E6DE700B5A5CD /* CoreTelephony.framework in Frameworks */,
+				49B3D96B133E6D6400B5A5CD /* CoreGraphics.framework in Frameworks */,
+				49B3D96C133E6D6400B5A5CD /* QuartzCore.framework in Frameworks */,
+				49B3D96D133E6D6400B5A5CD /* UIKit.framework in Frameworks */,
 				496DC3831333D35600743F65 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -143,9 +149,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				496DC38E1333D35600743F65 /* UIKit.framework in Frameworks */,
 				496DC38F1333D35600743F65 /* Foundation.framework in Frameworks */,
-				496DC3911333D35600743F65 /* CoreGraphics.framework in Frameworks */,
 				496DC3941333D35600743F65 /* libApptentiveConnect.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -154,9 +158,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49D1118D13341A7C00603373 /* UIKit.framework in Frameworks */,
 				49D1118E13341A7C00603373 /* Foundation.framework in Frameworks */,
-				49D1118F13341A7C00603373 /* CoreGraphics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -188,12 +190,21 @@
 		496DC3811333D35600743F65 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				49B3D96E133E6DE700B5A5CD /* CoreTelephony.framework */,
+				49B3D968133E6D6400B5A5CD /* CoreGraphics.framework */,
+				49B3D969133E6D6400B5A5CD /* QuartzCore.framework */,
+				49B3D96A133E6D6400B5A5CD /* UIKit.framework */,
 				496DC3821333D35600743F65 /* Foundation.framework */,
-				496DC38D1333D35600743F65 /* UIKit.framework */,
-				496DC3901333D35600743F65 /* CoreGraphics.framework */,
 				49C003491334195D0071F088 /* Other Frameworks */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		49B3D964133D843D00B5A5CD /* Custom Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "Custom Views";
 			sourceTree = "<group>";
 		};
 		49C002861334137E0071F088 /* tests */ = {
@@ -245,6 +256,7 @@
 				49C002A0133413BB0071F088 /* ATFeedbackController.m */,
 				49D111DB1335847700603373 /* ATUtilities.h */,
 				49D111DC1335847700603373 /* ATUtilities.m */,
+				49B3D964133D843D00B5A5CD /* Custom Views */,
 				49D1124C13368CA800603373 /* Tasks */,
 				49D111FA1335878400603373 /* URL  Loading */,
 			);

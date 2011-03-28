@@ -24,7 +24,7 @@
 @end
 
 @implementation ATContactInfoController
-@synthesize feedback, screenshotView;
+@synthesize feedback;
 
 - (id)init {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
@@ -44,30 +44,12 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void)setScreenshotView:(UIImageView *)newScreenshotView {
-    if (screenshotView != newScreenshotView) {
-        [screenshotView release];
-        screenshotView = nil;
-        screenshotView = [newScreenshotView retain];
-        screenshotView.image = feedback.screenshot;
-    }
-}
-
 - (void)setFeedback:(ATFeedback *)newFeedback {
     if (feedback != newFeedback) {
-        [feedback removeObserver:self forKeyPath:@"screenshot"];
         [feedback release];
         feedback = nil;
         feedback = [newFeedback retain];
-        screenshotView.image = feedback.screenshot;
-        [feedback addObserver:self forKeyPath:@"screenshot" options:0 context:NULL];
         [self setupFeedback];
-    }
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if (object == feedback) {
-        screenshotView.image = feedback.screenshot;
     }
 }
 
@@ -102,74 +84,11 @@
     [self dismissModalViewControllerAnimated:YES];
 }
 
-- (IBAction)screenshotSwitchToggled:(id)sender {
-    [UIView beginAnimations:@"screenshotSwitch" context:NULL];
-    [UIView setAnimationDuration:0.4];
-    screenshotView.alpha = screenshotSwitch.on ? 1.0 : 0.0;
-    [UIView commitAnimations];
-}
-
-- (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
-    if ([animationID isEqualToString:@"imageViewToBack"]) {
-        [imageControl removeFromSuperview];
-        [self.view addSubview:imageControl];
-        imageControl.frame = screenshotFrame;
-    }
-}
-
-
 - (IBAction)imageDisclosureTapped:(id)sender {
     ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithImage:self.feedback.screenshot];
     vc.title = NSLocalizedString(@"Screenshot", @"Title for screenshot view.");
     [self.navigationController pushViewController:vc animated:YES];
     [vc release];
-}
-
-//!!!-
-- (IBAction)imageControlTapped:(id)sender {
-    if ([emailField isEditing]) {
-        [emailField resignFirstResponder];
-    } else if ([phoneField isEditing]) {
-        [phoneField resignFirstResponder];
-    }
-    [self.view bringSubviewToFront:screenshotView];
-    [self.view bringSubviewToFront:imageControl];
-    
-    if (previewingImage) {
-        previewingImage = NO;
-        
-        UIWindow *window = self.view.window;
-        CGRect targetFrame = [window convertRect:screenshotFrame fromView:self.view];
-        
-        [UIView beginAnimations:@"imageViewToBack" context:NULL];
-        [UIView setAnimationDuration:0.3];
-        [UIView setAnimationDelegate:self];
-        imageControl.frame = targetFrame;
-        imageControl.layer.shadowRadius = 0.0;
-        imageControl.layer.shadowOpacity = 0.0;
-        [UIView commitAnimations];
-    } else {
-        previewingImage = YES;
-        screenshotFrame = [imageControl frame];
-        
-        // Move screenshot from our view to the window.
-        UIWindow *window = self.view.window;
-        CGRect newOriginatingFrame = [self.view convertRect:imageControl.frame toView:window];
-        [imageControl removeFromSuperview];
-        [window addSubview:imageControl];
-        imageControl.frame = newOriginatingFrame;
-        
-        [UIView beginAnimations:@"imageViewToFront" context:NULL];
-        [UIView setAnimationDuration:0.3];
-        imageControl.layer.shadowRadius = 40.0;
-        imageControl.layer.shadowColor = [UIColor blackColor].CGColor;
-        imageControl.layer.shadowOpacity = 0.5;
-        CGSize newSize = CGSizeMake(floor(feedback.screenshot.size.width * 0.8), floor(feedback.screenshot.size.height * 0.8));
-        CGSize diff = CGSizeMake(floor((imageControl.superview.frame.size.width - newSize.width)/2.0), floor((imageControl.superview.frame.size.height - newSize.height)/2.0));
-        CGRect newFrame = CGRectMake(diff.width, diff.height, newSize.width, newSize.height);
-        imageControl.frame = newFrame;
-        [UIView commitAnimations];
-    }
 }
 
 #pragma mark UITextFieldDelegate
@@ -193,8 +112,6 @@
 - (void)setup {
     self.title = NSLocalizedString(@"Info", @"Title of contact information screen.");
     self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Submit", @"Label of button for submitting feedback.") style:UIBarButtonItemStyleDone target:self action:@selector(nextStep:)] autorelease];
-    [imageControl setUserInteractionEnabled:YES];
-    [imageControl setEnabled:YES];
     [self setupFeedback];
     [self setupKeyboardAccessory];
 }
@@ -221,11 +138,7 @@
     emailField = nil;
     [phoneField release];
     phoneField = nil;
-    [screenshotView release];
-    screenshotView = nil;
     [screenshotSwitch release];
     screenshotSwitch = nil;
-    [imageControl release];
-    imageControl = nil;
 }
 @end

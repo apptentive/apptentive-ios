@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4982ECE6133C2DCF00B91781 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4982ECE4133C2DCF00B91781 /* MainWindow-iPad.xib */; };
+		49B3D9A31340084E00B5A5CD /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D9A21340084E00B5A5CD /* CoreTelephony.framework */; };
 		49C002EC1334172E0071F088 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C002EB1334172E0071F088 /* UIKit.framework */; };
 		49C002EE1334172F0071F088 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C002ED1334172F0071F088 /* Foundation.framework */; };
 		49C002F01334172F0071F088 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C002EF1334172F0071F088 /* CoreGraphics.framework */; };
@@ -73,6 +74,7 @@
 
 /* Begin PBXFileReference section */
 		4982ECE5133C2DCF00B91781 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "iPad/en.lproj/MainWindow-iPad.xib"; sourceTree = "<group>"; };
+		49B3D9A21340084E00B5A5CD /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		49C002E71334172E0071F088 /* FeedbackDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FeedbackDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49C002EB1334172E0071F088 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		49C002ED1334172F0071F088 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -103,6 +105,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49B3D9A31340084E00B5A5CD /* CoreTelephony.framework in Frameworks */,
 				49C00333133417790071F088 /* libApptentiveConnect.a in Frameworks */,
 				49C002EC1334172E0071F088 /* UIKit.framework in Frameworks */,
 				49C002EE1334172F0071F088 /* Foundation.framework in Frameworks */,
@@ -146,6 +149,7 @@
 		49C002EA1334172E0071F088 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				49B3D9A21340084E00B5A5CD /* CoreTelephony.framework */,
 				49C00332133417790071F088 /* libApptentiveConnect.a */,
 				49C002EB1334172E0071F088 /* UIKit.framework */,
 				49C002ED1334172F0071F088 /* Foundation.framework */,
@@ -357,7 +361,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\nif [ -d \"$BUILT_PRODUCTS_DIR/FeedbackDemo.app/ApptentiveResources.bundle\" ]; then\n    rm -rf \"$BUILT_PRODUCTS_DIR/FeedbackDemo.app/ApptentiveResources.bundle\"\n    mv \"$BUILT_PRODUCTS_DIR/ApptentiveResources.bundle\" \"$BUILT_PRODUCTS_DIR/FeedbackDemo.app/\"\nfi";
+			shellScript = "#!/bin/sh\nif [ -d \"$BUILT_PRODUCTS_DIR/FeedbackDemo.app/ApptentiveResources.bundle\" ]; then\n    echo \"1\"\n    rm -rf \"$BUILT_PRODUCTS_DIR/FeedbackDemo.app/ApptentiveResources.bundle\"\nfi\nif [ -d \"$BUILT_PRODUCTS_DIR/ApptentiveResources.bundle\" ]; then\n    echo \"2\"\n    mv \"$BUILT_PRODUCTS_DIR/ApptentiveResources.bundle\" \"$BUILT_PRODUCTS_DIR/FeedbackDemo.app/\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

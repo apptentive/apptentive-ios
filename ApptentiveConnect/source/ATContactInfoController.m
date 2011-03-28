@@ -11,7 +11,9 @@
 #import "ATBackend.h"
 #import "ATConnect.h"
 #import "ATFeedback.h"
+#import "ATSimpleImageViewController.h"
 #import "ATKeyboardAccessoryView.h"
+#import "ATUtilities.h"
 
 @interface ATContactInfoController (Private)
 - (BOOL)shouldReturn:(UIView *)view;
@@ -81,7 +83,12 @@
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return YES;
+    if (interfaceOrientation == UIInterfaceOrientationPortrait) {
+        return YES;
+    } else {
+        return NO;
+    }
+//    return YES;
 }
 
 
@@ -110,6 +117,15 @@
     }
 }
 
+
+- (IBAction)imageDisclosureTapped:(id)sender {
+    ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithImage:self.feedback.screenshot];
+    vc.title = NSLocalizedString(@"Screenshot", @"Title for screenshot view.");
+    [self.navigationController pushViewController:vc animated:YES];
+    [vc release];
+}
+
+//!!!-
 - (IBAction)imageControlTapped:(id)sender {
     if ([emailField isEditing]) {
         [emailField resignFirstResponder];

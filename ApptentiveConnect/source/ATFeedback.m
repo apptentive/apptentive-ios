@@ -22,12 +22,14 @@
         self.model = [[UIDevice currentDevice] model];
         self.os_version = [NSString stringWithFormat:@"%@ %@", [[UIDevice currentDevice] systemName], [[UIDevice currentDevice] systemVersion]];
         
-        CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
-        CTCarrier *c = [netInfo subscriberCellularProvider];
-        if (c.carrierName) {
-            self.carrier = c.carrierName;
+        if ([CTTelephonyNetworkInfo class]) {
+            CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
+            CTCarrier *c = [netInfo subscriberCellularProvider];
+            if (c.carrierName) {
+                self.carrier = c.carrierName;
+            }
+            [netInfo release];
         }
-        [netInfo release];
     }
     return self;
 }

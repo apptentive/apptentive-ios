@@ -78,7 +78,12 @@
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return YES;
+    if (interfaceOrientation == UIInterfaceOrientationPortrait) {
+        return YES;
+    } else {
+        return NO;
+    }
+    //    return YES;
 }
 
 - (IBAction)cancelFeedback:(id)sender {

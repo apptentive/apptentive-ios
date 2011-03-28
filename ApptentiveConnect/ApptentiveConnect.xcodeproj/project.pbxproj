@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		49174895134011E500A7D11E /* ATSimpleImageViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 49174893134011E500A7D11E /* ATSimpleImageViewController.h */; };
+		49174896134011E500A7D11E /* ATSimpleImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49174894134011E500A7D11E /* ATSimpleImageViewController.m */; };
+		4917489D13402FCA00A7D11E /* ATCenteringImageScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4917489B13402FC900A7D11E /* ATCenteringImageScrollView.h */; };
+		4917489E13402FCA00A7D11E /* ATCenteringImageScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4917489C13402FC900A7D11E /* ATCenteringImageScrollView.m */; };
 		496DC3831333D35600743F65 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3821333D35600743F65 /* Foundation.framework */; };
 		496DC38F1333D35600743F65 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3821333D35600743F65 /* Foundation.framework */; };
 		496DC3941333D35600743F65 /* libApptentiveConnect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC37F1333D35600743F65 /* libApptentiveConnect.a */; };
@@ -18,7 +22,7 @@
 		49B3D96B133E6D6400B5A5CD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D968133E6D6400B5A5CD /* CoreGraphics.framework */; };
 		49B3D96C133E6D6400B5A5CD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D969133E6D6400B5A5CD /* QuartzCore.framework */; };
 		49B3D96D133E6D6400B5A5CD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D96A133E6D6400B5A5CD /* UIKit.framework */; };
-		49B3D96F133E6DE700B5A5CD /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D96E133E6DE700B5A5CD /* CoreTelephony.framework */; };
+		49B3D96F133E6DE700B5A5CD /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D96E133E6DE700B5A5CD /* CoreTelephony.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		49C0028E1334137E0071F088 /* ApptentiveConnectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C0028A1334137E0071F088 /* ApptentiveConnectTests.m */; };
 		49C0028F1334137E0071F088 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49C0028B1334137E0071F088 /* InfoPlist.strings */; };
 		49C002A1133413BB0071F088 /* ApptentiveConnect-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 49C00296133413BB0071F088 /* ApptentiveConnect-Prefix.pch */; };
@@ -72,6 +76,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		49174893134011E500A7D11E /* ATSimpleImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSimpleImageViewController.h; sourceTree = "<group>"; };
+		49174894134011E500A7D11E /* ATSimpleImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSimpleImageViewController.m; sourceTree = "<group>"; };
+		4917489B13402FC900A7D11E /* ATCenteringImageScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATCenteringImageScrollView.h; sourceTree = "<group>"; };
+		4917489C13402FC900A7D11E /* ATCenteringImageScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATCenteringImageScrollView.m; sourceTree = "<group>"; };
 		496DC37F1333D35600743F65 /* libApptentiveConnect.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libApptentiveConnect.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		496DC3821333D35600743F65 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		496DC38C1333D35600743F65 /* ApptentiveConnectTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApptentiveConnectTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -203,6 +211,10 @@
 		49B3D964133D843D00B5A5CD /* Custom Views */ = {
 			isa = PBXGroup;
 			children = (
+				49174893134011E500A7D11E /* ATSimpleImageViewController.h */,
+				49174894134011E500A7D11E /* ATSimpleImageViewController.m */,
+				4917489B13402FC900A7D11E /* ATCenteringImageScrollView.h */,
+				4917489C13402FC900A7D11E /* ATCenteringImageScrollView.m */,
 			);
 			path = "Custom Views";
 			sourceTree = "<group>";
@@ -335,6 +347,8 @@
 				49D1128E1338050200603373 /* ATContactStorage.h in Headers */,
 				4982ECA3133AAB9300B91781 /* ATContactUpdater.h in Headers */,
 				4982ECEA133C31C100B91781 /* ATKeyboardAccessoryView.h in Headers */,
+				49174895134011E500A7D11E /* ATSimpleImageViewController.h in Headers */,
+				4917489D13402FCA00A7D11E /* ATCenteringImageScrollView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -496,6 +510,8 @@
 				49D1128F1338050200603373 /* ATContactStorage.m in Sources */,
 				4982ECA4133AAB9300B91781 /* ATContactUpdater.m in Sources */,
 				4982ECEB133C31C100B91781 /* ATKeyboardAccessoryView.m in Sources */,
+				49174896134011E500A7D11E /* ATSimpleImageViewController.m in Sources */,
+				4917489E13402FCA00A7D11E /* ATCenteringImageScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -28,6 +28,8 @@
 #define kCommonChannelName (@"ATWebClient")
 #define kUserAgentFormat (@"ApptentiveConnect/%@ (%@)")
 
+#define USE_BASE64 1
+
 @interface ATWebClient (Private)
 - (NSString *)userAgentString;
 @end
@@ -78,7 +80,7 @@
     NSDictionary *postData = [feedback apiDictionary];
     NSData *fileData = UIImagePNGRepresentation(feedback.screenshot);
     NSString *url = @"http://www.apptentive.com/feedback";
-    [self post:[NSURL URLWithString:url] withFileData:fileData ofMimeType:@"image/png" parameters:postData];
+    [self post:[NSURL URLWithString:url] withFileData:fileData ofMimeType:@"image/png" fileDataKey:@"feedback[screenshot]" parameters:postData];
 }
 
 - (NSString *)stringForParameters:(NSDictionary *)parameters {
@@ -249,7 +251,7 @@
 	[cm start];
 }
 
-- (void)post:(NSURL *)theURL withFileData:(NSData *)data ofMimeType:(NSString *)mimeType parameters:(NSDictionary *)parameters {
+- (void)post:(NSURL *)theURL withFileData:(NSData *)data ofMimeType:(NSString *)mimeType fileDataKey:(NSString *)fileDataKey parameters:(NSDictionary *)parameters {
     ATConnectionManager *cm = [ATConnectionManager sharedSingleton];
     ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL delegate:self];
     conn.timeoutInterval = self.timeoutInterval * 10.0;
@@ -297,7 +299,7 @@
     
     NSMutableData *multipartEncodedData = [NSMutableData data];
     if (data) {
-        [postParameters setValue:data forKey:@"filedata"];
+        [postParameters setValue:data forKey:fileDataKey];
     }
     
     [multipartEncodedData appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
@@ -310,13 +312,20 @@
         } else if ([value isKindOfClass:[NSData class]]) {
             [multipartEncodedData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", key, [ATUtilities randomStringOfLength:10]] dataUsingEncoding:NSUTF8StringEncoding]];
             [multipartEncodedData appendData:[[NSString stringWithFormat:@"Content-Type: %@\r\n", mimeType] dataUsingEncoding:NSUTF8StringEncoding]];
+#if USE_BASE64
+            [multipartEncodedData appendData:[@"Content-Transfer-Encoding: base64\r\n\r\n" dataUsingEncoding:NSASCIIStringEncoding]];
+            NSString *base64Data = [(NSData *)value at_base64EncodedString];
+            [multipartEncodedData appendData:[base64Data dataUsingEncoding:NSUTF8StringEncoding]];
+#else
             [multipartEncodedData appendData:[@"Content-Transfer-Encoding: binary\r\n\r\n" dataUsingEncoding:NSASCIIStringEncoding]];
             [multipartEncodedData appendData:(NSData *)value];
+#endif
         } // else Should be handled above.
     }
     [multipartEncodedData appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     [conn setHTTPBody:multipartEncodedData];
     
+    // Debugging helpers:
     /*
     NSLog(@"wtf parameters: %@", parameters);
     NSLog(@"-length: %d", [multipartEncodedData length]);

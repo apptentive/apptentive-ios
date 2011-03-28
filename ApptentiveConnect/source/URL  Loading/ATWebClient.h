@@ -57,5 +57,5 @@ typedef enum {
 - (void)post:(NSURL *)theURL JSON:(NSString *)body;
 - (void)post:(NSURL *)theURL body:(NSString *)body;
 - (void)addAPIHeaders:(ATURLConnection *)conn;
-- (void)post:(NSURL *)theURL withFileData:(NSData *)data ofMimeType:(NSString *)mimeType parameters:(NSDictionary *)parameters;
+- (void)post:(NSURL *)theURL withFileData:(NSData *)data ofMimeType:(NSString *)mimeType fileDataKey:(NSString *)fileDataKey  parameters:(NSDictionary *)parameters;
 @end

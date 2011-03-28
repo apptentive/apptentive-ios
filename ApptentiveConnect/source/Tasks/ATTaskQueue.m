@@ -12,6 +12,8 @@
 
 #define kATTaskQueueCodingVersion 1
 // Retry period in seconds.
+//!!! Increase for production.
+//TODO:
 #define kATTaskQueueRetryPeriod 10.0
 
 static ATTaskQueue *sharedTaskQueue = nil;

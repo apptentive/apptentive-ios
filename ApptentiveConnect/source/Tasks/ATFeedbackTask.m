@@ -80,6 +80,9 @@
         if (sender.failed) {
             self.failed = YES;
             NSLog(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
+            if (result) {
+                NSLog(@"Response: %@", result);
+            }
             [self stop];
         } else {
             self.finished = YES;

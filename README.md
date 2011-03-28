@@ -38,7 +38,11 @@ Finally, add a _Run Script_ build phase with the contents:
 
     #!/bin/sh
     if [ -d "$BUILT_PRODUCTS_DIR/FeedbackDemo.app/ApptentiveResources.bundle" ]; then
+        echo "1"
         rm -rf "$BUILT_PRODUCTS_DIR/FeedbackDemo.app/ApptentiveResources.bundle"
+    fi
+    if [ -d "$BUILT_PRODUCTS_DIR/ApptentiveResources.bundle" ]; then
+        echo "2"
         mv "$BUILT_PRODUCTS_DIR/ApptentiveResources.bundle" "$BUILT_PRODUCTS_DIR/FeedbackDemo.app/"
     fi
 

@@ -74,12 +74,11 @@
     [self get:[NSURL URLWithString:urlString]];
 }
 
-//!!!TODO: Need to include screenshot data:
 - (void)postFeedback:(ATFeedback *)feedback {
     NSDictionary *postData = [feedback apiDictionary];
-    // /*UIImagePNGRepresentation(feedback.screenshot)*/
+    NSData *fileData = UIImagePNGRepresentation(feedback.screenshot);
     NSString *url = @"http://www.apptentive.com/feedback";
-    [self post:[NSURL URLWithString:url] withFileData:nil ofMimeType:@"image/png" parameters:postData];
+    [self post:[NSURL URLWithString:url] withFileData:fileData ofMimeType:@"image/png" parameters:postData];
 }
 
 - (NSString *)stringForParameters:(NSDictionary *)parameters {

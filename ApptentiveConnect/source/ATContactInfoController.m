@@ -11,6 +11,7 @@
 #import "ATBackend.h"
 #import "ATConnect.h"
 #import "ATFeedback.h"
+#import "ATHUDView.h"
 #import "ATSimpleImageViewController.h"
 #import "ATKeyboardAccessoryView.h"
 #import "ATUtilities.h"
@@ -73,6 +74,9 @@
 //    return YES;
 }
 
+- (IBAction)screenshotSwitchToggled:(id)sender {
+    
+}
 
 - (IBAction)nextStep:(id)sender {
     feedback.email = emailField.text;
@@ -81,6 +85,10 @@
         feedback.screenshot = nil;
     }
     [[ATBackend sharedBackend] sendFeedback:feedback];
+    ATHUDView *hud = [[ATHUDView alloc] initWithWindow:[[self view] window]];
+    hud.label.text = NSLocalizedString(@"Thanks!", @"Text in thank you display upon submitting feedback.");
+    [hud show];
+    [hud release];
     [self dismissModalViewControllerAnimated:YES];
 }
 

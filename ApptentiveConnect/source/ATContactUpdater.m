@@ -37,15 +37,6 @@ NSString * const ATContactUpdaterFinished = @"ATContactUpdaterFinished";
         client = nil;
     }
 }
-#pragma mark ATContactParserDelegate
-- (void)parsingDidFinish:(ATContactParser *)sender {
-    ATContactStorage *storage = [ATContactStorage sharedContactStorage];
-    if (parser.name) storage.name = parser.name;
-    if (parser.email) storage.email = parser.email;
-    if (parser.phone) storage.phone = parser.phone;
-    [storage save];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ATContactUpdaterFinished object:self];
-}
 @end
 
 @implementation ATContactUpdater (Private)
@@ -69,7 +60,12 @@ NSString * const ATContactUpdaterFinished = @"ATContactUpdaterFinished";
     }
     parser = [[ATContactParser alloc] init];
     if ([parser parse:xmlContactInfo]) {
-        
+        ATContactStorage *storage = [ATContactStorage sharedContactStorage];
+        if (parser.name) storage.name = parser.name;
+        if (parser.email) storage.email = parser.email;
+        if (parser.phone) storage.phone = parser.phone;
+        [storage save];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ATContactUpdaterFinished object:self];
     }
 }
 @end

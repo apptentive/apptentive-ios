@@ -11,6 +11,7 @@
 #import "ATContactStorage.h"
 #import "ATFeedback.h"
 #import "ATFeedbackController.h"
+#import "ATHUDView.h"
 #import "ATUtilities.h"
 
 static ATConnect *sharedConnection = nil;
@@ -73,6 +74,10 @@ static ATConnect *sharedConnection = nil;
     }
     [nc release];
     [vc release];
+    ATHUDView *hud = [[ATHUDView alloc] initWithWindow:viewController.view.window];
+    hud.label.text = @"Thanks!";
+    [hud show];
+    [hud release];
 }
 
 + (NSBundle *)resourceBundle {

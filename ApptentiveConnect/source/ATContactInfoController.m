@@ -88,7 +88,7 @@
     ATHUDView *hud = [[ATHUDView alloc] initWithWindow:[[self view] window]];
     hud.label.text = NSLocalizedString(@"Thanks!", @"Text in thank you display upon submitting feedback.");
     [hud show];
-    [hud release];
+    [hud autorelease];
     [self dismissModalViewControllerAnimated:YES];
 }
 

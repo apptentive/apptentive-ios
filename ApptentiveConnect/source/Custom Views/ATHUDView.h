@@ -9,8 +9,7 @@
 #import <UIKit/UIKit.h>
 
 typedef enum {
-    ATHUDCheckmark,
-    ATHUDQuestionMark
+    ATHUDCheckmark
 } ATHUDMarkType;
 
 @interface ATHUDView : UIView {
@@ -20,7 +19,6 @@ typedef enum {
 }
 @property (nonatomic, readonly) UILabel *label;
 @property (nonatomic, assign) ATHUDMarkType markType;
-@property (nonatomic, retain) UIColor *markColor;
 @property (nonatomic, assign) CGSize size;
 @property (nonatomic, assign) CGFloat cornerRadius;
 

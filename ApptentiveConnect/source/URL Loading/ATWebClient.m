@@ -28,7 +28,7 @@
 #define kCommonChannelName (@"ATWebClient")
 #define kUserAgentFormat (@"ApptentiveConnect/%@ (%@)")
 
-#define USE_BASE64 1
+#define USE_BASE64 0
 
 @interface ATWebClient (Private)
 - (NSString *)userAgentString;

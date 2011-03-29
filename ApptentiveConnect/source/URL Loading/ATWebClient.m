@@ -28,8 +28,6 @@
 #define kCommonChannelName (@"ATWebClient")
 #define kUserAgentFormat (@"ApptentiveConnect/%@ (%@)")
 
-#define USE_BASE64 0
-
 @interface ATWebClient (Private)
 - (NSString *)userAgentString;
 @end
@@ -312,14 +310,8 @@
         } else if ([value isKindOfClass:[NSData class]]) {
             [multipartEncodedData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", key, [ATUtilities randomStringOfLength:10]] dataUsingEncoding:NSUTF8StringEncoding]];
             [multipartEncodedData appendData:[[NSString stringWithFormat:@"Content-Type: %@\r\n", mimeType] dataUsingEncoding:NSUTF8StringEncoding]];
-#if USE_BASE64
-            [multipartEncodedData appendData:[@"Content-Transfer-Encoding: base64\r\n\r\n" dataUsingEncoding:NSASCIIStringEncoding]];
-            NSString *base64Data = [(NSData *)value at_base64EncodedString];
-            [multipartEncodedData appendData:[base64Data dataUsingEncoding:NSUTF8StringEncoding]];
-#else
             [multipartEncodedData appendData:[@"Content-Transfer-Encoding: binary\r\n\r\n" dataUsingEncoding:NSASCIIStringEncoding]];
             [multipartEncodedData appendData:(NSData *)value];
-#endif
         } // else Should be handled above.
     }
     [multipartEncodedData appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];

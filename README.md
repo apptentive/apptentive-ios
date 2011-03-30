@@ -37,13 +37,11 @@ Then, add _libApptentiveConnect.a_ to _Link Binary With Libraries_
 Finally, add a _Run Script_ build phase with the contents:
 
     #!/bin/sh
-    if [ -d "$BUILT_PRODUCTS_DIR/FeedbackDemo.app/ApptentiveResources.bundle" ]; then
-        echo "1"
-        rm -rf "$BUILT_PRODUCTS_DIR/FeedbackDemo.app/ApptentiveResources.bundle"
+    if [ -d "$BUILT_PRODUCTS_DIR/$PRODUCT_NAME/ApptentiveResources.bundle" ]; then
+        rm -rf "$BUILT_PRODUCTS_DIR/$PRODUCT_NAME/ApptentiveResources.bundle"
     fi
     if [ -d "$BUILT_PRODUCTS_DIR/ApptentiveResources.bundle" ]; then
-        echo "2"
-        mv "$BUILT_PRODUCTS_DIR/ApptentiveResources.bundle" "$BUILT_PRODUCTS_DIR/FeedbackDemo.app/"
+        mv "$BUILT_PRODUCTS_DIR/ApptentiveResources.bundle" "$BUILT_PRODUCTS_DIR/$PRODUCT_NAME/"
     fi
 
 This will copy the _ApptentiveResources.bundle_ resource bundle into your

@@ -97,7 +97,6 @@
 						<string key="NSFrame">{{0, 44}, {320, 416}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">1</int>
 							<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -139,7 +138,6 @@
 						<string key="NSFrame">{{9, 66}, {86, 26}}</string>
 						<reference key="NSSuperview" ref="1045994194"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<int key="IBUIContentMode">7</int>
@@ -303,13 +301,13 @@
 						<reference key="parent" ref="0"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">68</int>
-						<reference key="object" ref="331034537"/>
+						<int key="objectID">69</int>
+						<reference key="object" ref="17610919"/>
 						<reference key="parent" ref="1045994194"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">69</int>
-						<reference key="object" ref="17610919"/>
+						<int key="objectID">68</int>
+						<reference key="object" ref="331034537"/>
 						<reference key="parent" ref="1045994194"/>
 					</object>
 				</object>

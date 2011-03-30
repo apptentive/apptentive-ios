@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4982ECE6133C2DCF00B91781 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4982ECE4133C2DCF00B91781 /* MainWindow-iPad.xib */; };
-		49B3D9A31340084E00B5A5CD /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D9A21340084E00B5A5CD /* CoreTelephony.framework */; };
+		49B3D9A31340084E00B5A5CD /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D9A21340084E00B5A5CD /* CoreTelephony.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		49C002EC1334172E0071F088 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C002EB1334172E0071F088 /* UIKit.framework */; };
 		49C002EE1334172F0071F088 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C002ED1334172F0071F088 /* Foundation.framework */; };
 		49C002F01334172F0071F088 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C002EF1334172F0071F088 /* CoreGraphics.framework */; };
@@ -461,7 +461,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/usr/local/include";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -476,7 +476,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/usr/local/include";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 			};
@@ -491,7 +491,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FeedbackDemo/FeedbackDemo-Prefix.pch";
 				INFOPLIST_FILE = "FeedbackDemo/FeedbackDemo-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -514,7 +514,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FeedbackDemo/FeedbackDemo-Prefix.pch";
 				INFOPLIST_FILE = "FeedbackDemo/FeedbackDemo-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",

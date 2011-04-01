@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4960E1201344293E00F6311F /* ApptentiveResources.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4960E11F1344293E00F6311F /* ApptentiveResources.bundle */; };
+		4960E1281344326B00F6311F /* icon-114x114.png in Resources */ = {isa = PBXBuildFile; fileRef = 4960E1221344326B00F6311F /* icon-114x114.png */; };
+		4960E1291344326B00F6311F /* icon-29x29.png in Resources */ = {isa = PBXBuildFile; fileRef = 4960E1231344326B00F6311F /* icon-29x29.png */; };
+		4960E12A1344326B00F6311F /* icon-58x58.png in Resources */ = {isa = PBXBuildFile; fileRef = 4960E1241344326B00F6311F /* icon-58x58.png */; };
+		4960E12B1344326B00F6311F /* icon-72x72.png in Resources */ = {isa = PBXBuildFile; fileRef = 4960E1251344326B00F6311F /* icon-72x72.png */; };
+		4960E12C1344326B00F6311F /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4960E1261344326B00F6311F /* icon.png */; };
+		4960E139134432F400F6311F /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 4960E138134432F400F6311F /* iTunesArtwork */; };
 		4982ECE6133C2DCF00B91781 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4982ECE4133C2DCF00B91781 /* MainWindow-iPad.xib */; };
 		49B3D9A31340084E00B5A5CD /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D9A21340084E00B5A5CD /* CoreTelephony.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		49C002EC1334172E0071F088 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C002EB1334172E0071F088 /* UIKit.framework */; };
@@ -63,16 +70,31 @@
 			remoteGlobalIDString = 49D1118C13341A7C00603373;
 			remoteInfo = ApptentiveResources;
 		};
-		49D111A513341AE300603373 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 49C00324133417390071F088 /* ApptentiveConnect.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 49D1118B13341A7C00603373;
-			remoteInfo = ApptentiveResources;
-		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		4960E11E1344292900F6311F /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 1;
+			files = (
+				4960E1201344293E00F6311F /* ApptentiveResources.bundle in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		4960E11A1344289F00F6311F /* ApptentiveResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = ApptentiveResources.bundle; sourceTree = SOURCE_ROOT; };
+		4960E11F1344293E00F6311F /* ApptentiveResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = ApptentiveResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		4960E1221344326B00F6311F /* icon-114x114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-114x114.png"; sourceTree = "<group>"; };
+		4960E1231344326B00F6311F /* icon-29x29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-29x29.png"; sourceTree = "<group>"; };
+		4960E1241344326B00F6311F /* icon-58x58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-58x58.png"; sourceTree = "<group>"; };
+		4960E1251344326B00F6311F /* icon-72x72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-72x72.png"; sourceTree = "<group>"; };
+		4960E1261344326B00F6311F /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		4960E138134432F400F6311F /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
+		4960E13E13455ACE00F6311F /* ATConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATConnect.h; path = ../ApptentiveConnect/source/ATConnect.h; sourceTree = "<group>"; };
 		4982ECE5133C2DCF00B91781 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "iPad/en.lproj/MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		49B3D9A21340084E00B5A5CD /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		49C002E71334172E0071F088 /* FeedbackDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FeedbackDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -126,13 +148,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4960E1211344326B00F6311F /* art */ = {
+			isa = PBXGroup;
+			children = (
+				4960E1221344326B00F6311F /* icon-114x114.png */,
+				4960E1231344326B00F6311F /* icon-29x29.png */,
+				4960E1241344326B00F6311F /* icon-58x58.png */,
+				4960E1251344326B00F6311F /* icon-72x72.png */,
+				4960E1261344326B00F6311F /* icon.png */,
+				4960E138134432F400F6311F /* iTunesArtwork */,
+			);
+			name = art;
+			path = art/generated;
+			sourceTree = SOURCE_ROOT;
+		};
 		49C002DC1334172E0071F088 = {
 			isa = PBXGroup;
 			children = (
+				4960E13E13455ACE00F6311F /* ATConnect.h */,
+				4960E11F1344293E00F6311F /* ApptentiveResources.bundle */,
 				49C00324133417390071F088 /* ApptentiveConnect.xcodeproj */,
 				49C002F11334172F0071F088 /* FeedbackDemo */,
 				49C003111334172F0071F088 /* FeedbackDemoTests */,
 				49C002EA1334172E0071F088 /* Frameworks */,
+				4960E11A1344289F00F6311F /* ApptentiveResources.bundle */,
 				49C002E81334172E0071F088 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -177,6 +216,7 @@
 		49C002F21334172F0071F088 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4960E1211344326B00F6311F /* art */,
 				49C002F31334172F0071F088 /* FeedbackDemo-Info.plist */,
 				49C002F41334172F0071F088 /* InfoPlist.strings */,
 				49C002F71334172F0071F088 /* FeedbackDemo-Prefix.pch */,
@@ -225,13 +265,12 @@
 				49C002E31334172E0071F088 /* Sources */,
 				49C002E41334172E0071F088 /* Frameworks */,
 				49C002E51334172E0071F088 /* Resources */,
-				49D111A813341C5200603373 /* ShellScript */,
+				4960E11E1344292900F6311F /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				49C00331133417740071F088 /* PBXTargetDependency */,
-				49D111A613341AE300603373 /* PBXTargetDependency */,
 			);
 			name = FeedbackDemo;
 			productName = FeedbackDemo;
@@ -322,6 +361,12 @@
 				49C002FF1334172F0071F088 /* MainWindow.xib in Resources */,
 				49C003051334172F0071F088 /* RootViewController.xib in Resources */,
 				4982ECE6133C2DCF00B91781 /* MainWindow-iPad.xib in Resources */,
+				4960E1281344326B00F6311F /* icon-114x114.png in Resources */,
+				4960E1291344326B00F6311F /* icon-29x29.png in Resources */,
+				4960E12A1344326B00F6311F /* icon-58x58.png in Resources */,
+				4960E12B1344326B00F6311F /* icon-72x72.png in Resources */,
+				4960E12C1344326B00F6311F /* icon.png in Resources */,
+				4960E139134432F400F6311F /* iTunesArtwork in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -349,19 +394,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
-		};
-		49D111A813341C5200603373 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\nif [ -d \"$BUILT_PRODUCTS_DIR/${PRODUCT_NAME}.app/ApptentiveResources.bundle\" ]; then\n    rm -rf \"$BUILT_PRODUCTS_DIR/${PRODUCT_NAME}.app/ApptentiveResources.bundle\"\nfi\nif [ -d \"$BUILT_PRODUCTS_DIR/ApptentiveResources.bundle\" ]; then\n    mv \"$BUILT_PRODUCTS_DIR/ApptentiveResources.bundle\" \"$BUILT_PRODUCTS_DIR/${PRODUCT_NAME}.app/\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -396,11 +428,6 @@
 			isa = PBXTargetDependency;
 			name = ApptentiveConnect;
 			targetProxy = 49C00330133417740071F088 /* PBXContainerItemProxy */;
-		};
-		49D111A613341AE300603373 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = ApptentiveResources;
-			targetProxy = 49D111A513341AE300603373 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -494,6 +521,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(BUILT_PRODUCTS_DIR)/usr/local/include",
 					"$(DSTROOT)/usr/local/include",
+					"$(BUILT_PRODUCTS_DIR)/../../public_folders/**/**",
 				);
 				INFOPLIST_FILE = "FeedbackDemo/FeedbackDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
@@ -522,6 +550,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(BUILT_PRODUCTS_DIR)/usr/local/include",
 					"$(DSTROOT)/usr/local/include",
+					"$(BUILT_PRODUCTS_DIR)/../../public_folders/**/**",
 				);
 				INFOPLIST_FILE = "FeedbackDemo/FeedbackDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;

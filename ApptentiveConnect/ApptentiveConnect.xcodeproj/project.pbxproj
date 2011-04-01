@@ -38,7 +38,7 @@
 		49C0028E1334137E0071F088 /* ApptentiveConnectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C0028A1334137E0071F088 /* ApptentiveConnectTests.m */; };
 		49C0028F1334137E0071F088 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49C0028B1334137E0071F088 /* InfoPlist.strings */; };
 		49C002A1133413BB0071F088 /* ApptentiveConnect-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 49C00296133413BB0071F088 /* ApptentiveConnect-Prefix.pch */; };
-		49C002A2133413BB0071F088 /* ATConnect.h in Headers */ = {isa = PBXBuildFile; fileRef = 49C00297133413BB0071F088 /* ATConnect.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		49C002A2133413BB0071F088 /* ATConnect.h in Headers */ = {isa = PBXBuildFile; fileRef = 49C00297133413BB0071F088 /* ATConnect.h */; settings = {ATTRIBUTES = (); }; };
 		49C002A3133413BB0071F088 /* ATConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C00298133413BB0071F088 /* ATConnect.m */; };
 		49C002A4133413BB0071F088 /* ATContactInfoController.h in Headers */ = {isa = PBXBuildFile; fileRef = 49C00299133413BB0071F088 /* ATContactInfoController.h */; settings = {ATTRIBUTES = (); }; };
 		49C002A5133413BB0071F088 /* ATContactInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C0029A133413BB0071F088 /* ATContactInfoController.m */; };
@@ -48,7 +48,6 @@
 		49C002A9133413BB0071F088 /* ATFeedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C0029E133413BB0071F088 /* ATFeedback.m */; };
 		49C002AA133413BB0071F088 /* ATFeedbackController.h in Headers */ = {isa = PBXBuildFile; fileRef = 49C0029F133413BB0071F088 /* ATFeedbackController.h */; settings = {ATTRIBUTES = (); }; };
 		49C002AB133413BB0071F088 /* ATFeedbackController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C002A0133413BB0071F088 /* ATFeedbackController.m */; };
-		49D1118E13341A7C00603373 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3821333D35600743F65 /* Foundation.framework */; };
 		49D111A113341A9D00603373 /* ATContactInfoController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49C00291133413AA0071F088 /* ATContactInfoController.xib */; };
 		49D111A213341A9D00603373 /* ATContactInfoController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49C00292133413AA0071F088 /* ATContactInfoController_iPad.xib */; };
 		49D111A313341A9D00603373 /* ATFeedbackController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49C00293133413AA0071F088 /* ATFeedbackController.xib */; };
@@ -70,6 +69,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		4960E1101344265200F6311F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 496DC3761333D35600743F65 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 49D1118B13341A7C00603373;
+			remoteInfo = ApptentiveResources;
+		};
 		496DC3921333D35600743F65 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 496DC3761333D35600743F65 /* Project object */;
@@ -174,7 +180,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49D1118E13341A7C00603373 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -388,6 +393,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				4960E1111344265200F6311F /* PBXTargetDependency */,
 			);
 			name = ApptentiveConnect;
 			productName = ApptentiveConnect;
@@ -507,7 +513,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+			shellScript = "echo \"HI\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -559,6 +565,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		4960E1111344265200F6311F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 49D1118B13341A7C00603373 /* ApptentiveResources */;
+			targetProxy = 4960E1101344265200F6311F /* PBXContainerItemProxy */;
+		};
 		496DC3931333D35600743F65 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 496DC37E1333D35600743F65 /* ApptentiveConnect */;
@@ -591,6 +602,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -604,6 +617,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -616,6 +631,7 @@
 				GCC_PREFIX_HEADER = "source/ApptentiveConnect-Prefix.pch";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include;
 			};
 			name = Debug;
 		};
@@ -628,6 +644,7 @@
 				GCC_PREFIX_HEADER = "source/ApptentiveConnect-Prefix.pch";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include;
 			};
 			name = Release;
 		};

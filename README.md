@@ -29,23 +29,18 @@ Also add the following to your _Other Linker Flags_ settings:
 
     -ObjC -all_load
 
-In your target's _Build Phases_ section, add the _ApptentiveResources_ and
-_ApptentiveConnect_ targets to your _Target Dependencies_.
+In your target's _Build Phases_ section, add the _ApptentiveConnect_ target
+to your _Target Dependencies_.
 
 Then, add _libApptentiveConnect.a_ to _Link Binary With Libraries_
 
-Finally, add a _Run Script_ build phase with the contents:
-
-    #!/bin/sh
-    if [ -d "$BUILT_PRODUCTS_DIR/${PRODUCT_NAME}.app/ApptentiveResources.bundle" ]; then
-        rm -rf "$BUILT_PRODUCTS_DIR/${PRODUCT_NAME}.app/ApptentiveResources.bundle"
-    fi
-    if [ -d "$BUILT_PRODUCTS_DIR/ApptentiveResources.bundle" ]; then
-        mv "$BUILT_PRODUCTS_DIR/ApptentiveResources.bundle" "$BUILT_PRODUCTS_DIR/${PRODUCT_NAME}.app/"
-    fi
+As the last build phase, add a _Copy Files_ build phase, set the destination
+to _Wrapper_, leave _Subpath_ blank and _Copy only when installing_ unchecked.
+Then, drag _ApptentiveResources.bundle_ from 
+_ApptentiveConnect.xcodeproj/Products_ in Xcode into the file list.
 
 This will copy the _ApptentiveResources.bundle_ resource bundle into your
-application bundle.
+application bundle as the last step of the build.
 
 That should be it!
 
@@ -53,7 +48,6 @@ Now, you can show the Apptentive feedback UI from a _UIViewController_ with:
 
     #include "ATConnect.h"
     …
-    
     
     ATConnect *connection = [ATConnect sharedConnection];
     connection.apiKey = kApptentiveAPIKey;

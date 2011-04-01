@@ -20,12 +20,8 @@ In Xcode 4, create a workspace with your application project in it. Then,
 add the _ApptentiveConnect.xcodeproj_ to your workspace as a child of your
 project.
 
-In your target's _Build Settings_ section, add the following path to your 
-_Header Search Paths_ settings:
-
-    $(BUILT_PRODUCTS_DIR)/usr/local/include
-    
-Also add the following to your _Other Linker Flags_ settings:
+In your target's _Build Settings_ section, add the following to your 
+_Other Linker Flags_ settings:
 
     -ObjC -all_load
 
@@ -42,8 +38,14 @@ _ApptentiveConnect.xcodeproj/Products_ in Xcode into the file list.
 This will copy the _ApptentiveResources.bundle_ resource bundle into your
 application bundle as the last step of the build.
 
+Now, for the final step. This is a workaround for a bug in Xcode 4: drag
+_ATConnect.h_ from _ApptentiveConnect.xcodeproj_ to your app's file list.
+
 That should be it!
 
+
+Using the Library
+-----------------
 Now, you can show the Apptentive feedback UI from a _UIViewController_ with:
 
     #include "ATConnect.h"
@@ -63,3 +65,6 @@ BUGS TO BE AWARE OF
 Xcode 4 won't correctly rebuild static libraries inside a workspace when the source has changed. If you change the source of _ApptentiveConnect_ when
 working on your app, you must do a _Product > Clean_ before building and
 running your app.
+
+Adding _ATConnect.h_ to your project, above, is necessary due to a bug in
+Xcode 4 when archiving your app.

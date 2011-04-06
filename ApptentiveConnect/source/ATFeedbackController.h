@@ -11,10 +11,12 @@
 @class ATDefaultTextView;
 @class ATFeedback;
 @class ATKeyboardAccessoryView;
+@class ATPopupSelectorControl;
 
 @interface ATFeedbackController : UIViewController {
     IBOutlet UITextField *nameField;
     IBOutlet ATDefaultTextView *feedbackView;
+    IBOutlet ATPopupSelectorControl *selectorControl;
 @private
     BOOL nameIsDirtied;
 }

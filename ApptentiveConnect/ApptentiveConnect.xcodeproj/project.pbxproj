@@ -21,8 +21,9 @@
 		491748BF1341177000A7D11E /* ATURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 491748B71341177000A7D11E /* ATURLConnection.m */; };
 		491748C01341177000A7D11E /* ATWebClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 491748B81341177000A7D11E /* ATWebClient.h */; };
 		491748C11341177000A7D11E /* ATWebClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 491748B91341177000A7D11E /* ATWebClient.m */; };
-		49692794134188B800180C50 /* at_checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 49692792134188B800180C50 /* at_checkmark.png */; };
-		49692795134188B800180C50 /* at_checkmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 49692793134188B800180C50 /* at_checkmark@2x.png */; };
+		4960E141134A4FAD00F6311F /* ATPopupSelectorControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 4960E13F134A4FAD00F6311F /* ATPopupSelectorControl.h */; };
+		4960E142134A4FAD00F6311F /* ATPopupSelectorControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 4960E140134A4FAD00F6311F /* ATPopupSelectorControl.m */; };
+		4960E154134A578F00F6311F /* generated in Resources */ = {isa = PBXBuildFile; fileRef = 4960E153134A578F00F6311F /* generated */; };
 		496DC3831333D35600743F65 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3821333D35600743F65 /* Foundation.framework */; };
 		496DC38F1333D35600743F65 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3821333D35600743F65 /* Foundation.framework */; };
 		496DC3941333D35600743F65 /* libApptentiveConnect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC37F1333D35600743F65 /* libApptentiveConnect.a */; };
@@ -100,8 +101,9 @@
 		491748B71341177000A7D11E /* ATURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATURLConnection.m; sourceTree = "<group>"; };
 		491748B81341177000A7D11E /* ATWebClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATWebClient.h; sourceTree = "<group>"; };
 		491748B91341177000A7D11E /* ATWebClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATWebClient.m; sourceTree = "<group>"; };
-		49692792134188B800180C50 /* at_checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_checkmark.png; sourceTree = "<group>"; };
-		49692793134188B800180C50 /* at_checkmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_checkmark@2x.png"; sourceTree = "<group>"; };
+		4960E13F134A4FAD00F6311F /* ATPopupSelectorControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATPopupSelectorControl.h; sourceTree = "<group>"; };
+		4960E140134A4FAD00F6311F /* ATPopupSelectorControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATPopupSelectorControl.m; sourceTree = "<group>"; };
+		4960E153134A578F00F6311F /* generated */ = {isa = PBXFileReference; lastKnownFileType = folder; name = generated; path = art/generated; sourceTree = SOURCE_ROOT; };
 		496DC37F1333D35600743F65 /* libApptentiveConnect.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libApptentiveConnect.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		496DC3821333D35600743F65 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		496DC38C1333D35600743F65 /* ApptentiveConnectTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApptentiveConnectTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -201,22 +203,12 @@
 			path = "URL Loading";
 			sourceTree = "<group>";
 		};
-		49692791134188B800180C50 /* generated */ = {
-			isa = PBXGroup;
-			children = (
-				49692792134188B800180C50 /* at_checkmark.png */,
-				49692793134188B800180C50 /* at_checkmark@2x.png */,
-			);
-			name = generated;
-			path = art/generated;
-			sourceTree = "<group>";
-		};
 		496DC3741333D35600743F65 = {
 			isa = PBXGroup;
 			children = (
 				49D1123913359BA000603373 /* ext */,
 				49C00295133413BB0071F088 /* source */,
-				49692791134188B800180C50 /* generated */,
+				4960E153134A578F00F6311F /* generated */,
 				49C00290133413AA0071F088 /* xibs */,
 				49C002861334137E0071F088 /* tests */,
 				496DC3811333D35600743F65 /* Frameworks */,
@@ -256,6 +248,8 @@
 				4917489C13402FC900A7D11E /* ATCenteringImageScrollView.m */,
 				4917489F1340F47700A7D11E /* ATHUDView.h */,
 				491748A01340F47700A7D11E /* ATHUDView.m */,
+				4960E13F134A4FAD00F6311F /* ATPopupSelectorControl.h */,
+				4960E140134A4FAD00F6311F /* ATPopupSelectorControl.m */,
 			);
 			path = "Custom Views";
 			sourceTree = "<group>";
@@ -376,6 +370,7 @@
 				491748BC1341177000A7D11E /* ATConnectionManager.h in Headers */,
 				491748BE1341177000A7D11E /* ATURLConnection.h in Headers */,
 				491748C01341177000A7D11E /* ATWebClient.h in Headers */,
+				4960E141134A4FAD00F6311F /* ATPopupSelectorControl.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -481,8 +476,7 @@
 				49D111A213341A9D00603373 /* ATContactInfoController_iPad.xib in Resources */,
 				49D111A313341A9D00603373 /* ATFeedbackController.xib in Resources */,
 				49D111A413341A9D00603373 /* ATFeedbackController_iPad.xib in Resources */,
-				49692794134188B800180C50 /* at_checkmark.png in Resources */,
-				49692795134188B800180C50 /* at_checkmark@2x.png in Resources */,
+				4960E154134A578F00F6311F /* generated in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -543,6 +537,7 @@
 				491748BD1341177000A7D11E /* ATConnectionManager.m in Sources */,
 				491748BF1341177000A7D11E /* ATURLConnection.m in Sources */,
 				491748C11341177000A7D11E /* ATWebClient.m in Sources */,
+				4960E142134A4FAD00F6311F /* ATPopupSelectorControl.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

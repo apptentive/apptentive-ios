@@ -7,6 +7,7 @@
 //
 
 #import "ATFeedbackController.h"
+#import "ATBackend.h"
 #import "ATConnect.h"
 #import "ATContactInfoController.h"
 #import "ATContactStorage.h"
@@ -14,6 +15,7 @@
 #import "ATDefaultTextView.h"
 #import "ATFeedback.h"
 #import "ATKeyboardAccessoryView.h"
+#import "ATPopupSelectorControl.h"
 
 @interface ATFeedbackController (Private)
 - (BOOL)shouldReturn:(UIView *)view;
@@ -136,6 +138,19 @@
     self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelFeedback:)] autorelease];
     self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Next Step", @"Title of button which takes user from feedback to contact info/screenshot screen.") style:UIBarButtonItemStyleBordered target:self action:@selector(nextStep:)] autorelease];
     self.navigationItem.rightBarButtonItem.enabled = NO;
+    
+    ATPopupSelection *feedbackSelection = [[ATPopupSelection alloc] initWithName:@"feedback" popupImage:[ATBackend imageNamed:@"at_feedback"] selectedImage:[ATBackend imageNamed:@"at_feedback_selected"]];
+    feedbackSelection.isSelected = YES;
+    ATPopupSelection *smileySelection = [[ATPopupSelection alloc] initWithName:@"praise" popupImage:[ATBackend imageNamed:@"at_smiley"] selectedImage:[ATBackend imageNamed:@"at_smiley_selected"]];
+    ATPopupSelection *frownySelection = [[ATPopupSelection alloc] initWithName:@"bug" popupImage:[ATBackend imageNamed:@"at_frowny"] selectedImage:[ATBackend imageNamed:@"at_frowny_selected"]];
+    ATPopupSelection *questionSelection = [[ATPopupSelection alloc] initWithName:@"question" popupImage:[ATBackend imageNamed:@"at_question"] selectedImage:[ATBackend imageNamed:@"at_question_selected"]];
+    
+    NSArray *selections = [NSArray arrayWithObjects:feedbackSelection, smileySelection, frownySelection, questionSelection, nil];
+    selectorControl.selections = selections;
+    [feedbackSelection release];
+    [smileySelection release];
+    [frownySelection release];
+    [questionSelection release];
 }
 
 - (void)setupFeedback {

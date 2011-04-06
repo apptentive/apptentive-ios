@@ -7,6 +7,7 @@
 //
 
 #import "ATBackend.h"
+#import "ATConnect.h"
 #import "ATContactStorage.h"
 #import "ATContactUpdater.h"
 #import "ATFeedback.h"
@@ -37,6 +38,37 @@ static ATBackend *sharedBackend = nil;
         }
     }
     return sharedBackend;
+}
+
++ (UIImage *)imageNamed:(NSString *)name {
+    NSString *imagePath = nil;
+    UIImage *result = nil;
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    if (scale > 1.0) {
+        imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@@2x", name] ofType:@"png"];
+    } else {
+        imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"png"];
+    }
+    
+    if (!imagePath) {
+        if (scale > 1.0) {
+            imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@@2x", name] ofType:@"png" inDirectory:@"generated"];
+        } else {
+            imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"png" inDirectory:@"generated"];
+        }
+    }
+    
+    if (imagePath) {
+        result = [UIImage imageWithContentsOfFile:imagePath];
+    } else {
+        result = [UIImage imageNamed:name];
+    }
+    if (!result) {
+        NSLog(@"Unable to find image named: %@", name);
+        NSLog(@"sought at: %@", imagePath);
+        NSLog(@"bundle is: %@", [ATConnect resourceBundle]);
+    }
+    return result;
 }
 
 - (id)init {

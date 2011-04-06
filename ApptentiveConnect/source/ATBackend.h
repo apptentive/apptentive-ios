@@ -6,7 +6,7 @@
 //  Copyright 2011 Planetary Scale LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @class ATContactUpdater;
 @class ATFeedback;
@@ -20,6 +20,8 @@
 @property (nonatomic, retain) NSString *apiKey;
 
 + (ATBackend *)sharedBackend;
++ (UIImage *)imageNamed:(NSString *)name;
+
 - (void)sendFeedback:(ATFeedback *)feedback;
 - (void)updateUserData;
 - (NSString *)supportDirectoryPath;

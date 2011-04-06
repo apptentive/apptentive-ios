@@ -8,6 +8,7 @@
 
 #import "ATPopupSelectorControl.h"
 #import "ATBackend.h"
+#import <QuartzCore/QuartzCore.h>
 
 #define kSelectionBackgroundImageTag 32
 #define kSelectionImageTag 33
@@ -15,6 +16,7 @@
 #define kPopupBackgroundImageTag 34
 
 #define kSelectionChangedNotification @"ATPopupSelectionChanged"
+#define kSelectionPopupDisappearedNotification @"ATPopupDisappeared"
 
 @interface ATPopupSelectorControl ()
 - (void)touchUpInside:(id)sender;
@@ -134,7 +136,7 @@
         imageView.tag = kSelectionImageTag;
         [self addSubview:imageView];
         CGRect f = imageView.frame;
-        f.origin.x = 2.0;
+        f.origin.x = 1.0;
         imageView.frame = f;
         [imageView release];
     } else {
@@ -169,9 +171,19 @@
     [self setNeedsLayout];
 }
 
+- (void)selectionDisappearedNotification:(NSNotification *)notification {
+    if (popup) {
+        [popup release];
+        popup = nil;
+    }
+    [self setNeedsLayout];
+}
+
 - (void)setup {
     [self addTarget:self action:@selector(touchUpInside:) forControlEvents:UIControlEventTouchUpInside];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectionChangedNotification:) name:kSelectionChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectionDisappearedNotification:) name:kSelectionPopupDisappearedNotification object:nil];
+    
 }
 
 - (void)teardown {
@@ -244,7 +256,20 @@
 }
 
 - (void)hide {
-    [self removeFromSuperview];
+    self.alpha = 1.0;
+    [UIView beginAnimations:@"hide" context:NULL];
+    [UIView setAnimationDelegate:self];
+    self.alpha = 0.0;
+    [UIView commitAnimations];
+}
+
+- (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
+    if (animationID) {
+        if ([animationID isEqualToString:@"hide"]) {
+            [self removeFromSuperview];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kSelectionPopupDisappearedNotification object:self];
+        }
+    }
 }
 
 - (void)setup {
@@ -293,6 +318,14 @@
         [self addSubview:popupBackground];
         [popupBackground setUserInteractionEnabled:YES];
         
+        
+        
+        CABasicAnimation *wiggleAnimation = [[CABasicAnimation animationWithKeyPath:@"transform"] retain];
+		wiggleAnimation.duration = 0.1;
+		wiggleAnimation.repeatCount = 1.0;//1e100f;
+		wiggleAnimation.autoreverses = YES;
+		wiggleAnimation.toValue = [NSValue valueWithCATransform3D:CATransform3DConcat(CATransform3DIdentity, CATransform3DScale(self.layer.transform, 1.1, 1.1, 1.0))];
+        
         NSUInteger i = 0;
         for (ATPopupSelection *sel in selections) {
             CGFloat offsetX = leftOffsetX + i*iconWidth + i*padding;
@@ -301,10 +334,27 @@
             [c addSubview:v];
             [c addTarget:self action:@selector(didTapSelection:) forControlEvents:UIControlEventTouchUpInside];
             [popupBackground addSubview:c];
+            
+            c.layer.transform = CATransform3DScale(CATransform3DIdentity, 0.2, 0.2, 1.0);
+            c.alpha = 0.0;
+            
+            [c.layer removeAnimationForKey:@"wiggle"];
+            [c.layer addAnimation:wiggleAnimation forKey:@"wiggle"];
+            
+            [UIView beginAnimations:nil context:NULL];
+            [UIView setAnimationDelay:i * 0.05];
+            [UIView setAnimationDuration:0.05];
+            c.alpha = 1.0;
+            c.layer.transform = CATransform3DIdentity;
+            [UIView commitAnimations];
+            
             [c release];
             [v release];
             i++;
         }
+        
+        [wiggleAnimation release];
+        wiggleAnimation = nil;
     } else {
         for (UIView *v in [popupBackground subviews]) {
             [v layoutSubviews];
@@ -322,7 +372,7 @@
     popupBackground.bounds = CGRectMake(0.0, 0.0, width, viewHeight);
     
     
-    self.backgroundColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.2];
+    self.backgroundColor = [UIColor clearColor];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -350,7 +400,7 @@
     }
     [self layoutSubviews];
     [[NSNotificationCenter defaultCenter] postNotificationName:kSelectionChangedNotification object:self];
-    NSLog(@"howdy, tapped: %@", control.selection.name);
+    [self hide];
 }
 
 - (void)outsideEventNotification:(NSNotification *)notification {

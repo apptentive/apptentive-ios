@@ -287,10 +287,10 @@
 		49C00290133413AA0071F088 /* xibs */ = {
 			isa = PBXGroup;
 			children = (
-				49C00291133413AA0071F088 /* ATContactInfoController.xib */,
-				49C00292133413AA0071F088 /* ATContactInfoController_iPad.xib */,
 				49C00293133413AA0071F088 /* ATFeedbackController.xib */,
 				49C00294133413AA0071F088 /* ATFeedbackController_iPad.xib */,
+				49C00291133413AA0071F088 /* ATContactInfoController.xib */,
+				49C00292133413AA0071F088 /* ATContactInfoController_iPad.xib */,
 			);
 			path = xibs;
 			sourceTree = "<group>";
@@ -309,16 +309,14 @@
 				49D1128D133804ED00603373 /* ATContactStorage.m */,
 				4982ECA1133AAB8B00B91781 /* ATContactUpdater.h */,
 				4982ECA2133AAB8F00B91781 /* ATContactUpdater.m */,
-				49C00299133413BB0071F088 /* ATContactInfoController.h */,
-				49C0029A133413BB0071F088 /* ATContactInfoController.m */,
 				49C0029B133413BB0071F088 /* ATDefaultTextView.h */,
 				49C0029C133413BB0071F088 /* ATDefaultTextView.m */,
 				49C0029D133413BB0071F088 /* ATFeedback.h */,
 				49C0029E133413BB0071F088 /* ATFeedback.m */,
-				49C0029F133413BB0071F088 /* ATFeedbackController.h */,
-				49C002A0133413BB0071F088 /* ATFeedbackController.m */,
 				49D111DB1335847700603373 /* ATUtilities.h */,
 				49D111DC1335847700603373 /* ATUtilities.m */,
+				49E89196134E73A700DD098A /* Contract Pane */,
+				49E89195134E739600DD098A /* Feedback Pane */,
 				49B3D964133D843D00B5A5CD /* Custom Views */,
 				49D1124C13368CA800603373 /* Tasks */,
 				491748B11341176E00A7D11E /* URL Loading */,
@@ -355,6 +353,24 @@
 				49D112721337CC9F00603373 /* ATTaskQueue.m */,
 			);
 			path = Tasks;
+			sourceTree = "<group>";
+		};
+		49E89195134E739600DD098A /* Feedback Pane */ = {
+			isa = PBXGroup;
+			children = (
+				49C0029F133413BB0071F088 /* ATFeedbackController.h */,
+				49C002A0133413BB0071F088 /* ATFeedbackController.m */,
+			);
+			name = "Feedback Pane";
+			sourceTree = "<group>";
+		};
+		49E89196134E73A700DD098A /* Contract Pane */ = {
+			isa = PBXGroup;
+			children = (
+				49C00299133413BB0071F088 /* ATContactInfoController.h */,
+				49C0029A133413BB0071F088 /* ATContactInfoController.m */,
+			);
+			name = "Contract Pane";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

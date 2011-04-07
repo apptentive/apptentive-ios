@@ -394,7 +394,7 @@
 - (void)didTapSelection:(id)sender {
     ATPopupSelectionControl *control = (ATPopupSelectionControl *)sender;
     for (ATPopupSelection *sel in selections) {
-        if (sel.feedbackType == control.selection.feedbackType) {
+        if (sel.feedbackType != control.selection.feedbackType) {
             sel.isSelected = NO;
         } else {
             sel.isSelected = YES;

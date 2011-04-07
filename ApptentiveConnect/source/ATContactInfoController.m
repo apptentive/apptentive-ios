@@ -12,7 +12,6 @@
 #import "ATConnect.h"
 #import "ATFeedback.h"
 #import "ATHUDView.h"
-#import "ATSimpleImageViewController.h"
 #import "ATKeyboardAccessoryView.h"
 #import "ATUtilities.h"
 
@@ -58,7 +57,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setup];
-    [emailField becomeFirstResponder];
+    [nameField becomeFirstResponder];
 }
 
 - (void)viewDidUnload {
@@ -74,29 +73,17 @@
 //    return YES;
 }
 
-- (IBAction)screenshotSwitchToggled:(id)sender {
-    
-}
 
 - (IBAction)nextStep:(id)sender {
+    feedback.name = nameField.text;
     feedback.email = emailField.text;
     feedback.phone = phoneField.text;
-    if (!screenshotSwitch.on) {
-        feedback.screenshot = nil;
-    }
     [[ATBackend sharedBackend] sendFeedback:feedback];
     ATHUDView *hud = [[ATHUDView alloc] initWithWindow:[[self view] window]];
     hud.label.text = NSLocalizedString(@"Thanks!", @"Text in thank you display upon submitting feedback.");
     [hud show];
     [hud autorelease];
     [self dismissModalViewControllerAnimated:YES];
-}
-
-- (IBAction)imageDisclosureTapped:(id)sender {
-    ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithImage:self.feedback.screenshot];
-    vc.title = NSLocalizedString(@"Screenshot", @"Title for screenshot view.");
-    [self.navigationController pushViewController:vc animated:YES];
-    [vc release];
 }
 
 #pragma mark UITextFieldDelegate
@@ -107,7 +94,10 @@
 
 @implementation ATContactInfoController (Private)
 - (BOOL)shouldReturn:(UIView *)view {
-    if (view == emailField) {
+    if (view == nameField) {
+        [emailField becomeFirstResponder];
+        return NO;
+    } else if (view == emailField) {
         [phoneField becomeFirstResponder];
         return NO;
     } else if (view == phoneField) {
@@ -118,13 +108,16 @@
 }
 
 - (void)setup {
-    self.title = NSLocalizedString(@"Info", @"Title of contact information screen.");
+    self.title = NSLocalizedString(@"Contact Info", @"Title of contact information screen.");
     self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Submit", @"Label of button for submitting feedback.") style:UIBarButtonItemStyleDone target:self action:@selector(nextStep:)] autorelease];
     [self setupFeedback];
     [self setupKeyboardAccessory];
 }
 
 - (void)setupFeedback {
+    if (nameField && (!nameField.text || [@"" isEqualToString:nameField.text]) && feedback.name) {
+        nameField.text = feedback.name;
+    }
     if (emailField && (!emailField.text || [@"" isEqualToString:emailField.text]) && feedback.email) {
         emailField.text = feedback.email;
     }
@@ -135,6 +128,7 @@
 
 - (void)setupKeyboardAccessory {
     if ([[ATConnect sharedConnection] showKeyboardAccessory]) {
+        nameField.inputAccessoryView = [[[ATKeyboardAccessoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 20.0)] autorelease];
         emailField.inputAccessoryView = [[[ATKeyboardAccessoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 20.0)] autorelease];
         phoneField.inputAccessoryView = [[[ATKeyboardAccessoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 20.0)] autorelease];
     }
@@ -142,11 +136,11 @@
 
 - (void)teardown {
     self.feedback = nil;
+    [nameField release];
+    nameField = nil;
     [emailField release];
     emailField = nil;
     [phoneField release];
     phoneField = nil;
-    [screenshotSwitch release];
-    screenshotSwitch = nil;
 }
 @end

@@ -16,6 +16,7 @@
 #import "ATFeedback.h"
 #import "ATKeyboardAccessoryView.h"
 #import "ATPopupSelectorControl.h"
+#import "ATSimpleImageViewController.h"
 
 @interface ATFeedbackController (Private)
 - (BOOL)shouldReturn:(UIView *)view;
@@ -26,7 +27,6 @@
 - (void)keyboardWillShow:(NSNotification *)notification;
 - (void)keyboardDidShow:(NSNotification *)notification;
 - (void)keyboardWillHide:(NSNotification *)notification;
-- (void)nameChanged:(NSNotification *)notification;
 - (void)feedbackChanged:(NSNotification *)notification;
 - (void)contactInfoChanged:(NSNotification *)notification;
 @end
@@ -67,11 +67,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setup];
-    if (self.feedback.name) {
-        [feedbackView becomeFirstResponder];
-    } else {
-        [nameField becomeFirstResponder];
-    }
+    [feedbackView becomeFirstResponder];
 }
 
 - (void)viewDidUnload {
@@ -88,6 +84,10 @@
     //    return YES;
 }
 
+- (IBAction)screenshotSwitchToggled:(id)sender {
+    
+}
+
 - (IBAction)cancelFeedback:(id)sender {
     [self dismissModalViewControllerAnimated:YES];
 }
@@ -95,11 +95,20 @@
 - (IBAction)nextStep:(id)sender {
     // TODO
     feedback.type = [selectorControl currentSelection].feedbackType;
-    feedback.name = nameField.text;
     feedback.text = feedbackView.text;
+    if (!screenshotSwitch.on) {
+        feedback.screenshot = nil;
+    }
     
     ATContactInfoController *vc = [[ATContactInfoController alloc] init];
     vc.feedback = self.feedback;
+    [self.navigationController pushViewController:vc animated:YES];
+    [vc release];
+}
+
+- (IBAction)imageDisclosureTapped:(id)sender {
+    ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithImage:self.feedback.screenshot];
+    vc.title = NSLocalizedString(@"Screenshot", @"Title for screenshot view.");
     [self.navigationController pushViewController:vc animated:YES];
     [vc release];
 }
@@ -113,10 +122,6 @@
 
 @implementation ATFeedbackController (Private)
 - (BOOL)shouldReturn:(UIView *)view {
-    if (view == nameField) {
-        [feedbackView becomeFirstResponder];
-        return NO;
-    }
     return YES;
 }
 
@@ -131,7 +136,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackChanged:) name:UITextViewTextDidChangeNotification object:feedbackView];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(nameChanged:) name:UITextFieldTextDidChangeNotification object:nameField];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contactInfoChanged:) name:ATContactUpdaterFinished object:nil];
     feedbackView.placeholder = NSLocalizedString(@"Feedback", @"Placeholder text for user feedback field.");
     self.title = NSLocalizedString(@"Give Feedback", @"Title of feedback screen.");
@@ -155,9 +159,6 @@
 }
 
 - (void)setupFeedback {
-    if (nameField && (!nameField.text || [@"" isEqualToString:nameField.text]) && feedback.name) {
-        nameField.text = feedback.name;
-    }
     if (feedbackView && [feedbackView isDefault] && feedback.text) {
         feedbackView.text = feedback.text;
     }
@@ -167,8 +168,12 @@
     self.feedback = nil;
     [feedbackView release];
     feedbackView = nil;
-    [nameField release];
-    nameField = nil;
+    
+    [screenshotContainerView release];
+    screenshotContainerView = nil;
+    
+    [screenshotSwitch release];
+    screenshotSwitch = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -178,12 +183,21 @@
     CGRect keyboardRect = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect feedbackRect = [feedbackView.superview convertRect:feedbackView.frame toView:nil];
     CGRect windowBounds = feedbackView.window.bounds;
-    CGFloat newHeight = windowBounds.size.height - keyboardRect.size.height - feedbackRect.origin.y;
+    CGRect screenshotRect = screenshotContainerView.frame;
+    CGFloat newHeight = windowBounds.size.height - keyboardRect.size.height - feedbackRect.origin.y - screenshotRect.size.height;
     
     CGRect newFrame = feedbackView.frame;
     newFrame.size.height = newHeight;
     
     return newFrame;
+}
+
+- (CGRect)newScreenshotFrameWithNotification:(NSNotification *)notification {
+    CGRect newFeedbackFrame = [self newFeedbackFrameWithNotification:notification];
+    CGRect newScreenshotFrame = screenshotContainerView.frame;
+    newScreenshotFrame.origin.y = newFeedbackFrame.origin.y + newFeedbackFrame.size.height;
+    
+    return newScreenshotFrame;
 }
 
 // Helper to get the frame of the feedbackView when a keyboard is shown.
@@ -192,12 +206,14 @@
     
     NSDictionary *userInfo = [notification userInfo];
     CGRect newFrame = [self newFeedbackFrameWithNotification:notification];
+    CGRect newScreenshotFrame = [self newScreenshotFrameWithNotification:notification];
     
     NSTimeInterval duration;
     [(NSValue *)[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&duration];
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:duration];
     feedbackView.frame = newFrame;
+    screenshotContainerView.frame = newScreenshotFrame;
     [UIView commitAnimations];
     [feedbackView flashScrollIndicators];
 }
@@ -207,7 +223,9 @@
 - (void)keyboardDidShow:(NSNotification *)notification {
     if (!feedbackView.window) return;
     CGRect newFrame = [self newFeedbackFrameWithNotification:notification];
+    CGRect screenshotFrame = [self newScreenshotFrameWithNotification:notification];
     feedbackView.frame = newFrame;
+    screenshotContainerView.frame = screenshotFrame;
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification {
@@ -220,23 +238,22 @@
     CGRect viewRect = [feedbackView.superview.superview convertRect:feedbackView.superview.frame toView:nil];
     CGRect windowBounds = feedbackView.window.bounds;
     CGRect feedbackRect = [feedbackView.superview convertRect:feedbackView.frame toView:nil];
+    CGRect screenshotRect = screenshotContainerView.frame;
     
     CGFloat bottomSpacing = windowBounds.size.height - (viewRect.origin.y + viewRect.size.height);
-    CGFloat newHeight = windowBounds.size.height - feedbackRect.origin.y - bottomSpacing;
+    CGFloat newHeight = windowBounds.size.height - feedbackRect.origin.y - bottomSpacing - screenshotRect.size.height;
     
     CGRect newFrame = feedbackView.frame;
     newFrame.size.height = newHeight;
     
+    CGRect newScreenshotFrame = screenshotContainerView.frame;
+    newScreenshotFrame.origin.y = newFrame.origin.y + newFrame.size.height;
+    
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:animationDuration];
     feedbackView.frame = newFrame;
+    screenshotContainerView.frame = newScreenshotFrame;
     [UIView commitAnimations];
-}
-
-- (void)nameChanged:(NSNotification *)notification {
-    if (notification.object == nameField) {
-        nameIsDirtied = YES;
-    }
 }
 
 - (void)feedbackChanged:(NSNotification *)notification {
@@ -247,9 +264,8 @@
 
 - (void)contactInfoChanged:(NSNotification *)notification {
     ATContactStorage *contact = [ATContactStorage sharedContactStorage];
-    if (!nameIsDirtied && contact.name) {
-        nameField.text = contact.name;
-        [feedbackView becomeFirstResponder];
+    if (contact.name) {
+        feedback.name = contact.name;
     }
     if (contact.phone) {
         feedback.phone = contact.phone;
@@ -261,7 +277,6 @@
 
 - (void)setupKeyboardAccessory {
     if ([[ATConnect sharedConnection] showKeyboardAccessory]) {
-        nameField.inputAccessoryView = [[[ATKeyboardAccessoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 20.0)] autorelease];
         feedbackView.inputAccessoryView = [[[ATKeyboardAccessoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 20.0)] autorelease];
     }
 }

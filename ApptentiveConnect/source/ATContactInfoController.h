@@ -11,13 +11,11 @@
 @class ATFeedback;
 
 @interface ATContactInfoController : UIViewController {
+    IBOutlet UITextField *nameField;
     IBOutlet UITextField *emailField;
     IBOutlet UITextField *phoneField;
-    IBOutlet UISwitch *screenshotSwitch;
 }
 @property (nonatomic, retain) ATFeedback *feedback;
 
 - (IBAction)nextStep:(id)sender;
-- (IBAction)imageDisclosureTapped:(id)sender;
-- (IBAction)screenshotSwitchToggled:(id)sender;
 @end

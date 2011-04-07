@@ -14,14 +14,15 @@
 @class ATPopupSelectorControl;
 
 @interface ATFeedbackController : UIViewController {
-    IBOutlet UITextField *nameField;
     IBOutlet ATDefaultTextView *feedbackView;
     IBOutlet ATPopupSelectorControl *selectorControl;
-@private
-    BOOL nameIsDirtied;
+    IBOutlet UISwitch *screenshotSwitch;
+    IBOutlet UIView *screenshotContainerView;
 }
 @property (nonatomic, retain) ATFeedback *feedback;
 - (id)init;
 - (IBAction)cancelFeedback:(id)sender;
 - (IBAction)nextStep:(id)sender;
+- (IBAction)imageDisclosureTapped:(id)sender;
+- (IBAction)screenshotSwitchToggled:(id)sender;
 @end

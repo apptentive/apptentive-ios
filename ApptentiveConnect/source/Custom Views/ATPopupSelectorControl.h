@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ATFeedback.h"
 
 @class ATPopupSelection;
 @class ATPopupSelectorPopup;
@@ -27,6 +28,6 @@
 @private
 }
 @property (nonatomic, assign) BOOL isSelected;
-- (id)initWithName:(NSString *)name popupImage:(UIImage *)popupImage selectedImage:(UIImage *)selectedImage;
-- (NSString *)name;
+- (id)initWithFeedbackType:(ATFeedbackType)type popupImage:(UIImage *)popupImage selectedImage:(UIImage *)selectedImage;
+- (ATFeedbackType)feedbackType;
 @end

@@ -25,7 +25,7 @@
 @end
 
 @interface ATPopupSelection ()
-@property (nonatomic, retain) NSString *name;
+@property (nonatomic, assign) ATFeedbackType feedbackType;
 @property (nonatomic, retain) UIImage *popupImage;
 @property (nonatomic, retain) UIImage *selectedImage;
 @end
@@ -208,10 +208,10 @@
 
 
 @implementation ATPopupSelection
-@synthesize name, popupImage, selectedImage, isSelected=selected;
-- (id)initWithName:(NSString *)aName popupImage:(UIImage *)aPopupImage selectedImage:(UIImage *)aSelectedImage {
+@synthesize feedbackType, popupImage, selectedImage, isSelected=selected;
+- (id)initWithFeedbackType:(ATFeedbackType)newType popupImage:(UIImage *)aPopupImage selectedImage:(UIImage *)aSelectedImage {
     if ((self = [super init])) {
-        self.name = aName;
+        self.feedbackType = newType;
         self.popupImage = aPopupImage;
         self.selectedImage = aSelectedImage;
     }
@@ -219,7 +219,6 @@
 }
 
 - (void)dealloc {
-    self.name = nil;
     self.popupImage = nil;
     self.selectedImage = nil;
     [super dealloc];
@@ -395,7 +394,7 @@
 - (void)didTapSelection:(id)sender {
     ATPopupSelectionControl *control = (ATPopupSelectionControl *)sender;
     for (ATPopupSelection *sel in selections) {
-        if (![sel.name isEqualToString:control.selection.name]) {
+        if (sel.feedbackType == control.selection.feedbackType) {
             sel.isSelected = NO;
         } else {
             sel.isSelected = YES;

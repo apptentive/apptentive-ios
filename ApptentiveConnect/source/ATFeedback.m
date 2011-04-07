@@ -11,13 +11,18 @@
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <CoreTelephony/CTCarrier.h>
 
-#define kFeedbackCodingVersion 1
+#define kFeedbackCodingVersion 2
+
+@interface ATFeedback (Private)
+- (ATFeedbackType)feedbackTypeFromString:(NSString *)feedbackString;
+- (NSString *)stringForFeedbackType:(ATFeedbackType)feedbackType;
+@end
 
 @implementation ATFeedback
 @synthesize type, text, name, email, phone, screenshot, uuid, model, os_version, carrier, date;
 - (id)init {
     if ((self = [super init])) {
-        self.type = @"feedback"; // TODO
+        self.type = ATFeedbackTypeFeedback;
         self.uuid = [[ATBackend sharedBackend] deviceUUID];
         self.model = [[UIDevice currentDevice] model];
         self.os_version = [NSString stringWithFormat:@"%@ %@", [[UIDevice currentDevice] systemName], [[UIDevice currentDevice] systemVersion]];
@@ -52,8 +57,22 @@
 - (id)initWithCoder:(NSCoder *)coder {
     if ((self = [self init])) {
         int version = [coder decodeIntForKey:@"version"];
-        if (version == kFeedbackCodingVersion) {
-            self.type = [coder decodeObjectForKey:@"type"];
+        if (version == 1) {
+            self.type = [self feedbackTypeFromString:[coder decodeObjectForKey:@"type"]];
+            self.text = [coder decodeObjectForKey:@"text"];
+            self.name = [coder decodeObjectForKey:@"name"];
+            self.email = [coder decodeObjectForKey:@"email"];
+            self.phone = [coder decodeObjectForKey:@"phone"];
+            if ([coder containsValueForKey:@"screenshot"]) {
+                NSData *data = [coder decodeObjectForKey:@"screenshot"];
+                self.screenshot = [UIImage imageWithData:data];
+            }
+            self.uuid = [coder decodeObjectForKey:@"uuid"];
+            self.model = [coder decodeObjectForKey:@"model"];
+            self.os_version = [coder decodeObjectForKey:@"os_version"];
+            self.carrier = [coder decodeObjectForKey:@"carrier"];
+        } else if (version == kFeedbackCodingVersion) {
+            self.type = [coder decodeIntForKey:@"type"];
             self.text = [coder decodeObjectForKey:@"text"];
             self.name = [coder decodeObjectForKey:@"name"];
             self.email = [coder decodeObjectForKey:@"email"];
@@ -79,7 +98,7 @@
 
 - (void)encodeWithCoder:(NSCoder *)coder {
     [coder encodeInt:kFeedbackCodingVersion forKey:@"version"];
-    [coder encodeObject:self.type forKey:@"type"];
+    [coder encodeObject:[self stringForFeedbackType:self.type] forKey:@"type"];
     [coder encodeObject:self.text forKey:@"text"];
     [coder encodeObject:self.name forKey:@"name"];
     [coder encodeObject:self.email forKey:@"email"];
@@ -108,7 +127,7 @@
     if (self.os_version) [d setObject:self.os_version forKey:@"feedback[os_version]"];
     if (self.carrier) [d setObject:self.carrier forKey:@"feedback[carrier]"];
     if (self.text) [d setObject:self.text forKey:@"feedback[feedback]"];
-    [d setObject:self.type forKey:@"feedback[feedback_type]"];
+    [d setObject:[self stringForFeedbackType:self.type] forKey:@"feedback[feedback_type]"];
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"MM/dd/yyyy hh:mma"];
@@ -118,5 +137,40 @@
     [d setObject:dateString forKey:@"feedback[feedback_date]"];
     
     return d;
+}
+@end
+
+
+@implementation ATFeedback (Private)
+- (ATFeedbackType)feedbackTypeFromString:(NSString *)feedbackString {
+    if ([feedbackString isEqualToString:@"feedback"] || [feedbackString isEqualToString:@"suggestion"]) {
+        return ATFeedbackTypeFeedback;
+    } else if ([feedbackString isEqualToString:@"question"]) {
+        return ATFeedbackTypeQuestion;
+    } else if ([feedbackString isEqualToString:@"praise"]) {
+        return ATFeedbackTypePraise;
+    } else if ([feedbackString isEqualToString:@"bug"]) {
+        return ATFeedbackTypeBug;
+    }
+    return ATFeedbackTypeFeedback;
+}
+
+- (NSString *)stringForFeedbackType:(ATFeedbackType)feedbackType {
+    NSString *result = nil;
+    switch (feedbackType) {
+        case ATFeedbackTypeBug:
+            result = @"bug";
+            break;
+        case ATFeedbackTypePraise:
+            result = @"praise";
+            break;
+        case ATFeedbackTypeQuestion:
+            result = @"question";
+        case ATFeedbackTypeFeedback:
+        default:
+            result = @"feedback";
+            break;
+    }
+    return result;
 }
 @end

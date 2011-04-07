@@ -8,11 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum {
+    ATFeedbackTypeFeedback,
+    ATFeedbackTypePraise,
+    ATFeedbackTypeBug,
+    ATFeedbackTypeQuestion
+} ATFeedbackType;
+
 NSString * const ATContactUpdaterFinished;
 
 @interface ATFeedback : NSObject {
 }
-@property (nonatomic, retain) NSString *type;
+@property (nonatomic, assign) ATFeedbackType type;
 @property (nonatomic, retain) NSString *text;
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *email;

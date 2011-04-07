@@ -67,6 +67,10 @@
 		49D112741337CC9F00603373 /* ATTaskQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D112721337CC9F00603373 /* ATTaskQueue.m */; };
 		49D1128E1338050200603373 /* ATContactStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D1128C133804DE00603373 /* ATContactStorage.h */; };
 		49D1128F1338050200603373 /* ATContactStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D1128D133804ED00603373 /* ATContactStorage.m */; };
+		49E8918F134E724F00DD098A /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E8918C134E724F00DD098A /* CoreTelephony.framework */; };
+		49E89190134E724F00DD098A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E8918D134E724F00DD098A /* QuartzCore.framework */; };
+		49E89191134E724F00DD098A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E8918E134E724F00DD098A /* UIKit.framework */; };
+		49E89194134E725F00DD098A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E89193134E725F00DD098A /* CoreGraphics.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -154,6 +158,10 @@
 		49D112721337CC9F00603373 /* ATTaskQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATTaskQueue.m; sourceTree = "<group>"; };
 		49D1128C133804DE00603373 /* ATContactStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATContactStorage.h; sourceTree = "<group>"; };
 		49D1128D133804ED00603373 /* ATContactStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATContactStorage.m; sourceTree = "<group>"; };
+		49E8918C134E724F00DD098A /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		49E8918D134E724F00DD098A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		49E8918E134E724F00DD098A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		49E89193134E725F00DD098A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +181,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49E89194134E725F00DD098A /* CoreGraphics.framework in Frameworks */,
+				49E8918F134E724F00DD098A /* CoreTelephony.framework in Frameworks */,
+				49E89190134E724F00DD098A /* QuartzCore.framework in Frameworks */,
+				49E89191134E724F00DD098A /* UIKit.framework in Frameworks */,
 				496DC38F1333D35600743F65 /* Foundation.framework in Frameworks */,
 				496DC3941333D35600743F65 /* libApptentiveConnect.a in Frameworks */,
 			);
@@ -206,6 +218,10 @@
 		496DC3741333D35600743F65 = {
 			isa = PBXGroup;
 			children = (
+				49E89193134E725F00DD098A /* CoreGraphics.framework */,
+				49E8918C134E724F00DD098A /* CoreTelephony.framework */,
+				49E8918D134E724F00DD098A /* QuartzCore.framework */,
+				49E8918E134E724F00DD098A /* UIKit.framework */,
 				49D1123913359BA000603373 /* ext */,
 				49C00295133413BB0071F088 /* source */,
 				4960E153134A578F00F6311F /* generated */,

@@ -94,6 +94,7 @@
 
 - (IBAction)nextStep:(id)sender {
     // TODO
+    feedback.type = [selectorControl currentSelection].name;
     feedback.name = nameField.text;
     feedback.text = feedbackView.text;
     

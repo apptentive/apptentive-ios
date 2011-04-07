@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+NSString * const ATContactUpdaterFinished;
 
 @interface ATFeedback : NSObject {
 }
@@ -21,6 +22,7 @@
 @property (nonatomic, retain) NSString *model;
 @property (nonatomic, retain) NSString *os_version;
 @property (nonatomic, retain) NSString *carrier;
+@property (nonatomic, retain) NSDate *date;
 
 - (NSDictionary *)dictionary;
 - (NSDictionary *)apiDictionary;

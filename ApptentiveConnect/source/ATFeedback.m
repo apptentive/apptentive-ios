@@ -14,13 +14,14 @@
 #define kFeedbackCodingVersion 1
 
 @implementation ATFeedback
-@synthesize type, text, name, email, phone, screenshot, uuid, model, os_version, carrier;
+@synthesize type, text, name, email, phone, screenshot, uuid, model, os_version, carrier, date;
 - (id)init {
     if ((self = [super init])) {
-        self.type = @"Feedback"; // TODO
+        self.type = @"feedback"; // TODO
         self.uuid = [[ATBackend sharedBackend] deviceUUID];
         self.model = [[UIDevice currentDevice] model];
         self.os_version = [NSString stringWithFormat:@"%@ %@", [[UIDevice currentDevice] systemName], [[UIDevice currentDevice] systemVersion]];
+        self.date = [NSDate date];
         
         if ([CTTelephonyNetworkInfo class]) {
             CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
@@ -44,11 +45,12 @@
     self.model = nil;
     self.os_version = nil;
     self.carrier = nil;
+    self.date = nil;
     [super dealloc];
 }
 
 - (id)initWithCoder:(NSCoder *)coder {
-    if ((self = [super init])) {
+    if ((self = [self init])) {
         int version = [coder decodeIntForKey:@"version"];
         if (version == kFeedbackCodingVersion) {
             self.type = [coder decodeObjectForKey:@"type"];
@@ -64,6 +66,9 @@
             self.model = [coder decodeObjectForKey:@"model"];
             self.os_version = [coder decodeObjectForKey:@"os_version"];
             self.carrier = [coder decodeObjectForKey:@"carrier"];
+            if ([coder containsValueForKey:@"date"]) {
+                self.date = [coder decodeObjectForKey:@"date"];
+            }
         } else {
             [self release];
             return nil;
@@ -86,6 +91,7 @@
     [coder encodeObject:self.model forKey:@"model"];
     [coder encodeObject:self.os_version forKey:@"os_version"];
     [coder encodeObject:self.carrier forKey:@"carrier"];
+    [coder encodeObject:self.date forKey:@"date"];
 }
 
 - (NSDictionary *)dictionary {
@@ -102,15 +108,14 @@
     if (self.os_version) [d setObject:self.os_version forKey:@"feedback[os_version]"];
     if (self.carrier) [d setObject:self.carrier forKey:@"feedback[carrier]"];
     if (self.text) [d setObject:self.text forKey:@"feedback[feedback]"];
-    //TODO: Need to make this a parameter.
-    [d setObject:@"bug" forKey:@"feedback[feedback_type]"];
+    [d setObject:self.type forKey:@"feedback[feedback_type]"];
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"MM/dd/yyyy hh:mma"];
-    NSString *date = [formatter stringFromDate:[NSDate date]];
+    NSString *dateString = [formatter stringFromDate:self.date];
     [formatter release];
     
-    [d setObject:date forKey:@"feedback[feedback_date]"];
+    [d setObject:dateString forKey:@"feedback[feedback_date]"];
     
     return d;
 }

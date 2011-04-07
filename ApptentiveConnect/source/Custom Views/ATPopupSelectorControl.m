@@ -98,7 +98,7 @@
 @implementation ATPopupSelectorControl
 @synthesize selections;
 - (id)initWithSelections:(NSArray *)someSelections {
-    if ((self = [super initWithFrame:CGRectMake(0.0, 0.0, 32.0, 32.0)])) {
+    if ((self = [super initWithFrame:CGRectMake(0.0, 0.0, 32.0, 36.0)])) {
         self.selections = someSelections;
         [self setup];
     }
@@ -306,6 +306,9 @@
     CGFloat leftOffsetX = 8.0;
     CGFloat rightOffsetX = 4.0;
     CGFloat topOffsetY = 0.0;
+    
+    CGFloat selectionBoxCenterAdjustmentY = 2.0;
+    
     CGFloat width = leftOffsetX + rightOffsetX + iconWidth * [selections count] + padding * ([selections count] - 1);
     
     UIImageView *popupBackground = (UIImageView *)[self viewWithTag:kPopupBackgroundImageTag];
@@ -365,7 +368,7 @@
     CGPoint targetCenter = targetView.center;
     CGPoint targetRightCenter = CGPointMake(targetView.frame.origin.x + targetView.frame.size.width, targetCenter.y);
     CGPoint targetRightCenterInSelf = [targetView.superview convertPoint:targetRightCenter toView:self];
-    CGPoint popupOffsetInSelf = CGPointMake(targetRightCenterInSelf.x, targetRightCenterInSelf.y - floorf(viewHeight/2.0));
+    CGPoint popupOffsetInSelf = CGPointMake(targetRightCenterInSelf.x, targetRightCenterInSelf.y - floorf(viewHeight/2.0) + selectionBoxCenterAdjustmentY);
     
     CGRect popupFrame = CGRectMake(popupOffsetInSelf.x, popupOffsetInSelf.y, width, viewHeight);
     popupBackground.frame = popupFrame;

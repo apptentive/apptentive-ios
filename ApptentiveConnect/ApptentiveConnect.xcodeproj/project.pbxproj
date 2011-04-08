@@ -315,7 +315,7 @@
 				49C0029E133413BB0071F088 /* ATFeedback.m */,
 				49D111DB1335847700603373 /* ATUtilities.h */,
 				49D111DC1335847700603373 /* ATUtilities.m */,
-				49E89196134E73A700DD098A /* Contract Pane */,
+				49E89196134E73A700DD098A /* Contact Pane */,
 				49E89195134E739600DD098A /* Feedback Pane */,
 				49B3D964133D843D00B5A5CD /* Custom Views */,
 				49D1124C13368CA800603373 /* Tasks */,
@@ -364,13 +364,13 @@
 			name = "Feedback Pane";
 			sourceTree = "<group>";
 		};
-		49E89196134E73A700DD098A /* Contract Pane */ = {
+		49E89196134E73A700DD098A /* Contact Pane */ = {
 			isa = PBXGroup;
 			children = (
 				49C00299133413BB0071F088 /* ATContactInfoController.h */,
 				49C0029A133413BB0071F088 /* ATContactInfoController.m */,
 			);
-			name = "Contract Pane";
+			name = "Contact Pane";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -75,6 +75,11 @@
     [super viewDidUnload];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [feedbackView becomeFirstResponder];
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     UIDevice *device = [UIDevice currentDevice];
     if ([device userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
@@ -114,6 +119,7 @@
 - (IBAction)imageDisclosureTapped:(id)sender {
     ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithImage:self.feedback.screenshot];
     vc.title = NSLocalizedString(@"Screenshot", @"Title for screenshot view.");
+    [feedbackView resignFirstResponder];
     [self.navigationController pushViewController:vc animated:YES];
     [vc release];
 }

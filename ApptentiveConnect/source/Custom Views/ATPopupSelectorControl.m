@@ -294,6 +294,14 @@
     // Basic idea: view covers entire window, placard points at target view
     // from right hand side.
     
+    // Get underlying view transform relative to window.
+    CGAffineTransform t = targetView.transform;
+    UIView *s = targetView.superview;
+    while (s && s != targetView.window) {
+        t = CGAffineTransformConcat(t, s.transform);
+        s = s.superview;
+    }
+    
     // Cover window with view.
     CGRect viewFrame = targetView.window.bounds;
     self.frame = viewFrame;
@@ -313,7 +321,7 @@
     UIImageView *popupBackground = (UIImageView *)[self viewWithTag:kPopupBackgroundImageTag];
     if (!popupBackground) {
         UIImage *bg = [ATBackend imageNamed:@"at_placard_bg"];
-        bg = [bg stretchableImageWithLeftCapWidth:10.0 topCapHeight:4.0];
+        bg = [bg stretchableImageWithLeftCapWidth:10.0 topCapHeight:0.0];
         popupBackground = [[UIImageView alloc] initWithImage:bg];
         popupBackground.tag = kPopupBackgroundImageTag;
         viewHeight = bg.size.height;
@@ -362,23 +370,24 @@
             [v layoutSubviews];
         }
     }
+    CGFloat rotation = atan2(t.b, t.a);
+    CGAffineTransform tr = CGAffineTransformMakeRotation(rotation);
+    popupBackground.transform = CGAffineTransformIdentity;
     
     // Get the place we should point the placard at.
     CGPoint targetCenter = targetView.center;
     CGPoint targetRightCenter = CGPointMake(targetView.frame.origin.x + targetView.frame.size.width, targetCenter.y);
-    CGPoint targetRightCenterInSelf = [targetView.superview convertPoint:targetRightCenter toView:self];
-    CGPoint popupOffsetInSelf = CGPointMake(targetRightCenterInSelf.x, targetRightCenterInSelf.y - floorf(viewHeight/2.0) + selectionBoxCenterAdjustmentY);
     
-    CGRect popupFrame = CGRectMake(popupOffsetInSelf.x, popupOffsetInSelf.y, width, viewHeight);
-    popupBackground.frame = popupFrame;
+    CGPoint popupCenterInTarget = CGPointMake(targetRightCenter.x + width/2.0, targetRightCenter.y + selectionBoxCenterAdjustmentY);
+    CGPoint popupBackgroundCenter = [targetView.superview convertPoint:popupCenterInTarget toView:self];
+    popupBackground.center = popupBackgroundCenter;
     popupBackground.bounds = CGRectMake(0.0, 0.0, width, viewHeight);
-    
+    popupBackground.transform = tr;
     
     self.backgroundColor = [UIColor clearColor];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    NSLog(@"hayooo");
 }
 
 - (void)didTap:(id)sender {
@@ -386,7 +395,6 @@
     CGPoint location = [tapRecognizer locationInView:self];
     UIView *subview = [self hitTest:location withEvent:nil];
     if ([subview isEqual:self]) {
-        NSLog(@"in subview %@", subview);
         [self hide];
     }
 }

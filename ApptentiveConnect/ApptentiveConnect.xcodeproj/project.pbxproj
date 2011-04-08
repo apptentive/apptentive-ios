@@ -218,10 +218,6 @@
 		496DC3741333D35600743F65 = {
 			isa = PBXGroup;
 			children = (
-				49E89193134E725F00DD098A /* CoreGraphics.framework */,
-				49E8918C134E724F00DD098A /* CoreTelephony.framework */,
-				49E8918D134E724F00DD098A /* QuartzCore.framework */,
-				49E8918E134E724F00DD098A /* UIKit.framework */,
 				49D1123913359BA000603373 /* ext */,
 				49C00295133413BB0071F088 /* source */,
 				4960E153134A578F00F6311F /* generated */,
@@ -245,6 +241,10 @@
 		496DC3811333D35600743F65 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				49E89193134E725F00DD098A /* CoreGraphics.framework */,
+				49E8918C134E724F00DD098A /* CoreTelephony.framework */,
+				49E8918D134E724F00DD098A /* QuartzCore.framework */,
+				49E8918E134E724F00DD098A /* UIKit.framework */,
 				49B3D96E133E6DE700B5A5CD /* CoreTelephony.framework */,
 				49B3D968133E6D6400B5A5CD /* CoreGraphics.framework */,
 				49B3D969133E6D6400B5A5CD /* QuartzCore.framework */,

@@ -76,12 +76,17 @@
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    if (interfaceOrientation == UIInterfaceOrientationPortrait) {
+    UIDevice *device = [UIDevice currentDevice];
+    if ([device userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         return YES;
     } else {
-        return NO;
+        // Not enough space to lay out fields on the iPhone in landscape.
+        if (interfaceOrientation == UIInterfaceOrientationPortrait) {
+            return YES;
+        } else {
+            return NO;
+        }
     }
-    //    return YES;
 }
 
 - (IBAction)screenshotSwitchToggled:(id)sender {
@@ -180,14 +185,36 @@
 - (CGRect)newFeedbackFrameWithNotification:(NSNotification *)notification {
     NSDictionary *userInfo = [notification userInfo];
     
-    CGRect keyboardRect = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    CGRect feedbackRect = [feedbackView.superview convertRect:feedbackView.frame toView:nil];
-    CGRect windowBounds = feedbackView.window.bounds;
-    CGRect screenshotRect = screenshotContainerView.frame;
-    CGFloat newHeight = windowBounds.size.height - keyboardRect.size.height - feedbackRect.origin.y - screenshotRect.size.height;
+    UIWindow *window = feedbackView.window;
+    CGRect newFrame = CGRectZero;
     
-    CGRect newFrame = feedbackView.frame;
-    newFrame.size.height = newHeight;
+    // We want to work with everything relative to the feedbackView.
+    // Let's get keyboard frame in coordinates we can deal with:
+    CGRect keyboardFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue]; // screen
+    CGRect keyboardFrameWindowRelative = [window convertRect:keyboardFrame fromWindow:nil]; // window
+    CGRect keyboardFrameFeedbackRelative = [feedbackView convertRect:keyboardFrameWindowRelative fromView:nil]; // feedbackView
+    // Superview frame.
+    CGRect superviewFrameFeedbackRelative = [feedbackView.superview convertRect:feedbackView.superview.frame toView:feedbackView]; // feedbackView
+    
+    // And, of course, the feedbackView frame.
+    CGRect feedbackViewFrame = [feedbackView.superview convertRect:feedbackView.frame toView:feedbackView]; // feedbackView
+    
+    // Okay, what's the amount of space we have left over for the feedbackView?
+    CGFloat screenshotViewHeight = screenshotContainerView.frame.size.height;
+    
+    CGFloat keyboardOrigin = keyboardFrameFeedbackRelative.origin.y;
+    CGFloat superviewBottom = superviewFrameFeedbackRelative.origin.y + superviewFrameFeedbackRelative.size.height;
+    
+    CGFloat maxYForFeedbackView = MIN(keyboardOrigin, superviewBottom);
+    CGFloat newFeedbackViewHeight = maxYForFeedbackView - screenshotViewHeight;
+    
+    CGRect newFrameFeedbackRelative = CGRectZero;
+    newFrameFeedbackRelative.origin.y = feedbackViewFrame.origin.y;
+    newFrameFeedbackRelative.origin.x = feedbackViewFrame.origin.x;
+    newFrameFeedbackRelative.size.width = feedbackViewFrame.size.width;
+    newFrameFeedbackRelative.size.height = newFeedbackViewHeight;
+    
+    newFrame = [feedbackView.superview convertRect:newFrameFeedbackRelative fromView:feedbackView];
     
     return newFrame;
 }

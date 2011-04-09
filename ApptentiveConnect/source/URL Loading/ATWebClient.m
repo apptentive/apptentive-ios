@@ -54,7 +54,7 @@
 - (void)showAlert {
 	if (self.failed) {
 #if TARGET_OS_IPHONE
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:self.errorTitle message:self.errorMessage delegate:self cancelButtonTitle:NSLocalizedString(@"Close", nil) otherButtonTitles:nil];
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:self.errorTitle message:self.errorMessage delegate:self cancelButtonTitle:ATLocalizedString(@"Close", nil) otherButtonTitles:nil];
 		[alert show];
 		[alert release];
 #endif
@@ -130,14 +130,14 @@
 			break;
 		case 401:
 			self.failed = YES;
-			self.errorTitle = NSLocalizedString(@"Authentication Failed", @"");
-			self.errorMessage = NSLocalizedString(@"Wrong username and/or password.", @"");
+			self.errorTitle = ATLocalizedString(@"Authentication Failed", @"");
+			self.errorMessage = ATLocalizedString(@"Wrong username and/or password.", @"");
 			break;
 		case 304:
 			break;
 		default:
 			self.failed = YES;
-			self.errorTitle = NSLocalizedString(@"Server error.", @"");
+			self.errorTitle = ATLocalizedString(@"Server error.", @"");
 			self.errorMessage = [NSHTTPURLResponse localizedStringForStatusCode:statusCode];
 			break;
 	}
@@ -163,8 +163,8 @@
 			id json = [s JSONValue];
 			if (!json) {
 				self.failed = YES;
-				self.errorTitle = NSLocalizedString(@"Invalid response from server.", @"");
-				self.errorMessage = NSLocalizedString(@"Server did not return properly formatted JSON.", @"");
+				self.errorTitle = ATLocalizedString(@"Invalid response from server.", @"");
+				self.errorMessage = ATLocalizedString(@"Server did not return properly formatted JSON.", @"");
 			}
 			result = json;
 			break;
@@ -183,10 +183,10 @@
 	}
 	self.failed = YES;
 	if (sender.failedAuthentication || sender.statusCode == 401) {
-		self.errorTitle = NSLocalizedString(@"Authentication Failed", @"");
-		self.errorMessage = NSLocalizedString(@"Wrong username and/or password.", @"");
+		self.errorTitle = ATLocalizedString(@"Authentication Failed", @"");
+		self.errorMessage = ATLocalizedString(@"Wrong username and/or password.", @"");
 	} else {
-		self.errorTitle = NSLocalizedString(@"Network Connection Error", @"");
+		self.errorTitle = ATLocalizedString(@"Network Connection Error", @"");
 		self.errorMessage = [sender.connectionError localizedDescription];
 	}
 	if (delegate && action) {

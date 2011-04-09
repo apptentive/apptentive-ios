@@ -71,6 +71,7 @@
 		49E89190134E724F00DD098A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E8918D134E724F00DD098A /* QuartzCore.framework */; };
 		49E89191134E724F00DD098A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E8918E134E724F00DD098A /* UIKit.framework */; };
 		49E89194134E725F00DD098A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E89193134E725F00DD098A /* CoreGraphics.framework */; };
+		49E891D0134FE2AB00DD098A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49E891CD134FE2AB00DD098A /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -162,6 +163,8 @@
 		49E8918D134E724F00DD098A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		49E8918E134E724F00DD098A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		49E89193134E725F00DD098A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		49E891CE134FE2AB00DD098A /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
+		49E891CF134FE2AB00DD098A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -320,6 +323,7 @@
 				49B3D964133D843D00B5A5CD /* Custom Views */,
 				49D1124C13368CA800603373 /* Tasks */,
 				491748B11341176E00A7D11E /* URL Loading */,
+				49E891CC134FE2AA00DD098A /* localization */,
 			);
 			path = source;
 			sourceTree = "<group>";
@@ -372,6 +376,15 @@
 			);
 			name = "Contact Pane";
 			sourceTree = "<group>";
+		};
+		49E891CC134FE2AA00DD098A /* localization */ = {
+			isa = PBXGroup;
+			children = (
+				49E891CD134FE2AB00DD098A /* Localizable.strings */,
+			);
+			name = localization;
+			path = resources/localization;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -450,10 +463,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 49D1119B13341A7C00603373 /* Build configuration list for PBXNativeTarget "ApptentiveResources" */;
 			buildPhases = (
+				49E891C0134FDBC000DD098A /* Localize (Release Only) */,
 				49D1118713341A7C00603373 /* Sources */,
 				49D1118813341A7C00603373 /* Frameworks */,
 				49D1118913341A7C00603373 /* Resources */,
-				49D1118A13341A7C00603373 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -478,6 +491,9 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				English,
+				Spanish,
+				es,
 			);
 			mainGroup = 496DC3741333D35600743F65;
 			productRefGroup = 496DC3801333D35600743F65 /* Products */;
@@ -509,6 +525,7 @@
 				49D111A313341A9D00603373 /* ATFeedbackController.xib in Resources */,
 				49D111A413341A9D00603373 /* ATFeedbackController_iPad.xib in Resources */,
 				4960E154134A578F00F6311F /* generated in Resources */,
+				49E891D0134FE2AB00DD098A /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -528,18 +545,19 @@
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
 		};
-		49D1118A13341A7C00603373 /* ShellScript */ = {
+		49E891C0134FDBC000DD098A /* Localize (Release Only) */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Localize (Release Only)";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"HI\"\n";
+			shellScript = "echo \"Configuration is: ${CONFIGURATION}\"\nif [ \"${CONFIGURATION}\" = 'Release' ]; then\n    echo \"b\"\n    if [ -e \"${PROJECT_DIR}/resources/localization/English.lproj/Localizable.strings\" ]; then\n        echo \"c\"\n        rm \"${PROJECT_DIR}/resources/localization/English.lproj/Localizable.strings\"\n    fi\n    echo \"WTF\"\n    genstrings -s ATLocalizedString -o \"${PROJECT_DIR}/resources/localization/English.lproj\" \"${PROJECT_DIR}/source/\"*.m \"${PROJECT_DIR}/source/\"*/*.m\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -611,6 +629,15 @@
 				49C0028C1334137E0071F088 /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		49E891CD134FE2AB00DD098A /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				49E891CE134FE2AB00DD098A /* English */,
+				49E891CF134FE2AB00DD098A /* es */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

@@ -82,3 +82,12 @@ static ATConnect *sharedConnection = nil;
     return [bundle autorelease];
 }
 @end
+
+NSString *ATLocalizedString(NSString *key, NSString *comment) {
+    static NSBundle *bundle = nil;
+    if (!bundle) {
+        bundle = [[ATConnect resourceBundle] retain];
+    }
+    NSString *result = [bundle localizedStringForKey:key value:key table:nil];
+    return result;
+}

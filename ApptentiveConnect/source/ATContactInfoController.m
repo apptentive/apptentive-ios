@@ -80,7 +80,7 @@
     feedback.phone = phoneField.text;
     [[ATBackend sharedBackend] sendFeedback:feedback];
     ATHUDView *hud = [[ATHUDView alloc] initWithWindow:[[self view] window]];
-    hud.label.text = NSLocalizedString(@"Thanks!", @"Text in thank you display upon submitting feedback.");
+    hud.label.text = ATLocalizedString(@"Thanks!", @"Text in thank you display upon submitting feedback.");
     [hud show];
     [hud autorelease];
     [self dismissModalViewControllerAnimated:YES];
@@ -108,8 +108,8 @@
 }
 
 - (void)setup {
-    self.title = NSLocalizedString(@"Contact Info", @"Title of contact information screen.");
-    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Submit", @"Label of button for submitting feedback.") style:UIBarButtonItemStyleDone target:self action:@selector(nextStep:)] autorelease];
+    self.title = ATLocalizedString(@"Contact Info", @"Title of contact information screen.");
+    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:ATLocalizedString(@"Submit", @"Label of button for submitting feedback.") style:UIBarButtonItemStyleDone target:self action:@selector(nextStep:)] autorelease];
     [self setupFeedback];
     [self setupKeyboardAccessory];
 }

@@ -33,6 +33,7 @@
 		49C0031B1334172F0071F088 /* FeedbackDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C0031A1334172F0071F088 /* FeedbackDemoTests.m */; };
 		49C00333133417790071F088 /* libApptentiveConnect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C00332133417790071F088 /* libApptentiveConnect.a */; };
 		49E8918B134BF69C00DD098A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E8918A134BF69C00DD098A /* QuartzCore.framework */; };
+		49E891D5134FE40200DD098A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49E891D2134FE40200DD098A /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -122,6 +123,8 @@
 		49C00332133417790071F088 /* libApptentiveConnect.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libApptentiveConnect.a; sourceTree = SOURCE_ROOT; };
 		49D111DA13355F4000603373 /* defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = defines.h; sourceTree = "<group>"; };
 		49E8918A134BF69C00DD098A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		49E891D3134FE40200DD098A /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
+		49E891D4134FE40200DD098A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -220,6 +223,7 @@
 		49C002F21334172F0071F088 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				49E891D1134FE40200DD098A /* localization */,
 				4960E1211344326B00F6311F /* art */,
 				49C002F31334172F0071F088 /* FeedbackDemo-Info.plist */,
 				49C002F41334172F0071F088 /* InfoPlist.strings */,
@@ -258,6 +262,15 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
+		};
+		49E891D1134FE40200DD098A /* localization */ = {
+			isa = PBXGroup;
+			children = (
+				49E891D2134FE40200DD098A /* Localizable.strings */,
+			);
+			name = localization;
+			path = resources/localization;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -314,6 +327,8 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				English,
+				es,
 			);
 			mainGroup = 49C002DC1334172E0071F088;
 			productRefGroup = 49C002E81334172E0071F088 /* Products */;
@@ -371,6 +386,7 @@
 				4960E12B1344326B00F6311F /* icon-72x72.png in Resources */,
 				4960E12C1344326B00F6311F /* icon.png in Resources */,
 				4960E139134432F400F6311F /* iTunesArtwork in Resources */,
+				49E891D5134FE40200DD098A /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -474,6 +490,15 @@
 				49C003151334172F0071F088 /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		49E891D2134FE40200DD098A /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				49E891D3134FE40200DD098A /* English */,
+				49E891D4134FE40200DD098A /* es */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

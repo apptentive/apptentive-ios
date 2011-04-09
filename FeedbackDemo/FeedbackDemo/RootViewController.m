@@ -20,7 +20,7 @@
 }
 
 - (void)viewDidLoad {
-    UIBarButtonItem *feedbackButton = [[UIBarButtonItem alloc] initWithTitle:@"Feedback" style:UIBarButtonItemStylePlain target:self action:@selector(showFeedback:)];
+    UIBarButtonItem *feedbackButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Feedback", @"Give feedback button title.") style:UIBarButtonItemStylePlain target:self action:@selector(showFeedback:)];
     self.navigationItem.rightBarButtonItem = feedbackButton;
     [feedbackButton release];
     feedbackButton = nil;

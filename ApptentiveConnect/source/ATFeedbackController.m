@@ -118,7 +118,7 @@
 
 - (IBAction)imageDisclosureTapped:(id)sender {
     ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithImage:self.feedback.screenshot];
-    vc.title = NSLocalizedString(@"Screenshot", @"Title for screenshot view.");
+    vc.title = ATLocalizedString(@"Screenshot", @"Title for screenshot view.");
     [feedbackView resignFirstResponder];
     [self.navigationController pushViewController:vc animated:YES];
     [vc release];
@@ -148,11 +148,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackChanged:) name:UITextViewTextDidChangeNotification object:feedbackView];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contactInfoChanged:) name:ATContactUpdaterFinished object:nil];
-    feedbackView.placeholder = NSLocalizedString(@"Feedback", @"Placeholder text for user feedback field.");
-    self.title = NSLocalizedString(@"Give Feedback", @"Title of feedback screen.");
-    self.navigationItem.backBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Feedback", @"Title of back button which takes user back to feedback screen.") style:UIBarButtonItemStylePlain target:nil action:nil] autorelease];
+    feedbackView.placeholder = ATLocalizedString(@"Feedback", nil);
+    self.title = ATLocalizedString(@"Give Feedback", @"Title of feedback screen.");
+    self.navigationItem.backBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:ATLocalizedString(@"Feedback", nil) style:UIBarButtonItemStylePlain target:nil action:nil] autorelease];
     self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelFeedback:)] autorelease];
-    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Next Step", @"Title of button which takes user from feedback to contact info/screenshot screen.") style:UIBarButtonItemStyleBordered target:self action:@selector(nextStep:)] autorelease];
+    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:ATLocalizedString(@"Next Step", @"Title of button which takes user from feedback to contact info/screenshot screen.") style:UIBarButtonItemStyleBordered target:self action:@selector(nextStep:)] autorelease];
     self.navigationItem.rightBarButtonItem.enabled = NO;
     
     ATPopupSelection *feedbackSelection = [[ATPopupSelection alloc] initWithFeedbackType:ATFeedbackTypeFeedback popupImage:[ATBackend imageNamed:@"at_feedback"] selectedImage:[ATBackend imageNamed:@"at_feedback_selected"]];

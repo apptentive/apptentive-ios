@@ -7,6 +7,7 @@
 //
 
 #import "ATKeyboardAccessoryView.h"
+#import "ATConnect.h"
 #import <QuartzCore/QuartzCore.h>
 
 @implementation ATKeyboardAccessoryView
@@ -32,7 +33,7 @@
         textLabel.textColor = [UIColor colorWithRed:0.57 green:0.77 blue:0.92 alpha:1.0];
         textLabel.shadowColor = [UIColor blackColor];
         textLabel.shadowOffset = CGSizeMake(0.0, 1.0);
-        textLabel.text = NSLocalizedString(@"Powered by Apptentive", @"Keyboard accessory text advertising Apptentive.");
+        textLabel.text = ATLocalizedString(@"Powered by Apptentive", @"Keyboard accessory text advertising Apptentive.");
         [textLabel sizeToFit];
         textLabel.textAlignment = UITextAlignmentCenter;
         

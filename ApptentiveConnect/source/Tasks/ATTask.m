@@ -8,16 +8,19 @@
 
 #import "ATTask.h"
 
-#define kATTaskCodingVersion 1
+#define kATTaskCodingVersion 2
 
 @implementation ATTask
 @synthesize finished;
 @synthesize failed;
+@synthesize failureCount;
 
 - (id)initWithCoder:(NSCoder *)coder {
     if ((self = [super init])) {
         int version = [coder decodeIntForKey:@"version"];
-        if (version == kATTaskCodingVersion) {
+		self.failureCount = 0;
+		if (version >= 2) {
+			self.failureCount = [(NSNumber *)[coder decodeObjectForKey:@"failureCount"] unsignedIntegerValue];
         } else {
             [self release];
             return nil;
@@ -28,6 +31,7 @@
 
 - (void)encodeWithCoder:(NSCoder *)coder {
     [coder encodeInt:kATTaskCodingVersion forKey:@"version"];
+	[coder encodeObject:[NSNumber numberWithUnsignedInteger:self.failureCount] forKey:@"failureCount"];
 }
 
 - (void)start {

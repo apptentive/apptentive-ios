@@ -13,6 +13,7 @@
 }
 @property (nonatomic, assign) BOOL finished;
 @property (nonatomic, assign) BOOL failed;
+@property (nonatomic, assign) NSUInteger failureCount;
 - (void)start;
 - (void)stop;
 @end

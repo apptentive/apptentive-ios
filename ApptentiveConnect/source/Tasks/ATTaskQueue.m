@@ -16,6 +16,8 @@
 //TODO:
 #define kATTaskQueueRetryPeriod 10.0
 
+#define kMaxFailureCount 5
+
 static ATTaskQueue *sharedTaskQueue = nil;
 
 @interface ATTaskQueue (Private)
@@ -120,13 +122,22 @@ static ATTaskQueue *sharedTaskQueue = nil;
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     @synchronized(self) {
         if (object != activeTask) return;
-        if ([keyPath isEqualToString:@"finished"] && [(ATTask *)object finished]) {
+		ATTask *task = (ATTask *)object;
+        if ([keyPath isEqualToString:@"finished"] && [task finished]) {
             [self unsetActiveTask];
             [tasks removeObject:object];
             [self start];
-        } else if ([keyPath isEqualToString:@"failed"] && [(ATTask *)object failed]) {
+        } else if ([keyPath isEqualToString:@"failed"] && [task failed]) {
             [self stop];
-            [self performSelector:@selector(start) withObject:nil afterDelay:kATTaskQueueRetryPeriod];
+			task.failureCount = task.failureCount + 1;
+			if (task.failureCount > kMaxFailureCount) {
+				NSLog(@"Task %@ failed too many times, removing from queue.", task);
+				[self unsetActiveTask];
+				[tasks removeObject:task];
+				[self start];
+			} else {
+				[self performSelector:@selector(start) withObject:nil afterDelay:kATTaskQueueRetryPeriod];
+			}
         }
     }
 }

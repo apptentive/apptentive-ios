@@ -7,6 +7,7 @@
 //
 
 #import "ATHUDView.h"
+#import "ATBackend.h"
 #import "ATConnect.h"
 #import <QuartzCore/QuartzCore.h>
 #import <math.h>
@@ -141,17 +142,8 @@
     label.adjustsFontSizeToFitWidth = YES;
     [self addSubview:label];
     
-    NSString *iconPath = nil;
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    if (scale > 1.0) {
-        iconPath = [[ATConnect resourceBundle] pathForResource:@"at_checkmark@2x" ofType:@"png"];
-    } else {
-        iconPath = [[ATConnect resourceBundle] pathForResource:@"at_checkmark" ofType:@"png"];
-    }
-    UIImage *iconImage = [[UIImage alloc] initWithContentsOfFile:iconPath];
-    icon = [[UIImageView alloc] initWithImage:iconImage];
-    [iconImage release];
-    iconImage = nil;
+    UIImage *iconImage = [ATBackend imageNamed:@"at_checkmark"];
+	icon = [[UIImageView alloc] initWithImage:iconImage];
     icon.backgroundColor = [UIColor clearColor];
     icon.opaque = NO;
     [self addSubview:icon];

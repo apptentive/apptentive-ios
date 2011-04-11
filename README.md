@@ -14,6 +14,18 @@ Sample Application
 The sample application FeedbackDemo demonstrates how to integrate the SDK
 with your application.
 
+
+Required Frameworks (Xcode 3 & 4)
+---------------------------------
+In order to use _ApptentiveConnect_, your project must link against the
+following frameworks:
+
+* CoreGraphics
+* CoreTelephony
+* Foundation
+* QuartzCore
+* UIKit
+
 Project Settings for Xcode 4
 ----------------------------
 In Xcode 4, create a workspace with your application project in it. Then,
@@ -43,6 +55,26 @@ _ATConnect.h_ from _ApptentiveConnect.xcodeproj_ to your app's file list.
 
 That should be it!
 
+Project Settings for Xcode 3
+----------------------------
+Drag the _ApptentiveConnect.xcodeproj_ project to your project in Xcode.
+
+In your build settings for All Configurations for your target, add the following 
+to _Other Linker Flags_:
+
+    -ObjC -all_load
+
+Inspect your application target by selecting the target and pressing _Cmd+I_, then
+in the General settings tab, add _ApptentiveConnect_ and _ApptentiveResources_ as
+direct dependencies.
+
+Now, disclose the contents of the _ApptentiveConnect.xcodeproj_ in Xcode and drag
+_libApptentiveConnect.a_ to your target's _Link Binary With Libraries_ build phase,
+and _ApptentiveResources.bundle_ to your target's _Copy Bundle Resources_ build phase.
+
+Finally, drag _ATConnect.h_ from _ApptentiveConnect.xcodeproj_ to your app's file list.
+
+That should be it!
 
 Using the Library
 -----------------

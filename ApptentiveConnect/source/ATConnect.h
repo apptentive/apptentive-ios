@@ -15,6 +15,7 @@
 }
 @property (nonatomic, retain) NSString *apiKey;
 @property (nonatomic, assign) BOOL showKeyboardAccessory;
+@property (nonatomic, assign) BOOL shouldTakeScreenshot;
 
 + (ATConnect *)sharedConnection;
 

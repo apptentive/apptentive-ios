@@ -16,7 +16,7 @@
 static ATConnect *sharedConnection = nil;
 
 @implementation ATConnect
-@synthesize apiKey, showKeyboardAccessory;
+@synthesize apiKey, showKeyboardAccessory, shouldTakeScreenshot;
 
 + (ATConnect *)sharedConnection {
     @synchronized(self) {
@@ -49,7 +49,10 @@ static ATConnect *sharedConnection = nil;
 }
 
 - (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController {
-    UIImage *screenshot = [ATUtilities imageByTakingScreenshot];
+	UIImage *screenshot = nil;
+	if (self.shouldTakeScreenshot) {
+		screenshot = [ATUtilities imageByTakingScreenshot];
+	}
     ATFeedbackController *vc = [[ATFeedbackController alloc] init];
     vc.feedback = [[[ATFeedback alloc] init] autorelease];
     ATContactStorage *contact = [ATContactStorage sharedContactStorage];

@@ -167,6 +167,10 @@
     [smileySelection release];
     [frownySelection release];
     [questionSelection release];
+	
+	if (self.feedback.screenshot == nil) {
+		screenshotSwitch.on = NO;
+	}
 }
 
 - (void)setupFeedback {

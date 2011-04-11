@@ -98,7 +98,7 @@
 
 - (void)encodeWithCoder:(NSCoder *)coder {
     [coder encodeInt:kFeedbackCodingVersion forKey:@"version"];
-    [coder encodeObject:[self stringForFeedbackType:self.type] forKey:@"type"];
+	[coder encodeInt:self.type forKey:@"type"];
     [coder encodeObject:self.text forKey:@"text"];
     [coder encodeObject:self.name forKey:@"name"];
     [coder encodeObject:self.email forKey:@"email"];
@@ -166,6 +166,7 @@
             break;
         case ATFeedbackTypeQuestion:
             result = @"question";
+			break;
         case ATFeedbackTypeFeedback:
         default:
             result = @"feedback";

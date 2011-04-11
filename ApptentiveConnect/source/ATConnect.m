@@ -30,6 +30,7 @@ static ATConnect *sharedConnection = nil;
 - (id)init {
     if ((self = [super init])) {
         self.showKeyboardAccessory = YES;
+		self.shouldTakeScreenshot = YES;
     }
     return self;
 }

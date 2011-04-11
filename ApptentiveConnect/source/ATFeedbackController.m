@@ -29,6 +29,7 @@
 - (void)keyboardWillHide:(NSNotification *)notification;
 - (void)feedbackChanged:(NSNotification *)notification;
 - (void)contactInfoChanged:(NSNotification *)notification;
+- (void)screenshotChanged:(NSNotification *)notification;
 @end
 
 @implementation ATFeedbackController
@@ -117,7 +118,7 @@
 }
 
 - (IBAction)imageDisclosureTapped:(id)sender {
-    ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithImage:self.feedback.screenshot];
+    ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithFeedback:self.feedback];
     vc.title = ATLocalizedString(@"Screenshot", @"Title for screenshot view.");
     [feedbackView resignFirstResponder];
     [self.navigationController pushViewController:vc animated:YES];
@@ -148,6 +149,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackChanged:) name:UITextViewTextDidChangeNotification object:feedbackView];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contactInfoChanged:) name:ATContactUpdaterFinished object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(screenshotChanged:) name:ATImageViewChoseImage object:nil];
+	
     feedbackView.placeholder = ATLocalizedString(@"Feedback", nil);
     self.title = ATLocalizedString(@"Give Feedback", @"Title of feedback screen.");
     self.navigationItem.backBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:ATLocalizedString(@"Feedback", nil) style:UIBarButtonItemStylePlain target:nil action:nil] autorelease];
@@ -310,6 +313,12 @@
     if (contact.email) {
         feedback.email = contact.email;
     }
+}
+
+- (void)screenshotChanged:(NSNotification *)notification {
+	if (self.feedback.screenshot) {
+		screenshotSwitch.on = YES;
+	} 
 }
 
 - (void)setupKeyboardAccessory {

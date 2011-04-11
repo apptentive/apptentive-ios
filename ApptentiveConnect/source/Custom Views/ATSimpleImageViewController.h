@@ -9,10 +9,14 @@
 #import <UIKit/UIKit.h>
 
 @class ATCenteringImageScrollView;
+@class ATFeedback;
 
-@interface ATSimpleImageViewController : UIViewController <UIScrollViewDelegate> {
+NSString * const ATImageViewChoseImage;
+
+@interface ATSimpleImageViewController : UIViewController <UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate> {
 @private
     ATCenteringImageScrollView *scrollView;
+	ATFeedback *feedback;
 }
-- (id)initWithImage:(UIImage *)image;
+- (id)initWithFeedback:(ATFeedback *)feedback;
 @end

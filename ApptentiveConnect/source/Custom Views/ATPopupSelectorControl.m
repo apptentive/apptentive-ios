@@ -165,7 +165,6 @@
         [popup release];
         popup = nil;
     }
-    NSLog(@"Ayoooo, I'm Galileo!");
 }
 
 - (void)selectionChangedNotification:(NSNotification *)notification {

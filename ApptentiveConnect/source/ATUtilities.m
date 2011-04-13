@@ -9,7 +9,7 @@
 #import "ATUtilities.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define KINDA_EQUALS(a, b) ((fabsf(a - b) < 0.1) || (fabsf(b - a) < 0.1))
+#define KINDA_EQUALS(a, b) (fabs(a - b) < 0.1)
 
 @implementation ATUtilities
 

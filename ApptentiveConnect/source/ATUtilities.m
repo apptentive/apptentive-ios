@@ -9,6 +9,8 @@
 #import "ATUtilities.h"
 #import <QuartzCore/QuartzCore.h>
 
+#define KINDA_EQUALS(a, b) ((fabsf(a - b) < 0.1) || (fabsf(b - a) < 0.1))
+
 @implementation ATUtilities
 
 // From QA1703:
@@ -58,6 +60,66 @@
     return image;
 }
 
++ (UIImage *)imageByRotatingImage:(UIImage *)image byRadians:(CGFloat)radians {
+	UIImage *result = nil;
+	
+	if (KINDA_EQUALS(radians, 0.0) || KINDA_EQUALS(radians, M_PI * 2.0)) {
+		return image;
+	}
+	
+	CGAffineTransform t = CGAffineTransformIdentity;
+	CGSize size = image.size;
+	BOOL onSide = NO;
+	
+	// Upside down, weeeee.
+	if (KINDA_EQUALS(fabsf(radians), M_PI)) {
+		t = CGAffineTransformTranslate(t, size.width, size.height);
+		t = CGAffineTransformRotate(t, M_PI);
+	// Home button on right. Image is rotated right 90 degrees.
+	} else if (KINDA_EQUALS(radians, M_PI * 0.5)) {
+		onSide = YES;
+		size = CGSizeMake(size.height, size.width);
+		t = CGAffineTransformRotate(t, M_PI * 0.5);
+		t = CGAffineTransformScale(t, size.height/size.width, size.width/size.height);
+		t = CGAffineTransformTranslate(t, 0.0, -size.height);
+	// Home button on left. Image is rotated left 90 degrees.
+	} else if (KINDA_EQUALS(radians, -1.0 * M_PI * 0.5)) {
+		onSide = YES;
+		size = CGSizeMake(size.height, size.width);\
+		t = CGAffineTransformRotate(t, -1.0 * M_PI * 0.5);
+		t = CGAffineTransformScale(t, size.height/size.width, size.width/size.height);
+		t = CGAffineTransformTranslate(t, -size.width, 0.0);
+	}
+	
+	UIGraphicsBeginImageContext(size);
+	CGRect r = CGRectMake(0.0, 0.0, size.width, size.height);
+	
+	CGContextRef context = UIGraphicsGetCurrentContext();
+	if (onSide) {
+		CGContextScaleCTM(context, 1.0, -1.0);
+		CGContextTranslateCTM(context, 0.0, -size.height);
+	} else {
+		CGContextScaleCTM(context, 1.0, -1.0);
+		CGContextTranslateCTM(context, 0.0, -size.height);
+	}
+	CGContextConcatCTM(context, t);
+	CGContextDrawImage(context, r, image.CGImage);
+	
+	result = UIGraphicsGetImageFromCurrentImageContext();
+	UIGraphicsEndImageContext();
+	
+	return result;
+}
+
++ (CGFloat)rotationOfViewHierarchyInRadians:(UIView *)leafView {
+	CGAffineTransform t = leafView.transform;
+	UIView *s = leafView.superview;
+	while (s && s != leafView.window) {
+		t = CGAffineTransformConcat(t, s.transform);
+		s = s.superview;
+	}
+	return atan2(t.b, t.a);
+}
 
 + (NSString *)stringByEscapingForURLArguments:(NSString *)string {
     CFStringRef result = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)string, NULL, (CFStringRef)@"%:/?#[]@!$&'()*+,;=", kCFStringEncodingUTF8);

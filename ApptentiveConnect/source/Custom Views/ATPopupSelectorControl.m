@@ -8,6 +8,7 @@
 
 #import "ATPopupSelectorControl.h"
 #import "ATBackend.h"
+#import "ATUtilities.h"
 #import <QuartzCore/QuartzCore.h>
 
 #define kSelectionBackgroundImageTag 32
@@ -294,13 +295,8 @@
     // Basic idea: view covers entire window, placard points at target view
     // from right hand side.
     
-    // Get underlying view transform relative to window.
-    CGAffineTransform t = targetView.transform;
-    UIView *s = targetView.superview;
-    while (s && s != targetView.window) {
-        t = CGAffineTransformConcat(t, s.transform);
-        s = s.superview;
-    }
+    // Get underlying rotation relative to window.
+	CGFloat rotation = [ATUtilities rotationOfViewHierarchyInRadians:targetView];
     
     // Cover window with view.
     CGRect viewFrame = targetView.window.bounds;
@@ -370,7 +366,6 @@
             [v layoutSubviews];
         }
     }
-    CGFloat rotation = atan2(t.b, t.a);
     CGAffineTransform tr = CGAffineTransformMakeRotation(rotation);
     popupBackground.transform = CGAffineTransformIdentity;
     

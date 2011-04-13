@@ -12,6 +12,8 @@
     
 }
 + (UIImage *)imageByTakingScreenshot;
++ (UIImage *)imageByRotatingImage:(UIImage *)image byRadians:(CGFloat)radians;
++ (CGFloat)rotationOfViewHierarchyInRadians:(UIView *)leafView;
 + (NSString *)stringByEscapingForURLArguments:(NSString *)string;
 + (NSString *)randomStringOfLength:(NSUInteger)length;
 @end

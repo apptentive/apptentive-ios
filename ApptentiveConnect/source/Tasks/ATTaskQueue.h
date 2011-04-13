@@ -21,6 +21,7 @@
 + (void)releaseSharedTaskQueue;
 
 - (void)addTask:(ATTask *)task;
+- (NSUInteger)count;
 - (void)start;
 - (void)stop;
 

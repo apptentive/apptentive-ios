@@ -24,6 +24,7 @@ following frameworks:
 * CoreTelephony
 * Foundation
 * QuartzCore
+* SystemConfiguration
 * UIKit
 
 Project Settings for Xcode 4

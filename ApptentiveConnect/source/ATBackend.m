@@ -12,6 +12,7 @@
 #import "ATContactUpdater.h"
 #import "ATFeedback.h"
 #import "ATFeedbackTask.h"
+#import "ATReachability.h"
 #import "ATTaskQueue.h"
 
 static ATBackend *sharedBackend = nil;
@@ -19,6 +20,7 @@ static ATBackend *sharedBackend = nil;
 @interface ATBackend (Private)
 - (void)setup;
 - (void)teardown;
+- (void)networkStatusChanged:(NSNotification *)notification;
 - (void)stopWorking:(NSNotification *)notification;
 - (void)startWorking:(NSNotification *)notification;
 - (void)contactUpdaterFinished:(NSNotification *)notification;
@@ -148,6 +150,7 @@ static ATBackend *sharedBackend = nil;
         working = newWorking;
         if (working) {
             [[ATTaskQueue sharedTaskQueue] start];
+			
             if (!userDataWasUpdated) {
                 [self updateUserData];
             }
@@ -171,6 +174,9 @@ static ATBackend *sharedBackend = nil;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWorking:) name:UIApplicationWillEnterForegroundNotification object:nil];
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contactUpdaterFinished:) name:ATContactUpdaterFinished object:nil];
+	
+	[ATReachability sharedReachability];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusChanged:) name:ATReachabilityStatusChanged object:nil];
 }
 
 - (void)teardown {
@@ -182,6 +188,15 @@ static ATBackend *sharedBackend = nil;
 }
 
 #pragma mark Notification Handling
+- (void)networkStatusChanged:(NSNotification *)notification {
+	ATNetworkStatus status = [[ATReachability sharedReachability] currentNetworkStatus];
+	if (status == ATNetworkNotReachable) {
+		self.working = NO;
+	} else if ([[ATTaskQueue sharedTaskQueue] count]) {
+		self.working = YES;
+	}
+}
+
 - (void)stopWorking:(NSNotification *)notification {
     self.working = NO;
 }

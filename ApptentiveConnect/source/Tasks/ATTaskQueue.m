@@ -14,9 +14,9 @@
 // Retry period in seconds.
 //!!! Increase for production.
 //TODO:
-#define kATTaskQueueRetryPeriod 10.0
+#define kATTaskQueueRetryPeriod 60.0
 
-#define kMaxFailureCount 5
+#define kMaxFailureCount 500
 
 static ATTaskQueue *sharedTaskQueue = nil;
 
@@ -99,6 +99,14 @@ static ATTaskQueue *sharedTaskQueue = nil;
     [self start];
 }
 
+- (NSUInteger)count {
+	NSUInteger count = 0;
+	@synchronized(self) {
+		count = [tasks count];
+	}
+	return count;
+}
+
 - (void)start {
     @synchronized(self) {
         if (activeTask) return;
@@ -136,6 +144,12 @@ static ATTaskQueue *sharedTaskQueue = nil;
 				[tasks removeObject:task];
 				[self start];
 			} else {
+				// Put task on back of queue.
+				[task retain];
+				[tasks removeObject:task];
+				[tasks addObject:task];
+				[task release];
+				
 				[self performSelector:@selector(start) withObject:nil afterDelay:kATTaskQueueRetryPeriod];
 			}
         }

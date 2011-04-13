@@ -21,6 +21,9 @@
 		491748BF1341177000A7D11E /* ATURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 491748B71341177000A7D11E /* ATURLConnection.m */; };
 		491748C01341177000A7D11E /* ATWebClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 491748B81341177000A7D11E /* ATWebClient.h */; };
 		491748C11341177000A7D11E /* ATWebClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 491748B91341177000A7D11E /* ATWebClient.m */; };
+		49509A61135658E200793EEC /* ATReachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 49509A5F135658E200793EEC /* ATReachability.h */; };
+		49509A62135658E200793EEC /* ATReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 49509A60135658E200793EEC /* ATReachability.m */; };
+		49509A6C1356596F00793EEC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49509A6B1356596F00793EEC /* SystemConfiguration.framework */; };
 		4960E141134A4FAD00F6311F /* ATPopupSelectorControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 4960E13F134A4FAD00F6311F /* ATPopupSelectorControl.h */; };
 		4960E142134A4FAD00F6311F /* ATPopupSelectorControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 4960E140134A4FAD00F6311F /* ATPopupSelectorControl.m */; };
 		4960E154134A578F00F6311F /* generated in Resources */ = {isa = PBXBuildFile; fileRef = 4960E153134A578F00F6311F /* generated */; };
@@ -67,10 +70,6 @@
 		49D112741337CC9F00603373 /* ATTaskQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D112721337CC9F00603373 /* ATTaskQueue.m */; };
 		49D1128E1338050200603373 /* ATContactStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D1128C133804DE00603373 /* ATContactStorage.h */; };
 		49D1128F1338050200603373 /* ATContactStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D1128D133804ED00603373 /* ATContactStorage.m */; };
-		49E8918F134E724F00DD098A /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E8918C134E724F00DD098A /* CoreTelephony.framework */; };
-		49E89190134E724F00DD098A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E8918D134E724F00DD098A /* QuartzCore.framework */; };
-		49E89191134E724F00DD098A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E8918E134E724F00DD098A /* UIKit.framework */; };
-		49E89194134E725F00DD098A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E89193134E725F00DD098A /* CoreGraphics.framework */; };
 		49E891D0134FE2AB00DD098A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49E891CD134FE2AB00DD098A /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
@@ -106,6 +105,9 @@
 		491748B71341177000A7D11E /* ATURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATURLConnection.m; sourceTree = "<group>"; };
 		491748B81341177000A7D11E /* ATWebClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATWebClient.h; sourceTree = "<group>"; };
 		491748B91341177000A7D11E /* ATWebClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATWebClient.m; sourceTree = "<group>"; };
+		49509A5F135658E200793EEC /* ATReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATReachability.h; path = Reachability/ATReachability.h; sourceTree = "<group>"; };
+		49509A60135658E200793EEC /* ATReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATReachability.m; path = Reachability/ATReachability.m; sourceTree = "<group>"; };
+		49509A6B1356596F00793EEC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		4960E13F134A4FAD00F6311F /* ATPopupSelectorControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATPopupSelectorControl.h; sourceTree = "<group>"; };
 		4960E140134A4FAD00F6311F /* ATPopupSelectorControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATPopupSelectorControl.m; sourceTree = "<group>"; };
 		4960E153134A578F00F6311F /* generated */ = {isa = PBXFileReference; lastKnownFileType = folder; name = generated; path = art/generated; sourceTree = SOURCE_ROOT; };
@@ -142,8 +144,6 @@
 		49C0029E133413BB0071F088 /* ATFeedback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATFeedback.m; sourceTree = "<group>"; };
 		49C0029F133413BB0071F088 /* ATFeedbackController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATFeedbackController.h; sourceTree = "<group>"; };
 		49C002A0133413BB0071F088 /* ATFeedbackController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATFeedbackController.m; sourceTree = "<group>"; };
-		49C0034B1334195D0071F088 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		49C0034C1334195D0071F088 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		49D1118C13341A7C00603373 /* ApptentiveResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApptentiveResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		49D111DB1335847700603373 /* ATUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATUtilities.h; sourceTree = "<group>"; };
 		49D111DC1335847700603373 /* ATUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATUtilities.m; sourceTree = "<group>"; };
@@ -159,10 +159,6 @@
 		49D112721337CC9F00603373 /* ATTaskQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATTaskQueue.m; sourceTree = "<group>"; };
 		49D1128C133804DE00603373 /* ATContactStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATContactStorage.h; sourceTree = "<group>"; };
 		49D1128D133804ED00603373 /* ATContactStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATContactStorage.m; sourceTree = "<group>"; };
-		49E8918C134E724F00DD098A /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
-		49E8918D134E724F00DD098A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		49E8918E134E724F00DD098A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		49E89193134E725F00DD098A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		49E891CE134FE2AB00DD098A /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		49E891CF134FE2AB00DD098A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -177,6 +173,7 @@
 				49B3D96C133E6D6400B5A5CD /* QuartzCore.framework in Frameworks */,
 				49B3D96D133E6D6400B5A5CD /* UIKit.framework in Frameworks */,
 				496DC3831333D35600743F65 /* Foundation.framework in Frameworks */,
+				49509A6C1356596F00793EEC /* SystemConfiguration.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,10 +181,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49E89194134E725F00DD098A /* CoreGraphics.framework in Frameworks */,
-				49E8918F134E724F00DD098A /* CoreTelephony.framework in Frameworks */,
-				49E89190134E724F00DD098A /* QuartzCore.framework in Frameworks */,
-				49E89191134E724F00DD098A /* UIKit.framework in Frameworks */,
 				496DC38F1333D35600743F65 /* Foundation.framework in Frameworks */,
 				496DC3941333D35600743F65 /* libApptentiveConnect.a in Frameworks */,
 			);
@@ -218,6 +211,15 @@
 			path = "URL Loading";
 			sourceTree = "<group>";
 		};
+		49509A5E135658CD00793EEC /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				49509A5F135658E200793EEC /* ATReachability.h */,
+				49509A60135658E200793EEC /* ATReachability.m */,
+			);
+			name = Reachability;
+			sourceTree = "<group>";
+		};
 		496DC3741333D35600743F65 = {
 			isa = PBXGroup;
 			children = (
@@ -244,16 +246,12 @@
 		496DC3811333D35600743F65 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				49E89193134E725F00DD098A /* CoreGraphics.framework */,
-				49E8918C134E724F00DD098A /* CoreTelephony.framework */,
-				49E8918D134E724F00DD098A /* QuartzCore.framework */,
-				49E8918E134E724F00DD098A /* UIKit.framework */,
-				49B3D96E133E6DE700B5A5CD /* CoreTelephony.framework */,
 				49B3D968133E6D6400B5A5CD /* CoreGraphics.framework */,
-				49B3D969133E6D6400B5A5CD /* QuartzCore.framework */,
-				49B3D96A133E6D6400B5A5CD /* UIKit.framework */,
+				49B3D96E133E6DE700B5A5CD /* CoreTelephony.framework */,
 				496DC3821333D35600743F65 /* Foundation.framework */,
-				49C003491334195D0071F088 /* Other Frameworks */,
+				49B3D969133E6D6400B5A5CD /* QuartzCore.framework */,
+				49509A6B1356596F00793EEC /* SystemConfiguration.framework */,
+				49B3D96A133E6D6400B5A5CD /* UIKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -301,6 +299,7 @@
 		49C00295133413BB0071F088 /* source */ = {
 			isa = PBXGroup;
 			children = (
+				49509A5E135658CD00793EEC /* Reachability */,
 				49C00296133413BB0071F088 /* ApptentiveConnect-Prefix.pch */,
 				49C00297133413BB0071F088 /* ATConnect.h */,
 				49C00298133413BB0071F088 /* ATConnect.m */,
@@ -326,15 +325,6 @@
 				49E891CC134FE2AA00DD098A /* localization */,
 			);
 			path = source;
-			sourceTree = "<group>";
-		};
-		49C003491334195D0071F088 /* Other Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				49C0034B1334195D0071F088 /* CoreData.framework */,
-				49C0034C1334195D0071F088 /* Foundation.framework */,
-			);
-			name = "Other Frameworks";
 			sourceTree = "<group>";
 		};
 		49D1123913359BA000603373 /* ext */ = {
@@ -416,6 +406,7 @@
 				491748BE1341177000A7D11E /* ATURLConnection.h in Headers */,
 				491748C01341177000A7D11E /* ATWebClient.h in Headers */,
 				4960E141134A4FAD00F6311F /* ATPopupSelectorControl.h in Headers */,
+				49509A61135658E200793EEC /* ATReachability.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -588,6 +579,7 @@
 				491748BF1341177000A7D11E /* ATURLConnection.m in Sources */,
 				491748C11341177000A7D11E /* ATWebClient.m in Sources */,
 				4960E142134A4FAD00F6311F /* ATPopupSelectorControl.m in Sources */,
+				49509A62135658E200793EEC /* ATReachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

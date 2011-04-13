@@ -78,17 +78,34 @@ That should be it!
 
 Using the Library
 -----------------
+
+_ApptentiveConnect_ queues feedback and attempts to upload in the background. This
+is intended to provide as quick a mechanism for submitting feedback as possible.
+
+In order for queued/interrupted feedback uploads to continue uploading, we 
+recommending instantiating _ATConnect_ and setting the API key at application
+startup, like:
+
+    #include "ATConnect.h"
+    …
+    - (void)applicationDidFinishLaunching:(UIApplication *)application … {
+        ATConnect *connection = [ATConnect sharedConnection];
+        connection.apiKey = kApptentiveAPIKey;
+        …
+    }
+
+Where _kApptentiveAPIKey_ is an _NSString_ containing your API key. As soon
+as you set the API key on the shared connection object, any queued feedback
+will start to upload, pending network availability. You also should not have
+to set the API key again on the shared connection object.
+
 Now, you can show the Apptentive feedback UI from a _UIViewController_ with:
 
     #include "ATConnect.h"
     …
     
     ATConnect *connection = [ATConnect sharedConnection];
-    connection.apiKey = kApptentiveAPIKey;
-    
     [connection presentFeedbackControllerFromViewController:self];
-
-Where _kApptentiveAPIKey_ is an _NSString_ containing your API key.
     
 Easy!
 

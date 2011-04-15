@@ -77,8 +77,9 @@ static ATContactStorage *sharedContactStorage = nil;
             break;
         }
         
-        NSTimeInterval interval = [modificationDate timeIntervalSince1970];
-        if (interval > kATContactStorageUpdateInterval) {
+        NSTimeInterval interval = [modificationDate timeIntervalSinceNow];
+		
+        if (interval <= -kATContactStorageUpdateInterval) {
             result = YES;
         }
     } while (NO);

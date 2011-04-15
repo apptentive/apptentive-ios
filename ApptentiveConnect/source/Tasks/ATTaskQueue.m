@@ -23,6 +23,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 @interface ATTaskQueue (Private)
 - (void)setup;
 - (void)teardown;
+- (void)archive;
 - (void)unsetActiveTask;
 @end
 
@@ -54,7 +55,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 + (void)releaseSharedTaskQueue {
     @synchronized(self) {
         if (sharedTaskQueue != nil) {
-            [NSKeyedArchiver archiveRootObject:sharedTaskQueue toFile:[ATTaskQueue taskQueuePath]];
+            [sharedTaskQueue archive];
             [sharedTaskQueue release];
             sharedTaskQueue = nil;
         }
@@ -95,6 +96,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 - (void)addTask:(ATTask *)task {
     @synchronized(self) {
         [tasks addObject:task];
+        [self archive];
     }
     [self start];
 }
@@ -134,6 +136,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
         if ([keyPath isEqualToString:@"finished"] && [task finished]) {
             [self unsetActiveTask];
             [tasks removeObject:object];
+            [self archive];
             [self start];
         } else if ([keyPath isEqualToString:@"failed"] && [task failed]) {
             [self stop];
@@ -149,6 +152,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 				[tasks removeObject:task];
 				[tasks addObject:task];
 				[task release];
+                [self archive];
 				
 				[self performSelector:@selector(start) withObject:nil afterDelay:kATTaskQueueRetryPeriod];
 			}
@@ -180,6 +184,12 @@ static ATTaskQueue *sharedTaskQueue = nil;
             [activeTask removeObserver:self forKeyPath:@"failed"];
             activeTask = nil;
         }
+    }
+}
+
+- (void)archive {
+    @synchronized(self) {
+        [NSKeyedArchiver archiveRootObject:sharedTaskQueue toFile:[ATTaskQueue taskQueuePath]];
     }
 }
 @end

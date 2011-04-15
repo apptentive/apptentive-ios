@@ -151,7 +151,7 @@ static ATBackend *sharedBackend = nil;
         if (working) {
             [[ATTaskQueue sharedTaskQueue] start];
 			
-            if (!userDataWasUpdated) {
+			if ([[ATContactStorage sharedContactStorage] shouldCheckForUpdate] && !userDataWasUpdated) {
                 [self updateUserData];
             }
         } else {

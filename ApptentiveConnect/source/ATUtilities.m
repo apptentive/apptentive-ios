@@ -28,10 +28,8 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     // Iterate over every window from back to front
-    for (UIWindow *window in [[UIApplication sharedApplication] windows]) 
-    {
-        if (![window respondsToSelector:@selector(screen)] || [window screen] == [UIScreen mainScreen])
-        {
+    for (UIWindow *window in [[UIApplication sharedApplication] windows])  {
+        if (![window respondsToSelector:@selector(screen)] || [window screen] == [UIScreen mainScreen]) {
             CGRect applicationFrame = [[UIScreen mainScreen] applicationFrame];
             // -renderInContext: renders in the coordinate space of the layer,
             // so we must first apply the layer's geometry to the graphics context
@@ -61,64 +59,64 @@
 }
 
 + (UIImage *)imageByRotatingImage:(UIImage *)image byRadians:(CGFloat)radians {
-	UIImage *result = nil;
-	
-	if (KINDA_EQUALS(radians, 0.0) || KINDA_EQUALS(radians, M_PI * 2.0)) {
-		return image;
-	}
-	
-	CGAffineTransform t = CGAffineTransformIdentity;
-	CGSize size = image.size;
-	BOOL onSide = NO;
-	
-	// Upside down, weeeee.
-	if (KINDA_EQUALS(fabsf(radians), M_PI)) {
-		t = CGAffineTransformTranslate(t, size.width, size.height);
-		t = CGAffineTransformRotate(t, M_PI);
-	// Home button on right. Image is rotated right 90 degrees.
-	} else if (KINDA_EQUALS(radians, M_PI * 0.5)) {
-		onSide = YES;
-		size = CGSizeMake(size.height, size.width);
-		t = CGAffineTransformRotate(t, M_PI * 0.5);
-		t = CGAffineTransformScale(t, size.height/size.width, size.width/size.height);
-		t = CGAffineTransformTranslate(t, 0.0, -size.height);
-	// Home button on left. Image is rotated left 90 degrees.
-	} else if (KINDA_EQUALS(radians, -1.0 * M_PI * 0.5)) {
-		onSide = YES;
-		size = CGSizeMake(size.height, size.width);\
-		t = CGAffineTransformRotate(t, -1.0 * M_PI * 0.5);
-		t = CGAffineTransformScale(t, size.height/size.width, size.width/size.height);
-		t = CGAffineTransformTranslate(t, -size.width, 0.0);
-	}
-	
-	UIGraphicsBeginImageContext(size);
-	CGRect r = CGRectMake(0.0, 0.0, size.width, size.height);
-	
-	CGContextRef context = UIGraphicsGetCurrentContext();
-	if (onSide) {
-		CGContextScaleCTM(context, 1.0, -1.0);
-		CGContextTranslateCTM(context, 0.0, -size.height);
-	} else {
-		CGContextScaleCTM(context, 1.0, -1.0);
-		CGContextTranslateCTM(context, 0.0, -size.height);
-	}
-	CGContextConcatCTM(context, t);
-	CGContextDrawImage(context, r, image.CGImage);
-	
-	result = UIGraphicsGetImageFromCurrentImageContext();
-	UIGraphicsEndImageContext();
-	
-	return result;
+    UIImage *result = nil;
+    
+    if (KINDA_EQUALS(radians, 0.0) || KINDA_EQUALS(radians, M_PI * 2.0)) {
+        return image;
+    }
+    
+    CGAffineTransform t = CGAffineTransformIdentity;
+    CGSize size = image.size;
+    BOOL onSide = NO;
+    
+    // Upside down, weeeee.
+    if (KINDA_EQUALS(fabsf(radians), M_PI)) {
+        t = CGAffineTransformTranslate(t, size.width, size.height);
+        t = CGAffineTransformRotate(t, M_PI);
+    // Home button on right. Image is rotated right 90 degrees.
+    } else if (KINDA_EQUALS(radians, M_PI * 0.5)) {
+        onSide = YES;
+        size = CGSizeMake(size.height, size.width);
+        t = CGAffineTransformRotate(t, M_PI * 0.5);
+        t = CGAffineTransformScale(t, size.height/size.width, size.width/size.height);
+        t = CGAffineTransformTranslate(t, 0.0, -size.height);
+    // Home button on left. Image is rotated left 90 degrees.
+    } else if (KINDA_EQUALS(radians, -1.0 * M_PI * 0.5)) {
+        onSide = YES;
+        size = CGSizeMake(size.height, size.width);\
+        t = CGAffineTransformRotate(t, -1.0 * M_PI * 0.5);
+        t = CGAffineTransformScale(t, size.height/size.width, size.width/size.height);
+        t = CGAffineTransformTranslate(t, -size.width, 0.0);
+    }
+    
+    UIGraphicsBeginImageContext(size);
+    CGRect r = CGRectMake(0.0, 0.0, size.width, size.height);
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    if (onSide) {
+        CGContextScaleCTM(context, 1.0, -1.0);
+        CGContextTranslateCTM(context, 0.0, -size.height);
+    } else {
+        CGContextScaleCTM(context, 1.0, -1.0);
+        CGContextTranslateCTM(context, 0.0, -size.height);
+    }
+    CGContextConcatCTM(context, t);
+    CGContextDrawImage(context, r, image.CGImage);
+    
+    result = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return result;
 }
 
 + (CGFloat)rotationOfViewHierarchyInRadians:(UIView *)leafView {
-	CGAffineTransform t = leafView.transform;
-	UIView *s = leafView.superview;
-	while (s && s != leafView.window) {
-		t = CGAffineTransformConcat(t, s.transform);
-		s = s.superview;
-	}
-	return atan2(t.b, t.a);
+    CGAffineTransform t = leafView.transform;
+    UIView *s = leafView.superview;
+    while (s && s != leafView.window) {
+        t = CGAffineTransformConcat(t, s.transform);
+        s = s.superview;
+    }
+    return atan2(t.b, t.a);
 }
 
 + (NSString *)stringByEscapingForURLArguments:(NSString *)string {
@@ -135,4 +133,41 @@
     }
     return result;
 }
+
++ (CGAffineTransform)viewTransformInWindow:(UIWindow *)window {
+    CGAffineTransform result = CGAffineTransformIdentity;
+    do { // once
+        if (!window) break;
+        
+        if ([[window rootViewController] view]) {
+            CGFloat rotation = [ATUtilities rotationOfViewHierarchyInRadians:[[window rootViewController] view]];
+            result = CGAffineTransformMakeRotation(rotation);
+            break;
+        }
+        
+        if ([[window subviews] count]) {
+            for (UIView *v in [window subviews]) {
+                if (!CGAffineTransformIsIdentity(v.transform)) {
+                    result = v.transform;
+                    break;
+                }
+            }
+        }
+    } while (NO);
+    return result;
+}
 @end
+
+
+extern CGRect ATCGRectOfEvenSize(CGRect inRect) {
+    CGRect result = CGRectMake(floor(inRect.origin.x), floor(inRect.origin.y), ceil(inRect.size.width), ceil(inRect.size.height));
+    
+    if (fmod(result.size.width, 2.0) != 0.0) {
+        result.size.width += 1.0;
+    }
+    if (fmod(result.size.height, 2.0) != 0.0) {
+        result.size.height += 1.0;
+    }
+    
+    return result;
+}

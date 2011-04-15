@@ -12,9 +12,9 @@ typedef enum {
     ATHUDCheckmark
 } ATHUDMarkType;
 
-@interface ATHUDView : UIView {
+@interface ATHUDView : UIWindow {
 @private
-    UIView *parentView;
+    UIWindow *parentWindow;
     UIImageView *icon;
 }
 @property (nonatomic, readonly) UILabel *label;

@@ -18,4 +18,8 @@
 + (CGFloat)rotationOfViewHierarchyInRadians:(UIView *)leafView;
 + (NSString *)stringByEscapingForURLArguments:(NSString *)string;
 + (NSString *)randomStringOfLength:(NSUInteger)length;
++ (CGAffineTransform)viewTransformInWindow:(UIWindow *)window;
 @end
+
+CGRect ATCGRectOfEvenSize(CGRect inRect);
+

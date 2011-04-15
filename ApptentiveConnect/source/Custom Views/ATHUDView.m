@@ -9,6 +9,7 @@
 #import "ATHUDView.h"
 #import "ATBackend.h"
 #import "ATConnect.h"
+#import "ATUtilities.h"
 #import <QuartzCore/QuartzCore.h>
 #import <math.h>
 
@@ -26,8 +27,8 @@
 
 - (id)initWithWindow:(UIWindow *)window {
     if ((self = [super initWithFrame:CGRectMake(0.0, 0.0, 100.0, 100.0)])) {
+        parentWindow = window;
         [self setup];
-        parentView = window;
     }
     return self;
 }
@@ -46,54 +47,40 @@
     [label sizeToFit];
     
     CGFloat labelTopPadding = 2.0;
-    if (NO) {
-        CGRect b = self.frame;
-        b.size = self.size;
-        self.frame = b;
-        
-        // Inset everything by the corner radius.
-        CGRect insetRect = CGRectInset(self.bounds, self.cornerRadius, self.cornerRadius);
-        CGRect iconRect = insetRect;
-        iconRect.size.height -= (label.bounds.size.height + labelTopPadding);
-        
-        CGRect labelRect = label.bounds;
-        labelRect.size.width = insetRect.size.width;
-        labelRect.origin.x = iconRect.origin.x;
-        labelRect.origin.y = iconRect.origin.y + iconRect.size.height + labelTopPadding;
-        
-        label.frame = labelRect;
-        icon.frame = iconRect;
-    } else {
-        CGSize imageSize = icon.image.size;
-        [label sizeToFit];
-        CGSize labelSize = [label sizeThatFits:CGSizeMake(200.0, label.bounds.size.height)];
-        
-        CGRect imageRect = CGRectMake(0.0, 0.0, imageSize.width, imageSize.height);
-        CGRect labelRect = CGRectMake(0.0, imageSize.height + labelTopPadding, labelSize.width, labelSize.height);
-        CGRect allRect = CGRectUnion(imageRect, labelRect);
-        CGRect insetAllRect = CGRectStandardize(CGRectInset(allRect, -1.0*self.cornerRadius, -1.0*self.cornerRadius));
-        CGFloat squareLength = MAX(insetAllRect.size.width, insetAllRect.size.height);
-        insetAllRect.size.width = squareLength;
-        insetAllRect.size.height = squareLength;
-        
-        
-        // Center imageRect.
-        CGRect finalImageRect = imageRect;
-        if (finalImageRect.size.width < insetAllRect.size.width) {
-            finalImageRect.origin.x += floorf((insetAllRect.size.width - imageRect.size.width)/2.0);
-        }
-        
-        // Center labelRect.
-        CGRect finalLabelRect = labelRect;
-        if (finalLabelRect.size.width < insetAllRect.size.width) {
-            finalLabelRect.origin.x += floorf((insetAllRect.size.width - finalLabelRect.size.width)/2.0);
-        }
-        
-        self.frame = insetAllRect;
-        self.center = parentView.center;
-        label.frame = finalLabelRect;
-        icon.frame = finalImageRect;
+    CGSize imageSize = icon.image.size;
+    [label sizeToFit];
+    CGSize labelSize = [label sizeThatFits:CGSizeMake(200.0, label.bounds.size.height)];
+    
+    CGRect imageRect = CGRectMake(0.0, 0.0, imageSize.width, imageSize.height);
+    CGRect labelRect = CGRectMake(0.0, imageSize.height + labelTopPadding, labelSize.width, labelSize.height);
+    
+    CGRect allRect = CGRectUnion(imageRect, labelRect);
+    CGFloat squareLength = MAX(allRect.size.width, allRect.size.height);
+    squareLength = ceil(squareLength + 2.0*self.cornerRadius);
+    
+    CGRect insetAllRect = CGRectMake(0.0, 0.0, squareLength, squareLength);
+    insetAllRect.size.width = squareLength;
+    insetAllRect.size.height = squareLength;
+    insetAllRect = ATCGRectOfEvenSize(insetAllRect);
+    
+    // Center imageRect.
+    CGRect finalImageRect = imageRect;
+    finalImageRect.origin.y += self.cornerRadius;
+    if (finalImageRect.size.width < insetAllRect.size.width) {
+        finalImageRect.origin.x += floorf((insetAllRect.size.width - imageRect.size.width)/2.0);
     }
+    
+    // Center labelRect.
+    CGRect finalLabelRect = labelRect;
+    finalLabelRect.origin.y += self.cornerRadius;
+    if (finalLabelRect.size.width < insetAllRect.size.width) {
+        finalLabelRect.origin.x += floorf((insetAllRect.size.width - finalLabelRect.size.width)/2.0);
+    }
+    
+    self.bounds = CGRectIntegral(insetAllRect);
+    self.center = CGPointMake(floorf(parentWindow.center.x), floorf(parentWindow.center.y));
+    label.frame = CGRectIntegral(finalLabelRect);
+	icon.frame = CGRectIntegral(finalImageRect);
 }
 
 - (void)show {
@@ -113,13 +100,13 @@
     CGContextSetGrayFillColor(context, 0.0, 0.8);
     
     
-	CGContextBeginPath(context);
-	CGContextMoveToPoint(context, CGRectGetMinX(roundRect) + radius, CGRectGetMinY(roundRect));
-	CGContextAddArc(context, CGRectGetMaxX(roundRect) - radius, CGRectGetMinY(roundRect) + radius, radius, 3 * M_PI / 2, 0, 0);
-	CGContextAddArc(context, CGRectGetMaxX(roundRect) - radius, CGRectGetMaxY(roundRect) - radius, radius, 0, M_PI / 2, 0);
-	CGContextAddArc(context, CGRectGetMinX(roundRect) + radius, CGRectGetMaxY(roundRect) - radius, radius, M_PI / 2, M_PI, 0);
-	CGContextAddArc(context, CGRectGetMinX(roundRect) + radius, CGRectGetMinY(roundRect) + radius, radius, M_PI, 3 * M_PI / 2, 0);
-	CGContextClosePath(context);
+    CGContextBeginPath(context);
+    CGContextMoveToPoint(context, CGRectGetMinX(roundRect) + radius, CGRectGetMinY(roundRect));
+    CGContextAddArc(context, CGRectGetMaxX(roundRect) - radius, CGRectGetMinY(roundRect) + radius, radius, 3 * M_PI / 2, 0, 0);
+    CGContextAddArc(context, CGRectGetMaxX(roundRect) - radius, CGRectGetMaxY(roundRect) - radius, radius, 0, M_PI / 2, 0);
+    CGContextAddArc(context, CGRectGetMinX(roundRect) + radius, CGRectGetMaxY(roundRect) - radius, radius, M_PI / 2, M_PI, 0);
+    CGContextAddArc(context, CGRectGetMinX(roundRect) + radius, CGRectGetMinY(roundRect) + radius, radius, M_PI, 3 * M_PI / 2, 0);
+    CGContextClosePath(context);
     
 	CGContextFillPath(context);
     CGContextRestoreGState(context);
@@ -130,6 +117,8 @@
 
 @implementation ATHUDView (Private)
 - (void)setup {
+    self.transform = [ATUtilities viewTransformInWindow:parentWindow];
+
     [self setUserInteractionEnabled:NO];
     
     label = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -167,15 +156,15 @@
     [label removeFromSuperview];
     [label release];
     label = nil;
-    parentView = nil;
+    parentWindow = nil;
 }
 
 - (void)animateIn {
     self.alpha = 1.0;
     [self layoutSubviews];
-    [parentView addSubview:self];
-    self.center = parentView.center;
-    [parentView bringSubviewToFront:self];
+    self.windowLevel = UIWindowLevelAlert;
+    [self makeKeyAndVisible];
+    self.center = parentWindow.center;
     
     [UIView beginAnimations:@"animateIn" context:NULL];
     [UIView setAnimationDuration:3.0];
@@ -193,7 +182,7 @@
         self.alpha = 0.0;
         [UIView commitAnimations];
     } else {
-        [self removeFromSuperview];
+        [[parentWindow window] makeKeyAndVisible]; 
     }
 }
 @end

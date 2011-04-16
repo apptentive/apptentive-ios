@@ -60,15 +60,23 @@ static ATContactStorage *sharedContactStorage = nil;
 }
 
 - (BOOL)shouldCheckForUpdate {
-    BOOL result = NO;
+    BOOL result = YES;
     
     do { // once
         NSFileManager *fm = [NSFileManager defaultManager];
         NSString *path = [ATContactStorage contactStoragePath];
         
+        if (![fm fileExistsAtPath:path]) {
+            break;
+        }
+        
         NSError *error = nil;
         NSDictionary *attrs = [fm attributesOfItemAtPath:path error:&error];
         if (!attrs) {
+            // Try to delete.
+            if ([fm isDeletableFileAtPath:path]) {
+                [fm removeItemAtPath:path error:&error];
+            }
             break;
         }
         
@@ -80,8 +88,9 @@ static ATContactStorage *sharedContactStorage = nil;
         NSTimeInterval interval = [modificationDate timeIntervalSinceNow];
 		
         if (interval <= -kATContactStorageUpdateInterval) {
-            result = YES;
+            break;
         }
+        result = NO;
     } while (NO);
     
     return result;

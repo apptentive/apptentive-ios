@@ -3,7 +3,7 @@
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 4/15/11.
-//  Copyright 2011 Planetary Scale LLC. All rights reserved.
+//  Copyright 2011 Apptentive, Inc.. All rights reserved.
 //
 //  See Also: http://developer.apple.com/iphone/library/documentation/Xcode/Conceptual/iphone_development/135-Unit_Testing_Applications/unit_testing_applications.html
 

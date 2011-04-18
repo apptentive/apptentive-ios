@@ -3,7 +3,7 @@
 //  ApptentiveConnectTests
 //
 //  Created by Andrew Wooster on 3/18/11.
-//  Copyright 2011 Planetary Scale LLC. All rights reserved.
+//  Copyright 2011 Apptentive, Inc.. All rights reserved.
 //
 
 #import "ApptentiveConnectTests.h"

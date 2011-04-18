@@ -2,7 +2,7 @@
 //  ATConnectionChannel.m
 //
 //  Created by Andrew Wooster on 12/14/08.
-//  Copyright 2008 Planetary Scale LLC. All rights reserved.
+//  Copyright 2008 Apptentive, Inc.. All rights reserved.
 //
 
 #import "ATConnectionChannel.h"

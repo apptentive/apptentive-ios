@@ -3,7 +3,7 @@
 //  AmidstApp
 //
 //  Created by Andrew Wooster on 7/28/09.
-//  Copyright 2009 Planetary Scale LLC. All rights reserved.
+//  Copyright 2009 Apptentive, Inc.. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

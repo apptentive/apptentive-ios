@@ -18,6 +18,8 @@
     BOOL userDataWasUpdated;
 }
 @property (nonatomic, retain) NSString *apiKey;
+/*! The feedback currently being worked on by the user. */
+@property (nonatomic, retain) ATFeedback *currentFeedback;
 
 + (ATBackend *)sharedBackend;
 + (UIImage *)imageNamed:(NSString *)name;

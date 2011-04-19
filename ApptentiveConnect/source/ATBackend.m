@@ -31,7 +31,7 @@ static ATBackend *sharedBackend = nil;
 @end
 
 @implementation ATBackend
-@synthesize apiKey, working;
+@synthesize apiKey, working, currentFeedback;
 
 + (ATBackend *)sharedBackend {
     @synchronized(self) {
@@ -107,11 +107,20 @@ static ATBackend *sharedBackend = nil;
     [ATContactStorage releaseSharedContactStorage];
     contact = nil;
     
+    // If we don't need the screenshot, discard it.
+    if (feedback.screenshot && !feedback.screenshotSwitchEnabled) {
+        feedback.screenshot = nil;
+    }
+    
     ATFeedbackTask *task = [[ATFeedbackTask alloc] init];
     task.feedback = feedback;
     [[ATTaskQueue sharedTaskQueue] addTask:task];
     [task release];
     task = nil;
+    
+    if (feedback == self.currentFeedback) {
+        self.currentFeedback = nil;
+    }
 }
 
 - (void)updateUserData {
@@ -185,6 +194,7 @@ static ATBackend *sharedBackend = nil;
     [contactUpdater release];
     contactUpdater = nil;
     self.apiKey = nil;
+    self.currentFeedback = nil;
 }
 
 #pragma mark Notification Handling

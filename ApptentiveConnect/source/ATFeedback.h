@@ -30,6 +30,8 @@ NSString * const ATContactUpdaterFinished;
 @property (nonatomic, retain) NSString *os_version;
 @property (nonatomic, retain) NSString *carrier;
 @property (nonatomic, retain) NSDate *date;
+/*! Used to keep hold of screenshot switch state. */
+@property (nonatomic, assign) BOOL screenshotSwitchEnabled;
 
 - (NSDictionary *)dictionary;
 - (NSDictionary *)apiDictionary;

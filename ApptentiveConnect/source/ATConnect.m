@@ -15,6 +15,7 @@
 
 static ATConnect *sharedConnection = nil;
 
+
 @implementation ATConnect
 @synthesize apiKey, showKeyboardAccessory, shouldTakeScreenshot;
 
@@ -51,26 +52,35 @@ static ATConnect *sharedConnection = nil;
 
 - (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController {
 	UIImage *screenshot = nil;
-	if (self.shouldTakeScreenshot) {
-		screenshot = [ATUtilities imageByTakingScreenshot];
-		// Get the rotation of the view hierarchy and rotate the screenshot as
-		// necessary.
-		CGFloat rotation = [ATUtilities rotationOfViewHierarchyInRadians:viewController.view];
-		screenshot = [ATUtilities imageByRotatingImage:screenshot byRadians:rotation];
-	}
+    
+    if (![[ATBackend sharedBackend] currentFeedback]) {
+        ATFeedback *feedback = [[ATFeedback alloc] init];
+    	if (self.shouldTakeScreenshot) {
+            screenshot = [ATUtilities imageByTakingScreenshot];
+            // Get the rotation of the view hierarchy and rotate the screenshot as
+            // necessary.
+            CGFloat rotation = [ATUtilities rotationOfViewHierarchyInRadians:viewController.view];
+            screenshot = [ATUtilities imageByRotatingImage:screenshot byRadians:rotation];
+        }
+        ATContactStorage *contact = [ATContactStorage sharedContactStorage];
+        if (contact.name) {
+            feedback.name = contact.name;
+        }
+        if (contact.phone) {
+            feedback.phone = contact.phone;
+        }
+        if (contact.email) {
+            feedback.email = contact.email;
+        }
+        feedback.screenshot = screenshot;
+        feedback.screenshotSwitchEnabled = (screenshot == nil);
+        [[ATBackend sharedBackend] setCurrentFeedback:feedback];
+        [feedback release];
+        feedback = nil;
+    }
     ATFeedbackController *vc = [[ATFeedbackController alloc] init];
-    vc.feedback = [[[ATFeedback alloc] init] autorelease];
-    ATContactStorage *contact = [ATContactStorage sharedContactStorage];
-    if (contact.name) {
-        vc.feedback.name = contact.name;
-    }
-    if (contact.phone) {
-        vc.feedback.phone = contact.phone;
-    }
-    if (contact.email) {
-        vc.feedback.email = contact.email;
-    }
-    vc.feedback.screenshot = screenshot;
+    vc.feedback = [[ATBackend sharedBackend] currentFeedback];
+
     UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
     
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {

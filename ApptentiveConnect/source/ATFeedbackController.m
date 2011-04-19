@@ -30,6 +30,7 @@
 - (void)feedbackChanged:(NSNotification *)notification;
 - (void)contactInfoChanged:(NSNotification *)notification;
 - (void)screenshotChanged:(NSNotification *)notification;
+- (void)captureFeedbackState;
 @end
 
 @implementation ATFeedbackController
@@ -50,7 +51,6 @@
 }
 
 - (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
 }
 
@@ -96,20 +96,16 @@
 }
 
 - (IBAction)screenshotSwitchToggled:(id)sender {
-    
+    [self captureFeedbackState];
 }
 
 - (IBAction)cancelFeedback:(id)sender {
+    [self captureFeedbackState];
     [self dismissModalViewControllerAnimated:YES];
 }
 
 - (IBAction)nextStep:(id)sender {
-    // TODO
-    feedback.type = [selectorControl currentSelection].feedbackType;
-    feedback.text = feedbackView.text;
-    if (!screenshotSwitch.on) {
-        feedback.screenshot = nil;
-    }
+    [self captureFeedbackState];
     
     ATContactInfoController *vc = [[ATContactInfoController alloc] init];
     vc.feedback = self.feedback;
@@ -156,13 +152,20 @@
     self.navigationItem.backBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:ATLocalizedString(@"Feedback", nil) style:UIBarButtonItemStylePlain target:nil action:nil] autorelease];
     self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelFeedback:)] autorelease];
     self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:ATLocalizedString(@"Next Step", @"Title of button which takes user from feedback to contact info/screenshot screen.") style:UIBarButtonItemStyleBordered target:self action:@selector(nextStep:)] autorelease];
-    self.navigationItem.rightBarButtonItem.enabled = NO;
+    self.navigationItem.rightBarButtonItem.enabled = ![@"" isEqualToString:feedbackView.text];
     
+    // Setup Popup
     ATPopupSelection *feedbackSelection = [[ATPopupSelection alloc] initWithFeedbackType:ATFeedbackTypeFeedback popupImage:[ATBackend imageNamed:@"at_feedback"] selectedImage:[ATBackend imageNamed:@"at_feedback_selected"]];
-    feedbackSelection.isSelected = YES;
+    feedbackSelection.isSelected = self.feedback.type == ATFeedbackTypeFeedback;
+    
     ATPopupSelection *smileySelection = [[ATPopupSelection alloc] initWithFeedbackType:ATFeedbackTypePraise popupImage:[ATBackend imageNamed:@"at_smiley"] selectedImage:[ATBackend imageNamed:@"at_smiley_selected"]];
+    smileySelection.isSelected = self.feedback.type == ATFeedbackTypePraise;
+    
     ATPopupSelection *frownySelection = [[ATPopupSelection alloc] initWithFeedbackType:ATFeedbackTypeBug popupImage:[ATBackend imageNamed:@"at_frowny"] selectedImage:[ATBackend imageNamed:@"at_frowny_selected"]];
+    frownySelection.isSelected = self.feedback.type == ATFeedbackTypeBug;
+    
     ATPopupSelection *questionSelection = [[ATPopupSelection alloc] initWithFeedbackType:ATFeedbackTypeQuestion popupImage:[ATBackend imageNamed:@"at_question"] selectedImage:[ATBackend imageNamed:@"at_question_selected"]];
+    questionSelection.isSelected = self.feedback.type == ATFeedbackTypeQuestion;
     
     NSArray *selections = [NSArray arrayWithObjects:feedbackSelection, smileySelection, frownySelection, questionSelection, nil];
     selectorControl.selections = selections;
@@ -171,9 +174,7 @@
     [frownySelection release];
     [questionSelection release];
 	
-	if (self.feedback.screenshot == nil) {
-		screenshotSwitch.on = NO;
-	}
+    screenshotSwitch.on = self.feedback.screenshotSwitchEnabled;
 }
 
 - (void)setupFeedback {
@@ -318,6 +319,7 @@
 - (void)screenshotChanged:(NSNotification *)notification {
 	if (self.feedback.screenshot) {
 		screenshotSwitch.on = YES;
+        self.feedback.screenshotSwitchEnabled = YES;
 	} 
 }
 
@@ -325,5 +327,11 @@
     if ([[ATConnect sharedConnection] showKeyboardAccessory]) {
         feedbackView.inputAccessoryView = [[[ATKeyboardAccessoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 20.0)] autorelease];
     }
+}
+
+- (void)captureFeedbackState {
+    feedback.type = [selectorControl currentSelection].feedbackType;
+    feedback.text = feedbackView.text;
+    feedback.screenshotSwitchEnabled = screenshotSwitch.on;
 }
 @end

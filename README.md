@@ -87,13 +87,13 @@ In order for queued/interrupted feedback uploads to continue uploading, we
 recommending instantiating `ATConnect` and setting the API key at application
 startup, like:
 
-``` objectivec
+``` objective-c
 #include "ATConnect.h"
-…
+// ...
 - (void)applicationDidFinishLaunching:(UIApplication *)application /* ... */ {
     ATConnect *connection = [ATConnect sharedConnection];
     connection.apiKey = kApptentiveAPIKey;
-    …
+    // ...
 }
 ```
 
@@ -107,7 +107,6 @@ Now, you can show the Apptentive feedback UI from a `UIViewController` with:
 ``` objective-c
 #include "ATConnect.h"
 // ...
-
 ATConnect *connection = [ATConnect sharedConnection];
 [connection presentFeedbackControllerFromViewController:self];
 ```

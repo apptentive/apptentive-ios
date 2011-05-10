@@ -73,7 +73,7 @@ static ATConnect *sharedConnection = nil;
             feedback.email = contact.email;
         }
         feedback.screenshot = screenshot;
-        feedback.screenshotSwitchEnabled = (screenshot == nil);
+        feedback.screenshotSwitchEnabled = (screenshot != nil);
         [[ATBackend sharedBackend] setCurrentFeedback:feedback];
         [feedback release];
         feedback = nil;

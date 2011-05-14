@@ -29,35 +29,39 @@ following frameworks:
 
 Project Settings for Xcode 4
 ----------------------------
-In Xcode 4, create a workspace with your application project in it. Then,
-add the `ApptentiveConnect.xcodeproj` to your workspace as a child of your
-project.
+
+There is a video demoing integration in Xcode 4 here:
+http://vimeo.com/23710908
+
+Drag the `ApptentiveConnect.xcodeproj` project to your project in Xcode 4 and
+add it as a subproject. You can do the same with a workspace.
 
 In your target's `Build Settings` section, add the following to your 
 `Other Linker Flags` settings:
 
     -ObjC -all_load
 
-In your target's `Build Phases` section, add the `ApptentiveConnect` target
-to your `Target Dependencies`.
+In your target's `Build Phases` section, add the `ApptentiveConnect` and
+`ApptentiveResources` targets to your `Target Dependencies`.
 
 Then, add `libApptentiveConnect.a` to `Link Binary With Libraries`
 
-As the last build phase, add a `Copy Files` build phase, set the destination
-to `Wrapper`, leave `Subpath` blank and `Copy only when installing` unchecked.
-Then, drag `ApptentiveResources.bundle` from 
-`ApptentiveConnect.xcodeproj/Products` in Xcode into the file list.
+Build the `ApptentiveResources` target for iOS devices. Then, add the
+`ApptentiveResources.bundle` from the `ApptentiveConnect` products in the
+file navigator into your `Copy Bundle Resources` build phase. Building
+for iOS devices first works around a bug in Xcode 4.
 
-This will copy the `ApptentiveResources.bundle` resource bundle into your
-application bundle as the last step of the build.
-
-Now, for the final step. This is a workaround for a bug in Xcode 4: drag
-`ATConnect.h` from `ApptentiveConnect.xcodeproj` to your app's file list.
+Now, drag `ATConnect.h` from `ApptentiveConnect.xcodeproj` to your app's 
+file list.
 
 That should be it!
 
 Project Settings for Xcode 3
 ----------------------------
+
+There is a video demoing integration in Xcode 3 here:
+http://vimeo.com/23566166
+
 Drag the `ApptentiveConnect.xcodeproj` project to your project in Xcode.
 
 In your build settings for All Configurations for your target, add the following 

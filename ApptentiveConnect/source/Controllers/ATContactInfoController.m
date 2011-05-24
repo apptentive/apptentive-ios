@@ -89,7 +89,7 @@
 
 - (IBAction)showInfoView:(id)sender {
     ATInfoViewController *vc = [[ATInfoViewController alloc] init];
-    [self.navigationController presentModalViewController:vc animated:YES];
+    [self presentModalViewController:vc animated:YES];
     [vc release];
 }
 

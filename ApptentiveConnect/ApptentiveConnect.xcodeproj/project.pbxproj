@@ -15,6 +15,10 @@
 		491748BF1341177000A7D11E /* ATURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 491748B71341177000A7D11E /* ATURLConnection.m */; };
 		491748C01341177000A7D11E /* ATWebClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 491748B81341177000A7D11E /* ATWebClient.h */; };
 		491748C11341177000A7D11E /* ATWebClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 491748B91341177000A7D11E /* ATWebClient.m */; };
+		493529FF138C7253000E464A /* ATInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA1022138B498C0082887A /* ATInfoViewController.xib */; };
+		49352A00138C7257000E464A /* ATInfoViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA1024138B49A50082887A /* ATInfoViewController_iPad.xib */; };
+		49352A20138C73B8000E464A /* AboutApptentiveView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49352A1F138C73B8000E464A /* AboutApptentiveView.xib */; };
+		49352A21138C73B8000E464A /* AboutApptentiveView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49352A1F138C73B8000E464A /* AboutApptentiveView.xib */; };
 		4936AE511379DE3100A4B17F /* ATCenteringImageScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4936AE451379DE3100A4B17F /* ATCenteringImageScrollView.h */; };
 		4936AE521379DE3100A4B17F /* ATCenteringImageScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE461379DE3100A4B17F /* ATCenteringImageScrollView.m */; };
 		4936AE531379DE3100A4B17F /* ATDefaultTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4936AE471379DE3100A4B17F /* ATDefaultTextView.h */; };
@@ -123,6 +127,7 @@
 		491748B71341177000A7D11E /* ATURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATURLConnection.m; sourceTree = "<group>"; };
 		491748B81341177000A7D11E /* ATWebClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATWebClient.h; sourceTree = "<group>"; };
 		491748B91341177000A7D11E /* ATWebClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATWebClient.m; sourceTree = "<group>"; };
+		49352A1F138C73B8000E464A /* AboutApptentiveView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AboutApptentiveView.xib; sourceTree = "<group>"; };
 		4936AE451379DE3100A4B17F /* ATCenteringImageScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATCenteringImageScrollView.h; sourceTree = "<group>"; };
 		4936AE461379DE3100A4B17F /* ATCenteringImageScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATCenteringImageScrollView.m; sourceTree = "<group>"; };
 		4936AE471379DE3100A4B17F /* ATDefaultTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATDefaultTextView.h; sourceTree = "<group>"; };
@@ -372,6 +377,7 @@
 				49C00292133413AA0071F088 /* ATContactInfoController_iPad.xib */,
 				49AA1022138B498C0082887A /* ATInfoViewController.xib */,
 				49AA1024138B49A50082887A /* ATInfoViewController_iPad.xib */,
+				49352A1F138C73B8000E464A /* AboutApptentiveView.xib */,
 			);
 			path = xibs;
 			sourceTree = "<group>";
@@ -556,6 +562,7 @@
 				49C0028F1334137E0071F088 /* InfoPlist.strings in Resources */,
 				49AA1023138B498C0082887A /* ATInfoViewController.xib in Resources */,
 				49AA1025138B49A50082887A /* ATInfoViewController_iPad.xib in Resources */,
+				49352A21138C73B8000E464A /* AboutApptentiveView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -569,6 +576,9 @@
 				49D111A413341A9D00603373 /* ATFeedbackController_iPad.xib in Resources */,
 				4960E154134A578F00F6311F /* generated in Resources */,
 				49E891D0134FE2AB00DD098A /* Localizable.strings in Resources */,
+				493529FF138C7253000E464A /* ATInfoViewController.xib in Resources */,
+				49352A00138C7257000E464A /* ATInfoViewController_iPad.xib in Resources */,
+				49352A20138C73B8000E464A /* AboutApptentiveView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

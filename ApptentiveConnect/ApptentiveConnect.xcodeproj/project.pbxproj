@@ -510,7 +510,7 @@
 		496DC3761333D35600743F65 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				ORGANIZATIONNAME = "Planetary Scale LLC";
+				ORGANIZATIONNAME = "Apptentive, Inc.";
 			};
 			buildConfigurationList = 496DC3791333D35600743F65 /* Build configuration list for PBXProject "ApptentiveConnect" */;
 			compatibilityVersion = "Xcode 3.2";

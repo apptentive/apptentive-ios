@@ -25,4 +25,5 @@
 - (IBAction)nextStep:(id)sender;
 - (IBAction)imageDisclosureTapped:(id)sender;
 - (IBAction)screenshotSwitchToggled:(id)sender;
+- (IBAction)showInfoView:(id)sender;
 @end

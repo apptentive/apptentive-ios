@@ -59,6 +59,7 @@
         CGRect f = self.frame;
         f.size.height = textLabel.bounds.size.height + 5.0;
         self.frame = f;
+        self.userInteractionEnabled = YES;
     }
     return self;
 }

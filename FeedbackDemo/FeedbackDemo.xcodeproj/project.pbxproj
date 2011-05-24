@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4960E1201344293E00F6311F /* ApptentiveResources.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4960E11F1344293E00F6311F /* ApptentiveResources.bundle */; };
+		493529BD138C712A000E464A /* ApptentiveResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 49D111A013341A7C00603373 /* ApptentiveResources.bundle */; };
+		493529C0138C7141000E464A /* libApptentiveConnect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C0032D133417390071F088 /* libApptentiveConnect.a */; };
 		4960E1281344326B00F6311F /* icon-114x114.png in Resources */ = {isa = PBXBuildFile; fileRef = 4960E1221344326B00F6311F /* icon-114x114.png */; };
 		4960E1291344326B00F6311F /* icon-29x29.png in Resources */ = {isa = PBXBuildFile; fileRef = 4960E1231344326B00F6311F /* icon-29x29.png */; };
 		4960E12A1344326B00F6311F /* icon-58x58.png in Resources */ = {isa = PBXBuildFile; fileRef = 4960E1241344326B00F6311F /* icon-58x58.png */; };
@@ -32,12 +33,18 @@
 		49C003161334172F0071F088 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49C003141334172F0071F088 /* InfoPlist.strings */; };
 		49C003191334172F0071F088 /* FeedbackDemoTests.h in Resources */ = {isa = PBXBuildFile; fileRef = 49C003181334172F0071F088 /* FeedbackDemoTests.h */; };
 		49C0031B1334172F0071F088 /* FeedbackDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C0031A1334172F0071F088 /* FeedbackDemoTests.m */; };
-		49C00333133417790071F088 /* libApptentiveConnect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C00332133417790071F088 /* libApptentiveConnect.a */; };
 		49E8918B134BF69C00DD098A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E8918A134BF69C00DD098A /* QuartzCore.framework */; };
 		49E891D5134FE40200DD098A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49E891D2134FE40200DD098A /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		49AA1026138B4E500082887A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 49C00324133417390071F088 /* ApptentiveConnect.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 49D1118B13341A7C00603373;
+			remoteInfo = ApptentiveResources;
+		};
 		49C0030F1334172F0071F088 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 49C002DE1334172E0071F088 /* Project object */;
@@ -75,22 +82,7 @@
 		};
 /* End PBXContainerItemProxy section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		4960E11E1344292900F6311F /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 1;
-			files = (
-				4960E1201344293E00F6311F /* ApptentiveResources.bundle in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		4960E11A1344289F00F6311F /* ApptentiveResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = ApptentiveResources.bundle; sourceTree = SOURCE_ROOT; };
-		4960E11F1344293E00F6311F /* ApptentiveResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = ApptentiveResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		4960E1221344326B00F6311F /* icon-114x114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-114x114.png"; sourceTree = "<group>"; };
 		4960E1231344326B00F6311F /* icon-29x29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-29x29.png"; sourceTree = "<group>"; };
 		4960E1241344326B00F6311F /* icon-58x58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-58x58.png"; sourceTree = "<group>"; };
@@ -134,10 +126,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				493529C0138C7141000E464A /* libApptentiveConnect.a in Frameworks */,
 				49AA100E138B41A40082887A /* SystemConfiguration.framework in Frameworks */,
 				49E8918B134BF69C00DD098A /* QuartzCore.framework in Frameworks */,
 				49B3D9A31340084E00B5A5CD /* CoreTelephony.framework in Frameworks */,
-				49C00333133417790071F088 /* libApptentiveConnect.a in Frameworks */,
 				49C002EC1334172E0071F088 /* UIKit.framework in Frameworks */,
 				49C002EE1334172F0071F088 /* Foundation.framework in Frameworks */,
 				49C002F01334172F0071F088 /* CoreGraphics.framework in Frameworks */,
@@ -175,12 +167,10 @@
 			isa = PBXGroup;
 			children = (
 				4960E13E13455ACE00F6311F /* ATConnect.h */,
-				4960E11F1344293E00F6311F /* ApptentiveResources.bundle */,
 				49C00324133417390071F088 /* ApptentiveConnect.xcodeproj */,
 				49C002F11334172F0071F088 /* FeedbackDemo */,
 				49C003111334172F0071F088 /* FeedbackDemoTests */,
 				49C002EA1334172E0071F088 /* Frameworks */,
-				4960E11A1344289F00F6311F /* ApptentiveResources.bundle */,
 				49C002E81334172E0071F088 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -286,11 +276,11 @@
 				49C002E31334172E0071F088 /* Sources */,
 				49C002E41334172E0071F088 /* Frameworks */,
 				49C002E51334172E0071F088 /* Resources */,
-				4960E11E1344292900F6311F /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				49AA1027138B4E500082887A /* PBXTargetDependency */,
 				49C00331133417740071F088 /* PBXTargetDependency */,
 			);
 			name = FeedbackDemo;
@@ -323,7 +313,7 @@
 		49C002DE1334172E0071F088 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				ORGANIZATIONNAME = "Planetary Scale LLC";
+				ORGANIZATIONNAME = "Apptentive, Inc.";
 			};
 			buildConfigurationList = 49C002E11334172E0071F088 /* Build configuration list for PBXProject "FeedbackDemo" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -380,6 +370,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				493529BD138C712A000E464A /* ApptentiveResources.bundle in Resources */,
 				49C002F61334172F0071F088 /* InfoPlist.strings in Resources */,
 				49C002FF1334172F0071F088 /* MainWindow.xib in Resources */,
 				49C003051334172F0071F088 /* RootViewController.xib in Resources */,
@@ -443,6 +434,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		49AA1027138B4E500082887A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ApptentiveResources;
+			targetProxy = 49AA1026138B4E500082887A /* PBXContainerItemProxy */;
+		};
 		49C003101334172F0071F088 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 49C002E61334172E0071F088 /* FeedbackDemo */;

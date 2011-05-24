@@ -12,6 +12,7 @@
 #import "ATConnect.h"
 #import "ATFeedback.h"
 #import "ATHUDView.h"
+#import "ATInfoViewController.h"
 #import "ATKeyboardAccessoryView.h"
 #import "ATUtilities.h"
 
@@ -86,6 +87,12 @@
     [self dismissModalViewControllerAnimated:YES];
 }
 
+- (IBAction)showInfoView:(id)sender {
+    ATInfoViewController *vc = [[ATInfoViewController alloc] init];
+    [self.navigationController presentModalViewController:vc animated:YES];
+    [vc release];
+}
+
 #pragma mark UITextFieldDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     return [self shouldReturn:textField];
@@ -128,9 +135,12 @@
 
 - (void)setupKeyboardAccessory {
     if ([[ATConnect sharedConnection] showKeyboardAccessory]) {
-        nameField.inputAccessoryView = [[[ATKeyboardAccessoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 20.0)] autorelease];
-        emailField.inputAccessoryView = [[[ATKeyboardAccessoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 20.0)] autorelease];
-        phoneField.inputAccessoryView = [[[ATKeyboardAccessoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 20.0)] autorelease];
+        NSArray *textFields = [NSArray arrayWithObjects:nameField, emailField, phoneField, nil];
+        for (UITextField *textField in textFields) {
+            ATKeyboardAccessoryView *accessory = [[[ATKeyboardAccessoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 20.0)] autorelease];
+            [accessory addTarget:self action:@selector(showInfoView:) forControlEvents:UIControlEventTouchUpInside];
+            textField.inputAccessoryView = accessory;
+        }
     }
 }
 

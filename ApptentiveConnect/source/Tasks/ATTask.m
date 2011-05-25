@@ -41,4 +41,8 @@
 - (void)stop {
     
 }
+
+- (float)percentComplete {
+    return 0.0f;
+}
 @end

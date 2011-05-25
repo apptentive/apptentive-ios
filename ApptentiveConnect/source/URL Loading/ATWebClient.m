@@ -1,5 +1,5 @@
 //
-//  PSWebClient.m
+//  ATWebClient.m
 //  AmidstApp
 //
 //  Created by Andrew Wooster on 7/28/09.
@@ -7,14 +7,11 @@
 //
 
 #import "ATWebClient.h"
-
-#if TARGET_OS_IPHONE
-#import <UIKit/UIKit.h>
-#endif
+#import "ATAPIRequest.h"
+#import "ATURLConnection.h"
 
 #import "ATBackend.h"
 #import "ATConnect.h"
-#import "ATConnectionManager.h"
 #import "ATFeedback.h"
 #import "ATURLConnection.h"
 #import "ATUtilities.h"
@@ -28,58 +25,59 @@
 #define kCommonChannelName (@"ATWebClient")
 #define kUserAgentFormat (@"ApptentiveConnect/%@ (%@)")
 
+static ATWebClient *sharedSingleton = nil;
+
 @interface ATWebClient (Private)
 - (NSString *)userAgentString;
+#pragma mark Query Parameter Encoding
+- (NSString *)stringForParameters:(NSDictionary *)parameters;
+- (NSString *)stringForParameter:(id)value;
+
+#pragma mark Internal Methods
+- (ATURLConnection *)connectionToGet:(NSURL *)theURL;
+- (ATURLConnection *)connectionToPost:(NSURL *)theURL;
+- (ATURLConnection *)connectionToPost:(NSURL *)theURL JSON:(NSString *)body;
+- (ATURLConnection *)connectionToPost:(NSURL *)theURL body:(NSString *)body;
+- (ATURLConnection *)connectionToPost:(NSURL *)theURL withFileData:(NSData *)data ofMimeType:(NSString *)mimeType fileDataKey:(NSString *)fileDataKey  parameters:(NSDictionary *)parameters;
+- (void)addAPIHeaders:(ATURLConnection *)conn;
 @end
 
 @implementation ATWebClient
-@synthesize returnType;
-@synthesize failed;
-@synthesize errorTitle;
-@synthesize errorMessage;
-@synthesize channelName;
-@synthesize timeoutInterval;
-
-- (id)initWithTarget:(id)aDelegate action:(SEL)anAction {
-	if ((self = [super init])) {
-		returnType = ATWebClientReturnTypeString;
-		delegate = aDelegate;
-		action = anAction;
-		channelName = kCommonChannelName;
-		timeoutInterval = 30.0;
-	}
-	return self;
++ (ATWebClient *)sharedClient {
+    @synchronized(self) {
+        if (sharedSingleton == nil) {
+            sharedSingleton = [[ATWebClient alloc] init];
+        }
+    }
+    return sharedSingleton;
 }
 
-- (void)showAlert {
-	if (self.failed) {
-#if TARGET_OS_IPHONE
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:self.errorTitle message:self.errorMessage delegate:self cancelButtonTitle:ATLocalizedString(@"Close", nil) otherButtonTitles:nil];
-		[alert show];
-		[alert release];
-#endif
-	}
-}
 
-- (void)cancel {
-	@synchronized(self) {
-		cancelled = YES;
-	}
-}
-
-- (void)getContactInfo {
+- (ATAPIRequest *)requestForGettingContactInfo {
     NSString *uuid = [[ATBackend sharedBackend] deviceUUID];
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:uuid forKey:@"uuid"];
     NSString *urlString = [NSString stringWithFormat:@"http://www.apptentive.com/feedback/fetch_contact?%@", [self stringForParameters:parameters]];
-    [self get:[NSURL URLWithString:urlString]];
+    ATURLConnection *conn = [self connectionToGet:[NSURL URLWithString:urlString]];
+    conn.timeoutInterval = 20.0;
+    ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kCommonChannelName];
+    request.returnType = ATAPIRequestReturnTypeData;
+    return [request autorelease];
 }
 
-- (void)postFeedback:(ATFeedback *)feedback {
+- (ATAPIRequest *)requestForPostingFeedback:(ATFeedback *)feedback {
     NSDictionary *postData = [feedback apiDictionary];
     NSData *fileData = UIImagePNGRepresentation(feedback.screenshot);
     NSString *url = @"http://www.apptentive.com/feedback";
-    [self post:[NSURL URLWithString:url] withFileData:fileData ofMimeType:@"image/png" fileDataKey:@"feedback[screenshot]" parameters:postData];
+    ATURLConnection *conn = [self connectionToPost:[NSURL URLWithString:url] withFileData:fileData ofMimeType:@"image/png" fileDataKey:@"feedback[screenshot]" parameters:postData];
+    conn.timeoutInterval = 240.0;
+    ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kCommonChannelName];
+    request.returnType = ATAPIRequestReturnTypeData;
+    return [request autorelease];
 }
+@end
+
+
+@implementation ATWebClient (Private)
 
 - (NSString *)stringForParameters:(NSDictionary *)parameters {
 	NSMutableString *result = [[NSMutableString alloc] init];
@@ -116,143 +114,47 @@
 	return result;
 }
 
-#pragma mark ATURLConnection Delegates
-- (void)connectionFinishedSuccessfully:(ATURLConnection *)sender {
-	@synchronized(self) {
-		if (cancelled) return;
-	}
-	int statusCode = sender.statusCode;
-	switch (statusCode) {
-		case 200:
-        case 201:
-		case 400: // rate limit reached
-		case 403: // whatevs, probably private feed
-			break;
-		case 401:
-			self.failed = YES;
-			self.errorTitle = ATLocalizedString(@"Authentication Failed", @"");
-			self.errorMessage = ATLocalizedString(@"Wrong username and/or password.", @"");
-			break;
-		case 304:
-			break;
-		default:
-			self.failed = YES;
-			self.errorTitle = ATLocalizedString(@"Server error.", @"");
-			self.errorMessage = [NSHTTPURLResponse localizedStringForStatusCode:statusCode];
-			break;
-	}
-	
-	id result = nil;
-	do { // once
-		NSData *d = [sender responseData];
-		if (!d) break;
-		if (self.returnType == ATWebClientReturnTypeData) {
-			result = d;
-			break;
-		}
-		
-		NSString *s = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];
-		if (!s) break;
-		if (self.returnType == ATWebClientReturnTypeString) {
-			result = s;
-			break;
-		}
-        
-#ifdef SUPPORT_JSON
-		if (self.returnType == ATWebClientReturnTypeJSON) {
-			id json = [s JSONValue];
-			if (!json) {
-				self.failed = YES;
-				self.errorTitle = ATLocalizedString(@"Invalid response from server.", @"");
-				self.errorMessage = ATLocalizedString(@"Server did not return properly formatted JSON.", @"");
-			}
-			result = json;
-			break;
-		}
-#endif
-	} while (NO);
-	
-	if (delegate && action) {
-		[delegate performSelector:action withObject:self withObject:result];
-	}
+- (NSString *)userAgentString {
+    return [NSString stringWithFormat:kUserAgentFormat, kATConnectVersionString, kATConnectPlatformString];
 }
 
-- (void)connectionFailed:(ATURLConnection *)sender {
-	@synchronized(self) {
-		if (cancelled) return;
-	}
-	self.failed = YES;
-	if (sender.failedAuthentication || sender.statusCode == 401) {
-		self.errorTitle = ATLocalizedString(@"Authentication Failed", @"");
-		self.errorMessage = ATLocalizedString(@"Wrong username and/or password.", @"");
-	} else {
-		self.errorTitle = ATLocalizedString(@"Network Connection Error", @"");
-		self.errorMessage = [sender.connectionError localizedDescription];
-	}
-	if (delegate && action) {
-		[delegate performSelector:action withObject:self withObject:nil];
-	}
-}
-
-#pragma mark Private Methods
-- (void)get:(NSURL *)theURL {
-	ATConnectionManager *cm = [ATConnectionManager sharedSingleton];
+- (ATURLConnection *)connectionToGet:(NSURL *)theURL {
 	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL delegate:self];
-	conn.timeoutInterval = self.timeoutInterval;
 	[self addAPIHeaders:conn];
-	[cm addConnection:conn toChannel:self.channelName];
-	[conn release];
-	[cm start];
+    return [conn autorelease];
 }
 
-- (void)post:(NSURL *)theURL {
-	ATConnectionManager *cm = [ATConnectionManager sharedSingleton];
+- (ATURLConnection *)connectionToPost:(NSURL *)theURL {
 	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL delegate:self];
-	conn.timeoutInterval = self.timeoutInterval;
 	[self addAPIHeaders:conn];
 	[conn setHTTPMethod:@"POST"];
-	
-	[cm addConnection:conn toChannel:self.channelName];
-	[conn release];
-	[cm start];
+    return [conn autorelease];
 }
 
-- (void)post:(NSURL *)theURL JSON:(NSString *)body {
-	ATConnectionManager *cm = [ATConnectionManager sharedSingleton];
+- (ATURLConnection *)connectionToPost:(NSURL *)theURL JSON:(NSString *)body {
 	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL delegate:self];
-	conn.timeoutInterval = self.timeoutInterval;
 	[self addAPIHeaders:conn];
 	[conn setHTTPMethod:@"POST"];
 	[conn setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
 	int length = [body lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
 	[conn setValue:[NSString stringWithFormat:@"%d", length] forHTTPHeaderField:@"Content-Length"];
 	[conn setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
-	
-	[cm addConnection:conn toChannel:self.channelName];
-	[conn release];
-	[cm start];
+	return [conn autorelease];
 }
 
-- (void)post:(NSURL *)theURL body:(NSString *)body {
-	ATConnectionManager *cm = [ATConnectionManager sharedSingleton];
+- (ATURLConnection *)connectionToPost:(NSURL *)theURL body:(NSString *)body {
 	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL delegate:self];
-	conn.timeoutInterval = self.timeoutInterval;
 	[self addAPIHeaders:conn];
 	[conn setHTTPMethod:@"POST"];
 	[conn setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
 	int length = [body lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
 	[conn setValue:[NSString stringWithFormat:@"%d", length] forHTTPHeaderField:@"Content-Length"];
 	[conn setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
-	
-	[cm addConnection:conn toChannel:self.channelName];
-	[conn release];
-	[cm start];
+    return [conn autorelease];
 }
 
-- (void)post:(NSURL *)theURL withFileData:(NSData *)data ofMimeType:(NSString *)mimeType fileDataKey:(NSString *)fileDataKey parameters:(NSDictionary *)parameters {
-    ATConnectionManager *cm = [ATConnectionManager sharedSingleton];
+- (ATURLConnection *)connectionToPost:(NSURL *)theURL withFileData:(NSData *)data ofMimeType:(NSString *)mimeType fileDataKey:(NSString *)fileDataKey parameters:(NSDictionary *)parameters {
     ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL delegate:self];
-    conn.timeoutInterval = self.timeoutInterval * 10.0;
     [self addAPIHeaders:conn];
     [conn setHTTPMethod:@"POST"];
     
@@ -319,16 +221,12 @@
     
     // Debugging helpers:
     /*
-    NSLog(@"wtf parameters: %@", parameters);
-    NSLog(@"-length: %d", [multipartEncodedData length]);
-    NSLog(@"-data: %@", [NSString stringWithUTF8String:[multipartEncodedData bytes]]);
+     NSLog(@"wtf parameters: %@", parameters);
+     NSLog(@"-length: %d", [multipartEncodedData length]);
+     NSLog(@"-data: %@", [NSString stringWithUTF8String:[multipartEncodedData bytes]]);
      */
-    
-	[cm addConnection:conn toChannel:self.channelName];
-	[conn release];
-	[cm start];
+    return [conn autorelease];
 }
-
 
 - (void)addAPIHeaders:(ATURLConnection *)conn {
 	[conn setValue:[self userAgentString] forHTTPHeaderField:@"User-Agent"];
@@ -341,23 +239,5 @@
         NSString *value = [NSString stringWithFormat:@"Basic %@", [apiKeyData at_base64EncodedString]];
         [conn setValue:value forHTTPHeaderField:@"Authorization"];
     }
-}
-
-#pragma mark Memory Management
-- (void)dealloc {
-    delegate = nil;
-    ATConnectionManager *cm = [ATConnectionManager sharedSingleton];
-    [cm cancelAllConnectionsInChannel:channelName];
-	[errorTitle release];
-	[errorMessage release];
-	[channelName release];
-	[super dealloc];
-}
-@end
-
-
-@implementation ATWebClient (Private)
-- (NSString *)userAgentString {
-    return [NSString stringWithFormat:kUserAgentFormat, kATConnectVersionString, kATConnectPlatformString];
 }
 @end

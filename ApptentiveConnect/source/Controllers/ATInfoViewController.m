@@ -7,6 +7,7 @@
 //
 
 #import "ATInfoViewController.h"
+#import "ATBackend.h"
 #import "ATConnect.h"
 
 @interface ATInfoViewController (Private)
@@ -41,21 +42,14 @@
 }
 
 #pragma mark - View lifecycle
-/*
-// Implement loadView to create a view hierarchy programmatically, without using a nib.
-- (void)loadView {
-}
-*/
-
-/*
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self setup];
 }
-*/
 
 - (void)viewDidUnload {
     [super viewDidUnload];
+    [headerView release], headerView = nil;
     self.tableView = nil;
 }
 
@@ -64,18 +58,34 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-
 - (IBAction)done:(id)sender {
     [self dismissModalViewControllerAnimated:YES];
 }
+
+#pragma mark UITableViewDelegate
+
+
+#pragma mark UITableViewDataSource
 @end
 
 
 @implementation ATInfoViewController (Private)
 - (void)setup {
+    if (headerView) {
+        [headerView release], headerView = nil;
+    }
+    UIImage *logoImage = [ATBackend imageNamed:@"at_logo_info"];
+    UINib *nib = [UINib nibWithNibName:@"AboutApptentiveView" bundle:[ATConnect resourceBundle]];
+    [nib instantiateWithOwner:self options:nil];
+    UIImageView *logoView = (UIImageView *)[headerView viewWithTag:2];
+    logoView.image = logoImage;
+    //tableView.delegate = self;
+    //tableView.dataSource = self;
+    tableView.tableHeaderView = headerView;
 }
 
 - (void)teardown {
+    [headerView release], headerView = nil;
     self.tableView = nil;
 }
 @end

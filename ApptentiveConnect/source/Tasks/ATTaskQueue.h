@@ -22,7 +22,7 @@
 
 - (void)addTask:(ATTask *)task;
 - (NSUInteger)count;
+- (ATTask *)taskAtIndex:(NSUInteger)index;
 - (void)start;
 - (void)stop;
-
 @end

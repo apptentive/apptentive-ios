@@ -27,6 +27,8 @@
 	int statusCode;
 	BOOL failedAuthentication;
 	NSError *connectionError;
+    
+    float percentComplete;
 }
 @property (nonatomic, readonly, copy) NSURL *targetURL;
 @property (nonatomic, readonly) id delegate;
@@ -34,12 +36,13 @@
 @property (nonatomic, assign) BOOL executing;
 @property (nonatomic, assign) BOOL finished;
 @property (nonatomic, assign) BOOL failed;
-@property (nonatomic, assign) BOOL cancelled;
+@property (nonatomic, readonly) BOOL cancelled;
 @property (nonatomic, assign) NSTimeInterval timeoutInterval;
 @property (nonatomic, retain) NSURLCredential *credential;
 @property (nonatomic, readonly) int statusCode;
 @property (nonatomic, readonly) BOOL failedAuthentication;
 @property (nonatomic, copy) NSError *connectionError;
+@property (nonatomic, assign) float percentComplete;
 
 /*! The delegate for this class is a weak reference. */
 - (id)initWithURL:(NSURL *)url delegate:(id)aDelegate;
@@ -47,8 +50,7 @@
 - (void)setHTTPMethod:(NSString *)method;
 - (void)setHTTPBody:(NSData *)body;
 
-- (void) start;
-- (void) cancel;
+- (void)start;
 
 - (BOOL)isExecuting;
 - (BOOL)isCancelled;
@@ -61,4 +63,5 @@
 @protocol ATURLConnectionDelegate
 - (void)connectionFinishedSuccessfully:(ATURLConnection *)sender;
 - (void)connectionFailed:(ATURLConnection *)sender;
+- (void)connectionDidProgress:(ATURLConnection *)sender;
 @end

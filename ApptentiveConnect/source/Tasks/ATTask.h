@@ -16,4 +16,5 @@
 @property (nonatomic, assign) NSUInteger failureCount;
 - (void)start;
 - (void)stop;
+- (float)percentComplete;
 @end

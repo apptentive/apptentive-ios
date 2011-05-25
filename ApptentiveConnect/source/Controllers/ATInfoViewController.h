@@ -11,6 +11,7 @@
 /*! View controller for showing information about Apptentive, as well as the
     tasks which are currently in progress. */
 @interface ATInfoViewController : UIViewController {
+    IBOutlet UIView *headerView;
 }
 @property (nonatomic, retain) IBOutlet UITableView *tableView;
 

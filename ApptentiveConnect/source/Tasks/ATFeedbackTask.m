@@ -15,7 +15,6 @@
 @interface ATFeedbackTask (Private)
 - (void)setup;
 - (void)teardown;
-- (void)feedbackDidLoad:(ATWebClient *)sender result:(id)result;
 @end
 
 @implementation ATFeedbackTask
@@ -45,19 +44,44 @@
 }
 
 - (void)start {
-    if (!client) {
-        client = [[ATWebClient alloc] initWithTarget:self action:@selector(feedbackDidLoad:result:)];
-        client.returnType = ATWebClientReturnTypeString;
-        [client postFeedback:self.feedback];
+    if (!request) {
+        request = [[[ATWebClient sharedClient] requestForPostingFeedback:self.feedback] retain];
+        [request start];
     }
-    
 }
 
 - (void)stop {
-    if (client) {
-        [client cancel];
-        [client release];
-        client = nil;
+    if (request) {
+        request.delegate = nil;
+        [request cancel];
+        [request release], request = nil;
+    }
+}
+
+- (float)percentComplete {
+    if (request) {
+        return [request percentageComplete];
+    } else {
+        return 0.0f;
+    }
+}
+
+#pragma mark ATAPIRequestDelegate
+- (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(id)result {
+    @synchronized(self) {
+        self.finished = YES;
+    }
+}
+
+- (void)at_APIRequestDidProgress:(ATAPIRequest *)sender {
+    // pass
+}
+
+- (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
+    @synchronized(self) {
+        self.failed = YES;
+        NSLog(@"ATAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
+        [self stop];        
     }
 }
 @end
@@ -68,25 +92,6 @@
 }
 
 - (void)teardown {
-    if (client) {
-        [client cancel];
-        [client release];
-        client = nil;
-    }
-}
-
-- (void)feedbackDidLoad:(ATWebClient *)sender result:(id)result {
-	@synchronized (self) {
-        if (sender.failed) {
-            self.failed = YES;
-            NSLog(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
-            if (result) {
-                NSLog(@"Response: %@", result);
-            }
-            [self stop];
-        } else {
-            self.finished = YES;
-        }
-	}
+    [self stop];
 }
 @end

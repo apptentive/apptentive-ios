@@ -7,12 +7,23 @@
 //
 
 #import "ATInfoViewController.h"
+#import "ATAPIRequest.h"
 #import "ATBackend.h"
 #import "ATConnect.h"
+#import "ATFeedback.h"
+#import "ATFeedbackTask.h"
+#import "ATTask.h"
+#import "ATTaskQueue.h"
+
+enum {
+    kSectionTasks,
+    kSectionCount
+};
 
 @interface ATInfoViewController (Private)
 - (void)setup;
 - (void)teardown;
+- (void)reload;
 @end
 
 @implementation ATInfoViewController
@@ -63,9 +74,91 @@
 }
 
 #pragma mark UITableViewDelegate
-
+- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [aTableView deselectRowAtIndexPath:indexPath animated:YES];
+}
 
 #pragma mark UITableViewDataSource
+- (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
+    if (section == kSectionTasks) {
+        ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
+        return [queue count];
+    } else {
+        return 0;
+    }
+}
+
+- (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *taskCellIdentifier = @"ATTaskProgressCellIdentifier";
+    UITableViewCell *result = nil;
+    if (indexPath.section == kSectionTasks) {
+        ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
+        ATTask *task = [queue taskAtIndex:indexPath.row];
+        result = [aTableView dequeueReusableCellWithIdentifier:taskCellIdentifier];
+        if (!result) {
+            UINib *nib = [UINib nibWithNibName:@"ATTaskProgressCell" bundle:[ATConnect resourceBundle]];
+            [nib instantiateWithOwner:self options:nil];
+            result = progressCell;
+            [[result retain] autorelease];
+            [progressCell release], progressCell = nil;
+        }
+        
+        UILabel *label = (UILabel *)[result viewWithTag:1];
+        UIProgressView *progressView = (UIProgressView *)[result viewWithTag:2];
+        UILabel *detailLabel = (UILabel *)[result viewWithTag:4];
+        
+        if ([task isKindOfClass:[ATFeedbackTask class]]) {
+            ATFeedbackTask *feedbackTask = (ATFeedbackTask *)task;
+            label.text = feedbackTask.feedback.text;
+        } else {
+            label.text = [task description];
+        }
+        
+        if (task.failed) {
+            detailLabel.hidden = NO;
+            if (task.lastErrorTitle) {
+                detailLabel.text = [NSString stringWithFormat:@"Failed: %@", task.lastErrorTitle];
+            }
+            progressView.hidden = YES;
+        } else if (task.inProgress) {
+            detailLabel.hidden = YES;
+            progressView.hidden = NO;
+            progressView.progress = [task percentComplete];
+        } else {
+            detailLabel.hidden = NO;
+            detailLabel.text = @"Waiting…";
+            progressView.hidden = YES;
+        }
+    } else {
+        NSAssert(NO, @"Unknown section.");
+    }
+    return result;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView {
+    return kSectionCount;
+}
+
+- (NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {
+    NSString *result = nil;
+    if (section == kSectionTasks) {
+        result = @"Running Tasks";
+    }
+    return result;
+}
+
+- (NSString *)tableView:(UITableView *)aTableView titleForFooterInSection:(NSInteger)section {
+    NSString *result = nil;
+    if (section == kSectionTasks) {
+        ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
+        if ([queue count]) {
+            result = @"These are the pieces of feedback which are currently being submitted.";
+        } else {
+            result = @"No tasks waiting to upload.";
+        }
+    }
+    return result;
+}
 @end
 
 
@@ -75,17 +168,23 @@
         [headerView release], headerView = nil;
     }
     UIImage *logoImage = [ATBackend imageNamed:@"at_logo_info"];
-    UINib *nib = [UINib nibWithNibName:@"AboutApptentiveView" bundle:[ATConnect resourceBundle]];
+    UINib *nib = [UINib nibWithNibName:@"ATAboutApptentiveView" bundle:[ATConnect resourceBundle]];
     [nib instantiateWithOwner:self options:nil];
     UIImageView *logoView = (UIImageView *)[headerView viewWithTag:2];
     logoView.image = logoImage;
     //tableView.delegate = self;
-    //tableView.dataSource = self;
+    tableView.dataSource = self;
     tableView.tableHeaderView = headerView;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reload) name:ATAPIRequestStatusChanged object:nil];
 }
 
 - (void)teardown {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [headerView release], headerView = nil;
     self.tableView = nil;
+}
+
+- (void)reload {
+    [self.tableView reloadData];
 }
 @end

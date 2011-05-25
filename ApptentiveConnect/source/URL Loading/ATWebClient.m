@@ -37,6 +37,7 @@ static ATWebClient *sharedSingleton = nil;
 - (ATURLConnection *)connectionToGet:(NSURL *)theURL;
 - (ATURLConnection *)connectionToPost:(NSURL *)theURL;
 - (ATURLConnection *)connectionToPost:(NSURL *)theURL JSON:(NSString *)body;
+- (ATURLConnection *)connectionToPost:(NSURL *)theURL parameters:(NSDictionary *)parameters;
 - (ATURLConnection *)connectionToPost:(NSURL *)theURL body:(NSString *)body;
 - (ATURLConnection *)connectionToPost:(NSURL *)theURL withFileData:(NSData *)data ofMimeType:(NSString *)mimeType fileDataKey:(NSString *)fileDataKey  parameters:(NSDictionary *)parameters;
 - (void)addAPIHeaders:(ATURLConnection *)conn;
@@ -66,9 +67,15 @@ static ATWebClient *sharedSingleton = nil;
 
 - (ATAPIRequest *)requestForPostingFeedback:(ATFeedback *)feedback {
     NSDictionary *postData = [feedback apiDictionary];
-    NSData *fileData = UIImagePNGRepresentation(feedback.screenshot);
     NSString *url = @"http://www.apptentive.com/feedback";
-    ATURLConnection *conn = [self connectionToPost:[NSURL URLWithString:url] withFileData:fileData ofMimeType:@"image/png" fileDataKey:@"feedback[screenshot]" parameters:postData];
+    ATURLConnection *conn = nil;
+    
+    if (feedback.screenshot) {
+        NSData *fileData = UIImagePNGRepresentation(feedback.screenshot);
+        conn = [self connectionToPost:[NSURL URLWithString:url] withFileData:fileData ofMimeType:@"image/png" fileDataKey:@"feedback[screenshot]" parameters:postData];
+    } else {
+        conn = [self connectionToPost:[NSURL URLWithString:url] parameters:postData];
+    }
     conn.timeoutInterval = 240.0;
     ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kCommonChannelName];
     request.returnType = ATAPIRequestReturnTypeData;
@@ -119,20 +126,20 @@ static ATWebClient *sharedSingleton = nil;
 }
 
 - (ATURLConnection *)connectionToGet:(NSURL *)theURL {
-	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL delegate:self];
+	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL];
 	[self addAPIHeaders:conn];
     return [conn autorelease];
 }
 
 - (ATURLConnection *)connectionToPost:(NSURL *)theURL {
-	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL delegate:self];
+	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL];
 	[self addAPIHeaders:conn];
 	[conn setHTTPMethod:@"POST"];
     return [conn autorelease];
 }
 
 - (ATURLConnection *)connectionToPost:(NSURL *)theURL JSON:(NSString *)body {
-	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL delegate:self];
+	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL];
 	[self addAPIHeaders:conn];
 	[conn setHTTPMethod:@"POST"];
 	[conn setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
@@ -142,8 +149,14 @@ static ATWebClient *sharedSingleton = nil;
 	return [conn autorelease];
 }
 
+- (ATURLConnection *)connectionToPost:(NSURL *)theURL parameters:(NSDictionary *)parameters {
+    NSDictionary *postParameters = [NSMutableDictionary dictionaryWithDictionary:parameters];
+    NSString *bodyString = [self stringForParameters:postParameters];
+    return [self connectionToPost:theURL body:bodyString];
+}
+
 - (ATURLConnection *)connectionToPost:(NSURL *)theURL body:(NSString *)body {
-	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL delegate:self];
+	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL];
 	[self addAPIHeaders:conn];
 	[conn setHTTPMethod:@"POST"];
 	[conn setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
@@ -154,7 +167,7 @@ static ATWebClient *sharedSingleton = nil;
 }
 
 - (ATURLConnection *)connectionToPost:(NSURL *)theURL withFileData:(NSData *)data ofMimeType:(NSString *)mimeType fileDataKey:(NSString *)fileDataKey parameters:(NSDictionary *)parameters {
-    ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL delegate:self];
+    ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL];
     [self addAPIHeaders:conn];
     [conn setHTTPMethod:@"POST"];
     

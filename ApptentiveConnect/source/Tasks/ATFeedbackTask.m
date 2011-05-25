@@ -46,7 +46,9 @@
 - (void)start {
     if (!request) {
         request = [[[ATWebClient sharedClient] requestForPostingFeedback:self.feedback] retain];
+        request.delegate = self;
         [request start];
+        self.inProgress = YES;
     }
 }
 
@@ -55,6 +57,7 @@
         request.delegate = nil;
         [request cancel];
         [request release], request = nil;
+        self.inProgress = NO;
     }
 }
 
@@ -80,6 +83,8 @@
 - (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
     @synchronized(self) {
         self.failed = YES;
+        self.lastErrorTitle = sender.errorTitle;
+        self.lastErrorMessage = sender.errorMessage;
         NSLog(@"ATAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
         [self stop];        
     }

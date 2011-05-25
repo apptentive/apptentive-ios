@@ -31,6 +31,10 @@
 @synthesize connectionError;
 @synthesize percentComplete;
 
+- (id)initWithURL:(NSURL *)url {
+    return [self initWithURL:url delegate:nil];
+}
+
 - (id)initWithURL:(NSURL *)url delegate:(id)aDelegate {
 	if ((self = [super init])) {
 		targetURL = [url copy];
@@ -223,6 +227,7 @@
     } else {
         NSLog(@"Orphaned connection. No delegate or nonresponsive delegate.");
     }
+    usleep(1000);
 }
 
 - (void)setExecuting:(BOOL)isExecuting {
@@ -263,6 +268,25 @@
 		[HTTPBody release];
 	}
 	[super dealloc];
+}
+
+- (NSString *)requestAsString {
+    NSMutableString *result = [NSMutableString string];
+    [result appendFormat:@"%@ %@\n", HTTPMethod ? HTTPMethod : @"GET", [targetURL absoluteURL]];
+    for (NSString *key in headers) {
+        NSString *value = [headers valueForKey:key];
+        [result appendFormat:@"%@: %@\n", key, value];
+    }
+    [result appendString:@"\n\n"];
+    if (HTTPBody) {
+        NSString *a = [[[NSString alloc] initWithData:HTTPBody encoding:NSUTF8StringEncoding] autorelease];
+        if (a) {
+            [result appendString:a];
+        } else {
+            [result appendFormat:@"<Data of length:%d>", [HTTPBody length]];
+        }
+    }
+    return result;
 }
 @end
 

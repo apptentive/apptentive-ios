@@ -10,8 +10,9 @@
 
 /*! View controller for showing information about Apptentive, as well as the
     tasks which are currently in progress. */
-@interface ATInfoViewController : UIViewController {
+@interface ATInfoViewController : UIViewController <UITableViewDataSource> {
     IBOutlet UIView *headerView;
+    IBOutlet UITableViewCell *progressCell;
 }
 @property (nonatomic, retain) IBOutlet UITableView *tableView;
 

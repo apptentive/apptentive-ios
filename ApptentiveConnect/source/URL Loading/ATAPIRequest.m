@@ -27,6 +27,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 - (id)initWithConnection:(ATURLConnection *)aConnection channelName:(NSString *)aChannelName {
     if ((self = [super init])) {
         connection = [aConnection retain];
+        connection.delegate = self;
         channelName = [aChannelName retain];
     }
     return self;
@@ -35,6 +36,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 - (void)dealloc {
     self.delegate = nil;
     if (connection) {
+        connection.delegate = nil;
         [[ATConnectionManager sharedSingleton] cancelConnection:connection inChannel:channelName];
         [connection release], connection = nil;
     }
@@ -49,6 +51,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
     @synchronized(self) {
         if (connection) {
             [[ATConnectionManager sharedSingleton] addConnection:connection toChannel:channelName];
+            [[ATConnectionManager sharedSingleton] start];
         }
     }
 }
@@ -105,6 +108,14 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	id result = nil;
 	do { // once
 		NSData *d = [sender responseData];
+        /*!!!!! Uncomment to debug HTTP stuff.
+        if (YES) {
+            NSString *a = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];
+            NSLog(@"request: %@", [connection requestAsString]);
+            NSLog(@"a: %@", a);
+        }
+         */
+        
 		if (!d) break;
 		if (self.returnType == ATAPIRequestReturnTypeData) {
 			result = d;

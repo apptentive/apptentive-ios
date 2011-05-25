@@ -31,7 +31,7 @@
     float percentComplete;
 }
 @property (nonatomic, readonly, copy) NSURL *targetURL;
-@property (nonatomic, readonly) id delegate;
+@property (nonatomic, assign) id delegate;
 @property (nonatomic, retain) NSURLConnection *connection;
 @property (nonatomic, assign) BOOL executing;
 @property (nonatomic, assign) BOOL finished;
@@ -46,6 +46,7 @@
 
 /*! The delegate for this class is a weak reference. */
 - (id)initWithURL:(NSURL *)url delegate:(id)aDelegate;
+- (id)initWithURL:(NSURL *)url;
 - (void)setValue:(NSString *)value forHTTPHeaderField:(NSString *)field;
 - (void)setHTTPMethod:(NSString *)method;
 - (void)setHTTPBody:(NSData *)body;
@@ -55,8 +56,9 @@
 - (BOOL)isExecuting;
 - (BOOL)isCancelled;
 - (BOOL)isFinished;
-
 - (NSData *)responseData;
+
+- (NSString *)requestAsString;
 @end
 
 

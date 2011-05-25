@@ -11,9 +11,14 @@
 
 @interface ATTask : NSObject <NSCoding> {
 }
+@property (nonatomic, assign) BOOL inProgress;
 @property (nonatomic, assign) BOOL finished;
 @property (nonatomic, assign) BOOL failed;
 @property (nonatomic, assign) NSUInteger failureCount;
+
+@property (nonatomic, retain) NSString *lastErrorTitle;
+@property (nonatomic, retain) NSString *lastErrorMessage;
+
 - (void)start;
 - (void)stop;
 - (float)percentComplete;

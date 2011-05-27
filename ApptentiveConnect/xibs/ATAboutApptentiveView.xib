@@ -75,7 +75,7 @@
 							<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						</object>
 					</object>
-					<object class="IBUIButton" id="583182937">
+					<object class="IBUIButton" id="732763935">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">290</int>
 						<string key="NSFrame">{{20, 163}, {299, 37}}</string>
@@ -127,7 +127,7 @@
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">openApptentiveDotCom:</string>
-						<reference key="source" ref="583182937"/>
+						<reference key="source" ref="732763935"/>
 						<reference key="destination" ref="372490531"/>
 						<int key="IBEventType">7</int>
 					</object>
@@ -150,7 +150,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="964298846"/>
 							<reference ref="995162201"/>
-							<reference ref="583182937"/>
+							<reference ref="732763935"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -177,7 +177,7 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">8</int>
-						<reference key="object" ref="583182937"/>
+						<reference key="object" ref="732763935"/>
 						<reference key="parent" ref="191373211"/>
 					</object>
 				</object>

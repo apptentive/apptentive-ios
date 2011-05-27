@@ -73,6 +73,10 @@ enum {
     [self dismissModalViewControllerAnimated:YES];
 }
 
+- (IBAction)openApptentiveDotCom:(id)sender {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://apptentive.com/"]];
+}
+
 #pragma mark UITableViewDelegate
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -142,7 +146,7 @@ enum {
 - (NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {
     NSString *result = nil;
     if (section == kSectionTasks) {
-        result = @"Running Tasks";
+        result = NSLocalizedString(@"Running Tasks", @"Running tasks section header");
     }
     return result;
 }
@@ -152,9 +156,9 @@ enum {
     if (section == kSectionTasks) {
         ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
         if ([queue count]) {
-            result = @"These are the pieces of feedback which are currently being submitted.";
+            result = NSLocalizedString(@"These are the pieces of feedback which are currently being submitted.", @"Section footer for feedback being uploaded.");
         } else {
-            result = @"No tasks waiting to upload.";
+            result = NSLocalizedString(@"No feedback waiting to upload.", @"Section footer for no feedback being updated.");
         }
     }
     return result;

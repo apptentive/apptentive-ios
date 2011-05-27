@@ -17,4 +17,5 @@
 @property (nonatomic, retain) IBOutlet UITableView *tableView;
 
 - (IBAction)done:(id)sender;
+- (IBAction)openApptentiveDotCom:(id)sender;
 @end

@@ -227,7 +227,6 @@
     } else {
         NSLog(@"Orphaned connection. No delegate or nonresponsive delegate.");
     }
-    usleep(1000);
 }
 
 - (void)setExecuting:(BOOL)isExecuting {

@@ -176,7 +176,7 @@
     struct tm timeStruct;
     localtime_r(&time, &timeStruct);
     char buffer[200];
-    strftime(buffer, 200, "%m/%d/%Y %I:%M%p%z", &timeStruct);
+    strftime(buffer, 200, "%Y-%m-%d %H:%M%z", &timeStruct);
     NSString *result = [NSString stringWithCString:buffer encoding:NSASCIIStringEncoding];
     return result;
 }

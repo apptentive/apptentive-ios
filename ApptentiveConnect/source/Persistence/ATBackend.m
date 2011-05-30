@@ -186,7 +186,7 @@ static ATBackend *sharedBackend = nil;
 #if TARGET_OS_IPHONE
     return [[UIDevice currentDevice] uniqueIdentifier];
 #elif TARGET_OS_MAC
-#warning "TODO"
+#warning TODO: implement on OS X
     return nil;
 #endif
 }
@@ -222,7 +222,7 @@ static ATBackend *sharedBackend = nil;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWorking:) name:UIApplicationWillEnterForegroundNotification object:nil];
     }
 #elif TARGET_OS_MAC
-#warning "TODO"
+#warning TODO: implement on OS X
 #endif
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contactUpdaterFinished:) name:ATContactUpdaterFinished object:nil];
 	

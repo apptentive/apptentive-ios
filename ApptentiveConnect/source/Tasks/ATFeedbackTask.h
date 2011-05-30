@@ -8,13 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import "ATTask.h"
+#import "ATAPIRequest.h"
 
-@class ATWebClient;
 @class ATFeedback;
 
-@interface ATFeedbackTask : ATTask {
+@interface ATFeedbackTask : ATTask <ATAPIRequestDelegate> {
 @private
-    ATWebClient *client;
+    ATAPIRequest *request;
 }
 @property (nonatomic, retain) ATFeedback *feedback;
 

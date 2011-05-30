@@ -13,7 +13,6 @@
 NSString * const ATContactUpdaterFinished = @"ATContactUpdaterFinished";
 
 @interface ATContactUpdater (Private)
-- (void)infoDidLoad:(ATWebClient *)sender result:(id)result;
 - (void)processResult:(NSData *)xmlContactInfo;
 @end
 
@@ -25,33 +24,42 @@ NSString * const ATContactUpdaterFinished = @"ATContactUpdaterFinished";
 
 - (void)update {
     [self cancel];
-    client = [[ATWebClient alloc] initWithTarget:self action:@selector(infoDidLoad:result:)];
-    client.returnType = ATWebClientReturnTypeData;
-    [client getContactInfo];
+    request = [[[ATWebClient sharedClient] requestForGettingContactInfo] retain];
+    request.delegate = self;
+    [request start];
 }
 
 - (void)cancel {
-    if (client) {
-        [client cancel];
-        [client release];
-        client = nil;
+    if (request) {
+        request.delegate = nil;
+        [request cancel];
+        [request release], request = nil;
+    }
+}
+
+#pragma mark ATATIRequestDelegate
+- (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(id)result {
+    @synchronized (self) {
+        if ([result isKindOfClass:[NSData class]]) {
+            [self processResult:(NSData *)result];
+        } else {
+            NSLog(@"Contact result is not NSData!");
+        }
+    }
+}
+
+- (void)at_APIRequestDidProgress:(ATAPIRequest *)sender {
+    // pass
+}
+
+- (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
+    @synchronized(self) {
+        NSLog(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
     }
 }
 @end
 
 @implementation ATContactUpdater (Private)
-- (void)infoDidLoad:(ATWebClient *)sender result:(id)result {
-	@synchronized (self) {
-        if (sender.failed) {
-            NSLog(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
-        } else if ([result isKindOfClass:[NSData class]]) {
-            [self processResult:(NSData *)result];
-        } else {
-            NSLog(@"Contact result is not NSData!");
-        }
-	}
-}
-
 - (void)processResult:(NSData *)xmlContactInfo {
     if (parser) {
         [parser abortParsing];

@@ -14,6 +14,7 @@
 #import "ATContactUpdater.h"
 #import "ATDefaultTextView.h"
 #import "ATFeedback.h"
+#import "ATInfoViewController.h"
 #import "ATKeyboardAccessoryView.h"
 #import "ATPopupSelectorControl.h"
 #import "ATSimpleImageViewController.h"
@@ -118,6 +119,12 @@
     vc.title = ATLocalizedString(@"Screenshot", @"Title for screenshot view.");
     [feedbackView resignFirstResponder];
     [self.navigationController pushViewController:vc animated:YES];
+    [vc release];
+}
+
+- (IBAction)showInfoView:(id)sender {
+    ATInfoViewController *vc = [[ATInfoViewController alloc] init];
+    [self presentModalViewController:vc animated:YES];
     [vc release];
 }
 
@@ -325,7 +332,9 @@
 
 - (void)setupKeyboardAccessory {
     if ([[ATConnect sharedConnection] showKeyboardAccessory]) {
-        feedbackView.inputAccessoryView = [[[ATKeyboardAccessoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 20.0)] autorelease];
+        ATKeyboardAccessoryView *accessory = [[[ATKeyboardAccessoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 20.0)] autorelease];
+        [accessory addTarget:self action:@selector(showInfoView:) forControlEvents:UIControlEventTouchUpInside];
+        feedbackView.inputAccessoryView = accessory;
     }
 }
 

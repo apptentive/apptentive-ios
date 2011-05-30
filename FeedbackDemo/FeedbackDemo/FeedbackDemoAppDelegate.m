@@ -7,6 +7,8 @@
 //
 
 #import "FeedbackDemoAppDelegate.h"
+#import "ATConnect.h"
+#import "defines.h"
 
 @implementation FeedbackDemoAppDelegate
 
@@ -25,6 +27,7 @@
         [self.window addSubview:self.navigationController.view];
     }
     [self.window makeKeyAndVisible];
+    [[ATConnect sharedConnection] setApiKey:kApptentiveAPIKey];
     return YES;
 }
 

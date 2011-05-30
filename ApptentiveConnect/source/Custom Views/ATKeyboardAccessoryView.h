@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 
-@interface ATKeyboardAccessoryView : UIView {
+@interface ATKeyboardAccessoryView : UIControl {
 @private
     CGFloat height;
     UIView *textContainerView;

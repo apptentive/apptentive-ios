@@ -109,6 +109,12 @@ static ATTaskQueue *sharedTaskQueue = nil;
 	return count;
 }
 
+- (ATTask *)taskAtIndex:(NSUInteger)index {
+    @synchronized(self) {
+        return [tasks objectAtIndex:index];
+    }
+}
+
 - (void)start {
     @synchronized(self) {
         if (activeTask) return;

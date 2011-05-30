@@ -7,15 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ATAPIRequest.h"
 
-@class ATWebClient;
 @class ATContactParser;
 
 NSString * const ATContactUpdaterFinished;
 
-@interface ATContactUpdater : NSObject {
+@interface ATContactUpdater : NSObject <ATAPIRequestDelegate> {
 @private
-    ATWebClient *client;
+    ATAPIRequest *request;
     ATContactParser *parser;
 }
 - (void)update;

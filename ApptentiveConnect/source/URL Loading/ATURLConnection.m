@@ -6,6 +6,7 @@
 //
 
 #import "ATURLConnection.h"
+#import "ATURLConnection_Private.h"
 #if TARGET_OS_IPHONE_BOGUS
 #import "PSNetworkActivityIndicator.h"
 #endif
@@ -13,6 +14,7 @@
 @interface ATURLConnection ()
 - (void)cacheDataIfNeeded;
 @end
+
 
 @implementation ATURLConnection
 @synthesize targetURL;
@@ -27,6 +29,11 @@
 @synthesize statusCode;
 @synthesize failedAuthentication;
 @synthesize connectionError;
+@synthesize percentComplete;
+
+- (id)initWithURL:(NSURL *)url {
+    return [self initWithURL:url delegate:nil];
+}
 
 - (id)initWithURL:(NSURL *)url delegate:(id)aDelegate {
 	if ((self = [super init])) {
@@ -43,6 +50,7 @@
 		HTTPMethod = nil;
 		
 		statusCode = 0;
+        percentComplete = 0.0f;
 		return self;
 	}
 	return nil;
@@ -111,23 +119,6 @@
 	}
 }
 
-- (void)cancel {
-	@synchronized (self) {
-		if (self.finished) {
-			return;
-		}
-		delegate = nil;
-		if (connection) {
-			[connection cancel];
-#if TARGET_OS_IPHONE_BOGUS
-			[[PSNetworkActivityIndicator sharedIndicator] decrement];
-#endif
-		}
-		self.executing = NO;
-		self.cancelled = YES;
-	}
-}
-
 - (NSData *)responseData {
 	if (data) {
 		return data;
@@ -162,7 +153,7 @@
 		if (delegate && [delegate respondsToSelector:@selector(connectionFailed:)]){
 			[delegate performSelectorOnMainThread:@selector(connectionFailed:) withObject:self waitUntilDone:YES];
 		} else {
-			[delegate performSelectorOnMainThread:@selector(dataLoadFailed:) withObject:nil waitUntilDone:YES];
+            NSLog(@"Orphaned connection. No delegate or nonresponsive delegate.");
 		}
 	}
 }
@@ -177,11 +168,12 @@
 	@synchronized (self) {
 		if (data && !failed) {
 			if (delegate != nil && ![self isCancelled]) {
+                self.percentComplete = 1.0f;
 				[self cacheDataIfNeeded];
 				if (delegate && [delegate respondsToSelector:@selector(connectionFinishedSuccessfully:)]){
 					[delegate performSelectorOnMainThread:@selector(connectionFinishedSuccessfully:) withObject:self waitUntilDone:YES];
 				} else {
-					[delegate performSelectorOnMainThread:@selector(dataLoaded:) withObject:data waitUntilDone:YES];
+                    NSLog(@"Orphaned connection. No delegate or nonresponsive delegate.");
 				}
 			}
 			[data release];
@@ -190,7 +182,7 @@
 			if (delegate && [delegate respondsToSelector:@selector(connectionFailed:)]){
 				[delegate performSelectorOnMainThread:@selector(connectionFailed:) withObject:self waitUntilDone:YES];
 			} else {
-				[delegate performSelectorOnMainThread:@selector(dataLoadFailed:) withObject:nil waitUntilDone:YES];
+                NSLog(@"Orphaned connection. No delegate or nonresponsive delegate.");
 			}
 		}
 #if TARGET_OS_IPHONE_BOGUS
@@ -223,9 +215,18 @@
 		if (delegate && [delegate respondsToSelector:@selector(connectionFailed:)]){
 			[delegate performSelectorOnMainThread:@selector(connectionFailed:) withObject:self waitUntilDone:YES];
 		} else {
-			[delegate performSelectorOnMainThread:@selector(dataLoadFailed:) withObject:nil waitUntilDone:YES];
+            NSLog(@"Orphaned connection. No delegate or nonresponsive delegate.");
 		}
 	}
+}
+
+- (void)connection:(NSURLConnection *)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite {
+    if (delegate && [delegate respondsToSelector:@selector(connectionDidProgress:)]) {
+        self.percentComplete = ((float)totalBytesWritten)/((float) totalBytesExpectedToWrite);
+        [delegate performSelectorOnMainThread:@selector(connectionDidProgress:) withObject:self waitUntilDone:YES];
+    } else {
+        NSLog(@"Orphaned connection. No delegate or nonresponsive delegate.");
+    }
 }
 
 - (void)setExecuting:(BOOL)isExecuting {
@@ -266,5 +267,43 @@
 		[HTTPBody release];
 	}
 	[super dealloc];
+}
+
+- (NSString *)requestAsString {
+    NSMutableString *result = [NSMutableString string];
+    [result appendFormat:@"%@ %@\n", HTTPMethod ? HTTPMethod : @"GET", [targetURL absoluteURL]];
+    for (NSString *key in headers) {
+        NSString *value = [headers valueForKey:key];
+        [result appendFormat:@"%@: %@\n", key, value];
+    }
+    [result appendString:@"\n\n"];
+    if (HTTPBody) {
+        NSString *a = [[[NSString alloc] initWithData:HTTPBody encoding:NSUTF8StringEncoding] autorelease];
+        if (a) {
+            [result appendString:a];
+        } else {
+            [result appendFormat:@"<Data of length:%d>", [HTTPBody length]];
+        }
+    }
+    return result;
+}
+@end
+
+@implementation ATURLConnection (Private)
+- (void)cancel {
+	@synchronized (self) {
+		if (self.finished) {
+			return;
+		}
+		delegate = nil;
+		if (connection) {
+			[connection cancel];
+#if TARGET_OS_IPHONE_BOGUS
+			[[PSNetworkActivityIndicator sharedIndicator] decrement];
+#endif
+		}
+		self.executing = NO;
+        cancelled = YES;
+	}
 }
 @end

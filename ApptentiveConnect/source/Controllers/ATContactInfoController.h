@@ -18,4 +18,5 @@
 @property (nonatomic, retain) ATFeedback *feedback;
 
 - (IBAction)nextStep:(id)sender;
+- (IBAction)showInfoView:(id)sender;
 @end

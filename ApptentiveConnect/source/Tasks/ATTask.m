@@ -11,9 +11,11 @@
 #define kATTaskCodingVersion 2
 
 @implementation ATTask
+@synthesize inProgress;
 @synthesize finished;
 @synthesize failed;
 @synthesize failureCount;
+@synthesize lastErrorTitle, lastErrorMessage;
 
 - (id)initWithCoder:(NSCoder *)coder {
     if ((self = [super init])) {
@@ -29,6 +31,12 @@
     return self;
 }
 
+- (void)dealloc {
+    self.lastErrorTitle = nil;
+    self.lastErrorMessage = nil;
+    [super dealloc];
+}
+
 - (void)encodeWithCoder:(NSCoder *)coder {
     [coder encodeInt:kATTaskCodingVersion forKey:@"version"];
 	[coder encodeObject:[NSNumber numberWithUnsignedInteger:self.failureCount] forKey:@"failureCount"];
@@ -40,5 +48,9 @@
 
 - (void)stop {
     
+}
+
+- (float)percentComplete {
+    return 0.0f;
 }
 @end

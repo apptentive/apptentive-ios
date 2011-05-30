@@ -7,6 +7,7 @@
 
 #import "ATConnectionChannel.h"
 #import "ATURLConnection.h"
+#import "ATURLConnection_Private.h"
 
 @implementation ATConnectionChannel
 @synthesize maximumConnections;

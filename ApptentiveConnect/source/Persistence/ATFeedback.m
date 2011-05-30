@@ -16,6 +16,7 @@
 @interface ATFeedback (Private)
 - (ATFeedbackType)feedbackTypeFromString:(NSString *)feedbackString;
 - (NSString *)stringForFeedbackType:(ATFeedbackType)feedbackType;
+- (NSString *)formattedDate:(NSDate *)aDate;
 @end
 
 @implementation ATFeedback
@@ -129,12 +130,7 @@
     if (self.text) [d setObject:self.text forKey:@"feedback[feedback]"];
     [d setObject:[self stringForFeedbackType:self.type] forKey:@"feedback[feedback_type]"];
     
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"MM/dd/yyyy hh:mma"];
-    NSString *dateString = [formatter stringFromDate:self.date];
-    [formatter release];
-    
-    [d setObject:dateString forKey:@"feedback[feedback_date]"];
+    [d setObject:[self formattedDate:self.date] forKey:@"feedback[feedback_date]"];
     
     return d;
 }
@@ -172,6 +168,16 @@
             result = @"feedback";
             break;
     }
+    return result;
+}
+
+- (NSString *)formattedDate:(NSDate *)aDate {
+    time_t time = [aDate timeIntervalSince1970];
+    struct tm timeStruct;
+    localtime_r(&time, &timeStruct);
+    char buffer[200];
+    strftime(buffer, 200, "%Y-%m-%d %H:%M%z", &timeStruct);
+    NSString *result = [NSString stringWithCString:buffer encoding:NSASCIIStringEncoding];
     return result;
 }
 @end

@@ -85,15 +85,16 @@ static void ATReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 		BOOL onDemand = ((flags & kSCNetworkReachabilityFlagsConnectionOnDemand) != 0);
 		BOOL onTraffic = ((flags & kSCNetworkReachabilityFlagsConnectionOnTraffic) != 0);
 		BOOL interventionRequired = ((flags & kSCNetworkReachabilityFlagsInterventionRequired) != 0);
-		BOOL isWWAN = ((flags & kSCNetworkReachabilityFlagsIsWWAN) == kSCNetworkReachabilityFlagsIsWWAN);
 		
 		if ((onDemand || onTraffic) && !interventionRequired) {
 			status = ATNetworkWifiReachable;
 		}
-		
+#if TARGET_OS_IPHONE
+		BOOL isWWAN = ((flags & kSCNetworkReachabilityFlagsIsWWAN) == kSCNetworkReachabilityFlagsIsWWAN);
 		if (isWWAN) {
 			status = ATNetworkWWANReachable;
 		}
+#endif
 	} while (NO);
 	
 	return status;

@@ -6,10 +6,20 @@
 //  Copyright 2011 Apptentive, Inc.. All rights reserved.
 //
 
+
+#if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
+#elif TARGET_OS_MAC
+#import <Cocoa/Cocoa.h>
+#endif
 
 #define kATConnectVersionString @"1.0"
+
+#if TARGET_OS_IPHONE
 #define kATConnectPlatformString @"iOS"
+#elif TARGET_OS_MAC
+#define kATConnectPlatformString @"Mac OS X"
+#endif
 
 @interface ATConnect : NSObject {
 }
@@ -19,12 +29,14 @@
 
 + (ATConnect *)sharedConnection;
 
+#if TARGET_OS_IPHONE
 /*! 
  * Presents a feedback controller from the given view controller. The feedback
  * controller will be presented with 
  * [viewController presentModalViewController:…].
  */
 - (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController;
+#endif
 
 /*!
  * Returns the NSBundle corresponding to the bundle containing ATConnect's

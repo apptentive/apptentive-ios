@@ -6,7 +6,7 @@
 //  Copyright 2011 Apptentive, Inc.. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 typedef enum {
     ATFeedbackTypeFeedback,
@@ -24,7 +24,11 @@ NSString * const ATContactUpdaterFinished;
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *email;
 @property (nonatomic, retain) NSString *phone;
+#if TARGET_OS_IPHONE
 @property (nonatomic, retain) UIImage *screenshot;
+#elif TARGET_OS_MAC
+@property (nonatomic, retain) NSImage *screenshot;
+#endif
 @property (nonatomic, retain) NSString *uuid;
 @property (nonatomic, retain) NSString *model;
 @property (nonatomic, retain) NSString *os_version;

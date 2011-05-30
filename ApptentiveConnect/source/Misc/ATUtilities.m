@@ -8,11 +8,16 @@
 
 #import "ATUtilities.h"
 #import <QuartzCore/QuartzCore.h>
+#if TARGET_OS_MAC
+#import <Carbon/Carbon.h>
+#import <SystemConfiguration/SystemConfiguration.h>
+#endif
 
 #define KINDA_EQUALS(a, b) (fabs(a - b) < 0.1)
 
 @implementation ATUtilities
 
+#if TARGET_OS_IPHONE
 // From QA1703:
 // http://developer.apple.com/library/ios/#qa/qa1703/_index.html
 + (UIImage*)imageByTakingScreenshot {
@@ -119,21 +124,6 @@
     return atan2(t.b, t.a);
 }
 
-+ (NSString *)stringByEscapingForURLArguments:(NSString *)string {
-    CFStringRef result = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)string, NULL, (CFStringRef)@"%:/?#[]@!$&'()*+,;=", kCFStringEncodingUTF8);
-    return [NSMakeCollectable(result) autorelease];
-}
-
-
-+ (NSString *)randomStringOfLength:(NSUInteger)length {
-    static NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-    NSMutableString *result = [NSMutableString stringWithString:@""];
-    for (NSUInteger i = 0; i < length; i++) {
-        [result appendFormat:@"%c", [letters characterAtIndex:rand()%[letters length]]];
-    }
-    return result;
-}
-
 + (CGAffineTransform)viewTransformInWindow:(UIWindow *)window {
     CGAffineTransform result = CGAffineTransformIdentity;
     do { // once
@@ -154,6 +144,53 @@
             }
         }
     } while (NO);
+    return result;
+}
+#endif
+
+#if TARGET_OS_MAC
++ (NSString *)currentMachineName {
+    OSErr err;
+    char *machineName = NULL;
+    err = Gestalt(gestaltUserVisibleMachineName, (SInt32 *)&machineName);
+    if (err == noErr) {
+        return [[[NSString alloc] initWithBytes:machineName+1 length:machineName[0] encoding:NSASCIIStringEncoding] autorelease];
+    } else {
+        return @"Unknown";
+    }
+}
+
++ (NSString *)currentSystemName {
+    NSProcessInfo *info = [NSProcessInfo processInfo];
+    return [info operatingSystemName];
+}
+
++ (NSString *)currentSystemVersion {
+    NSProcessInfo *info = [NSProcessInfo processInfo];
+    return [info operatingSystemVersionString];
+}
+
++ (NSData *)pngRepresentationOfImage:(NSImage *)image {
+    CGImageRef imageRef = [image CGImageForProposedRect:NULL context:NULL hints:nil];
+    CGSize size = CGSizeMake(CGImageGetWidth(imageRef), CGImageGetHeight(imageRef));
+    NSBitmapImageRep *imageRep = [[NSBitmapImageRep alloc] initWithCGImage:imageRef size:size];
+    NSData *result = [imageRep representationUsingType:NSPNGFileType properties:nil];
+    [imageRep release];
+    return result;
+}
+#endif
+
++ (NSString *)stringByEscapingForURLArguments:(NSString *)string {
+    CFStringRef result = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)string, NULL, (CFStringRef)@"%:/?#[]@!$&'()*+,;=", kCFStringEncodingUTF8);
+    return [NSMakeCollectable(result) autorelease];
+}
+
++ (NSString *)randomStringOfLength:(NSUInteger)length {
+    static NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    NSMutableString *result = [NSMutableString stringWithString:@""];
+    for (NSUInteger i = 0; i < length; i++) {
+        [result appendFormat:@"%c", [letters characterAtIndex:rand()%[letters length]]];
+    }
     return result;
 }
 @end

@@ -8,8 +8,12 @@
 
 #import "ATFeedback.h"
 #import "ATBackend.h"
+#if TARGET_OS_IPHONE
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <CoreTelephony/CTCarrier.h>
+#elif TARGET_OS_MAC
+#import "ATUtilities.h"
+#endif
 
 #define kFeedbackCodingVersion 2
 
@@ -25,10 +29,9 @@
     if ((self = [super init])) {
         self.type = ATFeedbackTypeFeedback;
         self.uuid = [[ATBackend sharedBackend] deviceUUID];
+#if TARGET_OS_IPHONE
         self.model = [[UIDevice currentDevice] model];
         self.os_version = [NSString stringWithFormat:@"%@ %@", [[UIDevice currentDevice] systemName], [[UIDevice currentDevice] systemVersion]];
-        self.date = [NSDate date];
-        
         if ([CTTelephonyNetworkInfo class]) {
             CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
             CTCarrier *c = [netInfo subscriberCellularProvider];
@@ -37,6 +40,12 @@
             }
             [netInfo release];
         }
+#elif TARGET_OS_MAC
+        self.model = [ATUtilities currentMachineName];
+        self.os_version = [NSString stringWithFormat:@"%@ %@", [ATUtilities currentSystemName], [ATUtilities currentSystemVersion]];
+        self.carrier = @"";
+#endif
+        self.date = [NSDate date];
     }
     return self;
 }
@@ -66,7 +75,11 @@
             self.phone = [coder decodeObjectForKey:@"phone"];
             if ([coder containsValueForKey:@"screenshot"]) {
                 NSData *data = [coder decodeObjectForKey:@"screenshot"];
+#if TARGET_OS_IPHONE
                 self.screenshot = [UIImage imageWithData:data];
+#elif TARGET_OS_MAC
+                self.screenshot = [[[NSImage alloc] initWithData:data] autorelease];
+#endif
             }
             self.uuid = [coder decodeObjectForKey:@"uuid"];
             self.model = [coder decodeObjectForKey:@"model"];
@@ -80,7 +93,11 @@
             self.phone = [coder decodeObjectForKey:@"phone"];
             if ([coder containsValueForKey:@"screenshot"]) {
                 NSData *data = [coder decodeObjectForKey:@"screenshot"];
+#if TARGET_OS_IPHONE
                 self.screenshot = [UIImage imageWithData:data];
+#elif TARGET_OS_MAC
+                self.screenshot = [[[NSImage alloc] initWithData:data] autorelease];
+#endif
             }
             self.uuid = [coder decodeObjectForKey:@"uuid"];
             self.model = [coder decodeObjectForKey:@"model"];
@@ -105,7 +122,12 @@
     [coder encodeObject:self.email forKey:@"email"];
     [coder encodeObject:self.phone forKey:@"phone"];
     if (self.screenshot) {
+#if TARGET_OS_IPHONE
         [coder encodeObject:UIImagePNGRepresentation(self.screenshot) forKey:@"screenshot"];
+#elif TARGET_OS_MAC
+        NSData *data = [ATUtilities pngRepresentationOfImage:self.screenshot];
+        [coder encodeObject:data forKey:@"screenshot"];
+#endif
     }
     [coder encodeObject:self.uuid forKey:@"uuid"];
     [coder encodeObject:self.model forKey:@"model"];

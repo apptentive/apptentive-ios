@@ -10,8 +10,11 @@
 #import "ATBackend.h"
 #import "ATContactStorage.h"
 #import "ATFeedback.h"
-#import "ATFeedbackController.h"
 #import "ATUtilities.h"
+#if TARGET_OS_IPHONE
+#import "ATFeedbackController.h"
+#endif
+
 
 static ATConnect *sharedConnection = nil;
 
@@ -50,6 +53,7 @@ static ATConnect *sharedConnection = nil;
     }
 }
 
+#if TARGET_OS_IPHONE
 - (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController {
 	UIImage *screenshot = nil;
     
@@ -92,12 +96,18 @@ static ATConnect *sharedConnection = nil;
     [nc release];
     [vc release];
 }
+#endif
 
 + (NSBundle *)resourceBundle {
+#if TARGET_OS_IPHONE
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSString *bundlePath = [path stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
     NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
     return [bundle autorelease];
+#elif TARGET_OS_MAC
+    NSBundle *bundle = [NSBundle bundleForClass:[ATConnect class]];
+    return bundle;
+#endif
 }
 @end
 

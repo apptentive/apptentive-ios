@@ -13,6 +13,8 @@
 #import "ATUtilities.h"
 #if TARGET_OS_IPHONE
 #import "ATFeedbackController.h"
+#elif TARGET_OS_MAC
+#import "ATFeedbackWindowController.h"
 #endif
 
 
@@ -95,6 +97,11 @@ static ATConnect *sharedConnection = nil;
     }
     [nc release];
     [vc release];
+}
+#elif TARGET_OS_MAC
+- (IBAction)showFeedbackWindow:(id)sender {
+    ATFeedbackWindowController *feedbackWindow = [[ATFeedbackWindowController alloc] init];
+    [feedbackWindow showWindow:self];
 }
 #endif
 

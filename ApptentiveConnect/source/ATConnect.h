@@ -36,6 +36,11 @@
  * [viewController presentModalViewController:…].
  */
 - (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController;
+#elif TARGET_OS_MAC
+/*!
+ * Presents a feedback window.
+ */
+- (IBAction)showFeedbackWindow:(id)sender;
 #endif
 
 /*!

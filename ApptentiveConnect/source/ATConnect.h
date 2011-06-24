@@ -19,9 +19,13 @@
 #define kATConnectPlatformString @"iOS"
 #elif TARGET_OS_MAC
 #define kATConnectPlatformString @"Mac OS X"
+@class ATFeedbackWindowController;
 #endif
 
 @interface ATConnect : NSObject {
+#if TARGET_OS_MAC
+    ATFeedbackWindowController *feedbackWindowController;
+#endif
 }
 @property (nonatomic, retain) NSString *apiKey;
 @property (nonatomic, assign) BOOL showKeyboardAccessory;
@@ -41,6 +45,9 @@
  * Presents a feedback window.
  */
 - (IBAction)showFeedbackWindow:(id)sender;
+- (IBAction)showFeedbackWindowForFeedback:(id)sender;
+- (IBAction)showFeedbackWindowForQuestion:(id)sender;
+- (IBAction)showFeedbackWindowForBugReport:(id)sender;
 #endif
 
 /*!

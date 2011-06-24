@@ -14,6 +14,7 @@
 #import "ATFeedbackTask.h"
 #import "ATReachability.h"
 #import "ATTaskQueue.h"
+#import "ATUtilities.h"
 
 static ATBackend *sharedBackend = nil;
 
@@ -186,8 +187,16 @@ static ATBackend *sharedBackend = nil;
 #if TARGET_OS_IPHONE
     return [[UIDevice currentDevice] uniqueIdentifier];
 #elif TARGET_OS_MAC
-#warning TODO: implement on OS X
-    return nil;
+    static CFStringRef keyRef = CFSTR("apptentiveUUID");
+    static CFStringRef appIDRef = CFSTR("com.apptentive.feedback");
+    NSString *uuid = nil;
+    uuid = (NSString *)CFPreferencesCopyAppValue(keyRef, appIDRef);
+    if (!uuid) {
+        uuid = [[NSString alloc] initWithFormat:@"osx:%@", [ATUtilities randomStringOfLength:40]];
+        CFPreferencesSetValue(keyRef, (CFStringRef)uuid, appIDRef, kCFPreferencesCurrentUser, kCFPreferencesCurrentHost);
+        CFPreferencesSynchronize(appIDRef, kCFPreferencesCurrentUser, kCFPreferencesCurrentHost);
+    }
+    return [uuid autorelease];
 #endif
 }
 

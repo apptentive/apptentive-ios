@@ -42,6 +42,12 @@ static ATConnect *sharedConnection = nil;
 }
 
 - (void)dealloc {
+#if TARGET_OS_MAC
+    if (feedbackWindowController) {
+        [feedbackWindowController release];
+        feedbackWindowController = nil;
+    }
+#endif
     self.apiKey = nil;
     [super dealloc];
 }
@@ -99,9 +105,28 @@ static ATConnect *sharedConnection = nil;
     [vc release];
 }
 #elif TARGET_OS_MAC
+- (void)showFeedbackWindow:(id)sender withFeedbackType:(ATFeedbackType)feedbackType {
+    if (!feedbackWindowController) {
+        feedbackWindowController = [[ATFeedbackWindowController alloc] init];
+    }
+    //!! Set feedback window type.
+    [feedbackWindowController showWindow:self];
+}
+
 - (IBAction)showFeedbackWindow:(id)sender {
-    ATFeedbackWindowController *feedbackWindow = [[ATFeedbackWindowController alloc] init];
-    [feedbackWindow showWindow:self];
+    [self showFeedbackWindow:sender withFeedbackType:ATFeedbackTypeFeedback];
+}
+
+- (IBAction)showFeedbackWindowForFeedback:(id)sender {
+    [self showFeedbackWindow:sender withFeedbackType:ATFeedbackTypeFeedback];
+}
+
+- (IBAction)showFeedbackWindowForQuestion:(id)sender {
+    [self showFeedbackWindow:sender withFeedbackType:ATFeedbackTypeQuestion];
+}
+
+- (IBAction)showFeedbackWindowForBugReport:(id)sender {
+    [self showFeedbackWindow:sender withFeedbackType:ATFeedbackTypeBug];
 }
 #endif
 

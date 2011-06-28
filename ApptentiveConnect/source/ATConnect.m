@@ -109,7 +109,7 @@ static ATConnect *sharedConnection = nil;
     if (!feedbackWindowController) {
         feedbackWindowController = [[ATFeedbackWindowController alloc] init];
     }
-    //!! Set feedback window type.
+    [feedbackWindowController setFeedbackType:feedbackType];
     [feedbackWindowController showWindow:self];
 }
 

@@ -17,9 +17,7 @@
 #import "ATFeedbackWindowController.h"
 #endif
 
-
 static ATConnect *sharedConnection = nil;
-
 
 @implementation ATConnect
 @synthesize apiKey, showKeyboardAccessory, shouldTakeScreenshot;
@@ -106,8 +104,16 @@ static ATConnect *sharedConnection = nil;
 }
 #elif TARGET_OS_MAC
 - (void)showFeedbackWindow:(id)sender withFeedbackType:(ATFeedbackType)feedbackType {
+    if (![[ATBackend sharedBackend] currentFeedback]) {
+        ATFeedback *feedback = [[ATFeedback alloc] init];
+        feedback.type = feedbackType;
+        [[ATBackend sharedBackend] setCurrentFeedback:feedback];
+        [feedback release];
+        feedback = nil;
+    }
+    
     if (!feedbackWindowController) {
-        feedbackWindowController = [[ATFeedbackWindowController alloc] init];
+        feedbackWindowController = [[ATFeedbackWindowController alloc] initWithFeedback:[[ATBackend sharedBackend] currentFeedback]];
     }
     [feedbackWindowController setFeedbackType:feedbackType];
     [feedbackWindowController showWindow:self];

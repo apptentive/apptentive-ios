@@ -108,13 +108,13 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	id result = nil;
 	do { // once
 		NSData *d = [sender responseData];
-        /*!!!!! Uncomment to debug HTTP stuff.
+        /*!!!!! Prefix line with // to debug HTTP stuff.
         if (YES) {
             NSString *a = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];
             NSLog(@"request: %@", [connection requestAsString]);
             NSLog(@"a: %@", a);
         }
-         */
+        // */
         
 		if (!d) break;
 		if (self.returnType == ATAPIRequestReturnTypeData) {
@@ -157,6 +157,14 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	@synchronized(self) {
 		if (cancelled) return;
 	}
+    /*!!!!! Prefix line with // to debug HTTP stuff.
+     if (YES) {
+         NSData *d = [sender responseData];
+         NSString *a = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];
+         NSLog(@"request: %@", [connection requestAsString]);
+         NSLog(@"a: %@", a);
+     }
+    // */
 	self.failed = YES;
 	if (sender.failedAuthentication || sender.statusCode == 401) {
 		self.errorTitle = ATLocalizedString(@"Authentication Failed", @"");

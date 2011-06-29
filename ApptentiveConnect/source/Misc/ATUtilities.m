@@ -11,6 +11,8 @@
 #if TARGET_OS_MAC
 #import <Carbon/Carbon.h>
 #import <SystemConfiguration/SystemConfiguration.h>
+#include <sys/types.h>
+#include <sys/sysctl.h>
 #endif
 
 #define KINDA_EQUALS(a, b) (fabs(a - b) < 0.1)
@@ -150,19 +152,25 @@
 
 #if TARGET_OS_MAC
 + (NSString *)currentMachineName {
-    OSErr err;
-    char *machineName = NULL;
-    err = Gestalt(gestaltUserVisibleMachineName, (SInt32 *)&machineName);
-    if (err == noErr) {
-        return [[[NSString alloc] initWithBytes:machineName+1 length:machineName[0] encoding:NSASCIIStringEncoding] autorelease];
-    } else {
-        return @"Unknown";
+    char modelBuffer[256];
+    size_t sz = sizeof(modelBuffer);
+    NSString *result = @"Unknown";
+    if (0 == sysctlbyname("hw.model", modelBuffer, &sz, NULL, 0)) {
+        modelBuffer[sizeof(modelBuffer) - 1] = 0;
+        result = [NSString stringWithUTF8String:modelBuffer];
     }
+    return result;
 }
 
 + (NSString *)currentSystemName {
     NSProcessInfo *info = [NSProcessInfo processInfo];
-    return [info operatingSystemName];
+    NSString *osName = [info operatingSystemName];
+    
+    if ([osName isEqualToString:@"NSMACHOperatingSystem"]) {
+        osName = @"Mac OS X";
+    }
+    
+    return osName;
 }
 
 + (NSString *)currentSystemVersion {
@@ -172,8 +180,7 @@
 
 + (NSData *)pngRepresentationOfImage:(NSImage *)image {
     CGImageRef imageRef = [image CGImageForProposedRect:NULL context:NULL hints:nil];
-    CGSize size = CGSizeMake(CGImageGetWidth(imageRef), CGImageGetHeight(imageRef));
-    NSBitmapImageRep *imageRep = [[NSBitmapImageRep alloc] initWithCGImage:imageRef size:size];
+    NSBitmapImageRep *imageRep = [[NSBitmapImageRep alloc] initWithCGImage:imageRef];
     NSData *result = [imageRep representationUsingType:NSPNGFileType properties:nil];
     [imageRep release];
     return result;

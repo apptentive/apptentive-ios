@@ -15,6 +15,7 @@
 #import "ATReachability.h"
 #import "ATTaskQueue.h"
 #import "ATUtilities.h"
+#import "ATWebClient.h"
 
 static ATBackend *sharedBackend = nil;
 
@@ -157,6 +158,23 @@ static ATBackend *sharedBackend = nil;
     }
 }
 
+- (ATAPIRequest *)requestForSendingFeedback:(ATFeedback *)feedback {
+    ATContactStorage *contact = [ATContactStorage sharedContactStorage];
+    contact.name = feedback.name;
+    contact.email = feedback.email;
+    contact.phone = feedback.phone;
+    [ATContactStorage releaseSharedContactStorage];
+    contact = nil;
+    
+    // If we don't need the screenshot, discard it.
+    if (feedback.screenshot && !feedback.screenshotSwitchEnabled) {
+        feedback.screenshot = nil;
+    }
+    
+    ATAPIRequest *request = [[ATWebClient sharedClient] requestForPostingFeedback:feedback];
+    return request;
+}
+
 - (void)updateUserData {
     if (contactUpdater) {
         [contactUpdater cancel];
@@ -232,6 +250,7 @@ static ATBackend *sharedBackend = nil;
     }
 #elif TARGET_OS_MAC
 #warning TODO: implement on OS X
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:NSApplicationWillTerminateNotification object:nil];
 #endif
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contactUpdaterFinished:) name:ATContactUpdaterFinished object:nil];
 	

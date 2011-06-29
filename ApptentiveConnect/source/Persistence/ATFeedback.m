@@ -44,6 +44,7 @@
         self.model = [ATUtilities currentMachineName];
         self.os_version = [NSString stringWithFormat:@"%@ %@", [ATUtilities currentSystemName], [ATUtilities currentSystemVersion]];
         self.carrier = @"";
+        self.screenshotSwitchEnabled = YES;
 #endif
         self.date = [NSDate date];
     }

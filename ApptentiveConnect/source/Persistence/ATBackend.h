@@ -14,6 +14,7 @@
 
 @class ATContactUpdater;
 @class ATFeedback;
+@class ATAPIRequest;
 
 /*! Handles all of the backend activities, such as sending feedback. */
 @interface ATBackend : NSObject {
@@ -32,7 +33,14 @@
 + (NSImage *)imageNamed:(NSString *)name;
 #endif
 
+/*! Use this to add the feedback to a queue of feedback tasks which
+    will be sent in the background. */
 - (void)sendFeedback:(ATFeedback *)feedback;
+
+/*! Use this if you don't want offline storage or sending of feedback
+    requests. */
+- (ATAPIRequest *)requestForSendingFeedback:(ATFeedback *)feedback;
+
 - (void)updateUserData;
 - (NSString *)supportDirectoryPath;
 - (NSString *)deviceUUID;

@@ -193,6 +193,17 @@
     }
     return result;
 }
+
++ (void)uniquifyArray:(NSMutableArray *)array {
+    NSUInteger location = [array count];
+    for (NSObject *value in [array reverseObjectEnumerator]) {
+        location -= 1;
+        NSUInteger index = [array indexOfObject:value];
+        if (index < location) {
+            [array removeObjectAtIndex:location];
+        }
+    }
+}
 @end
 
 

@@ -33,6 +33,8 @@
 
 + (NSString *)stringByEscapingForURLArguments:(NSString *)string;
 + (NSString *)randomStringOfLength:(NSUInteger)length;
+
++ (void)uniquifyArray:(NSMutableArray *)array;
 @end
 
 CGRect ATCGRectOfEvenSize(CGRect inRect);

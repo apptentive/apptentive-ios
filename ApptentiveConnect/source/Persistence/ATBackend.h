@@ -44,4 +44,6 @@
 - (void)updateUserData;
 - (NSString *)supportDirectoryPath;
 - (NSString *)deviceUUID;
+
+- (NSURL *)apptentiveHomepageURL;
 @end

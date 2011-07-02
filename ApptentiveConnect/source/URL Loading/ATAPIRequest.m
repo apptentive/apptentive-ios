@@ -116,6 +116,15 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
         }
         // */
         
+        if (self.failed) {
+            NSData *d = [sender responseData];
+            NSString *a = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];
+            NSLog(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
+            NSLog(@"Status was: %d", sender.statusCode);
+            NSLog(@"Request was: %@", [connection requestAsString]);
+            NSLog(@"Response was: %@", a);
+        }
+        
 		if (!d) break;
 		if (self.returnType == ATAPIRequestReturnTypeData) {
 			result = d;
@@ -157,14 +166,6 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	@synchronized(self) {
 		if (cancelled) return;
 	}
-    /*!!!!! Prefix line with // to debug HTTP stuff.
-     if (YES) {
-         NSData *d = [sender responseData];
-         NSString *a = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];
-         NSLog(@"request: %@", [connection requestAsString]);
-         NSLog(@"a: %@", a);
-     }
-    // */
 	self.failed = YES;
 	if (sender.failedAuthentication || sender.statusCode == 401) {
 		self.errorTitle = ATLocalizedString(@"Authentication Failed", @"");
@@ -173,6 +174,16 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 		self.errorTitle = ATLocalizedString(@"Network Connection Error", @"");
 		self.errorMessage = [sender.connectionError localizedDescription];
 	}
+    //*!!!!! Prefix line with // to debug HTTP stuff.
+    if (YES) {
+        NSData *d = [sender responseData];
+        NSString *a = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];
+        NSLog(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
+        NSLog(@"Status was: %d", sender.statusCode);
+        NSLog(@"Request was: %@", [connection requestAsString]);
+        NSLog(@"Response was: %@", a);
+    }
+    // */
 	if (delegate) {
         [delegate at_APIRequestDidFail:self];
 	}

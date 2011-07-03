@@ -23,7 +23,7 @@
 #endif
 
 @interface ATConnect : NSObject {
-#if TARGET_OS_MAC
+#if !TARGET_OS_IPHONE
     ATFeedbackWindowController *feedbackWindowController;
 #endif
 }

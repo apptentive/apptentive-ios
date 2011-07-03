@@ -22,9 +22,7 @@
 + (UIImage *)imageByRotatingImage:(UIImage *)image byRadians:(CGFloat)radians;
 + (CGFloat)rotationOfViewHierarchyInRadians:(UIView *)leafView;
 + (CGAffineTransform)viewTransformInWindow:(UIWindow *)window;
-#endif
-
-#if TARGET_OS_MAC
+#elif TARGET_OS_MAC
 + (NSString *)currentMachineName;
 + (NSString *)currentSystemName;
 + (NSString *)currentSystemVersion;

@@ -8,7 +8,7 @@
 
 #import "ATUtilities.h"
 #import <QuartzCore/QuartzCore.h>
-#if TARGET_OS_MAC
+#if !TARGET_OS_IPHONE
 #import <Carbon/Carbon.h>
 #import <SystemConfiguration/SystemConfiguration.h>
 #include <sys/types.h>
@@ -148,9 +148,7 @@
     } while (NO);
     return result;
 }
-#endif
-
-#if TARGET_OS_MAC
+#elif TARGET_OS_MAC
 + (NSString *)currentMachineName {
     char modelBuffer[256];
     size_t sz = sizeof(modelBuffer);

@@ -40,7 +40,7 @@ static ATConnect *sharedConnection = nil;
 }
 
 - (void)dealloc {
-#if TARGET_OS_MAC
+#if !TARGET_OS_IPHONE
     if (feedbackWindowController) {
         [feedbackWindowController release];
         feedbackWindowController = nil;

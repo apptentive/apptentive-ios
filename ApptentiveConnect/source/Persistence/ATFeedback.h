@@ -6,7 +6,12 @@
 //  Copyright 2011 Apptentive, Inc.. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#if TARGET_OS_IPHONE
+#import <UIKit/UIKit.h>
+#elif TARGET_OS_MAC
+#import <AppKit/AppKit.h>
+#endif
+
 
 typedef enum {
     ATFeedbackTypeFeedback,

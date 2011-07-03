@@ -10,11 +10,14 @@
 #import "ATBackend.h"
 #import "ATContactStorage.h"
 #import "ATFeedback.h"
-#import "ATFeedbackController.h"
 #import "ATUtilities.h"
+#if TARGET_OS_IPHONE
+#import "ATFeedbackController.h"
+#elif TARGET_OS_MAC
+#import "ATFeedbackWindowController.h"
+#endif
 
 static ATConnect *sharedConnection = nil;
-
 
 @implementation ATConnect
 @synthesize apiKey, showKeyboardAccessory, shouldTakeScreenshot;
@@ -37,6 +40,12 @@ static ATConnect *sharedConnection = nil;
 }
 
 - (void)dealloc {
+#if !TARGET_OS_IPHONE
+    if (feedbackWindowController) {
+        [feedbackWindowController release];
+        feedbackWindowController = nil;
+    }
+#endif
     self.apiKey = nil;
     [super dealloc];
 }
@@ -50,6 +59,7 @@ static ATConnect *sharedConnection = nil;
     }
 }
 
+#if TARGET_OS_IPHONE
 - (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController {
 	UIImage *screenshot = nil;
     
@@ -92,12 +102,50 @@ static ATConnect *sharedConnection = nil;
     [nc release];
     [vc release];
 }
+#elif TARGET_OS_MAC
+- (void)showFeedbackWindow:(id)sender withFeedbackType:(ATFeedbackType)feedbackType {
+    if (![[ATBackend sharedBackend] currentFeedback]) {
+        ATFeedback *feedback = [[ATFeedback alloc] init];
+        feedback.type = feedbackType;
+        [[ATBackend sharedBackend] setCurrentFeedback:feedback];
+        [feedback release];
+        feedback = nil;
+    }
+    
+    if (!feedbackWindowController) {
+        feedbackWindowController = [[ATFeedbackWindowController alloc] initWithFeedback:[[ATBackend sharedBackend] currentFeedback]];
+    }
+    [feedbackWindowController setFeedbackType:feedbackType];
+    [feedbackWindowController showWindow:self];
+}
+
+- (IBAction)showFeedbackWindow:(id)sender {
+    [self showFeedbackWindow:sender withFeedbackType:ATFeedbackTypeFeedback];
+}
+
+- (IBAction)showFeedbackWindowForFeedback:(id)sender {
+    [self showFeedbackWindow:sender withFeedbackType:ATFeedbackTypeFeedback];
+}
+
+- (IBAction)showFeedbackWindowForQuestion:(id)sender {
+    [self showFeedbackWindow:sender withFeedbackType:ATFeedbackTypeQuestion];
+}
+
+- (IBAction)showFeedbackWindowForBugReport:(id)sender {
+    [self showFeedbackWindow:sender withFeedbackType:ATFeedbackTypeBug];
+}
+#endif
 
 + (NSBundle *)resourceBundle {
+#if TARGET_OS_IPHONE
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSString *bundlePath = [path stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
     NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
     return [bundle autorelease];
+#elif TARGET_OS_MAC
+    NSBundle *bundle = [NSBundle bundleForClass:[ATConnect class]];
+    return bundle;
+#endif
 }
 @end
 

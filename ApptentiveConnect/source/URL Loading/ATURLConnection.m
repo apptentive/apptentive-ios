@@ -198,6 +198,7 @@
 		if (credential && [challenge previousFailureCount] == 0) {
 			[[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
 		} else {
+            failedAuthentication = YES;
 			[[challenge sender] cancelAuthenticationChallenge:challenge];
 		}
 	}

@@ -8,11 +8,18 @@
 
 #import "ATUtilities.h"
 #import <QuartzCore/QuartzCore.h>
+#if !TARGET_OS_IPHONE
+#import <Carbon/Carbon.h>
+#import <SystemConfiguration/SystemConfiguration.h>
+#include <sys/types.h>
+#include <sys/sysctl.h>
+#endif
 
 #define KINDA_EQUALS(a, b) (fabs(a - b) < 0.1)
 
 @implementation ATUtilities
 
+#if TARGET_OS_IPHONE
 // From QA1703:
 // http://developer.apple.com/library/ios/#qa/qa1703/_index.html
 + (UIImage*)imageByTakingScreenshot {
@@ -119,21 +126,6 @@
     return atan2(t.b, t.a);
 }
 
-+ (NSString *)stringByEscapingForURLArguments:(NSString *)string {
-    CFStringRef result = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)string, NULL, (CFStringRef)@"%:/?#[]@!$&'()*+,;=", kCFStringEncodingUTF8);
-    return [NSMakeCollectable(result) autorelease];
-}
-
-
-+ (NSString *)randomStringOfLength:(NSUInteger)length {
-    static NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-    NSMutableString *result = [NSMutableString stringWithString:@""];
-    for (NSUInteger i = 0; i < length; i++) {
-        [result appendFormat:@"%c", [letters characterAtIndex:rand()%[letters length]]];
-    }
-    return result;
-}
-
 + (CGAffineTransform)viewTransformInWindow:(UIWindow *)window {
     CGAffineTransform result = CGAffineTransformIdentity;
     do { // once
@@ -155,6 +147,67 @@
         }
     } while (NO);
     return result;
+}
+#elif TARGET_OS_MAC
++ (NSString *)currentMachineName {
+    char modelBuffer[256];
+    size_t sz = sizeof(modelBuffer);
+    NSString *result = @"Unknown";
+    if (0 == sysctlbyname("hw.model", modelBuffer, &sz, NULL, 0)) {
+        modelBuffer[sizeof(modelBuffer) - 1] = 0;
+        result = [NSString stringWithUTF8String:modelBuffer];
+    }
+    return result;
+}
+
++ (NSString *)currentSystemName {
+    NSProcessInfo *info = [NSProcessInfo processInfo];
+    NSString *osName = [info operatingSystemName];
+    
+    if ([osName isEqualToString:@"NSMACHOperatingSystem"]) {
+        osName = @"Mac OS X";
+    }
+    
+    return osName;
+}
+
++ (NSString *)currentSystemVersion {
+    NSProcessInfo *info = [NSProcessInfo processInfo];
+    return [info operatingSystemVersionString];
+}
+
++ (NSData *)pngRepresentationOfImage:(NSImage *)image {
+    CGImageRef imageRef = [image CGImageForProposedRect:NULL context:NULL hints:nil];
+    NSBitmapImageRep *imageRep = [[NSBitmapImageRep alloc] initWithCGImage:imageRef];
+    NSData *result = [imageRep representationUsingType:NSPNGFileType properties:nil];
+    [imageRep release];
+    return result;
+}
+#endif
+
++ (NSString *)stringByEscapingForURLArguments:(NSString *)string {
+    CFStringRef result = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)string, NULL, (CFStringRef)@"%:/?#[]@!$&'()*+,;=", kCFStringEncodingUTF8);
+    return [NSMakeCollectable(result) autorelease];
+}
+
++ (NSString *)randomStringOfLength:(NSUInteger)length {
+    static NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    NSMutableString *result = [NSMutableString stringWithString:@""];
+    for (NSUInteger i = 0; i < length; i++) {
+        [result appendFormat:@"%c", [letters characterAtIndex:rand()%[letters length]]];
+    }
+    return result;
+}
+
++ (void)uniquifyArray:(NSMutableArray *)array {
+    NSUInteger location = [array count];
+    for (NSObject *value in [array reverseObjectEnumerator]) {
+        location -= 1;
+        NSUInteger index = [array indexOfObject:value];
+        if (index < location) {
+            [array removeObjectAtIndex:location];
+        }
+    }
 }
 @end
 

@@ -71,7 +71,11 @@ static ATWebClient *sharedSingleton = nil;
     ATURLConnection *conn = nil;
     
     if (feedback.screenshot) {
+#if TARGET_OS_IPHONE
         NSData *fileData = UIImagePNGRepresentation(feedback.screenshot);
+#elif TARGET_OS_MAC
+        NSData *fileData = [ATUtilities pngRepresentationOfImage:feedback.screenshot];
+#endif
         conn = [self connectionToPost:[NSURL URLWithString:url] withFileData:fileData ofMimeType:@"image/png" fileDataKey:@"feedback[screenshot]" parameters:postData];
     } else {
         conn = [self connectionToPost:[NSURL URLWithString:url] parameters:postData];

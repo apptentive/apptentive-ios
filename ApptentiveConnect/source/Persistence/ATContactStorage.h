@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface ATContactStorage : NSObject <NSCoding> {
 }
 @property (nonatomic, retain) NSString *name;

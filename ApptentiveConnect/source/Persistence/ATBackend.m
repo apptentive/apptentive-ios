@@ -14,6 +14,8 @@
 #import "ATFeedbackTask.h"
 #import "ATReachability.h"
 #import "ATTaskQueue.h"
+#import "ATUtilities.h"
+#import "ATWebClient.h"
 
 static ATBackend *sharedBackend = nil;
 
@@ -42,6 +44,7 @@ static ATBackend *sharedBackend = nil;
     return sharedBackend;
 }
 
+#if TARGET_OS_IPHONE
 + (UIImage *)imageNamed:(NSString *)name {
     NSString *imagePath = nil;
     UIImage *result = nil;
@@ -72,6 +75,38 @@ static ATBackend *sharedBackend = nil;
     }
     return result;
 }
+#elif TARGET_OS_MAC
++ (NSImage *)imageNamed:(NSString *)name {
+    NSString *imagePath = nil;
+    NSImage *result = nil;
+    CGFloat scale = [[NSScreen mainScreen] userSpaceScaleFactor];
+    if (scale > 1.0) {
+        imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@@2x", name] ofType:@"png"];
+    } else {
+        imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"png"];
+    }
+    
+    if (!imagePath) {
+        if (scale > 1.0) {
+            imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@@2x", name] ofType:@"png" inDirectory:@"generated"];
+        } else {
+            imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"png" inDirectory:@"generated"];
+        }
+    }
+    
+    if (imagePath) {
+        result = [[[NSImage alloc] initWithContentsOfFile:imagePath] autorelease];
+    } else {
+        result = [NSImage imageNamed:name];
+    }
+    if (!result) {
+        NSLog(@"Unable to find image named: %@", name);
+        NSLog(@"sought at: %@", imagePath);
+        NSLog(@"bundle is: %@", [ATConnect resourceBundle]);
+    }
+    return result;
+}
+#endif
 
 - (id)init {
     if ((self = [super init])) {
@@ -123,6 +158,23 @@ static ATBackend *sharedBackend = nil;
     }
 }
 
+- (ATAPIRequest *)requestForSendingFeedback:(ATFeedback *)feedback {
+    ATContactStorage *contact = [ATContactStorage sharedContactStorage];
+    contact.name = feedback.name;
+    contact.email = feedback.email;
+    contact.phone = feedback.phone;
+    [ATContactStorage releaseSharedContactStorage];
+    contact = nil;
+    
+    // If we don't need the screenshot, discard it.
+    if (feedback.screenshot && !feedback.screenshotSwitchEnabled) {
+        feedback.screenshot = nil;
+    }
+    
+    ATAPIRequest *request = [[ATWebClient sharedClient] requestForPostingFeedback:feedback];
+    return request;
+}
+
 - (void)updateUserData {
     if (contactUpdater) {
         [contactUpdater cancel];
@@ -150,7 +202,20 @@ static ATBackend *sharedBackend = nil;
 }
 
 - (NSString *)deviceUUID {
+#if TARGET_OS_IPHONE
     return [[UIDevice currentDevice] uniqueIdentifier];
+#elif TARGET_OS_MAC
+    static CFStringRef keyRef = CFSTR("apptentiveUUID");
+    static CFStringRef appIDRef = CFSTR("com.apptentive.feedback");
+    NSString *uuid = nil;
+    uuid = (NSString *)CFPreferencesCopyAppValue(keyRef, appIDRef);
+    if (!uuid) {
+        uuid = [[NSString alloc] initWithFormat:@"osx:%@", [ATUtilities randomStringOfLength:40]];
+        CFPreferencesSetValue(keyRef, (CFStringRef)uuid, appIDRef, kCFPreferencesCurrentUser, kCFPreferencesCurrentHost);
+        CFPreferencesSynchronize(appIDRef, kCFPreferencesCurrentUser, kCFPreferencesCurrentHost);
+    }
+    return [uuid autorelease];
+#endif
 }
 
 #pragma mark Accessors
@@ -169,10 +234,16 @@ static ATBackend *sharedBackend = nil;
         }
     }
 }
+
+
+- (NSURL *)apptentiveHomepageURL {
+    return [NSURL URLWithString:@"http://www.apptentive.com/"];
+}
 @end
 
 @implementation ATBackend (Private)
 - (void)setup {
+#if TARGET_OS_IPHONE
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:UIApplicationWillTerminateNotification object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWorking:) name:UIApplicationDidBecomeActiveNotification object:nil];
@@ -182,6 +253,10 @@ static ATBackend *sharedBackend = nil;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:UIApplicationDidEnterBackgroundNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWorking:) name:UIApplicationWillEnterForegroundNotification object:nil];
     }
+#elif TARGET_OS_MAC
+#warning TODO: implement on OS X
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:NSApplicationWillTerminateNotification object:nil];
+#endif
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contactUpdaterFinished:) name:ATContactUpdaterFinished object:nil];
 	
 	[ATReachability sharedReachability];

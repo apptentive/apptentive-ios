@@ -6,7 +6,7 @@
 //  Copyright 2011 Apptentive, Inc. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 @class ATURLConnection;
 

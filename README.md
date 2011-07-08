@@ -54,7 +54,7 @@ for iOS devices first works around a bug in Xcode 4.
 Now, drag `ATConnect.h` from `ApptentiveConnect.xcodeproj` to your app's 
 file list.
 
-That should be it!
+Now see "Using the Library", below, for instructions on using the library in your code.
 
 Project Settings for Xcode 3
 ----------------------------
@@ -79,7 +79,7 @@ and `ApptentiveResources.bundle` to your target's `Copy Bundle Resources` build 
 
 Finally, drag `ATConnect.h` from `ApptentiveConnect.xcodeproj` to your app's file list.
 
-That should be it!
+Now see "Using the Library", below, for instructions on using the library in your code.
 
 Using the Library
 -----------------

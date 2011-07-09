@@ -125,20 +125,18 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
         
         // If the user has been prompted already, make sure we're after the
         // number of days for them to be re-prompted.
-        NSNumber *lastPrompt = [defaults objectForKey:ATAppRatingFlowLastPromptDateKey];
+        NSDate *lastPrompt = [defaults objectForKey:ATAppRatingFlowLastPromptDateKey];
         if (lastPrompt != nil && self.daysBeforeRePrompting != 0) {
-            double lastPromptDouble = [lastPrompt doubleValue];
-            double nextPromptDouble = lastPromptDouble + 60*60*24*self.daysBeforeRePrompting;
+            double nextPromptDouble = [lastPrompt timeIntervalSince1970] + 60*60*24*self.daysBeforeRePrompting;
             if ([[NSDate now] timeIntervalSince1970] < nextPromptDouble) {
                 break;
             }
         }
         
         // Make sure the user has been using the app long enough to be bothered.
-        NSNumber *firstUse = [defaults objectForKey:ATAppRatingFlowLastUsedVersionFirstUseDateKey];
+        NSDate *firstUse = [defaults objectForKey:ATAppRatingFlowLastUsedVersionFirstUseDateKey];
         if (firstUse != nil && self.daysBeforePrompt != 0) {
-            double firstUseDouble = [firstUse doubleValue];
-            double nextPromptDouble = firstUseDouble + 60*60*24*self.daysBeforePrompt;
+            double nextPromptDouble = [firstUse doubleValue] + 60*60*24*self.daysBeforePrompt;
             if ([[NSDate now] timeIntervalSince1970] < nextPromptDouble) {
                 break;
             }
@@ -189,10 +187,8 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
     
     if (lastBundleVersion == nil || ![lastBundleVersion isEqualToString:currentBundleVersion]) {
         [defaults setObject:currentBundleVersion forKey:ATAppRatingFlowLastUsedVersionKey];
-        NSDate *now = [NSDate date];
-        NSNumber *nowObject = [NSNumber numberWithDouble:[now timeIntervalSince1970]];
         
-        [defaults setObject:nowObject forKey:ATAppRatingFlowLastUsedVersionFirstUseDateKey];
+        [defaults setObject:[NSDate date] forKey:ATAppRatingFlowLastUsedVersionFirstUseDateKey];
         [defaults setObject:[NSNumber numberWithBool:NO] forKey:ATAppRatingFlowDeclinedToRateThisVersionKey];
         [defaults setObject:[NSNumber numberWithBool:NO] forKey:ATAppRatingFlowUserDislikesThisVersionKey];
         
@@ -234,8 +230,6 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 
 - (void)setRatingDialogWasShown {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDate *now = [NSDate date];
-    NSNumber *nowObject = [NSNumber numberWithDouble:[now timeIntervalSince1970]];
-    [defaults setObject:nowObject forKey:ATAppRatingFlowLastPromptDateKey];
+    [defaults setObject:[NSDate date] forKey:ATAppRatingFlowLastPromptDateKey];
 }
 @end

@@ -7,7 +7,7 @@
 //
 
 #import "ATAppRatingFlow.h"
-
+#import "ATConnect.h"
 
 NSString *const ATAppRatingFlowLastUsedVersionKey = @"ATAppRatingFlowLastUsedVersionKey";
 NSString *const ATAppRatingFlowLastUsedVersionFirstUseDateKey = @"ATAppRatingFlowLastUsedVersionFirstUseDateKey";
@@ -33,11 +33,12 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 - (void)setRatingDialogWasShown;
 - (void)setUserDislikesThisVersion;
 - (void)setDeclinedToRateThisVersion;
+- (void)logDefaults;
 @end
 
 
 @implementation ATAppRatingFlow
-@synthesize daysBeforePrompt, usesBeforePrompt, significantEventsBeforePrompt, daysBeforeRePrompting;
+@synthesize viewController, daysBeforePrompt, usesBeforePrompt, significantEventsBeforePrompt, daysBeforeRePrompting;
 
 
 - (id)initWithAppID:(NSString *)anITunesAppID {
@@ -61,6 +62,9 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 }
 
 - (void)appDidLaunch:(BOOL)canPromptForRating {
+#ifdef TARGET_IPHONE_SIMULATOR
+    [self logDefaults];
+#endif
     [self userDidUseApp];
     if (canPromptForRating) {
         [self showDialogIfNecessary];
@@ -118,7 +122,11 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
     if (alertView == enjoymentDialog) {
         if (buttonIndex == 0) { // no
             [self setUserDislikesThisVersion];
-            NSLog(@"present feedback");//!!
+            if (!self.viewController) {
+                NSLog(@"No view controller to present feedback interface!!");
+            } else {
+                [[ATConnect sharedConnection] presentFeedbackControllerFromViewController:self.viewController];
+            }
         } else if (buttonIndex == 1) { // yes
             [self showRatingDialog:self];
         }
@@ -134,7 +142,6 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
         [ratingDialog release], ratingDialog = nil;
     }
 }
-
 #elif TARGET_OS_MAC
 #endif
 @end
@@ -151,12 +158,15 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 #elif TARGET_OS_MAC
     NSString *URLString = [NSString stringWithFormat:@"macappstore://itunes.apple.com/app/id%@?mt=12", iTunesAppID];
 #endif
-    return [[[NSURL alloc] initWithString:URLString] autorelease];
+    return [NSURL URLWithString:URLString];
 }
 
 - (void)openURLForRatingApp {
     NSURL *url = [self URLForRatingApp];
 #if TARGET_OS_IPHONE
+    if (![[UIApplication sharedApplication] canOpenURL:url]) {
+        NSLog(@"No application can open the URL: %@", url);
+    }
     [[UIApplication sharedApplication] openURL:url];
 #elif TARGET_OS_MAC
     [[NSWorkspace defaultWorkspace] openURL:url];
@@ -271,6 +281,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
     if (useCount != nil) {
         count = [useCount unsignedIntegerValue];
     }
+    count++;
     
     [defaults setObject:[NSNumber numberWithUnsignedInteger:count] forKey:ATAppRatingFlowUseCountKey];
     [defaults synchronize];
@@ -303,5 +314,15 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 - (void)setDeclinedToRateThisVersion {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:[NSNumber numberWithBool:YES] forKey:ATAppRatingFlowDeclinedToRateThisVersionKey];
+}
+
+- (void)logDefaults {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSArray *keys = [NSArray arrayWithObjects:ATAppRatingFlowLastUsedVersionKey, ATAppRatingFlowLastUsedVersionFirstUseDateKey, ATAppRatingFlowDeclinedToRateThisVersionKey, ATAppRatingFlowUserDislikesThisVersionKey, ATAppRatingFlowLastPromptDateKey, ATAppRatingFlowUseCountKey, ATAppRatingFlowSignificantEventsCountKey, nil];
+    NSLog(@"-- BEGIN ATAppRatingFlow DEFAULTS --");
+    for (NSString *key in keys) {
+        NSLog(@"%@ == %@", key, [defaults objectForKey:key]);
+    }
+    NSLog(@"-- END ATAppRatingFlow DEFAULTS --");
 }
 @end

@@ -7,3 +7,4 @@
 //
 
 #define kApptentiveAPIKey @"<your key here>"
+#define kApptentiveAppID @"ExampleAppID"

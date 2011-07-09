@@ -26,7 +26,7 @@
     [feedbackButton release];
     feedbackButton = nil;
     
-    UIBarButtonItem *showRatingFlow = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Rating", @"Rating button title.") style:UIBarButtonItemStylePlain target:[ATAppRatingFlow sharedRatingFlowWithAppID:@"<example>"] action:@selector(showEnjoymentDialog:)];
+    UIBarButtonItem *showRatingFlow = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Rating", @"Rating button title.") style:UIBarButtonItemStylePlain target:[ATAppRatingFlow sharedRatingFlowWithAppID:kApptentiveAppID] action:@selector(showEnjoymentDialog:)];
     self.navigationItem.leftBarButtonItem = showRatingFlow;
     [showRatingFlow release], showRatingFlow = nil;
     [super viewDidLoad];

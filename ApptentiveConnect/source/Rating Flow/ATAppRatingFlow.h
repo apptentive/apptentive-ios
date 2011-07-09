@@ -22,7 +22,6 @@
 @interface ATAppRatingFlow : NSObject 
 #if TARGET_OS_IPHONE
     <UIAlertViewDelegate>
-#elif TARGET_OS_MAC
 #endif
 {
 @private
@@ -36,6 +35,10 @@
 /*! The default singleton constructor. Call with an iTunes Applicaiton ID as
  an NSString */
 + (ATAppRatingFlow *)sharedRatingFlowWithAppID:(NSString *)iTunesAppID;
+
+/*! Set this to the view controller which should be used to present the
+ feedback interface. */
+@property (nonatomic, retain) UIViewController *viewController;
 
 /*! Days since first app use when the user will first be prompted. 
  Set to 0 to disable. Defaults to kATAppRatingDefaultDaysBeforePrompt.

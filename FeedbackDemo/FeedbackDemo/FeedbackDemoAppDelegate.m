@@ -29,7 +29,10 @@
     }
     [self.window makeKeyAndVisible];
     [[ATConnect sharedConnection] setApiKey:kApptentiveAPIKey];
-    [[ATAppRatingFlow sharedRatingFlowWithAppID:@"<example>"] appDidLaunch:YES];
+    ATAppRatingFlow *ratingFlow = [ATAppRatingFlow sharedRatingFlowWithAppID:kApptentiveAppID];
+    ratingFlow.viewController = self.navigationController;
+    [ratingFlow appDidLaunch:YES];
+    
     return YES;
 }
 
@@ -61,7 +64,7 @@
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
-    [[ATAppRatingFlow sharedRatingFlowWithAppID:@"<example>"] appDidEnterForeground:YES];
+    [[ATAppRatingFlow sharedRatingFlowWithAppID:kApptentiveAppID] appDidEnterForeground:YES];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

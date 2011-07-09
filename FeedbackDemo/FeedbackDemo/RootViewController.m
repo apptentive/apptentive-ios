@@ -8,6 +8,7 @@
 
 #import "RootViewController.h"
 #import "ATConnect.h"
+#import "ATAppRatingFlow.h"
 #import "defines.h"
 
 @implementation RootViewController
@@ -24,6 +25,10 @@
     self.navigationItem.rightBarButtonItem = feedbackButton;
     [feedbackButton release];
     feedbackButton = nil;
+    
+    UIBarButtonItem *showRatingFlow = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Rating", @"Rating button title.") style:UIBarButtonItemStylePlain target:[ATAppRatingFlow sharedRatingFlowWithAppID:@"<example>"] action:@selector(showEnjoymentDialog:)];
+    self.navigationItem.leftBarButtonItem = showRatingFlow;
+    [showRatingFlow release], showRatingFlow = nil;
     [super viewDidLoad];
 }
 

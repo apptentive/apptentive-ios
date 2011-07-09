@@ -19,9 +19,18 @@
 
 /*! A workflow for a user either giving feedback on or rating the current
  application */
-@interface ATAppRatingFlow : NSObject {
+@interface ATAppRatingFlow : NSObject 
+#if TARGET_OS_IPHONE
+    <UIAlertViewDelegate>
+#elif TARGET_OS_MAC
+#endif
+{
 @private
     NSString *iTunesAppID;
+#if TARGET_OS_IPHONE
+    UIAlertView *enjoymentDialog;
+    UIAlertView *ratingDialog;
+#endif
 }
 
 /*! The default singleton constructor. Call with an iTunes Applicaiton ID as
@@ -73,6 +82,12 @@
  If we should be able to prompt for a rating when this is called, pass YES.
  */
 - (void)userDidPerformSignificantEvent:(BOOL)canPromptForRating;
+
+/*!
+ Call if you want to show the enjoyment dialog directly. This enters the flow
+ for either bringing up the feedback view or the rating dialog.
+ */
+- (IBAction)showEnjoymentDialog:(id)sender;
 
 /*!
  Call if you want to show the rating dialog directly.

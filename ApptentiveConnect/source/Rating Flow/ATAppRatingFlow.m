@@ -22,7 +22,9 @@ NSString *const ATAppRatingFlowSignificantEventsCountKey = @"ATAppRatingFlowSign
 static ATAppRatingFlow *sharedRatingFlow = nil;
 
 @interface ATAppRatingFlow (Private)
+- (NSString *)appName;
 - (NSURL *)URLForRatingApp;
+- (void)openURLForRatingApp;
 - (BOOL)shouldShowDialog;
 - (void)showDialogIfNecessary;
 - (void)updateVersionInfo;
@@ -80,14 +82,73 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
     }
 }
 
-- (IBAction)showRatingDialog:(id)sender {
-    //!!
+- (IBAction)showEnjoymentDialog:(id)sender {
+#if TARGET_OS_IPHONE
+    if (!enjoymentDialog) {
+        NSString *title = [NSString stringWithFormat:NSLocalizedString(@"Are you enjoying using %@?", @"Title for enjoyment alert view. Parameter is app name."), [self appName]];
+        
+        enjoymentDialog = [[UIAlertView alloc] initWithTitle:title message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"No", @"no"), NSLocalizedString(@"Yes", @"yes"), nil];
+        [enjoymentDialog show];
+    }
+#elif TARGET_OS_MAC
+#endif
     [self setRatingDialogWasShown];
 }
+
+- (IBAction)showRatingDialog:(id)sender {
+#if TARGET_OS_IPHONE
+    if (!ratingDialog) {
+        NSString *title = [NSString stringWithFormat:NSLocalizedString(@"Rate %@?", @"Rate app title. Parameter is app name."), [self appName]];
+        NSString *message = [NSString stringWithFormat:NSLocalizedString(@"If you enjoy %@, we'd really appreciate you taking the time to rate the app.", @"Rate app message. Parameter is app name."), [self appName]];
+        
+        NSString *rateAppTitle = [NSString stringWithFormat:NSLocalizedString(@"Rate %@", @"Rate app button title"), [self appName]];
+        
+        ratingDialog = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:NSLocalizedString(@"No thanks", @"cancel title for app rating dialog") otherButtonTitles:rateAppTitle, NSLocalizedString(@"Remind me later", @"Remind me later button title"), nil];
+        [ratingDialog show];
+    }
+#elif TARGET_OS_MAC
+#endif
+    [self setRatingDialogWasShown];
+}
+
+#if TARGET_OS_IPHONE
+#pragma mark UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (alertView == enjoymentDialog) {
+        if (buttonIndex == 0) { // no
+            NSLog(@"present feedback");
+        } else if (buttonIndex == 1) { // yes
+            [self showRatingDialog:self];
+        }
+        NSLog(@"enjoyment: %d", buttonIndex);
+        [enjoymentDialog release], enjoymentDialog = nil;
+    } else if (alertView == ratingDialog) {
+        NSLog(@"rating: %d", buttonIndex);
+        [ratingDialog release], ratingDialog = nil;
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    if (alertView == enjoymentDialog) {
+        NSLog(@"dismissed enjoyment: %d", buttonIndex);
+        
+    } else if (alertView == ratingDialog) {
+        
+        NSLog(@"dismissed rating: %d", buttonIndex);
+    }
+}
+
+
+#elif TARGET_OS_MAC
+#endif
 @end
 
 
 @implementation ATAppRatingFlow (Private)
+- (NSString *)appName {
+    return [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleNameKey];
+}
+
 - (NSURL *)URLForRatingApp {
 #if TARGET_OS_IPHONE
     NSString *URLString = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", iTunesAppID];
@@ -95,6 +156,15 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
     NSString *URLString = [NSString stringWithFormat:@"macappstore://itunes.apple.com/app/id%@?mt=12", iTunesAppID];
 #endif
     return [[[NSURL alloc] initWithString:URLString] autorelease];
+}
+
+- (void)openURLForRatingApp {
+    NSURL *url = [self URLForRatingApp];
+#if TARGET_OS_IPHONE
+    [[UIApplication sharedApplication] openURL:url];
+#elif TARGET_OS_MAC
+    [[NSWorkspace defaultWorkspace] openURL:url];
+#endif
 }
 
 - (BOOL)shouldShowDialog {
@@ -128,7 +198,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
         NSDate *lastPrompt = [defaults objectForKey:ATAppRatingFlowLastPromptDateKey];
         if (lastPrompt != nil && self.daysBeforeRePrompting != 0) {
             double nextPromptDouble = [lastPrompt timeIntervalSince1970] + 60*60*24*self.daysBeforeRePrompting;
-            if ([[NSDate now] timeIntervalSince1970] < nextPromptDouble) {
+            if ([[NSDate date] timeIntervalSince1970] < nextPromptDouble) {
                 break;
             }
         }
@@ -136,8 +206,8 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
         // Make sure the user has been using the app long enough to be bothered.
         NSDate *firstUse = [defaults objectForKey:ATAppRatingFlowLastUsedVersionFirstUseDateKey];
         if (firstUse != nil && self.daysBeforePrompt != 0) {
-            double nextPromptDouble = [firstUse doubleValue] + 60*60*24*self.daysBeforePrompt;
-            if ([[NSDate now] timeIntervalSince1970] < nextPromptDouble) {
+            double nextPromptDouble = [firstUse timeIntervalSince1970] + (double)(60*60*24*self.daysBeforePrompt);
+            if ([[NSDate date] timeIntervalSince1970] < nextPromptDouble) {
                 break;
             }
         }

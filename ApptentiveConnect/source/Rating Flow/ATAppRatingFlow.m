@@ -229,7 +229,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 }
 
 - (void)hideRatingDialog {
-    
+    //!!
 }
 
 - (void)setRatingDialogWasShown {

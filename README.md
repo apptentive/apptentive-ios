@@ -117,6 +117,42 @@ ATConnect *connection = [ATConnect sharedConnection];
 
 Easy!
 
+
+App Rating Flow
+---------------
+`ApptentiveConnect` now provides an app rating flow similar to other projects
+such as [appirator](https://github.com/arashpayan/appirater). To use it, add
+the `ATAppRatingFlow.h` header file to your project.
+
+Then, at startup, instantiate a shared `ATAppRatingFlow` object with your 
+iTunes app ID (see "Finding Your iTunes App ID" below):
+
+``` objective-c
+#include "ATAppRatingFlow.h"
+// ...
+- (void)applicationDidFinishLaunching:(UIApplication *)application /* ... */ {
+    ATAppRatingFlow *sharedFlow = [ATAppRatingFlow sharedRatingFlowWithAppID:@"<your iTunes app ID>"];
+    // The parameter is a BOOL indicating whether a rating dialog can be 
+    // shown here.
+    [sharedFlow appDidLaunch:YES];
+    
+    // ...
+}
+
+/* 
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    ATAppRatingFlow *sharedFlow = [ATAppRatingFlow sharedRatingFlowWithAppID:@"<your iTunes app ID>"];
+    [sharedFlow appDidEnterForeground:YES];
+}
+```
+
+**Finding Your iTunes App ID**
+In [iTunesConnect](https://itunesconnect.apple.com/), go to "Manage Your 
+Applications" and click on your application. In the "App Information" 
+section of the page, look for the "Apple ID". It will be a number. This is
+your iTunes applicaiton ID.
+
+
 BUGS TO BE AWARE OF
 -------------------
 Xcode 4 won't correctly rebuild static libraries inside a workspace when the source has changed. If you change the source of `ApptentiveConnect` when

@@ -30,8 +30,9 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 - (void)updateVersionInfo;
 - (void)userDidUseApp;
 - (void)userDidSignificantEvent;
-- (void)hideRatingDialog;
 - (void)setRatingDialogWasShown;
+- (void)setUserDislikesThisVersion;
+- (void)setDeclinedToRateThisVersion;
 @end
 
 
@@ -116,28 +117,23 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (alertView == enjoymentDialog) {
         if (buttonIndex == 0) { // no
-            NSLog(@"present feedback");
+            [self setUserDislikesThisVersion];
+            NSLog(@"present feedback");//!!
         } else if (buttonIndex == 1) { // yes
             [self showRatingDialog:self];
         }
-        NSLog(@"enjoyment: %d", buttonIndex);
         [enjoymentDialog release], enjoymentDialog = nil;
     } else if (alertView == ratingDialog) {
-        NSLog(@"rating: %d", buttonIndex);
+        if (buttonIndex == 1) { // rate
+            [self openURLForRatingApp];
+        } else if (buttonIndex == 2) { // remind later
+            [self setRatingDialogWasShown];
+        } else if (buttonIndex == 0) { // no thanks
+            [self setDeclinedToRateThisVersion];
+        }
         [ratingDialog release], ratingDialog = nil;
     }
 }
-
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    if (alertView == enjoymentDialog) {
-        NSLog(@"dismissed enjoyment: %d", buttonIndex);
-        
-    } else if (alertView == ratingDialog) {
-        
-        NSLog(@"dismissed rating: %d", buttonIndex);
-    }
-}
-
 
 #elif TARGET_OS_MAC
 #endif
@@ -294,12 +290,18 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
     
 }
 
-- (void)hideRatingDialog {
-    //!!
-}
-
 - (void)setRatingDialogWasShown {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:[NSDate date] forKey:ATAppRatingFlowLastPromptDateKey];
+}
+
+- (void)setUserDislikesThisVersion {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:[NSNumber numberWithBool:YES] forKey:ATAppRatingFlowUserDislikesThisVersionKey];
+}
+
+- (void)setDeclinedToRateThisVersion {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:[NSNumber numberWithBool:YES] forKey:ATAppRatingFlowDeclinedToRateThisVersionKey];
 }
 @end

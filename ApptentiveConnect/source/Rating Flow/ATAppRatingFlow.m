@@ -21,9 +21,11 @@ NSString *const ATAppRatingFlowSignificantEventsCountKey = @"ATAppRatingFlowSign
 
 static ATAppRatingFlow *sharedRatingFlow = nil;
 
+#if TARGET_OS_IPHONE
 @interface ATAppRatingFlow ()
 @property (nonatomic, retain) UIViewController *viewController;
 @end
+#endif
 
 
 @interface ATAppRatingFlow (Private)
@@ -45,7 +47,9 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 
 @implementation ATAppRatingFlow
 @synthesize daysBeforePrompt, usesBeforePrompt, significantEventsBeforePrompt, daysBeforeRePrompting;
+#if TARGET_OS_IPHONE
 @synthesize viewController;
+#endif
 
 - (id)initWithAppID:(NSString *)anITunesAppID {
     if ((self = [super init])) {
@@ -157,7 +161,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
     if (result == NSAlertFirstButtonReturn) { // yes
 #if TARGET_OS_IPHONE
         [self showRatingDialog:self.viewController];
-#elif
+#elif TARGET_OS_MAC
         [self showRatingDialog:self];
 #endif
     } else if (result == NSAlertSecondButtonReturn) { // no
@@ -263,7 +267,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
     }
     [[UIApplication sharedApplication] openURL:url];
 #elif TARGET_OS_MAC
-    [[NSWorkspace defaultWorkspace] openURL:url];
+    [[NSWorkspace sharedWorkspace] openURL:url];
 #endif
 }
 

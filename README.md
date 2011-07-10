@@ -134,17 +134,19 @@ iTunes app ID (see "Finding Your iTunes App ID" below):
     ATAppRatingFlow *sharedFlow = [ATAppRatingFlow sharedRatingFlowWithAppID:@"<your iTunes app ID>"];
     // The parameter is a BOOL indicating whether a rating dialog can be 
     // shown here.
-    [sharedFlow appDidLaunch:YES];
+    [sharedFlow appDidLaunch:YES viewController:self.navigationController];
     
     // ...
 }
 
-/* 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     ATAppRatingFlow *sharedFlow = [ATAppRatingFlow sharedRatingFlowWithAppID:@"<your iTunes app ID>"];
-    [sharedFlow appDidEnterForeground:YES];
+    [sharedFlow appDidEnterForeground:YES viewController:self.navigationController];
 }
 ```
+
+The `viewController` parameter is necessary in order to be able to show the 
+feedback view controller if a user is unhappy with your app.
 
 **Finding Your iTunes App ID**
 In [iTunesConnect](https://itunesconnect.apple.com/), go to "Manage Your 

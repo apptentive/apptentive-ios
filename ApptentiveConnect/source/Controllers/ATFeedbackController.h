@@ -20,6 +20,7 @@
     IBOutlet UIView *screenshotContainerView;
 }
 @property (nonatomic, retain) ATFeedback *feedback;
+@property (nonatomic, retain) NSString *customPlaceholderText;
 - (id)init;
 - (IBAction)cancelFeedback:(id)sender;
 - (IBAction)nextStep:(id)sender;

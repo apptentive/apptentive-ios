@@ -30,6 +30,9 @@
 @property (nonatomic, retain) NSString *apiKey;
 @property (nonatomic, assign) BOOL showKeyboardAccessory;
 @property (nonatomic, assign) BOOL shouldTakeScreenshot;
+/*! Set this if you want some custom text to appear as a placeholder in the
+ feedback text box. */
+@property (nonatomic, retain) NSString *customPlaceholderText;
 
 + (ATConnect *)sharedConnection;
 

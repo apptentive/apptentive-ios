@@ -35,7 +35,7 @@
 @end
 
 @implementation ATFeedbackController
-@synthesize feedback;
+@synthesize feedback, customPlaceholderText;
 
 - (id)init {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
@@ -154,7 +154,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contactInfoChanged:) name:ATContactUpdaterFinished object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(screenshotChanged:) name:ATImageViewChoseImage object:nil];
 	
-    feedbackView.placeholder = ATLocalizedString(@"Feedback", nil);
+    if (self.customPlaceholderText) {
+        feedbackView.placeholder = self.customPlaceholderText;
+    } else {
+        feedbackView.placeholder = ATLocalizedString(@"Feedback", nil);
+    }
     self.title = ATLocalizedString(@"Give Feedback", @"Title of feedback screen.");
     self.navigationItem.backBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:ATLocalizedString(@"Feedback", nil) style:UIBarButtonItemStylePlain target:nil action:nil] autorelease];
     self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelFeedback:)] autorelease];
@@ -192,6 +196,7 @@
 
 - (void)teardown {
     self.feedback = nil;
+    self.customPlaceholderText = nil;
     [feedbackView release];
     feedbackView = nil;
     

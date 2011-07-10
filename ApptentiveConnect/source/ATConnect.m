@@ -20,7 +20,7 @@
 static ATConnect *sharedConnection = nil;
 
 @implementation ATConnect
-@synthesize apiKey, showKeyboardAccessory, shouldTakeScreenshot;
+@synthesize apiKey, showKeyboardAccessory, shouldTakeScreenshot, customPlaceholderText;
 
 + (ATConnect *)sharedConnection {
     @synchronized(self) {
@@ -46,6 +46,7 @@ static ATConnect *sharedConnection = nil;
         feedbackWindowController = nil;
     }
 #endif
+    self.customPlaceholderText = nil;
     self.apiKey = nil;
     [super dealloc];
 }
@@ -89,6 +90,9 @@ static ATConnect *sharedConnection = nil;
         feedback = nil;
     }
     ATFeedbackController *vc = [[ATFeedbackController alloc] init];
+    if (self.customPlaceholderText) {
+        vc.customPlaceholderText = self.customPlaceholderText;
+    }
     vc.feedback = [[ATBackend sharedBackend] currentFeedback];
 
     UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];

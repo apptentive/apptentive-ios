@@ -42,6 +42,10 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 - (void)setUserDislikesThisVersion;
 - (void)setDeclinedToRateThisVersion;
 - (void)logDefaults;
+
+#if TARGET_OS_IPHONE
+- (void)appWillEnterBackground:(NSNotification *)notification;
+#endif
 @end
 
 
@@ -58,6 +62,9 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
         self.usesBeforePrompt = kATAppRatingDefaultUsesBeforePrompt;
         self.significantEventsBeforePrompt = kATAppRatingDefaultSignificantEventsBeforePrompt;
         self.daysBeforeRePrompting = kATAppRatingDefaultDaysBeforeRePrompting;
+#if TARGET_OS_IPHONE
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterBackground:) name:UIApplicationWillResignActiveNotification object:nil];
+#endif
     }
     return self;
 }
@@ -98,7 +105,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 }
 
 #if TARGET_OS_IPHONE
-- (void)appDidEnterForeground:(BOOL)canPromptForRating  viewController:(UIViewController *)vc {
+- (void)appDidEnterForeground:(BOOL)canPromptForRating viewController:(UIViewController *)vc {
     self.viewController = vc;
     [self userDidUseApp];
     
@@ -214,6 +221,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 #pragma mark UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (alertView == enjoymentDialog) {
+        [enjoymentDialog release], enjoymentDialog = nil;
         if (buttonIndex == 0) { // no
             [self setUserDislikesThisVersion];
             if (!self.viewController) {
@@ -228,8 +236,8 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
         } else if (buttonIndex == 1) { // yes
             [self showRatingDialog:self.viewController];
         }
-        [enjoymentDialog release], enjoymentDialog = nil;
     } else if (alertView == ratingDialog) {
+        [ratingDialog release], ratingDialog = nil;
         if (buttonIndex == 1) { // rate
             [self openURLForRatingApp];
         } else if (buttonIndex == 2) { // remind later
@@ -237,6 +245,16 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
         } else if (buttonIndex == 0) { // no thanks
             [self setDeclinedToRateThisVersion];
         }
+        self.viewController = nil;
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    NSLog(@"ATAppRatingFlow dismissing alert view %@, %d", alertView, buttonIndex);
+    if (alertView == enjoymentDialog) {
+        [enjoymentDialog release], enjoymentDialog = nil;
+        self.viewController = nil;
+    } else if (alertView == ratingDialog) {
         [ratingDialog release], ratingDialog = nil;
         self.viewController = nil;
     }
@@ -429,4 +447,16 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
     }
     NSLog(@"-- END ATAppRatingFlow DEFAULTS --");
 }
+
+#if TARGET_OS_IPHONE
+- (void)appWillEnterBackground:(NSNotification *)notification {
+    // We want to hide any dialogs here.
+    if (enjoymentDialog) {
+        [enjoymentDialog dismissWithClickedButtonIndex:3 animated:NO];
+    }
+    if (ratingDialog) {
+        [ratingDialog dismissWithClickedButtonIndex:3 animated:NO];
+    }
+}
+#endif
 @end

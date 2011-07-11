@@ -265,7 +265,12 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 
 @implementation ATAppRatingFlow (Private)
 - (NSString *)appName {
-    return [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleNameKey];
+    NSString *displayName = nil;
+    displayName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"];
+    if (!displayName) {
+        displayName = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleNameKey];
+    }
+    return displayName;
 }
 
 - (NSURL *)URLForRatingApp {

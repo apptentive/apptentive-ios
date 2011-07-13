@@ -12,4 +12,5 @@
 
 }
 - (IBAction)showFeedback:(id)sender;
+- (IBAction)showRating:(id)sender;
 @end

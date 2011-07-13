@@ -73,10 +73,16 @@
         placeholderLabel.text = self.placeholder;
         placeholderLabel.font = self.font;
         placeholderLabel.textAlignment = self.textAlignment;
+        placeholderLabel.numberOfLines = 0;
+        placeholderLabel.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         [placeholderLabel sizeToFit];
         [self addSubview:placeholderLabel];
+        CGFloat padding = 8.0;
+        CGRect b = placeholderLabel.bounds;
+        b.size.width = self.bounds.size.width - padding*2.0;
+        placeholderLabel.bounds = b;
         CGRect f = placeholderLabel.frame;
-        f.origin = CGPointMake(8.0, 8.0);
+        f.origin = CGPointMake(padding, padding);
         placeholderLabel.frame = f;
         [self sendSubviewToBack:placeholderLabel];
     } else {

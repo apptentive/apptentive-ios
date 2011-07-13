@@ -8,6 +8,7 @@
 
 #import "FeedbackDemoAppDelegate.h"
 #import "ATConnect.h"
+#import "ATAppRatingFlow.h"
 #import "defines.h"
 
 @implementation FeedbackDemoAppDelegate
@@ -28,6 +29,9 @@
     }
     [self.window makeKeyAndVisible];
     [[ATConnect sharedConnection] setApiKey:kApptentiveAPIKey];
+    ATAppRatingFlow *ratingFlow = [ATAppRatingFlow sharedRatingFlowWithAppID:kApptentiveAppID];
+    [ratingFlow appDidLaunch:YES viewController:self.navigationController];
+    
     return YES;
 }
 
@@ -59,6 +63,7 @@
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
+    [[ATAppRatingFlow sharedRatingFlowWithAppID:kApptentiveAppID] appDidEnterForeground:YES viewController:self.navigationController];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

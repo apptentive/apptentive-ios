@@ -1,12 +1,13 @@
 //
-//  ATFeedbackController.m
+//  ATSimpleFeedbackController.m
 //  ApptentiveConnect
 //
-//  Created by Andrew Wooster on 3/12/11.
-//  Copyright 2011 Uncorked Apps LLC. All rights reserved.
+//  Created by Andrew Wooster on 7/13/11.
+//  Copyright 2011 Apptentive, Inc. All rights reserved.
 //
 
-#import "ATFeedbackController.h"
+#import "ATSimpleFeedbackController.h"
+
 #import "ATBackend.h"
 #import "ATConnect.h"
 #import "ATContactInfoController.h"
@@ -14,12 +15,14 @@
 #import "ATContactUpdater.h"
 #import "ATDefaultTextView.h"
 #import "ATFeedback.h"
+#import "ATHUDView.h"
 #import "ATInfoViewController.h"
 #import "ATKeyboardAccessoryView.h"
 #import "ATPopupSelectorControl.h"
-#import "ATSimpleImageViewController.h"
 
-@interface ATFeedbackController (Private)
+#define kATEmailAlertTextFieldTag 1010
+
+@interface ATSimpleFeedbackController (Private)
 - (BOOL)shouldReturn:(UIView *)view;
 - (void)setup;
 - (void)setupFeedback;
@@ -30,18 +33,18 @@
 - (void)keyboardWillHide:(NSNotification *)notification;
 - (void)feedbackChanged:(NSNotification *)notification;
 - (void)contactInfoChanged:(NSNotification *)notification;
-- (void)screenshotChanged:(NSNotification *)notification;
 - (void)captureFeedbackState;
+- (void)sendFeedbackAndDismiss;
 @end
 
-@implementation ATFeedbackController
+@implementation ATSimpleFeedbackController
 @synthesize feedback, customPlaceholderText;
 
 - (id)init {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        self = [super initWithNibName:@"ATFeedbackController" bundle:[ATConnect resourceBundle]];
+        self = [super initWithNibName:@"ATSimpleFeedbackController" bundle:[ATConnect resourceBundle]];
     } else {
-        self = [super initWithNibName:@"ATFeedbackController_iPad" bundle:[ATConnect resourceBundle]];
+        self = [super initWithNibName:@"ATSimpleFeedbackController" bundle:[ATConnect resourceBundle]];
     }
     return self;
 }
@@ -96,30 +99,37 @@
     }
 }
 
-- (IBAction)screenshotSwitchToggled:(id)sender {
-    [self captureFeedbackState];
-}
-
 - (IBAction)cancelFeedback:(id)sender {
     [self captureFeedbackState];
     [self dismissModalViewControllerAnimated:YES];
 }
 
 - (IBAction)nextStep:(id)sender {
-    [self captureFeedbackState];
+    self.feedback.email = emailField.text;
     
-    ATContactInfoController *vc = [[ATContactInfoController alloc] init];
-    vc.feedback = self.feedback;
-    [self.navigationController pushViewController:vc animated:YES];
-    [vc release];
-}
-
-- (IBAction)imageDisclosureTapped:(id)sender {
-    ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithFeedback:self.feedback];
-    vc.title = ATLocalizedString(@"Screenshot", @"Title for screenshot view.");
-    [feedbackView resignFirstResponder];
-    [self.navigationController pushViewController:vc animated:YES];
-    [vc release];
+    if (!self.feedback.email || [self.feedback.email length] == 0) {
+        NSString *title = NSLocalizedString(@"No email address?", @"Lack of email dialog title.");
+        NSString *message = NSLocalizedString(@"We can't respond without one.\n\n\n", @"Lack of email dialog message.");
+        UIAlertView *emailAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil  otherButtonTitles:NSLocalizedString(@"Send Feedback", @"Send button title"), nil];
+        
+        UITextField *field = [[UITextField alloc] initWithFrame:CGRectMake(16, 83, 252, 25)];
+        field.font = [UIFont systemFontOfSize:18];
+        field.backgroundColor = [UIColor clearColor];
+        field.keyboardAppearance = UIKeyboardAppearanceAlert;
+        field.delegate = self;
+        field.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        field.placeholder = NSLocalizedString(@"Email Address", @"Email address popup placeholder text.");
+        field.borderStyle = UITextBorderStyleRoundedRect;
+        field.tag = kATEmailAlertTextFieldTag;
+        [field becomeFirstResponder];
+        [emailAlert addSubview:field];
+        [field release], field = nil;
+        [emailAlert sizeToFit];
+        [emailAlert show];
+        [emailAlert release];
+    } else {
+        [self sendFeedbackAndDismiss];
+    }
 }
 
 - (IBAction)showInfoView:(id)sender {
@@ -132,11 +142,33 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     return [self shouldReturn:textField];
 }
+
+
+#pragma mark UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    UITextField *textField = (UITextField *)[alertView viewWithTag:kATEmailAlertTextFieldTag];
+    if (textField) {
+        self.feedback.email = textField.text;
+        [self sendFeedbackAndDismiss];
+    }
+}
 @end
 
 
-@implementation ATFeedbackController (Private)
+@implementation ATSimpleFeedbackController (Private)
 - (BOOL)shouldReturn:(UIView *)view {
+    if (view == feedbackView) {
+        [emailField becomeFirstResponder];
+        return NO;
+    } else if (view == emailField) {
+        if (feedbackView.text && [feedbackView.text length] != 0) {
+            [self nextStep:emailField];
+            return YES;
+        } else {
+            [feedbackView becomeFirstResponder];
+            return NO;
+        }
+    }
     return YES;
 }
 
@@ -152,7 +184,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackChanged:) name:UITextViewTextDidChangeNotification object:feedbackView];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contactInfoChanged:) name:ATContactUpdaterFinished object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(screenshotChanged:) name:ATImageViewChoseImage object:nil];
 	
     if (self.customPlaceholderText) {
         feedbackView.placeholder = self.customPlaceholderText;
@@ -162,7 +193,7 @@
     self.title = ATLocalizedString(@"Give Feedback", @"Title of feedback screen.");
     self.navigationItem.backBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:ATLocalizedString(@"Feedback", nil) style:UIBarButtonItemStylePlain target:nil action:nil] autorelease];
     self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelFeedback:)] autorelease];
-    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:ATLocalizedString(@"Next Step", @"Title of button which takes user from feedback to contact info/screenshot screen.") style:UIBarButtonItemStyleBordered target:self action:@selector(nextStep:)] autorelease];
+    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:ATLocalizedString(@"Submit", @"Label of button for submitting feedback.") style:UIBarButtonItemStyleDone target:self action:@selector(nextStep:)] autorelease];
     self.navigationItem.rightBarButtonItem.enabled = ![@"" isEqualToString:feedbackView.text];
     
     // Setup Popup
@@ -184,13 +215,14 @@
     [smileySelection release];
     [frownySelection release];
     [questionSelection release];
-	
-    screenshotSwitch.on = self.feedback.screenshotSwitchEnabled;
 }
 
 - (void)setupFeedback {
     if (feedbackView && [feedbackView isDefault] && feedback.text) {
         feedbackView.text = feedback.text;
+    }
+    if (emailField && (!emailField.text || [@"" isEqualToString:emailField.text]) && feedback.email) {
+        emailField.text = feedback.email;
     }
 }
 
@@ -200,11 +232,10 @@
     [feedbackView release];
     feedbackView = nil;
     
-    [screenshotContainerView release];
-    screenshotContainerView = nil;
+    [emailContainerView release], emailContainerView = nil;
     
-    [screenshotSwitch release];
-    screenshotSwitch = nil;
+    [emailField release], emailField = nil;
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -226,13 +257,13 @@
     CGRect feedbackViewFrame = [feedbackView.superview convertRect:feedbackView.frame toView:feedbackView]; // feedbackView
     
     // Okay, what's the amount of space we have left over for the feedbackView?
-    CGFloat screenshotViewHeight = screenshotContainerView.frame.size.height;
+    CGFloat emailViewHeight = emailContainerView.frame.size.height;
     
     CGFloat keyboardOrigin = keyboardFrameFeedbackRelative.origin.y;
     CGFloat superviewBottom = superviewFrameFeedbackRelative.origin.y + superviewFrameFeedbackRelative.size.height;
     
     CGFloat maxYForFeedbackView = MIN(keyboardOrigin, superviewBottom);
-    CGFloat newFeedbackViewHeight = maxYForFeedbackView - screenshotViewHeight;
+    CGFloat newFeedbackViewHeight = maxYForFeedbackView - emailViewHeight;
     
     CGRect newFrameFeedbackRelative = CGRectZero;
     newFrameFeedbackRelative.origin.y = feedbackViewFrame.origin.y;
@@ -245,12 +276,12 @@
     return newFrame;
 }
 
-- (CGRect)newScreenshotFrameWithNotification:(NSNotification *)notification {
+- (CGRect)newEmailFrameWithNotification:(NSNotification *)notification {
     CGRect newFeedbackFrame = [self newFeedbackFrameWithNotification:notification];
-    CGRect newScreenshotFrame = screenshotContainerView.frame;
-    newScreenshotFrame.origin.y = newFeedbackFrame.origin.y + newFeedbackFrame.size.height;
+    CGRect newEmailFrame = emailContainerView.frame;
+    newEmailFrame.origin.y = newFeedbackFrame.origin.y + newFeedbackFrame.size.height;
     
-    return newScreenshotFrame;
+    return newEmailFrame;
 }
 
 // Helper to get the frame of the feedbackView when a keyboard is shown.
@@ -259,14 +290,14 @@
     
     NSDictionary *userInfo = [notification userInfo];
     CGRect newFrame = [self newFeedbackFrameWithNotification:notification];
-    CGRect newScreenshotFrame = [self newScreenshotFrameWithNotification:notification];
+    CGRect newEmailFrame = [self newEmailFrameWithNotification:notification];
     
     NSTimeInterval duration;
     [(NSValue *)[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&duration];
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:duration];
     feedbackView.frame = newFrame;
-    screenshotContainerView.frame = newScreenshotFrame;
+    emailContainerView.frame = newEmailFrame;
     [UIView commitAnimations];
     [feedbackView flashScrollIndicators];
 }
@@ -276,9 +307,9 @@
 - (void)keyboardDidShow:(NSNotification *)notification {
     if (!feedbackView.window) return;
     CGRect newFrame = [self newFeedbackFrameWithNotification:notification];
-    CGRect screenshotFrame = [self newScreenshotFrameWithNotification:notification];
+    CGRect emailFrame = [self newEmailFrameWithNotification:notification];
     feedbackView.frame = newFrame;
-    screenshotContainerView.frame = screenshotFrame;
+    emailContainerView.frame = emailFrame;
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification {
@@ -291,27 +322,29 @@
     CGRect viewRect = [feedbackView.superview.superview convertRect:feedbackView.superview.frame toView:nil];
     CGRect windowBounds = feedbackView.window.bounds;
     CGRect feedbackRect = [feedbackView.superview convertRect:feedbackView.frame toView:nil];
-    CGRect screenshotRect = screenshotContainerView.frame;
+    CGRect emailRect = emailContainerView.frame;
     
     CGFloat bottomSpacing = windowBounds.size.height - (viewRect.origin.y + viewRect.size.height);
-    CGFloat newHeight = windowBounds.size.height - feedbackRect.origin.y - bottomSpacing - screenshotRect.size.height;
+    CGFloat newHeight = windowBounds.size.height - feedbackRect.origin.y - bottomSpacing - emailRect.size.height;
     
     CGRect newFrame = feedbackView.frame;
     newFrame.size.height = newHeight;
     
-    CGRect newScreenshotFrame = screenshotContainerView.frame;
-    newScreenshotFrame.origin.y = newFrame.origin.y + newFrame.size.height;
+    CGRect newEmailFrame = emailContainerView.frame;
+    newEmailFrame.origin.y = newFrame.origin.y + newFrame.size.height;
     
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:animationDuration];
     feedbackView.frame = newFrame;
-    screenshotContainerView.frame = newScreenshotFrame;
+    emailContainerView.frame = newEmailFrame;
     [UIView commitAnimations];
 }
 
 - (void)feedbackChanged:(NSNotification *)notification {
     if (notification.object == feedbackView) {
-        self.navigationItem.rightBarButtonItem.enabled = ![@"" isEqualToString:feedbackView.text];
+        BOOL empty = [@"" isEqualToString:feedbackView.text];
+        self.navigationItem.rightBarButtonItem.enabled = !empty;
+        emailField.returnKeyType = empty ? UIReturnKeyNext : UIReturnKeyDone;
     }
 }
 
@@ -328,24 +361,31 @@
     }
 }
 
-- (void)screenshotChanged:(NSNotification *)notification {
-	if (self.feedback.screenshot) {
-		screenshotSwitch.on = YES;
-        self.feedback.screenshotSwitchEnabled = YES;
-	} 
-}
-
 - (void)setupKeyboardAccessory {
     if ([[ATConnect sharedConnection] showKeyboardAccessory]) {
-        ATKeyboardAccessoryView *accessory = [[[ATKeyboardAccessoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 20.0)] autorelease];
-        [accessory addTarget:self action:@selector(showInfoView:) forControlEvents:UIControlEventTouchUpInside];
-        feedbackView.inputAccessoryView = accessory;
+        NSArray *textFields = [NSArray arrayWithObjects:feedbackView, emailField, nil];
+        for (UITextField *textField in textFields) {
+            ATKeyboardAccessoryView *accessory = [[[ATKeyboardAccessoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 20.0)] autorelease];
+            [accessory addTarget:self action:@selector(showInfoView:) forControlEvents:UIControlEventTouchUpInside];
+            textField.inputAccessoryView = accessory;
+        }
     }
 }
 
 - (void)captureFeedbackState {
     feedback.type = [selectorControl currentSelection].feedbackType;
     feedback.text = feedbackView.text;
-    feedback.screenshotSwitchEnabled = screenshotSwitch.on;
+    feedback.email = emailField.text;
+}
+
+- (void)sendFeedbackAndDismiss {
+    self.feedback.screenshot = nil; // enforce no screenshot
+    [[ATBackend sharedBackend] sendFeedback:feedback];
+    ATHUDView *hud = [[ATHUDView alloc] initWithWindow:[[self view] window]];
+    hud.label.text = ATLocalizedString(@"Thanks!", @"Text in thank you display upon submitting feedback.");
+    [hud show];
+    [hud autorelease];
+    [self dismissModalViewControllerAnimated:YES];
 }
 @end
+

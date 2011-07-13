@@ -229,9 +229,12 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
             } else {
                 ATConnect *connection = [ATConnect sharedConnection];
                 connection.customPlaceholderText = NSLocalizedString(@"Unhappy with this app? We'd love to hear why so we can make it better.", @"Custom placeholder feedback text when user is unhappy with the application.");
+                ATFeedbackControllerType oldType = connection.feedbackControllerType;
+                connection.feedbackControllerType = ATFeedbackControllerSimple;
                 [connection presentFeedbackControllerFromViewController:self.viewController];
                 connection.customPlaceholderText = nil;
                 self.viewController = nil;
+                connection.feedbackControllerType = oldType;
             }
         } else if (buttonIndex == 1) { // yes
             [self showRatingDialog:self.viewController];

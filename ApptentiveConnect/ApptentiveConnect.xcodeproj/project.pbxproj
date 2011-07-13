@@ -15,6 +15,10 @@
 		491748BF1341177000A7D11E /* ATURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 491748B71341177000A7D11E /* ATURLConnection.m */; };
 		491748C01341177000A7D11E /* ATWebClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 491748B81341177000A7D11E /* ATWebClient.h */; };
 		491748C11341177000A7D11E /* ATWebClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 491748B91341177000A7D11E /* ATWebClient.m */; };
+		49185F5113CE21860092D349 /* ATSimpleFeedbackController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49185F4F13CE21860092D349 /* ATSimpleFeedbackController.m */; };
+		49185F5313CE21860092D349 /* ATSimpleFeedbackController.h in Headers */ = {isa = PBXBuildFile; fileRef = 49185F4E13CE21860092D349 /* ATSimpleFeedbackController.h */; };
+		49185F5413CE21860092D349 /* ATSimpleFeedbackController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49185F4F13CE21860092D349 /* ATSimpleFeedbackController.m */; };
+		49185F6113CE266D0092D349 /* ATSimpleFeedbackController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49185F6013CE266D0092D349 /* ATSimpleFeedbackController.xib */; };
 		493529FF138C7253000E464A /* ATInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA1022138B498C0082887A /* ATInfoViewController.xib */; };
 		49352A00138C7257000E464A /* ATInfoViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA1024138B49A50082887A /* ATInfoViewController_iPad.xib */; };
 		49352A20138C73B8000E464A /* ATAboutApptentiveView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49352A1F138C73B8000E464A /* ATAboutApptentiveView.xib */; };
@@ -135,6 +139,9 @@
 		491748B71341177000A7D11E /* ATURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATURLConnection.m; sourceTree = "<group>"; };
 		491748B81341177000A7D11E /* ATWebClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATWebClient.h; sourceTree = "<group>"; };
 		491748B91341177000A7D11E /* ATWebClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATWebClient.m; sourceTree = "<group>"; };
+		49185F4E13CE21860092D349 /* ATSimpleFeedbackController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSimpleFeedbackController.h; sourceTree = "<group>"; };
+		49185F4F13CE21860092D349 /* ATSimpleFeedbackController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSimpleFeedbackController.m; sourceTree = "<group>"; };
+		49185F6013CE266D0092D349 /* ATSimpleFeedbackController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ATSimpleFeedbackController.xib; sourceTree = "<group>"; };
 		49352A1F138C73B8000E464A /* ATAboutApptentiveView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ATAboutApptentiveView.xib; sourceTree = "<group>"; };
 		49352AC1138C97A2000E464A /* ATAPIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAPIRequest.h; sourceTree = "<group>"; };
 		49352AC2138C97A2000E464A /* ATAPIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAPIRequest.m; sourceTree = "<group>"; };
@@ -277,6 +284,8 @@
 				4936AE6A1379DE6A00A4B17F /* ATContactInfoController.m */,
 				49AA101D138B44C00082887A /* ATInfoViewController.h */,
 				49AA101E138B44C00082887A /* ATInfoViewController.m */,
+				49185F4E13CE21860092D349 /* ATSimpleFeedbackController.h */,
+				49185F4F13CE21860092D349 /* ATSimpleFeedbackController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -397,6 +406,7 @@
 		49C00290133413AA0071F088 /* xibs */ = {
 			isa = PBXGroup;
 			children = (
+				49185F6013CE266D0092D349 /* ATSimpleFeedbackController.xib */,
 				49C00293133413AA0071F088 /* ATFeedbackController.xib */,
 				49C00294133413AA0071F088 /* ATFeedbackController_iPad.xib */,
 				49C00291133413AA0071F088 /* ATContactInfoController.xib */,
@@ -494,6 +504,7 @@
 				49352AC4138C97A2000E464A /* ATAPIRequest.h in Headers */,
 				49352ADD138CA1DC000E464A /* ATURLConnection_Private.h in Headers */,
 				4942CC9113C7AD2D009BF758 /* ATAppRatingFlow.h in Headers */,
+				49185F5313CE21860092D349 /* ATSimpleFeedbackController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -611,6 +622,7 @@
 				49352A00138C7257000E464A /* ATInfoViewController_iPad.xib in Resources */,
 				49352A20138C73B8000E464A /* ATAboutApptentiveView.xib in Resources */,
 				49352B3F138DB3AA000E464A /* ATTaskProgressCell.xib in Resources */,
+				49185F6113CE266D0092D349 /* ATSimpleFeedbackController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -677,6 +689,7 @@
 				49AA1020138B44C00082887A /* ATInfoViewController.m in Sources */,
 				49352AC5138C97A2000E464A /* ATAPIRequest.m in Sources */,
 				4942CC9213C7AD2D009BF758 /* ATAppRatingFlow.m in Sources */,
+				49185F5413CE21860092D349 /* ATSimpleFeedbackController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -703,6 +716,7 @@
 				49AA1021138B44C00082887A /* ATInfoViewController.m in Sources */,
 				49352AC3138C97A2000E464A /* ATAPIRequest.m in Sources */,
 				4942CC9313C7AD2D009BF758 /* ATAppRatingFlow.m in Sources */,
+				49185F5113CE21860092D349 /* ATSimpleFeedbackController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

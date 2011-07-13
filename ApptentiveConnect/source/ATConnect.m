@@ -13,6 +13,7 @@
 #import "ATUtilities.h"
 #if TARGET_OS_IPHONE
 #import "ATFeedbackController.h"
+#import "ATSimpleFeedbackController.h"
 #elif TARGET_OS_MAC
 #import "ATFeedbackWindowController.h"
 #endif
@@ -20,7 +21,7 @@
 static ATConnect *sharedConnection = nil;
 
 @implementation ATConnect
-@synthesize apiKey, showKeyboardAccessory, shouldTakeScreenshot, customPlaceholderText;
+@synthesize apiKey, showKeyboardAccessory, shouldTakeScreenshot, feedbackControllerType, customPlaceholderText;
 
 + (ATConnect *)sharedConnection {
     @synchronized(self) {
@@ -66,7 +67,7 @@ static ATConnect *sharedConnection = nil;
     
     if (![[ATBackend sharedBackend] currentFeedback]) {
         ATFeedback *feedback = [[ATFeedback alloc] init];
-    	if (self.shouldTakeScreenshot) {
+    	if (self.shouldTakeScreenshot && self.feedbackControllerType != ATFeedbackControllerSimple) {
             screenshot = [ATUtilities imageByTakingScreenshot];
             // Get the rotation of the view hierarchy and rotate the screenshot as
             // necessary.
@@ -89,11 +90,21 @@ static ATConnect *sharedConnection = nil;
         [feedback release];
         feedback = nil;
     }
-    ATFeedbackController *vc = [[ATFeedbackController alloc] init];
-    if (self.customPlaceholderText) {
-        vc.customPlaceholderText = self.customPlaceholderText;
+    
+    UIViewController *vc = nil;
+    
+    Class cl = [ATFeedbackController class];
+    
+    if (self.feedbackControllerType == ATFeedbackControllerSimple) {
+        cl = [ATSimpleFeedbackController class];
     }
-    vc.feedback = [[ATBackend sharedBackend] currentFeedback];
+    vc = [[cl alloc] init];
+    if ([vc respondsToSelector:@selector(setCustomPlaceholderText:)] && [vc respondsToSelector:@selector(setFeedback:)]) {
+        if (self.customPlaceholderText) {
+            [vc setCustomPlaceholderText:self.customPlaceholderText];
+        }
+        [vc setFeedback:[[ATBackend sharedBackend] currentFeedback]];
+    }
 
     UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
     

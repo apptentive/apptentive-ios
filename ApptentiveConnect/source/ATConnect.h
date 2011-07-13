@@ -22,6 +22,12 @@
 @class ATFeedbackWindowController;
 #endif
 
+typedef enum {
+    ATFeedbackControllerDefault,
+    ATFeedbackControllerSimple
+} ATFeedbackControllerType;
+
+
 @interface ATConnect : NSObject {
 #if !TARGET_OS_IPHONE
     ATFeedbackWindowController *feedbackWindowController;
@@ -30,6 +36,7 @@
 @property (nonatomic, retain) NSString *apiKey;
 @property (nonatomic, assign) BOOL showKeyboardAccessory;
 @property (nonatomic, assign) BOOL shouldTakeScreenshot;
+@property (nonatomic, assign) ATFeedbackControllerType feedbackControllerType;
 /*! Set this if you want some custom text to appear as a placeholder in the
  feedback text box. */
 @property (nonatomic, retain) NSString *customPlaceholderText;

@@ -379,6 +379,7 @@
 }
 
 - (void)sendFeedbackAndDismiss {
+    [self captureFeedbackState];
     self.feedback.screenshot = nil; // enforce no screenshot
     [[ATBackend sharedBackend] sendFeedback:feedback];
     ATHUDView *hud = [[ATHUDView alloc] initWithWindow:[[self view] window]];

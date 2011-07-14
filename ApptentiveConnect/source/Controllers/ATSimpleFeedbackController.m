@@ -105,7 +105,7 @@
 }
 
 - (IBAction)nextStep:(id)sender {
-    self.feedback.email = emailField.text;
+    [self captureFeedbackState];
     
     if (!self.feedback.email || [self.feedback.email length] == 0) {
         NSString *title = NSLocalizedString(@"No email address?", @"Lack of email dialog title.");
@@ -379,7 +379,6 @@
 }
 
 - (void)sendFeedbackAndDismiss {
-    [self captureFeedbackState];
     self.feedback.screenshot = nil; // enforce no screenshot
     [[ATBackend sharedBackend] sendFeedback:feedback];
     ATHUDView *hud = [[ATHUDView alloc] initWithWindow:[[self view] window]];

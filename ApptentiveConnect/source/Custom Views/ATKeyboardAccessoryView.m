@@ -29,15 +29,21 @@
         textLabel = [[UILabel alloc] initWithFrame:self.frame];
         textLabel.opaque = NO;
         textLabel.backgroundColor = [UIColor clearColor];
-        textLabel.font = [UIFont boldSystemFontOfSize:16.0];
-        textLabel.textColor = [UIColor colorWithRed:0.57 green:0.77 blue:0.92 alpha:1.0];
-        textLabel.text = ATLocalizedString(@"Powered by Apptentive", @"Keyboard accessory text advertising Apptentive.");
+        textLabel.font = [UIFont systemFontOfSize:16.0];
+        if (NO) {
+            textLabel.textColor = [UIColor colorWithRed:0.57 green:0.77 blue:0.92 alpha:1.0];
+        } else {
+            CGFloat g = 0.4;
+            textLabel.textColor = [UIColor colorWithRed:g green:g blue:g alpha:1.0];
+        }
+        textLabel.text = ATLocalizedString(@"Feedback Powered by Apptentive", @"Keyboard accessory text advertising Apptentive.");
         [textLabel sizeToFit];
         textLabel.textAlignment = UITextAlignmentCenter;
         
         
         CGRect tf = textLabel.frame;
         tf.origin.x += 5.0;
+        tf.origin.y += 1.0;
         //tf.origin.y += 5.0;
         textLabel.frame = tf;
         
@@ -45,13 +51,22 @@
         textContainerView.opaque = NO;
         textContainerView.userInteractionEnabled = NO;
         [textContainerView addSubview:textLabel];
-        [textContainerView sizeToFit];
-        CGRect cf = textContainerView.frame;
-        cf.size.height += 10.0;
-        cf.size.width += 10.0;
-        textContainerView.frame = cf;
-        textContainerView.layer.cornerRadius = 4.0;
-        textContainerView.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.7];
+        if (NO) { // old way
+            [textContainerView sizeToFit];
+            CGRect cf = textContainerView.frame;
+            cf.size.height += 10.0;
+            cf.size.width += 10.0;
+            textContainerView.frame = cf;
+            textContainerView.layer.cornerRadius = 4.0;
+            textContainerView.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.7];
+        } else {
+            CGRect cf = textContainerView.frame;
+            cf.origin.x = 0.0;
+            cf.size.width = frame.size.width;
+            cf.size.height += 10.0;
+            textContainerView.frame = cf;
+            textContainerView.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.2];
+        }
         
         [self addSubview:textContainerView];
         

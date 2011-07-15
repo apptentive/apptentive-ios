@@ -18,7 +18,6 @@
 #import "ATHUDView.h"
 #import "ATInfoViewController.h"
 #import "ATKeyboardAccessoryView.h"
-#import "ATPopupSelectorControl.h"
 
 #define kATEmailAlertTextFieldTag 1010
 
@@ -195,26 +194,6 @@
     self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelFeedback:)] autorelease];
     self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:ATLocalizedString(@"Submit", @"Label of button for submitting feedback.") style:UIBarButtonItemStyleDone target:self action:@selector(nextStep:)] autorelease];
     self.navigationItem.rightBarButtonItem.enabled = ![@"" isEqualToString:feedbackView.text];
-    
-    // Setup Popup
-    ATPopupSelection *feedbackSelection = [[ATPopupSelection alloc] initWithFeedbackType:ATFeedbackTypeFeedback popupImage:[ATBackend imageNamed:@"at_feedback"] selectedImage:[ATBackend imageNamed:@"at_feedback_selected"]];
-    feedbackSelection.isSelected = self.feedback.type == ATFeedbackTypeFeedback;
-    
-    ATPopupSelection *smileySelection = [[ATPopupSelection alloc] initWithFeedbackType:ATFeedbackTypePraise popupImage:[ATBackend imageNamed:@"at_smiley"] selectedImage:[ATBackend imageNamed:@"at_smiley_selected"]];
-    smileySelection.isSelected = self.feedback.type == ATFeedbackTypePraise;
-    
-    ATPopupSelection *frownySelection = [[ATPopupSelection alloc] initWithFeedbackType:ATFeedbackTypeBug popupImage:[ATBackend imageNamed:@"at_frowny"] selectedImage:[ATBackend imageNamed:@"at_frowny_selected"]];
-    frownySelection.isSelected = self.feedback.type == ATFeedbackTypeBug;
-    
-    ATPopupSelection *questionSelection = [[ATPopupSelection alloc] initWithFeedbackType:ATFeedbackTypeQuestion popupImage:[ATBackend imageNamed:@"at_question"] selectedImage:[ATBackend imageNamed:@"at_question_selected"]];
-    questionSelection.isSelected = self.feedback.type == ATFeedbackTypeQuestion;
-    
-    NSArray *selections = [NSArray arrayWithObjects:feedbackSelection, smileySelection, frownySelection, questionSelection, nil];
-    selectorControl.selections = selections;
-    [feedbackSelection release];
-    [smileySelection release];
-    [frownySelection release];
-    [questionSelection release];
 }
 
 - (void)setupFeedback {
@@ -373,7 +352,6 @@
 }
 
 - (void)captureFeedbackState {
-    feedback.type = [selectorControl currentSelection].feedbackType;
     feedback.text = feedbackView.text;
     feedback.email = emailField.text;
 }

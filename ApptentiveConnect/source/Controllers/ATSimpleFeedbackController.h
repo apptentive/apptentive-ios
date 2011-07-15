@@ -11,13 +11,11 @@
 @class ATDefaultTextView;
 @class ATFeedback;
 @class ATKeyboardAccessoryView;
-@class ATPopupSelectorControl;
 
 @interface ATSimpleFeedbackController : UIViewController <UITextFieldDelegate> {
     IBOutlet ATDefaultTextView *feedbackView;
     IBOutlet UITextField *emailField;
     IBOutlet UIView *emailContainerView;
-    IBOutlet ATPopupSelectorControl *selectorControl;
 }
 
 @property (nonatomic, retain) ATFeedback *feedback;

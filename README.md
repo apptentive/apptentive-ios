@@ -14,6 +14,22 @@ Sample Application
 The sample application FeedbackDemo demonstrates how to integrate the SDK
 with your application.
 
+The demo app includes the normal feedback flow, which can be activated by
+clicking the Feedback button. It's a two screen process, the first gathering
+feedback and screenshot, the second gathering contact information for 
+followup:
+
+![Feedback Screen](raw/master/etc/screenshots/feedback_iphone.png)
+![Contact Info Screen](raw/master/etc/screenshots/contact_iphone.png)
+
+The rating flow can be activated by clicking on the Ratings button. It asks
+the user if they are happy with the app. If not, then a simplified feedback
+window is opened. If they are happy with the app, they are prompted to rate
+the app in the App Store:
+
+![Popup](raw/master/etc/screenshots/rating.png)
+![Simplified Feedback](raw/master/etc/screenshots/feedback_simple_iphone.png)
+
 
 Required Frameworks (Xcode 3 & 4)
 ---------------------------------

@@ -67,7 +67,7 @@ static ATWebClient *sharedSingleton = nil;
 
 - (ATAPIRequest *)requestForPostingFeedback:(ATFeedback *)feedback {
     NSDictionary *postData = [feedback apiDictionary];
-    NSString *url = @"http://www.apptentive.com/feedback";
+    NSString *url = @"http://www.apptentive-test.com/records";
     ATURLConnection *conn = nil;
     
     if (feedback.screenshot) {
@@ -76,7 +76,7 @@ static ATWebClient *sharedSingleton = nil;
 #elif TARGET_OS_MAC
         NSData *fileData = [ATUtilities pngRepresentationOfImage:feedback.screenshot];
 #endif
-        conn = [self connectionToPost:[NSURL URLWithString:url] withFileData:fileData ofMimeType:@"image/png" fileDataKey:@"feedback[screenshot]" parameters:postData];
+        conn = [self connectionToPost:[NSURL URLWithString:url] withFileData:fileData ofMimeType:@"image/png" fileDataKey:@"record[file][screenshot]" parameters:postData];
     } else {
         conn = [self connectionToPost:[NSURL URLWithString:url] parameters:postData];
     }
@@ -252,8 +252,7 @@ static ATWebClient *sharedSingleton = nil;
 	[conn setValue: @"utf-8" forHTTPHeaderField: @"Accept-Charset"];
     NSString *apiKey = [[ATBackend sharedBackend] apiKey];
     if (apiKey) {
-        NSData *apiKeyData = [apiKey dataUsingEncoding:NSUTF8StringEncoding];
-        NSString *value = [NSString stringWithFormat:@"Basic %@", [apiKeyData at_base64EncodedString]];
+        NSString *value = [NSString stringWithFormat:@"OAuth %@", apiKey];
         [conn setValue:value forHTTPHeaderField:@"Authorization"];
     }
 }

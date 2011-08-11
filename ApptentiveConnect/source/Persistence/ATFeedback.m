@@ -7,6 +7,7 @@
 //
 
 #import "ATFeedback.h"
+#import "ATConnect.h"
 #import "ATBackend.h"
 #if TARGET_OS_IPHONE
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
@@ -153,7 +154,7 @@
     if (self.text) [d setObject:self.text forKey:@"record[feedback]"];
     
     //!! what is the new equivalent for this?
-    [d setObject:[self stringForFeedbackType:self.type] forKey:@"feedback[feedback_type]"];
+    [d setObject:[self stringForFeedbackType:self.type] forKey:@"record[data][feedback_type]"];
     
     [d setObject:[self formattedDate:self.date] forKey:@"record[date]"];
     

@@ -67,7 +67,7 @@ static ATWebClient *sharedSingleton = nil;
 
 - (ATAPIRequest *)requestForPostingFeedback:(ATFeedback *)feedback {
     NSDictionary *postData = [feedback apiDictionary];
-    NSString *url = @"http://www.apptentive-test.com/records";
+    NSString *url = @"http://api.apptentive-beta.com/records";
     ATURLConnection *conn = nil;
     
     if (feedback.screenshot) {

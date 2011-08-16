@@ -12,6 +12,8 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
+#define USE_STAGING 1
+
 @class ATContactUpdater;
 @class ATFeedback;
 @class ATAPIRequest;

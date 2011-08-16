@@ -151,10 +151,10 @@
     if (self.model) [d setObject:self.model forKey:@"record[device][model]"];
     if (self.os_version) [d setObject:self.os_version forKey:@"record[device][os_version]"];
     if (self.carrier) [d setObject:self.carrier forKey:@"record[device][carrier]"];
-    if (self.text) [d setObject:self.text forKey:@"record[feedback]"];
+    if (self.text) [d setObject:self.text forKey:@"record[feedback][feedback]"];
     
     //!! what is the new equivalent for this?
-    [d setObject:[self stringForFeedbackType:self.type] forKey:@"record[data][feedback_type]"];
+    [d setObject:[self stringForFeedbackType:self.type] forKey:@"record[feedback][type]"];
     
     [d setObject:[self formattedDate:self.date] forKey:@"record[date]"];
     
@@ -163,7 +163,7 @@
     [d setObject:kATConnectPlatformString forKey:@"record[client][os]"];
     [d setObject:@"Apptentive, Inc." forKey:@"record[client][author]"];
     [d setObject:@"Apptentive, Inc." forKey:@"record[client][author]"];
-    
+    NSLog(@"d: %@", d);
     return d;
 }
 @end

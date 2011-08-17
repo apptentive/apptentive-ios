@@ -152,8 +152,6 @@
     if (self.os_version) [d setObject:self.os_version forKey:@"record[device][os_version]"];
     if (self.carrier) [d setObject:self.carrier forKey:@"record[device][carrier]"];
     if (self.text) [d setObject:self.text forKey:@"record[feedback][feedback]"];
-    
-    //!! what is the new equivalent for this?
     [d setObject:[self stringForFeedbackType:self.type] forKey:@"record[feedback][type]"];
     
     [d setObject:[self formattedDate:self.date] forKey:@"record[date]"];

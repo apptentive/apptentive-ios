@@ -146,7 +146,7 @@
     NSMutableDictionary *d = [NSMutableDictionary dictionary];
     if (self.uuid) [d setObject:self.uuid forKey:@"record[device][uuid]"];
     if (self.name) [d setObject:self.name forKey:@"record[user][name]"];
-    if (self.email) [d setObject:self.email forKey:@"record[user][email_address]"];
+    if (self.email) [d setObject:self.email forKey:@"record[user][email]"];
     if (self.phone) [d setObject:self.phone forKey:@"record[user][phone_number]"];
     if (self.model) [d setObject:self.model forKey:@"record[device][model]"];
     if (self.os_version) [d setObject:self.os_version forKey:@"record[device][os_version]"];
@@ -161,7 +161,6 @@
     [d setObject:kATConnectPlatformString forKey:@"record[client][os]"];
     [d setObject:@"Apptentive, Inc." forKey:@"record[client][author]"];
     [d setObject:@"Apptentive, Inc." forKey:@"record[client][author]"];
-    NSLog(@"d: %@", d);
     return d;
 }
 @end

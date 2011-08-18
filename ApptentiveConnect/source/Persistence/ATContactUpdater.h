@@ -16,24 +16,19 @@ NSString * const ATContactUpdaterFinished;
 @interface ATContactUpdater : NSObject <ATAPIRequestDelegate> {
 @private
     ATAPIRequest *request;
-    ATContactParser *parser;
 }
 - (void)update;
 - (void)cancel;
 @end
 
-
-@interface ATContactParser : NSObject <NSXMLParserDelegate> {
+@interface ATContactParser : NSObject {
 @private
-    NSXMLParser *parser;
-    BOOL parseInsideItem;
-    NSString *parseCurrentElementName;
-	NSMutableString *parseCurrentString;
+    NSError *parserError;
 }
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *phone;
 @property (nonatomic, retain) NSString *email;
-- (BOOL)parse:(NSData *)xmlData;
-- (void)abortParsing;
+- (BOOL)parse:(NSData *)jsonContactInfo;
 - (NSError *)parserError;
 @end
+

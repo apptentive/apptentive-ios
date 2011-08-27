@@ -25,6 +25,13 @@
 #define kCommonChannelName (@"ATWebClient")
 #define kUserAgentFormat (@"ApptentiveConnect/%@ (%@)")
 
+#if USE_STAGING
+#define kApptentiveBaseURL (@"http://api.apptentive-beta.com")
+#else
+#define kApptentiveBaseURL (@"https://api.apptentive.com")
+#endif
+
+
 static ATWebClient *sharedSingleton = nil;
 
 @interface ATWebClient (Private)
@@ -57,7 +64,7 @@ static ATWebClient *sharedSingleton = nil;
 - (ATAPIRequest *)requestForGettingContactInfo {
     NSString *uuid = [[ATBackend sharedBackend] deviceUUID];
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:uuid forKey:@"uuid"];
-    NSString *urlString = [NSString stringWithFormat:@"http://www.apptentive.com/feedback/fetch_contact?%@", [self stringForParameters:parameters]];
+    NSString *urlString = [NSString stringWithFormat:@"%@/feedback/fetch_contact?%@", kApptentiveBaseURL, [self stringForParameters:parameters]];
     ATURLConnection *conn = [self connectionToGet:[NSURL URLWithString:urlString]];
     conn.timeoutInterval = 20.0;
     ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kCommonChannelName];
@@ -67,7 +74,7 @@ static ATWebClient *sharedSingleton = nil;
 
 - (ATAPIRequest *)requestForPostingFeedback:(ATFeedback *)feedback {
     NSDictionary *postData = [feedback apiDictionary];
-    NSString *url = @"http://www.apptentive.com/feedback";
+    NSString *url = [NSString stringWithFormat:@"%@/feedback", kApptentiveBaseURL];
     ATURLConnection *conn = nil;
     
     if (feedback.screenshot) {

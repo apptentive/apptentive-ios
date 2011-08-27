@@ -7,6 +7,7 @@
 //
 
 #import "ATFeedback.h"
+#import "ATConnect.h"
 #import "ATBackend.h"
 #if TARGET_OS_IPHONE
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
@@ -143,18 +144,23 @@
 
 - (NSDictionary *)apiDictionary {
     NSMutableDictionary *d = [NSMutableDictionary dictionary];
-    if (self.uuid) [d setObject:self.uuid forKey:@"feedback[uuid]"];
-    if (self.name) [d setObject:self.name forKey:@"feedback[name]"];
-    if (self.email) [d setObject:self.email forKey:@"feedback[email_address]"];
-    if (self.phone) [d setObject:self.phone forKey:@"feedback[phone_number]"];
-    if (self.model) [d setObject:self.model forKey:@"feedback[model]"];
-    if (self.os_version) [d setObject:self.os_version forKey:@"feedback[os_version]"];
-    if (self.carrier) [d setObject:self.carrier forKey:@"feedback[carrier]"];
-    if (self.text) [d setObject:self.text forKey:@"feedback[feedback]"];
-    [d setObject:[self stringForFeedbackType:self.type] forKey:@"feedback[feedback_type]"];
+    if (self.uuid) [d setObject:self.uuid forKey:@"record[device][uuid]"];
+    if (self.name) [d setObject:self.name forKey:@"record[user][name]"];
+    if (self.email) [d setObject:self.email forKey:@"record[user][email]"];
+    if (self.phone) [d setObject:self.phone forKey:@"record[user][phone_number]"];
+    if (self.model) [d setObject:self.model forKey:@"record[device][model]"];
+    if (self.os_version) [d setObject:self.os_version forKey:@"record[device][os_version]"];
+    if (self.carrier) [d setObject:self.carrier forKey:@"record[device][carrier]"];
+    if (self.text) [d setObject:self.text forKey:@"record[feedback][feedback]"];
+    [d setObject:[self stringForFeedbackType:self.type] forKey:@"record[feedback][type]"];
     
-    [d setObject:[self formattedDate:self.date] forKey:@"feedback[feedback_date]"];
+    [d setObject:[self formattedDate:self.date] forKey:@"record[date]"];
     
+    // Add some client information.
+    [d setObject:kATConnectVersionString forKey:@"record[client][version]"];
+    [d setObject:kATConnectPlatformString forKey:@"record[client][os]"];
+    [d setObject:@"Apptentive, Inc." forKey:@"record[client][author]"];
+    [d setObject:@"Apptentive, Inc." forKey:@"record[client][author]"];
     return d;
 }
 @end

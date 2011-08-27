@@ -43,6 +43,12 @@ following frameworks:
 * SystemConfiguration
 * UIKit
 
+Library Conflicts
+-----------------
+`ApptentiveConnect` includes the `JSONKit` JSON parser. If you're already
+using `JSONKit` in your project, you may need to modify your project to use
+the copy in `ApptentiveConnect`.
+
 Project Settings for Xcode 4
 ----------------------------
 
@@ -169,13 +175,3 @@ In [iTunesConnect](https://itunesconnect.apple.com/), go to "Manage Your
 Applications" and click on your application. In the "App Information" 
 section of the page, look for the "Apple ID". It will be a number. This is
 your iTunes applicaiton ID.
-
-
-BUGS TO BE AWARE OF
--------------------
-Xcode 4 won't correctly rebuild static libraries inside a workspace when the source has changed. If you change the source of `ApptentiveConnect` when
-working on your app, you must do a `Product > Clean` before building and
-running your app.
-
-Adding `ATConnect.h` to your project, above, is necessary due to a bug in
-Xcode 4 when archiving your app.

@@ -25,6 +25,12 @@
 #define kCommonChannelName (@"ATWebClient")
 #define kUserAgentFormat (@"ApptentiveConnect/%@ (%@)")
 
+#if USE_STAGING
+#define kApptentiveBaseURL (@"http://api.apptentive-beta.com")
+#else
+#define kApptentiveBaseURL (@"https://api.apptentive.com")
+#endif
+
 static ATWebClient *sharedSingleton = nil;
 
 @interface ATWebClient (Private)
@@ -56,8 +62,8 @@ static ATWebClient *sharedSingleton = nil;
 
 - (ATAPIRequest *)requestForGettingContactInfo {
     NSString *uuid = [[ATBackend sharedBackend] deviceUUID];
-    NSDictionary *parameters = [NSDictionary dictionaryWithObject:uuid forKey:@"uuid"];
-    NSString *urlString = [NSString stringWithFormat:@"http://www.apptentive.com/feedback/fetch_contact?%@", [self stringForParameters:parameters]];
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:uuid, @"uuid", nil];
+    NSString *urlString = [NSString stringWithFormat:@"%@/records/recent_user?%@", kApptentiveBaseURL, [self stringForParameters:parameters]];
     ATURLConnection *conn = [self connectionToGet:[NSURL URLWithString:urlString]];
     conn.timeoutInterval = 20.0;
     ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kCommonChannelName];
@@ -67,7 +73,7 @@ static ATWebClient *sharedSingleton = nil;
 
 - (ATAPIRequest *)requestForPostingFeedback:(ATFeedback *)feedback {
     NSDictionary *postData = [feedback apiDictionary];
-    NSString *url = @"http://www.apptentive.com/feedback";
+    NSString *url = [NSString stringWithFormat:@"%@/records", kApptentiveBaseURL];
     ATURLConnection *conn = nil;
     
     if (feedback.screenshot) {
@@ -76,7 +82,7 @@ static ATWebClient *sharedSingleton = nil;
 #elif TARGET_OS_MAC
         NSData *fileData = [ATUtilities pngRepresentationOfImage:feedback.screenshot];
 #endif
-        conn = [self connectionToPost:[NSURL URLWithString:url] withFileData:fileData ofMimeType:@"image/png" fileDataKey:@"feedback[screenshot]" parameters:postData];
+        conn = [self connectionToPost:[NSURL URLWithString:url] withFileData:fileData ofMimeType:@"image/png" fileDataKey:@"record[file][screenshot]" parameters:postData];
     } else {
         conn = [self connectionToPost:[NSURL URLWithString:url] parameters:postData];
     }
@@ -252,8 +258,7 @@ static ATWebClient *sharedSingleton = nil;
 	[conn setValue: @"utf-8" forHTTPHeaderField: @"Accept-Charset"];
     NSString *apiKey = [[ATBackend sharedBackend] apiKey];
     if (apiKey) {
-        NSData *apiKeyData = [apiKey dataUsingEncoding:NSUTF8StringEncoding];
-        NSString *value = [NSString stringWithFormat:@"Basic %@", [apiKeyData at_base64EncodedString]];
+        NSString *value = [NSString stringWithFormat:@"OAuth %@", apiKey];
         [conn setValue:value forHTTPHeaderField:@"Authorization"];
     }
 }

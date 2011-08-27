@@ -13,13 +13,11 @@
 @implementation ApptentiveContactUpdaterTests
 
 - (void)testContactParsing {
-    NSString *contactResponseString = @""
-        @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-        @"<contact>\n"
-        @"  <name>Andrew</name>\n"
-        @"  <uuid>46D40D5E-C11C-5E62-BD1F-BA7A800BBDDD</uuid>\n"
-        @"  <email-address>wooster@example.com</email-address>\n"
-        @"</contact>\n";
+    NSString *contactResponseString = @"{"
+        @"\"name\":\"Andrew\",\n"
+        @"\"uuid\":\"46D40D5E-C11C-5E62-BD1F-BA7A800BBDDD\",\n"
+        @"\"email\":\"wooster@example.com\"\n"
+        @"}\n";
     NSData *contactData = [contactResponseString dataUsingEncoding:NSUTF8StringEncoding];
     
     ATContactParser *parser = [[ATContactParser alloc] init];
@@ -32,11 +30,10 @@
     }
     
     NSString *phoneOnly = @""
-        @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-        @"<contact>\n"
-        @"  <uuid>46D40D5E-C11C-5E62-BD1F-BA7A800BBDDD</uuid>\n"
-        @"  <phone-number>111-222-3333</phone-number>\n"
-        @"</contact>\n";
+        @"{\n"
+        @"\"uuid\":\"46D40D5E-C11C-5E62-BD1F-BA7A800BBDDD\",\n"
+        @"\"phone_number\":\"111-222-3333\"\n"
+        @"}\n";
     NSData *phoneData = [phoneOnly dataUsingEncoding:NSUTF8StringEncoding];
     if ([parser parse:phoneData]) {
         STAssertEqualObjects(parser.name, nil, @"%@ != nil", parser.name);

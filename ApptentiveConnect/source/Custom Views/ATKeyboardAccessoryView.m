@@ -30,7 +30,7 @@
         textLabel.opaque = NO;
         textLabel.backgroundColor = [UIColor clearColor];
         textLabel.font = [UIFont systemFontOfSize:16.0];
-        if (NO) {
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
             textLabel.textColor = [UIColor colorWithRed:0.57 green:0.77 blue:0.92 alpha:1.0];
         } else {
             CGFloat g = 0.4;
@@ -51,7 +51,7 @@
         textContainerView.opaque = NO;
         textContainerView.userInteractionEnabled = NO;
         [textContainerView addSubview:textLabel];
-        if (NO) { // old way
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) { // old way
             [textContainerView sizeToFit];
             CGRect cf = textContainerView.frame;
             cf.size.height += 10.0;

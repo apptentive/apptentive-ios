@@ -9,11 +9,12 @@
 #import "ATContactUpdater.h"
 #import "ATContactStorage.h"
 #import "ATWebClient.h"
+#import "JSONKit.h"
 
 NSString * const ATContactUpdaterFinished = @"ATContactUpdaterFinished";
 
 @interface ATContactUpdater (Private)
-- (void)processResult:(NSData *)xmlContactInfo;
+- (void)processResult:(NSData *)jsonContactInfo;
 @end
 
 @implementation ATContactUpdater
@@ -60,14 +61,9 @@ NSString * const ATContactUpdaterFinished = @"ATContactUpdaterFinished";
 @end
 
 @implementation ATContactUpdater (Private)
-- (void)processResult:(NSData *)xmlContactInfo {
-    if (parser) {
-        [parser abortParsing];
-        [parser release];
-        parser = nil;
-    }
-    parser = [[ATContactParser alloc] init];
-    if ([parser parse:xmlContactInfo]) {
+- (void)processResult:(NSData *)jsonContactInfo {
+    ATContactParser *parser = [[ATContactParser alloc] init];
+    if ([parser parse:jsonContactInfo]) {
         ATContactStorage *storage = [ATContactStorage sharedContactStorage];
         if (parser.name) storage.name = parser.name;
         if (parser.email) storage.email = parser.email;
@@ -75,91 +71,55 @@ NSString * const ATContactUpdaterFinished = @"ATContactUpdaterFinished";
         [storage save];
         [[NSNotificationCenter defaultCenter] postNotificationName:ATContactUpdaterFinished object:self];
     }
+    [parser release], parser = nil;
 }
 @end
 
 @implementation ATContactParser
-@synthesize name, phone, email;
+@synthesize name, email, phone;
 
-- (id)init {
-    if ((self = [super init])) {
-        parseCurrentString = [[NSMutableString alloc] init];
+- (BOOL)parse:(NSData *)jsonContactInfo {
+    BOOL success = NO;
+    
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    self.name = nil;
+    self.phone = nil;
+    self.email = nil;
+    JSONDecoder *decoder = [JSONDecoder decoder];
+    NSError *error = nil;
+    id decodedObject = [decoder objectWithData:jsonContactInfo error:&error];
+    if (decodedObject && [decodedObject isKindOfClass:[NSDictionary class]]) {
+        success = YES;
+        NSDictionary *values = (NSDictionary *)decodedObject;
+        
+        NSDictionary *keyMapping = [NSDictionary dictionaryWithObjectsAndKeys:@"name", @"name", @"email", @"email", @"phone", @"phone_number", nil];
+        
+        for (NSString *key in keyMapping) {
+            NSString *ivarName = [keyMapping objectForKey:key];
+            NSObject *value = [values objectForKey:key];
+            if (value && [value isKindOfClass:[NSString class]]) {
+                [self setValue:value forKey:ivarName];
+            }
+        }
+    } else {
+        parserError = [error retain];
+        success = NO;
     }
-    return self;
+    
+    [pool release], pool = nil;
+    return success;
+}
+
+- (NSError *)parserError {
+    return parserError;
 }
 
 - (void)dealloc {
     self.name = nil;
-    self.phone = nil;
     self.email = nil;
-    [parseCurrentString release];
-    parseCurrentString = nil;
-    [parser release];
-    parser = nil;
+    self.phone = nil;
+    [parserError release], parserError = nil;
     [super dealloc];
 }
-
-- (BOOL)parse:(NSData *)xmlData {
-    [self abortParsing];
-    self.name = nil;
-    self.phone = nil;
-    self.email = nil;
-    parser = [[NSXMLParser alloc] initWithData:xmlData];
-    [parser setDelegate:self];
-    return [parser parse];
-}
-
-- (void)abortParsing {
-    if (parser) {
-        [parser abortParsing];
-        [parser release];
-        parser = nil;
-    }
-}
-
-- (NSError *)parserError {
-    return [parser parserError];
-}
-
-#pragma mark NSXMLParserDelegate Methods
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
-	if ([elementName isEqualToString:@"contact"]) {
-        parseInsideItem = YES;
-		return;
-	} else if (parseInsideItem) {
-		parseCurrentElementName = elementName;
-		[parseCurrentString replaceCharactersInRange:NSMakeRange(0, [parseCurrentString length]) withString:@""];
-	}
-}
-
-- (void)parser:(NSXMLParser *)aParser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
-	if ([elementName isEqualToString:@"contact"]) {
-		parseInsideItem = NO;
-		return;
-	} else if (parseInsideItem && parseCurrentElementName) {
-        NSString *currentText = [[NSString alloc] initWithString:parseCurrentString];
-        if ([parseCurrentElementName isEqualToString:@"name"]) {
-            self.name = currentText;
-        } else if ([parseCurrentElementName isEqualToString:@"email-address"]) {
-            self.email = currentText;
-        } else if ([parseCurrentElementName isEqualToString:@"phone-number"]) {
-            self.phone = currentText;
-        }
-        [currentText release];
-        
-		parseCurrentElementName = nil;
-        [parseCurrentString deleteCharactersInRange:NSMakeRange(0, [parseCurrentString length])];
-	}
-}
-
-- (void)parser:(NSXMLParser *)aParser foundCharacters:(NSString *)string {
-	if (parseInsideItem && parseCurrentElementName) {
-		[parseCurrentString appendString:string];
-	}
-}
-
-- (void)parserDidEndDocument:(NSXMLParser *)aParser {
-}
 @end
-
 

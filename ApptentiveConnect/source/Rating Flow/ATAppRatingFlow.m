@@ -14,6 +14,7 @@ NSString *const ATAppRatingFlowLastUsedVersionFirstUseDateKey = @"ATAppRatingFlo
 NSString *const ATAppRatingFlowDeclinedToRateThisVersionKey = @"ATAppRatingFlowDeclinedToRateThisVersionKey";
 NSString *const ATAppRatingFlowUserDislikesThisVersionKey = @"ATAppRatingFlowUserDislikesThisVersionKey";
 NSString *const ATAppRatingFlowLastPromptDateKey = @"ATAppRatingFlowLastPromptDateKey";
+NSString *const ATAppRatingFlowRatedAppKey = @"ATAppRatingFlowRatedAppKey";
 
 NSString *const ATAppRatingFlowUseCountKey = @"ATAppRatingFlowUseCountKey";
 NSString *const ATAppRatingFlowSignificantEventsCountKey = @"ATAppRatingFlowSignificantEventsCountKey";
@@ -41,6 +42,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 - (void)setRatingDialogWasShown;
 - (void)setUserDislikesThisVersion;
 - (void)setDeclinedToRateThisVersion;
+- (void)setRatedApp;
 - (void)logDefaults;
 
 #if TARGET_OS_IPHONE
@@ -287,6 +289,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 
 - (void)openURLForRatingApp {
     NSURL *url = [self URLForRatingApp];
+    [self setRatedApp];
 #if TARGET_OS_IPHONE
     if (![[UIApplication sharedApplication] canOpenURL:url]) {
         NSLog(@"No application can open the URL: %@", url);
@@ -302,6 +305,12 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
     
     do { // once
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        
+        // Check to see if the user has rated the app.
+        NSNumber *rated = [defaults objectForKey:ATAppRatingFlowRatedAppKey];
+        if (rated != nil && [rated boolValue]) {
+            break;
+        }
         
         // Check to see if the user has rejected rating this version.
         NSNumber *rejected = [defaults objectForKey:ATAppRatingFlowDeclinedToRateThisVersionKey];
@@ -446,9 +455,14 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
     [defaults setObject:[NSNumber numberWithBool:YES] forKey:ATAppRatingFlowDeclinedToRateThisVersionKey];
 }
 
+- (void)setRatedApp {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:[NSNumber numberWithBool:YES] forKey:ATAppRatingFlowRatedAppKey];
+}
+
 - (void)logDefaults {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSArray *keys = [NSArray arrayWithObjects:ATAppRatingFlowLastUsedVersionKey, ATAppRatingFlowLastUsedVersionFirstUseDateKey, ATAppRatingFlowDeclinedToRateThisVersionKey, ATAppRatingFlowUserDislikesThisVersionKey, ATAppRatingFlowLastPromptDateKey, ATAppRatingFlowUseCountKey, ATAppRatingFlowSignificantEventsCountKey, nil];
+    NSArray *keys = [NSArray arrayWithObjects:ATAppRatingFlowLastUsedVersionKey, ATAppRatingFlowLastUsedVersionFirstUseDateKey, ATAppRatingFlowDeclinedToRateThisVersionKey, ATAppRatingFlowUserDislikesThisVersionKey, ATAppRatingFlowLastPromptDateKey, ATAppRatingFlowUseCountKey, ATAppRatingFlowSignificantEventsCountKey, ATAppRatingFlowRatedAppKey, nil];
     NSLog(@"-- BEGIN ATAppRatingFlow DEFAULTS --");
     for (NSString *key in keys) {
         NSLog(@"%@ == %@", key, [defaults objectForKey:key]);

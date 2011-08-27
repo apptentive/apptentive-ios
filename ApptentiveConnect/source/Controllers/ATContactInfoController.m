@@ -66,12 +66,17 @@
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    if (interfaceOrientation == UIInterfaceOrientationPortrait) {
+    UIDevice *device = [UIDevice currentDevice];
+    if ([device userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         return YES;
     } else {
-        return NO;
+        // Not enough space to lay out fields on the iPhone in landscape.
+        if (interfaceOrientation == UIInterfaceOrientationPortrait) {
+            return YES;
+        } else {
+            return NO;
+        }
     }
-//    return YES;
 }
 
 

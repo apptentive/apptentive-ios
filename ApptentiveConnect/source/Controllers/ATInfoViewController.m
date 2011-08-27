@@ -74,7 +74,7 @@ enum {
 }
 
 - (IBAction)openApptentiveDotCom:(id)sender {
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://apptentive.com/"]];
+    [[UIApplication sharedApplication] openURL:[[ATBackend sharedBackend] apptentiveHomepageURL]];
 }
 
 #pragma mark UITableViewDelegate

@@ -197,6 +197,9 @@
 - (void)teardown {
     self.feedback = nil;
     self.customPlaceholderText = nil;
+    
+    [selectorControl release], selectorControl = nil;
+    
     [feedbackView release];
     feedbackView = nil;
     

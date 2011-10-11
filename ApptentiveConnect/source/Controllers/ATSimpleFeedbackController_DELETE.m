@@ -6,11 +6,11 @@
 //  Copyright 2011 Apptentive, Inc. All rights reserved.
 //
 
-#import "ATSimpleFeedbackController.h"
+#import "ATSimpleFeedbackController_DELETE.h"
 
 #import "ATBackend.h"
 #import "ATConnect.h"
-#import "ATContactInfoController.h"
+#import "ATContactInfoController_DELETE.h"
 #import "ATContactStorage.h"
 #import "ATContactUpdater.h"
 #import "ATDefaultTextView.h"
@@ -21,7 +21,7 @@
 
 #define kATEmailAlertTextFieldTag 1010
 
-@interface ATSimpleFeedbackController (Private)
+@interface ATSimpleFeedbackController_DELETE (Private)
 - (BOOL)shouldReturn:(UIView *)view;
 - (void)setup;
 - (void)setupFeedback;
@@ -36,7 +36,7 @@
 - (void)sendFeedbackAndDismiss;
 @end
 
-@implementation ATSimpleFeedbackController
+@implementation ATSimpleFeedbackController_DELETE
 @synthesize feedback, customPlaceholderText;
 
 - (id)init {
@@ -154,7 +154,7 @@
 @end
 
 
-@implementation ATSimpleFeedbackController (Private)
+@implementation ATSimpleFeedbackController_DELETE (Private)
 - (BOOL)shouldReturn:(UIView *)view {
     if (view == feedbackView) {
         [emailField becomeFirstResponder];

@@ -10,7 +10,7 @@
 
 @class ATFeedback;
 
-@interface ATContactInfoController : UIViewController {
+@interface ATContactInfoController_DELETE : UIViewController {
     IBOutlet UITextField *nameField;
     IBOutlet UITextField *emailField;
     IBOutlet UITextField *phoneField;

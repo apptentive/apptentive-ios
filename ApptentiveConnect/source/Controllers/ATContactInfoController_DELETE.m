@@ -6,7 +6,7 @@
 //  Copyright 2011 Apptentive, Inc.. All rights reserved.
 //
 
-#import "ATContactInfoController.h"
+#import "ATContactInfoController_DELETE.h"
 #import <QuartzCore/QuartzCore.h>
 #import "ATBackend.h"
 #import "ATConnect.h"
@@ -16,7 +16,7 @@
 #import "ATKeyboardAccessoryView.h"
 #import "ATUtilities.h"
 
-@interface ATContactInfoController (Private)
+@interface ATContactInfoController_DELETE (Private)
 - (BOOL)shouldReturn:(UIView *)view;
 - (void)setup;
 - (void)setupFeedback;
@@ -24,7 +24,7 @@
 - (void)teardown;
 @end
 
-@implementation ATContactInfoController
+@implementation ATContactInfoController_DELETE
 @synthesize feedback;
 
 - (id)init {
@@ -104,7 +104,7 @@
 }
 @end
 
-@implementation ATContactInfoController (Private)
+@implementation ATContactInfoController_DELETE (Private)
 - (BOOL)shouldReturn:(UIView *)view {
     if (view == nameField) {
         [emailField becomeFirstResponder];

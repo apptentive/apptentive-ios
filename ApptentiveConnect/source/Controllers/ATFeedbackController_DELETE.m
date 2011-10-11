@@ -6,10 +6,10 @@
 //  Copyright 2011 Uncorked Apps LLC. All rights reserved.
 //
 
-#import "ATFeedbackController.h"
+#import "ATFeedbackController_DELETE.h"
 #import "ATBackend.h"
 #import "ATConnect.h"
-#import "ATContactInfoController.h"
+#import "ATContactInfoController_DELETE.h"
 #import "ATContactStorage.h"
 #import "ATContactUpdater.h"
 #import "ATDefaultTextView.h"
@@ -19,7 +19,7 @@
 #import "ATPopupSelectorControl.h"
 #import "ATSimpleImageViewController.h"
 
-@interface ATFeedbackController (Private)
+@interface ATFeedbackController_DELETE (Private)
 - (BOOL)shouldReturn:(UIView *)view;
 - (void)setup;
 - (void)setupFeedback;
@@ -34,7 +34,7 @@
 - (void)captureFeedbackState;
 @end
 
-@implementation ATFeedbackController
+@implementation ATFeedbackController_DELETE
 @synthesize feedback, customPlaceholderText;
 
 - (id)init {
@@ -108,7 +108,7 @@
 - (IBAction)nextStep:(id)sender {
     [self captureFeedbackState];
     
-    ATContactInfoController *vc = [[ATContactInfoController alloc] init];
+    ATContactInfoController_DELETE *vc = [[ATContactInfoController_DELETE alloc] init];
     vc.feedback = self.feedback;
     [self.navigationController pushViewController:vc animated:YES];
     [vc release];
@@ -135,7 +135,7 @@
 @end
 
 
-@implementation ATFeedbackController (Private)
+@implementation ATFeedbackController_DELETE (Private)
 - (BOOL)shouldReturn:(UIView *)view {
     return YES;
 }

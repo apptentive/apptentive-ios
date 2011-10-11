@@ -12,7 +12,7 @@
 @class ATFeedback;
 @class ATKeyboardAccessoryView;
 
-@interface ATSimpleFeedbackController : UIViewController <UITextFieldDelegate> {
+@interface ATSimpleFeedbackController_DELETE : UIViewController <UITextFieldDelegate> {
     IBOutlet ATDefaultTextView *feedbackView;
     IBOutlet UITextField *emailField;
     IBOutlet UIView *emailContainerView;

@@ -13,7 +13,7 @@
 @class ATKeyboardAccessoryView;
 @class ATPopupSelectorControl;
 
-@interface ATFeedbackController : UIViewController {
+@interface ATFeedbackController_DELETE : UIViewController {
     IBOutlet ATDefaultTextView *feedbackView;
     IBOutlet ATPopupSelectorControl *selectorControl;
     IBOutlet UISwitch *screenshotSwitch;

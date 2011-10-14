@@ -10,6 +10,7 @@
 
 @class ATCenteringImageScrollView;
 @class ATFeedback;
+@class ATFeedbackController;
 
 NSString * const ATImageViewChoseImage;
 
@@ -17,6 +18,9 @@ NSString * const ATImageViewChoseImage;
 @private
     ATCenteringImageScrollView *scrollView;
 	ATFeedback *feedback;
+	ATFeedbackController *controller;
+	BOOL shouldResign;
 }
-- (id)initWithFeedback:(ATFeedback *)feedback;
+- (id)initWithFeedback:(ATFeedback *)feedback feedbackController:(ATFeedbackController *)controller;
+- (IBAction)donePressed:(id)sender;
 @end

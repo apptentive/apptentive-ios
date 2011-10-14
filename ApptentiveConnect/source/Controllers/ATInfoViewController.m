@@ -11,6 +11,7 @@
 #import "ATBackend.h"
 #import "ATConnect.h"
 #import "ATFeedback.h"
+#import "ATFeedbackController.h"
 #import "ATFeedbackTask.h"
 #import "ATTask.h"
 #import "ATTaskQueue.h"
@@ -29,17 +30,19 @@ enum {
 @implementation ATInfoViewController
 @synthesize tableView;
 
-- (id)init {
+- (id)initWithFeedbackController:(ATFeedbackController *)aController {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         self = [super initWithNibName:@"ATInfoViewController" bundle:[ATConnect resourceBundle]];
     } else {
         self = [super initWithNibName:@"ATInfoViewController_iPad" bundle:[ATConnect resourceBundle]];
         self.modalPresentationStyle = UIModalPresentationFormSheet;
     }
+	controller = [aController retain];
     return self;
 }
 
 - (void)dealloc {
+	[controller release], controller = nil;
     [self teardown];
     [super dealloc];
 }
@@ -62,6 +65,13 @@ enum {
     [super viewDidUnload];
     [headerView release], headerView = nil;
     self.tableView = nil;
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+	if (controller != nil) {
+		[controller unhide:animated];
+		[controller release], controller = nil;
+	}
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

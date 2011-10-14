@@ -8,14 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+@class ATFeedbackController;
+
 /*! View controller for showing information about Apptentive, as well as the
     tasks which are currently in progress. */
 @interface ATInfoViewController : UIViewController <UITableViewDataSource> {
     IBOutlet UIView *headerView;
     IBOutlet UITableViewCell *progressCell;
+@private
+	ATFeedbackController *controller;
 }
 @property (nonatomic, retain) IBOutlet UITableView *tableView;
 
+- (id)initWithFeedbackController:(ATFeedbackController *)aController;
 - (IBAction)done:(id)sender;
 - (IBAction)openApptentiveDotCom:(id)sender;
 @end

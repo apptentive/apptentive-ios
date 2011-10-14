@@ -163,6 +163,7 @@
 										<string key="NSFrameSize">{128, 22}</string>
 										<reference key="NSSuperview" ref="206653923"/>
 										<reference key="NSWindow"/>
+										<reference key="NSNextKeyView"/>
 										<string key="NSReuseIdentifierKey">_NS:541</string>
 										<bool key="IBUIOpaque">NO</bool>
 										<bool key="IBUIUserInteractionEnabled">NO</bool>

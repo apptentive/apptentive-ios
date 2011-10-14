@@ -10,20 +10,23 @@
 #import "ATCenteringImageScrollView.h"
 #import "ATConnect.h"
 #import "ATFeedback.h"
+#import "ATFeedbackController.h"
 
 NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 
 @implementation ATSimpleImageViewController
 
-- (id)initWithFeedback:(ATFeedback *)someFeedback {
+- (id)initWithFeedback:(ATFeedback *)someFeedback feedbackController:(ATFeedbackController *)aController {
     if ((self = [super init])) {
 		feedback = [someFeedback retain];
+		controller = [aController retain];
 		self.view = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
     }
     return self;
 }
 
 - (void)dealloc {
+	[controller release], controller = nil;
 	[feedback release];
 	feedback = nil;
     [scrollView removeFromSuperview];
@@ -97,14 +100,28 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self setupScrollView];
-	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(takePhoto:)] autorelease];
+	self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(takePhoto:)] autorelease];
+	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)] autorelease];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+	if (controller != nil && shouldResign == YES) {
+		[controller unhide:animated];
+		[controller release], controller = nil;
+	}
 }
 
 - (void)viewDidUnload {
     [super viewDidUnload];
 }
 
+- (IBAction)donePressed:(id)sender {
+	shouldResign = YES;
+	[self.navigationController popViewControllerAnimated:YES];
+}
+
 - (void)takePhoto:(id)sender {
+	shouldResign = NO;
 	UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
 	imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
 	imagePicker.delegate = self;

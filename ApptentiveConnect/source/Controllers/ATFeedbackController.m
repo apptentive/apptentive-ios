@@ -29,7 +29,6 @@ enum {
 	kFeedbackPhotoControlTag = 403,
 };
 
-
 @interface ATFeedbackController (Private)
 - (void)teardown;
 - (void)setupFeedback;
@@ -42,6 +41,9 @@ enum {
 - (BOOL)shouldShowPaperclip;
 - (void)positionInWindow;
 - (void)captureFeedbackState;
+- (void)hide:(BOOL)animated;
+- (void)finishHide;
+- (void)finishUnhide;
 @end
 
 @implementation ATFeedbackController
@@ -83,6 +85,7 @@ enum {
 
 - (void)presentFromViewController:(UIViewController *)newPresentingViewController animated:(BOOL)animated {
 	[self retain];
+	
 	startingStatusBarStyle = [[UIApplication sharedApplication] statusBarStyle];
 	if (presentingViewController != newPresentingViewController) {
 		[presentingViewController release], presentingViewController = nil;
@@ -97,6 +100,7 @@ enum {
 	UIWindow *parentWindow = [self windowForViewController:presentingViewController];
 	self.window.transform = [ATFeedbackController viewTransformInWindow:parentWindow];
 	[parentWindow addSubview:self.window];
+	self.window.hidden = NO;
 	[self.window makeKeyAndVisible];
 	
 	
@@ -149,7 +153,6 @@ enum {
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
-	
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
 		[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
 	}
@@ -197,7 +200,9 @@ enum {
 		photoControl.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 		[self.view addSubview:photoControl];
 	}
-	if (NO) {
+	
+	
+	if (YES) {
 		self.feedbackView.scrollIndicatorInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -100.0);
 	} else {
 		self.feedbackView.clipsToBounds = YES;
@@ -272,18 +277,19 @@ enum {
 }
 
 - (IBAction)photoPressed:(id)sender {
-    ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithFeedback:self.feedback];
+    ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithFeedback:self.feedback feedbackController:self];
     vc.title = ATLocalizedString(@"Screenshot", @"Title for screenshot view.");
 	[self.emailField resignFirstResponder];
     [self.feedbackView resignFirstResponder];
     [presentingViewController.navigationController pushViewController:vc animated:YES];
     [vc release];
     [self captureFeedbackState];
-	[self dismiss:YES];
+	[self hide:NO];
 }
 
 - (IBAction)showInfoView:(id)sender {
-    ATInfoViewController *vc = [[ATInfoViewController alloc] init];
+	[self hide:YES];
+    ATInfoViewController *vc = [[ATInfoViewController alloc] initWithFeedbackController:self];
     [presentingViewController presentModalViewController:vc animated:YES];
     [vc release];
 }
@@ -325,6 +331,20 @@ enum {
 	[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
 	self.window.center = endingPoint;
 	[UIView commitAnimations];
+}
+
+- (void)unhide:(BOOL)animated {
+	self.window.windowLevel = UIWindowLevelAlert;
+	self.window.hidden = NO;
+	if (animated) {
+		[UIView beginAnimations:@"windowUnhide" context:NULL];
+		[UIView setAnimationDelegate:self];
+		[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
+		self.window.alpha = 1.0;
+		[UIView commitAnimations];
+	} else {
+		[self finishUnhide];
+	}
 }
 
 #pragma mark UITextFieldDelegate
@@ -434,6 +454,10 @@ enum {
 		[self.window removeFromSuperview];
 		self.window.hidden = YES;
 		[self release];
+	} else if ([animationID isEqualToString:@"windowHide"]) {
+		[self finishHide];
+	} else if ([animationID isEqualToString:@"windowUnhide"]) {
+		[self finishUnhide];
 	}
 }
 
@@ -452,50 +476,73 @@ enum {
     CGRect newFrame = [self windowForViewController:presentingViewController].bounds;
     CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
 	
+	NSLog(@"new bounds is: %@", NSStringFromCGRect(newFrame));
+	NSLog(@"status bar size is: %@", NSStringFromCGSize(statusBarSize));
+	
 	BOOL isLandscape = NO;
+	
+	CGFloat windowWidth = 0.0;
 	
     switch (orientation) { 
         case UIInterfaceOrientationPortraitUpsideDown:
             angle = M_PI; 
             newFrame.size.height -= statusBarSize.height;
+			windowWidth = statusBarSize.width;
             break;
         case UIInterfaceOrientationLandscapeLeft:
             angle = - M_PI / 2.0f;
             newFrame.origin.x += statusBarSize.width;
             newFrame.size.width -= statusBarSize.width;
 			isLandscape = YES;
+			windowWidth = statusBarSize.height;
             break;
         case UIInterfaceOrientationLandscapeRight:
             angle = M_PI / 2.0f;
             newFrame.size.width -= statusBarSize.width;
 			isLandscape = YES;
+			windowWidth = statusBarSize.height;
             break;
         default: // as UIInterfaceOrientationPortrait
             angle = 0.0;
             newFrame.origin.y += statusBarSize.height;
             newFrame.size.height -= statusBarSize.height;
+			windowWidth = statusBarSize.width;
             break;
     }
 	
 	CGFloat viewHeight = 0.0;
+	CGFloat viewWidth = 0.0;
 	CGFloat originY = 0.0;
+	CGFloat originX = 0.0;
 	
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
 		viewHeight = isLandscape ? 368.0 : 368.0;
 		originY = isLandscape ? 20.0 : 200;
 		//viewWidth = isLandscape ? 200.0 : 300.0;
+		viewWidth = windowWidth - 12*2 - 100.0;
 	} else {
 		viewHeight = isLandscape ? 168.0 : 237.0;
+		viewWidth = windowWidth - 12*2;
 	}
+	originX = floorf((windowWidth - viewWidth)/2.0);
 	
+	NSLog(@"setting window.frame to: %@", NSStringFromCGRect(newFrame));
 	
     self.window.transform = CGAffineTransformMakeRotation(angle);
     self.window.frame = newFrame;
 	CGRect f = self.view.frame;
 	f.origin.y = originY;
-//	f.size.width = viewWidth;
+	f.origin.x = originX;
+	f.size.width = viewWidth;
 	f.size.height = viewHeight;
 	self.view.frame = f;
+	
+	CGRect feedbackViewFrame = self.feedbackView.frame;
+	feedbackViewFrame.origin.x = 0.0;
+	feedbackViewFrame.size.width = [self shouldShowPaperclip] ? viewWidth - 100.0 : viewWidth;
+	self.feedbackView.frame = feedbackViewFrame;
+	
+	NSLog(@"setting view frame to: %@", NSStringFromCGRect(f));
 }
 
 - (void)feedbackChanged:(NSNotification *)notification {
@@ -526,5 +573,39 @@ enum {
 - (void)captureFeedbackState {
     self.feedback.text = self.feedbackView.text;
 	self.feedback.email = self.emailField.text;
+}
+
+
+- (void)hide:(BOOL)animated {
+	[self retain];
+	
+	self.window.windowLevel = UIWindowLevelNormal;
+	[self.emailField resignFirstResponder];
+	[self.feedbackView resignFirstResponder];
+	
+	if (animated) {
+		[UIView beginAnimations:@"windowHide" context:NULL];
+		[UIView setAnimationDelegate:self];
+		[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
+		self.window.alpha = 0.0;
+		[UIView commitAnimations];
+	} else {
+		[self finishHide];
+	}
+}
+
+- (void)finishHide {
+	self.window.alpha = 0.0;
+	self.window.hidden = YES;
+	[self.window removeFromSuperview];
+}
+
+- (void)finishUnhide {
+	self.window.alpha = 1.0;
+	[self.window makeKeyAndVisible];
+	[self.parentViewController.view.window addSubview:self.window];
+	[self positionInWindow];
+	[self.emailField becomeFirstResponder];
+	[self release];
 }
 @end

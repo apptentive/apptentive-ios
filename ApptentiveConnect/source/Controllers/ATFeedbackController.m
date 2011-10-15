@@ -658,8 +658,6 @@ enum {
 					scaledImageSize.width = fitDimension;
 				}
 				UIImage *scaledImage = [ATUtilities imageByScalingImage:image toSize:scaledImageSize scale:scale];
-				[UIImagePNGRepresentation(scaledImage) writeToFile:[NSString stringWithFormat:@"/tmp/foo%p_thumb.png", image] atomically:YES];
-				[UIImagePNGRepresentation(image) writeToFile:[NSString stringWithFormat:@"/tmp/foo%p.png", image] atomically:YES];
 				thumbnailView.image = scaledImage;
 			}
 			CGRect f = CGRectMake(11.5, 12, 70, 70);

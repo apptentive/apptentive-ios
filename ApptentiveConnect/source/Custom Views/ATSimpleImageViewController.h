@@ -20,7 +20,10 @@ NSString * const ATImageViewChoseImage;
 	ATFeedback *feedback;
 	ATFeedbackController *controller;
 	BOOL shouldResign;
+	UIView *containerView;
 }
+@property (nonatomic, retain) IBOutlet UIView *containerView;
 - (id)initWithFeedback:(ATFeedback *)feedback feedbackController:(ATFeedbackController *)controller;
 - (IBAction)donePressed:(id)sender;
+- (IBAction)takePhoto:(id)sender;
 @end

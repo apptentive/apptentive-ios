@@ -41,7 +41,6 @@
 	
 	
 	self = [super initWithCustomView:button];
-	[button release], button = nil;
 	if (self) {
 		
 	}

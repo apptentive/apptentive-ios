@@ -128,7 +128,6 @@
 	CGContextRef bitmapContext = nil;
 	CGImageRef newRef = nil;
 	CGAffineTransform transform = CGAffineTransformIdentity;
-	CGFloat currentHeight, currentWidth;
 	
 	imageRef = [image CGImage];
 	alphaInfo = CGImageGetAlphaInfo(imageRef);
@@ -141,11 +140,6 @@
 	size = CGSizeMake(floor(size.width), floor(size.height));
 	newWidth = size.width;
 	newHeight = size.height;
-	
-	// UIImage and CGImage disagree on the height and width of some
-	// orientations.
-	currentHeight = CGImageGetHeight(imageRef);
-	currentWidth = CGImageGetWidth(imageRef);
 	
 	// Rotate and scale based on orientation.
 	if (image.imageOrientation == UIImageOrientationUpMirrored) { // EXIF 2

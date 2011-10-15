@@ -80,6 +80,14 @@ enum {
 	[super dealloc];
 }
 
+- (oneway void)release {
+	[super release];
+}
+
+- (id)retain {
+	return [super retain];
+}
+
 - (void)setFeedback:(ATFeedback *)newFeedback {
     if (feedback != newFeedback) {
         [feedback release];
@@ -272,7 +280,7 @@ enum {
 }
 
 - (IBAction)donePressed:(id)sender {
-    self.feedback.email = self.emailField.text;
+	[self captureFeedbackState];
     [[ATBackend sharedBackend] sendFeedback:self.feedback];
 	UIWindow *parentWindow = [self windowForViewController:presentingViewController];
     ATHUDView *hud = [[ATHUDView alloc] initWithWindow:parentWindow];
@@ -283,14 +291,13 @@ enum {
 }
 
 - (IBAction)photoPressed:(id)sender {
-    ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithFeedback:self.feedback feedbackController:self];
-    vc.title = ATLocalizedString(@"Screenshot", @"Title for screenshot view.");
 	[self.emailField resignFirstResponder];
     [self.feedbackView resignFirstResponder];
-    [presentingViewController.navigationController pushViewController:vc animated:YES];
-    [vc release];
+	[self hide:YES];
     [self captureFeedbackState];
-	[self hide:NO];
+    ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithFeedback:self.feedback feedbackController:self];
+	[presentingViewController presentModalViewController:vc animated:YES];
+    [vc release];
 }
 
 - (IBAction)showInfoView:(id)sender {
@@ -329,7 +336,7 @@ enum {
 	[self.emailField resignFirstResponder];
 	[self.feedbackView resignFirstResponder];
 	
-	 
+	[self retain]; 
 	[UIView beginAnimations:@"animateOut" context:nil];
 	[UIView setAnimationDuration:0.3];
 	[UIView setAnimationDelegate:self];
@@ -660,8 +667,10 @@ enum {
 				}
 				UIImage *scaledImage = [ATUtilities imageByScalingImage:image toSize:scaledImageSize scale:scale];
 				thumbnailView.image = scaledImage;
+			} else if (image == nil) {
+				thumbnailView.image = [ATBackend imageNamed:@"at_camera_icon"];
 			}
-			CGRect f = CGRectMake(11, 11.5, 70, 70);
+			CGRect f = CGRectMake(11.5, 11.5, 70, 70);
 			f = CGRectOffset(f, frameView.frame.origin.x, frameView.frame.origin.y);
 			thumbnailView.frame = f;
 			thumbnailView.bounds = CGRectMake(0.0, 0.0, 70.0, 70.0);

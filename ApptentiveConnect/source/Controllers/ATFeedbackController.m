@@ -52,6 +52,7 @@ enum {
 - (void)finishUnhide;
 - (void)updateThumbnail;
 - (void)sendFeedbackAndDismiss;
+- (void)updateSendButtonState;
 @end
 
 @implementation ATFeedbackController
@@ -157,9 +158,6 @@ enum {
 	[UIView setAnimationDelegate:self];
 	[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
 	self.window.center = CGPointMake(CGRectGetMidX(endingFrame), CGRectGetMidY(endingFrame));
-	l.shadowRadius = 30.0;
-	l.shadowColor = [UIColor blackColor].CGColor;
-	l.shadowOpacity = 1.0;
 	l.cornerRadius = 10.0;
 	l.backgroundColor = [UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_dialog_paper_bg"]].CGColor;
 	[UIView commitAnimations];
@@ -266,6 +264,8 @@ enum {
 	self.toolbar.items = toolbarItems;
 	[toolbarItems release], toolbarItems = nil;
 	[button release], button = nil;
+	
+	[self updateSendButtonState];
     [super viewDidLoad];
 }
 
@@ -335,6 +335,7 @@ enum {
 }
 
 - (void)dismiss:(BOOL)animated {
+    [self captureFeedbackState];
 	CGPoint center = self.window.center;
 	CGPoint endingPoint = CGPointZero;
 	
@@ -359,6 +360,12 @@ enum {
 	[self.feedbackView resignFirstResponder];
 	
 	[self retain]; 
+	
+	CALayer *l = self.view.layer;
+	l.shadowRadius = 0.0;
+	l.shadowColor = [UIColor blackColor].CGColor;
+	l.shadowOpacity = 0.0;
+	
 	[UIView beginAnimations:@"animateOut" context:nil];
 	[UIView setAnimationDuration:0.3];
 	[UIView setAnimationDelegate:self];
@@ -497,6 +504,14 @@ enum {
 	if ([animationID isEqualToString:@"animateIn"]) {
 		self.window.hidden = NO;
 		[self.emailField becomeFirstResponder];
+		
+		CALayer *l = self.view.layer;
+		[UIView beginAnimations:nil context:NULL];
+		[UIView setAnimationDuration:0.2];
+		l.shadowRadius = 30.0;
+		l.shadowColor = [UIColor blackColor].CGColor;
+		l.shadowOpacity = 1.0;
+		[UIView commitAnimations];
 	} else if ([animationID isEqualToString:@"animateOut"]) {
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 		[presentingViewController.view setUserInteractionEnabled:YES];
@@ -593,9 +608,7 @@ enum {
 
 - (void)feedbackChanged:(NSNotification *)notification {
     if (notification.object == self.feedbackView) {
-		BOOL empty = [@"" isEqualToString:self.feedbackView.text];
-        self.doneButton.enabled = !empty;
-		NSLog(@"enabled is: %d", !empty);
+		[self updateSendButtonState];
     }
 }
 
@@ -719,5 +732,11 @@ enum {
     [hud show];
     [hud autorelease];
 	[self dismiss:YES];
+}
+
+- (void)updateSendButtonState {
+	BOOL empty = [@"" isEqualToString:self.feedbackView.text];
+	self.doneButton.enabled = !empty;
+	self.doneButton.style = empty == YES ? UIBarButtonItemStyleBordered : UIBarButtonItemStyleDone;
 }
 @end

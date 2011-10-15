@@ -69,6 +69,7 @@ enum {
 - (id)init {
 	self = [super initWithNibName:@"ATFeedbackController" bundle:[ATConnect resourceBundle]];
 	if (self != nil) {
+		startingStatusBarStyle = [[UIApplication sharedApplication] statusBarStyle];
 		self.attachmentOptions = ATFeedbackAllowPhotoAttachment | ATFeedbackAllowTakePhotoAttachment;
 	}
 	return self;
@@ -91,7 +92,6 @@ enum {
 - (void)presentFromViewController:(UIViewController *)newPresentingViewController animated:(BOOL)animated {
 	[self retain];
 	
-	startingStatusBarStyle = [[UIApplication sharedApplication] statusBarStyle];
 	if (presentingViewController != newPresentingViewController) {
 		[presentingViewController release], presentingViewController = nil;
 		presentingViewController = [newPresentingViewController retain];
@@ -106,12 +106,14 @@ enum {
 	self.window.transform = [ATFeedbackController viewTransformInWindow:parentWindow];
 	[parentWindow addSubview:self.window];
 	self.window.hidden = NO;
+	[parentWindow resignKeyWindow];
 	[self.window makeKeyAndVisible];
 	
 	
 	// Animate in from above.
 	self.window.bounds = parentWindow.bounds;
-	self.window.windowLevel = UIWindowLevelAlert;
+	self.window.backgroundColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.5];
+	self.window.windowLevel = UIWindowLevelNormal;
 	CGPoint center = parentWindow.center;
 	center.y = ceilf(center.y);
 	
@@ -329,7 +331,6 @@ enum {
 	[self.feedbackView resignFirstResponder];
 	
 	 
-	[[UIApplication sharedApplication] setStatusBarStyle:startingStatusBarStyle];
 	[UIView beginAnimations:@"animateOut" context:nil];
 	[UIView setAnimationDuration:0.3];
 	[UIView setAnimationDelegate:self];
@@ -386,6 +387,7 @@ enum {
 	self.feedbackView = nil;
 	self.logoControl = nil;
 	self.logoImageView = nil;
+	[[self windowForViewController:presentingViewController] makeKeyAndVisible];
 	[presentingViewController release], presentingViewController = nil;
 }
 
@@ -459,6 +461,7 @@ enum {
 		[self.window resignKeyWindow];
 		[self.window removeFromSuperview];
 		self.window.hidden = YES;
+		[[UIApplication sharedApplication] setStatusBarStyle:startingStatusBarStyle];
 		[self release];
 	} else if ([animationID isEqualToString:@"windowHide"]) {
 		[self finishHide];

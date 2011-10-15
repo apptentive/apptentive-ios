@@ -95,8 +95,6 @@ static ATConnect *sharedConnection = nil;
 		[vc setCustomPlaceholderText:self.customPlaceholderText];
 	}
 	[vc setFeedback:[[ATBackend sharedBackend] currentFeedback]];
-
-    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
 	
 	[vc presentFromViewController:viewController animated:YES];
     [vc release];

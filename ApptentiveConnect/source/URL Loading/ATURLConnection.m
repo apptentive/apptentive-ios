@@ -108,7 +108,9 @@
 			if (HTTPBody) {
 				[request setHTTPBody:HTTPBody];
 			}
-			self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+			self.connection = [[[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO] autorelease];
+			[self.connection scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+			[self.connection start];
 			self.executing = YES;
 			[request release];
 #if TARGET_OS_IPHONE_BOGUS

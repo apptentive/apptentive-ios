@@ -17,7 +17,7 @@ typedef enum {
 	ATFeedbackAllowTakePhotoAttachment = 2,
 } ATFeedbackAttachmentOptions;
 
-@interface ATFeedbackController : UIViewController {
+@interface ATFeedbackController : UIViewController <UITextFieldDelegate> {
 	UIViewController *presentingViewController;
 	
 @private
@@ -29,6 +29,7 @@ typedef enum {
 	UIImage *currentImage;
 }
 @property (nonatomic, retain) IBOutlet UIWindow *window;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *doneButton;
 @property (nonatomic, retain) IBOutlet ATToolbar *toolbar;
 @property (nonatomic, retain) IBOutlet UIView *redLineView;
 @property (nonatomic, retain) IBOutlet UIView *grayLineView;

@@ -25,12 +25,14 @@
 #define DEG_TO_RAD(angle) ((M_PI * angle) / 180.0)
 #define RAD_TO_DEG(radians) (radians * (180.0/M_PI))
 
+
 enum {
 	kFeedbackPaperclipTag = 400,
 	kFeedbackPaperclipBackgroundTag = 401,
 	kFeedbackPhotoFrameTag = 402,
 	kFeedbackPhotoControlTag = 403,
 	kFeedbackPhotoPreviewTag = 404,
+	kATEmailAlertTextFieldTag = 1010,
 };
 
 @interface ATFeedbackController (Private)
@@ -49,10 +51,12 @@ enum {
 - (void)finishHide;
 - (void)finishUnhide;
 - (void)updateThumbnail;
+- (void)sendFeedbackAndDismiss;
 @end
 
 @implementation ATFeedbackController
 @synthesize window=window$;
+@synthesize doneButton=doneButton$;
 @synthesize toolbar=toolbar$;
 @synthesize redLineView=redLineView$;
 @synthesize grayLineView=grayLineView$;
@@ -256,7 +260,7 @@ enum {
     if (self.customPlaceholderText) {
         self.feedbackView.placeholder = self.customPlaceholderText;
     } else {
-        self.feedbackView.placeholder = ATLocalizedString(@"Feedback", @"Feedback placeholder");
+        self.feedbackView.placeholder = ATLocalizedString(@"Feedback (required)", @"Feedback placeholder");
     }
 	
 	self.toolbar.items = toolbarItems;
@@ -281,13 +285,31 @@ enum {
 
 - (IBAction)donePressed:(id)sender {
 	[self captureFeedbackState];
-    [[ATBackend sharedBackend] sendFeedback:self.feedback];
-	UIWindow *parentWindow = [self windowForViewController:presentingViewController];
-    ATHUDView *hud = [[ATHUDView alloc] initWithWindow:parentWindow];
-    hud.label.text = ATLocalizedString(@"Thanks!", @"Text in thank you display upon submitting feedback.");
-    [hud show];
-    [hud autorelease];
-	[self dismiss:YES];
+    if (!self.feedback.email || [self.feedback.email length] == 0) {
+		self.window.windowLevel = UIWindowLevelNormal;
+        NSString *title = NSLocalizedString(@"No email address?", @"Lack of email dialog title.");
+        NSString *message = NSLocalizedString(@"We can't respond without one.\n\n\n", @"Lack of email dialog message.");
+        UIAlertView *emailAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil  otherButtonTitles:NSLocalizedString(@"Send Feedback", @"Send button title"), nil];
+        
+        UITextField *field = [[UITextField alloc] initWithFrame:CGRectMake(16, 83, 252, 25)];
+        field.font = [UIFont systemFontOfSize:18];
+		field.textColor = [UIColor whiteColor];
+        field.backgroundColor = [UIColor clearColor];
+        field.keyboardAppearance = UIKeyboardAppearanceAlert;
+        field.delegate = self;
+        field.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        field.placeholder = NSLocalizedString(@"Email Address", @"Email address popup placeholder text.");
+        field.borderStyle = UITextBorderStyleRoundedRect;
+        field.tag = kATEmailAlertTextFieldTag;
+        [field becomeFirstResponder];
+        [emailAlert addSubview:field];
+        [field release], field = nil;
+        [emailAlert sizeToFit];
+        [emailAlert show];
+        [emailAlert release];
+    } else {
+        [self sendFeedbackAndDismiss];
+    }
 }
 
 - (IBAction)photoPressed:(id)sender {
@@ -363,6 +385,15 @@ enum {
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     return [self shouldReturn:textField];
 }
+
+#pragma mark UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    UITextField *textField = (UITextField *)[alertView viewWithTag:kATEmailAlertTextFieldTag];
+    if (textField) {
+        self.feedback.email = textField.text;
+        [self sendFeedbackAndDismiss];
+    }
+}
 @end
 
 @implementation ATFeedbackController (Private)
@@ -384,6 +415,7 @@ enum {
 	[photoControl removeFromSuperview];
 	[photoControl release], photoControl = nil;
 	
+	self.doneButton = nil;
 	self.toolbar = nil;
 	self.redLineView = nil;
 	self.grayLineView = nil;
@@ -561,8 +593,9 @@ enum {
 
 - (void)feedbackChanged:(NSNotification *)notification {
     if (notification.object == self.feedbackView) {
-        self.navigationItem.rightBarButtonItem.enabled = ![@"" isEqualToString:self.feedbackView.text];
-		[self updateThumbnail];
+		BOOL empty = [@"" isEqualToString:self.feedbackView.text];
+        self.doneButton.enabled = !empty;
+		NSLog(@"enabled is: %d", !empty);
     }
 }
 
@@ -676,5 +709,15 @@ enum {
 			thumbnailView.bounds = CGRectMake(0.0, 0.0, 70.0, 70.0);
 		}
 	}
+}
+
+- (void)sendFeedbackAndDismiss {
+    [[ATBackend sharedBackend] sendFeedback:self.feedback];
+	UIWindow *parentWindow = [self windowForViewController:presentingViewController];
+    ATHUDView *hud = [[ATHUDView alloc] initWithWindow:parentWindow];
+    hud.label.text = ATLocalizedString(@"Thanks!", @"Text in thank you display upon submitting feedback.");
+    [hud show];
+    [hud autorelease];
+	[self dismiss:YES];
 }
 @end

@@ -625,6 +625,7 @@ enum {
 			UIImage *image = feedback.screenshot;
 			
 			UIView *frameView = [self.view viewWithTag:kFeedbackPhotoFrameTag];
+			frameView.alpha = 0.8;
 			UIImageView *thumbnailView = (UIImageView *)[self.view viewWithTag:kFeedbackPhotoPreviewTag];
 			CGFloat scale = [[UIScreen mainScreen] scale];
 			
@@ -641,7 +642,7 @@ enum {
 				[self.view bringSubviewToFront:paperclipView];
 				[self.view bringSubviewToFront:photoControl];
 				
-				thumbnailView.transform = CGAffineTransformMakeRotation(DEG_TO_RAD(3.0));
+				thumbnailView.transform = CGAffineTransformMakeRotation(DEG_TO_RAD(3.5));
 			}
 			if (image != nil && ![image isEqual:currentImage]) {
 				[currentImage release], currentImage = nil;
@@ -660,9 +661,10 @@ enum {
 				UIImage *scaledImage = [ATUtilities imageByScalingImage:image toSize:scaledImageSize scale:scale];
 				thumbnailView.image = scaledImage;
 			}
-			CGRect f = CGRectMake(11.5, 12, 70, 70);
+			CGRect f = CGRectMake(11, 11.5, 70, 70);
 			f = CGRectOffset(f, frameView.frame.origin.x, frameView.frame.origin.y);
 			thumbnailView.frame = f;
+			thumbnailView.bounds = CGRectMake(0.0, 0.0, 70.0, 70.0);
 		}
 	}
 }

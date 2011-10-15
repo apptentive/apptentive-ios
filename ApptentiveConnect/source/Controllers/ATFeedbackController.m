@@ -293,7 +293,7 @@ enum {
         
         UITextField *field = [[UITextField alloc] initWithFrame:CGRectMake(16, 83, 252, 25)];
         field.font = [UIFont systemFontOfSize:18];
-		field.textColor = [UIColor whiteColor];
+		field.textColor = [UIColor lightGrayColor];
         field.backgroundColor = [UIColor clearColor];
         field.keyboardAppearance = UIKeyboardAppearanceAlert;
         field.delegate = self;

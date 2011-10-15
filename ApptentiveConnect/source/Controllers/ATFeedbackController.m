@@ -104,7 +104,6 @@ enum {
 	
 	UIWindow *parentWindow = [self windowForViewController:presentingViewController];
 	self.window.transform = [ATFeedbackController viewTransformInWindow:parentWindow];
-	[parentWindow addSubview:self.window];
 	self.window.hidden = NO;
 	[parentWindow resignKeyWindow];
 	[self.window makeKeyAndVisible];
@@ -112,7 +111,6 @@ enum {
 	
 	// Animate in from above.
 	self.window.bounds = parentWindow.bounds;
-	self.window.backgroundColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.5];
 	self.window.windowLevel = UIWindowLevelNormal;
 	CGPoint center = parentWindow.center;
 	center.y = ceilf(center.y);
@@ -144,6 +142,8 @@ enum {
 	self.window.center = startingPoint;
 	[UIView beginAnimations:@"animateIn" context:nil];
 	[UIView setAnimationDuration:0.3];
+	[UIView setAnimationDelegate:self];
+	[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
 	self.window.center = CGPointMake(CGRectGetMidX(endingFrame), CGRectGetMidY(endingFrame));
 	l.shadowRadius = 30.0;
 	l.shadowColor = [UIColor blackColor].CGColor;
@@ -269,7 +269,6 @@ enum {
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-	NSLog(@"animating");
 }
 
 - (IBAction)donePressed:(id)sender {
@@ -387,6 +386,7 @@ enum {
 	self.feedbackView = nil;
 	self.logoControl = nil;
 	self.logoImageView = nil;
+	[currentImage release], currentImage = nil;
 	[[self windowForViewController:presentingViewController] makeKeyAndVisible];
 	[presentingViewController release], presentingViewController = nil;
 }
@@ -455,7 +455,10 @@ enum {
 }
 
 - (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
-	if ([animationID isEqualToString:@"animateOut"]) {
+	if ([animationID isEqualToString:@"animateIn"]) {
+		self.window.hidden = NO;
+		[self.emailField becomeFirstResponder];
+	} else if ([animationID isEqualToString:@"animateOut"]) {
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 		[presentingViewController.view setUserInteractionEnabled:YES];
 		[self.window resignKeyWindow];
@@ -484,9 +487,6 @@ enum {
     CGFloat angle = 0.0;
     CGRect newFrame = [self windowForViewController:presentingViewController].bounds;
     CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
-	
-	NSLog(@"new bounds is: %@", NSStringFromCGRect(newFrame));
-	NSLog(@"status bar size is: %@", NSStringFromCGSize(statusBarSize));
 	
 	BOOL isLandscape = NO;
 	
@@ -535,8 +535,6 @@ enum {
 	}
 	originX = floorf((windowWidth - viewWidth)/2.0);
 	
-	NSLog(@"setting window.frame to: %@", NSStringFromCGRect(newFrame));
-	
     self.window.transform = CGAffineTransformMakeRotation(angle);
     self.window.frame = newFrame;
 	CGRect f = self.view.frame;
@@ -552,13 +550,12 @@ enum {
 	self.feedbackView.frame = feedbackViewFrame;
 	
 	[self updateThumbnail];
-	
-	NSLog(@"setting view frame to: %@", NSStringFromCGRect(f));
 }
 
 - (void)feedbackChanged:(NSNotification *)notification {
     if (notification.object == self.feedbackView) {
         self.navigationItem.rightBarButtonItem.enabled = ![@"" isEqualToString:self.feedbackView.text];
+		[self updateThumbnail];
     }
 }
 
@@ -578,6 +575,7 @@ enum {
 - (void)screenshotChanged:(NSNotification *)notification {
 	if (self.feedback.screenshot) {
         self.feedback.screenshotSwitchEnabled = YES;
+		[self updateThumbnail];
 	} 
 }
 
@@ -645,10 +643,9 @@ enum {
 				
 				thumbnailView.transform = CGAffineTransformMakeRotation(DEG_TO_RAD(3.0));
 			}
-			CGRect f = CGRectMake(11.5, 12, 70, 70);
-			f = CGRectOffset(f, frameView.frame.origin.x, frameView.frame.origin.y);
-			thumbnailView.frame = f;
-			if (image != nil && thumbnailView.image != image) {
+			if (image != nil && ![image isEqual:currentImage]) {
+				[currentImage release], currentImage = nil;
+				currentImage = [image retain];
 				CGSize imageSize = image.size;
 				CGSize scaledImageSize = imageSize;
 				CGFloat fitDimension = 70.0 * scale;
@@ -661,8 +658,13 @@ enum {
 					scaledImageSize.width = fitDimension;
 				}
 				UIImage *scaledImage = [ATUtilities imageByScalingImage:image toSize:scaledImageSize scale:scale];
+				[UIImagePNGRepresentation(scaledImage) writeToFile:[NSString stringWithFormat:@"/tmp/foo%p_thumb.png", image] atomically:YES];
+				[UIImagePNGRepresentation(image) writeToFile:[NSString stringWithFormat:@"/tmp/foo%p.png", image] atomically:YES];
 				thumbnailView.image = scaledImage;
 			}
+			CGRect f = CGRectMake(11.5, 12, 70, 70);
+			f = CGRectOffset(f, frameView.frame.origin.x, frameView.frame.origin.y);
+			thumbnailView.frame = f;
 		}
 	}
 }

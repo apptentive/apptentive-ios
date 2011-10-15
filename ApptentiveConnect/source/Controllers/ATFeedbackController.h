@@ -26,6 +26,7 @@ typedef enum {
 	UIImageView *paperclipBackgroundView;
 	UIImageView *photoFrameView;
 	UIControl *photoControl;
+	UIImage *currentImage;
 }
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet ATToolbar *toolbar;

@@ -185,7 +185,14 @@
 	// 16-byte aligned, Quartz book p. 353
 	bytesPerRow = ((size_t)(samplesPerPixel * newWidth) + 15) & ~15;
 	
-	bitmapContext = CGBitmapContextCreate(NULL, newWidth, newHeight, CGImageGetBitsPerComponent(imageRef), bytesPerRow, CGImageGetColorSpace(imageRef), CGImageGetBitmapInfo(imageRef));
+	CGImageAlphaInfo newAlphaInfo;
+	if (alphaInfo == kCGImageAlphaNone) {
+		newAlphaInfo = kCGImageAlphaNoneSkipLast;
+	} else {
+		newAlphaInfo = kCGImageAlphaPremultipliedFirst;
+	}
+	
+	bitmapContext = CGBitmapContextCreate(NULL, newWidth, newHeight, CGImageGetBitsPerComponent(imageRef), bytesPerRow, CGImageGetColorSpace(imageRef), newAlphaInfo);
 	CGContextSetInterpolationQuality(bitmapContext, kCGInterpolationHigh);
 	
 	CGContextConcatCTM(bitmapContext, transform);

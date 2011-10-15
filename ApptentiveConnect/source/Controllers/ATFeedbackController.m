@@ -624,15 +624,12 @@ enum {
 			UIImage *image = feedback.screenshot;
 			
 			UIView *frameView = [self.view viewWithTag:kFeedbackPhotoFrameTag];
-			UIImageView *thumbnailView = (UIImageView *)[frameView viewWithTag:kFeedbackPhotoPreviewTag];
+			UIImageView *thumbnailView = (UIImageView *)[self.view viewWithTag:kFeedbackPhotoPreviewTag];
 			CGFloat scale = [[UIScreen mainScreen] scale];
 			
 			if (thumbnailView == nil) {
 				thumbnailView = [[[UIImageView alloc] init] autorelease];
 				thumbnailView.tag = kFeedbackPhotoPreviewTag;
-				CGRect f = CGRectMake(11.5, 12, 70, 70);
-				f = CGRectOffset(f, frameView.frame.origin.x, frameView.frame.origin.y);
-				thumbnailView.frame = f;
 				thumbnailView.contentMode = UIViewContentModeTop;
 				thumbnailView.clipsToBounds = YES;
 				thumbnailView.backgroundColor = [UIColor blackColor];
@@ -645,6 +642,9 @@ enum {
 				
 				thumbnailView.transform = CGAffineTransformMakeRotation(DEG_TO_RAD(3.0));
 			}
+			CGRect f = CGRectMake(11.5, 12, 70, 70);
+			f = CGRectOffset(f, frameView.frame.origin.x, frameView.frame.origin.y);
+			thumbnailView.frame = f;
 			if (image != nil && thumbnailView.image != image) {
 				CGSize imageSize = image.size;
 				CGSize scaledImageSize = imageSize;

@@ -22,11 +22,15 @@
 #import <QuartzCore/QuartzCore.h>
 
 
+#define DEG_TO_RAD(angle) ((M_PI * angle) / 180.0)
+#define RAD_TO_DEG(radians) (radians * (180.0/M_PI))
+
 enum {
 	kFeedbackPaperclipTag = 400,
 	kFeedbackPaperclipBackgroundTag = 401,
 	kFeedbackPhotoFrameTag = 402,
 	kFeedbackPhotoControlTag = 403,
+	kFeedbackPhotoPreviewTag = 404,
 };
 
 @interface ATFeedbackController (Private)
@@ -44,6 +48,7 @@ enum {
 - (void)hide:(BOOL)animated;
 - (void)finishHide;
 - (void)finishUnhide;
+- (void)updateThumbnail;
 @end
 
 @implementation ATFeedbackController
@@ -391,6 +396,7 @@ enum {
     if (self.emailField && (!self.emailField.text || [@"" isEqualToString:self.emailField.text]) && self.feedback.email) {
         self.emailField.text = self.feedback.email;
     }
+	[self updateThumbnail];
 }
 
 - (BOOL)shouldReturn:(UIView *)view {
@@ -542,6 +548,8 @@ enum {
 	feedbackViewFrame.size.width = [self shouldShowPaperclip] ? viewWidth - 100.0 : viewWidth;
 	self.feedbackView.frame = feedbackViewFrame;
 	
+	[self updateThumbnail];
+	
 	NSLog(@"setting view frame to: %@", NSStringFromCGRect(f));
 }
 
@@ -601,11 +609,58 @@ enum {
 }
 
 - (void)finishUnhide {
+	[self updateThumbnail];
 	self.window.alpha = 1.0;
 	[self.window makeKeyAndVisible];
 	[self.parentViewController.view.window addSubview:self.window];
 	[self positionInWindow];
 	[self.emailField becomeFirstResponder];
 	[self release];
+}
+
+- (void)updateThumbnail {
+	@synchronized(self) {
+		if ([self shouldShowPaperclip]) {
+			UIImage *image = feedback.screenshot;
+			
+			UIView *frameView = [self.view viewWithTag:kFeedbackPhotoFrameTag];
+			UIImageView *thumbnailView = (UIImageView *)[frameView viewWithTag:kFeedbackPhotoPreviewTag];
+			CGFloat scale = [[UIScreen mainScreen] scale];
+			
+			if (thumbnailView == nil) {
+				thumbnailView = [[[UIImageView alloc] init] autorelease];
+				thumbnailView.tag = kFeedbackPhotoPreviewTag;
+				CGRect f = CGRectMake(11.5, 12, 70, 70);
+				f = CGRectOffset(f, frameView.frame.origin.x, frameView.frame.origin.y);
+				thumbnailView.frame = f;
+				thumbnailView.contentMode = UIViewContentModeTop;
+				thumbnailView.clipsToBounds = YES;
+				thumbnailView.backgroundColor = [UIColor blackColor];
+				[self.view addSubview:thumbnailView];
+				[self.view bringSubviewToFront:paperclipBackgroundView];
+				[self.view bringSubviewToFront:thumbnailView];
+				[self.view bringSubviewToFront:photoFrameView];
+				[self.view bringSubviewToFront:paperclipView];
+				[self.view bringSubviewToFront:photoControl];
+				
+				thumbnailView.transform = CGAffineTransformMakeRotation(DEG_TO_RAD(3.0));
+			}
+			if (image != nil && thumbnailView.image != image) {
+				CGSize imageSize = image.size;
+				CGSize scaledImageSize = imageSize;
+				CGFloat fitDimension = 70.0 * scale;
+				
+				if (imageSize.width > imageSize.height) {
+					scaledImageSize.height = fitDimension;
+					scaledImageSize.width = (fitDimension/imageSize.height) * imageSize.width;
+				} else {
+					scaledImageSize.height = (fitDimension/imageSize.width) * imageSize.height;
+					scaledImageSize.width = fitDimension;
+				}
+				UIImage *scaledImage = [ATUtilities imageByScalingImage:image toSize:scaledImageSize scale:scale];
+				thumbnailView.image = scaledImage;
+			}
+		}
+	}
 }
 @end

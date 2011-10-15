@@ -76,7 +76,7 @@
 		4936AE8C1379DECE00A4B17F /* ATContactStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE7E1379DECE00A4B17F /* ATContactStorage.m */; };
 		4936AE8D1379DECE00A4B17F /* ATContactUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE801379DECE00A4B17F /* ATContactUpdater.m */; };
 		4936AE8E1379DECE00A4B17F /* ATFeedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE821379DECE00A4B17F /* ATFeedback.m */; };
-		4942CC9113C7AD2D009BF758 /* ATAppRatingFlow.h in Headers */ = {isa = PBXBuildFile; fileRef = 4942CC8F13C7AD2D009BF758 /* ATAppRatingFlow.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4942CC9113C7AD2D009BF758 /* ATAppRatingFlow.h in Headers */ = {isa = PBXBuildFile; fileRef = 4942CC8F13C7AD2D009BF758 /* ATAppRatingFlow.h */; settings = {ATTRIBUTES = (); }; };
 		4942CC9213C7AD2D009BF758 /* ATAppRatingFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4942CC9013C7AD2D009BF758 /* ATAppRatingFlow.m */; };
 		4942CC9313C7AD2D009BF758 /* ATAppRatingFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4942CC9013C7AD2D009BF758 /* ATAppRatingFlow.m */; };
 		49509A61135658E200793EEC /* ATReachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 49509A5F135658E200793EEC /* ATReachability.h */; };
@@ -505,6 +505,7 @@
 				49D112731337CC9F00603373 /* ATTaskQueue.h in Headers */,
 				491748BA1341177000A7D11E /* ATConnectionChannel.h in Headers */,
 				491748BC1341177000A7D11E /* ATConnectionManager.h in Headers */,
+				4942CC9113C7AD2D009BF758 /* ATAppRatingFlow.h in Headers */,
 				491748BE1341177000A7D11E /* ATURLConnection.h in Headers */,
 				491748C01341177000A7D11E /* ATWebClient.h in Headers */,
 				49509A61135658E200793EEC /* ATReachability.h in Headers */,
@@ -524,7 +525,6 @@
 				49AA101F138B44C00082887A /* ATInfoViewController.h in Headers */,
 				49352AC4138C97A2000E464A /* ATAPIRequest.h in Headers */,
 				49352ADD138CA1DC000E464A /* ATURLConnection_Private.h in Headers */,
-				4942CC9113C7AD2D009BF758 /* ATAppRatingFlow.h in Headers */,
 				49185F5313CE21860092D349 /* ATSimpleFeedbackController_DELETE.h in Headers */,
 				49E90DBA13FC7FAB00BDBDA1 /* JSONKit.h in Headers */,
 				490B8158144274EF009801E9 /* ATCustomButton.h in Headers */,

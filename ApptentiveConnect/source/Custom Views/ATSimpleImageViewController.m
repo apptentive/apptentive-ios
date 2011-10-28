@@ -14,6 +14,11 @@
 
 NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 
+@interface ATSimpleImageViewController (Private)
+- (void)chooseImage;
+- (void)takePhoto;
+@end
+
 @implementation ATSimpleImageViewController
 @synthesize containerView;
 
@@ -106,7 +111,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-	NSLog(@"size is: %@", NSStringFromCGRect(self.view.bounds));
+	//NSLog(@"size is: %@", NSStringFromCGRect(self.view.bounds));
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -128,12 +133,27 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 }
 
 - (IBAction)takePhoto:(id)sender {
-	shouldResign = NO;
-	UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
-	imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-	imagePicker.delegate = self;
-	[self presentModalViewController:imagePicker animated:YES];
-	[imagePicker release];
+	if (controller.attachmentOptions && ATFeedbackAllowTakePhotoAttachment) {
+		UIActionSheet *actionSheet = nil;
+		if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+			actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel Button Title") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Choose From Library", @"Choose Photo Button Title"), ATLocalizedString(@"Take Photo", @"Take Photo Button Title"), nil];
+		} else {
+			actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel Button Title") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Choose From Library", @"Choose Photo Button Title"), nil];
+		}
+		[actionSheet showInView:self.view];
+		[actionSheet autorelease];
+	} else {
+		[self chooseImage];
+	}
+}
+
+#pragma mark UIActionSheetDelegate
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+	if (buttonIndex == 0) {
+		[self chooseImage];
+	} else if (buttonIndex == 1) {
+		[self takePhoto];
+	}
 }
 
 #pragma mark UIImagePickerControllerDelegate
@@ -145,6 +165,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 		image = [info objectForKey:UIImagePickerControllerOriginalImage];
 	}
 	if (image) {
+		feedback.imageIsFromCamera = isFromCamera;
 		feedback.screenshot = image;
 		[[NSNotificationCenter defaultCenter] postNotificationName:ATImageViewChoseImage object:self];
 	}
@@ -172,5 +193,27 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 #pragma mark UIScrollViewDelegate
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)aScrollView {
     return [scrollView imageView];
+}
+@end
+
+@implementation ATSimpleImageViewController (Private)
+- (void)chooseImage {
+	isFromCamera = NO;
+	shouldResign = NO;
+	UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+	imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+	imagePicker.delegate = self;
+	[self presentModalViewController:imagePicker animated:YES];
+	[imagePicker release];
+}
+
+- (void)takePhoto {
+	isFromCamera = YES;
+	shouldResign = NO;
+	UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+	imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+	imagePicker.delegate = self;
+	[self presentModalViewController:imagePicker animated:YES];
+	[imagePicker release];
 }
 @end

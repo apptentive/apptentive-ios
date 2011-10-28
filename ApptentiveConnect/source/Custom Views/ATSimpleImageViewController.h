@@ -14,13 +14,14 @@
 
 NSString * const ATImageViewChoseImage;
 
-@interface ATSimpleImageViewController : UIViewController <UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate> {
+@interface ATSimpleImageViewController : UIViewController <UIActionSheetDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate> {
 @private
     ATCenteringImageScrollView *scrollView;
 	ATFeedback *feedback;
 	ATFeedbackController *controller;
 	BOOL shouldResign;
 	UIView *containerView;
+	BOOL isFromCamera;
 }
 @property (nonatomic, retain) IBOutlet UIView *containerView;
 - (id)initWithFeedback:(ATFeedback *)feedback feedbackController:(ATFeedbackController *)controller;

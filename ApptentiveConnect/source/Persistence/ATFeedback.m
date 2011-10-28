@@ -25,7 +25,7 @@
 @end
 
 @implementation ATFeedback
-@synthesize type, text, name, email, phone, screenshot, uuid, model, os_version, carrier, date, screenshotSwitchEnabled;
+@synthesize type, text, name, email, phone, screenshot, uuid, model, os_version, carrier, date, screenshotSwitchEnabled, imageIsFromCamera;
 - (id)init {
     if ((self = [super init])) {
         self.type = ATFeedbackTypeFeedback;

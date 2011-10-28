@@ -20,7 +20,7 @@
 #if TARGET_OS_IPHONE
 + (UIImage *)imageByTakingScreenshot;
 + (UIImage *)imageByRotatingImage:(UIImage *)image byRadians:(CGFloat)radians;
-+ (UIImage *)imageByScalingImage:(UIImage *)image toSize:(CGSize)size scale:(CGFloat)contentScale;
++ (UIImage *)imageByScalingImage:(UIImage *)image toSize:(CGSize)size scale:(CGFloat)contentScale fromITouchCamera:(BOOL)isFromITouchCamera;
 + (CGFloat)rotationOfViewHierarchyInRadians:(UIView *)leafView;
 + (CGAffineTransform)viewTransformInWindow:(UIWindow *)window;
 #elif TARGET_OS_MAC

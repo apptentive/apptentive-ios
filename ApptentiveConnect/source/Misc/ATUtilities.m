@@ -118,7 +118,7 @@
     return result;
 }
 
-+ (UIImage *)imageByScalingImage:(UIImage *)image toSize:(CGSize)size scale:(CGFloat)contentScale {
++ (UIImage *)imageByScalingImage:(UIImage *)image toSize:(CGSize)size scale:(CGFloat)contentScale fromITouchCamera:(BOOL)isFromITouchCamera {
 	UIImage *result = nil;
 	CGImageRef imageRef = nil;
 	CGImageAlphaInfo alphaInfo = kCGImageAlphaNone;
@@ -188,6 +188,17 @@
 	
 	bitmapContext = CGBitmapContextCreate(NULL, newWidth, newHeight, CGImageGetBitsPerComponent(imageRef), bytesPerRow, CGImageGetColorSpace(imageRef), newAlphaInfo);
 	CGContextSetInterpolationQuality(bitmapContext, kCGInterpolationHigh);
+	
+	// The iPhone tries to be "smart" about image orientation, and messes it
+	// up in the process. Here, UIImageOrientationLeft happens when the 
+	// device is held upside down (camera on the end towards the ground).
+	// UIImageOrientationRight happens when the camera is in a normal, upright
+	// position. In both cases, the image is rotated 180 degrees from what
+	// the user actually saw through the image preview.
+	if (isFromITouchCamera && (image.imageOrientation == UIImageOrientationRight || image.imageOrientation == UIImageOrientationLeft)) {
+		CGContextScaleCTM(bitmapContext, -1.0, -1);
+		CGContextTranslateCTM(bitmapContext, -newWidth, -newHeight);
+	}
 	
 	CGContextConcatCTM(bitmapContext, transform);
 	CGContextDrawImage(bitmapContext, newRect, imageRef);

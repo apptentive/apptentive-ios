@@ -174,19 +174,20 @@ enum {
 	shadowView.tag = kFeedbackGradientLayerTag;
 	[self.window addSubview:shadowView];
 	[self.window sendSubviewToBack:shadowView];
-	shadowView.alpha = 0.0;
+	shadowView.alpha = 1.0;
 #endif
 	
 	l.cornerRadius = 10.0;
 	l.backgroundColor = [UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_dialog_paper_bg"]].CGColor;
 	
-	[UIView beginAnimations:@"animateIn" context:nil];
-	[UIView setAnimationDuration:1.3];
-	[UIView setAnimationDelegate:self];
-	[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
 		[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
 	}
+	
+	[UIView beginAnimations:@"animateIn" context:nil];
+	[UIView setAnimationDuration:0.3];
+	[UIView setAnimationDelegate:self];
+	[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
 	self.view.center = newViewCenter;
 	shadowView.alpha = 1.0;
 	[UIView commitAnimations];
@@ -383,7 +384,7 @@ enum {
 #endif
 	
 	[UIView beginAnimations:@"animateOut" context:nil];
-	[UIView setAnimationDuration:3.3];
+	[UIView setAnimationDuration:0.3];
 	[UIView setAnimationDelegate:self];
 	[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
 	self.view.center = endingPoint;
@@ -540,9 +541,7 @@ enum {
 		[self.window resignKeyWindow];
 		[self.window removeFromSuperview];
 		self.window.hidden = YES;
-		[UIView beginAnimations:nil context:NULL];
 		[[UIApplication sharedApplication] setStatusBarStyle:startingStatusBarStyle];
-		[UIView commitAnimations];
 		[self release];
 	} else if ([animationID isEqualToString:@"windowHide"]) {
 		[self finishHide];
@@ -664,7 +663,7 @@ enum {
 					scaledImageSize.height = (fitDimension/imageSize.width) * imageSize.height;
 					scaledImageSize.width = fitDimension;
 				}
-				UIImage *scaledImage = [ATUtilities imageByScalingImage:image toSize:scaledImageSize scale:scale];
+				UIImage *scaledImage = [ATUtilities imageByScalingImage:image toSize:scaledImageSize scale:scale fromITouchCamera:feedback.imageIsFromCamera];
 				thumbnailView.image = scaledImage;
 			} else if (image == nil) {
 				thumbnailView.image = [ATBackend imageNamed:@"at_camera_icon"];
@@ -732,7 +731,7 @@ enum {
 		//viewWidth = isLandscape ? 200.0 : 300.0;
 		viewWidth = windowWidth - 12*2 - 100.0;
 	} else {
-		viewHeight = isLandscape ? 168.0 : 237.0;
+		viewHeight = isLandscape ? 176.0 : 237.0;
 		viewWidth = windowWidth - 12*2;
 	}
 	originX = floorf((windowWidth - viewWidth)/2.0);

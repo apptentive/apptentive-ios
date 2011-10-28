@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ATShadowView : UIView
-
+@interface ATShadowView : UIView {
+@private
+	CGPoint centerAt;
+	CGSize spotlightSize;
+}
+@property (nonatomic, assign) CGPoint centerAt;
+@property (nonatomic, assign) CGSize spotlightSize;
 @end

@@ -88,7 +88,7 @@
 								<string key="NSFrame">{{0, 44}, {297, 5}}</string>
 								<reference key="NSSuperview" ref="191373211"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="916510011"/>
+								<reference key="NSNextKeyView" ref="19027900"/>
 								<object class="NSColor" key="IBUIBackgroundColor">
 									<int key="NSColorSpace">3</int>
 									<bytes key="NSWhite">MQA</bytes>
@@ -102,10 +102,10 @@
 							<object class="IBUITextField" id="916510011">
 								<reference key="NSNextResponder" ref="191373211"/>
 								<int key="NSvFlags">294</int>
-								<string key="NSFrame">{{4, 49}, {210, 31}}</string>
+								<string key="NSFrame">{{8, 52}, {208, 31}}</string>
 								<reference key="NSSuperview" ref="191373211"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="19027900"/>
+								<reference key="NSNextKeyView" ref="206653923"/>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -192,7 +192,7 @@
 										<string key="NSFrameSize">{197, 126}</string>
 										<reference key="NSSuperview" ref="824863356"/>
 										<reference key="NSWindow"/>
-										<reference key="NSNextKeyView" ref="206653923"/>
+										<reference key="NSNextKeyView" ref="916510011"/>
 										<reference key="IBUIBackgroundColor" ref="1034174927"/>
 										<bool key="IBUIOpaque">NO</bool>
 										<bool key="IBUIMultipleTouchEnabled">YES</bool>

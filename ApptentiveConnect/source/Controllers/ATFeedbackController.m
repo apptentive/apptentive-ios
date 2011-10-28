@@ -265,7 +265,7 @@ enum {
 	
 	UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
 	titleLabel.text = ATLocalizedString(@"Give Feedback", @"Title of feedback screen.");
-	titleLabel.textAlignment = UITextAlignmentLeft;
+	titleLabel.textAlignment = UITextAlignmentCenter;
 	titleLabel.textColor = [UIColor colorWithRed:105/256. green:105/256. blue:105/256. alpha:1.0];
 	titleLabel.shadowColor = [UIColor whiteColor];
 	titleLabel.shadowOffset = CGSizeMake(0.0, 1.0);
@@ -275,7 +275,6 @@ enum {
 	titleLabel.opaque = NO;
 	[titleLabel sizeToFit];
 	CGRect titleFrame = titleLabel.frame;
-	titleFrame.size.width += 3.0;
 	titleLabel.frame = titleFrame;
 	
 	UIBarButtonItem *titleButton = [[UIBarButtonItem alloc] initWithCustomView:titleLabel];

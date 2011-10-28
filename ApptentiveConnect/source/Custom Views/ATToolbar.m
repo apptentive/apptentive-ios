@@ -17,6 +17,7 @@
 	NSArray *items = [self items];
 	if ([items count] > 0) {
 		UIBarButtonItem *firstItem = [items objectAtIndex:0];
+		
 		BOOL adjustedFirstItem = NO;
 		if (firstItem.customView != nil) {
 			CGRect f = firstItem.customView.frame;
@@ -30,9 +31,9 @@
 		if (adjustedFirstItem) {
 			NSUInteger i = 0;
 			for (UIBarButtonItem *item in items) {
-				if (i != 0 && item.customView) {
+				if (i != 0 && item.customView != nil) {
 					CGRect customFrame = item.customView.frame;
-					customFrame.origin.x -= 3.0;
+					customFrame.origin.x += 4.0;
 					item.customView.frame = customFrame;
 				}
 				i++;
@@ -44,5 +45,4 @@
 - (void)drawRect:(CGRect)rect {
 	//
 }
-
 @end

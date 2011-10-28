@@ -25,9 +25,6 @@
 		491748BF1341177000A7D11E /* ATURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 491748B71341177000A7D11E /* ATURLConnection.m */; };
 		491748C01341177000A7D11E /* ATWebClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 491748B81341177000A7D11E /* ATWebClient.h */; };
 		491748C11341177000A7D11E /* ATWebClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 491748B91341177000A7D11E /* ATWebClient.m */; };
-		49185F5113CE21860092D349 /* ATSimpleFeedbackController_DELETE.m in Sources */ = {isa = PBXBuildFile; fileRef = 49185F4F13CE21860092D349 /* ATSimpleFeedbackController_DELETE.m */; };
-		49185F5313CE21860092D349 /* ATSimpleFeedbackController_DELETE.h in Headers */ = {isa = PBXBuildFile; fileRef = 49185F4E13CE21860092D349 /* ATSimpleFeedbackController_DELETE.h */; };
-		49185F5413CE21860092D349 /* ATSimpleFeedbackController_DELETE.m in Sources */ = {isa = PBXBuildFile; fileRef = 49185F4F13CE21860092D349 /* ATSimpleFeedbackController_DELETE.m */; };
 		493529FF138C7253000E464A /* ATInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA1022138B498C0082887A /* ATInfoViewController.xib */; };
 		49352A00138C7257000E464A /* ATInfoViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA1024138B49A50082887A /* ATInfoViewController_iPad.xib */; };
 		49352A20138C73B8000E464A /* ATAboutApptentiveView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49352A1F138C73B8000E464A /* ATAboutApptentiveView.xib */; };
@@ -55,12 +52,6 @@
 		4936AE601379DE3100A4B17F /* ATKeyboardAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE4C1379DE3100A4B17F /* ATKeyboardAccessoryView.m */; };
 		4936AE611379DE3100A4B17F /* ATPopupSelectorControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE4E1379DE3100A4B17F /* ATPopupSelectorControl.m */; };
 		4936AE621379DE3100A4B17F /* ATSimpleImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE501379DE3100A4B17F /* ATSimpleImageViewController.m */; };
-		4936AE6D1379DE6A00A4B17F /* ATContactInfoController_DELETE.h in Headers */ = {isa = PBXBuildFile; fileRef = 4936AE691379DE6A00A4B17F /* ATContactInfoController_DELETE.h */; };
-		4936AE6E1379DE6A00A4B17F /* ATContactInfoController_DELETE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE6A1379DE6A00A4B17F /* ATContactInfoController_DELETE.m */; };
-		4936AE6F1379DE6A00A4B17F /* ATFeedbackController_DELETE.h in Headers */ = {isa = PBXBuildFile; fileRef = 4936AE6B1379DE6A00A4B17F /* ATFeedbackController_DELETE.h */; };
-		4936AE701379DE6A00A4B17F /* ATFeedbackController_DELETE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE6C1379DE6A00A4B17F /* ATFeedbackController_DELETE.m */; };
-		4936AE711379DE6A00A4B17F /* ATContactInfoController_DELETE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE6A1379DE6A00A4B17F /* ATContactInfoController_DELETE.m */; };
-		4936AE721379DE6A00A4B17F /* ATFeedbackController_DELETE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE6C1379DE6A00A4B17F /* ATFeedbackController_DELETE.m */; };
 		4936AE771379DEBB00A4B17F /* ATUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 4936AE751379DEBB00A4B17F /* ATUtilities.h */; };
 		4936AE781379DEBB00A4B17F /* ATUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE761379DEBB00A4B17F /* ATUtilities.m */; };
 		4936AE791379DEBB00A4B17F /* ATUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE761379DEBB00A4B17F /* ATUtilities.m */; };
@@ -157,8 +148,6 @@
 		491748B71341177000A7D11E /* ATURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATURLConnection.m; sourceTree = "<group>"; };
 		491748B81341177000A7D11E /* ATWebClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATWebClient.h; sourceTree = "<group>"; };
 		491748B91341177000A7D11E /* ATWebClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATWebClient.m; sourceTree = "<group>"; };
-		49185F4E13CE21860092D349 /* ATSimpleFeedbackController_DELETE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSimpleFeedbackController_DELETE.h; sourceTree = "<group>"; };
-		49185F4F13CE21860092D349 /* ATSimpleFeedbackController_DELETE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSimpleFeedbackController_DELETE.m; sourceTree = "<group>"; };
 		49352A1F138C73B8000E464A /* ATAboutApptentiveView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ATAboutApptentiveView.xib; sourceTree = "<group>"; };
 		49352AC1138C97A2000E464A /* ATAPIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAPIRequest.h; sourceTree = "<group>"; };
 		49352AC2138C97A2000E464A /* ATAPIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAPIRequest.m; sourceTree = "<group>"; };
@@ -176,10 +165,6 @@
 		4936AE4E1379DE3100A4B17F /* ATPopupSelectorControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATPopupSelectorControl.m; sourceTree = "<group>"; };
 		4936AE4F1379DE3100A4B17F /* ATSimpleImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSimpleImageViewController.h; sourceTree = "<group>"; };
 		4936AE501379DE3100A4B17F /* ATSimpleImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSimpleImageViewController.m; sourceTree = "<group>"; };
-		4936AE691379DE6A00A4B17F /* ATContactInfoController_DELETE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATContactInfoController_DELETE.h; sourceTree = "<group>"; };
-		4936AE6A1379DE6A00A4B17F /* ATContactInfoController_DELETE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATContactInfoController_DELETE.m; sourceTree = "<group>"; };
-		4936AE6B1379DE6A00A4B17F /* ATFeedbackController_DELETE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATFeedbackController_DELETE.h; sourceTree = "<group>"; };
-		4936AE6C1379DE6A00A4B17F /* ATFeedbackController_DELETE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATFeedbackController_DELETE.m; sourceTree = "<group>"; };
 		4936AE751379DEBB00A4B17F /* ATUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATUtilities.h; sourceTree = "<group>"; };
 		4936AE761379DEBB00A4B17F /* ATUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATUtilities.m; sourceTree = "<group>"; };
 		4936AE7B1379DECE00A4B17F /* ATBackend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATBackend.h; sourceTree = "<group>"; };
@@ -299,14 +284,8 @@
 			children = (
 				490B8162144275B3009801E9 /* ATFeedbackController.h */,
 				490B8163144275B3009801E9 /* ATFeedbackController.m */,
-				4936AE6B1379DE6A00A4B17F /* ATFeedbackController_DELETE.h */,
-				4936AE6C1379DE6A00A4B17F /* ATFeedbackController_DELETE.m */,
-				4936AE691379DE6A00A4B17F /* ATContactInfoController_DELETE.h */,
-				4936AE6A1379DE6A00A4B17F /* ATContactInfoController_DELETE.m */,
 				49AA101D138B44C00082887A /* ATInfoViewController.h */,
 				49AA101E138B44C00082887A /* ATInfoViewController.m */,
-				49185F4E13CE21860092D349 /* ATSimpleFeedbackController_DELETE.h */,
-				49185F4F13CE21860092D349 /* ATSimpleFeedbackController_DELETE.m */,
 				49BC2A58144F75E10041E789 /* ATShadowView.h */,
 				49BC2A59144F75E20041E789 /* ATShadowView.m */,
 			);
@@ -521,8 +500,6 @@
 				4936AE571379DE3100A4B17F /* ATKeyboardAccessoryView.h in Headers */,
 				4936AE591379DE3100A4B17F /* ATPopupSelectorControl.h in Headers */,
 				4936AE5B1379DE3100A4B17F /* ATSimpleImageViewController.h in Headers */,
-				4936AE6D1379DE6A00A4B17F /* ATContactInfoController_DELETE.h in Headers */,
-				4936AE6F1379DE6A00A4B17F /* ATFeedbackController_DELETE.h in Headers */,
 				4936AE771379DEBB00A4B17F /* ATUtilities.h in Headers */,
 				4936AE831379DECE00A4B17F /* ATBackend.h in Headers */,
 				4936AE851379DECE00A4B17F /* ATContactStorage.h in Headers */,
@@ -531,7 +508,6 @@
 				49AA101F138B44C00082887A /* ATInfoViewController.h in Headers */,
 				49352AC4138C97A2000E464A /* ATAPIRequest.h in Headers */,
 				49352ADD138CA1DC000E464A /* ATURLConnection_Private.h in Headers */,
-				49185F5313CE21860092D349 /* ATSimpleFeedbackController_DELETE.h in Headers */,
 				49E90DBA13FC7FAB00BDBDA1 /* JSONKit.h in Headers */,
 				490B8158144274EF009801E9 /* ATCustomButton.h in Headers */,
 				490B815D1442751F009801E9 /* ATToolbar.h in Headers */,
@@ -710,8 +686,6 @@
 				4936AE581379DE3100A4B17F /* ATKeyboardAccessoryView.m in Sources */,
 				4936AE5A1379DE3100A4B17F /* ATPopupSelectorControl.m in Sources */,
 				4936AE5C1379DE3100A4B17F /* ATSimpleImageViewController.m in Sources */,
-				4936AE6E1379DE6A00A4B17F /* ATContactInfoController_DELETE.m in Sources */,
-				4936AE701379DE6A00A4B17F /* ATFeedbackController_DELETE.m in Sources */,
 				4936AE781379DEBB00A4B17F /* ATUtilities.m in Sources */,
 				4936AE841379DECE00A4B17F /* ATBackend.m in Sources */,
 				4936AE861379DECE00A4B17F /* ATContactStorage.m in Sources */,
@@ -720,7 +694,6 @@
 				49AA1020138B44C00082887A /* ATInfoViewController.m in Sources */,
 				49352AC5138C97A2000E464A /* ATAPIRequest.m in Sources */,
 				4942CC9213C7AD2D009BF758 /* ATAppRatingFlow.m in Sources */,
-				49185F5413CE21860092D349 /* ATSimpleFeedbackController_DELETE.m in Sources */,
 				49E90DBB13FC7FAB00BDBDA1 /* JSONKit.m in Sources */,
 				490B8159144274EF009801E9 /* ATCustomButton.m in Sources */,
 				490B815E1442751F009801E9 /* ATToolbar.m in Sources */,
@@ -742,8 +715,6 @@
 				4936AE601379DE3100A4B17F /* ATKeyboardAccessoryView.m in Sources */,
 				4936AE611379DE3100A4B17F /* ATPopupSelectorControl.m in Sources */,
 				4936AE621379DE3100A4B17F /* ATSimpleImageViewController.m in Sources */,
-				4936AE711379DE6A00A4B17F /* ATContactInfoController_DELETE.m in Sources */,
-				4936AE721379DE6A00A4B17F /* ATFeedbackController_DELETE.m in Sources */,
 				4936AE791379DEBB00A4B17F /* ATUtilities.m in Sources */,
 				4936AE8B1379DECE00A4B17F /* ATBackend.m in Sources */,
 				4936AE8C1379DECE00A4B17F /* ATContactStorage.m in Sources */,
@@ -752,7 +723,6 @@
 				49AA1021138B44C00082887A /* ATInfoViewController.m in Sources */,
 				49352AC3138C97A2000E464A /* ATAPIRequest.m in Sources */,
 				4942CC9313C7AD2D009BF758 /* ATAppRatingFlow.m in Sources */,
-				49185F5113CE21860092D349 /* ATSimpleFeedbackController_DELETE.m in Sources */,
 				490B815A144274EF009801E9 /* ATCustomButton.m in Sources */,
 				490B815F1442751F009801E9 /* ATToolbar.m in Sources */,
 				490B8166144275B3009801E9 /* ATFeedbackController.m in Sources */,

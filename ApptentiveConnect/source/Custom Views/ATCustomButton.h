@@ -13,6 +13,13 @@ typedef enum {
 	ATCustomButtonStyleDone
 } ATCustomButtonStyle;
 
+@interface ATTrackingButton : UIButton {
+@private
+    UIEdgeInsets padding;
+}
+@property (nonatomic, assign) UIEdgeInsets padding;
+@end
+
 @interface ATCustomButton : UIBarButtonItem
 - (id)initWithButtonStyle:(ATCustomButtonStyle)style;
 - (void)setAction:(SEL)action forTarget:(id)target;

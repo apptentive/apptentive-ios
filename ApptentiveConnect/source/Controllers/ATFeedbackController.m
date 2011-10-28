@@ -19,12 +19,15 @@
 #import "ATInfoViewController.h"
 #import "ATSimpleImageViewController.h"
 #import "ATUtilities.h"
+#import "ATShadowView.h"
 #import <QuartzCore/QuartzCore.h>
 
 
 #define DEG_TO_RAD(angle) ((M_PI * angle) / 180.0)
 #define RAD_TO_DEG(radians) (radians * (180.0/M_PI))
 
+#define USE_SHADOW 0
+#define USE_GRADIENT 1
 
 enum {
 	kFeedbackPaperclipTag = 400,
@@ -33,6 +36,9 @@ enum {
 	kFeedbackPhotoControlTag = 403,
 	kFeedbackPhotoPreviewTag = 404,
 	kATEmailAlertTextFieldTag = 1010,
+#if USE_GRADIENT
+	kFeedbackGradientLayerTag = 1011,
+#endif
 };
 
 @interface ATFeedbackController (Private)
@@ -45,7 +51,6 @@ enum {
 - (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context;
 - (void)statusBarChangedOrientation:(NSNotification *)notification;
 - (BOOL)shouldShowPaperclip;
-- (void)positionInWindow;
 - (void)captureFeedbackState;
 - (void)hide:(BOOL)animated;
 - (void)finishHide;
@@ -53,6 +58,12 @@ enum {
 - (void)updateThumbnail;
 - (void)sendFeedbackAndDismiss;
 - (void)updateSendButtonState;
+@end
+
+@interface ATFeedbackController (Positioning)
+- (CGRect)onscreenRectOfView;
+- (CGPoint)offscreenPositionOfView;
+- (void)positionInWindow;
 @end
 
 @implementation ATFeedbackController
@@ -152,15 +163,36 @@ enum {
 	[self positionInWindow];
 	
 	[self.emailField becomeFirstResponder];
-	self.window.center = startingPoint;
-	[UIView beginAnimations:@"animateIn" context:nil];
-	[UIView setAnimationDuration:0.3];
-	[UIView setAnimationDelegate:self];
-	[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
 	self.window.center = CGPointMake(CGRectGetMidX(endingFrame), CGRectGetMidY(endingFrame));
+	self.view.center = [self offscreenPositionOfView];
+	
+	CGRect newFrame = [self onscreenRectOfView];
+	CGPoint newViewCenter = CGPointMake(CGRectGetMidX(newFrame), CGRectGetMidY(newFrame));
+
+#if USE_GRADIENT
+	ATShadowView *shadowView = [[ATShadowView alloc] initWithFrame:self.window.bounds];
+	shadowView.tag = kFeedbackGradientLayerTag;
+	[self.window addSubview:shadowView];
+	[self.window sendSubviewToBack:shadowView];
+	shadowView.alpha = 0.0;
+#endif
+	
 	l.cornerRadius = 10.0;
 	l.backgroundColor = [UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_dialog_paper_bg"]].CGColor;
+	
+	[UIView beginAnimations:@"animateIn" context:nil];
+	[UIView setAnimationDuration:1.3];
+	[UIView setAnimationDelegate:self];
+	[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
+	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+		[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
+	}
+	self.view.center = newViewCenter;
+	shadowView.alpha = 1.0;
 	[UIView commitAnimations];
+#if USE_GRADIENT
+	[shadowView release], shadowView = nil;
+#endif
 }
 
 - (void)didReceiveMemoryWarning {
@@ -170,9 +202,6 @@ enum {
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
-	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-		[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
-	}
 	
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackChanged:) name:UITextViewTextDidChangeNotification object:self.feedbackView];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contactInfoChanged:) name:ATContactUpdaterFinished object:nil];
@@ -336,41 +365,29 @@ enum {
 
 - (void)dismiss:(BOOL)animated {
     [self captureFeedbackState];
-	CGPoint center = self.window.center;
-	CGPoint endingPoint = CGPointZero;
-	
-	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-	
-    switch (orientation) {
-		case UIInterfaceOrientationPortraitUpsideDown:
-			endingPoint = CGPointMake(center.x, center.y + self.window.bounds.size.height);
-			break;
-        case UIInterfaceOrientationLandscapeLeft:
-			endingPoint = CGPointMake(center.x - self.window.bounds.size.width, center.y);
-            break;
-        case UIInterfaceOrientationLandscapeRight:
-			endingPoint = CGPointMake(center.x + self.window.bounds.size.width, center.y);
-            break;
-        default: // as UIInterfaceOrientationPortrait
-			endingPoint = CGPointMake(center.x, center.y - self.window.bounds.size.height);
-            break;
-    }
 	
 	[self.emailField resignFirstResponder];
 	[self.feedbackView resignFirstResponder];
 	
-	[self retain]; 
+	CGPoint endingPoint = [self offscreenPositionOfView];
 	
+	[self retain]; 
+#if USE_SHADOW
 	CALayer *l = self.view.layer;
 	l.shadowRadius = 0.0;
 	l.shadowColor = [UIColor blackColor].CGColor;
 	l.shadowOpacity = 0.0;
+#endif
+#if USE_GRADIENT
+	UIView *gradientView = [self.window viewWithTag:kFeedbackGradientLayerTag];
+#endif
 	
 	[UIView beginAnimations:@"animateOut" context:nil];
-	[UIView setAnimationDuration:0.3];
+	[UIView setAnimationDuration:3.3];
 	[UIView setAnimationDelegate:self];
 	[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
-	self.window.center = endingPoint;
+	self.view.center = endingPoint;
+	gradientView.alpha = 0.0;
 	[UIView commitAnimations];
 }
 
@@ -504,7 +521,7 @@ enum {
 	if ([animationID isEqualToString:@"animateIn"]) {
 		self.window.hidden = NO;
 		[self.emailField becomeFirstResponder];
-		
+#if USE_SHADOW		
 		CALayer *l = self.view.layer;
 		[UIView beginAnimations:nil context:NULL];
 		[UIView setAnimationDuration:0.2];
@@ -512,13 +529,20 @@ enum {
 		l.shadowColor = [UIColor blackColor].CGColor;
 		l.shadowOpacity = 1.0;
 		[UIView commitAnimations];
+#endif
 	} else if ([animationID isEqualToString:@"animateOut"]) {
+#if USE_GRADIENT
+		UIView *gradientView = [self.window viewWithTag:kFeedbackGradientLayerTag];
+		[gradientView removeFromSuperview];	
+#endif
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 		[presentingViewController.view setUserInteractionEnabled:YES];
 		[self.window resignKeyWindow];
 		[self.window removeFromSuperview];
 		self.window.hidden = YES;
+		[UIView beginAnimations:nil context:NULL];
 		[[UIApplication sharedApplication] setStatusBarStyle:startingStatusBarStyle];
+		[UIView commitAnimations];
 		[self release];
 	} else if ([animationID isEqualToString:@"windowHide"]) {
 		[self finishHide];
@@ -533,77 +557,6 @@ enum {
 
 - (BOOL)shouldShowPaperclip {
 	return (attachmentOptions != 0);
-}
-
-- (void)positionInWindow {
-	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-	
-    CGFloat angle = 0.0;
-    CGRect newFrame = [self windowForViewController:presentingViewController].bounds;
-    CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
-	
-	BOOL isLandscape = NO;
-	
-	CGFloat windowWidth = 0.0;
-	
-    switch (orientation) { 
-        case UIInterfaceOrientationPortraitUpsideDown:
-            angle = M_PI; 
-            newFrame.size.height -= statusBarSize.height;
-			windowWidth = statusBarSize.width;
-            break;
-        case UIInterfaceOrientationLandscapeLeft:
-            angle = - M_PI / 2.0f;
-            newFrame.origin.x += statusBarSize.width;
-            newFrame.size.width -= statusBarSize.width;
-			isLandscape = YES;
-			windowWidth = statusBarSize.height;
-            break;
-        case UIInterfaceOrientationLandscapeRight:
-            angle = M_PI / 2.0f;
-            newFrame.size.width -= statusBarSize.width;
-			isLandscape = YES;
-			windowWidth = statusBarSize.height;
-            break;
-        default: // as UIInterfaceOrientationPortrait
-            angle = 0.0;
-            newFrame.origin.y += statusBarSize.height;
-            newFrame.size.height -= statusBarSize.height;
-			windowWidth = statusBarSize.width;
-            break;
-    }
-	
-	CGFloat viewHeight = 0.0;
-	CGFloat viewWidth = 0.0;
-	CGFloat originY = 0.0;
-	CGFloat originX = 0.0;
-	
-	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-		viewHeight = isLandscape ? 368.0 : 368.0;
-		originY = isLandscape ? 20.0 : 200;
-		//viewWidth = isLandscape ? 200.0 : 300.0;
-		viewWidth = windowWidth - 12*2 - 100.0;
-	} else {
-		viewHeight = isLandscape ? 168.0 : 237.0;
-		viewWidth = windowWidth - 12*2;
-	}
-	originX = floorf((windowWidth - viewWidth)/2.0);
-	
-    self.window.transform = CGAffineTransformMakeRotation(angle);
-    self.window.frame = newFrame;
-	CGRect f = self.view.frame;
-	f.origin.y = originY;
-	f.origin.x = originX;
-	f.size.width = viewWidth;
-	f.size.height = viewHeight;
-	self.view.frame = f;
-	
-	CGRect feedbackViewFrame = self.feedbackView.frame;
-	feedbackViewFrame.origin.x = 0.0;
-	feedbackViewFrame.size.width = [self shouldShowPaperclip] ? viewWidth - 100.0 : viewWidth;
-	self.feedbackView.frame = feedbackViewFrame;
-	
-	[self updateThumbnail];
 }
 
 - (void)feedbackChanged:(NSNotification *)notification {
@@ -738,5 +691,111 @@ enum {
 	BOOL empty = [@"" isEqualToString:self.feedbackView.text];
 	self.doneButton.enabled = !empty;
 	self.doneButton.style = empty == YES ? UIBarButtonItemStyleBordered : UIBarButtonItemStyleDone;
+}
+@end
+
+
+@implementation ATFeedbackController (Positioning)
+- (CGRect)onscreenRectOfView {
+	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
+	
+	BOOL isLandscape = NO;
+	
+	CGFloat windowWidth = 0.0;
+	
+    switch (orientation) { 
+        case UIInterfaceOrientationPortraitUpsideDown:
+			windowWidth = statusBarSize.width;
+            break;
+        case UIInterfaceOrientationLandscapeLeft:
+			isLandscape = YES;
+			windowWidth = statusBarSize.height;
+            break;
+        case UIInterfaceOrientationLandscapeRight:
+			isLandscape = YES;
+			windowWidth = statusBarSize.height;
+            break;
+        default: // as UIInterfaceOrientationPortrait
+			windowWidth = statusBarSize.width;
+            break;
+    }
+	
+	CGFloat viewHeight = 0.0;
+	CGFloat viewWidth = 0.0;
+	CGFloat originY = 0.0;
+	CGFloat originX = 0.0;
+	
+	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+		viewHeight = isLandscape ? 368.0 : 368.0;
+		originY = isLandscape ? 20.0 : 200;
+		//viewWidth = isLandscape ? 200.0 : 300.0;
+		viewWidth = windowWidth - 12*2 - 100.0;
+	} else {
+		viewHeight = isLandscape ? 168.0 : 237.0;
+		viewWidth = windowWidth - 12*2;
+	}
+	originX = floorf((windowWidth - viewWidth)/2.0);
+	
+	CGRect f = self.view.frame;
+	f.origin.y = originY;
+	f.origin.x = originX;
+	f.size.width = viewWidth;
+	f.size.height = viewHeight;
+	
+	return f;
+}
+
+- (CGPoint)offscreenPositionOfView {
+	CGRect f = [self onscreenRectOfView];
+	CGFloat viewHeight = f.size.height;
+	
+	CGRect offscreenViewRect = f;
+	offscreenViewRect.origin.y = -viewHeight;
+	CGPoint offscreenPoint = CGPointMake(CGRectGetMidX(offscreenViewRect), CGRectGetMidY(offscreenViewRect));
+	
+	return offscreenPoint;
+}
+
+- (void)positionInWindow {
+	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+	
+    CGFloat angle = 0.0;
+    CGRect newFrame = [self windowForViewController:presentingViewController].bounds;
+    CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
+	
+    switch (orientation) { 
+        case UIInterfaceOrientationPortraitUpsideDown:
+            angle = M_PI; 
+            newFrame.size.height -= statusBarSize.height;
+            break;
+        case UIInterfaceOrientationLandscapeLeft:
+            angle = - M_PI / 2.0f;
+            newFrame.origin.x += statusBarSize.width;
+            newFrame.size.width -= statusBarSize.width;
+            break;
+        case UIInterfaceOrientationLandscapeRight:
+            angle = M_PI / 2.0f;
+            newFrame.size.width -= statusBarSize.width;
+            break;
+        default: // as UIInterfaceOrientationPortrait
+            angle = 0.0;
+            newFrame.origin.y += statusBarSize.height;
+            newFrame.size.height -= statusBarSize.height;
+            break;
+    }
+	
+    self.window.transform = CGAffineTransformMakeRotation(angle);
+    self.window.frame = newFrame;
+	CGRect onscreenRect = [self onscreenRectOfView];
+	CGFloat viewWidth = onscreenRect.size.width;
+	self.view.frame = onscreenRect;
+	
+	CGRect feedbackViewFrame = self.feedbackView.frame;
+	feedbackViewFrame.origin.x = 0.0;
+	feedbackViewFrame.size.width = [self shouldShowPaperclip] ? viewWidth - 100.0 : viewWidth;
+	self.feedbackView.frame = feedbackViewFrame;
+	
+	[self updateThumbnail];
 }
 @end

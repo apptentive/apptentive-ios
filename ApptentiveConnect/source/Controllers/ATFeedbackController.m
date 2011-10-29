@@ -325,6 +325,7 @@ enum {
 		field.textColor = [UIColor lightGrayColor];
         field.backgroundColor = [UIColor clearColor];
         field.keyboardAppearance = UIKeyboardAppearanceAlert;
+		field.keyboardType = UIKeyboardTypeEmailAddress;
         field.delegate = self;
         field.autocapitalizationType = UITextAutocapitalizationTypeNone;
         field.placeholder = NSLocalizedString(@"Email Address", @"Email address popup placeholder text.");

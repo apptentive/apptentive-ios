@@ -729,11 +729,12 @@ enum {
 		originY = isLandscape ? 20.0 : 200;
 		//viewWidth = isLandscape ? 200.0 : 300.0;
 		viewWidth = windowWidth - 12*2 - 100.0;
+		originX = floorf((windowWidth - viewWidth)/2.0);
 	} else {
 		viewHeight = isLandscape ? 176.0 : 237.0;
-		viewWidth = windowWidth - 12*2;
+		viewWidth = windowWidth - 10;
+		originX = 4.0;
 	}
-	originX = floorf((windowWidth - viewWidth)/2.0);
 	
 	CGRect f = self.view.frame;
 	f.origin.y = originY;

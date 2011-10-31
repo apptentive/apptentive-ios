@@ -46,10 +46,12 @@ enum {
 - (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context;
 - (void)statusBarChangedOrientation:(NSNotification *)notification;
 - (BOOL)shouldShowPaperclip;
+- (BOOL)shouldShowThumbnail;
 - (void)captureFeedbackState;
 - (void)hide:(BOOL)animated;
 - (void)finishHide;
 - (void)finishUnhide;
+- (CGRect)photoControlFrame;
 - (void)updateThumbnail;
 - (void)sendFeedbackAndDismiss;
 - (void)updateSendButtonState;
@@ -80,6 +82,7 @@ enum {
 - (id)init {
 	self = [super initWithNibName:@"ATFeedbackController" bundle:[ATConnect resourceBundle]];
 	if (self != nil) {
+		attachmentVerticalOffset = 40.0;
 		startingStatusBarStyle = [[UIApplication sharedApplication] statusBarStyle];
 		self.attachmentOptions = ATFeedbackAllowPhotoAttachment | ATFeedbackAllowTakePhotoAttachment;
 	}
@@ -210,36 +213,26 @@ enum {
 	
 	if ([self shouldShowPaperclip]) {
 		CGRect viewBounds = self.view.bounds;
-		CGFloat verticalOffset = 40.0;
 		UIImage *paperclipBackground = [ATBackend imageNamed:@"at_paperclip_background"];
 		paperclipBackgroundView = [[UIImageView alloc] initWithImage:paperclipBackground];
 		[self.view addSubview:paperclipBackgroundView];
-		paperclipBackgroundView.frame = CGRectMake(viewBounds.size.width - paperclipBackground.size.width + 2.0, verticalOffset + 6.0, paperclipBackground.size.width, paperclipBackground.size.height);
+		paperclipBackgroundView.frame = CGRectMake(viewBounds.size.width - paperclipBackground.size.width + 3.0, attachmentVerticalOffset + 6.0, paperclipBackground.size.width, paperclipBackground.size.height);
 		paperclipBackgroundView.tag = kFeedbackPaperclipBackgroundTag;
 		paperclipBackgroundView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-		
-		UIImage *photoFrame = [ATBackend imageNamed:@"at_photo"];
-		photoFrameView = [[UIImageView alloc] initWithImage:photoFrame];
-		photoFrameView.frame = CGRectMake(viewBounds.size.width - photoFrame.size.width - 2.0, verticalOffset, photoFrame.size.width, photoFrame.size.height);
-		[self.view addSubview:photoFrameView];
-		photoFrameView.tag = kFeedbackPhotoFrameTag;
-		photoFrameView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-		
+				
 		UIImage *paperclip = [ATBackend imageNamed:@"at_paperclip_foreground"];
 		paperclipView = [[UIImageView alloc] initWithImage:paperclip];
 		[self.view addSubview:paperclipView];
-		paperclipView.frame = CGRectMake(viewBounds.size.width - paperclip.size.width + 6.0, verticalOffset, paperclip.size.width, paperclip.size.height);
+		paperclipView.frame = CGRectMake(viewBounds.size.width - paperclip.size.width + 6.0, attachmentVerticalOffset, paperclip.size.width, paperclip.size.height);
 		paperclipView.tag = kFeedbackPaperclipTag;
 		paperclipView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 		
-		photoControl = [[UIControl alloc] initWithFrame:photoFrameView.frame];
+		photoControl = [[UIControl alloc] initWithFrame:[self photoControlFrame]];
 		photoControl.tag = kFeedbackPhotoControlTag;
 		[photoControl addTarget:self action:@selector(photoPressed:) forControlEvents:UIControlEventTouchUpInside];
 		photoControl.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 		[self.view addSubview:photoControl];
 	}
-	
-	self.feedbackView.scrollIndicatorInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -100.0);
 	
 	ATCustomButton *button = [[ATCustomButton alloc] initWithButtonStyle:ATCustomButtonStyleCancel];
 	[button setAction:@selector(cancelFeedback:) forTarget:self];
@@ -521,6 +514,10 @@ enum {
 	return (attachmentOptions != 0);
 }
 
+- (BOOL)shouldShowThumbnail {
+	return (feedback.screenshot != nil);
+}
+
 - (void)feedbackChanged:(NSNotification *)notification {
     if (notification.object == self.feedbackView) {
 		[self updateSendButtonState];
@@ -587,54 +584,91 @@ enum {
 	[self release];
 }
 
+
+- (CGRect)photoControlFrame {
+	if ([self shouldShowThumbnail] && [self shouldShowPaperclip]) {
+		return photoFrameView.frame;
+	} else {
+		CGRect f = paperclipView.frame;
+		f.size.height += 10;
+		return f;
+	}
+}
+
 - (void)updateThumbnail {
 	@synchronized(self) {
 		if ([self shouldShowPaperclip]) {
 			UIImage *image = feedback.screenshot;
-			
-			UIView *frameView = [self.view viewWithTag:kFeedbackPhotoFrameTag];
-			frameView.alpha = 0.8;
 			UIImageView *thumbnailView = (UIImageView *)[self.view viewWithTag:kFeedbackPhotoPreviewTag];
-			CGFloat scale = [[UIScreen mainScreen] scale];
 			
-			if (thumbnailView == nil) {
-				thumbnailView = [[[UIImageView alloc] init] autorelease];
-				thumbnailView.tag = kFeedbackPhotoPreviewTag;
-				thumbnailView.contentMode = UIViewContentModeTop;
-				thumbnailView.clipsToBounds = YES;
-				thumbnailView.backgroundColor = [UIColor blackColor];
-				[self.view addSubview:thumbnailView];
-				[self.view bringSubviewToFront:paperclipBackgroundView];
-				[self.view bringSubviewToFront:thumbnailView];
-				[self.view bringSubviewToFront:photoFrameView];
-				[self.view bringSubviewToFront:paperclipView];
-				[self.view bringSubviewToFront:photoControl];
-				
-				thumbnailView.transform = CGAffineTransformMakeRotation(DEG_TO_RAD(3.5));
-			}
-			if (image != nil && ![image isEqual:currentImage]) {
+			
+			if (image == nil) {
 				[currentImage release], currentImage = nil;
-				currentImage = [image retain];
-				CGSize imageSize = image.size;
-				CGSize scaledImageSize = imageSize;
-				CGFloat fitDimension = 70.0 * scale;
 				
-				if (imageSize.width > imageSize.height) {
-					scaledImageSize.height = fitDimension;
-					scaledImageSize.width = (fitDimension/imageSize.height) * imageSize.width;
-				} else {
-					scaledImageSize.height = (fitDimension/imageSize.width) * imageSize.height;
-					scaledImageSize.width = fitDimension;
+				if (thumbnailView != nil) {
+					[thumbnailView removeFromSuperview];
+					[thumbnailView release], thumbnailView = nil;
 				}
-				UIImage *scaledImage = [ATUtilities imageByScalingImage:image toSize:scaledImageSize scale:scale fromITouchCamera:feedback.imageIsFromCamera];
-				thumbnailView.image = scaledImage;
-			} else if (image == nil) {
-				thumbnailView.image = [ATBackend imageNamed:@"at_camera_icon"];
+				if (photoFrameView != nil) {
+					[photoFrameView removeFromSuperview];
+					[photoFrameView release], photoFrameView = nil;
+				}
+				photoControl.frame = [self photoControlFrame];
+				photoControl.transform = paperclipView.transform;
+			} else {
+				if (photoFrameView == nil) {
+					CGRect viewBounds = self.view.bounds;
+					UIImage *photoFrame = [ATBackend imageNamed:@"at_photo"];
+					photoFrameView = [[UIImageView alloc] initWithImage:photoFrame];
+					photoFrameView.frame = CGRectMake(viewBounds.size.width - photoFrame.size.width - 2.0, attachmentVerticalOffset, photoFrame.size.width, photoFrame.size.height);
+					[self.view addSubview:photoFrameView];
+					photoFrameView.tag = kFeedbackPhotoFrameTag;
+					photoFrameView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+				}
+				
+				if (thumbnailView == nil) {
+					thumbnailView = [[[UIImageView alloc] init] autorelease];
+					thumbnailView.tag = kFeedbackPhotoPreviewTag;
+					thumbnailView.contentMode = UIViewContentModeTop;
+					thumbnailView.clipsToBounds = YES;
+					thumbnailView.backgroundColor = [UIColor blackColor];
+					[self.view addSubview:thumbnailView];
+					[self.view bringSubviewToFront:paperclipBackgroundView];
+					[self.view bringSubviewToFront:thumbnailView];
+					[self.view bringSubviewToFront:photoFrameView];
+					[self.view bringSubviewToFront:paperclipView];
+					[self.view bringSubviewToFront:photoControl];
+					
+					thumbnailView.transform = CGAffineTransformMakeRotation(DEG_TO_RAD(3.5));
+				}
+				
+				photoFrameView.alpha = 1.0;
+				CGFloat scale = [[UIScreen mainScreen] scale];
+				
+				if (![image isEqual:currentImage]) {
+					[currentImage release], currentImage = nil;
+					currentImage = [image retain];
+					CGSize imageSize = image.size;
+					CGSize scaledImageSize = imageSize;
+					CGFloat fitDimension = 70.0 * scale;
+					
+					if (imageSize.width > imageSize.height) {
+						scaledImageSize.height = fitDimension;
+						scaledImageSize.width = (fitDimension/imageSize.height) * imageSize.width;
+					} else {
+						scaledImageSize.height = (fitDimension/imageSize.width) * imageSize.height;
+						scaledImageSize.width = fitDimension;
+					}
+					UIImage *scaledImage = [ATUtilities imageByScalingImage:image toSize:scaledImageSize scale:scale fromITouchCamera:feedback.imageIsFromCamera];
+					thumbnailView.image = scaledImage;
+				}
+				CGRect f = CGRectMake(11.5, 11.5, 70, 70);
+				f = CGRectOffset(f, photoFrameView.frame.origin.x, photoFrameView.frame.origin.y);
+				thumbnailView.frame = f;
+				thumbnailView.bounds = CGRectMake(0.0, 0.0, 70.0, 70.0);
+				photoControl.frame = [self photoControlFrame];
+				photoControl.transform = photoFrameView.transform;
 			}
-			CGRect f = CGRectMake(11.5, 11.5, 70, 70);
-			f = CGRectOffset(f, frameView.frame.origin.x, frameView.frame.origin.y);
-			thumbnailView.frame = f;
-			thumbnailView.bounds = CGRectMake(0.0, 0.0, 70.0, 70.0);
 		}
 	}
 }
@@ -756,7 +790,13 @@ enum {
 	
 	CGRect feedbackViewFrame = self.feedbackView.frame;
 	feedbackViewFrame.origin.x = 0.0;
-	feedbackViewFrame.size.width = [self shouldShowPaperclip] ? viewWidth - 100.0 : viewWidth;
+	if ([self shouldShowPaperclip] && [self shouldShowThumbnail]) {
+		feedbackViewFrame.size.width = viewWidth - 100;
+		self.feedbackView.scrollIndicatorInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -100.0);
+	} else {
+		feedbackViewFrame.size.width = viewWidth;
+		self.feedbackView.scrollIndicatorInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+	}
 	self.feedbackView.frame = feedbackViewFrame;
 	
 	[self updateThumbnail];

@@ -26,9 +26,6 @@
 #define DEG_TO_RAD(angle) ((M_PI * angle) / 180.0)
 #define RAD_TO_DEG(radians) (radians * (180.0/M_PI))
 
-#define USE_SHADOW 0
-#define USE_GRADIENT 1
-
 enum {
 	kFeedbackPaperclipTag = 400,
 	kFeedbackPaperclipBackgroundTag = 401,
@@ -36,9 +33,7 @@ enum {
 	kFeedbackPhotoControlTag = 403,
 	kFeedbackPhotoPreviewTag = 404,
 	kATEmailAlertTextFieldTag = 1010,
-#if USE_GRADIENT
 	kFeedbackGradientLayerTag = 1011,
-#endif
 };
 
 @interface ATFeedbackController (Private)
@@ -169,13 +164,11 @@ enum {
 	CGRect newFrame = [self onscreenRectOfView];
 	CGPoint newViewCenter = CGPointMake(CGRectGetMidX(newFrame), CGRectGetMidY(newFrame));
 
-#if USE_GRADIENT
 	ATShadowView *shadowView = [[ATShadowView alloc] initWithFrame:self.window.bounds];
 	shadowView.tag = kFeedbackGradientLayerTag;
 	[self.window addSubview:shadowView];
 	[self.window sendSubviewToBack:shadowView];
 	shadowView.alpha = 1.0;
-#endif
 	
 	l.cornerRadius = 10.0;
 	l.backgroundColor = [UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_dialog_paper_bg"]].CGColor;
@@ -191,9 +184,7 @@ enum {
 	self.view.center = newViewCenter;
 	shadowView.alpha = 1.0;
 	[UIView commitAnimations];
-#if USE_GRADIENT
 	[shadowView release], shadowView = nil;
-#endif
 }
 
 - (void)didReceiveMemoryWarning {
@@ -373,15 +364,7 @@ enum {
 	CGPoint endingPoint = [self offscreenPositionOfView];
 	
 	[self retain]; 
-#if USE_SHADOW
-	CALayer *l = self.view.layer;
-	l.shadowRadius = 0.0;
-	l.shadowColor = [UIColor blackColor].CGColor;
-	l.shadowOpacity = 0.0;
-#endif
-#if USE_GRADIENT
 	UIView *gradientView = [self.window viewWithTag:kFeedbackGradientLayerTag];
-#endif
 	
 	[UIView beginAnimations:@"animateOut" context:nil];
 	[UIView setAnimationDuration:0.3];
@@ -522,20 +505,10 @@ enum {
 	if ([animationID isEqualToString:@"animateIn"]) {
 		self.window.hidden = NO;
 		[self.emailField becomeFirstResponder];
-#if USE_SHADOW		
-		CALayer *l = self.view.layer;
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:0.2];
-		l.shadowRadius = 30.0;
-		l.shadowColor = [UIColor blackColor].CGColor;
-		l.shadowOpacity = 1.0;
-		[UIView commitAnimations];
-#endif
 	} else if ([animationID isEqualToString:@"animateOut"]) {
-#if USE_GRADIENT
 		UIView *gradientView = [self.window viewWithTag:kFeedbackGradientLayerTag];
 		[gradientView removeFromSuperview];	
-#endif
+
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 		[presentingViewController.view setUserInteractionEnabled:YES];
 		[self.window resignKeyWindow];

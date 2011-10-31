@@ -163,8 +163,8 @@
 		4936AE4C1379DE3100A4B17F /* ATKeyboardAccessoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATKeyboardAccessoryView.m; sourceTree = "<group>"; };
 		4936AE4D1379DE3100A4B17F /* ATPopupSelectorControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATPopupSelectorControl.h; sourceTree = "<group>"; };
 		4936AE4E1379DE3100A4B17F /* ATPopupSelectorControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATPopupSelectorControl.m; sourceTree = "<group>"; };
-		4936AE4F1379DE3100A4B17F /* ATSimpleImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSimpleImageViewController.h; sourceTree = "<group>"; };
-		4936AE501379DE3100A4B17F /* ATSimpleImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSimpleImageViewController.m; sourceTree = "<group>"; };
+		4936AE4F1379DE3100A4B17F /* ATSimpleImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATSimpleImageViewController.h; path = "../Custom Views/ATSimpleImageViewController.h"; sourceTree = "<group>"; };
+		4936AE501379DE3100A4B17F /* ATSimpleImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATSimpleImageViewController.m; path = "../Custom Views/ATSimpleImageViewController.m"; sourceTree = "<group>"; };
 		4936AE751379DEBB00A4B17F /* ATUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATUtilities.h; sourceTree = "<group>"; };
 		4936AE761379DEBB00A4B17F /* ATUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATUtilities.m; sourceTree = "<group>"; };
 		4936AE7B1379DECE00A4B17F /* ATBackend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATBackend.h; sourceTree = "<group>"; };
@@ -286,8 +286,8 @@
 				490B8163144275B3009801E9 /* ATFeedbackController.m */,
 				49AA101D138B44C00082887A /* ATInfoViewController.h */,
 				49AA101E138B44C00082887A /* ATInfoViewController.m */,
-				49BC2A58144F75E10041E789 /* ATShadowView.h */,
-				49BC2A59144F75E20041E789 /* ATShadowView.m */,
+				4936AE4F1379DE3100A4B17F /* ATSimpleImageViewController.h */,
+				4936AE501379DE3100A4B17F /* ATSimpleImageViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -385,8 +385,8 @@
 				4936AE4C1379DE3100A4B17F /* ATKeyboardAccessoryView.m */,
 				4936AE4D1379DE3100A4B17F /* ATPopupSelectorControl.h */,
 				4936AE4E1379DE3100A4B17F /* ATPopupSelectorControl.m */,
-				4936AE4F1379DE3100A4B17F /* ATSimpleImageViewController.h */,
-				4936AE501379DE3100A4B17F /* ATSimpleImageViewController.m */,
+				49BC2A58144F75E10041E789 /* ATShadowView.h */,
+				49BC2A59144F75E20041E789 /* ATShadowView.m */,
 				490B815B1442751F009801E9 /* ATToolbar.h */,
 				490B815C1442751F009801E9 /* ATToolbar.m */,
 			);

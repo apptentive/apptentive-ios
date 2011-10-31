@@ -75,6 +75,7 @@ enum {
 @synthesize feedbackView=feedbackView$;
 @synthesize logoControl=logoControl$;
 @synthesize logoImageView=logoImageView$;
+@synthesize taglineLabel=taglineLabel$;
 @synthesize attachmentOptions;
 @synthesize feedback=feedback;
 @synthesize customPlaceholderText=customPlaceholderText$;
@@ -209,7 +210,8 @@ enum {
 	self.redLineView.layer.opaque = NO;
 	self.grayLineView.layer.opaque = NO;
 	
-	self.logoImageView.image = [ATBackend imageNamed:@"at_apptentive_logo_small"];
+	self.logoImageView.image = [ATBackend imageNamed:@"at_apptentive_icon_small"];
+	self.taglineLabel.text = ATLocalizedString(@"Feedback Powered by Apptentive", @"Tagline text");
 	
 	if ([self shouldShowPaperclip]) {
 		CGRect viewBounds = self.view.bounds;
@@ -416,6 +418,7 @@ enum {
 	self.feedbackView = nil;
 	self.logoControl = nil;
 	self.logoImageView = nil;
+	self.taglineLabel = nil;
 	[currentImage release], currentImage = nil;
 	[[self windowForViewController:presentingViewController] makeKeyAndVisible];
 	[presentingViewController release], presentingViewController = nil;
@@ -729,7 +732,7 @@ enum {
 		viewWidth = windowWidth - 12*2 - 100.0;
 		originX = floorf((windowWidth - viewWidth)/2.0);
 	} else {
-		viewHeight = isLandscape ? 176.0 : 237.0;
+		viewHeight = isLandscape ? 168.0 : 237.0;
 		viewWidth = windowWidth - 10;
 		originX = 4.0;
 	}

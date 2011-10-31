@@ -40,6 +40,7 @@ typedef enum {
 @property (nonatomic, retain) IBOutlet ATDefaultTextView *feedbackView;
 @property (nonatomic, retain) IBOutlet UIControl *logoControl;
 @property (nonatomic, retain) IBOutlet UIImageView *logoImageView;
+@property (nonatomic, retain) IBOutlet UILabel *taglineLabel;
 
 
 @property (nonatomic, retain) ATFeedback *feedback;

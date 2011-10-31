@@ -239,20 +239,12 @@ enum {
 		[self.view addSubview:photoControl];
 	}
 	
-	
-	if (YES) {
-		self.feedbackView.scrollIndicatorInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -100.0);
-	} else {
-		self.feedbackView.clipsToBounds = YES;
-	}
-
-	//self.window.rootViewController = self;
+	self.feedbackView.scrollIndicatorInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -100.0);
 	
 	ATCustomButton *button = [[ATCustomButton alloc] initWithButtonStyle:ATCustomButtonStyleCancel];
 	[button setAction:@selector(cancelFeedback:) forTarget:self];
 	NSMutableArray *toolbarItems = [[self.toolbar items] mutableCopy];
 	[toolbarItems insertObject:button atIndex:0];
-	//--[toolbarItems insertObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(donePressed:)] atIndex:0];
 	
 	UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
 	titleLabel.text = ATLocalizedString(@"Give Feedback", @"Title of feedback screen.");
@@ -261,7 +253,6 @@ enum {
 	titleLabel.shadowColor = [UIColor whiteColor];
 	titleLabel.shadowOffset = CGSizeMake(0.0, 1.0);
 	titleLabel.font = [UIFont boldSystemFontOfSize:18.0];
-	//titleLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18.0];
 	titleLabel.backgroundColor = [UIColor clearColor];
 	titleLabel.opaque = NO;
 	[titleLabel sizeToFit];
@@ -295,7 +286,6 @@ enum {
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Return YES for supported orientations
 //	return YES;
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }

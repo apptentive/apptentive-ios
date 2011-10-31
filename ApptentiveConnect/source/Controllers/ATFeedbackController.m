@@ -44,7 +44,7 @@ enum {
 + (CGFloat)rotationOfViewHierarchyInRadians:(UIView *)leafView;
 + (CGAffineTransform)viewTransformInWindow:(UIWindow *)window;
 - (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context;
-- (void)statusBarChangedOrientation:(NSNotification *)notification;
+- (void)statusBarChanged:(NSNotification *)notification;
 - (BOOL)shouldShowPaperclip;
 - (BOOL)shouldShowThumbnail;
 - (void)captureFeedbackState;
@@ -121,7 +121,8 @@ enum {
 		[presentingViewController.view setUserInteractionEnabled:NO];
 	}
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarChangedOrientation:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarChanged:) name:UIApplicationDidChangeStatusBarFrameNotification object:nil];
 	
 	CALayer *l = self.view.layer;
 	
@@ -509,7 +510,7 @@ enum {
 	}
 }
 
-- (void)statusBarChangedOrientation:(NSNotification *)notification {
+- (void)statusBarChanged:(NSNotification *)notification {
 	[self positionInWindow];
 }
 
@@ -698,25 +699,31 @@ enum {
 - (CGRect)onscreenRectOfView {
 	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
     CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
+	CGRect screenBounds = [[UIScreen mainScreen] bounds];
+	CGFloat w = statusBarSize.width;
+	CGFloat h = statusBarSize.height;
+	CGFloat topPadding = 0.0;
+	if (CGSizeEqualToSize(CGSizeZero, statusBarSize)) {
+		w = screenBounds.size.width;
+		h = screenBounds.size.height;
+	}
 	
 	BOOL isLandscape = NO;
 	
 	CGFloat windowWidth = 0.0;
 	
     switch (orientation) { 
-        case UIInterfaceOrientationPortraitUpsideDown:
-			windowWidth = statusBarSize.width;
-            break;
         case UIInterfaceOrientationLandscapeLeft:
-			isLandscape = YES;
-			windowWidth = statusBarSize.height;
-            break;
         case UIInterfaceOrientationLandscapeRight:
 			isLandscape = YES;
-			windowWidth = statusBarSize.height;
+			topPadding = statusBarSize.width;
+			windowWidth = h;
             break;
-        default: // as UIInterfaceOrientationPortrait
-			windowWidth = statusBarSize.width;
+        case UIInterfaceOrientationPortraitUpsideDown:
+		case UIInterfaceOrientationPortrait:
+		default:
+			topPadding = statusBarSize.height;
+			windowWidth = w;
             break;
     }
 	
@@ -732,7 +739,8 @@ enum {
 		viewWidth = windowWidth - 12*2 - 100.0;
 		originX = floorf((windowWidth - viewWidth)/2.0);
 	} else {
-		viewHeight = isLandscape ? 168.0 : 237.0;
+		viewHeight = isLandscape ? 188.0 : 257.0;
+		viewHeight -= topPadding;
 		viewWidth = windowWidth - 10;
 		originX = 4.0;
 	}
@@ -778,7 +786,8 @@ enum {
             angle = M_PI / 2.0f;
             newFrame.size.width -= statusBarSize.width;
             break;
-        default: // as UIInterfaceOrientationPortrait
+		case UIInterfaceOrientationPortrait:
+        default:
             angle = 0.0;
             newFrame.origin.y += statusBarSize.height;
             newFrame.size.height -= statusBarSize.height;

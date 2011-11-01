@@ -15,12 +15,10 @@ The sample application FeedbackDemo demonstrates how to integrate the SDK
 with your application.
 
 The demo app includes the normal feedback flow, which can be activated by
-clicking the Feedback button. It's a two screen process, the first gathering
-feedback and screenshot, the second gathering contact information for 
-followup:
+clicking the Feedback button. It's a one screen process which can gather
+feedback, an email address, and even a screenshot:
 
 ![Feedback Screen](apptentive-ios/raw/master/etc/screenshots/feedback_iphone.png)
-![Contact Info Screen](apptentive-ios/raw/master/etc/screenshots/contact_iphone.png)
 
 The rating flow can be activated by clicking on the Ratings button. It asks
 the user if they are happy with the app. If not, then a simplified feedback

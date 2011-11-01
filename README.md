@@ -28,7 +28,6 @@ window is opened. If they are happy with the app, they are prompted to rate
 the app in the App Store:
 
 ![Popup](apptentive-ios/raw/master/etc/screenshots/rating.png)
-![Simplified Feedback](apptentive-ios/raw/master/etc/screenshots/feedback_simple_iphone.png)
 
 
 Required Frameworks (Xcode 3 & 4)

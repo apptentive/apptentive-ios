@@ -27,7 +27,6 @@ typedef enum {
 	UIImageView *photoFrameView;
 	UIControl *photoControl;
 	UIImage *currentImage;
-	CGFloat attachmentVerticalOffset;
 }
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *doneButton;

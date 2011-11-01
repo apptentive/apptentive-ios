@@ -13,42 +13,32 @@
 @implementation ATCustomButton
 
 - (id)initWithButtonStyle:(ATCustomButtonStyle)style {
-	if (NO && [[UIBarButtonItem class] instancesRespondToSelector:@selector(setTintColor:)]) {
-		if ((self = [super initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:nil action:nil])) {
-			[self setTintColor:[UIColor whiteColor]];
-		}
-	} else {
-		ATTrackingButton *button = [ATTrackingButton buttonWithType:UIButtonTypeCustom];
-		button.padding = UIEdgeInsetsMake(-10, -20, -10, -15);
-		if (style == ATCustomButtonStyleCancel) {
-			[button setTitle:NSLocalizedString(@"Cancel", @"Cancel button title") forState:UIControlStateNormal];
-			button.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
-			button.titleLabel.shadowOffset = CGSizeMake(0.0, 1.0);
-			
-			[button setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateNormal];
-			[button setTitleColor:[UIColor colorWithRed:130./256. green:130./256. blue:130./256. alpha:1.0] forState:UIControlStateNormal];
-			//[button setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
-			[button setBackgroundImage:[ATBackend imageNamed:@"at_cancel_bg"] forState:UIControlStateNormal];
-			[button setBackgroundImage:[ATBackend imageNamed:@"at_cancel_highlighted_bg"] forState:UIControlStateHighlighted];
-			button.layer.cornerRadius = 4.0;
-			button.layer.masksToBounds = YES;
-			button.layer.borderWidth = 0.5;
-			button.layer.borderColor = [UIColor colorWithRed:171./256. green:171./256. blue:171./256. alpha:1.0].CGColor;
-			button.layer.shadowColor = [UIColor whiteColor].CGColor;
-			button.layer.shadowOffset = CGSizeMake(0.0, 1.0);
-			button.layer.shadowRadius = 2.0;
-			CGSize s = [button.titleLabel.text sizeWithFont:button.titleLabel.font];
-			[button sizeToFit];
-			CGRect f = [button frame];
-			f.size.height = 30.0;
-			f.size.width = s.width + 20.0;
-			button.bounds = f;
-		}
+	ATTrackingButton *button = [ATTrackingButton buttonWithType:UIButtonTypeCustom];
+	button.padding = UIEdgeInsetsMake(-10, -20, -10, -15);
+	if (style == ATCustomButtonStyleCancel) {
+		[button setTitle:NSLocalizedString(@"Cancel", @"Cancel button title") forState:UIControlStateNormal];
+		button.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin;
+		button.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+		button.titleLabel.shadowOffset = CGSizeMake(0.0, 1.0);
 		
-		self = [super initWithCustomView:button];
-		if (self) {
-			
-		}
+		[button setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateNormal];
+		[button setTitleColor:[UIColor colorWithRed:130./256. green:130./256. blue:130./256. alpha:1.0] forState:UIControlStateNormal];
+		//[button setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
+		[button setBackgroundImage:[ATBackend imageNamed:@"at_cancel_bg"] forState:UIControlStateNormal];
+		[button setBackgroundImage:[ATBackend imageNamed:@"at_cancel_highlighted_bg"] forState:UIControlStateHighlighted];
+		button.layer.cornerRadius = 4.0;
+		button.layer.masksToBounds = YES;
+		button.layer.borderWidth = 0.5;
+		button.layer.borderColor = [UIColor colorWithRed:171./256. green:171./256. blue:171./256. alpha:1.0].CGColor;
+		button.layer.shadowColor = [UIColor whiteColor].CGColor;
+		button.layer.shadowOffset = CGSizeMake(0.0, 1.0);
+		button.layer.shadowRadius = 2.0;
+		[button sizeToFit];
+	}
+	
+	self = [super initWithCustomView:button];
+	if (self) {
+		
 	}
 	return self;
 }
@@ -77,5 +67,15 @@
 - (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
 	CGRect padded = UIEdgeInsetsInsetRect(self.bounds, padding);
 	return CGRectContainsPoint(padded, [touch locationInView:self]);
+}
+
+- (CGSize)sizeThatFits:(CGSize)size {
+	CGSize s = [super sizeThatFits:size];
+	
+	CGSize textSize = [self.titleLabel.text sizeWithFont:self.titleLabel.font];
+	s.height = size.height < 30  && CGSizeEqualToSize(CGSizeZero, size) == NO ? 23 : 30;
+	s.width = textSize.width + 20.0;
+	
+	return s;
 }
 @end

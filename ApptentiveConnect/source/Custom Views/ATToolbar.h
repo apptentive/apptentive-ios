@@ -8,6 +8,5 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ATToolbar : UIToolbar {
-}
+@interface ATToolbar : UIToolbar
 @end

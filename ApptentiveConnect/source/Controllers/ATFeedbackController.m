@@ -32,6 +32,7 @@ enum {
 	kFeedbackPhotoFrameTag = 402,
 	kFeedbackPhotoControlTag = 403,
 	kFeedbackPhotoPreviewTag = 404,
+	kContainerViewTag = 1009,
 	kATEmailAlertTextFieldTag = 1010,
 	kFeedbackGradientLayerTag = 1011,
 };
@@ -52,6 +53,7 @@ enum {
 - (void)finishHide;
 - (void)finishUnhide;
 - (CGRect)photoControlFrame;
+- (CGFloat)attachmentVerticalOffset;
 - (void)updateThumbnail;
 - (void)sendFeedbackAndDismiss;
 - (void)updateSendButtonState;
@@ -83,7 +85,6 @@ enum {
 - (id)init {
 	self = [super initWithNibName:@"ATFeedbackController" bundle:[ATConnect resourceBundle]];
 	if (self != nil) {
-		attachmentVerticalOffset = 40.0;
 		startingStatusBarStyle = [[UIApplication sharedApplication] statusBarStyle];
 		self.attachmentOptions = ATFeedbackAllowPhotoAttachment | ATFeedbackAllowTakePhotoAttachment;
 	}
@@ -219,14 +220,14 @@ enum {
 		UIImage *paperclipBackground = [ATBackend imageNamed:@"at_paperclip_background"];
 		paperclipBackgroundView = [[UIImageView alloc] initWithImage:paperclipBackground];
 		[self.view addSubview:paperclipBackgroundView];
-		paperclipBackgroundView.frame = CGRectMake(viewBounds.size.width - paperclipBackground.size.width + 3.0, attachmentVerticalOffset + 6.0, paperclipBackground.size.width, paperclipBackground.size.height);
+		paperclipBackgroundView.frame = CGRectMake(viewBounds.size.width - paperclipBackground.size.width + 3.0, [self attachmentVerticalOffset] + 6.0, paperclipBackground.size.width, paperclipBackground.size.height);
 		paperclipBackgroundView.tag = kFeedbackPaperclipBackgroundTag;
 		paperclipBackgroundView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 				
 		UIImage *paperclip = [ATBackend imageNamed:@"at_paperclip_foreground"];
 		paperclipView = [[UIImageView alloc] initWithImage:paperclip];
 		[self.view addSubview:paperclipView];
-		paperclipView.frame = CGRectMake(viewBounds.size.width - paperclip.size.width + 6.0, attachmentVerticalOffset, paperclip.size.width, paperclip.size.height);
+		paperclipView.frame = CGRectMake(viewBounds.size.width - paperclip.size.width + 6.0, [self attachmentVerticalOffset], paperclip.size.width, paperclip.size.height);
 		paperclipView.tag = kFeedbackPaperclipTag;
 		paperclipView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 		
@@ -599,12 +600,23 @@ enum {
 	}
 }
 
+- (CGFloat)attachmentVerticalOffset {
+	return self.toolbar.bounds.size.height - 4.0;
+}
+
 - (void)updateThumbnail {
 	@synchronized(self) {
 		if ([self shouldShowPaperclip]) {
 			UIImage *image = feedback.screenshot;
 			UIImageView *thumbnailView = (UIImageView *)[self.view viewWithTag:kFeedbackPhotoPreviewTag];
 			
+			CGRect paperclipBackgroundFrame = paperclipBackgroundView.frame;
+			paperclipBackgroundFrame.origin.y = [self attachmentVerticalOffset] + 6.0;
+			paperclipBackgroundView.frame = paperclipBackgroundFrame;
+			
+			CGRect paperclipFrame = paperclipView.frame;
+			paperclipFrame.origin.y = [self attachmentVerticalOffset];
+			paperclipView.frame = paperclipFrame;
 			
 			if (image == nil) {
 				[currentImage release], currentImage = nil;
@@ -624,11 +636,14 @@ enum {
 					CGRect viewBounds = self.view.bounds;
 					UIImage *photoFrame = [ATBackend imageNamed:@"at_photo"];
 					photoFrameView = [[UIImageView alloc] initWithImage:photoFrame];
-					photoFrameView.frame = CGRectMake(viewBounds.size.width - photoFrame.size.width - 2.0, attachmentVerticalOffset, photoFrame.size.width, photoFrame.size.height);
+					photoFrameView.frame = CGRectMake(viewBounds.size.width - photoFrame.size.width - 2.0, [self attachmentVerticalOffset], photoFrame.size.width, photoFrame.size.height);
 					[self.view addSubview:photoFrameView];
 					photoFrameView.tag = kFeedbackPhotoFrameTag;
 					photoFrameView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 				}
+				CGRect photoFrameFrame = photoFrameView.frame;
+				photoFrameFrame.origin.y = [self attachmentVerticalOffset];
+				photoFrameView.frame = photoFrameFrame;
 				
 				if (thumbnailView == nil) {
 					thumbnailView = [[[UIImageView alloc] init] autorelease];
@@ -673,6 +688,7 @@ enum {
 				photoControl.frame = [self photoControlFrame];
 				photoControl.transform = photoFrameView.transform;
 			}
+			
 		}
 	}
 }
@@ -793,6 +809,16 @@ enum {
             newFrame.size.height -= statusBarSize.height;
             break;
     }
+	[self.toolbar sizeToFit];
+	
+	CGRect toolbarBounds = self.toolbar.bounds;
+	UIView *containerView = [self.view viewWithTag:kContainerViewTag];
+	if (containerView != nil) {
+		CGRect containerFrame = containerView.frame;
+		containerFrame.origin.y = toolbarBounds.size.height;
+		containerFrame.size.height = self.view.bounds.size.height - toolbarBounds.size.height;
+		containerView.frame = containerFrame;
+	}
 	
     self.window.transform = CGAffineTransformMakeRotation(angle);
     self.window.frame = newFrame;

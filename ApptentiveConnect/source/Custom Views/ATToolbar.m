@@ -9,12 +9,17 @@
 #import "ATToolbar.h"
 
 @implementation ATToolbar
-
-//!! Hack to adjust frame origin of left-most custom view.
+//!! Hack to adjust frame origin of left-most custom view and to force
+//!! custom views to resize on orientation changes.
 //!! This is a huge hack.
 - (void)layoutSubviews {
 	[super layoutSubviews];
 	NSArray *items = [self items];
+	for (UIBarButtonItem *item in items) {
+		if (item.customView != nil) {
+			[item.customView sizeToFit];
+		}
+	}
 	if ([items count] > 0) {
 		UIBarButtonItem *firstItem = [items objectAtIndex:0];
 		

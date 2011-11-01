@@ -714,7 +714,7 @@ enum {
 @implementation ATFeedbackController (Positioning)
 - (CGRect)onscreenRectOfView {
 	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-    CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
+	CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
 	CGRect screenBounds = [[UIScreen mainScreen] bounds];
 	CGFloat w = statusBarSize.width;
 	CGFloat h = statusBarSize.height;
@@ -772,10 +772,12 @@ enum {
 
 - (CGPoint)offscreenPositionOfView {
 	CGRect f = [self onscreenRectOfView];
+	CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
+	CGFloat statusBarHeight = MIN(statusBarSize.height, statusBarSize.width);
 	CGFloat viewHeight = f.size.height;
 	
 	CGRect offscreenViewRect = f;
-	offscreenViewRect.origin.y = -viewHeight;
+	offscreenViewRect.origin.y = -(viewHeight + statusBarHeight);
 	CGPoint offscreenPoint = CGPointMake(CGRectGetMidX(offscreenViewRect), CGRectGetMidY(offscreenViewRect));
 	
 	return offscreenPoint;

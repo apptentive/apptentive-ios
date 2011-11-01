@@ -163,7 +163,12 @@ enum {
 	
 	[self positionInWindow];
 	
-	[self.emailField becomeFirstResponder];
+	if ([self.emailField.text isEqualToString:@""]) {
+		[self.emailField becomeFirstResponder];
+	} else {
+		[self.feedbackView becomeFirstResponder];
+	}
+
 	self.window.center = CGPointMake(CGRectGetMidX(endingFrame), CGRectGetMidY(endingFrame));
 	self.view.center = [self offscreenPositionOfView];
 	
@@ -273,6 +278,7 @@ enum {
 	[toolbarItems release], toolbarItems = nil;
 	[button release], button = nil;
 	
+	[self setupFeedback];
 	[self updateSendButtonState];
     [super viewDidLoad];
 }
@@ -492,7 +498,11 @@ enum {
 - (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
 	if ([animationID isEqualToString:@"animateIn"]) {
 		self.window.hidden = NO;
-		[self.emailField becomeFirstResponder];
+		if ([self.emailField.text isEqualToString:@""]) {
+			[self.emailField becomeFirstResponder];
+		} else {
+			[self.feedbackView becomeFirstResponder];
+		}
 	} else if ([animationID isEqualToString:@"animateOut"]) {
 		UIView *gradientView = [self.window viewWithTag:kFeedbackGradientLayerTag];
 		[gradientView removeFromSuperview];	

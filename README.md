@@ -167,6 +167,16 @@ iTunes app ID (see "Finding Your iTunes App ID" below):
 The `viewController` parameter is necessary in order to be able to show the 
 feedback view controller if a user is unhappy with your app.
 
+You can also choose to show the dialog manually:
+
+``` objective-c
+ATAppRatingFlow *sharedFlow = [ATAppRatingFlow sharedRatingFlowWithAppID:kApptentiveAppID];
+[sharedFlow showEnjoymentDialog:aViewController];
+```
+
+This is helpful if you want to implement custom triggers for the ratings 
+flow.
+
 **Finding Your iTunes App ID**
 In [iTunesConnect](https://itunesconnect.apple.com/), go to "Manage Your 
 Applications" and click on your application. In the "App Information" 

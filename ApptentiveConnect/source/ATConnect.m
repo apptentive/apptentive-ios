@@ -13,7 +13,6 @@
 #import "ATUtilities.h"
 #if TARGET_OS_IPHONE
 #import "ATFeedbackController.h"
-#import "ATSimpleFeedbackController.h"
 #elif TARGET_OS_MAC
 #import "ATFeedbackWindowController.h"
 #endif
@@ -91,30 +90,13 @@ static ATConnect *sharedConnection = nil;
         feedback = nil;
     }
     
-    UIViewController *vc = nil;
-    
-    Class cl = [ATFeedbackController class];
-    
-    if (self.feedbackControllerType == ATFeedbackControllerSimple) {
-        cl = [ATSimpleFeedbackController class];
-    }
-    vc = [[cl alloc] init];
-    if ([vc respondsToSelector:@selector(setCustomPlaceholderText:)] && [vc respondsToSelector:@selector(setFeedback:)]) {
-        if (self.customPlaceholderText) {
-            [vc setCustomPlaceholderText:self.customPlaceholderText];
-        }
-        [vc setFeedback:[[ATBackend sharedBackend] currentFeedback]];
-    }
-
-    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
-    
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        [viewController presentModalViewController:nc animated:YES];
-    } else {
-        nc.modalPresentationStyle = UIModalPresentationFormSheet;
-        [viewController presentModalViewController:nc animated:YES];
-    }
-    [nc release];
+    ATFeedbackController *vc = [[ATFeedbackController alloc] init];
+	if (self.customPlaceholderText) {
+		[vc setCustomPlaceholderText:self.customPlaceholderText];
+	}
+	[vc setFeedback:[[ATBackend sharedBackend] currentFeedback]];
+	
+	[vc presentFromViewController:viewController animated:YES];
     [vc release];
 }
 #elif TARGET_OS_MAC

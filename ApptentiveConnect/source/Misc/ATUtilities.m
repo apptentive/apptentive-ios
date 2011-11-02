@@ -16,6 +16,8 @@
 #endif
 
 #define KINDA_EQUALS(a, b) (fabs(a - b) < 0.1)
+#define DEG_TO_RAD(angle) ((M_PI * angle) / 180.0)
+#define RAD_TO_DEG(radians) (radians * (180.0/M_PI))
 
 @implementation ATUtilities
 
@@ -114,6 +116,99 @@
     UIGraphicsEndImageContext();
     
     return result;
+}
+
++ (UIImage *)imageByScalingImage:(UIImage *)image toSize:(CGSize)size scale:(CGFloat)contentScale fromITouchCamera:(BOOL)isFromITouchCamera {
+	UIImage *result = nil;
+	CGImageRef imageRef = nil;
+	CGImageAlphaInfo alphaInfo = kCGImageAlphaNone;
+	size_t samplesPerPixel, bytesPerRow;
+	CGFloat newHeight, newWidth;
+	CGRect newRect;
+	CGContextRef bitmapContext = nil;
+	CGImageRef newRef = nil;
+	CGAffineTransform transform = CGAffineTransformIdentity;
+	
+	imageRef = [image CGImage];
+	alphaInfo = CGImageGetAlphaInfo(imageRef);
+	
+	samplesPerPixel = CGImageGetBitsPerPixel(imageRef)/CGImageGetBitsPerComponent(imageRef);
+	if (alphaInfo == kCGImageAlphaNone) {
+		samplesPerPixel++;
+	}
+	
+	size = CGSizeMake(floor(size.width), floor(size.height));
+	newWidth = size.width;
+	newHeight = size.height;
+	
+	// Rotate and scale based on orientation.
+	if (image.imageOrientation == UIImageOrientationUpMirrored) { // EXIF 2
+		// Image is mirrored horizontally.
+		transform = CGAffineTransformMakeTranslation(newWidth, 0);
+		transform = CGAffineTransformScale(transform, -1, 1);
+	} else if (image.imageOrientation == UIImageOrientationDown) { // EXIF 3
+		// Image is rotated 180 degrees.
+		transform = CGAffineTransformMakeTranslation(newWidth, newHeight);
+		transform = CGAffineTransformRotate(transform, DEG_TO_RAD(180));
+	} else if (image.imageOrientation == UIImageOrientationDownMirrored) { // EXIF 4
+		// Image is mirrored vertically.
+		transform = CGAffineTransformMakeTranslation(0, newHeight);
+		transform = CGAffineTransformScale(transform, 1.0, -1.0);
+	} else if (image.imageOrientation == UIImageOrientationLeftMirrored) { // EXIF 5
+		// Image is mirrored horizontally then rotated 270 degrees clockwise.
+		transform = CGAffineTransformRotate(transform, DEG_TO_RAD(90));
+		transform = CGAffineTransformScale(transform, -newHeight/newWidth,  newWidth/newHeight);
+		transform = CGAffineTransformTranslate(transform, -newWidth, -newHeight);
+	} else if (image.imageOrientation == UIImageOrientationLeft) { // EXIF 6
+		// Image is rotated 270 degrees clockwise.
+		transform = CGAffineTransformRotate(transform, DEG_TO_RAD(-90));
+		transform = CGAffineTransformScale(transform, newHeight/newWidth,  newWidth/newHeight);
+		transform = CGAffineTransformTranslate(transform, -newWidth, 0);
+	} else if (image.imageOrientation == UIImageOrientationRightMirrored) { // EXIF 7
+		// Image is mirrored horizontally then rotated 90 degrees clockwise.
+		transform = CGAffineTransformRotate(transform, DEG_TO_RAD(-90));
+		transform = CGAffineTransformScale(transform, -newHeight/newWidth,  newWidth/newHeight);
+	} else if (image.imageOrientation == UIImageOrientationRight) { // EXIF 8
+		// Image is rotated 90 degrees clockwise.
+		transform = CGAffineTransformRotate(transform, DEG_TO_RAD(90));
+		transform = CGAffineTransformScale(transform, newHeight/newWidth,  newWidth/newHeight);
+		transform = CGAffineTransformTranslate(transform, 0.0, -newHeight);
+	}
+	newRect = CGRectIntegral(CGRectMake(0.0, 0.0, newWidth, newHeight));
+	
+	// 16-byte aligned, Quartz book p. 353
+	bytesPerRow = ((size_t)(samplesPerPixel * newWidth) + 15) & ~15;
+	
+	CGImageAlphaInfo newAlphaInfo;
+	if (alphaInfo == kCGImageAlphaNone) {
+		newAlphaInfo = kCGImageAlphaNoneSkipLast;
+	} else {
+		newAlphaInfo = kCGImageAlphaPremultipliedFirst;
+	}
+	
+	bitmapContext = CGBitmapContextCreate(NULL, newWidth, newHeight, CGImageGetBitsPerComponent(imageRef), bytesPerRow, CGImageGetColorSpace(imageRef), newAlphaInfo);
+	CGContextSetInterpolationQuality(bitmapContext, kCGInterpolationHigh);
+	
+	// The iPhone tries to be "smart" about image orientation, and messes it
+	// up in the process. Here, UIImageOrientationLeft happens when the 
+	// device is held upside down (camera on the end towards the ground).
+	// UIImageOrientationRight happens when the camera is in a normal, upright
+	// position. In both cases, the image is rotated 180 degrees from what
+	// the user actually saw through the image preview.
+	if (isFromITouchCamera && (image.imageOrientation == UIImageOrientationRight || image.imageOrientation == UIImageOrientationLeft)) {
+		CGContextScaleCTM(bitmapContext, -1.0, -1);
+		CGContextTranslateCTM(bitmapContext, -newWidth, -newHeight);
+	}
+	
+	CGContextConcatCTM(bitmapContext, transform);
+	CGContextDrawImage(bitmapContext, newRect, imageRef);
+	
+	newRef = CGBitmapContextCreateImage(bitmapContext);
+	result = [UIImage imageWithCGImage:newRef scale:contentScale orientation:UIImageOrientationUp];
+	CGContextRelease(bitmapContext);
+	CGImageRelease(newRef);
+	
+	return result;
 }
 
 + (CGFloat)rotationOfViewHierarchyInRadians:(UIView *)leafView {

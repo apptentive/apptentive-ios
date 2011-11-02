@@ -115,8 +115,16 @@ static ATTaskQueue *sharedTaskQueue = nil;
 }
 
 - (void)start {
+	if ([[NSThread currentThread] isMainThread]) {
+		[self performSelectorInBackground:@selector(start) withObject:nil];
+		return;
+	}
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     @synchronized(self) {
-        if (activeTask) return;
+        if (activeTask) {
+			[pool release], pool = nil;
+			return;
+		}
         
         if ([tasks count]) {
             activeTask = [tasks objectAtIndex:0];
@@ -125,6 +133,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
             [activeTask start];
         }
     }
+	[pool release];
 }
 
 - (void)stop {

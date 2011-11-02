@@ -135,6 +135,16 @@ static ATBackend *sharedBackend = nil;
 }
 
 - (void)sendFeedback:(ATFeedback *)feedback {
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	if ([[NSThread currentThread] isMainThread]) {
+		[feedback retain];
+		[self performSelectorInBackground:@selector(sendFeedback:) withObject:feedback];
+		[pool release], pool = nil;
+		return;
+	}
+    if (feedback == self.currentFeedback) {
+        self.currentFeedback = nil;
+    }
     ATContactStorage *contact = [ATContactStorage sharedContactStorage];
     contact.name = feedback.name;
     contact.email = feedback.email;
@@ -153,9 +163,8 @@ static ATBackend *sharedBackend = nil;
     [task release];
     task = nil;
     
-    if (feedback == self.currentFeedback) {
-        self.currentFeedback = nil;
-    }
+	[feedback release];
+	[pool release];
 }
 
 - (ATAPIRequest *)requestForSendingFeedback:(ATFeedback *)feedback {

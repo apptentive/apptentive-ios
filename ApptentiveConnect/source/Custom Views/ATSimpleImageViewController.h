@@ -10,13 +10,21 @@
 
 @class ATCenteringImageScrollView;
 @class ATFeedback;
+@class ATFeedbackController;
 
 NSString * const ATImageViewChoseImage;
 
-@interface ATSimpleImageViewController : UIViewController <UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate> {
+@interface ATSimpleImageViewController : UIViewController <UIActionSheetDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate> {
 @private
     ATCenteringImageScrollView *scrollView;
 	ATFeedback *feedback;
+	ATFeedbackController *controller;
+	BOOL shouldResign;
+	UIView *containerView;
+	BOOL isFromCamera;
 }
-- (id)initWithFeedback:(ATFeedback *)feedback;
+@property (nonatomic, retain) IBOutlet UIView *containerView;
+- (id)initWithFeedback:(ATFeedback *)feedback feedbackController:(ATFeedbackController *)controller;
+- (IBAction)donePressed:(id)sender;
+- (IBAction)takePhoto:(id)sender;
 @end

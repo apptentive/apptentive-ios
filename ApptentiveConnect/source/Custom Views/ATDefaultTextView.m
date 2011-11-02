@@ -37,6 +37,11 @@
     [super dealloc];
 }
 
+- (void)layoutSubviews {
+	[super layoutSubviews];
+	[self setupPlaceholder];
+}
+
 - (void)setPlaceholder:(NSString *)newPlaceholder {
     if (placeholder != newPlaceholder) {
         [placeholder release];

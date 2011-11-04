@@ -18,6 +18,9 @@
 		4982ECE6133C2DCF00B91781 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4982ECE4133C2DCF00B91781 /* MainWindow-iPad.xib */; };
 		49AA100E138B41A40082887A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49AA100D138B41A40082887A /* SystemConfiguration.framework */; };
 		49B3D9A31340084E00B5A5CD /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D9A21340084E00B5A5CD /* CoreTelephony.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		49B876D514647D0900594A5D /* libApptentiveSurveys.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B876D114647CE400594A5D /* libApptentiveSurveys.a */; };
+		49B876F21464825B00594A5D /* at_logo_info.png in Resources */ = {isa = PBXBuildFile; fileRef = 49B876F01464825B00594A5D /* at_logo_info.png */; };
+		49B876F31464825B00594A5D /* at_logo_info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 49B876F11464825B00594A5D /* at_logo_info@2x.png */; };
 		49C002EC1334172E0071F088 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C002EB1334172E0071F088 /* UIKit.framework */; };
 		49C002EE1334172F0071F088 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C002ED1334172F0071F088 /* Foundation.framework */; };
 		49C002F01334172F0071F088 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C002EF1334172F0071F088 /* CoreGraphics.framework */; };
@@ -44,6 +47,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 49D1118B13341A7C00603373;
 			remoteInfo = ApptentiveResources;
+		};
+		49B876D014647CE400594A5D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 49B876C714647CE300594A5D /* ApptentiveSurveys.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 49B8767F14647C5200594A5D;
+			remoteInfo = ApptentiveSurveys;
+		};
+		49B876D214647CE400594A5D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 49B876C714647CE300594A5D /* ApptentiveSurveys.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 49B8768F14647C5200594A5D;
+			remoteInfo = ApptentiveSurveysTests;
 		};
 		49C0030F1334172F0071F088 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -94,6 +111,10 @@
 		4982ECE5133C2DCF00B91781 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "iPad/en.lproj/MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		49AA100D138B41A40082887A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		49B3D9A21340084E00B5A5CD /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		49B876C714647CE300594A5D /* ApptentiveSurveys.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ApptentiveSurveys.xcodeproj; path = ../modules/ApptentiveSurveys/ApptentiveSurveys.xcodeproj; sourceTree = "<group>"; };
+		49B876F01464825B00594A5D /* at_logo_info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_logo_info.png; sourceTree = "<group>"; };
+		49B876F11464825B00594A5D /* at_logo_info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_logo_info@2x.png"; sourceTree = "<group>"; };
+		49B876F814648F7100594A5D /* ATSurveys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATSurveys.h; path = ../modules/ApptentiveSurveys/ApptentiveSurveys/ATSurveys.h; sourceTree = "<group>"; };
 		49C002E71334172E0071F088 /* FeedbackDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FeedbackDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49C002EB1334172E0071F088 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		49C002ED1334172F0071F088 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -127,6 +148,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49B876D514647D0900594A5D /* libApptentiveSurveys.a in Frameworks */,
 				493529C0138C7141000E464A /* libApptentiveConnect.a in Frameworks */,
 				49AA100E138B41A40082887A /* SystemConfiguration.framework in Frameworks */,
 				49E8918B134BF69C00DD098A /* QuartzCore.framework in Frameworks */,
@@ -153,6 +175,8 @@
 		4960E1211344326B00F6311F /* art */ = {
 			isa = PBXGroup;
 			children = (
+				49B876F01464825B00594A5D /* at_logo_info.png */,
+				49B876F11464825B00594A5D /* at_logo_info@2x.png */,
 				4960E1221344326B00F6311F /* icon-114x114.png */,
 				4960E1231344326B00F6311F /* icon-29x29.png */,
 				4960E1241344326B00F6311F /* icon-58x58.png */,
@@ -164,11 +188,22 @@
 			path = art/generated;
 			sourceTree = SOURCE_ROOT;
 		};
+		49B876C814647CE300594A5D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				49B876D114647CE400594A5D /* libApptentiveSurveys.a */,
+				49B876D314647CE400594A5D /* ApptentiveSurveysTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		49C002DC1334172E0071F088 = {
 			isa = PBXGroup;
 			children = (
 				4960E13E13455ACE00F6311F /* ATConnect.h */,
 				4942CD5E13C8D68E009BF758 /* ATAppRatingFlow.h */,
+				49B876F814648F7100594A5D /* ATSurveys.h */,
+				49B876C714647CE300594A5D /* ApptentiveSurveys.xcodeproj */,
 				49C00324133417390071F088 /* ApptentiveConnect.xcodeproj */,
 				49C002F11334172F0071F088 /* FeedbackDemo */,
 				49C003111334172F0071F088 /* FeedbackDemoTests */,
@@ -335,6 +370,10 @@
 					ProductGroup = 49C00325133417390071F088 /* Products */;
 					ProjectRef = 49C00324133417390071F088 /* ApptentiveConnect.xcodeproj */;
 				},
+				{
+					ProductGroup = 49B876C814647CE300594A5D /* Products */;
+					ProjectRef = 49B876C714647CE300594A5D /* ApptentiveSurveys.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -345,6 +384,20 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		49B876D114647CE400594A5D /* libApptentiveSurveys.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libApptentiveSurveys.a;
+			remoteRef = 49B876D014647CE400594A5D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		49B876D314647CE400594A5D /* ApptentiveSurveysTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ApptentiveSurveysTests.octest;
+			remoteRef = 49B876D214647CE400594A5D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		49C0032D133417390071F088 /* libApptentiveConnect.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -385,6 +438,8 @@
 				4960E12C1344326B00F6311F /* icon.png in Resources */,
 				4960E139134432F400F6311F /* iTunesArtwork in Resources */,
 				49E891D5134FE40200DD098A /* Localizable.strings in Resources */,
+				49B876F21464825B00594A5D /* at_logo_info.png in Resources */,
+				49B876F31464825B00594A5D /* at_logo_info@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -555,7 +610,7 @@
 					"$(DSTROOT)/usr/local/include",
 				);
 				INFOPLIST_FILE = "FeedbackDemo/FeedbackDemo-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -583,7 +638,7 @@
 					"$(DSTROOT)/usr/local/include",
 				);
 				INFOPLIST_FILE = "FeedbackDemo/FeedbackDemo-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",

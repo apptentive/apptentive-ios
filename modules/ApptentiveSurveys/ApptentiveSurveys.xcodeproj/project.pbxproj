@@ -1,0 +1,500 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		49B8768314647C5200594A5D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B8768214647C5200594A5D /* Foundation.framework */; };
+		49B8768914647C5200594A5D /* ATSurveys.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B8768814647C5200594A5D /* ATSurveys.m */; };
+		49B8769114647C5200594A5D /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B8769014647C5200594A5D /* SenTestingKit.framework */; };
+		49B8769314647C5200594A5D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B8769214647C5200594A5D /* UIKit.framework */; };
+		49B8769414647C5200594A5D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B8768214647C5200594A5D /* Foundation.framework */; };
+		49B8769714647C5200594A5D /* libApptentiveSurveys.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B8767F14647C5200594A5D /* libApptentiveSurveys.a */; };
+		49B8769D14647C5200594A5D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49B8769B14647C5200594A5D /* InfoPlist.strings */; };
+		49B876A014647C5200594A5D /* ApptentiveSurveysTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B8769F14647C5200594A5D /* ApptentiveSurveysTests.m */; };
+		49B876B914647C6C00594A5D /* ATConnect.h in Headers */ = {isa = PBXBuildFile; fileRef = 49B876B814647C6C00594A5D /* ATConnect.h */; };
+		49B876FC14648FAE00594A5D /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 49B876FB14648FAE00594A5D /* JSONKit.h */; };
+		49B876FF1464914700594A5D /* ATSurveyQuestion.h in Headers */ = {isa = PBXBuildFile; fileRef = 49B876FD1464914700594A5D /* ATSurveyQuestion.h */; };
+		49B877001464914700594A5D /* ATSurveyQuestion.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B876FE1464914700594A5D /* ATSurveyQuestion.m */; };
+		49B877011464914700594A5D /* ATSurveyQuestion.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B876FE1464914700594A5D /* ATSurveyQuestion.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		49B8769514647C5200594A5D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 49B8767614647C5200594A5D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 49B8767E14647C5200594A5D;
+			remoteInfo = ApptentiveSurveys;
+		};
+		49B876B214647C5F00594A5D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 49B876A914647C5F00594A5D /* ApptentiveConnect.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 496DC37F1333D35600743F65;
+			remoteInfo = ApptentiveConnect;
+		};
+		49B876B414647C5F00594A5D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 49B876A914647C5F00594A5D /* ApptentiveConnect.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 496DC38C1333D35600743F65;
+			remoteInfo = ApptentiveConnectTests;
+		};
+		49B876B614647C5F00594A5D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 49B876A914647C5F00594A5D /* ApptentiveConnect.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 49D1118C13341A7C00603373;
+			remoteInfo = ApptentiveResources;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		49B8767F14647C5200594A5D /* libApptentiveSurveys.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libApptentiveSurveys.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		49B8768214647C5200594A5D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		49B8768614647C5200594A5D /* ApptentiveSurveys-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ApptentiveSurveys-Prefix.pch"; sourceTree = "<group>"; };
+		49B8768714647C5200594A5D /* ATSurveys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ATSurveys.h; sourceTree = "<group>"; };
+		49B8768814647C5200594A5D /* ATSurveys.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ATSurveys.m; sourceTree = "<group>"; };
+		49B8768F14647C5200594A5D /* ApptentiveSurveysTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApptentiveSurveysTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		49B8769014647C5200594A5D /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		49B8769214647C5200594A5D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		49B8769A14647C5200594A5D /* ApptentiveSurveysTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ApptentiveSurveysTests-Info.plist"; sourceTree = "<group>"; };
+		49B8769C14647C5200594A5D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		49B8769E14647C5200594A5D /* ApptentiveSurveysTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveysTests.h; sourceTree = "<group>"; };
+		49B8769F14647C5200594A5D /* ApptentiveSurveysTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveysTests.m; sourceTree = "<group>"; };
+		49B876A914647C5F00594A5D /* ApptentiveConnect.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ApptentiveConnect.xcodeproj; path = ../../ApptentiveConnect/ApptentiveConnect.xcodeproj; sourceTree = "<group>"; };
+		49B876B814647C6C00594A5D /* ATConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATConnect.h; path = ../../ApptentiveConnect/source/ATConnect.h; sourceTree = "<group>"; };
+		49B876FB14648FAE00594A5D /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSONKit.h; path = ../../ApptentiveConnect/ext/JSONKit/JSONKit.h; sourceTree = "<group>"; };
+		49B876FD1464914700594A5D /* ATSurveyQuestion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATSurveyQuestion.h; path = source/ATSurveyQuestion.h; sourceTree = SOURCE_ROOT; };
+		49B876FE1464914700594A5D /* ATSurveyQuestion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATSurveyQuestion.m; path = source/ATSurveyQuestion.m; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		49B8767C14647C5200594A5D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49B8768314647C5200594A5D /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49B8768B14647C5200594A5D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49B8769114647C5200594A5D /* SenTestingKit.framework in Frameworks */,
+				49B8769314647C5200594A5D /* UIKit.framework in Frameworks */,
+				49B8769414647C5200594A5D /* Foundation.framework in Frameworks */,
+				49B8769714647C5200594A5D /* libApptentiveSurveys.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		49B8767414647C5200594A5D = {
+			isa = PBXGroup;
+			children = (
+				49B876B814647C6C00594A5D /* ATConnect.h */,
+				49B876FB14648FAE00594A5D /* JSONKit.h */,
+				49B876A914647C5F00594A5D /* ApptentiveConnect.xcodeproj */,
+				49B8768414647C5200594A5D /* ApptentiveSurveys */,
+				49B8769814647C5200594A5D /* ApptentiveSurveysTests */,
+				49B8768114647C5200594A5D /* Frameworks */,
+				49B8768014647C5200594A5D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		49B8768014647C5200594A5D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				49B8767F14647C5200594A5D /* libApptentiveSurveys.a */,
+				49B8768F14647C5200594A5D /* ApptentiveSurveysTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		49B8768114647C5200594A5D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				49B8768214647C5200594A5D /* Foundation.framework */,
+				49B8769014647C5200594A5D /* SenTestingKit.framework */,
+				49B8769214647C5200594A5D /* UIKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		49B8768414647C5200594A5D /* ApptentiveSurveys */ = {
+			isa = PBXGroup;
+			children = (
+				49B8768714647C5200594A5D /* ATSurveys.h */,
+				49B8768814647C5200594A5D /* ATSurveys.m */,
+				49B877021464914F00594A5D /* source */,
+				49B8768514647C5200594A5D /* Supporting Files */,
+			);
+			path = ApptentiveSurveys;
+			sourceTree = "<group>";
+		};
+		49B8768514647C5200594A5D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				49B8768614647C5200594A5D /* ApptentiveSurveys-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		49B8769814647C5200594A5D /* ApptentiveSurveysTests */ = {
+			isa = PBXGroup;
+			children = (
+				49B8769E14647C5200594A5D /* ApptentiveSurveysTests.h */,
+				49B8769F14647C5200594A5D /* ApptentiveSurveysTests.m */,
+				49B8769914647C5200594A5D /* Supporting Files */,
+			);
+			path = ApptentiveSurveysTests;
+			sourceTree = "<group>";
+		};
+		49B8769914647C5200594A5D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				49B8769A14647C5200594A5D /* ApptentiveSurveysTests-Info.plist */,
+				49B8769B14647C5200594A5D /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		49B876AA14647C5F00594A5D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				49B876B314647C5F00594A5D /* libApptentiveConnect.a */,
+				49B876B514647C5F00594A5D /* ApptentiveConnectTests.octest */,
+				49B876B714647C5F00594A5D /* ApptentiveResources.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		49B877021464914F00594A5D /* source */ = {
+			isa = PBXGroup;
+			children = (
+				49B876FD1464914700594A5D /* ATSurveyQuestion.h */,
+				49B876FE1464914700594A5D /* ATSurveyQuestion.m */,
+			);
+			name = source;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		49B8767D14647C5200594A5D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49B876B914647C6C00594A5D /* ATConnect.h in Headers */,
+				49B876FC14648FAE00594A5D /* JSONKit.h in Headers */,
+				49B876FF1464914700594A5D /* ATSurveyQuestion.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		49B8767E14647C5200594A5D /* ApptentiveSurveys */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 49B876A314647C5200594A5D /* Build configuration list for PBXNativeTarget "ApptentiveSurveys" */;
+			buildPhases = (
+				49B8767B14647C5200594A5D /* Sources */,
+				49B8767C14647C5200594A5D /* Frameworks */,
+				49B8767D14647C5200594A5D /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ApptentiveSurveys;
+			productName = ApptentiveSurveys;
+			productReference = 49B8767F14647C5200594A5D /* libApptentiveSurveys.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		49B8768E14647C5200594A5D /* ApptentiveSurveysTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 49B876A614647C5200594A5D /* Build configuration list for PBXNativeTarget "ApptentiveSurveysTests" */;
+			buildPhases = (
+				49B8768A14647C5200594A5D /* Sources */,
+				49B8768B14647C5200594A5D /* Frameworks */,
+				49B8768C14647C5200594A5D /* Resources */,
+				49B8768D14647C5200594A5D /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				49B8769614647C5200594A5D /* PBXTargetDependency */,
+			);
+			name = ApptentiveSurveysTests;
+			productName = ApptentiveSurveysTests;
+			productReference = 49B8768F14647C5200594A5D /* ApptentiveSurveysTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		49B8767614647C5200594A5D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+				ORGANIZATIONNAME = Apptentive;
+			};
+			buildConfigurationList = 49B8767914647C5200594A5D /* Build configuration list for PBXProject "ApptentiveSurveys" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 49B8767414647C5200594A5D;
+			productRefGroup = 49B8768014647C5200594A5D /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 49B876AA14647C5F00594A5D /* Products */;
+					ProjectRef = 49B876A914647C5F00594A5D /* ApptentiveConnect.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				49B8767E14647C5200594A5D /* ApptentiveSurveys */,
+				49B8768E14647C5200594A5D /* ApptentiveSurveysTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		49B876B314647C5F00594A5D /* libApptentiveConnect.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libApptentiveConnect.a;
+			remoteRef = 49B876B214647C5F00594A5D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		49B876B514647C5F00594A5D /* ApptentiveConnectTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ApptentiveConnectTests.octest;
+			remoteRef = 49B876B414647C5F00594A5D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		49B876B714647C5F00594A5D /* ApptentiveResources.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ApptentiveResources.bundle;
+			remoteRef = 49B876B614647C5F00594A5D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		49B8768C14647C5200594A5D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49B8769D14647C5200594A5D /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		49B8768D14647C5200594A5D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		49B8767B14647C5200594A5D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49B8768914647C5200594A5D /* ATSurveys.m in Sources */,
+				49B877001464914700594A5D /* ATSurveyQuestion.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		49B8768A14647C5200594A5D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49B876A014647C5200594A5D /* ApptentiveSurveysTests.m in Sources */,
+				49B877011464914700594A5D /* ATSurveyQuestion.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		49B8769614647C5200594A5D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 49B8767E14647C5200594A5D /* ApptentiveSurveys */;
+			targetProxy = 49B8769514647C5200594A5D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		49B8769B14647C5200594A5D /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				49B8769C14647C5200594A5D /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		49B876A114647C5200594A5D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_LDFLAGS = (
+					"-weak_framework",
+					libApptentiveConnect,
+				);
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		49B876A214647C5200594A5D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_LDFLAGS = (
+					"-weak_framework",
+					libApptentiveConnect,
+				);
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		49B876A414647C5200594A5D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/ApptentiveSurveys.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ApptentiveSurveys/ApptentiveSurveys-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		49B876A514647C5200594A5D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/ApptentiveSurveys.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ApptentiveSurveys/ApptentiveSurveys-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		49B876A714647C5200594A5D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ApptentiveSurveys/ApptentiveSurveys-Prefix.pch";
+				INFOPLIST_FILE = "ApptentiveSurveysTests/ApptentiveSurveysTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		49B876A814647C5200594A5D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ApptentiveSurveys/ApptentiveSurveys-Prefix.pch";
+				INFOPLIST_FILE = "ApptentiveSurveysTests/ApptentiveSurveysTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		49B8767914647C5200594A5D /* Build configuration list for PBXProject "ApptentiveSurveys" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				49B876A114647C5200594A5D /* Debug */,
+				49B876A214647C5200594A5D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		49B876A314647C5200594A5D /* Build configuration list for PBXNativeTarget "ApptentiveSurveys" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				49B876A414647C5200594A5D /* Debug */,
+				49B876A514647C5200594A5D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		49B876A614647C5200594A5D /* Build configuration list for PBXNativeTarget "ApptentiveSurveysTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				49B876A714647C5200594A5D /* Debug */,
+				49B876A814647C5200594A5D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 49B8767614647C5200594A5D /* Project object */;
+}

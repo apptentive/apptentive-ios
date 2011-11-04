@@ -11,6 +11,13 @@
 #import "ATAppRatingFlow.h"
 #import "defines.h"
 
+enum kRootTableSections {
+	kFeedbackSection,
+	kRatingSection,
+	kSurveySection,
+	kSectionCount
+};
+
 @implementation RootViewController
 
 - (IBAction)showFeedback:(id)sender {
@@ -26,138 +33,103 @@
 }
 
 - (void)viewDidLoad {
-    UIBarButtonItem *feedbackButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Feedback", @"Give feedback button title.") style:UIBarButtonItemStylePlain target:self action:@selector(showFeedback:)];
-    self.navigationItem.rightBarButtonItem = feedbackButton;
-    [feedbackButton release];
-    feedbackButton = nil;
-    
-    UIBarButtonItem *showRatingFlow = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Rating", @"Rating button title.") style:UIBarButtonItemStylePlain target:self action:@selector(showRating:)];
-    self.navigationItem.leftBarButtonItem = showRatingFlow;
-    [showRatingFlow release], showRatingFlow = nil;
+	self.navigationItem.title = @"Apptentive Demo";
+	UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"at_logo_info"]];
+	imageView.contentMode = UIViewContentModeCenter;
+	self.tableView.tableHeaderView = imageView;
+	[imageView release], imageView = nil;
     [super viewDidLoad];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
+- (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
+- (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 }
 
-- (void)viewDidDisappear:(BOOL)animated
-{
+- (void)viewDidDisappear:(BOOL)animated {
 	[super viewDidDisappear:animated];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-	// Return YES for supported orientations.
     return YES;
 }
 
-// Customize the number of sections in the table view.
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return kSectionCount;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return 0;
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+	return 1;
 }
 
-// Customize the appearance of table view cells.
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
-
-    // Configure the cell.
+	if (indexPath.section == kFeedbackSection) {
+		cell.textLabel.text = @"Send Feedback";
+	} else if (indexPath.section == kRatingSection) {
+		cell.textLabel.text = @"Start Rating Flow";
+	} else if (indexPath.section == kSurveySection) {
+		cell.textLabel.text = @"Show a Survey";
+	}
+	
     return cell;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete)
-    {
-        // Delete the row from the data source.
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }
-    else if (editingStyle == UITableViewCellEditingStyleInsert)
-    {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    /*
-    <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-    // ...
-    // Pass the selected object to the new view controller.
-    [self.navigationController pushViewController:detailViewController animated:YES];
-    [detailViewController release];
-	*/
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	if (indexPath.section == kFeedbackSection) {
+		[self showFeedback:nil];
+	} else if (indexPath.section == kRatingSection) {
+		[self showRating:nil];
+	} else if (indexPath.section == kSurveySection) {
+	}
+	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    // Releases the view if it doesn't have a superview.
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+	NSString *title = nil;
+	if (section == kFeedbackSection) {
+		title = @"Feedback";
+	} else if (section == kRatingSection) {
+		title = @"Ratings";
+	} else if (section == kSurveySection) {
+		title = @"Surveys";
+	}
+	return title;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+	NSString *title = nil;
+	if (section == kFeedbackSection) {
+		title = @"Opens feedback screen.";
+	} else if (section == kRatingSection) {
+		title = nil;
+	} else if (section == kSurveySection) {
+		title = nil;
+	}
+	return title;
+}
+
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    
-    // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
-- (void)viewDidUnload
-{
+- (void)viewDidUnload {
     [super viewDidUnload];
-
-    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-    // For example: self.myOutlet = nil;
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
     [super dealloc];
 }
-
 @end

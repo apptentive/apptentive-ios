@@ -10,6 +10,7 @@
 #import "ATConnect.h"
 #import "ATAppRatingFlow.h"
 #import "defines.h"
+#import "ApptentiveSurveys.h"
 
 @implementation FeedbackDemoAppDelegate
 
@@ -20,6 +21,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+	[[ApptentiveSurveys alloc] init];
     // Override point for customization after application launch.
     // Add the navigation controller's view to the window and display.
     if ([self.window respondsToSelector:@selector(setRootViewController:)]) {

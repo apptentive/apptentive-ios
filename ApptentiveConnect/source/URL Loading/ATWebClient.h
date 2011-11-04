@@ -15,6 +15,8 @@
 @interface ATWebClient : NSObject {
 }
 + (ATWebClient *)sharedClient;
+- (NSString *)baseURLString;
+- (NSString *)commonChannelName;
 - (ATAPIRequest *)requestForGettingContactInfo;
 - (ATAPIRequest *)requestForPostingFeedback:(ATFeedback *)feedback;
 @end

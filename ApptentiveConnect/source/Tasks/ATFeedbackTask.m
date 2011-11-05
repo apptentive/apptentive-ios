@@ -70,7 +70,7 @@
 }
 
 #pragma mark ATAPIRequestDelegate
-- (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(id)result {
+- (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(NSObject *)result {
     @synchronized(self) {
         self.finished = YES;
     }

@@ -32,6 +32,8 @@
     [[ATConnect sharedConnection] setApiKey:kApptentiveAPIKey];
     ATAppRatingFlow *ratingFlow = [ATAppRatingFlow sharedRatingFlowWithAppID:kApptentiveAppID];
     [ratingFlow appDidLaunch:YES viewController:self.navigationController];
+	
+	[ATSurveys checkForAvailableSurveys];
     
     return YES;
 }

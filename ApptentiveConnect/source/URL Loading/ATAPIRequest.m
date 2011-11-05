@@ -105,7 +105,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 			break;
 	}
 	
-	id result = nil;
+	NSObject *result = nil;
 	do { // once
 		NSData *d = [sender responseData];
         /*!!!!! Prefix line with // to debug HTTP stuff.
@@ -192,7 +192,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 
 - (void)connectionDidProgress:(ATURLConnection *)sender {
     percentageComplete = sender.percentComplete;
-    if (delegate) {
+    if (delegate && [delegate respondsToSelector:@selector(at_APIRequestDidProgress:)]) {
         [delegate at_APIRequestDidProgress:self];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:ATAPIRequestStatusChanged object:self];

@@ -1,0 +1,69 @@
+//
+//  ATSurveysBackend.m
+//  ApptentiveSurveys
+//
+//  Created by Andrew Wooster on 11/4/11.
+//  Copyright (c) 2011 Apptentive. All rights reserved.
+//
+
+#import "ATSurveysBackend.h"
+#import "ATSurvey.h"
+#import "ATSurveyParser.h"
+#import "JSONKit.h"
+
+@implementation ATSurveysBackend
+
++ (ATSurveysBackend *)sharedBackend {
+	static ATSurveysBackend *sharedBackend = nil;
+	@synchronized(self) {
+		if (sharedBackend == nil) {
+			sharedBackend = [[ATSurveysBackend alloc] init];
+		}
+	}
+	return sharedBackend;
+}
+
+- (void)dealloc {
+	checkSurveyRequest.delegate = nil;
+	[checkSurveyRequest release], checkSurveyRequest = nil;
+	[super dealloc];
+}
+
+- (void)checkForAvailableSurveys {
+	if (checkSurveyRequest == nil) {
+		NSLog(@"checking for surveys");
+		ATWebClient *client = [ATWebClient sharedClient];
+		checkSurveyRequest = [[client requestForGettingSurvey] retain];
+		checkSurveyRequest.delegate = self;
+		[checkSurveyRequest start];
+	}
+}
+
+- (ATSurvey *)currentSurvey {
+	return currentSurvey;
+}
+
+#pragma mark ATAPIRequestDelegate
+- (void)at_APIRequestDidFinish:(ATAPIRequest *)request result:(NSObject *)result {
+	if (request == checkSurveyRequest) {
+		ATSurveyParser *parser = [[ATSurveyParser alloc] init];
+		NSArray *surveys = [parser parseMultipleSurveys:(NSData *)result];
+		if (surveys == nil) {
+			NSLog(@"An error occurred parsing multiple surveys: %@", [parser parserError]);
+		} else if ([surveys count] > 0) {
+			[currentSurvey release], currentSurvey = nil;
+			currentSurvey = [[surveys objectAtIndex:0] retain];
+		}
+		checkSurveyRequest.delegate = nil;
+		[checkSurveyRequest release], checkSurveyRequest = nil;
+	}
+}
+
+- (void)at_APIRequestDidFail:(ATAPIRequest *)request {
+	if (request == checkSurveyRequest) {
+		NSLog(@"Survey request failed: %@: %@", request.errorTitle, request.errorMessage);
+		checkSurveyRequest.delegate = nil;
+		[checkSurveyRequest release], checkSurveyRequest = nil;
+	}
+}
+@end

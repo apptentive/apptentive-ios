@@ -10,9 +10,7 @@
 		49B8768314647C5200594A5D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B8768214647C5200594A5D /* Foundation.framework */; };
 		49B8768914647C5200594A5D /* ATSurveys.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B8768814647C5200594A5D /* ATSurveys.m */; };
 		49B8769114647C5200594A5D /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B8769014647C5200594A5D /* SenTestingKit.framework */; };
-		49B8769314647C5200594A5D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B8769214647C5200594A5D /* UIKit.framework */; };
 		49B8769414647C5200594A5D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B8768214647C5200594A5D /* Foundation.framework */; };
-		49B8769714647C5200594A5D /* libApptentiveSurveys.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B8767F14647C5200594A5D /* libApptentiveSurveys.a */; };
 		49B8769D14647C5200594A5D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49B8769B14647C5200594A5D /* InfoPlist.strings */; };
 		49B876A014647C5200594A5D /* ApptentiveSurveysTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B8769F14647C5200594A5D /* ApptentiveSurveysTests.m */; };
 		49B876B914647C6C00594A5D /* ATConnect.h in Headers */ = {isa = PBXBuildFile; fileRef = 49B876B814647C6C00594A5D /* ATConnect.h */; };
@@ -34,6 +32,21 @@
 		49B87724146498F700594A5D /* ATSurveyQuestion.h in Headers */ = {isa = PBXBuildFile; fileRef = 49B87722146498F700594A5D /* ATSurveyQuestion.h */; };
 		49B87725146498F700594A5D /* ATSurveyQuestion.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B87723146498F700594A5D /* ATSurveyQuestion.m */; };
 		49B87726146498F700594A5D /* ATSurveyQuestion.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B87723146498F700594A5D /* ATSurveyQuestion.m */; };
+		49B877291464BA2100594A5D /* ATSurveysBackend.h in Headers */ = {isa = PBXBuildFile; fileRef = 49B877271464BA2100594A5D /* ATSurveysBackend.h */; };
+		49B8772A1464BA2100594A5D /* ATSurveysBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B877281464BA2100594A5D /* ATSurveysBackend.m */; };
+		49B8772B1464BA2100594A5D /* ATSurveysBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B877281464BA2100594A5D /* ATSurveysBackend.m */; };
+		49B8772E1465C4D200594A5D /* ATSurvey.h in Headers */ = {isa = PBXBuildFile; fileRef = 49B8772C1465C4D200594A5D /* ATSurvey.h */; };
+		49B8772F1465C4D200594A5D /* ATSurvey.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B8772D1465C4D200594A5D /* ATSurvey.m */; };
+		49B877301465C4D200594A5D /* ATSurvey.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B8772D1465C4D200594A5D /* ATSurvey.m */; };
+		49B877331465C4F600594A5D /* ATSurveyParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 49B877311465C4F600594A5D /* ATSurveyParser.h */; };
+		49B877341465C4F600594A5D /* ATSurveyParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B877321465C4F600594A5D /* ATSurveyParser.m */; };
+		49B877351465C4F600594A5D /* ATSurveyParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B877321465C4F600594A5D /* ATSurveyParser.m */; };
+		49B877421465ED3200594A5D /* libApptentiveConnect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B876B314647C5F00594A5D /* libApptentiveConnect.a */; };
+		49B877461465EE4E00594A5D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B877451465EE4E00594A5D /* SystemConfiguration.framework */; };
+		49B877481465EE5400594A5D /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B877471465EE5400594A5D /* CoreTelephony.framework */; };
+		49B8774A1465EE6600594A5D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B877491465EE6600594A5D /* UIKit.framework */; };
+		49B8774D1465EE8700594A5D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B8774B1465EE8700594A5D /* CoreGraphics.framework */; };
+		49B8774E1465EE8700594A5D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B8774C1465EE8700594A5D /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +78,13 @@
 			remoteGlobalIDString = 49D1118C13341A7C00603373;
 			remoteInfo = ApptentiveResources;
 		};
+		49B877431465ED6900594A5D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 49B876A914647C5F00594A5D /* ApptentiveConnect.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 496DC37E1333D35600743F65;
+			remoteInfo = ApptentiveConnect;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -75,7 +95,6 @@
 		49B8768814647C5200594A5D /* ATSurveys.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ATSurveys.m; sourceTree = "<group>"; };
 		49B8768F14647C5200594A5D /* ApptentiveSurveysTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApptentiveSurveysTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		49B8769014647C5200594A5D /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		49B8769214647C5200594A5D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		49B8769A14647C5200594A5D /* ApptentiveSurveysTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ApptentiveSurveysTests-Info.plist"; sourceTree = "<group>"; };
 		49B8769C14647C5200594A5D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		49B8769E14647C5200594A5D /* ApptentiveSurveysTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveysTests.h; sourceTree = "<group>"; };
@@ -96,6 +115,17 @@
 		49B8771D1464970300594A5D /* ATSurveyResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATSurveyResponse.m; path = source/Persistence/ATSurveyResponse.m; sourceTree = SOURCE_ROOT; };
 		49B87722146498F700594A5D /* ATSurveyQuestion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveyQuestion.h; sourceTree = "<group>"; };
 		49B87723146498F700594A5D /* ATSurveyQuestion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveyQuestion.m; sourceTree = "<group>"; };
+		49B877271464BA2100594A5D /* ATSurveysBackend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATSurveysBackend.h; path = source/ATSurveysBackend.h; sourceTree = SOURCE_ROOT; };
+		49B877281464BA2100594A5D /* ATSurveysBackend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATSurveysBackend.m; path = source/ATSurveysBackend.m; sourceTree = SOURCE_ROOT; };
+		49B8772C1465C4D200594A5D /* ATSurvey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurvey.h; sourceTree = "<group>"; };
+		49B8772D1465C4D200594A5D /* ATSurvey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurvey.m; sourceTree = "<group>"; };
+		49B877311465C4F600594A5D /* ATSurveyParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveyParser.h; sourceTree = "<group>"; };
+		49B877321465C4F600594A5D /* ATSurveyParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveyParser.m; sourceTree = "<group>"; };
+		49B877451465EE4E00594A5D /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		49B877471465EE5400594A5D /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		49B877491465EE6600594A5D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		49B8774B1465EE8700594A5D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		49B8774C1465EE8700594A5D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,10 +141,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49B8774D1465EE8700594A5D /* CoreGraphics.framework in Frameworks */,
+				49B8774E1465EE8700594A5D /* QuartzCore.framework in Frameworks */,
+				49B8774A1465EE6600594A5D /* UIKit.framework in Frameworks */,
+				49B877481465EE5400594A5D /* CoreTelephony.framework in Frameworks */,
+				49B877461465EE4E00594A5D /* SystemConfiguration.framework in Frameworks */,
+				49B877421465ED3200594A5D /* libApptentiveConnect.a in Frameworks */,
 				49B8769114647C5200594A5D /* SenTestingKit.framework in Frameworks */,
-				49B8769314647C5200594A5D /* UIKit.framework in Frameworks */,
 				49B8769414647C5200594A5D /* Foundation.framework in Frameworks */,
-				49B8769714647C5200594A5D /* libApptentiveSurveys.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -151,9 +185,13 @@
 		49B8768114647C5200594A5D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				49B8774B1465EE8700594A5D /* CoreGraphics.framework */,
+				49B8774C1465EE8700594A5D /* QuartzCore.framework */,
+				49B877491465EE6600594A5D /* UIKit.framework */,
+				49B877471465EE5400594A5D /* CoreTelephony.framework */,
+				49B877451465EE4E00594A5D /* SystemConfiguration.framework */,
 				49B8768214647C5200594A5D /* Foundation.framework */,
 				49B8769014647C5200594A5D /* SenTestingKit.framework */,
-				49B8769214647C5200594A5D /* UIKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -163,6 +201,8 @@
 			children = (
 				49B8768714647C5200594A5D /* ATSurveys.h */,
 				49B8768814647C5200594A5D /* ATSurveys.m */,
+				49B877271464BA2100594A5D /* ATSurveysBackend.h */,
+				49B877281464BA2100594A5D /* ATSurveysBackend.m */,
 				49B877021464914F00594A5D /* source */,
 				49B8768514647C5200594A5D /* Supporting Files */,
 			);
@@ -249,6 +289,10 @@
 			children = (
 				49B87722146498F700594A5D /* ATSurveyQuestion.h */,
 				49B87723146498F700594A5D /* ATSurveyQuestion.m */,
+				49B8772C1465C4D200594A5D /* ATSurvey.h */,
+				49B8772D1465C4D200594A5D /* ATSurvey.m */,
+				49B877311465C4F600594A5D /* ATSurveyParser.h */,
+				49B877321465C4F600594A5D /* ATSurveyParser.m */,
 			);
 			name = Model;
 			path = source/Model;
@@ -272,6 +316,9 @@
 				49B877181464967700594A5D /* ATSurveyTask.h in Headers */,
 				49B8771E1464970300594A5D /* ATSurveyResponse.h in Headers */,
 				49B87724146498F700594A5D /* ATSurveyQuestion.h in Headers */,
+				49B877291464BA2100594A5D /* ATSurveysBackend.h in Headers */,
+				49B8772E1465C4D200594A5D /* ATSurvey.h in Headers */,
+				49B877331465C4F600594A5D /* ATSurveyParser.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,6 +354,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				49B877441465ED6900594A5D /* PBXTargetDependency */,
 				49B8769614647C5200594A5D /* PBXTargetDependency */,
 			);
 			name = ApptentiveSurveysTests;
@@ -408,6 +456,9 @@
 				49B877191464967700594A5D /* ATSurveyTask.m in Sources */,
 				49B8771F1464970300594A5D /* ATSurveyResponse.m in Sources */,
 				49B87725146498F700594A5D /* ATSurveyQuestion.m in Sources */,
+				49B8772A1464BA2100594A5D /* ATSurveysBackend.m in Sources */,
+				49B8772F1465C4D200594A5D /* ATSurvey.m in Sources */,
+				49B877341465C4F600594A5D /* ATSurveyParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -420,6 +471,9 @@
 				49B8771A1464967700594A5D /* ATSurveyTask.m in Sources */,
 				49B877201464970300594A5D /* ATSurveyResponse.m in Sources */,
 				49B87726146498F700594A5D /* ATSurveyQuestion.m in Sources */,
+				49B8772B1464BA2100594A5D /* ATSurveysBackend.m in Sources */,
+				49B877301465C4D200594A5D /* ATSurvey.m in Sources */,
+				49B877351465C4F600594A5D /* ATSurveyParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -430,6 +484,11 @@
 			isa = PBXTargetDependency;
 			target = 49B8767E14647C5200594A5D /* ApptentiveSurveys */;
 			targetProxy = 49B8769514647C5200594A5D /* PBXContainerItemProxy */;
+		};
+		49B877441465ED6900594A5D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ApptentiveConnect;
+			targetProxy = 49B877431465ED6900594A5D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -464,10 +523,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				OTHER_LDFLAGS = (
-					"-weak_framework",
-					libApptentiveConnect,
-				);
+				OTHER_LDFLAGS = "";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -484,10 +540,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				OTHER_LDFLAGS = (
-					"-weak_framework",
-					libApptentiveConnect,
-				);
+				OTHER_LDFLAGS = "";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -499,7 +552,11 @@
 				DSTROOT = /tmp/ApptentiveSurveys.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ApptentiveSurveys/ApptentiveSurveys-Prefix.pch";
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-weak_framework",
+					libApptentiveConnect,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -511,7 +568,11 @@
 				DSTROOT = /tmp/ApptentiveSurveys.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ApptentiveSurveys/ApptentiveSurveys-Prefix.pch";
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-weak_framework",
+					libApptentiveConnect,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};

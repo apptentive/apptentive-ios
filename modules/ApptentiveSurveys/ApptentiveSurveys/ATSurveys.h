@@ -10,5 +10,5 @@
 #import "ATConnect.h"
 
 @interface ATSurveys : NSObject
-
++ (void)checkForAvailableSurveys;
 @end

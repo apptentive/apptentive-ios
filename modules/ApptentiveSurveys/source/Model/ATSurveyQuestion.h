@@ -10,13 +10,26 @@
 
 typedef enum {
 	ATSurveyQuestionTypeSingeLine,
-	ATSurveyQuestionTypeTextField,
 	ATSurveyQuestionTypeMultipleChoice
 } ATSurveyQuestionType;
 
+@class ATSurveyQuestionAnswer;
+
 @interface ATSurveyQuestion : NSObject {
 @private
-	ATSurveyQuestionType type;
 }
 @property (nonatomic, assign) ATSurveyQuestionType type;
+@property (nonatomic, retain) NSString *identifier;
+@property (nonatomic, retain) NSString *questionText;
+@property (nonatomic, retain) NSString *value;
+@property (nonatomic, readonly) NSMutableArray *answerChoices;
+
+- (void)addAnswerChoice:(ATSurveyQuestionAnswer *)answer;
+@end
+
+@interface ATSurveyQuestionAnswer : NSObject {
+@private
+}
+@property (nonatomic, retain) NSString *identifier;
+@property (nonatomic, retain) NSString *value;
 @end

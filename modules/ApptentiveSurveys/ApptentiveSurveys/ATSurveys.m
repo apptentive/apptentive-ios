@@ -7,17 +7,26 @@
 //
 
 #import "ATSurveys.h"
+#import "ATSurveysBackend.h"
+
+@interface ATSurveys ()
++ (ATSurveys *)sharedSurveys;
+@end
 
 @implementation ATSurveys
++ (ATSurveys *)sharedSurveys {
+	static ATSurveys *sharedSingleton = nil;
+	@synchronized(self) {
+		if (sharedSingleton == nil) {
+			sharedSingleton = [[ATSurveys alloc] init];
+		}
+	}
+	return sharedSingleton;
+}
 
-- (id)init
-{
-    self = [super init];
-    if (self) {
-        // Initialization code here.
-    }
-    
-    return self;
++ (void)checkForAvailableSurveys {
+	ATSurveysBackend *backend = [ATSurveysBackend sharedBackend];
+	[backend checkForAvailableSurveys];
 }
 
 @end

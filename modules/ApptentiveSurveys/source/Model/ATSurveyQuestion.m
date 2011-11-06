@@ -14,6 +14,7 @@
 @synthesize questionText=questionText$;
 @synthesize value=value$;
 @synthesize answerChoices=answerChoices$;
+@synthesize answerText=answerText$;
 
 - (id)init {
 	if ((self = [super init])) {
@@ -27,6 +28,7 @@
 	[questionText$ release], questionText$ = nil;
 	[value$ release], value$ = nil;
 	[answerChoices$ release], answerChoices$ = nil;
+	[answerText$ release], answerText$ = nil;
 	[super dealloc];
 }
 

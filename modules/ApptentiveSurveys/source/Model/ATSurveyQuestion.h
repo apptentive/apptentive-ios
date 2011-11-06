@@ -23,6 +23,7 @@ typedef enum {
 @property (nonatomic, retain) NSString *questionText;
 @property (nonatomic, retain) NSString *value;
 @property (nonatomic, readonly) NSMutableArray *answerChoices;
+@property (nonatomic, retain) NSString *answerText;
 
 - (void)addAnswerChoice:(ATSurveyQuestionAnswer *)answer;
 @end

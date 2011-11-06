@@ -54,6 +54,7 @@
 		49EC5D951467187F00634D43 /* ATSurveysBackend.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EC5D931467187F00634D43 /* ATSurveysBackend.h */; };
 		49EC5D961467187F00634D43 /* ATSurveysBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EC5D941467187F00634D43 /* ATSurveysBackend.m */; };
 		49EC5D971467187F00634D43 /* ATSurveysBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EC5D941467187F00634D43 /* ATSurveysBackend.m */; };
+		49EC5D9A14671FB100634D43 /* ATDefaultTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EC5D9914671FB100634D43 /* ATDefaultTextView.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -135,6 +136,7 @@
 		49EC5D8C1467183600634D43 /* ATSurveys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATSurveys.m; path = source/ATSurveys.m; sourceTree = SOURCE_ROOT; };
 		49EC5D931467187F00634D43 /* ATSurveysBackend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATSurveysBackend.h; path = source/Persistence/ATSurveysBackend.h; sourceTree = SOURCE_ROOT; };
 		49EC5D941467187F00634D43 /* ATSurveysBackend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATSurveysBackend.m; path = source/Persistence/ATSurveysBackend.m; sourceTree = SOURCE_ROOT; };
+		49EC5D9914671FB100634D43 /* ATDefaultTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATDefaultTextView.h; path = "../../ApptentiveConnect/source/Custom Views/ATDefaultTextView.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,6 +176,7 @@
 				49B8770C146493D300594A5D /* ATAPIRequest.h */,
 				49B8770E1464955200594A5D /* ATURLConnection.h */,
 				49B876FB14648FAE00594A5D /* JSONKit.h */,
+				49EC5D9914671FB100634D43 /* ATDefaultTextView.h */,
 				49B876A914647C5F00594A5D /* ApptentiveConnect.xcodeproj */,
 				49B8768414647C5200594A5D /* ApptentiveSurveys */,
 				49EC5D81146717D700634D43 /* tests */,
@@ -325,6 +328,7 @@
 				49EC5D8D1467183600634D43 /* ApptentiveSurveys-Prefix.pch in Headers */,
 				49EC5D8E1467183600634D43 /* ATSurveys.h in Headers */,
 				49EC5D951467187F00634D43 /* ATSurveysBackend.h in Headers */,
+				49EC5D9A14671FB100634D43 /* ATDefaultTextView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

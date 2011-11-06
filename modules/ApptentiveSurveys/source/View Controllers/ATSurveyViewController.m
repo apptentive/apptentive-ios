@@ -11,11 +11,13 @@
 #import "ATSurveyQuestion.h"
 
 enum {
-	kTextFieldTag = 1
+	kTextViewTag = 1
 };
 
 @interface ATSurveyViewController (Private)
 - (void)cancel:(id)sender;
+
+- (BOOL)sizeTextView:(ATCellTextView *)textView;
 
 #pragma mark Rotation Handling
 
@@ -36,7 +38,8 @@ enum {
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[activeTextField release], activeTextField = nil;
+	[activeTextEntryCell release], activeTextEntryCell = nil;
+	[activeTextView release], activeTextView = nil;
 	[survey release], survey = nil;
 	[super dealloc];
 }
@@ -80,7 +83,7 @@ enum {
 }
 	 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-	if (activeTextField != nil) {
+	if (activeTextView != nil) {
 		
 	}
 }
@@ -105,7 +108,14 @@ enum {
 
 - (CGFloat)tableView:(UITableView *)aTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
-	if (cell.textLabel.text != nil) {
+	ATCellTextView *textViewCell = (ATCellTextView *)[cell viewWithTag:kTextViewTag];
+	if (textViewCell != nil) {
+		CGSize cellSize = CGSizeMake(textViewCell.bounds.size.width, textViewCell.bounds.size.height + 20);
+		CGRect f = textViewCell.frame;
+		f.origin.y = 10.0;
+		textViewCell.frame = f;
+		return MAX(44, cellSize.height);
+	} else if (cell.textLabel.text != nil) {
 		UIFont *font = cell.textLabel.font;
 		CGSize cellSize = CGSizeMake(cell.textLabel.bounds.size.width, 1024);
 		UILineBreakMode lbm = cell.textLabel.lineBreakMode;
@@ -122,7 +132,7 @@ enum {
 
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *ATSurveyCheckboxCellIdentifier = @"ATSurveyCheckboxCellIdentifier";
-    static NSString *ATSurveyTextFieldCellIdentifier = @"ATSurveyTextFieldCellIdentifier";
+    static NSString *ATSurveyTextViewCellIdentifier = @"ATSurveyTextViewCellIdentifier";
     static NSString *ATSurveyQuestionCellIdentifier = @"ATSurveyQuestionCellIdentifier";
     
 	
@@ -157,21 +167,39 @@ enum {
 			cell.textLabel.text = answer.value;
 		} else {
 			// Make a text entry cell.
-			cell = [tableView dequeueReusableCellWithIdentifier:ATSurveyTextFieldCellIdentifier];
-			if (cell == nil) {
-				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ATSurveyTextFieldCellIdentifier] autorelease];
-				UITextField *textField = [[UITextField alloc] initWithFrame:CGRectInset(cell.contentView.bounds, 10.0, 10.0)];
-				textField.tag = kTextFieldTag;
-				textField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-				[cell.contentView addSubview:textField];
-				textField.returnKeyType = UIReturnKeyDone;
-				[textField release], textField = nil;
-				cell.selectionStyle = UITableViewCellSelectionStyleNone;
+			if (activeTextView != nil && activeTextEntryCell != nil && activeTextView.cellPath.row == indexPath.row && activeTextView.cellPath.section == indexPath.section) {
+				cell = activeTextEntryCell;
+			} else {
+				cell = [tableView dequeueReusableCellWithIdentifier:ATSurveyTextViewCellIdentifier];
+				if (cell == nil) {
+					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ATSurveyTextViewCellIdentifier] autorelease];
+					ATCellTextView *textView = [[ATCellTextView alloc] initWithFrame:CGRectInset(cell.contentView.bounds, 10.0, 10.0)];
+					textView.font = [UIFont systemFontOfSize:16];
+					textView.backgroundColor = [UIColor clearColor];
+					textView.tag = kTextViewTag;
+					textView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+					[cell.contentView addSubview:textView];
+					textView.returnKeyType = UIReturnKeyDone;
+					[textView release], textView = nil;
+					cell.selectionStyle = UITableViewCellSelectionStyleNone;
+				}
 			}
 			
-			UITextField *textField = (UITextField *)[cell viewWithTag:kTextFieldTag];
-			textField.placeholder = @"Answer";
-			textField.delegate = self;
+			ATCellTextView *textView = (ATCellTextView *)[cell viewWithTag:kTextViewTag];
+			textView.cellPath = [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section];
+			textView.placeholder = @"Answer";
+			textView.delegate = self;
+			textView.question = question;
+			if (question.answerText != nil) {
+				textView.text = question.answerText;
+			}
+			//[textView sizeToFit];
+			[self sizeTextView:textView];
+			/*
+			CGRect cellFrame = cell.frame;
+			cellFrame.size.height = textView.frame.size.height + 20.0;
+			cell.frame = cellFrame;
+			 */
 		}
 	}
     
@@ -185,7 +213,7 @@ enum {
 	UITableViewCell *cell = [aTableView cellForRowAtIndexPath:indexPath];
 	if (indexPath.row == 0) {
 		// Question row.
-
+		
 	} else {
 		if (question.type == ATSurveyQuestionTypeMultipleChoice) {
 			if (cell.accessoryType == UITableViewCellAccessoryNone) {
@@ -199,24 +227,70 @@ enum {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-#pragma mark UITextFieldDelegate
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-	[activeTextField release], activeTextField = nil;
-	activeTextField = [textField retain];
-	[tableView scrollRectToVisible:textField.superview.superview.frame animated:YES];
+#pragma mark UITextViewDelegate
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+	if ([text isEqualToString:@"\n"]) {
+		[textView resignFirstResponder];
+		return NO;
+	}
+	return YES;
 }
 
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-	[activeTextField release], activeTextField = nil;
+- (void)textViewDidChange:(UITextView *)textView {
+	if ([textView isKindOfClass:[ATCellTextView class]]) {
+		ATCellTextView *ctv = (ATCellTextView *)textView;
+		ctv.question.answerText = ctv.text;
+	}
+
+	if ([self sizeTextView:(ATCellTextView *)textView]) {
+		[tableView beginUpdates];
+		[tableView endUpdates];
+		[tableView scrollRectToVisible:CGRectInset(activeTextEntryCell.frame, 0, -10) animated:YES];
+	}
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-	[textField resignFirstResponder];
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+	[textView flashScrollIndicators];
+	[activeTextEntryCell release], activeTextEntryCell = nil;
+	[activeTextView release], activeTextView = nil;
+	activeTextView = (ATCellTextView *)[textView retain];
+	activeTextEntryCell = [(UITableViewCell *)activeTextView.superview.superview retain];
+	[tableView scrollRectToVisible:textView.superview.superview.frame animated:YES];
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView {
+	if ([textView isKindOfClass:[ATCellTextView class]]) {
+		ATCellTextView *ctv = (ATCellTextView *)textView;
+		ctv.question.answerText = ctv.text;
+	}
+	[activeTextEntryCell release], activeTextEntryCell = nil;
+	[activeTextView release], activeTextView = nil;
+}
+
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView {
+	[textView resignFirstResponder];
 	return YES;
 }
 @end
 
 @implementation ATSurveyViewController (Private)
+
+- (BOOL)sizeTextView:(ATCellTextView *)textView {
+	BOOL didChange = NO;
+	CGRect f = textView.frame;
+	CGFloat originalHeight = f.size.height;
+	CGSize maxSize = CGSizeMake(f.size.width, 150);
+//	CGSize sizeThatFits = [textView.text sizeWithFont:textView.font constrainedToSize:maxSize lineBreakMode:UILineBreakModeWordWrap];
+	CGSize sizeThatFits = [textView sizeThatFits:maxSize];
+	if (originalHeight != sizeThatFits.height) {
+		NSLog(@"old: %f, new: %f", originalHeight, sizeThatFits.height);
+		f.size.height = sizeThatFits.height;
+		textView.frame = f;
+		didChange = YES;
+	}
+	return didChange;
+}
+
 - (void)cancel:(id)sender {
 	[self.navigationController dismissModalViewControllerAnimated:YES];
 }
@@ -238,13 +312,13 @@ enum {
     tableView.scrollIndicatorInsets = contentInsets;
 	
     // If active text field is hidden by keyboard, scroll it so it's visible
-	if (activeTextField != nil) {
+	if (activeTextView != nil && activeTextEntryCell) {
 		CGRect aRect = tableView.frame;
 		aRect.size.height -= kbSize.height;
-		CGRect r = [activeTextField.superview.superview convertRect:activeTextField.frame toView:tableView];
+		CGRect r = [activeTextEntryCell convertRect:activeTextView.frame toView:tableView];
 		if (!CGRectContainsPoint(aRect, r.origin) ) {
-			[activeTextField becomeFirstResponder];
-			[tableView scrollRectToVisible:activeTextField.superview.superview.frame animated:YES];
+			[activeTextView becomeFirstResponder];
+			[tableView scrollRectToVisible:CGRectInset(activeTextEntryCell.frame, 0, -10) animated:YES];
 //			CGPoint scrollPoint = CGPointMake(0.0, r.origin.y - kbSize.height);
 //			[tableView setContentOffset:scrollPoint animated:YES];
 		}
@@ -261,5 +335,14 @@ enum {
     tableView.contentInset = contentInsets;
     tableView.scrollIndicatorInsets = contentInsets;
 	[UIView commitAnimations];
+}
+@end
+
+@implementation ATCellTextView
+@synthesize cellPath, question;
+- (void)dealloc {
+	[cellPath release], cellPath = nil;
+	[question release], question = nil;
+	[super dealloc];
 }
 @end

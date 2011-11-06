@@ -17,6 +17,7 @@ enum {
 @interface ATSurveyViewController (Private)
 - (void)cancel:(id)sender;
 
+#pragma mark Rotation Handling
 
 #pragma mark Keyboard Handling
 - (void)registerForKeyboardNotifications;
@@ -76,6 +77,12 @@ enum {
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 	return YES;
+}
+	 
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+	if (activeTextField != nil) {
+		
+	}
 }
 
 #pragma mark UITableViewDataSource
@@ -222,7 +229,9 @@ enum {
 
 - (void)keyboardWasShown:(NSNotification*)aNotification {
     NSDictionary* info = [aNotification userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+	CGRect kbFrame = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+	CGRect kbAdjustedFrame = [tableView.window convertRect:kbFrame toView:tableView];
+	CGSize kbSize = kbAdjustedFrame.size;
 	
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
     tableView.contentInset = contentInsets;

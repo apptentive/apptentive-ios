@@ -44,7 +44,7 @@
 	ATSurveyQuestion *question = [[ATSurveyQuestion alloc] init];
 	BOOL failed = YES;
 	
-	NSDictionary *keyMapping = [NSDictionary dictionaryWithObjectsAndKeys:@"identifier", @"id", @"value", @"value", nil];
+	NSDictionary *keyMapping = [NSDictionary dictionaryWithObjectsAndKeys:@"identifier", @"id", @"questionText", @"value", nil];
 	
 	for (NSString *key in keyMapping) {
 		NSString *ivarName = [keyMapping objectForKey:key];

@@ -8,7 +8,9 @@
 
 #import "ATSurveysBackend.h"
 #import "ATSurvey.h"
+#import "ATSurveys.h"
 #import "ATSurveyParser.h"
+#import "ATSurveyViewController.h"
 #import "JSONKit.h"
 
 @implementation ATSurveysBackend
@@ -43,6 +45,24 @@
 	return currentSurvey;
 }
 
+
+- (void)presentSurveyControllerFromViewController:(UIViewController *)viewController {
+	if (currentSurvey == nil) {
+		return;
+	}
+	ATSurveyViewController *vc = [[ATSurveyViewController alloc] initWithSurvey:currentSurvey];
+	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        [viewController presentModalViewController:nc animated:YES];
+    } else {
+        nc.modalPresentationStyle = UIModalPresentationFormSheet;
+        [viewController presentModalViewController:nc animated:YES];
+    }
+    [nc release];
+	[vc release];
+}
+
 #pragma mark ATAPIRequestDelegate
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)request result:(NSObject *)result {
 	if (request == checkSurveyRequest) {
@@ -53,6 +73,7 @@
 		} else if ([surveys count] > 0) {
 			[currentSurvey release], currentSurvey = nil;
 			currentSurvey = [[surveys objectAtIndex:0] retain];
+			[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyNewSurveyAvailableNotification object:nil];
 		}
 		checkSurveyRequest.delegate = nil;
 		[checkSurveyRequest release], checkSurveyRequest = nil;

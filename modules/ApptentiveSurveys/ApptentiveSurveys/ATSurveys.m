@@ -9,6 +9,8 @@
 #import "ATSurveys.h"
 #import "ATSurveysBackend.h"
 
+NSString *const ATSurveyNewSurveyAvailableNotification = @"ATSurveyNewSurveyAvailableNotification";
+
 @interface ATSurveys ()
 + (ATSurveys *)sharedSurveys;
 @end
@@ -24,9 +26,19 @@
 	return sharedSingleton;
 }
 
++ (BOOL)hasSurveyAvailable {
+	ATSurveysBackend *backend = [ATSurveysBackend sharedBackend];
+	return [backend currentSurvey] != nil;
+}
+
 + (void)checkForAvailableSurveys {
 	ATSurveysBackend *backend = [ATSurveysBackend sharedBackend];
 	[backend checkForAvailableSurveys];
 }
 
+
++ (void)presentSurveyControllerFromViewController:(UIViewController *)viewController {
+	ATSurveysBackend *backend = [ATSurveysBackend sharedBackend];
+	[backend presentSurveyControllerFromViewController:viewController];
+}
 @end

@@ -9,6 +9,7 @@
 #import "RootViewController.h"
 #import "ATConnect.h"
 #import "ATAppRatingFlow.h"
+#import "ATSurveys.h"
 #import "defines.h"
 
 enum kRootTableSections {
@@ -17,6 +18,10 @@ enum kRootTableSections {
 	kSurveySection,
 	kSectionCount
 };
+
+@interface RootViewController ()
+- (void)surveyBecameAvailable:(NSNotification *)notification;
+@end
 
 @implementation RootViewController
 
@@ -33,12 +38,21 @@ enum kRootTableSections {
 }
 
 - (void)viewDidLoad {
+	ATConnect *connection = [ATConnect sharedConnection];
+	connection.apiKey = kApptentiveAPIKey;
 	self.navigationItem.title = @"Apptentive Demo";
 	UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"at_logo_info"]];
 	imageView.contentMode = UIViewContentModeCenter;
 	self.tableView.tableHeaderView = imageView;
 	[imageView release], imageView = nil;
     [super viewDidLoad];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyBecameAvailable:) name:ATSurveyNewSurveyAvailableNotification object:nil];
+	[ATSurveys checkForAvailableSurveys];
+}
+
+- (void)surveyBecameAvailable:(NSNotification *)notification {
+	[self.tableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -81,7 +95,13 @@ enum kRootTableSections {
 	} else if (indexPath.section == kRatingSection) {
 		cell.textLabel.text = @"Start Rating Flow";
 	} else if (indexPath.section == kSurveySection) {
-		cell.textLabel.text = @"Show a Survey";
+		if ([ATSurveys hasSurveyAvailable]) {
+			cell.textLabel.text = @"Show Survey";
+			cell.textLabel.textColor = [UIColor blackColor];
+		} else {
+			cell.textLabel.text = @"No Survey Available";
+			cell.textLabel.textColor = [UIColor grayColor];
+		}
 	}
 	
     return cell;
@@ -93,6 +113,9 @@ enum kRootTableSections {
 	} else if (indexPath.section == kRatingSection) {
 		[self showRating:nil];
 	} else if (indexPath.section == kSurveySection) {
+		if ([ATSurveys hasSurveyAvailable]) {
+			[ATSurveys presentSurveyControllerFromViewController:self];
+		}
 	}
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

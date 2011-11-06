@@ -47,6 +47,9 @@
 		49B8774A1465EE6600594A5D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B877491465EE6600594A5D /* UIKit.framework */; };
 		49B8774D1465EE8700594A5D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B8774B1465EE8700594A5D /* CoreGraphics.framework */; };
 		49B8774E1465EE8700594A5D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B8774C1465EE8700594A5D /* QuartzCore.framework */; };
+		49EC5D6C1466227800634D43 /* ATSurveyViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EC5D6A1466227800634D43 /* ATSurveyViewController.h */; };
+		49EC5D6D1466227800634D43 /* ATSurveyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EC5D6B1466227800634D43 /* ATSurveyViewController.m */; };
+		49EC5D6E1466227800634D43 /* ATSurveyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EC5D6B1466227800634D43 /* ATSurveyViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -126,6 +129,8 @@
 		49B877491465EE6600594A5D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		49B8774B1465EE8700594A5D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		49B8774C1465EE8700594A5D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		49EC5D6A1466227800634D43 /* ATSurveyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATSurveyViewController.h; path = "source/View Controllers/ATSurveyViewController.h"; sourceTree = SOURCE_ROOT; };
+		49EC5D6B1466227800634D43 /* ATSurveyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATSurveyViewController.m; path = "source/View Controllers/ATSurveyViewController.m"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -249,6 +254,7 @@
 		49B877021464914F00594A5D /* source */ = {
 			isa = PBXGroup;
 			children = (
+				49EC5D691466222300634D43 /* View Controllers */,
 				49B87721146498F600594A5D /* Model */,
 				49B8771B146496DB00594A5D /* Persistence */,
 				49B87704146492D100594A5D /* Tasks */,
@@ -298,6 +304,15 @@
 			path = source/Model;
 			sourceTree = SOURCE_ROOT;
 		};
+		49EC5D691466222300634D43 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				49EC5D6A1466227800634D43 /* ATSurveyViewController.h */,
+				49EC5D6B1466227800634D43 /* ATSurveyViewController.m */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -319,6 +334,7 @@
 				49B877291464BA2100594A5D /* ATSurveysBackend.h in Headers */,
 				49B8772E1465C4D200594A5D /* ATSurvey.h in Headers */,
 				49B877331465C4F600594A5D /* ATSurveyParser.h in Headers */,
+				49EC5D6C1466227800634D43 /* ATSurveyViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -459,6 +475,7 @@
 				49B8772A1464BA2100594A5D /* ATSurveysBackend.m in Sources */,
 				49B8772F1465C4D200594A5D /* ATSurvey.m in Sources */,
 				49B877341465C4F600594A5D /* ATSurveyParser.m in Sources */,
+				49EC5D6D1466227800634D43 /* ATSurveyViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -474,6 +491,7 @@
 				49B8772B1464BA2100594A5D /* ATSurveysBackend.m in Sources */,
 				49B877301465C4D200594A5D /* ATSurvey.m in Sources */,
 				49B877351465C4F600594A5D /* ATSurveyParser.m in Sources */,
+				49EC5D6E1466227800634D43 /* ATSurveyViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

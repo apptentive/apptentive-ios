@@ -6,7 +6,7 @@
 //  Copyright (c) 2011 Apptentive. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "ATAPIRequest.h"
 #import "ATWebClient+SurveyAdditions.h"
 
@@ -20,4 +20,5 @@
 + (ATSurveysBackend *)sharedBackend;
 - (void)checkForAvailableSurveys;
 - (ATSurvey *)currentSurvey;
+- (void)presentSurveyControllerFromViewController:(UIViewController *)viewController;
 @end

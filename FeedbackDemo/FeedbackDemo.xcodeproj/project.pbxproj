@@ -114,7 +114,6 @@
 		49B876C714647CE300594A5D /* ApptentiveSurveys.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ApptentiveSurveys.xcodeproj; path = ../modules/ApptentiveSurveys/ApptentiveSurveys.xcodeproj; sourceTree = "<group>"; };
 		49B876F01464825B00594A5D /* at_logo_info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_logo_info.png; sourceTree = "<group>"; };
 		49B876F11464825B00594A5D /* at_logo_info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_logo_info@2x.png"; sourceTree = "<group>"; };
-		49B876F814648F7100594A5D /* ATSurveys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATSurveys.h; path = ../modules/ApptentiveSurveys/ApptentiveSurveys/ATSurveys.h; sourceTree = "<group>"; };
 		49C002E71334172E0071F088 /* FeedbackDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FeedbackDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49C002EB1334172E0071F088 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		49C002ED1334172F0071F088 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -141,6 +140,7 @@
 		49E8918A134BF69C00DD098A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		49E891D3134FE40200DD098A /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		49E891D4134FE40200DD098A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		49EC5D981467199400634D43 /* ATSurveys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATSurveys.h; path = ../modules/ApptentiveSurveys/source/ATSurveys.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -202,7 +202,7 @@
 			children = (
 				4960E13E13455ACE00F6311F /* ATConnect.h */,
 				4942CD5E13C8D68E009BF758 /* ATAppRatingFlow.h */,
-				49B876F814648F7100594A5D /* ATSurveys.h */,
+				49EC5D981467199400634D43 /* ATSurveys.h */,
 				49B876C714647CE300594A5D /* ApptentiveSurveys.xcodeproj */,
 				49C00324133417390071F088 /* ApptentiveConnect.xcodeproj */,
 				49C002F11334172F0071F088 /* FeedbackDemo */,

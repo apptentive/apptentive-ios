@@ -46,5 +46,7 @@
 	
 	ATSurveyQuestion *question = [[survey questions] objectAtIndex:0];
 	STAssertTrue([question.answerChoices count] == 6, @"First question should have 6 answers");
+	
+	[parser release], parser = nil;
 }
 @end

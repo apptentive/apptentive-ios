@@ -12,8 +12,7 @@
 
 #define kATTaskQueueCodingVersion 1
 // Retry period in seconds.
-#warning TODO: increase for production
-#define kATTaskQueueRetryPeriod 60.0
+#define kATTaskQueueRetryPeriod 180.0
 
 #define kMaxFailureCount 500
 

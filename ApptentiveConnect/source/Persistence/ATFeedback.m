@@ -9,12 +9,13 @@
 #import "ATFeedback.h"
 #import "ATConnect.h"
 #import "ATBackend.h"
+#import "ATUtilities.h"
+
 #if TARGET_OS_IPHONE
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <CoreTelephony/CTCarrier.h>
-#elif TARGET_OS_MAC
-#import "ATUtilities.h"
 #endif
+
 
 #define kFeedbackCodingVersion 2
 
@@ -201,12 +202,6 @@
 }
 
 - (NSString *)formattedDate:(NSDate *)aDate {
-    time_t time = [aDate timeIntervalSince1970];
-    struct tm timeStruct;
-    localtime_r(&time, &timeStruct);
-    char buffer[200];
-    strftime(buffer, 200, "%Y-%m-%d %H:%M%z", &timeStruct);
-    NSString *result = [NSString stringWithCString:buffer encoding:NSASCIIStringEncoding];
-    return result;
+	return [ATUtilities stringRepresentationOfDate:aDate];
 }
 @end

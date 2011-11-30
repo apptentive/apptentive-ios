@@ -304,6 +304,43 @@
         }
     }
 }
+
+
++ (NSString *)stringRepresentationOfDate:(NSDate *)aDate {
+	static NSDateFormatter *dateFormatter = nil;
+	static NSDateFormatter *timeZoneFormatter = nil;
+	if (dateFormatter == nil) {
+		dateFormatter = [[NSDateFormatter alloc] init];
+		[dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+		timeZoneFormatter = [[NSDateFormatter alloc] init];
+		[timeZoneFormatter setDateFormat:@"Z"];
+	}
+	NSString *result = nil;
+	NSString *dateString = [dateFormatter stringFromDate:aDate];
+	NSString *timeZoneString = [timeZoneFormatter stringFromDate:aDate];
+	
+	NSTimeInterval interval = [aDate timeIntervalSince1970];
+	double fractionalSeconds = interval - (long)interval;
+	
+	// This is all necessary because of rdar://10500679 in which NSDateFormatter won't
+	// format fractional seconds past two decimal places. Also, strftime() doesn't seem
+	// to have fractional seconds on iOS.
+	if (fractionalSeconds == 0.0) {
+		result = [NSString stringWithFormat:@"%@ %@", dateString, timeZoneString];
+	} else {
+		NSString *f = [[NSString alloc] initWithFormat:@"%g", fractionalSeconds];
+		NSRange r = [f rangeOfString:@"."];
+		if (r.location != NSNotFound) {
+			NSString *truncatedFloat = [f substringFromIndex:r.location + r.length];
+			result = [NSString stringWithFormat:@"%@.%@ %@", dateString, truncatedFloat, timeZoneString];
+		} else {
+			// For some reason, we couldn't find the decimal place.
+			result = [NSString stringWithFormat:@"%@.%d %@", dateString, (long)(fractionalSeconds * 1000), timeZoneString];
+		}
+		[f release], f= nil;
+	}
+	return result;
+}
 @end
 
 

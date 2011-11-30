@@ -15,4 +15,5 @@
 
 }
 - (void)testEvenRect;
+- (void)testDateFormatting;
 @end

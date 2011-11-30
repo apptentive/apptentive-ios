@@ -34,6 +34,7 @@
 + (NSString *)randomStringOfLength:(NSUInteger)length;
 
 + (void)uniquifyArray:(NSMutableArray *)array;
++ (NSString *)stringRepresentationOfDate:(NSDate *)date;
 @end
 
 CGRect ATCGRectOfEvenSize(CGRect inRect);

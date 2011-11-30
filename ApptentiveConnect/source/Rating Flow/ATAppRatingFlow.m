@@ -8,6 +8,7 @@
 
 #import "ATAppRatingFlow.h"
 #import "ATConnect.h"
+#import "ATReachability.h"
 
 NSString *const ATAppRatingFlowLastUsedVersionKey = @"ATAppRatingFlowLastUsedVersionKey";
 NSString *const ATAppRatingFlowLastUsedVersionFirstUseDateKey = @"ATAppRatingFlowLastUsedVersionFirstUseDateKey";
@@ -306,6 +307,11 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
     do { // once
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         
+		// No network connection, don't show dialog.
+		if ([[ATReachability sharedReachability] currentNetworkStatus] == ATNetworkNotReachable) {
+			break;
+		}
+		
         // Check to see if the user has rated the app.
         NSNumber *rated = [defaults objectForKey:ATAppRatingFlowRatedAppKey];
         if (rated != nil && [rated boolValue]) {

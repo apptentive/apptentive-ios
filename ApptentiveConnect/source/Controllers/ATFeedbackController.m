@@ -46,6 +46,7 @@ enum {
 + (CGAffineTransform)viewTransformInWindow:(UIWindow *)window;
 - (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context;
 - (void)statusBarChanged:(NSNotification *)notification;
+- (void)applicationDidBecomeActive:(NSNotification *)notification;
 - (BOOL)shouldShowPaperclip;
 - (BOOL)shouldShowThumbnail;
 - (void)captureFeedbackState;
@@ -122,6 +123,7 @@ enum {
 		[presentingViewController.view setUserInteractionEnabled:NO];
 	}
 	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarChanged:) name:UIApplicationDidChangeStatusBarFrameNotification object:nil];
 	
@@ -369,7 +371,7 @@ enum {
 }
 
 - (void)unhide:(BOOL)animated {
-	self.window.windowLevel = UIWindowLevelAlert;
+	self.window.windowLevel = UIWindowLevelNormal;
 	self.window.hidden = NO;
 	if (animated) {
 		[UIView beginAnimations:@"windowUnhide" context:NULL];
@@ -525,6 +527,16 @@ enum {
 	[self positionInWindow];
 }
 
+
+- (void)applicationDidBecomeActive:(NSNotification *)notification {
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	if (self.window.hidden == NO) {
+		[self retain];
+		[self unhide:NO];
+	}
+	[pool release], pool = nil;
+}
+
 - (BOOL)shouldShowPaperclip {
 	return (attachmentOptions != 0);
 }
@@ -593,7 +605,6 @@ enum {
 	[self updateThumbnail];
 	self.window.alpha = 1.0;
 	[self.window makeKeyAndVisible];
-	[self.parentViewController.view.window addSubview:self.window];
 	[self positionInWindow];
 	[self.emailField becomeFirstResponder];
 	[self release];

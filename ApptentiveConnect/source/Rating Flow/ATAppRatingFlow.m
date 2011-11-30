@@ -152,7 +152,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 - (IBAction)showEnjoymentDialog:(id)sender
 #endif
 {
-    NSString *title = [NSString stringWithFormat:NSLocalizedString(@"Are you enjoying using %@?", @"Title for enjoyment alert view. Parameter is app name."), [self appName]];
+    NSString *title = [NSString stringWithFormat:NSLocalizedString(@"Do you love %@?", @"Title for enjoyment alert view. Parameter is app name."), [self appName]];
 #if TARGET_OS_IPHONE
     self.viewController = vc;
     if (!enjoymentDialog) {
@@ -188,11 +188,11 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 - (IBAction)showRatingDialog:(id)sender 
 #endif
 {
-    NSString *title = [NSString stringWithFormat:NSLocalizedString(@"Rate %@?", @"Rate app title. Parameter is app name."), [self appName]];
-    NSString *message = [NSString stringWithFormat:NSLocalizedString(@"If you enjoy %@, we'd really appreciate you taking the time to rate the app.", @"Rate app message. Parameter is app name."), [self appName]];
+    NSString *title = [NSString stringWithFormat:NSLocalizedString(@"Thank You", @"Rate app title.")];
+    NSString *message = [NSString stringWithFormat:NSLocalizedString(@"We're so happy to hear that you love %@! It'd be really helpful if you rated us in the App Store. Thanks so much for spending some time with us.", @"Rate app message. Parameter is app name."), [self appName]];
     NSString *rateAppTitle = [NSString stringWithFormat:NSLocalizedString(@"Rate %@", @"Rate app button title"), [self appName]];
-    NSString *noThanksTitle = NSLocalizedString(@"No thanks", @"cancel title for app rating dialog");
-    NSString *remindMeTitle = NSLocalizedString(@"Remind me later", @"Remind me later button title");
+    NSString *noThanksTitle = NSLocalizedString(@"No Thanks", @"cancel title for app rating dialog");
+    NSString *remindMeTitle = NSLocalizedString(@"Remind Me Later", @"Remind me later button title");
 #if TARGET_OS_IPHONE
     self.viewController = vc;
     if (!ratingDialog) {
@@ -231,7 +231,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
                 NSLog(@"No view controller to present feedback interface!!");
             } else {
                 ATConnect *connection = [ATConnect sharedConnection];
-                connection.customPlaceholderText = NSLocalizedString(@"Unhappy with this app? We'd love to hear why so we can make it better.", @"Custom placeholder feedback text when user is unhappy with the application.");
+                connection.customPlaceholderText = NSLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
                 ATFeedbackControllerType oldType = connection.feedbackControllerType;
                 connection.feedbackControllerType = ATFeedbackControllerSimple;
                 [connection presentFeedbackControllerFromViewController:self.viewController];

@@ -21,4 +21,17 @@
 	STAssertEquals(result2.size.width, (CGFloat)18.0, @"");
 	STAssertEquals(result2.size.height, (CGFloat)22.0, @"");
 }
+
+- (void)testDateFormatting {
+	// This test will only pass when the time zone is PST. *sigh*
+	NSDate *date = [NSDate dateWithTimeIntervalSince1970:1322609978.669914];
+	STAssertEqualObjects(@"2011-11-29 15:39:38.669914 -0800", [ATUtilities stringRepresentationOfDate:date], @"date doesn't match");
+	
+	date = [NSDate dateWithTimeIntervalSince1970:1322609978.669];
+	STAssertEqualObjects(@"2011-11-29 15:39:38.669 -0800", [ATUtilities stringRepresentationOfDate:date], @"date doesn't match");
+	
+	date = [NSDate dateWithTimeIntervalSince1970:1322609978.0];
+	STAssertEqualObjects(@"2011-11-29 15:39:38 -0800", [ATUtilities stringRepresentationOfDate:date], @"date doesn't match");
+	
+}
 @end

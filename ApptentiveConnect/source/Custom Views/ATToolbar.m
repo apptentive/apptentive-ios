@@ -7,6 +7,7 @@
 //
 
 #import "ATToolbar.h"
+#import "ATCustomButton.h"
 
 @implementation ATToolbar
 //!! Hack to adjust frame origin of left-most custom view and to force
@@ -36,7 +37,8 @@
 		if (adjustedFirstItem) {
 			NSUInteger i = 0;
 			for (UIBarButtonItem *item in items) {
-				if (i != 0 && item.customView != nil) {
+				// Also don't adjust any custom buttons.
+				if (i != 0 && item.customView != nil && ![item isKindOfClass:[ATCustomButton class]]) {
 					CGRect customFrame = item.customView.frame;
 					customFrame.origin.x += 4.0;
 					item.customView.frame = customFrame;

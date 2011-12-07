@@ -245,10 +245,16 @@ enum {
 		[self.view addSubview:photoControl];
 	}
 	
-	ATCustomButton *button = [[ATCustomButton alloc] initWithButtonStyle:ATCustomButtonStyleCancel];
-	[button setAction:@selector(cancelFeedback:) forTarget:self];
+	ATCustomButton *cancelButton = [[ATCustomButton alloc] initWithButtonStyle:ATCustomButtonStyleCancel];
+	[cancelButton setAction:@selector(cancelFeedback:) forTarget:self];
+	
+	ATCustomButton *sendButton = [[ATCustomButton alloc] initWithButtonStyle:ATCustomButtonStyleSend];
+	[sendButton setAction:@selector(donePressed:) forTarget:self];
+	self.doneButton = sendButton;
+	
 	NSMutableArray *toolbarItems = [[self.toolbar items] mutableCopy];
-	[toolbarItems insertObject:button atIndex:0];
+	[toolbarItems insertObject:cancelButton atIndex:0];
+	[toolbarItems addObject:sendButton];
 	
 	UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
 	titleLabel.text = ATLocalizedString(@"Give Feedback", @"Title of feedback screen.");
@@ -278,7 +284,8 @@ enum {
 	
 	self.toolbar.items = toolbarItems;
 	[toolbarItems release], toolbarItems = nil;
-	[button release], button = nil;
+	[cancelButton release], cancelButton = nil;
+	[sendButton release], sendButton = nil;
 	
 	[self setupFeedback];
 	[self updateSendButtonState];

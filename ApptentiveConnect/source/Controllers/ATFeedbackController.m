@@ -783,10 +783,10 @@ enum {
 		viewWidth = windowWidth - 12*2 - 100.0;
 		originX = floorf((windowWidth - viewWidth)/2.0);
 	} else {
-		viewHeight = isLandscape ? 188.0 : 257.0;
+		viewHeight = isLandscape ? 188.0 : 258.0;
 		viewHeight -= topPadding;
-		viewWidth = windowWidth - 10;
-		originX = 4.0;
+		viewWidth = windowWidth - 12;
+		originX = 6.0;
 	}
 	
 	CGRect f = self.view.frame;

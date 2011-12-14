@@ -7,14 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
+#import "ATBackend.h"
 
 typedef enum {
 	ATCustomButtonStyleCancel,
-	ATCustomButtonStyleDone
+	ATCustomButtonStyleSend
 } ATCustomButtonStyle;
 
 @interface ATTrackingButton : UIButton {
 @private
+	UIImageView *shadowView;
     UIEdgeInsets padding;
 }
 @property (nonatomic, assign) UIEdgeInsets padding;

@@ -7,8 +7,6 @@
 //
 
 #import "ATCustomButton.h"
-#import "ATBackend.h"
-#import <QuartzCore/QuartzCore.h>
 
 @implementation ATCustomButton
 
@@ -34,6 +32,25 @@
 		button.layer.shadowOffset = CGSizeMake(0.0, 1.0);
 		button.layer.shadowRadius = 2.0;
 		[button sizeToFit];
+	} else if (style == ATCustomButtonStyleSend) {
+		[button setTitle:NSLocalizedString(@"Send", @"Send button title") forState:UIControlStateNormal];
+		button.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin;
+		button.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+		button.titleLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		
+		[button setTitleShadowColor:[UIColor colorWithRed:63./256. green:63./256. blue:63./256. alpha:1.0] forState:UIControlStateNormal];
+		[button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+		
+		[button setBackgroundImage:[ATBackend imageNamed:@"at_send_bg"] forState:UIControlStateNormal];
+		[button setBackgroundImage:[ATBackend imageNamed:@"at_send_highlighted_bg"] forState:UIControlStateHighlighted];
+		[button setBackgroundImage:[ATBackend imageNamed:@"at_send_disabled_bg"] forState:UIControlStateDisabled];
+		button.layer.cornerRadius = 4.0;
+		button.layer.masksToBounds = YES;
+		button.layer.shadowColor = [UIColor whiteColor].CGColor;
+		button.layer.shadowOffset = CGSizeMake(0.0, 1.0);
+		button.layer.shadowRadius = 2.0;
+		[button sizeToFit];
+		
 	}
 	
 	self = [super initWithCustomView:button];
@@ -69,6 +86,15 @@
 	return CGRectContainsPoint(padded, [touch locationInView:self]);
 }
 
+- (void)setupButtonShadow {
+	if (shadowView == nil) {
+		UIImage *shadowImage = [[ATBackend imageNamed:@"at_button_shadow_overlay"] stretchableImageWithLeftCapWidth:5 topCapHeight:5];
+		shadowView = [[UIImageView alloc] initWithImage:shadowImage];
+		//shadowView.backgroundColor = [UIColor redColor];
+		[self addSubview:shadowView];
+	}
+}
+
 - (CGSize)sizeThatFits:(CGSize)size {
 	CGSize s = [super sizeThatFits:size];
 	
@@ -77,5 +103,20 @@
 	s.width = textSize.width + 20.0;
 	
 	return s;
+}
+
+- (void)layoutSubviews {
+	[super layoutSubviews];
+	[self setupButtonShadow];
+	shadowView.frame = self.bounds;
+	[self bringSubviewToFront:shadowView];
+}
+
+- (void)dealloc {
+	if (shadowView) {
+		[shadowView removeFromSuperview];
+		[shadowView release], shadowView = nil;
+	}
+	[super dealloc];
 }
 @end

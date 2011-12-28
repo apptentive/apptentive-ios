@@ -15,6 +15,7 @@
 #import "ATBackend.h"
 #import "ATConnect.h"
 #import "ATFeedback.h"
+#import "ATFeedbackMetrics.h"
 #import "ATHUDView.h"
 #import "ATInfoViewController.h"
 #import "ATSimpleImageViewController.h"
@@ -198,6 +199,8 @@ enum {
 	shadowView.alpha = 1.0;
 	[UIView commitAnimations];
 	[shadowView release], shadowView = nil;
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATFeedbackDidShowWindowNotification object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:ATFeedbackWindowTypeFeedback] forKey:ATFeedbackWindowTypeKey]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -207,7 +210,6 @@ enum {
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
-	
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackChanged:) name:UITextViewTextDidChangeNotification object:self.feedbackView];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contactInfoChanged:) name:ATContactUpdaterFinished object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(screenshotChanged:) name:ATImageViewChoseImage object:nil];
@@ -333,6 +335,7 @@ enum {
     } else {
         [self sendFeedbackAndDismiss];
     }
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATFeedbackDidHideWindowNotification object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:ATFeedbackEventTappedSend] forKey:ATFeedbackWindowHideEventKey]];
 }
 
 - (IBAction)photoPressed:(id)sender {
@@ -355,6 +358,7 @@ enum {
 - (IBAction)cancelFeedback:(id)sender {
     [self captureFeedbackState];
 	[self dismiss:YES];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATFeedbackDidHideWindowNotification object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:ATFeedbackEventTappedCancel] forKey:ATFeedbackWindowHideEventKey]];
 }
 
 - (void)dismiss:(BOOL)animated {

@@ -12,6 +12,7 @@
 #import "ATConnect.h"
 #import "ATFeedback.h"
 #import "ATFeedbackController.h"
+#import "ATFeedbackMetrics.h"
 #import "ATFeedbackTask.h"
 #import "ATTask.h"
 #import "ATTaskQueue.h"
@@ -56,6 +57,11 @@ enum {
 }
 
 #pragma mark - View lifecycle
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATFeedbackDidShowWindowNotification object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:ATFeedbackWindowTypeInfo] forKey:ATFeedbackWindowTypeKey]];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setup];
@@ -82,6 +88,7 @@ enum {
 
 - (IBAction)done:(id)sender {
     [self dismissModalViewControllerAnimated:YES];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATFeedbackDidHideWindowNotification object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:ATFeedbackWindowTypeInfo] forKey:ATFeedbackWindowTypeKey]];
 }
 
 - (IBAction)openApptentiveDotCom:(id)sender {

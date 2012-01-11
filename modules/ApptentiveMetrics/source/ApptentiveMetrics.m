@@ -10,7 +10,8 @@
 #import "ATFeedbackMetrics.h"
 #import "ATAppRatingMetrics.h"
 #import "ATMetric.h"
-
+#import "ATRecordTask.h"
+#import "ATTaskQueue.h"
 
 static NSString *ATMetricNameEnjoymentDialogLaunch = @"enjoyment_dialog.launch";
 static NSString *ATMetricNameEnjoymentDialogYes = @"enjoyment_dialog.yes";
@@ -63,7 +64,6 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 - (id)init {
 	self = [super init];
 	if (self) {
-		queuedMetrics = [[NSMutableArray alloc] init];
 		[self addMetricWithName:ATMetricNameAppLaunch info:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackDidShowWindow:) name:ATFeedbackDidShowWindowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackDidHideWindow:) name:ATFeedbackDidHideWindowNotification object:nil];
@@ -78,7 +78,6 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[queuedMetrics release], queuedMetrics = nil;
 	[super dealloc];
 }
 @end
@@ -90,8 +89,11 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 	ATMetric *metric = [[ATMetric alloc] init];
 	metric.name = name;
 	[metric addEntriesFromDictionary:userInfo];
-	[queuedMetrics addObject:metric];
+	ATRecordTask *task = [[ATRecordTask alloc] init];
+	[task setRecord:metric];
+	[[ATTaskQueue sharedTaskQueue] addTask:task];
 	[metric release], metric = nil;
+	[task release], task = nil;
 }
 
 - (ATFeedbackWindowType)windowTypeFromNotification:(NSNotification *)notification {

@@ -7,11 +7,15 @@
 //
 
 #import "ATMetric.h"
+#import "ATConnect.h"
+#import "ATUtilities.h"
+#import "ATWebClient.h"
+#import "ATWebClient+Metrics.h"
 
 #define kATMetricStorageVersion 1
 
 @implementation ATMetric
-@synthesize name, date, info;
+@synthesize name, info;
 
 - (id)init {
 	if ((self = [super init])) {
@@ -21,11 +25,10 @@
 }
 
 - (id)initWithCoder:(NSCoder *)coder {
-    if ((self = [super init])) {
+    if ((self = [super initWithCoder:coder])) {
         int version = [coder decodeIntForKey:@"version"];
         if (version == kATMetricStorageVersion) {
             self.name = [coder decodeObjectForKey:@"name"];
-            self.date = [coder decodeObjectForKey:@"date"];
             NSDictionary *d = [coder decodeObjectForKey:@"info"];
 			if (d != nil) {
 				info = [d mutableCopy];
@@ -41,15 +44,14 @@
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
+	[super encodeWithCoder:coder];
     [coder encodeInt:kATMetricStorageVersion forKey:@"version"];
     [coder encodeObject:self.name forKey:@"name"];
-    [coder encodeObject:self.date forKey:@"date"];
     [coder encodeObject:self.info forKey:@"info"];
 }
 
 - (void)dealloc {
 	[name release], name = nil;
-	[date release], date = nil;
 	[info release], info = nil;
 	[super dealloc];
 }
@@ -62,5 +64,28 @@
 	if (dictionary != nil) {
 		[info addEntriesFromDictionary:dictionary];
 	}
+}
+
+- (NSDictionary *)apiDictionary {
+    NSMutableDictionary *d = [NSMutableDictionary dictionaryWithDictionary:[super apiDictionary]];
+	
+	if (self.name) [d setObject:self.name forKey:@"record[metric][event]"];
+	
+	if (self.info) {
+		for (NSString *key in info) {
+			NSString *recordKey = [NSString stringWithFormat:@"record[metric][data][%@]", key];
+			NSObject *value = [info objectForKey:key];
+			NSObject *recordValue = info;
+			if ([value isKindOfClass:[NSDate class]]) {
+				recordValue = [ATUtilities stringRepresentationOfDate:(NSDate *)value];
+			}
+			[d setObject:recordValue forKey:recordKey];
+		}
+	}
+    return d;
+}
+
+- (ATAPIRequest *)requestForSendingRecord {
+	return [[ATWebClient sharedClient] requestForSendingMetric:self];
 }
 @end

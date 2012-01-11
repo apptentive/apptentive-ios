@@ -104,7 +104,7 @@ enum {
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
     if (section == kSectionTasks) {
         ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
-        return [queue count];
+        return [queue countOfTasksWithTaskNamesInSet:[NSSet setWithObject:@"feedback"]];
     } else {
         return 0;
     }
@@ -115,7 +115,7 @@ enum {
     UITableViewCell *result = nil;
     if (indexPath.section == kSectionTasks) {
         ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
-        ATTask *task = [queue taskAtIndex:indexPath.row];
+        ATTask *task = [queue taskAtIndex:indexPath.row withTaskNameInSet:[NSSet setWithObject:@"feedback"]];
         result = [aTableView dequeueReusableCellWithIdentifier:taskCellIdentifier];
         if (!result) {
             UINib *nib = [UINib nibWithNibName:@"ATTaskProgressCell" bundle:[ATConnect resourceBundle]];

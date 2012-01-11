@@ -12,6 +12,7 @@
 #import <AppKit/AppKit.h>
 #endif
 
+#import "ATRecord.h"
 
 typedef enum {
     ATFeedbackTypeFeedback,
@@ -22,7 +23,7 @@ typedef enum {
 
 NSString * const ATContactUpdaterFinished;
 
-@interface ATFeedback : NSObject {
+@interface ATFeedback : ATRecord <NSCoding> {
 }
 @property (nonatomic, assign) ATFeedbackType type;
 @property (nonatomic, retain) NSString *text;
@@ -34,11 +35,6 @@ NSString * const ATContactUpdaterFinished;
 #elif TARGET_OS_MAC
 @property (nonatomic, retain) NSImage *screenshot;
 #endif
-@property (nonatomic, retain) NSString *uuid;
-@property (nonatomic, retain) NSString *model;
-@property (nonatomic, retain) NSString *os_version;
-@property (nonatomic, retain) NSString *carrier;
-@property (nonatomic, retain) NSDate *date;
 /*! Used to keep hold of screenshot switch state. */
 @property (nonatomic, assign) BOOL screenshotSwitchEnabled;
 @property (nonatomic, assign) BOOL imageIsFromCamera;

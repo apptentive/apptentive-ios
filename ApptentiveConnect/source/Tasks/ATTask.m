@@ -53,4 +53,8 @@
 - (float)percentComplete {
     return 0.0f;
 }
+
+- (NSString *)taskName {
+	return @"task";
+}
 @end

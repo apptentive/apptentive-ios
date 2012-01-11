@@ -8,10 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ApptentiveMetrics : NSObject {
-@private
-	NSMutableArray *queuedMetrics;
-}
+@interface ApptentiveMetrics : NSObject
 + (id)sharedMetrics;
 @end
 

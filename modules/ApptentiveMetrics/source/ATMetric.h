@@ -7,13 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ATRecord.h"
 
-@interface ATMetric : NSObject <NSCoding> {
+@interface ATMetric : ATRecord <NSCoding> {
 @private
 	NSMutableDictionary *info;
 }
 @property (nonatomic, retain) NSString *name;
-@property (nonatomic, assign) NSDate *date;
 @property (nonatomic, readonly) NSDictionary *info;
 
 - (void)setValue:(id)value forKey:(NSString *)key;

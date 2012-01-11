@@ -20,6 +20,17 @@
 		49D11CEA14AAACFB00DF50CB /* ATMetric.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D11CE814AAACFB00DF50CB /* ATMetric.h */; };
 		49D11CEB14AAACFB00DF50CB /* ATMetric.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D11CE914AAACFB00DF50CB /* ATMetric.m */; };
 		49D11CEC14AAACFB00DF50CB /* ATMetric.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D11CE914AAACFB00DF50CB /* ATMetric.m */; };
+		49EA5AA514BCEE4B004F8A4D /* ATWebClient+Metrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EA5AA314BCEE4B004F8A4D /* ATWebClient+Metrics.h */; };
+		49EA5AA614BCEE4B004F8A4D /* ATWebClient+Metrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EA5AA414BCEE4B004F8A4D /* ATWebClient+Metrics.m */; };
+		49EA5AA914BCEE84004F8A4D /* ATWebClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EA5AA814BCEE84004F8A4D /* ATWebClient.h */; };
+		49EA5AAB14BCEE89004F8A4D /* ATWebClient_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EA5AAA14BCEE89004F8A4D /* ATWebClient_Private.h */; };
+		49EA5AAD14BCEF7D004F8A4D /* ATUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EA5AAC14BCEF7D004F8A4D /* ATUtilities.h */; };
+		49EA5AB414BD0C0A004F8A4D /* ATRecord.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EA5AB314BD0C0A004F8A4D /* ATRecord.h */; };
+		49EA5AB614BD0CA0004F8A4D /* ATBackend.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EA5AB514BD0CA0004F8A4D /* ATBackend.h */; };
+		49EA5AB814BD0E2B004F8A4D /* ATURLConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EA5AB714BD0E2B004F8A4D /* ATURLConnection.h */; };
+		49EA5ABA14BD0E42004F8A4D /* ATAPIRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EA5AB914BD0E42004F8A4D /* ATAPIRequest.h */; };
+		49EA5AC114BD11BD004F8A4D /* ATTaskQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EA5AC014BD11BD004F8A4D /* ATTaskQueue.h */; };
+		49EA5AC314BD11C6004F8A4D /* ATRecordTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EA5AC214BD11C6004F8A4D /* ATRecordTask.h */; };
 		49EF33CE14AA76AF00077F76 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49EF33CD14AA76AF00077F76 /* Foundation.framework */; };
 		49EF33DC14AA76AF00077F76 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49EF33DB14AA76AF00077F76 /* SenTestingKit.framework */; };
 		49EF33DE14AA76AF00077F76 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49EF33DD14AA76AF00077F76 /* UIKit.framework */; };
@@ -72,6 +83,17 @@
 		49AD1FAF14AAAA7900FFEEF7 /* ATConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATConnect.h; path = ../../ApptentiveConnect/source/ATConnect.h; sourceTree = "<group>"; };
 		49D11CE814AAACFB00DF50CB /* ATMetric.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMetric.h; sourceTree = "<group>"; };
 		49D11CE914AAACFB00DF50CB /* ATMetric.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMetric.m; sourceTree = "<group>"; };
+		49EA5AA314BCEE4B004F8A4D /* ATWebClient+Metrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ATWebClient+Metrics.h"; path = "URL Loading/ATWebClient+Metrics.h"; sourceTree = "<group>"; };
+		49EA5AA414BCEE4B004F8A4D /* ATWebClient+Metrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "ATWebClient+Metrics.m"; path = "URL Loading/ATWebClient+Metrics.m"; sourceTree = "<group>"; };
+		49EA5AA814BCEE84004F8A4D /* ATWebClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATWebClient.h; path = "../../ApptentiveConnect/source/URL Loading/ATWebClient.h"; sourceTree = "<group>"; };
+		49EA5AAA14BCEE89004F8A4D /* ATWebClient_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATWebClient_Private.h; path = "../../ApptentiveConnect/source/URL Loading/ATWebClient_Private.h"; sourceTree = "<group>"; };
+		49EA5AAC14BCEF7D004F8A4D /* ATUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATUtilities.h; path = ../../ApptentiveConnect/source/Misc/ATUtilities.h; sourceTree = "<group>"; };
+		49EA5AB314BD0C0A004F8A4D /* ATRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATRecord.h; path = ../../ApptentiveConnect/source/Persistence/ATRecord.h; sourceTree = "<group>"; };
+		49EA5AB514BD0CA0004F8A4D /* ATBackend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATBackend.h; path = ../../ApptentiveConnect/source/Persistence/ATBackend.h; sourceTree = "<group>"; };
+		49EA5AB714BD0E2B004F8A4D /* ATURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATURLConnection.h; path = "../../ApptentiveConnect/source/URL Loading/ATURLConnection.h"; sourceTree = "<group>"; };
+		49EA5AB914BD0E42004F8A4D /* ATAPIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATAPIRequest.h; path = "../../ApptentiveConnect/source/URL Loading/ATAPIRequest.h"; sourceTree = "<group>"; };
+		49EA5AC014BD11BD004F8A4D /* ATTaskQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATTaskQueue.h; path = ../../ApptentiveConnect/source/Tasks/ATTaskQueue.h; sourceTree = "<group>"; };
+		49EA5AC214BD11C6004F8A4D /* ATRecordTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATRecordTask.h; path = ../../ApptentiveConnect/source/Tasks/ATRecordTask.h; sourceTree = "<group>"; };
 		49EF33CA14AA76AF00077F76 /* libApptentiveMetrics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libApptentiveMetrics.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		49EF33CD14AA76AF00077F76 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		49EF33DA14AA76AF00077F76 /* ApptentiveMetricsTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApptentiveMetricsTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -112,6 +134,7 @@
 				49AD1F9B14AAAA2600FFEEF7 /* ApptentiveMetrics.m */,
 				49D11CE814AAACFB00DF50CB /* ATMetric.h */,
 				49D11CE914AAACFB00DF50CB /* ATMetric.m */,
+				49EA5AA714BCEE54004F8A4D /* URL Loading */,
 			);
 			path = source;
 			sourceTree = "<group>";
@@ -127,14 +150,40 @@
 			path = tests;
 			sourceTree = "<group>";
 		};
-		49EF33BF14AA76AF00077F76 = {
+		49EA5AA714BCEE54004F8A4D /* URL Loading */ = {
 			isa = PBXGroup;
 			children = (
+				49EA5AA314BCEE4B004F8A4D /* ATWebClient+Metrics.h */,
+				49EA5AA414BCEE4B004F8A4D /* ATWebClient+Metrics.m */,
+			);
+			name = "URL Loading";
+			sourceTree = "<group>";
+		};
+		49EA5AC414BD1274004F8A4D /* include */ = {
+			isa = PBXGroup;
+			children = (
+				49EA5AB514BD0CA0004F8A4D /* ATBackend.h */,
 				49AD1FAF14AAAA7900FFEEF7 /* ATConnect.h */,
 				49AD1FAB14AAAA6300FFEEF7 /* ATFeedbackMetrics.h */,
 				49AD1FAD14AAAA7000FFEEF7 /* ATAppRatingMetrics.h */,
+				49EA5AA814BCEE84004F8A4D /* ATWebClient.h */,
+				49EA5AAA14BCEE89004F8A4D /* ATWebClient_Private.h */,
+				49EA5AAC14BCEF7D004F8A4D /* ATUtilities.h */,
+				49EA5AB314BD0C0A004F8A4D /* ATRecord.h */,
+				49EA5AB714BD0E2B004F8A4D /* ATURLConnection.h */,
+				49EA5AB914BD0E42004F8A4D /* ATAPIRequest.h */,
+				49EA5AC014BD11BD004F8A4D /* ATTaskQueue.h */,
+				49EA5AC214BD11C6004F8A4D /* ATRecordTask.h */,
+			);
+			name = include;
+			sourceTree = "<group>";
+		};
+		49EF33BF14AA76AF00077F76 = {
+			isa = PBXGroup;
+			children = (
 				49EF33F414AA76BB00077F76 /* ApptentiveConnect.xcodeproj */,
 				49AD1F9814AAAA2600FFEEF7 /* source */,
+				49EA5AC414BD1274004F8A4D /* include */,
 				49AD1FA014AAAA4200FFEEF7 /* tests */,
 				49EF33CC14AA76AF00077F76 /* Frameworks */,
 				49EF33CB14AA76AF00077F76 /* Products */,
@@ -183,6 +232,16 @@
 				49AD1FAE14AAAA7000FFEEF7 /* ATAppRatingMetrics.h in Headers */,
 				49AD1FB014AAAA7900FFEEF7 /* ATConnect.h in Headers */,
 				49D11CEA14AAACFB00DF50CB /* ATMetric.h in Headers */,
+				49EA5AA514BCEE4B004F8A4D /* ATWebClient+Metrics.h in Headers */,
+				49EA5AA914BCEE84004F8A4D /* ATWebClient.h in Headers */,
+				49EA5AAB14BCEE89004F8A4D /* ATWebClient_Private.h in Headers */,
+				49EA5AAD14BCEF7D004F8A4D /* ATUtilities.h in Headers */,
+				49EA5AB414BD0C0A004F8A4D /* ATRecord.h in Headers */,
+				49EA5AB614BD0CA0004F8A4D /* ATBackend.h in Headers */,
+				49EA5AB814BD0E2B004F8A4D /* ATURLConnection.h in Headers */,
+				49EA5ABA14BD0E42004F8A4D /* ATAPIRequest.h in Headers */,
+				49EA5AC114BD11BD004F8A4D /* ATTaskQueue.h in Headers */,
+				49EA5AC314BD11C6004F8A4D /* ATRecordTask.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -317,6 +376,7 @@
 			files = (
 				49AD1F9E14AAAA2600FFEEF7 /* ApptentiveMetrics.m in Sources */,
 				49D11CEB14AAACFB00DF50CB /* ATMetric.m in Sources */,
+				49EA5AA614BCEE4B004F8A4D /* ATWebClient+Metrics.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

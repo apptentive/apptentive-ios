@@ -20,7 +20,7 @@
 static ATConnect *sharedConnection = nil;
 
 @implementation ATConnect
-@synthesize apiKey, showKeyboardAccessory, shouldTakeScreenshot, feedbackControllerType, customPlaceholderText;
+@synthesize apiKey, showKeyboardAccessory, shouldTakeScreenshot, showEmailField, initialEmailAddress, feedbackControllerType, customPlaceholderText;
 
 + (ATConnect *)sharedConnection {
     @synchronized(self) {
@@ -33,6 +33,7 @@ static ATConnect *sharedConnection = nil;
 
 - (id)init {
     if ((self = [super init])) {
+		self.showEmailField = YES;
         self.showKeyboardAccessory = YES;
 		self.shouldTakeScreenshot = YES;
 		additionalFeedbackData = [[NSMutableDictionary alloc] init];
@@ -50,6 +51,7 @@ static ATConnect *sharedConnection = nil;
 	[additionalFeedbackData release], additionalFeedbackData = nil;
     self.customPlaceholderText = nil;
     self.apiKey = nil;
+	self.initialEmailAddress = nil;
     [super dealloc];
 }
 
@@ -78,6 +80,10 @@ static ATConnect *sharedConnection = nil;
 	[additionalFeedbackData removeObjectForKey:key];
 }
 
+- (void)setShouldShowEmailFieldWhenRequestingFeedback:(BOOL)showEmailField {
+	
+}
+
 #if TARGET_OS_IPHONE
 - (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController {
 	UIImage *screenshot = nil;
@@ -94,6 +100,9 @@ static ATConnect *sharedConnection = nil;
             CGFloat rotation = [ATUtilities rotationOfViewHierarchyInRadians:viewController.view];
             screenshot = [ATUtilities imageByRotatingImage:screenshot byRadians:rotation];
         }
+		if (self.initialEmailAddress && [self.initialEmailAddress length] > 0) {
+			feedback.email = self.initialEmailAddress;
+		}
         ATContactStorage *contact = [ATContactStorage sharedContactStorage];
         if (contact.name) {
             feedback.name = contact.name;
@@ -101,7 +110,7 @@ static ATConnect *sharedConnection = nil;
         if (contact.phone) {
             feedback.phone = contact.phone;
         }
-        if (contact.email) {
+        if (contact.email && [contact.email length] > 0) {
             feedback.email = contact.email;
         }
         feedback.screenshot = screenshot;
@@ -112,6 +121,7 @@ static ATConnect *sharedConnection = nil;
     }
     
     ATFeedbackController *vc = [[ATFeedbackController alloc] init];
+	[vc setShowEmailAddressField:self.showEmailField];
 	if (self.customPlaceholderText) {
 		[vc setCustomPlaceholderText:self.customPlaceholderText];
 	}

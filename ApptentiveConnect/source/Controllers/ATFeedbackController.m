@@ -68,6 +68,7 @@ enum {
 @end
 
 @implementation ATFeedbackController
+@synthesize feedbackContainerView;
 @synthesize window=window$;
 @synthesize doneButton=doneButton$;
 @synthesize toolbar=toolbar$;
@@ -83,10 +84,12 @@ enum {
 @synthesize attachmentOptions;
 @synthesize feedback=feedback;
 @synthesize customPlaceholderText=customPlaceholderText$;
+@synthesize showEmailAddressField;
 
 - (id)init {
 	self = [super initWithNibName:@"ATFeedbackController" bundle:[ATConnect resourceBundle]];
 	if (self != nil) {
+		showEmailAddressField = YES;
 		startingStatusBarStyle = [[UIApplication sharedApplication] statusBarStyle];
 		self.attachmentOptions = ATFeedbackAllowPhotoAttachment | ATFeedbackAllowTakePhotoAttachment;
 	}
@@ -117,6 +120,16 @@ enum {
 
 - (void)presentFromViewController:(UIViewController *)newPresentingViewController animated:(BOOL)animated {
 	[self retain];
+	
+	if (self.showEmailAddressField == NO) {
+		CGRect emailFrame = [self.emailField frame];
+		CGRect feedbackFrame = [self.feedbackContainerView frame];
+		feedbackFrame.size.height += (feedbackFrame.origin.y - emailFrame.origin.y);
+		feedbackFrame.origin.y = emailFrame.origin.y;
+		[self.emailField setHidden:YES];
+		[self.grayLineView setHidden:YES];
+		[self.feedbackContainerView setFrame:feedbackFrame];
+	}
 	
 	if (presentingViewController != newPresentingViewController) {
 		[presentingViewController release], presentingViewController = nil;
@@ -166,7 +179,7 @@ enum {
 	
 	[self positionInWindow];
 	
-	if ([self.emailField.text isEqualToString:@""]) {
+	if ([self.emailField.text isEqualToString:@""] && self.showEmailAddressField) {
 		[self.emailField becomeFirstResponder];
 	} else {
 		[self.feedbackView becomeFirstResponder];
@@ -295,6 +308,7 @@ enum {
 }
 
 - (void)viewDidUnload {
+	[self setFeedbackContainerView:nil];
     [super viewDidUnload];
 	[self teardown];
 }
@@ -309,7 +323,7 @@ enum {
 
 - (IBAction)donePressed:(id)sender {
 	[self captureFeedbackState];
-    if (!self.feedback.email || [self.feedback.email length] == 0) {
+    if (self.showEmailAddressField && (!self.feedback.email || [self.feedback.email length] == 0)) {
 		self.window.windowLevel = UIWindowLevelNormal;
         NSString *title = NSLocalizedString(@"No email address?", @"Lack of email dialog title.");
         NSString *message = NSLocalizedString(@"We can't respond without one.\n\n\n", @"Lack of email dialog message.");
@@ -429,6 +443,9 @@ enum {
 	[photoControl removeFromSuperview];
 	[photoControl release], photoControl = nil;
 	
+	
+	[feedbackContainerView release], feedbackContainerView = nil;
+	
 	self.doneButton = nil;
 	self.toolbar = nil;
 	self.redLineView = nil;
@@ -511,7 +528,7 @@ enum {
 - (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
 	if ([animationID isEqualToString:@"animateIn"]) {
 		self.window.hidden = NO;
-		if ([self.emailField.text isEqualToString:@""]) {
+		if ([self.emailField.text isEqualToString:@""] && self.showEmailAddressField) {
 			[self.emailField becomeFirstResponder];
 		} else {
 			[self.feedbackView becomeFirstResponder];
@@ -617,7 +634,11 @@ enum {
 	self.window.alpha = 1.0;
 	[self.window makeKeyAndVisible];
 	[self positionInWindow];
-	[self.emailField becomeFirstResponder];
+	if (self.showEmailAddressField) {
+		[self.emailField becomeFirstResponder];
+	} else {
+		[self.feedbackView becomeFirstResponder];
+	}
 	[self release];
 }
 

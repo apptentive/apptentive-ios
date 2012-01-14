@@ -24,6 +24,7 @@ typedef enum {
 NSString * const ATContactUpdaterFinished;
 
 @interface ATFeedback : ATRecord <NSCoding> {
+	NSMutableDictionary *extraData;
 }
 @property (nonatomic, assign) ATFeedbackType type;
 @property (nonatomic, retain) NSString *text;
@@ -41,4 +42,5 @@ NSString * const ATContactUpdaterFinished;
 
 - (NSDictionary *)dictionary;
 - (NSDictionary *)apiDictionary;
+- (void)addExtraDataFromDictionary:(NSDictionary *)dictionary;
 @end

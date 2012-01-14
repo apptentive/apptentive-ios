@@ -35,6 +35,7 @@ static ATConnect *sharedConnection = nil;
     if ((self = [super init])) {
         self.showKeyboardAccessory = YES;
 		self.shouldTakeScreenshot = YES;
+		additionalFeedbackData = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -46,6 +47,7 @@ static ATConnect *sharedConnection = nil;
         feedbackWindowController = nil;
     }
 #endif
+	[additionalFeedbackData release], additionalFeedbackData = nil;
     self.customPlaceholderText = nil;
     self.apiKey = nil;
     [super dealloc];
@@ -60,12 +62,31 @@ static ATConnect *sharedConnection = nil;
     }
 }
 
+- (NSDictionary *)additionFeedbackInfo {
+	return additionalFeedbackData;
+}
+
+- (void)addAdditionalInfoToFeedback:(NSObject *)object withKey:(NSString *)key {
+	if ([object isKindOfClass:[NSDate class]]) {
+		[additionalFeedbackData setObject:[ATUtilities stringRepresentationOfDate:(NSDate *)object] forKey:key];
+	} else {
+		[additionalFeedbackData setObject:object forKey:key];
+	}
+}
+
+- (void)removeAdditionalInfoFromFeedbackWithKey:(NSString *)key {
+	[additionalFeedbackData removeObjectForKey:key];
+}
+
 #if TARGET_OS_IPHONE
 - (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController {
 	UIImage *screenshot = nil;
     
     if (![[ATBackend sharedBackend] currentFeedback]) {
         ATFeedback *feedback = [[ATFeedback alloc] init];
+		if (additionalFeedbackData && [additionalFeedbackData count]) {
+			[feedback addExtraDataFromDictionary:additionalFeedbackData];
+		}
     	if (self.shouldTakeScreenshot && self.feedbackControllerType != ATFeedbackControllerSimple) {
             screenshot = [ATUtilities imageByTakingScreenshot];
             // Get the rotation of the view hierarchy and rotate the screenshot as

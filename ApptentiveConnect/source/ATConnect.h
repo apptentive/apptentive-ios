@@ -32,6 +32,7 @@ typedef enum {
 #if !TARGET_OS_IPHONE
     ATFeedbackWindowController *feedbackWindowController;
 #endif
+	NSMutableDictionary *additionalFeedbackData;
 }
 @property (nonatomic, retain) NSString *apiKey;
 @property (nonatomic, assign) BOOL showKeyboardAccessory;
@@ -59,6 +60,12 @@ typedef enum {
 - (IBAction)showFeedbackWindowForQuestion:(id)sender;
 - (IBAction)showFeedbackWindowForBugReport:(id)sender;
 #endif
+
+/*! Adds an additional data field to any feedback sent. */
+- (void)addAdditionalInfoToFeedback:(NSObject<NSCoding> *)object withKey:(NSString *)key;
+
+/*! Removes an additional data field from the feedback sent. */
+- (void)removeAdditionalInfoFromFeedbackWithKey:(NSString *)key;
 
 /*!
  * Returns the NSBundle corresponding to the bundle containing ATConnect's

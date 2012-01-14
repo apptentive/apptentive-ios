@@ -169,7 +169,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 		self.errorTitle = ATLocalizedString(@"Network Connection Error", @"");
 		self.errorMessage = [sender.connectionError localizedDescription];
 	}
-    //*!!!!! Prefix line with // to debug HTTP stuff.
+    /*!!!!! Prefix line with // to debug HTTP stuff.
     if (YES) {
         NSData *d = [sender responseData];
         NSString *a = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];

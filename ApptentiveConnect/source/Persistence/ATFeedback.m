@@ -36,6 +36,7 @@
 }
 
 - (void)dealloc {
+	[extraData release], extraData = nil;
     self.text = nil;
     self.name = nil;
     self.email = nil;
@@ -76,10 +77,14 @@
                 self.screenshot = [[[NSImage alloc] initWithData:data] autorelease];
 #endif
             }
+			extraData = [coder decodeObjectForKey:@"extraData"];
         } else {
             [self release];
             return nil;
         }
+		if (!extraData) {
+			extraData = [[NSMutableDictionary alloc] init];
+		}
     }
     return self;
 }
@@ -92,6 +97,7 @@
     [coder encodeObject:self.name forKey:@"name"];
     [coder encodeObject:self.email forKey:@"email"];
     [coder encodeObject:self.phone forKey:@"phone"];
+	[coder encodeObject:extraData forKey:@"extraData"];
     if (self.screenshot) {
 #if TARGET_OS_IPHONE
         [coder encodeObject:UIImagePNGRepresentation(self.screenshot) forKey:@"screenshot"];
@@ -113,7 +119,18 @@
     if (self.phone) [d setObject:self.phone forKey:@"record[user][phone_number]"];
     if (self.text) [d setObject:self.text forKey:@"record[feedback][feedback]"];
     [d setObject:[self stringForFeedbackType:self.type] forKey:@"record[feedback][type]"];
+	if (extraData && [extraData count] > 0) {
+		for (NSString *key in extraData) {
+			NSString *fullKey = [NSString stringWithFormat:@"record[data][%@]", key];
+			[d setObject:[extraData objectForKey:key] forKey:fullKey];
+		}
+	}
 	return d;
+}
+
+
+- (void)addExtraDataFromDictionary:(NSDictionary *)dictionary {
+	[extraData addEntriesFromDictionary:dictionary];
 }
 
 - (ATAPIRequest *)requestForSendingRecord {
@@ -124,6 +141,7 @@
 
 @implementation ATFeedback (Private)
 - (void)setup {
+	extraData = [[NSMutableDictionary alloc] init];
 	self.type = ATFeedbackTypeFeedback;
 #if TARGET_OS_MAC
 	self.screenshotSwitchEnabled = YES;

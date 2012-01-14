@@ -181,4 +181,4 @@ flow.
 In [iTunesConnect](https://itunesconnect.apple.com/), go to "Manage Your 
 Applications" and click on your application. In the "App Information" 
 section of the page, look for the "Apple ID". It will be a number. This is
-your iTunes applicaiton ID.
+your iTunes application ID.

@@ -1,7 +1,7 @@
 2012-01-13 wooster
 ------------------
 * Start of version 0.2.
-* Added support for adding and removing initial data to feedback.
+* Added support for adding and removing extra data to feedback.
 * Added initial version of metrics module.
 * Added support for optionally showing or hiding the email address field on feedback.
 * Added support for setting an initial email address on the feedback form.

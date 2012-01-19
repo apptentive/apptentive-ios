@@ -9,6 +9,7 @@
 #import "ATAppRatingFlow.h"
 #import "ATConnect.h"
 #import "ATReachability.h"
+#import "ATAppRatingMetrics.h"
 
 NSString *const ATAppRatingFlowLastUsedVersionKey = @"ATAppRatingFlowLastUsedVersionKey";
 NSString *const ATAppRatingFlowLastUsedVersionFirstUseDateKey = @"ATAppRatingFlowLastUsedVersionFirstUseDateKey";
@@ -31,6 +32,8 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 
 
 @interface ATAppRatingFlow (Private)
+- (void)postNotification:(NSString *)name;
+- (void)postNotification:(NSString *)name forButton:(int)button;
 - (NSString *)appName;
 - (NSURL *)URLForRatingApp;
 - (void)openURLForRatingApp;
@@ -152,19 +155,19 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 - (IBAction)showEnjoymentDialog:(id)sender
 #endif
 {
-    NSString *title = [NSString stringWithFormat:NSLocalizedString(@"Do you love %@?", @"Title for enjoyment alert view. Parameter is app name."), [self appName]];
+    NSString *title = [NSString stringWithFormat:ATLocalizedString(@"Do you love %@?", @"Title for enjoyment alert view. Parameter is app name."), [self appName]];
 #if TARGET_OS_IPHONE
     self.viewController = vc;
     if (!enjoymentDialog) {
-        enjoymentDialog = [[UIAlertView alloc] initWithTitle:title message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"No", @"no"), NSLocalizedString(@"Yes", @"yes"), nil];
+        enjoymentDialog = [[UIAlertView alloc] initWithTitle:title message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"No", @"no"), ATLocalizedString(@"Yes", @"yes"), nil];
         [enjoymentDialog show];
     }
 #elif TARGET_OS_MAC
     NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-    [alert addButtonWithTitle:NSLocalizedString(@"Yes", @"yes")];
-    [alert addButtonWithTitle:NSLocalizedString(@"No", @"no")];
+    [alert addButtonWithTitle:ATLocalizedString(@"Yes", @"yes")];
+    [alert addButtonWithTitle:ATLocalizedString(@"No", @"no")];
     [alert setMessageText:title];
-    [alert setInformativeText:NSLocalizedString(@"You've been using this app for a while. Are you enjoying using it?", @"Enjoyment dialog text")];
+    [alert setInformativeText:ATLocalizedString(@"You've been using this app for a while. Are you enjoying using it?", @"Enjoyment dialog text")];
     [alert setAlertStyle:NSInformationalAlertStyle];
     [alert setIcon:[NSImage imageNamed:NSImageNameApplicationIcon]];
     NSUInteger result = [alert runModal];
@@ -179,6 +182,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
         [[ATConnect sharedConnection] showFeedbackWindow:self];
     }
 #endif
+	[self postNotification:ATAppRatingDidPromptForEnjoymentNotification];
     [self setRatingDialogWasShown];
 }
 
@@ -188,11 +192,11 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 - (IBAction)showRatingDialog:(id)sender 
 #endif
 {
-    NSString *title = [NSString stringWithFormat:NSLocalizedString(@"Thank You", @"Rate app title.")];
-    NSString *message = [NSString stringWithFormat:NSLocalizedString(@"We're so happy to hear that you love %@! It'd be really helpful if you rated us in the App Store. Thanks so much for spending some time with us.", @"Rate app message. Parameter is app name."), [self appName]];
-    NSString *rateAppTitle = [NSString stringWithFormat:NSLocalizedString(@"Rate %@", @"Rate app button title"), [self appName]];
-    NSString *noThanksTitle = NSLocalizedString(@"No Thanks", @"cancel title for app rating dialog");
-    NSString *remindMeTitle = NSLocalizedString(@"Remind Me Later", @"Remind me later button title");
+    NSString *title = ATLocalizedString(@"Thank You", @"Rate app title.");
+    NSString *message = [NSString stringWithFormat:ATLocalizedString(@"We're so happy to hear that you love %@! It'd be really helpful if you rated us in the App Store. Thanks so much for spending some time with us.", @"Rate app message. Parameter is app name."), [self appName]];
+    NSString *rateAppTitle = [NSString stringWithFormat:ATLocalizedString(@"Rate %@", @"Rate app button title"), [self appName]];
+    NSString *noThanksTitle = ATLocalizedString(@"No Thanks", @"cancel title for app rating dialog");
+    NSString *remindMeTitle = ATLocalizedString(@"Remind Me Later", @"Remind me later button title");
 #if TARGET_OS_IPHONE
     self.viewController = vc;
     if (!ratingDialog) {
@@ -217,6 +221,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
         [self openURLForRatingApp];
     }
 #endif
+	[self postNotification:ATAppRatingDidPromptForRatingNotification];
     [self setRatingDialogWasShown];
 }
 
@@ -226,12 +231,13 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
     if (alertView == enjoymentDialog) {
         [enjoymentDialog release], enjoymentDialog = nil;
         if (buttonIndex == 0) { // no
+			[self postNotification:ATAppRatingDidClickEnjoymentButtonNotification forButton:ATAppRatingEnjoymentButtonTypeNo];
             [self setUserDislikesThisVersion];
             if (!self.viewController) {
                 NSLog(@"No view controller to present feedback interface!!");
             } else {
                 ATConnect *connection = [ATConnect sharedConnection];
-                connection.customPlaceholderText = NSLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
+                connection.customPlaceholderText = ATLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
                 ATFeedbackControllerType oldType = connection.feedbackControllerType;
                 connection.feedbackControllerType = ATFeedbackControllerSimple;
                 [connection presentFeedbackControllerFromViewController:self.viewController];
@@ -240,15 +246,19 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
                 connection.feedbackControllerType = oldType;
             }
         } else if (buttonIndex == 1) { // yes
+			[self postNotification:ATAppRatingDidClickEnjoymentButtonNotification forButton:ATAppRatingEnjoymentButtonTypeYes];
             [self showRatingDialog:self.viewController];
         }
     } else if (alertView == ratingDialog) {
         [ratingDialog release], ratingDialog = nil;
         if (buttonIndex == 1) { // rate
+			[self postNotification:ATAppRatingDidClickRatingButtonNotification forButton:ATAppRatingButtonTypeRateApp];
             [self openURLForRatingApp];
         } else if (buttonIndex == 2) { // remind later
+			[self postNotification:ATAppRatingDidClickRatingButtonNotification forButton:ATAppRatingButtonTypeRemind];
             [self setRatingDialogWasShown];
         } else if (buttonIndex == 0) { // no thanks
+			[self postNotification:ATAppRatingDidClickRatingButtonNotification forButton:ATAppRatingButtonTypeNo];
             [self setDeclinedToRateThisVersion];
         }
         self.viewController = nil;
@@ -270,6 +280,15 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 
 
 @implementation ATAppRatingFlow (Private)
+- (void)postNotification:(NSString *)name {
+	[[NSNotificationCenter defaultCenter] postNotificationName:name object:self];
+}
+
+- (void)postNotification:(NSString *)name forButton:(int)button {
+	NSDictionary *userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:button] forKey:ATAppRatingButtonTypeKey];
+	[[NSNotificationCenter defaultCenter] postNotificationName:name object:self userInfo:userInfo];
+}
+
 - (NSString *)appName {
     NSString *displayName = nil;
     displayName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"];

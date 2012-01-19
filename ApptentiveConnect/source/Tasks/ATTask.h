@@ -22,4 +22,5 @@
 - (void)start;
 - (void)stop;
 - (float)percentComplete;
+- (NSString *)taskName;
 @end

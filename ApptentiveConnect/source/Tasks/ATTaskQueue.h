@@ -23,6 +23,8 @@
 - (void)addTask:(ATTask *)task;
 - (NSUInteger)count;
 - (ATTask *)taskAtIndex:(NSUInteger)index;
+- (NSUInteger)countOfTasksWithTaskNamesInSet:(NSSet *)taskNames;
+- (ATTask *)taskAtIndex:(NSUInteger)index withTaskNameInSet:(NSSet *)taskNames;
 - (void)start;
 - (void)stop;
 @end

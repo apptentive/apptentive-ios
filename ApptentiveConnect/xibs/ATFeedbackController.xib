@@ -375,6 +375,14 @@
 					<int key="connectionID">48</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">feedbackContainerView</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="824863356"/>
+					</object>
+					<int key="connectionID">64</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">showInfoView:</string>
 						<reference key="source" ref="206653923"/>
@@ -591,7 +599,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">63</int>
+			<int key="maxID">64</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -660,6 +668,7 @@
 							<string>backgroundView</string>
 							<string>doneButton</string>
 							<string>emailField</string>
+							<string>feedbackContainerView</string>
 							<string>feedbackView</string>
 							<string>grayLineView</string>
 							<string>logoControl</string>
@@ -675,6 +684,7 @@
 							<string>UIView</string>
 							<string>UIBarButtonItem</string>
 							<string>UITextField</string>
+							<string>UIView</string>
 							<string>ATDefaultTextView</string>
 							<string>UIView</string>
 							<string>UIControl</string>
@@ -693,6 +703,7 @@
 							<string>backgroundView</string>
 							<string>doneButton</string>
 							<string>emailField</string>
+							<string>feedbackContainerView</string>
 							<string>feedbackView</string>
 							<string>grayLineView</string>
 							<string>logoControl</string>
@@ -716,6 +727,10 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">emailField</string>
 								<string key="candidateClassName">UITextField</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">feedbackContainerView</string>
+								<string key="candidateClassName">UIView</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">feedbackView</string>

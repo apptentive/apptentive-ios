@@ -35,6 +35,7 @@
 		49C0031B1334172F0071F088 /* FeedbackDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C0031A1334172F0071F088 /* FeedbackDemoTests.m */; };
 		49E8918B134BF69C00DD098A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E8918A134BF69C00DD098A /* QuartzCore.framework */; };
 		49E891D5134FE40200DD098A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49E891D2134FE40200DD098A /* Localizable.strings */; };
+		49EA5AE514BD12F7004F8A4D /* libApptentiveMetrics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49EA5ADE14BD12BC004F8A4D /* libApptentiveMetrics.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +81,20 @@
 			remoteGlobalIDString = 49D1118C13341A7C00603373;
 			remoteInfo = ApptentiveResources;
 		};
+		49EA5ADD14BD12BC004F8A4D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 49EA5AD414BD12BC004F8A4D /* ApptentiveMetrics.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 49EF33CA14AA76AF00077F76;
+			remoteInfo = ApptentiveMetrics;
+		};
+		49EA5ADF14BD12BC004F8A4D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 49EA5AD414BD12BC004F8A4D /* ApptentiveMetrics.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 49EF33DA14AA76AF00077F76;
+			remoteInfo = ApptentiveMetricsTests;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -120,6 +135,7 @@
 		49E8918A134BF69C00DD098A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		49E891D3134FE40200DD098A /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		49E891D4134FE40200DD098A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		49EA5AD414BD12BC004F8A4D /* ApptentiveMetrics.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ApptentiveMetrics.xcodeproj; path = ../modules/ApptentiveMetrics/ApptentiveMetrics.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +143,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49EA5AE514BD12F7004F8A4D /* libApptentiveMetrics.a in Frameworks */,
 				493529C0138C7141000E464A /* libApptentiveConnect.a in Frameworks */,
 				49AA100E138B41A40082887A /* SystemConfiguration.framework in Frameworks */,
 				49E8918B134BF69C00DD098A /* QuartzCore.framework in Frameworks */,
@@ -170,6 +187,7 @@
 				4960E13E13455ACE00F6311F /* ATConnect.h */,
 				4942CD5E13C8D68E009BF758 /* ATAppRatingFlow.h */,
 				49C00324133417390071F088 /* ApptentiveConnect.xcodeproj */,
+				49EA5AD414BD12BC004F8A4D /* ApptentiveMetrics.xcodeproj */,
 				49C002F11334172F0071F088 /* FeedbackDemo */,
 				49C003111334172F0071F088 /* FeedbackDemoTests */,
 				49C002EA1334172E0071F088 /* Frameworks */,
@@ -268,6 +286,15 @@
 			path = resources/localization;
 			sourceTree = SOURCE_ROOT;
 		};
+		49EA5AD514BD12BC004F8A4D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				49EA5ADE14BD12BC004F8A4D /* libApptentiveMetrics.a */,
+				49EA5AE014BD12BC004F8A4D /* ApptentiveMetricsTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -335,6 +362,10 @@
 					ProductGroup = 49C00325133417390071F088 /* Products */;
 					ProjectRef = 49C00324133417390071F088 /* ApptentiveConnect.xcodeproj */;
 				},
+				{
+					ProductGroup = 49EA5AD514BD12BC004F8A4D /* Products */;
+					ProjectRef = 49EA5AD414BD12BC004F8A4D /* ApptentiveMetrics.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -364,6 +395,20 @@
 			fileType = wrapper.cfbundle;
 			path = ApptentiveResources.bundle;
 			remoteRef = 49D1119F13341A7C00603373 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		49EA5ADE14BD12BC004F8A4D /* libApptentiveMetrics.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libApptentiveMetrics.a;
+			remoteRef = 49EA5ADD14BD12BC004F8A4D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		49EA5AE014BD12BC004F8A4D /* ApptentiveMetricsTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ApptentiveMetricsTests.octest;
+			remoteRef = 49EA5ADF14BD12BC004F8A4D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

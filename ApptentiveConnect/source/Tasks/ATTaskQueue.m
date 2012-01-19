@@ -113,6 +113,33 @@ static ATTaskQueue *sharedTaskQueue = nil;
     }
 }
 
+- (NSUInteger)countOfTasksWithTaskNamesInSet:(NSSet *)taskNames {
+	NSUInteger count = 0;
+	@synchronized(self) {
+		for (ATTask *task in tasks) {
+			if ([taskNames containsObject:[task taskName]]) {
+				count++;
+			}
+		}
+	}
+	return count;
+}
+
+- (ATTask *)taskAtIndex:(NSUInteger)index withTaskNameInSet:(NSSet *)taskNames {
+	NSMutableArray *accum = [NSMutableArray array];
+	@synchronized(self) {
+		for (ATTask *task in tasks) {
+			if ([taskNames containsObject:[task taskName]]) {
+				[accum addObject:task];
+			}
+		}
+	}
+	if (index < [accum count]) {
+		return [accum objectAtIndex:index];
+	}
+	return nil;
+}
+
 - (void)start {
 	if ([[NSThread currentThread] isMainThread]) {
 		[self performSelectorInBackground:@selector(start) withObject:nil];

@@ -27,6 +27,7 @@ typedef enum {
 	UIImageView *photoFrameView;
 	UIControl *photoControl;
 	UIImage *currentImage;
+	BOOL showEmailAddressField;
 }
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *doneButton;
@@ -36,6 +37,7 @@ typedef enum {
 @property (nonatomic, retain) IBOutlet UIView *backgroundView;
 @property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, retain) IBOutlet UITextField *emailField;
+@property (nonatomic, retain) IBOutlet UIView *feedbackContainerView;
 @property (nonatomic, retain) IBOutlet ATDefaultTextView *feedbackView;
 @property (nonatomic, retain) IBOutlet UIControl *logoControl;
 @property (nonatomic, retain) IBOutlet UIImageView *logoImageView;
@@ -45,6 +47,7 @@ typedef enum {
 @property (nonatomic, retain) ATFeedback *feedback;
 @property (nonatomic, retain) NSString *customPlaceholderText;
 @property (nonatomic, assign) ATFeedbackAttachmentOptions attachmentOptions;
+@property (nonatomic, assign) BOOL showEmailAddressField;
 
 - (id)init;
 - (IBAction)cancelFeedback:(id)sender;

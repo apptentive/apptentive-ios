@@ -1,30 +1,30 @@
 //
-//  ATFeedbackTask.m
+//  ATRecordTask.m
 //  ApptentiveConnect
 //
-//  Created by Andrew Wooster on 3/20/11.
-//  Copyright 2011 Apptentive, Inc.. All rights reserved.
+//  Created by Andrew Wooster on 1/10/12.
+//  Copyright (c) 2012 Apptentive, Inc. All rights reserved.
 //
 
-#import "ATFeedbackTask.h"
+#import "ATRecordTask.h"
 #import "ATFeedback.h"
 #import "ATWebClient.h"
 
-#define kATFeedbackTaskCodingVersion 1
+#define kATRecordTaskCodingVersion 1
 
-@interface ATFeedbackTask (Private)
+@interface ATRecordTask (Private)
 - (void)setup;
 - (void)teardown;
 @end
 
-@implementation ATFeedbackTask
-@synthesize feedback;
+@implementation ATRecordTask
+@synthesize record;
 
 - (id)initWithCoder:(NSCoder *)coder {
     if ((self = [super init])) {
         int version = [coder decodeIntForKey:@"version"];
-        if (version == kATFeedbackTaskCodingVersion) {
-            self.feedback = [coder decodeObjectForKey:@"feedback"];
+        if (version == kATRecordTaskCodingVersion) {
+            self.record = [coder decodeObjectForKey:@"record"];
         } else {
             [self release];
             return nil;
@@ -34,8 +34,8 @@
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
-    [coder encodeInt:kATFeedbackTaskCodingVersion forKey:@"version"];
-    [coder encodeObject:self.feedback forKey:@"feedback"];
+    [coder encodeInt:kATRecordTaskCodingVersion forKey:@"version"];
+    [coder encodeObject:self.record forKey:@"record"];
 }
 
 - (void)dealloc {
@@ -45,7 +45,7 @@
 
 - (void)start {
     if (!request) {
-        request = [[self.feedback requestForSendingRecord] retain];
+        request = [[self.record requestForSendingRecord] retain];
 		if (request != nil) {
 			request.delegate = self;
 			[request start];
@@ -74,7 +74,7 @@
 }
 
 - (NSString *)taskName {
-	return @"feedback";
+	return @"record";
 }
 
 #pragma mark ATAPIRequestDelegate
@@ -99,7 +99,7 @@
 }
 @end
 
-@implementation ATFeedbackTask (Private)
+@implementation ATRecordTask (Private)
 - (void)setup {
     
 }

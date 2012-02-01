@@ -15,6 +15,7 @@
 #import "ATBackend.h"
 #import "ATConnect.h"
 #import "ATFeedback.h"
+#import "ATFeedbackMetrics.h"
 #import "ATHUDView.h"
 #import "ATInfoViewController.h"
 #import "ATSimpleImageViewController.h"
@@ -46,6 +47,7 @@ enum {
 + (CGAffineTransform)viewTransformInWindow:(UIWindow *)window;
 - (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context;
 - (void)statusBarChanged:(NSNotification *)notification;
+- (void)applicationDidBecomeActive:(NSNotification *)notification;
 - (BOOL)shouldShowPaperclip;
 - (BOOL)shouldShowThumbnail;
 - (void)captureFeedbackState;
@@ -66,6 +68,7 @@ enum {
 @end
 
 @implementation ATFeedbackController
+@synthesize feedbackContainerView;
 @synthesize window=window$;
 @synthesize doneButton=doneButton$;
 @synthesize toolbar=toolbar$;
@@ -81,10 +84,12 @@ enum {
 @synthesize attachmentOptions;
 @synthesize feedback=feedback;
 @synthesize customPlaceholderText=customPlaceholderText$;
+@synthesize showEmailAddressField;
 
 - (id)init {
 	self = [super initWithNibName:@"ATFeedbackController" bundle:[ATConnect resourceBundle]];
 	if (self != nil) {
+		showEmailAddressField = YES;
 		startingStatusBarStyle = [[UIApplication sharedApplication] statusBarStyle];
 		self.attachmentOptions = ATFeedbackAllowPhotoAttachment | ATFeedbackAllowTakePhotoAttachment;
 	}
@@ -116,12 +121,23 @@ enum {
 - (void)presentFromViewController:(UIViewController *)newPresentingViewController animated:(BOOL)animated {
 	[self retain];
 	
+	if (self.showEmailAddressField == NO) {
+		CGRect emailFrame = [self.emailField frame];
+		CGRect feedbackFrame = [self.feedbackContainerView frame];
+		feedbackFrame.size.height += (feedbackFrame.origin.y - emailFrame.origin.y);
+		feedbackFrame.origin.y = emailFrame.origin.y;
+		[self.emailField setHidden:YES];
+		[self.grayLineView setHidden:YES];
+		[self.feedbackContainerView setFrame:feedbackFrame];
+	}
+	
 	if (presentingViewController != newPresentingViewController) {
 		[presentingViewController release], presentingViewController = nil;
 		presentingViewController = [newPresentingViewController retain];
 		[presentingViewController.view setUserInteractionEnabled:NO];
 	}
 	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarChanged:) name:UIApplicationDidChangeStatusBarFrameNotification object:nil];
 	
@@ -163,7 +179,7 @@ enum {
 	
 	[self positionInWindow];
 	
-	if ([self.emailField.text isEqualToString:@""]) {
+	if ([self.emailField.text isEqualToString:@""] && self.showEmailAddressField) {
 		[self.emailField becomeFirstResponder];
 	} else {
 		[self.feedbackView becomeFirstResponder];
@@ -196,6 +212,8 @@ enum {
 	shadowView.alpha = 1.0;
 	[UIView commitAnimations];
 	[shadowView release], shadowView = nil;
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATFeedbackDidShowWindowNotification object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:ATFeedbackWindowTypeFeedback] forKey:ATFeedbackWindowTypeKey]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -205,7 +223,6 @@ enum {
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
-	
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackChanged:) name:UITextViewTextDidChangeNotification object:self.feedbackView];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contactInfoChanged:) name:ATContactUpdaterFinished object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(screenshotChanged:) name:ATImageViewChoseImage object:nil];
@@ -243,10 +260,16 @@ enum {
 		[self.view addSubview:photoControl];
 	}
 	
-	ATCustomButton *button = [[ATCustomButton alloc] initWithButtonStyle:ATCustomButtonStyleCancel];
-	[button setAction:@selector(cancelFeedback:) forTarget:self];
+	ATCustomButton *cancelButton = [[ATCustomButton alloc] initWithButtonStyle:ATCustomButtonStyleCancel];
+	[cancelButton setAction:@selector(cancelFeedback:) forTarget:self];
+	
+	ATCustomButton *sendButton = [[ATCustomButton alloc] initWithButtonStyle:ATCustomButtonStyleSend];
+	[sendButton setAction:@selector(donePressed:) forTarget:self];
+	self.doneButton = sendButton;
+	
 	NSMutableArray *toolbarItems = [[self.toolbar items] mutableCopy];
-	[toolbarItems insertObject:button atIndex:0];
+	[toolbarItems insertObject:cancelButton atIndex:0];
+	[toolbarItems addObject:sendButton];
 	
 	UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
 	titleLabel.text = ATLocalizedString(@"Give Feedback", @"Title of feedback screen.");
@@ -276,7 +299,8 @@ enum {
 	
 	self.toolbar.items = toolbarItems;
 	[toolbarItems release], toolbarItems = nil;
-	[button release], button = nil;
+	[cancelButton release], cancelButton = nil;
+	[sendButton release], sendButton = nil;
 	
 	[self setupFeedback];
 	[self updateSendButtonState];
@@ -284,6 +308,7 @@ enum {
 }
 
 - (void)viewDidUnload {
+	[self setFeedbackContainerView:nil];
     [super viewDidUnload];
 	[self teardown];
 }
@@ -298,7 +323,7 @@ enum {
 
 - (IBAction)donePressed:(id)sender {
 	[self captureFeedbackState];
-    if (!self.feedback.email || [self.feedback.email length] == 0) {
+    if (self.showEmailAddressField && (!self.feedback.email || [self.feedback.email length] == 0)) {
 		self.window.windowLevel = UIWindowLevelNormal;
         NSString *title = NSLocalizedString(@"No email address?", @"Lack of email dialog title.");
         NSString *message = NSLocalizedString(@"We can't respond without one.\n\n\n", @"Lack of email dialog message.");
@@ -324,6 +349,7 @@ enum {
     } else {
         [self sendFeedbackAndDismiss];
     }
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATFeedbackDidHideWindowNotification object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:ATFeedbackEventTappedSend] forKey:ATFeedbackWindowHideEventKey]];
 }
 
 - (IBAction)photoPressed:(id)sender {
@@ -346,6 +372,7 @@ enum {
 - (IBAction)cancelFeedback:(id)sender {
     [self captureFeedbackState];
 	[self dismiss:YES];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATFeedbackDidHideWindowNotification object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:ATFeedbackEventTappedCancel] forKey:ATFeedbackWindowHideEventKey]];
 }
 
 - (void)dismiss:(BOOL)animated {
@@ -369,7 +396,7 @@ enum {
 }
 
 - (void)unhide:(BOOL)animated {
-	self.window.windowLevel = UIWindowLevelAlert;
+	self.window.windowLevel = UIWindowLevelNormal;
 	self.window.hidden = NO;
 	if (animated) {
 		[UIView beginAnimations:@"windowUnhide" context:NULL];
@@ -415,6 +442,9 @@ enum {
 	
 	[photoControl removeFromSuperview];
 	[photoControl release], photoControl = nil;
+	
+	
+	[feedbackContainerView release], feedbackContainerView = nil;
 	
 	self.doneButton = nil;
 	self.toolbar = nil;
@@ -498,7 +528,7 @@ enum {
 - (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
 	if ([animationID isEqualToString:@"animateIn"]) {
 		self.window.hidden = NO;
-		if ([self.emailField.text isEqualToString:@""]) {
+		if ([self.emailField.text isEqualToString:@""] && self.showEmailAddressField) {
 			[self.emailField becomeFirstResponder];
 		} else {
 			[self.feedbackView becomeFirstResponder];
@@ -523,6 +553,16 @@ enum {
 
 - (void)statusBarChanged:(NSNotification *)notification {
 	[self positionInWindow];
+}
+
+
+- (void)applicationDidBecomeActive:(NSNotification *)notification {
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	if (self.window.hidden == NO) {
+		[self retain];
+		[self unhide:NO];
+	}
+	[pool release], pool = nil;
 }
 
 - (BOOL)shouldShowPaperclip {
@@ -593,9 +633,12 @@ enum {
 	[self updateThumbnail];
 	self.window.alpha = 1.0;
 	[self.window makeKeyAndVisible];
-	[self.parentViewController.view.window addSubview:self.window];
 	[self positionInWindow];
-	[self.emailField becomeFirstResponder];
+	if (self.showEmailAddressField) {
+		[self.emailField becomeFirstResponder];
+	} else {
+		[self.feedbackView becomeFirstResponder];
+	}
 	[self release];
 }
 
@@ -765,10 +808,10 @@ enum {
 		viewWidth = windowWidth - 12*2 - 100.0;
 		originX = floorf((windowWidth - viewWidth)/2.0);
 	} else {
-		viewHeight = isLandscape ? 188.0 : 257.0;
+		viewHeight = isLandscape ? 188.0 : 258.0;
 		viewHeight -= topPadding;
-		viewWidth = windowWidth - 10;
-		originX = 4.0;
+		viewWidth = windowWidth - 12;
+		originX = 6.0;
 	}
 	
 	CGRect f = self.view.frame;

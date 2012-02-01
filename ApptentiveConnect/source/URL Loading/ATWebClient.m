@@ -16,10 +16,9 @@
 #import "ATFeedback.h"
 #import "ATURLConnection.h"
 #import "ATUtilities.h"
+#import "ATWebClient_Private.h"
 
-#ifdef SUPPORT_JSON
-#import "JSON.h"
-#endif
+#import "JSONKit.h"
 
 #import "NSData+ATBase64.h"
 
@@ -33,8 +32,6 @@
 #endif
 
 static ATWebClient *sharedSingleton = nil;
-
-
 
 @implementation ATWebClient
 + (ATWebClient *)sharedClient {
@@ -57,7 +54,7 @@ static ATWebClient *sharedSingleton = nil;
 - (ATAPIRequest *)requestForGettingContactInfo {
     NSString *uuid = [[ATBackend sharedBackend] deviceUUID];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:uuid, @"uuid", nil];
-    NSString *urlString = [NSString stringWithFormat:@"%@/records/recent_user?%@", kApptentiveBaseURL, [self stringForParameters:parameters]];
+	NSString *urlString = [self apiURLStringWithPath:[NSString stringWithFormat:@"records/recent_user?%@", [self stringForParameters:parameters]]];
     ATURLConnection *conn = [self connectionToGet:[NSURL URLWithString:urlString]];
     conn.timeoutInterval = 20.0;
     ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:[self commonChannelName]];
@@ -67,7 +64,7 @@ static ATWebClient *sharedSingleton = nil;
 
 - (ATAPIRequest *)requestForPostingFeedback:(ATFeedback *)feedback {
     NSDictionary *postData = [feedback apiDictionary];
-    NSString *url = [NSString stringWithFormat:@"%@/records", kApptentiveBaseURL];
+	NSString *url = [self apiURLStringWithPath:@"records"];
     ATURLConnection *conn = nil;
     
     if (feedback.screenshot) {
@@ -123,6 +120,15 @@ static ATWebClient *sharedSingleton = nil;
 		result = [(NSNumber *)value stringValue];
 	}
 	return result;
+}
+
+
+- (NSString *)apiBaseURLString {
+	return kApptentiveBaseURL;
+}
+
+- (NSString *)apiURLStringWithPath:(NSString *)path {
+	return [NSString stringWithFormat:@"%@/%@", kApptentiveBaseURL, path];
 }
 
 - (NSString *)userAgentString {

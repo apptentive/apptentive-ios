@@ -10,10 +10,7 @@
 #import "ATConnect.h"
 #import "ATConnectionManager.h"
 #import "ATURLConnection.h"
-
-#ifdef SUPPORT_JSON
-#import "JSON.h"
-#endif
+#import "JSONKit.h"
 
 #if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
@@ -138,9 +135,8 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 			break;
 		}
         
-#ifdef SUPPORT_JSON
 		if (self.returnType == ATAPIRequestReturnTypeJSON) {
-			id json = [s JSONValue];
+			id json = [s objectFromJSONString];
 			if (!json) {
 				self.failed = YES;
 				self.errorTitle = ATLocalizedString(@"Invalid response from server.", @"");
@@ -149,7 +145,6 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 			result = json;
 			break;
 		}
-#endif
 	} while (NO);
 	
 	if (delegate) {
@@ -174,7 +169,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 		self.errorTitle = ATLocalizedString(@"Network Connection Error", @"");
 		self.errorMessage = [sender.connectionError localizedDescription];
 	}
-    //*!!!!! Prefix line with // to debug HTTP stuff.
+    /*!!!!! Prefix line with // to debug HTTP stuff.
     if (YES) {
         NSData *d = [sender responseData];
         NSString *a = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];

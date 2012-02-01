@@ -13,6 +13,11 @@
 
 @interface ATWebClient (Private)
 - (NSString *)userAgentString;
+
+#pragma mark API URL String
+- (NSString *)apiBaseURLString;
+- (NSString *)apiURLStringWithPath:(NSString *)path;
+
 #pragma mark Query Parameter Encoding
 - (NSString *)stringForParameters:(NSDictionary *)parameters;
 - (NSString *)stringForParameter:(id)value;

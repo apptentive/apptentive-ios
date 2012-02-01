@@ -9,65 +9,45 @@
 #import "ATFeedback.h"
 #import "ATConnect.h"
 #import "ATBackend.h"
+#import "ATUtilities.h"
+#import "ATWebClient.h"
+
 #if TARGET_OS_IPHONE
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <CoreTelephony/CTCarrier.h>
-#elif TARGET_OS_MAC
-#import "ATUtilities.h"
 #endif
+
 
 #define kFeedbackCodingVersion 2
 
 @interface ATFeedback (Private)
+- (void)setup;
 - (ATFeedbackType)feedbackTypeFromString:(NSString *)feedbackString;
 - (NSString *)stringForFeedbackType:(ATFeedbackType)feedbackType;
-- (NSString *)formattedDate:(NSDate *)aDate;
 @end
 
 @implementation ATFeedback
-@synthesize type, text, name, email, phone, screenshot, uuid, model, os_version, carrier, date, screenshotSwitchEnabled, imageIsFromCamera;
+@synthesize type, text, name, email, phone, screenshot, screenshotSwitchEnabled, imageIsFromCamera;
 - (id)init {
     if ((self = [super init])) {
-        self.type = ATFeedbackTypeFeedback;
-        self.uuid = [[ATBackend sharedBackend] deviceUUID];
-#if TARGET_OS_IPHONE
-        self.model = [[UIDevice currentDevice] model];
-        self.os_version = [NSString stringWithFormat:@"%@ %@", [[UIDevice currentDevice] systemName], [[UIDevice currentDevice] systemVersion]];
-        if ([CTTelephonyNetworkInfo class]) {
-            CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
-            CTCarrier *c = [netInfo subscriberCellularProvider];
-            if (c.carrierName) {
-                self.carrier = c.carrierName;
-            }
-            [netInfo release];
-        }
-#elif TARGET_OS_MAC
-        self.model = [ATUtilities currentMachineName];
-        self.os_version = [NSString stringWithFormat:@"%@ %@", [ATUtilities currentSystemName], [ATUtilities currentSystemVersion]];
-        self.carrier = @"";
-        self.screenshotSwitchEnabled = YES;
-#endif
-        self.date = [NSDate date];
+		[self setup];
     }
     return self;
 }
 
 - (void)dealloc {
+	[extraData release], extraData = nil;
     self.text = nil;
     self.name = nil;
     self.email = nil;
     self.phone = nil;
     self.screenshot = nil;
-    self.uuid = nil;
-    self.model = nil;
-    self.os_version = nil;
-    self.carrier = nil;
-    self.date = nil;
     [super dealloc];
 }
 
 - (id)initWithCoder:(NSCoder *)coder {
-    if ((self = [self init])) {
+    if ((self = [super initWithCoder:coder])) {
+		[self setup];
         int version = [coder decodeIntForKey:@"version"];
         if (version == 1) {
             self.type = [self feedbackTypeFromString:[coder decodeObjectForKey:@"type"]];
@@ -83,10 +63,6 @@
                 self.screenshot = [[[NSImage alloc] initWithData:data] autorelease];
 #endif
             }
-            self.uuid = [coder decodeObjectForKey:@"uuid"];
-            self.model = [coder decodeObjectForKey:@"model"];
-            self.os_version = [coder decodeObjectForKey:@"os_version"];
-            self.carrier = [coder decodeObjectForKey:@"carrier"];
         } else if (version == kFeedbackCodingVersion) {
             self.type = [coder decodeIntForKey:@"type"];
             self.text = [coder decodeObjectForKey:@"text"];
@@ -101,28 +77,27 @@
                 self.screenshot = [[[NSImage alloc] initWithData:data] autorelease];
 #endif
             }
-            self.uuid = [coder decodeObjectForKey:@"uuid"];
-            self.model = [coder decodeObjectForKey:@"model"];
-            self.os_version = [coder decodeObjectForKey:@"os_version"];
-            self.carrier = [coder decodeObjectForKey:@"carrier"];
-            if ([coder containsValueForKey:@"date"]) {
-                self.date = [coder decodeObjectForKey:@"date"];
-            }
+			extraData = [coder decodeObjectForKey:@"extraData"];
         } else {
             [self release];
             return nil;
         }
+		if (!extraData) {
+			extraData = [[NSMutableDictionary alloc] init];
+		}
     }
     return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
+	[super encodeWithCoder:coder];
     [coder encodeInt:kFeedbackCodingVersion forKey:@"version"];
 	[coder encodeInt:self.type forKey:@"type"];
     [coder encodeObject:self.text forKey:@"text"];
     [coder encodeObject:self.name forKey:@"name"];
     [coder encodeObject:self.email forKey:@"email"];
     [coder encodeObject:self.phone forKey:@"phone"];
+	[coder encodeObject:extraData forKey:@"extraData"];
     if (self.screenshot) {
 #if TARGET_OS_IPHONE
         [coder encodeObject:UIImagePNGRepresentation(self.screenshot) forKey:@"screenshot"];
@@ -131,11 +106,6 @@
         [coder encodeObject:data forKey:@"screenshot"];
 #endif
     }
-    [coder encodeObject:self.uuid forKey:@"uuid"];
-    [coder encodeObject:self.model forKey:@"model"];
-    [coder encodeObject:self.os_version forKey:@"os_version"];
-    [coder encodeObject:self.carrier forKey:@"carrier"];
-    [coder encodeObject:self.date forKey:@"date"];
 }
 
 - (NSDictionary *)dictionary {
@@ -143,30 +113,41 @@
 }
 
 - (NSDictionary *)apiDictionary {
-    NSMutableDictionary *d = [NSMutableDictionary dictionary];
-    if (self.uuid) [d setObject:self.uuid forKey:@"record[device][uuid]"];
+    NSMutableDictionary *d = [NSMutableDictionary dictionaryWithDictionary:[super apiDictionary]];
     if (self.name) [d setObject:self.name forKey:@"record[user][name]"];
     if (self.email) [d setObject:self.email forKey:@"record[user][email]"];
     if (self.phone) [d setObject:self.phone forKey:@"record[user][phone_number]"];
-    if (self.model) [d setObject:self.model forKey:@"record[device][model]"];
-    if (self.os_version) [d setObject:self.os_version forKey:@"record[device][os_version]"];
-    if (self.carrier) [d setObject:self.carrier forKey:@"record[device][carrier]"];
     if (self.text) [d setObject:self.text forKey:@"record[feedback][feedback]"];
     [d setObject:[self stringForFeedbackType:self.type] forKey:@"record[feedback][type]"];
-    
-    [d setObject:[self formattedDate:self.date] forKey:@"record[date]"];
-    
-    // Add some client information.
-    [d setObject:kATConnectVersionString forKey:@"record[client][version]"];
-    [d setObject:kATConnectPlatformString forKey:@"record[client][os]"];
-    [d setObject:@"Apptentive, Inc." forKey:@"record[client][author]"];
-    [d setObject:@"Apptentive, Inc." forKey:@"record[client][author]"];
-    return d;
+	if (extraData && [extraData count] > 0) {
+		for (NSString *key in extraData) {
+			NSString *fullKey = [NSString stringWithFormat:@"record[data][%@]", key];
+			[d setObject:[extraData objectForKey:key] forKey:fullKey];
+		}
+	}
+	return d;
+}
+
+
+- (void)addExtraDataFromDictionary:(NSDictionary *)dictionary {
+	[extraData addEntriesFromDictionary:dictionary];
+}
+
+- (ATAPIRequest *)requestForSendingRecord {
+	return [[ATWebClient sharedClient] requestForPostingFeedback:self];
 }
 @end
 
 
 @implementation ATFeedback (Private)
+- (void)setup {
+	extraData = [[NSMutableDictionary alloc] init];
+	self.type = ATFeedbackTypeFeedback;
+#if TARGET_OS_MAC
+	self.screenshotSwitchEnabled = YES;
+#endif
+}
+
 - (ATFeedbackType)feedbackTypeFromString:(NSString *)feedbackString {
     if ([feedbackString isEqualToString:@"feedback"] || [feedbackString isEqualToString:@"suggestion"]) {
         return ATFeedbackTypeFeedback;
@@ -197,16 +178,6 @@
             result = @"feedback";
             break;
     }
-    return result;
-}
-
-- (NSString *)formattedDate:(NSDate *)aDate {
-    time_t time = [aDate timeIntervalSince1970];
-    struct tm timeStruct;
-    localtime_r(&time, &timeStruct);
-    char buffer[200];
-    strftime(buffer, 200, "%Y-%m-%d %H:%M%z", &timeStruct);
-    NSString *result = [NSString stringWithCString:buffer encoding:NSASCIIStringEncoding];
     return result;
 }
 @end

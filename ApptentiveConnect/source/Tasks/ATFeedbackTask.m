@@ -45,10 +45,14 @@
 
 - (void)start {
     if (!request) {
-        request = [[[ATWebClient sharedClient] requestForPostingFeedback:self.feedback] retain];
-        request.delegate = self;
-        [request start];
-        self.inProgress = YES;
+        request = [[self.feedback requestForSendingRecord] retain];
+		if (request != nil) {
+			request.delegate = self;
+			[request start];
+			self.inProgress = YES;
+		} else {
+			self.finished = YES;
+		}
     }
 }
 
@@ -67,6 +71,10 @@
     } else {
         return 0.0f;
     }
+}
+
+- (NSString *)taskName {
+	return @"feedback";
 }
 
 #pragma mark ATAPIRequestDelegate

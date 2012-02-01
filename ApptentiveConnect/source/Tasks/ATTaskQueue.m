@@ -12,8 +12,7 @@
 
 #define kATTaskQueueCodingVersion 1
 // Retry period in seconds.
-#warning TODO: increase for production
-#define kATTaskQueueRetryPeriod 60.0
+#define kATTaskQueueRetryPeriod 180.0
 
 #define kMaxFailureCount 500
 
@@ -112,6 +111,33 @@ static ATTaskQueue *sharedTaskQueue = nil;
     @synchronized(self) {
         return [tasks objectAtIndex:index];
     }
+}
+
+- (NSUInteger)countOfTasksWithTaskNamesInSet:(NSSet *)taskNames {
+	NSUInteger count = 0;
+	@synchronized(self) {
+		for (ATTask *task in tasks) {
+			if ([taskNames containsObject:[task taskName]]) {
+				count++;
+			}
+		}
+	}
+	return count;
+}
+
+- (ATTask *)taskAtIndex:(NSUInteger)index withTaskNameInSet:(NSSet *)taskNames {
+	NSMutableArray *accum = [NSMutableArray array];
+	@synchronized(self) {
+		for (ATTask *task in tasks) {
+			if ([taskNames containsObject:[task taskName]]) {
+				[accum addObject:task];
+			}
+		}
+	}
+	if (index < [accum count]) {
+		return [accum objectAtIndex:index];
+	}
+	return nil;
 }
 
 - (void)start {

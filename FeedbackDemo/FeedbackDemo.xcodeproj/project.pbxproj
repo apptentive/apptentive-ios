@@ -17,10 +17,8 @@
 		4960E139134432F400F6311F /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 4960E138134432F400F6311F /* iTunesArtwork */; };
 		4982ECE6133C2DCF00B91781 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4982ECE4133C2DCF00B91781 /* MainWindow-iPad.xib */; };
 		49AA100E138B41A40082887A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49AA100D138B41A40082887A /* SystemConfiguration.framework */; };
+		49AB111A14D8D4F300D13C02 /* libApptentiveSurveys.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 493E6CDF14D8D469003F22FF /* libApptentiveSurveys.a */; };
 		49B3D9A31340084E00B5A5CD /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D9A21340084E00B5A5CD /* CoreTelephony.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		49B876D514647D0900594A5D /* libApptentiveSurveys.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B876D114647CE400594A5D /* libApptentiveSurveys.a */; };
-		49B876F21464825B00594A5D /* at_logo_info.png in Resources */ = {isa = PBXBuildFile; fileRef = 49B876F01464825B00594A5D /* at_logo_info.png */; };
-		49B876F31464825B00594A5D /* at_logo_info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 49B876F11464825B00594A5D /* at_logo_info@2x.png */; };
 		49C002EC1334172E0071F088 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C002EB1334172E0071F088 /* UIKit.framework */; };
 		49C002EE1334172F0071F088 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C002ED1334172F0071F088 /* Foundation.framework */; };
 		49C002F01334172F0071F088 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C002EF1334172F0071F088 /* CoreGraphics.framework */; };
@@ -38,9 +36,24 @@
 		49C0031B1334172F0071F088 /* FeedbackDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C0031A1334172F0071F088 /* FeedbackDemoTests.m */; };
 		49E8918B134BF69C00DD098A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E8918A134BF69C00DD098A /* QuartzCore.framework */; };
 		49E891D5134FE40200DD098A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49E891D2134FE40200DD098A /* Localizable.strings */; };
+		49EA5AE514BD12F7004F8A4D /* libApptentiveMetrics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49EA5ADE14BD12BC004F8A4D /* libApptentiveMetrics.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		493E6CDE14D8D469003F22FF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 493E6CD514D8D468003F22FF /* ApptentiveSurveys.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 49B8767F14647C5200594A5D;
+			remoteInfo = ApptentiveSurveys;
+		};
+		493E6CE014D8D469003F22FF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 493E6CD514D8D468003F22FF /* ApptentiveSurveys.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 49B8768F14647C5200594A5D;
+			remoteInfo = ApptentiveSurveysTests;
+		};
 		49AA1026138B4E500082887A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 49C00324133417390071F088 /* ApptentiveConnect.xcodeproj */;
@@ -48,19 +61,12 @@
 			remoteGlobalIDString = 49D1118B13341A7C00603373;
 			remoteInfo = ApptentiveResources;
 		};
-		49B876D014647CE400594A5D /* PBXContainerItemProxy */ = {
+		49AB111B14D8D4FC00D13C02 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 49B876C714647CE300594A5D /* ApptentiveSurveys.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 49B8767F14647C5200594A5D;
+			containerPortal = 493E6CD514D8D468003F22FF /* ApptentiveSurveys.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 49B8767E14647C5200594A5D;
 			remoteInfo = ApptentiveSurveys;
-		};
-		49B876D214647CE400594A5D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 49B876C714647CE300594A5D /* ApptentiveSurveys.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 49B8768F14647C5200594A5D;
-			remoteInfo = ApptentiveSurveysTests;
 		};
 		49C0030F1334172F0071F088 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -97,9 +103,24 @@
 			remoteGlobalIDString = 49D1118C13341A7C00603373;
 			remoteInfo = ApptentiveResources;
 		};
+		49EA5ADD14BD12BC004F8A4D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 49EA5AD414BD12BC004F8A4D /* ApptentiveMetrics.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 49EF33CA14AA76AF00077F76;
+			remoteInfo = ApptentiveMetrics;
+		};
+		49EA5ADF14BD12BC004F8A4D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 49EA5AD414BD12BC004F8A4D /* ApptentiveMetrics.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 49EF33DA14AA76AF00077F76;
+			remoteInfo = ApptentiveMetricsTests;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		493E6CD514D8D468003F22FF /* ApptentiveSurveys.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ApptentiveSurveys.xcodeproj; path = ../modules/ApptentiveSurveys/ApptentiveSurveys.xcodeproj; sourceTree = SOURCE_ROOT; };
 		4942CD5E13C8D68E009BF758 /* ATAppRatingFlow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATAppRatingFlow.h; path = "../ApptentiveConnect/source/Rating Flow/ATAppRatingFlow.h"; sourceTree = SOURCE_ROOT; };
 		4960E1221344326B00F6311F /* icon-114x114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-114x114.png"; sourceTree = "<group>"; };
 		4960E1231344326B00F6311F /* icon-29x29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-29x29.png"; sourceTree = "<group>"; };
@@ -110,10 +131,8 @@
 		4960E13E13455ACE00F6311F /* ATConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATConnect.h; path = ../ApptentiveConnect/source/ATConnect.h; sourceTree = "<group>"; };
 		4982ECE5133C2DCF00B91781 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "iPad/en.lproj/MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		49AA100D138B41A40082887A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		49AB111914D8D4C100D13C02 /* ATSurveys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATSurveys.h; path = ../modules/ApptentiveSurveys/source/ATSurveys.h; sourceTree = "<group>"; };
 		49B3D9A21340084E00B5A5CD /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
-		49B876C714647CE300594A5D /* ApptentiveSurveys.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ApptentiveSurveys.xcodeproj; path = ../modules/ApptentiveSurveys/ApptentiveSurveys.xcodeproj; sourceTree = "<group>"; };
-		49B876F01464825B00594A5D /* at_logo_info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_logo_info.png; sourceTree = "<group>"; };
-		49B876F11464825B00594A5D /* at_logo_info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_logo_info@2x.png"; sourceTree = "<group>"; };
 		49C002E71334172E0071F088 /* FeedbackDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FeedbackDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49C002EB1334172E0071F088 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		49C002ED1334172F0071F088 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -140,7 +159,7 @@
 		49E8918A134BF69C00DD098A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		49E891D3134FE40200DD098A /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		49E891D4134FE40200DD098A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
-		49EC5D981467199400634D43 /* ATSurveys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATSurveys.h; path = ../modules/ApptentiveSurveys/source/ATSurveys.h; sourceTree = "<group>"; };
+		49EA5AD414BD12BC004F8A4D /* ApptentiveMetrics.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ApptentiveMetrics.xcodeproj; path = ../modules/ApptentiveMetrics/ApptentiveMetrics.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,7 +167,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49B876D514647D0900594A5D /* libApptentiveSurveys.a in Frameworks */,
+				49AB111A14D8D4F300D13C02 /* libApptentiveSurveys.a in Frameworks */,
+				49EA5AE514BD12F7004F8A4D /* libApptentiveMetrics.a in Frameworks */,
 				493529C0138C7141000E464A /* libApptentiveConnect.a in Frameworks */,
 				49AA100E138B41A40082887A /* SystemConfiguration.framework in Frameworks */,
 				49E8918B134BF69C00DD098A /* QuartzCore.framework in Frameworks */,
@@ -172,11 +192,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		493E6CD614D8D468003F22FF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				493E6CDF14D8D469003F22FF /* libApptentiveSurveys.a */,
+				493E6CE114D8D469003F22FF /* ApptentiveSurveysTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		4960E1211344326B00F6311F /* art */ = {
 			isa = PBXGroup;
 			children = (
-				49B876F01464825B00594A5D /* at_logo_info.png */,
-				49B876F11464825B00594A5D /* at_logo_info@2x.png */,
 				4960E1221344326B00F6311F /* icon-114x114.png */,
 				4960E1231344326B00F6311F /* icon-29x29.png */,
 				4960E1241344326B00F6311F /* icon-58x58.png */,
@@ -188,23 +215,15 @@
 			path = art/generated;
 			sourceTree = SOURCE_ROOT;
 		};
-		49B876C814647CE300594A5D /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				49B876D114647CE400594A5D /* libApptentiveSurveys.a */,
-				49B876D314647CE400594A5D /* ApptentiveSurveysTests.octest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		49C002DC1334172E0071F088 = {
 			isa = PBXGroup;
 			children = (
 				4960E13E13455ACE00F6311F /* ATConnect.h */,
 				4942CD5E13C8D68E009BF758 /* ATAppRatingFlow.h */,
-				49EC5D981467199400634D43 /* ATSurveys.h */,
-				49B876C714647CE300594A5D /* ApptentiveSurveys.xcodeproj */,
+				49AB111914D8D4C100D13C02 /* ATSurveys.h */,
 				49C00324133417390071F088 /* ApptentiveConnect.xcodeproj */,
+				49EA5AD414BD12BC004F8A4D /* ApptentiveMetrics.xcodeproj */,
+				493E6CD514D8D468003F22FF /* ApptentiveSurveys.xcodeproj */,
 				49C002F11334172F0071F088 /* FeedbackDemo */,
 				49C003111334172F0071F088 /* FeedbackDemoTests */,
 				49C002EA1334172E0071F088 /* Frameworks */,
@@ -303,6 +322,15 @@
 			path = resources/localization;
 			sourceTree = SOURCE_ROOT;
 		};
+		49EA5AD514BD12BC004F8A4D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				49EA5ADE14BD12BC004F8A4D /* libApptentiveMetrics.a */,
+				49EA5AE014BD12BC004F8A4D /* ApptentiveMetricsTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -317,6 +345,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				49AB111C14D8D4FC00D13C02 /* PBXTargetDependency */,
 				49AA1027138B4E500082887A /* PBXTargetDependency */,
 				49C00331133417740071F088 /* PBXTargetDependency */,
 			);
@@ -371,8 +400,12 @@
 					ProjectRef = 49C00324133417390071F088 /* ApptentiveConnect.xcodeproj */;
 				},
 				{
-					ProductGroup = 49B876C814647CE300594A5D /* Products */;
-					ProjectRef = 49B876C714647CE300594A5D /* ApptentiveSurveys.xcodeproj */;
+					ProductGroup = 49EA5AD514BD12BC004F8A4D /* Products */;
+					ProjectRef = 49EA5AD414BD12BC004F8A4D /* ApptentiveMetrics.xcodeproj */;
+				},
+				{
+					ProductGroup = 493E6CD614D8D468003F22FF /* Products */;
+					ProjectRef = 493E6CD514D8D468003F22FF /* ApptentiveSurveys.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -384,18 +417,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		49B876D114647CE400594A5D /* libApptentiveSurveys.a */ = {
+		493E6CDF14D8D469003F22FF /* libApptentiveSurveys.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libApptentiveSurveys.a;
-			remoteRef = 49B876D014647CE400594A5D /* PBXContainerItemProxy */;
+			remoteRef = 493E6CDE14D8D469003F22FF /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		49B876D314647CE400594A5D /* ApptentiveSurveysTests.octest */ = {
+		493E6CE114D8D469003F22FF /* ApptentiveSurveysTests.octest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = ApptentiveSurveysTests.octest;
-			remoteRef = 49B876D214647CE400594A5D /* PBXContainerItemProxy */;
+			remoteRef = 493E6CE014D8D469003F22FF /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		49C0032D133417390071F088 /* libApptentiveConnect.a */ = {
@@ -419,6 +452,20 @@
 			remoteRef = 49D1119F13341A7C00603373 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		49EA5ADE14BD12BC004F8A4D /* libApptentiveMetrics.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libApptentiveMetrics.a;
+			remoteRef = 49EA5ADD14BD12BC004F8A4D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		49EA5AE014BD12BC004F8A4D /* ApptentiveMetricsTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ApptentiveMetricsTests.octest;
+			remoteRef = 49EA5ADF14BD12BC004F8A4D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -438,8 +485,6 @@
 				4960E12C1344326B00F6311F /* icon.png in Resources */,
 				4960E139134432F400F6311F /* iTunesArtwork in Resources */,
 				49E891D5134FE40200DD098A /* Localizable.strings in Resources */,
-				49B876F21464825B00594A5D /* at_logo_info.png in Resources */,
-				49B876F31464825B00594A5D /* at_logo_info@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -496,6 +541,11 @@
 			isa = PBXTargetDependency;
 			name = ApptentiveResources;
 			targetProxy = 49AA1026138B4E500082887A /* PBXContainerItemProxy */;
+		};
+		49AB111C14D8D4FC00D13C02 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ApptentiveSurveys;
+			targetProxy = 49AB111B14D8D4FC00D13C02 /* PBXContainerItemProxy */;
 		};
 		49C003101334172F0071F088 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -610,7 +660,7 @@
 					"$(DSTROOT)/usr/local/include",
 				);
 				INFOPLIST_FILE = "FeedbackDemo/FeedbackDemo-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -638,7 +688,7 @@
 					"$(DSTROOT)/usr/local/include",
 				);
 				INFOPLIST_FILE = "FeedbackDemo/FeedbackDemo-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",

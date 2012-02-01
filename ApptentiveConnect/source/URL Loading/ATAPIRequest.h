@@ -15,11 +15,8 @@ NSString *const ATAPIRequestStatusChanged;
 
 typedef enum {
 	ATAPIRequestReturnTypeData,
-	ATAPIRequestReturnTypeString
-#ifdef SUPPORT_JSON
-    ,
+	ATAPIRequestReturnTypeString,
 	ATAPIRequestReturnTypeJSON
-#endif
 } ATAPIRequestReturnType;
 
 @protocol ATAPIRequestDelegate <NSObject>

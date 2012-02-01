@@ -13,7 +13,7 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
-#define kATConnectVersionString @"1.1"
+#define kATConnectVersionString @"0.2.0"
 
 #if TARGET_OS_IPHONE
 #define kATConnectPlatformString @"iOS"
@@ -32,10 +32,13 @@ typedef enum {
 #if !TARGET_OS_IPHONE
     ATFeedbackWindowController *feedbackWindowController;
 #endif
+	NSMutableDictionary *additionalFeedbackData;
 }
 @property (nonatomic, retain) NSString *apiKey;
 @property (nonatomic, assign) BOOL showKeyboardAccessory;
 @property (nonatomic, assign) BOOL shouldTakeScreenshot;
+@property (nonatomic, assign) BOOL showEmailField;
+@property (nonatomic, retain) NSString *initialEmailAddress;
 @property (nonatomic, assign) ATFeedbackControllerType feedbackControllerType;
 /*! Set this if you want some custom text to appear as a placeholder in the
  feedback text box. */
@@ -57,6 +60,12 @@ typedef enum {
 - (IBAction)showFeedbackWindowForQuestion:(id)sender;
 - (IBAction)showFeedbackWindowForBugReport:(id)sender;
 #endif
+
+/*! Adds an additional data field to any feedback sent. */
+- (void)addAdditionalInfoToFeedback:(NSObject<NSCoding> *)object withKey:(NSString *)key;
+
+/*! Removes an additional data field from the feedback sent. */
+- (void)removeAdditionalInfoFromFeedbackWithKey:(NSString *)key;
 
 /*!
  * Returns the NSBundle corresponding to the bundle containing ATConnect's

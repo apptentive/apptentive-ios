@@ -12,9 +12,11 @@
 #import "ATSurveyResponse.h"
 #import "ATURLConnection.h"
 
+#define kSurveysChannelName @"Apptentive-Surveys"
+
 @implementation ATWebClient (SurveyAdditions)
 - (ATAPIRequest *)requestForGettingSurvey {
-    NSString *urlString = [NSString stringWithFormat:@"%@/surveys", [self baseURLString]];
+    NSString *urlString = [NSString stringWithFormat:@"%@/surveys/active", [self baseURLString]];
     ATURLConnection *conn = [self connectionToGet:[NSURL URLWithString:urlString]];
     conn.timeoutInterval = 20.0;
     ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:[self commonChannelName]];
@@ -25,14 +27,14 @@
 
 - (ATAPIRequest *)requestForPostingSurveyResponse:(ATSurveyResponse *)surveyResponse {
 	NSDictionary *postData = [surveyResponse apiDictionary];
-    NSString *url = [NSString stringWithFormat:@"%@/surveys", [self baseURLString]];
+	NSString *url = [self apiURLStringWithPath:@"records"];
     ATURLConnection *conn = nil;
     
 	conn = [self connectionToPost:[NSURL URLWithString:url] parameters:postData];
 	
     conn.timeoutInterval = 240.0;
-    ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:[self commonChannelName]];
-    request.returnType = ATAPIRequestReturnTypeData;
+    ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kSurveysChannelName];
+    request.returnType = ATAPIRequestReturnTypeJSON;
     return [request autorelease];
 }
 @end

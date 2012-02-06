@@ -7,8 +7,14 @@
 //
 
 #import "ATSurveyViewController.h"
+#import "ATConnect.h"
+#import "ATHUDView.h"
+#import "ATRecordTask.h"
 #import "ATSurvey.h"
 #import "ATSurveyQuestion.h"
+#import "ATSurveyResponse.h"
+#import "ATSurveyTask.h"
+#import "ATTaskQueue.h"
 
 enum {
 	kTextViewTag = 1
@@ -48,11 +54,45 @@ enum {
     [super didReceiveMemoryWarning];
 }
 
+- (IBAction)sendSurvey {
+	ATSurveyResponse *response = [[ATSurveyResponse alloc] init];
+	response.identifier = survey.identifier;
+	for (ATSurveyQuestion *question in [survey questions]) {
+		if (question.type == ATSurveyQuestionTypeSingeLine) {
+			ATSurveyQuestionResponse *answer = [[ATSurveyQuestionResponse alloc] init];
+			answer.identifier = question.identifier;
+			answer.response = question.answerText;
+			[response addQuestionResponse:answer];
+			[answer release], answer = nil;
+		} else if (question.type == ATSurveyQuestionTypeMultipleChoice) {
+			if (question.selectedAnswerChoice) {
+				ATSurveyQuestionResponse *answer = [[ATSurveyQuestionResponse alloc] init];
+				answer.identifier = question.identifier;
+				answer.response = question.selectedAnswerChoice.identifier;
+				[response addQuestionResponse:answer];
+				[answer release], answer = nil;
+			}
+		}
+	}
+	ATRecordTask *task = [[ATRecordTask alloc] init];
+	[task setRecord:response];
+	[[ATTaskQueue sharedTaskQueue] addTask:task];
+	[response release], response = nil;
+	[task release], task = nil;
+	
+    ATHUDView *hud = [[ATHUDView alloc] initWithWindow:self.view.window];
+    hud.label.text = ATLocalizedString(@"Thanks!", @"Text in thank you display upon submitting survey.");
+    [hud show];
+    [hud autorelease];
+
+	[self.navigationController dismissModalViewControllerAnimated:YES];
+}
+
 - (void)loadView {
 	[super loadView];
 	self.view.backgroundColor = [UIColor whiteColor];
 	tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
-	tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;	
 	[self.view addSubview:tableView];
 }
 
@@ -61,7 +101,7 @@ enum {
 	
 	self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)] autorelease];
 	
-	self.title = @"Survey"; //!!
+	self.title = ATLocalizedString(@"Survey", @"Survey view title");
 	
 	tableView.delegate = self;
 	tableView.dataSource = self;
@@ -91,7 +131,7 @@ enum {
 #pragma mark UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView {
-    return [[survey questions] count];
+    return [[survey questions] count] + 1;
 }
 
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
@@ -102,6 +142,8 @@ enum {
 		} else if (question.type == ATSurveyQuestionTypeMultipleChoice) {
 			return [[question answerChoices] count] + 1;
 		}
+	} else if (section == [[survey questions] count]) {
+		return 1;
 	}
     return 0;
 }
@@ -134,12 +176,22 @@ enum {
     static NSString *ATSurveyCheckboxCellIdentifier = @"ATSurveyCheckboxCellIdentifier";
     static NSString *ATSurveyTextViewCellIdentifier = @"ATSurveyTextViewCellIdentifier";
     static NSString *ATSurveyQuestionCellIdentifier = @"ATSurveyQuestionCellIdentifier";
-    
+    static NSString *ATSurveySendCellIdentifier = @"ATSurveySendCellIdentifier";
 	
-	if (indexPath.section >= [[survey questions] count]) {
+	if (indexPath.section == [[survey questions] count]) {
+		UITableViewCell *buttonCell = nil;
+		buttonCell = [tableView dequeueReusableCellWithIdentifier:ATSurveySendCellIdentifier];
+		if (!buttonCell) {
+			buttonCell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ATSurveySendCellIdentifier] autorelease];
+			buttonCell.textLabel.text = ATLocalizedString(@"Send Response", @"Survey send response button title");
+			buttonCell.textLabel.textAlignment = UITextAlignmentCenter;
+			buttonCell.textLabel.textColor = [UIColor blueColor];
+			buttonCell.selectionStyle = UITableViewCellSelectionStyleBlue;
+		}
+		return buttonCell;
+	} else if (indexPath.section >= [[survey questions] count]) {
 		return nil;
 	}
-	
 	ATSurveyQuestion *question = [[survey questions] objectAtIndex:indexPath.section];
 	UITableViewCell *cell = nil;
 	if (indexPath.row == 0) {
@@ -209,19 +261,37 @@ enum {
 #pragma mark UITableViewDelegate
 
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	ATSurveyQuestion *question = [[survey questions] objectAtIndex:indexPath.section];
-	UITableViewCell *cell = [aTableView cellForRowAtIndexPath:indexPath];
-	if (indexPath.row == 0) {
-		// Question row.
-		
+	if (indexPath.section == [[survey questions] count]) {
+		[self sendSurvey];
 	} else {
-		if (question.type == ATSurveyQuestionTypeMultipleChoice) {
-			if (cell.accessoryType == UITableViewCellAccessoryNone) {
-				cell.accessoryType = UITableViewCellAccessoryCheckmark;
-			} else {
-				cell.accessoryType = UITableViewCellAccessoryNone;
-			}
+		ATSurveyQuestion *question = [[survey questions] objectAtIndex:indexPath.section];
+		UITableViewCell *cell = [aTableView cellForRowAtIndexPath:indexPath];
+		if (indexPath.row == 0) {
+			// Question row.
+			
 		} else {
+			if (question.type == ATSurveyQuestionTypeMultipleChoice) {
+				if (cell.accessoryType == UITableViewCellAccessoryNone) {
+					cell.accessoryType = UITableViewCellAccessoryCheckmark;
+					ATSurveyQuestionAnswer *answer = [question.answerChoices objectAtIndex:indexPath.row - 1];
+					question.selectedAnswerChoice = answer;
+				} else {
+					cell.accessoryType = UITableViewCellAccessoryNone;
+					question.selectedAnswerChoice = nil;
+				}
+				// Deselect the other cells.
+				UITableViewCell *otherCell = nil;
+				for (NSUInteger i = 1; i < [self tableView:aTableView numberOfRowsInSection:indexPath.section]; i++) {
+					if (i != indexPath.row) {
+						NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:indexPath.section];
+						otherCell = [aTableView cellForRowAtIndexPath:path];
+						otherCell.accessoryType = UITableViewCellAccessoryNone;
+					}
+				}
+			} else if (question.type == ATSurveyQuestionTypeSingeLine) {
+				ATCellTextView *textView = (ATCellTextView *)[cell viewWithTag:kTextViewTag];
+				[textView becomeFirstResponder];
+			}
 		}
 	}
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];

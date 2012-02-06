@@ -9,8 +9,9 @@
 #import <Foundation/Foundation.h>
 
 typedef enum {
+	ATSurveyQuestionTypeUnknown,
 	ATSurveyQuestionTypeSingeLine,
-	ATSurveyQuestionTypeMultipleChoice
+	ATSurveyQuestionTypeMultipleChoice,
 } ATSurveyQuestionType;
 
 @class ATSurveyQuestionAnswer;
@@ -24,6 +25,8 @@ typedef enum {
 @property (nonatomic, retain) NSString *value;
 @property (nonatomic, readonly) NSMutableArray *answerChoices;
 @property (nonatomic, retain) NSString *answerText;
+// If this is a multiple choice question:
+@property (nonatomic, retain) ATSurveyQuestionAnswer *selectedAnswerChoice;
 
 - (void)addAnswerChoice:(ATSurveyQuestionAnswer *)answer;
 @end

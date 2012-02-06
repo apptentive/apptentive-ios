@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		49AB111E14D8DA5D00D13C02 /* ATRecord.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AB111D14D8DA5D00D13C02 /* ATRecord.h */; };
+		49AB112214D8E14A00D13C02 /* ATHUDView.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AB112114D8E14A00D13C02 /* ATHUDView.h */; };
+		49AB112414D8E17400D13C02 /* ATRecordTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AB112314D8E17400D13C02 /* ATRecordTask.h */; };
+		49AB112614D8E18600D13C02 /* ATTaskQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AB112514D8E18600D13C02 /* ATTaskQueue.h */; };
 		49B8768314647C5200594A5D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B8768214647C5200594A5D /* Foundation.framework */; };
 		49B8769114647C5200594A5D /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B8769014647C5200594A5D /* SenTestingKit.framework */; };
 		49B8769414647C5200594A5D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B8768214647C5200594A5D /* Foundation.framework */; };
@@ -96,6 +100,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		49AB111D14D8DA5D00D13C02 /* ATRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATRecord.h; path = ../../ApptentiveConnect/source/Persistence/ATRecord.h; sourceTree = "<group>"; };
+		49AB112114D8E14A00D13C02 /* ATHUDView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATHUDView.h; path = "../../ApptentiveConnect/source/Custom Views/ATHUDView.h"; sourceTree = "<group>"; };
+		49AB112314D8E17400D13C02 /* ATRecordTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATRecordTask.h; path = ../../ApptentiveConnect/source/Tasks/ATRecordTask.h; sourceTree = "<group>"; };
+		49AB112514D8E18600D13C02 /* ATTaskQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATTaskQueue.h; path = ../../ApptentiveConnect/source/Tasks/ATTaskQueue.h; sourceTree = "<group>"; };
 		49B8767F14647C5200594A5D /* libApptentiveSurveys.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libApptentiveSurveys.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		49B8768214647C5200594A5D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		49B8768F14647C5200594A5D /* ApptentiveSurveysTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApptentiveSurveysTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -174,6 +182,10 @@
 				49B8770A1464937A00594A5D /* ATWebClient.h */,
 				49B877121464960400594A5D /* ATWebClient_Private.h */,
 				49B8770C146493D300594A5D /* ATAPIRequest.h */,
+				49AB112114D8E14A00D13C02 /* ATHUDView.h */,
+				49AB111D14D8DA5D00D13C02 /* ATRecord.h */,
+				49AB112314D8E17400D13C02 /* ATRecordTask.h */,
+				49AB112514D8E18600D13C02 /* ATTaskQueue.h */,
 				49B8770E1464955200594A5D /* ATURLConnection.h */,
 				49B876FB14648FAE00594A5D /* JSONKit.h */,
 				49EC5D9914671FB100634D43 /* ATDefaultTextView.h */,
@@ -329,6 +341,10 @@
 				49EC5D8E1467183600634D43 /* ATSurveys.h in Headers */,
 				49EC5D951467187F00634D43 /* ATSurveysBackend.h in Headers */,
 				49EC5D9A14671FB100634D43 /* ATDefaultTextView.h in Headers */,
+				49AB111E14D8DA5D00D13C02 /* ATRecord.h in Headers */,
+				49AB112214D8E14A00D13C02 /* ATHUDView.h in Headers */,
+				49AB112414D8E17400D13C02 /* ATRecordTask.h in Headers */,
+				49AB112614D8E18600D13C02 /* ATTaskQueue.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

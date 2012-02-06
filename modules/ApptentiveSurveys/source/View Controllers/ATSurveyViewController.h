@@ -21,6 +21,7 @@
 	ATCellTextView *activeTextView;
 }
 - (id)initWithSurvey:(ATSurvey *)survey;
+- (IBAction)sendSurvey;
 @end
 
 

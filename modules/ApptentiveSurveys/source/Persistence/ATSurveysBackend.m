@@ -67,16 +67,17 @@
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)request result:(NSObject *)result {
 	if (request == checkSurveyRequest) {
 		ATSurveyParser *parser = [[ATSurveyParser alloc] init];
-		NSArray *surveys = [parser parseMultipleSurveys:(NSData *)result];
-		if (surveys == nil) {
-			NSLog(@"An error occurred parsing multiple surveys: %@", [parser parserError]);
-		} else if ([surveys count] > 0) {
+		ATSurvey *survey = [parser parseSurvey:(NSData *)result];
+		if (survey == nil) {
+			NSLog(@"An error occurred parsing survey: %@", [parser parserError]);
+		} else {
 			[currentSurvey release], currentSurvey = nil;
-			currentSurvey = [[surveys objectAtIndex:0] retain];
+			currentSurvey = [survey retain];
 			[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyNewSurveyAvailableNotification object:nil];
 		}
 		checkSurveyRequest.delegate = nil;
 		[checkSurveyRequest release], checkSurveyRequest = nil;
+		[parser release], parser = nil;
 	}
 }
 

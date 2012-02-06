@@ -7,9 +7,23 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ATRecord.h"
 
-@interface ATSurveyResponse : NSObject
+@class ATSurveyQuestionResponse;
 
-- (NSDictionary *)dictionary;
+@interface ATSurveyResponse : ATRecord {
+	NSMutableArray *questionResponses;
+}
+@property (nonatomic, retain) NSString *identifier;
+
+- (void)addQuestionResponse:(ATSurveyQuestionResponse *)response;
 - (NSDictionary *)apiDictionary;
+@end
+
+
+@interface ATSurveyQuestionResponse : NSObject <NSCoding> {
+@private
+}
+@property (nonatomic, retain) NSString *identifier;
+@property (nonatomic, retain) NSString *response;
 @end

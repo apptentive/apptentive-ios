@@ -20,5 +20,6 @@
 + (ATSurveysBackend *)sharedBackend;
 - (void)checkForAvailableSurveys;
 - (ATSurvey *)currentSurvey;
+- (void)resetSurvey;
 - (void)presentSurveyControllerFromViewController:(UIViewController *)viewController;
 @end

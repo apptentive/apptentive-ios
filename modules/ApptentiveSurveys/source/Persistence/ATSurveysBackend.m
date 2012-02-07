@@ -45,6 +45,9 @@
 	return currentSurvey;
 }
 
+- (void)resetSurvey {
+	[currentSurvey release], currentSurvey = nil;
+}
 
 - (void)presentSurveyControllerFromViewController:(UIViewController *)viewController {
 	if (currentSurvey == nil) {

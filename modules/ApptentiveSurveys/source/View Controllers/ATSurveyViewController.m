@@ -11,6 +11,7 @@
 #import "ATHUDView.h"
 #import "ATRecordTask.h"
 #import "ATSurvey.h"
+#import "ATSurveysBackend.h"
 #import "ATSurveyQuestion.h"
 #import "ATSurveyResponse.h"
 #import "ATSurveyTask.h"
@@ -85,6 +86,7 @@ enum {
     [hud show];
     [hud autorelease];
 
+	[[ATSurveysBackend sharedBackend] resetSurvey];
 	[self.navigationController dismissModalViewControllerAnimated:YES];
 }
 

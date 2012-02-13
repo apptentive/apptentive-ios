@@ -77,7 +77,7 @@
                 self.screenshot = [[[NSImage alloc] initWithData:data] autorelease];
 #endif
             }
-			extraData = [coder decodeObjectForKey:@"extraData"];
+			extraData = [[coder decodeObjectForKey:@"extraData"] retain];
         } else {
             [self release];
             return nil;

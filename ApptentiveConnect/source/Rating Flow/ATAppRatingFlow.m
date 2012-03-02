@@ -460,7 +460,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
         count = [eventCount unsignedIntegerValue];
     }
     
-    [defaults setObject:[NSNumber numberWithUnsignedInteger:count] forKey:ATAppRatingFlowSignificantEventsCountKey];
+    [defaults setObject:[NSNumber numberWithUnsignedInteger:count+1] forKey:ATAppRatingFlowSignificantEventsCountKey];
     [defaults synchronize];
     
 }

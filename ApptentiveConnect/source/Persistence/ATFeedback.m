@@ -77,14 +77,14 @@
                 self.screenshot = [[[NSImage alloc] initWithData:data] autorelease];
 #endif
             }
-			extraData = [[coder decodeObjectForKey:@"extraData"] retain];
+			NSDictionary *oldExtraData = [coder decodeObjectForKey:@"extraData"];
+			if (oldExtraData != nil) {
+				[extraData addEntriesFromDictionary:oldExtraData];
+			}
         } else {
             [self release];
             return nil;
         }
-		if (!extraData) {
-			extraData = [[NSMutableDictionary alloc] init];
-		}
     }
     return self;
 }

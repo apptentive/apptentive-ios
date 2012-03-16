@@ -1,6 +1,6 @@
 //
 //  ATWebClient.m
-//  AmidstApp
+//  apptentive-ios
 //
 //  Created by Andrew Wooster on 7/28/09.
 //  Copyright 2009 Apptentive, Inc.. All rights reserved.
@@ -200,6 +200,7 @@ static ATWebClient *sharedSingleton = nil;
                 if ([value isKindOfClass:[NSObject class]]) {
                     className = [NSString stringWithCString:object_getClassName((NSObject *)value) encoding:NSUTF8StringEncoding];
                 }
+				[conn release], conn = nil;
                 @throw [NSException exceptionWithName:@"ATWebClientException" reason:[NSString stringWithFormat:@"Can't encode form data of class: %@", className] userInfo:nil];
             }
         }

@@ -10,6 +10,7 @@
 #import "ATConnect.h"
 #import "ATAppRatingFlow.h"
 #import "defines.h"
+#import "ATSurveys.h"
 
 @implementation FeedbackDemoAppDelegate
 
@@ -31,6 +32,8 @@
     [[ATConnect sharedConnection] setApiKey:kApptentiveAPIKey];
     ATAppRatingFlow *ratingFlow = [ATAppRatingFlow sharedRatingFlowWithAppID:kApptentiveAppID];
     [ratingFlow appDidLaunch:YES viewController:self.navigationController];
+	
+	[ATSurveys checkForAvailableSurveys];
     
     return YES;
 }

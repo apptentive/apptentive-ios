@@ -39,7 +39,7 @@ NSString * const ATContactUpdaterFinished = @"ATContactUpdaterFinished";
 }
 
 #pragma mark ATATIRequestDelegate
-- (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(id)result {
+- (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(NSObject *)result {
     @synchronized (self) {
         if ([result isKindOfClass:[NSData class]]) {
             [self processResult:(NSData *)result];

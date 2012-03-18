@@ -7,6 +7,7 @@
 //
 
 #import "ATWebClient.h"
+#import "ATWebClient_Private.h"
 #import "ATAPIRequest.h"
 #import "ATURLConnection.h"
 
@@ -42,6 +43,13 @@ static ATWebClient *sharedSingleton = nil;
     return sharedSingleton;
 }
 
+- (NSString *)baseURLString {
+	return kApptentiveBaseURL;
+}
+
+- (NSString *)commonChannelName {
+	return kCommonChannelName;
+}
 
 - (ATAPIRequest *)requestForGettingContactInfo {
     NSString *uuid = [[ATBackend sharedBackend] deviceUUID];
@@ -49,7 +57,7 @@ static ATWebClient *sharedSingleton = nil;
 	NSString *urlString = [self apiURLStringWithPath:[NSString stringWithFormat:@"records/recent_user?%@", [self stringForParameters:parameters]]];
     ATURLConnection *conn = [self connectionToGet:[NSURL URLWithString:urlString]];
     conn.timeoutInterval = 20.0;
-    ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kCommonChannelName];
+    ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:[self commonChannelName]];
     request.returnType = ATAPIRequestReturnTypeData;
     return [request autorelease];
 }
@@ -70,7 +78,7 @@ static ATWebClient *sharedSingleton = nil;
         conn = [self connectionToPost:[NSURL URLWithString:url] parameters:postData];
     }
     conn.timeoutInterval = 240.0;
-    ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kCommonChannelName];
+    ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:[self commonChannelName]];
     request.returnType = ATAPIRequestReturnTypeData;
     return [request autorelease];
 }

@@ -1,30 +1,30 @@
 //
-//  ATFeedbackTask.m
-//  ApptentiveConnect
+//  ATSurveyTask.m
+//  ApptentiveSurveys
 //
-//  Created by Andrew Wooster on 3/20/11.
-//  Copyright 2011 Apptentive, Inc.. All rights reserved.
+//  Created by Andrew Wooster on 11/4/11.
+//  Copyright (c) 2011 Apptentive. All rights reserved.
 //
 
-#import "ATFeedbackTask.h"
-#import "ATFeedback.h"
-#import "ATWebClient.h"
+#import "ATSurveyTask.h"
+#import "ATSurveyResponse.h"
+#import "ATWebClient+SurveyAdditions.h"
 
-#define kATFeedbackTaskCodingVersion 1
+#define kATSurveyTaskCodingVersion 1
 
-@interface ATFeedbackTask (Private)
+@interface ATSurveyTask (Private)
 - (void)setup;
 - (void)teardown;
 @end
 
-@implementation ATFeedbackTask
-@synthesize feedback;
+@implementation ATSurveyTask
+@synthesize surveyResponse=surveyResponse$;
 
 - (id)initWithCoder:(NSCoder *)coder {
     if ((self = [super init])) {
         int version = [coder decodeIntForKey:@"version"];
-        if (version == kATFeedbackTaskCodingVersion) {
-            self.feedback = [coder decodeObjectForKey:@"feedback"];
+        if (version == kATSurveyTaskCodingVersion) {
+            self.surveyResponse = [coder decodeObjectForKey:@"surveyResponse"];
         } else {
             [self release];
             return nil;
@@ -34,8 +34,8 @@
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
-    [coder encodeInt:kATFeedbackTaskCodingVersion forKey:@"version"];
-    [coder encodeObject:self.feedback forKey:@"feedback"];
+    [coder encodeInt:kATSurveyTaskCodingVersion forKey:@"version"];
+    [coder encodeObject:self.surveyResponse forKey:@"surveyResponse"];
 }
 
 - (void)dealloc {
@@ -45,14 +45,10 @@
 
 - (void)start {
     if (!request) {
-        request = [[self.feedback requestForSendingRecord] retain];
-		if (request != nil) {
-			request.delegate = self;
-			[request start];
-			self.inProgress = YES;
-		} else {
-			self.finished = YES;
-		}
+        request = [[[ATWebClient sharedClient] requestForPostingSurveyResponse:self.surveyResponse] retain];
+        request.delegate = self;
+        [request start];
+        self.inProgress = YES;
     }
 }
 
@@ -71,10 +67,6 @@
     } else {
         return 0.0f;
     }
-}
-
-- (NSString *)taskName {
-	return @"feedback";
 }
 
 #pragma mark ATAPIRequestDelegate
@@ -99,13 +91,12 @@
 }
 @end
 
-@implementation ATFeedbackTask (Private)
+@implementation ATSurveyTask (Private)
 - (void)setup {
     
 }
 
 - (void)teardown {
     [self stop];
-	self.feedback = nil;
 }
 @end

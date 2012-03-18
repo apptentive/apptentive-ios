@@ -2,13 +2,14 @@
 //  ATWebClient_Private.h
 //  ApptentiveConnect
 //
-//  Created by Andrew Wooster on 1/10/12.
-//  Copyright (c) 2012 Apptentive, Inc. All rights reserved.
+//  Created by Andrew Wooster on 11/4/11.
+//  Copyright (c) 2011 Apptentive, Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
-@class ATWebClient, ATURLConnection;
+@class ATURLConnection;
+@class ATWebClient;
 
 @interface ATWebClient (Private)
 - (NSString *)userAgentString;

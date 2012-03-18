@@ -48,9 +48,7 @@ typedef enum {
 
 #if TARGET_OS_IPHONE
 /*! 
- * Presents a feedback controller from the given view controller. The feedback
- * controller will be presented with 
- * [viewController presentModalViewController:…].
+ * Presents a feedback controller in the window of the given view controller.
  */
 - (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController;
 #elif TARGET_OS_MAC

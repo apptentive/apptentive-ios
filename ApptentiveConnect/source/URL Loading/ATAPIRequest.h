@@ -19,10 +19,11 @@ typedef enum {
 	ATAPIRequestReturnTypeJSON
 } ATAPIRequestReturnType;
 
-@protocol ATAPIRequestDelegate
-- (void)at_APIRequestDidFinish:(ATAPIRequest *)request result:(id)result;
-- (void)at_APIRequestDidProgress:(ATAPIRequest *)request;
+@protocol ATAPIRequestDelegate <NSObject>
+- (void)at_APIRequestDidFinish:(ATAPIRequest *)request result:(NSObject *)result;
 - (void)at_APIRequestDidFail:(ATAPIRequest *)request;
+@optional
+- (void)at_APIRequestDidProgress:(ATAPIRequest *)request;
 @end
 
 /*! API request for the apptentive.com service. Encapsulates the connection

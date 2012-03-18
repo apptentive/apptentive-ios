@@ -41,6 +41,10 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 - (ATAppRatingButtonType)appRatingButtonTypeFromNotification:(NSNotification *)notification;
 - (void)ratingDidShowRating:(NSNotification *)notification;
 - (void)ratingDidClickRating:(NSNotification *)notification;
+
+- (void)appWillTerminate:(NSNotification *)notification;
+- (void)appDidEnterBackground:(NSNotification *)notification;
+- (void)appWillEnterForeground:(NSNotification *)notification;
 @end
 
 @implementation ApptentiveMetrics
@@ -71,6 +75,11 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingDidClickEnjoyment:) name:ATAppRatingDidClickEnjoymentButtonNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingDidShowRating:) name:ATAppRatingDidPromptForRatingNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingDidClickRating:) name:ATAppRatingDidClickRatingButtonNotification object:nil];
+		
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
 	}
 	
 	return self;
@@ -193,5 +202,17 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 	if (name != nil) {
 		[self addMetricWithName:name info:nil];
 	}
+}
+
+- (void)appWillTerminate:(NSNotification *)notification {
+	[self addMetricWithName:ATMetricNameAppExit info:nil];
+}
+
+- (void)appDidEnterBackground:(NSNotification *)notification {
+	[self addMetricWithName:ATMetricNameAppExit info:nil];
+}
+
+- (void)appWillEnterForeground:(NSNotification *)notification {
+	[self addMetricWithName:ATMetricNameAppLaunch info:nil];
 }
 @end

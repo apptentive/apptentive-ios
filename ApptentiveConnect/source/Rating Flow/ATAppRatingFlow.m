@@ -7,9 +7,11 @@
 //
 
 #import "ATAppRatingFlow.h"
+#import "ATAPIRequest.h"
 #import "ATConnect.h"
 #import "ATReachability.h"
 #import "ATAppRatingMetrics.h"
+#import "ATWebClient.h"
 
 NSString *const ATAppRatingFlowLastUsedVersionKey = @"ATAppRatingFlowLastUsedVersionKey";
 NSString *const ATAppRatingFlowLastUsedVersionFirstUseDateKey = @"ATAppRatingFlowLastUsedVersionFirstUseDateKey";
@@ -20,7 +22,6 @@ NSString *const ATAppRatingFlowRatedAppKey = @"ATAppRatingFlowRatedAppKey";
 
 NSString *const ATAppRatingFlowUseCountKey = @"ATAppRatingFlowUseCountKey";
 NSString *const ATAppRatingFlowSignificantEventsCountKey = @"ATAppRatingFlowSignificantEventsCountKey";
-
 
 static ATAppRatingFlow *sharedRatingFlow = nil;
 

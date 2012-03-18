@@ -96,6 +96,9 @@
 		49C002A1133413BB0071F088 /* ApptentiveConnect-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 49C00296133413BB0071F088 /* ApptentiveConnect-Prefix.pch */; };
 		49C002A2133413BB0071F088 /* ATConnect.h in Headers */ = {isa = PBXBuildFile; fileRef = 49C00297133413BB0071F088 /* ATConnect.h */; settings = {ATTRIBUTES = (); }; };
 		49C002A3133413BB0071F088 /* ATConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C00298133413BB0071F088 /* ATConnect.m */; };
+		49CEFF5D15168B54006D8BA8 /* ATAppConfigurationUpdater.h in Headers */ = {isa = PBXBuildFile; fileRef = 49CEFF5B15168B53006D8BA8 /* ATAppConfigurationUpdater.h */; };
+		49CEFF5E15168B54006D8BA8 /* ATAppConfigurationUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 49CEFF5C15168B53006D8BA8 /* ATAppConfigurationUpdater.m */; };
+		49CEFF5F15168B54006D8BA8 /* ATAppConfigurationUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 49CEFF5C15168B53006D8BA8 /* ATAppConfigurationUpdater.m */; };
 		49D1123C13359BA000603373 /* NSData+ATBase64.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D1123A13359BA000603373 /* NSData+ATBase64.h */; };
 		49D1123D13359BA000603373 /* NSData+ATBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D1123B13359BA000603373 /* NSData+ATBase64.m */; };
 		49D1124F13368CC200603373 /* ATTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D1124D13368CC200603373 /* ATTask.h */; };
@@ -211,6 +214,8 @@
 		49C00296133413BB0071F088 /* ApptentiveConnect-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ApptentiveConnect-Prefix.pch"; sourceTree = "<group>"; };
 		49C00297133413BB0071F088 /* ATConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATConnect.h; sourceTree = "<group>"; };
 		49C00298133413BB0071F088 /* ATConnect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATConnect.m; sourceTree = "<group>"; };
+		49CEFF5B15168B53006D8BA8 /* ATAppConfigurationUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAppConfigurationUpdater.h; sourceTree = "<group>"; };
+		49CEFF5C15168B53006D8BA8 /* ATAppConfigurationUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAppConfigurationUpdater.m; sourceTree = "<group>"; };
 		49D1118C13341A7C00603373 /* ApptentiveResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApptentiveResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		49D1123A13359BA000603373 /* NSData+ATBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "NSData+ATBase64.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		49D1123B13359BA000603373 /* NSData+ATBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "NSData+ATBase64.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -329,6 +334,8 @@
 				4936AE821379DECE00A4B17F /* ATFeedback.m */,
 				49EA5AAE14BD08AD004F8A4D /* ATRecord.h */,
 				49EA5AAF14BD08AD004F8A4D /* ATRecord.m */,
+				49CEFF5B15168B53006D8BA8 /* ATAppConfigurationUpdater.h */,
+				49CEFF5C15168B53006D8BA8 /* ATAppConfigurationUpdater.m */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -533,6 +540,7 @@
 				49EF340F14AA7F2D00077F76 /* ATAppRatingMetrics.h in Headers */,
 				49EA5AB014BD08AD004F8A4D /* ATRecord.h in Headers */,
 				49EA5ABD14BD0F4D004F8A4D /* ATRecordTask.h in Headers */,
+				49CEFF5D15168B54006D8BA8 /* ATAppConfigurationUpdater.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -721,6 +729,7 @@
 				49EF341014AA7F2D00077F76 /* ATAppRatingMetrics.m in Sources */,
 				49EA5AB114BD08AD004F8A4D /* ATRecord.m in Sources */,
 				49EA5ABE14BD0F4D004F8A4D /* ATRecordTask.m in Sources */,
+				49CEFF5E15168B54006D8BA8 /* ATAppConfigurationUpdater.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -750,6 +759,7 @@
 				49EF341114AA7F2D00077F76 /* ATAppRatingMetrics.m in Sources */,
 				49EA5AB214BD08AD004F8A4D /* ATRecord.m in Sources */,
 				49EA5ABF14BD0F4D004F8A4D /* ATRecordTask.m in Sources */,
+				49CEFF5F15168B54006D8BA8 /* ATAppConfigurationUpdater.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

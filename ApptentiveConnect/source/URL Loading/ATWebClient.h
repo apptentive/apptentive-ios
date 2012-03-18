@@ -19,4 +19,5 @@
 - (NSString *)commonChannelName;
 - (ATAPIRequest *)requestForGettingContactInfo;
 - (ATAPIRequest *)requestForPostingFeedback:(ATFeedback *)feedback;
+- (ATAPIRequest *)requestForGettingAppConfiguration;
 @end

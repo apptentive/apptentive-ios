@@ -82,6 +82,16 @@ static ATWebClient *sharedSingleton = nil;
     request.returnType = ATAPIRequestReturnTypeData;
     return [request autorelease];
 }
+
+- (ATAPIRequest *)requestForGettingAppConfiguration {
+	NSString *uuid = [[ATBackend sharedBackend] deviceUUID];
+	NSString *urlString = [self apiURLStringWithPath:[NSString stringWithFormat:@"devices/%@/configuration", uuid]];
+	ATURLConnection *conn = [self connectionToGet:[NSURL URLWithString:urlString]];
+	conn.timeoutInterval = 20.0;
+	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:[self commonChannelName]];
+	request.returnType = ATAPIRequestReturnTypeJSON;
+	return [request autorelease];
+}
 @end
 
 

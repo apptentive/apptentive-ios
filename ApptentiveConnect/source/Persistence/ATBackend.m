@@ -7,6 +7,7 @@
 //
 
 #import "ATBackend.h"
+#import "ATAppConfigurationUpdater.h"
 #import "ATConnect.h"
 #import "ATContactStorage.h"
 #import "ATContactUpdater.h"
@@ -194,6 +195,13 @@ static ATBackend *sharedBackend = nil;
     [contactUpdater update];
 }
 
+- (void)udpateRatingConfigurationIfNeeded {
+	if (configurationUpdater == nil && [ATAppConfigurationUpdater shouldCheckForUpdate]) {
+		configurationUpdater = [[ATAppConfigurationUpdater alloc] init];
+		[configurationUpdater update];
+	}
+}
+
 - (NSString *)supportDirectoryPath {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString *path = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
@@ -237,6 +245,8 @@ static ATBackend *sharedBackend = nil;
 			if ([[ATContactStorage sharedContactStorage] shouldCheckForUpdate] && !userDataWasUpdated) {
                 [self updateUserData];
             }
+			
+			[self udpateRatingConfigurationIfNeeded];
         } else {
             [[ATTaskQueue sharedTaskQueue] stop];
             [ATTaskQueue releaseSharedTaskQueue];
@@ -266,6 +276,7 @@ static ATBackend *sharedBackend = nil;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:NSApplicationWillTerminateNotification object:nil];
 #endif
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contactUpdaterFinished:) name:ATContactUpdaterFinished object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingUpdaterFinished::) name:ATAppConfigurationUpdaterFinished object:nil];
 	
 	[ATReachability sharedReachability];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusChanged:) name:ATReachabilityStatusChanged object:nil];
@@ -276,6 +287,9 @@ static ATBackend *sharedBackend = nil;
     [contactUpdater cancel];
     [contactUpdater release];
     contactUpdater = nil;
+	[configurationUpdater cancel];
+	[configurationUpdater release];
+	configurationUpdater = nil;
     self.apiKey = nil;
     self.currentFeedback = nil;
 }
@@ -304,5 +318,12 @@ static ATBackend *sharedBackend = nil;
         contactUpdater = nil;
     }
     userDataWasUpdated = YES;
+}
+
+- (void)ratingUpdaterFinished:(NSNotification *)notification {
+	if (configurationUpdater) {
+		[configurationUpdater release];
+		configurationUpdater = nil;
+	}
 }
 @end

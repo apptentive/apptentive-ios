@@ -14,6 +14,7 @@
 
 #define USE_STAGING 0
 
+@class ATAppConfigurationUpdater;
 @class ATContactUpdater;
 @class ATFeedback;
 @class ATAPIRequest;
@@ -21,8 +22,9 @@
 /*! Handles all of the backend activities, such as sending feedback. */
 @interface ATBackend : NSObject {
 @private
-    ATContactUpdater *contactUpdater;
-    BOOL userDataWasUpdated;
+	ATContactUpdater *contactUpdater;
+	ATAppConfigurationUpdater *configurationUpdater;
+	BOOL userDataWasUpdated;
 }
 @property (nonatomic, retain) NSString *apiKey;
 /*! The feedback currently being worked on by the user. */
@@ -44,6 +46,7 @@
 - (ATAPIRequest *)requestForSendingFeedback:(ATFeedback *)feedback;
 
 - (void)updateUserData;
+- (void)udpateRatingConfigurationIfNeeded;
 - (NSString *)supportDirectoryPath;
 - (NSString *)deviceUUID;
 

@@ -11,6 +11,8 @@
 
 NSString * const ATAppConfigurationUpdaterFinished;
 
+NSString *const ATAppConfigurationLastUpdatePreferenceKey;
+
 @interface ATAppConfigurationUpdater : NSObject <ATAPIRequestDelegate> {
 @private
 	ATAPIRequest *request;

@@ -13,15 +13,38 @@
 #import "JSONKit.h"
 
 NSString * const ATAppConfigurationUpdaterFinished = @"ATAppConfigurationUpdaterFinished";
+NSString *const ATAppConfigurationLastUpdatePreferenceKey = @"ATAppConfigurationLastUpdatePreferenceKey";
+
+// Interval, in seconds, after which we'll update the configuration.
+#define kATAppConfigurationUpdateInterval (60*60*24)
 
 @interface ATAppConfigurationUpdater (Private)
 - (void)processResult:(NSDictionary *)jsonRatingConfiguration;
 @end
 
 @implementation ATAppConfigurationUpdater
-#warning Implement
++ (void)registerDefaults {
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSDictionary *defaultPreferences = 
+	[NSDictionary dictionaryWithObjectsAndKeys:
+	 [NSDate distantPast], ATAppConfigurationLastUpdatePreferenceKey,
+	 nil];
+	[defaults registerDefaults:defaultPreferences];
+}
+
 + (BOOL)shouldCheckForUpdate {
-	return YES;
+	[ATAppConfigurationUpdater registerDefaults];	
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSDate *lastCheck = [defaults objectForKey:ATAppConfigurationLastUpdatePreferenceKey];
+	
+	NSTimeInterval interval = [lastCheck timeIntervalSinceNow];
+	
+	if (interval <= -kATAppConfigurationUpdateInterval) {
+		return YES;
+	} else {
+		return NO;
+	}
+	
 }
 - (void)dealloc {
 	[self cancel];
@@ -70,7 +93,10 @@ NSString * const ATAppConfigurationUpdaterFinished = @"ATAppConfigurationUpdater
 	BOOL hasRatingsChanges = NO;
 	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[ATAppConfigurationUpdater registerDefaults];
 	[ATAppRatingFlow_Private registerDefaults];
+	[defaults setObject:[NSDate date] forKey:ATAppConfigurationLastUpdatePreferenceKey];
+	[defaults synchronize];
 	
 	NSDictionary *numberObjects = 
 		[NSDictionary dictionaryWithObjectsAndKeys:

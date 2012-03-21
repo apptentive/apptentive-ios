@@ -11,6 +11,7 @@
 #import "ATConnect.h"
 #import "ATReachability.h"
 #import "ATAppRatingMetrics.h"
+#import "ATAppRatingFlow_Private.h"
 #import "ATWebClient.h"
 
 NSString *const ATAppRatingFlowLastUsedVersionKey = @"ATAppRatingFlowLastUsedVersionKey";
@@ -30,6 +31,20 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 @property (nonatomic, retain) UIViewController *viewController;
 @end
 #endif
+
+@interface ATAppRatingFlow ()
+/* Days since first app use when the user will first be prompted. */
+@property (nonatomic, readonly) NSUInteger daysBeforePrompt;
+
+/* Number of app uses before which the user will first be prompted. */
+@property (nonatomic, readonly) NSUInteger usesBeforePrompt;
+
+/* Significant events before the user will be prompted. */
+@property (nonatomic, readonly) NSUInteger significantEventsBeforePrompt;
+
+/* Days before the user will be re-prompted after having pressed the "Remind Me Later" button. */
+@property (nonatomic, readonly) NSUInteger daysBeforeRePrompting;
+@end
 
 
 @interface ATAppRatingFlow (Private)
@@ -53,6 +68,8 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 #if TARGET_OS_IPHONE
 - (void)appWillEnterBackground:(NSNotification *)notification;
 #endif
+- (void)preferencesChanged:(NSNotification *)notification;
+- (void)loadPreferences;
 @end
 
 
@@ -64,14 +81,13 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 
 - (id)initWithAppID:(NSString *)anITunesAppID {
     if ((self = [super init])) {
+		[ATAppRatingFlow_Private registerDefaults];
+		[self loadPreferences];
         iTunesAppID = [anITunesAppID retain];
-        self.daysBeforePrompt = kATAppRatingDefaultDaysBeforePrompt;
-        self.usesBeforePrompt = kATAppRatingDefaultUsesBeforePrompt;
-        self.significantEventsBeforePrompt = kATAppRatingDefaultSignificantEventsBeforePrompt;
-        self.daysBeforeRePrompting = kATAppRatingDefaultDaysBeforeRePrompting;
 #if TARGET_OS_IPHONE
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterBackground:) name:UIApplicationWillResignActiveNotification object:nil];
 #endif
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(preferencesChanged:) name:ATAppRatingPreferencesChangedNotification object:nil];
     }
     return self;
 }
@@ -326,6 +342,11 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
     
     do { // once
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+		
+		// Ratings are disabled, don't show dialog.
+		if ([[defaults objectForKey:ATAppRatingEnabledPreferenceKey] boolValue] == NO) {
+			break;
+		}
         
 		// No network connection, don't show dialog.
 		if ([[ATReachability sharedReachability] currentNetworkStatus] == ATNetworkNotReachable) {
@@ -367,42 +388,58 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
                 break;
             }
         }
-        
-        // Make sure the user has been using the app long enough to be bothered.
-        NSDate *firstUse = [defaults objectForKey:ATAppRatingFlowLastUsedVersionFirstUseDateKey];
-        if (firstUse != nil && self.daysBeforePrompt != 0) {
-            double nextPromptDouble = [firstUse timeIntervalSince1970] + (double)(60*60*24*self.daysBeforePrompt);
-            if ([[NSDate date] timeIntervalSince1970] < nextPromptDouble) {
-                break;
-            }
-        }
-        
-        // If the number of significant events is big enough, show a prompt.
-        NSNumber *significantEvents = [defaults objectForKey:ATAppRatingFlowSignificantEventsCountKey];
-        if (significantEvents != nil && self.significantEventsBeforePrompt != 0) {
-            NSUInteger count = [significantEvents unsignedIntegerValue];
-            if (count > self.significantEventsBeforePrompt) {
-                result = YES;
-                break;
-            }
-        }
-        
-        // If the number of app uses is big enough, show a prompt.
-        NSNumber *appUses = [defaults objectForKey:ATAppRatingFlowUseCountKey];
-        if (appUses != nil && self.usesBeforePrompt != 0) {
-            NSUInteger count = [appUses unsignedIntegerValue];
-            if (count > self.usesBeforePrompt) {
-                result = YES;
-                break;
-            }
-        }
-        
-        // Only if both the uses and significant events triggers are set to
-        // 0 (disabled), should we show a dialog based on prompt dates here.
-        if (self.usesBeforePrompt == 0 && self.significantEventsBeforePrompt == 0) {
-            result = YES;
-            break;
-        }
+		
+		ATAppRatingFlowPredicateInfo *info = [[ATAppRatingFlowPredicateInfo alloc] init];
+		info.firstUse = [defaults objectForKey:ATAppRatingFlowLastUsedVersionFirstUseDateKey];
+		info.significantEvents = [[defaults objectForKey:ATAppRatingFlowSignificantEventsCountKey] unsignedIntegerValue];
+		info.appUses = [[defaults objectForKey:ATAppRatingFlowUseCountKey] unsignedIntegerValue];
+		info.daysBeforePrompt = self.daysBeforePrompt;
+		info.significantEventsBeforePrompt = self.significantEventsBeforePrompt;
+		info.usesBeforePrompt = self.usesBeforePrompt;
+		
+		NSPredicate *predicate = [ATAppRatingFlow_Private predicateForPromptLogic:[defaults objectForKey:ATAppRatingPromptLogicPreferenceKey]];
+		if (predicate) {
+			result = [ATAppRatingFlow_Private evaluatePredicate:predicate withPredicateInfo:info];
+		}
+		[info release], info = nil;
+		
+        if (NO) {
+			// Make sure the user has been using the app long enough to be bothered.
+			NSDate *firstUse = [defaults objectForKey:ATAppRatingFlowLastUsedVersionFirstUseDateKey];
+			if (firstUse != nil && self.daysBeforePrompt != 0) {
+				double nextPromptDouble = [firstUse timeIntervalSince1970] + (double)(60*60*24*self.daysBeforePrompt);
+				if ([[NSDate date] timeIntervalSince1970] < nextPromptDouble) {
+					break;
+				}
+			}
+			
+			// If the number of significant events is big enough, show a prompt.
+			NSNumber *significantEvents = [defaults objectForKey:ATAppRatingFlowSignificantEventsCountKey];
+			if (significantEvents != nil && self.significantEventsBeforePrompt != 0) {
+				NSUInteger count = [significantEvents unsignedIntegerValue];
+				if (count > self.significantEventsBeforePrompt) {
+					result = YES;
+					break;
+				}
+			}
+			
+			// If the number of app uses is big enough, show a prompt.
+			NSNumber *appUses = [defaults objectForKey:ATAppRatingFlowUseCountKey];
+			if (appUses != nil && self.usesBeforePrompt != 0) {
+				NSUInteger count = [appUses unsignedIntegerValue];
+				if (count > self.usesBeforePrompt) {
+					result = YES;
+					break;
+				}
+			}
+			
+			// Only if both the uses and significant events triggers are set to
+			// 0 (disabled), should we show a dialog based on prompt dates here.
+			if (self.usesBeforePrompt == 0 && self.significantEventsBeforePrompt == 0) {
+				result = YES;
+				break;
+			}
+		}
     } while (NO);
     
     return result;
@@ -427,6 +464,13 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
     NSString *lastBundleVersion = [defaults objectForKey:ATAppRatingFlowLastUsedVersionKey];
     
     if (lastBundleVersion == nil || ![lastBundleVersion isEqualToString:currentBundleVersion]) {
+		BOOL clearCounts = [(NSNumber *)[defaults objectForKey:ATAppRatingClearCountsOnUpgradePreferenceKey] boolValue];
+		if (clearCounts) {
+			// Clear the counters.
+			[defaults setObject:[NSNumber numberWithUnsignedInteger:0] forKey:ATAppRatingFlowUseCountKey];
+			[defaults setObject:[NSNumber numberWithUnsignedInteger:0] forKey:ATAppRatingFlowSignificantEventsCountKey];
+		}
+		
         [defaults setObject:currentBundleVersion forKey:ATAppRatingFlowLastUsedVersionKey];
         
         [defaults setObject:[NSDate date] forKey:ATAppRatingFlowLastUsedVersionFirstUseDateKey];
@@ -469,21 +513,25 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 - (void)setRatingDialogWasShown {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:[NSDate date] forKey:ATAppRatingFlowLastPromptDateKey];
+	[defaults synchronize];
 }
 
 - (void)setUserDislikesThisVersion {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:[NSNumber numberWithBool:YES] forKey:ATAppRatingFlowUserDislikesThisVersionKey];
+	[defaults synchronize];
 }
 
 - (void)setDeclinedToRateThisVersion {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:[NSNumber numberWithBool:YES] forKey:ATAppRatingFlowDeclinedToRateThisVersionKey];
+	[defaults synchronize];
 }
 
 - (void)setRatedApp {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:[NSNumber numberWithBool:YES] forKey:ATAppRatingFlowRatedAppKey];
+	[defaults synchronize];
 }
 
 - (void)logDefaults {
@@ -507,4 +555,16 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
     }
 }
 #endif
+
+- (void)preferencesChanged:(NSNotification *)notification {
+	[self loadPreferences];
+}
+		 
+- (void)loadPreferences {
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	daysBeforePrompt = [(NSNumber *)[defaults objectForKey:ATAppRatingDaysBeforePromptPreferenceKey] unsignedIntegerValue];
+	usesBeforePrompt = [(NSNumber *)[defaults objectForKey:ATAppRatingUsesBeforePromptPreferenceKey] unsignedIntegerValue];
+	significantEventsBeforePrompt = [(NSNumber *)[defaults objectForKey:ATAppRatingSignificantEventsBeforePromptPreferenceKey] unsignedIntegerValue];
+	daysBeforeRePrompting = [(NSNumber *)[defaults objectForKey:ATAppRatingDaysBetweenPromptsPreferenceKey] unsignedIntegerValue];
+}
 @end

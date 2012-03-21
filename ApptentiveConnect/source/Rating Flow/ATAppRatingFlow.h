@@ -12,11 +12,6 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
-#define kATAppRatingDefaultDaysBeforePrompt 30
-#define kATAppRatingDefaultUsesBeforePrompt 20
-#define kATAppRatingDefaultSignificantEventsBeforePrompt 10
-#define kATAppRatingDefaultDaysBeforeRePrompting 5
-
 /*! A workflow for a user either giving feedback on or rating the current
  application. */
 @interface ATAppRatingFlow : NSObject 
@@ -30,33 +25,16 @@
     UIAlertView *enjoymentDialog;
     UIAlertView *ratingDialog;
 #endif
+	
+	NSUInteger daysBeforePrompt;
+	NSUInteger usesBeforePrompt;
+	NSUInteger significantEventsBeforePrompt;
+	NSUInteger daysBeforeRePrompting;
 }
 
 /*! The default singleton constructor. Call with an iTunes Applicaiton ID as
  an NSString */
 + (ATAppRatingFlow *)sharedRatingFlowWithAppID:(NSString *)iTunesAppID;
-
-/*! Days since first app use when the user will first be prompted. 
- Set to 0 to disable. Defaults to kATAppRatingDefaultDaysBeforePrompt.
- */
-@property (nonatomic, assign) NSUInteger daysBeforePrompt;
-
-/*! Number of app uses before which the user will first be prompted. 
- Set to 0 to disable. Defaults to kATAppRatingDefaultUsesBeforePrompt.
- */
-@property (nonatomic, assign) NSUInteger usesBeforePrompt;
-
-/*! Significant events before the user will be prompted.
- Set to 0 to disable. Defaults to 
- kATAppRatingDefaultSignificantEventsBeforePrompt.
- */
-@property (nonatomic, assign) NSUInteger significantEventsBeforePrompt;
-
-/*! Days before the user will be re-prompted after having pressed the
- "Remind Me Later" button.
- Set to 0 to disable. Defaults to kATAppRatingDefaultDaysBeforeRePrompting.
- */
-@property (nonatomic, assign) NSUInteger daysBeforeRePrompting;
 
 #if TARGET_OS_IPHONE
 /*! 

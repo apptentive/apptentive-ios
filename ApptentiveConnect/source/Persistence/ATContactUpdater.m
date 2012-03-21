@@ -54,9 +54,12 @@ NSString * const ATContactUpdaterFinished = @"ATContactUpdaterFinished";
 }
 
 - (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
-    @synchronized(self) {
-        NSLog(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
-    }
+	@synchronized(self) {
+		NSLog(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
+		// Save anyway, so we don't keep trying.
+		ATContactStorage *storage = [ATContactStorage sharedContactStorage];
+		[storage save];
+	}
 }
 @end
 

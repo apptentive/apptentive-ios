@@ -37,7 +37,7 @@
 	if (failed == YES) {
 		[answer release], answer = nil;
 	}
-	return answer;
+	return [answer autorelease];
 }
 
 - (ATSurveyQuestion *)questionWithJSONDictionary:(NSDictionary *)jsonDictionary {
@@ -92,11 +92,10 @@
 		[question release], question = nil;
 	}
 	
-	return question;
+	return [question autorelease];
 }
 
 - (ATSurvey *)surveyWithJSONDictionary:(NSDictionary *)jsonDictionary {
-//	NSLog(@"%@", jsonDictionary);
 	ATSurvey *survey = [[ATSurvey alloc] init];
 	
 	NSDictionary *keyMapping = [NSDictionary dictionaryWithObjectsAndKeys:@"surveyDescription", @"description", @"identifier", @"id", @"name", @"name", nil];
@@ -125,7 +124,7 @@
 		}
 	}
 	
-	return survey;
+	return [survey autorelease];
 }
 
 - (ATSurvey *)parseSurvey:(NSData *)jsonSurvey {
@@ -163,8 +162,7 @@
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     JSONDecoder *decoder = [JSONDecoder decoder];
     NSError *error = nil;
-	NSString *s = [[NSString alloc] initWithData:jsonSurveys encoding:NSUTF8StringEncoding];
-	NSLog(@"%@", s);
+	
     id decodedObject = [decoder objectWithData:jsonSurveys error:&error];
     if (decodedObject && [decodedObject isKindOfClass:[NSArray class]]) {
         success = YES;

@@ -133,7 +133,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 }
 
 - (IBAction)takePhoto:(id)sender {
-	if (controller.attachmentOptions && ATFeedbackAllowTakePhotoAttachment) {
+	if (controller.attachmentOptions & ATFeedbackAllowTakePhotoAttachment) {
 		UIActionSheet *actionSheet = nil;
 		if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
 			actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel Button Title") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Choose From Library", @"Choose Photo Button Title"), ATLocalizedString(@"Take Photo", @"Take Photo Button Title"), nil];

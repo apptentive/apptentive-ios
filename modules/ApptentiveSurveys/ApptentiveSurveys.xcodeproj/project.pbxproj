@@ -52,7 +52,7 @@
 		49EC5D88146717D700634D43 /* ApptentiveSurveysTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EC5D84146717D700634D43 /* ApptentiveSurveysTests.m */; };
 		49EC5D89146717D700634D43 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49EC5D85146717D700634D43 /* InfoPlist.strings */; };
 		49EC5D8D1467183600634D43 /* ApptentiveSurveys-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 49EC5D8A1467183600634D43 /* ApptentiveSurveys-Prefix.pch */; };
-		49EC5D8E1467183600634D43 /* ATSurveys.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EC5D8B1467183600634D43 /* ATSurveys.h */; };
+		49EC5D8E1467183600634D43 /* ATSurveys.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EC5D8B1467183600634D43 /* ATSurveys.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		49EC5D8F1467183600634D43 /* ATSurveys.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EC5D8C1467183600634D43 /* ATSurveys.m */; };
 		49EC5D901467184300634D43 /* ATSurveys.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EC5D8C1467183600634D43 /* ATSurveys.m */; };
 		49EC5D951467187F00634D43 /* ATSurveysBackend.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EC5D931467187F00634D43 /* ATSurveysBackend.h */; };
@@ -323,6 +323,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49EC5D8E1467183600634D43 /* ATSurveys.h in Headers */,
 				49B876B914647C6C00594A5D /* ATConnect.h in Headers */,
 				49B876FC14648FAE00594A5D /* JSONKit.h in Headers */,
 				49B877071464935200594A5D /* ATWebClient+SurveyAdditions.h in Headers */,
@@ -338,7 +339,6 @@
 				49B877331465C4F600594A5D /* ATSurveyParser.h in Headers */,
 				49EC5D6C1466227800634D43 /* ATSurveyViewController.h in Headers */,
 				49EC5D8D1467183600634D43 /* ApptentiveSurveys-Prefix.pch in Headers */,
-				49EC5D8E1467183600634D43 /* ATSurveys.h in Headers */,
 				49EC5D951467187F00634D43 /* ATSurveysBackend.h in Headers */,
 				49EC5D9A14671FB100634D43 /* ATDefaultTextView.h in Headers */,
 				49AB111E14D8DA5D00D13C02 /* ATRecord.h in Headers */,
@@ -358,6 +358,7 @@
 				49B8767B14647C5200594A5D /* Sources */,
 				49B8767C14647C5200594A5D /* Frameworks */,
 				49B8767D14647C5200594A5D /* Headers */,
+				4932C216151AB144000EFB80 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -458,6 +459,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		4932C216151AB144000EFB80 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Version 2.0 (updated for Xcode 4, with some fixes)\n# Changes:\n#    - Works with xcode 4, even when running xcode 3 projects (Workarounds for apple bugs)\n#    - Faster / better: only runs lipo once, instead of once per recursion\n#    - Added some debugging statemetns that can be switched on/off by changing the DEBUG_THIS_SCRIPT variable to \"true\"\n#    - Fixed some typos\n# \n# Purpose:\n#   Create a static library for iPhone from within XCode\n#   Because Apple staff DELIBERATELY broke Xcode to make this impossible from the GUI (Xcode 3.2.3 specifically states this in the Release notes!)\n#   ...no, I don't understand why they did this!\n#\n# Author: Adam Martin - http://twitter.com/redglassesapps\n# Based on: original script from Eonil (main changes: Eonil's script WILL NOT WORK in Xcode GUI - it WILL CRASH YOUR COMPUTER)\n#\n# More info: see this Stack Overflow question: http://stackoverflow.com/questions/3520977/build-fat-static-library-device-simulator-using-xcode-and-sdk-4\n\n#################[ Tests: helps workaround any future bugs in Xcode ]########\n#\nDEBUG_THIS_SCRIPT=\"false\"\n\nif [ $DEBUG_THIS_SCRIPT = \"true\" ]\nthen\necho \"########### TESTS #############\"\necho \"Use the following variables when debugging this script; note that they may change on recursions\"\necho \"BUILD_DIR = $BUILD_DIR\"\necho \"BUILD_ROOT = $BUILD_ROOT\"\necho \"CONFIGURATION_BUILD_DIR = $CONFIGURATION_BUILD_DIR\"\necho \"BUILT_PRODUCTS_DIR = $BUILT_PRODUCTS_DIR\"\necho \"CONFIGURATION_TEMP_DIR = $CONFIGURATION_TEMP_DIR\"\necho \"TARGET_BUILD_DIR = $TARGET_BUILD_DIR\"\nfi\n\n#####################[ part 1 ]##################\n# First, work out the BASESDK version number (NB: Apple ought to report this, but they hide it)\n#    (incidental: searching for substrings in sh is a nightmare! Sob)\n\nSDK_VERSION=$(echo ${SDK_NAME} | grep -o '.\\{3\\}$')\n\n# Next, work out if we're in SIM or DEVICE\n\nif [ ${PLATFORM_NAME} = \"iphonesimulator\" ]\nthen\nOTHER_SDK_TO_BUILD=iphoneos${SDK_VERSION}\nelse\nOTHER_SDK_TO_BUILD=iphonesimulator${SDK_VERSION}\nfi\n\necho \"XCode has selected SDK: ${PLATFORM_NAME} with version: ${SDK_VERSION} (although back-targetting: ${IPHONEOS_DEPLOYMENT_TARGET})\"\necho \"...therefore, OTHER_SDK_TO_BUILD = ${OTHER_SDK_TO_BUILD}\"\n#\n#####################[ end of part 1 ]##################\n\n#####################[ part 2 ]##################\n#\n# IF this is the original invocation, invoke WHATEVER other builds are required\n#\n# Xcode is already building ONE target...\n#\n# ...but this is a LIBRARY, so Apple is wrong to set it to build just one.\n# ...we need to build ALL targets\n# ...we MUST NOT re-build the target that is ALREADY being built: Xcode WILL CRASH YOUR COMPUTER if you try this (infinite recursion!)\n#\n#\n# So: build ONLY the missing platforms/configurations.\n\nif [ \"true\" == ${ALREADYINVOKED:-false} ]\nthen\necho \"RECURSION: I am NOT the root invocation, so I'm NOT going to recurse\"\nelse\n# CRITICAL:\n# Prevent infinite recursion (Xcode sucks)\nexport ALREADYINVOKED=\"true\"\n\necho \"RECURSION: I am the root ... recursing all missing build targets NOW...\"\necho \"RECURSION: ...about to invoke: xcodebuild -configuration \\\"${CONFIGURATION}\\\" -target \\\"${TARGET_NAME}\\\" -sdk \\\"${OTHER_SDK_TO_BUILD}\\\" ${ACTION} RUN_CLANG_STATIC_ANALYZER=NO\"\nxcodebuild -configuration \"${CONFIGURATION}\" -target \"${TARGET_NAME}\" -sdk \"${OTHER_SDK_TO_BUILD}\" ${ACTION} RUN_CLANG_STATIC_ANALYZER=NO BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\nACTION=\"build\"\n\n#Merge all platform binaries as a fat binary for each configurations.\n\n# Calculate where the (multiple) built files are coming from:\nCURRENTCONFIG_DEVICE_DIR=${SYMROOT}/${CONFIGURATION}-iphoneos\nCURRENTCONFIG_SIMULATOR_DIR=${SYMROOT}/${CONFIGURATION}-iphonesimulator\n\necho \"Taking device build from: ${CURRENTCONFIG_DEVICE_DIR}\"\necho \"Taking simulator build from: ${CURRENTCONFIG_SIMULATOR_DIR}\"\n\nCREATING_UNIVERSAL_DIR=${SYMROOT}/${CONFIGURATION}-universal-surveys\necho \"...I will output a universal build to: ${CREATING_UNIVERSAL_DIR}\"\n\n# ... remove the products of previous runs of this script\n#      NB: this directory is ONLY created by this script - it should be safe to delete!\n\nrm -rf \"${CREATING_UNIVERSAL_DIR}\"\nmkdir \"${CREATING_UNIVERSAL_DIR}\"\n\n#\necho \"lipo: for current configuration (${CONFIGURATION}) creating output file: ${CREATING_UNIVERSAL_DIR}/${EXECUTABLE_NAME}\"\nlipo -create -output \"${CREATING_UNIVERSAL_DIR}/${EXECUTABLE_NAME}\" \"${CURRENTCONFIG_DEVICE_DIR}/${EXECUTABLE_NAME}\" \"${CURRENTCONFIG_SIMULATOR_DIR}/${EXECUTABLE_NAME}\"\n\n#########\n#\n# Added: StackOverflow suggestion to also copy \"include\" files\n#    (untested, but should work OK)\n#\nif [ -d \"${CURRENTCONFIG_DEVICE_DIR}/usr/local/include\" ]\nthen\nmkdir -p \"${CREATING_UNIVERSAL_DIR}/include\"\n# * needs to be outside the double quotes?\ncp \"${CURRENTCONFIG_DEVICE_DIR}/usr/local/include/\"* \"${CREATING_UNIVERSAL_DIR}/include\"\nfi\nfi";
+		};
 		49B8768D14647C5200594A5D /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;

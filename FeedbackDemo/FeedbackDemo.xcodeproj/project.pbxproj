@@ -6,6 +6,24 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		4932C217151AB255000EFB80 /* Distribution */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 4932C218151AB255000EFB80 /* Build configuration list for PBXAggregateTarget "Distribution" */;
+			buildPhases = (
+				4932C223151AB262000EFB80 /* ShellScript */,
+			);
+			dependencies = (
+				4932C21C151AB25F000EFB80 /* PBXTargetDependency */,
+				4932C21E151AB25F000EFB80 /* PBXTargetDependency */,
+				4932C220151AB25F000EFB80 /* PBXTargetDependency */,
+				4932C222151AB25F000EFB80 /* PBXTargetDependency */,
+			);
+			name = Distribution;
+			productName = Distribution;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		493529BD138C712A000E464A /* ApptentiveResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 49D111A013341A7C00603373 /* ApptentiveResources.bundle */; };
 		493529C0138C7141000E464A /* libApptentiveConnect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C0032D133417390071F088 /* libApptentiveConnect.a */; };
@@ -40,6 +58,34 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		4932C21B151AB25F000EFB80 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 49C00324133417390071F088 /* ApptentiveConnect.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 496DC37E1333D35600743F65;
+			remoteInfo = ApptentiveConnect;
+		};
+		4932C21D151AB25F000EFB80 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 49C00324133417390071F088 /* ApptentiveConnect.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 49D1118B13341A7C00603373;
+			remoteInfo = ApptentiveResources;
+		};
+		4932C21F151AB25F000EFB80 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 49EA5AD414BD12BC004F8A4D /* ApptentiveMetrics.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 49EF33C914AA76AF00077F76;
+			remoteInfo = ApptentiveMetrics;
+		};
+		4932C221151AB25F000EFB80 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 493E6CD514D8D468003F22FF /* ApptentiveSurveys.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 49B8767E14647C5200594A5D;
+			remoteInfo = ApptentiveSurveys;
+		};
 		493E6CDE14D8D469003F22FF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 493E6CD514D8D468003F22FF /* ApptentiveSurveys.xcodeproj */;
@@ -412,6 +458,7 @@
 			targets = (
 				49C002E61334172E0071F088 /* FeedbackDemo */,
 				49C0030A1334172F0071F088 /* FeedbackDemoTests */,
+				4932C217151AB255000EFB80 /* Distribution */,
 			);
 		};
 /* End PBXProject section */
@@ -500,6 +547,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		4932C223151AB262000EFB80 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "UNIVERSAL_DIR=${SYMROOT}/${CONFIGURATION}-universal\nUNIVERSAL_METRICS_DIR=${SYMROOT}/${CONFIGURATION}-universal-metrics\nUNIVERSAL_SURVEYS_DIR=${SYMROOT}/${CONFIGURATION}-universal-surveys\n\nCREATING_TAR_DIR=${SYMROOT}/${CONFIGURATION}-distribution-tar\n\nrm -rf \"${CREATING_TAR_DIR}\"\nmkdir \"${CREATING_TAR_DIR}\"\n\nditto \"$UNIVERSAL_DIR/\" \"$CREATING_TAR_DIR/\"\nditto \"$UNIVERSAL_METRICS_DIR/\" \"$CREATING_TAR_DIR/\"\nditto \"$UNIVERSAL_SURVEYS_DIR/\" \"$CREATING_TAR_DIR/\"\n\ncd \"$CREATING_TAR_DIR\" && tar -zcvf ../apptentive_ios_sdk.tar.gz . && cd ..\n\nopen \"$SYMROOT\"\n";
+		};
 		49C003091334172F0071F088 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -537,6 +597,26 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		4932C21C151AB25F000EFB80 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ApptentiveConnect;
+			targetProxy = 4932C21B151AB25F000EFB80 /* PBXContainerItemProxy */;
+		};
+		4932C21E151AB25F000EFB80 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ApptentiveResources;
+			targetProxy = 4932C21D151AB25F000EFB80 /* PBXContainerItemProxy */;
+		};
+		4932C220151AB25F000EFB80 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ApptentiveMetrics;
+			targetProxy = 4932C21F151AB25F000EFB80 /* PBXContainerItemProxy */;
+		};
+		4932C222151AB25F000EFB80 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ApptentiveSurveys;
+			targetProxy = 4932C221151AB25F000EFB80 /* PBXContainerItemProxy */;
+		};
 		49AA1027138B4E500082887A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = ApptentiveResources;
@@ -612,6 +692,20 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		4932C219151AB255000EFB80 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		4932C21A151AB255000EFB80 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		49C0031C1334172F0071F088 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -767,6 +861,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		4932C218151AB255000EFB80 /* Build configuration list for PBXAggregateTarget "Distribution" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4932C219151AB255000EFB80 /* Debug */,
+				4932C21A151AB255000EFB80 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		49C002E11334172E0071F088 /* Build configuration list for PBXProject "FeedbackDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

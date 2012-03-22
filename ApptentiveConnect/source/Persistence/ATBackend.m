@@ -18,6 +18,9 @@
 #import "ATUtilities.h"
 #import "ATWebClient.h"
 
+
+NSString *const ATUUIDPreferenceKey = @"ATUUIDPreferenceKey";
+
 static ATBackend *sharedBackend = nil;
 
 @interface ATBackend (Private)
@@ -220,14 +223,35 @@ static ATBackend *sharedBackend = nil;
 
 - (NSString *)deviceUUID {
 #if TARGET_OS_IPHONE
-    return [[UIDevice currentDevice] uniqueIdentifier];
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSString *uuid = [defaults objectForKey:ATUUIDPreferenceKey];
+	if (!uuid) {
+		CFUUIDRef uuidRef = CFUUIDCreate(NULL);
+		CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
+		
+		uuid = [NSString stringWithFormat:@"ios:%@", (NSString *)uuidStringRef];
+		
+		CFRelease(uuidRef), uuidRef = NULL;
+		CFRelease(uuidStringRef), uuidStringRef = NULL;
+		
+		[defaults setObject:uuid forKey:ATUUIDPreferenceKey];
+		[defaults synchronize];
+	}
+	return uuid;
 #elif TARGET_OS_MAC
     static CFStringRef keyRef = CFSTR("apptentiveUUID");
     static CFStringRef appIDRef = CFSTR("com.apptentive.feedback");
     NSString *uuid = nil;
     uuid = (NSString *)CFPreferencesCopyAppValue(keyRef, appIDRef);
     if (!uuid) {
-        uuid = [[NSString alloc] initWithFormat:@"osx:%@", [ATUtilities randomStringOfLength:40]];
+		CFUUIDRef uuidRef = CFUUIDCreate(NULL);
+		CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
+		
+		uuid = [[NSString alloc] initWithFormat:@"osx:%@", (NSString *)uuidStringRef];
+		
+		CFRelease(uuidRef), uuidRef = NULL;
+		CFRelease(uuidStringRef), uuidStringRef = NULL;
+		
         CFPreferencesSetValue(keyRef, (CFStringRef)uuid, appIDRef, kCFPreferencesCurrentUser, kCFPreferencesCurrentHost);
         CFPreferencesSynchronize(appIDRef, kCFPreferencesCurrentUser, kCFPreferencesCurrentHost);
     }

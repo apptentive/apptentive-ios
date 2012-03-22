@@ -12,7 +12,7 @@
 #import "ATWebClient.h"
 #import "JSONKit.h"
 
-NSString * const ATAppConfigurationUpdaterFinished = @"ATAppConfigurationUpdaterFinished";
+NSString *const ATAppConfigurationUpdaterFinished = @"ATAppConfigurationUpdaterFinished";
 NSString *const ATAppConfigurationLastUpdatePreferenceKey = @"ATAppConfigurationLastUpdatePreferenceKey";
 
 // Interval, in seconds, after which we'll update the configuration.

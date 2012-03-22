@@ -494,6 +494,8 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
     
     [defaults setObject:[NSNumber numberWithUnsignedInteger:count] forKey:ATAppRatingFlowUseCountKey];
     [defaults synchronize];
+	
+	[self updateVersionInfo];
 }
 
 - (void)userDidSignificantEvent {

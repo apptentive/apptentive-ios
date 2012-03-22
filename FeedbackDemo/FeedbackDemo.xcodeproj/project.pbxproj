@@ -868,6 +868,7 @@
 				4932C21A151AB255000EFB80 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		49C002E11334172E0071F088 /* Build configuration list for PBXProject "FeedbackDemo" */ = {
 			isa = XCConfigurationList;

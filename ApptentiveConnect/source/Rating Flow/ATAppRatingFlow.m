@@ -402,44 +402,6 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 			result = [ATAppRatingFlow_Private evaluatePredicate:predicate withPredicateInfo:info];
 		}
 		[info release], info = nil;
-		
-        if (NO) {
-			// Make sure the user has been using the app long enough to be bothered.
-			NSDate *firstUse = [defaults objectForKey:ATAppRatingFlowLastUsedVersionFirstUseDateKey];
-			if (firstUse != nil && self.daysBeforePrompt != 0) {
-				double nextPromptDouble = [firstUse timeIntervalSince1970] + (double)(60*60*24*self.daysBeforePrompt);
-				if ([[NSDate date] timeIntervalSince1970] < nextPromptDouble) {
-					break;
-				}
-			}
-			
-			// If the number of significant events is big enough, show a prompt.
-			NSNumber *significantEvents = [defaults objectForKey:ATAppRatingFlowSignificantEventsCountKey];
-			if (significantEvents != nil && self.significantEventsBeforePrompt != 0) {
-				NSUInteger count = [significantEvents unsignedIntegerValue];
-				if (count > self.significantEventsBeforePrompt) {
-					result = YES;
-					break;
-				}
-			}
-			
-			// If the number of app uses is big enough, show a prompt.
-			NSNumber *appUses = [defaults objectForKey:ATAppRatingFlowUseCountKey];
-			if (appUses != nil && self.usesBeforePrompt != 0) {
-				NSUInteger count = [appUses unsignedIntegerValue];
-				if (count > self.usesBeforePrompt) {
-					result = YES;
-					break;
-				}
-			}
-			
-			// Only if both the uses and significant events triggers are set to
-			// 0 (disabled), should we show a dialog based on prompt dates here.
-			if (self.usesBeforePrompt == 0 && self.significantEventsBeforePrompt == 0) {
-				result = YES;
-				break;
-			}
-		}
     } while (NO);
     
     return result;

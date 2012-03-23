@@ -33,7 +33,6 @@
 
 - (void)checkForAvailableSurveys {
 	if (checkSurveyRequest == nil) {
-		NSLog(@"checking for surveys");
 		ATWebClient *client = [ATWebClient sharedClient];
 		checkSurveyRequest = [[client requestForGettingSurvey] retain];
 		checkSurveyRequest.delegate = self;

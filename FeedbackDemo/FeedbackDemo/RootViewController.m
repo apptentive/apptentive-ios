@@ -140,7 +140,7 @@ enum kRootTableSections {
 	} else if (section == kRatingSection) {
 		title = nil;
 	} else if (section == kSurveySection) {
-		title = nil;
+		title = [NSString stringWithFormat:@"ApptentiveConnect v%@", kATConnectVersionString];
 	}
 	return title;
 }

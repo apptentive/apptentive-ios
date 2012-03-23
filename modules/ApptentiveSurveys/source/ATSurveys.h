@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "ATConnect.h"
 
-NSString *const ATSurveyNewSurveyAvailableNotification;
+extern NSString *const ATSurveyNewSurveyAvailableNotification;
 
 @interface ATSurveys : NSObject
 + (BOOL)hasSurveyAvailable;

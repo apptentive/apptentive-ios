@@ -163,6 +163,13 @@
 			remoteGlobalIDString = 49EF33DA14AA76AF00077F76;
 			remoteInfo = ApptentiveMetricsTests;
 		};
+		49FB8654151BAEA700342914 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 49EA5AD414BD12BC004F8A4D /* ApptentiveMetrics.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 49EF33C914AA76AF00077F76;
+			remoteInfo = ApptentiveMetrics;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -391,6 +398,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				49FB8655151BAEA700342914 /* PBXTargetDependency */,
 				49AB111C14D8D4FC00D13C02 /* PBXTargetDependency */,
 				49AA1027138B4E500082887A /* PBXTargetDependency */,
 				49C00331133417740071F088 /* PBXTargetDependency */,
@@ -637,6 +645,11 @@
 			name = ApptentiveConnect;
 			targetProxy = 49C00330133417740071F088 /* PBXContainerItemProxy */;
 		};
+		49FB8655151BAEA700342914 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ApptentiveMetrics;
+			targetProxy = 49FB8654151BAEA700342914 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -783,7 +796,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FeedbackDemo/FeedbackDemo-Prefix.pch";
@@ -804,6 +817,7 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;

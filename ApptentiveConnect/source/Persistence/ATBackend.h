@@ -11,6 +11,7 @@
 #elif TARGET_OS_MAC
 #import <Cocoa/Cocoa.h>
 #endif
+#import "ATAppConfigurationUpdater.h"
 
 #define USE_STAGING 0
 
@@ -20,7 +21,7 @@
 @class ATAPIRequest;
 
 /*! Handles all of the backend activities, such as sending feedback. */
-@interface ATBackend : NSObject {
+@interface ATBackend : NSObject <ATAppConfigurationUpdaterDelegate> {
 @private
 	ATContactUpdater *contactUpdater;
 	ATAppConfigurationUpdater *configurationUpdater;

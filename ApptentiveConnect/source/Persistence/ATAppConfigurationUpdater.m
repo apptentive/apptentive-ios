@@ -12,8 +12,9 @@
 #import "ATWebClient.h"
 #import "JSONKit.h"
 
-NSString *const ATAppConfigurationUpdaterFinished = @"ATAppConfigurationUpdaterFinished";
+NSString *const ATConfigurationPreferencesChangedNotification = @"ATConfigurationPreferencesChangedNotification";
 NSString *const ATAppConfigurationLastUpdatePreferenceKey = @"ATAppConfigurationLastUpdatePreferenceKey";
+NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigurationMetricsEnabledPreferenceKey";
 
 // Interval, in seconds, after which we'll update the configuration.
 #define kATAppConfigurationUpdateInterval (60*60*24)
@@ -28,6 +29,7 @@ NSString *const ATAppConfigurationLastUpdatePreferenceKey = @"ATAppConfiguration
 	NSDictionary *defaultPreferences = 
 	[NSDictionary dictionaryWithObjectsAndKeys:
 	 [NSDate distantPast], ATAppConfigurationLastUpdatePreferenceKey,
+	 [NSNumber numberWithBool:YES], ATAppConfigurationMetricsEnabledPreferenceKey,
 	 nil];
 	[defaults registerDefaults:defaultPreferences];
 }
@@ -44,9 +46,18 @@ NSString *const ATAppConfigurationLastUpdatePreferenceKey = @"ATAppConfiguration
 	} else {
 		return NO;
 	}
-	
 }
+
+
+- (id)initWithDelegate:(NSObject<ATAppConfigurationUpdaterDelegate> *)aDelegate {
+	if ((self = [super init])) {
+		delegate = aDelegate;
+	}
+	return self;
+}
+
 - (void)dealloc {
+	delegate = nil;
 	[self cancel];
 	[super dealloc];
 }
@@ -71,8 +82,10 @@ NSString *const ATAppConfigurationLastUpdatePreferenceKey = @"ATAppConfiguration
 	@synchronized (self) {
 		if ([result isKindOfClass:[NSDictionary class]]) {
 			[self processResult:(NSDictionary *)result];
+			[delegate configurationUpdaterDidFinish:YES];
 		} else {
 			NSLog(@"App configuration result is not NSDictionary!");
+			[delegate configurationUpdaterDidFinish:NO];
 		}
 	}
 }
@@ -84,13 +97,15 @@ NSString *const ATAppConfigurationLastUpdatePreferenceKey = @"ATAppConfiguration
 - (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
 	@synchronized(self) {
 		NSLog(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
+		
+		[delegate configurationUpdaterDidFinish:NO];
 	}
 }
 @end
 
 @implementation ATAppConfigurationUpdater (Private)
-- (void)processResult:(NSDictionary *)jsonRatingConfiguration {
-	BOOL hasRatingsChanges = NO;
+- (void)processResult:(NSDictionary *)jsonConfiguration {
+	BOOL hasConfigurationChanges = NO;
 	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	[ATAppConfigurationUpdater registerDefaults];
@@ -105,13 +120,15 @@ NSString *const ATAppConfigurationLastUpdatePreferenceKey = @"ATAppConfiguration
 		 @"ratings_days_before_prompt", ATAppRatingDaysBeforePromptPreferenceKey, 
 		 @"ratings_days_between_prompts", ATAppRatingDaysBetweenPromptsPreferenceKey, 
 		 @"ratings_events_before_prompt", ATAppRatingSignificantEventsBeforePromptPreferenceKey, 
-		 @"ratings_uses_before_prompt", ATAppRatingUsesBeforePromptPreferenceKey, nil];
+		 @"ratings_uses_before_prompt", ATAppRatingUsesBeforePromptPreferenceKey, 
+		 @"metrics_enabled", ATAppConfigurationMetricsEnabledPreferenceKey,
+		 nil];
 	
-	NSArray *boolPreferences = [NSArray arrayWithObjects:@"ratings_clear_on_upgrade", @"ratings_enabled", nil];
-	NSObject *ratingsPromptLogic = [jsonRatingConfiguration objectForKey:@"ratings_prompt_logic"];
+	NSArray *boolPreferences = [NSArray arrayWithObjects:@"ratings_clear_on_upgrade", @"ratings_enabled", @"metrics_enabled", nil];
+	NSObject *ratingsPromptLogic = [jsonConfiguration objectForKey:@"ratings_prompt_logic"];
 	
 	for (NSString *key in numberObjects) {
-		NSObject *value = [jsonRatingConfiguration objectForKey:[numberObjects objectForKey:key]];
+		NSObject *value = [jsonConfiguration objectForKey:[numberObjects objectForKey:key]];
 		if (!value || ![value isKindOfClass:[NSNumber class]]) {
 			continue;
 		}
@@ -131,21 +148,21 @@ NSString *const ATAppConfigurationLastUpdatePreferenceKey = @"ATAppConfiguration
 			
 			[defaults setObject:replacementValue forKey:key];
 		}
-		hasRatingsChanges = YES;
+		hasConfigurationChanges = YES;
 	}
 	
 	if (ratingsPromptLogic) {
 		NSPredicate *predicate = [ATAppRatingFlow_Private predicateForPromptLogic:ratingsPromptLogic];
 		if (predicate) {
 			[defaults setObject:ratingsPromptLogic forKey:ATAppRatingPromptLogicPreferenceKey];
-			hasRatingsChanges = YES;
+			hasConfigurationChanges = YES;
 		}
 	}
 	
-	if (hasRatingsChanges) {
+	if (hasConfigurationChanges) {
 		[defaults setObject:[NSNumber numberWithBool:YES] forKey:ATAppRatingSettingsAreFromServerPreferenceKey];
 		[defaults synchronize];
-		[[NSNotificationCenter defaultCenter] postNotificationName:ATAppRatingPreferencesChangedNotification object:nil];
+		[[NSNotificationCenter defaultCenter] postNotificationName:ATConfigurationPreferencesChangedNotification object:nil];
 	}
 }
 @end

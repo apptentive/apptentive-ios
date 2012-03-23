@@ -200,7 +200,7 @@ static ATBackend *sharedBackend = nil;
 
 - (void)udpateRatingConfigurationIfNeeded {
 	if (configurationUpdater == nil && [ATAppConfigurationUpdater shouldCheckForUpdate]) {
-		configurationUpdater = [[ATAppConfigurationUpdater alloc] init];
+		configurationUpdater = [[ATAppConfigurationUpdater alloc] initWithDelegate:self];
 		[configurationUpdater update];
 	}
 }
@@ -282,6 +282,14 @@ static ATBackend *sharedBackend = nil;
 - (NSURL *)apptentiveHomepageURL {
     return [NSURL URLWithString:@"http://www.apptentive.com/"];
 }
+
+#pragma mark ATAppConfigurationUpdaterDelegate
+- (void)configurationUpdaterDidFinish:(BOOL)success {
+	if (configurationUpdater) {
+		[configurationUpdater release];
+		configurationUpdater = nil;
+	}
+}
 @end
 
 @implementation ATBackend (Private)
@@ -300,7 +308,6 @@ static ATBackend *sharedBackend = nil;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:NSApplicationWillTerminateNotification object:nil];
 #endif
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contactUpdaterFinished:) name:ATContactUpdaterFinished object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingUpdaterFinished::) name:ATAppConfigurationUpdaterFinished object:nil];
 	
 	[ATReachability sharedReachability];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusChanged:) name:ATReachabilityStatusChanged object:nil];
@@ -342,12 +349,5 @@ static ATBackend *sharedBackend = nil;
         contactUpdater = nil;
     }
     userDataWasUpdated = YES;
-}
-
-- (void)ratingUpdaterFinished:(NSNotification *)notification {
-	if (configurationUpdater) {
-		[configurationUpdater release];
-		configurationUpdater = nil;
-	}
 }
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "ApptentiveMetrics.h"
+#import "ATAppConfigurationUpdater.h"
 #import "ATFeedbackMetrics.h"
 #import "ATAppRatingMetrics.h"
 #import "ATMetric.h"
@@ -45,6 +46,10 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 - (void)appWillTerminate:(NSNotification *)notification;
 - (void)appDidEnterBackground:(NSNotification *)notification;
 - (void)appWillEnterForeground:(NSNotification *)notification;
+
+- (void)preferencesChanged:(NSNotification *)notification;
+
+- (void)updateWithCurrentPreferences;
 @end
 
 @implementation ApptentiveMetrics
@@ -65,9 +70,21 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 	return sharedSingleton;
 }
 
++ (void)registerDefaults {
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSDictionary *defaultPreferences = 
+	[NSDictionary dictionaryWithObjectsAndKeys:
+	 [NSNumber numberWithBool:YES], ATAppConfigurationMetricsEnabledPreferenceKey,
+	 nil];
+	[defaults registerDefaults:defaultPreferences];
+}
+
 - (id)init {
 	self = [super init];
 	if (self) {
+		metricsEnabled = NO;
+		[ApptentiveMetrics registerDefaults];
+		[self updateWithCurrentPreferences];
 		[self addMetricWithName:ATMetricNameAppLaunch info:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackDidShowWindow:) name:ATFeedbackDidShowWindowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackDidHideWindow:) name:ATFeedbackDidHideWindowNotification object:nil];
@@ -80,6 +97,8 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(preferencesChanged:) name:ATConfigurationPreferencesChangedNotification object:nil];
 	}
 	
 	return self;
@@ -95,6 +114,9 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 
 @implementation ApptentiveMetrics (Private)
 - (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo {
+	if (metricsEnabled == NO) {
+		return;
+	}
 	ATMetric *metric = [[ATMetric alloc] init];
 	metric.name = name;
 	[metric addEntriesFromDictionary:userInfo];
@@ -214,5 +236,18 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 
 - (void)appWillEnterForeground:(NSNotification *)notification {
 	[self addMetricWithName:ATMetricNameAppLaunch info:nil];
+}
+
+- (void)preferencesChanged:(NSNotification *)notification {
+	[self updateWithCurrentPreferences];
+}
+
+- (void)updateWithCurrentPreferences {
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	
+	NSNumber *enabled = [defaults objectForKey:ATAppConfigurationMetricsEnabledPreferenceKey];
+	if (enabled) {
+		metricsEnabled = [enabled boolValue];
+	}
 }
 @end

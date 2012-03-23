@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ApptentiveMetrics : NSObject
+@interface ApptentiveMetrics : NSObject {
+@private
+	BOOL metricsEnabled;
+}
 + (id)sharedMetrics;
 @end
 

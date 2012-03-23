@@ -9,15 +9,21 @@
 #import <Foundation/Foundation.h>
 #import "ATAPIRequest.h"
 
-NSString * const ATAppConfigurationUpdaterFinished;
-
+NSString *const ATConfigurationPreferencesChangedNotification;
 NSString *const ATAppConfigurationLastUpdatePreferenceKey;
+NSString *const ATAppConfigurationMetricsEnabledPreferenceKey;
+
+@protocol ATAppConfigurationUpdaterDelegate <NSObject>
+- (void)configurationUpdaterDidFinish:(BOOL)success;
+@end
 
 @interface ATAppConfigurationUpdater : NSObject <ATAPIRequestDelegate> {
 @private
 	ATAPIRequest *request;
+	NSObject<ATAppConfigurationUpdaterDelegate> *delegate;
 }
 + (BOOL)shouldCheckForUpdate;
+- (id)initWithDelegate:(NSObject<ATAppConfigurationUpdaterDelegate> *)delegate;
 - (void)update;
 - (void)cancel;
 @end

@@ -1,3 +1,30 @@
+2012-03-25 wooster
+------------------
+Major changes:
+
+* Start of version 0.3.
+* Ratings flow configuration is now done server-side. Old parameters in SDK no longer exist.
+* There are now server-side on/off switches for both ratings and metrics.
+* Added initial version of surveys.
+* Ratings parameter counters (days of use, significant events) can be reset on version upgrade.
+* Including armv6 (non-thumb) architecture in all libraries.
+* "Distribution" target in FeedbackDemo builds a static library distribution.
+* Application exit events wired up in Metrics module.
+
+##### Metrics
+The metrics module can be used by simply linking against the `libApptentiveMetrics.a` static library. That's it. You can turn metrics on or off server side in your app settings.
+
+##### Surveys
+This is a very rough initial version of surveys. To use, link against `libApptentiveSurveys.a`.
+
+Specific bug fixes and features:
+
+* IOS-3: App Exit events don't seem to be sent?
+* IOS-6: $ARCHS_STANDARD_32_BIT is now armv7 only, needs to be changed to armv6 and armv7
+* IOS-11: Surveys Module on iOS
+* IOS-21: Support for Server Side Ratings Settings
+* IOS-22: Option to clear ratings parameter values (days of use, events, etc.) on version upgrade
+
 2012-01-13 wooster
 ------------------
 * Start of version 0.2.

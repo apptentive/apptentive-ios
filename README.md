@@ -28,8 +28,8 @@ the app in the App Store:
 ![Popup](apptentive-ios/raw/master/etc/screenshots/rating.png)
 
 
-Required Frameworks (Xcode 3 & 4)
----------------------------------
+Required Frameworks
+-------------------
 In order to use `ApptentiveConnect`, your project must link against the
 following frameworks:
 
@@ -72,31 +72,6 @@ for iOS devices first works around a bug in Xcode 4.
 
 Now, drag `ATConnect.h` from `ApptentiveConnect.xcodeproj` to your app's 
 file list.
-
-Now see "Using the Library", below, for instructions on using the library in your code.
-
-Project Settings for Xcode 3
-----------------------------
-
-There is a video demoing integration in Xcode 3 here:
-http://vimeo.com/23566166
-
-Drag the `ApptentiveConnect.xcodeproj` project to your project in Xcode.
-
-In your build settings for All Configurations for your target, add the following 
-to `Other Linker Flags`:
-
-    -ObjC -all_load
-
-Inspect your application target by selecting the target and pressing `Cmd+I`, then
-in the General settings tab, add `ApptentiveConnect` and `ApptentiveResources` as
-direct dependencies.
-
-Now, disclose the contents of the `ApptentiveConnect.xcodeproj` in Xcode and drag
-`libApptentiveConnect.a` to your target's `Link Binary With Libraries` build phase,
-and `ApptentiveResources.bundle` to your target's `Copy Bundle Resources` build phase.
-
-Finally, drag `ATConnect.h` from `ApptentiveConnect.xcodeproj` to your app's file list.
 
 Now see "Using the Library", below, for instructions on using the library in your code.
 
@@ -176,6 +151,50 @@ ATAppRatingFlow *sharedFlow = [ATAppRatingFlow sharedRatingFlowWithAppID:kAppten
 
 This is helpful if you want to implement custom triggers for the ratings 
 flow.
+
+You can modify the parameters which determine when the ratings dialog will be
+shown in your app settings on apptentive.com.
+
+
+Surveys
+-------
+The surveys module is found in `modules/ApptentiveSurveys`. To use, add it
+to your project, add `ATSurveys.h` to your project and link against
+`libApptentiveSurveys.a`
+
+You can check for available surveys after having set up `ATConnect` (see above)
+by calling `[ATSurveys checkForAvailableSurveys]` and registering for the
+`ATSurveyNewSurveyAvailableNotification` notification. Then, you may present a 
+survey by calling `[ATSurveys presentSurveyControllerFromViewController:vc]`,
+where `vc` is the view controller which will present the survey.
+
+For example:
+
+```objective-c
+#include "ATSurveys.h"
+// ...
+- (void)applicationDidFinishLaunching:(UIApplication *)application /* ... */ {
+    // ...
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyBecameAvailable:) name:ATSurveyNewSurveyAvailableNotification object:nil];
+	[ATSurveys checkForAvailableSurveys];
+}
+
+- (void)surveyBecameAvailable:(NSNotification *)notification {
+	// Present survey here as appropriate.
+}
+```
+
+Metrics
+-------
+Metrics provide insight into exactly where people begin and end interactions
+with your app and with feedback, ratings, and surveys. You can find the
+module in `modules/ApptentiveMetrics`. To use, just link against the
+`libApptentiveMetrics.a` library. If metrics are enabled on your app
+settings on apptentive.com, the metrics module will begin sending metrics
+information, otherwise it won't.
+
+There isn't currently any UI on apptentive.com exposing the metrics.
+
 
 **Finding Your iTunes App ID**
 In [iTunesConnect](https://itunesconnect.apple.com/), go to "Manage Your 

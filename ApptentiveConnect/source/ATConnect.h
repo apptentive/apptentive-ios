@@ -13,7 +13,7 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
-#define kATConnectVersionString @"0.3.1"
+#define kATConnectVersionString @"0.3.2"
 
 #if TARGET_OS_IPHONE
 #define kATConnectPlatformString @"iOS"
@@ -38,6 +38,7 @@ typedef enum {
 @property (nonatomic, assign) BOOL showKeyboardAccessory;
 @property (nonatomic, assign) BOOL shouldTakeScreenshot;
 @property (nonatomic, assign) BOOL showEmailField;
+@property (nonatomic, retain) NSString *initialName;
 @property (nonatomic, retain) NSString *initialEmailAddress;
 @property (nonatomic, assign) ATFeedbackControllerType feedbackControllerType;
 /*! Set this if you want some custom text to appear as a placeholder in the

@@ -10,6 +10,7 @@ Major changes:
 * Including armv6 (non-thumb) architecture in all libraries.
 * "Distribution" target in FeedbackDemo builds a static library distribution.
 * Application exit events wired up in Metrics module.
+* Adding `initialName` property to ATConnect for pre-populating the user's name.
 
 ##### Metrics
 The metrics module can be used by simply linking against the `libApptentiveMetrics.a` static library. That's it. You can turn metrics on or off server side in your app settings.
@@ -24,6 +25,7 @@ Specific bug fixes and features:
 * IOS-11: Surveys Module on iOS
 * IOS-21: Support for Server Side Ratings Settings
 * IOS-22: Option to clear ratings parameter values (days of use, events, etc.) on version upgrade
+* IOS-34: Add support for prepopulating the user's name
 
 2012-01-13 wooster
 ------------------

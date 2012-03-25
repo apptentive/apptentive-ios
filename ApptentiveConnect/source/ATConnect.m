@@ -20,7 +20,7 @@
 static ATConnect *sharedConnection = nil;
 
 @implementation ATConnect
-@synthesize apiKey, showKeyboardAccessory, shouldTakeScreenshot, showEmailField, initialEmailAddress, feedbackControllerType, customPlaceholderText;
+@synthesize apiKey, showKeyboardAccessory, shouldTakeScreenshot, showEmailField, initialName, initialEmailAddress, feedbackControllerType, customPlaceholderText;
 
 + (ATConnect *)sharedConnection {
     @synchronized(self) {
@@ -51,6 +51,7 @@ static ATConnect *sharedConnection = nil;
 	[additionalFeedbackData release], additionalFeedbackData = nil;
     self.customPlaceholderText = nil;
     self.apiKey = nil;
+	self.initialName = nil;
 	self.initialEmailAddress = nil;
     [super dealloc];
 }
@@ -100,11 +101,14 @@ static ATConnect *sharedConnection = nil;
             CGFloat rotation = [ATUtilities rotationOfViewHierarchyInRadians:viewController.view];
             screenshot = [ATUtilities imageByRotatingImage:screenshot byRadians:rotation];
         }
+		if (self.initialName && [self.initialName length] > 0) {
+			feedback.name = self.initialName;
+		}
 		if (self.initialEmailAddress && [self.initialEmailAddress length] > 0) {
 			feedback.email = self.initialEmailAddress;
 		}
         ATContactStorage *contact = [ATContactStorage sharedContactStorage];
-        if (contact.name) {
+        if (contact.name && [contact.name length] > 0) {
             feedback.name = contact.name;
         }
         if (contact.phone) {

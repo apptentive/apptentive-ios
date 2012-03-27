@@ -53,13 +53,10 @@
 		4936AE841379DECE00A4B17F /* ATBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE7C1379DECE00A4B17F /* ATBackend.m */; };
 		4936AE851379DECE00A4B17F /* ATContactStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 4936AE7D1379DECE00A4B17F /* ATContactStorage.h */; };
 		4936AE861379DECE00A4B17F /* ATContactStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE7E1379DECE00A4B17F /* ATContactStorage.m */; };
-		4936AE871379DECE00A4B17F /* ATContactUpdater.h in Headers */ = {isa = PBXBuildFile; fileRef = 4936AE7F1379DECE00A4B17F /* ATContactUpdater.h */; };
-		4936AE881379DECE00A4B17F /* ATContactUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE801379DECE00A4B17F /* ATContactUpdater.m */; };
 		4936AE891379DECE00A4B17F /* ATFeedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 4936AE811379DECE00A4B17F /* ATFeedback.h */; };
 		4936AE8A1379DECE00A4B17F /* ATFeedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE821379DECE00A4B17F /* ATFeedback.m */; };
 		4936AE8B1379DECE00A4B17F /* ATBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE7C1379DECE00A4B17F /* ATBackend.m */; };
 		4936AE8C1379DECE00A4B17F /* ATContactStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE7E1379DECE00A4B17F /* ATContactStorage.m */; };
-		4936AE8D1379DECE00A4B17F /* ATContactUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE801379DECE00A4B17F /* ATContactUpdater.m */; };
 		4936AE8E1379DECE00A4B17F /* ATFeedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE821379DECE00A4B17F /* ATFeedback.m */; };
 		4942CC9113C7AD2D009BF758 /* ATAppRatingFlow.h in Headers */ = {isa = PBXBuildFile; fileRef = 4942CC8F13C7AD2D009BF758 /* ATAppRatingFlow.h */; settings = {ATTRIBUTES = (); }; };
 		4942CC9213C7AD2D009BF758 /* ATAppRatingFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4942CC9013C7AD2D009BF758 /* ATAppRatingFlow.m */; };
@@ -78,7 +75,6 @@
 		496DC38F1333D35600743F65 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3821333D35600743F65 /* Foundation.framework */; };
 		496DC3941333D35600743F65 /* libApptentiveConnect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC37F1333D35600743F65 /* libApptentiveConnect.a */; };
 		496F29E014496711005B7C01 /* ATSimpleImageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 496F29DE14496702005B7C01 /* ATSimpleImageViewController.xib */; };
-		4982ECC7133BF49000B91781 /* ApptentiveContactUpdaterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4982ECC6133BF49000B91781 /* ApptentiveContactUpdaterTests.m */; };
 		498B8E3E1519691900CA9A58 /* ATRatingPredicateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 498B8E3D1519691900CA9A58 /* ATRatingPredicateTests.m */; };
 		49AA101F138B44C00082887A /* ATInfoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AA101D138B44C00082887A /* ATInfoViewController.h */; };
 		49AA1020138B44C00082887A /* ATInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AA101E138B44C00082887A /* ATInfoViewController.m */; };
@@ -180,8 +176,6 @@
 		4936AE7C1379DECE00A4B17F /* ATBackend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATBackend.m; sourceTree = "<group>"; };
 		4936AE7D1379DECE00A4B17F /* ATContactStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATContactStorage.h; sourceTree = "<group>"; };
 		4936AE7E1379DECE00A4B17F /* ATContactStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATContactStorage.m; sourceTree = "<group>"; };
-		4936AE7F1379DECE00A4B17F /* ATContactUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATContactUpdater.h; sourceTree = "<group>"; };
-		4936AE801379DECE00A4B17F /* ATContactUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATContactUpdater.m; sourceTree = "<group>"; };
 		4936AE811379DECE00A4B17F /* ATFeedback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATFeedback.h; sourceTree = "<group>"; };
 		4936AE821379DECE00A4B17F /* ATFeedback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATFeedback.m; sourceTree = "<group>"; };
 		4942CC8F13C7AD2D009BF758 /* ATAppRatingFlow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAppRatingFlow.h; sourceTree = "<group>"; };
@@ -196,8 +190,6 @@
 		496DC3821333D35600743F65 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		496DC38C1333D35600743F65 /* ApptentiveConnectTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApptentiveConnectTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		496F29DE14496702005B7C01 /* ATSimpleImageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATSimpleImageViewController.xib; sourceTree = "<group>"; };
-		4982ECC5133BF49000B91781 /* ApptentiveContactUpdaterTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveContactUpdaterTests.h; sourceTree = "<group>"; };
-		4982ECC6133BF49000B91781 /* ApptentiveContactUpdaterTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveContactUpdaterTests.m; sourceTree = "<group>"; };
 		498B8E3C1519691900CA9A58 /* ATRatingPredicateTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATRatingPredicateTests.h; sourceTree = "<group>"; };
 		498B8E3D1519691900CA9A58 /* ATRatingPredicateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATRatingPredicateTests.m; sourceTree = "<group>"; };
 		49AA101D138B44C00082887A /* ATInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATInfoViewController.h; sourceTree = "<group>"; };
@@ -335,8 +327,6 @@
 				4936AE7C1379DECE00A4B17F /* ATBackend.m */,
 				4936AE7D1379DECE00A4B17F /* ATContactStorage.h */,
 				4936AE7E1379DECE00A4B17F /* ATContactStorage.m */,
-				4936AE7F1379DECE00A4B17F /* ATContactUpdater.h */,
-				4936AE801379DECE00A4B17F /* ATContactUpdater.m */,
 				4936AE811379DECE00A4B17F /* ATFeedback.h */,
 				4936AE821379DECE00A4B17F /* ATFeedback.m */,
 				49EA5AAE14BD08AD004F8A4D /* ATRecord.h */,
@@ -432,8 +422,6 @@
 				49C002891334137E0071F088 /* ApptentiveConnectTests.h */,
 				49C0028A1334137E0071F088 /* ApptentiveConnectTests.m */,
 				49C0028B1334137E0071F088 /* InfoPlist.strings */,
-				4982ECC5133BF49000B91781 /* ApptentiveContactUpdaterTests.h */,
-				4982ECC6133BF49000B91781 /* ApptentiveContactUpdaterTests.m */,
 				49509DF913583FB800793EEC /* ATUtilitiesTests.h */,
 				49509DFA13583FB800793EEC /* ATUtilitiesTests.m */,
 				498B8E3C1519691900CA9A58 /* ATRatingPredicateTests.h */,
@@ -536,7 +524,6 @@
 				4936AE771379DEBB00A4B17F /* ATUtilities.h in Headers */,
 				4936AE831379DECE00A4B17F /* ATBackend.h in Headers */,
 				4936AE851379DECE00A4B17F /* ATContactStorage.h in Headers */,
-				4936AE871379DECE00A4B17F /* ATContactUpdater.h in Headers */,
 				4936AE891379DECE00A4B17F /* ATFeedback.h in Headers */,
 				49AA101F138B44C00082887A /* ATInfoViewController.h in Headers */,
 				49352AC4138C97A2000E464A /* ATAPIRequest.h in Headers */,
@@ -741,7 +728,6 @@
 				4936AE781379DEBB00A4B17F /* ATUtilities.m in Sources */,
 				4936AE841379DECE00A4B17F /* ATBackend.m in Sources */,
 				4936AE861379DECE00A4B17F /* ATContactStorage.m in Sources */,
-				4936AE881379DECE00A4B17F /* ATContactUpdater.m in Sources */,
 				4936AE8A1379DECE00A4B17F /* ATFeedback.m in Sources */,
 				49AA1020138B44C00082887A /* ATInfoViewController.m in Sources */,
 				49352AC5138C97A2000E464A /* ATAPIRequest.m in Sources */,
@@ -765,7 +751,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				49C0028E1334137E0071F088 /* ApptentiveConnectTests.m in Sources */,
-				4982ECC7133BF49000B91781 /* ApptentiveContactUpdaterTests.m in Sources */,
 				49509DFB13583FB800793EEC /* ATUtilitiesTests.m in Sources */,
 				4936AE5D1379DE3100A4B17F /* ATCenteringImageScrollView.m in Sources */,
 				4936AE5E1379DE3100A4B17F /* ATDefaultTextView.m in Sources */,
@@ -774,7 +759,6 @@
 				4936AE791379DEBB00A4B17F /* ATUtilities.m in Sources */,
 				4936AE8B1379DECE00A4B17F /* ATBackend.m in Sources */,
 				4936AE8C1379DECE00A4B17F /* ATContactStorage.m in Sources */,
-				4936AE8D1379DECE00A4B17F /* ATContactUpdater.m in Sources */,
 				4936AE8E1379DECE00A4B17F /* ATFeedback.m in Sources */,
 				49AA1021138B44C00082887A /* ATInfoViewController.m in Sources */,
 				49352AC3138C97A2000E464A /* ATAPIRequest.m in Sources */,

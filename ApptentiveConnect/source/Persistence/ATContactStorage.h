@@ -15,7 +15,5 @@
 @property (nonatomic, retain) NSString *phone;
 + (ATContactStorage *)sharedContactStorage;
 + (void)releaseSharedContactStorage;
-
-- (BOOL)shouldCheckForUpdate;
 - (void)save;
 @end

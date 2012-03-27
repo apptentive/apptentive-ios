@@ -1,3 +1,8 @@
+2012-03-26 wooster v0.3.3
+-------------------------
+
+Fixes problem wherein app wouldn't use the correct ratings configuration from the server.
+
 2012-03-25 wooster
 ------------------
 Major changes:

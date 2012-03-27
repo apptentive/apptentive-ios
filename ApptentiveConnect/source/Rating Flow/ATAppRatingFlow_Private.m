@@ -24,8 +24,6 @@ NSString *const ATAppRatingPromptLogicPreferenceKey = @"ATAppRatingPromptLogicPr
 
 NSString *const ATAppRatingSettingsAreFromServerPreferenceKey = @"ATAppRatingSettingsAreFromServerPreferenceKey";
 
-NSString *const ATAppRatingPreferencesChangedNotification = @"ATAppRatingPreferencesChangedNotification";
-
 @implementation ATAppRatingFlowPredicateInfo
 @synthesize firstUse;
 @synthesize significantEvents;
@@ -44,6 +42,10 @@ NSString *const ATAppRatingPreferencesChangedNotification = @"ATAppRatingPrefere
 		self.firstUse = [NSDate date];
 	}
 	return [self.firstUse timeIntervalSince1970] + (double)(60*60*24*self.daysBeforePrompt);
+}
+
+- (NSString *)debugDescription {
+	return [NSString stringWithFormat:@"%@ firstUse: %@, significantEvents: %d, appUses: %d, daysBeforePrompt: %d, significantEventsBeforePrompt: %d, usesBeforePrompt: %d", [self description], self.firstUse, self.significantEvents, self.appUses, self.daysBeforePrompt, self.significantEventsBeforePrompt, self.usesBeforePrompt];
 }
 @end
 

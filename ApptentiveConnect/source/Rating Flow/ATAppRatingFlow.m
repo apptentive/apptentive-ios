@@ -9,6 +9,7 @@
 #import "ATAppRatingFlow.h"
 #import "ATAPIRequest.h"
 #import "ATConnect.h"
+#import "ATAppConfigurationUpdater.h"
 #import "ATReachability.h"
 #import "ATAppRatingMetrics.h"
 #import "ATAppRatingFlow_Private.h"
@@ -87,7 +88,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 #if TARGET_OS_IPHONE
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterBackground:) name:UIApplicationWillResignActiveNotification object:nil];
 #endif
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(preferencesChanged:) name:ATAppRatingPreferencesChangedNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(preferencesChanged:) name:ATConfigurationPreferencesChangedNotification object:nil];
     }
     return self;
 }

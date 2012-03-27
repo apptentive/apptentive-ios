@@ -19,8 +19,6 @@ NSString *const ATAppRatingPromptLogicPreferenceKey;
 
 NSString *const ATAppRatingSettingsAreFromServerPreferenceKey;
 
-NSString *const ATAppRatingPreferencesChangedNotification;
-
 @interface ATAppRatingFlowPredicateInfo : NSObject
 @property (nonatomic, retain) NSDate *firstUse;
 @property (nonatomic, assign) NSUInteger significantEvents;
@@ -31,6 +29,7 @@ NSString *const ATAppRatingPreferencesChangedNotification;
 @property (nonatomic, assign) NSUInteger usesBeforePrompt;
 - (double)now;
 - (double)nextPromptDate;
+- (NSString *)debugDescription;
 @end
 
 @interface ATAppRatingFlow_Private : NSObject

@@ -23,7 +23,7 @@
 @end
 
 @implementation ATHUDView
-@synthesize label, markType, size, cornerRadius;
+@synthesize label, markType, size, cornerRadius, fadeOutDuration;
 
 - (id)initWithWindow:(UIWindow *)window {
     if ((self = [super initWithFrame:CGRectMake(0.0, 0.0, 100.0, 100.0)])) {
@@ -117,6 +117,7 @@
 
 @implementation ATHUDView (Private)
 - (void)setup {
+    self.fadeOutDuration = 3.0;
     self.transform = [ATUtilities viewTransformInWindow:parentWindow];
 
     [self setUserInteractionEnabled:NO];
@@ -127,8 +128,9 @@
     label.textColor = [UIColor whiteColor];
     label.font = [UIFont boldSystemFontOfSize:17.0];
     label.textAlignment = UITextAlignmentCenter;
-    label.lineBreakMode = UILineBreakModeTailTruncation;
+    label.lineBreakMode = UILineBreakModeWordWrap;
     label.adjustsFontSizeToFitWidth = YES;
+    label.numberOfLines = 0;
     [self addSubview:label];
     
     UIImage *iconImage = [ATBackend imageNamed:@"at_checkmark"];
@@ -167,9 +169,10 @@
     self.center = parentWindow.center;
     
     [UIView beginAnimations:@"animateIn" context:NULL];
-    [UIView setAnimationDuration:3.0];
+    [UIView setAnimationDuration:self.fadeOutDuration];
     [UIView setAnimationDelegate:self];
     [UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
     self.alpha = 1.0;
     [UIView commitAnimations];
 }

@@ -21,6 +21,7 @@ typedef enum {
 @property (nonatomic, assign) ATHUDMarkType markType;
 @property (nonatomic, assign) CGSize size;
 @property (nonatomic, assign) CGFloat cornerRadius;
+@property (nonatomic, assign) CGFloat fadeOutDuration;
 
 - (id)initWithWindow:(UIWindow *)window;
 - (void)show;

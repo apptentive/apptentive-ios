@@ -283,6 +283,7 @@
 				49C002E81334172E0071F088 /* Products */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 1;
 		};
 		49C002E81334172E0071F088 /* Products */ = {
 			isa = PBXGroup;

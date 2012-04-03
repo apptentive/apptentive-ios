@@ -371,6 +371,7 @@
 				496DC3801333D35600743F65 /* Products */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 1;
 		};
 		496DC3801333D35600743F65 /* Products */ = {
 			isa = PBXGroup;

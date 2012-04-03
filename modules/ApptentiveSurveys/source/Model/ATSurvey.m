@@ -9,11 +9,13 @@
 #import "ATSurvey.h"
 
 @implementation ATSurvey
+@synthesize responseRequired;
 @synthesize active;
 @synthesize identifier=identifier$;
 @synthesize name=name$;
 @synthesize surveyDescription=surveyDescription$;
 @synthesize questions;
+@synthesize successMessage=successMessage$;
 
 - (id)init {
 	if ((self = [super init])) {
@@ -27,6 +29,7 @@
 	[identifier$ release], identifier$ = nil;
 	[name$ release], name$ = nil;
 	[surveyDescription$ release], surveyDescription$ = nil;
+	[successMessage$ release], successMessage$ = nil;
 	[super dealloc];
 }
 

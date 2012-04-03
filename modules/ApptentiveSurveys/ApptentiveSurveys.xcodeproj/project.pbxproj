@@ -196,6 +196,7 @@
 				49B8768014647C5200594A5D /* Products */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 1;
 		};
 		49B8768014647C5200594A5D /* Products */ = {
 			isa = PBXGroup;

@@ -81,10 +81,15 @@ enum {
 	[response release], response = nil;
 	[task release], task = nil;
 	
-    ATHUDView *hud = [[ATHUDView alloc] initWithWindow:self.view.window];
-    hud.label.text = ATLocalizedString(@"Thanks!", @"Text in thank you display upon submitting survey.");
-    [hud show];
-    [hud autorelease];
+	ATHUDView *hud = [[ATHUDView alloc] initWithWindow:self.view.window];
+	if (survey.successMessage) {
+		hud.label.text = survey.successMessage;
+	} else {
+		hud.label.text = ATLocalizedString(@"Thanks!", @"Text in thank you display upon submitting survey.");
+		hud.fadeOutDuration = 5.0;
+	}
+	[hud show];
+	[hud autorelease];
 
 	[[ATSurveysBackend sharedBackend] resetSurvey];
 	[self.navigationController dismissModalViewControllerAnimated:YES];
@@ -99,9 +104,11 @@ enum {
 }
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
+	[super viewDidLoad];
 	
-	self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)] autorelease];
+	if (![survey responseIsRequired]) {
+		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)] autorelease];
+	}
 	
 	self.title = ATLocalizedString(@"Survey", @"Survey view title");
 	
@@ -112,7 +119,7 @@ enum {
 }
 
 - (void)viewDidUnload {
-    [super viewDidUnload];
+	[super viewDidUnload];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[tableView removeFromSuperview];
 	tableView.delegate = nil;
@@ -133,7 +140,7 @@ enum {
 #pragma mark UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView {
-    return [[survey questions] count] + 1;
+	return [[survey questions] count] + 1;
 }
 
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
@@ -147,7 +154,7 @@ enum {
 	} else if (section == [[survey questions] count]) {
 		return 1;
 	}
-    return 0;
+	return 0;
 }
 
 - (CGFloat)tableView:(UITableView *)aTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -175,10 +182,10 @@ enum {
 }
 
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *ATSurveyCheckboxCellIdentifier = @"ATSurveyCheckboxCellIdentifier";
-    static NSString *ATSurveyTextViewCellIdentifier = @"ATSurveyTextViewCellIdentifier";
-    static NSString *ATSurveyQuestionCellIdentifier = @"ATSurveyQuestionCellIdentifier";
-    static NSString *ATSurveySendCellIdentifier = @"ATSurveySendCellIdentifier";
+	static NSString *ATSurveyCheckboxCellIdentifier = @"ATSurveyCheckboxCellIdentifier";
+	static NSString *ATSurveyTextViewCellIdentifier = @"ATSurveyTextViewCellIdentifier";
+	static NSString *ATSurveyQuestionCellIdentifier = @"ATSurveyQuestionCellIdentifier";
+	static NSString *ATSurveySendCellIdentifier = @"ATSurveySendCellIdentifier";
 	
 	if (indexPath.section == [[survey questions] count]) {
 		UITableViewCell *buttonCell = nil;
@@ -256,8 +263,8 @@ enum {
 			 */
 		}
 	}
-    
-    return cell;
+
+	return cell;
 }
 
 #pragma mark UITableViewDelegate
@@ -374,16 +381,16 @@ enum {
 }
 
 - (void)keyboardWasShown:(NSNotification*)aNotification {
-    NSDictionary* info = [aNotification userInfo];
+	NSDictionary* info = [aNotification userInfo];
 	CGRect kbFrame = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
 	CGRect kbAdjustedFrame = [tableView.window convertRect:kbFrame toView:tableView];
 	CGSize kbSize = kbAdjustedFrame.size;
+
+	UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
+	tableView.contentInset = contentInsets;
+	tableView.scrollIndicatorInsets = contentInsets;
 	
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
-    tableView.contentInset = contentInsets;
-    tableView.scrollIndicatorInsets = contentInsets;
-	
-    // If active text field is hidden by keyboard, scroll it so it's visible
+	// If active text field is hidden by keyboard, scroll it so it's visible
 	if (activeTextView != nil && activeTextEntryCell) {
 		CGRect aRect = tableView.frame;
 		aRect.size.height -= kbSize.height;
@@ -403,9 +410,9 @@ enum {
 	[UIView beginAnimations:nil context:nil];
 	[UIView setAnimationDuration:[duration floatValue]];
 	[UIView setAnimationCurve:[curve intValue]];
-    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
-    tableView.contentInset = contentInsets;
-    tableView.scrollIndicatorInsets = contentInsets;
+	UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+	tableView.contentInset = contentInsets;
+	tableView.scrollIndicatorInsets = contentInsets;
 	[UIView commitAnimations];
 }
 @end

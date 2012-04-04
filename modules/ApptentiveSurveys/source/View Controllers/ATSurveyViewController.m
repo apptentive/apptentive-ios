@@ -14,7 +14,6 @@
 #import "ATSurveysBackend.h"
 #import "ATSurveyQuestion.h"
 #import "ATSurveyResponse.h"
-#import "ATSurveyTask.h"
 #import "ATTaskQueue.h"
 
 enum {

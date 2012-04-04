@@ -24,9 +24,6 @@
 		49B8770F1464955200594A5D /* ATURLConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 49B8770E1464955200594A5D /* ATURLConnection.h */; };
 		49B877131464960400594A5D /* ATWebClient_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 49B877121464960400594A5D /* ATWebClient_Private.h */; };
 		49B877151464965600594A5D /* ATTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 49B877141464965600594A5D /* ATTask.h */; };
-		49B877181464967700594A5D /* ATSurveyTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 49B877161464967700594A5D /* ATSurveyTask.h */; };
-		49B877191464967700594A5D /* ATSurveyTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B877171464967700594A5D /* ATSurveyTask.m */; };
-		49B8771A1464967700594A5D /* ATSurveyTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B877171464967700594A5D /* ATSurveyTask.m */; };
 		49B8771E1464970300594A5D /* ATSurveyResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 49B8771C1464970300594A5D /* ATSurveyResponse.h */; };
 		49B8771F1464970300594A5D /* ATSurveyResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B8771D1464970300594A5D /* ATSurveyResponse.m */; };
 		49B877201464970300594A5D /* ATSurveyResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B8771D1464970300594A5D /* ATSurveyResponse.m */; };
@@ -118,8 +115,6 @@
 		49B8770E1464955200594A5D /* ATURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATURLConnection.h; path = "../../ApptentiveConnect/source/URL Loading/ATURLConnection.h"; sourceTree = "<group>"; };
 		49B877121464960400594A5D /* ATWebClient_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATWebClient_Private.h; path = "../../ApptentiveConnect/source/URL Loading/ATWebClient_Private.h"; sourceTree = "<group>"; };
 		49B877141464965600594A5D /* ATTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATTask.h; path = ../../ApptentiveConnect/source/Tasks/ATTask.h; sourceTree = "<group>"; };
-		49B877161464967700594A5D /* ATSurveyTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATSurveyTask.h; path = source/Tasks/ATSurveyTask.h; sourceTree = SOURCE_ROOT; };
-		49B877171464967700594A5D /* ATSurveyTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATSurveyTask.m; path = source/Tasks/ATSurveyTask.m; sourceTree = SOURCE_ROOT; };
 		49B8771C1464970300594A5D /* ATSurveyResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATSurveyResponse.h; path = source/Persistence/ATSurveyResponse.h; sourceTree = SOURCE_ROOT; };
 		49B8771D1464970300594A5D /* ATSurveyResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATSurveyResponse.m; path = source/Persistence/ATSurveyResponse.m; sourceTree = SOURCE_ROOT; };
 		49B87722146498F700594A5D /* ATSurveyQuestion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveyQuestion.h; sourceTree = "<group>"; };
@@ -248,7 +243,6 @@
 				49EC5D691466222300634D43 /* View Controllers */,
 				49B87721146498F600594A5D /* Model */,
 				49B8771B146496DB00594A5D /* Persistence */,
-				49B87704146492D100594A5D /* Tasks */,
 				49B87703146492C200594A5D /* URL Loading */,
 			);
 			name = source;
@@ -261,15 +255,6 @@
 				49B877061464935200594A5D /* ATWebClient+SurveyAdditions.m */,
 			);
 			name = "URL Loading";
-			sourceTree = "<group>";
-		};
-		49B87704146492D100594A5D /* Tasks */ = {
-			isa = PBXGroup;
-			children = (
-				49B877161464967700594A5D /* ATSurveyTask.h */,
-				49B877171464967700594A5D /* ATSurveyTask.m */,
-			);
-			name = Tasks;
 			sourceTree = "<group>";
 		};
 		49B8771B146496DB00594A5D /* Persistence */ = {
@@ -333,7 +318,6 @@
 				49B8770F1464955200594A5D /* ATURLConnection.h in Headers */,
 				49B877131464960400594A5D /* ATWebClient_Private.h in Headers */,
 				49B877151464965600594A5D /* ATTask.h in Headers */,
-				49B877181464967700594A5D /* ATSurveyTask.h in Headers */,
 				49B8771E1464970300594A5D /* ATSurveyResponse.h in Headers */,
 				49B87724146498F700594A5D /* ATSurveyQuestion.h in Headers */,
 				49B8772E1465C4D200594A5D /* ATSurvey.h in Headers */,
@@ -494,7 +478,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				49B877081464935200594A5D /* ATWebClient+SurveyAdditions.m in Sources */,
-				49B877191464967700594A5D /* ATSurveyTask.m in Sources */,
 				49B8771F1464970300594A5D /* ATSurveyResponse.m in Sources */,
 				49B87725146498F700594A5D /* ATSurveyQuestion.m in Sources */,
 				49B8772F1465C4D200594A5D /* ATSurvey.m in Sources */,
@@ -510,7 +493,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				49B877091464935200594A5D /* ATWebClient+SurveyAdditions.m in Sources */,
-				49B8771A1464967700594A5D /* ATSurveyTask.m in Sources */,
 				49B877201464970300594A5D /* ATSurveyResponse.m in Sources */,
 				49B87726146498F700594A5D /* ATSurveyQuestion.m in Sources */,
 				49B877301465C4D200594A5D /* ATSurvey.m in Sources */,

@@ -11,6 +11,7 @@
 #import "ATAPIRequest.h"
 #import "ATSurveyResponse.h"
 #import "ATURLConnection.h"
+#import "JSONKit.h"
 
 #define kSurveysChannelName @"Apptentive-Surveys"
 
@@ -26,11 +27,16 @@
 
 
 - (ATAPIRequest *)requestForPostingSurveyResponse:(ATSurveyResponse *)surveyResponse {
-	NSDictionary *postData = [surveyResponse apiDictionary];
+	NSError *error = nil;
+	NSString *postString = [[surveyResponse apiJSON] JSONStringWithOptions:JKSerializeOptionPretty error:&error];
+	if (!postString && error != nil) {
+		NSLog(@"ATWebClient+SurveyAdditions: Error while encoding JSON: %@", error);
+		return nil;
+	}
 	NSString *url = [self apiURLStringWithPath:@"records"];
     ATURLConnection *conn = nil;
     
-	conn = [self connectionToPost:[NSURL URLWithString:url] parameters:postData];
+	conn = [self connectionToPost:[NSURL URLWithString:url] JSON:postString];
 	
     conn.timeoutInterval = 240.0;
     ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kSurveysChannelName];

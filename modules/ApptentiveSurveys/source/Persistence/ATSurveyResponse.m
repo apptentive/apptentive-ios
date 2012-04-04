@@ -58,6 +58,35 @@
 	[questionResponses addObject:response];
 }
 
+- (NSDictionary *)apiJSON {
+	NSMutableDictionary *d = [NSMutableDictionary dictionaryWithDictionary:[super apiJSON]];
+	NSMutableDictionary *record = [d objectForKey:@"record"];
+	if (!record) {
+		record = [NSMutableDictionary dictionary];
+		[d setObject:record forKey:@"record"];
+	}
+	
+	NSMutableDictionary *survey = [NSMutableDictionary dictionary];
+	
+	if (self.identifier) {
+		[survey setObject:self.identifier forKey:@"id"];
+	}
+	
+	NSUInteger i = 0;
+	NSMutableDictionary *responses = [NSMutableDictionary dictionary];
+	for (ATSurveyQuestionResponse *response in questionResponses) {
+		NSObject *responseObject = response.response;
+		if (!responseObject) {
+			responseObject = @"";
+		}
+		[responses setObject:responseObject forKey:response.identifier];
+		i++;
+	}
+	[survey setObject:responses forKey:@"responses"];
+	[record setObject:survey forKey:@"survey"];
+    return d;
+}
+
 - (NSDictionary *)apiDictionary {
     NSMutableDictionary *d = [NSMutableDictionary dictionaryWithDictionary:[super apiDictionary]];
 	

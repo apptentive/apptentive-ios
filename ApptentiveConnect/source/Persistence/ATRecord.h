@@ -19,6 +19,7 @@
 
 - (NSString *)formattedDate:(NSDate *)aDate;
 
+- (NSDictionary *)apiJSON;
 - (NSDictionary *)apiDictionary;
 - (ATAPIRequest *)requestForSendingRecord;
 @end

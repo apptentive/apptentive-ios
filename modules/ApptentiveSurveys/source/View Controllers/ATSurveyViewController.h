@@ -19,6 +19,7 @@
 	UITableView *tableView;
 	UITableViewCell *activeTextEntryCell;
 	ATCellTextView *activeTextView;
+	NSString *errorText;
 }
 - (id)initWithSurvey:(ATSurvey *)survey;
 - (IBAction)sendSurvey;

@@ -21,11 +21,12 @@ enum {
 };
 
 @interface ATSurveyViewController (Private)
+- (ATSurveyQuestion *)questionAtIndexPath:(NSIndexPath *)path;
+- (BOOL)questionHasExtraInfo:(ATSurveyQuestion *)question;
+- (BOOL)validateSurvey;
 - (void)cancel:(id)sender;
 
 - (BOOL)sizeTextView:(ATCellTextView *)textView;
-
-#pragma mark Rotation Handling
 
 #pragma mark Keyboard Handling
 - (void)registerForKeyboardNotifications;
@@ -157,12 +158,17 @@ enum {
 
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
 	if (section < [[survey questions] count]) {
+		NSUInteger result = 0;
 		ATSurveyQuestion *question = [[survey questions] objectAtIndex:section];
 		if (question.type == ATSurveyQuestionTypeSingeLine) {
-			return 2;
+			result = 2;
 		} else if (question.type == ATSurveyQuestionTypeMultipleChoice || question.type == ATSurveyQuestionTypeMultipleSelect) {
-			return [[question answerChoices] count] + 1;
+			result = [[question answerChoices] count] + 1;
 		}
+		if ([self questionHasExtraInfo:question]) {
+			result++;
+		}
+		return result;
 	} else if (section == [[survey questions] count]) {
 		return 1;
 	}
@@ -172,12 +178,13 @@ enum {
 - (CGFloat)tableView:(UITableView *)aTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
 	ATCellTextView *textViewCell = (ATCellTextView *)[cell viewWithTag:kTextViewTag];
+	CGFloat cellHeight = 0;
 	if (textViewCell != nil) {
 		CGSize cellSize = CGSizeMake(textViewCell.bounds.size.width, textViewCell.bounds.size.height + 20);
 		CGRect f = textViewCell.frame;
 		f.origin.y = 10.0;
 		textViewCell.frame = f;
-		return MAX(44, cellSize.height);
+		cellHeight = MAX(44, cellSize.height);
 	} else if (cell.textLabel.text != nil) {
 		UIFont *font = cell.textLabel.font;
 		CGSize cellSize = CGSizeMake(cell.textLabel.bounds.size.width, 1024);
@@ -185,15 +192,25 @@ enum {
 		CGSize s = [cell.textLabel.text sizeWithFont:font constrainedToSize:cellSize lineBreakMode:lbm];
 		CGRect f = cell.textLabel.frame;
 		f.size = s;
-		f.origin.y = 10;
-		cell.textLabel.frame = f;
-		return MAX(44, s.height + 20);
+		
+		ATSurveyQuestion *question = [self questionAtIndexPath:indexPath];
+		if (question != nil && indexPath.row == 1 && [self questionHasExtraInfo:question]) {
+			f.origin.y = 4;
+			cell.textLabel.frame = f;
+			cellHeight = MAX(32, s.height + 8);
+		} else {
+			f.origin.y = 10;
+			cell.textLabel.frame = f;
+			cellHeight = MAX(44, s.height + 20);
+		}
 	} else {
-		return 44;
+		cellHeight = 44;
 	}
+	return cellHeight;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+	static NSString *ATSurveyExtraInfoCellIdentifier = @"ATSurveyExtraInfoCellIdentifier";
 	static NSString *ATSurveyCheckboxCellIdentifier = @"ATSurveyCheckboxCellIdentifier";
 	static NSString *ATSurveyTextViewCellIdentifier = @"ATSurveyTextViewCellIdentifier";
 	static NSString *ATSurveyQuestionCellIdentifier = @"ATSurveyQuestionCellIdentifier";
@@ -213,7 +230,7 @@ enum {
 	} else if (indexPath.section >= [[survey questions] count]) {
 		return nil;
 	}
-	ATSurveyQuestion *question = [[survey questions] objectAtIndex:indexPath.section];
+	ATSurveyQuestion *question = [self questionAtIndexPath:indexPath];
 	UITableViewCell *cell = nil;
 	if (indexPath.row == 0) {
 		// Show the question row.
@@ -228,9 +245,35 @@ enum {
 		cell.textLabel.text = question.questionText;
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		[cell layoutSubviews];
+	} else if (indexPath.row == 1 && [self questionHasExtraInfo:question]) {
+		cell = [tableView dequeueReusableCellWithIdentifier:ATSurveyExtraInfoCellIdentifier];
+		if (cell == nil) {
+			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ATSurveyExtraInfoCellIdentifier] autorelease];
+			cell.backgroundColor = [UIColor lightGrayColor];
+			cell.selectionStyle = UITableViewCellSelectionStyleNone;
+			cell.textLabel.font = [UIFont systemFontOfSize:15];
+		}
+		NSString *text = nil;
+		if (question.responseIsRequired) {
+			text = @"(required)";
+			if (question.type == ATSurveyQuestionTypeMultipleSelect && question.maxSelectionCount > 1) {
+				text = [NSString stringWithFormat:@"Select between 1 and %d choices.", question.maxSelectionCount];
+			}
+		} else if (question.type == ATSurveyQuestionTypeMultipleChoice) {
+			text = @"Select one.";
+		} else if (question.type == ATSurveyQuestionTypeMultipleSelect && question.maxSelectionCount > 1) {
+			text = [NSString stringWithFormat:@"Select up to %d choices.", question.maxSelectionCount];
+		}
+		cell.textLabel.text = text;
+		[cell layoutSubviews];
 	} else {
+		NSUInteger answerIndex = indexPath.row - 1;
+		if ([self questionHasExtraInfo:question]) {
+			answerIndex = answerIndex - 1;
+		}
+		
 		if (question.type == ATSurveyQuestionTypeMultipleChoice || question.type == ATSurveyQuestionTypeMultipleSelect) {
-			ATSurveyQuestionAnswer *answer = [question.answerChoices objectAtIndex:indexPath.row - 1];
+			ATSurveyQuestionAnswer *answer = [question.answerChoices objectAtIndex:answerIndex];
 			// Make a checkbox cell.
 			cell = [tableView dequeueReusableCellWithIdentifier:ATSurveyCheckboxCellIdentifier];
 			if (cell == nil) {
@@ -280,18 +323,34 @@ enum {
 
 #pragma mark UITableViewDelegate
 
+- (NSString *)tableView:(UITableView *)aTableView titleForFooterInSection:(NSInteger)section {
+	if (section == [[survey questions] count] && errorText != nil) {
+		return errorText;
+	}
+	return nil;
+}
+
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (indexPath.section == [[survey questions] count]) {
-		[self sendSurvey];
+		if ([self validateSurvey]) {
+			[self sendSurvey];
+		} else {
+			[tableView reloadData];
+		}
 	} else {
-		ATSurveyQuestion *question = [[survey questions] objectAtIndex:indexPath.section];
+		ATSurveyQuestion *question = [self questionAtIndexPath:indexPath];
 		UITableViewCell *cell = [aTableView cellForRowAtIndexPath:indexPath];
 		if (indexPath.row == 0) {
 			// Question row.
+		} else if ([self questionHasExtraInfo:question] && indexPath.row == 1) {
 			
 		} else {
+			NSUInteger answerIndex = indexPath.row - 1;
+			if ([self questionHasExtraInfo:question]) {
+				answerIndex = answerIndex - 1;
+			}
 			if (question.type == ATSurveyQuestionTypeMultipleChoice || question.type == ATSurveyQuestionTypeMultipleSelect) {
-				ATSurveyQuestionAnswer *answer = [question.answerChoices objectAtIndex:indexPath.row - 1];
+				ATSurveyQuestionAnswer *answer = [question.answerChoices objectAtIndex:answerIndex];
 				if (cell.accessoryType == UITableViewCellAccessoryNone) {
 					cell.accessoryType = UITableViewCellAccessoryCheckmark;
 					[question addSelectedAnswerChoice:answer];
@@ -366,6 +425,57 @@ enum {
 @end
 
 @implementation ATSurveyViewController (Private)
+- (ATSurveyQuestion *)questionAtIndexPath:(NSIndexPath *)indexPath {
+	if (indexPath.section >= [[survey questions] count]) {
+		return nil;
+	}
+	return [[survey questions] objectAtIndex:indexPath.section];
+}
+
+- (BOOL)questionHasExtraInfo:(ATSurveyQuestion *)question {
+	BOOL result = NO;
+	if (question.responseIsRequired) {
+		result = YES;
+	} else if (question.type == ATSurveyQuestionTypeMultipleSelect) {
+		result = YES;
+	} else if (question.type = ATSurveyQuestionTypeMultipleChoice) {
+		result = YES;
+	}
+	return result;
+}
+
+- (BOOL)validateSurvey {
+	BOOL valid = YES;
+	NSUInteger missingAnswerCount = 0;
+	for (ATSurveyQuestion *question in [survey questions]) {
+		if (question.type == ATSurveyQuestionTypeSingeLine) {
+			if (question.responseIsRequired && (question.answerText == nil || [question.answerText length] == 0)) {
+				missingAnswerCount++;
+				valid = NO;
+			}
+		} else if (question.type == ATSurveyQuestionTypeMultipleChoice) {
+			if (question.responseIsRequired && [question.selectedAnswerChoices count] == 0) {
+				missingAnswerCount++;
+				valid = NO;
+			}
+		} else if (question.type == ATSurveyQuestionTypeMultipleSelect) {
+			if (question.responseIsRequired && [question.selectedAnswerChoices count] == 0) {
+				missingAnswerCount++;
+				valid = NO;
+			}
+		}
+	}
+	if (valid) {
+		errorText = nil;
+	} else {
+		if (missingAnswerCount == 1) {
+			errorText = @"Missing a required answer.";
+		} else {
+			errorText = [NSString stringWithFormat:@"Missing %d required answers.", missingAnswerCount];
+		}
+	}
+	return valid;
+}
 
 - (BOOL)sizeTextView:(ATCellTextView *)textView {
 	BOOL didChange = NO;

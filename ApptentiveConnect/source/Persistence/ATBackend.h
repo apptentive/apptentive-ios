@@ -13,7 +13,7 @@
 #endif
 #import "ATAppConfigurationUpdater.h"
 
-#define USE_STAGING 0
+#define USE_STAGING 1
 
 @class ATAppConfigurationUpdater;
 @class ATFeedback;

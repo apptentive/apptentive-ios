@@ -62,13 +62,23 @@
 		
 		if ([(NSString *)typeString isEqualToString:@"multichoice"]) {
 			question.type = ATSurveyQuestionTypeMultipleChoice;
+		} else if ([(NSString *)typeString isEqualToString:@"multiselect"]) {
+			question.type = ATSurveyQuestionTypeMultipleSelect;
 		} else if ([(NSString *)typeString isEqualToString:@"singleline"]) {
 			question.type = ATSurveyQuestionTypeSingeLine;
 		} else {
 			break;
 		}
 		
-		if (question.type == ATSurveyQuestionTypeMultipleChoice) {
+		if ([jsonDictionary objectForKey:@"required"] != nil) {
+			question.responseRequired = [(NSNumber *)[jsonDictionary objectForKey:@"required"] boolValue];
+		}
+		
+		if ([jsonDictionary objectForKey:@"max_selections"] != nil) {
+			question.maxSelectionCount = [(NSNumber *)[jsonDictionary objectForKey:@"max_selections"] unsignedIntegerValue];
+		}
+		
+		if (question.type == ATSurveyQuestionTypeMultipleChoice || question.type == ATSurveyQuestionTypeMultipleSelect) {
 			NSObject *answerChoices = [jsonDictionary objectForKey:@"answer_choices"];
 			if (answerChoices == nil || ![answerChoices isKindOfClass:[NSArray class]]) {
 				break;

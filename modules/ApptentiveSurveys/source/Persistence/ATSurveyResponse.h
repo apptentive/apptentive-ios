@@ -25,5 +25,5 @@
 @private
 }
 @property (nonatomic, retain) NSString *identifier;
-@property (nonatomic, retain) NSString *response;
+@property (nonatomic, retain) NSObject<NSCoding> *response;
 @end

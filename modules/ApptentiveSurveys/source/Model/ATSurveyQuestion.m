@@ -10,16 +10,19 @@
 
 @implementation ATSurveyQuestion
 @synthesize type;
+@synthesize responseRequired;
 @synthesize identifier=identifier$;
 @synthesize questionText=questionText$;
 @synthesize value=value$;
 @synthesize answerChoices=answerChoices$;
 @synthesize answerText=answerText$;
-@synthesize selectedAnswerChoice=selectedAnswerChoice$;
+@synthesize selectedAnswerChoices=selectedAnswerChoices$;
+@synthesize maxSelectionCount;
 
 - (id)init {
 	if ((self = [super init])) {
 		answerChoices$ = [[NSMutableArray alloc] init];
+		selectedAnswerChoices$ = [[NSMutableArray alloc] init];
 	}
 	return self;
 }
@@ -30,12 +33,25 @@
 	[value$ release], value$ = nil;
 	[answerChoices$ release], answerChoices$ = nil;
 	[answerText$ release], answerText$ = nil;
-	[selectedAnswerChoice$ release], selectedAnswerChoice$ = nil;
+	[selectedAnswerChoices$ release], selectedAnswerChoices$ = nil;
 	[super dealloc];
 }
 
 - (void)addAnswerChoice:(ATSurveyQuestionAnswer *)answer {
 	[self.answerChoices addObject:answer];
+}
+
+- (void)addSelectedAnswerChoice:(ATSurveyQuestionAnswer *)answer {
+	if (self.type == ATSurveyQuestionTypeMultipleChoice) {
+		[self.selectedAnswerChoices removeAllObjects];
+	}
+	if (![self.selectedAnswerChoices containsObject:answer]) {
+		[self.selectedAnswerChoices addObject:answer];
+	}
+}
+
+- (void)removeSelectedAnswerChoice:(ATSurveyQuestionAnswer *)answer {
+	[self.selectedAnswerChoices removeObject:answer];
 }
 @end
 

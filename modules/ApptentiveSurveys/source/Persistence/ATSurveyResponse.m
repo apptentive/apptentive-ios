@@ -67,11 +67,13 @@
 	
 	NSUInteger i = 0;
 	for (ATSurveyQuestionResponse *response in questionResponses) {
-		NSString *responseText = response.response ? response.response : @"";
-		[d setObject:responseText forKey:[NSString stringWithFormat:@"record[survey][responses][%@]", response.identifier]];
+		NSObject *responseObject = response.response;
+		if (!responseObject) {
+			responseObject = @"";
+		}
+		[d setObject:responseObject forKey:[NSString stringWithFormat:@"record[survey][responses][%@]", response.identifier]];
 		i++;
 	}
-	NSLog(@"apiDict: %@", d);
     return d;
 }
 

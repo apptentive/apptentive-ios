@@ -15,16 +15,6 @@
 #import "ATAppRatingFlow_Private.h"
 #import "ATWebClient.h"
 
-NSString *const ATAppRatingFlowLastUsedVersionKey = @"ATAppRatingFlowLastUsedVersionKey";
-NSString *const ATAppRatingFlowLastUsedVersionFirstUseDateKey = @"ATAppRatingFlowLastUsedVersionFirstUseDateKey";
-NSString *const ATAppRatingFlowDeclinedToRateThisVersionKey = @"ATAppRatingFlowDeclinedToRateThisVersionKey";
-NSString *const ATAppRatingFlowUserDislikesThisVersionKey = @"ATAppRatingFlowUserDislikesThisVersionKey";
-NSString *const ATAppRatingFlowLastPromptDateKey = @"ATAppRatingFlowLastPromptDateKey";
-NSString *const ATAppRatingFlowRatedAppKey = @"ATAppRatingFlowRatedAppKey";
-
-NSString *const ATAppRatingFlowUseCountKey = @"ATAppRatingFlowUseCountKey";
-NSString *const ATAppRatingFlowSignificantEventsCountKey = @"ATAppRatingFlowSignificantEventsCountKey";
-
 static ATAppRatingFlow *sharedRatingFlow = nil;
 
 #if TARGET_OS_IPHONE
@@ -398,7 +388,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 		info.significantEventsBeforePrompt = self.significantEventsBeforePrompt;
 		info.usesBeforePrompt = self.usesBeforePrompt;
 		
-		NSPredicate *predicate = [ATAppRatingFlow_Private predicateForPromptLogic:[defaults objectForKey:ATAppRatingPromptLogicPreferenceKey]];
+		NSPredicate *predicate = [ATAppRatingFlow_Private predicateForPromptLogic:[defaults objectForKey:ATAppRatingPromptLogicPreferenceKey] withPredicateInfo:info];
 		if (predicate) {
 			result = [ATAppRatingFlow_Private evaluatePredicate:predicate withPredicateInfo:info];
 		}

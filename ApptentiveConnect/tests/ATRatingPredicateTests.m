@@ -11,7 +11,7 @@
 @implementation ATRatingPredicateTests
 - (void)predicateForObject:(NSObject *)promptObject shouldEqualString:(NSString *)result {
 	BOOL hasError = NO;
-	NSString *predicateString = [ATAppRatingFlow_Private predicateStringForPromptLogic:promptObject hasError:&hasError];
+	NSString *predicateString = [ATAppRatingFlow_Private predicateStringForPromptLogic:promptObject withPredicateInfo:nil hasError:&hasError];
 	STAssertEqualObjects(predicateString, result, [NSString stringWithFormat:@"%@ doesn't match %@", predicateString, result]);
 }
 
@@ -25,8 +25,12 @@
 	return [NSDictionary dictionaryWithObjectsAndKeys:[NSArray arrayWithObjects:@"days", @"events", @"uses", nil], @"and", nil];
 }
 
+- (NSDictionary *)allOrLogic {
+	return [NSDictionary dictionaryWithObjectsAndKeys:[NSArray arrayWithObjects:@"days", @"events", @"uses", nil], @"or", nil];
+}
+
 - (void)testPredicateStrings {
-	[self predicateForObject:[self defaultPromptLogic] shouldEqualString:@"((daysBeforePrompt == 0 || now >= nextPromptDate ) AND ((significantEventsBeforePrompt == 0 || significantEvents > significantEventsBeforePrompt) OR (usesBeforePrompt == 0 || appUses > usesBeforePrompt)))"];
+	[self predicateForObject:[self defaultPromptLogic] shouldEqualString:@"((now >= nextPromptDate) AND ((significantEvents > significantEventsBeforePrompt) OR (appUses > usesBeforePrompt)))"];
 }
 
 - (void)testDefaultPredicate1 {
@@ -36,17 +40,21 @@
 	info.significantEvents = 4;
 	info.usesBeforePrompt = 20;
 	info.appUses = 3;
-	NSPredicate *predicate = [ATAppRatingFlow_Private predicateForPromptLogic:[self defaultPromptLogic]];
+	NSPredicate *predicate = [ATAppRatingFlow_Private predicateForPromptLogic:[self defaultPromptLogic] withPredicateInfo:info];
 	STAssertFalse([ATAppRatingFlow_Private evaluatePredicate:predicate withPredicateInfo:info], @"Predicate should not be true.");
+	
 	info.significantEvents = 6;
+	predicate = [ATAppRatingFlow_Private predicateForPromptLogic:[self defaultPromptLogic] withPredicateInfo:info];
 	STAssertTrue([ATAppRatingFlow_Private evaluatePredicate:predicate withPredicateInfo:info], @"Predicate should be true.");
 	
 	info.appUses = 21;
+	predicate = [ATAppRatingFlow_Private predicateForPromptLogic:[self defaultPromptLogic] withPredicateInfo:info];
 	STAssertTrue([ATAppRatingFlow_Private evaluatePredicate:predicate withPredicateInfo:info], @"Predicate should be true.");
 	
 	info.significantEvents = 4;
-	
+	predicate = [ATAppRatingFlow_Private predicateForPromptLogic:[self defaultPromptLogic] withPredicateInfo:info];
 	STAssertTrue([ATAppRatingFlow_Private evaluatePredicate:predicate withPredicateInfo:info], @"Predicate should be true.");
+	
 	[info release], info = nil;
 }
 
@@ -57,18 +65,49 @@
 	info.significantEvents = 4;
 	info.usesBeforePrompt = 5;
 	info.appUses = 3;
-	NSPredicate *predicate = [ATAppRatingFlow_Private predicateForPromptLogic:[self allAndLogic]];
+	NSPredicate *predicate = [ATAppRatingFlow_Private predicateForPromptLogic:[self allAndLogic] withPredicateInfo:info];
 	STAssertFalse([ATAppRatingFlow_Private evaluatePredicate:predicate withPredicateInfo:info], @"Predicate should not be true.");
 	
 	info.firstUse = [NSDate dateWithTimeInterval:-1.0*(31*60*60*24) sinceDate:[NSDate date]];
 	info.significantEvents = 11;
 	info.appUses = 6;
+	predicate = [ATAppRatingFlow_Private predicateForPromptLogic:[self allAndLogic] withPredicateInfo:info];
 	
 	STAssertTrue([ATAppRatingFlow_Private evaluatePredicate:predicate withPredicateInfo:info], @"Predicate should be true.");
 	
 	
 	info.firstUse = [NSDate dateWithTimeInterval:-1.0*(10*60*60*24) sinceDate:[NSDate date]];
+	predicate = [ATAppRatingFlow_Private predicateForPromptLogic:[self allAndLogic] withPredicateInfo:info];
+
 	STAssertFalse([ATAppRatingFlow_Private evaluatePredicate:predicate withPredicateInfo:info], @"Predicate should not be true.");
 	[info release], info = nil;
+}
+
+- (void)testOrPredicates {
+	ATAppRatingFlowPredicateInfo *info = [[ATAppRatingFlowPredicateInfo alloc] init];
+	info.daysBeforePrompt = 15;
+	info.significantEventsBeforePrompt = 0;
+	info.significantEvents = 0;
+	info.usesBeforePrompt = 10;
+	info.appUses = 3;
+	NSPredicate *predicate = [ATAppRatingFlow_Private predicateForPromptLogic:[self allOrLogic] withPredicateInfo:info];
+	STAssertFalse([ATAppRatingFlow_Private evaluatePredicate:predicate withPredicateInfo:info], @"Predicate should not be true.");
+	
+	NSPredicate *missingClause = [ATAppRatingFlow_Private predicateForPromptLogic:[NSDictionary dictionaryWithObjectsAndKeys:[NSArray arrayWithObjects:@"days", @"uses", nil], @"or", nil] withPredicateInfo:info];
+	STAssertFalse([ATAppRatingFlow_Private evaluatePredicate:missingClause withPredicateInfo:info], @"Predicate should not be true.");
+	info.appUses = 11;
+	missingClause = [ATAppRatingFlow_Private predicateForPromptLogic:[NSDictionary dictionaryWithObjectsAndKeys:[NSArray arrayWithObjects:@"days", @"uses", nil], @"or", nil] withPredicateInfo:info];
+	STAssertTrue([ATAppRatingFlow_Private evaluatePredicate:missingClause withPredicateInfo:info], @"Predicate should be true.");
+	info.appUses = 3;
+	missingClause = [ATAppRatingFlow_Private predicateForPromptLogic:[NSDictionary dictionaryWithObjectsAndKeys:[NSArray arrayWithObjects:@"days", @"uses", nil], @"or", nil] withPredicateInfo:info];
+	
+	NSPredicate *noClauses = [ATAppRatingFlow_Private predicateForPromptLogic:[NSDictionary dictionaryWithObjectsAndKeys:[NSArray arrayWithObjects:nil], @"or", nil] withPredicateInfo:nil];
+	STAssertTrue(noClauses == nil, @"noClauses should be nil");
+	[info release], info = nil;
+}
+
+- (void)testNilInfo {
+	NSPredicate *predicate = [ATAppRatingFlow_Private predicateForPromptLogic:[self allOrLogic] withPredicateInfo:nil];
+	STAssertNotNil(predicate, @"Should be able to validate predicate with nil info.");
 }
 @end

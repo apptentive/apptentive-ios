@@ -19,6 +19,18 @@ NSString *const ATAppRatingPromptLogicPreferenceKey;
 
 NSString *const ATAppRatingSettingsAreFromServerPreferenceKey;
 
+
+
+NSString *const ATAppRatingFlowLastUsedVersionKey;
+NSString *const ATAppRatingFlowLastUsedVersionFirstUseDateKey;
+NSString *const ATAppRatingFlowDeclinedToRateThisVersionKey;
+NSString *const ATAppRatingFlowUserDislikesThisVersionKey;
+NSString *const ATAppRatingFlowLastPromptDateKey;
+NSString *const ATAppRatingFlowRatedAppKey;
+
+NSString *const ATAppRatingFlowUseCountKey;
+NSString *const ATAppRatingFlowSignificantEventsCountKey;
+
 @interface ATAppRatingFlowPredicateInfo : NSObject
 @property (nonatomic, retain) NSDate *firstUse;
 @property (nonatomic, assign) NSUInteger significantEvents;
@@ -34,7 +46,11 @@ NSString *const ATAppRatingSettingsAreFromServerPreferenceKey;
 
 @interface ATAppRatingFlow_Private : NSObject
 + (void)registerDefaults;
-+ (NSString *)predicateStringForPromptLogic:(NSObject *)promptObject hasError:(BOOL *)hasError;
-+ (NSPredicate *)predicateForPromptLogic:(NSObject *)promptObject;
+
+/*! Can pass in nil for info to just check for a well formed predicate prompt logic object. */
++ (NSString *)predicateStringForPromptLogic:(NSObject *)promptObject withPredicateInfo:(ATAppRatingFlowPredicateInfo *)info hasError:(BOOL *)hasError;
+
+/*! Can pass in nil for info to just check for a well formed predicate prompt logic object. */
++ (NSPredicate *)predicateForPromptLogic:(NSObject *)promptObject withPredicateInfo:(ATAppRatingFlowPredicateInfo *)info;
 + (BOOL)evaluatePredicate:(NSPredicate *)ratingsPredicate withPredicateInfo:(ATAppRatingFlowPredicateInfo *)info;
 @end

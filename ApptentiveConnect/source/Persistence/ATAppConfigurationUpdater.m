@@ -152,7 +152,7 @@ NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigura
 	}
 	
 	if (ratingsPromptLogic) {
-		NSPredicate *predicate = [ATAppRatingFlow_Private predicateForPromptLogic:ratingsPromptLogic];
+		NSPredicate *predicate = [ATAppRatingFlow_Private predicateForPromptLogic:ratingsPromptLogic withPredicateInfo:nil];
 		if (predicate) {
 			[defaults setObject:ratingsPromptLogic forKey:ATAppRatingPromptLogicPreferenceKey];
 			hasConfigurationChanges = YES;

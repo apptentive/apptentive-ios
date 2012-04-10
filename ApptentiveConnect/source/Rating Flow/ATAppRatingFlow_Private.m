@@ -24,6 +24,17 @@ NSString *const ATAppRatingPromptLogicPreferenceKey = @"ATAppRatingPromptLogicPr
 
 NSString *const ATAppRatingSettingsAreFromServerPreferenceKey = @"ATAppRatingSettingsAreFromServerPreferenceKey";
 
+
+NSString *const ATAppRatingFlowLastUsedVersionKey = @"ATAppRatingFlowLastUsedVersionKey";
+NSString *const ATAppRatingFlowLastUsedVersionFirstUseDateKey = @"ATAppRatingFlowLastUsedVersionFirstUseDateKey";
+NSString *const ATAppRatingFlowDeclinedToRateThisVersionKey = @"ATAppRatingFlowDeclinedToRateThisVersionKey";
+NSString *const ATAppRatingFlowUserDislikesThisVersionKey = @"ATAppRatingFlowUserDislikesThisVersionKey";
+NSString *const ATAppRatingFlowLastPromptDateKey = @"ATAppRatingFlowLastPromptDateKey";
+NSString *const ATAppRatingFlowRatedAppKey = @"ATAppRatingFlowRatedAppKey";
+
+NSString *const ATAppRatingFlowUseCountKey = @"ATAppRatingFlowUseCountKey";
+NSString *const ATAppRatingFlowSignificantEventsCountKey = @"ATAppRatingFlowSignificantEventsCountKey";
+
 @implementation ATAppRatingFlowPredicateInfo
 @synthesize firstUse;
 @synthesize significantEvents;
@@ -70,7 +81,7 @@ NSString *const ATAppRatingSettingsAreFromServerPreferenceKey = @"ATAppRatingSet
 	[defaults registerDefaults:defaultPreferences];
 }
 
-+ (NSString *)predicateStringForPromptLogic:(NSObject *)promptObject hasError:(BOOL *)hasError {
++ (NSString *)predicateStringForPromptLogic:(NSObject *)promptObject withPredicateInfo:(ATAppRatingFlowPredicateInfo *)info hasError:(BOOL *)hasError {
 	NSMutableString *result = [NSMutableString string];
 	if ([promptObject isKindOfClass:[NSDictionary class]]) {
 		NSDictionary *promptDictionary = (NSDictionary *)promptObject;
@@ -87,31 +98,41 @@ NSString *const ATAppRatingSettingsAreFromServerPreferenceKey = @"ATAppRatingSet
 			NSMutableArray *parts = [NSMutableArray array];
 			NSObject *value = [promptDictionary objectForKey:key];
 			if ([value isKindOfClass:[NSString class]]) {
-				NSString *partString = [ATAppRatingFlow_Private predicateStringForPromptLogic:value hasError:hasError];
-				if (partString) {
+				NSString *partString = [ATAppRatingFlow_Private predicateStringForPromptLogic:value withPredicateInfo:info hasError:hasError];
+				if (partString && [partString length] != 0) {
 					[parts addObject:partString];
 				}
 			} else if ([value isKindOfClass:[NSArray class]]) {
 				NSArray *promptArray = (NSArray *)value;
 				for (NSObject *part in promptArray) {
-					NSString *partString = [ATAppRatingFlow_Private predicateStringForPromptLogic:part hasError:hasError];
-					if (partString) {
+					NSString *partString = [ATAppRatingFlow_Private predicateStringForPromptLogic:part withPredicateInfo:info hasError:hasError];
+					if (partString && [partString length] != 0) {
 						[parts addObject:partString];
 					}
 				}
 			}
-			if ([parts count]) {
+			if ([parts count] > 1) {
 				[result appendFormat:@"(%@)", [parts componentsJoinedByString:joinWith]];
+			} else if ([parts count] == 1) {
+				[result appendFormat:@"(%@)", [parts objectAtIndex:0]];
+			} else {
+				*hasError = YES;
 			}
 		}
 	} else if ([promptObject isKindOfClass:[NSString class]]) {
 		NSString *promptString = (NSString *)promptObject;
 		if ([promptString isEqualToString:@"days"]) {
-			[result appendString:@"(daysBeforePrompt == 0 || now >= nextPromptDate )"];
+			if (info == nil || info.daysBeforePrompt != 0) {
+				[result appendString:@"(now >= nextPromptDate)"];
+			}
 		} else if ([promptString isEqualToString:@"events"]) {
-			[result appendString:@"(significantEventsBeforePrompt == 0 || significantEvents > significantEventsBeforePrompt)"];
+			if (info == nil || info.significantEventsBeforePrompt != 0) {
+				[result appendString:@"(significantEvents > significantEventsBeforePrompt)"];
+			}
 		} else if ([promptString isEqualToString:@"uses"]) {
-			[result appendString:@"(usesBeforePrompt == 0 || appUses > usesBeforePrompt)"];
+			if (info == nil || info.usesBeforePrompt != 0) {
+				[result appendString:@"(appUses > usesBeforePrompt)"];
+			}
 		} else {
 			*hasError = YES;
 		}
@@ -119,9 +140,9 @@ NSString *const ATAppRatingSettingsAreFromServerPreferenceKey = @"ATAppRatingSet
 	return result;
 }
 
-+ (NSPredicate *)predicateForPromptLogic:(NSObject *)promptObject {
++ (NSPredicate *)predicateForPromptLogic:(NSObject *)promptObject withPredicateInfo:(ATAppRatingFlowPredicateInfo *)info {
 	BOOL error = NO;
-	NSString *predicateString = [ATAppRatingFlow_Private predicateStringForPromptLogic:promptObject hasError:&error];
+	NSString *predicateString = [ATAppRatingFlow_Private predicateStringForPromptLogic:promptObject withPredicateInfo:info hasError:&error];
 	if (!predicateString || error || [predicateString length] == 0) {
 		return nil;
 	}

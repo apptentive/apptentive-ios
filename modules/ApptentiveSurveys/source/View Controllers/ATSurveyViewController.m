@@ -35,6 +35,7 @@ enum {
 @end
 
 @implementation ATSurveyViewController
+@synthesize errorText;
 
 - (id)initWithSurvey:(ATSurvey *)aSurvey {
 	if ((self = [super init])) {
@@ -48,6 +49,7 @@ enum {
 	[activeTextEntryCell release], activeTextEntryCell = nil;
 	[activeTextView release], activeTextView = nil;
 	[survey release], survey = nil;
+	[errorText release], errorText = nil;
 	[super dealloc];
 }
 
@@ -187,11 +189,24 @@ enum {
 		cellHeight = MAX(44, cellSize.height);
 	} else if (cell.textLabel.text != nil) {
 		UIFont *font = cell.textLabel.font;
+		
+		if (indexPath.row == 0) {
+			CGRect textFrame = cell.textLabel.frame;
+			textFrame.size.width = cell.frame.size.width - 38.0;
+			cell.textLabel.frame = textFrame;
+			NSLog(@"%@", NSStringFromCGRect(cell.textLabel.frame));
+		}
+		
 		CGSize cellSize = CGSizeMake(cell.textLabel.bounds.size.width, 1024);
 		UILineBreakMode lbm = cell.textLabel.lineBreakMode;
 		CGSize s = [cell.textLabel.text sizeWithFont:font constrainedToSize:cellSize lineBreakMode:lbm];
 		CGRect f = cell.textLabel.frame;
 		f.size = s;
+		if (s.height >= 50) {
+			NSLog(@"cell width is: %f", cell.frame.size.width);
+			NSLog(@"width is: %f", cellSize.width);
+			NSLog(@"Hi");
+		}
 		
 		ATSurveyQuestion *question = [self questionAtIndexPath:indexPath];
 		if (question != nil && indexPath.row == 1 && [self questionHasExtraInfo:question]) {
@@ -241,15 +256,17 @@ enum {
 			cell.textLabel.adjustsFontSizeToFitWidth = NO;
 			cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
 			cell.backgroundColor = [UIColor colorWithRed:223/255. green:235/255. blue:247/255. alpha:1.0];
+			cell.textLabel.backgroundColor = [UIColor redColor];
+			cell.textLabel.font = [UIFont boldSystemFontOfSize:20];
 		}
 		cell.textLabel.text = question.questionText;
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
-		[cell layoutSubviews];
+		[cell layoutIfNeeded];
 	} else if (indexPath.row == 1 && [self questionHasExtraInfo:question]) {
 		cell = [tableView dequeueReusableCellWithIdentifier:ATSurveyExtraInfoCellIdentifier];
 		if (cell == nil) {
 			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ATSurveyExtraInfoCellIdentifier] autorelease];
-			cell.backgroundColor = [UIColor lightGrayColor];
+			cell.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.0];
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
 			cell.textLabel.font = [UIFont systemFontOfSize:15];
 		}
@@ -278,8 +295,10 @@ enum {
 			cell = [tableView dequeueReusableCellWithIdentifier:ATSurveyCheckboxCellIdentifier];
 			if (cell == nil) {
 				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ATSurveyCheckboxCellIdentifier] autorelease];
+				cell.textLabel.font = [UIFont systemFontOfSize:18];
 			}
 			cell.textLabel.text = answer.value;
+			[cell layoutSubviews];
 		} else {
 			// Make a text entry cell.
 			if (activeTextView != nil && activeTextEntryCell != nil && activeTextView.cellPath.row == indexPath.row && activeTextView.cellPath.section == indexPath.section) {
@@ -323,11 +342,25 @@ enum {
 
 #pragma mark UITableViewDelegate
 
+- (NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {
+	if ([survey surveyDescription] != nil && section == 0) {
+		return [survey surveyDescription];
+	}
+	return nil;
+}
+
 - (NSString *)tableView:(UITableView *)aTableView titleForFooterInSection:(NSInteger)section {
 	if (section == [[survey questions] count] && errorText != nil) {
 		return errorText;
 	}
 	return nil;
+}
+
+- (void)scrollToBottom {
+	if (tableView) {
+		NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:[[survey questions] count]];
+		[tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionTop animated:YES];
+	}
 }
 
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -336,6 +369,7 @@ enum {
 			[self sendSurvey];
 		} else {
 			[tableView reloadData];
+			[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.1];
 		}
 	} else {
 		ATSurveyQuestion *question = [self questionAtIndexPath:indexPath];
@@ -438,7 +472,7 @@ enum {
 		result = YES;
 	} else if (question.type == ATSurveyQuestionTypeMultipleSelect) {
 		result = YES;
-	} else if (question.type = ATSurveyQuestionTypeMultipleChoice) {
+	} else if (question.type == ATSurveyQuestionTypeMultipleChoice) {
 		result = YES;
 	}
 	return result;
@@ -466,12 +500,12 @@ enum {
 		}
 	}
 	if (valid) {
-		errorText = nil;
+		self.errorText = nil;
 	} else {
 		if (missingAnswerCount == 1) {
-			errorText = @"Missing a required answer.";
+			self.errorText = @"Missing a required answer.";
 		} else {
-			errorText = [NSString stringWithFormat:@"Missing %d required answers.", missingAnswerCount];
+			self.errorText = [NSString stringWithFormat:@"Missing %d required answers.", missingAnswerCount];
 		}
 	}
 	return valid;

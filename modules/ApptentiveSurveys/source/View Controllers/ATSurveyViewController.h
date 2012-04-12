@@ -21,6 +21,7 @@
 	ATCellTextView *activeTextView;
 	NSString *errorText;
 }
+@property (nonatomic, retain) NSString *errorText;
 - (id)initWithSurvey:(ATSurvey *)survey;
 - (IBAction)sendSurvey;
 @end

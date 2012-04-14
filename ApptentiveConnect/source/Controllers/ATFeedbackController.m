@@ -309,8 +309,8 @@ enum {
 
 - (void)viewDidUnload {
 	[self setFeedbackContainerView:nil];
-    [super viewDidUnload];
 	[self teardown];
+	[super viewDidUnload];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

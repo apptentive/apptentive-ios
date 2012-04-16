@@ -107,7 +107,8 @@ enum {
 	}
 	[hud show];
 	[hud autorelease];
-
+	
+	[[ATSurveysBackend sharedBackend] setDidSendSurvey:survey];
 	[[ATSurveysBackend sharedBackend] resetSurvey];
 	[self.navigationController dismissModalViewControllerAnimated:YES];
 }

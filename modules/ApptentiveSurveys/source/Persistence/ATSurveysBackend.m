@@ -13,12 +13,22 @@
 #import "ATSurveyViewController.h"
 #import "JSONKit.h"
 
+NSString *const ATSurveySentSurveysPreferenceKey = @"ATSurveySentSurveysPreferenceKey";
+
+@interface ATSurveysBackend (Private)
+- (BOOL)surveyAlreadySubmitted:(ATSurvey *)survey;
+@end
+
 @implementation ATSurveysBackend
 
 + (ATSurveysBackend *)sharedBackend {
 	static ATSurveysBackend *sharedBackend = nil;
 	@synchronized(self) {
 		if (sharedBackend == nil) {
+			NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+			NSDictionary *defaultPreferences = [NSDictionary dictionaryWithObject:[NSArray array] forKey:ATSurveySentSurveysPreferenceKey];
+			[defaults registerDefaults:defaultPreferences];
+			
 			sharedBackend = [[ATSurveysBackend alloc] init];
 		}
 	}
@@ -65,6 +75,17 @@
 	[vc release];
 }
 
+- (void)setDidSendSurvey:(ATSurvey *)survey {
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSArray *sentSurveys = [defaults objectForKey:ATSurveySentSurveysPreferenceKey];
+	if (![sentSurveys containsObject:survey.identifier]) {
+		NSMutableArray *replacementSurveys = [sentSurveys mutableCopy];
+		[replacementSurveys addObject:survey.identifier];
+		[defaults setObject:replacementSurveys forKey:ATSurveySentSurveysPreferenceKey];
+		[defaults synchronize];
+	}
+}
+
 #pragma mark ATAPIRequestDelegate
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)request result:(NSObject *)result {
 	if (request == checkSurveyRequest) {
@@ -72,7 +93,7 @@
 		ATSurvey *survey = [parser parseSurvey:(NSData *)result];
 		if (survey == nil) {
 			NSLog(@"An error occurred parsing survey: %@", [parser parserError]);
-		} else {
+		} else if (![self surveyAlreadySubmitted:survey]) {
 			[currentSurvey release], currentSurvey = nil;
 			currentSurvey = [survey retain];
 			[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyNewSurveyAvailableNotification object:nil];
@@ -89,5 +110,17 @@
 		checkSurveyRequest.delegate = nil;
 		[checkSurveyRequest release], checkSurveyRequest = nil;
 	}
+}
+@end
+
+
+@implementation ATSurveysBackend (Private)
+- (BOOL)surveyAlreadySubmitted:(ATSurvey *)survey {
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	BOOL sentSurvey = NO;
+	if ([[defaults objectForKey:ATSurveySentSurveysPreferenceKey] containsObject:survey.identifier]) {
+		sentSurvey = YES;
+	}
+	return sentSurvey;
 }
 @end

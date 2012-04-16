@@ -51,17 +51,6 @@ static ATWebClient *sharedSingleton = nil;
 	return kCommonChannelName;
 }
 
-- (ATAPIRequest *)requestForGettingContactInfo {
-    NSString *uuid = [[ATBackend sharedBackend] deviceUUID];
-    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:uuid, @"uuid", nil];
-	NSString *urlString = [self apiURLStringWithPath:[NSString stringWithFormat:@"records/recent_user?%@", [self stringForParameters:parameters]]];
-    ATURLConnection *conn = [self connectionToGet:[NSURL URLWithString:urlString]];
-    conn.timeoutInterval = 20.0;
-    ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:[self commonChannelName]];
-    request.returnType = ATAPIRequestReturnTypeData;
-    return [request autorelease];
-}
-
 - (ATAPIRequest *)requestForPostingFeedback:(ATFeedback *)feedback {
     NSDictionary *postData = [feedback apiDictionary];
 	NSString *url = [self apiURLStringWithPath:@"records"];

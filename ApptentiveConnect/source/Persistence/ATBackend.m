@@ -10,7 +10,6 @@
 #import "ATAppConfigurationUpdater.h"
 #import "ATConnect.h"
 #import "ATContactStorage.h"
-#import "ATContactUpdater.h"
 #import "ATFeedback.h"
 #import "ATFeedbackTask.h"
 #import "ATReachability.h"
@@ -29,7 +28,6 @@ static ATBackend *sharedBackend = nil;
 - (void)networkStatusChanged:(NSNotification *)notification;
 - (void)stopWorking:(NSNotification *)notification;
 - (void)startWorking:(NSNotification *)notification;
-- (void)contactUpdaterFinished:(NSNotification *)notification;
 @end
 
 @interface ATBackend ()
@@ -188,16 +186,6 @@ static ATBackend *sharedBackend = nil;
     return request;
 }
 
-- (void)updateUserData {
-    if (contactUpdater) {
-        [contactUpdater cancel];
-        [contactUpdater release];
-        contactUpdater = nil;
-    }
-    contactUpdater = [[ATContactUpdater alloc] init];
-    [contactUpdater update];
-}
-
 - (void)udpateRatingConfigurationIfNeeded {
 	if (configurationUpdater == nil && [ATAppConfigurationUpdater shouldCheckForUpdate]) {
 		configurationUpdater = [[ATAppConfigurationUpdater alloc] initWithDelegate:self];
@@ -266,10 +254,6 @@ static ATBackend *sharedBackend = nil;
         if (working) {
             [[ATTaskQueue sharedTaskQueue] start];
 			
-			if ([[ATContactStorage sharedContactStorage] shouldCheckForUpdate] && !userDataWasUpdated) {
-                [self updateUserData];
-            }
-			
 			[self udpateRatingConfigurationIfNeeded];
         } else {
             [[ATTaskQueue sharedTaskQueue] stop];
@@ -307,7 +291,6 @@ static ATBackend *sharedBackend = nil;
 #elif TARGET_OS_MAC
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:NSApplicationWillTerminateNotification object:nil];
 #endif
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contactUpdaterFinished:) name:ATContactUpdaterFinished object:nil];
 	
 	[ATReachability sharedReachability];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusChanged:) name:ATReachabilityStatusChanged object:nil];
@@ -315,9 +298,6 @@ static ATBackend *sharedBackend = nil;
 
 - (void)teardown {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [contactUpdater cancel];
-    [contactUpdater release];
-    contactUpdater = nil;
 	[configurationUpdater cancel];
 	[configurationUpdater release];
 	configurationUpdater = nil;
@@ -341,13 +321,5 @@ static ATBackend *sharedBackend = nil;
 
 - (void)startWorking:(NSNotification *)notification {
     self.working = YES;
-}
-
-- (void)contactUpdaterFinished:(NSNotification *)notification {
-    if (contactUpdater) {
-        [contactUpdater release];
-        contactUpdater = nil;
-    }
-    userDataWasUpdated = YES;
 }
 @end

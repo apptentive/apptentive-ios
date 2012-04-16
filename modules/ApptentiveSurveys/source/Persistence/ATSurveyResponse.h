@@ -17,6 +17,7 @@
 @property (nonatomic, retain) NSString *identifier;
 
 - (void)addQuestionResponse:(ATSurveyQuestionResponse *)response;
+- (NSDictionary *)apiJSON;
 - (NSDictionary *)apiDictionary;
 @end
 
@@ -25,5 +26,5 @@
 @private
 }
 @property (nonatomic, retain) NSString *identifier;
-@property (nonatomic, retain) NSString *response;
+@property (nonatomic, retain) NSObject<NSCoding> *response;
 @end

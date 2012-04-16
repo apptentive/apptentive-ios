@@ -12,6 +12,7 @@ typedef enum {
 	ATSurveyQuestionTypeUnknown,
 	ATSurveyQuestionTypeSingeLine,
 	ATSurveyQuestionTypeMultipleChoice,
+	ATSurveyQuestionTypeMultipleSelect,
 } ATSurveyQuestionType;
 
 @class ATSurveyQuestionAnswer;
@@ -21,14 +22,19 @@ typedef enum {
 }
 @property (nonatomic, assign) ATSurveyQuestionType type;
 @property (nonatomic, retain) NSString *identifier;
+@property (nonatomic, getter=responseIsRequired) BOOL responseRequired;
 @property (nonatomic, retain) NSString *questionText;
 @property (nonatomic, retain) NSString *value;
 @property (nonatomic, readonly) NSMutableArray *answerChoices;
 @property (nonatomic, retain) NSString *answerText;
-// If this is a multiple choice question:
-@property (nonatomic, retain) ATSurveyQuestionAnswer *selectedAnswerChoice;
+// If this is a multiple choice or multiple select question:
+@property (nonatomic, retain) NSMutableArray *selectedAnswerChoices;
+@property (nonatomic, assign) NSUInteger maxSelectionCount;
 
 - (void)addAnswerChoice:(ATSurveyQuestionAnswer *)answer;
+
+- (void)addSelectedAnswerChoice:(ATSurveyQuestionAnswer *)answer;
+- (void)removeSelectedAnswerChoice:(ATSurveyQuestionAnswer *)answer;
 @end
 
 @interface ATSurveyQuestionAnswer : NSObject {

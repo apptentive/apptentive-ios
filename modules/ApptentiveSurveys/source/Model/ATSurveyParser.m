@@ -62,13 +62,23 @@
 		
 		if ([(NSString *)typeString isEqualToString:@"multichoice"]) {
 			question.type = ATSurveyQuestionTypeMultipleChoice;
+		} else if ([(NSString *)typeString isEqualToString:@"multiselect"]) {
+			question.type = ATSurveyQuestionTypeMultipleSelect;
 		} else if ([(NSString *)typeString isEqualToString:@"singleline"]) {
 			question.type = ATSurveyQuestionTypeSingeLine;
 		} else {
 			break;
 		}
 		
-		if (question.type == ATSurveyQuestionTypeMultipleChoice) {
+		if ([jsonDictionary objectForKey:@"required"] != nil) {
+			question.responseRequired = [(NSNumber *)[jsonDictionary objectForKey:@"required"] boolValue];
+		}
+		
+		if ([jsonDictionary objectForKey:@"max_selections"] != nil) {
+			question.maxSelectionCount = [(NSNumber *)[jsonDictionary objectForKey:@"max_selections"] unsignedIntegerValue];
+		}
+		
+		if (question.type == ATSurveyQuestionTypeMultipleChoice || question.type == ATSurveyQuestionTypeMultipleSelect) {
 			NSObject *answerChoices = [jsonDictionary objectForKey:@"answer_choices"];
 			if (answerChoices == nil || ![answerChoices isKindOfClass:[NSArray class]]) {
 				break;
@@ -98,7 +108,7 @@
 - (ATSurvey *)surveyWithJSONDictionary:(NSDictionary *)jsonDictionary {
 	ATSurvey *survey = [[ATSurvey alloc] init];
 	
-	NSDictionary *keyMapping = [NSDictionary dictionaryWithObjectsAndKeys:@"surveyDescription", @"description", @"identifier", @"id", @"name", @"name", nil];
+	NSDictionary *keyMapping = [NSDictionary dictionaryWithObjectsAndKeys:@"surveyDescription", @"description", @"identifier", @"id", @"name", @"name", @"successMessage", @"success_message", nil];
 	
 	for (NSString *key in keyMapping) {
 		NSString *ivarName = [keyMapping objectForKey:key];
@@ -110,6 +120,9 @@
 	
 	if ([jsonDictionary objectForKey:@"active"] != nil) {
 		survey.active = [(NSNumber *)[jsonDictionary objectForKey:@"active"] boolValue];
+	}
+	if ([jsonDictionary objectForKey:@"required"] != nil) {
+		survey.responseRequired = [(NSNumber *)[jsonDictionary objectForKey:@"required"] boolValue];
 	}
 	
 	NSObject *questions = [jsonDictionary objectForKey:@"questions"];
@@ -130,23 +143,23 @@
 - (ATSurvey *)parseSurvey:(NSData *)jsonSurvey {
 	ATSurvey *survey = nil;
 	BOOL success = NO;
-    
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    JSONDecoder *decoder = [JSONDecoder decoder];
-    NSError *error = nil;
-    id decodedObject = [decoder objectWithData:jsonSurvey error:&error];
-    if (decodedObject && [decodedObject isKindOfClass:[NSDictionary class]]) {
-        success = YES;
-        NSDictionary *values = (NSDictionary *)decodedObject;
-        survey = [self surveyWithJSONDictionary:values];
+
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	JSONDecoder *decoder = [JSONDecoder decoder];
+	NSError *error = nil;
+	id decodedObject = [decoder objectWithData:jsonSurvey error:&error];
+	if (decodedObject && [decodedObject isKindOfClass:[NSDictionary class]]) {
+		success = YES;
+		NSDictionary *values = (NSDictionary *)decodedObject;
+		survey = [self surveyWithJSONDictionary:values];
 		[survey retain];
-    } else {
+	} else {
 		[parserError release], parserError = nil;
-        parserError = [error retain];
-        success = NO;
-    }
-    
-    [pool release], pool = nil;
+		parserError = [error retain];
+		success = NO;
+	}
+
+	[pool release], pool = nil;
 	if (!success) {
 		survey = nil;
 	} else {

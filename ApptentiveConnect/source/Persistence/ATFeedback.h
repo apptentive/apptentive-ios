@@ -21,8 +21,6 @@ typedef enum {
     ATFeedbackTypeQuestion
 } ATFeedbackType;
 
-NSString * const ATContactUpdaterFinished;
-
 @interface ATFeedback : ATRecord <NSCoding> {
 	NSMutableDictionary *extraData;
 }

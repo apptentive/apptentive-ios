@@ -88,6 +88,29 @@
     [coder encodeObject:self.date forKey:@"date"];
 }
 
+- (NSDictionary *)apiJSON {
+    NSMutableDictionary *d = [NSMutableDictionary dictionary];
+	NSMutableDictionary *record = [NSMutableDictionary dictionary];
+	NSMutableDictionary *device = [NSMutableDictionary dictionary];
+    if (self.uuid) [device setObject:self.uuid forKey:@"uuid"];
+    if (self.model) [device setObject:self.model forKey:@"model"];
+    if (self.os_version) [device setObject:self.os_version forKey:@"os_version"];
+    if (self.carrier) [device setObject:self.carrier forKey:@"carrier"];
+	
+	[record setObject:device forKey:@"device"];
+    
+    [record setObject:[self formattedDate:self.date] forKey:@"date"];
+    
+    // Add some client information.
+	NSMutableDictionary *client = [NSMutableDictionary dictionary];
+    [client setObject:kATConnectVersionString forKey:@"version"];
+    [client setObject:kATConnectPlatformString forKey:@"os"];
+    [client setObject:@"Apptentive, Inc." forKey:@"author"];
+	[record setObject:client forKey:@"client"];
+	[d setObject:record forKey:@"record"];
+    return d;	
+}
+
 - (NSDictionary *)apiDictionary {
     NSMutableDictionary *d = [NSMutableDictionary dictionary];
     if (self.uuid) [d setObject:self.uuid forKey:@"record[device][uuid]"];

@@ -8,7 +8,6 @@
 
 #import "ATFeedbackController.h"
 #import "ATContactStorage.h"
-#import "ATContactUpdater.h"
 #import "ATCustomButton.h"
 #import "ATToolbar.h"
 #import "ATDefaultTextView.h"
@@ -224,7 +223,6 @@ enum {
 
 - (void)viewDidLoad {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackChanged:) name:UITextViewTextDidChangeNotification object:self.feedbackView];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contactInfoChanged:) name:ATContactUpdaterFinished object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(screenshotChanged:) name:ATImageViewChoseImage object:nil];
 	
 	self.redLineView.backgroundColor = [UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_dotted_red_line"]];

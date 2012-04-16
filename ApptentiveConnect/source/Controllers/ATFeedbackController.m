@@ -41,6 +41,7 @@ enum {
 - (void)teardown;
 - (void)setupFeedback;
 - (BOOL)shouldReturn:(UIView *)view;
+- (UIWindow *)findMainWindowPreferringMainScreen:(BOOL)preferMainScreen;
 - (UIWindow *)windowForViewController:(UIViewController *)viewController;
 + (CGFloat)rotationOfViewHierarchyInRadians:(UIView *)leafView;
 + (CGAffineTransform)viewTransformInWindow:(UIWindow *)window;
@@ -143,16 +144,29 @@ enum {
 	CALayer *l = self.view.layer;
 	
 	UIWindow *parentWindow = [self windowForViewController:presentingViewController];
-	self.window.transform = [ATFeedbackController viewTransformInWindow:parentWindow];
+	if (!parentWindow) {
+		NSLog(@"Unable to find parentWindow!");
+	}
+	if (originalPresentingWindow != parentWindow) {
+		[originalPresentingWindow release], originalPresentingWindow = nil;
+		originalPresentingWindow = [parentWindow retain];
+	}
+	CGRect animationBounds = CGRectZero;
+	CGPoint animationCenter = CGPointZero;
+	
+	CGAffineTransform t = [ATFeedbackController viewTransformInWindow:parentWindow];
+	self.window.transform = t;
 	self.window.hidden = NO;
 	[parentWindow resignKeyWindow];
 	[self.window makeKeyAndVisible];
+	animationBounds = parentWindow.bounds;
+	animationCenter = parentWindow.center;
 	
 	
 	// Animate in from above.
-	self.window.bounds = parentWindow.bounds;
+	self.window.bounds = animationBounds;
 	self.window.windowLevel = UIWindowLevelNormal;
-	CGPoint center = parentWindow.center;
+	CGPoint center = animationCenter;
 	center.y = ceilf(center.y);
 	
 	CGRect endingFrame = [[UIScreen mainScreen] applicationFrame];
@@ -172,7 +186,7 @@ enum {
 			startingPoint = CGPointMake(center.x + self.window.bounds.size.width, center.y);
             break;
         default: // as UIInterfaceOrientationPortrait
-			startingPoint = CGPointMake(center.x, center.y - parentWindow.bounds.size.height);
+			startingPoint = CGPointMake(center.x, center.y - animationBounds.size.height);
             break;
     }
 	
@@ -456,8 +470,9 @@ enum {
 	self.logoImageView = nil;
 	self.taglineLabel = nil;
 	[currentImage release], currentImage = nil;
-	[[self windowForViewController:presentingViewController] makeKeyAndVisible];
+	[originalPresentingWindow makeKeyAndVisible];
 	[presentingViewController release], presentingViewController = nil;
+	[originalPresentingWindow release], originalPresentingWindow = nil;
 }
 
 - (void)setupFeedback {
@@ -481,11 +496,33 @@ enum {
     return YES;
 }
 
+- (UIWindow *)findMainWindowPreferringMainScreen:(BOOL)preferMainScreen {
+	UIApplication *application = [UIApplication sharedApplication];
+	for (UIWindow *window in [[application windows] reverseObjectEnumerator]) {
+		if (window.rootViewController || window.isKeyWindow) {
+			if (preferMainScreen && [window respondsToSelector:@selector(screen)]) {
+				if (window.screen && [window.screen isEqual:[UIScreen mainScreen]]) {
+					return window;
+				}
+			} else {
+				return window;
+			}
+		}
+	}
+	return nil;
+}
+
 - (UIWindow *)windowForViewController:(UIViewController *)viewController {
 	UIWindow *result = nil;
 	UIView *rootView = [viewController view];
 	if (rootView.window) {
 		result = rootView.window;
+	}
+	if (!result) {
+		result = [self findMainWindowPreferringMainScreen:YES];
+		if (!result) {
+			result = [self findMainWindowPreferringMainScreen:NO];
+		}
 	}
 	return result;
 }
@@ -746,11 +783,14 @@ enum {
 
 - (void)sendFeedbackAndDismiss {
     [[ATBackend sharedBackend] sendFeedback:self.feedback];
-	UIWindow *parentWindow = [self windowForViewController:presentingViewController];
-    ATHUDView *hud = [[ATHUDView alloc] initWithWindow:parentWindow];
-    hud.label.text = ATLocalizedString(@"Thanks!", @"Text in thank you display upon submitting feedback.");
-    [hud show];
-    [hud autorelease];
+	UIWindow *parentWindow = originalPresentingWindow;
+	if (parentWindow) {
+		ATHUDView *hud = [[ATHUDView alloc] initWithWindow:parentWindow];
+		hud.label.text = ATLocalizedString(@"Thanks!", @"Text in thank you display upon submitting feedback.");
+		[hud show];
+		[hud autorelease];
+	}
+	
 	[self dismiss:YES];
 }
 
@@ -837,9 +877,9 @@ enum {
 - (void)positionInWindow {
 	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
 	
-    CGFloat angle = 0.0;
-    CGRect newFrame = [self windowForViewController:presentingViewController].bounds;
-    CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
+	CGFloat angle = 0.0;
+	CGRect newFrame = originalPresentingWindow.bounds;
+	CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
 	
     switch (orientation) { 
         case UIInterfaceOrientationPortraitUpsideDown:

@@ -28,6 +28,8 @@ typedef enum {
 	UIControl *photoControl;
 	UIImage *currentImage;
 	BOOL showEmailAddressField;
+	
+	UIWindow *originalPresentingWindow;
 }
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *doneButton;

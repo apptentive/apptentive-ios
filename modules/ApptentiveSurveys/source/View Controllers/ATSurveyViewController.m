@@ -16,6 +16,8 @@
 #import "ATSurveyResponse.h"
 #import "ATTaskQueue.h"
 
+#define DEBUG_CELL_HEIGHT_PROBLEM 0
+
 enum {
 	kTextViewTag = 1
 };
@@ -194,7 +196,9 @@ enum {
 			CGRect textFrame = cell.textLabel.frame;
 			textFrame.size.width = cell.frame.size.width - 38.0;
 			cell.textLabel.frame = textFrame;
+#if DEBUG_CELL_HEIGHT_PROBLEM
 			NSLog(@"%@", NSStringFromCGRect(cell.textLabel.frame));
+#endif
 		}
 		
 		CGSize cellSize = CGSizeMake(cell.textLabel.bounds.size.width, 1024);
@@ -202,11 +206,13 @@ enum {
 		CGSize s = [cell.textLabel.text sizeWithFont:font constrainedToSize:cellSize lineBreakMode:lbm];
 		CGRect f = cell.textLabel.frame;
 		f.size = s;
+#if DEBUG_CELL_HEIGHT_PROBLEM
 		if (s.height >= 50) {
 			NSLog(@"cell width is: %f", cell.frame.size.width);
 			NSLog(@"width is: %f", cellSize.width);
 			NSLog(@"Hi");
 		}
+#endif
 		
 		ATSurveyQuestion *question = [self questionAtIndexPath:indexPath];
 		if (question != nil && indexPath.row == 1 && [self questionHasExtraInfo:question]) {
@@ -256,7 +262,9 @@ enum {
 			cell.textLabel.adjustsFontSizeToFitWidth = NO;
 			cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
 			cell.backgroundColor = [UIColor colorWithRed:223/255. green:235/255. blue:247/255. alpha:1.0];
+#if DEBUG_CELL_HEIGHT_PROBLEM
 			cell.textLabel.backgroundColor = [UIColor redColor];
+#endif
 			cell.textLabel.font = [UIFont boldSystemFontOfSize:20];
 		}
 		cell.textLabel.text = question.questionText;
@@ -271,15 +279,12 @@ enum {
 			cell.textLabel.font = [UIFont systemFontOfSize:15];
 		}
 		NSString *text = nil;
-		if (question.responseIsRequired) {
-			text = @"(required)";
-			if (question.type == ATSurveyQuestionTypeMultipleSelect && question.maxSelectionCount > 1) {
-				text = [NSString stringWithFormat:@"Select between 1 and %d choices.", question.maxSelectionCount];
+		if (question.instructionsText) {
+			if ([question.instructionsText length]) {
+				text = question.instructionsText;
 			}
-		} else if (question.type == ATSurveyQuestionTypeMultipleChoice) {
-			text = @"Select one.";
-		} else if (question.type == ATSurveyQuestionTypeMultipleSelect && question.maxSelectionCount > 1) {
-			text = [NSString stringWithFormat:@"Select up to %d choices.", question.maxSelectionCount];
+		} else if (question.responseIsRequired) {
+			text = ATLocalizedString(@"(required)", @"Survey required answer fallback label.");
 		}
 		cell.textLabel.text = text;
 		[cell layoutSubviews];
@@ -298,6 +303,11 @@ enum {
 				cell.textLabel.font = [UIFont systemFontOfSize:18];
 			}
 			cell.textLabel.text = answer.value;
+			if ([[question selectedAnswerChoices] containsObject:answer]) {
+				cell.accessoryType = UITableViewCellAccessoryCheckmark;
+			} else {
+				cell.accessoryType = UITableViewCellAccessoryNone;
+			}
 			[cell layoutSubviews];
 		} else {
 			// Make a text entry cell.
@@ -321,7 +331,7 @@ enum {
 			
 			ATCellTextView *textView = (ATCellTextView *)[cell viewWithTag:kTextViewTag];
 			textView.cellPath = [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section];
-			textView.placeholder = @"Answer";
+			textView.placeholder = ATLocalizedString(@"Answer", @"Answer label");
 			textView.delegate = self;
 			textView.question = question;
 			if (question.answerText != nil) {
@@ -385,10 +395,14 @@ enum {
 			}
 			if (question.type == ATSurveyQuestionTypeMultipleChoice || question.type == ATSurveyQuestionTypeMultipleSelect) {
 				ATSurveyQuestionAnswer *answer = [question.answerChoices objectAtIndex:answerIndex];
-				if (cell.accessoryType == UITableViewCellAccessoryNone) {
+				BOOL isChecked = cell.accessoryType == UITableViewCellAccessoryCheckmark;
+				
+				if (isChecked == NO && question.type == ATSurveyQuestionTypeMultipleSelect && [[question selectedAnswerChoices] count] == question.maxSelectionCount) {
+					// Do nothing if unchecked and have already selected the maximum number of answers.
+				} else if (isChecked == NO) {
 					cell.accessoryType = UITableViewCellAccessoryCheckmark;
 					[question addSelectedAnswerChoice:answer];
-				} else {
+				} else if (isChecked == YES) {
 					cell.accessoryType = UITableViewCellAccessoryNone;
 					[question removeSelectedAnswerChoice:answer];
 				}
@@ -481,31 +495,36 @@ enum {
 - (BOOL)validateSurvey {
 	BOOL valid = YES;
 	NSUInteger missingAnswerCount = 0;
+	NSUInteger tooFewAnswersCount = 0;
+	NSUInteger tooManyAnswersCount = 0;
 	for (ATSurveyQuestion *question in [survey questions]) {
-		if (question.type == ATSurveyQuestionTypeSingeLine) {
-			if (question.responseIsRequired && (question.answerText == nil || [question.answerText length] == 0)) {
-				missingAnswerCount++;
-				valid = NO;
-			}
-		} else if (question.type == ATSurveyQuestionTypeMultipleChoice) {
-			if (question.responseIsRequired && [question.selectedAnswerChoices count] == 0) {
-				missingAnswerCount++;
-				valid = NO;
-			}
-		} else if (question.type == ATSurveyQuestionTypeMultipleSelect) {
-			if (question.responseIsRequired && [question.selectedAnswerChoices count] == 0) {
-				missingAnswerCount++;
-				valid = NO;
-			}
+		ATSurveyQuestionValidationErrorType error = [question validateAnswer];
+		if (error == ATSurveyQuestionValidationErrorMissingRequiredAnswer) {
+			missingAnswerCount++;
+			valid = NO;
+		} else if (error == ATSurveyQuestionValidationErrorTooFewAnswers) {
+			tooFewAnswersCount++;
+			valid = NO;
+		} else if (error == ATSurveyQuestionValidationErrorTooManyAnswers) {
+			tooManyAnswersCount++;
+			valid = NO;
 		}
 	}
 	if (valid) {
 		self.errorText = nil;
 	} else {
 		if (missingAnswerCount == 1) {
-			self.errorText = @"Missing a required answer.";
-		} else {
-			self.errorText = [NSString stringWithFormat:@"Missing %d required answers.", missingAnswerCount];
+			self.errorText = ATLocalizedString(@"Missing a required answer.", @"Survey missing required answer label.");
+		} else if (missingAnswerCount > 1) {
+			self.errorText = [NSString stringWithFormat:ATLocalizedString(@"Missing %d required answers.", @"Survey missing required answers formatted label."), missingAnswerCount];
+		} else if (tooFewAnswersCount == 1) {
+			self.errorText = ATLocalizedString(@"Too few selections made for a question above.", @"Survey too few selections label.");
+		} else if (tooFewAnswersCount > 1) {
+			self.errorText = [NSString stringWithFormat:ATLocalizedString(@"Too few selections made for %d questions above.", @"Survey too few selections formatted label."), tooFewAnswersCount];
+		} else if (tooManyAnswersCount == 1) {
+			self.errorText = ATLocalizedString(@"Too many selections made for a question above.", @"Survey too many selections label.");
+		} else if (tooManyAnswersCount > 1) {
+			self.errorText = [NSString stringWithFormat:ATLocalizedString(@"Too many selections made for %d questions above.", @"Survey too many selections formatted label."), tooFewAnswersCount];
 		}
 	}
 	return valid;

@@ -15,6 +15,13 @@ typedef enum {
 	ATSurveyQuestionTypeMultipleSelect,
 } ATSurveyQuestionType;
 
+typedef enum {
+	ATSurveyQuestionValidationErrorNone,
+	ATSurveyQuestionValidationErrorMissingRequiredAnswer,
+	ATSurveyQuestionValidationErrorTooFewAnswers,
+	ATSurveyQuestionValidationErrorTooManyAnswers,
+} ATSurveyQuestionValidationErrorType;
+
 @class ATSurveyQuestionAnswer;
 
 @interface ATSurveyQuestion : NSObject {
@@ -24,17 +31,20 @@ typedef enum {
 @property (nonatomic, retain) NSString *identifier;
 @property (nonatomic, getter=responseIsRequired) BOOL responseRequired;
 @property (nonatomic, retain) NSString *questionText;
+@property (nonatomic, retain) NSString *instructionsText;
 @property (nonatomic, retain) NSString *value;
 @property (nonatomic, readonly) NSMutableArray *answerChoices;
 @property (nonatomic, retain) NSString *answerText;
 // If this is a multiple choice or multiple select question:
 @property (nonatomic, retain) NSMutableArray *selectedAnswerChoices;
+@property (nonatomic, assign) NSUInteger minSelectionCount;
 @property (nonatomic, assign) NSUInteger maxSelectionCount;
 
 - (void)addAnswerChoice:(ATSurveyQuestionAnswer *)answer;
 
 - (void)addSelectedAnswerChoice:(ATSurveyQuestionAnswer *)answer;
 - (void)removeSelectedAnswerChoice:(ATSurveyQuestionAnswer *)answer;
+- (ATSurveyQuestionValidationErrorType)validateAnswer;
 @end
 
 @interface ATSurveyQuestionAnswer : NSObject {

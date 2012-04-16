@@ -44,7 +44,7 @@
 	ATSurveyQuestion *question = [[ATSurveyQuestion alloc] init];
 	BOOL failed = YES;
 	
-	NSDictionary *keyMapping = [NSDictionary dictionaryWithObjectsAndKeys:@"identifier", @"id", @"questionText", @"value", nil];
+	NSDictionary *keyMapping = [NSDictionary dictionaryWithObjectsAndKeys:@"identifier", @"id", @"questionText", @"value", @"instructionsText", @"instructions", nil];
 	
 	for (NSString *key in keyMapping) {
 		NSString *ivarName = [keyMapping objectForKey:key];
@@ -76,6 +76,9 @@
 		
 		if ([jsonDictionary objectForKey:@"max_selections"] != nil) {
 			question.maxSelectionCount = [(NSNumber *)[jsonDictionary objectForKey:@"max_selections"] unsignedIntegerValue];
+		}
+		if ([jsonDictionary objectForKey:@"min_selections"] != nil) {
+			question.minSelectionCount = [(NSNumber *)[jsonDictionary objectForKey:@"min_selections"] unsignedIntegerValue];
 		}
 		
 		if (question.type == ATSurveyQuestionTypeMultipleChoice || question.type == ATSurveyQuestionTypeMultipleSelect) {

@@ -13,10 +13,12 @@
 @synthesize responseRequired;
 @synthesize identifier=identifier$;
 @synthesize questionText=questionText$;
+@synthesize instructionsText=instructionsText$;
 @synthesize value=value$;
 @synthesize answerChoices=answerChoices$;
 @synthesize answerText=answerText$;
 @synthesize selectedAnswerChoices=selectedAnswerChoices$;
+@synthesize minSelectionCount;
 @synthesize maxSelectionCount;
 
 - (id)init {
@@ -30,6 +32,7 @@
 - (void)dealloc {
 	[identifier$ release], identifier$ = nil;
 	[questionText$ release], questionText$ = nil;
+	[instructionsText$ release], instructionsText$ = nil;
 	[value$ release], value$ = nil;
 	[answerChoices$ release], answerChoices$ = nil;
 	[answerText$ release], answerText$ = nil;
@@ -52,6 +55,29 @@
 
 - (void)removeSelectedAnswerChoice:(ATSurveyQuestionAnswer *)answer {
 	[self.selectedAnswerChoices removeObject:answer];
+}
+
+- (ATSurveyQuestionValidationErrorType)validateAnswer {
+	ATSurveyQuestionValidationErrorType error = ATSurveyQuestionValidationErrorNone;
+	
+	if (self.type == ATSurveyQuestionTypeSingeLine) {
+		if (self.responseIsRequired && (self.answerText == nil || [self.answerText length] == 0)) {
+			error = ATSurveyQuestionValidationErrorMissingRequiredAnswer;
+		}
+	} else if (self.type == ATSurveyQuestionTypeMultipleChoice) {
+		if (self.responseIsRequired && [self.selectedAnswerChoices count] == 0) {
+			error = ATSurveyQuestionValidationErrorMissingRequiredAnswer;
+		}
+	} else if (self.type == ATSurveyQuestionTypeMultipleSelect) {
+		if (self.responseIsRequired) {
+			if (minSelectionCount != 0 && [self.selectedAnswerChoices count] < minSelectionCount) {
+				error = ATSurveyQuestionValidationErrorTooFewAnswers;
+			} else if (maxSelectionCount != 0 && [self.selectedAnswerChoices count] > maxSelectionCount) {
+				error = ATSurveyQuestionValidationErrorTooManyAnswers;
+			}
+		}
+	}
+	return error;
 }
 @end
 

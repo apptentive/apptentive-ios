@@ -30,9 +30,9 @@
 }
 
 - (void)testPredicateStrings {
-	[self predicateForObject:[self defaultPromptLogic] shouldEqualString:@"((now >= nextPromptDate) AND ((significantEvents > significantEventsBeforePrompt) OR (appUses > usesBeforePrompt)))"];
-	[self predicateForObject:[self allAndLogic] shouldEqualString:@"((now >= nextPromptDate) AND (significantEvents > significantEventsBeforePrompt) AND (appUses > usesBeforePrompt))"];
-	[self predicateForObject:[self allOrLogic] shouldEqualString:@"((now >= nextPromptDate) OR (significantEvents > significantEventsBeforePrompt) OR (appUses > usesBeforePrompt))"];
+	[self predicateForObject:[self defaultPromptLogic] shouldEqualString:@"((now >= nextPromptDate) AND ((significantEvents >= significantEventsBeforePrompt) OR (appUses >= usesBeforePrompt)))"];
+	[self predicateForObject:[self allAndLogic] shouldEqualString:@"((now >= nextPromptDate) AND (significantEvents >= significantEventsBeforePrompt) AND (appUses >= usesBeforePrompt))"];
+	[self predicateForObject:[self allOrLogic] shouldEqualString:@"((now >= nextPromptDate) OR (significantEvents >= significantEventsBeforePrompt) OR (appUses >= usesBeforePrompt))"];
 	
 	
 	ATAppRatingFlowPredicateInfo *info = [[ATAppRatingFlowPredicateInfo alloc] init];
@@ -40,19 +40,19 @@
 	info.significantEventsBeforePrompt = 5;
 	info.usesBeforePrompt = 20;
 	
-	STAssertEqualObjects([ATAppRatingFlow_Private predicateStringForPromptLogic:[self allAndLogic] withPredicateInfo:info hasError:nil], @"((significantEvents > significantEventsBeforePrompt) AND (appUses > usesBeforePrompt))", @"Predicate should not contain disabled parameter.");
-	STAssertEqualObjects([ATAppRatingFlow_Private predicateStringForPromptLogic:[self allOrLogic] withPredicateInfo:info hasError:nil], @"((significantEvents > significantEventsBeforePrompt) OR (appUses > usesBeforePrompt))", @"Predicate should not contain disabled parameter.");
+	STAssertEqualObjects([ATAppRatingFlow_Private predicateStringForPromptLogic:[self allAndLogic] withPredicateInfo:info hasError:nil], @"((significantEvents >= significantEventsBeforePrompt) AND (appUses >= usesBeforePrompt))", @"Predicate should not contain disabled parameter.");
+	STAssertEqualObjects([ATAppRatingFlow_Private predicateStringForPromptLogic:[self allOrLogic] withPredicateInfo:info hasError:nil], @"((significantEvents >= significantEventsBeforePrompt) OR (appUses >= usesBeforePrompt))", @"Predicate should not contain disabled parameter.");
 	
 	
 	info.daysBeforePrompt = 1;
 	info.significantEventsBeforePrompt = 0;
-	STAssertEqualObjects([ATAppRatingFlow_Private predicateStringForPromptLogic:[self allAndLogic] withPredicateInfo:info hasError:nil], @"((now >= nextPromptDate) AND (appUses > usesBeforePrompt))", @"Predicate should not contain disabled parameter.");
-	STAssertEqualObjects([ATAppRatingFlow_Private predicateStringForPromptLogic:[self allOrLogic] withPredicateInfo:info hasError:nil], @"((now >= nextPromptDate) OR (appUses > usesBeforePrompt))", @"Predicate should not contain disabled parameter.");
+	STAssertEqualObjects([ATAppRatingFlow_Private predicateStringForPromptLogic:[self allAndLogic] withPredicateInfo:info hasError:nil], @"((now >= nextPromptDate) AND (appUses >= usesBeforePrompt))", @"Predicate should not contain disabled parameter.");
+	STAssertEqualObjects([ATAppRatingFlow_Private predicateStringForPromptLogic:[self allOrLogic] withPredicateInfo:info hasError:nil], @"((now >= nextPromptDate) OR (appUses >= usesBeforePrompt))", @"Predicate should not contain disabled parameter.");
 	
 	info.significantEventsBeforePrompt = 5;
 	info.usesBeforePrompt = 0;
-	STAssertEqualObjects([ATAppRatingFlow_Private predicateStringForPromptLogic:[self allAndLogic] withPredicateInfo:info hasError:nil], @"((now >= nextPromptDate) AND (significantEvents > significantEventsBeforePrompt))", @"Predicate should not contain disabled parameter.");
-	STAssertEqualObjects([ATAppRatingFlow_Private predicateStringForPromptLogic:[self allOrLogic] withPredicateInfo:info hasError:nil], @"((now >= nextPromptDate) OR (significantEvents > significantEventsBeforePrompt))", @"Predicate should not contain disabled parameter.");
+	STAssertEqualObjects([ATAppRatingFlow_Private predicateStringForPromptLogic:[self allAndLogic] withPredicateInfo:info hasError:nil], @"((now >= nextPromptDate) AND (significantEvents >= significantEventsBeforePrompt))", @"Predicate should not contain disabled parameter.");
+	STAssertEqualObjects([ATAppRatingFlow_Private predicateStringForPromptLogic:[self allOrLogic] withPredicateInfo:info hasError:nil], @"((now >= nextPromptDate) OR (significantEvents >= significantEventsBeforePrompt))", @"Predicate should not contain disabled parameter.");
 	
 	[info release], info = nil;
 }

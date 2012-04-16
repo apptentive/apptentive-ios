@@ -127,11 +127,11 @@ NSString *const ATAppRatingFlowSignificantEventsCountKey = @"ATAppRatingFlowSign
 			}
 		} else if ([promptString isEqualToString:@"events"]) {
 			if (info == nil || info.significantEventsBeforePrompt != 0) {
-				[result appendString:@"(significantEvents > significantEventsBeforePrompt)"];
+				[result appendString:@"(significantEvents >= significantEventsBeforePrompt)"];
 			}
 		} else if ([promptString isEqualToString:@"uses"]) {
 			if (info == nil || info.usesBeforePrompt != 0) {
-				[result appendString:@"(appUses > usesBeforePrompt)"];
+				[result appendString:@"(appUses >= usesBeforePrompt)"];
 			}
 		} else {
 			*hasError = YES;

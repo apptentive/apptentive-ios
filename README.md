@@ -193,8 +193,6 @@ module in `modules/ApptentiveMetrics`. To use, just link against the
 settings on apptentive.com, the metrics module will begin sending metrics
 information, otherwise it won't.
 
-There isn't currently any UI on apptentive.com exposing the metrics.
-
 
 **Finding Your iTunes App ID**
 In [iTunesConnect](https://itunesconnect.apple.com/), go to "Manage Your 

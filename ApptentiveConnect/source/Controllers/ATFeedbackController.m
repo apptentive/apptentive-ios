@@ -921,7 +921,15 @@ enum {
 	
 	CGRect feedbackViewFrame = self.feedbackView.frame;
 	feedbackViewFrame.origin.x = 0.0;
+	
+	// Either email field is shown and there's a thumbnail, or email is hidden.
+	BOOL textIsBlockedByPaperclip = NO;
 	if ([self shouldShowPaperclip] && [self shouldShowThumbnail]) {
+		textIsBlockedByPaperclip = YES;
+	} else if ([self shouldShowPaperclip] && ![self showEmailAddressField]) {
+		textIsBlockedByPaperclip = YES;
+	}
+	if (textIsBlockedByPaperclip) {
 		feedbackViewFrame.size.width = viewWidth - 100;
 		self.feedbackView.scrollIndicatorInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -100.0);
 	} else {

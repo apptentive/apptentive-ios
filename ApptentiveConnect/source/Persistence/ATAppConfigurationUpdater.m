@@ -17,7 +17,12 @@ NSString *const ATAppConfigurationLastUpdatePreferenceKey = @"ATAppConfiguration
 NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigurationMetricsEnabledPreferenceKey";
 
 // Interval, in seconds, after which we'll update the configuration.
+#if APPTENTIVE_DEBUG
+#define kATAppConfigurationUpdateInterval (3)
+#else
 #define kATAppConfigurationUpdateInterval (60*60*24)
+#endif
+
 
 @interface ATAppConfigurationUpdater (Private)
 - (void)processResult:(NSDictionary *)jsonRatingConfiguration;

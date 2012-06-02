@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4987FA89157ACB1D00AF2078 /* ATFeedbackMetrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 4987FA88157ACB1D00AF2078 /* ATFeedbackMetrics.h */; };
+		4987FA8F157ACB2F00AF2078 /* ATSurveyMetrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 4987FA8E157ACB2F00AF2078 /* ATSurveyMetrics.h */; };
 		49AD1F9C14AAAA2600FFEEF7 /* ApptentiveMetrics-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 49AD1F9914AAAA2600FFEEF7 /* ApptentiveMetrics-Prefix.pch */; };
 		49AD1F9D14AAAA2600FFEEF7 /* ApptentiveMetrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AD1F9A14AAAA2600FFEEF7 /* ApptentiveMetrics.h */; settings = {ATTRIBUTES = (); }; };
 		49AD1F9E14AAAA2600FFEEF7 /* ApptentiveMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AD1F9B14AAAA2600FFEEF7 /* ApptentiveMetrics.m */; };
@@ -14,7 +16,6 @@
 		49AD1FA614AAAA4200FFEEF7 /* ApptentiveMetricsTests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 49AD1FA114AAAA4200FFEEF7 /* ApptentiveMetricsTests-Info.plist */; };
 		49AD1FA714AAAA4200FFEEF7 /* ApptentiveMetricsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AD1FA314AAAA4200FFEEF7 /* ApptentiveMetricsTests.m */; };
 		49AD1FA814AAAA4200FFEEF7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49AD1FA414AAAA4200FFEEF7 /* InfoPlist.strings */; };
-		49AD1FAC14AAAA6300FFEEF7 /* ATFeedbackMetrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AD1FAB14AAAA6300FFEEF7 /* ATFeedbackMetrics.h */; };
 		49AD1FAE14AAAA7000FFEEF7 /* ATAppRatingMetrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AD1FAD14AAAA7000FFEEF7 /* ATAppRatingMetrics.h */; };
 		49AD1FB014AAAA7900FFEEF7 /* ATConnect.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AD1FAF14AAAA7900FFEEF7 /* ATConnect.h */; };
 		49D11CEA14AAACFB00DF50CB /* ATMetric.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D11CE814AAACFB00DF50CB /* ATMetric.h */; };
@@ -72,6 +73,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4987FA88157ACB1D00AF2078 /* ATFeedbackMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATFeedbackMetrics.h; path = ../../ApptentiveConnect/source/Metrics/ATFeedbackMetrics.h; sourceTree = "<group>"; };
+		4987FA8E157ACB2F00AF2078 /* ATSurveyMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATSurveyMetrics.h; path = ../../ApptentiveConnect/source/Metrics/ATSurveyMetrics.h; sourceTree = "<group>"; };
 		49AD1F9914AAAA2600FFEEF7 /* ApptentiveMetrics-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ApptentiveMetrics-Prefix.pch"; sourceTree = "<group>"; };
 		49AD1F9A14AAAA2600FFEEF7 /* ApptentiveMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMetrics.h; sourceTree = "<group>"; };
 		49AD1F9B14AAAA2600FFEEF7 /* ApptentiveMetrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMetrics.m; sourceTree = "<group>"; };
@@ -79,7 +82,6 @@
 		49AD1FA214AAAA4200FFEEF7 /* ApptentiveMetricsTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMetricsTests.h; sourceTree = "<group>"; };
 		49AD1FA314AAAA4200FFEEF7 /* ApptentiveMetricsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMetricsTests.m; sourceTree = "<group>"; };
 		49AD1FA514AAAA4200FFEEF7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		49AD1FAB14AAAA6300FFEEF7 /* ATFeedbackMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATFeedbackMetrics.h; path = ../../ApptentiveConnect/source/Misc/ATFeedbackMetrics.h; sourceTree = "<group>"; };
 		49AD1FAD14AAAA7000FFEEF7 /* ATAppRatingMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATAppRatingMetrics.h; path = "../../ApptentiveConnect/source/Rating Flow/ATAppRatingMetrics.h"; sourceTree = "<group>"; };
 		49AD1FAF14AAAA7900FFEEF7 /* ATConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATConnect.h; path = ../../ApptentiveConnect/source/ATConnect.h; sourceTree = "<group>"; };
 		49D11CE814AAACFB00DF50CB /* ATMetric.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMetric.h; sourceTree = "<group>"; };
@@ -166,7 +168,8 @@
 			children = (
 				49EA5AB514BD0CA0004F8A4D /* ATBackend.h */,
 				49AD1FAF14AAAA7900FFEEF7 /* ATConnect.h */,
-				49AD1FAB14AAAA6300FFEEF7 /* ATFeedbackMetrics.h */,
+				4987FA8E157ACB2F00AF2078 /* ATSurveyMetrics.h */,
+				4987FA88157ACB1D00AF2078 /* ATFeedbackMetrics.h */,
 				49AD1FAD14AAAA7000FFEEF7 /* ATAppRatingMetrics.h */,
 				49EA5AA814BCEE84004F8A4D /* ATWebClient.h */,
 				49EA5AAA14BCEE89004F8A4D /* ATWebClient_Private.h */,
@@ -231,7 +234,6 @@
 			files = (
 				49AD1F9C14AAAA2600FFEEF7 /* ApptentiveMetrics-Prefix.pch in Headers */,
 				49AD1F9D14AAAA2600FFEEF7 /* ApptentiveMetrics.h in Headers */,
-				49AD1FAC14AAAA6300FFEEF7 /* ATFeedbackMetrics.h in Headers */,
 				49AD1FAE14AAAA7000FFEEF7 /* ATAppRatingMetrics.h in Headers */,
 				49AD1FB014AAAA7900FFEEF7 /* ATConnect.h in Headers */,
 				49D11CEA14AAACFB00DF50CB /* ATMetric.h in Headers */,
@@ -246,6 +248,8 @@
 				49EA5AC114BD11BD004F8A4D /* ATTaskQueue.h in Headers */,
 				49EA5AC314BD11C6004F8A4D /* ATRecordTask.h in Headers */,
 				49F3FC87151D1B8B0094C518 /* ATAppConfigurationUpdater.h in Headers */,
+				4987FA89157ACB1D00AF2078 /* ATFeedbackMetrics.h in Headers */,
+				4987FA8F157ACB2F00AF2078 /* ATSurveyMetrics.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

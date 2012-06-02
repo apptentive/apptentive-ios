@@ -8,6 +8,7 @@
 
 #import "ATSurveysBackend.h"
 #import "ATSurvey.h"
+#import "ATSurveyMetrics.h"
 #import "ATSurveys.h"
 #import "ATSurveyParser.h"
 #import "ATSurveyViewController.h"
@@ -73,6 +74,10 @@ NSString *const ATSurveySentSurveysPreferenceKey = @"ATSurveySentSurveysPreferen
     }
     [nc release];
 	[vc release];
+	
+	NSDictionary *metricsInfo = [[NSDictionary alloc] initWithObjectsAndKeys:currentSurvey.identifier, ATSurveyMetricsSurveyIDKey, [NSNumber numberWithInt:ATSurveyWindowTypeSurvey], ATSurveyWindowTypeKey, nil];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidShowWindowNotification object:nil userInfo:metricsInfo];
+	[metricsInfo release], metricsInfo = nil;
 }
 
 - (void)setDidSendSurvey:(ATSurvey *)survey {
@@ -83,6 +88,7 @@ NSString *const ATSurveySentSurveysPreferenceKey = @"ATSurveySentSurveysPreferen
 		[replacementSurveys addObject:survey.identifier];
 		[defaults setObject:replacementSurveys forKey:ATSurveySentSurveysPreferenceKey];
 		[defaults synchronize];
+		[replacementSurveys release], replacementSurveys = nil;
 	}
 }
 

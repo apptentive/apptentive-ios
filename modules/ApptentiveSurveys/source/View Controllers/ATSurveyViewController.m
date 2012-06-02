@@ -12,6 +12,7 @@
 #import "ATRecordTask.h"
 #import "ATSurvey.h"
 #import "ATSurveysBackend.h"
+#import "ATSurveyMetrics.h"
 #import "ATSurveyQuestion.h"
 #import "ATSurveyResponse.h"
 #import "ATTaskQueue.h"
@@ -42,6 +43,7 @@ enum {
 - (id)initWithSurvey:(ATSurvey *)aSurvey {
 	if ((self = [super init])) {
 		survey = [aSurvey retain];
+		sentNotificationsAboutQuestionIDs = [[NSMutableSet alloc] init];
 	}
 	return self;
 }
@@ -52,6 +54,7 @@ enum {
 	[activeTextView release], activeTextView = nil;
 	[survey release], survey = nil;
 	[errorText release], errorText = nil;
+	[sentNotificationsAboutQuestionIDs release], sentNotificationsAboutQuestionIDs = nil;
 	[super dealloc];
 }
 
@@ -107,6 +110,11 @@ enum {
 	}
 	[hud show];
 	[hud autorelease];
+	
+	NSDictionary *metricsInfo = [[NSDictionary alloc] initWithObjectsAndKeys:survey.identifier, ATSurveyMetricsSurveyIDKey, [NSNumber numberWithInt:ATSurveyWindowTypeSurvey], ATSurveyWindowTypeKey, [NSNumber numberWithInt:ATSurveyEventTappedSend], ATSurveyMetricsEventKey, nil];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidHideWindowNotification object:nil userInfo:metricsInfo];
+	[metricsInfo release], metricsInfo = nil;
+	
 	
 	[[ATSurveysBackend sharedBackend] setDidSendSurvey:survey];
 	[[ATSurveysBackend sharedBackend] resetSurvey];
@@ -418,6 +426,11 @@ enum {
 						}
 					}
 				}
+				
+				// Send notification.
+				NSDictionary *metricsInfo = [[NSDictionary alloc] initWithObjectsAndKeys:survey.identifier, ATSurveyMetricsSurveyIDKey, question.identifier, ATSurveyMetricsSurveyQuestionIDKey, [NSNumber numberWithInt:ATSurveyEventAnsweredQuestion], ATSurveyMetricsEventKey, nil];
+				[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidAnswerQuestionNotification object:nil userInfo:metricsInfo];
+				[metricsInfo release], metricsInfo = nil;
 			} else if (question.type == ATSurveyQuestionTypeSingeLine) {
 				ATCellTextView *textView = (ATCellTextView *)[cell viewWithTag:kTextViewTag];
 				[textView becomeFirstResponder];
@@ -461,7 +474,20 @@ enum {
 - (void)textViewDidEndEditing:(UITextView *)textView {
 	if ([textView isKindOfClass:[ATCellTextView class]]) {
 		ATCellTextView *ctv = (ATCellTextView *)textView;
-		ctv.question.answerText = ctv.text;
+		ATSurveyQuestion *question = ctv.question;
+		
+		if (question) {
+			ctv.question.answerText = ctv.text;
+			
+			// Send notification.
+			if (![sentNotificationsAboutQuestionIDs containsObject:question.identifier]) {
+				NSDictionary *metricsInfo = [[NSDictionary alloc] initWithObjectsAndKeys:survey.identifier, ATSurveyMetricsSurveyIDKey, question.identifier, ATSurveyMetricsSurveyQuestionIDKey, [NSNumber numberWithInt:ATSurveyEventAnsweredQuestion], ATSurveyMetricsEventKey, nil];
+				[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidAnswerQuestionNotification object:nil userInfo:metricsInfo];
+				[metricsInfo release], metricsInfo = nil;
+				
+				[sentNotificationsAboutQuestionIDs addObject:question.identifier];
+			}
+		}
 	}
 	[activeTextEntryCell release], activeTextEntryCell = nil;
 	[activeTextView release], activeTextView = nil;
@@ -548,6 +574,10 @@ enum {
 }
 
 - (void)cancel:(id)sender {
+	NSDictionary *metricsInfo = [[NSDictionary alloc] initWithObjectsAndKeys:survey.identifier, ATSurveyMetricsSurveyIDKey, [NSNumber numberWithInt:ATSurveyWindowTypeSurvey], ATSurveyWindowTypeKey, [NSNumber numberWithInt:ATSurveyEventTappedCancel], ATSurveyMetricsEventKey, nil];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidHideWindowNotification object:nil userInfo:metricsInfo];
+	[metricsInfo release], metricsInfo = nil;
+	
 	[self.navigationController dismissModalViewControllerAnimated:YES];
 }
 

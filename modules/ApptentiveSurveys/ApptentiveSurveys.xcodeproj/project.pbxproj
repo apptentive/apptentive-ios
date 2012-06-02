@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4987FA91157ACB4200AF2078 /* ATSurveyMetrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 4987FA90157ACB4100AF2078 /* ATSurveyMetrics.h */; };
 		49AB111E14D8DA5D00D13C02 /* ATRecord.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AB111D14D8DA5D00D13C02 /* ATRecord.h */; };
 		49AB112214D8E14A00D13C02 /* ATHUDView.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AB112114D8E14A00D13C02 /* ATHUDView.h */; };
 		49AB112414D8E17400D13C02 /* ATRecordTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AB112314D8E17400D13C02 /* ATRecordTask.h */; };
@@ -97,6 +98,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4987FA90157ACB4100AF2078 /* ATSurveyMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATSurveyMetrics.h; path = ../../ApptentiveConnect/source/Metrics/ATSurveyMetrics.h; sourceTree = "<group>"; };
 		49AB111D14D8DA5D00D13C02 /* ATRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATRecord.h; path = ../../ApptentiveConnect/source/Persistence/ATRecord.h; sourceTree = "<group>"; };
 		49AB112114D8E14A00D13C02 /* ATHUDView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATHUDView.h; path = "../../ApptentiveConnect/source/Custom Views/ATHUDView.h"; sourceTree = "<group>"; };
 		49AB112314D8E17400D13C02 /* ATRecordTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATRecordTask.h; path = ../../ApptentiveConnect/source/Tasks/ATRecordTask.h; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 				49AB112314D8E17400D13C02 /* ATRecordTask.h */,
 				49AB112514D8E18600D13C02 /* ATTaskQueue.h */,
 				49B8770E1464955200594A5D /* ATURLConnection.h */,
+				4987FA90157ACB4100AF2078 /* ATSurveyMetrics.h */,
 				49B876FB14648FAE00594A5D /* JSONKit.h */,
 				49EC5D9914671FB100634D43 /* ATDefaultTextView.h */,
 				49B876A914647C5F00594A5D /* ApptentiveConnect.xcodeproj */,
@@ -330,6 +333,7 @@
 				49AB112214D8E14A00D13C02 /* ATHUDView.h in Headers */,
 				49AB112414D8E17400D13C02 /* ATRecordTask.h in Headers */,
 				49AB112614D8E18600D13C02 /* ATTaskQueue.h in Headers */,
+				4987FA91157ACB4200AF2078 /* ATSurveyMetrics.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

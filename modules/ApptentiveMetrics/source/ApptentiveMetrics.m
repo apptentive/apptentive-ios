@@ -12,6 +12,7 @@
 #import "ATAppRatingMetrics.h"
 #import "ATMetric.h"
 #import "ATRecordTask.h"
+#import "ATSurveyMetrics.h"
 #import "ATTaskQueue.h"
 
 static NSString *ATMetricNameEnjoymentDialogLaunch = @"enjoyment_dialog.launch";
@@ -25,6 +26,12 @@ static NSString *ATMetricNameRatingDialogDecline = @"rating_dialog.decline";
 
 static NSString *ATMetricNameFeedbackDialogLaunch = @"feedback_dialog.launch";
 static NSString *ATMetricNameFeedbackDialogCancel = @"feedback_dialog.cancel";
+static NSString *ATMetricNameFeedbackDialogSubmit = @"feedback_dialog.submit";
+
+static NSString *ATMetricNameSurveyLaunch = @"survey.launch";
+static NSString *ATMetricNameSurveyCancel = @"survey.cancel";
+static NSString *ATMetricNameSurveySubmit = @"survey.submit";
+static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 
 static NSString *ATMetricNameAppLaunch = @"app.launch";
 static NSString *ATMetricNameAppExit = @"app.exit";
@@ -42,6 +49,11 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 - (ATAppRatingButtonType)appRatingButtonTypeFromNotification:(NSNotification *)notification;
 - (void)ratingDidShowRating:(NSNotification *)notification;
 - (void)ratingDidClickRating:(NSNotification *)notification;
+
+- (ATSurveyEvent)surveyEventTypeFromNotification:(NSNotification *)notification;
+- (void)surveyDidShow:(NSNotification *)notification;
+- (void)surveyDidHide:(NSNotification *)notification;
+- (void)surveyDidAnswerQuestion:(NSNotification *)notification;
 
 - (void)appWillTerminate:(NSNotification *)notification;
 - (void)appDidEnterBackground:(NSNotification *)notification;
@@ -86,6 +98,7 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 		[ApptentiveMetrics registerDefaults];
 		[self updateWithCurrentPreferences];
 		[self addMetricWithName:ATMetricNameAppLaunch info:nil];
+		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackDidShowWindow:) name:ATFeedbackDidShowWindowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackDidHideWindow:) name:ATFeedbackDidHideWindowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingDidShowEnjoyment:) name:ATAppRatingDidPromptForEnjoymentNotification object:nil];
@@ -94,11 +107,17 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingDidClickRating:) name:ATAppRatingDidClickRatingButtonNotification object:nil];
 		
 		
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyDidShow:) name:ATSurveyDidShowWindowNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyDidHide:) name:ATSurveyDidHideWindowNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyDidAnswerQuestion:) name:ATSurveyDidAnswerQuestionNotification object:nil];
+		
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(preferencesChanged:) name:ATConfigurationPreferencesChangedNotification object:nil];
+		
+		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
-		
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(preferencesChanged:) name:ATConfigurationPreferencesChangedNotification object:nil];
 	}
 	
 	return self;
@@ -154,7 +173,6 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 }
 
 - (void)feedbackDidHideWindow:(NSNotification *)notification {
-	NSString *name = nil;
 	ATFeedbackWindowType windowType = [self windowTypeFromNotification:notification];
 	ATFeedbackEvent event = ATFeedbackEventTappedCancel;
 	if ([[notification userInfo] objectForKey:ATFeedbackWindowHideEventKey]) {
@@ -162,13 +180,13 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 	}
 	
 	if (windowType == ATFeedbackWindowTypeFeedback) {
-		name = ATMetricNameFeedbackDialogCancel;
+		if (event == ATFeedbackEventTappedCancel) {
+			[self addMetricWithName:ATMetricNameFeedbackDialogCancel info:nil];
+		} else if (event == ATFeedbackEventTappedSend) {
+			[self addMetricWithName:ATMetricNameFeedbackDialogSubmit info:nil];
+		}
 	} else if (windowType == ATFeedbackWindowTypeInfo) {
-		name = nil;
-	}
-	
-	if (name != nil && event == ATFeedbackEventTappedCancel) {
-		[self addMetricWithName:name info:nil];
+		// pass, for now
 	}
 }
 
@@ -224,6 +242,63 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 	if (name != nil) {
 		[self addMetricWithName:name info:nil];
 	}
+}
+
+- (ATSurveyEvent)surveyEventTypeFromNotification:(NSNotification *)notification {
+	ATSurveyEvent event = ATSurveyEventUnknown;
+	if ([[notification userInfo] objectForKey:ATSurveyMetricsEventKey]) {
+		event = [(NSNumber *)[[notification userInfo] objectForKey:ATSurveyMetricsEventKey] intValue];
+	}
+	if (event != ATSurveyEventTappedSend && event != ATSurveyEventTappedCancel && event != ATSurveyEventAnsweredQuestion) {
+		event = ATSurveyEventUnknown;
+		NSLog(@"Unknown survey event type: %d", event);
+	}
+	return event;
+}
+
+- (void)surveyDidShow:(NSNotification *)notification {
+	NSMutableDictionary *info = [[NSMutableDictionary alloc] init];
+	NSString *surveyID = [[notification userInfo] objectForKey:ATSurveyMetricsSurveyIDKey];
+	if (surveyID != nil) {
+		[info setObject:surveyID forKey:@"id"];
+	}
+	[self addMetricWithName:ATMetricNameSurveyLaunch info:info];
+	[info release], info = nil;
+}
+
+- (void)surveyDidHide:(NSNotification *)notification {
+	NSMutableDictionary *info = [[NSMutableDictionary alloc] init];
+	NSString *surveyID = [[notification userInfo] objectForKey:ATSurveyMetricsSurveyIDKey];
+	if (surveyID != nil) {
+		[info setObject:surveyID forKey:@"id"];
+	}
+	ATSurveyEvent eventType = [self surveyEventTypeFromNotification:notification];
+	
+	if (eventType == ATSurveyEventTappedSend) {
+		[self addMetricWithName:ATMetricNameSurveySubmit info:info];
+	} else if (eventType == ATSurveyEventTappedCancel) {
+		[self addMetricWithName:ATMetricNameSurveyCancel info:info];
+	}
+	
+	[info release], info = nil;
+}
+
+- (void)surveyDidAnswerQuestion:(NSNotification *)notification {
+	NSMutableDictionary *info = [[NSMutableDictionary alloc] init];
+	NSString *surveyID = [[notification userInfo] objectForKey:ATSurveyMetricsSurveyIDKey];
+	NSString *questionID = [[notification userInfo] objectForKey:ATSurveyMetricsSurveyQuestionIDKey];
+	if (surveyID != nil) {
+		[info setObject:surveyID forKey:@"survey_id"];
+	}
+	if (questionID != nil) {
+		[info setObject:questionID forKey:@"id"];
+	}
+	ATSurveyEvent eventType = [self surveyEventTypeFromNotification:notification];
+	if (eventType == ATSurveyEventAnsweredQuestion) {
+		[self addMetricWithName:ATMetricNameSurveyAnswerQuestion info:info];
+	}
+	
+	[info release], info = nil;
 }
 
 - (void)appWillTerminate:(NSNotification *)notification {

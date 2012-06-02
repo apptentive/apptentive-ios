@@ -20,6 +20,8 @@
 	UITableViewCell *activeTextEntryCell;
 	ATCellTextView *activeTextView;
 	NSString *errorText;
+	
+	NSMutableSet *sentNotificationsAboutQuestionIDs;
 }
 @property (nonatomic, retain) NSString *errorText;
 - (id)initWithSurvey:(ATSurvey *)survey;

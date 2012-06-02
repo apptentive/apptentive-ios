@@ -13,7 +13,7 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
-#define kATConnectVersionString @"0.3.4"
+#define kATConnectVersionString @"0.4.0"
 
 #if TARGET_OS_IPHONE
 #define kATConnectPlatformString @"iOS"

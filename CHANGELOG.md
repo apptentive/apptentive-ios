@@ -10,6 +10,7 @@ Bug fixes:
 * IOS-38: Fixed bug where the paperclip blocked feedback text when there was no email field and no thumbnail. See f0d7c6e52ee8053653d5ae346ddebb626f9b048e.
 * IOS-31: Now sending time to completion of surveys with the response. See 40b1e1e221a0fe60826da2b5ff31877485c72451.
 * IOS-42: Should use the localized app name in the ratings flow, if available. See dc2f59ef5cd347ecc5aa332323d9894092f635e7.
+* IOS-43: Fixes a bug where sometimes the ratings dialog was not shown at startup due to network reachability. See 717b010ee01bbfd87ee3cca957e7c5bf76d0f648 for more info.
 
 
 2012-03-26 wooster v0.3.3

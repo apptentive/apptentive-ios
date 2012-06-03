@@ -115,8 +115,12 @@ Easy!
 App Rating Flow
 ---------------
 `ApptentiveConnect` now provides an app rating flow similar to other projects
-such as [appirator](https://github.com/arashpayan/appirater). To use it, add
-the `ATAppRatingFlow.h` header file to your project.
+such as [appirator](https://github.com/arashpayan/appirater). This uses the number
+of launches of your application, the amount of time users have been using it, and
+the number of significant events the user has completed (for example, levels passed)
+to determine when to display a ratings dialog.
+
+To use it, add the `ATAppRatingFlow.h` header file to your project.
 
 Then, at startup, instantiate a shared `ATAppRatingFlow` object with your 
 iTunes app ID (see "Finding Your iTunes App ID" below):
@@ -141,6 +145,16 @@ iTunes app ID (see "Finding Your iTunes App ID" below):
 
 The `viewController` parameter is necessary in order to be able to show the 
 feedback view controller if a user is unhappy with your app.
+
+If you're using significant events to determine when to show the ratings flow, you can
+increment the number of significant events by calling:
+
+```
+[sharedFlow userDidPerformSignificantEvent:canPromptForRating viewController:aViewController];
+```
+
+Above, `canPromptForRating` is a `BOOL` indicating whether the user could be prompted for a rating then and there, and `aViewController` is a `UIViewController` from which to display the feedback view controller if the user is unhappy with your app.
+
 
 You can also choose to show the dialog manually:
 

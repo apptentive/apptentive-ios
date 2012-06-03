@@ -42,6 +42,7 @@ enum {
 
 - (id)initWithSurvey:(ATSurvey *)aSurvey {
 	if ((self = [super init])) {
+		startedSurveyDate = [[NSDate alloc] init];
 		survey = [aSurvey retain];
 		sentNotificationsAboutQuestionIDs = [[NSMutableSet alloc] init];
 	}
@@ -55,6 +56,7 @@ enum {
 	[survey release], survey = nil;
 	[errorText release], errorText = nil;
 	[sentNotificationsAboutQuestionIDs release], sentNotificationsAboutQuestionIDs = nil;
+	[startedSurveyDate release], startedSurveyDate = nil;
 	[super dealloc];
 }
 
@@ -64,6 +66,10 @@ enum {
 
 - (IBAction)sendSurvey {
 	ATSurveyResponse *response = [[ATSurveyResponse alloc] init];
+	NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:startedSurveyDate];
+	if (interval > 0) {
+		response.completionSeconds = (NSUInteger)interval;
+	}
 	response.identifier = survey.identifier;
 	for (ATSurveyQuestion *question in [survey questions]) {
 		if (question.type == ATSurveyQuestionTypeSingeLine) {

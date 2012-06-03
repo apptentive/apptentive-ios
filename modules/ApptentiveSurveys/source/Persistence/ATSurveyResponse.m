@@ -14,6 +14,7 @@
 
 @implementation ATSurveyResponse
 @synthesize identifier;
+@synthesize completionSeconds;
 
 - (id)init {
 	if ((self = [super init])) {
@@ -27,6 +28,11 @@
         int version = [coder decodeIntForKey:@"survey_version"];
         if (version == kATSurveyStorageVersion) {
             self.identifier = [coder decodeObjectForKey:@"identifier"];
+			
+			if ([coder containsValueForKey:@"completion_seconds"]) {
+				self.completionSeconds = [(NSNumber *)[coder decodeObjectForKey:@"completion_seconds"] unsignedIntegerValue];
+			}
+			
 			NSArray *d = [coder decodeObjectForKey:@"question_responses"];
 			if (d != nil) {
 				questionResponses = [d mutableCopy];
@@ -46,6 +52,7 @@
     [coder encodeInt:kATSurveyStorageVersion forKey:@"survey_version"];
     [coder encodeObject:self.identifier forKey:@"identifier"];
     [coder encodeObject:questionResponses forKey:@"question_responses"];
+	[coder encodeObject:[NSNumber numberWithUnsignedInteger:self.completionSeconds] forKey:@"completion_seconds"];
 }
 
 - (void)dealloc {
@@ -70,6 +77,10 @@
 	
 	if (self.identifier) {
 		[survey setObject:self.identifier forKey:@"id"];
+	}
+	
+	if (self.completionSeconds != 0) {
+		[survey setObject:[NSNumber numberWithUnsignedInteger:self.completionSeconds] forKey:@"completion_time"];
 	}
 	
 	NSUInteger i = 0;

@@ -15,6 +15,7 @@
 	NSMutableArray *questionResponses;
 }
 @property (nonatomic, retain) NSString *identifier;
+@property (nonatomic, assign) NSUInteger completionSeconds;
 
 - (void)addQuestionResponse:(ATSurveyQuestionResponse *)response;
 - (NSDictionary *)apiJSON;

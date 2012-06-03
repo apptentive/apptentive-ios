@@ -22,6 +22,8 @@
 	NSString *errorText;
 	
 	NSMutableSet *sentNotificationsAboutQuestionIDs;
+	
+	NSDate *startedSurveyDate;
 }
 @property (nonatomic, retain) NSString *errorText;
 - (id)initWithSurvey:(ATSurvey *)survey;

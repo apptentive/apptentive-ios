@@ -12,6 +12,8 @@ Bug fixes:
 * IOS-42: Should use the localized app name in the ratings flow, if available. See dc2f59ef5cd347ecc5aa332323d9894092f635e7
 * IOS-43: Fixes a bug where sometimes the ratings dialog was not shown at startup due to network reachability. See 717b010ee01bbfd87ee3cca957e7c5bf76d0f648 for more info.
 * IOS-36: Fixes bug where the alert view asking for email addresses looks funny in landscape mode. This fix only works on iOS 5+. See b1aa55dac9b4dc6ae9b10440901129572d271b21
+* IOS-44: Where screenshots appear too small on Retina display devices. See 7a0d877b523a7f58ba94789bda6ceeebaaff1bd0
+* IOS-45: In which the application frame wasn't properly taken into account and whitespace appeared in the screenshot under non-default orientations. See e8a7358f329797812e9d944412bd6708b0d238d4
 
 
 2012-03-26 wooster v0.3.3

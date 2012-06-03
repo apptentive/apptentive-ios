@@ -298,12 +298,24 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 }
 
 - (NSString *)appName {
-    NSString *displayName = nil;
-    displayName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"];
-    if (!displayName) {
-        displayName = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleNameKey];
-    }
-    return displayName;
+	NSString *displayName = nil;
+	NSArray *appNameKeys = [NSArray arrayWithObjects:@"CFBundleDisplayName", (NSString *)kCFBundleNameKey, nil];
+	NSMutableArray *infoDictionaries = [NSMutableArray array];
+	if ([[NSBundle mainBundle] localizedInfoDictionary]) {
+		[infoDictionaries addObject:[[NSBundle mainBundle] localizedInfoDictionary]];
+	}
+	if ([[NSBundle mainBundle] infoDictionary]) {
+		[infoDictionaries addObject:[[NSBundle mainBundle] infoDictionary]];
+	}
+	for (NSDictionary *infoDictionary in infoDictionaries) {
+		for (NSString *appNameKey in appNameKeys) {
+			displayName = [infoDictionary objectForKey:appNameKey];
+			if (displayName != nil) {
+				break;
+			}
+		}
+	}
+	return displayName;
 }
 
 - (NSURL *)URLForRatingApp {

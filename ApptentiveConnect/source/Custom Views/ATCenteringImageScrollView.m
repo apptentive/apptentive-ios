@@ -16,7 +16,7 @@
         imageView = [[UIImageView alloc] initWithImage:image];
         self.frame = imageView.bounds;
         [self addSubview:imageView];
-        self.contentSize =  imageView.bounds.size;
+        self.contentSize = imageView.bounds.size;
     }
     return self;
 }

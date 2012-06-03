@@ -1,3 +1,16 @@
+2012-06-01 wooster v0.4.0
+-------------------------
+Major changes:
+
+The metrics module has been integrated into `ApptentiveConnect` proper. Now that you can enable and disable metrics from the website, it didn't make sense to keep them separate.
+
+Bug fixes:
+* IOS-40: On debug builds, the configuration is updated much more often to aid debugging. See df7aa47dce369e6caad8c18ff72b8f9cb0485050.
+* IOS-41: Added metrics for surveys and for feedback submission. See e4ce211834737c08b8a5fe9591dffc14b884304f.
+* IOS-38: Fixed bug where the paperclip blocked feedback text when there was no email field and no thumbnail. See f0d7c6e52ee8053653d5ae346ddebb626f9b048e.
+* IOS-31: Now sending time to completion of surveys with the response. See 40b1e1e221a0fe60826da2b5ff31877485c72451.
+
+
 2012-03-26 wooster v0.3.3
 -------------------------
 

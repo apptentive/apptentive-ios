@@ -12,6 +12,7 @@
 #import "ATContactStorage.h"
 #import "ATFeedback.h"
 #import "ATFeedbackTask.h"
+#import "ApptentiveMetrics.h"
 #import "ATReachability.h"
 #import "ATTaskQueue.h"
 #import "ATUtilities.h"
@@ -41,6 +42,7 @@ static ATBackend *sharedBackend = nil;
     @synchronized(self) {
         if (sharedBackend == nil) {
             sharedBackend = [[self alloc] init];
+			[ApptentiveMetrics sharedMetrics];
         }
     }
     return sharedBackend;

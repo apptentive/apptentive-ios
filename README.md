@@ -156,6 +156,13 @@ You can modify the parameters which determine when the ratings dialog will be
 shown in your app settings on apptentive.com.
 
 
+Metrics
+-------
+Metrics provide insight into exactly where people begin and end interactions
+with your app and with feedback, ratings, and surveys. You can enable and disable
+metrics on your app settings page on apptentive.com.
+
+
 Surveys
 -------
 The surveys module is found in `modules/ApptentiveSurveys`. To use, add it
@@ -183,15 +190,6 @@ For example:
 	// Present survey here as appropriate.
 }
 ```
-
-Metrics
--------
-Metrics provide insight into exactly where people begin and end interactions
-with your app and with feedback, ratings, and surveys. You can find the
-module in `modules/ApptentiveMetrics`. To use, just link against the
-`libApptentiveMetrics.a` library. If metrics are enabled on your app
-settings on apptentive.com, the metrics module will begin sending metrics
-information, otherwise it won't.
 
 
 **Finding Your iTunes App ID**

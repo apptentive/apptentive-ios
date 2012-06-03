@@ -12,6 +12,6 @@
 @private
 	BOOL metricsEnabled;
 }
-+ (id)sharedMetrics;
++ (ApptentiveMetrics *)sharedMetrics;
 @end
 

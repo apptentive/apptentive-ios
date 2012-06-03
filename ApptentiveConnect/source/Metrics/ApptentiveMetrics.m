@@ -65,16 +65,10 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 @end
 
 @implementation ApptentiveMetrics
-+ (void)load {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	[[NSNotificationCenter defaultCenter] addObserver:[ApptentiveMetrics class] selector:@selector(sharedMetrics) name:UIApplicationDidFinishLaunchingNotification object:nil];
-	[pool release], pool = nil;
-}
 
-+ (id)sharedMetrics {
++ (ApptentiveMetrics *)sharedMetrics {
 	static ApptentiveMetrics *sharedSingleton = nil;
 	@synchronized(self) {
-		[[NSNotificationCenter defaultCenter] removeObserver:[ApptentiveMetrics class] name:UIApplicationDidFinishLaunchingNotification object:nil];
 		if (sharedSingleton == nil) {
 			sharedSingleton = [[ApptentiveMetrics alloc] init];
 		}

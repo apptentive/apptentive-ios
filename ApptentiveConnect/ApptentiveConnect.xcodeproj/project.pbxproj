@@ -81,6 +81,16 @@
 		4987FA85157ACB0B00AF2078 /* ATFeedbackMetrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 4987FA83157ACB0A00AF2078 /* ATFeedbackMetrics.h */; };
 		4987FA86157ACB0B00AF2078 /* ATFeedbackMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 4987FA84157ACB0A00AF2078 /* ATFeedbackMetrics.m */; };
 		4987FA87157ACB0B00AF2078 /* ATFeedbackMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 4987FA84157ACB0A00AF2078 /* ATFeedbackMetrics.m */; };
+		4987FA9C157AE53700AF2078 /* ApptentiveMetrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 4987FA95157AE53500AF2078 /* ApptentiveMetrics.h */; };
+		4987FA9D157AE53700AF2078 /* ApptentiveMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 4987FA96157AE53500AF2078 /* ApptentiveMetrics.m */; };
+		4987FA9E157AE53700AF2078 /* ApptentiveMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 4987FA96157AE53500AF2078 /* ApptentiveMetrics.m */; };
+		4987FA9F157AE53700AF2078 /* ATMetric.h in Headers */ = {isa = PBXBuildFile; fileRef = 4987FA97157AE53500AF2078 /* ATMetric.h */; };
+		4987FAA0157AE53700AF2078 /* ATMetric.m in Sources */ = {isa = PBXBuildFile; fileRef = 4987FA98157AE53600AF2078 /* ATMetric.m */; };
+		4987FAA1157AE53700AF2078 /* ATMetric.m in Sources */ = {isa = PBXBuildFile; fileRef = 4987FA98157AE53600AF2078 /* ATMetric.m */; };
+		4987FAA2157AE53700AF2078 /* ATWebClient+Metrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 4987FA9A157AE53700AF2078 /* ATWebClient+Metrics.h */; };
+		4987FAA3157AE53700AF2078 /* ATWebClient+Metrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 4987FA9B157AE53700AF2078 /* ATWebClient+Metrics.m */; };
+		4987FAA4157AE53700AF2078 /* ATWebClient+Metrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 4987FA9B157AE53700AF2078 /* ATWebClient+Metrics.m */; };
+		4987FAA7157AE59D00AF2078 /* ApptentiveMetricsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4987FAA6157AE59D00AF2078 /* ApptentiveMetricsTests.m */; };
 		498B8E3E1519691900CA9A58 /* ATRatingPredicateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 498B8E3D1519691900CA9A58 /* ATRatingPredicateTests.m */; };
 		49AA101F138B44C00082887A /* ATInfoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AA101D138B44C00082887A /* ATInfoViewController.h */; };
 		49AA1020138B44C00082887A /* ATInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AA101E138B44C00082887A /* ATInfoViewController.m */; };
@@ -197,6 +207,14 @@
 		4987FA7F157ACAB500AF2078 /* ATSurveyMetrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATSurveyMetrics.m; path = Metrics/ATSurveyMetrics.m; sourceTree = "<group>"; };
 		4987FA83157ACB0A00AF2078 /* ATFeedbackMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATFeedbackMetrics.h; path = Metrics/ATFeedbackMetrics.h; sourceTree = "<group>"; };
 		4987FA84157ACB0A00AF2078 /* ATFeedbackMetrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATFeedbackMetrics.m; path = Metrics/ATFeedbackMetrics.m; sourceTree = "<group>"; };
+		4987FA95157AE53500AF2078 /* ApptentiveMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ApptentiveMetrics.h; path = Metrics/ApptentiveMetrics.h; sourceTree = "<group>"; };
+		4987FA96157AE53500AF2078 /* ApptentiveMetrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ApptentiveMetrics.m; path = Metrics/ApptentiveMetrics.m; sourceTree = "<group>"; };
+		4987FA97157AE53500AF2078 /* ATMetric.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATMetric.h; path = Metrics/ATMetric.h; sourceTree = "<group>"; };
+		4987FA98157AE53600AF2078 /* ATMetric.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATMetric.m; path = Metrics/ATMetric.m; sourceTree = "<group>"; };
+		4987FA9A157AE53700AF2078 /* ATWebClient+Metrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ATWebClient+Metrics.h"; sourceTree = "<group>"; };
+		4987FA9B157AE53700AF2078 /* ATWebClient+Metrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ATWebClient+Metrics.m"; sourceTree = "<group>"; };
+		4987FAA5157AE59D00AF2078 /* ApptentiveMetricsTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMetricsTests.h; sourceTree = "<group>"; };
+		4987FAA6157AE59D00AF2078 /* ApptentiveMetricsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMetricsTests.m; sourceTree = "<group>"; };
 		498B8E3C1519691900CA9A58 /* ATRatingPredicateTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATRatingPredicateTests.h; sourceTree = "<group>"; };
 		498B8E3D1519691900CA9A58 /* ATRatingPredicateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATRatingPredicateTests.m; sourceTree = "<group>"; };
 		49AA101D138B44C00082887A /* ATInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATInfoViewController.h; sourceTree = "<group>"; };
@@ -402,12 +420,27 @@
 		4987FA7C157ACA8C00AF2078 /* Metrics */ = {
 			isa = PBXGroup;
 			children = (
+				4987FA95157AE53500AF2078 /* ApptentiveMetrics.h */,
+				4987FA96157AE53500AF2078 /* ApptentiveMetrics.m */,
+				4987FA97157AE53500AF2078 /* ATMetric.h */,
+				4987FA98157AE53600AF2078 /* ATMetric.m */,
 				4987FA83157ACB0A00AF2078 /* ATFeedbackMetrics.h */,
 				4987FA84157ACB0A00AF2078 /* ATFeedbackMetrics.m */,
 				4987FA7E157ACAB500AF2078 /* ATSurveyMetrics.h */,
 				4987FA7F157ACAB500AF2078 /* ATSurveyMetrics.m */,
+				4987FA99157AE53600AF2078 /* URL Loading */,
 			);
 			name = Metrics;
+			sourceTree = "<group>";
+		};
+		4987FA99157AE53600AF2078 /* URL Loading */ = {
+			isa = PBXGroup;
+			children = (
+				4987FA9A157AE53700AF2078 /* ATWebClient+Metrics.h */,
+				4987FA9B157AE53700AF2078 /* ATWebClient+Metrics.m */,
+			);
+			name = "URL Loading";
+			path = "Metrics/URL Loading";
 			sourceTree = "<group>";
 		};
 		49B3D964133D843D00B5A5CD /* Custom Views */ = {
@@ -441,6 +474,8 @@
 				49509DFA13583FB800793EEC /* ATUtilitiesTests.m */,
 				498B8E3C1519691900CA9A58 /* ATRatingPredicateTests.h */,
 				498B8E3D1519691900CA9A58 /* ATRatingPredicateTests.m */,
+				4987FAA5157AE59D00AF2078 /* ApptentiveMetricsTests.h */,
+				4987FAA6157AE59D00AF2078 /* ApptentiveMetricsTests.m */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -557,6 +592,9 @@
 				49CEFF8115193EC2006D8BA8 /* ATAppRatingFlow_Private.h in Headers */,
 				4987FA80157ACAB500AF2078 /* ATSurveyMetrics.h in Headers */,
 				4987FA85157ACB0B00AF2078 /* ATFeedbackMetrics.h in Headers */,
+				4987FA9C157AE53700AF2078 /* ApptentiveMetrics.h in Headers */,
+				4987FA9F157AE53700AF2078 /* ATMetric.h in Headers */,
+				4987FAA2157AE53700AF2078 /* ATWebClient+Metrics.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -762,6 +800,9 @@
 				49CEFF8215193EC2006D8BA8 /* ATAppRatingFlow_Private.m in Sources */,
 				4987FA81157ACAB500AF2078 /* ATSurveyMetrics.m in Sources */,
 				4987FA86157ACB0B00AF2078 /* ATFeedbackMetrics.m in Sources */,
+				4987FA9D157AE53700AF2078 /* ApptentiveMetrics.m in Sources */,
+				4987FAA0157AE53700AF2078 /* ATMetric.m in Sources */,
+				4987FAA3157AE53700AF2078 /* ATWebClient+Metrics.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -792,6 +833,10 @@
 				498B8E3E1519691900CA9A58 /* ATRatingPredicateTests.m in Sources */,
 				4987FA82157ACAB500AF2078 /* ATSurveyMetrics.m in Sources */,
 				4987FA87157ACB0B00AF2078 /* ATFeedbackMetrics.m in Sources */,
+				4987FA9E157AE53700AF2078 /* ApptentiveMetrics.m in Sources */,
+				4987FAA1157AE53700AF2078 /* ATMetric.m in Sources */,
+				4987FAA4157AE53700AF2078 /* ATWebClient+Metrics.m in Sources */,
+				4987FAA7157AE59D00AF2078 /* ApptentiveMetricsTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

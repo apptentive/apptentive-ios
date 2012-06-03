@@ -23,13 +23,15 @@
 }
 
 - (void)update {
-	while ([active count] < maximumConnections && [waiting count] > 0) {
-		ATURLConnection *loader = [[waiting objectAtIndex:0] retain];
-		[active addObject:loader];
-		[loader addObserver:self forKeyPath:@"isFinished" options:NSKeyValueObservingOptionNew context:NULL];
-		[waiting removeObjectAtIndex:0];
-		[loader start];
-		[loader release];
+	@synchronized(self) {
+		while ([active count] < maximumConnections && [waiting count] > 0) {
+			ATURLConnection *loader = [[waiting objectAtIndex:0] retain];
+			[active addObject:loader];
+			[loader addObserver:self forKeyPath:@"isFinished" options:NSKeyValueObservingOptionNew context:NULL];
+			[waiting removeObjectAtIndex:0];
+			[loader start];
+			[loader release];
+		}
 	}
 }
 
@@ -55,21 +57,25 @@
 }
 
 - (void)cancelConnection:(ATURLConnection *)connection {
-	if ([active containsObject:connection]) {
-		[connection cancel];
-		[active removeObject:connection];
-	}
-	
-	if ([waiting containsObject:connection]) {
-		[connection cancel];
-		[waiting removeObject:connection];
+	@synchronized(self) {
+		if ([active containsObject:connection]) {
+			[connection cancel];
+			[active removeObject:connection];
+		}
+		
+		if ([waiting containsObject:connection]) {
+			[connection cancel];
+			[waiting removeObject:connection];
+		}
 	}
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if ([keyPath isEqual:@"isFinished"] && [(ATURLConnection *)object isFinished]) {
-		[object removeObserver:self forKeyPath:@"isFinished"];
-		[active removeObject:object];
+		@synchronized(self) {
+			[object removeObserver:self forKeyPath:@"isFinished"];
+			[active removeObject:object];
+		}
 		[self update];
 	}
 }

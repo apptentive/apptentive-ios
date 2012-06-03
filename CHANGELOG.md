@@ -15,7 +15,6 @@ Bug fixes:
 * IOS-44: Where screenshots appear too small on Retina display devices. See 7a0d877b523a7f58ba94789bda6ceeebaaff1bd0
 * IOS-45: In which the application frame wasn't properly taken into account and whitespace appeared in the screenshot under non-default orientations. See e8a7358f329797812e9d944412bd6708b0d238d4
 
-
 2012-03-26 wooster v0.3.3
 -------------------------
 

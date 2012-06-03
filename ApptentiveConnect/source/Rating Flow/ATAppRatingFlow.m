@@ -44,6 +44,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 - (NSString *)appName;
 - (NSURL *)URLForRatingApp;
 - (void)openURLForRatingApp;
+- (BOOL)requirementsToShowDialogMet;
 - (BOOL)shouldShowDialog;
 /*! Returns YES if a dialog was shown. */
 - (BOOL)showDialogIfNecessary;
@@ -58,6 +59,10 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 
 #if TARGET_OS_IPHONE
 - (void)appWillEnterBackground:(NSNotification *)notification;
+
+- (UIViewController *)rootViewControllerForCurrentWindow;
+- (void)tryToShowDialogWaitingForReachability;
+- (void)reachabilityChangedAndPendingDialog:(NSNotification *)notification;
 #endif
 - (void)preferencesChanged:(NSNotification *)notification;
 - (void)loadPreferences;
@@ -340,57 +345,53 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 #endif
 }
 
-- (BOOL)shouldShowDialog {
-    BOOL result = NO;
-    
-    do { // once
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
+- (BOOL)requirementsToShowDialogMet {
+	BOOL result = NO;
+	
+	do { // once
+		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		
 		// Ratings are disabled, don't show dialog.
 		if ([[defaults objectForKey:ATAppRatingEnabledPreferenceKey] boolValue] == NO) {
 			break;
 		}
-        
-		// No network connection, don't show dialog.
-		if ([[ATReachability sharedReachability] currentNetworkStatus] == ATNetworkNotReachable) {
+		
+		// Check to see if the user has rated the app.
+		NSNumber *rated = [defaults objectForKey:ATAppRatingFlowRatedAppKey];
+		if (rated != nil && [rated boolValue]) {
 			break;
 		}
 		
-        // Check to see if the user has rated the app.
-        NSNumber *rated = [defaults objectForKey:ATAppRatingFlowRatedAppKey];
-        if (rated != nil && [rated boolValue]) {
-            break;
-        }
-        
-        // Check to see if the user has rejected rating this version.
-        NSNumber *rejected = [defaults objectForKey:ATAppRatingFlowDeclinedToRateThisVersionKey];
-        if (rejected != nil && [rejected boolValue]) {
-            break;
-        }
-        
-        // Check to see if the user dislikes this version of the app.
-        NSNumber *dislikes = [defaults objectForKey:ATAppRatingFlowUserDislikesThisVersionKey];
-        if (dislikes != nil && [dislikes boolValue]) {
-            break;
-        }
-        
-        // If we don't have the last version set, update it and don't show
-        // the dialog.
-        NSString *lastBundleVersion = [defaults objectForKey:ATAppRatingFlowLastUsedVersionKey];
-        if (lastBundleVersion == nil) {
-            [self updateVersionInfo];
-            break;
-        }
-        
-        // If the user has been prompted already, make sure we're after the
-        // number of days for them to be re-prompted.
-        NSDate *lastPrompt = [defaults objectForKey:ATAppRatingFlowLastPromptDateKey];
-        if (lastPrompt != nil && self.daysBeforeRePrompting != 0) {
-            double nextPromptDouble = [lastPrompt timeIntervalSince1970] + 60*60*24*self.daysBeforeRePrompting;
-            if ([[NSDate date] timeIntervalSince1970] < nextPromptDouble) {
-                break;
-            }
-        }
+		// Check to see if the user has rejected rating this version.
+		NSNumber *rejected = [defaults objectForKey:ATAppRatingFlowDeclinedToRateThisVersionKey];
+		if (rejected != nil && [rejected boolValue]) {
+			break;
+		}
+		
+		// Check to see if the user dislikes this version of the app.
+		NSNumber *dislikes = [defaults objectForKey:ATAppRatingFlowUserDislikesThisVersionKey];
+		if (dislikes != nil && [dislikes boolValue]) {
+			break;
+		}
+		
+		// If we don't have the last version set, update it and don't show
+		// the dialog.
+		NSString *lastBundleVersion = [defaults objectForKey:ATAppRatingFlowLastUsedVersionKey];
+		if (lastBundleVersion == nil) {
+			[self updateVersionInfo];
+			break;
+		}
+		
+		// If the user has been prompted already, make sure we're after the
+		// number of days for them to be re-prompted.
+		NSDate *lastPrompt = [defaults objectForKey:ATAppRatingFlowLastPromptDateKey];
+		if (lastPrompt != nil && self.daysBeforeRePrompting != 0) {
+			double nextPromptDouble = [lastPrompt timeIntervalSince1970] + 60*60*24*self.daysBeforeRePrompting;
+			if ([[NSDate date] timeIntervalSince1970] < nextPromptDouble) {
+				break;
+			}
+		}
 		
 		ATAppRatingFlowPredicateInfo *info = [[ATAppRatingFlowPredicateInfo alloc] init];
 		info.firstUse = [defaults objectForKey:ATAppRatingFlowLastUsedVersionFirstUseDateKey];
@@ -405,21 +406,33 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 			result = [ATAppRatingFlow_Private evaluatePredicate:predicate withPredicateInfo:info];
 		}
 		[info release], info = nil;
-    } while (NO);
-    
-    return result;
+	} while (NO);
+	
+	return result;
+}
+
+- (BOOL)shouldShowDialog {
+	// No network connection, don't show dialog.
+	if ([[ATReachability sharedReachability] currentNetworkStatus] == ATNetworkNotReachable) {
+		return NO;
+	}
+	return [self requirementsToShowDialogMet];
 }
 
 - (BOOL)showDialogIfNecessary {
-    if ([self shouldShowDialog]) {
 #if TARGET_OS_IPHONE
-        [self showEnjoymentDialog:self.viewController];
+	if ([self shouldShowDialog]) {
+		[self showEnjoymentDialog:self.viewController];
+		return YES;
+	} else if ([self rootViewControllerForCurrentWindow]) {
+		[self tryToShowDialogWaitingForReachability];
+	}
 #elif TARGET_OS_MAC
-        [self showEnjoymentDialog:self];
+	if ([self shouldShowDialog]) {
+		[self showEnjoymentDialog:self];
+	}
 #endif
-        return YES;
-    }
-    return NO;
+	return NO;
 }
 
 - (void)updateVersionInfo {
@@ -520,6 +533,59 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
     if (ratingDialog) {
         [ratingDialog dismissWithClickedButtonIndex:3 animated:NO];
     }
+}
+				
+				
+- (UIViewController *)rootViewControllerForCurrentWindow {
+	UIWindow *window = nil;
+	if (self.viewController && self.viewController.view && self.viewController.view.window) {
+		window = self.viewController.view.window;
+	} else {
+		for (UIWindow *tmpWindow in [[UIApplication sharedApplication] windows]) {
+			if ([[tmpWindow screen] isEqual:[UIScreen mainScreen]] && [tmpWindow isKeyWindow]) {
+				window = tmpWindow;
+				break;
+			}
+		}
+	}
+	if (window && [window respondsToSelector:@selector(rootViewController)]) {
+		return [window rootViewController];
+	} else {
+		return nil;
+	}
+}
+
+- (void)tryToShowDialogWaitingForReachability {
+	if (![[NSThread currentThread] isMainThread]) {
+		[self performSelectorOnMainThread:@selector(tryToShowDialogWaitingForReachability) withObject:nil waitUntilDone:NO];
+		return;
+	}
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	UIViewController *vc = [self rootViewControllerForCurrentWindow];
+	
+	if (vc && [self requirementsToShowDialogMet]) {
+		// We can get a root view controller and we should be showing a dialog.
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChangedAndPendingDialog:) name:ATReachabilityStatusChanged object:nil];
+	}
+	
+	[pool release], pool = nil;
+}
+
+- (void)reachabilityChangedAndPendingDialog:(NSNotification *)notification {
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ATReachabilityStatusChanged object:nil];
+	
+	UIViewController *vc = [self rootViewControllerForCurrentWindow];
+	
+	if (vc && [self requirementsToShowDialogMet]) {
+		if ([[ATReachability sharedReachability] currentNetworkStatus] == ATNetworkNotReachable) {
+			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChangedAndPendingDialog:) name:ATReachabilityStatusChanged object:nil];
+		} else {
+			[self showEnjoymentDialog:vc];
+		}
+		
+	}
+	[pool release], pool = nil;
 }
 #endif
 

@@ -335,32 +335,46 @@ enum {
 
 - (IBAction)donePressed:(id)sender {
 	[self captureFeedbackState];
-    if (self.showEmailAddressField && (!self.feedback.email || [self.feedback.email length] == 0)) {
+	if (self.showEmailAddressField && (!self.feedback.email || [self.feedback.email length] == 0)) {
 		self.window.windowLevel = UIWindowLevelNormal;
-        NSString *title = NSLocalizedString(@"No email address?", @"Lack of email dialog title.");
-        NSString *message = NSLocalizedString(@"We can't respond without one.\n\n\n", @"Lack of email dialog message.");
-        UIAlertView *emailAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil  otherButtonTitles:NSLocalizedString(@"Send Feedback", @"Send button title"), nil];
-        
-        UITextField *field = [[UITextField alloc] initWithFrame:CGRectMake(16, 83, 252, 25)];
-        field.font = [UIFont systemFontOfSize:18];
-		field.textColor = [UIColor lightGrayColor];
-        field.backgroundColor = [UIColor clearColor];
-        field.keyboardAppearance = UIKeyboardAppearanceAlert;
+		NSString *title = NSLocalizedString(@"No email address?", @"Lack of email dialog title.");
+		NSString *message = NSLocalizedString(@"We can't respond without one.", @"Lack of email dialog message.");
+		UIAlertView *emailAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Send Feedback", @"Send button title"), nil];
+		BOOL useNativeTextField = [emailAlert respondsToSelector:@selector(alertViewStyle)];
+		UITextField *field = nil;
+		
+		if (useNativeTextField) {
+			// iOS 5 and above.
+			[emailAlert setAlertViewStyle:2]; // UIAlertViewStylePlainTextInput
+			field = [emailAlert textFieldAtIndex:0];
+			[field retain];
+		} else {
+			NSString *messagePadded = [NSString stringWithFormat:@"%@\n\n\n", message];
+			[emailAlert setMessage:messagePadded];
+			field = [[UITextField alloc] initWithFrame:CGRectMake(16, 83, 252, 25)];
+			field.font = [UIFont systemFontOfSize:18];
+			field.textColor = [UIColor lightGrayColor];
+			field.backgroundColor = [UIColor clearColor];
+			field.keyboardAppearance = UIKeyboardAppearanceAlert;
+			field.borderStyle = UITextBorderStyleRoundedRect;
+		}
 		field.keyboardType = UIKeyboardTypeEmailAddress;
-        field.delegate = self;
-        field.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        field.placeholder = NSLocalizedString(@"Email Address", @"Email address popup placeholder text.");
-        field.borderStyle = UITextBorderStyleRoundedRect;
-        field.tag = kATEmailAlertTextFieldTag;
-        [field becomeFirstResponder];
-        [emailAlert addSubview:field];
-        [field release], field = nil;
-        [emailAlert sizeToFit];
-        [emailAlert show];
-        [emailAlert release];
-    } else {
-        [self sendFeedbackAndDismiss];
-    }
+		field.delegate = self;
+		field.autocapitalizationType = UITextAutocapitalizationTypeNone;
+		field.placeholder = NSLocalizedString(@"Email Address", @"Email address popup placeholder text.");
+		field.tag = kATEmailAlertTextFieldTag;
+		
+		if (!useNativeTextField) {
+			[field becomeFirstResponder];
+			[emailAlert addSubview:field];
+		}
+		[field release], field = nil;
+		[emailAlert sizeToFit];
+		[emailAlert show];
+		[emailAlert release];
+	} else {
+		[self sendFeedbackAndDismiss];
+	}
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATFeedbackDidHideWindowNotification object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:ATFeedbackEventTappedSend] forKey:ATFeedbackWindowHideEventKey]];
 }
 

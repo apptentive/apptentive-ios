@@ -5,15 +5,15 @@ Major changes:
 The metrics module has been integrated into `ApptentiveConnect` proper. Now that you can enable and disable metrics from the website, it didn't make sense to keep them separate.
 
 Bug fixes:
-* IOS-40: On debug builds, the configuration is updated much more often to aid debugging. See df7aa47dce369e6caad8c18ff72b8f9cb0485050
-* IOS-41: Added metrics for surveys and for feedback submission. See e4ce211834737c08b8a5fe9591dffc14b884304f
-* IOS-38: Fixed bug where the paperclip blocked feedback text when there was no email field and no thumbnail. See f0d7c6e52ee8053653d5ae346ddebb626f9b048e
-* IOS-31: Now sending time to completion of surveys with the response. See 40b1e1e221a0fe60826da2b5ff31877485c72451
-* IOS-42: Should use the localized app name in the ratings flow, if available. See dc2f59ef5cd347ecc5aa332323d9894092f635e7
-* IOS-43: Fixes a bug where sometimes the ratings dialog was not shown at startup due to network reachability. See 717b010ee01bbfd87ee3cca957e7c5bf76d0f648 for more info.
-* IOS-36: Fixes bug where the alert view asking for email addresses looks funny in landscape mode. This fix only works on iOS 5+. See b1aa55dac9b4dc6ae9b10440901129572d271b21
-* IOS-44: Where screenshots appear too small on Retina display devices. See 7a0d877b523a7f58ba94789bda6ceeebaaff1bd0
-* IOS-45: In which the application frame wasn't properly taken into account and whitespace appeared in the screenshot under non-default orientations. See e8a7358f329797812e9d944412bd6708b0d238d4
+* IOS-40: On debug builds, the configuration is updated much more often to aid debugging. See [df7aa47dce369e6caad8c18ff72b8f9cb0485050](https://github.com/apptentive/apptentive-ios/commit/df7aa47dce369e6caad8c18ff72b8f9cb0485050)
+* IOS-41: Added metrics for surveys and for feedback submission. See [e4ce211834737c08b8a5fe9591dffc14b884304f](https://github.com/apptentive/apptentive-ios/commit/e4ce211834737c08b8a5fe9591dffc14b884304f)
+* IOS-38: Fixed bug where the paperclip blocked feedback text when there was no email field and no thumbnail. See [f0d7c6e52ee8053653d5ae346ddebb626f9b048e](https://github.com/apptentive/apptentive-ios/commit/f0d7c6e52ee8053653d5ae346ddebb626f9b048e)
+* IOS-31: Now sending time to completion of surveys with the response. See [40b1e1e221a0fe60826da2b5ff31877485c72451](https://github.com/apptentive/apptentive-ios/commit/40b1e1e221a0fe60826da2b5ff31877485c72451)
+* IOS-42: Should use the localized app name in the ratings flow, if available. See [dc2f59ef5cd347ecc5aa332323d9894092f635e7](https://github.com/apptentive/apptentive-ios/commit/dc2f59ef5cd347ecc5aa332323d9894092f635e7)
+* IOS-43: Fixes a bug where sometimes the ratings dialog was not shown at startup due to network reachability. See [717b010ee01bbfd87ee3cca957e7c5bf76d0f648](https://github.com/apptentive/apptentive-ios/commit/717b010ee01bbfd87ee3cca957e7c5bf76d0f648) for more info.
+* IOS-36: Fixes bug where the alert view asking for email addresses looks funny in landscape mode. This fix only works on iOS 5+. See [b1aa55dac9b4dc6ae9b10440901129572d271b21](https://github.com/apptentive/apptentive-ios/commit/b1aa55dac9b4dc6ae9b10440901129572d271b21)
+* IOS-44: Where screenshots appear too small on Retina display devices. See [7a0d877b523a7f58ba94789bda6ceeebaaff1bd0](https://github.com/apptentive/apptentive-ios/commit/7a0d877b523a7f58ba94789bda6ceeebaaff1bd0)
+* IOS-45: In which the application frame wasn't properly taken into account and whitespace appeared in the screenshot under non-default orientations. See [e8a7358f329797812e9d944412bd6708b0d238d4](https://github.com/apptentive/apptentive-ios/commit/e8a7358f329797812e9d944412bd6708b0d238d4)
 
 2012-03-26 wooster v0.3.3
 -------------------------

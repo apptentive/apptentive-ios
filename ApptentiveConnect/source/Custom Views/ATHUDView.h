@@ -9,13 +9,13 @@
 #import <UIKit/UIKit.h>
 
 typedef enum {
-    ATHUDCheckmark
+	ATHUDCheckmark
 } ATHUDMarkType;
 
 @interface ATHUDView : UIWindow {
 @private
-    UIWindow *parentWindow;
-    UIImageView *icon;
+	UIWindow *parentWindow;
+	UIImageView *icon;
 }
 @property (nonatomic, readonly) UILabel *label;
 @property (nonatomic, assign) ATHUDMarkType markType;

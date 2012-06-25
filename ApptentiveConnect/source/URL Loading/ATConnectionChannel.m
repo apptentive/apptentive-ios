@@ -36,24 +36,24 @@
 }
 
 - (void)addConnection:(ATURLConnection *)connection {
-    @synchronized(self) {
-        [waiting addObject:connection];
-        [self update];
-    }
+	@synchronized(self) {
+		[waiting addObject:connection];
+		[self update];
+	}
 }
 
 - (void)cancelAllConnections {
-    @synchronized (self) {
-        for (ATURLConnection *loader in active) {
-            [loader removeObserver:self forKeyPath:@"isFinished"];
-            [loader cancel];
-        }
-        [active removeAllObjects];
-        for (ATURLConnection *loader in waiting) {
-            [loader cancel];
-        }
-        [waiting removeAllObjects];
-    }
+	@synchronized (self) {
+		for (ATURLConnection *loader in active) {
+			[loader removeObserver:self forKeyPath:@"isFinished"];
+			[loader cancel];
+		}
+		[active removeAllObjects];
+		for (ATURLConnection *loader in waiting) {
+			[loader cancel];
+		}
+		[waiting removeAllObjects];
+	}
 }
 
 - (void)cancelConnection:(ATURLConnection *)connection {

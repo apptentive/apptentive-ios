@@ -18,40 +18,40 @@
 @synthesize lastErrorTitle, lastErrorMessage;
 
 - (id)initWithCoder:(NSCoder *)coder {
-    if ((self = [super init])) {
-        int version = [coder decodeIntForKey:@"version"];
+	if ((self = [super init])) {
+		int version = [coder decodeIntForKey:@"version"];
 		self.failureCount = 0;
 		if (version >= 2) {
 			self.failureCount = [(NSNumber *)[coder decodeObjectForKey:@"failureCount"] unsignedIntegerValue];
-        } else {
-            [self release];
-            return nil;
-        }
-    }
-    return self;
+		} else {
+			[self release];
+			return nil;
+		}
+	}
+	return self;
 }
 
 - (void)dealloc {
-    self.lastErrorTitle = nil;
-    self.lastErrorMessage = nil;
-    [super dealloc];
+	self.lastErrorTitle = nil;
+	self.lastErrorMessage = nil;
+	[super dealloc];
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
-    [coder encodeInt:kATTaskCodingVersion forKey:@"version"];
+	[coder encodeInt:kATTaskCodingVersion forKey:@"version"];
 	[coder encodeObject:[NSNumber numberWithUnsignedInteger:self.failureCount] forKey:@"failureCount"];
 }
 
 - (void)start {
-    
+	
 }
 
 - (void)stop {
-    
+	
 }
 
 - (float)percentComplete {
-    return 0.0f;
+	return 0.0f;
 }
 
 - (NSString *)taskName {

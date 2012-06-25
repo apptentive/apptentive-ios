@@ -65,14 +65,14 @@ NSString *const ATSurveySentSurveysPreferenceKey = @"ATSurveySentSurveysPreferen
 	}
 	ATSurveyViewController *vc = [[ATSurveyViewController alloc] initWithSurvey:currentSurvey];
 	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
-    
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        [viewController presentModalViewController:nc animated:YES];
-    } else {
-        nc.modalPresentationStyle = UIModalPresentationFormSheet;
-        [viewController presentModalViewController:nc animated:YES];
-    }
-    [nc release];
+	
+	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+		[viewController presentModalViewController:nc animated:YES];
+	} else {
+		nc.modalPresentationStyle = UIModalPresentationFormSheet;
+		[viewController presentModalViewController:nc animated:YES];
+	}
+	[nc release];
 	[vc release];
 	
 	NSDictionary *metricsInfo = [[NSDictionary alloc] initWithObjectsAndKeys:currentSurvey.identifier, ATSurveyMetricsSurveyIDKey, [NSNumber numberWithInt:ATSurveyWindowTypeSurvey], ATSurveyWindowTypeKey, nil];

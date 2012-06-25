@@ -27,8 +27,8 @@
 	int statusCode;
 	BOOL failedAuthentication;
 	NSError *connectionError;
-    
-    float percentComplete;
+	
+	float percentComplete;
 }
 @property (nonatomic, readonly, copy) NSURL *targetURL;
 @property (nonatomic, assign) id delegate;

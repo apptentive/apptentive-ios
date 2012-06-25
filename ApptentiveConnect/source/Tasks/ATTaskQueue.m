@@ -27,76 +27,76 @@ static ATTaskQueue *sharedTaskQueue = nil;
 
 @implementation ATTaskQueue
 + (NSString *)taskQueuePath {
-    return [[[ATBackend sharedBackend] supportDirectoryPath] stringByAppendingPathComponent:@"tasks.objects"];
+	return [[[ATBackend sharedBackend] supportDirectoryPath] stringByAppendingPathComponent:@"tasks.objects"];
 }
 
 + (BOOL)serializedQueueExists {
-    NSFileManager *fm = [NSFileManager defaultManager];
-    return [fm fileExistsAtPath:[ATTaskQueue taskQueuePath]];
+	NSFileManager *fm = [NSFileManager defaultManager];
+	return [fm fileExistsAtPath:[ATTaskQueue taskQueuePath]];
 }
 
 
 + (ATTaskQueue *)sharedTaskQueue {
-    @synchronized(self) {
-        if (sharedTaskQueue == nil) {
-            if ([ATTaskQueue serializedQueueExists]) {
-                sharedTaskQueue = [[NSKeyedUnarchiver unarchiveObjectWithFile:[ATTaskQueue taskQueuePath]] retain];
-            }
-            if (!sharedTaskQueue) {
-                sharedTaskQueue = [[ATTaskQueue alloc] init];
-            }
-        }
-    }
-    return sharedTaskQueue;
+	@synchronized(self) {
+		if (sharedTaskQueue == nil) {
+			if ([ATTaskQueue serializedQueueExists]) {
+				sharedTaskQueue = [[NSKeyedUnarchiver unarchiveObjectWithFile:[ATTaskQueue taskQueuePath]] retain];
+			}
+			if (!sharedTaskQueue) {
+				sharedTaskQueue = [[ATTaskQueue alloc] init];
+			}
+		}
+	}
+	return sharedTaskQueue;
 }
 
 + (void)releaseSharedTaskQueue {
-    @synchronized(self) {
-        if (sharedTaskQueue != nil) {
-            [sharedTaskQueue archive];
-            [sharedTaskQueue release];
-            sharedTaskQueue = nil;
-        }
-    }
+	@synchronized(self) {
+		if (sharedTaskQueue != nil) {
+			[sharedTaskQueue archive];
+			[sharedTaskQueue release];
+			sharedTaskQueue = nil;
+		}
+	}
 }
 
 - (id)init {
-    if ((self = [super init])) {
-        [self setup];
-    }
-    return self;
+	if ((self = [super init])) {
+		[self setup];
+	}
+	return self;
 }
 
 - (id)initWithCoder:(NSCoder *)coder {
-    if ((self = [super init])) {
-        int version = [coder decodeIntForKey:@"version"];
-        if (version == kATTaskQueueCodingVersion) {
-            tasks = [[coder decodeObjectForKey:@"tasks"] retain];
-        } else {
-            [self release];
-            return nil;
-        }
-    }
-    return self;
+	if ((self = [super init])) {
+		int version = [coder decodeIntForKey:@"version"];
+		if (version == kATTaskQueueCodingVersion) {
+			tasks = [[coder decodeObjectForKey:@"tasks"] retain];
+		} else {
+			[self release];
+			return nil;
+		}
+	}
+	return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
-    [coder encodeInt:kATTaskQueueCodingVersion forKey:@"version"];
-    [coder encodeObject:tasks forKey:@"tasks"];
+	[coder encodeInt:kATTaskQueueCodingVersion forKey:@"version"];
+	[coder encodeObject:tasks forKey:@"tasks"];
 }
 
 - (void)dealloc {
-    [self teardown];
-    [super dealloc];
+	[self teardown];
+	[super dealloc];
 }
 
 
 - (void)addTask:(ATTask *)task {
-    @synchronized(self) {
-        [tasks addObject:task];
-        [self archive];
-    }
-    [self start];
+	@synchronized(self) {
+		[tasks addObject:task];
+		[self archive];
+	}
+	[self start];
 }
 
 - (NSUInteger)count {
@@ -108,9 +108,9 @@ static ATTaskQueue *sharedTaskQueue = nil;
 }
 
 - (ATTask *)taskAtIndex:(NSUInteger)index {
-    @synchronized(self) {
-        return [tasks objectAtIndex:index];
-    }
+	@synchronized(self) {
+		return [tasks objectAtIndex:index];
+	}
 }
 
 - (NSUInteger)countOfTasksWithTaskNamesInSet:(NSSet *)taskNames {
@@ -146,40 +146,40 @@ static ATTaskQueue *sharedTaskQueue = nil;
 		return;
 	}
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    @synchronized(self) {
-        if (activeTask) {
+	@synchronized(self) {
+		if (activeTask) {
 			[pool release], pool = nil;
 			return;
 		}
-        
-        if ([tasks count]) {
-            activeTask = [tasks objectAtIndex:0];
-            [activeTask addObserver:self forKeyPath:@"finished" options:NSKeyValueObservingOptionNew context:NULL];
-            [activeTask addObserver:self forKeyPath:@"failed" options:NSKeyValueObservingOptionNew context:NULL];
-            [activeTask start];
-        }
-    }
+		
+		if ([tasks count]) {
+			activeTask = [tasks objectAtIndex:0];
+			[activeTask addObserver:self forKeyPath:@"finished" options:NSKeyValueObservingOptionNew context:NULL];
+			[activeTask addObserver:self forKeyPath:@"failed" options:NSKeyValueObservingOptionNew context:NULL];
+			[activeTask start];
+		}
+	}
 	[pool release];
 }
 
 - (void)stop {
-    @synchronized(self) {
-        [activeTask stop];
-        [self unsetActiveTask];
-    }
+	@synchronized(self) {
+		[activeTask stop];
+		[self unsetActiveTask];
+	}
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    @synchronized(self) {
-        if (object != activeTask) return;
+	@synchronized(self) {
+		if (object != activeTask) return;
 		ATTask *task = (ATTask *)object;
-        if ([keyPath isEqualToString:@"finished"] && [task finished]) {
-            [self unsetActiveTask];
-            [tasks removeObject:object];
-            [self archive];
-            [self start];
-        } else if ([keyPath isEqualToString:@"failed"] && [task failed]) {
-            [self stop];
+		if ([keyPath isEqualToString:@"finished"] && [task finished]) {
+			[self unsetActiveTask];
+			[tasks removeObject:object];
+			[self archive];
+			[self start];
+		} else if ([keyPath isEqualToString:@"failed"] && [task failed]) {
+			[self stop];
 			task.failureCount = task.failureCount + 1;
 			if (task.failureCount > kMaxFailureCount) {
 				NSLog(@"Task %@ failed too many times, removing from queue.", task);
@@ -192,45 +192,45 @@ static ATTaskQueue *sharedTaskQueue = nil;
 				[tasks removeObject:task];
 				[tasks addObject:task];
 				[task release];
-                [self archive];
+				[self archive];
 				
 				[self performSelector:@selector(start) withObject:nil afterDelay:kATTaskQueueRetryPeriod];
 			}
-        }
-    }
+		}
+	}
 }
 @end
 
 @implementation ATTaskQueue (Private)
 - (void)setup {
-    @synchronized(self) {
-        tasks = [[NSMutableArray alloc] init];
-    }
+	@synchronized(self) {
+		tasks = [[NSMutableArray alloc] init];
+	}
 }
 
 - (void)teardown {
-    @synchronized(self) {
-        [self stop];
-        [tasks release];
-        tasks = nil;
-        [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    }
+	@synchronized(self) {
+		[self stop];
+		[tasks release];
+		tasks = nil;
+		[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	}
 }
 
 - (void)unsetActiveTask {
-    @synchronized(self) {
-        if (activeTask) {
-            [activeTask removeObserver:self forKeyPath:@"finished"];
-            [activeTask removeObserver:self forKeyPath:@"failed"];
-            activeTask = nil;
-        }
-    }
+	@synchronized(self) {
+		if (activeTask) {
+			[activeTask removeObserver:self forKeyPath:@"finished"];
+			[activeTask removeObserver:self forKeyPath:@"failed"];
+			activeTask = nil;
+		}
+	}
 }
 
 - (void)archive {
-    @synchronized(self) {
-        [NSKeyedArchiver archiveRootObject:sharedTaskQueue toFile:[ATTaskQueue taskQueuePath]];
-    }
+	@synchronized(self) {
+		[NSKeyedArchiver archiveRootObject:sharedTaskQueue toFile:[ATTaskQueue taskQueuePath]];
+	}
 }
 @end
 

@@ -11,7 +11,7 @@
 
 @interface ATDefaultTextView : UITextView {
 @private
-    UILabel *placeholderLabel;
+	UILabel *placeholderLabel;
 }
 @property (nonatomic, retain) NSString *placeholder;
 - (BOOL)isDefault;

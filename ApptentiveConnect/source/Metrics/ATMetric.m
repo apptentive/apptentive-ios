@@ -25,29 +25,29 @@
 }
 
 - (id)initWithCoder:(NSCoder *)coder {
-    if ((self = [super initWithCoder:coder])) {
-        int version = [coder decodeIntForKey:@"version"];
-        if (version == kATMetricStorageVersion) {
-            self.name = [coder decodeObjectForKey:@"name"];
-            NSDictionary *d = [coder decodeObjectForKey:@"info"];
+	if ((self = [super initWithCoder:coder])) {
+		int version = [coder decodeIntForKey:@"version"];
+		if (version == kATMetricStorageVersion) {
+			self.name = [coder decodeObjectForKey:@"name"];
+			NSDictionary *d = [coder decodeObjectForKey:@"info"];
 			if (d != nil) {
 				info = [d mutableCopy];
 			} else {
 				info = [[NSMutableDictionary alloc] init];
 			}
-        } else {
-            [self release];
-            return nil;
-        }
-    }
-    return self;
+		} else {
+			[self release];
+			return nil;
+		}
+	}
+	return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
 	[super encodeWithCoder:coder];
-    [coder encodeInt:kATMetricStorageVersion forKey:@"version"];
-    [coder encodeObject:self.name forKey:@"name"];
-    [coder encodeObject:self.info forKey:@"info"];
+	[coder encodeInt:kATMetricStorageVersion forKey:@"version"];
+	[coder encodeObject:self.name forKey:@"name"];
+	[coder encodeObject:self.info forKey:@"info"];
 }
 
 - (void)dealloc {
@@ -67,7 +67,7 @@
 }
 
 - (NSDictionary *)apiDictionary {
-    NSMutableDictionary *d = [NSMutableDictionary dictionaryWithDictionary:[super apiDictionary]];
+	NSMutableDictionary *d = [NSMutableDictionary dictionaryWithDictionary:[super apiDictionary]];
 	
 	if (self.name) [d setObject:self.name forKey:@"record[metric][event]"];
 	
@@ -82,7 +82,7 @@
 			[d setObject:recordValue forKey:recordKey];
 		}
 	}
-    return d;
+	return d;
 }
 
 - (ATAPIRequest *)requestForSendingRecord {

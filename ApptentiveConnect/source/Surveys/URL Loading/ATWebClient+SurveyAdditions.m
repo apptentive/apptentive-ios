@@ -17,12 +17,12 @@
 
 @implementation ATWebClient (SurveyAdditions)
 - (ATAPIRequest *)requestForGettingSurvey {
-    NSString *urlString = [NSString stringWithFormat:@"%@/surveys/active", [self baseURLString]];
-    ATURLConnection *conn = [self connectionToGet:[NSURL URLWithString:urlString]];
-    conn.timeoutInterval = 20.0;
-    ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:[self commonChannelName]];
-    request.returnType = ATAPIRequestReturnTypeData;
-    return [request autorelease];
+	NSString *urlString = [NSString stringWithFormat:@"%@/surveys/active", [self baseURLString]];
+	ATURLConnection *conn = [self connectionToGet:[NSURL URLWithString:urlString]];
+	conn.timeoutInterval = 20.0;
+	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:[self commonChannelName]];
+	request.returnType = ATAPIRequestReturnTypeData;
+	return [request autorelease];
 }
 
 
@@ -34,13 +34,13 @@
 		return nil;
 	}
 	NSString *url = [self apiURLStringWithPath:@"records"];
-    ATURLConnection *conn = nil;
-    
+	ATURLConnection *conn = nil;
+	
 	conn = [self connectionToPost:[NSURL URLWithString:url] JSON:postString];
 	
-    conn.timeoutInterval = 240.0;
-    ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kSurveysChannelName];
-    request.returnType = ATAPIRequestReturnTypeJSON;
-    return [request autorelease];
+	conn.timeoutInterval = 240.0;
+	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kSurveysChannelName];
+	request.returnType = ATAPIRequestReturnTypeJSON;
+	return [request autorelease];
 }
 @end

@@ -29,96 +29,96 @@
 @implementation ATFeedback
 @synthesize type, text, name, email, phone, screenshot, screenshotSwitchEnabled, imageIsFromCamera;
 - (id)init {
-    if ((self = [super init])) {
+	if ((self = [super init])) {
 		[self setup];
-    }
-    return self;
+	}
+	return self;
 }
 
 - (void)dealloc {
 	[extraData release], extraData = nil;
-    self.text = nil;
-    self.name = nil;
-    self.email = nil;
-    self.phone = nil;
-    self.screenshot = nil;
-    [super dealloc];
+	self.text = nil;
+	self.name = nil;
+	self.email = nil;
+	self.phone = nil;
+	self.screenshot = nil;
+	[super dealloc];
 }
 
 - (id)initWithCoder:(NSCoder *)coder {
-    if ((self = [super initWithCoder:coder])) {
+	if ((self = [super initWithCoder:coder])) {
 		[self setup];
-        int version = [coder decodeIntForKey:@"version"];
-        if (version == 1) {
-            self.type = [self feedbackTypeFromString:[coder decodeObjectForKey:@"type"]];
-            self.text = [coder decodeObjectForKey:@"text"];
-            self.name = [coder decodeObjectForKey:@"name"];
-            self.email = [coder decodeObjectForKey:@"email"];
-            self.phone = [coder decodeObjectForKey:@"phone"];
-            if ([coder containsValueForKey:@"screenshot"]) {
-                NSData *data = [coder decodeObjectForKey:@"screenshot"];
+		int version = [coder decodeIntForKey:@"version"];
+		if (version == 1) {
+			self.type = [self feedbackTypeFromString:[coder decodeObjectForKey:@"type"]];
+			self.text = [coder decodeObjectForKey:@"text"];
+			self.name = [coder decodeObjectForKey:@"name"];
+			self.email = [coder decodeObjectForKey:@"email"];
+			self.phone = [coder decodeObjectForKey:@"phone"];
+			if ([coder containsValueForKey:@"screenshot"]) {
+				NSData *data = [coder decodeObjectForKey:@"screenshot"];
 #if TARGET_OS_IPHONE
-                self.screenshot = [UIImage imageWithData:data];
+				self.screenshot = [UIImage imageWithData:data];
 #elif TARGET_OS_MAC
-                self.screenshot = [[[NSImage alloc] initWithData:data] autorelease];
+				self.screenshot = [[[NSImage alloc] initWithData:data] autorelease];
 #endif
-            }
-        } else if (version == kFeedbackCodingVersion) {
-            self.type = [coder decodeIntForKey:@"type"];
-            self.text = [coder decodeObjectForKey:@"text"];
-            self.name = [coder decodeObjectForKey:@"name"];
-            self.email = [coder decodeObjectForKey:@"email"];
-            self.phone = [coder decodeObjectForKey:@"phone"];
-            if ([coder containsValueForKey:@"screenshot"]) {
-                NSData *data = [coder decodeObjectForKey:@"screenshot"];
+			}
+		} else if (version == kFeedbackCodingVersion) {
+			self.type = [coder decodeIntForKey:@"type"];
+			self.text = [coder decodeObjectForKey:@"text"];
+			self.name = [coder decodeObjectForKey:@"name"];
+			self.email = [coder decodeObjectForKey:@"email"];
+			self.phone = [coder decodeObjectForKey:@"phone"];
+			if ([coder containsValueForKey:@"screenshot"]) {
+				NSData *data = [coder decodeObjectForKey:@"screenshot"];
 #if TARGET_OS_IPHONE
-                self.screenshot = [UIImage imageWithData:data];
+				self.screenshot = [UIImage imageWithData:data];
 #elif TARGET_OS_MAC
-                self.screenshot = [[[NSImage alloc] initWithData:data] autorelease];
+				self.screenshot = [[[NSImage alloc] initWithData:data] autorelease];
 #endif
-            }
+			}
 			NSDictionary *oldExtraData = [coder decodeObjectForKey:@"extraData"];
 			if (oldExtraData != nil) {
 				[extraData addEntriesFromDictionary:oldExtraData];
 			}
-        } else {
-            [self release];
-            return nil;
-        }
-    }
-    return self;
+		} else {
+			[self release];
+			return nil;
+		}
+	}
+	return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
 	[super encodeWithCoder:coder];
-    [coder encodeInt:kFeedbackCodingVersion forKey:@"version"];
+	[coder encodeInt:kFeedbackCodingVersion forKey:@"version"];
 	[coder encodeInt:self.type forKey:@"type"];
-    [coder encodeObject:self.text forKey:@"text"];
-    [coder encodeObject:self.name forKey:@"name"];
-    [coder encodeObject:self.email forKey:@"email"];
-    [coder encodeObject:self.phone forKey:@"phone"];
+	[coder encodeObject:self.text forKey:@"text"];
+	[coder encodeObject:self.name forKey:@"name"];
+	[coder encodeObject:self.email forKey:@"email"];
+	[coder encodeObject:self.phone forKey:@"phone"];
 	[coder encodeObject:extraData forKey:@"extraData"];
-    if (self.screenshot) {
+	if (self.screenshot) {
 #if TARGET_OS_IPHONE
-        [coder encodeObject:UIImagePNGRepresentation(self.screenshot) forKey:@"screenshot"];
+		[coder encodeObject:UIImagePNGRepresentation(self.screenshot) forKey:@"screenshot"];
 #elif TARGET_OS_MAC
-        NSData *data = [ATUtilities pngRepresentationOfImage:self.screenshot];
-        [coder encodeObject:data forKey:@"screenshot"];
+		NSData *data = [ATUtilities pngRepresentationOfImage:self.screenshot];
+		[coder encodeObject:data forKey:@"screenshot"];
 #endif
-    }
+	}
 }
 
 - (NSDictionary *)dictionary {
-    return [NSDictionary dictionaryWithObjectsAndKeys:self.text, @"text", self.name, @"name", self.email, @"email", self.phone, @"phone", self.screenshot, @"screenshot", nil];
+	return [NSDictionary dictionaryWithObjectsAndKeys:self.text, @"text", self.name, @"name", self.email, @"email", self.phone, @"phone", self.screenshot, @"screenshot", nil];
 }
 
 - (NSDictionary *)apiDictionary {
-    NSMutableDictionary *d = [NSMutableDictionary dictionaryWithDictionary:[super apiDictionary]];
-    if (self.name) [d setObject:self.name forKey:@"record[user][name]"];
-    if (self.email) [d setObject:self.email forKey:@"record[user][email]"];
-    if (self.phone) [d setObject:self.phone forKey:@"record[user][phone_number]"];
-    if (self.text) [d setObject:self.text forKey:@"record[feedback][feedback]"];
-    [d setObject:[self stringForFeedbackType:self.type] forKey:@"record[feedback][type]"];
+	NSMutableDictionary *d = [NSMutableDictionary dictionaryWithDictionary:[super apiDictionary]];
+	if (self.name) [d setObject:self.name forKey:@"record[user][name]"];
+	if (self.email) [d setObject:self.email forKey:@"record[user][email]"];
+	if (self.phone) [d setObject:self.phone forKey:@"record[user][phone_number]"];
+	if (self.text) [d setObject:self.text forKey:@"record[feedback][feedback]"];
+	[d setObject:[self stringForFeedbackType:self.type] forKey:@"record[feedback][type]"];
 	if (extraData && [extraData count] > 0) {
 		for (NSString *key in extraData) {
 			NSString *fullKey = [NSString stringWithFormat:@"record[data][%@]", key];
@@ -149,35 +149,35 @@
 }
 
 - (ATFeedbackType)feedbackTypeFromString:(NSString *)feedbackString {
-    if ([feedbackString isEqualToString:@"feedback"] || [feedbackString isEqualToString:@"suggestion"]) {
-        return ATFeedbackTypeFeedback;
-    } else if ([feedbackString isEqualToString:@"question"]) {
-        return ATFeedbackTypeQuestion;
-    } else if ([feedbackString isEqualToString:@"praise"]) {
-        return ATFeedbackTypePraise;
-    } else if ([feedbackString isEqualToString:@"bug"]) {
-        return ATFeedbackTypeBug;
-    }
-    return ATFeedbackTypeFeedback;
+	if ([feedbackString isEqualToString:@"feedback"] || [feedbackString isEqualToString:@"suggestion"]) {
+		return ATFeedbackTypeFeedback;
+	} else if ([feedbackString isEqualToString:@"question"]) {
+		return ATFeedbackTypeQuestion;
+	} else if ([feedbackString isEqualToString:@"praise"]) {
+		return ATFeedbackTypePraise;
+	} else if ([feedbackString isEqualToString:@"bug"]) {
+		return ATFeedbackTypeBug;
+	}
+	return ATFeedbackTypeFeedback;
 }
 
 - (NSString *)stringForFeedbackType:(ATFeedbackType)feedbackType {
-    NSString *result = nil;
-    switch (feedbackType) {
-        case ATFeedbackTypeBug:
-            result = @"bug";
-            break;
-        case ATFeedbackTypePraise:
-            result = @"praise";
-            break;
-        case ATFeedbackTypeQuestion:
-            result = @"question";
+	NSString *result = nil;
+	switch (feedbackType) {
+		case ATFeedbackTypeBug:
+			result = @"bug";
 			break;
-        case ATFeedbackTypeFeedback:
-        default:
-            result = @"feedback";
-            break;
-    }
-    return result;
+		case ATFeedbackTypePraise:
+			result = @"praise";
+			break;
+		case ATFeedbackTypeQuestion:
+			result = @"question";
+			break;
+		case ATFeedbackTypeFeedback:
+		default:
+			result = @"feedback";
+			break;
+	}
+	return result;
 }
 @end

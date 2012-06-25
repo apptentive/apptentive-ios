@@ -11,7 +11,7 @@
 
 @interface ApptentiveConnectTests : SenTestCase {
 @private
-    
+	
 }
 
 @end

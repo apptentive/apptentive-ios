@@ -33,7 +33,7 @@
 
 @interface ATCellTextView : ATDefaultTextView {
 @private
-    NSIndexPath *cellPath;
+	NSIndexPath *cellPath;
 	ATSurveyQuestion *question;
 }
 @property (nonatomic, retain) NSIndexPath *cellPath;

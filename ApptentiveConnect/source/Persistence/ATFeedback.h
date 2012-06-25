@@ -15,10 +15,10 @@
 #import "ATRecord.h"
 
 typedef enum {
-    ATFeedbackTypeFeedback,
-    ATFeedbackTypePraise,
-    ATFeedbackTypeBug,
-    ATFeedbackTypeQuestion
+	ATFeedbackTypeFeedback,
+	ATFeedbackTypePraise,
+	ATFeedbackTypeBug,
+	ATFeedbackTypeQuestion
 } ATFeedbackType;
 
 @interface ATFeedback : ATRecord <NSCoding> {

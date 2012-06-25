@@ -18,7 +18,7 @@ typedef enum {
 @interface ATTrackingButton : UIButton {
 @private
 	UIImageView *shadowView;
-    UIEdgeInsets padding;
+	UIEdgeInsets padding;
 }
 @property (nonatomic, assign) UIEdgeInsets padding;
 @end

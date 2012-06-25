@@ -146,7 +146,7 @@
 - (ATSurvey *)parseSurvey:(NSData *)jsonSurvey {
 	ATSurvey *survey = nil;
 	BOOL success = NO;
-
+	
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	JSONDecoder *decoder = [JSONDecoder decoder];
 	NSError *error = nil;
@@ -161,7 +161,7 @@
 		parserError = [error retain];
 		success = NO;
 	}
-
+	
 	[pool release], pool = nil;
 	if (!success) {
 		survey = nil;
@@ -174,15 +174,15 @@
 - (NSArray *)parseMultipleSurveys:(NSData *)jsonSurveys {
 	NSMutableArray *result = [NSMutableArray array];
 	BOOL success = NO;
-    
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    JSONDecoder *decoder = [JSONDecoder decoder];
-    NSError *error = nil;
 	
-    id decodedObject = [decoder objectWithData:jsonSurveys error:&error];
-    if (decodedObject && [decodedObject isKindOfClass:[NSArray class]]) {
-        success = YES;
-        NSArray *surveys = (NSArray *)decodedObject;
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	JSONDecoder *decoder = [JSONDecoder decoder];
+	NSError *error = nil;
+	
+	id decodedObject = [decoder objectWithData:jsonSurveys error:&error];
+	if (decodedObject && [decodedObject isKindOfClass:[NSArray class]]) {
+		success = YES;
+		NSArray *surveys = (NSArray *)decodedObject;
 		for (NSObject *obj in surveys) {
 			if ([obj isKindOfClass:[NSDictionary class]]) {
 				NSDictionary *dict = (NSDictionary *)obj;
@@ -192,13 +192,13 @@
 				}
 			}
 		}
-    } else {
+	} else {
 		[parserError release], parserError = nil;
-        parserError = [error retain];
-        success = NO;
-    }
-    
-    [pool release], pool = nil;
+		parserError = [error retain];
+		success = NO;
+	}
+	
+	[pool release], pool = nil;
 	
 	if (!success) {
 		result = nil;
@@ -208,11 +208,11 @@
 }
 
 - (NSError *)parserError {
-    return parserError;
+	return parserError;
 }
 
 - (void)dealloc {
-    [parserError release], parserError = nil;
-    [super dealloc];
+	[parserError release], parserError = nil;
+	[super dealloc];
 }
 @end

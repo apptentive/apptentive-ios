@@ -11,11 +11,11 @@
 @implementation ATSurvey
 @synthesize responseRequired;
 @synthesize active;
-@synthesize identifier=identifier$;
-@synthesize name=name$;
-@synthesize surveyDescription=surveyDescription$;
+@synthesize identifier;
+@synthesize name;
+@synthesize surveyDescription;
 @synthesize questions;
-@synthesize successMessage=successMessage$;
+@synthesize successMessage;
 
 - (id)init {
 	if ((self = [super init])) {
@@ -26,10 +26,10 @@
 
 - (void)dealloc {
 	[questions release], questions = nil;
-	[identifier$ release], identifier$ = nil;
-	[name$ release], name$ = nil;
-	[surveyDescription$ release], surveyDescription$ = nil;
-	[successMessage$ release], successMessage$ = nil;
+	[identifier release], identifier = nil;
+	[name release], name = nil;
+	[surveyDescription release], surveyDescription = nil;
+	[successMessage release], successMessage = nil;
 	[super dealloc];
 }
 

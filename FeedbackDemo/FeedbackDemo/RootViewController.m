@@ -26,15 +26,15 @@ enum kRootTableSections {
 @implementation RootViewController
 
 - (IBAction)showFeedback:(id)sender {
-    ATConnect *connection = [ATConnect sharedConnection];
-    connection.apiKey = kApptentiveAPIKey;
-    
-    [connection presentFeedbackControllerFromViewController:self];
+	ATConnect *connection = [ATConnect sharedConnection];
+	connection.apiKey = kApptentiveAPIKey;
+	
+	[connection presentFeedbackControllerFromViewController:self];
 }
 
 - (IBAction)showRating:(id)sender {
-    ATAppRatingFlow *flow = [ATAppRatingFlow sharedRatingFlowWithAppID:kApptentiveAppID];
-    [flow showEnjoymentDialog:self];
+	ATAppRatingFlow *flow = [ATAppRatingFlow sharedRatingFlowWithAppID:kApptentiveAppID];
+	[flow showEnjoymentDialog:self];
 }
 
 - (void)viewDidLoad {
@@ -45,7 +45,7 @@ enum kRootTableSections {
 	imageView.contentMode = UIViewContentModeCenter;
 	self.tableView.tableHeaderView = imageView;
 	[imageView release], imageView = nil;
-    [super viewDidLoad];
+	[super viewDidLoad];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyBecameAvailable:) name:ATSurveyNewSurveyAvailableNotification object:nil];
 	[ATSurveys checkForAvailableSurveys];
@@ -57,11 +57,11 @@ enum kRootTableSections {
 
 - (void)viewWillAppear:(BOOL)animated {
 	[self.tableView reloadData];
-    [super viewWillAppear:animated];
+	[super viewWillAppear:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
+	[super viewDidAppear:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -73,11 +73,11 @@ enum kRootTableSections {
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return YES;
+	return YES;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return kSectionCount;
+	return kSectionCount;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -85,12 +85,12 @@ enum kRootTableSections {
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"Cell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
+	static NSString *CellIdentifier = @"Cell";
+	
+	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+	if (cell == nil) {
+		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+	}
 	if (indexPath.section == kFeedbackSection) {
 		cell.textLabel.text = @"Send Feedback";
 	} else if (indexPath.section == kRatingSection) {
@@ -105,7 +105,7 @@ enum kRootTableSections {
 		}
 	}
 	
-    return cell;
+	return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -146,14 +146,14 @@ enum kRootTableSections {
 }
 
 - (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
+	[super didReceiveMemoryWarning];
 }
 
 - (void)viewDidUnload {
-    [super viewDidUnload];
+	[super viewDidUnload];
 }
 
 - (void)dealloc {
-    [super dealloc];
+	[super dealloc];
 }
 @end

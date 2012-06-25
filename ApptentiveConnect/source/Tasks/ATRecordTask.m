@@ -21,31 +21,31 @@
 @synthesize record;
 
 - (id)initWithCoder:(NSCoder *)coder {
-    if ((self = [super init])) {
-        int version = [coder decodeIntForKey:@"version"];
-        if (version == kATRecordTaskCodingVersion) {
-            self.record = [coder decodeObjectForKey:@"record"];
-        } else {
-            [self release];
-            return nil;
-        }
-    }
-    return self;
+	if ((self = [super init])) {
+		int version = [coder decodeIntForKey:@"version"];
+		if (version == kATRecordTaskCodingVersion) {
+			self.record = [coder decodeObjectForKey:@"record"];
+		} else {
+			[self release];
+			return nil;
+		}
+	}
+	return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
-    [coder encodeInt:kATRecordTaskCodingVersion forKey:@"version"];
-    [coder encodeObject:self.record forKey:@"record"];
+	[coder encodeInt:kATRecordTaskCodingVersion forKey:@"version"];
+	[coder encodeObject:self.record forKey:@"record"];
 }
 
 - (void)dealloc {
-    [self teardown];
-    [super dealloc];
+	[self teardown];
+	[super dealloc];
 }
 
 - (void)start {
-    if (!request) {
-        request = [[self.record requestForSendingRecord] retain];
+	if (!request) {
+		request = [[self.record requestForSendingRecord] retain];
 		if (request != nil) {
 			request.delegate = self;
 			[request start];
@@ -53,24 +53,24 @@
 		} else {
 			self.finished = YES;
 		}
-    }
+	}
 }
 
 - (void)stop {
-    if (request) {
-        request.delegate = nil;
-        [request cancel];
-        [request release], request = nil;
-        self.inProgress = NO;
-    }
+	if (request) {
+		request.delegate = nil;
+		[request cancel];
+		[request release], request = nil;
+		self.inProgress = NO;
+	}
 }
 
 - (float)percentComplete {
-    if (request) {
-        return [request percentageComplete];
-    } else {
-        return 0.0f;
-    }
+	if (request) {
+		return [request percentageComplete];
+	} else {
+		return 0.0f;
+	}
 }
 
 - (NSString *)taskName {
@@ -79,32 +79,32 @@
 
 #pragma mark ATAPIRequestDelegate
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(id)result {
-    @synchronized(self) {
-        self.finished = YES;
-    }
+	@synchronized(self) {
+		self.finished = YES;
+	}
 }
 
 - (void)at_APIRequestDidProgress:(ATAPIRequest *)sender {
-    // pass
+	// pass
 }
 
 - (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
-    @synchronized(self) {
-        self.failed = YES;
-        self.lastErrorTitle = sender.errorTitle;
-        self.lastErrorMessage = sender.errorMessage;
-        NSLog(@"ATAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
-        [self stop];        
-    }
+	@synchronized(self) {
+		self.failed = YES;
+		self.lastErrorTitle = sender.errorTitle;
+		self.lastErrorMessage = sender.errorMessage;
+		NSLog(@"ATAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
+		[self stop];        
+	}
 }
 @end
 
 @implementation ATRecordTask (Private)
 - (void)setup {
-    
+	
 }
 
 - (void)teardown {
-    [self stop];
+	[self stop];
 }
 @end

@@ -24,30 +24,30 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 
 - (id)initWithFeedback:(ATFeedback *)someFeedback feedbackController:(ATFeedbackController *)aController {
 	self = [super initWithNibName:@"ATSimpleImageViewController" bundle:[ATConnect resourceBundle]];
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        self.modalPresentationStyle = UIModalPresentationFormSheet;
-    }
+	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+		self.modalPresentationStyle = UIModalPresentationFormSheet;
+	}
 	if (self != nil) {
 		feedback = [someFeedback retain];
 		controller = [aController retain];
-    }
-    return self;
+	}
+	return self;
 }
 
 - (void)dealloc {
 	[controller release], controller = nil;
 	[feedback release];
 	feedback = nil;
-    [scrollView removeFromSuperview];
-    [scrollView release];
-    scrollView = nil;
+	[scrollView removeFromSuperview];
+	[scrollView release];
+	scrollView = nil;
 	[containerView removeFromSuperview];
 	[containerView release], containerView = nil;
-    [super dealloc];
+	[super dealloc];
 }
 
 - (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
+	[super didReceiveMemoryWarning];
 }
 
 #pragma mark - View lifecycle
@@ -106,8 +106,8 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [self setupScrollView];
+	[super viewWillAppear:animated];
+	[self setupScrollView];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -124,7 +124,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 - (void)viewDidUnload {
 	[containerView removeFromSuperview];
 	[containerView release], containerView = nil;
-    [super viewDidUnload];
+	[super viewDidUnload];
 }
 
 - (IBAction)donePressed:(id)sender {
@@ -169,7 +169,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 		feedback.screenshot = image;
 		[[NSNotificationCenter defaultCenter] postNotificationName:ATImageViewChoseImage object:self];
 	}
-    [self setupScrollView];
+	[self setupScrollView];
 	[picker dismissModalViewControllerAnimated:YES];
 }
 
@@ -179,20 +179,20 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 
 #pragma mark Rotation
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return YES;
+	return YES;
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-    
+	
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-    [self setupScrollView];
+	[self setupScrollView];
 }
 
 #pragma mark UIScrollViewDelegate
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)aScrollView {
-    return [scrollView imageView];
+	return [scrollView imageView];
 }
 @end
 

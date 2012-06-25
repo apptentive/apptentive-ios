@@ -61,7 +61,7 @@ enum {
 }
 
 - (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
+	[super didReceiveMemoryWarning];
 }
 
 - (IBAction)sendSurvey {
@@ -162,7 +162,7 @@ enum {
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 	return YES;
 }
-	 
+
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
 	if (activeTextView != nil) {
 		
@@ -355,13 +355,13 @@ enum {
 			//[textView sizeToFit];
 			[self sizeTextView:textView];
 			/*
-			CGRect cellFrame = cell.frame;
-			cellFrame.size.height = textView.frame.size.height + 20.0;
-			cell.frame = cellFrame;
+			 CGRect cellFrame = cell.frame;
+			 cellFrame.size.height = textView.frame.size.height + 20.0;
+			 cell.frame = cellFrame;
 			 */
 		}
 	}
-
+	
 	return cell;
 }
 
@@ -460,7 +460,7 @@ enum {
 		ATCellTextView *ctv = (ATCellTextView *)textView;
 		ctv.question.answerText = ctv.text;
 	}
-
+	
 	if ([self sizeTextView:(ATCellTextView *)textView]) {
 		[tableView beginUpdates];
 		[tableView endUpdates];
@@ -568,10 +568,10 @@ enum {
 	CGRect f = textView.frame;
 	CGFloat originalHeight = f.size.height;
 	CGSize maxSize = CGSizeMake(f.size.width, 150);
-//	CGSize sizeThatFits = [textView.text sizeWithFont:textView.font constrainedToSize:maxSize lineBreakMode:UILineBreakModeWordWrap];
+	//	CGSize sizeThatFits = [textView.text sizeWithFont:textView.font constrainedToSize:maxSize lineBreakMode:UILineBreakModeWordWrap];
 	CGSize sizeThatFits = [textView sizeThatFits:maxSize];
 	if (originalHeight != sizeThatFits.height) {
-//		NSLog(@"old: %f, new: %f", originalHeight, sizeThatFits.height);
+		//		NSLog(@"old: %f, new: %f", originalHeight, sizeThatFits.height);
 		f.size.height = sizeThatFits.height;
 		textView.frame = f;
 		didChange = YES;
@@ -598,7 +598,7 @@ enum {
 	CGRect kbFrame = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
 	CGRect kbAdjustedFrame = [tableView.window convertRect:kbFrame toView:tableView];
 	CGSize kbSize = kbAdjustedFrame.size;
-
+	
 	UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
 	tableView.contentInset = contentInsets;
 	tableView.scrollIndicatorInsets = contentInsets;
@@ -611,8 +611,8 @@ enum {
 		if (!CGRectContainsPoint(aRect, r.origin) ) {
 			[activeTextView becomeFirstResponder];
 			[tableView scrollRectToVisible:CGRectInset(activeTextEntryCell.frame, 0, -10) animated:YES];
-//			CGPoint scrollPoint = CGPointMake(0.0, r.origin.y - kbSize.height);
-//			[tableView setContentOffset:scrollPoint animated:YES];
+			//			CGPoint scrollPoint = CGPointMake(0.0, r.origin.y - kbSize.height);
+			//			[tableView setContentOffset:scrollPoint animated:YES];
 		}
 	}
 }

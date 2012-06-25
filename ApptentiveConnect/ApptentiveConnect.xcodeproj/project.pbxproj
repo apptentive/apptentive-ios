@@ -216,7 +216,7 @@
 		4936AE7E1379DECE00A4B17F /* ATContactStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATContactStorage.m; sourceTree = "<group>"; };
 		4936AE811379DECE00A4B17F /* ATFeedback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATFeedback.h; sourceTree = "<group>"; };
 		4936AE821379DECE00A4B17F /* ATFeedback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATFeedback.m; sourceTree = "<group>"; };
-		493AEB1615990A4D00DFD4C7 /* ATSurveys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveys.h; sourceTree = "<group>"; };
+		493AEB1615990A4D00DFD4C7 /* ATSurveys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATSurveys.h; path = Surveys/ATSurveys.h; sourceTree = "<group>"; };
 		493AEB1715990A4D00DFD4C7 /* ATSurveys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveys.m; sourceTree = "<group>"; };
 		493AEB1915990A4D00DFD4C7 /* ATSurvey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurvey.h; sourceTree = "<group>"; };
 		493AEB1A15990A4D00DFD4C7 /* ATSurvey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurvey.m; sourceTree = "<group>"; };
@@ -404,7 +404,6 @@
 		493AEB1515990A4D00DFD4C7 /* Surveys */ = {
 			isa = PBXGroup;
 			children = (
-				493AEB1615990A4D00DFD4C7 /* ATSurveys.h */,
 				493AEB1715990A4D00DFD4C7 /* ATSurveys.m */,
 				493AEB1815990A4D00DFD4C7 /* Model */,
 				493AEB1F15990A4D00DFD4C7 /* Persistence */,
@@ -518,7 +517,6 @@
 		4987FA7C157ACA8C00AF2078 /* Metrics */ = {
 			isa = PBXGroup;
 			children = (
-				4987FA95157AE53500AF2078 /* ApptentiveMetrics.h */,
 				4987FA96157AE53500AF2078 /* ApptentiveMetrics.m */,
 				4987FA97157AE53500AF2078 /* ATMetric.h */,
 				4987FA98157AE53600AF2078 /* ATMetric.m */,
@@ -596,11 +594,13 @@
 		49C00295133413BB0071F088 /* source */ = {
 			isa = PBXGroup;
 			children = (
-				4987FA7C157ACA8C00AF2078 /* Metrics */,
-				493AEB1515990A4D00DFD4C7 /* Surveys */,
 				49C00296133413BB0071F088 /* ApptentiveConnect-Prefix.pch */,
 				49C00297133413BB0071F088 /* ATConnect.h */,
+				4987FA95157AE53500AF2078 /* ApptentiveMetrics.h */,
+				493AEB1615990A4D00DFD4C7 /* ATSurveys.h */,
 				49C00298133413BB0071F088 /* ATConnect.m */,
+				4987FA7C157ACA8C00AF2078 /* Metrics */,
+				493AEB1515990A4D00DFD4C7 /* Surveys */,
 				4936AE681379DE6A00A4B17F /* Controllers */,
 				49B3D964133D843D00B5A5CD /* Custom Views */,
 				4936AE741379DEBB00A4B17F /* Misc */,

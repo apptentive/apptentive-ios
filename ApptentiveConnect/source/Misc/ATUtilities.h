@@ -14,9 +14,7 @@
 
 #define kApptentiveHostName @"apptentive.com"
 
-@interface ATUtilities : NSObject {
-    
-}
+@interface ATUtilities : NSObject
 #if TARGET_OS_IPHONE
 + (UIImage *)imageByTakingScreenshot;
 + (UIImage *)imageByRotatingImage:(UIImage *)image byRadians:(CGFloat)radians;

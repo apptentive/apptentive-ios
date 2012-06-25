@@ -11,32 +11,32 @@
 @implementation ATSurveyQuestion
 @synthesize type;
 @synthesize responseRequired;
-@synthesize identifier=identifier$;
-@synthesize questionText=questionText$;
-@synthesize instructionsText=instructionsText$;
-@synthesize value=value$;
-@synthesize answerChoices=answerChoices$;
-@synthesize answerText=answerText$;
-@synthesize selectedAnswerChoices=selectedAnswerChoices$;
+@synthesize identifier;
+@synthesize questionText;
+@synthesize instructionsText;
+@synthesize value;
+@synthesize answerChoices;
+@synthesize answerText;
+@synthesize selectedAnswerChoices;
 @synthesize minSelectionCount;
 @synthesize maxSelectionCount;
 
 - (id)init {
 	if ((self = [super init])) {
-		answerChoices$ = [[NSMutableArray alloc] init];
-		selectedAnswerChoices$ = [[NSMutableArray alloc] init];
+		answerChoices = [[NSMutableArray alloc] init];
+		selectedAnswerChoices = [[NSMutableArray alloc] init];
 	}
 	return self;
 }
 
 - (void)dealloc {
-	[identifier$ release], identifier$ = nil;
-	[questionText$ release], questionText$ = nil;
-	[instructionsText$ release], instructionsText$ = nil;
-	[value$ release], value$ = nil;
-	[answerChoices$ release], answerChoices$ = nil;
-	[answerText$ release], answerText$ = nil;
-	[selectedAnswerChoices$ release], selectedAnswerChoices$ = nil;
+	[identifier release], identifier = nil;
+	[questionText release], questionText = nil;
+	[instructionsText release], instructionsText = nil;
+	[value release], value = nil;
+	[answerChoices release], answerChoices = nil;
+	[answerText release], answerText = nil;
+	[selectedAnswerChoices release], selectedAnswerChoices = nil;
 	[super dealloc];
 }
 
@@ -82,12 +82,12 @@
 @end
 
 @implementation ATSurveyQuestionAnswer
-@synthesize identifier=identifier$;
-@synthesize value=value$;
+@synthesize identifier;
+@synthesize value;
 
 - (void)dealloc {
-	[identifier$ release], identifier$ = nil;
-	[value$ release], value$ = nil;
+	[identifier release], identifier = nil;
+	[value release], value = nil;
 	[super dealloc];
 }
 @end

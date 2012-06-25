@@ -11,7 +11,7 @@
 
 @interface ATCenteringImageScrollView : UIScrollView {
 @private
-    UIImageView *imageView;
+	UIImageView *imageView;
 }
 - (id)initWithImage:(UIImage *)image;
 - (UIImageView *)imageView;

@@ -30,10 +30,10 @@ typedef enum {
  connection state, completion percentage, etc. */
 @interface ATAPIRequest : NSObject {
 @private
-    ATURLConnection *connection;
-    NSString *channelName;
-    BOOL cancelled;
-    float percentageComplete;
+	ATURLConnection *connection;
+	NSString *channelName;
+	BOOL cancelled;
+	float percentageComplete;
 }
 @property (nonatomic, assign) ATAPIRequestReturnType returnType;
 @property (nonatomic, assign) BOOL failed;

@@ -16,14 +16,14 @@
  application. */
 @interface ATAppRatingFlow : NSObject 
 #if TARGET_OS_IPHONE
-    <UIAlertViewDelegate>
+<UIAlertViewDelegate>
 #endif
 {
 @private
-    NSString *iTunesAppID;
+	NSString *iTunesAppID;
 #if TARGET_OS_IPHONE
-    UIAlertView *enjoymentDialog;
-    UIAlertView *ratingDialog;
+	UIAlertView *enjoymentDialog;
+	UIAlertView *ratingDialog;
 #endif
 	
 	NSUInteger daysBeforePrompt;

@@ -16,7 +16,7 @@ NSString * const ATImageViewChoseImage;
 
 @interface ATSimpleImageViewController : UIViewController <UIActionSheetDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate> {
 @private
-    ATCenteringImageScrollView *scrollView;
+	ATCenteringImageScrollView *scrollView;
 	ATFeedback *feedback;
 	ATFeedbackController *controller;
 	BOOL shouldResign;

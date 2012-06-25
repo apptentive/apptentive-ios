@@ -12,8 +12,8 @@
 
 @interface ATTaskQueue : NSObject <NSCoding> {
 @private
-    ATTask *activeTask;
-    NSMutableArray *tasks;
+	ATTask *activeTask;
+	NSMutableArray *tasks;
 }
 + (NSString *)taskQueuePath;
 + (BOOL)serializedQueueExists;

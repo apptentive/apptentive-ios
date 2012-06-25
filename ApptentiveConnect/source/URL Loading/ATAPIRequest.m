@@ -22,43 +22,43 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 @synthesize returnType, failed, errorTitle, errorMessage, timeoutInterval, delegate;
 
 - (id)initWithConnection:(ATURLConnection *)aConnection channelName:(NSString *)aChannelName {
-    if ((self = [super init])) {
-        connection = [aConnection retain];
-        connection.delegate = self;
-        channelName = [aChannelName retain];
-    }
-    return self;
+	if ((self = [super init])) {
+		connection = [aConnection retain];
+		connection.delegate = self;
+		channelName = [aChannelName retain];
+	}
+	return self;
 }
 
 - (void)dealloc {
-    self.delegate = nil;
-    if (connection) {
-        connection.delegate = nil;
-        [[ATConnectionManager sharedSingleton] cancelConnection:connection inChannel:channelName];
-        [connection release], connection = nil;
-    }
-    self.errorTitle = nil;
-    self.errorMessage = nil;
-    [channelName release], channelName = nil;
-    
-    [super dealloc];
+	self.delegate = nil;
+	if (connection) {
+		connection.delegate = nil;
+		[[ATConnectionManager sharedSingleton] cancelConnection:connection inChannel:channelName];
+		[connection release], connection = nil;
+	}
+	self.errorTitle = nil;
+	self.errorMessage = nil;
+	[channelName release], channelName = nil;
+	
+	[super dealloc];
 }
 
 - (void)start {
-    @synchronized(self) {
-        if (connection) {
-            [[ATConnectionManager sharedSingleton] addConnection:connection toChannel:channelName];
-            [[ATConnectionManager sharedSingleton] start];
-        }
-    }
+	@synchronized(self) {
+		if (connection) {
+			[[ATConnectionManager sharedSingleton] addConnection:connection toChannel:channelName];
+			[[ATConnectionManager sharedSingleton] start];
+		}
+	}
 }
 
 - (void)cancel {
-    @synchronized(self) {
+	@synchronized(self) {
 		cancelled = YES;
-        if (connection) {
-            [[ATConnectionManager sharedSingleton] cancelConnection:connection inChannel:channelName];
-        }
+		if (connection) {
+			[[ATConnectionManager sharedSingleton] cancelConnection:connection inChannel:channelName];
+		}
 	}
 }
 
@@ -73,7 +73,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 }
 
 - (float)percentageComplete {
-    return percentageComplete;
+	return percentageComplete;
 }
 
 #pragma mark ATURLConnection Delegates
@@ -84,7 +84,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	int statusCode = sender.statusCode;
 	switch (statusCode) {
 		case 200:
-        case 201:
+		case 201:
 		case 400: // rate limit reached
 		case 403: // whatevs, probably private feed
 			break;
@@ -105,23 +105,23 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	NSObject *result = nil;
 	do { // once
 		NSData *d = [sender responseData];
-        /*!!!!! Prefix line with // to debug HTTP stuff.
-        if (YES) {
-            NSString *a = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];
-            NSLog(@"request: %@", [connection requestAsString]);
-            NSLog(@"a: %@", a);
-        }
-        // */
-        
-        if (self.failed) {
-            NSData *d = [sender responseData];
-            NSString *a = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];
-            NSLog(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
-            NSLog(@"Status was: %d", sender.statusCode);
-            NSLog(@"Request was: %@", [connection requestAsString]);
-            NSLog(@"Response was: %@", a);
-        }
-        
+		/*!!!!! Prefix line with // to debug HTTP stuff.
+		 if (YES) {
+		 NSString *a = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];
+		 NSLog(@"request: %@", [connection requestAsString]);
+		 NSLog(@"a: %@", a);
+		 }
+		 // */
+		
+		if (self.failed) {
+			NSData *d = [sender responseData];
+			NSString *a = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];
+			NSLog(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
+			NSLog(@"Status was: %d", sender.statusCode);
+			NSLog(@"Request was: %@", [connection requestAsString]);
+			NSLog(@"Response was: %@", a);
+		}
+		
 		if (!d) break;
 		if (self.returnType == ATAPIRequestReturnTypeData) {
 			result = d;
@@ -134,7 +134,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 			result = s;
 			break;
 		}
-        
+		
 		if (self.returnType == ATAPIRequestReturnTypeJSON) {
 			id json = [s objectFromJSONString];
 			if (!json) {
@@ -148,13 +148,13 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	} while (NO);
 	
 	if (delegate) {
-        if (self.failed) {
-            [delegate at_APIRequestDidFail:self];
-        } else {
-            [delegate at_APIRequestDidFinish:self result:result];
-        }
+		if (self.failed) {
+			[delegate at_APIRequestDidFail:self];
+		} else {
+			[delegate at_APIRequestDidFinish:self result:result];
+		}
 	}
-    [[NSNotificationCenter defaultCenter] postNotificationName:ATAPIRequestStatusChanged object:self];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATAPIRequestStatusChanged object:self];
 }
 
 - (void)connectionFailed:(ATURLConnection *)sender {
@@ -169,27 +169,27 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 		self.errorTitle = ATLocalizedString(@"Network Connection Error", @"");
 		self.errorMessage = [sender.connectionError localizedDescription];
 	}
-    /*!!!!! Prefix line with // to debug HTTP stuff.
-    if (YES) {
-        NSData *d = [sender responseData];
-        NSString *a = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];
-        NSLog(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
-        NSLog(@"Status was: %d", sender.statusCode);
-        NSLog(@"Request was: %@", [connection requestAsString]);
-        NSLog(@"Response was: %@", a);
-    }
-    // */
+	/*!!!!! Prefix line with // to debug HTTP stuff.
+	 if (YES) {
+	 NSData *d = [sender responseData];
+	 NSString *a = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];
+	 NSLog(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
+	 NSLog(@"Status was: %d", sender.statusCode);
+	 NSLog(@"Request was: %@", [connection requestAsString]);
+	 NSLog(@"Response was: %@", a);
+	 }
+	 // */
 	if (delegate) {
-        [delegate at_APIRequestDidFail:self];
+		[delegate at_APIRequestDidFail:self];
 	}
-    [[NSNotificationCenter defaultCenter] postNotificationName:ATAPIRequestStatusChanged object:self];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATAPIRequestStatusChanged object:self];
 }
 
 - (void)connectionDidProgress:(ATURLConnection *)sender {
-    percentageComplete = sender.percentComplete;
-    if (delegate && [delegate respondsToSelector:@selector(at_APIRequestDidProgress:)]) {
-        [delegate at_APIRequestDidProgress:self];
-    }
-    [[NSNotificationCenter defaultCenter] postNotificationName:ATAPIRequestStatusChanged object:self];
+	percentageComplete = sender.percentComplete;
+	if (delegate && [delegate respondsToSelector:@selector(at_APIRequestDidProgress:)]) {
+		[delegate at_APIRequestDidProgress:self];
+	}
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATAPIRequestStatusChanged object:self];
 }
 @end

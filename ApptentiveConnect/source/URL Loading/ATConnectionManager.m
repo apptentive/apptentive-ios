@@ -68,9 +68,9 @@ static ATConnectionManager *sharedSingleton = nil;
 
 
 - (ATConnectionChannel *)channelForName:(NSString *)channelName {
-    if (!channelName) {
-        channelName = PLACEHOLDER_CHANNEL_NAME;
-    }
+	if (!channelName) {
+		channelName = PLACEHOLDER_CHANNEL_NAME;
+	}
 	ATConnectionChannel *channel = [channels objectForKey:channelName];
 	if (!channel) {
 		channel = [[ATConnectionChannel alloc] init];

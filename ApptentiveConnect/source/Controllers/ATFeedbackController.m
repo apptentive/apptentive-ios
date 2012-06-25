@@ -69,21 +69,21 @@ enum {
 
 @implementation ATFeedbackController
 @synthesize feedbackContainerView;
-@synthesize window=window$;
-@synthesize doneButton=doneButton$;
-@synthesize toolbar=toolbar$;
-@synthesize redLineView=redLineView$;
-@synthesize grayLineView=grayLineView$;
-@synthesize backgroundView=backgroundView$;
-@synthesize scrollView=scrollView$;
-@synthesize emailField=emailField$;
-@synthesize feedbackView=feedbackView$;
-@synthesize logoControl=logoControl$;
-@synthesize logoImageView=logoImageView$;
-@synthesize taglineLabel=taglineLabel$;
+@synthesize window;
+@synthesize doneButton;
+@synthesize toolbar;
+@synthesize redLineView;
+@synthesize grayLineView;
+@synthesize backgroundView;
+@synthesize scrollView;
+@synthesize emailField;
+@synthesize feedbackView;
+@synthesize logoControl;
+@synthesize logoImageView;
+@synthesize taglineLabel;
 @synthesize attachmentOptions;
-@synthesize feedback=feedback;
-@synthesize customPlaceholderText=customPlaceholderText$;
+@synthesize feedback;
+@synthesize customPlaceholderText;
 @synthesize showEmailAddressField;
 
 - (id)init {
@@ -110,12 +110,12 @@ enum {
 }
 
 - (void)setFeedback:(ATFeedback *)newFeedback {
-    if (feedback != newFeedback) {
-        [feedback release];
-        feedback = nil;
-        feedback = [newFeedback retain];
-        [self setupFeedback];
-    }
+	if (feedback != newFeedback) {
+		[feedback release];
+		feedback = nil;
+		feedback = [newFeedback retain];
+		[self setupFeedback];
+	}
 }
 
 - (void)presentFromViewController:(UIViewController *)newPresentingViewController animated:(BOOL)animated {
@@ -175,20 +175,20 @@ enum {
 	
 	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
 	
-    switch (orientation) {
+	switch (orientation) {
 		case UIInterfaceOrientationPortraitUpsideDown:
 			startingPoint = CGPointMake(center.x, center.y + self.window.bounds.size.height);
 			break;
-        case UIInterfaceOrientationLandscapeLeft:
+		case UIInterfaceOrientationLandscapeLeft:
 			startingPoint = CGPointMake(center.x - self.window.bounds.size.width, center.y);
-            break;
-        case UIInterfaceOrientationLandscapeRight:
+			break;
+		case UIInterfaceOrientationLandscapeRight:
 			startingPoint = CGPointMake(center.x + self.window.bounds.size.width, center.y);
-            break;
-        default: // as UIInterfaceOrientationPortrait
+			break;
+		default: // as UIInterfaceOrientationPortrait
 			startingPoint = CGPointMake(center.x, center.y - animationBounds.size.height);
-            break;
-    }
+			break;
+	}
 	
 	[self positionInWindow];
 	
@@ -197,13 +197,13 @@ enum {
 	} else {
 		[self.feedbackView becomeFirstResponder];
 	}
-
+	
 	self.window.center = CGPointMake(CGRectGetMidX(endingFrame), CGRectGetMidY(endingFrame));
 	self.view.center = [self offscreenPositionOfView];
 	
 	CGRect newFrame = [self onscreenRectOfView];
 	CGPoint newViewCenter = CGPointMake(CGRectGetMidX(newFrame), CGRectGetMidY(newFrame));
-
+	
 	ATShadowView *shadowView = [[ATShadowView alloc] initWithFrame:self.window.bounds];
 	shadowView.tag = kFeedbackGradientLayerTag;
 	[self.window addSubview:shadowView];
@@ -230,13 +230,13 @@ enum {
 }
 
 - (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
+	[super didReceiveMemoryWarning];
 }
 
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackChanged:) name:UITextViewTextDidChangeNotification object:self.feedbackView];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackChanged:) name:UITextViewTextDidChangeNotification object:self.feedbackView];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(screenshotChanged:) name:ATImageViewChoseImage object:nil];
 	
 	self.redLineView.backgroundColor = [UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_dotted_red_line"]];
@@ -257,7 +257,7 @@ enum {
 		paperclipBackgroundView.frame = CGRectMake(viewBounds.size.width - paperclipBackground.size.width + 3.0, [self attachmentVerticalOffset] + 6.0, paperclipBackground.size.width, paperclipBackground.size.height);
 		paperclipBackgroundView.tag = kFeedbackPaperclipBackgroundTag;
 		paperclipBackgroundView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-				
+		
 		UIImage *paperclip = [ATBackend imageNamed:@"at_paperclip_foreground"];
 		paperclipView = [[UIImageView alloc] initWithImage:paperclip];
 		[self.view addSubview:paperclipView];
@@ -303,11 +303,11 @@ enum {
 	
 	self.emailField.placeholder = ATLocalizedString(@"Email Address", @"Email Address Field Placeholder");
 	
-    if (self.customPlaceholderText) {
-        self.feedbackView.placeholder = self.customPlaceholderText;
-    } else {
-        self.feedbackView.placeholder = ATLocalizedString(@"Feedback (required)", @"Feedback placeholder");
-    }
+	if (self.customPlaceholderText) {
+		self.feedbackView.placeholder = self.customPlaceholderText;
+	} else {
+		self.feedbackView.placeholder = ATLocalizedString(@"Feedback (required)", @"Feedback placeholder");
+	}
 	
 	self.toolbar.items = toolbarItems;
 	[toolbarItems release], toolbarItems = nil;
@@ -316,7 +316,7 @@ enum {
 	
 	[self setupFeedback];
 	[self updateSendButtonState];
-    [super viewDidLoad];
+	[super viewDidLoad];
 }
 
 - (void)viewDidUnload {
@@ -326,8 +326,8 @@ enum {
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-//	return YES;
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+	//	return YES;
+	return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
@@ -380,29 +380,29 @@ enum {
 
 - (IBAction)photoPressed:(id)sender {
 	[self.emailField resignFirstResponder];
-    [self.feedbackView resignFirstResponder];
+	[self.feedbackView resignFirstResponder];
 	[self hide:YES];
-    [self captureFeedbackState];
-    ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithFeedback:self.feedback feedbackController:self];
+	[self captureFeedbackState];
+	ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithFeedback:self.feedback feedbackController:self];
 	[presentingViewController presentModalViewController:vc animated:YES];
-    [vc release];
+	[vc release];
 }
 
 - (IBAction)showInfoView:(id)sender {
 	[self hide:YES];
-    ATInfoViewController *vc = [[ATInfoViewController alloc] initWithFeedbackController:self];
-    [presentingViewController presentModalViewController:vc animated:YES];
-    [vc release];
+	ATInfoViewController *vc = [[ATInfoViewController alloc] initWithFeedbackController:self];
+	[presentingViewController presentModalViewController:vc animated:YES];
+	[vc release];
 }
 
 - (IBAction)cancelFeedback:(id)sender {
-    [self captureFeedbackState];
+	[self captureFeedbackState];
 	[self dismiss:YES];
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATFeedbackDidHideWindowNotification object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:ATFeedbackEventTappedCancel] forKey:ATFeedbackWindowHideEventKey]];
 }
 
 - (void)dismiss:(BOOL)animated {
-    [self captureFeedbackState];
+	[self captureFeedbackState];
 	
 	[self.emailField resignFirstResponder];
 	[self.feedbackView resignFirstResponder];
@@ -437,16 +437,16 @@ enum {
 
 #pragma mark UITextFieldDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    return [self shouldReturn:textField];
+	return [self shouldReturn:textField];
 }
 
 #pragma mark UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    UITextField *textField = (UITextField *)[alertView viewWithTag:kATEmailAlertTextFieldTag];
-    if (textField) {
-        self.feedback.email = textField.text;
-        [self sendFeedbackAndDismiss];
-    }
+	UITextField *textField = (UITextField *)[alertView viewWithTag:kATEmailAlertTextFieldTag];
+	if (textField) {
+		self.feedback.email = textField.text;
+		[self sendFeedbackAndDismiss];
+	}
 }
 @end
 
@@ -490,36 +490,36 @@ enum {
 }
 
 - (void)setupFeedback {
-    if (self.feedbackView && [self.feedbackView isDefault] && self.feedback.text) {
-        self.feedbackView.text = self.feedback.text;
-    }
-    if (self.emailField && (!self.emailField.text || [@"" isEqualToString:self.emailField.text]) && self.feedback.email) {
-        self.emailField.text = self.feedback.email;
-    }
+	if (self.feedbackView && [self.feedbackView isDefault] && self.feedback.text) {
+		self.feedbackView.text = self.feedback.text;
+	}
+	if (self.emailField && (!self.emailField.text || [@"" isEqualToString:self.emailField.text]) && self.feedback.email) {
+		self.emailField.text = self.feedback.email;
+	}
 	[self updateThumbnail];
 }
 
 - (BOOL)shouldReturn:(UIView *)view {
-    if (view == self.emailField) {
-        [self.feedbackView becomeFirstResponder];
-        return NO;
-    } else if (view == self.feedbackView) {
+	if (view == self.emailField) {
+		[self.feedbackView becomeFirstResponder];
+		return NO;
+	} else if (view == self.feedbackView) {
 		[self.feedbackView resignFirstResponder];
-        return YES;
-    }
-    return YES;
+		return YES;
+	}
+	return YES;
 }
 
 - (UIWindow *)findMainWindowPreferringMainScreen:(BOOL)preferMainScreen {
 	UIApplication *application = [UIApplication sharedApplication];
-	for (UIWindow *window in [[application windows] reverseObjectEnumerator]) {
-		if (window.rootViewController || window.isKeyWindow) {
-			if (preferMainScreen && [window respondsToSelector:@selector(screen)]) {
-				if (window.screen && [window.screen isEqual:[UIScreen mainScreen]]) {
-					return window;
+	for (UIWindow *tmpWindow in [[application windows] reverseObjectEnumerator]) {
+		if (tmpWindow.rootViewController || tmpWindow.isKeyWindow) {
+			if (preferMainScreen && [tmpWindow respondsToSelector:@selector(screen)]) {
+				if (tmpWindow.screen && [tmpWindow.screen isEqual:[UIScreen mainScreen]]) {
+					return tmpWindow;
 				}
 			} else {
-				return window;
+				return tmpWindow;
 			}
 		}
 	}
@@ -542,36 +542,36 @@ enum {
 }
 
 + (CGFloat)rotationOfViewHierarchyInRadians:(UIView *)leafView {
-    CGAffineTransform t = leafView.transform;
-    UIView *s = leafView.superview;
-    while (s && s != leafView.window) {
-        t = CGAffineTransformConcat(t, s.transform);
-        s = s.superview;
-    }
-    return atan2(t.b, t.a);
+	CGAffineTransform t = leafView.transform;
+	UIView *s = leafView.superview;
+	while (s && s != leafView.window) {
+		t = CGAffineTransformConcat(t, s.transform);
+		s = s.superview;
+	}
+	return atan2(t.b, t.a);
 }
 
 + (CGAffineTransform)viewTransformInWindow:(UIWindow *)window {
-    CGAffineTransform result = CGAffineTransformIdentity;
-    do { // once
-        if (!window) break;
-        
-        if ([[window rootViewController] view]) {
-            CGFloat rotation = [ATFeedbackController rotationOfViewHierarchyInRadians:[[window rootViewController] view]];
-            result = CGAffineTransformMakeRotation(rotation);
-            break;
-        }
-        
-        if ([[window subviews] count]) {
-            for (UIView *v in [window subviews]) {
-                if (!CGAffineTransformIsIdentity(v.transform)) {
-                    result = v.transform;
-                    break;
-                }
-            }
-        }
-    } while (NO);
-    return result;
+	CGAffineTransform result = CGAffineTransformIdentity;
+	do { // once
+		if (!window) break;
+		
+		if ([[window rootViewController] view]) {
+			CGFloat rotation = [ATFeedbackController rotationOfViewHierarchyInRadians:[[window rootViewController] view]];
+			result = CGAffineTransformMakeRotation(rotation);
+			break;
+		}
+		
+		if ([[window subviews] count]) {
+			for (UIView *v in [window subviews]) {
+				if (!CGAffineTransformIsIdentity(v.transform)) {
+					result = v.transform;
+					break;
+				}
+			}
+		}
+	} while (NO);
+	return result;
 }
 
 - (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
@@ -585,7 +585,7 @@ enum {
 	} else if ([animationID isEqualToString:@"animateOut"]) {
 		UIView *gradientView = [self.window viewWithTag:kFeedbackGradientLayerTag];
 		[gradientView removeFromSuperview];	
-
+		
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 		[presentingViewController.view setUserInteractionEnabled:YES];
 		[self.window resignKeyWindow];
@@ -623,33 +623,33 @@ enum {
 }
 
 - (void)feedbackChanged:(NSNotification *)notification {
-    if (notification.object == self.feedbackView) {
+	if (notification.object == self.feedbackView) {
 		[self updateSendButtonState];
-    }
+	}
 }
 
 - (void)contactInfoChanged:(NSNotification *)notification {
-    ATContactStorage *contact = [ATContactStorage sharedContactStorage];
-    if (contact.name) {
-        feedback.name = contact.name;
-    }
-    if (contact.phone) {
-        feedback.phone = contact.phone;
-    }
-    if (contact.email) {
-        feedback.email = contact.email;
-    }
+	ATContactStorage *contact = [ATContactStorage sharedContactStorage];
+	if (contact.name) {
+		feedback.name = contact.name;
+	}
+	if (contact.phone) {
+		feedback.phone = contact.phone;
+	}
+	if (contact.email) {
+		feedback.email = contact.email;
+	}
 }
 
 - (void)screenshotChanged:(NSNotification *)notification {
 	if (self.feedback.screenshot) {
-        self.feedback.screenshotSwitchEnabled = YES;
+		self.feedback.screenshotSwitchEnabled = YES;
 		[self updateThumbnail];
 	} 
 }
 
 - (void)captureFeedbackState {
-    self.feedback.text = self.feedbackView.text;
+	self.feedback.text = self.feedbackView.text;
 	self.feedback.email = self.emailField.text;
 }
 
@@ -796,7 +796,7 @@ enum {
 }
 
 - (void)sendFeedbackAndDismiss {
-    [[ATBackend sharedBackend] sendFeedback:self.feedback];
+	[[ATBackend sharedBackend] sendFeedback:self.feedback];
 	UIWindow *parentWindow = originalPresentingWindow;
 	if (parentWindow) {
 		ATHUDView *hud = [[ATHUDView alloc] initWithWindow:parentWindow];
@@ -833,20 +833,20 @@ enum {
 	
 	CGFloat windowWidth = 0.0;
 	
-    switch (orientation) { 
-        case UIInterfaceOrientationLandscapeLeft:
-        case UIInterfaceOrientationLandscapeRight:
+	switch (orientation) { 
+		case UIInterfaceOrientationLandscapeLeft:
+		case UIInterfaceOrientationLandscapeRight:
 			isLandscape = YES;
 			topPadding = statusBarSize.width;
 			windowWidth = h;
-            break;
-        case UIInterfaceOrientationPortraitUpsideDown:
+			break;
+		case UIInterfaceOrientationPortraitUpsideDown:
 		case UIInterfaceOrientationPortrait:
 		default:
 			topPadding = statusBarSize.height;
 			windowWidth = w;
-            break;
-    }
+			break;
+	}
 	
 	CGFloat viewHeight = 0.0;
 	CGFloat viewWidth = 0.0;
@@ -895,27 +895,27 @@ enum {
 	CGRect newFrame = originalPresentingWindow.bounds;
 	CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
 	
-    switch (orientation) { 
-        case UIInterfaceOrientationPortraitUpsideDown:
-            angle = M_PI; 
-            newFrame.size.height -= statusBarSize.height;
-            break;
-        case UIInterfaceOrientationLandscapeLeft:
-            angle = - M_PI / 2.0f;
-            newFrame.origin.x += statusBarSize.width;
-            newFrame.size.width -= statusBarSize.width;
-            break;
-        case UIInterfaceOrientationLandscapeRight:
-            angle = M_PI / 2.0f;
-            newFrame.size.width -= statusBarSize.width;
-            break;
+	switch (orientation) { 
+		case UIInterfaceOrientationPortraitUpsideDown:
+			angle = M_PI; 
+			newFrame.size.height -= statusBarSize.height;
+			break;
+		case UIInterfaceOrientationLandscapeLeft:
+			angle = - M_PI / 2.0f;
+			newFrame.origin.x += statusBarSize.width;
+			newFrame.size.width -= statusBarSize.width;
+			break;
+		case UIInterfaceOrientationLandscapeRight:
+			angle = M_PI / 2.0f;
+			newFrame.size.width -= statusBarSize.width;
+			break;
 		case UIInterfaceOrientationPortrait:
-        default:
-            angle = 0.0;
-            newFrame.origin.y += statusBarSize.height;
-            newFrame.size.height -= statusBarSize.height;
-            break;
-    }
+		default:
+			angle = 0.0;
+			newFrame.origin.y += statusBarSize.height;
+			newFrame.size.height -= statusBarSize.height;
+			break;
+	}
 	[self.toolbar sizeToFit];
 	
 	CGRect toolbarBounds = self.toolbar.bounds;
@@ -927,8 +927,8 @@ enum {
 		containerView.frame = containerFrame;
 	}
 	
-    self.window.transform = CGAffineTransformMakeRotation(angle);
-    self.window.frame = newFrame;
+	self.window.transform = CGAffineTransformMakeRotation(angle);
+	self.window.frame = newFrame;
 	CGRect onscreenRect = [self onscreenRectOfView];
 	CGFloat viewWidth = onscreenRect.size.width;
 	self.view.frame = onscreenRect;

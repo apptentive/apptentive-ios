@@ -11,22 +11,19 @@
 
 @implementation ApptentiveConnectTests
 
-- (void)setUp
-{
-    [super setUp];
-    
-    // Set-up code here.
+- (void)setUp {
+	[super setUp];
+	
+	// Set-up code here.
 }
 
-- (void)tearDown
-{
-    // Tear-down code here.
-    
-    [super tearDown];
+- (void)tearDown {
+	// Tear-down code here.
+	
+	[super tearDown];
 }
 
-- (void)testExample
-{
+- (void)testExample {
 }
 
 @end

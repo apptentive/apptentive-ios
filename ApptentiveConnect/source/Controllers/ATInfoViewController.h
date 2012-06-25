@@ -11,10 +11,10 @@
 @class ATFeedbackController;
 
 /*! View controller for showing information about Apptentive, as well as the
-    tasks which are currently in progress. */
+ tasks which are currently in progress. */
 @interface ATInfoViewController : UIViewController <UITableViewDataSource> {
-    IBOutlet UIView *headerView;
-    IBOutlet UITableViewCell *progressCell;
+	IBOutlet UIView *headerView;
+	IBOutlet UITableViewCell *progressCell;
 @private
 	ATFeedbackController *controller;
 }

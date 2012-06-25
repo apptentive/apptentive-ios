@@ -24,10 +24,10 @@
 }
 
 - (id)initWithCoder:(NSCoder *)coder {
-    if ((self = [super initWithCoder:coder])) {
-        int version = [coder decodeIntForKey:@"survey_version"];
-        if (version == kATSurveyStorageVersion) {
-            self.identifier = [coder decodeObjectForKey:@"identifier"];
+	if ((self = [super initWithCoder:coder])) {
+		int version = [coder decodeIntForKey:@"survey_version"];
+		if (version == kATSurveyStorageVersion) {
+			self.identifier = [coder decodeObjectForKey:@"identifier"];
 			
 			if ([coder containsValueForKey:@"completion_seconds"]) {
 				self.completionSeconds = [(NSNumber *)[coder decodeObjectForKey:@"completion_seconds"] unsignedIntegerValue];
@@ -39,19 +39,19 @@
 			} else {
 				questionResponses = [[NSMutableArray alloc] init];
 			}
-        } else {
-            [self release];
-            return nil;
-        }
-    }
-    return self;
+		} else {
+			[self release];
+			return nil;
+		}
+	}
+	return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
 	[super encodeWithCoder:coder];
-    [coder encodeInt:kATSurveyStorageVersion forKey:@"survey_version"];
-    [coder encodeObject:self.identifier forKey:@"identifier"];
-    [coder encodeObject:questionResponses forKey:@"question_responses"];
+	[coder encodeInt:kATSurveyStorageVersion forKey:@"survey_version"];
+	[coder encodeObject:self.identifier forKey:@"identifier"];
+	[coder encodeObject:questionResponses forKey:@"question_responses"];
 	[coder encodeObject:[NSNumber numberWithUnsignedInteger:self.completionSeconds] forKey:@"completion_seconds"];
 }
 
@@ -95,11 +95,11 @@
 	}
 	[survey setObject:responses forKey:@"responses"];
 	[record setObject:survey forKey:@"survey"];
-    return d;
+	return d;
 }
 
 - (NSDictionary *)apiDictionary {
-    NSMutableDictionary *d = [NSMutableDictionary dictionaryWithDictionary:[super apiDictionary]];
+	NSMutableDictionary *d = [NSMutableDictionary dictionaryWithDictionary:[super apiDictionary]];
 	
 	if (self.identifier) {
 		[d setObject:self.identifier forKey:@"record[survey][id]"];
@@ -114,7 +114,7 @@
 		[d setObject:responseObject forKey:[NSString stringWithFormat:@"record[survey][responses][%@]", response.identifier]];
 		i++;
 	}
-    return d;
+	return d;
 }
 
 - (ATAPIRequest *)requestForSendingRecord {
@@ -127,23 +127,23 @@
 @synthesize identifier, response;
 
 - (id)initWithCoder:(NSCoder *)coder {
-    if ((self = [super init])) {
-        int version = [coder decodeIntForKey:@"survey_question_response_version"];
-        if (version == kATSurveyQuestionResponseStorageVersion) {
-            self.identifier = [coder decodeObjectForKey:@"identifier"];
+	if ((self = [super init])) {
+		int version = [coder decodeIntForKey:@"survey_question_response_version"];
+		if (version == kATSurveyQuestionResponseStorageVersion) {
+			self.identifier = [coder decodeObjectForKey:@"identifier"];
 			self.response = [coder decodeObjectForKey:@"response"];
-        } else {
-            [self release];
-            return nil;
-        }
-    }
-    return self;
+		} else {
+			[self release];
+			return nil;
+		}
+	}
+	return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
-    [coder encodeInt:kATSurveyQuestionResponseStorageVersion forKey:@"survey_question_response_version"];
-    [coder encodeObject:self.identifier forKey:@"identifier"];
-    [coder encodeObject:self.response forKey:@"response"];
+	[coder encodeInt:kATSurveyQuestionResponseStorageVersion forKey:@"survey_question_response_version"];
+	[coder encodeObject:self.identifier forKey:@"identifier"];
+	[coder encodeObject:self.response forKey:@"response"];
 }
 
 - (void)dealloc {

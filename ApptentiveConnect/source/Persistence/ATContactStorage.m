@@ -26,81 +26,81 @@ static ATContactStorage *sharedContactStorage = nil;
 @synthesize name, email, phone;
 
 + (NSString *)contactStoragePath {
-    return [[[ATBackend sharedBackend] supportDirectoryPath] stringByAppendingPathComponent:@"contactinfo.objects"];
+	return [[[ATBackend sharedBackend] supportDirectoryPath] stringByAppendingPathComponent:@"contactinfo.objects"];
 }
 
 + (BOOL)serializedVersionExists {
-    NSFileManager *fm = [NSFileManager defaultManager];
-    return [fm fileExistsAtPath:[ATContactStorage contactStoragePath]];
+	NSFileManager *fm = [NSFileManager defaultManager];
+	return [fm fileExistsAtPath:[ATContactStorage contactStoragePath]];
 }
 
 
 + (ATContactStorage *)sharedContactStorage {
-    @synchronized(self) {
-        if (sharedContactStorage == nil) {
-            if ([ATContactStorage serializedVersionExists]) {
-                sharedContactStorage = [[NSKeyedUnarchiver unarchiveObjectWithFile:[ATContactStorage contactStoragePath]] retain];
-            }
-            if (!sharedContactStorage) {
-                sharedContactStorage = [[ATContactStorage alloc] init];
-            }
-        }
-    }
-    return sharedContactStorage;
+	@synchronized(self) {
+		if (sharedContactStorage == nil) {
+			if ([ATContactStorage serializedVersionExists]) {
+				sharedContactStorage = [[NSKeyedUnarchiver unarchiveObjectWithFile:[ATContactStorage contactStoragePath]] retain];
+			}
+			if (!sharedContactStorage) {
+				sharedContactStorage = [[ATContactStorage alloc] init];
+			}
+		}
+	}
+	return sharedContactStorage;
 }
 
 + (void)releaseSharedContactStorage {
-    @synchronized(self) {
-        if (sharedContactStorage != nil) {
-            [sharedContactStorage save];
-            [sharedContactStorage release];
-            sharedContactStorage = nil;
-        }
-    }
+	@synchronized(self) {
+		if (sharedContactStorage != nil) {
+			[sharedContactStorage save];
+			[sharedContactStorage release];
+			sharedContactStorage = nil;
+		}
+	}
 }
 
 - (void)save {
-    @synchronized(self) {
-        [NSKeyedArchiver archiveRootObject:sharedContactStorage toFile:[ATContactStorage contactStoragePath]];
-    }
+	@synchronized(self) {
+		[NSKeyedArchiver archiveRootObject:sharedContactStorage toFile:[ATContactStorage contactStoragePath]];
+	}
 }
 
 - (id)initWithCoder:(NSCoder *)coder {
-    if ((self = [super init])) {
-        int version = [coder decodeIntForKey:@"version"];
-        if (version == kATContactStorageVersion) {
-            self.name = [coder decodeObjectForKey:@"name"];
-            self.email = [coder decodeObjectForKey:@"email"];
-            self.phone = [coder decodeObjectForKey:@"phone"];
-        } else {
-            [self release];
-            return nil;
-        }
-    }
-    return self;
+	if ((self = [super init])) {
+		int version = [coder decodeIntForKey:@"version"];
+		if (version == kATContactStorageVersion) {
+			self.name = [coder decodeObjectForKey:@"name"];
+			self.email = [coder decodeObjectForKey:@"email"];
+			self.phone = [coder decodeObjectForKey:@"phone"];
+		} else {
+			[self release];
+			return nil;
+		}
+	}
+	return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
-    [coder encodeInt:kATContactStorageVersion forKey:@"version"];
-    [coder encodeObject:self.name forKey:@"name"];
-    [coder encodeObject:self.email forKey:@"email"];
-    [coder encodeObject:self.phone forKey:@"phone"];
+	[coder encodeInt:kATContactStorageVersion forKey:@"version"];
+	[coder encodeObject:self.name forKey:@"name"];
+	[coder encodeObject:self.email forKey:@"email"];
+	[coder encodeObject:self.phone forKey:@"phone"];
 }
 
 - (void)dealloc {
-    [self teardown];
-    [super dealloc];
+	[self teardown];
+	[super dealloc];
 }
 @end
 
 @implementation ATContactStorage (Private)
 - (void)setup {
-    
+	
 }
 
 - (void)teardown {
-    self.name = nil;
-    self.phone = nil;
-    self.email = nil;
+	self.name = nil;
+	self.phone = nil;
+	self.email = nil;
 }
 @end

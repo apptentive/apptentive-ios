@@ -58,6 +58,31 @@
 		4936AE8B1379DECE00A4B17F /* ATBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE7C1379DECE00A4B17F /* ATBackend.m */; };
 		4936AE8C1379DECE00A4B17F /* ATContactStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE7E1379DECE00A4B17F /* ATContactStorage.m */; };
 		4936AE8E1379DECE00A4B17F /* ATFeedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE821379DECE00A4B17F /* ATFeedback.m */; };
+		493AEB2A15990A4D00DFD4C7 /* ATSurveys.h in Headers */ = {isa = PBXBuildFile; fileRef = 493AEB1615990A4D00DFD4C7 /* ATSurveys.h */; };
+		493AEB2B15990A4D00DFD4C7 /* ATSurveys.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB1715990A4D00DFD4C7 /* ATSurveys.m */; };
+		493AEB2C15990A4D00DFD4C7 /* ATSurveys.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB1715990A4D00DFD4C7 /* ATSurveys.m */; };
+		493AEB2D15990A4D00DFD4C7 /* ATSurvey.h in Headers */ = {isa = PBXBuildFile; fileRef = 493AEB1915990A4D00DFD4C7 /* ATSurvey.h */; };
+		493AEB2E15990A4D00DFD4C7 /* ATSurvey.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB1A15990A4D00DFD4C7 /* ATSurvey.m */; };
+		493AEB2F15990A4D00DFD4C7 /* ATSurvey.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB1A15990A4D00DFD4C7 /* ATSurvey.m */; };
+		493AEB3015990A4D00DFD4C7 /* ATSurveyParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 493AEB1B15990A4D00DFD4C7 /* ATSurveyParser.h */; };
+		493AEB3115990A4D00DFD4C7 /* ATSurveyParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB1C15990A4D00DFD4C7 /* ATSurveyParser.m */; };
+		493AEB3215990A4D00DFD4C7 /* ATSurveyParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB1C15990A4D00DFD4C7 /* ATSurveyParser.m */; };
+		493AEB3315990A4D00DFD4C7 /* ATSurveyQuestion.h in Headers */ = {isa = PBXBuildFile; fileRef = 493AEB1D15990A4D00DFD4C7 /* ATSurveyQuestion.h */; };
+		493AEB3415990A4D00DFD4C7 /* ATSurveyQuestion.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB1E15990A4D00DFD4C7 /* ATSurveyQuestion.m */; };
+		493AEB3515990A4D00DFD4C7 /* ATSurveyQuestion.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB1E15990A4D00DFD4C7 /* ATSurveyQuestion.m */; };
+		493AEB3615990A4D00DFD4C7 /* ATSurveyResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 493AEB2015990A4D00DFD4C7 /* ATSurveyResponse.h */; };
+		493AEB3715990A4D00DFD4C7 /* ATSurveyResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB2115990A4D00DFD4C7 /* ATSurveyResponse.m */; };
+		493AEB3815990A4D00DFD4C7 /* ATSurveyResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB2115990A4D00DFD4C7 /* ATSurveyResponse.m */; };
+		493AEB3915990A4D00DFD4C7 /* ATSurveysBackend.h in Headers */ = {isa = PBXBuildFile; fileRef = 493AEB2215990A4D00DFD4C7 /* ATSurveysBackend.h */; };
+		493AEB3A15990A4D00DFD4C7 /* ATSurveysBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB2315990A4D00DFD4C7 /* ATSurveysBackend.m */; };
+		493AEB3B15990A4D00DFD4C7 /* ATSurveysBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB2315990A4D00DFD4C7 /* ATSurveysBackend.m */; };
+		493AEB3C15990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 493AEB2515990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.h */; };
+		493AEB3D15990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB2615990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.m */; };
+		493AEB3E15990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB2615990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.m */; };
+		493AEB3F15990A4D00DFD4C7 /* ATSurveyViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 493AEB2815990A4D00DFD4C7 /* ATSurveyViewController.h */; };
+		493AEB4015990A4D00DFD4C7 /* ATSurveyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB2915990A4D00DFD4C7 /* ATSurveyViewController.m */; };
+		493AEB4115990A4D00DFD4C7 /* ATSurveyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB2915990A4D00DFD4C7 /* ATSurveyViewController.m */; };
+		493AEB4515990A6B00DFD4C7 /* ApptentiveSurveysTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB4415990A6B00DFD4C7 /* ApptentiveSurveysTests.m */; };
 		4942CC9113C7AD2D009BF758 /* ATAppRatingFlow.h in Headers */ = {isa = PBXBuildFile; fileRef = 4942CC8F13C7AD2D009BF758 /* ATAppRatingFlow.h */; settings = {ATTRIBUTES = (); }; };
 		4942CC9213C7AD2D009BF758 /* ATAppRatingFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4942CC9013C7AD2D009BF758 /* ATAppRatingFlow.m */; };
 		4942CC9313C7AD2D009BF758 /* ATAppRatingFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4942CC9013C7AD2D009BF758 /* ATAppRatingFlow.m */; };
@@ -191,6 +216,24 @@
 		4936AE7E1379DECE00A4B17F /* ATContactStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATContactStorage.m; sourceTree = "<group>"; };
 		4936AE811379DECE00A4B17F /* ATFeedback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATFeedback.h; sourceTree = "<group>"; };
 		4936AE821379DECE00A4B17F /* ATFeedback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATFeedback.m; sourceTree = "<group>"; };
+		493AEB1615990A4D00DFD4C7 /* ATSurveys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveys.h; sourceTree = "<group>"; };
+		493AEB1715990A4D00DFD4C7 /* ATSurveys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveys.m; sourceTree = "<group>"; };
+		493AEB1915990A4D00DFD4C7 /* ATSurvey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurvey.h; sourceTree = "<group>"; };
+		493AEB1A15990A4D00DFD4C7 /* ATSurvey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurvey.m; sourceTree = "<group>"; };
+		493AEB1B15990A4D00DFD4C7 /* ATSurveyParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveyParser.h; sourceTree = "<group>"; };
+		493AEB1C15990A4D00DFD4C7 /* ATSurveyParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveyParser.m; sourceTree = "<group>"; };
+		493AEB1D15990A4D00DFD4C7 /* ATSurveyQuestion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveyQuestion.h; sourceTree = "<group>"; };
+		493AEB1E15990A4D00DFD4C7 /* ATSurveyQuestion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveyQuestion.m; sourceTree = "<group>"; };
+		493AEB2015990A4D00DFD4C7 /* ATSurveyResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveyResponse.h; sourceTree = "<group>"; };
+		493AEB2115990A4D00DFD4C7 /* ATSurveyResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveyResponse.m; sourceTree = "<group>"; };
+		493AEB2215990A4D00DFD4C7 /* ATSurveysBackend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveysBackend.h; sourceTree = "<group>"; };
+		493AEB2315990A4D00DFD4C7 /* ATSurveysBackend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveysBackend.m; sourceTree = "<group>"; };
+		493AEB2515990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ATWebClient+SurveyAdditions.h"; sourceTree = "<group>"; };
+		493AEB2615990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ATWebClient+SurveyAdditions.m"; sourceTree = "<group>"; };
+		493AEB2815990A4D00DFD4C7 /* ATSurveyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveyViewController.h; sourceTree = "<group>"; };
+		493AEB2915990A4D00DFD4C7 /* ATSurveyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveyViewController.m; sourceTree = "<group>"; };
+		493AEB4315990A6B00DFD4C7 /* ApptentiveSurveysTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveysTests.h; sourceTree = "<group>"; };
+		493AEB4415990A6B00DFD4C7 /* ApptentiveSurveysTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveysTests.m; sourceTree = "<group>"; };
 		4942CC8F13C7AD2D009BF758 /* ATAppRatingFlow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAppRatingFlow.h; sourceTree = "<group>"; };
 		4942CC9013C7AD2D009BF758 /* ATAppRatingFlow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAppRatingFlow.m; sourceTree = "<group>"; };
 		49509A5F135658E200793EEC /* ATReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATReachability.h; path = Reachability/ATReachability.h; sourceTree = "<group>"; };
@@ -358,6 +401,61 @@
 			path = Persistence;
 			sourceTree = "<group>";
 		};
+		493AEB1515990A4D00DFD4C7 /* Surveys */ = {
+			isa = PBXGroup;
+			children = (
+				493AEB1615990A4D00DFD4C7 /* ATSurveys.h */,
+				493AEB1715990A4D00DFD4C7 /* ATSurveys.m */,
+				493AEB1815990A4D00DFD4C7 /* Model */,
+				493AEB1F15990A4D00DFD4C7 /* Persistence */,
+				493AEB2415990A4D00DFD4C7 /* URL Loading */,
+				493AEB2715990A4D00DFD4C7 /* View Controllers */,
+			);
+			path = Surveys;
+			sourceTree = "<group>";
+		};
+		493AEB1815990A4D00DFD4C7 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				493AEB1915990A4D00DFD4C7 /* ATSurvey.h */,
+				493AEB1A15990A4D00DFD4C7 /* ATSurvey.m */,
+				493AEB1B15990A4D00DFD4C7 /* ATSurveyParser.h */,
+				493AEB1C15990A4D00DFD4C7 /* ATSurveyParser.m */,
+				493AEB1D15990A4D00DFD4C7 /* ATSurveyQuestion.h */,
+				493AEB1E15990A4D00DFD4C7 /* ATSurveyQuestion.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		493AEB1F15990A4D00DFD4C7 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				493AEB2015990A4D00DFD4C7 /* ATSurveyResponse.h */,
+				493AEB2115990A4D00DFD4C7 /* ATSurveyResponse.m */,
+				493AEB2215990A4D00DFD4C7 /* ATSurveysBackend.h */,
+				493AEB2315990A4D00DFD4C7 /* ATSurveysBackend.m */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
+		493AEB2415990A4D00DFD4C7 /* URL Loading */ = {
+			isa = PBXGroup;
+			children = (
+				493AEB2515990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.h */,
+				493AEB2615990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.m */,
+			);
+			path = "URL Loading";
+			sourceTree = "<group>";
+		};
+		493AEB2715990A4D00DFD4C7 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				493AEB2815990A4D00DFD4C7 /* ATSurveyViewController.h */,
+				493AEB2915990A4D00DFD4C7 /* ATSurveyViewController.m */,
+			);
+			path = "View Controllers";
+			sourceTree = "<group>";
+		};
 		4942CC8E13C7AD2D009BF758 /* Rating Flow */ = {
 			isa = PBXGroup;
 			children = (
@@ -476,6 +574,8 @@
 				498B8E3D1519691900CA9A58 /* ATRatingPredicateTests.m */,
 				4987FAA5157AE59D00AF2078 /* ApptentiveMetricsTests.h */,
 				4987FAA6157AE59D00AF2078 /* ApptentiveMetricsTests.m */,
+				493AEB4315990A6B00DFD4C7 /* ApptentiveSurveysTests.h */,
+				493AEB4415990A6B00DFD4C7 /* ApptentiveSurveysTests.m */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -497,6 +597,7 @@
 			isa = PBXGroup;
 			children = (
 				4987FA7C157ACA8C00AF2078 /* Metrics */,
+				493AEB1515990A4D00DFD4C7 /* Surveys */,
 				49C00296133413BB0071F088 /* ApptentiveConnect-Prefix.pch */,
 				49C00297133413BB0071F088 /* ATConnect.h */,
 				49C00298133413BB0071F088 /* ATConnect.m */,
@@ -595,6 +696,14 @@
 				4987FA9C157AE53700AF2078 /* ApptentiveMetrics.h in Headers */,
 				4987FA9F157AE53700AF2078 /* ATMetric.h in Headers */,
 				4987FAA2157AE53700AF2078 /* ATWebClient+Metrics.h in Headers */,
+				493AEB2A15990A4D00DFD4C7 /* ATSurveys.h in Headers */,
+				493AEB2D15990A4D00DFD4C7 /* ATSurvey.h in Headers */,
+				493AEB3015990A4D00DFD4C7 /* ATSurveyParser.h in Headers */,
+				493AEB3315990A4D00DFD4C7 /* ATSurveyQuestion.h in Headers */,
+				493AEB3615990A4D00DFD4C7 /* ATSurveyResponse.h in Headers */,
+				493AEB3915990A4D00DFD4C7 /* ATSurveysBackend.h in Headers */,
+				493AEB3C15990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.h in Headers */,
+				493AEB3F15990A4D00DFD4C7 /* ATSurveyViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -803,6 +912,14 @@
 				4987FA9D157AE53700AF2078 /* ApptentiveMetrics.m in Sources */,
 				4987FAA0157AE53700AF2078 /* ATMetric.m in Sources */,
 				4987FAA3157AE53700AF2078 /* ATWebClient+Metrics.m in Sources */,
+				493AEB2B15990A4D00DFD4C7 /* ATSurveys.m in Sources */,
+				493AEB2E15990A4D00DFD4C7 /* ATSurvey.m in Sources */,
+				493AEB3115990A4D00DFD4C7 /* ATSurveyParser.m in Sources */,
+				493AEB3415990A4D00DFD4C7 /* ATSurveyQuestion.m in Sources */,
+				493AEB3715990A4D00DFD4C7 /* ATSurveyResponse.m in Sources */,
+				493AEB3A15990A4D00DFD4C7 /* ATSurveysBackend.m in Sources */,
+				493AEB3D15990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.m in Sources */,
+				493AEB4015990A4D00DFD4C7 /* ATSurveyViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -837,6 +954,15 @@
 				4987FAA1157AE53700AF2078 /* ATMetric.m in Sources */,
 				4987FAA4157AE53700AF2078 /* ATWebClient+Metrics.m in Sources */,
 				4987FAA7157AE59D00AF2078 /* ApptentiveMetricsTests.m in Sources */,
+				493AEB2C15990A4D00DFD4C7 /* ATSurveys.m in Sources */,
+				493AEB2F15990A4D00DFD4C7 /* ATSurvey.m in Sources */,
+				493AEB3215990A4D00DFD4C7 /* ATSurveyParser.m in Sources */,
+				493AEB3515990A4D00DFD4C7 /* ATSurveyQuestion.m in Sources */,
+				493AEB3815990A4D00DFD4C7 /* ATSurveyResponse.m in Sources */,
+				493AEB3B15990A4D00DFD4C7 /* ATSurveysBackend.m in Sources */,
+				493AEB3E15990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.m in Sources */,
+				493AEB4115990A4D00DFD4C7 /* ATSurveyViewController.m in Sources */,
+				493AEB4515990A6B00DFD4C7 /* ApptentiveSurveysTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

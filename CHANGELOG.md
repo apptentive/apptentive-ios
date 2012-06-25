@@ -1,3 +1,9 @@
+2012-06-25 wooster v0.4.1
+-------------------------
+Major changes:
+
+The surveys module has been integrated into `ApptentiveConnect` proper, as the survey features are now live for all users on the site. If you have previously added the Surveys module to your app, you will need to update the configuration by removing it from your app and including the `ATSurveys.h` header file.
+
 2012-06-01 wooster v0.4.0
 -------------------------
 Major changes:

@@ -16,7 +16,6 @@
 			dependencies = (
 				4932C21C151AB25F000EFB80 /* PBXTargetDependency */,
 				4932C21E151AB25F000EFB80 /* PBXTargetDependency */,
-				4932C222151AB25F000EFB80 /* PBXTargetDependency */,
 			);
 			name = Distribution;
 			productName = Distribution;
@@ -34,7 +33,6 @@
 		4960E139134432F400F6311F /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 4960E138134432F400F6311F /* iTunesArtwork */; };
 		4982ECE6133C2DCF00B91781 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4982ECE4133C2DCF00B91781 /* MainWindow-iPad.xib */; };
 		49AA100E138B41A40082887A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49AA100D138B41A40082887A /* SystemConfiguration.framework */; };
-		49AB111A14D8D4F300D13C02 /* libApptentiveSurveys.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 493E6CDF14D8D469003F22FF /* libApptentiveSurveys.a */; };
 		49B3D9A31340084E00B5A5CD /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D9A21340084E00B5A5CD /* CoreTelephony.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		49C002EC1334172E0071F088 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C002EB1334172E0071F088 /* UIKit.framework */; };
 		49C002EE1334172F0071F088 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C002ED1334172F0071F088 /* Foundation.framework */; };
@@ -70,40 +68,12 @@
 			remoteGlobalIDString = 49D1118B13341A7C00603373;
 			remoteInfo = ApptentiveResources;
 		};
-		4932C221151AB25F000EFB80 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 493E6CD514D8D468003F22FF /* ApptentiveSurveys.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 49B8767E14647C5200594A5D;
-			remoteInfo = ApptentiveSurveys;
-		};
-		493E6CDE14D8D469003F22FF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 493E6CD514D8D468003F22FF /* ApptentiveSurveys.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 49B8767F14647C5200594A5D;
-			remoteInfo = ApptentiveSurveys;
-		};
-		493E6CE014D8D469003F22FF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 493E6CD514D8D468003F22FF /* ApptentiveSurveys.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 49B8768F14647C5200594A5D;
-			remoteInfo = ApptentiveSurveysTests;
-		};
 		49AA1026138B4E500082887A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 49C00324133417390071F088 /* ApptentiveConnect.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 49D1118B13341A7C00603373;
 			remoteInfo = ApptentiveResources;
-		};
-		49AB111B14D8D4FC00D13C02 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 493E6CD514D8D468003F22FF /* ApptentiveSurveys.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 49B8767E14647C5200594A5D;
-			remoteInfo = ApptentiveSurveys;
 		};
 		49C0030F1334172F0071F088 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -143,7 +113,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		493E6CD514D8D468003F22FF /* ApptentiveSurveys.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ApptentiveSurveys.xcodeproj; path = ../modules/ApptentiveSurveys/ApptentiveSurveys.xcodeproj; sourceTree = SOURCE_ROOT; };
+		493AEB4615990AB800DFD4C7 /* ATSurveys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATSurveys.h; path = ../ApptentiveConnect/source/Surveys/ATSurveys.h; sourceTree = "<group>"; };
 		4942CD5E13C8D68E009BF758 /* ATAppRatingFlow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATAppRatingFlow.h; path = "../ApptentiveConnect/source/Rating Flow/ATAppRatingFlow.h"; sourceTree = SOURCE_ROOT; };
 		4960E1221344326B00F6311F /* icon-114x114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-114x114.png"; sourceTree = "<group>"; };
 		4960E1231344326B00F6311F /* icon-29x29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-29x29.png"; sourceTree = "<group>"; };
@@ -154,7 +124,6 @@
 		4960E13E13455ACE00F6311F /* ATConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATConnect.h; path = ../ApptentiveConnect/source/ATConnect.h; sourceTree = "<group>"; };
 		4982ECE5133C2DCF00B91781 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "iPad/en.lproj/MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		49AA100D138B41A40082887A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		49AB111914D8D4C100D13C02 /* ATSurveys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATSurveys.h; path = ../modules/ApptentiveSurveys/source/ATSurveys.h; sourceTree = "<group>"; };
 		49B3D9A21340084E00B5A5CD /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		49C002E71334172E0071F088 /* FeedbackDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FeedbackDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49C002EB1334172E0071F088 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -189,7 +158,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49AB111A14D8D4F300D13C02 /* libApptentiveSurveys.a in Frameworks */,
 				493529C0138C7141000E464A /* libApptentiveConnect.a in Frameworks */,
 				49AA100E138B41A40082887A /* SystemConfiguration.framework in Frameworks */,
 				49E8918B134BF69C00DD098A /* QuartzCore.framework in Frameworks */,
@@ -213,15 +181,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		493E6CD614D8D468003F22FF /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				493E6CDF14D8D469003F22FF /* libApptentiveSurveys.a */,
-				493E6CE114D8D469003F22FF /* ApptentiveSurveysTests.octest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		4960E1211344326B00F6311F /* art */ = {
 			isa = PBXGroup;
 			children = (
@@ -241,9 +200,8 @@
 			children = (
 				4960E13E13455ACE00F6311F /* ATConnect.h */,
 				4942CD5E13C8D68E009BF758 /* ATAppRatingFlow.h */,
-				49AB111914D8D4C100D13C02 /* ATSurveys.h */,
+				493AEB4615990AB800DFD4C7 /* ATSurveys.h */,
 				49C00324133417390071F088 /* ApptentiveConnect.xcodeproj */,
-				493E6CD514D8D468003F22FF /* ApptentiveSurveys.xcodeproj */,
 				49C002F11334172F0071F088 /* FeedbackDemo */,
 				49C003111334172F0071F088 /* FeedbackDemoTests */,
 				49C002EA1334172E0071F088 /* Frameworks */,
@@ -357,7 +315,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				49AB111C14D8D4FC00D13C02 /* PBXTargetDependency */,
 				49AA1027138B4E500082887A /* PBXTargetDependency */,
 				49C00331133417740071F088 /* PBXTargetDependency */,
 			);
@@ -411,10 +368,6 @@
 					ProductGroup = 49C00325133417390071F088 /* Products */;
 					ProjectRef = 49C00324133417390071F088 /* ApptentiveConnect.xcodeproj */;
 				},
-				{
-					ProductGroup = 493E6CD614D8D468003F22FF /* Products */;
-					ProjectRef = 493E6CD514D8D468003F22FF /* ApptentiveSurveys.xcodeproj */;
-				},
 			);
 			projectRoot = "";
 			targets = (
@@ -426,20 +379,6 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		493E6CDF14D8D469003F22FF /* libApptentiveSurveys.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libApptentiveSurveys.a;
-			remoteRef = 493E6CDE14D8D469003F22FF /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		493E6CE114D8D469003F22FF /* ApptentiveSurveysTests.octest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = ApptentiveSurveysTests.octest;
-			remoteRef = 493E6CE014D8D469003F22FF /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		49C0032D133417390071F088 /* libApptentiveConnect.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -506,7 +445,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "UNIVERSAL_DIR=${SYMROOT}/${CONFIGURATION}-universal\nUNIVERSAL_METRICS_DIR=${SYMROOT}/${CONFIGURATION}-universal-metrics\nUNIVERSAL_SURVEYS_DIR=${SYMROOT}/${CONFIGURATION}-universal-surveys\n\nCREATING_TAR_DIR=${SYMROOT}/${CONFIGURATION}-distribution-tar\n\nrm -rf \"${CREATING_TAR_DIR}\"\nmkdir \"${CREATING_TAR_DIR}\"\n\nditto \"$UNIVERSAL_DIR/\" \"$CREATING_TAR_DIR/\"\nditto \"$UNIVERSAL_METRICS_DIR/\" \"$CREATING_TAR_DIR/\"\nditto \"$UNIVERSAL_SURVEYS_DIR/\" \"$CREATING_TAR_DIR/\"\n\ncd \"$CREATING_TAR_DIR\" && tar -zcvf ../apptentive_ios_sdk.tar.gz . && cd ..\n\nopen \"$SYMROOT\"\n";
+			shellScript = "UNIVERSAL_DIR=${SYMROOT}/${CONFIGURATION}-universal\n\nCREATING_TAR_DIR=${SYMROOT}/${CONFIGURATION}-distribution-tar\n\nrm -rf \"${CREATING_TAR_DIR}\"\nmkdir \"${CREATING_TAR_DIR}\"\n\nditto \"$UNIVERSAL_DIR/\" \"$CREATING_TAR_DIR/\"\n\ncd \"$CREATING_TAR_DIR\" && tar -zcvf ../apptentive_ios_sdk.tar.gz . && cd ..\n\nopen \"$SYMROOT\"\n";
 		};
 		49C003091334172F0071F088 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -555,20 +494,10 @@
 			name = ApptentiveResources;
 			targetProxy = 4932C21D151AB25F000EFB80 /* PBXContainerItemProxy */;
 		};
-		4932C222151AB25F000EFB80 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = ApptentiveSurveys;
-			targetProxy = 4932C221151AB25F000EFB80 /* PBXContainerItemProxy */;
-		};
 		49AA1027138B4E500082887A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = ApptentiveResources;
 			targetProxy = 49AA1026138B4E500082887A /* PBXContainerItemProxy */;
-		};
-		49AB111C14D8D4FC00D13C02 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = ApptentiveSurveys;
-			targetProxy = 49AB111B14D8D4FC00D13C02 /* PBXContainerItemProxy */;
 		};
 		49C003101334172F0071F088 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

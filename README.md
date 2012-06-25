@@ -179,9 +179,7 @@ metrics on your app settings page on apptentive.com.
 
 Surveys
 -------
-The surveys module is found in `modules/ApptentiveSurveys`. To use, add it
-to your project, add `ATSurveys.h` to your project and link against
-`libApptentiveSurveys.a`
+To use surveys, add the `ATSurveys.h` header to your project.
 
 You can check for available surveys after having set up `ATConnect` (see above)
 by calling `[ATSurveys checkForAvailableSurveys]` and registering for the

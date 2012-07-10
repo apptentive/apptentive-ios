@@ -81,10 +81,6 @@ static ATConnect *sharedConnection = nil;
 	[additionalFeedbackData removeObjectForKey:key];
 }
 
-- (void)setShouldShowEmailFieldWhenRequestingFeedback:(BOOL)showEmailField {
-	
-}
-
 #if TARGET_OS_IPHONE
 - (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController {
 	UIImage *screenshot = nil;

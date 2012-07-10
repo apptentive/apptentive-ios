@@ -23,46 +23,46 @@ static ATConnect *sharedConnection = nil;
 @synthesize apiKey, showKeyboardAccessory, shouldTakeScreenshot, showEmailField, initialName, initialEmailAddress, feedbackControllerType, customPlaceholderText;
 
 + (ATConnect *)sharedConnection {
-    @synchronized(self) {
-        if (sharedConnection == nil) {
-            sharedConnection = [[ATConnect alloc] init];
-        }
-    }
-    return sharedConnection;
+	@synchronized(self) {
+		if (sharedConnection == nil) {
+			sharedConnection = [[ATConnect alloc] init];
+		}
+	}
+	return sharedConnection;
 }
 
 - (id)init {
-    if ((self = [super init])) {
+	if ((self = [super init])) {
 		self.showEmailField = YES;
-        self.showKeyboardAccessory = YES;
+		self.showKeyboardAccessory = YES;
 		self.shouldTakeScreenshot = YES;
 		additionalFeedbackData = [[NSMutableDictionary alloc] init];
-    }
-    return self;
+	}
+	return self;
 }
 
 - (void)dealloc {
 #if !TARGET_OS_IPHONE
-    if (feedbackWindowController) {
-        [feedbackWindowController release];
-        feedbackWindowController = nil;
-    }
+	if (feedbackWindowController) {
+		[feedbackWindowController release];
+		feedbackWindowController = nil;
+	}
 #endif
 	[additionalFeedbackData release], additionalFeedbackData = nil;
-    self.customPlaceholderText = nil;
-    self.apiKey = nil;
+	self.customPlaceholderText = nil;
+	self.apiKey = nil;
 	self.initialName = nil;
 	self.initialEmailAddress = nil;
-    [super dealloc];
+	[super dealloc];
 }
 
 - (void)setApiKey:(NSString *)anAPIKey {
-    if (apiKey != anAPIKey) {
-        [apiKey release];
-        apiKey = nil;
-        apiKey = [anAPIKey retain];
-        [[ATBackend sharedBackend] setApiKey:self.apiKey];
-    }
+	if (apiKey != anAPIKey) {
+		[apiKey release];
+		apiKey = nil;
+		apiKey = [anAPIKey retain];
+		[[ATBackend sharedBackend] setApiKey:self.apiKey];
+	}
 }
 
 - (NSDictionary *)additionFeedbackInfo {
@@ -84,104 +84,104 @@ static ATConnect *sharedConnection = nil;
 #if TARGET_OS_IPHONE
 - (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController {
 	UIImage *screenshot = nil;
-    
-    if (![[ATBackend sharedBackend] currentFeedback]) {
-        ATFeedback *feedback = [[ATFeedback alloc] init];
+
+	if (![[ATBackend sharedBackend] currentFeedback]) {
+		ATFeedback *feedback = [[ATFeedback alloc] init];
 		if (additionalFeedbackData && [additionalFeedbackData count]) {
 			[feedback addExtraDataFromDictionary:additionalFeedbackData];
 		}
-    	if (self.shouldTakeScreenshot && self.feedbackControllerType != ATFeedbackControllerSimple) {
-            screenshot = [ATUtilities imageByTakingScreenshot];
-            // Get the rotation of the view hierarchy and rotate the screenshot as
-            // necessary.
-            CGFloat rotation = [ATUtilities rotationOfViewHierarchyInRadians:viewController.view];
-            screenshot = [ATUtilities imageByRotatingImage:screenshot byRadians:rotation];
-        }
+		if (self.shouldTakeScreenshot && self.feedbackControllerType != ATFeedbackControllerSimple) {
+			screenshot = [ATUtilities imageByTakingScreenshot];
+			// Get the rotation of the view hierarchy and rotate the screenshot as
+			// necessary.
+			CGFloat rotation = [ATUtilities rotationOfViewHierarchyInRadians:viewController.view];
+			screenshot = [ATUtilities imageByRotatingImage:screenshot byRadians:rotation];
+		}
 		if (self.initialName && [self.initialName length] > 0) {
 			feedback.name = self.initialName;
 		}
 		if (self.initialEmailAddress && [self.initialEmailAddress length] > 0) {
 			feedback.email = self.initialEmailAddress;
 		}
-        ATContactStorage *contact = [ATContactStorage sharedContactStorage];
-        if (contact.name && [contact.name length] > 0) {
-            feedback.name = contact.name;
-        }
-        if (contact.phone) {
-            feedback.phone = contact.phone;
-        }
-        if (contact.email && [contact.email length] > 0) {
-            feedback.email = contact.email;
-        }
-        feedback.screenshot = screenshot;
-        feedback.screenshotSwitchEnabled = (screenshot != nil);
-        [[ATBackend sharedBackend] setCurrentFeedback:feedback];
-        [feedback release];
-        feedback = nil;
-    }
-    
-    ATFeedbackController *vc = [[ATFeedbackController alloc] init];
+		ATContactStorage *contact = [ATContactStorage sharedContactStorage];
+		if (contact.name && [contact.name length] > 0) {
+			feedback.name = contact.name;
+		}
+		if (contact.phone) {
+			feedback.phone = contact.phone;
+		}
+		if (contact.email && [contact.email length] > 0) {
+			feedback.email = contact.email;
+		}
+		feedback.screenshot = screenshot;
+		feedback.screenshotSwitchEnabled = (screenshot != nil);
+		[[ATBackend sharedBackend] setCurrentFeedback:feedback];
+		[feedback release];
+		feedback = nil;
+	}
+
+	ATFeedbackController *vc = [[ATFeedbackController alloc] init];
 	[vc setShowEmailAddressField:self.showEmailField];
 	if (self.customPlaceholderText) {
 		[vc setCustomPlaceholderText:self.customPlaceholderText];
 	}
 	[vc setFeedback:[[ATBackend sharedBackend] currentFeedback]];
-	
+
 	[vc presentFromViewController:viewController animated:YES];
-    [vc release];
+	[vc release];
 }
 #elif TARGET_OS_MAC
 - (void)showFeedbackWindow:(id)sender withFeedbackType:(ATFeedbackType)feedbackType {
-    if (![[ATBackend sharedBackend] currentFeedback]) {
-        ATFeedback *feedback = [[ATFeedback alloc] init];
-        feedback.type = feedbackType;
-        [[ATBackend sharedBackend] setCurrentFeedback:feedback];
-        [feedback release];
-        feedback = nil;
-    }
-    
-    if (!feedbackWindowController) {
-        feedbackWindowController = [[ATFeedbackWindowController alloc] initWithFeedback:[[ATBackend sharedBackend] currentFeedback]];
-    }
-    [feedbackWindowController setFeedbackType:feedbackType];
-    [feedbackWindowController showWindow:self];
+	if (![[ATBackend sharedBackend] currentFeedback]) {
+		ATFeedback *feedback = [[ATFeedback alloc] init];
+		feedback.type = feedbackType;
+		[[ATBackend sharedBackend] setCurrentFeedback:feedback];
+		[feedback release];
+		feedback = nil;
+	}
+
+	if (!feedbackWindowController) {
+		feedbackWindowController = [[ATFeedbackWindowController alloc] initWithFeedback:[[ATBackend sharedBackend] currentFeedback]];
+	}
+	[feedbackWindowController setFeedbackType:feedbackType];
+	[feedbackWindowController showWindow:self];
 }
 
 - (IBAction)showFeedbackWindow:(id)sender {
-    [self showFeedbackWindow:sender withFeedbackType:ATFeedbackTypeFeedback];
+	[self showFeedbackWindow:sender withFeedbackType:ATFeedbackTypeFeedback];
 }
 
 - (IBAction)showFeedbackWindowForFeedback:(id)sender {
-    [self showFeedbackWindow:sender withFeedbackType:ATFeedbackTypeFeedback];
+	[self showFeedbackWindow:sender withFeedbackType:ATFeedbackTypeFeedback];
 }
 
 - (IBAction)showFeedbackWindowForQuestion:(id)sender {
-    [self showFeedbackWindow:sender withFeedbackType:ATFeedbackTypeQuestion];
+	[self showFeedbackWindow:sender withFeedbackType:ATFeedbackTypeQuestion];
 }
 
 - (IBAction)showFeedbackWindowForBugReport:(id)sender {
-    [self showFeedbackWindow:sender withFeedbackType:ATFeedbackTypeBug];
+	[self showFeedbackWindow:sender withFeedbackType:ATFeedbackTypeBug];
 }
 #endif
 
 + (NSBundle *)resourceBundle {
 #if TARGET_OS_IPHONE
-    NSString *path = [[NSBundle mainBundle] bundlePath];
-    NSString *bundlePath = [path stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
-    NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
-    return [bundle autorelease];
+	NSString *path = [[NSBundle mainBundle] bundlePath];
+	NSString *bundlePath = [path stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
+	NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
+	return [bundle autorelease];
 #elif TARGET_OS_MAC
-    NSBundle *bundle = [NSBundle bundleForClass:[ATConnect class]];
-    return bundle;
+	NSBundle *bundle = [NSBundle bundleForClass:[ATConnect class]];
+	return bundle;
 #endif
 }
 @end
 
 NSString *ATLocalizedString(NSString *key, NSString *comment) {
-    static NSBundle *bundle = nil;
-    if (!bundle) {
-        bundle = [[ATConnect resourceBundle] retain];
-    }
-    NSString *result = [bundle localizedStringForKey:key value:key table:nil];
-    return result;
+	static NSBundle *bundle = nil;
+	if (!bundle) {
+		bundle = [[ATConnect resourceBundle] retain];
+	}
+	NSString *result = [bundle localizedStringForKey:key value:key table:nil];
+	return result;
 }

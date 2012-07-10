@@ -1,3 +1,10 @@
+2012-07-09 wooster v0.4.2
+-------------------------
+Minor changes:
+* Adding Spanish localization courtesy of [Babble-on Inc](http://www.ibabbleon.com/).
+* Fixes from [@kgn](https://github.com/kgn) for crash on original iPad and disabled styling on Send button ([pull request 18](https://github.com/apptentive/apptentive-ios/pull/18)).
+
+
 2012-06-25 wooster v0.4.1
 -------------------------
 Major changes:

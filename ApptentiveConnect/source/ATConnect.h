@@ -13,7 +13,7 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
-#define kATConnectVersionString @"0.4.1"
+#define kATConnectVersionString @"0.4.2"
 
 #if TARGET_OS_IPHONE
 #define kATConnectPlatformString @"iOS"
@@ -23,14 +23,14 @@
 #endif
 
 typedef enum {
-    ATFeedbackControllerDefault,
-    ATFeedbackControllerSimple
+	ATFeedbackControllerDefault,
+	ATFeedbackControllerSimple
 } ATFeedbackControllerType;
 
 
 @interface ATConnect : NSObject {
 #if !TARGET_OS_IPHONE
-    ATFeedbackWindowController *feedbackWindowController;
+	ATFeedbackWindowController *feedbackWindowController;
 #endif
 	NSMutableDictionary *additionalFeedbackData;
 }

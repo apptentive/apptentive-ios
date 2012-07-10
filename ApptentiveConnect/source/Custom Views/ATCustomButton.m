@@ -39,7 +39,7 @@
 		button.titleLabel.shadowOffset = CGSizeMake(0.0, -1.0);
 		
 		[button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-		[button setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.8] forState:UIControlStateNormal];		
+		[button setTitleShadowColor:[UIColor colorWithRed:63./256. green:63./256. blue:63./256. alpha:1.0] forState:UIControlStateNormal];	
 		[button setTitleColor:[UIColor colorWithRed: 0.79 green: 0.86 blue: 0.99 alpha: 1] forState:UIControlStateDisabled];		
 		[button setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.5] forState:UIControlStateDisabled];		
 		

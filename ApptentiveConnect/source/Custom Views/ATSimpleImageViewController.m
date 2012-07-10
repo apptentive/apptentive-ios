@@ -151,7 +151,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
 	if (buttonIndex == 0) {
 		[self chooseImage];
-	} else if (buttonIndex == 1) {
+	} else if (buttonIndex == 1 && [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
 		[self takePhoto];
 	}
 }

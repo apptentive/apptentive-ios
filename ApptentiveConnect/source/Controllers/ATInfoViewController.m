@@ -194,6 +194,9 @@ enum {
 	[nib instantiateWithOwner:self options:nil];
 	UIImageView *logoView = (UIImageView *)[headerView viewWithTag:2];
 	logoView.image = logoImage;
+	CGRect f = logoView.frame;
+	f.size = logoImage.size;
+	logoView.frame = f;
 	//tableView.delegate = self;
 	tableView.dataSource = self;
 	tableView.tableHeaderView = headerView;

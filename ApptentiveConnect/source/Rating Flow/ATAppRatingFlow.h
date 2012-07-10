@@ -30,6 +30,8 @@
 	NSUInteger usesBeforePrompt;
 	NSUInteger significantEventsBeforePrompt;
 	NSUInteger daysBeforeRePrompting;
+	
+	NSDate *lastUseOfApp;
 }
 
 /*! The default singleton constructor. Call with an iTunes Applicaiton ID as

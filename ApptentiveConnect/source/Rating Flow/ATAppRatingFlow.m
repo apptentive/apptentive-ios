@@ -17,6 +17,8 @@
 
 static ATAppRatingFlow *sharedRatingFlow = nil;
 
+#define kATAppAppUsageMinimumInterval (20)
+
 #if TARGET_OS_IPHONE
 @interface ATAppRatingFlow ()
 @property (nonatomic, retain) UIViewController *viewController;
@@ -461,6 +463,15 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 }
 
 - (void)userDidUseApp {
+	if (lastUseOfApp != nil) {
+		NSTimeInterval interval = [lastUseOfApp timeIntervalSinceNow];
+		
+		if (interval >= -kATAppAppUsageMinimumInterval) {
+			return;
+		}
+	}
+	lastUseOfApp = [[NSDate alloc] init];
+	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	
 	NSNumber *useCount = [defaults objectForKey:ATAppRatingFlowUseCountKey];

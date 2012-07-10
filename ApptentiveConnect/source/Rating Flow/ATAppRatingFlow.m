@@ -17,6 +17,7 @@
 
 static ATAppRatingFlow *sharedRatingFlow = nil;
 
+//TODO: This should be changed for iOS 4+
 #define kATAppAppUsageMinimumInterval (20)
 
 #if TARGET_OS_IPHONE

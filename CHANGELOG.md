@@ -3,6 +3,7 @@
 Minor changes:
 * Adding Spanish localization courtesy of [Babble-on Inc](http://www.ibabbleon.com/).
 * Fixes from [@kgn](https://github.com/kgn) for crash on original iPad and disabled styling on Send button ([pull request 18](https://github.com/apptentive/apptentive-ios/pull/18)).
+* IOS-48: Use count is incremented twice at startup, again at location prompt See [a8dedf6abb5b08342aa564ca2a26fcbae80c9d6f](https://github.com/apptentive/apptentive-ios/commit/a8dedf6abb5b08342aa564ca2a26fcbae80c9d6f)
 
 
 2012-06-25 wooster v0.4.1

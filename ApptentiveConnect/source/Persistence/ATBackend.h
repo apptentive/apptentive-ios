@@ -29,6 +29,8 @@
 @property (nonatomic, retain) ATFeedback *currentFeedback;
 
 + (ATBackend *)sharedBackend;
++ (ATBackend *)sharedBackendWithApiKey:(NSString *)anAPIKey;
+
 #if TARGET_OS_IPHONE
 + (UIImage *)imageNamed:(NSString *)name;
 #elif TARGET_OS_MAC

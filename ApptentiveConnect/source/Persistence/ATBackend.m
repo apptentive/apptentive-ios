@@ -48,6 +48,17 @@ static ATBackend *sharedBackend = nil;
 	return sharedBackend;
 }
 
++ (ATBackend *)sharedBackendWithApiKey:(NSString *)anAPIKey {
+    @synchronized(self) {
+        if (sharedBackend == nil) {
+            sharedBackend = [[self alloc] init];
+			sharedBackend.apiKey = anAPIKey;
+			[ApptentiveMetrics sharedMetrics];
+        }
+    }
+    return sharedBackend;
+}
+
 #if TARGET_OS_IPHONE
 + (UIImage *)imageNamed:(NSString *)name {
 	NSString *imagePath = nil;

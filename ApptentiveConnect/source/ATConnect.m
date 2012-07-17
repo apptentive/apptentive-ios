@@ -61,7 +61,7 @@ static ATConnect *sharedConnection = nil;
         [apiKey release];
         apiKey = nil;
         apiKey = [anAPIKey retain];
-        [[ATBackend sharedBackend] setApiKey:self.apiKey];
+        [ATBackend sharedBackendWithApiKey:self.apiKey];
     }
 }
 

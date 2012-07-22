@@ -82,19 +82,19 @@
 	CGSize size = image.size;
 	BOOL onSide = NO;
 	
-	// Upside down, weeeee.
 	if (KINDA_EQUALS(fabsf(radians), M_PI)) {
+		// Upside down, weeeee.
 		t = CGAffineTransformTranslate(t, size.width, size.height);
 		t = CGAffineTransformRotate(t, M_PI);
-		// Home button on right. Image is rotated right 90 degrees.
 	} else if (KINDA_EQUALS(radians, M_PI * 0.5)) {
+		// Home button on right. Image is rotated right 90 degrees.
 		onSide = YES;
 		size = CGSizeMake(size.height, size.width);
 		t = CGAffineTransformRotate(t, M_PI * 0.5);
 		t = CGAffineTransformScale(t, size.height/size.width, size.width/size.height);
 		t = CGAffineTransformTranslate(t, 0.0, -size.height);
-		// Home button on left. Image is rotated left 90 degrees.
 	} else if (KINDA_EQUALS(radians, -1.0 * M_PI * 0.5)) {
+		// Home button on left. Image is rotated left 90 degrees.
 		onSide = YES;
 		size = CGSizeMake(size.height, size.width);\
 		t = CGAffineTransformRotate(t, -1.0 * M_PI * 0.5);

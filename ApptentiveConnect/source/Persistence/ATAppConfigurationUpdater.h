@@ -26,4 +26,5 @@ NSString *const ATAppConfigurationMetricsEnabledPreferenceKey;
 - (id)initWithDelegate:(NSObject<ATAppConfigurationUpdaterDelegate> *)delegate;
 - (void)update;
 - (void)cancel;
+- (float)percentageComplete;
 @end

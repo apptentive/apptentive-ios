@@ -11,7 +11,8 @@
 #elif TARGET_OS_MAC
 #import <Cocoa/Cocoa.h>
 #endif
-#import "ATAppConfigurationUpdater.h"
+
+NSString *const ATBackendNewAPIKeyNotification;
 
 #define USE_STAGING 0
 
@@ -20,10 +21,7 @@
 @class ATAPIRequest;
 
 /*! Handles all of the backend activities, such as sending feedback. */
-@interface ATBackend : NSObject <ATAppConfigurationUpdaterDelegate> {
-@private
-	ATAppConfigurationUpdater *configurationUpdater;
-}
+@interface ATBackend : NSObject
 @property (nonatomic, retain) NSString *apiKey;
 /*! The feedback currently being worked on by the user. */
 @property (nonatomic, retain) ATFeedback *currentFeedback;
@@ -39,11 +37,6 @@
     will be sent in the background. */
 - (void)sendFeedback:(ATFeedback *)feedback;
 
-/*! Use this if you don't want offline storage or sending of feedback
-    requests. */
-- (ATAPIRequest *)requestForSendingFeedback:(ATFeedback *)feedback;
-
-- (void)udpateRatingConfigurationIfNeeded;
 - (NSString *)supportDirectoryPath;
 - (NSString *)deviceUUID;
 

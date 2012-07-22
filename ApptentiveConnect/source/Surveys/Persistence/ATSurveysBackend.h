@@ -7,14 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ATAPIRequest.h"
-#import "ATWebClient+SurveyAdditions.h"
 
 @class ATSurvey;
 
-@interface ATSurveysBackend : NSObject <ATAPIRequestDelegate> {
+@interface ATSurveysBackend : NSObject {
 @private
-	ATAPIRequest *checkSurveyRequest;
 	ATSurvey *currentSurvey;
 }
 + (ATSurveysBackend *)sharedBackend;
@@ -23,4 +20,10 @@
 - (void)resetSurvey;
 - (void)presentSurveyControllerFromViewController:(UIViewController *)viewController;
 - (void)setDidSendSurvey:(ATSurvey *)survey;
+@end
+
+
+@interface ATSurveysBackend (Private)
+- (BOOL)surveyAlreadySubmitted:(ATSurvey *)survey;
+- (void)didReceiveNewSurvey:(ATSurvey *)survey;
 @end

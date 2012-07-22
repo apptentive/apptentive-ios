@@ -7,7 +7,7 @@
 //
 
 #import "ATBackend.h"
-#import "ATAppConfigurationUpdater.h"
+#import "ATAppConfigurationUpdateTask.h"
 #import "ATConnect.h"
 #import "ATContactStorage.h"
 #import "ATFeedback.h"
@@ -19,9 +19,14 @@
 #import "ATWebClient.h"
 
 
+NSString *const ATBackendNewAPIKeyNotification = @"ATBackendNewAPIKeyNotification";
 NSString *const ATUUIDPreferenceKey = @"ATUUIDPreferenceKey";
 
 static ATBackend *sharedBackend = nil;
+
+@interface ATBackend ()
+- (void)updateRatingConfigurationIfNeeded;
+@end
 
 @interface ATBackend (Private)
 - (void)setup;
@@ -135,6 +140,7 @@ static ATBackend *sharedBackend = nil;
 			self.working = NO;
 			self.working = YES;
 		}
+		[[NSNotificationCenter defaultCenter] postNotificationName:ATBackendNewAPIKeyNotification object:nil];
 	}
 }
 
@@ -171,28 +177,10 @@ static ATBackend *sharedBackend = nil;
 	[pool release];
 }
 
-- (ATAPIRequest *)requestForSendingFeedback:(ATFeedback *)feedback {
-	ATContactStorage *contact = [ATContactStorage sharedContactStorage];
-	contact.name = feedback.name;
-	contact.email = feedback.email;
-	contact.phone = feedback.phone;
-	[ATContactStorage releaseSharedContactStorage];
-	contact = nil;
-	
-	// If we don't need the screenshot, discard it.
-	if (feedback.screenshot && !feedback.screenshotSwitchEnabled) {
-		feedback.screenshot = nil;
-	}
-	
-	ATAPIRequest *request = [[ATWebClient sharedClient] requestForPostingFeedback:feedback];
-	return request;
-}
-
-- (void)udpateRatingConfigurationIfNeeded {
-	if (configurationUpdater == nil && [ATAppConfigurationUpdater shouldCheckForUpdate]) {
-		configurationUpdater = [[ATAppConfigurationUpdater alloc] initWithDelegate:self];
-		[configurationUpdater update];
-	}
+- (void)updateRatingConfigurationIfNeeded {
+	ATAppConfigurationUpdateTask *task = [[ATAppConfigurationUpdateTask alloc] init];
+	[[ATTaskQueue sharedTaskQueue] addTask:task];
+	[task release], task = nil;
 }
 
 - (NSString *)supportDirectoryPath {
@@ -256,7 +244,7 @@ static ATBackend *sharedBackend = nil;
 		if (working) {
 			[[ATTaskQueue sharedTaskQueue] start];
 			
-			[self udpateRatingConfigurationIfNeeded];
+			[self updateRatingConfigurationIfNeeded];
 		} else {
 			[[ATTaskQueue sharedTaskQueue] stop];
 			[ATTaskQueue releaseSharedTaskQueue];
@@ -267,14 +255,6 @@ static ATBackend *sharedBackend = nil;
 
 - (NSURL *)apptentiveHomepageURL {
 	return [NSURL URLWithString:@"http://www.apptentive.com/"];
-}
-
-#pragma mark ATAppConfigurationUpdaterDelegate
-- (void)configurationUpdaterDidFinish:(BOOL)success {
-	if (configurationUpdater) {
-		[configurationUpdater release];
-		configurationUpdater = nil;
-	}
 }
 @end
 
@@ -300,9 +280,6 @@ static ATBackend *sharedBackend = nil;
 
 - (void)teardown {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[configurationUpdater cancel];
-	[configurationUpdater release];
-	configurationUpdater = nil;
 	self.apiKey = nil;
 	self.currentFeedback = nil;
 }

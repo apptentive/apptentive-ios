@@ -59,6 +59,7 @@
 - (void)cancelConnection:(ATURLConnection *)connection {
 	@synchronized(self) {
 		if ([active containsObject:connection]) {
+			[connection removeObserver:self forKeyPath:@"isFinished"];
 			[connection cancel];
 			[active removeObject:connection];
 		}

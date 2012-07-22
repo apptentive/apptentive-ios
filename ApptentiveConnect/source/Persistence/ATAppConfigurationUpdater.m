@@ -82,6 +82,14 @@ NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigura
 	}
 }
 
+- (float)percentageComplete {
+	if (request) {
+		return [request percentageComplete];
+	} else {
+		return 0.0f;
+	}
+}
+
 #pragma mark ATATIRequestDelegate
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(NSObject *)result {
 	@synchronized (self) {

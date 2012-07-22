@@ -7,18 +7,18 @@
 //
 
 #import "ATSurveysBackend.h"
+#import "ATBackend.h"
 #import "ATSurvey.h"
+#import "ATSurveyGetSurveyTask.h"
 #import "ATSurveyMetrics.h"
 #import "ATSurveys.h"
 #import "ATSurveyParser.h"
 #import "ATSurveyViewController.h"
+#import "ATTaskQueue.h"
 #import "JSONKit.h"
 
 NSString *const ATSurveySentSurveysPreferenceKey = @"ATSurveySentSurveysPreferenceKey";
 
-@interface ATSurveysBackend (Private)
-- (BOOL)surveyAlreadySubmitted:(ATSurvey *)survey;
-@end
 
 @implementation ATSurveysBackend
 
@@ -37,18 +37,13 @@ NSString *const ATSurveySentSurveysPreferenceKey = @"ATSurveySentSurveysPreferen
 }
 
 - (void)dealloc {
-	checkSurveyRequest.delegate = nil;
-	[checkSurveyRequest release], checkSurveyRequest = nil;
 	[super dealloc];
 }
 
 - (void)checkForAvailableSurveys {
-	if (checkSurveyRequest == nil) {
-		ATWebClient *client = [ATWebClient sharedClient];
-		checkSurveyRequest = [[client requestForGettingSurvey] retain];
-		checkSurveyRequest.delegate = self;
-		[checkSurveyRequest start];
-	}
+	ATSurveyGetSurveyTask *task = [[ATSurveyGetSurveyTask alloc] init];
+	[[ATTaskQueue sharedTaskQueue] addTask:task];
+	[task release], task = nil;
 }
 
 - (ATSurvey *)currentSurvey {
@@ -92,31 +87,6 @@ NSString *const ATSurveySentSurveysPreferenceKey = @"ATSurveySentSurveysPreferen
 	}
 }
 
-#pragma mark ATAPIRequestDelegate
-- (void)at_APIRequestDidFinish:(ATAPIRequest *)request result:(NSObject *)result {
-	if (request == checkSurveyRequest) {
-		ATSurveyParser *parser = [[ATSurveyParser alloc] init];
-		ATSurvey *survey = [parser parseSurvey:(NSData *)result];
-		if (survey == nil) {
-			NSLog(@"An error occurred parsing survey: %@", [parser parserError]);
-		} else if (![self surveyAlreadySubmitted:survey]) {
-			[currentSurvey release], currentSurvey = nil;
-			currentSurvey = [survey retain];
-			[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyNewSurveyAvailableNotification object:nil];
-		}
-		checkSurveyRequest.delegate = nil;
-		[checkSurveyRequest release], checkSurveyRequest = nil;
-		[parser release], parser = nil;
-	}
-}
-
-- (void)at_APIRequestDidFail:(ATAPIRequest *)request {
-	if (request == checkSurveyRequest) {
-		NSLog(@"Survey request failed: %@: %@", request.errorTitle, request.errorMessage);
-		checkSurveyRequest.delegate = nil;
-		[checkSurveyRequest release], checkSurveyRequest = nil;
-	}
-}
 @end
 
 
@@ -128,5 +98,13 @@ NSString *const ATSurveySentSurveysPreferenceKey = @"ATSurveySentSurveysPreferen
 		sentSurvey = YES;
 	}
 	return sentSurvey;
+}
+
+- (void)didReceiveNewSurvey:(ATSurvey *)survey {
+	if (![self surveyAlreadySubmitted:survey]) {
+		[currentSurvey release], currentSurvey = nil;
+		currentSurvey = [survey retain];
+		[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyNewSurveyAvailableNotification object:nil];
+	}
 }
 @end

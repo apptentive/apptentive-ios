@@ -82,7 +82,16 @@ static ATTaskQueue *sharedTaskQueue = nil;
 
 - (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeInt:kATTaskQueueCodingVersion forKey:@"version"];
-	[coder encodeObject:tasks forKey:@"tasks"];
+	@synchronized(self) {
+		NSMutableArray *archivableTasks = [[NSMutableArray alloc] init];
+		for (ATTask *task in tasks) {
+			if ([task shouldArchive]) {
+				[archivableTasks addObject:task];
+			}
+		}
+		[coder encodeObject:archivableTasks forKey:@"tasks"];
+		[archivableTasks release], archivableTasks = nil;
+	}
 }
 
 - (void)dealloc {
@@ -153,10 +162,15 @@ static ATTaskQueue *sharedTaskQueue = nil;
 		}
 		
 		if ([tasks count]) {
-			activeTask = [tasks objectAtIndex:0];
-			[activeTask addObserver:self forKeyPath:@"finished" options:NSKeyValueObservingOptionNew context:NULL];
-			[activeTask addObserver:self forKeyPath:@"failed" options:NSKeyValueObservingOptionNew context:NULL];
-			[activeTask start];
+			for (ATTask *task in tasks) {
+				if ([task canStart]) {
+					activeTask = task;
+					[activeTask addObserver:self forKeyPath:@"finished" options:NSKeyValueObservingOptionNew context:NULL];
+					[activeTask addObserver:self forKeyPath:@"failed" options:NSKeyValueObservingOptionNew context:NULL];
+					[activeTask start];
+					break;
+				}
+			}
 		}
 	}
 	[pool release];

@@ -1,3 +1,14 @@
+2012-07-22 wooster v0.4.2
+-------------------------
+
+* IOS-52: Requests sent before API key is set won't succeed until next app start
+
+	Thanks to @kgr for finding this and [proposing a fix](https://github.com/apptentive/apptentive-ios/pull/19). The fix we've chosen is a
+	bit more involved. We are now making each of our various URL requests be handled
+	by `ATTask` objects, which can tell the task queue whether or not they're able
+	to be executed at the current time. For the case of API requests, that will be
+	`NO` until such time as the API key is set.
+
 2012-07-09 wooster v0.4.2
 -------------------------
 Minor changes:

@@ -19,6 +19,8 @@
 @property (nonatomic, retain) NSString *lastErrorTitle;
 @property (nonatomic, retain) NSString *lastErrorMessage;
 
+- (BOOL)canStart;
+- (BOOL)shouldArchive;
 - (void)start;
 - (void)stop;
 - (float)percentComplete;

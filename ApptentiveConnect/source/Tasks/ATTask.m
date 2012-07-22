@@ -42,6 +42,14 @@
 	[coder encodeObject:[NSNumber numberWithUnsignedInteger:self.failureCount] forKey:@"failureCount"];
 }
 
+- (BOOL)canStart {
+	return YES;
+}
+
+- (BOOL)shouldArchive {
+	return YES;
+}
+
 - (void)start {
 	
 }

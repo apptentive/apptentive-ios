@@ -7,6 +7,7 @@
 //
 
 #import "ATRecordTask.h"
+#import "ATBackend.h"
 #import "ATFeedback.h"
 #import "ATWebClient.h"
 
@@ -41,6 +42,13 @@
 - (void)dealloc {
 	[self teardown];
 	[super dealloc];
+}
+
+- (BOOL)canStart {
+	if ([[ATBackend sharedBackend] apiKey] == nil) {
+		return NO;
+	}
+	return YES;
 }
 
 - (void)start {
@@ -94,7 +102,7 @@
 		self.lastErrorTitle = sender.errorTitle;
 		self.lastErrorMessage = sender.errorMessage;
 		NSLog(@"ATAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
-		[self stop];        
+		[self stop];
 	}
 }
 @end

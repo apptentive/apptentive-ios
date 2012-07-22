@@ -7,6 +7,7 @@
 //
 
 #import "ATFeedbackTask.h"
+#import "ATBackend.h"
 #import "ATFeedback.h"
 #import "ATWebClient.h"
 
@@ -41,6 +42,13 @@
 - (void)dealloc {
 	[self teardown];
 	[super dealloc];
+}
+
+- (BOOL)canStart {
+	if ([[ATBackend sharedBackend] apiKey] == nil) {
+		return NO;
+	}
+	return YES;
 }
 
 - (void)start {

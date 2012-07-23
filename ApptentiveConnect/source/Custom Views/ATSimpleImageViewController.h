@@ -14,16 +14,20 @@
 
 NSString * const ATImageViewChoseImage;
 
-@interface ATSimpleImageViewController : UIViewController <UIActionSheetDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate> {
+@interface ATSimpleImageViewController : UIViewController <UIActionSheetDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverControllerDelegate> {
 @private
 	ATCenteringImageScrollView *scrollView;
 	ATFeedback *feedback;
 	ATFeedbackController *controller;
+	UIBarButtonItem *cameraButtonItem;
 	BOOL shouldResign;
 	UIView *containerView;
 	BOOL isFromCamera;
+	
+	UIPopoverController *imagePickerPopover;
 }
 @property (nonatomic, retain) IBOutlet UIView *containerView;
+@property (retain, nonatomic) IBOutlet UIBarButtonItem *cameraButtonItem;
 - (id)initWithFeedback:(ATFeedback *)feedback feedbackController:(ATFeedbackController *)controller;
 - (IBAction)donePressed:(id)sender;
 - (IBAction)takePhoto:(id)sender;

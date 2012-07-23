@@ -1,3 +1,7 @@
+2012-07-23 wooster v0.4.3
+-------------------------
+* Fix for #20, wherein the image picker on iPad would cause the app to crash.
+
 2012-07-22 wooster v0.4.2
 -------------------------
 

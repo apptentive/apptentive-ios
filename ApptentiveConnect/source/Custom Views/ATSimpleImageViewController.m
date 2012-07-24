@@ -21,6 +21,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 
 @implementation ATSimpleImageViewController
 @synthesize containerView;
+@synthesize cameraButtonItem;
 
 - (id)initWithFeedback:(ATFeedback *)someFeedback feedbackController:(ATFeedbackController *)aController {
 	self = [super initWithNibName:@"ATSimpleImageViewController" bundle:[ATConnect resourceBundle]];
@@ -35,6 +36,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 }
 
 - (void)dealloc {
+	[imagePickerPopover release], imagePickerPopover = nil;
 	[controller release], controller = nil;
 	[feedback release];
 	feedback = nil;
@@ -43,6 +45,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 	scrollView = nil;
 	[containerView removeFromSuperview];
 	[containerView release], containerView = nil;
+	[cameraButtonItem release], cameraButtonItem = nil;
 	[super dealloc];
 }
 
@@ -124,6 +127,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 - (void)viewDidUnload {
 	[containerView removeFromSuperview];
 	[containerView release], containerView = nil;
+	[self setCameraButtonItem:nil];
 	[super viewDidUnload];
 }
 
@@ -140,7 +144,12 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 		} else {
 			actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel Button Title") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Choose From Library", @"Choose Photo Button Title"), nil];
 		}
-		[actionSheet showInView:self.view];
+		
+		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+			[actionSheet showFromBarButtonItem:self.cameraButtonItem animated:YES];
+		} else {
+			[actionSheet showInView:self.view];
+		}
 		[actionSheet autorelease];
 	} else {
 		[self chooseImage];
@@ -170,7 +179,12 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 		[[NSNotificationCenter defaultCenter] postNotificationName:ATImageViewChoseImage object:self];
 	}
 	[self setupScrollView];
-	[picker dismissModalViewControllerAnimated:YES];
+	
+	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+		[imagePickerPopover dismissPopoverAnimated:YES];
+	} else {
+		[picker dismissModalViewControllerAnimated:YES];
+	}
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
@@ -194,6 +208,13 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)aScrollView {
 	return [scrollView imageView];
 }
+
+#pragma mark UIPopoverControllerDelegate
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
+	if (popoverController == imagePickerPopover) {
+		[imagePickerPopover release], imagePickerPopover = nil;
+	}
+}
 @end
 
 @implementation ATSimpleImageViewController (Private)
@@ -203,7 +224,17 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 	UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
 	imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
 	imagePicker.delegate = self;
-	[self presentModalViewController:imagePicker animated:YES];
+	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+		if (imagePickerPopover) {
+			[imagePickerPopover dismissPopoverAnimated:NO];
+			[imagePickerPopover release], imagePickerPopover = nil;
+		}
+		imagePickerPopover = [[UIPopoverController alloc] initWithContentViewController:imagePicker];
+		imagePickerPopover.delegate = self;
+		[imagePickerPopover presentPopoverFromBarButtonItem:self.cameraButtonItem permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+	} else {
+		[self presentModalViewController:imagePicker animated:YES];
+	}
 	[imagePicker release];
 }
 

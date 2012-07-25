@@ -1,4 +1,4 @@
-2012-07-23 wooster v0.4.3
+2012-07-23 wooster v0.4.2
 -------------------------
 * Fix for [#20](https://github.com/apptentive/apptentive-ios/issues/20), wherein the image picker on iPad would cause the app to crash.
 

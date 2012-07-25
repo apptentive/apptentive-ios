@@ -1,3 +1,9 @@
+2012-07-24 wooster v0.4.3
+-------------------------
+* Fix for IOS-41, wherein the metrics were being sent incorrectly and metric for 
+  text responses was being sent after the metric for survey submission.
+
+
 2012-07-23 wooster v0.4.2
 -------------------------
 * Fix for [#20](https://github.com/apptentive/apptentive-ios/issues/20), wherein the image picker on iPad would cause the app to crash.

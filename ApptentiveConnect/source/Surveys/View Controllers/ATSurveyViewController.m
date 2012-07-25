@@ -24,6 +24,7 @@ enum {
 };
 
 @interface ATSurveyViewController (Private)
+- (void)sendNotificationAboutTextViewQuestion:(ATSurveyQuestion *)question;
 - (ATSurveyQuestion *)questionAtIndexPath:(NSIndexPath *)path;
 - (BOOL)questionHasExtraInfo:(ATSurveyQuestion *)question;
 - (BOOL)validateSurvey;
@@ -65,6 +66,17 @@ enum {
 }
 
 - (IBAction)sendSurvey {
+	// Send text view notification, if applicable.
+	if (activeTextView) {
+		ATCellTextView *ctv = activeTextView;
+		ATSurveyQuestion *question = ctv.question;
+		
+		if (question) {
+			ctv.question.answerText = ctv.text;
+			[self sendNotificationAboutTextViewQuestion:question];
+		}
+	}
+	
 	ATSurveyResponse *response = [[ATSurveyResponse alloc] init];
 	NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:startedSurveyDate];
 	if (interval > 0) {
@@ -101,6 +113,7 @@ enum {
 			}
 		}
 	}
+	
 	ATRecordTask *task = [[ATRecordTask alloc] init];
 	[task setRecord:response];
 	[[ATTaskQueue sharedTaskQueue] addTask:task];
@@ -484,15 +497,7 @@ enum {
 		
 		if (question) {
 			ctv.question.answerText = ctv.text;
-			
-			// Send notification.
-			if (![sentNotificationsAboutQuestionIDs containsObject:question.identifier]) {
-				NSDictionary *metricsInfo = [[NSDictionary alloc] initWithObjectsAndKeys:survey.identifier, ATSurveyMetricsSurveyIDKey, question.identifier, ATSurveyMetricsSurveyQuestionIDKey, [NSNumber numberWithInt:ATSurveyEventAnsweredQuestion], ATSurveyMetricsEventKey, nil];
-				[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidAnswerQuestionNotification object:nil userInfo:metricsInfo];
-				[metricsInfo release], metricsInfo = nil;
-				
-				[sentNotificationsAboutQuestionIDs addObject:question.identifier];
-			}
+			[self sendNotificationAboutTextViewQuestion:question];
 		}
 	}
 	[activeTextEntryCell release], activeTextEntryCell = nil;
@@ -506,6 +511,22 @@ enum {
 @end
 
 @implementation ATSurveyViewController (Private)
+- (void)sendNotificationAboutTextViewQuestion:(ATSurveyQuestion *)question {
+	if (!question.type == ATSurveyQuestionTypeSingeLine) {
+		return;
+	}
+	
+	// Send notification.
+	if (![sentNotificationsAboutQuestionIDs containsObject:question.identifier]) {
+		NSDictionary *metricsInfo = [[NSDictionary alloc] initWithObjectsAndKeys:survey.identifier, ATSurveyMetricsSurveyIDKey, question.identifier, ATSurveyMetricsSurveyQuestionIDKey, [NSNumber numberWithInt:ATSurveyEventAnsweredQuestion], ATSurveyMetricsEventKey, nil];
+		[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidAnswerQuestionNotification object:nil userInfo:metricsInfo];
+		[metricsInfo release], metricsInfo = nil;
+		
+		[sentNotificationsAboutQuestionIDs addObject:question.identifier];
+	}
+}
+
+
 - (ATSurveyQuestion *)questionAtIndexPath:(NSIndexPath *)indexPath {
 	if (indexPath.section >= [[survey questions] count]) {
 		return nil;

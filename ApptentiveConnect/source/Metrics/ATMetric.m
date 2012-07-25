@@ -75,11 +75,10 @@
 		for (NSString *key in info) {
 			NSString *recordKey = [NSString stringWithFormat:@"record[metric][data][%@]", key];
 			NSObject *value = [info objectForKey:key];
-			NSObject *recordValue = info;
 			if ([value isKindOfClass:[NSDate class]]) {
-				recordValue = [ATUtilities stringRepresentationOfDate:(NSDate *)value];
+				value = [ATUtilities stringRepresentationOfDate:(NSDate *)value];
 			}
-			[d setObject:recordValue forKey:recordKey];
+			[d setObject:value forKey:recordKey];
 		}
 	}
 	return d;

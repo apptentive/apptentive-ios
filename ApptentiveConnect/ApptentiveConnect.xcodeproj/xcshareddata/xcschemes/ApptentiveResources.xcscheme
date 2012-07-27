@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0430"
+   LastUpgradeVersion = "0440"
    version = "1.8">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -40,6 +40,7 @@
       buildConfiguration = "Debug"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
+      enableOpenGLFrameCaptureMode = "0"
       allowLocationSimulation = "YES">
       <AdditionalOptions>
       </AdditionalOptions>

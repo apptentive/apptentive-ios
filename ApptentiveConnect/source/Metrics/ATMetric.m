@@ -30,6 +30,9 @@
 		if (version == kATMetricStorageVersion) {
 			self.name = [coder decodeObjectForKey:@"name"];
 			NSDictionary *d = [coder decodeObjectForKey:@"info"];
+			if (info) {
+				[info release], info = nil;
+			}
 			if (d != nil) {
 				info = [d mutableCopy];
 			} else {

@@ -171,25 +171,6 @@ enum {
 	
 	CGRect endingFrame = [[UIScreen mainScreen] applicationFrame];
 	
-	CGPoint startingPoint = CGPointZero;
-	
-	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-	
-	switch (orientation) {
-		case UIInterfaceOrientationPortraitUpsideDown:
-			startingPoint = CGPointMake(center.x, center.y + self.window.bounds.size.height);
-			break;
-		case UIInterfaceOrientationLandscapeLeft:
-			startingPoint = CGPointMake(center.x - self.window.bounds.size.width, center.y);
-			break;
-		case UIInterfaceOrientationLandscapeRight:
-			startingPoint = CGPointMake(center.x + self.window.bounds.size.width, center.y);
-			break;
-		default: // as UIInterfaceOrientationPortrait
-			startingPoint = CGPointMake(center.x, center.y - animationBounds.size.height);
-			break;
-	}
-	
 	[self positionInWindow];
 	
 	if ([self.emailField.text isEqualToString:@""] && self.showEmailAddressField) {
@@ -727,7 +708,6 @@ enum {
 				
 				if (thumbnailView != nil) {
 					[thumbnailView removeFromSuperview];
-					[thumbnailView release], thumbnailView = nil;
 				}
 				if (photoFrameView != nil) {
 					[photoFrameView removeFromSuperview];

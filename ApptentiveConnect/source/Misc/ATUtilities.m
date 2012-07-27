@@ -339,7 +339,7 @@
 			result = [NSString stringWithFormat:@"%@.%@ %@", dateString, truncatedFloat, timeZoneString];
 		} else {
 			// For some reason, we couldn't find the decimal place.
-			result = [NSString stringWithFormat:@"%@.%d %@", dateString, (long)(fractionalSeconds * 1000), timeZoneString];
+			result = [NSString stringWithFormat:@"%@.%ld %@", dateString, (long)(fractionalSeconds * 1000), timeZoneString];
 		}
 		[f release], f= nil;
 	}

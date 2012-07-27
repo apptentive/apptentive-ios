@@ -156,7 +156,6 @@
 		49E891D0134FE2AB00DD098A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49E891CD134FE2AB00DD098A /* Localizable.strings */; };
 		49E90DBA13FC7FAB00BDBDA1 /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 49E90DB813FC7FAB00BDBDA1 /* JSONKit.h */; };
 		49E90DBB13FC7FAB00BDBDA1 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 49E90DB913FC7FAB00BDBDA1 /* JSONKit.m */; };
-		49E90DBD13FC7FDE00BDBDA1 /* JSONKIT_License.txt in Resources */ = {isa = PBXBuildFile; fileRef = 49E90DBC13FC7FDE00BDBDA1 /* JSONKIT_License.txt */; };
 		49EA5AB014BD08AD004F8A4D /* ATRecord.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EA5AAE14BD08AD004F8A4D /* ATRecord.h */; };
 		49EA5AB114BD08AD004F8A4D /* ATRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EA5AAF14BD08AD004F8A4D /* ATRecord.m */; };
 		49EA5AB214BD08AD004F8A4D /* ATRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EA5AAF14BD08AD004F8A4D /* ATRecord.m */; };
@@ -306,7 +305,6 @@
 		49E891CF134FE2AB00DD098A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		49E90DB813FC7FAB00BDBDA1 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSONKit.h; path = JSONKit/JSONKit.h; sourceTree = "<group>"; };
 		49E90DB913FC7FAB00BDBDA1 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSONKit.m; path = JSONKit/JSONKit.m; sourceTree = "<group>"; };
-		49E90DBC13FC7FDE00BDBDA1 /* JSONKIT_License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = JSONKIT_License.txt; path = JSONKit/JSONKIT_License.txt; sourceTree = "<group>"; };
 		49EA5AAE14BD08AD004F8A4D /* ATRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATRecord.h; sourceTree = "<group>"; };
 		49EA5AAF14BD08AD004F8A4D /* ATRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATRecord.m; sourceTree = "<group>"; };
 		49EA5ABB14BD0F4D004F8A4D /* ATRecordTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATRecordTask.h; sourceTree = "<group>"; };
@@ -641,7 +639,6 @@
 				49D1123B13359BA000603373 /* NSData+ATBase64.m */,
 				49E90DB813FC7FAB00BDBDA1 /* JSONKit.h */,
 				49E90DB913FC7FAB00BDBDA1 /* JSONKit.m */,
-				49E90DBC13FC7FDE00BDBDA1 /* JSONKIT_License.txt */,
 			);
 			path = ext;
 			sourceTree = "<group>";
@@ -843,7 +840,6 @@
 				49352A00138C7257000E464A /* ATInfoViewController_iPad.xib in Resources */,
 				49352A20138C73B8000E464A /* ATAboutApptentiveView.xib in Resources */,
 				49352B3F138DB3AA000E464A /* ATTaskProgressCell.xib in Resources */,
-				49E90DBD13FC7FDE00BDBDA1 /* JSONKIT_License.txt in Resources */,
 				490B816C14427A95009801E9 /* ATFeedbackController.xib in Resources */,
 				496F29E014496711005B7C01 /* ATSimpleImageViewController.xib in Resources */,
 			);

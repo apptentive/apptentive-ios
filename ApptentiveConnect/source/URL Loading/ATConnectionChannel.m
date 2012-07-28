@@ -23,7 +23,13 @@
 }
 
 - (void)update {
+	if (![[NSThread currentThread] isMainThread]) {
+		[self performSelectorOnMainThread:@selector(update) withObject:nil waitUntilDone:NO];
+		return;
+	}
+	
 	@synchronized(self) {
+		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 		while ([active count] < maximumConnections && [waiting count] > 0) {
 			ATURLConnection *loader = [[waiting objectAtIndex:0] retain];
 			[active addObject:loader];
@@ -32,6 +38,7 @@
 			[loader start];
 			[loader release];
 		}
+		[pool release], pool = nil;
 	}
 }
 

@@ -37,8 +37,8 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 		[[ATConnectionManager sharedSingleton] cancelConnection:connection inChannel:channelName];
 		[connection release], connection = nil;
 	}
-	self.errorTitle = nil;
-	self.errorMessage = nil;
+	[errorTitle release], errorTitle = nil;
+	[errorMessage release], errorMessage = nil;
 	[channelName release], channelName = nil;
 	
 	[super dealloc];

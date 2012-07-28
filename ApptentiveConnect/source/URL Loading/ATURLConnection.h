@@ -7,9 +7,11 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol ATURLConnectionDelegate;
+
 @interface ATURLConnection : NSObject {
 	NSURL *targetURL;
-	id delegate;
+	NSObject<ATURLConnectionDelegate> *delegate;
 	
 	NSURLConnection *connection;
 	NSMutableData *data;
@@ -31,7 +33,7 @@
 	float percentComplete;
 }
 @property (nonatomic, readonly, copy) NSURL *targetURL;
-@property (nonatomic, assign) id delegate;
+@property (nonatomic, assign) NSObject<ATURLConnectionDelegate> *delegate;
 @property (nonatomic, retain) NSURLConnection *connection;
 @property (nonatomic, assign) BOOL executing;
 @property (nonatomic, assign) BOOL finished;
@@ -45,7 +47,7 @@
 @property (nonatomic, assign) float percentComplete;
 
 /*! The delegate for this class is a weak reference. */
-- (id)initWithURL:(NSURL *)url delegate:(id)aDelegate;
+- (id)initWithURL:(NSURL *)url delegate:(NSObject<ATURLConnectionDelegate> *)aDelegate;
 - (id)initWithURL:(NSURL *)url;
 - (void)setValue:(NSString *)value forHTTPHeaderField:(NSString *)field;
 - (void)setHTTPMethod:(NSString *)method;
@@ -62,7 +64,7 @@
 @end
 
 
-@protocol ATURLConnectionDelegate
+@protocol ATURLConnectionDelegate <NSObject>
 - (void)connectionFinishedSuccessfully:(ATURLConnection *)sender;
 - (void)connectionFailed:(ATURLConnection *)sender;
 - (void)connectionDidProgress:(ATURLConnection *)sender;

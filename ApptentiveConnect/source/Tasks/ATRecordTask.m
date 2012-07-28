@@ -41,6 +41,7 @@
 
 - (void)dealloc {
 	[self teardown];
+	[record release], record = nil;
 	[super dealloc];
 }
 
@@ -88,7 +89,10 @@
 #pragma mark ATAPIRequestDelegate
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(id)result {
 	@synchronized(self) {
+		[self retain];
+		[self stop];
 		self.finished = YES;
+		[self release];
 	}
 }
 
@@ -98,11 +102,13 @@
 
 - (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
 	@synchronized(self) {
+		[self retain];
 		self.failed = YES;
 		self.lastErrorTitle = sender.errorTitle;
 		self.lastErrorMessage = sender.errorMessage;
 		NSLog(@"ATAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
 		[self stop];
+		[self release];
 	}
 }
 @end

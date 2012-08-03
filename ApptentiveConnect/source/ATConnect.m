@@ -20,7 +20,7 @@
 static ATConnect *sharedConnection = nil;
 
 @implementation ATConnect
-@synthesize apiKey, showKeyboardAccessory, shouldTakeScreenshot, showEmailField, initialName, initialEmailAddress, feedbackControllerType, customPlaceholderText;
+@synthesize apiKey, showKeyboardAccessory, shouldTakeScreenshot, showEmailField, showTagline, initialName, initialEmailAddress, feedbackControllerType, customPlaceholderText;
 
 + (ATConnect *)sharedConnection {
 	@synchronized(self) {
@@ -33,6 +33,7 @@ static ATConnect *sharedConnection = nil;
 
 - (id)init {
 	if ((self = [super init])) {
+		self.showTagline = YES;
 		self.showEmailField = YES;
 		self.showKeyboardAccessory = YES;
 		self.shouldTakeScreenshot = YES;

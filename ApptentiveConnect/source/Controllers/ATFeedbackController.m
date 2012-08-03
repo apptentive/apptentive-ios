@@ -231,9 +231,9 @@ enum {
 
 	self.logoImageView.image = [ATBackend imageNamed:@"at_apptentive_icon_small"];
 	self.taglineLabel.text = ATLocalizedString(@"Feedback Powered by Apptentive", @"Tagline text");
-#ifdef AT_HIDE_TAGLINE
-	[self.logoControl setHidden:YES];
-#endif
+	if (![[ATConnect sharedConnection] showTagline]) {
+		[self.logoControl setHidden:YES];
+	}
 	if ([self shouldShowPaperclip]) {
 		CGRect viewBounds = self.view.bounds;
 		UIImage *paperclipBackground = [ATBackend imageNamed:@"at_paperclip_background"];

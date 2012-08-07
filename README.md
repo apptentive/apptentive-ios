@@ -1,3 +1,7 @@
+# PrefixedJSONKit
+
+PrefixedJSONKit is a fork of JSONKit which prefixes the symbols in JSONKit for easy embedding in static libraries to avoid conflicts with other uses of JSONKit in the same library.
+
 # JSONKit
 
 JSONKit is dual licensed under either the terms of the BSD License, or alternatively under the terms of the Apache License, Version 2.0.<br />

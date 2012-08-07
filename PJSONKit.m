@@ -226,37 +226,37 @@
 @class JSONKIT_PREPEND(JKArray), JSONKIT_PREPEND(JKDictionaryEnumerator), JSONKIT_PREPEND(JKDictionary);
 
 enum {
-  JSONKIT_PREPEND(JSONNumberStateStart)                 = 0,
-  JSONKIT_PREPEND(JSONNumberStateFinished)              = 1,
-  JSONKIT_PREPEND(JSONNumberStateError)                 = 2,
-  JSONKIT_PREPEND(JSONNumberStateWholeNumberStart)      = 3,
-  JSONKIT_PREPEND(JSONNumberStateWholeNumberMinus)      = 4,
-  JSONKIT_PREPEND(JSONNumberStateWholeNumberZero)       = 5,
-  JSONKIT_PREPEND(JSONNumberStateWholeNumber)           = 6,
-  JSONKIT_PREPEND(JSONNumberStatePeriod)                = 7,
-  JSONKIT_PREPEND(JSONNumberStateFractionalNumberStart) = 8,
-  JSONKIT_PREPEND(JSONNumberStateFractionalNumber)      = 9,
-  JSONKIT_PREPEND(JSONNumberStateExponentStart)         = 10,
-  JSONKIT_PREPEND(JSONNumberStateExponentPlusMinus)     = 11,
-  JSONKIT_PREPEND(JSONNumberStateExponent)              = 12,
+  JSONNumberStateStart                 = 0,
+  JSONNumberStateFinished              = 1,
+  JSONNumberStateError                 = 2,
+  JSONNumberStateWholeNumberStart      = 3,
+  JSONNumberStateWholeNumberMinus      = 4,
+  JSONNumberStateWholeNumberZero       = 5,
+  JSONNumberStateWholeNumber           = 6,
+  JSONNumberStatePeriod                = 7,
+  JSONNumberStateFractionalNumberStart = 8,
+  JSONNumberStateFractionalNumber      = 9,
+  JSONNumberStateExponentStart         = 10,
+  JSONNumberStateExponentPlusMinus     = 11,
+  JSONNumberStateExponent              = 12,
 };
 
 enum {
-  JSONKIT_PREPEND(JSONStringStateStart)                           = 0,
-  JSONKIT_PREPEND(JSONStringStateParsing)                         = 1,
-  JSONKIT_PREPEND(JSONStringStateFinished)                        = 2,
-  JSONKIT_PREPEND(JSONStringStateError)                           = 3,
-  JSONKIT_PREPEND(JSONStringStateEscape)                          = 4,
-  JSONKIT_PREPEND(JSONStringStateEscapedUnicode1)                 = 5,
-  JSONKIT_PREPEND(JSONStringStateEscapedUnicode2)                 = 6,
-  JSONKIT_PREPEND(JSONStringStateEscapedUnicode3)                 = 7,
-  JSONKIT_PREPEND(JSONStringStateEscapedUnicode4)                 = 8,
-  JSONKIT_PREPEND(JSONStringStateEscapedUnicodeSurrogate1)        = 9,
-  JSONKIT_PREPEND(JSONStringStateEscapedUnicodeSurrogate2)        = 10,
-  JSONKIT_PREPEND(JSONStringStateEscapedUnicodeSurrogate3)        = 11,
-  JSONKIT_PREPEND(JSONStringStateEscapedUnicodeSurrogate4)        = 12,
-  JSONKIT_PREPEND(JSONStringStateEscapedNeedEscapeForSurrogate)   = 13,
-  JSONKIT_PREPEND(JSONStringStateEscapedNeedEscapedUForSurrogate) = 14,
+  JSONStringStateStart                           = 0,
+  JSONStringStateParsing                         = 1,
+  JSONStringStateFinished                        = 2,
+  JSONStringStateError                           = 3,
+  JSONStringStateEscape                          = 4,
+  JSONStringStateEscapedUnicode1                 = 5,
+  JSONStringStateEscapedUnicode2                 = 6,
+  JSONStringStateEscapedUnicode3                 = 7,
+  JSONStringStateEscapedUnicode4                 = 8,
+  JSONStringStateEscapedUnicodeSurrogate1        = 9,
+  JSONStringStateEscapedUnicodeSurrogate2        = 10,
+  JSONStringStateEscapedUnicodeSurrogate3        = 11,
+  JSONStringStateEscapedUnicodeSurrogate4        = 12,
+  JSONStringStateEscapedNeedEscapeForSurrogate   = 13,
+  JSONStringStateEscapedNeedEscapedUForSurrogate = 14,
 };
 
 enum {
@@ -1429,7 +1429,7 @@ static int jk_parse_string(JSONKIT_PREPEND(JKParseState) *parseState) {
   size_t               tokenStartIndex   = parseState->atIndex;
   size_t               tokenBufferIdx    = 0UL;
 
-  int      onlySimpleString        = 1,  stringState     = JSONKIT_PREPEND(JSONStringStateStart);
+  int      onlySimpleString        = 1,  stringState     = JSONStringStateStart;
   uint16_t escapedUnicode1         = 0U, escapedUnicode2 = 0U;
   uint32_t escapedUnicodeCodePoint = 0U;
   JKHash   stringHash              = PJK_HASH_INIT;
@@ -1437,7 +1437,7 @@ static int jk_parse_string(JSONKIT_PREPEND(JKParseState) *parseState) {
   while(1) {
     unsigned long currentChar;
 
-    if(PJK_EXPECT_F(atStringCharacter == endOfBuffer)) { /* XXX Add error message */ stringState = JSONKIT_PREPEND(JSONStringStateError); goto finishedParsing; }
+    if(PJK_EXPECT_F(atStringCharacter == endOfBuffer)) { /* XXX Add error message */ stringState = JSONStringStateError; goto finishedParsing; }
     
     if(PJK_EXPECT_F((currentChar = *atStringCharacter++) >= 0x80UL)) {
       const unsigned char *nextValidCharacter = NULL;
@@ -1449,19 +1449,19 @@ static int jk_parse_string(JSONKIT_PREPEND(JKParseState) *parseState) {
       while(atStringCharacter < nextValidCharacter) { NSCParameterAssert(JK_AT_STRING_PTR(parseState) <= JK_END_STRING_PTR(parseState)); stringHash = jk_calculateHash(stringHash, *atStringCharacter++); }
       continue;
     } else {
-      if(PJK_EXPECT_F(currentChar == (unsigned long)'"')) { stringState = JSONKIT_PREPEND(JSONStringStateFinished); goto finishedParsing; }
+      if(PJK_EXPECT_F(currentChar == (unsigned long)'"')) { stringState = JSONStringStateFinished; goto finishedParsing; }
 
       if(PJK_EXPECT_F(currentChar == (unsigned long)'\\')) {
       switchToSlowPath:
         onlySimpleString = 0;
-        stringState      = JSONKIT_PREPEND(JSONStringStateParsing);
+        stringState      = JSONStringStateParsing;
         tokenBufferIdx   = (atStringCharacter - stringStart) - 1L;
-        if(PJK_EXPECT_F((tokenBufferIdx + 16UL) > parseState->token.tokenBuffer.bytes.length)) { if((tokenBuffer = jk_managedBuffer_resize(&parseState->token.tokenBuffer, tokenBufferIdx + 1024UL)) == NULL) { jk_error(parseState, @"Internal error: Unable to resize temporary buffer. %@ line #%ld", [NSString stringWithUTF8String:__FILE__], (long)__LINE__); stringState = JSONKIT_PREPEND(JSONStringStateError); goto finishedParsing; } }
+        if(PJK_EXPECT_F((tokenBufferIdx + 16UL) > parseState->token.tokenBuffer.bytes.length)) { if((tokenBuffer = jk_managedBuffer_resize(&parseState->token.tokenBuffer, tokenBufferIdx + 1024UL)) == NULL) { jk_error(parseState, @"Internal error: Unable to resize temporary buffer. %@ line #%ld", [NSString stringWithUTF8String:__FILE__], (long)__LINE__); stringState = JSONStringStateError; goto finishedParsing; } }
         memcpy(tokenBuffer, stringStart, tokenBufferIdx);
         goto slowMatch;
       }
 
-      if(PJK_EXPECT_F(currentChar < 0x20UL)) { jk_error(parseState, @"Invalid character < 0x20 found in string: 0x%2.2x.", currentChar); stringState = JSONKIT_PREPEND(JSONStringStateError); goto finishedParsing; }
+      if(PJK_EXPECT_F(currentChar < 0x20UL)) { jk_error(parseState, @"Invalid character < 0x20 found in string: 0x%2.2x.", currentChar); stringState = JSONStringStateError; goto finishedParsing; }
 
       stringHash = jk_calculateHash(stringHash, currentChar);
     }
@@ -1470,17 +1470,17 @@ static int jk_parse_string(JSONKIT_PREPEND(JKParseState) *parseState) {
  slowMatch:
 
   for(atStringCharacter = (stringStart + ((atStringCharacter - stringStart) - 1L)); (atStringCharacter < endOfBuffer) && (tokenBufferIdx < parseState->token.tokenBuffer.bytes.length); atStringCharacter++) {
-    if((tokenBufferIdx + 16UL) > parseState->token.tokenBuffer.bytes.length) { if((tokenBuffer = jk_managedBuffer_resize(&parseState->token.tokenBuffer, tokenBufferIdx + 1024UL)) == NULL) { jk_error(parseState, @"Internal error: Unable to resize temporary buffer. %@ line #%ld", [NSString stringWithUTF8String:__FILE__], (long)__LINE__); stringState = JSONKIT_PREPEND(JSONStringStateError); goto finishedParsing; } }
+    if((tokenBufferIdx + 16UL) > parseState->token.tokenBuffer.bytes.length) { if((tokenBuffer = jk_managedBuffer_resize(&parseState->token.tokenBuffer, tokenBufferIdx + 1024UL)) == NULL) { jk_error(parseState, @"Internal error: Unable to resize temporary buffer. %@ line #%ld", [NSString stringWithUTF8String:__FILE__], (long)__LINE__); stringState = JSONStringStateError; goto finishedParsing; } }
 
     NSCParameterAssert(tokenBufferIdx < parseState->token.tokenBuffer.bytes.length);
 
     unsigned long currentChar = (*atStringCharacter), escapedChar;
 
-    if(PJK_EXPECT_T(stringState == JSONKIT_PREPEND(JSONStringStateParsing))) {
+    if(PJK_EXPECT_T(stringState == JSONStringStateParsing)) {
       if(PJK_EXPECT_T(currentChar >= 0x20UL)) {
         if(PJK_EXPECT_T(currentChar < (unsigned long)0x80)) { // Not a UTF8 sequence
-          if(PJK_EXPECT_F(currentChar == (unsigned long)'"'))  { stringState = JSONKIT_PREPEND(JSONStringStateFinished); atStringCharacter++; goto finishedParsing; }
-          if(PJK_EXPECT_F(currentChar == (unsigned long)'\\')) { stringState = JSONKIT_PREPEND(JSONStringStateEscape); continue; }
+          if(PJK_EXPECT_F(currentChar == (unsigned long)'"'))  { stringState = JSONStringStateFinished; atStringCharacter++; goto finishedParsing; }
+          if(PJK_EXPECT_F(currentChar == (unsigned long)'\\')) { stringState = JSONStringStateEscape; continue; }
           stringHash = jk_calculateHash(stringHash, currentChar);
           tokenBuffer[tokenBufferIdx++] = currentChar;
           continue;
@@ -1490,9 +1490,9 @@ static int jk_parse_string(JSONKIT_PREPEND(JKParseState) *parseState) {
           ConversionResult     result;
           
           if(PJK_EXPECT_F((result = ConvertSingleCodePointInUTF8(atStringCharacter, endOfBuffer, (UTF8 const **)&nextValidCharacter, &u32ch)) != conversionOK)) {
-            if((result == sourceIllegal) && ((parseState->parseOptionFlags & JSONKIT_PREPEND(JKParseOptionLooseUnicode)) == 0)) { jk_error(parseState, @"Illegal UTF8 sequence found in \"\" string.");              stringState = JSONKIT_PREPEND(JSONStringStateError); goto finishedParsing; }
-            if(result == sourceExhausted)                                                                      { jk_error(parseState, @"End of buffer reached while parsing UTF8 in \"\" string."); stringState = JSONKIT_PREPEND(JSONStringStateError); goto finishedParsing; }
-            if(jk_string_add_unicodeCodePoint(parseState, u32ch, &tokenBufferIdx, &stringHash))                { jk_error(parseState, @"Internal error: Unable to add UTF8 sequence to internal string buffer. %@ line #%ld", [NSString stringWithUTF8String:__FILE__], (long)__LINE__); stringState = JSONKIT_PREPEND(JSONStringStateError); goto finishedParsing; }
+            if((result == sourceIllegal) && ((parseState->parseOptionFlags & JSONKIT_PREPEND(JKParseOptionLooseUnicode)) == 0)) { jk_error(parseState, @"Illegal UTF8 sequence found in \"\" string.");              stringState = JSONStringStateError; goto finishedParsing; }
+            if(result == sourceExhausted)                                                                      { jk_error(parseState, @"End of buffer reached while parsing UTF8 in \"\" string."); stringState = JSONStringStateError; goto finishedParsing; }
+            if(jk_string_add_unicodeCodePoint(parseState, u32ch, &tokenBufferIdx, &stringHash))                { jk_error(parseState, @"Internal error: Unable to add UTF8 sequence to internal string buffer. %@ line #%ld", [NSString stringWithUTF8String:__FILE__], (long)__LINE__); stringState = JSONStringStateError; goto finishedParsing; }
             atStringCharacter = nextValidCharacter - 1;
             continue;
           } else {
@@ -1502,16 +1502,16 @@ static int jk_parse_string(JSONKIT_PREPEND(JKParseState) *parseState) {
           }
         }
       } else { // currentChar < 0x20
-        jk_error(parseState, @"Invalid character < 0x20 found in string: 0x%2.2x.", currentChar); stringState = JSONKIT_PREPEND(JSONStringStateError); goto finishedParsing;
+        jk_error(parseState, @"Invalid character < 0x20 found in string: 0x%2.2x.", currentChar); stringState = JSONStringStateError; goto finishedParsing;
       }
 
     } else { // stringState != JSONStringStateParsing
       int isSurrogate = 1;
 
       switch(stringState) {
-        case JSONKIT_PREPEND(JSONStringStateEscape):
+        case JSONStringStateEscape:
           switch(currentChar) {
-            case 'u': escapedUnicode1 = 0U; escapedUnicode2 = 0U; escapedUnicodeCodePoint = 0U; stringState = JSONKIT_PREPEND(JSONStringStateEscapedUnicode1); break;
+            case 'u': escapedUnicode1 = 0U; escapedUnicode2 = 0U; escapedUnicodeCodePoint = 0U; stringState = JSONStringStateEscapedUnicode1; break;
 
             case 'b':  escapedChar = '\b'; goto parsedEscapedChar;
             case 'f':  escapedChar = '\f'; goto parsedEscapedChar;
@@ -1523,23 +1523,23 @@ static int jk_parse_string(JSONKIT_PREPEND(JKParseState) *parseState) {
             case '"':  escapedChar = '"';  goto parsedEscapedChar;
               
             parsedEscapedChar:
-              stringState = JSONKIT_PREPEND(JSONStringStateParsing);
+              stringState = JSONStringStateParsing;
               stringHash  = jk_calculateHash(stringHash, escapedChar);
               tokenBuffer[tokenBufferIdx++] = escapedChar;
               break;
               
-            default: jk_error(parseState, @"Invalid escape sequence found in \"\" string."); stringState = JSONKIT_PREPEND(JSONStringStateError); goto finishedParsing; break;
+            default: jk_error(parseState, @"Invalid escape sequence found in \"\" string."); stringState = JSONStringStateError; goto finishedParsing; break;
           }
           break;
 
-        case JSONKIT_PREPEND(JSONStringStateEscapedUnicode1):
-        case JSONKIT_PREPEND(JSONStringStateEscapedUnicode2):
-        case JSONKIT_PREPEND(JSONStringStateEscapedUnicode3):
-        case JSONKIT_PREPEND(JSONStringStateEscapedUnicode4):           isSurrogate = 0;
-        case JSONKIT_PREPEND(JSONStringStateEscapedUnicodeSurrogate1):
-        case JSONKIT_PREPEND(JSONStringStateEscapedUnicodeSurrogate2):
-        case JSONKIT_PREPEND(JSONStringStateEscapedUnicodeSurrogate3):
-        case JSONKIT_PREPEND(JSONStringStateEscapedUnicodeSurrogate4):
+        case JSONStringStateEscapedUnicode1:
+        case JSONStringStateEscapedUnicode2:
+        case JSONStringStateEscapedUnicode3:
+        case JSONStringStateEscapedUnicode4:           isSurrogate = 0;
+        case JSONStringStateEscapedUnicodeSurrogate1:
+        case JSONStringStateEscapedUnicodeSurrogate2:
+        case JSONStringStateEscapedUnicodeSurrogate3:
+        case JSONStringStateEscapedUnicodeSurrogate4:
           {
             uint16_t hexValue = 0U;
 
@@ -1551,62 +1551,62 @@ static int jk_parse_string(JSONKIT_PREPEND(JKParseState) *parseState) {
               parsedHex:
               if(!isSurrogate) { escapedUnicode1 = (escapedUnicode1 << 4) | hexValue; } else { escapedUnicode2 = (escapedUnicode2 << 4) | hexValue; }
                 
-              if(stringState == JSONKIT_PREPEND(JSONStringStateEscapedUnicode4)) {
+              if(stringState == JSONStringStateEscapedUnicode4) {
                 if(((escapedUnicode1 >= 0xD800U) && (escapedUnicode1 < 0xE000U))) {
-                  if((escapedUnicode1 >= 0xD800U) && (escapedUnicode1 < 0xDC00U)) { stringState = JSONKIT_PREPEND(JSONStringStateEscapedNeedEscapeForSurrogate); }
+                  if((escapedUnicode1 >= 0xD800U) && (escapedUnicode1 < 0xDC00U)) { stringState = JSONStringStateEscapedNeedEscapeForSurrogate; }
                   else if((escapedUnicode1 >= 0xDC00U) && (escapedUnicode1 < 0xE000U)) { 
                     if((parseState->parseOptionFlags & JSONKIT_PREPEND(JKParseOptionLooseUnicode))) { escapedUnicodeCodePoint = UNI_REPLACEMENT_CHAR; }
-                    else { jk_error(parseState, @"Illegal \\u Unicode escape sequence."); stringState = JSONKIT_PREPEND(JSONStringStateError); goto finishedParsing; }
+                    else { jk_error(parseState, @"Illegal \\u Unicode escape sequence."); stringState = JSONStringStateError; goto finishedParsing; }
                   }
                 }
                 else { escapedUnicodeCodePoint = escapedUnicode1; }
               }
 
-              if(stringState == JSONKIT_PREPEND(JSONStringStateEscapedUnicodeSurrogate4)) {
+              if(stringState == JSONStringStateEscapedUnicodeSurrogate4) {
                 if((escapedUnicode2 < 0xdc00) || (escapedUnicode2 > 0xdfff)) {
                   if((parseState->parseOptionFlags & JSONKIT_PREPEND(JKParseOptionLooseUnicode))) { escapedUnicodeCodePoint = UNI_REPLACEMENT_CHAR; }
-                  else { jk_error(parseState, @"Illegal \\u Unicode escape sequence."); stringState = JSONKIT_PREPEND(JSONStringStateError); goto finishedParsing; }
+                  else { jk_error(parseState, @"Illegal \\u Unicode escape sequence."); stringState = JSONStringStateError; goto finishedParsing; }
                 }
                 else { escapedUnicodeCodePoint = ((escapedUnicode1 - 0xd800) * 0x400) + (escapedUnicode2 - 0xdc00) + 0x10000; }
               }
                 
-              if((stringState == JSONKIT_PREPEND(JSONStringStateEscapedUnicode4)) || (stringState == JSONKIT_PREPEND(JSONStringStateEscapedUnicodeSurrogate4))) { 
-                if((isValidCodePoint(&escapedUnicodeCodePoint) == sourceIllegal) && ((parseState->parseOptionFlags & JSONKIT_PREPEND(JKParseOptionLooseUnicode)) == 0)) { jk_error(parseState, @"Illegal \\u Unicode escape sequence."); stringState = JSONKIT_PREPEND(JSONStringStateError); goto finishedParsing; }
-                stringState = JSONKIT_PREPEND(JSONStringStateParsing);
-                if(jk_string_add_unicodeCodePoint(parseState, escapedUnicodeCodePoint, &tokenBufferIdx, &stringHash)) { jk_error(parseState, @"Internal error: Unable to add UTF8 sequence to internal string buffer. %@ line #%ld", [NSString stringWithUTF8String:__FILE__], (long)__LINE__); stringState = JSONKIT_PREPEND(JSONStringStateError); goto finishedParsing; }
+              if((stringState == JSONStringStateEscapedUnicode4) || (stringState == JSONStringStateEscapedUnicodeSurrogate4)) { 
+                if((isValidCodePoint(&escapedUnicodeCodePoint) == sourceIllegal) && ((parseState->parseOptionFlags & JSONKIT_PREPEND(JKParseOptionLooseUnicode)) == 0)) { jk_error(parseState, @"Illegal \\u Unicode escape sequence."); stringState = JSONStringStateError; goto finishedParsing; }
+                stringState = JSONStringStateParsing;
+                if(jk_string_add_unicodeCodePoint(parseState, escapedUnicodeCodePoint, &tokenBufferIdx, &stringHash)) { jk_error(parseState, @"Internal error: Unable to add UTF8 sequence to internal string buffer. %@ line #%ld", [NSString stringWithUTF8String:__FILE__], (long)__LINE__); stringState = JSONStringStateError; goto finishedParsing; }
               }
-              else if((stringState >= JSONKIT_PREPEND(JSONStringStateEscapedUnicode1)) && (stringState <= JSONKIT_PREPEND(JSONStringStateEscapedUnicodeSurrogate4))) { stringState++; }
+              else if((stringState >= JSONStringStateEscapedUnicode1) && (stringState <= JSONStringStateEscapedUnicodeSurrogate4)) { stringState++; }
               break;
 
-              default: jk_error(parseState, @"Unexpected character found in \\u Unicode escape sequence.  Found '%c', expected [0-9a-fA-F].", currentChar); stringState = JSONKIT_PREPEND(JSONStringStateError); goto finishedParsing; break;
+              default: jk_error(parseState, @"Unexpected character found in \\u Unicode escape sequence.  Found '%c', expected [0-9a-fA-F].", currentChar); stringState = JSONStringStateError; goto finishedParsing; break;
             }
           }
           break;
 
-        case JSONKIT_PREPEND(JSONStringStateEscapedNeedEscapeForSurrogate):
-          if(currentChar == '\\') { stringState = JSONKIT_PREPEND(JSONStringStateEscapedNeedEscapedUForSurrogate); }
+        case JSONStringStateEscapedNeedEscapeForSurrogate:
+          if(currentChar == '\\') { stringState = JSONStringStateEscapedNeedEscapedUForSurrogate; }
           else { 
-            if((parseState->parseOptionFlags & JSONKIT_PREPEND(JKParseOptionLooseUnicode)) == 0) { jk_error(parseState, @"Required a second \\u Unicode escape sequence following a surrogate \\u Unicode escape sequence."); stringState = JSONKIT_PREPEND(JSONStringStateError); goto finishedParsing; }
-            else { stringState = JSONKIT_PREPEND(JSONStringStateParsing); atStringCharacter--;    if(jk_string_add_unicodeCodePoint(parseState, UNI_REPLACEMENT_CHAR, &tokenBufferIdx, &stringHash)) { jk_error(parseState, @"Internal error: Unable to add UTF8 sequence to internal string buffer. %@ line #%ld", [NSString stringWithUTF8String:__FILE__], (long)__LINE__); stringState = JSONKIT_PREPEND(JSONStringStateError); goto finishedParsing; } }
+            if((parseState->parseOptionFlags & JSONKIT_PREPEND(JKParseOptionLooseUnicode)) == 0) { jk_error(parseState, @"Required a second \\u Unicode escape sequence following a surrogate \\u Unicode escape sequence."); stringState = JSONStringStateError; goto finishedParsing; }
+            else { stringState = JSONStringStateParsing; atStringCharacter--;    if(jk_string_add_unicodeCodePoint(parseState, UNI_REPLACEMENT_CHAR, &tokenBufferIdx, &stringHash)) { jk_error(parseState, @"Internal error: Unable to add UTF8 sequence to internal string buffer. %@ line #%ld", [NSString stringWithUTF8String:__FILE__], (long)__LINE__); stringState = JSONStringStateError; goto finishedParsing; } }
           }
           break;
 
-        case JSONKIT_PREPEND(JSONStringStateEscapedNeedEscapedUForSurrogate):
-          if(currentChar == 'u') { stringState = JSONKIT_PREPEND(JSONStringStateEscapedUnicodeSurrogate1); }
+        case JSONStringStateEscapedNeedEscapedUForSurrogate:
+          if(currentChar == 'u') { stringState = JSONStringStateEscapedUnicodeSurrogate1; }
           else { 
-            if((parseState->parseOptionFlags & JSONKIT_PREPEND(JKParseOptionLooseUnicode)) == 0) { jk_error(parseState, @"Required a second \\u Unicode escape sequence following a surrogate \\u Unicode escape sequence."); stringState = JSONKIT_PREPEND(JSONStringStateError); goto finishedParsing; }
-            else { stringState = JSONKIT_PREPEND(JSONStringStateParsing); atStringCharacter -= 2; if(jk_string_add_unicodeCodePoint(parseState, UNI_REPLACEMENT_CHAR, &tokenBufferIdx, &stringHash)) { jk_error(parseState, @"Internal error: Unable to add UTF8 sequence to internal string buffer. %@ line #%ld", [NSString stringWithUTF8String:__FILE__], (long)__LINE__); stringState = JSONKIT_PREPEND(JSONStringStateError); goto finishedParsing; } }
+            if((parseState->parseOptionFlags & JSONKIT_PREPEND(JKParseOptionLooseUnicode)) == 0) { jk_error(parseState, @"Required a second \\u Unicode escape sequence following a surrogate \\u Unicode escape sequence."); stringState = JSONStringStateError; goto finishedParsing; }
+            else { stringState = JSONStringStateParsing; atStringCharacter -= 2; if(jk_string_add_unicodeCodePoint(parseState, UNI_REPLACEMENT_CHAR, &tokenBufferIdx, &stringHash)) { jk_error(parseState, @"Internal error: Unable to add UTF8 sequence to internal string buffer. %@ line #%ld", [NSString stringWithUTF8String:__FILE__], (long)__LINE__); stringState = JSONStringStateError; goto finishedParsing; } }
           }
           break;
 
-        default: jk_error(parseState, @"Internal error: Unknown stringState. %@ line #%ld", [NSString stringWithUTF8String:__FILE__], (long)__LINE__); stringState = JSONKIT_PREPEND(JSONStringStateError); goto finishedParsing; break;
+        default: jk_error(parseState, @"Internal error: Unknown stringState. %@ line #%ld", [NSString stringWithUTF8String:__FILE__], (long)__LINE__); stringState = JSONStringStateError; goto finishedParsing; break;
       }
     }
   }
 
 finishedParsing:
 
-  if(PJK_EXPECT_T(stringState == JSONKIT_PREPEND(JSONStringStateFinished))) {
+  if(PJK_EXPECT_T(stringState == JSONStringStateFinished)) {
     NSCParameterAssert((parseState->stringBuffer.bytes.ptr + tokenStartIndex) < atStringCharacter);
 
     parseState->token.tokenPtrRange.ptr    = parseState->stringBuffer.bytes.ptr + tokenStartIndex;
@@ -1626,8 +1626,8 @@ finishedParsing:
     parseState->atIndex          = (atStringCharacter - parseState->stringBuffer.bytes.ptr);
   }
 
-  if(PJK_EXPECT_F(stringState != JSONKIT_PREPEND(JSONStringStateFinished))) { jk_error(parseState, @"Invalid string."); }
-  return(PJK_EXPECT_T(stringState == JSONKIT_PREPEND(JSONStringStateFinished)) ? 0 : 1);
+  if(PJK_EXPECT_F(stringState != JSONStringStateFinished)) { jk_error(parseState, @"Invalid string."); }
+  return(PJK_EXPECT_T(stringState == JSONStringStateFinished) ? 0 : 1);
 }
 
 static int jk_parse_number(JSONKIT_PREPEND(JKParseState) *parseState) {
@@ -1635,28 +1635,28 @@ static int jk_parse_number(JSONKIT_PREPEND(JKParseState) *parseState) {
   const unsigned char *numberStart       = JK_AT_STRING_PTR(parseState);
   const unsigned char *endOfBuffer       = JK_END_STRING_PTR(parseState);
   const unsigned char *atNumberCharacter = NULL;
-  int                  numberState       = JSONKIT_PREPEND(JSONNumberStateWholeNumberStart), isFloatingPoint = 0, isNegative = 0, backup = 0;
+  int                  numberState       = JSONNumberStateWholeNumberStart, isFloatingPoint = 0, isNegative = 0, backup = 0;
   size_t               startingIndex     = parseState->atIndex;
   
-  for(atNumberCharacter = numberStart; (PJK_EXPECT_T(atNumberCharacter < endOfBuffer)) && (PJK_EXPECT_T(!(PJK_EXPECT_F(numberState == JSONKIT_PREPEND(JSONNumberStateFinished)) || PJK_EXPECT_F(numberState == JSONKIT_PREPEND(JSONNumberStateError))))); atNumberCharacter++) {
+  for(atNumberCharacter = numberStart; (PJK_EXPECT_T(atNumberCharacter < endOfBuffer)) && (PJK_EXPECT_T(!(PJK_EXPECT_F(numberState == JSONNumberStateFinished) || PJK_EXPECT_F(numberState == JSONNumberStateError)))); atNumberCharacter++) {
     unsigned long currentChar = (unsigned long)(*atNumberCharacter), lowerCaseCC = currentChar | 0x20UL;
     
     switch(numberState) {
-      case JSONKIT_PREPEND(JSONNumberStateWholeNumberStart): if   (currentChar == '-')                                                                              { numberState = JSONKIT_PREPEND(JSONNumberStateWholeNumberMinus);      isNegative      = 1; break; }
-      case JSONKIT_PREPEND(JSONNumberStateWholeNumberMinus): if   (currentChar == '0')                                                                              { numberState = JSONKIT_PREPEND(JSONNumberStateWholeNumberZero);                            break; }
-                                       else if(  (currentChar >= '1') && (currentChar <= '9'))                                                     { numberState = JSONKIT_PREPEND(JSONNumberStateWholeNumber);                                break; }
-                                       else                                                     { /* XXX Add error message */                        numberState = JSONKIT_PREPEND(JSONNumberStateError);                                      break; }
-      case JSONKIT_PREPEND(JSONNumberStateExponentStart):    if(  (currentChar == '+') || (currentChar == '-'))                                                     { numberState = JSONKIT_PREPEND(JSONNumberStateExponentPlusMinus);                          break; }
-      case JSONKIT_PREPEND(JSONNumberStateFractionalNumberStart):
-      case JSONKIT_PREPEND(JSONNumberStateExponentPlusMinus):if(!((currentChar >= '0') && (currentChar <= '9'))) { /* XXX Add error message */                        numberState = JSONKIT_PREPEND(JSONNumberStateError);                                      break; }
-                                       else {                                              if(numberState == JSONKIT_PREPEND(JSONNumberStateFractionalNumberStart)) { numberState = JSONKIT_PREPEND(JSONNumberStateFractionalNumber); }
-                                                                                           else                                                    { numberState = JSONKIT_PREPEND(JSONNumberStateExponent);         }                         break; }
-      case JSONKIT_PREPEND(JSONNumberStateWholeNumberZero):
-      case JSONKIT_PREPEND(JSONNumberStateWholeNumber):      if   (currentChar == '.')                                                                              { numberState = JSONKIT_PREPEND(JSONNumberStateFractionalNumberStart); isFloatingPoint = 1; break; }
-      case JSONKIT_PREPEND(JSONNumberStateFractionalNumber): if   (lowerCaseCC == 'e')                                                                              { numberState = JSONKIT_PREPEND(JSONNumberStateExponentStart);         isFloatingPoint = 1; break; }
-      case JSONKIT_PREPEND(JSONNumberStateExponent):         if(!((currentChar >= '0') && (currentChar <= '9')) || (numberState == JSONKIT_PREPEND(JSONNumberStateWholeNumberZero))) { numberState = JSONKIT_PREPEND(JSONNumberStateFinished);              backup          = 1; break; }
+      case JSONNumberStateWholeNumberStart: if   (currentChar == '-')                                                                              { numberState = JSONNumberStateWholeNumberMinus;      isNegative      = 1; break; }
+      case JSONNumberStateWholeNumberMinus: if   (currentChar == '0')                                                                              { numberState = JSONNumberStateWholeNumberZero;                            break; }
+                                       else if(  (currentChar >= '1') && (currentChar <= '9'))                                                     { numberState = JSONNumberStateWholeNumber;                                break; }
+                                       else                                                     { /* XXX Add error message */                        numberState = JSONNumberStateError;                                      break; }
+      case JSONNumberStateExponentStart:    if(  (currentChar == '+') || (currentChar == '-'))                                                     { numberState = JSONNumberStateExponentPlusMinus;                          break; }
+      case JSONNumberStateFractionalNumberStart:
+      case JSONNumberStateExponentPlusMinus:if(!((currentChar >= '0') && (currentChar <= '9'))) { /* XXX Add error message */                        numberState = JSONNumberStateError;                                      break; }
+                                       else {                                              if(numberState == JSONNumberStateFractionalNumberStart) { numberState = JSONNumberStateFractionalNumber; }
+                                                                                           else                                                    { numberState = JSONNumberStateExponent;         }                         break; }
+      case JSONNumberStateWholeNumberZero:
+      case JSONNumberStateWholeNumber:      if   (currentChar == '.')                                                                              { numberState = JSONNumberStateFractionalNumberStart; isFloatingPoint = 1; break; }
+      case JSONNumberStateFractionalNumber: if   (lowerCaseCC == 'e')                                                                              { numberState = JSONNumberStateExponentStart;         isFloatingPoint = 1; break; }
+      case JSONNumberStateExponent:         if(!((currentChar >= '0') && (currentChar <= '9')) || (numberState == JSONNumberStateWholeNumberZero)) { numberState = JSONNumberStateFinished;              backup          = 1; break; }
         break;
-      default:                                                                                    /* XXX Add error message */                        numberState = JSONKIT_PREPEND(JSONNumberStateError);                                      break;
+      default:                                                                                    /* XXX Add error message */                        numberState = JSONNumberStateError;                                      break;
     }
   }
   
@@ -1664,7 +1664,7 @@ static int jk_parse_number(JSONKIT_PREPEND(JKParseState) *parseState) {
   parseState->token.tokenPtrRange.length = (atNumberCharacter - parseState->token.tokenPtrRange.ptr) - backup;
   parseState->atIndex                    = (parseState->token.tokenPtrRange.ptr + parseState->token.tokenPtrRange.length) - parseState->stringBuffer.bytes.ptr;
 
-  if(PJK_EXPECT_T(numberState == JSONKIT_PREPEND(JSONNumberStateFinished))) {
+  if(PJK_EXPECT_T(numberState == JSONNumberStateFinished)) {
     unsigned char  numberTempBuf[parseState->token.tokenPtrRange.length + 4UL];
     unsigned char *endOfNumber = NULL;
 
@@ -1699,7 +1699,7 @@ static int jk_parse_number(JSONKIT_PREPEND(JKParseState) *parseState) {
     }
 
     if(PJK_EXPECT_F(errno != 0)) {
-      numberState = JSONKIT_PREPEND(JSONNumberStateError);
+      numberState = JSONNumberStateError;
       if(errno == ERANGE) {
         switch(parseState->token.value.type) {
           case JKValueTypeDouble:           jk_error(parseState, @"The value '%s' could not be represented as a 'double' due to %s.",           numberTempBuf, (parseState->token.value.number.doubleValue == 0.0) ? "underflow" : "overflow"); break; // see above for == 0.0.
@@ -1709,14 +1709,14 @@ static int jk_parse_number(JSONKIT_PREPEND(JKParseState) *parseState) {
         }
       }
     }
-    if(PJK_EXPECT_F(endOfNumber != &numberTempBuf[parseState->token.tokenPtrRange.length]) && PJK_EXPECT_F(numberState != JSONKIT_PREPEND(JSONNumberStateError))) { numberState = JSONKIT_PREPEND(JSONNumberStateError); jk_error(parseState, @"The conversion function did not consume all of the number tokens characters."); }
+    if(PJK_EXPECT_F(endOfNumber != &numberTempBuf[parseState->token.tokenPtrRange.length]) && PJK_EXPECT_F(numberState != JSONNumberStateError)) { numberState = JSONNumberStateError; jk_error(parseState, @"The conversion function did not consume all of the number tokens characters."); }
 
     size_t hashIndex = 0UL;
     for(hashIndex = 0UL; hashIndex < parseState->token.value.ptrRange.length; hashIndex++) { parseState->token.value.hash = jk_calculateHash(parseState->token.value.hash, parseState->token.value.ptrRange.ptr[hashIndex]); }
   }
 
-  if(PJK_EXPECT_F(numberState != JSONKIT_PREPEND(JSONNumberStateFinished))) { jk_error(parseState, @"Invalid number."); }
-  return(PJK_EXPECT_T((numberState == JSONKIT_PREPEND(JSONNumberStateFinished))) ? 0 : 1);
+  if(PJK_EXPECT_F(numberState != JSONNumberStateFinished)) { jk_error(parseState, @"Invalid number."); }
+  return(PJK_EXPECT_T((numberState == JSONNumberStateFinished)) ? 0 : 1);
 }
 
 PJK_STATIC_INLINE void jk_set_parsed_token(JSONKIT_PREPEND(JKParseState) *parseState, const unsigned char *ptr, size_t length, JKTokenType type, size_t advanceBy) {

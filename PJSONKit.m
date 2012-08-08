@@ -566,7 +566,7 @@ static JKHashTableEntry *_JKDictionaryHashTableEntryForKey(JSONKIT_PREPEND(JKDic
 
 static void _JSONDecoderCleanup(JSONKIT_PREPEND(JSONDecoder) *decoder);
 
-static id JSONKIT_PREPEND(_NSStringObjectFromJSONString)(NSString *jsonString, JSONKIT_PREPEND(JKParseOptionFlags) parseOptionFlags, NSError **error, BOOL mutableCollection);
+static id _NSStringObjectFromJSONString(NSString *jsonString, JSONKIT_PREPEND(JKParseOptionFlags) parseOptionFlags, NSError **error, BOOL mutableCollection);
 
 
 static void jk_managedBuffer_release(JKManagedBuffer *managedBuffer);
@@ -2322,7 +2322,7 @@ static id _JKParseUTF8String(JSONKIT_PREPEND(JKParseState) *parseState, BOOL mut
 
 @implementation NSString (JSONKIT_PREPEND(JSONKitDeserializing))
 
-static id JSONKIT_PREPEND(_NSStringObjectFromJSONString)(NSString *jsonString, JSONKIT_PREPEND(JKParseOptionFlags) parseOptionFlags, NSError **error, BOOL mutableCollection) {
+static id _NSStringObjectFromJSONString(NSString *jsonString, JSONKIT_PREPEND(JKParseOptionFlags) parseOptionFlags, NSError **error, BOOL mutableCollection) {
   id                returnObject = NULL;
   CFMutableDataRef  mutableData  = NULL;
   JSONKIT_PREPEND(JSONDecoder)      *decoder      = NULL;
@@ -2359,7 +2359,7 @@ exitNow:
 
 - (id)JSONKIT_PREPEND(objectFromJSONStringWithParseOptions):(JSONKIT_PREPEND(JKParseOptionFlags))parseOptionFlags error:(NSError **)error
 {
-  return(JSONKIT_PREPEND(_NSStringObjectFromJSONString)(self, parseOptionFlags, error, NO));
+  return(_NSStringObjectFromJSONString(self, parseOptionFlags, error, NO));
 }
 
 
@@ -2375,7 +2375,7 @@ exitNow:
 
 - (id)JSONKIT_PREPEND(mutableObjectFromJSONStringWithParseOptions):(JSONKIT_PREPEND(JKParseOptionFlags))parseOptionFlags error:(NSError **)error
 {
-  return(JSONKIT_PREPEND(_NSStringObjectFromJSONString)(self, parseOptionFlags, error, YES));
+  return(_NSStringObjectFromJSONString(self, parseOptionFlags, error, YES));
 }
 
 @end

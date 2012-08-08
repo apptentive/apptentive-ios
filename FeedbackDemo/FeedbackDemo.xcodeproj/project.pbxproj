@@ -348,7 +348,7 @@
 		49C002DE1334172E0071F088 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0440;
 				ORGANIZATIONNAME = "Apptentive, Inc.";
 			};
 			buildConfigurationList = 49C002E11334172E0071F088 /* Build configuration list for PBXProject "FeedbackDemo" */;
@@ -572,6 +572,7 @@
 					armv6,
 					i386,
 				);
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -584,6 +585,7 @@
 					armv6,
 					i386,
 				);
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

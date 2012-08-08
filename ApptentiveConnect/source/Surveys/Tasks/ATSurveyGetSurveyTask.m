@@ -12,7 +12,7 @@
 #import "ATSurveysBackend.h"
 #import "ATWebClient.h"
 #import "ATWebClient+SurveyAdditions.h"
-#import "JSONKit.h"
+#import "PJSONKit.h"
 
 @interface ATSurveyGetSurveyTask (Private)
 - (void)setup;

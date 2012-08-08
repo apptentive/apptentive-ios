@@ -10,7 +10,7 @@
 #import "ATConnect.h"
 #import "ATConnectionManager.h"
 #import "ATURLConnection.h"
-#import "JSONKit.h"
+#import "PJSONKit.h"
 
 #if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
@@ -136,7 +136,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 		}
 		
 		if (self.returnType == ATAPIRequestReturnTypeJSON) {
-			id json = [s objectFromJSONString];
+			id json = [s ATobjectFromJSONString];
 			if (!json) {
 				self.failed = YES;
 				self.errorTitle = ATLocalizedString(@"Invalid response from server.", @"");

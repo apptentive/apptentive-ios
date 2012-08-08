@@ -10,7 +10,7 @@
 #import "ATAppRatingFlow_Private.h"
 #import "ATContactStorage.h"
 #import "ATWebClient.h"
-#import "JSONKit.h"
+#import "PJSONKit.h"
 
 NSString *const ATConfigurationPreferencesChangedNotification = @"ATConfigurationPreferencesChangedNotification";
 NSString *const ATAppConfigurationLastUpdatePreferenceKey = @"ATAppConfigurationLastUpdatePreferenceKey";

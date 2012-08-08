@@ -123,6 +123,9 @@
 		498EFB7015BA48B300A1043B /* ATAppConfigurationUpdateTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 498EFB6E15BA48B200A1043B /* ATAppConfigurationUpdateTask.h */; };
 		498EFB7115BA48B300A1043B /* ATAppConfigurationUpdateTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 498EFB6F15BA48B300A1043B /* ATAppConfigurationUpdateTask.m */; };
 		498EFB7215BA48B300A1043B /* ATAppConfigurationUpdateTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 498EFB6F15BA48B300A1043B /* ATAppConfigurationUpdateTask.m */; };
+		499B56CA15D305880063C23C /* PJSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 499B56C615D305880063C23C /* PJSONKit.h */; };
+		499B56CB15D305880063C23C /* PJSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 499B56C715D305880063C23C /* PJSONKit.m */; };
+		499B56CC15D305880063C23C /* PJSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 499B56C715D305880063C23C /* PJSONKit.m */; };
 		49AA101F138B44C00082887A /* ATInfoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AA101D138B44C00082887A /* ATInfoViewController.h */; };
 		49AA1020138B44C00082887A /* ATInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AA101E138B44C00082887A /* ATInfoViewController.m */; };
 		49AA1021138B44C00082887A /* ATInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AA101E138B44C00082887A /* ATInfoViewController.m */; };
@@ -154,9 +157,6 @@
 		49D112731337CC9F00603373 /* ATTaskQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D112711337CC9E00603373 /* ATTaskQueue.h */; };
 		49D112741337CC9F00603373 /* ATTaskQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D112721337CC9F00603373 /* ATTaskQueue.m */; };
 		49E891D0134FE2AB00DD098A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49E891CD134FE2AB00DD098A /* Localizable.strings */; };
-		49E90DBA13FC7FAB00BDBDA1 /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 49E90DB813FC7FAB00BDBDA1 /* JSONKit.h */; };
-		49E90DBB13FC7FAB00BDBDA1 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 49E90DB913FC7FAB00BDBDA1 /* JSONKit.m */; };
-		49E90DBD13FC7FDE00BDBDA1 /* JSONKIT_License.txt in Resources */ = {isa = PBXBuildFile; fileRef = 49E90DBC13FC7FDE00BDBDA1 /* JSONKIT_License.txt */; };
 		49EA5AB014BD08AD004F8A4D /* ATRecord.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EA5AAE14BD08AD004F8A4D /* ATRecord.h */; };
 		49EA5AB114BD08AD004F8A4D /* ATRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EA5AAF14BD08AD004F8A4D /* ATRecord.m */; };
 		49EA5AB214BD08AD004F8A4D /* ATRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EA5AAF14BD08AD004F8A4D /* ATRecord.m */; };
@@ -270,6 +270,8 @@
 		498EFB6A15BA414A00A1043B /* ATSurveyGetSurveyTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATSurveyGetSurveyTask.m; path = Tasks/ATSurveyGetSurveyTask.m; sourceTree = "<group>"; };
 		498EFB6E15BA48B200A1043B /* ATAppConfigurationUpdateTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAppConfigurationUpdateTask.h; sourceTree = "<group>"; };
 		498EFB6F15BA48B300A1043B /* ATAppConfigurationUpdateTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAppConfigurationUpdateTask.m; sourceTree = "<group>"; };
+		499B56C615D305880063C23C /* PJSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PJSONKit.h; sourceTree = "<group>"; };
+		499B56C715D305880063C23C /* PJSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PJSONKit.m; sourceTree = "<group>"; };
 		49AA101D138B44C00082887A /* ATInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATInfoViewController.h; sourceTree = "<group>"; };
 		49AA101E138B44C00082887A /* ATInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATInfoViewController.m; sourceTree = "<group>"; };
 		49AA1022138B498C0082887A /* ATInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATInfoViewController.xib; sourceTree = "<group>"; };
@@ -304,9 +306,6 @@
 		49D112721337CC9F00603373 /* ATTaskQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATTaskQueue.m; sourceTree = "<group>"; };
 		49E891CE134FE2AB00DD098A /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		49E891CF134FE2AB00DD098A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
-		49E90DB813FC7FAB00BDBDA1 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSONKit.h; path = JSONKit/JSONKit.h; sourceTree = "<group>"; };
-		49E90DB913FC7FAB00BDBDA1 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSONKit.m; path = JSONKit/JSONKit.m; sourceTree = "<group>"; };
-		49E90DBC13FC7FDE00BDBDA1 /* JSONKIT_License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = JSONKIT_License.txt; path = JSONKit/JSONKIT_License.txt; sourceTree = "<group>"; };
 		49EA5AAE14BD08AD004F8A4D /* ATRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATRecord.h; sourceTree = "<group>"; };
 		49EA5AAF14BD08AD004F8A4D /* ATRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATRecord.m; sourceTree = "<group>"; };
 		49EA5ABB14BD0F4D004F8A4D /* ATRecordTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATRecordTask.h; sourceTree = "<group>"; };
@@ -559,6 +558,15 @@
 			name = Tasks;
 			sourceTree = "<group>";
 		};
+		499B56C415D305880063C23C /* PrefixedJSONKit */ = {
+			isa = PBXGroup;
+			children = (
+				499B56C615D305880063C23C /* PJSONKit.h */,
+				499B56C715D305880063C23C /* PJSONKit.m */,
+			);
+			path = PrefixedJSONKit;
+			sourceTree = "<group>";
+		};
 		49B3D964133D843D00B5A5CD /* Custom Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -639,9 +647,7 @@
 			children = (
 				49D1123A13359BA000603373 /* NSData+ATBase64.h */,
 				49D1123B13359BA000603373 /* NSData+ATBase64.m */,
-				49E90DB813FC7FAB00BDBDA1 /* JSONKit.h */,
-				49E90DB913FC7FAB00BDBDA1 /* JSONKit.m */,
-				49E90DBC13FC7FDE00BDBDA1 /* JSONKIT_License.txt */,
+				499B56C415D305880063C23C /* PrefixedJSONKit */,
 			);
 			path = ext;
 			sourceTree = "<group>";
@@ -702,7 +708,6 @@
 				49AA101F138B44C00082887A /* ATInfoViewController.h in Headers */,
 				49352AC4138C97A2000E464A /* ATAPIRequest.h in Headers */,
 				49352ADD138CA1DC000E464A /* ATURLConnection_Private.h in Headers */,
-				49E90DBA13FC7FAB00BDBDA1 /* JSONKit.h in Headers */,
 				490B8158144274EF009801E9 /* ATCustomButton.h in Headers */,
 				490B815D1442751F009801E9 /* ATToolbar.h in Headers */,
 				490B8164144275B3009801E9 /* ATFeedbackController.h in Headers */,
@@ -728,6 +733,7 @@
 				493AEB3F15990A4D00DFD4C7 /* ATSurveyViewController.h in Headers */,
 				498EFB6B15BA414A00A1043B /* ATSurveyGetSurveyTask.h in Headers */,
 				498EFB7015BA48B300A1043B /* ATAppConfigurationUpdateTask.h in Headers */,
+				499B56CA15D305880063C23C /* PJSONKit.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -843,7 +849,6 @@
 				49352A00138C7257000E464A /* ATInfoViewController_iPad.xib in Resources */,
 				49352A20138C73B8000E464A /* ATAboutApptentiveView.xib in Resources */,
 				49352B3F138DB3AA000E464A /* ATTaskProgressCell.xib in Resources */,
-				49E90DBD13FC7FDE00BDBDA1 /* JSONKIT_License.txt in Resources */,
 				490B816C14427A95009801E9 /* ATFeedbackController.xib in Resources */,
 				496F29E014496711005B7C01 /* ATSimpleImageViewController.xib in Resources */,
 			);
@@ -921,7 +926,6 @@
 				49AA1020138B44C00082887A /* ATInfoViewController.m in Sources */,
 				49352AC5138C97A2000E464A /* ATAPIRequest.m in Sources */,
 				4942CC9213C7AD2D009BF758 /* ATAppRatingFlow.m in Sources */,
-				49E90DBB13FC7FAB00BDBDA1 /* JSONKit.m in Sources */,
 				490B8159144274EF009801E9 /* ATCustomButton.m in Sources */,
 				490B815E1442751F009801E9 /* ATToolbar.m in Sources */,
 				490B8165144275B3009801E9 /* ATFeedbackController.m in Sources */,
@@ -946,6 +950,7 @@
 				493AEB4015990A4D00DFD4C7 /* ATSurveyViewController.m in Sources */,
 				498EFB6C15BA414A00A1043B /* ATSurveyGetSurveyTask.m in Sources */,
 				498EFB7115BA48B300A1043B /* ATAppConfigurationUpdateTask.m in Sources */,
+				499B56CB15D305880063C23C /* PJSONKit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -991,6 +996,7 @@
 				493AEB4515990A6B00DFD4C7 /* ApptentiveSurveysTests.m in Sources */,
 				498EFB6D15BA414A00A1043B /* ATSurveyGetSurveyTask.m in Sources */,
 				498EFB7215BA48B300A1043B /* ATAppConfigurationUpdateTask.m in Sources */,
+				499B56CC15D305880063C23C /* PJSONKit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1047,7 +1053,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					DEBUG,
+					"JSONKIT_PREFIX=AT",
 					"APPTENTIVE_DEBUG=1",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
@@ -1072,6 +1078,7 @@
 					armv7,
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = "JSONKIT_PREFIX=AT";
 				GCC_THUMB_SUPPORT = NO;
 				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
 				"GCC_THUMB_SUPPORT[arch=armv7]" = YES;

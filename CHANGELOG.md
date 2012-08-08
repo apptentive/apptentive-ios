@@ -1,8 +1,16 @@
+2012-08-08 wooster v0.4.3
+-------------------------
+Major changes:
+
+We switched from JSONKit to our PrefixedJSONKit library, which prefixes all the JSONKit symbols. In this case, our prefix is `AT`. So, we no longer conflict with JSONKit. If you were using JSONKit already and removed it in favor of ours, you'll want to add the original JSONKit back to your project rather than using the PrefixedJSONKit project.
+
+Minor changes:
+- Fix for IOS-59, which tweaks how `ATBackend` stops and restarts the task queue.
+
 2012-07-24 wooster v0.4.3
 -------------------------
 * Fix for IOS-41, wherein the metrics were being sent incorrectly and metric for 
   text responses was being sent after the metric for survey submission.
-
 
 2012-07-23 wooster v0.4.2
 -------------------------

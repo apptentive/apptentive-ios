@@ -31,6 +31,7 @@ static ATBackend *sharedBackend = nil;
 @interface ATBackend (Private)
 - (void)setup;
 - (void)teardown;
+- (void)updateWorking;
 - (void)networkStatusChanged:(NSNotification *)notification;
 - (void)stopWorking:(NSNotification *)notification;
 - (void)startWorking:(NSNotification *)notification;
@@ -135,11 +136,11 @@ static ATBackend *sharedBackend = nil;
 		apiKey = nil;
 		apiKey = [anAPIKey retain];
 		if (apiKey == nil) {
-			self.working = NO;
+			apiKeySet = NO;
 		} else {
-			self.working = NO;
-			self.working = YES;
+			apiKeySet = YES;
 		}
+		[self updateWorking];
 		[[NSNotificationCenter defaultCenter] postNotificationName:ATBackendNewAPIKeyNotification object:nil];
 	}
 }
@@ -284,21 +285,38 @@ static ATBackend *sharedBackend = nil;
 	self.currentFeedback = nil;
 }
 
+
+- (void)updateWorking {
+	if (shouldStopWorking) {
+		// Probably going into the background or being terminated.
+		self.working = NO;
+	} else if (apiKeySet && networkAvailable) {
+		// API Key is set and the network is up. Start working.
+		self.working = YES;
+	} else {
+		// No API Key or not network, or both. Stop working.
+		self.working = NO;
+	}
+}
+
 #pragma mark Notification Handling
 - (void)networkStatusChanged:(NSNotification *)notification {
 	ATNetworkStatus status = [[ATReachability sharedReachability] currentNetworkStatus];
 	if (status == ATNetworkNotReachable) {
-		self.working = NO;
-	} else if ([[ATTaskQueue sharedTaskQueue] count]) {
-		self.working = YES;
+		networkAvailable = NO;
+	} else {
+		networkAvailable = YES;
 	}
+	[self updateWorking];
 }
 
 - (void)stopWorking:(NSNotification *)notification {
-	self.working = NO;
+	shouldStopWorking = YES;
+	[self updateWorking];
 }
 
 - (void)startWorking:(NSNotification *)notification {
-	self.working = YES;
+	shouldStopWorking = NO;
+	[self updateWorking];
 }
 @end

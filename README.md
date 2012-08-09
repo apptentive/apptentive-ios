@@ -1,6 +1,6 @@
 # PrefixedJSONKit
 
-PrefixedJSONKit is a fork of JSONKit which prefixes the symbols in JSONKit for easy embedding in static libraries to avoid conflicts with other uses of JSONKit in the same library.
+PrefixedJSONKit is a fork of JSONKit which prefixes the symbols in JSONKit for easy embedding in static libraries to avoid conflicts with other uses of JSONKit in the same binary.
 
 To use, set a preprocessor macro for `JSONKIT_PREFIX`, for example: `JSONKIT_PREFIX=EXAMPLE_`. Now, all external JSONKit symbols will be prefixed with "EXAMPLE_", so `JSONDecoder` would become `EXAMPLE_JSONDecoder`.
 

@@ -12,7 +12,7 @@
 #import "ATSurveysBackend.h"
 #import "ATWebClient.h"
 #import "ATWebClient+SurveyAdditions.h"
-#import "JSONKit.h"
+#import "PJSONKit.h"
 
 @interface ATSurveyGetSurveyTask (Private)
 - (void)setup;
@@ -82,6 +82,7 @@
 #pragma mark ATAPIRequestDelegate
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)request result:(NSObject *)result {
 	@synchronized(self) {
+		[self retain];
 		if (request == checkSurveyRequest) {
 			ATSurveyParser *parser = [[ATSurveyParser alloc] init];
 			ATSurvey *survey = [parser parseSurvey:(NSData *)result];
@@ -95,16 +96,19 @@
 			[parser release], parser = nil;
 			self.finished = YES;
 		}
+		[self release];
 	}
 }
 
 - (void)at_APIRequestDidFail:(ATAPIRequest *)request {
 	@synchronized(self) {
+		[self retain];
 		if (request == checkSurveyRequest) {
 			NSLog(@"Survey request failed: %@: %@", request.errorTitle, request.errorMessage);
 			self.failed = YES;
 			[self stop];
 		}
+		[self release];
 	}
 }
 @end

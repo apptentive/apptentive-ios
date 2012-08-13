@@ -173,7 +173,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 			}
 		}
 	}
-	[pool release];
+	[pool release], pool = nil;
 }
 
 - (void)stop {
@@ -225,8 +225,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 - (void)teardown {
 	@synchronized(self) {
 		[self stop];
-		[tasks release];
-		tasks = nil;
+		[tasks release], tasks = nil;
 		[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	}
 }

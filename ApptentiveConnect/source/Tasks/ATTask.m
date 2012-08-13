@@ -32,8 +32,8 @@
 }
 
 - (void)dealloc {
-	self.lastErrorTitle = nil;
-	self.lastErrorMessage = nil;
+	[lastErrorTitle release], lastErrorTitle = nil;
+	[lastErrorMessage release], lastErrorMessage = nil;
 	[super dealloc];
 }
 

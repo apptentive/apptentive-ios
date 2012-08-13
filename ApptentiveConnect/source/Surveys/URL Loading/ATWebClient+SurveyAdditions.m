@@ -11,7 +11,7 @@
 #import "ATAPIRequest.h"
 #import "ATSurveyResponse.h"
 #import "ATURLConnection.h"
-#import "JSONKit.h"
+#import "PJSONKit.h"
 
 #define kSurveysChannelName @"Apptentive-Surveys"
 
@@ -28,7 +28,7 @@
 
 - (ATAPIRequest *)requestForPostingSurveyResponse:(ATSurveyResponse *)surveyResponse {
 	NSError *error = nil;
-	NSString *postString = [[surveyResponse apiJSON] JSONStringWithOptions:JKSerializeOptionPretty error:&error];
+	NSString *postString = [[surveyResponse apiJSON] ATJSONStringWithOptions:ATJKSerializeOptionPretty error:&error];
 	if (!postString && error != nil) {
 		NSLog(@"ATWebClient+SurveyAdditions: Error while encoding JSON: %@", error);
 		return nil;

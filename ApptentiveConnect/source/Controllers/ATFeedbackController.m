@@ -85,6 +85,7 @@ enum {
 @synthesize feedback;
 @synthesize customPlaceholderText;
 @synthesize showEmailAddressField;
+@synthesize deleteCurrentFeedbackOnCancel;
 
 - (id)init {
 	self = [super initWithNibName:@"ATFeedbackController" bundle:[ATConnect resourceBundle]];
@@ -97,16 +98,7 @@ enum {
 }
 
 - (void)dealloc {
-	[self teardown];
 	[super dealloc];
-}
-
-- (oneway void)release {
-	[super release];
-}
-
-- (id)retain {
-	return [super retain];
 }
 
 - (void)setFeedback:(ATFeedback *)newFeedback {
@@ -302,12 +294,6 @@ enum {
 	[super viewDidLoad];
 }
 
-- (void)viewDidUnload {
-	[self setFeedbackContainerView:nil];
-	[self teardown];
-	[super viewDidUnload];
-}
-
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 	//	return YES;
 	return (interfaceOrientation == UIInterfaceOrientationPortrait);
@@ -392,7 +378,6 @@ enum {
 	
 	CGPoint endingPoint = [self offscreenPositionOfView];
 	
-	[self retain]; 
 	UIView *gradientView = [self.window viewWithTag:kFeedbackGradientLayerTag];
 	
 	[UIView beginAnimations:@"animateOut" context:nil];
@@ -466,10 +451,15 @@ enum {
 	self.logoControl = nil;
 	self.logoImageView = nil;
 	self.taglineLabel = nil;
+	self.feedback = nil;
+	self.customPlaceholderText = nil;
 	[currentImage release], currentImage = nil;
 	[originalPresentingWindow makeKeyAndVisible];
 	[presentingViewController release], presentingViewController = nil;
 	[originalPresentingWindow release], originalPresentingWindow = nil;
+	if (self.deleteCurrentFeedbackOnCancel) {
+		[[ATBackend sharedBackend] setCurrentFeedback:nil];
+	}
 }
 
 - (void)setupFeedback {
@@ -575,6 +565,7 @@ enum {
 		[self.window removeFromSuperview];
 		self.window.hidden = YES;
 		[[UIApplication sharedApplication] setStatusBarStyle:startingStatusBarStyle];
+		[self teardown];
 		[self release];
 	} else if ([animationID isEqualToString:@"windowHide"]) {
 		[self finishHide];

@@ -49,10 +49,10 @@ static ATConnect *sharedConnection = nil;
 	}
 #endif
 	[additionalFeedbackData release], additionalFeedbackData = nil;
-	self.customPlaceholderText = nil;
-	self.apiKey = nil;
-	self.initialName = nil;
-	self.initialEmailAddress = nil;
+	[customPlaceholderText release], customPlaceholderText = nil;
+	[apiKey release], apiKey = nil;
+	[initialName release], initialName = nil;
+	[initialEmailAddress release], initialEmailAddress = nil;
 	[super dealloc];
 }
 
@@ -122,6 +122,9 @@ static ATConnect *sharedConnection = nil;
 
 	ATFeedbackController *vc = [[ATFeedbackController alloc] init];
 	[vc setShowEmailAddressField:self.showEmailField];
+	if (self.feedbackControllerType == ATFeedbackControllerSimple) {
+		vc.deleteCurrentFeedbackOnCancel = YES;
+	}
 	if (self.customPlaceholderText) {
 		[vc setCustomPlaceholderText:self.customPlaceholderText];
 	}

@@ -28,6 +28,7 @@ typedef enum {
 	UIControl *photoControl;
 	UIImage *currentImage;
 	BOOL showEmailAddressField;
+	BOOL deleteCurrentFeedbackOnCancel;
 	
 	UIWindow *originalPresentingWindow;
 }
@@ -50,6 +51,7 @@ typedef enum {
 @property (nonatomic, retain) NSString *customPlaceholderText;
 @property (nonatomic, assign) ATFeedbackAttachmentOptions attachmentOptions;
 @property (nonatomic, assign) BOOL showEmailAddressField;
+@property (nonatomic, assign) BOOL deleteCurrentFeedbackOnCancel;
 
 - (id)init;
 - (IBAction)cancelFeedback:(id)sender;

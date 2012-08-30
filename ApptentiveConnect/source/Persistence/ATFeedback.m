@@ -37,11 +37,11 @@
 
 - (void)dealloc {
 	[extraData release], extraData = nil;
-	self.text = nil;
-	self.name = nil;
-	self.email = nil;
-	self.phone = nil;
-	self.screenshot = nil;
+	[text release], text = nil;
+	[name release], name = nil;
+	[email release], email = nil;
+	[phone release], phone = nil;
+	[screenshot release], screenshot = nil;
 	[super dealloc];
 }
 

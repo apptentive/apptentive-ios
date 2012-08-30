@@ -1,3 +1,11 @@
+2012-08-29 wooster v0.4.5
+-------------------------
+Fixes in this version:
+
+* Fixes IOS-65, `[[UIApplication sharedApplication] keyWindow]` being nil after feedback window is dismissed.
+* Fixes leak of feedback and custom placeholder text by feedback controller.
+* Current feedback is cleared before feedback window is shown by ratings and after that window is dismissed.
+
 2012-08-08 wooster v0.4.4
 -------------------------
 Major changes:

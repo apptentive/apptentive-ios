@@ -8,6 +8,7 @@
 
 #import "ATAppRatingFlow.h"
 #import "ATAPIRequest.h"
+#import "ATBackend.h"
 #import "ATConnect.h"
 #import "ATAppConfigurationUpdater.h"
 #import "ATReachability.h"
@@ -252,6 +253,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 			if (!self.viewController) {
 				NSLog(@"No view controller to present feedback interface!!");
 			} else {
+				[[ATBackend sharedBackend] setCurrentFeedback:nil];
 				ATConnect *connection = [ATConnect sharedConnection];
 				connection.customPlaceholderText = ATLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
 				ATFeedbackControllerType oldType = connection.feedbackControllerType;

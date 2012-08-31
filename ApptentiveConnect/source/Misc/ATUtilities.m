@@ -14,6 +14,7 @@
 #include <sys/types.h>
 #include <sys/sysctl.h>
 #endif
+#include <stdlib.h>
 
 #define KINDA_EQUALS(a, b) (fabs(a - b) < 0.1)
 #define DEG_TO_RAD(angle) ((M_PI * angle) / 180.0)
@@ -291,9 +292,10 @@
 
 + (NSString *)randomStringOfLength:(NSUInteger)length {
 	static NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+	srandomdev();
 	NSMutableString *result = [NSMutableString stringWithString:@""];
 	for (NSUInteger i = 0; i < length; i++) {
-		[result appendFormat:@"%c", [letters characterAtIndex:rand()%[letters length]]];
+		[result appendFormat:@"%c", [letters characterAtIndex:random()%[letters length]]];
 	}
 	return result;
 }

@@ -23,9 +23,12 @@ NSString *const ATBackendNewAPIKeyNotification;
 /*! Handles all of the backend activities, such as sending feedback. */
 @interface ATBackend : NSObject {
 @private
+	NSString *apiKey;
+	ATFeedback *currentFeedback;
 	BOOL networkAvailable;
 	BOOL apiKeySet;
 	BOOL shouldStopWorking;
+	BOOL working;
 }
 @property (nonatomic, retain) NSString *apiKey;
 /*! The feedback currently being worked on by the user. */

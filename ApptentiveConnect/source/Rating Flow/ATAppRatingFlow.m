@@ -184,19 +184,23 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 	[alert addButtonWithTitle:ATLocalizedString(@"Yes", @"yes")];
 	[alert addButtonWithTitle:ATLocalizedString(@"No", @"no")];
 	[alert setMessageText:title];
-	[alert setInformativeText:ATLocalizedString(@"You've been using this app for a while. Are you enjoying using it?", @"Enjoyment dialog text")];
+	[alert setInformativeText:ATLocalizedString(@"You've been using this app for a while. Do you love it?", @"Enjoyment dialog text")];
 	[alert setAlertStyle:NSInformationalAlertStyle];
 	[alert setIcon:[NSImage imageNamed:NSImageNameApplicationIcon]];
 	NSUInteger result = [alert runModal];
 	if (result == NSAlertFirstButtonReturn) { // yes
-#if TARGET_OS_IPHONE
-		[self showRatingDialog:self.viewController];
-#elif TARGET_OS_MAC
 		[self showRatingDialog:self];
-#endif
 	} else if (result == NSAlertSecondButtonReturn) { // no
 		[self setUserDislikesThisVersion];
-		[[ATConnect sharedConnection] showFeedbackWindow:self];
+		
+		[[ATBackend sharedBackend] setCurrentFeedback:nil];
+		ATConnect *connection = [ATConnect sharedConnection];
+		connection.customPlaceholderText = ATLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
+		ATFeedbackControllerType oldType = connection.feedbackControllerType;
+		connection.feedbackControllerType = ATFeedbackControllerSimple;
+		[connection showFeedbackWindow:self];
+		connection.customPlaceholderText = nil;
+		connection.feedbackControllerType = oldType;
 	}
 #endif
 	[self postNotification:ATAppRatingDidPromptForEnjoymentNotification];

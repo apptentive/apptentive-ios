@@ -11,6 +11,7 @@
 
 @interface ATMetric : ATRecord <NSCoding> {
 @private
+	NSString *name;
 	NSMutableDictionary *info;
 }
 @property (nonatomic, retain) NSString *name;

@@ -56,7 +56,7 @@ NSString *const ATAppRatingFlowSignificantEventsCountKey = @"ATAppRatingFlowSign
 }
 
 - (NSString *)debugDescription {
-	return [NSString stringWithFormat:@"%@ firstUse: %@, significantEvents: %d, appUses: %d, daysBeforePrompt: %d, significantEventsBeforePrompt: %d, usesBeforePrompt: %d", [self description], self.firstUse, self.significantEvents, self.appUses, self.daysBeforePrompt, self.significantEventsBeforePrompt, self.usesBeforePrompt];
+	return [NSString stringWithFormat:@"%@ firstUse: %@, significantEvents: %ld, appUses: %ld, daysBeforePrompt: %ld, significantEventsBeforePrompt: %ld, usesBeforePrompt: %ld", [self description], self.firstUse, (long)self.significantEvents, (long)self.appUses, (long)self.daysBeforePrompt, (long)self.significantEventsBeforePrompt, (long)self.usesBeforePrompt];
 }
 @end
 

@@ -10,6 +10,13 @@
 
 
 @interface ATTask : NSObject <NSCoding> {
+@private
+	BOOL inProgress;
+	BOOL finished;
+	BOOL failed;
+	NSUInteger failureCount;
+	NSString *lastErrorTitle;
+	NSString *lastErrorMessage;
 }
 @property (nonatomic, assign) BOOL inProgress;
 @property (nonatomic, assign) BOOL finished;

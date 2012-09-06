@@ -22,7 +22,20 @@ typedef enum {
 } ATFeedbackType;
 
 @interface ATFeedback : ATRecord <NSCoding> {
+@private
 	NSMutableDictionary *extraData;
+	ATFeedbackType type;
+	NSString *text;
+	NSString *name;
+	NSString *email;
+	NSString *phone;
+#if TARGET_OS_IPHONE
+	UIImage *screenshot;
+#elif TARGET_OS_MAC
+	NSImage *screenshot;
+#endif
+	BOOL screenshotSwitchEnabled;
+	BOOL imageIsFromCamera;
 }
 @property (nonatomic, assign) ATFeedbackType type;
 @property (nonatomic, retain) NSString *text;

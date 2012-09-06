@@ -15,6 +15,7 @@
 @interface ATRecordTask : ATTask<ATAPIRequestDelegate> {
 @private
 	ATAPIRequest *request;
+	ATRecord *record;
 }
 @property (nonatomic, retain) ATRecord *record;
 

@@ -31,7 +31,16 @@ NSString *const ATAppRatingFlowRatedAppKey;
 NSString *const ATAppRatingFlowUseCountKey;
 NSString *const ATAppRatingFlowSignificantEventsCountKey;
 
-@interface ATAppRatingFlowPredicateInfo : NSObject
+@interface ATAppRatingFlowPredicateInfo : NSObject {
+@private
+	NSDate *firstUse;
+	NSUInteger significantEvents;
+	NSUInteger appUses;
+	
+	NSUInteger daysBeforePrompt;
+	NSUInteger significantEventsBeforePrompt;
+	NSUInteger usesBeforePrompt;
+}
 @property (nonatomic, retain) NSDate *firstUse;
 @property (nonatomic, assign) NSUInteger significantEvents;
 @property (nonatomic, assign) NSUInteger appUses;

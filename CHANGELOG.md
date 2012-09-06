@@ -1,3 +1,9 @@
+2012-08-29 wooster v0.4.6
+-------------------------
+Changes for OS X compatibility:
+* Added backing ivars for properties.
+* Removed methods for displaying different feedback window types on OS X.
+
 2012-08-29 wooster v0.4.5
 -------------------------
 Fixes in this version:

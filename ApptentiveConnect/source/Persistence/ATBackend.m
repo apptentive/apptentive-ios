@@ -88,7 +88,11 @@ static ATBackend *sharedBackend = nil;
 + (NSImage *)imageNamed:(NSString *)name {
 	NSString *imagePath = nil;
 	NSImage *result = nil;
-	CGFloat scale = [[NSScreen mainScreen] userSpaceScaleFactor];
+	CGFloat scale = 1.0;
+	
+	if ([[NSScreen mainScreen] respondsToSelector:@selector(backingScaleFactor)]) {
+		scale = (CGFloat)[[NSScreen mainScreen] backingScaleFactor];
+	}
 	if (scale > 1.0) {
 		imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@@2x", name] ofType:@"png"];
 	} else {

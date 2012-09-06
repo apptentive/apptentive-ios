@@ -35,6 +35,13 @@ typedef enum {
 	NSString *channelName;
 	BOOL cancelled;
 	float percentageComplete;
+	
+	ATAPIRequestReturnType returnType;
+	BOOL failed;
+	NSString *errorTitle;
+	NSString *errorMessage;
+	NSTimeInterval timeoutInterval;
+	NSObject<ATAPIRequestDelegate> *delegate;
 }
 @property (nonatomic, assign) ATAPIRequestReturnType returnType;
 @property (nonatomic, assign) BOOL failed;

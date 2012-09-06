@@ -134,36 +134,18 @@ static ATConnect *sharedConnection = nil;
 	[vc release];
 }
 #elif TARGET_OS_MAC
-- (void)showFeedbackWindow:(id)sender withFeedbackType:(ATFeedbackType)feedbackType {
+- (IBAction)showFeedbackWindow:(id)sender {
 	if (![[ATBackend sharedBackend] currentFeedback]) {
 		ATFeedback *feedback = [[ATFeedback alloc] init];
-		feedback.type = feedbackType;
 		[[ATBackend sharedBackend] setCurrentFeedback:feedback];
 		[feedback release];
 		feedback = nil;
 	}
-
+	
 	if (!feedbackWindowController) {
 		feedbackWindowController = [[ATFeedbackWindowController alloc] initWithFeedback:[[ATBackend sharedBackend] currentFeedback]];
 	}
-	[feedbackWindowController setFeedbackType:feedbackType];
 	[feedbackWindowController showWindow:self];
-}
-
-- (IBAction)showFeedbackWindow:(id)sender {
-	[self showFeedbackWindow:sender withFeedbackType:ATFeedbackTypeFeedback];
-}
-
-- (IBAction)showFeedbackWindowForFeedback:(id)sender {
-	[self showFeedbackWindow:sender withFeedbackType:ATFeedbackTypeFeedback];
-}
-
-- (IBAction)showFeedbackWindowForQuestion:(id)sender {
-	[self showFeedbackWindow:sender withFeedbackType:ATFeedbackTypeQuestion];
-}
-
-- (IBAction)showFeedbackWindowForBugReport:(id)sender {
-	[self showFeedbackWindow:sender withFeedbackType:ATFeedbackTypeBug];
 }
 #endif
 

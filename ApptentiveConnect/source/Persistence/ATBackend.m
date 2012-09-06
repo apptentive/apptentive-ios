@@ -30,7 +30,6 @@ static ATBackend *sharedBackend = nil;
 
 @interface ATBackend (Private)
 - (void)setup;
-- (void)teardown;
 - (void)updateWorking;
 - (void)networkStatusChanged:(NSNotification *)notification;
 - (void)stopWorking:(NSNotification *)notification;
@@ -126,7 +125,9 @@ static ATBackend *sharedBackend = nil;
 }
 
 - (void)dealloc {
-	[self teardown];
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[apiKey release], apiKey = nil;
+	[currentFeedback release], currentFeedback = nil;
 	[super dealloc];
 }
 
@@ -278,13 +279,6 @@ static ATBackend *sharedBackend = nil;
 	[ATReachability sharedReachability];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusChanged:) name:ATReachabilityStatusChanged object:nil];
 }
-
-- (void)teardown {
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	self.apiKey = nil;
-	self.currentFeedback = nil;
-}
-
 
 - (void)updateWorking {
 	if (shouldStopWorking) {

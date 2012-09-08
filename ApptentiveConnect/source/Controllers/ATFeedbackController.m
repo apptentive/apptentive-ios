@@ -454,7 +454,7 @@ enum {
 	self.feedback = nil;
 	self.customPlaceholderText = nil;
 	[currentImage release], currentImage = nil;
-	[originalPresentingWindow makeKeyAndVisible];
+	[originalPresentingWindow makeKeyWindow];
 	[presentingViewController release], presentingViewController = nil;
 	[originalPresentingWindow release], originalPresentingWindow = nil;
 	if (self.deleteCurrentFeedbackOnCancel) {

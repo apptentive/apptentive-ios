@@ -25,13 +25,30 @@
 - (void)testDateFormatting {
 	// This test will only pass when the time zone is PST. *sigh*
 	NSDate *date = [NSDate dateWithTimeIntervalSince1970:1322609978.669914];
-	STAssertEqualObjects(@"2011-11-29 15:39:38.669914 -0800", [ATUtilities stringRepresentationOfDate:date], @"date doesn't match");
+	STAssertEqualObjects(@"2011-11-29 15:39:38.669914 -0800", [ATUtilities stringRepresentationOfDate:date timeZone:[NSTimeZone timeZoneForSecondsFromGMT:-8*60*60]], @"date doesn't match");
 	
 	date = [NSDate dateWithTimeIntervalSince1970:1322609978.669];
-	STAssertEqualObjects(@"2011-11-29 15:39:38.669 -0800", [ATUtilities stringRepresentationOfDate:date], @"date doesn't match");
+	STAssertEqualObjects(@"2011-11-29 15:39:38.669 -0800", [ATUtilities stringRepresentationOfDate:date timeZone:[NSTimeZone timeZoneForSecondsFromGMT:-8*60*60]], @"date doesn't match");
 	
 	date = [NSDate dateWithTimeIntervalSince1970:1322609978.0];
-	STAssertEqualObjects(@"2011-11-29 15:39:38 -0800", [ATUtilities stringRepresentationOfDate:date], @"date doesn't match");
+	STAssertEqualObjects(@"2011-11-29 15:39:38 -0800", [ATUtilities stringRepresentationOfDate:date timeZone:[NSTimeZone timeZoneForSecondsFromGMT:-8*60*60]], @"date doesn't match");
 	
+	date = [NSDate dateWithTimeIntervalSince1970:1322609978.0];
+	STAssertEqualObjects(@"2011-11-29 23:39:38 +0000", [ATUtilities stringRepresentationOfDate:date timeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]], @"date doesn't match");
+	
+	NSString *string = @"2012-09-07T23:01:07+00:00";
+	date = [ATUtilities dateFromISO8601String:string];
+	STAssertNotNil(date, @"date shouldn't be nil");
+	STAssertEqualObjects(@"2012-09-07 23:01:07 +0000", [ATUtilities stringRepresentationOfDate:date timeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]], @"date doesn't match");
+	
+	string = @"2012-09-07T23:01:07Z";
+	date = [ATUtilities dateFromISO8601String:string];
+	STAssertNotNil(date, @"date shouldn't be nil");
+	STAssertEqualObjects(@"2012-09-07 23:01:07 +0000", [ATUtilities stringRepresentationOfDate:date timeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]], @"date doesn't match");
+	
+	string = @"2012-09-07T23:01:07.111+00:00";
+	date = [ATUtilities dateFromISO8601String:string];
+	STAssertNotNil(date, @"date shouldn't be nil");
+	STAssertEqualObjects(@"2012-09-07 23:01:07 +0000", [ATUtilities stringRepresentationOfDate:date timeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]], @"date doesn't match");
 }
 @end

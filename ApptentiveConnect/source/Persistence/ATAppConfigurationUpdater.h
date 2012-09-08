@@ -11,6 +11,7 @@
 
 NSString *const ATConfigurationPreferencesChangedNotification;
 NSString *const ATAppConfigurationLastUpdatePreferenceKey;
+NSString *const ATAppConfigurationExpirationPreferenceKey;
 NSString *const ATAppConfigurationMetricsEnabledPreferenceKey;
 
 @protocol ATAppConfigurationUpdaterDelegate <NSObject>

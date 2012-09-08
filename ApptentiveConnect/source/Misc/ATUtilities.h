@@ -33,6 +33,8 @@
 
 + (void)uniquifyArray:(NSMutableArray *)array;
 + (NSString *)stringRepresentationOfDate:(NSDate *)date;
++ (NSString *)stringRepresentationOfDate:(NSDate *)date timeZone:(NSTimeZone *)timeZone;
++ (NSDate *)dateFromISO8601String:(NSString *)string;
 @end
 
 CGRect ATCGRectOfEvenSize(CGRect inRect);

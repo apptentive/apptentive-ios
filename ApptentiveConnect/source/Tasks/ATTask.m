@@ -16,6 +16,7 @@
 @synthesize failed;
 @synthesize failureCount;
 @synthesize lastErrorTitle, lastErrorMessage;
+@synthesize failureOkay;
 
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {

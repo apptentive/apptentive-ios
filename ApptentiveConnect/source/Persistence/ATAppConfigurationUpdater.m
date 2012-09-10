@@ -134,7 +134,6 @@ NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigura
 
 @implementation ATAppConfigurationUpdater (Private)
 - (void)processResult:(NSDictionary *)jsonConfiguration {
-	NSLog(@"configuration:%@", jsonConfiguration);
 	BOOL hasConfigurationChanges = NO;
 	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

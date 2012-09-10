@@ -17,6 +17,7 @@
 	NSUInteger failureCount;
 	NSString *lastErrorTitle;
 	NSString *lastErrorMessage;
+	BOOL failureOkay;
 }
 @property (nonatomic, assign) BOOL inProgress;
 @property (nonatomic, assign) BOOL finished;
@@ -25,6 +26,9 @@
 
 @property (nonatomic, retain) NSString *lastErrorTitle;
 @property (nonatomic, retain) NSString *lastErrorMessage;
+/*! Should we stop the task queue if this task fails, or just throw it away? Defaults to stopping task queue (failureOkay == NO). */
+@property (nonatomic, assign, getter=isFailureOkay) BOOL failureOkay;
+
 
 - (BOOL)canStart;
 - (BOOL)shouldArchive;

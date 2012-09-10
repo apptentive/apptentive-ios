@@ -46,6 +46,7 @@
 }
 
 - (void)start {
+	self.failureOkay = YES;
 	if (checkSurveyRequest == nil) {
 		ATWebClient *client = [ATWebClient sharedClient];
 		checkSurveyRequest = [[client requestForGettingSurvey] retain];

@@ -14,6 +14,7 @@
 #import "ATReachability.h"
 #import "ATAppRatingMetrics.h"
 #import "ATAppRatingFlow_Private.h"
+#import "ATUtilities.h"
 #import "ATWebClient.h"
 
 static ATAppRatingFlow *sharedRatingFlow = nil;
@@ -333,11 +334,22 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 }
 
 - (NSURL *)URLForRatingApp {
+	NSString *URLString = nil;
+	NSString *URLStringFromPreferences = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppRatingReviewURLPreferenceKey];
+	if (URLStringFromPreferences == nil) {
 #if TARGET_OS_IPHONE
-	NSString *URLString = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", iTunesAppID];
+		NSString *osVersion = [[UIDevice currentDevice] systemVersion];
+		if ([ATUtilities versionString:osVersion isGreaterThanVersionString:@"6.0"] || [ATUtilities versionString:osVersion isEqualToVersionString:@"6.0"]) {
+			URLString = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/app/id%@", iTunesAppID];
+		} else {
+			URLString = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", iTunesAppID];
+		}
 #elif TARGET_OS_MAC
-	NSString *URLString = [NSString stringWithFormat:@"macappstore://itunes.apple.com/app/id%@?mt=12", iTunesAppID];
+		URLString = [NSString stringWithFormat:@"macappstore://itunes.apple.com/app/id%@?mt=12", iTunesAppID];
 #endif
+	} else {
+		URLString = URLStringFromPreferences;
+	}
 	return [NSURL URLWithString:URLString];
 }
 

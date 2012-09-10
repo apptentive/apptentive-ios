@@ -459,6 +459,25 @@ static NSDateFormatter *dateFormatter = nil;
 	[components release], components = nil;
 	return result;
 }
+
++ (NSComparisonResult)compareVersionString:(NSString *)a toVersionString:(NSString *)b {
+	return [a compare:b options:NSNumericSearch];
+}
+
++ (BOOL)versionString:(NSString *)a isGreaterThanVersionString:(NSString *)b {
+	NSComparisonResult comparisonResult = [ATUtilities compareVersionString:a toVersionString:b];
+	return (comparisonResult == NSOrderedDescending);
+}
+
++ (BOOL)versionString:(NSString *)a isLessThanVersionString:(NSString *)b {
+	NSComparisonResult comparisonResult = [ATUtilities compareVersionString:a toVersionString:b];
+	return (comparisonResult == NSOrderedAscending);
+}
+
++ (BOOL)versionString:(NSString *)a isEqualToVersionString:(NSString *)b {
+	NSComparisonResult comparisonResult = [ATUtilities compareVersionString:a toVersionString:b];
+	return (comparisonResult == NSOrderedSame);
+}
 @end
 
 

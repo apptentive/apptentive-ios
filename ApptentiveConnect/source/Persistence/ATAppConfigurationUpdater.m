@@ -188,6 +188,11 @@ NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigura
 		}
 	}
 	
+	if ([jsonConfiguration objectForKey:@"review_url"]) {
+		NSString *reviewURLString = [jsonConfiguration objectForKey:@"review_url"];
+		[defaults setObject:reviewURLString forKey:ATAppRatingReviewURLPreferenceKey];
+	}
+	
 	if ([jsonConfiguration objectForKey:@"cache-expiration"]) {
 		NSString *expirationDateString = [jsonConfiguration objectForKey:@"cache-expiration"];
 		NSDate *expirationDate = [ATUtilities dateFromISO8601String:expirationDateString];

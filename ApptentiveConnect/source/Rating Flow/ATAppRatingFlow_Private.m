@@ -24,6 +24,7 @@ NSString *const ATAppRatingPromptLogicPreferenceKey = @"ATAppRatingPromptLogicPr
 
 NSString *const ATAppRatingSettingsAreFromServerPreferenceKey = @"ATAppRatingSettingsAreFromServerPreferenceKey";
 
+NSString *const ATAppRatingReviewURLPreferenceKey = @"ATAppRatingReviewURLPreferenceKey";
 
 NSString *const ATAppRatingFlowLastUsedVersionKey = @"ATAppRatingFlowLastUsedVersionKey";
 NSString *const ATAppRatingFlowLastUsedVersionFirstUseDateKey = @"ATAppRatingFlowLastUsedVersionFirstUseDateKey";

@@ -35,6 +35,11 @@
 + (NSString *)stringRepresentationOfDate:(NSDate *)date;
 + (NSString *)stringRepresentationOfDate:(NSDate *)date timeZone:(NSTimeZone *)timeZone;
 + (NSDate *)dateFromISO8601String:(NSString *)string;
+
++ (NSComparisonResult)compareVersionString:(NSString *)a toVersionString:(NSString *)b;
++ (BOOL)versionString:(NSString *)a isGreaterThanVersionString:(NSString *)b;
++ (BOOL)versionString:(NSString *)a isLessThanVersionString:(NSString *)b;
++ (BOOL)versionString:(NSString *)a isEqualToVersionString:(NSString *)b;
 @end
 
 CGRect ATCGRectOfEvenSize(CGRect inRect);

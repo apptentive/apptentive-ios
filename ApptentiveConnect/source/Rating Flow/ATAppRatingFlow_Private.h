@@ -19,6 +19,8 @@ NSString *const ATAppRatingPromptLogicPreferenceKey;
 
 NSString *const ATAppRatingSettingsAreFromServerPreferenceKey;
 
+NSString *const ATAppRatingReviewURLPreferenceKey;
+
 
 
 NSString *const ATAppRatingFlowLastUsedVersionKey;

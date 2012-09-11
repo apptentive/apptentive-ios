@@ -40,6 +40,13 @@
 + (BOOL)versionString:(NSString *)a isGreaterThanVersionString:(NSString *)b;
 + (BOOL)versionString:(NSString *)a isLessThanVersionString:(NSString *)b;
 + (BOOL)versionString:(NSString *)a isEqualToVersionString:(NSString *)b;
+
++ (NSArray *)availableAppLocalizations;
+
+/*! Yes if there is only an app version, rather than an app version + build number in standard Cocoa versioning. */
++ (BOOL)bundleVersionIsMainVersion;
++ (NSString *)appVersionString;
++ (NSString *)buildNumberString;
 @end
 
 CGRect ATCGRectOfEvenSize(CGRect inRect);

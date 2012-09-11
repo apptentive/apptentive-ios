@@ -478,6 +478,69 @@ static NSDateFormatter *dateFormatter = nil;
 	NSComparisonResult comparisonResult = [ATUtilities compareVersionString:a toVersionString:b];
 	return (comparisonResult == NSOrderedSame);
 }
+
++ (NSArray *)availableAppLocalizations {
+	static NSMutableArray *localAppLocalizations = nil;
+	@synchronized(self) {
+		if (localAppLocalizations == nil) {
+			NSArray *rawLocalizations = [[NSBundle mainBundle] localizations];
+			localAppLocalizations = [[NSMutableArray alloc] init];
+			for (NSString *loc in rawLocalizations)  {
+				NSString *s = [NSLocale canonicalLocaleIdentifierFromString:loc];
+				if (![localAppLocalizations containsObject:s]) {
+					[localAppLocalizations addObject:s];
+				}
+			}
+		}
+	}
+	return localAppLocalizations;
+}
+
++ (BOOL)bundleVersionIsMainVersion {
+	BOOL result = NO;
+	NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+	NSString *bundleVersion = [infoDictionary objectForKey:(NSString *)kCFBundleVersionKey];
+	NSString *shortVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+	
+	if (!shortVersion) {
+		result = YES;
+	} else if ([shortVersion isEqualToString:bundleVersion]) {
+		result = YES;
+	}
+	return result;
+}
+
++ (NSString *)appVersionString {
+	static NSString *appVersionString = nil;
+	@synchronized(self) {
+		if (appVersionString == nil) {
+			if ([ATUtilities bundleVersionIsMainVersion]) {
+				appVersionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
+			} else {
+				appVersionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+			}
+		}
+	}
+	return appVersionString;
+}
+
++ (NSString *)buildNumberString {
+	static NSString *buildNumberString = nil;
+	@synchronized(self) {
+		if (buildNumberString == nil) {
+			if (![self bundleVersionIsMainVersion]) {
+				buildNumberString = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
+			} else {
+				buildNumberString = @"?";
+			}
+		}
+	}
+	if ([buildNumberString isEqualToString:@"?"]) {
+		return nil;
+	} else {
+		return buildNumberString;
+	}
+}
 @end
 
 

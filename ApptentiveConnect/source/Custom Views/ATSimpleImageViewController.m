@@ -174,7 +174,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 		image = [info objectForKey:UIImagePickerControllerOriginalImage];
 	}
 	if (image) {
-		feedback.imageIsFromCamera = isFromCamera;
+		feedback.imageSource = isFromCamera ? ATFeedbackImageSourceCamera : ATFeedbackImageSourcePhotoLibrary;
 		feedback.screenshot = image;
 		[[NSNotificationCenter defaultCenter] postNotificationName:ATImageViewChoseImage object:self];
 	}

@@ -1,5 +1,8 @@
 2012-09-11 wooster v0.4.6
 -------------------------
+One major change in the API:
+* The `shouldTakeScreenshot` property of `ATConnect` is now `NO` by default.
+
 Some changes for iOS 6 compatibility:
 * Fixes for `viewDidUnload` deprecation (IOS-66 Fixes for deprecated API in iOS 6)
 * Retrieves review URL for app store from our server (IOS-64)

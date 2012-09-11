@@ -26,6 +26,12 @@ typedef enum {
 	ATFeedbackSourceEnjoymentDialog,
 } ATFeedbackSource;
 
+typedef enum {
+	ATFeedbackImageSourceScreenshot,
+	ATFeedbackImageSourceCamera,
+	ATFeedbackImageSourcePhotoLibrary,
+} ATFeedbackImageSource;
+
 @interface ATFeedback : ATRecord <NSCoding> {
 @private
 	NSMutableDictionary *extraData;
@@ -40,7 +46,7 @@ typedef enum {
 #elif TARGET_OS_MAC
 	NSImage *screenshot;
 #endif
-	BOOL imageIsFromCamera;
+	ATFeedbackImageSource imageSource;
 }
 @property (nonatomic, assign) ATFeedbackType type;
 @property (nonatomic, retain) NSString *text;
@@ -53,7 +59,7 @@ typedef enum {
 #elif TARGET_OS_MAC
 @property (nonatomic, retain) NSImage *screenshot;
 #endif
-@property (nonatomic, assign) BOOL imageIsFromCamera;
+@property (nonatomic, assign) ATFeedbackImageSource imageSource;
 
 - (NSDictionary *)dictionary;
 - (NSDictionary *)apiDictionary;

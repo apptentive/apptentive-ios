@@ -90,13 +90,6 @@ static ATConnect *sharedConnection = nil;
 		if (additionalFeedbackData && [additionalFeedbackData count]) {
 			[feedback addExtraDataFromDictionary:additionalFeedbackData];
 		}
-		if (self.shouldTakeScreenshot && self.feedbackControllerType != ATFeedbackControllerSimple) {
-			screenshot = [ATUtilities imageByTakingScreenshot];
-			// Get the rotation of the view hierarchy and rotate the screenshot as
-			// necessary.
-			CGFloat rotation = [ATUtilities rotationOfViewHierarchyInRadians:viewController.view];
-			screenshot = [ATUtilities imageByRotatingImage:screenshot byRadians:rotation];
-		}
 		if (self.initialName && [self.initialName length] > 0) {
 			feedback.name = self.initialName;
 		}
@@ -113,11 +106,11 @@ static ATConnect *sharedConnection = nil;
 		if (contact.email && [contact.email length] > 0) {
 			feedback.email = contact.email;
 		}
-		feedback.screenshot = screenshot;
 		[[ATBackend sharedBackend] setCurrentFeedback:feedback];
 		[feedback release];
 		feedback = nil;
-	} else {
+	}
+	if ([[ATBackend sharedBackend] currentFeedback]) {
 		ATFeedback *currentFeedback = [[ATBackend sharedBackend] currentFeedback];
 		if (self.shouldTakeScreenshot && currentFeedback.screenshot == nil && self.feedbackControllerType != ATFeedbackControllerSimple) {
 			screenshot = [ATUtilities imageByTakingScreenshot];
@@ -126,7 +119,7 @@ static ATConnect *sharedConnection = nil;
 			CGFloat rotation = [ATUtilities rotationOfViewHierarchyInRadians:viewController.view];
 			screenshot = [ATUtilities imageByRotatingImage:screenshot byRadians:rotation];
 			currentFeedback.screenshot = screenshot;
-		} else if (!self.shouldTakeScreenshot && currentFeedback.screenshot != nil && !currentFeedback.imageIsFromCamera) {
+		} else if (!self.shouldTakeScreenshot && currentFeedback.screenshot != nil && (currentFeedback.imageSource == ATFeedbackImageSourceScreenshot)) {
 			currentFeedback.screenshot = nil;
 		}
 	}

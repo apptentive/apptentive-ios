@@ -28,7 +28,7 @@
 @end
 
 @implementation ATFeedback
-@synthesize type, text, name, email, phone, source, screenshot, imageIsFromCamera;
+@synthesize type, text, name, email, phone, source, screenshot, imageSource;
 - (id)init {
 	if ((self = [super init])) {
 		[self setup];

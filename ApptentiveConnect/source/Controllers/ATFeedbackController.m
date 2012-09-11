@@ -752,7 +752,7 @@ enum {
 						scaledImageSize.height = (fitDimension/imageSize.width) * imageSize.height;
 						scaledImageSize.width = fitDimension;
 					}
-					UIImage *scaledImage = [ATUtilities imageByScalingImage:image toSize:scaledImageSize scale:scale fromITouchCamera:feedback.imageIsFromCamera];
+					UIImage *scaledImage = [ATUtilities imageByScalingImage:image toSize:scaledImageSize scale:scale fromITouchCamera:(feedback.imageSource == ATFeedbackImageSourceCamera)];
 					thumbnailView.image = scaledImage;
 				}
 				CGRect f = CGRectMake(11.5, 11.5, 70, 70);

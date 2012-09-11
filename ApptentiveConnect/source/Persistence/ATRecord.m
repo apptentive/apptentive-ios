@@ -148,7 +148,9 @@
 		[d setObject:buildNumber forKey:@"record[app_version][build_number]"];
 	}
 	[d setObject:[self primaryLocale] forKey:@"record[app_version][primary_locale]"];
-	[d setObject:[self availableLocales] forKey:@"record[app_version][supported_locales]"];
+	for (NSString *locale in [self availableLocales]) {
+		[d setObject:locale forKey:@"record[app_version][supported_locales][]"];
+	}
 	
 	return d;
 }

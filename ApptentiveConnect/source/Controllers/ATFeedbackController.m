@@ -617,7 +617,6 @@ enum {
 
 - (void)screenshotChanged:(NSNotification *)notification {
 	if (self.feedback.screenshot) {
-		self.feedback.screenshotSwitchEnabled = YES;
 		[self updateThumbnail];
 	} 
 }

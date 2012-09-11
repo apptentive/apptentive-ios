@@ -35,7 +35,7 @@ static ATConnect *sharedConnection = nil;
 	if ((self = [super init])) {
 		self.showEmailField = YES;
 		self.showKeyboardAccessory = YES;
-		self.shouldTakeScreenshot = YES;
+		self.shouldTakeScreenshot = NO;
 		additionalFeedbackData = [[NSMutableDictionary alloc] init];
 	}
 	return self;
@@ -114,10 +114,21 @@ static ATConnect *sharedConnection = nil;
 			feedback.email = contact.email;
 		}
 		feedback.screenshot = screenshot;
-		feedback.screenshotSwitchEnabled = (screenshot != nil);
 		[[ATBackend sharedBackend] setCurrentFeedback:feedback];
 		[feedback release];
 		feedback = nil;
+	} else {
+		ATFeedback *currentFeedback = [[ATBackend sharedBackend] currentFeedback];
+		if (self.shouldTakeScreenshot && currentFeedback.screenshot == nil && self.feedbackControllerType != ATFeedbackControllerSimple) {
+			screenshot = [ATUtilities imageByTakingScreenshot];
+			// Get the rotation of the view hierarchy and rotate the screenshot as
+			// necessary.
+			CGFloat rotation = [ATUtilities rotationOfViewHierarchyInRadians:viewController.view];
+			screenshot = [ATUtilities imageByRotatingImage:screenshot byRadians:rotation];
+			currentFeedback.screenshot = screenshot;
+		} else if (!self.shouldTakeScreenshot && currentFeedback.screenshot != nil && !currentFeedback.imageIsFromCamera) {
+			currentFeedback.screenshot = nil;
+		}
 	}
 
 	ATFeedbackController *vc = [[ATFeedbackController alloc] init];

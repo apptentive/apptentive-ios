@@ -81,6 +81,9 @@ enum kRootTableSections {
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+	if (section == kFeedbackSection) {
+		return 2;
+	}
 	return 1;
 }
 
@@ -92,7 +95,11 @@ enum kRootTableSections {
 		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 	}
 	if (indexPath.section == kFeedbackSection) {
-		cell.textLabel.text = @"Send Feedback";
+		if (indexPath.row == 0) {
+			cell.textLabel.text = @"Send Feedback";
+		} else {
+			cell.textLabel.text = @"Send Feedback with Screenshot";
+		}
 	} else if (indexPath.section == kRatingSection) {
 		cell.textLabel.text = @"Start Rating Flow";
 	} else if (indexPath.section == kSurveySection) {
@@ -110,6 +117,12 @@ enum kRootTableSections {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (indexPath.section == kFeedbackSection) {
+		ATConnect *connection = [ATConnect sharedConnection];
+		if (indexPath.row == 0) {
+			connection.shouldTakeScreenshot = NO;
+		} else if (indexPath.row == 1) {
+			connection.shouldTakeScreenshot = YES;
+		}
 		[self showFeedback:nil];
 	} else if (indexPath.section == kRatingSection) {
 		[self showRating:nil];

@@ -40,7 +40,6 @@ typedef enum {
 #elif TARGET_OS_MAC
 	NSImage *screenshot;
 #endif
-	BOOL screenshotSwitchEnabled;
 	BOOL imageIsFromCamera;
 }
 @property (nonatomic, assign) ATFeedbackType type;
@@ -54,8 +53,6 @@ typedef enum {
 #elif TARGET_OS_MAC
 @property (nonatomic, retain) NSImage *screenshot;
 #endif
-/*! Used to keep hold of screenshot switch state. */
-@property (nonatomic, assign) BOOL screenshotSwitchEnabled;
 @property (nonatomic, assign) BOOL imageIsFromCamera;
 
 - (NSDictionary *)dictionary;

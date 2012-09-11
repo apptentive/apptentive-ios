@@ -28,7 +28,7 @@
 @end
 
 @implementation ATFeedback
-@synthesize type, text, name, email, phone, source, screenshot, screenshotSwitchEnabled, imageIsFromCamera;
+@synthesize type, text, name, email, phone, source, screenshot, imageIsFromCamera;
 - (id)init {
 	if ((self = [super init])) {
 		[self setup];
@@ -156,9 +156,6 @@
 - (void)setup {
 	extraData = [[NSMutableDictionary alloc] init];
 	self.type = ATFeedbackTypeFeedback;
-#if TARGET_OS_MAC
-	self.screenshotSwitchEnabled = YES;
-#endif
 }
 
 - (ATFeedbackType)feedbackTypeFromString:(NSString *)feedbackString {

@@ -168,11 +168,6 @@ static ATBackend *sharedBackend = nil;
 	[ATContactStorage releaseSharedContactStorage];
 	contact = nil;
 	
-	// If we don't need the screenshot, discard it.
-	if (feedback.screenshot && !feedback.screenshotSwitchEnabled) {
-		feedback.screenshot = nil;
-	}
-	
 	ATFeedbackTask *task = [[ATFeedbackTask alloc] init];
 	task.feedback = feedback;
 	[[ATTaskQueue sharedTaskQueue] addTask:task];

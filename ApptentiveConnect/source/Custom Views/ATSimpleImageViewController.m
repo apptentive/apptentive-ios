@@ -181,9 +181,12 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 	[self setupScrollView];
 	
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-		[imagePickerPopover dismissPopoverAnimated:YES];
-	} else {
-		[picker dismissModalViewControllerAnimated:YES];
+		if (imagePickerPopover) {
+			[imagePickerPopover dismissPopoverAnimated:YES];
+		}
+	}
+	if (self.modalViewController) {
+		[self dismissModalViewControllerAnimated:YES];
 	}
 }
 

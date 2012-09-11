@@ -11,6 +11,7 @@
 #import "ATBackend.h"
 #import "ATConnect.h"
 #import "ATAppConfigurationUpdater.h"
+#import "ATFeedback.h"
 #import "ATReachability.h"
 #import "ATAppRatingMetrics.h"
 #import "ATAppRatingFlow_Private.h"
@@ -200,6 +201,8 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 		ATFeedbackControllerType oldType = connection.feedbackControllerType;
 		connection.feedbackControllerType = ATFeedbackControllerSimple;
 		[connection showFeedbackWindow:self];
+		ATFeedback *inProgressFeedback = [[ATBackend sharedBackend] currentFeedback];
+		inProgressFeedback.source = ATFeedbackSourceEnjoymentDialog;
 		connection.customPlaceholderText = nil;
 		connection.feedbackControllerType = oldType;
 	}
@@ -264,6 +267,8 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 				ATFeedbackControllerType oldType = connection.feedbackControllerType;
 				connection.feedbackControllerType = ATFeedbackControllerSimple;
 				[connection presentFeedbackControllerFromViewController:self.viewController];
+				ATFeedback *inProgressFeedback = [[ATBackend sharedBackend] currentFeedback];
+				inProgressFeedback.source = ATFeedbackSourceEnjoymentDialog;
 				connection.customPlaceholderText = nil;
 				self.viewController = nil;
 				connection.feedbackControllerType = oldType;

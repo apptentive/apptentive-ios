@@ -21,6 +21,11 @@ typedef enum {
 	ATFeedbackTypeQuestion
 } ATFeedbackType;
 
+typedef enum {
+	ATFeedbackSourceUnknown,
+	ATFeedbackSourceEnjoymentDialog,
+} ATFeedbackSource;
+
 @interface ATFeedback : ATRecord <NSCoding> {
 @private
 	NSMutableDictionary *extraData;
@@ -29,6 +34,7 @@ typedef enum {
 	NSString *name;
 	NSString *email;
 	NSString *phone;
+	ATFeedbackSource source;
 #if TARGET_OS_IPHONE
 	UIImage *screenshot;
 #elif TARGET_OS_MAC
@@ -42,6 +48,7 @@ typedef enum {
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *email;
 @property (nonatomic, retain) NSString *phone;
+@property (nonatomic, assign) ATFeedbackSource source;
 #if TARGET_OS_IPHONE
 @property (nonatomic, retain) UIImage *screenshot;
 #elif TARGET_OS_MAC

@@ -52,6 +52,12 @@ enum {
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	if (tableView) {
+		[tableView removeFromSuperview];
+		tableView.delegate = nil;
+		tableView.dataSource = nil;
+		[tableView release], tableView = nil;
+	}
 	[activeTextEntryCell release], activeTextEntryCell = nil;
 	[activeTextView release], activeTextView = nil;
 	[survey release], survey = nil;

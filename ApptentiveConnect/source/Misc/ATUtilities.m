@@ -333,7 +333,7 @@ static NSDateFormatter *dateFormatter = nil;
 		NSString *sign = (timeZoneOffset >= 0) ? @"+" : @"-";
 		NSInteger hoursOffset = abs(floor(timeZoneOffset/60/60));
 		NSInteger minutesOffset = abs((int)floor(timeZoneOffset/60) % 60);
-		NSString *timeZoneString = [NSString stringWithFormat:@"%@%.2d%.2d", sign, hoursOffset, minutesOffset];
+		NSString *timeZoneString = [NSString stringWithFormat:@"%@%.2d%.2d", sign, (int)hoursOffset, (int)minutesOffset];
 		
 		NSTimeInterval interval = [aDate timeIntervalSince1970];
 		double fractionalSeconds = interval - (long)interval;

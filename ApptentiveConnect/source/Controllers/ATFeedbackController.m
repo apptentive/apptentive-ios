@@ -832,8 +832,9 @@ enum {
 		viewWidth = windowWidth - 12*2 - 100.0;
 		originX = floorf((windowWidth - viewWidth)/2.0);
 	} else {
-		viewHeight = isLandscape ? 188.0 : 258.0;
-		viewHeight -= topPadding;
+		CGFloat landscapeKeyboardHeight = 162;
+		CGFloat portraitKeyboardHeight = 216;
+		viewHeight = self.view.window.bounds.size.height - (isLandscape ? landscapeKeyboardHeight + 8 - 37 : portraitKeyboardHeight + 8);
 		viewWidth = windowWidth - 12;
 		originX = 6.0;
 	}

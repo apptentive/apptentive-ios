@@ -456,7 +456,7 @@ enum {
 	self.feedback = nil;
 	self.customPlaceholderText = nil;
 	[currentImage release], currentImage = nil;
-	[originalPresentingWindow makeKeyAndVisible];
+	[originalPresentingWindow makeKeyWindow];
 	[presentingViewController release], presentingViewController = nil;
 	[originalPresentingWindow release], originalPresentingWindow = nil;
 	if (self.deleteCurrentFeedbackOnCancel) {
@@ -619,7 +619,6 @@ enum {
 
 - (void)screenshotChanged:(NSNotification *)notification {
 	if (self.feedback.screenshot) {
-		self.feedback.screenshotSwitchEnabled = YES;
 		[self updateThumbnail];
 	} 
 }
@@ -755,7 +754,7 @@ enum {
 						scaledImageSize.height = (fitDimension/imageSize.width) * imageSize.height;
 						scaledImageSize.width = fitDimension;
 					}
-					UIImage *scaledImage = [ATUtilities imageByScalingImage:image toSize:scaledImageSize scale:scale fromITouchCamera:feedback.imageIsFromCamera];
+					UIImage *scaledImage = [ATUtilities imageByScalingImage:image toSize:scaledImageSize scale:scale fromITouchCamera:(feedback.imageSource == ATFeedbackImageSourceCamera)];
 					thumbnailView.image = scaledImage;
 				}
 				CGRect f = CGRectMake(11.5, 11.5, 70, 70);

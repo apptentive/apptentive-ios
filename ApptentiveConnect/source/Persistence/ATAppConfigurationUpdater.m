@@ -9,11 +9,13 @@
 #import "ATAppConfigurationUpdater.h"
 #import "ATAppRatingFlow_Private.h"
 #import "ATContactStorage.h"
+#import "ATUtilities.h"
 #import "ATWebClient.h"
 #import "PJSONKit.h"
 
 NSString *const ATConfigurationPreferencesChangedNotification = @"ATConfigurationPreferencesChangedNotification";
 NSString *const ATAppConfigurationLastUpdatePreferenceKey = @"ATAppConfigurationLastUpdatePreferenceKey";
+NSString *const ATAppConfigurationExpirationPreferenceKey = @"ATAppConfigurationExpirationPreferenceKey";
 NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigurationMetricsEnabledPreferenceKey";
 
 // Interval, in seconds, after which we'll update the configuration.
@@ -44,6 +46,20 @@ NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigura
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSDate *lastCheck = [defaults objectForKey:ATAppConfigurationLastUpdatePreferenceKey];
 	
+#ifndef APPTENTIVE_DEBUG
+	NSDate *expiration = [defaults objectForKey:ATAppConfigurationExpirationPreferenceKey];
+	if (expiration) {
+		NSDate *now = [NSDate date];
+		NSComparisonResult comparison = [expiration compare:now];
+		if (comparison == NSOrderedSame || comparison == NSOrderedAscending) {
+			return YES;
+		} else {
+			return NO;
+		}
+	}
+#endif
+	
+	// Fall back to the defaults.
 	NSTimeInterval interval = [lastCheck timeIntervalSinceNow];
 	
 	if (interval <= -kATAppConfigurationUpdateInterval) {
@@ -169,6 +185,19 @@ NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigura
 		if (predicate) {
 			[defaults setObject:ratingsPromptLogic forKey:ATAppRatingPromptLogicPreferenceKey];
 			hasConfigurationChanges = YES;
+		}
+	}
+	
+	if ([jsonConfiguration objectForKey:@"review_url"]) {
+		NSString *reviewURLString = [jsonConfiguration objectForKey:@"review_url"];
+		[defaults setObject:reviewURLString forKey:ATAppRatingReviewURLPreferenceKey];
+	}
+	
+	if ([jsonConfiguration objectForKey:@"cache-expiration"]) {
+		NSString *expirationDateString = [jsonConfiguration objectForKey:@"cache-expiration"];
+		NSDate *expirationDate = [ATUtilities dateFromISO8601String:expirationDateString];
+		if (expirationDate) {
+			[defaults setObject:expirationDate forKey:ATAppConfigurationExpirationPreferenceKey];
 		}
 	}
 	

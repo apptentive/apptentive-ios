@@ -33,6 +33,20 @@
 
 + (void)uniquifyArray:(NSMutableArray *)array;
 + (NSString *)stringRepresentationOfDate:(NSDate *)date;
++ (NSString *)stringRepresentationOfDate:(NSDate *)date timeZone:(NSTimeZone *)timeZone;
++ (NSDate *)dateFromISO8601String:(NSString *)string;
+
++ (NSComparisonResult)compareVersionString:(NSString *)a toVersionString:(NSString *)b;
++ (BOOL)versionString:(NSString *)a isGreaterThanVersionString:(NSString *)b;
++ (BOOL)versionString:(NSString *)a isLessThanVersionString:(NSString *)b;
++ (BOOL)versionString:(NSString *)a isEqualToVersionString:(NSString *)b;
+
++ (NSArray *)availableAppLocalizations;
+
+/*! Yes if there is only an app version, rather than an app version + build number in standard Cocoa versioning. */
++ (BOOL)bundleVersionIsMainVersion;
++ (NSString *)appVersionString;
++ (NSString *)buildNumberString;
 @end
 
 CGRect ATCGRectOfEvenSize(CGRect inRect);

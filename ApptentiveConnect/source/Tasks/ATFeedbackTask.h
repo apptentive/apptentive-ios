@@ -16,6 +16,7 @@
 @interface ATFeedbackTask : ATTask <ATAPIRequestDelegate> {
 @private
 	ATAPIRequest *request;
+	ATFeedback *feedback;
 }
 @property (nonatomic, retain) ATFeedback *feedback;
 

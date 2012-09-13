@@ -285,7 +285,7 @@
 		if (a) {
 			[result appendString:a];
 		} else {
-			[result appendFormat:@"<Data of length:%d>", [HTTPBody length]];
+			[result appendFormat:@"<Data of length:%ld>", (long)[HTTPBody length]];
 		}
 	}
 	return result;

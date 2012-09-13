@@ -21,22 +21,45 @@ typedef enum {
 	ATFeedbackTypeQuestion
 } ATFeedbackType;
 
+typedef enum {
+	ATFeedbackSourceUnknown,
+	ATFeedbackSourceEnjoymentDialog,
+} ATFeedbackSource;
+
+typedef enum {
+	ATFeedbackImageSourceScreenshot,
+	ATFeedbackImageSourceCamera,
+	ATFeedbackImageSourcePhotoLibrary,
+} ATFeedbackImageSource;
+
 @interface ATFeedback : ATRecord <NSCoding> {
+@private
 	NSMutableDictionary *extraData;
+	ATFeedbackType type;
+	NSString *text;
+	NSString *name;
+	NSString *email;
+	NSString *phone;
+	ATFeedbackSource source;
+#if TARGET_OS_IPHONE
+	UIImage *screenshot;
+#elif TARGET_OS_MAC
+	NSImage *screenshot;
+#endif
+	ATFeedbackImageSource imageSource;
 }
 @property (nonatomic, assign) ATFeedbackType type;
 @property (nonatomic, retain) NSString *text;
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *email;
 @property (nonatomic, retain) NSString *phone;
+@property (nonatomic, assign) ATFeedbackSource source;
 #if TARGET_OS_IPHONE
 @property (nonatomic, retain) UIImage *screenshot;
 #elif TARGET_OS_MAC
 @property (nonatomic, retain) NSImage *screenshot;
 #endif
-/*! Used to keep hold of screenshot switch state. */
-@property (nonatomic, assign) BOOL screenshotSwitchEnabled;
-@property (nonatomic, assign) BOOL imageIsFromCamera;
+@property (nonatomic, assign) ATFeedbackImageSource imageSource;
 
 - (NSDictionary *)dictionary;
 - (NSDictionary *)apiDictionary;

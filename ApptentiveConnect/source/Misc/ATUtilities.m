@@ -14,10 +14,17 @@
 #include <sys/types.h>
 #include <sys/sysctl.h>
 #endif
+#include <stdlib.h>
 
 #define KINDA_EQUALS(a, b) (fabs(a - b) < 0.1)
 #define DEG_TO_RAD(angle) ((M_PI * angle) / 180.0)
 #define RAD_TO_DEG(radians) (radians * (180.0/M_PI))
+
+static NSDateFormatter *dateFormatter = nil;
+
+@interface ATUtilities (Private)
++ (void)setupDateFormatters;
+@end
 
 @implementation ATUtilities
 
@@ -291,9 +298,10 @@
 
 + (NSString *)randomStringOfLength:(NSUInteger)length {
 	static NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+	srandomdev();
 	NSMutableString *result = [NSMutableString stringWithString:@""];
 	for (NSUInteger i = 0; i < length; i++) {
-		[result appendFormat:@"%c", [letters characterAtIndex:rand()%[letters length]]];
+		[result appendFormat:@"%c", [letters characterAtIndex:random()%[letters length]]];
 	}
 	return result;
 }
@@ -311,42 +319,241 @@
 
 
 + (NSString *)stringRepresentationOfDate:(NSDate *)aDate {
-	static NSDateFormatter *dateFormatter = nil;
-	static NSDateFormatter *timeZoneFormatter = nil;
-	if (dateFormatter == nil) {
-		dateFormatter = [[NSDateFormatter alloc] init];
-		[dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-		timeZoneFormatter = [[NSDateFormatter alloc] init];
-		[timeZoneFormatter setDateFormat:@"Z"];
-	}
+	return [ATUtilities stringRepresentationOfDate:aDate timeZone:[NSTimeZone defaultTimeZone]];
+}
+
++ (NSString *)stringRepresentationOfDate:(NSDate *)aDate timeZone:(NSTimeZone *)timeZone {
 	NSString *result = nil;
-	NSString *dateString = [dateFormatter stringFromDate:aDate];
-	NSString *timeZoneString = [timeZoneFormatter stringFromDate:aDate];
-	
-	NSTimeInterval interval = [aDate timeIntervalSince1970];
-	double fractionalSeconds = interval - (long)interval;
-	
-	// This is all necessary because of rdar://10500679 in which NSDateFormatter won't
-	// format fractional seconds past two decimal places. Also, strftime() doesn't seem
-	// to have fractional seconds on iOS.
-	if (fractionalSeconds == 0.0) {
-		result = [NSString stringWithFormat:@"%@ %@", dateString, timeZoneString];
-	} else {
-		NSString *f = [[NSString alloc] initWithFormat:@"%g", fractionalSeconds];
-		NSRange r = [f rangeOfString:@"."];
-		if (r.location != NSNotFound) {
-			NSString *truncatedFloat = [f substringFromIndex:r.location + r.length];
-			result = [NSString stringWithFormat:@"%@.%@ %@", dateString, truncatedFloat, timeZoneString];
+	@synchronized(self) { // to avoid calendars stepping on themselves
+		[ATUtilities setupDateFormatters];
+		dateFormatter.timeZone = timeZone;
+		NSString *dateString = [dateFormatter stringFromDate:aDate];
+		
+		NSInteger timeZoneOffset = [timeZone secondsFromGMT];
+		NSString *sign = (timeZoneOffset >= 0) ? @"+" : @"-";
+		NSInteger hoursOffset = abs(floor(timeZoneOffset/60/60));
+		NSInteger minutesOffset = abs((int)floor(timeZoneOffset/60) % 60);
+		NSString *timeZoneString = [NSString stringWithFormat:@"%@%.2d%.2d", sign, (int)hoursOffset, (int)minutesOffset];
+		
+		NSTimeInterval interval = [aDate timeIntervalSince1970];
+		double fractionalSeconds = interval - (long)interval;
+		
+		// This is all necessary because of rdar://10500679 in which NSDateFormatter won't
+		// format fractional seconds past two decimal places. Also, strftime() doesn't seem
+		// to have fractional seconds on iOS.
+		if (fractionalSeconds == 0.0) {
+			result = [NSString stringWithFormat:@"%@ %@", dateString, timeZoneString];
 		} else {
-			// For some reason, we couldn't find the decimal place.
-			result = [NSString stringWithFormat:@"%@.%ld %@", dateString, (long)(fractionalSeconds * 1000), timeZoneString];
+			NSString *f = [[NSString alloc] initWithFormat:@"%g", fractionalSeconds];
+			NSRange r = [f rangeOfString:@"."];
+			if (r.location != NSNotFound) {
+				NSString *truncatedFloat = [f substringFromIndex:r.location + r.length];
+				result = [NSString stringWithFormat:@"%@.%@ %@", dateString, truncatedFloat, timeZoneString];
+			} else {
+				// For some reason, we couldn't find the decimal place.
+				result = [NSString stringWithFormat:@"%@.%ld %@", dateString, (long)(fractionalSeconds * 1000), timeZoneString];
+			}
+			[f release], f= nil;
 		}
-		[f release], f= nil;
 	}
 	return result;
 }
+
++ (NSDate *)dateFromISO8601String:(NSString *)string {
+	BOOL validDate = YES;
+	NSDate *result = nil;
+	
+	NSDate *now = [NSDate date];
+	NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+	calendar.firstWeekday = 2;
+	calendar.timeZone = [NSTimeZone defaultTimeZone];
+	
+	NSDateComponents *components = [[NSDateComponents alloc] init];
+	NSDateComponents *nowComponents = [calendar components:NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit fromDate:now];
+	components.calendar = calendar;
+	
+	NSScanner *scanner = [[NSScanner alloc] initWithString:string];
+	NSString *ymdString = nil;
+	[scanner scanUpToString:@"T" intoString:&ymdString];
+	
+	if (ymdString && [ymdString length]) {
+		NSScanner *ymdScanner = [[NSScanner alloc] initWithString:ymdString];
+		do { // once
+			NSInteger month = 0;
+			NSInteger day = 0;
+			NSString *yearString = nil;
+			if (![ymdScanner scanCharactersFromSet:[NSCharacterSet decimalDigitCharacterSet] intoString:&yearString] || [yearString length] != 4) {
+				validDate = NO;
+				break;
+			}
+			components.year = [yearString integerValue];
+			if (![ymdScanner scanString:@"-" intoString:NULL]) break;
+			if (![ymdScanner scanInteger:&month]) break;
+			components.month = month;
+			if (![ymdScanner scanString:@"-" intoString:NULL]) break;
+			if (![ymdScanner scanInteger:&day]) break;
+			components.day = day;
+		} while (NO);
+		[ymdScanner release], ymdScanner = nil;
+	} else {
+		[components setYear:[nowComponents year]];
+		[components setMonth:[nowComponents month]];
+		[components setDay:[nowComponents day]];
+	}
+	
+	if ([scanner scanString:@"T" intoString:NULL]) {
+		do { // once
+			NSInteger hour = 0;
+			NSInteger minute = 0;
+			if (![scanner scanInteger:&hour]) {
+				validDate = NO;
+				break;
+			}
+			components.hour = hour;
+			if (![scanner scanString:@":" intoString:NULL]) break;
+			if (![scanner scanInteger:&minute]) break;
+			components.minute = minute;
+			if (![scanner scanString:@":" intoString:NULL]) break;
+			double secondFraction = 0.0;
+			if (![scanner scanDouble:&secondFraction]) break;
+			components.second = (NSInteger)round(secondFraction);
+		} while (NO);
+	}
+	
+	if ([scanner scanString:@"Z" intoString:NULL]) {
+		// Use UTC.
+		components.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+	} else {
+		do { // once
+			BOOL isPositiveOffset = YES;
+			if ([scanner scanString:@"+" intoString:NULL]) {
+				isPositiveOffset = YES;
+			} else if ([scanner scanString:@"-" intoString:NULL]) {
+				isPositiveOffset = NO;
+			} else {
+				if (![scanner isAtEnd]) {
+					validDate = NO;
+				}
+				break;
+			}
+			NSInteger hours = 0;
+			NSInteger minutes = 0;
+			NSInteger seconds = 0;
+			if (!([scanner scanInteger:&hours] && [scanner scanString:@":" intoString:NULL] && [scanner scanInteger:&minutes])) {
+				validDate = NO;
+				break;
+			}
+			NSInteger secondsFromGMT = hours*3600 + seconds*60;
+			if (!isPositiveOffset) {
+				secondsFromGMT = secondsFromGMT * -1;
+			}
+			components.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:secondsFromGMT];
+		} while (NO);
+	}
+	
+	[calendar release], calendar = nil;
+	[scanner release], scanner = nil;
+	if (validDate) {
+		result = [components date];
+	}
+	[components release], components = nil;
+	return result;
+}
+
++ (NSComparisonResult)compareVersionString:(NSString *)a toVersionString:(NSString *)b {
+	return [a compare:b options:NSNumericSearch];
+}
+
++ (BOOL)versionString:(NSString *)a isGreaterThanVersionString:(NSString *)b {
+	NSComparisonResult comparisonResult = [ATUtilities compareVersionString:a toVersionString:b];
+	return (comparisonResult == NSOrderedDescending);
+}
+
++ (BOOL)versionString:(NSString *)a isLessThanVersionString:(NSString *)b {
+	NSComparisonResult comparisonResult = [ATUtilities compareVersionString:a toVersionString:b];
+	return (comparisonResult == NSOrderedAscending);
+}
+
++ (BOOL)versionString:(NSString *)a isEqualToVersionString:(NSString *)b {
+	NSComparisonResult comparisonResult = [ATUtilities compareVersionString:a toVersionString:b];
+	return (comparisonResult == NSOrderedSame);
+}
+
++ (NSArray *)availableAppLocalizations {
+	static NSMutableArray *localAppLocalizations = nil;
+	@synchronized(self) {
+		if (localAppLocalizations == nil) {
+			NSArray *rawLocalizations = [[NSBundle mainBundle] localizations];
+			localAppLocalizations = [[NSMutableArray alloc] init];
+			for (NSString *loc in rawLocalizations)  {
+				NSString *s = [NSLocale canonicalLocaleIdentifierFromString:loc];
+				if (![localAppLocalizations containsObject:s]) {
+					[localAppLocalizations addObject:s];
+				}
+			}
+		}
+	}
+	return localAppLocalizations;
+}
+
++ (BOOL)bundleVersionIsMainVersion {
+	BOOL result = NO;
+	NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+	NSString *bundleVersion = [infoDictionary objectForKey:(NSString *)kCFBundleVersionKey];
+	NSString *shortVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+	
+	if (!shortVersion) {
+		result = YES;
+	} else if ([shortVersion isEqualToString:bundleVersion]) {
+		result = YES;
+	}
+	return result;
+}
+
++ (NSString *)appVersionString {
+	static NSString *appVersionString = nil;
+	@synchronized(self) {
+		if (appVersionString == nil) {
+			if ([ATUtilities bundleVersionIsMainVersion]) {
+				appVersionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
+			} else {
+				appVersionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+			}
+		}
+	}
+	return appVersionString;
+}
+
++ (NSString *)buildNumberString {
+	static NSString *buildNumberString = nil;
+	@synchronized(self) {
+		if (buildNumberString == nil) {
+			if (![self bundleVersionIsMainVersion]) {
+				buildNumberString = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
+			} else {
+				buildNumberString = @"?";
+			}
+		}
+	}
+	if ([buildNumberString isEqualToString:@"?"]) {
+		return nil;
+	} else {
+		return buildNumberString;
+	}
+}
 @end
 
+
+@implementation ATUtilities (Private)
++ (void)setupDateFormatters {
+	@synchronized(self) {
+		if (dateFormatter == nil) {
+			dateFormatter = [[NSDateFormatter alloc] init];
+			[dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+		}
+	}
+}
+@end
 
 extern CGRect ATCGRectOfEvenSize(CGRect inRect) {
 	CGRect result = CGRectMake(floor(inRect.origin.x), floor(inRect.origin.y), ceil(inRect.size.width), ceil(inRect.size.height));

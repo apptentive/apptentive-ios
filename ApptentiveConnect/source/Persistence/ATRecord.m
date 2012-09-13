@@ -18,6 +18,11 @@
 
 #define kRecordCodingVersion 1
 
+@interface ATRecord (Private)
+- (NSString *)primaryLocale;
+- (NSArray *)availableLocales;
+@end
+
 @implementation ATRecord
 @synthesize uuid, model, os_version, carrier, date;
 - (id)init {
@@ -108,6 +113,17 @@
 	[client setObject:@"Apptentive, Inc." forKey:@"author"];
 	[record setObject:client forKey:@"client"];
 	[d setObject:record forKey:@"record"];
+	
+	// Add some app information.
+	NSMutableDictionary *appVersion = [NSMutableDictionary dictionary];
+	[appVersion setObject:[ATUtilities appVersionString] forKey:@"version"];
+	NSString *buildNumber = [ATUtilities buildNumberString];
+	if (buildNumber) {
+		[appVersion setObject:buildNumber forKey:@"build_number"];
+	}
+	[appVersion setObject:[self primaryLocale] forKey:@"primary_locale"];
+	[appVersion setObject:[self availableLocales] forKey:@"supported_locales"];
+	[d setObject:appVersion forKey:@"app_version"];
 	return d;	
 }
 
@@ -124,6 +140,18 @@
 	[d setObject:kATConnectVersionString forKey:@"record[client][version]"];
 	[d setObject:kATConnectPlatformString forKey:@"record[client][os]"];
 	[d setObject:@"Apptentive, Inc." forKey:@"record[client][author]"];
+	
+	// Add some app information.
+	[d setObject:[ATUtilities appVersionString] forKey:@"record[app_version][version]"];
+	NSString *buildNumber = [ATUtilities buildNumberString];
+	if (buildNumber) {
+		[d setObject:buildNumber forKey:@"record[app_version][build_number]"];
+	}
+	[d setObject:[self primaryLocale] forKey:@"record[app_version][primary_locale]"];
+	for (NSString *locale in [self availableLocales]) {
+		[d setObject:locale forKey:@"record[app_version][supported_locales][]"];
+	}
+	
 	return d;
 }
 
@@ -133,5 +161,16 @@
 
 - (ATAPIRequest *)requestForSendingRecord {
 	return nil;
+}
+@end
+
+
+@implementation ATRecord (Private)
+- (NSString *)primaryLocale {
+	return [[NSLocale currentLocale] localeIdentifier];
+}
+
+- (NSArray *)availableLocales {
+	return [ATUtilities availableAppLocalizations];
 }
 @end

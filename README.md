@@ -40,12 +40,6 @@ following frameworks:
 * SystemConfiguration
 * UIKit
 
-Library Conflicts
------------------
-`ApptentiveConnect` includes the `JSONKit` JSON parser. If you're already
-using `JSONKit` in your project, you may need to modify your project to use
-the copy in `ApptentiveConnect`.
-
 Project Settings for Xcode 4
 ----------------------------
 

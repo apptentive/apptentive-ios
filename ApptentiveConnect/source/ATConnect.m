@@ -35,7 +35,7 @@ static ATConnect *sharedConnection = nil;
 	if ((self = [super init])) {
 		self.showEmailField = YES;
 		self.showKeyboardAccessory = YES;
-		self.shouldTakeScreenshot = YES;
+		self.shouldTakeScreenshot = NO;
 		additionalFeedbackData = [[NSMutableDictionary alloc] init];
 	}
 	return self;
@@ -49,10 +49,10 @@ static ATConnect *sharedConnection = nil;
 	}
 #endif
 	[additionalFeedbackData release], additionalFeedbackData = nil;
-	self.customPlaceholderText = nil;
-	self.apiKey = nil;
-	self.initialName = nil;
-	self.initialEmailAddress = nil;
+	[customPlaceholderText release], customPlaceholderText = nil;
+	[apiKey release], apiKey = nil;
+	[initialName release], initialName = nil;
+	[initialEmailAddress release], initialEmailAddress = nil;
 	[super dealloc];
 }
 
@@ -90,13 +90,6 @@ static ATConnect *sharedConnection = nil;
 		if (additionalFeedbackData && [additionalFeedbackData count]) {
 			[feedback addExtraDataFromDictionary:additionalFeedbackData];
 		}
-		if (self.shouldTakeScreenshot && self.feedbackControllerType != ATFeedbackControllerSimple) {
-			screenshot = [ATUtilities imageByTakingScreenshot];
-			// Get the rotation of the view hierarchy and rotate the screenshot as
-			// necessary.
-			CGFloat rotation = [ATUtilities rotationOfViewHierarchyInRadians:viewController.view];
-			screenshot = [ATUtilities imageByRotatingImage:screenshot byRadians:rotation];
-		}
 		if (self.initialName && [self.initialName length] > 0) {
 			feedback.name = self.initialName;
 		}
@@ -113,15 +106,29 @@ static ATConnect *sharedConnection = nil;
 		if (contact.email && [contact.email length] > 0) {
 			feedback.email = contact.email;
 		}
-		feedback.screenshot = screenshot;
-		feedback.screenshotSwitchEnabled = (screenshot != nil);
 		[[ATBackend sharedBackend] setCurrentFeedback:feedback];
 		[feedback release];
 		feedback = nil;
 	}
+	if ([[ATBackend sharedBackend] currentFeedback]) {
+		ATFeedback *currentFeedback = [[ATBackend sharedBackend] currentFeedback];
+		if (self.shouldTakeScreenshot && currentFeedback.screenshot == nil && self.feedbackControllerType != ATFeedbackControllerSimple) {
+			screenshot = [ATUtilities imageByTakingScreenshot];
+			// Get the rotation of the view hierarchy and rotate the screenshot as
+			// necessary.
+			CGFloat rotation = [ATUtilities rotationOfViewHierarchyInRadians:viewController.view];
+			screenshot = [ATUtilities imageByRotatingImage:screenshot byRadians:rotation];
+			currentFeedback.screenshot = screenshot;
+		} else if (!self.shouldTakeScreenshot && currentFeedback.screenshot != nil && (currentFeedback.imageSource == ATFeedbackImageSourceScreenshot)) {
+			currentFeedback.screenshot = nil;
+		}
+	}
 
 	ATFeedbackController *vc = [[ATFeedbackController alloc] init];
 	[vc setShowEmailAddressField:self.showEmailField];
+	if (self.feedbackControllerType == ATFeedbackControllerSimple) {
+		vc.deleteCurrentFeedbackOnCancel = YES;
+	}
 	if (self.customPlaceholderText) {
 		[vc setCustomPlaceholderText:self.customPlaceholderText];
 	}
@@ -131,36 +138,18 @@ static ATConnect *sharedConnection = nil;
 	[vc release];
 }
 #elif TARGET_OS_MAC
-- (void)showFeedbackWindow:(id)sender withFeedbackType:(ATFeedbackType)feedbackType {
+- (IBAction)showFeedbackWindow:(id)sender {
 	if (![[ATBackend sharedBackend] currentFeedback]) {
 		ATFeedback *feedback = [[ATFeedback alloc] init];
-		feedback.type = feedbackType;
 		[[ATBackend sharedBackend] setCurrentFeedback:feedback];
 		[feedback release];
 		feedback = nil;
 	}
-
+	
 	if (!feedbackWindowController) {
 		feedbackWindowController = [[ATFeedbackWindowController alloc] initWithFeedback:[[ATBackend sharedBackend] currentFeedback]];
 	}
-	[feedbackWindowController setFeedbackType:feedbackType];
 	[feedbackWindowController showWindow:self];
-}
-
-- (IBAction)showFeedbackWindow:(id)sender {
-	[self showFeedbackWindow:sender withFeedbackType:ATFeedbackTypeFeedback];
-}
-
-- (IBAction)showFeedbackWindowForFeedback:(id)sender {
-	[self showFeedbackWindow:sender withFeedbackType:ATFeedbackTypeFeedback];
-}
-
-- (IBAction)showFeedbackWindowForQuestion:(id)sender {
-	[self showFeedbackWindow:sender withFeedbackType:ATFeedbackTypeQuestion];
-}
-
-- (IBAction)showFeedbackWindowForBugReport:(id)sender {
-	[self showFeedbackWindow:sender withFeedbackType:ATFeedbackTypeBug];
 }
 #endif
 

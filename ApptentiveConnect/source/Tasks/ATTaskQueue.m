@@ -173,7 +173,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 			}
 		}
 	}
-	[pool release];
+	[pool release], pool = nil;
 }
 
 - (void)stop {
@@ -193,22 +193,29 @@ static ATTaskQueue *sharedTaskQueue = nil;
 			[self archive];
 			[self start];
 		} else if ([keyPath isEqualToString:@"failed"] && [task failed]) {
-			[self stop];
-			task.failureCount = task.failureCount + 1;
-			if (task.failureCount > kMaxFailureCount) {
-				NSLog(@"Task %@ failed too many times, removing from queue.", task);
+			if (task.isFailureOkay) {
+				task.failureCount = task.failureCount + 1;
 				[self unsetActiveTask];
 				[tasks removeObject:task];
 				[self start];
 			} else {
-				// Put task on back of queue.
-				[task retain];
-				[tasks removeObject:task];
-				[tasks addObject:task];
-				[task release];
-				[self archive];
-				
-				[self performSelector:@selector(start) withObject:nil afterDelay:kATTaskQueueRetryPeriod];
+				[self stop];
+				task.failureCount = task.failureCount + 1;
+				if (task.failureCount > kMaxFailureCount) {
+					NSLog(@"Task %@ failed too many times, removing from queue.", task);
+					[self unsetActiveTask];
+					[tasks removeObject:task];
+					[self start];
+				} else {
+					// Put task on back of queue.
+					[task retain];
+					[tasks removeObject:task];
+					[tasks addObject:task];
+					[task release];
+					[self archive];
+					
+					[self performSelector:@selector(start) withObject:nil afterDelay:kATTaskQueueRetryPeriod];
+				}
 			}
 		}
 	}
@@ -225,8 +232,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 - (void)teardown {
 	@synchronized(self) {
 		[self stop];
-		[tasks release];
-		tasks = nil;
+		[tasks release], tasks = nil;
 		[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	}
 }

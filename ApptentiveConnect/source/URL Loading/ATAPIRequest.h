@@ -8,9 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+#import "ATURLConnection.h"
+
 NSString *const ATAPIRequestStatusChanged;
 
-@class ATURLConnection;
 @class ATAPIRequest;
 
 typedef enum {
@@ -28,19 +29,26 @@ typedef enum {
 
 /*! API request for the apptentive.com service. Encapsulates the connection
  connection state, completion percentage, etc. */
-@interface ATAPIRequest : NSObject {
+@interface ATAPIRequest : NSObject <ATURLConnectionDelegate> {
 @private
 	ATURLConnection *connection;
 	NSString *channelName;
 	BOOL cancelled;
 	float percentageComplete;
+	
+	ATAPIRequestReturnType returnType;
+	BOOL failed;
+	NSString *errorTitle;
+	NSString *errorMessage;
+	NSTimeInterval timeoutInterval;
+	NSObject<ATAPIRequestDelegate> *delegate;
 }
 @property (nonatomic, assign) ATAPIRequestReturnType returnType;
 @property (nonatomic, assign) BOOL failed;
 @property (nonatomic, retain) NSString *errorTitle;
 @property (nonatomic, retain) NSString *errorMessage;
 @property (nonatomic, assign) NSTimeInterval timeoutInterval;
-@property (nonatomic, retain) id <ATAPIRequestDelegate> delegate;
+@property (nonatomic, assign) NSObject<ATAPIRequestDelegate> *delegate;
 
 - (id)initWithConnection:(ATURLConnection *)connection channelName:(NSString *)channelName;
 - (void)start;

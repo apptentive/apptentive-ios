@@ -16,6 +16,7 @@
 @synthesize failed;
 @synthesize failureCount;
 @synthesize lastErrorTitle, lastErrorMessage;
+@synthesize failureOkay;
 
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
@@ -32,8 +33,8 @@
 }
 
 - (void)dealloc {
-	self.lastErrorTitle = nil;
-	self.lastErrorMessage = nil;
+	[lastErrorTitle release], lastErrorTitle = nil;
+	[lastErrorMessage release], lastErrorMessage = nil;
 	[super dealloc];
 }
 

@@ -174,16 +174,19 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 		image = [info objectForKey:UIImagePickerControllerOriginalImage];
 	}
 	if (image) {
-		feedback.imageIsFromCamera = isFromCamera;
+		feedback.imageSource = isFromCamera ? ATFeedbackImageSourceCamera : ATFeedbackImageSourcePhotoLibrary;
 		feedback.screenshot = image;
 		[[NSNotificationCenter defaultCenter] postNotificationName:ATImageViewChoseImage object:self];
 	}
 	[self setupScrollView];
 	
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-		[imagePickerPopover dismissPopoverAnimated:YES];
-	} else {
-		[picker dismissModalViewControllerAnimated:YES];
+		if (imagePickerPopover) {
+			[imagePickerPopover dismissPopoverAnimated:YES];
+		}
+	}
+	if (self.modalViewController) {
+		[self dismissModalViewControllerAnimated:YES];
 	}
 }
 

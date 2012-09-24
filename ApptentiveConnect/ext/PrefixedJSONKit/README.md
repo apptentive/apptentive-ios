@@ -1,9 +1,17 @@
+# PrefixedJSONKit
+
+PrefixedJSONKit is a fork of JSONKit which prefixes the symbols in JSONKit for easy embedding in static libraries to avoid conflicts with other uses of JSONKit in the same library.
+
+To use, set a preprocessor macro for `JSONKIT_PREFIX`, for example: `JSONKIT_PREFIX=EXAMPLE_`. Now, all external JSONKit symbols will be prefixed with "EXAMPLE_", so `JSONDecoder` would become `EXAMPLE_JSONDecoder`.
+
 # JSONKit
 
 JSONKit is dual licensed under either the terms of the BSD License, or alternatively under the terms of the Apache License, Version 2.0.<br />
 Copyright &copy; 2011, John Engelhart.
 
 ### A Very High Performance Objective-C JSON Library
+
+**UPDATE:** (2011/12/18) The benchmarks below were performed before Apples [`NSJSONSerialization`][NSJSONSerialization] was available (as of Mac OS X 10.7 and iOS 5).  The obvious question is: Which is faster, [`NSJSONSerialization`][NSJSONSerialization] or JSONKit?  According to [this site](http://www.bonto.ch/blog/2011/12/08/json-libraries-for-ios-comparison-updated/), JSONKit is faster than [`NSJSONSerialization`][NSJSONSerialization].  Some quick "back of the envelope" calculations using the numbers reported, JSONKit appears to be approximately 25% to 40% faster than [`NSJSONSerialization`][NSJSONSerialization], which is pretty significant.
 
   Parsing  |  Serializing
 :---------:|:-------------:
@@ -305,3 +313,4 @@ Example       | Result            | Argument
 [strtoull]: http://developer.apple.com/library/mac/#documentation/Darwin/Reference/ManPages/man3/strtoull.3.html
 [getrusage]: http://developer.apple.com/library/mac/#documentation/Darwin/Reference/ManPages/man2/getrusage.2.html
 [printf]: http://developer.apple.com/library/mac/#documentation/Darwin/Reference/ManPages/man3/printf.3.html
+[NSJSONSerialization]: http://developer.apple.com/library/ios/#documentation/Foundation/Reference/NSJSONSerialization_Class/Reference/Reference.html

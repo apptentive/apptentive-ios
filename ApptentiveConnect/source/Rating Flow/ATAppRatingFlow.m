@@ -8,11 +8,14 @@
 
 #import "ATAppRatingFlow.h"
 #import "ATAPIRequest.h"
+#import "ATBackend.h"
 #import "ATConnect.h"
 #import "ATAppConfigurationUpdater.h"
+#import "ATFeedback.h"
 #import "ATReachability.h"
 #import "ATAppRatingMetrics.h"
 #import "ATAppRatingFlow_Private.h"
+#import "ATUtilities.h"
 #import "ATWebClient.h"
 
 static ATAppRatingFlow *sharedRatingFlow = nil;
@@ -64,9 +67,9 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 - (void)appWillEnterBackground:(NSNotification *)notification;
 
 - (UIViewController *)rootViewControllerForCurrentWindow;
+#endif
 - (void)tryToShowDialogWaitingForReachability;
 - (void)reachabilityChangedAndPendingDialog:(NSNotification *)notification;
-#endif
 - (void)preferencesChanged:(NSNotification *)notification;
 - (void)loadPreferences;
 @end
@@ -183,19 +186,25 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 	[alert addButtonWithTitle:ATLocalizedString(@"Yes", @"yes")];
 	[alert addButtonWithTitle:ATLocalizedString(@"No", @"no")];
 	[alert setMessageText:title];
-	[alert setInformativeText:ATLocalizedString(@"You've been using this app for a while. Are you enjoying using it?", @"Enjoyment dialog text")];
+	[alert setInformativeText:ATLocalizedString(@"You've been using this app for a while. Do you love it?", @"Enjoyment dialog text")];
 	[alert setAlertStyle:NSInformationalAlertStyle];
 	[alert setIcon:[NSImage imageNamed:NSImageNameApplicationIcon]];
 	NSUInteger result = [alert runModal];
 	if (result == NSAlertFirstButtonReturn) { // yes
-#if TARGET_OS_IPHONE
-		[self showRatingDialog:self.viewController];
-#elif TARGET_OS_MAC
 		[self showRatingDialog:self];
-#endif
 	} else if (result == NSAlertSecondButtonReturn) { // no
 		[self setUserDislikesThisVersion];
-		[[ATConnect sharedConnection] showFeedbackWindow:self];
+		
+		[[ATBackend sharedBackend] setCurrentFeedback:nil];
+		ATConnect *connection = [ATConnect sharedConnection];
+		connection.customPlaceholderText = ATLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
+		ATFeedbackControllerType oldType = connection.feedbackControllerType;
+		connection.feedbackControllerType = ATFeedbackControllerSimple;
+		[connection showFeedbackWindow:self];
+		ATFeedback *inProgressFeedback = [[ATBackend sharedBackend] currentFeedback];
+		inProgressFeedback.source = ATFeedbackSourceEnjoymentDialog;
+		connection.customPlaceholderText = nil;
+		connection.feedbackControllerType = oldType;
 	}
 #endif
 	[self postNotification:ATAppRatingDidPromptForEnjoymentNotification];
@@ -252,11 +261,14 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 			if (!self.viewController) {
 				NSLog(@"No view controller to present feedback interface!!");
 			} else {
+				[[ATBackend sharedBackend] setCurrentFeedback:nil];
 				ATConnect *connection = [ATConnect sharedConnection];
 				connection.customPlaceholderText = ATLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
 				ATFeedbackControllerType oldType = connection.feedbackControllerType;
 				connection.feedbackControllerType = ATFeedbackControllerSimple;
 				[connection presentFeedbackControllerFromViewController:self.viewController];
+				ATFeedback *inProgressFeedback = [[ATBackend sharedBackend] currentFeedback];
+				inProgressFeedback.source = ATFeedbackSourceEnjoymentDialog;
 				connection.customPlaceholderText = nil;
 				self.viewController = nil;
 				connection.feedbackControllerType = oldType;
@@ -327,11 +339,22 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 }
 
 - (NSURL *)URLForRatingApp {
+	NSString *URLString = nil;
+	NSString *URLStringFromPreferences = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppRatingReviewURLPreferenceKey];
+	if (URLStringFromPreferences == nil) {
 #if TARGET_OS_IPHONE
-	NSString *URLString = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", iTunesAppID];
+		NSString *osVersion = [[UIDevice currentDevice] systemVersion];
+		if ([ATUtilities versionString:osVersion isGreaterThanVersionString:@"6.0"] || [ATUtilities versionString:osVersion isEqualToVersionString:@"6.0"]) {
+			URLString = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/%@/app/id%@", [[NSLocale currentLocale] objectForKey: NSLocaleCountryCode], iTunesAppID];
+		} else {
+			URLString = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", iTunesAppID];
+		}
 #elif TARGET_OS_MAC
-	NSString *URLString = [NSString stringWithFormat:@"macappstore://itunes.apple.com/app/id%@?mt=12", iTunesAppID];
+		URLString = [NSString stringWithFormat:@"macappstore://itunes.apple.com/app/id%@?mt=12", iTunesAppID];
 #endif
+	} else {
+		URLString = URLStringFromPreferences;
+	}
 	return [NSURL URLWithString:URLString];
 }
 
@@ -433,6 +456,8 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 #elif TARGET_OS_MAC
 	if ([self shouldShowDialog]) {
 		[self showEnjoymentDialog:self];
+	} else {
+		[self tryToShowDialogWaitingForReachability];
 	}
 #endif
 	return NO;
@@ -566,6 +591,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 		return nil;
 	}
 }
+#endif
 
 - (void)tryToShowDialogWaitingForReachability {
 	if (![[NSThread currentThread] isMainThread]) {
@@ -573,20 +599,27 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 		return;
 	}
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+#if TARGET_OS_IPHONE
 	UIViewController *vc = [self rootViewControllerForCurrentWindow];
 	
 	if (vc && [self requirementsToShowDialogMet]) {
 		// We can get a root view controller and we should be showing a dialog.
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChangedAndPendingDialog:) name:ATReachabilityStatusChanged object:nil];
 	}
-	
+#elif TARGET_OS_MAC
+	if ([self requirementsToShowDialogMet]) {
+		// We should show a ratings dialog.
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChangedAndPendingDialog:) name:ATReachabilityStatusChanged object:nil];
+	}
+#endif
 	[pool release], pool = nil;
 }
 
 - (void)reachabilityChangedAndPendingDialog:(NSNotification *)notification {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ATReachabilityStatusChanged object:nil];
-	
+
+#if TARGET_OS_IPHONE
 	UIViewController *vc = [self rootViewControllerForCurrentWindow];
 	
 	if (vc && [self requirementsToShowDialogMet]) {
@@ -597,9 +630,17 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 		}
 		
 	}
+#elif TARGET_OS_MAC
+	if ([self requirementsToShowDialogMet]) {
+		if ([[ATReachability sharedReachability] currentNetworkStatus] == ATNetworkNotReachable) {
+			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChangedAndPendingDialog:) name:ATReachabilityStatusChanged object:nil];
+		} else {
+			[self showEnjoymentDialog:self];
+		}
+	}
+#endif
 	[pool release], pool = nil;
 }
-#endif
 
 - (void)preferencesChanged:(NSNotification *)notification {
 	[self loadPreferences];

@@ -85,6 +85,7 @@ enum {
 @synthesize feedback;
 @synthesize customPlaceholderText;
 @synthesize showEmailAddressField;
+@synthesize deleteCurrentFeedbackOnCancel;
 
 - (id)init {
 	self = [super initWithNibName:@"ATFeedbackController" bundle:[ATConnect resourceBundle]];
@@ -97,16 +98,7 @@ enum {
 }
 
 - (void)dealloc {
-	[self teardown];
 	[super dealloc];
-}
-
-- (oneway void)release {
-	[super release];
-}
-
-- (id)retain {
-	return [super retain];
 }
 
 - (void)setFeedback:(ATFeedback *)newFeedback {
@@ -170,25 +162,6 @@ enum {
 	center.y = ceilf(center.y);
 	
 	CGRect endingFrame = [[UIScreen mainScreen] applicationFrame];
-	
-	CGPoint startingPoint = CGPointZero;
-	
-	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-	
-	switch (orientation) {
-		case UIInterfaceOrientationPortraitUpsideDown:
-			startingPoint = CGPointMake(center.x, center.y + self.window.bounds.size.height);
-			break;
-		case UIInterfaceOrientationLandscapeLeft:
-			startingPoint = CGPointMake(center.x - self.window.bounds.size.width, center.y);
-			break;
-		case UIInterfaceOrientationLandscapeRight:
-			startingPoint = CGPointMake(center.x + self.window.bounds.size.width, center.y);
-			break;
-		default: // as UIInterfaceOrientationPortrait
-			startingPoint = CGPointMake(center.x, center.y - animationBounds.size.height);
-			break;
-	}
 	
 	[self positionInWindow];
 	
@@ -321,12 +294,6 @@ enum {
 	[super viewDidLoad];
 }
 
-- (void)viewDidUnload {
-	[self setFeedbackContainerView:nil];
-	[self teardown];
-	[super viewDidUnload];
-}
-
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 	//	return YES;
 	return (interfaceOrientation == UIInterfaceOrientationPortrait);
@@ -411,7 +378,6 @@ enum {
 	
 	CGPoint endingPoint = [self offscreenPositionOfView];
 	
-	[self retain]; 
 	UIView *gradientView = [self.window viewWithTag:kFeedbackGradientLayerTag];
 	
 	[UIView beginAnimations:@"animateOut" context:nil];
@@ -485,10 +451,15 @@ enum {
 	self.logoControl = nil;
 	self.logoImageView = nil;
 	self.taglineLabel = nil;
+	self.feedback = nil;
+	self.customPlaceholderText = nil;
 	[currentImage release], currentImage = nil;
-	[originalPresentingWindow makeKeyAndVisible];
+	[originalPresentingWindow makeKeyWindow];
 	[presentingViewController release], presentingViewController = nil;
 	[originalPresentingWindow release], originalPresentingWindow = nil;
+	if (self.deleteCurrentFeedbackOnCancel) {
+		[[ATBackend sharedBackend] setCurrentFeedback:nil];
+	}
 }
 
 - (void)setupFeedback {
@@ -594,6 +565,7 @@ enum {
 		[self.window removeFromSuperview];
 		self.window.hidden = YES;
 		[[UIApplication sharedApplication] setStatusBarStyle:startingStatusBarStyle];
+		[self teardown];
 		[self release];
 	} else if ([animationID isEqualToString:@"windowHide"]) {
 		[self finishHide];
@@ -645,7 +617,6 @@ enum {
 
 - (void)screenshotChanged:(NSNotification *)notification {
 	if (self.feedback.screenshot) {
-		self.feedback.screenshotSwitchEnabled = YES;
 		[self updateThumbnail];
 	} 
 }
@@ -727,7 +698,6 @@ enum {
 				
 				if (thumbnailView != nil) {
 					[thumbnailView removeFromSuperview];
-					[thumbnailView release], thumbnailView = nil;
 				}
 				if (photoFrameView != nil) {
 					[photoFrameView removeFromSuperview];
@@ -782,7 +752,7 @@ enum {
 						scaledImageSize.height = (fitDimension/imageSize.width) * imageSize.height;
 						scaledImageSize.width = fitDimension;
 					}
-					UIImage *scaledImage = [ATUtilities imageByScalingImage:image toSize:scaledImageSize scale:scale fromITouchCamera:feedback.imageIsFromCamera];
+					UIImage *scaledImage = [ATUtilities imageByScalingImage:image toSize:scaledImageSize scale:scale fromITouchCamera:(feedback.imageSource == ATFeedbackImageSourceCamera)];
 					thumbnailView.image = scaledImage;
 				}
 				CGRect f = CGRectMake(11.5, 11.5, 70, 70);

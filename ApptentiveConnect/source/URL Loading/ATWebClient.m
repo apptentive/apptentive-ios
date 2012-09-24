@@ -18,7 +18,7 @@
 #import "ATUtilities.h"
 #import "ATWebClient_Private.h"
 
-#import "JSONKit.h"
+#import "PJSONKit.h"
 
 #import "NSData+ATBase64.h"
 

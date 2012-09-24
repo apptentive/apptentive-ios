@@ -24,10 +24,11 @@
 - (void)setup;
 - (ATFeedbackType)feedbackTypeFromString:(NSString *)feedbackString;
 - (NSString *)stringForFeedbackType:(ATFeedbackType)feedbackType;
+- (NSString *)stringForSource:(ATFeedbackSource)aSource;
 @end
 
 @implementation ATFeedback
-@synthesize type, text, name, email, phone, screenshot, screenshotSwitchEnabled, imageIsFromCamera;
+@synthesize type, text, name, email, phone, source, screenshot, imageSource;
 - (id)init {
 	if ((self = [super init])) {
 		[self setup];
@@ -37,11 +38,11 @@
 
 - (void)dealloc {
 	[extraData release], extraData = nil;
-	self.text = nil;
-	self.name = nil;
-	self.email = nil;
-	self.phone = nil;
-	self.screenshot = nil;
+	[text release], text = nil;
+	[name release], name = nil;
+	[email release], email = nil;
+	[phone release], phone = nil;
+	[screenshot release], screenshot = nil;
 	[super dealloc];
 }
 
@@ -49,6 +50,11 @@
 	if ((self = [super initWithCoder:coder])) {
 		[self setup];
 		int version = [coder decodeIntForKey:@"version"];
+		if ([coder containsValueForKey:@"source"]) {
+			self.source = [coder decodeIntForKey:@"source"];
+		} else {
+			self.source = ATFeedbackSourceUnknown;
+		}
 		if (version == 1) {
 			self.type = [self feedbackTypeFromString:[coder decodeObjectForKey:@"type"]];
 			self.text = [coder decodeObjectForKey:@"text"];
@@ -97,6 +103,9 @@
 	[coder encodeObject:self.name forKey:@"name"];
 	[coder encodeObject:self.email forKey:@"email"];
 	[coder encodeObject:self.phone forKey:@"phone"];
+	if (self.source != ATFeedbackSourceUnknown) {
+		[coder encodeInt:self.source forKey:@"source"];
+	}
 	[coder encodeObject:extraData forKey:@"extraData"];
 	if (self.screenshot) {
 #if TARGET_OS_IPHONE
@@ -119,6 +128,10 @@
 	if (self.phone) [d setObject:self.phone forKey:@"record[user][phone_number]"];
 	if (self.text) [d setObject:self.text forKey:@"record[feedback][feedback]"];
 	[d setObject:[self stringForFeedbackType:self.type] forKey:@"record[feedback][type]"];
+	NSString *sourceString = [self stringForSource:self.source];
+	if (sourceString != nil) {
+		[d setObject:sourceString forKey:@"record[feedback][source]"];
+	}
 	if (extraData && [extraData count] > 0) {
 		for (NSString *key in extraData) {
 			NSString *fullKey = [NSString stringWithFormat:@"record[data][%@]", key];
@@ -143,9 +156,6 @@
 - (void)setup {
 	extraData = [[NSMutableDictionary alloc] init];
 	self.type = ATFeedbackTypeFeedback;
-#if TARGET_OS_MAC
-	self.screenshotSwitchEnabled = YES;
-#endif
 }
 
 - (ATFeedbackType)feedbackTypeFromString:(NSString *)feedbackString {
@@ -176,6 +186,18 @@
 		case ATFeedbackTypeFeedback:
 		default:
 			result = @"feedback";
+			break;
+	}
+	return result;
+}
+
+- (NSString *)stringForSource:(ATFeedbackSource)aSource {
+	NSString *result = nil;
+	switch (aSource) {
+		case ATFeedbackSourceEnjoymentDialog:
+			result = @"enjoyment_dialog";
+			break;
+		default:
 			break;
 	}
 	return result;

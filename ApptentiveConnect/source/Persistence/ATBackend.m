@@ -30,7 +30,7 @@ static ATBackend *sharedBackend = nil;
 
 @interface ATBackend (Private)
 - (void)setup;
-- (void)teardown;
+- (void)updateWorking;
 - (void)networkStatusChanged:(NSNotification *)notification;
 - (void)stopWorking:(NSNotification *)notification;
 - (void)startWorking:(NSNotification *)notification;
@@ -88,7 +88,11 @@ static ATBackend *sharedBackend = nil;
 + (NSImage *)imageNamed:(NSString *)name {
 	NSString *imagePath = nil;
 	NSImage *result = nil;
-	CGFloat scale = [[NSScreen mainScreen] userSpaceScaleFactor];
+	CGFloat scale = 1.0;
+	
+	if ([[NSScreen mainScreen] respondsToSelector:@selector(backingScaleFactor)]) {
+		scale = (CGFloat)[[NSScreen mainScreen] backingScaleFactor];
+	}
 	if (scale > 1.0) {
 		imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@@2x", name] ofType:@"png"];
 	} else {
@@ -125,7 +129,9 @@ static ATBackend *sharedBackend = nil;
 }
 
 - (void)dealloc {
-	[self teardown];
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[apiKey release], apiKey = nil;
+	[currentFeedback release], currentFeedback = nil;
 	[super dealloc];
 }
 
@@ -135,11 +141,11 @@ static ATBackend *sharedBackend = nil;
 		apiKey = nil;
 		apiKey = [anAPIKey retain];
 		if (apiKey == nil) {
-			self.working = NO;
+			apiKeySet = NO;
 		} else {
-			self.working = NO;
-			self.working = YES;
+			apiKeySet = YES;
 		}
+		[self updateWorking];
 		[[NSNotificationCenter defaultCenter] postNotificationName:ATBackendNewAPIKeyNotification object:nil];
 	}
 }
@@ -161,11 +167,6 @@ static ATBackend *sharedBackend = nil;
 	contact.phone = feedback.phone;
 	[ATContactStorage releaseSharedContactStorage];
 	contact = nil;
-	
-	// If we don't need the screenshot, discard it.
-	if (feedback.screenshot && !feedback.screenshotSwitchEnabled) {
-		feedback.screenshot = nil;
-	}
 	
 	ATFeedbackTask *task = [[ATFeedbackTask alloc] init];
 	task.feedback = feedback;
@@ -278,27 +279,37 @@ static ATBackend *sharedBackend = nil;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusChanged:) name:ATReachabilityStatusChanged object:nil];
 }
 
-- (void)teardown {
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	self.apiKey = nil;
-	self.currentFeedback = nil;
+- (void)updateWorking {
+	if (shouldStopWorking) {
+		// Probably going into the background or being terminated.
+		self.working = NO;
+	} else if (apiKeySet && networkAvailable) {
+		// API Key is set and the network is up. Start working.
+		self.working = YES;
+	} else {
+		// No API Key or not network, or both. Stop working.
+		self.working = NO;
+	}
 }
 
 #pragma mark Notification Handling
 - (void)networkStatusChanged:(NSNotification *)notification {
 	ATNetworkStatus status = [[ATReachability sharedReachability] currentNetworkStatus];
 	if (status == ATNetworkNotReachable) {
-		self.working = NO;
-	} else if ([[ATTaskQueue sharedTaskQueue] count]) {
-		self.working = YES;
+		networkAvailable = NO;
+	} else {
+		networkAvailable = YES;
 	}
+	[self updateWorking];
 }
 
 - (void)stopWorking:(NSNotification *)notification {
-	self.working = NO;
+	shouldStopWorking = YES;
+	[self updateWorking];
 }
 
 - (void)startWorking:(NSNotification *)notification {
-	self.working = YES;
+	shouldStopWorking = NO;
+	[self updateWorking];
 }
 @end

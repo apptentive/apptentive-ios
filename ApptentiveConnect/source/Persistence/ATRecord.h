@@ -10,7 +10,14 @@
 
 @class ATAPIRequest;
 
-@interface ATRecord : NSObject <NSCoding>
+@interface ATRecord : NSObject <NSCoding> {
+@private
+	NSString *uuid;
+	NSString *model;
+	NSString *os_version;
+	NSString *carrier;
+	NSDate *date;
+}
 @property (nonatomic, retain) NSString *uuid;
 @property (nonatomic, retain) NSString *model;
 @property (nonatomic, retain) NSString *os_version;

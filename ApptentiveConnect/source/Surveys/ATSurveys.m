@@ -10,6 +10,9 @@
 #import "ATSurveysBackend.h"
 
 NSString *const ATSurveyNewSurveyAvailableNotification = @"ATSurveyNewSurveyAvailableNotification";
+NSString *const ATSurveySentNotification = @"ATSurveySentNotification";
+
+NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 
 @interface ATSurveys ()
 + (ATSurveys *)sharedSurveys;

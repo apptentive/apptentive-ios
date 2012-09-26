@@ -232,6 +232,20 @@
 	}
 }
 
+- (NSCachedURLResponse *)connection:(NSURLConnection *)aConnection willCacheResponse:(NSCachedURLResponse *)cachedResponse {
+	// See: http://blackpixel.com/blog/1659/caching-and-nsurlconnection/
+	NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)[cachedResponse response];
+	if ([aConnection currentRequest].cachePolicy == NSURLRequestUseProtocolCachePolicy) {
+		NSDictionary *responseHeaders = [httpResponse allHeaderFields];
+		NSString *cacheControlHeader = [responseHeaders valueForKey:@"Cache-Control"];
+		NSString *expiresHeader = [responseHeaders valueForKey:@"Expires"];
+		if ((cacheControlHeader == nil) && (expiresHeader == nil)) {
+			return nil;
+		}
+	}
+	return cachedResponse;
+}
+
 - (void)setExecuting:(BOOL)isExecuting {
 	[self willChangeValueForKey:@"isExecuting"];
 	executing = isExecuting;

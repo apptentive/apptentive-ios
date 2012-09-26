@@ -1,12 +1,15 @@
-2012-09-25 wooster v0.4.7
+2012-09-?? wooster v0.4.7
 -------------------------
 
 * Fixes IOS-71 Add callback after survey completion
   See the `ATSurveys.h` header for details.
 * Added `showTagline` property on `ATConnect`. This allows you to hide the "Powered by Apptentive" logo text.
 * Fixes IOS-78 Always send dates in english
+  
   This bug was causing some dates to be sent localized to the server. Oops.
-
+* Fixes IOS-79 Allow dev to prompt user to re-rate after new version installed
+  
+  When the "Reset rating prompt counters when app version changes" settings is enabled, if a user has already rated the app, that will be reset when they upgrade the app. The upshot of this is, users will be prompted to rate the app again after upgrade. You may want to do this if you want users to re-rate the app on a version change, as the iOS App Store is heavily geared towards ratings and reviews for the current version. This change makes our behavior match what developers expect when checking that box on the Apptentive site.
 
 2012-09-11 wooster v0.4.6
 -------------------------

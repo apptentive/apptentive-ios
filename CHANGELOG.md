@@ -10,6 +10,9 @@
 * Fixes IOS-79 Allow dev to prompt user to re-rate after new version installed
   
   When the "Reset rating prompt counters when app version changes" settings is enabled, if a user has already rated the app, that will be reset when they upgrade the app. The upshot of this is, users will be prompted to rate the app again after upgrade. You may want to do this if you want users to re-rate the app on a version change, as the iOS App Store is heavily geared towards ratings and reviews for the current version. This change makes our behavior match what developers expect when checking that box on the Apptentive site.
+* URL Loading changes:
+  * Better cache policy handling, per http://blackpixel.com/blog/1659/caching-and-nsurlconnection/
+  * Better URL redirection handling.
 
 2012-09-11 wooster v0.4.6
 -------------------------

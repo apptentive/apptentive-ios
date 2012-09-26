@@ -1,3 +1,13 @@
+2012-09-25 wooster v0.4.7
+-------------------------
+
+* Fixes IOS-71 Add callback after survey completion
+  See the `ATSurveys.h` header for details.
+* Added `showTagline` property on `ATConnect`. This allows you to hide the "Powered by Apptentive" logo text.
+* Fixes IOS-78 Always send dates in english
+  This bug was causing some dates to be sent localized to the server. Oops.
+
+
 2012-09-11 wooster v0.4.6
 -------------------------
 One major change in the API:

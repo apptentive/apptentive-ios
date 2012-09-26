@@ -438,12 +438,11 @@ static NSDateFormatter *dateFormatter = nil;
 			}
 			NSInteger hours = 0;
 			NSInteger minutes = 0;
-			NSInteger seconds = 0;
 			if (!([scanner scanInteger:&hours] && [scanner scanString:@":" intoString:NULL] && [scanner scanInteger:&minutes])) {
 				validDate = NO;
 				break;
 			}
-			NSInteger secondsFromGMT = hours*3600 + seconds*60;
+			NSInteger secondsFromGMT = hours*3600 + minutes*60;
 			if (!isPositiveOffset) {
 				secondsFromGMT = secondsFromGMT * -1;
 			}
@@ -549,6 +548,10 @@ static NSDateFormatter *dateFormatter = nil;
 	@synchronized(self) {
 		if (dateFormatter == nil) {
 			dateFormatter = [[NSDateFormatter alloc] init];
+			NSLocale *enUSLocale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] autorelease];
+			NSCalendar *calendar = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] autorelease];
+			[dateFormatter setLocale:enUSLocale];
+			[dateFormatter setCalendar:calendar];
 			[dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
 		}
 	}

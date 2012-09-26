@@ -11,6 +11,7 @@
 #import "ATHUDView.h"
 #import "ATRecordTask.h"
 #import "ATSurvey.h"
+#import "ATSurveys.h"
 #import "ATSurveysBackend.h"
 #import "ATSurveyMetrics.h"
 #import "ATSurveyQuestion.h"

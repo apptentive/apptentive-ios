@@ -13,6 +13,9 @@
 * URL Loading changes:
   * Better cache policy handling, per http://blackpixel.com/blog/1659/caching-and-nsurlconnection/
   * Better URL redirection handling.
+* Fixes IOS-39 No option to cancel a photo/screenshot attachment?
+  * To cancel a screenshot or photo attachment, just drag it away from the paperclip.
+
 
 2012-09-11 wooster v0.4.6
 -------------------------

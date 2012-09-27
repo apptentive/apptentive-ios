@@ -20,11 +20,8 @@
 static ATConnect *sharedConnection = nil;
 
 @implementation ATConnect
-<<<<<<< HEAD
-@synthesize apiKey, showKeyboardAccessory, shouldTakeScreenshot, showEmailField, showTagline, initialName, initialEmailAddress, feedbackControllerType, customPlaceholderText;
-=======
+
 @synthesize apiKey, showTagline, shouldTakeScreenshot, showEmailField, initialName, initialEmailAddress, feedbackControllerType, customPlaceholderText;
->>>>>>> c2f4dcc... Adding ability to remove tagline.
 
 + (ATConnect *)sharedConnection {
 	@synchronized(self) {

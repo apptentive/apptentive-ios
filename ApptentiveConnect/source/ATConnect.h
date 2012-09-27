@@ -47,7 +47,6 @@ typedef enum {
 @property (nonatomic, assign) BOOL showTagline;
 @property (nonatomic, assign) BOOL shouldTakeScreenshot;
 @property (nonatomic, assign) BOOL showEmailField;
-@property (nonatomic, assign) BOOL showTagline;
 @property (nonatomic, retain) NSString *initialName;
 @property (nonatomic, retain) NSString *initialEmailAddress;
 @property (nonatomic, assign) ATFeedbackControllerType feedbackControllerType;

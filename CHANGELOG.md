@@ -1,5 +1,9 @@
 2012-09-?? wooster v0.4.7
 -------------------------
+Major change:
+* We're dropping armv6 support. This means no more iPhone 3G or iPod Touch 2 support. This is in line with what we're seeing from app developers and other vendors of 3rd party libraries. If you *really* need armv6 support, let us know.
+
+Other changes:
 
 * Fixes IOS-71 Add callback after survey completion
   See the `ATSurveys.h` header for details.

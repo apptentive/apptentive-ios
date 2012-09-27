@@ -573,7 +573,7 @@
 			buildSettings = {
 				ARCHS = (
 					armv7,
-					armv6,
+					armv7s,
 					i386,
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -586,7 +586,7 @@
 			buildSettings = {
 				ARCHS = (
 					armv7,
-					armv6,
+					armv7s,
 					i386,
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;

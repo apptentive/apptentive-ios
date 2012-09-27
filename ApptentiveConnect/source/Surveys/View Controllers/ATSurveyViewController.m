@@ -148,6 +148,7 @@ enum {
 	[self.navigationController dismissModalViewControllerAnimated:YES];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveySentNotification object:nil userInfo:notificationInfo];
+	[notificationInfo release], notificationInfo = nil;
 }
 
 - (void)loadView {

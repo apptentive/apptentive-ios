@@ -14,6 +14,7 @@
 
 enum kRootTableSections {
 	kFeedbackSection,
+	kMessageCenterSection,
 	kRatingSection,
 	kSurveySection,
 	kSectionCount
@@ -94,6 +95,7 @@ enum kRootTableSections {
 	if (cell == nil) {
 		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 	}
+	cell.textLabel.textColor = [UIColor blackColor];
 	if (indexPath.section == kFeedbackSection) {
 		if (indexPath.row == 0) {
 			cell.textLabel.text = @"Send Feedback";
@@ -105,11 +107,12 @@ enum kRootTableSections {
 	} else if (indexPath.section == kSurveySection) {
 		if ([ATSurveys hasSurveyAvailable]) {
 			cell.textLabel.text = @"Show Survey";
-			cell.textLabel.textColor = [UIColor blackColor];
 		} else {
 			cell.textLabel.text = @"No Survey Available";
 			cell.textLabel.textColor = [UIColor grayColor];
 		}
+	} else if (indexPath.section == kMessageCenterSection) {
+		cell.textLabel.text = @"Message Center";
 	}
 	
 	return cell;
@@ -130,6 +133,8 @@ enum kRootTableSections {
 		if ([ATSurveys hasSurveyAvailable]) {
 			[ATSurveys presentSurveyControllerFromViewController:self];
 		}
+	} else if (indexPath.section == kMessageCenterSection) {
+		[[ATConnect sharedConnection] presentMessageCenterFromViewController:self];
 	}
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

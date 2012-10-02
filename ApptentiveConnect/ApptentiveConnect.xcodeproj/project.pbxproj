@@ -123,6 +123,11 @@
 		498EFB7015BA48B300A1043B /* ATAppConfigurationUpdateTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 498EFB6E15BA48B200A1043B /* ATAppConfigurationUpdateTask.h */; };
 		498EFB7115BA48B300A1043B /* ATAppConfigurationUpdateTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 498EFB6F15BA48B300A1043B /* ATAppConfigurationUpdateTask.m */; };
 		498EFB7215BA48B300A1043B /* ATAppConfigurationUpdateTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 498EFB6F15BA48B300A1043B /* ATAppConfigurationUpdateTask.m */; };
+		4999128516165BD400FDA15F /* ATMessageCenterViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4999128216165BD400FDA15F /* ATMessageCenterViewController.h */; };
+		4999128616165BD400FDA15F /* ATMessageCenterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4999128316165BD400FDA15F /* ATMessageCenterViewController.m */; };
+		4999128F16166C2F00FDA15F /* ATMessageCenterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4999128716165BF200FDA15F /* ATMessageCenterViewController.xib */; };
+		499912A3161A3B8700FDA15F /* ATResizingTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 499912A1161A3B8700FDA15F /* ATResizingTextView.h */; };
+		499912A4161A3B8700FDA15F /* ATResizingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 499912A2161A3B8700FDA15F /* ATResizingTextView.m */; };
 		499B56CA15D305880063C23C /* PJSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 499B56C615D305880063C23C /* PJSONKit.h */; };
 		499B56CB15D305880063C23C /* PJSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 499B56C715D305880063C23C /* PJSONKit.m */; };
 		499B56CC15D305880063C23C /* PJSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 499B56C715D305880063C23C /* PJSONKit.m */; };
@@ -270,6 +275,11 @@
 		498EFB6A15BA414A00A1043B /* ATSurveyGetSurveyTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATSurveyGetSurveyTask.m; path = Tasks/ATSurveyGetSurveyTask.m; sourceTree = "<group>"; };
 		498EFB6E15BA48B200A1043B /* ATAppConfigurationUpdateTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAppConfigurationUpdateTask.h; sourceTree = "<group>"; };
 		498EFB6F15BA48B300A1043B /* ATAppConfigurationUpdateTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAppConfigurationUpdateTask.m; sourceTree = "<group>"; };
+		4999128216165BD400FDA15F /* ATMessageCenterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATMessageCenterViewController.h; path = "Message Center/ATMessageCenterViewController.h"; sourceTree = "<group>"; };
+		4999128316165BD400FDA15F /* ATMessageCenterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATMessageCenterViewController.m; path = "Message Center/ATMessageCenterViewController.m"; sourceTree = "<group>"; };
+		4999128716165BF200FDA15F /* ATMessageCenterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ATMessageCenterViewController.xib; path = xibs/ATMessageCenterViewController.xib; sourceTree = SOURCE_ROOT; };
+		499912A1161A3B8700FDA15F /* ATResizingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATResizingTextView.h; sourceTree = "<group>"; };
+		499912A2161A3B8700FDA15F /* ATResizingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATResizingTextView.m; sourceTree = "<group>"; };
 		499B56C615D305880063C23C /* PJSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PJSONKit.h; sourceTree = "<group>"; };
 		499B56C715D305880063C23C /* PJSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PJSONKit.m; sourceTree = "<group>"; };
 		49AA101D138B44C00082887A /* ATInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATInfoViewController.h; sourceTree = "<group>"; };
@@ -558,6 +568,16 @@
 			name = Tasks;
 			sourceTree = "<group>";
 		};
+		4999127B16165B7900FDA15F /* Message Center */ = {
+			isa = PBXGroup;
+			children = (
+				4999128216165BD400FDA15F /* ATMessageCenterViewController.h */,
+				4999128316165BD400FDA15F /* ATMessageCenterViewController.m */,
+				4999128716165BF200FDA15F /* ATMessageCenterViewController.xib */,
+			);
+			name = "Message Center";
+			sourceTree = "<group>";
+		};
 		499B56C415D305880063C23C /* PrefixedJSONKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -582,6 +602,8 @@
 				49BC2A59144F75E20041E789 /* ATShadowView.m */,
 				490B815B1442751F009801E9 /* ATToolbar.h */,
 				490B815C1442751F009801E9 /* ATToolbar.m */,
+				499912A1161A3B8700FDA15F /* ATResizingTextView.h */,
+				499912A2161A3B8700FDA15F /* ATResizingTextView.m */,
 			);
 			path = "Custom Views";
 			sourceTree = "<group>";
@@ -622,6 +644,7 @@
 		49C00295133413BB0071F088 /* source */ = {
 			isa = PBXGroup;
 			children = (
+				4999127B16165B7900FDA15F /* Message Center */,
 				49C00296133413BB0071F088 /* ApptentiveConnect-Prefix.pch */,
 				49C00297133413BB0071F088 /* ATConnect.h */,
 				4987FA95157AE53500AF2078 /* ApptentiveMetrics.h */,
@@ -734,6 +757,8 @@
 				498EFB6B15BA414A00A1043B /* ATSurveyGetSurveyTask.h in Headers */,
 				498EFB7015BA48B300A1043B /* ATAppConfigurationUpdateTask.h in Headers */,
 				499B56CA15D305880063C23C /* PJSONKit.h in Headers */,
+				4999128516165BD400FDA15F /* ATMessageCenterViewController.h in Headers */,
+				499912A3161A3B8700FDA15F /* ATResizingTextView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -851,6 +876,7 @@
 				49352B3F138DB3AA000E464A /* ATTaskProgressCell.xib in Resources */,
 				490B816C14427A95009801E9 /* ATFeedbackController.xib in Resources */,
 				496F29E014496711005B7C01 /* ATSimpleImageViewController.xib in Resources */,
+				4999128F16166C2F00FDA15F /* ATMessageCenterViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -951,6 +977,8 @@
 				498EFB6C15BA414A00A1043B /* ATSurveyGetSurveyTask.m in Sources */,
 				498EFB7115BA48B300A1043B /* ATAppConfigurationUpdateTask.m in Sources */,
 				499B56CB15D305880063C23C /* PJSONKit.m in Sources */,
+				4999128616165BD400FDA15F /* ATMessageCenterViewController.m in Sources */,
+				499912A4161A3B8700FDA15F /* ATResizingTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

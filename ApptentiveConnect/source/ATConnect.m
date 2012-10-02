@@ -13,6 +13,7 @@
 #import "ATUtilities.h"
 #if TARGET_OS_IPHONE
 #import "ATFeedbackController.h"
+#import "ATMessageCenterViewController.h"
 #elif TARGET_OS_MAC
 #import "ATFeedbackWindowController.h"
 #endif
@@ -136,6 +137,15 @@ static ATConnect *sharedConnection = nil;
 
 	[vc presentFromViewController:viewController animated:YES];
 	[vc release];
+}
+
+- (void)presentMessageCenterFromViewController:(UIViewController *)viewController {
+	ATMessageCenterViewController *vc = [[ATMessageCenterViewController alloc] init];
+	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
+	nc.modalPresentationStyle = UIModalPresentationFormSheet;
+	[viewController presentModalViewController:nc animated:YES];
+	[vc release], vc = nil;
+	[nc release], nc = nil;
 }
 #elif TARGET_OS_MAC
 - (IBAction)showFeedbackWindow:(id)sender {

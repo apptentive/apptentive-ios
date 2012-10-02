@@ -61,6 +61,8 @@ typedef enum {
  * Presents a feedback controller in the window of the given view controller.
  */
 - (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController;
+
+- (void)presentMessageCenterFromViewController:(UIViewController *)viewController;
 #elif TARGET_OS_MAC
 /*!
  * Presents a feedback window.

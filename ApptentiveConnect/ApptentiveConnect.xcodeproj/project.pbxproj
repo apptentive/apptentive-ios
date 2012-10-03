@@ -96,6 +96,20 @@
 		49509E1B1358409C00793EEC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49509A6B1356596F00793EEC /* SystemConfiguration.framework */; };
 		49509E1C135840A000793EEC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D96A133E6D6400B5A5CD /* UIKit.framework */; };
 		4960E154134A578F00F6311F /* generated in Resources */ = {isa = PBXBuildFile; fileRef = 4960E153134A578F00F6311F /* generated */; };
+		4961A3FC161BB8D400E30037 /* ATPerson.h in Headers */ = {isa = PBXBuildFile; fileRef = 4961A3FA161BB8D400E30037 /* ATPerson.h */; };
+		4961A3FD161BB8D400E30037 /* ATPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = 4961A3FB161BB8D400E30037 /* ATPerson.m */; };
+		4961A402161BBD7000E30037 /* ATMessageTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 4961A400161BBD7000E30037 /* ATMessageTask.h */; };
+		4961A403161BBD7000E30037 /* ATMessageTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 4961A401161BBD7000E30037 /* ATMessageTask.m */; };
+		4961A406161BBD8100E30037 /* ATPersonTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 4961A404161BBD8100E30037 /* ATPersonTask.h */; };
+		4961A407161BBD8100E30037 /* ATPersonTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 4961A405161BBD8100E30037 /* ATPersonTask.m */; };
+		4961A40B161BBE0800E30037 /* ATPersonUpdater.h in Headers */ = {isa = PBXBuildFile; fileRef = 4961A409161BBE0800E30037 /* ATPersonUpdater.h */; };
+		4961A40C161BBE0800E30037 /* ATPersonUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 4961A40A161BBE0800E30037 /* ATPersonUpdater.m */; };
+		4961A40F161BBE1F00E30037 /* ATDeviceUpdater.h in Headers */ = {isa = PBXBuildFile; fileRef = 4961A40D161BBE1F00E30037 /* ATDeviceUpdater.h */; };
+		4961A410161BBE1F00E30037 /* ATDeviceUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 4961A40E161BBE1F00E30037 /* ATDeviceUpdater.m */; };
+		4961A413161BBE4000E30037 /* ATMessageParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 4961A411161BBE4000E30037 /* ATMessageParser.h */; };
+		4961A414161BBE4000E30037 /* ATMessageParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4961A412161BBE4000E30037 /* ATMessageParser.m */; };
+		4961A417161BBE6500E30037 /* ATPersonResponseParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 4961A415161BBE6500E30037 /* ATPersonResponseParser.h */; };
+		4961A418161BBE6500E30037 /* ATPersonResponseParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4961A416161BBE6500E30037 /* ATPersonResponseParser.m */; };
 		496DC3831333D35600743F65 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3821333D35600743F65 /* Foundation.framework */; };
 		496DC38F1333D35600743F65 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3821333D35600743F65 /* Foundation.framework */; };
 		496DC3941333D35600743F65 /* libApptentiveConnect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC37F1333D35600743F65 /* libApptentiveConnect.a */; };
@@ -128,6 +142,10 @@
 		4999128F16166C2F00FDA15F /* ATMessageCenterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4999128716165BF200FDA15F /* ATMessageCenterViewController.xib */; };
 		499912A3161A3B8700FDA15F /* ATResizingTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 499912A1161A3B8700FDA15F /* ATResizingTextView.h */; };
 		499912A4161A3B8700FDA15F /* ATResizingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 499912A2161A3B8700FDA15F /* ATResizingTextView.m */; };
+		499912A8161B6AF700FDA15F /* ATWebClient+MessageCenter.h in Headers */ = {isa = PBXBuildFile; fileRef = 499912A6161B6AF700FDA15F /* ATWebClient+MessageCenter.h */; };
+		499912A9161B6AF700FDA15F /* ATWebClient+MessageCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 499912A7161B6AF700FDA15F /* ATWebClient+MessageCenter.m */; };
+		499912AD161B6B9400FDA15F /* ATMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 499912AB161B6B9400FDA15F /* ATMessage.h */; };
+		499912AE161B6B9400FDA15F /* ATMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 499912AC161B6B9400FDA15F /* ATMessage.m */; };
 		499B56CA15D305880063C23C /* PJSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 499B56C615D305880063C23C /* PJSONKit.h */; };
 		499B56CB15D305880063C23C /* PJSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 499B56C715D305880063C23C /* PJSONKit.m */; };
 		499B56CC15D305880063C23C /* PJSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 499B56C715D305880063C23C /* PJSONKit.m */; };
@@ -253,6 +271,20 @@
 		49509DF913583FB800793EEC /* ATUtilitiesTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATUtilitiesTests.h; sourceTree = "<group>"; };
 		49509DFA13583FB800793EEC /* ATUtilitiesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATUtilitiesTests.m; sourceTree = "<group>"; };
 		4960E153134A578F00F6311F /* generated */ = {isa = PBXFileReference; lastKnownFileType = folder; name = generated; path = art/generated; sourceTree = SOURCE_ROOT; };
+		4961A3FA161BB8D400E30037 /* ATPerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATPerson.h; path = "Message Center/Model/ATPerson.h"; sourceTree = "<group>"; };
+		4961A3FB161BB8D400E30037 /* ATPerson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATPerson.m; path = "Message Center/Model/ATPerson.m"; sourceTree = "<group>"; };
+		4961A400161BBD7000E30037 /* ATMessageTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATMessageTask.h; path = "Message Center/Tasks/ATMessageTask.h"; sourceTree = "<group>"; };
+		4961A401161BBD7000E30037 /* ATMessageTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATMessageTask.m; path = "Message Center/Tasks/ATMessageTask.m"; sourceTree = "<group>"; };
+		4961A404161BBD8100E30037 /* ATPersonTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATPersonTask.h; path = "Message Center/Tasks/ATPersonTask.h"; sourceTree = "<group>"; };
+		4961A405161BBD8100E30037 /* ATPersonTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATPersonTask.m; path = "Message Center/Tasks/ATPersonTask.m"; sourceTree = "<group>"; };
+		4961A409161BBE0800E30037 /* ATPersonUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATPersonUpdater.h; path = "Message Center/Persistence/ATPersonUpdater.h"; sourceTree = "<group>"; };
+		4961A40A161BBE0800E30037 /* ATPersonUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATPersonUpdater.m; path = "Message Center/Persistence/ATPersonUpdater.m"; sourceTree = "<group>"; };
+		4961A40D161BBE1F00E30037 /* ATDeviceUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATDeviceUpdater.h; path = "Message Center/Persistence/ATDeviceUpdater.h"; sourceTree = "<group>"; };
+		4961A40E161BBE1F00E30037 /* ATDeviceUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATDeviceUpdater.m; path = "Message Center/Persistence/ATDeviceUpdater.m"; sourceTree = "<group>"; };
+		4961A411161BBE4000E30037 /* ATMessageParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATMessageParser.h; path = "Message Center/Model/ATMessageParser.h"; sourceTree = "<group>"; };
+		4961A412161BBE4000E30037 /* ATMessageParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATMessageParser.m; path = "Message Center/Model/ATMessageParser.m"; sourceTree = "<group>"; };
+		4961A415161BBE6500E30037 /* ATPersonResponseParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATPersonResponseParser.h; path = "Message Center/Model/ATPersonResponseParser.h"; sourceTree = "<group>"; };
+		4961A416161BBE6500E30037 /* ATPersonResponseParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATPersonResponseParser.m; path = "Message Center/Model/ATPersonResponseParser.m"; sourceTree = "<group>"; };
 		496DC37F1333D35600743F65 /* libApptentiveConnect.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libApptentiveConnect.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		496DC3821333D35600743F65 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		496DC38C1333D35600743F65 /* ApptentiveConnectTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApptentiveConnectTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -280,6 +312,10 @@
 		4999128716165BF200FDA15F /* ATMessageCenterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ATMessageCenterViewController.xib; path = xibs/ATMessageCenterViewController.xib; sourceTree = SOURCE_ROOT; };
 		499912A1161A3B8700FDA15F /* ATResizingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATResizingTextView.h; sourceTree = "<group>"; };
 		499912A2161A3B8700FDA15F /* ATResizingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATResizingTextView.m; sourceTree = "<group>"; };
+		499912A6161B6AF700FDA15F /* ATWebClient+MessageCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ATWebClient+MessageCenter.h"; path = "Message Center/URL Loading/ATWebClient+MessageCenter.h"; sourceTree = "<group>"; };
+		499912A7161B6AF700FDA15F /* ATWebClient+MessageCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "ATWebClient+MessageCenter.m"; path = "Message Center/URL Loading/ATWebClient+MessageCenter.m"; sourceTree = "<group>"; };
+		499912AB161B6B9400FDA15F /* ATMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATMessage.h; path = "Message Center/Model/ATMessage.h"; sourceTree = "<group>"; };
+		499912AC161B6B9400FDA15F /* ATMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATMessage.m; path = "Message Center/Model/ATMessage.m"; sourceTree = "<group>"; };
 		499B56C615D305880063C23C /* PJSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PJSONKit.h; sourceTree = "<group>"; };
 		499B56C715D305880063C23C /* PJSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PJSONKit.m; sourceTree = "<group>"; };
 		49AA101D138B44C00082887A /* ATInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATInfoViewController.h; sourceTree = "<group>"; };
@@ -497,6 +533,28 @@
 			name = Reachability;
 			sourceTree = "<group>";
 		};
+		4961A3FF161BBD5200E30037 /* Tasks */ = {
+			isa = PBXGroup;
+			children = (
+				4961A400161BBD7000E30037 /* ATMessageTask.h */,
+				4961A401161BBD7000E30037 /* ATMessageTask.m */,
+				4961A404161BBD8100E30037 /* ATPersonTask.h */,
+				4961A405161BBD8100E30037 /* ATPersonTask.m */,
+			);
+			name = Tasks;
+			sourceTree = "<group>";
+		};
+		4961A408161BBDBE00E30037 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				4961A409161BBE0800E30037 /* ATPersonUpdater.h */,
+				4961A40A161BBE0800E30037 /* ATPersonUpdater.m */,
+				4961A40D161BBE1F00E30037 /* ATDeviceUpdater.h */,
+				4961A40E161BBE1F00E30037 /* ATDeviceUpdater.m */,
+			);
+			name = Persistence;
+			sourceTree = "<group>";
+		};
 		496DC3741333D35600743F65 = {
 			isa = PBXGroup;
 			children = (
@@ -571,11 +629,39 @@
 		4999127B16165B7900FDA15F /* Message Center */ = {
 			isa = PBXGroup;
 			children = (
+				499912AA161B6B2000FDA15F /* Model */,
+				4961A408161BBDBE00E30037 /* Persistence */,
+				4961A3FF161BBD5200E30037 /* Tasks */,
+				499912A5161B6AC800FDA15F /* URL Loading */,
 				4999128216165BD400FDA15F /* ATMessageCenterViewController.h */,
 				4999128316165BD400FDA15F /* ATMessageCenterViewController.m */,
 				4999128716165BF200FDA15F /* ATMessageCenterViewController.xib */,
 			);
 			name = "Message Center";
+			sourceTree = "<group>";
+		};
+		499912A5161B6AC800FDA15F /* URL Loading */ = {
+			isa = PBXGroup;
+			children = (
+				499912A6161B6AF700FDA15F /* ATWebClient+MessageCenter.h */,
+				499912A7161B6AF700FDA15F /* ATWebClient+MessageCenter.m */,
+			);
+			name = "URL Loading";
+			sourceTree = "<group>";
+		};
+		499912AA161B6B2000FDA15F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				499912AB161B6B9400FDA15F /* ATMessage.h */,
+				499912AC161B6B9400FDA15F /* ATMessage.m */,
+				4961A3FA161BB8D400E30037 /* ATPerson.h */,
+				4961A3FB161BB8D400E30037 /* ATPerson.m */,
+				4961A411161BBE4000E30037 /* ATMessageParser.h */,
+				4961A412161BBE4000E30037 /* ATMessageParser.m */,
+				4961A415161BBE6500E30037 /* ATPersonResponseParser.h */,
+				4961A416161BBE6500E30037 /* ATPersonResponseParser.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 		499B56C415D305880063C23C /* PrefixedJSONKit */ = {
@@ -759,6 +845,15 @@
 				499B56CA15D305880063C23C /* PJSONKit.h in Headers */,
 				4999128516165BD400FDA15F /* ATMessageCenterViewController.h in Headers */,
 				499912A3161A3B8700FDA15F /* ATResizingTextView.h in Headers */,
+				499912A8161B6AF700FDA15F /* ATWebClient+MessageCenter.h in Headers */,
+				499912AD161B6B9400FDA15F /* ATMessage.h in Headers */,
+				4961A3FC161BB8D400E30037 /* ATPerson.h in Headers */,
+				4961A402161BBD7000E30037 /* ATMessageTask.h in Headers */,
+				4961A406161BBD8100E30037 /* ATPersonTask.h in Headers */,
+				4961A40B161BBE0800E30037 /* ATPersonUpdater.h in Headers */,
+				4961A40F161BBE1F00E30037 /* ATDeviceUpdater.h in Headers */,
+				4961A413161BBE4000E30037 /* ATMessageParser.h in Headers */,
+				4961A417161BBE6500E30037 /* ATPersonResponseParser.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -979,6 +1074,15 @@
 				499B56CB15D305880063C23C /* PJSONKit.m in Sources */,
 				4999128616165BD400FDA15F /* ATMessageCenterViewController.m in Sources */,
 				499912A4161A3B8700FDA15F /* ATResizingTextView.m in Sources */,
+				499912A9161B6AF700FDA15F /* ATWebClient+MessageCenter.m in Sources */,
+				499912AE161B6B9400FDA15F /* ATMessage.m in Sources */,
+				4961A3FD161BB8D400E30037 /* ATPerson.m in Sources */,
+				4961A403161BBD7000E30037 /* ATMessageTask.m in Sources */,
+				4961A407161BBD8100E30037 /* ATPersonTask.m in Sources */,
+				4961A40C161BBE0800E30037 /* ATPersonUpdater.m in Sources */,
+				4961A410161BBE1F00E30037 /* ATDeviceUpdater.m in Sources */,
+				4961A414161BBE4000E30037 /* ATMessageParser.m in Sources */,
+				4961A418161BBE6500E30037 /* ATPersonResponseParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -108,8 +108,6 @@
 		4961A410161BBE1F00E30037 /* ATDeviceUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 4961A40E161BBE1F00E30037 /* ATDeviceUpdater.m */; };
 		4961A413161BBE4000E30037 /* ATMessageParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 4961A411161BBE4000E30037 /* ATMessageParser.h */; };
 		4961A414161BBE4000E30037 /* ATMessageParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4961A412161BBE4000E30037 /* ATMessageParser.m */; };
-		4961A417161BBE6500E30037 /* ATPersonResponseParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 4961A415161BBE6500E30037 /* ATPersonResponseParser.h */; };
-		4961A418161BBE6500E30037 /* ATPersonResponseParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4961A416161BBE6500E30037 /* ATPersonResponseParser.m */; };
 		496DC3831333D35600743F65 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3821333D35600743F65 /* Foundation.framework */; };
 		496DC38F1333D35600743F65 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3821333D35600743F65 /* Foundation.framework */; };
 		496DC3941333D35600743F65 /* libApptentiveConnect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC37F1333D35600743F65 /* libApptentiveConnect.a */; };
@@ -283,8 +281,6 @@
 		4961A40E161BBE1F00E30037 /* ATDeviceUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATDeviceUpdater.m; path = "Message Center/Persistence/ATDeviceUpdater.m"; sourceTree = "<group>"; };
 		4961A411161BBE4000E30037 /* ATMessageParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATMessageParser.h; path = "Message Center/Model/ATMessageParser.h"; sourceTree = "<group>"; };
 		4961A412161BBE4000E30037 /* ATMessageParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATMessageParser.m; path = "Message Center/Model/ATMessageParser.m"; sourceTree = "<group>"; };
-		4961A415161BBE6500E30037 /* ATPersonResponseParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATPersonResponseParser.h; path = "Message Center/Model/ATPersonResponseParser.h"; sourceTree = "<group>"; };
-		4961A416161BBE6500E30037 /* ATPersonResponseParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATPersonResponseParser.m; path = "Message Center/Model/ATPersonResponseParser.m"; sourceTree = "<group>"; };
 		496DC37F1333D35600743F65 /* libApptentiveConnect.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libApptentiveConnect.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		496DC3821333D35600743F65 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		496DC38C1333D35600743F65 /* ApptentiveConnectTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApptentiveConnectTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -658,8 +654,6 @@
 				4961A3FB161BB8D400E30037 /* ATPerson.m */,
 				4961A411161BBE4000E30037 /* ATMessageParser.h */,
 				4961A412161BBE4000E30037 /* ATMessageParser.m */,
-				4961A415161BBE6500E30037 /* ATPersonResponseParser.h */,
-				4961A416161BBE6500E30037 /* ATPersonResponseParser.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -853,7 +847,6 @@
 				4961A40B161BBE0800E30037 /* ATPersonUpdater.h in Headers */,
 				4961A40F161BBE1F00E30037 /* ATDeviceUpdater.h in Headers */,
 				4961A413161BBE4000E30037 /* ATMessageParser.h in Headers */,
-				4961A417161BBE6500E30037 /* ATPersonResponseParser.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1082,7 +1075,6 @@
 				4961A40C161BBE0800E30037 /* ATPersonUpdater.m in Sources */,
 				4961A410161BBE1F00E30037 /* ATDeviceUpdater.m in Sources */,
 				4961A414161BBE4000E30037 /* ATMessageParser.m in Sources */,
-				4961A418161BBE6500E30037 /* ATPersonResponseParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

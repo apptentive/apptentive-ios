@@ -38,4 +38,5 @@ typedef enum {
 @property (nonatomic, readonly) NSArray *displayTypes;
 
 - (BOOL)isOfMessageDisplayType:(ATMessageDisplayType)displayType;
+- (NSDictionary *)apiJSON;
 @end

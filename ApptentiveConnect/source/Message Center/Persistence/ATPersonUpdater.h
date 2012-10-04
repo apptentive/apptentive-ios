@@ -15,7 +15,7 @@ NSString *const ATCurrentPersonPreferenceKey;
 
 @protocol ATPersonUpdaterDelegate;
 
-@interface ATPersonUpdater : NSObject {
+@interface ATPersonUpdater : NSObject <ATAPIRequestDelegate> {
 @private
 	NSObject<ATPersonUpdaterDelegate> *delegate;
 	ATAPIRequest *request;
@@ -25,7 +25,7 @@ NSString *const ATCurrentPersonPreferenceKey;
 + (ATPerson *)currentPerson;
 
 - (id)initWithDelegate:(NSObject<ATPersonUpdaterDelegate> *)delegate;
-- (void)update;
+- (void)createPerson;
 - (void)cancel;
 - (float)percentageComplete;
 @end

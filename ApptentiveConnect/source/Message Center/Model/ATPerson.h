@@ -11,12 +11,14 @@
 @interface ATPerson : NSObject <NSCoding> {
 @private
 	NSString *apptentiveID;
-	NSString *firstName;
-	NSString *lastName;
+	NSString *name;
 	NSString *facebookID;
 }
 @property (nonatomic, retain) NSString *apptentiveID;
-@property (nonatomic, retain) NSString *firstName;
-@property (nonatomic, retain) NSString *lastName;
+@property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *facebookID;
+@property (nonatomic, retain) NSString *emailAddress;
+
++ (ATPerson *)newPersonFromJSON:(NSDictionary *)json;
+- (NSDictionary *)apiJSON;
 @end

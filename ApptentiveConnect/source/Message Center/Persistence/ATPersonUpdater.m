@@ -47,9 +47,9 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 	[super dealloc];
 }
 
-- (void)update {
+- (void)createPerson {
 	[self cancel];
-	request = [[[ATWebClient sharedClient] requestForPostingPerson] retain];
+	request = [[[ATWebClient sharedClient] requestForCreatingPerson:nil] retain];
 	request.delegate = self;
 	[request start];
 }
@@ -75,10 +75,9 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 	@synchronized (self) {
 		if ([result isKindOfClass:[NSDictionary class]]) {
 			[self processResult:(NSDictionary *)result];
-			[delegate configurationUpdaterDidFinish:YES];
 		} else {
-			NSLog(@"App configuration result is not NSDictionary!");
-			[delegate configurationUpdaterDidFinish:NO];
+			NSLog(@"Person result is not NSDictionary!");
+			[delegate personUpdaterDidFinish:NO];
 		}
 	}
 }
@@ -91,84 +90,22 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 	@synchronized(self) {
 		NSLog(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
 		
-		[delegate configurationUpdaterDidFinish:NO];
+		[delegate personUpdaterDidFinish:NO];
 	}
 }
 @end
 
 @implementation ATPersonUpdater (Private)
-- (void)processResult:(NSDictionary *)jsonConfiguration {
-	BOOL hasConfigurationChanges = NO;
+- (void)processResult:(NSDictionary *)jsonPerson {
+	ATPerson *person = [ATPerson newPersonFromJSON:jsonPerson];
 	
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[ATAppConfigurationUpdater registerDefaults];
-	[ATAppRatingFlow_Private registerDefaults];
-	[defaults setObject:[NSDate date] forKey:ATAppConfigurationLastUpdatePreferenceKey];
-	[defaults synchronize];
-	
-	NSDictionary *numberObjects =
-	[NSDictionary dictionaryWithObjectsAndKeys:
-	 @"ratings_clear_on_upgrade", ATAppRatingClearCountsOnUpgradePreferenceKey,
-	 @"ratings_enabled", ATAppRatingEnabledPreferenceKey,
-	 @"ratings_days_before_prompt", ATAppRatingDaysBeforePromptPreferenceKey,
-	 @"ratings_days_between_prompts", ATAppRatingDaysBetweenPromptsPreferenceKey,
-	 @"ratings_events_before_prompt", ATAppRatingSignificantEventsBeforePromptPreferenceKey,
-	 @"ratings_uses_before_prompt", ATAppRatingUsesBeforePromptPreferenceKey,
-	 @"metrics_enabled", ATAppConfigurationMetricsEnabledPreferenceKey,
-	 nil];
-	
-	NSArray *boolPreferences = [NSArray arrayWithObjects:@"ratings_clear_on_upgrade", @"ratings_enabled", @"metrics_enabled", nil];
-	NSObject *ratingsPromptLogic = [jsonConfiguration objectForKey:@"ratings_prompt_logic"];
-	
-	for (NSString *key in numberObjects) {
-		NSObject *value = [jsonConfiguration objectForKey:[numberObjects objectForKey:key]];
-		if (!value || ![value isKindOfClass:[NSNumber class]]) {
-			continue;
-		}
-		
-		NSNumber *numberValue = (NSNumber *)value;
-		
-		NSNumber *existingNumber = [defaults objectForKey:key];
-		if ([existingNumber isEqualToNumber:numberValue]) {
-			continue;
-		}
-		
-		if ([boolPreferences containsObject:[numberObjects objectForKey:key]]) {
-			[defaults setObject:numberValue forKey:key];
-		} else {
-			NSUInteger unsignedIntegerValue = [numberValue unsignedIntegerValue];
-			NSNumber *replacementValue = [NSNumber numberWithUnsignedInteger:unsignedIntegerValue];
-			
-			[defaults setObject:replacementValue forKey:key];
-		}
-		hasConfigurationChanges = YES;
-	}
-	
-	if (ratingsPromptLogic) {
-		NSPredicate *predicate = [ATAppRatingFlow_Private predicateForPromptLogic:ratingsPromptLogic withPredicateInfo:nil];
-		if (predicate) {
-			[defaults setObject:ratingsPromptLogic forKey:ATAppRatingPromptLogicPreferenceKey];
-			hasConfigurationChanges = YES;
-		}
-	}
-	
-	if ([jsonConfiguration objectForKey:@"review_url"]) {
-		NSString *reviewURLString = [jsonConfiguration objectForKey:@"review_url"];
-		[defaults setObject:reviewURLString forKey:ATAppRatingReviewURLPreferenceKey];
-	}
-	
-	if ([jsonConfiguration objectForKey:@"cache-expiration"]) {
-		NSString *expirationDateString = [jsonConfiguration objectForKey:@"cache-expiration"];
-		NSDate *expirationDate = [ATUtilities dateFromISO8601String:expirationDateString];
-		if (expirationDate) {
-			[defaults setObject:expirationDate forKey:ATAppConfigurationExpirationPreferenceKey];
-		}
-	}
-	
-	if (hasConfigurationChanges) {
-		[defaults setObject:[NSNumber numberWithBool:YES] forKey:ATAppRatingSettingsAreFromServerPreferenceKey];
+	if (person) {
+		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+		[defaults setObject:person forKey:ATCurrentPersonPreferenceKey];
 		[defaults synchronize];
-		[[NSNotificationCenter defaultCenter] postNotificationName:ATConfigurationPreferencesChangedNotification object:nil];
+		[delegate personUpdaterDidFinish:YES];
+	} else {
+		[delegate personUpdaterDidFinish:NO];
 	}
 }
 @end

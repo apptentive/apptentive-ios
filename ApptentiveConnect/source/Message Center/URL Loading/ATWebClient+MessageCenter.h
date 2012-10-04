@@ -8,6 +8,8 @@
 
 #import "ATWebClient.h"
 
-@interface ATWebClient (MessageCenter)
+#import "ATPerson.h"
 
+@interface ATWebClient (MessageCenter)
+- (ATAPIRequest *)requestForCreatingPerson:(ATPerson *)person;
 @end

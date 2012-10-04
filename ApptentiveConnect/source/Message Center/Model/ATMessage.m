@@ -8,6 +8,8 @@
 
 #import "ATMessage.h"
 
+#import "ATBackend.h"
+
 #define kATMessageCodingVersion 1
 
 @implementation ATMessage
@@ -79,5 +81,23 @@
 		}
 	}
 	return result;
+}
+
+- (NSDictionary *)apiJSON {
+	NSMutableDictionary *result = [NSMutableDictionary dictionary];
+	
+	if (self.apptentiveID) {
+		[result setObject:self.apptentiveID forKey:@"id"];
+	}
+	if (self.creationTime != 0) {
+		[result setObject:[NSNumber numberWithDouble:self.creationTime] forKey:@"created_at"];
+	}
+	if (self.senderID) {
+		[result setObject:self.senderID forKey:@"sender_id"];
+	}
+	
+	[result setObject:[[ATBackend sharedBackend] deviceUUID] forKey:@"device_id"];
+	
+	return [NSDictionary dictionaryWithObject:result forKey:@"message"];
 }
 @end

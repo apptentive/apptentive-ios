@@ -7,7 +7,154 @@
 //
 
 #import "ATMessageTask.h"
+#import "ATBackend.h"
+#import "ATMessage.h"
+#import "ATPersonUpdater.h"
+#import "ATWebClient.h"
+#import "ATWebClient+MessageCenter.h"
+
+#define kATMessageTaskCodingVersion 1
+
+@interface ATMessageTask (Private)
+- (void)setup;
+- (void)teardown;
+- (BOOL)processResult:(NSDictionary *)jsonMessage;
+@end
 
 @implementation ATMessageTask
+@synthesize message;
 
+- (id)initWithCoder:(NSCoder *)coder {
+	if ((self = [super init])) {
+		int version = [coder decodeIntForKey:@"version"];
+		if (version == kATMessageTaskCodingVersion) {
+			self.message = [coder decodeObjectForKey:@"message"];
+		} else {
+			[self release];
+			return nil;
+		}
+	}
+	return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder {
+	[coder encodeInt:kATMessageTaskCodingVersion forKey:@"version"];
+	[coder encodeObject:self.message forKey:@"message"];
+}
+
+- (void)dealloc {
+	[self teardown];
+	[message release], message = nil;
+	[super dealloc];
+}
+
+- (BOOL)canStart {
+	if ([[ATBackend sharedBackend] apiKey] == nil) {
+		return NO;
+	}
+	if (![ATPersonUpdater personExists]) {
+		return NO;
+	}
+	return YES;
+}
+
+- (void)start {
+	if (!request) {
+		request = [[[ATWebClient sharedClient] requestForPostingMessage:self.message] retain];
+		if (request != nil) {
+			request.delegate = self;
+			[request start];
+			self.inProgress = YES;
+		} else {
+			self.finished = YES;
+		}
+	}
+}
+
+- (void)stop {
+	if (request) {
+		request.delegate = nil;
+		[request cancel];
+		[request release], request = nil;
+		self.inProgress = NO;
+	}
+}
+
+- (float)percentComplete {
+	if (request) {
+		return [request percentageComplete];
+	} else {
+		return 0.0f;
+	}
+}
+
+- (NSString *)taskName {
+	return @"message";
+}
+
+#pragma mark ATAPIRequestDelegate
+- (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(NSObject *)result {
+	@synchronized(self) {
+		[self retain];
+		
+		if ([result isKindOfClass:[NSDictionary class]] && [self processResult:(NSDictionary *)result]) {
+			self.finished = YES;
+		} else {
+			NSLog(@"Message result is not NSDictionary!");
+			self.failed = YES;
+		}
+		[self stop];
+		[self release];
+	}
+}
+
+- (void)at_APIRequestDidProgress:(ATAPIRequest *)sender {
+	// pass
+}
+
+- (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
+	@synchronized(self) {
+		[self retain];
+		self.failed = YES;
+		self.lastErrorTitle = sender.errorTitle;
+		self.lastErrorMessage = sender.errorMessage;
+		NSLog(@"ATAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
+		[self stop];
+		[self release];
+	}
+}
+@end
+
+@implementation ATMessageTask (Private)
+- (void)setup {
+	
+}
+
+- (void)teardown {
+	[self stop];
+}
+
+- (BOOL)processResult:(NSDictionary *)jsonMessage {
+	NSMutableDictionary *mutableJSON = [[jsonMessage mutableCopy] autorelease];
+	NSTimeInterval timeInterval = [[NSDate date] timeIntervalSince1970];
+	NSNumber *d = [NSNumber numberWithDouble:timeInterval];
+	[mutableJSON setObject:message.body forKey:@"body"];
+	[mutableJSON setObject:@[@"message center"] forKey:@"display"];
+	[mutableJSON setObject:@"text_message" forKey:@"type"];
+	[mutableJSON setObject:d forKey:@"created_at"];
+	
+	NSDictionary *m = @{@"message":mutableJSON};
+	
+	ATMessage *newMessage = [ATMessage newMessageFromJSON:m];
+	
+	if (newMessage != nil) {
+		NSError *error = nil;
+		if (![[[ATBackend sharedBackend] managedObjectContext] save:&error]) {
+			NSLog(@"Failed to save new message: %@", error);
+			return NO;
+		}
+		return YES;
+	}
+	return NO;
+}
 @end

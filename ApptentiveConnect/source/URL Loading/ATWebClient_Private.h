@@ -29,5 +29,6 @@
 - (ATURLConnection *)connectionToPost:(NSURL *)theURL parameters:(NSDictionary *)parameters;
 - (ATURLConnection *)connectionToPost:(NSURL *)theURL body:(NSString *)body;
 - (ATURLConnection *)connectionToPost:(NSURL *)theURL withFileData:(NSData *)data ofMimeType:(NSString *)mimeType fileDataKey:(NSString *)fileDataKey  parameters:(NSDictionary *)parameters;
+- (ATURLConnection *)connectionToPut:(NSURL *)theURL JSON:(NSString *)body;
 - (void)addAPIHeaders:(ATURLConnection *)conn;
 @end

@@ -8,6 +8,26 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ATDeviceUpdater : NSObject
+#import "ATAPIRequest.h"
 
+NSString *const ATDeviceLastUpdatePreferenceKey;
+
+@protocol ATDeviceUpdaterDelegate;
+
+@interface ATDeviceUpdater : NSObject <ATAPIRequestDelegate> {
+@private
+	NSObject<ATDeviceUpdaterDelegate> *delegate;
+	ATAPIRequest *request;
+}
+@property (nonatomic, assign) NSObject<ATDeviceUpdaterDelegate> *delegate;
++ (BOOL)shouldUpdate;
+
+- (id)initWithDelegate:(NSObject<ATDeviceUpdaterDelegate> *)delegate;
+- (void)update;
+- (void)cancel;
+- (float)percentageComplete;
+@end
+
+@protocol ATDeviceUpdaterDelegate <NSObject>
+- (void)deviceUpdater:(ATDeviceUpdater *)deviceUpdater didFinish:(BOOL)success;
 @end

@@ -50,9 +50,7 @@
 	
 	do { // once
 		if (!json) break;
-		NSObject *tmp = [json objectForKey:@"person"];
-		if (!tmp || ![tmp isKindOfClass:[NSDictionary class]]) break;
-		NSDictionary *p = (NSDictionary *)tmp;
+		NSDictionary *p = json;
 		
 		result = [[ATPerson alloc] init];
 		result.apptentiveID = [p objectForKey:@"id"];

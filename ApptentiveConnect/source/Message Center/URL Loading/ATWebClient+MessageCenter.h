@@ -8,8 +8,12 @@
 
 #import "ATWebClient.h"
 
+#import "ATDeviceInfo.h"
+#import "ATPendingMessage.h"
 #import "ATPerson.h"
 
 @interface ATWebClient (MessageCenter)
 - (ATAPIRequest *)requestForCreatingPerson:(ATPerson *)person;
+- (ATAPIRequest *)requestForUpdatingDevice:(ATDeviceInfo *)deviceInfo;
+- (ATAPIRequest *)requestForPostingMessage:(ATPendingMessage *)message;
 @end

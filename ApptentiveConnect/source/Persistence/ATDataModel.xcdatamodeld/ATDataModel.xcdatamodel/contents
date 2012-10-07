@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1810" systemVersion="12C54" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="ATMessage" representedClassName="ATMessage" isAbstract="YES" syncable="YES">
+        <attribute name="apptentiveID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="creationTime" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="pending" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
+        <attribute name="priority" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="recipientID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="seenByUser" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="senderID" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="displayTypes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ATMessageDisplayType" inverseName="messages" inverseEntity="ATMessageDisplayType" syncable="YES"/>
+    </entity>
+    <entity name="ATMessageDisplayType" representedClassName="ATMessageDisplayType" syncable="YES">
+        <attribute name="displayType" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ATMessage" inverseName="displayTypes" inverseEntity="ATMessage" syncable="YES"/>
+    </entity>
+    <entity name="ATTextMessage" representedClassName="ATTextMessage" parentEntity="ATMessage" syncable="YES">
+        <attribute name="body" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="subject" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="ATUpgradeRequestMessage" representedClassName="ATUpgradeRequestMessage" parentEntity="ATTextMessage" syncable="YES">
+        <attribute name="forced" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="ATMessageDisplayType" positionX="52" positionY="-171" width="128" height="73"/>
+        <element name="ATMessage" positionX="-189" positionY="-327" width="128" height="163"/>
+        <element name="ATTextMessage" positionX="-290" positionY="-90" width="128" height="73"/>
+        <element name="ATUpgradeRequestMessage" positionX="-306" positionY="90" width="128" height="60"/>
+    </elements>
+</model>

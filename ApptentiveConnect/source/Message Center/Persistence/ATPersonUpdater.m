@@ -30,7 +30,11 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 
 + (ATPerson *)currentPerson {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	ATPerson *person = (ATPerson *)[defaults objectForKey:ATCurrentPersonPreferenceKey];
+	NSData *personData = [defaults dataForKey:ATCurrentPersonPreferenceKey];
+	if (!personData) {
+		return nil;
+	}
+	ATPerson *person = [NSKeyedUnarchiver unarchiveObjectWithData:personData];
 	return person;
 }
 
@@ -77,7 +81,7 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 			[self processResult:(NSDictionary *)result];
 		} else {
 			NSLog(@"Person result is not NSDictionary!");
-			[delegate personUpdaterDidFinish:NO];
+			[delegate personUpdater:self didFinish:NO];
 		}
 	}
 }
@@ -90,7 +94,7 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 	@synchronized(self) {
 		NSLog(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
 		
-		[delegate personUpdaterDidFinish:NO];
+		[delegate personUpdater:self didFinish:NO];
 	}
 }
 @end
@@ -101,11 +105,12 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 	
 	if (person) {
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		[defaults setObject:person forKey:ATCurrentPersonPreferenceKey];
+		NSData *personData = [NSKeyedArchiver archivedDataWithRootObject:person];
+		[defaults setObject:personData forKey:ATCurrentPersonPreferenceKey];
 		[defaults synchronize];
-		[delegate personUpdaterDidFinish:YES];
+		[delegate personUpdater:self didFinish:YES];
 	} else {
-		[delegate personUpdaterDidFinish:NO];
+		[delegate personUpdater:self didFinish:NO];
 	}
 }
 @end

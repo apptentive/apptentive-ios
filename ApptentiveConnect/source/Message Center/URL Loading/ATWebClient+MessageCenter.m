@@ -7,7 +7,10 @@
 //
 
 #import "ATWebClient+MessageCenter.h"
+
 #import "ATAPIRequest.h"
+#import "ATBackend.h"
+#import "ATPersonUpdater.h"
 #import "ATURLConnection.h"
 #import "ATWebClient_Private.h"
 
@@ -38,5 +41,45 @@
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
 	request.returnType = ATAPIRequestReturnTypeJSON;
 	return [request autorelease];
+}
+
+- (ATAPIRequest *)requestForUpdatingDevice:(ATDeviceInfo *)deviceInfo {
+	NSError *error = nil;
+	NSDictionary *postJSON = [deviceInfo apiJSON];
+	
+	NSString *postString = [postJSON ATJSONStringWithOptions:ATJKSerializeOptionPretty error:&error];
+	if (!postString && error != nil) {
+		NSLog(@"ATWebClient+MessageCenter: Error while encoding JSON: %@", error);
+		return nil;
+	}
+	NSString *path = [NSString stringWithFormat:@"devices/%@", [[ATBackend sharedBackend] deviceUUID]];
+	NSString *url = [self apiURLStringWithPath:path];
+	
+	ATURLConnection *conn = [self connectionToPut:[NSURL URLWithString:url] JSON:postString];
+	conn.timeoutInterval = 60.0;
+	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
+	request.returnType = ATAPIRequestReturnTypeJSON;
+	return [request autorelease];
+}
+
+- (ATAPIRequest *)requestForPostingMessage:(ATPendingMessage *)message {
+	NSError *error = nil;
+	NSDictionary *postJSON = [message apiJSON];
+	
+	NSString *postString = [postJSON ATJSONStringWithOptions:ATJKSerializeOptionPretty error:&error];
+	if (!postString && error != nil) {
+		NSLog(@"ATWebClient+MessageCenter: Error while encoding JSON: %@", error);
+		return nil;
+	}
+	ATPerson *person = [ATPersonUpdater currentPerson];
+	NSString *path = [NSString stringWithFormat:@"people/%@/messages", person.apptentiveID];
+	NSString *url = [self apiURLStringWithPath:path];
+	
+	ATURLConnection *conn = [self connectionToPost:[NSURL URLWithString:url] JSON:postString];
+	conn.timeoutInterval = 60.0;
+	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
+	request.returnType = ATAPIRequestReturnTypeJSON;
+	return [request autorelease];
+	
 }
 @end

@@ -7,8 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ATAPIRequest.h"
 
+#import "ATAPIRequest.h"
 #import "ATPerson.h"
 
 NSString *const ATCurrentPersonPreferenceKey;
@@ -31,6 +31,6 @@ NSString *const ATCurrentPersonPreferenceKey;
 @end
 
 @protocol ATPersonUpdaterDelegate <NSObject>
-- (void)personUpdaterDidFinish:(BOOL)success;
+- (void)personUpdater:(ATPersonUpdater *)personUpdater didFinish:(BOOL)success;
 @end
 

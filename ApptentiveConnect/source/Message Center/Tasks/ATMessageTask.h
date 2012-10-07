@@ -6,8 +6,16 @@
 //  Copyright (c) 2012 Apptentive, Inc. All rights reserved.
 //
 
+#import "ATAPIRequest.h"
 #import "ATTask.h"
 
-@interface ATMessageTask : ATTask
+@class ATPendingMessage;
+
+@interface ATMessageTask : ATTask <ATAPIRequestDelegate> {
+@private
+	ATAPIRequest *request;
+	ATPendingMessage *message;
+}
+@property (nonatomic, retain) ATPendingMessage *message;
 
 @end

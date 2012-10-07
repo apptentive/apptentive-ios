@@ -33,6 +33,7 @@
 		4960E12C1344326B00F6311F /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4960E1261344326B00F6311F /* icon.png */; };
 		4960E139134432F400F6311F /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 4960E138134432F400F6311F /* iTunesArtwork */; };
 		4982ECE6133C2DCF00B91781 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4982ECE4133C2DCF00B91781 /* MainWindow-iPad.xib */; };
+		4988FB5616212BE3000A7CB7 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4988FB5516212BE3000A7CB7 /* CoreData.framework */; };
 		49AA100E138B41A40082887A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49AA100D138B41A40082887A /* SystemConfiguration.framework */; };
 		49B3D9A31340084E00B5A5CD /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D9A21340084E00B5A5CD /* CoreTelephony.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		49C002EC1334172E0071F088 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C002EB1334172E0071F088 /* UIKit.framework */; };
@@ -125,6 +126,7 @@
 		4960E138134432F400F6311F /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
 		4960E13E13455ACE00F6311F /* ATConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATConnect.h; path = ../ApptentiveConnect/source/ATConnect.h; sourceTree = "<group>"; };
 		4982ECE5133C2DCF00B91781 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "iPad/en.lproj/MainWindow-iPad.xib"; sourceTree = "<group>"; };
+		4988FB5516212BE3000A7CB7 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		49AA100D138B41A40082887A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		49B3D9A21340084E00B5A5CD /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		49C002E71334172E0071F088 /* FeedbackDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FeedbackDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -160,6 +162,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4988FB5616212BE3000A7CB7 /* CoreData.framework in Frameworks */,
 				493529C0138C7141000E464A /* libApptentiveConnect.a in Frameworks */,
 				49AA100E138B41A40082887A /* SystemConfiguration.framework in Frameworks */,
 				49E8918B134BF69C00DD098A /* QuartzCore.framework in Frameworks */,
@@ -201,6 +204,7 @@
 		49C002DC1334172E0071F088 = {
 			isa = PBXGroup;
 			children = (
+				4988FB5516212BE3000A7CB7 /* CoreData.framework */,
 				4960E13E13455ACE00F6311F /* ATConnect.h */,
 				4942CD5E13C8D68E009BF758 /* ATAppRatingFlow.h */,
 				493AEB4615990AB800DFD4C7 /* ATSurveys.h */,

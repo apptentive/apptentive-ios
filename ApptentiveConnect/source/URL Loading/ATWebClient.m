@@ -251,6 +251,12 @@ static ATWebClient *sharedSingleton = nil;
 	return [conn autorelease];
 }
 
+- (ATURLConnection *)connectionToPut:(NSURL *)theURL JSON:(NSString *)body {
+	ATURLConnection *conn = [self connectionToPost:theURL JSON:body];
+	[conn setHTTPMethod:@"PUT"];
+	return conn;
+}
+
 - (void)addAPIHeaders:(ATURLConnection *)conn {
 	[conn setValue:[self userAgentString] forHTTPHeaderField:@"User-Agent"];
 	[conn setValue: @"gzip" forHTTPHeaderField: @"Accept-Encoding"];

@@ -2,102 +2,117 @@
 //  ATMessage.m
 //  ApptentiveConnect
 //
-//  Created by Andrew Wooster on 10/2/12.
+//  Created by Andrew Wooster on 10/6/12.
 //  Copyright (c) 2012 Apptentive, Inc. All rights reserved.
 //
 
 #import "ATMessage.h"
-
 #import "ATBackend.h"
-
-#define kATMessageCodingVersion 1
+#import "ATMessageDisplayType.h"
+#import "ATTextMessage.h"
+#import "ATUpgradeRequestMessage.h"
 
 @implementation ATMessage
-@synthesize messageType;
-@synthesize apptentiveID;
-@synthesize creationTime;
-@synthesize senderID;
-@synthesize recipientID;
-@synthesize priority;
-@synthesize displayTypes;
 
-- (id)initWithCoder:(NSCoder *)coder {
-	if ((self = [super init])) {
-		self.messageType = [coder decodeIntForKey:@"messageType"];
-		self.apptentiveID = (NSString *)[coder decodeObjectForKey:@"apptentiveID"];
-		self.creationTime = [(NSNumber *)[coder decodeObjectForKey:@"creationTime"] doubleValue];
-		self.senderID = (NSString *)[coder decodeObjectForKey:@"senderID"];
-		self.recipientID = (NSString *)[coder decodeObjectForKey:@"recipientID"];
-		self.priority = (NSNumber *)[coder decodeObjectForKey:@"priority"];
-		@synchronized(self) {
-			displayTypes = [(NSArray *)[coder decodeObjectForKey:@"displayTypes"] mutableCopy];
-		}
-	}
-	return self;
-}
+@dynamic apptentiveID;
+@dynamic creationTime;
+@dynamic pending;
+@dynamic priority;
+@dynamic recipientID;
+@dynamic seenByUser;
+@dynamic senderID;
+@dynamic displayTypes;
 
-- (void)dealloc {
-	@synchronized(self) {
-		[displayTypes release], displayTypes = nil;
-	}
-	[apptentiveID release], apptentiveID = nil;
-	[senderID release], senderID = nil;
-	[recipientID release], recipientID = nil;
-	[priority release], priority = nil;
-	[super dealloc];
-}
-
-- (void)encodeWithCoder:(NSCoder *)coder {
-	[coder encodeInt:kATMessageCodingVersion forKey:@"version"];
++ (ATMessage *)newMessageFromJSON:(NSDictionary *)json {
+	// Figure out the message type.
+	NSDictionary *messageJSON = [json objectForKey:@"message"];
+	if (!messageJSON) return nil;
 	
-	[coder encodeInt:self.messageType forKey:@"messageType"];
-	[coder encodeObject:self.apptentiveID forKey:@"apptentiveID"];
-	[coder encodeObject:[NSNumber numberWithDouble:self.creationTime] forKey:@"creationTime"];
-	[coder encodeObject:self.senderID forKey:@"senderID"];
-	[coder encodeObject:self.recipientID forKey:@"recipientID"];
-	[coder encodeObject:self.priority forKey:@"priority"];
-	@synchronized(self) {
-		[coder encodeObject:self.displayTypes forKey:@"displayTypes"];
+	NSString *messageType = [messageJSON objectForKey:@"type"];
+	NSString *objectName = nil;
+	if ([messageType isEqualToString:@"text_message"]) {
+		objectName = @"ATTextMessage";
+	} else if ([messageType isEqualToString:@"upgrade_request"]) {
+		objectName = @"ATUpgradeRequestMessage";
+	} else if ([messageType isEqualToString:@"share_request"]) {
+		//!!
+		NSLog(@"Unimplimented share request type");
+		return nil;
+	} else {
+		NSLog(@"Unknown message type");
+		return nil;
 	}
-}
-
-- (NSArray *)displayTypes {
-	NSArray *result = nil;
+	
+	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
+	
+	ATMessageDisplayType *messageCenterType = nil;
+	ATMessageDisplayType *modalType = nil;
+	
 	@synchronized(self) {
-		result = [NSArray arrayWithArray:displayTypes];
-	}
-	return result;
-}
-
-- (BOOL)isOfMessageDisplayType:(ATMessageDisplayType)typeToCheck {
-	BOOL result = NO;
-	@synchronized(self) {
-		for (NSNumber *typeNumber in displayTypes) {
-			ATMessageDisplayType displayType = [typeNumber intValue];
-			if (displayType == typeToCheck) {
-				result = YES;
-				break;
+		NSFetchRequest *fetchTypes = [[NSFetchRequest alloc] initWithEntityName:@"ATMessageDisplayType"];
+		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(displayType == %d) || (displayType == %d)", ATMessageDisplayTypeTypeMessageCenter, ATMessageDisplayTypeTypeModal];
+		fetchTypes.predicate = fetchPredicate;
+		NSError *fetchError = nil;
+		NSArray *fetchArray = [context executeFetchRequest:fetchTypes error:&fetchError];
+		
+		if (!fetchArray) {
+			[NSException raise:NSGenericException format:@"%@", [fetchError description]];
+		} else {
+			for (NSManagedObject *fetchedObject in fetchArray) {
+				ATMessageDisplayType *dt = (ATMessageDisplayType *)fetchedObject;
+				ATMessageDisplayTypeType displayType = (ATMessageDisplayTypeType)[[dt displayType] intValue];
+				if (displayType == ATMessageDisplayTypeTypeModal) {
+					modalType = dt;
+				} else if (displayType == ATMessageDisplayTypeTypeMessageCenter) {
+					messageCenterType = dt;
+				}
 			}
 		}
-	}
-	return result;
-}
-
-- (NSDictionary *)apiJSON {
-	NSMutableDictionary *result = [NSMutableDictionary dictionary];
-	
-	if (self.apptentiveID) {
-		[result setObject:self.apptentiveID forKey:@"id"];
-	}
-	if (self.creationTime != 0) {
-		[result setObject:[NSNumber numberWithDouble:self.creationTime] forKey:@"created_at"];
-	}
-	if (self.senderID) {
-		[result setObject:self.senderID forKey:@"sender_id"];
+		
+		if (!messageCenterType) {
+			messageCenterType = [[ATMessageDisplayType alloc] initWithEntity:[NSEntityDescription entityForName:@"ATMessageDisplayType" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
+			messageCenterType.displayType = [NSNumber numberWithInt:ATMessageDisplayTypeTypeMessageCenter];
+			[context save:nil];
+		}
+		if (!modalType) {
+			modalType = [[ATMessageDisplayType alloc] initWithEntity:[NSEntityDescription entityForName:@"ATMessageDisplayType" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
+			modalType.displayType = [NSNumber numberWithInt:ATMessageDisplayTypeTypeModal];
+			[context save:nil];
+		}
 	}
 	
-	[result setObject:[[ATBackend sharedBackend] deviceUUID] forKey:@"device_id"];
+	NSManagedObject *message = [[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:objectName inManagedObjectContext:context] insertIntoManagedObjectContext:context];
+	[message setValue:[messageJSON objectForKey:@"id"] forKey:@"apptentiveID"];
+	[message setValue:[messageJSON objectForKey:@"sender_id"] forKey:@"senderID"];
+	[message setValue:[messageJSON objectForKey:@"recipient_id"] forKey:@"recipientID"];
 	
-	return [NSDictionary dictionaryWithObject:result forKey:@"message"];
+	NSNumber *creationTimestamp = (NSNumber *)[messageJSON objectForKey:@"created_at"];
+	[message setValue:creationTimestamp forKey:@"creationTime"];
+	
+	[message setValue:[messageJSON objectForKey:@"priority"] forKey:@"priority"];
+	
+	NSArray *displayTypes = [messageJSON objectForKey:@"display"];
+	BOOL inserted = NO;
+	for (NSString *displayType in displayTypes) {
+		if ([displayType isEqualToString:@"modal"]) {
+			[(ATMessage *)message addDisplayTypesObject:modalType];
+			inserted = YES;
+		} else if ([displayType isEqualToString:@"message center"]) {
+			[(ATMessage *)message addDisplayTypesObject:messageCenterType];
+			inserted = YES;
+		}
+	}
+	if (!inserted) {
+		[(ATMessage *)message addDisplayTypesObject:messageCenterType];
+	}
+	
+	if ([objectName isEqualToString:@"ATTextMessage"]) {
+		[message setValue:[messageJSON objectForKey:@"body"] forKey:@"body"];
+		[message setValue:[messageJSON objectForKey:@"subject"] forKey:@"subject"];
+	} else if ([objectName isEqualToString:@"ATUpgradeRequestMessage"]) {
+		[message setValue:[messageJSON objectForKey:@"forced"] forKey:@"forced"];
+	}
+	
+	return (ATMessage *)message;
 }
 @end

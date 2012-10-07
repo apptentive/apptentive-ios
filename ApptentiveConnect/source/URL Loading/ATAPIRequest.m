@@ -85,6 +85,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	switch (statusCode) {
 		case 200:
 		case 201:
+		case 204:
 		case 400: // rate limit reached
 		case 403: // whatevs, probably private feed
 			break;
@@ -135,7 +136,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 			break;
 		}
 		
-		if (self.returnType == ATAPIRequestReturnTypeJSON) {
+		if (self.returnType == ATAPIRequestReturnTypeJSON && statusCode != 204) {
 			id json = [s ATobjectFromJSONString];
 			if (!json) {
 				self.failed = YES;

@@ -2,41 +2,33 @@
 //  ATMessage.h
 //  ApptentiveConnect
 //
-//  Created by Andrew Wooster on 10/2/12.
+//  Created by Andrew Wooster on 10/6/12.
 //  Copyright (c) 2012 Apptentive, Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
-typedef enum {
-	ATMessageTypeUnknown,
-	ATMessageTypeText,
-	ATMessageTypeShareRequest,
-	ATMessageTypeUpgradeRequest,
-} ATMessageType;
 
-typedef enum {
-	ATMessageDisplayTypeUnknown,
-	ATMessageDisplayTypeModal,
-	ATMessageDisplayTypeMessageCenter,
-} ATMessageDisplayType;
+@interface ATMessage : NSManagedObject
 
-@interface ATMessage : NSObject <NSCoding> {
-	NSString *apptentiveID;
-	NSTimeInterval creationTime;
-	NSString *senderID;
-	NSString *recipientID;
-	NSNumber *priority;
-	NSMutableArray *displayTypes;
-}
-@property (nonatomic, assign) ATMessageType messageType;
-@property (nonatomic, retain) NSString *apptentiveID;
-@property (nonatomic, assign) NSTimeInterval creationTime;
-@property (nonatomic, retain) NSString *senderID;
-@property (nonatomic, retain) NSString *recipientID;
-@property (nonatomic, retain) NSNumber *priority;
-@property (nonatomic, readonly) NSArray *displayTypes;
+@property (nonatomic, retain) NSString * apptentiveID;
+@property (nonatomic, retain) NSNumber * creationTime;
+@property (nonatomic, retain) NSNumber * pending;
+@property (nonatomic, retain) NSNumber * priority;
+@property (nonatomic, retain) NSString * recipientID;
+@property (nonatomic, retain) NSNumber * seenByUser;
+@property (nonatomic, retain) NSString * senderID;
+@property (nonatomic, retain) NSSet *displayTypes;
 
-- (BOOL)isOfMessageDisplayType:(ATMessageDisplayType)displayType;
-- (NSDictionary *)apiJSON;
++ (ATMessage *)newMessageFromJSON:(NSDictionary *)json;
+@end
+
+@interface ATMessage (CoreDataGeneratedAccessors)
+
+- (void)addDisplayTypesObject:(NSManagedObject *)value;
+- (void)removeDisplayTypesObject:(NSManagedObject *)value;
+- (void)addDisplayTypes:(NSSet *)values;
+- (void)removeDisplayTypes:(NSSet *)values;
+
 @end

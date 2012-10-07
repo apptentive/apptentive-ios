@@ -11,17 +11,21 @@
 #elif TARGET_OS_MAC
 #import <Cocoa/Cocoa.h>
 #endif
+#import <CoreData/CoreData.h>
+
+#import "ATPersonUpdater.h"
+#import "ATDeviceUpdater.h"
 
 NSString *const ATBackendNewAPIKeyNotification;
 
-#define USE_STAGING 0
+#define USE_STAGING 1
 
 @class ATAppConfigurationUpdater;
 @class ATFeedback;
 @class ATAPIRequest;
 
 /*! Handles all of the backend activities, such as sending feedback. */
-@interface ATBackend : NSObject {
+@interface ATBackend : NSObject <ATPersonUpdaterDelegate, ATDeviceUpdaterDelegate> {
 @private
 	NSString *apiKey;
 	ATFeedback *currentFeedback;
@@ -29,10 +33,20 @@ NSString *const ATBackendNewAPIKeyNotification;
 	BOOL apiKeySet;
 	BOOL shouldStopWorking;
 	BOOL working;
+	
+	NSPersistentStoreCoordinator *persistentStoreCoordinator;
+	NSManagedObjectContext *managedObjectContext;
+	NSManagedObjectModel *managedObjectModel;
+	
+	ATDeviceUpdater *deviceUpdater;
+	ATPersonUpdater *personUpdater;
 }
 @property (nonatomic, retain) NSString *apiKey;
 /*! The feedback currently being worked on by the user. */
 @property (nonatomic, retain) ATFeedback *currentFeedback;
+@property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
 
 + (ATBackend *)sharedBackend;
 #if TARGET_OS_IPHONE

@@ -10,7 +10,7 @@
 
 #import "ATResizingTextView.h"
 
-@interface ATMessageCenterViewController : UIViewController <ATResizingTextViewDelegate>
+@interface ATMessageCenterViewController : UIViewController <ATResizingTextViewDelegate, NSFetchedResultsControllerDelegate, UIScrollViewDelegate, UITableViewDataSource,  UITableViewDelegate>
 @property (retain, nonatomic) IBOutlet UITableView *tableView;
 @property (retain, nonatomic) IBOutlet UIView *containerView;
 @property (retain, nonatomic) IBOutlet UIView *composerView;

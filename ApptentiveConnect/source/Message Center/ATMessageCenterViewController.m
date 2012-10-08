@@ -59,7 +59,7 @@
 	
 	[self.view addSubview:self.containerView];
 	
-	composerFieldHeight = self.composerView.frame.size.height;
+	composerFieldHeight = self.textView.frame.size.height;
 	
 	
 	UIImage *sendImage = [[ATBackend imageNamed:@"at_send_button_bg"] resizableImageWithCapInsets:UIEdgeInsetsMake(13, 13, 13, 13)];
@@ -73,18 +73,17 @@
 		NSLog(@"got an error loading messages: %@", error);
 		//!! handle me
 	}
-	
 }
 
+#warning Implement for iOS 4
 - (void)viewDidLayoutSubviews {
 	CGFloat viewHeight = self.view.bounds.size.height;
-	NSLog(@"frame size: %@", NSStringFromCGRect(self.view.frame));
 	
 	CGRect composerFrame = composerView.frame;
 	CGRect tableFrame = tableView.frame;
 	CGRect containerFrame = containerView.frame;
 	CGRect attachmentFrame = attachmentView.frame;
-
+	
 	composerFrame.size.height = composerFieldHeight + 2*TextViewPadding;
 	
 	if (!attachmentsVisible) {
@@ -105,7 +104,7 @@
 	
 	tableFrame.origin.y = 0;
 	tableFrame.size.height = composerFrame.origin.y;
-	containerFrame.size.height = composerFrame.size.height + tableFrame.size.height + attachmentFrame.size.height;
+	containerFrame.size.height = tableFrame.size.height + composerFrame.size.height + attachmentFrame.size.height;
 	attachmentFrame.origin.y = composerFrame.origin.y + composerFrame.size.height;
 	
 	containerView.frame = containerFrame;

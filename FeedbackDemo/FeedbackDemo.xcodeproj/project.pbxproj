@@ -204,7 +204,6 @@
 		49C002DC1334172E0071F088 = {
 			isa = PBXGroup;
 			children = (
-				4988FB5516212BE3000A7CB7 /* CoreData.framework */,
 				4960E13E13455ACE00F6311F /* ATConnect.h */,
 				4942CD5E13C8D68E009BF758 /* ATAppRatingFlow.h */,
 				493AEB4615990AB800DFD4C7 /* ATSurveys.h */,
@@ -229,6 +228,7 @@
 		49C002EA1334172E0071F088 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4988FB5516212BE3000A7CB7 /* CoreData.framework */,
 				49AA100D138B41A40082887A /* SystemConfiguration.framework */,
 				49E8918A134BF69C00DD098A /* QuartzCore.framework */,
 				49B3D9A21340084E00B5A5CD /* CoreTelephony.framework */,

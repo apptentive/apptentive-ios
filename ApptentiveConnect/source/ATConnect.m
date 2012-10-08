@@ -141,6 +141,15 @@ static ATConnect *sharedConnection = nil;
 - (IBAction)showFeedbackWindow:(id)sender {
 	if (![[ATBackend sharedBackend] currentFeedback]) {
 		ATFeedback *feedback = [[ATFeedback alloc] init];
+		if (additionalFeedbackData && [additionalFeedbackData count]) {
+			[feedback addExtraDataFromDictionary:additionalFeedbackData];
+		}
+		if (self.initialName && [self.initialName length] > 0) {
+			feedback.name = self.initialName;
+		}
+		if (self.initialEmailAddress && [self.initialEmailAddress length] > 0) {
+			feedback.email = self.initialEmailAddress;
+		}
 		[[ATBackend sharedBackend] setCurrentFeedback:feedback];
 		[feedback release];
 		feedback = nil;

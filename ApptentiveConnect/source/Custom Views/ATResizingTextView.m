@@ -114,7 +114,7 @@
 	textBounds.height = MIN(textSize.height, lineHeight * maximumVeritcalLines);
 	textBounds.height += (textFieldInset.bottom + textFieldInset.top);
 	
-	if (textSize.height != currentFrame.size.height) {
+	if (textBounds.height != currentFrame.size.height) {
 //		[UIView animateWithDuration:0.3 animations:^(void) {
 			[self.delegate resizingTextView:self willChangeHeight:textBounds.height];
 			CGRect newFrame = currentFrame;

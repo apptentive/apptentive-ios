@@ -666,10 +666,10 @@
 				499912A5161B6AC800FDA15F /* URL Loading */,
 				4999128216165BD400FDA15F /* ATMessageCenterViewController.h */,
 				4999128316165BD400FDA15F /* ATMessageCenterViewController.m */,
-				490B24A21624B6D50055B812 /* ATTextMessageUserCell.xib */,
+				4999128716165BF200FDA15F /* ATMessageCenterViewController.xib */,
 				490B24A51624B70D0055B812 /* ATTextMessageUserCell.h */,
 				490B24A61624B70D0055B812 /* ATTextMessageUserCell.m */,
-				4999128716165BF200FDA15F /* ATMessageCenterViewController.xib */,
+				490B24A21624B6D50055B812 /* ATTextMessageUserCell.xib */,
 			);
 			name = "Message Center";
 			sourceTree = "<group>";

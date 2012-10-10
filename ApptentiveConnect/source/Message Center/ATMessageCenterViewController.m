@@ -20,6 +20,7 @@
 #define TextViewPadding 2
 
 @interface ATMessageCenterViewController ()
+- (void)relayoutSubviews;
 - (void)styleTextView;
 - (CGRect)formRectToShow;
 - (void)registerForKeyboardNotifications;
@@ -37,6 +38,7 @@
 	CGFloat composerFieldHeight;
 	NSFetchedResultsController *fetchedMessagesController;
 	ATPendingMessage *composingMessage;
+	BOOL animatingTransition;
 }
 @synthesize tableView, containerView, composerView, composerBackgroundView, attachmentButton, textView, sendButton, attachmentView;
 @synthesize userCell;
@@ -86,56 +88,14 @@
 		NSLog(@"got an error loading messages: %@", error);
 		//!! handle me
 	}
+	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
+		[self relayoutSubviews];
+	});
 }
 
 #warning Implement for iOS 4
 - (void)viewDidLayoutSubviews {
-	CGFloat viewHeight = self.view.bounds.size.height;
-	
-	CGRect composerFrame = composerView.frame;
-	CGRect tableFrame = tableView.frame;
-	CGRect containerFrame = containerView.frame;
-	CGRect attachmentFrame = attachmentView.frame;
-	
-	composerFrame.size.height = composerFieldHeight + 2*TextViewPadding;
-	
-	if (!attachmentsVisible) {
-		composerFrame.origin.y = viewHeight - composerView.frame.size.height;
-	} else {
-		composerFrame.origin.y = viewHeight - composerView.frame.size.height - attachmentFrame.size.height;
-	}
-	
-	if (!CGRectEqualToRect(CGRectZero, currentKeyboardFrameInView)) {
-		CGFloat bottomOffset = viewHeight - composerFrame.size.height;
-		CGFloat keyboardOffset = currentKeyboardFrameInView.origin.y - composerFrame.size.height;
-		if (attachmentsVisible) {
-			bottomOffset = bottomOffset - attachmentFrame.size.height;
-			keyboardOffset = keyboardOffset - attachmentFrame.size.height;
-		}
-		composerFrame.origin.y = MIN(bottomOffset, keyboardOffset);
-	}
-	
-	tableFrame.origin.y = 0;
-	tableFrame.size.height = composerFrame.origin.y;
-	containerFrame.size.height = tableFrame.size.height + composerFrame.size.height + attachmentFrame.size.height;
-	attachmentFrame.origin.y = composerFrame.origin.y + composerFrame.size.height;
-	
-	containerView.frame = containerFrame;
-	[containerView setNeedsLayout];
-	tableView.frame = tableFrame;
-	composerView.frame = composerFrame;
-	attachmentView.frame = attachmentFrame;
-	/*
-	if (!CGRectEqualToRect(composerFrame, composerView.frame)) {
-		NSLog(@"composerFrame: %@ != %@", NSStringFromCGRect(composerFrame), NSStringFromCGRect(composerView.frame));
-	}
-	if (!CGRectEqualToRect(attachmentFrame, attachmentView.frame)) {
-		NSLog(@"attachmentFrame: %@ != %@", NSStringFromCGRect(attachmentFrame), NSStringFromCGRect(attachmentView.frame));
-	}
-	if (!CGRectEqualToRect(containerFrame, containerView.frame)) {
-		NSLog(@"containerFrame: %@ != %@", NSStringFromCGRect(containerFrame), NSStringFromCGRect(containerView.frame));
-	}
-	 */
+	[self relayoutSubviews];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -216,14 +176,79 @@
 	if (!CGRectEqualToRect(CGRectZero, currentKeyboardFrameInView)) {
 		[self.textView resignFirstResponder];
 	} else {
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:0.3];
-		[self viewDidLayoutSubviews];
-		[UIView commitAnimations];
+		if (!animatingTransition) {
+			[UIView animateWithDuration:0.3 animations:^(void){
+				animatingTransition = YES;
+				[self relayoutSubviews];
+			} completion:^(BOOL finished) {
+				animatingTransition = NO;
+				[self scrollToBottomOfTableView];
+			}];
+		}
 	}
 }
 
 #pragma mark Private
+- (void)relayoutSubviews {
+	CGFloat viewHeight = self.view.bounds.size.height;
+	
+	CGRect composerFrame = composerView.frame;
+	CGRect tableFrame = tableView.frame;
+	CGRect containerFrame = containerView.frame;
+	CGRect attachmentFrame = attachmentView.frame;
+	
+	composerFrame.size.height = composerFieldHeight + 2*TextViewPadding;
+	
+	if (!attachmentsVisible) {
+		composerFrame.origin.y = viewHeight - composerView.frame.size.height;
+	} else {
+		composerFrame.origin.y = viewHeight - composerView.frame.size.height - attachmentFrame.size.height;
+	}
+	
+	if (!CGRectEqualToRect(CGRectZero, currentKeyboardFrameInView)) {
+		CGFloat bottomOffset = viewHeight - composerFrame.size.height;
+		CGFloat keyboardOffset = currentKeyboardFrameInView.origin.y - composerFrame.size.height;
+		if (attachmentsVisible) {
+			bottomOffset = bottomOffset - attachmentFrame.size.height;
+			keyboardOffset = keyboardOffset - attachmentFrame.size.height;
+		}
+		composerFrame.origin.y = MIN(bottomOffset, keyboardOffset);
+	}
+	
+	tableFrame.origin.y = 0;
+	tableFrame.size.height = composerFrame.origin.y;
+	containerFrame.size.height = tableFrame.size.height + composerFrame.size.height + attachmentFrame.size.height;
+	attachmentFrame.origin.y = composerFrame.origin.y + composerFrame.size.height;
+	
+	//containerView.frame = containerFrame;
+	//[containerView setNeedsLayout];
+	tableView.frame = tableFrame;
+	composerView.frame = composerFrame;
+	attachmentView.frame = attachmentFrame;
+	/*
+	 if (!CGRectEqualToRect(composerFrame, composerView.frame)) {
+	 NSLog(@"composerFrame: %@ != %@", NSStringFromCGRect(composerFrame), NSStringFromCGRect(composerView.frame));
+	 }
+	 if (!CGRectEqualToRect(attachmentFrame, attachmentView.frame)) {
+	 NSLog(@"attachmentFrame: %@ != %@", NSStringFromCGRect(attachmentFrame), NSStringFromCGRect(attachmentView.frame));
+	 }
+	 if (!CGRectEqualToRect(containerFrame, containerView.frame)) {
+	 NSLog(@"containerFrame: %@ != %@", NSStringFromCGRect(containerFrame), NSStringFromCGRect(containerView.frame));
+	 }
+	 */
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+	[self relayoutSubviews];
+	
+	CGRect containerFrame = containerView.frame;
+	containerFrame.size.height = self.tableView.frame.size.height + self.composerView.frame.size.height + self.attachmentView.frame.size.height;
+	containerView.frame = containerFrame;
+	[containerView setNeedsLayout];
+	[self relayoutSubviews];
+}
+
 - (void)styleTextView {
 	self.textView.placeholder = @"What's on your mind?";
 	self.textView.clipsToBounds = YES;
@@ -265,7 +290,8 @@
 }
 
 - (void)resizingTextView:(ATResizingTextView *)textView didChangeHeight:(CGFloat)height {
-	[self viewDidLayoutSubviews];
+	[self relayoutSubviews];
+	[self scrollToBottomOfTableView];
 }
 
 - (BOOL)resizingTextViewShouldBeginEditing:(ATResizingTextView *)textView {
@@ -313,13 +339,19 @@
 	NSNumber *duration = [[aNotification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey];
 	NSNumber *curve = [[aNotification userInfo] objectForKey:UIKeyboardAnimationCurveUserInfoKey];
 	
-	
-	[UIView beginAnimations:nil context:nil];
-	[UIView setAnimationDuration:[duration floatValue]];
-	[UIView setAnimationCurve:[curve intValue]];
-	currentKeyboardFrameInView = CGRectIntersection(self.view.frame, kbAdjustedFrame);
-	[self viewDidLayoutSubviews];
-	[UIView commitAnimations];
+	if (!animatingTransition) {
+		[UIView animateWithDuration:[duration floatValue] animations:^(void){
+			animatingTransition = YES;
+			[UIView setAnimationCurve:[curve intValue]];
+			currentKeyboardFrameInView = CGRectIntersection(self.view.frame, kbAdjustedFrame);
+			[self relayoutSubviews];
+		} completion:^(BOOL finished) {
+			animatingTransition = NO;
+			[self scrollToBottomOfTableView];
+		}];
+	} else {
+		currentKeyboardFrameInView = CGRectIntersection(self.view.frame, kbAdjustedFrame);
+	}
 }
 
 - (void)keyboardWasShown:(NSNotification *)aNotification {
@@ -330,12 +362,19 @@
 	NSNumber *duration = [[aNotification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey];
 	NSNumber *curve = [[aNotification userInfo] objectForKey:UIKeyboardAnimationCurveUserInfoKey];
 	
-	[UIView beginAnimations:nil context:nil];
-	[UIView setAnimationDuration:[duration floatValue]];
-	[UIView setAnimationCurve:[curve intValue]];
-	currentKeyboardFrameInView = CGRectZero;
-	[self viewDidLayoutSubviews];
-	[UIView commitAnimations];
+	if (!animatingTransition) {
+		[UIView animateWithDuration:[duration floatValue] animations:^(void){
+			animatingTransition = YES;
+			[UIView setAnimationCurve:[curve intValue]];
+			currentKeyboardFrameInView = CGRectZero;
+			[self relayoutSubviews];
+		} completion:^(BOOL finished) {
+			animatingTransition = NO;
+			[self scrollToBottomOfTableView];
+		}];
+	} else {
+		currentKeyboardFrameInView = CGRectZero;
+	}
 }
 
 #pragma mark UIScrollViewDelegate

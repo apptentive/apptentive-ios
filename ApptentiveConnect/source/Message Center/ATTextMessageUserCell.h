@@ -14,6 +14,8 @@
 @property (retain, nonatomic) IBOutlet UIImageView *userIcon;
 @property (retain, nonatomic) IBOutlet UIImageView *messageBubbleImage;
 @property (retain, nonatomic) IBOutlet TTTAttributedLabel *messageText;
+@property (retain, nonatomic) IBOutlet UIImageView *composingBubble;
+@property (nonatomic, assign) BOOL isComposing;
 
 - (CGFloat)cellHeightForWidth:(CGFloat)width;
 @end

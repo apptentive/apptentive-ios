@@ -49,4 +49,23 @@
 	}
 	return message;
 }
+
++ (void)clearComposingMessages {
+	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
+	
+	@synchronized(self) {
+		NSFetchRequest *fetchTypes = [[NSFetchRequest alloc] initWithEntityName:@"ATTextMessage"];
+		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingState == %d)", ATPendingMessageStateComposing];
+		fetchTypes.predicate = fetchPredicate;
+		NSError *fetchError = nil;
+		NSArray *fetchArray = [context executeFetchRequest:fetchTypes error:&fetchError];
+		
+		if (fetchArray) {
+			for (NSManagedObject *fetchedObject in fetchArray) {
+				[context deleteObject:fetchedObject];
+			}
+			[context save:nil];
+		}
+	}
+}
 @end

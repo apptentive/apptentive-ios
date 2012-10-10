@@ -20,4 +20,5 @@
 
 + (ATTextMessage *)findMessageWithPendingID:(NSString *)pendingID;
 + (ATTextMessage *)createMessageWithPendingMessage:(ATPendingMessage *)pendingMessage;
++ (void)clearComposingMessages;
 @end

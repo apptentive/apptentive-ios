@@ -51,6 +51,7 @@
 #warning Fixme
 - (void)viewDidLoad {
     [super viewDidLoad];
+	[ATTextMessage clearComposingMessages];
 	self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 	self.tableView.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.0];
 	self.tableView.scrollsToTop = YES;
@@ -181,10 +182,19 @@
 
 - (IBAction)sendPressed:(id)sender {
 	@synchronized(self) {
-		ATPendingMessage *message = [[ATPendingMessage alloc] init];
+		ATPendingMessage *message = nil;
+		if (composingMessage) {
+			message = composingMessage;
+			composingMessage = nil;
+		} else {
+			message = [[ATPendingMessage alloc] init];
+		}
 		message.body = [self.textView text];
 		
-		ATTextMessage *textMessage = [ATTextMessage createMessageWithPendingMessage:message];
+		ATTextMessage *textMessage = [ATTextMessage findMessageWithPendingID:message.pendingMessageID];
+		if (!textMessage) {
+			textMessage = [ATTextMessage createMessageWithPendingMessage:message];
+		}
 		textMessage.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
 		[[[ATBackend sharedBackend] managedObjectContext] save:nil];
 		
@@ -257,6 +267,26 @@
 
 - (BOOL)resizingTextViewShouldBeginEditing:(ATResizingTextView *)textView {
 	return YES;
+}
+
+- (void)resizingTextViewDidChange:(ATResizingTextView *)aTextView {
+	if (aTextView.text && ![aTextView.text isEqualToString:@""]) {
+		if (!composingMessage) {
+			composingMessage = [[ATPendingMessage alloc] init];
+		}
+		composingMessage.body = aTextView.text;
+		ATMessage *message = [ATTextMessage findMessageWithPendingID:composingMessage.pendingMessageID];
+		if (!message) {
+			message = [ATTextMessage createMessageWithPendingMessage:composingMessage];
+		}
+	} else {
+		if (composingMessage) {
+			ATMessage *message = [ATTextMessage findMessageWithPendingID:composingMessage.pendingMessageID];
+			NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
+			[context deleteObject:message];
+			[composingMessage release], composingMessage = nil;
+		}
+	}
 }
 
 #pragma mark Keyboard Handling
@@ -343,6 +373,7 @@
 		cell.userIcon.layer.cornerRadius = 4.0;
 		cell.userIcon.layer.masksToBounds = YES;
 		cell.messageBubbleImage.image = [[ATBackend imageNamed:@"at_chat_bubble"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 27, 21)];
+		cell.composingBubble.image = [ATBackend imageNamed:@"at_composing_bubble"];
 		UIView *backgroundView = [[UIView alloc] init];
 		backgroundView.backgroundColor = [UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]];
 		cell.backgroundView = backgroundView;
@@ -351,6 +382,7 @@
 	}
 	ATMessage *message = (ATMessage *)[fetchedMessagesController objectAtIndexPath:indexPath];
 	//cell.messageText.text = [[NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)[message.creationTime doubleValue]] description];
+	cell.isComposing = NO;
 	if ([message isKindOfClass:[ATTextMessage class]]) {
 		NSString *messageBody = [(ATTextMessage *)message body];
 		cell.messageText.text = messageBody;
@@ -366,7 +398,8 @@
 			[sending release], sending = nil;
 			[sFinal release], sFinal = nil;
 		} else if ([[message pendingState] intValue] == ATPendingMessageStateComposing) {
-			cell.textLabel.text = @"Composing…";
+			cell.isComposing = YES;
+			cell.textLabel.text = @"";
 		}
 	} else {
 		cell.messageText.text = [message description];
@@ -390,7 +423,7 @@
 			[self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
 			break;
 		case NSFetchedResultsChangeDelete:
-			[self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+			[self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
 			break;
 		case NSFetchedResultsChangeMove:
 			[self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];

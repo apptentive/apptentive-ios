@@ -212,7 +212,7 @@
 }
 
 - (void)textViewDidChange:(UITextView *)textView {
-	if (self.delegate && [self.delegate respondsToSelector:@selector(textViewDidChange:)]) {
+	if (self.delegate && [self.delegate respondsToSelector:@selector(resizingTextViewDidChange:)]) {
 		[self.delegate resizingTextViewDidChange:self];
 	}
 	[self resizeTextView];

@@ -17,14 +17,14 @@ typedef enum {
 
 @interface ATMessage : NSManagedObject
 
-@property (nonatomic, retain) NSString * apptentiveID;
-@property (nonatomic, retain) NSNumber * creationTime;
-@property (nonatomic, retain) NSString * pendingMessageID;
-@property (nonatomic, retain) NSNumber * pendingState;
-@property (nonatomic, retain) NSNumber * priority;
-@property (nonatomic, retain) NSString * recipientID;
-@property (nonatomic, retain) NSNumber * seenByUser;
-@property (nonatomic, retain) NSString * senderID;
+@property (nonatomic, retain) NSString *apptentiveID;
+@property (nonatomic, retain) NSNumber *creationTime;
+@property (nonatomic, retain) NSString *pendingMessageID;
+@property (nonatomic, retain) NSNumber *pendingState;
+@property (nonatomic, retain) NSNumber *priority;
+@property (nonatomic, retain) NSString *recipientID;
+@property (nonatomic, retain) NSNumber *seenByUser;
+@property (nonatomic, retain) NSString *senderID;
 @property (nonatomic, retain) NSSet *displayTypes;
 
 + (ATMessage *)newMessageFromJSON:(NSDictionary *)json;

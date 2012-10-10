@@ -10,6 +10,7 @@
 #import "ATBackend.h"
 #import "ATMessage.h"
 #import "ATPersonUpdater.h"
+#import "ATTextMessage.h"
 #import "ATWebClient.h"
 #import "ATWebClient+MessageCenter.h"
 
@@ -135,9 +136,22 @@
 }
 
 - (BOOL)processResult:(NSDictionary *)jsonMessage {
+	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
+	ATTextMessage *textMessage = [ATTextMessage findMessageWithPendingID:message.pendingMessageID];
+	textMessage.pendingState = [NSNumber numberWithInt:ATPendingMessageStateConfirmed];
+	textMessage.apptentiveID = [jsonMessage objectForKey:@"id"];
+	textMessage.senderID = [jsonMessage objectForKey:@"sender_id"];
+	
+	NSError *error = nil;
+	if (![context save:&error]) {
+		NSLog(@"Failed to save new message: %@", error);
+		return NO;
+	}
+	return YES;
+	/*
+	
 	NSMutableDictionary *mutableJSON = [[jsonMessage mutableCopy] autorelease];
-	NSTimeInterval timeInterval = [[NSDate date] timeIntervalSince1970];
-	NSNumber *d = [NSNumber numberWithDouble:timeInterval];
+	NSNumber *d = [NSNumber numberWithDouble:message.creationTime];
 	[mutableJSON setObject:message.body forKey:@"body"];
 	[mutableJSON setObject:@[@"message center"] forKey:@"display"];
 	[mutableJSON setObject:@"text_message" forKey:@"type"];
@@ -156,5 +170,6 @@
 		return YES;
 	}
 	return NO;
+	 */
 }
 @end

@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ATTextMessageUserCell : UITableViewCell
+#import "TTTAttributedLabel.h"
 
+@interface ATTextMessageUserCell : UITableViewCell
+@property (retain, nonatomic) IBOutlet UIImageView *userIcon;
+@property (retain, nonatomic) IBOutlet UIImageView *messageBubbleImage;
+@property (retain, nonatomic) IBOutlet TTTAttributedLabel *messageText;
+
+- (CGFloat)cellHeightForWidth:(CGFloat)width;
 @end

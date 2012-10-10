@@ -17,12 +17,13 @@
 #import "ATTaskQueue.h"
 #import "ATTextMessage.h"
 
-#define TextViewPadding 4
+#define TextViewPadding 2
 
 @interface ATMessageCenterViewController ()
 - (void)styleTextView;
 - (CGRect)formRectToShow;
 - (void)registerForKeyboardNotifications;
+- (void)keyboardWillBeShown:(NSNotification *)aNotification;
 - (void)keyboardWasShown:(NSNotification *)aNotification;
 - (void)keyboardWillBeHidden:(NSNotification *)aNotification;
 - (NSFetchedResultsController *)fetchedMessagesController;
@@ -35,8 +36,10 @@
 	CGRect currentKeyboardFrameInView;
 	CGFloat composerFieldHeight;
 	NSFetchedResultsController *fetchedMessagesController;
+	ATPendingMessage *composingMessage;
 }
 @synthesize tableView, containerView, composerView, composerBackgroundView, attachmentButton, textView, sendButton, attachmentView;
+@synthesize userCell;
 
 - (id)init {
 	self = [super initWithNibName:@"ATMessageCenterViewController" bundle:[ATConnect resourceBundle]];
@@ -48,6 +51,8 @@
 #warning Fixme
 - (void)viewDidLoad {
     [super viewDidLoad];
+	self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+	self.tableView.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.0];
 	self.tableView.scrollsToTop = YES;
 	firstLoad = YES;
 	[self registerForKeyboardNotifications];
@@ -56,6 +61,13 @@
 	[self styleTextView];
 	
 	self.composerBackgroundView.image = [[ATBackend imageNamed:@"at_inbox_composer_bg"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 0, 29, 19)];
+	[self.attachmentButton setImage:[ATBackend imageNamed:@"at_plus_button"] forState:UIControlStateNormal];
+	[self.cameraButton setImage:[ATBackend imageNamed:@"at_attachment_photo_icon"] forState:UIControlStateNormal];
+	[self.locationButton setImage:[ATBackend imageNamed:@"at_attachment_location"] forState:UIControlStateNormal];
+	[self.emailButton setImage:[ATBackend imageNamed:@"at_attachment_email"] forState:UIControlStateNormal];
+	[self.iconButton setImage:[ATBackend imageNamed:@"at_apptentive_icon_small"] forState:UIControlStateNormal];
+	[self.tableView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]]];
+	[self.attachmentView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_attachment_bg"]]];
 	
 	[self.view addSubview:self.containerView];
 	
@@ -112,7 +124,7 @@
 	tableView.frame = tableFrame;
 	composerView.frame = composerFrame;
 	attachmentView.frame = attachmentFrame;
-	
+	/*
 	if (!CGRectEqualToRect(composerFrame, composerView.frame)) {
 		NSLog(@"composerFrame: %@ != %@", NSStringFromCGRect(composerFrame), NSStringFromCGRect(composerView.frame));
 	}
@@ -122,6 +134,7 @@
 	if (!CGRectEqualToRect(containerFrame, containerView.frame)) {
 		NSLog(@"containerFrame: %@ != %@", NSStringFromCGRect(containerFrame), NSStringFromCGRect(containerView.frame));
 	}
+	 */
 }
 
 - (void)didReceiveMemoryWarning {
@@ -139,6 +152,10 @@
 	[sendButton release];
 	[attachmentButton release];
 	[fetchedMessagesController release], fetchedMessagesController = nil;
+	[_cameraButton release];
+	[_locationButton release];
+	[_emailButton release];
+	[_iconButton release];
 	[super dealloc];
 }
 
@@ -151,6 +168,10 @@
 	[self setTextView:nil];
 	[self setSendButton:nil];
 	[self setAttachmentButton:nil];
+	[self setCameraButton:nil];
+	[self setLocationButton:nil];
+	[self setEmailButton:nil];
+	[self setIconButton:nil];
 	[super viewDidUnload];
 }
 
@@ -162,6 +183,11 @@
 	@synchronized(self) {
 		ATPendingMessage *message = [[ATPendingMessage alloc] init];
 		message.body = [self.textView text];
+		
+		ATTextMessage *textMessage = [ATTextMessage createMessageWithPendingMessage:message];
+		textMessage.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
+		[[[ATBackend sharedBackend] managedObjectContext] save:nil];
+		
 		ATMessageTask *task = [[ATMessageTask alloc] init];
 		task.message = message;
 		[[ATTaskQueue sharedTaskQueue] addTask:task];
@@ -210,15 +236,19 @@
 
 - (void)scrollToBottomOfTableView {
 	id<NSFetchedResultsSectionInfo> sectionInfo = [[fetchedMessagesController sections] objectAtIndex:0];
-	NSUInteger row = MAX(0, [sectionInfo numberOfObjects] - 1);
-	NSIndexPath *path = [NSIndexPath indexPathForRow:row inSection:0];
-	[self.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+	if ([sectionInfo numberOfObjects] > 0) {
+		NSUInteger row = [sectionInfo numberOfObjects] - 1;
+		NSIndexPath *path = [NSIndexPath indexPathForRow:row inSection:0];
+		[self.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+	}
 }
 
 #pragma mark UITextViewDelegate
 - (void)resizingTextView:(ATResizingTextView *)textView willChangeHeight:(CGFloat)height {
-	composerFieldHeight = height;
-	[self viewDidLayoutSubviews];
+	if (composerFieldHeight != height) {
+		composerFieldHeight = height;
+		//[self viewDidLayoutSubviews];
+	}
 }
 
 - (void)resizingTextView:(ATResizingTextView *)textView didChangeHeight:(CGFloat)height {
@@ -236,18 +266,30 @@
 }
 
 - (void)registerForKeyboardNotifications {
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeShown:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardDidShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];
 }
 
-- (void)keyboardWasShown:(NSNotification *)aNotification {
+
+- (void)keyboardWillBeShown:(NSNotification *)aNotification {
 	attachmentsVisible = NO;
 	NSDictionary *info = [aNotification userInfo];
 	CGRect kbFrame = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
 	CGRect kbAdjustedFrame = [self.view.window convertRect:kbFrame toView:self.view];
+	NSNumber *duration = [[aNotification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+	NSNumber *curve = [[aNotification userInfo] objectForKey:UIKeyboardAnimationCurveUserInfoKey];
 	
+	
+	[UIView beginAnimations:nil context:nil];
+	[UIView setAnimationDuration:[duration floatValue]];
+	[UIView setAnimationCurve:[curve intValue]];
 	currentKeyboardFrameInView = CGRectIntersection(self.view.frame, kbAdjustedFrame);
 	[self viewDidLayoutSubviews];
+	[UIView commitAnimations];
+}
+
+- (void)keyboardWasShown:(NSNotification *)aNotification {
 	[self scrollToBottomOfTableView];
 }
 
@@ -268,6 +310,11 @@
 	return YES;
 }
 
+- (CGFloat)tableView:(UITableView *)aTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	ATTextMessageUserCell *cell = (ATTextMessageUserCell *)[self tableView:aTableView cellForRowAtIndexPath:indexPath];
+	return [cell cellHeightForWidth:aTableView.bounds.size.width];
+}
+
 #pragma mark UITableViewDelegate
 - (void)tableView:(UITableView *)aTableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (firstLoad && indexPath.row == 0 && indexPath.section == 0) {
@@ -283,19 +330,47 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	static NSString *CellIdentifier = @"ATMessageCell";
-	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+	static NSString *CellIdentifier = @"ATTextMessageUserCell";
+	ATTextMessageUserCell *cell = (ATTextMessageUserCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (!cell) {
-		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+		UINib *nib = [UINib nibWithNibName:@"ATTextMessageUserCell" bundle:[ATConnect resourceBundle]];
+		[nib instantiateWithOwner:self options:nil];
+		cell = userCell;
+		[[cell retain] autorelease];
+		[userCell release], userCell = nil;
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
+		cell.userIcon.image = [ATBackend imageNamed:@"profile-photo"];
+		cell.userIcon.layer.cornerRadius = 4.0;
+		cell.userIcon.layer.masksToBounds = YES;
+		cell.messageBubbleImage.image = [[ATBackend imageNamed:@"at_chat_bubble"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 27, 21)];
+		UIView *backgroundView = [[UIView alloc] init];
+		backgroundView.backgroundColor = [UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]];
+		cell.backgroundView = backgroundView;
+		[backgroundView release];
+		cell.messageText.dataDetectorTypes = UIDataDetectorTypeAll;
 	}
 	ATMessage *message = (ATMessage *)[fetchedMessagesController objectAtIndexPath:indexPath];
+	//cell.messageText.text = [[NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)[message.creationTime doubleValue]] description];
 	if ([message isKindOfClass:[ATTextMessage class]]) {
-		cell.textLabel.text = [(ATTextMessage *)message body];
+		NSString *messageBody = [(ATTextMessage *)message body];
+		cell.messageText.text = messageBody;
+		if ([[message pendingState] intValue] == ATPendingMessageStateSending) {
+			NSAttributedString *sending = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ ", NSLocalizedString(@"Sending\n", @"Sending prefix on messages that are sending")] attributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:15]}];
+			
+			NSAttributedString *messageText = [[NSAttributedString alloc] initWithString:messageBody attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15]}];
+			NSMutableAttributedString *sFinal = [[NSMutableAttributedString alloc] initWithAttributedString:sending];
+			[sFinal appendAttributedString:messageText];
+			
+			cell.messageText.attributedText = sFinal;
+			[messageText release], messageText = nil;
+			[sending release], sending = nil;
+			[sFinal release], sFinal = nil;
+		} else if ([[message pendingState] intValue] == ATPendingMessageStateComposing) {
+			cell.textLabel.text = @"Composing…";
+		}
 	} else {
-		cell.textLabel.text = [message description];
+		cell.messageText.text = [message description];
 	}
-	cell.detailTextLabel.text = [[NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)[message.creationTime doubleValue]] description];
 	return cell;
 }
 

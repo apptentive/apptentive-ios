@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		490B24A31624B6D50055B812 /* ATTextMessageUserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 490B24A21624B6D50055B812 /* ATTextMessageUserCell.xib */; };
+		490B24A71624B70E0055B812 /* ATTextMessageUserCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 490B24A51624B70D0055B812 /* ATTextMessageUserCell.h */; };
+		490B24A81624B70E0055B812 /* ATTextMessageUserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 490B24A61624B70D0055B812 /* ATTextMessageUserCell.m */; };
 		490B8158144274EF009801E9 /* ATCustomButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 490B8156144274EF009801E9 /* ATCustomButton.h */; };
 		490B8159144274EF009801E9 /* ATCustomButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 490B8157144274EF009801E9 /* ATCustomButton.m */; };
 		490B815A144274EF009801E9 /* ATCustomButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 490B8157144274EF009801E9 /* ATCustomButton.m */; };
@@ -162,6 +165,9 @@
 		49AA1021138B44C00082887A /* ATInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AA101E138B44C00082887A /* ATInfoViewController.m */; };
 		49AA1023138B498C0082887A /* ATInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA1022138B498C0082887A /* ATInfoViewController.xib */; };
 		49AA1025138B49A50082887A /* ATInfoViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA1024138B49A50082887A /* ATInfoViewController_iPad.xib */; };
+		49ADE8D8162613BA00DD8634 /* TTTAttributedLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 49ADE8D6162613BA00DD8634 /* TTTAttributedLabel.h */; };
+		49ADE8D9162613BA00DD8634 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 49ADE8D7162613BA00DD8634 /* TTTAttributedLabel.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		49ADE8DC1626167F00DD8634 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49ADE8DB1626167F00DD8634 /* CoreText.framework */; };
 		49B3D96B133E6D6400B5A5CD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D968133E6D6400B5A5CD /* CoreGraphics.framework */; };
 		49B3D96C133E6D6400B5A5CD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D969133E6D6400B5A5CD /* QuartzCore.framework */; };
 		49B3D96D133E6D6400B5A5CD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D96A133E6D6400B5A5CD /* UIKit.framework */; };
@@ -217,6 +223,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		490B24A21624B6D50055B812 /* ATTextMessageUserCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ATTextMessageUserCell.xib; path = xibs/ATTextMessageUserCell.xib; sourceTree = SOURCE_ROOT; };
+		490B24A51624B70D0055B812 /* ATTextMessageUserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATTextMessageUserCell.h; path = "Message Center/ATTextMessageUserCell.h"; sourceTree = "<group>"; };
+		490B24A61624B70D0055B812 /* ATTextMessageUserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATTextMessageUserCell.m; path = "Message Center/ATTextMessageUserCell.m"; sourceTree = "<group>"; };
 		490B8156144274EF009801E9 /* ATCustomButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATCustomButton.h; sourceTree = "<group>"; };
 		490B8157144274EF009801E9 /* ATCustomButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATCustomButton.m; sourceTree = "<group>"; };
 		490B815B1442751F009801E9 /* ATToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATToolbar.h; sourceTree = "<group>"; };
@@ -338,6 +347,9 @@
 		49AA101E138B44C00082887A /* ATInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATInfoViewController.m; sourceTree = "<group>"; };
 		49AA1022138B498C0082887A /* ATInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATInfoViewController.xib; sourceTree = "<group>"; };
 		49AA1024138B49A50082887A /* ATInfoViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATInfoViewController_iPad.xib; sourceTree = "<group>"; };
+		49ADE8D6162613BA00DD8634 /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTTAttributedLabel.h; path = TTTAttributedLabel/TTTAttributedLabel.h; sourceTree = "<group>"; };
+		49ADE8D7162613BA00DD8634 /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TTTAttributedLabel.m; path = TTTAttributedLabel/TTTAttributedLabel.m; sourceTree = "<group>"; };
+		49ADE8DB1626167F00DD8634 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		49B3D968133E6D6400B5A5CD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		49B3D969133E6D6400B5A5CD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		49B3D96A133E6D6400B5A5CD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -381,6 +393,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49ADE8DC1626167F00DD8634 /* CoreText.framework in Frameworks */,
 				4988FB5416212BD4000A7CB7 /* CoreData.framework in Frameworks */,
 				49B3D96F133E6DE700B5A5CD /* CoreTelephony.framework in Frameworks */,
 				49B3D96B133E6D6400B5A5CD /* CoreGraphics.framework in Frameworks */,
@@ -598,6 +611,7 @@
 		496DC3811333D35600743F65 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				49ADE8DB1626167F00DD8634 /* CoreText.framework */,
 				4988FB5316212BD4000A7CB7 /* CoreData.framework */,
 				49B3D968133E6D6400B5A5CD /* CoreGraphics.framework */,
 				49B3D96E133E6DE700B5A5CD /* CoreTelephony.framework */,
@@ -652,6 +666,9 @@
 				499912A5161B6AC800FDA15F /* URL Loading */,
 				4999128216165BD400FDA15F /* ATMessageCenterViewController.h */,
 				4999128316165BD400FDA15F /* ATMessageCenterViewController.m */,
+				490B24A21624B6D50055B812 /* ATTextMessageUserCell.xib */,
+				490B24A51624B70D0055B812 /* ATTextMessageUserCell.h */,
+				490B24A61624B70D0055B812 /* ATTextMessageUserCell.m */,
 				4999128716165BF200FDA15F /* ATMessageCenterViewController.xib */,
 			);
 			name = "Message Center";
@@ -677,14 +694,14 @@
 				4961A3FB161BB8D400E30037 /* ATPerson.m */,
 				4988FB3B162109FF000A7CB7 /* ATDeviceInfo.h */,
 				4988FB3C162109FF000A7CB7 /* ATDeviceInfo.m */,
+				4988FB4316212B40000A7CB7 /* ATMessage.h */,
+				4988FB4416212B40000A7CB7 /* ATMessage.m */,
 				4988FB4F16212B44000A7CB7 /* ATTextMessage.h */,
 				4988FB5016212B44000A7CB7 /* ATTextMessage.m */,
 				4988FB4B16212B42000A7CB7 /* ATMessageDisplayType.h */,
 				4988FB4C16212B42000A7CB7 /* ATMessageDisplayType.m */,
 				4988FB4716212B41000A7CB7 /* ATUpgradeRequestMessage.h */,
 				4988FB4816212B41000A7CB7 /* ATUpgradeRequestMessage.m */,
-				4988FB4316212B40000A7CB7 /* ATMessage.h */,
-				4988FB4416212B40000A7CB7 /* ATMessage.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -779,6 +796,8 @@
 		49D1123913359BA000603373 /* ext */ = {
 			isa = PBXGroup;
 			children = (
+				49ADE8D6162613BA00DD8634 /* TTTAttributedLabel.h */,
+				49ADE8D7162613BA00DD8634 /* TTTAttributedLabel.m */,
 				49D1123A13359BA000603373 /* NSData+ATBase64.h */,
 				49D1123B13359BA000603373 /* NSData+ATBase64.m */,
 				499B56C415D305880063C23C /* PrefixedJSONKit */,
@@ -882,6 +901,8 @@
 				4988FB4D16212B43000A7CB7 /* ATMessageDisplayType.h in Headers */,
 				4988FB5116212B44000A7CB7 /* ATTextMessage.h in Headers */,
 				4988FB9616213D1F000A7CB7 /* ATPendingMessage.h in Headers */,
+				490B24A71624B70E0055B812 /* ATTextMessageUserCell.h in Headers */,
+				49ADE8D8162613BA00DD8634 /* TTTAttributedLabel.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1000,6 +1021,7 @@
 				490B816C14427A95009801E9 /* ATFeedbackController.xib in Resources */,
 				496F29E014496711005B7C01 /* ATSimpleImageViewController.xib in Resources */,
 				4999128F16166C2F00FDA15F /* ATMessageCenterViewController.xib in Resources */,
+				490B24A31624B6D50055B812 /* ATTextMessageUserCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1114,6 +1136,8 @@
 				4988FB4E16212B43000A7CB7 /* ATMessageDisplayType.m in Sources */,
 				4988FB5216212B44000A7CB7 /* ATTextMessage.m in Sources */,
 				4988FB9716213D1F000A7CB7 /* ATPendingMessage.m in Sources */,
+				490B24A81624B70E0055B812 /* ATTextMessageUserCell.m in Sources */,
+				49ADE8D9162613BA00DD8634 /* TTTAttributedLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

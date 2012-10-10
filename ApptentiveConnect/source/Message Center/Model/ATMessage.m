@@ -16,7 +16,8 @@
 
 @dynamic apptentiveID;
 @dynamic creationTime;
-@dynamic pending;
+@dynamic pendingMessageID;
+@dynamic pendingState;
 @dynamic priority;
 @dynamic recipientID;
 @dynamic seenByUser;
@@ -45,41 +46,8 @@
 	
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
 	
-	ATMessageDisplayType *messageCenterType = nil;
-	ATMessageDisplayType *modalType = nil;
-	
-	@synchronized(self) {
-		NSFetchRequest *fetchTypes = [[NSFetchRequest alloc] initWithEntityName:@"ATMessageDisplayType"];
-		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(displayType == %d) || (displayType == %d)", ATMessageDisplayTypeTypeMessageCenter, ATMessageDisplayTypeTypeModal];
-		fetchTypes.predicate = fetchPredicate;
-		NSError *fetchError = nil;
-		NSArray *fetchArray = [context executeFetchRequest:fetchTypes error:&fetchError];
-		
-		if (!fetchArray) {
-			[NSException raise:NSGenericException format:@"%@", [fetchError description]];
-		} else {
-			for (NSManagedObject *fetchedObject in fetchArray) {
-				ATMessageDisplayType *dt = (ATMessageDisplayType *)fetchedObject;
-				ATMessageDisplayTypeType displayType = (ATMessageDisplayTypeType)[[dt displayType] intValue];
-				if (displayType == ATMessageDisplayTypeTypeModal) {
-					modalType = dt;
-				} else if (displayType == ATMessageDisplayTypeTypeMessageCenter) {
-					messageCenterType = dt;
-				}
-			}
-		}
-		
-		if (!messageCenterType) {
-			messageCenterType = [[ATMessageDisplayType alloc] initWithEntity:[NSEntityDescription entityForName:@"ATMessageDisplayType" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
-			messageCenterType.displayType = [NSNumber numberWithInt:ATMessageDisplayTypeTypeMessageCenter];
-			[context save:nil];
-		}
-		if (!modalType) {
-			modalType = [[ATMessageDisplayType alloc] initWithEntity:[NSEntityDescription entityForName:@"ATMessageDisplayType" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
-			modalType.displayType = [NSNumber numberWithInt:ATMessageDisplayTypeTypeModal];
-			[context save:nil];
-		}
-	}
+	ATMessageDisplayType *messageCenterType = [ATMessageDisplayType messageCenterType];
+	ATMessageDisplayType *modalType = [ATMessageDisplayType modalType];
 	
 	NSManagedObject *message = [[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:objectName inManagedObjectContext:context] insertIntoManagedObjectContext:context];
 	[message setValue:[messageJSON objectForKey:@"id"] forKey:@"apptentiveID"];

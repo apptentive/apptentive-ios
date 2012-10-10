@@ -21,6 +21,10 @@ typedef enum {
 
 @property (nonatomic, retain) NSNumber *displayType;
 @property (nonatomic, retain) NSSet *messages;
+
++ (void)setupSingletons;
++ (ATMessageDisplayType *)messageCenterType;
++ (ATMessageDisplayType *)modalType;
 @end
 
 @interface ATMessageDisplayType (CoreDataGeneratedAccessors)

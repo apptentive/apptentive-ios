@@ -3,7 +3,8 @@
     <entity name="ATMessage" representedClassName="ATMessage" isAbstract="YES" syncable="YES">
         <attribute name="apptentiveID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="creationTime" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="pending" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
+        <attribute name="pendingMessageID" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="pendingState" attributeType="Integer 32" defaultValueString="YES" syncable="YES"/>
         <attribute name="priority" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="recipientID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="seenByUser" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
@@ -22,8 +23,8 @@
         <attribute name="forced" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
     </entity>
     <elements>
+        <element name="ATMessage" positionX="-189" positionY="-327" width="128" height="178"/>
         <element name="ATMessageDisplayType" positionX="52" positionY="-171" width="128" height="73"/>
-        <element name="ATMessage" positionX="-189" positionY="-327" width="128" height="163"/>
         <element name="ATTextMessage" positionX="-290" positionY="-90" width="128" height="73"/>
         <element name="ATUpgradeRequestMessage" positionX="-306" positionY="90" width="128" height="60"/>
     </elements>

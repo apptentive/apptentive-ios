@@ -19,6 +19,7 @@
 #import "ATWebClient.h"
 #import "ATPersonUpdater.h"
 #import "ATDeviceUpdater.h"
+#import "ATMessageDisplayType.h"
 
 NSString *const ATBackendNewAPIKeyNotification = @"ATBackendNewAPIKeyNotification";
 NSString *const ATUUIDPreferenceKey = @"ATUUIDPreferenceKey";
@@ -49,6 +50,8 @@ static ATBackend *sharedBackend = nil;
 		if (sharedBackend == nil) {
 			sharedBackend = [[self alloc] init];
 			[ApptentiveMetrics sharedMetrics];
+			
+			[ATMessageDisplayType setupSingletons];
 		}
 	}
 	return sharedBackend;
@@ -334,10 +337,10 @@ static ATBackend *sharedBackend = nil;
          Lightweight migration will only work for a limited set of schema changes; consult "Core Data Model Versioning and Data Migration Programming Guide" for details.
          
          */
+		[[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        abort();
+//        abort();
     }
-    
     return persistentStoreCoordinator;
 }
 

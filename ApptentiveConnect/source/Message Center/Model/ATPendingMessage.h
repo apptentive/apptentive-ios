@@ -10,8 +10,12 @@
 
 @interface ATPendingMessage : NSObject <NSCoding> {
 	NSString *body;
+	NSString *pendingMessageID;
+	NSTimeInterval creationTime;
 }
 @property (nonatomic, retain) NSString *body;
+@property (nonatomic, retain) NSString *pendingMessageID;
+@property (nonatomic, assign) NSTimeInterval creationTime;
 
 - (NSDictionary *)apiJSON;
 @end

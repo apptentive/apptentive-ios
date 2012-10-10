@@ -9,12 +9,18 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+typedef enum {
+	ATPendingMessageStateComposing,
+	ATPendingMessageStateSending,
+	ATPendingMessageStateConfirmed
+} ATPendingMessageState;
 
 @interface ATMessage : NSManagedObject
 
 @property (nonatomic, retain) NSString * apptentiveID;
 @property (nonatomic, retain) NSNumber * creationTime;
-@property (nonatomic, retain) NSNumber * pending;
+@property (nonatomic, retain) NSString * pendingMessageID;
+@property (nonatomic, retain) NSNumber * pendingState;
 @property (nonatomic, retain) NSNumber * priority;
 @property (nonatomic, retain) NSString * recipientID;
 @property (nonatomic, retain) NSNumber * seenByUser;

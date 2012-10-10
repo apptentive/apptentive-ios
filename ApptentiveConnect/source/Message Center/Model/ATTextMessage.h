@@ -8,7 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+
 #import "ATMessage.h"
+#import "ATPendingMessage.h"
 
 
 @interface ATTextMessage : ATMessage
@@ -16,4 +18,6 @@
 @property (nonatomic, retain) NSString * body;
 @property (nonatomic, retain) NSString * subject;
 
++ (ATTextMessage *)findMessageWithPendingID:(NSString *)pendingID;
++ (ATTextMessage *)createMessageWithPendingMessage:(ATPendingMessage *)pendingMessage;
 @end

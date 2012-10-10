@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 #import "ATResizingTextView.h"
+#import "ATTextMessageUserCell.h"
 
 @interface ATMessageCenterViewController : UIViewController <ATResizingTextViewDelegate, NSFetchedResultsControllerDelegate, UIScrollViewDelegate, UITableViewDataSource,  UITableViewDelegate>
 @property (retain, nonatomic) IBOutlet UITableView *tableView;
@@ -19,6 +20,11 @@
 @property (retain, nonatomic) IBOutlet ATResizingTextView *textView;
 @property (retain, nonatomic) IBOutlet UIButton *sendButton;
 @property (retain, nonatomic) IBOutlet UIView *attachmentView;
+@property (retain, nonatomic) IBOutlet UIButton *cameraButton;
+@property (retain, nonatomic) IBOutlet UIButton *locationButton;
+@property (retain, nonatomic) IBOutlet UIButton *emailButton;
+@property (retain, nonatomic) IBOutlet UIButton *iconButton;
+@property (retain, nonatomic) IBOutlet ATTextMessageUserCell *userCell;
 
 - (IBAction)donePressed:(id)sender;
 - (IBAction)sendPressed:(id)sender;

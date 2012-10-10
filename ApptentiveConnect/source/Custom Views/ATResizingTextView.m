@@ -47,25 +47,30 @@
 
 - (void)setup {
 	self.backgroundColor = [UIColor clearColor];
+	self.clipsToBounds = NO;
 	
 	UIImageView *backgroundView = [[UIImageView alloc] initWithImage:[[ATBackend imageNamed:@"at_resizing_text_bg"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 14)]];
 	backgroundView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-	backgroundView.frame = self.bounds;
+	backgroundView.frame = CGRectInset(self.bounds, 0, 2);
 	[self addSubview:backgroundView];
 	[self sendSubviewToBack:backgroundView];
 	[backgroundView release], backgroundView = nil;
 	
-	textFieldInset = UIEdgeInsetsMake(3, 7, 3, 7);
+	textFieldInset = UIEdgeInsetsMake(8, 7, 5, 0);
 	
 	CGRect f = {
 		.origin = {
 			.x = textFieldInset.left,
-			.y=textFieldInset.top
+			.y = textFieldInset.top
 		},
-		.size = self.frame.size
+		.size = {
+			.width = self.frame.size.width - textFieldInset.left - textFieldInset.right,
+			.height = self.frame.size.height - textFieldInset.top - textFieldInset.bottom
+		}
 	};
 	f.size.width = f.size.width - (textFieldInset.left + textFieldInset.right);
 	internalTextView = [[ATInternalDefaultTextView alloc] initWithFrame:f];
+	internalTextView.clipsToBounds = NO;
 	internalTextView.delegate = self;
 	internalTextView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
 	internalTextView.showsHorizontalScrollIndicator = NO;
@@ -110,14 +115,14 @@
 	textBounds.height += (textFieldInset.bottom + textFieldInset.top);
 	
 	if (textSize.height != currentFrame.size.height) {
-		[UIView animateWithDuration:0.3 animations:^(void) {
+//		[UIView animateWithDuration:0.3 animations:^(void) {
 			[self.delegate resizingTextView:self willChangeHeight:textBounds.height];
 			CGRect newFrame = currentFrame;
 			newFrame.size.height = textBounds.height;
 			self.frame = newFrame;
-		} completion:^(BOOL finished) {
+//		} completion:^(BOOL finished) {
 			[self.delegate resizingTextView:self didChangeHeight:textBounds.height];
-		}];
+//		}];
 	}
 }
 

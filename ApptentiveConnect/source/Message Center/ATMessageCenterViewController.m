@@ -195,14 +195,17 @@
 		if (!textMessage) {
 			textMessage = [ATTextMessage createMessageWithPendingMessage:message];
 		}
+		textMessage.body = message.body;
 		textMessage.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
 		[[[ATBackend sharedBackend] managedObjectContext] save:nil];
 		
-		ATMessageTask *task = [[ATMessageTask alloc] init];
-		task.message = message;
-		[[ATTaskQueue sharedTaskQueue] addTask:task];
-		[[ATTaskQueue sharedTaskQueue] start];
-		[task release], task = nil;
+		// Give it a wee bit o' delay.
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{		ATMessageTask *task = [[ATMessageTask alloc] init];
+			task.message = message;
+			[[ATTaskQueue sharedTaskQueue] addTask:task];
+			[[ATTaskQueue sharedTaskQueue] start];
+			[task release], task = nil;
+		});
 		[message release], message = nil;
 		self.textView.text = @"";
 	}
@@ -387,7 +390,7 @@
 		NSString *messageBody = [(ATTextMessage *)message body];
 		cell.messageText.text = messageBody;
 		if ([[message pendingState] intValue] == ATPendingMessageStateSending) {
-			NSAttributedString *sending = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ ", NSLocalizedString(@"Sending\n", @"Sending prefix on messages that are sending")] attributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:15]}];
+			NSAttributedString *sending = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ ", NSLocalizedString(@"Sending:", @"Sending prefix on messages that are sending")] attributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:15]}];
 			
 			NSAttributedString *messageText = [[NSAttributedString alloc] initWithString:messageBody attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15]}];
 			NSMutableAttributedString *sFinal = [[NSMutableAttributedString alloc] initWithAttributedString:sending];

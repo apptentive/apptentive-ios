@@ -39,6 +39,7 @@
 	NSFetchedResultsController *fetchedMessagesController;
 	ATPendingMessage *composingMessage;
 	BOOL animatingTransition;
+	NSDateFormatter *messageDateFormatter;
 }
 @synthesize tableView, containerView, composerView, composerBackgroundView, attachmentButton, textView, sendButton, attachmentView;
 @synthesize userCell;
@@ -53,6 +54,9 @@
 #warning Fixme
 - (void)viewDidLoad {
     [super viewDidLoad];
+	messageDateFormatter = [[NSDateFormatter alloc] init];
+	messageDateFormatter.dateStyle = NSDateFormatterMediumStyle;
+	messageDateFormatter.timeStyle = NSDateFormatterShortStyle;
 	[ATTextMessage clearComposingMessages];
 	self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 	self.tableView.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.0];
@@ -105,6 +109,7 @@
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[messageDateFormatter release];
 	[tableView release];
 	[attachmentView release];
 	[containerView release];
@@ -423,9 +428,18 @@
 		[backgroundView release];
 		cell.messageText.dataDetectorTypes = UIDataDetectorTypeAll;
 	}
+	BOOL showDate = NO;
 	ATMessage *message = (ATMessage *)[fetchedMessagesController objectAtIndexPath:indexPath];
+	if (indexPath.row == 0) {
+		showDate = YES;
+	} else {
+		ATMessage *previousMessage = (ATMessage *)[fetchedMessagesController objectAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
+		if ([message.creationTime doubleValue] - [previousMessage.creationTime doubleValue] > 60 * 5) {
+			showDate = YES;
+		}
+	}
 	//cell.messageText.text = [[NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)[message.creationTime doubleValue]] description];
-	cell.isComposing = NO;
+	cell.composing = NO;
 	if ([message isKindOfClass:[ATTextMessage class]]) {
 		NSString *messageBody = [(ATTextMessage *)message body];
 		cell.messageText.text = messageBody;
@@ -441,11 +455,19 @@
 			[sending release], sending = nil;
 			[sFinal release], sFinal = nil;
 		} else if ([[message pendingState] intValue] == ATPendingMessageStateComposing) {
-			cell.isComposing = YES;
+			cell.composing = YES;
 			cell.textLabel.text = @"";
 		}
 	} else {
 		cell.messageText.text = [message description];
+	}
+	if (showDate) {
+		NSTimeInterval t = (NSTimeInterval)[message.creationTime doubleValue];
+		NSDate *date = [NSDate dateWithTimeIntervalSince1970:t];
+		cell.dateLabel.text = [messageDateFormatter stringFromDate:date];
+		cell.showDateLabel = YES;
+	} else {
+		cell.showDateLabel = NO;
 	}
 	return cell;
 }

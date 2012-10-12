@@ -40,6 +40,7 @@ static ATBackend *sharedBackend = nil;
 
 @interface ATBackend ()
 @property (nonatomic, assign) BOOL working;
+- (void)updatePersonIfNeeded;
 @end
 
 @implementation ATBackend
@@ -253,12 +254,7 @@ static ATBackend *sharedBackend = nil;
 			[[ATTaskQueue sharedTaskQueue] start];
 			
 			[self updateRatingConfigurationIfNeeded];
-			if (!personUpdater) {
-				if (![ATPersonUpdater personExists]) {
-					personUpdater = [[ATPersonUpdater alloc] initWithDelegate:self];
-					[personUpdater createPerson];
-				}
-			}
+			[self updatePersonIfNeeded];
 			if (!deviceUpdater) {
 				if ([ATDeviceUpdater shouldUpdate]) {
 					deviceUpdater = [[ATDeviceUpdater alloc] initWithDelegate:self];
@@ -344,10 +340,27 @@ static ATBackend *sharedBackend = nil;
     return persistentStoreCoordinator;
 }
 
+- (void)updatePersonIfNeeded {
+	if (![[NSThread currentThread] isMainThread]) {
+		[self performSelectorOnMainThread:@selector(updatePersonIfNeeded) withObject:nil waitUntilDone:NO];
+		return;
+	}
+	if (!personUpdater) {
+		if (![ATPersonUpdater personExists]) {
+			personUpdater = [[ATPersonUpdater alloc] initWithDelegate:self];
+			[personUpdater createPerson];
+		}
+	}
+}
+
 #pragma mark ATPersonUpdaterDelegate
 - (void)personUpdater:(ATPersonUpdater *)aPersonUpdater didFinish:(BOOL)success {
 	if (aPersonUpdater == personUpdater) {
 		[personUpdater release], personUpdater = nil;
+		if (!success) {
+			// Retry in 20 seconds.
+			[self performSelector:@selector(updatePersonIfNeeded) withObject:nil afterDelay:20];
+		}
 	}
 }
 

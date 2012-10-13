@@ -40,6 +40,8 @@ NSString *const ATBackendNewAPIKeyNotification;
 	
 	ATDeviceUpdater *deviceUpdater;
 	ATPersonUpdater *personUpdater;
+	
+	NSTimer *messageRetrievalTimer;
 }
 @property (nonatomic, retain) NSString *apiKey;
 /*! The feedback currently being worked on by the user. */

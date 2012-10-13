@@ -28,6 +28,7 @@ static ATMessageDisplayType *modalTypeSingleton = nil;
 		fetchTypes.predicate = fetchPredicate;
 		NSError *fetchError = nil;
 		NSArray *fetchArray = [context executeFetchRequest:fetchTypes error:&fetchError];
+		[fetchTypes release], fetchTypes = nil;
 		
 		if (!fetchArray) {
 			[NSException raise:NSGenericException format:@"%@", [fetchError description]];

@@ -274,6 +274,8 @@
 		NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:nil cacheName:@"at-messages-cache"];
 		newController.delegate = self;
 		fetchedMessagesController = newController;
+		
+		[request release], request = nil;
 	}
 	return fetchedMessagesController;
 }
@@ -310,9 +312,8 @@
 			composingMessage = [[ATPendingMessage alloc] init];
 		}
 		composingMessage.body = aTextView.text;
-		ATMessage *message = [ATTextMessage findMessageWithPendingID:composingMessage.pendingMessageID];
-		if (!message) {
-			message = [ATTextMessage createMessageWithPendingMessage:composingMessage];
+		if (![ATTextMessage findMessageWithPendingID:composingMessage.pendingMessageID]) {
+			[ATTextMessage createMessageWithPendingMessage:composingMessage];
 		}
 	} else {
 		if (composingMessage) {

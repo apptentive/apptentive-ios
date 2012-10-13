@@ -80,6 +80,30 @@
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
 	request.returnType = ATAPIRequestReturnTypeJSON;
 	return [request autorelease];
+}
+
+- (ATAPIRequest *)requestForRetrievingMessagesSinceMessage:(ATMessage *)message {
+	NSDictionary *parameters = nil;
+	if (message && message.apptentiveID) {
+		parameters = @{@"newer_than":message.apptentiveID};
+	}
 	
+	ATPerson *person = [ATPersonUpdater currentPerson];
+	if (!person) {
+		return nil;
+	}
+	
+	NSString *path = [NSString stringWithFormat:@"people/%@/messages", person.apptentiveID];
+	if (parameters) {
+		NSString *paramString = [self stringForParameters:parameters];
+		path = [NSString stringWithFormat:@"%@?%@", path, paramString];
+	}
+	NSString *url = [self apiURLStringWithPath:path];
+	
+	ATURLConnection *conn = [self connectionToGet:[NSURL URLWithString:url]];
+	conn.timeoutInterval = 60.0;
+	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
+	request.returnType = ATAPIRequestReturnTypeJSON;
+	return [request autorelease];
 }
 @end

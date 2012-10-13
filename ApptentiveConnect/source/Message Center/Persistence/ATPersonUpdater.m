@@ -112,6 +112,7 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 	} else {
 		[delegate personUpdater:self didFinish:NO];
 	}
+	[person release], person = nil;
 }
 @end
 

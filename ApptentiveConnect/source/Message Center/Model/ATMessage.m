@@ -83,4 +83,25 @@
 	
 	return (ATMessage *)message;
 }
+
++ (ATMessage *)findMessageWithID:(NSString *)apptentiveID {
+	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
+	ATMessage *result = nil;
+	
+	@synchronized(self) {
+		NSFetchRequest *fetchTypes = [[NSFetchRequest alloc] initWithEntityName:@"ATMessage"];
+		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(apptentiveID == %@)", apptentiveID];
+		fetchTypes.predicate = fetchPredicate;
+		NSError *fetchError = nil;
+		NSArray *fetchArray = [context executeFetchRequest:fetchTypes error:&fetchError];
+		
+		if (fetchArray) {
+			for (NSManagedObject *fetchedObject in fetchArray) {
+				result = (ATMessage *)fetchedObject;
+			}
+		}
+		[fetchTypes release], fetchTypes = nil;
+	}
+	return result;
+}
 @end

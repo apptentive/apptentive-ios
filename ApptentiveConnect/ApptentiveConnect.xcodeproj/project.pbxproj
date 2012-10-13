@@ -193,6 +193,8 @@
 		49D1125413368CEF00603373 /* ATFeedbackTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D1125213368CEF00603373 /* ATFeedbackTask.m */; };
 		49D112731337CC9F00603373 /* ATTaskQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D112711337CC9E00603373 /* ATTaskQueue.h */; };
 		49D112741337CC9F00603373 /* ATTaskQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D112721337CC9F00603373 /* ATTaskQueue.m */; };
+		49E3A26F1628F4FF000675B4 /* ATGetMessagesTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 49E3A26D1628F4FF000675B4 /* ATGetMessagesTask.h */; };
+		49E3A2701628F4FF000675B4 /* ATGetMessagesTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 49E3A26E1628F4FF000675B4 /* ATGetMessagesTask.m */; };
 		49E891D0134FE2AB00DD098A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49E891CD134FE2AB00DD098A /* Localizable.strings */; };
 		49EA5AB014BD08AD004F8A4D /* ATRecord.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EA5AAE14BD08AD004F8A4D /* ATRecord.h */; };
 		49EA5AB114BD08AD004F8A4D /* ATRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EA5AAF14BD08AD004F8A4D /* ATRecord.m */; };
@@ -378,6 +380,8 @@
 		49D1125213368CEF00603373 /* ATFeedbackTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATFeedbackTask.m; sourceTree = "<group>"; };
 		49D112711337CC9E00603373 /* ATTaskQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATTaskQueue.h; sourceTree = "<group>"; };
 		49D112721337CC9F00603373 /* ATTaskQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATTaskQueue.m; sourceTree = "<group>"; };
+		49E3A26D1628F4FF000675B4 /* ATGetMessagesTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATGetMessagesTask.h; path = "Message Center/Tasks/ATGetMessagesTask.h"; sourceTree = "<group>"; };
+		49E3A26E1628F4FF000675B4 /* ATGetMessagesTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATGetMessagesTask.m; path = "Message Center/Tasks/ATGetMessagesTask.m"; sourceTree = "<group>"; };
 		49E891CE134FE2AB00DD098A /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		49E891CF134FE2AB00DD098A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		49EA5AAE14BD08AD004F8A4D /* ATRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATRecord.h; sourceTree = "<group>"; };
@@ -569,6 +573,8 @@
 			children = (
 				4961A400161BBD7000E30037 /* ATMessageTask.h */,
 				4961A401161BBD7000E30037 /* ATMessageTask.m */,
+				49E3A26D1628F4FF000675B4 /* ATGetMessagesTask.h */,
+				49E3A26E1628F4FF000675B4 /* ATGetMessagesTask.m */,
 			);
 			name = Tasks;
 			sourceTree = "<group>";
@@ -903,6 +909,7 @@
 				4988FB9616213D1F000A7CB7 /* ATPendingMessage.h in Headers */,
 				490B24A71624B70E0055B812 /* ATTextMessageUserCell.h in Headers */,
 				49ADE8D8162613BA00DD8634 /* TTTAttributedLabel.h in Headers */,
+				49E3A26F1628F4FF000675B4 /* ATGetMessagesTask.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1138,6 +1145,7 @@
 				4988FB9716213D1F000A7CB7 /* ATPendingMessage.m in Sources */,
 				490B24A81624B70E0055B812 /* ATTextMessageUserCell.m in Sources */,
 				49ADE8D9162613BA00DD8634 /* TTTAttributedLabel.m in Sources */,
+				49E3A2701628F4FF000675B4 /* ATGetMessagesTask.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

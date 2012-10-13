@@ -28,6 +28,8 @@ typedef enum {
 @property (nonatomic, retain) NSSet *displayTypes;
 
 + (ATMessage *)newMessageFromJSON:(NSDictionary *)json;
+
++ (ATMessage *)findMessageWithID:(NSString *)apptentiveID;
 @end
 
 @interface ATMessage (CoreDataGeneratedAccessors)

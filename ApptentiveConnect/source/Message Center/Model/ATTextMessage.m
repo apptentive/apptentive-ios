@@ -31,6 +31,7 @@
 				result = (ATTextMessage *)fetchedObject;
 			}
 		}
+		[fetchTypes release], fetchTypes = nil;
 	}
 	return result;
 }
@@ -40,7 +41,7 @@
 	
 	ATTextMessage *message = [ATTextMessage findMessageWithPendingID:pendingMessage.pendingMessageID];
 	if (!message) {
-		message = [[ATTextMessage alloc] initWithEntity:[NSEntityDescription entityForName:@"ATTextMessage" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
+		message = [[[ATTextMessage alloc] initWithEntity:[NSEntityDescription entityForName:@"ATTextMessage" inManagedObjectContext:context] insertIntoManagedObjectContext:context] autorelease];
 		message.pendingMessageID = pendingMessage.pendingMessageID;
 		message.pendingState = [NSNumber numberWithInt:ATPendingMessageStateComposing];
 		message.body = pendingMessage.body;
@@ -66,6 +67,8 @@
 			}
 			[context save:nil];
 		}
+		
+		[fetchTypes release], fetchTypes = nil;
 	}
 }
 @end

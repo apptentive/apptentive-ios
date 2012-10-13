@@ -9,6 +9,7 @@
 #import "ATWebClient.h"
 
 #import "ATDeviceInfo.h"
+#import "ATMessage.h"
 #import "ATPendingMessage.h"
 #import "ATPerson.h"
 
@@ -16,4 +17,5 @@
 - (ATAPIRequest *)requestForCreatingPerson:(ATPerson *)person;
 - (ATAPIRequest *)requestForUpdatingDevice:(ATDeviceInfo *)deviceInfo;
 - (ATAPIRequest *)requestForPostingMessage:(ATPendingMessage *)message;
+- (ATAPIRequest *)requestForRetrievingMessagesSinceMessage:(ATMessage *)message;
 @end

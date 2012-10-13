@@ -20,6 +20,7 @@
 #import "ATPersonUpdater.h"
 #import "ATDeviceUpdater.h"
 #import "ATMessageDisplayType.h"
+#import "ATGetMessagesTask.h"
 
 NSString *const ATBackendNewAPIKeyNotification = @"ATBackendNewAPIKeyNotification";
 NSString *const ATUUIDPreferenceKey = @"ATUUIDPreferenceKey";
@@ -36,6 +37,7 @@ static ATBackend *sharedBackend = nil;
 - (void)networkStatusChanged:(NSNotification *)notification;
 - (void)stopWorking:(NSNotification *)notification;
 - (void)startWorking:(NSNotification *)notification;
+- (void)checkForMessages;
 @end
 
 @interface ATBackend ()
@@ -53,6 +55,8 @@ static ATBackend *sharedBackend = nil;
 			[ApptentiveMetrics sharedMetrics];
 			
 			[ATMessageDisplayType setupSingletons];
+			
+			[sharedBackend performSelector:@selector(checkForMessages) withObject:nil afterDelay:8];
 		}
 	}
 	return sharedBackend;
@@ -134,6 +138,8 @@ static ATBackend *sharedBackend = nil;
 }
 
 - (void)dealloc {
+	[messageRetrievalTimer invalidate];
+	[messageRetrievalTimer release], messageRetrievalTimer = nil;
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[apiKey release], apiKey = nil;
 	[currentFeedback release], currentFeedback = nil;
@@ -333,9 +339,13 @@ static ATBackend *sharedBackend = nil;
          Lightweight migration will only work for a limited set of schema changes; consult "Core Data Model Versioning and Data Migration Programming Guide" for details.
          
          */
-		[[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-//        abort();
+		NSError *error2 = nil;
+		if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:@{NSMigratePersistentStoresAutomaticallyOption:@YES, NSInferMappingModelAutomaticallyOption:@YES} error:&error2]) {
+			[[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];
+			NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+			NSLog(@"Unresolved error2 %@, %@", error2, [error2 userInfo]);
+			//        abort();
+		}
     }
     return persistentStoreCoordinator;
 }
@@ -424,5 +434,21 @@ static ATBackend *sharedBackend = nil;
 - (void)startWorking:(NSNotification *)notification {
 	shouldStopWorking = NO;
 	[self updateWorking];
+}
+
+- (void)checkForMessages {
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	@synchronized(self) {
+		ATGetMessagesTask *task = [[ATGetMessagesTask alloc] init];
+		ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
+		[queue addTask:task];
+		[task release], task = nil;
+		if (!messageRetrievalTimer) {
+			messageRetrievalTimer = [[NSTimer timerWithTimeInterval:60*5. target:self selector:@selector(checkForMessages) userInfo:nil repeats:YES] retain];
+			NSRunLoop *mainRunLoop = [NSRunLoop mainRunLoop];
+			[mainRunLoop addTimer:messageRetrievalTimer forMode:NSDefaultRunLoopMode];
+		}
+	}
+	[pool release], pool = nil;
 }
 @end

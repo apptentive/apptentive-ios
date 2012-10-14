@@ -54,8 +54,17 @@
 	[message setValue:[messageJSON objectForKey:@"sender_id"] forKey:@"senderID"];
 	[message setValue:[messageJSON objectForKey:@"recipient_id"] forKey:@"recipientID"];
 	
-	NSNumber *creationTimestamp = (NSNumber *)[messageJSON objectForKey:@"created_at"];
-	[message setValue:creationTimestamp forKey:@"creationTime"];
+	NSObject *creationDate = [messageJSON objectForKey:@"created_at"];
+	if ([creationDate isKindOfClass:[NSNumber class]]) {
+		NSNumber *creationTimestamp = (NSNumber *)[messageJSON objectForKey:@"created_at"];
+		[message setValue:creationTimestamp forKey:@"creationTime"];
+	} else if ([creationDate isKindOfClass:[NSDate class]]) {
+		NSDate *creationDate = (NSDate *)[messageJSON objectForKey:@"created_at"];
+		NSTimeInterval t = [creationDate timeIntervalSince1970];
+		NSNumber *creationTimestamp = [NSNumber numberWithFloat:t];
+		[message setValue:creationTimestamp forKey:@"creationTime"];
+		
+	}
 	
 	[message setValue:[messageJSON objectForKey:@"priority"] forKey:@"priority"];
 	

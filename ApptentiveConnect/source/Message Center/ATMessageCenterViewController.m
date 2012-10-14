@@ -14,6 +14,7 @@
 #import "ATMessage.h"
 #import "ATMessageTask.h"
 #import "ATPendingMessage.h"
+#import "ATPersonUpdater.h"
 #import "ATTaskQueue.h"
 #import "ATTextMessage.h"
 
@@ -42,7 +43,7 @@
 	NSDateFormatter *messageDateFormatter;
 }
 @synthesize tableView, containerView, composerView, composerBackgroundView, attachmentButton, textView, sendButton, attachmentView;
-@synthesize userCell;
+@synthesize userCell, developerCell;
 
 - (id)init {
 	self = [super initWithNibName:@"ATMessageCenterViewController" bundle:[ATConnect resourceBundle]];
@@ -143,7 +144,8 @@
 }
 
 - (IBAction)donePressed:(id)sender {
-	[self.navigationController dismissModalViewControllerAnimated:YES];
+	[self.navigationController.presentingViewController dismissModalViewControllerAnimated:YES];
+//	[self.navigationController dismissModalViewControllerAnimated:YES];
 }
 
 - (IBAction)sendPressed:(id)sender {
@@ -409,19 +411,47 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	static NSString *CellIdentifier = @"ATTextMessageUserCell";
-	ATTextMessageUserCell *cell = (ATTextMessageUserCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+	static NSString *UserCellIdentifier = @"ATTextMessageUserCell";
+	static NSString *DevCellIdentifier = @"ATTextMessageDevCell";
+	ATTextMessageUserCell *cell = nil;
+	ATMessage *message = (ATMessage *)[fetchedMessagesController objectAtIndexPath:indexPath];
+	ATPerson *person = [ATPersonUpdater currentPerson];
+	ATTextMessageCellType cellType = (person != nil && [person.apptentiveID isEqualToString:message.senderID]) ? ATTextMessageCellTypeUser : ATTextMessageCellTypeDeveloper;
+	if (person == nil) {
+		if ([@"demouserid" isEqualToString:message.senderID] || [[message pendingState] intValue] == ATPendingMessageStateComposing || [[message pendingState] intValue] == ATPendingMessageStateSending) {
+			cellType = ATTextMessageCellTypeUser;
+		} else {
+			cellType = ATTextMessageCellTypeDeveloper;
+		}
+	}
+	if ([[message pendingState] intValue] == ATPendingMessageStateComposing || [[message pendingState] intValue] == ATPendingMessageStateSending) {
+		cellType = ATTextMessageCellTypeUser;
+	}
+	
+	if (cellType == ATTextMessageCellTypeUser) {
+		cell = (ATTextMessageUserCell *)[tableView dequeueReusableCellWithIdentifier:UserCellIdentifier];
+	} else if (cellType == ATTextMessageCellTypeDeveloper) {
+		cell = (ATTextMessageUserCell *)[tableView dequeueReusableCellWithIdentifier:DevCellIdentifier];
+	}
 	if (!cell) {
 		UINib *nib = [UINib nibWithNibName:@"ATTextMessageUserCell" bundle:[ATConnect resourceBundle]];
 		[nib instantiateWithOwner:self options:nil];
-		cell = userCell;
+		if (cellType == ATTextMessageCellTypeUser) {
+			cell = userCell;
+			cell.messageBubbleImage.image = [[ATBackend imageNamed:@"at_chat_bubble"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 27, 21)];
+			cell.userIcon.image = [ATBackend imageNamed:@"profile-photo"];
+		} else {
+			cell = developerCell;
+			cell.messageBubbleImage.image = [[ATBackend imageNamed:@"at_urbanspoon_chat_bubble"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 21, 27, 15)];
+			cell.userIcon.image = [UIImage imageNamed:@"dev_photo"];
+		}
 		[[cell retain] autorelease];
 		[userCell release], userCell = nil;
+		[developerCell release], developerCell = nil;
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
-		cell.userIcon.image = [ATBackend imageNamed:@"profile-photo"];
 		cell.userIcon.layer.cornerRadius = 4.0;
 		cell.userIcon.layer.masksToBounds = YES;
-		cell.messageBubbleImage.image = [[ATBackend imageNamed:@"at_chat_bubble"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 27, 21)];
+
 		cell.composingBubble.image = [ATBackend imageNamed:@"at_composing_bubble"];
 		UIView *backgroundView = [[UIView alloc] init];
 		backgroundView.backgroundColor = [UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]];
@@ -430,7 +460,6 @@
 		cell.messageText.dataDetectorTypes = UIDataDetectorTypeAll;
 	}
 	BOOL showDate = NO;
-	ATMessage *message = (ATMessage *)[fetchedMessagesController objectAtIndexPath:indexPath];
 	if (indexPath.row == 0) {
 		showDate = YES;
 	} else {

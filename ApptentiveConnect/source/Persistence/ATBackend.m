@@ -21,6 +21,7 @@
 #import "ATDeviceUpdater.h"
 #import "ATMessageDisplayType.h"
 #import "ATGetMessagesTask.h"
+#import "ATTextMessage.h"
 
 NSString *const ATBackendNewAPIKeyNotification = @"ATBackendNewAPIKeyNotification";
 NSString *const ATUUIDPreferenceKey = @"ATUUIDPreferenceKey";
@@ -32,6 +33,7 @@ static ATBackend *sharedBackend = nil;
 @end
 
 @interface ATBackend (Private)
+- (void)loadDemoData;
 - (void)setup;
 - (void)updateWorking;
 - (void)networkStatusChanged:(NSNotification *)notification;
@@ -57,6 +59,9 @@ static ATBackend *sharedBackend = nil;
 			[ATMessageDisplayType setupSingletons];
 			
 			[sharedBackend performSelector:@selector(checkForMessages) withObject:nil afterDelay:8];
+#if APPTENTIVE_DEMO
+			[sharedBackend performSelector:@selector(loadDemoData) withObject:nil afterDelay:0.1];
+#endif
 		}
 	}
 	return sharedBackend;
@@ -344,6 +349,7 @@ static ATBackend *sharedBackend = nil;
 			[[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];
 			NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 			NSLog(@"Unresolved error2 %@, %@", error2, [error2 userInfo]);
+			[persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error];
 			//        abort();
 		}
     }
@@ -437,6 +443,9 @@ static ATBackend *sharedBackend = nil;
 }
 
 - (void)checkForMessages {
+#if APPTENTIVE_DEMO
+	return;
+#endif
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	@synchronized(self) {
 		ATGetMessagesTask *task = [[ATGetMessagesTask alloc] init];
@@ -450,5 +459,41 @@ static ATBackend *sharedBackend = nil;
 		}
 	}
 	[pool release], pool = nil;
+}
+
+- (void)clearDemoData {
+	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
+	
+	@synchronized(self) {
+		NSFetchRequest *fetchTypes = [[NSFetchRequest alloc] initWithEntityName:@"ATTextMessage"];
+		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(senderID == 'demouserid' || senderID = 'demodevid')"];
+		fetchTypes.predicate = fetchPredicate;
+		NSError *fetchError = nil;
+		NSArray *fetchArray = [context executeFetchRequest:fetchTypes error:&fetchError];
+		
+		if (fetchArray) {
+			for (NSManagedObject *fetchedObject in fetchArray) {
+				[context deleteObject:fetchedObject];
+			}
+			[context save:nil];
+		}
+		
+		[fetchTypes release], fetchTypes = nil;
+	}
+}
+
+- (void)loadDemoData {
+	[self clearDemoData];
+	NSLog(@"loading demo data");
+	NSDictionary *messages = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"demoData" ofType:@"plist"]];
+	NSLog(@"messages: %@", messages);
+	for (NSDictionary *message in [messages objectForKey:@"messages"]) {
+		ATMessage *m = [ATMessage newMessageFromJSON:message];
+		[m setPendingState:[NSNumber numberWithInt:ATPendingMessageStateConfirmed]];
+	}
+	NSError *error = nil;
+	if (![self.managedObjectContext save:&error]) {
+		NSLog(@"Error: %@", error);
+	}
 }
 @end

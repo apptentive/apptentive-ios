@@ -12,6 +12,7 @@
 
 @implementation ATTextMessageUserCell
 @synthesize dateLabel, chatBubbleContainer, userIcon, messageBubbleImage, messageText, composingBubble, composing, showDateLabel;
+@synthesize cellType;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];

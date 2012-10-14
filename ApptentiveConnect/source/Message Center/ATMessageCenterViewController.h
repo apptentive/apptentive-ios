@@ -25,6 +25,7 @@
 @property (retain, nonatomic) IBOutlet UIButton *emailButton;
 @property (retain, nonatomic) IBOutlet UIButton *iconButton;
 @property (retain, nonatomic) IBOutlet ATTextMessageUserCell *userCell;
+@property (retain, nonatomic) IBOutlet ATTextMessageUserCell *developerCell;
 
 - (IBAction)donePressed:(id)sender;
 - (IBAction)sendPressed:(id)sender;

@@ -53,7 +53,11 @@
 		NSDictionary *p = json;
 		
 		result = [[ATPerson alloc] init];
+#if APPTENTIVE_DEMO
+		result.apptentiveID = @"demouserid";
+#else
 		result.apptentiveID = [p objectForKey:@"id"];
+#endif
 		result.name = [p objectForKey:@"name"];
 		result.facebookID = [p objectForKey:@"facebook_id"];
 		result.emailAddress = [p objectForKey:@"primary_email"];

@@ -10,6 +10,11 @@
 
 #import "TTTAttributedLabel.h"
 
+typedef enum {
+	ATTextMessageCellTypeUser,
+	ATTextMessageCellTypeDeveloper,
+} ATTextMessageCellType;
+
 @interface ATTextMessageUserCell : UITableViewCell
 @property (retain, nonatomic) IBOutlet UILabel *dateLabel;
 @property (retain, nonatomic) IBOutlet UIView *chatBubbleContainer;
@@ -19,6 +24,7 @@
 @property (retain, nonatomic) IBOutlet UIImageView *composingBubble;
 @property (nonatomic, assign, getter = isComposing) BOOL composing;
 @property (nonatomic, assign, getter = shouldShowDateLabel) BOOL showDateLabel;
+@property (nonatomic, assign) ATTextMessageCellType cellType;
 
 - (CGFloat)cellHeightForWidth:(CGFloat)width;
 @end

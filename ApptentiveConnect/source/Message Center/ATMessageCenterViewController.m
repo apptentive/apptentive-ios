@@ -55,6 +55,12 @@
 #warning Fixme
 - (void)viewDidLoad {
     [super viewDidLoad];
+	
+	UIImageView *logoView = [[UIImageView alloc] initWithImage:[ATBackend imageNamed:@"at_apptentive_icon_small"]];
+	[self.navigationController.navigationBar addSubview:logoView];
+	logoView.frame = CGRectMake(60, 12, logoView.bounds.size.width, logoView.bounds.size.height);
+	[logoView release], logoView = nil;
+	
 	messageDateFormatter = [[NSDateFormatter alloc] init];
 	messageDateFormatter.dateStyle = NSDateFormatterMediumStyle;
 	messageDateFormatter.timeStyle = NSDateFormatterShortStyle;

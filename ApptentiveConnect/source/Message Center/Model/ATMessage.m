@@ -8,6 +8,7 @@
 
 #import "ATMessage.h"
 #import "ATBackend.h"
+#import "ATFakeMessage.h"
 #import "ATMessageDisplayType.h"
 #import "ATTextMessage.h"
 #import "ATUpgradeRequestMessage.h"
@@ -39,6 +40,8 @@
 		//!!
 		NSLog(@"Unimplimented share request type");
 		return nil;
+	} else if ([messageType isEqualToString:@"fake"]) {
+		objectName = @"ATFakeMessage";
 	} else {
 		NSLog(@"Unknown message type");
 		return nil;
@@ -83,7 +86,7 @@
 		[(ATMessage *)message addDisplayTypesObject:messageCenterType];
 	}
 	
-	if ([objectName isEqualToString:@"ATTextMessage"]) {
+	if ([objectName isEqualToString:@"ATTextMessage"] || [objectName isEqualToString:@"ATFakeMessage"]) {
 		[message setValue:[messageJSON objectForKey:@"body"] forKey:@"body"];
 		[message setValue:[messageJSON objectForKey:@"subject"] forKey:@"subject"];
 	} else if ([objectName isEqualToString:@"ATUpgradeRequestMessage"]) {

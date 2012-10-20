@@ -11,12 +11,19 @@
 #import "ATMessageCenterViewController.h"
 #import "ATBackend.h"
 #import "ATConnect.h"
+#import "ATFakeMessage.h"
 #import "ATMessage.h"
 #import "ATMessageTask.h"
 #import "ATPendingMessage.h"
 #import "ATPersonUpdater.h"
 #import "ATTaskQueue.h"
 #import "ATTextMessage.h"
+
+typedef enum {
+	ATMessageCellTypeUnknown,
+	ATMessageCellTypeFake,
+	ATMessageCellTypeText
+} ATMessageCellType;
 
 #define TextViewPadding 2
 
@@ -42,7 +49,7 @@
 	BOOL animatingTransition;
 	NSDateFormatter *messageDateFormatter;
 }
-@synthesize tableView, containerView, composerView, composerBackgroundView, attachmentButton, textView, sendButton, attachmentView;
+@synthesize tableView, containerView, composerView, composerBackgroundView, attachmentButton, textView, sendButton, attachmentView, fakeCell;
 @synthesize userCell, developerCell;
 
 - (id)init {
@@ -417,55 +424,24 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+	static NSString *FakeCellIdentifier = @"ATFakeMessageCell";
 	static NSString *UserCellIdentifier = @"ATTextMessageUserCell";
 	static NSString *DevCellIdentifier = @"ATTextMessageDevCell";
-	ATTextMessageUserCell *cell = nil;
+	
+	ATMessageCellType cellType = ATMessageCellTypeUnknown;
+	
+	UITableViewCell *cell = nil;
 	ATMessage *message = (ATMessage *)[fetchedMessagesController objectAtIndexPath:indexPath];
-	ATPerson *person = [ATPersonUpdater currentPerson];
-	ATTextMessageCellType cellType = (person != nil && [person.apptentiveID isEqualToString:message.senderID]) ? ATTextMessageCellTypeUser : ATTextMessageCellTypeDeveloper;
-	if (person == nil) {
-		if ([@"demouserid" isEqualToString:message.senderID] || [[message pendingState] intValue] == ATPendingMessageStateComposing || [[message pendingState] intValue] == ATPendingMessageStateSending) {
-			cellType = ATTextMessageCellTypeUser;
-		} else {
-			cellType = ATTextMessageCellTypeDeveloper;
-		}
-	}
-	if ([[message pendingState] intValue] == ATPendingMessageStateComposing || [[message pendingState] intValue] == ATPendingMessageStateSending) {
-		cellType = ATTextMessageCellTypeUser;
+	
+	if ([message isKindOfClass:[ATFakeMessage class]]) {
+		cellType = ATMessageCellTypeFake;
+	} else if ([message isKindOfClass:[ATTextMessage class]]) {
+		cellType = ATMessageCellTypeText;
 	}
 	
-	if (cellType == ATTextMessageCellTypeUser) {
-		cell = (ATTextMessageUserCell *)[tableView dequeueReusableCellWithIdentifier:UserCellIdentifier];
-	} else if (cellType == ATTextMessageCellTypeDeveloper) {
-		cell = (ATTextMessageUserCell *)[tableView dequeueReusableCellWithIdentifier:DevCellIdentifier];
-	}
-	if (!cell) {
-		UINib *nib = [UINib nibWithNibName:@"ATTextMessageUserCell" bundle:[ATConnect resourceBundle]];
-		[nib instantiateWithOwner:self options:nil];
-		if (cellType == ATTextMessageCellTypeUser) {
-			cell = userCell;
-			cell.messageBubbleImage.image = [[ATBackend imageNamed:@"at_chat_bubble"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 27, 21)];
-			cell.userIcon.image = [ATBackend imageNamed:@"profile-photo"];
-		} else {
-			cell = developerCell;
-			cell.messageBubbleImage.image = [[ATBackend imageNamed:@"at_urbanspoon_chat_bubble"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 21, 27, 15)];
-			cell.userIcon.image = [UIImage imageNamed:@"dev_photo"];
-		}
-		[[cell retain] autorelease];
-		[userCell release], userCell = nil;
-		[developerCell release], developerCell = nil;
-		cell.selectionStyle = UITableViewCellSelectionStyleNone;
-		cell.userIcon.layer.cornerRadius = 4.0;
-		cell.userIcon.layer.masksToBounds = YES;
-
-		cell.composingBubble.image = [ATBackend imageNamed:@"at_composing_bubble"];
-		UIView *backgroundView = [[UIView alloc] init];
-		backgroundView.backgroundColor = [UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]];
-		cell.backgroundView = backgroundView;
-		[backgroundView release];
-		cell.messageText.dataDetectorTypes = UIDataDetectorTypeAll;
-	}
 	BOOL showDate = NO;
+	NSString *dateString = nil;
+	
 	if (indexPath.row == 0) {
 		showDate = YES;
 	} else {
@@ -474,36 +450,129 @@
 			showDate = YES;
 		}
 	}
-	//cell.messageText.text = [[NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)[message.creationTime doubleValue]] description];
-	cell.composing = NO;
-	if ([message isKindOfClass:[ATTextMessage class]]) {
-		NSString *messageBody = [(ATTextMessage *)message body];
-		cell.messageText.text = messageBody;
-		if ([[message pendingState] intValue] == ATPendingMessageStateSending) {
-			NSAttributedString *sending = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ ", NSLocalizedString(@"Sending:", @"Sending prefix on messages that are sending")] attributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:15]}];
-			
-			NSAttributedString *messageText = [[NSAttributedString alloc] initWithString:messageBody attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15]}];
-			NSMutableAttributedString *sFinal = [[NSMutableAttributedString alloc] initWithAttributedString:sending];
-			[sFinal appendAttributedString:messageText];
-			
-			cell.messageText.attributedText = sFinal;
-			[messageText release], messageText = nil;
-			[sending release], sending = nil;
-			[sFinal release], sFinal = nil;
-		} else if ([[message pendingState] intValue] == ATPendingMessageStateComposing) {
-			cell.composing = YES;
-			cell.textLabel.text = @"";
-		}
-	} else {
-		cell.messageText.text = [message description];
-	}
+	
+	
 	if (showDate) {
 		NSTimeInterval t = (NSTimeInterval)[message.creationTime doubleValue];
 		NSDate *date = [NSDate dateWithTimeIntervalSince1970:t];
-		cell.dateLabel.text = [messageDateFormatter stringFromDate:date];
-		cell.showDateLabel = YES;
-	} else {
-		cell.showDateLabel = NO;
+		dateString = [messageDateFormatter stringFromDate:date];
+	}
+	
+	if (cellType == ATMessageCellTypeText) {
+		ATTextMessageUserCell *textCell = nil;
+		ATPerson *person = [ATPersonUpdater currentPerson];
+		ATTextMessageCellType cellSubType = (person != nil && [person.apptentiveID isEqualToString:message.senderID]) ? ATTextMessageCellTypeUser : ATTextMessageCellTypeDeveloper;
+		if (person == nil) {
+			if ([@"demouserid" isEqualToString:message.senderID] || [[message pendingState] intValue] == ATPendingMessageStateComposing || [[message pendingState] intValue] == ATPendingMessageStateSending) {
+				cellSubType = ATTextMessageCellTypeUser;
+			} else {
+				cellSubType = ATTextMessageCellTypeDeveloper;
+			}
+		}
+		if ([[message pendingState] intValue] == ATPendingMessageStateComposing || [[message pendingState] intValue] == ATPendingMessageStateSending) {
+			cellSubType = ATTextMessageCellTypeUser;
+		}
+		
+		if (cellSubType == ATTextMessageCellTypeUser) {
+			textCell = (ATTextMessageUserCell *)[tableView dequeueReusableCellWithIdentifier:UserCellIdentifier];
+		} else if (cellSubType == ATTextMessageCellTypeDeveloper) {
+			textCell = (ATTextMessageUserCell *)[tableView dequeueReusableCellWithIdentifier:DevCellIdentifier];
+		}
+		
+		
+		if (!textCell) {
+			UINib *nib = [UINib nibWithNibName:@"ATTextMessageUserCell" bundle:[ATConnect resourceBundle]];
+			[nib instantiateWithOwner:self options:nil];
+			if (cellSubType == ATTextMessageCellTypeUser) {
+				textCell = userCell;
+				textCell.messageBubbleImage.image = [[ATBackend imageNamed:@"at_chat_bubble"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 27, 21)];
+				textCell.userIcon.image = [ATBackend imageNamed:@"profile-photo"];
+			} else {
+				textCell = developerCell;
+				textCell.messageBubbleImage.image = [[ATBackend imageNamed:@"at_urbanspoon_chat_bubble"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 21, 27, 15)];
+				textCell.userIcon.image = [UIImage imageNamed:@"dev_photo"];
+			}
+			[[textCell retain] autorelease];
+			[userCell release], userCell = nil;
+			[developerCell release], developerCell = nil;
+			textCell.selectionStyle = UITableViewCellSelectionStyleNone;
+			textCell.userIcon.layer.cornerRadius = 4.0;
+			textCell.userIcon.layer.masksToBounds = YES;
+			
+			textCell.composingBubble.image = [ATBackend imageNamed:@"at_composing_bubble"];
+			UIView *backgroundView = [[UIView alloc] init];
+			backgroundView.backgroundColor = [UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]];
+			textCell.backgroundView = backgroundView;
+			[backgroundView release];
+			textCell.messageText.dataDetectorTypes = UIDataDetectorTypeAll;
+		}
+		textCell.composing = NO;
+		if ([message isKindOfClass:[ATTextMessage class]]) {
+			NSString *messageBody = [(ATTextMessage *)message body];
+			textCell.messageText.text = messageBody;
+			if ([[message pendingState] intValue] == ATPendingMessageStateSending) {
+				NSAttributedString *sending = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ ", NSLocalizedString(@"Sending:", @"Sending prefix on messages that are sending")] attributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:15]}];
+				
+				NSAttributedString *messageText = [[NSAttributedString alloc] initWithString:messageBody attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15]}];
+				NSMutableAttributedString *sFinal = [[NSMutableAttributedString alloc] initWithAttributedString:sending];
+				[sFinal appendAttributedString:messageText];
+				
+				textCell.messageText.attributedText = sFinal;
+				[messageText release], messageText = nil;
+				[sending release], sending = nil;
+				[sFinal release], sFinal = nil;
+			} else if ([[message pendingState] intValue] == ATPendingMessageStateComposing) {
+				textCell.composing = YES;
+				textCell.textLabel.text = @"";
+			}
+		} else {
+			textCell.messageText.text = [message description];
+		}
+		
+		if (showDate) {
+			textCell.dateLabel.text = dateString;
+			textCell.showDateLabel = YES;
+		} else {
+			textCell.showDateLabel = NO;
+		}
+		
+		cell = textCell;
+	} else if (cellType == ATMessageCellTypeFake) {
+		ATFakeMessageCell *currentCell = (ATFakeMessageCell *)[tableView dequeueReusableCellWithIdentifier:FakeCellIdentifier];
+		
+		if (!currentCell) {
+			UINib *nib = [UINib nibWithNibName:@"ATFakeMessageCell" bundle:[ATConnect resourceBundle]];
+			[nib instantiateWithOwner:self options:nil];
+			currentCell = fakeCell;
+			[[currentCell retain] autorelease];
+			[fakeCell release], fakeCell = nil;
+			
+			currentCell.selectionStyle = UITableViewCellSelectionStyleNone;
+			currentCell.messageText.dataDetectorTypes = UIDataDetectorTypeAll;
+		}
+		if ([message isKindOfClass:[ATFakeMessage class]]) {
+			ATFakeMessage *fakeMessage = (ATFakeMessage *)message;
+			NSString *messageSubject = fakeMessage.subject;
+			NSString *messageBody = fakeMessage.body;
+			
+			NSMutableParagraphStyle *centerParagraphStyle = [[NSMutableParagraphStyle alloc] init];
+			[centerParagraphStyle setAlignment:UITextAlignmentCenter];
+			NSAttributedString *boldSubject = [[NSAttributedString alloc] initWithString:messageSubject attributes:@{NSFontAttributeName : [UIFont fontWithName:@"AmericanTypewriter-Bold" size:15], NSParagraphStyleAttributeName:centerParagraphStyle}];
+			currentCell.subjectText.attributedText = boldSubject;
+			[boldSubject release], boldSubject = nil;
+			[centerParagraphStyle release], centerParagraphStyle = nil;
+			
+			currentCell.messageText.text = messageBody;
+		}
+		
+		if (showDate) {
+			currentCell.dateLabel.text = dateString;
+			currentCell.showDateLabel = YES;
+		} else {
+			currentCell.showDateLabel = NO;
+		}
+		
+		cell = currentCell;
 	}
 	return cell;
 }

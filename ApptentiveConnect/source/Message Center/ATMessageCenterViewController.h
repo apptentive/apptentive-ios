@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+#import "ATFakeMessageCell.h"
 #import "ATResizingTextView.h"
 #import "ATTextMessageUserCell.h"
 
@@ -24,6 +25,7 @@
 @property (retain, nonatomic) IBOutlet UIButton *locationButton;
 @property (retain, nonatomic) IBOutlet UIButton *emailButton;
 @property (retain, nonatomic) IBOutlet UIButton *iconButton;
+@property (retain, nonatomic) IBOutlet ATFakeMessageCell *fakeCell;
 @property (retain, nonatomic) IBOutlet ATTextMessageUserCell *userCell;
 @property (retain, nonatomic) IBOutlet ATTextMessageUserCell *developerCell;
 

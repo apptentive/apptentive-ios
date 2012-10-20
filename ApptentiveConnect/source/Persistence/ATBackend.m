@@ -465,7 +465,7 @@ static ATBackend *sharedBackend = nil;
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
 	
 	@synchronized(self) {
-		NSFetchRequest *fetchTypes = [[NSFetchRequest alloc] initWithEntityName:@"ATTextMessage"];
+		NSFetchRequest *fetchTypes = [[NSFetchRequest alloc] initWithEntityName:@"ATMessage"];
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(senderID == 'demouserid' || senderID = 'demodevid')"];
 		fetchTypes.predicate = fetchPredicate;
 		NSError *fetchError = nil;
@@ -485,7 +485,11 @@ static ATBackend *sharedBackend = nil;
 - (void)loadDemoData {
 	[self clearDemoData];
 	NSLog(@"loading demo data");
+#if RATINGS_DEMO
+	NSDictionary *messages = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"demoRatingData" ofType:@"plist"]];
+#else
 	NSDictionary *messages = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"demoData" ofType:@"plist"]];
+#endif
 	NSLog(@"messages: %@", messages);
 	for (NSDictionary *message in [messages objectForKey:@"messages"]) {
 		ATMessage *m = [ATMessage newMessageFromJSON:message];

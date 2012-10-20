@@ -13,6 +13,7 @@
 	NSURL *targetURL;
 	NSObject<ATURLConnectionDelegate> *delegate;
 	
+	NSMutableURLRequest *request;
 	NSURLConnection *connection;
 	NSMutableData *data;
 	BOOL executing;

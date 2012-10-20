@@ -32,6 +32,8 @@ enum {
 	kFeedbackPhotoFrameTag = 402,
 	kFeedbackPhotoControlTag = 403,
 	kFeedbackPhotoPreviewTag = 404,
+	kFeedbackPhotoFrameContainerTag = 405,
+	kFeedbackPhotoHighlightTag = 406,
 	kContainerViewTag = 1009,
 	kATEmailAlertTextFieldTag = 1010,
 	kFeedbackGradientLayerTag = 1011,
@@ -57,8 +59,10 @@ enum {
 - (CGRect)photoControlFrame;
 - (CGFloat)attachmentVerticalOffset;
 - (void)updateThumbnail;
+- (void)updateThumbnailOffsetWithScale:(CGSize)scale;
 - (void)sendFeedbackAndDismiss;
 - (void)updateSendButtonState;
+- (void)photoDragged:(UIPanGestureRecognizer *)recognizer;
 @end
 
 @interface ATFeedbackController (Positioning)
@@ -223,6 +227,9 @@ enum {
 	
 	self.logoImageView.image = [ATBackend imageNamed:@"at_apptentive_icon_small"];
 	self.taglineLabel.text = ATLocalizedString(@"Feedback Powered by Apptentive", @"Tagline text");
+	if (![[ATConnect sharedConnection] showTagline]) {
+		[self.logoControl setHidden:YES];
+	}
 	
 	if ([self shouldShowPaperclip]) {
 		CGRect viewBounds = self.view.bounds;
@@ -431,12 +438,11 @@ enum {
 	[paperclipView removeFromSuperview];
 	[paperclipView release], paperclipView = nil;
 	
-	[photoFrameView removeFromSuperview];
-	[photoFrameView release], photoFrameView = nil;
-	
 	[photoControl removeFromSuperview];
 	[photoControl release], photoControl = nil;
 	
+	[photoFrameContainerView removeFromSuperview];
+	[photoFrameContainerView release], photoFrameContainerView = nil;
 	
 	[feedbackContainerView release], feedbackContainerView = nil;
 	
@@ -469,7 +475,10 @@ enum {
 	if (self.emailField && (!self.emailField.text || [@"" isEqualToString:self.emailField.text]) && self.feedback.email) {
 		self.emailField.text = self.feedback.email;
 	}
-	[self updateThumbnail];
+	if ([self isViewLoaded]) {
+		// Avoid touching self.view before viewDidLoad.
+		[self updateThumbnail];
+	}
 }
 
 - (BOOL)shouldReturn:(UIView *)view {
@@ -571,6 +580,12 @@ enum {
 		[self finishHide];
 	} else if ([animationID isEqualToString:@"windowUnhide"]) {
 		[self finishUnhide];
+	} else if ([animationID isEqualToString:@"remove-screenshot"]) {
+		self.feedback.screenshot = nil;
+		photoDragOffset = CGPointZero;
+		[self updateThumbnail];
+	} else if ([animationID isEqualToString:@"snapback-screenshot"]) {
+		// do nothing.
 	}
 }
 
@@ -667,7 +682,7 @@ enum {
 
 - (CGRect)photoControlFrame {
 	if ([self shouldShowThumbnail] && [self shouldShowPaperclip]) {
-		return photoFrameView.frame;
+		return photoFrameContainerView.frame;
 	} else {
 		CGRect f = paperclipView.frame;
 		f.size.height += 10;
@@ -681,9 +696,12 @@ enum {
 
 - (void)updateThumbnail {
 	@synchronized(self) {
+		if (photoPanRecognizer) {
+			[photoPanRecognizer release], photoPanRecognizer = nil;
+		}
 		if ([self shouldShowPaperclip]) {
 			UIImage *image = feedback.screenshot;
-			UIImageView *thumbnailView = (UIImageView *)[self.view viewWithTag:kFeedbackPhotoPreviewTag];
+			UIImageView *thumbnailView = nil;
 			
 			CGRect paperclipBackgroundFrame = paperclipBackgroundView.frame;
 			paperclipBackgroundFrame.origin.y = [self attachmentVerticalOffset] + 6.0;
@@ -695,47 +713,57 @@ enum {
 			
 			if (image == nil) {
 				[currentImage release], currentImage = nil;
-				
-				if (thumbnailView != nil) {
-					[thumbnailView removeFromSuperview];
+				if (photoFrameContainerView != nil) {
+					[photoFrameContainerView removeFromSuperview];
+					[photoFrameContainerView release], photoFrameContainerView = nil;
 				}
-				if (photoFrameView != nil) {
-					[photoFrameView removeFromSuperview];
-					[photoFrameView release], photoFrameView = nil;
-				}
-				photoControl.frame = [self photoControlFrame];
 				photoControl.transform = paperclipView.transform;
+				photoControl.frame = [self photoControlFrame];
 			} else {
-				if (photoFrameView == nil) {
+				if (photoFrameContainerView == nil) {
 					CGRect viewBounds = self.view.bounds;
-					UIImage *photoFrame = [ATBackend imageNamed:@"at_photo"];
-					photoFrameView = [[UIImageView alloc] initWithImage:photoFrame];
-					photoFrameView.frame = CGRectMake(viewBounds.size.width - photoFrame.size.width - 2.0, [self attachmentVerticalOffset], photoFrame.size.width, photoFrame.size.height);
-					[self.view addSubview:photoFrameView];
+					UIImage *photoFrameImage = [ATBackend imageNamed:@"at_photo"];
+					CGRect photoFrameContainerFrame = CGRectMake(viewBounds.size.width - photoFrameImage.size.width - 2.0, [self attachmentVerticalOffset], photoFrameImage.size.width, photoFrameImage.size.height);
+					photoFrameContainerView = [[UIView alloc] initWithFrame:photoFrameContainerFrame];
+					photoFrameContainerView.tag = kFeedbackPhotoFrameContainerTag;
+					[self.view addSubview:photoFrameContainerView];
+					
+					UIImageView *photoFrameView = [[[UIImageView alloc] initWithImage:photoFrameImage] autorelease];
 					photoFrameView.tag = kFeedbackPhotoFrameTag;
-					photoFrameView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+					
+					[photoFrameContainerView addSubview:photoFrameView];
+					photoFrameContainerView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 				}
-				CGRect photoFrameFrame = photoFrameView.frame;
+				CGRect photoFrameFrame = photoFrameContainerView.frame;
 				photoFrameFrame.origin.y = [self attachmentVerticalOffset];
-				photoFrameView.frame = photoFrameFrame;
+				photoFrameContainerView.frame = photoFrameFrame;
+				thumbnailView = (UIImageView *)[photoFrameContainerView viewWithTag:kFeedbackPhotoPreviewTag];
+				photoFrameTransform = photoFrameContainerView.transform;
 				
 				if (thumbnailView == nil) {
 					thumbnailView = [[[UIImageView alloc] init] autorelease];
 					thumbnailView.tag = kFeedbackPhotoPreviewTag;
 					thumbnailView.contentMode = UIViewContentModeTop;
 					thumbnailView.clipsToBounds = YES;
-					thumbnailView.backgroundColor = [UIColor blackColor];
-					[self.view addSubview:thumbnailView];
+					
+					UIView *highlightView = [[[UIView alloc] initWithFrame:thumbnailView.frame] autorelease];
+					highlightView.tag = kFeedbackPhotoHighlightTag;
+					
+					//thumbnailView.backgroundColor = [UIColor blackColor];
+					[photoFrameContainerView addSubview:thumbnailView];
+					[photoFrameContainerView sendSubviewToBack:thumbnailView];
+					[photoFrameContainerView addSubview:highlightView];
+					[photoFrameContainerView bringSubviewToFront:highlightView];
+					
 					[self.view bringSubviewToFront:paperclipBackgroundView];
-					[self.view bringSubviewToFront:thumbnailView];
-					[self.view bringSubviewToFront:photoFrameView];
+					[self.view bringSubviewToFront:photoFrameContainerView];
 					[self.view bringSubviewToFront:paperclipView];
 					[self.view bringSubviewToFront:photoControl];
 					
 					thumbnailView.transform = CGAffineTransformMakeRotation(DEG_TO_RAD(3.5));
 				}
 				
-				photoFrameView.alpha = 1.0;
+				photoFrameContainerView.alpha = 1.0;
 				CGFloat scale = [[UIScreen mainScreen] scale];
 				
 				if (![image isEqual:currentImage]) {
@@ -753,16 +781,47 @@ enum {
 						scaledImageSize.width = fitDimension;
 					}
 					UIImage *scaledImage = [ATUtilities imageByScalingImage:image toSize:scaledImageSize scale:scale fromITouchCamera:(feedback.imageSource == ATFeedbackImageSourceCamera)];
+					thumbnailView.bounds = CGRectMake(0.0, 0.0, 70.0, 70.0);
 					thumbnailView.image = scaledImage;
 				}
 				CGRect f = CGRectMake(11.5, 11.5, 70, 70);
-				f = CGRectOffset(f, photoFrameView.frame.origin.x, photoFrameView.frame.origin.y);
 				thumbnailView.frame = f;
 				thumbnailView.bounds = CGRectMake(0.0, 0.0, 70.0, 70.0);
+				UIView *updatingHighlightView = [photoFrameContainerView viewWithTag:kFeedbackPhotoHighlightTag];
+				CGRect highlightFrame = thumbnailView.frame;
+				highlightFrame.origin.x += 5;
+				highlightFrame.origin.y += 1;
+				highlightFrame.size.width -= 10;
+				highlightFrame.size.height -= 1;
+				updatingHighlightView.frame = highlightFrame;
+				updatingHighlightView.transform = thumbnailView.transform;
+				
 				photoControl.frame = [self photoControlFrame];
-				photoControl.transform = photoFrameView.transform;
+				photoControl.transform = photoFrameContainerView.transform;
+				
+				photoPanRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(photoDragged:)];
+				photoPanRecognizer.minimumNumberOfTouches = 1;
+				photoPanRecognizer.maximumNumberOfTouches = 1;
+				photoPanRecognizer.delaysTouchesBegan = YES;
+				photoPanRecognizer.cancelsTouchesInView = YES;
+				[photoControl addGestureRecognizer:photoPanRecognizer];
 			}
-			
+		}
+	}
+}
+
+- (void)updateThumbnailOffsetWithScale:(CGSize)scale {
+	@synchronized(self) {
+		if ([self shouldShowPaperclip]) {
+			CGAffineTransform newPhotoFrameTransform = photoFrameTransform;
+			if (!CGPointEqualToPoint(CGPointZero, photoDragOffset)) {
+				newPhotoFrameTransform = CGAffineTransformTranslate(newPhotoFrameTransform, photoDragOffset.x, photoDragOffset.y);
+			}
+			if (!CGSizeEqualToSize(CGSizeZero, scale)) {
+				newPhotoFrameTransform = CGAffineTransformScale(newPhotoFrameTransform, scale.width, scale.height);
+			}
+			photoControl.transform = newPhotoFrameTransform;
+			photoFrameContainerView.transform = newPhotoFrameTransform;
 		}
 	}
 }
@@ -785,6 +844,54 @@ enum {
 	self.doneButton.enabled = !empty;
 	self.doneButton.style = empty == YES ? UIBarButtonItemStyleBordered : UIBarButtonItemStyleDone;
 }
+
+- (void)photoDragged:(UIPanGestureRecognizer *)recognizer {
+	CGFloat dragDistance = 75;
+	if (recognizer == photoPanRecognizer) {
+		if (recognizer.state == UIGestureRecognizerStateCancelled) {
+			photoDragOffset = CGPointZero;
+			[self updateThumbnailOffsetWithScale:CGSizeZero];
+		} else if (recognizer.state == UIGestureRecognizerStateBegan) {
+			photoDragOffset = CGPointZero;
+			[self updateThumbnailOffsetWithScale:CGSizeZero];
+		} else if (recognizer.state == UIGestureRecognizerStateChanged) {
+			CGPoint translation = [recognizer translationInView:self.view];
+			UIView *highlightView = [photoFrameContainerView viewWithTag:kFeedbackPhotoHighlightTag];
+			translation.x = MIN(8, translation.x);
+			photoDragOffset = translation;
+			CGFloat distance = sqrt(photoDragOffset.x*photoDragOffset.x + photoDragOffset.y*photoDragOffset.y);
+			if (distance > dragDistance) {
+				highlightView.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.2];
+			} else {
+				highlightView.backgroundColor = [UIColor clearColor];
+			}
+			[self updateThumbnailOffsetWithScale:CGSizeZero];
+		} else if (recognizer.state == UIGestureRecognizerStateEnded) {
+			CGFloat distance = sqrt(photoDragOffset.x*photoDragOffset.x + photoDragOffset.y*photoDragOffset.y);
+			if (distance > dragDistance) {
+				[UIView beginAnimations:@"remove-screenshot" context:NULL];
+				[UIView setAnimationDuration:0.3];
+				[UIView setAnimationDelegate:self];
+				[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
+				
+				[self updateThumbnailOffsetWithScale:CGSizeMake(2, 2)];
+				photoFrameContainerView.alpha = 0.0;
+				
+				[UIView commitAnimations];
+			} else {
+				[UIView beginAnimations:@"snapback-screenshot" context:NULL];
+				[UIView setAnimationDuration:0.3];
+				[UIView setAnimationDelegate:self];
+				[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
+				
+				photoDragOffset = CGPointZero;
+				[self updateThumbnailOffsetWithScale:CGSizeZero];
+				
+				[UIView commitAnimations];
+			}
+		}
+	}
+}
 @end
 
 
@@ -795,7 +902,6 @@ enum {
 	CGRect screenBounds = [[UIScreen mainScreen] bounds];
 	CGFloat w = statusBarSize.width;
 	CGFloat h = statusBarSize.height;
-	CGFloat topPadding = 0.0;
 	if (CGSizeEqualToSize(CGSizeZero, statusBarSize)) {
 		w = screenBounds.size.width;
 		h = screenBounds.size.height;
@@ -809,13 +915,11 @@ enum {
 		case UIInterfaceOrientationLandscapeLeft:
 		case UIInterfaceOrientationLandscapeRight:
 			isLandscape = YES;
-			topPadding = statusBarSize.width;
 			windowWidth = h;
 			break;
 		case UIInterfaceOrientationPortraitUpsideDown:
 		case UIInterfaceOrientationPortrait:
 		default:
-			topPadding = statusBarSize.height;
 			windowWidth = w;
 			break;
 	}
@@ -828,7 +932,6 @@ enum {
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
 		viewHeight = isLandscape ? 368.0 : 368.0;
 		originY = isLandscape ? 20.0 : 200;
-		//viewWidth = isLandscape ? 200.0 : 300.0;
 		viewWidth = windowWidth - 12*2 - 100.0;
 		originX = floorf((windowWidth - viewWidth)/2.0);
 	} else {

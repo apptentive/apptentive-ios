@@ -35,7 +35,7 @@ typedef enum {
 #endif
 	NSMutableDictionary *additionalFeedbackData;
 	NSString *apiKey;
-	BOOL showKeyboardAccessory;
+	BOOL showTagline;
 	BOOL shouldTakeScreenshot;
 	BOOL showEmailField;
 	NSString *initialName;
@@ -44,7 +44,7 @@ typedef enum {
 	NSString *customPlaceholderText;
 }
 @property (nonatomic, retain) NSString *apiKey;
-@property (nonatomic, assign) BOOL showKeyboardAccessory;
+@property (nonatomic, assign) BOOL showTagline;
 @property (nonatomic, assign) BOOL shouldTakeScreenshot;
 @property (nonatomic, assign) BOOL showEmailField;
 @property (nonatomic, retain) NSString *initialName;

@@ -98,7 +98,10 @@
 			if ([self isFinished]) {
 				break;
 			}
-			NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:self.targetURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:timeoutInterval];
+			if (request) {
+				[request release], request = nil;
+			}
+			request = [[NSMutableURLRequest alloc] initWithURL:self.targetURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:timeoutInterval];
 			for (NSString *key in headers) {
 				[request setValue:[headers objectForKey:key] forHTTPHeaderField:key];
 			}
@@ -112,7 +115,6 @@
 			[self.connection scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
 			[self.connection start];
 			self.executing = YES;
-			[request release];
 #if TARGET_OS_IPHONE_BOGUS
 			[[PSNetworkActivityIndicator sharedIndicator] increment];
 #endif
@@ -232,6 +234,30 @@
 	}
 }
 
+- (NSCachedURLResponse *)connection:(NSURLConnection *)aConnection willCacheResponse:(NSCachedURLResponse *)cachedResponse {
+	// See: http://blackpixel.com/blog/1659/caching-and-nsurlconnection/
+	NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)[cachedResponse response];
+	if ([aConnection currentRequest].cachePolicy == NSURLRequestUseProtocolCachePolicy) {
+		NSDictionary *responseHeaders = [httpResponse allHeaderFields];
+		NSString *cacheControlHeader = [responseHeaders valueForKey:@"Cache-Control"];
+		NSString *expiresHeader = [responseHeaders valueForKey:@"Expires"];
+		if ((cacheControlHeader == nil) && (expiresHeader == nil)) {
+			return nil;
+		}
+	}
+	return cachedResponse;
+}
+
+- (NSURLRequest *)connection: (NSURLConnection *)inConnection willSendRequest: (NSURLRequest *)inRequest redirectResponse: (NSURLResponse *)inRedirectResponse {
+	if (inRedirectResponse) {
+		NSMutableURLRequest *r = [[request mutableCopy] autorelease];
+		[r setURL:[inRequest URL]];
+		return r;
+	} else {
+		return inRequest;
+	}
+}
+
 - (void)setExecuting:(BOOL)isExecuting {
 	[self willChangeValueForKey:@"isExecuting"];
 	executing = isExecuting;
@@ -251,6 +277,7 @@
 - (void)dealloc {
 	@synchronized (self) {
 		delegate = nil;
+		[request release], request = nil;
 		[targetURL release];
 		if (connection) {
 			[connection release];

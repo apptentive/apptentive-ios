@@ -127,15 +127,16 @@ enum {
 	[response release], response = nil;
 	[task release], task = nil;
 	
-	ATHUDView *hud = [[ATHUDView alloc] initWithWindow:self.view.window];
-	if (survey.successMessage) {
-		hud.label.text = survey.successMessage;
-	} else {
+	if (!survey.successMessage) {
+		ATHUDView *hud = [[ATHUDView alloc] initWithWindow:self.view.window];
 		hud.label.text = ATLocalizedString(@"Thanks!", @"Text in thank you display upon submitting survey.");
 		hud.fadeOutDuration = 5.0;
+		[hud show];
+		[hud autorelease];
+	} else {
+		UIAlertView *successAlert = [[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Thanks!", @"Text in thank you display upon submitting survey.") message:survey.successMessage delegate:nil cancelButtonTitle:ATLocalizedString(@"Okay", @"Okay button title") otherButtonTitles:nil] autorelease];
+		[successAlert show];
 	}
-	[hud show];
-	[hud autorelease];
 	
 	NSDictionary *notificationInfo = [[NSDictionary alloc] initWithObjectsAndKeys:survey.identifier, ATSurveyIDKey, nil];
 	NSDictionary *metricsInfo = [[NSDictionary alloc] initWithObjectsAndKeys:survey.identifier, ATSurveyMetricsSurveyIDKey, [NSNumber numberWithInt:ATSurveyWindowTypeSurvey], ATSurveyWindowTypeKey, [NSNumber numberWithInt:ATSurveyEventTappedSend], ATSurveyMetricsEventKey, nil];

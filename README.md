@@ -37,6 +37,7 @@ following frameworks:
 * CoreTelephony
 * Foundation
 * QuartzCore
+* StoreKit
 * SystemConfiguration
 * UIKit
 

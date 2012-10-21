@@ -113,7 +113,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 	self.viewController = vc;
 #endif
 
-#ifdef TARGET_IPHONE_SIMULATOR
+#if TARGET_IPHONE_SIMULATOR
 	[self logDefaults];
 #endif
 	[self userDidUseApp];
@@ -303,6 +303,11 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 		self.viewController = nil;
 	}
 }
+
+#pragma mark SKStoreProductViewControllerDelegate
+- (void)productViewControllerDidFinish:(SKStoreProductViewController *)productViewController {
+	[productViewController dismissModalViewControllerAnimated:YES];
+}
 #endif
 @end
 
@@ -358,14 +363,40 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 	return [NSURL URLWithString:URLString];
 }
 
+#if TARGET_OS_IPHONE
+- (void)showUnableToOpenAppStoreDialog {
+	UIAlertView *errorAlert = [[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Oops!", @"Unable to load the App Store title") message:ATLocalizedString(@"Unable to load the App Store", @"Unable to load the App Store message") delegate:nil cancelButtonTitle:ATLocalizedString(@"Okay", @"Okay button title") otherButtonTitles:nil] autorelease];
+	[errorAlert show];
+}
+#endif
+
 - (void)openURLForRatingApp {
 	NSURL *url = [self URLForRatingApp];
 	[self setRatedApp];
 #if TARGET_OS_IPHONE
-	if (![[UIApplication sharedApplication] canOpenURL:url]) {
-		NSLog(@"No application can open the URL: %@", url);
+	if ([SKStoreProductViewController class] != NULL && iTunesAppID) {
+#if TARGET_IPHONE_SIMULATOR
+		[self showUnableToOpenAppStoreDialog];
+#else
+		SKStoreProductViewController *vc = [[[SKStoreProductViewController alloc] init] autorelease];
+		vc.delegate = self;
+		[vc loadProductWithParameters:@{SKStoreProductParameterITunesItemIdentifier:iTunesAppID} completionBlock:^(BOOL result, NSError *error) {
+			if (error) {
+				[self showUnableToOpenAppStoreDialog];
+				NSLog(@"Error loading product view: %@", error);
+			} else {
+				UIViewController *presentingVC = [self rootViewControllerForCurrentWindow];
+				[presentingVC presentModalViewController:vc animated:YES];
+			}
+		}];
+#endif
+	} else {
+		if (![[UIApplication sharedApplication] canOpenURL:url]) {
+			NSLog(@"No application can open the URL: %@", url);
+			[self showUnableToOpenAppStoreDialog];
+		}
+		[[UIApplication sharedApplication] openURL:url];
 	}
-	[[UIApplication sharedApplication] openURL:url];
 #elif TARGET_OS_MAC
 	[[NSWorkspace sharedWorkspace] openURL:url];
 #endif

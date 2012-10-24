@@ -19,6 +19,7 @@
 	ATFeedbackController *controller;
 }
 @property (nonatomic, retain) IBOutlet UITableView *tableView;
+@property (retain, nonatomic) IBOutlet UIView *headerView;
 
 - (id)initWithFeedbackController:(ATFeedbackController *)aController;
 - (IBAction)done:(id)sender;

@@ -7,7 +7,9 @@
 //
 
 #import "ATMessageDisplayType.h"
+
 #import "ATBackend.h"
+#import "ATData.h"
 #import "ATMessage.h"
 
 
@@ -23,16 +25,10 @@ static ATMessageDisplayType *modalTypeSingleton = nil;
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
 	
 	@synchronized(self) {
-		NSFetchRequest *fetchTypes = [[NSFetchRequest alloc] initWithEntityName:@"ATMessageDisplayType"];
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(displayType == %d) || (displayType == %d)", ATMessageDisplayTypeTypeMessageCenter, ATMessageDisplayTypeTypeModal];
-		fetchTypes.predicate = fetchPredicate;
-		NSError *fetchError = nil;
-		NSArray *fetchArray = [context executeFetchRequest:fetchTypes error:&fetchError];
-		[fetchTypes release], fetchTypes = nil;
+		NSArray *fetchArray = [ATData findEntityNamed:@"ATMessageDisplayType" withPredicate:fetchPredicate];
 		
-		if (!fetchArray) {
-			[NSException raise:NSGenericException format:@"%@", [fetchError description]];
-		} else {
+		if (fetchArray) {
 			for (NSManagedObject *fetchedObject in fetchArray) {
 				ATMessageDisplayType *dt = (ATMessageDisplayType *)fetchedObject;
 				ATMessageDisplayTypeType displayType = (ATMessageDisplayTypeType)[[dt displayType] intValue];

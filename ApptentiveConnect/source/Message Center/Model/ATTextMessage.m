@@ -9,6 +9,7 @@
 #import "ATTextMessage.h"
 
 #import "ATBackend.h"
+#import "ATData.h"
 
 @implementation ATTextMessage
 
@@ -16,22 +17,14 @@
 @dynamic subject;
 
 + (ATTextMessage *)findMessageWithPendingID:(NSString *)pendingID {
-	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
 	ATTextMessage *result = nil;
 	
 	@synchronized(self) {
-		NSFetchRequest *fetchTypes = [[NSFetchRequest alloc] initWithEntityName:@"ATTextMessage"];
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingMessageID == %@)", pendingID];
-		fetchTypes.predicate = fetchPredicate;
-		NSError *fetchError = nil;
-		NSArray *fetchArray = [context executeFetchRequest:fetchTypes error:&fetchError];
-		
-		if (fetchArray) {
-			for (NSManagedObject *fetchedObject in fetchArray) {
-				result = (ATTextMessage *)fetchedObject;
-			}
+		NSArray *results = [ATData findEntityNamed:@"ATTextMessage" withPredicate:fetchPredicate];
+		if (results && [results count] != 0) {
+			result = [results objectAtIndex:0];
 		}
-		[fetchTypes release], fetchTypes = nil;
 	}
 	return result;
 }
@@ -52,23 +45,9 @@
 }
 
 + (void)clearComposingMessages {
-	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
-	
 	@synchronized(self) {
-		NSFetchRequest *fetchTypes = [[NSFetchRequest alloc] initWithEntityName:@"ATTextMessage"];
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingState == %d)", ATPendingMessageStateComposing];
-		fetchTypes.predicate = fetchPredicate;
-		NSError *fetchError = nil;
-		NSArray *fetchArray = [context executeFetchRequest:fetchTypes error:&fetchError];
-		
-		if (fetchArray) {
-			for (NSManagedObject *fetchedObject in fetchArray) {
-				[context deleteObject:fetchedObject];
-			}
-			[context save:nil];
-		}
-		
-		[fetchTypes release], fetchTypes = nil;
+		[ATData removeEntitiesNamed:@"ATTextMessage" withPredicate:fetchPredicate];
 	}
 }
 @end

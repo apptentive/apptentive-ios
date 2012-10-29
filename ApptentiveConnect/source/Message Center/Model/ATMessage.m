@@ -7,7 +7,9 @@
 //
 
 #import "ATMessage.h"
+
 #import "ATBackend.h"
+#import "ATData.h"
 #import "ATFakeMessage.h"
 #import "ATMessageDisplayType.h"
 #import "ATTextMessage.h"
@@ -47,12 +49,10 @@
 		return nil;
 	}
 	
-	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
-	
 	ATMessageDisplayType *messageCenterType = [ATMessageDisplayType messageCenterType];
 	ATMessageDisplayType *modalType = [ATMessageDisplayType modalType];
 	
-	NSManagedObject *message = [[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:objectName inManagedObjectContext:context] insertIntoManagedObjectContext:context];
+	NSManagedObject *message = [ATData newEntityNamed:objectName];
 	[message setValue:[messageJSON objectForKey:@"id"] forKey:@"apptentiveID"];
 	[message setValue:[messageJSON objectForKey:@"sender_id"] forKey:@"senderID"];
 	[message setValue:[messageJSON objectForKey:@"recipient_id"] forKey:@"recipientID"];
@@ -97,22 +97,14 @@
 }
 
 + (ATMessage *)findMessageWithID:(NSString *)apptentiveID {
-	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
 	ATMessage *result = nil;
 	
 	@synchronized(self) {
-		NSFetchRequest *fetchTypes = [[NSFetchRequest alloc] initWithEntityName:@"ATMessage"];
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(apptentiveID == %@)", apptentiveID];
-		fetchTypes.predicate = fetchPredicate;
-		NSError *fetchError = nil;
-		NSArray *fetchArray = [context executeFetchRequest:fetchTypes error:&fetchError];
-		
-		if (fetchArray) {
-			for (NSManagedObject *fetchedObject in fetchArray) {
-				result = (ATMessage *)fetchedObject;
-			}
+		NSArray *results = [ATData findEntityNamed:@"ATMessage" withPredicate:fetchPredicate];
+		if (results && [results count]) {
+			result = [results objectAtIndex:0];
 		}
-		[fetchTypes release], fetchTypes = nil;
 	}
 	return result;
 }

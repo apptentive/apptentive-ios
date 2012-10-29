@@ -22,6 +22,7 @@
 #import "ATMessageDisplayType.h"
 #import "ATGetMessagesTask.h"
 #import "ATTextMessage.h"
+#import "ATLog.h"
 
 NSString *const ATBackendNewAPIKeyNotification = @"ATBackendNewAPIKeyNotification";
 NSString *const ATUUIDPreferenceKey = @"ATUUIDPreferenceKey";
@@ -92,9 +93,9 @@ static ATBackend *sharedBackend = nil;
 		result = [UIImage imageNamed:name];
 	}
 	if (!result) {
-		NSLog(@"Unable to find image named: %@", name);
-		NSLog(@"sought at: %@", imagePath);
-		NSLog(@"bundle is: %@", [ATConnect resourceBundle]);
+		ATLogError(@"Unable to find image named: %@", name);
+		ATLogError(@"sought at: %@", imagePath);
+		ATLogError(@"bundle is: %@", [ATConnect resourceBundle]);
 	}
 	return result;
 }
@@ -127,9 +128,9 @@ static ATBackend *sharedBackend = nil;
 		result = [NSImage imageNamed:name];
 	}
 	if (!result) {
-		NSLog(@"Unable to find image named: %@", name);
-		NSLog(@"sought at: %@", imagePath);
-		NSLog(@"bundle is: %@", [ATConnect resourceBundle]);
+		ATLogError(@"Unable to find image named: %@", name);
+		ATLogError(@"sought at: %@", imagePath);
+		ATLogError(@"bundle is: %@", [ATConnect resourceBundle]);
 	}
 	return result;
 }
@@ -212,8 +213,8 @@ static ATBackend *sharedBackend = nil;
 	NSError *error = nil;
 	BOOL result = [fm createDirectoryAtPath:newPath withIntermediateDirectories:YES attributes:nil error:&error];
 	if (!result) {
-		NSLog(@"Failed to create support directory: %@", newPath);
-		NSLog(@"Error was: %@", error);
+		ATLogError(@"Failed to create support directory: %@", newPath);
+		ATLogError(@"Error was: %@", error);
 		return nil;
 	}
 	return newPath;
@@ -347,8 +348,8 @@ static ATBackend *sharedBackend = nil;
 		NSError *error2 = nil;
 		if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:@{NSMigratePersistentStoresAutomaticallyOption:@YES, NSInferMappingModelAutomaticallyOption:@YES} error:&error2]) {
 			[[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];
-			NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-			NSLog(@"Unresolved error2 %@, %@", error2, [error2 userInfo]);
+			ATLogError(@"Unresolved error %@, %@", error, [error userInfo]);
+			ATLogError(@"Unresolved error2 %@, %@", error2, [error2 userInfo]);
 			[persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error];
 			//        abort();
 		}
@@ -484,20 +485,19 @@ static ATBackend *sharedBackend = nil;
 
 - (void)loadDemoData {
 	[self clearDemoData];
-	NSLog(@"loading demo data");
 #if RATINGS_DEMO
 	NSDictionary *messages = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"demoRatingData" ofType:@"plist"]];
 #else
 	NSDictionary *messages = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"demoData" ofType:@"plist"]];
 #endif
-	NSLog(@"messages: %@", messages);
 	for (NSDictionary *message in [messages objectForKey:@"messages"]) {
 		ATMessage *m = [ATMessage newMessageFromJSON:message];
 		[m setPendingState:[NSNumber numberWithInt:ATPendingMessageStateConfirmed]];
+		[m release], m = nil;
 	}
 	NSError *error = nil;
 	if (![self.managedObjectContext save:&error]) {
-		NSLog(@"Error: %@", error);
+		ATLogError(@"%@", error);
 	}
 }
 @end

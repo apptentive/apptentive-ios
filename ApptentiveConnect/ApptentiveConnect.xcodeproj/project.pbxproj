@@ -28,6 +28,9 @@
 		491748BF1341177000A7D11E /* ATURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 491748B71341177000A7D11E /* ATURLConnection.m */; };
 		491748C01341177000A7D11E /* ATWebClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 491748B81341177000A7D11E /* ATWebClient.h */; };
 		491748C11341177000A7D11E /* ATWebClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 491748B91341177000A7D11E /* ATWebClient.m */; };
+		491E03C9163F243600DC3E18 /* ATData.h in Headers */ = {isa = PBXBuildFile; fileRef = 491E03C7163F243600DC3E18 /* ATData.h */; };
+		491E03CA163F243600DC3E18 /* ATData.m in Sources */ = {isa = PBXBuildFile; fileRef = 491E03C8163F243600DC3E18 /* ATData.m */; };
+		491E03CE163F261C00DC3E18 /* ATLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 491E03CC163F261C00DC3E18 /* ATLog.h */; };
 		493529FF138C7253000E464A /* ATInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA1022138B498C0082887A /* ATInfoViewController.xib */; };
 		49352A00138C7257000E464A /* ATInfoViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA1024138B49A50082887A /* ATInfoViewController_iPad.xib */; };
 		49352A20138C73B8000E464A /* ATAboutApptentiveView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49352A1F138C73B8000E464A /* ATAboutApptentiveView.xib */; };
@@ -248,6 +251,9 @@
 		491748B71341177000A7D11E /* ATURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATURLConnection.m; sourceTree = "<group>"; };
 		491748B81341177000A7D11E /* ATWebClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATWebClient.h; sourceTree = "<group>"; };
 		491748B91341177000A7D11E /* ATWebClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATWebClient.m; sourceTree = "<group>"; };
+		491E03C7163F243600DC3E18 /* ATData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATData.h; path = "Message Center/Model/ATData.h"; sourceTree = "<group>"; };
+		491E03C8163F243600DC3E18 /* ATData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATData.m; path = "Message Center/Model/ATData.m"; sourceTree = "<group>"; };
+		491E03CC163F261C00DC3E18 /* ATLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATLog.h; sourceTree = "<group>"; };
 		49352A1F138C73B8000E464A /* ATAboutApptentiveView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ATAboutApptentiveView.xib; sourceTree = "<group>"; };
 		49352AC1138C97A2000E464A /* ATAPIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAPIRequest.h; sourceTree = "<group>"; };
 		49352AC2138C97A2000E464A /* ATAPIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAPIRequest.m; sourceTree = "<group>"; };
@@ -479,6 +485,7 @@
 			children = (
 				4936AE751379DEBB00A4B17F /* ATUtilities.h */,
 				4936AE761379DEBB00A4B17F /* ATUtilities.m */,
+				491E03CC163F261C00DC3E18 /* ATLog.h */,
 			);
 			path = Misc;
 			sourceTree = "<group>";
@@ -723,6 +730,8 @@
 				4988FB4816212B41000A7CB7 /* ATUpgradeRequestMessage.m */,
 				49AF27C916321EDC005E1E9D /* ATFakeMessage.h */,
 				49AF27CA16321EDC005E1E9D /* ATFakeMessage.m */,
+				491E03C7163F243600DC3E18 /* ATData.h */,
+				491E03C8163F243600DC3E18 /* ATData.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -927,6 +936,8 @@
 				49E3A26F1628F4FF000675B4 /* ATGetMessagesTask.h in Headers */,
 				49AF27CB16321EDC005E1E9D /* ATFakeMessage.h in Headers */,
 				49AF27CF16321F0C005E1E9D /* ATFakeMessageCell.h in Headers */,
+				491E03C9163F243600DC3E18 /* ATData.h in Headers */,
+				491E03CE163F261C00DC3E18 /* ATLog.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1166,6 +1177,7 @@
 				49E3A2701628F4FF000675B4 /* ATGetMessagesTask.m in Sources */,
 				49AF27CC16321EDC005E1E9D /* ATFakeMessage.m in Sources */,
 				49AF27D016321F0C005E1E9D /* ATFakeMessageCell.m in Sources */,
+				491E03CA163F243600DC3E18 /* ATData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1322,7 +1334,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"JSONKIT_PREFIX=AT",
 					"APPTENTIVE_DEBUG=1",
-					"APPTENTIVE_DEMO=1",
+					"APPTENTIVE_DEMO=0",
 					"RATINGS_DEMO=0",
 				);
 				OTHER_LDFLAGS = "-ObjC";

@@ -18,6 +18,7 @@
 #import "ATPersonUpdater.h"
 #import "ATTaskQueue.h"
 #import "ATTextMessage.h"
+#import "ATInfoViewController.h"
 
 typedef enum {
 	ATMessageCellTypeUnknown,
@@ -207,6 +208,12 @@ typedef enum {
 			}];
 		}
 	}
+}
+
+- (IBAction)showInfoView:(id)sender {
+	ATInfoViewController *vc = [[ATInfoViewController alloc] init];
+	[self presentModalViewController:vc animated:YES];
+	[vc release], vc = nil;
 }
 
 #pragma mark Private

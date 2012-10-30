@@ -31,13 +31,18 @@ enum {
 @implementation ATInfoViewController
 @synthesize tableView;
 
-- (id)initWithFeedbackController:(ATFeedbackController *)aController {
+- (id)init {
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
 		self = [super initWithNibName:@"ATInfoViewController" bundle:[ATConnect resourceBundle]];
 	} else {
 		self = [super initWithNibName:@"ATInfoViewController_iPad" bundle:[ATConnect resourceBundle]];
 		self.modalPresentationStyle = UIModalPresentationFormSheet;
 	}
+	return self;
+}
+
+- (id)initWithFeedbackController:(ATFeedbackController *)aController {
+	self = [self init];
 	controller = [aController retain];
 	return self;
 }
@@ -205,7 +210,7 @@ enum {
 - (void)teardown {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[headerView release], headerView = nil;
-	self.tableView = nil;
+	[tableView release], tableView = nil;
 }
 
 - (void)reload {

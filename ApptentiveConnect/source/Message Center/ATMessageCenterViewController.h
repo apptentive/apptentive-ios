@@ -32,4 +32,5 @@
 - (IBAction)donePressed:(id)sender;
 - (IBAction)sendPressed:(id)sender;
 - (IBAction)paperclipPressed:(id)sender;
+- (IBAction)showInfoView:(id)sender;
 @end

@@ -23,6 +23,10 @@ static ATConnect *sharedConnection = nil;
 @implementation ATConnect
 @synthesize apiKey, showTagline, shouldTakeScreenshot, showEmailField, initialName, initialEmailAddress, feedbackControllerType, customPlaceholderText;
 
+#if TARGET_OS_IPHONE
+@synthesize shouldUseMessageCenter;
+#endif
+
 + (ATConnect *)sharedConnection {
 	@synchronized(self) {
 		if (sharedConnection == nil) {

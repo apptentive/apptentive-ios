@@ -57,7 +57,8 @@ typedef enum {
 + (ATConnect *)sharedConnection;
 
 #if TARGET_OS_IPHONE
-/*! 
+@property (nonatomic, assign) BOOL shouldUseMessageCenter;
+/*!
  * Presents a feedback controller in the window of the given view controller.
  */
 - (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController;

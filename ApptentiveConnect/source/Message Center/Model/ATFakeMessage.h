@@ -16,4 +16,5 @@
 @property (nonatomic, retain) NSString * body;
 @property (nonatomic, retain) NSString * subject;
 
++ (void)removeFakeMessages;
 @end

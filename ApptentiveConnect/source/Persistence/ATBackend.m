@@ -10,6 +10,7 @@
 #import "ATAppConfigurationUpdateTask.h"
 #import "ATConnect.h"
 #import "ATContactStorage.h"
+#import "ATFakeMessage.h"
 #import "ATFeedback.h"
 #import "ATFeedbackTask.h"
 #import "ApptentiveMetrics.h"
@@ -35,6 +36,7 @@ static ATBackend *sharedBackend = nil;
 
 @interface ATBackend (Private)
 - (void)loadDemoData;
+- (void)clearTemporaryData;
 - (void)setup;
 - (void)updateWorking;
 - (void)networkStatusChanged:(NSNotification *)notification;
@@ -63,6 +65,7 @@ static ATBackend *sharedBackend = nil;
 #if APPTENTIVE_DEMO
 			[sharedBackend performSelector:@selector(loadDemoData) withObject:nil afterDelay:0.1];
 #endif
+			[sharedBackend performSelector:@selector(clearTemporaryData) withObject:nil afterDelay:0.1];
 		}
 	}
 	return sharedBackend;
@@ -499,5 +502,14 @@ static ATBackend *sharedBackend = nil;
 	if (![self.managedObjectContext save:&error]) {
 		ATLogError(@"%@", error);
 	}
+}
+
+- (void)clearTemporaryData {
+	if (![[NSThread currentThread] isMainThread]) {
+		[self performSelectorOnMainThread:@selector(clearTemporaryData) withObject:nil waitUntilDone:YES];
+		return;
+	}
+	ATLogInfo(@"Removing temporary data");
+	[ATFakeMessage removeFakeMessages];
 }
 @end

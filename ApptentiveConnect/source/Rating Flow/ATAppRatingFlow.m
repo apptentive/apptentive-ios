@@ -10,7 +10,9 @@
 #import "ATAPIRequest.h"
 #import "ATBackend.h"
 #import "ATConnect.h"
+#import "ATData.h"
 #import "ATAppConfigurationUpdater.h"
+#import "ATFakeMessage.h"
 #import "ATFeedback.h"
 #import "ATReachability.h"
 #import "ATAppRatingMetrics.h"
@@ -263,19 +265,25 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 			} else {
 				[[ATBackend sharedBackend] setCurrentFeedback:nil];
 				ATConnect *connection = [ATConnect sharedConnection];
-#if RATINGS_DEMO
-				[connection presentMessageCenterFromViewController:self.viewController];
-#else
-				connection.customPlaceholderText = ATLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
-				ATFeedbackControllerType oldType = connection.feedbackControllerType;
-				connection.feedbackControllerType = ATFeedbackControllerSimple;
-				[connection presentFeedbackControllerFromViewController:self.viewController];
-				ATFeedback *inProgressFeedback = [[ATBackend sharedBackend] currentFeedback];
-				inProgressFeedback.source = ATFeedbackSourceEnjoymentDialog;
-				connection.customPlaceholderText = nil;
-				self.viewController = nil;
-				connection.feedbackControllerType = oldType;
-#endif
+				if (connection.shouldUseMessageCenter) {
+					ATFakeMessage *fakeMessage = (ATFakeMessage *)[ATData newEntityNamed:@"ATFakeMessage"];
+					fakeMessage.subject = NSLocalizedString(@"We're Sorry!", @"We're sorry text");
+					fakeMessage.body = ATLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
+					fakeMessage.creationTime = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
+					fakeMessage.senderID = @"demodevid"; // !! Replace.
+					[connection presentMessageCenterFromViewController:self.viewController];
+					[fakeMessage release], fakeMessage = nil;
+				} else {
+					connection.customPlaceholderText = ATLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
+					ATFeedbackControllerType oldType = connection.feedbackControllerType;
+					connection.feedbackControllerType = ATFeedbackControllerSimple;
+					[connection presentFeedbackControllerFromViewController:self.viewController];
+					ATFeedback *inProgressFeedback = [[ATBackend sharedBackend] currentFeedback];
+					inProgressFeedback.source = ATFeedbackSourceEnjoymentDialog;
+					connection.customPlaceholderText = nil;
+					self.viewController = nil;
+					connection.feedbackControllerType = oldType;
+				}
 			}
 		} else if (buttonIndex == 1) { // yes
 			[self postNotification:ATAppRatingDidClickEnjoymentButtonNotification forButton:ATAppRatingEnjoymentButtonTypeYes];

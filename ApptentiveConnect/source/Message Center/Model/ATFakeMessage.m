@@ -8,10 +8,18 @@
 
 #import "ATFakeMessage.h"
 
+#import "ATData.h"
 
 @implementation ATFakeMessage
 
 @dynamic body;
 @dynamic subject;
+
+
++ (void)removeFakeMessages {
+	@synchronized(self) {
+		[ATData removeEntitiesNamed:@"ATFakeMessage" withPredicate:nil];
+	}
+}
 
 @end

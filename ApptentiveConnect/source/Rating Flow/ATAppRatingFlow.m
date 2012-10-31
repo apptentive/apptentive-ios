@@ -14,6 +14,7 @@
 #import "ATAppConfigurationUpdater.h"
 #import "ATFakeMessage.h"
 #import "ATFeedback.h"
+#import "ATMessageSender.h"
 #import "ATReachability.h"
 #import "ATAppRatingMetrics.h"
 #import "ATAppRatingFlow_Private.h"
@@ -270,7 +271,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 					fakeMessage.subject = NSLocalizedString(@"We're Sorry!", @"We're sorry text");
 					fakeMessage.body = ATLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
 					fakeMessage.creationTime = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
-					fakeMessage.senderID = @"demodevid"; // !! Replace.
+					fakeMessage.sender = [ATMessageSender newOrExistingMessageSenderFromJSON:@{@"id":@"demodevid"}]; //!! replace
 					[connection presentMessageCenterFromViewController:self.viewController];
 					[fakeMessage release], fakeMessage = nil;
 				} else {

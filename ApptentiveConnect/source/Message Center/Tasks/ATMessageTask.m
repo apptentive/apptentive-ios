@@ -8,6 +8,7 @@
 
 #import "ATMessageTask.h"
 #import "ATBackend.h"
+#import "ATLog.h"
 #import "ATMessage.h"
 #import "ATPersonUpdater.h"
 #import "ATTextMessage.h"
@@ -145,11 +146,11 @@
 }
 
 - (BOOL)processResult:(NSDictionary *)jsonMessage {
+	ATLogInfo(@"getting json result: %@", jsonMessage);
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
 	ATTextMessage *textMessage = [ATTextMessage findMessageWithPendingID:message.pendingMessageID];
+	[textMessage updateWithJSON:jsonMessage];
 	textMessage.pendingState = [NSNumber numberWithInt:ATPendingMessageStateConfirmed];
-	textMessage.apptentiveID = [jsonMessage objectForKey:@"id"];
-	textMessage.senderID = [jsonMessage objectForKey:@"sender_id"];
 	
 	NSError *error = nil;
 	if (![context save:&error]) {

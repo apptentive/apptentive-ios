@@ -13,6 +13,7 @@
 #import "ATConnect.h"
 #import "ATFakeMessage.h"
 #import "ATMessage.h"
+#import "ATMessageSender.h"
 #import "ATMessageTask.h"
 #import "ATPendingMessage.h"
 #import "ATPersonUpdater.h"
@@ -468,9 +469,9 @@ typedef enum {
 	if (cellType == ATMessageCellTypeText) {
 		ATTextMessageUserCell *textCell = nil;
 		ATPerson *person = [ATPersonUpdater currentPerson];
-		ATTextMessageCellType cellSubType = (person != nil && [person.apptentiveID isEqualToString:message.senderID]) ? ATTextMessageCellTypeUser : ATTextMessageCellTypeDeveloper;
+		ATTextMessageCellType cellSubType = (person != nil && [person.apptentiveID isEqualToString:message.sender.apptentiveID]) ? ATTextMessageCellTypeUser : ATTextMessageCellTypeDeveloper;
 		if (person == nil) {
-			if ([@"demouserid" isEqualToString:message.senderID] || [[message pendingState] intValue] == ATPendingMessageStateComposing || [[message pendingState] intValue] == ATPendingMessageStateSending) {
+			if ([@"demouserid" isEqualToString:message.sender.apptentiveID] || [[message pendingState] intValue] == ATPendingMessageStateComposing || [[message pendingState] intValue] == ATPendingMessageStateSending) {
 				cellSubType = ATTextMessageCellTypeUser;
 			} else {
 				cellSubType = ATTextMessageCellTypeDeveloper;

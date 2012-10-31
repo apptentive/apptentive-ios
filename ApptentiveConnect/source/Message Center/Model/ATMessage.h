@@ -15,6 +15,8 @@ typedef enum {
 	ATPendingMessageStateConfirmed
 } ATPendingMessageState;
 
+@class ATMessageDisplayType, ATMessageSender;
+
 @interface ATMessage : NSManagedObject
 
 @property (nonatomic, retain) NSString *apptentiveID;
@@ -22,19 +24,21 @@ typedef enum {
 @property (nonatomic, retain) NSString *pendingMessageID;
 @property (nonatomic, retain) NSNumber *pendingState;
 @property (nonatomic, retain) NSNumber *priority;
-@property (nonatomic, retain) NSString *recipientID;
 @property (nonatomic, retain) NSNumber *seenByUser;
-@property (nonatomic, retain) NSString *senderID;
+@property (nonatomic, retain) ATMessageSender *sender;
+@property (nonatomic, retain) ATMessageSender *recipient;
 @property (nonatomic, retain) NSSet *displayTypes;
 
 + (ATMessage *)newMessageFromJSON:(NSDictionary *)json;
 + (ATMessage *)findMessageWithID:(NSString *)apptentiveID;
+
+- (void)updateWithJSON:(NSDictionary *)json;
 @end
 
 @interface ATMessage (CoreDataGeneratedAccessors)
 
-- (void)addDisplayTypesObject:(NSManagedObject *)value;
-- (void)removeDisplayTypesObject:(NSManagedObject *)value;
+- (void)addDisplayTypesObject:(ATMessageDisplayType *)value;
+- (void)removeDisplayTypesObject:(ATMessageDisplayType *)value;
 - (void)addDisplayTypes:(NSSet *)values;
 - (void)removeDisplayTypes:(NSSet *)values;
 

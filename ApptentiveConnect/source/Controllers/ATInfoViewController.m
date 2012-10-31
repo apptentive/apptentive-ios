@@ -14,6 +14,8 @@
 #import "ATFeedbackController.h"
 #import "ATFeedbackMetrics.h"
 #import "ATFeedbackTask.h"
+#import "ATMessageTask.h"
+#import "ATPendingMessage.h"
 #import "ATTask.h"
 #import "ATTaskQueue.h"
 
@@ -108,7 +110,7 @@ enum {
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
 	if (section == kSectionTasks) {
 		ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
-		return [queue countOfTasksWithTaskNamesInSet:[NSSet setWithObject:@"feedback"]];
+		return [queue countOfTasksWithTaskNamesInSet:[NSSet setWithObjects:@"feedback", @"message", nil]];
 	} else {
 		return 0;
 	}
@@ -119,7 +121,7 @@ enum {
 	UITableViewCell *result = nil;
 	if (indexPath.section == kSectionTasks) {
 		ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
-		ATTask *task = [queue taskAtIndex:indexPath.row withTaskNameInSet:[NSSet setWithObject:@"feedback"]];
+		ATTask *task = [queue taskAtIndex:indexPath.row withTaskNameInSet:[NSSet setWithObjects:@"feedback", @"message", nil]];
 		result = [aTableView dequeueReusableCellWithIdentifier:taskCellIdentifier];
 		if (!result) {
 			UINib *nib = [UINib nibWithNibName:@"ATTaskProgressCell" bundle:[ATConnect resourceBundle]];
@@ -136,6 +138,9 @@ enum {
 		if ([task isKindOfClass:[ATFeedbackTask class]]) {
 			ATFeedbackTask *feedbackTask = (ATFeedbackTask *)task;
 			label.text = feedbackTask.feedback.text;
+		} else if ([task isKindOfClass:[ATMessageTask class]]) {
+			ATMessageTask *messageTask = (ATMessageTask *)task;
+			label.text = messageTask.message.body;
 		} else {
 			label.text = [task description];
 		}

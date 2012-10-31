@@ -470,7 +470,7 @@ static ATBackend *sharedBackend = nil;
 	
 	@synchronized(self) {
 		NSFetchRequest *fetchTypes = [[NSFetchRequest alloc] initWithEntityName:@"ATMessage"];
-		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(senderID == 'demouserid' || senderID = 'demodevid')"];
+		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(sender.apptentiveID == 'demouserid' || sender.apptentiveID = 'demodevid')"];
 		fetchTypes.predicate = fetchPredicate;
 		NSError *fetchError = nil;
 		NSArray *fetchArray = [context executeFetchRequest:fetchTypes error:&fetchError];

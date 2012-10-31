@@ -12,6 +12,7 @@
 #import "ATData.h"
 #import "ATFakeMessage.h"
 #import "ATMessageDisplayType.h"
+#import "ATMessageSender.h"
 #import "ATTextMessage.h"
 #import "ATUpgradeRequestMessage.h"
 
@@ -22,9 +23,9 @@
 @dynamic pendingMessageID;
 @dynamic pendingState;
 @dynamic priority;
-@dynamic recipientID;
 @dynamic seenByUser;
-@dynamic senderID;
+@dynamic sender;
+@dynamic recipient;
 @dynamic displayTypes;
 
 + (ATMessage *)newMessageFromJSON:(NSDictionary *)json {
@@ -53,9 +54,8 @@
 	ATMessageDisplayType *modalType = [ATMessageDisplayType modalType];
 	
 	NSManagedObject *message = [ATData newEntityNamed:objectName];
-	[message setValue:[messageJSON objectForKey:@"id"] forKey:@"apptentiveID"];
-	[message setValue:[messageJSON objectForKey:@"sender_id"] forKey:@"senderID"];
-	[message setValue:[messageJSON objectForKey:@"recipient_id"] forKey:@"recipientID"];
+	
+	[(ATMessage *)message updateWithJSON:messageJSON];
 	
 	NSObject *creationDate = [messageJSON objectForKey:@"created_at"];
 	if ([creationDate isKindOfClass:[NSNumber class]]) {
@@ -66,7 +66,6 @@
 		NSTimeInterval t = [creationDate timeIntervalSince1970];
 		NSNumber *creationTimestamp = [NSNumber numberWithFloat:t];
 		[message setValue:creationTimestamp forKey:@"creationTime"];
-		
 	}
 	
 	[message setValue:[messageJSON objectForKey:@"priority"] forKey:@"priority"];
@@ -107,5 +106,16 @@
 		}
 	}
 	return result;
+}
+
+- (void)updateWithJSON:(NSDictionary *)messageJSON {
+	NSDictionary *senderDict = [messageJSON objectForKey:@"sender"];
+	ATMessageSender *sender = [ATMessageSender newOrExistingMessageSenderFromJSON:senderDict];
+	NSDictionary *recipientDict = [messageJSON objectForKey:@"recipient"];
+	ATMessageSender *recipient = [ATMessageSender newOrExistingMessageSenderFromJSON:recipientDict];
+	
+	[self setValue:[messageJSON objectForKey:@"id"] forKey:@"apptentiveID"];
+	[self setValue:sender forKey:@"sender"];
+	[self setValue:recipient forKey:@"recipient"];
 }
 @end

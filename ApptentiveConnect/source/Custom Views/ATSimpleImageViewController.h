@@ -8,17 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+#import "ATFeedback.h"
+#import "ATFeedbackTypes.h"
+
 @class ATCenteringImageScrollView;
-@class ATFeedback;
-@class ATFeedbackController;
 
 NSString * const ATImageViewChoseImage;
 
+@protocol ATSimpleImageViewControllerDelegate;
+
 @interface ATSimpleImageViewController : UIViewController <UIActionSheetDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverControllerDelegate> {
 @private
+	NSObject<ATSimpleImageViewControllerDelegate> *delegate;
 	ATCenteringImageScrollView *scrollView;
-	ATFeedback *feedback;
-	ATFeedbackController *controller;
 	UIBarButtonItem *cameraButtonItem;
 	BOOL shouldResign;
 	UIView *containerView;
@@ -28,7 +30,17 @@ NSString * const ATImageViewChoseImage;
 }
 @property (nonatomic, retain) IBOutlet UIView *containerView;
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *cameraButtonItem;
-- (id)initWithFeedback:(ATFeedback *)feedback feedbackController:(ATFeedbackController *)controller;
+
+- (id)initWithDelegate:(NSObject<ATSimpleImageViewControllerDelegate> *)delegate;
 - (IBAction)donePressed:(id)sender;
 - (IBAction)takePhoto:(id)sender;
+@end
+
+@protocol ATSimpleImageViewControllerDelegate <NSObject>
+- (void)imageViewController:(ATSimpleImageViewController *)vc pickedImage:(UIImage *)image fromSource:(ATFeedbackImageSource)source;
+- (void)imageViewControllerWillDismiss:(ATSimpleImageViewController *)vc animated:(BOOL)animated;
+- (ATFeedbackAttachmentOptions)attachmentOptionsForImageViewController:(ATSimpleImageViewController *)vc;
+
+@optional
+- (UIImage *)defaultImageForImageViewController:(ATSimpleImageViewController *)vc;
 @end

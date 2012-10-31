@@ -12,6 +12,7 @@
 #import "ATBackend.h"
 #import "ATConnect.h"
 #import "ATFakeMessage.h"
+#import "ATLog.h"
 #import "ATMessage.h"
 #import "ATMessageSender.h"
 #import "ATMessageTask.h"
@@ -50,6 +51,7 @@ typedef enum {
 	ATPendingMessage *composingMessage;
 	BOOL animatingTransition;
 	NSDateFormatter *messageDateFormatter;
+	UIImage *pickedImage;
 }
 @synthesize tableView, containerView, composerView, composerBackgroundView, attachmentButton, textView, sendButton, attachmentView, fakeCell;
 @synthesize userCell, developerCell;
@@ -125,6 +127,7 @@ typedef enum {
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[pickedImage release], pickedImage = nil;
 	[messageDateFormatter release];
 	[tableView release];
 	[attachmentView release];
@@ -213,6 +216,12 @@ typedef enum {
 
 - (IBAction)showInfoView:(id)sender {
 	ATInfoViewController *vc = [[ATInfoViewController alloc] init];
+	[self presentModalViewController:vc animated:YES];
+	[vc release], vc = nil;
+}
+
+- (IBAction)cameraPressed:(id)sender {
+	ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithDelegate:self];
 	[self presentModalViewController:vc animated:YES];
 	[vc release], vc = nil;
 }
@@ -404,6 +413,49 @@ typedef enum {
 		}];
 	} else {
 		currentKeyboardFrameInView = CGRectZero;
+	}
+}
+
+#pragma mark ATSimpleImageViewControllerDelegate
+- (void)imageViewController:(ATSimpleImageViewController *)vc pickedImage:(UIImage *)image fromSource:(ATFeedbackImageSource)source {
+	if (pickedImage != image) {
+		[pickedImage release], pickedImage = nil;
+		pickedImage = [image retain];
+	}
+}
+
+- (void)imageViewControllerWillDismiss:(ATSimpleImageViewController *)vc animated:(BOOL)animated {
+	if (pickedImage) {
+		UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Send Image", @"Send image button title"), nil];
+		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+			[actionSheet showFromRect:sendButton.bounds inView:sendButton animated:YES];
+		} else {
+			[actionSheet showInView:self.view];
+		}
+		[actionSheet autorelease];
+	}
+}
+
+- (ATFeedbackAttachmentOptions)attachmentOptionsForImageViewController:(ATSimpleImageViewController *)vc {
+	return ATFeedbackAllowPhotoAttachment & ATFeedbackAllowTakePhotoAttachment;
+}
+
+- (UIImage *)defaultImageForImageViewController:(ATSimpleImageViewController *)vc {
+	return pickedImage;
+}
+
+#pragma mark UIActionSheetDelegate
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+	if (buttonIndex == 0) {
+		ATLogDebug(@"picked button 0");
+	} else if (buttonIndex == 1) {
+		[pickedImage release], pickedImage = nil;
+	}
+}
+
+- (void)actionSheetCancel:(UIActionSheet *)actionSheet {
+	if (pickedImage) {
+		[pickedImage release], pickedImage = nil;
 	}
 }
 

@@ -34,6 +34,7 @@
 		491E03D31640823A00DC3E18 /* ATMessageSender.h in Headers */ = {isa = PBXBuildFile; fileRef = 491E03D11640823800DC3E18 /* ATMessageSender.h */; };
 		491E03D41640823A00DC3E18 /* ATMessageSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 491E03D21640823900DC3E18 /* ATMessageSender.m */; };
 		491E03D51640823A00DC3E18 /* ATMessageSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 491E03D21640823900DC3E18 /* ATMessageSender.m */; };
+		491E03D91640D01F00DC3E18 /* ATFeedbackTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 491E03D81640D01F00DC3E18 /* ATFeedbackTypes.h */; };
 		493529FF138C7253000E464A /* ATInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA1022138B498C0082887A /* ATInfoViewController.xib */; };
 		49352A00138C7257000E464A /* ATInfoViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA1024138B49A50082887A /* ATInfoViewController_iPad.xib */; };
 		49352A20138C73B8000E464A /* ATAboutApptentiveView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49352A1F138C73B8000E464A /* ATAboutApptentiveView.xib */; };
@@ -257,6 +258,7 @@
 		491E03CC163F261C00DC3E18 /* ATLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATLog.h; sourceTree = "<group>"; };
 		491E03D11640823800DC3E18 /* ATMessageSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATMessageSender.h; path = "Message Center/Model/ATMessageSender.h"; sourceTree = "<group>"; };
 		491E03D21640823900DC3E18 /* ATMessageSender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATMessageSender.m; path = "Message Center/Model/ATMessageSender.m"; sourceTree = "<group>"; };
+		491E03D81640D01F00DC3E18 /* ATFeedbackTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATFeedbackTypes.h; sourceTree = "<group>"; };
 		49352A1F138C73B8000E464A /* ATAboutApptentiveView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ATAboutApptentiveView.xib; sourceTree = "<group>"; };
 		49352AC1138C97A2000E464A /* ATAPIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAPIRequest.h; sourceTree = "<group>"; };
 		49352AC2138C97A2000E464A /* ATAPIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAPIRequest.m; sourceTree = "<group>"; };
@@ -477,6 +479,7 @@
 				49AA101E138B44C00082887A /* ATInfoViewController.m */,
 				4936AE4F1379DE3100A4B17F /* ATSimpleImageViewController.h */,
 				4936AE501379DE3100A4B17F /* ATSimpleImageViewController.m */,
+				491E03D81640D01F00DC3E18 /* ATFeedbackTypes.h */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -713,26 +716,26 @@
 		499912AA161B6B2000FDA15F /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				4988FB9416213D1E000A7CB7 /* ATPendingMessage.h */,
-				4988FB9516213D1E000A7CB7 /* ATPendingMessage.m */,
-				4961A3FA161BB8D400E30037 /* ATPerson.h */,
-				4961A3FB161BB8D400E30037 /* ATPerson.m */,
-				491E03D11640823800DC3E18 /* ATMessageSender.h */,
-				491E03D21640823900DC3E18 /* ATMessageSender.m */,
-				4988FB3B162109FF000A7CB7 /* ATDeviceInfo.h */,
-				4988FB3C162109FF000A7CB7 /* ATDeviceInfo.m */,
-				4988FB4316212B40000A7CB7 /* ATMessage.h */,
-				4988FB4416212B40000A7CB7 /* ATMessage.m */,
-				4988FB4F16212B44000A7CB7 /* ATTextMessage.h */,
-				4988FB5016212B44000A7CB7 /* ATTextMessage.m */,
-				4988FB4B16212B42000A7CB7 /* ATMessageDisplayType.h */,
-				4988FB4C16212B42000A7CB7 /* ATMessageDisplayType.m */,
-				4988FB4716212B41000A7CB7 /* ATUpgradeRequestMessage.h */,
-				4988FB4816212B41000A7CB7 /* ATUpgradeRequestMessage.m */,
-				49AF27C916321EDC005E1E9D /* ATFakeMessage.h */,
-				49AF27CA16321EDC005E1E9D /* ATFakeMessage.m */,
 				491E03C7163F243600DC3E18 /* ATData.h */,
 				491E03C8163F243600DC3E18 /* ATData.m */,
+				4961A3FA161BB8D400E30037 /* ATPerson.h */,
+				4961A3FB161BB8D400E30037 /* ATPerson.m */,
+				4988FB3B162109FF000A7CB7 /* ATDeviceInfo.h */,
+				4988FB3C162109FF000A7CB7 /* ATDeviceInfo.m */,
+				4988FB4B16212B42000A7CB7 /* ATMessageDisplayType.h */,
+				4988FB4C16212B42000A7CB7 /* ATMessageDisplayType.m */,
+				4988FB4316212B40000A7CB7 /* ATMessage.h */,
+				4988FB4416212B40000A7CB7 /* ATMessage.m */,
+				49AF27C916321EDC005E1E9D /* ATFakeMessage.h */,
+				49AF27CA16321EDC005E1E9D /* ATFakeMessage.m */,
+				4988FB9416213D1E000A7CB7 /* ATPendingMessage.h */,
+				4988FB9516213D1E000A7CB7 /* ATPendingMessage.m */,
+				4988FB4F16212B44000A7CB7 /* ATTextMessage.h */,
+				4988FB5016212B44000A7CB7 /* ATTextMessage.m */,
+				4988FB4716212B41000A7CB7 /* ATUpgradeRequestMessage.h */,
+				4988FB4816212B41000A7CB7 /* ATUpgradeRequestMessage.m */,
+				491E03D11640823800DC3E18 /* ATMessageSender.h */,
+				491E03D21640823900DC3E18 /* ATMessageSender.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -939,6 +942,7 @@
 				491E03C9163F243600DC3E18 /* ATData.h in Headers */,
 				491E03CE163F261C00DC3E18 /* ATLog.h in Headers */,
 				491E03D31640823A00DC3E18 /* ATMessageSender.h in Headers */,
+				491E03D91640D01F00DC3E18 /* ATFeedbackTypes.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

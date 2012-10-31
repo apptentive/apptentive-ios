@@ -10,9 +10,10 @@
 
 #import "ATFakeMessageCell.h"
 #import "ATResizingTextView.h"
+#import "ATSimpleImageViewController.h"
 #import "ATTextMessageUserCell.h"
 
-@interface ATMessageCenterViewController : UIViewController <ATResizingTextViewDelegate, NSFetchedResultsControllerDelegate, UIScrollViewDelegate, UITableViewDataSource,  UITableViewDelegate>
+@interface ATMessageCenterViewController : UIViewController <ATResizingTextViewDelegate, ATSimpleImageViewControllerDelegate, NSFetchedResultsControllerDelegate, UIActionSheetDelegate, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate>
 @property (retain, nonatomic) IBOutlet UITableView *tableView;
 @property (retain, nonatomic) IBOutlet UIView *containerView;
 @property (retain, nonatomic) IBOutlet UIView *composerView;
@@ -33,4 +34,5 @@
 - (IBAction)sendPressed:(id)sender;
 - (IBAction)paperclipPressed:(id)sender;
 - (IBAction)showInfoView:(id)sender;
+- (IBAction)cameraPressed:(id)sender;
 @end

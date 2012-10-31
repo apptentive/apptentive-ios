@@ -23,26 +23,22 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 @synthesize containerView;
 @synthesize cameraButtonItem;
 
-- (id)initWithFeedback:(ATFeedback *)someFeedback feedbackController:(ATFeedbackController *)aController {
+- (id)initWithDelegate:(NSObject<ATSimpleImageViewControllerDelegate> *)aDelegate {
 	self = [super initWithNibName:@"ATSimpleImageViewController" bundle:[ATConnect resourceBundle]];
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
 		self.modalPresentationStyle = UIModalPresentationFormSheet;
 	}
 	if (self != nil) {
-		feedback = [someFeedback retain];
-		controller = [aController retain];
+		delegate = [aDelegate retain];
 	}
 	return self;
 }
 
 - (void)dealloc {
 	[imagePickerPopover release], imagePickerPopover = nil;
-	[controller release], controller = nil;
-	[feedback release];
-	feedback = nil;
+	[delegate release], delegate = nil;
 	[scrollView removeFromSuperview];
-	[scrollView release];
-	scrollView = nil;
+	[scrollView release], scrollView = nil;
 	[containerView removeFromSuperview];
 	[containerView release], containerView = nil;
 	[cameraButtonItem release], cameraButtonItem = nil;
@@ -60,11 +56,15 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 		[scrollView release];
 		scrollView = nil;
 	}
-	if (feedback.screenshot) {
+	UIImage *defaultScreenshot = nil;
+	if (delegate && [delegate respondsToSelector:@selector(defaultImageForImageViewController:)]) {
+		defaultScreenshot = [delegate defaultImageForImageViewController:self];
+	}
+	if (defaultScreenshot) {
 		for (UIView *subview in self.containerView.subviews) {
 			[subview removeFromSuperview];
 		}
-		scrollView = [[ATCenteringImageScrollView alloc] initWithImage:feedback.screenshot];
+		scrollView = [[ATCenteringImageScrollView alloc] initWithImage:defaultScreenshot];
 		scrollView.backgroundColor = [UIColor blackColor];
 		CGSize boundsSize = self.containerView.bounds.size;
 		CGSize imageSize = [scrollView imageView].image.size;
@@ -118,9 +118,9 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-	if (controller != nil && shouldResign == YES) {
-		[controller unhide:animated];
-		[controller release], controller = nil;
+	if (shouldResign) {
+		[delegate imageViewControllerWillDismiss:self animated:animated];
+		[delegate release], delegate = nil;
 	}
 }
 
@@ -137,7 +137,8 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 }
 
 - (IBAction)takePhoto:(id)sender {
-	if (controller.attachmentOptions & ATFeedbackAllowTakePhotoAttachment) {
+	ATFeedbackAttachmentOptions options = [delegate attachmentOptionsForImageViewController:self];
+	if (options & ATFeedbackAllowTakePhotoAttachment) {
 		UIActionSheet *actionSheet = nil;
 		if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
 			actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel Button Title") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Choose From Library", @"Choose Photo Button Title"), ATLocalizedString(@"Take Photo", @"Take Photo Button Title"), nil];
@@ -174,8 +175,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 		image = [info objectForKey:UIImagePickerControllerOriginalImage];
 	}
 	if (image) {
-		feedback.imageSource = isFromCamera ? ATFeedbackImageSourceCamera : ATFeedbackImageSourcePhotoLibrary;
-		feedback.screenshot = image;
+		[delegate imageViewController:self pickedImage:image fromSource:isFromCamera ? ATFeedbackImageSourceCamera : ATFeedbackImageSourcePhotoLibrary];
 		[[NSNotificationCenter defaultCenter] postNotificationName:ATImageViewChoseImage object:self];
 	}
 	[self setupScrollView];

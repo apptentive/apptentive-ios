@@ -4,6 +4,17 @@
         <attribute name="body" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="subject" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
+    <entity name="ATFileAttachment" syncable="YES">
+        <attribute name="localPath" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mimeType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="transient" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="userVisible" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
+        <relationship name="fileMessage" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="ATFileMessage" inverseName="fileAttachment" inverseEntity="ATFileMessage" syncable="YES"/>
+    </entity>
+    <entity name="ATFileMessage" parentEntity="ATMessage" syncable="YES">
+        <relationship name="fileAttachment" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="ATFileAttachment" inverseName="fileMessage" inverseEntity="ATFileAttachment" syncable="YES"/>
+    </entity>
     <entity name="ATMessage" representedClassName="ATMessage" isAbstract="YES" syncable="YES">
         <attribute name="apptentiveID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="creationTime" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
@@ -34,11 +45,13 @@
         <attribute name="forced" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
     </entity>
     <elements>
-        <element name="ATFakeMessage" positionX="-126" positionY="71" width="128" height="73"/>
+        <element name="ATFakeMessage" positionX="-117" positionY="90" width="128" height="73"/>
         <element name="ATMessage" positionX="-189" positionY="-327" width="128" height="178"/>
         <element name="ATMessageDisplayType" positionX="43" positionY="-342" width="128" height="73"/>
         <element name="ATTextMessage" positionX="-290" positionY="-90" width="128" height="73"/>
-        <element name="ATUpgradeRequestMessage" positionX="-306" positionY="90" width="128" height="60"/>
+        <element name="ATUpgradeRequestMessage" positionX="-306" positionY="90" width="162" height="60"/>
         <element name="ATMessageSender" positionX="43" positionY="-144" width="128" height="118"/>
+        <element name="ATFileAttachment" positionX="-587" positionY="-25" width="128" height="133"/>
+        <element name="ATFileMessage" positionX="-414" positionY="-153" width="128" height="58"/>
     </elements>
 </model>

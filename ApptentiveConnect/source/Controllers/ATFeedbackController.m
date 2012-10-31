@@ -5,6 +5,7 @@
 //  Created by Andrew Wooster on 9/24/11.
 //  Copyright 2011 Apptentive, Inc. All rights reserved.
 //
+#import <QuartzCore/QuartzCore.h>
 
 #import "ATFeedbackController.h"
 #import "ATContactStorage.h"
@@ -20,7 +21,6 @@
 #import "ATSimpleImageViewController.h"
 #import "ATUtilities.h"
 #import "ATShadowView.h"
-#import <QuartzCore/QuartzCore.h>
 
 
 #define DEG_TO_RAD(angle) ((M_PI * angle) / 180.0)
@@ -359,7 +359,8 @@ enum {
 	[self.feedbackView resignFirstResponder];
 	[self hide:YES];
 	[self captureFeedbackState];
-	ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithFeedback:self.feedback feedbackController:self];
+	[self retain];
+	ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithDelegate:self];
 	[presentingViewController presentModalViewController:vc animated:YES];
 	[vc release];
 }
@@ -408,6 +409,25 @@ enum {
 	} else {
 		[self finishUnhide];
 	}
+}
+
+#pragma mark ATSimpleImageViewControllerDelegate
+- (void)imageViewController:(ATSimpleImageViewController *)vc pickedImage:(UIImage *)image fromSource:(ATFeedbackImageSource)source {
+	self.feedback.imageSource = source;
+	self.feedback.screenshot = image;
+}
+
+- (void)imageViewControllerWillDismiss:(ATSimpleImageViewController *)vc animated:(BOOL)animated {
+	[self unhide:animated];
+	[self release];
+}
+
+- (ATFeedbackAttachmentOptions)attachmentOptionsForImageViewController:(ATSimpleImageViewController *)vc {
+	return self.attachmentOptions;
+}
+
+- (UIImage *)defaultImageForImageViewController:(ATSimpleImageViewController *)vc {
+	return self.feedback.screenshot;
 }
 
 #pragma mark UITextFieldDelegate

@@ -111,7 +111,7 @@
 		if ([result isKindOfClass:[NSDictionary class]] && [self processResult:(NSDictionary *)result]) {
 			self.finished = YES;
 		} else {
-			NSLog(@"Message result is not NSDictionary!");
+			ATLogError(@"Message result is not NSDictionary!");
 			self.failed = YES;
 		}
 		[self stop];
@@ -129,7 +129,7 @@
 		self.failed = YES;
 		self.lastErrorTitle = sender.errorTitle;
 		self.lastErrorMessage = sender.errorMessage;
-		NSLog(@"ATAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
+		ATLogError(@"ATAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
 		[self stop];
 		[self release];
 	}
@@ -154,32 +154,9 @@
 	
 	NSError *error = nil;
 	if (![context save:&error]) {
-		NSLog(@"Failed to save new message: %@", error);
+		ATLogError(@"Failed to save new message: %@", error);
 		return NO;
 	}
 	return YES;
-	/*
-	
-	NSMutableDictionary *mutableJSON = [[jsonMessage mutableCopy] autorelease];
-	NSNumber *d = [NSNumber numberWithDouble:message.creationTime];
-	[mutableJSON setObject:message.body forKey:@"body"];
-	[mutableJSON setObject:@[@"message center"] forKey:@"display"];
-	[mutableJSON setObject:@"text_message" forKey:@"type"];
-	[mutableJSON setObject:d forKey:@"created_at"];
-	
-	NSDictionary *m = @{@"message":mutableJSON};
-	
-	ATMessage *newMessage = [ATMessage newMessageFromJSON:m];
-	
-	if (newMessage != nil) {
-		NSError *error = nil;
-		if (![[[ATBackend sharedBackend] managedObjectContext] save:&error]) {
-			NSLog(@"Failed to save new message: %@", error);
-			return NO;
-		}
-		return YES;
-	}
-	return NO;
-	 */
 }
 @end

@@ -94,6 +94,10 @@ enum {
 	[[UIApplication sharedApplication] openURL:[[ATBackend sharedBackend] apptentiveHomepageURL]];
 }
 
+- (IBAction)openPrivacyPolicy:(id)sender {
+	[[UIApplication sharedApplication] openURL:[[ATBackend sharedBackend] apptentivePrivacyPolicyURL]];
+}
+
 #pragma mark UITableViewDelegate
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[aTableView deselectRowAtIndexPath:indexPath animated:YES];

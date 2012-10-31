@@ -24,4 +24,5 @@
 - (id)initWithFeedbackController:(ATFeedbackController *)aController;
 - (IBAction)done:(id)sender;
 - (IBAction)openApptentiveDotCom:(id)sender;
+- (IBAction)openPrivacyPolicy:(id)sender;
 @end

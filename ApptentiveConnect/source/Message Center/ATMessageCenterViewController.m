@@ -11,6 +11,7 @@
 #import "ATMessageCenterViewController.h"
 #import "ATBackend.h"
 #import "ATConnect.h"
+#import "ATData.h"
 #import "ATFakeMessage.h"
 #import "ATLog.h"
 #import "ATMessage.h"
@@ -66,6 +67,16 @@ typedef enum {
 #warning Fixme
 - (void)viewDidLoad {
     [super viewDidLoad];
+	
+	NSUInteger messageCount = [ATData countEntityNamed:@"ATMessage" withPredicate:nil];
+	if (messageCount == 0) {
+		ATFakeMessage *fakeMessage = (ATFakeMessage *)[ATData newEntityNamed:@"ATFakeMessage"];
+		fakeMessage.subject = NSLocalizedString(@"Welcome", @"Welcome");
+		fakeMessage.body = ATLocalizedString(@"Use this area to communicate with the developer of this app! If you have questions, suggestions, concerns, or just want to help us make the app better or get in touch, feel free to send us a message!", @"Placeholder welcome message.");
+		fakeMessage.creationTime = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
+		fakeMessage.sender = [ATMessageSender newOrExistingMessageSenderFromJSON:@{@"id":@"demodevid"}]; //!! replace
+		[fakeMessage release], fakeMessage = nil;
+	}
 	
 	UIImageView *logoView = [[UIImageView alloc] initWithImage:[ATBackend imageNamed:@"at_apptentive_icon_small"]];
 	[self.navigationController.navigationBar addSubview:logoView];
@@ -288,7 +299,7 @@ typedef enum {
 }
 
 - (void)styleTextView {
-	self.textView.placeholder = @"What's on your mind?";
+	self.textView.placeholder = ATLocalizedString(@"What's on your mind?", @"Placeholder for message center text input.");
 	self.textView.clipsToBounds = YES;
 	self.textView.font = [UIFont systemFontOfSize:13];
 }

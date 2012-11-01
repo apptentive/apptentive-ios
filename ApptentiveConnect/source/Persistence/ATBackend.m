@@ -488,10 +488,13 @@ static ATBackend *sharedBackend = nil;
 
 - (void)loadDemoData {
 	[self clearDemoData];
+	NSDictionary *messages = nil;
 #if RATINGS_DEMO
-	NSDictionary *messages = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"demoRatingData" ofType:@"plist"]];
+	messages = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"demoRatingData" ofType:@"plist"]];
+#elif APPTENTIVE_DEMO
+	messages = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"demoData" ofType:@"plist"]];
 #else
-	NSDictionary *messages = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"demoData" ofType:@"plist"]];
+	messages = @{};
 #endif
 	for (NSDictionary *message in [messages objectForKey:@"messages"]) {
 		ATMessage *m = [ATMessage newMessageFromJSON:message];

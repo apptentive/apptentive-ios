@@ -33,6 +33,21 @@
 	return fetchArray;
 }
 
++ (NSUInteger)countEntityNamed:(NSString *)entityName withPredicate:(NSPredicate *)predicate {
+	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
+	NSFetchRequest *fetchType = [[NSFetchRequest alloc] initWithEntityName:entityName];
+	fetchType.predicate = predicate;
+	NSError *fetchError = nil;
+	NSUInteger count = [context countForFetchRequest:fetchType error:&fetchError];
+	if (fetchError != nil) {
+		ATLogError(@"Error executing fetch request: %@", fetchError);
+		count = 0;
+	}
+	[fetchType release], fetchType = nil;
+	
+	return count;
+}
+
 + (void)removeEntitiesNamed:(NSString *)entityName withPredicate:(NSPredicate *)predicate {
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
 	NSFetchRequest *fetchTypes = [[NSFetchRequest alloc] initWithEntityName:entityName];

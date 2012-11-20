@@ -292,15 +292,17 @@ static ATBackend *sharedBackend = nil;
 #pragma mark - Core Data stack
 
 - (NSManagedObjectContext *)managedObjectContext {
-    if (managedObjectContext != nil) {
-        return managedObjectContext;
-    }
-    
-    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
-    if (coordinator != nil) {
-        managedObjectContext = [[NSManagedObjectContext alloc] init];
-        [managedObjectContext setPersistentStoreCoordinator:coordinator];
-    }
+	@synchronized(self) {
+		if (managedObjectContext != nil) {
+			return managedObjectContext;
+		}
+		
+		NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+		if (coordinator != nil) {
+			managedObjectContext = [[NSManagedObjectContext alloc] init];
+			[managedObjectContext setPersistentStoreCoordinator:coordinator];
+		}
+	}
     return managedObjectContext;
 }
 

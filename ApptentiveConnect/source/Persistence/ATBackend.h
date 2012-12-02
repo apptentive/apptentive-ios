@@ -49,4 +49,5 @@ NSString *const ATBackendNewAPIKeyNotification;
 - (NSString *)deviceUUID;
 
 - (NSURL *)apptentiveHomepageURL;
+- (NSURL *)apptentivePrivacyPolicyURL;
 @end

@@ -257,6 +257,10 @@ static ATBackend *sharedBackend = nil;
 - (NSURL *)apptentiveHomepageURL {
 	return [NSURL URLWithString:@"http://www.apptentive.com/"];
 }
+
+- (NSURL *)apptentivePrivacyPolicyURL {
+	return [NSURL URLWithString:@"http://www.apptentive.com/privacy"];
+}
 @end
 
 @implementation ATBackend (Private)

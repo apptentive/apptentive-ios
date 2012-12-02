@@ -45,6 +45,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 
 
 @interface ATAppRatingFlow (Private)
+- (void)updateLastUseOfApp;
 - (void)postNotification:(NSString *)name;
 - (void)postNotification:(NSString *)name forButton:(int)button;
 - (NSString *)appName;
@@ -64,7 +65,10 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 - (void)logDefaults;
 
 #if TARGET_OS_IPHONE
-- (void)appWillEnterBackground:(NSNotification *)notification;
+- (void)appDidFinishLaunching:(NSNotification *)notification;
+- (void)appDidEnterBackground:(NSNotification *)notification;
+- (void)appWillEnterForeground:(NSNotification *)notification;
+- (void)appWillResignActive:(NSNotification *)notification;
 
 - (UIViewController *)rootViewControllerForCurrentWindow;
 #endif
@@ -87,7 +91,10 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 		[self loadPreferences];
 		iTunesAppID = [anITunesAppID retain];
 #if TARGET_OS_IPHONE
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterBackground:) name:UIApplicationWillResignActiveNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidFinishLaunching:) name:UIApplicationDidFinishLaunchingNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
 #endif
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(preferencesChanged:) name:ATConfigurationPreferencesChangedNotification object:nil];
 	}
@@ -111,12 +118,13 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 {
 #if TARGET_OS_IPHONE
 	self.viewController = vc;
+#elif TARGET_OS_MAC
+	[self userDidUseApp];
 #endif
 
-#ifdef TARGET_IPHONE_SIMULATOR
+#if TARGET_IPHONE_SIMULATOR
 	[self logDefaults];
 #endif
-	[self userDidUseApp];
 	BOOL showedDialog = NO;
 	if (canPromptForRating) {
 		showedDialog = [self showDialogIfNecessary];
@@ -132,7 +140,6 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 #if TARGET_OS_IPHONE
 - (void)appDidEnterForeground:(BOOL)canPromptForRating viewController:(UIViewController *)vc {
 	self.viewController = vc;
-	[self userDidUseApp];
 	
 	BOOL showedDialog = NO;
 	if (canPromptForRating) {
@@ -307,11 +314,23 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 		self.viewController = nil;
 	}
 }
+
+#pragma mark SKStoreProductViewControllerDelegate
+- (void)productViewControllerDidFinish:(SKStoreProductViewController *)productViewController {
+	[productViewController dismissModalViewControllerAnimated:YES];
+}
 #endif
 @end
 
 
 @implementation ATAppRatingFlow (Private)
+- (void)updateLastUseOfApp {
+	if (lastUseOfApp) {
+		[lastUseOfApp release], lastUseOfApp = nil;
+	}
+	lastUseOfApp = [[NSDate alloc] init];
+}
+
 - (void)postNotification:(NSString *)name {
 	[[NSNotificationCenter defaultCenter] postNotificationName:name object:self];
 }
@@ -362,14 +381,40 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 	return [NSURL URLWithString:URLString];
 }
 
+#if TARGET_OS_IPHONE
+- (void)showUnableToOpenAppStoreDialog {
+	UIAlertView *errorAlert = [[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Oops!", @"Unable to load the App Store title") message:ATLocalizedString(@"Unable to load the App Store", @"Unable to load the App Store message") delegate:nil cancelButtonTitle:ATLocalizedString(@"Okay", @"Okay button title") otherButtonTitles:nil] autorelease];
+	[errorAlert show];
+}
+#endif
+
 - (void)openURLForRatingApp {
 	NSURL *url = [self URLForRatingApp];
 	[self setRatedApp];
 #if TARGET_OS_IPHONE
-	if (![[UIApplication sharedApplication] canOpenURL:url]) {
-		NSLog(@"No application can open the URL: %@", url);
+	if ([SKStoreProductViewController class] != NULL && iTunesAppID) {
+#if TARGET_IPHONE_SIMULATOR
+		[self showUnableToOpenAppStoreDialog];
+#else
+		SKStoreProductViewController *vc = [[[SKStoreProductViewController alloc] init] autorelease];
+		vc.delegate = self;
+		[vc loadProductWithParameters:@{SKStoreProductParameterITunesItemIdentifier:iTunesAppID} completionBlock:^(BOOL result, NSError *error) {
+			if (error) {
+				[self showUnableToOpenAppStoreDialog];
+				NSLog(@"Error loading product view: %@", error);
+			} else {
+				UIViewController *presentingVC = [self rootViewControllerForCurrentWindow];
+				[presentingVC presentModalViewController:vc animated:YES];
+			}
+		}];
+#endif
+	} else {
+		if (![[UIApplication sharedApplication] canOpenURL:url]) {
+			NSLog(@"No application can open the URL: %@", url);
+			[self showUnableToOpenAppStoreDialog];
+		}
+		[[UIApplication sharedApplication] openURL:url];
 	}
-	[[UIApplication sharedApplication] openURL:url];
 #elif TARGET_OS_MAC
 	[[NSWorkspace sharedWorkspace] openURL:url];
 #endif
@@ -498,10 +543,11 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 		NSTimeInterval interval = [lastUseOfApp timeIntervalSinceNow];
 		
 		if (interval >= -kATAppAppUsageMinimumInterval) {
+			[self updateLastUseOfApp];
 			return;
 		}
 	}
-	lastUseOfApp = [[NSDate alloc] init];
+	[self updateLastUseOfApp];
 	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	
@@ -567,6 +613,22 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 }
 
 #if TARGET_OS_IPHONE
+- (void)appDidFinishLaunching:(NSNotification *)notification {
+	[self userDidUseApp];
+}
+
+- (void)appDidEnterBackground:(NSNotification *)notification {
+	[self updateLastUseOfApp];
+}
+
+- (void)appWillEnterForeground:(NSNotification *)notification {
+	[self userDidUseApp];
+}
+
+- (void)appWillResignActive:(NSNotification *)notification {
+	[self updateLastUseOfApp];
+}
+
 - (void)appWillEnterBackground:(NSNotification *)notification {
 	// We want to hide any dialogs here.
 	if (enjoymentDialog) {
@@ -575,6 +637,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 	if (ratingDialog) {
 		[ratingDialog dismissWithClickedButtonIndex:3 animated:NO];
 	}
+	[self updateLastUseOfApp];
 }
 
 

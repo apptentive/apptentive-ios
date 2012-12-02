@@ -1,3 +1,11 @@
+In progress wooster v0.4.8
+--------------------------
+* Fixes IOS-80 Use StoreKit to show product page when reviewing app
+  * Your users on iOS 6 and above will no longer be bounced out of the app to rate your app.
+  * To use this, you'll need to link against StoreKit and build with the iOS 6 SDK.
+
+
+
 2012-09-27 wooster v0.4.7
 -------------------------
 Major change:

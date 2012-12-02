@@ -181,6 +181,8 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 		enjoymentDialog = [[UIAlertView alloc] initWithTitle:title message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"No", @"no"), ATLocalizedString(@"Yes", @"yes"), nil];
 		[enjoymentDialog show];
 	}
+	[self postNotification:ATAppRatingDidPromptForEnjoymentNotification];
+	[self setRatingDialogWasShown];
 #elif TARGET_OS_MAC
 	NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 	[alert addButtonWithTitle:ATLocalizedString(@"Yes", @"yes")];
@@ -189,6 +191,8 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 	[alert setInformativeText:ATLocalizedString(@"You've been using this app for a while. Do you love it?", @"Enjoyment dialog text")];
 	[alert setAlertStyle:NSInformationalAlertStyle];
 	[alert setIcon:[NSImage imageNamed:NSImageNameApplicationIcon]];
+	[self postNotification:ATAppRatingDidPromptForEnjoymentNotification];
+	[self setRatingDialogWasShown];
 	NSUInteger result = [alert runModal];
 	if (result == NSAlertFirstButtonReturn) { // yes
 		[self showRatingDialog:self];
@@ -207,8 +211,6 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 		connection.feedbackControllerType = oldType;
 	}
 #endif
-	[self postNotification:ATAppRatingDidPromptForEnjoymentNotification];
-	[self setRatingDialogWasShown];
 }
 
 #if TARGET_OS_IPHONE
@@ -228,6 +230,8 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 		ratingDialog = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:noThanksTitle otherButtonTitles:rateAppTitle, remindMeTitle, nil];
 		[ratingDialog show];
 	}
+	[self postNotification:ATAppRatingDidPromptForRatingNotification];
+	[self setRatingDialogWasShown];
 #elif TARGET_OS_MAC
 	NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 	[alert addButtonWithTitle:noThanksTitle];
@@ -237,6 +241,8 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 	[alert setInformativeText:message];
 	[alert setAlertStyle:NSInformationalAlertStyle];
 	[alert setIcon:[NSImage imageNamed:NSImageNameApplicationIcon]];
+	[self postNotification:ATAppRatingDidPromptForRatingNotification];
+	[self setRatingDialogWasShown];
 	NSUInteger result = [alert runModal];
 	if (result == NSAlertFirstButtonReturn) { // cancel
 		[self setDeclinedToRateThisVersion];
@@ -246,8 +252,6 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 		[self openURLForRatingApp];
 	}
 #endif
-	[self postNotification:ATAppRatingDidPromptForRatingNotification];
-	[self setRatingDialogWasShown];
 }
 
 #if TARGET_OS_IPHONE

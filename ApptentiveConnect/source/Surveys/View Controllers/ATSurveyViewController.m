@@ -11,6 +11,7 @@
 #import "ATHUDView.h"
 #import "ATRecordTask.h"
 #import "ATSurvey.h"
+#import "ATSurveys.h"
 #import "ATSurveysBackend.h"
 #import "ATSurveyMetrics.h"
 #import "ATSurveyQuestion.h"
@@ -136,6 +137,7 @@ enum {
 	[hud show];
 	[hud autorelease];
 	
+	NSDictionary *notificationInfo = [[NSDictionary alloc] initWithObjectsAndKeys:survey.identifier, ATSurveyIDKey, nil];
 	NSDictionary *metricsInfo = [[NSDictionary alloc] initWithObjectsAndKeys:survey.identifier, ATSurveyMetricsSurveyIDKey, [NSNumber numberWithInt:ATSurveyWindowTypeSurvey], ATSurveyWindowTypeKey, [NSNumber numberWithInt:ATSurveyEventTappedSend], ATSurveyMetricsEventKey, nil];
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidHideWindowNotification object:nil userInfo:metricsInfo];
 	[metricsInfo release], metricsInfo = nil;
@@ -144,6 +146,9 @@ enum {
 	[[ATSurveysBackend sharedBackend] setDidSendSurvey:survey];
 	[[ATSurveysBackend sharedBackend] resetSurvey];
 	[self.navigationController dismissModalViewControllerAnimated:YES];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveySentNotification object:nil userInfo:notificationInfo];
+	[notificationInfo release], notificationInfo = nil;
 }
 
 - (void)loadView {

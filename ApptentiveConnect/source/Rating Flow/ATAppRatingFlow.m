@@ -479,6 +479,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 			// Clear the counters.
 			[defaults setObject:[NSNumber numberWithUnsignedInteger:0] forKey:ATAppRatingFlowUseCountKey];
 			[defaults setObject:[NSNumber numberWithUnsignedInteger:0] forKey:ATAppRatingFlowSignificantEventsCountKey];
+			[defaults setObject:[NSNumber numberWithBool:NO] forKey:ATAppRatingFlowRatedAppKey];
 		}
 		
 		[defaults setObject:currentBundleVersion forKey:ATAppRatingFlowLastUsedVersionKey];

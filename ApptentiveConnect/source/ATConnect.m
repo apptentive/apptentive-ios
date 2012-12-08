@@ -20,7 +20,7 @@
 static ATConnect *sharedConnection = nil;
 
 @implementation ATConnect
-@synthesize apiKey, showKeyboardAccessory, shouldTakeScreenshot, showEmailField, initialName, initialEmailAddress, feedbackControllerType, customPlaceholderText;
+@synthesize apiKey, showTagline, shouldTakeScreenshot, showEmailField, initialName, initialEmailAddress, feedbackControllerType, customPlaceholderText;
 
 + (ATConnect *)sharedConnection {
 	@synchronized(self) {
@@ -34,7 +34,7 @@ static ATConnect *sharedConnection = nil;
 - (id)init {
 	if ((self = [super init])) {
 		self.showEmailField = YES;
-		self.showKeyboardAccessory = YES;
+		self.showTagline = YES;
 		self.shouldTakeScreenshot = NO;
 		additionalFeedbackData = [[NSMutableDictionary alloc] init];
 	}
@@ -141,6 +141,15 @@ static ATConnect *sharedConnection = nil;
 - (IBAction)showFeedbackWindow:(id)sender {
 	if (![[ATBackend sharedBackend] currentFeedback]) {
 		ATFeedback *feedback = [[ATFeedback alloc] init];
+		if (additionalFeedbackData && [additionalFeedbackData count]) {
+			[feedback addExtraDataFromDictionary:additionalFeedbackData];
+		}
+		if (self.initialName && [self.initialName length] > 0) {
+			feedback.name = self.initialName;
+		}
+		if (self.initialEmailAddress && [self.initialEmailAddress length] > 0) {
+			feedback.email = self.initialEmailAddress;
+		}
 		[[ATBackend sharedBackend] setCurrentFeedback:feedback];
 		[feedback release];
 		feedback = nil;

@@ -24,11 +24,15 @@ typedef enum {
 	UIStatusBarStyle startingStatusBarStyle;
 	UIImageView *paperclipView;
 	UIImageView *paperclipBackgroundView;
-	UIImageView *photoFrameView;
+	UIView *photoFrameContainerView;
 	UIControl *photoControl;
 	UIImage *currentImage;
 	BOOL showEmailAddressField;
 	BOOL deleteCurrentFeedbackOnCancel;
+	
+	UIPanGestureRecognizer *photoPanRecognizer;
+	CGPoint photoDragOffset;
+	CGAffineTransform photoFrameTransform;
 	
 	UIWindow *originalPresentingWindow;
 }

@@ -10,3 +10,5 @@
 
 @interface ATToolbar : UIToolbar
 @end
+
+void ATToolbar_Bootstrap();

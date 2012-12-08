@@ -65,3 +65,4 @@ NSString *const ATAppRatingFlowSignificantEventsCountKey;
 + (NSPredicate *)predicateForPromptLogic:(NSObject *)promptObject withPredicateInfo:(ATAppRatingFlowPredicateInfo *)info;
 + (BOOL)evaluatePredicate:(NSPredicate *)ratingsPredicate withPredicateInfo:(ATAppRatingFlowPredicateInfo *)info;
 @end
+

@@ -31,3 +31,5 @@
 - (ATURLConnection *)connectionToPost:(NSURL *)theURL withFileData:(NSData *)data ofMimeType:(NSString *)mimeType fileDataKey:(NSString *)fileDataKey  parameters:(NSDictionary *)parameters;
 - (void)addAPIHeaders:(ATURLConnection *)conn;
 @end
+
+void ATWebClient_Private_Bootstrap();

@@ -14,3 +14,6 @@
 @interface ATWebClient (Metrics)
 - (ATAPIRequest *)requestForSendingMetric:(ATMetric *)metric;
 @end
+
+
+void ATWebClient_Metrics_Bootstrap();

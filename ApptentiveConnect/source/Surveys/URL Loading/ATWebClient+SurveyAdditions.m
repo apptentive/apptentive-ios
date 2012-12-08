@@ -44,3 +44,7 @@
 	return [request autorelease];
 }
 @end
+
+void ATWebClient_SurveyAdditions_Bootstrap() {
+	NSLog(@"Loading ATWebClient_SurveyAdditions_Bootstrap");
+}

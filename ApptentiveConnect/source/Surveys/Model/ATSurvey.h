@@ -9,17 +9,25 @@
 #import <Foundation/Foundation.h>
 #import "ATSurveyQuestion.h"
 
-@interface ATSurvey : NSObject {
+@interface ATSurvey : NSObject <NSCoding> {
 @private
 	NSMutableArray *questions;
+	NSMutableArray *tags;
 }
 @property (nonatomic, getter=isActive) BOOL active;
 @property (nonatomic, getter=responseIsRequired) BOOL responseRequired;
+@property (nonatomic) BOOL multipleResponsesAllowed;
 @property (nonatomic, retain) NSString *identifier;
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *surveyDescription;
 @property (nonatomic, readonly) NSArray *questions;
+@property (nonatomic, readonly) NSArray *tags;
 @property (nonatomic, retain) NSString *successMessage;
 
 - (void)addQuestion:(ATSurveyQuestion *)question;
+- (void)addTag:(NSString *)tag;
+
+- (BOOL)surveyHasTags:(NSSet *)tagsToCheck;
+
+- (void)reset;
 @end

@@ -24,7 +24,7 @@ typedef enum {
 
 @class ATSurveyQuestionAnswer;
 
-@interface ATSurveyQuestion : NSObject {
+@interface ATSurveyQuestion : NSObject <NSCoding> {
 @private
 }
 @property (nonatomic, assign) ATSurveyQuestionType type;
@@ -45,9 +45,11 @@ typedef enum {
 - (void)addSelectedAnswerChoice:(ATSurveyQuestionAnswer *)answer;
 - (void)removeSelectedAnswerChoice:(ATSurveyQuestionAnswer *)answer;
 - (ATSurveyQuestionValidationErrorType)validateAnswer;
+
+- (void)reset;
 @end
 
-@interface ATSurveyQuestionAnswer : NSObject {
+@interface ATSurveyQuestionAnswer : NSObject <NSCoding> {
 @private
 }
 @property (nonatomic, retain) NSString *identifier;

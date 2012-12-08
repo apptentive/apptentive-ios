@@ -16,8 +16,8 @@
 #define kSurveysChannelName @"Apptentive-Surveys"
 
 @implementation ATWebClient (SurveyAdditions)
-- (ATAPIRequest *)requestForGettingSurvey {
-	NSString *urlString = [NSString stringWithFormat:@"%@/surveys/active", [self baseURLString]];
+- (ATAPIRequest *)requestForGettingSurveys {
+	NSString *urlString = [NSString stringWithFormat:@"%@/surveys?active=1", [self baseURLString]];
 	ATURLConnection *conn = [self connectionToGet:[NSURL URLWithString:urlString]];
 	conn.timeoutInterval = 20.0;
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:[self commonChannelName]];

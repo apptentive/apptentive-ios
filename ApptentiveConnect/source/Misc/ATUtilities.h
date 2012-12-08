@@ -47,6 +47,8 @@
 + (BOOL)bundleVersionIsMainVersion;
 + (NSString *)appVersionString;
 + (NSString *)buildNumberString;
+
++ (NSTimeInterval)maxAgeFromCacheControlHeader:(NSString *)cacheControl;
 @end
 
 CGRect ATCGRectOfEvenSize(CGRect inRect);

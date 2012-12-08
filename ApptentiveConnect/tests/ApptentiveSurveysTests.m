@@ -49,4 +49,15 @@
 	
 	[parser release], parser = nil;
 }
+
+- (void)testEmptySurvey {
+	NSString *surveyString = @"[]";
+	NSData *surveyData = [surveyString dataUsingEncoding:NSUTF8StringEncoding];
+	STAssertNotNil(surveyData, @"Survey data shouldn't be nil");
+
+	ATSurveyParser *parser = [[ATSurveyParser alloc] init];
+	NSArray *surveys = [parser parseMultipleSurveys:surveyData];
+	STAssertNotNil(surveys, @"shouldn't be nil");
+	STAssertTrue([surveys count] == 0, @"Should be zero surveys");
+}
 @end

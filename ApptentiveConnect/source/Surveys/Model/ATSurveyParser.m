@@ -128,6 +128,15 @@
 		survey.responseRequired = [(NSNumber *)[jsonDictionary objectForKey:@"required"] boolValue];
 	}
 	
+	if ([jsonDictionary objectForKey:@"multiple_responses"] != nil) {
+		survey.multipleResponsesAllowed = [(NSNumber *)[jsonDictionary objectForKey:@"multiple_responses"] boolValue];
+	}
+	if ([jsonDictionary objectForKey:@"tags"] != nil) {
+		for (NSString *tag in [jsonDictionary objectForKey:@"tags"]) {
+			[survey addTag:tag];
+		}
+	}
+	
 	NSObject *questions = [jsonDictionary objectForKey:@"questions"];
 	if ([questions isKindOfClass:[NSArray class]]) {
 		for (NSObject *question in (NSArray *)questions) {
@@ -180,15 +189,18 @@
 	NSError *error = nil;
 	
 	id decodedObject = [decoder objectWithData:jsonSurveys error:&error];
-	if (decodedObject && [decodedObject isKindOfClass:[NSArray class]]) {
-		success = YES;
-		NSArray *surveys = (NSArray *)decodedObject;
-		for (NSObject *obj in surveys) {
-			if ([obj isKindOfClass:[NSDictionary class]]) {
-				NSDictionary *dict = (NSDictionary *)obj;
-				ATSurvey *survey = [self surveyWithJSONDictionary:dict];
-				if (survey != nil) {
-					[result addObject:survey];
+	if (decodedObject && [decodedObject isKindOfClass:[NSDictionary class]]) {
+		NSDictionary *surveysContainer = (NSDictionary *)decodedObject;
+		NSArray *surveys = [surveysContainer objectForKey:@"surveys"];
+		if (surveys) {
+			success = YES;
+			for (NSObject *obj in surveys) {
+				if ([obj isKindOfClass:[NSDictionary class]]) {
+					NSDictionary *dict = (NSDictionary *)obj;
+					ATSurvey *survey = [self surveyWithJSONDictionary:dict];
+					if (survey != nil) {
+						[result addObject:survey];
+					}
 				}
 			}
 		}

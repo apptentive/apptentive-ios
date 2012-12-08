@@ -76,12 +76,17 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	return percentageComplete;
 }
 
+- (NSTimeInterval)expiresMaxAge {
+	return expiresMaxAge;
+}
+
 #pragma mark ATURLConnection Delegates
 - (void)connectionFinishedSuccessfully:(ATURLConnection *)sender {
 	@synchronized(self) {
 		if (cancelled) return;
 	}
 	int statusCode = sender.statusCode;
+	expiresMaxAge = [sender expiresMaxAge];
 	switch (statusCode) {
 		case 200:
 		case 201:

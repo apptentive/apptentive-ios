@@ -42,6 +42,8 @@ typedef enum {
 	NSString *errorMessage;
 	NSTimeInterval timeoutInterval;
 	NSObject<ATAPIRequestDelegate> *delegate;
+	
+	NSTimeInterval expiresMaxAge;
 }
 @property (nonatomic, assign) ATAPIRequestReturnType returnType;
 @property (nonatomic, assign) BOOL failed;
@@ -55,5 +57,6 @@ typedef enum {
 - (void)cancel;
 - (void)showAlert;
 - (float)percentageComplete;
+- (NSTimeInterval)expiresMaxAge;
 @end
 

@@ -47,7 +47,6 @@
 
 - (void)layoutSubviews {
 	[super layoutSubviews];
-	
 	if (showDateLabel == NO || composing == YES) {
 		self.dateLabel.hidden = YES;
 		CGRect chatBubbleRect = self.chatBubbleContainer.frame;

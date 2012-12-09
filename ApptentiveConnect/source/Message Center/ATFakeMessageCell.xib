@@ -3,12 +3,12 @@
 	<data>
 		<int key="IBDocument.SystemTarget">1536</int>
 		<string key="IBDocument.SystemVersion">12C60</string>
-		<string key="IBDocument.InterfaceBuilderVersion">2843</string>
+		<string key="IBDocument.InterfaceBuilderVersion">2844</string>
 		<string key="IBDocument.AppKitVersion">1187.34</string>
 		<string key="IBDocument.HIToolboxVersion">625.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-			<string key="NS.object.0">1929</string>
+			<string key="NS.object.0">1930</string>
 		</object>
 		<array key="IBDocument.IntegratedClassDependencies">
 			<string>IBProxyObject</string>
@@ -118,7 +118,6 @@
 						<string key="NSFrame">{{20, 20}, {438, 89}}</string>
 						<reference key="NSSuperview" ref="357115758"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="1022569325"/>
 						<bool key="IBUIOpaque">NO</bool>
@@ -166,10 +165,8 @@
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="546603170"/>
-				<object class="NSColor" key="IBUIBackgroundColor">
-					<int key="NSColorSpace">1</int>
-					<bytes key="NSRGB">MC44OTE5ODM2OTU3IDAuODkxOTgzNjk1NyAwLjg5MTk4MzY5NTcAA</bytes>
-				</object>
+				<reference key="IBUIBackgroundColor" ref="1022569325"/>
+				<bool key="IBUIOpaque">NO</bool>
 				<string key="IBUIRestorationIdentifier">ATFakeMessageCell</string>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
@@ -354,11 +351,17 @@
 					<string key="className">ATMessageCenterViewController</string>
 					<string key="superclassName">UIViewController</string>
 					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="cameraPressed:">id</string>
 						<string key="donePressed:">id</string>
 						<string key="paperclipPressed:">id</string>
 						<string key="sendPressed:">id</string>
+						<string key="showInfoView:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="cameraPressed:">
+							<string key="name">cameraPressed:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 						<object class="IBActionInfo" key="donePressed:">
 							<string key="name">donePressed:</string>
 							<string key="candidateClassName">id</string>
@@ -369,6 +372,10 @@
 						</object>
 						<object class="IBActionInfo" key="sendPressed:">
 							<string key="name">sendPressed:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="showInfoView:">
+							<string key="name">showInfoView:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 					</dictionary>
@@ -531,6 +538,6 @@
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaTouchFramework</string>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
-		<string key="IBCocoaTouchPluginVersion">1929</string>
+		<string key="IBCocoaTouchPluginVersion">1930</string>
 	</data>
 </archive>

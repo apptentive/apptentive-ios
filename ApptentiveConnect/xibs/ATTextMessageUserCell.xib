@@ -2,13 +2,13 @@
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1536</int>
-		<string key="IBDocument.SystemVersion">12C54</string>
-		<string key="IBDocument.InterfaceBuilderVersion">2840</string>
+		<string key="IBDocument.SystemVersion">12C60</string>
+		<string key="IBDocument.InterfaceBuilderVersion">2844</string>
 		<string key="IBDocument.AppKitVersion">1187.34</string>
 		<string key="IBDocument.HIToolboxVersion">625.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-			<string key="NS.object.0">1926</string>
+			<string key="NS.object.0">1930</string>
 		</object>
 		<array key="IBDocument.IntegratedClassDependencies">
 			<string>IBProxyObject</string>
@@ -164,10 +164,8 @@
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="728810637"/>
-				<object class="NSColor" key="IBUIBackgroundColor">
-					<int key="NSColorSpace">1</int>
-					<bytes key="NSRGB">MC44OTE5ODM2OTU3IDAuODkxOTgzNjk1NyAwLjg5MTk4MzY5NTcAA</bytes>
-				</object>
+				<reference key="IBUIBackgroundColor" ref="910216260"/>
+				<bool key="IBUIOpaque">NO</bool>
 				<string key="IBUIRestorationIdentifier">ATTextMessageUserCell</string>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
@@ -277,10 +275,8 @@
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="967169267"/>
-				<object class="NSColor" key="IBUIBackgroundColor">
-					<int key="NSColorSpace">1</int>
-					<bytes key="NSRGB">MC44OTE5ODM2OTU3IDAuODkxOTgzNjk1NyAwLjg5MTk4MzY5NTcAA</bytes>
-				</object>
+				<reference key="IBUIBackgroundColor" ref="910216260"/>
+				<bool key="IBUIOpaque">NO</bool>
 				<string key="IBUIRestorationIdentifier">ATTextMessageDevCell</string>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
@@ -556,14 +552,57 @@
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<object class="IBPartialClassDescription">
+					<string key="className">ATFakeMessageCell</string>
+					<string key="superclassName">UITableViewCell</string>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="containerView">UIView</string>
+						<string key="dateLabel">UILabel</string>
+						<string key="grayLineView">UIView</string>
+						<string key="messageText">TTTAttributedLabel</string>
+						<string key="subjectText">TTTAttributedLabel</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="containerView">
+							<string key="name">containerView</string>
+							<string key="candidateClassName">UIView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="dateLabel">
+							<string key="name">dateLabel</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="grayLineView">
+							<string key="name">grayLineView</string>
+							<string key="candidateClassName">UIView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="messageText">
+							<string key="name">messageText</string>
+							<string key="candidateClassName">TTTAttributedLabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="subjectText">
+							<string key="name">subjectText</string>
+							<string key="candidateClassName">TTTAttributedLabel</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/ATFakeMessageCell.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">ATMessageCenterViewController</string>
 					<string key="superclassName">UIViewController</string>
 					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="cameraPressed:">id</string>
 						<string key="donePressed:">id</string>
 						<string key="paperclipPressed:">id</string>
 						<string key="sendPressed:">id</string>
+						<string key="showInfoView:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="cameraPressed:">
+							<string key="name">cameraPressed:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 						<object class="IBActionInfo" key="donePressed:">
 							<string key="name">donePressed:</string>
 							<string key="candidateClassName">id</string>
@@ -576,6 +615,10 @@
 							<string key="name">sendPressed:</string>
 							<string key="candidateClassName">id</string>
 						</object>
+						<object class="IBActionInfo" key="showInfoView:">
+							<string key="name">showInfoView:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="attachmentButton">UIButton</string>
@@ -586,6 +629,7 @@
 						<string key="containerView">UIView</string>
 						<string key="developerCell">ATTextMessageUserCell</string>
 						<string key="emailButton">UIButton</string>
+						<string key="fakeCell">ATFakeMessageCell</string>
 						<string key="iconButton">UIButton</string>
 						<string key="locationButton">UIButton</string>
 						<string key="sendButton">UIButton</string>
@@ -625,6 +669,10 @@
 						<object class="IBToOneOutletInfo" key="emailButton">
 							<string key="name">emailButton</string>
 							<string key="candidateClassName">UIButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="fakeCell">
+							<string key="name">fakeCell</string>
+							<string key="candidateClassName">ATFakeMessageCell</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="iconButton">
 							<string key="name">iconButton</string>
@@ -731,6 +779,6 @@
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaTouchFramework</string>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
-		<string key="IBCocoaTouchPluginVersion">1926</string>
+		<string key="IBCocoaTouchPluginVersion">1930</string>
 	</data>
 </archive>

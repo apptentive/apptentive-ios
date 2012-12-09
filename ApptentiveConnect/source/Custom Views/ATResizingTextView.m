@@ -5,6 +5,7 @@
 //  Created by Andrew Wooster on 10/1/12.
 //  Copyright (c) 2012 Apptentive, Inc. All rights reserved.
 //
+#import <QuartzCore/QuartzCore.h>
 
 #import "ATResizingTextView.h"
 
@@ -26,9 +27,11 @@
 @implementation ATResizingTextView {
 	CGFloat lineHeight;
 	UIEdgeInsets textFieldInset;
+	UIView *backgroundView;
 }
 @synthesize delegate;
 @synthesize maximumVeritcalLines;
+@synthesize style;
 @synthesize internalTextView;
 
 - (id)initWithFrame:(CGRect)frame {
@@ -46,17 +49,32 @@
 }
 
 - (void)setup {
-	self.backgroundColor = [UIColor clearColor];
-	self.clipsToBounds = NO;
 	
-	UIImageView *backgroundView = [[UIImageView alloc] initWithImage:[[ATBackend imageNamed:@"at_resizing_text_bg"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 14)]];
-	backgroundView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-	backgroundView.frame = CGRectInset(self.bounds, 0, 2);
-	[self addSubview:backgroundView];
-	[self sendSubviewToBack:backgroundView];
-	[backgroundView release], backgroundView = nil;
+	if (self.style == ATResizingTextViewStyleIOS) {
+		self.backgroundColor = [UIColor clearColor];
+		self.clipsToBounds = NO;
+		if (!backgroundView) {
+			backgroundView = [[UIImageView alloc] initWithImage:[[ATBackend imageNamed:@"at_resizing_text_bg"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 14)]];
+			backgroundView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+			backgroundView.frame = CGRectInset(self.bounds, 0, 2);
+			[self addSubview:backgroundView];
+			[self sendSubviewToBack:backgroundView];
+		}
 	
-	textFieldInset = UIEdgeInsetsMake(8, 7, 5, 0);
+		textFieldInset = UIEdgeInsetsMake(8, 7, 5, 0);
+	} else {
+		self.backgroundColor = [UIColor colorWithRed:217/255. green:217/255. blue:217/255. alpha:1];
+		self.clipsToBounds = NO;
+		if (backgroundView) {
+			[backgroundView removeFromSuperview];
+			[backgroundView release], backgroundView = nil;
+		}
+		self.layer.borderWidth = 2;
+		self.layer.borderColor = [UIColor colorWithRed:60/255. green:154/255. blue:227/255. alpha:1].CGColor;
+		self.layer.cornerRadius = 4;
+		
+		textFieldInset = UIEdgeInsetsMake(8, 0, 5, 0);
+	}
 	
 	CGRect f = {
 		.origin = {
@@ -69,20 +87,23 @@
 		}
 	};
 	f.size.width = f.size.width - (textFieldInset.left + textFieldInset.right);
-	internalTextView = [[ATInternalDefaultTextView alloc] initWithFrame:f];
-	internalTextView.clipsToBounds = NO;
-	internalTextView.delegate = self;
-	internalTextView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
-	internalTextView.showsHorizontalScrollIndicator = NO;
-	internalTextView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	
-	[self addSubview:internalTextView];
+	if (!internalTextView) {
+		internalTextView = [[ATInternalDefaultTextView alloc] initWithFrame:f];
+		internalTextView.clipsToBounds = NO;
+		internalTextView.delegate = self;
+		internalTextView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+		internalTextView.showsHorizontalScrollIndicator = NO;
+		internalTextView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		
+		[self addSubview:internalTextView];
+	}
 	[self computeLineHeight];
 	self.maximumVeritcalLines = 3;
 	[self.internalTextView setBackgroundColor:[UIColor clearColor]];
 }
 
 - (void)dealloc {
+	[backgroundView release], backgroundView = nil;
 	[internalTextView removeFromSuperview];
 	[internalTextView release], internalTextView = nil;
 	delegate = nil;
@@ -172,6 +193,13 @@
 - (void)setFont:(UIFont *)font {
 	[internalTextView setFont:font];
 	[self computeLineHeight];
+}
+
+- (void)setStyle:(ATResizingTextViewStyle)aStyle {
+	if (style != aStyle) {
+		style = aStyle;
+		[self setup];
+	}
 }
 
 #pragma mark - UITextViewDelegate

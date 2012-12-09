@@ -10,9 +10,15 @@
 
 @protocol ATResizingTextViewDelegate;
 
+typedef enum {
+	ATResizingTextViewStyleIOS,
+	ATResizingTextViewStyleV2
+} ATResizingTextViewStyle;
+
 @interface ATResizingTextView : UIView <UITextViewDelegate>
 @property (nonatomic, assign) IBOutlet NSObject<ATResizingTextViewDelegate> *delegate;
 @property (nonatomic, assign) NSUInteger maximumVeritcalLines;
+@property (nonatomic, assign) ATResizingTextViewStyle style;
 
 #pragma mark ATDefaultTextView
 @property (nonatomic, retain) NSString *placeholder;

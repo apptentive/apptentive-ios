@@ -3,17 +3,16 @@
 	<data>
 		<int key="IBDocument.SystemTarget">1536</int>
 		<string key="IBDocument.SystemVersion">12C60</string>
-		<string key="IBDocument.InterfaceBuilderVersion">2843</string>
+		<string key="IBDocument.InterfaceBuilderVersion">2844</string>
 		<string key="IBDocument.AppKitVersion">1187.34</string>
 		<string key="IBDocument.HIToolboxVersion">625.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-			<string key="NS.object.0">1929</string>
+			<string key="NS.object.0">1930</string>
 		</object>
 		<array key="IBDocument.IntegratedClassDependencies">
 			<string>IBProxyObject</string>
 			<string>IBUIButton</string>
-			<string>IBUIImageView</string>
 			<string>IBUITableView</string>
 			<string>IBUIView</string>
 		</array>
@@ -96,16 +95,6 @@
 						<reference key="NSNextResponder" ref="366529944"/>
 						<int key="NSvFlags">298</int>
 						<array class="NSMutableArray" key="NSSubviews">
-							<object class="IBUIImageView" id="408214953">
-								<reference key="NSNextResponder" ref="363270385"/>
-								<int key="NSvFlags">274</int>
-								<string key="NSFrameSize">{320, 47}</string>
-								<reference key="NSSuperview" ref="363270385"/>
-								<reference key="NSNextKeyView" ref="543872388"/>
-								<string key="NSReuseIdentifierKey">_NS:9</string>
-								<bool key="IBUIUserInteractionEnabled">NO</bool>
-								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-							</object>
 							<object class="IBUIView" id="613992807">
 								<reference key="NSNextResponder" ref="363270385"/>
 								<int key="NSvFlags">290</int>
@@ -123,7 +112,7 @@
 							<object class="IBUIButton" id="42279261">
 								<reference key="NSNextResponder" ref="363270385"/>
 								<int key="NSvFlags">265</int>
-								<string key="NSFrame">{{246, 13}, {70, 27}}</string>
+								<string key="NSFrame">{{246, 2}, {70, 42}}</string>
 								<reference key="NSSuperview" ref="363270385"/>
 								<reference key="NSNextKeyView" ref="887474815"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
@@ -175,7 +164,7 @@
 						</array>
 						<string key="NSFrame">{{0, 485}, {320, 47}}</string>
 						<reference key="NSSuperview" ref="366529944"/>
-						<reference key="NSNextKeyView" ref="408214953"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">3</int>
@@ -4808,14 +4797,6 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">composerBackgroundView</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="408214953"/>
-					</object>
-					<int key="connectionID">61</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">cameraButton</string>
 						<reference key="source" ref="372490531"/>
 						<reference key="destination" ref="1028993352"/>
@@ -4989,7 +4970,6 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 							<reference ref="543872388"/>
 							<reference ref="42279261"/>
 							<reference ref="613992807"/>
-							<reference ref="408214953"/>
 						</array>
 						<reference key="parent" ref="366529944"/>
 						<string key="objectName">Composer View</string>
@@ -5013,11 +4993,6 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 					<object class="IBObjectRecord">
 						<int key="objectID">51</int>
 						<reference key="object" ref="613992807"/>
-						<reference key="parent" ref="363270385"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">54</int>
-						<reference key="object" ref="408214953"/>
 						<reference key="parent" ref="363270385"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -5063,7 +5038,6 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 				<string key="47.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="51.CustomClassName">ATResizingTextView</string>
 				<string key="51.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-				<string key="54.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="64.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="65.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="66.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -5088,6 +5062,6 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 			<string key="at_attachment_photo_icon.png">{54, 37}</string>
 			<string key="at_plus_button@2x.png">{66, 66}</string>
 		</dictionary>
-		<string key="IBCocoaTouchPluginVersion">1929</string>
+		<string key="IBCocoaTouchPluginVersion">1930</string>
 	</data>
 </archive>

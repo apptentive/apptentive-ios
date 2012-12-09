@@ -102,20 +102,25 @@ typedef enum {
 	[self.locationButton setImage:[ATBackend imageNamed:@"at_attachment_location"] forState:UIControlStateNormal];
 	[self.emailButton setImage:[ATBackend imageNamed:@"at_attachment_email"] forState:UIControlStateNormal];
 	[self.iconButton setImage:[ATBackend imageNamed:@"at_apptentive_icon_small"] forState:UIControlStateNormal];
-	[self.tableView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]]];
-	[self.containerView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]]];
-	[self.attachmentView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_attachment_bg"]]];
+	[self.tableView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_dust_bg"]]];
+	[self.containerView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_dust_bg"]]];
+	[self.composerView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_denim_bg"]]];
+	[self.attachmentView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_denim_bg"]]];
 	
 	[self.view addSubview:self.containerView];
 	
 	composerFieldHeight = self.textView.frame.size.height;
 	
 	
-	UIImage *sendImage = [[ATBackend imageNamed:@"at_send_button_bg"] resizableImageWithCapInsets:UIEdgeInsetsMake(13, 13, 13, 13)];
-	[self.sendButton setBackgroundImage:sendImage forState:UIControlStateNormal];
-	[self.sendButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-	[self.sendButton.titleLabel setShadowOffset:CGSizeMake(0, -1)];
+	[self.sendButton setBackgroundImage:[ATBackend imageNamed:@"at_send_button_v2_bg"] forState:UIControlStateNormal];
+	self.sendButton.layer.cornerRadius = 4;
+	self.sendButton.layer.borderColor = [UIColor colorWithRed:63/255. green:63/255. blue:63/255. alpha:1].CGColor;
+	self.sendButton.layer.borderWidth = 2;
+	[self.sendButton setTitleColor:[UIColor colorWithRed:31/255. green:31/255. blue:31/255. alpha:1] forState:UIControlStateNormal];
+	[self.sendButton setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateNormal];
+	[self.sendButton.titleLabel setShadowOffset:CGSizeMake(0, 1)];
 	[self.sendButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.4] forState:UIControlStateDisabled];
+	self.sendButton.clipsToBounds = YES;
 	
 	NSError *error = nil;
 	if (![self.fetchedMessagesController performFetch:&error]) {
@@ -125,6 +130,9 @@ typedef enum {
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
 		[self relayoutSubviews];
 	});
+	
+	[self.navigationController.navigationBar setBackgroundImage:[ATBackend imageNamed:@"at_denim_blue_bg"] forBarMetrics:UIBarMetricsDefault];
+
 }
 
 #warning Implement for iOS 4
@@ -302,6 +310,7 @@ typedef enum {
 	self.textView.placeholder = ATLocalizedString(@"What's on your mind?", @"Placeholder for message center text input.");
 	self.textView.clipsToBounds = YES;
 	self.textView.font = [UIFont systemFontOfSize:13];
+	self.textView.style = ATResizingTextViewStyleV2;
 }
 
 
@@ -572,7 +581,7 @@ typedef enum {
 			
 			textCell.composingBubble.image = [ATBackend imageNamed:@"at_composing_bubble"];
 			UIView *backgroundView = [[UIView alloc] init];
-			backgroundView.backgroundColor = [UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]];
+			backgroundView.backgroundColor = [UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_dust_bg"]];
 			textCell.backgroundView = backgroundView;
 			[backgroundView release];
 			textCell.messageText.dataDetectorTypes = UIDataDetectorTypeAll;

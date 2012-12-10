@@ -131,7 +131,8 @@ typedef enum {
 		[self relayoutSubviews];
 	});
 	
-	[self.navigationController.navigationBar setBackgroundImage:[ATBackend imageNamed:@"at_denim_blue_bg"] forBarMetrics:UIBarMetricsDefault];
+//	[self.navigationController.navigationBar setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_denim_blue_bg"]]];
+	[self.navigationController.navigationBar setBackgroundImage:[ATBackend imageNamed:@"at_toolbar_denim_bg"] forBarMetrics:UIBarMetricsDefault];
 
 }
 

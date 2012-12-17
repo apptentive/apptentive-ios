@@ -400,6 +400,8 @@ enum {
 		self.view.center = endingPoint;
 		gradientView.alpha = 0.0;
 	} completion:^(BOOL finished) {
+		[self.emailField resignFirstResponder];
+		[self.feedbackView resignFirstResponder];
 		UIView *gradientView = [self.window viewWithTag:kFeedbackGradientLayerTag];
 		[gradientView removeFromSuperview];
 		
@@ -583,6 +585,7 @@ enum {
 	return result;
 }
 
+
 - (void)statusBarChanged:(NSNotification *)notification {
 	[self positionInWindow];
 }
@@ -657,6 +660,8 @@ enum {
 - (void)finishHide {
 	self.window.alpha = 0.0;
 	self.window.hidden = YES;
+	[self.emailField resignFirstResponder];
+	[self.feedbackView resignFirstResponder];
 	[self.window removeFromSuperview];
 }
 

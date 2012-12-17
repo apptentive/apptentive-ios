@@ -565,6 +565,8 @@ enum {
 			[self.feedbackView becomeFirstResponder];
 		}
 	} else if ([animationID isEqualToString:@"animateOut"]) {
+		[self.emailField resignFirstResponder];
+		[self.feedbackView resignFirstResponder];
 		UIView *gradientView = [self.window viewWithTag:kFeedbackGradientLayerTag];
 		[gradientView removeFromSuperview];	
 		
@@ -663,6 +665,8 @@ enum {
 - (void)finishHide {
 	self.window.alpha = 0.0;
 	self.window.hidden = YES;
+	[self.emailField resignFirstResponder];
+	[self.feedbackView resignFirstResponder];
 	[self.window removeFromSuperview];
 }
 

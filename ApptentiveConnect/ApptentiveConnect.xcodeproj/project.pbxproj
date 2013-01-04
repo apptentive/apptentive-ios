@@ -493,7 +493,6 @@
 		496DC3741333D35600743F65 = {
 			isa = PBXGroup;
 			children = (
-				49AAA17A1633716F00B26851 /* StoreKit.framework */,
 				49D1123913359BA000603373 /* ext */,
 				49C00295133413BB0071F088 /* source */,
 				4960E153134A578F00F6311F /* generated */,
@@ -522,6 +521,7 @@
 				49B3D96E133E6DE700B5A5CD /* CoreTelephony.framework */,
 				496DC3821333D35600743F65 /* Foundation.framework */,
 				49B3D969133E6D6400B5A5CD /* QuartzCore.framework */,
+				49AAA17A1633716F00B26851 /* StoreKit.framework */,
 				49509A6B1356596F00793EEC /* SystemConfiguration.framework */,
 				49B3D96A133E6D6400B5A5CD /* UIKit.framework */,
 			);

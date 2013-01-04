@@ -42,7 +42,12 @@ static ATConnect *sharedConnection = nil;
 }
 
 - (void)dealloc {
-#if !TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE
+	if (feedbackController) {
+		[feedbackController release];
+		feedbackController = nil;
+	}
+#elif IF_TARGET_OS_MAC
 	if (feedbackWindowController) {
 		[feedbackWindowController release];
 		feedbackWindowController = nil;
@@ -136,6 +141,11 @@ static ATConnect *sharedConnection = nil;
 
 	[vc presentFromViewController:viewController animated:YES];
 	[vc release];
+}
+
+
+- (void)dismissFeedbackControllerAnimated:(BOOL)animated completion:(void (^)(void))completion {
+	
 }
 #elif TARGET_OS_MAC
 - (IBAction)showFeedbackWindow:(id)sender {

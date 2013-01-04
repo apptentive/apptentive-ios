@@ -6,7 +6,10 @@
 //  Copyright 2011 Apptentive, Inc. All rights reserved.
 //
 
+#import <QuartzCore/QuartzCore.h>
+
 #import "ATFeedbackController.h"
+
 #import "ATContactStorage.h"
 #import "ATCustomButton.h"
 #import "ATToolbar.h"
@@ -20,8 +23,6 @@
 #import "ATSimpleImageViewController.h"
 #import "ATUtilities.h"
 #import "ATShadowView.h"
-#import <QuartzCore/QuartzCore.h>
-
 
 #define DEG_TO_RAD(angle) ((M_PI * angle) / 180.0)
 #define RAD_TO_DEG(radians) (radians * (180.0/M_PI))

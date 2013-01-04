@@ -22,7 +22,7 @@ NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigura
 #if APPTENTIVE_DEBUG
 #define kATAppConfigurationUpdateInterval (60*60)
 #else
-#define kATAppConfigurationUpdateInterval (60*60*24)
+#define kATAppConfigurationUpdateInterval (60*60*3)
 #endif
 
 

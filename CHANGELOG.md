@@ -3,8 +3,12 @@ In progress wooster v0.4.8
 * Fixes IOS-80 Use StoreKit to show product page when reviewing app
   * Your users on iOS 6 and above will no longer be bounced out of the app to rate your app.
   * To use this, you'll need to link against StoreKit and build with the iOS 6 SDK.
-
-
+* Fixes IOS-86 Always dismiss keyboard on feedback dialog going away
+* Fixes IOS-76 Update launch logic for iOS 4 API (better last use of app metrics for iOS 4+)
+* Fixes IOS-83 Distribution build script phase is buggy and runs even when not necessary
+* Fixes IOS-72 Find out more button doesn't work in iOS 6
+* Fixes IOS-28 Show success message on survey completion when configured
+* Fixes IOS-15 Privacy information on info screen
 
 2012-09-27 wooster v0.4.7
 -------------------------

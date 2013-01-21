@@ -45,6 +45,7 @@ typedef enum {
 	NSString *initialEmailAddress;
 	ATFeedbackControllerType feedbackControllerType;
 	NSString *customPlaceholderText;
+	ATFeedbackController *currentFeedbackController;
 }
 @property (nonatomic, retain) NSString *apiKey;
 @property (nonatomic, assign) BOOL showTagline;

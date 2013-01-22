@@ -109,4 +109,9 @@
  */
 - (IBAction)showRatingDialog:(id)sender;
 #endif
+
+/*!
+ Call if you want to take the user to the app store directly.
+ */
+- (void)openURLForRatingApp;
 @end

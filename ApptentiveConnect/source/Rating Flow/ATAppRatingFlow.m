@@ -49,7 +49,6 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 - (void)postNotification:(NSString *)name forButton:(int)button;
 - (NSString *)appName;
 - (NSURL *)URLForRatingApp;
-- (void)openURLForRatingApp;
 - (BOOL)requirementsToShowDialogMet;
 - (BOOL)shouldShowDialog;
 /*! Returns YES if a dialog was shown. */
@@ -304,6 +303,20 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 	}
 }
 #endif
+
+- (void)openURLForRatingApp {
+	NSURL *url = [self URLForRatingApp];
+	[self setRatedApp];
+#if TARGET_OS_IPHONE
+	if (![[UIApplication sharedApplication] canOpenURL:url]) {
+		NSLog(@"No application can open the URL: %@", url);
+	}
+	[[UIApplication sharedApplication] openURL:url];
+#elif TARGET_OS_MAC
+	[[NSWorkspace sharedWorkspace] openURL:url];
+#endif
+}
+
 @end
 
 
@@ -357,20 +370,6 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 	}
 	return [NSURL URLWithString:URLString];
 }
-
-- (void)openURLForRatingApp {
-	NSURL *url = [self URLForRatingApp];
-	[self setRatedApp];
-#if TARGET_OS_IPHONE
-	if (![[UIApplication sharedApplication] canOpenURL:url]) {
-		NSLog(@"No application can open the URL: %@", url);
-	}
-	[[UIApplication sharedApplication] openURL:url];
-#elif TARGET_OS_MAC
-	[[NSWorkspace sharedWorkspace] openURL:url];
-#endif
-}
-
 
 - (BOOL)requirementsToShowDialogMet {
 	BOOL result = NO;

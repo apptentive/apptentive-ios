@@ -139,6 +139,7 @@
 		49B877111464958C00594A5D /* ATWebClient_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 49B877101464958C00594A5D /* ATWebClient_Private.h */; };
 		49BC2A5A144F75E20041E789 /* ATShadowView.h in Headers */ = {isa = PBXBuildFile; fileRef = 49BC2A58144F75E10041E789 /* ATShadowView.h */; };
 		49BC2A5B144F75E20041E789 /* ATShadowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 49BC2A59144F75E20041E789 /* ATShadowView.m */; };
+		49BF6F2D16AD09C800D1F382 /* ATConnect_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 49BF6F2C16AD09C800D1F382 /* ATConnect_Private.h */; };
 		49C0028E1334137E0071F088 /* ApptentiveConnectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C0028A1334137E0071F088 /* ApptentiveConnectTests.m */; };
 		49C0028F1334137E0071F088 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49C0028B1334137E0071F088 /* InfoPlist.strings */; };
 		49C002A1133413BB0071F088 /* ApptentiveConnect-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 49C00296133413BB0071F088 /* ApptentiveConnect-Prefix.pch */; };
@@ -285,6 +286,7 @@
 		49B877101464958C00594A5D /* ATWebClient_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATWebClient_Private.h; sourceTree = "<group>"; };
 		49BC2A58144F75E10041E789 /* ATShadowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATShadowView.h; path = "source/Custom Views/ATShadowView.h"; sourceTree = SOURCE_ROOT; };
 		49BC2A59144F75E20041E789 /* ATShadowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATShadowView.m; path = "source/Custom Views/ATShadowView.m"; sourceTree = SOURCE_ROOT; };
+		49BF6F2C16AD09C800D1F382 /* ATConnect_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATConnect_Private.h; sourceTree = "<group>"; };
 		49C002871334137E0071F088 /* ApptentiveConnectTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ApptentiveConnectTests-Info.plist"; sourceTree = "<group>"; };
 		49C002881334137E0071F088 /* ApptentiveConnectTests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ApptentiveConnectTests-Prefix.pch"; sourceTree = "<group>"; };
 		49C002891334137E0071F088 /* ApptentiveConnectTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveConnectTests.h; sourceTree = "<group>"; };
@@ -493,7 +495,6 @@
 		496DC3741333D35600743F65 = {
 			isa = PBXGroup;
 			children = (
-				49AAA17A1633716F00B26851 /* StoreKit.framework */,
 				49D1123913359BA000603373 /* ext */,
 				49C00295133413BB0071F088 /* source */,
 				4960E153134A578F00F6311F /* generated */,
@@ -522,6 +523,7 @@
 				49B3D96E133E6DE700B5A5CD /* CoreTelephony.framework */,
 				496DC3821333D35600743F65 /* Foundation.framework */,
 				49B3D969133E6D6400B5A5CD /* QuartzCore.framework */,
+				49AAA17A1633716F00B26851 /* StoreKit.framework */,
 				49509A6B1356596F00793EEC /* SystemConfiguration.framework */,
 				49B3D96A133E6D6400B5A5CD /* UIKit.framework */,
 			);
@@ -631,6 +633,7 @@
 				4987FA95157AE53500AF2078 /* ApptentiveMetrics.h */,
 				493AEB1615990A4D00DFD4C7 /* ATSurveys.h */,
 				49C00298133413BB0071F088 /* ATConnect.m */,
+				49BF6F2C16AD09C800D1F382 /* ATConnect_Private.h */,
 				4987FA7C157ACA8C00AF2078 /* Metrics */,
 				493AEB1515990A4D00DFD4C7 /* Surveys */,
 				4936AE681379DE6A00A4B17F /* Controllers */,
@@ -738,6 +741,7 @@
 				498EFB6B15BA414A00A1043B /* ATSurveyGetSurveyTask.h in Headers */,
 				498EFB7015BA48B300A1043B /* ATAppConfigurationUpdateTask.h in Headers */,
 				499B56CA15D305880063C23C /* PJSONKit.h in Headers */,
+				49BF6F2D16AD09C800D1F382 /* ATConnect_Private.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

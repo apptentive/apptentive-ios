@@ -9,7 +9,7 @@
 #import "ATSurveysBackend.h"
 #import "ATBackend.h"
 #import "ATSurvey.h"
-#import "ATSurveyGetSurveyTask.h"
+#import "ATSurveyGetSurveysTask.h"
 #import "ATSurveyMetrics.h"
 #import "ATSurveys.h"
 #import "ATSurveyParser.h"
@@ -18,7 +18,13 @@
 #import "PJSONKit.h"
 
 NSString *const ATSurveySentSurveysPreferenceKey = @"ATSurveySentSurveysPreferenceKey";
+NSString *const ATSurveyCachedSurveysExpirationPreferenceKey = @"ATSurveyCachedSurveysExpirationPreferenceKey";
 
+@interface ATSurveysBackend ()
++ (NSString *)cachedSurveysStoragePath;
+- (BOOL)shouldRetrieveNewSurveys;
+- (ATSurvey *)surveyWithTags:(NSSet *)tags;
+@end
 
 @implementation ATSurveysBackend
 
@@ -36,14 +42,55 @@ NSString *const ATSurveySentSurveysPreferenceKey = @"ATSurveySentSurveysPreferen
 	return sharedBackend;
 }
 
++ (NSString *)cachedSurveysStoragePath {
+	return [[[ATBackend sharedBackend] supportDirectoryPath] stringByAppendingPathComponent:@"cachedsurveys.objects"];
+}
+
+- (id)init {
+	if ((self = [super init])) {
+		availableSurveys = [[NSMutableArray alloc] init];
+		NSFileManager *fm = [NSFileManager defaultManager];
+		if ([fm fileExistsAtPath:[ATSurveysBackend cachedSurveysStoragePath]]) {
+			NSArray *surveys = [NSKeyedUnarchiver unarchiveObjectWithFile:[ATSurveysBackend cachedSurveysStoragePath]];
+			[availableSurveys addObjectsFromArray:surveys];
+		}
+	}
+	return self;
+}
+
 - (void)dealloc {
+	[availableSurveys release], availableSurveys = nil;
 	[super dealloc];
 }
 
+- (BOOL)shouldRetrieveNewSurveys {
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	
+	NSDate *expiration = [defaults objectForKey:ATSurveyCachedSurveysExpirationPreferenceKey];
+	if (expiration) {
+		NSDate *now = [NSDate date];
+		NSComparisonResult comparison = [expiration compare:now];
+		if (comparison == NSOrderedSame || comparison == NSOrderedAscending) {
+			return YES;
+		} else {
+			NSFileManager *fm = [NSFileManager defaultManager];
+			if (![fm fileExistsAtPath:[ATSurveysBackend cachedSurveysStoragePath]]) {
+				// If no file, check anyway.
+				return YES;
+			}
+			return NO;
+		}
+	} else {
+		return YES;
+	}
+}
+
 - (void)checkForAvailableSurveys {
-	ATSurveyGetSurveyTask *task = [[ATSurveyGetSurveyTask alloc] init];
-	[[ATTaskQueue sharedTaskQueue] addTask:task];
-	[task release], task = nil;
+	if ([self shouldRetrieveNewSurveys]) {
+		ATSurveyGetSurveysTask *task = [[ATSurveyGetSurveysTask alloc] init];
+		[[ATTaskQueue sharedTaskQueue] addTask:task];
+		[task release], task = nil;
+	}
 }
 
 - (ATSurvey *)currentSurvey {
@@ -51,10 +98,21 @@ NSString *const ATSurveySentSurveysPreferenceKey = @"ATSurveySentSurveysPreferen
 }
 
 - (void)resetSurvey {
-	[currentSurvey release], currentSurvey = nil;
+	@synchronized(self) {
+		[currentSurvey reset];
+		[currentSurvey release], currentSurvey = nil;
+	}
 }
 
 - (void)presentSurveyControllerFromViewController:(UIViewController *)viewController {
+	[self presentSurveyControllerWithTags:nil fromViewController:viewController];
+}
+
+- (void)presentSurveyControllerWithTags:(NSSet *)tags fromViewController:(UIViewController *)viewController {
+	if (currentSurvey != nil) {
+		[self resetSurvey];
+	}
+	currentSurvey = [[self surveyWithTags:tags] retain];
 	if (currentSurvey == nil) {
 		return;
 	}
@@ -87,6 +145,34 @@ NSString *const ATSurveySentSurveysPreferenceKey = @"ATSurveySentSurveysPreferen
 	}
 }
 
+
+- (ATSurvey *)surveyWithTags:(NSSet *)tags {
+	ATSurvey *result = nil;
+	@synchronized(self) {
+		for (ATSurvey *survey in availableSurveys) {
+			if ([survey surveyHasTags:tags]) {
+				if (![self surveyAlreadySubmitted:survey]) {
+					result = survey;
+					break;
+				} else if (![survey multipleResponsesAllowed] || ![survey isActive]) {
+					continue;
+				} else {
+					result = survey;
+				}
+			}
+		}
+	}
+	return result;
+}
+
+- (BOOL)hasSurveyAvailableWithTags:(NSSet *)tags {
+	ATSurvey *survey = [self surveyWithTags:tags];
+	if (survey) {
+		return YES;
+	} else {
+		return NO;
+	}
+}
 @end
 
 
@@ -100,10 +186,29 @@ NSString *const ATSurveySentSurveysPreferenceKey = @"ATSurveySentSurveysPreferen
 	return sentSurvey;
 }
 
-- (void)didReceiveNewSurvey:(ATSurvey *)survey {
-	if (![self surveyAlreadySubmitted:survey]) {
-		[currentSurvey release], currentSurvey = nil;
-		currentSurvey = [survey retain];
+- (void)didReceiveNewSurveys:(NSArray *)surveys maxAge:(NSTimeInterval)expiresMaxAge {
+	BOOL hasNewSurvey = NO;
+	for (ATSurvey *survey in surveys) {
+		if (![self surveyAlreadySubmitted:survey]) {
+			hasNewSurvey = YES;
+		}
+	}
+	
+	@synchronized(self) {
+		[NSKeyedArchiver archiveRootObject:surveys toFile:[ATSurveysBackend cachedSurveysStoragePath]];
+		// Store expiration.
+		if (expiresMaxAge > 0) {
+			NSDate *date = [NSDate dateWithTimeInterval:expiresMaxAge sinceDate:[NSDate date]];
+			NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+			[defaults setObject:date forKey:ATSurveyCachedSurveysExpirationPreferenceKey];
+			[defaults synchronize];
+		}
+		
+		[availableSurveys removeAllObjects];
+		[availableSurveys addObjectsFromArray:surveys];
+	}
+	
+	if (hasNewSurvey) {
 		[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyNewSurveyAvailableNotification object:nil];
 	}
 }

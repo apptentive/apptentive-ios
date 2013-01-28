@@ -7,9 +7,7 @@
 
 #import "ATURLConnection.h"
 #import "ATURLConnection_Private.h"
-#if TARGET_OS_IPHONE_BOGUS
-#import "PSNetworkActivityIndicator.h"
-#endif
+#import "ATUtilities.h"
 
 @interface ATURLConnection ()
 - (void)cacheDataIfNeeded;
@@ -30,6 +28,7 @@
 @synthesize failedAuthentication;
 @synthesize connectionError;
 @synthesize percentComplete;
+@synthesize expiresMaxAge;
 
 - (id)initWithURL:(NSURL *)url {
 	return [self initWithURL:url delegate:nil];
@@ -115,9 +114,6 @@
 			[self.connection scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
 			[self.connection start];
 			self.executing = YES;
-#if TARGET_OS_IPHONE_BOGUS
-			[[PSNetworkActivityIndicator sharedIndicator] increment];
-#endif
 		} while (NO);
 		[pool drain];
 	}
@@ -140,6 +136,14 @@
 			} else {
 				statusCode = 200;
 			}
+			
+			NSDictionary *responseHeaders = [response allHeaderFields];
+			NSString *cacheControlHeader = [responseHeaders valueForKey:@"Cache-Control"];
+			if (cacheControlHeader) {
+				expiresMaxAge = [ATUtilities maxAgeFromCacheControlHeader:cacheControlHeader];
+			} else {
+				expiresMaxAge = 0;
+			}
 		}
 	}
 }
@@ -151,9 +155,6 @@
 		if (error) {
 			self.connectionError = error;
 		}
-#if TARGET_OS_IPHONE_BOGUS
-		[[PSNetworkActivityIndicator sharedIndicator] decrement];
-#endif
 		if (delegate && [delegate respondsToSelector:@selector(connectionFailed:)]){
 			[delegate performSelectorOnMainThread:@selector(connectionFailed:) withObject:self waitUntilDone:YES];
 		} else {
@@ -189,9 +190,6 @@
 				NSLog(@"Orphaned connection. No delegate or nonresponsive delegate.");
 			}
 		}
-#if TARGET_OS_IPHONE_BOGUS
-		[[PSNetworkActivityIndicator sharedIndicator] decrement];
-#endif
 		self.executing = NO;
 		self.finished = YES;
 	}
@@ -214,9 +212,6 @@
 		self.finished = YES;
 		self.executing = NO;
 		failedAuthentication = YES;
-#if TARGET_OS_IPHONE_BOGUS
-		[[PSNetworkActivityIndicator sharedIndicator] decrement];
-#endif
 		if (delegate && [delegate respondsToSelector:@selector(connectionFailed:)]){
 			[delegate performSelectorOnMainThread:@selector(connectionFailed:) withObject:self waitUntilDone:YES];
 		} else {
@@ -234,6 +229,7 @@
 	}
 }
 
+#warning Revisit this.
 - (NSCachedURLResponse *)connection:(NSURLConnection *)aConnection willCacheResponse:(NSCachedURLResponse *)cachedResponse {
 	// See: http://blackpixel.com/blog/1659/caching-and-nsurlconnection/
 	NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)[cachedResponse response];
@@ -248,7 +244,7 @@
 	return cachedResponse;
 }
 
-- (NSURLRequest *)connection: (NSURLConnection *)inConnection willSendRequest: (NSURLRequest *)inRequest redirectResponse: (NSURLResponse *)inRedirectResponse {
+- (NSURLRequest *)connection:(NSURLConnection *)inConnection willSendRequest: (NSURLRequest *)inRequest redirectResponse: (NSURLResponse *)inRedirectResponse {
 	if (inRedirectResponse) {
 		NSMutableURLRequest *r = [[request mutableCopy] autorelease];
 		[r setURL:[inRequest URL]];
@@ -317,6 +313,16 @@
 	}
 	return result;
 }
+
+- (NSDate *)expirationDateForRequestWithMaxAge:(NSTimeInterval)maxAge {
+	if (!request) {
+		return nil;
+	}
+	
+	
+	
+	
+}
 @end
 
 @implementation ATURLConnection (Private)
@@ -328,9 +334,6 @@
 		delegate = nil;
 		if (connection) {
 			[connection cancel];
-#if TARGET_OS_IPHONE_BOGUS
-			[[PSNetworkActivityIndicator sharedIndicator] decrement];
-#endif
 		}
 		self.executing = NO;
 		cancelled = YES;

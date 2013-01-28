@@ -12,6 +12,7 @@
 
 @interface ATSurveysBackend : NSObject {
 @private
+	NSMutableArray *availableSurveys;
 	ATSurvey *currentSurvey;
 }
 + (ATSurveysBackend *)sharedBackend;
@@ -19,11 +20,13 @@
 - (ATSurvey *)currentSurvey;
 - (void)resetSurvey;
 - (void)presentSurveyControllerFromViewController:(UIViewController *)viewController;
+- (void)presentSurveyControllerWithTags:(NSSet *)tags fromViewController:(UIViewController *)viewController;
 - (void)setDidSendSurvey:(ATSurvey *)survey;
+- (BOOL)hasSurveyAvailableWithTags:(NSSet *)tags;
 @end
 
 
 @interface ATSurveysBackend (Private)
 - (BOOL)surveyAlreadySubmitted:(ATSurvey *)survey;
-- (void)didReceiveNewSurvey:(ATSurvey *)survey;
+- (void)didReceiveNewSurveys:(NSArray *)surveys maxAge:(NSTimeInterval)expiresMaxAge;
 @end

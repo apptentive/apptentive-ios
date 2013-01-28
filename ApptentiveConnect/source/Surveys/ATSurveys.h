@@ -20,11 +20,17 @@ The userInfo dictionary will have a key named ATSurveyIDKey, with a value of the
 */
 @interface ATSurveys : NSObject
 + (BOOL)hasSurveyAvailable;
++ (BOOL)hasSurveyAvailableWithTags:(NSSet *)tags;
 + (void)checkForAvailableSurveys;
 #if TARGET_OS_IPHONE
 /*! 
  * Presents a survey controller in the window of the given view controller.
  */
 + (void)presentSurveyControllerFromViewController:(UIViewController *)viewController;
+
+/*!
+ * Presents a survey controller in the window of the given view controller. The survey must have all of the given tags.
+ */
++ (void)presentSurveyControllerWithTags:(NSSet *)tags fromViewController:(UIViewController *)viewController;
 #endif
 @end

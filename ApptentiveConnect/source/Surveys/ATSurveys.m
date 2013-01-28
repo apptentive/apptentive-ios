@@ -30,8 +30,11 @@ NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 }
 
 + (BOOL)hasSurveyAvailable {
-	ATSurveysBackend *backend = [ATSurveysBackend sharedBackend];
-	return [backend currentSurvey] != nil;
+	return [[ATSurveysBackend sharedBackend] hasSurveyAvailableWithTags:nil];
+}
+
++ (BOOL)hasSurveyAvailableWithTags:(NSSet *)tags {
+	return [[ATSurveysBackend sharedBackend] hasSurveyAvailableWithTags:tags];
 }
 
 + (void)checkForAvailableSurveys {
@@ -41,6 +44,10 @@ NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 
 
 + (void)presentSurveyControllerFromViewController:(UIViewController *)viewController {
+	[self presentSurveyControllerWithTags:nil fromViewController:viewController];
+}
+
++ (void)presentSurveyControllerWithTags:(NSSet *)tags fromViewController:(UIViewController *)viewController {
 	ATSurveysBackend *backend = [ATSurveysBackend sharedBackend];
 	[backend presentSurveyControllerFromViewController:viewController];
 }

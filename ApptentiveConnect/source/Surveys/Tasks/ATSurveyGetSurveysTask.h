@@ -1,5 +1,5 @@
 //
-//  ATSurveyGetSurveyTask.h
+//  ATSurveyGetSurveysTask.h
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 7/20/12.
@@ -10,9 +10,9 @@
 
 #import "ATAPIRequest.h"
 
-@interface ATSurveyGetSurveyTask : ATTask <ATAPIRequestDelegate> {
+@interface ATSurveyGetSurveysTask : ATTask <ATAPIRequestDelegate> {
 @private
-	ATAPIRequest *checkSurveyRequest;
+	ATAPIRequest *checkSurveysRequest;
 }
 
 @end

@@ -844,7 +844,8 @@ enum {
 }
 
 - (void)updateSendButtonState {
-	BOOL empty = [@"" isEqualToString:self.feedbackView.text];
+	NSString *trimmedText = [self.feedbackView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	BOOL empty = [trimmedText length] == 0;
 	self.doneButton.enabled = !empty;
 	self.doneButton.style = empty == YES ? UIBarButtonItemStyleBordered : UIBarButtonItemStyleDone;
 }

@@ -32,6 +32,8 @@
 	NSError *connectionError;
 	
 	float percentComplete;
+	
+	NSTimeInterval expiresMaxAge;
 }
 @property (nonatomic, readonly, copy) NSURL *targetURL;
 @property (nonatomic, assign) NSObject<ATURLConnectionDelegate> *delegate;
@@ -46,6 +48,7 @@
 @property (nonatomic, readonly) BOOL failedAuthentication;
 @property (nonatomic, copy) NSError *connectionError;
 @property (nonatomic, assign) float percentComplete;
+@property (nonatomic, readonly) NSTimeInterval expiresMaxAge;
 
 /*! The delegate for this class is a weak reference. */
 - (id)initWithURL:(NSURL *)url delegate:(NSObject<ATURLConnectionDelegate> *)aDelegate;
@@ -62,6 +65,8 @@
 - (NSData *)responseData;
 
 - (NSString *)requestAsString;
+
+- (NSDate *)expirationDateForRequestWithMaxAge:(NSTimeInterval)maxAge;
 @end
 
 

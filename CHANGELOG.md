@@ -9,6 +9,7 @@ In progress wooster v0.4.8
 * Fixes IOS-72 Find out more button doesn't work in iOS 6
 * Fixes IOS-28 Show success message on survey completion when configured
 * Fixes IOS-15 Privacy information on info screen
+* Fixes [#30](https://github.com/apptentive/apptentive-ios/issues/30) JSONKit warnings in Xcode 4.6
 
 2012-09-27 wooster v0.4.7
 -------------------------

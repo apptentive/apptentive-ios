@@ -288,7 +288,6 @@ static ATBackend *sharedBackend = nil;
 	return [NSURL URLWithString:@"http://www.apptentive.com/"];
 }
 
-
 #pragma mark - Core Data stack
 
 - (NSManagedObjectContext *)managedObjectContext {
@@ -391,6 +390,10 @@ static ATBackend *sharedBackend = nil;
 	if (deviceUpdater == aDeviceUpdater) {
 		[deviceUpdater release], deviceUpdater = nil;
 	}
+}
+
+- (NSURL *)apptentivePrivacyPolicyURL {
+	return [NSURL URLWithString:@"http://www.apptentive.com/privacy"];
 }
 @end
 

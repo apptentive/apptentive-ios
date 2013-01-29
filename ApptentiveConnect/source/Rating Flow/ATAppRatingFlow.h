@@ -8,15 +8,16 @@
 
 #if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
+#import <StoreKit/StoreKit.h>
 #elif TARGET_OS_MAC
 #import <Cocoa/Cocoa.h>
 #endif
 
 /*! A workflow for a user either giving feedback on or rating the current
  application. */
-@interface ATAppRatingFlow : NSObject 
+@interface ATAppRatingFlow : NSObject
 #if TARGET_OS_IPHONE
-<UIAlertViewDelegate>
+<SKStoreProductViewControllerDelegate, UIAlertViewDelegate>
 #endif
 {
 @private

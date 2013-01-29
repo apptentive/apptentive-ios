@@ -154,7 +154,9 @@
 
 @implementation ATFeedback (Private)
 - (void)setup {
-	extraData = [[NSMutableDictionary alloc] init];
+	if (!extraData) {
+		extraData = [[NSMutableDictionary alloc] init];
+	}
 	self.type = ATFeedbackTypeFeedback;
 }
 

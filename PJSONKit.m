@@ -677,7 +677,7 @@ static JSONKIT_PREPEND(JKArray) *_JKArrayCreate(id *objects, NSUInteger count, B
   NSCParameterAssert((objects != NULL) && (_JKArrayClass != NULL) && (_JKArrayInstanceSize > 0UL));
   JSONKIT_PREPEND(JKArray) *array = NULL;
   if(PJK_EXPECT_T((array = (JSONKIT_PREPEND(JKArray) *)calloc(1UL, _JKArrayInstanceSize)) != NULL)) { // Directly allocate the JKArray instance via calloc.
-    array->isa      = _JKArrayClass;
+    object_setClass(array, _JKArrayClass);
     if((array = [array init]) == NULL) { return(NULL); }
     array->capacity = count;
     array->count    = count;
@@ -928,7 +928,7 @@ static JSONKIT_PREPEND(JKDictionary) *_JKDictionaryCreate(id *keys, NSUInteger *
   NSCParameterAssert((keys != NULL) && (keyHashes != NULL) && (objects != NULL) && (_JKDictionaryClass != NULL) && (_JKDictionaryInstanceSize > 0UL));
   JSONKIT_PREPEND(JKDictionary) *dictionary = NULL;
   if(PJK_EXPECT_T((dictionary = (JSONKIT_PREPEND(JKDictionary) *)calloc(1UL, _JKDictionaryInstanceSize)) != NULL)) { // Directly allocate the JKDictionary instance via calloc.
-    dictionary->isa      = _JKDictionaryClass;
+    object_setClass(dictionary, _JKDictionaryClass);
     if((dictionary = [dictionary init]) == NULL) { return(NULL); }
     dictionary->capacity = _JKDictionaryCapacityForCount(count);
     dictionary->count    = 0UL;

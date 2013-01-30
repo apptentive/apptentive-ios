@@ -9,12 +9,14 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "ATMessageCenterViewController.h"
+
 #import "ATBackend.h"
 #import "ATConnect.h"
 #import "ATData.h"
 #import "ATFakeMessage.h"
 #import "ATLog.h"
 #import "ATMessage.h"
+#import "ATMessageCenterCell.h"
 #import "ATMessageSender.h"
 #import "ATMessageTask.h"
 #import "ATPendingMessage.h"
@@ -491,8 +493,11 @@ typedef enum {
 }
 
 - (CGFloat)tableView:(UITableView *)aTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	ATTextMessageUserCell *cell = (ATTextMessageUserCell *)[self tableView:aTableView cellForRowAtIndexPath:indexPath];
-	return [cell cellHeightForWidth:aTableView.bounds.size.width];
+	UITableViewCell *cell = [self tableView:aTableView cellForRowAtIndexPath:indexPath];
+	if ([cell conformsToProtocol:@protocol(ATMessageCenterCell)]) {
+		return [(NSObject<ATMessageCenterCell> *)cell cellHeightForWidth:aTableView.bounds.size.width];
+	}
+	return 44;
 }
 
 #pragma mark UITableViewDelegate

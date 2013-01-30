@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+#import "ATMessageCenterCell.h"
 #import "TTTAttributedLabel.h"
 
 typedef enum {
@@ -15,7 +16,7 @@ typedef enum {
 	ATTextMessageCellTypeDeveloper,
 } ATTextMessageCellType;
 
-@interface ATTextMessageUserCell : UITableViewCell
+@interface ATTextMessageUserCell : UITableViewCell <ATMessageCenterCell>
 @property (retain, nonatomic) IBOutlet UILabel *dateLabel;
 @property (retain, nonatomic) IBOutlet UIView *chatBubbleContainer;
 @property (retain, nonatomic) IBOutlet UIImageView *userIcon;
@@ -25,6 +26,4 @@ typedef enum {
 @property (nonatomic, assign, getter = isComposing) BOOL composing;
 @property (nonatomic, assign, getter = shouldShowDateLabel) BOOL showDateLabel;
 @property (nonatomic, assign) ATTextMessageCellType cellType;
-
-- (CGFloat)cellHeightForWidth:(CGFloat)width;
 @end

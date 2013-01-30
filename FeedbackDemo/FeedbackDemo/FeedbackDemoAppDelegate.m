@@ -29,6 +29,7 @@
 	}
 	[self.window makeKeyAndVisible];
 	[[ATConnect sharedConnection] setApiKey:kApptentiveAPIKey];
+	[[ATConnect sharedConnection] setShouldUseMessageCenter:YES];
 	ATAppRatingFlow *ratingFlow = [ATAppRatingFlow sharedRatingFlowWithAppID:kApptentiveAppID];
 	[ratingFlow appDidLaunch:YES viewController:self.navigationController];
 	

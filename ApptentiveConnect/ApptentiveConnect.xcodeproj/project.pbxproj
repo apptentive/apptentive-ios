@@ -115,6 +115,7 @@
 		4961A40F161BBE1F00E30037 /* ATDeviceUpdater.h in Headers */ = {isa = PBXBuildFile; fileRef = 4961A40D161BBE1F00E30037 /* ATDeviceUpdater.h */; };
 		4961A410161BBE1F00E30037 /* ATDeviceUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 4961A40E161BBE1F00E30037 /* ATDeviceUpdater.m */; };
 		4961A454161D360E00E30037 /* ATDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4961A452161D360E00E30037 /* ATDataModel.xcdatamodeld */; };
+		4967273A16B8A41400C679B8 /* ATMessageCenterCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 4967273916B8A41400C679B8 /* ATMessageCenterCell.h */; };
 		496DC3831333D35600743F65 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3821333D35600743F65 /* Foundation.framework */; };
 		496DC38F1333D35600743F65 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3821333D35600743F65 /* Foundation.framework */; };
 		496DC3941333D35600743F65 /* libApptentiveConnect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC37F1333D35600743F65 /* libApptentiveConnect.a */; };
@@ -317,6 +318,7 @@
 		4961A40D161BBE1F00E30037 /* ATDeviceUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATDeviceUpdater.h; path = "Message Center/Persistence/ATDeviceUpdater.h"; sourceTree = "<group>"; };
 		4961A40E161BBE1F00E30037 /* ATDeviceUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATDeviceUpdater.m; path = "Message Center/Persistence/ATDeviceUpdater.m"; sourceTree = "<group>"; };
 		4961A453161D360E00E30037 /* ATDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ATDataModel.xcdatamodel; sourceTree = "<group>"; };
+		4967273916B8A41400C679B8 /* ATMessageCenterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATMessageCenterCell.h; path = "Message Center/ATMessageCenterCell.h"; sourceTree = "<group>"; };
 		496DC37F1333D35600743F65 /* libApptentiveConnect.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libApptentiveConnect.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		496DC3821333D35600743F65 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		496DC38C1333D35600743F65 /* ApptentiveConnectTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApptentiveConnectTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -707,6 +709,7 @@
 				49AF27CD16321F0C005E1E9D /* ATFakeMessageCell.h */,
 				49AF27CE16321F0C005E1E9D /* ATFakeMessageCell.m */,
 				49AF27D116321F21005E1E9D /* ATFakeMessageCell.xib */,
+				4967273916B8A41400C679B8 /* ATMessageCenterCell.h */,
 			);
 			name = "Message Center";
 			sourceTree = "<group>";
@@ -952,6 +955,7 @@
 				491E03D31640823A00DC3E18 /* ATMessageSender.h in Headers */,
 				491E03D91640D01F00DC3E18 /* ATFeedbackTypes.h in Headers */,
 				49BF6F2D16AD09C800D1F382 /* ATConnect_Private.h in Headers */,
+				4967273A16B8A41400C679B8 /* ATMessageCenterCell.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

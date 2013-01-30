@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+#import "ATMessageCenterCell.h"
 #import "TTTAttributedLabel.h"
 
-@interface ATFakeMessageCell : UITableViewCell
+@interface ATFakeMessageCell : UITableViewCell <ATMessageCenterCell>
 @property (retain, nonatomic) IBOutlet UIView *containerView;
 @property (retain, nonatomic) IBOutlet UILabel *dateLabel;
 @property (retain, nonatomic) IBOutlet TTTAttributedLabel *subjectText;
@@ -18,5 +19,4 @@
 @property (retain, nonatomic) IBOutlet TTTAttributedLabel *messageText;
 @property (nonatomic, assign, getter = shouldShowDateLabel) BOOL showDateLabel;
 
-- (CGFloat)cellHeightForWidth:(CGFloat)width;
 @end

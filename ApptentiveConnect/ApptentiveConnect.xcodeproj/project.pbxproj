@@ -170,6 +170,7 @@
 		49AA1021138B44C00082887A /* ATInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AA101E138B44C00082887A /* ATInfoViewController.m */; };
 		49AA1023138B498C0082887A /* ATInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA1022138B498C0082887A /* ATInfoViewController.xib */; };
 		49AA1025138B49A50082887A /* ATInfoViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA1024138B49A50082887A /* ATInfoViewController_iPad.xib */; };
+		49AAA17B1633716F00B26851 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49AAA17A1633716F00B26851 /* StoreKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		49ADE8D8162613BA00DD8634 /* TTTAttributedLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 49ADE8D6162613BA00DD8634 /* TTTAttributedLabel.h */; };
 		49ADE8D9162613BA00DD8634 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 49ADE8D7162613BA00DD8634 /* TTTAttributedLabel.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		49ADE8DC1626167F00DD8634 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49ADE8DB1626167F00DD8634 /* CoreText.framework */; };
@@ -178,7 +179,6 @@
 		49AF27CF16321F0C005E1E9D /* ATFakeMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AF27CD16321F0C005E1E9D /* ATFakeMessageCell.h */; };
 		49AF27D016321F0C005E1E9D /* ATFakeMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AF27CE16321F0C005E1E9D /* ATFakeMessageCell.m */; };
 		49AF27D216321F27005E1E9D /* ATFakeMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AF27D116321F21005E1E9D /* ATFakeMessageCell.xib */; };
-		49AAA17B1633716F00B26851 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49AAA17A1633716F00B26851 /* StoreKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		49B3D96B133E6D6400B5A5CD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D968133E6D6400B5A5CD /* CoreGraphics.framework */; };
 		49B3D96C133E6D6400B5A5CD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D969133E6D6400B5A5CD /* QuartzCore.framework */; };
 		49B3D96D133E6D6400B5A5CD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D96A133E6D6400B5A5CD /* UIKit.framework */; };
@@ -365,6 +365,7 @@
 		49AA101E138B44C00082887A /* ATInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATInfoViewController.m; sourceTree = "<group>"; };
 		49AA1022138B498C0082887A /* ATInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATInfoViewController.xib; sourceTree = "<group>"; };
 		49AA1024138B49A50082887A /* ATInfoViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATInfoViewController_iPad.xib; sourceTree = "<group>"; };
+		49AAA17A1633716F00B26851 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		49ADE8D6162613BA00DD8634 /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTTAttributedLabel.h; path = TTTAttributedLabel/TTTAttributedLabel.h; sourceTree = "<group>"; };
 		49ADE8D7162613BA00DD8634 /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TTTAttributedLabel.m; path = TTTAttributedLabel/TTTAttributedLabel.m; sourceTree = "<group>"; };
 		49ADE8DB1626167F00DD8634 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -373,7 +374,6 @@
 		49AF27CD16321F0C005E1E9D /* ATFakeMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATFakeMessageCell.h; path = "Message Center/ATFakeMessageCell.h"; sourceTree = "<group>"; };
 		49AF27CE16321F0C005E1E9D /* ATFakeMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATFakeMessageCell.m; path = "Message Center/ATFakeMessageCell.m"; sourceTree = "<group>"; };
 		49AF27D116321F21005E1E9D /* ATFakeMessageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ATFakeMessageCell.xib; path = "Message Center/ATFakeMessageCell.xib"; sourceTree = "<group>"; };
-		49AAA17A1633716F00B26851 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		49B3D968133E6D6400B5A5CD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		49B3D969133E6D6400B5A5CD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		49B3D96A133E6D6400B5A5CD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -813,13 +813,13 @@
 		49C00295133413BB0071F088 /* source */ = {
 			isa = PBXGroup;
 			children = (
-				4999127B16165B7900FDA15F /* Message Center */,
 				49C00296133413BB0071F088 /* ApptentiveConnect-Prefix.pch */,
 				49C00297133413BB0071F088 /* ATConnect.h */,
 				4987FA95157AE53500AF2078 /* ApptentiveMetrics.h */,
 				493AEB1615990A4D00DFD4C7 /* ATSurveys.h */,
 				49C00298133413BB0071F088 /* ATConnect.m */,
 				49BF6F2C16AD09C800D1F382 /* ATConnect_Private.h */,
+				4999127B16165B7900FDA15F /* Message Center */,
 				4987FA7C157ACA8C00AF2078 /* Metrics */,
 				493AEB1515990A4D00DFD4C7 /* Surveys */,
 				4936AE681379DE6A00A4B17F /* Controllers */,

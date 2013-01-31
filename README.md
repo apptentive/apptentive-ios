@@ -18,14 +18,14 @@ The demo app includes the normal feedback flow, which can be activated by
 clicking the Feedback button. It's a one screen process which can gather
 feedback, an email address, and even a screenshot:
 
-![Feedback Screen](apptentive-ios/raw/master/etc/screenshots/feedback_iphone.png)
+![Feedback Screen](apptentive-ios/blob/master/etc/screenshots/feedback_iphone.png?raw=true)
 
 The rating flow can be activated by clicking on the Ratings button. It asks
 the user if they are happy with the app. If not, then a simplified feedback
 window is opened. If they are happy with the app, they are prompted to rate
 the app in the App Store:
 
-![Popup](apptentive-ios/raw/master/etc/screenshots/rating.png)
+![Popup](apptentive-ios/raw/master/etc/screenshots/rating.png?raw=true)
 
 
 Required Frameworks

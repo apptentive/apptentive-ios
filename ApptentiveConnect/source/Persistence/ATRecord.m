@@ -162,6 +162,10 @@
 - (ATAPIRequest *)requestForSendingRecord {
 	return nil;
 }
+
+- (void)cleanup {
+	// Do nothing by default.
+}
 @end
 
 

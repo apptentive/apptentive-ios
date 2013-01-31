@@ -12,6 +12,7 @@ In progress wooster v0.4.8
 * Fixes [#30](https://github.com/apptentive/apptentive-ios/issues/30) JSONKit warnings in Xcode 4.6
 * Fixes IOS-96 Text cut off in screenshot view in landscape
 * Fixes IOS-94 Right side of feedback UI doesn't work on iPhone app running on iPad (in landscape)
+* Fixes IOS-97 Sending file attachments is writing files to disk a lot
 
 2012-09-27 wooster v0.4.7
 -------------------------

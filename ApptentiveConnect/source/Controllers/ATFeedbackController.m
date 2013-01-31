@@ -606,7 +606,7 @@ enum {
 }
 
 - (BOOL)shouldShowThumbnail {
-	return (feedback.screenshot != nil);
+	return [feedback hasScreenshot];
 }
 
 - (void)feedbackChanged:(NSNotification *)notification {
@@ -629,7 +629,7 @@ enum {
 }
 
 - (void)screenshotChanged:(NSNotification *)notification {
-	if (self.feedback.screenshot) {
+	if ([self.feedback hasScreenshot]) {
 		[self updateThumbnail];
 	} 
 }
@@ -700,7 +700,7 @@ enum {
 			[photoPanRecognizer release], photoPanRecognizer = nil;
 		}
 		if ([self shouldShowPaperclip]) {
-			UIImage *image = feedback.screenshot;
+			UIImage *image = [feedback copyScreenshot];
 			UIImageView *thumbnailView = nil;
 			
 			CGRect paperclipBackgroundFrame = paperclipBackgroundView.frame;
@@ -805,6 +805,7 @@ enum {
 				photoPanRecognizer.delaysTouchesBegan = YES;
 				photoPanRecognizer.cancelsTouchesInView = YES;
 				[photoControl addGestureRecognizer:photoPanRecognizer];
+				[image release], image = nil;
 			}
 		}
 	}
@@ -874,7 +875,7 @@ enum {
 					[self updateThumbnailOffsetWithScale:CGSizeMake(2, 2)];
 					photoFrameContainerView.alpha = 0.0;
 				} completion:^(BOOL complete){
-					self.feedback.screenshot = nil;
+					[self.feedback setScreenshot:nil];
 					photoDragOffset = CGPointZero;
 					[self updateThumbnail];
 				}];

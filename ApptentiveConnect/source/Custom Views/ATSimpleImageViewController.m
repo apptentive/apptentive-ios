@@ -63,11 +63,13 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 		[scrollView release];
 		scrollView = nil;
 	}
-	if (feedback.screenshot) {
+	if ([feedback hasScreenshot]) {
 		for (UIView *subview in self.containerView.subviews) {
 			[subview removeFromSuperview];
 		}
-		scrollView = [[ATCenteringImageScrollView alloc] initWithImage:feedback.screenshot];
+		UIImage *screenshot = [feedback copyScreenshot];
+		scrollView = [[ATCenteringImageScrollView alloc] initWithImage:screenshot];
+		[screenshot release], screenshot = nil;
 		scrollView.backgroundColor = [UIColor blackColor];
 		CGSize boundsSize = self.containerView.bounds.size;
 		CGSize imageSize = [scrollView imageView].image.size;
@@ -193,7 +195,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 	}
 	if (image) {
 		feedback.imageSource = isFromCamera ? ATFeedbackImageSourceCamera : ATFeedbackImageSourcePhotoLibrary;
-		feedback.screenshot = image;
+		[feedback setScreenshot:image];
 		[[NSNotificationCenter defaultCenter] postNotificationName:ATImageViewChoseImage object:self];
 	}
 	[self setupScrollView];

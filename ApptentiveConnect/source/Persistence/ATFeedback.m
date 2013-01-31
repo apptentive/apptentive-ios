@@ -25,10 +25,13 @@
 - (ATFeedbackType)feedbackTypeFromString:(NSString *)feedbackString;
 - (NSString *)stringForFeedbackType:(ATFeedbackType)feedbackType;
 - (NSString *)stringForSource:(ATFeedbackSource)aSource;
+- (NSString *)fullPathForScreenshotFilename:(NSString *)filename;
+- (void)createScreenshotSidecarIfNecessary;
+- (void)deleteScreenshotSidecar;
 @end
 
 @implementation ATFeedback
-@synthesize type, text, name, email, phone, source, screenshot, imageSource;
+@synthesize type, text, name, email, phone, source, imageSource;
 - (id)init {
 	if ((self = [super init])) {
 		[self setup];
@@ -43,6 +46,7 @@
 	[email release], email = nil;
 	[phone release], phone = nil;
 	[screenshot release], screenshot = nil;
+	[screenshotFilename release], screenshotFilename = nil;
 	[super dealloc];
 }
 
@@ -64,9 +68,9 @@
 			if ([coder containsValueForKey:@"screenshot"]) {
 				NSData *data = [coder decodeObjectForKey:@"screenshot"];
 #if TARGET_OS_IPHONE
-				self.screenshot = [UIImage imageWithData:data];
+				screenshot = [[UIImage imageWithData:data] retain];
 #elif TARGET_OS_MAC
-				self.screenshot = [[[NSImage alloc] initWithData:data] autorelease];
+				screenshot = [[NSImage alloc] initWithData:data];
 #endif
 			}
 		} else if (version == kFeedbackCodingVersion) {
@@ -78,10 +82,13 @@
 			if ([coder containsValueForKey:@"screenshot"]) {
 				NSData *data = [coder decodeObjectForKey:@"screenshot"];
 #if TARGET_OS_IPHONE
-				self.screenshot = [UIImage imageWithData:data];
+				screenshot = [[UIImage imageWithData:data] retain];
 #elif TARGET_OS_MAC
-				self.screenshot = [[[NSImage alloc] initWithData:data] autorelease];
+				screenshot = [[NSImage alloc] initWithData:data];
 #endif
+			}
+			if ([coder containsValueForKey:@"screenshotFilename"]) {
+				screenshotFilename = [[coder decodeObjectForKey:@"screenshotFilename"] retain];
 			}
 			NSDictionary *oldExtraData = [coder decodeObjectForKey:@"extraData"];
 			if (oldExtraData != nil) {
@@ -90,6 +97,12 @@
 		} else {
 			[self release];
 			return nil;
+		}
+		
+		// Upgrade screenshot data, if necessary.
+		[self createScreenshotSidecarIfNecessary];
+		if (screenshotFilename && screenshot != nil) {
+			[screenshot release], screenshot = nil;
 		}
 	}
 	return self;
@@ -107,18 +120,8 @@
 		[coder encodeInt:self.source forKey:@"source"];
 	}
 	[coder encodeObject:extraData forKey:@"extraData"];
-	if (self.screenshot) {
-#if TARGET_OS_IPHONE
-		[coder encodeObject:UIImagePNGRepresentation(self.screenshot) forKey:@"screenshot"];
-#elif TARGET_OS_MAC
-		NSData *data = [ATUtilities pngRepresentationOfImage:self.screenshot];
-		[coder encodeObject:data forKey:@"screenshot"];
-#endif
-	}
-}
-
-- (NSDictionary *)dictionary {
-	return [NSDictionary dictionaryWithObjectsAndKeys:self.text, @"text", self.name, @"name", self.email, @"email", self.phone, @"phone", self.screenshot, @"screenshot", nil];
+	[self createScreenshotSidecarIfNecessary];
+	[coder encodeObject:screenshotFilename forKey:@"screenshotFilename"];
 }
 
 - (NSDictionary *)apiDictionary {
@@ -141,13 +144,79 @@
 	return d;
 }
 
-
 - (void)addExtraDataFromDictionary:(NSDictionary *)dictionary {
 	[extraData addEntriesFromDictionary:dictionary];
 }
 
 - (ATAPIRequest *)requestForSendingRecord {
 	return [[ATWebClient sharedClient] requestForPostingFeedback:self];
+}
+
+- (void)cleanup {
+	[self deleteScreenshotSidecar];
+	[super cleanup];
+}
+
+#if TARGET_OS_IPHONE
+- (void)setScreenshot:(UIImage *)aScreenshot
+#elif TARGET_OS_MAC
+- (void)setScreenshot:(NSImage *)aScreenshot
+#endif
+{
+	if (screenshot != aScreenshot) {
+		[screenshot release], screenshot = nil;
+		[self deleteScreenshotSidecar];
+		screenshot = [aScreenshot retain];
+	}
+}
+
+#if TARGET_OS_IPHONE
+- (UIImage *)copyScreenshot
+#elif TARGET_OS_MAC
+- (NSImage *)copyScreenshot
+#endif
+{
+	if (screenshot) {
+		return [screenshot copy];
+	} else {
+		NSData *data = [self dataForScreenshot];
+		if (data) {
+#			if TARGET_OS_IPHONE
+			return [[UIImage imageWithData:data] retain];
+#			elif TARGET_OS_MAC
+			return [[NSImage alloc] initWithData:data];
+#			endif
+		}
+	}
+	return nil;
+}
+
+- (BOOL)hasScreenshot {
+	if (screenshotFilename) {
+		return YES;
+	} else if (screenshot) {
+		return YES;
+	} else {
+		return NO;
+	}
+}
+
+- (NSData *)dataForScreenshot {
+	NSData *result = nil;
+	if (![self hasScreenshot]) {
+		return result;
+	}
+	NSFileManager *fm = [NSFileManager defaultManager];
+	if (screenshotFilename && [fm fileExistsAtPath:[self fullPathForScreenshotFilename:screenshotFilename]]) {
+		result = [NSData dataWithContentsOfFile:[self fullPathForScreenshotFilename:screenshotFilename]];
+	} else if (screenshot) {
+#		if TARGET_OS_IPHONE
+		result = UIImagePNGRepresentation(screenshot);
+#		elif TARGET_OS_MAC
+		result = [ATUtilities pngRepresentationOfImage:self.screenshot];
+#		endif
+	}
+	return result;
 }
 @end
 
@@ -203,5 +272,36 @@
 			break;
 	}
 	return result;
+}
+
+- (NSString *)fullPathForScreenshotFilename:(NSString *)filename {
+	return [[[ATBackend sharedBackend] attachmentDirectoryPath] stringByAppendingPathComponent:filename];
+}
+
+- (void)createScreenshotSidecarIfNecessary {
+	if (screenshot) {
+		if (!screenshotFilename) {
+			// First time this screenshot has been saved.
+			screenshotFilename = [[ATUtilities randomStringOfLength:20] retain];
+			NSString *fullPath = [self fullPathForScreenshotFilename:screenshotFilename];
+			NSData *screenshotData = [self dataForScreenshot];
+			if (![screenshotData writeToFile:fullPath atomically:YES]) {
+				NSLog(@"Unable to save screenshot data to path: %@", fullPath);
+			}
+		}
+	}
+}
+
+- (void)deleteScreenshotSidecar {
+	if (screenshotFilename) {
+		NSFileManager *fm = [NSFileManager defaultManager];
+		NSString *fullPath = [self fullPathForScreenshotFilename:screenshotFilename];
+		NSError *error = nil;
+		if (![fm removeItemAtPath:fullPath error:&error]) {
+			NSLog(@"Error removing screenshot at path: %@. %@", screenshotFilename, error);
+			return;
+		}
+		[screenshotFilename release], screenshotFilename = nil;
+	}	
 }
 @end

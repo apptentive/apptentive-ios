@@ -200,6 +200,23 @@ static ATBackend *sharedBackend = nil;
 	return newPath;
 }
 
+- (NSString *)attachmentDirectoryPath {
+	NSString *supportPath = [self supportDirectoryPath];
+	if (!supportPath) {
+		return nil;
+	}
+	NSString *newPath = [supportPath stringByAppendingPathComponent:@"attachments"];
+	NSFileManager *fm = [NSFileManager defaultManager];
+	NSError *error = nil;
+	BOOL result = [fm createDirectoryAtPath:newPath withIntermediateDirectories:YES attributes:nil error:&error];
+	if (!result) {
+		NSLog(@"Failed to create attachments directory: %@", newPath);
+		NSLog(@"Error was: %@", error);
+		return nil;
+	}
+	return newPath;
+}
+
 - (NSString *)deviceUUID {
 #if TARGET_OS_IPHONE
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

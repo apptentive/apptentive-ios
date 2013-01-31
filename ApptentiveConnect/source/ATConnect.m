@@ -122,15 +122,15 @@ static ATConnect *sharedConnection = nil;
 		}
 		if ([[ATBackend sharedBackend] currentFeedback]) {
 			ATFeedback *currentFeedback = [[ATBackend sharedBackend] currentFeedback];
-			if (self.shouldTakeScreenshot && currentFeedback.screenshot == nil && self.feedbackControllerType != ATFeedbackControllerSimple) {
+			if (self.shouldTakeScreenshot && ![currentFeedback hasScreenshot] && self.feedbackControllerType != ATFeedbackControllerSimple) {
 				screenshot = [ATUtilities imageByTakingScreenshot];
 				// Get the rotation of the view hierarchy and rotate the screenshot as
 				// necessary.
 				CGFloat rotation = [ATUtilities rotationOfViewHierarchyInRadians:viewController.view];
 				screenshot = [ATUtilities imageByRotatingImage:screenshot byRadians:rotation];
-				currentFeedback.screenshot = screenshot;
-			} else if (!self.shouldTakeScreenshot && currentFeedback.screenshot != nil && (currentFeedback.imageSource == ATFeedbackImageSourceScreenshot)) {
-				currentFeedback.screenshot = nil;
+				[currentFeedback setScreenshot:screenshot];
+			} else if (!self.shouldTakeScreenshot && [currentFeedback hasScreenshot] && (currentFeedback.imageSource == ATFeedbackImageSourceScreenshot)) {
+				[currentFeedback setScreenshot:nil];
 			}
 		}
 

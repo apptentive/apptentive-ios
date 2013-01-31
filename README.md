@@ -43,6 +43,7 @@ following frameworks:
 
 Project Settings for Xcode 4
 ----------------------------
+The instructions below are for source integration. For binary releases, see our [Binary Distributions](https://github.com/apptentive/apptentive-ios/wiki/Binary-Distributions) page.
 
 There is a video demoing integration in Xcode 4 here:
 http://vimeo.com/23710908

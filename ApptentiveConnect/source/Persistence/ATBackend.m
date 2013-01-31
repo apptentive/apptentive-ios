@@ -21,6 +21,7 @@
 
 NSString *const ATBackendNewAPIKeyNotification = @"ATBackendNewAPIKeyNotification";
 NSString *const ATUUIDPreferenceKey = @"ATUUIDPreferenceKey";
+NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 
 static ATBackend *sharedBackend = nil;
 
@@ -277,6 +278,15 @@ static ATBackend *sharedBackend = nil;
 
 - (NSURL *)apptentivePrivacyPolicyURL {
 	return [NSURL URLWithString:@"http://www.apptentive.com/privacy"];
+}
+
+- (NSString *)distributionName {
+	static NSString *cachedDistributionName = nil;
+    static dispatch_once_t onceToken = 0;
+    dispatch_once(&onceToken, ^{
+		cachedDistributionName = [(NSString *)[[ATConnect resourceBundle] objectForInfoDictionaryKey:ATInfoDistributionKey] retain];
+    });
+    return cachedDistributionName;
 }
 @end
 

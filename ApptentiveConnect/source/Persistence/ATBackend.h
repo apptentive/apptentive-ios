@@ -53,4 +53,6 @@ NSString *const ATBackendNewAPIKeyNotification;
 
 - (NSURL *)apptentiveHomepageURL;
 - (NSURL *)apptentivePrivacyPolicyURL;
+
+- (NSString *)distributionName;
 @end

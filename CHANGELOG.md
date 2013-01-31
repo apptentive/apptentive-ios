@@ -13,6 +13,7 @@ In progress wooster v0.4.8
 * Fixes IOS-96 Text cut off in screenshot view in landscape
 * Fixes IOS-94 Right side of feedback UI doesn't work on iPhone app running on iPad (in landscape)
 * Fixes IOS-97 Sending file attachments is writing files to disk a lot
+* Fixes IOS-88 Send CP suffix on client version for cocoa pod versions
 
 2012-09-27 wooster v0.4.7
 -------------------------

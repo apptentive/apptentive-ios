@@ -18,14 +18,14 @@ The demo app includes the normal feedback flow, which can be activated by
 clicking the Feedback button. It's a one screen process which can gather
 feedback, an email address, and even a screenshot:
 
-![Feedback Screen](apptentive-ios/raw/master/etc/screenshots/feedback_iphone.png)
+![Feedback Screen](etc/screenshots/feedback_iphone.png?raw=true)
 
 The rating flow can be activated by clicking on the Ratings button. It asks
 the user if they are happy with the app. If not, then a simplified feedback
 window is opened. If they are happy with the app, they are prompted to rate
 the app in the App Store:
 
-![Popup](apptentive-ios/raw/master/etc/screenshots/rating.png)
+![Popup](etc/screenshots/rating.png?raw=true)
 
 
 Required Frameworks
@@ -43,6 +43,7 @@ following frameworks:
 
 Project Settings for Xcode 4
 ----------------------------
+The instructions below are for source integration. For binary releases, see our [Binary Distributions](https://github.com/apptentive/apptentive-ios/wiki/Binary-Distributions) page.
 
 There is a video demoing integration in Xcode 4 here:
 http://vimeo.com/23710908

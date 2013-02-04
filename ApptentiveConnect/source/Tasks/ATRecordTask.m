@@ -86,6 +86,10 @@
 	return @"record";
 }
 
+- (void)cleanup {
+	[record cleanup];
+}
+
 #pragma mark ATAPIRequestDelegate
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(id)result {
 	@synchronized(self) {

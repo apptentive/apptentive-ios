@@ -34,6 +34,8 @@
 - (BOOL)shouldArchive;
 - (void)start;
 - (void)stop;
+/*! Called before we delete this task. */
+- (void)cleanup;
 - (float)percentComplete;
 - (NSString *)taskName;
 @end

@@ -62,8 +62,13 @@ NSString *const ATBackendNewAPIKeyNotification;
 - (void)sendFeedback:(ATFeedback *)feedback;
 
 - (NSString *)supportDirectoryPath;
+
+/*! Path to directory for storing attachments. */
+- (NSString *)attachmentDirectoryPath;
 - (NSString *)deviceUUID;
 
 - (NSURL *)apptentiveHomepageURL;
 - (NSURL *)apptentivePrivacyPolicyURL;
+
+- (NSString *)distributionName;
 @end

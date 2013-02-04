@@ -68,6 +68,7 @@ enum {
 @end
 
 @interface ATFeedbackController (Positioning)
+- (BOOL)isIPhoneAppInIPad;
 - (CGRect)onscreenRectOfView;
 - (CGPoint)offscreenPositionOfView;
 - (void)positionInWindow;
@@ -626,7 +627,7 @@ enum {
 }
 
 - (BOOL)shouldShowThumbnail {
-	return (feedback.screenshot != nil);
+	return [feedback hasScreenshot];
 }
 
 - (void)feedbackChanged:(NSNotification *)notification {
@@ -649,7 +650,7 @@ enum {
 }
 
 - (void)screenshotChanged:(NSNotification *)notification {
-	if (self.feedback.screenshot) {
+	if ([self.feedback hasScreenshot]) {
 		[self updateThumbnail];
 	} 
 }
@@ -720,7 +721,7 @@ enum {
 			[photoPanRecognizer release], photoPanRecognizer = nil;
 		}
 		if ([self shouldShowPaperclip]) {
-			UIImage *image = feedback.screenshot;
+			UIImage *image = [feedback copyScreenshot];
 			UIImageView *thumbnailView = nil;
 			
 			CGRect paperclipBackgroundFrame = paperclipBackgroundView.frame;
@@ -825,6 +826,7 @@ enum {
 				photoPanRecognizer.delaysTouchesBegan = YES;
 				photoPanRecognizer.cancelsTouchesInView = YES;
 				[photoControl addGestureRecognizer:photoPanRecognizer];
+				[image release], image = nil;
 			}
 		}
 	}
@@ -894,7 +896,7 @@ enum {
 					[self updateThumbnailOffsetWithScale:CGSizeMake(2, 2)];
 					photoFrameContainerView.alpha = 0.0;
 				} completion:^(BOOL complete){
-					self.feedback.screenshot = nil;
+					[self.feedback setScreenshot:nil];
 					photoDragOffset = CGPointZero;
 					[self updateThumbnail];
 				}];
@@ -913,7 +915,18 @@ enum {
 
 
 @implementation ATFeedbackController (Positioning)
+- (BOOL)isIPhoneAppInIPad {
+	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+		NSString *model = [[UIDevice currentDevice] model];
+		if ([model isEqualToString:@"iPad"]) {
+			return YES;
+		}
+	}
+	return NO;
+}
+
 - (CGRect)onscreenRectOfView {
+	BOOL constrainViewWidth = [self isIPhoneAppInIPad];
 	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
 	CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
 	CGRect screenBounds = [[UIScreen mainScreen] bounds];
@@ -957,6 +970,9 @@ enum {
 		viewHeight = self.view.window.bounds.size.height - (isLandscape ? landscapeKeyboardHeight + 8 - 37 : portraitKeyboardHeight + 8);
 		viewWidth = windowWidth - 12;
 		originX = 6.0;
+		if (constrainViewWidth) {
+			viewWidth = MIN(320, windowWidth - 12);
+		}
 	}
 	
 	CGRect f = self.view.frame;

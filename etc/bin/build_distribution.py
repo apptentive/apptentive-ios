@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 from contextlib import contextmanager
 import os
+import biplist
 import re
+import shutil
 import subprocess
 import sys
 
@@ -44,9 +46,18 @@ def run_command(command, verbose=False):
 	return (p.returncode, output)
 
 class Builder(object):
+	COCOAPODS_DIST = "COCOAPODS_DIST"
+	BINARY_DIST = "BINARY_DIST"
 	build_root = "/tmp/apptentive_connect_build"
-	def __init__(self, verbose=False):
+	dist_type = None
+	def __init__(self, verbose=False, dist_type=None):
+		if not dist_type:
+			dist_type = self.BINARY_DIST
 		self.verbose = verbose
+		self.dist_type = dist_type
+		if dist_type not in [self.COCOAPODS_DIST, self.BINARY_DIST]:
+			log("Unknown dist_type: %s" % dist_type)
+			sys.exit(1)
 	
 	def build(self):
 		# First, build the simulator target.
@@ -65,10 +76,12 @@ class Builder(object):
 				return False
 			library_dir = self._output_dir()
 			try:
-				os.rmtree(library_dir)
+				if os.path.exists(library_dir):
+					shutil.rmtree(library_dir)
 				os.makedirs(library_dir)
 				os.makedirs(os.path.join(library_dir, 'include'))
-			except:
+			except Exception as e:
+				log("Exception %s" % e)
 				pass
 			if not os.path.exists(library_dir):
 				log("Unable to create output directory at: %s" % library_dir)
@@ -87,6 +100,26 @@ class Builder(object):
 					log("Unable to ditto project path: %s" % full_project_path)
 					log(output)
 					return False
+			# Copy the ApptentiveResources.bundle.
+			bundle_source = os.path.join(self._products_dir(), "ApptentiveResources.bundle")
+			bundle_dest = os.path.join(self._output_dir(), "ApptentiveResources.bundle")
+			(status, output) = self._ditto_file(bundle_source, bundle_dest)
+			# Update the Info.plist in the ApptentiveResources.bundle.
+			bundle_plist_path = os.path.join(bundle_dest, "Info.plist")
+			if not os.path.exists(bundle_plist_path):
+				log("Unable to find bundle Info.plist at %s" % bundle_plist_path)
+				return False
+			plist = biplist.readPlist(bundle_plist_path)
+			plist_key = "ATInfoDistributionKey"
+			if self.dist_type == self.COCOAPODS_DIST:
+				plist[plist_key] = "CocoaPods"
+			elif self.dist_type == self.BINARY_DIST:
+				plist[plist_key] = "binary"
+			else:
+				log("Unknown dist_type")
+				return False
+			biplist.writePlist(plist, bundle_plist_path)
+		
 		# Try to get the version.
 		version = None
 		header_contents = open(os.path.join(self._project_dir(), "source", "ATConnect.h")).read()
@@ -96,7 +129,10 @@ class Builder(object):
 		with chdir(self._output_dir()):
 			filename = 'apptentive_ios_sdk.tar.gz'
 			if version:
-				filename = 'apptentive_ios_sdk-%s.tar.gz' % version
+				if self.dist_type == self.BINARY_DIST:
+					filename = 'apptentive_ios_sdk-%s.tar.gz' % version
+				elif self.dist_type == self.COCOAPODS_DIST:
+					filename = 'apptentive_ios_sdk-cocoapods-%s.tar.gz' % version
 			tar_command = "tar -zcvf ../%s ." % filename
 			(status, output) = run_command(tar_command, verbose=self.verbose)
 			if status != 0:
@@ -147,10 +183,11 @@ class Builder(object):
 		return run_command(command, verbose=self.verbose)
 
 if __name__ == "__main__":
-	builder = Builder()
-	result = builder.build()
-	if result == True:
-		log("Build suceeded")
-	else:
-		log("Build failed!")
-
+	for dist_type in [Builder.BINARY_DIST, Builder.COCOAPODS_DIST]:
+		builder = Builder(dist_type=dist_type)
+		result = builder.build()
+		if result == True:
+			log("Build suceeded")
+		else:
+			log("Build failed!")
+			break

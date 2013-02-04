@@ -21,6 +21,7 @@
 
 enum {
 	kSectionTasks,
+	kSectionVersion,
 	kSectionCount
 };
 
@@ -191,6 +192,8 @@ enum {
 		} else {
 			result = NSLocalizedString(@"No feedback waiting to upload.", @"Section footer for no feedback being updated.");
 		}
+	} else if (section == kSectionVersion) {
+		result = [NSString stringWithFormat:@"ApptentiveConnect v%@", kATConnectVersionString];
 	}
 	return result;
 }

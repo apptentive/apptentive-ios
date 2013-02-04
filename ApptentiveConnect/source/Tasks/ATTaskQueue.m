@@ -192,6 +192,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 		ATTask *task = (ATTask *)object;
 		if ([keyPath isEqualToString:@"finished"] && [task finished]) {
 			[self unsetActiveTask];
+			[task cleanup];
 			[tasks removeObject:object];
 			[self archive];
 			[self start];
@@ -207,6 +208,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 				if (task.failureCount > kMaxFailureCount) {
 					NSLog(@"Task %@ failed too many times, removing from queue.", task);
 					[self unsetActiveTask];
+					[task cleanup];
 					[tasks removeObject:task];
 					[self start];
 				} else {

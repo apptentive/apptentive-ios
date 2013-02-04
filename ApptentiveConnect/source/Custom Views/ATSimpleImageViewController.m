@@ -14,6 +14,9 @@
 
 NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 
+#define kATContainerViewTag (5)
+#define kATLabelViewTag (6)
+
 @interface ATSimpleImageViewController (Private)
 - (void)chooseImage;
 - (void)takePhoto;
@@ -56,6 +59,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 		[scrollView release];
 		scrollView = nil;
 	}
+<<<<<<< HEAD
 	UIImage *defaultScreenshot = nil;
 	if (delegate && [delegate respondsToSelector:@selector(defaultImageForImageViewController:)]) {
 		defaultScreenshot = [delegate defaultImageForImageViewController:self];
@@ -65,6 +69,15 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 			[subview removeFromSuperview];
 		}
 		scrollView = [[ATCenteringImageScrollView alloc] initWithImage:defaultScreenshot];
+=======
+	if ([feedback hasScreenshot]) {
+		for (UIView *subview in self.containerView.subviews) {
+			[subview removeFromSuperview];
+		}
+		UIImage *screenshot = [feedback copyScreenshot];
+		scrollView = [[ATCenteringImageScrollView alloc] initWithImage:screenshot];
+		[screenshot release], screenshot = nil;
+>>>>>>> 045075dcdac9a55b8669784ac44c14ee116fcc76
 		scrollView.backgroundColor = [UIColor blackColor];
 		CGSize boundsSize = self.containerView.bounds.size;
 		CGSize imageSize = [scrollView imageView].image.size;
@@ -89,19 +102,34 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 		scrollView.frame = self.containerView.bounds;
 		[self.containerView addSubview:scrollView];
 	} else {
-		UIView *container = [[UIView alloc] initWithFrame:self.containerView.bounds];
-		container.backgroundColor = [UIColor blackColor];
-		UITextView *label = [[UITextView alloc] initWithFrame:CGRectZero];
-		label.backgroundColor = [UIColor clearColor];
-		label.font = [UIFont boldSystemFontOfSize:16.0];
-		label.textColor = [UIColor whiteColor];
-		label.userInteractionEnabled = NO;
-		label.textAlignment = UITextAlignmentCenter;
-		label.text = ATLocalizedString(@"You can include a screenshot by choosing a photo from your photo library above.\n\nTo take a screenshot, hold down the power and home buttons at the same time.", @"Description of what to do when there is no screenshot.");
+		UIView *container = nil;
+		UITextView *label = nil;
+		if ([self.containerView viewWithTag:kATContainerViewTag]) {
+			container = [[self.containerView viewWithTag:kATContainerViewTag] retain];
+			label = [(UITextView *)[self.containerView viewWithTag:kATLabelViewTag] retain];
+		} else {
+			container = [[UIView alloc] initWithFrame:self.containerView.bounds];
+			container.tag = kATContainerViewTag;
+			container.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+			container.backgroundColor = [UIColor blackColor];
+			label = [[UITextView alloc] initWithFrame:CGRectZero];
+			label.tag = kATLabelViewTag;
+			label.backgroundColor = [UIColor clearColor];
+			label.font = [UIFont boldSystemFontOfSize:16.0];
+			label.textColor = [UIColor whiteColor];
+			label.userInteractionEnabled = NO;
+			label.textAlignment = UITextAlignmentCenter;
+			label.text = ATLocalizedString(@"You can include a screenshot by choosing a photo from your photo library above.\n\nTo take a screenshot, hold down the power and home buttons at the same time.", @"Description of what to do when there is no screenshot.");
+		}
 		[self.containerView addSubview:container];
 		[container sizeToFit];
 		[container addSubview:label];
-		label.frame = CGRectInset(container.bounds, 20.0, 100.0);
+		
+		CGFloat labelWidth = container.bounds.size.width - 40.0;
+		CGSize labelSize = [label sizeThatFits:CGSizeMake(labelWidth, CGFLOAT_MAX)];
+		CGFloat topOffset = floor(labelSize.height/2.0);
+		CGRect labelRect = CGRectMake(20, topOffset, labelWidth, labelSize.height);
+		label.frame = labelRect;
 		label.center = container.center;
 		[label release];
 		[container release];
@@ -175,7 +203,12 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 		image = [info objectForKey:UIImagePickerControllerOriginalImage];
 	}
 	if (image) {
+<<<<<<< HEAD
 		[delegate imageViewController:self pickedImage:image fromSource:isFromCamera ? ATFeedbackImageSourceCamera : ATFeedbackImageSourcePhotoLibrary];
+=======
+		feedback.imageSource = isFromCamera ? ATFeedbackImageSourceCamera : ATFeedbackImageSourcePhotoLibrary;
+		[feedback setScreenshot:image];
+>>>>>>> 045075dcdac9a55b8669784ac44c14ee116fcc76
 		[[NSNotificationCenter defaultCenter] postNotificationName:ATImageViewChoseImage object:self];
 	}
 	[self setupScrollView];

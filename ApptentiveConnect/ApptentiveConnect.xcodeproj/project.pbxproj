@@ -628,6 +628,8 @@
 				4961A40E161BBE1F00E30037 /* ATDeviceUpdater.m */,
 			);
 			name = Persistence;
+			sourceTree = "<group>";
+		};
 		4967278516B9FE7000C679B8 /* ApptentiveResources */ = {
 			isa = PBXGroup;
 			children = (

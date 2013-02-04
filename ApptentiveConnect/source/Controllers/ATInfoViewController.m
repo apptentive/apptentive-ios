@@ -19,6 +19,7 @@
 
 enum {
 	kSectionTasks,
+	kSectionVersion,
 	kSectionCount
 };
 
@@ -29,7 +30,7 @@ enum {
 @end
 
 @implementation ATInfoViewController
-@synthesize tableView;
+@synthesize tableView, headerView;
 
 - (id)initWithFeedbackController:(ATFeedbackController *)aController {
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
@@ -92,6 +93,10 @@ enum {
 
 - (IBAction)openApptentiveDotCom:(id)sender {
 	[[UIApplication sharedApplication] openURL:[[ATBackend sharedBackend] apptentiveHomepageURL]];
+}
+
+- (IBAction)openPrivacyPolicy:(id)sender {
+	[[UIApplication sharedApplication] openURL:[[ATBackend sharedBackend] apptentivePrivacyPolicyURL]];
 }
 
 #pragma mark UITableViewDelegate
@@ -177,6 +182,8 @@ enum {
 		} else {
 			result = NSLocalizedString(@"No feedback waiting to upload.", @"Section footer for no feedback being updated.");
 		}
+	} else if (section == kSectionVersion) {
+		result = [NSString stringWithFormat:@"ApptentiveConnect v%@", kATConnectVersionString];
 	}
 	return result;
 }
@@ -198,7 +205,7 @@ enum {
 	logoView.frame = f;
 	//tableView.delegate = self;
 	tableView.dataSource = self;
-	tableView.tableHeaderView = headerView;
+	tableView.tableHeaderView = self.headerView;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reload) name:ATAPIRequestStatusChanged object:nil];
 }
 

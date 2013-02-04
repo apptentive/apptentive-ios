@@ -24,6 +24,7 @@
 
 NSString *const ATBackendNewAPIKeyNotification = @"ATBackendNewAPIKeyNotification";
 NSString *const ATUUIDPreferenceKey = @"ATUUIDPreferenceKey";
+NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 
 static ATBackend *sharedBackend = nil;
 
@@ -214,6 +215,23 @@ static ATBackend *sharedBackend = nil;
 	return newPath;
 }
 
+- (NSString *)attachmentDirectoryPath {
+	NSString *supportPath = [self supportDirectoryPath];
+	if (!supportPath) {
+		return nil;
+	}
+	NSString *newPath = [supportPath stringByAppendingPathComponent:@"attachments"];
+	NSFileManager *fm = [NSFileManager defaultManager];
+	NSError *error = nil;
+	BOOL result = [fm createDirectoryAtPath:newPath withIntermediateDirectories:YES attributes:nil error:&error];
+	if (!result) {
+		NSLog(@"Failed to create attachments directory: %@", newPath);
+		NSLog(@"Error was: %@", error);
+		return nil;
+	}
+	return newPath;
+}
+
 - (NSString *)deviceUUID {
 #if TARGET_OS_IPHONE
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -379,6 +397,19 @@ static ATBackend *sharedBackend = nil;
 	if (deviceUpdater == aDeviceUpdater) {
 		[deviceUpdater release], deviceUpdater = nil;
 	}
+}
+
+- (NSURL *)apptentivePrivacyPolicyURL {
+	return [NSURL URLWithString:@"http://www.apptentive.com/privacy"];
+}
+
+- (NSString *)distributionName {
+	static NSString *cachedDistributionName = nil;
+    static dispatch_once_t onceToken = 0;
+    dispatch_once(&onceToken, ^{
+		cachedDistributionName = [(NSString *)[[ATConnect resourceBundle] objectForInfoDictionaryKey:ATInfoDistributionKey] retain];
+    });
+    return cachedDistributionName;
 }
 @end
 

@@ -445,7 +445,7 @@ enum {
 #pragma mark ATSimpleImageViewControllerDelegate
 - (void)imageViewController:(ATSimpleImageViewController *)vc pickedImage:(UIImage *)image fromSource:(ATFeedbackImageSource)source {
 	self.feedback.imageSource = source;
-	self.feedback.screenshot = image;
+	[self.feedback setScreenshot:image];
 }
 
 - (void)imageViewControllerWillDismiss:(ATSimpleImageViewController *)vc animated:(BOOL)animated {
@@ -458,7 +458,10 @@ enum {
 }
 
 - (UIImage *)defaultImageForImageViewController:(ATSimpleImageViewController *)vc {
-	return self.feedback.screenshot;
+	if ([self.feedback hasScreenshot]) {
+		return [[self.feedback copyScreenshot] autorelease];
+	}
+	return nil;
 }
 
 #pragma mark UITextFieldDelegate

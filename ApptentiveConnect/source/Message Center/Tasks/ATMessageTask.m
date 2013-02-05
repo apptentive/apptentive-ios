@@ -10,7 +10,7 @@
 #import "ATBackend.h"
 #import "ATLog.h"
 #import "ATMessage.h"
-#import "ATPersonUpdater.h"
+#import "ATActivityFeedUpdater.h"
 #import "ATTextMessage.h"
 #import "ATWebClient.h"
 #import "ATWebClient+MessageCenter.h"
@@ -57,7 +57,7 @@
 	if ([[ATBackend sharedBackend] apiKey] == nil) {
 		return NO;
 	}
-	if (![ATPersonUpdater personExists]) {
+	if (![ATActivityFeedUpdater activityFeedExists]) {
 		return NO;
 	}
 	return YES;

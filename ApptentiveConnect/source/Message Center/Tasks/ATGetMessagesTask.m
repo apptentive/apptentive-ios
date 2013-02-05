@@ -10,7 +10,7 @@
 
 #import "ATBackend.h"
 #import "ATMessage.h"
-#import "ATPersonUpdater.h"
+#import "ATActivityFeedUpdater.h"
 #import "ATTextMessage.h"
 #import "ATWebClient.h"
 #import "ATWebClient+MessageCenter.h"
@@ -51,7 +51,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 	if ([[ATBackend sharedBackend] apiKey] == nil) {
 		return NO;
 	}
-	if (![ATPersonUpdater personExists]) {
+	if (![ATActivityFeedUpdater activityFeedExists]) {
 		return NO;
 	}
 	return YES;
@@ -139,9 +139,9 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 	
 	do { // once
 		if (!jsonMessages) break;
-		if (![jsonMessages objectForKey:@"messages"]) break;
+		if (![jsonMessages objectForKey:@"items"]) break;
 		
-		NSArray *messages = [jsonMessages objectForKey:@"messages"];
+		NSArray *messages = [jsonMessages objectForKey:@"items"];
 		if (![messages isKindOfClass:[NSArray class]]) break;
 		
 		BOOL success = YES;

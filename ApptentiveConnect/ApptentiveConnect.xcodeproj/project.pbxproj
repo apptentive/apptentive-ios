@@ -174,6 +174,13 @@
 		49AA1023138B498C0082887A /* ATInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA1022138B498C0082887A /* ATInfoViewController.xib */; };
 		49AA1025138B49A50082887A /* ATInfoViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA1024138B49A50082887A /* ATInfoViewController_iPad.xib */; };
 		49AAA17B1633716F00B26851 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49AAA17A1633716F00B26851 /* StoreKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		49AC178216C0987400BE1615 /* ATActivityFeedUpdater.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AC178016C0987400BE1615 /* ATActivityFeedUpdater.h */; };
+		49AC178316C0987400BE1615 /* ATActivityFeedUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AC178116C0987400BE1615 /* ATActivityFeedUpdater.m */; };
+		49AC178416C0987400BE1615 /* ATActivityFeedUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AC178116C0987400BE1615 /* ATActivityFeedUpdater.m */; };
+		49AC178816C0A01C00BE1615 /* ATActivityFeed.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AC178616C0A01B00BE1615 /* ATActivityFeed.h */; };
+		49AC178916C0A01C00BE1615 /* ATActivityFeed.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AC178716C0A01B00BE1615 /* ATActivityFeed.m */; };
+		49AC178A16C0A01C00BE1615 /* ATActivityFeed.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AC178716C0A01B00BE1615 /* ATActivityFeed.m */; };
+		49AC178D16C0A0BC00BE1615 /* ATJSONModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AC178C16C0A0BC00BE1615 /* ATJSONModel.h */; };
 		49ADE8D8162613BA00DD8634 /* TTTAttributedLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 49ADE8D6162613BA00DD8634 /* TTTAttributedLabel.h */; };
 		49ADE8D9162613BA00DD8634 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 49ADE8D7162613BA00DD8634 /* TTTAttributedLabel.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		49ADE8DC1626167F00DD8634 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49ADE8DB1626167F00DD8634 /* CoreText.framework */; };
@@ -182,10 +189,6 @@
 		49AF27CF16321F0C005E1E9D /* ATFakeMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AF27CD16321F0C005E1E9D /* ATFakeMessageCell.h */; };
 		49AF27D016321F0C005E1E9D /* ATFakeMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AF27CE16321F0C005E1E9D /* ATFakeMessageCell.m */; };
 		49AF27D216321F27005E1E9D /* ATFakeMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AF27D116321F21005E1E9D /* ATFakeMessageCell.xib */; };
-		49ADE8D8162613BA00DD8634 /* TTTAttributedLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 49ADE8D6162613BA00DD8634 /* TTTAttributedLabel.h */; };
-		49ADE8D9162613BA00DD8634 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 49ADE8D7162613BA00DD8634 /* TTTAttributedLabel.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		49ADE8DC1626167F00DD8634 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49ADE8DB1626167F00DD8634 /* CoreText.framework */; };
-		49AAA17B1633716F00B26851 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49AAA17A1633716F00B26851 /* StoreKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		49B3D96B133E6D6400B5A5CD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D968133E6D6400B5A5CD /* CoreGraphics.framework */; };
 		49B3D96C133E6D6400B5A5CD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D969133E6D6400B5A5CD /* QuartzCore.framework */; };
 		49B3D96D133E6D6400B5A5CD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D96A133E6D6400B5A5CD /* UIKit.framework */; };
@@ -376,6 +379,11 @@
 		49AA1022138B498C0082887A /* ATInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATInfoViewController.xib; sourceTree = "<group>"; };
 		49AA1024138B49A50082887A /* ATInfoViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATInfoViewController_iPad.xib; sourceTree = "<group>"; };
 		49AAA17A1633716F00B26851 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		49AC178016C0987400BE1615 /* ATActivityFeedUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATActivityFeedUpdater.h; path = "Message Center/Persistence/ATActivityFeedUpdater.h"; sourceTree = "<group>"; };
+		49AC178116C0987400BE1615 /* ATActivityFeedUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATActivityFeedUpdater.m; path = "Message Center/Persistence/ATActivityFeedUpdater.m"; sourceTree = "<group>"; };
+		49AC178616C0A01B00BE1615 /* ATActivityFeed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATActivityFeed.h; path = "Message Center/Model/ATActivityFeed.h"; sourceTree = "<group>"; };
+		49AC178716C0A01B00BE1615 /* ATActivityFeed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATActivityFeed.m; path = "Message Center/Model/ATActivityFeed.m"; sourceTree = "<group>"; };
+		49AC178C16C0A0BC00BE1615 /* ATJSONModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATJSONModel.h; path = "Message Center/ATJSONModel.h"; sourceTree = "<group>"; };
 		49ADE8D6162613BA00DD8634 /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTTAttributedLabel.h; path = TTTAttributedLabel/TTTAttributedLabel.h; sourceTree = "<group>"; };
 		49ADE8D7162613BA00DD8634 /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TTTAttributedLabel.m; path = TTTAttributedLabel/TTTAttributedLabel.m; sourceTree = "<group>"; };
 		49ADE8DB1626167F00DD8634 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -384,10 +392,6 @@
 		49AF27CD16321F0C005E1E9D /* ATFakeMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATFakeMessageCell.h; path = "Message Center/ATFakeMessageCell.h"; sourceTree = "<group>"; };
 		49AF27CE16321F0C005E1E9D /* ATFakeMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATFakeMessageCell.m; path = "Message Center/ATFakeMessageCell.m"; sourceTree = "<group>"; };
 		49AF27D116321F21005E1E9D /* ATFakeMessageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ATFakeMessageCell.xib; path = "Message Center/ATFakeMessageCell.xib"; sourceTree = "<group>"; };
-		49ADE8D6162613BA00DD8634 /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTTAttributedLabel.h; path = TTTAttributedLabel/TTTAttributedLabel.h; sourceTree = "<group>"; };
-		49ADE8D7162613BA00DD8634 /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TTTAttributedLabel.m; path = TTTAttributedLabel/TTTAttributedLabel.m; sourceTree = "<group>"; };
-		49ADE8DB1626167F00DD8634 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
-		49AAA17A1633716F00B26851 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		49B3D968133E6D6400B5A5CD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		49B3D969133E6D6400B5A5CD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		49B3D96A133E6D6400B5A5CD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -626,6 +630,8 @@
 				4961A40A161BBE0800E30037 /* ATPersonUpdater.m */,
 				4961A40D161BBE1F00E30037 /* ATDeviceUpdater.h */,
 				4961A40E161BBE1F00E30037 /* ATDeviceUpdater.m */,
+				49AC178016C0987400BE1615 /* ATActivityFeedUpdater.h */,
+				49AC178116C0987400BE1615 /* ATActivityFeedUpdater.m */,
 			);
 			name = Persistence;
 			sourceTree = "<group>";
@@ -718,6 +724,7 @@
 		4999127B16165B7900FDA15F /* Message Center */ = {
 			isa = PBXGroup;
 			children = (
+				49AC178B16C0A09200BE1615 /* Protocols */,
 				499912AA161B6B2000FDA15F /* Model */,
 				4961A408161BBDBE00E30037 /* Persistence */,
 				4961A3FF161BBD5200E30037 /* Tasks */,
@@ -768,6 +775,8 @@
 				4988FB4816212B41000A7CB7 /* ATUpgradeRequestMessage.m */,
 				491E03D11640823800DC3E18 /* ATMessageSender.h */,
 				491E03D21640823900DC3E18 /* ATMessageSender.m */,
+				49AC178616C0A01B00BE1615 /* ATActivityFeed.h */,
+				49AC178716C0A01B00BE1615 /* ATActivityFeed.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -779,6 +788,14 @@
 				499B56C715D305880063C23C /* PJSONKit.m */,
 			);
 			path = PrefixedJSONKit;
+			sourceTree = "<group>";
+		};
+		49AC178B16C0A09200BE1615 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				49AC178C16C0A0BC00BE1615 /* ATJSONModel.h */,
+			);
+			name = Protocols;
 			sourceTree = "<group>";
 		};
 		49B3D964133D843D00B5A5CD /* Custom Views */ = {
@@ -843,7 +860,6 @@
 				4987FA95157AE53500AF2078 /* ApptentiveMetrics.h */,
 				493AEB1615990A4D00DFD4C7 /* ATSurveys.h */,
 				49C00298133413BB0071F088 /* ATConnect.m */,
-				49BF6F2C16AD09C800D1F382 /* ATConnect_Private.h */,
 				4999127B16165B7900FDA15F /* Message Center */,
 				4967278116B9D9CB00C679B8 /* ATConnect_Private.h */,
 				4987FA7C157ACA8C00AF2078 /* Metrics */,
@@ -977,9 +993,11 @@
 				491E03CE163F261C00DC3E18 /* ATLog.h in Headers */,
 				491E03D31640823A00DC3E18 /* ATMessageSender.h in Headers */,
 				491E03D91640D01F00DC3E18 /* ATFeedbackTypes.h in Headers */,
-				49BF6F2D16AD09C800D1F382 /* ATConnect_Private.h in Headers */,
 				4967273A16B8A41400C679B8 /* ATMessageCenterCell.h in Headers */,
 				4967278216B9D9CB00C679B8 /* ATConnect_Private.h in Headers */,
+				49AC178216C0987400BE1615 /* ATActivityFeedUpdater.h in Headers */,
+				49AC178816C0A01C00BE1615 /* ATActivityFeed.h in Headers */,
+				49AC178D16C0A0BC00BE1615 /* ATJSONModel.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1206,6 +1224,8 @@
 				49AF27D016321F0C005E1E9D /* ATFakeMessageCell.m in Sources */,
 				491E03CA163F243600DC3E18 /* ATData.m in Sources */,
 				491E03D41640823A00DC3E18 /* ATMessageSender.m in Sources */,
+				49AC178316C0987400BE1615 /* ATActivityFeedUpdater.m in Sources */,
+				49AC178916C0A01C00BE1615 /* ATActivityFeed.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1253,6 +1273,8 @@
 				498EFB7215BA48B300A1043B /* ATAppConfigurationUpdateTask.m in Sources */,
 				499B56CC15D305880063C23C /* PJSONKit.m in Sources */,
 				491E03D51640823A00DC3E18 /* ATMessageSender.m in Sources */,
+				49AC178416C0987400BE1615 /* ATActivityFeedUpdater.m in Sources */,
+				49AC178A16C0A01C00BE1615 /* ATActivityFeed.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,7 +10,6 @@
 
 #import "ATAPIRequest.h"
 #import "ATBackend.h"
-#import "ATPersonUpdater.h"
 #import "ATURLConnection.h"
 #import "ATWebClient_Private.h"
 
@@ -19,20 +18,20 @@
 #define kMessageCenterChannelName (@"Message Center")
 
 @implementation ATWebClient (MessageCenter)
-- (ATAPIRequest *)requestForCreatingPerson:(ATPerson *)person {
+- (ATAPIRequest *)requestForCreatingActivityFeed:(ATActivityFeed *)activityFeed {
 	NSError *error = nil;
 	NSDictionary *postJSON = nil;
-	if (person == nil) {
+	if (activityFeed == nil) {
 		postJSON = [NSDictionary dictionary];
 	} else {
-		postJSON = [person apiJSON];
+		postJSON = [activityFeed apiJSON];
 	}
 	NSString *postString = [postJSON ATJSONStringWithOptions:ATJKSerializeOptionPretty error:&error];
 	if (!postString && error != nil) {
 		NSLog(@"ATWebClient+MessageCenter: Error while encoding JSON: %@", error);
 		return nil;
 	}
-	NSString *url = [self apiURLStringWithPath:@"people"];
+	NSString *url = [self apiURLStringWithPath:@"activity_feed"];
 	ATURLConnection *conn = nil;
 	
 	conn = [self connectionToPost:[NSURL URLWithString:url] JSON:postString];
@@ -71,12 +70,18 @@
 		NSLog(@"ATWebClient+MessageCenter: Error while encoding JSON: %@", error);
 		return nil;
 	}
-	ATPerson *person = [ATPersonUpdater currentPerson];
-	NSString *path = [NSString stringWithFormat:@"people/%@/messages", person.apptentiveID];
+	
+	ATActivityFeed *feed = [ATActivityFeedUpdater currentActivityFeed];
+	if (!feed) {
+		NSLog(@"No current activity feed.");
+		return nil;
+	}
+	NSString *path = @"messages";
 	NSString *url = [self apiURLStringWithPath:path];
 	
 	ATURLConnection *conn = [self connectionToPost:[NSURL URLWithString:url] JSON:postString];
 	conn.timeoutInterval = 60.0;
+	[self updateConnection:conn withOAuthToken:feed.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
 	request.returnType = ATAPIRequestReturnTypeJSON;
 	return [request autorelease];
@@ -85,15 +90,16 @@
 - (ATAPIRequest *)requestForRetrievingMessagesSinceMessage:(ATMessage *)message {
 	NSDictionary *parameters = nil;
 	if (message && message.apptentiveID) {
-		parameters = @{@"newer_than":message.apptentiveID};
+		parameters = @{@"after_id":message.apptentiveID};
 	}
 	
-	ATPerson *person = [ATPersonUpdater currentPerson];
-	if (!person) {
+	ATActivityFeed *feed = [ATActivityFeedUpdater currentActivityFeed];
+	if (!feed) {
+		NSLog(@"No current activity feed.");
 		return nil;
 	}
 	
-	NSString *path = [NSString stringWithFormat:@"people/%@/messages", person.apptentiveID];
+	NSString *path = @"activity_feed";
 	if (parameters) {
 		NSString *paramString = [self stringForParameters:parameters];
 		path = [NSString stringWithFormat:@"%@?%@", path, paramString];
@@ -102,6 +108,7 @@
 	
 	ATURLConnection *conn = [self connectionToGet:[NSURL URLWithString:url]];
 	conn.timeoutInterval = 60.0;
+	[self updateConnection:conn withOAuthToken:feed.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
 	request.returnType = ATAPIRequestReturnTypeJSON;
 	return [request autorelease];

@@ -10,6 +10,7 @@
 #import "ATAppConfigurationUpdateTask.h"
 #import "ATConnect.h"
 #import "ATContactStorage.h"
+#import "ATDeviceUpdater.h"
 #import "ATFakeMessage.h"
 #import "ATFeedback.h"
 #import "ATFeedbackTask.h"
@@ -18,8 +19,6 @@
 #import "ATTaskQueue.h"
 #import "ATUtilities.h"
 #import "ATWebClient.h"
-#import "ATPersonUpdater.h"
-#import "ATDeviceUpdater.h"
 #import "ATMessageDisplayType.h"
 #import "ATGetMessagesTask.h"
 #import "ATTextMessage.h"
@@ -48,7 +47,7 @@ static ATBackend *sharedBackend = nil;
 
 @interface ATBackend ()
 @property (nonatomic, assign) BOOL working;
-- (void)updatePersonIfNeeded;
+- (void)updateActivityFeedIfNeeded;
 @end
 
 @implementation ATBackend
@@ -280,6 +279,7 @@ static ATBackend *sharedBackend = nil;
 }
 
 #pragma mark Accessors
+
 - (void)setWorking:(BOOL)newWorking {
 	if (working != newWorking) {
 		working = newWorking;
@@ -287,7 +287,7 @@ static ATBackend *sharedBackend = nil;
 			[[ATTaskQueue sharedTaskQueue] start];
 			
 			[self updateRatingConfigurationIfNeeded];
-			[self updatePersonIfNeeded];
+			[self updateActivityFeedIfNeeded];
 			if (!deviceUpdater) {
 				if ([ATDeviceUpdater shouldUpdate]) {
 					deviceUpdater = [[ATDeviceUpdater alloc] initWithDelegate:self];
@@ -379,26 +379,26 @@ static ATBackend *sharedBackend = nil;
     return persistentStoreCoordinator;
 }
 
-- (void)updatePersonIfNeeded {
+- (void)updateActivityFeedIfNeeded {
 	if (![[NSThread currentThread] isMainThread]) {
-		[self performSelectorOnMainThread:@selector(updatePersonIfNeeded) withObject:nil waitUntilDone:NO];
+		[self performSelectorOnMainThread:@selector(updateActivityFeedIfNeeded) withObject:nil waitUntilDone:NO];
 		return;
 	}
-	if (!personUpdater) {
-		if (![ATPersonUpdater personExists]) {
-			personUpdater = [[ATPersonUpdater alloc] initWithDelegate:self];
-			[personUpdater createPerson];
+	if (!activityFeedUpdater) {
+		if (![ATActivityFeedUpdater activityFeedExists]) {
+			activityFeedUpdater = [[ATActivityFeedUpdater alloc] initWithDelegate:self];
+			[activityFeedUpdater createActivityFeed];
 		}
 	}
 }
 
-#pragma mark ATPersonUpdaterDelegate
-- (void)personUpdater:(ATPersonUpdater *)aPersonUpdater didFinish:(BOOL)success {
-	if (aPersonUpdater == personUpdater) {
-		[personUpdater release], personUpdater = nil;
+#pragma mark ATActivityFeedUpdaterDelegate
+- (void)activityFeed:(ATActivityFeedUpdater *)aFeedUpdater createdFeed:(BOOL)success {
+	if (activityFeedUpdater == aFeedUpdater) {
+		[activityFeedUpdater release], activityFeedUpdater = nil;
 		if (!success) {
-			// Retry in 20 seconds.
-			[self performSelector:@selector(updatePersonIfNeeded) withObject:nil afterDelay:20];
+			// Retry after delay.
+			[self performSelector:@selector(updateActivityFeedIfNeeded) withObject:nil afterDelay:20];
 		}
 	}
 }
@@ -409,6 +409,8 @@ static ATBackend *sharedBackend = nil;
 		[deviceUpdater release], deviceUpdater = nil;
 	}
 }
+
+#pragma mark -
 
 - (NSURL *)apptentivePrivacyPolicyURL {
 	return [NSURL URLWithString:@"http://www.apptentive.com/privacy"];

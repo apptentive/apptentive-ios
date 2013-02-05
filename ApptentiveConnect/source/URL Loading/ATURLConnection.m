@@ -69,6 +69,12 @@
 	[headers setValue:value forKey:field];
 }
 
+- (void)removeHTTPHeaderField:(NSString *)field {
+	if ([headers objectForKey:field]) {
+		[headers removeObjectForKey:field];
+	}
+}
+
 - (void)setHTTPMethod:(NSString *)method {
 	if (HTTPMethod != method) {
 		[HTTPMethod release];

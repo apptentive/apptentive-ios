@@ -51,6 +51,7 @@
 - (id)initWithURL:(NSURL *)url delegate:(NSObject<ATURLConnectionDelegate> *)aDelegate;
 - (id)initWithURL:(NSURL *)url;
 - (void)setValue:(NSString *)value forHTTPHeaderField:(NSString *)field;
+- (void)removeHTTPHeaderField:(NSString *)field;
 - (void)setHTTPMethod:(NSString *)method;
 - (void)setHTTPBody:(NSData *)body;
 

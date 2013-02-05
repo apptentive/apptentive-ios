@@ -260,8 +260,16 @@ static ATWebClient *sharedSingleton = nil;
 	[conn setValue: @"utf-8" forHTTPHeaderField: @"Accept-Charset"];
 	NSString *apiKey = [[ATBackend sharedBackend] apiKey];
 	if (apiKey) {
-		NSString *value = [NSString stringWithFormat:@"OAuth %@", apiKey];
+		[self updateConnection:conn withOAuthToken:apiKey];
+	}
+}
+
+- (void)updateConnection:(ATURLConnection *)conn withOAuthToken:(NSString *)token {
+	if (token) {
+		NSString *value = [NSString stringWithFormat:@"OAuth %@", token];
 		[conn setValue:value forHTTPHeaderField:@"Authorization"];
+	} else {
+		[conn removeHTTPHeaderField:@"Authorization"];
 	}
 }
 @end

@@ -55,6 +55,6 @@
 
 - (NSDictionary *)apiJSON {
 	NSNumber *d = [NSNumber numberWithDouble:self.creationTime];
-	return @{@"message":@{@"body":self.body, @"created_at":d}};
+	return @{@"message":@{@"nonce":self.pendingMessageID, @"body":self.body, @"client_created_at":d}};
 }
 @end

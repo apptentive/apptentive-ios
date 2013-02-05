@@ -29,20 +29,17 @@
 @dynamic displayTypes;
 
 + (ATMessage *)newMessageFromJSON:(NSDictionary *)json {
-	// Figure out the message type.
-	NSDictionary *messageJSON = [json objectForKey:@"message"];
-	if (!messageJSON) return nil;
-	
-	NSString *messageType = [messageJSON objectForKey:@"type"];
+	NSString *messageType = [json objectForKey:@"type"];
 	NSString *objectName = nil;
-	if ([messageType isEqualToString:@"text_message"]) {
+	if ([messageType isEqualToString:@"Message"]) {
 		objectName = @"ATTextMessage";
-	} else if ([messageType isEqualToString:@"upgrade_request"]) {
-		objectName = @"ATUpgradeRequestMessage";
-	} else if ([messageType isEqualToString:@"share_request"]) {
+//	}
+	//else if ([messageType isEqualToString:@"upgrade_request"]) {
+	//	objectName = @"ATUpgradeRequestMessage";
+	//} else if ([messageType isEqualToString:@"share_request"]) {
 		//!!
-		NSLog(@"Unimplimented share request type");
-		return nil;
+	//	NSLog(@"Unimplimented share request type");
+	//	return nil;
 	} else if ([messageType isEqualToString:@"fake"]) {
 		objectName = @"ATFakeMessage";
 	} else {
@@ -55,22 +52,22 @@
 	
 	NSManagedObject *message = [ATData newEntityNamed:objectName];
 	
-	[(ATMessage *)message updateWithJSON:messageJSON];
+	[(ATMessage *)message updateWithJSON:json];
 	
-	NSObject *creationDate = [messageJSON objectForKey:@"created_at"];
-	if ([creationDate isKindOfClass:[NSNumber class]]) {
-		NSNumber *creationTimestamp = (NSNumber *)[messageJSON objectForKey:@"created_at"];
+	NSObject *creationDateObject = [json objectForKey:@"created_at"];
+	if ([creationDateObject isKindOfClass:[NSNumber class]]) {
+		NSNumber *creationTimestamp = (NSNumber *)creationDateObject;
 		[message setValue:creationTimestamp forKey:@"creationTime"];
-	} else if ([creationDate isKindOfClass:[NSDate class]]) {
-		NSDate *creationDate = (NSDate *)[messageJSON objectForKey:@"created_at"];
+	} else if ([creationDateObject isKindOfClass:[NSDate class]]) {
+		NSDate *creationDate = (NSDate *)creationDateObject;
 		NSTimeInterval t = [creationDate timeIntervalSince1970];
 		NSNumber *creationTimestamp = [NSNumber numberWithFloat:t];
 		[message setValue:creationTimestamp forKey:@"creationTime"];
 	}
 	
-	[message setValue:[messageJSON objectForKey:@"priority"] forKey:@"priority"];
+	[message setValue:[json objectForKey:@"priority"] forKey:@"priority"];
 	
-	NSArray *displayTypes = [messageJSON objectForKey:@"display"];
+	NSArray *displayTypes = [json objectForKey:@"display"];
 	BOOL inserted = NO;
 	for (NSString *displayType in displayTypes) {
 		if ([displayType isEqualToString:@"modal"]) {
@@ -86,10 +83,9 @@
 	}
 	
 	if ([objectName isEqualToString:@"ATTextMessage"] || [objectName isEqualToString:@"ATFakeMessage"]) {
-		[message setValue:[messageJSON objectForKey:@"body"] forKey:@"body"];
-		[message setValue:[messageJSON objectForKey:@"subject"] forKey:@"subject"];
+		[message setValue:[json objectForKey:@"body"] forKey:@"body"];
 	} else if ([objectName isEqualToString:@"ATUpgradeRequestMessage"]) {
-		[message setValue:[messageJSON objectForKey:@"forced"] forKey:@"forced"];
+		[message setValue:[json objectForKey:@"forced"] forKey:@"forced"];
 	}
 	
 	return (ATMessage *)message;

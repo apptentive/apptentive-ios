@@ -13,10 +13,11 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
-#define kATConnectVersionString @"0.4.7"
+#define kATConnectVersionString @"0.4.8"
 
 #if TARGET_OS_IPHONE
 #define kATConnectPlatformString @"iOS"
+@class ATFeedbackController;
 #elif TARGET_OS_MAC
 #define kATConnectPlatformString @"Mac OS X"
 @class ATFeedbackWindowController;
@@ -30,7 +31,9 @@ typedef enum {
 
 @interface ATConnect : NSObject {
 @private
-#if !TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE
+	ATFeedbackController *feedbackController;
+#elif TARGET_OS_MAC
 	ATFeedbackWindowController *feedbackWindowController;
 #endif
 	NSMutableDictionary *additionalFeedbackData;
@@ -42,6 +45,7 @@ typedef enum {
 	NSString *initialEmailAddress;
 	ATFeedbackControllerType feedbackControllerType;
 	NSString *customPlaceholderText;
+	ATFeedbackController *currentFeedbackController;
 }
 @property (nonatomic, retain) NSString *apiKey;
 @property (nonatomic, assign) BOOL showTagline;
@@ -61,6 +65,11 @@ typedef enum {
  * Presents a feedback controller in the window of the given view controller.
  */
 - (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController;
+
+/*!
+ * Dismisses the feedback controller. You normally won't need to call this.
+ */
+- (void)dismissFeedbackControllerAnimated:(BOOL)animated completion:(void (^)(void))completion;
 #elif TARGET_OS_MAC
 /*!
  * Presents a feedback window.

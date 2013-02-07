@@ -6,22 +6,6 @@
 	objectVersion = 46;
 	objects = {
 
-/* Begin PBXAggregateTarget section */
-		4932C217151AB255000EFB80 /* Distribution */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 4932C218151AB255000EFB80 /* Build configuration list for PBXAggregateTarget "Distribution" */;
-			buildPhases = (
-				4932C223151AB262000EFB80 /* ShellScript */,
-			);
-			dependencies = (
-				4932C21C151AB25F000EFB80 /* PBXTargetDependency */,
-				4932C21E151AB25F000EFB80 /* PBXTargetDependency */,
-			);
-			name = Distribution;
-			productName = Distribution;
-		};
-/* End PBXAggregateTarget section */
-
 /* Begin PBXBuildFile section */
 		49173D89160176B1002A27CC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 49173D88160176B1002A27CC /* Default-568h@2x.png */; };
 		493529BD138C712A000E464A /* ApptentiveResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 49D111A013341A7C00603373 /* ApptentiveResources.bundle */; };
@@ -34,6 +18,7 @@
 		4960E139134432F400F6311F /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 4960E138134432F400F6311F /* iTunesArtwork */; };
 		4982ECE6133C2DCF00B91781 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4982ECE4133C2DCF00B91781 /* MainWindow-iPad.xib */; };
 		49AA100E138B41A40082887A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49AA100D138B41A40082887A /* SystemConfiguration.framework */; };
+		49AAA17E163373A800B26851 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49AAA17D163373A800B26851 /* StoreKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		49B3D9A31340084E00B5A5CD /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D9A21340084E00B5A5CD /* CoreTelephony.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		49C002EC1334172E0071F088 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C002EB1334172E0071F088 /* UIKit.framework */; };
 		49C002EE1334172F0071F088 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C002ED1334172F0071F088 /* Foundation.framework */; };
@@ -55,20 +40,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		4932C21B151AB25F000EFB80 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 49C00324133417390071F088 /* ApptentiveConnect.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 496DC37E1333D35600743F65;
-			remoteInfo = ApptentiveConnect;
-		};
-		4932C21D151AB25F000EFB80 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 49C00324133417390071F088 /* ApptentiveConnect.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 49D1118B13341A7C00603373;
-			remoteInfo = ApptentiveResources;
-		};
 		49AA1026138B4E500082887A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 49C00324133417390071F088 /* ApptentiveConnect.xcodeproj */;
@@ -126,6 +97,7 @@
 		4960E13E13455ACE00F6311F /* ATConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATConnect.h; path = ../ApptentiveConnect/source/ATConnect.h; sourceTree = "<group>"; };
 		4982ECE5133C2DCF00B91781 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "iPad/en.lproj/MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		49AA100D138B41A40082887A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		49AAA17D163373A800B26851 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		49B3D9A21340084E00B5A5CD /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		49C002E71334172E0071F088 /* FeedbackDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FeedbackDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49C002EB1334172E0071F088 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -160,6 +132,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49AAA17E163373A800B26851 /* StoreKit.framework in Frameworks */,
 				493529C0138C7141000E464A /* libApptentiveConnect.a in Frameworks */,
 				49AA100E138B41A40082887A /* SystemConfiguration.framework in Frameworks */,
 				49E8918B134BF69C00DD098A /* QuartzCore.framework in Frameworks */,
@@ -225,6 +198,7 @@
 		49C002EA1334172E0071F088 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				49AAA17D163373A800B26851 /* StoreKit.framework */,
 				49AA100D138B41A40082887A /* SystemConfiguration.framework */,
 				49E8918A134BF69C00DD098A /* QuartzCore.framework */,
 				49B3D9A21340084E00B5A5CD /* CoreTelephony.framework */,
@@ -376,7 +350,6 @@
 			targets = (
 				49C002E61334172E0071F088 /* FeedbackDemo */,
 				49C0030A1334172F0071F088 /* FeedbackDemoTests */,
-				4932C217151AB255000EFB80 /* Distribution */,
 			);
 		};
 /* End PBXProject section */
@@ -438,19 +411,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4932C223151AB262000EFB80 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "UNIVERSAL_DIR=${SYMROOT}/${CONFIGURATION}-universal\n\nCREATING_TAR_DIR=${SYMROOT}/${CONFIGURATION}-distribution-tar\n\nrm -rf \"${CREATING_TAR_DIR}\"\nmkdir \"${CREATING_TAR_DIR}\"\n\nditto \"$UNIVERSAL_DIR/\" \"$CREATING_TAR_DIR/\"\n\ncd \"$CREATING_TAR_DIR\" && tar -zcvf ../apptentive_ios_sdk.tar.gz . && cd ..\n\nopen \"$SYMROOT\"\n";
-		};
 		49C003091334172F0071F088 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -488,16 +448,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		4932C21C151AB25F000EFB80 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = ApptentiveConnect;
-			targetProxy = 4932C21B151AB25F000EFB80 /* PBXContainerItemProxy */;
-		};
-		4932C21E151AB25F000EFB80 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = ApptentiveResources;
-			targetProxy = 4932C21D151AB25F000EFB80 /* PBXContainerItemProxy */;
-		};
 		49AA1027138B4E500082887A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = ApptentiveResources;
@@ -568,32 +518,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		4932C219151AB255000EFB80 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = (
-					armv7,
-					armv7s,
-					i386,
-				);
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		4932C21A151AB255000EFB80 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = (
-					armv7,
-					armv7s,
-					i386,
-				);
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 		49C0031C1334172F0071F088 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -647,10 +571,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-all_load",
-				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -677,10 +598,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-all_load",
-				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -740,15 +658,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4932C218151AB255000EFB80 /* Build configuration list for PBXAggregateTarget "Distribution" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4932C219151AB255000EFB80 /* Debug */,
-				4932C21A151AB255000EFB80 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		49C002E11334172E0071F088 /* Build configuration list for PBXProject "FeedbackDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

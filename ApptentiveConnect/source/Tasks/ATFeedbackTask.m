@@ -111,6 +111,10 @@
 		[self release];
 	}
 }
+
+- (void)cleanup {
+	[feedback cleanup];
+}
 @end
 
 @implementation ATFeedbackTask (Private)

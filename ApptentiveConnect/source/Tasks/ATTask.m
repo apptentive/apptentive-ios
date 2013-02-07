@@ -66,4 +66,8 @@
 - (NSString *)taskName {
 	return @"task";
 }
+
+- (void)cleanup {
+	// Do nothing by default.
+}
 @end

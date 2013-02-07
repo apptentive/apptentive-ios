@@ -29,4 +29,6 @@
 - (NSDictionary *)apiJSON;
 - (NSDictionary *)apiDictionary;
 - (ATAPIRequest *)requestForSendingRecord;
+/*! Called when we're done using this record. */
+- (void)cleanup;
 @end

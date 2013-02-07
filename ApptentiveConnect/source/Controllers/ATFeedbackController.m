@@ -6,7 +6,11 @@
 //  Copyright 2011 Apptentive, Inc. All rights reserved.
 //
 
+#import <QuartzCore/QuartzCore.h>
+
 #import "ATFeedbackController.h"
+
+#import "ATConnect_Private.h"
 #import "ATContactStorage.h"
 #import "ATCustomButton.h"
 #import "ATToolbar.h"
@@ -20,8 +24,6 @@
 #import "ATSimpleImageViewController.h"
 #import "ATUtilities.h"
 #import "ATShadowView.h"
-#import <QuartzCore/QuartzCore.h>
-
 
 #define DEG_TO_RAD(angle) ((M_PI * angle) / 180.0)
 #define RAD_TO_DEG(radians) (radians * (180.0/M_PI))
@@ -47,7 +49,6 @@ enum {
 - (UIWindow *)windowForViewController:(UIViewController *)viewController;
 + (CGFloat)rotationOfViewHierarchyInRadians:(UIView *)leafView;
 + (CGAffineTransform)viewTransformInWindow:(UIWindow *)window;
-- (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context;
 - (void)statusBarChanged:(NSNotification *)notification;
 - (void)applicationDidBecomeActive:(NSNotification *)notification;
 - (BOOL)shouldShowPaperclip;
@@ -66,6 +67,7 @@ enum {
 @end
 
 @interface ATFeedbackController (Positioning)
+- (BOOL)isIPhoneAppInIPad;
 - (CGRect)onscreenRectOfView;
 - (CGPoint)offscreenPositionOfView;
 - (void)positionInWindow;
@@ -195,14 +197,18 @@ enum {
 	} else {
 		[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque];
 	}
-
-	[UIView beginAnimations:@"animateIn" context:nil];
-	[UIView setAnimationDuration:0.3];
-	[UIView setAnimationDelegate:self];
-	[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
-	self.view.center = newViewCenter;
-	shadowView.alpha = 1.0;
-	[UIView commitAnimations];
+	
+	[UIView animateWithDuration:0.3 animations:^(void){
+		self.view.center = newViewCenter;
+		shadowView.alpha = 1.0;
+	} completion:^(BOOL finished) {
+		self.window.hidden = NO;
+		if ([self.emailField.text isEqualToString:@""] && self.showEmailAddressField) {
+			[self.emailField becomeFirstResponder];
+		} else {
+			[self.feedbackView becomeFirstResponder];
+		}
+	}];
 	[shadowView release], shadowView = nil;
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATFeedbackDidShowWindowNotification object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:ATFeedbackWindowTypeFeedback] forKey:ATFeedbackWindowTypeKey]];
@@ -377,7 +383,7 @@ enum {
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATFeedbackDidHideWindowNotification object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:ATFeedbackEventTappedCancel] forKey:ATFeedbackWindowHideEventKey]];
 }
 
-- (void)dismiss:(BOOL)animated {
+- (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion {
 	[self captureFeedbackState];
 
 	[self.emailField resignFirstResponder];
@@ -386,25 +392,49 @@ enum {
 	CGPoint endingPoint = [self offscreenPositionOfView];
 
 	UIView *gradientView = [self.window viewWithTag:kFeedbackGradientLayerTag];
+	
+	CGFloat duration = 0;
+	if (animated) {
+		duration = 0.3;
+	}
+	[UIView animateWithDuration:duration animations:^(void){
+		self.view.center = endingPoint;
+		gradientView.alpha = 0.0;
+	} completion:^(BOOL finished) {
+		[self.emailField resignFirstResponder];
+		[self.feedbackView resignFirstResponder];
+		UIView *gradientView = [self.window viewWithTag:kFeedbackGradientLayerTag];
+		[gradientView removeFromSuperview];
+		
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+		[presentingViewController.view setUserInteractionEnabled:YES];
+		[self.window resignKeyWindow];
+		[self.window removeFromSuperview];
+		self.window.hidden = YES;
+		[[UIApplication sharedApplication] setStatusBarStyle:startingStatusBarStyle];
+		[self teardown];
+		[self release];
 
-	[UIView beginAnimations:@"animateOut" context:nil];
-	[UIView setAnimationDuration:0.3];
-	[UIView setAnimationDelegate:self];
-	[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
-	self.view.center = endingPoint;
-	gradientView.alpha = 0.0;
-	[UIView commitAnimations];
+		if (completion) {
+			completion();
+		}
+		[[ATConnect sharedConnection] feedbackControllerDidDismiss];
+	}];
+}
+
+- (void)dismiss:(BOOL)animated {
+	[self dismissAnimated:animated completion:nil];
 }
 
 - (void)unhide:(BOOL)animated {
 	self.window.windowLevel = UIWindowLevelNormal;
 	self.window.hidden = NO;
 	if (animated) {
-		[UIView beginAnimations:@"windowUnhide" context:NULL];
-		[UIView setAnimationDelegate:self];
-		[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
-		self.window.alpha = 1.0;
-		[UIView commitAnimations];
+		[UIView animateWithDuration:0.2 animations:^(void){
+			self.window.alpha = 1.0;
+		} completion:^(BOOL complete){
+			[self finishUnhide];
+		}];
 	} else {
 		[self finishUnhide];
 	}
@@ -556,38 +586,6 @@ enum {
 	return result;
 }
 
-- (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
-	if ([animationID isEqualToString:@"animateIn"]) {
-		self.window.hidden = NO;
-		if ([self.emailField.text isEqualToString:@""] && self.showEmailAddressField) {
-			[self.emailField becomeFirstResponder];
-		} else {
-			[self.feedbackView becomeFirstResponder];
-		}
-	} else if ([animationID isEqualToString:@"animateOut"]) {
-		UIView *gradientView = [self.window viewWithTag:kFeedbackGradientLayerTag];
-		[gradientView removeFromSuperview];
-
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
-		[presentingViewController.view setUserInteractionEnabled:YES];
-		[self.window resignKeyWindow];
-		[self.window removeFromSuperview];
-		self.window.hidden = YES;
-		[[UIApplication sharedApplication] setStatusBarStyle:startingStatusBarStyle];
-		[self teardown];
-		[self release];
-	} else if ([animationID isEqualToString:@"windowHide"]) {
-		[self finishHide];
-	} else if ([animationID isEqualToString:@"windowUnhide"]) {
-		[self finishUnhide];
-	} else if ([animationID isEqualToString:@"remove-screenshot"]) {
-		self.feedback.screenshot = nil;
-		photoDragOffset = CGPointZero;
-		[self updateThumbnail];
-	} else if ([animationID isEqualToString:@"snapback-screenshot"]) {
-		// do nothing.
-	}
-}
 
 - (void)statusBarChanged:(NSNotification *)notification {
 	[self positionInWindow];
@@ -608,7 +606,7 @@ enum {
 }
 
 - (BOOL)shouldShowThumbnail {
-	return (feedback.screenshot != nil);
+	return [feedback hasScreenshot];
 }
 
 - (void)feedbackChanged:(NSNotification *)notification {
@@ -631,7 +629,7 @@ enum {
 }
 
 - (void)screenshotChanged:(NSNotification *)notification {
-	if (self.feedback.screenshot) {
+	if ([self.feedback hasScreenshot]) {
 		[self updateThumbnail];
 	}
 }
@@ -650,11 +648,11 @@ enum {
 	[self.feedbackView resignFirstResponder];
 
 	if (animated) {
-		[UIView beginAnimations:@"windowHide" context:NULL];
-		[UIView setAnimationDelegate:self];
-		[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
-		self.window.alpha = 0.0;
-		[UIView commitAnimations];
+		[UIView animateWithDuration:0.2 animations:^(void){
+			self.window.alpha = 0.0;
+		} completion:^(BOOL finished) {
+			[self finishHide];
+		}];
 	} else {
 		[self finishHide];
 	}
@@ -663,6 +661,8 @@ enum {
 - (void)finishHide {
 	self.window.alpha = 0.0;
 	self.window.hidden = YES;
+	[self.emailField resignFirstResponder];
+	[self.feedbackView resignFirstResponder];
 	[self.window removeFromSuperview];
 }
 
@@ -700,7 +700,7 @@ enum {
 			[photoPanRecognizer release], photoPanRecognizer = nil;
 		}
 		if ([self shouldShowPaperclip]) {
-			UIImage *image = feedback.screenshot;
+			UIImage *image = [feedback copyScreenshot];
 			UIImageView *thumbnailView = nil;
 
 			CGRect paperclipBackgroundFrame = paperclipBackgroundView.frame;
@@ -808,6 +808,7 @@ enum {
 				photoPanRecognizer.delaysTouchesBegan = YES;
 				photoPanRecognizer.cancelsTouchesInView = YES;
 				[photoControl addGestureRecognizer:photoPanRecognizer];
+				[image release], image = nil;
 			}
 		}
 	}
@@ -844,9 +845,9 @@ enum {
 
 - (void)updateSendButtonState {
 	NSString *trimmedText = [self.feedbackView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-	NSUInteger textLength = [trimmedText length];
-	self.doneButton.enabled = textLength > 1;
-	self.doneButton.style = textLength > 1 ? UIBarButtonItemStyleBordered : UIBarButtonItemStyleDone;
+	BOOL empty = [trimmedText length] == 0;
+	self.doneButton.enabled = !empty;
+	self.doneButton.style = empty == YES ? UIBarButtonItemStyleBordered : UIBarButtonItemStyleDone;
 }
 
 - (void)photoDragged:(UIPanGestureRecognizer *)recognizer {
@@ -873,25 +874,21 @@ enum {
 		} else if (recognizer.state == UIGestureRecognizerStateEnded) {
 			CGFloat distance = sqrt(photoDragOffset.x*photoDragOffset.x + photoDragOffset.y*photoDragOffset.y);
 			if (distance > dragDistance) {
-				[UIView beginAnimations:@"remove-screenshot" context:NULL];
-				[UIView setAnimationDuration:0.3];
-				[UIView setAnimationDelegate:self];
-				[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
-				
-				[self updateThumbnailOffsetWithScale:CGSizeMake(2, 2)];
-				photoFrameContainerView.alpha = 0.0;
-				
-				[UIView commitAnimations];
+				[UIView animateWithDuration:0.3 animations:^(void){
+					[self updateThumbnailOffsetWithScale:CGSizeMake(2, 2)];
+					photoFrameContainerView.alpha = 0.0;
+				} completion:^(BOOL complete){
+					[self.feedback setScreenshot:nil];
+					photoDragOffset = CGPointZero;
+					[self updateThumbnail];
+				}];
 			} else {
-				[UIView beginAnimations:@"snapback-screenshot" context:NULL];
-				[UIView setAnimationDuration:0.3];
-				[UIView setAnimationDelegate:self];
-				[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
-				
-				photoDragOffset = CGPointZero;
-				[self updateThumbnailOffsetWithScale:CGSizeZero];
-				
-				[UIView commitAnimations];
+				[UIView animateWithDuration:0.3 animations:^(void){
+					photoDragOffset = CGPointZero;
+					[self updateThumbnailOffsetWithScale:CGSizeZero];
+				} completion:^(BOOL complete){
+					// do nothing
+				}];
 			}
 		}
 	}
@@ -900,7 +897,18 @@ enum {
 
 
 @implementation ATFeedbackController (Positioning)
+- (BOOL)isIPhoneAppInIPad {
+	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+		NSString *model = [[UIDevice currentDevice] model];
+		if ([model isEqualToString:@"iPad"]) {
+			return YES;
+		}
+	}
+	return NO;
+}
+
 - (CGRect)onscreenRectOfView {
+	BOOL constrainViewWidth = [self isIPhoneAppInIPad];
 	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
 	CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
 	CGRect screenBounds = [[UIScreen mainScreen] bounds];
@@ -944,6 +952,9 @@ enum {
 		viewHeight = self.view.window.bounds.size.height - (isLandscape ? landscapeKeyboardHeight + 8 - 37 : portraitKeyboardHeight + 8);
 		viewWidth = windowWidth - 12;
 		originX = 6.0;
+		if (constrainViewWidth) {
+			viewWidth = MIN(320, windowWidth - 12);
+		}
 	}
 
 	CGRect f = self.view.frame;

@@ -64,6 +64,7 @@ typedef enum {
 - (IBAction)showInfoView:(id)sender;
 
 - (void)presentFromViewController:(UIViewController *)presentingViewController animated:(BOOL)animated;
+- (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion;
 - (void)dismiss:(BOOL)animated;
 - (void)unhide:(BOOL)animated;
 @end

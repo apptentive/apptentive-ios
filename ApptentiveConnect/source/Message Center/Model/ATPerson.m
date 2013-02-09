@@ -8,6 +8,8 @@
 
 #import "ATPerson.h"
 
+#import "NSDictionary+ATAdditions.h"
+
 #define kATPersonCodingVersion 1
 
 @implementation ATPerson
@@ -53,14 +55,10 @@
 		NSDictionary *p = json;
 		
 		result = [[ATPerson alloc] init];
-#if APPTENTIVE_DEMO
-		result.apptentiveID = @"demouserid";
-#else
-		result.apptentiveID = [p objectForKey:@"id"];
-#endif
-		result.name = [p objectForKey:@"name"];
-		result.facebookID = [p objectForKey:@"facebook_id"];
-		result.emailAddress = [p objectForKey:@"primary_email"];
+		result.apptentiveID = [p at_safeObjectForKey:@"id"];
+		result.name = [p at_safeObjectForKey:@"name"];
+		result.facebookID = [p at_safeObjectForKey:@"facebook_id"];
+		result.emailAddress = [p at_safeObjectForKey:@"primary_email"];
 		
 		success = YES;
 	} while (NO);

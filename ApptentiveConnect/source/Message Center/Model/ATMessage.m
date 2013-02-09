@@ -15,23 +15,27 @@
 #import "ATMessageSender.h"
 #import "ATTextMessage.h"
 #import "ATUpgradeRequestMessage.h"
+#import "NSDictionary+ATAdditions.h"
 
 @implementation ATMessage
 
 @dynamic apptentiveID;
+@dynamic clientCreationTime;
+@dynamic clientCreationTimezone;
+@dynamic clientCreationUTCOffset;
 @dynamic creationTime;
 @dynamic pendingMessageID;
 @dynamic pendingState;
 @dynamic priority;
 @dynamic seenByUser;
+@dynamic sentByUser;
 @dynamic sender;
-@dynamic recipient;
 @dynamic displayTypes;
 
 + (ATMessage *)newMessageFromJSON:(NSDictionary *)json {
-	NSString *messageType = [json objectForKey:@"type"];
+	NSString *messageType = [json at_safeObjectForKey:@"type"];
 	NSString *objectName = nil;
-	if ([messageType isEqualToString:@"Message"]) {
+	if ([messageType isEqualToString:@"TextMessage"]) {
 		objectName = @"ATTextMessage";
 //	}
 	//else if ([messageType isEqualToString:@"upgrade_request"]) {
@@ -54,10 +58,10 @@
 	
 	[(ATMessage *)message updateWithJSON:json];
 	
-	NSObject *creationDateObject = [json objectForKey:@"created_at"];
+	NSObject *creationDateObject = [json at_safeObjectForKey:@"created_at"];
 	if ([creationDateObject isKindOfClass:[NSNumber class]]) {
-		NSNumber *creationTimestamp = (NSNumber *)creationDateObject;
-		[message setValue:creationTimestamp forKey:@"creationTime"];
+		NSTimeInterval creationTimestamp = [ATMessage timeIntervalForServerTime:(NSNumber *)creationDateObject];
+		[message setValue:@(creationTimestamp) forKey:@"creationTime"];
 	} else if ([creationDateObject isKindOfClass:[NSDate class]]) {
 		NSDate *creationDate = (NSDate *)creationDateObject;
 		NSTimeInterval t = [creationDate timeIntervalSince1970];
@@ -65,9 +69,9 @@
 		[message setValue:creationTimestamp forKey:@"creationTime"];
 	}
 	
-	[message setValue:[json objectForKey:@"priority"] forKey:@"priority"];
+	[message setValue:[json at_safeObjectForKey:@"priority"] forKey:@"priority"];
 	
-	NSArray *displayTypes = [json objectForKey:@"display"];
+	NSArray *displayTypes = [json at_safeObjectForKey:@"display"];
 	BOOL inserted = NO;
 	for (NSString *displayType in displayTypes) {
 		if ([displayType isEqualToString:@"modal"]) {
@@ -83,9 +87,9 @@
 	}
 	
 	if ([objectName isEqualToString:@"ATTextMessage"] || [objectName isEqualToString:@"ATFakeMessage"]) {
-		[message setValue:[json objectForKey:@"body"] forKey:@"body"];
+		[message setValue:[json at_safeObjectForKey:@"body"] forKey:@"body"];
 	} else if ([objectName isEqualToString:@"ATUpgradeRequestMessage"]) {
-		[message setValue:[json objectForKey:@"forced"] forKey:@"forced"];
+		[message setValue:[json at_safeObjectForKey:@"forced"] forKey:@"forced"];
 	}
 	
 	return (ATMessage *)message;
@@ -104,14 +108,40 @@
 	return result;
 }
 
-- (void)updateWithJSON:(NSDictionary *)messageJSON {
-	NSDictionary *senderDict = [messageJSON objectForKey:@"sender"];
-	ATMessageSender *sender = [ATMessageSender newOrExistingMessageSenderFromJSON:senderDict];
-	NSDictionary *recipientDict = [messageJSON objectForKey:@"recipient"];
-	ATMessageSender *recipient = [ATMessageSender newOrExistingMessageSenderFromJSON:recipientDict];
++ (ATMessage *)findMessageWithPendingID:(NSString *)pendingID {
+	ATMessage *result = nil;
 	
-	[self setValue:[messageJSON objectForKey:@"id"] forKey:@"apptentiveID"];
+	@synchronized(self) {
+		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingMessageID == %@)", pendingID];
+		NSArray *results = [ATData findEntityNamed:@"ATMessage" withPredicate:fetchPredicate];
+		if (results && [results count] != 0) {
+			result = [results objectAtIndex:0];
+		}
+	}
+	return result;
+}
+
+#warning No Sender or Recipient anymore
+- (void)updateWithJSON:(NSDictionary *)messageJSON {
+	NSDictionary *senderDict = [messageJSON at_safeObjectForKey:@"sender"];
+	ATMessageSender *sender = [ATMessageSender newOrExistingMessageSenderFromJSON:senderDict];
 	[self setValue:sender forKey:@"sender"];
-	[self setValue:recipient forKey:@"recipient"];
+	
+	if ([messageJSON at_safeObjectForKey:@"created_at"]) {
+		NSTimeInterval timestamp = [ATMessage timeIntervalForServerTime:[messageJSON at_safeObjectForKey:@"created_at"]];
+		self.creationTime = @(timestamp);
+	}
+	[self setValue:[messageJSON at_safeObjectForKey:@"id"] forKey:@"apptentiveID"];
+	[sender release], sender = nil;
+}
+
++ (NSTimeInterval)timeIntervalForServerTime:(NSNumber *)timestamp {
+	long long serverTimestamp = [timestamp longLongValue];
+	NSTimeInterval clientTimestamp = ((double)serverTimestamp)/1000.0;
+	return clientTimestamp;
+}
+
++ (NSNumber *)serverFormatForTimeInterval:(NSTimeInterval)timestamp {
+	return @((long long)(timestamp * 1000));
 }
 @end

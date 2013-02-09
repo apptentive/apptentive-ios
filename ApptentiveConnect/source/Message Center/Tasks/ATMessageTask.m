@@ -51,9 +51,6 @@
 }
 
 - (BOOL)canStart {
-#if APPTENTIVE_DEMO
-	return YES;
-#endif
 	if ([[ATBackend sharedBackend] apiKey] == nil) {
 		return NO;
 	}
@@ -64,11 +61,6 @@
 }
 
 - (void)start {
-#if APPTENTIVE_DEMO
-	[self processResult:@{@"id":@"fobar132", @"sender_id":@"demouserid"}];
-	self.inProgress = NO;
-	self.finished = YES;
-#else
 	if (!request) {
 		request = [[[ATWebClient sharedClient] requestForPostingMessage:self.message] retain];
 		if (request != nil) {
@@ -79,7 +71,6 @@
 			self.finished = YES;
 		}
 	}
-#endif
 }
 
 - (void)stop {
@@ -148,7 +139,7 @@
 - (BOOL)processResult:(NSDictionary *)jsonMessage {
 	ATLogInfo(@"getting json result: %@", jsonMessage);
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
-	ATTextMessage *textMessage = [ATTextMessage findMessageWithPendingID:message.pendingMessageID];
+	ATTextMessage *textMessage = (ATTextMessage *)[ATMessage findMessageWithPendingID:message.pendingMessageID];
 	[textMessage updateWithJSON:jsonMessage];
 	textMessage.pendingState = [NSNumber numberWithInt:ATPendingMessageStateConfirmed];
 	

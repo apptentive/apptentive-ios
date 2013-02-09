@@ -8,6 +8,8 @@
 
 #import "ATPendingMessage.h"
 
+#import "ATMessage.h"
+
 #define kATPendingMessageCodingVersion 1
 
 @implementation ATPendingMessage
@@ -54,7 +56,7 @@
 }
 
 - (NSDictionary *)apiJSON {
-	NSNumber *d = [NSNumber numberWithDouble:self.creationTime];
-	return @{@"message":@{@"nonce":self.pendingMessageID, @"body":self.body, @"client_created_at":d}};
+	NSNumber *timestamp = [ATMessage serverFormatForTimeInterval:self.creationTime];
+	return @{@"message":@{@"nonce":self.pendingMessageID, @"type":@"TextMessage", @"body":self.body, @"client_created_at":timestamp}};
 }
 @end

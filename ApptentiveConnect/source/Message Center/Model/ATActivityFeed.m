@@ -8,6 +8,8 @@
 
 #import "ATActivityFeed.h"
 
+#import "NSDictionary+ATAdditions.h"
+
 #define kATActivityFeedCodingVersion 1
 
 @implementation ATActivityFeed
@@ -48,8 +50,8 @@
 		NSDictionary *p = json;
 		
 		result = [[ATActivityFeed alloc] init];
-		result.token = [p objectForKey:@"token"];
-		result.deviceID = [p objectForKey:@"device_id"];
+		result.token = [p at_safeObjectForKey:@"token"];
+		result.deviceID = [p at_safeObjectForKey:@"device_id"];
 		
 		success = YES;
 	} while (NO);

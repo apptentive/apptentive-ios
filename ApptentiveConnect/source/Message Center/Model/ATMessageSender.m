@@ -10,12 +10,14 @@
 
 #import "ATData.h"
 #import "ATMessage.h"
+#import "NSDictionary+ATAdditions.h"
 
 @implementation ATMessageSender
 
 @dynamic apptentiveID;
 @dynamic name;
 @dynamic emailAddress;
+@dynamic profilePhotoURL;
 @dynamic sentMessages;
 @dynamic receivedMessages;
 
@@ -36,7 +38,7 @@
 + (ATMessageSender *)newOrExistingMessageSenderFromJSON:(NSDictionary *)json {
 	if (!json) return nil;
 	
-	NSString *apptentiveID = [json objectForKey:@"id"];
+	NSString *apptentiveID = [json at_safeObjectForKey:@"id"];
 	if (!apptentiveID) return nil;
 	
 	ATMessageSender *sender = [ATMessageSender findSenderWithID:apptentiveID];
@@ -46,13 +48,17 @@
 	} else {
 		[sender retain];
 	}
-	NSString *senderEmail = [json objectForKey:@"email"];
-	NSString *senderName = [json objectForKey:@"name"];
+	NSString *senderEmail = [json at_safeObjectForKey:@"email"];
+	NSString *senderName = [json at_safeObjectForKey:@"name"];
+	NSString *profilePhoto = [json at_safeObjectForKey:@"profile_photo"];
 	if (senderEmail) {
 		sender.emailAddress = senderEmail;
 	}
 	if (senderName) {
 		sender.name = senderName;
+	}
+	if (profilePhoto) {
+		sender.profilePhotoURL = profilePhoto;
 	}
 	return sender;
 }

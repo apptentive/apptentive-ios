@@ -62,9 +62,6 @@ static ATBackend *sharedBackend = nil;
 			[ATMessageDisplayType setupSingletons];
 			
 			[sharedBackend performSelector:@selector(checkForMessages) withObject:nil afterDelay:8];
-#if APPTENTIVE_DEMO
-			[sharedBackend performSelector:@selector(loadDemoData) withObject:nil afterDelay:0.1];
-#endif
 			[sharedBackend performSelector:@selector(clearTemporaryData) withObject:nil afterDelay:0.1];
 		}
 	}
@@ -481,9 +478,6 @@ static ATBackend *sharedBackend = nil;
 }
 
 - (void)checkForMessages {
-#if APPTENTIVE_DEMO
-	return;
-#endif
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	@synchronized(self) {
 		ATGetMessagesTask *task = [[ATGetMessagesTask alloc] init];
@@ -491,7 +485,7 @@ static ATBackend *sharedBackend = nil;
 		[queue addTask:task];
 		[task release], task = nil;
 		if (!messageRetrievalTimer) {
-			messageRetrievalTimer = [[NSTimer timerWithTimeInterval:60*5. target:self selector:@selector(checkForMessages) userInfo:nil repeats:YES] retain];
+			messageRetrievalTimer = [[NSTimer timerWithTimeInterval:60. target:self selector:@selector(checkForMessages) userInfo:nil repeats:YES] retain];
 			NSRunLoop *mainRunLoop = [NSRunLoop mainRunLoop];
 			[mainRunLoop addTimer:messageRetrievalTimer forMode:NSDefaultRunLoopMode];
 		}
@@ -523,13 +517,7 @@ static ATBackend *sharedBackend = nil;
 - (void)loadDemoData {
 	[self clearDemoData];
 	NSDictionary *messages = nil;
-#if RATINGS_DEMO
-	messages = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"demoRatingData" ofType:@"plist"]];
-#elif APPTENTIVE_DEMO
-	messages = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"demoData" ofType:@"plist"]];
-#else
 	messages = @{};
-#endif
 	for (NSDictionary *message in [messages objectForKey:@"messages"]) {
 		ATMessage *m = [ATMessage newMessageFromJSON:message];
 		[m setPendingState:[NSNumber numberWithInt:ATPendingMessageStateConfirmed]];

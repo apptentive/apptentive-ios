@@ -178,11 +178,8 @@ static ATTaskQueue *sharedTaskQueue = nil;
 
 - (void)stop {
 	@synchronized(self) {
-#if APPTENTIVE_DEMO
-#else
 		[activeTask stop];
 		[self unsetActiveTask];
-#endif
 	}
 }
 

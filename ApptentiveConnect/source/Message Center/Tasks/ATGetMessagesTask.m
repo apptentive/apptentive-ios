@@ -14,6 +14,7 @@
 #import "ATTextMessage.h"
 #import "ATWebClient.h"
 #import "ATWebClient+MessageCenter.h"
+#import "NSDictionary+ATAdditions.h"
 
 static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessagesLastRetrievedMessagIDPreferenceKey";
 
@@ -139,17 +140,18 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 	
 	do { // once
 		if (!jsonMessages) break;
-		if (![jsonMessages objectForKey:@"items"]) break;
+		if (![jsonMessages at_safeObjectForKey:@"items"]) break;
 		
-		NSArray *messages = [jsonMessages objectForKey:@"items"];
+		NSArray *messages = [jsonMessages at_safeObjectForKey:@"items"];
 		if (![messages isKindOfClass:[NSArray class]]) break;
 		
 		BOOL success = YES;
 		for (NSDictionary *messageJSON in messages) {
-			NSString *messageID = [messageJSON objectForKey:@"id"];
+			NSString *messageID = [messageJSON at_safeObjectForKey:@"id"];
 			ATMessage *message = [ATMessage findMessageWithID:messageID];
 			if (!message) {
 				message = [[ATMessage newMessageFromJSON:messageJSON] autorelease];
+				message.pendingState = @(ATPendingMessageStateConfirmed);
 				if (message) {
 					lastMessageID = messageID;
 				}

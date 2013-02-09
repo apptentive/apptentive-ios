@@ -18,7 +18,6 @@
 @property (nonatomic, retain) NSString * body;
 @property (nonatomic, retain) NSString * subject;
 
-+ (ATTextMessage *)findMessageWithPendingID:(NSString *)pendingID;
 + (ATTextMessage *)createMessageWithPendingMessage:(ATPendingMessage *)pendingMessage;
 + (void)clearComposingMessages;
 @end

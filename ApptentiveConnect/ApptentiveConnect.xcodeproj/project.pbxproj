@@ -216,6 +216,9 @@
 		49D112741337CC9F00603373 /* ATTaskQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D112721337CC9F00603373 /* ATTaskQueue.m */; };
 		49E3A26F1628F4FF000675B4 /* ATGetMessagesTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 49E3A26D1628F4FF000675B4 /* ATGetMessagesTask.h */; };
 		49E3A2701628F4FF000675B4 /* ATGetMessagesTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 49E3A26E1628F4FF000675B4 /* ATGetMessagesTask.m */; };
+		49E6208716C5E8C2000C9F5A /* NSDictionary+ATAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 49E6208516C5E8C2000C9F5A /* NSDictionary+ATAdditions.h */; };
+		49E6208816C5E8C2000C9F5A /* NSDictionary+ATAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 49E6208616C5E8C2000C9F5A /* NSDictionary+ATAdditions.m */; };
+		49E6208916C5E8C2000C9F5A /* NSDictionary+ATAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 49E6208616C5E8C2000C9F5A /* NSDictionary+ATAdditions.m */; };
 		49E891D0134FE2AB00DD098A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49E891CD134FE2AB00DD098A /* Localizable.strings */; };
 		49EA5AB014BD08AD004F8A4D /* ATRecord.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EA5AAE14BD08AD004F8A4D /* ATRecord.h */; };
 		49EA5AB114BD08AD004F8A4D /* ATRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EA5AAF14BD08AD004F8A4D /* ATRecord.m */; };
@@ -422,6 +425,8 @@
 		49D112721337CC9F00603373 /* ATTaskQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATTaskQueue.m; sourceTree = "<group>"; };
 		49E3A26D1628F4FF000675B4 /* ATGetMessagesTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATGetMessagesTask.h; path = "Message Center/Tasks/ATGetMessagesTask.h"; sourceTree = "<group>"; };
 		49E3A26E1628F4FF000675B4 /* ATGetMessagesTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATGetMessagesTask.m; path = "Message Center/Tasks/ATGetMessagesTask.m"; sourceTree = "<group>"; };
+		49E6208516C5E8C2000C9F5A /* NSDictionary+ATAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+ATAdditions.h"; sourceTree = "<group>"; };
+		49E6208616C5E8C2000C9F5A /* NSDictionary+ATAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+ATAdditions.m"; sourceTree = "<group>"; };
 		49E891CE134FE2AB00DD098A /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		49E891CF134FE2AB00DD098A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		49EA5AAE14BD08AD004F8A4D /* ATRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATRecord.h; sourceTree = "<group>"; };
@@ -513,6 +518,8 @@
 				4936AE751379DEBB00A4B17F /* ATUtilities.h */,
 				4936AE761379DEBB00A4B17F /* ATUtilities.m */,
 				491E03CC163F261C00DC3E18 /* ATLog.h */,
+				49E6208516C5E8C2000C9F5A /* NSDictionary+ATAdditions.h */,
+				49E6208616C5E8C2000C9F5A /* NSDictionary+ATAdditions.m */,
 			);
 			path = Misc;
 			sourceTree = "<group>";
@@ -860,8 +867,8 @@
 				4987FA95157AE53500AF2078 /* ApptentiveMetrics.h */,
 				493AEB1615990A4D00DFD4C7 /* ATSurveys.h */,
 				49C00298133413BB0071F088 /* ATConnect.m */,
-				4999127B16165B7900FDA15F /* Message Center */,
 				4967278116B9D9CB00C679B8 /* ATConnect_Private.h */,
+				4999127B16165B7900FDA15F /* Message Center */,
 				4987FA7C157ACA8C00AF2078 /* Metrics */,
 				493AEB1515990A4D00DFD4C7 /* Surveys */,
 				4936AE681379DE6A00A4B17F /* Controllers */,
@@ -998,6 +1005,7 @@
 				49AC178216C0987400BE1615 /* ATActivityFeedUpdater.h in Headers */,
 				49AC178816C0A01C00BE1615 /* ATActivityFeed.h in Headers */,
 				49AC178D16C0A0BC00BE1615 /* ATJSONModel.h in Headers */,
+				49E6208716C5E8C2000C9F5A /* NSDictionary+ATAdditions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1226,6 +1234,7 @@
 				491E03D41640823A00DC3E18 /* ATMessageSender.m in Sources */,
 				49AC178316C0987400BE1615 /* ATActivityFeedUpdater.m in Sources */,
 				49AC178916C0A01C00BE1615 /* ATActivityFeed.m in Sources */,
+				49E6208816C5E8C2000C9F5A /* NSDictionary+ATAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1275,6 +1284,7 @@
 				491E03D51640823A00DC3E18 /* ATMessageSender.m in Sources */,
 				49AC178416C0987400BE1615 /* ATActivityFeedUpdater.m in Sources */,
 				49AC178A16C0A01C00BE1615 /* ATActivityFeed.m in Sources */,
+				49E6208916C5E8C2000C9F5A /* NSDictionary+ATAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1386,8 +1396,6 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"JSONKIT_PREFIX=AT",
 					"APPTENTIVE_DEBUG=1",
-					"APPTENTIVE_DEMO=0",
-					"RATINGS_DEMO=0",
 					"AT_LOGGING_LEVEL_INFO=1",
 					"AT_LOGGING_LEVEL_DEBUG=1",
 				);

@@ -76,7 +76,7 @@ typedef enum {
 		fakeMessage.subject = NSLocalizedString(@"Welcome", @"Welcome");
 		fakeMessage.body = ATLocalizedString(@"Use this area to communicate with the developer of this app! If you have questions, suggestions, concerns, or just want to help us make the app better or get in touch, feel free to send us a message!", @"Placeholder welcome message.");
 		fakeMessage.creationTime = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
-		fakeMessage.sender = [ATMessageSender newOrExistingMessageSenderFromJSON:@{@"id":@"demodevid"}]; //!! replace
+		fakeMessage.sender = [[ATMessageSender newOrExistingMessageSenderFromJSON:@{@"id":@"demodevid"}] autorelease]; //!! replace
 		[fakeMessage release], fakeMessage = nil;
 	}
 	
@@ -204,16 +204,18 @@ typedef enum {
 		}
 		message.body = [self.textView text];
 		
-		ATTextMessage *textMessage = [ATTextMessage findMessageWithPendingID:message.pendingMessageID];
+		ATTextMessage *textMessage = (ATTextMessage *)[ATTextMessage findMessageWithPendingID:message.pendingMessageID];
 		if (!textMessage) {
 			textMessage = [ATTextMessage createMessageWithPendingMessage:message];
 		}
+		textMessage.sentByUser = @YES;
 		textMessage.body = message.body;
 		textMessage.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
 		[[[ATBackend sharedBackend] managedObjectContext] save:nil];
 		
 		// Give it a wee bit o' delay.
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{		ATMessageTask *task = [[ATMessageTask alloc] init];
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
+			ATMessageTask *task = [[ATMessageTask alloc] init];
 			task.message = message;
 			[[ATTaskQueue sharedTaskQueue] addTask:task];
 			[[ATTaskQueue sharedTaskQueue] start];
@@ -551,15 +553,7 @@ typedef enum {
 	
 	if (cellType == ATMessageCellTypeText) {
 		ATTextMessageUserCell *textCell = nil;
-		ATPerson *person = [ATPersonUpdater currentPerson];
-		ATTextMessageCellType cellSubType = (person != nil && [person.apptentiveID isEqualToString:message.sender.apptentiveID]) ? ATTextMessageCellTypeUser : ATTextMessageCellTypeDeveloper;
-		if (person == nil) {
-			if ([@"demouserid" isEqualToString:message.sender.apptentiveID] || [[message pendingState] intValue] == ATPendingMessageStateComposing || [[message pendingState] intValue] == ATPendingMessageStateSending) {
-				cellSubType = ATTextMessageCellTypeUser;
-			} else {
-				cellSubType = ATTextMessageCellTypeDeveloper;
-			}
-		}
+		ATTextMessageCellType cellSubType = [message.sentByUser boolValue] ? ATTextMessageCellTypeUser : ATTextMessageCellTypeDeveloper;
 		if ([[message pendingState] intValue] == ATPendingMessageStateComposing || [[message pendingState] intValue] == ATPendingMessageStateSending) {
 			cellSubType = ATTextMessageCellTypeUser;
 		}

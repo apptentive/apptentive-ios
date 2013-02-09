@@ -20,19 +20,26 @@ typedef enum {
 @interface ATMessage : NSManagedObject
 
 @property (nonatomic, retain) NSString *apptentiveID;
+@property (nonatomic, retain) NSNumber *clientCreationTime;
+@property (nonatomic, retain) NSString *clientCreationTimezone;
+@property (nonatomic, retain) NSNumber *clientCreationUTCOffset;
 @property (nonatomic, retain) NSNumber *creationTime;
 @property (nonatomic, retain) NSString *pendingMessageID;
 @property (nonatomic, retain) NSNumber *pendingState;
 @property (nonatomic, retain) NSNumber *priority;
 @property (nonatomic, retain) NSNumber *seenByUser;
+@property (nonatomic, retain) NSNumber *sentByUser;
 @property (nonatomic, retain) ATMessageSender *sender;
-@property (nonatomic, retain) ATMessageSender *recipient;
 @property (nonatomic, retain) NSSet *displayTypes;
 
 + (ATMessage *)newMessageFromJSON:(NSDictionary *)json;
 + (ATMessage *)findMessageWithID:(NSString *)apptentiveID;
++ (ATMessage *)findMessageWithPendingID:(NSString *)pendingID;
++ (NSTimeInterval)timeIntervalForServerTime:(NSNumber *)timestamp;
++ (NSNumber *)serverFormatForTimeInterval:(NSTimeInterval)timestamp;
 
 - (void)updateWithJSON:(NSDictionary *)json;
+
 @end
 
 @interface ATMessage (CoreDataGeneratedAccessors)

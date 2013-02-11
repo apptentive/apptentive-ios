@@ -10,7 +10,6 @@
 
 #import "ATBackend.h"
 #import "ATData.h"
-#import "ATMessage.h"
 
 
 @implementation ATMessageDisplayType

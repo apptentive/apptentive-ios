@@ -12,7 +12,6 @@
 #import "ATMessage.h"
 #import "ATPendingMessage.h"
 
-
 @interface ATTextMessage : ATMessage
 
 @property (nonatomic, retain) NSString * body;

@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+#import "ATJSONModel.h"
+
 typedef enum {
 	ATPendingMessageStateComposing,
 	ATPendingMessageStateSending,
@@ -17,7 +19,7 @@ typedef enum {
 
 @class ATMessageDisplayType, ATMessageSender;
 
-@interface ATMessage : NSManagedObject
+@interface ATMessage : NSManagedObject <ATJSONModel>
 
 @property (nonatomic, retain) NSString *apptentiveID;
 @property (nonatomic, retain) NSNumber *clientCreationTime;
@@ -32,14 +34,10 @@ typedef enum {
 @property (nonatomic, retain) ATMessageSender *sender;
 @property (nonatomic, retain) NSSet *displayTypes;
 
-+ (ATMessage *)newMessageFromJSON:(NSDictionary *)json;
 + (ATMessage *)findMessageWithID:(NSString *)apptentiveID;
 + (ATMessage *)findMessageWithPendingID:(NSString *)pendingID;
 + (NSTimeInterval)timeIntervalForServerTime:(NSNumber *)timestamp;
 + (NSNumber *)serverFormatForTimeInterval:(NSTimeInterval)timestamp;
-
-- (void)updateWithJSON:(NSDictionary *)json;
-
 @end
 
 @interface ATMessage (CoreDataGeneratedAccessors)

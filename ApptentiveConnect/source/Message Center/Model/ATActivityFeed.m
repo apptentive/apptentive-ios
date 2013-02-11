@@ -43,24 +43,24 @@
 
 + (NSObject *)newInstanceWithJSON:(NSDictionary *)json {
 	ATActivityFeed *result = nil;
-	BOOL success = NO;
 	
-	do { // once
-		if (!json) break;
-		NSDictionary *p = json;
-		
+	if (json != nil) {
 		result = [[ATActivityFeed alloc] init];
-		result.token = [p at_safeObjectForKey:@"token"];
-		result.deviceID = [p at_safeObjectForKey:@"device_id"];
-		
-		success = YES;
-	} while (NO);
-	
-	if (result != nil && success == NO) {
-		[result release], result = nil;
+		[result updateWithJSON:json];
 	}
 	
 	return result;
+}
+
+- (void)updateWithJSON:(NSDictionary *)json {
+	NSString *tokenObject = [json at_safeObjectForKey:@"token"];
+	if (tokenObject != nil) {
+		self.token = tokenObject;
+	}
+	NSString *deviceIDObject = [json at_safeObjectForKey:@"device_id"];
+	if (deviceIDObject != nil) {
+		self.deviceID = deviceIDObject;
+	}
 }
 
 //TODO: Add support for sending person.

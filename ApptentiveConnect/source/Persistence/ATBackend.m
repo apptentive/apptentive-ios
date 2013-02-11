@@ -35,7 +35,6 @@ static ATBackend *sharedBackend = nil;
 @end
 
 @interface ATBackend (Private)
-- (void)loadDemoData;
 - (void)clearTemporaryData;
 - (void)setup;
 - (void)updateWorking;
@@ -511,21 +510,6 @@ static ATBackend *sharedBackend = nil;
 		}
 		
 		[fetchTypes release], fetchTypes = nil;
-	}
-}
-
-- (void)loadDemoData {
-	[self clearDemoData];
-	NSDictionary *messages = nil;
-	messages = @{};
-	for (NSDictionary *message in [messages objectForKey:@"messages"]) {
-		ATMessage *m = [ATMessage newMessageFromJSON:message];
-		[m setPendingState:[NSNumber numberWithInt:ATPendingMessageStateConfirmed]];
-		[m release], m = nil;
-	}
-	NSError *error = nil;
-	if (![self.managedObjectContext save:&error]) {
-		ATLogError(@"%@", error);
 	}
 }
 

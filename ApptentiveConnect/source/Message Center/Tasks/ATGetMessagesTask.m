@@ -150,7 +150,12 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 			NSString *messageID = [messageJSON at_safeObjectForKey:@"id"];
 			ATMessage *message = [ATMessage findMessageWithID:messageID];
 			if (!message) {
-				message = [[ATMessage newMessageFromJSON:messageJSON] autorelease];
+				NSString *type = [messageJSON at_safeObjectForKey:@"type"];
+				if ([type isEqualToString:@"TextMessage"]) {
+					message = [[ATTextMessage newInstanceWithJSON:messageJSON] autorelease];
+				} else if ([type isEqualToString:@"FileMessage"]) {
+#warning Add file message here.
+				}
 				message.pendingState = @(ATPendingMessageStateConfirmed);
 				if (message) {
 					lastMessageID = messageID;

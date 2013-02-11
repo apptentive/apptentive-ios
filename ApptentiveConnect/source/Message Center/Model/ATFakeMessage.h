@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import "ATMessage.h"
 
+#import "ATMessage.h"
 
 @interface ATFakeMessage : ATMessage
 

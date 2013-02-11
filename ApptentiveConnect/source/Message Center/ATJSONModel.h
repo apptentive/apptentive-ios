@@ -10,5 +10,6 @@
 
 @protocol ATJSONModel <NSObject>
 + (NSObject *)newInstanceWithJSON:(NSDictionary *)json;
+- (void)updateWithJSON:(NSDictionary *)json;
 - (NSDictionary *)apiJSON;
 @end

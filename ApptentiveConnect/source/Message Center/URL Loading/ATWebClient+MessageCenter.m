@@ -61,9 +61,10 @@
 	return [request autorelease];
 }
 
-- (ATAPIRequest *)requestForPostingMessage:(ATPendingMessage *)message {
+- (ATAPIRequest *)requestForPostingMessage:(ATMessage *)message {
 	NSError *error = nil;
-	NSDictionary *postJSON = [message apiJSON];
+	NSDictionary *messageJSON = [message apiJSON];
+	NSDictionary *postJSON = @{@"message":messageJSON};
 	
 	NSString *postString = [postJSON ATJSONStringWithOptions:ATJKSerializeOptionPretty error:&error];
 	if (!postString && error != nil) {

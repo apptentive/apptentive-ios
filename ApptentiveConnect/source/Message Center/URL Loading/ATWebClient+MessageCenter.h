@@ -11,12 +11,11 @@
 #import "ATActivityFeed.h"
 #import "ATDeviceInfo.h"
 #import "ATMessage.h"
-#import "ATPendingMessage.h"
 #import "ATPerson.h"
 
 @interface ATWebClient (MessageCenter)
 - (ATAPIRequest *)requestForCreatingActivityFeed:(ATActivityFeed *)activityFeed;
 - (ATAPIRequest *)requestForUpdatingDevice:(ATDeviceInfo *)deviceInfo;
-- (ATAPIRequest *)requestForPostingMessage:(ATPendingMessage *)message;
+- (ATAPIRequest *)requestForPostingMessage:(ATMessage *)message;
 - (ATAPIRequest *)requestForRetrievingMessagesSinceMessage:(ATMessage *)message;
 @end

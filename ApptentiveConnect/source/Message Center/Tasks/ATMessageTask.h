@@ -8,14 +8,17 @@
 
 #import "ATAPIRequest.h"
 #import "ATTask.h"
+#import "ATMessage.h"
 
 @class ATPendingMessage;
 
 @interface ATMessageTask : ATTask <ATAPIRequestDelegate> {
 @private
 	ATAPIRequest *request;
-	ATPendingMessage *message;
+	NSString *pendingMessageID;
+	ATMessage *message;
 }
-@property (nonatomic, retain) ATPendingMessage *message;
+@property (nonatomic, retain) NSString *pendingMessageID;
+@property (nonatomic, readonly) ATMessage *message;
 
 @end

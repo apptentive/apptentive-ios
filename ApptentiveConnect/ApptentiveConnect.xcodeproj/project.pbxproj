@@ -149,8 +149,6 @@
 		4988FB5116212B44000A7CB7 /* ATTextMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 4988FB4F16212B44000A7CB7 /* ATTextMessage.h */; };
 		4988FB5216212B44000A7CB7 /* ATTextMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4988FB5016212B44000A7CB7 /* ATTextMessage.m */; };
 		4988FB5416212BD4000A7CB7 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4988FB5316212BD4000A7CB7 /* CoreData.framework */; };
-		4988FB9616213D1F000A7CB7 /* ATPendingMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 4988FB9416213D1E000A7CB7 /* ATPendingMessage.h */; };
-		4988FB9716213D1F000A7CB7 /* ATPendingMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4988FB9516213D1E000A7CB7 /* ATPendingMessage.m */; };
 		498B8E3E1519691900CA9A58 /* ATRatingPredicateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 498B8E3D1519691900CA9A58 /* ATRatingPredicateTests.m */; };
 		498EFB6B15BA414A00A1043B /* ATSurveyGetSurveyTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 498EFB6915BA414A00A1043B /* ATSurveyGetSurveyTask.h */; };
 		498EFB6C15BA414A00A1043B /* ATSurveyGetSurveyTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 498EFB6A15BA414A00A1043B /* ATSurveyGetSurveyTask.m */; };
@@ -360,8 +358,6 @@
 		4988FB4F16212B44000A7CB7 /* ATTextMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATTextMessage.h; path = "Message Center/Model/ATTextMessage.h"; sourceTree = "<group>"; };
 		4988FB5016212B44000A7CB7 /* ATTextMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATTextMessage.m; path = "Message Center/Model/ATTextMessage.m"; sourceTree = "<group>"; };
 		4988FB5316212BD4000A7CB7 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		4988FB9416213D1E000A7CB7 /* ATPendingMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATPendingMessage.h; path = "Message Center/Model/ATPendingMessage.h"; sourceTree = "<group>"; };
-		4988FB9516213D1E000A7CB7 /* ATPendingMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATPendingMessage.m; path = "Message Center/Model/ATPendingMessage.m"; sourceTree = "<group>"; };
 		498B8E3C1519691900CA9A58 /* ATRatingPredicateTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATRatingPredicateTests.h; sourceTree = "<group>"; };
 		498B8E3D1519691900CA9A58 /* ATRatingPredicateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATRatingPredicateTests.m; sourceTree = "<group>"; };
 		498EFB6915BA414A00A1043B /* ATSurveyGetSurveyTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATSurveyGetSurveyTask.h; path = Tasks/ATSurveyGetSurveyTask.h; sourceTree = "<group>"; };
@@ -774,8 +770,6 @@
 				4988FB4416212B40000A7CB7 /* ATMessage.m */,
 				49AF27C916321EDC005E1E9D /* ATFakeMessage.h */,
 				49AF27CA16321EDC005E1E9D /* ATFakeMessage.m */,
-				4988FB9416213D1E000A7CB7 /* ATPendingMessage.h */,
-				4988FB9516213D1E000A7CB7 /* ATPendingMessage.m */,
 				4988FB4F16212B44000A7CB7 /* ATTextMessage.h */,
 				4988FB5016212B44000A7CB7 /* ATTextMessage.m */,
 				4988FB4716212B41000A7CB7 /* ATUpgradeRequestMessage.h */,
@@ -990,7 +984,6 @@
 				4988FB4916212B41000A7CB7 /* ATUpgradeRequestMessage.h in Headers */,
 				4988FB4D16212B43000A7CB7 /* ATMessageDisplayType.h in Headers */,
 				4988FB5116212B44000A7CB7 /* ATTextMessage.h in Headers */,
-				4988FB9616213D1F000A7CB7 /* ATPendingMessage.h in Headers */,
 				490B24A71624B70E0055B812 /* ATTextMessageUserCell.h in Headers */,
 				49ADE8D8162613BA00DD8634 /* TTTAttributedLabel.h in Headers */,
 				49E3A26F1628F4FF000675B4 /* ATGetMessagesTask.h in Headers */,
@@ -1224,7 +1217,6 @@
 				4988FB4A16212B41000A7CB7 /* ATUpgradeRequestMessage.m in Sources */,
 				4988FB4E16212B43000A7CB7 /* ATMessageDisplayType.m in Sources */,
 				4988FB5216212B44000A7CB7 /* ATTextMessage.m in Sources */,
-				4988FB9716213D1F000A7CB7 /* ATPendingMessage.m in Sources */,
 				490B24A81624B70E0055B812 /* ATTextMessageUserCell.m in Sources */,
 				49ADE8D9162613BA00DD8634 /* TTTAttributedLabel.m in Sources */,
 				49E3A2701628F4FF000675B4 /* ATGetMessagesTask.m in Sources */,

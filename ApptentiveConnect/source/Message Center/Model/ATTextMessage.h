@@ -10,13 +10,11 @@
 #import <CoreData/CoreData.h>
 
 #import "ATMessage.h"
-#import "ATPendingMessage.h"
 
 @interface ATTextMessage : ATMessage
 
 @property (nonatomic, retain) NSString * body;
 @property (nonatomic, retain) NSString * subject;
 
-+ (ATTextMessage *)createMessageWithPendingMessage:(ATPendingMessage *)pendingMessage;
 + (void)clearComposingMessages;
 @end

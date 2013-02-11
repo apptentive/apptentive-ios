@@ -152,7 +152,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 			if (!message) {
 				NSString *type = [messageJSON at_safeObjectForKey:@"type"];
 				if ([type isEqualToString:@"TextMessage"]) {
-					message = [[ATTextMessage newInstanceWithJSON:messageJSON] autorelease];
+					message = [(ATTextMessage *)[ATTextMessage newInstanceWithJSON:messageJSON] autorelease];
 				} else if ([type isEqualToString:@"FileMessage"]) {
 #warning Add file message here.
 				}

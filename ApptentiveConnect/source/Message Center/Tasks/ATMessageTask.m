@@ -8,14 +8,14 @@
 
 #import "ATMessageTask.h"
 #import "ATBackend.h"
+#import "ATData.h"
 #import "ATLog.h"
 #import "ATMessage.h"
 #import "ATActivityFeedUpdater.h"
-#import "ATTextMessage.h"
 #import "ATWebClient.h"
 #import "ATWebClient+MessageCenter.h"
 
-#define kATMessageTaskCodingVersion 1
+#define kATMessageTaskCodingVersion 2
 
 @interface ATMessageTask (Private)
 - (void)setup;
@@ -24,13 +24,14 @@
 @end
 
 @implementation ATMessageTask
-@synthesize message;
+@synthesize message, pendingMessageID;
 
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
 		int version = [coder decodeIntForKey:@"version"];
 		if (version == kATMessageTaskCodingVersion) {
-			self.message = [coder decodeObjectForKey:@"message"];
+			self.pendingMessageID = [coder decodeObjectForKey:@"pendingMessageID"];
+			message = [[ATMessage findMessageWithPendingID:self.pendingMessageID] retain];
 		} else {
 			[self release];
 			return nil;
@@ -41,11 +42,12 @@
 
 - (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeInt:kATMessageTaskCodingVersion forKey:@"version"];
-	[coder encodeObject:self.message forKey:@"message"];
+	[coder encodeObject:self.pendingMessageID forKey:@"pendingMessageID"];
 }
 
 - (void)dealloc {
 	[self teardown];
+	[pendingMessageID release], pendingMessageID = nil;
 	[message release], message = nil;
 	[super dealloc];
 }
@@ -62,6 +64,14 @@
 
 - (void)start {
 	if (!request) {
+		if (self.message == nil) {
+			message = [[ATMessage findMessageWithPendingID:self.pendingMessageID] retain];
+			if (self.message == nil) {
+				NSLog(@"Warning: Message was nil in message task.");
+				self.finished = YES;
+				return;
+			}
+		}
 		request = [[[ATWebClient sharedClient] requestForPostingMessage:self.message] retain];
 		if (request != nil) {
 			request.delegate = self;
@@ -139,9 +149,8 @@
 - (BOOL)processResult:(NSDictionary *)jsonMessage {
 	ATLogInfo(@"getting json result: %@", jsonMessage);
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
-	ATTextMessage *textMessage = (ATTextMessage *)[ATMessage findMessageWithPendingID:message.pendingMessageID];
-	[textMessage updateWithJSON:jsonMessage];
-	textMessage.pendingState = [NSNumber numberWithInt:ATPendingMessageStateConfirmed];
+	[message updateWithJSON:jsonMessage];
+	message.pendingState = [NSNumber numberWithInt:ATPendingMessageStateConfirmed];
 	
 	NSError *error = nil;
 	if (![context save:&error]) {

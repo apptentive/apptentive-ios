@@ -60,6 +60,29 @@
 	return result;
 }
 
+- (void)setup {
+	if (self.clientCreationTime == nil || [self.clientCreationTime doubleValue] == 0) {
+		self.clientCreationTime = [NSNumber numberWithDouble:(double)[[NSDate date] timeIntervalSince1970]];
+	}
+	if (self.creationTime == nil || [self.creationTime doubleValue] == 0) {
+		self.creationTime = self.clientCreationTime;
+	}
+	if (self.pendingMessageID == nil) {
+		CFUUIDRef uuidRef = CFUUIDCreate(NULL);
+		CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
+		
+		self.pendingMessageID = [NSString stringWithFormat:@"pending-message:%@", (NSString *)uuidStringRef];
+		
+		CFRelease(uuidRef), uuidRef = NULL;
+		CFRelease(uuidStringRef), uuidStringRef = NULL;
+	}
+}
+
+- (void)awakeFromInsert {
+	[super awakeFromInsert];
+	[self setup];
+}
+
 - (void)updateWithJSON:(NSDictionary *)json {
 	NSDictionary *senderDict = [json at_safeObjectForKey:@"sender"];
 	if (senderDict != nil) {

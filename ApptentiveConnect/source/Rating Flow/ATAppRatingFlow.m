@@ -279,9 +279,9 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 				ATConnect *connection = [ATConnect sharedConnection];
 				if (connection.shouldUseMessageCenter) {
 					ATFakeMessage *fakeMessage = (ATFakeMessage *)[ATData newEntityNamed:@"ATFakeMessage"];
+					[fakeMessage setup];
 					fakeMessage.subject = NSLocalizedString(@"We're Sorry!", @"We're sorry text");
 					fakeMessage.body = ATLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
-					fakeMessage.creationTime = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
 					fakeMessage.sender = [[ATMessageSender newOrExistingMessageSenderFromJSON:@{@"id":@"demodevid"}] autorelease]; //!! replace
 					[connection presentMessageCenterFromViewController:self.viewController];
 					[fakeMessage release], fakeMessage = nil;

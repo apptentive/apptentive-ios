@@ -17,23 +17,6 @@
 @dynamic body;
 @dynamic subject;
 
-
-+ (ATTextMessage *)createMessageWithPendingMessage:(ATPendingMessage *)pendingMessage {
-	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
-	
-	ATTextMessage *message = (ATTextMessage *)[ATTextMessage findMessageWithPendingID:pendingMessage.pendingMessageID];
-	if (!message) {
-		message = [[[ATTextMessage alloc] initWithEntity:[NSEntityDescription entityForName:@"ATTextMessage" inManagedObjectContext:context] insertIntoManagedObjectContext:context] autorelease];
-		message.pendingMessageID = pendingMessage.pendingMessageID;
-		message.pendingState = [NSNumber numberWithInt:ATPendingMessageStateComposing];
-		message.body = pendingMessage.body;
-		message.creationTime = [NSNumber numberWithDouble:pendingMessage.creationTime];
-		message.clientCreationTime = message.creationTime;
-		[context save:nil];
-	}
-	return message;
-}
-
 + (NSObject *)newInstanceWithJSON:(NSDictionary *)json {
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
 	ATTextMessage *message = nil;
@@ -65,6 +48,7 @@
 	if (self.body) {
 		result[@"body"] = self.body;
 	}
+	result[@"type"] = @"TextMessage";
 	
 	return result;
 }

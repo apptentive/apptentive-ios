@@ -15,9 +15,9 @@
 #import "ATFeedbackMetrics.h"
 #import "ATFeedbackTask.h"
 #import "ATMessageTask.h"
-#import "ATPendingMessage.h"
 #import "ATTask.h"
 #import "ATTaskQueue.h"
+#import "ATTextMessage.h"
 
 enum {
 	kSectionTasks,
@@ -145,7 +145,13 @@ enum {
 			label.text = feedbackTask.feedback.text;
 		} else if ([task isKindOfClass:[ATMessageTask class]]) {
 			ATMessageTask *messageTask = (ATMessageTask *)task;
-			label.text = messageTask.message.body;
+			ATMessage *message = [messageTask message];
+			if ([message isKindOfClass:[ATTextMessage class]]) {
+				ATTextMessage *textMessage = (ATTextMessage *)message;
+				label.text = textMessage.body;
+			} else {
+				label.text = [message description];
+			}
 		} else {
 			label.text = [task description];
 		}

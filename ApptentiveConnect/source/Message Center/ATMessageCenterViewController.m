@@ -19,7 +19,6 @@
 #import "ATMessageCenterCell.h"
 #import "ATMessageSender.h"
 #import "ATMessageTask.h"
-#import "ATPendingMessage.h"
 #import "ATPersonUpdater.h"
 #import "ATTaskQueue.h"
 #import "ATTextMessage.h"
@@ -51,7 +50,7 @@ typedef enum {
 	CGRect currentKeyboardFrameInView;
 	CGFloat composerFieldHeight;
 	NSFetchedResultsController *fetchedMessagesController;
-	ATPendingMessage *composingMessage;
+	ATTextMessage *composingMessage;
 	BOOL animatingTransition;
 	NSDateFormatter *messageDateFormatter;
 	UIImage *pickedImage;
@@ -73,9 +72,9 @@ typedef enum {
 	NSUInteger messageCount = [ATData countEntityNamed:@"ATMessage" withPredicate:nil];
 	if (messageCount == 0) {
 		ATFakeMessage *fakeMessage = (ATFakeMessage *)[ATData newEntityNamed:@"ATFakeMessage"];
+		[fakeMessage setup];
 		fakeMessage.subject = NSLocalizedString(@"Welcome", @"Welcome");
 		fakeMessage.body = ATLocalizedString(@"Use this area to communicate with the developer of this app! If you have questions, suggestions, concerns, or just want to help us make the app better or get in touch, feel free to send us a message!", @"Placeholder welcome message.");
-		fakeMessage.creationTime = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
 		fakeMessage.sender = [[ATMessageSender newOrExistingMessageSenderFromJSON:@{@"id":@"demodevid"}] autorelease]; //!! replace
 		[fakeMessage release], fakeMessage = nil;
 	}
@@ -195,33 +194,26 @@ typedef enum {
 
 - (IBAction)sendPressed:(id)sender {
 	@synchronized(self) {
-		ATPendingMessage *message = nil;
-		if (composingMessage) {
-			message = composingMessage;
-			composingMessage = nil;
-		} else {
-			message = [[ATPendingMessage alloc] init];
+		if (composingMessage == nil) {
+			composingMessage = (ATTextMessage *)[ATData newEntityNamed:@"ATTextMessage"];
+			[composingMessage setup];
 		}
-		message.body = [self.textView text];
+		composingMessage.body = [self.textView text];
+		composingMessage.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
+		composingMessage.sentByUser = @YES;
 		
-		ATTextMessage *textMessage = (ATTextMessage *)[ATTextMessage findMessageWithPendingID:message.pendingMessageID];
-		if (!textMessage) {
-			textMessage = [ATTextMessage createMessageWithPendingMessage:message];
-		}
-		textMessage.sentByUser = @YES;
-		textMessage.body = message.body;
-		textMessage.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
 		[[[ATBackend sharedBackend] managedObjectContext] save:nil];
 		
 		// Give it a wee bit o' delay.
+		NSString *pendingMessageID = [composingMessage pendingMessageID];
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
 			ATMessageTask *task = [[ATMessageTask alloc] init];
-			task.message = message;
+			task.pendingMessageID = pendingMessageID;
 			[[ATTaskQueue sharedTaskQueue] addTask:task];
 			[[ATTaskQueue sharedTaskQueue] start];
 			[task release], task = nil;
 		});
-		[message release], message = nil;
+		[composingMessage release], composingMessage = nil;
 		self.textView.text = @"";
 	}
 }
@@ -371,17 +363,15 @@ typedef enum {
 - (void)resizingTextViewDidChange:(ATResizingTextView *)aTextView {
 	if (aTextView.text && ![aTextView.text isEqualToString:@""]) {
 		if (!composingMessage) {
-			composingMessage = [[ATPendingMessage alloc] init];
+			composingMessage = (ATTextMessage *)[ATData newEntityNamed:@"ATTextMessage"];
+			[composingMessage setup];
 		}
-		composingMessage.body = aTextView.text;
-		if (![ATTextMessage findMessageWithPendingID:composingMessage.pendingMessageID]) {
-			[ATTextMessage createMessageWithPendingMessage:composingMessage];
-		}
+		// Don't modify the message.
+		//composingMessage.body = aTextView.text;
 	} else {
 		if (composingMessage) {
-			ATMessage *message = [ATTextMessage findMessageWithPendingID:composingMessage.pendingMessageID];
 			NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
-			[context deleteObject:message];
+			[context deleteObject:composingMessage];
 			[composingMessage release], composingMessage = nil;
 		}
 	}
@@ -550,6 +540,8 @@ typedef enum {
 		NSDate *date = [NSDate dateWithTimeIntervalSince1970:t];
 		dateString = [messageDateFormatter stringFromDate:date];
 	}
+	NSLog(@"clientCreationTime: %@", [messageDateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[message.clientCreationTime doubleValue]]]);
+	NSLog(@"creationTime: %@", [messageDateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[message.creationTime doubleValue]]]);
 	
 	if (cellType == ATMessageCellTypeText) {
 		ATTextMessageUserCell *textCell = nil;

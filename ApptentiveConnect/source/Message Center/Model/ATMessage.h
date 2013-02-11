@@ -38,6 +38,8 @@ typedef enum {
 + (ATMessage *)findMessageWithPendingID:(NSString *)pendingID;
 + (NSTimeInterval)timeIntervalForServerTime:(NSNumber *)timestamp;
 + (NSNumber *)serverFormatForTimeInterval:(NSTimeInterval)timestamp;
+
+- (void)setup;
 @end
 
 @interface ATMessage (CoreDataGeneratedAccessors)

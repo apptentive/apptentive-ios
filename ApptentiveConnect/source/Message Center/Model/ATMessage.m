@@ -62,7 +62,7 @@
 
 - (void)setup {
 	if (self.clientCreationTime == nil || [self.clientCreationTime doubleValue] == 0) {
-		self.clientCreationTime = [NSNumber numberWithDouble:(double)[[NSDate date] timeIntervalSince1970]];
+		[self updateClientCreationTime];
 	}
 	if (self.creationTime == nil || [self.creationTime doubleValue] == 0) {
 		self.creationTime = self.clientCreationTime;
@@ -76,6 +76,11 @@
 		CFRelease(uuidRef), uuidRef = NULL;
 		CFRelease(uuidStringRef), uuidStringRef = NULL;
 	}
+}
+
+- (void)updateClientCreationTime {
+	self.clientCreationTime = [NSNumber numberWithDouble:(double)[[NSDate date] timeIntervalSince1970]];
+	self.creationTime = self.clientCreationTime;
 }
 
 - (void)awakeFromInsert {

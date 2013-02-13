@@ -40,6 +40,7 @@ typedef enum {
 + (NSNumber *)serverFormatForTimeInterval:(NSTimeInterval)timestamp;
 
 - (void)setup;
+- (void)updateClientCreationTime;
 @end
 
 @interface ATMessage (CoreDataGeneratedAccessors)

@@ -201,6 +201,7 @@ typedef enum {
 		composingMessage.body = [self.textView text];
 		composingMessage.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
 		composingMessage.sentByUser = @YES;
+		[composingMessage updateClientCreationTime];
 		
 		[[[ATBackend sharedBackend] managedObjectContext] save:nil];
 		
@@ -321,7 +322,7 @@ typedef enum {
 		NSFetchRequest *request = [[NSFetchRequest alloc] init];
 		[request setEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
 		[request setFetchBatchSize:20];
-		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"creationTime" ascending:YES];
+		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
 		[request setSortDescriptors:@[sortDescriptor]];
 		[sortDescriptor release], sortDescriptor = nil;
 		
@@ -533,15 +534,15 @@ typedef enum {
 			showDate = YES;
 		}
 	}
-	
+	if ([message isKindOfClass:[ATFakeMessage class]]) {
+		showDate = YES;
+	}
 	
 	if (showDate) {
 		NSTimeInterval t = (NSTimeInterval)[message.creationTime doubleValue];
 		NSDate *date = [NSDate dateWithTimeIntervalSince1970:t];
 		dateString = [messageDateFormatter stringFromDate:date];
 	}
-	NSLog(@"clientCreationTime: %@", [messageDateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[message.clientCreationTime doubleValue]]]);
-	NSLog(@"creationTime: %@", [messageDateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[message.creationTime doubleValue]]]);
 	
 	if (cellType == ATMessageCellTypeText) {
 		ATTextMessageUserCell *textCell = nil;
@@ -641,13 +642,8 @@ typedef enum {
 			
 			currentCell.messageText.text = messageBody;
 		}
-		
-		if (showDate) {
-			currentCell.dateLabel.text = dateString;
-			currentCell.showDateLabel = YES;
-		} else {
-			currentCell.showDateLabel = NO;
-		}
+		currentCell.dateLabel.text = dateString;
+		currentCell.showDateLabel = YES;
 		
 		cell = currentCell;
 	}

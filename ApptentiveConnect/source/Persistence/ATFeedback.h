@@ -12,7 +12,7 @@
 #import <AppKit/AppKit.h>
 #endif
 
-#import "ATRecord.h"
+#import "ATLegacyRecord.h"
 
 typedef enum {
 	ATFeedbackTypeFeedback,
@@ -32,7 +32,7 @@ typedef enum {
 	ATFeedbackImageSourcePhotoLibrary,
 } ATFeedbackImageSource;
 
-@interface ATFeedback : ATRecord <NSCoding> {
+@interface ATFeedback : ATLegacyRecord <NSCoding> {
 @private
 	NSMutableDictionary *extraData;
 	ATFeedbackType type;

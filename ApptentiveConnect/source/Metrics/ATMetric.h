@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ATRecord.h"
+#import "ATLegacyRecord.h"
 
-@interface ATMetric : ATRecord <NSCoding> {
+@interface ATMetric : ATLegacyRecord <NSCoding> {
 @private
 	NSString *name;
 	NSMutableDictionary *info;

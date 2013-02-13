@@ -163,6 +163,7 @@ typedef enum {
 	[textView release];
 	[sendButton release];
 	[attachmentButton release];
+	fetchedMessagesController.delegate = nil;
 	[fetchedMessagesController release], fetchedMessagesController = nil;
 	[_cameraButton release];
 	[_locationButton release];

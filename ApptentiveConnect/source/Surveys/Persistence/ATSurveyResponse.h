@@ -7,11 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ATRecord.h"
+#import "ATLegacyRecord.h"
 
 @class ATSurveyQuestionResponse;
 
-@interface ATSurveyResponse : ATRecord {
+@interface ATSurveyResponse : ATLegacyRecord {
 	NSMutableArray *questionResponses;
 }
 @property (nonatomic, retain) NSString *identifier;

@@ -8,11 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-#import "ATRecord.h"
+#import "ATLegacyRecord.h"
 
 @interface ATDeviceInfo : NSObject {
 @private
-	ATRecord *record;
+	ATLegacyRecord *record;
 }
 
 - (NSDictionary *)apiJSON;

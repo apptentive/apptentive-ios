@@ -16,10 +16,6 @@
 
 @implementation ATMessage
 
-@dynamic apptentiveID;
-@dynamic clientCreationTime;
-@dynamic clientCreationTimezone;
-@dynamic clientCreationUTCOffset;
 @dynamic creationTime;
 @dynamic pendingMessageID;
 @dynamic pendingState;
@@ -61,9 +57,7 @@
 }
 
 - (void)setup {
-	if (self.clientCreationTime == nil || [self.clientCreationTime doubleValue] == 0) {
-		[self updateClientCreationTime];
-	}
+	[super setup];
 	if (self.creationTime == nil || [self.creationTime doubleValue] == 0) {
 		self.creationTime = self.clientCreationTime;
 	}
@@ -79,7 +73,7 @@
 }
 
 - (void)updateClientCreationTime {
-	self.clientCreationTime = [NSNumber numberWithDouble:(double)[[NSDate date] timeIntervalSince1970]];
+	[super updateClientCreationTime];
 	self.creationTime = self.clientCreationTime;
 }
 
@@ -89,15 +83,13 @@
 }
 
 - (void)updateWithJSON:(NSDictionary *)json {
+	[super updateWithJSON:json];
+	
 	NSDictionary *senderDict = [json at_safeObjectForKey:@"sender"];
 	if (senderDict != nil) {
 		ATMessageSender *sender = [ATMessageSender newOrExistingMessageSenderFromJSON:senderDict];
 		[self setValue:sender forKey:@"sender"];
 		[sender release], sender = nil;
-	}
-	NSString *tmpID = [json at_safeObjectForKey:@"id"];
-	if (tmpID != nil) {
-		self.apptentiveID = tmpID;
 	}
 	
 	ATMessageDisplayType *messageCenterType = [ATMessageDisplayType messageCenterType];
@@ -113,7 +105,7 @@
 		NSNumber *creationTimestamp = [NSNumber numberWithFloat:t];
 		self.creationTime = creationTimestamp;
 	}
-	if (self.clientCreationTime == nil && self.creationTime != nil) {
+	if ([self isClientCreationTimeEmpty] && self.creationTime != nil) {
 		self.clientCreationTime = self.creationTime;
 	}
 	
@@ -138,29 +130,14 @@
 	}
 }
 
-+ (NSTimeInterval)timeIntervalForServerTime:(NSNumber *)timestamp {
-	long long serverTimestamp = [timestamp longLongValue];
-	NSTimeInterval clientTimestamp = ((double)serverTimestamp)/1000.0;
-	return clientTimestamp;
-}
-
-+ (NSNumber *)serverFormatForTimeInterval:(NSTimeInterval)timestamp {
-	return @((long long)(timestamp * 1000));
-}
-
 - (NSDictionary *)apiJSON {
+	NSDictionary *parentJSON = [super apiJSON];
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
+	if (parentJSON) {
+		[result addEntriesFromDictionary:parentJSON];
+	}
 	if (self.pendingMessageID != nil) {
 		result[@"nonce"] = self.pendingMessageID;
-	}
-	if (self.clientCreationTime != nil) {
-		result[@"client_created_at"] = [ATMessage serverFormatForTimeInterval:(NSTimeInterval)[self.clientCreationTime doubleValue]];
-	}
-	if (self.clientCreationTimezone != nil) {
-		result[@"client_created_at_timezone"] = self.clientCreationTimezone;
-	}
-	if (self.clientCreationUTCOffset != nil) {
-		result[@"client_created_at_utc_offset"] = self.clientCreationUTCOffset;
 	}
 	return result;
 }

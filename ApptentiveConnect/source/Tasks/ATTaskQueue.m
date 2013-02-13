@@ -9,6 +9,7 @@
 #import "ATTaskQueue.h"
 #import "ATBackend.h"
 #import "ATTask.h"
+#import "ATLegacyRecord.h"
 
 #define kATTaskQueueCodingVersion 1
 // Retry period in seconds.
@@ -40,7 +41,16 @@ static ATTaskQueue *sharedTaskQueue = nil;
 	@synchronized(self) {
 		if (sharedTaskQueue == nil) {
 			if ([ATTaskQueue serializedQueueExists]) {
-				sharedTaskQueue = [[NSKeyedUnarchiver unarchiveObjectWithFile:[ATTaskQueue taskQueuePath]] retain];
+				NSError *error = nil;
+				NSData *data = [NSData dataWithContentsOfFile:[ATTaskQueue taskQueuePath] options:NSDataReadingMapped error:&error];
+				if (!data) {
+					NSLog(@"Unable to unarchive task queue: %@", error);
+				} else {
+					NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+					[unarchiver setClass:[ATLegacyRecord class] forClassName:@"ATRecord"];
+					sharedTaskQueue = [[unarchiver decodeObjectForKey:@"root"] retain];
+					[unarchiver release], unarchiver = nil;
+				}
 			}
 			if (!sharedTaskQueue) {
 				sharedTaskQueue = [[ATTaskQueue alloc] init];

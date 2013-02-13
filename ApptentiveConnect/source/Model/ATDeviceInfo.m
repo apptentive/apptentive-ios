@@ -13,7 +13,7 @@
 @implementation ATDeviceInfo
 - (id)init {
 	if ((self = [super init])) {
-		record = [[ATRecord alloc] init];
+		record = [[ATLegacyRecord alloc] init];
 	}
 	return self;
 }

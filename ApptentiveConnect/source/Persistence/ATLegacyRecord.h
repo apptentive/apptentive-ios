@@ -10,7 +10,7 @@
 
 @class ATAPIRequest;
 
-@interface ATRecord : NSObject <NSCoding> {
+@interface ATLegacyRecord : NSObject <NSCoding> {
 @private
 	NSString *uuid;
 	NSString *model;

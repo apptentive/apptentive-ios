@@ -16,7 +16,6 @@
 
 @implementation ATMessage
 
-@dynamic creationTime;
 @dynamic pendingMessageID;
 @dynamic pendingState;
 @dynamic priority;
@@ -58,9 +57,6 @@
 
 - (void)setup {
 	[super setup];
-	if (self.creationTime == nil || [self.creationTime doubleValue] == 0) {
-		self.creationTime = self.clientCreationTime;
-	}
 	if (self.pendingMessageID == nil) {
 		CFUUIDRef uuidRef = CFUUIDCreate(NULL);
 		CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
@@ -70,11 +66,6 @@
 		CFRelease(uuidRef), uuidRef = NULL;
 		CFRelease(uuidStringRef), uuidStringRef = NULL;
 	}
-}
-
-- (void)updateClientCreationTime {
-	[super updateClientCreationTime];
-	self.creationTime = self.clientCreationTime;
 }
 
 - (void)awakeFromInsert {
@@ -94,20 +85,6 @@
 	
 	ATMessageDisplayType *messageCenterType = [ATMessageDisplayType messageCenterType];
 	ATMessageDisplayType *modalType = [ATMessageDisplayType modalType];
-	
-	NSObject *createdAt = [json at_safeObjectForKey:@"created_at"];
-	if ([createdAt isKindOfClass:[NSNumber class]]) {
-		NSTimeInterval creationTimestamp = [ATMessage timeIntervalForServerTime:(NSNumber *)createdAt];
-		self.creationTime = @(creationTimestamp);
-	} else if ([createdAt isKindOfClass:[NSDate class]]) {
-		NSDate *creationDate = (NSDate *)createdAt;
-		NSTimeInterval t = [creationDate timeIntervalSince1970];
-		NSNumber *creationTimestamp = [NSNumber numberWithFloat:t];
-		self.creationTime = creationTimestamp;
-	}
-	if ([self isClientCreationTimeEmpty] && self.creationTime != nil) {
-		self.clientCreationTime = self.creationTime;
-	}
 	
 	NSNumber *priorityNumber = [json at_safeObjectForKey:@"priority"];
 	if (priorityNumber != nil) {

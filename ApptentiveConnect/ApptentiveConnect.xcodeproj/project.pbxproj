@@ -228,6 +228,8 @@
 		49F8AFF816CC4A5D0070FFEA /* ATDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFD116CC4A550070FFEA /* ATDataModel.xcdatamodeld */; };
 		49F8AFFB16CC4D860070FFEA /* ATRecord.h in Headers */ = {isa = PBXBuildFile; fileRef = 49F8AFF916CC4D860070FFEA /* ATRecord.h */; };
 		49F8AFFC16CC4D860070FFEA /* ATRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFFA16CC4D860070FFEA /* ATRecord.m */; };
+		49F8AFFF16CC56580070FFEA /* ATEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 49F8AFFD16CC56570070FFEA /* ATEvent.h */; };
+		49F8B00016CC56580070FFEA /* ATEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFFE16CC56570070FFEA /* ATEvent.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -433,6 +435,8 @@
 		49F8AFE216CC4A550070FFEA /* ATUpgradeRequestMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATUpgradeRequestMessage.m; sourceTree = "<group>"; };
 		49F8AFF916CC4D860070FFEA /* ATRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATRecord.h; sourceTree = "<group>"; };
 		49F8AFFA16CC4D860070FFEA /* ATRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATRecord.m; sourceTree = "<group>"; };
+		49F8AFFD16CC56570070FFEA /* ATEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATEvent.h; sourceTree = "<group>"; };
+		49F8AFFE16CC56570070FFEA /* ATEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATEvent.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -900,6 +904,8 @@
 				49F8AFD016CC4A550070FFEA /* ATData.m */,
 				49F8AFD316CC4A550070FFEA /* ATDeviceInfo.h */,
 				49F8AFD416CC4A550070FFEA /* ATDeviceInfo.m */,
+				49F8AFFD16CC56570070FFEA /* ATEvent.h */,
+				49F8AFFE16CC56570070FFEA /* ATEvent.m */,
 				49F8AFD516CC4A550070FFEA /* ATFakeMessage.h */,
 				49F8AFD616CC4A550070FFEA /* ATFakeMessage.m */,
 				49F8AFD716CC4A550070FFEA /* ATMessage.h */,
@@ -1004,6 +1010,7 @@
 				49F8AFF416CC4A550070FFEA /* ATTextMessage.h in Headers */,
 				49F8AFF616CC4A550070FFEA /* ATUpgradeRequestMessage.h in Headers */,
 				49F8AFFB16CC4D860070FFEA /* ATRecord.h in Headers */,
+				49F8AFFF16CC56580070FFEA /* ATEvent.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1233,6 +1240,7 @@
 				49F8AFF516CC4A550070FFEA /* ATTextMessage.m in Sources */,
 				49F8AFF716CC4A550070FFEA /* ATUpgradeRequestMessage.m in Sources */,
 				49F8AFFC16CC4D860070FFEA /* ATRecord.m in Sources */,
+				49F8B00016CC56580070FFEA /* ATEvent.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

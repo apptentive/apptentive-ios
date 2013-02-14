@@ -22,7 +22,6 @@ typedef enum {
 
 @interface ATMessage : ATRecord <ATJSONModel>
 
-@property (nonatomic, retain) NSNumber *creationTime;
 @property (nonatomic, retain) NSString *pendingMessageID;
 @property (nonatomic, retain) NSNumber *pendingState;
 @property (nonatomic, retain) NSNumber *priority;

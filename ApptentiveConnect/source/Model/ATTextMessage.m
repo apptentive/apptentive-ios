@@ -29,6 +29,9 @@
 		message = [[ATTextMessage alloc] initWithEntity:[NSEntityDescription entityForName:@"ATTextMessage" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
 	}
 	[message updateWithJSON:json];
+	if (![message isCreationTimeEmpty]) {
+		message.clientCreationTime = message.creationTime;
+	}
 	return message;
 }
 

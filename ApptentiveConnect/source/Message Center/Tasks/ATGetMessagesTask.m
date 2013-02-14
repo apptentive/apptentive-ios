@@ -137,6 +137,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 - (BOOL)processResult:(NSDictionary *)jsonMessages {
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
 	NSString *lastMessageID = nil;
+	NSLog(@"messages: %@", jsonMessages);
 	
 	do { // once
 		if (!jsonMessages) break;

@@ -13,10 +13,10 @@
 @implementation ATRecord
 
 @dynamic apptentiveID;
+@dynamic creationTime;
 @dynamic clientCreationTime;
 @dynamic clientCreationTimezone;
 @dynamic clientCreationUTCOffset;
-
 
 + (NSTimeInterval)timeIntervalForServerTime:(NSNumber *)timestamp {
 	long long serverTimestamp = [timestamp longLongValue];
@@ -28,7 +28,6 @@
 	return @((long long)(timestamp * 1000));
 }
 
-
 + (NSObject *)newInstanceWithJSON:(NSDictionary *)json {
 	NSAssert(NO, @"Abstract method called.");
 	return nil;
@@ -38,6 +37,20 @@
 	NSString *tmpID = [json at_safeObjectForKey:@"id"];
 	if (tmpID != nil) {
 		self.apptentiveID = tmpID;
+	}
+	
+	NSObject *createdAt = [json at_safeObjectForKey:@"created_at"];
+	if ([createdAt isKindOfClass:[NSNumber class]]) {
+		NSTimeInterval creationTimestamp = [ATRecord timeIntervalForServerTime:(NSNumber *)createdAt];
+		self.creationTime = @(creationTimestamp);
+	} else if ([createdAt isKindOfClass:[NSDate class]]) {
+		NSDate *creationDate = (NSDate *)createdAt;
+		NSTimeInterval t = [creationDate timeIntervalSince1970];
+		NSNumber *creationTimestamp = [NSNumber numberWithFloat:t];
+		self.creationTime = creationTimestamp;
+	}
+	if ([self isClientCreationTimeEmpty] && self.creationTime != nil) {
+		self.clientCreationTime = self.creationTime;
 	}
 }
 
@@ -59,14 +72,25 @@
 	if ([self isClientCreationTimeEmpty]) {
 		[self updateClientCreationTime];
 	}
+	if ([self isCreationTimeEmpty]) {
+		self.creationTime = self.clientCreationTime;
+	}
 }
 
 - (void)updateClientCreationTime {
 	self.clientCreationTime = [NSNumber numberWithDouble:(double)[[NSDate date] timeIntervalSince1970]];
+	self.creationTime = self.clientCreationTime;
 }
 
 - (BOOL)isClientCreationTimeEmpty {
 	if (self.clientCreationTime == nil || [self.clientCreationTime doubleValue] == 0) {
+		return YES;
+	}
+	return NO;
+}
+
+- (BOOL)isCreationTimeEmpty {
+	if (self.creationTime == nil || [self.creationTime doubleValue] == 0) {
 		return YES;
 	}
 	return NO;

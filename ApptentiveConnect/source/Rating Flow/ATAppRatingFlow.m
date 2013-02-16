@@ -653,7 +653,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 		}
 	}
 	if (window && [window respondsToSelector:@selector(rootViewController)]) {
-		return [window rootViewController];
+		return [[window rootViewController] presentedViewController];
 	} else {
 		return nil;
 	}

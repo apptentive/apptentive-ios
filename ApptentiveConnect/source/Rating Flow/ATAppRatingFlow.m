@@ -677,7 +677,14 @@ NSString *const ATAppRatingFlowUserAgreedToRateAppNotification = @"ATAppRatingFl
 		}
 	}
 	if (window && [window respondsToSelector:@selector(rootViewController)]) {
-		return [window rootViewController];
+		UIViewController *vc = [window rootViewController];
+		if ([vc respondsToSelector:@selector(presentedViewController)] && [vc presentedViewController]) {
+			return [vc presentedViewController];
+		}
+		if ([vc respondsToSelector:@selector(modalViewController)] && [vc modalViewController]) {
+			return [vc modalViewController];
+		}
+		return vc;
 	} else {
 		return nil;
 	}

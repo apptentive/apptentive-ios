@@ -14,6 +14,8 @@
 #import "ATConnect.h"
 #import "ATData.h"
 #import "ATFakeMessage.h"
+#import "ATFileAttachment.h"
+#import "ATFileMessage.h"
 #import "ATLog.h"
 #import "ATMessage.h"
 #import "ATMessageCenterCell.h"
@@ -27,7 +29,8 @@
 typedef enum {
 	ATMessageCellTypeUnknown,
 	ATMessageCellTypeFake,
-	ATMessageCellTypeText
+	ATMessageCellTypeText,
+	ATMessageCellTypeFile
 } ATMessageCellType;
 
 #define TextViewPadding 2
@@ -56,7 +59,7 @@ typedef enum {
 	UIImage *pickedImage;
 }
 @synthesize tableView, containerView, composerView, composerBackgroundView, attachmentButton, textView, sendButton, attachmentView, fakeCell;
-@synthesize userCell, developerCell;
+@synthesize userCell, developerCell, userFileMessageCell;
 
 - (id)init {
 	self = [super initWithNibName:@"ATMessageCenterViewController" bundle:[ATConnect resourceBundle]];
@@ -469,7 +472,34 @@ typedef enum {
 #pragma mark UIActionSheetDelegate
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
 	if (buttonIndex == 0) {
-		ATLogDebug(@"picked button 0");
+		if (pickedImage) {
+			@synchronized(self) {
+				ATFileMessage *fileMessage = (ATFileMessage *)[ATData newEntityNamed:@"ATFileMessage"];
+				ATFileAttachment *fileAttachment = (ATFileAttachment *)[ATData newEntityNamed:@"ATFileAttachment"];
+				fileMessage.pendingState = @(ATPendingMessageStateSending);
+				fileMessage.sentByUser = @(YES);
+				[fileMessage updateClientCreationTime];
+				fileMessage.fileAttachment = fileAttachment;
+				
+				[fileAttachment setFileData:UIImageJPEGRepresentation(pickedImage, 1.0)];
+				[fileAttachment setMimeType:@"image/jpeg"];
+				
+				[[[ATBackend sharedBackend] managedObjectContext] save:nil];
+				
+				// Give it a wee bit o' delay.
+				NSString *pendingMessageID = [fileMessage pendingMessageID];
+				dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
+					ATMessageTask *task = [[ATMessageTask alloc] init];
+					task.pendingMessageID = pendingMessageID;
+					[[ATTaskQueue sharedTaskQueue] addTask:task];
+					[[ATTaskQueue sharedTaskQueue] start];
+					[task release], task = nil;
+				});
+				[fileMessage release], fileMessage = nil;
+				[fileAttachment release], fileAttachment = nil;
+			}
+
+		}
 	} else if (buttonIndex == 1) {
 		[pickedImage release], pickedImage = nil;
 	}
@@ -512,6 +542,7 @@ typedef enum {
 	static NSString *FakeCellIdentifier = @"ATFakeMessageCell";
 	static NSString *UserCellIdentifier = @"ATTextMessageUserCell";
 	static NSString *DevCellIdentifier = @"ATTextMessageDevCell";
+	static NSString *FileCellIdentifier = @"ATFileMessageCell";
 	
 	ATMessageCellType cellType = ATMessageCellTypeUnknown;
 	
@@ -522,6 +553,10 @@ typedef enum {
 		cellType = ATMessageCellTypeFake;
 	} else if ([message isKindOfClass:[ATTextMessage class]]) {
 		cellType = ATMessageCellTypeText;
+	} else if ([message isKindOfClass:[ATFileMessage class]]) {
+		cellType = ATMessageCellTypeFile;
+	} else {
+		NSAssert(NO, @"Unknown cell type");
 	}
 	
 	BOOL showDate = NO;
@@ -646,6 +681,30 @@ typedef enum {
 		currentCell.dateLabel.text = dateString;
 		currentCell.showDateLabel = YES;
 		
+		cell = currentCell;
+	} else if (cellType == ATMessageCellTypeFile) {
+		ATFileMessageCell *currentCell = (ATFileMessageCell *)[tableView dequeueReusableCellWithIdentifier:FileCellIdentifier];
+		
+		if (!currentCell) {
+			UINib *nib = [UINib nibWithNibName:@"ATFileMessageCell" bundle:[ATConnect resourceBundle]];
+			[nib instantiateWithOwner:self options:nil];
+			currentCell = userFileMessageCell;
+			[[currentCell retain] autorelease];
+			[userFileMessageCell release], userFileMessageCell = nil;
+			
+			currentCell.selectionStyle = UITableViewCellSelectionStyleNone;
+		}
+		if ([message isKindOfClass:[ATFileMessage class]]) {
+			ATFileMessage *fileMessage = (ATFileMessage *)message;
+			[currentCell configureWithFileMessage:fileMessage];
+		}
+		
+		if (showDate) {
+			currentCell.dateLabel.text = dateString;
+			currentCell.showDateLabel = YES;
+		} else {
+			currentCell.showDateLabel = NO;
+		}
 		cell = currentCell;
 	}
 	return cell;

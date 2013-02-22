@@ -247,6 +247,90 @@ static ATWebClient *sharedSingleton = nil;
 	return [conn autorelease];
 }
 
+- (ATURLConnection *)connectionToPost:(NSURL *)theURL JSON:(NSString *)body withFile:(NSString *)path ofMimeType:(NSString *)mimeType {
+	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL];
+	[self addAPIHeaders:conn];
+	[conn setHTTPMethod:@"POST"];
+	
+	NSFileManager *fm = [NSFileManager defaultManager];
+	NSURL *pathURL = [NSURL fileURLWithPath:path isDirectory:NO];
+		
+	// Figure out boundary string.
+	NSString *boundary = nil;
+	while (YES) {
+		boundary = [ATUtilities randomStringOfLength:20];
+		NSData *boundaryData = [boundary dataUsingEncoding:NSUTF8StringEncoding];
+		BOOL found = NO;
+		
+		if (body) {
+			NSRange range = [body rangeOfString:boundary];
+			if (range.location != NSNotFound) {
+				found = YES;
+				break;
+			}
+		}
+		if (path && [fm fileExistsAtPath:path]) {
+			NSError *error = nil;
+			NSData *d = [NSData dataWithContentsOfURL:pathURL options:NSDataReadingMappedIfSafe error:&error];
+			if (!d) {
+				NSLog(@"Unable to get contents of file path for uploading: %@", error);
+				// This is probably unrecoverable.
+				goto fail;
+			}
+			NSRange range = [d rangeOfData:boundaryData options:0 range:NSMakeRange(0, [d length])];
+			if (range.location != NSNotFound) {
+				found = YES;
+				break;
+			}
+		}
+		if (!found) {
+			break;
+		}
+	}
+	
+	NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; charset=utf-8; boundary=%@", boundary];
+	[conn setValue:contentType forHTTPHeaderField:@"Content-Type"];
+	
+	
+	NSMutableData *multipartEncodedData = [NSMutableData data];
+	[multipartEncodedData appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+	if (body) {
+		[multipartEncodedData appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+		[multipartEncodedData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", @"message"] dataUsingEncoding:NSUTF8StringEncoding]];
+		[multipartEncodedData appendData:[[NSString stringWithFormat:@"Content-Type: %@\r\n", @"application/json"] dataUsingEncoding:NSUTF8StringEncoding]];
+		[multipartEncodedData appendData:[(NSString *)body dataUsingEncoding:NSUTF8StringEncoding]];
+	}
+	[multipartEncodedData appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+	if (path && [fm fileExistsAtPath:path]) {
+		NSError *error = nil;
+		NSData *d = [NSData dataWithContentsOfURL:pathURL options:NSDataReadingMappedIfSafe error:&error];
+		if (!d) {
+			NSLog(@"Unable to get contents of file path for uploading: %@", error);
+			// This is probably unrecoverable.
+			goto fail;
+		}
+		NSString *filename = [path lastPathComponent];
+		[multipartEncodedData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", @"file", filename] dataUsingEncoding:NSUTF8StringEncoding]];
+		[multipartEncodedData appendData:[[NSString stringWithFormat:@"Content-Type: %@\r\n", mimeType] dataUsingEncoding:NSUTF8StringEncoding]];
+		[multipartEncodedData appendData:[@"Content-Transfer-Encoding: binary\r\n\r\n" dataUsingEncoding:NSASCIIStringEncoding]];
+		[multipartEncodedData appendData:d];
+	}
+	[multipartEncodedData appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+	[conn setHTTPBody:multipartEncodedData];
+	
+	// Debugging helpers:
+	/*
+	 NSLog(@"wtf parameters: %@", parameters);
+	 NSLog(@"-length: %d", [multipartEncodedData length]);
+	 NSLog(@"-data: %@", [NSString stringWithUTF8String:[multipartEncodedData bytes]]);
+	 */
+	return [conn autorelease];
+
+fail:
+	[conn release], conn = nil;
+	return nil;
+}
+
 - (ATURLConnection *)connectionToPut:(NSURL *)theURL JSON:(NSString *)body {
 	ATURLConnection *conn = [self connectionToPost:theURL JSON:body];
 	[conn setHTTPMethod:@"PUT"];

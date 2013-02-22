@@ -30,6 +30,16 @@
 		491748C11341177000A7D11E /* ATWebClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 491748B91341177000A7D11E /* ATWebClient.m */; };
 		491E03CE163F261C00DC3E18 /* ATLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 491E03CC163F261C00DC3E18 /* ATLog.h */; };
 		491E03D91640D01F00DC3E18 /* ATFeedbackTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 491E03D81640D01F00DC3E18 /* ATFeedbackTypes.h */; };
+		492B81D516D595740031BEF6 /* ATFileMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 492B81D316D595740031BEF6 /* ATFileMessage.h */; };
+		492B81D616D595740031BEF6 /* ATFileMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 492B81D416D595740031BEF6 /* ATFileMessage.m */; };
+		492B81D716D595740031BEF6 /* ATFileMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 492B81D416D595740031BEF6 /* ATFileMessage.m */; };
+		492B81DA16D595A00031BEF6 /* ATFileAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = 492B81D816D595A00031BEF6 /* ATFileAttachment.h */; };
+		492B81DB16D595A00031BEF6 /* ATFileAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 492B81D916D595A00031BEF6 /* ATFileAttachment.m */; };
+		492B81DC16D595A00031BEF6 /* ATFileAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 492B81D916D595A00031BEF6 /* ATFileAttachment.m */; };
+		492B81E416D5C8AD0031BEF6 /* ATFileMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 492B81E216D5C8AC0031BEF6 /* ATFileMessageCell.h */; };
+		492B81E516D5C8AD0031BEF6 /* ATFileMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 492B81E316D5C8AC0031BEF6 /* ATFileMessageCell.m */; };
+		492B81E616D5C8AD0031BEF6 /* ATFileMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 492B81E316D5C8AC0031BEF6 /* ATFileMessageCell.m */; };
+		492B81E816D5C8E20031BEF6 /* ATFileMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 492B81E716D5C8E20031BEF6 /* ATFileMessageCell.xib */; };
 		493529FF138C7253000E464A /* ATInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA1022138B498C0082887A /* ATInfoViewController.xib */; };
 		49352A00138C7257000E464A /* ATInfoViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA1024138B49A50082887A /* ATInfoViewController_iPad.xib */; };
 		49352A20138C73B8000E464A /* ATAboutApptentiveView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49352A1F138C73B8000E464A /* ATAboutApptentiveView.xib */; };
@@ -270,6 +280,13 @@
 		491748B91341177000A7D11E /* ATWebClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATWebClient.m; sourceTree = "<group>"; };
 		491E03CC163F261C00DC3E18 /* ATLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATLog.h; sourceTree = "<group>"; };
 		491E03D81640D01F00DC3E18 /* ATFeedbackTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATFeedbackTypes.h; sourceTree = "<group>"; };
+		492B81D316D595740031BEF6 /* ATFileMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATFileMessage.h; sourceTree = "<group>"; };
+		492B81D416D595740031BEF6 /* ATFileMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATFileMessage.m; sourceTree = "<group>"; };
+		492B81D816D595A00031BEF6 /* ATFileAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATFileAttachment.h; sourceTree = "<group>"; };
+		492B81D916D595A00031BEF6 /* ATFileAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATFileAttachment.m; sourceTree = "<group>"; };
+		492B81E216D5C8AC0031BEF6 /* ATFileMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATFileMessageCell.h; path = "Message Center/ATFileMessageCell.h"; sourceTree = "<group>"; };
+		492B81E316D5C8AC0031BEF6 /* ATFileMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATFileMessageCell.m; path = "Message Center/ATFileMessageCell.m"; sourceTree = "<group>"; };
+		492B81E716D5C8E20031BEF6 /* ATFileMessageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ATFileMessageCell.xib; path = xibs/ATFileMessageCell.xib; sourceTree = SOURCE_ROOT; };
 		49352A1F138C73B8000E464A /* ATAboutApptentiveView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ATAboutApptentiveView.xib; sourceTree = "<group>"; };
 		49352AC1138C97A2000E464A /* ATAPIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAPIRequest.h; sourceTree = "<group>"; };
 		49352AC2138C97A2000E464A /* ATAPIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAPIRequest.m; sourceTree = "<group>"; };
@@ -739,13 +756,16 @@
 				4999128216165BD400FDA15F /* ATMessageCenterViewController.h */,
 				4999128316165BD400FDA15F /* ATMessageCenterViewController.m */,
 				4999128716165BF200FDA15F /* ATMessageCenterViewController.xib */,
+				4967273916B8A41400C679B8 /* ATMessageCenterCell.h */,
 				490B24A51624B70D0055B812 /* ATTextMessageUserCell.h */,
 				490B24A61624B70D0055B812 /* ATTextMessageUserCell.m */,
 				490B24A21624B6D50055B812 /* ATTextMessageUserCell.xib */,
 				49AF27CD16321F0C005E1E9D /* ATFakeMessageCell.h */,
 				49AF27CE16321F0C005E1E9D /* ATFakeMessageCell.m */,
 				49AF27D116321F21005E1E9D /* ATFakeMessageCell.xib */,
-				4967273916B8A41400C679B8 /* ATMessageCenterCell.h */,
+				492B81E216D5C8AC0031BEF6 /* ATFileMessageCell.h */,
+				492B81E316D5C8AC0031BEF6 /* ATFileMessageCell.m */,
+				492B81E716D5C8E20031BEF6 /* ATFileMessageCell.xib */,
 			);
 			name = "Message Center";
 			sourceTree = "<group>";
@@ -908,6 +928,10 @@
 				49F8AFFE16CC56570070FFEA /* ATEvent.m */,
 				49F8AFD516CC4A550070FFEA /* ATFakeMessage.h */,
 				49F8AFD616CC4A550070FFEA /* ATFakeMessage.m */,
+				492B81D816D595A00031BEF6 /* ATFileAttachment.h */,
+				492B81D916D595A00031BEF6 /* ATFileAttachment.m */,
+				492B81D316D595740031BEF6 /* ATFileMessage.h */,
+				492B81D416D595740031BEF6 /* ATFileMessage.m */,
 				49F8AFD716CC4A550070FFEA /* ATMessage.h */,
 				49F8AFD816CC4A550070FFEA /* ATMessage.m */,
 				49F8AFD916CC4A550070FFEA /* ATMessageDisplayType.h */,
@@ -1011,6 +1035,9 @@
 				49F8AFF616CC4A550070FFEA /* ATUpgradeRequestMessage.h in Headers */,
 				49F8AFFB16CC4D860070FFEA /* ATRecord.h in Headers */,
 				49F8AFFF16CC56580070FFEA /* ATEvent.h in Headers */,
+				492B81D516D595740031BEF6 /* ATFileMessage.h in Headers */,
+				492B81DA16D595A00031BEF6 /* ATFileAttachment.h in Headers */,
+				492B81E416D5C8AD0031BEF6 /* ATFileMessageCell.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1131,6 +1158,7 @@
 				490B24A31624B6D50055B812 /* ATTextMessageUserCell.xib in Resources */,
 				49AF27D216321F27005E1E9D /* ATFakeMessageCell.xib in Resources */,
 				4967278416B9FE6400C679B8 /* Info.plist in Resources */,
+				492B81E816D5C8E20031BEF6 /* ATFileMessageCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1241,6 +1269,9 @@
 				49F8AFF716CC4A550070FFEA /* ATUpgradeRequestMessage.m in Sources */,
 				49F8AFFC16CC4D860070FFEA /* ATRecord.m in Sources */,
 				49F8B00016CC56580070FFEA /* ATEvent.m in Sources */,
+				492B81D616D595740031BEF6 /* ATFileMessage.m in Sources */,
+				492B81DB16D595A00031BEF6 /* ATFileAttachment.m in Sources */,
+				492B81E516D5C8AD0031BEF6 /* ATFileMessageCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1289,6 +1320,9 @@
 				499B56CC15D305880063C23C /* PJSONKit.m in Sources */,
 				49AC178416C0987400BE1615 /* ATActivityFeedUpdater.m in Sources */,
 				49E6208916C5E8C2000C9F5A /* NSDictionary+ATAdditions.m in Sources */,
+				492B81D716D595740031BEF6 /* ATFileMessage.m in Sources */,
+				492B81DC16D595A00031BEF6 /* ATFileAttachment.m in Sources */,
+				492B81E616D5C8AD0031BEF6 /* ATFileMessageCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

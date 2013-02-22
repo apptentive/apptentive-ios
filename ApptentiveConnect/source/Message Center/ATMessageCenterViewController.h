@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 #import "ATFakeMessageCell.h"
+#import "ATFileMessageCell.h"
 #import "ATResizingTextView.h"
 #import "ATSimpleImageViewController.h"
 #import "ATTextMessageUserCell.h"
@@ -29,6 +30,7 @@
 @property (retain, nonatomic) IBOutlet ATFakeMessageCell *fakeCell;
 @property (retain, nonatomic) IBOutlet ATTextMessageUserCell *userCell;
 @property (retain, nonatomic) IBOutlet ATTextMessageUserCell *developerCell;
+@property (retain, nonatomic) IBOutlet ATFileMessageCell *userFileMessageCell;
 
 - (IBAction)donePressed:(id)sender;
 - (IBAction)sendPressed:(id)sender;

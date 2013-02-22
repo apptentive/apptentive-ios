@@ -8,7 +8,7 @@
         <attribute name="body" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="subject" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="ATFileAttachment" syncable="YES">
+    <entity name="ATFileAttachment" representedClassName="ATFileAttachment" syncable="YES">
         <attribute name="localPath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="mimeType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -16,7 +16,7 @@
         <attribute name="userVisible" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
         <relationship name="fileMessage" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="ATFileMessage" inverseName="fileAttachment" inverseEntity="ATFileMessage" syncable="YES"/>
     </entity>
-    <entity name="ATFileMessage" parentEntity="ATMessage" syncable="YES">
+    <entity name="ATFileMessage" representedClassName="ATFileMessage" parentEntity="ATMessage" syncable="YES">
         <relationship name="fileAttachment" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="ATFileAttachment" inverseName="fileMessage" inverseEntity="ATFileAttachment" syncable="YES"/>
     </entity>
     <entity name="ATMessage" representedClassName="ATMessage" isAbstract="YES" parentEntity="ATRecord" syncable="YES">

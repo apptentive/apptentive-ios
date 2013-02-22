@@ -26,6 +26,7 @@
 	NSMutableDictionary *headers;
 	NSString *HTTPMethod;
 	NSData *HTTPBody;
+	NSInputStream *HTTPBodyStream;
 	
 	int statusCode;
 	BOOL failedAuthentication;
@@ -54,6 +55,7 @@
 - (void)removeHTTPHeaderField:(NSString *)field;
 - (void)setHTTPMethod:(NSString *)method;
 - (void)setHTTPBody:(NSData *)body;
+- (void)setHTTPBodyStream:(NSInputStream *)HTTPBodyStream;
 
 - (void)start;
 

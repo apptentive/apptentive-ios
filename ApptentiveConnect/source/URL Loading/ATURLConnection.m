@@ -89,6 +89,13 @@
 	}
 }
 
+- (void)setHTTPBodyStream:(NSInputStream *)stream {
+	if (HTTPBodyStream != stream) {
+		[HTTPBodyStream release];
+		HTTPBodyStream = [stream retain];
+	}
+}
+
 - (void)start {
 	@synchronized (self) {
 		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -113,6 +120,8 @@
 			}
 			if (HTTPBody) {
 				[request setHTTPBody:HTTPBody];
+			} else if (HTTPBodyStream) {
+				[request setHTTPBodyStream:HTTPBodyStream];
 			}
 			self.connection = [[[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO] autorelease];
 			[self.connection scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
@@ -296,7 +305,8 @@
 		
 		[headers release];
 		[HTTPMethod release];
-		[HTTPBody release];
+		[HTTPBody release], HTTPBody = nil;
+		[HTTPBodyStream release], HTTPBodyStream = nil;
 	}
 	[super dealloc];
 }
@@ -316,6 +326,8 @@
 		} else {
 			[result appendFormat:@"<Data of length:%ld>", (long)[HTTPBody length]];
 		}
+	} else if (HTTPBodyStream) {
+		[result appendString:@"<NSInputStream>"];
 	}
 	return result;
 }

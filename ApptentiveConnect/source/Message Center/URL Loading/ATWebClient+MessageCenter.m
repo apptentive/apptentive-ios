@@ -10,6 +10,8 @@
 
 #import "ATAPIRequest.h"
 #import "ATBackend.h"
+#import "ATFileMessage.h"
+#import "ATFileAttachment.h"
 #import "ATURLConnection.h"
 #import "ATWebClient_Private.h"
 
@@ -78,9 +80,22 @@
 		return nil;
 	}
 	NSString *path = @"messages";
-	NSString *url = [self apiURLStringWithPath:path];
+	NSString *urlString = [self apiURLStringWithPath:path];
 	
-	ATURLConnection *conn = [self connectionToPost:[NSURL URLWithString:url] JSON:postString];
+	ATURLConnection *conn = nil;
+	NSURL *url = [NSURL URLWithString:urlString];
+	
+	if ([message isKindOfClass:[ATFileMessage class]]) {
+		ATFileMessage *fileMessage = (ATFileMessage *)message;
+		ATFileAttachment *fileAttachment = fileMessage.fileAttachment;
+		if (!fileAttachment) {
+			NSLog(@"Expected file attachment on message");
+			return nil;
+		}
+		conn = [self connectionToPost:url JSON:postString withFile:fileAttachment.localPath ofMimeType:fileAttachment.mimeType];
+	} else {
+		conn = [self connectionToPost:url JSON:postString];
+	}
 	conn.timeoutInterval = 60.0;
 	[self updateConnection:conn withOAuthToken:feed.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];

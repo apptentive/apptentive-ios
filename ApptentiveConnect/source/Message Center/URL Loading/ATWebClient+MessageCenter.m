@@ -33,7 +33,7 @@
 		NSLog(@"ATWebClient+MessageCenter: Error while encoding JSON: %@", error);
 		return nil;
 	}
-	NSString *url = [self apiURLStringWithPath:@"activity_feed"];
+	NSString *url = [self apiURLStringWithPath:@"conversation"];
 	ATURLConnection *conn = nil;
 	
 	conn = [self connectionToPost:[NSURL URLWithString:url] JSON:postString];
@@ -66,7 +66,12 @@
 - (ATAPIRequest *)requestForPostingMessage:(ATMessage *)message {
 	NSError *error = nil;
 	NSDictionary *messageJSON = [message apiJSON];
-	NSDictionary *postJSON = @{@"message":messageJSON};
+	NSDictionary *postJSON = nil;
+	if ([message isKindOfClass:[ATFileMessage class]]) {
+		postJSON = messageJSON;
+	} else {
+		postJSON = @{@"message":messageJSON};
+	}
 	
 	NSString *postString = [postJSON ATJSONStringWithOptions:ATJKSerializeOptionPretty error:&error];
 	if (!postString && error != nil) {
@@ -92,7 +97,7 @@
 			NSLog(@"Expected file attachment on message");
 			return nil;
 		}
-		conn = [self connectionToPost:url JSON:postString withFile:fileAttachment.localPath ofMimeType:fileAttachment.mimeType];
+		conn = [self connectionToPost:url JSON:postString withFile:[fileAttachment fullLocalPath] ofMimeType:fileAttachment.mimeType];
 	} else {
 		conn = [self connectionToPost:url JSON:postString];
 	}
@@ -115,7 +120,7 @@
 		return nil;
 	}
 	
-	NSString *path = @"activity_feed";
+	NSString *path = @"conversation";
 	if (parameters) {
 		NSString *paramString = [self stringForParameters:parameters];
 		path = [NSString stringWithFormat:@"%@?%@", path, paramString];

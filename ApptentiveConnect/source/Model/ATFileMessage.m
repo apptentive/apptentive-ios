@@ -13,4 +13,16 @@
 
 @dynamic fileAttachment;
 
+
+- (NSDictionary *)apiJSON {
+	NSDictionary *messageJSON = [super apiJSON];
+	NSMutableDictionary *result = [NSMutableDictionary dictionaryWithDictionary:messageJSON];
+	
+	result[@"type"] = @"FileMessage";
+	if (self.fileAttachment && self.fileAttachment.mimeType) {
+		result[@"mime_type"] = self.fileAttachment.mimeType;
+	}
+	
+	return result;
+}
 @end

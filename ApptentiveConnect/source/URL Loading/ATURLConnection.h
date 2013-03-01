@@ -65,6 +65,7 @@
 - (NSData *)responseData;
 
 - (NSString *)requestAsString;
+- (NSDictionary *)headers;
 @end
 
 

@@ -65,6 +65,10 @@
 	return self.cancelled;
 }
 
+- (NSDictionary *)headers {
+	return headers;
+}
+
 - (void)setValue:(NSString *)value forHTTPHeaderField:(NSString *)field {
 	[headers setValue:value forKey:field];
 }

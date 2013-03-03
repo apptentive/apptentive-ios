@@ -23,6 +23,7 @@
 @property (retain, nonatomic) IBOutlet ATResizingTextView *textView;
 @property (retain, nonatomic) IBOutlet UIButton *sendButton;
 @property (retain, nonatomic) IBOutlet UIView *attachmentView;
+@property (retain, nonatomic) IBOutlet UIImageView *attachmentShadowView;
 @property (retain, nonatomic) IBOutlet UIButton *cameraButton;
 @property (retain, nonatomic) IBOutlet UIButton *locationButton;
 @property (retain, nonatomic) IBOutlet UIButton *emailButton;

@@ -108,7 +108,8 @@ typedef enum {
 	[self.iconButton setImage:[ATBackend imageNamed:@"at_apptentive_icon_small"] forState:UIControlStateNormal];
 	[self.tableView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]]];
 	[self.containerView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]]];
-//	[self.attachmentView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_attachment_bg"]]];
+	[self.attachmentView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_mc_noise_bg"]]];
+	self.attachmentShadowView.image = [[ATBackend imageNamed:@"at_mc_attachment_shadow"] resizableImageWithCapInsets:UIEdgeInsetsMake(4, 0, 0, 128)];
 	
 	[self.view addSubview:self.containerView];
 	
@@ -172,6 +173,7 @@ typedef enum {
 	[_locationButton release];
 	[_emailButton release];
 	[_iconButton release];
+	[_attachmentShadowView release];
 	[super dealloc];
 }
 
@@ -188,6 +190,7 @@ typedef enum {
 	[self setLocationButton:nil];
 	[self setEmailButton:nil];
 	[self setIconButton:nil];
+	[self setAttachmentShadowView:nil];
 	[super viewDidUnload];
 }
 

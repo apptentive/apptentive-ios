@@ -604,7 +604,7 @@ typedef enum {
 			} else {
 				textCell = developerCell;
 				textCell.messageBubbleImage.image = [[ATBackend imageNamed:@"at_urbanspoon_chat_bubble"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 21, 27, 15)];
-				textCell.userIcon.image = [UIImage imageNamed:@"at_mc_user_icon"];
+				textCell.userIcon.image = [ATBackend imageNamed:@"at_mc_user_icon"];
 				textCell.usernameLabel.text = ATLocalizedString(@"Developer", @"User name for text bubbles from developers.");
 			}
 			[[textCell retain] autorelease];

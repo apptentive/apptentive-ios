@@ -91,7 +91,6 @@
 		CGFloat textWidth = width - 101;
 		CGFloat heightPadding = 19 + 6;
 		CGSize textSize = [self.messageText sizeThatFits:CGSizeMake(textWidth, 2000)];
-		//	CGSize textSize = [self.messageText.text sizeWithFont:self.messageText.font constrainedToSize:CGSizeMake(textWidth, 2000) lineBreakMode:self.messageText.lineBreakMode];
 		cellHeight += MAX(60, textSize.height + heightPadding);
 
 	} while (NO);

@@ -601,10 +601,12 @@ typedef enum {
 				textCell = userCell;
 				textCell.messageBubbleImage.image = [[ATBackend imageNamed:@"at_chat_bubble"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 27, 21)];
 				textCell.userIcon.image = [ATBackend imageNamed:@"at_mc_user_icon"];
+				textCell.usernameLabel.text = ATLocalizedString(@"You", @"User name for text bubbles from users.");
 			} else {
 				textCell = developerCell;
 				textCell.messageBubbleImage.image = [[ATBackend imageNamed:@"at_urbanspoon_chat_bubble"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 21, 27, 15)];
 				textCell.userIcon.image = [UIImage imageNamed:@"at_mc_user_icon"];
+				textCell.usernameLabel.text = ATLocalizedString(@"Developer", @"User name for text bubbles from developers.");
 			}
 			[[textCell retain] autorelease];
 			[userCell release], userCell = nil;
@@ -698,6 +700,7 @@ typedef enum {
 			ATFileMessage *fileMessage = (ATFileMessage *)message;
 			[currentCell configureWithFileMessage:fileMessage];
 		}
+		currentCell.userIcon.image = [ATBackend imageNamed:@"at_mc_user_icon"];
 		
 		if (showDate) {
 			currentCell.dateLabel.text = dateString;

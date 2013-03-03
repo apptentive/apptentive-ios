@@ -11,7 +11,7 @@
 
 
 @implementation ATTextMessageUserCell
-@synthesize dateLabel, chatBubbleContainer, userIcon, messageBubbleImage, messageText, composingBubble, composing, showDateLabel;
+@synthesize dateLabel, chatBubbleContainer, userIcon, messageBubbleImage, usernameLabel, messageText, composingBubble, composing, showDateLabel;
 @synthesize cellType;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
@@ -72,6 +72,7 @@
 	[composingBubble release];
 	[dateLabel release];
 	[chatBubbleContainer release];
+    [usernameLabel release];
 	[super dealloc];
 }
 
@@ -86,8 +87,9 @@
 		if (showDateLabel) {
 			cellHeight += self.dateLabel.bounds.size.height;
 		}
+		cellHeight += self.usernameLabel.bounds.size.height;
 		CGFloat textWidth = width - 101;
-		CGFloat heightPadding = 19;
+		CGFloat heightPadding = 19 + 6;
 		CGSize textSize = [self.messageText sizeThatFits:CGSizeMake(textWidth, 2000)];
 		//	CGSize textSize = [self.messageText.text sizeWithFont:self.messageText.font constrainedToSize:CGSizeMake(textWidth, 2000) lineBreakMode:self.messageText.lineBreakMode];
 		cellHeight += MAX(60, textSize.height + heightPadding);

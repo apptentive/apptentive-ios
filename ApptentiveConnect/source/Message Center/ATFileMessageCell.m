@@ -10,7 +10,7 @@
 #import "ATFileMessageCell.h"
 
 @implementation ATFileMessageCell
-@synthesize dateLabel, userIcon, imageView, imageContainer, showDateLabel;
+@synthesize dateLabel, userIcon, imageContainer, showDateLabel;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -69,7 +69,6 @@
 - (void)dealloc {
     [dateLabel release], dateLabel = nil;
     [userIcon release], userIcon = nil;
-	[imageView release];
 	[imageContainer release];
 	[fileMessage release], fileMessage = nil;
 	[currentImage release], currentImage = nil;

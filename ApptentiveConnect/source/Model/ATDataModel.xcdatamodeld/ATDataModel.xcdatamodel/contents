@@ -55,14 +55,14 @@
     </entity>
     <elements>
         <element name="ATEvent" positionX="-425" positionY="-264" width="128" height="73"/>
-        <element name="ATFakeMessage" positionX="-65" positionY="105" width="128" height="75"/>
+        <element name="ATFakeMessage" positionX="-11" positionY="105" width="128" height="75"/>
         <element name="ATFileAttachment" positionX="-594" positionY="81" width="128" height="135"/>
         <element name="ATFileMessage" positionX="-425" positionY="-0" width="128" height="60"/>
         <element name="ATMessage" positionX="-225" positionY="-264" width="128" height="148"/>
         <element name="ATMessageDisplayType" positionX="54" positionY="-298" width="128" height="73"/>
         <element name="ATMessageSender" positionX="54" positionY="-180" width="128" height="120"/>
         <element name="ATRecord" positionX="-225" positionY="-456" width="128" height="118"/>
-        <element name="ATTextMessage" positionX="-218" positionY="27" width="128" height="75"/>
-        <element name="ATUpgradeRequestMessage" positionX="-216" positionY="138" width="128" height="60"/>
+        <element name="ATTextMessage" positionX="-225" positionY="27" width="128" height="75"/>
+        <element name="ATUpgradeRequestMessage" positionX="-252" positionY="165" width="180" height="60"/>
     </elements>
 </model>

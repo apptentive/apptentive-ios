@@ -19,6 +19,7 @@
 #import "ATLog.h"
 #import "ATMessage.h"
 #import "ATMessageCenterCell.h"
+#import "ATDefaultMessageCenterTitleView.h"
 #import "ATMessageSender.h"
 #import "ATMessageTask.h"
 #import "ATPersonUpdater.h"
@@ -82,11 +83,6 @@ typedef enum {
 		[fakeMessage release], fakeMessage = nil;
 	}
 	
-	UIImageView *logoView = [[UIImageView alloc] initWithImage:[ATBackend imageNamed:@"at_apptentive_icon_small"]];
-	[self.navigationController.navigationBar addSubview:logoView];
-	logoView.frame = CGRectMake(60, 12, logoView.bounds.size.width, logoView.bounds.size.height);
-	[logoView release], logoView = nil;
-	
 	messageDateFormatter = [[NSDateFormatter alloc] init];
 	messageDateFormatter.dateStyle = NSDateFormatterMediumStyle;
 	messageDateFormatter.timeStyle = NSDateFormatterShortStyle;
@@ -96,7 +92,7 @@ typedef enum {
 	self.tableView.scrollsToTop = YES;
 	firstLoad = YES;
 	[self registerForKeyboardNotifications];
-	self.title = ATLocalizedString(@"Message Center", @"Message Center title");
+	self.navigationItem.titleView = [[ATDefaultMessageCenterTitleView alloc] initWithFrame:self.navigationController.navigationBar.bounds];
 	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)] autorelease];
 	[self styleTextView];
 	

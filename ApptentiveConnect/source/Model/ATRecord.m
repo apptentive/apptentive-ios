@@ -20,12 +20,12 @@
 
 + (NSTimeInterval)timeIntervalForServerTime:(NSNumber *)timestamp {
 	long long serverTimestamp = [timestamp longLongValue];
-	NSTimeInterval clientTimestamp = ((double)serverTimestamp)/1000.0;
+	NSTimeInterval clientTimestamp = ((double)serverTimestamp);
 	return clientTimestamp;
 }
 
 + (NSNumber *)serverFormatForTimeInterval:(NSTimeInterval)timestamp {
-	return @((long long)(timestamp * 1000));
+	return @((long long)(timestamp));
 }
 
 + (NSObject *)newInstanceWithJSON:(NSDictionary *)json {

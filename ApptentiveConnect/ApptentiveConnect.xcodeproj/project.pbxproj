@@ -40,6 +40,8 @@
 		492B81E516D5C8AD0031BEF6 /* ATFileMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 492B81E316D5C8AC0031BEF6 /* ATFileMessageCell.m */; };
 		492B81E616D5C8AD0031BEF6 /* ATFileMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 492B81E316D5C8AC0031BEF6 /* ATFileMessageCell.m */; };
 		492B81E816D5C8E20031BEF6 /* ATFileMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 492B81E716D5C8E20031BEF6 /* ATFileMessageCell.xib */; };
+		492F2F0716E320010030E48A /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49ADE8DB1626167F00DD8634 /* CoreText.framework */; };
+		492F2F0816E320040030E48A /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4988FB5316212BD4000A7CB7 /* CoreData.framework */; };
 		493529FF138C7253000E464A /* ATInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA1022138B498C0082887A /* ATInfoViewController.xib */; };
 		49352A00138C7257000E464A /* ATInfoViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA1024138B49A50082887A /* ATInfoViewController_iPad.xib */; };
 		49352A20138C73B8000E464A /* ATAboutApptentiveView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49352A1F138C73B8000E464A /* ATAboutApptentiveView.xib */; };
@@ -485,6 +487,8 @@
 				49509E081358409800793EEC /* QuartzCore.framework in Frameworks */,
 				49509E1B1358409C00793EEC /* SystemConfiguration.framework in Frameworks */,
 				49509E1C135840A000793EEC /* UIKit.framework in Frameworks */,
+				492F2F0716E320010030E48A /* CoreText.framework in Frameworks */,
+				492F2F0816E320040030E48A /* CoreData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

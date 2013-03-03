@@ -53,6 +53,7 @@
 	self.imageContainer.layer.cornerRadius = 8;
 	self.imageContainer.backgroundColor = [UIColor blackColor];
 	self.imageContainer.clipsToBounds = YES;
+	self.imageContainer.layer.contentsGravity = kCAGravityResizeAspectFill;
 }
 
 - (void)configureWithFileMessage:(ATFileMessage *)message {
@@ -84,13 +85,15 @@
 		}
 		
 		CGSize imageSize = currentImage.size;
-		CGFloat imageRatio = imageSize.height / imageSize.width;
+		CGFloat widthRatio = self.imageContainer.bounds.size.width/imageSize.width;
+		CGSize scaledImageSize = CGSizeMake(self.imageContainer.bounds.size.width, imageSize.height * widthRatio);
 		
-		CGFloat imageWidth = self.imageContainer.bounds.size.width;
-		CGFloat imageHeight = imageRatio * imageWidth;
+		CGFloat imageHeight = scaledImageSize.height;
 		CGFloat heightPadding = 19;
 		
 		cellHeight += MAX(60, imageHeight + heightPadding);
+		
+		cellHeight = MIN(150, cellHeight);
 		
 	} while (NO);
 	return cellHeight;

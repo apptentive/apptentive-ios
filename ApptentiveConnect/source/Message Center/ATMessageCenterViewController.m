@@ -600,11 +600,11 @@ typedef enum {
 			if (cellSubType == ATTextMessageCellTypeUser) {
 				textCell = userCell;
 				textCell.messageBubbleImage.image = [[ATBackend imageNamed:@"at_chat_bubble"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 27, 21)];
-				textCell.userIcon.image = [ATBackend imageNamed:@"profile-photo"];
+				textCell.userIcon.image = [ATBackend imageNamed:@"at_mc_user_icon"];
 			} else {
 				textCell = developerCell;
 				textCell.messageBubbleImage.image = [[ATBackend imageNamed:@"at_urbanspoon_chat_bubble"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 21, 27, 15)];
-				textCell.userIcon.image = [UIImage imageNamed:@"dev_photo"];
+				textCell.userIcon.image = [UIImage imageNamed:@"at_mc_user_icon"];
 			}
 			[[textCell retain] autorelease];
 			[userCell release], userCell = nil;

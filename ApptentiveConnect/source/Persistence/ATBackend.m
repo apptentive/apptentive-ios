@@ -395,6 +395,10 @@ static ATBackend *sharedBackend = nil;
 		if (!success) {
 			// Retry after delay.
 			[self performSelector:@selector(updateActivityFeedIfNeeded) withObject:nil afterDelay:20];
+		} else {
+			// Queued tasks can probably start now.
+			ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
+			[queue start];
 		}
 	}
 }

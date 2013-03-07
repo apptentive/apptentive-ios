@@ -22,7 +22,6 @@
 enum {
 	kSectionTasks,
 	kSectionVersion,
-	kSectionCount
 };
 
 @interface ATInfoViewController (Private)
@@ -51,6 +50,7 @@ enum {
 }
 
 - (void)dealloc {
+	[logicalSections release], logicalSections = nil;
 	[controller release], controller = nil;
 	[self teardown];
 	[super dealloc];
@@ -112,7 +112,9 @@ enum {
 }
 
 #pragma mark UITableViewDataSource
-- (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)physicalSection {
+	NSUInteger section = [[logicalSections objectAtIndex:physicalSection] integerValue];
+	
 	if (section == kSectionTasks) {
 		ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
 		return [queue countOfTasksWithTaskNamesInSet:[NSSet setWithObjects:@"feedback", @"message", nil]];
@@ -124,7 +126,11 @@ enum {
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	static NSString *taskCellIdentifier = @"ATTaskProgressCellIdentifier";
 	UITableViewCell *result = nil;
-	if (indexPath.section == kSectionTasks) {
+	
+	NSUInteger physicalSection = indexPath.section;
+	NSUInteger section = [[logicalSections objectAtIndex:physicalSection] integerValue];
+	
+	if (section == kSectionTasks) {
 		ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
 		ATTask *task = [queue taskAtIndex:indexPath.row withTaskNameInSet:[NSSet setWithObjects:@"feedback", @"message", nil]];
 		result = [aTableView dequeueReusableCellWithIdentifier:taskCellIdentifier];
@@ -178,19 +184,22 @@ enum {
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView {
-	return kSectionCount;
+	return [logicalSections count];
 }
 
-- (NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {
+- (NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)physicalSection {
 	NSString *result = nil;
+	
+	NSUInteger section = [[logicalSections objectAtIndex:physicalSection] integerValue];
 	if (section == kSectionTasks) {
 		result = NSLocalizedString(@"Running Tasks", @"Running tasks section header");
 	}
 	return result;
 }
 
-- (NSString *)tableView:(UITableView *)aTableView titleForFooterInSection:(NSInteger)section {
+- (NSString *)tableView:(UITableView *)aTableView titleForFooterInSection:(NSInteger)physicalSection {
 	NSString *result = nil;
+	NSUInteger section = [[logicalSections objectAtIndex:physicalSection] integerValue];
 	if (section == kSectionTasks) {
 		ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
 		if ([queue count]) {
@@ -211,6 +220,13 @@ enum {
 	if (headerView) {
 		[headerView release], headerView = nil;
 	}
+	if (logicalSections) {
+		[logicalSections release], logicalSections = nil;
+	}
+	logicalSections = [[NSMutableArray alloc] init];
+	[logicalSections addObject:@(kSectionTasks)];
+	[logicalSections addObject:@(kSectionVersion)];
+	
 	UIImage *logoImage = [ATBackend imageNamed:@"at_logo_info"];
 	UINib *nib = [UINib nibWithNibName:@"ATAboutApptentiveView" bundle:[ATConnect resourceBundle]];
 	[nib instantiateWithOwner:self options:nil];

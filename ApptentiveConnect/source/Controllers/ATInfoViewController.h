@@ -17,6 +17,7 @@
 	IBOutlet UITableViewCell *progressCell;
 @private
 	ATFeedbackController *controller;
+    NSMutableArray *logicalSections;
 }
 @property (nonatomic, retain) IBOutlet UITableView *tableView;
 @property (retain, nonatomic) IBOutlet UIView *headerView;

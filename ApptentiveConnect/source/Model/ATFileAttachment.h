@@ -18,6 +18,7 @@ typedef enum {
 	ATFileAttachmentSourcePhotoLibrary,
 } ATFIleAttachmentSource;
 
+#warning Add CGSize for images?
 @interface ATFileAttachment : NSManagedObject
 @property (nonatomic, retain) NSString *localPath;
 @property (nonatomic, retain) NSString *mimeType;

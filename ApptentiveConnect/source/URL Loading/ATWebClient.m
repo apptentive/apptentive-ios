@@ -341,7 +341,7 @@ static ATWebClient *sharedSingleton = nil;
 	[multipartEncodedData appendData:[finalBoundary dataUsingEncoding:NSUTF8StringEncoding]];
 	[debugString appendString:finalBoundary];
 	
-	NSLog(@"\n%@", debugString);
+	//NSLog(@"\n%@", debugString);
 	
 	[conn setHTTPBody:multipartEncodedData];
 	

@@ -106,7 +106,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	NSObject *result = nil;
 	do { // once
 		NSData *d = [sender responseData];
-		//*!!!!! Prefix line with // to debug HTTP stuff.
+		/*!!!!! Prefix line with // to debug HTTP stuff.
 		 if (YES) {
 		 NSString *a = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];
 		 NSLog(@"request: %@", [connection requestAsString]);

@@ -54,7 +54,7 @@
 		self.imageContainer.frame = imageRect;
 	}
 	self.imageContainer.layer.cornerRadius = 8;
-	self.imageContainer.backgroundColor = [UIColor blackColor];
+	self.imageContainer.backgroundColor = [UIColor grayColor];
 	self.imageContainer.clipsToBounds = YES;
 	self.imageContainer.layer.contentsGravity = kCAGravityResizeAspectFill;
 }
@@ -65,10 +65,12 @@
 		currentImage = [image retain];
 		if (currentImage != nil) {
 			self.imageContainer.layer.contents = (id)currentImage.CGImage;
+			self.imageContainer.layer.contentsGravity = kCAGravityResizeAspectFill;
 		}
 	}
 	if (currentImage == nil) {
 		currentImage = [[ATBackend imageNamed:@"at_mc_file_default"] retain];
+		self.imageContainer.layer.contentsGravity = kCAGravityResizeAspect;
 		self.imageContainer.layer.contents = (id)currentImage.CGImage;
 	}
 }
@@ -81,6 +83,10 @@
 		
 		UIImage *imageFile = [UIImage imageWithContentsOfFile:[message.fileAttachment fullLocalPath]];
 		CGSize thumbnailSize = ATThumbnailSizeOfMaxSize(imageFile.size, CGSizeMake(320, 320));
+		CGFloat scale = [[UIScreen mainScreen] scale];
+		thumbnailSize.width *= scale;
+		thumbnailSize.height *= scale;
+		
 		UIImage *thumbnail = [message.fileAttachment thumbnailOfSize:thumbnailSize];
 		if (thumbnail) {
 			[currentImage release], currentImage = nil;
@@ -107,6 +113,7 @@
     [super dealloc];
 }
 
+#warning Redo
 - (CGFloat)cellHeightForWidth:(CGFloat)width {
 	return 320;
 	

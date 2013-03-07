@@ -570,3 +570,33 @@ extern CGRect ATCGRectOfEvenSize(CGRect inRect) {
 	
 	return result;
 }
+
+CGSize ATThumbnailSizeOfMaxSize(CGSize imageSize, CGSize maxSize) {
+    CGFloat ratio = MIN(maxSize.width/imageSize.width, maxSize.height/imageSize.height);
+	if (ratio < 1.0) {
+		return CGSizeMake(floor(ratio * imageSize.width), floor(ratio * imageSize.height));
+	} else {
+		return imageSize;
+	}
+}
+
+CGRect ATThumbnailCropRectForThumbnailSize(CGSize imageSize, CGSize thumbnailSize) {
+    CGFloat cropRatio = thumbnailSize.width/thumbnailSize.height;
+	CGFloat sizeRatio = imageSize.width/imageSize.height;
+	
+	if (cropRatio < sizeRatio) {
+		// Shrink width. eg. 100:100 < 1600:1200
+		CGFloat croppedWidth = imageSize.width * (1.0/sizeRatio);
+		CGFloat originX = floor((imageSize.width - croppedWidth)/2.0);
+		
+		return CGRectMake(originX, 0, croppedWidth, imageSize.height);
+	} else if (cropRatio > sizeRatio) {
+		// Shrink height. eg. 100:100 > 1200:1600
+		CGFloat croppedHeight = floor(imageSize.height * sizeRatio);
+		CGFloat originY = floor((imageSize.height - croppedHeight)/2.0);
+		
+		return CGRectMake(0, originY, imageSize.width, croppedHeight);
+	} else {
+		return CGRectMake(0, 0, imageSize.width, imageSize.height);
+	}
+}

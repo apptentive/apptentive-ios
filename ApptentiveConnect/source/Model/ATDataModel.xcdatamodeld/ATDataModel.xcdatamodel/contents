@@ -12,6 +12,7 @@
         <attribute name="localPath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="mimeType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="source" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="transient" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="userVisible" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
         <relationship name="fileMessage" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="ATFileMessage" inverseName="fileAttachment" inverseEntity="ATFileMessage" syncable="YES"/>
@@ -56,7 +57,7 @@
     <elements>
         <element name="ATEvent" positionX="-425" positionY="-264" width="128" height="73"/>
         <element name="ATFakeMessage" positionX="-11" positionY="105" width="128" height="75"/>
-        <element name="ATFileAttachment" positionX="-594" positionY="81" width="128" height="135"/>
+        <element name="ATFileAttachment" positionX="-594" positionY="81" width="128" height="148"/>
         <element name="ATFileMessage" positionX="-425" positionY="-0" width="128" height="60"/>
         <element name="ATMessage" positionX="-225" positionY="-264" width="128" height="148"/>
         <element name="ATMessageDisplayType" positionX="54" positionY="-298" width="128" height="73"/>

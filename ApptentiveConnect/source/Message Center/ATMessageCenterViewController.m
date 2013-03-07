@@ -58,6 +58,7 @@ typedef enum {
 	BOOL animatingTransition;
 	NSDateFormatter *messageDateFormatter;
 	UIImage *pickedImage;
+	ATFeedbackImageSource pickedImageSource;
 }
 @synthesize tableView, containerView, composerView, composerBackgroundView, attachmentButton, textView, sendButton, attachmentView, fakeCell;
 @synthesize userCell, developerCell, userFileMessageCell;
@@ -92,7 +93,7 @@ typedef enum {
 	self.tableView.scrollsToTop = YES;
 	firstLoad = YES;
 	[self registerForKeyboardNotifications];
-	self.navigationItem.titleView = [[ATDefaultMessageCenterTitleView alloc] initWithFrame:self.navigationController.navigationBar.bounds];
+	self.navigationItem.titleView = [[[ATDefaultMessageCenterTitleView alloc] initWithFrame:self.navigationController.navigationBar.bounds] autorelease];
 	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)] autorelease];
 	[self styleTextView];
 	
@@ -445,6 +446,7 @@ typedef enum {
 	if (pickedImage != image) {
 		[pickedImage release], pickedImage = nil;
 		pickedImage = [image retain];
+		pickedImageSource = source;
 	}
 }
 
@@ -461,7 +463,7 @@ typedef enum {
 }
 
 - (ATFeedbackAttachmentOptions)attachmentOptionsForImageViewController:(ATSimpleImageViewController *)vc {
-	return ATFeedbackAllowPhotoAttachment & ATFeedbackAllowTakePhotoAttachment;
+	return ATFeedbackAllowPhotoAttachment | ATFeedbackAllowTakePhotoAttachment;
 }
 
 - (UIImage *)defaultImageForImageViewController:(ATSimpleImageViewController *)vc {
@@ -482,6 +484,24 @@ typedef enum {
 				
 				[fileAttachment setFileData:UIImageJPEGRepresentation(pickedImage, 1.0)];
 				[fileAttachment setMimeType:@"image/jpeg"];
+				
+				switch (pickedImageSource) {
+					case ATFeedbackImageSourceCamera:
+					case ATFeedbackImageSourcePhotoLibrary:
+						[fileAttachment setSource:@(ATFileAttachmentSourceCamera)];
+						break;
+						/* for now we're going to assume camera…
+						[fileAttachment setSource:@(ATFileAttachmentSourcePhotoLibrary)];
+						break;
+						 */
+					case ATFeedbackImageSourceScreenshot:
+						[fileAttachment setSource:@(ATFileAttachmentSourceScreenshot)];
+						break;
+					default:
+						[fileAttachment setSource:@(ATFileAttachmentSourceUnknown)];
+						break;
+				}
+				
 				
 				[[[ATBackend sharedBackend] managedObjectContext] save:nil];
 				

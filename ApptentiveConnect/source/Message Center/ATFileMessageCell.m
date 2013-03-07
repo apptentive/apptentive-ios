@@ -9,6 +9,9 @@
 
 #import "ATFileMessageCell.h"
 
+#import "ATBackend.h"
+#import "ATUtilities.h"
+
 @implementation ATFileMessageCell
 @synthesize dateLabel, userIcon, imageContainer, showDateLabel;
 
@@ -56,13 +59,41 @@
 	self.imageContainer.layer.contentsGravity = kCAGravityResizeAspectFill;
 }
 
+- (void)setCurrentImage:(UIImage *)image {
+	if (currentImage != image) {
+		[currentImage release], currentImage = nil;
+		currentImage = [image retain];
+		if (currentImage != nil) {
+			self.imageContainer.layer.contents = (id)currentImage.CGImage;
+		}
+	}
+	if (currentImage == nil) {
+		currentImage = [[ATBackend imageNamed:@"at_mc_file_default"] retain];
+		self.imageContainer.layer.contents = (id)currentImage.CGImage;
+	}
+}
+
 - (void)configureWithFileMessage:(ATFileMessage *)message {
 	if (message != fileMessage) {
 		[fileMessage release], fileMessage = nil;
 		[currentImage release], currentImage = nil;
 		fileMessage = [message retain];
-		currentImage = [[UIImage imageWithContentsOfFile:[fileMessage.fileAttachment fullLocalPath]] retain];
-		self.imageContainer.layer.contents = (id)currentImage.CGImage;
+		
+		UIImage *imageFile = [UIImage imageWithContentsOfFile:[message.fileAttachment fullLocalPath]];
+		CGSize thumbnailSize = ATThumbnailSizeOfMaxSize(imageFile.size, CGSizeMake(320, 320));
+		UIImage *thumbnail = [message.fileAttachment thumbnailOfSize:thumbnailSize];
+		if (thumbnail) {
+			[currentImage release], currentImage = nil;
+			currentImage = [thumbnail retain];
+			self.imageContainer.layer.contents = (id)currentImage.CGImage;
+		} else {
+			[self setCurrentImage:nil];
+			[message.fileAttachment createThumbnailOfSize:thumbnailSize completion:^{
+				UIImage *image = [UIImage imageWithContentsOfFile:[message.fileAttachment fullLocalPath]];
+				[self setCurrentImage:image];
+			}];
+		}
+		
 		[self setNeedsLayout];
 	}
 }
@@ -77,6 +108,8 @@
 }
 
 - (CGFloat)cellHeightForWidth:(CGFloat)width {
+	return 320;
+	
 	CGFloat cellHeight = 0;
 	
 	do { // once

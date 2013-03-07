@@ -71,4 +71,66 @@
 	STAssertTrue([ATUtilities versionString:@"5.0" isLessThanVersionString:@"5.1"], @"Should be less");
 	STAssertTrue([ATUtilities versionString:@"5.0" isLessThanVersionString:@"6.0.1"], @"Should be less");
 }
+
+- (void)testThumbnailSize {
+	CGSize imageSize, maxSize, result;
+	
+	imageSize = CGSizeMake(10, 10);
+	maxSize = CGSizeMake(4, 3);
+	result = ATThumbnailSizeOfMaxSize(imageSize, maxSize);
+	STAssertTrue(CGSizeEqualToSize(result, CGSizeMake(3, 3)), @"Should be 3x3 thumbnail.");
+	
+	imageSize = CGSizeMake(10, 10);
+	maxSize = CGSizeMake(11, 20);
+	result = ATThumbnailSizeOfMaxSize(imageSize, maxSize);
+	STAssertTrue(CGSizeEqualToSize(result, CGSizeMake(10, 10)), @"Should be 10x10 thumbnail.");
+	
+	imageSize = CGSizeMake(6, 8);
+	maxSize = CGSizeMake(4, 4);
+	result = ATThumbnailSizeOfMaxSize(imageSize, maxSize);
+	STAssertTrue(CGSizeEqualToSize(result, CGSizeMake(3, 4)), @"Should be 3x4 thumbnail.");
+	
+	imageSize = CGSizeMake(8, 6);
+	maxSize = CGSizeMake(6, 6);
+	result = ATThumbnailSizeOfMaxSize(imageSize, maxSize);
+	STAssertTrue(CGSizeEqualToSize(result, CGSizeMake(6, 4)), @"Should be 6x4 thumbnail.");
+	
+	imageSize = CGSizeMake(800, 600);
+	maxSize = CGSizeMake(600, 600);
+	result = ATThumbnailSizeOfMaxSize(imageSize, maxSize);
+	STAssertTrue(CGSizeEqualToSize(result, CGSizeMake(600, 450)), @"Should be 600x450 thumbnail.");
+	
+	imageSize = CGSizeMake(0, 0);
+	maxSize = CGSizeMake(6, 6);
+	result = ATThumbnailSizeOfMaxSize(imageSize, maxSize);
+	STAssertTrue(CGSizeEqualToSize(result, CGSizeMake(0, 0)), @"Should be 0x0 thumbnail.");
+	
+	imageSize = CGSizeMake(6, 6);
+	maxSize = CGSizeMake(0, 0);
+	result = ATThumbnailSizeOfMaxSize(imageSize, maxSize);
+	STAssertTrue(CGSizeEqualToSize(result, CGSizeMake(0, 0)), @"Should be 0x0 thumbnail.");
+}
+
+- (void)testThumbnailCrop {
+	CGSize imageSize, thumbSize;
+	CGRect result, expected;
+	
+	imageSize = CGSizeMake(1200, 1600);
+	thumbSize = CGSizeMake(100, 100);
+	result = ATThumbnailCropRectForThumbnailSize(imageSize, thumbSize);
+	expected = CGRectMake(0, 200, 1200, 1200);
+	STAssertTrue(CGRectEqualToRect(result, expected), @"Expected %@, got %@", NSStringFromCGRect(expected), NSStringFromCGRect(result));
+	
+	imageSize = CGSizeMake(1600, 1200);
+	thumbSize = CGSizeMake(100, 100);
+	result = ATThumbnailCropRectForThumbnailSize(imageSize, thumbSize);
+	expected = CGRectMake(200, 0, 1200, 1200);
+	STAssertTrue(CGRectEqualToRect(result, expected), @"Expected %@, got %@", NSStringFromCGRect(expected), NSStringFromCGRect(result));
+	
+	imageSize = CGSizeMake(1600, 1200);
+	thumbSize = CGSizeMake(800, 600);
+	result = ATThumbnailCropRectForThumbnailSize(imageSize, thumbSize);
+	expected = CGRectMake(0, 0, 1600, 1200);
+	STAssertTrue(CGRectEqualToRect(result, expected), @"Expected %@, got %@", NSStringFromCGRect(expected), NSStringFromCGRect(result));
+}
 @end

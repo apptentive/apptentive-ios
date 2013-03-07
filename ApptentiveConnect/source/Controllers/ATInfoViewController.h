@@ -12,7 +12,7 @@
 
 /*! View controller for showing information about Apptentive, as well as the
  tasks which are currently in progress. */
-@interface ATInfoViewController : UIViewController <UITableViewDataSource> {
+@interface ATInfoViewController : UIViewController <UITableViewDataSource, UITableViewDelegate> {
 	IBOutlet UIView *headerView;
 	IBOutlet UITableViewCell *progressCell;
 @private

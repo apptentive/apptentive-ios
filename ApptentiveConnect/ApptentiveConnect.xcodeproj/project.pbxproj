@@ -145,6 +145,8 @@
 		4987FAA3157AE53700AF2078 /* ATWebClient+Metrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 4987FA9B157AE53700AF2078 /* ATWebClient+Metrics.m */; };
 		4987FAA4157AE53700AF2078 /* ATWebClient+Metrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 4987FA9B157AE53700AF2078 /* ATWebClient+Metrics.m */; };
 		4987FAA7157AE59D00AF2078 /* ApptentiveMetricsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4987FAA6157AE59D00AF2078 /* ApptentiveMetricsTests.m */; };
+		49881DDD16E839540061D888 /* ATLogViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 49881DDB16E839540061D888 /* ATLogViewController.h */; };
+		49881DDE16E839540061D888 /* ATLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49881DDC16E839540061D888 /* ATLogViewController.m */; };
 		4988FB5416212BD4000A7CB7 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4988FB5316212BD4000A7CB7 /* CoreData.framework */; };
 		498B8E3E1519691900CA9A58 /* ATRatingPredicateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 498B8E3D1519691900CA9A58 /* ATRatingPredicateTests.m */; };
 		498EFB6B15BA414A00A1043B /* ATSurveyGetSurveyTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 498EFB6915BA414A00A1043B /* ATSurveyGetSurveyTask.h */; };
@@ -366,6 +368,8 @@
 		4987FA9B157AE53700AF2078 /* ATWebClient+Metrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ATWebClient+Metrics.m"; sourceTree = "<group>"; };
 		4987FAA5157AE59D00AF2078 /* ApptentiveMetricsTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMetricsTests.h; sourceTree = "<group>"; };
 		4987FAA6157AE59D00AF2078 /* ApptentiveMetricsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMetricsTests.m; sourceTree = "<group>"; };
+		49881DDB16E839540061D888 /* ATLogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATLogViewController.h; sourceTree = "<group>"; };
+		49881DDC16E839540061D888 /* ATLogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATLogViewController.m; sourceTree = "<group>"; };
 		4988FB5316212BD4000A7CB7 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		498B8E3C1519691900CA9A58 /* ATRatingPredicateTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATRatingPredicateTests.h; sourceTree = "<group>"; };
 		498B8E3D1519691900CA9A58 /* ATRatingPredicateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATRatingPredicateTests.m; sourceTree = "<group>"; };
@@ -544,6 +548,8 @@
 				49AA101E138B44C00082887A /* ATInfoViewController.m */,
 				4936AE4F1379DE3100A4B17F /* ATSimpleImageViewController.h */,
 				4936AE501379DE3100A4B17F /* ATSimpleImageViewController.m */,
+				49881DDB16E839540061D888 /* ATLogViewController.h */,
+				49881DDC16E839540061D888 /* ATLogViewController.m */,
 				491E03D81640D01F00DC3E18 /* ATFeedbackTypes.h */,
 			);
 			path = Controllers;
@@ -1057,6 +1063,7 @@
 				492B81DA16D595A00031BEF6 /* ATFileAttachment.h in Headers */,
 				492B81E416D5C8AD0031BEF6 /* ATFileMessageCell.h in Headers */,
 				492F2F0E16E3F9660030E48A /* ATDefaultMessageCenterTitleView.h in Headers */,
+				49881DDD16E839540061D888 /* ATLogViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1292,6 +1299,7 @@
 				492B81DB16D595A00031BEF6 /* ATFileAttachment.m in Sources */,
 				492B81E516D5C8AD0031BEF6 /* ATFileMessageCell.m in Sources */,
 				492F2F0F16E3F9660030E48A /* ATDefaultMessageCenterTitleView.m in Sources */,
+				49881DDE16E839540061D888 /* ATLogViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1456,6 +1464,7 @@
 					"APPTENTIVE_DEBUG=1",
 					"AT_LOGGING_LEVEL_INFO=1",
 					"AT_LOGGING_LEVEL_DEBUG=1",
+					"APPTENTIVE_DEBUG_LOG_VIEWER=1",
 				);
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				OTHER_LDFLAGS = "-ObjC";

@@ -11,15 +11,7 @@
 #import "ATLogger.h"
 
 #ifndef AT_LOGGING_ENABLED
-#	ifdef APPTENTIVE_DEBUG
-#		define AT_LOGGING_ENABLED 1
-#	else
-#		define AT_LOGGING_ENABLED 0
-#	endif
-#else
-#	ifndef AT_LOGGING_ENABLED
-#		define AT_LOGGING_ENABLED 1
-#	endif
+#	define AT_LOGGING_ENABLED 1
 #endif
 
 #ifndef AT_LOGGING_LEVEL_DEBUG

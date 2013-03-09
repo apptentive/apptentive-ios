@@ -67,7 +67,7 @@
 		if (self.message == nil) {
 			message = [[ATMessage findMessageWithPendingID:self.pendingMessageID] retain];
 			if (self.message == nil) {
-				NSLog(@"Warning: Message was nil in message task.");
+				ATLogError(@"Warning: Message was nil in message task.");
 				self.finished = YES;
 				return;
 			}
@@ -130,7 +130,7 @@
 		self.failed = YES;
 		self.lastErrorTitle = sender.errorTitle;
 		self.lastErrorMessage = sender.errorMessage;
-		ATLogError(@"ATAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
+		ATLogInfo(@"ATAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
 		[self stop];
 		[self release];
 	}

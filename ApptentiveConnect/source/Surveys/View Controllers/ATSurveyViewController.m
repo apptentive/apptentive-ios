@@ -237,7 +237,7 @@ enum {
 			textFrame.size.width = cell.frame.size.width - 38.0;
 			cell.textLabel.frame = textFrame;
 #if DEBUG_CELL_HEIGHT_PROBLEM
-			NSLog(@"%@", NSStringFromCGRect(cell.textLabel.frame));
+			ATLogDebug(@"%@", NSStringFromCGRect(cell.textLabel.frame));
 #endif
 		}
 		
@@ -248,9 +248,9 @@ enum {
 		f.size = s;
 #if DEBUG_CELL_HEIGHT_PROBLEM
 		if (s.height >= 50) {
-			NSLog(@"cell width is: %f", cell.frame.size.width);
-			NSLog(@"width is: %f", cellSize.width);
-			NSLog(@"Hi");
+			ATLogDebug(@"cell width is: %f", cell.frame.size.width);
+			ATLogDebug(@"width is: %f", cellSize.width);
+			ATLogDebug(@"Hi");
 		}
 #endif
 		

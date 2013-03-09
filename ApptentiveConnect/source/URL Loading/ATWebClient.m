@@ -273,7 +273,7 @@ static ATWebClient *sharedSingleton = nil;
 			NSError *error = nil;
 			NSData *d = [NSData dataWithContentsOfURL:pathURL options:NSDataReadingMappedIfSafe error:&error];
 			if (!d) {
-				NSLog(@"Unable to get contents of file path for uploading: %@", error);
+				ATLogError(@"Unable to get contents of file path for uploading: %@", error);
 				// This is probably unrecoverable.
 				goto fail;
 			}
@@ -322,7 +322,7 @@ static ATWebClient *sharedSingleton = nil;
 		NSError *error = nil;
 		NSData *d = [NSData dataWithContentsOfURL:pathURL options:NSDataReadingMappedIfSafe error:&error];
 		if (!d) {
-			NSLog(@"Unable to get contents of file path for uploading: %@", error);
+			ATLogError(@"Unable to get contents of file path for uploading: %@", error);
 			// This is probably unrecoverable.
 			goto fail;
 		}

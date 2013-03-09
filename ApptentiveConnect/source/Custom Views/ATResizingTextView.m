@@ -257,7 +257,7 @@
 
 @implementation ATInternalDefaultTextView
 - (void)setContentInset:(UIEdgeInsets)aContentInset {
-	NSLog(@"content inset is: %@", NSStringFromUIEdgeInsets(aContentInset));
+	ATLogDebug(@"content inset is: %@", NSStringFromUIEdgeInsets(aContentInset));
 	[super setContentInset:aContentInset];
 }
 

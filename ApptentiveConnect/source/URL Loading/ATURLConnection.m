@@ -167,7 +167,7 @@
 		if (delegate && [delegate respondsToSelector:@selector(connectionFailed:)]){
 			[delegate performSelectorOnMainThread:@selector(connectionFailed:) withObject:self waitUntilDone:YES];
 		} else {
-			NSLog(@"Orphaned connection. No delegate or nonresponsive delegate.");
+			ATLogError(@"Orphaned connection. No delegate or nonresponsive delegate.");
 		}
 	}
 }
@@ -187,7 +187,7 @@
 				if (delegate && [delegate respondsToSelector:@selector(connectionFinishedSuccessfully:)]){
 					[delegate performSelectorOnMainThread:@selector(connectionFinishedSuccessfully:) withObject:self waitUntilDone:YES];
 				} else {
-					NSLog(@"Orphaned connection. No delegate or nonresponsive delegate.");
+					ATLogError(@"Orphaned connection. No delegate or nonresponsive delegate.");
 				}
 			}
 			[data release];
@@ -196,7 +196,7 @@
 			if (delegate && [delegate respondsToSelector:@selector(connectionFailed:)]){
 				[delegate performSelectorOnMainThread:@selector(connectionFailed:) withObject:self waitUntilDone:YES];
 			} else {
-				NSLog(@"Orphaned connection. No delegate or nonresponsive delegate.");
+				ATLogError(@"Orphaned connection. No delegate or nonresponsive delegate.");
 			}
 		}
 		self.executing = NO;
@@ -224,7 +224,7 @@
 		if (delegate && [delegate respondsToSelector:@selector(connectionFailed:)]){
 			[delegate performSelectorOnMainThread:@selector(connectionFailed:) withObject:self waitUntilDone:YES];
 		} else {
-			NSLog(@"Orphaned connection. No delegate or nonresponsive delegate.");
+			ATLogError(@"Orphaned connection. No delegate or nonresponsive delegate.");
 		}
 	}
 }
@@ -234,7 +234,7 @@
 		self.percentComplete = ((float)totalBytesWritten)/((float) totalBytesExpectedToWrite);
 		[delegate performSelectorOnMainThread:@selector(connectionDidProgress:) withObject:self waitUntilDone:YES];
 	} else {
-		NSLog(@"Orphaned connection. No delegate or nonresponsive delegate.");
+		ATLogError(@"Orphaned connection. No delegate or nonresponsive delegate.");
 	}
 }
 

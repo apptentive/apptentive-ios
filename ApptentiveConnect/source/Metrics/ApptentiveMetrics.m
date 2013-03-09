@@ -150,7 +150,7 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 		windowType = [(NSNumber *)[[notification userInfo] objectForKey:ATFeedbackWindowTypeKey] intValue];
 	}
 	if (windowType != ATFeedbackWindowTypeFeedback && windowType != ATFeedbackWindowTypeInfo) {
-		NSLog(@"Unknown window type: %d", windowType);
+		ATLogError(@"Unknown window type: %d", windowType);
 	}
 	return windowType;
 }
@@ -194,7 +194,7 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 		buttonType = [(NSNumber *)[[notification userInfo] objectForKey:ATAppRatingButtonTypeKey] intValue];
 	}
 	if (buttonType != ATAppRatingEnjoymentButtonTypeYes && buttonType != ATAppRatingEnjoymentButtonTypeNo) {
-		NSLog(@"Unknown button type: %d", buttonType);
+		ATLogError(@"Unknown button type: %d", buttonType);
 	}
 	return buttonType;
 }
@@ -218,7 +218,7 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 		buttonType = [(NSNumber *)[[notification userInfo] objectForKey:ATAppRatingButtonTypeKey] intValue];
 	}
 	if (buttonType != ATAppRatingButtonTypeNo && buttonType != ATAppRatingButtonTypeRemind && buttonType != ATAppRatingButtonTypeRateApp) {
-		NSLog(@"Unknown button type: %d", buttonType);
+		ATLogError(@"Unknown button type: %d", buttonType);
 	}
 	return buttonType;
 }
@@ -249,7 +249,7 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 	}
 	if (event != ATSurveyEventTappedSend && event != ATSurveyEventTappedCancel && event != ATSurveyEventAnsweredQuestion) {
 		event = ATSurveyEventUnknown;
-		NSLog(@"Unknown survey event type: %d", event);
+		ATLogError(@"Unknown survey event type: %d", event);
 	}
 	return event;
 }

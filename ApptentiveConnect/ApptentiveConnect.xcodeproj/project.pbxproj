@@ -115,6 +115,9 @@
 		49509E081358409800793EEC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D969133E6D6400B5A5CD /* QuartzCore.framework */; };
 		49509E1B1358409C00793EEC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49509A6B1356596F00793EEC /* SystemConfiguration.framework */; };
 		49509E1C135840A000793EEC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D96A133E6D6400B5A5CD /* UIKit.framework */; };
+		495E9C1C16EABD8E00AE3B03 /* ATLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 495E9C1A16EABD8E00AE3B03 /* ATLogger.h */; };
+		495E9C1D16EABD8E00AE3B03 /* ATLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 495E9C1B16EABD8E00AE3B03 /* ATLogger.m */; };
+		495E9C1E16EABD8E00AE3B03 /* ATLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 495E9C1B16EABD8E00AE3B03 /* ATLogger.m */; };
 		4960E154134A578F00F6311F /* generated in Resources */ = {isa = PBXBuildFile; fileRef = 4960E153134A578F00F6311F /* generated */; };
 		4961A402161BBD7000E30037 /* ATMessageTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 4961A400161BBD7000E30037 /* ATMessageTask.h */; };
 		4961A403161BBD7000E30037 /* ATMessageTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 4961A401161BBD7000E30037 /* ATMessageTask.m */; };
@@ -342,6 +345,8 @@
 		49509A6B1356596F00793EEC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		49509DF913583FB800793EEC /* ATUtilitiesTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATUtilitiesTests.h; sourceTree = "<group>"; };
 		49509DFA13583FB800793EEC /* ATUtilitiesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATUtilitiesTests.m; sourceTree = "<group>"; };
+		495E9C1A16EABD8E00AE3B03 /* ATLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATLogger.h; sourceTree = "<group>"; };
+		495E9C1B16EABD8E00AE3B03 /* ATLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATLogger.m; sourceTree = "<group>"; };
 		4960E153134A578F00F6311F /* generated */ = {isa = PBXFileReference; lastKnownFileType = folder; name = generated; path = art/generated; sourceTree = SOURCE_ROOT; };
 		4961A400161BBD7000E30037 /* ATMessageTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATMessageTask.h; path = "Message Center/Tasks/ATMessageTask.h"; sourceTree = "<group>"; };
 		4961A401161BBD7000E30037 /* ATMessageTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATMessageTask.m; path = "Message Center/Tasks/ATMessageTask.m"; sourceTree = "<group>"; };
@@ -562,6 +567,8 @@
 				4936AE751379DEBB00A4B17F /* ATUtilities.h */,
 				4936AE761379DEBB00A4B17F /* ATUtilities.m */,
 				491E03CC163F261C00DC3E18 /* ATLog.h */,
+				495E9C1A16EABD8E00AE3B03 /* ATLogger.h */,
+				495E9C1B16EABD8E00AE3B03 /* ATLogger.m */,
 				49E6208516C5E8C2000C9F5A /* NSDictionary+ATAdditions.h */,
 				49E6208616C5E8C2000C9F5A /* NSDictionary+ATAdditions.m */,
 			);
@@ -1064,6 +1071,7 @@
 				492B81E416D5C8AD0031BEF6 /* ATFileMessageCell.h in Headers */,
 				492F2F0E16E3F9660030E48A /* ATDefaultMessageCenterTitleView.h in Headers */,
 				49881DDD16E839540061D888 /* ATLogViewController.h in Headers */,
+				495E9C1C16EABD8E00AE3B03 /* ATLogger.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1300,6 +1308,7 @@
 				492B81E516D5C8AD0031BEF6 /* ATFileMessageCell.m in Sources */,
 				492F2F0F16E3F9660030E48A /* ATDefaultMessageCenterTitleView.m in Sources */,
 				49881DDE16E839540061D888 /* ATLogViewController.m in Sources */,
+				495E9C1D16EABD8E00AE3B03 /* ATLogger.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1351,6 +1360,7 @@
 				492B81D716D595740031BEF6 /* ATFileMessage.m in Sources */,
 				492B81DC16D595A00031BEF6 /* ATFileAttachment.m in Sources */,
 				492B81E616D5C8AD0031BEF6 /* ATFileMessageCell.m in Sources */,
+				495E9C1E16EABD8E00AE3B03 /* ATLogger.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

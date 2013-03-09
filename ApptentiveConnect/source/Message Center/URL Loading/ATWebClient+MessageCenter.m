@@ -30,7 +30,7 @@
 	}
 	NSString *postString = [postJSON ATJSONStringWithOptions:ATJKSerializeOptionPretty error:&error];
 	if (!postString && error != nil) {
-		NSLog(@"ATWebClient+MessageCenter: Error while encoding JSON: %@", error);
+		ATLogError(@"Error while encoding JSON: %@", error);
 		return nil;
 	}
 	NSString *url = [self apiURLStringWithPath:@"conversation"];
@@ -50,7 +50,7 @@
 	
 	NSString *postString = [postJSON ATJSONStringWithOptions:ATJKSerializeOptionPretty error:&error];
 	if (!postString && error != nil) {
-		NSLog(@"ATWebClient+MessageCenter: Error while encoding JSON: %@", error);
+		ATLogError(@"Error while encoding JSON: %@", error);
 		return nil;
 	}
 	NSString *path = [NSString stringWithFormat:@"devices/%@", [[ATBackend sharedBackend] deviceUUID]];
@@ -75,13 +75,13 @@
 	
 	NSString *postString = [postJSON ATJSONStringWithOptions:ATJKSerializeOptionPretty error:&error];
 	if (!postString && error != nil) {
-		NSLog(@"ATWebClient+MessageCenter: Error while encoding JSON: %@", error);
+		ATLogError(@"Error while encoding JSON: %@", error);
 		return nil;
 	}
 	
 	ATActivityFeed *feed = [ATActivityFeedUpdater currentActivityFeed];
 	if (!feed) {
-		NSLog(@"No current activity feed.");
+		ATLogError(@"No current activity feed.");
 		return nil;
 	}
 	NSString *path = @"messages";
@@ -94,7 +94,7 @@
 		ATFileMessage *fileMessage = (ATFileMessage *)message;
 		ATFileAttachment *fileAttachment = fileMessage.fileAttachment;
 		if (!fileAttachment) {
-			NSLog(@"Expected file attachment on message");
+			ATLogError(@"Expected file attachment on message");
 			return nil;
 		}
 		conn = [self connectionToPost:url JSON:postString withFile:[fileAttachment fullLocalPath] ofMimeType:fileAttachment.mimeType];

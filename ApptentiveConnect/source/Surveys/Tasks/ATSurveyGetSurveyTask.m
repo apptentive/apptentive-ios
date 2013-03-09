@@ -88,7 +88,7 @@
 			ATSurveyParser *parser = [[ATSurveyParser alloc] init];
 			ATSurvey *survey = [parser parseSurvey:(NSData *)result];
 			if (survey == nil) {
-				NSLog(@"An error occurred parsing survey: %@", [parser parserError]);
+				ATLogError(@"An error occurred parsing survey: %@", [parser parserError]);
 			} else {
 				[[ATSurveysBackend sharedBackend] didReceiveNewSurvey:survey];
 			}
@@ -105,7 +105,7 @@
 	@synchronized(self) {
 		[self retain];
 		if (request == checkSurveyRequest) {
-			NSLog(@"Survey request failed: %@: %@", request.errorTitle, request.errorMessage);
+			ATLogError(@"Survey request failed: %@: %@", request.errorTitle, request.errorMessage);
 			self.failed = YES;
 			[self stop];
 		}

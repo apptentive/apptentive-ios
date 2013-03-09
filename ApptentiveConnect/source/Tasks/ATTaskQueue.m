@@ -44,7 +44,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 				NSError *error = nil;
 				NSData *data = [NSData dataWithContentsOfFile:[ATTaskQueue taskQueuePath] options:NSDataReadingMapped error:&error];
 				if (!data) {
-					NSLog(@"Unable to unarchive task queue: %@", error);
+					ATLogError(@"Unable to unarchive task queue: %@", error);
 				} else {
 					NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
 					[unarchiver setClass:[ATLegacyRecord class] forClassName:@"ATRecord"];
@@ -213,7 +213,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 				[self stop];
 				task.failureCount = task.failureCount + 1;
 				if (task.failureCount > kMaxFailureCount) {
-					NSLog(@"Task %@ failed too many times, removing from queue.", task);
+					ATLogError(@"Task %@ failed too many times, removing from queue.", task);
 					[self unsetActiveTask];
 					[task cleanup];
 					[tasks removeObject:task];

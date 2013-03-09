@@ -8,6 +8,8 @@
 
 #import "ATLogViewController.h"
 
+#import "ATLogger.h"
+
 @implementation ATLogViewController
 @synthesize textView;
 
@@ -28,10 +30,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	textView = [[UITextView alloc] initWithFrame:self.view.bounds];
+	textView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	textView.delegate = self;
+	textView.showsHorizontalScrollIndicator = YES;
 	[self.view addSubview:textView];
 	
 	self.navigationItem.title = @"Debug Logs";
 	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)];
+	self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reloadLogs:)];
+	
+	self.textView.text = [[ATLogger sharedLogger] currentLogText];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -42,5 +50,15 @@
 
 - (void)done:(id)sender {
 	[self dismissModalViewControllerAnimated:YES];
+}
+
+- (IBAction)reloadLogs:(id)sender {
+	self.textView.text = [[ATLogger sharedLogger] currentLogText];
+	[self.textView scrollRangeToVisible:NSMakeRange([[self.textView text] length] - 1, 1)];
+}
+
+#pragma mark - UITextViewDelegate
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+	return NO;
 }
 @end

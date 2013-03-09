@@ -32,7 +32,7 @@
 	if (data) {
 		self.localPath = [ATUtilities randomStringOfLength:20];
 		if (![data writeToFile:[self fullLocalPath] atomically:YES]) {
-			NSLog(@"Unable to save file data to path: %@", [self fullLocalPath]);
+			ATLogError(@"Unable to save file data to path: %@", [self fullLocalPath]);
 			self.localPath = nil;
 		}
 		self.mimeType = @"application/octet-stream";
@@ -47,14 +47,14 @@
 		BOOL isDir = NO;
 		NSFileManager *fm = [NSFileManager defaultManager];
 		if (![fm fileExistsAtPath:sourceFilename isDirectory:&isDir] || isDir) {
-			NSLog(@"Either source attachment file doesn't exist or is directory: %@, %d", sourceFilename, isDir);
+			ATLogError(@"Either source attachment file doesn't exist or is directory: %@, %d", sourceFilename, isDir);
 			return;
 		}
 		self.localPath = [ATUtilities randomStringOfLength:20];
 		NSError *error = nil;
 		if (![fm copyItemAtPath:sourceFilename toPath:[self fullLocalPath] error:&error]) {
 			self.localPath = nil;
-			NSLog(@"Unable to write attachment to path: %@, %@", [self fullLocalPath], error);
+			ATLogError(@"Unable to write attachment to path: %@, %@", [self fullLocalPath], error);
 			return;
 		}
 		self.mimeType = @"application/octet-stream";
@@ -87,24 +87,24 @@
 		NSError *error = nil;
 		BOOL isDir = NO;
 		if (![fm fileExistsAtPath:fullPath isDirectory:&isDir] || isDir) {
-			NSLog(@"File attachment sidecar doesn't exist at path or is directory: %@, %d", fullPath, isDir);
+			ATLogError(@"File attachment sidecar doesn't exist at path or is directory: %@, %d", fullPath, isDir);
 			return;
 		}
 		if (![fm removeItemAtPath:fullPath error:&error]) {
-			NSLog(@"Error removing attachment at path: %@. %@", fullPath, error);
+			ATLogError(@"Error removing attachment at path: %@. %@", fullPath, error);
 			return;
 		}
 		// Delete any thumbnails.
 		NSArray *filenames = [fm contentsOfDirectoryAtPath:[[ATBackend sharedBackend] attachmentDirectoryPath] error:&error];
 		if (!filenames) {
-			NSLog(@"Error listing attachments directory: %@", error);
+			ATLogError(@"Error listing attachments directory: %@", error);
 		} else {
 			for (NSString *filename in filenames) {
 				if ([filename rangeOfString:self.localPath].location == 0) {
 					NSString *thumbnailPath = [self fullLocalPathForFilename:filename];
 					
 					if (![fm removeItemAtPath:thumbnailPath error:&error]) {
-						NSLog(@"Error removing attachment thumbnail at path: %@. %@", thumbnailPath, error);
+						ATLogError(@"Error removing attachment thumbnail at path: %@. %@", thumbnailPath, error);
 						continue;
 					}
 				}

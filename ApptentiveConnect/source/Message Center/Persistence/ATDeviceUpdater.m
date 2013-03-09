@@ -111,7 +111,7 @@ NSString *const ATDeviceLastUpdatePreferenceKey = @"ATDeviceLastUpdatePreference
 
 - (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
 	@synchronized(self) {
-		NSLog(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
+		ATLogInfo(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
 		
 		[delegate deviceUpdater:self didFinish:NO];
 	}

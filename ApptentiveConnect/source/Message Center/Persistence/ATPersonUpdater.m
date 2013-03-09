@@ -80,7 +80,7 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 		if ([result isKindOfClass:[NSDictionary class]]) {
 			[self processResult:(NSDictionary *)result];
 		} else {
-			NSLog(@"Person result is not NSDictionary!");
+			ATLogError(@"Person result is not NSDictionary!");
 			[delegate personUpdater:self didFinish:NO];
 		}
 	}
@@ -92,7 +92,7 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 
 - (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
 	@synchronized(self) {
-		NSLog(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
+		ATLogInfo(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
 		
 		[delegate personUpdater:self didFinish:NO];
 	}

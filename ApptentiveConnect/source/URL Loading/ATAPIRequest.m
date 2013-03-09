@@ -109,18 +109,18 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 		/*!!!!! Prefix line with // to debug HTTP stuff.
 		 if (YES) {
 		 NSString *a = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];
-		 NSLog(@"request: %@", [connection requestAsString]);
-		 NSLog(@"a: %@", a);
+		 ATLogDebug(@"request: %@", [connection requestAsString]);
+		 ATLogDebug(@"a: %@", a);
 		 }
 		 // */
 		
 		if (self.failed) {
 			NSData *d = [sender responseData];
 			NSString *a = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];
-			NSLog(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
-			NSLog(@"Status was: %d", sender.statusCode);
-			NSLog(@"Request was: %@", [connection requestAsString]);
-			NSLog(@"Response was: %@", a);
+			ATLogError(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
+			ATLogInfo(@"Status was: %d", sender.statusCode);
+			ATLogDebug(@"Request was: %@", [connection requestAsString]);
+			ATLogDebug(@"Response was: %@", a);
 		}
 		
 		if (!d) break;
@@ -174,10 +174,10 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	 if (YES) {
 	 NSData *d = [sender responseData];
 	 NSString *a = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];
-	 NSLog(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
-	 NSLog(@"Status was: %d", sender.statusCode);
-	 NSLog(@"Request was: %@", [connection requestAsString]);
-	 NSLog(@"Response was: %@", a);
+	 ATLogError(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
+	 ATLogInfo(@"Status was: %d", sender.statusCode);
+	 ATLogDebug(@"Request was: %@", [connection requestAsString]);
+	 ATLogDebug(@"Response was: %@", a);
 	 }
 	 // */
 	if (delegate) {

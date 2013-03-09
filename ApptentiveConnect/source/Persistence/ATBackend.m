@@ -229,8 +229,8 @@ static ATBackend *sharedBackend = nil;
 	NSError *error = nil;
 	BOOL result = [fm createDirectoryAtPath:newPath withIntermediateDirectories:YES attributes:nil error:&error];
 	if (!result) {
-		NSLog(@"Failed to create attachments directory: %@", newPath);
-		NSLog(@"Error was: %@", error);
+		ATLogError(@"Failed to create attachments directory: %@", newPath);
+		ATLogError(@"Error was: %@", error);
 		return nil;
 	}
 	return newPath;

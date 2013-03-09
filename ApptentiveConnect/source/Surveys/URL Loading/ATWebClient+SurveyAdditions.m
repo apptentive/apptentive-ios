@@ -30,7 +30,7 @@
 	NSError *error = nil;
 	NSString *postString = [[surveyResponse apiJSON] ATJSONStringWithOptions:ATJKSerializeOptionPretty error:&error];
 	if (!postString && error != nil) {
-		NSLog(@"ATWebClient+SurveyAdditions: Error while encoding JSON: %@", error);
+		ATLogError(@"ATWebClient+SurveyAdditions: Error while encoding JSON: %@", error);
 		return nil;
 	}
 	NSString *url = [self apiURLStringWithPath:@"records"];

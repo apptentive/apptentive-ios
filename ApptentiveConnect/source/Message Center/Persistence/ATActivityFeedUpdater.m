@@ -84,7 +84,7 @@ NSString *const ATCurrentActivityFeedPreferenceKey = @"ATCurrentActivityFeedPref
 		if ([result isKindOfClass:[NSDictionary class]]) {
 			[self processResult:(NSDictionary *)result];
 		} else {
-			NSLog(@"Activity feed result is not NSDictionary!");
+			ATLogError(@"Activity feed result is not NSDictionary!");
 			[delegate activityFeed:self createdFeed:NO];
 		}
 	}
@@ -96,7 +96,7 @@ NSString *const ATCurrentActivityFeedPreferenceKey = @"ATCurrentActivityFeedPref
 
 - (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
 	@synchronized(self) {
-		NSLog(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
+		ATLogInfo(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
 		
 		[delegate activityFeed:self createdFeed:NO];
 	}

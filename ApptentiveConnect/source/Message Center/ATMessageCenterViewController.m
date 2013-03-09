@@ -131,7 +131,7 @@ typedef enum {
 	
 	NSError *error = nil;
 	if (![self.fetchedMessagesController performFetch:&error]) {
-		NSLog(@"got an error loading messages: %@", error);
+		ATLogError(@"got an error loading messages: %@", error);
 		//!! handle me
 	}
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{

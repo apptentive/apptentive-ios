@@ -100,7 +100,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 		if ([result isKindOfClass:[NSDictionary class]] && [self processResult:(NSDictionary *)result]) {
 			self.finished = YES;
 		} else {
-			NSLog(@"Messages result is not NSDictionary!");
+			ATLogError(@"Messages result is not NSDictionary!");
 			self.failed = YES;
 		}
 		[self stop];
@@ -118,7 +118,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 		self.failed = YES;
 		self.lastErrorTitle = sender.errorTitle;
 		self.lastErrorMessage = sender.errorMessage;
-		NSLog(@"ATAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
+		ATLogInfo(@"ATAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
 		[self stop];
 		[self release];
 	}
@@ -137,7 +137,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 - (BOOL)processResult:(NSDictionary *)jsonMessages {
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
 	NSString *lastMessageID = nil;
-	NSLog(@"messages: %@", jsonMessages);
+	ATLogDebug(@"messages: %@", jsonMessages);
 	
 	do { // once
 		if (!jsonMessages) break;
@@ -171,7 +171,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 		}
 		NSError *error = nil;
 		if (![context save:&error]) {
-			NSLog(@"Failed to save messages: %@", error);
+			ATLogError(@"Failed to save messages: %@", error);
 			success = NO;
 		}
 		if (success && lastMessageID) {

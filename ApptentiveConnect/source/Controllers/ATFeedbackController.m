@@ -144,7 +144,7 @@ enum {
 	
 	UIWindow *parentWindow = [self windowForViewController:presentingViewController];
 	if (!parentWindow) {
-		NSLog(@"Unable to find parentWindow!");
+		ATLogError(@"Unable to find parentWindow!");
 	}
 	if (originalPresentingWindow != parentWindow) {
 		[originalPresentingWindow release], originalPresentingWindow = nil;

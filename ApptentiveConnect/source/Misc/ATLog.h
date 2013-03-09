@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#import "ATLogger.h"
+
 #ifndef AT_LOGGING_ENABLED
 #	ifdef APPTENTIVE_DEBUG
 #		define AT_LOGGING_ENABLED 1
@@ -38,19 +40,7 @@
 #	undef AT_LOGGING_LEVEL_ERROR
 #endif
 
-#ifndef AT_LOGGING_LOCATION
-#	define AT_LOGGING_LOCATION 0
-#endif
-
-
-#define AT_LOG_FORMAT_BARE(format, level, ...) NSLog((@"[%@] " format), level, ##__VA_ARGS__)
-#define AT_LOG_FORMAT_LOCATION(format, level, ...) NSLog((@"%s[%d] [%@] " format), __PRETTY_FUNCTION__, __LINE__, level, ##__VA_ARGS__)
-
-#if (defined(AT_LOGGING_LOCATION) && AT_LOGGING_LOCATION)
-#	define AT_LOG_FORMAT(format, level, ...) AT_LOG_FORMAT_LOCATION(format, level, ##__VA_ARGS__)
-#else
-#	define AT_LOG_FORMAT(format, level, ...) AT_LOG_FORMAT_BARE(format, level, ##__VA_ARGS__)
-#endif
+#define AT_LOG_FORMAT(format_val, level, ...) ([ATLogger logWithLevel:level file:__FILE__ function:__PRETTY_FUNCTION__ line:__LINE__ format:(format_val), ##__VA_ARGS__ ])
 
 #if AT_LOGGING_LEVEL_DEBUG
 #	define ATLogDebug(s, ...) AT_LOG_FORMAT(s, @"debug", ##__VA_ARGS__)

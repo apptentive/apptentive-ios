@@ -42,6 +42,7 @@ static ATBackend *sharedBackend = nil;
 - (void)stopWorking:(NSNotification *)notification;
 - (void)startWorking:(NSNotification *)notification;
 - (void)checkForMessages;
+- (void)startMonitoringUnreadMessages;
 @end
 
 @interface ATBackend ()
@@ -388,6 +389,20 @@ static ATBackend *sharedBackend = nil;
 	}
 }
 
+#pragma mark NSFetchedResultsControllerDelegate
+#if TARGET_OS_IPHONE
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+	if (controller == unreadCountController) {
+		id<NSFetchedResultsSectionInfo> sectionInfo = [[unreadCountController sections] objectAtIndex:0];
+		NSUInteger unreadCount = [sectionInfo numberOfObjects];
+		if (unreadCount != previousUnreadCount) {
+			previousUnreadCount = unreadCount;
+			[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterUnreadCountChangedNotification object:nil userInfo:@{@"count":@(previousUnreadCount)}];
+		}
+	}
+}
+#endif
+
 #pragma mark ATActivityFeedUpdaterDelegate
 - (void)activityFeed:(ATActivityFeedUpdater *)aFeedUpdater createdFeed:(BOOL)success {
 	if (activityFeedUpdater == aFeedUpdater) {
@@ -424,6 +439,10 @@ static ATBackend *sharedBackend = nil;
     });
     return cachedDistributionName;
 }
+
+- (NSUInteger)unreadMessageCount {
+	return previousUnreadCount;
+}
 @end
 
 @implementation ATBackend (Private)
@@ -444,6 +463,7 @@ static ATBackend *sharedBackend = nil;
 	
 	[ATReachability sharedReachability];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusChanged:) name:ATReachabilityStatusChanged object:nil];
+	[self performSelector:@selector(startMonitoringUnreadMessages) withObject:nil afterDelay:0.2];
 }
 
 - (void)updateWorking {
@@ -524,5 +544,39 @@ static ATBackend *sharedBackend = nil;
 	}
 	ATLogInfo(@"Removing temporary data");
 	[ATFakeMessage removeFakeMessages];
+}
+
+- (void)startMonitoringUnreadMessages {
+	@autoreleasepool {
+#if TARGET_OS_IPHONE
+		if (unreadCountController != nil) {
+			ATLogError(@"startMonitoringUnreadMessages called more than once!");
+			return;
+		}
+		NSFetchRequest *request = [[NSFetchRequest alloc] init];
+		[request setEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:[self managedObjectContext]]];
+		[request setFetchBatchSize:20];
+		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
+		[request setSortDescriptors:@[sortDescriptor]];
+		[sortDescriptor release], sortDescriptor = nil;
+		
+		NSPredicate *unreadPredicate = [NSPredicate predicateWithFormat:@"seenByUser == %@", @(NO)];
+		request.predicate = unreadPredicate;
+		
+		NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:nil cacheName:@"at-unread-messages-cache"];
+		newController.delegate = self;
+		unreadCountController = newController;
+		
+		NSError *error = nil;
+		if (![unreadCountController performFetch:&error]) {
+			ATLogError(@"got an error loading unread messages: %@", error);
+			//!! handle me
+		} else {
+			[self controllerDidChangeContent:unreadCountController];
+		}
+		
+		[request release], request = nil;
+#endif
+	}
 }
 @end

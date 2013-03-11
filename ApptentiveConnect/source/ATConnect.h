@@ -28,6 +28,7 @@ typedef enum {
 	ATFeedbackControllerSimple
 } ATFeedbackControllerType;
 
+extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 
 @interface ATConnect : NSObject {
 @private
@@ -69,6 +70,7 @@ typedef enum {
 
 
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController;
+- (NSUInteger)unreadMessageCount;
 
 /*!
  * Dismisses the feedback controller. You normally won't need to call this.

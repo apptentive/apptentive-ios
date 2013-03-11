@@ -20,6 +20,9 @@
 
 static ATConnect *sharedConnection = nil;
 
+
+NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCenterUnreadCountChangedNotification";
+
 @implementation ATConnect
 @synthesize apiKey, showTagline, shouldTakeScreenshot, showEmailField, initialName, initialEmailAddress, feedbackControllerType, customPlaceholderText;
 
@@ -173,6 +176,10 @@ static ATConnect *sharedConnection = nil;
 	[viewController presentModalViewController:nc animated:YES];
 	[vc release], vc = nil;
 	[nc release], nc = nil;
+}
+
+- (NSUInteger)unreadMessageCount {
+	return [[ATBackend sharedBackend] unreadMessageCount];
 }
 
 #elif TARGET_OS_MAC

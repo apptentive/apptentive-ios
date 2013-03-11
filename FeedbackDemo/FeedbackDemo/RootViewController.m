@@ -5,6 +5,7 @@
 //  Created by Andrew Wooster on 3/18/11.
 //  Copyright 2011 Apptentive, Inc.. All rights reserved.
 //
+#import <QuartzCore/QuartzCore.h>
 
 #import "RootViewController.h"
 #import "ATConnect.h"
@@ -22,6 +23,7 @@ enum kRootTableSections {
 
 @interface RootViewController ()
 - (void)surveyBecameAvailable:(NSNotification *)notification;
+- (void)unreadMessageCountChanged:(NSNotification *)notification;
 @end
 
 @implementation RootViewController
@@ -49,10 +51,15 @@ enum kRootTableSections {
 	[super viewDidLoad];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyBecameAvailable:) name:ATSurveyNewSurveyAvailableNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unreadMessageCountChanged:) name:ATMessageCenterUnreadCountChangedNotification object:nil];
 	[ATSurveys checkForAvailableSurveys];
 }
 
 - (void)surveyBecameAvailable:(NSNotification *)notification {
+	[self.tableView reloadData];
+}
+
+- (void)unreadMessageCountChanged:(NSNotification *)notification {
 	[self.tableView reloadData];
 }
 
@@ -94,6 +101,7 @@ enum kRootTableSections {
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil) {
 		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+		cell.accessoryView = nil;
 	}
 	cell.textLabel.textColor = [UIColor blackColor];
 	if (indexPath.section == kFeedbackSection) {
@@ -113,6 +121,15 @@ enum kRootTableSections {
 		}
 	} else if (indexPath.section == kMessageCenterSection) {
 		cell.textLabel.text = @"Message Center";
+		UILabel *unreadLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+		unreadLabel.text = [NSString stringWithFormat:@" %d ", [[ATConnect sharedConnection] unreadMessageCount]];
+		unreadLabel.backgroundColor = [UIColor grayColor];
+		unreadLabel.textColor = [UIColor whiteColor];
+		unreadLabel.textAlignment = UITextAlignmentCenter;
+		unreadLabel.layer.cornerRadius = 10.0;
+		unreadLabel.font = [UIFont boldSystemFontOfSize:17];
+		[unreadLabel sizeToFit];
+		cell.accessoryView = [unreadLabel autorelease];
 	}
 	
 	return cell;

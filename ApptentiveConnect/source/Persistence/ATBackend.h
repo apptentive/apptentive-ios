@@ -25,7 +25,11 @@ NSString *const ATBackendNewAPIKeyNotification;
 @class ATAPIRequest;
 
 /*! Handles all of the backend activities, such as sending feedback. */
-@interface ATBackend : NSObject <ATActivityFeedUpdaterDelegate, ATDeviceUpdaterDelegate> {
+@interface ATBackend : NSObject <ATActivityFeedUpdaterDelegate, ATDeviceUpdaterDelegate
+#if TARGET_OS_IPHONE
+, NSFetchedResultsControllerDelegate
+#endif
+> {
 @private
 	NSString *apiKey;
 	ATFeedback *currentFeedback;
@@ -42,6 +46,10 @@ NSString *const ATBackendNewAPIKeyNotification;
 	ATDeviceUpdater *deviceUpdater;
 	
 	NSTimer *messageRetrievalTimer;
+#if TARGET_OS_IPHONE
+	NSFetchedResultsController *unreadCountController;
+	NSInteger previousUnreadCount;
+#endif
 }
 @property (nonatomic, retain) NSString *apiKey;
 /*! The feedback currently being worked on by the user. */
@@ -71,4 +79,6 @@ NSString *const ATBackendNewAPIKeyNotification;
 - (NSURL *)apptentivePrivacyPolicyURL;
 
 - (NSString *)distributionName;
+
+- (NSUInteger)unreadMessageCount;
 @end

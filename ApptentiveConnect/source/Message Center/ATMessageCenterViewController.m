@@ -569,7 +569,7 @@ typedef enum {
 	ATMessage *message = (ATMessage *)[fetchedMessagesController objectAtIndexPath:indexPath];
 	if ([[message seenByUser] boolValue] == NO) {
 		[message setSeenByUser:@(YES)];
-		[[[ATBackend sharedBackend] managedObjectContext] save:nil];
+		[ATData save];
 	}
 	
 	if ([message isKindOfClass:[ATFakeMessage class]]) {

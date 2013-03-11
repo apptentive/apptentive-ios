@@ -10,8 +10,11 @@
 #import "ATAppConfigurationUpdater.h"
 #import "ATFeedbackMetrics.h"
 #import "ATAppRatingMetrics.h"
+#import "ATData.h"
+#import "ATEvent.h"
 #import "ATMetric.h"
 #import "ATRecordTask.h"
+#import "ATRecordRequestTask.h"
 #import "ATSurveyMetrics.h"
 #import "ATTaskQueue.h"
 
@@ -134,13 +137,16 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 	if (metricsEnabled == NO) {
 		return;
 	}
-	ATMetric *metric = [[ATMetric alloc] init];
-	metric.name = name;
-	[metric addEntriesFromDictionary:userInfo];
-	ATRecordTask *task = [[ATRecordTask alloc] init];
-	[task setRecord:metric];
+	ATEvent *event = (ATEvent *)[ATData newEntityNamed:@"ATEvent"];
+	[event setup];
+	event.label = name;
+	[event addEntriesFromDictionary:userInfo];
+	[ATData save];
+	
+	ATRecordRequestTask *task = [[ATRecordRequestTask alloc] init];
+	[task setTaskProvider:event];
 	[[ATTaskQueue sharedTaskQueue] addTask:task];
-	[metric release], metric = nil;
+	[event release], event = nil;
 	[task release], task = nil;
 }
 

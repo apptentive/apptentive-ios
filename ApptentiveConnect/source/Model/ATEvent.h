@@ -12,10 +12,14 @@
 #import "ATRecord.h"
 
 #import "ATJSONModel.h"
+#import "ATRecordRequestTask.h"
 
-@interface ATEvent : ATRecord <ATJSONModel>
+@interface ATEvent : ATRecord <ATJSONModel, ATRequestTaskProvider>
 
+@property (nonatomic, retain) NSString *pendingEventID;
 @property (nonatomic, retain) NSData *dictionaryData;
 @property (nonatomic, retain) NSString *label;
 
+- (void)setValue:(id)value forKey:(NSString *)key;
+- (void)addEntriesFromDictionary:(NSDictionary *)dictionary;
 @end

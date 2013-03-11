@@ -12,6 +12,9 @@
 @interface ATData : NSObject
 + (NSManagedObject *)newEntityNamed:(NSString *)entityName;
 + (NSArray *)findEntityNamed:(NSString *)entityName withPredicate:(NSPredicate *)predicate;
++ (NSManagedObject *)findEntityWithURI:(NSURL *)URL;
 + (NSUInteger)countEntityNamed:(NSString *)entityName withPredicate:(NSPredicate *)predicate;
 + (void)removeEntitiesNamed:(NSString *)entityName withPredicate:(NSPredicate *)predicate;
++ (void)deleteManagedObject:(NSManagedObject *)object;
++ (void)save;
 @end

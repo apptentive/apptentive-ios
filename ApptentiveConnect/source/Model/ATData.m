@@ -33,6 +33,22 @@
 	return fetchArray;
 }
 
++ (NSManagedObject *)findEntityWithURI:(NSURL *)URL {
+	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
+	NSManagedObjectID *objectID = [[context persistentStoreCoordinator] managedObjectIDForURIRepresentation:URL];
+	if (objectID == nil) {
+		return nil;
+	}
+	NSError *fetchError = nil;
+	NSManagedObject *object = [context existingObjectWithID:objectID error:&fetchError];
+	if (object == nil) {
+		ATLogError(@"Error finding object with URL: %@", URL);
+		ATLogError(@"Error was: %@", fetchError);
+		return nil;
+	}
+	return object;
+}
+
 + (NSUInteger)countEntityNamed:(NSString *)entityName withPredicate:(NSPredicate *)predicate {
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
 	NSFetchRequest *fetchType = [[NSFetchRequest alloc] initWithEntityName:entityName];
@@ -65,5 +81,18 @@
 	}
 	
 	[fetchTypes release], fetchTypes = nil;
+}
+
++ (void)deleteManagedObject:(NSManagedObject *)object {
+	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
+	[context deleteObject:object];
+}
+
++ (void)save {
+	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
+	NSError *error = nil;
+	if (![context save:&error]) {
+		ATLogError(@"Error saving context: %@", error);
+	}
 }
 @end

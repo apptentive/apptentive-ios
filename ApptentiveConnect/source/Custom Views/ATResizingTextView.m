@@ -49,7 +49,6 @@
 }
 
 - (void)setup {
-	
 	if (self.style == ATResizingTextViewStyleIOS) {
 		self.backgroundColor = [UIColor clearColor];
 		self.clipsToBounds = NO;
@@ -257,7 +256,7 @@
 
 @implementation ATInternalDefaultTextView
 - (void)setContentInset:(UIEdgeInsets)aContentInset {
-	ATLogDebug(@"content inset is: %@", NSStringFromUIEdgeInsets(aContentInset));
+	//ATLogDebug(@"content inset is: %@", NSStringFromUIEdgeInsets(aContentInset));
 	[super setContentInset:aContentInset];
 }
 

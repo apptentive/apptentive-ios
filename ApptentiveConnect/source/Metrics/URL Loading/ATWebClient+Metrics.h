@@ -10,8 +10,9 @@
 
 #import "ATWebClient.h"
 
-@class ATAPIRequest, ATMetric;
+@class ATAPIRequest, ATMetric, ATEvent;
 
 @interface ATWebClient (Metrics)
 - (ATAPIRequest *)requestForSendingMetric:(ATMetric *)metric;
+- (ATAPIRequest *)requestForSendingEvent:(ATEvent *)event;
 @end

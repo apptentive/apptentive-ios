@@ -7,7 +7,6 @@
 //
 
 #import "ATTask.h"
-#import "ATTask.h"
 #import "ATAPIRequest.h"
 
 @class ATLegacyRecord;

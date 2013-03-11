@@ -45,6 +45,8 @@
 		492F2F0A16E3F77C0030E48A /* ATFakeMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 492F2F0916E3F77C0030E48A /* ATFakeMessageCell.xib */; };
 		492F2F0E16E3F9660030E48A /* ATDefaultMessageCenterTitleView.h in Headers */ = {isa = PBXBuildFile; fileRef = 492F2F0C16E3F9660030E48A /* ATDefaultMessageCenterTitleView.h */; };
 		492F2F0F16E3F9660030E48A /* ATDefaultMessageCenterTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 492F2F0D16E3F9660030E48A /* ATDefaultMessageCenterTitleView.m */; };
+		492F2F1C16ED597F0030E48A /* ATRecordRequestTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 492F2F1A16ED597F0030E48A /* ATRecordRequestTask.h */; };
+		492F2F1D16ED597F0030E48A /* ATRecordRequestTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 492F2F1B16ED597F0030E48A /* ATRecordRequestTask.m */; };
 		493529FF138C7253000E464A /* ATInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA1022138B498C0082887A /* ATInfoViewController.xib */; };
 		49352A00138C7257000E464A /* ATInfoViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA1024138B49A50082887A /* ATInfoViewController_iPad.xib */; };
 		49352A20138C73B8000E464A /* ATAboutApptentiveView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49352A1F138C73B8000E464A /* ATAboutApptentiveView.xib */; };
@@ -299,6 +301,8 @@
 		492F2F0916E3F77C0030E48A /* ATFakeMessageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ATFakeMessageCell.xib; path = xibs/ATFakeMessageCell.xib; sourceTree = SOURCE_ROOT; };
 		492F2F0C16E3F9660030E48A /* ATDefaultMessageCenterTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATDefaultMessageCenterTitleView.h; path = "Message Center/Custom Views/ATDefaultMessageCenterTitleView.h"; sourceTree = "<group>"; };
 		492F2F0D16E3F9660030E48A /* ATDefaultMessageCenterTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATDefaultMessageCenterTitleView.m; path = "Message Center/Custom Views/ATDefaultMessageCenterTitleView.m"; sourceTree = "<group>"; };
+		492F2F1A16ED597F0030E48A /* ATRecordRequestTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATRecordRequestTask.h; sourceTree = "<group>"; };
+		492F2F1B16ED597F0030E48A /* ATRecordRequestTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATRecordRequestTask.m; sourceTree = "<group>"; };
 		49352A1F138C73B8000E464A /* ATAboutApptentiveView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ATAboutApptentiveView.xib; sourceTree = "<group>"; };
 		49352AC1138C97A2000E464A /* ATAPIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAPIRequest.h; sourceTree = "<group>"; };
 		49352AC2138C97A2000E464A /* ATAPIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAPIRequest.m; sourceTree = "<group>"; };
@@ -932,6 +936,8 @@
 				49D112721337CC9F00603373 /* ATTaskQueue.m */,
 				498EFB6E15BA48B200A1043B /* ATAppConfigurationUpdateTask.h */,
 				498EFB6F15BA48B300A1043B /* ATAppConfigurationUpdateTask.m */,
+				492F2F1A16ED597F0030E48A /* ATRecordRequestTask.h */,
+				492F2F1B16ED597F0030E48A /* ATRecordRequestTask.m */,
 			);
 			path = Tasks;
 			sourceTree = "<group>";
@@ -1072,6 +1078,7 @@
 				492F2F0E16E3F9660030E48A /* ATDefaultMessageCenterTitleView.h in Headers */,
 				49881DDD16E839540061D888 /* ATLogViewController.h in Headers */,
 				495E9C1C16EABD8E00AE3B03 /* ATLogger.h in Headers */,
+				492F2F1C16ED597F0030E48A /* ATRecordRequestTask.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1309,6 +1316,7 @@
 				492F2F0F16E3F9660030E48A /* ATDefaultMessageCenterTitleView.m in Sources */,
 				49881DDE16E839540061D888 /* ATLogViewController.m in Sources */,
 				495E9C1D16EABD8E00AE3B03 /* ATLogger.m in Sources */,
+				492F2F1D16ED597F0030E48A /* ATRecordRequestTask.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

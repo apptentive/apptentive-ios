@@ -126,7 +126,7 @@
 }
 
 - (ATRecordRequestTaskResult)taskResultForTask:(ATRecordRequestTask *)task withRequest:(ATAPIRequest *)request withResult:(id)result {
-	ATLogInfo(@"Successfully sent event: %@ %@", self, result);
+	//ATLogInfo(@"Successfully sent event: %@ %@", self, result);
 	return ATRecordRequestTaskFinishedResult;
 }
 @end

@@ -750,6 +750,7 @@
 		4987FA7C157ACA8C00AF2078 /* Metrics */ = {
 			isa = PBXGroup;
 			children = (
+				4987FA95157AE53500AF2078 /* ApptentiveMetrics.h */,
 				4987FA96157AE53500AF2078 /* ApptentiveMetrics.m */,
 				4987FA97157AE53500AF2078 /* ATMetric.h */,
 				4987FA98157AE53600AF2078 /* ATMetric.m */,
@@ -891,7 +892,6 @@
 			isa = PBXGroup;
 			children = (
 				49C00297133413BB0071F088 /* ATConnect.h */,
-				4987FA95157AE53500AF2078 /* ApptentiveMetrics.h */,
 				493AEB1615990A4D00DFD4C7 /* ATSurveys.h */,
 				49C00298133413BB0071F088 /* ATConnect.m */,
 				4967278116B9D9CB00C679B8 /* ATConnect_Private.h */,

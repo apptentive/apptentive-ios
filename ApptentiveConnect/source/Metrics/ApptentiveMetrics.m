@@ -128,6 +128,24 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[super dealloc];
 }
+
+- (void)upgradeLegacyMetric:(ATMetric *)metric {
+	if (metricsEnabled == NO) {
+		return;
+	}
+	
+	ATEvent *event = (ATEvent *)[ATData newEntityNamed:@"ATEvent"];
+	[event setup];
+	event.label = metric.name;
+	[event addEntriesFromDictionary:[metric info]];
+	[ATData save];
+	
+	ATRecordRequestTask *task = [[ATRecordRequestTask alloc] init];
+	[task setTaskProvider:event];
+	[[ATTaskQueue sharedTaskQueue] addTask:task];
+	[event release], event = nil;
+	[task release], task = nil;
+}
 @end
 
 

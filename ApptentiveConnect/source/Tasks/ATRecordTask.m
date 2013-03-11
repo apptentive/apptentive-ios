@@ -7,8 +7,10 @@
 //
 
 #import "ATRecordTask.h"
+#import "ApptentiveMetrics.h"
 #import "ATBackend.h"
 #import "ATFeedback.h"
+#import "ATMetric.h"
 #import "ATWebClient.h"
 
 #define kATRecordTaskCodingVersion 1
@@ -16,6 +18,7 @@
 @interface ATRecordTask (Private)
 - (void)setup;
 - (void)teardown;
+- (BOOL)handleLegacyRecord;
 @end
 
 @implementation ATRecordTask
@@ -53,6 +56,10 @@
 }
 
 - (void)start {
+	if ([self handleLegacyRecord]) {
+		self.finished = YES;
+		return;
+	}
 	if (!request) {
 		request = [[self.record requestForSendingRecord] retain];
 		if (request != nil) {
@@ -124,5 +131,13 @@
 
 - (void)teardown {
 	[self stop];
+}
+
+- (BOOL)handleLegacyRecord {
+	if ([self.record isKindOfClass:[ATMetric class]]) {
+		[[ApptentiveMetrics sharedMetrics] upgradeLegacyMetric:(ATMetric *)self.record];
+		return YES;
+	}
+	return NO;
 }
 @end

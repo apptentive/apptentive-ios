@@ -95,4 +95,8 @@
 		ATLogError(@"Error saving context: %@", error);
 	}
 }
+
++ (NSManagedObjectContext *)moc {
+	return [[ATBackend sharedBackend] managedObjectContext];
+}
 @end

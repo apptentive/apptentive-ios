@@ -6,6 +6,7 @@
 //  Copyright (c) 2012 Apptentive, Inc. All rights reserved.
 //
 #import <CoreData/CoreData.h>
+#import <CoreText/CoreText.h>
 #import <QuartzCore/QuartzCore.h>
 
 #import "ATMessageCenterViewController.h"
@@ -46,6 +47,7 @@ typedef enum {
 - (void)keyboardWillBeHidden:(NSNotification *)aNotification;
 - (NSFetchedResultsController *)fetchedMessagesController;
 - (void)scrollToBottomOfTableView;
+- (void)markAllMessagesAsRead;
 @end
 
 @implementation ATMessageCenterViewController {
@@ -73,6 +75,14 @@ typedef enum {
 #warning Fixme
 - (void)viewDidLoad {
     [super viewDidLoad];
+	
+	[self markAllMessagesAsRead];
+	NSError *error = nil;
+	if (![self.fetchedMessagesController performFetch:&error]) {
+		ATLogError(@"got an error loading messages: %@", error);
+		//!! handle me
+	}
+	[self.tableView reloadData];
 	
 	NSUInteger messageCount = [ATData countEntityNamed:@"ATMessage" withPredicate:nil];
 	if (messageCount == 0) {
@@ -129,11 +139,6 @@ typedef enum {
 	self.sendButton.clipsToBounds = YES;
 	 */
 	
-	NSError *error = nil;
-	if (![self.fetchedMessagesController performFetch:&error]) {
-		ATLogError(@"got an error loading messages: %@", error);
-		//!! handle me
-	}
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
 		[self relayoutSubviews];
 	});
@@ -189,6 +194,10 @@ typedef enum {
 	[self setIconButton:nil];
 	[self setAttachmentShadowView:nil];
 	[super viewDidUnload];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+	[self markAllMessagesAsRead];
 }
 
 - (IBAction)donePressed:(id)sender {
@@ -322,29 +331,36 @@ typedef enum {
 
 
 - (NSFetchedResultsController *)fetchedMessagesController {
-	if (!fetchedMessagesController) {
-		NSFetchRequest *request = [[NSFetchRequest alloc] init];
-		[request setEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
-		[request setFetchBatchSize:20];
-		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
-		[request setSortDescriptors:@[sortDescriptor]];
-		[sortDescriptor release], sortDescriptor = nil;
-		
-		NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:nil cacheName:@"at-messages-cache"];
-		newController.delegate = self;
-		fetchedMessagesController = newController;
-		
-		[request release], request = nil;
+	@synchronized(self) {
+		if (!fetchedMessagesController) {
+			[NSFetchedResultsController deleteCacheWithName:@"at-messages-cache"];
+			NSFetchRequest *request = [[NSFetchRequest alloc] init];
+			[request setEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
+			[request setFetchBatchSize:20];
+			NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
+			[request setSortDescriptors:@[sortDescriptor]];
+			[sortDescriptor release], sortDescriptor = nil;
+			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"clientCreationTime != %d", 0];
+			[request setPredicate:predicate];
+			
+			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:nil cacheName:@"at-messages-cache"];
+			newController.delegate = self;
+			fetchedMessagesController = newController;
+			
+			[request release], request = nil;
+		}
 	}
 	return fetchedMessagesController;
 }
 
 - (void)scrollToBottomOfTableView {
-	id<NSFetchedResultsSectionInfo> sectionInfo = [[fetchedMessagesController sections] objectAtIndex:0];
-	if ([sectionInfo numberOfObjects] > 0) {
-		NSUInteger row = [sectionInfo numberOfObjects] - 1;
-		NSIndexPath *path = [NSIndexPath indexPathForRow:row inSection:0];
-		[self.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+	if ([self.tableView numberOfSections] > 0) {
+		NSInteger rowCount = [self.tableView numberOfRowsInSection:0];
+		if (rowCount > 0) {
+			NSUInteger row = rowCount - 1;
+			NSIndexPath *path = [NSIndexPath indexPathForRow:row inSection:0];
+			[self.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+		}
 	}
 }
 
@@ -553,7 +569,7 @@ typedef enum {
 
 #pragma mark UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
-	id<NSFetchedResultsSectionInfo> sectionInfo = [[fetchedMessagesController sections] objectAtIndex:0];
+	id<NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedMessagesController sections] objectAtIndex:0];
 	return [sectionInfo numberOfObjects];
 }
 
@@ -566,11 +582,7 @@ typedef enum {
 	ATMessageCellType cellType = ATMessageCellTypeUnknown;
 	
 	UITableViewCell *cell = nil;
-	ATMessage *message = (ATMessage *)[fetchedMessagesController objectAtIndexPath:indexPath];
-	if ([[message seenByUser] boolValue] == NO) {
-		[message setSeenByUser:@(YES)];
-		[ATData save];
-	}
+	ATMessage *message = (ATMessage *)[self.fetchedMessagesController objectAtIndexPath:indexPath];
 	
 	if ([message isKindOfClass:[ATFakeMessage class]]) {
 		cellType = ATMessageCellTypeFake;
@@ -588,7 +600,7 @@ typedef enum {
 	if (indexPath.row == 0) {
 		showDate = YES;
 	} else {
-		ATMessage *previousMessage = (ATMessage *)[fetchedMessagesController objectAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
+		ATMessage *previousMessage = (ATMessage *)[self.fetchedMessagesController objectAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
 		if ([message.creationTime doubleValue] - [previousMessage.creationTime doubleValue] > 60 * 5) {
 			showDate = YES;
 		}
@@ -648,21 +660,25 @@ typedef enum {
 		textCell.composing = NO;
 		if ([message isKindOfClass:[ATTextMessage class]]) {
 			NSString *messageBody = [(ATTextMessage *)message body];
-			textCell.messageText.text = messageBody;
 			if ([[message pendingState] intValue] == ATPendingMessageStateSending) {
-				NSAttributedString *sending = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ ", NSLocalizedString(@"Sending:", @"Sending prefix on messages that are sending")] attributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:15]}];
-				
-				NSAttributedString *messageText = [[NSAttributedString alloc] initWithString:messageBody attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15]}];
-				NSMutableAttributedString *sFinal = [[NSMutableAttributedString alloc] initWithAttributedString:sending];
-				[sFinal appendAttributedString:messageText];
-				
-				textCell.messageText.attributedText = sFinal;
-				[messageText release], messageText = nil;
-				[sending release], sending = nil;
-				[sFinal release], sFinal = nil;
+				NSString *sendingText = NSLocalizedString(@"Sending:", @"Sending prefix on messages that are sending");
+				NSString *fullText = [NSString stringWithFormat:@"%@ %@", sendingText, messageBody];
+				[textCell.messageText setText:fullText afterInheritingLabelAttributesAndConfiguringWithBlock:^ NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
+					NSRange boldRange = NSMakeRange(0, [sendingText length]);
+					
+					UIFont *boldFont = [UIFont boldSystemFontOfSize:15];
+					CTFontRef font = CTFontCreateWithName((CFStringRef)[boldFont fontName], [boldFont pointSize], NULL);
+					if (font) {
+						[mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(id)font range:boldRange];
+						CFRelease(font), font = NULL;
+					}
+					return mutableAttributedString;
+				}];
 			} else if ([[message pendingState] intValue] == ATPendingMessageStateComposing) {
 				textCell.composing = YES;
 				textCell.textLabel.text = @"";
+			} else {
+				textCell.messageText.text = messageBody;
 			}
 		} else {
 			textCell.messageText.text = [message description];
@@ -694,13 +710,18 @@ typedef enum {
 			NSString *messageSubject = fakeMessage.subject;
 			NSString *messageBody = fakeMessage.body;
 			
-			NSMutableParagraphStyle *centerParagraphStyle = [[NSMutableParagraphStyle alloc] init];
-			[centerParagraphStyle setAlignment:UITextAlignmentCenter];
-			NSAttributedString *boldSubject = [[NSAttributedString alloc] initWithString:messageSubject attributes:@{NSFontAttributeName : [UIFont fontWithName:@"AmericanTypewriter-Bold" size:15], NSParagraphStyleAttributeName:centerParagraphStyle}];
-			currentCell.subjectText.attributedText = boldSubject;
-			[boldSubject release], boldSubject = nil;
-			[centerParagraphStyle release], centerParagraphStyle = nil;
-			
+			currentCell.subjectText.textAlignment = UITextAlignmentCenter;
+			[currentCell.subjectText setText:messageSubject afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
+				NSRange boldRange = NSMakeRange(0, [mutableAttributedString length]);
+				
+				UIFont *boldFont = [UIFont fontWithName:@"AmericanTypewriter-Bold" size:15];
+				CTFontRef font = CTFontCreateWithName((CFStringRef)[boldFont fontName], [boldFont pointSize], NULL);
+				if (font) {
+					[mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(id)font range:boldRange];
+					CFRelease(font), font = NULL;
+				}
+				return mutableAttributedString;
+			}];
 			currentCell.messageText.text = messageBody;
 		}
 		currentCell.dateLabel.text = dateString;
@@ -738,12 +759,30 @@ typedef enum {
 
 #pragma mark NSFetchedResultsControllerDelegate
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
-	[tableView beginUpdates];
+	[self.tableView beginUpdates];
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-	[tableView endUpdates];
+	@try {
+		[self.tableView endUpdates];
+	}
+	@catch (NSException *exception) {
+		ATLogError(@"caught exception: %@: %@", [exception name], [exception description]);
+	}
 	[self scrollToBottomOfTableView];
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
+		   atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
+    switch(type) {
+        case NSFetchedResultsChangeInsert:
+            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+			
+        case NSFetchedResultsChangeDelete:
+            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
@@ -764,5 +803,29 @@ typedef enum {
 		default:
 			break;
 	}
+}
+
+- (void)markAllMessagesAsRead {
+	NSFetchRequest *request = [[NSFetchRequest alloc] init];
+	[request setEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
+	[request setFetchBatchSize:20];
+	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
+	[request setSortDescriptors:@[sortDescriptor]];
+	[sortDescriptor release], sortDescriptor = nil;
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"seenByUser == %d", 0];
+	[request setPredicate:predicate];
+	
+	NSManagedObjectContext *moc = [ATData moc];
+	NSError *error = nil;
+	NSArray *results = [moc executeFetchRequest:request error:&error];
+	if (!results) {
+		ATLogError(@"Error exceuting fetch request: %@", error);
+	} else {
+		for (ATMessage *message in results) {
+			[message setSeenByUser:@(YES)];
+		}
+		[ATData save];
+	}
+	[request release], request = nil;
 }
 @end

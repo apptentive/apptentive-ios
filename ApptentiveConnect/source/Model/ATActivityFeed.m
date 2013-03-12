@@ -68,7 +68,7 @@
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
 	
 	if (self.deviceID) {
-		NSDictionary *deviceInfo = @{@"id":self.deviceID};
+		NSDictionary *deviceInfo = @{@"uuid":self.deviceID};
 		[result setObject:deviceInfo forKey:@"device"];
 	}
 	

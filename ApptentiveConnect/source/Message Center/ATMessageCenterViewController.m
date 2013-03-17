@@ -201,8 +201,11 @@ typedef enum {
 }
 
 - (IBAction)donePressed:(id)sender {
-	[self.navigationController.presentingViewController dismissModalViewControllerAnimated:YES];
-//	[self.navigationController dismissModalViewControllerAnimated:YES];
+	if ([[self navigationController] respondsToSelector:@selector(presentingViewController)]) {
+		[self.navigationController.presentingViewController dismissModalViewControllerAnimated:YES];
+	} else {
+		[self.navigationController dismissModalViewControllerAnimated:YES];
+	}
 }
 
 - (IBAction)sendPressed:(id)sender {

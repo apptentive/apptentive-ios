@@ -22,11 +22,11 @@
 + (CGFloat)rotationOfViewHierarchyInRadians:(UIView *)leafView;
 + (CGAffineTransform)viewTransformInWindow:(UIWindow *)window;
 #elif TARGET_OS_MAC
++ (NSData *)pngRepresentationOfImage:(NSImage *)image;
+#endif
 + (NSString *)currentMachineName;
 + (NSString *)currentSystemName;
 + (NSString *)currentSystemVersion;
-+ (NSData *)pngRepresentationOfImage:(NSImage *)image;
-#endif
 
 + (NSString *)stringByEscapingForURLArguments:(NSString *)string;
 + (NSString *)randomStringOfLength:(NSUInteger)length;
@@ -47,6 +47,9 @@
 + (BOOL)bundleVersionIsMainVersion;
 + (NSString *)appVersionString;
 + (NSString *)buildNumberString;
+
++ (BOOL)dictionary:(NSDictionary *)a isEqualToDictionary:(NSDictionary *)b;
++ (BOOL)array:(NSArray *)a isEqualToArray:(NSArray *)b;
 @end
 
 CGRect ATCGRectOfEvenSize(CGRect inRect);

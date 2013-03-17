@@ -5,36 +5,58 @@
 //  Created by Andrew Wooster on 10/6/12.
 //  Copyright (c) 2012 Apptentive, Inc. All rights reserved.
 //
+#if TARGET_OS_IPHONE
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
+#import <CoreTelephony/CTCarrier.h>
+#endif
 
 #import "ATDeviceInfo.h"
 
+#import "ATBackend.h"
 #import "ATConnect.h"
+#import "ATUtilities.h"
 
 @implementation ATDeviceInfo
 - (id)init {
 	if ((self = [super init])) {
-		record = [[ATLegacyRecord alloc] init];
 	}
 	return self;
 }
 
 - (void)dealloc {
-	[record release], record = nil;
 	[super dealloc];
 }
 
++ (NSString *)carrier {
+#if TARGET_OS_IPHONE
+	NSString *result = nil;
+	if ([CTTelephonyNetworkInfo class]) {
+		CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
+		CTCarrier *c = [netInfo subscriberCellularProvider];
+		if (c.carrierName) {
+			result = c.carrierName;
+		}
+		[netInfo release], netInfo = nil;
+	}
+	return result;
+#elif TARGET_OS_MAC
+	return @"";
+#endif
+}
+
 - (NSDictionary *)apiJSON {
-	NSMutableDictionary *d = [NSMutableDictionary dictionary];
 	NSMutableDictionary *device = [NSMutableDictionary dictionary];
 	
-	[device setObject:kATConnectPlatformString forKey:@"os_name"];
-	if (record.os_version) [device setObject:record.os_version forKey:@"os_version"];
-	if (record.model) [device setObject:record.model forKey:@"model"];
-	if (record.uuid) [device setObject:record.uuid forKey:@"uuid"];
-	if (record.carrier) [device setObject:record.carrier forKey:@"carrier"];
+	device[@"uuid"] = [[ATBackend sharedBackend] deviceUUID];
+	device[@"os_name"] = [ATUtilities currentSystemName];
+	device[@"os_version"] = [ATUtilities currentSystemVersion];
+	device[@"model"] = [ATUtilities currentMachineName];
 	
-	[d setObject:device forKey:@"device"];
+	NSString *carrier = [ATDeviceInfo carrier];
+	if (carrier != nil) {
+		device[@"carrier"] = carrier;
+	}
 	
-	return d;
+	return @{@"device":device};
 }
 @end

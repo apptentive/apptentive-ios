@@ -255,32 +255,6 @@ static NSDateFormatter *dateFormatter = nil;
 	return result;
 }
 #elif TARGET_OS_MAC
-+ (NSString *)currentMachineName {
-	char modelBuffer[256];
-	size_t sz = sizeof(modelBuffer);
-	NSString *result = @"Unknown";
-	if (0 == sysctlbyname("hw.model", modelBuffer, &sz, NULL, 0)) {
-		modelBuffer[sizeof(modelBuffer) - 1] = 0;
-		result = [NSString stringWithUTF8String:modelBuffer];
-	}
-	return result;
-}
-
-+ (NSString *)currentSystemName {
-	NSProcessInfo *info = [NSProcessInfo processInfo];
-	NSString *osName = [info operatingSystemName];
-	
-	if ([osName isEqualToString:@"NSMACHOperatingSystem"]) {
-		osName = @"Mac OS X";
-	}
-	
-	return osName;
-}
-
-+ (NSString *)currentSystemVersion {
-	NSProcessInfo *info = [NSProcessInfo processInfo];
-	return [info operatingSystemVersionString];
-}
 
 + (NSData *)pngRepresentationOfImage:(NSImage *)image {
 	CGImageRef imageRef = [image CGImageForProposedRect:NULL context:NULL hints:nil];
@@ -291,6 +265,45 @@ static NSDateFormatter *dateFormatter = nil;
 }
 #endif
 
++ (NSString *)currentMachineName {
+#if TARGET_OS_IPHONE
+	return [[UIDevice currentDevice] model];
+#elif TARGET_OS_MAC
+	char modelBuffer[256];
+	size_t sz = sizeof(modelBuffer);
+	NSString *result = @"Unknown";
+	if (0 == sysctlbyname("hw.model", modelBuffer, &sz, NULL, 0)) {
+		modelBuffer[sizeof(modelBuffer) - 1] = 0;
+		result = [NSString stringWithUTF8String:modelBuffer];
+	}
+	return result;
+#endif
+}
++ (NSString *)currentSystemName {
+#if TARGET_OS_IPHONE
+	return [[UIDevice currentDevice] systemName];
+#elif TARGET_OS_MAC
+	NSProcessInfo *info = [NSProcessInfo processInfo];
+	NSString *osName = [info operatingSystemName];
+	
+	if ([osName isEqualToString:@"NSMACHOperatingSystem"]) {
+		osName = @"Mac OS X";
+	}
+	
+	return osName;
+#endif
+}
+
++ (NSString *)currentSystemVersion {
+#if TARGET_OS_PHONE
+	return [[UIDevice currentDevice] systemVersion];
+#elif TARGET_OS_MAC
+	NSProcessInfo *info = [NSProcessInfo processInfo];
+	return [info operatingSystemVersionString];
+#endif
+}
+
+
 + (NSString *)stringByEscapingForURLArguments:(NSString *)string {
 	CFStringRef result = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)string, NULL, (CFStringRef)@"%:/?#[]@!$&'()*+,;=", kCFStringEncodingUTF8);
 	return [NSMakeCollectable(result) autorelease];
@@ -298,10 +311,9 @@ static NSDateFormatter *dateFormatter = nil;
 
 + (NSString *)randomStringOfLength:(NSUInteger)length {
 	static NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-	srandomdev();
 	NSMutableString *result = [NSMutableString stringWithString:@""];
 	for (NSUInteger i = 0; i < length; i++) {
-		[result appendFormat:@"%c", [letters characterAtIndex:random()%[letters length]]];
+		[result appendFormat:@"%c", [letters characterAtIndex:arc4random()%[letters length]]];
 	}
 	return result;
 }
@@ -540,6 +552,86 @@ static NSDateFormatter *dateFormatter = nil;
 		return buildNumberString;
 	}
 }
+
++ (BOOL)dictionary:(NSDictionary *)a isEqualToDictionary:(NSDictionary *)b {
+	BOOL isEqual = NO;
+	
+	do { // once
+		if (a == b) {
+			isEqual = YES;
+			break;
+		}
+		if ((a == nil && b != nil) || (a != nil && b == nil)) {
+			break;
+		}
+		if ([a count] != [b count]) {
+			break;
+		}
+		for (NSObject *keyA in a) {
+			NSObject *valueB = [b objectForKey:keyA];
+			if (valueB == nil) {
+				goto done;
+			}
+			NSObject *valueA = [a objectForKey:keyA];
+			if ([valueA isKindOfClass:[NSDictionary class]] && [valueB isKindOfClass:[NSDictionary class]]) {
+				BOOL deepEquals = [ATUtilities dictionary:(NSDictionary *)valueA isEqualToDictionary:(NSDictionary *)valueB];
+				if (!deepEquals) {
+					goto done;
+				}
+			} else if ([valueA isKindOfClass:[NSArray class]] && [valueB isKindOfClass:[NSArray class]])  {
+				BOOL deepEquals = [ATUtilities array:(NSArray *)valueA isEqualToArray:(NSArray *)valueB];
+				if (!deepEquals) {
+					goto done;
+				}
+			} else if (![valueA isEqual:valueB]) {
+				goto done;
+			}
+		}
+		isEqual = YES;
+	} while (NO);
+
+done:
+	return isEqual;
+}
+
++ (BOOL)array:(NSArray *)a isEqualToArray:(NSArray *)b {
+	BOOL isEqual = NO;
+	
+	do { // once
+		if (a == b) {
+			isEqual = YES;
+			break;
+		}
+		if ((a == nil && b != nil) || (a != nil && b == nil)) {
+			break;
+		}
+		if ([a count] != [b count]) {
+			break;
+		}
+		NSUInteger index = 0;
+		for (NSObject *valueA in a) {
+			NSObject *valueB = [b objectAtIndex:index];
+			if ([valueA isKindOfClass:[NSDictionary class]] && [valueB isKindOfClass:[NSDictionary class]]) {
+				BOOL deepEquals = [ATUtilities dictionary:(NSDictionary *)valueA isEqualToDictionary:(NSDictionary *)valueB];
+				if (!deepEquals) {
+					goto done;
+				}
+			} else if ([valueA isKindOfClass:[NSArray class]] && [valueB isKindOfClass:[NSArray class]])  {
+				BOOL deepEquals = [ATUtilities array:(NSArray *)valueA isEqualToArray:(NSArray *)valueB];
+				if (!deepEquals) {
+					goto done;
+				}
+			} else if (![valueA isEqual:valueB]) {
+				goto done;
+			}
+			index++;
+		}
+		isEqual = YES;
+	} while (NO);
+	
+done:
+	return isEqual;
+}
 @end
 
 
@@ -556,6 +648,7 @@ static NSDateFormatter *dateFormatter = nil;
 		}
 	}
 }
+
 @end
 
 extern CGRect ATCGRectOfEvenSize(CGRect inRect) {

@@ -133,4 +133,76 @@
 	expected = CGRectMake(0, 0, 1600, 1200);
 	STAssertTrue(CGRectEqualToRect(result, expected), @"Expected %@, got %@", NSStringFromCGRect(expected), NSStringFromCGRect(result));
 }
+
+- (void)testDictionaryEquality {
+	NSDictionary *a = nil;
+	NSDictionary *b = nil;
+	
+	STAssertTrue([ATUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should be equal: %@ v %@", a, b);
+	
+	a = @{};
+	STAssertFalse([ATUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should not be equal: %@ v %@", a, b);
+	
+	a = nil;
+	b = @{};
+	STAssertFalse([ATUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should not be equal: %@ v %@", a, b);
+	
+	a = @{};
+	b = @{};
+	STAssertTrue([ATUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should be equal: %@ v %@", a, b);
+	
+	a = @{@"foo":@"bar"};
+	b = @{@"foo":@"bar"};
+	STAssertTrue([ATUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should be equal: %@ v %@", a, b);
+	
+	a = @{@"foo":@[@1, @2, @3]};
+	b = @{@"foo":@[@1, @2, @4]};
+	STAssertFalse([ATUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should not be equal: %@ v %@", a, b);
+	
+	a = @{@"foo":@[@1, @2, @{@"bar":@"yarg"}]};
+	b = @{@"foo":@[@1, @2, @{@"narf":@"fran"}]};
+	STAssertFalse([ATUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should not be equal: %@ v %@", a, b);
+	
+	a = @{@"foo":@[@1, @2, @{@"bar":@"yarg"}]};
+	b = @{@"foo":@[@1, @2, @{@"bar":@"yarg"}]};
+	STAssertTrue([ATUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should be equal: %@ v %@", a, b);
+}
+
+- (void)testArrayEquality {
+	NSArray *a = nil;
+	NSArray *b = nil;
+	
+	STAssertTrue([ATUtilities array:a isEqualToArray:b], @"Arrays should be equal: %@ v %@", a, b);
+	
+	a = @[];
+	STAssertFalse([ATUtilities array:a isEqualToArray:b], @"Arrays should not be equal: %@ v %@", a, b);
+	
+	a = nil;
+	b = @[];
+	STAssertFalse([ATUtilities array:a isEqualToArray:b], @"Arrays should not be equal: %@ v %@", a, b);
+	
+	a = @[];
+	b = nil;
+	STAssertFalse([ATUtilities array:a isEqualToArray:b], @"Arrays should not be equal: %@ v %@", a, b);
+	
+	a = @[];
+	b = @[];
+	STAssertTrue([ATUtilities array:a isEqualToArray:b], @"Arrays should be equal: %@ v %@", a, b);
+	
+	a = @[@1, @2, @3];
+	b = @[@1, @2, @3];
+	STAssertTrue([ATUtilities array:a isEqualToArray:b], @"Arrays should be equal: %@ v %@", a, b);
+	
+	a = @[@1, @2, @"foo"];
+	b = @[@1, @2, @3];
+	STAssertFalse([ATUtilities array:a isEqualToArray:b], @"Arrays should not be equal: %@ v %@", a, b);
+	
+	a = @[@1, @2, @[@1, @2, @3]];
+	b = @[@1, @2, @[@1, @2, @3]];
+	STAssertTrue([ATUtilities array:a isEqualToArray:b], @"Arrays should be equal: %@ v %@", a, b);
+	
+	a = @[@1, @2, @[@1, @2, @{}]];
+	b = @[@1, @2, @[@1, @2, @3]];
+	STAssertFalse([ATUtilities array:a isEqualToArray:b], @"Arrays should not be equal: %@ v %@", a, b);
+}
 @end

@@ -48,6 +48,7 @@ static ATBackend *sharedBackend = nil;
 @interface ATBackend ()
 @property (nonatomic, assign) BOOL working;
 - (void)updateActivityFeedIfNeeded;
+- (void)updateDeviceIfNeeded;
 @end
 
 @implementation ATBackend
@@ -285,12 +286,7 @@ static ATBackend *sharedBackend = nil;
 			
 			[self updateRatingConfigurationIfNeeded];
 			[self updateActivityFeedIfNeeded];
-			if (!deviceUpdater) {
-				if ([ATDeviceUpdater shouldUpdate]) {
-					deviceUpdater = [[ATDeviceUpdater alloc] initWithDelegate:self];
-					[deviceUpdater update];
-				}
-			}
+			[self updateDeviceIfNeeded];
 		} else {
 			[[ATTaskQueue sharedTaskQueue] stop];
 			[ATTaskQueue releaseSharedTaskQueue];
@@ -389,6 +385,18 @@ static ATBackend *sharedBackend = nil;
 	}
 }
 
+- (void)updateDeviceIfNeeded {
+	if (![ATActivityFeedUpdater activityFeedExists]) {
+		return;
+	}
+	if (!deviceUpdater) {
+		if ([ATDeviceUpdater shouldUpdate]) {
+			deviceUpdater = [[ATDeviceUpdater alloc] initWithDelegate:self];
+			[deviceUpdater update];
+		}
+	}
+}
+
 #pragma mark NSFetchedResultsControllerDelegate
 #if TARGET_OS_IPHONE
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
@@ -414,6 +422,7 @@ static ATBackend *sharedBackend = nil;
 			// Queued tasks can probably start now.
 			ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
 			[queue start];
+			[self updateDeviceIfNeeded];
 		}
 	}
 }

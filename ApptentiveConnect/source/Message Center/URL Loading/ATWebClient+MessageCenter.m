@@ -53,11 +53,18 @@
 		ATLogError(@"Error while encoding JSON: %@", error);
 		return nil;
 	}
-	NSString *path = [NSString stringWithFormat:@"devices/%@", [[ATBackend sharedBackend] deviceUUID]];
-	NSString *url = [self apiURLStringWithPath:path];
+	
+	ATActivityFeed *feed = [ATActivityFeedUpdater currentActivityFeed];
+	if (!feed) {
+		ATLogError(@"No current activity feed.");
+		return nil;
+	}
+	
+	NSString *url = [self apiURLStringWithPath:@"devices"];
 	
 	ATURLConnection *conn = [self connectionToPut:[NSURL URLWithString:url] JSON:postString];
 	conn.timeoutInterval = 60.0;
+	[self updateConnection:conn withOAuthToken:feed.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
 	request.returnType = ATAPIRequestReturnTypeJSON;
 	return [request autorelease];

@@ -11,6 +11,7 @@
 #import "ATAPIRequest.h"
 
 NSString *const ATDeviceLastUpdatePreferenceKey;
+NSString *const ATDeviceLastUpdateValuePreferenceKey;
 
 @protocol ATDeviceUpdaterDelegate;
 

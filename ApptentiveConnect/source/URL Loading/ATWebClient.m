@@ -260,12 +260,10 @@ static ATWebClient *sharedSingleton = nil;
 	while (YES) {
 		boundary = [ATUtilities randomStringOfLength:20];
 		NSData *boundaryData = [boundary dataUsingEncoding:NSUTF8StringEncoding];
-		BOOL found = NO;
 		
 		if (body) {
 			NSRange range = [body rangeOfString:boundary];
 			if (range.location != NSNotFound) {
-				found = YES;
 				break;
 			}
 		}
@@ -279,12 +277,8 @@ static ATWebClient *sharedSingleton = nil;
 			}
 			NSRange range = [d rangeOfData:boundaryData options:0 range:NSMakeRange(0, [d length])];
 			if (range.location != NSNotFound) {
-				found = YES;
 				break;
 			}
-		}
-		if (!found) {
-			break;
 		}
 	}
 	

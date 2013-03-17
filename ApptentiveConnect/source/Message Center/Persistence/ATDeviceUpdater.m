@@ -8,17 +8,12 @@
 
 #import "ATDeviceUpdater.h"
 
+#import "ATUtilities.h"
 #import "ATWebClient+MessageCenter.h"
 
 
 NSString *const ATDeviceLastUpdatePreferenceKey = @"ATDeviceLastUpdatePreferenceKey";
-
-// Interval, in seconds, after which we'll update the device.
-#if APPTENTIVE_DEBUG
-#	define kATDeviceUpdateInterval (3)
-#else
-#	define kATDeviceUpdateInterval (60*60*24*7)
-#endif
+NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValuePreferenceKey";
 
 @implementation ATDeviceUpdater
 @synthesize delegate;
@@ -27,6 +22,7 @@ NSString *const ATDeviceLastUpdatePreferenceKey = @"ATDeviceLastUpdatePreference
 	NSDictionary *defaultPreferences =
 	[NSDictionary dictionaryWithObjectsAndKeys:
 	 [NSDate distantPast], ATDeviceLastUpdatePreferenceKey,
+	 [NSDictionary dictionary], ATDeviceLastUpdateValuePreferenceKey,
 	 nil];
 	[defaults registerDefaults:defaultPreferences];
 }
@@ -35,29 +31,21 @@ NSString *const ATDeviceLastUpdatePreferenceKey = @"ATDeviceLastUpdatePreference
 	[ATDeviceUpdater registerDefaults];
 	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSDate *lastCheck = [defaults objectForKey:ATDeviceLastUpdatePreferenceKey];
-		
-#ifndef APPTENTIVE_DEBUG
-	NSDate *expiration = [defaults objectForKey:ATDeviceLastUpdatePreferenceKey];
-	if (expiration) {
-		NSDate *now = [NSDate date];
-		NSComparisonResult comparison = [expiration compare:now];
-		if (comparison == NSOrderedSame || comparison == NSOrderedAscending) {
-			return YES;
-		} else {
-			return NO;
+	NSObject *lastValue = [defaults objectForKey:ATDeviceLastUpdateValuePreferenceKey];
+	BOOL shouldUpdate = NO;
+	if (lastValue == nil || ![lastValue isKindOfClass:[NSDictionary class]]) {
+		shouldUpdate = YES;
+	} else {
+		NSDictionary *lastValueDictionary = (NSDictionary *)lastValue;
+		ATDeviceInfo *deviceInfo = [[ATDeviceInfo alloc] init];
+		NSDictionary *currentValueDictionary = [deviceInfo apiJSON];
+		[deviceInfo release], deviceInfo = nil;
+		if (![ATUtilities dictionary:currentValueDictionary isEqualToDictionary:lastValueDictionary]) {
+			shouldUpdate = YES;
 		}
 	}
-#endif
 	
-	// Fall back to the defaults.
-	NSTimeInterval interval = [lastCheck timeIntervalSinceNow];
-	
-	if (interval <= -kATDeviceUpdateInterval) {
-		return YES;
-	} else {
-		return NO;
-	}
+	return shouldUpdate;
 }
 
 - (id)initWithDelegate:(NSObject<ATDeviceUpdaterDelegate> *)aDelegate {
@@ -101,7 +89,19 @@ NSString *const ATDeviceLastUpdatePreferenceKey = @"ATDeviceLastUpdatePreference
 #pragma mark ATATIRequestDelegate
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(NSObject *)result {
 	@synchronized (self) {
-		[delegate deviceUpdater:self didFinish:YES];
+		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+		ATDeviceInfo *deviceInfo = [[ATDeviceInfo alloc] init];
+		NSDictionary *currentValueDictionary = [deviceInfo apiJSON];
+		[deviceInfo release], deviceInfo = nil;
+		
+		[defaults setObject:[NSDate date] forKey:ATDeviceLastUpdatePreferenceKey];
+		[defaults setObject:currentValueDictionary forKey:ATDeviceLastUpdateValuePreferenceKey];
+		if (![defaults synchronize]) {
+			ATLogError(@"Unable to synchronize defaults for device update.");
+			[delegate deviceUpdater:self didFinish:NO];
+		} else {
+			[delegate deviceUpdater:self didFinish:YES];
+		}
 	}
 }
 

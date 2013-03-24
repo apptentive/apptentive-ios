@@ -130,6 +130,8 @@
 		4967273A16B8A41400C679B8 /* ATMessageCenterCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 4967273916B8A41400C679B8 /* ATMessageCenterCell.h */; };
 		4967278216B9D9CB00C679B8 /* ATConnect_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4967278116B9D9CB00C679B8 /* ATConnect_Private.h */; };
 		4967278416B9FE6400C679B8 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4967278316B9FE6400C679B8 /* Info.plist */; };
+		496AE63E16FFB31500CC6F2F /* ATDefaultMessageCenterTheme.h in Headers */ = {isa = PBXBuildFile; fileRef = 496AE63C16FFB31500CC6F2F /* ATDefaultMessageCenterTheme.h */; };
+		496AE63F16FFB31500CC6F2F /* ATDefaultMessageCenterTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 496AE63D16FFB31500CC6F2F /* ATDefaultMessageCenterTheme.m */; };
 		496DC3831333D35600743F65 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3821333D35600743F65 /* Foundation.framework */; };
 		496DC38F1333D35600743F65 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3821333D35600743F65 /* Foundation.framework */; };
 		496DC3941333D35600743F65 /* libApptentiveConnect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC37F1333D35600743F65 /* libApptentiveConnect.a */; };
@@ -361,6 +363,8 @@
 		4967273916B8A41400C679B8 /* ATMessageCenterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATMessageCenterCell.h; path = "Message Center/ATMessageCenterCell.h"; sourceTree = "<group>"; };
 		4967278116B9D9CB00C679B8 /* ATConnect_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATConnect_Private.h; sourceTree = "<group>"; };
 		4967278316B9FE6400C679B8 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = resources/ApptentiveResources/Info.plist; sourceTree = SOURCE_ROOT; };
+		496AE63C16FFB31500CC6F2F /* ATDefaultMessageCenterTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATDefaultMessageCenterTheme.h; path = "Message Center/ATDefaultMessageCenterTheme.h"; sourceTree = "<group>"; };
+		496AE63D16FFB31500CC6F2F /* ATDefaultMessageCenterTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATDefaultMessageCenterTheme.m; path = "Message Center/ATDefaultMessageCenterTheme.m"; sourceTree = "<group>"; };
 		496DC37F1333D35600743F65 /* libApptentiveConnect.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libApptentiveConnect.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		496DC3821333D35600743F65 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		496DC38C1333D35600743F65 /* ApptentiveConnectTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApptentiveConnectTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -790,6 +794,8 @@
 				4999128216165BD400FDA15F /* ATMessageCenterViewController.h */,
 				4999128316165BD400FDA15F /* ATMessageCenterViewController.m */,
 				4999128716165BF200FDA15F /* ATMessageCenterViewController.xib */,
+				496AE63C16FFB31500CC6F2F /* ATDefaultMessageCenterTheme.h */,
+				496AE63D16FFB31500CC6F2F /* ATDefaultMessageCenterTheme.m */,
 				4967273916B8A41400C679B8 /* ATMessageCenterCell.h */,
 				490B24A51624B70D0055B812 /* ATTextMessageUserCell.h */,
 				490B24A61624B70D0055B812 /* ATTextMessageUserCell.m */,
@@ -1079,6 +1085,7 @@
 				49881DDD16E839540061D888 /* ATLogViewController.h in Headers */,
 				495E9C1C16EABD8E00AE3B03 /* ATLogger.h in Headers */,
 				492F2F1C16ED597F0030E48A /* ATRecordRequestTask.h in Headers */,
+				496AE63E16FFB31500CC6F2F /* ATDefaultMessageCenterTheme.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1317,6 +1324,7 @@
 				49881DDE16E839540061D888 /* ATLogViewController.m in Sources */,
 				495E9C1D16EABD8E00AE3B03 /* ATLogger.m in Sources */,
 				492F2F1D16ED597F0030E48A /* ATRecordRequestTask.m in Sources */,
+				496AE63F16FFB31500CC6F2F /* ATDefaultMessageCenterTheme.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -170,7 +170,7 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 }
 
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController {
-	ATMessageCenterViewController *vc = [[ATMessageCenterViewController alloc] init];
+	ATMessageCenterViewController *vc = [[ATMessageCenterViewController alloc] initWithThemeDelegate:nil];
 	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
 	nc.modalPresentationStyle = UIModalPresentationFormSheet;
 	[viewController presentModalViewController:nc animated:YES];

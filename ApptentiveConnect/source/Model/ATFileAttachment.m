@@ -26,6 +26,10 @@
 @dynamic userVisible;
 @dynamic fileMessage;
 
+- (void)prepareForDeletion {
+	[self setFileData:nil];
+}
+
 - (void)setFileData:(NSData *)data {
 	[self deleteSidecarIfNecessary];
 	self.localPath = nil;

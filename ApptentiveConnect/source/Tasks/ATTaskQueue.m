@@ -15,7 +15,7 @@
 // Retry period in seconds.
 #define kATTaskQueueRetryPeriod 180.0
 
-#define kMaxFailureCount 500
+#define kMaxFailureCount 30
 
 static ATTaskQueue *sharedTaskQueue = nil;
 

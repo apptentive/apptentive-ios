@@ -18,8 +18,17 @@
 @synthesize window=_window;
 
 @synthesize navigationController=_navigationController;
-
+- (void)resetApptentiveRatings {
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[defaults removeObjectForKey:@"ATAppRatingFlowRatedAppKey"];
+	[defaults removeObjectForKey:@"ATAppRatingFlowDeclinedToRateThisVersionKey"];
+	[defaults removeObjectForKey:@"ATAppRatingFlowUserDislikesThisVersionKey"];
+	[defaults removeObjectForKey:@"ATAppRatingFlowLastUsedVersionKey"];
+	[defaults removeObjectForKey:@"ATAppRatingFlowLastPromptDateKey"];
+	[defaults synchronize];
+}
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+	[self resetApptentiveRatings];
 	// Override point for customization after application launch.
 	// Add the navigation controller's view to the window and display.
 	if ([self.window respondsToSelector:@selector(setRootViewController:)]) {

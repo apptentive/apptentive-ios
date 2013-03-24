@@ -20,7 +20,7 @@
 #import "ATLog.h"
 #import "ATMessage.h"
 #import "ATMessageCenterCell.h"
-#import "ATDefaultMessageCenterTitleView.h"
+#import "ATDefaultMessageCenterTheme.h"
 #import "ATMessageSender.h"
 #import "ATMessageTask.h"
 #import "ATPersonUpdater.h"
@@ -61,13 +61,20 @@ typedef enum {
 	NSDateFormatter *messageDateFormatter;
 	UIImage *pickedImage;
 	ATFeedbackImageSource pickedImageSource;
+	ATDefaultMessageCenterTheme *defaultTheme;
+	UIActionSheet *sendImageActionSheet;
+	ATMessage *retryMessage;
+	UIActionSheet *retryMessageActionSheet;
 }
 @synthesize tableView, containerView, composerView, composerBackgroundView, attachmentButton, textView, sendButton, attachmentView, fakeCell;
 @synthesize userCell, developerCell, userFileMessageCell;
+@synthesize themeDelegate;
 
-- (id)init {
+- (id)initWithThemeDelegate:(NSObject<ATMessageCenterThemeDelegate> *)aThemeDelegate {
 	self = [super initWithNibName:@"ATMessageCenterViewController" bundle:[ATConnect resourceBundle]];
 	if (self != nil) {
+		themeDelegate = aThemeDelegate;
+		defaultTheme = [[ATDefaultMessageCenterTheme alloc] init];
 	}
 	return self;
 }
@@ -103,7 +110,12 @@ typedef enum {
 	self.tableView.scrollsToTop = YES;
 	firstLoad = YES;
 	[self registerForKeyboardNotifications];
-	self.navigationItem.titleView = [[[ATDefaultMessageCenterTitleView alloc] initWithFrame:self.navigationController.navigationBar.bounds] autorelease];
+	
+	if (themeDelegate && [themeDelegate respondsToSelector:@selector(titleViewForMessageCenterViewController:)]) {
+		self.navigationItem.titleView = [themeDelegate titleViewForMessageCenterViewController:self];
+	} else {
+		self.navigationItem.titleView = [defaultTheme titleViewForMessageCenterViewController:self];
+	}
 	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)] autorelease];
 	[self styleTextView];
 	
@@ -122,30 +134,16 @@ typedef enum {
 	
 	composerFieldHeight = self.textView.frame.size.height;
 	
-	UIImage *sendImage = [[ATBackend imageNamed:@"at_send_button_bg"] resizableImageWithCapInsets:UIEdgeInsetsMake(13, 13, 13, 13)];
-	[self.sendButton setBackgroundImage:sendImage forState:UIControlStateNormal];
-	[self.sendButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-	[self.sendButton.titleLabel setShadowOffset:CGSizeMake(0, -1)];
-	[self.sendButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.4] forState:UIControlStateDisabled];
-	/*
-	[self.sendButton setBackgroundImage:[ATBackend imageNamed:@"at_send_button_v2_bg"] forState:UIControlStateNormal];
-	self.sendButton.layer.cornerRadius = 4;
-	self.sendButton.layer.borderColor = [UIColor colorWithRed:63/255. green:63/255. blue:63/255. alpha:1].CGColor;
-	self.sendButton.layer.borderWidth = 2;
-	[self.sendButton setTitleColor:[UIColor colorWithRed:31/255. green:31/255. blue:31/255. alpha:1] forState:UIControlStateNormal];
-	[self.sendButton setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateNormal];
-	[self.sendButton.titleLabel setShadowOffset:CGSizeMake(0, 1)];
-	[self.sendButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.4] forState:UIControlStateDisabled];
-	self.sendButton.clipsToBounds = YES;
-	 */
+	self.sendButton.enabled = NO;
+	if (themeDelegate && [themeDelegate respondsToSelector:@selector(configureSendButton:forMessageCenterViewController:)]) {
+		[themeDelegate configureSendButton:self.sendButton forMessageCenterViewController:self];
+	} else {
+		[defaultTheme configureSendButton:self.sendButton forMessageCenterViewController:self];
+	}
 	
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
 		[self relayoutSubviews];
 	});
-	
-//!!	[self.navigationController.navigationBar setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_denim_blue_bg"]]];
-//!!	[self.navigationController.navigationBar setBackgroundImage:[ATBackend imageNamed:@"at_toolbar_denim_bg"] forBarMetrics:UIBarMetricsDefault];
-
 }
 
 #warning Implement for iOS 4
@@ -176,6 +174,8 @@ typedef enum {
 	[_emailButton release];
 	[_iconButton release];
 	[_attachmentShadowView release];
+	[defaultTheme release], defaultTheme = nil;
+	themeDelegate = nil;
 	[super dealloc];
 }
 
@@ -367,7 +367,7 @@ typedef enum {
 	}
 }
 
-#pragma mark UITextViewDelegate
+#pragma mark ATResizingTextViewDelegate
 - (void)resizingTextView:(ATResizingTextView *)textView willChangeHeight:(CGFloat)height {
 	if (composerFieldHeight != height) {
 		composerFieldHeight = height;
@@ -390,6 +390,7 @@ typedef enum {
 			composingMessage = (ATTextMessage *)[ATData newEntityNamed:@"ATTextMessage"];
 			[composingMessage setup];
 		}
+		self.sendButton.enabled = YES;
 		// Don't modify the message.
 		//composingMessage.body = aTextView.text;
 	} else {
@@ -398,6 +399,7 @@ typedef enum {
 			[context deleteObject:composingMessage];
 			[composingMessage release], composingMessage = nil;
 		}
+		self.sendButton.enabled = NO;
 	}
 }
 
@@ -471,13 +473,15 @@ typedef enum {
 
 - (void)imageViewControllerWillDismiss:(ATSimpleImageViewController *)vc animated:(BOOL)animated {
 	if (pickedImage) {
-		UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Send Image", @"Send image button title"), nil];
-		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-			[actionSheet showFromRect:sendButton.bounds inView:sendButton animated:YES];
-		} else {
-			[actionSheet showInView:self.view];
+		if (sendImageActionSheet) {
+			[sendImageActionSheet autorelease], sendImageActionSheet = nil;
 		}
-		[actionSheet autorelease];
+		sendImageActionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Send Image", @"Send image button title"), nil];
+		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+			[sendImageActionSheet showFromRect:sendButton.bounds inView:sendButton animated:YES];
+		} else {
+			[sendImageActionSheet showInView:self.view];
+		}
 	}
 }
 
@@ -491,61 +495,90 @@ typedef enum {
 
 #pragma mark UIActionSheetDelegate
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-	if (buttonIndex == 0) {
-		if (pickedImage) {
-			@synchronized(self) {
-				ATFileMessage *fileMessage = (ATFileMessage *)[ATData newEntityNamed:@"ATFileMessage"];
-				ATFileAttachment *fileAttachment = (ATFileAttachment *)[ATData newEntityNamed:@"ATFileAttachment"];
-				fileMessage.pendingState = @(ATPendingMessageStateSending);
-				fileMessage.sentByUser = @(YES);
-				[fileMessage updateClientCreationTime];
-				fileMessage.fileAttachment = fileAttachment;
-				
-				[fileAttachment setFileData:UIImageJPEGRepresentation(pickedImage, 1.0)];
-				[fileAttachment setMimeType:@"image/jpeg"];
-				
-				switch (pickedImageSource) {
-					case ATFeedbackImageSourceCamera:
-					case ATFeedbackImageSourcePhotoLibrary:
-						[fileAttachment setSource:@(ATFileAttachmentSourceCamera)];
-						break;
-						/* for now we're going to assume camera…
-						[fileAttachment setSource:@(ATFileAttachmentSourcePhotoLibrary)];
-						break;
-						 */
-					case ATFeedbackImageSourceScreenshot:
-						[fileAttachment setSource:@(ATFileAttachmentSourceScreenshot)];
-						break;
-					default:
-						[fileAttachment setSource:@(ATFileAttachmentSourceUnknown)];
-						break;
+	if (actionSheet == sendImageActionSheet) {
+		if (buttonIndex == 0) {
+			if (pickedImage) {
+				@synchronized(self) {
+					ATFileMessage *fileMessage = (ATFileMessage *)[ATData newEntityNamed:@"ATFileMessage"];
+					ATFileAttachment *fileAttachment = (ATFileAttachment *)[ATData newEntityNamed:@"ATFileAttachment"];
+					fileMessage.pendingState = @(ATPendingMessageStateSending);
+					fileMessage.sentByUser = @(YES);
+					[fileMessage updateClientCreationTime];
+					fileMessage.fileAttachment = fileAttachment;
+					
+					[fileAttachment setFileData:UIImageJPEGRepresentation(pickedImage, 1.0)];
+					[fileAttachment setMimeType:@"image/jpeg"];
+					
+					switch (pickedImageSource) {
+						case ATFeedbackImageSourceCamera:
+						case ATFeedbackImageSourcePhotoLibrary:
+							[fileAttachment setSource:@(ATFileAttachmentSourceCamera)];
+							break;
+							/* for now we're going to assume camera…
+							[fileAttachment setSource:@(ATFileAttachmentSourcePhotoLibrary)];
+							break;
+							 */
+						case ATFeedbackImageSourceScreenshot:
+							[fileAttachment setSource:@(ATFileAttachmentSourceScreenshot)];
+							break;
+						default:
+							[fileAttachment setSource:@(ATFileAttachmentSourceUnknown)];
+							break;
+					}
+					
+					
+					[[[ATBackend sharedBackend] managedObjectContext] save:nil];
+					
+					// Give it a wee bit o' delay.
+					NSString *pendingMessageID = [fileMessage pendingMessageID];
+					dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
+						ATMessageTask *task = [[ATMessageTask alloc] init];
+						task.pendingMessageID = pendingMessageID;
+						[[ATTaskQueue sharedTaskQueue] addTask:task];
+						[[ATTaskQueue sharedTaskQueue] start];
+						[task release], task = nil;
+					});
+					[fileMessage release], fileMessage = nil;
+					[fileAttachment release], fileAttachment = nil;
 				}
-				
-				
-				[[[ATBackend sharedBackend] managedObjectContext] save:nil];
-				
-				// Give it a wee bit o' delay.
-				NSString *pendingMessageID = [fileMessage pendingMessageID];
-				dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
-					ATMessageTask *task = [[ATMessageTask alloc] init];
-					task.pendingMessageID = pendingMessageID;
-					[[ATTaskQueue sharedTaskQueue] addTask:task];
-					[[ATTaskQueue sharedTaskQueue] start];
-					[task release], task = nil;
-				});
-				[fileMessage release], fileMessage = nil;
-				[fileAttachment release], fileAttachment = nil;
-			}
 
+			}
+		} else if (buttonIndex == 1) {
+			[pickedImage release], pickedImage = nil;
 		}
-	} else if (buttonIndex == 1) {
-		[pickedImage release], pickedImage = nil;
+		[sendImageActionSheet autorelease], sendImageActionSheet = nil;
+	} else if (actionSheet == retryMessageActionSheet) {
+		if (buttonIndex == 0) {
+			retryMessage.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
+			[[[ATBackend sharedBackend] managedObjectContext] save:nil];
+			
+			// Give it a wee bit o' delay.
+			NSString *pendingMessageID = [retryMessage pendingMessageID];
+			dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
+				ATMessageTask *task = [[ATMessageTask alloc] init];
+				task.pendingMessageID = pendingMessageID;
+				[[ATTaskQueue sharedTaskQueue] addTask:task];
+				[[ATTaskQueue sharedTaskQueue] start];
+				[task release], task = nil;
+			});
+			
+			[retryMessage release], retryMessage = nil;
+		} else if (buttonIndex == 1) {
+			[ATData deleteManagedObject:retryMessage];
+			[retryMessage release], retryMessage = nil;
+		}
+		[retryMessageActionSheet autorelease], retryMessageActionSheet = nil;
 	}
 }
 
 - (void)actionSheetCancel:(UIActionSheet *)actionSheet {
-	if (pickedImage) {
-		[pickedImage release], pickedImage = nil;
+	if (actionSheet == sendImageActionSheet) {
+		if (pickedImage) {
+			[pickedImage release], pickedImage = nil;
+		}
+		[sendImageActionSheet autorelease], sendImageActionSheet = nil;
+	} else if (actionSheet == retryMessageActionSheet) {
+		[retryMessageActionSheet autorelease], retryMessageActionSheet = nil;
 	}
 }
 
@@ -563,6 +596,32 @@ typedef enum {
 }
 
 #pragma mark UITableViewDelegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	ATMessage *message = (ATMessage *)[self.fetchedMessagesController objectAtIndexPath:indexPath];
+	if (message != nil && [message.sentByUser boolValue] && [message.pendingState intValue] == ATPendingMessageStateError) {
+		if (retryMessageActionSheet) {
+			[retryMessageActionSheet autorelease], retryMessageActionSheet = nil;
+		}
+		if (retryMessage) {
+			[retryMessage release], retryMessage = nil;
+		}
+		retryMessage = [message retain];
+		NSArray *errors = [message errorsFromErrorMessage];
+		NSString *errorString = nil;
+		if (errors != nil && [errors count] != 0) {
+			errorString = [NSString stringWithFormat:ATLocalizedString(@"Error Sending Message: %@", @"Title of action sheet for messages with errors. Parameter is the error."), [errors componentsJoinedByString:@"\n"]];
+		} else {
+			errorString = ATLocalizedString(@"Error Sending Message", @"Title of action sheet for messages with errors, but no error details.");
+		}
+		retryMessageActionSheet = [[UIActionSheet alloc] initWithTitle:errorString delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Retry Sending", @"Retry sending message title"), nil];
+		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+			[retryMessageActionSheet showFromRect:sendButton.bounds inView:sendButton animated:YES];
+		} else {
+			[retryMessageActionSheet showInView:self.view];
+		}
+	}
+}
+
 - (void)tableView:(UITableView *)aTableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (firstLoad && indexPath.row == 0 && indexPath.section == 0) {
 		firstLoad = NO;
@@ -680,6 +739,22 @@ typedef enum {
 			} else if ([[message pendingState] intValue] == ATPendingMessageStateComposing) {
 				textCell.composing = YES;
 				textCell.textLabel.text = @"";
+			} else if ([[message pendingState] intValue] == ATPendingMessageStateError) {
+				NSString *sendingText = NSLocalizedString(@"Error:", @"Sending prefix on messages that are sending");
+				NSString *fullText = [NSString stringWithFormat:@"%@ %@", sendingText, messageBody];
+				[textCell.messageText setText:fullText afterInheritingLabelAttributesAndConfiguringWithBlock:^ NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
+					NSRange boldRange = NSMakeRange(0, [sendingText length]);
+					
+					UIFont *boldFont = [UIFont boldSystemFontOfSize:15];
+					UIColor *redColor = [UIColor redColor];
+					CTFontRef font = CTFontCreateWithName((CFStringRef)[boldFont fontName], [boldFont pointSize], NULL);
+					if (font) {
+						[mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(id)font range:boldRange];
+						CFRelease(font), font = NULL;
+					}
+					[mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)redColor.CGColor range:boldRange];
+					return mutableAttributedString;
+				}];
 			} else {
 				textCell.messageText.text = messageBody;
 			}

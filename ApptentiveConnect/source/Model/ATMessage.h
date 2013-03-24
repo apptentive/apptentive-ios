@@ -15,7 +15,8 @@
 typedef enum {
 	ATPendingMessageStateComposing,
 	ATPendingMessageStateSending,
-	ATPendingMessageStateConfirmed
+	ATPendingMessageStateConfirmed,
+	ATPendingMessageStateError
 } ATPendingMessageState;
 
 @class ATMessageDisplayType, ATMessageSender;
@@ -27,11 +28,14 @@ typedef enum {
 @property (nonatomic, retain) NSNumber *priority;
 @property (nonatomic, retain) NSNumber *seenByUser;
 @property (nonatomic, retain) NSNumber *sentByUser;
+@property (nonatomic, retain) NSNumber *errorOccurred;
+@property (nonatomic, retain) NSString *errorMessageJSON;
 @property (nonatomic, retain) ATMessageSender *sender;
 @property (nonatomic, retain) NSSet *displayTypes;
 
 + (ATMessage *)findMessageWithID:(NSString *)apptentiveID;
 + (ATMessage *)findMessageWithPendingID:(NSString *)pendingID;
+- (NSArray *)errorsFromErrorMessage;
 @end
 
 @interface ATMessage (CoreDataGeneratedAccessors)

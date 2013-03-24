@@ -13,6 +13,7 @@
 #import "ATMessageDisplayType.h"
 #import "ATMessageSender.h"
 #import "NSDictionary+ATAdditions.h"
+#import "PJSONKit.h"
 
 @implementation ATMessage
 
@@ -21,6 +22,8 @@
 @dynamic priority;
 @dynamic seenByUser;
 @dynamic sentByUser;
+@dynamic errorOccurred;
+@dynamic errorMessageJSON;
 @dynamic sender;
 @dynamic displayTypes;
 
@@ -71,6 +74,24 @@
 - (void)awakeFromInsert {
 	[super awakeFromInsert];
 	[self setup];
+}
+
+- (NSArray *)errorsFromErrorMessage {
+	if (self.errorMessageJSON == nil) {
+		return nil;
+	}
+	NSObject *errorObject = [self.errorMessageJSON ATobjectFromJSONString];
+	if (errorObject == nil) {
+		return nil;
+	}
+	if ([errorObject isKindOfClass:[NSDictionary class]]) {
+		NSDictionary *errorDictionary = (NSDictionary *)errorObject;
+		NSObject *errors = [errorDictionary objectForKey:@"errors"];
+		if (errors != nil && [errors isKindOfClass:[NSArray class]]) {
+			return [[(NSArray *)errors copy] autorelease];
+		}
+	}
+	return nil;
 }
 
 - (void)updateWithJSON:(NSDictionary *)json {

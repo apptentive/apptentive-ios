@@ -14,6 +14,7 @@
 #import "ATActivityFeedUpdater.h"
 #import "ATWebClient.h"
 #import "ATWebClient+MessageCenter.h"
+#import "PJSONKit.h"
 
 #define kATMessageTaskCodingVersion 2
 
@@ -24,14 +25,13 @@
 @end
 
 @implementation ATMessageTask
-@synthesize message, pendingMessageID;
+@synthesize pendingMessageID;
 
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
 		int version = [coder decodeIntForKey:@"version"];
 		if (version == kATMessageTaskCodingVersion) {
 			self.pendingMessageID = [coder decodeObjectForKey:@"pendingMessageID"];
-			message = [[ATMessage findMessageWithPendingID:self.pendingMessageID] retain];
 		} else {
 			[self release];
 			return nil;
@@ -48,7 +48,6 @@
 - (void)dealloc {
 	[self teardown];
 	[pendingMessageID release], pendingMessageID = nil;
-	[message release], message = nil;
 	[super dealloc];
 }
 
@@ -64,15 +63,13 @@
 
 - (void)start {
 	if (!request) {
-		if (self.message == nil) {
-			message = [[ATMessage findMessageWithPendingID:self.pendingMessageID] retain];
-			if (self.message == nil) {
-				ATLogError(@"Warning: Message was nil in message task.");
-				self.finished = YES;
-				return;
-			}
+		ATMessage *message = [[ATMessage findMessageWithPendingID:self.pendingMessageID] retain];
+		if (message == nil) {
+			ATLogError(@"Warning: Message was nil in message task.");
+			self.finished = YES;
+			return;
 		}
-		request = [[[ATWebClient sharedClient] requestForPostingMessage:self.message] retain];
+		request = [[[ATWebClient sharedClient] requestForPostingMessage:message] retain];
 		if (request != nil) {
 			request.delegate = self;
 			[request start];
@@ -127,10 +124,38 @@
 - (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
 	@synchronized(self) {
 		[self retain];
-		self.failed = YES;
 		self.lastErrorTitle = sender.errorTitle;
 		self.lastErrorMessage = sender.errorMessage;
+		
+		ATMessage *message = [[ATMessage findMessageWithPendingID:self.pendingMessageID] retain];
+		if (message == nil) {
+			ATLogError(@"Warning: Message went away during task.");
+			self.finished = YES;
+			return;
+		}
+		[message setErrorOccurred:@(YES)];
+		if (sender.errorResponse != nil) {
+			NSObject *errorObject = [sender.errorResponse ATobjectFromJSONString];
+			if (errorObject != nil && [errorObject isKindOfClass:[NSDictionary class]]) {
+				NSDictionary *errorDictionary = (NSDictionary *)errorObject;
+				if ([errorDictionary objectForKey:@"errors"]) {
+					ATLogInfo(@"ATAPIRequest server error: %@", [errorDictionary objectForKey:@"errors"]);
+					[message setErrorMessageJSON:sender.errorResponse];
+				}
+			}
+			[message setPendingState:@(ATPendingMessageStateError)];
+		}
+		NSError *error = nil;
+		NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
+		if (![context save:&error]) {
+			ATLogError(@"Failed to save message after API failure: %@", error);
+		}
 		ATLogInfo(@"ATAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
+		if (self.failureCount > 2) {
+			self.finished = YES;
+		} else {
+			self.failed = YES;
+		}
 		[self stop];
 		[self release];
 	}
@@ -149,6 +174,12 @@
 - (BOOL)processResult:(NSDictionary *)jsonMessage {
 	ATLogInfo(@"getting json result: %@", jsonMessage);
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
+	
+	ATMessage *message = [[ATMessage findMessageWithPendingID:self.pendingMessageID] retain];
+	if (message == nil) {
+		ATLogError(@"Warning: Message went away during task.");
+		return YES;
+	}
 	[message updateWithJSON:jsonMessage];
 	message.pendingState = [NSNumber numberWithInt:ATPendingMessageStateConfirmed];
 	

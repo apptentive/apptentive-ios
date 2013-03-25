@@ -253,8 +253,19 @@ static ATWebClient *sharedSingleton = nil;
 	[conn setHTTPMethod:@"POST"];
 	
 	NSFileManager *fm = [NSFileManager defaultManager];
-	NSURL *pathURL = [NSURL fileURLWithPath:path isDirectory:NO];
-		
+
+	NSData *fileData = nil;
+	if (path && [fm fileExistsAtPath:path]) {
+		NSError *error = nil;
+		fileData = [NSData dataWithContentsOfFile:path options:NSDataReadingMappedIfSafe error:&error];
+		if (!fileData) {
+			ATLogError(@"Unable to get contents of file path for uploading: %@", error);
+			// This is probably unrecoverable.
+			goto fail;
+		}
+	}
+
+	
 	// Figure out boundary string.
 	NSString *boundary = nil;
 	while (YES) {
@@ -264,22 +275,16 @@ static ATWebClient *sharedSingleton = nil;
 		if (body) {
 			NSRange range = [body rangeOfString:boundary];
 			if (range.location != NSNotFound) {
-				break;
+				continue;
 			}
 		}
-		if (path && [fm fileExistsAtPath:path]) {
-			NSError *error = nil;
-			NSData *d = [NSData dataWithContentsOfURL:pathURL options:NSDataReadingMappedIfSafe error:&error];
-			if (!d) {
-				ATLogError(@"Unable to get contents of file path for uploading: %@", error);
-				// This is probably unrecoverable.
-				goto fail;
-			}
-			NSRange range = [d rangeOfData:boundaryData options:0 range:NSMakeRange(0, [d length])];
+		if (fileData != nil) {
+			NSRange range = [fileData rangeOfData:boundaryData options:0 range:NSMakeRange(0, [fileData length])];
 			if (range.location != NSNotFound) {
-				break;
+				continue;
 			}
 		}
+		break;
 	}
 	
 	NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
@@ -312,14 +317,7 @@ static ATWebClient *sharedSingleton = nil;
 	
 	[debugString appendString:boundaryString];
 	
-	if (path && [fm fileExistsAtPath:path]) {
-		NSError *error = nil;
-		NSData *d = [NSData dataWithContentsOfURL:pathURL options:NSDataReadingMappedIfSafe error:&error];
-		if (!d) {
-			ATLogError(@"Unable to get contents of file path for uploading: %@", error);
-			// This is probably unrecoverable.
-			goto fail;
-		}
+	if (fileData != nil) {
 		NSString *filename = [path lastPathComponent];
 		NSMutableString *multipartHeader = [NSMutableString string];
 		[multipartHeader appendString:[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", @"file", filename]];
@@ -328,8 +326,8 @@ static ATWebClient *sharedSingleton = nil;
 		[debugString appendString:multipartHeader];
 		
 		[multipartEncodedData appendData:[multipartHeader dataUsingEncoding:NSUTF8StringEncoding]];
-		[multipartEncodedData appendData:d];
-		[debugString appendFormat:@"<NSData of length: %d>", [d length]];
+		[multipartEncodedData appendData:fileData];
+		[debugString appendFormat:@"<NSData of length: %d>", [fileData length]];
 	}
 	NSString *finalBoundary = [NSString stringWithFormat:@"\r\n--%@--\r\n", boundary];
 	[multipartEncodedData appendData:[finalBoundary dataUsingEncoding:NSUTF8StringEncoding]];

@@ -133,20 +133,19 @@ static NSDateFormatter *dateFormatter = nil;
 	UIImage *result = nil;
 	CGImageRef imageRef = nil;
 	CGImageAlphaInfo alphaInfo = kCGImageAlphaNone;
-	size_t samplesPerPixel, bytesPerRow;
+	size_t samplesPerPixel, bytesPerRow, bitsPerComponent;
 	CGFloat newHeight, newWidth;
 	CGRect newRect;
 	CGContextRef bitmapContext = nil;
 	CGImageRef newRef = nil;
 	CGAffineTransform transform = CGAffineTransformIdentity;
+	CGImageAlphaInfo newAlphaInfo;
+	CGColorSpaceRef colorSpaceRef;
 	
 	imageRef = [image CGImage];
 	alphaInfo = CGImageGetAlphaInfo(imageRef);
 	
-	samplesPerPixel = CGImageGetBitsPerPixel(imageRef)/CGImageGetBitsPerComponent(imageRef);
-	if (alphaInfo == kCGImageAlphaNone) {
-		samplesPerPixel++;
-	}
+	samplesPerPixel = 4;
 	
 	size = CGSizeMake(floor(size.width), floor(size.height));
 	newWidth = size.width;
@@ -187,17 +186,13 @@ static NSDateFormatter *dateFormatter = nil;
 	}
 	newRect = CGRectIntegral(CGRectMake(0.0, 0.0, newWidth, newHeight));
 	
-	// 16-byte aligned, Quartz book p. 353
-	bytesPerRow = ((size_t)(samplesPerPixel * newWidth) + 15) & ~15;
+	bytesPerRow = samplesPerPixel * newWidth;
+	newAlphaInfo = kCGImageAlphaPremultipliedFirst;
+	bitsPerComponent = 8;
+	colorSpaceRef = CGColorSpaceCreateDeviceRGB();
 	
-	CGImageAlphaInfo newAlphaInfo;
-	if (alphaInfo == kCGImageAlphaNone) {
-		newAlphaInfo = kCGImageAlphaNoneSkipLast;
-	} else {
-		newAlphaInfo = kCGImageAlphaPremultipliedFirst;
-	}
-	
-	bitmapContext = CGBitmapContextCreate(NULL, newWidth, newHeight, CGImageGetBitsPerComponent(imageRef), bytesPerRow, CGImageGetColorSpace(imageRef), newAlphaInfo);
+	bitmapContext = CGBitmapContextCreate(NULL, newWidth, newHeight, bitsPerComponent, bytesPerRow, colorSpaceRef, newAlphaInfo);
+	CGColorSpaceRelease(colorSpaceRef), colorSpaceRef = NULL;
 	CGContextSetInterpolationQuality(bitmapContext, kCGInterpolationHigh);
 	
 	// The iPhone tries to be "smart" about image orientation, and messes it

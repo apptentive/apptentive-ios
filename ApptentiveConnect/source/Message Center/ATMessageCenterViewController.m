@@ -120,7 +120,6 @@ typedef enum {
 	[self styleTextView];
 	
 	self.composerBackgroundView.image = [[ATBackend imageNamed:@"at_inbox_composer_bg"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 0, 29, 19)];
-	[self.attachmentButton setImage:[ATBackend imageNamed:@"at_plus_button"] forState:UIControlStateNormal];
 	[self.cameraButton setImage:[ATBackend imageNamed:@"at_attachment_photo_icon"] forState:UIControlStateNormal];
 	[self.locationButton setImage:[ATBackend imageNamed:@"at_attachment_location"] forState:UIControlStateNormal];
 	[self.emailButton setImage:[ATBackend imageNamed:@"at_attachment_email"] forState:UIControlStateNormal];
@@ -139,6 +138,12 @@ typedef enum {
 		[themeDelegate configureSendButton:self.sendButton forMessageCenterViewController:self];
 	} else {
 		[defaultTheme configureSendButton:self.sendButton forMessageCenterViewController:self];
+	}
+	
+	if (themeDelegate && [themeDelegate respondsToSelector:@selector(configureAttachmentsButton:forMessageCenterViewController:)]) {
+		[themeDelegate configureAttachmentsButton:self.attachmentButton forMessageCenterViewController:self];
+	} else {
+		[defaultTheme configureAttachmentsButton:self.attachmentButton forMessageCenterViewController:self];
 	}
 	
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{

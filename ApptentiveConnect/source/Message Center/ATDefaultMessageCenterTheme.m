@@ -23,4 +23,8 @@
 	[sendButton.titleLabel setShadowOffset:CGSizeMake(0, -1)];
 	[sendButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.4] forState:UIControlStateDisabled];
 }
+
+- (void)configureAttachmentsButton:(UIButton *)button forMessageCenterViewController:(ATMessageCenterViewController *)vc {
+	[button setImage:[ATBackend imageNamed:@"at_plus_button"] forState:UIControlStateNormal];
+}
 @end

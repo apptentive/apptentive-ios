@@ -27,6 +27,7 @@
 @implementation ATResizingTextView {
 	CGFloat lineHeight;
 	UIEdgeInsets textFieldInset;
+	UIEdgeInsets textFieldContentInset;
 	UIView *backgroundView;
 }
 @synthesize delegate;
@@ -61,7 +62,7 @@
 		}
 	
 		textFieldInset = UIEdgeInsetsMake(8, 7, 5, 0);
-	} else {
+	} else if (self.style == ATResizingTextViewStyleV2) {
 		self.backgroundColor = [UIColor colorWithRed:217/255. green:217/255. blue:217/255. alpha:1];
 		self.clipsToBounds = NO;
 		if (backgroundView) {
@@ -73,32 +74,59 @@
 		self.layer.cornerRadius = 4;
 		
 		textFieldInset = UIEdgeInsetsMake(8, 0, 5, 0);
+	} else if (self.style == ATResizingTextViewStyleV3) {
+		self.backgroundColor = [UIColor clearColor];
+		self.clipsToBounds = NO;
+		internalTextView.clipsToBounds = YES;
+		if (backgroundView) {
+			[backgroundView removeFromSuperview];
+			[backgroundView release], backgroundView = nil;
+		}
+		backgroundView = [[UIImageView alloc] initWithImage:[[ATBackend imageNamed:@"at_mc_text_input_bg"] resizableImageWithCapInsets:UIEdgeInsetsMake(16, 10, 16, 10)]];
+		backgroundView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+		CGRect backgroundFrame = CGRectInset(self.bounds, 0, 6);
+		backgroundFrame.origin.y += 1;
+		backgroundView.frame = backgroundFrame;
+		[self addSubview:backgroundView];
+		[self sendSubviewToBack:backgroundView];
+		
+		textFieldInset = UIEdgeInsetsMake(8, 0, 5, 0);
+		textFieldContentInset = UIEdgeInsetsMake(2, 0, 2, 0);
 	}
-	
+
 	CGRect f = {
 		.origin = {
 			.x = textFieldInset.left,
 			.y = textFieldInset.top
 		},
 		.size = {
-			.width = self.frame.size.width - textFieldInset.left - textFieldInset.right,
-			.height = self.frame.size.height - textFieldInset.top - textFieldInset.bottom
+			.width = self.bounds.size.width - textFieldInset.left - textFieldInset.right,
+			.height = self.bounds.size.height - textFieldInset.top - textFieldInset.bottom
 		}
 	};
-	f.size.width = f.size.width - (textFieldInset.left + textFieldInset.right);
+	NSString *text = nil;
+	if (internalTextView) {
+		[internalTextView removeFromSuperview];
+		text = internalTextView.text;
+		[internalTextView release], internalTextView = nil;
+	}
 	if (!internalTextView) {
 		internalTextView = [[ATInternalDefaultTextView alloc] initWithFrame:f];
 		internalTextView.clipsToBounds = NO;
 		internalTextView.delegate = self;
-		internalTextView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+		internalTextView.contentInset = textFieldContentInset;
 		internalTextView.showsHorizontalScrollIndicator = NO;
 		internalTextView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		internalTextView.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.1];
 		
 		[self addSubview:internalTextView];
 	}
+	if (text) {
+		internalTextView.text = text;
+	}
 	[self computeLineHeight];
 	self.maximumVeritcalLines = 3;
-	[self.internalTextView setBackgroundColor:[UIColor clearColor]];
+	//[self.internalTextView setBackgroundColor:[UIColor clearColor]];
 }
 
 - (void)dealloc {
@@ -128,20 +156,36 @@
 }
 
 - (void)resizeTextView {
-	CGRect currentFrame = self.frame;
-	CGSize textSize = internalTextView.contentSize;
-	CGSize textBounds = textSize;
-	textBounds.height = MIN(textSize.height, lineHeight * maximumVeritcalLines);
-	textBounds.height += (textFieldInset.bottom + textFieldInset.top);
+	CGRect currentBounds = self.bounds;
+//	CGSize textSize = internalTextView.contentSize;
+	CGSize minSize = [@"|SomeyExamp le text" sizeWithFont:internalTextView.font constrainedToSize:CGSizeMake(internalTextView.bounds.size.width, internalTextView.font.lineHeight)];
+	CGSize maxTextSize = CGSizeMake(internalTextView.bounds.size.width, internalTextView.font.lineHeight * maximumVeritcalLines);
+	CGSize textSize = [internalTextView.text sizeWithFont:internalTextView.font constrainedToSize:maxTextSize];
+	if ([internalTextView.text hasSuffix:@"\n"]) {
+		textSize.height += [internalTextView.font lineHeight];
+	}
+	CGFloat sizeDiff = currentBounds.size.height - internalTextView.bounds.size.height;
+	CGFloat newHeight = MAX(minSize.height, MIN(textSize.height, maxTextSize.height));
+//	newHeight += textFieldContentInset.bottom + textFieldContentInset.top;
+//	newHeight += textFieldInset.bottom + textFieldInset.top;
+	newHeight += sizeDiff;
 	
-	if (textBounds.height != currentFrame.size.height) {
+	if (newHeight != currentBounds.size.height) {
 //		[UIView animateWithDuration:0.3 animations:^(void) {
-			[self.delegate resizingTextView:self willChangeHeight:textBounds.height];
-			CGRect newFrame = currentFrame;
-			newFrame.size.height = textBounds.height;
+			[self.delegate resizingTextView:self willChangeHeight:newHeight];
+			CGRect newFrame = self.frame;
+			newFrame.size.height = newHeight;
+		NSLog(@"minSize: %@", NSStringFromCGSize(minSize));
+		NSLog(@"maxTextSize: %@", NSStringFromCGSize(maxTextSize));
+		NSLog(@"textSize: %@", NSStringFromCGSize(textSize));
+		NSLog(@"sizeDiff: %f", sizeDiff);
+		NSLog(@"textFieldInset: %@", NSStringFromUIEdgeInsets(textFieldInset));
+		NSLog(@"textFieldContentInset: %@", NSStringFromUIEdgeInsets(textFieldContentInset));
+		NSLog(@"newHeight: %f", newHeight);
+			
 			self.frame = newFrame;
 //		} completion:^(BOOL finished) {
-			[self.delegate resizingTextView:self didChangeHeight:textBounds.height];
+			[self.delegate resizingTextView:self didChangeHeight:newHeight];
 //		}];
 	}
 }
@@ -234,7 +278,7 @@
 	if (self.delegate && [self.delegate respondsToSelector:@selector(resizingTextView:shouldChangeTextInRange:replacementText:)]) {
 		return [self.delegate resizingTextView:self shouldChangeTextInRange:range replacementText:text];
 	}
-	[self resizeTextView];
+	//[self resizeTextView];
 	return YES;
 }
 
@@ -243,6 +287,7 @@
 		[self.delegate resizingTextViewDidChange:self];
 	}
 	[self resizeTextView];
+	[internalTextView scrollRangeToVisible:internalTextView.selectedRange];
 }
 
 - (void)textViewDidChangeSelection:(UITextView *)textView {
@@ -250,6 +295,7 @@
 		[self.delegate resizingTextViewDidChangeSelection:self];
 	}
 	[self resizeTextView];
+	[internalTextView scrollRangeToVisible:internalTextView.selectedRange];
 }
 @end
 
@@ -276,7 +322,7 @@
 	}*/
 	[super setContentOffset:aContentOffset];
 }
-
+/*
 - (void)setContentSize:(CGSize)contentSize {
 	if (self.contentSize.height > contentSize.height) {
 		UIEdgeInsets inset = self.contentInset;
@@ -285,6 +331,6 @@
 		self.contentInset = inset;
 	}
 	[super setContentSize:contentSize];
-}
+}*/
 @end
 

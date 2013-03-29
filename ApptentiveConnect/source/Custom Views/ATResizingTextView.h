@@ -12,7 +12,8 @@
 
 typedef enum {
 	ATResizingTextViewStyleIOS,
-	ATResizingTextViewStyleV2
+	ATResizingTextViewStyleV2,
+	ATResizingTextViewStyleV3,
 } ATResizingTextViewStyle;
 
 @interface ATResizingTextView : UIView <UITextViewDelegate>

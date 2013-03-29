@@ -334,7 +334,7 @@ typedef enum {
 	self.textView.placeholder = ATLocalizedString(@"What's on your mind?", @"Placeholder for message center text input.");
 	self.textView.clipsToBounds = YES;
 	self.textView.font = [UIFont systemFontOfSize:13];
-	self.textView.style = ATResizingTextViewStyleIOS;
+	self.textView.style = ATResizingTextViewStyleV3;
 }
 
 

@@ -132,7 +132,6 @@ static NSDateFormatter *dateFormatter = nil;
 + (UIImage *)imageByScalingImage:(UIImage *)image toSize:(CGSize)size scale:(CGFloat)contentScale fromITouchCamera:(BOOL)isFromITouchCamera {
 	UIImage *result = nil;
 	CGImageRef imageRef = nil;
-	CGImageAlphaInfo alphaInfo = kCGImageAlphaNone;
 	size_t samplesPerPixel, bytesPerRow, bitsPerComponent;
 	CGFloat newHeight, newWidth;
 	CGRect newRect;
@@ -143,7 +142,6 @@ static NSDateFormatter *dateFormatter = nil;
 	CGColorSpaceRef colorSpaceRef;
 	
 	imageRef = [image CGImage];
-	alphaInfo = CGImageGetAlphaInfo(imageRef);
 	
 	samplesPerPixel = 4;
 	

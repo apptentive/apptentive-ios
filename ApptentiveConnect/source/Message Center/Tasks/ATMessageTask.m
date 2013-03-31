@@ -77,6 +77,7 @@
 		} else {
 			self.finished = YES;
 		}
+		[message release], message = nil;
 	}
 }
 
@@ -157,6 +158,7 @@
 			self.failed = YES;
 		}
 		[self stop];
+		[message release], message = nil;
 		[self release];
 	}
 }
@@ -186,8 +188,10 @@
 	NSError *error = nil;
 	if (![context save:&error]) {
 		ATLogError(@"Failed to save new message: %@", error);
+		[message release], message = nil;
 		return NO;
 	}
+	[message release], message = nil;
 	return YES;
 }
 @end

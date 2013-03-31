@@ -10,6 +10,7 @@
 #import "ATAPIRequest.h"
 #import "ATBackend.h"
 #import "ATConnect.h"
+#import "ATData.h"
 #import "ATFeedback.h"
 #import "ATFeedbackController.h"
 #import "ATFeedbackMetrics.h"
@@ -165,7 +166,8 @@ enum {
 			label.text = feedbackTask.feedback.text;
 		} else if ([task isKindOfClass:[ATMessageTask class]]) {
 			ATMessageTask *messageTask = (ATMessageTask *)task;
-			ATMessage *message = [messageTask message];
+			NSString *messageID = [messageTask pendingMessageID];
+			ATMessage *message = [ATMessage findMessageWithPendingID:messageID];
 			if ([message isKindOfClass:[ATTextMessage class]]) {
 				ATTextMessage *textMessage = (ATTextMessage *)message;
 				label.text = textMessage.body;

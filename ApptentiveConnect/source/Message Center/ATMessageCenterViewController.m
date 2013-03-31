@@ -39,7 +39,6 @@ typedef enum {
 
 @interface ATMessageCenterViewController ()
 - (void)relayoutSubviews;
-- (void)styleTextView;
 - (CGRect)formRectToShow;
 - (void)registerForKeyboardNotifications;
 - (void)keyboardWillBeShown:(NSNotification *)aNotification;
@@ -161,7 +160,7 @@ typedef enum {
 	} else {
 		[defaultTheme configureAttachmentsButton:inputView.attachButton forMessageCenterViewController:self];
 	}
-	[self styleTextView];
+	inputView.placeholder = ATLocalizedString(@"What's on your mind?", @"Placeholder for message center text input.");
 	
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
 		[self relayoutSubviews];
@@ -294,11 +293,6 @@ typedef enum {
 }
 
 - (void)styleTextView {
-	inputView.placeholder = ATLocalizedString(@"What's on your mind?", @"Placeholder for message center text input.");
-/*	self.textView.clipsToBounds = YES;
-	self.textView.font = [UIFont systemFontOfSize:13];
-	self.textView.style = ATResizingTextViewStyleV3;
- */
 }
 
 

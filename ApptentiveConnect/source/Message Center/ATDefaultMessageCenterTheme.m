@@ -17,14 +17,18 @@
 }
 
 - (void)configureSendButton:(UIButton *)sendButton forMessageCenterViewController:(ATMessageCenterViewController *)vc {
-	UIImage *sendImage = [[ATBackend imageNamed:@"at_send_button_bg"] resizableImageWithCapInsets:UIEdgeInsetsMake(13, 13, 13, 13)];
+	UIImage *sendImage = [[ATBackend imageNamed:@"at_send_button_flat"] resizableImageWithCapInsets:UIEdgeInsetsMake(12, 49, 13, 13)];
 	[sendButton setBackgroundImage:sendImage forState:UIControlStateNormal];
-	[sendButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-	[sendButton.titleLabel setShadowOffset:CGSizeMake(0, -1)];
-	[sendButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.4] forState:UIControlStateDisabled];
+	[sendButton.titleLabel setShadowOffset:CGSizeMake(0, 1)];
+	[sendButton setTitleColor:[UIColor colorWithWhite:0.0 alpha:0.7] forState:UIControlStateNormal];
+	[sendButton setTitleShadowColor:[UIColor colorWithWhite:1 alpha:0.5] forState:UIControlStateNormal];
+	[sendButton setTitleShadowColor:[UIColor colorWithWhite:1 alpha:0.5] forState:UIControlStateDisabled];
+	[sendButton setTitleColor:[UIColor colorWithWhite:0.0 alpha:0.3] forState:UIControlStateDisabled];
+	//[sendButton setTitleShadowColor:[UIColor clearColor] forState:UIControlStateDisabled];
 }
 
 - (void)configureAttachmentsButton:(UIButton *)button forMessageCenterViewController:(ATMessageCenterViewController *)vc {
-	[button setImage:[ATBackend imageNamed:@"at_plus_button"] forState:UIControlStateNormal];
+	[button setTitle:@"" forState:UIControlStateNormal];
+	[button setImage:[ATBackend imageNamed:@"at_plus_button_flat"] forState:UIControlStateNormal];
 }
 @end

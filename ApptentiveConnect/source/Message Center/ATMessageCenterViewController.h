@@ -10,20 +10,16 @@
 
 #import "ATFakeMessageCell.h"
 #import "ATFileMessageCell.h"
-#import "ATResizingTextView.h"
+#import "ATMessageInputView.h"
 #import "ATSimpleImageViewController.h"
 #import "ATTextMessageUserCell.h"
 
 @protocol ATMessageCenterThemeDelegate;
 
-@interface ATMessageCenterViewController : UIViewController <ATResizingTextViewDelegate, ATSimpleImageViewControllerDelegate, NSFetchedResultsControllerDelegate, UIActionSheetDelegate, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface ATMessageCenterViewController : UIViewController <ATMessageInputViewDelegate, ATSimpleImageViewControllerDelegate, NSFetchedResultsControllerDelegate, UIActionSheetDelegate, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate>
 @property (retain, nonatomic) IBOutlet UITableView *tableView;
 @property (retain, nonatomic) IBOutlet UIView *containerView;
-@property (retain, nonatomic) IBOutlet UIView *composerView;
-@property (retain, nonatomic) IBOutlet UIImageView *composerBackgroundView;
-@property (retain, nonatomic) IBOutlet UIButton *attachmentButton;
-@property (retain, nonatomic) IBOutlet ATResizingTextView *textView;
-@property (retain, nonatomic) IBOutlet UIButton *sendButton;
+@property (retain, nonatomic) IBOutlet UIView *inputContainerView;
 @property (retain, nonatomic) IBOutlet UIView *attachmentView;
 @property (retain, nonatomic) IBOutlet UIImageView *attachmentShadowView;
 @property (retain, nonatomic) IBOutlet UIButton *cameraButton;
@@ -39,8 +35,6 @@
 - (id)initWithThemeDelegate:(NSObject<ATMessageCenterThemeDelegate> *)themeDelegate;
 
 - (IBAction)donePressed:(id)sender;
-- (IBAction)sendPressed:(id)sender;
-- (IBAction)paperclipPressed:(id)sender;
 - (IBAction)showInfoView:(id)sender;
 - (IBAction)cameraPressed:(id)sender;
 @end

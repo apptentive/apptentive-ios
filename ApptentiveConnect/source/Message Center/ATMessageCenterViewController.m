@@ -65,8 +65,11 @@ typedef enum {
 	UIActionSheet *sendImageActionSheet;
 	ATMessage *retryMessage;
 	UIActionSheet *retryMessageActionSheet;
+	
+	UINib *inputViewNib;
+	ATMessageInputView *inputView;
 }
-@synthesize tableView, containerView, composerView, composerBackgroundView, attachmentButton, textView, sendButton, attachmentView, fakeCell;
+@synthesize tableView, containerView, inputContainerView, attachmentView, fakeCell;
 @synthesize userCell, developerCell, userFileMessageCell;
 @synthesize themeDelegate;
 
@@ -117,9 +120,8 @@ typedef enum {
 		self.navigationItem.titleView = [defaultTheme titleViewForMessageCenterViewController:self];
 	}
 	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)] autorelease];
-	[self styleTextView];
 	
-	self.composerBackgroundView.image = [[ATBackend imageNamed:@"at_inbox_composer_bg"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 0, 29, 19)];
+//	self.composerBackgroundView.image = [[ATBackend imageNamed:@"at_inbox_composer_bg"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 0, 29, 19)];
 	[self.cameraButton setImage:[ATBackend imageNamed:@"at_attachment_photo_icon"] forState:UIControlStateNormal];
 	[self.locationButton setImage:[ATBackend imageNamed:@"at_attachment_location"] forState:UIControlStateNormal];
 	[self.emailButton setImage:[ATBackend imageNamed:@"at_attachment_email"] forState:UIControlStateNormal];
@@ -130,21 +132,36 @@ typedef enum {
 	self.attachmentShadowView.image = [[ATBackend imageNamed:@"at_mc_attachment_shadow"] resizableImageWithCapInsets:UIEdgeInsetsMake(4, 0, 0, 128)];
 	
 	[self.view addSubview:self.containerView];
-	
-	composerFieldHeight = self.textView.frame.size.height;
-	
-	self.sendButton.enabled = NO;
-	if (themeDelegate && [themeDelegate respondsToSelector:@selector(configureSendButton:forMessageCenterViewController:)]) {
-		[themeDelegate configureSendButton:self.sendButton forMessageCenterViewController:self];
+	inputViewNib = [UINib nibWithNibName:@"ATMessageInputView" bundle:[ATConnect resourceBundle]];
+	NSArray *views = [inputViewNib instantiateWithOwner:self options:NULL];
+	if ([views count] == 0) {
+		NSLog(@"Unable to load input view.");
 	} else {
-		[defaultTheme configureSendButton:self.sendButton forMessageCenterViewController:self];
+		inputView = [views objectAtIndex:0];
+		CGRect inputContainerFrame = self.inputContainerView.frame;
+		[inputContainerView removeFromSuperview];
+		self.inputContainerView = nil;
+		[self.view addSubview:inputView];
+		inputView.frame = inputContainerFrame;
+		inputView.delegate = self;
+		self.inputContainerView = inputView;
+	}
+	
+	UIImage *flatInputBG = [ATBackend imageNamed:@"at_flat_input_bg"];
+	inputView.backgroundImage = [flatInputBG resizableImageWithCapInsets:UIEdgeInsetsMake(16, 44, flatInputBG.size.height - 16 - 1, flatInputBG.size.width - 44 - 1)];
+	
+	if (themeDelegate && [themeDelegate respondsToSelector:@selector(configureSendButton:forMessageCenterViewController:)]) {
+		[themeDelegate configureSendButton:inputView.sendButton forMessageCenterViewController:self];
+	} else {
+		[defaultTheme configureSendButton:inputView.sendButton forMessageCenterViewController:self];
 	}
 	
 	if (themeDelegate && [themeDelegate respondsToSelector:@selector(configureAttachmentsButton:forMessageCenterViewController:)]) {
-		[themeDelegate configureAttachmentsButton:self.attachmentButton forMessageCenterViewController:self];
+		[themeDelegate configureAttachmentsButton:inputView.attachButton forMessageCenterViewController:self];
 	} else {
-		[defaultTheme configureAttachmentsButton:self.attachmentButton forMessageCenterViewController:self];
+		[defaultTheme configureAttachmentsButton:inputView.attachButton forMessageCenterViewController:self];
 	}
+	[self styleTextView];
 	
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
 		[self relayoutSubviews];
@@ -167,11 +184,7 @@ typedef enum {
 	[tableView release];
 	[attachmentView release];
 	[containerView release];
-	[composerView release];
-	[composerBackgroundView release];
-	[textView release];
-	[sendButton release];
-	[attachmentButton release];
+	[inputContainerView release];
 	fetchedMessagesController.delegate = nil;
 	[fetchedMessagesController release], fetchedMessagesController = nil;
 	[_cameraButton release];
@@ -188,11 +201,7 @@ typedef enum {
 	[self setTableView:nil];
 	[self setAttachmentView:nil];
 	[self setContainerView:nil];
-	[self setComposerView:nil];
-	[self setComposerBackgroundView:nil];
-	[self setTextView:nil];
-	[self setSendButton:nil];
-	[self setAttachmentButton:nil];
+	[self setInputContainerView:nil];
 	[self setCameraButton:nil];
 	[self setLocationButton:nil];
 	[self setEmailButton:nil];
@@ -213,50 +222,6 @@ typedef enum {
 	}
 }
 
-- (IBAction)sendPressed:(id)sender {
-	@synchronized(self) {
-		if (composingMessage == nil) {
-			composingMessage = (ATTextMessage *)[ATData newEntityNamed:@"ATTextMessage"];
-			[composingMessage setup];
-		}
-		composingMessage.body = [self.textView text];
-		composingMessage.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
-		composingMessage.sentByUser = @YES;
-		[composingMessage updateClientCreationTime];
-		
-		[[[ATBackend sharedBackend] managedObjectContext] save:nil];
-		
-		// Give it a wee bit o' delay.
-		NSString *pendingMessageID = [composingMessage pendingMessageID];
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
-			ATMessageTask *task = [[ATMessageTask alloc] init];
-			task.pendingMessageID = pendingMessageID;
-			[[ATTaskQueue sharedTaskQueue] addTask:task];
-			[[ATTaskQueue sharedTaskQueue] start];
-			[task release], task = nil;
-		});
-		[composingMessage release], composingMessage = nil;
-		self.textView.text = @"";
-	}
-}
-
-- (IBAction)paperclipPressed:(id)sender {
-	attachmentsVisible = !attachmentsVisible;
-	if (!CGRectEqualToRect(CGRectZero, currentKeyboardFrameInView)) {
-		[self.textView resignFirstResponder];
-	} else {
-		if (!animatingTransition) {
-			[UIView animateWithDuration:0.3 animations:^(void){
-				animatingTransition = YES;
-				[self relayoutSubviews];
-			} completion:^(BOOL finished) {
-				animatingTransition = NO;
-				[self scrollToBottomOfTableView];
-			}];
-		}
-	}
-}
-
 - (IBAction)showInfoView:(id)sender {
 	ATInfoViewController *vc = [[ATInfoViewController alloc] init];
 	[self presentModalViewController:vc animated:YES];
@@ -273,17 +238,15 @@ typedef enum {
 - (void)relayoutSubviews {
 	CGFloat viewHeight = self.view.bounds.size.height;
 	
-	CGRect composerFrame = composerView.frame;
+	CGRect composerFrame = inputContainerView.frame;
 	CGRect tableFrame = tableView.frame;
 	CGRect containerFrame = containerView.frame;
 	CGRect attachmentFrame = attachmentView.frame;
 	
-	composerFrame.size.height = composerFieldHeight + 2*TextViewPadding;
-	
 	if (!attachmentsVisible) {
-		composerFrame.origin.y = viewHeight - composerView.frame.size.height;
+		composerFrame.origin.y = viewHeight - inputContainerView.frame.size.height;
 	} else {
-		composerFrame.origin.y = viewHeight - composerView.frame.size.height - attachmentFrame.size.height;
+		composerFrame.origin.y = viewHeight - inputContainerView.frame.size.height - attachmentFrame.size.height;
 	}
 	
 	if (!CGRectEqualToRect(CGRectZero, currentKeyboardFrameInView)) {
@@ -304,7 +267,7 @@ typedef enum {
 	//containerView.frame = containerFrame;
 	//[containerView setNeedsLayout];
 	tableView.frame = tableFrame;
-	composerView.frame = composerFrame;
+	inputContainerView.frame = composerFrame;
 	attachmentView.frame = attachmentFrame;
 	/*
 	 if (!CGRectEqualToRect(composerFrame, composerView.frame)) {
@@ -324,17 +287,18 @@ typedef enum {
 	[self relayoutSubviews];
 	
 	CGRect containerFrame = containerView.frame;
-	containerFrame.size.height = self.tableView.frame.size.height + self.composerView.frame.size.height + self.attachmentView.frame.size.height;
+	containerFrame.size.height = self.tableView.frame.size.height + self.inputContainerView.frame.size.height + self.attachmentView.frame.size.height;
 	containerView.frame = containerFrame;
 	[containerView setNeedsLayout];
 	[self relayoutSubviews];
 }
 
 - (void)styleTextView {
-	self.textView.placeholder = ATLocalizedString(@"What's on your mind?", @"Placeholder for message center text input.");
-	self.textView.clipsToBounds = YES;
+	inputView.placeholder = ATLocalizedString(@"What's on your mind?", @"Placeholder for message center text input.");
+/*	self.textView.clipsToBounds = YES;
 	self.textView.font = [UIFont systemFontOfSize:13];
 	self.textView.style = ATResizingTextViewStyleV3;
+ */
 }
 
 
@@ -372,45 +336,77 @@ typedef enum {
 	}
 }
 
-#pragma mark ATResizingTextViewDelegate
-- (void)resizingTextView:(ATResizingTextView *)textView willChangeHeight:(CGFloat)height {
-	if (composerFieldHeight != height) {
-		composerFieldHeight = height;
-		//[self viewDidLayoutSubviews];
-	}
-}
-
-- (void)resizingTextView:(ATResizingTextView *)textView didChangeHeight:(CGFloat)height {
-	[self relayoutSubviews];
-	[self scrollToBottomOfTableView];
-}
-
-- (BOOL)resizingTextViewShouldBeginEditing:(ATResizingTextView *)textView {
-	return YES;
-}
-
-- (void)resizingTextViewDidChange:(ATResizingTextView *)aTextView {
-	if (aTextView.text && ![aTextView.text isEqualToString:@""]) {
+#pragma mark ATMessageInputViewDelegate
+- (void)messageInputViewDidChange:(ATMessageInputView *)anInputView {
+	if (anInputView.text && ![anInputView.text isEqualToString:@""]) {
 		if (!composingMessage) {
 			composingMessage = (ATTextMessage *)[ATData newEntityNamed:@"ATTextMessage"];
 			[composingMessage setup];
 		}
-		self.sendButton.enabled = YES;
-		// Don't modify the message.
-		//composingMessage.body = aTextView.text;
 	} else {
 		if (composingMessage) {
 			NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
 			[context deleteObject:composingMessage];
 			[composingMessage release], composingMessage = nil;
 		}
-		self.sendButton.enabled = NO;
+	}
+	[self relayoutSubviews];
+	[self scrollToBottomOfTableView];
+}
+
+- (void)messageInputView:(ATMessageInputView *)anInputView didChangeHeight:(CGFloat)height {
+	[self relayoutSubviews];
+	[self scrollToBottomOfTableView];
+}
+
+- (void)messageInputViewSendPressed:(ATMessageInputView *)anInputView {
+	@synchronized(self) {
+		if (composingMessage == nil) {
+			composingMessage = (ATTextMessage *)[ATData newEntityNamed:@"ATTextMessage"];
+			[composingMessage setup];
+		}
+		composingMessage.body = [inputView text];
+		composingMessage.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
+		composingMessage.sentByUser = @YES;
+		[composingMessage updateClientCreationTime];
+		
+		[[[ATBackend sharedBackend] managedObjectContext] save:nil];
+		
+		// Give it a wee bit o' delay.
+		NSString *pendingMessageID = [composingMessage pendingMessageID];
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
+			ATMessageTask *task = [[ATMessageTask alloc] init];
+			task.pendingMessageID = pendingMessageID;
+			[[ATTaskQueue sharedTaskQueue] addTask:task];
+			[[ATTaskQueue sharedTaskQueue] start];
+			[task release], task = nil;
+		});
+		[composingMessage release], composingMessage = nil;
+		inputView.text = @"";
+	}
+	
+}
+
+- (void)messageInputViewAttachPressed:(ATMessageInputView *)anInputView {
+	attachmentsVisible = !attachmentsVisible;
+	if (!CGRectEqualToRect(CGRectZero, currentKeyboardFrameInView)) {
+		[inputView resignFirstResponder];
+	} else {
+		if (!animatingTransition) {
+			[UIView animateWithDuration:0.3 animations:^(void){
+				animatingTransition = YES;
+				[self relayoutSubviews];
+			} completion:^(BOOL finished) {
+				animatingTransition = NO;
+				[self scrollToBottomOfTableView];
+			}];
+		}
 	}
 }
 
 #pragma mark Keyboard Handling
 - (CGRect)formRectToShow {
-	CGRect result = self.composerView.frame;
+	CGRect result = self.inputContainerView.frame;
 	return result;
 }
 
@@ -483,7 +479,7 @@ typedef enum {
 		}
 		sendImageActionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Send Image", @"Send image button title"), nil];
 		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-			[sendImageActionSheet showFromRect:sendButton.bounds inView:sendButton animated:YES];
+			[sendImageActionSheet showFromRect:inputView.sendButton.bounds inView:inputView.sendButton animated:YES];
 		} else {
 			[sendImageActionSheet showInView:self.view];
 		}
@@ -620,7 +616,7 @@ typedef enum {
 		}
 		retryMessageActionSheet = [[UIActionSheet alloc] initWithTitle:errorString delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Retry Sending", @"Retry sending message title"), nil];
 		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-			[retryMessageActionSheet showFromRect:sendButton.bounds inView:sendButton animated:YES];
+			[retryMessageActionSheet showFromRect:inputView.sendButton.bounds inView:inputView.sendButton animated:YES];
 		} else {
 			[retryMessageActionSheet showInView:self.view];
 		}

@@ -146,9 +146,6 @@ typedef enum {
 		self.inputContainerView = inputView;
 	}
 	
-	UIImage *flatInputBG = [ATBackend imageNamed:@"at_flat_input_bg"];
-	inputView.backgroundImage = [flatInputBG resizableImageWithCapInsets:UIEdgeInsetsMake(16, 44, flatInputBG.size.height - 16 - 1, flatInputBG.size.width - 44 - 1)];
-	
 	if (themeDelegate && [themeDelegate respondsToSelector:@selector(configureSendButton:forMessageCenterViewController:)]) {
 		[themeDelegate configureSendButton:inputView.sendButton forMessageCenterViewController:self];
 	} else {
@@ -160,6 +157,13 @@ typedef enum {
 	} else {
 		[defaultTheme configureAttachmentsButton:inputView.attachButton forMessageCenterViewController:self];
 	}
+	
+	if (themeDelegate && [themeDelegate respondsToSelector:@selector(backgroundImageForMessageForMessageCenterViewController:)]) {
+		inputView.backgroundImage = [themeDelegate backgroundImageForMessageForMessageCenterViewController:self];
+	} else {
+		inputView.backgroundImage = [defaultTheme backgroundImageForMessageForMessageCenterViewController:self];
+	}
+	
 	inputView.placeholder = ATLocalizedString(@"What's on your mind?", @"Placeholder for message center text input.");
 	
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{

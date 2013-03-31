@@ -31,4 +31,11 @@
 	[button setTitle:@"" forState:UIControlStateNormal];
 	[button setImage:[ATBackend imageNamed:@"at_plus_button_flat"] forState:UIControlStateNormal];
 }
+
+- (UIImage *)backgroundImageForMessageForMessageCenterViewController:(ATMessageCenterViewController *)vc {
+	UIImage *flatInputBackgroundImage = [ATBackend imageNamed:@"at_flat_input_bg"];
+	UIEdgeInsets capInsets = UIEdgeInsetsMake(16, 44, flatInputBackgroundImage.size.height - 16 - 1, flatInputBackgroundImage.size.width - 44 - 1);
+	UIImage *resizableImage = [flatInputBackgroundImage resizableImageWithCapInsets:capInsets];
+	return resizableImage;
+}
 @end

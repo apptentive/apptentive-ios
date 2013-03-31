@@ -46,4 +46,5 @@
 - (UIView *)titleViewForMessageCenterViewController:(ATMessageCenterViewController *)vc;
 - (void)configureSendButton:(UIButton *)sendButton forMessageCenterViewController:(ATMessageCenterViewController *)vc;
 - (void)configureAttachmentsButton:(UIButton *)button forMessageCenterViewController:(ATMessageCenterViewController *)vc;
+- (UIImage *)backgroundImageForMessageForMessageCenterViewController:(ATMessageCenterViewController *)vc;
 @end

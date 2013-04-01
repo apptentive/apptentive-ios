@@ -111,7 +111,7 @@ UIEdgeInsets insetsForView(UIView *v) {
 		self.frame = newFrame;
 		
 		CGRect newTextFrame = textView.frame;
-		newTextFrame.origin.y = newFrame.size.height - textViewInsets.top - newTextHeight;
+		newTextFrame.origin.y = textViewInsets.top;
 		newTextFrame.size.height = newTextHeight;
 		textView.frame = newTextFrame;
 		

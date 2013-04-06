@@ -14,7 +14,7 @@
 @interface ATSurveyResponse : ATRecord {
 	NSMutableArray *questionResponses;
 }
-@property (nonatomic, retain) NSString *identifier;
+@property (nonatomic, copy) NSString *identifier;
 @property (nonatomic, assign) NSUInteger completionSeconds;
 
 - (void)addQuestionResponse:(ATSurveyQuestionResponse *)response;
@@ -26,6 +26,6 @@
 @interface ATSurveyQuestionResponse : NSObject <NSCoding> {
 @private
 }
-@property (nonatomic, retain) NSString *identifier;
+@property (nonatomic, copy) NSString *identifier;
 @property (nonatomic, retain) NSObject<NSCoding> *response;
 @end

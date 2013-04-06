@@ -47,8 +47,8 @@ typedef enum {
 }
 @property (nonatomic, assign) ATAPIRequestReturnType returnType;
 @property (nonatomic, assign) BOOL failed;
-@property (nonatomic, retain) NSString *errorTitle;
-@property (nonatomic, retain) NSString *errorMessage;
+@property (nonatomic, copy) NSString *errorTitle;
+@property (nonatomic, copy) NSString *errorMessage;
 @property (nonatomic, assign) NSTimeInterval timeoutInterval;
 @property (nonatomic, assign) NSObject<ATAPIRequestDelegate> *delegate;
 

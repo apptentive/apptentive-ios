@@ -65,8 +65,6 @@
 - (NSData *)responseData;
 
 - (NSString *)requestAsString;
-
-- (NSDate *)expirationDateForRequestWithMaxAge:(NSTimeInterval)maxAge;
 @end
 
 

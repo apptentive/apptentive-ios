@@ -30,7 +30,7 @@ NSString *const ATBackendNewAPIKeyNotification;
 	BOOL shouldStopWorking;
 	BOOL working;
 }
-@property (nonatomic, retain) NSString *apiKey;
+@property (nonatomic, copy) NSString *apiKey;
 /*! The feedback currently being worked on by the user. */
 @property (nonatomic, retain) ATFeedback *currentFeedback;
 

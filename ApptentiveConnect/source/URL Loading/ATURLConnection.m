@@ -324,16 +324,6 @@
 	}
 	return result;
 }
-
-- (NSDate *)expirationDateForRequestWithMaxAge:(NSTimeInterval)maxAge {
-	if (!request) {
-		return nil;
-	}
-	
-	
-	
-	
-}
 @end
 
 @implementation ATURLConnection (Private)

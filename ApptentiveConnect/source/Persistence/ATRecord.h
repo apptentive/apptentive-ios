@@ -18,10 +18,10 @@
 	NSString *carrier;
 	NSDate *date;
 }
-@property (nonatomic, retain) NSString *uuid;
-@property (nonatomic, retain) NSString *model;
-@property (nonatomic, retain) NSString *os_version;
-@property (nonatomic, retain) NSString *carrier;
+@property (nonatomic, copy) NSString *uuid;
+@property (nonatomic, copy) NSString *model;
+@property (nonatomic, copy) NSString *os_version;
+@property (nonatomic, copy) NSString *carrier;
 @property (nonatomic, retain) NSDate *date;
 
 - (NSString *)formattedDate:(NSDate *)aDate;

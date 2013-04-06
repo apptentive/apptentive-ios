@@ -13,6 +13,6 @@
 @private
 	UILabel *placeholderLabel;
 }
-@property (nonatomic, retain) NSString *placeholder;
+@property (nonatomic, copy) NSString *placeholder;
 - (BOOL)isDefault;
 @end

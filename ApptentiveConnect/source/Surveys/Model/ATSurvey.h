@@ -17,12 +17,12 @@
 @property (nonatomic, getter=isActive) BOOL active;
 @property (nonatomic, getter=responseIsRequired) BOOL responseRequired;
 @property (nonatomic) BOOL multipleResponsesAllowed;
-@property (nonatomic, retain) NSString *identifier;
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *surveyDescription;
+@property (nonatomic, copy) NSString *identifier;
+@property (nonatomic, copy) NSString *name;
+@property (nonatomic, copy) NSString *surveyDescription;
 @property (nonatomic, readonly) NSArray *questions;
 @property (nonatomic, readonly) NSArray *tags;
-@property (nonatomic, retain) NSString *successMessage;
+@property (nonatomic, copy) NSString *successMessage;
 
 - (void)addQuestion:(ATSurveyQuestion *)question;
 - (void)addTag:(NSString *)tag;

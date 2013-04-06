@@ -14,7 +14,7 @@
 	NSString *name;
 	NSMutableDictionary *info;
 }
-@property (nonatomic, retain) NSString *name;
+@property (nonatomic, copy) NSString *name;
 @property (nonatomic, readonly) NSDictionary *info;
 
 - (void)setValue:(id)value forKey:(NSString *)key;

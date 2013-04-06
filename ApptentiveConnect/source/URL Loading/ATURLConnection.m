@@ -233,7 +233,18 @@
 - (NSCachedURLResponse *)connection:(NSURLConnection *)aConnection willCacheResponse:(NSCachedURLResponse *)cachedResponse {
 	// See: http://blackpixel.com/blog/1659/caching-and-nsurlconnection/
 	NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)[cachedResponse response];
-	if ([aConnection currentRequest].cachePolicy == NSURLRequestUseProtocolCachePolicy) {
+	NSURLRequest *r = nil;
+#if TARGET_OS_IPHONE
+	if ([aConnection respondsToSelector:@selector(currentRequest)]) {
+		r = [aConnection currentRequest];
+	}
+#endif
+#if TARGET_OS_MAC
+	if (request) {
+		r = request;
+	}
+#endif
+	if (r != nil && [r cachePolicy] == NSURLRequestUseProtocolCachePolicy) {
 		NSDictionary *responseHeaders = [httpResponse allHeaderFields];
 		NSString *cacheControlHeader = [responseHeaders valueForKey:@"Cache-Control"];
 		NSString *expiresHeader = [responseHeaders valueForKey:@"Expires"];
@@ -244,7 +255,7 @@
 	return cachedResponse;
 }
 
-- (NSURLRequest *)connection:(NSURLConnection *)inConnection willSendRequest: (NSURLRequest *)inRequest redirectResponse: (NSURLResponse *)inRedirectResponse {
+- (NSURLRequest *)connection:(NSURLConnection *)inConnection willSendRequest:(NSURLRequest *)inRequest redirectResponse: (NSURLResponse *)inRedirectResponse {
 	if (inRedirectResponse) {
 		NSMutableURLRequest *r = [[request mutableCopy] autorelease];
 		[r setURL:[inRequest URL]];

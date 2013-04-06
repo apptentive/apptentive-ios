@@ -42,13 +42,12 @@ NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 	[backend checkForAvailableSurveys];
 }
 
-
 + (void)presentSurveyControllerFromViewController:(UIViewController *)viewController {
 	[self presentSurveyControllerWithTags:nil fromViewController:viewController];
 }
 
 + (void)presentSurveyControllerWithTags:(NSSet *)tags fromViewController:(UIViewController *)viewController {
 	ATSurveysBackend *backend = [ATSurveysBackend sharedBackend];
-	[backend presentSurveyControllerFromViewController:viewController];
+	[backend presentSurveyControllerWithTags:tags fromViewController:viewController];
 }
 @end

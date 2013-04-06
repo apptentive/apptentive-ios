@@ -46,6 +46,8 @@ enum kRootTableSections {
 	self.tableView.tableHeaderView = imageView;
 	[imageView release], imageView = nil;
 	[super viewDidLoad];
+    
+    tags = [[NSSet alloc] initWithObjects:@"testsurvey", @"testtag", nil];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyBecameAvailable:) name:ATSurveyNewSurveyAvailableNotification object:nil];
 	[ATSurveys checkForAvailableSurveys];
@@ -83,12 +85,15 @@ enum kRootTableSections {
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	if (section == kFeedbackSection) {
 		return 2;
-	}
+	} else if (section == kSurveySection) {
+        return 2;
+    }
 	return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	static NSString *CellIdentifier = @"Cell";
+    static NSString *SurveyTagsCell = @"SurveyTagsCell";
 	
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil) {
@@ -103,15 +108,31 @@ enum kRootTableSections {
 	} else if (indexPath.section == kRatingSection) {
 		cell.textLabel.text = @"Start Rating Flow";
 	} else if (indexPath.section == kSurveySection) {
-		if ([ATSurveys hasSurveyAvailable]) {
-			cell.textLabel.text = @"Show Survey";
-			cell.textLabel.textColor = [UIColor blackColor];
-		} else {
-			cell.textLabel.text = @"No Survey Available";
-			cell.textLabel.textColor = [UIColor grayColor];
-		}
+        if (indexPath.row == 0) {
+            if ([ATSurveys hasSurveyAvailable]) {
+                cell.textLabel.text = @"Show Survey";
+                cell.textLabel.textColor = [UIColor blackColor];
+            } else {
+                cell.textLabel.text = @"No Survey Available";
+                cell.textLabel.textColor = [UIColor grayColor];
+            }
+        } else if (indexPath.row == 1) {
+            cell = [tableView dequeueReusableCellWithIdentifier:SurveyTagsCell];
+            if (cell == nil) {
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:SurveyTagsCell] autorelease];
+            }
+            if ([ATSurveys hasSurveyAvailableWithTags:tags]) {
+                cell.textLabel.text = @"Show Survey With Tags";
+                cell.textLabel.textColor = [UIColor blackColor];
+            } else {
+                cell.textLabel.text = @"No Survey Available With Tags";
+                cell.textLabel.textColor = [UIColor grayColor];
+            }
+            NSArray *tagArray = [tags allObjects];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"tags: %@", [tagArray componentsJoinedByString:@", "]];
+        }
 	}
-	
+    
 	return cell;
 }
 
@@ -127,9 +148,15 @@ enum kRootTableSections {
 	} else if (indexPath.section == kRatingSection) {
 		[self showRating:nil];
 	} else if (indexPath.section == kSurveySection) {
-		if ([ATSurveys hasSurveyAvailable]) {
-			[ATSurveys presentSurveyControllerFromViewController:self];
-		}
+        if (indexPath.row == 0) {
+            if ([ATSurveys hasSurveyAvailable]) {
+                [ATSurveys presentSurveyControllerFromViewController:self];
+            }
+        } else if (indexPath.row == 1) {
+            if ([ATSurveys hasSurveyAvailableWithTags:tags]) {
+                [ATSurveys presentSurveyControllerWithTags:tags fromViewController:self];
+            }
+        }
 	}
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -167,6 +194,8 @@ enum kRootTableSections {
 }
 
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [tags release], tags = nil;
 	[super dealloc];
 }
 @end

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface RootViewController : UITableViewController {
-
+	NSSet *tags;
 }
 - (IBAction)showFeedback:(id)sender;
 - (IBAction)showRating:(id)sender;

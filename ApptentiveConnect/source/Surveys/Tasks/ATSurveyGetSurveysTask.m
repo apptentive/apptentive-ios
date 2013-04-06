@@ -86,6 +86,7 @@
 		[self retain];
 		if (request == checkSurveysRequest) {
 			ATSurveyParser *parser = [[ATSurveyParser alloc] init];
+			
 			NSArray *surveys = [parser parseMultipleSurveys:(NSData *)result];
 			if (surveys == nil) {
 				NSLog(@"An error occurred parsing surveys: %@", [parser parserError]);

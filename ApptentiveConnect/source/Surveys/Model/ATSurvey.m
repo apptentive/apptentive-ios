@@ -60,6 +60,7 @@
 
 - (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeInt:kATSurveyStorageVersion forKey:@"version"];
+	[coder encodeObject:self.identifier forKey:@"identifier"];
 	[coder encodeBool:self.isActive forKey:@"active"];
 	[coder encodeBool:self.responseIsRequired forKey:@"responseRequired"];
 	[coder encodeBool:self.multipleResponsesAllowed forKey:@"multipleResponsesAllowed"];
@@ -81,7 +82,7 @@
 }
 
 - (NSString *)description {
-	return [NSString stringWithFormat:@"<ATSurvey: %p {%@}>", self, [self name]];
+	return [NSString stringWithFormat:@"<ATSurvey: %p {name:%@, identifier:%@}>", self, self.name, self.identifier];
 }
 
 - (void)addQuestion:(ATSurveyQuestion *)question {

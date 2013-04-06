@@ -437,7 +437,11 @@ enum {
 				ATSurveyQuestionAnswer *answer = [question.answerChoices objectAtIndex:answerIndex];
 				BOOL isChecked = cell.accessoryType == UITableViewCellAccessoryCheckmark;
 				
-				if (isChecked == NO && question.type == ATSurveyQuestionTypeMultipleSelect && [[question selectedAnswerChoices] count] == question.maxSelectionCount) {
+				NSUInteger maxSelections = question.maxSelectionCount;
+				if (maxSelections == 0) {
+					maxSelections = NSUIntegerMax;
+				}
+				if (isChecked == NO && question.type == ATSurveyQuestionTypeMultipleSelect && [[question selectedAnswerChoices] count] == maxSelections) {
 					// Do nothing if unchecked and have already selected the maximum number of answers.
 				} else if (isChecked == NO) {
 					cell.accessoryType = UITableViewCellAccessoryCheckmark;

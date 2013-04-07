@@ -37,7 +37,7 @@
 		if (version == kATSurveyStorageVersion) {
 			self.active = [coder decodeBoolForKey:@"active"];
 			self.responseRequired = [coder decodeBoolForKey:@"responseRequired"];
-			self.multipleResponsesAllowed = [coder decodeBoolForKey:@"multipleResponesAllowed"];
+			self.multipleResponsesAllowed = [coder decodeBoolForKey:@"multipleResponsesAllowed"];
 			self.identifier = [coder decodeObjectForKey:@"identifier"];
 			self.name = [coder decodeObjectForKey:@"name"];
 			self.surveyDescription = [coder decodeObjectForKey:@"surveyDescription"];

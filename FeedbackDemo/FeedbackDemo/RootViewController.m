@@ -59,6 +59,12 @@ enum kRootTableSections {
 }
 
 - (void)checkForProperConfiguration {
+	static BOOL checkedAlready = NO;
+	if (checkedAlready) {
+		// Don't display more than once.
+		return;
+	}
+	checkedAlready = YES;
 	if ([kApptentiveAPIKey isEqualToString:@"<your key here>"]) {
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Please Set API Key" message:@"This demo app will not work properly until you set your API key in defines.h" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
 		[alert show];

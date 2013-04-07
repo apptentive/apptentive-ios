@@ -18,8 +18,6 @@
 #import "ATUtilities.h"
 #import "ATWebClient.h"
 
-static ATAppRatingFlow *sharedRatingFlow = nil;
-
 //TODO: This should be changed for iOS 4+
 #define kATAppAppUsageMinimumInterval (20)
 
@@ -102,12 +100,12 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 }
 
 + (ATAppRatingFlow *)sharedRatingFlowWithAppID:(NSString *)iTunesAppID {
-	@synchronized(self) {
-		if (sharedRatingFlow == nil) {
-			sharedRatingFlow = [[ATAppRatingFlow alloc] initWithAppID:iTunesAppID];
-		}
-		return sharedRatingFlow;
-	}
+	static ATAppRatingFlow *sharedRatingFlow = nil;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		sharedRatingFlow = [[ATAppRatingFlow alloc] initWithAppID:iTunesAppID];
+	});
+	return sharedRatingFlow;
 }
 
 #if TARGET_OS_IPHONE

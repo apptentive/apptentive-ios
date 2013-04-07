@@ -23,8 +23,6 @@ NSString *const ATBackendNewAPIKeyNotification = @"ATBackendNewAPIKeyNotificatio
 NSString *const ATUUIDPreferenceKey = @"ATUUIDPreferenceKey";
 NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 
-static ATBackend *sharedBackend = nil;
-
 @interface ATBackend ()
 - (void)updateRatingConfigurationIfNeeded;
 @end
@@ -45,12 +43,12 @@ static ATBackend *sharedBackend = nil;
 @synthesize apiKey, working, currentFeedback;
 
 + (ATBackend *)sharedBackend {
-	@synchronized(self) {
-		if (sharedBackend == nil) {
-			sharedBackend = [[self alloc] init];
-			[ApptentiveMetrics sharedMetrics];
-		}
-	}
+	static ATBackend *sharedBackend = nil;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		sharedBackend = [[self alloc] init];
+		[ApptentiveMetrics sharedMetrics];
+	});
 	return sharedBackend;
 }
 

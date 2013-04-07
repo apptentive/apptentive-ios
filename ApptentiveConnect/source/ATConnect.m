@@ -17,17 +17,15 @@
 #import "ATFeedbackWindowController.h"
 #endif
 
-static ATConnect *sharedConnection = nil;
-
 @implementation ATConnect
 @synthesize apiKey, showTagline, shouldTakeScreenshot, showEmailField, initialName, initialEmailAddress, feedbackControllerType, customPlaceholderText;
 
 + (ATConnect *)sharedConnection {
-	@synchronized(self) {
-		if (sharedConnection == nil) {
-			sharedConnection = [[ATConnect alloc] init];
-		}
-	}
+	static ATConnect *sharedConnection = nil;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		sharedConnection = [[ATConnect alloc] init];
+	});
 	return sharedConnection;
 }
 

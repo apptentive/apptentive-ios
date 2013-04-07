@@ -30,15 +30,14 @@ NSString *const ATSurveyCachedSurveysExpirationPreferenceKey = @"ATSurveyCachedS
 
 + (ATSurveysBackend *)sharedBackend {
 	static ATSurveysBackend *sharedBackend = nil;
-	@synchronized(self) {
-		if (sharedBackend == nil) {
-			NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-			NSDictionary *defaultPreferences = [NSDictionary dictionaryWithObject:[NSArray array] forKey:ATSurveySentSurveysPreferenceKey];
-			[defaults registerDefaults:defaultPreferences];
-			
-			sharedBackend = [[ATSurveysBackend alloc] init];
-		}
-	}
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+		NSDictionary *defaultPreferences = [NSDictionary dictionaryWithObject:[NSArray array] forKey:ATSurveySentSurveysPreferenceKey];
+		[defaults registerDefaults:defaultPreferences];
+		
+		sharedBackend = [[ATSurveysBackend alloc] init];
+	});
 	return sharedBackend;
 }
 

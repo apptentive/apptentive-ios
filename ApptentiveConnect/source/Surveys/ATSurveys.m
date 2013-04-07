@@ -21,11 +21,10 @@ NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 @implementation ATSurveys
 + (ATSurveys *)sharedSurveys {
 	static ATSurveys *sharedSingleton = nil;
-	@synchronized(self) {
-		if (sharedSingleton == nil) {
-			sharedSingleton = [[ATSurveys alloc] init];
-		}
-	}
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		sharedSingleton = [[ATSurveys alloc] init];
+	});
 	return sharedSingleton;
 }
 

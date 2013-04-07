@@ -68,11 +68,10 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 
 + (ApptentiveMetrics *)sharedMetrics {
 	static ApptentiveMetrics *sharedSingleton = nil;
-	@synchronized(self) {
-		if (sharedSingleton == nil) {
-			sharedSingleton = [[ApptentiveMetrics alloc] init];
-		}
-	}
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		sharedSingleton = [[ApptentiveMetrics alloc] init];
+	});
 	return sharedSingleton;
 }
 

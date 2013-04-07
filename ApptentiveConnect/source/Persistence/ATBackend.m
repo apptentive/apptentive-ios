@@ -47,8 +47,8 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		sharedBackend = [[self alloc] init];
-		[ApptentiveMetrics sharedMetrics];
 	});
+	[ApptentiveMetrics sharedMetrics];
 	return sharedBackend;
 }
 

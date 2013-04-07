@@ -14,8 +14,6 @@
 #import "ATMetric.h"
 #import "ATURLConnection.h"
 
-#define kMetricsChannelName @"Apptentive-Metrics"
-
 @implementation ATWebClient (Metrics)
 - (ATAPIRequest *)requestForSendingMetric:(ATMetric *)metric {
 	NSDictionary *postData = [metric apiDictionary];
@@ -24,7 +22,7 @@
 	
 	conn = [self connectionToPost:[NSURL URLWithString:url] parameters:postData];
 	conn.timeoutInterval = 240.0;
-	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMetricsChannelName];
+	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:ATWebClientDefaultChannelName];
 	request.returnType = ATAPIRequestReturnTypeJSON;
 	return [request autorelease];
 }

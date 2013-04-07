@@ -22,7 +22,8 @@
 
 #import "NSData+ATBase64.h"
 
-#define kCommonChannelName (@"ATWebClient")
+NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
+
 #define kUserAgentFormat (@"ApptentiveConnect/%@ (%@)")
 
 #if USE_STAGING
@@ -46,7 +47,7 @@
 }
 
 - (NSString *)commonChannelName {
-	return kCommonChannelName;
+	return ATWebClientDefaultChannelName;
 }
 
 - (ATAPIRequest *)requestForPostingFeedback:(ATFeedback *)feedback {

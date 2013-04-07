@@ -37,6 +37,7 @@ static NSString *ATMetricNameAppLaunch = @"app.launch";
 static NSString *ATMetricNameAppExit = @"app.exit";
 
 @interface ApptentiveMetrics (Private)
+- (void)addLaunchMetric;
 - (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo;
 - (ATFeedbackWindowType)windowTypeFromNotification:(NSNotification *)notification;
 - (void)feedbackDidShowWindow:(NSNotification *)notification;
@@ -90,7 +91,6 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 		metricsEnabled = NO;
 		[ApptentiveMetrics registerDefaults];
 		[self updateWithCurrentPreferences];
-		[self addMetricWithName:ATMetricNameAppLaunch info:nil];
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackDidShowWindow:) name:ATFeedbackDidShowWindowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackDidHideWindow:) name:ATFeedbackDidHideWindowNotification object:nil];
@@ -115,6 +115,7 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
 		
 #endif
+		[self performSelector:@selector(addLaunchMetric) withObject:nil afterDelay:0.1];
 	}
 	
 	return self;
@@ -129,6 +130,12 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 
 
 @implementation ApptentiveMetrics (Private)
+- (void)addLaunchMetric {
+	@autoreleasepool {
+		[self addMetricWithName:ATMetricNameAppLaunch info:nil];
+	}
+}
+
 - (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo {
 	if (metricsEnabled == NO) {
 		return;

@@ -13,8 +13,6 @@
 #import "ATURLConnection.h"
 #import "PJSONKit.h"
 
-#define kSurveysChannelName @"Apptentive-Surveys"
-
 @implementation ATWebClient (SurveyAdditions)
 - (ATAPIRequest *)requestForGettingSurveys {
 	NSString *urlString = [NSString stringWithFormat:@"%@/surveys?active=1", [self baseURLString]];
@@ -39,7 +37,7 @@
 	conn = [self connectionToPost:[NSURL URLWithString:url] JSON:postString];
 	
 	conn.timeoutInterval = 240.0;
-	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kSurveysChannelName];
+	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:ATWebClientDefaultChannelName];
 	request.returnType = ATAPIRequestReturnTypeJSON;
 	return [request autorelease];
 }

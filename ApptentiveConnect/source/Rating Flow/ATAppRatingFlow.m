@@ -56,6 +56,7 @@
 - (void)updateVersionInfo;
 - (void)userDidUseApp;
 - (void)userDidSignificantEvent;
+- (void)incrementPromptCount;
 - (void)setRatingDialogWasShown;
 - (void)setUserDislikesThisVersion;
 - (void)setDeclinedToRateThisVersion;
@@ -187,6 +188,7 @@
 		[enjoymentDialog show];
 	}
 	[self postNotification:ATAppRatingDidPromptForEnjoymentNotification];
+	[self incrementPromptCount];
 	[self setRatingDialogWasShown];
 #elif TARGET_OS_MAC
 	NSAlert *alert = [[[NSAlert alloc] init] autorelease];
@@ -197,6 +199,7 @@
 	[alert setAlertStyle:NSInformationalAlertStyle];
 	[alert setIcon:[NSImage imageNamed:NSImageNameApplicationIcon]];
 	[self postNotification:ATAppRatingDidPromptForEnjoymentNotification];
+	[self incrementPromptCount];
 	[self setRatingDialogWasShown];
 	NSUInteger result = [alert runModal];
 	if (result == NSAlertFirstButtonReturn) { // yes
@@ -466,6 +469,15 @@
 			}
 		}
 		
+		NSInteger promptCount = [[defaults objectForKey:ATAppRatingFlowPromptCountThisVersionKey] integerValue];
+		if (self.daysBeforeRePrompting == 0 && promptCount > 0) {
+			// Don't prompt more than once.
+			break;
+		} else if (promptCount > 1) {
+			// Don't prompt more than twice per update.
+			break;
+		}
+		
 		ATAppRatingFlowPredicateInfo *info = [[ATAppRatingFlowPredicateInfo alloc] init];
 		info.firstUse = [defaults objectForKey:ATAppRatingFlowLastUsedVersionFirstUseDateKey];
 		info.significantEvents = [[defaults objectForKey:ATAppRatingFlowSignificantEventsCountKey] unsignedIntegerValue];
@@ -530,6 +542,7 @@
 		[defaults setObject:[NSDate date] forKey:ATAppRatingFlowLastUsedVersionFirstUseDateKey];
 		[defaults setObject:[NSNumber numberWithBool:NO] forKey:ATAppRatingFlowDeclinedToRateThisVersionKey];
 		[defaults setObject:[NSNumber numberWithBool:NO] forKey:ATAppRatingFlowUserDislikesThisVersionKey];
+		[defaults setObject:[NSNumber numberWithInteger:0] forKey:ATAppRatingFlowPromptCountThisVersionKey];
 		
 		[defaults synchronize];
 	}
@@ -576,6 +589,14 @@
 	
 }
 
+- (void)incrementPromptCount {
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSInteger promptCount = [[defaults objectForKey:ATAppRatingFlowPromptCountThisVersionKey] integerValue];
+	promptCount += 1;
+	[defaults setObject:[NSNumber numberWithInteger:promptCount] forKey:ATAppRatingFlowPromptCountThisVersionKey];
+	[defaults synchronize];
+}
+
 - (void)setRatingDialogWasShown {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	[defaults setObject:[NSDate date] forKey:ATAppRatingFlowLastPromptDateKey];
@@ -602,7 +623,7 @@
 
 - (void)logDefaults {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSArray *keys = [NSArray arrayWithObjects:ATAppRatingFlowLastUsedVersionKey, ATAppRatingFlowLastUsedVersionFirstUseDateKey, ATAppRatingFlowDeclinedToRateThisVersionKey, ATAppRatingFlowUserDislikesThisVersionKey, ATAppRatingFlowLastPromptDateKey, ATAppRatingFlowUseCountKey, ATAppRatingFlowSignificantEventsCountKey, ATAppRatingFlowRatedAppKey, nil];
+	NSArray *keys = [NSArray arrayWithObjects:ATAppRatingFlowLastUsedVersionKey, ATAppRatingFlowLastUsedVersionFirstUseDateKey, ATAppRatingFlowDeclinedToRateThisVersionKey, ATAppRatingFlowUserDislikesThisVersionKey, ATAppRatingFlowPromptCountThisVersionKey, ATAppRatingFlowLastPromptDateKey, ATAppRatingFlowUseCountKey, ATAppRatingFlowSignificantEventsCountKey, ATAppRatingFlowRatedAppKey, nil];
 	NSLog(@"-- BEGIN ATAppRatingFlow DEFAULTS --");
 	for (NSString *key in keys) {
 		NSLog(@"%@ == %@", key, [defaults objectForKey:key]);

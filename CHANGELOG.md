@@ -11,6 +11,8 @@ We've finally added support for surveys with tags.
 * Fixes IOS-63 Implement new client API for surveys (survey tags)
 * Fixes IOS-106 Limit connections to 2 at once
     * This prevents a potential problem in situations where the number of connections is limited. See [the problem AFNetworking+TestFlight hit](https://github.com/AFNetworking/AFNetworking/issues/307).
+* Fixes IOS-92 Demo app should show a message when the API key is not set
+    * This will hopefully be a nice reminder, rather than an irritation.
 
 2013-02-01 wooster v0.4.8
 -------------------------

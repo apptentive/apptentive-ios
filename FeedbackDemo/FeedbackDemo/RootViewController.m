@@ -21,6 +21,7 @@ enum kRootTableSections {
 
 @interface RootViewController ()
 - (void)surveyBecameAvailable:(NSNotification *)notification;
+- (void)checkForProperConfiguration;
 @end
 
 @implementation RootViewController
@@ -57,6 +58,18 @@ enum kRootTableSections {
 	[self.tableView reloadData];
 }
 
+- (void)checkForProperConfiguration {
+	if ([kApptentiveAPIKey isEqualToString:@"<your key here>"]) {
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Please Set API Key" message:@"This demo app will not work properly until you set your API key in defines.h" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
+		[alert show];
+		[alert autorelease];
+	} else if ([kApptentiveAppID isEqualToString:@"ExampleAppID"]) {
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Please Set App ID" message:@"This demo app won't be able to show your app in the app store until you set your App ID in defines.h" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
+		[alert show];
+		[alert autorelease];
+	}
+}
+
 - (void)viewWillAppear:(BOOL)animated {
 	[self.tableView reloadData];
 	[super viewWillAppear:animated];
@@ -64,6 +77,7 @@ enum kRootTableSections {
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
+	[self checkForProperConfiguration];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

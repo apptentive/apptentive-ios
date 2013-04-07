@@ -206,6 +206,7 @@
 		491748B71341177000A7D11E /* ATURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATURLConnection.m; sourceTree = "<group>"; };
 		491748B81341177000A7D11E /* ATWebClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATWebClient.h; sourceTree = "<group>"; };
 		491748B91341177000A7D11E /* ATWebClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATWebClient.m; sourceTree = "<group>"; };
+		49227B761710F72500AD1759 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		49352A1F138C73B8000E464A /* ATAboutApptentiveView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ATAboutApptentiveView.xib; sourceTree = "<group>"; };
 		49352AC1138C97A2000E464A /* ATAPIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAPIRequest.h; sourceTree = "<group>"; };
 		49352AC2138C97A2000E464A /* ATAPIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAPIRequest.m; sourceTree = "<group>"; };
@@ -838,6 +839,7 @@
 				English,
 				Spanish,
 				es,
+				ru,
 			);
 			mainGroup = 496DC3741333D35600743F65;
 			productRefGroup = 496DC3801333D35600743F65 /* Products */;
@@ -1047,6 +1049,7 @@
 			children = (
 				49E891CE134FE2AB00DD098A /* English */,
 				49E891CF134FE2AB00DD098A /* es */,
+				49227B761710F72500AD1759 /* ru */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

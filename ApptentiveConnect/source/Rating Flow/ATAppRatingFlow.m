@@ -18,6 +18,9 @@
 #import "ATUtilities.h"
 #import "ATWebClient.h"
 
+
+NSString *const ATAppRatingFlowUserAgreedToRateAppNotification = @"ATAppRatingFlowUserAgreedToRateAppNotification";
+
 //TODO: This should be changed for iOS 4+
 #define kATAppAppUsageMinimumInterval (20)
 
@@ -419,6 +422,7 @@
 #elif TARGET_OS_MAC
 	[[NSWorkspace sharedWorkspace] openURL:url];
 #endif
+    [[NSNotificationCenter defaultCenter] postNotificationName:ATAppRatingFlowUserAgreedToRateAppNotification object:nil];
 }
 
 

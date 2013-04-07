@@ -18,6 +18,8 @@ We've finally added support for surveys with tags.
 * IOS-84 Re-prompt only once per version
     * We will only prompt twice per update total (prompt and re-prompt).
 * IOS-62 Add support for repeat surveys
+* IOS-99 Add Callback after a user agrees to rate the app
+    * You can now listen for ATAppRatingFlowUserAgreedToRateAppNotification to know when a user agrees to rate the app.
 
 2013-02-01 wooster v0.4.8
 -------------------------

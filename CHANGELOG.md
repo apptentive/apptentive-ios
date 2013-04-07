@@ -13,6 +13,11 @@ We've finally added support for surveys with tags.
     * This prevents a potential problem in situations where the number of connections is limited. See [the problem AFNetworking+TestFlight hit](https://github.com/AFNetworking/AFNetworking/issues/307).
 * Fixes IOS-92 Demo app should show a message when the API key is not set
     * This will hopefully be a nice reminder, rather than an irritation.
+* Fixes IOS-85 Setting days before re-prompt to 0 doesn't work as expected
+    * If this value is 0, we will now only prompt once per update.
+* IOS-84 Re-prompt only once per version
+    * We will only prompt twice per update total (prompt and re-prompt).
+* IOS-62 Add support for repeat surveys
 
 2013-02-01 wooster v0.4.8
 -------------------------

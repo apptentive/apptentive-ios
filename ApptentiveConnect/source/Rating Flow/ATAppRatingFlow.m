@@ -220,6 +220,16 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 }
 
 #if TARGET_OS_IPHONE
+- (void)showEnjoymentDialogIfRequirementsMet:(UIViewController *)vc{
+	self.viewController = vc;
+	BOOL showedDialog = [self showDialogIfNecessary];
+	if (!showedDialog) {
+		self.viewController = nil;
+	}
+}
+
+#endif
+#if TARGET_OS_IPHONE
 - (void)showRatingDialog:(UIViewController *)vc
 #elif TARGET_OS_MAC
 - (IBAction)showRatingDialog:(id)sender 

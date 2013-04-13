@@ -200,6 +200,8 @@
 		49C002A1133413BB0071F088 /* ApptentiveConnect-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 49C00296133413BB0071F088 /* ApptentiveConnect-Prefix.pch */; };
 		49C002A2133413BB0071F088 /* ATConnect.h in Headers */ = {isa = PBXBuildFile; fileRef = 49C00297133413BB0071F088 /* ATConnect.h */; settings = {ATTRIBUTES = (); }; };
 		49C002A3133413BB0071F088 /* ATConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C00298133413BB0071F088 /* ATConnect.m */; };
+		49CB6DEA1718FE4400BC9223 /* ATMessageCenterMetrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 49CB6DE81718FE4400BC9223 /* ATMessageCenterMetrics.h */; };
+		49CB6DEB1718FE4400BC9223 /* ATMessageCenterMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 49CB6DE91718FE4400BC9223 /* ATMessageCenterMetrics.m */; };
 		49CEFF5D15168B54006D8BA8 /* ATAppConfigurationUpdater.h in Headers */ = {isa = PBXBuildFile; fileRef = 49CEFF5B15168B53006D8BA8 /* ATAppConfigurationUpdater.h */; };
 		49CEFF5E15168B54006D8BA8 /* ATAppConfigurationUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 49CEFF5C15168B53006D8BA8 /* ATAppConfigurationUpdater.m */; };
 		49CEFF5F15168B54006D8BA8 /* ATAppConfigurationUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 49CEFF5C15168B53006D8BA8 /* ATAppConfigurationUpdater.m */; };
@@ -429,6 +431,8 @@
 		49C00296133413BB0071F088 /* ApptentiveConnect-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ApptentiveConnect-Prefix.pch"; path = "../ApptentiveConnect-Prefix.pch"; sourceTree = "<group>"; };
 		49C00297133413BB0071F088 /* ATConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATConnect.h; sourceTree = "<group>"; };
 		49C00298133413BB0071F088 /* ATConnect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATConnect.m; sourceTree = "<group>"; };
+		49CB6DE81718FE4400BC9223 /* ATMessageCenterMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATMessageCenterMetrics.h; path = Metrics/ATMessageCenterMetrics.h; sourceTree = "<group>"; };
+		49CB6DE91718FE4400BC9223 /* ATMessageCenterMetrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATMessageCenterMetrics.m; path = Metrics/ATMessageCenterMetrics.m; sourceTree = "<group>"; };
 		49CEFF5B15168B53006D8BA8 /* ATAppConfigurationUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAppConfigurationUpdater.h; sourceTree = "<group>"; };
 		49CEFF5C15168B53006D8BA8 /* ATAppConfigurationUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAppConfigurationUpdater.m; sourceTree = "<group>"; };
 		49CEFF7F15193EC2006D8BA8 /* ATAppRatingFlow_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAppRatingFlow_Private.h; sourceTree = "<group>"; };
@@ -762,6 +766,8 @@
 				4987FA98157AE53600AF2078 /* ATMetric.m */,
 				4987FA83157ACB0A00AF2078 /* ATFeedbackMetrics.h */,
 				4987FA84157ACB0A00AF2078 /* ATFeedbackMetrics.m */,
+				49CB6DE81718FE4400BC9223 /* ATMessageCenterMetrics.h */,
+				49CB6DE91718FE4400BC9223 /* ATMessageCenterMetrics.m */,
 				4987FA7E157ACAB500AF2078 /* ATSurveyMetrics.h */,
 				4987FA7F157ACAB500AF2078 /* ATSurveyMetrics.m */,
 				4987FA99157AE53600AF2078 /* URL Loading */,
@@ -1089,6 +1095,7 @@
 				492F2F1C16ED597F0030E48A /* ATRecordRequestTask.h in Headers */,
 				496AE63E16FFB31500CC6F2F /* ATDefaultMessageCenterTheme.h in Headers */,
 				494D1B6F1708E1F900C3060C /* ATMessageInputView.h in Headers */,
+				49CB6DEA1718FE4400BC9223 /* ATMessageCenterMetrics.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1329,6 +1336,7 @@
 				492F2F1D16ED597F0030E48A /* ATRecordRequestTask.m in Sources */,
 				496AE63F16FFB31500CC6F2F /* ATDefaultMessageCenterTheme.m in Sources */,
 				494D1B701708E1F900C3060C /* ATMessageInputView.m in Sources */,
+				49CB6DEB1718FE4400BC9223 /* ATMessageCenterMetrics.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

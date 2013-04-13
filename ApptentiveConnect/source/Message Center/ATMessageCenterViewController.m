@@ -21,6 +21,7 @@
 #import "ATMessage.h"
 #import "ATMessageCenterCell.h"
 #import "ATDefaultMessageCenterTheme.h"
+#import "ATMessageCenterMetrics.h"
 #import "ATMessageSender.h"
 #import "ATMessageTask.h"
 #import "ATPersonUpdater.h"
@@ -217,6 +218,16 @@ typedef enum {
 	[self markAllMessagesAsRead];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidShowNotification object:nil];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+	[super viewDidDisappear:animated];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidHideNotification object:nil];
+}
+
 - (IBAction)donePressed:(id)sender {
 	if ([[self navigationController] respondsToSelector:@selector(presentingViewController)]) {
 		[self.navigationController.presentingViewController dismissModalViewControllerAnimated:YES];
@@ -370,6 +381,8 @@ typedef enum {
 		
 		[[[ATBackend sharedBackend] managedObjectContext] save:nil];
 		
+		[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidSendNotification object:@{ATMessageCenterMessageNonceKey:composingMessage.pendingMessageID}];
+		
 		// Give it a wee bit o' delay.
 		NSString *pendingMessageID = [composingMessage pendingMessageID];
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
@@ -400,6 +413,7 @@ typedef enum {
 			}];
 		}
 	}
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidAttachNotification object:nil];
 }
 
 #pragma mark Keyboard Handling
@@ -900,6 +914,9 @@ typedef enum {
 	} else {
 		for (ATMessage *message in results) {
 			[message setSeenByUser:@(YES)];
+			if (message.apptentiveID != nil && [message.sentByUser boolValue] != YES) {
+				[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidReadNotification object:@{ATMessageCenterMessageIDKey:message.apptentiveID}];
+			}
 		}
 		[ATData save];
 	}

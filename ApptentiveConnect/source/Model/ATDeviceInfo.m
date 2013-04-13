@@ -14,6 +14,7 @@
 
 #import "ATBackend.h"
 #import "ATConnect.h"
+#import "ATConnect_Private.h"
 #import "ATUtilities.h"
 
 @implementation ATDeviceInfo
@@ -55,6 +56,26 @@
 	NSString *carrier = [ATDeviceInfo carrier];
 	if (carrier != nil) {
 		device[@"carrier"] = carrier;
+	}
+	
+	NSLocale *locale = [NSLocale currentLocale];
+	NSString *localeIdentifier = [locale localeIdentifier];
+	NSDictionary *localeComponents = [NSLocale componentsFromLocaleIdentifier:localeIdentifier];
+	NSString *countryCode = [localeComponents objectForKey:NSLocaleCountryCode];
+	NSString *languageCode = [localeComponents objectForKey:NSLocaleLanguageCode];
+	if (localeIdentifier) {
+		device[@"locale_raw"] = localeIdentifier;
+	}
+	if (countryCode) {
+		device[@"locale_country_code"] = countryCode;
+	}
+	if (languageCode) {
+		device[@"locale_language_code"] = languageCode;
+	}
+	
+	NSDictionary *extraInfo = [[ATConnect sharedConnection] additionFeedbackInfo];
+	if (extraInfo && [extraInfo count]) {
+		device[@"custom_data"] = extraInfo;
 	}
 	
 	return @{@"device":device};

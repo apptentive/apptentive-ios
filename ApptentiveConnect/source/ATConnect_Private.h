@@ -10,4 +10,5 @@
 
 @interface ATConnect ()
 - (void)feedbackControllerDidDismiss;
+- (NSDictionary *)additionFeedbackInfo;
 @end

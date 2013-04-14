@@ -662,6 +662,7 @@ void JSONKIT_PREPEND(jk_collectionClassLoadTimeInitialization)(void) {
   id         *objects;
   NSUInteger  count, capacity, mutations;
 }
+- (id)initWithCount:(NSUInteger)aCount;
 @end
 
 @implementation JSONKIT_PREPEND(JKArray)
@@ -673,14 +674,23 @@ void JSONKIT_PREPEND(jk_collectionClassLoadTimeInitialization)(void) {
   return(NULL);
 }
 
+- (id)initWithCount:(NSUInteger)aCount {
+	if ((self = [self init])) {
+		count = aCount;
+		capacity = aCount;
+	}
+	return self;
+}
+
 static JSONKIT_PREPEND(JKArray) *_JKArrayCreate(id *objects, NSUInteger count, BOOL mutableCollection) {
   NSCParameterAssert((objects != NULL) && (_JKArrayClass != NULL) && (_JKArrayInstanceSize > 0UL));
   JSONKIT_PREPEND(JKArray) *array = NULL;
   if(PJK_EXPECT_T((array = (JSONKIT_PREPEND(JKArray) *)calloc(1UL, _JKArrayInstanceSize)) != NULL)) { // Directly allocate the JKArray instance via calloc.
     object_setClass(array, _JKArrayClass);
-    if((array = [array init]) == NULL) { return(NULL); }
-    array->capacity = count;
-    array->count    = count;
+    array = [array initWithCount:count];
+    if (array == NULL) {
+      return NULL;
+    }
     if(PJK_EXPECT_F((array->objects = (id *)malloc(sizeof(id) * array->capacity)) == NULL)) { [array autorelease]; return(NULL); }
     memcpy(array->objects, objects, array->capacity * sizeof(id));
     array->mutations = (mutableCollection == NO) ? 0UL : 1UL;
@@ -877,6 +887,7 @@ static void _JKArrayRemoveObjectAtIndex(JSONKIT_PREPEND(JKArray) *array, NSUInte
   NSUInteger count, capacity, mutations;
   JKHashTableEntry *entry;
 }
+- (id)initWithCapacity:(NSUInteger)aCapacity;
 @end
 
 @implementation JSONKIT_PREPEND(JKDictionary)
@@ -901,6 +912,14 @@ static NSUInteger _JKDictionaryCapacityForCount(NSUInteger count) {
   NSUInteger bottom = 0UL, top = sizeof(jk_dictionaryCapacities) / sizeof(NSUInteger), mid = 0UL, tableSize = (NSUInteger)lround(floor(((double)count) * 1.33));
   while(top > bottom) { mid = (top + bottom) / 2UL; if(jk_dictionaryCapacities[mid] < tableSize) { bottom = mid + 1UL; } else { top = mid; } }
   return(jk_dictionaryCapacities[bottom]);
+}
+
+- (id)initWithCapacity:(NSUInteger)aCapacity {
+    if ((self = [self init])) {
+      capacity = aCapacity;
+      count = 0UL;
+    }
+    return self;
 }
 
 static void _JKDictionaryResizeIfNeccessary(JSONKIT_PREPEND(JKDictionary) *dictionary) {
@@ -929,9 +948,9 @@ static JSONKIT_PREPEND(JKDictionary) *_JKDictionaryCreate(id *keys, NSUInteger *
   JSONKIT_PREPEND(JKDictionary) *dictionary = NULL;
   if(PJK_EXPECT_T((dictionary = (JSONKIT_PREPEND(JKDictionary) *)calloc(1UL, _JKDictionaryInstanceSize)) != NULL)) { // Directly allocate the JKDictionary instance via calloc.
     object_setClass(dictionary, _JKDictionaryClass);
-    if((dictionary = [dictionary init]) == NULL) { return(NULL); }
-    dictionary->capacity = _JKDictionaryCapacityForCount(count);
-    dictionary->count    = 0UL;
+    dictionary = [dictionary initWithCapacity:_JKDictionaryCapacityForCount(count)];
+    
+    if(dictionary == NULL) { return(NULL); }
     
     if(PJK_EXPECT_F((dictionary->entry = (JKHashTableEntry *)calloc(1UL, sizeof(JKHashTableEntry) * dictionary->capacity)) == NULL)) { [dictionary autorelease]; return(NULL); }
 

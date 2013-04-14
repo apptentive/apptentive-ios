@@ -40,6 +40,7 @@ typedef enum {
 	BOOL failed;
 	NSString *errorTitle;
 	NSString *errorMessage;
+	NSString *errorResponse;
 	NSTimeInterval timeoutInterval;
 	NSObject<ATAPIRequestDelegate> *delegate;
 	
@@ -49,6 +50,7 @@ typedef enum {
 @property (nonatomic, assign) BOOL failed;
 @property (nonatomic, copy) NSString *errorTitle;
 @property (nonatomic, copy) NSString *errorMessage;
+@property (nonatomic, copy) NSString *errorResponse;
 @property (nonatomic, assign) NSTimeInterval timeoutInterval;
 @property (nonatomic, assign) NSObject<ATAPIRequestDelegate> *delegate;
 

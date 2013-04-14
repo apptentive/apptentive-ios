@@ -135,6 +135,14 @@
 		49AA1023138B498C0082887A /* ATInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA1022138B498C0082887A /* ATInfoViewController.xib */; };
 		49AA1025138B49A50082887A /* ATInfoViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA1024138B49A50082887A /* ATInfoViewController_iPad.xib */; };
 		49AAA17B1633716F00B26851 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49AAA17A1633716F00B26851 /* StoreKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		49B2F445171B5CC1004E5FE0 /* ATLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 49B2F442171B5CC1004E5FE0 /* ATLog.h */; };
+		49B2F446171B5CC1004E5FE0 /* ATLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 49B2F443171B5CC1004E5FE0 /* ATLogger.h */; };
+		49B2F447171B5CC1004E5FE0 /* ATLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B2F444171B5CC1004E5FE0 /* ATLogger.m */; };
+		49B2F448171B5CC1004E5FE0 /* ATLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B2F444171B5CC1004E5FE0 /* ATLogger.m */; };
+		49B2F44A171B5CE3004E5FE0 /* ATFeedbackTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 49B2F449171B5CE3004E5FE0 /* ATFeedbackTypes.h */; };
+		49B2F44D171B5CF8004E5FE0 /* ATLogViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 49B2F44B171B5CF8004E5FE0 /* ATLogViewController.h */; };
+		49B2F44E171B5CF8004E5FE0 /* ATLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B2F44C171B5CF8004E5FE0 /* ATLogViewController.m */; };
+		49B2F44F171B5CF8004E5FE0 /* ATLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B2F44C171B5CF8004E5FE0 /* ATLogViewController.m */; };
 		49B3D96B133E6D6400B5A5CD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D968133E6D6400B5A5CD /* CoreGraphics.framework */; };
 		49B3D96C133E6D6400B5A5CD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D969133E6D6400B5A5CD /* QuartzCore.framework */; };
 		49B3D96D133E6D6400B5A5CD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D96A133E6D6400B5A5CD /* UIKit.framework */; };
@@ -285,6 +293,12 @@
 		49AA1022138B498C0082887A /* ATInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATInfoViewController.xib; sourceTree = "<group>"; };
 		49AA1024138B49A50082887A /* ATInfoViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATInfoViewController_iPad.xib; sourceTree = "<group>"; };
 		49AAA17A1633716F00B26851 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		49B2F442171B5CC1004E5FE0 /* ATLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATLog.h; path = "../../../../apptentive-ios-copy/ApptentiveConnect/source/Misc/ATLog.h"; sourceTree = "<group>"; };
+		49B2F443171B5CC1004E5FE0 /* ATLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATLogger.h; path = "../../../../apptentive-ios-copy/ApptentiveConnect/source/Misc/ATLogger.h"; sourceTree = "<group>"; };
+		49B2F444171B5CC1004E5FE0 /* ATLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATLogger.m; path = "../../../../apptentive-ios-copy/ApptentiveConnect/source/Misc/ATLogger.m"; sourceTree = "<group>"; };
+		49B2F449171B5CE3004E5FE0 /* ATFeedbackTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATFeedbackTypes.h; path = "../../../../apptentive-ios-copy/ApptentiveConnect/source/Controllers/ATFeedbackTypes.h"; sourceTree = "<group>"; };
+		49B2F44B171B5CF8004E5FE0 /* ATLogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATLogViewController.h; path = "../../../../apptentive-ios-copy/ApptentiveConnect/source/Controllers/ATLogViewController.h"; sourceTree = "<group>"; };
+		49B2F44C171B5CF8004E5FE0 /* ATLogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATLogViewController.m; path = "../../../../apptentive-ios-copy/ApptentiveConnect/source/Controllers/ATLogViewController.m"; sourceTree = "<group>"; };
 		49B3D968133E6D6400B5A5CD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		49B3D969133E6D6400B5A5CD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		49B3D96A133E6D6400B5A5CD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -392,6 +406,9 @@
 				49AA101E138B44C00082887A /* ATInfoViewController.m */,
 				4936AE4F1379DE3100A4B17F /* ATSimpleImageViewController.h */,
 				4936AE501379DE3100A4B17F /* ATSimpleImageViewController.m */,
+				49B2F44B171B5CF8004E5FE0 /* ATLogViewController.h */,
+				49B2F44C171B5CF8004E5FE0 /* ATLogViewController.m */,
+				49B2F449171B5CE3004E5FE0 /* ATFeedbackTypes.h */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -399,6 +416,9 @@
 		4936AE741379DEBB00A4B17F /* Misc */ = {
 			isa = PBXGroup;
 			children = (
+				49B2F442171B5CC1004E5FE0 /* ATLog.h */,
+				49B2F443171B5CC1004E5FE0 /* ATLogger.h */,
+				49B2F444171B5CC1004E5FE0 /* ATLogger.m */,
 				4936AE751379DEBB00A4B17F /* ATUtilities.h */,
 				4936AE761379DEBB00A4B17F /* ATUtilities.m */,
 			);
@@ -760,6 +780,10 @@
 				498EFB7015BA48B300A1043B /* ATAppConfigurationUpdateTask.h in Headers */,
 				499B56CA15D305880063C23C /* PJSONKit.h in Headers */,
 				4967278216B9D9CB00C679B8 /* ATConnect_Private.h in Headers */,
+				49B2F445171B5CC1004E5FE0 /* ATLog.h in Headers */,
+				49B2F446171B5CC1004E5FE0 /* ATLogger.h in Headers */,
+				49B2F44A171B5CE3004E5FE0 /* ATFeedbackTypes.h in Headers */,
+				49B2F44D171B5CF8004E5FE0 /* ATLogViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -964,6 +988,8 @@
 				498EFB6C15BA414A00A1043B /* ATSurveyGetSurveysTask.m in Sources */,
 				498EFB7115BA48B300A1043B /* ATAppConfigurationUpdateTask.m in Sources */,
 				499B56CB15D305880063C23C /* PJSONKit.m in Sources */,
+				49B2F447171B5CC1004E5FE0 /* ATLogger.m in Sources */,
+				49B2F44E171B5CF8004E5FE0 /* ATLogViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1010,6 +1036,8 @@
 				498EFB6D15BA414A00A1043B /* ATSurveyGetSurveysTask.m in Sources */,
 				498EFB7215BA48B300A1043B /* ATAppConfigurationUpdateTask.m in Sources */,
 				499B56CC15D305880063C23C /* PJSONKit.m in Sources */,
+				49B2F448171B5CC1004E5FE0 /* ATLogger.m in Sources */,
+				49B2F44F171B5CF8004E5FE0 /* ATLogViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1115,6 +1143,13 @@
 				DSTROOT = /tmp/ApptentiveConnect.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "source/ApptentiveConnect-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"JSONKIT_PREFIX=AT",
+					"APPTENTIVE_DEBUG=1",
+					"APPTENTIVE_DEBUG_LOG_VIEWER=1",
+					"AT_LOGGING_LEVEL_INFO=1",
+					"AT_LOGGING_LEVEL_DEBUG=1",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include;
@@ -1128,6 +1163,10 @@
 				DSTROOT = /tmp/ApptentiveConnect.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "source/ApptentiveConnect-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"JSONKIT_PREFIX=AT",
+					"AT_LOGGING_LEVEL_INFO=1",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include;

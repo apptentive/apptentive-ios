@@ -14,7 +14,7 @@
 // Retry period in seconds.
 #define kATTaskQueueRetryPeriod 180.0
 
-#define kMaxFailureCount 500
+#define kMaxFailureCount 30
 
 static ATTaskQueue *sharedTaskQueue = nil;
 
@@ -203,7 +203,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 				[self stop];
 				task.failureCount = task.failureCount + 1;
 				if (task.failureCount > kMaxFailureCount) {
-					NSLog(@"Task %@ failed too many times, removing from queue.", task);
+					ATLogError(@"Task %@ failed too many times, removing from queue.", task);
 					[self unsetActiveTask];
 					[task cleanup];
 					[tasks removeObject:task];

@@ -26,6 +26,7 @@
 	NSMutableDictionary *headers;
 	NSString *HTTPMethod;
 	NSData *HTTPBody;
+	NSInputStream *HTTPBodyStream;
 	
 	int statusCode;
 	BOOL failedAuthentication;
@@ -54,8 +55,10 @@
 - (id)initWithURL:(NSURL *)url delegate:(NSObject<ATURLConnectionDelegate> *)aDelegate;
 - (id)initWithURL:(NSURL *)url;
 - (void)setValue:(NSString *)value forHTTPHeaderField:(NSString *)field;
+- (void)removeHTTPHeaderField:(NSString *)field;
 - (void)setHTTPMethod:(NSString *)method;
 - (void)setHTTPBody:(NSData *)body;
+- (void)setHTTPBodyStream:(NSInputStream *)HTTPBodyStream;
 
 - (void)start;
 
@@ -65,6 +68,7 @@
 - (NSData *)responseData;
 
 - (NSString *)requestAsString;
+- (NSDictionary *)headers;
 @end
 
 

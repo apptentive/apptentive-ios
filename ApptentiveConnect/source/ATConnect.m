@@ -88,7 +88,7 @@
 - (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController {
 	@synchronized(self) {
 		if (currentFeedbackController) {
-			NSLog(@"Apptentive feedback controller already shown.");
+			ATLogInfo(@"Apptentive feedback controller already shown.");
 			return;
 		}
 		UIImage *screenshot = nil;

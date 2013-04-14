@@ -17,7 +17,7 @@
 #import "ATTaskQueue.h"
 #import "ATUtilities.h"
 #import "ATWebClient.h"
-
+#import "ATLog.h"
 
 NSString *const ATBackendNewAPIKeyNotification = @"ATBackendNewAPIKeyNotification";
 NSString *const ATUUIDPreferenceKey = @"ATUUIDPreferenceKey";
@@ -77,9 +77,9 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 		result = [UIImage imageNamed:name];
 	}
 	if (!result) {
-		NSLog(@"Unable to find image named: %@", name);
-		NSLog(@"sought at: %@", imagePath);
-		NSLog(@"bundle is: %@", [ATConnect resourceBundle]);
+		ATLogError(@"Unable to find image named: %@", name);
+		ATLogError(@"sought at: %@", imagePath);
+		ATLogError(@"bundle is: %@", [ATConnect resourceBundle]);
 	}
 	return result;
 }
@@ -112,9 +112,9 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 		result = [NSImage imageNamed:name];
 	}
 	if (!result) {
-		NSLog(@"Unable to find image named: %@", name);
-		NSLog(@"sought at: %@", imagePath);
-		NSLog(@"bundle is: %@", [ATConnect resourceBundle]);
+		ATLogError(@"Unable to find image named: %@", name);
+		ATLogError(@"sought at: %@", imagePath);
+		ATLogError(@"bundle is: %@", [ATConnect resourceBundle]);
 	}
 	return result;
 }
@@ -192,8 +192,8 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	NSError *error = nil;
 	BOOL result = [fm createDirectoryAtPath:newPath withIntermediateDirectories:YES attributes:nil error:&error];
 	if (!result) {
-		NSLog(@"Failed to create support directory: %@", newPath);
-		NSLog(@"Error was: %@", error);
+		ATLogError(@"Failed to create support directory: %@", newPath);
+		ATLogError(@"Error was: %@", error);
 		return nil;
 	}
 	return newPath;
@@ -209,8 +209,8 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	NSError *error = nil;
 	BOOL result = [fm createDirectoryAtPath:newPath withIntermediateDirectories:YES attributes:nil error:&error];
 	if (!result) {
-		NSLog(@"Failed to create attachments directory: %@", newPath);
-		NSLog(@"Error was: %@", error);
+		ATLogError(@"Failed to create attachments directory: %@", newPath);
+		ATLogError(@"Error was: %@", error);
 		return nil;
 	}
 	return newPath;

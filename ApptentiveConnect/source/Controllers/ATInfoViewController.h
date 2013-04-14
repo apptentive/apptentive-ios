@@ -12,15 +12,17 @@
 
 /*! View controller for showing information about Apptentive, as well as the
  tasks which are currently in progress. */
-@interface ATInfoViewController : UIViewController <UITableViewDataSource> {
+@interface ATInfoViewController : UIViewController <UITableViewDataSource, UITableViewDelegate> {
 	IBOutlet UIView *headerView;
 	IBOutlet UITableViewCell *progressCell;
 @private
 	ATFeedbackController *controller;
+    NSMutableArray *logicalSections;
 }
 @property (nonatomic, retain) IBOutlet UITableView *tableView;
 @property (retain, nonatomic) IBOutlet UIView *headerView;
 
+- (id)init;
 - (id)initWithFeedbackController:(ATFeedbackController *)aController;
 - (IBAction)done:(id)sender;
 - (IBAction)openApptentiveDotCom:(id)sender;

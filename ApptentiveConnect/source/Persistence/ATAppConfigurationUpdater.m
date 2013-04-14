@@ -113,7 +113,7 @@ NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigura
 			[self processResult:(NSDictionary *)result];
 			[delegate configurationUpdaterDidFinish:YES];
 		} else {
-			NSLog(@"App configuration result is not NSDictionary!");
+			ATLogError(@"App configuration result is not NSDictionary!");
 			[delegate configurationUpdaterDidFinish:NO];
 		}
 	}
@@ -125,7 +125,7 @@ NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigura
 
 - (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
 	@synchronized(self) {
-		NSLog(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
+		ATLogInfo(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
 		
 		[delegate configurationUpdaterDidFinish:NO];
 	}

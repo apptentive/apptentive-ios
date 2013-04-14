@@ -89,7 +89,7 @@
 			
 			NSArray *surveys = [parser parseMultipleSurveys:(NSData *)result];
 			if (surveys == nil) {
-				NSLog(@"An error occurred parsing surveys: %@", [parser parserError]);
+				ATLogError(@"An error occurred parsing surveys: %@", [parser parserError]);
 			} else {
 				[[ATSurveysBackend sharedBackend] didReceiveNewSurveys:surveys maxAge:[request expiresMaxAge]];
 			}
@@ -106,7 +106,7 @@
 	@synchronized(self) {
 		[self retain];
 		if (request == checkSurveysRequest) {
-			NSLog(@"Survey request failed: %@: %@", request.errorTitle, request.errorMessage);
+			ATLogError(@"Survey request failed: %@: %@", request.errorTitle, request.errorMessage);
 			self.failed = YES;
 			[self stop];
 		}

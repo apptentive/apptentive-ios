@@ -143,7 +143,7 @@ enum {
 	
 	UIWindow *parentWindow = [self windowForViewController:presentingViewController];
 	if (!parentWindow) {
-		NSLog(@"Unable to find parentWindow!");
+		ATLogError(@"Unable to find parentWindow!");
 	}
 	if (originalPresentingWindow != parentWindow) {
 		[originalPresentingWindow release], originalPresentingWindow = nil;
@@ -365,7 +365,8 @@ enum {
 	[self.feedbackView resignFirstResponder];
 	[self hide:YES];
 	[self captureFeedbackState];
-	ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithFeedback:self.feedback feedbackController:self];
+	[self retain];
+	ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithDelegate:self];
 	[presentingViewController presentModalViewController:vc animated:YES];
 	[vc release];
 }
@@ -438,6 +439,28 @@ enum {
 	} else {
 		[self finishUnhide];
 	}
+}
+
+#pragma mark ATSimpleImageViewControllerDelegate
+- (void)imageViewController:(ATSimpleImageViewController *)vc pickedImage:(UIImage *)image fromSource:(ATFeedbackImageSource)source {
+	self.feedback.imageSource = source;
+	[self.feedback setScreenshot:image];
+}
+
+- (void)imageViewControllerWillDismiss:(ATSimpleImageViewController *)vc animated:(BOOL)animated {
+	[self unhide:animated];
+	[self release];
+}
+
+- (ATFeedbackAttachmentOptions)attachmentOptionsForImageViewController:(ATSimpleImageViewController *)vc {
+	return self.attachmentOptions;
+}
+
+- (UIImage *)defaultImageForImageViewController:(ATSimpleImageViewController *)vc {
+	if ([self.feedback hasScreenshot]) {
+		return [[self.feedback copyScreenshot] autorelease];
+	}
+	return nil;
 }
 
 #pragma mark UITextFieldDelegate

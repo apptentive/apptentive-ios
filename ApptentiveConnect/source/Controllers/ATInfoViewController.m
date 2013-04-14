@@ -14,13 +14,14 @@
 #import "ATFeedbackController.h"
 #import "ATFeedbackMetrics.h"
 #import "ATFeedbackTask.h"
+#import "ATLogViewController.h"
 #import "ATTask.h"
 #import "ATTaskQueue.h"
 
 enum {
 	kSectionTasks,
+	kSectionDebugLog,
 	kSectionVersion,
-	kSectionCount
 };
 
 @interface ATInfoViewController (Private)
@@ -29,21 +30,29 @@ enum {
 - (void)reload;
 @end
 
-@implementation ATInfoViewController
+@implementation ATInfoViewController {
+	BOOL showingDebugController;
+}
 @synthesize tableView, headerView;
 
-- (id)initWithFeedbackController:(ATFeedbackController *)aController {
+- (id)init {
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
 		self = [super initWithNibName:@"ATInfoViewController" bundle:[ATConnect resourceBundle]];
 	} else {
 		self = [super initWithNibName:@"ATInfoViewController_iPad" bundle:[ATConnect resourceBundle]];
 		self.modalPresentationStyle = UIModalPresentationFormSheet;
 	}
+	return self;
+}
+
+- (id)initWithFeedbackController:(ATFeedbackController *)aController {
+	self = [self init];
 	controller = [aController retain];
 	return self;
 }
 
 - (void)dealloc {
+	[logicalSections release], logicalSections = nil;
 	[controller release], controller = nil;
 	[self teardown];
 	[super dealloc];
@@ -60,7 +69,11 @@ enum {
 #pragma mark - View lifecycle
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATFeedbackDidShowWindowNotification object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:ATFeedbackWindowTypeInfo] forKey:ATFeedbackWindowTypeKey]];
+	if (showingDebugController) {
+		showingDebugController = NO;
+	} else {
+		[[NSNotificationCenter defaultCenter] postNotificationName:ATFeedbackDidShowWindowNotification object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:ATFeedbackWindowTypeInfo] forKey:ATFeedbackWindowTypeKey]];
+	}
 }
 
 - (void)viewDidLoad {
@@ -75,9 +88,11 @@ enum {
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-	if (controller != nil) {
-		[controller unhide:animated];
-		[controller release], controller = nil;
+	if (!showingDebugController) {
+		if (controller != nil) {
+			[controller unhide:animated];
+			[controller release], controller = nil;
+		}
 	}
 }
 
@@ -101,14 +116,28 @@ enum {
 
 #pragma mark UITableViewDelegate
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	NSUInteger physicalSection = indexPath.section;
+	NSUInteger section = [[logicalSections objectAtIndex:physicalSection] integerValue];
+	if (section == kSectionDebugLog) {
+		showingDebugController = YES;
+		ATLogViewController *vc = [[ATLogViewController alloc] init];
+		UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
+		[self presentModalViewController:nc animated:YES];
+		[vc release], vc = nil;
+		[nc release], nc = nil;
+	}
 	[aTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark UITableViewDataSource
-- (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)physicalSection {
+	NSUInteger section = [[logicalSections objectAtIndex:physicalSection] integerValue];
+	
 	if (section == kSectionTasks) {
 		ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
-		return [queue countOfTasksWithTaskNamesInSet:[NSSet setWithObject:@"feedback"]];
+		return [queue countOfTasksWithTaskNamesInSet:[NSSet setWithObjects:@"feedback", nil]];
+	} else if (section == kSectionDebugLog) {
+		return 1;
 	} else {
 		return 0;
 	}
@@ -116,10 +145,15 @@ enum {
 
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	static NSString *taskCellIdentifier = @"ATTaskProgressCellIdentifier";
+	static NSString *logCellIdentifier = @"ATLogViewCellIdentifier";
 	UITableViewCell *result = nil;
-	if (indexPath.section == kSectionTasks) {
+	
+	NSUInteger physicalSection = indexPath.section;
+	NSUInteger section = [[logicalSections objectAtIndex:physicalSection] integerValue];
+	
+	if (section == kSectionTasks) {
 		ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
-		ATTask *task = [queue taskAtIndex:indexPath.row withTaskNameInSet:[NSSet setWithObject:@"feedback"]];
+		ATTask *task = [queue taskAtIndex:indexPath.row withTaskNameInSet:[NSSet setWithObjects:@"feedback", nil]];
 		result = [aTableView dequeueReusableCellWithIdentifier:taskCellIdentifier];
 		if (!result) {
 			UINib *nib = [UINib nibWithNibName:@"ATTaskProgressCell" bundle:[ATConnect resourceBundle]];
@@ -155,6 +189,12 @@ enum {
 			detailLabel.text = @"Waiting…";
 			progressView.hidden = YES;
 		}
+	} else if (section == kSectionDebugLog) {
+		result = [aTableView dequeueReusableCellWithIdentifier:logCellIdentifier];
+		if (!result) {
+			result = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:logCellIdentifier] autorelease];
+		}
+		result.textLabel.text = @"View Debug Logs";
 	} else {
 		NSAssert(NO, @"Unknown section.");
 	}
@@ -162,19 +202,22 @@ enum {
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView {
-	return kSectionCount;
+	return [logicalSections count];
 }
 
-- (NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {
+- (NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)physicalSection {
 	NSString *result = nil;
+	
+	NSUInteger section = [[logicalSections objectAtIndex:physicalSection] integerValue];
 	if (section == kSectionTasks) {
 		result = NSLocalizedString(@"Running Tasks", @"Running tasks section header");
 	}
 	return result;
 }
 
-- (NSString *)tableView:(UITableView *)aTableView titleForFooterInSection:(NSInteger)section {
+- (NSString *)tableView:(UITableView *)aTableView titleForFooterInSection:(NSInteger)physicalSection {
 	NSString *result = nil;
+	NSUInteger section = [[logicalSections objectAtIndex:physicalSection] integerValue];
 	if (section == kSectionTasks) {
 		ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
 		if ([queue count]) {
@@ -195,6 +238,16 @@ enum {
 	if (headerView) {
 		[headerView release], headerView = nil;
 	}
+	if (logicalSections) {
+		[logicalSections release], logicalSections = nil;
+	}
+	logicalSections = [[NSMutableArray alloc] init];
+	[logicalSections addObject:@(kSectionTasks)];
+#if APPTENTIVE_DEBUG_LOG_VIEWER
+	[logicalSections addObject:@(kSectionDebugLog)];
+#endif
+	[logicalSections addObject:@(kSectionVersion)];
+	
 	UIImage *logoImage = [ATBackend imageNamed:@"at_logo_info"];
 	UINib *nib = [UINib nibWithNibName:@"ATAboutApptentiveView" bundle:[ATConnect resourceBundle]];
 	[nib instantiateWithOwner:self options:nil];
@@ -203,7 +256,7 @@ enum {
 	CGRect f = logoView.frame;
 	f.size = logoImage.size;
 	logoView.frame = f;
-	//tableView.delegate = self;
+	tableView.delegate = self;
 	tableView.dataSource = self;
 	tableView.tableHeaderView = self.headerView;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reload) name:ATAPIRequestStatusChanged object:nil];
@@ -212,7 +265,7 @@ enum {
 - (void)teardown {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[headerView release], headerView = nil;
-	self.tableView = nil;
+	[tableView release], tableView = nil;
 }
 
 - (void)reload {

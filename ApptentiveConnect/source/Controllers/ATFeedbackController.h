@@ -7,17 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ATSimpleImageViewController.h"
 
 @class ATDefaultTextView;
 @class ATFeedback;
 @class ATToolbar;
 
-typedef enum {
-	ATFeedbackAllowPhotoAttachment = 1,
-	ATFeedbackAllowTakePhotoAttachment = 2,
-} ATFeedbackAttachmentOptions;
-
-@interface ATFeedbackController : UIViewController <UITextFieldDelegate> {
+@interface ATFeedbackController : UIViewController <ATSimpleImageViewControllerDelegate, UITextFieldDelegate> {
 	UIViewController *presentingViewController;
 	
 @private

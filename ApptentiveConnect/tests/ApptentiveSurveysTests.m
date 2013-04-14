@@ -28,7 +28,7 @@
 }
 
 - (void)testSurveyParsing {
-	NSString *surveyString = @"[{\"id\":\"4eb4877cd4d8f8000100002a\",\"questions\":[{\"id\":\"4eb4877cd4d8f8000100002b\",\"answer_choices\":[{\"id\":\"4eb4877cd4d8f8000100002c\",\"value\":\"BMW 335i\"},{\"id\":\"4eb4877cd4d8f8000100002d\",\"value\":\"BMW 335i\"},{\"id\":\"4eb4877cd4d8f8000100002e\",\"value\":\"Bugatti Veyron\"},{\"id\":\"4eb4877cd4d8f8000100002f\",\"value\":\"Tesla Model S\"},{\"id\":\"4eb4877cd4d8f80001000030\",\"value\":\"Dodge Charger\"},{\"id\":\"4eb4877cd4d8f80001000031\",\"value\":\"Other\"}],\"value\":\"Which car would you rather drive?\",\"type\":\"multichoice\"},{\"id\":\"4eb4877cd4d8f80001000032\",\"value\":\"If Other, Please Elaborate:\",\"type\":\"singleline\"},{\"id\":\"4eb4877cd4d8f80001000033\",\"value\":\"How does a really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really long question appear?\",\"type\":\"singleline\"}],\"responses\":[{\"question\":\"Which car would you rather drive?\",\"type\":\"multichoice\",\"responses\":{}},{\"question\":\"If Other, Please Elaborate:\",\"type\":\"singleline\",\"responses\":[]},{\"question\":\"How does a really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really long question appear?\",\"type\":\"singleline\",\"responses\":[]}],\"name\":\"Happy Fun Test Survey\",\"description\":\"This is a fun test survey with a description like this.\",\"active\":true}]";
+	NSString *surveyString = @"{\"surveys\":[{\"id\":\"4eb4877cd4d8f8000100002a\",\"questions\":[{\"id\":\"4eb4877cd4d8f8000100002b\",\"answer_choices\":[{\"id\":\"4eb4877cd4d8f8000100002c\",\"value\":\"BMW 335i\"},{\"id\":\"4eb4877cd4d8f8000100002d\",\"value\":\"BMW 335i\"},{\"id\":\"4eb4877cd4d8f8000100002e\",\"value\":\"Bugatti Veyron\"},{\"id\":\"4eb4877cd4d8f8000100002f\",\"value\":\"Tesla Model S\"},{\"id\":\"4eb4877cd4d8f80001000030\",\"value\":\"Dodge Charger\"},{\"id\":\"4eb4877cd4d8f80001000031\",\"value\":\"Other\"}],\"value\":\"Which car would you rather drive?\",\"type\":\"multichoice\"},{\"id\":\"4eb4877cd4d8f80001000032\",\"value\":\"If Other, Please Elaborate:\",\"type\":\"singleline\"},{\"id\":\"4eb4877cd4d8f80001000033\",\"value\":\"How does a really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really long question appear?\",\"type\":\"singleline\"}],\"responses\":[{\"question\":\"Which car would you rather drive?\",\"type\":\"multichoice\",\"responses\":{}},{\"question\":\"If Other, Please Elaborate:\",\"type\":\"singleline\",\"responses\":[]},{\"question\":\"How does a really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really long question appear?\",\"type\":\"singleline\",\"responses\":[]}],\"name\":\"Happy Fun Test Survey\",\"description\":\"This is a fun test survey with a description like this.\",\"active\":true}]}";
 	NSData *surveyData = [surveyString dataUsingEncoding:NSUTF8StringEncoding];
 	STAssertNotNil(surveyData, @"Survey data shouldn't be nil");
 	
@@ -51,7 +51,7 @@
 }
 
 - (void)testEmptySurvey {
-	NSString *surveyString = @"[]";
+	NSString *surveyString = @"{\"surveys\":[]}";
 	NSData *surveyData = [surveyString dataUsingEncoding:NSUTF8StringEncoding];
 	STAssertNotNil(surveyData, @"Survey data shouldn't be nil");
 

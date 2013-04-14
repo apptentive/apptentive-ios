@@ -1183,6 +1183,12 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "tests/ApptentiveConnectTests-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"JSONKIT_PREFIX=AT",
+					"APPTENTIVE_DEBUG=1",
+					"AT_LOGGING_LEVEL_INFO=1",
+					"AT_LOGGING_LEVEL_DEBUG=1",
+				);
 				INFOPLIST_FILE = "tests/ApptentiveConnectTests-Info.plist";
 				OTHER_LDFLAGS = (
 					"-framework",

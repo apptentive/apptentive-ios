@@ -21,7 +21,8 @@
 
 NSString *const ATAppRatingFlowUserAgreedToRateAppNotification = @"ATAppRatingFlowUserAgreedToRateAppNotification";
 
-//TODO: This should be changed for iOS 4+
+// Don't count an app re-launch within 20 seconds as
+// an app launch.
 #define kATAppAppUsageMinimumInterval (20)
 
 #if TARGET_OS_IPHONE
@@ -120,13 +121,12 @@ NSString *const ATAppRatingFlowUserAgreedToRateAppNotification = @"ATAppRatingFl
 {
 #if TARGET_OS_IPHONE
 	self.viewController = vc;
-#elif TARGET_OS_MAC
-	[self userDidUseApp];
 #endif
 
 #if TARGET_IPHONE_SIMULATOR
 	[self logDefaults];
 #endif
+	[self userDidUseApp];
 	BOOL showedDialog = NO;
 	if (canPromptForRating) {
 		showedDialog = [self showDialogIfNecessary];
@@ -142,6 +142,7 @@ NSString *const ATAppRatingFlowUserAgreedToRateAppNotification = @"ATAppRatingFl
 #if TARGET_OS_IPHONE
 - (void)appDidEnterForeground:(BOOL)canPromptForRating viewController:(UIViewController *)vc {
 	self.viewController = vc;
+	[self userDidUseApp];
 	
 	BOOL showedDialog = NO;
 	if (canPromptForRating) {

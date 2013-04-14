@@ -675,11 +675,11 @@ void JSONKIT_PREPEND(jk_collectionClassLoadTimeInitialization)(void) {
 }
 
 - (id)initWithCount:(NSUInteger)aCount {
-	if ((self = [self init])) {
-		count = aCount;
-		capacity = aCount;
-	}
-	return self;
+  if ((self = [self init])) {
+    count = aCount;
+    capacity = aCount;
+  }
+  return self;
 }
 
 static JSONKIT_PREPEND(JKArray) *_JKArrayCreate(id *objects, NSUInteger count, BOOL mutableCollection) {

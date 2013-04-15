@@ -45,7 +45,7 @@ static dispatch_queue_t loggingQueue;
 		[logHandle closeFile];
 		[logHandle release], logHandle = nil;
 	}
-    [super dealloc];
+	[super dealloc];
 }
 
 + (void)logWithLevel:(NSString *)level file:(const char *)file function:(const char *)function line:(int)line format:(NSString *)format, ... {
@@ -80,53 +80,53 @@ static dispatch_queue_t loggingQueue;
 
 #pragma mark - Private Methods
 - (NSString *)logDirectoryPath {
-    NSFileManager *fm = [NSFileManager defaultManager];
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+	NSFileManager *fm = [NSFileManager defaultManager];
+
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
 	NSString *path = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-    
-    if (path == nil) {
-        creatingLogPathFailed = YES;
-        return nil;
-    }
-	
+
+	if (path == nil) {
+		creatingLogPathFailed = YES;
+		return nil;
+	}
+
 	NSString *newPath = [path stringByAppendingPathComponent:@"com.apptentive.logs"];
 	NSError *error = nil;
-    BOOL isDir = NO;
-    
-    BOOL pathExists = [fm fileExistsAtPath:newPath isDirectory:&isDir];
-    if (pathExists == NO && isDir == YES) {
-        NSLog(@"ATLog path exists but is a directory: %@", newPath);
-        creatingLogPathFailed = YES;
-        return nil;
-    } else if (pathExists == YES) {
-        return newPath;
-    }
-    
+	BOOL isDir = NO;
+
+	BOOL pathExists = [fm fileExistsAtPath:newPath isDirectory:&isDir];
+	if (pathExists == NO && isDir == YES) {
+		NSLog(@"ATLog path exists but is a directory: %@", newPath);
+		creatingLogPathFailed = YES;
+		return nil;
+	} else if (pathExists == YES) {
+		return newPath;
+	}
+
 	BOOL pathCreated = [fm createDirectoryAtPath:newPath withIntermediateDirectories:YES attributes:nil error:&error];
 	if (pathCreated == NO) {
-        NSLog(@"Failed to create log directory: %@", newPath);
-        NSLog(@"Error was: %@", error);
-        return nil;
+		NSLog(@"Failed to create log directory: %@", newPath);
+		NSLog(@"Error was: %@", error);
+		return nil;
 	}
 	return newPath;
 
 }
 
 - (NSString *)logFilePath {
-    NSString *logDir = [self logDirectoryPath];
-    if (logDir == nil) {
-        return nil;
-    }
-    return [logDir stringByAppendingPathComponent:@"apptentive.log"];
+	NSString *logDir = [self logDirectoryPath];
+	if (logDir == nil) {
+		return nil;
+	}
+	return [logDir stringByAppendingPathComponent:@"apptentive.log"];
 }
 
 - (NSString *)backupLogFilePath {
-    NSString *logDir = [self logDirectoryPath];
-    if (logDir == nil) {
-        return nil;
-    }
-    return [logDir stringByAppendingPathComponent:@"apptentive.previous.log"];
+	NSString *logDir = [self logDirectoryPath];
+	if (logDir == nil) {
+		return nil;
+	}
+	return [logDir stringByAppendingPathComponent:@"apptentive.previous.log"];
 }
 
 - (BOOL)rotateLog {
@@ -150,7 +150,7 @@ static dispatch_queue_t loggingQueue;
 			}
 		}
 	});
-    return result;
+	return result;
 }
 
 - (BOOL)startNewLog {

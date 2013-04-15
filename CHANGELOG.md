@@ -20,6 +20,9 @@ We've finally added support for surveys with tags.
 * IOS-62 Add support for repeat surveys
 * IOS-99 Add Callback after a user agrees to rate the app
     * You can now listen for ATAppRatingFlowUserAgreedToRateAppNotification to know when a user agrees to rate the app.
+* apptentive/apptentive-ios#32 Showing the rating dialog from a modal
+* IOS-108 Fix for launches not being detected after IOS-76 changes
+* IOS-107 Fix warnings in PrefixedJSONKit
 
 2013-02-01 wooster v0.4.8
 -------------------------

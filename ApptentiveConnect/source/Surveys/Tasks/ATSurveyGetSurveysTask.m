@@ -79,7 +79,6 @@
 	return @"survey check";
 }
 
-
 #pragma mark ATAPIRequestDelegate
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)request result:(NSObject *)result {
 	@synchronized(self) {
@@ -107,6 +106,8 @@
 		[self retain];
 		if (request == checkSurveysRequest) {
 			ATLogError(@"Survey request failed: %@: %@", request.errorTitle, request.errorMessage);
+			self.lastErrorTitle = request.errorTitle;
+			self.lastErrorMessage = request.errorMessage;
 			self.failed = YES;
 			[self stop];
 		}

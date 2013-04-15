@@ -38,4 +38,6 @@
 - (void)cleanup;
 - (float)percentComplete;
 - (NSString *)taskName;
+
+- (NSString *)taskDescription;
 @end

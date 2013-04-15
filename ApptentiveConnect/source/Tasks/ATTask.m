@@ -70,4 +70,24 @@
 - (void)cleanup {
 	// Do nothing by default.
 }
+
+- (NSString *)taskDescription {
+	NSMutableArray *parts = [[NSMutableArray alloc] init];
+	if (lastErrorTitle) {
+		[parts addObject:[NSString stringWithFormat:@"lastErrorTitle: %@", lastErrorTitle]];
+	}
+	if (lastErrorMessage) {
+		[parts addObject:[NSString stringWithFormat:@"lastErrorMessage: %@", lastErrorMessage]];
+	}
+	[parts addObject:[NSString stringWithFormat:@"inProgress: %@", inProgress ? @"YES" : @"NO"]];
+	[parts addObject:[NSString stringWithFormat:@"finished: %@", finished ? @"YES" : @"NO"]];
+	[parts addObject:[NSString stringWithFormat:@"failed: %@", failed ? @"YES" : @"NO"]];
+	[parts addObject:[NSString stringWithFormat:@"failureCount: %d", failureCount]];
+	[parts addObject:[NSString stringWithFormat:@"percentComplete: %f", [self percentComplete]]];
+	[parts addObject:[NSString stringWithFormat:@"taskName: %@", [self taskName]]];
+	
+	NSString *d = [parts componentsJoinedByString:@", "];
+	[parts dealloc], parts = nil;
+	return [NSString stringWithFormat:@"<%@ %p: %@>", NSStringFromClass([self class]), self, d];
+}
 @end

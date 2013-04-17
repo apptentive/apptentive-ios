@@ -10,7 +10,7 @@
 
 #import "ATBackend.h"
 #import "ATMessage.h"
-#import "ATActivityFeedUpdater.h"
+#import "ATConversationUpdater.h"
 #import "ATTextMessage.h"
 #import "ATWebClient.h"
 #import "ATWebClient+MessageCenter.h"
@@ -52,7 +52,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 	if ([[ATBackend sharedBackend] apiKey] == nil) {
 		return NO;
 	}
-	if (![ATActivityFeedUpdater activityFeedExists]) {
+	if (![ATConversationUpdater conversationExists]) {
 		return NO;
 	}
 	return YES;

@@ -11,7 +11,7 @@
 #import "ATData.h"
 #import "ATLog.h"
 #import "ATMessage.h"
-#import "ATActivityFeedUpdater.h"
+#import "ATConversationUpdater.h"
 #import "ATWebClient.h"
 #import "ATWebClient+MessageCenter.h"
 #import "PJSONKit.h"
@@ -55,7 +55,7 @@
 	if ([[ATBackend sharedBackend] apiKey] == nil) {
 		return NO;
 	}
-	if (![ATActivityFeedUpdater activityFeedExists]) {
+	if (![ATConversationUpdater conversationExists]) {
 		return NO;
 	}
 	return YES;

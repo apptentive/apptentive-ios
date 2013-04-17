@@ -20,13 +20,13 @@
 #define kMessageCenterChannelName (@"Message Center")
 
 @implementation ATWebClient (MessageCenter)
-- (ATAPIRequest *)requestForCreatingActivityFeed:(ATActivityFeed *)activityFeed {
+- (ATAPIRequest *)requestForCreatingConversation:(ATConversation *)conversation {
 	NSError *error = nil;
 	NSDictionary *postJSON = nil;
-	if (activityFeed == nil) {
+	if (conversation == nil) {
 		postJSON = [NSDictionary dictionary];
 	} else {
-		postJSON = [activityFeed apiJSON];
+		postJSON = [conversation apiJSON];
 	}
 	NSString *postString = [postJSON ATJSONStringWithOptions:ATJKSerializeOptionPretty error:&error];
 	if (!postString && error != nil) {
@@ -54,9 +54,9 @@
 		return nil;
 	}
 	
-	ATActivityFeed *feed = [ATActivityFeedUpdater currentActivityFeed];
-	if (!feed) {
-		ATLogError(@"No current activity feed.");
+	ATConversation *conversation = [ATConversationUpdater currentConversation];
+	if (!conversation) {
+		ATLogError(@"No current conversation.");
 		return nil;
 	}
 	
@@ -64,7 +64,7 @@
 	
 	ATURLConnection *conn = [self connectionToPut:[NSURL URLWithString:url] JSON:postString];
 	conn.timeoutInterval = 60.0;
-	[self updateConnection:conn withOAuthToken:feed.token];
+	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
 	request.returnType = ATAPIRequestReturnTypeJSON;
 	return [request autorelease];
@@ -86,9 +86,9 @@
 		return nil;
 	}
 	
-	ATActivityFeed *feed = [ATActivityFeedUpdater currentActivityFeed];
-	if (!feed) {
-		ATLogError(@"No current activity feed.");
+	ATConversation *conversation = [ATConversationUpdater currentConversation];
+	if (!conversation) {
+		ATLogError(@"No current conversation");
 		return nil;
 	}
 	NSString *path = @"messages";
@@ -109,7 +109,7 @@
 		conn = [self connectionToPost:url JSON:postString];
 	}
 	conn.timeoutInterval = 60.0;
-	[self updateConnection:conn withOAuthToken:feed.token];
+	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
 	request.returnType = ATAPIRequestReturnTypeJSON;
 	return [request autorelease];
@@ -121,9 +121,9 @@
 		parameters = @{@"after_id":message.apptentiveID};
 	}
 	
-	ATActivityFeed *feed = [ATActivityFeedUpdater currentActivityFeed];
-	if (!feed) {
-		NSLog(@"No current activity feed.");
+	ATConversation *conversation = [ATConversationUpdater currentConversation];
+	if (!conversation) {
+		NSLog(@"No current conversation.");
 		return nil;
 	}
 	
@@ -136,7 +136,7 @@
 	
 	ATURLConnection *conn = [self connectionToGet:[NSURL URLWithString:url]];
 	conn.timeoutInterval = 60.0;
-	[self updateConnection:conn withOAuthToken:feed.token];
+	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
 	request.returnType = ATAPIRequestReturnTypeJSON;
 	return [request autorelease];

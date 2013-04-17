@@ -8,13 +8,13 @@
 
 #import "ATWebClient.h"
 
-#import "ATActivityFeed.h"
+#import "ATConversation.h"
 #import "ATDeviceInfo.h"
 #import "ATMessage.h"
 #import "ATPerson.h"
 
 @interface ATWebClient (MessageCenter)
-- (ATAPIRequest *)requestForCreatingActivityFeed:(ATActivityFeed *)activityFeed;
+- (ATAPIRequest *)requestForCreatingConversation:(ATConversation *)conversation;
 - (ATAPIRequest *)requestForUpdatingDevice:(ATDeviceInfo *)deviceInfo;
 - (ATAPIRequest *)requestForPostingMessage:(ATMessage *)message;
 - (ATAPIRequest *)requestForRetrievingMessagesSinceMessage:(ATMessage *)message;

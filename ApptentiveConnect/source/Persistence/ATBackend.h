@@ -13,7 +13,7 @@
 #endif
 #import <CoreData/CoreData.h>
 
-#import "ATActivityFeedUpdater.h"
+#import "ATConversationUpdater.h"
 #import "ATDeviceUpdater.h"
 
 NSString *const ATBackendNewAPIKeyNotification;
@@ -25,7 +25,7 @@ NSString *const ATBackendNewAPIKeyNotification;
 @class ATAPIRequest;
 
 /*! Handles all of the backend activities, such as sending feedback. */
-@interface ATBackend : NSObject <ATActivityFeedUpdaterDelegate, ATDeviceUpdaterDelegate
+@interface ATBackend : NSObject <ATConversationUpdaterDelegate, ATDeviceUpdaterDelegate
 #if TARGET_OS_IPHONE
 , NSFetchedResultsControllerDelegate
 #endif
@@ -42,7 +42,7 @@ NSString *const ATBackendNewAPIKeyNotification;
 	NSManagedObjectContext *managedObjectContext;
 	NSManagedObjectModel *managedObjectModel;
 	
-	ATActivityFeedUpdater *activityFeedUpdater;
+	ATConversationUpdater *conversationUpdater;
 	ATDeviceUpdater *deviceUpdater;
 	
 	NSTimer *messageRetrievalTimer;

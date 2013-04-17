@@ -1,5 +1,5 @@
 //
-//  ATActivityFeed.h
+//  ATConversation.h
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 2/4/13.
@@ -10,7 +10,7 @@
 
 #import "ATJSONModel.h"
 
-@interface ATActivityFeed : NSObject <NSCoding, ATJSONModel> {
+@interface ATConversation : NSObject <NSCoding, ATJSONModel> {
 @private
 	NSString *token;
 	NSString *personID;

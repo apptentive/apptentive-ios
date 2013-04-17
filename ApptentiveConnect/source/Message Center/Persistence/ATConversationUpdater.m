@@ -6,21 +6,21 @@
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
 
-#import "ATActivityFeedUpdater.h"
+#import "ATConversationUpdater.h"
 
 #import "ATBackend.h"
 #import "ATWebClient+MessageCenter.h"
 
-NSString *const ATCurrentActivityFeedPreferenceKey = @"ATCurrentActivityFeedPreferenceKey";
+NSString *const ATCurrentConversationPreferenceKey = @"ATCurrentConversationPreferenceKey";
 
-@interface ATActivityFeedUpdater (Private)
+@interface ATConversationUpdater (Private)
 - (void)processResult:(NSDictionary *)jsonActivityFeed;
 @end
 
-@implementation ATActivityFeedUpdater
+@implementation ATConversationUpdater
 @synthesize delegate;
 
-- (id)initWithDelegate:(NSObject<ATActivityFeedUpdaterDelegate> *)aDelegate {
+- (id)initWithDelegate:(NSObject<ATConversationUpdaterDelegate> *)aDelegate {
 	if ((self = [super init])) {
 		delegate = aDelegate;
 	}
@@ -33,14 +33,14 @@ NSString *const ATCurrentActivityFeedPreferenceKey = @"ATCurrentActivityFeedPref
 	[super dealloc];
 }
 
-- (void)createActivityFeed {
+- (void)createConversation {
 	[self cancel];
-	ATActivityFeed *activityFeed = [[ATActivityFeed alloc] init];
-	activityFeed.deviceID = [[ATBackend sharedBackend] deviceUUID];
-	request = [[[ATWebClient sharedClient] requestForCreatingActivityFeed:activityFeed] retain];
+	ATConversation *conversation = [[ATConversation alloc] init];
+	conversation.deviceID = [[ATBackend sharedBackend] deviceUUID];
+	request = [[[ATWebClient sharedClient] requestForCreatingConversation:conversation] retain];
 	request.delegate = self;
 	[request start];
-	[activityFeed release], activityFeed = nil;
+	[conversation release], conversation = nil;
 }
 
 - (void)cancel {
@@ -59,8 +59,8 @@ NSString *const ATCurrentActivityFeedPreferenceKey = @"ATCurrentActivityFeedPref
 	}
 }
 
-+ (BOOL)activityFeedExists {
-	ATActivityFeed *currentFeed = [ATActivityFeedUpdater currentActivityFeed];
++ (BOOL)conversationExists {
+	ATConversation *currentFeed = [ATConversationUpdater currentConversation];
 	if (currentFeed == nil) {
 		return NO;
 	} else {
@@ -68,14 +68,14 @@ NSString *const ATCurrentActivityFeedPreferenceKey = @"ATCurrentActivityFeedPref
 	}
 }
 
-+ (ATActivityFeed *)currentActivityFeed {
++ (ATConversation *)currentConversation {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSData *feedData = [defaults dataForKey:ATCurrentActivityFeedPreferenceKey];
-	if (!feedData) {
+	NSData *conversationData = [defaults dataForKey:ATCurrentConversationPreferenceKey];
+	if (!conversationData) {
 		return nil;
 	}
-	ATActivityFeed *feed = [NSKeyedUnarchiver unarchiveObjectWithData:feedData];
-	return feed;
+	ATConversation *conversation = [NSKeyedUnarchiver unarchiveObjectWithData:conversationData];
+	return conversation;
 }
 
 #pragma mark ATATIRequestDelegate
@@ -85,7 +85,7 @@ NSString *const ATCurrentActivityFeedPreferenceKey = @"ATCurrentActivityFeedPref
 			[self processResult:(NSDictionary *)result];
 		} else {
 			ATLogError(@"Activity feed result is not NSDictionary!");
-			[delegate activityFeed:self createdFeed:NO];
+			[delegate conversation:self createdSuccessfully:NO];
 		}
 	}
 }
@@ -97,26 +97,25 @@ NSString *const ATCurrentActivityFeedPreferenceKey = @"ATCurrentActivityFeedPref
 - (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
 	@synchronized(self) {
 		ATLogInfo(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
-		
-		[delegate activityFeed:self createdFeed:NO];
+		[delegate conversation:self createdSuccessfully:NO];
 	}
 }
 
 @end
 
 
-@implementation ATActivityFeedUpdater (Private)
+@implementation ATConversationUpdater (Private)
 - (void)processResult:(NSDictionary *)jsonActivityFeed {
-	ATActivityFeed *feed = (ATActivityFeed *)[ATActivityFeed newInstanceWithJSON:jsonActivityFeed];
-	if (feed) {
+	ATConversation *conversation = (ATConversation *)[ATConversation newInstanceWithJSON:jsonActivityFeed];
+	if (conversation) {
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		NSData *feedData = [NSKeyedArchiver archivedDataWithRootObject:feed];
-		[defaults setObject:feedData forKey:ATCurrentActivityFeedPreferenceKey];
+		NSData *conversationData = [NSKeyedArchiver archivedDataWithRootObject:conversation];
+		[defaults setObject:conversationData forKey:ATCurrentConversationPreferenceKey];
 		[defaults synchronize];
-		[delegate activityFeed:self createdFeed:YES];
+		[delegate conversation:self createdSuccessfully:YES];
 	} else {
-		[delegate activityFeed:self createdFeed:NO];
+		[delegate conversation:self createdSuccessfully:NO];
 	}
-	[feed release], feed = nil;
+	[conversation release], conversation = nil;
 }
 @end

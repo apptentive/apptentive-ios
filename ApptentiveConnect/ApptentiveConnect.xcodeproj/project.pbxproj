@@ -179,9 +179,9 @@
 		49AA1023138B498C0082887A /* ATInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA1022138B498C0082887A /* ATInfoViewController.xib */; };
 		49AA1025138B49A50082887A /* ATInfoViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49AA1024138B49A50082887A /* ATInfoViewController_iPad.xib */; };
 		49AAA17B1633716F00B26851 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49AAA17A1633716F00B26851 /* StoreKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		49AC178216C0987400BE1615 /* ATActivityFeedUpdater.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AC178016C0987400BE1615 /* ATActivityFeedUpdater.h */; };
-		49AC178316C0987400BE1615 /* ATActivityFeedUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AC178116C0987400BE1615 /* ATActivityFeedUpdater.m */; };
-		49AC178416C0987400BE1615 /* ATActivityFeedUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AC178116C0987400BE1615 /* ATActivityFeedUpdater.m */; };
+		49AC178216C0987400BE1615 /* ATConversationUpdater.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AC178016C0987400BE1615 /* ATConversationUpdater.h */; };
+		49AC178316C0987400BE1615 /* ATConversationUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AC178116C0987400BE1615 /* ATConversationUpdater.m */; };
+		49AC178416C0987400BE1615 /* ATConversationUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AC178116C0987400BE1615 /* ATConversationUpdater.m */; };
 		49AC178D16C0A0BC00BE1615 /* ATJSONModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AC178C16C0A0BC00BE1615 /* ATJSONModel.h */; };
 		49ADE8D8162613BA00DD8634 /* TTTAttributedLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 49ADE8D6162613BA00DD8634 /* TTTAttributedLabel.h */; };
 		49ADE8D9162613BA00DD8634 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 49ADE8D7162613BA00DD8634 /* TTTAttributedLabel.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -231,8 +231,8 @@
 		49EF341014AA7F2D00077F76 /* ATAppRatingMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EF340E14AA7F2D00077F76 /* ATAppRatingMetrics.m */; };
 		49EF341114AA7F2D00077F76 /* ATAppRatingMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EF340E14AA7F2D00077F76 /* ATAppRatingMetrics.m */; };
 		49F3404E16BC8B1A008AA02B /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49AAA17A1633716F00B26851 /* StoreKit.framework */; };
-		49F8AFE316CC4A550070FFEA /* ATActivityFeed.h in Headers */ = {isa = PBXBuildFile; fileRef = 49F8AFCD16CC4A550070FFEA /* ATActivityFeed.h */; };
-		49F8AFE416CC4A550070FFEA /* ATActivityFeed.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFCE16CC4A550070FFEA /* ATActivityFeed.m */; };
+		49F8AFE316CC4A550070FFEA /* ATConversation.h in Headers */ = {isa = PBXBuildFile; fileRef = 49F8AFCD16CC4A550070FFEA /* ATConversation.h */; };
+		49F8AFE416CC4A550070FFEA /* ATConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFCE16CC4A550070FFEA /* ATConversation.m */; };
 		49F8AFE516CC4A550070FFEA /* ATData.h in Headers */ = {isa = PBXBuildFile; fileRef = 49F8AFCF16CC4A550070FFEA /* ATData.h */; };
 		49F8AFE616CC4A550070FFEA /* ATData.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFD016CC4A550070FFEA /* ATData.m */; };
 		49F8AFE816CC4A550070FFEA /* ATDeviceInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 49F8AFD316CC4A550070FFEA /* ATDeviceInfo.h */; };
@@ -408,8 +408,8 @@
 		49AA1022138B498C0082887A /* ATInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATInfoViewController.xib; sourceTree = "<group>"; };
 		49AA1024138B49A50082887A /* ATInfoViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATInfoViewController_iPad.xib; sourceTree = "<group>"; };
 		49AAA17A1633716F00B26851 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
-		49AC178016C0987400BE1615 /* ATActivityFeedUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATActivityFeedUpdater.h; path = "Message Center/Persistence/ATActivityFeedUpdater.h"; sourceTree = "<group>"; };
-		49AC178116C0987400BE1615 /* ATActivityFeedUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATActivityFeedUpdater.m; path = "Message Center/Persistence/ATActivityFeedUpdater.m"; sourceTree = "<group>"; };
+		49AC178016C0987400BE1615 /* ATConversationUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATConversationUpdater.h; path = "Message Center/Persistence/ATConversationUpdater.h"; sourceTree = "<group>"; };
+		49AC178116C0987400BE1615 /* ATConversationUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATConversationUpdater.m; path = "Message Center/Persistence/ATConversationUpdater.m"; sourceTree = "<group>"; };
 		49AC178C16C0A0BC00BE1615 /* ATJSONModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATJSONModel.h; path = "Message Center/ATJSONModel.h"; sourceTree = "<group>"; };
 		49ADE8D6162613BA00DD8634 /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTTAttributedLabel.h; path = TTTAttributedLabel/TTTAttributedLabel.h; sourceTree = "<group>"; };
 		49ADE8D7162613BA00DD8634 /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TTTAttributedLabel.m; path = TTTAttributedLabel/TTTAttributedLabel.m; sourceTree = "<group>"; };
@@ -458,8 +458,8 @@
 		49EA5ABC14BD0F4D004F8A4D /* ATRecordTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATRecordTask.m; sourceTree = "<group>"; };
 		49EF340D14AA7F2D00077F76 /* ATAppRatingMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAppRatingMetrics.h; sourceTree = "<group>"; };
 		49EF340E14AA7F2D00077F76 /* ATAppRatingMetrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAppRatingMetrics.m; sourceTree = "<group>"; };
-		49F8AFCD16CC4A550070FFEA /* ATActivityFeed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATActivityFeed.h; sourceTree = "<group>"; };
-		49F8AFCE16CC4A550070FFEA /* ATActivityFeed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATActivityFeed.m; sourceTree = "<group>"; };
+		49F8AFCD16CC4A550070FFEA /* ATConversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATConversation.h; sourceTree = "<group>"; };
+		49F8AFCE16CC4A550070FFEA /* ATConversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATConversation.m; sourceTree = "<group>"; };
 		49F8AFCF16CC4A550070FFEA /* ATData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATData.h; sourceTree = "<group>"; };
 		49F8AFD016CC4A550070FFEA /* ATData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATData.m; sourceTree = "<group>"; };
 		49F8AFD216CC4A550070FFEA /* ATDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ATDataModel.xcdatamodel; sourceTree = "<group>"; };
@@ -701,8 +701,8 @@
 				4961A40A161BBE0800E30037 /* ATPersonUpdater.m */,
 				4961A40D161BBE1F00E30037 /* ATDeviceUpdater.h */,
 				4961A40E161BBE1F00E30037 /* ATDeviceUpdater.m */,
-				49AC178016C0987400BE1615 /* ATActivityFeedUpdater.h */,
-				49AC178116C0987400BE1615 /* ATActivityFeedUpdater.m */,
+				49AC178016C0987400BE1615 /* ATConversationUpdater.h */,
+				49AC178116C0987400BE1615 /* ATConversationUpdater.m */,
 			);
 			name = Persistence;
 			sourceTree = "<group>";
@@ -970,8 +970,8 @@
 			isa = PBXGroup;
 			children = (
 				49F8AFD116CC4A550070FFEA /* ATDataModel.xcdatamodeld */,
-				49F8AFCD16CC4A550070FFEA /* ATActivityFeed.h */,
-				49F8AFCE16CC4A550070FFEA /* ATActivityFeed.m */,
+				49F8AFCD16CC4A550070FFEA /* ATConversation.h */,
+				49F8AFCE16CC4A550070FFEA /* ATConversation.m */,
 				49F8AFCF16CC4A550070FFEA /* ATData.h */,
 				49F8AFD016CC4A550070FFEA /* ATData.m */,
 				49F8AFD316CC4A550070FFEA /* ATDeviceInfo.h */,
@@ -1071,10 +1071,10 @@
 				491E03D91640D01F00DC3E18 /* ATFeedbackTypes.h in Headers */,
 				4967273A16B8A41400C679B8 /* ATMessageCenterCell.h in Headers */,
 				4967278216B9D9CB00C679B8 /* ATConnect_Private.h in Headers */,
-				49AC178216C0987400BE1615 /* ATActivityFeedUpdater.h in Headers */,
+				49AC178216C0987400BE1615 /* ATConversationUpdater.h in Headers */,
 				49AC178D16C0A0BC00BE1615 /* ATJSONModel.h in Headers */,
 				49E6208716C5E8C2000C9F5A /* NSDictionary+ATAdditions.h in Headers */,
-				49F8AFE316CC4A550070FFEA /* ATActivityFeed.h in Headers */,
+				49F8AFE316CC4A550070FFEA /* ATConversation.h in Headers */,
 				49F8AFE516CC4A550070FFEA /* ATData.h in Headers */,
 				49F8AFE816CC4A550070FFEA /* ATDeviceInfo.h in Headers */,
 				49F8AFEA16CC4A550070FFEA /* ATFakeMessage.h in Headers */,
@@ -1313,9 +1313,9 @@
 				49ADE8D9162613BA00DD8634 /* TTTAttributedLabel.m in Sources */,
 				49E3A2701628F4FF000675B4 /* ATGetMessagesTask.m in Sources */,
 				49AF27D016321F0C005E1E9D /* ATFakeMessageCell.m in Sources */,
-				49AC178316C0987400BE1615 /* ATActivityFeedUpdater.m in Sources */,
+				49AC178316C0987400BE1615 /* ATConversationUpdater.m in Sources */,
 				49E6208816C5E8C2000C9F5A /* NSDictionary+ATAdditions.m in Sources */,
-				49F8AFE416CC4A550070FFEA /* ATActivityFeed.m in Sources */,
+				49F8AFE416CC4A550070FFEA /* ATConversation.m in Sources */,
 				49F8AFE616CC4A550070FFEA /* ATData.m in Sources */,
 				49F8AFE916CC4A550070FFEA /* ATDeviceInfo.m in Sources */,
 				49F8AFEB16CC4A550070FFEA /* ATFakeMessage.m in Sources */,
@@ -1383,7 +1383,7 @@
 				498EFB6D15BA414A00A1043B /* ATSurveyGetSurveyTask.m in Sources */,
 				498EFB7215BA48B300A1043B /* ATAppConfigurationUpdateTask.m in Sources */,
 				499B56CC15D305880063C23C /* PJSONKit.m in Sources */,
-				49AC178416C0987400BE1615 /* ATActivityFeedUpdater.m in Sources */,
+				49AC178416C0987400BE1615 /* ATConversationUpdater.m in Sources */,
 				49E6208916C5E8C2000C9F5A /* NSDictionary+ATAdditions.m in Sources */,
 				492B81D716D595740031BEF6 /* ATFileMessage.m in Sources */,
 				492B81DC16D595A00031BEF6 /* ATFileAttachment.m in Sources */,

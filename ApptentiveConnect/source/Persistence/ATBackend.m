@@ -47,7 +47,7 @@ static ATBackend *sharedBackend = nil;
 
 @interface ATBackend ()
 @property (nonatomic, assign) BOOL working;
-- (void)updateActivityFeedIfNeeded;
+- (void)updateConversationIfNeeded;
 - (void)updateDeviceIfNeeded;
 @end
 
@@ -285,7 +285,7 @@ static ATBackend *sharedBackend = nil;
 			[[ATTaskQueue sharedTaskQueue] start];
 			
 			[self updateRatingConfigurationIfNeeded];
-			[self updateActivityFeedIfNeeded];
+			[self updateConversationIfNeeded];
 			[self updateDeviceIfNeeded];
 		} else {
 			[[ATTaskQueue sharedTaskQueue] stop];
@@ -372,21 +372,21 @@ static ATBackend *sharedBackend = nil;
     return persistentStoreCoordinator;
 }
 
-- (void)updateActivityFeedIfNeeded {
+- (void)updateConversationIfNeeded {
 	if (![[NSThread currentThread] isMainThread]) {
-		[self performSelectorOnMainThread:@selector(updateActivityFeedIfNeeded) withObject:nil waitUntilDone:NO];
+		[self performSelectorOnMainThread:@selector(updateRatingConfigurationIfNeeded) withObject:nil waitUntilDone:NO];
 		return;
 	}
-	if (!activityFeedUpdater) {
-		if (![ATActivityFeedUpdater activityFeedExists]) {
-			activityFeedUpdater = [[ATActivityFeedUpdater alloc] initWithDelegate:self];
-			[activityFeedUpdater createActivityFeed];
+	if (!conversationUpdater) {
+		if (![ATConversationUpdater conversationExists]) {
+			conversationUpdater = [[ATConversationUpdater alloc] initWithDelegate:self];
+			[conversationUpdater createConversation];
 		}
 	}
 }
 
 - (void)updateDeviceIfNeeded {
-	if (![ATActivityFeedUpdater activityFeedExists]) {
+	if (![ATConversationUpdater conversationExists]) {
 		return;
 	}
 	if (!deviceUpdater) {
@@ -412,9 +412,9 @@ static ATBackend *sharedBackend = nil;
 #endif
 
 #pragma mark ATActivityFeedUpdaterDelegate
-- (void)activityFeed:(ATActivityFeedUpdater *)aFeedUpdater createdFeed:(BOOL)success {
-	if (activityFeedUpdater == aFeedUpdater) {
-		[activityFeedUpdater release], activityFeedUpdater = nil;
+- (void)conversation:(ATConversationUpdater *)aFeedUpdater createdSuccessfully:(BOOL)success {
+	if (conversationUpdater == aFeedUpdater) {
+		[conversationUpdater release], conversationUpdater = nil;
 		if (!success) {
 			// Retry after delay.
 			[self performSelector:@selector(updateActivityFeedIfNeeded) withObject:nil afterDelay:20];

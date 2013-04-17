@@ -39,9 +39,9 @@
 		ATLogError(@"Error while encoding JSON: %@", error);
 		return nil;
 	}
-	ATActivityFeed *feed = [ATActivityFeedUpdater currentActivityFeed];
-	if (!feed) {
-		ATLogError(@"No current activity feed.");
+	ATConversation *conversation = [ATConversationUpdater currentConversation];
+	if (!conversation) {
+		ATLogError(@"No current conversation.");
 		return nil;
 	}
 	NSString *url = [self apiURLStringWithPath:@"events"];
@@ -49,7 +49,7 @@
 	
 	conn = [self connectionToPost:[NSURL URLWithString:url] JSON:postString];
 	conn.timeoutInterval = 240.0;
-	[self updateConnection:conn withOAuthToken:feed.token];
+	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMetricsChannelName];
 	request.returnType = ATAPIRequestReturnTypeJSON;
 	return [request autorelease];

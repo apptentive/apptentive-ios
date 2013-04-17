@@ -1,18 +1,18 @@
 //
-//  ATActivityFeed.m
+//  ATConversation.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 2/4/13.
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
 
-#import "ATActivityFeed.h"
+#import "ATConversation.h"
 
 #import "NSDictionary+ATAdditions.h"
 
-#define kATActivityFeedCodingVersion 1
+#define kATConversationCodingVersion 1
 
-@implementation ATActivityFeed
+@implementation ATConversation
 @synthesize token;
 @synthesize personID;
 @synthesize deviceID;
@@ -34,7 +34,7 @@
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
-	[coder encodeInt:kATActivityFeedCodingVersion forKey:@"version"];
+	[coder encodeInt:kATConversationCodingVersion forKey:@"version"];
 	
 	[coder encodeObject:self.token forKey:@"token"];
 	[coder encodeObject:self.personID forKey:@"personID"];
@@ -42,10 +42,10 @@
 }
 
 + (NSObject *)newInstanceWithJSON:(NSDictionary *)json {
-	ATActivityFeed *result = nil;
+	ATConversation *result = nil;
 	
 	if (json != nil) {
-		result = [[ATActivityFeed alloc] init];
+		result = [[ATConversation alloc] init];
 		[result updateWithJSON:json];
 	}
 	

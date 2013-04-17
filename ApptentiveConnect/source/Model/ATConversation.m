@@ -8,6 +8,8 @@
 
 #import "ATConversation.h"
 
+#import "ATConnect.h"
+#import "ATUtilities.h"
 #import "NSDictionary+ATAdditions.h"
 
 #define kATConversationCodingVersion 1
@@ -69,9 +71,32 @@
 	
 	if (self.deviceID) {
 		NSDictionary *deviceInfo = @{@"uuid":self.deviceID};
-		[result setObject:deviceInfo forKey:@"device"];
+        result[@"device"] = deviceInfo;
 	}
 	
 	return result;
+}
+
+- (NSDictionary *)appReleaseJSON {
+    NSMutableDictionary *result = [NSMutableDictionary dictionary];
+    result[@"version"] = [ATUtilities appVersionString];
+    result[@"build_number"] = [ATUtilities buildNumberString];
+    return result;
+}
+
+- (NSDictionary *)sdkJSON {
+    NSMutableDictionary *result = [NSMutableDictionary dictionary];
+    result[@"version"] = kATConnectVersionString;
+    result[@"programming_language"] = @"Objective-C";
+    result[@"author_name"] = @"Apptentive, Inc.";
+	result[@"platform"] = kATConnectPlatformString;
+    return result;
+}
+
+- (NSDictionary *)apiUpdateJSON {
+    NSMutableDictionary *result = [NSMutableDictionary dictionary];
+    result[@"app_release"] = [self appReleaseJSON];
+    result[@"sdk"] = [self sdkJSON];
+    return result;
 }
 @end

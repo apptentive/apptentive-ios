@@ -44,6 +44,30 @@
 	return [request autorelease];
 }
 
+- (ATAPIRequest *)requestForUpdatingConversation:(ATConversation *)conversation {
+	NSError *error = nil;
+	NSDictionary *putJSON = nil;
+	if (conversation == nil) {
+		return nil;
+	}
+	putJSON = [conversation apiUpdateJSON];
+	NSString *putString = [putJSON ATJSONStringWithOptions:ATJKSerializeOptionPretty error:&error];
+	if (!putString && error != nil) {
+		ATLogError(@"Error while encoding JSON: %@", error);
+		return nil;
+	}
+	NSString *url = [self apiURLStringWithPath:@"conversation"];
+	ATURLConnection *conn = nil;
+	
+	conn = [self connectionToPut:[NSURL URLWithString:url] JSON:putString];
+	
+	conn.timeoutInterval = 60.0;
+	[self updateConnection:conn withOAuthToken:conversation.token];
+	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
+	request.returnType = ATAPIRequestReturnTypeJSON;
+	return [request autorelease];
+}
+
 - (ATAPIRequest *)requestForUpdatingDevice:(ATDeviceInfo *)deviceInfo {
 	NSError *error = nil;
 	NSDictionary *postJSON = [deviceInfo apiJSON];

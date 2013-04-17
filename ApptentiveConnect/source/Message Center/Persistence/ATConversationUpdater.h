@@ -19,17 +19,20 @@ NSString *const ATCurrentConversationPreferenceKey;
 @private
 	NSObject<ATConversationUpdaterDelegate> *delegate;
 	ATAPIRequest *request;
+	BOOL creatingConversation;
 }
 @property (nonatomic, assign) NSObject<ATConversationUpdaterDelegate> *delegate;
 + (BOOL)conversationExists;
 + (ATConversation *)currentConversation;
++ (BOOL)shouldUpdate;
 
 - (id)initWithDelegate:(NSObject<ATConversationUpdaterDelegate> *)delegate;
-- (void)createConversation;
+- (void)createOrUpdateConversation;
 - (void)cancel;
 - (float)percentageComplete;
 @end
 
 @protocol ATConversationUpdaterDelegate <NSObject>
-- (void)conversation:(ATConversationUpdater *)conversation createdSuccessfully:(BOOL)success;
+- (void)conversationUpdater:(ATConversationUpdater *)updater createdConversationSuccessfully:(BOOL)success;
+- (void)conversationUpdater:(ATConversationUpdater *)updater updatedConversationSuccessfully:(BOOL)success;
 @end

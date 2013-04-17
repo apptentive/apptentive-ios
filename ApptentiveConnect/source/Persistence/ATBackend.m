@@ -374,14 +374,12 @@ static ATBackend *sharedBackend = nil;
 
 - (void)updateConversationIfNeeded {
 	if (![[NSThread currentThread] isMainThread]) {
-		[self performSelectorOnMainThread:@selector(updateRatingConfigurationIfNeeded) withObject:nil waitUntilDone:NO];
+		[self performSelectorOnMainThread:@selector(updateConversationIfNeeded) withObject:nil waitUntilDone:NO];
 		return;
 	}
-	if (!conversationUpdater) {
-		if (![ATConversationUpdater conversationExists]) {
-			conversationUpdater = [[ATConversationUpdater alloc] initWithDelegate:self];
-			[conversationUpdater createConversation];
-		}
+	if (!conversationUpdater && [ATConversationUpdater shouldUpdate]) {
+		conversationUpdater = [[ATConversationUpdater alloc] initWithDelegate:self];
+		[conversationUpdater createOrUpdateConversation];
 	}
 }
 
@@ -412,18 +410,24 @@ static ATBackend *sharedBackend = nil;
 #endif
 
 #pragma mark ATActivityFeedUpdaterDelegate
-- (void)conversation:(ATConversationUpdater *)aFeedUpdater createdSuccessfully:(BOOL)success {
-	if (conversationUpdater == aFeedUpdater) {
+- (void)conversationUpdater:(ATConversationUpdater *)updater createdConversationSuccessfully:(BOOL)success {
+	if (conversationUpdater == updater) {
 		[conversationUpdater release], conversationUpdater = nil;
 		if (!success) {
 			// Retry after delay.
-			[self performSelector:@selector(updateActivityFeedIfNeeded) withObject:nil afterDelay:20];
+			[self performSelector:@selector(updateConversationIfNeeded) withObject:nil afterDelay:20];
 		} else {
 			// Queued tasks can probably start now.
 			ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
 			[queue start];
 			[self updateDeviceIfNeeded];
 		}
+	}
+}
+
+- (void)conversationUpdater:(ATConversationUpdater *)updater updatedConversationSuccessfully:(BOOL)success {
+	if (conversationUpdater == updater) {
+		[conversationUpdater release], conversationUpdater = nil;
 	}
 }
 

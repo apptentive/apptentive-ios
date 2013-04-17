@@ -19,4 +19,6 @@
 @property (nonatomic, retain) NSString *token;
 @property (nonatomic, retain) NSString *personID;
 @property (nonatomic, retain) NSString *deviceID;
+
+- (NSDictionary *)apiUpdateJSON;
 @end

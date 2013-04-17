@@ -17,6 +17,7 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 
 @implementation ATDeviceUpdater
 @synthesize delegate;
+
 + (void)registerDefaults {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSDictionary *defaultPreferences =

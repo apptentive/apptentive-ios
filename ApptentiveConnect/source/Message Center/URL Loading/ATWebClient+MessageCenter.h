@@ -15,6 +15,8 @@
 
 @interface ATWebClient (MessageCenter)
 - (ATAPIRequest *)requestForCreatingConversation:(ATConversation *)conversation;
+- (ATAPIRequest *)requestForUpdatingConversation:(ATConversation *)conversation;
+
 - (ATAPIRequest *)requestForUpdatingDevice:(ATDeviceInfo *)deviceInfo;
 - (ATAPIRequest *)requestForPostingMessage:(ATMessage *)message;
 - (ATAPIRequest *)requestForRetrievingMessagesSinceMessage:(ATMessage *)message;

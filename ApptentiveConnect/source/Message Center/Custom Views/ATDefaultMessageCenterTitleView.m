@@ -10,19 +10,26 @@
 
 #import "ATBackend.h"
 #import "ATConnect.h"
+#import "ATAppConfigurationUpdater.h"
 
 @implementation ATDefaultMessageCenterTitleView
 @synthesize title;
 @synthesize imageView;
 
 - (void)setup {
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSString *titleString = [defaults objectForKey:ATAppConfigurationMessageCenterTitleKey];
+	if (titleString == nil) {
+		titleString = ATLocalizedString(@"Message Center", @"Message Center title text");
+	}
+	
 	self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	//self.backgroundColor = [UIColor clearColor];
 	UIImage *image = [ATBackend imageNamed:@"at_apptentive_icon_small"];
 	imageView = [[UIImageView alloc] initWithImage:image];
 	[self addSubview:imageView];
 	title = [[UILabel alloc] initWithFrame:CGRectZero];
-	title.text = ATLocalizedString(@"Message Center", @"Message Center title text");
+	title.text = titleString;
 	title.font = [UIFont boldSystemFontOfSize:20.];
 	title.textColor = [UIColor whiteColor];
 	title.shadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4];

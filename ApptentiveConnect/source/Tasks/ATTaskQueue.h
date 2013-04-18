@@ -21,6 +21,7 @@
 + (void)releaseSharedTaskQueue;
 
 - (void)addTask:(ATTask *)task;
+- (BOOL)hasTaskOfClass:(Class)c;
 - (NSUInteger)count;
 - (ATTask *)taskAtIndex:(NSUInteger)index;
 - (NSUInteger)countOfTasksWithTaskNamesInSet:(NSSet *)taskNames;

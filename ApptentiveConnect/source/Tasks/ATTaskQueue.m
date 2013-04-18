@@ -118,6 +118,19 @@ static ATTaskQueue *sharedTaskQueue = nil;
 	[self start];
 }
 
+- (BOOL)hasTaskOfClass:(Class)c {
+	BOOL result = NO;
+	@synchronized(self) {
+		for (ATTask *task in tasks) {
+			if ([task isKindOfClass:c]) {
+				result = YES;
+				break;
+			}
+		}
+	}
+	return result;
+}
+
 - (NSUInteger)count {
 	NSUInteger count = 0;
 	@synchronized(self) {

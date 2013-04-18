@@ -13,6 +13,7 @@
 
 #import "ATBackend.h"
 #import "ATConnect.h"
+#import "ATConversationUpdater.h"
 #import "ATFeedback.h"
 #import "ATURLConnection.h"
 #import "ATUtilities.h"
@@ -69,10 +70,14 @@ static ATWebClient *sharedSingleton = nil;
 }
 
 - (ATAPIRequest *)requestForGettingAppConfiguration {
-	NSString *uuid = [[ATBackend sharedBackend] deviceUUID];
-	NSString *urlString = [self apiURLStringWithPath:[NSString stringWithFormat:@"devices/%@/configuration", uuid]];
+	ATConversation *conversation = [ATConversationUpdater currentConversation];
+	if (!conversation) {
+		return nil;
+	}
+	NSString *urlString = [self apiURLStringWithPath:@"conversation/configuration"];
 	ATURLConnection *conn = [self connectionToGet:[NSURL URLWithString:urlString]];
 	conn.timeoutInterval = 20.0;
+	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:[self commonChannelName]];
 	request.returnType = ATAPIRequestReturnTypeJSON;
 	return [request autorelease];

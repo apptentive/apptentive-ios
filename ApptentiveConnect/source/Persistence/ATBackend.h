@@ -81,4 +81,7 @@ NSString *const ATBackendNewAPIKeyNotification;
 - (NSString *)distributionName;
 
 - (NSUInteger)unreadMessageCount;
+
+- (void)messageCenterEnteredForeground;
+- (void)messageCenterLeftForeground;
 @end

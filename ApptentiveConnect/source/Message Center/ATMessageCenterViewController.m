@@ -85,6 +85,7 @@ typedef enum {
 #warning Fixme
 - (void)viewDidLoad {
     [super viewDidLoad];
+	[[ATBackend sharedBackend] messageCenterEnteredForeground];
 	
 	[self markAllMessagesAsRead];
 	NSError *error = nil;
@@ -182,6 +183,7 @@ typedef enum {
 }
 
 - (void)dealloc {
+	[[ATBackend sharedBackend] messageCenterLeftForeground];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[pickedImage release], pickedImage = nil;
 	[messageDateFormatter release];

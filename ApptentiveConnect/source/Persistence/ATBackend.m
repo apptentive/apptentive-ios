@@ -31,7 +31,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 static ATBackend *sharedBackend = nil;
 
 @interface ATBackend ()
-- (void)updateRatingConfigurationIfNeeded;
+- (void)updateConfigurationIfNeeded;
 @end
 
 @interface ATBackend (Private)
@@ -199,12 +199,6 @@ static ATBackend *sharedBackend = nil;
 	[pool release];
 }
 
-- (void)updateRatingConfigurationIfNeeded {
-	ATAppConfigurationUpdateTask *task = [[ATAppConfigurationUpdateTask alloc] init];
-	[[ATTaskQueue sharedTaskQueue] addTask:task];
-	[task release], task = nil;
-}
-
 - (NSString *)supportDirectoryPath {
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
 	NSString *path = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
@@ -284,8 +278,8 @@ static ATBackend *sharedBackend = nil;
 		if (working) {
 			[[ATTaskQueue sharedTaskQueue] start];
 			
-			[self updateRatingConfigurationIfNeeded];
 			[self updateConversationIfNeeded];
+			[self updateConfigurationIfNeeded];
 			[self updateDeviceIfNeeded];
 		} else {
 			[[ATTaskQueue sharedTaskQueue] stop];
@@ -395,6 +389,19 @@ static ATBackend *sharedBackend = nil;
 	}
 }
 
+- (void)updateConfigurationIfNeeded {
+	if (![ATConversationUpdater conversationExists]) {
+		return;
+	}
+	
+	ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
+	if (![queue hasTaskOfClass:[ATAppConfigurationUpdateTask class]]) {
+		ATAppConfigurationUpdateTask *task = [[ATAppConfigurationUpdateTask alloc] init];
+		[queue addTask:task];
+		[task release], task = nil;
+	}
+}
+
 #pragma mark NSFetchedResultsControllerDelegate
 #if TARGET_OS_IPHONE
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
@@ -456,6 +463,32 @@ static ATBackend *sharedBackend = nil;
 - (NSUInteger)unreadMessageCount {
 	return previousUnreadCount;
 }
+
+- (void)messageCenterEnteredForeground {
+	@synchronized(self) {
+		[self checkForMessages];
+		if (!messageRetrievalTimer) {
+			NSNumber *refreshIntervalNumber = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterForegroundRefreshIntervalKey];
+			int refreshInterval = 8;
+			if (refreshIntervalNumber) {
+				refreshInterval = [refreshIntervalNumber intValue];
+				refreshInterval = MAX(4, refreshInterval);
+			}
+			messageRetrievalTimer = [[NSTimer timerWithTimeInterval:refreshInterval target:self selector:@selector(checkForMessages) userInfo:nil repeats:YES] retain];
+			NSRunLoop *mainRunLoop = [NSRunLoop mainRunLoop];
+			[mainRunLoop addTimer:messageRetrievalTimer forMode:NSDefaultRunLoopMode];
+		}
+	}
+}
+
+- (void)messageCenterLeftForeground {
+	@synchronized(self) {
+		if (messageRetrievalTimer) {
+			[messageRetrievalTimer invalidate];
+			[messageRetrievalTimer release], messageRetrievalTimer = nil;
+		}
+	}
+}
 @end
 
 @implementation ATBackend (Private)
@@ -516,14 +549,11 @@ static ATBackend *sharedBackend = nil;
 - (void)checkForMessages {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	@synchronized(self) {
-		ATGetMessagesTask *task = [[ATGetMessagesTask alloc] init];
 		ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
-		[queue addTask:task];
-		[task release], task = nil;
-		if (!messageRetrievalTimer) {
-			messageRetrievalTimer = [[NSTimer timerWithTimeInterval:60. target:self selector:@selector(checkForMessages) userInfo:nil repeats:YES] retain];
-			NSRunLoop *mainRunLoop = [NSRunLoop mainRunLoop];
-			[mainRunLoop addTimer:messageRetrievalTimer forMode:NSDefaultRunLoopMode];
+		if (![queue hasTaskOfClass:[ATGetMessagesTask class]]) {
+			ATGetMessagesTask *task = [[ATGetMessagesTask alloc] init];
+			[queue addTask:task];
+			[task release], task = nil;
 		}
 	}
 	[pool release], pool = nil;

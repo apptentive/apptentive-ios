@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 #import "ATMessageCenterCell.h"
+#import "ATNetworkImageView.h"
 #import "TTTAttributedLabel.h"
 
 typedef enum {
@@ -19,7 +20,7 @@ typedef enum {
 @interface ATTextMessageUserCell : UITableViewCell <ATMessageCenterCell>
 @property (retain, nonatomic) IBOutlet UILabel *dateLabel;
 @property (retain, nonatomic) IBOutlet UIView *chatBubbleContainer;
-@property (retain, nonatomic) IBOutlet UIImageView *userIcon;
+@property (retain, nonatomic) IBOutlet ATNetworkImageView *userIcon;
 @property (retain, nonatomic) IBOutlet UIImageView *messageBubbleImage;
 @property (retain, nonatomic) IBOutlet UILabel *usernameLabel;
 @property (retain, nonatomic) IBOutlet TTTAttributedLabel *messageText;

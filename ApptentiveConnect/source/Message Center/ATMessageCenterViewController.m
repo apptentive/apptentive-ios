@@ -736,6 +736,10 @@ typedef enum {
 		}
 		textCell.composing = NO;
 		if ([message isKindOfClass:[ATTextMessage class]]) {
+			ATMessageSender *sender = [(ATTextMessage *)message sender];
+			if (sender.profilePhotoURL) {
+				textCell.userIcon.imageURL = [NSURL URLWithString:sender.profilePhotoURL];
+			}
 			NSString *messageBody = [(ATTextMessage *)message body];
 			if ([[message pendingState] intValue] == ATPendingMessageStateSending) {
 				NSString *sendingText = NSLocalizedString(@"Sending:", @"Sending prefix on messages that are sending");
@@ -839,6 +843,10 @@ typedef enum {
 		}
 		currentCell.userIcon.image = [ATBackend imageNamed:@"at_mc_user_icon"];
 		
+		ATMessageSender *sender = [(ATTextMessage *)message sender];
+		if (sender.profilePhotoURL) {
+			currentCell.userIcon.imageURL = [NSURL URLWithString:sender.profilePhotoURL];
+		}
 		if (showDate) {
 			currentCell.dateLabel.text = dateString;
 			currentCell.showDateLabel = YES;

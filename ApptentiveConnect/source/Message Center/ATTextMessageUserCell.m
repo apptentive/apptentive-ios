@@ -66,13 +66,13 @@
 }
 
 - (void)dealloc {
-	[userIcon release];
-	[messageBubbleImage release];
-	[messageText release];
-	[composingBubble release];
-	[dateLabel release];
-	[chatBubbleContainer release];
-    [usernameLabel release];
+	[userIcon release], userIcon = nil;
+	[messageBubbleImage release], messageBubbleImage = nil;
+	[messageText release], messageText = nil;
+	[composingBubble release], composingBubble = nil;
+	[dateLabel release], dateLabel = nil;
+	[chatBubbleContainer release], chatBubbleContainer = nil;
+    [usernameLabel release], usernameLabel = nil;
 	[super dealloc];
 }
 

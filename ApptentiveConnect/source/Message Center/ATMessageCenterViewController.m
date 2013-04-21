@@ -842,6 +842,7 @@ typedef enum {
 			[currentCell configureWithFileMessage:fileMessage];
 		}
 		currentCell.userIcon.image = [ATBackend imageNamed:@"at_mc_user_icon"];
+		currentCell.messageBubbleImage.image = [[ATBackend imageNamed:@"at_chat_bubble"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 27, 21)];
 		
 		ATMessageSender *sender = [(ATTextMessage *)message sender];
 		if (sender.profilePhotoURL) {

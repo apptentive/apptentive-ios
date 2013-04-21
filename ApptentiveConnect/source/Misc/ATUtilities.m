@@ -625,6 +625,20 @@ done:
 done:
 	return isEqual;
 }
+
+#if TARGET_OS_IPHONE
++ (UIEdgeInsets)edgeInsetsOfView:(UIView *)view {
+	UIEdgeInsets insets = UIEdgeInsetsZero;
+	insets.left = view.frame.origin.x;
+	insets.top = view.frame.origin.y;
+	if (view.superview) {
+		UIView *superview = view.superview;
+		insets.bottom = superview.bounds.size.height - view.bounds.size.height - insets.top;
+		insets.right = superview.bounds.size.width - view.bounds.size.width - insets.left;
+	}
+	return insets;
+}
+#endif
 @end
 
 

@@ -15,17 +15,17 @@
 @synthesize cellType;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-        // Initialization code
-    }
-    return self;
+	self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+	if (self) {
+		// Initialization code
+	}
+	return self;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
+	[super setSelected:selected animated:animated];
 
-    // Configure the view for the selected state
+	// Configure the view for the selected state
 }
 
 - (void)setIsComposing:(BOOL)comp {
@@ -72,7 +72,7 @@
 	[composingBubble release], composingBubble = nil;
 	[dateLabel release], dateLabel = nil;
 	[chatBubbleContainer release], chatBubbleContainer = nil;
-    [usernameLabel release], usernameLabel = nil;
+	[usernameLabel release], usernameLabel = nil;
 	[super dealloc];
 }
 

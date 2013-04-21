@@ -321,49 +321,50 @@ static ATBackend *sharedBackend = nil;
 
 #warning Fix before shipping this code.
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
-    if (persistentStoreCoordinator != nil) {
-        return persistentStoreCoordinator;
-    }
-    
-    NSURL *storeURL = [[NSURL fileURLWithPath:[self supportDirectoryPath]] URLByAppendingPathComponent:@"ATDataModel.sqlite"];
-    
-    NSError *error = nil;
-    persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-    if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
+	if (persistentStoreCoordinator != nil) {
+		return persistentStoreCoordinator;
+	}
+
+	NSURL *storeURL = [[NSURL fileURLWithPath:[self supportDirectoryPath]] URLByAppendingPathComponent:@"ATDataModel.sqlite"];
+
+	NSError *error = nil;
+	persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+	if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
 		
-        /*
-         Replace this implementation with code to handle the error appropriately.
-         
-         abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-         
-         Typical reasons for an error here include:
-         * The persistent store is not accessible;
-         * The schema for the persistent store is incompatible with current managed object model.
-         Check the error message to determine what the actual problem was.
-         
-         
-         If the persistent store is not accessible, there is typically something wrong with the file path. Often, a file URL is pointing into the application's resources directory instead of a writeable directory.
-         
-         If you encounter schema incompatibility errors during development, you can reduce their frequency by:
-         * Simply deleting the existing store:
-         [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil]
-         
-         * Performing automatic lightweight migration by passing the following dictionary as the options parameter:
-         @{NSMigratePersistentStoresAutomaticallyOption:@YES, NSInferMappingModelAutomaticallyOption:@YES}
-         
-         Lightweight migration will only work for a limited set of schema changes; consult "Core Data Model Versioning and Data Migration Programming Guide" for details.
-         
-         */
+		/*
+		 Replace this implementation with code to handle the error appropriately.
+		 
+		 abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+		 
+		 Typical reasons for an error here include:
+		 * The persistent store is not accessible;
+		 * The schema for the persistent store is incompatible with current managed object model.
+		 Check the error message to determine what the actual problem was.
+		 
+		 
+		 If the persistent store is not accessible, there is typically something wrong with the file path. Often, a file URL is pointing into the application's resources directory instead of a writeable directory.
+		 
+		 If you encounter schema incompatibility errors during development, you can reduce their frequency by:
+		 * Simply deleting the existing store:
+		 [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil]
+		 
+		 * Performing automatic lightweight migration by passing the following dictionary as the options parameter:
+		 @{NSMigratePersistentStoresAutomaticallyOption:@YES, NSInferMappingModelAutomaticallyOption:@YES}
+		 
+		 Lightweight migration will only work for a limited set of schema changes; consult "Core Data Model Versioning and Data Migration Programming Guide" for details.
+		 
+		 */
 		NSError *error2 = nil;
-		if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:@{NSMigratePersistentStoresAutomaticallyOption:@YES, NSInferMappingModelAutomaticallyOption:@YES} error:&error2]) {
+		NSDictionary *optionsDictionary = @{NSMigratePersistentStoresAutomaticallyOption:@YES, NSInferMappingModelAutomaticallyOption:@YES};
+		if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:optionsDictionary error:&error2]) {
 			[[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];
 			ATLogError(@"Unresolved error %@, %@", error, [error userInfo]);
 			ATLogError(@"Unresolved error2 %@, %@", error2, [error2 userInfo]);
 			[persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error];
 			//        abort();
 		}
-    }
-    return persistentStoreCoordinator;
+	}
+	return persistentStoreCoordinator;
 }
 
 - (void)updateConversationIfNeeded {
@@ -453,11 +454,11 @@ static ATBackend *sharedBackend = nil;
 
 - (NSString *)distributionName {
 	static NSString *cachedDistributionName = nil;
-    static dispatch_once_t onceToken = 0;
-    dispatch_once(&onceToken, ^{
+	static dispatch_once_t onceToken = 0;
+	dispatch_once(&onceToken, ^{
 		cachedDistributionName = [(NSString *)[[ATConnect resourceBundle] objectForInfoDictionaryKey:ATInfoDistributionKey] retain];
-    });
-    return cachedDistributionName;
+	});
+	return cachedDistributionName;
 }
 
 - (NSUInteger)unreadMessageCount {

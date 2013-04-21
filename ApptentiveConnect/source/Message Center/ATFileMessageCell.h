@@ -22,6 +22,8 @@
 @property (retain, nonatomic) IBOutlet UILabel *dateLabel;
 @property (retain, nonatomic) IBOutlet ATNetworkImageView *userIcon;
 @property (retain, nonatomic) IBOutlet UIView *imageContainer;
+@property (retain, nonatomic) IBOutlet UIView *chatBubbleContainer;
+@property (retain, nonatomic) IBOutlet UIImageView *messageBubbleImage;
 @property (nonatomic, assign, getter = shouldShowDateLabel) BOOL showDateLabel;
 
 - (void)configureWithFileMessage:(ATFileMessage *)message;

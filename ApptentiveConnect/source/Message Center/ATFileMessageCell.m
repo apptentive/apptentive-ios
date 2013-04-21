@@ -12,21 +12,23 @@
 #import "ATBackend.h"
 #import "ATUtilities.h"
 
-@implementation ATFileMessageCell
+@implementation ATFileMessageCell {
+	CGSize cachedThumbnailSize;
+}
 @synthesize dateLabel, userIcon, imageContainer, showDateLabel;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-        // Initialization code
-    }
-    return self;
+	self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+	if (self) {
+		// Initialization code
+	}
+	return self;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
+	[super setSelected:selected animated:animated];
 
-    // Configure the view for the selected state
+	// Configure the view for the selected state
 }
 
 - (void)setShowDateLabel:(BOOL)show {
@@ -38,25 +40,27 @@
 
 - (void)layoutSubviews {
 	[super layoutSubviews];
-	CGFloat heightPadding = 19;
+	
 	if (showDateLabel == NO) {
 		self.dateLabel.hidden = YES;
-		CGRect imageRect = self.imageContainer.frame;
-		imageRect.size.height = self.bounds.size.height - heightPadding;
-		imageRect.origin.y = 0;
-		self.imageContainer.frame = imageRect;
+		CGRect chatBubbleRect = self.chatBubbleContainer.frame;
+		chatBubbleRect.size.height = self.bounds.size.height;
+		chatBubbleRect.origin.y = 0;
+		self.chatBubbleContainer.frame = chatBubbleRect;
 	} else {
 		self.dateLabel.hidden = NO;
 		CGRect dateLabelRect = self.dateLabel.frame;
-		CGRect imageRect = self.imageContainer.frame;
-		imageRect.size.height = self.bounds.size.height - dateLabelRect.size.height - 9;
-		imageRect.origin.y = dateLabelRect.size.height;
-		self.imageContainer.frame = imageRect;
+		CGRect chatBubbleRect = self.chatBubbleContainer.frame;
+		chatBubbleRect.size.height = self.bounds.size.height - dateLabelRect.size.height;
+		chatBubbleRect.origin.y = dateLabelRect.size.height;
+		self.chatBubbleContainer.frame = chatBubbleRect;
 	}
-	self.imageContainer.layer.cornerRadius = 8;
+	self.imageContainer.layer.borderColor = [UIColor grayColor].CGColor;
+	self.imageContainer.layer.borderWidth = 1;
+	self.imageContainer.layer.cornerRadius = 2;
 	self.imageContainer.backgroundColor = [UIColor grayColor];
 	self.imageContainer.clipsToBounds = YES;
-	self.imageContainer.layer.contentsGravity = kCAGravityResizeAspectFill;
+	self.imageContainer.layer.contentsGravity = kCAGravityResizeAspect;
 }
 
 - (void)setCurrentImage:(UIImage *)image {
@@ -65,7 +69,7 @@
 		currentImage = [image retain];
 		if (currentImage != nil) {
 			self.imageContainer.layer.contents = (id)currentImage.CGImage;
-			self.imageContainer.layer.contentsGravity = kCAGravityResizeAspectFill;
+			self.imageContainer.layer.contentsGravity = kCAGravityResizeAspect;
 		}
 	}
 	if (currentImage == nil) {
@@ -83,6 +87,7 @@
 		
 		UIImage *imageFile = [UIImage imageWithContentsOfFile:[message.fileAttachment fullLocalPath]];
 		CGSize thumbnailSize = ATThumbnailSizeOfMaxSize(imageFile.size, CGSizeMake(320, 320));
+		cachedThumbnailSize = thumbnailSize;
 		CGFloat scale = [[UIScreen mainScreen] scale];
 		thumbnailSize.width *= scale;
 		thumbnailSize.height *= scale;
@@ -105,37 +110,36 @@
 }
 
 - (void)dealloc {
-    [dateLabel release], dateLabel = nil;
-    [userIcon release], userIcon = nil;
+	[dateLabel release], dateLabel = nil;
+	[userIcon release], userIcon = nil;
 	[imageContainer release];
 	[fileMessage release], fileMessage = nil;
 	[currentImage release], currentImage = nil;
-    [super dealloc];
+	[_chatBubbleContainer release];
+	[_messageBubbleImage release];
+	[super dealloc];
 }
 
-#warning Redo
 - (CGFloat)cellHeightForWidth:(CGFloat)width {
-	return 320;
-	
 	CGFloat cellHeight = 0;
+	if (showDateLabel) {
+		cellHeight += self.dateLabel.bounds.size.height;
+	}
 	
-	do { // once
-		if (showDateLabel) {
-			cellHeight += self.dateLabel.bounds.size.height;
-		}
-		
-		CGSize imageSize = currentImage.size;
-		CGFloat widthRatio = self.imageContainer.bounds.size.width/imageSize.width;
-		CGSize scaledImageSize = CGSizeMake(self.imageContainer.bounds.size.width, imageSize.height * widthRatio);
-		
-		CGFloat imageHeight = scaledImageSize.height;
-		CGFloat heightPadding = 19;
-		
-		cellHeight += MAX(60, imageHeight + heightPadding);
-		
-		cellHeight = MIN(150, cellHeight);
-		
-	} while (NO);
+	CGSize thumbSize = cachedThumbnailSize;
+	if (CGSizeEqualToSize(CGSizeZero, thumbSize)) {
+		thumbSize = CGSizeMake(320, 320);
+	}
+	thumbSize.width = MAX(thumbSize.width, 1);
+	CGFloat thumbRatio = thumbSize.height/thumbSize.width;
+	
+	UIEdgeInsets chatBubbleInsets = [ATUtilities edgeInsetsOfView:self.chatBubbleContainer];
+	UIEdgeInsets imageInsets = [ATUtilities edgeInsetsOfView:self.imageContainer];
+	
+	CGFloat imageContainerWidth = width - (chatBubbleInsets.left + chatBubbleInsets.right + imageInsets.left + imageInsets.right);
+	CGFloat scaledHeight = ceil(imageContainerWidth * thumbRatio);
+	cellHeight += MAX(150, scaledHeight);
+	cellHeight += imageInsets.top + imageInsets.bottom;
 	return cellHeight;
 }
 @end

@@ -50,6 +50,10 @@
 
 + (BOOL)dictionary:(NSDictionary *)a isEqualToDictionary:(NSDictionary *)b;
 + (BOOL)array:(NSArray *)a isEqualToArray:(NSArray *)b;
+
+#if TARGET_OS_IPHONE
++ (UIEdgeInsets)edgeInsetsOfView:(UIView *)view;
+#endif
 @end
 
 CGRect ATCGRectOfEvenSize(CGRect inRect);

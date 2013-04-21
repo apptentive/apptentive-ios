@@ -39,29 +39,56 @@
 					<object class="IBUIImageView" id="217876595">
 						<reference key="NSNextResponder" ref="1048916289"/>
 						<int key="NSvFlags">265</int>
-						<string key="NSFrame">{{425, 45}, {44, 44}}</string>
+						<string key="NSFrame">{{425, 56}, {44, 44}}</string>
 						<reference key="NSSuperview" ref="1048916289"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 					</object>
-					<object class="IBUIView" id="372228068">
+					<object class="IBUIView" id="632312807">
 						<reference key="NSNextResponder" ref="1048916289"/>
 						<int key="NSvFlags">274</int>
-						<string key="NSFrame">{{24, 20}, {384, 80}}</string>
+						<array class="NSMutableArray" key="NSSubviews">
+							<object class="IBUIImageView" id="505642654">
+								<reference key="NSNextResponder" ref="632312807"/>
+								<int key="NSvFlags">274</int>
+								<string key="NSFrameSize">{397, 89}</string>
+								<reference key="NSSuperview" ref="632312807"/>
+								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView" ref="217876595"/>
+								<string key="NSReuseIdentifierKey">_NS:9</string>
+								<bool key="IBUIUserInteractionEnabled">NO</bool>
+								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+							</object>
+							<object class="IBUIView" id="372228068">
+								<reference key="NSNextResponder" ref="632312807"/>
+								<int key="NSvFlags">274</int>
+								<string key="NSFrame">{{10, 10}, {371, 69}}</string>
+								<reference key="NSSuperview" ref="632312807"/>
+								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView" ref="632312807"/>
+								<string key="NSReuseIdentifierKey">_NS:9</string>
+								<object class="NSColor" key="IBUIBackgroundColor">
+									<int key="NSColorSpace">3</int>
+									<bytes key="NSWhite">MQA</bytes>
+									<object class="NSColorSpace" key="NSCustomColorSpace">
+										<int key="NSID">2</int>
+									</object>
+								</object>
+								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+							</object>
+						</array>
+						<string key="NSFrame">{{20, 20}, {397, 89}}</string>
 						<reference key="NSSuperview" ref="1048916289"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="217876595"/>
+						<reference key="NSNextKeyView" ref="505642654"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
-						<object class="NSColor" key="IBUIBackgroundColor">
+						<object class="NSColor" key="IBUIBackgroundColor" id="20535154">
 							<int key="NSColorSpace">3</int>
-							<bytes key="NSWhite">MQA</bytes>
-							<object class="NSColorSpace" key="NSCustomColorSpace">
-								<int key="NSID">2</int>
-							</object>
+							<bytes key="NSWhite">MCAwAA</bytes>
 						</object>
+						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 					</object>
 					<object class="IBUILabel" id="689244391">
@@ -106,10 +133,7 @@
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="689244391"/>
-				<object class="NSColor" key="IBUIBackgroundColor">
-					<int key="NSColorSpace">3</int>
-					<bytes key="NSWhite">MCAwAA</bytes>
-				</object>
+				<reference key="IBUIBackgroundColor" ref="20535154"/>
 				<bool key="IBUIOpaque">NO</bool>
 				<string key="IBUIRestorationIdentifier">ATFileMessageCell</string>
 				<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -149,6 +173,22 @@
 					</object>
 					<int key="connectionID">46</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">chatBubbleContainer</string>
+						<reference key="source" ref="1048916289"/>
+						<reference key="destination" ref="632312807"/>
+					</object>
+					<int key="connectionID">51</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">messageBubbleImage</string>
+						<reference key="source" ref="1048916289"/>
+						<reference key="destination" ref="505642654"/>
+					</object>
+					<int key="connectionID">52</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -175,7 +215,7 @@
 						<array class="NSMutableArray" key="children">
 							<reference ref="689244391"/>
 							<reference ref="217876595"/>
-							<reference ref="372228068"/>
+							<reference ref="632312807"/>
 						</array>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">File Message Cell</string>
@@ -195,9 +235,25 @@
 						<string key="objectName">Profile Image View</string>
 					</object>
 					<object class="IBObjectRecord">
+						<int key="objectID">47</int>
+						<reference key="object" ref="632312807"/>
+						<array class="NSMutableArray" key="children">
+							<reference ref="505642654"/>
+							<reference ref="372228068"/>
+						</array>
+						<reference key="parent" ref="1048916289"/>
+						<string key="objectName">Chat Bubble Container</string>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">50</int>
+						<reference key="object" ref="505642654"/>
+						<reference key="parent" ref="632312807"/>
+						<string key="objectName">Chat Bubble Image View</string>
+					</object>
+					<object class="IBObjectRecord">
 						<int key="objectID">45</int>
 						<reference key="object" ref="372228068"/>
-						<reference key="parent" ref="1048916289"/>
+						<reference key="parent" ref="632312807"/>
 						<string key="objectName">Image Container</string>
 					</object>
 				</array>
@@ -210,6 +266,8 @@
 				<string key="4.CustomClassName">ATFileMessageCell</string>
 				<string key="4.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="45.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<string key="47.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<string key="50.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="6.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="8.CustomClassName">ATNetworkImageView</string>
 				<string key="8.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -218,7 +276,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">46</int>
+			<int key="maxID">52</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -263,11 +321,17 @@
 					<string key="className">ATFileMessageCell</string>
 					<string key="superclassName">UITableViewCell</string>
 					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="chatBubbleContainer">UIView</string>
 						<string key="dateLabel">UILabel</string>
 						<string key="imageContainer">UIView</string>
+						<string key="messageBubbleImage">UIImageView</string>
 						<string key="userIcon">ATNetworkImageView</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="chatBubbleContainer">
+							<string key="name">chatBubbleContainer</string>
+							<string key="candidateClassName">UIView</string>
+						</object>
 						<object class="IBToOneOutletInfo" key="dateLabel">
 							<string key="name">dateLabel</string>
 							<string key="candidateClassName">UILabel</string>
@@ -275,6 +339,10 @@
 						<object class="IBToOneOutletInfo" key="imageContainer">
 							<string key="name">imageContainer</string>
 							<string key="candidateClassName">UIView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="messageBubbleImage">
+							<string key="name">messageBubbleImage</string>
+							<string key="candidateClassName">UIImageView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="userIcon">
 							<string key="name">userIcon</string>

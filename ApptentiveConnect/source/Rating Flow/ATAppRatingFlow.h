@@ -69,13 +69,6 @@
  */
 - (void)userDidPerformSignificantEvent:(BOOL)canPromptForRating viewController:(UIViewController *)viewController;
 
-/*!
- Call whenever you would like to set the application name in the ratings
- dialog, if no application name is set the bundle display name will be 
- used as a default value
- */
--(void)setAppName:(NSString *)appName;
-
 #elif TARGET_OS_MAC
 /*! 
  Call when the application is done launching. If we should be able to
@@ -94,6 +87,12 @@
 - (void)userDidPerformSignificantEvent:(BOOL)canPromptForRating;
 #endif
 
+/*!
+ Call whenever you would like to set the application name in the ratings
+ dialog, if no application name is set the bundle display name will be
+ used as a default value
+ */
+-(void)setAppName:(NSString *)appName;
 
 #if TARGET_OS_IPHONE
 /*!

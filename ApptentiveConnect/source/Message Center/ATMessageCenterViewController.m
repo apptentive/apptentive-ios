@@ -48,6 +48,7 @@ typedef enum {
 - (NSFetchedResultsController *)fetchedMessagesController;
 - (void)scrollToBottomOfTableView;
 - (void)markAllMessagesAsRead;
+- (void)toggleAttachmentsView;
 @end
 
 @implementation ATMessageCenterViewController {
@@ -84,7 +85,7 @@ typedef enum {
 
 #warning Fixme
 - (void)viewDidLoad {
-    [super viewDidLoad];
+	[super viewDidLoad];
 	[[ATBackend sharedBackend] messageCenterEnteredForeground];
 	
 	[self markAllMessagesAsRead];
@@ -136,7 +137,7 @@ typedef enum {
 	inputViewNib = [UINib nibWithNibName:@"ATMessageInputView" bundle:[ATConnect resourceBundle]];
 	NSArray *views = [inputViewNib instantiateWithOwner:self options:NULL];
 	if ([views count] == 0) {
-		NSLog(@"Unable to load input view.");
+		ATLogError(@"Unable to load message input view.");
 	} else {
 		inputView = [views objectAtIndex:0];
 		CGRect inputContainerFrame = self.inputContainerView.frame;
@@ -171,6 +172,32 @@ typedef enum {
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
 		[self relayoutSubviews];
 	});
+	
+	self.sendPhotoButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
+	self.sendPhotoButton.layer.cornerRadius = 4;
+	self.sendPhotoButton.layer.shadowColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.2].CGColor;
+	self.sendPhotoButton.layer.shadowRadius = 4;
+	self.sendPhotoButton.layer.borderWidth = 1;
+	self.sendPhotoButton.layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5].CGColor;
+	self.sendPhotoButton.clipsToBounds = YES;
+	UIImage *whiteImage = [ATBackend imageNamed:@"at_white_button_bg"];
+	[self.sendPhotoButton setBackgroundImage:whiteImage forState:UIControlStateNormal];
+	[self.sendPhotoButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+	[self.sendPhotoButton setTitleShadowColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.2] forState:UIControlStateNormal];
+	[self.sendPhotoButton.titleLabel setShadowOffset:CGSizeMake(0, -1)];
+	
+	self.cancelButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
+	self.cancelButton.layer.cornerRadius = 4;
+	self.cancelButton.layer.shadowColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.2].CGColor;
+	self.cancelButton.layer.shadowRadius = 4;
+	self.cancelButton.layer.borderWidth = 1;
+	self.cancelButton.layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5].CGColor;
+	self.cancelButton.clipsToBounds = YES;
+	UIImage *redImage = [ATBackend imageNamed:@"at_red_button_bg"];
+	[self.cancelButton setBackgroundImage:redImage forState:UIControlStateNormal];
+	[self.cancelButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+	[self.cancelButton setTitleShadowColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.2] forState:UIControlStateNormal];
+	[self.cancelButton.titleLabel setShadowOffset:CGSizeMake(0, -1)];
 }
 
 #warning Implement for iOS 4
@@ -179,7 +206,7 @@ typedef enum {
 }
 
 - (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
+	[super didReceiveMemoryWarning];
 }
 
 - (void)dealloc {
@@ -200,6 +227,8 @@ typedef enum {
 	[_attachmentShadowView release];
 	[defaultTheme release], defaultTheme = nil;
 	themeDelegate = nil;
+	[_sendPhotoButton release];
+	[_cancelButton release];
 	[super dealloc];
 }
 
@@ -213,6 +242,8 @@ typedef enum {
 	[self setEmailButton:nil];
 	[self setIconButton:nil];
 	[self setAttachmentShadowView:nil];
+	[self setSendPhotoButton:nil];
+	[self setCancelButton:nil];
 	[super viewDidUnload];
 }
 
@@ -250,6 +281,10 @@ typedef enum {
 	[vc release], vc = nil;
 }
 
+- (IBAction)cancelAttachmentPressed:(id)sender {
+	[self toggleAttachmentsView];
+}
+
 #pragma mark Private
 - (void)relayoutSubviews {
 	CGFloat viewHeight = self.view.bounds.size.height;
@@ -259,10 +294,10 @@ typedef enum {
 	CGRect containerFrame = containerView.frame;
 	CGRect attachmentFrame = attachmentView.frame;
 	
-	if (!attachmentsVisible) {
-		composerFrame.origin.y = viewHeight - inputContainerView.frame.size.height;
-	} else {
+	if (attachmentsVisible) {
 		composerFrame.origin.y = viewHeight - inputContainerView.frame.size.height - attachmentFrame.size.height;
+	} else {
+		composerFrame.origin.y = viewHeight - inputContainerView.frame.size.height;
 	}
 	
 	if (!CGRectEqualToRect(CGRectZero, currentKeyboardFrameInView)) {
@@ -401,21 +436,7 @@ typedef enum {
 }
 
 - (void)messageInputViewAttachPressed:(ATMessageInputView *)anInputView {
-	attachmentsVisible = !attachmentsVisible;
-	if (!CGRectEqualToRect(CGRectZero, currentKeyboardFrameInView)) {
-		[inputView resignFirstResponder];
-	} else {
-		if (!animatingTransition) {
-			[UIView animateWithDuration:0.3 animations:^(void){
-				animatingTransition = YES;
-				[self relayoutSubviews];
-			} completion:^(BOOL finished) {
-				animatingTransition = NO;
-				[self scrollToBottomOfTableView];
-			}];
-		}
-	}
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidAttachNotification object:nil];
+	[self toggleAttachmentsView];
 }
 
 #pragma mark Keyboard Handling
@@ -876,15 +897,15 @@ typedef enum {
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
 		   atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
-    switch(type) {
-        case NSFetchedResultsChangeInsert:
-            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-            break;
+	switch(type) {
+		case NSFetchedResultsChangeInsert:
+			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+			break;
 			
-        case NSFetchedResultsChangeDelete:
-            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-    }
+		case NSFetchedResultsChangeDelete:
+			[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+			break;
+	}
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
@@ -932,5 +953,23 @@ typedef enum {
 		[ATData save];
 	}
 	[request release], request = nil;
+}
+
+- (void)toggleAttachmentsView {
+	attachmentsVisible = !attachmentsVisible;
+	if (!CGRectEqualToRect(CGRectZero, currentKeyboardFrameInView) && [inputView isFirstResponder]) {
+		[inputView resignFirstResponder];
+	} else {
+		if (!animatingTransition) {
+			[UIView animateWithDuration:0.3 animations:^(void){
+				animatingTransition = YES;
+				[self relayoutSubviews];
+			} completion:^(BOOL finished) {
+				animatingTransition = NO;
+				[self scrollToBottomOfTableView];
+			}];
+		}
+	}
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidAttachNotification object:nil];
 }
 @end

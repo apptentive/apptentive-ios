@@ -26,6 +26,8 @@
 @property (retain, nonatomic) IBOutlet UIButton *locationButton;
 @property (retain, nonatomic) IBOutlet UIButton *emailButton;
 @property (retain, nonatomic) IBOutlet UIButton *iconButton;
+@property (retain, nonatomic) IBOutlet UIButton *sendPhotoButton;
+@property (retain, nonatomic) IBOutlet UIButton *cancelButton;
 @property (retain, nonatomic) IBOutlet ATFakeMessageCell *fakeCell;
 @property (retain, nonatomic) IBOutlet ATTextMessageUserCell *userCell;
 @property (retain, nonatomic) IBOutlet ATTextMessageUserCell *developerCell;
@@ -37,6 +39,7 @@
 - (IBAction)donePressed:(id)sender;
 - (IBAction)showInfoView:(id)sender;
 - (IBAction)cameraPressed:(id)sender;
+- (IBAction)cancelAttachmentPressed:(id)sender;
 @end
 
 

@@ -23,6 +23,7 @@ NSString *const ATSurveyCachedSurveysExpirationPreferenceKey = @"ATSurveyCachedS
 @interface ATSurveysBackend ()
 + (NSString *)cachedSurveysStoragePath;
 - (BOOL)shouldRetrieveNewSurveys;
+- (void)presentSurveyControllerFromViewControllerWithCurrentSurvey:(UIViewController *)viewController;
 - (ATSurvey *)surveyWithTags:(NSSet *)tags;
 @end
 
@@ -103,18 +104,7 @@ NSString *const ATSurveyCachedSurveysExpirationPreferenceKey = @"ATSurveyCachedS
 	}
 }
 
-- (void)presentSurveyControllerFromViewController:(UIViewController *)viewController {
-	[self presentSurveyControllerWithTags:nil fromViewController:viewController];
-}
-
-- (void)presentSurveyControllerWithTags:(NSSet *)tags fromViewController:(UIViewController *)viewController {
-	if (currentSurvey != nil) {
-		[self resetSurvey];
-	}
-	currentSurvey = [[self surveyWithTags:tags] retain];
-	if (currentSurvey == nil) {
-		return;
-	}
+- (void)presentSurveyControllerFromViewControllerWithCurrentSurvey:(UIViewController *)viewController {
 	ATSurveyViewController *vc = [[ATSurveyViewController alloc] initWithSurvey:currentSurvey];
 	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
 	
@@ -132,6 +122,28 @@ NSString *const ATSurveyCachedSurveysExpirationPreferenceKey = @"ATSurveyCachedS
 	[metricsInfo release], metricsInfo = nil;
 }
 
+- (void)presentSurveyControllerWithNoTagsFromViewController:(UIViewController *)viewController {
+	if (currentSurvey != nil) {
+		[self resetSurvey];
+	}
+	currentSurvey = [[self surveyWithNoTags] retain];
+	if (currentSurvey == nil) {
+		return;
+	}
+	[self presentSurveyControllerFromViewControllerWithCurrentSurvey:viewController];
+}
+
+- (void)presentSurveyControllerWithTags:(NSSet *)tags fromViewController:(UIViewController *)viewController {
+	if (currentSurvey != nil) {
+		[self resetSurvey];
+	}
+	currentSurvey = [[self surveyWithTags:tags] retain];
+	if (currentSurvey == nil) {
+		return;
+	}
+	[self presentSurveyControllerFromViewControllerWithCurrentSurvey:viewController];
+}
+
 - (void)setDidSendSurvey:(ATSurvey *)survey {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSArray *sentSurveys = [defaults objectForKey:ATSurveySentSurveysPreferenceKey];
@@ -144,6 +156,23 @@ NSString *const ATSurveyCachedSurveysExpirationPreferenceKey = @"ATSurveyCachedS
 	}
 }
 
+- (ATSurvey *)surveyWithNoTags {
+	ATSurvey *result = nil;
+	@synchronized(self) {
+		for (ATSurvey *survey in availableSurveys) {
+			if ([survey surveyHasNoTags]) {
+				if (![self surveyAlreadySubmitted:survey]) {
+					result = survey;
+				} else if (![survey multipleResponsesAllowed] || ![survey isActive]) {
+					continue;
+				} else {
+					result = survey;
+				}
+			}
+		}
+	}
+	return result;
+}
 
 - (ATSurvey *)surveyWithTags:(NSSet *)tags {
 	ATSurvey *result = nil;
@@ -162,6 +191,15 @@ NSString *const ATSurveyCachedSurveysExpirationPreferenceKey = @"ATSurveyCachedS
 		}
 	}
 	return result;
+}
+
+- (BOOL)hasSurveyAvailableWithNoTags {
+	ATSurvey *survey = [self surveyWithNoTags];
+	if (survey) {
+		return YES;
+	} else {
+		return NO;
+	}
 }
 
 - (BOOL)hasSurveyAvailableWithTags:(NSSet *)tags {

@@ -27,6 +27,7 @@
 - (void)addQuestion:(ATSurveyQuestion *)question;
 - (void)addTag:(NSString *)tag;
 
+- (BOOL)surveyHasNoTags;
 - (BOOL)surveyHasTags:(NSSet *)tagsToCheck;
 
 - (void)reset;

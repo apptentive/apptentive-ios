@@ -43,6 +43,14 @@
 	STAssertTrue([survey.surveyDescription isEqualToString:@"This is a fun test survey with a description like this."], @"description mismatch");
 	STAssertTrue(survey.isActive, @"Survey should be active");
 	STAssertTrue([[survey questions] count] == 3 , @"Should be 3 questions");
+	STAssertTrue([survey surveyHasNoTags], @"Survey shouldn't have any tags.");
+	
+	[survey addTag:@"video"];
+	[survey addTag:@"played"];
+	NSSet *goodSet = [NSSet setWithObjects:@"video", @"played", nil];
+	NSSet *badSet = [NSSet setWithObjects:@"video", @"paused", nil];
+	STAssertTrue([survey surveyHasTags:goodSet], @"Survey should have some tags.");
+	STAssertFalse([survey surveyHasTags:badSet], @"Survey should not have these tags.");
 	
 	ATSurveyQuestion *question = [[survey questions] objectAtIndex:0];
 	STAssertTrue([question.answerChoices count] == 6, @"First question should have 6 answers");

@@ -95,6 +95,13 @@
 	}
 }
 
+- (BOOL)surveyHasNoTags {
+	if (self.tags == nil || [self.tags count] == 0) {
+		return YES;
+	}
+	return NO;
+}
+
 - (BOOL)surveyHasTags:(NSSet *)tagsToCheck {
 	if (tagsToCheck == nil || [tagsToCheck count] == 0) {
 		return YES;

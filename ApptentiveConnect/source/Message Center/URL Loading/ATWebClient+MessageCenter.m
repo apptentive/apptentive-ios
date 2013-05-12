@@ -147,7 +147,7 @@
 	
 	ATConversation *conversation = [ATConversationUpdater currentConversation];
 	if (!conversation) {
-		NSLog(@"No current conversation.");
+		ATLogError(@"No current conversation.");
 		return nil;
 	}
 	

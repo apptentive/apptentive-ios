@@ -21,6 +21,7 @@ NSString *const ATBackendNewAPIKeyNotification;
 #define USE_STAGING 1
 
 @class ATAppConfigurationUpdater;
+@class ATDataManager;
 @class ATFeedback;
 @class ATAPIRequest;
 
@@ -38,14 +39,11 @@ NSString *const ATBackendNewAPIKeyNotification;
 	BOOL shouldStopWorking;
 	BOOL working;
 	
-	NSPersistentStoreCoordinator *persistentStoreCoordinator;
-	NSManagedObjectContext *managedObjectContext;
-	NSManagedObjectModel *managedObjectModel;
-	
 	ATConversationUpdater *conversationUpdater;
 	ATDeviceUpdater *deviceUpdater;
 	
 	NSTimer *messageRetrievalTimer;
+	ATDataManager *dataManager;
 #if TARGET_OS_IPHONE
 	NSFetchedResultsController *unreadCountController;
 	NSInteger previousUnreadCount;

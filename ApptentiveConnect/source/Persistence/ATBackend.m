@@ -10,6 +10,7 @@
 #import "ATAppConfigurationUpdateTask.h"
 #import "ATConnect.h"
 #import "ATContactStorage.h"
+#import "ATDataManager.h"
 #import "ATDeviceUpdater.h"
 #import "ATFakeMessage.h"
 #import "ATFeedback.h"
@@ -35,6 +36,7 @@ static ATBackend *sharedBackend = nil;
 @end
 
 @interface ATBackend (Private)
+- (void)setupDataManager;
 - (void)clearTemporaryData;
 - (void)setup;
 - (void)updateWorking;
@@ -58,12 +60,12 @@ static ATBackend *sharedBackend = nil;
 	@synchronized(self) {
 		if (sharedBackend == nil) {
 			sharedBackend = [[self alloc] init];
+			[sharedBackend setupDataManager];
+			
 			[ApptentiveMetrics sharedMetrics];
 			
 			[ATMessageDisplayType setupSingletons];
-			
 			[sharedBackend performSelector:@selector(checkForMessages) withObject:nil afterDelay:8];
-			[sharedBackend performSelector:@selector(clearTemporaryData) withObject:nil afterDelay:0.1];
 		}
 	}
 	return sharedBackend;
@@ -150,9 +152,7 @@ static ATBackend *sharedBackend = nil;
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[apiKey release], apiKey = nil;
 	[currentFeedback release], currentFeedback = nil;
-	[persistentStoreCoordinator release], persistentStoreCoordinator = nil;
-	[managedObjectContext release], managedObjectContext = nil;
-	[managedObjectModel release], managedObjectModel = nil;
+	[dataManager release], dataManager = nil;
 	[super dealloc];
 }
 
@@ -296,76 +296,18 @@ static ATBackend *sharedBackend = nil;
 #pragma mark - Core Data stack
 
 - (NSManagedObjectContext *)managedObjectContext {
-	@synchronized(self) {
-		if (managedObjectContext != nil) {
-			return managedObjectContext;
-		}
-		
-		NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
-		if (coordinator != nil) {
-			managedObjectContext = [[NSManagedObjectContext alloc] init];
-			[managedObjectContext setPersistentStoreCoordinator:coordinator];
-		}
-	}
-    return managedObjectContext;
+	return [dataManager managedObjectContext];
 }
 
 - (NSManagedObjectModel *)managedObjectModel {
-    if (managedObjectModel != nil) {
-        return managedObjectModel;
-    }
-    NSURL *modelURL = [[ATConnect resourceBundle] URLForResource:@"ATDataModel" withExtension:@"momd"];
-    managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-    return managedObjectModel;
+	return [dataManager managedObjectModel];
 }
 
-#warning Fix before shipping this code.
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
-	if (persistentStoreCoordinator != nil) {
-		return persistentStoreCoordinator;
-	}
-
-	NSURL *storeURL = [[NSURL fileURLWithPath:[self supportDirectoryPath]] URLByAppendingPathComponent:@"ATDataModel.sqlite"];
-
-	NSError *error = nil;
-	persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-	if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
-		
-		/*
-		 Replace this implementation with code to handle the error appropriately.
-		 
-		 abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-		 
-		 Typical reasons for an error here include:
-		 * The persistent store is not accessible;
-		 * The schema for the persistent store is incompatible with current managed object model.
-		 Check the error message to determine what the actual problem was.
-		 
-		 
-		 If the persistent store is not accessible, there is typically something wrong with the file path. Often, a file URL is pointing into the application's resources directory instead of a writeable directory.
-		 
-		 If you encounter schema incompatibility errors during development, you can reduce their frequency by:
-		 * Simply deleting the existing store:
-		 [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil]
-		 
-		 * Performing automatic lightweight migration by passing the following dictionary as the options parameter:
-		 @{NSMigratePersistentStoresAutomaticallyOption:@YES, NSInferMappingModelAutomaticallyOption:@YES}
-		 
-		 Lightweight migration will only work for a limited set of schema changes; consult "Core Data Model Versioning and Data Migration Programming Guide" for details.
-		 
-		 */
-		NSError *error2 = nil;
-		NSDictionary *optionsDictionary = @{NSMigratePersistentStoresAutomaticallyOption:@YES, NSInferMappingModelAutomaticallyOption:@YES};
-		if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:optionsDictionary error:&error2]) {
-			[[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];
-			ATLogError(@"Unresolved error %@, %@", error, [error userInfo]);
-			ATLogError(@"Unresolved error2 %@, %@", error2, [error2 userInfo]);
-			[persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error];
-			//        abort();
-		}
-	}
-	return persistentStoreCoordinator;
+	return [dataManager persistentStoreCoordinator];
 }
+
+#pragma mark -
 
 - (void)updateConversationIfNeeded {
 	if (![[NSThread currentThread] isMainThread]) {
@@ -517,11 +459,11 @@ static ATBackend *sharedBackend = nil;
 	if (shouldStopWorking) {
 		// Probably going into the background or being terminated.
 		self.working = NO;
-	} else if (apiKeySet && networkAvailable) {
-		// API Key is set and the network is up. Start working.
+	} else if (apiKeySet && networkAvailable && dataManager != nil && [dataManager persistentStoreCoordinator] != nil) {
+		// API Key is set and the network and Core Data stack is up. Start working.
 		self.working = YES;
 	} else {
-		// No API Key or not network, or both. Stop working.
+		// No API Key, no network, or no Core Data. Stop working.
 		self.working = NO;
 	}
 }
@@ -579,6 +521,19 @@ static ATBackend *sharedBackend = nil;
 		
 		[fetchTypes release], fetchTypes = nil;
 	}
+}
+
+- (void)setupDataManager {
+	if (![[NSThread currentThread] isMainThread]) {
+		[self performSelectorOnMainThread:@selector(setupDataManager) withObject:nil waitUntilDone:YES];
+		return;
+	}
+	ATLogInfo(@"Setting up data manager");
+	dataManager = [[ATDataManager alloc] initWithModelName:@"ATDataModel" inBundle:[ATConnect resourceBundle] storagePath:[self supportDirectoryPath]];
+	if (![dataManager persistentStoreCoordinator]) {
+		ATLogError(@"There was a problem setting up the persistent store coordinator!");
+	}
+	[self performSelector:@selector(clearTemporaryData) withObject:nil afterDelay:0.2];
 }
 
 - (void)clearTemporaryData {

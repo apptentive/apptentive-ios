@@ -21,9 +21,11 @@
 #import "ATUtilities.h"
 #import "ATWebClient.h"
 
-static ATAppRatingFlow *sharedRatingFlow = nil;
 
-//TODO: This should be changed for iOS 4+
+NSString *const ATAppRatingFlowUserAgreedToRateAppNotification = @"ATAppRatingFlowUserAgreedToRateAppNotification";
+
+// Don't count an app re-launch within 20 seconds as
+// an app launch.
 #define kATAppAppUsageMinimumInterval (20)
 
 #if TARGET_OS_IPHONE
@@ -61,6 +63,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 - (void)updateVersionInfo;
 - (void)userDidUseApp;
 - (void)userDidSignificantEvent;
+- (void)incrementPromptCount;
 - (void)setRatingDialogWasShown;
 - (void)setUserDislikesThisVersion;
 - (void)setDeclinedToRateThisVersion;
@@ -105,12 +108,12 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 }
 
 + (ATAppRatingFlow *)sharedRatingFlowWithAppID:(NSString *)iTunesAppID {
-	@synchronized(self) {
-		if (sharedRatingFlow == nil) {
-			sharedRatingFlow = [[ATAppRatingFlow alloc] initWithAppID:iTunesAppID];
-		}
-		return sharedRatingFlow;
-	}
+	static ATAppRatingFlow *sharedRatingFlow = nil;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		sharedRatingFlow = [[ATAppRatingFlow alloc] initWithAppID:iTunesAppID];
+	});
+	return sharedRatingFlow;
 }
 
 #if TARGET_OS_IPHONE
@@ -121,13 +124,12 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 {
 #if TARGET_OS_IPHONE
 	self.viewController = vc;
-#elif TARGET_OS_MAC
-	[self userDidUseApp];
 #endif
 
 #if TARGET_IPHONE_SIMULATOR
 	[self logDefaults];
 #endif
+	[self userDidUseApp];
 	BOOL showedDialog = NO;
 	if (canPromptForRating) {
 		showedDialog = [self showDialogIfNecessary];
@@ -143,6 +145,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 #if TARGET_OS_IPHONE
 - (void)appDidEnterForeground:(BOOL)canPromptForRating viewController:(UIViewController *)vc {
 	self.viewController = vc;
+	[self userDidUseApp];
 	
 	BOOL showedDialog = NO;
 	if (canPromptForRating) {
@@ -192,6 +195,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 		[enjoymentDialog show];
 	}
 	[self postNotification:ATAppRatingDidPromptForEnjoymentNotification];
+	[self incrementPromptCount];
 	[self setRatingDialogWasShown];
 #elif TARGET_OS_MAC
 	NSAlert *alert = [[[NSAlert alloc] init] autorelease];
@@ -202,6 +206,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 	[alert setAlertStyle:NSInformationalAlertStyle];
 	[alert setIcon:[NSImage imageNamed:NSImageNameApplicationIcon]];
 	[self postNotification:ATAppRatingDidPromptForEnjoymentNotification];
+	[self incrementPromptCount];
 	[self setRatingDialogWasShown];
 	NSUInteger result = [alert runModal];
 	if (result == NSAlertFirstButtonReturn) { // yes
@@ -431,6 +436,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 #elif TARGET_OS_MAC
 	[[NSWorkspace sharedWorkspace] openURL:url];
 #endif
+    [[NSNotificationCenter defaultCenter] postNotificationName:ATAppRatingFlowUserAgreedToRateAppNotification object:nil];
 }
 
 
@@ -479,6 +485,15 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 			if ([[NSDate date] timeIntervalSince1970] < nextPromptDouble) {
 				break;
 			}
+		}
+		
+		NSInteger promptCount = [[defaults objectForKey:ATAppRatingFlowPromptCountThisVersionKey] integerValue];
+		if (self.daysBeforeRePrompting == 0 && promptCount > 0) {
+			// Don't prompt more than once.
+			break;
+		} else if (promptCount > 1) {
+			// Don't prompt more than twice per update.
+			break;
 		}
 		
 		ATAppRatingFlowPredicateInfo *info = [[ATAppRatingFlowPredicateInfo alloc] init];
@@ -545,6 +560,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 		[defaults setObject:[NSDate date] forKey:ATAppRatingFlowLastUsedVersionFirstUseDateKey];
 		[defaults setObject:[NSNumber numberWithBool:NO] forKey:ATAppRatingFlowDeclinedToRateThisVersionKey];
 		[defaults setObject:[NSNumber numberWithBool:NO] forKey:ATAppRatingFlowUserDislikesThisVersionKey];
+		[defaults setObject:[NSNumber numberWithInteger:0] forKey:ATAppRatingFlowPromptCountThisVersionKey];
 		
 		[defaults synchronize];
 	}
@@ -591,6 +607,14 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 	
 }
 
+- (void)incrementPromptCount {
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSInteger promptCount = [[defaults objectForKey:ATAppRatingFlowPromptCountThisVersionKey] integerValue];
+	promptCount += 1;
+	[defaults setObject:[NSNumber numberWithInteger:promptCount] forKey:ATAppRatingFlowPromptCountThisVersionKey];
+	[defaults synchronize];
+}
+
 - (void)setRatingDialogWasShown {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	[defaults setObject:[NSDate date] forKey:ATAppRatingFlowLastPromptDateKey];
@@ -617,7 +641,7 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 
 - (void)logDefaults {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSArray *keys = [NSArray arrayWithObjects:ATAppRatingFlowLastUsedVersionKey, ATAppRatingFlowLastUsedVersionFirstUseDateKey, ATAppRatingFlowDeclinedToRateThisVersionKey, ATAppRatingFlowUserDislikesThisVersionKey, ATAppRatingFlowLastPromptDateKey, ATAppRatingFlowUseCountKey, ATAppRatingFlowSignificantEventsCountKey, ATAppRatingFlowRatedAppKey, nil];
+	NSArray *keys = [NSArray arrayWithObjects:ATAppRatingFlowLastUsedVersionKey, ATAppRatingFlowLastUsedVersionFirstUseDateKey, ATAppRatingFlowDeclinedToRateThisVersionKey, ATAppRatingFlowUserDislikesThisVersionKey, ATAppRatingFlowPromptCountThisVersionKey, ATAppRatingFlowLastPromptDateKey, ATAppRatingFlowUseCountKey, ATAppRatingFlowSignificantEventsCountKey, ATAppRatingFlowRatedAppKey, nil];
 	ATLogDebug(@"-- BEGIN ATAppRatingFlow DEFAULTS --");
 	for (NSString *key in keys) {
 		ATLogDebug(@"%@ == %@", key, [defaults objectForKey:key]);
@@ -667,7 +691,14 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 		}
 	}
 	if (window && [window respondsToSelector:@selector(rootViewController)]) {
-		return [window rootViewController];
+		UIViewController *vc = [window rootViewController];
+		if ([vc respondsToSelector:@selector(presentedViewController)] && [vc presentedViewController]) {
+			return [vc presentedViewController];
+		}
+		if ([vc respondsToSelector:@selector(modalViewController)] && [vc modalViewController]) {
+			return [vc modalViewController];
+		}
+		return vc;
 	} else {
 		return nil;
 	}

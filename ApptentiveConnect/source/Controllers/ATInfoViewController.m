@@ -33,7 +33,9 @@ enum {
 - (void)reload;
 @end
 
-@implementation ATInfoViewController
+@implementation ATInfoViewController {
+	BOOL showingDebugController;
+}
 @synthesize tableView, headerView;
 
 - (id)init {
@@ -70,7 +72,11 @@ enum {
 #pragma mark - View lifecycle
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATFeedbackDidShowWindowNotification object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:ATFeedbackWindowTypeInfo] forKey:ATFeedbackWindowTypeKey]];
+	if (showingDebugController) {
+		showingDebugController = NO;
+	} else {
+		[[NSNotificationCenter defaultCenter] postNotificationName:ATFeedbackDidShowWindowNotification object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:ATFeedbackWindowTypeInfo] forKey:ATFeedbackWindowTypeKey]];
+	}
 }
 
 - (void)viewDidLoad {
@@ -85,9 +91,11 @@ enum {
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-	if (controller != nil) {
-		[controller unhide:animated];
-		[controller release], controller = nil;
+	if (!showingDebugController) {
+		if (controller != nil) {
+			[controller unhide:animated];
+			[controller release], controller = nil;
+		}
 	}
 }
 
@@ -114,6 +122,7 @@ enum {
 	NSUInteger physicalSection = indexPath.section;
 	NSUInteger section = [[logicalSections objectAtIndex:physicalSection] integerValue];
 	if (section == kSectionDebugLog) {
+		showingDebugController = YES;
 		ATLogViewController *vc = [[ATLogViewController alloc] init];
 		UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
 		[self presentModalViewController:nc animated:YES];

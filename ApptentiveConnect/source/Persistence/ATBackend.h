@@ -49,7 +49,7 @@ NSString *const ATBackendNewAPIKeyNotification;
 	NSInteger previousUnreadCount;
 #endif
 }
-@property (nonatomic, retain) NSString *apiKey;
+@property (nonatomic, copy) NSString *apiKey;
 /*! The feedback currently being worked on by the user. */
 @property (nonatomic, retain) ATFeedback *currentFeedback;
 @property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;

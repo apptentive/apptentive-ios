@@ -48,7 +48,7 @@
 
 
 @property (nonatomic, retain) ATFeedback *feedback;
-@property (nonatomic, retain) NSString *customPlaceholderText;
+@property (nonatomic, copy) NSString *customPlaceholderText;
 @property (nonatomic, assign) ATFeedbackAttachmentOptions attachmentOptions;
 @property (nonatomic, assign) BOOL showEmailAddressField;
 @property (nonatomic, assign) BOOL deleteCurrentFeedbackOnCancel;

@@ -610,7 +610,6 @@ enum {
 	return result;
 }
 
-
 - (void)statusBarChanged:(NSNotification *)notification {
 	[self positionInWindow];
 }

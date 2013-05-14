@@ -72,6 +72,15 @@
 	STAssertTrue([ATUtilities versionString:@"5.0" isLessThanVersionString:@"6.0.1"], @"Should be less");
 }
 
+- (void)testCacheControlParsing {
+	STAssertEquals(0., [ATUtilities maxAgeFromCacheControlHeader:nil], @"Should be same");
+	STAssertEquals(0., [ATUtilities maxAgeFromCacheControlHeader:@""], @"Should be same");
+	STAssertEquals(86400., [ATUtilities maxAgeFromCacheControlHeader:@"Cache-Control: max-age=86400, private"], @"Should be same");
+	STAssertEquals(86400., [ATUtilities maxAgeFromCacheControlHeader:@"max-age=86400, private"], @"Should be same");
+	STAssertEquals(47.47, [ATUtilities maxAgeFromCacheControlHeader:@"max-age=47.47, private"], @"Should be same");
+	STAssertEquals(0., [ATUtilities maxAgeFromCacheControlHeader:@"max-age=0, private"], @"Should be same");
+}
+
 - (void)testThumbnailSize {
 	CGSize imageSize, maxSize, result;
 	

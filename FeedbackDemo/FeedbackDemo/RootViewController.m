@@ -24,6 +24,7 @@ enum kRootTableSections {
 @interface RootViewController ()
 - (void)surveyBecameAvailable:(NSNotification *)notification;
 - (void)unreadMessageCountChanged:(NSNotification *)notification;
+- (void)checkForProperConfiguration;
 @end
 
 @implementation RootViewController
@@ -49,6 +50,8 @@ enum kRootTableSections {
 	self.tableView.tableHeaderView = imageView;
 	[imageView release], imageView = nil;
 	[super viewDidLoad];
+    
+    tags = [[NSSet alloc] initWithObjects:@"testsurvey", @"testtag", nil];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyBecameAvailable:) name:ATSurveyNewSurveyAvailableNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unreadMessageCountChanged:) name:ATMessageCenterUnreadCountChangedNotification object:nil];
@@ -63,6 +66,24 @@ enum kRootTableSections {
 	[self.tableView reloadData];
 }
 
+- (void)checkForProperConfiguration {
+	static BOOL checkedAlready = NO;
+	if (checkedAlready) {
+		// Don't display more than once.
+		return;
+	}
+	checkedAlready = YES;
+	if ([kApptentiveAPIKey isEqualToString:@"<your key here>"]) {
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Please Set API Key" message:@"This demo app will not work properly until you set your API key in defines.h" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
+		[alert show];
+		[alert autorelease];
+	} else if ([kApptentiveAppID isEqualToString:@"ExampleAppID"]) {
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Please Set App ID" message:@"This demo app won't be able to show your app in the app store until you set your App ID in defines.h" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
+		[alert show];
+		[alert autorelease];
+	}
+}
+
 - (void)viewWillAppear:(BOOL)animated {
 	[self.tableView reloadData];
 	[super viewWillAppear:animated];
@@ -70,6 +91,7 @@ enum kRootTableSections {
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
+	[self checkForProperConfiguration];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -91,12 +113,15 @@ enum kRootTableSections {
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	if (section == kFeedbackSection) {
 		return 2;
-	}
+	} else if (section == kSurveySection) {
+        return 2;
+    }
 	return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	static NSString *CellIdentifier = @"Cell";
+    static NSString *SurveyTagsCell = @"SurveyTagsCell";
 	
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil) {
@@ -113,12 +138,29 @@ enum kRootTableSections {
 	} else if (indexPath.section == kRatingSection) {
 		cell.textLabel.text = @"Start Rating Flow";
 	} else if (indexPath.section == kSurveySection) {
-		if ([ATSurveys hasSurveyAvailable]) {
-			cell.textLabel.text = @"Show Survey";
-		} else {
-			cell.textLabel.text = @"No Survey Available";
-			cell.textLabel.textColor = [UIColor grayColor];
-		}
+        if (indexPath.row == 0) {
+            if ([ATSurveys hasSurveyAvailable]) {
+                cell.textLabel.text = @"Show Survey";
+                cell.textLabel.textColor = [UIColor blackColor];
+            } else {
+                cell.textLabel.text = @"No Survey Available";
+                cell.textLabel.textColor = [UIColor grayColor];
+            }
+        } else if (indexPath.row == 1) {
+            cell = [tableView dequeueReusableCellWithIdentifier:SurveyTagsCell];
+            if (cell == nil) {
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:SurveyTagsCell] autorelease];
+            }
+            if ([ATSurveys hasSurveyAvailableWithTags:tags]) {
+                cell.textLabel.text = @"Show Survey With Tags";
+                cell.textLabel.textColor = [UIColor blackColor];
+            } else {
+                cell.textLabel.text = @"No Survey Available With Tags";
+                cell.textLabel.textColor = [UIColor grayColor];
+            }
+            NSArray *tagArray = [tags allObjects];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"tags: %@", [tagArray componentsJoinedByString:@", "]];
+        }
 	} else if (indexPath.section == kMessageCenterSection) {
 		cell.textLabel.text = @"Message Center";
 		UILabel *unreadLabel = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -131,7 +173,7 @@ enum kRootTableSections {
 		[unreadLabel sizeToFit];
 		cell.accessoryView = [unreadLabel autorelease];
 	}
-	
+    
 	return cell;
 }
 
@@ -147,9 +189,15 @@ enum kRootTableSections {
 	} else if (indexPath.section == kRatingSection) {
 		[self showRating:nil];
 	} else if (indexPath.section == kSurveySection) {
-		if ([ATSurveys hasSurveyAvailable]) {
-			[ATSurveys presentSurveyControllerFromViewController:self];
-		}
+        if (indexPath.row == 0) {
+            if ([ATSurveys hasSurveyAvailable]) {
+                [ATSurveys presentSurveyControllerFromViewController:self];
+            }
+        } else if (indexPath.row == 1) {
+            if ([ATSurveys hasSurveyAvailableWithTags:tags]) {
+                [ATSurveys presentSurveyControllerWithTags:tags fromViewController:self];
+            }
+        }
 	} else if (indexPath.section == kMessageCenterSection) {
 		[[ATConnect sharedConnection] presentMessageCenterFromViewController:self];
 	}
@@ -189,6 +237,8 @@ enum kRootTableSections {
 }
 
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [tags release], tags = nil;
 	[super dealloc];
 }
 @end

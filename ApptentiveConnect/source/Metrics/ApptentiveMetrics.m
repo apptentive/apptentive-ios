@@ -47,6 +47,7 @@ static NSString *ATMetricNameMessageCenterRead = @"message_center.read";
 static NSString *ATMetricNameMessageCenterSend = @"message_center.send";
 
 @interface ApptentiveMetrics (Private)
+- (void)addLaunchMetric;
 - (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo;
 - (ATFeedbackWindowType)windowTypeFromNotification:(NSNotification *)notification;
 - (void)feedbackDidShowWindow:(NSNotification *)notification;
@@ -84,11 +85,10 @@ static NSString *ATMetricNameMessageCenterSend = @"message_center.send";
 
 + (ApptentiveMetrics *)sharedMetrics {
 	static ApptentiveMetrics *sharedSingleton = nil;
-	@synchronized(self) {
-		if (sharedSingleton == nil) {
-			sharedSingleton = [[ApptentiveMetrics alloc] init];
-		}
-	}
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		sharedSingleton = [[ApptentiveMetrics alloc] init];
+	});
 	return sharedSingleton;
 }
 
@@ -107,7 +107,6 @@ static NSString *ATMetricNameMessageCenterSend = @"message_center.send";
 		metricsEnabled = NO;
 		[ApptentiveMetrics registerDefaults];
 		[self updateWithCurrentPreferences];
-		[self addMetricWithName:ATMetricNameAppLaunch info:nil];
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackDidShowWindow:) name:ATFeedbackDidShowWindowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackDidHideWindow:) name:ATFeedbackDidHideWindowNotification object:nil];
@@ -134,6 +133,7 @@ static NSString *ATMetricNameMessageCenterSend = @"message_center.send";
 		
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterDidLaunch:) name:ATMessageCenterDidShowNotification object:nil];
+		[self performSelector:@selector(addLaunchMetric) withObject:nil afterDelay:0.1];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterDidClose:) name:ATMessageCenterDidHideNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterDidAttach:) name:ATMessageCenterDidAttachNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterDidRead:) name:ATMessageCenterDidReadNotification object:nil];
@@ -171,6 +171,12 @@ static NSString *ATMetricNameMessageCenterSend = @"message_center.send";
 
 
 @implementation ApptentiveMetrics (Private)
+- (void)addLaunchMetric {
+	@autoreleasepool {
+		[self addMetricWithName:ATMetricNameAppLaunch info:nil];
+	}
+}
+
 - (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo {
 	if (metricsEnabled == NO) {
 		return;

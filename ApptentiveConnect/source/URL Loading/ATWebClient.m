@@ -23,7 +23,8 @@
 
 #import "NSData+ATBase64.h"
 
-#define kCommonChannelName (@"ATWebClient")
+NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
+
 #define kUserAgentFormat (@"ApptentiveConnect/%@ (%@)")
 
 #if USE_STAGING
@@ -32,15 +33,13 @@
 #define kApptentiveBaseURL (@"https://api.apptentive.com")
 #endif
 
-static ATWebClient *sharedSingleton = nil;
-
 @implementation ATWebClient
 + (ATWebClient *)sharedClient {
-	@synchronized(self) {
-		if (sharedSingleton == nil) {
-			sharedSingleton = [[ATWebClient alloc] init];
-		}
-	}
+	static ATWebClient *sharedSingleton = nil;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		sharedSingleton = [[ATWebClient alloc] init];
+	});
 	return sharedSingleton;
 }
 
@@ -49,7 +48,7 @@ static ATWebClient *sharedSingleton = nil;
 }
 
 - (NSString *)commonChannelName {
-	return kCommonChannelName;
+	return ATWebClientDefaultChannelName;
 }
 
 - (ATAPIRequest *)requestForPostingFeedback:(ATFeedback *)feedback {

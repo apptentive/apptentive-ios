@@ -29,8 +29,6 @@ NSString *const ATBackendNewAPIKeyNotification = @"ATBackendNewAPIKeyNotificatio
 NSString *const ATUUIDPreferenceKey = @"ATUUIDPreferenceKey";
 NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 
-static ATBackend *sharedBackend = nil;
-
 @interface ATBackend ()
 - (void)updateConfigurationIfNeeded;
 @end
@@ -57,11 +55,11 @@ static ATBackend *sharedBackend = nil;
 @synthesize apiKey, working, currentFeedback, persistentStoreCoordinator;
 
 + (ATBackend *)sharedBackend {
+	static ATBackend *sharedBackend = nil;
 	@synchronized(self) {
 		if (sharedBackend == nil) {
 			sharedBackend = [[self alloc] init];
 			[sharedBackend setupDataManager];
-			
 			[ApptentiveMetrics sharedMetrics];
 			
 			[ATMessageDisplayType setupSingletons];

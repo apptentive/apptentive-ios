@@ -7,6 +7,7 @@
 
 #import "ATURLConnection.h"
 #import "ATURLConnection_Private.h"
+#import "ATUtilities.h"
 
 @interface ATURLConnection ()
 - (void)cacheDataIfNeeded;
@@ -27,6 +28,7 @@
 @synthesize failedAuthentication;
 @synthesize connectionError;
 @synthesize percentComplete;
+@synthesize expiresMaxAge;
 
 - (id)initWithURL:(NSURL *)url {
 	return [self initWithURL:url delegate:nil];
@@ -152,6 +154,14 @@
 				statusCode = response.statusCode;
 			} else {
 				statusCode = 200;
+			}
+			
+			NSDictionary *responseHeaders = [response allHeaderFields];
+			NSString *cacheControlHeader = [responseHeaders valueForKey:@"Cache-Control"];
+			if (cacheControlHeader) {
+				expiresMaxAge = [ATUtilities maxAgeFromCacheControlHeader:cacheControlHeader];
+			} else {
+				expiresMaxAge = 0;
 			}
 		}
 	}

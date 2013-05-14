@@ -546,6 +546,22 @@ static NSDateFormatter *dateFormatter = nil;
 	}
 }
 
++ (NSTimeInterval)maxAgeFromCacheControlHeader:(NSString *)cacheControl {
+	if (cacheControl == nil || [cacheControl rangeOfString:@"max-age"].location == NSNotFound) {
+		return 0;
+	}
+	NSTimeInterval maxAge = 0;
+	NSScanner *scanner = [[NSScanner alloc] initWithString:[cacheControl lowercaseString]];
+	[scanner scanUpToString:@"max-age" intoString:NULL];
+	if ([scanner scanString:@"max-age" intoString:NULL] && [scanner scanString:@"=" intoString:NULL]) {
+		if (![scanner scanDouble:&maxAge]) {
+			maxAge = 0;
+		}
+	}
+	[scanner release], scanner = nil;
+	return maxAge;
+}
+
 + (BOOL)dictionary:(NSDictionary *)a isEqualToDictionary:(NSDictionary *)b {
 	BOOL isEqual = NO;
 	
@@ -625,6 +641,7 @@ done:
 done:
 	return isEqual;
 }
+
 
 #if TARGET_OS_IPHONE
 + (UIEdgeInsets)edgeInsetsOfView:(UIView *)view {

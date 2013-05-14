@@ -18,9 +18,6 @@
 #import "ATFeedbackWindowController.h"
 #endif
 
-static ATConnect *sharedConnection = nil;
-
-
 NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCenterUnreadCountChangedNotification";
 
 @implementation ATConnect
@@ -31,11 +28,11 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 #endif
 
 + (ATConnect *)sharedConnection {
-	@synchronized(self) {
-		if (sharedConnection == nil) {
-			sharedConnection = [[ATConnect alloc] init];
-		}
-	}
+	static ATConnect *sharedConnection = nil;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		sharedConnection = [[ATConnect alloc] init];
+	});
 	return sharedConnection;
 }
 

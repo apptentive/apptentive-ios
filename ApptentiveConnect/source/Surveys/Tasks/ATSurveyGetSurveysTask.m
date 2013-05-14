@@ -1,12 +1,12 @@
 //
-//  ATSurveyGetSurveyTask.m
+//  ATSurveyGetSurveysTask.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 7/20/12.
 //  Copyright (c) 2012 Apptentive, Inc. All rights reserved.
 //
 
-#import "ATSurveyGetSurveyTask.h"
+#import "ATSurveyGetSurveysTask.h"
 #import "ATBackend.h"
 #import "ATSurveyParser.h"
 #import "ATSurveysBackend.h"
@@ -14,12 +14,12 @@
 #import "ATWebClient+SurveyAdditions.h"
 #import "PJSONKit.h"
 
-@interface ATSurveyGetSurveyTask (Private)
+@interface ATSurveyGetSurveysTask (Private)
 - (void)setup;
 - (void)teardown;
 @end
 
-@implementation ATSurveyGetSurveyTask
+@implementation ATSurveyGetSurveysTask
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
 	}
@@ -47,29 +47,29 @@
 
 - (void)start {
 	self.failureOkay = YES;
-	if (checkSurveyRequest == nil) {
+	if (checkSurveysRequest == nil) {
 		ATWebClient *client = [ATWebClient sharedClient];
-		checkSurveyRequest = [[client requestForGettingSurvey] retain];
-		checkSurveyRequest.delegate = self;
+		checkSurveysRequest = [[client requestForGettingSurveys] retain];
+		checkSurveysRequest.delegate = self;
 		self.inProgress = YES;
-		[checkSurveyRequest start];
+		[checkSurveysRequest start];
 	} else {
 		self.finished = YES;
 	}
 }
 
 - (void)stop {
-	if (checkSurveyRequest) {
-		checkSurveyRequest.delegate = nil;
-		[checkSurveyRequest cancel];
-		[checkSurveyRequest release], checkSurveyRequest = nil;
+	if (checkSurveysRequest) {
+		checkSurveysRequest.delegate = nil;
+		[checkSurveysRequest cancel];
+		[checkSurveysRequest release], checkSurveysRequest = nil;
 		self.inProgress = NO;
 	}
 }
 
 - (float)percentComplete {
-	if (checkSurveyRequest) {
-		return [checkSurveyRequest percentageComplete];
+	if (checkSurveysRequest) {
+		return [checkSurveysRequest percentageComplete];
 	} else {
 		return 0.0f;
 	}
@@ -79,21 +79,21 @@
 	return @"survey check";
 }
 
-
 #pragma mark ATAPIRequestDelegate
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)request result:(NSObject *)result {
 	@synchronized(self) {
 		[self retain];
-		if (request == checkSurveyRequest) {
+		if (request == checkSurveysRequest) {
 			ATSurveyParser *parser = [[ATSurveyParser alloc] init];
-			ATSurvey *survey = [parser parseSurvey:(NSData *)result];
-			if (survey == nil) {
-				ATLogError(@"An error occurred parsing survey: %@", [parser parserError]);
+			
+			NSArray *surveys = [parser parseMultipleSurveys:(NSData *)result];
+			if (surveys == nil) {
+				ATLogError(@"An error occurred parsing surveys: %@", [parser parserError]);
 			} else {
-				[[ATSurveysBackend sharedBackend] didReceiveNewSurvey:survey];
+				[[ATSurveysBackend sharedBackend] didReceiveNewSurveys:surveys maxAge:[request expiresMaxAge]];
 			}
-			checkSurveyRequest.delegate = nil;
-			[checkSurveyRequest release], checkSurveyRequest = nil;
+			checkSurveysRequest.delegate = nil;
+			[checkSurveysRequest release], checkSurveysRequest = nil;
 			[parser release], parser = nil;
 			self.finished = YES;
 		}
@@ -104,8 +104,10 @@
 - (void)at_APIRequestDidFail:(ATAPIRequest *)request {
 	@synchronized(self) {
 		[self retain];
-		if (request == checkSurveyRequest) {
+		if (request == checkSurveysRequest) {
 			ATLogError(@"Survey request failed: %@: %@", request.errorTitle, request.errorMessage);
+			self.lastErrorTitle = request.errorTitle;
+			self.lastErrorMessage = request.errorMessage;
 			self.failed = YES;
 			[self stop];
 		}
@@ -114,7 +116,7 @@
 }
 @end
 
-@implementation ATSurveyGetSurveyTask (Private)
+@implementation ATSurveyGetSurveysTask (Private)
 - (void)setup {
 	
 }

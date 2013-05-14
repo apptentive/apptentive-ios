@@ -9,16 +9,17 @@
 #import "ATLogViewController.h"
 
 #import "ATLogger.h"
+#import "ATTaskQueue.h"
 
 @implementation ATLogViewController
 @synthesize textView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
+	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+	if (self) {
+		// Custom initialization
+	}
+	return self;
 }
 
 - (void)dealloc {
@@ -28,7 +29,7 @@
 }
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
+	[super viewDidLoad];
 	textView = [[UITextView alloc] initWithFrame:self.view.bounds];
 	textView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	textView.delegate = self;
@@ -39,11 +40,15 @@
 	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)];
 	self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reloadLogs:)];
 	
+	ATLogInfo(@"%@", [[ATTaskQueue sharedTaskQueue] queueDescription]);
+	
 	self.textView.text = [[ATLogger sharedLogger] currentLogText];
+	self.textView.editable = NO;
+	[self performSelector:@selector(reloadLogs:) withObject:nil afterDelay:0.1];
 }
 
 - (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
+	[super didReceiveMemoryWarning];
 	[textView removeFromSuperview];
 	[textView release], textView = nil;
 }

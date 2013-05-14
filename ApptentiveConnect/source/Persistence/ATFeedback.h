@@ -51,10 +51,10 @@ typedef enum {
 	NSString *screenshotFilename;
 }
 @property (nonatomic, assign) ATFeedbackType type;
-@property (nonatomic, retain) NSString *text;
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *email;
-@property (nonatomic, retain) NSString *phone;
+@property (nonatomic, copy) NSString *text;
+@property (nonatomic, copy) NSString *name;
+@property (nonatomic, copy) NSString *email;
+@property (nonatomic, copy) NSString *phone;
 @property (nonatomic, assign) ATFeedbackSource source;
 @property (nonatomic, assign) ATFeedbackImageSource imageSource;
 

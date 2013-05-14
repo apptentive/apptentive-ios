@@ -49,6 +49,7 @@
 + (NSString *)buildNumberString;
 
 + (BOOL)dictionary:(NSDictionary *)a isEqualToDictionary:(NSDictionary *)b;
++ (NSTimeInterval)maxAgeFromCacheControlHeader:(NSString *)cacheControl;
 + (BOOL)array:(NSArray *)a isEqualToArray:(NSArray *)b;
 
 #if TARGET_OS_IPHONE

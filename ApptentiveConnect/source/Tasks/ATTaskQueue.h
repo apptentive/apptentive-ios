@@ -28,4 +28,6 @@
 - (ATTask *)taskAtIndex:(NSUInteger)index withTaskNameInSet:(NSSet *)taskNames;
 - (void)start;
 - (void)stop;
+
+- (NSString *)queueDescription;
 @end

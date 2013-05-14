@@ -206,6 +206,25 @@ static ATTaskQueue *sharedTaskQueue = nil;
 	}
 }
 
+- (NSString *)queueDescription {
+	NSMutableString *result = [[NSMutableString alloc] init];
+	@synchronized(self) {
+		[result appendString:[NSString stringWithFormat:@"<ATTaskQueue: %d task(s) [", [tasks count]]];
+		NSMutableArray *parts = [[NSMutableArray alloc] init];
+		for (ATTask *task in tasks) {
+			[parts addObject:[task taskDescription]];
+		}
+		if ([parts count]) {
+			[result appendString:@"\n"];
+			[result appendString:[parts componentsJoinedByString:@",\n"]];
+			[result appendString:@"\n"];
+		}
+		[parts release], parts = nil;
+		[result appendString:@"]>"];
+	}
+	return [result autorelease];
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	@synchronized(self) {
 		if (object != activeTask) return;

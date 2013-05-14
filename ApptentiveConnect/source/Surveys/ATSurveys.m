@@ -21,17 +21,19 @@ NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 @implementation ATSurveys
 + (ATSurveys *)sharedSurveys {
 	static ATSurveys *sharedSingleton = nil;
-	@synchronized(self) {
-		if (sharedSingleton == nil) {
-			sharedSingleton = [[ATSurveys alloc] init];
-		}
-	}
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		sharedSingleton = [[ATSurveys alloc] init];
+	});
 	return sharedSingleton;
 }
 
 + (BOOL)hasSurveyAvailable {
-	ATSurveysBackend *backend = [ATSurveysBackend sharedBackend];
-	return [backend currentSurvey] != nil;
+	return [[ATSurveysBackend sharedBackend] hasSurveyAvailableWithNoTags];
+}
+
++ (BOOL)hasSurveyAvailableWithTags:(NSSet *)tags {
+	return [[ATSurveysBackend sharedBackend] hasSurveyAvailableWithTags:tags];
 }
 
 + (void)checkForAvailableSurveys {
@@ -39,9 +41,13 @@ NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 	[backend checkForAvailableSurveys];
 }
 
-
 + (void)presentSurveyControllerFromViewController:(UIViewController *)viewController {
 	ATSurveysBackend *backend = [ATSurveysBackend sharedBackend];
-	[backend presentSurveyControllerFromViewController:viewController];
+	[backend presentSurveyControllerWithNoTagsFromViewController:viewController];
+}
+
++ (void)presentSurveyControllerWithTags:(NSSet *)tags fromViewController:(UIViewController *)viewController {
+	ATSurveysBackend *backend = [ATSurveysBackend sharedBackend];
+	[backend presentSurveyControllerWithTags:tags fromViewController:viewController];
 }
 @end

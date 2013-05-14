@@ -957,7 +957,7 @@ typedef enum {
 
 - (void)toggleAttachmentsView {
 	attachmentsVisible = !attachmentsVisible;
-	if (!CGRectEqualToRect(CGRectZero, currentKeyboardFrameInView) && [inputView isFirstResponder]) {
+	if (!CGRectEqualToRect(CGRectZero, currentKeyboardFrameInView)) {
 		[inputView resignFirstResponder];
 	} else {
 		if (!animatingTransition) {

@@ -84,7 +84,9 @@ typedef enum {
 		
 		NSError *error = nil;
 		persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-		if ([self isMigrationNecessary:persistentStoreCoordinator]) {
+		BOOL storeExists = [[NSFileManager defaultManager] fileExistsAtPath:[storeURL path]];
+		
+		if (storeExists && [self isMigrationNecessary:persistentStoreCoordinator]) {
 			if (![self migrateStoreError:&error]) {
 				ATLogError(@"Failed to migrate store. Need to start over from scratch: %@", error);
 				if (![[NSFileManager defaultManager] removeItemAtURL:storeURL error:&error]) {

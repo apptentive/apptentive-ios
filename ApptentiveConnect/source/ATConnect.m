@@ -208,8 +208,21 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 #if TARGET_OS_IPHONE
 	NSString *path = [[NSBundle mainBundle] bundlePath];
 	NSString *bundlePath = [path stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
-	NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
-	return [bundle autorelease];
+	NSFileManager *fm = [NSFileManager defaultManager];
+	if ([fm fileExistsAtPath:bundlePath]) {
+		NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
+		return [bundle autorelease];
+	} else {
+		// Try trigger.io path.
+		bundlePath = [path stringByAppendingPathComponent:@"plugin.bundle"];
+		bundlePath = [bundlePath stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
+		if ([fm fileExistsAtPath:bundlePath]) {
+			NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
+			return [bundle autorelease];
+		} else {
+			return nil;
+		}
+	}
 #elif TARGET_OS_MAC
 	NSBundle *bundle = [NSBundle bundleForClass:[ATConnect class]];
 	return bundle;

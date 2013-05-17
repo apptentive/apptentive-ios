@@ -81,8 +81,14 @@
 
 - (NSDictionary *)appReleaseJSON {
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
-	result[@"version"] = [ATUtilities appVersionString];
-	result[@"build_number"] = [ATUtilities buildNumberString];
+	NSString *appVersion = [ATUtilities appVersionString];
+	if (appVersion) {
+		result[@"version"] = appVersion;
+	}
+	NSString *buildNumber = [ATUtilities buildNumberString];
+	if (buildNumber) {
+		result[@"build_number"] = buildNumber;
+	}
 	return result;
 }
 

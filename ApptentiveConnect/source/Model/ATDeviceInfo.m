@@ -73,7 +73,7 @@
 		device[@"locale_language_code"] = languageCode;
 	}
 	
-	NSDictionary *extraInfo = [[ATConnect sharedConnection] additionFeedbackInfo];
+	NSDictionary *extraInfo = [[ATConnect sharedConnection] customData];
 	if (extraInfo && [extraInfo count]) {
 		device[@"custom_data"] = extraInfo;
 	}

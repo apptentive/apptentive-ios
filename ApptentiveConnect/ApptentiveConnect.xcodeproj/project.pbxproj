@@ -209,6 +209,7 @@
 		49C002A1133413BB0071F088 /* ApptentiveConnect-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 49C00296133413BB0071F088 /* ApptentiveConnect-Prefix.pch */; };
 		49C002A2133413BB0071F088 /* ATConnect.h in Headers */ = {isa = PBXBuildFile; fileRef = 49C00297133413BB0071F088 /* ATConnect.h */; settings = {ATTRIBUTES = (); }; };
 		49C002A3133413BB0071F088 /* ATConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C00298133413BB0071F088 /* ATConnect.m */; };
+		49C24F56174B0EC5002F2338 /* ATAppRatingFlow+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 49C24F54174B0EC5002F2338 /* ATAppRatingFlow+Internal.h */; };
 		49CB6DEA1718FE4400BC9223 /* ATMessageCenterMetrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 49CB6DE81718FE4400BC9223 /* ATMessageCenterMetrics.h */; };
 		49CB6DEB1718FE4400BC9223 /* ATMessageCenterMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 49CB6DE91718FE4400BC9223 /* ATMessageCenterMetrics.m */; };
 		49CEFF5D15168B54006D8BA8 /* ATAppConfigurationUpdater.h in Headers */ = {isa = PBXBuildFile; fileRef = 49CEFF5B15168B53006D8BA8 /* ATAppConfigurationUpdater.h */; };
@@ -447,6 +448,7 @@
 		49C00296133413BB0071F088 /* ApptentiveConnect-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ApptentiveConnect-Prefix.pch"; path = "../ApptentiveConnect-Prefix.pch"; sourceTree = "<group>"; };
 		49C00297133413BB0071F088 /* ATConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATConnect.h; sourceTree = "<group>"; };
 		49C00298133413BB0071F088 /* ATConnect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATConnect.m; sourceTree = "<group>"; };
+		49C24F54174B0EC5002F2338 /* ATAppRatingFlow+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ATAppRatingFlow+Internal.h"; sourceTree = "<group>"; };
 		49CB6DE81718FE4400BC9223 /* ATMessageCenterMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATMessageCenterMetrics.h; path = Metrics/ATMessageCenterMetrics.h; sourceTree = "<group>"; };
 		49CB6DE91718FE4400BC9223 /* ATMessageCenterMetrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATMessageCenterMetrics.m; path = Metrics/ATMessageCenterMetrics.m; sourceTree = "<group>"; };
 		49CEFF5B15168B53006D8BA8 /* ATAppConfigurationUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAppConfigurationUpdater.h; sourceTree = "<group>"; };
@@ -684,6 +686,7 @@
 			children = (
 				4942CC8F13C7AD2D009BF758 /* ATAppRatingFlow.h */,
 				4942CC9013C7AD2D009BF758 /* ATAppRatingFlow.m */,
+				49C24F54174B0EC5002F2338 /* ATAppRatingFlow+Internal.h */,
 				49CEFF7F15193EC2006D8BA8 /* ATAppRatingFlow_Private.h */,
 				49CEFF8015193EC2006D8BA8 /* ATAppRatingFlow_Private.m */,
 				49EF340D14AA7F2D00077F76 /* ATAppRatingMetrics.h */,
@@ -1120,6 +1123,7 @@
 				49CB6DEA1718FE4400BC9223 /* ATMessageCenterMetrics.h in Headers */,
 				4960A533171F70530082669B /* ATNetworkImageView.h in Headers */,
 				496F5781174060CE003BF516 /* ATDataManager.h in Headers */,
+				49C24F56174B0EC5002F2338 /* ATAppRatingFlow+Internal.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -4,6 +4,8 @@ Apptentive iOS SDK
 This iOS library allows you to add a quick and easy in-app-feedback mechanism
 to your iOS applications. Feedback is sent to the Apptentive web service.
 
+Note that there have been some recent API changes. See `docs/APIChanges.md`.
+
 Quickstart
 ==========
 
@@ -14,11 +16,9 @@ Sample Application
 The sample application FeedbackDemo demonstrates how to integrate the SDK
 with your application.
 
-The demo app includes the normal feedback flow, which can be activated by
-clicking the Feedback button. It's a one screen process which can gather
-feedback, an email address, and even a screenshot:
-
-![Feedback Screen](etc/screenshots/feedback_iphone.png?raw=true)
+The demo app includes integration of the message center, surveys, and the
+ratings flow. You use it by editing the `defines.h` file and entering in
+the Apple ID for your app and your Apptentive API token. 
 
 The rating flow can be activated by clicking on the Ratings button. It asks
 the user if they are happy with the app. If not, then a simplified feedback
@@ -102,7 +102,7 @@ Now, you can show the Apptentive feedback UI from a `UIViewController` with:
 #include "ATConnect.h"
 // ...
 ATConnect *connection = [ATConnect sharedConnection];
-[connection presentFeedbackControllerFromViewController:self];
+[connection presentMessageCenterFromViewController:self];
 ```
 
 Easy!
@@ -125,42 +125,29 @@ iTunes app ID (see "Finding Your iTunes App ID" below):
 #include "ATAppRatingFlow.h"
 // ...
 - (void)applicationDidFinishLaunching:(UIApplication *)application /* ... */ {
-    ATAppRatingFlow *sharedFlow = [ATAppRatingFlow sharedRatingFlowWithAppID:@"<your iTunes app ID>"];
-    // The parameter is a BOOL indicating whether a rating dialog can be 
-    // shown here.
-    [sharedFlow appDidLaunch:YES viewController:self.navigationController];
-    
+    ATAppRatingFlow *sharedFlow = [ATAppRatingFlow sharedRatingFlow];
+    sharedFlow.appID = @"<your iTunes app ID>";
     // ...
 }
+```
 
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-    ATAppRatingFlow *sharedFlow = [ATAppRatingFlow sharedRatingFlowWithAppID:@"<your iTunes app ID>"];
-    [sharedFlow appDidEnterForeground:YES viewController:self.navigationController];
-}
+The ratings flow won't show unless you call the following:
+
+``` objective-c
+[[ATAppRatingFlow sharedRatingFlow] showRatingFlowFromViewControllerIfConditionsAreMet:viewController];
 ```
 
 The `viewController` parameter is necessary in order to be able to show the 
 feedback view controller if a user is unhappy with your app.
 
+You'll want to add calls to `-showRatingFlowFromViewControllerIfConditionsAreMet:` wherever it makes sense in the context of your app.
+
 If you're using significant events to determine when to show the ratings flow, you can
 increment the number of significant events by calling:
 
 ```
-[sharedFlow userDidPerformSignificantEvent:canPromptForRating viewController:aViewController];
+[sharedFlow logSignificantEvent];
 ```
-
-Above, `canPromptForRating` is a `BOOL` indicating whether the user could be prompted for a rating then and there, and `aViewController` is a `UIViewController` from which to display the feedback view controller if the user is unhappy with your app.
-
-
-You can also choose to show the dialog manually:
-
-``` objective-c
-ATAppRatingFlow *sharedFlow = [ATAppRatingFlow sharedRatingFlowWithAppID:kApptentiveAppID];
-[sharedFlow showEnjoymentDialog:aViewController];
-```
-
-This is helpful if you want to implement custom triggers for the ratings 
-flow.
 
 You can modify the parameters which determine when the ratings dialog will be
 shown in your app settings on apptentive.com.
@@ -179,11 +166,32 @@ To use surveys, add the `ATSurveys.h` header to your project.
 
 You can check for available surveys after having set up `ATConnect` (see above)
 by calling `[ATSurveys checkForAvailableSurveys]` and registering for the
-`ATSurveyNewSurveyAvailableNotification` notification. Then, you may present a 
-survey by calling `[ATSurveys presentSurveyControllerFromViewController:vc]`,
-where `vc` is the view controller which will present the survey.
+`ATSurveyNewSurveyAvailableNotification` notification. 
 
-For example:
+There are both tagged surveys and untagged surveys. Tags are useful for defining
+surveys that should be shown only in certain locations, whereas untagged surveys
+are more general.
+
+To check if a survey with a given set of tags is available to be shown, call:
+
+```objective-c
+if ([ATSurveys hasSurveyAvailableWithTags:tags]) {
+    [ATSurveys presentSurveyControllerWithTags:tags fromViewController:viewController];
+}
+```
+
+where tags is an `NSSet` consisting of strings like `aftervideo` that you set as tags
+on your survey on the Apptentive website.
+
+To show a survey without tags, use:
+
+```objective-c
+if ([ATSurveys hasSurveyAvailableWithNoTags]) {
+    [ATSurveys presentSurveyControllerWithNoTagsFromViewController:viewController];
+}
+```
+
+So, the full flow looks like:
 
 ```objective-c
 #include "ATSurveys.h"

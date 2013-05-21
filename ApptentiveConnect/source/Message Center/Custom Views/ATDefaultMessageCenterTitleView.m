@@ -10,6 +10,7 @@
 
 #import "ATBackend.h"
 #import "ATConnect.h"
+#import "ATConnect_Private.h"
 #import "ATAppConfigurationUpdater.h"
 
 @implementation ATDefaultMessageCenterTitleView

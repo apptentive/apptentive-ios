@@ -173,8 +173,9 @@ static ATTaskQueue *sharedTaskQueue = nil;
 }
 
 - (void)start {
-	if ([[NSThread currentThread] isMainThread]) {
-		[self performSelectorInBackground:@selector(start) withObject:nil];
+	// We can no longer do this in the background because of CoreData objects.
+	if (![[NSThread currentThread] isMainThread]) {
+		[self performSelectorOnMainThread:@selector(start) withObject:nil waitUntilDone:NO];
 		return;
 	}
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];

@@ -1,3 +1,13 @@
+2013-05 wooster v1.0.0 (in progress)
+----------------------
+There are a lot of major API changes. They are documented in docs/APIChanges.md
+
+* Fixes IOS-127 Make some APIs private for Message Center release
+* Fixes IOS-129 Simplify SDK API
+* Fixes IOS-130 Rename add info API call
+* Fixes IOS-128 Remove feedback API for Message Center
+* Fixes IOS-103 Make ratings flow easier
+
 2013-04 wooster v0.4.9 (in progress)
 ----------------------
 We've finally added support for surveys with tags.

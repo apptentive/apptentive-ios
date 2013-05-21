@@ -10,6 +10,7 @@
 #import "ATAPIRequest.h"
 #import "ATBackend.h"
 #import "ATConnect.h"
+#import "ATConnect_Private.h"
 #import "ATData.h"
 #import "ATFeedback.h"
 #import "ATFeedbackController.h"

@@ -15,6 +15,7 @@
 #import "ATTextMessageUserCell.h"
 
 @protocol ATMessageCenterThemeDelegate;
+@protocol ATMessageCenterDismissalDelegate;
 
 @interface ATMessageCenterViewController : UIViewController <ATMessageInputViewDelegate, ATSimpleImageViewControllerDelegate, NSFetchedResultsControllerDelegate, UIActionSheetDelegate, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate>
 @property (retain, nonatomic) IBOutlet UITableView *tableView;
@@ -33,6 +34,7 @@
 @property (retain, nonatomic) IBOutlet ATTextMessageUserCell *developerCell;
 @property (retain, nonatomic) IBOutlet ATFileMessageCell *userFileMessageCell;
 @property (readonly, nonatomic) NSObject<ATMessageCenterThemeDelegate> *themeDelegate;
+@property (assign, nonatomic) NSObject<ATMessageCenterDismissalDelegate> *dismissalDelegate;
 
 - (id)initWithThemeDelegate:(NSObject<ATMessageCenterThemeDelegate> *)themeDelegate;
 
@@ -50,4 +52,10 @@
 - (void)configureSendButton:(UIButton *)sendButton forMessageCenterViewController:(ATMessageCenterViewController *)vc;
 - (void)configureAttachmentsButton:(UIButton *)button forMessageCenterViewController:(ATMessageCenterViewController *)vc;
 - (UIImage *)backgroundImageForMessageForMessageCenterViewController:(ATMessageCenterViewController *)vc;
+@end
+
+@protocol ATMessageCenterDismissalDelegate <NSObject>
+- (void)messageCenterWillDismiss:(ATMessageCenterViewController *)messageCenter;
+@optional
+- (void)messageCenterDidDismiss:(ATMessageCenterViewController *)messageCenter;
 @end

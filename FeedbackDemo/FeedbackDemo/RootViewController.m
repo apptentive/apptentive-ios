@@ -14,7 +14,6 @@
 #import "defines.h"
 
 enum kRootTableSections {
-	kFeedbackSection,
 	kMessageCenterSection,
 	kRatingSection,
 	kSurveySection,
@@ -29,16 +28,13 @@ enum kRootTableSections {
 
 @implementation RootViewController
 
-- (IBAction)showFeedback:(id)sender {
-	ATConnect *connection = [ATConnect sharedConnection];
-	connection.apiKey = kApptentiveAPIKey;
-	
-	[connection presentFeedbackControllerFromViewController:self];
-}
-
 - (IBAction)showRating:(id)sender {
-	ATAppRatingFlow *flow = [ATAppRatingFlow sharedRatingFlowWithAppID:kApptentiveAppID];
-	[flow showEnjoymentDialog:self];
+	ATAppRatingFlow *flow = [ATAppRatingFlow sharedRatingFlow];
+	flow.appID = kApptentiveAppID;
+	// Don't do this in production apps.
+	if ([flow respondsToSelector:@selector(showEnjoymentDialog:)]) {
+		[flow performSelector:@selector(showEnjoymentDialog:) withObject:self];
+	}
 }
 
 - (void)viewDidLoad {
@@ -111,9 +107,7 @@ enum kRootTableSections {
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	if (section == kFeedbackSection) {
-		return 2;
-	} else if (section == kSurveySection) {
+	if (section == kSurveySection) {
         return 2;
     }
 	return 1;
@@ -129,17 +123,11 @@ enum kRootTableSections {
 		cell.accessoryView = nil;
 	}
 	cell.textLabel.textColor = [UIColor blackColor];
-	if (indexPath.section == kFeedbackSection) {
-		if (indexPath.row == 0) {
-			cell.textLabel.text = @"Send Feedback";
-		} else {
-			cell.textLabel.text = @"Send Feedback with Screenshot";
-		}
-	} else if (indexPath.section == kRatingSection) {
+	if (indexPath.section == kRatingSection) {
 		cell.textLabel.text = @"Start Rating Flow";
 	} else if (indexPath.section == kSurveySection) {
         if (indexPath.row == 0) {
-            if ([ATSurveys hasSurveyAvailable]) {
+            if ([ATSurveys hasSurveyAvailableWithNoTags]) {
                 cell.textLabel.text = @"Show Survey";
                 cell.textLabel.textColor = [UIColor blackColor];
             } else {
@@ -178,20 +166,12 @@ enum kRootTableSections {
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	if (indexPath.section == kFeedbackSection) {
-		ATConnect *connection = [ATConnect sharedConnection];
-		if (indexPath.row == 0) {
-			connection.shouldTakeScreenshot = NO;
-		} else if (indexPath.row == 1) {
-			connection.shouldTakeScreenshot = YES;
-		}
-		[self showFeedback:nil];
-	} else if (indexPath.section == kRatingSection) {
+	if (indexPath.section == kRatingSection) {
 		[self showRating:nil];
 	} else if (indexPath.section == kSurveySection) {
         if (indexPath.row == 0) {
-            if ([ATSurveys hasSurveyAvailable]) {
-                [ATSurveys presentSurveyControllerFromViewController:self];
+            if ([ATSurveys hasSurveyAvailableWithNoTags]) {
+                [ATSurveys presentSurveyControllerWithNoTagsFromViewController:self];
             }
         } else if (indexPath.row == 1) {
             if ([ATSurveys hasSurveyAvailableWithTags:tags]) {
@@ -206,9 +186,7 @@ enum kRootTableSections {
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 	NSString *title = nil;
-	if (section == kFeedbackSection) {
-		title = @"Feedback";
-	} else if (section == kRatingSection) {
+	if (section == kRatingSection) {
 		title = @"Ratings";
 	} else if (section == kSurveySection) {
 		title = @"Surveys";
@@ -218,9 +196,7 @@ enum kRootTableSections {
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
 	NSString *title = nil;
-	if (section == kFeedbackSection) {
-		title = @"Opens feedback screen.";
-	} else if (section == kRatingSection) {
+	if (section == kRatingSection) {
 		title = nil;
 	} else if (section == kSurveySection) {
 		title = [NSString stringWithFormat:@"ApptentiveConnect v%@", kATConnectVersionString];

@@ -13,6 +13,7 @@
 
 #import "ATBackend.h"
 #import "ATConnect.h"
+#import "ATConnect_Private.h"
 #import "ATData.h"
 #import "ATFakeMessage.h"
 #import "ATFileAttachment.h"
@@ -72,7 +73,7 @@ typedef enum {
 }
 @synthesize tableView, containerView, inputContainerView, attachmentView, fakeCell;
 @synthesize userCell, developerCell, userFileMessageCell;
-@synthesize themeDelegate;
+@synthesize themeDelegate, dismissalDelegate;
 
 - (id)initWithThemeDelegate:(NSObject<ATMessageCenterThemeDelegate> *)aThemeDelegate {
 	self = [super initWithNibName:@"ATMessageCenterViewController" bundle:[ATConnect resourceBundle]];
@@ -229,6 +230,7 @@ typedef enum {
 	themeDelegate = nil;
 	[_sendPhotoButton release];
 	[_cancelButton release];
+	dismissalDelegate = nil;
 	[super dealloc];
 }
 
@@ -259,9 +261,15 @@ typedef enum {
 - (void)viewDidDisappear:(BOOL)animated {
 	[super viewDidDisappear:animated];
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidHideNotification object:nil];
+	if (self.dismissalDelegate && [self.dismissalDelegate respondsToSelector:@selector(messageCenterDidDismiss:)]) {
+		[self.dismissalDelegate messageCenterDidDismiss:self];
+	}
 }
 
 - (IBAction)donePressed:(id)sender {
+	if (self.dismissalDelegate) {
+		[self.dismissalDelegate messageCenterWillDismiss:self];
+	}
 	if ([[self navigationController] respondsToSelector:@selector(presentingViewController)]) {
 		[self.navigationController.presentingViewController dismissModalViewControllerAnimated:YES];
 	} else {

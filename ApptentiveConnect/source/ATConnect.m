@@ -21,7 +21,12 @@
 NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCenterUnreadCountChangedNotification";
 
 @implementation ATConnect
-@synthesize apiKey, showTagline, shouldTakeScreenshot, showEmailField, initialName, initialEmailAddress, feedbackControllerType, customPlaceholderText;
+#if TARGET_OS_IPHONE
+{
+	ATFeedbackController *currentFeedbackController;
+}
+#endif
+@synthesize apiKey, showTagline, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText;
 
 #if TARGET_OS_IPHONE
 @synthesize shouldUseMessageCenter;
@@ -40,17 +45,16 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 	if ((self = [super init])) {
 		self.showEmailField = YES;
 		self.showTagline = YES;
-		self.shouldTakeScreenshot = NO;
-		additionalFeedbackData = [[NSMutableDictionary alloc] init];
+		customData = [[NSMutableDictionary alloc] init];
 	}
 	return self;
 }
 
 - (void)dealloc {
 #if TARGET_OS_IPHONE
-	if (feedbackController) {
-		[feedbackController release];
-		feedbackController = nil;
+	if (currentFeedbackController) {
+		[currentFeedbackController release];
+		currentFeedbackController = nil;
 	}
 #elif IF_TARGET_OS_MAC
 	if (feedbackWindowController) {
@@ -58,11 +62,11 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 		feedbackWindowController = nil;
 	}
 #endif
-	[additionalFeedbackData release], additionalFeedbackData = nil;
+	[customData release], customData = nil;
 	[customPlaceholderText release], customPlaceholderText = nil;
 	[apiKey release], apiKey = nil;
-	[initialName release], initialName = nil;
-	[initialEmailAddress release], initialEmailAddress = nil;
+	[initialUserName release], initialUserName = nil;
+	[initialUserEmailAddress release], initialUserEmailAddress = nil;
 	[super dealloc];
 }
 
@@ -75,20 +79,20 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 	}
 }
 
-- (NSDictionary *)additionFeedbackInfo {
-	return additionalFeedbackData;
+- (NSDictionary *)customData {
+	return customData;
 }
 
-- (void)addAdditionalInfoToFeedback:(NSObject *)object withKey:(NSString *)key {
+- (void)addCustomData:(NSObject *)object withKey:(NSString *)key {
 	if ([object isKindOfClass:[NSDate class]]) {
-		[additionalFeedbackData setObject:[ATUtilities stringRepresentationOfDate:(NSDate *)object] forKey:key];
+		[customData setObject:[ATUtilities stringRepresentationOfDate:(NSDate *)object] forKey:key];
 	} else {
-		[additionalFeedbackData setObject:object forKey:key];
+		[customData setObject:object forKey:key];
 	}
 }
 
-- (void)removeAdditionalInfoFromFeedbackWithKey:(NSString *)key {
-	[additionalFeedbackData removeObjectForKey:key];
+- (void)removeCustomDataWithKey:(NSString *)key {
+	[customData removeObjectForKey:key];
 }
 
 #if TARGET_OS_IPHONE
@@ -98,18 +102,17 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 			ATLogInfo(@"Apptentive feedback controller already shown.");
 			return;
 		}
-		UIImage *screenshot = nil;
 
 		if (![[ATBackend sharedBackend] currentFeedback]) {
 			ATFeedback *feedback = [[ATFeedback alloc] init];
-			if (additionalFeedbackData && [additionalFeedbackData count]) {
-				[feedback addExtraDataFromDictionary:additionalFeedbackData];
+			if (customData && [customData count]) {
+				[feedback addExtraDataFromDictionary:customData];
 			}
-			if (self.initialName && [self.initialName length] > 0) {
-				feedback.name = self.initialName;
+			if (self.initialUserName && [self.initialUserName length] > 0) {
+				feedback.name = self.initialUserName;
 			}
-			if (self.initialEmailAddress && [self.initialEmailAddress length] > 0) {
-				feedback.email = self.initialEmailAddress;
+			if (self.initialUserEmailAddress && [self.initialUserEmailAddress length] > 0) {
+				feedback.email = self.initialUserEmailAddress;
 			}
 			ATContactStorage *contact = [ATContactStorage sharedContactStorage];
 			if (contact.name && [contact.name length] > 0) {
@@ -127,23 +130,13 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 		}
 		if ([[ATBackend sharedBackend] currentFeedback]) {
 			ATFeedback *currentFeedback = [[ATBackend sharedBackend] currentFeedback];
-			if (self.shouldTakeScreenshot && ![currentFeedback hasScreenshot] && self.feedbackControllerType != ATFeedbackControllerSimple) {
-				screenshot = [ATUtilities imageByTakingScreenshot];
-				// Get the rotation of the view hierarchy and rotate the screenshot as
-				// necessary.
-				CGFloat rotation = [ATUtilities rotationOfViewHierarchyInRadians:viewController.view];
-				screenshot = [ATUtilities imageByRotatingImage:screenshot byRadians:rotation];
-				[currentFeedback setScreenshot:screenshot];
-			} else if (!self.shouldTakeScreenshot && [currentFeedback hasScreenshot] && (currentFeedback.imageSource == ATFeedbackImageSourceScreenshot)) {
+			if (![currentFeedback hasScreenshot]) {
 				[currentFeedback setScreenshot:nil];
 			}
 		}
 
 		ATFeedbackController *vc = [[ATFeedbackController alloc] init];
 		[vc setShowEmailAddressField:self.showEmailField];
-		if (self.feedbackControllerType == ATFeedbackControllerSimple) {
-			vc.deleteCurrentFeedbackOnCancel = YES;
-		}
 		if (self.customPlaceholderText) {
 			[vc setCustomPlaceholderText:self.customPlaceholderText];
 		}
@@ -167,12 +160,11 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 }
 
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController {
-	ATMessageCenterViewController *vc = [[ATMessageCenterViewController alloc] initWithThemeDelegate:nil];
-	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
-	nc.modalPresentationStyle = UIModalPresentationFormSheet;
-	[viewController presentModalViewController:nc animated:YES];
-	[vc release], vc = nil;
-	[nc release], nc = nil;
+	[[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController];
+}
+
+- (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion {
+	[[ATBackend sharedBackend] dismissMessageCenterAnimated:animated completion:completion];
 }
 
 - (NSUInteger)unreadMessageCount {

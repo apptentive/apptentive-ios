@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Apptentive, Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 NSString *const ATAppRatingClearCountsOnUpgradePreferenceKey;
 NSString *const ATAppRatingEnabledPreferenceKey;

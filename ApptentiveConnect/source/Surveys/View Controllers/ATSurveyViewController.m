@@ -8,6 +8,7 @@
 
 #import "ATSurveyViewController.h"
 #import "ATConnect.h"
+#import "ATConnect_Private.h"
 #import "ATHUDView.h"
 #import "ATRecordTask.h"
 #import "ATSurvey.h"

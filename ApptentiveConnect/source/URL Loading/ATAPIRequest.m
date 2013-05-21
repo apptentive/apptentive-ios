@@ -8,6 +8,7 @@
 
 #import "ATAPIRequest.h"
 #import "ATConnect.h"
+#import "ATConnect_Private.h"
 #import "ATConnectionManager.h"
 #import "ATURLConnection.h"
 #import "PJSONKit.h"

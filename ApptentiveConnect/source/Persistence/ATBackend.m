@@ -9,6 +9,7 @@
 #import "ATBackend.h"
 #import "ATAppConfigurationUpdateTask.h"
 #import "ATConnect.h"
+#import "ATConnect_Private.h"
 #import "ATContactStorage.h"
 #import "ATDataManager.h"
 #import "ATDeviceUpdater.h"
@@ -52,6 +53,11 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 @end
 
 @implementation ATBackend
+#if TARGET_OS_IPHONE
+{
+	UIViewController *presentedMessageCenterViewController;
+}
+#endif
 @synthesize apiKey, working, currentFeedback, persistentStoreCoordinator;
 
 + (ATBackend *)sharedBackend {
@@ -151,6 +157,11 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	[apiKey release], apiKey = nil;
 	[currentFeedback release], currentFeedback = nil;
 	[dataManager release], dataManager = nil;
+#if TARGET_OS_IPHONE
+	if (presentedMessageCenterViewController) {
+		[presentedMessageCenterViewController release], presentedMessageCenterViewController = nil;
+	}
+#endif
 	[super dealloc];
 }
 
@@ -266,6 +277,49 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	}
 	return [uuid autorelease];
 #endif
+}
+
+#pragma mark Message Center
+
+
+- (void)presentMessageCenterFromViewController:(UIViewController *)viewController {
+	if (presentedMessageCenterViewController != nil) {
+		ATLogInfo(@"Apptentive message center controller already shown.");
+		return;
+	}
+	ATMessageCenterViewController *vc = [[ATMessageCenterViewController alloc] initWithThemeDelegate:nil];
+	vc.dismissalDelegate = self;
+	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
+	nc.modalPresentationStyle = UIModalPresentationFormSheet;
+	if ([viewController respondsToSelector:@selector(presentViewController:animated:completion:)]) {
+		[viewController presentViewController:nc animated:YES completion:^{}];
+	} else {
+		[viewController presentModalViewController:nc animated:YES];
+	}
+	presentedMessageCenterViewController = nc;
+	[vc release], vc = nil;
+}
+
+- (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion {
+	if (presentedMessageCenterViewController != nil) {
+		BOOL didDismiss = NO;
+		if ([presentedMessageCenterViewController respondsToSelector:@selector(presentingViewController)]) {
+			UIViewController *vc = [presentedMessageCenterViewController presentingViewController];
+			if ([vc respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
+				didDismiss = YES;
+				[vc dismissViewControllerAnimated:animated completion:completion];
+			}
+		}
+		if (!didDismiss) {
+			// Gnarly hack for iOS 4.
+			[presentedMessageCenterViewController dismissModalViewControllerAnimated:YES];
+			[presentedMessageCenterViewController release], presentedMessageCenterViewController = nil;
+			
+			double delayInSeconds = 1.0;
+			dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+			dispatch_after(popTime, dispatch_get_main_queue(), completion);
+		}
+	}
 }
 
 #pragma mark Accessors
@@ -385,6 +439,14 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 		[deviceUpdater release], deviceUpdater = nil;
 	}
 }
+
+#if TARGET_OS_IPHONE
+- (void)messageCenterWillDismiss:(ATMessageCenterViewController *)messageCenter {
+	if (presentedMessageCenterViewController) {
+		[presentedMessageCenterViewController release], presentedMessageCenterViewController = nil;
+	}
+}
+#endif
 
 #pragma mark -
 

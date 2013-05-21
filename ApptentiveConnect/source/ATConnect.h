@@ -16,45 +16,35 @@
 #define kATConnectVersionString @"1.0.0"
 
 #if TARGET_OS_IPHONE
-#define kATConnectPlatformString @"iOS"
-@class ATFeedbackController;
+#	define kATConnectPlatformString @"iOS"
 #elif TARGET_OS_MAC
-#define kATConnectPlatformString @"Mac OS X"
+#	define kATConnectPlatformString @"Mac OS X"
 @class ATFeedbackWindowController;
 #endif
 
-typedef enum {
-	ATFeedbackControllerDefault,
-	ATFeedbackControllerSimple
-} ATFeedbackControllerType;
-
 extern NSString *const ATMessageCenterUnreadCountChangedNotification;
+
 
 @interface ATConnect : NSObject {
 @private
 #if TARGET_OS_IPHONE
-	ATFeedbackController *feedbackController;
 #elif TARGET_OS_MAC
 	ATFeedbackWindowController *feedbackWindowController;
 #endif
-	NSMutableDictionary *additionalFeedbackData;
+	NSMutableDictionary *customData;
 	NSString *apiKey;
 	BOOL showTagline;
 	BOOL shouldTakeScreenshot;
 	BOOL showEmailField;
-	NSString *initialName;
-	NSString *initialEmailAddress;
-	ATFeedbackControllerType feedbackControllerType;
+	NSString *initialUserName;
+	NSString *initialUserEmailAddress;
 	NSString *customPlaceholderText;
-	ATFeedbackController *currentFeedbackController;
 }
 @property (nonatomic, copy) NSString *apiKey;
 @property (nonatomic, assign) BOOL showTagline;
-@property (nonatomic, assign) BOOL shouldTakeScreenshot;
 @property (nonatomic, assign) BOOL showEmailField;
-@property (nonatomic, copy) NSString *initialName;
-@property (nonatomic, copy) NSString *initialEmailAddress;
-@property (nonatomic, assign) ATFeedbackControllerType feedbackControllerType;
+@property (nonatomic, copy) NSString *initialUserName;
+@property (nonatomic, copy) NSString *initialUserEmailAddress;
 /*! Set this if you want some custom text to appear as a placeholder in the
  feedback text box. */
 @property (nonatomic, copy) NSString *customPlaceholderText;
@@ -63,19 +53,14 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 
 #if TARGET_OS_IPHONE
 @property (nonatomic, assign) BOOL shouldUseMessageCenter;
-/*!
- * Presents a feedback controller in the window of the given view controller.
- */
-- (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController;
-
 
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController;
 - (NSUInteger)unreadMessageCount;
 
 /*!
- * Dismisses the feedback controller. You normally won't need to call this.
+ * Dismisses the message center. You normally won't need to call this.
  */
-- (void)dismissFeedbackControllerAnimated:(BOOL)animated completion:(void (^)(void))completion;
+- (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion;
 
 #elif TARGET_OS_MAC
 /*!
@@ -85,18 +70,9 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 #endif
 
 /*! Adds an additional data field to any feedback sent. */
-- (void)addAdditionalInfoToFeedback:(NSObject<NSCoding> *)object withKey:(NSString *)key;
+- (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
 
 /*! Removes an additional data field from the feedback sent. */
-- (void)removeAdditionalInfoFromFeedbackWithKey:(NSString *)key;
+- (void)removeCustomDataWithKey:(NSString *)key;
 
-/*!
- * Returns the NSBundle corresponding to the bundle containing ATConnect's
- * images, xibs, strings files, etc.
- */
-+ (NSBundle *)resourceBundle;
 @end
-
-/*! Replacement for NSLocalizedString within ApptentiveConnect. Pulls 
-    localized strings out of the resource bundle. */
-extern NSString *ATLocalizedString(NSString *key, NSString *comment);

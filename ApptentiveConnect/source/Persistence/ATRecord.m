@@ -111,6 +111,10 @@
 	[client setObject:kATConnectVersionString forKey:@"version"];
 	[client setObject:kATConnectPlatformString forKey:@"os"];
 	[client setObject:@"Apptentive, Inc." forKey:@"author"];
+	NSString *distribution = [[ATBackend sharedBackend] distributionName];
+	if (distribution) {
+		[client setObject:distribution forKey:@"distribution"];
+	}
 	[record setObject:client forKey:@"client"];
 	[d setObject:record forKey:@"record"];
 	
@@ -140,6 +144,10 @@
 	[d setObject:kATConnectVersionString forKey:@"record[client][version]"];
 	[d setObject:kATConnectPlatformString forKey:@"record[client][os]"];
 	[d setObject:@"Apptentive, Inc." forKey:@"record[client][author]"];
+	NSString *distribution = [[ATBackend sharedBackend] distributionName];
+	if (distribution) {
+		[d setObject:distribution forKey:@"record[client][distribution]"];
+	}
 	
 	// Add some app information.
 	[d setObject:[ATUtilities appVersionString] forKey:@"record[app_version][version]"];
@@ -161,6 +169,10 @@
 
 - (ATAPIRequest *)requestForSendingRecord {
 	return nil;
+}
+
+- (void)cleanup {
+	// Do nothing by default.
 }
 @end
 

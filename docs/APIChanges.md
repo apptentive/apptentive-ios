@@ -21,8 +21,8 @@ In ratings:
 
 In surveys:
 
-* Replace `hasSurveyAvailable` with `hasSurveyAvailableWithNoTags`.
-
+* Replace `+hasSurveyAvailable` with `+hasSurveyAvailableWithNoTags`.
+* Remove calls to `+checkForAvailableSurveys`. This is now automatic.
 
 ## `ATConnect`
 
@@ -47,8 +47,9 @@ Feedback-related API has been removed.
 
 ## `ATSurveys`
 
-* Renamed `-hasSurveyAvailable` to `-hasSurveyAvailableWithNoTags`.
-* Renamed `-presentSurveyControllerFromViewController:` to `-presentSurveyControllerWithNoTagsFromViewController:`
+* Renamed `+hasSurveyAvailable` to `+hasSurveyAvailableWithNoTags`.
+* Renamed `+presentSurveyControllerFromViewController:` to `+presentSurveyControllerWithNoTagsFromViewController:`
+* Removed `+checkForAvailableSurveys`
 
 ## `ATAppRatingFlow`
 

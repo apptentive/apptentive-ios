@@ -44,8 +44,6 @@
 	ATAppRatingFlow *flow = [ATAppRatingFlow sharedRatingFlow];
 	flow.appID = kApptentiveAppID;
 	[flow showRatingFlowFromViewControllerIfConditionsAreMet:self.navigationController];
-
-	[ATSurveys checkForAvailableSurveys];
 	
 	return YES;
 }

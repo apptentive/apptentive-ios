@@ -18,6 +18,8 @@
 #import "ATFeedbackTask.h"
 #import "ApptentiveMetrics.h"
 #import "ATReachability.h"
+#import "ATSurveys.h"
+#import "ATSurveys_Private.h"
 #import "ATTaskQueue.h"
 #import "ATUtilities.h"
 #import "ATWebClient.h"
@@ -42,6 +44,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 - (void)networkStatusChanged:(NSNotification *)notification;
 - (void)stopWorking:(NSNotification *)notification;
 - (void)startWorking:(NSNotification *)notification;
+- (void)checkForSurveys;
 - (void)checkForMessages;
 - (void)startMonitoringUnreadMessages;
 @end
@@ -69,6 +72,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 			[ApptentiveMetrics sharedMetrics];
 			
 			[ATMessageDisplayType setupSingletons];
+			[sharedBackend performSelector:@selector(checkForSurveys) withObject:nil afterDelay:4];
 			[sharedBackend performSelector:@selector(checkForMessages) withObject:nil afterDelay:8];
 		}
 	}
@@ -549,17 +553,23 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	[self updateWorking];
 }
 
+- (void)checkForSurveys {
+	@autoreleasepool {
+		[ATSurveys checkForAvailableSurveys];
+	}
+}
+
 - (void)checkForMessages {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	@synchronized(self) {
-		ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
-		if (![queue hasTaskOfClass:[ATGetMessagesTask class]]) {
-			ATGetMessagesTask *task = [[ATGetMessagesTask alloc] init];
-			[queue addTask:task];
-			[task release], task = nil;
+	@autoreleasepool {
+		@synchronized(self) {
+			ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
+			if (![queue hasTaskOfClass:[ATGetMessagesTask class]]) {
+				ATGetMessagesTask *task = [[ATGetMessagesTask alloc] init];
+				[queue addTask:task];
+				[task release], task = nil;
+			}
 		}
 	}
-	[pool release], pool = nil;
 }
 
 - (void)clearDemoData {

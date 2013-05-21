@@ -164,9 +164,8 @@ Surveys
 -------
 To use surveys, add the `ATSurveys.h` header to your project.
 
-You can check for available surveys after having set up `ATConnect` (see above)
-by calling `[ATSurveys checkForAvailableSurveys]` and registering for the
-`ATSurveyNewSurveyAvailableNotification` notification. 
+New surveys will be retrieved automatically. When a new survey becomes available,
+the `ATSurveyNewSurveyAvailableNotification` notification will be sent.
 
 There are both tagged surveys and untagged surveys. Tags are useful for defining
 surveys that should be shown only in certain locations, whereas untagged surveys
@@ -199,7 +198,6 @@ So, the full flow looks like:
 - (void)applicationDidFinishLaunching:(UIApplication *)application /* ... */ {
     // ...
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyBecameAvailable:) name:ATSurveyNewSurveyAvailableNotification object:nil];
-	[ATSurveys checkForAvailableSurveys];
 }
 
 - (void)surveyBecameAvailable:(NSNotification *)notification {

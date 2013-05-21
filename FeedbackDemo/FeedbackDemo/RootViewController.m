@@ -51,7 +51,6 @@ enum kRootTableSections {
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyBecameAvailable:) name:ATSurveyNewSurveyAvailableNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unreadMessageCountChanged:) name:ATMessageCenterUnreadCountChangedNotification object:nil];
-	[ATSurveys checkForAvailableSurveys];
 }
 
 - (void)surveyBecameAvailable:(NSNotification *)notification {

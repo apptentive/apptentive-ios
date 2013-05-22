@@ -15,7 +15,7 @@
 @implementation ATTextMessage
 
 @dynamic body;
-@dynamic subject;
+@dynamic title;
 
 + (NSObject *)newInstanceWithJSON:(NSDictionary *)json {
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];

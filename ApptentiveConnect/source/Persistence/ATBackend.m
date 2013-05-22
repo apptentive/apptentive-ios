@@ -220,17 +220,17 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	[pool release];
 }
 
-- (void)sendAutomatedMessageWithSubject:(NSString *)subject body:(NSString *)body {
+- (void)sendAutomatedMessageWithTitle:(NSString *)title body:(NSString *)body {
 	ATAutomatedMessage *message = (ATAutomatedMessage *)[ATData newEntityNamed:@"ATAutomatedMessage"];
 	[message setup];
-	message.subject = subject;
+	message.title = title;
 	message.body = body;
 	message.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
 	message.sentByUser = @YES;
 	[message updateClientCreationTime];
 	NSError *error = nil;
 	if (![[self managedObjectContext] save:&error]) {
-		ATLogError(@"Unable to send automated message with subject: %@, body: %@, error: %@", subject, body, error);
+		ATLogError(@"Unable to send automated message with title: %@, body: %@, error: %@", title, body, error);
 		[message release], message = nil;
 		return;
 	}

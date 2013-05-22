@@ -166,9 +166,9 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 			if (!self.viewController) {
 				ATLogError(@"No view controller to present feedback interface!!");
 			} else {
-				NSString *subject = NSLocalizedString(@"We're Sorry!", @"We're sorry text");
+				NSString *title = NSLocalizedString(@"We're Sorry!", @"We're sorry text");
 				NSString *body = ATLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
-				[[ATBackend sharedBackend] sendAutomatedMessageWithSubject:subject body:body];
+				[[ATBackend sharedBackend] sendAutomatedMessageWithTitle:title body:body];
 				[[ATConnect sharedConnection] presentMessageCenterFromViewController:self.viewController];
 			}
 		} else if (buttonIndex == 1) { // yes

@@ -11,7 +11,7 @@
 #import "ATBackend.h"
 
 @implementation ATAutomatedMessageCell
-@synthesize dateLabel, showDateLabel, messageText, subjectText, grayLineView, containerView;
+@synthesize dateLabel, showDateLabel, messageText, titleText, grayLineView, containerView;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -37,7 +37,7 @@
 - (void)dealloc {
     [dateLabel release];
 	[messageText release];
-	[subjectText release];
+	[titleText release];
 	[grayLineView release];
 	[containerView release];
     [super dealloc];

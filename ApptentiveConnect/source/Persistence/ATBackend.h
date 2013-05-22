@@ -75,7 +75,7 @@ NSString *const ATBackendNewAPIKeyNotification;
 - (void)sendFeedback:(ATFeedback *)feedback;
 
 /*! Use this to send an automated message. */
-- (void)sendAutomatedMessageWithSubject:(NSString *)subject body:(NSString *)body;
+- (void)sendAutomatedMessageWithTitle:(NSString *)title body:(NSString *)body;
 
 - (NSString *)supportDirectoryPath;
 

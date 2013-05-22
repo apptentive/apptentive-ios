@@ -8,6 +8,7 @@
 
 #import "ATGetMessagesTask.h"
 
+#import "ATAutomatedMessage.h"
 #import "ATBackend.h"
 #import "ATMessage.h"
 #import "ATConversationUpdater.h"
@@ -156,6 +157,8 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 					message = [(ATTextMessage *)[ATTextMessage newInstanceWithJSON:messageJSON] autorelease];
 				} else if ([type isEqualToString:@"FileMessage"]) {
 #warning Add file message here.
+				} else if ([type isEqualToString:@"AutomatedMessage"]) {
+					message = [(ATAutomatedMessage *)[ATAutomatedMessage newInstanceWithJSON:messageJSON] autorelease];
 				}
 				message.pendingState = @(ATPendingMessageStateConfirmed);
 				if (message) {

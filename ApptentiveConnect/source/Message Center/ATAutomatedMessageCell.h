@@ -14,7 +14,7 @@
 @interface ATAutomatedMessageCell : UITableViewCell <ATMessageCenterCell>
 @property (retain, nonatomic) IBOutlet UIView *containerView;
 @property (retain, nonatomic) IBOutlet UILabel *dateLabel;
-@property (retain, nonatomic) IBOutlet TTTAttributedLabel *subjectText;
+@property (retain, nonatomic) IBOutlet TTTAttributedLabel *titleText;
 @property (retain, nonatomic) IBOutlet UIView *grayLineView;
 @property (retain, nonatomic) IBOutlet TTTAttributedLabel *messageText;
 @property (nonatomic, assign, getter = shouldShowDateLabel) BOOL showDateLabel;

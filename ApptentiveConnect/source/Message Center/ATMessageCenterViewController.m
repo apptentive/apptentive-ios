@@ -99,9 +99,9 @@ typedef enum {
 	
 	NSUInteger messageCount = [ATData countEntityNamed:@"ATMessage" withPredicate:nil];
 	if (messageCount == 0) {
-		NSString *subject = NSLocalizedString(@"Welcome", @"Welcome");
+		NSString *title = NSLocalizedString(@"Welcome", @"Welcome");
 		NSString *body = ATLocalizedString(@"Use this area to communicate with the developer of this app! If you have questions, suggestions, concerns, or just want to help us make the app better or get in touch, feel free to send us a message!", @"Placeholder welcome message.");
-		[[ATBackend sharedBackend] sendAutomatedMessageWithSubject:subject body:body];
+		[[ATBackend sharedBackend] sendAutomatedMessageWithTitle:title body:body];
 	}
 	
 	messageDateFormatter = [[NSDateFormatter alloc] init];
@@ -830,11 +830,11 @@ typedef enum {
 		}
 		if ([message isKindOfClass:[ATAutomatedMessage class]]) {
 			ATAutomatedMessage *automatedMessage = (ATAutomatedMessage *)message;
-			NSString *messageSubject = automatedMessage.subject;
+			NSString *messageTitle = automatedMessage.title;
 			NSString *messageBody = automatedMessage.body;
 			
-			currentCell.subjectText.textAlignment = UITextAlignmentCenter;
-			[currentCell.subjectText setText:messageSubject afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
+			currentCell.titleText.textAlignment = UITextAlignmentCenter;
+			[currentCell.titleText setText:messageTitle afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
 				NSRange boldRange = NSMakeRange(0, [mutableAttributedString length]);
 				
 				UIFont *boldFont = [UIFont fontWithName:@"AmericanTypewriter-Bold" size:15];

@@ -19,25 +19,6 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 @implementation ATPersonUpdater
 @synthesize delegate;
 
-+ (BOOL)personExists {
-	ATPerson *currentPerson = [ATPersonUpdater currentPerson];
-	if (currentPerson == nil) {
-		return NO;
-	} else {
-		return YES;
-	}
-}
-
-+ (ATPerson *)currentPerson {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSData *personData = [defaults dataForKey:ATCurrentPersonPreferenceKey];
-	if (!personData) {
-		return nil;
-	}
-	ATPerson *person = [NSKeyedUnarchiver unarchiveObjectWithData:personData];
-	return person;
-}
-
 - (id)initWithDelegate:(NSObject<ATPersonUpdaterDelegate> *)aDelegate {
 	if ((self = [super init])) {
 		delegate = aDelegate;
@@ -51,9 +32,23 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 	[super dealloc];
 }
 
-- (void)createPerson {
++ (BOOL)shouldUpdate {
+	ATPersonInfo *person = [ATPersonInfo currentPerson];
+	if (!person) {
+		// Avoid creating a person "just because".
+		return NO;
+	}
+	return person.needsUpdate;
+}
+
+- (void)update {
 	[self cancel];
-	request = [[[ATWebClient sharedClient] requestForCreatingPerson:nil] retain];
+	ATPersonInfo *person = [ATPersonInfo currentPerson];
+	if (person) {
+		person.needsUpdate = YES;
+		[person saveAsCurrentPerson];
+	}
+	request = [[[ATWebClient sharedClient] requestForUpdatingPerson:person] retain];
 	request.delegate = self;
 	[request start];
 }
@@ -101,13 +96,11 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 
 @implementation ATPersonUpdater (Private)
 - (void)processResult:(NSDictionary *)jsonPerson {
-	ATPerson *person = [ATPerson newPersonFromJSON:jsonPerson];
+	ATPersonInfo *person = [ATPersonInfo newPersonFromJSON:jsonPerson];
 	
 	if (person) {
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		NSData *personData = [NSKeyedArchiver archivedDataWithRootObject:person];
-		[defaults setObject:personData forKey:ATCurrentPersonPreferenceKey];
-		[defaults synchronize];
+		person.needsUpdate = NO;
+		[person saveAsCurrentPerson];
 		[delegate personUpdater:self didFinish:YES];
 	} else {
 		[delegate personUpdater:self didFinish:NO];
@@ -115,4 +108,3 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 	[person release], person = nil;
 }
 @end
-

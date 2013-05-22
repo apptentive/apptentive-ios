@@ -256,8 +256,8 @@
 		49F8AFEF16CC4A550070FFEA /* ATMessageDisplayType.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFDA16CC4A550070FFEA /* ATMessageDisplayType.m */; };
 		49F8AFF016CC4A550070FFEA /* ATMessageSender.h in Headers */ = {isa = PBXBuildFile; fileRef = 49F8AFDB16CC4A550070FFEA /* ATMessageSender.h */; };
 		49F8AFF116CC4A550070FFEA /* ATMessageSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFDC16CC4A550070FFEA /* ATMessageSender.m */; };
-		49F8AFF216CC4A550070FFEA /* ATPerson.h in Headers */ = {isa = PBXBuildFile; fileRef = 49F8AFDD16CC4A550070FFEA /* ATPerson.h */; };
-		49F8AFF316CC4A550070FFEA /* ATPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFDE16CC4A550070FFEA /* ATPerson.m */; };
+		49F8AFF216CC4A550070FFEA /* ATPersonInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 49F8AFDD16CC4A550070FFEA /* ATPersonInfo.h */; };
+		49F8AFF316CC4A550070FFEA /* ATPersonInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFDE16CC4A550070FFEA /* ATPersonInfo.m */; };
 		49F8AFF416CC4A550070FFEA /* ATTextMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 49F8AFDF16CC4A550070FFEA /* ATTextMessage.h */; };
 		49F8AFF516CC4A550070FFEA /* ATTextMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFE016CC4A550070FFEA /* ATTextMessage.m */; };
 		49F8AFF616CC4A550070FFEA /* ATUpgradeRequestMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 49F8AFE116CC4A550070FFEA /* ATUpgradeRequestMessage.h */; };
@@ -492,8 +492,8 @@
 		49F8AFDA16CC4A550070FFEA /* ATMessageDisplayType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageDisplayType.m; sourceTree = "<group>"; };
 		49F8AFDB16CC4A550070FFEA /* ATMessageSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageSender.h; sourceTree = "<group>"; };
 		49F8AFDC16CC4A550070FFEA /* ATMessageSender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageSender.m; sourceTree = "<group>"; };
-		49F8AFDD16CC4A550070FFEA /* ATPerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATPerson.h; sourceTree = "<group>"; };
-		49F8AFDE16CC4A550070FFEA /* ATPerson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATPerson.m; sourceTree = "<group>"; };
+		49F8AFDD16CC4A550070FFEA /* ATPersonInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATPersonInfo.h; sourceTree = "<group>"; };
+		49F8AFDE16CC4A550070FFEA /* ATPersonInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATPersonInfo.m; sourceTree = "<group>"; };
 		49F8AFDF16CC4A550070FFEA /* ATTextMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATTextMessage.h; sourceTree = "<group>"; };
 		49F8AFE016CC4A550070FFEA /* ATTextMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATTextMessage.m; sourceTree = "<group>"; };
 		49F8AFE116CC4A550070FFEA /* ATUpgradeRequestMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATUpgradeRequestMessage.h; sourceTree = "<group>"; };
@@ -1018,8 +1018,8 @@
 				49F8AFDA16CC4A550070FFEA /* ATMessageDisplayType.m */,
 				49F8AFDB16CC4A550070FFEA /* ATMessageSender.h */,
 				49F8AFDC16CC4A550070FFEA /* ATMessageSender.m */,
-				49F8AFDD16CC4A550070FFEA /* ATPerson.h */,
-				49F8AFDE16CC4A550070FFEA /* ATPerson.m */,
+				49F8AFDD16CC4A550070FFEA /* ATPersonInfo.h */,
+				49F8AFDE16CC4A550070FFEA /* ATPersonInfo.m */,
 				49F8AFF916CC4D860070FFEA /* ATRecord.h */,
 				49F8AFFA16CC4D860070FFEA /* ATRecord.m */,
 				49F8AFDF16CC4A550070FFEA /* ATTextMessage.h */,
@@ -1109,7 +1109,7 @@
 				49F8AFEC16CC4A550070FFEA /* ATMessage.h in Headers */,
 				49F8AFEE16CC4A550070FFEA /* ATMessageDisplayType.h in Headers */,
 				49F8AFF016CC4A550070FFEA /* ATMessageSender.h in Headers */,
-				49F8AFF216CC4A550070FFEA /* ATPerson.h in Headers */,
+				49F8AFF216CC4A550070FFEA /* ATPersonInfo.h in Headers */,
 				49F8AFF416CC4A550070FFEA /* ATTextMessage.h in Headers */,
 				49F8AFF616CC4A550070FFEA /* ATUpgradeRequestMessage.h in Headers */,
 				49F8AFFB16CC4D860070FFEA /* ATRecord.h in Headers */,
@@ -1355,7 +1355,7 @@
 				49F8AFED16CC4A550070FFEA /* ATMessage.m in Sources */,
 				49F8AFEF16CC4A550070FFEA /* ATMessageDisplayType.m in Sources */,
 				49F8AFF116CC4A550070FFEA /* ATMessageSender.m in Sources */,
-				49F8AFF316CC4A550070FFEA /* ATPerson.m in Sources */,
+				49F8AFF316CC4A550070FFEA /* ATPersonInfo.m in Sources */,
 				49F8AFF516CC4A550070FFEA /* ATTextMessage.m in Sources */,
 				49F8AFF716CC4A550070FFEA /* ATUpgradeRequestMessage.m in Sources */,
 				49F8AFFC16CC4D860070FFEA /* ATRecord.m in Sources */,

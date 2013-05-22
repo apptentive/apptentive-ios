@@ -9,9 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import "ATAPIRequest.h"
-#import "ATPerson.h"
-
-NSString *const ATCurrentPersonPreferenceKey;
+#import "ATPersonInfo.h"
 
 @protocol ATPersonUpdaterDelegate;
 
@@ -21,11 +19,11 @@ NSString *const ATCurrentPersonPreferenceKey;
 	ATAPIRequest *request;
 }
 @property (nonatomic, assign) NSObject<ATPersonUpdaterDelegate> *delegate;
-+ (BOOL)personExists;
-+ (ATPerson *)currentPerson;
+
++ (BOOL)shouldUpdate;
 
 - (id)initWithDelegate:(NSObject<ATPersonUpdaterDelegate> *)delegate;
-- (void)createPerson;
+- (void)update;
 - (void)cancel;
 - (float)percentageComplete;
 @end
@@ -33,4 +31,3 @@ NSString *const ATCurrentPersonPreferenceKey;
 @protocol ATPersonUpdaterDelegate <NSObject>
 - (void)personUpdater:(ATPersonUpdater *)personUpdater didFinish:(BOOL)success;
 @end
-

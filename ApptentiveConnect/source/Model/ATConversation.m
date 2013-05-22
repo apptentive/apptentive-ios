@@ -63,6 +63,10 @@
 	if (deviceIDObject != nil) {
 		self.deviceID = deviceIDObject;
 	}
+	NSString *personIDObject = [json at_safeObjectForKey:@"person_id"];
+	if (personIDObject != nil) {
+		self.personID = personIDObject;
+	}
 }
 
 //TODO: Add support for sending person.

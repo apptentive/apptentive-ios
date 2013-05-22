@@ -94,6 +94,32 @@
 	return [request autorelease];
 }
 
+- (ATAPIRequest *)requestForUpdatingPerson:(ATPersonInfo *)personInfo {
+	NSError *error = nil;
+	NSDictionary *postJSON = [personInfo apiJSON];
+	
+	NSString *postString = [postJSON ATJSONStringWithOptions:ATJKSerializeOptionPretty error:&error];
+	if (!postString && error != nil) {
+		ATLogError(@"Error while encoding JSON: %@", error);
+		return nil;
+	}
+	
+	ATConversation *conversation = [ATConversationUpdater currentConversation];
+	if (!conversation) {
+		ATLogError(@"No current conversation.");
+		return nil;
+	}
+	
+	NSString *url = [self apiURLStringWithPath:@"people"];
+	
+	ATURLConnection *conn = [self connectionToPut:[NSURL URLWithString:url] JSON:postString];
+	conn.timeoutInterval = 60.0;
+	[self updateConnection:conn withOAuthToken:conversation.token];
+	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
+	request.returnType = ATAPIRequestReturnTypeJSON;
+	return [request autorelease];
+}
+
 - (ATAPIRequest *)requestForPostingMessage:(ATMessage *)message {
 	NSError *error = nil;
 	NSDictionary *messageJSON = [message apiJSON];

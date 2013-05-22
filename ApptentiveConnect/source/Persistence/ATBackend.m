@@ -27,6 +27,7 @@
 #import "ATGetMessagesTask.h"
 #import "ATTextMessage.h"
 #import "ATLog.h"
+#import "ATPersonUpdater.h"
 
 NSString *const ATBackendNewAPIKeyNotification = @"ATBackendNewAPIKeyNotification";
 NSString *const ATUUIDPreferenceKey = @"ATUUIDPreferenceKey";
@@ -53,6 +54,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 @property (nonatomic, assign) BOOL working;
 - (void)updateConversationIfNeeded;
 - (void)updateDeviceIfNeeded;
+- (void)updatePersonIfNeeded;
 @end
 
 @implementation ATBackend
@@ -72,8 +74,12 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 			[ApptentiveMetrics sharedMetrics];
 			
 			[ATMessageDisplayType setupSingletons];
+			
+			// One-shot actions at startup.
 			[sharedBackend performSelector:@selector(checkForSurveys) withObject:nil afterDelay:4];
+			[sharedBackend performSelector:@selector(updateDeviceIfNeeded) withObject:nil afterDelay:7];
 			[sharedBackend performSelector:@selector(checkForMessages) withObject:nil afterDelay:8];
+			[sharedBackend performSelector:@selector(updatePersonIfNeeded) withObject:nil afterDelay:9];
 		}
 	}
 	return sharedBackend;
@@ -336,7 +342,6 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 			
 			[self updateConversationIfNeeded];
 			[self updateConfigurationIfNeeded];
-			[self updateDeviceIfNeeded];
 		} else {
 			[[ATTaskQueue sharedTaskQueue] stop];
 			[ATTaskQueue releaseSharedTaskQueue];
@@ -377,6 +382,10 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 }
 
 - (void)updateDeviceIfNeeded {
+	if (![[NSThread currentThread] isMainThread]) {
+		[self performSelectorOnMainThread:@selector(updateDeviceIfNeeded) withObject:nil waitUntilDone:NO];
+		return;
+	}
 	if (![ATConversationUpdater conversationExists]) {
 		return;
 	}
@@ -384,6 +393,22 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 		if ([ATDeviceUpdater shouldUpdate]) {
 			deviceUpdater = [[ATDeviceUpdater alloc] initWithDelegate:self];
 			[deviceUpdater update];
+		}
+	}
+}
+
+- (void)updatePersonIfNeeded {
+	if (![[NSThread currentThread] isMainThread]) {
+		[self performSelectorOnMainThread:@selector(updatePersonIfNeeded) withObject:nil waitUntilDone:NO];
+		return;
+	}
+	if (![ATConversationUpdater conversationExists]) {
+		return;
+	}
+	if (!personUpdater) {
+		if ([ATPersonUpdater shouldUpdate]) {
+			personUpdater = [[ATPersonUpdater alloc] initWithDelegate:self];
+			[personUpdater update];
 		}
 	}
 }
@@ -427,6 +452,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 			ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
 			[queue start];
 			[self updateDeviceIfNeeded];
+			[self updatePersonIfNeeded];
 		}
 	}
 }
@@ -441,6 +467,13 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 - (void)deviceUpdater:(ATDeviceUpdater *)aDeviceUpdater didFinish:(BOOL)success {
 	if (deviceUpdater == aDeviceUpdater) {
 		[deviceUpdater release], deviceUpdater = nil;
+	}
+}
+
+#pragma mark ATPersonUpdaterDelegate
+- (void)personUpdater:(ATPersonUpdater *)aPersonUpdater didFinish:(BOOL)success {
+	if (personUpdater == aPersonUpdater) {
+		[personUpdater release], personUpdater = nil;
 	}
 }
 

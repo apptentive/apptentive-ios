@@ -1,5 +1,5 @@
 //
-//  ATFakeMessage.h
+//  ATAutomatedMessage.h
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 10/19/12.
@@ -9,12 +9,10 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-#import "ATMessage.h"
+#import "ATTextMessage.h"
 
-@interface ATFakeMessage : ATMessage
+@interface ATAutomatedMessage : ATTextMessage
 
-@property (nonatomic, retain) NSString *body;
 @property (nonatomic, retain) NSString *subject;
 
-+ (void)removeFakeMessages;
 @end

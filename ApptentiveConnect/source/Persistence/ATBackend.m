@@ -8,12 +8,14 @@
 
 #import "ATBackend.h"
 #import "ATAppConfigurationUpdateTask.h"
+#import "ATAutomatedMessage.h"
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
 #import "ATContactStorage.h"
+#import "ATData.h"
 #import "ATDataManager.h"
 #import "ATDeviceUpdater.h"
-#import "ATFakeMessage.h"
+#import "ATAutomatedMessage.h"
 #import "ATFeedback.h"
 #import "ATFeedbackTask.h"
 #import "ApptentiveMetrics.h"
@@ -25,6 +27,7 @@
 #import "ATWebClient.h"
 #import "ATMessageDisplayType.h"
 #import "ATGetMessagesTask.h"
+#import "ATMessageTask.h"
 #import "ATTextMessage.h"
 #import "ATLog.h"
 #import "ATPersonUpdater.h"
@@ -39,7 +42,6 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 
 @interface ATBackend (Private)
 - (void)setupDataManager;
-- (void)clearTemporaryData;
 - (void)setup;
 - (void)updateWorking;
 - (void)networkStatusChanged:(NSNotification *)notification;
@@ -216,6 +218,33 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	
 	[feedback release];
 	[pool release];
+}
+
+- (void)sendAutomatedMessageWithSubject:(NSString *)subject body:(NSString *)body {
+	ATAutomatedMessage *message = (ATAutomatedMessage *)[ATData newEntityNamed:@"ATAutomatedMessage"];
+	[message setup];
+	message.subject = subject;
+	message.body = body;
+	message.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
+	message.sentByUser = @YES;
+	[message updateClientCreationTime];
+	NSError *error = nil;
+	if (![[self managedObjectContext] save:&error]) {
+		ATLogError(@"Unable to send automated message with subject: %@, body: %@, error: %@", subject, body, error);
+		[message release], message = nil;
+		return;
+	}
+	
+	// Give it a wee bit o' delay.
+	NSString *pendingMessageID = [message pendingMessageID];
+	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
+		ATMessageTask *task = [[ATMessageTask alloc] init];
+		task.pendingMessageID = pendingMessageID;
+		[[ATTaskQueue sharedTaskQueue] addTask:task];
+		[[ATTaskQueue sharedTaskQueue] start];
+		[task release], task = nil;
+	});
+	[message release], message = nil;
 }
 
 - (NSString *)supportDirectoryPath {
@@ -636,16 +665,6 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	if (![dataManager persistentStoreCoordinator]) {
 		ATLogError(@"There was a problem setting up the persistent store coordinator!");
 	}
-	[self performSelector:@selector(clearTemporaryData) withObject:nil afterDelay:0.2];
-}
-
-- (void)clearTemporaryData {
-	if (![[NSThread currentThread] isMainThread]) {
-		[self performSelectorOnMainThread:@selector(clearTemporaryData) withObject:nil waitUntilDone:YES];
-		return;
-	}
-	ATLogInfo(@"Removing temporary data");
-	[ATFakeMessage removeFakeMessages];
 }
 
 - (void)startMonitoringUnreadMessages {

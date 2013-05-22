@@ -74,6 +74,9 @@ NSString *const ATBackendNewAPIKeyNotification;
     will be sent in the background. */
 - (void)sendFeedback:(ATFeedback *)feedback;
 
+/*! Use this to send an automated message. */
+- (void)sendAutomatedMessageWithSubject:(NSString *)subject body:(NSString *)body;
+
 - (NSString *)supportDirectoryPath;
 
 /*! Path to directory for storing attachments. */

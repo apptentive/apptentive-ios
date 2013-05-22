@@ -34,7 +34,6 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 	NSMutableDictionary *customData;
 	NSString *apiKey;
 	BOOL showTagline;
-	BOOL shouldTakeScreenshot;
 	BOOL showEmailField;
 	NSString *initialUserName;
 	NSString *initialUserEmailAddress;

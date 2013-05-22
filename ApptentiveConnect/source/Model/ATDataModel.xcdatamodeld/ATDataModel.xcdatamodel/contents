@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2061" systemVersion="12D78" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="ATAutomatedMessage" representedClassName="ATAutomatedMessage" parentEntity="ATTextMessage" syncable="YES">
+        <attribute name="subject" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="ATEvent" representedClassName="ATEvent" parentEntity="ATRecord" syncable="YES">
         <attribute name="dictionaryData" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="pendingEventID" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
-    </entity>
-    <entity name="ATFakeMessage" representedClassName="ATFakeMessage" parentEntity="ATMessage" syncable="YES">
-        <attribute name="body" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="subject" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="ATFileAttachment" representedClassName="ATFileAttachment" syncable="YES">
         <attribute name="localPath" optional="YES" attributeType="String" syncable="YES"/>
@@ -52,21 +51,20 @@
     </entity>
     <entity name="ATTextMessage" representedClassName="ATTextMessage" parentEntity="ATMessage" syncable="YES">
         <attribute name="body" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="subject" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="ATUpgradeRequestMessage" representedClassName="ATUpgradeRequestMessage" parentEntity="ATTextMessage" syncable="YES">
         <attribute name="forced" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
     </entity>
     <elements>
-        <element name="ATEvent" positionX="-425" positionY="-264" width="128" height="88"/>
-        <element name="ATFakeMessage" positionX="-11" positionY="105" width="128" height="75"/>
-        <element name="ATFileAttachment" positionX="-594" positionY="81" width="128" height="148"/>
-        <element name="ATFileMessage" positionX="-425" positionY="-0" width="128" height="60"/>
-        <element name="ATMessage" positionX="-225" positionY="-259" width="128" height="178"/>
-        <element name="ATMessageDisplayType" positionX="54" positionY="-298" width="128" height="73"/>
-        <element name="ATMessageSender" positionX="43" positionY="-210" width="128" height="120"/>
-        <element name="ATRecord" positionX="-225" positionY="-456" width="128" height="118"/>
-        <element name="ATTextMessage" positionX="-225" positionY="27" width="128" height="75"/>
-        <element name="ATUpgradeRequestMessage" positionX="-252" positionY="165" width="180" height="60"/>
+        <element name="ATAutomatedMessage" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ATEvent" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ATFileAttachment" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ATFileMessage" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ATMessage" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ATMessageDisplayType" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ATMessageSender" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ATRecord" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ATTextMessage" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ATUpgradeRequestMessage" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

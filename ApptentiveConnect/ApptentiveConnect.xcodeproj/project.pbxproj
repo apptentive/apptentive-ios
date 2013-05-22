@@ -44,7 +44,7 @@
 		492B81E816D5C8E20031BEF6 /* ATFileMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 492B81E716D5C8E20031BEF6 /* ATFileMessageCell.xib */; };
 		492F2F0716E320010030E48A /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49ADE8DB1626167F00DD8634 /* CoreText.framework */; };
 		492F2F0816E320040030E48A /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4988FB5316212BD4000A7CB7 /* CoreData.framework */; };
-		492F2F0A16E3F77C0030E48A /* ATFakeMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 492F2F0916E3F77C0030E48A /* ATFakeMessageCell.xib */; };
+		492F2F0A16E3F77C0030E48A /* ATAutomatedMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 492F2F0916E3F77C0030E48A /* ATAutomatedMessageCell.xib */; };
 		492F2F0E16E3F9660030E48A /* ATDefaultMessageCenterTitleView.h in Headers */ = {isa = PBXBuildFile; fileRef = 492F2F0C16E3F9660030E48A /* ATDefaultMessageCenterTitleView.h */; };
 		492F2F0F16E3F9660030E48A /* ATDefaultMessageCenterTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 492F2F0D16E3F9660030E48A /* ATDefaultMessageCenterTitleView.m */; };
 		492F2F1C16ED597F0030E48A /* ATRecordRequestTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 492F2F1A16ED597F0030E48A /* ATRecordRequestTask.h */; };
@@ -195,8 +195,8 @@
 		49ADE8D8162613BA00DD8634 /* TTTAttributedLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 49ADE8D6162613BA00DD8634 /* TTTAttributedLabel.h */; };
 		49ADE8D9162613BA00DD8634 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 49ADE8D7162613BA00DD8634 /* TTTAttributedLabel.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		49ADE8DC1626167F00DD8634 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49ADE8DB1626167F00DD8634 /* CoreText.framework */; };
-		49AF27CF16321F0C005E1E9D /* ATFakeMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AF27CD16321F0C005E1E9D /* ATFakeMessageCell.h */; };
-		49AF27D016321F0C005E1E9D /* ATFakeMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AF27CE16321F0C005E1E9D /* ATFakeMessageCell.m */; };
+		49AF27CF16321F0C005E1E9D /* ATAutomatedMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AF27CD16321F0C005E1E9D /* ATAutomatedMessageCell.h */; };
+		49AF27D016321F0C005E1E9D /* ATAutomatedMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AF27CE16321F0C005E1E9D /* ATAutomatedMessageCell.m */; };
 		49B3D96B133E6D6400B5A5CD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D968133E6D6400B5A5CD /* CoreGraphics.framework */; };
 		49B3D96C133E6D6400B5A5CD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D969133E6D6400B5A5CD /* QuartzCore.framework */; };
 		49B3D96D133E6D6400B5A5CD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D96A133E6D6400B5A5CD /* UIKit.framework */; };
@@ -248,8 +248,8 @@
 		49F8AFE616CC4A550070FFEA /* ATData.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFD016CC4A550070FFEA /* ATData.m */; };
 		49F8AFE816CC4A550070FFEA /* ATDeviceInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 49F8AFD316CC4A550070FFEA /* ATDeviceInfo.h */; };
 		49F8AFE916CC4A550070FFEA /* ATDeviceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFD416CC4A550070FFEA /* ATDeviceInfo.m */; };
-		49F8AFEA16CC4A550070FFEA /* ATFakeMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 49F8AFD516CC4A550070FFEA /* ATFakeMessage.h */; };
-		49F8AFEB16CC4A550070FFEA /* ATFakeMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFD616CC4A550070FFEA /* ATFakeMessage.m */; };
+		49F8AFEA16CC4A550070FFEA /* ATAutomatedMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 49F8AFD516CC4A550070FFEA /* ATAutomatedMessage.h */; };
+		49F8AFEB16CC4A550070FFEA /* ATAutomatedMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFD616CC4A550070FFEA /* ATAutomatedMessage.m */; };
 		49F8AFEC16CC4A550070FFEA /* ATMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 49F8AFD716CC4A550070FFEA /* ATMessage.h */; };
 		49F8AFED16CC4A550070FFEA /* ATMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFD816CC4A550070FFEA /* ATMessage.m */; };
 		49F8AFEE16CC4A550070FFEA /* ATMessageDisplayType.h in Headers */ = {isa = PBXBuildFile; fileRef = 49F8AFD916CC4A550070FFEA /* ATMessageDisplayType.h */; };
@@ -316,7 +316,7 @@
 		492B81E216D5C8AC0031BEF6 /* ATFileMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATFileMessageCell.h; path = "Message Center/ATFileMessageCell.h"; sourceTree = "<group>"; };
 		492B81E316D5C8AC0031BEF6 /* ATFileMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATFileMessageCell.m; path = "Message Center/ATFileMessageCell.m"; sourceTree = "<group>"; };
 		492B81E716D5C8E20031BEF6 /* ATFileMessageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ATFileMessageCell.xib; path = xibs/ATFileMessageCell.xib; sourceTree = SOURCE_ROOT; };
-		492F2F0916E3F77C0030E48A /* ATFakeMessageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ATFakeMessageCell.xib; path = xibs/ATFakeMessageCell.xib; sourceTree = SOURCE_ROOT; };
+		492F2F0916E3F77C0030E48A /* ATAutomatedMessageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ATAutomatedMessageCell.xib; path = xibs/ATAutomatedMessageCell.xib; sourceTree = SOURCE_ROOT; };
 		492F2F0C16E3F9660030E48A /* ATDefaultMessageCenterTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATDefaultMessageCenterTitleView.h; path = "Message Center/Custom Views/ATDefaultMessageCenterTitleView.h"; sourceTree = "<group>"; };
 		492F2F0D16E3F9660030E48A /* ATDefaultMessageCenterTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATDefaultMessageCenterTitleView.m; path = "Message Center/Custom Views/ATDefaultMessageCenterTitleView.m"; sourceTree = "<group>"; };
 		492F2F1A16ED597F0030E48A /* ATRecordRequestTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATRecordRequestTask.h; sourceTree = "<group>"; };
@@ -432,8 +432,8 @@
 		49ADE8D6162613BA00DD8634 /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTTAttributedLabel.h; path = TTTAttributedLabel/TTTAttributedLabel.h; sourceTree = "<group>"; };
 		49ADE8D7162613BA00DD8634 /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TTTAttributedLabel.m; path = TTTAttributedLabel/TTTAttributedLabel.m; sourceTree = "<group>"; };
 		49ADE8DB1626167F00DD8634 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
-		49AF27CD16321F0C005E1E9D /* ATFakeMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATFakeMessageCell.h; path = "Message Center/ATFakeMessageCell.h"; sourceTree = "<group>"; };
-		49AF27CE16321F0C005E1E9D /* ATFakeMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATFakeMessageCell.m; path = "Message Center/ATFakeMessageCell.m"; sourceTree = "<group>"; };
+		49AF27CD16321F0C005E1E9D /* ATAutomatedMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATAutomatedMessageCell.h; path = "Message Center/ATAutomatedMessageCell.h"; sourceTree = "<group>"; };
+		49AF27CE16321F0C005E1E9D /* ATAutomatedMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATAutomatedMessageCell.m; path = "Message Center/ATAutomatedMessageCell.m"; sourceTree = "<group>"; };
 		49B3D968133E6D6400B5A5CD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		49B3D969133E6D6400B5A5CD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		49B3D96A133E6D6400B5A5CD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -484,8 +484,8 @@
 		49F8AFD016CC4A550070FFEA /* ATData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATData.m; sourceTree = "<group>"; };
 		49F8AFD316CC4A550070FFEA /* ATDeviceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATDeviceInfo.h; sourceTree = "<group>"; };
 		49F8AFD416CC4A550070FFEA /* ATDeviceInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATDeviceInfo.m; sourceTree = "<group>"; };
-		49F8AFD516CC4A550070FFEA /* ATFakeMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATFakeMessage.h; sourceTree = "<group>"; };
-		49F8AFD616CC4A550070FFEA /* ATFakeMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATFakeMessage.m; sourceTree = "<group>"; };
+		49F8AFD516CC4A550070FFEA /* ATAutomatedMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAutomatedMessage.h; sourceTree = "<group>"; };
+		49F8AFD616CC4A550070FFEA /* ATAutomatedMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAutomatedMessage.m; sourceTree = "<group>"; };
 		49F8AFD716CC4A550070FFEA /* ATMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessage.h; sourceTree = "<group>"; };
 		49F8AFD816CC4A550070FFEA /* ATMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessage.m; sourceTree = "<group>"; };
 		49F8AFD916CC4A550070FFEA /* ATMessageDisplayType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageDisplayType.h; sourceTree = "<group>"; };
@@ -832,9 +832,9 @@
 				490B24A51624B70D0055B812 /* ATTextMessageUserCell.h */,
 				490B24A61624B70D0055B812 /* ATTextMessageUserCell.m */,
 				490B24A21624B6D50055B812 /* ATTextMessageUserCell.xib */,
-				49AF27CD16321F0C005E1E9D /* ATFakeMessageCell.h */,
-				49AF27CE16321F0C005E1E9D /* ATFakeMessageCell.m */,
-				492F2F0916E3F77C0030E48A /* ATFakeMessageCell.xib */,
+				49AF27CD16321F0C005E1E9D /* ATAutomatedMessageCell.h */,
+				49AF27CE16321F0C005E1E9D /* ATAutomatedMessageCell.m */,
+				492F2F0916E3F77C0030E48A /* ATAutomatedMessageCell.xib */,
 				492B81E216D5C8AC0031BEF6 /* ATFileMessageCell.h */,
 				492B81E316D5C8AC0031BEF6 /* ATFileMessageCell.m */,
 				492B81E716D5C8E20031BEF6 /* ATFileMessageCell.xib */,
@@ -1006,8 +1006,8 @@
 				49F8AFD416CC4A550070FFEA /* ATDeviceInfo.m */,
 				49F8AFFD16CC56570070FFEA /* ATEvent.h */,
 				49F8AFFE16CC56570070FFEA /* ATEvent.m */,
-				49F8AFD516CC4A550070FFEA /* ATFakeMessage.h */,
-				49F8AFD616CC4A550070FFEA /* ATFakeMessage.m */,
+				49F8AFD516CC4A550070FFEA /* ATAutomatedMessage.h */,
+				49F8AFD616CC4A550070FFEA /* ATAutomatedMessage.m */,
 				492B81D816D595A00031BEF6 /* ATFileAttachment.h */,
 				492B81D916D595A00031BEF6 /* ATFileAttachment.m */,
 				492B81D316D595740031BEF6 /* ATFileMessage.h */,
@@ -1094,7 +1094,7 @@
 				490B24A71624B70E0055B812 /* ATTextMessageUserCell.h in Headers */,
 				49ADE8D8162613BA00DD8634 /* TTTAttributedLabel.h in Headers */,
 				49E3A26F1628F4FF000675B4 /* ATGetMessagesTask.h in Headers */,
-				49AF27CF16321F0C005E1E9D /* ATFakeMessageCell.h in Headers */,
+				49AF27CF16321F0C005E1E9D /* ATAutomatedMessageCell.h in Headers */,
 				491E03CE163F261C00DC3E18 /* ATLog.h in Headers */,
 				491E03D91640D01F00DC3E18 /* ATFeedbackTypes.h in Headers */,
 				4967273A16B8A41400C679B8 /* ATMessageCenterCell.h in Headers */,
@@ -1105,7 +1105,7 @@
 				49F8AFE316CC4A550070FFEA /* ATConversation.h in Headers */,
 				49F8AFE516CC4A550070FFEA /* ATData.h in Headers */,
 				49F8AFE816CC4A550070FFEA /* ATDeviceInfo.h in Headers */,
-				49F8AFEA16CC4A550070FFEA /* ATFakeMessage.h in Headers */,
+				49F8AFEA16CC4A550070FFEA /* ATAutomatedMessage.h in Headers */,
 				49F8AFEC16CC4A550070FFEA /* ATMessage.h in Headers */,
 				49F8AFEE16CC4A550070FFEA /* ATMessageDisplayType.h in Headers */,
 				49F8AFF016CC4A550070FFEA /* ATMessageSender.h in Headers */,
@@ -1249,7 +1249,7 @@
 				490B24A31624B6D50055B812 /* ATTextMessageUserCell.xib in Resources */,
 				4967278416B9FE6400C679B8 /* Info.plist in Resources */,
 				492B81E816D5C8E20031BEF6 /* ATFileMessageCell.xib in Resources */,
-				492F2F0A16E3F77C0030E48A /* ATFakeMessageCell.xib in Resources */,
+				492F2F0A16E3F77C0030E48A /* ATAutomatedMessageCell.xib in Resources */,
 				494D1B721708E20A00C3060C /* ATMessageInputView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1345,13 +1345,13 @@
 				490B24A81624B70E0055B812 /* ATTextMessageUserCell.m in Sources */,
 				49ADE8D9162613BA00DD8634 /* TTTAttributedLabel.m in Sources */,
 				49E3A2701628F4FF000675B4 /* ATGetMessagesTask.m in Sources */,
-				49AF27D016321F0C005E1E9D /* ATFakeMessageCell.m in Sources */,
+				49AF27D016321F0C005E1E9D /* ATAutomatedMessageCell.m in Sources */,
 				49AC178316C0987400BE1615 /* ATConversationUpdater.m in Sources */,
 				49E6208816C5E8C2000C9F5A /* NSDictionary+ATAdditions.m in Sources */,
 				49F8AFE416CC4A550070FFEA /* ATConversation.m in Sources */,
 				49F8AFE616CC4A550070FFEA /* ATData.m in Sources */,
 				49F8AFE916CC4A550070FFEA /* ATDeviceInfo.m in Sources */,
-				49F8AFEB16CC4A550070FFEA /* ATFakeMessage.m in Sources */,
+				49F8AFEB16CC4A550070FFEA /* ATAutomatedMessage.m in Sources */,
 				49F8AFED16CC4A550070FFEA /* ATMessage.m in Sources */,
 				49F8AFEF16CC4A550070FFEA /* ATMessageDisplayType.m in Sources */,
 				49F8AFF116CC4A550070FFEA /* ATMessageSender.m in Sources */,

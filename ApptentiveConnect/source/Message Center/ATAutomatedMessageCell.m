@@ -1,5 +1,5 @@
 //
-//  ATFakeMessageCell.m
+//  ATAutomatedMessageCell.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 10/19/12.
@@ -7,10 +7,10 @@
 //
 #import <QuartzCore/QuartzCore.h>
 
-#import "ATFakeMessageCell.h"
+#import "ATAutomatedMessageCell.h"
 #import "ATBackend.h"
 
-@implementation ATFakeMessageCell
+@implementation ATAutomatedMessageCell
 @synthesize dateLabel, showDateLabel, messageText, subjectText, grayLineView, containerView;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {

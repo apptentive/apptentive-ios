@@ -13,7 +13,7 @@
 #import "ATConnect_Private.h"
 #import "ATData.h"
 #import "ATAppConfigurationUpdater.h"
-#import "ATFakeMessage.h"
+#import "ATAutomatedMessage.h"
 #import "ATFeedback.h"
 #import "ATMessageSender.h"
 #import "ATReachability.h"
@@ -166,15 +166,10 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 			if (!self.viewController) {
 				ATLogError(@"No view controller to present feedback interface!!");
 			} else {
-				[[ATBackend sharedBackend] setCurrentFeedback:nil];
-				ATConnect *connection = [ATConnect sharedConnection];
-				ATFakeMessage *fakeMessage = (ATFakeMessage *)[ATData newEntityNamed:@"ATFakeMessage"];
-				[fakeMessage setup];
-				fakeMessage.subject = NSLocalizedString(@"We're Sorry!", @"We're sorry text");
-				fakeMessage.body = ATLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
-				fakeMessage.sender = [[ATMessageSender newOrExistingMessageSenderFromJSON:@{@"id":@"demodevid"}] autorelease]; //!! replace
-				[connection presentMessageCenterFromViewController:self.viewController];
-				[fakeMessage release], fakeMessage = nil;
+				NSString *subject = NSLocalizedString(@"We're Sorry!", @"We're sorry text");
+				NSString *body = ATLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
+				[[ATBackend sharedBackend] sendAutomatedMessageWithSubject:subject body:body];
+				[[ATConnect sharedConnection] presentMessageCenterFromViewController:self.viewController];
 			}
 		} else if (buttonIndex == 1) { // yes
 			[self postNotification:ATAppRatingDidClickEnjoymentButtonNotification forButton:ATAppRatingEnjoymentButtonTypeYes];

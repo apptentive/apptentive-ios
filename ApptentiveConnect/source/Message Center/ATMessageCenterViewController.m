@@ -15,7 +15,7 @@
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
 #import "ATData.h"
-#import "ATFakeMessage.h"
+#import "ATAutomatedMessage.h"
 #import "ATFileAttachment.h"
 #import "ATFileMessage.h"
 #import "ATLog.h"
@@ -32,7 +32,7 @@
 
 typedef enum {
 	ATMessageCellTypeUnknown,
-	ATMessageCellTypeFake,
+	ATMessageCellTypeAutomated,
 	ATMessageCellTypeText,
 	ATMessageCellTypeFile
 } ATMessageCellType;
@@ -71,7 +71,7 @@ typedef enum {
 	UINib *inputViewNib;
 	ATMessageInputView *inputView;
 }
-@synthesize tableView, containerView, inputContainerView, attachmentView, fakeCell;
+@synthesize tableView, containerView, inputContainerView, attachmentView, automatedCell;
 @synthesize userCell, developerCell, userFileMessageCell;
 @synthesize themeDelegate, dismissalDelegate;
 
@@ -92,19 +92,16 @@ typedef enum {
 	[self markAllMessagesAsRead];
 	NSError *error = nil;
 	if (![self.fetchedMessagesController performFetch:&error]) {
-		ATLogError(@"got an error loading messages: %@", error);
+		ATLogError(@"Got an error loading messages: %@", error);
 		//!! handle me
 	}
 	[self.tableView reloadData];
 	
 	NSUInteger messageCount = [ATData countEntityNamed:@"ATMessage" withPredicate:nil];
 	if (messageCount == 0) {
-		ATFakeMessage *fakeMessage = (ATFakeMessage *)[ATData newEntityNamed:@"ATFakeMessage"];
-		[fakeMessage setup];
-		fakeMessage.subject = NSLocalizedString(@"Welcome", @"Welcome");
-		fakeMessage.body = ATLocalizedString(@"Use this area to communicate with the developer of this app! If you have questions, suggestions, concerns, or just want to help us make the app better or get in touch, feel free to send us a message!", @"Placeholder welcome message.");
-		fakeMessage.sender = [[ATMessageSender newOrExistingMessageSenderFromJSON:@{@"id":@"demodevid"}] autorelease]; //!! replace
-		[fakeMessage release], fakeMessage = nil;
+		NSString *subject = NSLocalizedString(@"Welcome", @"Welcome");
+		NSString *body = ATLocalizedString(@"Use this area to communicate with the developer of this app! If you have questions, suggestions, concerns, or just want to help us make the app better or get in touch, feel free to send us a message!", @"Placeholder welcome message.");
+		[[ATBackend sharedBackend] sendAutomatedMessageWithSubject:subject body:body];
 	}
 	
 	messageDateFormatter = [[NSDateFormatter alloc] init];
@@ -680,7 +677,7 @@ typedef enum {
 }
 
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	static NSString *FakeCellIdentifier = @"ATFakeMessageCell";
+	static NSString *AutomatedCellIdentifier = @"ATAutomatedMessageCell";
 	static NSString *UserCellIdentifier = @"ATTextMessageUserCell";
 	static NSString *DevCellIdentifier = @"ATTextMessageDevCell";
 	static NSString *FileCellIdentifier = @"ATFileMessageCell";
@@ -690,8 +687,8 @@ typedef enum {
 	UITableViewCell *cell = nil;
 	ATMessage *message = (ATMessage *)[self.fetchedMessagesController objectAtIndexPath:indexPath];
 	
-	if ([message isKindOfClass:[ATFakeMessage class]]) {
-		cellType = ATMessageCellTypeFake;
+	if ([message isKindOfClass:[ATAutomatedMessage class]]) {
+		cellType = ATMessageCellTypeAutomated;
 	} else if ([message isKindOfClass:[ATTextMessage class]]) {
 		cellType = ATMessageCellTypeText;
 	} else if ([message isKindOfClass:[ATFileMessage class]]) {
@@ -711,7 +708,7 @@ typedef enum {
 			showDate = YES;
 		}
 	}
-	if ([message isKindOfClass:[ATFakeMessage class]]) {
+	if ([message isKindOfClass:[ATAutomatedMessage class]]) {
 		showDate = YES;
 	}
 	
@@ -818,23 +815,23 @@ typedef enum {
 		}
 		
 		cell = textCell;
-	} else if (cellType == ATMessageCellTypeFake) {
-		ATFakeMessageCell *currentCell = (ATFakeMessageCell *)[tableView dequeueReusableCellWithIdentifier:FakeCellIdentifier];
+	} else if (cellType == ATMessageCellTypeAutomated) {
+		ATAutomatedMessageCell *currentCell = (ATAutomatedMessageCell *)[tableView dequeueReusableCellWithIdentifier:AutomatedCellIdentifier];
 		
 		if (!currentCell) {
-			UINib *nib = [UINib nibWithNibName:@"ATFakeMessageCell" bundle:[ATConnect resourceBundle]];
+			UINib *nib = [UINib nibWithNibName:@"ATAutomatedMessageCell" bundle:[ATConnect resourceBundle]];
 			[nib instantiateWithOwner:self options:nil];
-			currentCell = fakeCell;
+			currentCell = automatedCell;
 			[[currentCell retain] autorelease];
-			[fakeCell release], fakeCell = nil;
+			[automatedCell release], automatedCell = nil;
 			
 			currentCell.selectionStyle = UITableViewCellSelectionStyleNone;
 			currentCell.messageText.dataDetectorTypes = UIDataDetectorTypeAll;
 		}
-		if ([message isKindOfClass:[ATFakeMessage class]]) {
-			ATFakeMessage *fakeMessage = (ATFakeMessage *)message;
-			NSString *messageSubject = fakeMessage.subject;
-			NSString *messageBody = fakeMessage.body;
+		if ([message isKindOfClass:[ATAutomatedMessage class]]) {
+			ATAutomatedMessage *automatedMessage = (ATAutomatedMessage *)message;
+			NSString *messageSubject = automatedMessage.subject;
+			NSString *messageBody = automatedMessage.body;
 			
 			currentCell.subjectText.textAlignment = UITextAlignmentCenter;
 			[currentCell.subjectText setText:messageSubject afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {

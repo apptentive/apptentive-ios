@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#import "ATFakeMessageCell.h"
+#import "ATAutomatedMessageCell.h"
 #import "ATFileMessageCell.h"
 #import "ATMessageInputView.h"
 #import "ATSimpleImageViewController.h"
@@ -29,7 +29,7 @@
 @property (retain, nonatomic) IBOutlet UIButton *iconButton;
 @property (retain, nonatomic) IBOutlet UIButton *sendPhotoButton;
 @property (retain, nonatomic) IBOutlet UIButton *cancelButton;
-@property (retain, nonatomic) IBOutlet ATFakeMessageCell *fakeCell;
+@property (retain, nonatomic) IBOutlet ATAutomatedMessageCell *automatedCell;
 @property (retain, nonatomic) IBOutlet ATTextMessageUserCell *userCell;
 @property (retain, nonatomic) IBOutlet ATTextMessageUserCell *developerCell;
 @property (retain, nonatomic) IBOutlet ATFileMessageCell *userFileMessageCell;

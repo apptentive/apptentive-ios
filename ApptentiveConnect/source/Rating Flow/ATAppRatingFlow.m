@@ -267,7 +267,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 			URLString = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", appID];
 		}
 #elif TARGET_OS_MAC
-		URLString = [NSString stringWithFormat:@"macappstore://itunes.apple.com/app/id%@?mt=12", iTunesAppID];
+		URLString = [NSString stringWithFormat:@"macappstore://itunes.apple.com/app/id%@?mt=12", appID];
 #endif
 	} else {
 		URLString = URLStringFromPreferences;

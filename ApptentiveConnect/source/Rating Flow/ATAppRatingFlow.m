@@ -127,6 +127,12 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	return sharedRatingFlow;
 }
 
++ (ATAppRatingFlow *)sharedRatingFlowWithAppID:(NSString *)iTunesAppID {
+	ATAppRatingFlow *sharedRatingFlow = [self sharedRatingFlow];
+	sharedRatingFlow.appID = iTunesAppID;
+	return sharedRatingFlow;
+}
+
 #if TARGET_OS_IPHONE
 - (void)showRatingFlowFromViewControllerIfConditionsAreMet:(UIViewController *)vc {
 	self.viewController = vc;
@@ -262,12 +268,12 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 #if TARGET_OS_IPHONE
 		NSString *osVersion = [[UIDevice currentDevice] systemVersion];
 		if ([ATUtilities versionString:osVersion isGreaterThanVersionString:@"6.0"] || [ATUtilities versionString:osVersion isEqualToVersionString:@"6.0"]) {
-			URLString = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/%@/app/id%@", [[NSLocale currentLocale] objectForKey: NSLocaleCountryCode], appID];
+			URLString = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/%@/app/id%@", [[NSLocale currentLocale] objectForKey: NSLocaleCountryCode], self.appID];
 		} else {
-			URLString = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", appID];
+			URLString = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", self.appID];
 		}
 #elif TARGET_OS_MAC
-		URLString = [NSString stringWithFormat:@"macappstore://itunes.apple.com/app/id%@?mt=12", appID];
+		URLString = [NSString stringWithFormat:@"macappstore://itunes.apple.com/app/id%@?mt=12", self.appID];
 #endif
 	} else {
 		URLString = URLStringFromPreferences;
@@ -286,13 +292,13 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	NSURL *url = [self URLForRatingApp];
 	[self setRatedApp];
 #if TARGET_OS_IPHONE
-	if ([SKStoreProductViewController class] != NULL && appID) {
+	if ([SKStoreProductViewController class] != NULL && self.appID) {
 #if TARGET_IPHONE_SIMULATOR
 		[self showUnableToOpenAppStoreDialog];
 #else
 		SKStoreProductViewController *vc = [[[SKStoreProductViewController alloc] init] autorelease];
 		vc.delegate = self;
-		[vc loadProductWithParameters:@{SKStoreProductParameterITunesItemIdentifier:appID} completionBlock:^(BOOL result, NSError *error) {
+		[vc loadProductWithParameters:@{SKStoreProductParameterITunesItemIdentifier:self.appID} completionBlock:^(BOOL result, NSError *error) {
 			if (error) {
 				[self showUnableToOpenAppStoreDialog];
 				ATLogError(@"Error loading product view: %@", error);

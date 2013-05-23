@@ -42,6 +42,8 @@ extern NSString *const ATAppRatingFlowUserAgreedToRateAppNotification;
 /*! The default singleton constructor. */
 + (ATAppRatingFlow *)sharedRatingFlow;
 
++ (ATAppRatingFlow *)sharedRatingFlowWithAppID:(NSString *)iTunesAppID;
+
 #if TARGET_OS_IPHONE
 /*! Will show the ratings flow from the given viewController if the conditions to do so are met. */
 - (void)showRatingFlowFromViewControllerIfConditionsAreMet:(UIViewController *)viewController;

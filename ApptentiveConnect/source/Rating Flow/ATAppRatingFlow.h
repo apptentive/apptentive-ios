@@ -24,7 +24,7 @@ extern NSString *const ATAppRatingFlowUserAgreedToRateAppNotification;
 #endif
 {
 @private
-	NSString *iTunesAppID;
+	NSString *appID;
 #if TARGET_OS_IPHONE
 	UIAlertView *enjoymentDialog;
 	UIAlertView *ratingDialog;

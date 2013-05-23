@@ -92,7 +92,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 
 @implementation ATAppRatingFlow
 @synthesize daysBeforePrompt, usesBeforePrompt, significantEventsBeforePrompt, daysBeforeRePrompting;
-@synthesize appID=iTunesAppID;
+@synthesize appID;
 #if TARGET_OS_IPHONE
 @synthesize viewController;
 #endif
@@ -262,9 +262,9 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 #if TARGET_OS_IPHONE
 		NSString *osVersion = [[UIDevice currentDevice] systemVersion];
 		if ([ATUtilities versionString:osVersion isGreaterThanVersionString:@"6.0"] || [ATUtilities versionString:osVersion isEqualToVersionString:@"6.0"]) {
-			URLString = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/%@/app/id%@", [[NSLocale currentLocale] objectForKey: NSLocaleCountryCode], iTunesAppID];
+			URLString = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/%@/app/id%@", [[NSLocale currentLocale] objectForKey: NSLocaleCountryCode], appID];
 		} else {
-			URLString = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", iTunesAppID];
+			URLString = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", appID];
 		}
 #elif TARGET_OS_MAC
 		URLString = [NSString stringWithFormat:@"macappstore://itunes.apple.com/app/id%@?mt=12", iTunesAppID];
@@ -286,13 +286,13 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	NSURL *url = [self URLForRatingApp];
 	[self setRatedApp];
 #if TARGET_OS_IPHONE
-	if ([SKStoreProductViewController class] != NULL && iTunesAppID) {
+	if ([SKStoreProductViewController class] != NULL && appID) {
 #if TARGET_IPHONE_SIMULATOR
 		[self showUnableToOpenAppStoreDialog];
 #else
 		SKStoreProductViewController *vc = [[[SKStoreProductViewController alloc] init] autorelease];
 		vc.delegate = self;
-		[vc loadProductWithParameters:@{SKStoreProductParameterITunesItemIdentifier:iTunesAppID} completionBlock:^(BOOL result, NSError *error) {
+		[vc loadProductWithParameters:@{SKStoreProductParameterITunesItemIdentifier:appID} completionBlock:^(BOOL result, NSError *error) {
 			if (error) {
 				[self showUnableToOpenAppStoreDialog];
 				ATLogError(@"Error loading product view: %@", error);

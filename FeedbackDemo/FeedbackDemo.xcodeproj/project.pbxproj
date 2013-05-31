@@ -96,6 +96,11 @@
 		4960E138134432F400F6311F /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
 		4960E13E13455ACE00F6311F /* ATConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATConnect.h; path = ../ApptentiveConnect/source/ATConnect.h; sourceTree = "<group>"; };
 		4982ECE5133C2DCF00B91781 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "iPad/en.lproj/MainWindow-iPad.xib"; sourceTree = "<group>"; };
+		4995EDC917595AF100AF7268 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		4995EDCA17595AFC00AF7268 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		4995EDCB17595B1F00AF7268 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
+		4995EDCC17595B3100AF7268 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		4995EDCD17595B3C00AF7268 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		49AA100D138B41A40082887A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		49AAA17D163373A800B26851 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		49B3D9A21340084E00B5A5CD /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -336,6 +341,11 @@
 				en,
 				English,
 				es,
+				ja,
+				de,
+				pt,
+				ru,
+				"zh-Hans",
 			);
 			mainGroup = 49C002DC1334172E0071F088;
 			productRefGroup = 49C002E81334172E0071F088 /* Products */;
@@ -511,6 +521,11 @@
 			children = (
 				49E891D3134FE40200DD098A /* English */,
 				49E891D4134FE40200DD098A /* es */,
+				4995EDC917595AF100AF7268 /* ja */,
+				4995EDCA17595AFC00AF7268 /* de */,
+				4995EDCB17595B1F00AF7268 /* pt */,
+				4995EDCC17595B3100AF7268 /* ru */,
+				4995EDCD17595B3C00AF7268 /* zh-Hans */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

@@ -1,3 +1,9 @@
+2013-05-31 wooster v0.4.8a
+--------------------------
+This is a localization minor bump.
+
+Thanks to Robert Lo Bue and Applingua (with help from SpaceInch) for the new localizations!
+
 2013-02-01 wooster v0.4.8
 -------------------------
 This is a bug fix release.

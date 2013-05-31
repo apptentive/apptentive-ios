@@ -276,6 +276,11 @@
 		498EFB6A15BA414A00A1043B /* ATSurveyGetSurveyTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATSurveyGetSurveyTask.m; path = Tasks/ATSurveyGetSurveyTask.m; sourceTree = "<group>"; };
 		498EFB6E15BA48B200A1043B /* ATAppConfigurationUpdateTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAppConfigurationUpdateTask.h; sourceTree = "<group>"; };
 		498EFB6F15BA48B300A1043B /* ATAppConfigurationUpdateTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAppConfigurationUpdateTask.m; sourceTree = "<group>"; };
+		4995EDC3175959EC00AF7268 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		4995EDC417595A0500AF7268 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		4995EDC517595A0E00AF7268 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
+		4995EDC617595A1800AF7268 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		4995EDC717595A2200AF7268 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		499B56C615D305880063C23C /* PJSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PJSONKit.h; sourceTree = "<group>"; };
 		499B56C715D305880063C23C /* PJSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PJSONKit.m; sourceTree = "<group>"; };
 		49AA101D138B44C00082887A /* ATInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATInfoViewController.h; sourceTree = "<group>"; };
@@ -836,6 +841,11 @@
 				English,
 				Spanish,
 				es,
+				de,
+				ja,
+				pt,
+				ru,
+				"zh-Hans",
 			);
 			mainGroup = 496DC3741333D35600743F65;
 			productRefGroup = 496DC3801333D35600743F65 /* Products */;
@@ -1045,6 +1055,11 @@
 			children = (
 				49E891CE134FE2AB00DD098A /* English */,
 				49E891CF134FE2AB00DD098A /* es */,
+				4995EDC3175959EC00AF7268 /* de */,
+				4995EDC417595A0500AF7268 /* ja */,
+				4995EDC517595A0E00AF7268 /* pt */,
+				4995EDC617595A1800AF7268 /* ru */,
+				4995EDC717595A2200AF7268 /* zh-Hans */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

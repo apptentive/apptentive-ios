@@ -1,6 +1,6 @@
 2013-05-31 wooster v0.4.8a
 --------------------------
-This is a localization minor bump.
+This is a localization minor bump. There are still a few edge cases in the UI.
 
 Thanks to Robert Lo Bue and Applingua (with help from SpaceInch) for the new localizations!
 

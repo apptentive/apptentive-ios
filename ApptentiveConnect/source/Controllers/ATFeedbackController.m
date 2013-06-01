@@ -279,6 +279,8 @@ enum {
 	titleLabel.shadowOffset = CGSizeMake(0.0, 1.0);
 	titleLabel.font = [UIFont boldSystemFontOfSize:18.0];
 	titleLabel.backgroundColor = [UIColor clearColor];
+	titleLabel.minimumFontSize = 12;
+	titleLabel.adjustsFontSizeToFitWidth = YES;
 	titleLabel.opaque = NO;
 	[titleLabel sizeToFit];
 	CGRect titleFrame = titleLabel.frame;

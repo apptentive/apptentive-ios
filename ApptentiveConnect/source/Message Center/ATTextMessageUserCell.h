@@ -23,7 +23,7 @@ typedef enum {
 @property (retain, nonatomic) IBOutlet ATNetworkImageView *userIcon;
 @property (retain, nonatomic) IBOutlet UIImageView *messageBubbleImage;
 @property (retain, nonatomic) IBOutlet UILabel *usernameLabel;
-@property (retain, nonatomic) IBOutlet TTTAttributedLabel *messageText;
+@property (retain, nonatomic) IBOutlet ATTTTAttributedLabel *messageText;
 @property (retain, nonatomic) IBOutlet UIImageView *composingBubble;
 @property (nonatomic, assign, getter = isComposing) BOOL composing;
 @property (nonatomic, assign, getter = shouldShowDateLabel) BOOL showDateLabel;

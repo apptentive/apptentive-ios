@@ -23,7 +23,7 @@
 #import <UIKit/UIKit.h>
 #import "TTTAttributedLabel.h"
 
-@interface RootViewController : UITableViewController <TTTAttributedLabelDelegate, UIActionSheetDelegate> {
+@interface RootViewController : UITableViewController <EXAMPLE_TTTAttributedLabelDelegate, UIActionSheetDelegate> {
     NSArray *_espressos;
 }
 

@@ -1,15 +1,18 @@
-# TTTAttributedLabel
-## A drop-in replacement for UILabel that supports NSAttributedStrings
+# PrefixedTTTAttributedLabel
 
-![Screenshot of TTTAttributedLabel](https://github.com/mattt/TTTAttributedLabel/raw/master/TTTAttributedLabelExample/screenshot.png "TTTAttributedLabel Screenshot")
+TTTAttributedLabel is a fork of JSONKit which prefixes the symbols in TTTAttributedLabel for easy embedding in static libraries to avoid conflicts with other uses of TTTAttributedLabel in the same binary.
+
+To use, set a preprocessor macro for `TTTATTRIBUTEDLABEL_PREFIX`, for example: `TTTATTRIBUTEDLABEL_PREFIX=EXAMPLE_`. Now, all external TTTAttributedLabel symbols will be prefixed with "EXAMPLE_", so `TTTAttributedLabel` would become `EXAMPLE_TTTAttributedLabel`.
+
+# TTTAttributedLabel
+
+**A drop-in replacement for `UILabel` that supports attributes, data detectors, links, and more**
 
 [NSAttributedString](http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/NSAttributedString_Class/Reference/Reference.html) is pretty rad. When it was ported into iOS 4 from Mac OS, iPhone developers everywhere rejoiced. Unfortunately, as of iOS 4 none of the standard controls in UIKit support it. Bummer.
 
 `TTTAttributedLabel` was created to be a drop-in replacement for `UILabel`, that provided a simple API to styling text with `NSAttributedString` while remaining performant. As a bonus, it also supports link embedding, both automatically with `UIDataDetectorTypes` and manually by specifying a range for a URL, address, phone number, or event.
 
 ## Documentation
-
-Online documentation is available at http://mattt.github.com/TTTAttributedLabel/.
 
 To install the docset directly into your local Xcode organizer, first [install `appledoc`](https://github.com/tomaz/appledoc), and then clone this project and run `appledoc -p TTTAttributedLabel -c "Mattt Thompson" --company-id com.mattt TTTAttributedLabel.*`
 
@@ -26,7 +29,7 @@ Now that the framework has been linked, all you need to do is drop `TTTAttribute
 ## Example Usage
 
 ``` objective-c
-TTTAttributedLabel *label = [[[TTTAttributedLabel alloc] initWithFrame:CGRectZero] autorelease];
+TTTAttributedLabel *label = [[TTTAttributedLabel alloc] initWithFrame:CGRectZero];
 label.font = [UIFont systemFontOfSize:14];
 label.textColor = [UIColor darkGrayColor];
 label.lineBreakMode = UILineBreakModeWordWrap;
@@ -39,14 +42,14 @@ NSString *text = @"Lorem ipsum dolar sit amet";
 
   // Core Text APIs use C functions without a direct bridge to UIFont. See Apple's "Core Text Programming Guide" to learn how to configure string attributes.
   UIFont *boldSystemFont = [UIFont boldSystemFontOfSize:14];
-	CTFontRef font = CTFontCreateWithName((CFStringRef)boldSystemFont.fontName, boldSystemFont.pointSize, NULL);
-	if (font) {
-	  [mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(id)font range:boldRange];
-	  [mutableAttributedString addAttribute:@"TTTCustomStrikeOut" value:[NSNumber numberWithBool:YES] range:strikeRange];
-	  CFRelease(font);
-	}
+  CTFontRef font = CTFontCreateWithName((__bridge CFStringRef)boldSystemFont.fontName, boldSystemFont.pointSize, NULL);
+  if (font) {
+    [mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(id)font range:boldRange];
+    [mutableAttributedString addAttribute:kTTTStrikeOutAttributeName value:[NSNumber numberWithBool:YES] range:strikeRange];
+    CFRelease(font);
+  }
 
-	return mutableAttributedString;
+  return mutableAttributedString;
 }];
 ```
 
@@ -67,6 +70,10 @@ label.text = @"Fork me on GitHub! (http://github.com/mattt/TTTAttributedLabel/)"
 NSRange range = [label.text rangeOfString:@"me"];
 [label addLinkToURL:[NSURL URLWithString:@"http://github.com/mattt/"] withRange:range]; // Embedding a custom link in a substring
 ```
+
+## Requirements
+
+`TTTAttributedLabel` is compatible with iOS 4.3+ as a deployment target, but must be compiled using the iOS 6 SDK. If you get compiler errors for undefined constants, try upgrading to the latest version of Xcode, and updating your project to the recommended build settings.
 
 ## Credits
 

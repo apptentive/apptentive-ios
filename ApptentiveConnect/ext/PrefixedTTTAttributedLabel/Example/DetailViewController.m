@@ -50,9 +50,9 @@ static inline NSRegularExpression * ParenthesisRegularExpression() {
     return _parenthesisRegularExpression;
 }
 
-@interface DetailViewController () <TTTAttributedLabelDelegate, UIActionSheetDelegate>
+@interface DetailViewController () <EXAMPLE_TTTAttributedLabelDelegate, UIActionSheetDelegate>
 @property (nonatomic, copy) NSString *espressoDescription;
-@property (nonatomic) TTTAttributedLabel *attributedLabel;
+@property (nonatomic) EXAMPLE_TTTAttributedLabel *attributedLabel;
 @end
 
 @implementation DetailViewController
@@ -75,7 +75,7 @@ static inline NSRegularExpression * ParenthesisRegularExpression() {
 - (void)loadView {
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 100.0f, 100.0f)];
     
-    self.attributedLabel = [[TTTAttributedLabel alloc] initWithFrame:CGRectInset(view.bounds, 10.0f, 10.0f)];
+    self.attributedLabel = [[EXAMPLE_TTTAttributedLabel alloc] initWithFrame:CGRectInset(view.bounds, 10.0f, 10.0f)];
     self.attributedLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [view addSubview:self.attributedLabel];
     
@@ -97,7 +97,7 @@ static inline NSRegularExpression * ParenthesisRegularExpression() {
     self.attributedLabel.highlightedTextColor = [UIColor whiteColor];
     self.attributedLabel.shadowColor = [UIColor colorWithWhite:0.87f alpha:1.0f];
     self.attributedLabel.shadowOffset = CGSizeMake(0.0f, 1.0f);
-    self.attributedLabel.verticalAlignment = TTTAttributedLabelVerticalAlignmentTop;
+    self.attributedLabel.verticalAlignment = EXAMPLE_TTTAttributedLabelVerticalAlignmentTop;
     
     [self.attributedLabel setText:self.espressoDescription afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
         NSRange stringRange = NSMakeRange(0, [mutableAttributedString length]);
@@ -139,7 +139,7 @@ static inline NSRegularExpression * ParenthesisRegularExpression() {
 
 #pragma mark - TTTAttributedLabelDelegate
 
-- (void)attributedLabel:(TTTAttributedLabel *)label
+- (void)attributedLabel:(EXAMPLE_TTTAttributedLabel *)label
    didSelectLinkWithURL:(NSURL *)url
 {
     [[[UIActionSheet alloc] initWithTitle:[url absoluteString] delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) destructiveButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Open Link in Safari", nil), nil] showInView:self.view];

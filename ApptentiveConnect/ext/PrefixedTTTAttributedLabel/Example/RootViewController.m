@@ -86,7 +86,7 @@
 
 #pragma mark - TTTAttributedLabelDelegate
 
-- (void)attributedLabel:(TTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url {
+- (void)attributedLabel:(EXAMPLE_TTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url {
     [[[UIActionSheet alloc] initWithTitle:[url absoluteString] delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) destructiveButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Open Link in Safari", nil), nil] showInView:self.view];
 }
 

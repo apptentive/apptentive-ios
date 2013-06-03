@@ -22,12 +22,12 @@
 
 #import <UIKit/UIKit.h>
 
-@class TTTAttributedLabel;
+@class EXAMPLE_TTTAttributedLabel;
 
 @interface AttributedTableViewCell : UITableViewCell
 
 @property (nonatomic, copy) NSString *summaryText;
-@property (nonatomic, strong) TTTAttributedLabel *summaryLabel;
+@property (nonatomic, strong) EXAMPLE_TTTAttributedLabel *summaryLabel;
 
 + (CGFloat)heightForCellWithText:(NSString *)text;
 

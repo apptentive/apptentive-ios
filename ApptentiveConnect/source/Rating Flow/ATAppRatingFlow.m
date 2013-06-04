@@ -63,7 +63,7 @@ NSString *const ATAppRatingFlowUserAgreedToRateAppNotification = @"ATAppRatingFl
 - (void)setRatingDialogWasShown;
 - (void)setUserDislikesThisVersion;
 - (void)setDeclinedToRateThisVersion;
-- (void)setRatedApp;
+- (void)setRatedApp:(BOOL)hasRated;
 - (void)logDefaults;
 
 #if TARGET_OS_IPHONE
@@ -401,12 +401,13 @@ NSString *const ATAppRatingFlowUserAgreedToRateAppNotification = @"ATAppRatingFl
 - (void)showUnableToOpenAppStoreDialog {
 	UIAlertView *errorAlert = [[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Oops!", @"Unable to load the App Store title") message:ATLocalizedString(@"Unable to load the App Store", @"Unable to load the App Store message") delegate:nil cancelButtonTitle:ATLocalizedString(@"Okay", @"Okay button title") otherButtonTitles:nil] autorelease];
 	[errorAlert show];
+	[self setRatedApp:NO];
 }
 #endif
 
 - (void)openURLForRatingApp {
 	NSURL *url = [self URLForRatingApp];
-	[self setRatedApp];
+	[self setRatedApp:YES];
 #if TARGET_OS_IPHONE
 	if ([SKStoreProductViewController class] != NULL && iTunesAppID) {
 #if TARGET_IPHONE_SIMULATOR
@@ -631,9 +632,9 @@ NSString *const ATAppRatingFlowUserAgreedToRateAppNotification = @"ATAppRatingFl
 	[defaults synchronize];
 }
 
-- (void)setRatedApp {
+- (void)setRatedApp:(BOOL)hasRated {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[defaults setObject:[NSNumber numberWithBool:YES] forKey:ATAppRatingFlowRatedAppKey];
+	[defaults setObject:[NSNumber numberWithBool:hasRated] forKey:ATAppRatingFlowRatedAppKey];
 	[defaults synchronize];
 }
 

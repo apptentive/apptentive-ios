@@ -1,4 +1,4 @@
-2013-04 wooster v0.4.9 (in progress)
+2013-06 wooster v0.4.9 (pending)
 ----------------------
 We've finally added support for surveys with tags.
 - To check for surveys, call `ATSurveys +(void)checkForAvailableSurveys` as usual.
@@ -8,6 +8,7 @@ We've finally added support for surveys with tags.
 
 * Fixes IOS-105 Add Russian Localization
     * Thanks to Захаров Дмитрий for the translation!
+* Fixes IOS-120 Get localizations for iOS Client strings
 * Fixes IOS-63 Implement new client API for surveys (survey tags)
 * Fixes IOS-106 Limit connections to 2 at once
     * This prevents a potential problem in situations where the number of connections is limited. See [the problem AFNetworking+TestFlight hit](https://github.com/AFNetworking/AFNetworking/issues/307).
@@ -24,6 +25,12 @@ We've finally added support for surveys with tags.
 * IOS-108 Fix for launches not being detected after IOS-76 changes
 * IOS-107 Fix warnings in PrefixedJSONKit
 * Fixes IOS-124 Surveys with tags shouldn't show up in bare surveys calls
+
+2013-05-31 wooster v0.4.8a
+--------------------------
+This is a localization minor bump. There are still a few edge cases in the UI.
+
+Thanks to Robert Lo Bue and Applingua (with help from SpaceInch) for the new localizations!
 
 2013-02-01 wooster v0.4.8
 -------------------------

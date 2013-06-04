@@ -43,9 +43,6 @@ NSString *const ATAppRatingFlowUserAgreedToRateAppNotification = @"ATAppRatingFl
 
 /* Days before the user will be re-prompted after having pressed the "Remind Me Later" button. */
 @property (nonatomic, readonly) NSUInteger daysBeforeRePrompting;
-
-/* App display name in rating dialog */
-@property (nonatomic, retain) NSString *appName;
 @end
 
 
@@ -53,7 +50,6 @@ NSString *const ATAppRatingFlowUserAgreedToRateAppNotification = @"ATAppRatingFl
 - (void)updateLastUseOfApp;
 - (void)postNotification:(NSString *)name;
 - (void)postNotification:(NSString *)name forButton:(int)button;
-- (NSString *)appName;
 - (NSURL *)URLForRatingApp;
 - (void)openURLForRatingApp;
 - (BOOL)requirementsToShowDialogMet;
@@ -269,6 +265,39 @@ NSString *const ATAppRatingFlowUserAgreedToRateAppNotification = @"ATAppRatingFl
 #endif
 }
 
+#pragma mark Properties
+
+- (void)setAppName:(NSString *)anAppName {
+	if (appName != anAppName) {
+		[appName release], appName = nil;
+		appName = [anAppName copy];
+	}
+}
+
+- (NSString *)appName {
+	if (appName != nil) {
+		return appName;
+	}
+	NSString *displayName = nil;
+	NSArray *appNameKeys = [NSArray arrayWithObjects:@"CFBundleDisplayName", (NSString *)kCFBundleNameKey, nil];
+	NSMutableArray *infoDictionaries = [NSMutableArray array];
+	if ([[NSBundle mainBundle] localizedInfoDictionary]) {
+		[infoDictionaries addObject:[[NSBundle mainBundle] localizedInfoDictionary]];
+	}
+	if ([[NSBundle mainBundle] infoDictionary]) {
+		[infoDictionaries addObject:[[NSBundle mainBundle] infoDictionary]];
+	}
+	for (NSDictionary *infoDictionary in infoDictionaries) {
+		for (NSString *appNameKey in appNameKeys) {
+			displayName = [infoDictionary objectForKey:appNameKey];
+			if (displayName != nil) {
+				break;
+			}
+		}
+	}
+	return displayName;
+}
+
 #if TARGET_OS_IPHONE
 #pragma mark UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -346,36 +375,6 @@ NSString *const ATAppRatingFlowUserAgreedToRateAppNotification = @"ATAppRatingFl
 - (void)postNotification:(NSString *)name forButton:(int)button {
 	NSDictionary *userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:button] forKey:ATAppRatingButtonTypeKey];
 	[[NSNotificationCenter defaultCenter] postNotificationName:name object:self userInfo:userInfo];
-}
-
-- (void)setAppName:(NSString *)appName
-{
-	_appName = appName;
-}
-
-- (NSString *)appName {
-	if (_appName)
-	{
-		return _appName;
-	}
-	NSString *displayName = nil;
-	NSArray *appNameKeys = [NSArray arrayWithObjects:@"CFBundleDisplayName", (NSString *)kCFBundleNameKey, nil];
-	NSMutableArray *infoDictionaries = [NSMutableArray array];
-	if ([[NSBundle mainBundle] localizedInfoDictionary]) {
-		[infoDictionaries addObject:[[NSBundle mainBundle] localizedInfoDictionary]];
-	}
-	if ([[NSBundle mainBundle] infoDictionary]) {
-		[infoDictionaries addObject:[[NSBundle mainBundle] infoDictionary]];
-	}
-	for (NSDictionary *infoDictionary in infoDictionaries) {
-		for (NSString *appNameKey in appNameKeys) {
-			displayName = [infoDictionary objectForKey:appNameKey];
-			if (displayName != nil) {
-				break;
-			}
-		}
-	}
-	return displayName;
 }
 
 - (NSURL *)URLForRatingApp {

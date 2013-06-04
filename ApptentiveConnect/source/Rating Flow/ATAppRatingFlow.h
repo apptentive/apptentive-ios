@@ -36,7 +36,11 @@ extern NSString *const ATAppRatingFlowUserAgreedToRateAppNotification;
 	NSUInteger daysBeforeRePrompting;
 	
 	NSDate *lastUseOfApp;
+	
+	NSString *appName;
 }
+/*! Set to a custom app name if you'd like to use something other than the bundle display name. */
+@property (nonatomic, copy) NSString *appName;
 
 /*! The default singleton constructor. Call with an iTunes Applicaiton ID as
  an NSString */
@@ -89,13 +93,6 @@ extern NSString *const ATAppRatingFlowUserAgreedToRateAppNotification;
  */
 - (void)userDidPerformSignificantEvent:(BOOL)canPromptForRating;
 #endif
-
-/*!
- Call whenever you would like to set the application name in the ratings
- dialog, if no application name is set the bundle display name will be
- used as a default value
- */
--(void)setAppName:(NSString *)appName;
 
 #if TARGET_OS_IPHONE
 /*!

@@ -1,3 +1,10 @@
+BETA
+----
+
+Welcome to the Apptentive Message Center Beta. Message Center enables direct, two-way customer communication within your app. To get started, please email [beta@apptentive.com](mailto:beta@apptentive.com) and request that your account be enabled for the beta. Then, downloading the SDK and following the upgrade instructions below to integrate. Please note that this is beta software – we're eager for your feedback and appreciate you spending time with it, but we don't yet recommend shipping your app with the beta integrated. We're hoping to release the official version of Message Center shortly.
+
+Note that there are substantial API differences between versions of the SDK prior to Message Center and this beta. For more information, see `docs/APIChanges.md`.
+
 Apptentive iOS SDK
 ==================
 

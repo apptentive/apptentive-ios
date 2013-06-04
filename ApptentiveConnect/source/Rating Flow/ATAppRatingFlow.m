@@ -41,6 +41,9 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 
 /* Days before the user will be re-prompted after having pressed the "Remind Me Later" button. */
 @property (nonatomic, readonly) NSUInteger daysBeforeRePrompting;
+
+/* App display name in rating dialog */
+@property (nonatomic, retain) NSString *appName;
 @end
 
 
@@ -340,7 +343,16 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 	[[NSNotificationCenter defaultCenter] postNotificationName:name object:self userInfo:userInfo];
 }
 
+- (void)setAppName:(NSString *)appName
+{
+	_appName = appName;
+}
+
 - (NSString *)appName {
+	if (_appName)
+	{
+		return _appName;
+	}
 	NSString *displayName = nil;
 	NSArray *appNameKeys = [NSArray arrayWithObjects:@"CFBundleDisplayName", (NSString *)kCFBundleNameKey, nil];
 	NSMutableArray *infoDictionaries = [NSMutableArray array];

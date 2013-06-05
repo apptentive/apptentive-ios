@@ -83,13 +83,13 @@
 		493AEB4015990A4D00DFD4C7 /* ATSurveyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB2915990A4D00DFD4C7 /* ATSurveyViewController.m */; };
 		493AEB4115990A4D00DFD4C7 /* ATSurveyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB2915990A4D00DFD4C7 /* ATSurveyViewController.m */; };
 		493AEB4515990A6B00DFD4C7 /* ApptentiveSurveysTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB4415990A6B00DFD4C7 /* ApptentiveSurveysTests.m */; };
+		493F8D1B1672A551000B5151 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49AAA17A1633716F00B26851 /* StoreKit.framework */; };
 		493F8D8C1672DEFD000B5151 /* ATStaticLibraryBootstrap.h in Headers */ = {isa = PBXBuildFile; fileRef = 493F8D8A1672DEFD000B5151 /* ATStaticLibraryBootstrap.h */; };
 		493F8D8D1672DEFD000B5151 /* ATStaticLibraryBootstrap.m in Sources */ = {isa = PBXBuildFile; fileRef = 493F8D8B1672DEFD000B5151 /* ATStaticLibraryBootstrap.m */; };
 		493F8D8E1672DEFD000B5151 /* ATStaticLibraryBootstrap.m in Sources */ = {isa = PBXBuildFile; fileRef = 493F8D8B1672DEFD000B5151 /* ATStaticLibraryBootstrap.m */; };
 		493F8D901672E07D000B5151 /* ATURLConnection_Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 493F8D8F1672E07D000B5151 /* ATURLConnection_Private.m */; };
 		493F8D911672E07D000B5151 /* ATURLConnection_Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 493F8D8F1672E07D000B5151 /* ATURLConnection_Private.m */; };
 		493F8D931672E15F000B5151 /* ATWebClient_Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 493F8D921672E15F000B5151 /* ATWebClient_Private.m */; };
-		493F8D1B1672A551000B5151 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49AAA17A1633716F00B26851 /* StoreKit.framework */; };
 		4942CC9113C7AD2D009BF758 /* ATAppRatingFlow.h in Headers */ = {isa = PBXBuildFile; fileRef = 4942CC8F13C7AD2D009BF758 /* ATAppRatingFlow.h */; settings = {ATTRIBUTES = (); }; };
 		4942CC9213C7AD2D009BF758 /* ATAppRatingFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4942CC9013C7AD2D009BF758 /* ATAppRatingFlow.m */; };
 		4942CC9313C7AD2D009BF758 /* ATAppRatingFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4942CC9013C7AD2D009BF758 /* ATAppRatingFlow.m */; };
@@ -955,7 +955,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"Configuration is: ${CONFIGURATION}\"\nif [ \"${CONFIGURATION}\" = 'Release' ]; then\n    echo \"b\"\n    if [ -e \"${PROJECT_DIR}/resources/localization/English.lproj/Localizable.strings\" ]; then\n        echo \"c\"\n        rm \"${PROJECT_DIR}/resources/localization/English.lproj/Localizable.strings\"\n    fi\n    echo \"WTF\"\n    genstrings -s ATLocalizedString -o \"${PROJECT_DIR}/resources/localization/English.lproj\" \"${PROJECT_DIR}/source/\"*.m \"${PROJECT_DIR}/source/\"*/*.m\nfi\n";
+			shellScript = "echo \"Configuration is: ${CONFIGURATION}\"\nif [ \"${CONFIGURATION}\" = 'Release' ]; then\n    echo \"b\"\n    if [ -e \"${PROJECT_DIR}/resources/localization/English.lproj/Localizable.strings\" ]; then\n        echo \"c\"\n        rm \"${PROJECT_DIR}/resources/localization/English.lproj/Localizable.strings\"\n    fi\n    find \"${PROJECT_DIR}/source/\" -name *.m -print0 | xargs -0 genstrings -s ATLocalizedString -o \"${PROJECT_DIR}/resources/localization/English.lproj\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1064,7 +1064,6 @@
 				493F8D8E1672DEFD000B5151 /* ATStaticLibraryBootstrap.m in Sources */,
 				493F8D911672E07D000B5151 /* ATURLConnection_Private.m in Sources */,
 				49B2F45C171B89C4004E5FE0 /* ATLogger.m in Sources */,
-				493F8D941672E15F000B5151 /* ATWebClient_Private.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

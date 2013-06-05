@@ -317,6 +317,9 @@ enum {
 			cell.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.0];
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
 			cell.textLabel.font = [UIFont systemFontOfSize:15];
+			cell.textLabel.numberOfLines = 0;
+			cell.textLabel.adjustsFontSizeToFitWidth = NO;
+			cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
 		}
 		NSString *text = nil;
 		if (question.instructionsText) {
@@ -340,9 +343,12 @@ enum {
 			cell = [tableView dequeueReusableCellWithIdentifier:ATSurveyCheckboxCellIdentifier];
 			if (cell == nil) {
 				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ATSurveyCheckboxCellIdentifier] autorelease];
-				cell.textLabel.font = [UIFont systemFontOfSize:18];
 			}
+			cell.textLabel.font = [UIFont systemFontOfSize:18];
 			cell.textLabel.text = answer.value;
+			cell.textLabel.numberOfLines = 0;
+			cell.textLabel.adjustsFontSizeToFitWidth = NO;
+			cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
 			if ([[question selectedAnswerChoices] containsObject:answer]) {
 				cell.accessoryType = UITableViewCellAccessoryCheckmark;
 			} else {

@@ -25,6 +25,7 @@ We've finally added support for surveys with tags.
 * IOS-108 Fix for launches not being detected after IOS-76 changes
 * IOS-107 Fix warnings in PrefixedJSONKit
 * Fixes IOS-124 Surveys with tags shouldn't show up in bare surveys calls
+* Fixes IOS-126 Long survey answers are truncated
 
 2013-05-31 wooster v0.4.8a
 --------------------------

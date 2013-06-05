@@ -8,10 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-@class ATURLConnection;
+#import "ATURLConnection.h"
 
 @interface ATURLConnection (Private)
 /*! It's important nobody but ATURLConnection and ATConnectionChannel call this
     selector. */
 - (void)cancel;
 @end
+
+void ATURLConnection_Private_Bootstrap();

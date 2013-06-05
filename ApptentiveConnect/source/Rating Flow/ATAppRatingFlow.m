@@ -50,7 +50,6 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 - (void)postNotification:(NSString *)name forButton:(int)button;
 - (NSString *)appName;
 - (NSURL *)URLForRatingApp;
-- (void)openURLForRatingApp;
 - (BOOL)requirementsToShowDialogMet;
 - (BOOL)shouldShowDialog;
 /*! Returns YES if a dialog was shown. */
@@ -221,6 +220,16 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 }
 
 #if TARGET_OS_IPHONE
+- (void)showEnjoymentDialogIfRequirementsMet:(UIViewController *)vc{
+	self.viewController = vc;
+	BOOL showedDialog = [self showDialogIfNecessary];
+	if (!showedDialog) {
+		self.viewController = nil;
+	}
+}
+
+#endif
+#if TARGET_OS_IPHONE
 - (void)showRatingDialog:(UIViewController *)vc
 #elif TARGET_OS_MAC
 - (IBAction)showRatingDialog:(id)sender 
@@ -320,6 +329,46 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 	[productViewController dismissModalViewControllerAnimated:YES];
 }
 #endif
+
+#if TARGET_OS_IPHONE
+- (void)showUnableToOpenAppStoreDialog {
+	UIAlertView *errorAlert = [[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Oops!", @"Unable to load the App Store title") message:ATLocalizedString(@"Unable to load the App Store", @"Unable to load the App Store message") delegate:nil cancelButtonTitle:ATLocalizedString(@"Okay", @"Okay button title") otherButtonTitles:nil] autorelease];
+	[errorAlert show];
+}
+#endif
+
+- (void)openURLForRatingApp {
+	NSURL *url = [self URLForRatingApp];
+	[self setRatedApp];
+#if TARGET_OS_IPHONE
+	if ([SKStoreProductViewController class] != NULL && iTunesAppID) {
+#if TARGET_IPHONE_SIMULATOR
+		[self showUnableToOpenAppStoreDialog];
+#else
+		SKStoreProductViewController *vc = [[[SKStoreProductViewController alloc] init] autorelease];
+		vc.delegate = self;
+		[vc loadProductWithParameters:@{SKStoreProductParameterITunesItemIdentifier:iTunesAppID} completionBlock:^(BOOL result, NSError *error) {
+			if (error) {
+				[self showUnableToOpenAppStoreDialog];
+				NSLog(@"Error loading product view: %@", error);
+			} else {
+				UIViewController *presentingVC = [self rootViewControllerForCurrentWindow];
+				[presentingVC presentModalViewController:vc animated:YES];
+			}
+		}];
+#endif
+	} else {
+		if (![[UIApplication sharedApplication] canOpenURL:url]) {
+			NSLog(@"No application can open the URL: %@", url);
+			[self showUnableToOpenAppStoreDialog];
+		}
+		[[UIApplication sharedApplication] openURL:url];
+	}
+#elif TARGET_OS_MAC
+	[[NSWorkspace sharedWorkspace] openURL:url];
+#endif
+}
+
 @end
 
 
@@ -380,46 +429,6 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 	}
 	return [NSURL URLWithString:URLString];
 }
-
-#if TARGET_OS_IPHONE
-- (void)showUnableToOpenAppStoreDialog {
-	UIAlertView *errorAlert = [[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Oops!", @"Unable to load the App Store title") message:ATLocalizedString(@"Unable to load the App Store", @"Unable to load the App Store message") delegate:nil cancelButtonTitle:ATLocalizedString(@"Okay", @"Okay button title") otherButtonTitles:nil] autorelease];
-	[errorAlert show];
-}
-#endif
-
-- (void)openURLForRatingApp {
-	NSURL *url = [self URLForRatingApp];
-	[self setRatedApp];
-#if TARGET_OS_IPHONE
-	if ([SKStoreProductViewController class] != NULL && iTunesAppID) {
-#if TARGET_IPHONE_SIMULATOR
-		[self showUnableToOpenAppStoreDialog];
-#else
-		SKStoreProductViewController *vc = [[[SKStoreProductViewController alloc] init] autorelease];
-		vc.delegate = self;
-		[vc loadProductWithParameters:@{SKStoreProductParameterITunesItemIdentifier:iTunesAppID} completionBlock:^(BOOL result, NSError *error) {
-			if (error) {
-				[self showUnableToOpenAppStoreDialog];
-				NSLog(@"Error loading product view: %@", error);
-			} else {
-				UIViewController *presentingVC = [self rootViewControllerForCurrentWindow];
-				[presentingVC presentModalViewController:vc animated:YES];
-			}
-		}];
-#endif
-	} else {
-		if (![[UIApplication sharedApplication] canOpenURL:url]) {
-			NSLog(@"No application can open the URL: %@", url);
-			[self showUnableToOpenAppStoreDialog];
-		}
-		[[UIApplication sharedApplication] openURL:url];
-	}
-#elif TARGET_OS_MAC
-	[[NSWorkspace sharedWorkspace] openURL:url];
-#endif
-}
-
 
 - (BOOL)requirementsToShowDialogMet {
 	BOOL result = NO;
@@ -654,7 +663,14 @@ static ATAppRatingFlow *sharedRatingFlow = nil;
 		}
 	}
 	if (window && [window respondsToSelector:@selector(rootViewController)]) {
-		return [window rootViewController];
+		UIViewController *vc = [window rootViewController];
+		if ([vc respondsToSelector:@selector(presentedViewController)] && [vc presentedViewController]) {
+			return [vc presentedViewController];
+		}
+		if ([vc respondsToSelector:@selector(modalViewController)] && [vc modalViewController]) {
+			return [vc modalViewController];
+		}
+		return vc;
 	} else {
 		return nil;
 	}

@@ -95,6 +95,12 @@
 - (void)showEnjoymentDialog:(UIViewController *)vc;
 
 /*!
+ Call if you want to show the enjoyment dialog if requirments are met. This 
+ enters the flow for either bringing up the feedback view or the rating dialog.
+ */
+- (void)showEnjoymentDialogIfRequirementsMet:(UIViewController *)vc;
+
+/*!
  Call if you want to show the rating dialog directly.
  */
 - (IBAction)showRatingDialog:(UIViewController *)vc;
@@ -110,4 +116,9 @@
  */
 - (IBAction)showRatingDialog:(id)sender;
 #endif
+
+/*!
+ Call if you want to take the user to the app store directly.
+ */
+- (void)openURLForRatingApp;
 @end

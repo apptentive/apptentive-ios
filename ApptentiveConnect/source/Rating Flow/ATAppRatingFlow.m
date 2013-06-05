@@ -291,10 +291,11 @@ NSString *const ATAppRatingFlowUserAgreedToRateAppNotification = @"ATAppRatingFl
 		for (NSString *appNameKey in appNameKeys) {
 			displayName = [infoDictionary objectForKey:appNameKey];
 			if (displayName != nil) {
-				break;
+				goto done;
 			}
 		}
 	}
+done:
 	return displayName;
 }
 

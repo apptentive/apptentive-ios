@@ -40,7 +40,12 @@ static ATTaskQueue *sharedTaskQueue = nil;
 	@synchronized(self) {
 		if (sharedTaskQueue == nil) {
 			if ([ATTaskQueue serializedQueueExists]) {
-				sharedTaskQueue = [[NSKeyedUnarchiver unarchiveObjectWithFile:[ATTaskQueue taskQueuePath]] retain];
+				@try {
+					sharedTaskQueue = [[NSKeyedUnarchiver unarchiveObjectWithFile:[ATTaskQueue taskQueuePath]] retain];
+				} @catch (NSException *exception) {
+					ATLogError(@"Unable to unarchive tasks at: %@, exception: %@", [ATTaskQueue taskQueuePath], exception);
+					sharedTaskQueue = [[ATTaskQueue alloc] init];
+				}
 			}
 			if (!sharedTaskQueue) {
 				sharedTaskQueue = [[ATTaskQueue alloc] init];
@@ -270,8 +275,9 @@ static ATTaskQueue *sharedTaskQueue = nil;
 
 - (void)archive {
 	@synchronized(self) {
-		[NSKeyedArchiver archiveRootObject:sharedTaskQueue toFile:[ATTaskQueue taskQueuePath]];
+		if (![NSKeyedArchiver archiveRootObject:sharedTaskQueue toFile:[ATTaskQueue taskQueuePath]]) {
+			ATLogError(@"Unable to archive task queue to: %@", [ATTaskQueue taskQueuePath]);
+		}
 	}
 }
 @end
-

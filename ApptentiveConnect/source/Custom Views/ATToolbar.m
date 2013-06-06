@@ -81,3 +81,8 @@
 	//
 }
 @end
+
+
+void ATToolbar_Bootstrap() {
+	NSLog(@"Loading ATToolbar_Bootstrap");
+}

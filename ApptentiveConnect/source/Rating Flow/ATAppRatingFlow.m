@@ -288,6 +288,9 @@ NSString *const ATAppRatingFlowUserAgreedToRateAppNotification = @"ATAppRatingFl
 		[infoDictionaries addObject:[[NSBundle mainBundle] infoDictionary]];
 	}
 	for (NSDictionary *infoDictionary in infoDictionaries) {
+		if (displayName != nil) {
+			break;
+		}
 		for (NSString *appNameKey in appNameKeys) {
 			displayName = [infoDictionary objectForKey:appNameKey];
 			if (displayName != nil) {

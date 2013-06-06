@@ -79,6 +79,7 @@
 
 - (void)updateClientCreationTime {
 	self.clientCreationTime = [NSNumber numberWithDouble:(double)[[NSDate date] timeIntervalSince1970]];
+#warning Need to add UTC offset
 	self.creationTime = self.clientCreationTime;
 }
 

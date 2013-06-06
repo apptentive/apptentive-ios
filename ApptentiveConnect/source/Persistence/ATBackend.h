@@ -18,6 +18,7 @@
 #import "ATPersonUpdater.h"
 #if TARGET_OS_IPHONE
 #import "ATMessageCenterViewController.h"
+#import "ATMessagePanelViewController.h"
 #endif
 
 NSString *const ATBackendNewAPIKeyNotification;
@@ -32,7 +33,7 @@ NSString *const ATBackendNewAPIKeyNotification;
 /*! Handles all of the backend activities, such as sending feedback. */
 @interface ATBackend : NSObject <ATConversationUpdaterDelegate, ATDeviceUpdaterDelegate, ATPersonUpdaterDelegate
 #if TARGET_OS_IPHONE
-, NSFetchedResultsControllerDelegate, ATMessageCenterDismissalDelegate
+, NSFetchedResultsControllerDelegate, ATMessageCenterDismissalDelegate, ATMessagePanelDelegate, UIAlertViewDelegate
 #endif
 > {
 @private
@@ -66,6 +67,8 @@ NSString *const ATBackendNewAPIKeyNotification;
 + (UIImage *)imageNamed:(NSString *)name;
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController;
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion;
+- (void)presentIntroDialogFromViewController:(UIViewController *)viewController;
+- (void)presentIntroDialogFromViewController:(UIViewController *)viewController withTitle:(NSString *)title prompt:(NSString *)prompt placeholderText:(NSString *)placeholder;
 #elif TARGET_OS_MAC
 + (NSImage *)imageNamed:(NSString *)name;
 #endif

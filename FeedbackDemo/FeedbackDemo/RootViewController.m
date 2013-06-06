@@ -108,7 +108,9 @@ enum kRootTableSections {
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	if (section == kSurveySection) {
         return 2;
-    }
+    } else if (section == kMessageCenterSection) {
+		return 2;
+	}
 	return 1;
 }
 
@@ -149,16 +151,20 @@ enum kRootTableSections {
             cell.detailTextLabel.text = [NSString stringWithFormat:@"tags: %@", [tagArray componentsJoinedByString:@", "]];
         }
 	} else if (indexPath.section == kMessageCenterSection) {
-		cell.textLabel.text = @"Message Center";
-		UILabel *unreadLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-		unreadLabel.text = [NSString stringWithFormat:@" %d ", [[ATConnect sharedConnection] unreadMessageCount]];
-		unreadLabel.backgroundColor = [UIColor grayColor];
-		unreadLabel.textColor = [UIColor whiteColor];
-		unreadLabel.textAlignment = UITextAlignmentCenter;
-		unreadLabel.layer.cornerRadius = 10.0;
-		unreadLabel.font = [UIFont boldSystemFontOfSize:17];
-		[unreadLabel sizeToFit];
-		cell.accessoryView = [unreadLabel autorelease];
+		if (indexPath.row == 0) {
+			cell.textLabel.text = @"Message Center";
+			UILabel *unreadLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+			unreadLabel.text = [NSString stringWithFormat:@" %d ", [[ATConnect sharedConnection] unreadMessageCount]];
+			unreadLabel.backgroundColor = [UIColor grayColor];
+			unreadLabel.textColor = [UIColor whiteColor];
+			unreadLabel.textAlignment = UITextAlignmentCenter;
+			unreadLabel.layer.cornerRadius = 10.0;
+			unreadLabel.font = [UIFont boldSystemFontOfSize:17];
+			[unreadLabel sizeToFit];
+			cell.accessoryView = [unreadLabel autorelease];
+		} else if (indexPath.row == 1) {
+			cell.textLabel.text = @"Show Intro Panel";
+		}
 	}
     
 	return cell;
@@ -178,7 +184,11 @@ enum kRootTableSections {
             }
         }
 	} else if (indexPath.section == kMessageCenterSection) {
-		[[ATConnect sharedConnection] presentMessageCenterFromViewController:self];
+		if (indexPath.row == 0) {
+			[[ATConnect sharedConnection] presentMessageCenterFromViewController:self];
+		} else if (indexPath.row == 1) {
+			[[ATConnect sharedConnection] presentIntroDialogFromViewController:self];
+		}
 	}
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

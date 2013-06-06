@@ -149,8 +149,13 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 		
 		BOOL success = YES;
 		for (NSDictionary *messageJSON in messages) {
+			NSString *pendingMessageID = [messageJSON at_safeObjectForKey:@"nonce"];
 			NSString *messageID = [messageJSON at_safeObjectForKey:@"id"];
-			ATMessage *message = [ATMessage findMessageWithID:messageID];
+			ATMessage *message = nil;
+			message = [ATMessage findMessageWithPendingID:pendingMessageID];
+			if (!message) {
+				message = [ATMessage findMessageWithID:messageID];
+			}
 			if (!message) {
 				NSString *type = [messageJSON at_safeObjectForKey:@"type"];
 				if ([type isEqualToString:@"TextMessage"]) {

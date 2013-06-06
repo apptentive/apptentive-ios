@@ -16,6 +16,7 @@
 
 @implementation ATDefaultTextView
 @synthesize placeholder;
+@synthesize at_drawRectBlock;
 
 - (id)initWithFrame:(CGRect)frame {
 	if ((self = [super initWithFrame:frame])) {
@@ -32,8 +33,8 @@
 - (void)dealloc {
 	self.placeholder = nil;
 	[placeholderLabel removeFromSuperview];
-	[placeholderLabel release];
-	placeholderLabel = nil;
+	[placeholderLabel release], placeholderLabel = nil;
+	[at_drawRectBlock release], at_drawRectBlock = nil;
 	[super dealloc];
 }
 
@@ -55,6 +56,12 @@
 	if (!self.text || [self.text length] == 0) return YES;
 	return NO;
 }
+
+- (void)drawRect:(CGRect)rect {
+	if (at_drawRectBlock) {
+		at_drawRectBlock(self, rect);
+	}
+}
 @end
 
 
@@ -71,6 +78,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEdit:) name:UITextViewTextDidChangeNotification object:self];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEdit:) name:UITextViewTextDidEndEditingNotification object:self];
 	[self setupPlaceholder];
+	self.contentMode = UIViewContentModeRedraw;
 }
 
 - (void)setupPlaceholder {

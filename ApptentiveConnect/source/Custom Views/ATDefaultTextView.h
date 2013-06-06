@@ -8,11 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+#import "ATTypes.h"
 
-@interface ATDefaultTextView : UITextView {
+@interface ATDefaultTextView : UITextView  {
 @private
 	UILabel *placeholderLabel;
+	ATDrawRectBlock at_drawRectBlock;
 }
 @property (nonatomic, copy) NSString *placeholder;
+@property (nonatomic, readwrite, copy) ATDrawRectBlock at_drawRectBlock;
 - (BOOL)isDefault;
 @end

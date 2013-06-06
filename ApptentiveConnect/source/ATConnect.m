@@ -163,6 +163,10 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 	[[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController];
 }
 
+- (void)presentIntroDialogFromViewController:(UIViewController *)viewController {
+	[[ATBackend sharedBackend] presentIntroDialogFromViewController:viewController];
+}
+
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion {
 	[[ATBackend sharedBackend] dismissMessageCenterAnimated:animated completion:completion];
 }

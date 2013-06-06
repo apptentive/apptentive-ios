@@ -27,7 +27,9 @@
 #import "ATWebClient.h"
 #import "ATMessageDisplayType.h"
 #import "ATGetMessagesTask.h"
+#import "ATMessageCenterMetrics.h"
 #import "ATMessageTask.h"
+#import "ATMessagePanelViewController.h"
 #import "ATTextMessage.h"
 #import "ATLog.h"
 #import "ATPersonUpdater.h"
@@ -53,6 +55,9 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 @end
 
 @interface ATBackend ()
+#if TARGET_OS_IPHONE
+@property (nonatomic, retain) UIViewController *presentingViewController;
+#endif
 @property (nonatomic, assign) BOOL working;
 - (void)updateConversationIfNeeded;
 - (void)updateDeviceIfNeeded;
@@ -63,7 +68,12 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 #if TARGET_OS_IPHONE
 {
 	UIViewController *presentedMessageCenterViewController;
+	ATMessagePanelViewController *currentMessagePanelController;
+	
+	UIViewController *presentingViewController;
+	UIAlertView *messagePanelSentMessageAlert;
 }
+@synthesize presentingViewController;
 #endif
 @synthesize apiKey, working, currentFeedback, persistentStoreCoordinator;
 
@@ -173,6 +183,12 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	if (presentedMessageCenterViewController) {
 		[presentedMessageCenterViewController release], presentedMessageCenterViewController = nil;
 	}
+	if (currentMessagePanelController) {
+		[currentMessagePanelController release], currentMessagePanelController = nil;
+	}
+	if (presentingViewController) {
+		[presentingViewController release], presentingViewController = nil;
+	}
 #endif
 	[super dealloc];
 }
@@ -234,6 +250,34 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 		[message release], message = nil;
 		return;
 	}
+	
+	// Give it a wee bit o' delay.
+	NSString *pendingMessageID = [message pendingMessageID];
+	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
+		ATMessageTask *task = [[ATMessageTask alloc] init];
+		task.pendingMessageID = pendingMessageID;
+		[[ATTaskQueue sharedTaskQueue] addTask:task];
+		[[ATTaskQueue sharedTaskQueue] start];
+		[task release], task = nil;
+	});
+	[message release], message = nil;
+}
+
+- (void)sendTextMessageWithBody:(NSString *)body {
+	ATTextMessage *message = (ATTextMessage *)[ATData newEntityNamed:@"ATTextMessage"];
+	[message setup];
+	message.body = body;
+	message.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
+	message.sentByUser = @YES;
+	[message updateClientCreationTime];
+	NSError *error = nil;
+	if (![[self managedObjectContext] save:&error]) {
+		ATLogError(@"Unable to send text message with body: %@, error: %@", body, error);
+		[message release], message = nil;
+		return;
+	}
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidSendNotification object:@{ATMessageCenterMessageNonceKey:message.pendingMessageID}];
 	
 	// Give it a wee bit o' delay.
 	NSString *pendingMessageID = [message pendingMessageID];
@@ -319,9 +363,16 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 }
 
 #pragma mark Message Center
-
-
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController {
+	NSUInteger messageCount = [ATData countEntityNamed:@"ATMessage" withPredicate:nil];
+	if (messageCount == 0) {
+		NSString *title = ATLocalizedString(@"Give Feedback", @"First feedback screen title.");
+		NSString *body = ATLocalizedString(@"Let us know how to make our app better for you!", @"First feedback screen body.");
+		NSString *placeholder = ATLocalizedString(@"How can we help? (required)", @"First feedback placeholder text.");
+		[self presentIntroDialogFromViewController:viewController withTitle:title prompt:body placeholderText:placeholder];
+		return;
+	}
+	
 	if (presentedMessageCenterViewController != nil) {
 		ATLogInfo(@"Apptentive message center controller already shown.");
 		return;
@@ -340,6 +391,11 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 }
 
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion {
+	if (currentMessagePanelController != nil) {
+		[currentMessagePanelController dismissAnimated:animated completion:completion];
+		return;
+	}
+	
 	if (presentedMessageCenterViewController != nil) {
 		BOOL didDismiss = NO;
 		if ([presentedMessageCenterViewController respondsToSelector:@selector(presentingViewController)]) {
@@ -360,6 +416,89 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 		}
 	}
 }
+
+- (void)presentIntroDialogFromViewController:(UIViewController *)viewController withTitle:(NSString *)title prompt:(NSString *)prompt placeholderText:(NSString *)placeholder {
+	@synchronized(self) {
+		if (currentMessagePanelController) {
+			ATLogInfo(@"Apptentive message panel controller already shown.");
+			return;
+		}
+		
+		ATMessagePanelViewController *vc = [[ATMessagePanelViewController alloc] initWithDelegate:self];
+		if (title) {
+			vc.promptTitle = title;
+		}
+		if (prompt) {
+			vc.promptText = prompt;
+		}
+		if (placeholder) {
+			vc.customPlaceholderText = placeholder;
+		}
+		[vc setShowEmailAddressField:[[ATConnect sharedConnection] showEmailField]];
+		[vc presentFromViewController:viewController animated:YES];
+		currentMessagePanelController = vc;
+		self.presentingViewController = viewController;
+	}
+}
+
+- (void)presentIntroDialogFromViewController:(UIViewController *)viewController {
+	[self presentIntroDialogFromViewController:viewController withTitle:nil prompt:nil placeholderText:nil];
+}
+
+#if TARGET_OS_IPHONE
+#pragma mark ATMessagePanelDelegate
+- (void)messagePanelDidCancel:(ATMessagePanelViewController *)messagePanel {
+	if (currentMessagePanelController == messagePanel) {
+		return;
+	}
+}
+
+- (void)messagePanel:(ATMessagePanelViewController *)messagePanel didSendMessage:(NSString *)message withEmailAddress:(NSString *)emailAddress {
+	if (currentMessagePanelController == messagePanel) {
+		ATPersonInfo *person = nil;
+		if ([ATPersonInfo personExists]) {
+			person = [ATPersonInfo currentPerson];
+		} else {
+			person = [[[ATPersonInfo alloc] init] autorelease];
+		}
+		if (emailAddress && ![emailAddress isEqualToString:person.emailAddress]) {
+			person.emailAddress = emailAddress;
+			person.needsUpdate = YES;
+		}
+		[person saveAsCurrentPerson];
+		[self sendTextMessageWithBody:message];
+	}
+}
+
+- (void)messagePanel:(ATMessagePanelViewController *)messagePanel didDismissWithAction:(ATMessagePanelDismissAction)action {
+	if (currentMessagePanelController) {
+		[currentMessagePanelController release], currentMessagePanelController = nil;
+		if (action == ATMessagePanelDidSendMessage) {
+			if (!messagePanelSentMessageAlert) {
+				messagePanelSentMessageAlert = [[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Thanks!", nil) message:ATLocalizedString(@"Your response has been saved in this app's Message Center, where you may get a reply from us.", @"Message panel sent message confirmation dialog text") delegate:self cancelButtonTitle:ATLocalizedString(@"Close", @"Close alert view title") otherButtonTitles:ATLocalizedString(@"View Messages", @"View messages button title"), nil];
+				[messagePanelSentMessageAlert show];
+			}
+		}
+	}
+}
+
+- (NSString *)initialEmailAddressForMessagePanel:(ATMessagePanelViewController *)messagePanel {
+	ATPersonInfo *person = [ATPersonInfo currentPerson];
+	return person.emailAddress;
+}
+
+#pragma mark UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+	if (alertView == messagePanelSentMessageAlert) {
+		if (buttonIndex == 1) {
+			UIViewController *vc = [[self presentingViewController] retain];
+			self.presentingViewController = nil;
+			[self presentMessageCenterFromViewController:vc];
+		}
+		[messagePanelSentMessageAlert release], messagePanelSentMessageAlert = nil;
+	}
+}
+#endif
 
 #pragma mark Accessors
 
@@ -455,8 +594,8 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	}
 }
 
-#pragma mark NSFetchedResultsControllerDelegate
 #if TARGET_OS_IPHONE
+#pragma mark NSFetchedResultsControllerDelegate
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
 	if (controller == unreadCountController) {
 		id<NSFetchedResultsSectionInfo> sectionInfo = [[unreadCountController sections] objectAtIndex:0];
@@ -681,7 +820,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 		[request setSortDescriptors:@[sortDescriptor]];
 		[sortDescriptor release], sortDescriptor = nil;
 		
-		NSPredicate *unreadPredicate = [NSPredicate predicateWithFormat:@"seenByUser == %@", @(NO)];
+		NSPredicate *unreadPredicate = [NSPredicate predicateWithFormat:@"seenByUser == %@ AND sentByUser == %@", @(NO), @(NO)];
 		request.predicate = unreadPredicate;
 		
 		NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:nil cacheName:@"at-unread-messages-cache"];

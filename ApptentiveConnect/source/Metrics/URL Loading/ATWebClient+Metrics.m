@@ -53,3 +53,7 @@
 	return [request autorelease];
 }
 @end
+
+void ATWebClient_Metrics_Bootstrap() {
+	NSLog(@"Loading ATWebClient_Metrics_Bootstrap");
+}

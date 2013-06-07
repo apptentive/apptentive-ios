@@ -36,7 +36,12 @@ extern NSString *const ATAppRatingFlowUserAgreedToRateAppNotification;
 	NSUInteger daysBeforeRePrompting;
 	
 	NSDate *lastUseOfApp;
+	
+	NSString *appName;
 }
+/*! Set to a custom app name if you'd like to use something other than the bundle display name. */
+@property (nonatomic, copy) NSString *appName;
+
 @property (nonatomic, copy) NSString *appID;
 
 /*! The default singleton constructor. */

@@ -280,6 +280,8 @@ enum {
 	titleLabel.shadowOffset = CGSizeMake(0.0, 1.0);
 	titleLabel.font = [UIFont boldSystemFontOfSize:18.0];
 	titleLabel.backgroundColor = [UIColor clearColor];
+	titleLabel.minimumFontSize = 12;
+	titleLabel.adjustsFontSizeToFitWidth = YES;
 	titleLabel.opaque = NO;
 	[titleLabel sizeToFit];
 	CGRect titleFrame = titleLabel.frame;
@@ -320,9 +322,9 @@ enum {
 	[self captureFeedbackState];
 	if (self.showEmailAddressField && (!self.feedback.email || [self.feedback.email length] == 0)) {
 		self.window.windowLevel = UIWindowLevelNormal;
-		NSString *title = NSLocalizedString(@"No email address?", @"Lack of email dialog title.");
-		NSString *message = NSLocalizedString(@"We can't respond without one.", @"Lack of email dialog message.");
-		UIAlertView *emailAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Send Feedback", @"Send button title"), nil];
+		NSString *title = ATLocalizedString(@"No email address?", @"Lack of email dialog title.");
+		NSString *message = ATLocalizedString(@"We can't respond without one.", @"Lack of email dialog message.");
+		UIAlertView *emailAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Send Feedback", @"Send button title"), nil];
 		BOOL useNativeTextField = [emailAlert respondsToSelector:@selector(alertViewStyle)];
 		UITextField *field = nil;
 		
@@ -344,7 +346,7 @@ enum {
 		field.keyboardType = UIKeyboardTypeEmailAddress;
 		field.delegate = self;
 		field.autocapitalizationType = UITextAutocapitalizationTypeNone;
-		field.placeholder = NSLocalizedString(@"Email Address", @"Email address popup placeholder text.");
+		field.placeholder = ATLocalizedString(@"Email Address", @"Email address popup placeholder text.");
 		field.tag = kATEmailAlertTextFieldTag;
 		
 		if (!useNativeTextField) {

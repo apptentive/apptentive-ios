@@ -34,3 +34,5 @@
 - (void)addAPIHeaders:(ATURLConnection *)conn;
 - (void)updateConnection:(ATURLConnection *)conn withOAuthToken:(NSString *)token;
 @end
+
+void ATWebClient_Private_Bootstrap();

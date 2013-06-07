@@ -21,6 +21,7 @@
 #import "ApptentiveMetrics.h"
 #import "ATReachability.h"
 #import "ATSurveys.h"
+#import "ATStaticLibraryBootstrap.h"
 #import "ATSurveys_Private.h"
 #import "ATTaskQueue.h"
 #import "ATUtilities.h"
@@ -701,6 +702,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 
 @implementation ATBackend (Private)
 - (void)setup {
+	[ATStaticLibraryBootstrap forceStaticLibrarySymbolUsage];
 #if TARGET_OS_IPHONE
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:UIApplicationWillTerminateNotification object:nil];
 	

@@ -58,7 +58,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 - (void)updateLastUseOfApp;
 - (void)postNotification:(NSString *)name;
 - (void)postNotification:(NSString *)name forButton:(int)button;
-- (NSString *)appName;
 - (NSURL *)URLForRatingApp;
 - (void)openURLForRatingApp;
 - (BOOL)requirementsToShowDialogMet;
@@ -72,7 +71,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 - (void)setRatingDialogWasShown;
 - (void)setUserDislikesThisVersion;
 - (void)setDeclinedToRateThisVersion;
-- (void)setRatedApp;
+- (void)setRatedApp:(BOOL)hasRated;
 - (void)logDefaults;
 
 #if TARGET_OS_IPHONE
@@ -161,6 +160,42 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	[self userDidSignificantEvent];
 }
 
+#pragma mark Properties
+
+- (void)setAppName:(NSString *)anAppName {
+	if (appName != anAppName) {
+		[appName release], appName = nil;
+		appName = [anAppName copy];
+	}
+}
+
+- (NSString *)appName {
+	if (appName != nil) {
+		return appName;
+	}
+	NSString *displayName = nil;
+	NSArray *appNameKeys = [NSArray arrayWithObjects:@"CFBundleDisplayName", (NSString *)kCFBundleNameKey, nil];
+	NSMutableArray *infoDictionaries = [NSMutableArray array];
+	if ([[NSBundle mainBundle] localizedInfoDictionary]) {
+		[infoDictionaries addObject:[[NSBundle mainBundle] localizedInfoDictionary]];
+	}
+	if ([[NSBundle mainBundle] infoDictionary]) {
+		[infoDictionaries addObject:[[NSBundle mainBundle] infoDictionary]];
+	}
+	for (NSDictionary *infoDictionary in infoDictionaries) {
+		if (displayName != nil) {
+			break;
+		}
+		for (NSString *appNameKey in appNameKeys) {
+			displayName = [infoDictionary objectForKey:appNameKey];
+			if (displayName != nil) {
+				break;
+			}
+		}
+	}
+	return displayName;
+}
+
 #if TARGET_OS_IPHONE
 #pragma mark UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -240,27 +275,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	[[NSNotificationCenter defaultCenter] postNotificationName:name object:self userInfo:userInfo];
 }
 
-- (NSString *)appName {
-	NSString *displayName = nil;
-	NSArray *appNameKeys = [NSArray arrayWithObjects:@"CFBundleDisplayName", (NSString *)kCFBundleNameKey, nil];
-	NSMutableArray *infoDictionaries = [NSMutableArray array];
-	if ([[NSBundle mainBundle] localizedInfoDictionary]) {
-		[infoDictionaries addObject:[[NSBundle mainBundle] localizedInfoDictionary]];
-	}
-	if ([[NSBundle mainBundle] infoDictionary]) {
-		[infoDictionaries addObject:[[NSBundle mainBundle] infoDictionary]];
-	}
-	for (NSDictionary *infoDictionary in infoDictionaries) {
-		for (NSString *appNameKey in appNameKeys) {
-			displayName = [infoDictionary objectForKey:appNameKey];
-			if (displayName != nil) {
-				break;
-			}
-		}
-	}
-	return displayName;
-}
-
 - (NSURL *)URLForRatingApp {
 	NSString *URLString = nil;
 	NSString *URLStringFromPreferences = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppRatingReviewURLPreferenceKey];
@@ -285,12 +299,13 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 - (void)showUnableToOpenAppStoreDialog {
 	UIAlertView *errorAlert = [[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Oops!", @"Unable to load the App Store title") message:ATLocalizedString(@"Unable to load the App Store", @"Unable to load the App Store message") delegate:nil cancelButtonTitle:ATLocalizedString(@"Okay", @"Okay button title") otherButtonTitles:nil] autorelease];
 	[errorAlert show];
+	[self setRatedApp:NO];
 }
 #endif
 
 - (void)openURLForRatingApp {
 	NSURL *url = [self URLForRatingApp];
-	[self setRatedApp];
+	[self setRatedApp:YES];
 #if TARGET_OS_IPHONE
 	if ([SKStoreProductViewController class] != NULL && self.appID) {
 #if TARGET_IPHONE_SIMULATOR
@@ -520,9 +535,9 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	[defaults synchronize];
 }
 
-- (void)setRatedApp {
+- (void)setRatedApp:(BOOL)hasRated {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[defaults setObject:[NSNumber numberWithBool:YES] forKey:ATAppRatingFlowRatedAppKey];
+	[defaults setObject:[NSNumber numberWithBool:hasRated] forKey:ATAppRatingFlowRatedAppKey];
 	[defaults synchronize];
 }
 

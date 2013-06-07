@@ -51,14 +51,12 @@ NSString *const ATSurveyCachedSurveysExpirationPreferenceKey = @"ATSurveyCachedS
 		availableSurveys = [[NSMutableArray alloc] init];
 		NSFileManager *fm = [NSFileManager defaultManager];
 		if ([fm fileExistsAtPath:[ATSurveysBackend cachedSurveysStoragePath]]) {
-			NSArray *surveys = nil;
 			@try {
-				surveys = [NSKeyedUnarchiver unarchiveObjectWithFile:[ATSurveysBackend cachedSurveysStoragePath]];
-			}
-			@catch (NSException *exception) {
+				NSArray *surveys = [NSKeyedUnarchiver unarchiveObjectWithFile:[ATSurveysBackend cachedSurveysStoragePath]];
+				[availableSurveys addObjectsFromArray:surveys];
+			} @catch (NSException *exception) {
 				ATLogError(@"Unable to unarchive surveys: %@", exception);
 			}
-			[availableSurveys addObjectsFromArray:surveys];
 		}
 	}
 	return self;

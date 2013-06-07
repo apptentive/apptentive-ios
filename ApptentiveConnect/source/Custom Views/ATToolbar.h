@@ -15,3 +15,5 @@
 }
 @property (nonatomic, readwrite, copy) ATDrawRectBlock at_drawRectBlock;
 @end
+
+void ATToolbar_Bootstrap();

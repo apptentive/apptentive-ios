@@ -7,6 +7,7 @@
 //
 
 #import "ATCustomButton.h"
+#import "ATConnect.h"
 
 @implementation ATCustomButton
 
@@ -14,7 +15,7 @@
 	ATTrackingButton *button = [ATTrackingButton buttonWithType:UIButtonTypeCustom];
 	button.padding = UIEdgeInsetsMake(-10, -20, -10, -15);
 	if (style == ATCustomButtonStyleCancel) {
-		[button setTitle:NSLocalizedString(@"Cancel", @"Cancel button title") forState:UIControlStateNormal];
+		[button setTitle:ATLocalizedString(@"Cancel", @"Cancel button title") forState:UIControlStateNormal];
 		button.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin;
 		button.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
 		button.titleLabel.shadowOffset = CGSizeMake(0.0, 1.0);
@@ -33,7 +34,7 @@
 		button.layer.shadowRadius = 2.0;
 		[button sizeToFit];
 	} else if (style == ATCustomButtonStyleSend) {
-		[button setTitle:NSLocalizedString(@"Send", @"Send button title") forState:UIControlStateNormal];
+		[button setTitle:ATLocalizedString(@"Send", @"Send button title") forState:UIControlStateNormal];
 		button.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin;
 		button.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
 		button.titleLabel.shadowOffset = CGSizeMake(0.0, -1.0);

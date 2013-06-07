@@ -8,6 +8,7 @@
 
 #import "ATDeviceUpdater.h"
 
+#import "ATConversationUpdater.h"
 #import "ATUtilities.h"
 #import "ATWebClient+MessageCenter.h"
 
@@ -30,6 +31,10 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 
 + (BOOL)shouldUpdate {
 	[ATDeviceUpdater registerDefaults];
+	
+	if (![ATConversationUpdater conversationExists]) {
+		return NO;
+	}
 	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSObject *lastValue = [defaults objectForKey:ATDeviceLastUpdateValuePreferenceKey];

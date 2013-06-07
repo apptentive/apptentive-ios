@@ -49,6 +49,8 @@
 	if (json != nil) {
 		result = [[ATConversation alloc] init];
 		[result updateWithJSON:json];
+	} else {
+		ATLogError(@"Conversation JSON was nil");
 	}
 	
 	return result;

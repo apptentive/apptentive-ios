@@ -96,7 +96,13 @@
 	if (self.dictionaryData == nil) {
 		return @{};
 	} else {
-		return [NSKeyedUnarchiver unarchiveObjectWithData:self.dictionaryData];
+		NSDictionary *result = nil;
+		@try {
+			result = [NSKeyedUnarchiver unarchiveObjectWithData:self.dictionaryData];
+		} @catch (NSException *exception) {
+			ATLogError(@"Unable to unarchive event: %@", result);
+		}
+		return result;
 	}
 }
 

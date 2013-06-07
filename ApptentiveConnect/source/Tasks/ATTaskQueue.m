@@ -46,10 +46,14 @@ static ATTaskQueue *sharedTaskQueue = nil;
 				if (!data) {
 					ATLogError(@"Unable to unarchive task queue: %@", error);
 				} else {
-					NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
-					[unarchiver setClass:[ATLegacyRecord class] forClassName:@"ATRecord"];
-					sharedTaskQueue = [[unarchiver decodeObjectForKey:@"root"] retain];
-					[unarchiver release], unarchiver = nil;
+					@try {
+						NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+						[unarchiver setClass:[ATLegacyRecord class] forClassName:@"ATRecord"];
+						sharedTaskQueue = [[unarchiver decodeObjectForKey:@"root"] retain];
+						[unarchiver release], unarchiver = nil;
+					} @catch (NSException *exception) {
+						ATLogError(@"Unable to unarchive task queue: %@", exception);
+					}
 				}
 			}
 			if (!sharedTaskQueue) {

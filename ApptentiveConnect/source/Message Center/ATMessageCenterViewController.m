@@ -122,9 +122,6 @@ typedef enum {
 	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)] autorelease];
 	
 //	self.composerBackgroundView.image = [[ATBackend imageNamed:@"at_inbox_composer_bg"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 0, 29, 19)];
-	[self.cameraButton setImage:[ATBackend imageNamed:@"at_attachment_photo_icon"] forState:UIControlStateNormal];
-	[self.locationButton setImage:[ATBackend imageNamed:@"at_attachment_location"] forState:UIControlStateNormal];
-	[self.emailButton setImage:[ATBackend imageNamed:@"at_attachment_email"] forState:UIControlStateNormal];
 	[self.iconButton setImage:[ATBackend imageNamed:@"at_apptentive_icon_small"] forState:UIControlStateNormal];
 	[self.tableView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]]];
 	[self.containerView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]]];
@@ -218,9 +215,6 @@ typedef enum {
 	[inputContainerView release];
 	fetchedMessagesController.delegate = nil;
 	[fetchedMessagesController release], fetchedMessagesController = nil;
-	[_cameraButton release];
-	[_locationButton release];
-	[_emailButton release];
 	[_iconButton release];
 	[_attachmentShadowView release];
 	[defaultTheme release], defaultTheme = nil;
@@ -236,9 +230,6 @@ typedef enum {
 	[self setAttachmentView:nil];
 	[self setContainerView:nil];
 	[self setInputContainerView:nil];
-	[self setCameraButton:nil];
-	[self setLocationButton:nil];
-	[self setEmailButton:nil];
 	[self setIconButton:nil];
 	[self setAttachmentShadowView:nil];
 	[self setSendPhotoButton:nil];

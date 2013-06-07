@@ -68,7 +68,14 @@
 	if (!personData) {
 		return nil;
 	}
-	ATPersonInfo *person = [NSKeyedUnarchiver unarchiveObjectWithData:personData];
+	ATPersonInfo *person = nil;
+	
+	@try {
+		person = [NSKeyedUnarchiver unarchiveObjectWithData:personData];
+	} @catch (NSException *exception) {
+		ATLogError(@"Unable to unarchive person: %@", person);
+	}
+	
 	return person;
 }
 

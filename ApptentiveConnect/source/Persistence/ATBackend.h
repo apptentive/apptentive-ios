@@ -23,7 +23,7 @@
 
 NSString *const ATBackendNewAPIKeyNotification;
 
-#define USE_STAGING 1
+#define USE_STAGING 0
 
 @class ATAppConfigurationUpdater;
 @class ATDataManager;

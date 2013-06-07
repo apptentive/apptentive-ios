@@ -472,11 +472,13 @@ enum {
 		CGRect emailFrame = self.scrollView.bounds;
 		emailFrame.origin.x = horizontalPadding;
 		emailFrame.origin.y = offsetY;
-		emailFrame.size.height = 31;
+		UIFont *emailFont = [UIFont systemFontOfSize:17];
+		CGSize sizedEmail = [@"XXYyI|" sizeWithFont:emailFont];
+		emailFrame.size.height = sizedEmail.height;
 		emailFrame.size.width = emailFrame.size.width - horizontalPadding*2;
 		self.emailField = [[UITextField alloc] initWithFrame:emailFrame];
-		self.emailField.placeholder = ATLocalizedString(@"Email Address", @"Email Address Field Placeholder");
-		self.emailField.font = [UIFont systemFontOfSize:17];
+		self.emailField.placeholder = ATLocalizedString(@"Your Email", @"Email Address Field Placeholder");
+		self.emailField.font = emailFont;
 		self.emailField.adjustsFontSizeToFitWidth = YES;
 		self.emailField.keyboardType = UIKeyboardTypeEmailAddress;
 		self.emailField.returnKeyType = UIReturnKeyNext;
@@ -487,7 +489,7 @@ enum {
 		self.emailField.text = [self.delegate initialEmailAddressForMessagePanel:self];
 
 		[self.scrollView addSubview:self.emailField];
-		offsetY += self.emailField.bounds.size.height;
+		offsetY += self.emailField.bounds.size.height + 5;
 		
 		ATCustomView *thinBlueLineView = [[ATCustomView alloc] initWithFrame:CGRectZero];
 		thinBlueLineView.at_drawRectBlock = ^(NSObject *caller, CGRect rect) {
@@ -498,9 +500,10 @@ enum {
 		};
 		thinBlueLineView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		CGRect lineFrame = self.scrollView.bounds;
-		lineFrame.origin.x = horizontalPadding;
+		CGFloat linePadding = 2;
+		lineFrame.origin.x = linePadding;
 		lineFrame.origin.y = offsetY;
-		lineFrame.size.width = lineFrame.size.width - horizontalPadding*2;
+		lineFrame.size.width = lineFrame.size.width - linePadding*2;
 		lineFrame.size.height = 1;
 		thinBlueLineView.frame = lineFrame;
 		[self.scrollView addSubview:thinBlueLineView];

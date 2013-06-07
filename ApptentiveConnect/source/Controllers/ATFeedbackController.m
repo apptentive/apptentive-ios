@@ -290,7 +290,7 @@ enum {
 	[titleButton release], titleButton = nil;
 	[titleLabel release], titleLabel = nil;
 	
-	self.emailField.placeholder = ATLocalizedString(@"Email Address", @"Email Address Field Placeholder");
+	self.emailField.placeholder = ATLocalizedString(@"Your Email", @"Email Address Field Placeholder");
 	
 	if (self.customPlaceholderText) {
 		self.feedbackView.placeholder = self.customPlaceholderText;

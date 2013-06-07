@@ -52,6 +52,7 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
     
     ATConversation *currentConversation = [ATConversationUpdater currentConversation];
     if (currentConversation == nil) {
+		ATLogInfo(@"Creating conversation");
         creatingConversation = YES;
         ATConversation *conversation = [[ATConversation alloc] init];
         conversation.deviceID = [[ATBackend sharedBackend] deviceUUID];
@@ -98,7 +99,12 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 	if (!conversationData) {
 		return nil;
 	}
-	ATConversation *conversation = [NSKeyedUnarchiver unarchiveObjectWithData:conversationData];
+	ATConversation *conversation = nil;
+	@try {
+		conversation = [NSKeyedUnarchiver unarchiveObjectWithData:conversationData];
+	} @catch (NSException *exception) {
+		ATLogError(@"Unable to unarchive conversation: %@", exception);
+	}
 	return conversation;
 }
 
@@ -150,7 +156,7 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 
 - (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
 	@synchronized(self) {
-		ATLogInfo(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
+		ATLogInfo(@"Conversation request failed: %@, %@", sender.errorTitle, sender.errorMessage);
         if (creatingConversation) {
             [delegate conversationUpdater:self createdConversationSuccessfully:NO];
         } else {
@@ -176,15 +182,18 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 				ATLogError(@"Unable to synchronize defaults for conversation creation.");
 				[delegate conversationUpdater:self createdConversationSuccessfully:NO];
 			} else {
+				ATLogInfo(@"Conversation created successfully.");
 				[delegate conversationUpdater:self createdConversationSuccessfully:YES];
 			}
         } else {
+			ATLogError(@"Unable to create conversation");
             [delegate conversationUpdater:self createdConversationSuccessfully:NO];
         }
         [conversation release], conversation = nil;
     } else {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        [defaults setObject:[[ATConversationUpdater currentConversation] apiUpdateJSON] forKey:ATConversationLastUpdateValuePreferenceKey];
+		ATConversation *conversation = [ATConversationUpdater currentConversation];
+        [defaults setObject:[conversation apiUpdateJSON] forKey:ATConversationLastUpdateValuePreferenceKey];
         [defaults setObject:[NSDate date] forKey:ATConversationLastUpdatePreferenceKey];
 		if (![defaults synchronize]) {
 			ATLogError(@"Unable to synchronize defaults for conversation update.");

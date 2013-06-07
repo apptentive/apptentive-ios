@@ -23,9 +23,6 @@
 @property (retain, nonatomic) IBOutlet UIView *inputContainerView;
 @property (retain, nonatomic) IBOutlet UIView *attachmentView;
 @property (retain, nonatomic) IBOutlet UIImageView *attachmentShadowView;
-@property (retain, nonatomic) IBOutlet UIButton *cameraButton;
-@property (retain, nonatomic) IBOutlet UIButton *locationButton;
-@property (retain, nonatomic) IBOutlet UIButton *emailButton;
 @property (retain, nonatomic) IBOutlet UIButton *iconButton;
 @property (retain, nonatomic) IBOutlet UIButton *sendPhotoButton;
 @property (retain, nonatomic) IBOutlet UIButton *cancelButton;

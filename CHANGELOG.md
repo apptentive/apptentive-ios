@@ -1,10 +1,13 @@
-2013-06 wooster v0.4.9 (pending)
-----------------------
+2013-06-07 wooster v0.4.9
+-------------------------
 We've finally added support for surveys with tags.
+
 - To check for surveys, call `ATSurveys +(void)checkForAvailableSurveys` as usual.
 - Listen for the `ATSurveyNewSurveyAvailableNotification`.
 - Check to see if surveys with a given set of tags are available with `ATSurveys +(BOOL)hasSurveyAvailableWithTags:(NSSet *)tags`.
 - Display a survey with tags with: `ATSurveys +(void)presentSurveyControllerWithTags:(NSSet *)tags fromViewController:(UIViewController *)viewController`.
+
+Other fixes:
 
 * Fixes IOS-105 Add Russian Localization
     * Thanks to Захаров Дмитрий for the translation!
@@ -16,16 +19,17 @@ We've finally added support for surveys with tags.
     * This will hopefully be a nice reminder, rather than an irritation.
 * Fixes IOS-85 Setting days before re-prompt to 0 doesn't work as expected
     * If this value is 0, we will now only prompt once per update.
-* IOS-84 Re-prompt only once per version
+* Fixes IOS-84 Re-prompt only once per version
     * We will only prompt twice per update total (prompt and re-prompt).
-* IOS-62 Add support for repeat surveys
-* IOS-99 Add Callback after a user agrees to rate the app
-    * You can now listen for ATAppRatingFlowUserAgreedToRateAppNotification to know when a user agrees to rate the app.
+* Fixes IOS-62 Add support for repeat surveys
+* Fixes IOS-99 Add Callback after a user agrees to rate the app
+    * You can now listen for `ATAppRatingFlowUserAgreedToRateAppNotification` to know when a user agrees to rate the app.
 * apptentive/apptentive-ios#32 Showing the rating dialog from a modal
 * IOS-108 Fix for launches not being detected after IOS-76 changes
 * IOS-107 Fix warnings in PrefixedJSONKit
 * Fixes IOS-124 Surveys with tags shouldn't show up in bare surveys calls
 * Fixes IOS-126 Long survey answers are truncated
+* Also brings in pull requests #38 and #39.
 
 2013-05-31 wooster v0.4.8a
 --------------------------

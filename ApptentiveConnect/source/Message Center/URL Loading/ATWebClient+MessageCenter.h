@@ -22,3 +22,5 @@
 - (ATAPIRequest *)requestForPostingMessage:(ATMessage *)message;
 - (ATAPIRequest *)requestForRetrievingMessagesSinceMessage:(ATMessage *)message;
 @end
+
+void ATWebClient_MessageCenter_Bootstrap();

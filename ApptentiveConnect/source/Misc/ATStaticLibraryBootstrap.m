@@ -12,6 +12,7 @@
 #import "ATWebClient+Metrics.h"
 #import "ATWebClient+SurveyAdditions.h"
 #import "ATURLConnection_Private.h"
+#import "ATWebClient+MessageCenter.h"
 #import "ATWebClient_Private.h"
 
 @implementation ATStaticLibraryBootstrap
@@ -20,6 +21,7 @@
 	ATWebClient_SurveyAdditions_Bootstrap();
 	ATURLConnection_Private_Bootstrap();
 	ATWebClient_Private_Bootstrap();
+	ATWebClient_MessageCenter_Bootstrap();
 	ATToolbar_Bootstrap();
 }
 @end

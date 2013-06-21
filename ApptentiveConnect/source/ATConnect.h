@@ -51,7 +51,6 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 + (ATConnect *)sharedConnection;
 
 #if TARGET_OS_IPHONE
-@property (nonatomic, assign) BOOL shouldUseMessageCenter;
 
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController;
 - (NSUInteger)unreadMessageCount;

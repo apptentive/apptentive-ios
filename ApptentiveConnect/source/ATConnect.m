@@ -28,10 +28,6 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 #endif
 @synthesize apiKey, showTagline, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText;
 
-#if TARGET_OS_IPHONE
-@synthesize shouldUseMessageCenter;
-#endif
-
 + (ATConnect *)sharedConnection {
 	static ATConnect *sharedConnection = nil;
 	static dispatch_once_t onceToken;

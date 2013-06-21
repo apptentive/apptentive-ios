@@ -8,6 +8,7 @@
 
 #import "ATCustomButton.h"
 #import "ATConnect.h"
+#import "ATConnect_Private.h"
 
 @implementation ATCustomButton
 

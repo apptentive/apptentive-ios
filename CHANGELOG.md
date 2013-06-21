@@ -7,6 +7,7 @@ There are a lot of major API changes. They are documented in docs/APIChanges.md
 * Fixes IOS-130 Rename add info API call
 * Fixes IOS-128 Remove feedback API for Message Center
 * Fixes IOS-103 Make ratings flow easier
+* Fixes IOS-136 Create personal info editing screen
 
 2013-06-07 wooster v0.4.9
 -------------------------

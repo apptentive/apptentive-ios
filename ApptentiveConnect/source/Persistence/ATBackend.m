@@ -18,6 +18,7 @@
 #import "ATAutomatedMessage.h"
 #import "ATFeedback.h"
 #import "ATFeedbackTask.h"
+#import "ATNavigationController.h"
 #import "ApptentiveMetrics.h"
 #import "ATReachability.h"
 #import "ATSurveys.h"
@@ -380,7 +381,8 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	}
 	ATMessageCenterViewController *vc = [[ATMessageCenterViewController alloc] initWithThemeDelegate:nil];
 	vc.dismissalDelegate = self;
-	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
+	ATNavigationController *nc = [[ATNavigationController alloc] initWithRootViewController:vc];
+	nc.disablesAutomaticKeyboardDismissal = NO;
 	nc.modalPresentationStyle = UIModalPresentationFormSheet;
 	if ([viewController respondsToSelector:@selector(presentViewController:animated:completion:)]) {
 		[viewController presentViewController:nc animated:YES completion:^{}];

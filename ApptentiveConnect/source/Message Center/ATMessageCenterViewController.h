@@ -26,6 +26,7 @@
 @property (retain, nonatomic) IBOutlet UIButton *iconButton;
 @property (retain, nonatomic) IBOutlet UIButton *sendPhotoButton;
 @property (retain, nonatomic) IBOutlet UIButton *cancelButton;
+@property (retain, nonatomic) IBOutlet UIButton *poweredByButton;
 @property (retain, nonatomic) IBOutlet ATAutomatedMessageCell *automatedCell;
 @property (retain, nonatomic) IBOutlet ATTextMessageUserCell *userCell;
 @property (retain, nonatomic) IBOutlet ATTextMessageUserCell *developerCell;
@@ -36,6 +37,7 @@
 - (id)initWithThemeDelegate:(NSObject<ATMessageCenterThemeDelegate> *)themeDelegate;
 
 - (IBAction)donePressed:(id)sender;
+- (IBAction)settingsPressed:(id)sender;
 - (IBAction)showInfoView:(id)sender;
 - (IBAction)cameraPressed:(id)sender;
 - (IBAction)cancelAttachmentPressed:(id)sender;

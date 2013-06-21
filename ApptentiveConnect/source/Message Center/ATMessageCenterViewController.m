@@ -25,6 +25,7 @@
 #import "ATMessageCenterMetrics.h"
 #import "ATMessageSender.h"
 #import "ATMessageTask.h"
+#import "ATPersonDetailsViewController.h"
 #import "ATPersonUpdater.h"
 #import "ATTaskQueue.h"
 #import "ATTextMessage.h"
@@ -120,9 +121,19 @@ typedef enum {
 		self.navigationItem.titleView = [defaultTheme titleViewForMessageCenterViewController:self];
 	}
 	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)] autorelease];
+	if ([self.navigationItem.rightBarButtonItem respondsToSelector:@selector(initWithImage:landscapeImagePhone:style:target:action:)]) {
+		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[ATBackend imageNamed:@"at_user_button_image"] landscapeImagePhone:[ATBackend imageNamed:@"at_user_button_image_landscape"] style:UIBarButtonItemStylePlain target:self action:@selector(settingsPressed:)]autorelease];
+	} else {
+		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[ATBackend imageNamed:@"at_user_button_image"] style:UIBarButtonItemStylePlain target:self action:@selector(settingsPressed:)]autorelease];
+	}
 	
 //	self.composerBackgroundView.image = [[ATBackend imageNamed:@"at_inbox_composer_bg"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 0, 29, 19)];
+	[self.poweredByButton setTitle:ATLocalizedString(@"Powered By Apptentive", @"Short tagline for Apptentive") forState:UIControlStateNormal];
 	[self.iconButton setImage:[ATBackend imageNamed:@"at_apptentive_icon_small"] forState:UIControlStateNormal];
+	if (![[ATConnect sharedConnection] showTagline]) {
+		self.poweredByButton.hidden = YES;
+		self.iconButton.hidden = YES;
+	}
 	[self.tableView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]]];
 	[self.containerView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]]];
 	[self.attachmentView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_mc_noise_bg"]]];
@@ -222,6 +233,7 @@ typedef enum {
 	[_sendPhotoButton release];
 	[_cancelButton release];
 	dismissalDelegate = nil;
+	[_poweredByButton release];
 	[super dealloc];
 }
 
@@ -234,6 +246,7 @@ typedef enum {
 	[self setAttachmentShadowView:nil];
 	[self setSendPhotoButton:nil];
 	[self setCancelButton:nil];
+	[self setPoweredByButton:nil];
 	[super viewDidUnload];
 }
 
@@ -263,6 +276,12 @@ typedef enum {
 	} else {
 		[self.navigationController dismissModalViewControllerAnimated:YES];
 	}
+}
+
+- (IBAction)settingsPressed:(id)sender {
+	ATPersonDetailsViewController *vc = [[ATPersonDetailsViewController alloc] initWithNibName:@"ATPersonDetailsViewController" bundle:[ATConnect resourceBundle]];
+	[self.navigationController pushViewController:vc animated:YES];
+	[vc release], vc = nil;
 }
 
 - (IBAction)showInfoView:(id)sender {

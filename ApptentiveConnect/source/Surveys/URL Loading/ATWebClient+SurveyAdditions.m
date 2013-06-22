@@ -9,9 +9,9 @@
 #import "ATWebClient+SurveyAdditions.h"
 #import "ATWebClient_Private.h"
 #import "ATAPIRequest.h"
+#import "ATJSONSerialization.h"
 #import "ATSurveyResponse.h"
 #import "ATURLConnection.h"
-#import "PJSONKit.h"
 
 @implementation ATWebClient (SurveyAdditions)
 - (ATAPIRequest *)requestForGettingSurveys {
@@ -26,7 +26,7 @@
 
 - (ATAPIRequest *)requestForPostingSurveyResponse:(ATSurveyResponse *)surveyResponse {
 	NSError *error = nil;
-	NSString *postString = [[surveyResponse apiJSON] ATJSONStringWithOptions:ATJKSerializeOptionPretty error:&error];
+	NSString *postString = [ATJSONSerialization stringWithJSONObject:[surveyResponse apiJSON] options:ATJSONWritingPrettyPrinted error:&error];
 	if (!postString && error != nil) {
 		ATLogError(@"ATWebClient+SurveyAdditions: Error while encoding JSON: %@", error);
 		return nil;

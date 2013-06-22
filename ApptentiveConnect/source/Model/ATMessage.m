@@ -10,10 +10,10 @@
 
 #import "ATBackend.h"
 #import "ATData.h"
+#import "ATJSONSerialization.h"
 #import "ATMessageDisplayType.h"
 #import "ATMessageSender.h"
 #import "NSDictionary+ATAdditions.h"
-#import "PJSONKit.h"
 
 @implementation ATMessage
 
@@ -80,8 +80,12 @@
 	if (self.errorMessageJSON == nil) {
 		return nil;
 	}
-	NSObject *errorObject = [self.errorMessageJSON ATobjectFromJSONString];
+	
+	NSError *error = nil;
+	NSObject *errorObject = (NSObject *)[ATJSONSerialization JSONObjectWithString:self.errorMessageJSON error:&error];
+	
 	if (errorObject == nil) {
+		ATLogError(@"Error parsing errors: %@", error);
 		return nil;
 	}
 	if ([errorObject isKindOfClass:[NSDictionary class]]) {

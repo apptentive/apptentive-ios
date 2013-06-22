@@ -10,8 +10,8 @@
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
 #import "ATConnectionManager.h"
+#import "ATJSONSerialization.h"
 #import "ATURLConnection.h"
-#import "PJSONKit.h"
 
 #if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
@@ -140,11 +140,13 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 		}
 		
 		if (self.returnType == ATAPIRequestReturnTypeJSON && statusCode != 204) {
-			id json = [s ATobjectFromJSONString];
+			NSError *error = nil;
+			id json = [ATJSONSerialization JSONObjectWithString:s error:&error];
 			if (!json) {
 				self.failed = YES;
 				self.errorTitle = ATLocalizedString(@"Invalid response from server.", @"");
 				self.errorMessage = ATLocalizedString(@"Server did not return properly formatted JSON.", @"");
+				ATLogError(@"Invalid JSON: %@", error);
 			}
 			result = json;
 			break;

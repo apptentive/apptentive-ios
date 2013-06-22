@@ -13,7 +13,7 @@
 #import "ATConnect.h"
 #import "ATEvent.h"
 #import "ATMetric.h"
-#import "PJSONKit.h"
+#import "ATJSONSerialization.h"
 #import "ATURLConnection.h"
 
 @implementation ATWebClient (Metrics)
@@ -32,7 +32,7 @@
 - (ATAPIRequest *)requestForSendingEvent:(ATEvent *)event {
 	NSDictionary *postJSON = [event apiJSON];
 	NSError *error = nil;
-	NSString *postString = [postJSON ATJSONStringWithOptions:ATJKSerializeOptionPretty error:&error];
+	NSString *postString = [ATJSONSerialization stringWithJSONObject:postJSON options:ATJSONWritingPrettyPrinted error:&error];
 	if (!postString && error != nil) {
 		ATLogError(@"Error while encoding JSON: %@", error);
 		return nil;

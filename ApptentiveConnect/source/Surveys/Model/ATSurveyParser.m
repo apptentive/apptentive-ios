@@ -7,7 +7,7 @@
 //
 
 #import "ATSurveyParser.h"
-#import "PJSONKit.h"
+#import "ATJSONSerialization.h"
 #import "ATSurveyQuestion.h"
 
 @interface ATSurveyParser ()
@@ -157,9 +157,8 @@
 	BOOL success = NO;
 	
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	ATJSONDecoder *decoder = [ATJSONDecoder decoder];
 	NSError *error = nil;
-	id decodedObject = [decoder objectWithData:jsonSurvey error:&error];
+	id decodedObject = [ATJSONSerialization JSONObjectWithData:jsonSurvey error:&error];
 	if (decodedObject && [decodedObject isKindOfClass:[NSDictionary class]]) {
 		success = YES;
 		NSDictionary *values = (NSDictionary *)decodedObject;
@@ -185,10 +184,10 @@
 	BOOL success = NO;
 	
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	ATJSONDecoder *decoder = [ATJSONDecoder decoder];
-	NSError *error = nil;
 	
-	id decodedObject = [decoder objectWithData:jsonSurveys error:&error];
+	NSError *error = nil;
+	id decodedObject = [ATJSONSerialization JSONObjectWithData:jsonSurveys error:&error];
+	
 	if (decodedObject && [decodedObject isKindOfClass:[NSDictionary class]]) {
 		NSDictionary *surveysContainer = (NSDictionary *)decodedObject;
 		NSArray *surveys = [surveysContainer objectForKey:@"surveys"];

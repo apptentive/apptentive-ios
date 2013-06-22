@@ -12,10 +12,9 @@
 #import "ATBackend.h"
 #import "ATFileMessage.h"
 #import "ATFileAttachment.h"
+#import "ATJSONSerialization.h"
 #import "ATURLConnection.h"
 #import "ATWebClient_Private.h"
-
-#import "PJSONKit.h"
 
 #define kMessageCenterChannelName (@"Message Center")
 
@@ -28,7 +27,7 @@
 	} else {
 		postJSON = [conversation apiJSON];
 	}
-	NSString *postString = [postJSON ATJSONStringWithOptions:ATJKSerializeOptionPretty error:&error];
+	NSString *postString = [ATJSONSerialization stringWithJSONObject:postJSON options:ATJSONWritingPrettyPrinted error:&error];
 	if (!postString && error != nil) {
 		ATLogError(@"Error while encoding JSON: %@", error);
 		return nil;
@@ -51,7 +50,7 @@
 		return nil;
 	}
 	putJSON = [conversation apiUpdateJSON];
-	NSString *putString = [putJSON ATJSONStringWithOptions:ATJKSerializeOptionPretty error:&error];
+	NSString *putString = [ATJSONSerialization stringWithJSONObject:putJSON options:ATJSONWritingPrettyPrinted error:&error];
 	if (!putString && error != nil) {
 		ATLogError(@"Error while encoding JSON: %@", error);
 		return nil;
@@ -72,7 +71,7 @@
 	NSError *error = nil;
 	NSDictionary *postJSON = [deviceInfo apiJSON];
 	
-	NSString *postString = [postJSON ATJSONStringWithOptions:ATJKSerializeOptionPretty error:&error];
+	NSString *postString = [ATJSONSerialization stringWithJSONObject:postJSON options:ATJSONWritingPrettyPrinted error:&error];
 	if (!postString && error != nil) {
 		ATLogError(@"Error while encoding JSON: %@", error);
 		return nil;
@@ -98,7 +97,7 @@
 	NSError *error = nil;
 	NSDictionary *postJSON = [personInfo apiJSON];
 	
-	NSString *postString = [postJSON ATJSONStringWithOptions:ATJKSerializeOptionPretty error:&error];
+	NSString *postString = [ATJSONSerialization stringWithJSONObject:postJSON options:ATJSONWritingPrettyPrinted error:&error];
 	if (!postString && error != nil) {
 		ATLogError(@"Error while encoding JSON: %@", error);
 		return nil;
@@ -130,7 +129,7 @@
 		postJSON = @{@"message":messageJSON};
 	}
 	
-	NSString *postString = [postJSON ATJSONStringWithOptions:ATJKSerializeOptionPretty error:&error];
+	NSString *postString = [ATJSONSerialization stringWithJSONObject:postJSON options:ATJSONWritingPrettyPrinted error:&error];
 	if (!postString && error != nil) {
 		ATLogError(@"Error while encoding JSON: %@", error);
 		return nil;

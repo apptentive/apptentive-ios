@@ -15,7 +15,6 @@
 #import "ATSurveyParser.h"
 #import "ATSurveyViewController.h"
 #import "ATTaskQueue.h"
-#import "PJSONKit.h"
 
 NSString *const ATSurveySentSurveysPreferenceKey = @"ATSurveySentSurveysPreferenceKey";
 NSString *const ATSurveyCachedSurveysExpirationPreferenceKey = @"ATSurveyCachedSurveysExpirationPreferenceKey";

@@ -9,12 +9,12 @@
 #import "ATMessageTask.h"
 #import "ATBackend.h"
 #import "ATData.h"
+#import "ATJSONSerialization.h"
 #import "ATLog.h"
 #import "ATMessage.h"
 #import "ATConversationUpdater.h"
 #import "ATWebClient.h"
 #import "ATWebClient+MessageCenter.h"
-#import "PJSONKit.h"
 
 #define kATMessageTaskCodingVersion 2
 
@@ -136,13 +136,16 @@
 		}
 		[message setErrorOccurred:@(YES)];
 		if (sender.errorResponse != nil) {
-			NSObject *errorObject = [sender.errorResponse ATobjectFromJSONString];
+			NSError *parseError = nil;
+			NSObject *errorObject = [ATJSONSerialization JSONObjectWithString:sender.errorResponse error:&parseError];
 			if (errorObject != nil && [errorObject isKindOfClass:[NSDictionary class]]) {
 				NSDictionary *errorDictionary = (NSDictionary *)errorObject;
 				if ([errorDictionary objectForKey:@"errors"]) {
 					ATLogInfo(@"ATAPIRequest server error: %@", [errorDictionary objectForKey:@"errors"]);
 					[message setErrorMessageJSON:sender.errorResponse];
 				}
+			} else if (errorObject == nil) {
+				ATLogError(@"Error decoding error response: %@", parseError);
 			}
 			[message setPendingState:@(ATPendingMessageStateError)];
 		}

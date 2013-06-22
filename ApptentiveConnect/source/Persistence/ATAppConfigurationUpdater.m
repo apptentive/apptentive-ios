@@ -11,7 +11,6 @@
 #import "ATContactStorage.h"
 #import "ATUtilities.h"
 #import "ATWebClient.h"
-#import "PJSONKit.h"
 
 NSString *const ATConfigurationPreferencesChangedNotification = @"ATConfigurationPreferencesChangedNotification";
 NSString *const ATAppConfigurationLastUpdatePreferenceKey = @"ATAppConfigurationLastUpdatePreferenceKey";

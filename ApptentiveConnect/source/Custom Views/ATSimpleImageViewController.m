@@ -11,7 +11,6 @@
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
 #import "ATFeedback.h"
-#import "ATFeedbackController.h"
 
 NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 

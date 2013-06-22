@@ -12,7 +12,6 @@
 #import "ATFeedback.h"
 #import "ATUtilities.h"
 #if TARGET_OS_IPHONE
-#import "ATFeedbackController.h"
 #import "ATMessageCenterViewController.h"
 #elif TARGET_OS_MAC
 #import "ATFeedbackWindowController.h"
@@ -21,11 +20,6 @@
 NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCenterUnreadCountChangedNotification";
 
 @implementation ATConnect
-#if TARGET_OS_IPHONE
-{
-	ATFeedbackController *currentFeedbackController;
-}
-#endif
 @synthesize apiKey, showTagline, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText;
 
 + (ATConnect *)sharedConnection {
@@ -48,10 +42,6 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 
 - (void)dealloc {
 #if TARGET_OS_IPHONE
-	if (currentFeedbackController) {
-		[currentFeedbackController release];
-		currentFeedbackController = nil;
-	}
 #elif IF_TARGET_OS_MAC
 	if (feedbackWindowController) {
 		[feedbackWindowController release];
@@ -92,69 +82,6 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 }
 
 #if TARGET_OS_IPHONE
-- (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController {
-	@synchronized(self) {
-		if (currentFeedbackController) {
-			ATLogInfo(@"Apptentive feedback controller already shown.");
-			return;
-		}
-
-		if (![[ATBackend sharedBackend] currentFeedback]) {
-			ATFeedback *feedback = [[ATFeedback alloc] init];
-			if (customData && [customData count]) {
-				[feedback addExtraDataFromDictionary:customData];
-			}
-			if (self.initialUserName && [self.initialUserName length] > 0) {
-				feedback.name = self.initialUserName;
-			}
-			if (self.initialUserEmailAddress && [self.initialUserEmailAddress length] > 0) {
-				feedback.email = self.initialUserEmailAddress;
-			}
-			ATContactStorage *contact = [ATContactStorage sharedContactStorage];
-			if (contact.name && [contact.name length] > 0) {
-				feedback.name = contact.name;
-			}
-			if (contact.phone) {
-				feedback.phone = contact.phone;
-			}
-			if (contact.email && [contact.email length] > 0) {
-				feedback.email = contact.email;
-			}
-			[[ATBackend sharedBackend] setCurrentFeedback:feedback];
-			[feedback release];
-			feedback = nil;
-		}
-		if ([[ATBackend sharedBackend] currentFeedback]) {
-			ATFeedback *currentFeedback = [[ATBackend sharedBackend] currentFeedback];
-			if (![currentFeedback hasScreenshot]) {
-				[currentFeedback setScreenshot:nil];
-			}
-		}
-
-		ATFeedbackController *vc = [[ATFeedbackController alloc] init];
-		[vc setShowEmailAddressField:self.showEmailField];
-		if (self.customPlaceholderText) {
-			[vc setCustomPlaceholderText:self.customPlaceholderText];
-		}
-		[vc setFeedback:[[ATBackend sharedBackend] currentFeedback]];
-
-		[vc presentFromViewController:viewController animated:YES];
-		currentFeedbackController = vc;
-	}
-}
-
-
-- (void)dismissFeedbackControllerAnimated:(BOOL)animated completion:(void (^)(void))completion {
-	[currentFeedbackController dismissAnimated:animated completion:completion];
-}
-
-
-- (void)feedbackControllerDidDismiss {
-	@synchronized(self) {
-		[currentFeedbackController release], currentFeedbackController = nil;
-	}
-}
-
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController {
 	[[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController];
 }

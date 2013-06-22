@@ -16,10 +16,6 @@
 		490B815D1442751F009801E9 /* ATToolbar.h in Headers */ = {isa = PBXBuildFile; fileRef = 490B815B1442751F009801E9 /* ATToolbar.h */; };
 		490B815E1442751F009801E9 /* ATToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 490B815C1442751F009801E9 /* ATToolbar.m */; };
 		490B815F1442751F009801E9 /* ATToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 490B815C1442751F009801E9 /* ATToolbar.m */; };
-		490B8164144275B3009801E9 /* ATFeedbackController.h in Headers */ = {isa = PBXBuildFile; fileRef = 490B8162144275B3009801E9 /* ATFeedbackController.h */; };
-		490B8165144275B3009801E9 /* ATFeedbackController.m in Sources */ = {isa = PBXBuildFile; fileRef = 490B8163144275B3009801E9 /* ATFeedbackController.m */; };
-		490B8166144275B3009801E9 /* ATFeedbackController.m in Sources */ = {isa = PBXBuildFile; fileRef = 490B8163144275B3009801E9 /* ATFeedbackController.m */; };
-		490B816C14427A95009801E9 /* ATFeedbackController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 490B81601442759D009801E9 /* ATFeedbackController.xib */; };
 		49129ED4174068730026C2E1 /* ApptentiveMigrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49129ED3174068730026C2E1 /* ApptentiveMigrationTests.m */; };
 		49129ED51740687A0026C2E1 /* ATDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 496F5780174060CE003BF516 /* ATDataManager.m */; };
 		491748BA1341177000A7D11E /* ATConnectionChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = 491748B21341177000A7D11E /* ATConnectionChannel.h */; };
@@ -316,9 +312,6 @@
 		490B8157144274EF009801E9 /* ATCustomButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATCustomButton.m; sourceTree = "<group>"; };
 		490B815B1442751F009801E9 /* ATToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATToolbar.h; sourceTree = "<group>"; };
 		490B815C1442751F009801E9 /* ATToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATToolbar.m; sourceTree = "<group>"; };
-		490B81601442759D009801E9 /* ATFeedbackController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATFeedbackController.xib; sourceTree = "<group>"; };
-		490B8162144275B3009801E9 /* ATFeedbackController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATFeedbackController.h; sourceTree = "<group>"; };
-		490B8163144275B3009801E9 /* ATFeedbackController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATFeedbackController.m; sourceTree = "<group>"; };
 		49129ED2174068720026C2E1 /* ApptentiveMigrationTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMigrationTests.h; sourceTree = "<group>"; };
 		49129ED3174068730026C2E1 /* ApptentiveMigrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMigrationTests.m; sourceTree = "<group>"; };
 		491748B21341177000A7D11E /* ATConnectionChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATConnectionChannel.h; sourceTree = "<group>"; };
@@ -629,8 +622,6 @@
 		4936AE681379DE6A00A4B17F /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				490B8162144275B3009801E9 /* ATFeedbackController.h */,
-				490B8163144275B3009801E9 /* ATFeedbackController.m */,
 				49AA101D138B44C00082887A /* ATInfoViewController.h */,
 				49AA101E138B44C00082887A /* ATInfoViewController.m */,
 				4936AE4F1379DE3100A4B17F /* ATSimpleImageViewController.h */,
@@ -983,7 +974,6 @@
 		49C00290133413AA0071F088 /* xibs */ = {
 			isa = PBXGroup;
 			children = (
-				490B81601442759D009801E9 /* ATFeedbackController.xib */,
 				49AA1022138B498C0082887A /* ATInfoViewController.xib */,
 				49AA1024138B49A50082887A /* ATInfoViewController_iPad.xib */,
 				49352A1F138C73B8000E464A /* ATAboutApptentiveView.xib */,
@@ -1127,7 +1117,6 @@
 				49352ADD138CA1DC000E464A /* ATURLConnection_Private.h in Headers */,
 				490B8158144274EF009801E9 /* ATCustomButton.h in Headers */,
 				490B815D1442751F009801E9 /* ATToolbar.h in Headers */,
-				490B8164144275B3009801E9 /* ATFeedbackController.h in Headers */,
 				49BC2A5A144F75E20041E789 /* ATShadowView.h in Headers */,
 				49B877111464958C00594A5D /* ATWebClient_Private.h in Headers */,
 				49EF340F14AA7F2D00077F76 /* ATAppRatingMetrics.h in Headers */,
@@ -1320,7 +1309,6 @@
 				49352A00138C7257000E464A /* ATInfoViewController_iPad.xib in Resources */,
 				49352A20138C73B8000E464A /* ATAboutApptentiveView.xib in Resources */,
 				49352B3F138DB3AA000E464A /* ATTaskProgressCell.xib in Resources */,
-				490B816C14427A95009801E9 /* ATFeedbackController.xib in Resources */,
 				496F29E014496711005B7C01 /* ATSimpleImageViewController.xib in Resources */,
 				4999128F16166C2F00FDA15F /* ATMessageCenterViewController.xib in Resources */,
 				490B24A31624B6D50055B812 /* ATTextMessageUserCell.xib in Resources */,
@@ -1393,7 +1381,6 @@
 				4942CC9213C7AD2D009BF758 /* ATAppRatingFlow.m in Sources */,
 				490B8159144274EF009801E9 /* ATCustomButton.m in Sources */,
 				490B815E1442751F009801E9 /* ATToolbar.m in Sources */,
-				490B8165144275B3009801E9 /* ATFeedbackController.m in Sources */,
 				49BC2A5B144F75E20041E789 /* ATShadowView.m in Sources */,
 				49EF341014AA7F2D00077F76 /* ATAppRatingMetrics.m in Sources */,
 				49EA5AB114BD08AD004F8A4D /* ATLegacyRecord.m in Sources */,
@@ -1482,7 +1469,6 @@
 				4942CC9313C7AD2D009BF758 /* ATAppRatingFlow.m in Sources */,
 				490B815A144274EF009801E9 /* ATCustomButton.m in Sources */,
 				490B815F1442751F009801E9 /* ATToolbar.m in Sources */,
-				490B8166144275B3009801E9 /* ATFeedbackController.m in Sources */,
 				49EF341114AA7F2D00077F76 /* ATAppRatingMetrics.m in Sources */,
 				49EA5AB214BD08AD004F8A4D /* ATLegacyRecord.m in Sources */,
 				49EA5ABF14BD0F4D004F8A4D /* ATRecordTask.m in Sources */,

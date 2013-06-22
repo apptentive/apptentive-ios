@@ -7,6 +7,7 @@
 //
 
 #import "ATConnect.h"
+#import "ATConnect_Private.h"
 #import "ATBackend.h"
 #import "ATContactStorage.h"
 #import "ATFeedback.h"
@@ -86,8 +87,11 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 	[[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController];
 }
 
-- (void)presentIntroDialogFromViewController:(UIViewController *)viewController {
-	[[ATBackend sharedBackend] presentIntroDialogFromViewController:viewController];
+- (void)presentFeedbackDialogFromViewController:(UIViewController *)viewController {
+	NSString *title = ATLocalizedString(@"Give Feedback", @"First feedback screen title.");
+	NSString *body = ATLocalizedString(@"Let us know how to make our app better for you!", @"First feedback screen body.");
+	NSString *placeholder = ATLocalizedString(@"How can we help? (required)", @"First feedback placeholder text.");
+	[[ATBackend sharedBackend] presentIntroDialogFromViewController:viewController withTitle:title prompt:body placeholderText:placeholder];
 }
 
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion {

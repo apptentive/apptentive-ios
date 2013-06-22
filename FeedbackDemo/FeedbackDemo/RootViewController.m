@@ -109,7 +109,7 @@ enum kRootTableSections {
 	if (section == kSurveySection) {
         return 2;
     } else if (section == kMessageCenterSection) {
-		return 1;
+		return 2;
 	}
 	return 1;
 }
@@ -162,9 +162,9 @@ enum kRootTableSections {
 			unreadLabel.font = [UIFont boldSystemFontOfSize:17];
 			[unreadLabel sizeToFit];
 			cell.accessoryView = [unreadLabel autorelease];
-		}/* else if (indexPath.row == 1) {
-			cell.textLabel.text = @"Show Intro Panel";
-		}*/
+		} else if (indexPath.row == 1) {
+			cell.textLabel.text = @"Show Feedback Dialog";
+		}
 	}
     
 	return cell;
@@ -186,9 +186,9 @@ enum kRootTableSections {
 	} else if (indexPath.section == kMessageCenterSection) {
 		if (indexPath.row == 0) {
 			[[ATConnect sharedConnection] presentMessageCenterFromViewController:self];
-		}/* else if (indexPath.row == 1) {
-			[[ATConnect sharedConnection] presentIntroDialogFromViewController:self];
-		}*/
+		} else if (indexPath.row == 1) {
+			[[ATConnect sharedConnection] presentFeedbackDialogFromViewController:self];
+		}
 	}
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

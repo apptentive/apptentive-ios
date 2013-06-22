@@ -497,6 +497,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 			UIViewController *vc = [[self presentingViewController] retain];
 			self.presentingViewController = nil;
 			[self presentMessageCenterFromViewController:vc];
+			[vc release], vc = nil;
 		}
 		[messagePanelSentMessageAlert release], messagePanelSentMessageAlert = nil;
 	}

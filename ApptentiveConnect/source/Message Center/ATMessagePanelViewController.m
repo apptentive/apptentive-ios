@@ -476,7 +476,7 @@ enum {
 		CGSize sizedEmail = [@"XXYyI|" sizeWithFont:emailFont];
 		emailFrame.size.height = sizedEmail.height;
 		emailFrame.size.width = emailFrame.size.width - horizontalPadding*2;
-		self.emailField = [[UITextField alloc] initWithFrame:emailFrame];
+		self.emailField = [[[UITextField alloc] initWithFrame:emailFrame] autorelease];
 		self.emailField.placeholder = ATLocalizedString(@"Your Email", @"Email Address Field Placeholder");
 		self.emailField.font = emailFont;
 		self.emailField.adjustsFontSizeToFitWidth = YES;
@@ -516,7 +516,7 @@ enum {
 	feedbackFrame.origin.y = offsetY;
 	feedbackFrame.size.height = 20;
 	feedbackFrame.size.width = feedbackFrame.size.width - horizontalPadding*2;
-	self.feedbackView = [[ATDefaultTextView alloc] initWithFrame:feedbackFrame];
+	self.feedbackView = [[[ATDefaultTextView alloc] initWithFrame:feedbackFrame] autorelease];
 	UIEdgeInsets insets = UIEdgeInsetsMake(0, -8, 0, 0);
 	self.feedbackView.contentInset = insets;
 	self.feedbackView.clipsToBounds = YES;

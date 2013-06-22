@@ -149,9 +149,8 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 #if TARGET_OS_MAC
 - (void)appDidLaunch:(BOOL)canPromptForRating {
 	[self userDidUseApp];
-	BOOL showedDialog = NO;
 	if (canPromptForRating) {
-		showedDialog = [self showDialogIfNecessary];
+		[self showDialogIfNecessary];
 	}
 }
 #endif

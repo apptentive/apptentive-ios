@@ -80,7 +80,6 @@
 - (void)updateClientCreationTime {
 	NSDate *d = [NSDate date];
 	self.clientCreationTime = [NSNumber numberWithDouble:(double)[d timeIntervalSince1970]];
-#warning Need to add UTC offset
 	self.creationTime = self.clientCreationTime;
 	self.clientCreationUTCOffset = [NSNumber numberWithInteger:[[NSTimeZone systemTimeZone] secondsFromGMTForDate:d]];
 }

@@ -9,7 +9,6 @@
 #import "ATConnect.h"
 
 @interface ATConnect ()
-- (void)feedbackControllerDidDismiss;
 - (NSDictionary *)customData;
 
 #if TARGET_OS_IPHONE

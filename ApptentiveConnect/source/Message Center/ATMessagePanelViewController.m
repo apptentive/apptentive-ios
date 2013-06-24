@@ -424,7 +424,6 @@ enum {
 
 @implementation ATMessagePanelViewController (Private)
 - (void)setupScrollView {
-#	warning Implement me
 	CGFloat offsetY = 0;
 	CGFloat horizontalPadding = 7;
 	self.scrollView.backgroundColor = [UIColor colorWithRed:240/255. green:240/255. blue:240/255. alpha:1];

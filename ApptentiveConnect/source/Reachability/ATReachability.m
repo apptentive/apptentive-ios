@@ -109,7 +109,7 @@ static void ATReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 			break;
 		}
 		
-		if (!SCNetworkReachabilityScheduleWithRunLoop(reachabilityRef, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode)) {
+		if (!SCNetworkReachabilityScheduleWithRunLoop(reachabilityRef, CFRunLoopGetMain(), kCFRunLoopDefaultMode)) {
 			break;
 		}
 		
@@ -121,7 +121,7 @@ static void ATReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 
 - (void)stop {
 	if (reachabilityRef != NULL) {
-		SCNetworkReachabilityUnscheduleFromRunLoop(reachabilityRef, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
+		SCNetworkReachabilityUnscheduleFromRunLoop(reachabilityRef, CFRunLoopGetMain(), kCFRunLoopDefaultMode);
 	}
 }
 @end

@@ -47,6 +47,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 @interface ATBackend (Private)
 - (void)setupDataManager;
 - (void)setup;
+- (void)startup;
 - (void)updateWorking;
 - (void)networkStatusChanged:(NSNotification *)notification;
 - (void)stopWorking:(NSNotification *)notification;
@@ -84,16 +85,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	@synchronized(self) {
 		if (sharedBackend == nil) {
 			sharedBackend = [[self alloc] init];
-			[sharedBackend setupDataManager];
-			[ApptentiveMetrics sharedMetrics];
-			
-			[ATMessageDisplayType setupSingletons];
-			
-			// One-shot actions at startup.
-			[sharedBackend performSelector:@selector(checkForSurveys) withObject:nil afterDelay:4];
-			[sharedBackend performSelector:@selector(updateDeviceIfNeeded) withObject:nil afterDelay:7];
-			[sharedBackend performSelector:@selector(checkForMessages) withObject:nil afterDelay:8];
-			[sharedBackend performSelector:@selector(updatePersonIfNeeded) withObject:nil afterDelay:9];
+			[sharedBackend startup];
 		}
 	}
 	return sharedBackend;
@@ -704,7 +696,12 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 @end
 
 @implementation ATBackend (Private)
+/* Methods which are safe to run when sharedBackend is still nil. */
 - (void)setup {
+	if (![[NSThread currentThread] isMainThread]) {
+		[self performSelectorOnMainThread:@selector(setup) withObject:nil waitUntilDone:YES];
+		return;
+	}
 	[ATStaticLibraryBootstrap forceStaticLibrarySymbolUsage];
 #if TARGET_OS_IPHONE
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:UIApplicationWillTerminateNotification object:nil];
@@ -719,6 +716,24 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 #elif TARGET_OS_MAC
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:NSApplicationWillTerminateNotification object:nil];
 #endif
+}
+
+/* Methods which are not safe to run until sharedBackend is assigned. */
+- (void)startup {
+	if (![[NSThread currentThread] isMainThread]) {
+		[self performSelectorOnMainThread:@selector(startup) withObject:nil waitUntilDone:NO];
+		return;
+	}
+	[self setupDataManager];
+	[ApptentiveMetrics sharedMetrics];
+	
+	[ATMessageDisplayType setupSingletons];
+	
+	// One-shot actions at startup.
+	[self performSelector:@selector(checkForSurveys) withObject:nil afterDelay:4];
+	[self performSelector:@selector(updateDeviceIfNeeded) withObject:nil afterDelay:7];
+	[self performSelector:@selector(checkForMessages) withObject:nil afterDelay:8];
+	[self performSelector:@selector(updatePersonIfNeeded) withObject:nil afterDelay:9];
 	
 	[ATReachability sharedReachability];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusChanged:) name:ATReachabilityStatusChanged object:nil];

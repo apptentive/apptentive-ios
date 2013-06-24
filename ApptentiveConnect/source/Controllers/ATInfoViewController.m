@@ -48,15 +48,8 @@ enum {
 	return self;
 }
 
-- (id)initWithFeedbackController:(ATFeedbackController *)aController {
-	self = [self init];
-	controller = [aController retain];
-	return self;
-}
-
 - (void)dealloc {
 	[logicalSections release], logicalSections = nil;
-	[controller release], controller = nil;
 	[self teardown];
 	[super dealloc];
 }
@@ -91,12 +84,7 @@ enum {
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-	if (!showingDebugController) {
-		if (controller != nil) {
-			[controller unhide:animated];
-			[controller release], controller = nil;
-		}
-	}
+	[super viewWillDisappear:animated];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -257,9 +245,7 @@ enum {
 	logicalSections = [[NSMutableArray alloc] init];
 	[logicalSections addObject:@(kSectionTasks)];
 #if APPTENTIVE_DEBUG_LOG_VIEWER
-	if (controller == nil) {
-		[logicalSections addObject:@(kSectionDebugLog)];
-	}
+	[logicalSections addObject:@(kSectionDebugLog)];
 #endif
 	[logicalSections addObject:@(kSectionVersion)];
 	

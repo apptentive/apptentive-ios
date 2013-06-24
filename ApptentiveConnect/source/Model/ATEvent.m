@@ -115,10 +115,6 @@
 }
 
 #pragma mark ATRequestTaskprovider
-- (BOOL)shouldPerformTask:(ATRecordRequestTask *)task {
-	return YES;
-}
-
 - (NSURL *)managedObjectURIRepresentationForTask:(ATRecordRequestTask *)task {
 	return [[self objectID] URIRepresentation];
 }

@@ -26,8 +26,6 @@ typedef enum {
 
 
 @protocol ATRequestTaskProvider <NSObject>
-#warning Make dependent on conversation creation, where necessary.
-- (BOOL)shouldPerformTask:(ATRecordRequestTask *)task;
 - (NSURL *)managedObjectURIRepresentationForTask:(ATRecordRequestTask *)task;
 - (void)cleanupAfterTask:(ATRecordRequestTask *)task;
 - (ATAPIRequest *)requestForTask:(ATRecordRequestTask *)task;

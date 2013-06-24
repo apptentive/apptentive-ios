@@ -70,9 +70,7 @@ fail:
 }
 
 - (void)start {
-	if (![self.taskProvider shouldPerformTask:self]) {
-		self.finished = YES;
-	} else if (!request) {
+	if (!request) {
 		request = [[self.taskProvider requestForTask:self] retain];
 		if (request != nil) {
 			request.delegate = self;

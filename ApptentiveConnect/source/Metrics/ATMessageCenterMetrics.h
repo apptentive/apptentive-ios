@@ -16,3 +16,10 @@ NSString *const ATMessageCenterDidSendNotification;
 
 NSString *const ATMessageCenterMessageIDKey;
 NSString *const ATMessageCenterMessageNonceKey;
+
+NSString *const ATMessageCenterIntroDidShowNotification;
+NSString *const ATMessageCenterIntroDidSendNotification;
+NSString *const ATMessageCenterIntroDidCancelNotification;
+NSString *const ATMessageCenterIntroThankYouDidShowNotification;
+NSString *const ATMessageCenterIntroThankYouHitMessagesNotification;
+NSString *const ATMessageCenterIntroThankYouDidCloseNotification;

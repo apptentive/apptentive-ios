@@ -17,3 +17,10 @@ NSString *const ATMessageCenterDidSendNotification = @"ATMessageCenterDidSendNot
 
 NSString *const ATMessageCenterMessageIDKey = @"ATMessageCenterMessageIDKey";
 NSString *const ATMessageCenterMessageNonceKey = @"ATMessageCenterMessageNonceKey";
+
+NSString *const ATMessageCenterIntroDidShowNotification = @"ATMessageCenterIntroDidShowNotification";
+NSString *const ATMessageCenterIntroDidSendNotification = @"ATMessageCenterIntroDidSendNotification";
+NSString *const ATMessageCenterIntroDidCancelNotification = @"ATMessageCenterIntroDidCancelNotification";
+NSString *const ATMessageCenterIntroThankYouDidShowNotification = @"ATMessageCenterIntroThankYouDidShowNotification";
+NSString *const ATMessageCenterIntroThankYouHitMessagesNotification = @"ATMessageCenterIntroThankYouHitMessagesNotification";
+NSString *const ATMessageCenterIntroThankYouDidCloseNotification = @"ATMessageCenterIntroThankYouDidCloseNotification";

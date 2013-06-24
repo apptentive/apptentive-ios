@@ -19,6 +19,7 @@
 #import "ATConnect.h"
 #import "ATHUDView.h"
 #import "ATLabel.h"
+#import "ATMessageCenterMetrics.h"
 #import "ATUtilities.h"
 #import "ATShadowView.h"
 
@@ -183,8 +184,7 @@ enum {
 	}];
 	[shadowView release], shadowView = nil;
 	
-#warning TODO
-	//[[NSNotificationCenter defaultCenter] postNotificationName:ATFeedbackDidShowWindowNotification object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:ATFeedbackWindowTypeFeedback] forKey:ATFeedbackWindowTypeKey]];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroDidShowNotification object:self userInfo:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -299,13 +299,12 @@ enum {
 	} else {
 		[self sendMessageAndDismiss];
 	}
-//!!	[[NSNotificationCenter defaultCenter] postNotificationName:ATFeedbackDidHideWindowNotification object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:ATFeedbackEventTappedSend] forKey:ATFeedbackWindowHideEventKey]];
 }
 
 - (IBAction)cancelPressed:(id)sender {
 	[self.delegate messagePanelDidCancel:self];
 	[self dismissAnimated:YES completion:NULL withAction:ATMessagePanelDidCancel];
-//!!	[[NSNotificationCenter defaultCenter] postNotificationName:ATFeedbackDidHideWindowNotification object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:ATFeedbackEventTappedCancel] forKey:ATFeedbackWindowHideEventKey]];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroDidCancelNotification object:self userInfo:nil];
 }
 
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion withAction:(ATMessagePanelDismissAction)action {

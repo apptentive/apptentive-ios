@@ -257,7 +257,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	[message release], message = nil;
 }
 
-- (void)sendTextMessageWithBody:(NSString *)body {
+- (BOOL)sendTextMessageWithBody:(NSString *)body completion:(void (^)(NSString *pendingMessageID))completion {
 	ATTextMessage *message = (ATTextMessage *)[ATData newEntityNamed:@"ATTextMessage"];
 	[message setup];
 	message.body = body;
@@ -268,7 +268,10 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	if (![[self managedObjectContext] save:&error]) {
 		ATLogError(@"Unable to send text message with body: %@, error: %@", body, error);
 		[message release], message = nil;
-		return;
+		return NO;
+	}
+	if (completion) {
+		completion(message.pendingMessageID);
 	}
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidSendNotification object:@{ATMessageCenterMessageNonceKey:message.pendingMessageID}];
@@ -283,6 +286,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 		[task release], task = nil;
 	});
 	[message release], message = nil;
+	return YES;
 }
 
 - (NSString *)supportDirectoryPath {
@@ -461,7 +465,10 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 			person.needsUpdate = YES;
 		}
 		[person saveAsCurrentPerson];
-		[self sendTextMessageWithBody:message];
+		
+		[self sendTextMessageWithBody:message completion:^(NSString *pendingMessageID) {
+			[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroDidSendNotification object:nil userInfo:@{ATMessageCenterMessageNonceKey: pendingMessageID}];
+		}];
 	}
 }
 
@@ -472,6 +479,8 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 			if (!messagePanelSentMessageAlert) {
 				messagePanelSentMessageAlert = [[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Thanks!", nil) message:ATLocalizedString(@"Your response has been saved in this app's Message Center, where you may get a reply from us.", @"Message panel sent message confirmation dialog text") delegate:self cancelButtonTitle:ATLocalizedString(@"Close", @"Close alert view title") otherButtonTitles:ATLocalizedString(@"View Messages", @"View messages button title"), nil];
 				[messagePanelSentMessageAlert show];
+				
+				[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroThankYouDidShowNotification object:self userInfo:nil];
 			}
 		}
 	}
@@ -486,10 +495,13 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	if (alertView == messagePanelSentMessageAlert) {
 		if (buttonIndex == 1) {
+			[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroThankYouHitMessagesNotification object:self userInfo:nil];
 			UIViewController *vc = [[self presentingViewController] retain];
 			self.presentingViewController = nil;
 			[self presentMessageCenterFromViewController:vc];
 			[vc release], vc = nil;
+		} else {
+			[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroThankYouDidCloseNotification object:self userInfo:nil];
 		}
 		[messagePanelSentMessageAlert release], messagePanelSentMessageAlert = nil;
 	}

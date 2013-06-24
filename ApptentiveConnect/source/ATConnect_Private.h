@@ -12,6 +12,10 @@
 - (void)feedbackControllerDidDismiss;
 - (NSDictionary *)customData;
 
+#if TARGET_OS_IPHONE
+- (void)presentFeedbackDialogFromViewController:(UIViewController *)viewController;
+#endif
+
 /*!
  * Returns the NSBundle corresponding to the bundle containing ATConnect's
  * images, xibs, strings files, etc.

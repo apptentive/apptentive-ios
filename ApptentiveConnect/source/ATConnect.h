@@ -53,7 +53,6 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 #if TARGET_OS_IPHONE
 
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController;
-- (void)presentFeedbackDialogFromViewController:(UIViewController *)viewController;
 - (NSUInteger)unreadMessageCount;
 
 /*!

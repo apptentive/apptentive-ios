@@ -51,6 +51,10 @@ enum {
 - (void)dealloc {
 	[logicalSections release], logicalSections = nil;
 	[self teardown];
+	[_apptentiveDescriptionTextView release];
+	[_apptentivePrivacyTextView release];
+	[_findOutMoreButton release];
+	[_gotoPrivacyPolicyButton release];
 	[super dealloc];
 }
 
@@ -78,6 +82,10 @@ enum {
 }
 
 - (void)viewDidUnload {
+	[self setApptentiveDescriptionTextView:nil];
+	[self setApptentivePrivacyTextView:nil];
+	[self setFindOutMoreButton:nil];
+	[self setGotoPrivacyPolicyButton:nil];
 	[super viewDidUnload];
 	[headerView release], headerView = nil;
 	self.tableView = nil;
@@ -257,6 +265,12 @@ enum {
 	CGRect f = logoView.frame;
 	f.size = logoImage.size;
 	logoView.frame = f;
+	
+	self.apptentiveDescriptionTextView.text = ATLocalizedString(@"Apptentive is an in-app feedback mechanism which allows app developers to quickly get feedback from customers.", @"Description of Apptentive service in information screen.");
+	[self.findOutMoreButton setTitle:ATLocalizedString(@"Find out more at apptentive.com", @"Title of button to open Apptentive.com") forState:UIControlStateNormal];
+	self.apptentivePrivacyTextView.text = ATLocalizedString(@"Your feedback is hosted by Apptentive and is subject to Apptentive's privacy policy and the privacy policy of the developer of this app.", @"Description of Apptentive privacy policy.");
+	[self.gotoPrivacyPolicyButton setTitle:ATLocalizedString(@"Go to Apptentive's Privacy Policy", @"Title for button to open Apptentive's privacy policy") forState:UIControlStateNormal];
+	
 	tableView.delegate = self;
 	tableView.dataSource = self;
 	tableView.tableHeaderView = self.headerView;

@@ -394,6 +394,8 @@ enum {
 		CGRect newTextViewFrame = oldTextViewRect;
 		newTextViewFrame.size.height -= heightDiff;
 		textView.frame = newTextViewFrame;
+		// Fix for iOS 4.
+		textView.contentInset = UIEdgeInsetsMake(0, -8, 0, 0);
 		if (!CGSizeEqualToSize(self.scrollView.contentSize, newContentSize)) {
 			self.scrollView.contentSize = newContentSize;
 		}

@@ -754,7 +754,6 @@ typedef enum {
 				textCell = developerCell;
 				textCell.messageBubbleImage.image = [[ATBackend imageNamed:@"at_dev_chat_bubble"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 21, 27, 15)];
 				textCell.userIcon.image = [ATBackend imageNamed:@"at_mc_user_icon"];
-				textCell.usernameLabel.text = ATLocalizedString(@"Developer", @"User name for text bubbles from developers.");
 			}
 			[[textCell retain] autorelease];
 			[userCell release], userCell = nil;
@@ -771,6 +770,12 @@ typedef enum {
 			textCell.messageText.dataDetectorTypes = UIDataDetectorTypeAll;
 		}
 		textCell.composing = NO;
+		if (cellSubType != ATTextMessageCellTypeUser) {
+			textCell.usernameLabel.text = ATLocalizedString(@"Developer", @"User name for text bubbles from developers.");
+			if (message.sender.name) {
+				textCell.usernameLabel.text = message.sender.name;
+			}
+		}
 		if ([message isKindOfClass:[ATTextMessage class]]) {
 			ATMessageSender *sender = [(ATTextMessage *)message sender];
 			if (sender.profilePhotoURL) {

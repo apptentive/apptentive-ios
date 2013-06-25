@@ -171,6 +171,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 				}
 			} else {
 				lastMessageID = messageID;
+				[message updateWithJSON:messageJSON];
 			}
 			if (!message) {
 				success = NO;

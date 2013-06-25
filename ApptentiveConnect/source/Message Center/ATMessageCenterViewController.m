@@ -137,7 +137,16 @@ typedef enum {
 	[self.tableView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]]];
 	[self.containerView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]]];
 	[self.attachmentView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_mc_noise_bg"]]];
-	self.attachmentShadowView.image = [[ATBackend imageNamed:@"at_mc_attachment_shadow"] resizableImageWithCapInsets:UIEdgeInsetsMake(4, 0, 0, 128)];
+	
+	UIImage *attachmentShadowBase = [ATBackend imageNamed:@"at_mc_attachment_shadow"];
+	UIImage *attachmentShadow = nil;
+	UIEdgeInsets attachmentInsets = UIEdgeInsetsMake(4, 0, 0, 128);
+	if ([attachmentShadow respondsToSelector:@selector(resizableImageWithCapInsets:)]) {
+		attachmentShadow = [attachmentShadowBase resizableImageWithCapInsets:attachmentInsets];
+	} else {
+		attachmentShadow = [attachmentShadowBase stretchableImageWithLeftCapWidth:attachmentInsets.left topCapHeight:attachmentInsets.top];
+	}
+	self.attachmentShadowView.image = attachmentShadow;
 	
 	[self.view addSubview:self.containerView];
 	inputViewNib = [UINib nibWithNibName:@"ATMessageInputView" bundle:[ATConnect resourceBundle]];
@@ -747,12 +756,32 @@ typedef enum {
 			[nib instantiateWithOwner:self options:nil];
 			if (cellSubType == ATTextMessageCellTypeUser) {
 				textCell = userCell;
-				textCell.messageBubbleImage.image = [[ATBackend imageNamed:@"at_chat_bubble"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 27, 21)];
+				
+				UIEdgeInsets chatInsets = UIEdgeInsetsMake(15, 15, 27, 21);
+				UIImage *chatBubbleBase = [ATBackend imageNamed:@"at_chat_bubble"];
+				UIImage *chatBubbleImage = nil;
+				if ([chatBubbleBase respondsToSelector:@selector(resizableImageWithCapInsets:)]) {
+					chatBubbleImage = [chatBubbleBase resizableImageWithCapInsets:chatInsets];
+				} else {
+					chatBubbleImage = [chatBubbleBase stretchableImageWithLeftCapWidth:chatInsets.left topCapHeight:chatInsets.top];
+				}
+				textCell.messageBubbleImage.image = chatBubbleImage;
+				
 				textCell.userIcon.image = [ATBackend imageNamed:@"at_mc_user_icon"];
 				textCell.usernameLabel.text = ATLocalizedString(@"You", @"User name for text bubbles from users.");
 			} else {
 				textCell = developerCell;
-				textCell.messageBubbleImage.image = [[ATBackend imageNamed:@"at_dev_chat_bubble"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 21, 27, 15)];
+				
+				UIEdgeInsets chatInsets = UIEdgeInsetsMake(15, 21, 27, 15);
+				UIImage *chatBubbleBase = [ATBackend imageNamed:@"at_dev_chat_bubble"];
+				UIImage *chatBubbleImage = nil;
+				if ([chatBubbleBase respondsToSelector:@selector(resizableImageWithCapInsets:)]) {
+					chatBubbleImage = [chatBubbleBase resizableImageWithCapInsets:chatInsets];
+				} else {
+					chatBubbleImage = [chatBubbleBase stretchableImageWithLeftCapWidth:chatInsets.left topCapHeight:chatInsets.top];
+				}
+				textCell.messageBubbleImage.image = chatBubbleImage;
+				
 				textCell.userIcon.image = [ATBackend imageNamed:@"at_mc_user_icon"];
 			}
 			[[textCell retain] autorelease];
@@ -883,7 +912,18 @@ typedef enum {
 			[currentCell configureWithFileMessage:fileMessage];
 		}
 		currentCell.userIcon.image = [ATBackend imageNamed:@"at_mc_user_icon"];
-		currentCell.messageBubbleImage.image = [[ATBackend imageNamed:@"at_chat_bubble"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 27, 21)];
+		
+		
+		
+		UIEdgeInsets chatInsets = UIEdgeInsetsMake(15, 21, 27, 15);
+		UIImage *chatBubbleBase = [ATBackend imageNamed:@"at_dev_chat_bubble"];
+		UIImage *chatBubbleImage = nil;
+		if ([chatBubbleBase respondsToSelector:@selector(resizableImageWithCapInsets:)]) {
+			chatBubbleImage = [chatBubbleBase resizableImageWithCapInsets:chatInsets];
+		} else {
+			chatBubbleImage = [chatBubbleBase stretchableImageWithLeftCapWidth:chatInsets.left topCapHeight:chatInsets.top];
+		}
+		currentCell.messageBubbleImage.image = chatBubbleImage;
 		
 		ATMessageSender *sender = [(ATTextMessage *)message sender];
 		if (sender.profilePhotoURL) {

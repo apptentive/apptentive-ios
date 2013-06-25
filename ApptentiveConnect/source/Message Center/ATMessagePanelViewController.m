@@ -201,7 +201,14 @@ enum {
 	self.sendButton = [[[ATCustomButton alloc] initWithButtonStyle:ATCustomButtonStyleSend] autorelease];
 	[self.sendButton setAction:@selector(sendPressed:) forTarget:self];
 	
-	self.toolbarShadowImage.image = [[ATBackend imageNamed:@"at_message_toolbar_shadow"] resizableImageWithCapInsets:UIEdgeInsetsMake(8, 0, 0, 128)];
+	UIImage *toolbarShadowBase = [ATBackend imageNamed:@"at_message_toolbar_shadow"];
+	UIImage *toolbarShadow = nil;
+	if ([toolbarShadowBase respondsToSelector:@selector(resizableImageWithCapInsets:)]) {
+		toolbarShadow = [toolbarShadowBase resizableImageWithCapInsets:UIEdgeInsetsMake(8, 0, 0, 128)];
+	} else {
+		toolbarShadow = [toolbarShadowBase stretchableImageWithLeftCapWidth:0 topCapHeight:8];
+	}
+	self.toolbarShadowImage.image = toolbarShadow;
 	self.toolbarShadowImage.alpha = 0;
 	
 	NSMutableArray *toolbarItems = [[self.toolbar items] mutableCopy];

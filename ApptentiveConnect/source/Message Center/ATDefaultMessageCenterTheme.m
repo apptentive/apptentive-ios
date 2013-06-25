@@ -17,7 +17,13 @@
 }
 
 - (void)configureSendButton:(UIButton *)sendButton forMessageCenterViewController:(ATMessageCenterViewController *)vc {
-	UIImage *sendImage = [[ATBackend imageNamed:@"at_send_button_flat"] resizableImageWithCapInsets:UIEdgeInsetsMake(12, 49, 13, 13)];
+	UIImage *sendImageBase = [ATBackend imageNamed:@"at_send_button_flat"];
+	UIImage *sendImage = nil;
+	if ([sendImageBase respondsToSelector:@selector(resizableImageWithCapInsets:)]) {
+		sendImage = [sendImageBase resizableImageWithCapInsets:UIEdgeInsetsMake(12, 49, 13, 13)];
+	} else {
+		sendImage = [sendImageBase stretchableImageWithLeftCapWidth:49 topCapHeight:12];
+	}
 	[sendButton setBackgroundImage:sendImage forState:UIControlStateNormal];
 	[sendButton.titleLabel setShadowOffset:CGSizeMake(0, 1)];
 	[sendButton setTitleColor:[UIColor colorWithWhite:0.0 alpha:0.7] forState:UIControlStateNormal];
@@ -35,7 +41,13 @@
 - (UIImage *)backgroundImageForMessageForMessageCenterViewController:(ATMessageCenterViewController *)vc {
 	UIImage *flatInputBackgroundImage = [ATBackend imageNamed:@"at_flat_input_bg"];
 	UIEdgeInsets capInsets = UIEdgeInsetsMake(16, 44, flatInputBackgroundImage.size.height - 16 - 1, flatInputBackgroundImage.size.width - 44 - 1);
-	UIImage *resizableImage = [flatInputBackgroundImage resizableImageWithCapInsets:capInsets];
+	
+	UIImage *resizableImage = nil;
+	if ([flatInputBackgroundImage respondsToSelector:@selector(resizableImageWithCapInsets:)]) {
+		resizableImage = [flatInputBackgroundImage resizableImageWithCapInsets:capInsets];
+	} else {
+		resizableImage = [flatInputBackgroundImage stretchableImageWithLeftCapWidth:capInsets.left topCapHeight:capInsets.top];
+	}
 	return resizableImage;
 }
 @end

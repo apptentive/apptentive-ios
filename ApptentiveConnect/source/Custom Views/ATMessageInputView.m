@@ -26,6 +26,8 @@ UIEdgeInsets insetsForView(UIView *v) {
 	CGFloat maxTextFieldHeight;
 	NSUInteger maxNumberOfLines;
 	UIEdgeInsets textViewInsets;
+	
+	UIEdgeInsets textViewContentInset;
 }
 @synthesize sendButton, attachButton, delegate, text, allowsEmptyText;
 
@@ -41,9 +43,11 @@ UIEdgeInsets insetsForView(UIView *v) {
 	maxTextFieldHeight = textView.font.lineHeight * maxNumberOfLines;
 	
 	textView.backgroundColor = [UIColor clearColor];
+	
 	textView.autoresizingMask = UIViewAutoresizingNone;
 	//TODO: Get rid of magic numbers here.
-	textView.contentInset = UIEdgeInsetsMake(-4, -2, -4, 0);
+	textViewContentInset = UIEdgeInsetsMake(-4, -2, -4, 0);
+	textView.contentInset = textViewContentInset;
 	textView.showsHorizontalScrollIndicator = NO;
 	
 	[self validateTextField];
@@ -68,6 +72,7 @@ UIEdgeInsets insetsForView(UIView *v) {
 	textFrame.origin.x = textViewInsets.left;
 	textFrame.size.width = self.bounds.size.width - textViewInsets.left - textViewInsets.right;
 	textView.frame = textFrame;
+	textView.contentInset = textViewContentInset;
 	[self resizeTextViewWithString:textView.text animated:NO];
 }
 

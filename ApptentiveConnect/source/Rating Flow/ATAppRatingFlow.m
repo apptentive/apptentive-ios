@@ -204,6 +204,12 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 			[self postNotification:ATAppRatingDidClickEnjoymentButtonNotification forButton:ATAppRatingEnjoymentButtonTypeNo];
 			[self setUserDislikesThisVersion];
 			if (!self.viewController) {
+				UIViewController *candidateVC = [self rootViewControllerForCurrentWindow];
+				if (candidateVC) {
+					self.viewController = candidateVC;
+				}
+			}
+			if (!self.viewController) {
 				ATLogError(@"No view controller to present feedback interface!!");
 			} else {
 				NSString *title = NSLocalizedString(@"We're Sorry!", @"We're sorry text");

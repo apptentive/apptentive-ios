@@ -68,4 +68,41 @@
 	STAssertNotNil(surveys, @"shouldn't be nil");
 	STAssertTrue([surveys count] == 0, @"Should be zero surveys");
 }
+
+- (void)testMultipleSelectValidation {
+	ATSurveyQuestion *question = [[ATSurveyQuestion alloc] init];
+	question.type = ATSurveyQuestionTypeMultipleSelect;
+	question.value = @"Pick one:";
+	
+	ATSurveyQuestionAnswer *answerA = [[ATSurveyQuestionAnswer alloc] init];
+	answerA.identifier = @"a";
+	answerA.value = @"A";
+	
+	ATSurveyQuestionAnswer *answerB = [[ATSurveyQuestionAnswer alloc] init];
+	answerB.identifier = @"b";
+	answerB.value = @"B";
+	
+	[question addAnswerChoice:answerA];
+	[question addAnswerChoice:answerB];
+	question.minSelectionCount = 1;
+	question.maxSelectionCount = 1;
+	question.responseRequired = YES;
+	
+	STAssertEquals(ATSurveyQuestionValidationErrorTooFewAnswers, [question validateAnswer], @"Should be too few answers");
+	[question addSelectedAnswerChoice:answerA];
+	STAssertEquals(ATSurveyQuestionValidationErrorNone, [question validateAnswer], @"Should be valid");
+	question.minSelectionCount = 2;
+	question.maxSelectionCount = 2;
+	STAssertEquals(ATSurveyQuestionValidationErrorTooFewAnswers, [question validateAnswer], @"Should be too few answers");
+	question.minSelectionCount = 1;
+	question.maxSelectionCount = 1;
+	[question addSelectedAnswerChoice:answerB];
+	STAssertEquals(ATSurveyQuestionValidationErrorTooManyAnswers, [question validateAnswer], @"Should be too many answers");
+	question.responseRequired = NO;
+	STAssertEquals(ATSurveyQuestionValidationErrorTooManyAnswers, [question validateAnswer], @"Should be too many answers");
+	[question removeSelectedAnswerChoice:answerB];
+	STAssertEquals(ATSurveyQuestionValidationErrorNone, [question validateAnswer], @"Should be valid");
+	[question removeSelectedAnswerChoice:answerA];
+	STAssertEquals(ATSurveyQuestionValidationErrorNone, [question validateAnswer], @"Should be valid");
+}
 @end

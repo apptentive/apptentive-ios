@@ -114,6 +114,10 @@ ATConnect *connection = [ATConnect sharedConnection];
 [connection presentMessageCenterFromViewController:self];
 ```
 
+![Message Center initial feedback](etc/screenshots/messageCenter_giveFeedback.png?raw=true)
+
+![Message Center response](etc/screenshots/messageCenter_response.png?raw=true)
+
 Easy!
 
 

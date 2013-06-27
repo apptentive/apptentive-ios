@@ -71,11 +71,19 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 }
 
 - (void)addCustomData:(NSObject *)object withKey:(NSString *)key {
+		
+	//special cases
 	if ([object isKindOfClass:[NSDate class]]) {
-		[customData setObject:[ATUtilities stringRepresentationOfDate:(NSDate *)object] forKey:key];
-	} else {
-		[customData setObject:object forKey:key];
+		object = [ATUtilities stringRepresentationOfDate:(NSDate *)object];
 	}
+	
+	BOOL allowedData = ([object isKindOfClass:[NSString class]] ||
+						[object isKindOfClass:[NSNumber class]] ||
+						[object isKindOfClass:[NSNull class]]);
+	
+	NSAssert(allowedData, @"Custom data must be of type NSString, NSNumber, or NSNull. Attempted to add custom data of type %@", NSStringFromClass([object class]));
+	
+	[customData setObject:object forKey:key];
 }
 
 - (void)removeCustomDataWithKey:(NSString *)key {

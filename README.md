@@ -11,7 +11,10 @@ Apptentive iOS SDK
 This iOS library allows you to add a quick and easy in-app-feedback mechanism
 to your iOS applications. Feedback is sent to the Apptentive web service.
 
-Note that there have been some recent API changes. See `docs/APIChanges.md`.
+There have been many recent API changes for the 1.0 release. Please see `docs/APIChanges.md`.
+
+For developers with apps created before June 28, 2013, please contact us to have your account
+upgraded to the new Message Center UI on our website.
 
 Quickstart
 ==========
@@ -58,6 +61,7 @@ Project Settings for Xcode 4
 The instructions below are for source integration. For binary releases, see our [Binary Distributions](https://github.com/apptentive/apptentive-ios/wiki/Binary-Distributions) page.
 
 There is a video demoing integration in Xcode 4 here:
+
 http://vimeo.com/23710908
 
 Drag the `ApptentiveConnect.xcodeproj` project to your project in Xcode 4 and

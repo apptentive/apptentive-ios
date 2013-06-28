@@ -1,5 +1,5 @@
-2013-05 wooster v1.0.0 (in progress)
-----------------------
+2013-06-28 wooster v1.0.0 (in progress)
+-------------------------
 There are a lot of major API changes. They are documented in docs/APIChanges.md
 
 * Fixes IOS-127 Make some APIs private for Message Center release
@@ -8,6 +8,11 @@ There are a lot of major API changes. They are documented in docs/APIChanges.md
 * Fixes IOS-128 Remove feedback API for Message Center
 * Fixes IOS-103 Make ratings flow easier
 * Fixes IOS-136 Create personal info editing screen
+* Many, many other changes.
+
+Note that for apps created before June 28, 2013, please contact us to have your account
+upgraded to the new Message Center UI on our website. If you have any questions at all,
+please let us know!
 
 2013-06-07 wooster v0.4.9
 -------------------------

@@ -11,6 +11,7 @@
 #import "ATConnect_Private.h"
 #import "ATPersonInfo.h"
 #import "ATInfoViewController.h"
+#import "ATUtilities.h"
 
 enum kPersonDetailsTableSections {
 	kContactInfoSection,
@@ -20,7 +21,8 @@ enum kPersonDetailsTableSections {
 
 
 @interface ATPersonDetailsViewController ()
-- (void)savePersonData;
+- (BOOL)emailIsValid;
+- (BOOL)savePersonData;
 - (void)registerForKeyboardNotifications;
 - (void)keyboardWillBeShown:(NSNotification *)aNotification;
 - (void)keyboardWillBeHidden:(NSNotification *)aNotification;
@@ -28,6 +30,7 @@ enum kPersonDetailsTableSections {
 
 @implementation ATPersonDetailsViewController {
 	UIEdgeInsets previousScrollInsets;
+	UILabel *emailValidationLabel;
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -52,6 +55,8 @@ enum kPersonDetailsTableSections {
 }
 
 - (void)viewDidUnload {
+	self.nameTextField.delegate = nil;
+	self.emailTextField.delegate = nil;
 	[self setTableView:nil];
 	[self setLogoButton:nil];
 	[self setEmailCell:nil];
@@ -60,6 +65,7 @@ enum kPersonDetailsTableSections {
 	[self setNameTextField:nil];
 	[self setPoweredByLabel:nil];
 	[self setLogoImage:nil];
+	[emailValidationLabel release], emailValidationLabel = nil;
 	[super viewDidUnload];
 }
 
@@ -80,6 +86,26 @@ enum kPersonDetailsTableSections {
 	self.logoImage.image = [ATBackend imageNamed:@"at_apptentive_logo"];
 	self.poweredByLabel.text = ATLocalizedString(@"Message Center Powered By", @"Text above Apptentive logo");
 	[self registerForKeyboardNotifications];
+	[self.emailTextField addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];
+	emailValidationLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width - 10, 20)];
+	emailValidationLabel.text = ATLocalizedString(@"Please enter a valid email address.", @"Table footer asking for a valid email address.");
+	emailValidationLabel.textColor = [UIColor redColor];
+	emailValidationLabel.font = [UIFont systemFontOfSize:15];
+	emailValidationLabel.shadowColor = [UIColor whiteColor];
+	emailValidationLabel.shadowOffset = CGSizeMake(0, 1);
+	emailValidationLabel.textAlignment = UITextAlignmentCenter;
+	emailValidationLabel.numberOfLines = 0;
+	emailValidationLabel.lineBreakMode = UILineBreakModeWordWrap;
+	emailValidationLabel.backgroundColor = [UIColor clearColor];
+	emailValidationLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	
+	CGSize s = [emailValidationLabel sizeThatFits:CGSizeMake(self.tableView.bounds.size.width - 10, 1000)];
+	s.height = MAX(s.height, 25);
+	CGRect f = emailValidationLabel.frame;
+	f.size = s;
+	emailValidationLabel.frame = f;
+	
+	emailValidationLabel.hidden = [self emailIsValid];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -100,7 +126,10 @@ enum kPersonDetailsTableSections {
     // Dispose of any resources that can be recreated.
 }
 
-- (void)savePersonData {
+- (BOOL)savePersonData {
+	if (![self emailIsValid]) {
+		return NO;
+	}
 	ATPersonInfo *person = nil;
 	if ([ATPersonInfo personExists]) {
 		person = [ATPersonInfo currentPerson];
@@ -118,11 +147,21 @@ enum kPersonDetailsTableSections {
 		person.needsUpdate = YES;
 	}
 	[person saveAsCurrentPerson];
+	return YES;
+}
+
+- (BOOL)emailIsValid {
+	NSString *email = self.emailTextField.text;
+	if (email && [email length] > 0) {
+		return [ATUtilities emailAddressIsValid:email];
+	}
+	return YES;
 }
 
 - (IBAction)donePressed:(id)sender {
-	[self savePersonData];
-	[self.navigationController popViewControllerAnimated:YES];
+	if ([self savePersonData]) {
+		[self.navigationController popViewControllerAnimated:YES];
+	}
 }
 
 - (IBAction)logoPressed:(id)sender {
@@ -147,6 +186,20 @@ enum kPersonDetailsTableSections {
         return 2;
     } else if (section == kForgetInfoSection) {
 		return 1;
+	}
+	return 0;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+	if (section == kContactInfoSection) {
+		return emailValidationLabel;
+	}
+	return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+	if (section == kContactInfoSection) {
+		return emailValidationLabel.bounds.size.height;
 	}
 	return 0;
 }
@@ -200,6 +253,10 @@ enum kPersonDetailsTableSections {
 		return YES;
 	}
 	return YES;
+}
+
+- (void)textFieldChanged:(id)sender {
+	emailValidationLabel.hidden = [self emailIsValid];
 }
 
 #pragma mark Keyboard Handling

@@ -114,7 +114,7 @@
 	if (self.facebookID) {
 		[result setObject:self.facebookID forKey:@"facebook_id"];
 	}
-	if (self.emailAddress) {
+	if (self.emailAddress && [self.emailAddress length] > 0 && [ATUtilities emailAddressIsValid:self.emailAddress]) {
 		[result setObject:self.emailAddress forKey:@"email"];
 	}
 	if (self.secret) {

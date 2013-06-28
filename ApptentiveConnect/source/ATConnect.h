@@ -67,7 +67,7 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 - (IBAction)showFeedbackWindow:(id)sender;
 #endif
 
-/*! Adds an additional data field to any feedback sent. */
+/*! Adds an additional data field to any feedback sent. object should be an NSDate, NSNumber, or NSString. */
 - (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
 
 /*! Removes an additional data field from the feedback sent. */

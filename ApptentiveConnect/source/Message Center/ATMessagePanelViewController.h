@@ -27,6 +27,9 @@ typedef enum {
 	BOOL showEmailAddressField;
 	UIWindow *originalPresentingWindow;
 	NSObject<ATMessagePanelDelegate> *delegate;
+	
+	UIAlertView *noEmailAddressAlert;
+	UIAlertView *invalidEmailAddressAlert;
 }
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet ATCustomButton *cancelButton;

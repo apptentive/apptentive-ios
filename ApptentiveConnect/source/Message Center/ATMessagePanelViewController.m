@@ -87,6 +87,8 @@ enum {
 
 - (void)dealloc {
 	[_toolbarShadowImage release], _toolbarShadowImage = nil;
+	[noEmailAddressAlert release], noEmailAddressAlert = nil;
+	[invalidEmailAddressAlert release], invalidEmailAddressAlert = nil;
 	delegate = nil;
 	[super dealloc];
 }
@@ -262,24 +264,38 @@ enum {
 - (IBAction)sendPressed:(id)sender {
 	[self.emailField resignFirstResponder];
 	[self.feedbackView resignFirstResponder];
-	if (self.showEmailAddressField && (!self.emailField.text || [self.emailField.text length] == 0)) {
+	if (self.showEmailAddressField && [self.emailField.text length] > 0 && ![ATUtilities emailAddressIsValid:self.emailField.text]) {
+		if (invalidEmailAddressAlert) {
+			[invalidEmailAddressAlert release], invalidEmailAddressAlert = nil;
+		}
+		self.window.windowLevel = UIWindowLevelNormal;
+		self.window.userInteractionEnabled = NO;
+		self.window.layer.shouldRasterize = YES;
+		NSString *title = NSLocalizedString(@"Invalid Email Address", @"Invalid email dialog title.");
+		NSString *message = NSLocalizedString(@"That doesn't look like an email address. An email address will help us respond.", @"Invalid email dialog message.");
+		invalidEmailAddressAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Okay", @"Okay button title"), nil];
+		[invalidEmailAddressAlert show];
+	} else if (self.showEmailAddressField && (!self.emailField.text || [self.emailField.text length] == 0)) {
+		if (noEmailAddressAlert) {
+			[noEmailAddressAlert release], noEmailAddressAlert = nil;
+		}
 		self.window.windowLevel = UIWindowLevelNormal;
 		self.window.userInteractionEnabled = NO;
 		self.window.layer.shouldRasterize = YES;
 		NSString *title = NSLocalizedString(@"No email address?", @"Lack of email dialog title.");
 		NSString *message = NSLocalizedString(@"An email address will help us respond.", @"Lack of email dialog message.");
-		UIAlertView *emailAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Send Feedback", @"Send button title"), nil];
-		BOOL useNativeTextField = [emailAlert respondsToSelector:@selector(alertViewStyle)];
+		noEmailAddressAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Send Feedback", @"Send button title"), nil];
+		BOOL useNativeTextField = [noEmailAddressAlert respondsToSelector:@selector(alertViewStyle)];
 		UITextField *field = nil;
 		
 		if (useNativeTextField) {
 			// iOS 5 and above.
-			[emailAlert setAlertViewStyle:2]; // UIAlertViewStylePlainTextInput
-			field = [emailAlert textFieldAtIndex:0];
+			[noEmailAddressAlert setAlertViewStyle:2]; // UIAlertViewStylePlainTextInput
+			field = [noEmailAddressAlert textFieldAtIndex:0];
 			[field retain];
 		} else {
 			NSString *messagePadded = [NSString stringWithFormat:@"%@\n\n\n", message];
-			[emailAlert setMessage:messagePadded];
+			[noEmailAddressAlert setMessage:messagePadded];
 			field = [[UITextField alloc] initWithFrame:CGRectMake(16, 83, 252, 25)];
 			field.font = [UIFont systemFontOfSize:18];
 			field.textColor = [UIColor lightGrayColor];
@@ -295,14 +311,13 @@ enum {
 		
 		if (!useNativeTextField) {
 			[field becomeFirstResponder];
-			[emailAlert addSubview:field];
+			[noEmailAddressAlert addSubview:field];
 		} else {
 			[field becomeFirstResponder];
 		}
 		[field release], field = nil;
-		[emailAlert sizeToFit];
-		[emailAlert show];
-		[emailAlert release];
+		[noEmailAddressAlert sizeToFit];
+		[noEmailAddressAlert show];
 	} else {
 		[self sendMessageAndDismiss];
 	}
@@ -417,13 +432,33 @@ enum {
 
 #pragma mark UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-	UITextField *textField = (UITextField *)[alertView viewWithTag:kATEmailAlertTextFieldTag];
-	if (textField) {
-		self.emailField.text = textField.text;
-		self.window.layer.shouldRasterize = NO;
-		[self sendMessageAndDismiss];
+	self.window.layer.shouldRasterize = NO;
+	if (noEmailAddressAlert && [alertView isEqual:noEmailAddressAlert]) {
+		[noEmailAddressAlert release], noEmailAddressAlert = nil;
+		UITextField *textField = (UITextField *)[alertView viewWithTag:kATEmailAlertTextFieldTag];
+		if (textField) {
+			self.emailField.text = textField.text;
+			[self sendMessageAndDismiss];
+		}
+	} else if (invalidEmailAddressAlert && [alertView isEqual:invalidEmailAddressAlert]) {
+		self.window.userInteractionEnabled = YES;
+		[invalidEmailAddressAlert release], invalidEmailAddressAlert = nil;
+		[self.emailField becomeFirstResponder];
 	}
 }
+
+- (void)alertViewCancel:(UIAlertView *)alertView {
+	self.window.layer.shouldRasterize = NO;
+	self.window.userInteractionEnabled = YES;
+	if (noEmailAddressAlert && [alertView isEqual:noEmailAddressAlert]) {
+		[noEmailAddressAlert release], noEmailAddressAlert = nil;
+	} else if (invalidEmailAddressAlert && [alertView isEqual:invalidEmailAddressAlert]) {
+		[invalidEmailAddressAlert release], invalidEmailAddressAlert = nil;
+	}
+}
+
+#pragma mark -
+
 - (void)viewDidUnload {
 	[self setToolbarShadowImage:nil];
 	[super viewDidUnload];

@@ -259,7 +259,7 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 	NSData *fileData = nil;
 	if (path && [fm fileExistsAtPath:path]) {
 		NSError *error = nil;
-#warning Unknown behavior on iOS 4
+		//TODO: Determine behavior on iOS 4. Seems to work, but unknown if mapped file is being used.
 		fileData = [NSData dataWithContentsOfFile:path options:NSDataReadingMappedIfSafe error:&error];
 		if (!fileData) {
 			ATLogError(@"Unable to get contents of file path for uploading: %@", error);

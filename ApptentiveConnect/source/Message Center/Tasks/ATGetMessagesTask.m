@@ -161,7 +161,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 				if ([type isEqualToString:@"TextMessage"]) {
 					message = [(ATTextMessage *)[ATTextMessage newInstanceWithJSON:messageJSON] autorelease];
 				} else if ([type isEqualToString:@"FileMessage"]) {
-#warning Add file message here.
+					//TODO: Add file message type here. Currently server won't return file messages.
 				} else if ([type isEqualToString:@"AutomatedMessage"]) {
 					message = [(ATAutomatedMessage *)[ATAutomatedMessage newInstanceWithJSON:messageJSON] autorelease];
 				}

@@ -144,7 +144,7 @@
 	return thumb;
 }
 
-#warning Remove
+//TODO: Should this be removed?
 - (void)createThumbnailOfSize:(CGSize)size completion:(void (^)(void))completion {
 	CGFloat scale = [[UIScreen mainScreen] scale];
 	NSString *fullLocalPath = [self fullLocalPath];

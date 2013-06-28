@@ -85,7 +85,6 @@ typedef enum {
 	return self;
 }
 
-#warning Fixme
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	[[ATBackend sharedBackend] messageCenterEnteredForeground];
@@ -94,7 +93,7 @@ typedef enum {
 	NSError *error = nil;
 	if (![self.fetchedMessagesController performFetch:&error]) {
 		ATLogError(@"Got an error loading messages: %@", error);
-		//!! handle me
+		//TODO: Handle this error.
 	}
 	[self.tableView reloadData];
 	
@@ -215,7 +214,7 @@ typedef enum {
 	[self.cancelButton.titleLabel setShadowOffset:CGSizeMake(0, -1)];
 }
 
-#warning Implement for iOS 4
+//TODO: Handle relayouting on iOS 4.
 - (void)viewDidLayoutSubviews {
 	[self relayoutSubviews];
 }

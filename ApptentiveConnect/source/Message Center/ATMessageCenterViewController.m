@@ -917,7 +917,7 @@ typedef enum {
 		
 		
 		UIEdgeInsets chatInsets = UIEdgeInsetsMake(15, 21, 27, 15);
-		UIImage *chatBubbleBase = [ATBackend imageNamed:@"at_dev_chat_bubble"];
+		UIImage *chatBubbleBase = [ATBackend imageNamed:@"at_chat_bubble"];
 		UIImage *chatBubbleImage = nil;
 		if ([chatBubbleBase respondsToSelector:@selector(resizableImageWithCapInsets:)]) {
 			chatBubbleImage = [chatBubbleBase resizableImageWithCapInsets:chatInsets];

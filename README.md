@@ -50,6 +50,9 @@ following frameworks:
 * SystemConfiguration
 * UIKit
 
+*Note:* If your app uses Core Data and you listen for Core Data related notifications, you will
+want to filter them based upon your managed object context. [Learn more from Apple's documentation.](https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/CoreDataFramework/Classes/NSManagedObjectContext_Class/NSManagedObjectContext.html)
+
 Project Settings for Xcode 4
 ----------------------------
 The instructions below are for source integration. For binary releases, see our [Binary Distributions](https://github.com/apptentive/apptentive-ios/wiki/Binary-Distributions) page.

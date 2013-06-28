@@ -229,6 +229,7 @@ typedef enum {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[pickedImage release], pickedImage = nil;
 	[messageDateFormatter release];
+	tableView.delegate = nil;
 	[tableView release];
 	[attachmentView release];
 	[containerView release];

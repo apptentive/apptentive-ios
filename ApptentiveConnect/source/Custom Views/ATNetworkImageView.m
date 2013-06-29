@@ -37,7 +37,9 @@
 	}
 	if (self.imageURL) {
 		NSURLRequest *request = [NSURLRequest requestWithURL:self.imageURL];
-		connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+		connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
+		[connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+		[connection start];
 	}
 }
 

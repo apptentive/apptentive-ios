@@ -9,6 +9,7 @@
 #import "ATSurveyParser.h"
 #import "ATJSONSerialization.h"
 #import "ATSurveyQuestion.h"
+#import "ATUtilities.h"
 
 @interface ATSurveyParser ()
 - (ATSurveyQuestionAnswer *)answerWithJSONDictionary:(NSDictionary *)jsonDictionary;
@@ -124,6 +125,19 @@
 	if ([jsonDictionary objectForKey:@"active"] != nil) {
 		survey.active = [(NSNumber *)[jsonDictionary objectForKey:@"active"] boolValue];
 	}
+	
+	if ([jsonDictionary objectForKey:@"date"] != nil) {
+		survey.date = [ATUtilities dateFromISO8601String:[jsonDictionary objectForKey:@"date"]];
+	}
+	
+	if ([jsonDictionary objectForKey:@"start_time"] != nil) {
+		survey.startTime = [ATUtilities dateFromISO8601String:[jsonDictionary objectForKey:@"start_time"]];
+	}
+	
+	if ([jsonDictionary objectForKey:@"end_time"] != nil) {
+		survey.endTime = [ATUtilities dateFromISO8601String:[jsonDictionary objectForKey:@"end_time"]];		
+	}
+	
 	if ([jsonDictionary objectForKey:@"required"] != nil) {
 		survey.responseRequired = [(NSNumber *)[jsonDictionary objectForKey:@"required"] boolValue];
 	}

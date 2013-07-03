@@ -15,6 +15,9 @@
 	NSMutableArray *tags;
 }
 @property (nonatomic, getter=isActive) BOOL active;
+@property (nonatomic, copy) NSDate *date;
+@property (nonatomic, copy) NSDate *startTime;
+@property (nonatomic, copy) NSDate *endTime;
 @property (nonatomic, getter=responseIsRequired) BOOL responseRequired;
 @property (nonatomic) BOOL multipleResponsesAllowed;
 @property (nonatomic, copy) NSString *identifier;
@@ -29,6 +32,9 @@
 
 - (BOOL)surveyHasNoTags;
 - (BOOL)surveyHasTags:(NSSet *)tagsToCheck;
+
+- (BOOL)isStarted;
+- (BOOL)isEnded;
 
 - (void)reset;
 @end

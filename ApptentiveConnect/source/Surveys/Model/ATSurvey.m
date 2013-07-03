@@ -14,6 +14,7 @@
 @synthesize responseRequired;
 @synthesize multipleResponsesAllowed;
 @synthesize active;
+@synthesize date, startTime, endTime;
 @synthesize identifier;
 @synthesize name;
 @synthesize surveyDescription;
@@ -36,6 +37,9 @@
 		tags = [[NSMutableArray alloc] init];
 		if (version == kATSurveyStorageVersion) {
 			self.active = [coder decodeBoolForKey:@"active"];
+			self.date = [coder decodeObjectForKey:@"date"];
+			self.startTime = [coder decodeObjectForKey:@"startTime"];
+			self.endTime = [coder decodeObjectForKey:@"endTime"];
 			self.responseRequired = [coder decodeBoolForKey:@"responseRequired"];
 			self.multipleResponsesAllowed = [coder decodeBoolForKey:@"multipleResponsesAllowed"];
 			self.identifier = [coder decodeObjectForKey:@"identifier"];
@@ -62,6 +66,9 @@
 	[coder encodeInt:kATSurveyStorageVersion forKey:@"version"];
 	[coder encodeObject:self.identifier forKey:@"identifier"];
 	[coder encodeBool:self.isActive forKey:@"active"];
+	[coder encodeObject:self.date forKey:@"date"];
+	[coder encodeObject:self.endTime forKey:@"endTime"];
+	[coder encodeObject:self.startTime forKey:@"startTime"];
 	[coder encodeBool:self.responseIsRequired forKey:@"responseRequired"];
 	[coder encodeBool:self.multipleResponsesAllowed forKey:@"multipleResponsesAllowed"];
 	[coder encodeObject:self.name forKey:@"name"];
@@ -78,6 +85,9 @@
 	[surveyDescription release], surveyDescription = nil;
 	[successMessage release], successMessage = nil;
 	[tags release], tags = nil;
+	[date release], date = nil;
+	[startTime release], startTime = nil;
+	[endTime release], endTime = nil;	
 	[super dealloc];
 }
 
@@ -124,6 +134,14 @@
 	}
 	
 	return isSubset;
+}
+
+- (BOOL)isStarted {
+	return ([self.startTime compare:[NSDate date]] == NSOrderedAscending);
+}
+
+- (BOOL)isEnded {
+	return ([self.endTime compare:[NSDate date]] == NSOrderedAscending);
 }
 
 - (void)reset {

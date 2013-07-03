@@ -749,6 +749,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	
 	[ATReachability sharedReachability];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusChanged:) name:ATReachabilityStatusChanged object:nil];
+	[self networkStatusChanged:nil];
 	[self performSelector:@selector(startMonitoringUnreadMessages) withObject:nil afterDelay:0.2];
 }
 

@@ -137,10 +137,18 @@
 }
 
 - (BOOL)isStarted {
+	if (self.startTime == nil) {
+		return YES;
+	}
+	
 	return ([self.startTime compare:[NSDate date]] == NSOrderedAscending);
 }
 
 - (BOOL)isEnded {
+	if (self.endTime == nil) {
+		return NO;
+	}
+	
 	return ([self.endTime compare:[NSDate date]] == NSOrderedAscending);
 }
 

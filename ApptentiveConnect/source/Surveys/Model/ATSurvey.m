@@ -15,12 +15,15 @@
 @synthesize multipleResponsesAllowed;
 @synthesize active;
 @synthesize date, startTime, endTime;
+@synthesize showOncePer;
 @synthesize identifier;
 @synthesize name;
 @synthesize surveyDescription;
 @synthesize questions;
 @synthesize tags;
 @synthesize successMessage;
+
+NSString *const ATSurveyDateShownLastKeyForSurveyID = @"ATSurveyDateShownLastKeyForSurveyID";
 
 - (id)init {
 	if ((self = [super init])) {
@@ -40,6 +43,7 @@
 			self.date = [coder decodeObjectForKey:@"date"];
 			self.startTime = [coder decodeObjectForKey:@"startTime"];
 			self.endTime = [coder decodeObjectForKey:@"endTime"];
+			self.showOncePer = [coder decodeObjectForKey:@"showOncePer"];
 			self.responseRequired = [coder decodeBoolForKey:@"responseRequired"];
 			self.multipleResponsesAllowed = [coder decodeBoolForKey:@"multipleResponsesAllowed"];
 			self.identifier = [coder decodeObjectForKey:@"identifier"];
@@ -67,8 +71,9 @@
 	[coder encodeObject:self.identifier forKey:@"identifier"];
 	[coder encodeBool:self.isActive forKey:@"active"];
 	[coder encodeObject:self.date forKey:@"date"];
-	[coder encodeObject:self.endTime forKey:@"endTime"];
 	[coder encodeObject:self.startTime forKey:@"startTime"];
+	[coder encodeObject:self.endTime forKey:@"endTime"];
+	[coder encodeObject:self.showOncePer forKey:@"showOncePer"];
 	[coder encodeBool:self.responseIsRequired forKey:@"responseRequired"];
 	[coder encodeBool:self.multipleResponsesAllowed forKey:@"multipleResponsesAllowed"];
 	[coder encodeObject:self.name forKey:@"name"];
@@ -88,6 +93,7 @@
 	[date release], date = nil;
 	[startTime release], startTime = nil;
 	[endTime release], endTime = nil;	
+	[showOncePer release], showOncePer = nil;
 	[super dealloc];
 }
 
@@ -150,6 +156,18 @@
 	}
 	
 	return ([self.endTime compare:[NSDate date]] == NSOrderedAscending);
+}
+
+- (BOOL)shownTooRecently {
+	NSString *shownLastKey = [NSString stringWithFormat:@"%@%@", ATSurveyDateShownLastKeyForSurveyID, self.identifier];
+	NSDate *shownLast = [[NSUserDefaults standardUserDefaults] objectForKey:shownLastKey];
+	
+	if (self.showOncePer == nil || shownLast == nil) {
+		return NO;
+	}
+		
+	NSDate *showAgain = [shownLast dateByAddingTimeInterval:60 * [self.showOncePer doubleValue]];
+	return ([showAgain compare:[NSDate date]] == NSOrderedDescending);
 }
 
 - (void)reset {

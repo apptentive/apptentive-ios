@@ -138,6 +138,10 @@
 		survey.endTime = [ATUtilities dateFromISO8601String:[jsonDictionary objectForKey:@"end_time"]];		
 	}
 	
+	if ([jsonDictionary objectForKey:@"show_once_per"] != nil) {
+		survey.showOncePer = [jsonDictionary objectForKey:@"show_once_per"];
+	}
+	
 	if ([jsonDictionary objectForKey:@"required"] != nil) {
 		survey.responseRequired = [(NSNumber *)[jsonDictionary objectForKey:@"required"] boolValue];
 	}

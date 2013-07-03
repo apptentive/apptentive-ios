@@ -46,6 +46,9 @@ enum {
 - (id)initWithSurvey:(ATSurvey *)aSurvey {
 	if ((self = [super init])) {
 		startedSurveyDate = [[NSDate alloc] init];
+		NSString *shownLastKey = [NSString stringWithFormat:@"%@%@", ATSurveyDateShownLastKeyForSurveyID, aSurvey.identifier];
+		[[NSUserDefaults standardUserDefaults] setObject:startedSurveyDate forKey:shownLastKey];
+				
 		survey = [aSurvey retain];
 		sentNotificationsAboutQuestionIDs = [[NSMutableSet alloc] init];
 	}

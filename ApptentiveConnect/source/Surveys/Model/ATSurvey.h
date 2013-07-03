@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "ATSurveyQuestion.h"
 
+extern NSString *const ATSurveyDateShownLastKeyForSurveyID;
+
 @interface ATSurvey : NSObject <NSCoding> {
 @private
 	NSMutableArray *questions;
@@ -18,6 +20,7 @@
 @property (nonatomic, copy) NSDate *date;
 @property (nonatomic, copy) NSDate *startTime;
 @property (nonatomic, copy) NSDate *endTime;
+@property (nonatomic, copy) NSNumber *showOncePer;
 @property (nonatomic, getter=responseIsRequired) BOOL responseRequired;
 @property (nonatomic) BOOL multipleResponsesAllowed;
 @property (nonatomic, copy) NSString *identifier;
@@ -35,6 +38,7 @@
 
 - (BOOL)isStarted;
 - (BOOL)isEnded;
+- (BOOL)shownTooRecently;
 
 - (void)reset;
 @end

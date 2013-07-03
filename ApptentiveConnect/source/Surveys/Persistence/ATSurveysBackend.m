@@ -164,7 +164,7 @@ NSString *const ATSurveyCachedSurveysExpirationPreferenceKey = @"ATSurveyCachedS
 	@synchronized(self) {
 		for (ATSurvey *survey in availableSurveys) {
 			if ([survey surveyHasNoTags]) {
-				if (![survey isActive] || ![survey isStarted] || [survey isEnded]) {
+				if (![survey isActive] || ![survey isStarted] || [survey isEnded] || [survey shownTooRecently]) {
 					continue;
 				}
 				else if (![self surveyAlreadySubmitted:survey] || [survey multipleResponsesAllowed]) {
@@ -181,7 +181,7 @@ NSString *const ATSurveyCachedSurveysExpirationPreferenceKey = @"ATSurveyCachedS
 	@synchronized(self) {
 		for (ATSurvey *survey in availableSurveys) {
 			if ([survey surveyHasTags:tags]) {
-				if (![survey isActive] || ![survey isStarted] || [survey isEnded]) {
+				if (![survey isActive] || ![survey isStarted] || [survey isEnded] || [survey shownTooRecently]) {
 					continue;
 				}
 				else if (![self surveyAlreadySubmitted:survey] || [survey multipleResponsesAllowed]) {

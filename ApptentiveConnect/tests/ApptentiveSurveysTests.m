@@ -23,7 +23,6 @@
 - (void)tearDown
 {
 	// Tear-down code here.
-	
 	[super tearDown];
 }
 
@@ -54,6 +53,31 @@
 	
 	ATSurveyQuestion *question = [[survey questions] objectAtIndex:0];
 	STAssertTrue([question.answerChoices count] == 6, @"First question should have 6 answers");
+	
+	[parser release], parser = nil;
+}
+
+- (void)testSingleLineParsing {
+	NSString *surveyString = @"{\"surveys\":[{\"id\":\"51bbd4eb4712c7a70d000001\",\"questions\":[{\"id\":\"51bbd4eb4712c7a70d000002\",\"value\":\"Test\",\"type\":\"singleline\",\"required\":false}],\"date\":\"2013-06-15T02:43:55Z\",\"name\":\"Test\",\"description\":\"Test\",\"required\":false,\"multiple_responses\":false,\"show_success_message\":false,\"active\":true},{\"id\":\"51d494cc4712c7012c000059\",\"questions\":[{\"id\":\"51d494cc4712c7012c00005a\",\"multiline\":false,\"value\":\"Single line response type\",\"type\":\"singleline\",\"required\":true},{\"id\":\"51d494cc4712c7012c00005b\",\"multiline\":true,\"value\":\"Multiline response type\",\"type\":\"singleline\",\"required\":true}],\"date\":\"2013-07-03T21:17:00Z\",\"name\":\"Test New Surveys\",\"required\":false,\"multiple_responses\":false,\"show_success_message\":false,\"start_time\":\"2013-07-03T21:15:55Z\",\"active\":true}]}";
+	NSData *surveyData = [surveyString dataUsingEncoding:NSUTF8StringEncoding];
+	STAssertNotNil(surveyData, @"Survey data shouldn't be nil");
+	
+	ATSurveyParser *parser = [[ATSurveyParser alloc] init];
+	NSArray *surveys = [parser parseMultipleSurveys:surveyData];
+	
+	STAssertTrue([surveys count] == 2, @"Should be 2 surveys");
+	
+	ATSurvey *survey = [surveys objectAtIndex:0];
+	ATSurveyQuestion *question = [[survey questions] objectAtIndex:0];
+	STAssertTrue(question.multiline, @"Questions without multiline attribute should be multiple lines by default.");
+	
+	
+	survey = [surveys objectAtIndex:1];
+	question = [[survey questions] objectAtIndex:0];
+	STAssertFalse(question.multiline, @"Question should be a single line.");
+	
+	question = [[survey questions] objectAtIndex:1];
+	STAssertTrue(question.multiline, @"Question should be multiple lines.");
 	
 	[parser release], parser = nil;
 }

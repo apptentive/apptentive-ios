@@ -67,6 +67,12 @@
 			question.type = ATSurveyQuestionTypeMultipleSelect;
 		} else if ([(NSString *)typeString isEqualToString:@"singleline"]) {
 			question.type = ATSurveyQuestionTypeSingeLine;
+			
+			if ([jsonDictionary objectForKey:@"multiline"]) {
+				question.multiline = [(NSNumber *)[jsonDictionary objectForKey:@"multiline"] boolValue];
+			} else {
+				question.multiline = YES;
+			}
 		} else {
 			break;
 		}

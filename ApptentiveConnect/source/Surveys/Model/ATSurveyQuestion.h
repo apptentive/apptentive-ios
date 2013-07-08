@@ -39,6 +39,7 @@ typedef enum {
 @property (nonatomic, retain) NSMutableArray *selectedAnswerChoices;
 @property (nonatomic, assign) NSUInteger minSelectionCount;
 @property (nonatomic, assign) NSUInteger maxSelectionCount;
+@property (nonatomic, assign) BOOL multiline;
 
 - (void)addAnswerChoice:(ATSurveyQuestionAnswer *)answer;
 

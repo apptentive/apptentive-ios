@@ -23,7 +23,7 @@
 @synthesize tags;
 @synthesize successMessage;
 
-NSString *const ATSurveyDateShownLastKeyForSurveyID = @"ATSurveyDateShownLastKeyForSurveyID";
+NSString *const ATSurveyDatesShownKey = @"ATSurveyDatesShownKey";
 
 - (id)init {
 	if ((self = [super init])) {
@@ -158,40 +158,51 @@ NSString *const ATSurveyDateShownLastKeyForSurveyID = @"ATSurveyDateShownLastKey
 	return ([self.endTime compare:[NSDate date]] == NSOrderedAscending);
 }
 
-- (BOOL)shownTooRecently {
-	NSDate *shownLast = nil;
+- (NSArray *)datesShown {
+	NSArray *datesShown = nil;
 	@synchronized([ATSurvey class]) {
-		NSDictionary *shownDates = [[NSUserDefaults standardUserDefaults] objectForKey:ATSurveyDateShownLastKeyForSurveyID];
-		if (shownDates && [shownDates objectForKey:self.identifier]) {
-			shownLast = (NSDate *)[shownDates objectForKey:self.identifier];
-		}
+		NSDictionary *surveysDatesShown = [[NSUserDefaults standardUserDefaults] objectForKey:ATSurveyDatesShownKey];
+		datesShown = [surveysDatesShown objectForKey:self.identifier];
 	}
-	
-	if (self.showOncePer == nil || shownLast == nil) {
-		return NO;
-	}
-		
-	NSDate *showAgain = [shownLast dateByAddingTimeInterval:60 * [self.showOncePer doubleValue]];
-	return ([showAgain compare:[NSDate date]] == NSOrderedDescending);
+	return datesShown;
 }
 
-- (void)setShownAtDate:(NSDate *)shownDate {
+- (void)addDateShown:(NSDate *)dateShown {
+	NSMutableArray *datesShown = [NSMutableArray arrayWithArray:[self datesShown]];
+	if (dateShown != nil) {
+		[datesShown insertObject:dateShown atIndex:0];
+	}
+		
 	@synchronized([ATSurvey class]) {
-		NSDictionary *shownDates = [[NSUserDefaults standardUserDefaults] objectForKey:ATSurveyDateShownLastKeyForSurveyID];
-		if (!shownDates) {
-			shownDates = @{};
+		NSMutableDictionary *surveysDatesShown = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:ATSurveyDatesShownKey]];
+		
+		//Passing in nil removes all recorded dates for this survey
+		if (dateShown == nil) {
+			[surveysDatesShown removeObjectForKey:self.identifier];
 		}
-		NSMutableDictionary *shownDatesMutable = [NSMutableDictionary dictionaryWithDictionary:shownDates];
-		if (shownDate == nil) {
-			[shownDatesMutable removeObjectForKey:self.identifier];
-		} else {
-			[shownDatesMutable setObject:shownDate forKey:self.identifier];
+		else {
+			[surveysDatesShown setObject:datesShown forKey:self.identifier];
 		}
-		[[NSUserDefaults standardUserDefaults] setObject:shownDatesMutable forKey:ATSurveyDateShownLastKeyForSurveyID];
+		
+		[[NSUserDefaults standardUserDefaults] setObject:surveysDatesShown forKey:ATSurveyDatesShownKey];
 		if (![[NSUserDefaults standardUserDefaults] synchronize]) {
 			ATLogError(@"Unable to synchronize defaults for survey shown at dates.");
 		}
 	}
+}
+
+- (BOOL)shownTooRecently {
+	NSArray *datesShown = [self datesShown];
+	
+	if (self.showOncePer == nil || datesShown == nil || datesShown.count == 0) {
+		return NO;
+	}
+	
+	//TODO: This is currently only using "once per N" durations. Will eventually move to "X per N" e.g. "8 times per year"
+	NSDate *shownLast = [datesShown objectAtIndex:0];
+	NSDate *showAgain = [shownLast dateByAddingTimeInterval:60 * [self.showOncePer doubleValue]];
+	
+	return ([showAgain compare:[NSDate date]] == NSOrderedDescending);
 }
 
 - (void)reset {
@@ -199,4 +210,5 @@ NSString *const ATSurveyDateShownLastKeyForSurveyID = @"ATSurveyDateShownLastKey
 		[question reset];
 	}
 }
+
 @end

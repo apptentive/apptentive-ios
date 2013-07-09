@@ -36,8 +36,10 @@
 
 - (BOOL)isStarted;
 - (BOOL)isEnded;
+
+- (NSArray *)datesShown;
+- (void)addDateShown:(NSDate *)dateShown;
 - (BOOL)shownTooRecently;
-- (void)setShownAtDate:(NSDate *)date;
 
 - (void)reset;
 @end

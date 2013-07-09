@@ -159,8 +159,13 @@ NSString *const ATSurveyDateShownLastKeyForSurveyID = @"ATSurveyDateShownLastKey
 }
 
 - (BOOL)shownTooRecently {
-	NSString *shownLastKey = [NSString stringWithFormat:@"%@%@", ATSurveyDateShownLastKeyForSurveyID, self.identifier];
-	NSDate *shownLast = [[NSUserDefaults standardUserDefaults] objectForKey:shownLastKey];
+	NSDate *shownLast = nil;
+	@synchronized([ATSurvey class]) {
+		NSDictionary *shownDates = [[NSUserDefaults standardUserDefaults] objectForKey:ATSurveyDateShownLastKeyForSurveyID];
+		if (shownDates && [shownDates objectForKey:self.identifier]) {
+			shownLast = (NSDate *)[shownDates objectForKey:self.identifier];
+		}
+	}
 	
 	if (self.showOncePer == nil || shownLast == nil) {
 		return NO;
@@ -168,6 +173,25 @@ NSString *const ATSurveyDateShownLastKeyForSurveyID = @"ATSurveyDateShownLastKey
 		
 	NSDate *showAgain = [shownLast dateByAddingTimeInterval:60 * [self.showOncePer doubleValue]];
 	return ([showAgain compare:[NSDate date]] == NSOrderedDescending);
+}
+
+- (void)setShownAtDate:(NSDate *)shownDate {
+	@synchronized([ATSurvey class]) {
+		NSDictionary *shownDates = [[NSUserDefaults standardUserDefaults] objectForKey:ATSurveyDateShownLastKeyForSurveyID];
+		if (!shownDates) {
+			shownDates = @{};
+		}
+		NSMutableDictionary *shownDatesMutable = [NSMutableDictionary dictionaryWithDictionary:shownDates];
+		if (shownDate == nil) {
+			[shownDatesMutable removeObjectForKey:self.identifier];
+		} else {
+			[shownDatesMutable setObject:shownDate forKey:self.identifier];
+		}
+		[[NSUserDefaults standardUserDefaults] setObject:shownDatesMutable forKey:ATSurveyDateShownLastKeyForSurveyID];
+		if (![[NSUserDefaults standardUserDefaults] synchronize]) {
+			ATLogError(@"Unable to synchronize defaults for survey shown at dates.");
+		}
+	}
 }
 
 - (void)reset {

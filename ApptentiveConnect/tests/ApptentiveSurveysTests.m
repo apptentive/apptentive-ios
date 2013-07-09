@@ -129,4 +129,51 @@
 	[question removeSelectedAnswerChoice:answerA];
 	STAssertEquals(ATSurveyQuestionValidationErrorNone, [question validateAnswer], @"Should be valid");
 }
+
+- (void)testStartAndEndDates {
+	ATSurvey *survey = [[ATSurvey alloc] init];
+	
+	STAssertTrue([survey isStarted], @"nil start dates should mean the survey is valid to start.");
+	
+	survey.startTime = [NSDate dateWithTimeIntervalSinceNow:100];
+	STAssertFalse([survey isStarted], @"Surveys with start times in the future should not have started.");
+	
+	survey.startTime = [NSDate dateWithTimeIntervalSinceNow:-100];
+	STAssertTrue([survey isStarted], @"Surveys with start times in the past should have started.");
+	
+	survey.endTime = nil;
+	STAssertFalse([survey isEnded], @"nil end dates should mean the survey hasn't ended yet.");
+	
+	survey.endTime = [NSDate dateWithTimeIntervalSinceNow:100];
+	STAssertFalse([survey isEnded], @"Surveys with end times in the future should not have ended.");
+	
+	survey.endTime = [NSDate dateWithTimeIntervalSinceNow:-99];
+	STAssertTrue([survey isEnded], @"Surveys with end times in the past should have ended.");
+}
+
+- (void)testSurveyFrequency {
+	ATSurvey *survey = [[ATSurvey alloc] init];
+	survey.identifier = @"1234567890";
+	
+	[survey setShownAtDate:nil];
+	STAssertFalse([survey shownTooRecently], @"nil showOncePer frequencies shouldn't matter");
+	
+	[survey setShowOncePer:@(1)];
+	STAssertFalse([survey shownTooRecently], @"nil shownAtDate means it wasn't shown recently");
+	
+	[survey setShowOncePer:nil];
+	[survey setShownAtDate:[NSDate date]];
+	STAssertFalse([survey shownTooRecently], @"nil showOncePer with non-nil shownAtDate means it wasn't shown too recently");
+	
+	[survey setShowOncePer:@(10)];
+	STAssertTrue([survey shownTooRecently], @"Survey shown recently and with small window.");
+	
+	[survey setShownAtDate:[NSDate dateWithTimeIntervalSinceNow:-10*60]];
+	[survey setShowOncePer:@(5)];
+	STAssertFalse([survey shownTooRecently], @"Survey shown 10 minutes ago, can show every 5 minutes.");
+	
+	[survey setShownAtDate:[NSDate dateWithTimeIntervalSinceNow:-5*60]];
+	[survey setShowOncePer:@(10)];
+	STAssertTrue([survey shownTooRecently], @"Survey shown 5 minutes ago, can show every 10 minutes.");
+}
 @end

@@ -276,6 +276,11 @@ typedef enum {
 	}
 }
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+	// Return YES for supported orientations
+	return YES;
+}
+
 - (IBAction)donePressed:(id)sender {
 	if (self.dismissalDelegate) {
 		[self.dismissalDelegate messageCenterWillDismiss:self];

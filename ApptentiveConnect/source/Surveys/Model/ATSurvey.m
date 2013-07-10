@@ -7,6 +7,7 @@
 //
 
 #import "ATSurvey.h"
+#import "ATSurveysBackend.h"
 
 #define kATSurveyStorageVersion 1
 
@@ -15,7 +16,7 @@
 @synthesize multipleResponsesAllowed;
 @synthesize active;
 @synthesize date, startTime, endTime;
-@synthesize showOncePer;
+@synthesize viewCount, viewPeriod;
 @synthesize identifier;
 @synthesize name;
 @synthesize surveyDescription;
@@ -23,7 +24,7 @@
 @synthesize tags;
 @synthesize successMessage;
 
-NSString *const ATSurveyDatesShownKey = @"ATSurveyDatesShownKey";
+NSString *const ATSurveyViewDatesKey = @"ATSurveyViewDatesKey";
 
 - (id)init {
 	if ((self = [super init])) {
@@ -43,7 +44,8 @@ NSString *const ATSurveyDatesShownKey = @"ATSurveyDatesShownKey";
 			self.date = [coder decodeObjectForKey:@"date"];
 			self.startTime = [coder decodeObjectForKey:@"startTime"];
 			self.endTime = [coder decodeObjectForKey:@"endTime"];
-			self.showOncePer = [coder decodeObjectForKey:@"showOncePer"];
+			self.viewCount = [coder decodeObjectForKey:@"viewCount"];
+			self.viewPeriod = [coder decodeObjectForKey:@"viewPeriod"];
 			self.responseRequired = [coder decodeBoolForKey:@"responseRequired"];
 			self.multipleResponsesAllowed = [coder decodeBoolForKey:@"multipleResponsesAllowed"];
 			self.identifier = [coder decodeObjectForKey:@"identifier"];
@@ -73,7 +75,8 @@ NSString *const ATSurveyDatesShownKey = @"ATSurveyDatesShownKey";
 	[coder encodeObject:self.date forKey:@"date"];
 	[coder encodeObject:self.startTime forKey:@"startTime"];
 	[coder encodeObject:self.endTime forKey:@"endTime"];
-	[coder encodeObject:self.showOncePer forKey:@"showOncePer"];
+	[coder encodeObject:self.viewCount forKey:@"viewCount"];
+	[coder encodeObject:self.viewPeriod forKey:@"viewPeriod"];
 	[coder encodeBool:self.responseIsRequired forKey:@"responseRequired"];
 	[coder encodeBool:self.multipleResponsesAllowed forKey:@"multipleResponsesAllowed"];
 	[coder encodeObject:self.name forKey:@"name"];
@@ -93,7 +96,8 @@ NSString *const ATSurveyDatesShownKey = @"ATSurveyDatesShownKey";
 	[date release], date = nil;
 	[startTime release], startTime = nil;
 	[endTime release], endTime = nil;	
-	[showOncePer release], showOncePer = nil;
+	[viewCount release], viewCount = nil;
+	[viewPeriod release], viewPeriod = nil;
 	[super dealloc];
 }
 
@@ -142,6 +146,15 @@ NSString *const ATSurveyDatesShownKey = @"ATSurveyDatesShownKey";
 	return isSubset;
 }
 
+- (BOOL)isEligibleToBeShown {
+	
+	BOOL eligible = ([self isActive] && [self isStarted] && ![self isEnded] && [self isWithinViewLimits]);
+	
+	BOOL responseAllowed = (![self wasAlreadySubmitted] || [self multipleResponsesAllowed]);
+			
+	return (eligible && responseAllowed);
+}
+
 - (BOOL)isStarted {
 	if (self.startTime == nil) {
 		return YES;
@@ -158,51 +171,64 @@ NSString *const ATSurveyDatesShownKey = @"ATSurveyDatesShownKey";
 	return ([self.endTime compare:[NSDate date]] == NSOrderedAscending);
 }
 
-- (NSArray *)datesShown {
-	NSArray *datesShown = nil;
-	@synchronized([ATSurvey class]) {
-		NSDictionary *surveysDatesShown = [[NSUserDefaults standardUserDefaults] objectForKey:ATSurveyDatesShownKey];
-		datesShown = [surveysDatesShown objectForKey:self.identifier];
-	}
-	return datesShown;
+- (BOOL)wasAlreadySubmitted {
+	return [[ATSurveysBackend sharedBackend] surveyAlreadySubmitted:self];
 }
 
-- (void)addDateShown:(NSDate *)dateShown {
-	NSMutableArray *datesShown = [NSMutableArray arrayWithArray:[self datesShown]];
-	if (dateShown != nil) {
-		[datesShown insertObject:dateShown atIndex:0];
+- (NSArray *)viewDates {
+	NSArray *viewDates = nil;
+	@synchronized([ATSurvey class]) {
+		NSDictionary *surveysViewDates = [[NSUserDefaults standardUserDefaults] objectForKey:ATSurveyViewDatesKey];
+		viewDates = [surveysViewDates objectForKey:self.identifier];
+	}
+	return viewDates;
+}
+
+- (void)addViewDate:(NSDate *)viewDate {
+	NSMutableArray *viewDates = [NSMutableArray arrayWithArray:[self viewDates]];
+	if (viewDate != nil) {
+		[viewDates insertObject:viewDate atIndex:0];
 	}
 		
 	@synchronized([ATSurvey class]) {
-		NSMutableDictionary *surveysDatesShown = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:ATSurveyDatesShownKey]];
+		NSMutableDictionary *surveysViewDates = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:ATSurveyViewDatesKey]];
 		
 		//Passing in nil removes all recorded dates for this survey
-		if (dateShown == nil) {
-			[surveysDatesShown removeObjectForKey:self.identifier];
+		if (viewDate == nil) {
+			[surveysViewDates removeObjectForKey:self.identifier];
 		}
 		else {
-			[surveysDatesShown setObject:datesShown forKey:self.identifier];
+			[surveysViewDates setObject:viewDates forKey:self.identifier];
 		}
 		
-		[[NSUserDefaults standardUserDefaults] setObject:surveysDatesShown forKey:ATSurveyDatesShownKey];
+		[[NSUserDefaults standardUserDefaults] setObject:surveysViewDates forKey:ATSurveyViewDatesKey];
 		if (![[NSUserDefaults standardUserDefaults] synchronize]) {
-			ATLogError(@"Unable to synchronize defaults for survey shown at dates.");
+			ATLogError(@"Unable to synchronize defaults for survey view dates.");
 		}
 	}
 }
 
-- (BOOL)shownTooRecently {
-	NSArray *datesShown = [self datesShown];
+- (BOOL)isWithinViewLimits {
+	NSArray *viewDates = [self viewDates];
 	
-	if (self.showOncePer == nil || datesShown == nil || datesShown.count == 0) {
-		return NO;
+	if (self.viewCount == nil || self.viewPeriod == nil || viewDates == nil) {
+		return YES;
 	}
 	
-	//TODO: This is currently only using "once per N" durations. Will eventually move to "X per N" e.g. "8 times per year"
-	NSDate *shownLast = [datesShown objectAtIndex:0];
-	NSDate *showAgain = [shownLast dateByAddingTimeInterval:60 * [self.showOncePer doubleValue]];
+	if ([self.viewCount intValue] == 0 || self.viewDates.count < [self.viewCount intValue]) {
+		return YES;
+	}
 	
-	return ([showAgain compare:[NSDate date]] == NSOrderedDescending);
+	NSDate *cutoff = [[NSDate date] dateByAddingTimeInterval: -[self.viewPeriod doubleValue]];
+	
+	int viewDatesWithinCutoff = 0;
+	for (NSDate *viewDate in viewDates) {
+		if ([cutoff compare:viewDate] == NSOrderedAscending) {
+			viewDatesWithinCutoff++;
+		}
+	}
+	
+	return (viewDatesWithinCutoff < [self.viewCount intValue]);
 }
 
 - (void)reset {

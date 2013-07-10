@@ -152,32 +152,101 @@
 	STAssertTrue([survey isEnded], @"Surveys with end times in the past should have ended.");
 }
 
-- (void)testSurveyFrequency {
+- (void)testSurveyViewLimits {
 	ATSurvey *survey = [[ATSurvey alloc] init];
 	survey.identifier = @"1234567890";
 	
-	[survey addDateShown:nil];
-	[survey setShowOncePer:nil];
-	STAssertFalse([survey shownTooRecently], @"nil dateShown and nil showOncePer means it wasn't shown too recently");
+	[survey addViewDate:nil];
+	STAssertTrue([survey viewDates] == nil, @"Setting `[survey addViewDates:nil]` should make [survey viewDates] == nil");
 	
-	[survey addDateShown:nil];
-	[survey setShowOncePer:@(1)];
-	STAssertFalse([survey shownTooRecently], @"nil dateShown with non-nil showOncePer means it wasn't shown too recently");
+	survey.viewCount = @(0);
+	survey.viewPeriod = @(100);
+	[survey addViewDate:nil];
+	[survey addViewDate:[NSDate date]];
+	STAssertTrue([survey isWithinViewLimits], @"Surveys with viewCount == 0 should always be within view limits");
 	
-	[survey addDateShown:[NSDate date]];
-	[survey setShowOncePer:nil];
-	STAssertFalse([survey shownTooRecently], @"nil showOncePer with non-nil dateShown means it wasn't shown too recently");
+	survey.viewCount = nil;
+	STAssertTrue([survey isWithinViewLimits], @"Surveys with nil viewCount should be within view limits");
+
+	survey.viewCount = @(10);
+	survey.viewPeriod = nil;
+	STAssertTrue([survey isWithinViewLimits], @"Surveys with nil viewPeriod should be within view limits");
+
+	survey.viewCount = @(3);
+	survey.viewPeriod = @(1000);
+	[survey addViewDate:nil];
+	STAssertTrue([survey isWithinViewLimits], @"Surveys with nil viewDates should be within view limits");
+	[survey addViewDate:[NSDate dateWithTimeInterval:-50 sinceDate:[NSDate date]]];
+	[survey addViewDate:[NSDate dateWithTimeInterval:-40 sinceDate:[NSDate date]]];
+	STAssertTrue([survey isWithinViewLimits], @"Surveys with viewDates less than viewCount should always be within view limits");
+	[survey addViewDate:[NSDate dateWithTimeInterval:-30 sinceDate:[NSDate date]]];
+	STAssertFalse([survey isWithinViewLimits], @"Surveys with viewDates == viewCount (within period) should NOT be within view limits");
+	[survey addViewDate:[NSDate dateWithTimeInterval:-20 sinceDate:[NSDate date]]];
+	STAssertFalse([survey isWithinViewLimits], @"Surveys with viewDates > viewCount (within period) should NOT be within view limits");
 	
-	[survey addDateShown:[NSDate date]];
-	[survey setShowOncePer:@(10)];
-	STAssertTrue([survey shownTooRecently], @"Survey shown very recently, can show every 10 minutes.");
+	survey.viewCount = @(2);
+	survey.viewPeriod = @(1000);
+	[survey addViewDate:nil];
+	[survey addViewDate:[NSDate dateWithTimeInterval:-4000 sinceDate:[NSDate date]]];
+	[survey addViewDate:[NSDate dateWithTimeInterval:-3000 sinceDate:[NSDate date]]];
+	[survey addViewDate:[NSDate dateWithTimeInterval:-2000 sinceDate:[NSDate date]]];
+	STAssertTrue([survey isWithinViewLimits], @"Surveys with many viewDates outside the viewPeriod, but 0 in the viewPeriod, should be within view limits");
+	[survey addViewDate:[NSDate dateWithTimeInterval:-50 sinceDate:[NSDate date]]];
+	STAssertTrue([survey isWithinViewLimits], @"Surveys with many viewDates outside the viewPeriod, but viewDates < viewCount in the viewPeriod, should be within view limits");
+	[survey addViewDate:[NSDate dateWithTimeInterval:-40 sinceDate:[NSDate date]]];
+	STAssertFalse([survey isWithinViewLimits], @"Surveys with many viewDates outside the viewPeriod, but viewDates == viewCount in the viewPeriod, should not be within view limits");
+	[survey addViewDate:[NSDate dateWithTimeInterval:-30 sinceDate:[NSDate date]]];
+	STAssertFalse([survey isWithinViewLimits], @"Surveys with many viewDates outside the viewPeriod, but viewDates > viewCount in the viewPeriod, should not be within view limits");
 	
-	[survey addDateShown:[NSDate dateWithTimeIntervalSinceNow:-10*60]];
-	[survey setShowOncePer:@(5)];
-	STAssertFalse([survey shownTooRecently], @"Survey shown 10 minutes ago, can show every 5 minutes.");
-	
-	[survey addDateShown:[NSDate dateWithTimeIntervalSinceNow:-5*60]];
-	[survey setShowOncePer:@(10)];
-	STAssertTrue([survey shownTooRecently], @"Survey shown 5 minutes ago, can show every 10 minutes.");
+	survey.viewCount = @(2);
+	survey.viewPeriod = @(3);
+	[survey addViewDate:nil];
+	[survey addViewDate:[NSDate date]];
+	[survey addViewDate:[NSDate date]];
+	STAssertFalse([survey isWithinViewLimits], @"View count was exceeded in the period, should not be within view limits.");
+	[NSThread sleepForTimeInterval:3.0f];
+	STAssertTrue([survey isWithinViewLimits], @"View times have lapsed out of period, should now be within view limits.");
 }
+
+//[ATSurveysBackend sharedBackend] surveyAlreadySubmitted:] is giving an NSInvalidArgumentException:
+//'Cannot create an NSPersistentStoreCoordinator with a nil model'
+//`isEligibleToBeShown` relies on `surveyAlreadySubmitted:`... thus commenting out these tests for the time being.
+/*
+- (void)testSurveyEligibilityToBeShown {
+		
+	ATSurvey *survey = [[ATSurvey alloc] init];
+	survey.identifier = @"1234567890";
+	
+	survey.active = YES;
+	survey.startTime = [NSDate dateWithTimeIntervalSinceNow:-100];
+	survey.endTime = [NSDate dateWithTimeIntervalSinceNow:100];
+	survey.viewCount = @(2);
+	survey.viewPeriod = @(100);
+	[survey addViewDate:nil];
+	survey.multipleResponsesAllowed = YES;
+	
+	STAssertTrue([survey isEligibleToBeShown], @"Eligible to be shown:active, start time in past, end time in future, within view limits.");
+	survey.active = NO;
+	STAssertFalse([survey isEligibleToBeShown], @"Not Eligible to be shown: not active");
+	survey.active = YES;
+	survey.startTime = [NSDate dateWithTimeIntervalSinceNow:20];
+	STAssertFalse([survey isEligibleToBeShown], @"Not Eligible to be shown: start time in future.");
+	survey.startTime = [NSDate dateWithTimeIntervalSinceNow:-100];
+	survey.endTime = [NSDate dateWithTimeIntervalSinceNow:-20];
+	STAssertFalse([survey isEligibleToBeShown], @"Not Eligible to be shown: end time in past.");
+	survey.endTime = [NSDate dateWithTimeIntervalSinceNow:100];
+	[survey addViewDate:[NSDate date]];
+	[survey addViewDate:[NSDate date]];
+	STAssertFalse([survey isEligibleToBeShown], @"Not Eligible to be shown: hit view limits for period");
+	[survey addViewDate:nil];
+	STAssertTrue([survey isEligibleToBeShown], @"Eligible to be shown:active, start time in past, end time in future, within view limits.");
+	
+	[[ATSurveysBackend sharedBackend] setDidSendSurvey:survey];
+	survey.multipleResponsesAllowed = NO;
+	STAssertFalse([survey isEligibleToBeShown], @"Not Eligible to be shown: Survey was already sent, multiple responses not allowed.");
+	survey.multipleResponsesAllowed = YES;
+	STAssertTrue([survey isEligibleToBeShown], @"Eligible to be shown: Survey was already sent, but multiple responses are allowed.");
+}
+*/
+
 @end

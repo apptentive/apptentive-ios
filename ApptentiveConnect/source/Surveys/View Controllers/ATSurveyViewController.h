@@ -52,7 +52,7 @@
 
 @interface ATCellTextField : UITextField <ATCellTextEntry> {
 @private
-	NSIndexPath *cellpath;
+	NSIndexPath *cellPath;
 	ATSurveyQuestion *question;
 }
 @property (nonatomic, retain) NSIndexPath *cellPath;

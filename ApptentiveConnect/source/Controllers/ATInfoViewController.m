@@ -55,6 +55,7 @@ enum {
 	[_apptentivePrivacyTextView release];
 	[_findOutMoreButton release];
 	[_gotoPrivacyPolicyButton release];
+	[_titleNavigationitem release];
 	[super dealloc];
 }
 
@@ -86,6 +87,7 @@ enum {
 	[self setApptentivePrivacyTextView:nil];
 	[self setFindOutMoreButton:nil];
 	[self setGotoPrivacyPolicyButton:nil];
+	[self setTitleNavigationitem:nil];
 	[super viewDidUnload];
 	[headerView release], headerView = nil;
 	self.tableView = nil;
@@ -152,7 +154,7 @@ enum {
 	
 	if (section == kSectionTasks) {
 		ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
-		ATTask *task = [queue taskAtIndex:indexPath.row withTaskNameInSet:[NSSet setWithObjects:@"feedback", @"message", nil]];
+		ATTask *task = [queue taskAtIndex:indexPath.row withTaskNameInSet:[NSSet setWithObjects:@"feedback", @"message", @"survey response", nil]];
 		result = [aTableView dequeueReusableCellWithIdentifier:taskCellIdentifier];
 		if (!result) {
 			UINib *nib = [UINib nibWithNibName:@"ATTaskProgressCell" bundle:[ATConnect resourceBundle]];
@@ -266,6 +268,8 @@ enum {
 	f.size = logoImage.size;
 	logoView.frame = f;
 	
+	
+	self.titleNavigationitem.title = ATLocalizedString(@"About Apptentive", @"About Apptentive");
 	self.apptentiveDescriptionTextView.text = ATLocalizedString(@"Apptentive is an in-app feedback mechanism which allows app developers to quickly get feedback from customers.", @"Description of Apptentive service in information screen.");
 	[self.findOutMoreButton setTitle:ATLocalizedString(@"Find out more at apptentive.com", @"Title of button to open Apptentive.com") forState:UIControlStateNormal];
 	self.apptentivePrivacyTextView.text = ATLocalizedString(@"Your feedback is hosted by Apptentive and is subject to Apptentive's privacy policy and the privacy policy of the developer of this app.", @"Description of Apptentive privacy policy.");

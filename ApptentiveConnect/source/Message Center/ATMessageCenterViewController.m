@@ -829,7 +829,7 @@ typedef enum {
 				textCell.composing = YES;
 				textCell.textLabel.text = @"";
 			} else if ([[message pendingState] intValue] == ATPendingMessageStateError) {
-				NSString *sendingText = NSLocalizedString(@"Error:", @"Sending prefix on messages that are sending");
+				NSString *sendingText = NSLocalizedString(@"Error:", @"Error prefix on messages that failed to send");
 				NSString *fullText = [NSString stringWithFormat:@"%@ %@", sendingText, messageBody];
 				[textCell.messageText setText:fullText afterInheritingLabelAttributesAndConfiguringWithBlock:^ NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
 					NSRange boldRange = NSMakeRange(0, [sendingText length]);

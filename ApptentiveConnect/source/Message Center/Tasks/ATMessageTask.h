@@ -10,8 +10,6 @@
 #import "ATTask.h"
 #import "ATMessage.h"
 
-@class ATPendingMessage;
-
 @interface ATMessageTask : ATTask <ATAPIRequestDelegate> {
 @private
 	ATAPIRequest *request;

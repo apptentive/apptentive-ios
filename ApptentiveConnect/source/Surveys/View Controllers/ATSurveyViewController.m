@@ -56,7 +56,7 @@ enum {
 - (id)initWithSurvey:(ATSurvey *)aSurvey {
 	if ((self = [super init])) {
 		startedSurveyDate = [[NSDate alloc] init];
-		[aSurvey setShownAtDate:startedSurveyDate];
+		[aSurvey addViewDate:startedSurveyDate];
 				
 		survey = [aSurvey retain];
 		sentNotificationsAboutQuestionIDs = [[NSMutableSet alloc] init];

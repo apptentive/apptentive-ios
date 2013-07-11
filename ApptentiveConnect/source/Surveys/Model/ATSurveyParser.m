@@ -144,8 +144,12 @@
 		survey.endTime = [ATUtilities dateFromISO8601String:[jsonDictionary objectForKey:@"end_time"]];		
 	}
 	
-	if ([jsonDictionary objectForKey:@"show_once_per"] != nil && ![[jsonDictionary objectForKey:@"show_once_per"] isEqualToNumber:[NSNumber numberWithInt:0]]) {
-		survey.showOncePer = [jsonDictionary objectForKey:@"show_once_per"];
+	if ([jsonDictionary objectForKey:@"view_count"] != nil) {
+		survey.viewCount = [jsonDictionary objectForKey:@"view_count"];
+	}
+	
+	if ([jsonDictionary objectForKey:@"view_period"] != nil) {
+		survey.viewPeriod = [jsonDictionary objectForKey:@"view_period"];
 	}
 	
 	if ([jsonDictionary objectForKey:@"required"] != nil) {

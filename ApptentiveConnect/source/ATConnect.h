@@ -13,7 +13,7 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
-#define kATConnectVersionString @"1.0.0"
+#define kATConnectVersionString @"1.0.1"
 
 #if TARGET_OS_IPHONE
 #	define kATConnectPlatformString @"iOS"
@@ -76,4 +76,8 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 - (void)removeCustomPersonDataWithKey:(NSString *)key;
 - (void)removeCustomDeviceDataWithKey:(NSString *)key;
 
+/*! Deprecated. Use addCustomDeviceData:withKey: instead. */
+- (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key DEPRECATED_ATTRIBUTE;
+/*! Deprecated. Use removeCustomDeviceDataWithKey: instead. */
+- (void)removeCustomDataWithKey:(NSString *)key DEPRECATED_ATTRIBUTE;
 @end

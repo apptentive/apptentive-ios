@@ -109,6 +109,14 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 	[customDeviceData removeObjectForKey:key];
 }
 
+- (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key {
+	[self addCustomDeviceData:object withKey:key];
+}
+
+- (void)removeCustomDataWithKey:(NSString *)key {
+	[self removeCustomDataWithKey:key];
+}
+
 #if TARGET_OS_IPHONE
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController {
 	[[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController];

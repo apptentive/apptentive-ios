@@ -1,4 +1,20 @@
-2013-06-28 wooster v1.0.0 (in progress)
+2013-07-12 wooster v1.0.1
+-------------------------
+Deprecating the `-addCustomData:withKey:` and `-removeCustomDataWithKey:` methods in `ATConnect`.
+
+In their place, use these new methods, which add custom data about devices and people:
+
+```
+/*! Adds an additional data field to any feedback sent. object should be an NSDate, NSNumber, or NSString. */
+- (void)addCustomPersonData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
+- (void)addCustomDeviceData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
+
+/*! Removes an additional data field from the feedback sent. */
+- (void)removeCustomPersonDataWithKey:(NSString *)key;
+- (void)removeCustomDeviceDataWithKey:(NSString *)key;
+```
+
+2013-06-28 wooster v1.0.0
 -------------------------
 There are a lot of major API changes. They are documented in docs/APIChanges.md
 

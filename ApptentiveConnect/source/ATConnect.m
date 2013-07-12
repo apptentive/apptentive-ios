@@ -114,7 +114,7 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 }
 
 - (void)removeCustomDataWithKey:(NSString *)key {
-	[self removeCustomDataWithKey:key];
+	[self removeCustomDeviceDataWithKey:key];
 }
 
 #if TARGET_OS_IPHONE

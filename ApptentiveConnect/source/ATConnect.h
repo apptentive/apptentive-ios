@@ -31,7 +31,8 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 #elif TARGET_OS_MAC
 	ATFeedbackWindowController *feedbackWindowController;
 #endif
-	NSMutableDictionary *customData;
+	NSMutableDictionary *customPersonData;
+	NSMutableDictionary *customDeviceData;
 	NSString *apiKey;
 	BOOL showTagline;
 	BOOL showEmailField;
@@ -68,9 +69,11 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 #endif
 
 /*! Adds an additional data field to any feedback sent. object should be an NSDate, NSNumber, or NSString. */
-- (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
+- (void)addCustomPersonData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
+- (void)addCustomDeviceData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
 
 /*! Removes an additional data field from the feedback sent. */
-- (void)removeCustomDataWithKey:(NSString *)key;
+- (void)removeCustomPersonDataWithKey:(NSString *)key;
+- (void)removeCustomDeviceDataWithKey:(NSString *)key;
 
 @end

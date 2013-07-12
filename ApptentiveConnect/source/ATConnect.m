@@ -36,7 +36,8 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 	if ((self = [super init])) {
 		self.showEmailField = YES;
 		self.showTagline = YES;
-		customData = [[NSMutableDictionary alloc] init];
+		customPersonData = [[NSMutableDictionary alloc] init];
+		customDeviceData = [[NSMutableDictionary alloc] init];
 	}
 	return self;
 }
@@ -49,7 +50,8 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 		feedbackWindowController = nil;
 	}
 #endif
-	[customData release], customData = nil;
+	[customPersonData release], customPersonData = nil;
+	[customDeviceData release], customDeviceData = nil;
 	[customPlaceholderText release], customPlaceholderText = nil;
 	[apiKey release], apiKey = nil;
 	[initialUserName release], initialUserName = nil;
@@ -66,11 +68,23 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 	}
 }
 
-- (NSDictionary *)customData {
-	return customData;
+- (NSDictionary *)customPersonData {
+	return customPersonData;
 }
 
-- (void)addCustomData:(NSObject *)object withKey:(NSString *)key {
+- (NSDictionary *)customDeviceData {
+	return customDeviceData;
+}
+
+- (void)addCustomPersonData:(NSObject *)object withKey:(NSString *)key {
+	[self addCustomData:object withKey:key toCustomDataDictionary:customPersonData];
+}
+
+- (void)addCustomDeviceData:(NSObject *)object withKey:(NSString *)key {
+	[self addCustomData:object withKey:key toCustomDataDictionary:customDeviceData];
+}
+
+- (void)addCustomData:(NSObject *)object withKey:(NSString *)key toCustomDataDictionary:(NSMutableDictionary *)customData {
 	// Special cases
 	if ([object isKindOfClass:[NSDate class]]) {
 		object = [ATUtilities stringRepresentationOfDate:(NSDate *)object];
@@ -87,8 +101,12 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 	}
 }
 
-- (void)removeCustomDataWithKey:(NSString *)key {
-	[customData removeObjectForKey:key];
+- (void)removeCustomPersonDataWithKey:(NSString *)key {
+	[customPersonData removeObjectForKey:key];
+}
+
+- (void)removeCustomDeviceDataWithKey:(NSString *)key {
+	[customDeviceData removeObjectForKey:key];
 }
 
 #if TARGET_OS_IPHONE

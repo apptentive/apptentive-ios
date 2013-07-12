@@ -8,6 +8,7 @@
 
 #import "ATPersonInfo.h"
 
+#import "ATConnect_Private.h"
 #import "ATUtilities.h"
 #import "NSDictionary+ATAdditions.h"
 
@@ -106,22 +107,27 @@
 }
 
 - (NSDictionary *)apiJSON {
-	NSMutableDictionary *result = [NSMutableDictionary dictionary];
+	NSMutableDictionary *person = [NSMutableDictionary dictionary];
 	
 	if (self.name) {
-		[result setObject:self.name forKey:@"name"];
+		[person setObject:self.name forKey:@"name"];
 	}
 	if (self.facebookID) {
-		[result setObject:self.facebookID forKey:@"facebook_id"];
+		[person setObject:self.facebookID forKey:@"facebook_id"];
 	}
 	if (self.emailAddress && [self.emailAddress length] > 0 && [ATUtilities emailAddressIsValid:self.emailAddress]) {
-		[result setObject:self.emailAddress forKey:@"email"];
+		[person setObject:self.emailAddress forKey:@"email"];
 	}
 	if (self.secret) {
-		[result setObject:self.secret forKey:@"secret"];
+		[person setObject:self.secret forKey:@"secret"];
 	}
 	
-	return [NSDictionary dictionaryWithObject:result forKey:@"person"];
+	NSDictionary *customPersonData = [[ATConnect sharedConnection] customPersonData];
+	if (customPersonData && [customPersonData count]) {
+		[person setObject:customPersonData forKey:@"custom_data"];
+	}
+	
+	return [NSDictionary dictionaryWithObject:person forKey:@"person"];
 }
 
 - (NSDictionary *)comparisonDictionary {

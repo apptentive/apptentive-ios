@@ -156,12 +156,14 @@
 	ATSurvey *survey = [[ATSurvey alloc] init];
 	survey.identifier = @"1234567890";
 	
-	[survey addViewDate:nil];
-	STAssertTrue([survey viewDates] == nil, @"Setting `[survey addViewDates:nil]` should make [survey viewDates] == nil");
+	[survey removeAllViewDates];
+	NSArray *viewDates = [survey viewDates];
+	STAssertNotNil(viewDates, @"View dates shouldn't be nil");
+	STAssertTrue([viewDates count] == 0, @"Should remove all view dates.");
 	
 	survey.viewCount = @(0);
 	survey.viewPeriod = @(100);
-	[survey addViewDate:nil];
+	[survey removeAllViewDates];
 	[survey addViewDate:[NSDate date]];
 	STAssertTrue([survey isWithinViewLimits], @"Surveys with viewCount == 0 should always be within view limits");
 	
@@ -174,7 +176,8 @@
 
 	survey.viewCount = @(3);
 	survey.viewPeriod = @(1000);
-	[survey addViewDate:nil];
+	
+	[survey removeAllViewDates];
 	STAssertTrue([survey isWithinViewLimits], @"Surveys with nil viewDates should be within view limits");
 	[survey addViewDate:[NSDate dateWithTimeInterval:-50 sinceDate:[NSDate date]]];
 	[survey addViewDate:[NSDate dateWithTimeInterval:-40 sinceDate:[NSDate date]]];
@@ -186,7 +189,7 @@
 	
 	survey.viewCount = @(2);
 	survey.viewPeriod = @(1000);
-	[survey addViewDate:nil];
+	[survey removeAllViewDates];
 	[survey addViewDate:[NSDate dateWithTimeInterval:-4000 sinceDate:[NSDate date]]];
 	[survey addViewDate:[NSDate dateWithTimeInterval:-3000 sinceDate:[NSDate date]]];
 	[survey addViewDate:[NSDate dateWithTimeInterval:-2000 sinceDate:[NSDate date]]];
@@ -200,7 +203,7 @@
 	
 	survey.viewCount = @(2);
 	survey.viewPeriod = @(3);
-	[survey addViewDate:nil];
+	[survey removeAllViewDates];
 	[survey addViewDate:[NSDate date]];
 	[survey addViewDate:[NSDate date]];
 	STAssertFalse([survey isWithinViewLimits], @"View count was exceeded in the period, should not be within view limits.");

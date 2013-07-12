@@ -44,6 +44,7 @@
 
 - (NSArray *)viewDates;
 - (void)addViewDate:(NSDate *)viewDate;
+- (void)removeAllViewDates;
 
 - (void)reset;
 

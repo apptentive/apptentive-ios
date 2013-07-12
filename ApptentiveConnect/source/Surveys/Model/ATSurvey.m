@@ -181,10 +181,14 @@ NSString *const ATSurveyViewDatesKey = @"ATSurveyViewDatesKey";
 		NSDictionary *surveysViewDates = [[NSUserDefaults standardUserDefaults] objectForKey:ATSurveyViewDatesKey];
 		viewDates = [surveysViewDates objectForKey:self.identifier];
 	}
+	if (!viewDates) {
+		viewDates = @[];
+	}
 	return viewDates;
 }
 
 - (void)addViewDate:(NSDate *)viewDate {
+	NSAssert(viewDate != nil, @"Shouldn't be passing in nil values to add methods");
 	NSMutableArray *viewDates = [NSMutableArray arrayWithArray:[self viewDates]];
 	if (viewDate != nil) {
 		[viewDates insertObject:viewDate atIndex:0];
@@ -192,14 +196,7 @@ NSString *const ATSurveyViewDatesKey = @"ATSurveyViewDatesKey";
 		
 	@synchronized([ATSurvey class]) {
 		NSMutableDictionary *surveysViewDates = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:ATSurveyViewDatesKey]];
-		
-		//Passing in nil removes all recorded dates for this survey
-		if (viewDate == nil) {
-			[surveysViewDates removeObjectForKey:self.identifier];
-		}
-		else {
-			[surveysViewDates setObject:viewDates forKey:self.identifier];
-		}
+		[surveysViewDates setObject:viewDates forKey:self.identifier];
 		
 		[[NSUserDefaults standardUserDefaults] setObject:surveysViewDates forKey:ATSurveyViewDatesKey];
 		if (![[NSUserDefaults standardUserDefaults] synchronize]) {
@@ -208,10 +205,24 @@ NSString *const ATSurveyViewDatesKey = @"ATSurveyViewDatesKey";
 	}
 }
 
+- (void)removeAllViewDates {
+	@synchronized([ATSurvey class]) {
+		NSMutableDictionary *surveysViewDates = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:ATSurveyViewDatesKey]];
+		if (self.identifier) {
+			[surveysViewDates removeObjectForKey:self.identifier];
+			
+			[[NSUserDefaults standardUserDefaults] setObject:surveysViewDates forKey:ATSurveyViewDatesKey];
+			if (![[NSUserDefaults standardUserDefaults] synchronize]) {
+				ATLogError(@"Unable to synchronize defaults for survey view dates.");
+			}
+		}
+	}
+}
+
 - (BOOL)isWithinViewLimits {
 	NSArray *viewDates = [self viewDates];
 	
-	if (self.viewCount == nil || self.viewPeriod == nil || viewDates == nil) {
+	if (self.viewCount == nil || self.viewPeriod == nil || [viewDates count] == 0) {
 		return YES;
 	}
 	

@@ -138,7 +138,8 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 
 + (NSBundle *)resourceBundle {
 #if TARGET_OS_IPHONE
-	NSString *path = [[NSBundle mainBundle] bundlePath];
+	NSString *path = [[NSBundle bundleForClass:[ATBackend class]] bundlePath];
+	
 	NSString *bundlePath = [path stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
 	NSFileManager *fm = [NSFileManager defaultManager];
 	if ([fm fileExistsAtPath:bundlePath]) {

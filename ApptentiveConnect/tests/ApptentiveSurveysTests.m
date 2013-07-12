@@ -8,6 +8,7 @@
 
 #import "ApptentiveSurveysTests.h"
 #import "ATSurvey.h"
+#import "ATSurveysBackend.h"
 #import "ATSurveyParser.h"
 #import "ATSurveyQuestion.h"
 
@@ -211,12 +212,7 @@
 	STAssertTrue([survey isWithinViewLimits], @"View times have lapsed out of period, should now be within view limits.");
 }
 
-//[ATSurveysBackend sharedBackend] surveyAlreadySubmitted:] is giving an NSInvalidArgumentException:
-//'Cannot create an NSPersistentStoreCoordinator with a nil model'
-//`isEligibleToBeShown` relies on `surveyAlreadySubmitted:`... thus commenting out these tests for the time being.
-/*
 - (void)testSurveyEligibilityToBeShown {
-		
 	ATSurvey *survey = [[ATSurvey alloc] init];
 	survey.identifier = @"1234567890";
 	
@@ -225,7 +221,7 @@
 	survey.endTime = [NSDate dateWithTimeIntervalSinceNow:100];
 	survey.viewCount = @(2);
 	survey.viewPeriod = @(100);
-	[survey addViewDate:nil];
+	[survey removeAllViewDates];
 	survey.multipleResponsesAllowed = YES;
 	
 	STAssertTrue([survey isEligibleToBeShown], @"Eligible to be shown:active, start time in past, end time in future, within view limits.");
@@ -241,7 +237,7 @@
 	[survey addViewDate:[NSDate date]];
 	[survey addViewDate:[NSDate date]];
 	STAssertFalse([survey isEligibleToBeShown], @"Not Eligible to be shown: hit view limits for period");
-	[survey addViewDate:nil];
+	[survey removeAllViewDates];
 	STAssertTrue([survey isEligibleToBeShown], @"Eligible to be shown:active, start time in past, end time in future, within view limits.");
 	
 	[[ATSurveysBackend sharedBackend] setDidSendSurvey:survey];
@@ -250,6 +246,4 @@
 	survey.multipleResponsesAllowed = YES;
 	STAssertTrue([survey isEligibleToBeShown], @"Eligible to be shown: Survey was already sent, but multiple responses are allowed.");
 }
-*/
-
 @end

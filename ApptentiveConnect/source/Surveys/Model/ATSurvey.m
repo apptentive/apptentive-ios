@@ -147,11 +147,10 @@ NSString *const ATSurveyViewDatesKey = @"ATSurveyViewDatesKey";
 }
 
 - (BOOL)isEligibleToBeShown {
-	
 	BOOL eligible = ([self isActive] && [self isStarted] && ![self isEnded] && [self isWithinViewLimits]);
 	
 	BOOL responseAllowed = (![self wasAlreadySubmitted] || [self multipleResponsesAllowed]);
-			
+	
 	return (eligible && responseAllowed);
 }
 

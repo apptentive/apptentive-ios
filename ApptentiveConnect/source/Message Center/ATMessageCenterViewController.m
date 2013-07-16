@@ -692,6 +692,8 @@ typedef enum {
 		firstLoad = NO;
 		[self scrollToBottomOfTableView];
 	}
+	
+	cell.backgroundColor = [UIColor clearColor];
 }
 
 #pragma mark UITableViewDataSource

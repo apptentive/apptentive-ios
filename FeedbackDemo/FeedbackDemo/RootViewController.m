@@ -154,13 +154,21 @@ enum kRootTableSections {
 		if (indexPath.row == 0) {
 			cell.textLabel.text = @"Message Center";
 			UILabel *unreadLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-			unreadLabel.text = [NSString stringWithFormat:@" %d ", [[ATConnect sharedConnection] unreadMessageCount]];
+			unreadLabel.text = [NSString stringWithFormat:@"%d", [[ATConnect sharedConnection] unreadMessageCount]];
 			unreadLabel.backgroundColor = [UIColor grayColor];
 			unreadLabel.textColor = [UIColor whiteColor];
 			unreadLabel.textAlignment = UITextAlignmentCenter;
-			unreadLabel.layer.cornerRadius = 10.0;
 			unreadLabel.font = [UIFont boldSystemFontOfSize:17];
 			[unreadLabel sizeToFit];
+			
+			CGRect paddedFrame = unreadLabel.frame;
+			paddedFrame.size.width += 10;
+			if (paddedFrame.size.width < paddedFrame.size.height) {
+				paddedFrame.size.width = paddedFrame.size.height;
+			}
+			unreadLabel.frame = paddedFrame;
+			unreadLabel.layer.cornerRadius = unreadLabel.frame.size.height / 2;
+			
 			cell.accessoryView = [unreadLabel autorelease];
 		}
 	}

@@ -692,8 +692,6 @@ typedef enum {
 		firstLoad = NO;
 		[self scrollToBottomOfTableView];
 	}
-	
-	cell.backgroundColor = [UIColor clearColor];
 }
 
 #pragma mark UITableViewDataSource
@@ -864,6 +862,7 @@ typedef enum {
 		} else {
 			textCell.showDateLabel = NO;
 		}
+		textCell.backgroundColor = [UIColor clearColor];
 		
 		cell = textCell;
 	} else if (cellType == ATMessageCellTypeAutomated) {
@@ -900,6 +899,7 @@ typedef enum {
 		}
 		currentCell.dateLabel.text = dateString;
 		currentCell.showDateLabel = YES;
+		currentCell.backgroundColor = [UIColor clearColor];
 		
 		cell = currentCell;
 	} else if (cellType == ATMessageCellTypeFile) {
@@ -942,6 +942,8 @@ typedef enum {
 		} else {
 			currentCell.showDateLabel = NO;
 		}
+		currentCell.backgroundColor = [UIColor clearColor];
+		
 		cell = currentCell;
 	}
 	return cell;

@@ -655,6 +655,10 @@ done:
 	}
 	return insets;
 }
+
++ (BOOL)osVersionGreaterThanOrEqualTo:(NSString *)version {
+	return ([[[UIDevice currentDevice] systemVersion] compare:version options:NSNumericSearch] != NSOrderedAscending);
+}
 #endif
 
 + (BOOL)emailAddressIsValid:(NSString *)emailAddress {

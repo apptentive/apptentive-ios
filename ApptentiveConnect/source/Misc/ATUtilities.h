@@ -54,6 +54,8 @@
 
 #if TARGET_OS_IPHONE
 + (UIEdgeInsets)edgeInsetsOfView:(UIView *)view;
+
++ (BOOL)osVersionGreaterThanOrEqualTo:(NSString *)version;
 #endif
 
 + (BOOL)emailAddressIsValid:(NSString *)emailAddress;

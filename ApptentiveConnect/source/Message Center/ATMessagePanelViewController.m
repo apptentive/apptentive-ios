@@ -431,8 +431,10 @@ enum {
 		CGRect newTextViewFrame = oldTextViewRect;
 		newTextViewFrame.size.height -= heightDiff;
 		textView.frame = newTextViewFrame;
-		// Fix for iOS 4.
-		textView.contentInset = UIEdgeInsetsMake(0, -8, 0, 0);
+		if (![ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+			// Fix for iOS 4.
+			textView.contentInset = UIEdgeInsetsMake(0, -8, 0, 0);
+		}
 		if (!CGSizeEqualToSize(self.scrollView.contentSize, newContentSize)) {
 			self.scrollView.contentSize = newContentSize;
 		}
@@ -533,13 +535,18 @@ enum {
 	
 	if (self.showEmailAddressField) {
 		offsetY += 5;
+		CGFloat extraHorzontalPadding = 0;
+		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+			// Needs a little extra to line up with new metrics on UITextViews.
+			extraHorzontalPadding = 4;
+		}
 		CGRect emailFrame = self.scrollView.bounds;
-		emailFrame.origin.x = horizontalPadding;
+		emailFrame.origin.x = horizontalPadding + extraHorzontalPadding;
 		emailFrame.origin.y = offsetY;
 		UIFont *emailFont = [UIFont systemFontOfSize:17];
 		CGSize sizedEmail = [@"XXYyI|" sizeWithFont:emailFont];
 		emailFrame.size.height = sizedEmail.height;
-		emailFrame.size.width = emailFrame.size.width - horizontalPadding*2;
+		emailFrame.size.width = emailFrame.size.width - (horizontalPadding + extraHorzontalPadding)*2;
 		self.emailField = [[[UITextField alloc] initWithFrame:emailFrame] autorelease];
 		self.emailField.placeholder = ATLocalizedString(@"Your Email", @"Email Address Field Placeholder");
 		self.emailField.font = emailFont;
@@ -551,6 +558,7 @@ enum {
 		self.emailField.backgroundColor = [UIColor clearColor];
 		self.emailField.clearButtonMode = UITextFieldViewModeWhileEditing;
 		self.emailField.text = [self.delegate initialEmailAddressForMessagePanel:self];
+		self.emailField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
 		[self.scrollView addSubview:self.emailField];
 		offsetY += self.emailField.bounds.size.height + 5;
@@ -581,8 +589,13 @@ enum {
 	feedbackFrame.size.height = 20;
 	feedbackFrame.size.width = feedbackFrame.size.width - horizontalPadding*2;
 	self.feedbackView = [[[ATDefaultTextView alloc] initWithFrame:feedbackFrame] autorelease];
-	UIEdgeInsets insets = UIEdgeInsetsMake(0, -8, 0, 0);
-	self.feedbackView.contentInset = insets;
+	
+	if (![ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+		UIEdgeInsets insets = UIEdgeInsetsMake(0, -8, 0, 0);
+		self.feedbackView.contentInset = insets;
+	} else {
+		self.feedbackView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+	}
 	self.feedbackView.clipsToBounds = YES;
 	self.feedbackView.font = [UIFont systemFontOfSize:17];
 	self.feedbackView.backgroundColor = [UIColor clearColor];

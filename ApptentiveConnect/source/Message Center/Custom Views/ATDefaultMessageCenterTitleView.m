@@ -40,7 +40,7 @@
 	title.minimumFontSize = 10;
 	title.adjustsFontSizeToFitWidth = YES;
 	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
-		title.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+		title.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline1];
 		title.textColor = [UIColor blackColor];
 	} else {
 		title.font = [UIFont boldSystemFontOfSize:20.];

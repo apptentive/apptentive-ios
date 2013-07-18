@@ -21,6 +21,7 @@
 #define RAD_TO_DEG(radians) (radians * (180.0/M_PI))
 
 static NSDateFormatter *dateFormatter = nil;
+static NSDateFormatter *sRFC3339DateFormatter = nil;
 
 @interface ATUtilities (Private)
 + (void)setupDateFormatters;
@@ -464,6 +465,12 @@ static NSDateFormatter *dateFormatter = nil;
 	return result;
 }
 
++ (NSDate *)dateFromRFC3339String:(NSString *)string
+{
+	[ATUtilities setupDateFormatters];
+	return [sRFC3339DateFormatter dateFromString:string];
+}
+
 + (NSComparisonResult)compareVersionString:(NSString *)a toVersionString:(NSString *)b {
 	return [a compare:b options:NSNumericSearch];
 }
@@ -684,6 +691,16 @@ done:
 			[dateFormatter setLocale:enUSLocale];
 			[dateFormatter setCalendar:calendar];
 			[dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+		}
+		
+		if (sRFC3339DateFormatter == nil) {
+			sRFC3339DateFormatter = [[NSDateFormatter alloc] init];
+			assert(sRFC3339DateFormatter != nil);
+			NSLocale *enUSPOSIXLocale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease];
+			assert(enUSPOSIXLocale != nil);
+			[sRFC3339DateFormatter setLocale:enUSPOSIXLocale];
+			[sRFC3339DateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
+			[sRFC3339DateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
 		}
 	}
 }

@@ -153,7 +153,25 @@ enum {
 	CGRect newFrame = [self onscreenRectOfView];
 	CGPoint newViewCenter = CGPointMake(CGRectGetMidX(newFrame), CGRectGetMidY(newFrame));
 	
-	ATShadowView *shadowView = [[ATShadowView alloc] initWithFrame:self.window.bounds];
+	UIView *shadowView = nil;
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+		UIScreen *screen = self.window.screen;
+		CGRect statusFrame = [screen applicationFrame];
+		CGRect shadowFrame = self.window.bounds;
+		CGFloat offset = 0;
+		if (statusFrame.origin.x > 0) {
+			offset = statusFrame.origin.x;
+		} else if (statusFrame.origin.y > 0) {
+			offset = statusFrame.origin.y;
+		}
+		shadowFrame.origin.y -= offset;
+		shadowFrame.size.height += offset;
+		shadowView = [[UIView alloc] initWithFrame:shadowFrame];
+		shadowView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+		shadowView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+	} else {
+		shadowView = [[ATShadowView alloc] initWithFrame:self.window.bounds];
+	}
 	shadowView.tag = kMessagePanelGradientLayerTag;
 	[self.window addSubview:shadowView];
 	[self.window sendSubviewToBack:shadowView];
@@ -167,10 +185,14 @@ enum {
 	
 	l.masksToBounds = YES;
 	
-	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-		[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+		[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
 	} else {
-		[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque];
+		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+			[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
+		} else {
+			[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque];
+		}
 	}
 	
 	[UIView animateWithDuration:0.3 animations:^(void){

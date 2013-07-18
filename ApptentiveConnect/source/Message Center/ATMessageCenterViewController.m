@@ -56,6 +56,7 @@ typedef enum {
 @implementation ATMessageCenterViewController {
 	BOOL firstLoad;
 	BOOL attachmentsVisible;
+	BOOL showAttachSheetOnBecomingVisible;
 	CGRect currentKeyboardFrameInView;
 	CGFloat composerFieldHeight;
 	NSFetchedResultsController *fetchedMessagesController;
@@ -265,6 +266,20 @@ typedef enum {
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
+	
+	if (showAttachSheetOnBecomingVisible) {
+		showAttachSheetOnBecomingVisible = NO;
+		if (sendImageActionSheet) {
+			[sendImageActionSheet autorelease], sendImageActionSheet = nil;
+		}
+		sendImageActionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Send Image", @"Send image button title"), nil];
+		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+			[sendImageActionSheet showFromRect:inputView.sendButton.bounds inView:inputView.sendButton animated:YES];
+		} else {
+			[sendImageActionSheet showInView:self.view];
+		}
+	}
+	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidShowNotification object:nil];
 }
 
@@ -538,15 +553,7 @@ typedef enum {
 
 - (void)imageViewControllerWillDismiss:(ATSimpleImageViewController *)vc animated:(BOOL)animated {
 	if (pickedImage) {
-		if (sendImageActionSheet) {
-			[sendImageActionSheet autorelease], sendImageActionSheet = nil;
-		}
-		sendImageActionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Send Image", @"Send image button title"), nil];
-		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-			[sendImageActionSheet showFromRect:inputView.sendButton.bounds inView:inputView.sendButton animated:YES];
-		} else {
-			[sendImageActionSheet showInView:self.view];
-		}
+		showAttachSheetOnBecomingVisible = YES;
 	}
 }
 

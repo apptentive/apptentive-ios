@@ -141,7 +141,7 @@
 	}
 	
 	if ([jsonDictionary objectForKey:@"end_time"] != nil) {
-		survey.endTime = [ATUtilities dateFromRFC3339String:[jsonDictionary objectForKey:@"end_time"]];
+		survey.endTime = [ATUtilities dateFromISO8601String:[jsonDictionary objectForKey:@"end_time"]];		
 	}
 	
 	if ([jsonDictionary objectForKey:@"view_count"] != nil) {

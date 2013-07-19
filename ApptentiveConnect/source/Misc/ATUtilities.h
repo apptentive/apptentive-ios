@@ -35,7 +35,6 @@
 + (NSString *)stringRepresentationOfDate:(NSDate *)date;
 + (NSString *)stringRepresentationOfDate:(NSDate *)date timeZone:(NSTimeZone *)timeZone;
 + (NSDate *)dateFromISO8601String:(NSString *)string;
-+ (NSDate *)dateFromRFC3339String:(NSString *)string;
 
 + (NSComparisonResult)compareVersionString:(NSString *)a toVersionString:(NSString *)b;
 + (BOOL)versionString:(NSString *)a isGreaterThanVersionString:(NSString *)b;

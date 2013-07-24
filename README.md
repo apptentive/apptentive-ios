@@ -125,20 +125,26 @@ Message Center
 
 Show the Apptentive Message Center with `presentMessageCenterFromViewController:`:
 
-    [[ATConnect sharedConnection] presentMessageCenterFromViewController:viewController];
+``` objective-c
+[[ATConnect sharedConnection] presentMessageCenterFromViewController:viewController];
+```
 
 The first time your app opens Message Center, the user will be presented with a feedback form. On subsequent showings they will be taken directly to the Message Center.
 
 Use `unreadMessageCount` to check if there are any unread Message Center messages:
 
-    NSUInteger *unreadMessageCount = [[ATConnect sharedConnection] unreadMessageCount];
+``` objective-c
+NSUInteger *unreadMessageCount = [[ATConnect sharedConnection] unreadMessageCount];
+```
 
 You can also [listen](https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/NSNotificationCenter_Class/Reference/Reference.html) for the `ATMessageCenterUnreadCountChangedNotification` notification, which we post when the unread message count changes. 
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(unreadMessageCountChanged:)
-											     name:ATMessageCenterUnreadCountChangedNotification
-										       object:nil];
+``` objective-c
+[[NSNotificationCenter defaultCenter] addObserver:self
+										 selector:@selector(unreadMessageCountChanged:)
+										     name:ATMessageCenterUnreadCountChangedNotification
+									       object:nil];
+```
 
 App Rating Flow
 ---------------
@@ -177,7 +183,7 @@ You'll want to add calls to `-showRatingFlowFromViewControllerIfConditionsAreMet
 If you're using significant events to determine when to show the ratings flow, you can
 increment the number of significant events by calling:
 
-```
+``` objective-c
 [sharedFlow logSignificantEvent];
 ```
 

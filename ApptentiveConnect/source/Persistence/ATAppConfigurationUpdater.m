@@ -20,6 +20,8 @@ NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigura
 NSString *const ATAppConfigurationMessageCenterTitleKey = @"ATAppConfigurationMessageCenterTitleKey";
 NSString *const ATAppConfigurationMessageCenterForegroundRefreshIntervalKey = @"ATAppConfigurationMessageCenterForegroundRefreshIntervalKey";
 
+NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDisplayNameKey";
+
 // Interval, in seconds, after which we'll update the configuration.
 #if APPTENTIVE_DEBUG
 #define kATAppConfigurationUpdateInterval (3)
@@ -152,7 +154,7 @@ NSString *const ATAppConfigurationMessageCenterForegroundRefreshIntervalKey = @"
 		 @"ratings_days_before_prompt", ATAppRatingDaysBeforePromptPreferenceKey, 
 		 @"ratings_days_between_prompts", ATAppRatingDaysBetweenPromptsPreferenceKey, 
 		 @"ratings_events_before_prompt", ATAppRatingSignificantEventsBeforePromptPreferenceKey, 
-		 @"ratings_uses_before_prompt", ATAppRatingUsesBeforePromptPreferenceKey, 
+		 @"ratings_uses_before_prompt", ATAppRatingUsesBeforePromptPreferenceKey,
 		 @"metrics_enabled", ATAppConfigurationMetricsEnabledPreferenceKey,
 		 nil];
 	
@@ -225,6 +227,18 @@ NSString *const ATAppConfigurationMessageCenterForegroundRefreshIntervalKey = @"
 				hasConfigurationChanges = YES;
 			}
 		}
+	}
+	
+	BOOL setAppName = NO;
+	if ([jsonConfiguration objectForKey:@"app_display_name"]) {
+		NSObject *appNameObject = [jsonConfiguration objectForKey:@"app_display_name"];
+		if ([appNameObject isKindOfClass:[NSString class]]) {
+			[defaults setObject:appNameObject forKey:ATAppConfigurationAppDisplayNameKey];
+			setAppName = YES;
+		}
+	}
+	if (!setAppName) {
+		[defaults removeObjectForKey:ATAppConfigurationAppDisplayNameKey];
 	}
 	
 	if (hasConfigurationChanges) {

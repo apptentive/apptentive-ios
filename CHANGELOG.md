@@ -14,6 +14,8 @@ In their place, use these new methods, which add custom data about devices and p
 - (void)removeCustomDeviceDataWithKey:(NSString *)key;
 ```
 
+Also deprecating the `appName` property on `ATAppRatingFlow`. Now, the display name of the application used in our framework can be set server-side.
+
 2013-06-28 wooster v1.0.0
 -------------------------
 There are a lot of major API changes. They are documented in docs/APIChanges.md

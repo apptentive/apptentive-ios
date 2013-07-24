@@ -39,8 +39,9 @@ extern NSString *const ATAppRatingFlowUserAgreedToRateAppNotification;
 	
 	NSString *appName;
 }
-/*! Set to a custom app name if you'd like to use something other than the bundle display name. */
-@property (nonatomic, copy) NSString *appName;
+/*! Set to a custom app name if you'd like to use something other than the bundle display name. 
+ Deprecated in 1.0.1 in favor of server-based configuration of the app display name. */
+@property (nonatomic, copy) NSString *appName DEPRECATED_ATTRIBUTE;
 
 @property (nonatomic, copy) NSString *appID;
 

@@ -168,31 +168,12 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	}
 }
 
+// TODO: Remove this once deployed on server.
 - (NSString *)appName {
 	if (appName != nil) {
 		return appName;
 	}
-	NSString *displayName = nil;
-	NSArray *appNameKeys = [NSArray arrayWithObjects:@"CFBundleDisplayName", (NSString *)kCFBundleNameKey, nil];
-	NSMutableArray *infoDictionaries = [NSMutableArray array];
-	if ([[NSBundle mainBundle] localizedInfoDictionary]) {
-		[infoDictionaries addObject:[[NSBundle mainBundle] localizedInfoDictionary]];
-	}
-	if ([[NSBundle mainBundle] infoDictionary]) {
-		[infoDictionaries addObject:[[NSBundle mainBundle] infoDictionary]];
-	}
-	for (NSDictionary *infoDictionary in infoDictionaries) {
-		if (displayName != nil) {
-			break;
-		}
-		for (NSString *appNameKey in appNameKeys) {
-			displayName = [infoDictionary objectForKey:appNameKey];
-			if (displayName != nil) {
-				break;
-			}
-		}
-	}
-	return displayName;
+	return [[ATBackend sharedBackend] appName];
 }
 
 #if TARGET_OS_IPHONE

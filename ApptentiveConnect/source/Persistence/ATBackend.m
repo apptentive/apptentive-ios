@@ -360,9 +360,12 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 #endif
 }
 
-//TODO: Get app name from server-based configuration.
 - (NSString *)appName {
-	NSString *displayName = nil;
+	NSString *displayName = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationAppDisplayNameKey];
+	if (displayName) {
+		return displayName;
+	}
+	
 	NSArray *appNameKeys = [NSArray arrayWithObjects:@"CFBundleDisplayName", (NSString *)kCFBundleNameKey, nil];
 	NSMutableArray *infoDictionaries = [NSMutableArray array];
 	if ([[NSBundle mainBundle] localizedInfoDictionary]) {

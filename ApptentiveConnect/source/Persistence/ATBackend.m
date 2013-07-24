@@ -360,12 +360,37 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 #endif
 }
 
+//TODO: Get app name from server-based configuration.
+- (NSString *)appName {
+	NSString *displayName = nil;
+	NSArray *appNameKeys = [NSArray arrayWithObjects:@"CFBundleDisplayName", (NSString *)kCFBundleNameKey, nil];
+	NSMutableArray *infoDictionaries = [NSMutableArray array];
+	if ([[NSBundle mainBundle] localizedInfoDictionary]) {
+		[infoDictionaries addObject:[[NSBundle mainBundle] localizedInfoDictionary]];
+	}
+	if ([[NSBundle mainBundle] infoDictionary]) {
+		[infoDictionaries addObject:[[NSBundle mainBundle] infoDictionary]];
+	}
+	for (NSDictionary *infoDictionary in infoDictionaries) {
+		if (displayName != nil) {
+			break;
+		}
+		for (NSString *appNameKey in appNameKeys) {
+			displayName = [infoDictionary objectForKey:appNameKey];
+			if (displayName != nil) {
+				break;
+			}
+		}
+	}
+	return displayName;
+}
+
 #pragma mark Message Center
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController {
 	NSUInteger messageCount = [ATData countEntityNamed:@"ATMessage" withPredicate:nil];
 	if (messageCount == 0) {
 		NSString *title = ATLocalizedString(@"Give Feedback", @"First feedback screen title.");
-		NSString *body = ATLocalizedString(@"Let us know how to make our app better for you!", @"First feedback screen body.");
+		NSString *body = [NSString stringWithFormat:ATLocalizedString(@"Please let us know how to make %@ better for you!", @"Feedback screen body. Parameter is the app name."), [self appName]];
 		NSString *placeholder = ATLocalizedString(@"How can we help? (required)", @"First feedback placeholder text.");
 		[self presentIntroDialogFromViewController:viewController withTitle:title prompt:body placeholderText:placeholder];
 		return;
@@ -477,7 +502,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 		[currentMessagePanelController release], currentMessagePanelController = nil;
 		if (action == ATMessagePanelDidSendMessage) {
 			if (!messagePanelSentMessageAlert) {
-				messagePanelSentMessageAlert = [[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Thanks!", nil) message:ATLocalizedString(@"Your response has been saved in this app's Message Center, where you may get a reply from us.", @"Message panel sent message confirmation dialog text") delegate:self cancelButtonTitle:ATLocalizedString(@"Close", @"Close alert view title") otherButtonTitles:ATLocalizedString(@"View Messages", @"View messages button title"), nil];
+				messagePanelSentMessageAlert = [[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Thanks!", nil) message:ATLocalizedString(@"Your response has been saved in the Message Center, where you'll be able to view replies and send us other messages.", @"Message panel sent message confirmation dialog text") delegate:self cancelButtonTitle:ATLocalizedString(@"Close", @"Close alert view title") otherButtonTitles:ATLocalizedString(@"View Messages", @"View messages button title"), nil];
 				[messagePanelSentMessageAlert show];
 				
 				[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroThankYouDidShowNotification object:self userInfo:nil];

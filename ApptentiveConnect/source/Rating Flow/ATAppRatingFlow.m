@@ -302,7 +302,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 
 #if TARGET_OS_IPHONE
 - (void)showUnableToOpenAppStoreDialog {
-	UIAlertView *errorAlert = [[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Oops!", @"Unable to load the App Store title") message:ATLocalizedString(@"Unable to load the App Store", @"Unable to load the App Store message") delegate:nil cancelButtonTitle:ATLocalizedString(@"Okay", @"Okay button title") otherButtonTitles:nil] autorelease];
+	UIAlertView *errorAlert = [[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Oops!", @"Unable to load the App Store title") message:ATLocalizedString(@"Unable to load the App Store", @"Unable to load the App Store message") delegate:nil cancelButtonTitle:ATLocalizedString(@"OK", @"OK button title") otherButtonTitles:nil] autorelease];
 	[errorAlert show];
 	[self setRatedApp:NO];
 }
@@ -728,7 +728,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 #endif
 {
 	NSString *title = ATLocalizedString(@"Thank You", @"Rate app title.");
-	NSString *message = [NSString stringWithFormat:ATLocalizedString(@"We're so happy to hear that you love %@! It'd be really helpful if you rated us in the App Store. Thanks so much for spending some time with us.", @"Rate app message. Parameter is app name."), [self appName]];
+	NSString *message = [NSString stringWithFormat:ATLocalizedString(@"We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us.", @"Rate app message. Parameter is app name."), [self appName]];
 	NSString *rateAppTitle = [NSString stringWithFormat:ATLocalizedString(@"Rate %@", @"Rate app button title"), [self appName]];
 	NSString *noThanksTitle = ATLocalizedString(@"No Thanks", @"cancel title for app rating dialog");
 	NSString *remindMeTitle = ATLocalizedString(@"Remind Me Later", @"Remind me later button title");

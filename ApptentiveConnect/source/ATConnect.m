@@ -124,7 +124,7 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 
 - (void)presentFeedbackDialogFromViewController:(UIViewController *)viewController {
 	NSString *title = ATLocalizedString(@"Give Feedback", @"First feedback screen title.");
-	NSString *body = ATLocalizedString(@"Let us know how to make our app better for you!", @"First feedback screen body.");
+	NSString *body = [NSString stringWithFormat:ATLocalizedString(@"Please let us know how to make %@ better for you!", @"Feedback screen body. Parameter is the app name."), [[ATBackend sharedBackend] appName]];
 	NSString *placeholder = ATLocalizedString(@"How can we help? (required)", @"First feedback placeholder text.");
 	[[ATBackend sharedBackend] presentIntroDialogFromViewController:viewController withTitle:title prompt:body placeholderText:placeholder];
 }

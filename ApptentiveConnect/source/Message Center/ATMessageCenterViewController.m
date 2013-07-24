@@ -101,7 +101,7 @@ typedef enum {
 	NSUInteger messageCount = [ATData countEntityNamed:@"ATMessage" withPredicate:nil];
 	if (messageCount == 0) {
 		NSString *title = NSLocalizedString(@"Welcome", @"Welcome");
-		NSString *body = ATLocalizedString(@"Use this area to communicate with the developer of this app! If you have questions, suggestions, concerns, or just want to help us make the app better or get in touch, feel free to send us a message!", @"Placeholder welcome message.");
+		NSString *body = ATLocalizedString(@"This is our Message Center. If you have questions, suggestions, concerns or just want to get in touch, please send us a message. We love talking with our customers!", @"Placeholder welcome message.");
 		[[ATBackend sharedBackend] sendAutomatedMessageWithTitle:title body:body];
 	}
 	
@@ -182,7 +182,7 @@ typedef enum {
 		inputView.backgroundImage = [defaultTheme backgroundImageForMessageForMessageCenterViewController:self];
 	}
 	
-	inputView.placeholder = ATLocalizedString(@"What's on your mind?", @"Placeholder for message center text input.");
+	inputView.placeholder = ATLocalizedString(@"Type a message…", @"Placeholder for message center text input.");
 	
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
 		[self relayoutSubviews];

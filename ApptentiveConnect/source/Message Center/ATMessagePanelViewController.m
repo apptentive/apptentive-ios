@@ -295,7 +295,7 @@ enum {
 		self.window.layer.shouldRasterize = YES;
 		NSString *title = NSLocalizedString(@"Invalid Email Address", @"Invalid email dialog title.");
 		NSString *message = NSLocalizedString(@"That doesn't look like an email address. An email address will help us respond.", @"Invalid email dialog message.");
-		invalidEmailAddressAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Okay", @"Okay button title"), nil];
+		invalidEmailAddressAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"OK", @"OK button title"), nil];
 		[invalidEmailAddressAlert show];
 	} else if (self.showEmailAddressField && (!self.emailField.text || [self.emailField.text length] == 0)) {
 		if (noEmailAddressAlert) {

@@ -135,7 +135,7 @@ enum {
 		[hud show];
 		[hud autorelease];
 	} else {
-		UIAlertView *successAlert = [[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Thanks!", @"Text in thank you display upon submitting survey.") message:survey.successMessage delegate:nil cancelButtonTitle:ATLocalizedString(@"Okay", @"Okay button title") otherButtonTitles:nil] autorelease];
+		UIAlertView *successAlert = [[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Thanks!", @"Text in thank you display upon submitting survey.") message:survey.successMessage delegate:nil cancelButtonTitle:ATLocalizedString(@"OK", @"OK button title") otherButtonTitles:nil] autorelease];
 		[successAlert show];
 	}
 	
@@ -328,7 +328,7 @@ enum {
 				text = question.instructionsText;
 			}
 		} else if (question.responseIsRequired) {
-			text = ATLocalizedString(@"(required)", @"Survey required answer fallback label.");
+			text = ATLocalizedString(@"required", @"Survey required answer fallback label.");
 		}
 		cell.textLabel.text = text;
 		[cell layoutSubviews];

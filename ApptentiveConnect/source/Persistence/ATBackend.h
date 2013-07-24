@@ -95,4 +95,6 @@ NSString *const ATBackendNewAPIKeyNotification;
 
 - (void)messageCenterEnteredForeground;
 - (void)messageCenterLeftForeground;
+
+- (NSString *)appName;
 @end

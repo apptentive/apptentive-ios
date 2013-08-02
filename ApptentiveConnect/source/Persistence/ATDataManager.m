@@ -83,6 +83,13 @@ typedef enum {
 		NSURL *storeURL = [self persistentStoreURL];
 		
 		NSError *error = nil;
+		@try {
+			persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+		}
+		@catch (NSException *exception) {
+			ATLogError(@"Unable to setup persistent store: %@", exception);
+			return nil;
+		}
 		persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
 		BOOL storeExists = [[NSFileManager defaultManager] fileExistsAtPath:[storeURL path]];
 		

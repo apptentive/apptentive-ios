@@ -48,6 +48,8 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 - (void)setupDataManager;
 - (void)setup;
 - (void)startup;
+- (void)continueStartupWithDataManagerSuccess;
+- (void)continueStartupWithDataManagerFailure;
 - (void)updateWorking;
 - (void)networkStatusChanged:(NSNotification *)notification;
 - (void)stopWorking:(NSNotification *)notification;
@@ -55,6 +57,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 - (void)checkForSurveys;
 - (void)checkForMessages;
 - (void)startMonitoringUnreadMessages;
+- (void)checkForProperConfiguration;
 @end
 
 @interface ATBackend ()
@@ -765,11 +768,15 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 		return;
 	}
 	[self setupDataManager];
+}
+
+- (void)continueStartupWithDataManagerSuccess {
 	[ApptentiveMetrics sharedMetrics];
 	
 	[ATMessageDisplayType setupSingletons];
 	
 	// One-shot actions at startup.
+	[self performSelector:@selector(checkForProperConfiguration) withObject:nil afterDelay:1];
 	[self performSelector:@selector(checkForSurveys) withObject:nil afterDelay:4];
 	[self performSelector:@selector(updateDeviceIfNeeded) withObject:nil afterDelay:7];
 	[self performSelector:@selector(checkForMessages) withObject:nil afterDelay:8];
@@ -778,6 +785,10 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	[ATReachability sharedReachability];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusChanged:) name:ATReachabilityStatusChanged object:nil];
 	[self performSelector:@selector(startMonitoringUnreadMessages) withObject:nil afterDelay:0.2];
+}
+
+- (void)continueStartupWithDataManagerFailure {
+	[self performSelector:@selector(checkForProperConfiguration) withObject:nil afterDelay:1];
 }
 
 - (void)updateWorking {
@@ -863,6 +874,9 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	dataManager = [[ATDataManager alloc] initWithModelName:@"ATDataModel" inBundle:[ATConnect resourceBundle] storagePath:[self supportDirectoryPath]];
 	if (![dataManager persistentStoreCoordinator]) {
 		ATLogError(@"There was a problem setting up the persistent store coordinator!");
+		[self continueStartupWithDataManagerFailure];
+	} else {
+		[self continueStartupWithDataManagerSuccess];
 	}
 }
 
@@ -898,5 +912,25 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 		[request release], request = nil;
 #endif
 	}
+}
+
+- (void)checkForProperConfiguration {
+	static BOOL checkedAlready = NO;
+	if (checkedAlready) {
+		// Don't display more than once.
+		return;
+	}
+	checkedAlready = YES;
+#if TARGET_IPHONE_SIMULATOR
+	if ([ATConnect resourceBundle] == nil) {
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unable to Find Resources" message:@"Unable to find ApptentiveResources.bundle in the app. Did you remember to add it to the project?" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+		[alert show];
+		[alert autorelease];
+	} else if (self.persistentStoreCoordinator == nil || self.managedObjectContext == nil) {
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unable to Setup Core Data" message:@"Unable to setup Core Data store. Did you link against Core Data? If so, something else may be wrong." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+		[alert show];
+		[alert autorelease];
+	}
+#endif
 }
 @end

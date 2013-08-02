@@ -41,7 +41,6 @@
 	[[ATConnect sharedConnection] setApiKey:kApptentiveAPIKey];
 	
 	ATAppRatingFlow *flow = [ATAppRatingFlow sharedRatingFlowWithAppID:kApptentiveAppID];
-	[flow setAppName:@"Apptentive"];
 	[flow showRatingFlowFromViewControllerIfConditionsAreMet:self.navigationController];
 	
 	return YES;

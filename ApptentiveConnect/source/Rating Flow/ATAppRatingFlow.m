@@ -162,17 +162,11 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 #pragma mark Properties
 
 - (void)setAppName:(NSString *)anAppName {
-	if (appName != anAppName) {
-		[appName release], appName = nil;
-		appName = [anAppName copy];
-	}
+	// Do nothing.
 }
 
 // TODO: Remove this once deployed on server.
 - (NSString *)appName {
-	if (appName != nil) {
-		return appName;
-	}
 	return [[ATBackend sharedBackend] appName];
 }
 
@@ -661,7 +655,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 - (IBAction)showEnjoymentDialog:(id)sender
 #endif
 {
-	NSString *title = [NSString stringWithFormat:ATLocalizedString(@"Do you love %@?", @"Title for enjoyment alert view. Parameter is app name."), [self appName]];
+	NSString *title = [NSString stringWithFormat:ATLocalizedString(@"Do you love %@?", @"Title for enjoyment alert view. Parameter is app name."), [[ATBackend sharedBackend] appName]];
 #if TARGET_OS_IPHONE
 	self.viewController = vc;
 	if (!enjoymentDialog) {
@@ -709,8 +703,8 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 #endif
 {
 	NSString *title = ATLocalizedString(@"Thank You", @"Rate app title.");
-	NSString *message = [NSString stringWithFormat:ATLocalizedString(@"We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us.", @"Rate app message. Parameter is app name."), [self appName]];
-	NSString *rateAppTitle = [NSString stringWithFormat:ATLocalizedString(@"Rate %@", @"Rate app button title"), [self appName]];
+	NSString *message = [NSString stringWithFormat:ATLocalizedString(@"We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us.", @"Rate app message. Parameter is app name."), [[ATBackend sharedBackend] appName]];
+	NSString *rateAppTitle = [NSString stringWithFormat:ATLocalizedString(@"Rate %@", @"Rate app button title"), [[ATBackend sharedBackend] appName]];
 	NSString *noThanksTitle = ATLocalizedString(@"No Thanks", @"cancel title for app rating dialog");
 	NSString *remindMeTitle = ATLocalizedString(@"Remind Me Later", @"Remind me later button title");
 #if TARGET_OS_IPHONE

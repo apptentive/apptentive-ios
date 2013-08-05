@@ -19,6 +19,7 @@ NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigura
 
 NSString *const ATAppConfigurationMessageCenterTitleKey = @"ATAppConfigurationMessageCenterTitleKey";
 NSString *const ATAppConfigurationMessageCenterForegroundRefreshIntervalKey = @"ATAppConfigurationMessageCenterForegroundRefreshIntervalKey";
+NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey = @"ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey";
 
 NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDisplayNameKey";
 
@@ -42,6 +43,7 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	 [NSDate distantPast], ATAppConfigurationLastUpdatePreferenceKey,
 	 [NSNumber numberWithBool:YES], ATAppConfigurationMetricsEnabledPreferenceKey,
 	 [NSNumber numberWithInt:20], ATAppConfigurationMessageCenterForegroundRefreshIntervalKey,
+	 [NSNumber numberWithInt:180], ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey,
 	 nil];
 	[defaults registerDefaults:defaultPreferences];
 }
@@ -220,11 +222,21 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 				[defaults setObject:title forKey:ATAppConfigurationMessageCenterTitleKey];
 				hasConfigurationChanges = YES;
 			}
+			
 			NSNumber *fgRefresh = [mc objectForKey:@"fg_poll"];
 			NSNumber *oldFGRefresh = [defaults objectForKey:ATAppConfigurationMessageCenterForegroundRefreshIntervalKey];
 			if (!oldFGRefresh || [oldFGRefresh intValue] != [fgRefresh intValue]) {
 				[defaults setObject:fgRefresh forKey:ATAppConfigurationMessageCenterForegroundRefreshIntervalKey];
 				hasConfigurationChanges = YES;
+			}
+			
+			if ([mc objectForKey:@"bg_poll"] != nil) {
+				NSNumber *bgRefresh = [mc objectForKey:@"bg_poll"];
+				NSNumber *oldBGRefresh = [defaults objectForKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey];
+				if (!oldBGRefresh || [oldBGRefresh intValue] != [bgRefresh intValue]) {
+					[defaults setObject:bgRefresh forKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey];
+					hasConfigurationChanges = YES;
+				}
 			}
 		}
 	}

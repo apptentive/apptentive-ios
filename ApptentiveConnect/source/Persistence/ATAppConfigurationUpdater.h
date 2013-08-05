@@ -16,6 +16,7 @@ NSString *const ATAppConfigurationMetricsEnabledPreferenceKey;
 
 NSString *const ATAppConfigurationMessageCenterTitleKey;
 NSString *const ATAppConfigurationMessageCenterForegroundRefreshIntervalKey;
+NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey;
 
 NSString *const ATAppConfigurationAppDisplayNameKey;
 

@@ -711,29 +711,52 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	return previousUnreadCount;
 }
 
-- (void)messageCenterEnteredForeground {
-	@synchronized(self) {
-		[self checkForMessages];
-		if (!messageRetrievalTimer) {
-			NSNumber *refreshIntervalNumber = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterForegroundRefreshIntervalKey];
-			int refreshInterval = 8;
-			if (refreshIntervalNumber) {
-				refreshInterval = [refreshIntervalNumber intValue];
-				refreshInterval = MAX(4, refreshInterval);
-			}
-			messageRetrievalTimer = [[NSTimer timerWithTimeInterval:refreshInterval target:self selector:@selector(checkForMessages) userInfo:nil repeats:YES] retain];
-			NSRunLoop *mainRunLoop = [NSRunLoop mainRunLoop];
-			[mainRunLoop addTimer:messageRetrievalTimer forMode:NSDefaultRunLoopMode];
-		}
+- (void)checkForMessagesAtForegroundRefreshInterval {
+	NSNumber *refreshIntervalNumber = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterForegroundRefreshIntervalKey];
+	int refreshInterval = 8;
+	if (refreshIntervalNumber) {
+		refreshInterval = [refreshIntervalNumber intValue];
+		refreshInterval = MAX(4, refreshInterval);
 	}
+	
+	[self checkForMessagesAtRefreshInterval:refreshInterval];
 }
 
-- (void)messageCenterLeftForeground {
+- (void)checkForMessagesAtBackgroundRefreshInterval {
+	NSNumber *refreshIntervalNumber = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey];
+	int refreshInterval = 180;
+	if (refreshIntervalNumber) {
+		refreshInterval = [refreshIntervalNumber intValue];
+		refreshInterval = MAX(60, refreshInterval);
+	}
+	
+	[self checkForMessagesAtRefreshInterval:refreshInterval];
+}
+
+- (void)checkForMessagesAtRefreshInterval:(NSTimeInterval)refreshInterval {
 	@synchronized(self) {
 		if (messageRetrievalTimer) {
 			[messageRetrievalTimer invalidate];
 			[messageRetrievalTimer release], messageRetrievalTimer = nil;
 		}
+		
+		messageRetrievalTimer = [[NSTimer timerWithTimeInterval:refreshInterval target:self selector:@selector(checkForMessages) userInfo:nil repeats:YES] retain];
+		NSRunLoop *mainRunLoop = [NSRunLoop mainRunLoop];
+		[mainRunLoop addTimer:messageRetrievalTimer forMode:NSDefaultRunLoopMode];
+	}
+}
+
+- (void)messageCenterEnteredForeground {
+	@synchronized(self) {
+		[self checkForMessages];
+		
+		[self checkForMessagesAtForegroundRefreshInterval];
+	}
+}
+
+- (void)messageCenterLeftForeground {
+	@synchronized(self) {
+		[self checkForMessagesAtBackgroundRefreshInterval];
 	}
 }
 @end
@@ -755,12 +778,15 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	if (&UIApplicationDidEnterBackgroundNotification != nil) {
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWorking:) name:UIApplicationWillEnterForegroundNotification object:nil];
+		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkForMessages) name:UIApplicationWillEnterForegroundNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkForSurveys) name:UIApplicationWillEnterForegroundNotification object:nil];
 	}
 #elif TARGET_OS_MAC
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:NSApplicationWillTerminateNotification object:nil];
 #endif
+	
+	[self checkForMessagesAtBackgroundRefreshInterval];
 }
 
 /* Methods which are not safe to run until sharedBackend is assigned. */

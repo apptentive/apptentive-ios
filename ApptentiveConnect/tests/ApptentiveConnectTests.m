@@ -10,7 +10,7 @@
 #import "ATConnect.h"
 #import "ATPersonInfo.h"
 #import "ATDeviceInfo.h"
-
+#import "ATUtilities.h"
 
 @implementation ApptentiveConnectTests
 
@@ -28,6 +28,92 @@
 
 - (void)testExample {
 }
+
+- (void)testInitialUserName {
+	ATPersonInfo *person = [[[ATPersonInfo alloc] init] autorelease];
+	[person saveAsCurrentPerson];
+	STAssertTrue([ATPersonInfo currentPerson].name == nil, @"New person object's name should be nil");
+	
+	[ATConnect sharedConnection].initialUserName = @"setAfterInit";
+	STAssertTrue([[ATPersonInfo currentPerson].name isEqualToString:@"setAfterInit"], @"Setting the initialUserName should set the current person's name.");
+	
+	[ATConnect sharedConnection].initialUserName = @"setToSomethingElse";
+	STAssertTrue([[ATPersonInfo currentPerson].name isEqualToString:@"setToSomethingElse"], @"Should be able to change the initial user name");
+	
+	person = [ATPersonInfo currentPerson];
+	person.name = @"changingThePersonNameDirectly";
+	[person saveAsCurrentPerson];
+	STAssertTrue([[ATPersonInfo currentPerson].name isEqualToString:@"changingThePersonNameDirectly"], @"Should be able to set the person object's name directly.");
+	
+	[ATConnect sharedConnection].initialUserName = @"settingInitialNameAFTERsettingPersonNameDirectly";
+	STAssertFalse([[ATPersonInfo currentPerson].name isEqualToString:@"settingInitialNameAFTERsettingPersonNameDirectly"], @"Person object should not take a new *initial* name if the person has a non-initial name");
+	STAssertTrue([[ATPersonInfo currentPerson].name isEqualToString:@"changingThePersonNameDirectly"], @"Should still be using the (non-initial) name that was set directly.");
+	
+	person = [ATPersonInfo currentPerson];
+	person.name = @"settingNameDirectlyAgain";
+	[person saveAsCurrentPerson];
+	STAssertTrue([[ATPersonInfo currentPerson].name isEqualToString:@"settingNameDirectlyAgain"], @"Should be able to set the person object's name directly.");
+	
+	//Set initial name prior to creating new person object
+	[ATConnect sharedConnection].initialUserName = @"setBeforeInit";
+	person = [[[ATPersonInfo alloc] init] autorelease];
+	[person saveAsCurrentPerson];
+	STAssertTrue([[ATPersonInfo currentPerson].name isEqualToString:@"setBeforeInit"], @"A new person object should pick up the set initialUserName.");
+	
+	[ATConnect sharedConnection].initialUserName = @"settingToAnotherInitialName";
+	STAssertTrue([[ATPersonInfo currentPerson].name isEqualToString:@"settingToAnotherInitialName"], @"Should be able to change the initial name.");
+}
+
+- (void)testInitialUserEmailAddress {
+	ATPersonInfo *person = [[[ATPersonInfo alloc] init] autorelease];
+	[person saveAsCurrentPerson];
+	STAssertTrue([ATPersonInfo currentPerson].emailAddress == nil, @"New person object's email address should be nil");
+	
+	[ATConnect sharedConnection].initialUserEmailAddress = @"setAfterInit@example.com";
+	STAssertTrue([[ATPersonInfo currentPerson].emailAddress isEqualToString:@"setAfterInit@example.com"], @"Setting the initialUserEmailAddress should set the current person's email address");
+	
+	[ATConnect sharedConnection].initialUserEmailAddress = @"setToSomethingElse@example.com";
+	STAssertTrue([[ATPersonInfo currentPerson].emailAddress isEqualToString:@"setToSomethingElse@example.com"], @"Should be able to change the initial email address");
+	
+	person = [ATPersonInfo currentPerson];
+	person.emailAddress = @"changingThePersonEmailDirectly@example.com";
+	[person saveAsCurrentPerson];
+	STAssertTrue([[ATPersonInfo currentPerson].emailAddress isEqualToString:@"changingThePersonEmailDirectly@example.com"], @"Should be able to set the person object's email directly.");
+	
+	[ATConnect sharedConnection].initialUserEmailAddress = @"settingInitialEmailAddressAFTERsettingPersonsEmailAddressDirectly@example.com";
+	STAssertFalse([[ATPersonInfo currentPerson].emailAddress isEqualToString:@"settingInitialEmailAddressAFTERsettingPersonsEmailAddressDirectly@example.com"], @"Person object should not take a new *initial* email address if the person has a non-initial email");
+	STAssertTrue([[ATPersonInfo currentPerson].emailAddress isEqualToString:@"changingThePersonEmailDirectly@example.com"], @"Should still be using the (non-initial) email address that was set directly.");
+
+	person = [ATPersonInfo currentPerson];
+	person.emailAddress = @"settingEmailDirectlyAgain@example.com";
+	[person saveAsCurrentPerson];
+	STAssertTrue([[ATPersonInfo currentPerson].emailAddress isEqualToString:@"settingEmailDirectlyAgain@example.com"], @"Should be able to set the person object's email directly.");
+	
+	//Set initial email address prior to creating new person object
+	[ATConnect sharedConnection].initialUserEmailAddress = @"setBeforeInit@example.com";
+	person = [[[ATPersonInfo alloc] init] autorelease];
+	[person saveAsCurrentPerson];
+	STAssertTrue([[ATPersonInfo currentPerson].emailAddress isEqualToString:@"setBeforeInit@example.com"], @"A new person object should pick up the set initialUserEmailAddress.");
+	
+	[ATConnect sharedConnection].initialUserEmailAddress = @"settingToAnotherInitialEmailAddress@example.com";
+	STAssertTrue([[ATPersonInfo currentPerson].emailAddress isEqualToString:@"settingToAnotherInitialEmailAddress@example.com"], @"Should be able to change the initial email address");
+	
+	//Initial email address validation
+	NSString *valid = @"valid@example.com";
+	STAssertTrue([ATUtilities emailAddressIsValid:valid], @"Valid email is valid.");
+	NSString *invalid = @"INVALID";
+	STAssertFalse([ATUtilities emailAddressIsValid:invalid], @"Invalid email is invalid.");
+	person = [[[ATPersonInfo alloc] init] autorelease];
+	[person saveAsCurrentPerson];
+	[ATConnect sharedConnection].initialUserEmailAddress = valid;
+	STAssertTrue([[ATConnect sharedConnection].initialUserEmailAddress isEqualToString:valid], @"Initial email should only be set to a valid email address.");
+	STAssertTrue([[ATPersonInfo currentPerson].emailAddress isEqualToString:valid], @"Person's email should only be set to a valid email address.");
+	[ATConnect sharedConnection].initialUserEmailAddress = invalid;
+	STAssertTrue([[ATConnect sharedConnection].initialUserEmailAddress isEqualToString:valid], @"Initial email should only be set to a valid email address.");
+	STAssertFalse([[ATConnect sharedConnection].initialUserEmailAddress isEqualToString:invalid], @"Initial email should NOT be set to an invalid email address.");
+	STAssertFalse([[ATPersonInfo currentPerson].emailAddress isEqualToString:invalid], @"Person's email should NOT be set to an invalid initial email address.");
+}
+
 
 - (void)testCustomPersonData {
 	ATPersonInfo *person = [[[ATPersonInfo alloc] init] autorelease];

@@ -19,6 +19,8 @@
 #endif
 
 NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCenterUnreadCountChangedNotification";
+NSString *const ATInitialUserNameKey = @"ATInitialUserNameKey";
+NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 
 @implementation ATConnect
 @synthesize apiKey, showTagline, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText;
@@ -65,6 +67,49 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 		apiKey = nil;
 		apiKey = [anAPIKey retain];
 		[[ATBackend sharedBackend] setApiKey:self.apiKey];
+	}
+}
+
+- (void)setInitialUserName:(NSString *)anInitialUserName {
+	if (initialUserName != anInitialUserName) {
+		[initialUserName release];
+		initialUserName = nil;
+		initialUserName = [anInitialUserName retain];
+		
+		//Set person object's name. Only overwrites previous *initial* names.
+		NSString *previousInitialUserName = [[NSUserDefaults standardUserDefaults] objectForKey:ATInitialUserNameKey];
+		if ([ATPersonInfo personExists]) {
+			ATPersonInfo *person = [ATPersonInfo currentPerson];
+			if (!person.name || [person.name isEqualToString:previousInitialUserName]) {
+				person.name = initialUserName;
+				[person saveAsCurrentPerson];
+			}
+		}
+		[[NSUserDefaults standardUserDefaults] setObject:initialUserName forKey:ATInitialUserNameKey];
+	}
+}
+
+- (void)setInitialUserEmailAddress:(NSString *)anInitialUserEmailAddress {
+	if (![ATUtilities emailAddressIsValid:anInitialUserEmailAddress]) {
+		ATLogInfo(@"Attempting to set an invalid initial user email address: %@", anInitialUserEmailAddress);
+		return;
+	}
+		
+	if (initialUserEmailAddress != anInitialUserEmailAddress) {		
+		[initialUserEmailAddress release];
+		initialUserEmailAddress = nil;
+		initialUserEmailAddress = [anInitialUserEmailAddress retain];
+		
+		//Set person object's email. Only overwrites previous *initial* emails.
+		NSString *previousInitialUserEmailAddress = [[NSUserDefaults standardUserDefaults] objectForKey:ATInitialUserEmailAddressKey];
+		if ([ATPersonInfo personExists]) {
+			ATPersonInfo *person = [ATPersonInfo currentPerson];
+			if (!person.emailAddress || [person.emailAddress isEqualToString:previousInitialUserEmailAddress]) {
+				person.emailAddress = initialUserEmailAddress;
+				[person saveAsCurrentPerson];
+			}			
+		}
+		[[NSUserDefaults standardUserDefaults] setObject:initialUserEmailAddress forKey:ATInitialUserEmailAddressKey];
 	}
 }
 

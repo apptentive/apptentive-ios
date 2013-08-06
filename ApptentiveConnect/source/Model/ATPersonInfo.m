@@ -22,6 +22,15 @@
 @synthesize secret;
 @synthesize needsUpdate;
 
+
+- (id)init {
+	if (self = [super init]) {
+		self.name = [ATConnect sharedConnection].initialUserName;
+		self.emailAddress = [ATConnect sharedConnection].initialUserEmailAddress;
+	}
+	return self;
+}
+
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
 		self.apptentiveID = (NSString *)[coder decodeObjectForKey:@"apptentiveID"];

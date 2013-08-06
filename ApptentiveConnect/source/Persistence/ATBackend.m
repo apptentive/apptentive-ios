@@ -518,8 +518,13 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 }
 
 - (NSString *)initialEmailAddressForMessagePanel:(ATMessagePanelViewController *)messagePanel {
-	ATPersonInfo *person = [ATPersonInfo currentPerson];
-	return person.emailAddress;
+	NSString *email = [ATConnect sharedConnection].initialUserEmailAddress;
+	
+	if ([ATPersonInfo personExists]) {
+		email = [ATPersonInfo currentPerson].emailAddress;
+	}
+	
+	return email;
 }
 
 #pragma mark UIAlertViewDelegate

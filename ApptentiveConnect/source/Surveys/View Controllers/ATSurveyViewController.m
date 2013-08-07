@@ -563,10 +563,6 @@ enum {
 		[textField resignFirstResponder];
 		return NO;
 	}
-	NSString *result = [textField.text stringByReplacingCharactersInRange:range withString:text];
-	if ([result length] > 30) {
-		return NO;
-	}
 	return YES;
 }
 

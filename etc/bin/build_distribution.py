@@ -2,6 +2,7 @@
 from contextlib import contextmanager
 import os
 import biplist
+import json
 import re
 import shutil
 import subprocess
@@ -129,6 +130,9 @@ class Builder(object):
 				return False
 			biplist.writePlist(plist, bundle_plist_path)
 		
+		if self.dist_type == self.TRIGGER_IO_DIST:
+			self._triggerio_postprocess()
+		
 		# Try to get the version.
 		version = None
 		header_contents = open(os.path.join(self._project_dir(), "source", "ATConnect.h")).read()
@@ -156,7 +160,27 @@ class Builder(object):
 				return False
 			run_command("open .")
 		return True
-		
+	
+	def _triggerio_postprocess(self):
+		with chdir(self._output_dir()):
+			# Generate build_steps.json file.
+			build_steps_json = [
+				{'do': { "add_ios_system_framework" : {"framework":"CoreText.framework"}}},
+				{'do': { "add_ios_system_framework" : {"framework":"CoreTelephony.framework"}}},
+				{'do': { "add_ios_system_framework" : {"framework":"CoreData.framework"}}},
+				{'do': { "add_ios_system_framework" : {"framework":"QuartzCore.framework"}}},
+				{'do': { "add_ios_system_framework" : {"framework":"StoreKit.framework"}}}
+			]
+			with open("build_steps.json", "w") as f:
+				json.dump(build_steps_json, f, indent=4)
+			os.makedirs("bundles/plugin.bundle")
+			shutil.move("ApptentiveResources.bundle", "bundles/plugin.bundle/ApptentiveResources.bundle")
+			shutil.move("libApptentiveConnect.a", "plugin.a")
+			shutil.rmtree("include")
+			os.remove("LICENSE.txt")
+			os.remove("README.md")
+			os.remove("CHANGELOG.md")
+	
 	def _project_dir(self):
 		return os.path.join("..", "..", "ApptentiveConnect")
 	
@@ -198,7 +222,7 @@ class Builder(object):
 		return run_command(command, verbose=self.verbose)
 
 if __name__ == "__main__":
-	for dist_type in [Builder.BINARY_DIST, Builder.COCOAPODS_DIST, Builder.TRIGGER_IO_DIST, Builder.TITANIUM_DIST, Builder.XAMARIN_DIST]:
+	for dist_type in [Builder.BINARY_DIST, Builder.COCOAPODS_DIST, Builder.TRIGGER_IO_DIST]:
 		builder = Builder(dist_type=dist_type)
 		result = builder.build()
 		if result == True:

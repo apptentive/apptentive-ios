@@ -173,7 +173,7 @@ class Builder(object):
 			]
 			with open("build_steps.json", "w") as f:
 				json.dump(build_steps_json, f, indent=4)
-			os.makedirs("bundles/plugin.bundle")
+			os.makedirs("bundles/apptentive_module.bundle")
 			shutil.move("ApptentiveResources.bundle", "bundles/apptentive_module.bundle/ApptentiveResources.bundle")
 			shutil.move("libApptentiveConnect.a", "plugin.a")
 			shutil.rmtree("include")

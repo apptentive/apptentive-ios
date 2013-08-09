@@ -229,15 +229,6 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 				[defaults setObject:fgRefresh forKey:ATAppConfigurationMessageCenterForegroundRefreshIntervalKey];
 				hasConfigurationChanges = YES;
 			}
-			
-			if ([mc objectForKey:@"bg_poll"] != nil) {
-				NSNumber *bgRefresh = [mc objectForKey:@"bg_poll"];
-				NSNumber *oldBGRefresh = [defaults objectForKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey];
-				if (!oldBGRefresh || [oldBGRefresh intValue] != [bgRefresh intValue]) {
-					[defaults setObject:bgRefresh forKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey];
-					hasConfigurationChanges = YES;
-				}
-			}
 		}
 	}
 	

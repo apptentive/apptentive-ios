@@ -546,6 +546,8 @@
 		58EA5B3B17B479A500ECEB4B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		58EA5B4117B47AAC00ECEB4B /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		58EA5B4717B47BAB00ECEB4B /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		58EA5B4E17B47E0C00ECEB4B /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/Localizable.strings; sourceTree = "<group>"; };
+		58EA5B4F17B47E0C00ECEB4B /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1283,6 +1285,7 @@
 				it,
 				da,
 				fr,
+				zh,
 			);
 			mainGroup = 496DC3741333D35600743F65;
 			productRefGroup = 496DC3801333D35600743F65 /* Products */;
@@ -1546,6 +1549,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				49C0028C1334137E0071F088 /* en */,
+				58EA5B4F17B47E0C00ECEB4B /* zh */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1564,6 +1568,7 @@
 				58EA5B3B17B479A500ECEB4B /* it */,
 				58EA5B4117B47AAC00ECEB4B /* da */,
 				58EA5B4717B47BAB00ECEB4B /* fr */,
+				58EA5B4E17B47E0C00ECEB4B /* zh */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

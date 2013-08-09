@@ -222,7 +222,7 @@ class Builder(object):
 		return run_command(command, verbose=self.verbose)
 
 if __name__ == "__main__":
-	for dist_type in [Builder.BINARY_DIST, Builder.COCOAPODS_DIST, Builder.TRIGGER_IO_DIST]:
+	for dist_type in [Builder.BINARY_DIST, Builder.COCOAPODS_DIST, Builder.TRIGGER_IO_DIST, Builder.TITANIUM_DIST]:
 		builder = Builder(dist_type=dist_type)
 		result = builder.build()
 		if result == True:

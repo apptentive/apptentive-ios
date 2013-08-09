@@ -19,6 +19,6 @@
 	BOOL metricsEnabled;
 }
 + (ApptentiveMetrics *)sharedMetrics;
-- (void)upgradeLegacyMetric:(ATMetric *)metric;
+- (BOOL)upgradeLegacyMetric:(ATMetric *)metric;
 @end
 

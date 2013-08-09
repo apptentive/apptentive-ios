@@ -135,8 +135,9 @@
 
 - (BOOL)handleLegacyRecord {
 	if ([self.record isKindOfClass:[ATMetric class]]) {
-		[[ApptentiveMetrics sharedMetrics] upgradeLegacyMetric:(ATMetric *)self.record];
-		return YES;
+		if ([[ApptentiveMetrics sharedMetrics] upgradeLegacyMetric:(ATMetric *)self.record]) {
+			return YES;
+		}
 	}
 	return NO;
 }

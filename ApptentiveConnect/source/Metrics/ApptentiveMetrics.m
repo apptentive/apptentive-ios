@@ -7,7 +7,9 @@
 //
 
 #import "ApptentiveMetrics.h"
+
 #import "ATAppConfigurationUpdater.h"
+#import "ATBackend.h"
 #import "ATFeedbackMetrics.h"
 #import "ATAppRatingMetrics.h"
 #import "ATData.h"
@@ -115,10 +117,10 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 	[defaults registerDefaults:defaultPreferences];
 }
 
-- (id)init {
-	self = [super init];
-	if (self) {
-		metricsEnabled = NO;
+- (void)backendBecameAvailable:(NSNotification *)notification {
+	@autoreleasepool {
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:ATBackendBecameReadyNotification object:nil];
+		
 		[ApptentiveMetrics registerDefaults];
 		[self updateWithCurrentPreferences];
 		
@@ -152,7 +154,7 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterDidAttach:) name:ATMessageCenterDidAttachNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterDidRead:) name:ATMessageCenterDidReadNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterDidSend:) name:ATMessageCenterDidSendNotification object:nil];
-
+		
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroDidLaunch:) name:ATMessageCenterIntroDidShowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroDidSend:) name:ATMessageCenterIntroDidSendNotification object:nil];
@@ -160,6 +162,14 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroThankYouDidLaunch:) name:ATMessageCenterIntroThankYouDidShowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroThankYouHitMessages:) name:ATMessageCenterIntroThankYouHitMessagesNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroThankYouDidClose:) name:ATMessageCenterIntroThankYouDidCloseNotification object:nil];
+	}
+}
+
+- (id)init {
+	self = [super init];
+	if (self) {
+		metricsEnabled = NO;
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backendBecameAvailable:) name:ATBackendBecameReadyNotification object:nil];
 	}
 	
 	return self;
@@ -170,22 +180,26 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 	[super dealloc];
 }
 
-- (void)upgradeLegacyMetric:(ATMetric *)metric {
+- (BOOL)upgradeLegacyMetric:(ATMetric *)metric {
 	if (metricsEnabled == NO) {
-		return;
+		return NO;
 	}
 	
 	ATEvent *event = (ATEvent *)[ATData newEntityNamed:@"ATEvent"];
 	[event setup];
 	event.label = metric.name;
 	[event addEntriesFromDictionary:[metric info]];
-	[ATData save];
+	if (![ATData save]) {
+		[event release], event = nil;
+		return NO;
+	}
 	
 	ATRecordRequestTask *task = [[ATRecordRequestTask alloc] init];
 	[task setTaskProvider:event];
 	[[ATTaskQueue sharedTaskQueue] addTask:task];
 	[event release], event = nil;
 	[task release], task = nil;
+	return YES;
 }
 @end
 
@@ -206,7 +220,10 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 	[event setup];
 	event.label = name;
 	[event addEntriesFromDictionary:userInfo];
-	[ATData save];
+	if (![ATData save]) {
+		[event release], event = nil;
+		return;
+	}
 	
 	ATRecordRequestTask *task = [[ATRecordRequestTask alloc] init];
 	[task setTaskProvider:event];

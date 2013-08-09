@@ -21,7 +21,7 @@
 #import "ATMessagePanelViewController.h"
 #endif
 
-NSString *const ATBackendNewAPIKeyNotification;
+NSString *const ATBackendBecameReadyNotification;
 
 #define USE_STAGING 0
 
@@ -97,4 +97,6 @@ NSString *const ATBackendNewAPIKeyNotification;
 - (void)messageCenterLeftForeground;
 
 - (NSString *)appName;
+
+- (BOOL)isReady;
 @end

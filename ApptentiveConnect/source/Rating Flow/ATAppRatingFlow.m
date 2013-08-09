@@ -405,6 +405,9 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 }
 
 - (BOOL)showDialogIfNecessary {
+	if (![[ATBackend sharedBackend] isReady]) {
+		return NO;
+	}
 #if TARGET_OS_IPHONE
 	if ([self shouldShowDialog]) {
 		[self showEnjoymentDialog:self.viewController];

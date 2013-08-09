@@ -36,7 +36,15 @@
 #import "ATLog.h"
 #import "ATPersonUpdater.h"
 
-NSString *const ATBackendNewAPIKeyNotification = @"ATBackendNewAPIKeyNotification";
+typedef NS_ENUM(NSInteger, ATBackendState){
+	ATBackendStateStarting,
+	ATBackendStateWaitingForDataProtectionUnlock,
+	ATBackendStateReady
+};
+
+
+NSString *const ATBackendBecameReadyNotification = @"ATBackendBecameReadyNotification";
+
 NSString *const ATUUIDPreferenceKey = @"ATUUIDPreferenceKey";
 NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 
@@ -73,6 +81,8 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 @implementation ATBackend
 #if TARGET_OS_IPHONE
 {
+	ATBackendState state;
+	
 	UIViewController *presentedMessageCenterViewController;
 	ATMessagePanelViewController *currentMessagePanelController;
 	
@@ -201,7 +211,6 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 			apiKeySet = YES;
 		}
 		[self updateWorking];
-		[[NSNotificationCenter defaultCenter] postNotificationName:ATBackendNewAPIKeyNotification object:nil];
 	}
 }
 
@@ -389,6 +398,10 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 		}
 	}
 	return displayName;
+}
+
+- (BOOL)isReady {
+	return (state == ATBackendStateReady);
 }
 
 #pragma mark Message Center
@@ -804,6 +817,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 }
 
 - (void)continueStartupWithDataManagerSuccess {
+	state = ATBackendStateReady;
 	[ApptentiveMetrics sharedMetrics];
 	
 	[ATMessageDisplayType setupSingletons];
@@ -818,6 +832,8 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	[ATReachability sharedReachability];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusChanged:) name:ATReachabilityStatusChanged object:nil];
 	[self performSelector:@selector(startMonitoringUnreadMessages) withObject:nil afterDelay:0.2];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATBackendBecameReadyNotification object:nil];
 }
 
 - (void)continueStartupWithDataManagerFailure {
@@ -827,6 +843,9 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 - (void)updateWorking {
 	if (shouldStopWorking) {
 		// Probably going into the background or being terminated.
+		self.working = NO;
+	} else if (state != ATBackendStateReady) {
+		// Backend isn't ready yet.
 		self.working = NO;
 	} else if (apiKeySet && networkAvailable && dataManager != nil && [dataManager persistentStoreCoordinator] != nil) {
 		// API Key is set and the network and Core Data stack is up. Start working.
@@ -860,6 +879,9 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 
 - (void)checkForSurveys {
 	@autoreleasepool {
+		if (![self isReady]) {
+			return;
+		}
 		[ATSurveys checkForAvailableSurveys];
 	}
 }
@@ -867,6 +889,9 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 - (void)checkForMessages {
 	@autoreleasepool {
 		@synchronized(self) {
+			if (![self isReady]) {
+				return;
+			}
 			ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
 			if (![queue hasTaskOfClass:[ATGetMessagesTask class]]) {
 				ATGetMessagesTask *task = [[ATGetMessagesTask alloc] init];
@@ -877,33 +902,22 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	}
 }
 
-- (void)clearDemoData {
-	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
-	
-	@synchronized(self) {
-		NSFetchRequest *fetchTypes = [[NSFetchRequest alloc] initWithEntityName:@"ATMessage"];
-		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(sender.apptentiveID == 'demouserid' || sender.apptentiveID = 'demodevid')"];
-		fetchTypes.predicate = fetchPredicate;
-		NSError *fetchError = nil;
-		NSArray *fetchArray = [context executeFetchRequest:fetchTypes error:&fetchError];
-		
-		if (fetchArray) {
-			for (NSManagedObject *fetchedObject in fetchArray) {
-				[context deleteObject:fetchedObject];
-			}
-			[context save:nil];
-		}
-		
-		[fetchTypes release], fetchTypes = nil;
-	}
-}
-
 - (void)setupDataManager {
 	if (![[NSThread currentThread] isMainThread]) {
 		[self performSelectorOnMainThread:@selector(setupDataManager) withObject:nil waitUntilDone:YES];
 		return;
 	}
 	ATLogInfo(@"Setting up data manager");
+	
+	if (![[UIApplication sharedApplication] isProtectedDataAvailable]) {
+		state = ATBackendStateWaitingForDataProtectionUnlock;
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupDataManager) name:UIApplicationProtectedDataDidBecomeAvailable object:nil];
+		return;
+	} else if (state == ATBackendStateWaitingForDataProtectionUnlock) {
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationProtectedDataDidBecomeAvailable object:nil];
+		state = ATBackendStateStarting;
+	}
+	
 	dataManager = [[ATDataManager alloc] initWithModelName:@"ATDataModel" inBundle:[ATConnect resourceBundle] storagePath:[self supportDirectoryPath]];
 	if (![dataManager persistentStoreCoordinator]) {
 		ATLogError(@"There was a problem setting up the persistent store coordinator!");

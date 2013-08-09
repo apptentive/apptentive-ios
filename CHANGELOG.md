@@ -1,4 +1,4 @@
-2013-07-12 wooster v1.0.1
+2013-07-12 wooster v1.0.1 (in progress)
 -------------------------
 Deprecating the `-addCustomData:withKey:` and `-removeCustomDataWithKey:` methods in `ATConnect`.
 
@@ -15,6 +15,11 @@ In their place, use these new methods, which add custom data about devices and p
 ```
 
 Also deprecating the `appName` property on `ATAppRatingFlow`. Now, the display name of the application used in our framework can be set server-side.
+
+Fixes:
+
+* IOS-173 Make client play nicely with location updates and file protection
+    * This was a crasher caused when background apps were started before the phone was unlocked.
 
 2013-06-28 wooster v1.0.0
 -------------------------

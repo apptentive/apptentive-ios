@@ -54,7 +54,7 @@
 	[person saveAsCurrentPerson];
 	STAssertTrue([[ATPersonInfo currentPerson].name isEqualToString:@"settingNameDirectlyAgain"], @"Should be able to set the person object's name directly.");
 	
-	//Set initial name prior to creating new person object
+	// Set initial name prior to creating new person object
 	[ATConnect sharedConnection].initialUserName = @"setBeforeInit";
 	person = [[[ATPersonInfo alloc] init] autorelease];
 	[person saveAsCurrentPerson];
@@ -89,7 +89,7 @@
 	[person saveAsCurrentPerson];
 	STAssertTrue([[ATPersonInfo currentPerson].emailAddress isEqualToString:@"settingEmailDirectlyAgain@example.com"], @"Should be able to set the person object's email directly.");
 	
-	//Set initial email address prior to creating new person object
+	// Set initial email address prior to creating new person object
 	[ATConnect sharedConnection].initialUserEmailAddress = @"setBeforeInit@example.com";
 	person = [[[ATPersonInfo alloc] init] autorelease];
 	[person saveAsCurrentPerson];
@@ -98,7 +98,7 @@
 	[ATConnect sharedConnection].initialUserEmailAddress = @"settingToAnotherInitialEmailAddress@example.com";
 	STAssertTrue([[ATPersonInfo currentPerson].emailAddress isEqualToString:@"settingToAnotherInitialEmailAddress@example.com"], @"Should be able to change the initial email address");
 	
-	//Initial email address validation
+	// Initial email address validation
 	NSString *valid = @"valid@example.com";
 	STAssertTrue([ATUtilities emailAddressIsValid:valid], @"Valid email is valid.");
 	NSString *invalid = @"INVALID";

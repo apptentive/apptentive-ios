@@ -76,7 +76,7 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 		initialUserName = nil;
 		initialUserName = [anInitialUserName retain];
 		
-		//Set person object's name. Only overwrites previous *initial* names.
+		// Set person object's name. Only overwrites previous *initial* names.
 		NSString *previousInitialUserName = [[NSUserDefaults standardUserDefaults] objectForKey:ATInitialUserNameKey];
 		if ([ATPersonInfo personExists]) {
 			ATPersonInfo *person = [ATPersonInfo currentPerson];
@@ -100,7 +100,7 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 		initialUserEmailAddress = nil;
 		initialUserEmailAddress = [anInitialUserEmailAddress retain];
 		
-		//Set person object's email. Only overwrites previous *initial* emails.
+		// Set person object's email. Only overwrites previous *initial* emails.
 		NSString *previousInitialUserEmailAddress = [[NSUserDefaults standardUserDefaults] objectForKey:ATInitialUserEmailAddressKey];
 		if ([ATPersonInfo personExists]) {
 			ATPersonInfo *person = [ATPersonInfo currentPerson];

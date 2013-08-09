@@ -140,6 +140,9 @@
 		58EA5B3817B4795A00ECEB4B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		58EA5B3917B4795B00ECEB4B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		58EA5B3A17B4795B00ECEB4B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		58EA5B3E17B47A4600ECEB4B /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
+		58EA5B3F17B47A4600ECEB4B /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		58EA5B4017B47A4600ECEB4B /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -362,6 +365,7 @@
 				"zh-Hans",
 				nl,
 				it,
+				da,
 			);
 			mainGroup = 49C002DC1334172E0071F088;
 			productRefGroup = 49C002E81334172E0071F088 /* Products */;
@@ -506,6 +510,7 @@
 				49C002F51334172F0071F088 /* en */,
 				58EA5B3417B4778F00ECEB4B /* nl */,
 				58EA5B3917B4795B00ECEB4B /* it */,
+				58EA5B3F17B47A4600ECEB4B /* da */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -532,6 +537,7 @@
 				49C003151334172F0071F088 /* en */,
 				58EA5B3517B4778F00ECEB4B /* nl */,
 				58EA5B3A17B4795B00ECEB4B /* it */,
+				58EA5B4017B47A4600ECEB4B /* da */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -548,6 +554,7 @@
 				4995EDCD17595B3C00AF7268 /* zh-Hans */,
 				58EA5B3317B4778F00ECEB4B /* nl */,
 				58EA5B3817B4795A00ECEB4B /* it */,
+				58EA5B3E17B47A4600ECEB4B /* da */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

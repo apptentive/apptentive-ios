@@ -544,6 +544,7 @@
 		49F8AFFE16CC56570070FFEA /* ATEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATEvent.m; sourceTree = "<group>"; };
 		58EA5B3617B4781600ECEB4B /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		58EA5B3B17B479A500ECEB4B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		58EA5B4117B47AAC00ECEB4B /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1279,6 +1280,7 @@
 				"zh-Hans",
 				nl,
 				it,
+				da,
 			);
 			mainGroup = 496DC3741333D35600743F65;
 			productRefGroup = 496DC3801333D35600743F65 /* Products */;
@@ -1558,6 +1560,7 @@
 				4995EDC717595A2200AF7268 /* zh-Hans */,
 				58EA5B3617B4781600ECEB4B /* nl */,
 				58EA5B3B17B479A500ECEB4B /* it */,
+				58EA5B4117B47AAC00ECEB4B /* da */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

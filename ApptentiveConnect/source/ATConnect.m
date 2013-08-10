@@ -82,6 +82,7 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 			ATPersonInfo *person = [ATPersonInfo currentPerson];
 			if (!person.name || [person.name isEqualToString:previousInitialUserName]) {
 				person.name = initialUserName;
+				person.needsUpdate = YES;
 				[person saveAsCurrentPerson];
 			}
 		}
@@ -106,6 +107,7 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 			ATPersonInfo *person = [ATPersonInfo currentPerson];
 			if (!person.emailAddress || [person.emailAddress isEqualToString:previousInitialUserEmailAddress]) {
 				person.emailAddress = initialUserEmailAddress;
+				person.needsUpdate = YES;
 				[person saveAsCurrentPerson];
 			}			
 		}

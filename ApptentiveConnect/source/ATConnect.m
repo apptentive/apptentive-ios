@@ -146,7 +146,7 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 		return [bundle autorelease];
 	} else {
 		// Try trigger.io path.
-		bundlePath = [path stringByAppendingPathComponent:@"apptentive_module.bundle"];
+		bundlePath = [path stringByAppendingPathComponent:@"apptentive.bundle"];
 		bundlePath = [bundlePath stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
 		if ([fm fileExistsAtPath:bundlePath]) {
 			NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];

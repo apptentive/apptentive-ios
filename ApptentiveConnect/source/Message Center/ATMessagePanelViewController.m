@@ -397,7 +397,7 @@ enum {
 #pragma mark UITextViewDelegate
 - (void)textViewDidChange:(UITextView *)textView {
 	if (textView == self.feedbackView) {
-		CGFloat minTextViewHeight = self.scrollView.frame.size.height - textView.frame.origin.y;
+		CGFloat minTextViewHeight = CGRectGetMaxY(self.scrollView.frame) - textView.frame.origin.y;
 		CGSize oldContentSize = self.scrollView.contentSize;
 		CGRect oldTextViewRect = textView.frame;
 		
@@ -407,6 +407,7 @@ enum {
 		
 		CGSize newContentSize = oldContentSize;
 		newContentSize.height -= heightDiff;
+		newContentSize.width = scrollView.bounds.size.width;
 		CGRect newTextViewFrame = oldTextViewRect;
 		newTextViewFrame.size.height -= heightDiff;
 		textView.frame = newTextViewFrame;

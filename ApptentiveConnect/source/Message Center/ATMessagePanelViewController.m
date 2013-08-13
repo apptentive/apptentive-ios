@@ -162,9 +162,6 @@ enum {
 	
 	l.cornerRadius = 10.0;
 	l.backgroundColor = [UIColor whiteColor].CGColor;
-	l.shadowColor = [UIColor blackColor].CGColor;
-	l.shadowOpacity = 0.72;
-	l.shadowRadius = 8;
 	
 	l.masksToBounds = YES;
 	

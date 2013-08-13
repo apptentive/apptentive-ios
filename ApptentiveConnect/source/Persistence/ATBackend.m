@@ -742,10 +742,10 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 
 - (void)checkForMessagesAtBackgroundRefreshInterval {
 	NSNumber *refreshIntervalNumber = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey];
-	int refreshInterval = 180;
+	int refreshInterval = 60;
 	if (refreshIntervalNumber) {
 		refreshInterval = [refreshIntervalNumber intValue];
-		refreshInterval = MAX(60, refreshInterval);
+		refreshInterval = MAX(30, refreshInterval);
 	}
 	
 	[self checkForMessagesAtRefreshInterval:refreshInterval];

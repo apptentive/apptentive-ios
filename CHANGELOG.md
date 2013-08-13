@@ -20,6 +20,8 @@ Fixes:
 
 * IOS-173 Make client play nicely with location updates and file protection
     * This was a crasher caused when background apps were started before the phone was unlocked.
+* IOS-176 Select/Copy/Paste menu is broken
+* apptentive-ios#44 Doesn't work well in portrait mode on iPad
 
 2013-06-28 wooster v1.0.0
 -------------------------

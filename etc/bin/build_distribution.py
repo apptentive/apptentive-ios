@@ -50,8 +50,6 @@ class Builder(object):
 	COCOAPODS_DIST = "COCOAPODS_DIST"
 	BINARY_DIST = "BINARY_DIST"
 	TRIGGER_IO_DIST = "TRIGGER_IO_DIST"
-	TITANIUM_DIST = "TITANIUM_DIST"
-	XAMARIN_DIST = "XAMARIN_DIST"
 	build_root = "/tmp/apptentive_connect_build"
 	dist_type = None
 	def __init__(self, verbose=False, dist_type=None):
@@ -59,7 +57,7 @@ class Builder(object):
 			dist_type = self.BINARY_DIST
 		self.verbose = verbose
 		self.dist_type = dist_type
-		if dist_type not in [self.COCOAPODS_DIST, self.BINARY_DIST, self.TRIGGER_IO_DIST, self.TITANIUM_DIST, self.XAMARIN_DIST]:
+		if dist_type not in [self.COCOAPODS_DIST, self.BINARY_DIST, self.TRIGGER_IO_DIST]:
 			log("Unknown dist_type: %s" % dist_type)
 			sys.exit(1)
 	
@@ -121,10 +119,6 @@ class Builder(object):
 				plist[plist_key] = "binary"
 			elif self.dist_type == self.TRIGGER_IO_DIST:
 				plist[plist_key] = "Trigger.io"
-			elif self.dist_type == self.TITANIUM_DIST:
-				plist[plist_key] = "Titanium"
-			elif self.dist_type == self.XAMARIN_DIST:
-				plist[plist_key] = "Xamarin"
 			else:
 				log("Unknown dist_type")
 				return False
@@ -148,10 +142,6 @@ class Builder(object):
 					filename = 'apptentive_ios_sdk-cocoapods-%s.tar.gz' % version
 				elif self.dist_type == self.TRIGGER_IO_DIST:
 					filename = 'apptentive_ios_sdk-trigger_io-%s.tar.gz' % version
-				elif self.dist_type == self.TITANIUM_DIST:
-					filename = 'apptentive_ios_sdk-titanium-%s.tar.gz' % version
-				elif self.dist_type == self.XAMARIN_DIST:
-					filename = 'apptentive_ios_sdk-xamarin-%s.tar.gz' % version
 			tar_command = "tar -zcvf ../%s ." % filename
 			(status, output) = run_command(tar_command, verbose=self.verbose)
 			if status != 0:
@@ -222,7 +212,7 @@ class Builder(object):
 		return run_command(command, verbose=self.verbose)
 
 if __name__ == "__main__":
-	for dist_type in [Builder.BINARY_DIST, Builder.COCOAPODS_DIST, Builder.TRIGGER_IO_DIST, Builder.TITANIUM_DIST]:
+	for dist_type in [Builder.BINARY_DIST, Builder.COCOAPODS_DIST, Builder.TRIGGER_IO_DIST]:
 		builder = Builder(dist_type=dist_type)
 		result = builder.build()
 		if result == True:

@@ -269,9 +269,9 @@ enum {
 		self.window.windowLevel = UIWindowLevelNormal;
 		self.window.userInteractionEnabled = NO;
 		self.window.layer.shouldRasterize = YES;
-		NSString *title = NSLocalizedString(@"Invalid Email Address", @"Invalid email dialog title.");
-		NSString *message = NSLocalizedString(@"That doesn't look like an email address. An email address will help us respond.", @"Invalid email dialog message.");
-		invalidEmailAddressAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"OK", @"OK button title"), nil];
+		NSString *title = ATLocalizedString(@"Invalid Email Address", @"Invalid email dialog title.");
+		NSString *message = ATLocalizedString(@"That doesn't look like an email address. An email address will help us respond.", @"Invalid email dialog message.");
+		invalidEmailAddressAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"OK", @"OK button title"), nil];
 		[invalidEmailAddressAlert show];
 	} else if (self.showEmailAddressField && (!self.emailField.text || [self.emailField.text length] == 0)) {
 		if (noEmailAddressAlert) {
@@ -280,9 +280,9 @@ enum {
 		self.window.windowLevel = UIWindowLevelNormal;
 		self.window.userInteractionEnabled = NO;
 		self.window.layer.shouldRasterize = YES;
-		NSString *title = NSLocalizedString(@"No email address?", @"Lack of email dialog title.");
-		NSString *message = NSLocalizedString(@"An email address will help us respond.", @"Lack of email dialog message.");
-		noEmailAddressAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Send Feedback", @"Send button title"), nil];
+		NSString *title = ATLocalizedString(@"No email address?", @"Lack of email dialog title.");
+		NSString *message = ATLocalizedString(@"An email address will help us respond.", @"Lack of email dialog message.");
+		noEmailAddressAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Send Feedback", @"Send button title"), nil];
 		BOOL useNativeTextField = [noEmailAddressAlert respondsToSelector:@selector(alertViewStyle)];
 		UITextField *field = nil;
 		
@@ -304,7 +304,7 @@ enum {
 		field.keyboardType = UIKeyboardTypeEmailAddress;
 		field.delegate = self;
 		field.autocapitalizationType = UITextAutocapitalizationTypeNone;
-		field.placeholder = NSLocalizedString(@"Email Address", @"Email address popup placeholder text.");
+		field.placeholder = ATLocalizedString(@"Email Address", @"Email address popup placeholder text.");
 		field.tag = kATEmailAlertTextFieldTag;
 		
 		if (!useNativeTextField) {

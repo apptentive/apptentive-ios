@@ -100,7 +100,7 @@ typedef enum {
 	
 	NSUInteger messageCount = [ATData countEntityNamed:@"ATMessage" withPredicate:nil];
 	if (messageCount == 0) {
-		NSString *title = NSLocalizedString(@"Welcome", @"Welcome");
+		NSString *title = ATLocalizedString(@"Welcome", @"Welcome");
 		NSString *body = ATLocalizedString(@"This is our Message Center. If you have questions, suggestions, concerns or just want to get in touch, please send us a message. We love talking with our customers!", @"Placeholder welcome message.");
 		[[ATBackend sharedBackend] sendAutomatedMessageWithTitle:title body:body];
 	}
@@ -830,7 +830,7 @@ typedef enum {
 			}
 			NSString *messageBody = [(ATTextMessage *)message body];
 			if ([[message pendingState] intValue] == ATPendingMessageStateSending) {
-				NSString *sendingText = NSLocalizedString(@"Sending:", @"Sending prefix on messages that are sending");
+				NSString *sendingText = ATLocalizedString(@"Sending:", @"Sending prefix on messages that are sending");
 				NSString *fullText = [NSString stringWithFormat:@"%@ %@", sendingText, messageBody];
 				[textCell.messageText setText:fullText afterInheritingLabelAttributesAndConfiguringWithBlock:^ NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
 					NSRange boldRange = NSMakeRange(0, [sendingText length]);
@@ -847,7 +847,7 @@ typedef enum {
 				textCell.composing = YES;
 				textCell.textLabel.text = @"";
 			} else if ([[message pendingState] intValue] == ATPendingMessageStateError) {
-				NSString *sendingText = NSLocalizedString(@"Error:", @"Sending prefix on messages that are sending");
+				NSString *sendingText = ATLocalizedString(@"Error:", @"Sending prefix on messages that are sending");
 				NSString *fullText = [NSString stringWithFormat:@"%@ %@", sendingText, messageBody];
 				[textCell.messageText setText:fullText afterInheritingLabelAttributesAndConfiguringWithBlock:^ NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
 					NSRange boldRange = NSMakeRange(0, [sendingText length]);

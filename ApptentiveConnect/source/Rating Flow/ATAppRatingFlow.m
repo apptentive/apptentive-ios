@@ -146,7 +146,8 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 }
 #endif
 
-#if TARGET_OS_MAC
+#if TARGET_OS_IPHONE
+#elif TARGET_OS_MAC
 - (void)appDidLaunch:(BOOL)canPromptForRating {
 	[self userDidUseApp];
 	if (canPromptForRating) {

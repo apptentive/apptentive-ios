@@ -8,6 +8,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "ATMessageInputView.h"
+#import "ATBackend.h"
 #import "ATUtilities.h"
 
 UIEdgeInsets insetsForView(UIView *v) {
@@ -50,6 +51,8 @@ UIEdgeInsets insetsForView(UIView *v) {
 	textViewContentInset = UIEdgeInsetsMake(-4, -2, -4, 0);
 	textView.contentInset = textViewContentInset;
 	textView.showsHorizontalScrollIndicator = NO;
+	
+	[self.sendButton setTitle:ATLocalizedString(@"Send", @"Send button title") forState:UIControlStateNormal];
 	
 	[self validateTextField];
 	[self resizeTextViewWithString:textView.text animated:NO];

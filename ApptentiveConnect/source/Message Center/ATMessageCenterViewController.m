@@ -192,6 +192,7 @@ typedef enum {
 		[self relayoutSubviews];
 	});
 	
+	[self.sendPhotoButton setTitle:ATLocalizedString(@"Send Image", @"Send image button title") forState:UIControlStateNormal];
 	self.sendPhotoButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
 	self.sendPhotoButton.layer.cornerRadius = 4;
 	self.sendPhotoButton.layer.shadowColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.2].CGColor;
@@ -205,6 +206,7 @@ typedef enum {
 	[self.sendPhotoButton setTitleShadowColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.2] forState:UIControlStateNormal];
 	[self.sendPhotoButton.titleLabel setShadowOffset:CGSizeMake(0, -1)];
 	
+	[self.cancelButton setTitle:ATLocalizedString(@"Cancel", @"Cancel button title") forState:UIControlStateNormal];
 	self.cancelButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
 	self.cancelButton.layer.cornerRadius = 4;
 	self.cancelButton.layer.shadowColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.2].CGColor;

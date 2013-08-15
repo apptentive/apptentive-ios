@@ -128,6 +128,10 @@ typedef enum {
 	}
 	
 //	self.composerBackgroundView.image = [[ATBackend imageNamed:@"at_inbox_composer_bg"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 0, 29, 19)];
+	[self.poweredByButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
+	[self.poweredByButton setContentEdgeInsets:UIEdgeInsetsMake(0, 10, 0, 0)];
+	[[self.poweredByButton titleLabel] setMinimumFontSize:10];
+	[[self.poweredByButton titleLabel] setAdjustsFontSizeToFitWidth:YES];
 	[self.poweredByButton setTitle:ATLocalizedString(@"Powered By Apptentive", @"Short tagline for Apptentive") forState:UIControlStateNormal];
 	[self.iconButton setImage:[ATBackend imageNamed:@"at_apptentive_icon_small"] forState:UIControlStateNormal];
 	if (![[ATConnect sharedConnection] showTagline]) {

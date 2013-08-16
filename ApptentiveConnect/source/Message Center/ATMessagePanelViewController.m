@@ -221,6 +221,8 @@ enum {
 	} else {
 		titleLabel.text = ATLocalizedString(@"Give Feedback", @"Title of feedback screen.");
 	}
+	titleLabel.adjustsFontSizeToFitWidth = YES;
+	titleLabel.minimumFontSize = 10;
 	titleLabel.textAlignment = UITextAlignmentCenter;
 	titleLabel.textColor = [UIColor colorWithRed:105/256. green:105/256. blue:105/256. alpha:1.0];
 	titleLabel.shadowColor = [UIColor whiteColor];

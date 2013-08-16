@@ -69,8 +69,12 @@
 				// Also don't adjust any custom buttons.
 				if (i != 0 && item.customView != nil && ![item isKindOfClass:[ATCustomButton class]]) {
 					CGRect customFrame = item.customView.frame;
-					customFrame.origin.x += 4.0;
 					customFrame.size.width = MIN(widthAvailable, customFrame.size.width);
+					CGFloat widthDiff = customFrame.origin.x - CGRectGetMaxX(firstItem.customView.frame);
+					if (widthDiff < 0) {
+						// Only adjust the x origin if the label is going to overlap the first button.
+						customFrame.origin.x -= (widthDiff - 3);
+					}
 					item.customView.frame = customFrame;
 				}
 				i++;

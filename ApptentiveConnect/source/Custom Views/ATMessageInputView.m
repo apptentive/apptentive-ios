@@ -8,7 +8,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "ATMessageInputView.h"
-#import "ATBackend.h"
+#import "ATConnect_Private.h"
 #import "ATUtilities.h"
 
 UIEdgeInsets insetsForView(UIView *v) {

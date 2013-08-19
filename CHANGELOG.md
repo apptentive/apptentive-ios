@@ -1,4 +1,4 @@
-2013-07-12 wooster v1.0.1 (in progress)
+2013-08-18 wooster v1.0.1
 -------------------------
 Deprecating the `-addCustomData:withKey:` and `-removeCustomDataWithKey:` methods in `ATConnect`.
 
@@ -16,12 +16,27 @@ In their place, use these new methods, which add custom data about devices and p
 
 Also deprecating the `appName` property on `ATAppRatingFlow`. Now, the display name of the application used in our framework can be set server-side.
 
+Per IOS-144 and IOS-145, we now have much better localizations across many more languages.
+
+We have started on iOS 7 compatibility with IOS-159, IOS-168, and IOS-169. We covered some of the major parts, but there's more to come!
+
 Fixes:
 
+* IOS-144 Get incremental updates of localizable strings for Message Center
+* IOS-145 Get missing strings from surveys localized
+* IOS-159 Spacing between top of email form and the status bar
+* IOS-156 Message Center on Original iPad locks to portrait mode
+* IOS-168 Attaching photo causes crash on iOS 7
+* IOS-169 UITextView metrics changed in iOS 7
 * IOS-173 Make client play nicely with location updates and file protection
     * This was a crasher caused when background apps were started before the phone was unlocked.
+* IOS-174 Initial email address and name not hooked up to person object
+* IOS-175 Add warning if resource bundle isn't found in app
+    * If the app isn't properly integrated, and you run it in the Simulator, this will warn you with an alert.
 * IOS-176 Select/Copy/Paste menu is broken
+* IOS-179 Localization overflow in Message Center feedback form title
 * apptentive-ios#44 Doesn't work well in portrait mode on iPad
+* apptentive-ios#26 More localizations
 
 2013-06-28 wooster v1.0.0
 -------------------------

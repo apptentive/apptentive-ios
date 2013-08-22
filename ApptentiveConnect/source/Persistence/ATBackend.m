@@ -407,7 +407,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 #pragma mark Message Center
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController {
 	NSUInteger messageCount = [ATData countEntityNamed:@"ATMessage" withPredicate:nil];
-	if (messageCount == 0) {
+	if (messageCount == 0 || ![ATConnect sharedConnection].useMessageCenter) {
 		NSString *title = ATLocalizedString(@"Give Feedback", @"First feedback screen title.");
 		NSString *body = [NSString stringWithFormat:ATLocalizedString(@"Please let us know how to make %@ better for you!", @"Feedback screen body. Parameter is the app name."), [self appName]];
 		NSString *placeholder = ATLocalizedString(@"How can we help? (required)", @"First feedback placeholder text.");
@@ -521,7 +521,20 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 		[currentMessagePanelController release], currentMessagePanelController = nil;
 		if (action == ATMessagePanelDidSendMessage) {
 			if (!messagePanelSentMessageAlert) {
-				messagePanelSentMessageAlert = [[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Thanks!", nil) message:ATLocalizedString(@"Your response has been saved in the Message Center, where you'll be able to view replies and send us other messages.", @"Message panel sent message confirmation dialog text") delegate:self cancelButtonTitle:ATLocalizedString(@"Close", @"Close alert view title") otherButtonTitles:ATLocalizedString(@"View Messages", @"View messages button title"), nil];
+				
+				NSString *alertTitle, *alertMessage, *cancelButtonTitle, *otherButtonTitle;
+				if ([[ATConnect sharedConnection] useMessageCenter]) {
+					alertTitle = ATLocalizedString(@"Thanks!", nil);
+					alertMessage = ATLocalizedString(@"Your response has been saved in the Message Center, where you'll be able to view replies and send us other messages.", @"Message panel sent message confirmation dialog text");
+					cancelButtonTitle = ATLocalizedString(@"Close", @"Close alert view title");
+					otherButtonTitle = ATLocalizedString(@"View Messages", @"View messages button title");
+				} else {
+					alertTitle = ATLocalizedString(@"Thanks!", nil);
+					alertMessage = ATLocalizedString(@"We will contact you via email shortly.", @"Message panel sent message but will not show Message Center dialog.");
+					cancelButtonTitle = ATLocalizedString(@"Close", @"Close alert view title");
+					otherButtonTitle = nil;
+				}
+				messagePanelSentMessageAlert = [[UIAlertView alloc] initWithTitle:alertTitle message:alertMessage delegate:self cancelButtonTitle:cancelButtonTitle otherButtonTitles:otherButtonTitle, nil];
 				[messagePanelSentMessageAlert show];
 				
 				[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroThankYouDidShowNotification object:self userInfo:nil];

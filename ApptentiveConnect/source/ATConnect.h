@@ -39,6 +39,7 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 	NSString *initialUserName;
 	NSString *initialUserEmailAddress;
 	NSString *customPlaceholderText;
+	BOOL useMessageCenter;
 }
 @property (nonatomic, copy) NSString *apiKey;
 @property (nonatomic, assign) BOOL showTagline;
@@ -48,6 +49,7 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 /*! Set this if you want some custom text to appear as a placeholder in the
  feedback text box. */
 @property (nonatomic, copy) NSString *customPlaceholderText;
+@property (nonatomic, assign) BOOL useMessageCenter;
 
 + (ATConnect *)sharedConnection;
 

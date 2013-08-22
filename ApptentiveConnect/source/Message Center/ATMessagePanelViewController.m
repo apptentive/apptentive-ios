@@ -435,12 +435,20 @@ enum {
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	self.window.layer.shouldRasterize = NO;
 	if (noEmailAddressAlert && [alertView isEqual:noEmailAddressAlert]) {
-		[noEmailAddressAlert release], noEmailAddressAlert = nil;
-		UITextField *textField = (UITextField *)[alertView viewWithTag:kATEmailAlertTextFieldTag];
+		BOOL useNativeTextField = [noEmailAddressAlert respondsToSelector:@selector(alertViewStyle)];
+		
+		UITextField *textField = nil;
+		if (useNativeTextField) {
+			textField = [noEmailAddressAlert textFieldAtIndex:0];
+		} else {
+			textField = (UITextField *)[noEmailAddressAlert viewWithTag:kATEmailAlertTextFieldTag];
+		}
 		if (textField) {
 			self.emailField.text = textField.text;
-			[self sendMessageAndDismiss];
 		}
+		noEmailAddressAlert.delegate = nil;
+		[noEmailAddressAlert release], noEmailAddressAlert = nil;
+		[self sendMessageAndDismiss];
 	} else if (invalidEmailAddressAlert && [alertView isEqual:invalidEmailAddressAlert]) {
 		self.window.userInteractionEnabled = YES;
 		[invalidEmailAddressAlert release], invalidEmailAddressAlert = nil;

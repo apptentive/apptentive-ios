@@ -18,14 +18,17 @@ Also deprecating the `appName` property on `ATAppRatingFlow`. Now, the display n
 
 Per IOS-144 and IOS-145, we now have much better localizations across many more languages.
 
-We have started on iOS 7 compatibility with IOS-159, IOS-168, and IOS-169. We covered some of the major parts, but there's more to come!
+We have started on iOS 7 compatibility with IOS-157, IOS-159, IOS-164, IOS-168, and IOS-169. We covered some of the major parts, but there's more to come!
 
 Fixes:
 
 * IOS-144 Get incremental updates of localizable strings for Message Center
 * IOS-145 Get missing strings from surveys localized
+* IOS-149 Don't allow nested key/value pairs for custom data.
+* IOS-157 Unread message count not centered in FeedbackDemo
 * IOS-159 Spacing between top of email form and the status bar
 * IOS-156 Message Center on Original iPad locks to portrait mode
+* IOS-164 Message Center background color: white vs. grey
 * IOS-168 Attaching photo causes crash on iOS 7
 * IOS-169 UITextView metrics changed in iOS 7
 * IOS-173 Make client play nicely with location updates and file protection

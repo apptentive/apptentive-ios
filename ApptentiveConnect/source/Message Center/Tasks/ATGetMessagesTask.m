@@ -138,7 +138,6 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 - (BOOL)processResult:(NSDictionary *)jsonMessages {
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
 	NSString *lastMessageID = nil;
-	ATLogDebug(@"messages: %@", jsonMessages);
 	
 	do { // once
 		if (!jsonMessages) break;
@@ -146,6 +145,9 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 		
 		NSArray *messages = [jsonMessages at_safeObjectForKey:@"items"];
 		if (![messages isKindOfClass:[NSArray class]]) break;
+		if (messages.count > 0) {
+			ATLogDebug(@"Apptentive messages: %@", jsonMessages);
+		}
 		
 		BOOL success = YES;
 		for (NSDictionary *messageJSON in messages) {

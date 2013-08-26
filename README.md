@@ -55,7 +55,7 @@ The instructions below are for source integration. For binary releases, see our 
 
 There is a video demoing integration in Xcode 4 here:
 
-http://vimeo.com/23710908
+http://vimeo.com/73020193
 
 Drag the `ApptentiveConnect.xcodeproj` project to your project in Xcode 4 and
 add it as a subproject. You can do the same with a workspace.

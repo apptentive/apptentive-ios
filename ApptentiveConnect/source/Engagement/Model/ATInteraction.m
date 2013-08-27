@@ -20,6 +20,16 @@
 	return [interaction autorelease];
 }
 
+- (NSString *)description {	
+	NSDictionary *description = @{@"identifier" : self.identifier?: [NSNull null],
+						@"priority" : [NSNumber numberWithInt:self.priority]?: [NSNull null],
+						@"type" : self.type?: [NSNull null],
+						@"configuration" : self.configuration?: [NSNull null],
+						@"conditions" : self.conditions?: [NSNull null]};
+	
+	return [description description];
+}
+
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
 		self.identifier = [coder decodeObjectForKey:@"identifier"];

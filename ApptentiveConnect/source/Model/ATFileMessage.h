@@ -9,9 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-#import "ATMessage.h"
+#import "ATAbstractMessage.h"
 #import "ATFileAttachment.h"
 
-@interface ATFileMessage : ATMessage
+@interface ATFileMessage : ATAbstractMessage
 @property (nonatomic, retain) ATFileAttachment *fileAttachment;
 @end

@@ -406,7 +406,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 
 #pragma mark Message Center
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController {
-	NSUInteger messageCount = [ATData countEntityNamed:@"ATMessage" withPredicate:nil];
+	NSUInteger messageCount = [ATData countEntityNamed:@"ATAbstractMessage" withPredicate:nil];
 	if (messageCount == 0 || ![ATConnect sharedConnection].useMessageCenter) {
 		NSString *title = ATLocalizedString(@"Give Feedback", @"First feedback screen title.");
 		NSString *body = [NSString stringWithFormat:ATLocalizedString(@"Please let us know how to make %@ better for you!", @"Feedback screen body. Parameter is the app name."), [self appName]];
@@ -949,7 +949,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 			return;
 		}
 		NSFetchRequest *request = [[NSFetchRequest alloc] init];
-		[request setEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:[self managedObjectContext]]];
+		[request setEntity:[NSEntityDescription entityForName:@"ATAbstractMessage" inManagedObjectContext:[self managedObjectContext]]];
 		[request setFetchBatchSize:20];
 		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
 		[request setSortDescriptors:@[sortDescriptor]];

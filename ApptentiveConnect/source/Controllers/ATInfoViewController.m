@@ -174,7 +174,7 @@ enum {
 		} else if ([task isKindOfClass:[ATMessageTask class]]) {
 			ATMessageTask *messageTask = (ATMessageTask *)task;
 			NSString *messageID = [messageTask pendingMessageID];
-			ATMessage *message = [ATMessage findMessageWithPendingID:messageID];
+			ATAbstractMessage *message = [ATAbstractMessage findMessageWithPendingID:messageID];
 			if ([message isKindOfClass:[ATTextMessage class]]) {
 				ATTextMessage *textMessage = (ATTextMessage *)message;
 				label.text = textMessage.body;

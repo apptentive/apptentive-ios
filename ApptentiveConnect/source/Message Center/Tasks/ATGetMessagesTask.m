@@ -10,7 +10,7 @@
 
 #import "ATAutomatedMessage.h"
 #import "ATBackend.h"
-#import "ATMessage.h"
+#import "ATAbstractMessage.h"
 #import "ATConversationUpdater.h"
 #import "ATTextMessage.h"
 #import "ATWebClient.h"
@@ -33,7 +33,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		NSString *messageID = [defaults objectForKey:ATMessagesLastRetrievedMessageIDPreferenceKey];
 		if (messageID) {
-			lastMessage = [[ATMessage findMessageWithID:messageID] retain];
+			lastMessage = [[ATAbstractMessage findMessageWithID:messageID] retain];
 		}
 	}
 	return self;
@@ -153,10 +153,10 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 		for (NSDictionary *messageJSON in messages) {
 			NSString *pendingMessageID = [messageJSON at_safeObjectForKey:@"nonce"];
 			NSString *messageID = [messageJSON at_safeObjectForKey:@"id"];
-			ATMessage *message = nil;
-			message = [ATMessage findMessageWithPendingID:pendingMessageID];
+			ATAbstractMessage *message = nil;
+			message = [ATAbstractMessage findMessageWithPendingID:pendingMessageID];
 			if (!message) {
-				message = [ATMessage findMessageWithID:messageID];
+				message = [ATAbstractMessage findMessageWithID:messageID];
 			}
 			if (!message) {
 				NSString *type = [messageJSON at_safeObjectForKey:@"type"];

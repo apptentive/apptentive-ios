@@ -8,7 +8,7 @@
 
 #import "ATAPIRequest.h"
 #import "ATTask.h"
-#import "ATMessage.h"
+#import "ATAbstractMessage.h"
 
 @interface ATMessageTask : ATTask <ATAPIRequestDelegate> {
 @private

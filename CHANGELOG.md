@@ -1,3 +1,22 @@
+2013-08-XX wooster v1.0.2
+-------------------------
+This release focuses on support for Enterprise Surveys.
+
+These are mostly changes on the web side of things, but there are also some client changes:
+
+* Moved survey responses into Core Data.
+* IOS-119 Implement short v. long survey text response type
+* IOS-116 Implement new survey submission endpoint
+
+Other changes for IOS 7 forward compatibility:
+
+* IOS-181 App hangs in iOS 7 after "No email Address?" input field alert.
+
+Other fixes:
+
+* apptentive-ios#45 Renames `ATMessage` to `ATAbstractMessage` because of naming conflict with `AirTraffic.framework`
+
+
 2013-08-18 wooster v1.0.1
 -------------------------
 Deprecating the `-addCustomData:withKey:` and `-removeCustomDataWithKey:` methods in `ATConnect`.

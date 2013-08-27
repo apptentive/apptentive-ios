@@ -10,7 +10,7 @@
 
 #import "ATConversation.h"
 #import "ATDeviceInfo.h"
-#import "ATMessage.h"
+#import "ATAbstractMessage.h"
 #import "ATPersonInfo.h"
 
 @interface ATWebClient (MessageCenter)
@@ -19,8 +19,8 @@
 
 - (ATAPIRequest *)requestForUpdatingDevice:(ATDeviceInfo *)deviceInfo;
 - (ATAPIRequest *)requestForUpdatingPerson:(ATPersonInfo *)personInfo;
-- (ATAPIRequest *)requestForPostingMessage:(ATMessage *)message;
-- (ATAPIRequest *)requestForRetrievingMessagesSinceMessage:(ATMessage *)message;
+- (ATAPIRequest *)requestForPostingMessage:(ATAbstractMessage *)message;
+- (ATAPIRequest *)requestForRetrievingMessagesSinceMessage:(ATAbstractMessage *)message;
 @end
 
 void ATWebClient_MessageCenter_Bootstrap();

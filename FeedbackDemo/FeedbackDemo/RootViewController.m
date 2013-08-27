@@ -11,12 +11,14 @@
 #import "ATConnect.h"
 #import "ATAppRatingFlow.h"
 #import "ATSurveys.h"
+#import "ATEngagement.h"
 #import "defines.h"
 
 enum kRootTableSections {
 	kMessageCenterSection,
 	kRatingSection,
 	kSurveySection,
+	kEngagementSection,
 	kSectionCount
 };
 
@@ -171,6 +173,10 @@ enum kRootTableSections {
 			
 			cell.accessoryView = [unreadLabel autorelease];
 		}
+	} else if (indexPath.section == kEngagementSection) {
+		if (indexPath.row == 0) {
+			cell.textLabel.text = @"app.launch";
+		}
 	}
     
 	return cell;
@@ -193,7 +199,10 @@ enum kRootTableSections {
 		if (indexPath.row == 0) {
 			[[ATConnect sharedConnection] presentMessageCenterFromViewController:self];
 		}
+	} else if (indexPath.section == kEngagementSection) {
+		[ATEngagement engage:[tableView cellForRowAtIndexPath:indexPath].textLabel.text];
 	}
+	
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -203,6 +212,8 @@ enum kRootTableSections {
 		title = @"Ratings";
 	} else if (section == kSurveySection) {
 		title = @"Surveys";
+	} else if (section == kEngagementSection) {
+		title = @"Engagement";
 	}
 	return title;
 }
@@ -212,6 +223,8 @@ enum kRootTableSections {
 	if (section == kRatingSection) {
 		title = nil;
 	} else if (section == kSurveySection) {
+		title = nil;
+	} else if (section == kEngagementSection) {
 		title = [NSString stringWithFormat:@"ApptentiveConnect v%@", kATConnectVersionString];
 	}
 	return title;

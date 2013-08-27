@@ -289,6 +289,9 @@
 		584647C617C426E800BFD6E6 /* ATEngagementManifestParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 584647C417C426E800BFD6E6 /* ATEngagementManifestParser.h */; };
 		584647C717C426E800BFD6E6 /* ATEngagementManifestParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 584647C517C426E800BFD6E6 /* ATEngagementManifestParser.m */; };
 		584647C817C426E800BFD6E6 /* ATEngagementManifestParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 584647C517C426E800BFD6E6 /* ATEngagementManifestParser.m */; };
+		586990BE17CD21C100F5BDFC /* ATEngagement.h in Headers */ = {isa = PBXBuildFile; fileRef = 586990BC17CD21C100F5BDFC /* ATEngagement.h */; };
+		586990BF17CD21C100F5BDFC /* ATEngagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 586990BD17CD21C100F5BDFC /* ATEngagement.m */; };
+		586990C017CD21C100F5BDFC /* ATEngagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 586990BD17CD21C100F5BDFC /* ATEngagement.m */; };
 		5898DF8C17C2E0CE0048F11F /* ATEngagementGetManifestTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 5898DF8A17C2E0CE0048F11F /* ATEngagementGetManifestTask.h */; };
 		5898DF8D17C2E0CE0048F11F /* ATEngagementGetManifestTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 5898DF8B17C2E0CE0048F11F /* ATEngagementGetManifestTask.m */; };
 		5898DF8E17C2E0CE0048F11F /* ATEngagementGetManifestTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 5898DF8B17C2E0CE0048F11F /* ATEngagementGetManifestTask.m */; };
@@ -559,6 +562,8 @@
 		49F8AFFE16CC56570070FFEA /* ATEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATEvent.m; sourceTree = "<group>"; };
 		584647C417C426E800BFD6E6 /* ATEngagementManifestParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATEngagementManifestParser.h; path = Engagement/Model/ATEngagementManifestParser.h; sourceTree = "<group>"; };
 		584647C517C426E800BFD6E6 /* ATEngagementManifestParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATEngagementManifestParser.m; path = Engagement/Model/ATEngagementManifestParser.m; sourceTree = "<group>"; };
+		586990BC17CD21C100F5BDFC /* ATEngagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATEngagement.h; path = Engagement/ATEngagement.h; sourceTree = "<group>"; };
+		586990BD17CD21C100F5BDFC /* ATEngagement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATEngagement.m; path = Engagement/ATEngagement.m; sourceTree = "<group>"; };
 		5898DF8A17C2E0CE0048F11F /* ATEngagementGetManifestTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATEngagementGetManifestTask.h; path = source/Engagement/Tasks/ATEngagementGetManifestTask.h; sourceTree = SOURCE_ROOT; };
 		5898DF8B17C2E0CE0048F11F /* ATEngagementGetManifestTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATEngagementGetManifestTask.m; path = source/Engagement/Tasks/ATEngagementGetManifestTask.m; sourceTree = SOURCE_ROOT; };
 		58C5921F17C55ADD000FA428 /* ATEngagementBackend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATEngagementBackend.h; path = Engagement/Persistence/ATEngagementBackend.h; sourceTree = "<group>"; };
@@ -1132,6 +1137,8 @@
 		5898DF8817C2D8E60048F11F /* Engagement */ = {
 			isa = PBXGroup;
 			children = (
+				586990BC17CD21C100F5BDFC /* ATEngagement.h */,
+				586990BD17CD21C100F5BDFC /* ATEngagement.m */,
 				584647C917C426ED00BFD6E6 /* Model */,
 				58C5921E17C55A83000FA428 /* Persistence */,
 				5898DF8917C2D8F70048F11F /* URL Loading */,
@@ -1277,6 +1284,7 @@
 				58C5922117C55ADD000FA428 /* ATEngagementBackend.h in Headers */,
 				58C5922B17C59BE3000FA428 /* ATWebClient+EngagementAdditions.h in Headers */,
 				58EEBE2317C7E8150039A0F5 /* ATInteraction.h in Headers */,
+				586990BE17CD21C100F5BDFC /* ATEngagement.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1545,6 +1553,7 @@
 				58C5922217C55ADD000FA428 /* ATEngagementBackend.m in Sources */,
 				58C5922C17C59BE3000FA428 /* ATWebClient+EngagementAdditions.m in Sources */,
 				58EEBE2417C7E8150039A0F5 /* ATInteraction.m in Sources */,
+				586990BF17CD21C100F5BDFC /* ATEngagement.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1608,6 +1617,7 @@
 				58C5922317C55ADD000FA428 /* ATEngagementBackend.m in Sources */,
 				58C5922D17C59BE3000FA428 /* ATWebClient+EngagementAdditions.m in Sources */,
 				58EEBE2517C7E8150039A0F5 /* ATInteraction.m in Sources */,
+				586990C017CD21C100F5BDFC /* ATEngagement.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

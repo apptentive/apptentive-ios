@@ -119,7 +119,9 @@ enum {
 			answer.identifier = question.identifier;
 			answer.response = question.answerText;
 			
-			answers[answer.identifier] = answer.response;
+			if (answer.response) {
+				answers[answer.identifier] = answer.response;
+			}
 			[answer release], answer = nil;
 		} else if (question.type == ATSurveyQuestionTypeMultipleChoice) {
 			if ([question.selectedAnswerChoices count]) {
@@ -128,7 +130,9 @@ enum {
 				answer.identifier = question.identifier;
 				answer.response = selectedAnswer.identifier;
 				
-				answers[answer.identifier] = answer.response;
+				if (answer.response) {
+					answers[answer.identifier] = answer.response;
+				}
 				[answer release], answer = nil;
 			}
 		} else if (question.type == ATSurveyQuestionTypeMultipleSelect) {
@@ -141,7 +145,9 @@ enum {
 				}
 				answer.response = responses;
 				
-				answers[answer.identifier] = answer.response;
+				if (answer.response) {
+					answers[answer.identifier] = answer.response;
+				}
 				[answer release], answer = nil;
 			}
 		}

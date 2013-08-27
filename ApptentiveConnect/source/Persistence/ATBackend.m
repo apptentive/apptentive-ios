@@ -35,6 +35,7 @@
 #import "ATTextMessage.h"
 #import "ATLog.h"
 #import "ATPersonUpdater.h"
+#import "ATEngagementBackend.h"
 
 typedef NS_ENUM(NSInteger, ATBackendState){
 	ATBackendStateStarting,
@@ -824,6 +825,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	
 	// One-shot actions at startup.
 	[self performSelector:@selector(checkForProperConfiguration) withObject:nil afterDelay:1];
+	[self performSelector:@selector(checkForEngagementManifest) withObject:nil afterDelay:3];
 	[self performSelector:@selector(checkForSurveys) withObject:nil afterDelay:4];
 	[self performSelector:@selector(updateDeviceIfNeeded) withObject:nil afterDelay:7];
 	[self performSelector:@selector(checkForMessages) withObject:nil afterDelay:8];
@@ -883,6 +885,15 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 			return;
 		}
 		[ATSurveys checkForAvailableSurveys];
+	}
+}
+
+- (void)checkForEngagementManifest {
+	@autoreleasepool {
+		if (![self isReady]) {
+			return;
+		}
+		[[ATEngagementBackend sharedBackend] checkForEngagementManifest];
 	}
 }
 

@@ -10,19 +10,4 @@
 
 @interface ATConnect ()
 - (void)feedbackControllerDidDismiss;
-- (NSDictionary *)customData;
-
-/*!
- * Returns the NSBundle corresponding to the bundle containing ATConnect's
- * images, xibs, strings files, etc.
- */
-+ (NSBundle *)resourceBundle;
-
-#if TARGET_OS_IPHONE
-- (void)presentIntroDialogFromViewController:(UIViewController *)viewController;
-#endif
 @end
-
-/*! Replacement for NSLocalizedString within ApptentiveConnect. Pulls
- localized strings out of the resource bundle. */
-extern NSString *ATLocalizedString(NSString *key, NSString *comment);

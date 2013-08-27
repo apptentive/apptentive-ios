@@ -18,18 +18,8 @@
 @synthesize window=_window;
 
 @synthesize navigationController=_navigationController;
-- (void)resetApptentiveRatings {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[defaults removeObjectForKey:@"ATAppRatingFlowRatedAppKey"];
-	[defaults removeObjectForKey:@"ATAppRatingFlowDeclinedToRateThisVersionKey"];
-	[defaults removeObjectForKey:@"ATAppRatingFlowUserDislikesThisVersionKey"];
-	[defaults removeObjectForKey:@"ATAppRatingFlowLastUsedVersionKey"];
-	[defaults removeObjectForKey:@"ATAppRatingFlowLastPromptDateKey"];
-	[defaults synchronize];
-}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-	[self resetApptentiveRatings];
 	// Override point for customization after application launch.
 	// Add the navigation controller's view to the window and display.
 	if ([self.window respondsToSelector:@selector(setRootViewController:)]) {
@@ -39,10 +29,10 @@
 	}
 	[self.window makeKeyAndVisible];
 	[[ATConnect sharedConnection] setApiKey:kApptentiveAPIKey];
-	[[ATConnect sharedConnection] setShouldUseMessageCenter:YES];
+	ATAppRatingFlow *ratingFlow = [ATAppRatingFlow sharedRatingFlowWithAppID:kApptentiveAppID];
+	[ratingFlow appDidLaunch:YES viewController:self.navigationController];
 	
-	ATAppRatingFlow *flow = [ATAppRatingFlow sharedRatingFlowWithAppID:kApptentiveAppID];
-	[flow showRatingFlowFromViewControllerIfConditionsAreMet:self.navigationController];
+	[ATSurveys checkForAvailableSurveys];
 	
 	return YES;
 }
@@ -71,7 +61,7 @@
 	/*
 	 Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 	 */
-	[[ATAppRatingFlow sharedRatingFlow] showRatingFlowFromViewControllerIfConditionsAreMet:self.navigationController];
+	[[ATAppRatingFlow sharedRatingFlowWithAppID:kApptentiveAppID] appDidEnterForeground:YES viewController:self.navigationController];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -83,8 +73,8 @@
 }
 
 - (void)dealloc {
-	[_window release], _window = nil;
-	[_navigationController release], _navigationController = nil;
+	[_window release];
+	[_navigationController release];
 	[super dealloc];
 }
 @end

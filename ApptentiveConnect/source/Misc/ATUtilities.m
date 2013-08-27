@@ -132,18 +132,21 @@ static NSDateFormatter *dateFormatter = nil;
 + (UIImage *)imageByScalingImage:(UIImage *)image toSize:(CGSize)size scale:(CGFloat)contentScale fromITouchCamera:(BOOL)isFromITouchCamera {
 	UIImage *result = nil;
 	CGImageRef imageRef = nil;
-	size_t samplesPerPixel, bytesPerRow, bitsPerComponent;
+	CGImageAlphaInfo alphaInfo = kCGImageAlphaNone;
+	size_t samplesPerPixel, bytesPerRow;
 	CGFloat newHeight, newWidth;
 	CGRect newRect;
 	CGContextRef bitmapContext = nil;
 	CGImageRef newRef = nil;
 	CGAffineTransform transform = CGAffineTransformIdentity;
-	CGImageAlphaInfo newAlphaInfo;
-	CGColorSpaceRef colorSpaceRef;
 	
 	imageRef = [image CGImage];
+	alphaInfo = CGImageGetAlphaInfo(imageRef);
 	
-	samplesPerPixel = 4;
+	samplesPerPixel = CGImageGetBitsPerPixel(imageRef)/CGImageGetBitsPerComponent(imageRef);
+	if (alphaInfo == kCGImageAlphaNone) {
+		samplesPerPixel++;
+	}
 	
 	size = CGSizeMake(floor(size.width), floor(size.height));
 	newWidth = size.width;
@@ -184,13 +187,17 @@ static NSDateFormatter *dateFormatter = nil;
 	}
 	newRect = CGRectIntegral(CGRectMake(0.0, 0.0, newWidth, newHeight));
 	
-	bytesPerRow = samplesPerPixel * newWidth;
-	newAlphaInfo = kCGImageAlphaPremultipliedFirst;
-	bitsPerComponent = 8;
-	colorSpaceRef = CGColorSpaceCreateDeviceRGB();
+	// 16-byte aligned, Quartz book p. 353
+	bytesPerRow = ((size_t)(samplesPerPixel * newWidth) + 15) & ~15;
 	
-	bitmapContext = CGBitmapContextCreate(NULL, newWidth, newHeight, bitsPerComponent, bytesPerRow, colorSpaceRef, newAlphaInfo);
-	CGColorSpaceRelease(colorSpaceRef), colorSpaceRef = NULL;
+	CGImageAlphaInfo newAlphaInfo;
+	if (alphaInfo == kCGImageAlphaNone) {
+		newAlphaInfo = kCGImageAlphaNoneSkipLast;
+	} else {
+		newAlphaInfo = kCGImageAlphaPremultipliedFirst;
+	}
+	
+	bitmapContext = CGBitmapContextCreate(NULL, newWidth, newHeight, CGImageGetBitsPerComponent(imageRef), bytesPerRow, CGImageGetColorSpace(imageRef), newAlphaInfo);
 	CGContextSetInterpolationQuality(bitmapContext, kCGInterpolationHigh);
 	
 	// The iPhone tries to be "smart" about image orientation, and messes it
@@ -248,6 +255,32 @@ static NSDateFormatter *dateFormatter = nil;
 	return result;
 }
 #elif TARGET_OS_MAC
++ (NSString *)currentMachineName {
+	char modelBuffer[256];
+	size_t sz = sizeof(modelBuffer);
+	NSString *result = @"Unknown";
+	if (0 == sysctlbyname("hw.model", modelBuffer, &sz, NULL, 0)) {
+		modelBuffer[sizeof(modelBuffer) - 1] = 0;
+		result = [NSString stringWithUTF8String:modelBuffer];
+	}
+	return result;
+}
+
++ (NSString *)currentSystemName {
+	NSProcessInfo *info = [NSProcessInfo processInfo];
+	NSString *osName = [info operatingSystemName];
+	
+	if ([osName isEqualToString:@"NSMACHOperatingSystem"]) {
+		osName = @"Mac OS X";
+	}
+	
+	return osName;
+}
+
++ (NSString *)currentSystemVersion {
+	NSProcessInfo *info = [NSProcessInfo processInfo];
+	return [info operatingSystemVersionString];
+}
 
 + (NSData *)pngRepresentationOfImage:(NSImage *)image {
 	CGImageRef imageRef = [image CGImageForProposedRect:NULL context:NULL hints:nil];
@@ -258,45 +291,6 @@ static NSDateFormatter *dateFormatter = nil;
 }
 #endif
 
-+ (NSString *)currentMachineName {
-#if TARGET_OS_IPHONE
-	return [[UIDevice currentDevice] model];
-#elif TARGET_OS_MAC
-	char modelBuffer[256];
-	size_t sz = sizeof(modelBuffer);
-	NSString *result = @"Unknown";
-	if (0 == sysctlbyname("hw.model", modelBuffer, &sz, NULL, 0)) {
-		modelBuffer[sizeof(modelBuffer) - 1] = 0;
-		result = [NSString stringWithUTF8String:modelBuffer];
-	}
-	return result;
-#endif
-}
-+ (NSString *)currentSystemName {
-#if TARGET_OS_IPHONE
-	return [[UIDevice currentDevice] systemName];
-#elif TARGET_OS_MAC
-	NSProcessInfo *info = [NSProcessInfo processInfo];
-	NSString *osName = [info operatingSystemName];
-	
-	if ([osName isEqualToString:@"NSMACHOperatingSystem"]) {
-		osName = @"Mac OS X";
-	}
-	
-	return osName;
-#endif
-}
-
-+ (NSString *)currentSystemVersion {
-#if TARGET_OS_PHONE
-	return [[UIDevice currentDevice] systemVersion];
-#elif TARGET_OS_MAC
-	NSProcessInfo *info = [NSProcessInfo processInfo];
-	return [info operatingSystemVersionString];
-#endif
-}
-
-
 + (NSString *)stringByEscapingForURLArguments:(NSString *)string {
 	CFStringRef result = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)string, NULL, (CFStringRef)@"%:/?#[]@!$&'()*+,;=", kCFStringEncodingUTF8);
 	return [NSMakeCollectable(result) autorelease];
@@ -304,9 +298,10 @@ static NSDateFormatter *dateFormatter = nil;
 
 + (NSString *)randomStringOfLength:(NSUInteger)length {
 	static NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+	srandomdev();
 	NSMutableString *result = [NSMutableString stringWithString:@""];
 	for (NSUInteger i = 0; i < length; i++) {
-		[result appendFormat:@"%c", [letters characterAtIndex:arc4random()%[letters length]]];
+		[result appendFormat:@"%c", [letters characterAtIndex:random()%[letters length]]];
 	}
 	return result;
 }
@@ -545,117 +540,6 @@ static NSDateFormatter *dateFormatter = nil;
 		return buildNumberString;
 	}
 }
-
-+ (NSTimeInterval)maxAgeFromCacheControlHeader:(NSString *)cacheControl {
-	if (cacheControl == nil || [cacheControl rangeOfString:@"max-age"].location == NSNotFound) {
-		return 0;
-	}
-	NSTimeInterval maxAge = 0;
-	NSScanner *scanner = [[NSScanner alloc] initWithString:[cacheControl lowercaseString]];
-	[scanner scanUpToString:@"max-age" intoString:NULL];
-	if ([scanner scanString:@"max-age" intoString:NULL] && [scanner scanString:@"=" intoString:NULL]) {
-		if (![scanner scanDouble:&maxAge]) {
-			maxAge = 0;
-		}
-	}
-	[scanner release], scanner = nil;
-	return maxAge;
-}
-
-+ (BOOL)dictionary:(NSDictionary *)a isEqualToDictionary:(NSDictionary *)b {
-	BOOL isEqual = NO;
-	
-	do { // once
-		if (a == b) {
-			isEqual = YES;
-			break;
-		}
-		if ((a == nil && b != nil) || (a != nil && b == nil)) {
-			break;
-		}
-		if ([a count] != [b count]) {
-			break;
-		}
-		for (NSObject *keyA in a) {
-			NSObject *valueB = [b objectForKey:keyA];
-			if (valueB == nil) {
-				goto done;
-			}
-			NSObject *valueA = [a objectForKey:keyA];
-			if ([valueA isKindOfClass:[NSDictionary class]] && [valueB isKindOfClass:[NSDictionary class]]) {
-				BOOL deepEquals = [ATUtilities dictionary:(NSDictionary *)valueA isEqualToDictionary:(NSDictionary *)valueB];
-				if (!deepEquals) {
-					goto done;
-				}
-			} else if ([valueA isKindOfClass:[NSArray class]] && [valueB isKindOfClass:[NSArray class]])  {
-				BOOL deepEquals = [ATUtilities array:(NSArray *)valueA isEqualToArray:(NSArray *)valueB];
-				if (!deepEquals) {
-					goto done;
-				}
-			} else if (![valueA isEqual:valueB]) {
-				goto done;
-			}
-		}
-		isEqual = YES;
-	} while (NO);
-
-done:
-	return isEqual;
-}
-
-+ (BOOL)array:(NSArray *)a isEqualToArray:(NSArray *)b {
-	BOOL isEqual = NO;
-	
-	do { // once
-		if (a == b) {
-			isEqual = YES;
-			break;
-		}
-		if ((a == nil && b != nil) || (a != nil && b == nil)) {
-			break;
-		}
-		if ([a count] != [b count]) {
-			break;
-		}
-		NSUInteger index = 0;
-		for (NSObject *valueA in a) {
-			NSObject *valueB = [b objectAtIndex:index];
-			if ([valueA isKindOfClass:[NSDictionary class]] && [valueB isKindOfClass:[NSDictionary class]]) {
-				BOOL deepEquals = [ATUtilities dictionary:(NSDictionary *)valueA isEqualToDictionary:(NSDictionary *)valueB];
-				if (!deepEquals) {
-					goto done;
-				}
-			} else if ([valueA isKindOfClass:[NSArray class]] && [valueB isKindOfClass:[NSArray class]])  {
-				BOOL deepEquals = [ATUtilities array:(NSArray *)valueA isEqualToArray:(NSArray *)valueB];
-				if (!deepEquals) {
-					goto done;
-				}
-			} else if (![valueA isEqual:valueB]) {
-				goto done;
-			}
-			index++;
-		}
-		isEqual = YES;
-	} while (NO);
-	
-done:
-	return isEqual;
-}
-
-
-#if TARGET_OS_IPHONE
-+ (UIEdgeInsets)edgeInsetsOfView:(UIView *)view {
-	UIEdgeInsets insets = UIEdgeInsetsZero;
-	insets.left = view.frame.origin.x;
-	insets.top = view.frame.origin.y;
-	if (view.superview) {
-		UIView *superview = view.superview;
-		insets.bottom = superview.bounds.size.height - view.bounds.size.height - insets.top;
-		insets.right = superview.bounds.size.width - view.bounds.size.width - insets.left;
-	}
-	return insets;
-}
-#endif
 @end
 
 
@@ -672,7 +556,6 @@ done:
 		}
 	}
 }
-
 @end
 
 extern CGRect ATCGRectOfEvenSize(CGRect inRect) {
@@ -686,34 +569,4 @@ extern CGRect ATCGRectOfEvenSize(CGRect inRect) {
 	}
 	
 	return result;
-}
-
-CGSize ATThumbnailSizeOfMaxSize(CGSize imageSize, CGSize maxSize) {
-    CGFloat ratio = MIN(maxSize.width/imageSize.width, maxSize.height/imageSize.height);
-	if (ratio < 1.0) {
-		return CGSizeMake(floor(ratio * imageSize.width), floor(ratio * imageSize.height));
-	} else {
-		return imageSize;
-	}
-}
-
-CGRect ATThumbnailCropRectForThumbnailSize(CGSize imageSize, CGSize thumbnailSize) {
-    CGFloat cropRatio = thumbnailSize.width/thumbnailSize.height;
-	CGFloat sizeRatio = imageSize.width/imageSize.height;
-	
-	if (cropRatio < sizeRatio) {
-		// Shrink width. eg. 100:100 < 1600:1200
-		CGFloat croppedWidth = imageSize.width * (1.0/sizeRatio);
-		CGFloat originX = floor((imageSize.width - croppedWidth)/2.0);
-		
-		return CGRectMake(originX, 0, croppedWidth, imageSize.height);
-	} else if (cropRatio > sizeRatio) {
-		// Shrink height. eg. 100:100 > 1200:1600
-		CGFloat croppedHeight = floor(imageSize.height * sizeRatio);
-		CGFloat originY = floor((imageSize.height - croppedHeight)/2.0);
-		
-		return CGRectMake(0, originY, imageSize.width, croppedHeight);
-	} else {
-		return CGRectMake(0, 0, imageSize.width, imageSize.height);
-	}
 }

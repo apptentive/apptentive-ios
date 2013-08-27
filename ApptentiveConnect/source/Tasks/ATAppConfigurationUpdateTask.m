@@ -34,9 +34,6 @@
 	if ([[ATBackend sharedBackend] apiKey] == nil) {
 		return NO;
 	}
-	if (![ATConversationUpdater conversationExists]) {
-		return NO;
-	}
 	return YES;
 }
 

@@ -24,8 +24,8 @@
 @property (nonatomic, assign) BOOL failed;
 @property (nonatomic, assign) NSUInteger failureCount;
 
-@property (nonatomic, copy) NSString *lastErrorTitle;
-@property (nonatomic, copy) NSString *lastErrorMessage;
+@property (nonatomic, retain) NSString *lastErrorTitle;
+@property (nonatomic, retain) NSString *lastErrorMessage;
 /*! Should we stop the task queue if this task fails, or just throw it away? Defaults to stopping task queue (failureOkay == NO). */
 @property (nonatomic, assign, getter=isFailureOkay) BOOL failureOkay;
 
@@ -38,6 +38,4 @@
 - (void)cleanup;
 - (float)percentComplete;
 - (NSString *)taskName;
-
-- (NSString *)taskDescription;
 @end

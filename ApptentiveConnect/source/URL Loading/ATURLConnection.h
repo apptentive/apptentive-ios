@@ -26,15 +26,12 @@
 	NSMutableDictionary *headers;
 	NSString *HTTPMethod;
 	NSData *HTTPBody;
-	NSInputStream *HTTPBodyStream;
 	
 	int statusCode;
 	BOOL failedAuthentication;
 	NSError *connectionError;
 	
 	float percentComplete;
-	
-	NSTimeInterval expiresMaxAge;
 }
 @property (nonatomic, readonly, copy) NSURL *targetURL;
 @property (nonatomic, assign) NSObject<ATURLConnectionDelegate> *delegate;
@@ -49,16 +46,13 @@
 @property (nonatomic, readonly) BOOL failedAuthentication;
 @property (nonatomic, copy) NSError *connectionError;
 @property (nonatomic, assign) float percentComplete;
-@property (nonatomic, readonly) NSTimeInterval expiresMaxAge;
 
 /*! The delegate for this class is a weak reference. */
 - (id)initWithURL:(NSURL *)url delegate:(NSObject<ATURLConnectionDelegate> *)aDelegate;
 - (id)initWithURL:(NSURL *)url;
 - (void)setValue:(NSString *)value forHTTPHeaderField:(NSString *)field;
-- (void)removeHTTPHeaderField:(NSString *)field;
 - (void)setHTTPMethod:(NSString *)method;
 - (void)setHTTPBody:(NSData *)body;
-- (void)setHTTPBodyStream:(NSInputStream *)HTTPBodyStream;
 
 - (void)start;
 
@@ -68,7 +62,6 @@
 - (NSData *)responseData;
 
 - (NSString *)requestAsString;
-- (NSDictionary *)headers;
 @end
 
 

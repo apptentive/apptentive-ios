@@ -24,17 +24,17 @@ typedef enum {
 
 @class ATSurveyQuestionAnswer;
 
-@interface ATSurveyQuestion : NSObject <NSCoding> {
+@interface ATSurveyQuestion : NSObject {
 @private
 }
 @property (nonatomic, assign) ATSurveyQuestionType type;
-@property (nonatomic, copy) NSString *identifier;
+@property (nonatomic, retain) NSString *identifier;
 @property (nonatomic, getter=responseIsRequired) BOOL responseRequired;
-@property (nonatomic, copy) NSString *questionText;
-@property (nonatomic, copy) NSString *instructionsText;
-@property (nonatomic, copy) NSString *value;
+@property (nonatomic, retain) NSString *questionText;
+@property (nonatomic, retain) NSString *instructionsText;
+@property (nonatomic, retain) NSString *value;
 @property (nonatomic, readonly) NSMutableArray *answerChoices;
-@property (nonatomic, copy) NSString *answerText;
+@property (nonatomic, retain) NSString *answerText;
 // If this is a multiple choice or multiple select question:
 @property (nonatomic, retain) NSMutableArray *selectedAnswerChoices;
 @property (nonatomic, assign) NSUInteger minSelectionCount;
@@ -45,13 +45,11 @@ typedef enum {
 - (void)addSelectedAnswerChoice:(ATSurveyQuestionAnswer *)answer;
 - (void)removeSelectedAnswerChoice:(ATSurveyQuestionAnswer *)answer;
 - (ATSurveyQuestionValidationErrorType)validateAnswer;
-
-- (void)reset;
 @end
 
-@interface ATSurveyQuestionAnswer : NSObject <NSCoding> {
+@interface ATSurveyQuestionAnswer : NSObject {
 @private
 }
-@property (nonatomic, copy) NSString *identifier;
-@property (nonatomic, copy) NSString *value;
+@property (nonatomic, retain) NSString *identifier;
+@property (nonatomic, retain) NSString *value;
 @end

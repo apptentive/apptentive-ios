@@ -7,12 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-
 #import "ATWebClient.h"
 
-@class ATAPIRequest, ATMetric, ATEvent;
+@class ATAPIRequest, ATMetric;
 
 @interface ATWebClient (Metrics)
 - (ATAPIRequest *)requestForSendingMetric:(ATMetric *)metric;
-- (ATAPIRequest *)requestForSendingEvent:(ATEvent *)event;
 @end

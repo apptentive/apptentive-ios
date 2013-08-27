@@ -9,7 +9,6 @@
 #import "ATSimpleImageViewController.h"
 #import "ATCenteringImageScrollView.h"
 #import "ATConnect.h"
-#import "ATConnect_Private.h"
 #import "ATFeedback.h"
 #import "ATFeedbackController.h"
 
@@ -27,22 +26,26 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 @synthesize containerView;
 @synthesize cameraButtonItem;
 
-- (id)initWithDelegate:(NSObject<ATSimpleImageViewControllerDelegate> *)aDelegate {
+- (id)initWithFeedback:(ATFeedback *)someFeedback feedbackController:(ATFeedbackController *)aController {
 	self = [super initWithNibName:@"ATSimpleImageViewController" bundle:[ATConnect resourceBundle]];
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
 		self.modalPresentationStyle = UIModalPresentationFormSheet;
 	}
 	if (self != nil) {
-		delegate = [aDelegate retain];
+		feedback = [someFeedback retain];
+		controller = [aController retain];
 	}
 	return self;
 }
 
 - (void)dealloc {
 	[imagePickerPopover release], imagePickerPopover = nil;
-	[delegate release], delegate = nil;
+	[controller release], controller = nil;
+	[feedback release];
+	feedback = nil;
 	[scrollView removeFromSuperview];
-	[scrollView release], scrollView = nil;
+	[scrollView release];
+	scrollView = nil;
 	[containerView removeFromSuperview];
 	[containerView release], containerView = nil;
 	[cameraButtonItem release], cameraButtonItem = nil;
@@ -60,16 +63,13 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 		[scrollView release];
 		scrollView = nil;
 	}
-	
-	UIImage *defaultScreenshot = nil;
-	if (delegate && [delegate respondsToSelector:@selector(defaultImageForImageViewController:)]) {
-		defaultScreenshot = [delegate defaultImageForImageViewController:self];
-	}
-	if (defaultScreenshot) {
+	if ([feedback hasScreenshot]) {
 		for (UIView *subview in self.containerView.subviews) {
 			[subview removeFromSuperview];
 		}
-		scrollView = [[ATCenteringImageScrollView alloc] initWithImage:defaultScreenshot];
+		UIImage *screenshot = [feedback copyScreenshot];
+		scrollView = [[ATCenteringImageScrollView alloc] initWithImage:screenshot];
+		[screenshot release], screenshot = nil;
 		scrollView.backgroundColor = [UIColor blackColor];
 		CGSize boundsSize = self.containerView.bounds.size;
 		CGSize imageSize = [scrollView imageView].image.size;
@@ -138,9 +138,9 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-	if (shouldResign) {
-		[delegate imageViewControllerWillDismiss:self animated:animated];
-		[delegate release], delegate = nil;
+	if (controller != nil && shouldResign == YES) {
+		[controller unhide:animated];
+		[controller release], controller = nil;
 	}
 }
 
@@ -157,8 +157,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 }
 
 - (IBAction)takePhoto:(id)sender {
-	ATFeedbackAttachmentOptions options = [delegate attachmentOptionsForImageViewController:self];
-	if (options & ATFeedbackAllowTakePhotoAttachment) {
+	if (controller.attachmentOptions & ATFeedbackAllowTakePhotoAttachment) {
 		UIActionSheet *actionSheet = nil;
 		if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
 			actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel Button Title") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Choose From Library", @"Choose Photo Button Title"), ATLocalizedString(@"Take Photo", @"Take Photo Button Title"), nil];
@@ -195,7 +194,8 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 		image = [info objectForKey:UIImagePickerControllerOriginalImage];
 	}
 	if (image) {
-		[delegate imageViewController:self pickedImage:image fromSource:isFromCamera ? ATFeedbackImageSourceCamera : ATFeedbackImageSourcePhotoLibrary];
+		feedback.imageSource = isFromCamera ? ATFeedbackImageSourceCamera : ATFeedbackImageSourcePhotoLibrary;
+		[feedback setScreenshot:image];
 		[[NSNotificationCenter defaultCenter] postNotificationName:ATImageViewChoseImage object:self];
 	}
 	[self setupScrollView];

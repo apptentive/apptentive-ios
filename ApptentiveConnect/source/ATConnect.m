@@ -13,31 +13,21 @@
 #import "ATUtilities.h"
 #if TARGET_OS_IPHONE
 #import "ATFeedbackController.h"
-#import "ATMessageCenterViewController.h"
 #elif TARGET_OS_MAC
 #import "ATFeedbackWindowController.h"
 #endif
 
-NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCenterUnreadCountChangedNotification";
+static ATConnect *sharedConnection = nil;
 
 @implementation ATConnect
-#if TARGET_OS_IPHONE
-{
-	ATFeedbackController *currentFeedbackController;
-}
-#endif
-@synthesize apiKey, showTagline, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText;
-
-#if TARGET_OS_IPHONE
-@synthesize shouldUseMessageCenter;
-#endif
+@synthesize apiKey, showTagline, shouldTakeScreenshot, showEmailField, initialName, initialEmailAddress, feedbackControllerType, customPlaceholderText;
 
 + (ATConnect *)sharedConnection {
-	static ATConnect *sharedConnection = nil;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		sharedConnection = [[ATConnect alloc] init];
-	});
+	@synchronized(self) {
+		if (sharedConnection == nil) {
+			sharedConnection = [[ATConnect alloc] init];
+		}
+	}
 	return sharedConnection;
 }
 
@@ -45,16 +35,17 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 	if ((self = [super init])) {
 		self.showEmailField = YES;
 		self.showTagline = YES;
-		customData = [[NSMutableDictionary alloc] init];
+		self.shouldTakeScreenshot = NO;
+		additionalFeedbackData = [[NSMutableDictionary alloc] init];
 	}
 	return self;
 }
 
 - (void)dealloc {
 #if TARGET_OS_IPHONE
-	if (currentFeedbackController) {
-		[currentFeedbackController release];
-		currentFeedbackController = nil;
+	if (feedbackController) {
+		[feedbackController release];
+		feedbackController = nil;
 	}
 #elif IF_TARGET_OS_MAC
 	if (feedbackWindowController) {
@@ -62,11 +53,11 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 		feedbackWindowController = nil;
 	}
 #endif
-	[customData release], customData = nil;
+	[additionalFeedbackData release], additionalFeedbackData = nil;
 	[customPlaceholderText release], customPlaceholderText = nil;
 	[apiKey release], apiKey = nil;
-	[initialUserName release], initialUserName = nil;
-	[initialUserEmailAddress release], initialUserEmailAddress = nil;
+	[initialName release], initialName = nil;
+	[initialEmailAddress release], initialEmailAddress = nil;
 	[super dealloc];
 }
 
@@ -79,40 +70,41 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 	}
 }
 
-- (NSDictionary *)customData {
-	return customData;
+- (NSDictionary *)additionFeedbackInfo {
+	return additionalFeedbackData;
 }
 
-- (void)addCustomData:(NSObject *)object withKey:(NSString *)key {
+- (void)addAdditionalInfoToFeedback:(NSObject *)object withKey:(NSString *)key {
 	if ([object isKindOfClass:[NSDate class]]) {
-		[customData setObject:[ATUtilities stringRepresentationOfDate:(NSDate *)object] forKey:key];
+		[additionalFeedbackData setObject:[ATUtilities stringRepresentationOfDate:(NSDate *)object] forKey:key];
 	} else {
-		[customData setObject:object forKey:key];
+		[additionalFeedbackData setObject:object forKey:key];
 	}
 }
 
-- (void)removeCustomDataWithKey:(NSString *)key {
-	[customData removeObjectForKey:key];
+- (void)removeAdditionalInfoFromFeedbackWithKey:(NSString *)key {
+	[additionalFeedbackData removeObjectForKey:key];
 }
 
 #if TARGET_OS_IPHONE
 - (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController {
 	@synchronized(self) {
 		if (currentFeedbackController) {
-			ATLogInfo(@"Apptentive feedback controller already shown.");
+			NSLog(@"Apptentive feedback controller already shown.");
 			return;
 		}
+		UIImage *screenshot = nil;
 
 		if (![[ATBackend sharedBackend] currentFeedback]) {
 			ATFeedback *feedback = [[ATFeedback alloc] init];
-			if (customData && [customData count]) {
-				[feedback addExtraDataFromDictionary:customData];
+			if (additionalFeedbackData && [additionalFeedbackData count]) {
+				[feedback addExtraDataFromDictionary:additionalFeedbackData];
 			}
-			if (self.initialUserName && [self.initialUserName length] > 0) {
-				feedback.name = self.initialUserName;
+			if (self.initialName && [self.initialName length] > 0) {
+				feedback.name = self.initialName;
 			}
-			if (self.initialUserEmailAddress && [self.initialUserEmailAddress length] > 0) {
-				feedback.email = self.initialUserEmailAddress;
+			if (self.initialEmailAddress && [self.initialEmailAddress length] > 0) {
+				feedback.email = self.initialEmailAddress;
 			}
 			ATContactStorage *contact = [ATContactStorage sharedContactStorage];
 			if (contact.name && [contact.name length] > 0) {
@@ -130,13 +122,23 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 		}
 		if ([[ATBackend sharedBackend] currentFeedback]) {
 			ATFeedback *currentFeedback = [[ATBackend sharedBackend] currentFeedback];
-			if (![currentFeedback hasScreenshot]) {
+			if (self.shouldTakeScreenshot && ![currentFeedback hasScreenshot] && self.feedbackControllerType != ATFeedbackControllerSimple) {
+				screenshot = [ATUtilities imageByTakingScreenshot];
+				// Get the rotation of the view hierarchy and rotate the screenshot as
+				// necessary.
+				CGFloat rotation = [ATUtilities rotationOfViewHierarchyInRadians:viewController.view];
+				screenshot = [ATUtilities imageByRotatingImage:screenshot byRadians:rotation];
+				[currentFeedback setScreenshot:screenshot];
+			} else if (!self.shouldTakeScreenshot && [currentFeedback hasScreenshot] && (currentFeedback.imageSource == ATFeedbackImageSourceScreenshot)) {
 				[currentFeedback setScreenshot:nil];
 			}
 		}
 
 		ATFeedbackController *vc = [[ATFeedbackController alloc] init];
 		[vc setShowEmailAddressField:self.showEmailField];
+		if (self.feedbackControllerType == ATFeedbackControllerSimple) {
+			vc.deleteCurrentFeedbackOnCancel = YES;
+		}
 		if (self.customPlaceholderText) {
 			[vc setCustomPlaceholderText:self.customPlaceholderText];
 		}
@@ -157,22 +159,6 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 	@synchronized(self) {
 		[currentFeedbackController release], currentFeedbackController = nil;
 	}
-}
-
-- (void)presentMessageCenterFromViewController:(UIViewController *)viewController {
-	[[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController];
-}
-
-- (void)presentIntroDialogFromViewController:(UIViewController *)viewController {
-	[[ATBackend sharedBackend] presentIntroDialogFromViewController:viewController];
-}
-
-- (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion {
-	[[ATBackend sharedBackend] dismissMessageCenterAnimated:animated completion:completion];
-}
-
-- (NSUInteger)unreadMessageCount {
-	return [[ATBackend sharedBackend] unreadMessageCount];
 }
 
 #elif TARGET_OS_MAC
@@ -204,21 +190,8 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 #if TARGET_OS_IPHONE
 	NSString *path = [[NSBundle mainBundle] bundlePath];
 	NSString *bundlePath = [path stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
-	NSFileManager *fm = [NSFileManager defaultManager];
-	if ([fm fileExistsAtPath:bundlePath]) {
-		NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
-		return [bundle autorelease];
-	} else {
-		// Try trigger.io path.
-		bundlePath = [path stringByAppendingPathComponent:@"plugin.bundle"];
-		bundlePath = [bundlePath stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
-		if ([fm fileExistsAtPath:bundlePath]) {
-			NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
-			return [bundle autorelease];
-		} else {
-			return nil;
-		}
-	}
+	NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
+	return [bundle autorelease];
 #elif TARGET_OS_MAC
 	NSBundle *bundle = [NSBundle bundleForClass:[ATConnect class]];
 	return bundle;

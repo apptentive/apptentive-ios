@@ -25,7 +25,7 @@
 	
 	NSDate *startedSurveyDate;
 }
-@property (nonatomic, copy) NSString *errorText;
+@property (nonatomic, retain) NSString *errorText;
 - (id)initWithSurvey:(ATSurvey *)survey;
 - (IBAction)sendSurvey;
 @end

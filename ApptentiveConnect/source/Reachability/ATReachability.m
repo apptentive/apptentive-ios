@@ -11,6 +11,8 @@
 
 NSString *const ATReachabilityStatusChanged = @"ATReachabilityStatusChanged";
 
+static ATReachability *sharedSingleton = nil;
+
 @interface ATReachability (Private)
 - (BOOL)start;
 - (void)stop;
@@ -19,11 +21,11 @@ NSString *const ATReachabilityStatusChanged = @"ATReachabilityStatusChanged";
 
 @implementation ATReachability
 + (ATReachability *)sharedReachability {
-	static ATReachability *sharedSingleton = nil;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		sharedSingleton = [[ATReachability alloc] init];
-	});
+	@synchronized(self) {
+		if (!sharedSingleton) {
+			sharedSingleton = [[ATReachability alloc] init];
+		}
+	}
 	return sharedSingleton;
 }
 

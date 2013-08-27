@@ -13,7 +13,6 @@
 
 #import "ATBackend.h"
 #import "ATConnect.h"
-#import "ATConversationUpdater.h"
 #import "ATFeedback.h"
 #import "ATURLConnection.h"
 #import "ATUtilities.h"
@@ -23,8 +22,7 @@
 
 #import "NSData+ATBase64.h"
 
-NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
-
+#define kCommonChannelName (@"ATWebClient")
 #define kUserAgentFormat (@"ApptentiveConnect/%@ (%@)")
 
 #if USE_STAGING
@@ -33,13 +31,15 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 #define kApptentiveBaseURL (@"https://api.apptentive.com")
 #endif
 
+static ATWebClient *sharedSingleton = nil;
+
 @implementation ATWebClient
 + (ATWebClient *)sharedClient {
-	static ATWebClient *sharedSingleton = nil;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		sharedSingleton = [[ATWebClient alloc] init];
-	});
+	@synchronized(self) {
+		if (sharedSingleton == nil) {
+			sharedSingleton = [[ATWebClient alloc] init];
+		}
+	}
 	return sharedSingleton;
 }
 
@@ -48,7 +48,7 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 }
 
 - (NSString *)commonChannelName {
-	return ATWebClientDefaultChannelName;
+	return kCommonChannelName;
 }
 
 - (ATAPIRequest *)requestForPostingFeedback:(ATFeedback *)feedback {
@@ -69,14 +69,10 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 }
 
 - (ATAPIRequest *)requestForGettingAppConfiguration {
-	ATConversation *conversation = [ATConversationUpdater currentConversation];
-	if (!conversation) {
-		return nil;
-	}
-	NSString *urlString = [self apiURLStringWithPath:@"conversation/configuration"];
+	NSString *uuid = [[ATBackend sharedBackend] deviceUUID];
+	NSString *urlString = [self apiURLStringWithPath:[NSString stringWithFormat:@"devices/%@/configuration", uuid]];
 	ATURLConnection *conn = [self connectionToGet:[NSURL URLWithString:urlString]];
 	conn.timeoutInterval = 20.0;
-	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:[self commonChannelName]];
 	request.returnType = ATAPIRequestReturnTypeJSON;
 	return [request autorelease];
@@ -251,134 +247,15 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 	return [conn autorelease];
 }
 
-- (ATURLConnection *)connectionToPost:(NSURL *)theURL JSON:(NSString *)body withFile:(NSString *)path ofMimeType:(NSString *)mimeType {
-	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL];
-	[self addAPIHeaders:conn];
-	[conn setHTTPMethod:@"POST"];
-	
-	NSFileManager *fm = [NSFileManager defaultManager];
-
-	NSData *fileData = nil;
-	if (path && [fm fileExistsAtPath:path]) {
-		NSError *error = nil;
-#warning Unknown behavior on iOS 4
-		fileData = [NSData dataWithContentsOfFile:path options:NSDataReadingMappedIfSafe error:&error];
-		if (!fileData) {
-			ATLogError(@"Unable to get contents of file path for uploading: %@", error);
-			// This is probably unrecoverable.
-			goto fail;
-		}
-	}
-
-	
-	// Figure out boundary string.
-	NSString *boundary = nil;
-	while (YES) {
-		boundary = [ATUtilities randomStringOfLength:20];
-		NSData *boundaryData = [boundary dataUsingEncoding:NSUTF8StringEncoding];
-		
-		if (body) {
-			NSRange range = [body rangeOfString:boundary];
-			if (range.location != NSNotFound) {
-				continue;
-			}
-		}
-		if (fileData != nil) {
-			NSRange range = [fileData rangeOfData:boundaryData options:0 range:NSMakeRange(0, [fileData length])];
-			if (range.location != NSNotFound) {
-				continue;
-			}
-		}
-		break;
-	}
-	
-	NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
-	[conn setValue:contentType forHTTPHeaderField:@"Content-Type"];
-	
-	
-	NSMutableData *multipartEncodedData = [NSMutableData data];
-	//[multipartEncodedData appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-	NSMutableString *debugString = [NSMutableString string];
-	
-	for (NSString *key in [conn headers]) {
-		[debugString appendFormat:@"%@: %@\n", key, [[conn headers] objectForKey:key]];
-	}
-	[debugString appendString:@"\n"];
-	
-	
-	if (body) {
-		NSMutableString *bodyHeader = [NSMutableString string];
-		[bodyHeader appendString:[NSString stringWithFormat:@"--%@\r\n", boundary]];
-		[bodyHeader appendString:[NSString stringWithFormat:@"Content-Type: %@\r\n", @"text/plain"]];
-		[bodyHeader appendString:[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", @"message"]];
-		[debugString appendString:bodyHeader];
-		
-		[multipartEncodedData appendData:[bodyHeader dataUsingEncoding:NSUTF8StringEncoding]];
-		[multipartEncodedData appendData:[(NSString *)body dataUsingEncoding:NSUTF8StringEncoding]];
-		[debugString appendString:body];
-	}
-	NSString *boundaryString = [NSString stringWithFormat:@"\r\n--%@\r\n", boundary];
-	[multipartEncodedData appendData:[boundaryString dataUsingEncoding:NSUTF8StringEncoding]];
-	
-	[debugString appendString:boundaryString];
-	
-	if (fileData != nil) {
-		NSString *filename = [path lastPathComponent];
-		NSMutableString *multipartHeader = [NSMutableString string];
-		[multipartHeader appendString:[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", @"file", filename]];
-		[multipartHeader appendString:[NSString stringWithFormat:@"Content-Type: %@\r\n", mimeType]];
-		[multipartHeader appendString:@"Content-Transfer-Encoding: binary\r\n\r\n"];
-		[debugString appendString:multipartHeader];
-		
-		[multipartEncodedData appendData:[multipartHeader dataUsingEncoding:NSUTF8StringEncoding]];
-		[multipartEncodedData appendData:fileData];
-		[debugString appendFormat:@"<NSData of length: %d>", [fileData length]];
-	}
-	NSString *finalBoundary = [NSString stringWithFormat:@"\r\n--%@--\r\n", boundary];
-	[multipartEncodedData appendData:[finalBoundary dataUsingEncoding:NSUTF8StringEncoding]];
-	[debugString appendString:finalBoundary];
-	
-	//NSLog(@"\n%@", debugString);
-	
-	[conn setHTTPBody:multipartEncodedData];
-	
-	// Debugging helpers:
-	/*
-	 NSLog(@"wtf parameters: %@", parameters);
-	 NSLog(@"-length: %d", [multipartEncodedData length]);
-	 NSLog(@"-data: %@", [NSString stringWithUTF8String:[multipartEncodedData bytes]]);
-	 */
-	return [conn autorelease];
-
-fail:
-	[conn release], conn = nil;
-	return nil;
-}
-
-- (ATURLConnection *)connectionToPut:(NSURL *)theURL JSON:(NSString *)body {
-	ATURLConnection *conn = [self connectionToPost:theURL JSON:body];
-	[conn setHTTPMethod:@"PUT"];
-	return conn;
-}
-
 - (void)addAPIHeaders:(ATURLConnection *)conn {
 	[conn setValue:[self userAgentString] forHTTPHeaderField:@"User-Agent"];
 	[conn setValue: @"gzip" forHTTPHeaderField: @"Accept-Encoding"];
-//!!	[conn setValue: @"text/xml" forHTTPHeaderField: @"Accept"];
+	[conn setValue: @"text/xml" forHTTPHeaderField: @"Accept"];
 	[conn setValue: @"utf-8" forHTTPHeaderField: @"Accept-Charset"];
-	[conn setValue:@"1" forHTTPHeaderField:@"X-API-Version"];
 	NSString *apiKey = [[ATBackend sharedBackend] apiKey];
 	if (apiKey) {
-		[self updateConnection:conn withOAuthToken:apiKey];
-	}
-}
-
-- (void)updateConnection:(ATURLConnection *)conn withOAuthToken:(NSString *)token {
-	if (token) {
-		NSString *value = [NSString stringWithFormat:@"OAuth %@", token];
+		NSString *value = [NSString stringWithFormat:@"OAuth %@", apiKey];
 		[conn setValue:value forHTTPHeaderField:@"Authorization"];
-	} else {
-		[conn removeHTTPHeaderField:@"Authorization"];
 	}
 }
 @end

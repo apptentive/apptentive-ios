@@ -7,13 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ATSimpleImageViewController.h"
 
 @class ATDefaultTextView;
 @class ATFeedback;
 @class ATToolbar;
 
-@interface ATFeedbackController : UIViewController <ATSimpleImageViewControllerDelegate, UITextFieldDelegate> {
+typedef enum {
+	ATFeedbackAllowPhotoAttachment = 1,
+	ATFeedbackAllowTakePhotoAttachment = 2,
+} ATFeedbackAttachmentOptions;
+
+@interface ATFeedbackController : UIViewController <UITextFieldDelegate> {
 	UIViewController *presentingViewController;
 	
 @private
@@ -48,7 +52,7 @@
 
 
 @property (nonatomic, retain) ATFeedback *feedback;
-@property (nonatomic, copy) NSString *customPlaceholderText;
+@property (nonatomic, retain) NSString *customPlaceholderText;
 @property (nonatomic, assign) ATFeedbackAttachmentOptions attachmentOptions;
 @property (nonatomic, assign) BOOL showEmailAddressField;
 @property (nonatomic, assign) BOOL deleteCurrentFeedbackOnCancel;

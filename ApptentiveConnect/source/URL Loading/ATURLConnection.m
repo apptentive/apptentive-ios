@@ -7,7 +7,6 @@
 
 #import "ATURLConnection.h"
 #import "ATURLConnection_Private.h"
-#import "ATUtilities.h"
 
 @interface ATURLConnection ()
 - (void)cacheDataIfNeeded;
@@ -28,7 +27,6 @@
 @synthesize failedAuthentication;
 @synthesize connectionError;
 @synthesize percentComplete;
-@synthesize expiresMaxAge;
 
 - (id)initWithURL:(NSURL *)url {
 	return [self initWithURL:url delegate:nil];
@@ -67,18 +65,8 @@
 	return self.cancelled;
 }
 
-- (NSDictionary *)headers {
-	return headers;
-}
-
 - (void)setValue:(NSString *)value forHTTPHeaderField:(NSString *)field {
 	[headers setValue:value forKey:field];
-}
-
-- (void)removeHTTPHeaderField:(NSString *)field {
-	if ([headers objectForKey:field]) {
-		[headers removeObjectForKey:field];
-	}
 }
 
 - (void)setHTTPMethod:(NSString *)method {
@@ -92,13 +80,6 @@
 	if (HTTPBody != body) {
 		[HTTPBody release];
 		HTTPBody = [body retain];
-	}
-}
-
-- (void)setHTTPBodyStream:(NSInputStream *)stream {
-	if (HTTPBodyStream != stream) {
-		[HTTPBodyStream release];
-		HTTPBodyStream = [stream retain];
 	}
 }
 
@@ -126,8 +107,6 @@
 			}
 			if (HTTPBody) {
 				[request setHTTPBody:HTTPBody];
-			} else if (HTTPBodyStream) {
-				[request setHTTPBodyStream:HTTPBodyStream];
 			}
 			self.connection = [[[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO] autorelease];
 			[self.connection scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
@@ -155,14 +134,6 @@
 			} else {
 				statusCode = 200;
 			}
-			
-			NSDictionary *responseHeaders = [response allHeaderFields];
-			NSString *cacheControlHeader = [responseHeaders valueForKey:@"Cache-Control"];
-			if (cacheControlHeader) {
-				expiresMaxAge = [ATUtilities maxAgeFromCacheControlHeader:cacheControlHeader];
-			} else {
-				expiresMaxAge = 0;
-			}
 		}
 	}
 }
@@ -177,7 +148,7 @@
 		if (delegate && [delegate respondsToSelector:@selector(connectionFailed:)]){
 			[delegate performSelectorOnMainThread:@selector(connectionFailed:) withObject:self waitUntilDone:YES];
 		} else {
-			ATLogError(@"Orphaned connection. No delegate or nonresponsive delegate.");
+			NSLog(@"Orphaned connection. No delegate or nonresponsive delegate.");
 		}
 	}
 }
@@ -197,7 +168,7 @@
 				if (delegate && [delegate respondsToSelector:@selector(connectionFinishedSuccessfully:)]){
 					[delegate performSelectorOnMainThread:@selector(connectionFinishedSuccessfully:) withObject:self waitUntilDone:YES];
 				} else {
-					ATLogError(@"Orphaned connection. No delegate or nonresponsive delegate.");
+					NSLog(@"Orphaned connection. No delegate or nonresponsive delegate.");
 				}
 			}
 			[data release];
@@ -206,7 +177,7 @@
 			if (delegate && [delegate respondsToSelector:@selector(connectionFailed:)]){
 				[delegate performSelectorOnMainThread:@selector(connectionFailed:) withObject:self waitUntilDone:YES];
 			} else {
-				ATLogError(@"Orphaned connection. No delegate or nonresponsive delegate.");
+				NSLog(@"Orphaned connection. No delegate or nonresponsive delegate.");
 			}
 		}
 		self.executing = NO;
@@ -234,7 +205,7 @@
 		if (delegate && [delegate respondsToSelector:@selector(connectionFailed:)]){
 			[delegate performSelectorOnMainThread:@selector(connectionFailed:) withObject:self waitUntilDone:YES];
 		} else {
-			ATLogError(@"Orphaned connection. No delegate or nonresponsive delegate.");
+			NSLog(@"Orphaned connection. No delegate or nonresponsive delegate.");
 		}
 	}
 }
@@ -244,7 +215,7 @@
 		self.percentComplete = ((float)totalBytesWritten)/((float) totalBytesExpectedToWrite);
 		[delegate performSelectorOnMainThread:@selector(connectionDidProgress:) withObject:self waitUntilDone:YES];
 	} else {
-		ATLogError(@"Orphaned connection. No delegate or nonresponsive delegate.");
+		NSLog(@"Orphaned connection. No delegate or nonresponsive delegate.");
 	}
 }
 
@@ -319,8 +290,7 @@
 		
 		[headers release];
 		[HTTPMethod release];
-		[HTTPBody release], HTTPBody = nil;
-		[HTTPBodyStream release], HTTPBodyStream = nil;
+		[HTTPBody release];
 	}
 	[super dealloc];
 }
@@ -340,8 +310,6 @@
 		} else {
 			[result appendFormat:@"<Data of length:%ld>", (long)[HTTPBody length]];
 		}
-	} else if (HTTPBodyStream) {
-		[result appendString:@"<NSInputStream>"];
 	}
 	return result;
 }

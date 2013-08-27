@@ -19,20 +19,12 @@ When a survey is submitted by the user, the ATSurveySentNotification will be sen
 The userInfo dictionary will have a key named ATSurveyIDKey, with a value of the id of the survey that was sent.
 */
 @interface ATSurveys : NSObject
-/*! Returns YES if there are any surveys available which have no tags. Returns NO otherwise. */
-+ (BOOL)hasSurveyAvailableWithNoTags;
-/*! Returns YES if there are any surveys which have all of the given tags. Returns NO otherwise. If no tags are given, returns surveys which have tags. */
-+ (BOOL)hasSurveyAvailableWithTags:(NSSet *)tags;
-
++ (BOOL)hasSurveyAvailable;
++ (void)checkForAvailableSurveys;
 #if TARGET_OS_IPHONE
 /*! 
- * Presents a survey controller in the window of the given view controller. Will not present a survey which has tags.
+ * Presents a survey controller in the window of the given view controller.
  */
-+ (void)presentSurveyControllerWithNoTagsFromViewController:(UIViewController *)viewController;
-
-/*!
- * Presents a survey controller in the window of the given view controller. The survey must have all of the given tags.
- */
-+ (void)presentSurveyControllerWithTags:(NSSet *)tags fromViewController:(UIViewController *)viewController;
++ (void)presentSurveyControllerFromViewController:(UIViewController *)viewController;
 #endif
 @end

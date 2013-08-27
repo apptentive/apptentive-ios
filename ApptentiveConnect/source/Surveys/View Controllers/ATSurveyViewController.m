@@ -8,7 +8,6 @@
 
 #import "ATSurveyViewController.h"
 #import "ATConnect.h"
-#import "ATConnect_Private.h"
 #import "ATHUDView.h"
 #import "ATRecordTask.h"
 #import "ATSurvey.h"
@@ -238,7 +237,7 @@ enum {
 			textFrame.size.width = cell.frame.size.width - 38.0;
 			cell.textLabel.frame = textFrame;
 #if DEBUG_CELL_HEIGHT_PROBLEM
-			ATLogDebug(@"%@", NSStringFromCGRect(cell.textLabel.frame));
+			NSLog(@"%@", NSStringFromCGRect(cell.textLabel.frame));
 #endif
 		}
 		
@@ -249,9 +248,9 @@ enum {
 		f.size = s;
 #if DEBUG_CELL_HEIGHT_PROBLEM
 		if (s.height >= 50) {
-			ATLogDebug(@"cell width is: %f", cell.frame.size.width);
-			ATLogDebug(@"width is: %f", cellSize.width);
-			ATLogDebug(@"Hi");
+			NSLog(@"cell width is: %f", cell.frame.size.width);
+			NSLog(@"width is: %f", cellSize.width);
+			NSLog(@"Hi");
 		}
 #endif
 		
@@ -438,11 +437,7 @@ enum {
 				ATSurveyQuestionAnswer *answer = [question.answerChoices objectAtIndex:answerIndex];
 				BOOL isChecked = cell.accessoryType == UITableViewCellAccessoryCheckmark;
 				
-				NSUInteger maxSelections = question.maxSelectionCount;
-				if (maxSelections == 0) {
-					maxSelections = NSUIntegerMax;
-				}
-				if (isChecked == NO && question.type == ATSurveyQuestionTypeMultipleSelect && [[question selectedAnswerChoices] count] == maxSelections) {
+				if (isChecked == NO && question.type == ATSurveyQuestionTypeMultipleSelect && [[question selectedAnswerChoices] count] == question.maxSelectionCount) {
 					// Do nothing if unchecked and have already selected the maximum number of answers.
 				} else if (isChecked == NO) {
 					cell.accessoryType = UITableViewCellAccessoryCheckmark;

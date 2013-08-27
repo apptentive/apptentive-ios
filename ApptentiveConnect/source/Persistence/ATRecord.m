@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Apptentive, Inc. All rights reserved.
 //
 
-#import "ATLegacyRecord.h"
+#import "ATRecord.h"
 #import "ATConnect.h"
 #import "ATBackend.h"
 #import "ATUtilities.h"
@@ -18,12 +18,12 @@
 
 #define kRecordCodingVersion 1
 
-@interface ATLegacyRecord (Private)
+@interface ATRecord (Private)
 - (NSString *)primaryLocale;
 - (NSArray *)availableLocales;
 @end
 
-@implementation ATLegacyRecord
+@implementation ATRecord
 @synthesize uuid, model, os_version, carrier, date;
 - (id)init {
 	if ((self = [super init])) {
@@ -177,7 +177,7 @@
 @end
 
 
-@implementation ATLegacyRecord (Private)
+@implementation ATRecord (Private)
 - (NSString *)primaryLocale {
 	return [[NSLocale currentLocale] localeIdentifier];
 }

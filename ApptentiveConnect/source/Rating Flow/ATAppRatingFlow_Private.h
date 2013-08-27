@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Apptentive, Inc. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 NSString *const ATAppRatingClearCountsOnUpgradePreferenceKey;
 NSString *const ATAppRatingEnabledPreferenceKey;
@@ -27,7 +27,6 @@ NSString *const ATAppRatingFlowLastUsedVersionKey;
 NSString *const ATAppRatingFlowLastUsedVersionFirstUseDateKey;
 NSString *const ATAppRatingFlowDeclinedToRateThisVersionKey;
 NSString *const ATAppRatingFlowUserDislikesThisVersionKey;
-NSString *const ATAppRatingFlowPromptCountThisVersionKey;
 NSString *const ATAppRatingFlowLastPromptDateKey;
 NSString *const ATAppRatingFlowRatedAppKey;
 

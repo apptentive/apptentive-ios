@@ -286,7 +286,7 @@
 			NSString *fullPath = [self fullPathForScreenshotFilename:screenshotFilename];
 			NSData *screenshotData = [self dataForScreenshot];
 			if (![screenshotData writeToFile:fullPath atomically:YES]) {
-				ATLogError(@"Unable to save screenshot data to path: %@", fullPath);
+				NSLog(@"Unable to save screenshot data to path: %@", fullPath);
 			}
 		}
 	}
@@ -298,7 +298,7 @@
 		NSString *fullPath = [self fullPathForScreenshotFilename:screenshotFilename];
 		NSError *error = nil;
 		if (![fm removeItemAtPath:fullPath error:&error]) {
-			ATLogError(@"Error removing screenshot at path: %@. %@", screenshotFilename, error);
+			NSLog(@"Error removing screenshot at path: %@. %@", screenshotFilename, error);
 			return;
 		}
 		[screenshotFilename release], screenshotFilename = nil;

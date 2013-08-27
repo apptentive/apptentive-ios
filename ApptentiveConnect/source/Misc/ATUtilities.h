@@ -22,11 +22,11 @@
 + (CGFloat)rotationOfViewHierarchyInRadians:(UIView *)leafView;
 + (CGAffineTransform)viewTransformInWindow:(UIWindow *)window;
 #elif TARGET_OS_MAC
-+ (NSData *)pngRepresentationOfImage:(NSImage *)image;
-#endif
 + (NSString *)currentMachineName;
 + (NSString *)currentSystemName;
 + (NSString *)currentSystemVersion;
++ (NSData *)pngRepresentationOfImage:(NSImage *)image;
+#endif
 
 + (NSString *)stringByEscapingForURLArguments:(NSString *)string;
 + (NSString *)randomStringOfLength:(NSUInteger)length;
@@ -47,18 +47,7 @@
 + (BOOL)bundleVersionIsMainVersion;
 + (NSString *)appVersionString;
 + (NSString *)buildNumberString;
-
-+ (BOOL)dictionary:(NSDictionary *)a isEqualToDictionary:(NSDictionary *)b;
-+ (NSTimeInterval)maxAgeFromCacheControlHeader:(NSString *)cacheControl;
-+ (BOOL)array:(NSArray *)a isEqualToArray:(NSArray *)b;
-
-#if TARGET_OS_IPHONE
-+ (UIEdgeInsets)edgeInsetsOfView:(UIView *)view;
-#endif
 @end
 
 CGRect ATCGRectOfEvenSize(CGRect inRect);
 
-CGSize ATThumbnailSizeOfMaxSize(CGSize imageSize, CGSize maxSize);
-
-CGRect ATThumbnailCropRectForThumbnailSize(CGSize imageSize, CGSize thumbnailSize);

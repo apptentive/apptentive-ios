@@ -5,7 +5,6 @@
 //  Created by Andrew Wooster on 9/24/11.
 //  Copyright 2011 Apptentive, Inc. All rights reserved.
 //
-#import <QuartzCore/QuartzCore.h>
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -144,7 +143,7 @@ enum {
 	
 	UIWindow *parentWindow = [self windowForViewController:presentingViewController];
 	if (!parentWindow) {
-		ATLogError(@"Unable to find parentWindow!");
+		NSLog(@"Unable to find parentWindow!");
 	}
 	if (originalPresentingWindow != parentWindow) {
 		[originalPresentingWindow release], originalPresentingWindow = nil;
@@ -290,7 +289,7 @@ enum {
 	[titleButton release], titleButton = nil;
 	[titleLabel release], titleLabel = nil;
 	
-	self.emailField.placeholder = ATLocalizedString(@"Your Email", @"Email Address Field Placeholder");
+	self.emailField.placeholder = ATLocalizedString(@"Email Address", @"Email Address Field Placeholder");
 	
 	if (self.customPlaceholderText) {
 		self.feedbackView.placeholder = self.customPlaceholderText;
@@ -366,8 +365,7 @@ enum {
 	[self.feedbackView resignFirstResponder];
 	[self hide:YES];
 	[self captureFeedbackState];
-	[self retain];
-	ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithDelegate:self];
+	ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithFeedback:self.feedback feedbackController:self];
 	[presentingViewController presentModalViewController:vc animated:YES];
 	[vc release];
 }
@@ -440,28 +438,6 @@ enum {
 	} else {
 		[self finishUnhide];
 	}
-}
-
-#pragma mark ATSimpleImageViewControllerDelegate
-- (void)imageViewController:(ATSimpleImageViewController *)vc pickedImage:(UIImage *)image fromSource:(ATFeedbackImageSource)source {
-	self.feedback.imageSource = source;
-	[self.feedback setScreenshot:image];
-}
-
-- (void)imageViewControllerWillDismiss:(ATSimpleImageViewController *)vc animated:(BOOL)animated {
-	[self unhide:animated];
-	[self release];
-}
-
-- (ATFeedbackAttachmentOptions)attachmentOptionsForImageViewController:(ATSimpleImageViewController *)vc {
-	return self.attachmentOptions;
-}
-
-- (UIImage *)defaultImageForImageViewController:(ATSimpleImageViewController *)vc {
-	if ([self.feedback hasScreenshot]) {
-		return [[self.feedback copyScreenshot] autorelease];
-	}
-	return nil;
 }
 
 #pragma mark UITextFieldDelegate
@@ -609,6 +585,7 @@ enum {
 	} while (NO);
 	return result;
 }
+
 
 - (void)statusBarChanged:(NSNotification *)notification {
 	[self positionInWindow];

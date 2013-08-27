@@ -14,9 +14,6 @@ NSString *const ATAppConfigurationLastUpdatePreferenceKey;
 NSString *const ATAppConfigurationExpirationPreferenceKey;
 NSString *const ATAppConfigurationMetricsEnabledPreferenceKey;
 
-NSString *const ATAppConfigurationMessageCenterTitleKey;
-NSString *const ATAppConfigurationMessageCenterForegroundRefreshIntervalKey;
-
 @protocol ATAppConfigurationUpdaterDelegate <NSObject>
 - (void)configurationUpdaterDidFinish:(BOOL)success;
 @end

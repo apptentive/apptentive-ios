@@ -1,3 +1,101 @@
+2013-08-18 wooster v1.0.1
+-------------------------
+Deprecating the `-addCustomData:withKey:` and `-removeCustomDataWithKey:` methods in `ATConnect`.
+
+In their place, use these new methods, which add custom data about devices and people:
+
+```
+/*! Adds an additional data field to any feedback sent. object should be an NSDate, NSNumber, or NSString. */
+- (void)addCustomPersonData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
+- (void)addCustomDeviceData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
+
+/*! Removes an additional data field from the feedback sent. */
+- (void)removeCustomPersonDataWithKey:(NSString *)key;
+- (void)removeCustomDeviceDataWithKey:(NSString *)key;
+```
+
+Also deprecating the `appName` property on `ATAppRatingFlow`. Now, the display name of the application used in our framework can be set server-side.
+
+Per IOS-144 and IOS-145, we now have much better localizations across many more languages.
+
+We have started on iOS 7 compatibility with IOS-157, IOS-159, IOS-164, IOS-168, and IOS-169. We covered some of the major parts, but there's more to come!
+
+Fixes:
+
+* IOS-144 Get incremental updates of localizable strings for Message Center
+* IOS-145 Get missing strings from surveys localized
+* IOS-149 Don't allow nested key/value pairs for custom data.
+* IOS-157 Unread message count not centered in FeedbackDemo
+* IOS-159 Spacing between top of email form and the status bar
+* IOS-156 Message Center on Original iPad locks to portrait mode
+* IOS-164 Message Center background color: white vs. grey
+* IOS-168 Attaching photo causes crash on iOS 7
+* IOS-169 UITextView metrics changed in iOS 7
+* IOS-173 Make client play nicely with location updates and file protection
+    * This was a crasher caused when background apps were started before the phone was unlocked.
+* IOS-174 Initial email address and name not hooked up to person object
+* IOS-175 Add warning if resource bundle isn't found in app
+    * If the app isn't properly integrated, and you run it in the Simulator, this will warn you with an alert.
+* IOS-176 Select/Copy/Paste menu is broken
+* IOS-179 Localization overflow in Message Center feedback form title
+* apptentive-ios#44 Doesn't work well in portrait mode on iPad
+* apptentive-ios#26 More localizations
+
+2013-06-28 wooster v1.0.0
+-------------------------
+There are a lot of major API changes. They are documented in docs/APIChanges.md
+
+* Fixes IOS-127 Make some APIs private for Message Center release
+* Fixes IOS-129 Simplify SDK API
+* Fixes IOS-130 Rename add info API call
+* Fixes IOS-128 Remove feedback API for Message Center
+* Fixes IOS-103 Make ratings flow easier
+* Fixes IOS-136 Create personal info editing screen
+* Many, many other changes.
+
+Note that for apps created before June 28, 2013, please contact us to have your account
+upgraded to the new Message Center UI on our website. If you have any questions at all,
+please let us know!
+
+2013-06-07 wooster v0.4.9
+-------------------------
+We've finally added support for surveys with tags.
+
+- To check for surveys, call `ATSurveys +(void)checkForAvailableSurveys` as usual.
+- Listen for the `ATSurveyNewSurveyAvailableNotification`.
+- Check to see if surveys with a given set of tags are available with `ATSurveys +(BOOL)hasSurveyAvailableWithTags:(NSSet *)tags`.
+- Display a survey with tags with: `ATSurveys +(void)presentSurveyControllerWithTags:(NSSet *)tags fromViewController:(UIViewController *)viewController`.
+
+Other fixes:
+
+* Fixes IOS-105 Add Russian Localization
+    * Thanks to Захаров Дмитрий for the translation!
+* Fixes IOS-120 Get localizations for iOS Client strings
+* Fixes IOS-63 Implement new client API for surveys (survey tags)
+* Fixes IOS-106 Limit connections to 2 at once
+    * This prevents a potential problem in situations where the number of connections is limited. See [the problem AFNetworking+TestFlight hit](https://github.com/AFNetworking/AFNetworking/issues/307).
+* Fixes IOS-92 Demo app should show a message when the API key is not set
+    * This will hopefully be a nice reminder, rather than an irritation.
+* Fixes IOS-85 Setting days before re-prompt to 0 doesn't work as expected
+    * If this value is 0, we will now only prompt once per update.
+* Fixes IOS-84 Re-prompt only once per version
+    * We will only prompt twice per update total (prompt and re-prompt).
+* Fixes IOS-62 Add support for repeat surveys
+* Fixes IOS-99 Add Callback after a user agrees to rate the app
+    * You can now listen for `ATAppRatingFlowUserAgreedToRateAppNotification` to know when a user agrees to rate the app.
+* apptentive/apptentive-ios#32 Showing the rating dialog from a modal
+* IOS-108 Fix for launches not being detected after IOS-76 changes
+* IOS-107 Fix warnings in PrefixedJSONKit
+* Fixes IOS-124 Surveys with tags shouldn't show up in bare surveys calls
+* Fixes IOS-126 Long survey answers are truncated
+* Also brings in pull requests #38 and #39.
+
+2013-05-31 wooster v0.4.8a
+--------------------------
+This is a localization minor bump. There are still a few edge cases in the UI.
+
+Thanks to Robert Lo Bue and Applingua (with help from SpaceInch) for the new localizations!
+
 2013-02-01 wooster v0.4.8
 -------------------------
 This is a bug fix release.

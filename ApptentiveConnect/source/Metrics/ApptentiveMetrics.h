@@ -12,10 +12,13 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
+@class ATMetric;
+
 @interface ApptentiveMetrics : NSObject {
 @private
 	BOOL metricsEnabled;
 }
 + (ApptentiveMetrics *)sharedMetrics;
+- (BOOL)upgradeLegacyMetric:(ATMetric *)metric;
 @end
 

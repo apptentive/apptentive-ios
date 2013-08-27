@@ -13,63 +13,54 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
-#define kATConnectVersionString @"0.4.8"
+#define kATConnectVersionString @"1.0.1"
 
 #if TARGET_OS_IPHONE
-#define kATConnectPlatformString @"iOS"
-@class ATFeedbackController;
+#	define kATConnectPlatformString @"iOS"
 #elif TARGET_OS_MAC
-#define kATConnectPlatformString @"Mac OS X"
+#	define kATConnectPlatformString @"Mac OS X"
 @class ATFeedbackWindowController;
 #endif
 
-typedef enum {
-	ATFeedbackControllerDefault,
-	ATFeedbackControllerSimple
-} ATFeedbackControllerType;
+extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 
 
 @interface ATConnect : NSObject {
 @private
 #if TARGET_OS_IPHONE
-	ATFeedbackController *feedbackController;
 #elif TARGET_OS_MAC
 	ATFeedbackWindowController *feedbackWindowController;
 #endif
-	NSMutableDictionary *additionalFeedbackData;
+	NSMutableDictionary *customPersonData;
+	NSMutableDictionary *customDeviceData;
 	NSString *apiKey;
 	BOOL showTagline;
-	BOOL shouldTakeScreenshot;
 	BOOL showEmailField;
-	NSString *initialName;
-	NSString *initialEmailAddress;
-	ATFeedbackControllerType feedbackControllerType;
+	NSString *initialUserName;
+	NSString *initialUserEmailAddress;
 	NSString *customPlaceholderText;
-	ATFeedbackController *currentFeedbackController;
 }
-@property (nonatomic, retain) NSString *apiKey;
+@property (nonatomic, copy) NSString *apiKey;
 @property (nonatomic, assign) BOOL showTagline;
-@property (nonatomic, assign) BOOL shouldTakeScreenshot;
 @property (nonatomic, assign) BOOL showEmailField;
-@property (nonatomic, retain) NSString *initialName;
-@property (nonatomic, retain) NSString *initialEmailAddress;
-@property (nonatomic, assign) ATFeedbackControllerType feedbackControllerType;
+@property (nonatomic, copy) NSString *initialUserName;
+@property (nonatomic, copy) NSString *initialUserEmailAddress;
 /*! Set this if you want some custom text to appear as a placeholder in the
  feedback text box. */
-@property (nonatomic, retain) NSString *customPlaceholderText;
+@property (nonatomic, copy) NSString *customPlaceholderText;
 
 + (ATConnect *)sharedConnection;
 
 #if TARGET_OS_IPHONE
-/*! 
- * Presents a feedback controller in the window of the given view controller.
- */
-- (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController;
+
+- (void)presentMessageCenterFromViewController:(UIViewController *)viewController;
+- (NSUInteger)unreadMessageCount;
 
 /*!
- * Dismisses the feedback controller. You normally won't need to call this.
+ * Dismisses the message center. You normally won't need to call this.
  */
-- (void)dismissFeedbackControllerAnimated:(BOOL)animated completion:(void (^)(void))completion;
+- (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion;
+
 #elif TARGET_OS_MAC
 /*!
  * Presents a feedback window.
@@ -77,19 +68,16 @@ typedef enum {
 - (IBAction)showFeedbackWindow:(id)sender;
 #endif
 
-/*! Adds an additional data field to any feedback sent. */
-- (void)addAdditionalInfoToFeedback:(NSObject<NSCoding> *)object withKey:(NSString *)key;
+/*! Adds an additional data field to any feedback sent. object should be an NSDate, NSNumber, or NSString. */
+- (void)addCustomPersonData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
+- (void)addCustomDeviceData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
 
 /*! Removes an additional data field from the feedback sent. */
-- (void)removeAdditionalInfoFromFeedbackWithKey:(NSString *)key;
+- (void)removeCustomPersonDataWithKey:(NSString *)key;
+- (void)removeCustomDeviceDataWithKey:(NSString *)key;
 
-/*!
- * Returns the NSBundle corresponding to the bundle containing ATConnect's
- * images, xibs, strings files, etc.
- */
-+ (NSBundle *)resourceBundle;
+/*! Deprecated. Use addCustomDeviceData:withKey: instead. */
+- (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key DEPRECATED_ATTRIBUTE;
+/*! Deprecated. Use removeCustomDeviceDataWithKey: instead. */
+- (void)removeCustomDataWithKey:(NSString *)key DEPRECATED_ATTRIBUTE;
 @end
-
-/*! Replacement for NSLocalizedString within ApptentiveConnect. Pulls 
-    localized strings out of the resource bundle. */
-extern NSString *ATLocalizedString(NSString *key, NSString *comment);

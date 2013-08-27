@@ -7,6 +7,7 @@
 //
 
 #import "ATDefaultTextView.h"
+#import "ATUtilities.h"
 
 @interface ATDefaultTextView (Private)
 - (void)setup;
@@ -16,6 +17,7 @@
 
 @implementation ATDefaultTextView
 @synthesize placeholder;
+@synthesize at_drawRectBlock;
 
 - (id)initWithFrame:(CGRect)frame {
 	if ((self = [super initWithFrame:frame])) {
@@ -32,8 +34,8 @@
 - (void)dealloc {
 	self.placeholder = nil;
 	[placeholderLabel removeFromSuperview];
-	[placeholderLabel release];
-	placeholderLabel = nil;
+	[placeholderLabel release], placeholderLabel = nil;
+	[at_drawRectBlock release], at_drawRectBlock = nil;
 	[super dealloc];
 }
 
@@ -55,6 +57,12 @@
 	if (!self.text || [self.text length] == 0) return YES;
 	return NO;
 }
+
+- (void)drawRect:(CGRect)rect {
+	if (at_drawRectBlock) {
+		at_drawRectBlock(self, rect);
+	}
+}
 @end
 
 
@@ -71,6 +79,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEdit:) name:UITextViewTextDidChangeNotification object:self];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEdit:) name:UITextViewTextDidEndEditingNotification object:self];
 	[self setupPlaceholder];
+	self.contentMode = UIViewContentModeRedraw;
 }
 
 - (void)setupPlaceholder {
@@ -82,12 +91,18 @@
 		placeholderLabel.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 		[placeholderLabel sizeToFit];
 		[self addSubview:placeholderLabel];
-		CGFloat padding = 8.0;
+		
+		CGFloat paddingX = 0;
+		CGPoint origin = CGPointZero;
+		
+		paddingX = 8;
+		origin = CGPointMake(8, 8);
+		
 		CGRect b = placeholderLabel.bounds;
-		b.size.width = self.bounds.size.width - padding*2.0;
+		b.size.width = self.bounds.size.width - paddingX*2.0;
 		placeholderLabel.bounds = b;
 		CGRect f = placeholderLabel.frame;
-		f.origin = CGPointMake(padding, padding);
+		f.origin = origin;
 		placeholderLabel.frame = f;
 		[self sendSubviewToBack:placeholderLabel];
 	} else {

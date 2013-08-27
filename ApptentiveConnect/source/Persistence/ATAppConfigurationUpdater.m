@@ -11,12 +11,17 @@
 #import "ATContactStorage.h"
 #import "ATUtilities.h"
 #import "ATWebClient.h"
-#import "PJSONKit.h"
 
 NSString *const ATConfigurationPreferencesChangedNotification = @"ATConfigurationPreferencesChangedNotification";
 NSString *const ATAppConfigurationLastUpdatePreferenceKey = @"ATAppConfigurationLastUpdatePreferenceKey";
 NSString *const ATAppConfigurationExpirationPreferenceKey = @"ATAppConfigurationExpirationPreferenceKey";
 NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigurationMetricsEnabledPreferenceKey";
+
+NSString *const ATAppConfigurationMessageCenterTitleKey = @"ATAppConfigurationMessageCenterTitleKey";
+NSString *const ATAppConfigurationMessageCenterForegroundRefreshIntervalKey = @"ATAppConfigurationMessageCenterForegroundRefreshIntervalKey";
+NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey = @"ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey";
+
+NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDisplayNameKey";
 
 // Interval, in seconds, after which we'll update the configuration.
 #if APPTENTIVE_DEBUG
@@ -37,6 +42,8 @@ NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigura
 	[NSDictionary dictionaryWithObjectsAndKeys:
 	 [NSDate distantPast], ATAppConfigurationLastUpdatePreferenceKey,
 	 [NSNumber numberWithBool:YES], ATAppConfigurationMetricsEnabledPreferenceKey,
+	 [NSNumber numberWithInt:20], ATAppConfigurationMessageCenterForegroundRefreshIntervalKey,
+	 [NSNumber numberWithInt:60], ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey,
 	 nil];
 	[defaults registerDefaults:defaultPreferences];
 }
@@ -113,7 +120,7 @@ NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigura
 			[self processResult:(NSDictionary *)result];
 			[delegate configurationUpdaterDidFinish:YES];
 		} else {
-			NSLog(@"App configuration result is not NSDictionary!");
+			ATLogError(@"App configuration result is not NSDictionary!");
 			[delegate configurationUpdaterDidFinish:NO];
 		}
 	}
@@ -125,7 +132,7 @@ NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigura
 
 - (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
 	@synchronized(self) {
-		NSLog(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
+		ATLogInfo(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
 		
 		[delegate configurationUpdaterDidFinish:NO];
 	}
@@ -149,7 +156,7 @@ NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigura
 		 @"ratings_days_before_prompt", ATAppRatingDaysBeforePromptPreferenceKey, 
 		 @"ratings_days_between_prompts", ATAppRatingDaysBetweenPromptsPreferenceKey, 
 		 @"ratings_events_before_prompt", ATAppRatingSignificantEventsBeforePromptPreferenceKey, 
-		 @"ratings_uses_before_prompt", ATAppRatingUsesBeforePromptPreferenceKey, 
+		 @"ratings_uses_before_prompt", ATAppRatingUsesBeforePromptPreferenceKey,
 		 @"metrics_enabled", ATAppConfigurationMetricsEnabledPreferenceKey,
 		 nil];
 	
@@ -190,6 +197,10 @@ NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigura
 	
 	if ([jsonConfiguration objectForKey:@"review_url"]) {
 		NSString *reviewURLString = [jsonConfiguration objectForKey:@"review_url"];
+		NSString *oldReviewURLString = [defaults objectForKey:ATAppRatingReviewURLPreferenceKey];
+		if (![reviewURLString isEqualToString:oldReviewURLString]) {
+			hasConfigurationChanges = YES;
+		}
 		[defaults setObject:reviewURLString forKey:ATAppRatingReviewURLPreferenceKey];
 	}
 	
@@ -199,6 +210,45 @@ NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigura
 		if (expirationDate) {
 			[defaults setObject:expirationDate forKey:ATAppConfigurationExpirationPreferenceKey];
 		}
+	}
+	
+	if ([jsonConfiguration objectForKey:@"message_center"]) {
+		NSObject *messageCenterConfiguration = [jsonConfiguration objectForKey:@"message_center"];
+		if ([messageCenterConfiguration isKindOfClass:[NSDictionary class]]) {
+			NSDictionary *mc = (NSDictionary *)messageCenterConfiguration;
+			NSString *title = [mc objectForKey:@"title"];
+			NSString *oldTitle = [defaults objectForKey:ATAppConfigurationMessageCenterTitleKey];
+			if (!oldTitle || ![oldTitle isEqualToString:title]) {
+				[defaults setObject:title forKey:ATAppConfigurationMessageCenterTitleKey];
+				hasConfigurationChanges = YES;
+			}
+			
+			NSNumber *fgRefresh = [mc objectForKey:@"fg_poll"];
+			NSNumber *oldFGRefresh = [defaults objectForKey:ATAppConfigurationMessageCenterForegroundRefreshIntervalKey];
+			if (!oldFGRefresh || [oldFGRefresh intValue] != [fgRefresh intValue]) {
+				[defaults setObject:fgRefresh forKey:ATAppConfigurationMessageCenterForegroundRefreshIntervalKey];
+				hasConfigurationChanges = YES;
+			}
+			
+			NSNumber *bgRefresh = [mc objectForKey:@"bg_poll"];
+			NSNumber *oldBGRefresh = [defaults objectForKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey];
+			if (!oldBGRefresh || [oldBGRefresh intValue] != [bgRefresh intValue]) {
+				[defaults setObject:bgRefresh forKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey];
+				hasConfigurationChanges = YES;
+			}
+		}
+	}
+	
+	BOOL setAppName = NO;
+	if ([jsonConfiguration objectForKey:@"app_display_name"]) {
+		NSObject *appNameObject = [jsonConfiguration objectForKey:@"app_display_name"];
+		if ([appNameObject isKindOfClass:[NSString class]]) {
+			[defaults setObject:appNameObject forKey:ATAppConfigurationAppDisplayNameKey];
+			setAppName = YES;
+		}
+	}
+	if (!setAppName) {
+		[defaults removeObjectForKey:ATAppConfigurationAppDisplayNameKey];
 	}
 	
 	if (hasConfigurationChanges) {

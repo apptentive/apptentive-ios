@@ -7,14 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ATRecord.h"
+#import "ATLegacyRecord.h"
 
-@interface ATMetric : ATRecord <NSCoding> {
+@interface ATMetric : ATLegacyRecord <NSCoding> {
 @private
 	NSString *name;
 	NSMutableDictionary *info;
 }
-@property (nonatomic, retain) NSString *name;
+@property (nonatomic, copy) NSString *name;
 @property (nonatomic, readonly) NSDictionary *info;
 
 - (void)setValue:(id)value forKey:(NSString *)key;

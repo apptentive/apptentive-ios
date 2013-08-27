@@ -8,5 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ATToolbar : UIToolbar
+#import "ATTypes.h"
+
+@interface ATToolbar : UIToolbar {
+	ATDrawRectBlock at_drawRectBlock;
+}
+@property (nonatomic, readwrite, copy) ATDrawRectBlock at_drawRectBlock;
 @end
+
+void ATToolbar_Bootstrap();

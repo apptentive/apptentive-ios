@@ -11,9 +11,10 @@
 @class ATFeedback;
 @class ATAPIRequest;
 
+extern NSString *const ATWebClientDefaultChannelName;
+
 /*! Singleton for generating API requests. */
-@interface ATWebClient : NSObject {
-}
+@interface ATWebClient : NSObject
 + (ATWebClient *)sharedClient;
 - (NSString *)baseURLString;
 - (NSString *)commonChannelName;

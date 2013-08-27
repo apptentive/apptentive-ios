@@ -71,4 +71,168 @@
 	STAssertTrue([ATUtilities versionString:@"5.0" isLessThanVersionString:@"5.1"], @"Should be less");
 	STAssertTrue([ATUtilities versionString:@"5.0" isLessThanVersionString:@"6.0.1"], @"Should be less");
 }
+
+- (void)testCacheControlParsing {
+	STAssertEquals(0., [ATUtilities maxAgeFromCacheControlHeader:nil], @"Should be same");
+	STAssertEquals(0., [ATUtilities maxAgeFromCacheControlHeader:@""], @"Should be same");
+	STAssertEquals(86400., [ATUtilities maxAgeFromCacheControlHeader:@"Cache-Control: max-age=86400, private"], @"Should be same");
+	STAssertEquals(86400., [ATUtilities maxAgeFromCacheControlHeader:@"max-age=86400, private"], @"Should be same");
+	STAssertEquals(47.47, [ATUtilities maxAgeFromCacheControlHeader:@"max-age=47.47, private"], @"Should be same");
+	STAssertEquals(0., [ATUtilities maxAgeFromCacheControlHeader:@"max-age=0, private"], @"Should be same");
+}
+
+- (void)testThumbnailSize {
+	CGSize imageSize, maxSize, result;
+	
+	imageSize = CGSizeMake(10, 10);
+	maxSize = CGSizeMake(4, 3);
+	result = ATThumbnailSizeOfMaxSize(imageSize, maxSize);
+	STAssertTrue(CGSizeEqualToSize(result, CGSizeMake(3, 3)), @"Should be 3x3 thumbnail.");
+	
+	imageSize = CGSizeMake(10, 10);
+	maxSize = CGSizeMake(11, 20);
+	result = ATThumbnailSizeOfMaxSize(imageSize, maxSize);
+	STAssertTrue(CGSizeEqualToSize(result, CGSizeMake(10, 10)), @"Should be 10x10 thumbnail.");
+	
+	imageSize = CGSizeMake(6, 8);
+	maxSize = CGSizeMake(4, 4);
+	result = ATThumbnailSizeOfMaxSize(imageSize, maxSize);
+	STAssertTrue(CGSizeEqualToSize(result, CGSizeMake(3, 4)), @"Should be 3x4 thumbnail.");
+	
+	imageSize = CGSizeMake(8, 6);
+	maxSize = CGSizeMake(6, 6);
+	result = ATThumbnailSizeOfMaxSize(imageSize, maxSize);
+	STAssertTrue(CGSizeEqualToSize(result, CGSizeMake(6, 4)), @"Should be 6x4 thumbnail.");
+	
+	imageSize = CGSizeMake(800, 600);
+	maxSize = CGSizeMake(600, 600);
+	result = ATThumbnailSizeOfMaxSize(imageSize, maxSize);
+	STAssertTrue(CGSizeEqualToSize(result, CGSizeMake(600, 450)), @"Should be 600x450 thumbnail.");
+	
+	imageSize = CGSizeMake(0, 0);
+	maxSize = CGSizeMake(6, 6);
+	result = ATThumbnailSizeOfMaxSize(imageSize, maxSize);
+	STAssertTrue(CGSizeEqualToSize(result, CGSizeMake(0, 0)), @"Should be 0x0 thumbnail.");
+	
+	imageSize = CGSizeMake(6, 6);
+	maxSize = CGSizeMake(0, 0);
+	result = ATThumbnailSizeOfMaxSize(imageSize, maxSize);
+	STAssertTrue(CGSizeEqualToSize(result, CGSizeMake(0, 0)), @"Should be 0x0 thumbnail.");
+}
+
+- (void)testThumbnailCrop {
+	CGSize imageSize, thumbSize;
+	CGRect result, expected;
+	
+	imageSize = CGSizeMake(1200, 1600);
+	thumbSize = CGSizeMake(100, 100);
+	result = ATThumbnailCropRectForThumbnailSize(imageSize, thumbSize);
+	expected = CGRectMake(0, 200, 1200, 1200);
+	STAssertTrue(CGRectEqualToRect(result, expected), @"Expected %@, got %@", NSStringFromCGRect(expected), NSStringFromCGRect(result));
+	
+	imageSize = CGSizeMake(1600, 1200);
+	thumbSize = CGSizeMake(100, 100);
+	result = ATThumbnailCropRectForThumbnailSize(imageSize, thumbSize);
+	expected = CGRectMake(200, 0, 1200, 1200);
+	STAssertTrue(CGRectEqualToRect(result, expected), @"Expected %@, got %@", NSStringFromCGRect(expected), NSStringFromCGRect(result));
+	
+	imageSize = CGSizeMake(1600, 1200);
+	thumbSize = CGSizeMake(800, 600);
+	result = ATThumbnailCropRectForThumbnailSize(imageSize, thumbSize);
+	expected = CGRectMake(0, 0, 1600, 1200);
+	STAssertTrue(CGRectEqualToRect(result, expected), @"Expected %@, got %@", NSStringFromCGRect(expected), NSStringFromCGRect(result));
+}
+
+- (void)testDictionaryEquality {
+	NSDictionary *a = nil;
+	NSDictionary *b = nil;
+	
+	STAssertTrue([ATUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should be equal: %@ v %@", a, b);
+	
+	a = @{};
+	STAssertFalse([ATUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should not be equal: %@ v %@", a, b);
+	
+	a = nil;
+	b = @{};
+	STAssertFalse([ATUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should not be equal: %@ v %@", a, b);
+	
+	a = @{};
+	b = @{};
+	STAssertTrue([ATUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should be equal: %@ v %@", a, b);
+	
+	a = @{@"foo":@"bar"};
+	b = @{@"foo":@"bar"};
+	STAssertTrue([ATUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should be equal: %@ v %@", a, b);
+	
+	a = @{@"foo":@[@1, @2, @3]};
+	b = @{@"foo":@[@1, @2, @4]};
+	STAssertFalse([ATUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should not be equal: %@ v %@", a, b);
+	
+	a = @{@"foo":@[@1, @2, @{@"bar":@"yarg"}]};
+	b = @{@"foo":@[@1, @2, @{@"narf":@"fran"}]};
+	STAssertFalse([ATUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should not be equal: %@ v %@", a, b);
+	
+	a = @{@"foo":@[@1, @2, @{@"bar":@"yarg"}]};
+	b = @{@"foo":@[@1, @2, @{@"bar":@"yarg"}]};
+	STAssertTrue([ATUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should be equal: %@ v %@", a, b);
+}
+
+- (void)testArrayEquality {
+	NSArray *a = nil;
+	NSArray *b = nil;
+	
+	STAssertTrue([ATUtilities array:a isEqualToArray:b], @"Arrays should be equal: %@ v %@", a, b);
+	
+	a = @[];
+	STAssertFalse([ATUtilities array:a isEqualToArray:b], @"Arrays should not be equal: %@ v %@", a, b);
+	
+	a = nil;
+	b = @[];
+	STAssertFalse([ATUtilities array:a isEqualToArray:b], @"Arrays should not be equal: %@ v %@", a, b);
+	
+	a = @[];
+	b = nil;
+	STAssertFalse([ATUtilities array:a isEqualToArray:b], @"Arrays should not be equal: %@ v %@", a, b);
+	
+	a = @[];
+	b = @[];
+	STAssertTrue([ATUtilities array:a isEqualToArray:b], @"Arrays should be equal: %@ v %@", a, b);
+	
+	a = @[@1, @2, @3];
+	b = @[@1, @2, @3];
+	STAssertTrue([ATUtilities array:a isEqualToArray:b], @"Arrays should be equal: %@ v %@", a, b);
+	
+	a = @[@1, @2, @"foo"];
+	b = @[@1, @2, @3];
+	STAssertFalse([ATUtilities array:a isEqualToArray:b], @"Arrays should not be equal: %@ v %@", a, b);
+	
+	a = @[@1, @2, @[@1, @2, @3]];
+	b = @[@1, @2, @[@1, @2, @3]];
+	STAssertTrue([ATUtilities array:a isEqualToArray:b], @"Arrays should be equal: %@ v %@", a, b);
+	
+	a = @[@1, @2, @[@1, @2, @{}]];
+	b = @[@1, @2, @[@1, @2, @3]];
+	STAssertFalse([ATUtilities array:a isEqualToArray:b], @"Arrays should not be equal: %@ v %@", a, b);
+}
+
+- (void)testEmailValidation {
+	STAssertTrue([ATUtilities emailAddressIsValid:@"andrew@example.com"], @"Should be valid");
+	STAssertTrue([ATUtilities emailAddressIsValid:@" andrew+spam@foo.md "], @"Should be valid");
+	STAssertTrue([ATUtilities emailAddressIsValid:@"a_blah@a.co.uk"], @"Should be valid");
+	STAssertTrue([ATUtilities emailAddressIsValid:@"☃@☃.net"], @"Snowman! Valid!");
+	STAssertTrue([ATUtilities emailAddressIsValid:@"andrew@example.com"], @"Should be valid");
+//	STAssertTrue([ATUtilities emailAddressIsValid:@" foo@bar.com yarg@blah.com"], @"May as well accept multiple");
+//	STAssertTrue([ATUtilities emailAddressIsValid:@"Andrew Wooster <andrew@example.com>"], @"Accept contact emails");
+	STAssertTrue([ATUtilities emailAddressIsValid:@"foo/bar=blah@example.com"], @"Accept department emails");
+	STAssertTrue([ATUtilities emailAddressIsValid:@"!hi!%blah@example.com"], @"Should be valid");
+	STAssertTrue([ATUtilities emailAddressIsValid:@"m@example.com"], @"Should be valid");
+	
+	STAssertFalse([ATUtilities emailAddressIsValid:@"blah"], @"Shouldn't be valid");
+//	STAssertFalse([ATUtilities emailAddressIsValid:@"andrew@example,com"], @"Shouldn't be valid");
+	STAssertFalse([ATUtilities emailAddressIsValid:@""], @"Shouldn't be valid");
+	STAssertFalse([ATUtilities emailAddressIsValid:@"@"], @"Shouldn't be valid");
+	STAssertFalse([ATUtilities emailAddressIsValid:@".com"], @"Shouldn't be valid");
+	STAssertFalse([ATUtilities emailAddressIsValid:@"\n"], @"Shouldn't be valid");
+//	STAssertFalse([ATUtilities emailAddressIsValid:@"foo@yarg"], @"Shouldn't be valid");
+}
 @end

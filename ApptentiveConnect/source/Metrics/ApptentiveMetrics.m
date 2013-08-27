@@ -7,11 +7,17 @@
 //
 
 #import "ApptentiveMetrics.h"
+
 #import "ATAppConfigurationUpdater.h"
+#import "ATBackend.h"
 #import "ATFeedbackMetrics.h"
 #import "ATAppRatingMetrics.h"
+#import "ATData.h"
+#import "ATEvent.h"
+#import "ATMessageCenterMetrics.h"
 #import "ATMetric.h"
 #import "ATRecordTask.h"
+#import "ATRecordRequestTask.h"
 #import "ATSurveyMetrics.h"
 #import "ATTaskQueue.h"
 
@@ -36,7 +42,21 @@ static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 static NSString *ATMetricNameAppLaunch = @"app.launch";
 static NSString *ATMetricNameAppExit = @"app.exit";
 
+static NSString *ATMetricNameMessageCenterLaunch = @"message_center.launch";
+static NSString *ATMetricNameMessageCenterClose = @"message_center.close";
+static NSString *ATMetricNameMessageCenterAttach = @"message_center.attach";
+static NSString *ATMetricNameMessageCenterRead = @"message_center.read";
+static NSString *ATMetricNameMessageCenterSend = @"message_center.send";
+
+static NSString *ATMetricNameMessageCenterIntroLaunch = @"message_center.intro.launch";
+static NSString *ATMetricNameMessageCenterIntroSend = @"message_center.intro.send";
+static NSString *ATMetricNameMessageCenterIntroCancel = @"message_center.intro.cancel";
+static NSString *ATMetricNameMessageCenterThankYouLaunch = @"message_center.thank_you.launch";
+static NSString *ATMetricNameMessageCenterThankYouMessages = @"message_center.thank_you.messages";
+static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank_you.close";
+
 @interface ApptentiveMetrics (Private)
+- (void)addLaunchMetric;
 - (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo;
 - (ATFeedbackWindowType)windowTypeFromNotification:(NSNotification *)notification;
 - (void)feedbackDidShowWindow:(NSNotification *)notification;
@@ -59,6 +79,19 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 - (void)appDidEnterBackground:(NSNotification *)notification;
 - (void)appWillEnterForeground:(NSNotification *)notification;
 
+- (void)messageCenterDidLaunch:(NSNotification *)notification;
+- (void)messageCenterDidClose:(NSNotification *)notification;
+- (void)messageCenterDidAttach:(NSNotification *)notification;
+- (void)messageCenterDidRead:(NSNotification *)notification;
+- (void)messageCenterDidSend:(NSNotification *)notification;
+
+- (void)messageCenterIntroDidLaunch:(NSNotification *)notification;
+- (void)messageCenterIntroDidSend:(NSNotification *)notification;
+- (void)messageCenterIntroDidCancel:(NSNotification *)notification;
+- (void)messageCenterIntroThankYouDidLaunch:(NSNotification *)notification;
+- (void)messageCenterIntroThankYouHitMessages:(NSNotification *)notification;
+- (void)messageCenterIntroThankYouDidClose:(NSNotification *)notification;
+
 - (void)preferencesChanged:(NSNotification *)notification;
 
 - (void)updateWithCurrentPreferences;
@@ -68,11 +101,10 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 
 + (ApptentiveMetrics *)sharedMetrics {
 	static ApptentiveMetrics *sharedSingleton = nil;
-	@synchronized(self) {
-		if (sharedSingleton == nil) {
-			sharedSingleton = [[ApptentiveMetrics alloc] init];
-		}
-	}
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		sharedSingleton = [[ApptentiveMetrics alloc] init];
+	});
 	return sharedSingleton;
 }
 
@@ -85,13 +117,12 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 	[defaults registerDefaults:defaultPreferences];
 }
 
-- (id)init {
-	self = [super init];
-	if (self) {
-		metricsEnabled = NO;
+- (void)backendBecameAvailable:(NSNotification *)notification {
+	@autoreleasepool {
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:ATBackendBecameReadyNotification object:nil];
+		
 		[ApptentiveMetrics registerDefaults];
 		[self updateWithCurrentPreferences];
-		[self addMetricWithName:ATMetricNameAppLaunch info:nil];
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackDidShowWindow:) name:ATFeedbackDidShowWindowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackDidHideWindow:) name:ATFeedbackDidHideWindowNotification object:nil];
@@ -114,8 +145,31 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
 #elif TARGET_OS_MAC
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
-		
 #endif
+		
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterDidLaunch:) name:ATMessageCenterDidShowNotification object:nil];
+		[self performSelector:@selector(addLaunchMetric) withObject:nil afterDelay:0.1];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterDidClose:) name:ATMessageCenterDidHideNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterDidAttach:) name:ATMessageCenterDidAttachNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterDidRead:) name:ATMessageCenterDidReadNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterDidSend:) name:ATMessageCenterDidSendNotification object:nil];
+		
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroDidLaunch:) name:ATMessageCenterIntroDidShowNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroDidSend:) name:ATMessageCenterIntroDidSendNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroDidCancel:) name:ATMessageCenterIntroDidCancelNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroThankYouDidLaunch:) name:ATMessageCenterIntroThankYouDidShowNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroThankYouHitMessages:) name:ATMessageCenterIntroThankYouHitMessagesNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroThankYouDidClose:) name:ATMessageCenterIntroThankYouDidCloseNotification object:nil];
+	}
+}
+
+- (id)init {
+	self = [super init];
+	if (self) {
+		metricsEnabled = NO;
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backendBecameAvailable:) name:ATBackendBecameReadyNotification object:nil];
 	}
 	
 	return self;
@@ -125,22 +179,56 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[super dealloc];
 }
+
+- (BOOL)upgradeLegacyMetric:(ATMetric *)metric {
+	if (metricsEnabled == NO) {
+		return NO;
+	}
+	
+	ATEvent *event = (ATEvent *)[ATData newEntityNamed:@"ATEvent"];
+	[event setup];
+	event.label = metric.name;
+	[event addEntriesFromDictionary:[metric info]];
+	if (![ATData save]) {
+		[event release], event = nil;
+		return NO;
+	}
+	
+	ATRecordRequestTask *task = [[ATRecordRequestTask alloc] init];
+	[task setTaskProvider:event];
+	[[ATTaskQueue sharedTaskQueue] addTask:task];
+	[event release], event = nil;
+	[task release], task = nil;
+	return YES;
+}
 @end
 
 
 
 @implementation ApptentiveMetrics (Private)
+- (void)addLaunchMetric {
+	@autoreleasepool {
+		[self addMetricWithName:ATMetricNameAppLaunch info:nil];
+	}
+}
+
 - (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo {
 	if (metricsEnabled == NO) {
 		return;
 	}
-	ATMetric *metric = [[ATMetric alloc] init];
-	metric.name = name;
-	[metric addEntriesFromDictionary:userInfo];
-	ATRecordTask *task = [[ATRecordTask alloc] init];
-	[task setRecord:metric];
+	ATEvent *event = (ATEvent *)[ATData newEntityNamed:@"ATEvent"];
+	[event setup];
+	event.label = name;
+	[event addEntriesFromDictionary:userInfo];
+	if (![ATData save]) {
+		[event release], event = nil;
+		return;
+	}
+	
+	ATRecordRequestTask *task = [[ATRecordRequestTask alloc] init];
+	[task setTaskProvider:event];
 	[[ATTaskQueue sharedTaskQueue] addTask:task];
-	[metric release], metric = nil;
+	[event release], event = nil;
 	[task release], task = nil;
 }
 
@@ -150,7 +238,7 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 		windowType = [(NSNumber *)[[notification userInfo] objectForKey:ATFeedbackWindowTypeKey] intValue];
 	}
 	if (windowType != ATFeedbackWindowTypeFeedback && windowType != ATFeedbackWindowTypeInfo) {
-		NSLog(@"Unknown window type: %d", windowType);
+		ATLogError(@"Unknown window type: %d", windowType);
 	}
 	return windowType;
 }
@@ -194,7 +282,7 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 		buttonType = [(NSNumber *)[[notification userInfo] objectForKey:ATAppRatingButtonTypeKey] intValue];
 	}
 	if (buttonType != ATAppRatingEnjoymentButtonTypeYes && buttonType != ATAppRatingEnjoymentButtonTypeNo) {
-		NSLog(@"Unknown button type: %d", buttonType);
+		ATLogError(@"Unknown button type: %d", buttonType);
 	}
 	return buttonType;
 }
@@ -218,7 +306,7 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 		buttonType = [(NSNumber *)[[notification userInfo] objectForKey:ATAppRatingButtonTypeKey] intValue];
 	}
 	if (buttonType != ATAppRatingButtonTypeNo && buttonType != ATAppRatingButtonTypeRemind && buttonType != ATAppRatingButtonTypeRateApp) {
-		NSLog(@"Unknown button type: %d", buttonType);
+		ATLogError(@"Unknown button type: %d", buttonType);
 	}
 	return buttonType;
 }
@@ -249,7 +337,7 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 	}
 	if (event != ATSurveyEventTappedSend && event != ATSurveyEventTappedCancel && event != ATSurveyEventAnsweredQuestion) {
 		event = ATSurveyEventUnknown;
-		NSLog(@"Unknown survey event type: %d", event);
+		ATLogError(@"Unknown survey event type: %d", event);
 	}
 	return event;
 }
@@ -309,6 +397,68 @@ static NSString *ATMetricNameAppExit = @"app.exit";
 
 - (void)appWillEnterForeground:(NSNotification *)notification {
 	[self addMetricWithName:ATMetricNameAppLaunch info:nil];
+}
+
+- (void)messageCenterDidLaunch:(NSNotification *)notification {
+	[self addMetricWithName:ATMetricNameMessageCenterLaunch info:nil];
+}
+
+- (void)messageCenterDidClose:(NSNotification *)notification {
+	[self addMetricWithName:ATMetricNameMessageCenterClose info:nil];
+}
+
+- (void)messageCenterDidAttach:(NSNotification *)notification {
+	[self addMetricWithName:ATMetricNameMessageCenterAttach info:nil];
+}
+
+- (void)messageCenterDidRead:(NSNotification *)notification {
+	NSMutableDictionary *info = [[NSMutableDictionary alloc] init];
+	NSString *messageID = [[notification userInfo] objectForKey:ATMessageCenterMessageIDKey];
+	if (messageID != nil) {
+		info[@"message_id"] = messageID;
+	}
+	[self addMetricWithName:ATMetricNameMessageCenterRead info:info];
+	[info release], info = nil;
+}
+
+- (void)messageCenterDidSend:(NSNotification *)notification {
+	NSMutableDictionary *info = [[NSMutableDictionary alloc] init];
+	NSString *nonce = [[notification userInfo] objectForKey:ATMessageCenterMessageNonceKey];
+	if (nonce != nil) {
+		info[@"nonce"] = nonce;
+	}
+	[self addMetricWithName:ATMetricNameMessageCenterSend info:info];
+	[info release], info = nil;
+}
+
+- (void)messageCenterIntroDidLaunch:(NSNotification *)notification {
+	[self addMetricWithName:ATMetricNameMessageCenterIntroLaunch info:nil];
+}
+
+- (void)messageCenterIntroDidSend:(NSNotification *)notification {
+	NSMutableDictionary *info = [[NSMutableDictionary alloc] init];
+	NSString *nonce = [[notification userInfo] objectForKey:ATMessageCenterMessageNonceKey];
+	if (nonce != nil) {
+		info[@"nonce"] = nonce;
+	}
+	[self addMetricWithName:ATMetricNameMessageCenterIntroSend info:info];
+	[info release], info = nil;
+}
+
+- (void)messageCenterIntroDidCancel:(NSNotification *)notification {
+	[self addMetricWithName:ATMetricNameMessageCenterIntroCancel info:nil];
+}
+
+- (void)messageCenterIntroThankYouDidLaunch:(NSNotification *)notification {
+	[self addMetricWithName:ATMetricNameMessageCenterThankYouLaunch info:nil];
+}
+
+- (void)messageCenterIntroThankYouHitMessages:(NSNotification *)notification {
+	[self addMetricWithName:ATMetricNameMessageCenterThankYouMessages info:nil];
+}
+
+- (void)messageCenterIntroThankYouDidClose:(NSNotification *)notification {
+	[self addMetricWithName:ATMetricNameMessageCenterThankYouClose info:nil];
 }
 
 - (void)preferencesChanged:(NSNotification *)notification {

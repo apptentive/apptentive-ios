@@ -7,27 +7,30 @@
 //
 
 #import "ATConnect.h"
+#import "ATConnect_Private.h"
 #import "ATBackend.h"
 #import "ATContactStorage.h"
 #import "ATFeedback.h"
 #import "ATUtilities.h"
 #if TARGET_OS_IPHONE
-#import "ATFeedbackController.h"
+#import "ATMessageCenterViewController.h"
 #elif TARGET_OS_MAC
 #import "ATFeedbackWindowController.h"
 #endif
 
-static ATConnect *sharedConnection = nil;
+NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCenterUnreadCountChangedNotification";
+NSString *const ATInitialUserNameKey = @"ATInitialUserNameKey";
+NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 
 @implementation ATConnect
-@synthesize apiKey, showTagline, shouldTakeScreenshot, showEmailField, initialName, initialEmailAddress, feedbackControllerType, customPlaceholderText;
+@synthesize apiKey, showTagline, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText;
 
 + (ATConnect *)sharedConnection {
-	@synchronized(self) {
-		if (sharedConnection == nil) {
-			sharedConnection = [[ATConnect alloc] init];
-		}
-	}
+	static ATConnect *sharedConnection = nil;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		sharedConnection = [[ATConnect alloc] init];
+	});
 	return sharedConnection;
 }
 
@@ -35,29 +38,26 @@ static ATConnect *sharedConnection = nil;
 	if ((self = [super init])) {
 		self.showEmailField = YES;
 		self.showTagline = YES;
-		self.shouldTakeScreenshot = NO;
-		additionalFeedbackData = [[NSMutableDictionary alloc] init];
+		customPersonData = [[NSMutableDictionary alloc] init];
+		customDeviceData = [[NSMutableDictionary alloc] init];
 	}
 	return self;
 }
 
 - (void)dealloc {
 #if TARGET_OS_IPHONE
-	if (feedbackController) {
-		[feedbackController release];
-		feedbackController = nil;
-	}
 #elif IF_TARGET_OS_MAC
 	if (feedbackWindowController) {
 		[feedbackWindowController release];
 		feedbackWindowController = nil;
 	}
 #endif
-	[additionalFeedbackData release], additionalFeedbackData = nil;
+	[customPersonData release], customPersonData = nil;
+	[customDeviceData release], customDeviceData = nil;
 	[customPlaceholderText release], customPlaceholderText = nil;
 	[apiKey release], apiKey = nil;
-	[initialName release], initialName = nil;
-	[initialEmailAddress release], initialEmailAddress = nil;
+	[initialUserName release], initialUserName = nil;
+	[initialUserEmailAddress release], initialUserEmailAddress = nil;
 	[super dealloc];
 }
 
@@ -70,95 +70,118 @@ static ATConnect *sharedConnection = nil;
 	}
 }
 
-- (NSDictionary *)additionFeedbackInfo {
-	return additionalFeedbackData;
-}
-
-- (void)addAdditionalInfoToFeedback:(NSObject *)object withKey:(NSString *)key {
-	if ([object isKindOfClass:[NSDate class]]) {
-		[additionalFeedbackData setObject:[ATUtilities stringRepresentationOfDate:(NSDate *)object] forKey:key];
-	} else {
-		[additionalFeedbackData setObject:object forKey:key];
+- (void)setInitialUserName:(NSString *)anInitialUserName {
+	if (initialUserName != anInitialUserName) {
+		[initialUserName release];
+		initialUserName = nil;
+		initialUserName = [anInitialUserName retain];
+		
+		// Set person object's name. Only overwrites previous *initial* names.
+		NSString *previousInitialUserName = [[NSUserDefaults standardUserDefaults] objectForKey:ATInitialUserNameKey];
+		if ([ATPersonInfo personExists]) {
+			ATPersonInfo *person = [ATPersonInfo currentPerson];
+			if (!person.name || [person.name isEqualToString:previousInitialUserName]) {
+				person.name = initialUserName;
+				person.needsUpdate = YES;
+				[person saveAsCurrentPerson];
+			}
+		}
+		[[NSUserDefaults standardUserDefaults] setObject:initialUserName forKey:ATInitialUserNameKey];
 	}
 }
 
-- (void)removeAdditionalInfoFromFeedbackWithKey:(NSString *)key {
-	[additionalFeedbackData removeObjectForKey:key];
+- (void)setInitialUserEmailAddress:(NSString *)anInitialUserEmailAddress {
+	if (![ATUtilities emailAddressIsValid:anInitialUserEmailAddress]) {
+		ATLogInfo(@"Attempting to set an invalid initial user email address: %@", anInitialUserEmailAddress);
+		return;
+	}
+		
+	if (initialUserEmailAddress != anInitialUserEmailAddress) {		
+		[initialUserEmailAddress release];
+		initialUserEmailAddress = nil;
+		initialUserEmailAddress = [anInitialUserEmailAddress retain];
+		
+		// Set person object's email. Only overwrites previous *initial* emails.
+		NSString *previousInitialUserEmailAddress = [[NSUserDefaults standardUserDefaults] objectForKey:ATInitialUserEmailAddressKey];
+		if ([ATPersonInfo personExists]) {
+			ATPersonInfo *person = [ATPersonInfo currentPerson];
+			if (!person.emailAddress || [person.emailAddress isEqualToString:previousInitialUserEmailAddress]) {
+				person.emailAddress = initialUserEmailAddress;
+				person.needsUpdate = YES;
+				[person saveAsCurrentPerson];
+			}			
+		}
+		[[NSUserDefaults standardUserDefaults] setObject:initialUserEmailAddress forKey:ATInitialUserEmailAddressKey];
+	}
+}
+
+- (NSDictionary *)customPersonData {
+	return customPersonData;
+}
+
+- (NSDictionary *)customDeviceData {
+	return customDeviceData;
+}
+
+- (void)addCustomPersonData:(NSObject *)object withKey:(NSString *)key {
+	[self addCustomData:object withKey:key toCustomDataDictionary:customPersonData];
+}
+
+- (void)addCustomDeviceData:(NSObject *)object withKey:(NSString *)key {
+	[self addCustomData:object withKey:key toCustomDataDictionary:customDeviceData];
+}
+
+- (void)addCustomData:(NSObject *)object withKey:(NSString *)key toCustomDataDictionary:(NSMutableDictionary *)customData {
+	// Special cases
+	if ([object isKindOfClass:[NSDate class]]) {
+		object = [ATUtilities stringRepresentationOfDate:(NSDate *)object];
+	}
+	
+	BOOL allowedData = ([object isKindOfClass:[NSString class]] ||
+						[object isKindOfClass:[NSNumber class]] ||
+						[object isKindOfClass:[NSNull class]]);
+	
+	NSAssert(allowedData, @"Custom data must be of type NSString, NSNumber, or NSNull. Attempted to add custom data of type %@", NSStringFromClass([object class]));
+	
+	if (allowedData) {
+		[customData setObject:object forKey:key];
+	}
+}
+
+- (void)removeCustomPersonDataWithKey:(NSString *)key {
+	[customPersonData removeObjectForKey:key];
+}
+
+- (void)removeCustomDeviceDataWithKey:(NSString *)key {
+	[customDeviceData removeObjectForKey:key];
+}
+
+- (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key {
+	[self addCustomDeviceData:object withKey:key];
+}
+
+- (void)removeCustomDataWithKey:(NSString *)key {
+	[self removeCustomDeviceDataWithKey:key];
 }
 
 #if TARGET_OS_IPHONE
-- (void)presentFeedbackControllerFromViewController:(UIViewController *)viewController {
-	@synchronized(self) {
-		if (currentFeedbackController) {
-			NSLog(@"Apptentive feedback controller already shown.");
-			return;
-		}
-		UIImage *screenshot = nil;
-
-		if (![[ATBackend sharedBackend] currentFeedback]) {
-			ATFeedback *feedback = [[ATFeedback alloc] init];
-			if (additionalFeedbackData && [additionalFeedbackData count]) {
-				[feedback addExtraDataFromDictionary:additionalFeedbackData];
-			}
-			if (self.initialName && [self.initialName length] > 0) {
-				feedback.name = self.initialName;
-			}
-			if (self.initialEmailAddress && [self.initialEmailAddress length] > 0) {
-				feedback.email = self.initialEmailAddress;
-			}
-			ATContactStorage *contact = [ATContactStorage sharedContactStorage];
-			if (contact.name && [contact.name length] > 0) {
-				feedback.name = contact.name;
-			}
-			if (contact.phone) {
-				feedback.phone = contact.phone;
-			}
-			if (contact.email && [contact.email length] > 0) {
-				feedback.email = contact.email;
-			}
-			[[ATBackend sharedBackend] setCurrentFeedback:feedback];
-			[feedback release];
-			feedback = nil;
-		}
-		if ([[ATBackend sharedBackend] currentFeedback]) {
-			ATFeedback *currentFeedback = [[ATBackend sharedBackend] currentFeedback];
-			if (self.shouldTakeScreenshot && ![currentFeedback hasScreenshot] && self.feedbackControllerType != ATFeedbackControllerSimple) {
-				screenshot = [ATUtilities imageByTakingScreenshot];
-				// Get the rotation of the view hierarchy and rotate the screenshot as
-				// necessary.
-				CGFloat rotation = [ATUtilities rotationOfViewHierarchyInRadians:viewController.view];
-				screenshot = [ATUtilities imageByRotatingImage:screenshot byRadians:rotation];
-				[currentFeedback setScreenshot:screenshot];
-			} else if (!self.shouldTakeScreenshot && [currentFeedback hasScreenshot] && (currentFeedback.imageSource == ATFeedbackImageSourceScreenshot)) {
-				[currentFeedback setScreenshot:nil];
-			}
-		}
-
-		ATFeedbackController *vc = [[ATFeedbackController alloc] init];
-		[vc setShowEmailAddressField:self.showEmailField];
-		if (self.feedbackControllerType == ATFeedbackControllerSimple) {
-			vc.deleteCurrentFeedbackOnCancel = YES;
-		}
-		if (self.customPlaceholderText) {
-			[vc setCustomPlaceholderText:self.customPlaceholderText];
-		}
-		[vc setFeedback:[[ATBackend sharedBackend] currentFeedback]];
-
-		[vc presentFromViewController:viewController animated:YES];
-		currentFeedbackController = vc;
-	}
+- (void)presentMessageCenterFromViewController:(UIViewController *)viewController {
+	[[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController];
 }
 
-
-- (void)dismissFeedbackControllerAnimated:(BOOL)animated completion:(void (^)(void))completion {
-	[currentFeedbackController dismissAnimated:animated completion:completion];
+- (void)presentFeedbackDialogFromViewController:(UIViewController *)viewController {
+	NSString *title = ATLocalizedString(@"Give Feedback", @"First feedback screen title.");
+	NSString *body = [NSString stringWithFormat:ATLocalizedString(@"Please let us know how to make %@ better for you!", @"Feedback screen body. Parameter is the app name."), [[ATBackend sharedBackend] appName]];
+	NSString *placeholder = ATLocalizedString(@"How can we help? (required)", @"First feedback placeholder text.");
+	[[ATBackend sharedBackend] presentIntroDialogFromViewController:viewController withTitle:title prompt:body placeholderText:placeholder];
 }
 
+- (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion {
+	[[ATBackend sharedBackend] dismissMessageCenterAnimated:animated completion:completion];
+}
 
-- (void)feedbackControllerDidDismiss {
-	@synchronized(self) {
-		[currentFeedbackController release], currentFeedbackController = nil;
-	}
+- (NSUInteger)unreadMessageCount {
+	return [[ATBackend sharedBackend] unreadMessageCount];
 }
 
 #elif TARGET_OS_MAC
@@ -188,10 +211,23 @@ static ATConnect *sharedConnection = nil;
 
 + (NSBundle *)resourceBundle {
 #if TARGET_OS_IPHONE
-	NSString *path = [[NSBundle mainBundle] bundlePath];
+	NSString *path = [[NSBundle bundleForClass:[ATBackend class]] bundlePath];
 	NSString *bundlePath = [path stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
-	NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
-	return [bundle autorelease];
+	NSFileManager *fm = [NSFileManager defaultManager];
+	if ([fm fileExistsAtPath:bundlePath]) {
+		NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
+		return [bundle autorelease];
+	} else {
+		// Try trigger.io path.
+		bundlePath = [path stringByAppendingPathComponent:@"plugin.bundle"];
+		bundlePath = [bundlePath stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
+		if ([fm fileExistsAtPath:bundlePath]) {
+			NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
+			return [bundle autorelease];
+		} else {
+			return nil;
+		}
+	}
 #elif TARGET_OS_MAC
 	NSBundle *bundle = [NSBundle bundleForClass:[ATConnect class]];
 	return bundle;

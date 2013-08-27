@@ -30,6 +30,7 @@ NSString *const ATAppRatingFlowLastUsedVersionKey = @"ATAppRatingFlowLastUsedVer
 NSString *const ATAppRatingFlowLastUsedVersionFirstUseDateKey = @"ATAppRatingFlowLastUsedVersionFirstUseDateKey";
 NSString *const ATAppRatingFlowDeclinedToRateThisVersionKey = @"ATAppRatingFlowDeclinedToRateThisVersionKey";
 NSString *const ATAppRatingFlowUserDislikesThisVersionKey = @"ATAppRatingFlowUserDislikesThisVersionKey";
+NSString *const ATAppRatingFlowPromptCountThisVersionKey = @"ATAppRatingFlowPromptCountThisVersionKey";
 NSString *const ATAppRatingFlowLastPromptDateKey = @"ATAppRatingFlowLastPromptDateKey";
 NSString *const ATAppRatingFlowRatedAppKey = @"ATAppRatingFlowRatedAppKey";
 
@@ -74,7 +75,8 @@ NSString *const ATAppRatingFlowSignificantEventsCountKey = @"ATAppRatingFlowSign
 		 [NSNumber numberWithUnsignedInteger:kATAppRatingDefaultUsesBeforePrompt], ATAppRatingUsesBeforePromptPreferenceKey, 
 		 [NSNumber numberWithUnsignedInteger:kATAppRatingDefaultDaysBeforePrompt], ATAppRatingDaysBeforePromptPreferenceKey, 
 		 [NSNumber numberWithUnsignedInteger:kATAppRatingDefaultDaysBetweenPrompts], ATAppRatingDaysBetweenPromptsPreferenceKey, 
-		 [NSNumber numberWithUnsignedInteger:kATAppRatingDefaultSignificantEventsBeforePrompt], ATAppRatingSignificantEventsBeforePromptPreferenceKey, 
+		 [NSNumber numberWithUnsignedInteger:kATAppRatingDefaultSignificantEventsBeforePrompt], ATAppRatingSignificantEventsBeforePromptPreferenceKey,
+		 [NSNumber numberWithInteger:0], ATAppRatingFlowPromptCountThisVersionKey,
 		 defaultPromptLogic, ATAppRatingPromptLogicPreferenceKey, 
 		 [NSNumber numberWithBool:NO], ATAppRatingSettingsAreFromServerPreferenceKey, 
 		 [NSNumber numberWithBool:YES], ATAppRatingEnabledPreferenceKey,

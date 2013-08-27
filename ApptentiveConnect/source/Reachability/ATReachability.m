@@ -8,10 +8,9 @@
 
 #import "ATReachability.h"
 #import "ATUtilities.h"
+#import "ATLog.h"
 
 NSString *const ATReachabilityStatusChanged = @"ATReachabilityStatusChanged";
-
-static ATReachability *sharedSingleton = nil;
 
 @interface ATReachability (Private)
 - (BOOL)start;
@@ -21,11 +20,11 @@ static ATReachability *sharedSingleton = nil;
 
 @implementation ATReachability
 + (ATReachability *)sharedReachability {
-	@synchronized(self) {
-		if (!sharedSingleton) {
-			sharedSingleton = [[ATReachability alloc] init];
-		}
-	}
+	static ATReachability *sharedSingleton = nil;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		sharedSingleton = [[ATReachability alloc] init];
+	});
 	return sharedSingleton;
 }
 
@@ -46,8 +45,24 @@ static void ATReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 	
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	ATReachability *reachability = (ATReachability *)info;
+	
+	[[ATReachability sharedReachability] updateDeviceInfoWithCurrentNetworkType:reachability];
+	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATReachabilityStatusChanged object:reachability];
 	[pool release];
+}
+
+- (void)updateDeviceInfoWithCurrentNetworkType:(ATReachability *)reachability {
+	//TODO: ATDeviceInfo is not currently being updated with the new network type.
+	ATNetworkStatus status = [reachability currentNetworkStatus];
+	
+	NSString *statusString = @"network not reachable";
+	if (status == ATNetworkWifiReachable) {
+		statusString = @"WiFi";
+	} else if (status == ATNetworkWWANReachable) {
+		statusString = @"WWAN";
+	}
+	ATLogInfo(@"Apptentive Reachability changed: %@", statusString);
 }
 
 - (void)dealloc {
@@ -58,7 +73,6 @@ static void ATReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 	}
 	[super dealloc];
 }
-
 
 - (ATNetworkStatus)currentNetworkStatus {
 	ATNetworkStatus status = ATNetworkNotReachable;
@@ -111,7 +125,7 @@ static void ATReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 			break;
 		}
 		
-		if (!SCNetworkReachabilityScheduleWithRunLoop(reachabilityRef, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode)) {
+		if (!SCNetworkReachabilityScheduleWithRunLoop(reachabilityRef, CFRunLoopGetMain(), kCFRunLoopDefaultMode)) {
 			break;
 		}
 		
@@ -123,7 +137,7 @@ static void ATReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 
 - (void)stop {
 	if (reachabilityRef != NULL) {
-		SCNetworkReachabilityUnscheduleFromRunLoop(reachabilityRef, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
+		SCNetworkReachabilityUnscheduleFromRunLoop(reachabilityRef, CFRunLoopGetMain(), kCFRunLoopDefaultMode);
 	}
 }
 @end

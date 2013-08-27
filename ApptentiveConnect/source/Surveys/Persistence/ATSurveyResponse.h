@@ -7,14 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ATRecord.h"
+#import "ATLegacyRecord.h"
 
 @class ATSurveyQuestionResponse;
 
-@interface ATSurveyResponse : ATRecord {
+@interface ATSurveyResponse : ATLegacyRecord {
 	NSMutableArray *questionResponses;
 }
-@property (nonatomic, retain) NSString *identifier;
+@property (nonatomic, copy) NSString *identifier;
 @property (nonatomic, assign) NSUInteger completionSeconds;
 
 - (void)addQuestionResponse:(ATSurveyQuestionResponse *)response;
@@ -26,6 +26,6 @@
 @interface ATSurveyQuestionResponse : NSObject <NSCoding> {
 @private
 }
-@property (nonatomic, retain) NSString *identifier;
+@property (nonatomic, copy) NSString *identifier;
 @property (nonatomic, retain) NSObject<NSCoding> *response;
 @end

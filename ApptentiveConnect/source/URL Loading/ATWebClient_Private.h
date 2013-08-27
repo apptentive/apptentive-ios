@@ -29,5 +29,10 @@
 - (ATURLConnection *)connectionToPost:(NSURL *)theURL parameters:(NSDictionary *)parameters;
 - (ATURLConnection *)connectionToPost:(NSURL *)theURL body:(NSString *)body;
 - (ATURLConnection *)connectionToPost:(NSURL *)theURL withFileData:(NSData *)data ofMimeType:(NSString *)mimeType fileDataKey:(NSString *)fileDataKey  parameters:(NSDictionary *)parameters;
+- (ATURLConnection *)connectionToPost:(NSURL *)theURL JSON:(NSString *)body withFile:(NSString *)path ofMimeType:(NSString *)mimeType;
+- (ATURLConnection *)connectionToPut:(NSURL *)theURL JSON:(NSString *)body;
 - (void)addAPIHeaders:(ATURLConnection *)conn;
+- (void)updateConnection:(ATURLConnection *)conn withOAuthToken:(NSString *)token;
 @end
+
+void ATWebClient_Private_Bootstrap();

@@ -8,9 +8,10 @@
 
 #import "ATAPIRequest.h"
 #import "ATConnect.h"
+#import "ATConnect_Private.h"
 #import "ATConnectionManager.h"
+#import "ATJSONSerialization.h"
 #import "ATURLConnection.h"
-#import "PJSONKit.h"
 
 #if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
@@ -19,7 +20,7 @@
 NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 
 @implementation ATAPIRequest
-@synthesize returnType, failed, errorTitle, errorMessage, timeoutInterval, delegate;
+@synthesize returnType, failed, errorTitle, errorMessage, errorResponse, timeoutInterval, delegate;
 
 - (id)initWithConnection:(ATURLConnection *)aConnection channelName:(NSString *)aChannelName {
 	if ((self = [super init])) {
@@ -39,6 +40,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	}
 	[errorTitle release], errorTitle = nil;
 	[errorMessage release], errorMessage = nil;
+	[errorResponse release], errorResponse = nil;
 	[channelName release], channelName = nil;
 	
 	[super dealloc];
@@ -76,15 +78,21 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	return percentageComplete;
 }
 
+- (NSTimeInterval)expiresMaxAge {
+	return expiresMaxAge;
+}
+
 #pragma mark ATURLConnection Delegates
 - (void)connectionFinishedSuccessfully:(ATURLConnection *)sender {
 	@synchronized(self) {
 		if (cancelled) return;
 	}
 	int statusCode = sender.statusCode;
+	expiresMaxAge = [sender expiresMaxAge];
 	switch (statusCode) {
 		case 200:
 		case 201:
+		case 204:
 		case 400: // rate limit reached
 		case 403: // whatevs, probably private feed
 			break;
@@ -105,21 +113,17 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	NSObject *result = nil;
 	do { // once
 		NSData *d = [sender responseData];
-		/*!!!!! Prefix line with // to debug HTTP stuff.
-		 if (YES) {
-		 NSString *a = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];
-		 NSLog(@"request: %@", [connection requestAsString]);
-		 NSLog(@"a: %@", a);
-		 }
-		 // */
 		
 		if (self.failed) {
-			NSData *d = [sender responseData];
-			NSString *a = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];
-			NSLog(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
-			NSLog(@"Status was: %d", sender.statusCode);
-			NSLog(@"Request was: %@", [connection requestAsString]);
-			NSLog(@"Response was: %@", a);
+			NSString *responseString = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
+			if (responseString != nil) {
+				self.errorResponse = responseString;
+				[responseString release], responseString = nil;
+			}
+			ATLogError(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
+			ATLogInfo(@"Status was: %d", sender.statusCode);
+			ATLogDebug(@"Request was: %@", [connection requestAsString]);
+			ATLogDebug(@"Response was: %@", responseString);
 		}
 		
 		if (!d) break;
@@ -135,12 +139,14 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 			break;
 		}
 		
-		if (self.returnType == ATAPIRequestReturnTypeJSON) {
-			id json = [s ATobjectFromJSONString];
+		if (self.returnType == ATAPIRequestReturnTypeJSON && statusCode != 204) {
+			NSError *error = nil;
+			id json = [ATJSONSerialization JSONObjectWithString:s error:&error];
 			if (!json) {
 				self.failed = YES;
 				self.errorTitle = ATLocalizedString(@"Invalid response from server.", @"");
 				self.errorMessage = ATLocalizedString(@"Server did not return properly formatted JSON.", @"");
+				ATLogError(@"Invalid JSON: %@", error);
 			}
 			result = json;
 			break;
@@ -169,14 +175,21 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 		self.errorTitle = ATLocalizedString(@"Network Connection Error", @"");
 		self.errorMessage = [sender.connectionError localizedDescription];
 	}
+	NSData *d = [sender responseData];
+	NSString *responseString = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
+	if (responseString != nil) {
+		self.errorResponse = responseString;
+		[responseString release], responseString = nil;
+	}
+	
 	/*!!!!! Prefix line with // to debug HTTP stuff.
 	 if (YES) {
 	 NSData *d = [sender responseData];
 	 NSString *a = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];
-	 NSLog(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
-	 NSLog(@"Status was: %d", sender.statusCode);
-	 NSLog(@"Request was: %@", [connection requestAsString]);
-	 NSLog(@"Response was: %@", a);
+	 ATLogError(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
+	 ATLogInfo(@"Status was: %d", sender.statusCode);
+	 ATLogDebug(@"Request was: %@", [connection requestAsString]);
+	 ATLogDebug(@"Response was: %@", a);
 	 }
 	 // */
 	if (delegate) {

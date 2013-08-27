@@ -106,7 +106,7 @@
 		self.failed = YES;
 		self.lastErrorTitle = sender.errorTitle;
 		self.lastErrorMessage = sender.errorMessage;
-		NSLog(@"ATAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
+		ATLogInfo(@"ATAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
 		[self stop];
 		[self release];
 	}

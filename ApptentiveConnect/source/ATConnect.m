@@ -142,7 +142,7 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 						[object isKindOfClass:[NSNumber class]] ||
 						[object isKindOfClass:[NSNull class]]);
 	
-	NSAssert(allowedData, @"Custom data must be of type NSString, NSNumber, or NSNull. Attempted to add custom data of type %@", NSStringFromClass([object class]));
+	NSAssert(allowedData, @"Apptentive custom data must be of type NSString, NSNumber, or NSNull. Attempted to add custom data of type %@", NSStringFromClass([object class]));
 	
 	if (allowedData) {
 		[customData setObject:object forKey:key];

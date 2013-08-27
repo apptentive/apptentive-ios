@@ -7,6 +7,7 @@
 //
 
 #import "ATSurvey.h"
+#import "ATSurveysBackend.h"
 
 #define kATSurveyStorageVersion 1
 
@@ -14,12 +15,16 @@
 @synthesize responseRequired;
 @synthesize multipleResponsesAllowed;
 @synthesize active;
+@synthesize date, startTime, endTime;
+@synthesize viewCount, viewPeriod;
 @synthesize identifier;
 @synthesize name;
 @synthesize surveyDescription;
 @synthesize questions;
 @synthesize tags;
 @synthesize successMessage;
+
+NSString *const ATSurveyViewDatesKey = @"ATSurveyViewDatesKey";
 
 - (id)init {
 	if ((self = [super init])) {
@@ -36,6 +41,11 @@
 		tags = [[NSMutableArray alloc] init];
 		if (version == kATSurveyStorageVersion) {
 			self.active = [coder decodeBoolForKey:@"active"];
+			self.date = [coder decodeObjectForKey:@"date"];
+			self.startTime = [coder decodeObjectForKey:@"startTime"];
+			self.endTime = [coder decodeObjectForKey:@"endTime"];
+			self.viewCount = [coder decodeObjectForKey:@"viewCount"];
+			self.viewPeriod = [coder decodeObjectForKey:@"viewPeriod"];
 			self.responseRequired = [coder decodeBoolForKey:@"responseRequired"];
 			self.multipleResponsesAllowed = [coder decodeBoolForKey:@"multipleResponsesAllowed"];
 			self.identifier = [coder decodeObjectForKey:@"identifier"];
@@ -62,6 +72,11 @@
 	[coder encodeInt:kATSurveyStorageVersion forKey:@"version"];
 	[coder encodeObject:self.identifier forKey:@"identifier"];
 	[coder encodeBool:self.isActive forKey:@"active"];
+	[coder encodeObject:self.date forKey:@"date"];
+	[coder encodeObject:self.startTime forKey:@"startTime"];
+	[coder encodeObject:self.endTime forKey:@"endTime"];
+	[coder encodeObject:self.viewCount forKey:@"viewCount"];
+	[coder encodeObject:self.viewPeriod forKey:@"viewPeriod"];
 	[coder encodeBool:self.responseIsRequired forKey:@"responseRequired"];
 	[coder encodeBool:self.multipleResponsesAllowed forKey:@"multipleResponsesAllowed"];
 	[coder encodeObject:self.name forKey:@"name"];
@@ -78,6 +93,11 @@
 	[surveyDescription release], surveyDescription = nil;
 	[successMessage release], successMessage = nil;
 	[tags release], tags = nil;
+	[date release], date = nil;
+	[startTime release], startTime = nil;
+	[endTime release], endTime = nil;	
+	[viewCount release], viewCount = nil;
+	[viewPeriod release], viewPeriod = nil;
 	[super dealloc];
 }
 
@@ -126,9 +146,105 @@
 	return isSubset;
 }
 
+- (BOOL)isEligibleToBeShown {
+	BOOL eligible = ([self isActive] && [self isStarted] && ![self isEnded] && [self isWithinViewLimits]);
+	
+	BOOL responseAllowed = (![self wasAlreadySubmitted] || [self multipleResponsesAllowed]);
+	
+	return (eligible && responseAllowed);
+}
+
+- (BOOL)isStarted {
+	if (self.startTime == nil) {
+		return YES;
+	}
+	
+	return ([self.startTime compare:[NSDate date]] == NSOrderedAscending);
+}
+
+- (BOOL)isEnded {
+	if (self.endTime == nil) {
+		return NO;
+	}
+	
+	return ([self.endTime compare:[NSDate date]] == NSOrderedAscending);
+}
+
+- (BOOL)wasAlreadySubmitted {
+	return [[ATSurveysBackend sharedBackend] surveyAlreadySubmitted:self];
+}
+
+- (NSArray *)viewDates {
+	NSArray *viewDates = nil;
+	@synchronized([ATSurvey class]) {
+		NSDictionary *surveysViewDates = [[NSUserDefaults standardUserDefaults] objectForKey:ATSurveyViewDatesKey];
+		viewDates = [surveysViewDates objectForKey:self.identifier];
+	}
+	if (!viewDates) {
+		viewDates = @[];
+	}
+	return viewDates;
+}
+
+- (void)addViewDate:(NSDate *)viewDate {
+	NSAssert(viewDate != nil, @"Shouldn't be passing in nil values to add methods");
+	NSMutableArray *viewDates = [NSMutableArray arrayWithArray:[self viewDates]];
+	if (viewDate != nil) {
+		[viewDates insertObject:viewDate atIndex:0];
+	}
+		
+	@synchronized([ATSurvey class]) {
+		NSMutableDictionary *surveysViewDates = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:ATSurveyViewDatesKey]];
+		[surveysViewDates setObject:viewDates forKey:self.identifier];
+		
+		[[NSUserDefaults standardUserDefaults] setObject:surveysViewDates forKey:ATSurveyViewDatesKey];
+		if (![[NSUserDefaults standardUserDefaults] synchronize]) {
+			ATLogError(@"Unable to synchronize defaults for survey view dates.");
+		}
+	}
+}
+
+- (void)removeAllViewDates {
+	@synchronized([ATSurvey class]) {
+		NSMutableDictionary *surveysViewDates = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:ATSurveyViewDatesKey]];
+		if (self.identifier) {
+			[surveysViewDates removeObjectForKey:self.identifier];
+			
+			[[NSUserDefaults standardUserDefaults] setObject:surveysViewDates forKey:ATSurveyViewDatesKey];
+			if (![[NSUserDefaults standardUserDefaults] synchronize]) {
+				ATLogError(@"Unable to synchronize defaults for survey view dates.");
+			}
+		}
+	}
+}
+
+- (BOOL)isWithinViewLimits {
+	NSArray *viewDates = [self viewDates];
+	
+	if (self.viewCount == nil || self.viewPeriod == nil || [viewDates count] == 0) {
+		return YES;
+	}
+	
+	if ([self.viewCount intValue] == 0 || self.viewDates.count < [self.viewCount intValue]) {
+		return YES;
+	}
+	
+	NSDate *cutoff = [[NSDate date] dateByAddingTimeInterval: -[self.viewPeriod doubleValue]];
+	
+	int viewDatesWithinCutoff = 0;
+	for (NSDate *viewDate in viewDates) {
+		if ([cutoff compare:viewDate] == NSOrderedAscending) {
+			viewDatesWithinCutoff++;
+		}
+	}
+	
+	return (viewDatesWithinCutoff < [self.viewCount intValue]);
+}
+
 - (void)reset {
 	for (ATSurveyQuestion *question in questions) {
 		[question reset];
 	}
 }
+
 @end

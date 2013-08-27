@@ -136,7 +136,7 @@ enum {
 	
 	if (section == kSectionTasks) {
 		ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
-		return [queue countOfTasksWithTaskNamesInSet:[NSSet setWithObjects:@"feedback", @"message", nil]];
+		return [queue countOfTasksWithTaskNamesInSet:[NSSet setWithObjects:@"feedback", @"message", @"survey response", nil]];
 	} else if (section == kSectionDebugLog) {
 		return 1;
 	} else {

@@ -10,6 +10,7 @@
 #import "ATBackend.h"
 #import "ATTask.h"
 #import "ATLegacyRecord.h"
+#import "ATLegacySurveyResponse.h"
 
 #define kATTaskQueueCodingVersion 1
 // Retry period in seconds.
@@ -49,6 +50,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 					@try {
 						NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
 						[unarchiver setClass:[ATLegacyRecord class] forClassName:@"ATRecord"];
+						[unarchiver setClass:[ATLegacySurveyResponse class] forClassName:@"ATSurveyResponse"];
 						sharedTaskQueue = [[unarchiver decodeObjectForKey:@"root"] retain];
 						[unarchiver release], unarchiver = nil;
 					} @catch (NSException *exception) {

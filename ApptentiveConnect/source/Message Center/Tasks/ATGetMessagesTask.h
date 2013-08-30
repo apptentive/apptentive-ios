@@ -8,14 +8,14 @@
 
 #import "ATTask.h"
 #import "ATAPIRequest.h"
-#import "ATMessage.h"
+#import "ATAbstractMessage.h"
 
 static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey;
 
 @interface ATGetMessagesTask : ATTask <ATAPIRequestDelegate> {
 @private
 	ATAPIRequest *request;
-	ATMessage *lastMessage;
+	ATAbstractMessage *lastMessage;
 }
 
 @end

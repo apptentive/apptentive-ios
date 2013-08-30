@@ -9,9 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-#import "ATMessage.h"
+#import "ATAbstractMessage.h"
 
-@interface ATTextMessage : ATMessage
+@interface ATTextMessage : ATAbstractMessage
 
 @property (nonatomic, retain) NSString *body;
 @property (nonatomic, retain) NSString *title;

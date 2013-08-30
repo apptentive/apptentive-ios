@@ -1,37 +1,32 @@
 //
-//  ATMessageTask.m
+//  ATSurveyResponseTask.m
 //  ApptentiveConnect
 //
-//  Created by Andrew Wooster on 10/2/12.
-//  Copyright (c) 2012 Apptentive, Inc. All rights reserved.
+//  Created by Andrew Wooster on 7/8/13.
+//  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
 
-#import "ATMessageTask.h"
+#import "ATSurveyResponseTask.h"
 #import "ATBackend.h"
-#import "ATData.h"
 #import "ATJSONSerialization.h"
-#import "ATLog.h"
-#import "ATAbstractMessage.h"
-#import "ATConversationUpdater.h"
-#import "ATWebClient.h"
-#import "ATWebClient+MessageCenter.h"
+#import "ATWebClient+SurveyAdditions.h"
 
-#define kATMessageTaskCodingVersion 2
+#define kATPendingMessageTaskCodingVersion 1
 
-@interface ATMessageTask (Private)
+@interface ATSurveyResponseTask (Private)
 - (void)setup;
 - (void)teardown;
 - (BOOL)processResult:(NSDictionary *)jsonMessage;
 @end
 
-@implementation ATMessageTask
-@synthesize pendingMessageID;
+@implementation ATSurveyResponseTask
+@synthesize pendingSurveyResponseID;
 
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
 		int version = [coder decodeIntForKey:@"version"];
-		if (version == kATMessageTaskCodingVersion) {
-			self.pendingMessageID = [coder decodeObjectForKey:@"pendingMessageID"];
+		if (version == kATPendingMessageTaskCodingVersion) {
+			self.pendingSurveyResponseID = [coder decodeObjectForKey:@"pendingSurveyResponseID"];
 		} else {
 			[self release];
 			return nil;
@@ -41,13 +36,13 @@
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
-	[coder encodeInt:kATMessageTaskCodingVersion forKey:@"version"];
-	[coder encodeObject:self.pendingMessageID forKey:@"pendingMessageID"];
+	[coder encodeInt:kATPendingMessageTaskCodingVersion forKey:@"version"];
+	[coder encodeObject:self.pendingSurveyResponseID forKey:@"pendingSurveyResponseID"];
 }
 
 - (void)dealloc {
 	[self teardown];
-	[pendingMessageID release], pendingMessageID = nil;
+	[pendingSurveyResponseID release], pendingSurveyResponseID = nil;
 	[super dealloc];
 }
 
@@ -63,13 +58,13 @@
 
 - (void)start {
 	if (!request) {
-		ATAbstractMessage *message = [[ATAbstractMessage findMessageWithPendingID:self.pendingMessageID] retain];
-		if (message == nil) {
-			ATLogError(@"Warning: Message was nil in message task.");
+		ATSurveyResponse *response = [[ATSurveyResponse findSurveyResponseWithPendingID:self.pendingSurveyResponseID] retain];
+		if (response == nil) {
+			ATLogError(@"Warning: Response was nil in survey response task.");
 			self.finished = YES;
 			return;
 		}
-		request = [[[ATWebClient sharedClient] requestForPostingMessage:message] retain];
+		request = [[[ATWebClient sharedClient] requestForPostingSurveyResponse:response] retain];
 		if (request != nil) {
 			request.delegate = self;
 			[request start];
@@ -77,7 +72,7 @@
 		} else {
 			self.finished = YES;
 		}
-		[message release], message = nil;
+		[response release], response = nil;
 	}
 }
 
@@ -99,7 +94,7 @@
 }
 
 - (NSString *)taskName {
-	return @"message";
+	return @"survey response";
 }
 
 #pragma mark ATAPIRequestDelegate
@@ -110,7 +105,7 @@
 		if ([result isKindOfClass:[NSDictionary class]] && [self processResult:(NSDictionary *)result]) {
 			self.finished = YES;
 		} else {
-			ATLogError(@"Message result is not NSDictionary!");
+			ATLogError(@"Survey response result is not NSDictionary!");
 			self.failed = YES;
 		}
 		[self stop];
@@ -128,13 +123,13 @@
 		self.lastErrorTitle = sender.errorTitle;
 		self.lastErrorMessage = sender.errorMessage;
 		
-		ATAbstractMessage *message = [[ATAbstractMessage findMessageWithPendingID:self.pendingMessageID] retain];
-		if (message == nil) {
-			ATLogError(@"Warning: Message went away during task.");
+		ATSurveyResponse *response = [[ATSurveyResponse findSurveyResponseWithPendingID:self.pendingSurveyResponseID] retain];
+		if (response == nil) {
+			ATLogError(@"Warning: Survey response went away during task.");
 			self.finished = YES;
 			return;
 		}
-		[message setErrorOccurred:@(YES)];
+		
 		if (sender.errorResponse != nil) {
 			NSError *parseError = nil;
 			NSObject *errorObject = [ATJSONSerialization JSONObjectWithString:sender.errorResponse error:&parseError];
@@ -142,17 +137,16 @@
 				NSDictionary *errorDictionary = (NSDictionary *)errorObject;
 				if ([errorDictionary objectForKey:@"errors"]) {
 					ATLogInfo(@"ATAPIRequest server error: %@", [errorDictionary objectForKey:@"errors"]);
-					[message setErrorMessageJSON:sender.errorResponse];
 				}
 			} else if (errorObject == nil) {
 				ATLogError(@"Error decoding error response: %@", parseError);
 			}
-			[message setPendingState:@(ATPendingMessageStateError)];
+			[response setPendingState:@(ATPendingSurveyResponseError)];
 		}
 		NSError *error = nil;
 		NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
 		if (![context save:&error]) {
-			ATLogError(@"Failed to save message after API failure: %@", error);
+			ATLogError(@"Failed to save survey response after API failure: %@", error);
 		}
 		ATLogInfo(@"ATAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
 		if (self.failureCount > 2) {
@@ -161,13 +155,13 @@
 			self.failed = YES;
 		}
 		[self stop];
-		[message release], message = nil;
+		[response release], response = nil;
 		[self release];
 	}
 }
 @end
 
-@implementation ATMessageTask (Private)
+@implementation ATSurveyResponseTask (Private)
 - (void)setup {
 	
 }
@@ -176,25 +170,25 @@
 	[self stop];
 }
 
-- (BOOL)processResult:(NSDictionary *)jsonMessage {
-	ATLogInfo(@"getting json result: %@", jsonMessage);
+- (BOOL)processResult:(NSDictionary *)jsonResponse {
+	ATLogInfo(@"Getting json result: %@", jsonResponse);
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
 	
-	ATAbstractMessage *message = [[ATAbstractMessage findMessageWithPendingID:self.pendingMessageID] retain];
-	if (message == nil) {
-		ATLogError(@"Warning: Message went away during task.");
+	ATSurveyResponse *response = [[ATSurveyResponse findSurveyResponseWithPendingID:self.pendingSurveyResponseID] retain];
+	if (response == nil) {
+		ATLogError(@"Warning: Response went away during task.");
 		return YES;
 	}
-	[message updateWithJSON:jsonMessage];
-	message.pendingState = [NSNumber numberWithInt:ATPendingMessageStateConfirmed];
+	[response updateWithJSON:jsonResponse];
+	response.pendingState = [NSNumber numberWithInt:ATPendingSurveyResponseConfirmed];
 	
 	NSError *error = nil;
 	if (![context save:&error]) {
-		ATLogError(@"Failed to save new message: %@", error);
-		[message release], message = nil;
+		ATLogError(@"Failed to save new response: %@", error);
+		[response release], response = nil;
 		return NO;
 	}
-	[message release], message = nil;
+	[response release], response = nil;
 	return YES;
 }
 @end

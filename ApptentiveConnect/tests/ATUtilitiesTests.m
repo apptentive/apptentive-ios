@@ -55,6 +55,24 @@
 	date = [ATUtilities dateFromISO8601String:string];
 	STAssertNotNil(date, @"date shouldn't be nil");
 	STAssertEqualObjects(@"2012-09-07 20:28:07 +0000", [ATUtilities stringRepresentationOfDate:date timeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]], @"date doesn't match");
+	
+	string = @"2012-09-07T23:01:07.111-00:33";
+	date = [ATUtilities dateFromISO8601String:string];
+	STAssertNotNil(date, @"date shouldn't be nil");
+	STAssertEqualObjects(@"2012-09-07 23:34:07 +0000", [ATUtilities stringRepresentationOfDate:date timeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]], @"date doesn't match");
+	
+	// RFC3339 Format Tests.
+	
+	// Test example survey dates from docs.
+	string = @"2013-05-12T20:04:05Z";
+	date = [ATUtilities dateFromISO8601String:string];
+	STAssertNotNil(date, @"date shouldn't be nil");
+	STAssertEqualObjects(@"2013-05-12 20:04:05 +0000", [ATUtilities stringRepresentationOfDate:date timeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]], @"date doesn't match");
+	
+	string = @"2013-06-13T20:04:09Z";
+	date = [ATUtilities dateFromISO8601String:string];
+	STAssertNotNil(date, @"date shouldn't be nil");
+	STAssertEqualObjects(@"2013-06-13 20:04:09 +0000", [ATUtilities stringRepresentationOfDate:date timeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]], @"date doesn't match");
 }
 
 - (void)testVersionComparisons {

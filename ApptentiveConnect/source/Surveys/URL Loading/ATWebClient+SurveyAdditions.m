@@ -23,7 +23,7 @@
 		return nil;
 	}
 	
-	NSString *urlString = [NSString stringWithFormat:@"%@/surveys?active=1", [self baseURLString]];
+	NSString *urlString = [NSString stringWithFormat:@"%@/surveys", [self baseURLString]];
 	ATURLConnection *conn = [self connectionToGet:[NSURL URLWithString:urlString]];
 	conn.timeoutInterval = 20.0;
 	[self updateConnection:conn withOAuthToken:conversation.token];

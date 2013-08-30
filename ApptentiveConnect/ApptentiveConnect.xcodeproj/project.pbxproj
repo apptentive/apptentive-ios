@@ -226,7 +226,6 @@
 		49B7E91B178BAB8D0059E776 /* ATSurveyResponseTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 49B7E919178BAB8D0059E776 /* ATSurveyResponseTask.h */; };
 		49B7E91C178BAB8D0059E776 /* ATSurveyResponseTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B7E91A178BAB8D0059E776 /* ATSurveyResponseTask.m */; };
 		49B7E91D178BAB8D0059E776 /* ATSurveyResponseTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 49B7E91A178BAB8D0059E776 /* ATSurveyResponseTask.m */; };
-		49B7E921178BB5510059E776 /* ATDataModel v1 to v2.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49B7E91E178BB4F80059E776 /* ATDataModel v1 to v2.xcmappingmodel */; };
 		49B877111464958C00594A5D /* ATWebClient_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 49B877101464958C00594A5D /* ATWebClient_Private.h */; };
 		49BC2A5A144F75E20041E789 /* ATShadowView.h in Headers */ = {isa = PBXBuildFile; fileRef = 49BC2A58144F75E10041E789 /* ATShadowView.h */; };
 		49BC2A5B144F75E20041E789 /* ATShadowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 49BC2A59144F75E20041E789 /* ATShadowView.m */; };
@@ -237,7 +236,6 @@
 		49C002A3133413BB0071F088 /* ATConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C00298133413BB0071F088 /* ATConnect.m */; };
 		49C24F56174B0EC5002F2338 /* ATAppRatingFlow+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 49C24F54174B0EC5002F2338 /* ATAppRatingFlow+Internal.h */; };
 		49C24F5B174BFEB7002F2338 /* ATSurveys_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 49C24F59174BFEB7002F2338 /* ATSurveys_Private.h */; };
-		49C54BD41790A898009CCD5D /* ATDataModel v1 to v2.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49B7E91E178BB4F80059E776 /* ATDataModel v1 to v2.xcmappingmodel */; };
 		49C54BD51790A95E009CCD5D /* ApptentiveResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 49D1118C13341A7C00603373 /* ApptentiveResources.bundle */; };
 		49C54BD81790B783009CCD5D /* ATDataModelv1.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 49C54BD71790B783009CCD5D /* ATDataModelv1.sqlite */; };
 		49CB6DEA1718FE4400BC9223 /* ATMessageCenterMetrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 49CB6DE81718FE4400BC9223 /* ATMessageCenterMetrics.h */; };
@@ -295,6 +293,8 @@
 		49F8AFFC16CC4D860070FFEA /* ATRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFFA16CC4D860070FFEA /* ATRecord.m */; };
 		49F8AFFF16CC56580070FFEA /* ATEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 49F8AFFD16CC56570070FFEA /* ATEvent.h */; };
 		49F8B00016CC56580070FFEA /* ATEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFFE16CC56570070FFEA /* ATEvent.m */; };
+		49FECBE317D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49FECBE217D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel */; };
+		49FECBE417D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49FECBE217D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -492,7 +492,6 @@
 		49B7E915178BA8060059E776 /* ATSurveyResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATSurveyResponse.m; path = source/Surveys/Model/ATSurveyResponse.m; sourceTree = SOURCE_ROOT; };
 		49B7E919178BAB8D0059E776 /* ATSurveyResponseTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATSurveyResponseTask.h; path = Tasks/ATSurveyResponseTask.h; sourceTree = "<group>"; };
 		49B7E91A178BAB8D0059E776 /* ATSurveyResponseTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATSurveyResponseTask.m; path = Tasks/ATSurveyResponseTask.m; sourceTree = "<group>"; };
-		49B7E91E178BB4F80059E776 /* ATDataModel v1 to v2.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v1 to v2.xcmappingmodel"; sourceTree = "<group>"; };
 		49B877101464958C00594A5D /* ATWebClient_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATWebClient_Private.h; sourceTree = "<group>"; };
 		49BC2A58144F75E10041E789 /* ATShadowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATShadowView.h; path = "source/Custom Views/ATShadowView.h"; sourceTree = SOURCE_ROOT; };
 		49BC2A59144F75E20041E789 /* ATShadowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATShadowView.m; path = "source/Custom Views/ATShadowView.m"; sourceTree = SOURCE_ROOT; };
@@ -558,6 +557,7 @@
 		49F8AFFA16CC4D860070FFEA /* ATRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATRecord.m; sourceTree = "<group>"; };
 		49F8AFFD16CC56570070FFEA /* ATEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATEvent.h; sourceTree = "<group>"; };
 		49F8AFFE16CC56570070FFEA /* ATEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATEvent.m; sourceTree = "<group>"; };
+		49FECBE217D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v1 to v2.xcmappingmodel"; sourceTree = "<group>"; };
 		58EA5B3617B4781600ECEB4B /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		58EA5B3B17B479A500ECEB4B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		58EA5B4117B47AAC00ECEB4B /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -1089,7 +1089,7 @@
 			isa = PBXGroup;
 			children = (
 				49AB227D1746EE9500175F4D /* ATDataModel.xcdatamodeld */,
-				49B7E91E178BB4F80059E776 /* ATDataModel v1 to v2.xcmappingmodel */,
+				49FECBE217D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel */,
 				49F8AFCD16CC4A550070FFEA /* ATConversation.h */,
 				49F8AFCE16CC4A550070FFEA /* ATConversation.m */,
 				49F8AFCF16CC4A550070FFEA /* ATData.h */,
@@ -1555,7 +1555,7 @@
 				497A9A0617762512002B6F96 /* ATJSONSerialization.m in Sources */,
 				49B7E918178BA8060059E776 /* ATSurveyResponse.m in Sources */,
 				49B7E91D178BAB8D0059E776 /* ATSurveyResponseTask.m in Sources */,
-				49C54BD41790A898009CCD5D /* ATDataModel v1 to v2.xcmappingmodel in Sources */,
+				49FECBE317D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1564,7 +1564,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				49AB22801746EE9500175F4D /* ATDataModel.xcdatamodeld in Sources */,
-				49B7E921178BB5510059E776 /* ATDataModel v1 to v2.xcmappingmodel in Sources */,
+				49FECBE417D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

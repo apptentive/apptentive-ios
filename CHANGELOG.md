@@ -1,4 +1,4 @@
-2013-08-XX wooster v1.0.2
+2013-08-29 wooster v1.1.0
 -------------------------
 This release focuses on support for Enterprise Surveys.
 
@@ -15,7 +15,8 @@ Other changes for IOS 7 forward compatibility:
 Other fixes:
 
 * apptentive-ios#45 Renames `ATMessage` to `ATAbstractMessage` because of naming conflict with `AirTraffic.framework`
-
+* We accidentally used the Traditional Chinese localization for both Traditional and Simplified Chinese. This has been fixed.
+* Added `useMessageCenter` property on `ATConnect` for those who don't want to use Message Center.
 
 2013-08-18 wooster v1.0.1
 -------------------------

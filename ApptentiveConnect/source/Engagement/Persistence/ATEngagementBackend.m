@@ -10,6 +10,7 @@
 #import "ATBackend.h"
 #import "ATEngagementGetManifestTask.h"
 #import "ATTaskQueue.h"
+#import "ATInteraction.h"
 
 NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEngagementCachedInteractionsExpirationPreferenceKey";
 
@@ -99,4 +100,29 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 - (NSArray *)interactionsForCodePoint:(NSString *)codePoint {
 	return [codePointInteractions objectForKey:codePoint];
 }
+
+- (ATInteraction *)interactionForCodePoint:(NSString *)codePoint {
+	NSArray *interactions = [self interactionsForCodePoint:codePoint];
+	for (ATInteraction *interaction in interactions) {
+		if ([interaction criteriaAreMetForCodePoint:codePoint]) {
+			return interaction;
+		}
+	}
+	return nil;
+}
+
+- (NSDictionary *)usageDataForInteraction:(ATInteraction *)interation atCodePoint:(NSString *)codePoint {
+	
+	//TODO: Add live data for the below.
+	
+	NSDictionary *data = @{@"days_since_install": @1,
+						@"days_since_upgrade" : @2,
+						@"application_version" : @"1.2",
+						[NSString stringWithFormat:@"code_point_%@_invokes_total", codePoint] : @3,
+						[NSString stringWithFormat:@"code_point_%@_invokes_version", codePoint] : @2,
+						[NSString stringWithFormat:@"interactions_%@_invokes_total", interation.identifier] : @3,
+						[NSString stringWithFormat:@"interactions_%@_invokes_version", interation.identifier] : @0,};
+	return data;
+}
+
 @end

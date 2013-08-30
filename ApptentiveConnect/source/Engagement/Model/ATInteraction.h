@@ -20,4 +20,6 @@
 
 + (ATInteraction *)interactionWithJSONDictionary:(NSDictionary *)jsonDictionary;
 
+- (BOOL) criteriaAreMetForCodePoint:(NSString *)codePoint;
+
 @end

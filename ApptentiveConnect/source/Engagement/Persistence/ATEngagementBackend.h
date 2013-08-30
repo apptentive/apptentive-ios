@@ -21,4 +21,8 @@
 + (NSString *)cachedEngagementStoragePath;
 
 - (NSArray *)interactionsForCodePoint:(NSString *)codePoint;
+- (ATInteraction *)interactionForCodePoint:(NSString *)codePoint;
+
+- (NSDictionary *)usageDataForInteraction:(ATInteraction *)interation atCodePoint:(NSString *)codePoint;
+
 @end

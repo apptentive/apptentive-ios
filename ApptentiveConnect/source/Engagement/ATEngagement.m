@@ -8,12 +8,20 @@
 
 #import "ATEngagement.h"
 #import "ATEngagementBackend.h"
+#import "ATInteraction.h"
 
 @implementation ATEngagement
 
 + (void)engage:(NSString *)codePoint {
-	NSArray *interactions = [[ATEngagementBackend sharedBackend] interactionsForCodePoint:codePoint];
-	NSLog(@"Codepoint `%@` has %i interactions", codePoint, interactions.count);
+	ATInteraction *interaction = [[ATEngagementBackend sharedBackend] interactionForCodePoint:codePoint];
+	if (interaction) {
+		ATLogInfo(@"Valid interaction %@ found for code point: %@", interaction.identifier, codePoint);
+		
+		// TODO: launch interaction
+	}
+	else {
+		ATLogInfo(@"No valid interactions found for code point: %@", codePoint);
+	}
 }
 
 @end

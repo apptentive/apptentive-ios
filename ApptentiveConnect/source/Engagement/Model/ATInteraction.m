@@ -7,6 +7,7 @@
 //
 
 #import "ATInteraction.h"
+#import "ATEngagementBackend.h"
 
 @implementation ATInteraction
 
@@ -50,6 +51,113 @@
 	[coder encodeObject:self.type forKey:@"type"];
 	[coder encodeObject:self.configuration forKey:@"configuration"];
 	[coder encodeObject:self.criteria forKey:@"criteria"];
+}
+
+- (BOOL)criteriaAreMetForCodePoint:(NSString *)codePoint {
+	NSDictionary *usageData = [[ATEngagementBackend sharedBackend] usageDataForInteraction:self atCodePoint:codePoint];
+	return [[self criteriaPredicate] evaluateWithObject:usageData];
+}
+
+- (NSPredicate *)criteriaPredicate {
+	BOOL error = NO;
+	NSString *predicateString = [ATInteraction predicateStringForInteractionCriteria:self.criteria hasError:&error];
+	
+	if (!predicateString || error || [predicateString length] == 0) {
+		return nil;
+	}
+	
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateString];
+	return predicate;
+}
+
++ (NSString *)predicateStringForInteractionCriteria:(NSDictionary *)interactionCriteria hasError:(BOOL *)hasError {
+	NSMutableArray *parts = [NSMutableArray array];
+	NSString *joinWith = @" AND ";
+	
+	for (NSString *key in interactionCriteria) {
+		NSObject *object = [interactionCriteria objectForKey:key];
+		NSString *escapedKey = [[key mutableCopy] stringByReplacingOccurrencesOfString:@"." withString:@"_"];
+		
+		if ([object isKindOfClass:[NSArray class]]) {
+			if ([key isEqualToString:@"$and"]) {
+				joinWith = @" AND ";
+			} else if ([key isEqualToString:@"$or"]) {
+				joinWith = @" OR ";
+			} else {
+				*hasError = YES;
+			}
+			
+			NSMutableArray *criteria = [NSMutableArray array];
+			for (NSDictionary *dictionary in (NSArray *)object) {
+				NSString *criterion = [self predicateStringForInteractionCriteria:dictionary hasError:hasError];
+				[criteria addObject:criterion];
+			}
+			[parts addObjectsFromArray:criteria];
+		}
+		else if ([object isKindOfClass:[NSDictionary class]]) {
+			NSMutableArray *criteria = [NSMutableArray array];
+			for (NSString *equalityKey in (NSDictionary *)object) {
+				NSString *equalitySymbol = nil;
+				if ([equalityKey isEqualToString:@"$gt"]) {
+					equalitySymbol = @">";
+				}
+				else if ([equalityKey isEqualToString:@"$gte"]) {
+					equalitySymbol = @">=";
+				}
+				else if ([equalityKey isEqualToString:@"$lt"]) {
+					equalitySymbol = @"<";
+				}
+				else if ([equalityKey isEqualToString:@"$lte"]) {
+					equalitySymbol = @"<=";
+				}
+				else if ([equalityKey isEqualToString:@"$ne"]) {
+					equalitySymbol = @"!=";
+				}
+				else {
+					*hasError = YES;
+				}
+				
+				NSObject *value = [(NSDictionary *)object objectForKey:equalityKey];
+				NSString *valueString = nil;
+				if ([value isKindOfClass:[NSString class]]) {
+					valueString = [NSString stringWithFormat:@"'%@'", value];
+				}
+				else if ([value isKindOfClass:[NSNumber class]]) {
+					valueString = [NSString stringWithFormat:@"%@", value];
+				}
+				else {
+					*hasError = YES;
+				}
+				
+				NSString *criterion = [NSString stringWithFormat:@"(%@ %@ %@)", escapedKey, equalitySymbol, valueString];
+				[criteria addObject:criterion];
+			}
+			
+			[parts addObjectsFromArray:criteria];
+		}
+		else if ([object isKindOfClass:[NSString class]]) {
+			NSString *criterion = [NSString stringWithFormat:@"(%@ == '%@')", escapedKey, (NSString *)object];
+			[parts addObject:criterion];
+		}
+		else if ([object isKindOfClass:[NSNumber class]]) {
+			NSString *criterion = [NSString stringWithFormat:@"(%@ == %@)", escapedKey, (NSNumber *)object];
+			[parts addObject:criterion];
+		}
+		else {
+			*hasError = YES;
+		}
+	}
+		
+	NSString *result = nil;
+	if ([parts count] > 1) {
+		result = [NSString stringWithFormat:@"(%@)", [parts componentsJoinedByString:joinWith]];
+	} else if ([parts count] == 1) {
+		result = [NSString stringWithFormat:@"%@", [parts objectAtIndex:0]];
+	} else {
+		*hasError = YES;
+	}
+	
+	return result;
 }
 
 @end

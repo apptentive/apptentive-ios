@@ -112,6 +112,8 @@ enum kRootTableSections {
         return 2;
     } else if (section == kMessageCenterSection) {
 		return 1;
+	} else if (section == kEngagementSection) {
+		return 2;
 	}
 	return 1;
 }
@@ -176,6 +178,9 @@ enum kRootTableSections {
 	} else if (indexPath.section == kEngagementSection) {
 		if (indexPath.row == 0) {
 			cell.textLabel.text = @"app.launch";
+		}
+		if (indexPath.row == 1) {
+			cell.textLabel.text = @"complext_criteria";
 		}
 	}
     

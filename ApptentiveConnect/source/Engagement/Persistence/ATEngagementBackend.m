@@ -37,6 +37,14 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	if ((self = [super init])) {
 		codePointInteractions = [[NSMutableDictionary alloc] init];
 		
+		NSDictionary *defaults = @{ATEngagementInstallDateKey : [NSDate date],
+							 ATEngagementUpgradeDateKey : [NSDate date],
+							 ATEngagementCodePointsInvokesTotalKey : @0,
+							 ATEngagementCodePointsInvokesVersionKey : @0,
+							 ATEngagementInteractionsInvokesTotalKey : @0,
+							 ATEngagementInteractionsInvokesVersionKey : @0};
+		[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
+		
 		NSFileManager *fm = [NSFileManager defaultManager];
 		if ([fm fileExistsAtPath:[ATEngagementBackend cachedEngagementStoragePath]]) {
 			@try {

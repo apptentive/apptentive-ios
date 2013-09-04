@@ -32,4 +32,7 @@ NSString *const ATEngagementInteractionsInvokesVersionKey;
 
 - (NSDictionary *)usageDataForInteraction:(ATInteraction *)interation atCodePoint:(NSString *)codePoint;
 
+- (void)codePointWasEngaged:(NSString *)codePoint;
+- (void)interactionWasEngaged:(ATInteraction *)interaction;
+
 @end

@@ -153,4 +153,32 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	return data;
 }
 
+- (void)codePointWasEngaged:(NSString *)codePoint {
+	NSMutableDictionary *codePointsInvokesTotal = [[[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesTotalKey] mutableCopy];
+	NSNumber *codePointInvokesTotal = [codePointsInvokesTotal objectForKey:codePoint] ?: 0;
+	codePointInvokesTotal = @(codePointInvokesTotal.intValue + 1);
+	[codePointsInvokesTotal setObject:codePointInvokesTotal forKey:codePoint];
+	[[NSUserDefaults standardUserDefaults] setObject:codePointsInvokesTotal forKey:ATEngagementCodePointsInvokesTotalKey];
+	
+	NSMutableDictionary *codePointsInvokesVersion = [[[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesVersionKey] mutableCopy];
+	NSNumber *codePointInvokesVersion = [codePointsInvokesVersion objectForKey:codePoint] ?: 0;
+	codePointInvokesVersion = @(codePointInvokesVersion.intValue + 1);
+	[codePointsInvokesVersion setObject:codePointInvokesVersion forKey:codePoint];
+	[[NSUserDefaults standardUserDefaults] setObject:codePointsInvokesVersion forKey:ATEngagementCodePointsInvokesVersionKey];
+}
+
+- (void)interactionWasEngaged:(ATInteraction *)interaction {
+	NSMutableDictionary *interactionsInvokesTotal = [[[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesTotalKey] mutableCopy];
+	NSNumber *interactionInvokesTotal = [interactionsInvokesTotal objectForKey:interaction.identifier] ?: 0;
+	interactionInvokesTotal = @(interactionInvokesTotal.intValue + 1);
+	[interactionsInvokesTotal setObject:interactionInvokesTotal forKey:interaction.identifier];
+	[[NSUserDefaults standardUserDefaults] setObject:interactionsInvokesTotal forKey:ATEngagementInteractionsInvokesTotalKey];
+	
+	NSMutableDictionary *interactionsInvokesVersion = [[[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesVersionKey] mutableCopy];
+	NSNumber *interactionInvokesVersion = [interactionsInvokesVersion objectForKey:interaction.identifier] ?: 0;
+	interactionInvokesVersion = @(interactionInvokesVersion.intValue +1);
+	[interactionsInvokesVersion setObject:interactionInvokesVersion forKey:interaction.identifier];
+	[[NSUserDefaults standardUserDefaults] setObject:interactionsInvokesVersion forKey:ATEngagementInteractionsInvokesVersionKey];
+}
+
 @end

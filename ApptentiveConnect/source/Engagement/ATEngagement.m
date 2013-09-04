@@ -13,11 +13,13 @@
 @implementation ATEngagement
 
 + (void)engage:(NSString *)codePoint {
+	[[ATEngagementBackend sharedBackend] codePointWasEngaged:codePoint];
+	
 	ATInteraction *interaction = [[ATEngagementBackend sharedBackend] interactionForCodePoint:codePoint];
 	if (interaction) {
 		ATLogInfo(@"Valid interaction %@ found for code point: %@", interaction.identifier, codePoint);
-		
-		// TODO: launch interaction
+				
+		[[ATEngagementBackend sharedBackend] interactionWasEngaged:interaction];
 	}
 	else {
 		ATLogInfo(@"No valid interactions found for code point: %@", codePoint);

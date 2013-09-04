@@ -39,10 +39,10 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 		
 		NSDictionary *defaults = @{ATEngagementInstallDateKey : [NSDate date],
 							 ATEngagementUpgradeDateKey : [NSDate date],
-							 ATEngagementCodePointsInvokesTotalKey : @0,
-							 ATEngagementCodePointsInvokesVersionKey : @0,
-							 ATEngagementInteractionsInvokesTotalKey : @0,
-							 ATEngagementInteractionsInvokesVersionKey : @0};
+							 ATEngagementCodePointsInvokesTotalKey : @{},
+							 ATEngagementCodePointsInvokesVersionKey : @{},
+							 ATEngagementInteractionsInvokesTotalKey : @{},
+							 ATEngagementInteractionsInvokesVersionKey : @{}};
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 		
 		NSFileManager *fm = [NSFileManager defaultManager];
@@ -138,10 +138,10 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	[calendar release];
 	
 	NSString *applicationVersion = [defaults objectForKey:ATAppRatingFlowLastUsedVersionKey];
-	NSNumber *codepointInvokesTotal = [defaults objectForKey:ATEngagementCodePointsInvokesTotalKey];
-	NSNumber *codepointInvokesVersion = [defaults objectForKey:ATEngagementCodePointsInvokesVersionKey];
-	NSNumber *interactionInvokesTotal = [defaults objectForKey:ATEngagementInteractionsInvokesTotalKey];
-	NSNumber *interactionInvokesVersion = [defaults objectForKey:ATEngagementInteractionsInvokesVersionKey];
+	NSNumber *codepointInvokesTotal = [[defaults objectForKey:ATEngagementCodePointsInvokesTotalKey] objectForKey:codePoint] ?: 0;
+	NSNumber *codepointInvokesVersion = [[defaults objectForKey:ATEngagementCodePointsInvokesVersionKey] objectForKey:codePoint] ?: 0;
+	NSNumber *interactionInvokesTotal = [[defaults objectForKey:ATEngagementInteractionsInvokesTotalKey] objectForKey:interation.identifier] ?: 0;
+	NSNumber *interactionInvokesVersion = [[defaults objectForKey:ATEngagementInteractionsInvokesVersionKey] objectForKey:interation.identifier] ?: 0;
 	
 	NSDictionary *data = @{@"days_since_install": [NSNumber numberWithInt:daysSinceInstall],
 						@"days_since_upgrade" : [NSNumber numberWithInt:daysSinceUpgrade],

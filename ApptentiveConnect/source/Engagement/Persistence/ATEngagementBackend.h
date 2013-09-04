@@ -8,6 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+NSString *const ATEngagementInstallDateKey;
+NSString *const ATEngagementUpgradeDateKey;
+NSString *const ATEngagementCodePointsInvokesTotalKey;
+NSString *const ATEngagementCodePointsInvokesVersionKey;
+NSString *const ATEngagementInteractionsInvokesTotalKey;
+NSString *const ATEngagementInteractionsInvokesVersionKey;
+
 @class ATInteraction;
 
 @interface ATEngagementBackend : NSObject {

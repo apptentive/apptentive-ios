@@ -12,6 +12,7 @@
 #import "ATTaskQueue.h"
 #import "ATInteraction.h"
 #import "ATAppRatingFlow_Private.h"
+#import "ATConnect_Private.h"
 
 NSString *const ATEngagementInstallDateKey = @"ATEngagementInstallDateKey";
 NSString *const ATEngagementUpgradeDateKey = @"ATEngagementUpgradeDateKey";
@@ -127,7 +128,6 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	return nil;
 }
 
-
 - (NSDictionary *)usageDataForInteraction:(ATInteraction *)interaction
 							  atCodePoint:(NSString *)codePoint
 						 daysSinceInstall:(NSNumber *)daysSinceInstall
@@ -202,6 +202,24 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	interactionInvokesVersion = @(interactionInvokesVersion.intValue +1);
 	[interactionsInvokesVersion setObject:interactionInvokesVersion forKey:interaction.identifier];
 	[[NSUserDefaults standardUserDefaults] setObject:interactionsInvokesVersion forKey:ATEngagementInteractionsInvokesVersionKey];
+}
+
+- (void)presentInteraction:(ATInteraction *)interaction {
+	ATLogInfo(@"Valid interaction found: %@", interaction);
+
+	if ([interaction.type isEqualToString:@"HtmlMessage"]) {	
+		NSString *title = [interaction.configuration objectForKey:@"title"];
+		NSString *message = [interaction.configuration objectForKey:@"message"];
+		
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"No", @"no"), ATLocalizedString(@"Yes", @"yes"), nil];
+		[alert show];
+	}
+	else if ([interaction.type isEqualToString:@"RatingDialog"]) {
+		NSString *title = [interaction.configuration objectForKey:@"question_text"];
+		
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:ATLocalizedString(title, @"Rating Dialog title from server") message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"No", @"no"), ATLocalizedString(@"Yes", @"yes"), nil];
+		[alert show];
+	}
 }
 
 @end

@@ -17,12 +17,12 @@
 	
 	ATInteraction *interaction = [[ATEngagementBackend sharedBackend] interactionForCodePoint:codePoint];
 	if (interaction) {
-		ATLogInfo(@"Valid interaction %@ found for code point: %@", interaction.identifier, codePoint);
-				
+		[[ATEngagementBackend sharedBackend] presentInteraction:interaction];
+		
 		[[ATEngagementBackend sharedBackend] interactionWasEngaged:interaction];
 	}
 	else {
-		ATLogInfo(@"No valid interactions found for code point: %@", codePoint);
+		ATLogInfo(@"No valid Apptentive interactions found for code point: %@", codePoint);
 	}
 }
 

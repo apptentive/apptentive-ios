@@ -30,7 +30,7 @@ NSString *const ATEngagementInteractionsInvokesVersionKey;
 - (NSArray *)interactionsForCodePoint:(NSString *)codePoint;
 - (ATInteraction *)interactionForCodePoint:(NSString *)codePoint;
 
-- (NSDictionary *)usageDataForInteraction:(ATInteraction *)interation atCodePoint:(NSString *)codePoint;
+- (NSDictionary *)usageDataForInteraction:(ATInteraction *)interaction atCodePoint:(NSString *)codePoint;
 
 - (void)codePointWasEngaged:(NSString *)codePoint;
 - (void)interactionWasEngaged:(ATInteraction *)interaction;

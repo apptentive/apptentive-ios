@@ -127,41 +127,64 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	return nil;
 }
 
-- (NSDictionary *)usageDataForInteraction:(ATInteraction *)interation atCodePoint:(NSString *)codePoint {
+
+- (NSDictionary *)usageDataForInteraction:(ATInteraction *)interaction
+							  atCodePoint:(NSString *)codePoint
+						 daysSinceInstall:(NSNumber *)daysSinceInstall
+						 daysSinceUpgrade:(NSNumber *)daysSinceUpgrade
+					   applicationVersion:(NSString *)applicationVersion
+					codePointInvokesTotal:(NSNumber *)codePointInvokesTotal
+				  codePointInvokesVersion:(NSNumber *)codePointInvokesVersion
+				  interactionInvokesTotal:(NSNumber *)interactionInvokesTotal
+				interactionInvokesVersion:(NSNumber *)interactionInvokesVersion {
+	
+	NSDictionary *data = @{@"days_since_install": daysSinceInstall,
+						@"days_since_upgrade" : daysSinceUpgrade,
+						@"application_version" : applicationVersion,
+						[NSString stringWithFormat:@"code_point_%@_invokes_total", codePoint] : codePointInvokesTotal,
+						[NSString stringWithFormat:@"code_point_%@_invokes_version", codePoint] : codePointInvokesVersion,
+						[NSString stringWithFormat:@"interactions_%@_invokes_total", interaction.identifier] : interactionInvokesTotal,
+						[NSString stringWithFormat:@"interactions_%@_invokes_version", interaction.identifier] : interactionInvokesVersion};
+	return data;
+}
+
+- (NSDictionary *)usageDataForInteraction:(ATInteraction *)interaction atCodePoint:(NSString *)codePoint {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	
 	NSDate *installDate = [defaults objectForKey:ATEngagementInstallDateKey];
 	NSDate *upgradeDate = [defaults objectForKey:ATEngagementUpgradeDateKey];
     NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];	
-	NSUInteger daysSinceInstall = [[calendar components:NSDayCalendarUnit fromDate:installDate toDate:[NSDate date] options:0] day] + 1;
-	NSUInteger daysSinceUpgrade = [[calendar components:NSDayCalendarUnit fromDate:upgradeDate toDate:[NSDate date] options:0] day] + 1;
+	NSNumber *daysSinceInstall = @([[calendar components:NSDayCalendarUnit fromDate:installDate toDate:[NSDate date] options:0] day] + 1);
+	NSNumber *daysSinceUpgrade = @([[calendar components:NSDayCalendarUnit fromDate:upgradeDate toDate:[NSDate date] options:0] day] + 1);
 	[calendar release];
 	
 	NSString *applicationVersion = [defaults objectForKey:ATAppRatingFlowLastUsedVersionKey];
-	NSNumber *codepointInvokesTotal = [[defaults objectForKey:ATEngagementCodePointsInvokesTotalKey] objectForKey:codePoint] ?: 0;
-	NSNumber *codepointInvokesVersion = [[defaults objectForKey:ATEngagementCodePointsInvokesVersionKey] objectForKey:codePoint] ?: 0;
-	NSNumber *interactionInvokesTotal = [[defaults objectForKey:ATEngagementInteractionsInvokesTotalKey] objectForKey:interation.identifier] ?: 0;
-	NSNumber *interactionInvokesVersion = [[defaults objectForKey:ATEngagementInteractionsInvokesVersionKey] objectForKey:interation.identifier] ?: 0;
+	NSNumber *codepointInvokesTotal = [[defaults objectForKey:ATEngagementCodePointsInvokesTotalKey] objectForKey:codePoint] ?: @0;
+	NSNumber *codepointInvokesVersion = [[defaults objectForKey:ATEngagementCodePointsInvokesVersionKey] objectForKey:codePoint] ?: @0;
+	NSNumber *interactionInvokesTotal = [[defaults objectForKey:ATEngagementInteractionsInvokesTotalKey] objectForKey:interaction.identifier] ?: @0;
+	NSNumber *interactionInvokesVersion = [[defaults objectForKey:ATEngagementInteractionsInvokesVersionKey] objectForKey:interaction.identifier] ?: @0;
 	
-	NSDictionary *data = @{@"days_since_install": [NSNumber numberWithInt:daysSinceInstall],
-						@"days_since_upgrade" : [NSNumber numberWithInt:daysSinceUpgrade],
-						@"application_version" : applicationVersion,
-						[NSString stringWithFormat:@"code_point_%@_invokes_total", codePoint] : codepointInvokesTotal,
-						[NSString stringWithFormat:@"code_point_%@_invokes_version", codePoint] : codepointInvokesVersion,
-						[NSString stringWithFormat:@"interactions_%@_invokes_total", interation.identifier] : interactionInvokesTotal,
-						[NSString stringWithFormat:@"interactions_%@_invokes_version", interation.identifier] : interactionInvokesVersion};
+	NSDictionary *data = [self usageDataForInteraction:interaction
+										   atCodePoint:codePoint
+									  daysSinceInstall:daysSinceInstall 
+									  daysSinceUpgrade:daysSinceUpgrade
+									applicationVersion:applicationVersion
+								 codePointInvokesTotal:codepointInvokesTotal
+							   codePointInvokesVersion:codepointInvokesVersion
+							   interactionInvokesTotal:interactionInvokesTotal
+							 interactionInvokesVersion:interactionInvokesVersion];
 	return data;
 }
 
 - (void)codePointWasEngaged:(NSString *)codePoint {
 	NSMutableDictionary *codePointsInvokesTotal = [[[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesTotalKey] mutableCopy];
-	NSNumber *codePointInvokesTotal = [codePointsInvokesTotal objectForKey:codePoint] ?: 0;
+	NSNumber *codePointInvokesTotal = [codePointsInvokesTotal objectForKey:codePoint] ?: @0;
 	codePointInvokesTotal = @(codePointInvokesTotal.intValue + 1);
 	[codePointsInvokesTotal setObject:codePointInvokesTotal forKey:codePoint];
 	[[NSUserDefaults standardUserDefaults] setObject:codePointsInvokesTotal forKey:ATEngagementCodePointsInvokesTotalKey];
 	
 	NSMutableDictionary *codePointsInvokesVersion = [[[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesVersionKey] mutableCopy];
-	NSNumber *codePointInvokesVersion = [codePointsInvokesVersion objectForKey:codePoint] ?: 0;
+	NSNumber *codePointInvokesVersion = [codePointsInvokesVersion objectForKey:codePoint] ?: @0;
 	codePointInvokesVersion = @(codePointInvokesVersion.intValue + 1);
 	[codePointsInvokesVersion setObject:codePointInvokesVersion forKey:codePoint];
 	[[NSUserDefaults standardUserDefaults] setObject:codePointsInvokesVersion forKey:ATEngagementCodePointsInvokesVersionKey];
@@ -169,13 +192,13 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 
 - (void)interactionWasEngaged:(ATInteraction *)interaction {
 	NSMutableDictionary *interactionsInvokesTotal = [[[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesTotalKey] mutableCopy];
-	NSNumber *interactionInvokesTotal = [interactionsInvokesTotal objectForKey:interaction.identifier] ?: 0;
+	NSNumber *interactionInvokesTotal = [interactionsInvokesTotal objectForKey:interaction.identifier] ?: @0;
 	interactionInvokesTotal = @(interactionInvokesTotal.intValue + 1);
 	[interactionsInvokesTotal setObject:interactionInvokesTotal forKey:interaction.identifier];
 	[[NSUserDefaults standardUserDefaults] setObject:interactionsInvokesTotal forKey:ATEngagementInteractionsInvokesTotalKey];
 	
 	NSMutableDictionary *interactionsInvokesVersion = [[[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesVersionKey] mutableCopy];
-	NSNumber *interactionInvokesVersion = [interactionsInvokesVersion objectForKey:interaction.identifier] ?: 0;
+	NSNumber *interactionInvokesVersion = [interactionsInvokesVersion objectForKey:interaction.identifier] ?: @0;
 	interactionInvokesVersion = @(interactionInvokesVersion.intValue +1);
 	[interactionsInvokesVersion setObject:interactionInvokesVersion forKey:interaction.identifier];
 	[[NSUserDefaults standardUserDefaults] setObject:interactionsInvokesVersion forKey:ATEngagementInteractionsInvokesVersionKey];

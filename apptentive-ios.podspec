@@ -11,8 +11,7 @@ Pod::Spec.new do |s|
   s.exclude_files = 'ApptentiveConnect/ext/PrefixedTTTAttributedLabel/Example/*.*'
   s.requires_arc = false
   s.frameworks     = 'CoreGraphics', 'Foundation', 'QuartzCore', 'SystemConfiguration', 'UIKit', 'CoreData', 'CoreText'
-  s.resources = 'ApptentiveConnect/xibs/**/*.*', 'ApptentiveConnect/resources/localization/*.*', 'ApptentiveConnect/source/Model/*.xcdatamodeld', 'ApptentiveConnect/art/generated'
-  s.resource_bundle = { 'ApptentiveResources' => 'ApptentiveConnect/source/Model/*.xcdatamodeld' }
+  s.resource_bundle = { 'ApptentiveResources' => ['ApptentiveConnect/source/Model/*.xcdatamodeld', 'ApptentiveConnect/xibs/**/*.*', 'ApptentiveConnect/resources/localization/English.lproj','ApptentiveConnect/art/generated/**/*.*'] }
   s.weak_frameworks = 'StoreKit', 'CoreTelephony'
   s.prefix_header_contents = '#import "ATLog.h"'
   s.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" =>  "TTTATTRIBUTEDLABEL_PREFIX=AT  JSONKIT_PREFIX=AT APPTENTIVE_DEBUG_LOG_VIEWER=1 AT_LOGGING_LEVEL_INFO=1 AT_LOGGING_LEVEL_ERROR=1" }

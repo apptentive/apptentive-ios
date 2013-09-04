@@ -305,7 +305,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2E1C01CB17D139AB00757721 /* apptentive-ios.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = "apptentive-ios.podspec"; sourceTree = "<group>"; };
 		490B24A21624B6D50055B812 /* ATTextMessageUserCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ATTextMessageUserCell.xib; path = xibs/ATTextMessageUserCell.xib; sourceTree = SOURCE_ROOT; };
 		490B24A51624B70D0055B812 /* ATTextMessageUserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATTextMessageUserCell.h; path = "Message Center/ATTextMessageUserCell.h"; sourceTree = "<group>"; };
 		490B24A61624B70D0055B812 /* ATTextMessageUserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATTextMessageUserCell.m; path = "Message Center/ATTextMessageUserCell.m"; sourceTree = "<group>"; };
@@ -790,7 +789,6 @@
 		496DC3741333D35600743F65 = {
 			isa = PBXGroup;
 			children = (
-				2E1C01CB17D139AB00757721 /* apptentive-ios.podspec */,
 				49D1123913359BA000603373 /* ext */,
 				49C00295133413BB0071F088 /* source */,
 				49C00290133413AA0071F088 /* xibs */,

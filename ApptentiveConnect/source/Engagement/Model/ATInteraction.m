@@ -43,9 +43,6 @@
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
-	//TODO: versions. See Surveys
-	//[coder encodeInt:kATInteractionVersion forKey:@"version"];
-	
 	[coder encodeObject:self.identifier forKey:@"identifier"];
 	[coder encodeInt:self.priority forKey:@"priority"];
 	[coder encodeObject:self.type forKey:@"type"];
@@ -76,7 +73,7 @@
 	
 	for (NSString *key in interactionCriteria) {
 		NSObject *object = [interactionCriteria objectForKey:key];
-		NSString *escapedKey = [[key mutableCopy] stringByReplacingOccurrencesOfString:@"." withString:@"_"];
+		NSString *escapedKey = [key stringByReplacingOccurrencesOfString:@"." withString:@"_"];
 		
 		if ([object isKindOfClass:[NSArray class]]) {
 			if ([key isEqualToString:@"$and"]) {

@@ -113,7 +113,7 @@ enum kRootTableSections {
     } else if (section == kMessageCenterSection) {
 		return 1;
 	} else if (section == kEngagementSection) {
-		return 2;
+		return 4;
 	}
 	return 1;
 }
@@ -176,11 +176,26 @@ enum kRootTableSections {
 			cell.accessoryView = [unreadLabel autorelease];
 		}
 	} else if (indexPath.section == kEngagementSection) {
+		switch (indexPath.row) {
+			case 0:
+				cell.textLabel.text = @"app.launch";
+				break;
+			case 1:
+				cell.textLabel.text = @"complext_criteria";
+				break;
+			case 2:
+				cell.textLabel.text = @"big.win";
+				break;
+			case 3:
+				cell.textLabel.text = @"or_clause";
+				break;
+			default:
+				break;
+		}
+		
 		if (indexPath.row == 0) {
-			cell.textLabel.text = @"app.launch";
 		}
 		if (indexPath.row == 1) {
-			cell.textLabel.text = @"complext_criteria";
 		}
 	}
     

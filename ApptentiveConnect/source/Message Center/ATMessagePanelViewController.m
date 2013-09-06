@@ -154,7 +154,24 @@ enum {
 	CGPoint newViewCenter = CGPointMake(CGRectGetMidX(newFrame), CGRectGetMidY(newFrame));
 	
 	UIView *shadowView = nil;
-	shadowView = [[ATShadowView alloc] initWithFrame:self.window.bounds];
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+		UIScreen *screen = self.window.screen;
+		CGRect statusFrame = [screen applicationFrame];
+		CGRect shadowFrame = self.window.bounds;
+		CGFloat offset = 0;
+		if (statusFrame.origin.x > 0) {
+			offset = statusFrame.origin.x;
+		} else if (statusFrame.origin.y > 0) {
+			offset = statusFrame.origin.y;
+		}
+		shadowFrame.origin.y -= offset;
+		shadowFrame.size.height += offset;
+		shadowView = [[UIView alloc] initWithFrame:shadowFrame];
+		shadowView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+		shadowView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+	} else {
+		shadowView = [[ATShadowView alloc] initWithFrame:self.window.bounds];
+	}
 	shadowView.tag = kMessagePanelGradientLayerTag;
 	[self.window addSubview:shadowView];
 	[self.window sendSubviewToBack:shadowView];
@@ -165,10 +182,14 @@ enum {
 	
 	l.masksToBounds = YES;
 	
-	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-		[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+		[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
 	} else {
-		[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque];
+		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+			[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
+		} else {
+			[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque];
+		}
 	}
 	
 	[UIView animateWithDuration:0.3 animations:^(void){
@@ -410,8 +431,10 @@ enum {
 		CGRect newTextViewFrame = oldTextViewRect;
 		newTextViewFrame.size.height -= heightDiff;
 		textView.frame = newTextViewFrame;
-		// Fix for iOS 4.
-		textView.contentInset = UIEdgeInsetsMake(0, -8, 0, 0);
+		if (![ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+			// Fix for iOS 4.
+			textView.contentInset = UIEdgeInsetsMake(0, -8, 0, 0);
+		}
 		if (!CGSizeEqualToSize(self.scrollView.contentSize, newContentSize)) {
 			self.scrollView.contentSize = newContentSize;
 		}
@@ -521,8 +544,10 @@ enum {
 	if (self.showEmailAddressField) {
 		offsetY += 5;
 		CGFloat extraHorzontalPadding = 0;
-		// Needs a little extra to line up with new metrics on UITextViews.
-		extraHorzontalPadding = 4;
+		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+			// Needs a little extra to line up with new metrics on UITextViews.
+			extraHorzontalPadding = 4;
+		}
 		CGRect emailFrame = self.scrollView.bounds;
 		emailFrame.origin.x = horizontalPadding + extraHorzontalPadding;
 		emailFrame.origin.y = offsetY;
@@ -573,8 +598,12 @@ enum {
 	feedbackFrame.size.width = feedbackFrame.size.width - horizontalPadding*2;
 	self.feedbackView = [[[ATDefaultTextView alloc] initWithFrame:feedbackFrame] autorelease];
 	
-	UIEdgeInsets insets = UIEdgeInsetsMake(0, -8, 0, 0);
-	self.feedbackView.contentInset = insets;
+	if (![ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+		UIEdgeInsets insets = UIEdgeInsetsMake(0, -8, 0, 0);
+		self.feedbackView.contentInset = insets;
+	} else {
+		self.feedbackView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+	}
 	self.feedbackView.clipsToBounds = YES;
 	self.feedbackView.font = [UIFont systemFontOfSize:17];
 	self.feedbackView.backgroundColor = [UIColor clearColor];

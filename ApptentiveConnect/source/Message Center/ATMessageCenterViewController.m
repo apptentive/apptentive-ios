@@ -19,7 +19,7 @@
 #import "ATFileAttachment.h"
 #import "ATFileMessage.h"
 #import "ATLog.h"
-#import "ATMessage.h"
+#import "ATAbstractMessage.h"
 #import "ATMessageCenterCell.h"
 #import "ATDefaultMessageCenterTheme.h"
 #import "ATMessageCenterMetrics.h"
@@ -67,7 +67,7 @@ typedef enum {
 	ATFeedbackImageSource pickedImageSource;
 	ATDefaultMessageCenterTheme *defaultTheme;
 	UIActionSheet *sendImageActionSheet;
-	ATMessage *retryMessage;
+	ATAbstractMessage *retryMessage;
 	UIActionSheet *retryMessageActionSheet;
 	
 	UINib *inputViewNib;
@@ -98,7 +98,7 @@ typedef enum {
 	}
 	[self.tableView reloadData];
 	
-	NSUInteger messageCount = [ATData countEntityNamed:@"ATMessage" withPredicate:nil];
+	NSUInteger messageCount = [ATData countEntityNamed:@"ATAbstractMessage" withPredicate:nil];
 	if (messageCount == 0) {
 		NSString *title = ATLocalizedString(@"Welcome", @"Welcome");
 		NSString *body = ATLocalizedString(@"This is our Message Center. If you have questions, suggestions, concerns or just want to get in touch, please send us a message. We love talking with our customers!", @"Placeholder welcome message.");
@@ -403,7 +403,7 @@ typedef enum {
 		if (!fetchedMessagesController) {
 			[NSFetchedResultsController deleteCacheWithName:@"at-messages-cache"];
 			NSFetchRequest *request = [[NSFetchRequest alloc] init];
-			[request setEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
+			[request setEntity:[NSEntityDescription entityForName:@"ATAbstractMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
 			[request setFetchBatchSize:20];
 			NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
 			[request setSortDescriptors:@[sortDescriptor]];
@@ -675,7 +675,7 @@ typedef enum {
 
 #pragma mark UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	ATMessage *message = (ATMessage *)[self.fetchedMessagesController objectAtIndexPath:indexPath];
+	ATAbstractMessage *message = (ATAbstractMessage *)[self.fetchedMessagesController objectAtIndexPath:indexPath];
 	if (message != nil && [message.sentByUser boolValue] && [message.pendingState intValue] == ATPendingMessageStateError) {
 		if (retryMessageActionSheet) {
 			[retryMessageActionSheet autorelease], retryMessageActionSheet = nil;
@@ -722,7 +722,7 @@ typedef enum {
 	ATMessageCellType cellType = ATMessageCellTypeUnknown;
 	
 	UITableViewCell *cell = nil;
-	ATMessage *message = (ATMessage *)[self.fetchedMessagesController objectAtIndexPath:indexPath];
+	ATAbstractMessage *message = (ATAbstractMessage *)[self.fetchedMessagesController objectAtIndexPath:indexPath];
 	
 	if ([message isKindOfClass:[ATAutomatedMessage class]]) {
 		cellType = ATMessageCellTypeAutomated;
@@ -740,7 +740,7 @@ typedef enum {
 	if (indexPath.row == 0) {
 		showDate = YES;
 	} else {
-		ATMessage *previousMessage = (ATMessage *)[self.fetchedMessagesController objectAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
+		ATAbstractMessage *previousMessage = (ATAbstractMessage *)[self.fetchedMessagesController objectAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
 		if ([message.creationTime doubleValue] - [previousMessage.creationTime doubleValue] > 60 * 5) {
 			showDate = YES;
 		}
@@ -847,7 +847,7 @@ typedef enum {
 				textCell.composing = YES;
 				textCell.textLabel.text = @"";
 			} else if ([[message pendingState] intValue] == ATPendingMessageStateError) {
-				NSString *sendingText = ATLocalizedString(@"Error:", @"Sending prefix on messages that are sending");
+				NSString *sendingText = NSLocalizedString(@"Error:", @"Error prefix on messages that failed to send");
 				NSString *fullText = [NSString stringWithFormat:@"%@ %@", sendingText, messageBody];
 				[textCell.messageText setText:fullText afterInheritingLabelAttributesAndConfiguringWithBlock:^ NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
 					NSRange boldRange = NSMakeRange(0, [sendingText length]);
@@ -1012,7 +1012,7 @@ typedef enum {
 
 - (void)markAllMessagesAsRead {
 	NSFetchRequest *request = [[NSFetchRequest alloc] init];
-	[request setEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
+	[request setEntity:[NSEntityDescription entityForName:@"ATAbstractMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
 	[request setFetchBatchSize:20];
 	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
 	[request setSortDescriptors:@[sortDescriptor]];
@@ -1026,7 +1026,7 @@ typedef enum {
 	if (!results) {
 		ATLogError(@"Error exceuting fetch request: %@", error);
 	} else {
-		for (ATMessage *message in results) {
+		for (ATAbstractMessage *message in results) {
 			[message setSeenByUser:@(YES)];
 			if (message.apptentiveID != nil && [message.sentByUser boolValue] != YES) {
 				[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidReadNotification object:@{ATMessageCenterMessageIDKey:message.apptentiveID}];

@@ -1,3 +1,23 @@
+2013-08-29 wooster v1.1.0
+-------------------------
+This release focuses on support for Enterprise Surveys.
+
+These are mostly changes on the web side of things, but there are also some client changes:
+
+* Moved survey responses into Core Data.
+* IOS-119 Implement short v. long survey text response type
+* IOS-116 Implement new survey submission endpoint
+
+Other changes for IOS 7 forward compatibility:
+
+* IOS-181 App hangs in iOS 7 after "No email Address?" input field alert.
+
+Other fixes:
+
+* apptentive-ios#45 Renames `ATMessage` to `ATAbstractMessage` because of naming conflict with `AirTraffic.framework`
+* We accidentally used the Traditional Chinese localization for both Traditional and Simplified Chinese. This has been fixed.
+* Added `useMessageCenter` property on `ATConnect` for those who don't want to use Message Center.
+
 2013-08-18 wooster v1.0.1
 -------------------------
 Deprecating the `-addCustomData:withKey:` and `-removeCustomDataWithKey:` methods in `ATConnect`.
@@ -18,14 +38,17 @@ Also deprecating the `appName` property on `ATAppRatingFlow`. Now, the display n
 
 Per IOS-144 and IOS-145, we now have much better localizations across many more languages.
 
-We have started on iOS 7 compatibility with IOS-159, IOS-168, and IOS-169. We covered some of the major parts, but there's more to come!
+We have started on iOS 7 compatibility with IOS-157, IOS-159, IOS-164, IOS-168, and IOS-169. We covered some of the major parts, but there's more to come!
 
 Fixes:
 
 * IOS-144 Get incremental updates of localizable strings for Message Center
 * IOS-145 Get missing strings from surveys localized
+* IOS-149 Don't allow nested key/value pairs for custom data.
+* IOS-157 Unread message count not centered in FeedbackDemo
 * IOS-159 Spacing between top of email form and the status bar
 * IOS-156 Message Center on Original iPad locks to portrait mode
+* IOS-164 Message Center background color: white vs. grey
 * IOS-168 Attaching photo causes crash on iOS 7
 * IOS-169 UITextView metrics changed in iOS 7
 * IOS-173 Make client play nicely with location updates and file protection

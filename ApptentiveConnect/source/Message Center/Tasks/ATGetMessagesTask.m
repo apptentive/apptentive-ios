@@ -10,7 +10,7 @@
 
 #import "ATAutomatedMessage.h"
 #import "ATBackend.h"
-#import "ATMessage.h"
+#import "ATAbstractMessage.h"
 #import "ATConversationUpdater.h"
 #import "ATTextMessage.h"
 #import "ATWebClient.h"
@@ -33,7 +33,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		NSString *messageID = [defaults objectForKey:ATMessagesLastRetrievedMessageIDPreferenceKey];
 		if (messageID) {
-			lastMessage = [[ATMessage findMessageWithID:messageID] retain];
+			lastMessage = [[ATAbstractMessage findMessageWithID:messageID] retain];
 		}
 	}
 	return self;
@@ -138,7 +138,6 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 - (BOOL)processResult:(NSDictionary *)jsonMessages {
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
 	NSString *lastMessageID = nil;
-	ATLogDebug(@"messages: %@", jsonMessages);
 	
 	do { // once
 		if (!jsonMessages) break;
@@ -146,15 +145,18 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 		
 		NSArray *messages = [jsonMessages at_safeObjectForKey:@"items"];
 		if (![messages isKindOfClass:[NSArray class]]) break;
+		if (messages.count > 0) {
+			ATLogDebug(@"Apptentive messages: %@", jsonMessages);
+		}
 		
 		BOOL success = YES;
 		for (NSDictionary *messageJSON in messages) {
 			NSString *pendingMessageID = [messageJSON at_safeObjectForKey:@"nonce"];
 			NSString *messageID = [messageJSON at_safeObjectForKey:@"id"];
-			ATMessage *message = nil;
-			message = [ATMessage findMessageWithPendingID:pendingMessageID];
+			ATAbstractMessage *message = nil;
+			message = [ATAbstractMessage findMessageWithPendingID:pendingMessageID];
 			if (!message) {
-				message = [ATMessage findMessageWithID:messageID];
+				message = [ATAbstractMessage findMessageWithID:messageID];
 			}
 			if (!message) {
 				NSString *type = [messageJSON at_safeObjectForKey:@"type"];

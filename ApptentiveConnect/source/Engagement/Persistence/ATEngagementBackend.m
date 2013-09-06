@@ -239,14 +239,14 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 - (void)presentInteraction:(ATInteraction *)interaction {
 	ATLogInfo(@"Valid interaction found: %@", interaction);
 
-	if ([interaction.type isEqualToString:@"HtmlMessage"]) {	
+#	warning This should show a UIWebView.
+	if ([interaction.type isEqualToString:@"HtmlMessage"]) {
 		NSString *title = [interaction.configuration objectForKey:@"title"];
 		NSString *message = [interaction.configuration objectForKey:@"message"];
 		
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"No", @"no"), ATLocalizedString(@"Yes", @"yes"), nil];
 		[alert show];
-	}
-	else if ([interaction.type isEqualToString:@"RatingDialog"]) {
+	} else if ([interaction.type isEqualToString:@"RatingDialog"]) {
 		NSString *title = [interaction.configuration objectForKey:@"question_text"];
 		
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:ATLocalizedString(title, @"Rating Dialog title from server") message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"No", @"no"), ATLocalizedString(@"Yes", @"yes"), nil];

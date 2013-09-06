@@ -47,8 +47,12 @@ UIEdgeInsets insetsForView(UIView *v) {
 	textView.backgroundColor = [UIColor clearColor];
 	
 	textView.autoresizingMask = UIViewAutoresizingNone;
-	//TODO: Get rid of magic numbers here.
-	textViewContentInset = UIEdgeInsetsMake(-4, -2, -4, 0);
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+		textViewContentInset = UIEdgeInsetsMake(-4, 0, -4, 0);
+	} else {
+		//TODO: Get rid of magic numbers here.
+		textViewContentInset = UIEdgeInsetsMake(-4, -2, -4, 0);
+	}
 	textView.contentInset = textViewContentInset;
 	textView.showsHorizontalScrollIndicator = NO;
 	

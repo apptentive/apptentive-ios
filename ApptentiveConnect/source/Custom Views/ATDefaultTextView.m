@@ -95,8 +95,13 @@
 		CGFloat paddingX = 0;
 		CGPoint origin = CGPointZero;
 		
-		paddingX = 8;
-		origin = CGPointMake(8, 8);
+		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+			paddingX = 4;
+			origin = CGPointMake(4, 8);
+		} else {
+			paddingX = 8;
+			origin = CGPointMake(8, 8);
+		}
 		
 		CGRect b = placeholderLabel.bounds;
 		b.size.width = self.bounds.size.width - paddingX*2.0;

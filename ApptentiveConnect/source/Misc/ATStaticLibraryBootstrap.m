@@ -9,14 +9,16 @@
 #import "ATStaticLibraryBootstrap.h"
 
 #import "ATToolbar.h"
+#import "ATURLConnection_Private.h"
+#import "ATWebClient+EngagementAdditions.h"
 #import "ATWebClient+Metrics.h"
 #import "ATWebClient+SurveyAdditions.h"
-#import "ATURLConnection_Private.h"
 #import "ATWebClient+MessageCenter.h"
 #import "ATWebClient_Private.h"
 
 @implementation ATStaticLibraryBootstrap
 + (void)forceStaticLibrarySymbolUsage {
+	ATWebClient_EngagementAdditions_Bootstrap();
 	ATWebClient_Metrics_Bootstrap();
 	ATWebClient_SurveyAdditions_Bootstrap();
 	ATURLConnection_Private_Bootstrap();

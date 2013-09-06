@@ -10,5 +10,6 @@
 
 @interface ATWebClient (EngagementAdditions)
 - (ATAPIRequest *)requestForGettingEngagementManifest;
-
 @end
+
+void ATWebClient_EngagementAdditions_Bootstrap();

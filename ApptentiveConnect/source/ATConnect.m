@@ -10,7 +10,9 @@
 #import "ATConnect_Private.h"
 #import "ATBackend.h"
 #import "ATContactStorage.h"
+#import "ATEngagementBackend.h"
 #import "ATFeedback.h"
+#import "ATInteraction.h"
 #import "ATUtilities.h"
 #if TARGET_OS_IPHONE
 #import "ATMessageCenterViewController.h"
@@ -233,6 +235,21 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 	return bundle;
 #endif
 }
+
+- (void)engage:(NSString *)codePoint {
+	[[ATEngagementBackend sharedBackend] codePointWasEngaged:codePoint];
+	
+	ATInteraction *interaction = [[ATEngagementBackend sharedBackend] interactionForCodePoint:codePoint];
+	if (interaction) {
+		[[ATEngagementBackend sharedBackend] presentInteraction:interaction];
+		
+		[[ATEngagementBackend sharedBackend] interactionWasEngaged:interaction];
+	}
+	else {
+		ATLogInfo(@"No valid Apptentive interactions found for code point: %@", codePoint);
+	}
+}
+
 @end
 
 NSString *ATLocalizedString(NSString *key, NSString *comment) {

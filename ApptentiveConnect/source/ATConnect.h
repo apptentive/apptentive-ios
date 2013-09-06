@@ -80,4 +80,6 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 - (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key DEPRECATED_ATTRIBUTE;
 /*! Deprecated. Use removeCustomDeviceDataWithKey: instead. */
 - (void)removeCustomDataWithKey:(NSString *)key DEPRECATED_ATTRIBUTE;
+
+- (void)engage:(NSString *)codePoint;
 @end

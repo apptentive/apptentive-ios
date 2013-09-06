@@ -11,7 +11,6 @@
 #import "ATConnect.h"
 #import "ATAppRatingFlow.h"
 #import "ATSurveys.h"
-#import "ATEngagement.h"
 #import "defines.h"
 
 enum kRootTableSections {
@@ -181,7 +180,7 @@ enum kRootTableSections {
 				cell.textLabel.text = @"app.launch";
 				break;
 			case 1:
-				cell.textLabel.text = @"complext_criteria";
+				cell.textLabel.text = @"complex_criteria";
 				break;
 			case 2:
 				cell.textLabel.text = @"big.win";
@@ -220,7 +219,7 @@ enum kRootTableSections {
 			[[ATConnect sharedConnection] presentMessageCenterFromViewController:self];
 		}
 	} else if (indexPath.section == kEngagementSection) {
-		[ATEngagement engage:[tableView cellForRowAtIndexPath:indexPath].textLabel.text];
+		[[ATConnect sharedConnection] engage:[tableView cellForRowAtIndexPath:indexPath].textLabel.text];
 	}
 	
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];

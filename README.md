@@ -242,18 +242,16 @@ shown in your app settings on [Apptentive](https://apptentive.com).
 
 Surveys can be created on our website and presented, in-app, to users.
 
+Surveys are **cached** and will only be re-downloaded every 24 hours, to cut down on network connections. When developing your app and testing Apptentive, force a cache refresh by delete the app from your device and re-running.
+
 To begin using surveys...
 
 1. In the file navigator, expand `source` under the ApptentiveConnect project.
 2. Drag `ATConnect.h` from `ApptentiveConnect.xcodeproj` to your app's file list.
 3. Import `ATSurveys.h` into the file where you need it.
 
-New surveys will be retrieved automatically. When a new survey becomes available,
-the `ATSurveyNewSurveyAvailableNotification` notification will be sent.
-
 There are both tagged surveys and untagged surveys. Tags are useful for defining
-surveys that should be shown only in certain locations, whereas untagged surveys
-are more general.
+surveys that should be shown only in certain instances.
 
 To check if a survey with a given set of tags is available to be shown, call:
 
@@ -265,7 +263,7 @@ if ([ATSurveys hasSurveyAvailableWithTags:tags]) {
 }
 ```
 
-Note: Your survey tags are set on the Apptentive website.
+Note: Tags for a particular survey are set on the Apptentive website.
 
 To show a survey without tags, use:
 
@@ -275,7 +273,8 @@ if ([ATSurveys hasSurveyAvailableWithNoTags]) {
 }
 ```
 
-You can check if there are any available surveys that have been downloaded from the server:
+New surveys will be retrieved automatically. When a new survey becomes available,
+the `ATSurveyNewSurveyAvailableNotification` notification will be sent.
 
 ```objective-c
 #include "ATSurveys.h"

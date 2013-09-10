@@ -13,6 +13,7 @@ NSString *const ATConfigurationPreferencesChangedNotification;
 NSString *const ATAppConfigurationLastUpdatePreferenceKey;
 NSString *const ATAppConfigurationExpirationPreferenceKey;
 NSString *const ATAppConfigurationMetricsEnabledPreferenceKey;
+NSString *const ATAppConfigurationMessageCenterEnabledKey;
 
 NSString *const ATAppConfigurationMessageCenterTitleKey;
 NSString *const ATAppConfigurationMessageCenterForegroundRefreshIntervalKey;

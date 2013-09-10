@@ -35,6 +35,7 @@
 #import "ATTextMessage.h"
 #import "ATLog.h"
 #import "ATPersonUpdater.h"
+#import "ATConnect_Private.h"
 
 typedef NS_ENUM(NSInteger, ATBackendState){
 	ATBackendStateStarting,
@@ -407,7 +408,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 #pragma mark Message Center
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController {
 	NSUInteger messageCount = [ATData countEntityNamed:@"ATAbstractMessage" withPredicate:nil];
-	if (messageCount == 0 || ![ATConnect sharedConnection].useMessageCenter) {
+	if (messageCount == 0 || ![[ATConnect sharedConnection] messageCenterEnabled]) {
 		NSString *title = ATLocalizedString(@"Give Feedback", @"First feedback screen title.");
 		NSString *body = [NSString stringWithFormat:ATLocalizedString(@"Please let us know how to make %@ better for you!", @"Feedback screen body. Parameter is the app name."), [self appName]];
 		NSString *placeholder = ATLocalizedString(@"How can we help? (required)", @"First feedback placeholder text.");
@@ -523,7 +524,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 			if (!messagePanelSentMessageAlert) {
 				
 				NSString *alertTitle, *alertMessage, *cancelButtonTitle, *otherButtonTitle;
-				if ([[ATConnect sharedConnection] useMessageCenter]) {
+				if ([[ATConnect sharedConnection] messageCenterEnabled]) {
 					alertTitle = ATLocalizedString(@"Thanks!", nil);
 					alertMessage = ATLocalizedString(@"Your response has been saved in the Message Center, where you'll be able to view replies and send us other messages.", @"Message panel sent message confirmation dialog text");
 					cancelButtonTitle = ATLocalizedString(@"Close", @"Close alert view title");

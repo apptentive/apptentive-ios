@@ -9,7 +9,8 @@
 #import "ATConnect.h"
 
 @interface ATConnect ()
-- (NSDictionary *)customData;
+- (NSDictionary *)customPersonData;
+- (NSDictionary *)customDeviceData;
 
 #if TARGET_OS_IPHONE
 - (void)presentFeedbackDialogFromViewController:(UIViewController *)viewController;

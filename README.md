@@ -55,7 +55,7 @@ The instructions below are for source integration. For binary releases, see our 
 
 There is a video demoing integration in Xcode 4 here:
 
-http://vimeo.com/23710908
+http://vimeo.com/73020193
 
 Drag the `ApptentiveConnect.xcodeproj` project to your project in Xcode 4 and
 add it as a subproject. You can do the same with a workspace.
@@ -120,6 +120,31 @@ ATConnect *connection = [ATConnect sharedConnection];
 
 Easy!
 
+Message Center
+-----------------
+
+Show the Apptentive Message Center with `presentMessageCenterFromViewController:`:
+
+``` objective-c
+[[ATConnect sharedConnection] presentMessageCenterFromViewController:viewController];
+```
+
+The first time your app opens Message Center, the user will be presented with a feedback form. On subsequent showings they will be taken directly to the Message Center.
+
+Use `unreadMessageCount` to check if there are any unread Message Center messages:
+
+``` objective-c
+NSUInteger *unreadMessageCount = [[ATConnect sharedConnection] unreadMessageCount];
+```
+
+You can also [listen](https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/NSNotificationCenter_Class/Reference/Reference.html) for the `ATMessageCenterUnreadCountChangedNotification` notification, which we post when the unread message count changes. 
+
+``` objective-c
+[[NSNotificationCenter defaultCenter] addObserver:self
+										 selector:@selector(unreadMessageCountChanged:)
+										     name:ATMessageCenterUnreadCountChangedNotification
+									       object:nil];
+```
 
 App Rating Flow
 ---------------
@@ -158,7 +183,7 @@ You'll want to add calls to `-showRatingFlowFromViewControllerIfConditionsAreMet
 If you're using significant events to determine when to show the ratings flow, you can
 increment the number of significant events by calling:
 
-```
+``` objective-c
 [sharedFlow logSignificantEvent];
 ```
 

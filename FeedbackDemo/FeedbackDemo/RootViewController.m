@@ -69,11 +69,11 @@ enum kRootTableSections {
 	}
 	checkedAlready = YES;
 	if ([kApptentiveAPIKey isEqualToString:@"<your key here>"]) {
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Please Set API Key" message:@"This demo app will not work properly until you set your API key in defines.h" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Please Set API Key" message:@"This demo app will not work properly until you set your API key in defines.h" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
 		[alert show];
 		[alert autorelease];
 	} else if ([kApptentiveAppID isEqualToString:@"ExampleAppID"]) {
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Please Set App ID" message:@"This demo app won't be able to show your app in the app store until you set your App ID in defines.h" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Please Set App ID" message:@"This demo app won't be able to show your app in the app store until you set your App ID in defines.h" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
 		[alert show];
 		[alert autorelease];
 	}
@@ -154,13 +154,21 @@ enum kRootTableSections {
 		if (indexPath.row == 0) {
 			cell.textLabel.text = @"Message Center";
 			UILabel *unreadLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-			unreadLabel.text = [NSString stringWithFormat:@" %d ", [[ATConnect sharedConnection] unreadMessageCount]];
+			unreadLabel.text = [NSString stringWithFormat:@"%d", [[ATConnect sharedConnection] unreadMessageCount]];
 			unreadLabel.backgroundColor = [UIColor grayColor];
 			unreadLabel.textColor = [UIColor whiteColor];
 			unreadLabel.textAlignment = UITextAlignmentCenter;
-			unreadLabel.layer.cornerRadius = 10.0;
 			unreadLabel.font = [UIFont boldSystemFontOfSize:17];
 			[unreadLabel sizeToFit];
+			
+			CGRect paddedFrame = unreadLabel.frame;
+			paddedFrame.size.width += 10;
+			if (paddedFrame.size.width < paddedFrame.size.height) {
+				paddedFrame.size.width = paddedFrame.size.height;
+			}
+			unreadLabel.frame = paddedFrame;
+			unreadLabel.layer.cornerRadius = unreadLabel.frame.size.height / 2;
+			
 			cell.accessoryView = [unreadLabel autorelease];
 		}
 	}

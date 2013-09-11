@@ -19,6 +19,9 @@ NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigura
 
 NSString *const ATAppConfigurationMessageCenterTitleKey = @"ATAppConfigurationMessageCenterTitleKey";
 NSString *const ATAppConfigurationMessageCenterForegroundRefreshIntervalKey = @"ATAppConfigurationMessageCenterForegroundRefreshIntervalKey";
+NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey = @"ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey";
+
+NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDisplayNameKey";
 
 // Interval, in seconds, after which we'll update the configuration.
 #if APPTENTIVE_DEBUG
@@ -40,6 +43,7 @@ NSString *const ATAppConfigurationMessageCenterForegroundRefreshIntervalKey = @"
 	 [NSDate distantPast], ATAppConfigurationLastUpdatePreferenceKey,
 	 [NSNumber numberWithBool:YES], ATAppConfigurationMetricsEnabledPreferenceKey,
 	 [NSNumber numberWithInt:20], ATAppConfigurationMessageCenterForegroundRefreshIntervalKey,
+	 [NSNumber numberWithInt:60], ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey,
 	 nil];
 	[defaults registerDefaults:defaultPreferences];
 }
@@ -152,7 +156,7 @@ NSString *const ATAppConfigurationMessageCenterForegroundRefreshIntervalKey = @"
 		 @"ratings_days_before_prompt", ATAppRatingDaysBeforePromptPreferenceKey, 
 		 @"ratings_days_between_prompts", ATAppRatingDaysBetweenPromptsPreferenceKey, 
 		 @"ratings_events_before_prompt", ATAppRatingSignificantEventsBeforePromptPreferenceKey, 
-		 @"ratings_uses_before_prompt", ATAppRatingUsesBeforePromptPreferenceKey, 
+		 @"ratings_uses_before_prompt", ATAppRatingUsesBeforePromptPreferenceKey,
 		 @"metrics_enabled", ATAppConfigurationMetricsEnabledPreferenceKey,
 		 nil];
 	
@@ -218,13 +222,33 @@ NSString *const ATAppConfigurationMessageCenterForegroundRefreshIntervalKey = @"
 				[defaults setObject:title forKey:ATAppConfigurationMessageCenterTitleKey];
 				hasConfigurationChanges = YES;
 			}
+			
 			NSNumber *fgRefresh = [mc objectForKey:@"fg_poll"];
 			NSNumber *oldFGRefresh = [defaults objectForKey:ATAppConfigurationMessageCenterForegroundRefreshIntervalKey];
 			if (!oldFGRefresh || [oldFGRefresh intValue] != [fgRefresh intValue]) {
 				[defaults setObject:fgRefresh forKey:ATAppConfigurationMessageCenterForegroundRefreshIntervalKey];
 				hasConfigurationChanges = YES;
 			}
+			
+			NSNumber *bgRefresh = [mc objectForKey:@"bg_poll"];
+			NSNumber *oldBGRefresh = [defaults objectForKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey];
+			if (!oldBGRefresh || [oldBGRefresh intValue] != [bgRefresh intValue]) {
+				[defaults setObject:bgRefresh forKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey];
+				hasConfigurationChanges = YES;
+			}
 		}
+	}
+	
+	BOOL setAppName = NO;
+	if ([jsonConfiguration objectForKey:@"app_display_name"]) {
+		NSObject *appNameObject = [jsonConfiguration objectForKey:@"app_display_name"];
+		if ([appNameObject isKindOfClass:[NSString class]]) {
+			[defaults setObject:appNameObject forKey:ATAppConfigurationAppDisplayNameKey];
+			setAppName = YES;
+		}
+	}
+	if (!setAppName) {
+		[defaults removeObjectForKey:ATAppConfigurationAppDisplayNameKey];
 	}
 	
 	if (hasConfigurationChanges) {

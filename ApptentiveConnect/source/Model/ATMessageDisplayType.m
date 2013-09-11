@@ -22,6 +22,10 @@ static ATMessageDisplayType *modalTypeSingleton = nil;
 
 + (void)setupSingletons {
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
+	if (!context) {
+		ATLogError(@"No managed object context found.");
+		return;
+	}
 	
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(displayType == %d) || (displayType == %d)", ATMessageDisplayTypeTypeMessageCenter, ATMessageDisplayTypeTypeModal];

@@ -88,12 +88,14 @@
 	[context deleteObject:object];
 }
 
-+ (void)save {
++ (BOOL)save {
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
 	NSError *error = nil;
 	if (![context save:&error]) {
 		ATLogError(@"Error saving context: %@", error);
+		return NO;
 	}
+	return YES;
 }
 
 + (NSManagedObjectContext *)moc {

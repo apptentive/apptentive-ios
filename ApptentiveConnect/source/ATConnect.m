@@ -19,9 +19,11 @@
 #endif
 
 NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCenterUnreadCountChangedNotification";
+NSString *const ATInitialUserNameKey = @"ATInitialUserNameKey";
+NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 
 @implementation ATConnect
-@synthesize apiKey, showTagline, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText;
+@synthesize apiKey, showTagline, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText, useMessageCenter;
 
 + (ATConnect *)sharedConnection {
 	static ATConnect *sharedConnection = nil;
@@ -36,7 +38,9 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 	if ((self = [super init])) {
 		self.showEmailField = YES;
 		self.showTagline = YES;
-		customData = [[NSMutableDictionary alloc] init];
+		customPersonData = [[NSMutableDictionary alloc] init];
+		customDeviceData = [[NSMutableDictionary alloc] init];
+		useMessageCenter = YES;
 	}
 	return self;
 }
@@ -49,7 +53,8 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 		feedbackWindowController = nil;
 	}
 #endif
-	[customData release], customData = nil;
+	[customPersonData release], customPersonData = nil;
+	[customDeviceData release], customDeviceData = nil;
 	[customPlaceholderText release], customPlaceholderText = nil;
 	[apiKey release], apiKey = nil;
 	[initialUserName release], initialUserName = nil;
@@ -66,11 +71,68 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 	}
 }
 
-- (NSDictionary *)customData {
-	return customData;
+- (void)setInitialUserName:(NSString *)anInitialUserName {
+	if (initialUserName != anInitialUserName) {
+		[initialUserName release];
+		initialUserName = nil;
+		initialUserName = [anInitialUserName retain];
+		
+		// Set person object's name. Only overwrites previous *initial* names.
+		NSString *previousInitialUserName = [[NSUserDefaults standardUserDefaults] objectForKey:ATInitialUserNameKey];
+		if ([ATPersonInfo personExists]) {
+			ATPersonInfo *person = [ATPersonInfo currentPerson];
+			if (!person.name || [person.name isEqualToString:previousInitialUserName]) {
+				person.name = initialUserName;
+				person.needsUpdate = YES;
+				[person saveAsCurrentPerson];
+			}
+		}
+		[[NSUserDefaults standardUserDefaults] setObject:initialUserName forKey:ATInitialUserNameKey];
+	}
 }
 
-- (void)addCustomData:(NSObject *)object withKey:(NSString *)key {
+- (void)setInitialUserEmailAddress:(NSString *)anInitialUserEmailAddress {
+	if (![ATUtilities emailAddressIsValid:anInitialUserEmailAddress]) {
+		ATLogInfo(@"Attempting to set an invalid initial user email address: %@", anInitialUserEmailAddress);
+		return;
+	}
+		
+	if (initialUserEmailAddress != anInitialUserEmailAddress) {		
+		[initialUserEmailAddress release];
+		initialUserEmailAddress = nil;
+		initialUserEmailAddress = [anInitialUserEmailAddress retain];
+		
+		// Set person object's email. Only overwrites previous *initial* emails.
+		NSString *previousInitialUserEmailAddress = [[NSUserDefaults standardUserDefaults] objectForKey:ATInitialUserEmailAddressKey];
+		if ([ATPersonInfo personExists]) {
+			ATPersonInfo *person = [ATPersonInfo currentPerson];
+			if (!person.emailAddress || [person.emailAddress isEqualToString:previousInitialUserEmailAddress]) {
+				person.emailAddress = initialUserEmailAddress;
+				person.needsUpdate = YES;
+				[person saveAsCurrentPerson];
+			}			
+		}
+		[[NSUserDefaults standardUserDefaults] setObject:initialUserEmailAddress forKey:ATInitialUserEmailAddressKey];
+	}
+}
+
+- (NSDictionary *)customPersonData {
+	return customPersonData;
+}
+
+- (NSDictionary *)customDeviceData {
+	return customDeviceData;
+}
+
+- (void)addCustomPersonData:(NSObject *)object withKey:(NSString *)key {
+	[self addCustomData:object withKey:key toCustomDataDictionary:customPersonData];
+}
+
+- (void)addCustomDeviceData:(NSObject *)object withKey:(NSString *)key {
+	[self addCustomData:object withKey:key toCustomDataDictionary:customDeviceData];
+}
+
+- (void)addCustomData:(NSObject *)object withKey:(NSString *)key toCustomDataDictionary:(NSMutableDictionary *)customData {
 	// Special cases
 	if ([object isKindOfClass:[NSDate class]]) {
 		object = [ATUtilities stringRepresentationOfDate:(NSDate *)object];
@@ -80,15 +142,27 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 						[object isKindOfClass:[NSNumber class]] ||
 						[object isKindOfClass:[NSNull class]]);
 	
-	NSAssert(allowedData, @"Custom data must be of type NSString, NSNumber, or NSNull. Attempted to add custom data of type %@", NSStringFromClass([object class]));
+	NSAssert(allowedData, @"Apptentive custom data must be of type NSString, NSNumber, or NSNull. Attempted to add custom data of type %@", NSStringFromClass([object class]));
 	
 	if (allowedData) {
 		[customData setObject:object forKey:key];
 	}
 }
 
+- (void)removeCustomPersonDataWithKey:(NSString *)key {
+	[customPersonData removeObjectForKey:key];
+}
+
+- (void)removeCustomDeviceDataWithKey:(NSString *)key {
+	[customDeviceData removeObjectForKey:key];
+}
+
+- (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key {
+	[self addCustomDeviceData:object withKey:key];
+}
+
 - (void)removeCustomDataWithKey:(NSString *)key {
-	[customData removeObjectForKey:key];
+	[self removeCustomDeviceDataWithKey:key];
 }
 
 #if TARGET_OS_IPHONE
@@ -98,7 +172,7 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 
 - (void)presentFeedbackDialogFromViewController:(UIViewController *)viewController {
 	NSString *title = ATLocalizedString(@"Give Feedback", @"First feedback screen title.");
-	NSString *body = ATLocalizedString(@"Let us know how to make our app better for you!", @"First feedback screen body.");
+	NSString *body = [NSString stringWithFormat:ATLocalizedString(@"Please let us know how to make %@ better for you!", @"Feedback screen body. Parameter is the app name."), [[ATBackend sharedBackend] appName]];
 	NSString *placeholder = ATLocalizedString(@"How can we help? (required)", @"First feedback placeholder text.");
 	[[ATBackend sharedBackend] presentIntroDialogFromViewController:viewController withTitle:title prompt:body placeholderText:placeholder];
 }
@@ -138,7 +212,7 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 
 + (NSBundle *)resourceBundle {
 #if TARGET_OS_IPHONE
-	NSString *path = [[NSBundle mainBundle] bundlePath];
+	NSString *path = [[NSBundle bundleForClass:[ATBackend class]] bundlePath];
 	NSString *bundlePath = [path stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
 	NSFileManager *fm = [NSFileManager defaultManager];
 	if ([fm fileExistsAtPath:bundlePath]) {

@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Apptentive, Inc. All rights reserved.
 //
 
-#import "ATMessage.h"
+#import "ATAbstractMessage.h"
 
 #import "ATBackend.h"
 #import "ATData.h"
@@ -15,7 +15,7 @@
 #import "ATMessageSender.h"
 #import "NSDictionary+ATAdditions.h"
 
-@implementation ATMessage
+@implementation ATAbstractMessage
 
 @dynamic pendingMessageID;
 @dynamic pendingState;
@@ -32,12 +32,12 @@
 	return nil;
 }
 
-+ (ATMessage *)findMessageWithID:(NSString *)apptentiveID {
-	ATMessage *result = nil;
++ (ATAbstractMessage *)findMessageWithID:(NSString *)apptentiveID {
+	ATAbstractMessage *result = nil;
 	
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(apptentiveID == %@)", apptentiveID];
-		NSArray *results = [ATData findEntityNamed:@"ATMessage" withPredicate:fetchPredicate];
+		NSArray *results = [ATData findEntityNamed:@"ATAbstractMessage" withPredicate:fetchPredicate];
 		if (results && [results count]) {
 			result = [results objectAtIndex:0];
 		}
@@ -45,12 +45,12 @@
 	return result;
 }
 
-+ (ATMessage *)findMessageWithPendingID:(NSString *)pendingID {
-	ATMessage *result = nil;
++ (ATAbstractMessage *)findMessageWithPendingID:(NSString *)pendingID {
+	ATAbstractMessage *result = nil;
 	
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingMessageID == %@)", pendingID];
-		NSArray *results = [ATData findEntityNamed:@"ATMessage" withPredicate:fetchPredicate];
+		NSArray *results = [ATData findEntityNamed:@"ATAbstractMessage" withPredicate:fetchPredicate];
 		if (results && [results count] != 0) {
 			result = [results objectAtIndex:0];
 		}

@@ -36,7 +36,15 @@
 #import "ATLog.h"
 #import "ATPersonUpdater.h"
 
-NSString *const ATBackendNewAPIKeyNotification = @"ATBackendNewAPIKeyNotification";
+typedef NS_ENUM(NSInteger, ATBackendState){
+	ATBackendStateStarting,
+	ATBackendStateWaitingForDataProtectionUnlock,
+	ATBackendStateReady
+};
+
+
+NSString *const ATBackendBecameReadyNotification = @"ATBackendBecameReadyNotification";
+
 NSString *const ATUUIDPreferenceKey = @"ATUUIDPreferenceKey";
 NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 
@@ -48,6 +56,8 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 - (void)setupDataManager;
 - (void)setup;
 - (void)startup;
+- (void)continueStartupWithDataManagerSuccess;
+- (void)continueStartupWithDataManagerFailure;
 - (void)updateWorking;
 - (void)networkStatusChanged:(NSNotification *)notification;
 - (void)stopWorking:(NSNotification *)notification;
@@ -55,6 +65,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 - (void)checkForSurveys;
 - (void)checkForMessages;
 - (void)startMonitoringUnreadMessages;
+- (void)checkForProperConfiguration;
 @end
 
 @interface ATBackend ()
@@ -70,6 +81,8 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 @implementation ATBackend
 #if TARGET_OS_IPHONE
 {
+	ATBackendState state;
+	
 	UIViewController *presentedMessageCenterViewController;
 	ATMessagePanelViewController *currentMessagePanelController;
 	
@@ -198,7 +211,6 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 			apiKeySet = YES;
 		}
 		[self updateWorking];
-		[[NSNotificationCenter defaultCenter] postNotificationName:ATBackendNewAPIKeyNotification object:nil];
 	}
 }
 
@@ -360,12 +372,44 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 #endif
 }
 
+- (NSString *)appName {
+	NSString *displayName = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationAppDisplayNameKey];
+	if (displayName) {
+		return displayName;
+	}
+	
+	NSArray *appNameKeys = [NSArray arrayWithObjects:@"CFBundleDisplayName", (NSString *)kCFBundleNameKey, nil];
+	NSMutableArray *infoDictionaries = [NSMutableArray array];
+	if ([[NSBundle mainBundle] localizedInfoDictionary]) {
+		[infoDictionaries addObject:[[NSBundle mainBundle] localizedInfoDictionary]];
+	}
+	if ([[NSBundle mainBundle] infoDictionary]) {
+		[infoDictionaries addObject:[[NSBundle mainBundle] infoDictionary]];
+	}
+	for (NSDictionary *infoDictionary in infoDictionaries) {
+		if (displayName != nil) {
+			break;
+		}
+		for (NSString *appNameKey in appNameKeys) {
+			displayName = [infoDictionary objectForKey:appNameKey];
+			if (displayName != nil) {
+				break;
+			}
+		}
+	}
+	return displayName;
+}
+
+- (BOOL)isReady {
+	return (state == ATBackendStateReady);
+}
+
 #pragma mark Message Center
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController {
-	NSUInteger messageCount = [ATData countEntityNamed:@"ATMessage" withPredicate:nil];
-	if (messageCount == 0) {
+	NSUInteger messageCount = [ATData countEntityNamed:@"ATAbstractMessage" withPredicate:nil];
+	if (messageCount == 0 || ![ATConnect sharedConnection].useMessageCenter) {
 		NSString *title = ATLocalizedString(@"Give Feedback", @"First feedback screen title.");
-		NSString *body = ATLocalizedString(@"Let us know how to make our app better for you!", @"First feedback screen body.");
+		NSString *body = [NSString stringWithFormat:ATLocalizedString(@"Please let us know how to make %@ better for you!", @"Feedback screen body. Parameter is the app name."), [self appName]];
 		NSString *placeholder = ATLocalizedString(@"How can we help? (required)", @"First feedback placeholder text.");
 		[self presentIntroDialogFromViewController:viewController withTitle:title prompt:body placeholderText:placeholder];
 		return;
@@ -477,7 +521,20 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 		[currentMessagePanelController release], currentMessagePanelController = nil;
 		if (action == ATMessagePanelDidSendMessage) {
 			if (!messagePanelSentMessageAlert) {
-				messagePanelSentMessageAlert = [[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Thanks!", nil) message:ATLocalizedString(@"Your response has been saved in this app's Message Center, where you may get a reply from us.", @"Message panel sent message confirmation dialog text") delegate:self cancelButtonTitle:ATLocalizedString(@"Close", @"Close alert view title") otherButtonTitles:ATLocalizedString(@"View Messages", @"View messages button title"), nil];
+				
+				NSString *alertTitle, *alertMessage, *cancelButtonTitle, *otherButtonTitle;
+				if ([[ATConnect sharedConnection] useMessageCenter]) {
+					alertTitle = ATLocalizedString(@"Thanks!", nil);
+					alertMessage = ATLocalizedString(@"Your response has been saved in the Message Center, where you'll be able to view replies and send us other messages.", @"Message panel sent message confirmation dialog text");
+					cancelButtonTitle = ATLocalizedString(@"Close", @"Close alert view title");
+					otherButtonTitle = ATLocalizedString(@"View Messages", @"View messages button title");
+				} else {
+					alertTitle = ATLocalizedString(@"Thanks!", nil);
+					alertMessage = ATLocalizedString(@"We will contact you via email shortly.", @"Message panel sent message but will not show Message Center dialog.");
+					cancelButtonTitle = ATLocalizedString(@"Close", @"Close alert view title");
+					otherButtonTitle = nil;
+				}
+				messagePanelSentMessageAlert = [[UIAlertView alloc] initWithTitle:alertTitle message:alertMessage delegate:self cancelButtonTitle:cancelButtonTitle otherButtonTitles:otherButtonTitle, nil];
 				[messagePanelSentMessageAlert show];
 				
 				[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroThankYouDidShowNotification object:self userInfo:nil];
@@ -487,8 +544,13 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 }
 
 - (NSString *)initialEmailAddressForMessagePanel:(ATMessagePanelViewController *)messagePanel {
-	ATPersonInfo *person = [ATPersonInfo currentPerson];
-	return person.emailAddress;
+	NSString *email = [ATConnect sharedConnection].initialUserEmailAddress;
+	
+	if ([ATPersonInfo personExists]) {
+		email = [ATPersonInfo currentPerson].emailAddress;
+	}
+	
+	return email;
 }
 
 #pragma mark UIAlertViewDelegate
@@ -680,29 +742,52 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	return previousUnreadCount;
 }
 
-- (void)messageCenterEnteredForeground {
-	@synchronized(self) {
-		[self checkForMessages];
-		if (!messageRetrievalTimer) {
-			NSNumber *refreshIntervalNumber = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterForegroundRefreshIntervalKey];
-			int refreshInterval = 8;
-			if (refreshIntervalNumber) {
-				refreshInterval = [refreshIntervalNumber intValue];
-				refreshInterval = MAX(4, refreshInterval);
-			}
-			messageRetrievalTimer = [[NSTimer timerWithTimeInterval:refreshInterval target:self selector:@selector(checkForMessages) userInfo:nil repeats:YES] retain];
-			NSRunLoop *mainRunLoop = [NSRunLoop mainRunLoop];
-			[mainRunLoop addTimer:messageRetrievalTimer forMode:NSDefaultRunLoopMode];
-		}
+- (void)checkForMessagesAtForegroundRefreshInterval {
+	NSNumber *refreshIntervalNumber = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterForegroundRefreshIntervalKey];
+	int refreshInterval = 8;
+	if (refreshIntervalNumber) {
+		refreshInterval = [refreshIntervalNumber intValue];
+		refreshInterval = MAX(4, refreshInterval);
 	}
+	
+	[self checkForMessagesAtRefreshInterval:refreshInterval];
 }
 
-- (void)messageCenterLeftForeground {
+- (void)checkForMessagesAtBackgroundRefreshInterval {
+	NSNumber *refreshIntervalNumber = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey];
+	int refreshInterval = 60;
+	if (refreshIntervalNumber) {
+		refreshInterval = [refreshIntervalNumber intValue];
+		refreshInterval = MAX(30, refreshInterval);
+	}
+	
+	[self checkForMessagesAtRefreshInterval:refreshInterval];
+}
+
+- (void)checkForMessagesAtRefreshInterval:(NSTimeInterval)refreshInterval {
 	@synchronized(self) {
 		if (messageRetrievalTimer) {
 			[messageRetrievalTimer invalidate];
 			[messageRetrievalTimer release], messageRetrievalTimer = nil;
 		}
+		
+		messageRetrievalTimer = [[NSTimer timerWithTimeInterval:refreshInterval target:self selector:@selector(checkForMessages) userInfo:nil repeats:YES] retain];
+		NSRunLoop *mainRunLoop = [NSRunLoop mainRunLoop];
+		[mainRunLoop addTimer:messageRetrievalTimer forMode:NSDefaultRunLoopMode];
+	}
+}
+
+- (void)messageCenterEnteredForeground {
+	@synchronized(self) {
+		[self checkForMessages];
+		
+		[self checkForMessagesAtForegroundRefreshInterval];
+	}
+}
+
+- (void)messageCenterLeftForeground {
+	@synchronized(self) {
+		[self checkForMessagesAtBackgroundRefreshInterval];
 	}
 }
 @end
@@ -724,10 +809,15 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	if (&UIApplicationDidEnterBackgroundNotification != nil) {
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWorking:) name:UIApplicationWillEnterForegroundNotification object:nil];
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkForMessages) name:UIApplicationWillEnterForegroundNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkForSurveys) name:UIApplicationWillEnterForegroundNotification object:nil];
 	}
 #elif TARGET_OS_MAC
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:NSApplicationWillTerminateNotification object:nil];
 #endif
+	
+	[self checkForMessagesAtBackgroundRefreshInterval];
 }
 
 /* Methods which are not safe to run until sharedBackend is assigned. */
@@ -737,11 +827,16 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 		return;
 	}
 	[self setupDataManager];
+}
+
+- (void)continueStartupWithDataManagerSuccess {
+	state = ATBackendStateReady;
 	[ApptentiveMetrics sharedMetrics];
 	
 	[ATMessageDisplayType setupSingletons];
 	
 	// One-shot actions at startup.
+	[self performSelector:@selector(checkForProperConfiguration) withObject:nil afterDelay:1];
 	[self performSelector:@selector(checkForSurveys) withObject:nil afterDelay:4];
 	[self performSelector:@selector(updateDeviceIfNeeded) withObject:nil afterDelay:7];
 	[self performSelector:@selector(checkForMessages) withObject:nil afterDelay:8];
@@ -749,12 +844,22 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	
 	[ATReachability sharedReachability];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusChanged:) name:ATReachabilityStatusChanged object:nil];
+	[self networkStatusChanged:nil];
 	[self performSelector:@selector(startMonitoringUnreadMessages) withObject:nil afterDelay:0.2];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATBackendBecameReadyNotification object:nil];
+}
+
+- (void)continueStartupWithDataManagerFailure {
+	[self performSelector:@selector(checkForProperConfiguration) withObject:nil afterDelay:1];
 }
 
 - (void)updateWorking {
 	if (shouldStopWorking) {
 		// Probably going into the background or being terminated.
+		self.working = NO;
+	} else if (state != ATBackendStateReady) {
+		// Backend isn't ready yet.
 		self.working = NO;
 	} else if (apiKeySet && networkAvailable && dataManager != nil && [dataManager persistentStoreCoordinator] != nil) {
 		// API Key is set and the network and Core Data stack is up. Start working.
@@ -788,6 +893,9 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 
 - (void)checkForSurveys {
 	@autoreleasepool {
+		if (![self isReady]) {
+			return;
+		}
 		[ATSurveys checkForAvailableSurveys];
 	}
 }
@@ -795,6 +903,9 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 - (void)checkForMessages {
 	@autoreleasepool {
 		@synchronized(self) {
+			if (![self isReady]) {
+				return;
+			}
 			ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
 			if (![queue hasTaskOfClass:[ATGetMessagesTask class]]) {
 				ATGetMessagesTask *task = [[ATGetMessagesTask alloc] init];
@@ -805,36 +916,28 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	}
 }
 
-- (void)clearDemoData {
-	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
-	
-	@synchronized(self) {
-		NSFetchRequest *fetchTypes = [[NSFetchRequest alloc] initWithEntityName:@"ATMessage"];
-		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(sender.apptentiveID == 'demouserid' || sender.apptentiveID = 'demodevid')"];
-		fetchTypes.predicate = fetchPredicate;
-		NSError *fetchError = nil;
-		NSArray *fetchArray = [context executeFetchRequest:fetchTypes error:&fetchError];
-		
-		if (fetchArray) {
-			for (NSManagedObject *fetchedObject in fetchArray) {
-				[context deleteObject:fetchedObject];
-			}
-			[context save:nil];
-		}
-		
-		[fetchTypes release], fetchTypes = nil;
-	}
-}
-
 - (void)setupDataManager {
 	if (![[NSThread currentThread] isMainThread]) {
 		[self performSelectorOnMainThread:@selector(setupDataManager) withObject:nil waitUntilDone:YES];
 		return;
 	}
 	ATLogInfo(@"Setting up data manager");
+	
+	if (![[UIApplication sharedApplication] isProtectedDataAvailable]) {
+		state = ATBackendStateWaitingForDataProtectionUnlock;
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupDataManager) name:UIApplicationProtectedDataDidBecomeAvailable object:nil];
+		return;
+	} else if (state == ATBackendStateWaitingForDataProtectionUnlock) {
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationProtectedDataDidBecomeAvailable object:nil];
+		state = ATBackendStateStarting;
+	}
+	
 	dataManager = [[ATDataManager alloc] initWithModelName:@"ATDataModel" inBundle:[ATConnect resourceBundle] storagePath:[self supportDirectoryPath]];
 	if (![dataManager persistentStoreCoordinator]) {
 		ATLogError(@"There was a problem setting up the persistent store coordinator!");
+		[self continueStartupWithDataManagerFailure];
+	} else {
+		[self continueStartupWithDataManagerSuccess];
 	}
 }
 
@@ -846,7 +949,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 			return;
 		}
 		NSFetchRequest *request = [[NSFetchRequest alloc] init];
-		[request setEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:[self managedObjectContext]]];
+		[request setEntity:[NSEntityDescription entityForName:@"ATAbstractMessage" inManagedObjectContext:[self managedObjectContext]]];
 		[request setFetchBatchSize:20];
 		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
 		[request setSortDescriptors:@[sortDescriptor]];
@@ -870,5 +973,25 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 		[request release], request = nil;
 #endif
 	}
+}
+
+- (void)checkForProperConfiguration {
+	static BOOL checkedAlready = NO;
+	if (checkedAlready) {
+		// Don't display more than once.
+		return;
+	}
+	checkedAlready = YES;
+#if TARGET_IPHONE_SIMULATOR
+	if ([ATConnect resourceBundle] == nil) {
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unable to Find Resources" message:@"Unable to find ApptentiveResources.bundle in the app. Did you remember to add it to the project?" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+		[alert show];
+		[alert autorelease];
+	} else if (self.persistentStoreCoordinator == nil || self.managedObjectContext == nil) {
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unable to Setup Core Data" message:@"Unable to setup Core Data store. Did you link against Core Data? If so, something else may be wrong." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+		[alert show];
+		[alert autorelease];
+	}
+#endif
 }
 @end

@@ -146,7 +146,8 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 }
 #endif
 
-#if TARGET_OS_MAC
+#if TARGET_OS_IPHONE
+#elif TARGET_OS_MAC
 - (void)appDidLaunch:(BOOL)canPromptForRating {
 	[self userDidUseApp];
 	if (canPromptForRating) {
@@ -162,37 +163,12 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 #pragma mark Properties
 
 - (void)setAppName:(NSString *)anAppName {
-	if (appName != anAppName) {
-		[appName release], appName = nil;
-		appName = [anAppName copy];
-	}
+	// Do nothing.
 }
 
+// TODO: Remove this once deployed on server.
 - (NSString *)appName {
-	if (appName != nil) {
-		return appName;
-	}
-	NSString *displayName = nil;
-	NSArray *appNameKeys = [NSArray arrayWithObjects:@"CFBundleDisplayName", (NSString *)kCFBundleNameKey, nil];
-	NSMutableArray *infoDictionaries = [NSMutableArray array];
-	if ([[NSBundle mainBundle] localizedInfoDictionary]) {
-		[infoDictionaries addObject:[[NSBundle mainBundle] localizedInfoDictionary]];
-	}
-	if ([[NSBundle mainBundle] infoDictionary]) {
-		[infoDictionaries addObject:[[NSBundle mainBundle] infoDictionary]];
-	}
-	for (NSDictionary *infoDictionary in infoDictionaries) {
-		if (displayName != nil) {
-			break;
-		}
-		for (NSString *appNameKey in appNameKeys) {
-			displayName = [infoDictionary objectForKey:appNameKey];
-			if (displayName != nil) {
-				break;
-			}
-		}
-	}
-	return displayName;
+	return [[ATBackend sharedBackend] appName];
 }
 
 #if TARGET_OS_IPHONE
@@ -212,7 +188,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 			if (!self.viewController) {
 				ATLogError(@"No view controller to present feedback interface!!");
 			} else {
-				NSString *title = NSLocalizedString(@"We're Sorry!", @"We're sorry text");
+				NSString *title = ATLocalizedString(@"We're Sorry!", @"We're sorry text");
 				NSString *body = ATLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
 				[[ATBackend sharedBackend] sendAutomatedMessageWithTitle:title body:body];
 				[[ATBackend sharedBackend] presentIntroDialogFromViewController:self.viewController withTitle:title prompt:body placeholderText:nil];
@@ -302,7 +278,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 
 #if TARGET_OS_IPHONE
 - (void)showUnableToOpenAppStoreDialog {
-	UIAlertView *errorAlert = [[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Oops!", @"Unable to load the App Store title") message:ATLocalizedString(@"Unable to load the App Store", @"Unable to load the App Store message") delegate:nil cancelButtonTitle:ATLocalizedString(@"Okay", @"Okay button title") otherButtonTitles:nil] autorelease];
+	UIAlertView *errorAlert = [[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Oops!", @"Unable to load the App Store title") message:ATLocalizedString(@"Unable to load the App Store", @"Unable to load the App Store message") delegate:nil cancelButtonTitle:ATLocalizedString(@"OK", @"OK button title") otherButtonTitles:nil] autorelease];
 	[errorAlert show];
 	[self setRatedApp:NO];
 }
@@ -430,6 +406,9 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 }
 
 - (BOOL)showDialogIfNecessary {
+	if (![[ATBackend sharedBackend] isReady]) {
+		return NO;
+	}
 #if TARGET_OS_IPHONE
 	if ([self shouldShowDialog]) {
 		[self showEnjoymentDialog:self.viewController];
@@ -680,7 +659,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 - (IBAction)showEnjoymentDialog:(id)sender
 #endif
 {
-	NSString *title = [NSString stringWithFormat:ATLocalizedString(@"Do you love %@?", @"Title for enjoyment alert view. Parameter is app name."), [self appName]];
+	NSString *title = [NSString stringWithFormat:ATLocalizedString(@"Do you love %@?", @"Title for enjoyment alert view. Parameter is app name."), [[ATBackend sharedBackend] appName]];
 #if TARGET_OS_IPHONE
 	self.viewController = vc;
 	if (!enjoymentDialog) {
@@ -728,8 +707,8 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 #endif
 {
 	NSString *title = ATLocalizedString(@"Thank You", @"Rate app title.");
-	NSString *message = [NSString stringWithFormat:ATLocalizedString(@"We're so happy to hear that you love %@! It'd be really helpful if you rated us in the App Store. Thanks so much for spending some time with us.", @"Rate app message. Parameter is app name."), [self appName]];
-	NSString *rateAppTitle = [NSString stringWithFormat:ATLocalizedString(@"Rate %@", @"Rate app button title"), [self appName]];
+	NSString *message = [NSString stringWithFormat:ATLocalizedString(@"We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us.", @"Rate app message. Parameter is app name."), [[ATBackend sharedBackend] appName]];
+	NSString *rateAppTitle = [NSString stringWithFormat:ATLocalizedString(@"Rate %@", @"Rate app button title"), [[ATBackend sharedBackend] appName]];
 	NSString *noThanksTitle = ATLocalizedString(@"No Thanks", @"cancel title for app rating dialog");
 	NSString *remindMeTitle = ATLocalizedString(@"Remind Me Later", @"Remind me later button title");
 #if TARGET_OS_IPHONE

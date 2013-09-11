@@ -1,4 +1,67 @@
-2013-06-28 wooster v1.0.0 (in progress)
+2013-08-29 wooster v1.1.0
+-------------------------
+This release focuses on support for Enterprise Surveys.
+
+These are mostly changes on the web side of things, but there are also some client changes:
+
+* Moved survey responses into Core Data.
+* IOS-119 Implement short v. long survey text response type
+* IOS-116 Implement new survey submission endpoint
+
+Other changes for IOS 7 forward compatibility:
+
+* IOS-181 App hangs in iOS 7 after "No email Address?" input field alert.
+
+Other fixes:
+
+* apptentive-ios#45 Renames `ATMessage` to `ATAbstractMessage` because of naming conflict with `AirTraffic.framework`
+* We accidentally used the Traditional Chinese localization for both Traditional and Simplified Chinese. This has been fixed.
+* Added `useMessageCenter` property on `ATConnect` for those who don't want to use Message Center.
+
+2013-08-18 wooster v1.0.1
+-------------------------
+Deprecating the `-addCustomData:withKey:` and `-removeCustomDataWithKey:` methods in `ATConnect`.
+
+In their place, use these new methods, which add custom data about devices and people:
+
+```
+/*! Adds an additional data field to any feedback sent. object should be an NSDate, NSNumber, or NSString. */
+- (void)addCustomPersonData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
+- (void)addCustomDeviceData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
+
+/*! Removes an additional data field from the feedback sent. */
+- (void)removeCustomPersonDataWithKey:(NSString *)key;
+- (void)removeCustomDeviceDataWithKey:(NSString *)key;
+```
+
+Also deprecating the `appName` property on `ATAppRatingFlow`. Now, the display name of the application used in our framework can be set server-side.
+
+Per IOS-144 and IOS-145, we now have much better localizations across many more languages.
+
+We have started on iOS 7 compatibility with IOS-157, IOS-159, IOS-164, IOS-168, and IOS-169. We covered some of the major parts, but there's more to come!
+
+Fixes:
+
+* IOS-144 Get incremental updates of localizable strings for Message Center
+* IOS-145 Get missing strings from surveys localized
+* IOS-149 Don't allow nested key/value pairs for custom data.
+* IOS-157 Unread message count not centered in FeedbackDemo
+* IOS-159 Spacing between top of email form and the status bar
+* IOS-156 Message Center on Original iPad locks to portrait mode
+* IOS-164 Message Center background color: white vs. grey
+* IOS-168 Attaching photo causes crash on iOS 7
+* IOS-169 UITextView metrics changed in iOS 7
+* IOS-173 Make client play nicely with location updates and file protection
+    * This was a crasher caused when background apps were started before the phone was unlocked.
+* IOS-174 Initial email address and name not hooked up to person object
+* IOS-175 Add warning if resource bundle isn't found in app
+    * If the app isn't properly integrated, and you run it in the Simulator, this will warn you with an alert.
+* IOS-176 Select/Copy/Paste menu is broken
+* IOS-179 Localization overflow in Message Center feedback form title
+* apptentive-ios#44 Doesn't work well in portrait mode on iPad
+* apptentive-ios#26 More localizations
+
+2013-06-28 wooster v1.0.0
 -------------------------
 There are a lot of major API changes. They are documented in docs/APIChanges.md
 

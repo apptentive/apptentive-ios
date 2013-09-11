@@ -119,7 +119,7 @@
 	return [request autorelease];
 }
 
-- (ATAPIRequest *)requestForPostingMessage:(ATMessage *)message {
+- (ATAPIRequest *)requestForPostingMessage:(ATAbstractMessage *)message {
 	NSError *error = nil;
 	NSDictionary *messageJSON = [message apiJSON];
 	NSDictionary *postJSON = nil;
@@ -164,7 +164,7 @@
 	return [request autorelease];
 }
 
-- (ATAPIRequest *)requestForRetrievingMessagesSinceMessage:(ATMessage *)message {
+- (ATAPIRequest *)requestForRetrievingMessagesSinceMessage:(ATAbstractMessage *)message {
 	NSDictionary *parameters = nil;
 	if (message && message.apptentiveID) {
 		parameters = @{@"after_id":message.apptentiveID};

@@ -16,6 +16,6 @@
 + (NSUInteger)countEntityNamed:(NSString *)entityName withPredicate:(NSPredicate *)predicate;
 + (void)removeEntitiesNamed:(NSString *)entityName withPredicate:(NSPredicate *)predicate;
 + (void)deleteManagedObject:(NSManagedObject *)object;
-+ (void)save;
++ (BOOL)save;
 + (NSManagedObjectContext *)moc;
 @end

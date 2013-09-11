@@ -12,6 +12,7 @@
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
 #import "ATAppConfigurationUpdater.h"
+#import "ATUtilities.h"
 
 @implementation ATDefaultMessageCenterTitleView {
 	BOOL showTagline;
@@ -36,9 +37,9 @@
 	}
 	title = [[UILabel alloc] initWithFrame:CGRectZero];
 	title.text = titleString;
-	title.font = [UIFont boldSystemFontOfSize:20.];
 	title.minimumFontSize = 10;
 	title.adjustsFontSizeToFitWidth = YES;
+	title.font = [UIFont boldSystemFontOfSize:20.];
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
 		title.textColor = [UIColor whiteColor];
 		title.shadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4];
@@ -47,6 +48,7 @@
 		title.shadowColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.7];
 		title.shadowOffset = CGSizeMake(0, 1);
 	}
+	
 	title.textAlignment = UITextAlignmentLeft;
 	title.lineBreakMode = UILineBreakModeMiddleTruncation;
 	title.backgroundColor = [UIColor clearColor];

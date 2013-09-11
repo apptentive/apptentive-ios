@@ -7,6 +7,7 @@
 //
 
 #import "ATDefaultTextView.h"
+#import "ATUtilities.h"
 
 @interface ATDefaultTextView (Private)
 - (void)setup;
@@ -90,12 +91,18 @@
 		placeholderLabel.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 		[placeholderLabel sizeToFit];
 		[self addSubview:placeholderLabel];
-		CGFloat padding = 8.0;
+		
+		CGFloat paddingX = 0;
+		CGPoint origin = CGPointZero;
+		
+		paddingX = 8;
+		origin = CGPointMake(8, 8);
+		
 		CGRect b = placeholderLabel.bounds;
-		b.size.width = self.bounds.size.width - padding*2.0;
+		b.size.width = self.bounds.size.width - paddingX*2.0;
 		placeholderLabel.bounds = b;
 		CGRect f = placeholderLabel.frame;
-		f.origin = CGPointMake(padding, padding);
+		f.origin = origin;
 		placeholderLabel.frame = f;
 		[self sendSubviewToBack:placeholderLabel];
 	} else {

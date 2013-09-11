@@ -13,7 +13,7 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
-#define kATConnectVersionString @"1.0.0"
+#define kATConnectVersionString @"1.1.0"
 
 #if TARGET_OS_IPHONE
 #	define kATConnectPlatformString @"iOS"
@@ -31,13 +31,15 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 #elif TARGET_OS_MAC
 	ATFeedbackWindowController *feedbackWindowController;
 #endif
-	NSMutableDictionary *customData;
+	NSMutableDictionary *customPersonData;
+	NSMutableDictionary *customDeviceData;
 	NSString *apiKey;
 	BOOL showTagline;
 	BOOL showEmailField;
 	NSString *initialUserName;
 	NSString *initialUserEmailAddress;
 	NSString *customPlaceholderText;
+	BOOL useMessageCenter;
 }
 @property (nonatomic, copy) NSString *apiKey;
 @property (nonatomic, assign) BOOL showTagline;
@@ -47,6 +49,8 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 /*! Set this if you want some custom text to appear as a placeholder in the
  feedback text box. */
 @property (nonatomic, copy) NSString *customPlaceholderText;
+/*! Set this to NO if you don't want to use Message Center, and instead just want unidirectional in-app feedback. */
+@property (nonatomic, assign) BOOL useMessageCenter;
 
 + (ATConnect *)sharedConnection;
 
@@ -68,9 +72,15 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 #endif
 
 /*! Adds an additional data field to any feedback sent. object should be an NSDate, NSNumber, or NSString. */
-- (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
+- (void)addCustomPersonData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
+- (void)addCustomDeviceData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
 
 /*! Removes an additional data field from the feedback sent. */
-- (void)removeCustomDataWithKey:(NSString *)key;
+- (void)removeCustomPersonDataWithKey:(NSString *)key;
+- (void)removeCustomDeviceDataWithKey:(NSString *)key;
 
+/*! Deprecated. Use addCustomDeviceData:withKey: instead. */
+- (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key DEPRECATED_ATTRIBUTE;
+/*! Deprecated. Use removeCustomDeviceDataWithKey: instead. */
+- (void)removeCustomDataWithKey:(NSString *)key DEPRECATED_ATTRIBUTE;
 @end

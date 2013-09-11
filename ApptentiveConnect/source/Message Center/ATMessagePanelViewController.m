@@ -153,7 +153,8 @@ enum {
 	CGRect newFrame = [self onscreenRectOfView];
 	CGPoint newViewCenter = CGPointMake(CGRectGetMidX(newFrame), CGRectGetMidY(newFrame));
 	
-	ATShadowView *shadowView = [[ATShadowView alloc] initWithFrame:self.window.bounds];
+	UIView *shadowView = nil;
+	shadowView = [[ATShadowView alloc] initWithFrame:self.window.bounds];
 	shadowView.tag = kMessagePanelGradientLayerTag;
 	[self.window addSubview:shadowView];
 	[self.window sendSubviewToBack:shadowView];
@@ -161,9 +162,6 @@ enum {
 	
 	l.cornerRadius = 10.0;
 	l.backgroundColor = [UIColor whiteColor].CGColor;
-	l.shadowColor = [UIColor blackColor].CGColor;
-	l.shadowOpacity = 0.72;
-	l.shadowRadius = 8;
 	
 	l.masksToBounds = YES;
 	
@@ -223,6 +221,8 @@ enum {
 	} else {
 		titleLabel.text = ATLocalizedString(@"Give Feedback", @"Title of feedback screen.");
 	}
+	titleLabel.adjustsFontSizeToFitWidth = YES;
+	titleLabel.minimumFontSize = 10;
 	titleLabel.textAlignment = UITextAlignmentCenter;
 	titleLabel.textColor = [UIColor colorWithRed:105/256. green:105/256. blue:105/256. alpha:1.0];
 	titleLabel.shadowColor = [UIColor whiteColor];
@@ -271,9 +271,9 @@ enum {
 		self.window.windowLevel = UIWindowLevelNormal;
 		self.window.userInteractionEnabled = NO;
 		self.window.layer.shouldRasterize = YES;
-		NSString *title = NSLocalizedString(@"Invalid Email Address", @"Invalid email dialog title.");
-		NSString *message = NSLocalizedString(@"That doesn't look like an email address. An email address will help us respond.", @"Invalid email dialog message.");
-		invalidEmailAddressAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Okay", @"Okay button title"), nil];
+		NSString *title = ATLocalizedString(@"Invalid Email Address", @"Invalid email dialog title.");
+		NSString *message = ATLocalizedString(@"That doesn't look like an email address. An email address will help us respond.", @"Invalid email dialog message.");
+		invalidEmailAddressAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"OK", @"OK button title"), nil];
 		[invalidEmailAddressAlert show];
 	} else if (self.showEmailAddressField && (!self.emailField.text || [self.emailField.text length] == 0)) {
 		if (noEmailAddressAlert) {
@@ -282,9 +282,9 @@ enum {
 		self.window.windowLevel = UIWindowLevelNormal;
 		self.window.userInteractionEnabled = NO;
 		self.window.layer.shouldRasterize = YES;
-		NSString *title = NSLocalizedString(@"No email address?", @"Lack of email dialog title.");
-		NSString *message = NSLocalizedString(@"An email address will help us respond.", @"Lack of email dialog message.");
-		noEmailAddressAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Send Feedback", @"Send button title"), nil];
+		NSString *title = ATLocalizedString(@"No email address?", @"Lack of email dialog title.");
+		NSString *message = ATLocalizedString(@"An email address will help us respond.", @"Lack of email dialog message.");
+		noEmailAddressAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Send Feedback", @"Send button title"), nil];
 		BOOL useNativeTextField = [noEmailAddressAlert respondsToSelector:@selector(alertViewStyle)];
 		UITextField *field = nil;
 		
@@ -306,7 +306,7 @@ enum {
 		field.keyboardType = UIKeyboardTypeEmailAddress;
 		field.delegate = self;
 		field.autocapitalizationType = UITextAutocapitalizationTypeNone;
-		field.placeholder = NSLocalizedString(@"Email Address", @"Email address popup placeholder text.");
+		field.placeholder = ATLocalizedString(@"Email Address", @"Email address popup placeholder text.");
 		field.tag = kATEmailAlertTextFieldTag;
 		
 		if (!useNativeTextField) {
@@ -396,7 +396,7 @@ enum {
 #pragma mark UITextViewDelegate
 - (void)textViewDidChange:(UITextView *)textView {
 	if (textView == self.feedbackView) {
-		CGFloat minTextViewHeight = self.scrollView.frame.size.height - textView.frame.origin.y;
+		CGFloat minTextViewHeight = CGRectGetMaxY(self.scrollView.frame) - textView.frame.origin.y;
 		CGSize oldContentSize = self.scrollView.contentSize;
 		CGRect oldTextViewRect = textView.frame;
 		
@@ -406,6 +406,7 @@ enum {
 		
 		CGSize newContentSize = oldContentSize;
 		newContentSize.height -= heightDiff;
+		newContentSize.width = scrollView.bounds.size.width;
 		CGRect newTextViewFrame = oldTextViewRect;
 		newTextViewFrame.size.height -= heightDiff;
 		textView.frame = newTextViewFrame;
@@ -434,12 +435,20 @@ enum {
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	self.window.layer.shouldRasterize = NO;
 	if (noEmailAddressAlert && [alertView isEqual:noEmailAddressAlert]) {
-		[noEmailAddressAlert release], noEmailAddressAlert = nil;
-		UITextField *textField = (UITextField *)[alertView viewWithTag:kATEmailAlertTextFieldTag];
+		BOOL useNativeTextField = [noEmailAddressAlert respondsToSelector:@selector(alertViewStyle)];
+		
+		UITextField *textField = nil;
+		if (useNativeTextField) {
+			textField = [noEmailAddressAlert textFieldAtIndex:0];
+		} else {
+			textField = (UITextField *)[noEmailAddressAlert viewWithTag:kATEmailAlertTextFieldTag];
+		}
 		if (textField) {
 			self.emailField.text = textField.text;
-			[self sendMessageAndDismiss];
 		}
+		noEmailAddressAlert.delegate = nil;
+		[noEmailAddressAlert release], noEmailAddressAlert = nil;
+		[self sendMessageAndDismiss];
 	} else if (invalidEmailAddressAlert && [alertView isEqual:invalidEmailAddressAlert]) {
 		self.window.userInteractionEnabled = YES;
 		[invalidEmailAddressAlert release], invalidEmailAddressAlert = nil;
@@ -511,13 +520,16 @@ enum {
 	
 	if (self.showEmailAddressField) {
 		offsetY += 5;
+		CGFloat extraHorzontalPadding = 0;
+		// Needs a little extra to line up with new metrics on UITextViews.
+		extraHorzontalPadding = 4;
 		CGRect emailFrame = self.scrollView.bounds;
-		emailFrame.origin.x = horizontalPadding;
+		emailFrame.origin.x = horizontalPadding + extraHorzontalPadding;
 		emailFrame.origin.y = offsetY;
 		UIFont *emailFont = [UIFont systemFontOfSize:17];
 		CGSize sizedEmail = [@"XXYyI|" sizeWithFont:emailFont];
 		emailFrame.size.height = sizedEmail.height;
-		emailFrame.size.width = emailFrame.size.width - horizontalPadding*2;
+		emailFrame.size.width = emailFrame.size.width - (horizontalPadding + extraHorzontalPadding)*2;
 		self.emailField = [[[UITextField alloc] initWithFrame:emailFrame] autorelease];
 		self.emailField.placeholder = ATLocalizedString(@"Your Email", @"Email Address Field Placeholder");
 		self.emailField.font = emailFont;
@@ -529,6 +541,7 @@ enum {
 		self.emailField.backgroundColor = [UIColor clearColor];
 		self.emailField.clearButtonMode = UITextFieldViewModeWhileEditing;
 		self.emailField.text = [self.delegate initialEmailAddressForMessagePanel:self];
+		self.emailField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
 		[self.scrollView addSubview:self.emailField];
 		offsetY += self.emailField.bounds.size.height + 5;
@@ -559,6 +572,7 @@ enum {
 	feedbackFrame.size.height = 20;
 	feedbackFrame.size.width = feedbackFrame.size.width - horizontalPadding*2;
 	self.feedbackView = [[[ATDefaultTextView alloc] initWithFrame:feedbackFrame] autorelease];
+	
 	UIEdgeInsets insets = UIEdgeInsetsMake(0, -8, 0, 0);
 	self.feedbackView.contentInset = insets;
 	self.feedbackView.clipsToBounds = YES;

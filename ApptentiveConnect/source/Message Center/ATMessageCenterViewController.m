@@ -19,7 +19,7 @@
 #import "ATFileAttachment.h"
 #import "ATFileMessage.h"
 #import "ATLog.h"
-#import "ATMessage.h"
+#import "ATAbstractMessage.h"
 #import "ATMessageCenterCell.h"
 #import "ATDefaultMessageCenterTheme.h"
 #import "ATMessageCenterMetrics.h"
@@ -56,6 +56,7 @@ typedef enum {
 @implementation ATMessageCenterViewController {
 	BOOL firstLoad;
 	BOOL attachmentsVisible;
+	BOOL showAttachSheetOnBecomingVisible;
 	CGRect currentKeyboardFrameInView;
 	CGFloat composerFieldHeight;
 	NSFetchedResultsController *fetchedMessagesController;
@@ -66,7 +67,7 @@ typedef enum {
 	ATFeedbackImageSource pickedImageSource;
 	ATDefaultMessageCenterTheme *defaultTheme;
 	UIActionSheet *sendImageActionSheet;
-	ATMessage *retryMessage;
+	ATAbstractMessage *retryMessage;
 	UIActionSheet *retryMessageActionSheet;
 	
 	UINib *inputViewNib;
@@ -97,10 +98,10 @@ typedef enum {
 	}
 	[self.tableView reloadData];
 	
-	NSUInteger messageCount = [ATData countEntityNamed:@"ATMessage" withPredicate:nil];
+	NSUInteger messageCount = [ATData countEntityNamed:@"ATAbstractMessage" withPredicate:nil];
 	if (messageCount == 0) {
-		NSString *title = NSLocalizedString(@"Welcome", @"Welcome");
-		NSString *body = ATLocalizedString(@"Use this area to communicate with the developer of this app! If you have questions, suggestions, concerns, or just want to help us make the app better or get in touch, feel free to send us a message!", @"Placeholder welcome message.");
+		NSString *title = ATLocalizedString(@"Welcome", @"Welcome");
+		NSString *body = ATLocalizedString(@"This is our Message Center. If you have questions, suggestions, concerns or just want to get in touch, please send us a message. We love talking with our customers!", @"Placeholder welcome message.");
 		[[ATBackend sharedBackend] sendAutomatedMessageWithTitle:title body:body];
 	}
 	
@@ -127,6 +128,10 @@ typedef enum {
 	}
 	
 //	self.composerBackgroundView.image = [[ATBackend imageNamed:@"at_inbox_composer_bg"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 0, 29, 19)];
+	[self.poweredByButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
+	[self.poweredByButton setContentEdgeInsets:UIEdgeInsetsMake(0, 10, 0, 0)];
+	[[self.poweredByButton titleLabel] setMinimumFontSize:10];
+	[[self.poweredByButton titleLabel] setAdjustsFontSizeToFitWidth:YES];
 	[self.poweredByButton setTitle:ATLocalizedString(@"Powered By Apptentive", @"Short tagline for Apptentive") forState:UIControlStateNormal];
 	[self.iconButton setImage:[ATBackend imageNamed:@"at_apptentive_icon_small"] forState:UIControlStateNormal];
 	if (![[ATConnect sharedConnection] showTagline]) {
@@ -181,12 +186,13 @@ typedef enum {
 		inputView.backgroundImage = [defaultTheme backgroundImageForMessageForMessageCenterViewController:self];
 	}
 	
-	inputView.placeholder = ATLocalizedString(@"What's on your mind?", @"Placeholder for message center text input.");
+	inputView.placeholder = ATLocalizedString(@"Type a message…", @"Placeholder for message center text input.");
 	
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
 		[self relayoutSubviews];
 	});
 	
+	[self.sendPhotoButton setTitle:ATLocalizedString(@"Send Image", @"Send image button title") forState:UIControlStateNormal];
 	self.sendPhotoButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
 	self.sendPhotoButton.layer.cornerRadius = 4;
 	self.sendPhotoButton.layer.shadowColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.2].CGColor;
@@ -200,6 +206,7 @@ typedef enum {
 	[self.sendPhotoButton setTitleShadowColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.2] forState:UIControlStateNormal];
 	[self.sendPhotoButton.titleLabel setShadowOffset:CGSizeMake(0, -1)];
 	
+	[self.cancelButton setTitle:ATLocalizedString(@"Cancel", @"Cancel button title") forState:UIControlStateNormal];
 	self.cancelButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
 	self.cancelButton.layer.cornerRadius = 4;
 	self.cancelButton.layer.shadowColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.2].CGColor;
@@ -265,6 +272,20 @@ typedef enum {
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
+	
+	if (showAttachSheetOnBecomingVisible) {
+		showAttachSheetOnBecomingVisible = NO;
+		if (sendImageActionSheet) {
+			[sendImageActionSheet autorelease], sendImageActionSheet = nil;
+		}
+		sendImageActionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Send Image", @"Send image button title"), nil];
+		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+			[sendImageActionSheet showFromRect:inputView.sendButton.bounds inView:inputView.sendButton animated:YES];
+		} else {
+			[sendImageActionSheet showInView:self.view];
+		}
+	}
+	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidShowNotification object:nil];
 }
 
@@ -274,6 +295,11 @@ typedef enum {
 	if (self.dismissalDelegate && [self.dismissalDelegate respondsToSelector:@selector(messageCenterDidDismiss:)]) {
 		[self.dismissalDelegate messageCenterDidDismiss:self];
 	}
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+	// Return YES for supported orientations
+	return YES;
 }
 
 - (IBAction)donePressed:(id)sender {
@@ -377,7 +403,7 @@ typedef enum {
 		if (!fetchedMessagesController) {
 			[NSFetchedResultsController deleteCacheWithName:@"at-messages-cache"];
 			NSFetchRequest *request = [[NSFetchRequest alloc] init];
-			[request setEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
+			[request setEntity:[NSEntityDescription entityForName:@"ATAbstractMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
 			[request setFetchBatchSize:20];
 			NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
 			[request setSortDescriptors:@[sortDescriptor]];
@@ -533,15 +559,7 @@ typedef enum {
 
 - (void)imageViewControllerWillDismiss:(ATSimpleImageViewController *)vc animated:(BOOL)animated {
 	if (pickedImage) {
-		if (sendImageActionSheet) {
-			[sendImageActionSheet autorelease], sendImageActionSheet = nil;
-		}
-		sendImageActionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Send Image", @"Send image button title"), nil];
-		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-			[sendImageActionSheet showFromRect:inputView.sendButton.bounds inView:inputView.sendButton animated:YES];
-		} else {
-			[sendImageActionSheet showInView:self.view];
-		}
+		showAttachSheetOnBecomingVisible = YES;
 	}
 }
 
@@ -657,7 +675,7 @@ typedef enum {
 
 #pragma mark UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	ATMessage *message = (ATMessage *)[self.fetchedMessagesController objectAtIndexPath:indexPath];
+	ATAbstractMessage *message = (ATAbstractMessage *)[self.fetchedMessagesController objectAtIndexPath:indexPath];
 	if (message != nil && [message.sentByUser boolValue] && [message.pendingState intValue] == ATPendingMessageStateError) {
 		if (retryMessageActionSheet) {
 			[retryMessageActionSheet autorelease], retryMessageActionSheet = nil;
@@ -704,7 +722,7 @@ typedef enum {
 	ATMessageCellType cellType = ATMessageCellTypeUnknown;
 	
 	UITableViewCell *cell = nil;
-	ATMessage *message = (ATMessage *)[self.fetchedMessagesController objectAtIndexPath:indexPath];
+	ATAbstractMessage *message = (ATAbstractMessage *)[self.fetchedMessagesController objectAtIndexPath:indexPath];
 	
 	if ([message isKindOfClass:[ATAutomatedMessage class]]) {
 		cellType = ATMessageCellTypeAutomated;
@@ -722,7 +740,7 @@ typedef enum {
 	if (indexPath.row == 0) {
 		showDate = YES;
 	} else {
-		ATMessage *previousMessage = (ATMessage *)[self.fetchedMessagesController objectAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
+		ATAbstractMessage *previousMessage = (ATAbstractMessage *)[self.fetchedMessagesController objectAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
 		if ([message.creationTime doubleValue] - [previousMessage.creationTime doubleValue] > 60 * 5) {
 			showDate = YES;
 		}
@@ -812,7 +830,7 @@ typedef enum {
 			}
 			NSString *messageBody = [(ATTextMessage *)message body];
 			if ([[message pendingState] intValue] == ATPendingMessageStateSending) {
-				NSString *sendingText = NSLocalizedString(@"Sending:", @"Sending prefix on messages that are sending");
+				NSString *sendingText = ATLocalizedString(@"Sending:", @"Sending prefix on messages that are sending");
 				NSString *fullText = [NSString stringWithFormat:@"%@ %@", sendingText, messageBody];
 				[textCell.messageText setText:fullText afterInheritingLabelAttributesAndConfiguringWithBlock:^ NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
 					NSRange boldRange = NSMakeRange(0, [sendingText length]);
@@ -829,7 +847,7 @@ typedef enum {
 				textCell.composing = YES;
 				textCell.textLabel.text = @"";
 			} else if ([[message pendingState] intValue] == ATPendingMessageStateError) {
-				NSString *sendingText = NSLocalizedString(@"Error:", @"Sending prefix on messages that are sending");
+				NSString *sendingText = NSLocalizedString(@"Error:", @"Error prefix on messages that failed to send");
 				NSString *fullText = [NSString stringWithFormat:@"%@ %@", sendingText, messageBody];
 				[textCell.messageText setText:fullText afterInheritingLabelAttributesAndConfiguringWithBlock:^ NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
 					NSRange boldRange = NSMakeRange(0, [sendingText length]);
@@ -857,6 +875,7 @@ typedef enum {
 		} else {
 			textCell.showDateLabel = NO;
 		}
+		textCell.backgroundColor = [UIColor clearColor];
 		
 		cell = textCell;
 	} else if (cellType == ATMessageCellTypeAutomated) {
@@ -893,6 +912,7 @@ typedef enum {
 		}
 		currentCell.dateLabel.text = dateString;
 		currentCell.showDateLabel = YES;
+		currentCell.backgroundColor = [UIColor clearColor];
 		
 		cell = currentCell;
 	} else if (cellType == ATMessageCellTypeFile) {
@@ -935,6 +955,8 @@ typedef enum {
 		} else {
 			currentCell.showDateLabel = NO;
 		}
+		currentCell.backgroundColor = [UIColor clearColor];
+		
 		cell = currentCell;
 	}
 	return cell;
@@ -990,7 +1012,7 @@ typedef enum {
 
 - (void)markAllMessagesAsRead {
 	NSFetchRequest *request = [[NSFetchRequest alloc] init];
-	[request setEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
+	[request setEntity:[NSEntityDescription entityForName:@"ATAbstractMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
 	[request setFetchBatchSize:20];
 	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
 	[request setSortDescriptors:@[sortDescriptor]];
@@ -1004,7 +1026,7 @@ typedef enum {
 	if (!results) {
 		ATLogError(@"Error exceuting fetch request: %@", error);
 	} else {
-		for (ATMessage *message in results) {
+		for (ATAbstractMessage *message in results) {
 			[message setSeenByUser:@(YES)];
 			if (message.apptentiveID != nil && [message.sentByUser boolValue] != YES) {
 				[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidReadNotification object:@{ATMessageCenterMessageIDKey:message.apptentiveID}];

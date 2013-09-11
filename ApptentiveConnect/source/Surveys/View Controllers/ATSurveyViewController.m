@@ -579,7 +579,9 @@ enum {
 	
 	activeTextField = (ATCellTextField *)[textField retain];
 	activeTextEntryCell = [(UITableViewCell *)activeTextField.superview.superview retain];
-	[tableView scrollRectToVisible:activeTextEntryCell.frame animated:YES];
+	
+	CGRect textEntryCellFrame = [tableView convertRect:activeTextEntryCell.frame fromView:activeTextEntryCell.superview];
+	[tableView scrollRectToVisible:textEntryCellFrame animated:YES];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
@@ -620,7 +622,8 @@ enum {
 	if ([self sizeTextView:(ATCellTextView *)textView]) {
 		[tableView beginUpdates];
 		[tableView endUpdates];
-		[tableView scrollRectToVisible:CGRectInset(activeTextEntryCell.frame, 0, -10) animated:YES];
+		CGRect textEntryCellFrame = [tableView convertRect:activeTextEntryCell.frame fromView:activeTextEntryCell.superview];
+		[tableView scrollRectToVisible:CGRectInset(textEntryCellFrame, 0, -10) animated:YES];
 	}
 }
 
@@ -632,7 +635,9 @@ enum {
 	
 	activeTextView = (ATCellTextView *)[textView retain];
 	activeTextEntryCell = [(UITableViewCell *)activeTextView.superview.superview retain];
-	[tableView scrollRectToVisible:textView.superview.superview.frame animated:YES];
+	
+	CGRect textEntryCellFrame = [tableView convertRect:activeTextEntryCell.frame fromView:activeTextEntryCell.superview];
+	[tableView scrollRectToVisible:textEntryCellFrame animated:YES];
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
@@ -776,13 +781,15 @@ enum {
 	
 	// If active text field is hidden by keyboard, scroll it so it's visible
 	if ((activeTextView != nil || activeTextField != nil) && activeTextEntryCell) {
-		NSObject<ATCellTextEntry> *entry = activeTextView != nil ? activeTextView : activeTextField;
+		UIView<ATCellTextEntry> *entry = activeTextView != nil ? activeTextView : activeTextField;
 		CGRect aRect = tableView.frame;
 		aRect.size.height -= occludedScrollViewRect.size.height;
 		CGRect r = [activeTextEntryCell convertRect:[entry frame] toView:tableView];
 		if (!CGRectContainsPoint(aRect, r.origin) ) {
 			[entry becomeFirstResponder];
-			[tableView scrollRectToVisible:CGRectInset(activeTextEntryCell.frame, 0, -10) animated:YES];
+			
+			CGRect textEntryCellFrame = [tableView convertRect:entry.frame fromView:entry.superview];
+			[tableView scrollRectToVisible:CGRectInset(textEntryCellFrame, 0, -10) animated:YES];
 		}
 	}
 }

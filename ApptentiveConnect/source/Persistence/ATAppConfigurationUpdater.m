@@ -16,6 +16,7 @@ NSString *const ATConfigurationPreferencesChangedNotification = @"ATConfiguratio
 NSString *const ATAppConfigurationLastUpdatePreferenceKey = @"ATAppConfigurationLastUpdatePreferenceKey";
 NSString *const ATAppConfigurationExpirationPreferenceKey = @"ATAppConfigurationExpirationPreferenceKey";
 NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigurationMetricsEnabledPreferenceKey";
+NSString *const ATAppConfigurationMessageCenterEnabledKey = @"ATAppConfigurationMessageCenterEnabledKey";
 
 NSString *const ATAppConfigurationMessageCenterTitleKey = @"ATAppConfigurationMessageCenterTitleKey";
 NSString *const ATAppConfigurationMessageCenterForegroundRefreshIntervalKey = @"ATAppConfigurationMessageCenterForegroundRefreshIntervalKey";
@@ -44,6 +45,7 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	 [NSNumber numberWithBool:YES], ATAppConfigurationMetricsEnabledPreferenceKey,
 	 [NSNumber numberWithInt:20], ATAppConfigurationMessageCenterForegroundRefreshIntervalKey,
 	 [NSNumber numberWithInt:60], ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey,
+	 [NSNumber numberWithBool:YES], ATAppConfigurationMessageCenterEnabledKey,
 	 nil];
 	[defaults registerDefaults:defaultPreferences];
 }
@@ -158,9 +160,10 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 		 @"ratings_events_before_prompt", ATAppRatingSignificantEventsBeforePromptPreferenceKey, 
 		 @"ratings_uses_before_prompt", ATAppRatingUsesBeforePromptPreferenceKey,
 		 @"metrics_enabled", ATAppConfigurationMetricsEnabledPreferenceKey,
+		 @"message_center_enabled", ATAppConfigurationMessageCenterEnabledKey,
 		 nil];
 	
-	NSArray *boolPreferences = [NSArray arrayWithObjects:@"ratings_clear_on_upgrade", @"ratings_enabled", @"metrics_enabled", nil];
+	NSArray *boolPreferences = [NSArray arrayWithObjects:@"ratings_clear_on_upgrade", @"ratings_enabled", @"metrics_enabled", @"message_center_enabled", nil];
 	NSObject *ratingsPromptLogic = [jsonConfiguration objectForKey:@"ratings_prompt_logic"];
 	
 	for (NSString *key in numberObjects) {

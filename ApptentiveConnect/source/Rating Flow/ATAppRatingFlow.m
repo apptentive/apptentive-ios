@@ -327,34 +327,34 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 		
 		// Ratings are disabled, don't show dialog.
 		if ([[defaults objectForKey:ATAppRatingEnabledPreferenceKey] boolValue] == NO) {
-			reasonForNotShowingDialog = @"Did not show Apptentive ratings dialog because ratings are disabled.";
+			reasonForNotShowingDialog = @"ratings are disabled.";
 			break;
 		}
 		
 		// No iTunes App ID set, don't show dialog.
 		if (self.appID == nil) {
-			reasonForNotShowingDialog = @"Did not show Apptentive ratings dialog because the iTunes App ID is not set.";
+			reasonForNotShowingDialog = @"iTunes App ID is not set.";
 			break;
 		}
 		
 		// Check to see if the user has rated the app.
 		NSNumber *rated = [defaults objectForKey:ATAppRatingFlowRatedAppKey];
 		if (rated != nil && [rated boolValue]) {
-			reasonForNotShowingDialog = @"Did not show Apptentive ratings dialog because the user already rated this app.";
+			reasonForNotShowingDialog = @"the user already rated this app.";
 			break;
 		}
 		
 		// Check to see if the user has rejected rating this version.
 		NSNumber *rejected = [defaults objectForKey:ATAppRatingFlowDeclinedToRateThisVersionKey];
 		if (rejected != nil && [rejected boolValue]) {
-			reasonForNotShowingDialog = @"Did not show Apptentive ratings dialog because the user rejected rating this version of the app.";
+			reasonForNotShowingDialog = @"the user rejected rating this version of the app.";
 			break;
 		}
 		
 		// Check to see if the user dislikes this version of the app.
 		NSNumber *dislikes = [defaults objectForKey:ATAppRatingFlowUserDislikesThisVersionKey];
 		if (dislikes != nil && [dislikes boolValue]) {
-			reasonForNotShowingDialog = @"Did not show Apptentive ratings dialog because the user dislikes this version of the app.";
+			reasonForNotShowingDialog = @"the user dislikes this version of the app.";
 			break;
 		}
 		
@@ -363,7 +363,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 		NSString *lastBundleVersion = [defaults objectForKey:ATAppRatingFlowLastUsedVersionKey];
 		if (lastBundleVersion == nil) {
 			[self updateVersionInfo];
-			reasonForNotShowingDialog = @"Did not show Apptentive ratings dialog because the latest version number was not yet recorded.";
+			reasonForNotShowingDialog = @"the latest version number was not yet recorded.";
 			break;
 		}
 		
@@ -373,7 +373,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 		if (lastPrompt != nil && self.daysBeforeRePrompting != 0) {
 			double nextPromptDouble = [lastPrompt timeIntervalSince1970] + 60*60*24*self.daysBeforeRePrompting;
 			if ([[NSDate date] timeIntervalSince1970] < nextPromptDouble) {
-				reasonForNotShowingDialog = @"Did not show Apptentive ratings dialog because the user was prompted too recently.";
+				reasonForNotShowingDialog = @"the user was prompted too recently.";
 				break;
 			}
 		}
@@ -381,11 +381,11 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 		NSInteger promptCount = [[defaults objectForKey:ATAppRatingFlowPromptCountThisVersionKey] integerValue];
 		if (self.daysBeforeRePrompting == 0 && promptCount > 0) {
 			// Don't prompt more than once.
-			reasonForNotShowingDialog = @"Did not show Apptentive ratings dialog because we shouldn't prompt more than once.";
+			reasonForNotShowingDialog = @"we shouldn't prompt more than once.";
 			break;
 		} else if (promptCount > 1) {
 			// Don't prompt more than twice per update.
-			reasonForNotShowingDialog = @"Did not show Apptentive ratings dialog because we shouldn't prompt more than twice per update.";
+			reasonForNotShowingDialog = @"we shouldn't prompt more than twice per update.";
 			break;
 		}
 		
@@ -401,14 +401,19 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 		if (predicate) {
 			result = [ATAppRatingFlow_Private evaluatePredicate:predicate withPredicateInfo:info];
 			if (!result) {
-				reasonForNotShowingDialog = @"Did not show Apptentive ratings dialog because the prompt logic was not satisfied.";
+				reasonForNotShowingDialog = @"the prompt logic was not satisfied.";
+				ATLogInfo(@"Predicate failed evaluation");
+				ATLogInfo(@"Predicate info: %@", [info debugDescription]);
+				ATLogInfo(@"Predicate: %@", predicate);
 			}
+		} else {
+			ATLogError(@"Predicate not correct");
 		}
 		[info release], info = nil;
 	} while (NO);
 	
 	if (reasonForNotShowingDialog) {
-		ATLogInfo(@"%@", reasonForNotShowingDialog);
+		ATLogInfo(@"Did not show Apptentive ratings dialog because %@", reasonForNotShowingDialog);
 	}
 	
 	return result;
@@ -417,6 +422,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 - (BOOL)shouldShowDialog {
 	// No network connection, don't show dialog.
 	if ([[ATReachability sharedReachability] currentNetworkStatus] == ATNetworkNotReachable) {
+		ATLogInfo(@"shouldShowDialog failed because network not reachable");
 		return NO;
 	}
 	return [self requirementsToShowDialogMet];

@@ -55,7 +55,6 @@ enum {
 	[_apptentivePrivacyTextView release];
 	[_findOutMoreButton release];
 	[_gotoPrivacyPolicyButton release];
-	[_titleNavigationitem release];
 	[super dealloc];
 }
 
@@ -87,7 +86,6 @@ enum {
 	[self setApptentivePrivacyTextView:nil];
 	[self setFindOutMoreButton:nil];
 	[self setGotoPrivacyPolicyButton:nil];
-	[self setTitleNavigationitem:nil];
 	[super viewDidUnload];
 	[headerView release], headerView = nil;
 	self.tableView = nil;
@@ -269,7 +267,8 @@ enum {
 	logoView.frame = f;
 	
 	
-	self.titleNavigationitem.title = ATLocalizedString(@"About Apptentive", @"About Apptentive");
+	self.navigationItem.title = ATLocalizedString(@"About Apptentive", @"About Apptentive");
+	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)] autorelease];
 	self.apptentiveDescriptionTextView.text = ATLocalizedString(@"Apptentive is a feedback and communication service which allows the people who make this app to quickly get your feedback and better listen to you.", @"Description of Apptentive service in information screen.");
 	[self.findOutMoreButton setTitle:ATLocalizedString(@"Find out more at apptentive.com", @"Title of button to open Apptentive.com") forState:UIControlStateNormal];
 	self.apptentivePrivacyTextView.text = ATLocalizedString(@"Your feedback is hosted by Apptentive and is subject to Apptentive's privacy policy and the privacy policy of the developer of this app.", @"Description of Apptentive privacy policy.");

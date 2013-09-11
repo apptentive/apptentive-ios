@@ -22,7 +22,6 @@
 @property (retain, nonatomic) IBOutlet UITextView *apptentivePrivacyTextView;
 @property (retain, nonatomic) IBOutlet UIButton *findOutMoreButton;
 @property (retain, nonatomic) IBOutlet UIButton *gotoPrivacyPolicyButton;
-@property (retain, nonatomic) IBOutlet UINavigationItem *titleNavigationitem;
 
 - (id)init;
 - (IBAction)done:(id)sender;

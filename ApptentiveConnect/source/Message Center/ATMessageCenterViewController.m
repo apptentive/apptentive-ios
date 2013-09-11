@@ -43,6 +43,7 @@ typedef enum {
 @interface ATMessageCenterViewController ()
 - (void)relayoutSubviews;
 - (CGRect)formRectToShow;
+- (void)showSendImageUIIfNecessary;
 - (void)registerForKeyboardNotifications;
 - (void)keyboardWillBeShown:(NSNotification *)aNotification;
 - (void)keyboardWasShown:(NSNotification *)aNotification;
@@ -273,20 +274,13 @@ typedef enum {
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 	
-	if (showAttachSheetOnBecomingVisible) {
-		showAttachSheetOnBecomingVisible = NO;
-		if (sendImageActionSheet) {
-			[sendImageActionSheet autorelease], sendImageActionSheet = nil;
-		}
-		sendImageActionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Send Image", @"Send image button title"), nil];
-		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-			[sendImageActionSheet showFromRect:inputView.sendButton.bounds inView:inputView.sendButton animated:YES];
-		} else {
-			[sendImageActionSheet showInView:self.view];
-		}
-	}
+	[self showSendImageUIIfNecessary];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidShowNotification object:nil];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -321,18 +315,39 @@ typedef enum {
 
 - (IBAction)showInfoView:(id)sender {
 	ATInfoViewController *vc = [[ATInfoViewController alloc] init];
-	[self presentModalViewController:vc animated:YES];
+	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
+	nc.modalPresentationStyle = UIModalPresentationFormSheet;
+	[self.navigationController presentModalViewController:nc animated:YES];
 	[vc release], vc = nil;
+	[nc release], nc = nil;
 }
 
 - (IBAction)cameraPressed:(id)sender {
 	ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithDelegate:self];
-	[self presentModalViewController:vc animated:YES];
+	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
+	nc.modalPresentationStyle = UIModalPresentationFormSheet;
+	[self.navigationController presentModalViewController:nc animated:YES];
 	[vc release], vc = nil;
+	[nc release], nc = nil;
 }
 
 - (IBAction)cancelAttachmentPressed:(id)sender {
 	[self toggleAttachmentsView];
+}
+
+- (void)showSendImageUIIfNecessary {
+	if (showAttachSheetOnBecomingVisible) {
+		showAttachSheetOnBecomingVisible = NO;
+		if (sendImageActionSheet) {
+			[sendImageActionSheet autorelease], sendImageActionSheet = nil;
+		}
+		sendImageActionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Send Image", @"Send image button title"), nil];
+		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+			[sendImageActionSheet showFromRect:inputView.sendButton.bounds inView:inputView.sendButton animated:YES];
+		} else {
+			[sendImageActionSheet showInView:self.view];
+		}
+	}
 }
 
 #pragma mark Private
@@ -563,6 +578,10 @@ typedef enum {
 	}
 }
 
+- (void)imageViewControllerDidDismiss:(ATSimpleImageViewController *)vc {
+	[self showSendImageUIIfNecessary];
+}
+
 - (ATFeedbackAttachmentOptions)attachmentOptionsForImageViewController:(ATSimpleImageViewController *)vc {
 	return ATFeedbackAllowPhotoAttachment | ATFeedbackAllowTakePhotoAttachment;
 }
@@ -618,6 +637,7 @@ typedef enum {
 					});
 					[fileMessage release], fileMessage = nil;
 					[fileAttachment release], fileAttachment = nil;
+					[pickedImage release], pickedImage = nil;
 				}
 
 			}

@@ -166,8 +166,11 @@ enum kPersonDetailsTableSections {
 
 - (IBAction)logoPressed:(id)sender {
 	ATInfoViewController *vc = [[ATInfoViewController alloc] init];
-	[self presentModalViewController:vc animated:YES];
+	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
+	nc.modalPresentationStyle = UIModalPresentationFormSheet;
+	[self.navigationController presentModalViewController:nc animated:YES];
 	[vc release], vc = nil;
+	[nc release], nc = nil;
 }
 
 - (BOOL)disablesAutomaticKeyboardDismissal {

@@ -31,6 +31,15 @@ NSString *const ATEngagementInteractionsInvokesVersionKey;
 - (ATInteraction *)interactionForCodePoint:(NSString *)codePoint;
 
 - (NSDictionary *)usageDataForInteraction:(ATInteraction *)interaction atCodePoint:(NSString *)codePoint;
+- (NSDictionary *)usageDataForInteraction:(ATInteraction *)interaction
+							  atCodePoint:(NSString *)codePoint
+						 daysSinceInstall:(NSNumber *)daysSinceInstall
+						 daysSinceUpgrade:(NSNumber *)daysSinceUpgrade
+					   applicationVersion:(NSString *)applicationVersion
+					codePointInvokesTotal:(NSNumber *)codePointInvokesTotal
+				  codePointInvokesVersion:(NSNumber *)codePointInvokesVersion
+				  interactionInvokesTotal:(NSNumber *)interactionInvokesTotal
+				interactionInvokesVersion:(NSNumber *)interactionInvokesVersion;
 
 - (void)codePointWasEngaged:(NSString *)codePoint;
 - (void)interactionWasEngaged:(ATInteraction *)interaction;

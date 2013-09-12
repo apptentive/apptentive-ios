@@ -55,6 +55,10 @@
 	return [[self criteriaPredicate] evaluateWithObject:usageData];
 }
 
+- (BOOL)criteriaAreMetForUsageData:(NSDictionary *)usageData {
+	return [[self criteriaPredicate] evaluateWithObject:usageData];
+}
+
 - (NSPredicate *)criteriaPredicate {
 	BOOL error = NO;
 	NSString *predicateString = [ATInteraction predicateStringForInteractionCriteria:self.criteria hasError:&error];

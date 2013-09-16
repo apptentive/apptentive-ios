@@ -499,7 +499,6 @@
 		49C002881334137E0071F088 /* ApptentiveConnectTests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ApptentiveConnectTests-Prefix.pch"; sourceTree = "<group>"; };
 		49C002891334137E0071F088 /* ApptentiveConnectTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveConnectTests.h; sourceTree = "<group>"; };
 		49C0028A1334137E0071F088 /* ApptentiveConnectTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveConnectTests.m; sourceTree = "<group>"; };
-		49C0028C1334137E0071F088 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		49C00296133413BB0071F088 /* ApptentiveConnect-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ApptentiveConnect-Prefix.pch"; path = "../ApptentiveConnect-Prefix.pch"; sourceTree = "<group>"; };
 		49C00297133413BB0071F088 /* ATConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATConnect.h; sourceTree = "<group>"; };
 		49C00298133413BB0071F088 /* ATConnect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATConnect.m; sourceTree = "<group>"; };
@@ -525,7 +524,6 @@
 		49E3A26E1628F4FF000675B4 /* ATGetMessagesTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATGetMessagesTask.m; path = "Message Center/Tasks/ATGetMessagesTask.m"; sourceTree = "<group>"; };
 		49E6208516C5E8C2000C9F5A /* NSDictionary+ATAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+ATAdditions.h"; sourceTree = "<group>"; };
 		49E6208616C5E8C2000C9F5A /* NSDictionary+ATAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+ATAdditions.m"; sourceTree = "<group>"; };
-		49E891CE134FE2AB00DD098A /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		49E891CF134FE2AB00DD098A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		49EA5AAE14BD08AD004F8A4D /* ATLegacyRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATLegacyRecord.h; sourceTree = "<group>"; };
 		49EA5AAF14BD08AD004F8A4D /* ATLegacyRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATLegacyRecord.m; sourceTree = "<group>"; };
@@ -1395,7 +1393,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"Configuration is: ${CONFIGURATION}\"\nif [ \"${CONFIGURATION}\" = 'Release' ]; then\n    echo \"b\"\n    if [ -e \"${PROJECT_DIR}/resources/localization/English.lproj/Localizable.strings\" ]; then\n        echo \"c\"\n        rm \"${PROJECT_DIR}/resources/localization/English.lproj/Localizable.strings\"\n    fi\n    find \"${PROJECT_DIR}/source/\" -name *.m -print0 | xargs -0 genstrings -s ATLocalizedString -o \"${PROJECT_DIR}/resources/localization/English.lproj\"\nfi\n";
+			shellScript = "echo \"Configuration is: ${CONFIGURATION}\"\nif [ \"${CONFIGURATION}\" = 'Release' ]; then\n    echo \"b\"\n    if [ -e \"${PROJECT_DIR}/resources/localization/en.lproj/Localizable.strings\" ]; then\n        echo \"c\"\n        rm \"${PROJECT_DIR}/resources/localization/en.lproj/Localizable.strings\"\n    fi\n    find \"${PROJECT_DIR}/source/\" -name *.m -print0 | xargs -0 genstrings -s ATLocalizedString -o \"${PROJECT_DIR}/resources/localization/en.lproj\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1587,7 +1585,6 @@
 		49C0028B1334137E0071F088 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				49C0028C1334137E0071F088 /* en */,
 				58EA5B4F17B47E0C00ECEB4B /* zh */,
 			);
 			name = InfoPlist.strings;
@@ -1596,7 +1593,6 @@
 		49E891CD134FE2AB00DD098A /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				49E891CE134FE2AB00DD098A /* English */,
 				49E891CF134FE2AB00DD098A /* es */,
 				4995EDC3175959EC00AF7268 /* de */,
 				4995EDC417595A0500AF7268 /* ja */,

@@ -125,6 +125,7 @@ enum {
 	CGAffineTransform t = [ATMessagePanelViewController viewTransformInWindow:parentWindow];
 	self.window.transform = t;
 	self.window.hidden = NO;
+	self.window.tintAdjustmentMode = UIViewTintAdjustmentModeNormal;
 	[parentWindow resignKeyWindow];
 	[self.window makeKeyAndVisible];
 	animationBounds = parentWindow.bounds;
@@ -134,6 +135,10 @@ enum {
 	// Animate in from above.
 	self.window.bounds = animationBounds;
 	self.window.windowLevel = UIWindowLevelNormal;
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"] && originalPresentingWindow) {
+		startingTintAdjustmentMode = originalPresentingWindow.tintAdjustmentMode;
+		originalPresentingWindow.tintAdjustmentMode = UIViewTintAdjustmentModeDimmed;
+	}
 	CGPoint center = animationCenter;
 	center.y = ceilf(center.y);
 	
@@ -377,6 +382,9 @@ enum {
 		[self.window removeFromSuperview];
 		self.window.hidden = YES;
 		[[UIApplication sharedApplication] setStatusBarStyle:startingStatusBarStyle];
+		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"] && originalPresentingWindow) {
+			originalPresentingWindow.tintAdjustmentMode = startingTintAdjustmentMode;
+		}
 		[self teardown];
 		[self release];
 		

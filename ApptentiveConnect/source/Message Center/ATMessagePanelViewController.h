@@ -24,6 +24,7 @@ typedef enum {
 	UIViewController *presentingViewController;
 @private
 	UIStatusBarStyle startingStatusBarStyle;
+	UIViewTintAdjustmentMode startingTintAdjustmentMode;
 	BOOL showEmailAddressField;
 	UIWindow *originalPresentingWindow;
 	NSObject<ATMessagePanelDelegate> *delegate;

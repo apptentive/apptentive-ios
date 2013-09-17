@@ -51,7 +51,6 @@ typedef enum {
 - (NSFetchedResultsController *)fetchedMessagesController;
 - (void)scrollToBottomOfTableView;
 - (void)markAllMessagesAsRead;
-- (void)toggleAttachmentsView;
 @end
 
 @implementation ATMessageCenterViewController {
@@ -74,7 +73,7 @@ typedef enum {
 	UINib *inputViewNib;
 	ATMessageInputView *inputView;
 }
-@synthesize tableView, containerView, inputContainerView, attachmentView, automatedCell;
+@synthesize tableView, containerView, inputContainerView, automatedCell;
 @synthesize userCell, developerCell, userFileMessageCell;
 @synthesize themeDelegate, dismissalDelegate;
 
@@ -129,30 +128,9 @@ typedef enum {
 	}
 	
 //	self.composerBackgroundView.image = [[ATBackend imageNamed:@"at_inbox_composer_bg"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 0, 29, 19)];
-	[self.poweredByButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
-	[self.poweredByButton setContentEdgeInsets:UIEdgeInsetsMake(0, 10, 0, 0)];
-	[[self.poweredByButton titleLabel] setMinimumFontSize:10];
-	[[self.poweredByButton titleLabel] setAdjustsFontSizeToFitWidth:YES];
-	[self.poweredByButton setTitle:ATLocalizedString(@"Powered By Apptentive", @"Short tagline for Apptentive") forState:UIControlStateNormal];
-	[self.iconButton setImage:[ATBackend imageNamed:@"at_apptentive_icon_small"] forState:UIControlStateNormal];
-	if (![[ATConnect sharedConnection] showTagline]) {
-		self.poweredByButton.hidden = YES;
-		self.iconButton.hidden = YES;
-	}
 	[self.tableView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]]];
 	[self.containerView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]]];
-	[self.attachmentView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_mc_noise_bg"]]];
-	
-	UIImage *attachmentShadowBase = [ATBackend imageNamed:@"at_mc_attachment_shadow"];
-	UIImage *attachmentShadow = nil;
-	UIEdgeInsets attachmentInsets = UIEdgeInsetsMake(4, 0, 0, 128);
-	if ([attachmentShadow respondsToSelector:@selector(resizableImageWithCapInsets:)]) {
-		attachmentShadow = [attachmentShadowBase resizableImageWithCapInsets:attachmentInsets];
-	} else {
-		attachmentShadow = [attachmentShadowBase stretchableImageWithLeftCapWidth:attachmentInsets.left topCapHeight:attachmentInsets.top];
-	}
-	self.attachmentShadowView.image = attachmentShadow;
-	
+		
 	[self.view addSubview:self.containerView];
 	inputViewNib = [UINib nibWithNibName:@"ATMessageInputView" bundle:[ATConnect resourceBundle]];
 	NSArray *views = [inputViewNib instantiateWithOwner:self options:NULL];
@@ -192,34 +170,6 @@ typedef enum {
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
 		[self relayoutSubviews];
 	});
-	
-	[self.sendPhotoButton setTitle:ATLocalizedString(@"Send Image", @"Send image button title") forState:UIControlStateNormal];
-	self.sendPhotoButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
-	self.sendPhotoButton.layer.cornerRadius = 4;
-	self.sendPhotoButton.layer.shadowColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.2].CGColor;
-	self.sendPhotoButton.layer.shadowRadius = 4;
-	self.sendPhotoButton.layer.borderWidth = 1;
-	self.sendPhotoButton.layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5].CGColor;
-	self.sendPhotoButton.clipsToBounds = YES;
-	UIImage *whiteImage = [ATBackend imageNamed:@"at_white_button_bg"];
-	[self.sendPhotoButton setBackgroundImage:whiteImage forState:UIControlStateNormal];
-	[self.sendPhotoButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-	[self.sendPhotoButton setTitleShadowColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.2] forState:UIControlStateNormal];
-	[self.sendPhotoButton.titleLabel setShadowOffset:CGSizeMake(0, -1)];
-	
-	[self.cancelButton setTitle:ATLocalizedString(@"Cancel", @"Cancel button title") forState:UIControlStateNormal];
-	self.cancelButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
-	self.cancelButton.layer.cornerRadius = 4;
-	self.cancelButton.layer.shadowColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.2].CGColor;
-	self.cancelButton.layer.shadowRadius = 4;
-	self.cancelButton.layer.borderWidth = 1;
-	self.cancelButton.layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5].CGColor;
-	self.cancelButton.clipsToBounds = YES;
-	UIImage *redImage = [ATBackend imageNamed:@"at_red_button_bg"];
-	[self.cancelButton setBackgroundImage:redImage forState:UIControlStateNormal];
-	[self.cancelButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-	[self.cancelButton setTitleShadowColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.2] forState:UIControlStateNormal];
-	[self.cancelButton.titleLabel setShadowOffset:CGSizeMake(0, -1)];
 }
 
 //TODO: Handle relayouting on iOS 4.
@@ -238,32 +188,20 @@ typedef enum {
 	[messageDateFormatter release];
 	tableView.delegate = nil;
 	[tableView release];
-	[attachmentView release];
 	[containerView release];
 	[inputContainerView release];
 	fetchedMessagesController.delegate = nil;
 	[fetchedMessagesController release], fetchedMessagesController = nil;
-	[_iconButton release];
-	[_attachmentShadowView release];
 	[defaultTheme release], defaultTheme = nil;
 	themeDelegate = nil;
-	[_sendPhotoButton release];
-	[_cancelButton release];
 	dismissalDelegate = nil;
-	[_poweredByButton release];
 	[super dealloc];
 }
 
 - (void)viewDidUnload {
 	[self setTableView:nil];
-	[self setAttachmentView:nil];
 	[self setContainerView:nil];
 	[self setInputContainerView:nil];
-	[self setIconButton:nil];
-	[self setAttachmentShadowView:nil];
-	[self setSendPhotoButton:nil];
-	[self setCancelButton:nil];
-	[self setPoweredByButton:nil];
 	[super viewDidUnload];
 }
 
@@ -331,10 +269,6 @@ typedef enum {
 	[nc release], nc = nil;
 }
 
-- (IBAction)cancelAttachmentPressed:(id)sender {
-	[self toggleAttachmentsView];
-}
-
 - (void)showSendImageUIIfNecessary {
 	if (showAttachSheetOnBecomingVisible) {
 		showAttachSheetOnBecomingVisible = NO;
@@ -357,34 +291,23 @@ typedef enum {
 	CGRect composerFrame = inputContainerView.frame;
 	CGRect tableFrame = tableView.frame;
 	CGRect containerFrame = containerView.frame;
-	CGRect attachmentFrame = attachmentView.frame;
 	
-	if (attachmentsVisible) {
-		composerFrame.origin.y = viewHeight - inputContainerView.frame.size.height - attachmentFrame.size.height;
-	} else {
-		composerFrame.origin.y = viewHeight - inputContainerView.frame.size.height;
-	}
+	composerFrame.origin.y = viewHeight - inputContainerView.frame.size.height;
 	
 	if (!CGRectEqualToRect(CGRectZero, currentKeyboardFrameInView)) {
 		CGFloat bottomOffset = viewHeight - composerFrame.size.height;
 		CGFloat keyboardOffset = currentKeyboardFrameInView.origin.y - composerFrame.size.height;
-		if (attachmentsVisible) {
-			bottomOffset = bottomOffset - attachmentFrame.size.height;
-			keyboardOffset = keyboardOffset - attachmentFrame.size.height;
-		}
 		composerFrame.origin.y = MIN(bottomOffset, keyboardOffset);
 	}
 	
 	tableFrame.origin.y = 0;
 	tableFrame.size.height = composerFrame.origin.y;
-	containerFrame.size.height = tableFrame.size.height + composerFrame.size.height + attachmentFrame.size.height;
-	attachmentFrame.origin.y = composerFrame.origin.y + composerFrame.size.height;
+	containerFrame.size.height = tableFrame.size.height + composerFrame.size.height;
 	
 	//containerView.frame = containerFrame;
 	//[containerView setNeedsLayout];
 	tableView.frame = tableFrame;
 	inputContainerView.frame = composerFrame;
-	attachmentView.frame = attachmentFrame;
 	/*
 	 if (!CGRectEqualToRect(composerFrame, composerView.frame)) {
 	 NSLog(@"composerFrame: %@ != %@", NSStringFromCGRect(composerFrame), NSStringFromCGRect(composerView.frame));
@@ -403,7 +326,7 @@ typedef enum {
 	[self relayoutSubviews];
 	
 	CGRect containerFrame = containerView.frame;
-	containerFrame.size.height = self.tableView.frame.size.height + self.inputContainerView.frame.size.height + self.attachmentView.frame.size.height;
+	containerFrame.size.height = self.tableView.frame.size.height + self.inputContainerView.frame.size.height;
 	containerView.frame = containerFrame;
 	[containerView setNeedsLayout];
 	[self relayoutSubviews];
@@ -501,7 +424,12 @@ typedef enum {
 }
 
 - (void)messageInputViewAttachPressed:(ATMessageInputView *)anInputView {
-	[self toggleAttachmentsView];
+	ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithDelegate:self];
+	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
+	nc.modalPresentationStyle = UIModalPresentationFormSheet;
+	[self.navigationController presentModalViewController:nc animated:YES];
+	[vc release], vc = nil;
+	[nc release], nc = nil;
 }
 
 #pragma mark Keyboard Handling
@@ -1055,23 +983,5 @@ typedef enum {
 		[ATData save];
 	}
 	[request release], request = nil;
-}
-
-- (void)toggleAttachmentsView {
-	attachmentsVisible = !attachmentsVisible;
-	if (!CGRectEqualToRect(CGRectZero, currentKeyboardFrameInView)) {
-		[inputView resignFirstResponder];
-	} else {
-		if (!animatingTransition) {
-			[UIView animateWithDuration:0.3 animations:^(void){
-				animatingTransition = YES;
-				[self relayoutSubviews];
-			} completion:^(BOOL finished) {
-				animatingTransition = NO;
-				[self scrollToBottomOfTableView];
-			}];
-		}
-	}
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidAttachNotification object:nil];
 }
 @end

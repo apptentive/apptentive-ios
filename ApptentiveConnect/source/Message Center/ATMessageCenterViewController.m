@@ -20,8 +20,9 @@
 #import "ATFileMessage.h"
 #import "ATLog.h"
 #import "ATAbstractMessage.h"
-#import "ATMessageCenterCell.h"
 #import "ATDefaultMessageCenterTheme.h"
+#import "ATInfoViewController.h"
+#import "ATMessageCenterCell.h"
 #import "ATMessageCenterMetrics.h"
 #import "ATMessageSender.h"
 #import "ATMessageTask.h"
@@ -29,7 +30,7 @@
 #import "ATPersonUpdater.h"
 #import "ATTaskQueue.h"
 #import "ATTextMessage.h"
-#import "ATInfoViewController.h"
+#import "ATUtilities.h"
 
 typedef enum {
 	ATMessageCellTypeUnknown,
@@ -132,7 +133,11 @@ typedef enum {
 	[self.containerView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]]];
 		
 	[self.view addSubview:self.containerView];
-	inputViewNib = [UINib nibWithNibName:@"ATMessageInputView" bundle:[ATConnect resourceBundle]];
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+		inputViewNib = [UINib nibWithNibName:@"ATMessageInputViewV7" bundle:[ATConnect resourceBundle]];
+	} else {
+		inputViewNib = [UINib nibWithNibName:@"ATMessageInputView" bundle:[ATConnect resourceBundle]];
+	}
 	NSArray *views = [inputViewNib instantiateWithOwner:self options:NULL];
 	if ([views count] == 0) {
 		ATLogError(@"Unable to load message input view.");

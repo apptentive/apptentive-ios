@@ -49,6 +49,11 @@ UIEdgeInsets insetsForView(UIView *v) {
 	textView.autoresizingMask = UIViewAutoresizingNone;
 	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
 		textViewContentInset = UIEdgeInsetsMake(-4, 0, -4, 0);
+		textView.backgroundColor = [UIColor whiteColor];
+		textView.layer.borderColor = [UIColor colorWithRed:222/255. green:222/255. blue:230/255. alpha:1].CGColor;
+		textView.layer.borderWidth = 1;
+		textView.layer.cornerRadius = 6;
+		self.backgroundColor = [UIColor colorWithRed:248/255. green:248/255. blue:248/255. alpha:1];
 	} else {
 		//TODO: Get rid of magic numbers here.
 		textViewContentInset = UIEdgeInsetsMake(-4, -2, -4, 0);
@@ -75,7 +80,6 @@ UIEdgeInsets insetsForView(UIView *v) {
 
 - (void)layoutSubviews {
 	[super layoutSubviews];
-	
 	CGRect textFrame = textView.frame;
 	textFrame.origin.x = textViewInsets.left;
 	textFrame.size.width = self.bounds.size.width - textViewInsets.left - textViewInsets.right;

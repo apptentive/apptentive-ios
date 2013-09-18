@@ -166,6 +166,7 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 }
 
 - (BOOL)messageCenterEnabled {
+	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ATAppConfigurationMessageCenterEnabledKey : [NSNumber numberWithBool:YES]}];
 	return [[[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterEnabledKey] boolValue];
 }
 

@@ -39,6 +39,7 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 	NSString *initialUserName;
 	NSString *initialUserEmailAddress;
 	NSString *customPlaceholderText;
+	BOOL useMessageCenter;
 }
 @property (nonatomic, copy) NSString *apiKey;
 @property (nonatomic, assign) BOOL showTagline;
@@ -49,6 +50,8 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
  feedback text box. */
 @property (nonatomic, copy) NSString *customPlaceholderText;
 /*! Set this to NO if you don't want to use Message Center, and instead just want unidirectional in-app feedback. */
+/*! Deprecated in 1.1.1 in favor of server-based configuration of Message Center. */
+@property (nonatomic, assign) BOOL useMessageCenter DEPRECATED_ATTRIBUTE;
 
 + (ATConnect *)sharedConnection;
 

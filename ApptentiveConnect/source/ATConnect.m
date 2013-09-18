@@ -24,7 +24,7 @@ NSString *const ATInitialUserNameKey = @"ATInitialUserNameKey";
 NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 
 @implementation ATConnect
-@synthesize apiKey, showTagline, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText;
+@synthesize apiKey, showTagline, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText, useMessageCenter;
 
 + (ATConnect *)sharedConnection {
 	static ATConnect *sharedConnection = nil;
@@ -41,6 +41,7 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 		self.showTagline = YES;
 		customPersonData = [[NSMutableDictionary alloc] init];
 		customDeviceData = [[NSMutableDictionary alloc] init];
+		useMessageCenter = YES;
 	}
 	return self;
 }

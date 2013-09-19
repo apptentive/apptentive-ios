@@ -760,20 +760,25 @@ enum {
 }
 
 - (void)keyboardWasShown:(NSNotification*)aNotification {
-	NSDictionary* info = [aNotification userInfo];
-	CGRect kbFrame = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
-	CGRect kbAdjustedFrame = [tableView.window convertRect:kbFrame toView:tableView];
-	CGSize kbSize = kbAdjustedFrame.size;
+	NSDictionary *info = [aNotification userInfo];
+	CGRect kbFrame = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+	CGRect kbAdjustedRect = [self.view convertRect:kbFrame fromView:nil];
 	
-	UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
-	tableView.contentInset = contentInsets;
-	tableView.scrollIndicatorInsets = contentInsets;
+	UIScrollView *scrollView = tableView;
+	CGRect scrollViewRect = [self.view convertRect:scrollView.frame fromView:scrollView.superview];
+	
+	CGRect occludedScrollViewRect = CGRectIntersection(scrollViewRect, kbAdjustedRect);
+	if (!CGRectEqualToRect(CGRectZero, occludedScrollViewRect)) {
+		UIEdgeInsets contentInsets = UIEdgeInsetsMake(0, 0, occludedScrollViewRect.size.height, 0);
+		scrollView.contentInset = contentInsets;
+		scrollView.scrollIndicatorInsets = contentInsets;
+	}
 	
 	// If active text field is hidden by keyboard, scroll it so it's visible
 	if ((activeTextView != nil || activeTextField != nil) && activeTextEntryCell) {
 		NSObject<ATCellTextEntry> *entry = activeTextView != nil ? activeTextView : activeTextField;
 		CGRect aRect = tableView.frame;
-		aRect.size.height -= kbSize.height;
+		aRect.size.height -= occludedScrollViewRect.size.height;
 		CGRect r = [activeTextEntryCell convertRect:[entry frame] toView:tableView];
 		if (!CGRectContainsPoint(aRect, r.origin) ) {
 			[entry becomeFirstResponder];

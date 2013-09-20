@@ -125,7 +125,9 @@ enum {
 	CGAffineTransform t = [ATMessagePanelViewController viewTransformInWindow:parentWindow];
 	self.window.transform = t;
 	self.window.hidden = NO;
-	self.window.tintAdjustmentMode = UIViewTintAdjustmentModeNormal;
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+		self.window.tintAdjustmentMode = UIViewTintAdjustmentModeNormal;
+	}
 	[parentWindow resignKeyWindow];
 	[self.window makeKeyAndVisible];
 	animationBounds = parentWindow.bounds;

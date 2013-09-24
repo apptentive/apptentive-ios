@@ -385,7 +385,7 @@ enum {
 		self.window.hidden = YES;
 		[[UIApplication sharedApplication] setStatusBarStyle:startingStatusBarStyle];
 		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"] && originalPresentingWindow) {
-			originalPresentingWindow.tintAdjustmentMode = startingTintAdjustmentMode;
+			originalPresentingWindow.tintAdjustmentMode = startingTintAdjustmentMode == UIViewTintAdjustmentModeDimmed ? UIViewTintAdjustmentModeAutomatic : startingTintAdjustmentMode;
 		}
 		[self teardown];
 		[self release];

@@ -309,21 +309,8 @@ typedef enum {
 	tableFrame.size.height = composerFrame.origin.y;
 	containerFrame.size.height = tableFrame.size.height + composerFrame.size.height;
 	
-	//containerView.frame = containerFrame;
-	//[containerView setNeedsLayout];
 	tableView.frame = tableFrame;
 	inputContainerView.frame = composerFrame;
-	/*
-	 if (!CGRectEqualToRect(composerFrame, composerView.frame)) {
-	 NSLog(@"composerFrame: %@ != %@", NSStringFromCGRect(composerFrame), NSStringFromCGRect(composerView.frame));
-	 }
-	 if (!CGRectEqualToRect(attachmentFrame, attachmentView.frame)) {
-	 NSLog(@"attachmentFrame: %@ != %@", NSStringFromCGRect(attachmentFrame), NSStringFromCGRect(attachmentView.frame));
-	 }
-	 if (!CGRectEqualToRect(containerFrame, containerView.frame)) {
-	 NSLog(@"containerFrame: %@ != %@", NSStringFromCGRect(containerFrame), NSStringFromCGRect(containerView.frame));
-	 }
-	 */
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
@@ -466,6 +453,7 @@ typedef enum {
 			[self relayoutSubviews];
 		} completion:^(BOOL finished) {
 			animatingTransition = NO;
+			[self relayoutSubviews];
 			[self scrollToBottomOfTableView];
 		}];
 	} else {
@@ -489,6 +477,7 @@ typedef enum {
 			[self relayoutSubviews];
 		} completion:^(BOOL finished) {
 			animatingTransition = NO;
+			[self relayoutSubviews];
 			[self scrollToBottomOfTableView];
 		}];
 	} else {

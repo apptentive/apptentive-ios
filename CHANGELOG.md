@@ -12,6 +12,9 @@ Fixes:
 * IOS-181 App hangs in iOS 7 after "No email Address?" input field alert.
 * IOS-183 Unable to attach screenshot on iPad
 * IOS-184 After selecting image and pressing done no action sheet is presented
+* IOS-190 Survey Description Obscured when Adding Free form Text
+* IOS-193 Contact info panel in MC is scrolled down too far
+* IOS-194 Message Center doesn't handle rapid keyboard appearing/disappearing
 
 Other changes:
 

@@ -71,6 +71,9 @@ enum kPersonDetailsTableSections {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+	if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
+		self.edgesForExtendedLayout = UIRectEdgeNone;
+	}
 	if ([ATPersonInfo personExists]) {
 		ATPersonInfo *person = [ATPersonInfo currentPerson];
 		self.nameTextField.text = person.name;

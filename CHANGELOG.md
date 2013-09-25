@@ -1,3 +1,24 @@
+2013-09-24 wooster v1.1.1 (in progress)
+-------------------------
+This is a compatibility release for iOS 7.
+
+Fixes:
+
+* IOS-160 Red glow under FeedbackDemo keyboard
+* IOS-162 White "Message Center" title bar text can't be seen on iOS 7 white title bars.
+* IOS-166 Status bar overlap issues in Message Center "Send a Photo" view
+* IOS-167 Tapping Survey text entry cell results in haphazard scrolling
+* IOS-171 Text entry for messages should be redone for iOS 7
+* IOS-181 App hangs in iOS 7 after "No email Address?" input field alert.
+* IOS-183 Unable to attach screenshot on iPad
+* IOS-184 After selecting image and pressing done no action sheet is presented
+
+Other changes:
+
+* Deprecated `useMessageCenter` property in favor of server-based configuration.
+* Added debug messages to the rating flow for debugging ratings flow problems.
+* Renamed English.lproj to en.lproj to fix Application Loader warning on app submission.
+
 2013-08-29 wooster v1.1.0
 -------------------------
 This release focuses on support for Enterprise Surveys.

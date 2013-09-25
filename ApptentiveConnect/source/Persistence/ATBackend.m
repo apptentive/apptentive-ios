@@ -531,7 +531,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 					otherButtonTitle = ATLocalizedString(@"View Messages", @"View messages button title");
 				} else {
 					alertTitle = ATLocalizedString(@"Thanks!", nil);
-					alertMessage = ATLocalizedString(@"We will contact you via email shortly.", @"Message panel sent message but will not show Message Center dialog.");
+					alertMessage = ATLocalizedString(@"We'll be in touch via email.", @"Message panel sent message but will not show Message Center dialog.");
 					cancelButtonTitle = ATLocalizedString(@"Close", @"Close alert view title");
 					otherButtonTitle = nil;
 				}

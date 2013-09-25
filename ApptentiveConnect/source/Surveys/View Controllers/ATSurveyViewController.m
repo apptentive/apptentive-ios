@@ -774,7 +774,8 @@ enum {
 	
 	CGRect occludedScrollViewRect = CGRectIntersection(scrollViewRect, kbAdjustedRect);
 	if (!CGRectEqualToRect(CGRectZero, occludedScrollViewRect)) {
-		UIEdgeInsets contentInsets = UIEdgeInsetsMake(0, 0, occludedScrollViewRect.size.height, 0);
+		UIEdgeInsets contentInsets = scrollView.contentInset;
+		contentInsets.bottom = occludedScrollViewRect.size.height;
 		scrollView.contentInset = contentInsets;
 		scrollView.scrollIndicatorInsets = contentInsets;
 	}
@@ -800,7 +801,8 @@ enum {
 	[UIView beginAnimations:nil context:nil];
 	[UIView setAnimationDuration:[duration floatValue]];
 	[UIView setAnimationCurve:[curve intValue]];
-	UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+	UIEdgeInsets contentInsets = tableView.contentInset;
+	contentInsets.bottom = 0;
 	tableView.contentInset = contentInsets;
 	tableView.scrollIndicatorInsets = contentInsets;
 	[UIView commitAnimations];

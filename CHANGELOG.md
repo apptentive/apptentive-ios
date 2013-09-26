@@ -1,4 +1,4 @@
-2013-09-24 wooster v1.1.1 (in progress)
+2013-09-24 wooster v1.1.1
 -------------------------
 This is a compatibility release for iOS 7.
 
@@ -21,6 +21,7 @@ Other changes:
 * Deprecated `useMessageCenter` property in favor of server-based configuration.
 * Added debug messages to the rating flow for debugging ratings flow problems.
 * Renamed English.lproj to en.lproj to fix Application Loader warning on app submission.
+* Made `showTagline` setting work for Apptentive logo on person details screen.
 
 2013-08-29 wooster v1.1.0
 -------------------------

@@ -49,8 +49,8 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 /*! Set this if you want some custom text to appear as a placeholder in the
  feedback text box. */
 @property (nonatomic, copy) NSString *customPlaceholderText;
-/*! Set this to NO if you don't want to use Message Center, and instead just want unidirectional in-app feedback. */
-/*! Deprecated in 1.1.1 in favor of server-based configuration of Message Center. */
+/*! Set this to NO if you don't want to use Message Center, and instead just want unidirectional in-app feedback.
+ Deprecated in 1.1.1 in favor of server-based configuration of Message Center. */
 @property (nonatomic, assign) BOOL useMessageCenter DEPRECATED_ATTRIBUTE;
 
 + (ATConnect *)sharedConnection;

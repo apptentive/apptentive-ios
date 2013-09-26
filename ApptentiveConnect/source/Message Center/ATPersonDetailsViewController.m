@@ -86,8 +86,15 @@ enum kPersonDetailsTableSections {
 	previousScrollInsets = self.tableView.contentInset;
 	UIImage *buttonBackgroundImage = [[ATBackend imageNamed:@"at_contact_button_bg"] stretchableImageWithLeftCapWidth:1 topCapHeight:40];
 	[self.logoButton setBackgroundImage:buttonBackgroundImage forState:UIControlStateNormal];
-	self.logoImage.image = [ATBackend imageNamed:@"at_apptentive_logo"];
-	self.poweredByLabel.text = ATLocalizedString(@"Message Center Powered By", @"Text above Apptentive logo");
+	if ([[ATConnect sharedConnection] showTagline]) {
+		self.logoImage.image = [ATBackend imageNamed:@"at_apptentive_logo"];
+		self.poweredByLabel.text = ATLocalizedString(@"Message Center Powered By", @"Text above Apptentive logo");
+		self.logoImage.hidden = NO;
+		self.poweredByLabel.hidden = NO;
+	} else {
+		self.logoImage.hidden = YES;
+		self.poweredByLabel.hidden = YES;
+	}
 	[self registerForKeyboardNotifications];
 	[self.emailTextField addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];
 	emailValidationLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width - 10, 20)];

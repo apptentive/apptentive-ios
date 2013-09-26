@@ -15,6 +15,7 @@ Fixes:
 * IOS-190 Survey Description Obscured when Adding Free form Text
 * IOS-193 Contact info panel in MC is scrolled down too far
 * IOS-194 Message Center doesn't handle rapid keyboard appearing/disappearing
+* IOS-195 Handle case where message center is disabled and no valid email address
 
 Other changes:
 

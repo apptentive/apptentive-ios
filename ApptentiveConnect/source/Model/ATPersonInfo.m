@@ -185,4 +185,11 @@
 		[defaults synchronize];
 	}
 }
+
+- (BOOL)hasEmailAddress {
+	if (self.emailAddress && [self.emailAddress length] > 0) {
+		return YES;
+	}
+	return NO;
+}
 @end

@@ -33,4 +33,6 @@ NSString *const ATCurrentPersonPreferenceKey;
 
 - (NSDictionary *)apiJSON;
 - (void)saveAsCurrentPerson;
+
+- (BOOL)hasEmailAddress;
 @end

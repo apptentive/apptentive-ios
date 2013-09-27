@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'apptentive-ios'
-  s.version  = '1.1.0'
+  s.version  = '1.1.1'
   s.license  = 'BSD'
   s.summary  = 'Apptentive Customer Communications SDK.'
   s.homepage = 'https://www.apptentive.com/'
@@ -11,8 +11,8 @@ Pod::Spec.new do |s|
   s.exclude_files = 'ApptentiveConnect/ext/PrefixedTTTAttributedLabel/Example/*.*'
   s.requires_arc = false
   s.frameworks     = 'CoreGraphics', 'Foundation', 'QuartzCore', 'SystemConfiguration', 'UIKit', 'CoreData', 'CoreText'
-  s.resource_bundle = { 'ApptentiveResources' => ['ApptentiveConnect/source/Model/*.xcdatamodeld', 'ApptentiveConnect/xibs/**/*.*', 'ApptentiveConnect/resources/localization/English.lproj','ApptentiveConnect/art/generated/**/*.*'] }
+  s.resource_bundle = { 'ApptentiveResources' => ['ApptentiveConnect/source/Model/*.xcdatamodeld', 'ApptentiveConnect/xibs/**/*.*', 'ApptentiveConnect/resources/localization/*.lproj','ApptentiveConnect/art/generated/**/*.*'] }
   s.weak_frameworks = 'StoreKit', 'CoreTelephony'
   s.prefix_header_contents = '#import "ATLog.h"'
-  s.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" =>  "TTTATTRIBUTEDLABEL_PREFIX=AT  JSONKIT_PREFIX=AT APPTENTIVE_DEBUG_LOG_VIEWER=1 AT_LOGGING_LEVEL_INFO=1 AT_LOGGING_LEVEL_ERROR=1" }
+  s.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" =>  "TTTATTRIBUTEDLABEL_PREFIX=AT  JSONKIT_PREFIX=AT APPTENTIVE_DEBUG_LOG_VIEWER=1 AT_LOGGING_LEVEL_ERROR=1", "GCC_PREPROCESSOR_DEFINITIONS[config=Debug]" => "AT_LOGGING_LEVEL_INFO=1" }
 end

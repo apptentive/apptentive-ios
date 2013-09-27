@@ -27,6 +27,7 @@
 	if (self = [super init]) {
 		self.name = [ATConnect sharedConnection].initialUserName;
 		self.emailAddress = [ATConnect sharedConnection].initialUserEmailAddress;
+		// Note: customPersonData is appended in the `apiJSON` method, never added to the person object.
 	}
 	return self;
 }

@@ -514,6 +514,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 		[self sendTextMessageWithBody:message completion:^(NSString *pendingMessageID) {
 			[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroDidSendNotification object:nil userInfo:@{ATMessageCenterMessageNonceKey: pendingMessageID}];
 		}];
+		[self updatePersonIfNeeded];
 	}
 }
 

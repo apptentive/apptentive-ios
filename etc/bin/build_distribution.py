@@ -20,6 +20,9 @@ class Usage(Exception):
 def log(msg):
 	print >> sys.stderr, msg
 
+def get_dirname():
+	return os.path.dirname(globals()["__file__"])
+
 @contextmanager
 def chdir(path):
 	curdir = os.getcwd()
@@ -172,7 +175,7 @@ class Builder(object):
 			os.remove("CHANGELOG.md")
 	
 	def _project_dir(self):
-		return os.path.join("..", "..", "ApptentiveConnect")
+		return os.path.realpath(os.path.join(get_dirname(), "..", "..", "ApptentiveConnect"))
 	
 	def _output_dir(self):
 		return os.path.join(self.build_root, "library_dir")

@@ -3,6 +3,7 @@
 Fixes:
 
 * IOS-199 Contact info Name field should have word capitalization set
+* IOS-200 Suggestion for "singleline" survey question type
 
 2013-09-24 wooster v1.1.1
 -------------------------

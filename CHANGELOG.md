@@ -1,3 +1,9 @@
+2013-09-24 wooster v1.1.2 (ongoing)
+-------------------------
+Fixes:
+
+* IOS-199 Contact info Name field should have word capitalization set
+
 2013-09-24 wooster v1.1.1
 -------------------------
 This is a compatibility release for iOS 7.

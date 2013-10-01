@@ -21,6 +21,7 @@ NSString *const ATAppConfigurationMessageCenterEnabledKey = @"ATAppConfiguration
 NSString *const ATAppConfigurationMessageCenterTitleKey = @"ATAppConfigurationMessageCenterTitleKey";
 NSString *const ATAppConfigurationMessageCenterForegroundRefreshIntervalKey = @"ATAppConfigurationMessageCenterForegroundRefreshIntervalKey";
 NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey = @"ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey";
+NSString *const ATAppConfigurationMessageCenterEmailRequiredKey = @"ATAppConfigurationMessageCenterEmailRequiredKey";
 
 NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDisplayNameKey";
 
@@ -45,6 +46,7 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	 [NSNumber numberWithBool:YES], ATAppConfigurationMetricsEnabledPreferenceKey,
 	 [NSNumber numberWithInt:20], ATAppConfigurationMessageCenterForegroundRefreshIntervalKey,
 	 [NSNumber numberWithInt:60], ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey,
+	 [NSNumber numberWithBool:NO], ATAppConfigurationMessageCenterEmailRequiredKey,
 	 [NSNumber numberWithBool:YES], ATAppConfigurationMessageCenterEnabledKey,
 	 nil];
 	[defaults registerDefaults:defaultPreferences];
@@ -238,6 +240,15 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 			if (!oldBGRefresh || [oldBGRefresh intValue] != [bgRefresh intValue]) {
 				[defaults setObject:bgRefresh forKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey];
 				hasConfigurationChanges = YES;
+			}
+			
+			NSNumber *emailRequired = [mc objectForKey:@"email_required"];
+			if (emailRequired) {
+				NSNumber *oldEmailRequired = [defaults objectForKey:ATAppConfigurationMessageCenterEmailRequiredKey];
+				if (!oldEmailRequired || [emailRequired boolValue] != [oldEmailRequired boolValue]) {
+					[defaults setObject:emailRequired forKey:ATAppConfigurationMessageCenterEmailRequiredKey];
+					hasConfigurationChanges = YES;
+				}
 			}
 		}
 	}

@@ -42,6 +42,10 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 		customPersonData = [[NSMutableDictionary alloc] init];
 		customDeviceData = [[NSMutableDictionary alloc] init];
 		useMessageCenter = YES;
+		
+		NSDictionary *defaults = @{ATAppConfigurationMessageCenterEnabledKey : [NSNumber numberWithBool:YES],
+								   ATAppConfigurationMessageCenterEmailRequiredKey : [NSNumber numberWithBool:NO]};
+		[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 	}
 	return self;
 }
@@ -167,8 +171,11 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 }
 
 - (BOOL)messageCenterEnabled {
-	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ATAppConfigurationMessageCenterEnabledKey : [NSNumber numberWithBool:YES]}];
 	return [[[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterEnabledKey] boolValue];
+}
+
+- (BOOL)emailRequired {
+	return [[[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterEmailRequiredKey] boolValue];
 }
 
 #if TARGET_OS_IPHONE

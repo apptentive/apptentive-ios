@@ -12,6 +12,7 @@
 - (NSDictionary *)customPersonData;
 - (NSDictionary *)customDeviceData;
 - (BOOL)messageCenterEnabled;
+- (BOOL)emailRequired;
 
 #if TARGET_OS_IPHONE
 - (void)presentFeedbackDialogFromViewController:(UIViewController *)viewController;

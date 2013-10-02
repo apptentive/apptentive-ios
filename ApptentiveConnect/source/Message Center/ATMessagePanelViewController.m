@@ -300,7 +300,12 @@ enum {
 		self.window.userInteractionEnabled = NO;
 		self.window.layer.shouldRasterize = YES;
 		NSString *title = ATLocalizedString(@"Invalid Email Address", @"Invalid email dialog title.");
-		NSString *message = ATLocalizedString(@"That doesn't look like an email address. An email address will help us respond.", @"Invalid email dialog message.");
+		NSString *message = nil;
+		if ([[ATConnect sharedConnection] emailRequired]) {
+			message = ATLocalizedString(@"That doesn't look like an email address. An email address is required for us to respond.", @"Invalid email dialog message (email is required).");
+		} else {
+			message = ATLocalizedString(@"That doesn't look like an email address. An email address will help us respond.", @"Invalid email dialog message.");
+		}
 		invalidEmailAddressAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"OK", @"OK button title"), nil];
 		[invalidEmailAddressAlert show];
 	} else if (self.showEmailAddressField && (!self.emailField.text || [self.emailField.text length] == 0)) {
@@ -566,7 +571,12 @@ enum {
 		emailFrame.size.height = sizedEmail.height;
 		emailFrame.size.width = emailFrame.size.width - (horizontalPadding + extraHorzontalPadding)*2;
 		self.emailField = [[[UITextField alloc] initWithFrame:emailFrame] autorelease];
-		self.emailField.placeholder = ATLocalizedString(@"Your Email", @"Email Address Field Placeholder");
+		if ([[ATConnect sharedConnection] emailRequired]) {
+			self.emailField.placeholder = ATLocalizedString(@"Your Email (required)", @"Email Address Field Placeholder (email is required)");
+		}
+		else {
+			self.emailField.placeholder = ATLocalizedString(@"Your Email", @"Email Address Field Placeholder");
+		}
 		self.emailField.font = emailFont;
 		self.emailField.adjustsFontSizeToFitWidth = YES;
 		self.emailField.keyboardType = UIKeyboardTypeEmailAddress;

@@ -295,7 +295,7 @@ enum {
 		self.window.userInteractionEnabled = NO;
 		self.window.layer.shouldRasterize = YES;
 		NSString *title = ATLocalizedString(@"Please enter an email address", @"Email is required and no email was entered alert title.");
-		NSString *message = ATLocalizedString(@"An email address is required for us to respond!", @"Email is required and no email was entered alert message.");
+		NSString *message = ATLocalizedString(@"An email address is required for us to respond.", @"Email is required and no email was entered alert message.");
 		
 		emailRequiredAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"OK", @"OK button title"), nil];
 		[emailRequiredAlert show];

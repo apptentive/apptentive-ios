@@ -31,6 +31,7 @@ typedef enum {
 	
 	UIAlertView *noEmailAddressAlert;
 	UIAlertView *invalidEmailAddressAlert;
+	UIAlertView *emailRequiredAlert;
 }
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet ATCustomButton *cancelButton;

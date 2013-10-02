@@ -17,6 +17,7 @@
 @property (nonatomic, retain) NSString *type;
 @property (nonatomic, retain) NSDictionary *configuration;
 @property (nonatomic, retain) NSDictionary *criteria;
+@property (nonatomic, retain) NSString *version;
 
 + (ATInteraction *)interactionWithJSONDictionary:(NSDictionary *)jsonDictionary;
 

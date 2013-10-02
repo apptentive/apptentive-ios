@@ -18,15 +18,17 @@
 	interaction.type = [jsonDictionary objectForKey:@"type"];
 	interaction.configuration = [jsonDictionary objectForKey:@"configuration"];
 	interaction.criteria = [jsonDictionary objectForKey:@"criteria"];
+	interaction.version = [jsonDictionary objectForKey:@"version"];
 	return [interaction autorelease];
 }
 
 - (NSString *)description {	
-	NSDictionary *description = @{@"identifier" : self.identifier?: [NSNull null],
-						@"priority" : [NSNumber numberWithInt:self.priority]?: [NSNull null],
-						@"type" : self.type?: [NSNull null],
-						@"configuration" : self.configuration?: [NSNull null],
-						@"criteria" : self.criteria?: [NSNull null]};
+	NSDictionary *description = @{@"identifier" : self.identifier ?: [NSNull null],
+								  @"priority" : [NSNumber numberWithInt:self.priority] ?: [NSNull null],
+								  @"type" : self.type ?: [NSNull null],
+								  @"configuration" : self.configuration ?: [NSNull null],
+								  @"criteria" : self.criteria ?: [NSNull null],
+								  @"version" : self.version ?: [NSNull null]};
 	
 	return [description description];
 }
@@ -38,6 +40,7 @@
 		self.type = [coder decodeObjectForKey:@"type"];
 		self.configuration = [coder decodeObjectForKey:@"configuration"];
 		self.criteria = [coder decodeObjectForKey:@"criteria"];
+		self.version = [coder decodeObjectForKey:@"version"];
 	}
 	return self;
 }
@@ -48,6 +51,7 @@
 	[coder encodeObject:self.type forKey:@"type"];
 	[coder encodeObject:self.configuration forKey:@"configuration"];
 	[coder encodeObject:self.criteria forKey:@"criteria"];
+	[coder encodeObject:self.version forKey:@"version"];
 }
 
 - (BOOL)criteriaAreMetForCodePoint:(NSString *)codePoint {

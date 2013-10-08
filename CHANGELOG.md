@@ -1,4 +1,10 @@
-2013-09-24 wooster v1.2.0
+2013-09 wooster v1.2.1 (in progress)
+----------------------
+Fixes:
+
+* IOS-187 Entering text in one free form field overrides another free form field's data
+
+2013-10-08 wooster v1.2.0
 -------------------------
 Fixes:
 

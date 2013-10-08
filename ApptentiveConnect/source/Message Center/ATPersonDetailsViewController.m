@@ -51,6 +51,7 @@ enum kPersonDetailsTableSections {
 	[_nameTextField release];
 	[_poweredByLabel release];
 	[_logoImage release];
+	[emailRequiredAlert release], emailRequiredAlert = nil;
 	[super dealloc];
 }
 
@@ -74,6 +75,14 @@ enum kPersonDetailsTableSections {
 	if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
 		self.edgesForExtendedLayout = UIRectEdgeNone;
 	}
+	
+	self.nameTextField.placeholder = ATLocalizedString(@"Name", @"Placeholder text for `Name` field when editing user details.");
+	if ([[ATConnect sharedConnection] emailRequired]) {
+		self.emailTextField.placeholder = ATLocalizedString(@"Email (required)", @"Placeholder text for *required* `Email` field when editing user details.");
+	} else {
+		self.emailTextField.placeholder = ATLocalizedString(@"Email", @"Placeholder text for `Email` field when editing user details.");
+	}
+	
 	if ([ATPersonInfo personExists]) {
 		ATPersonInfo *person = [ATPersonInfo currentPerson];
 		self.nameTextField.text = person.name;
@@ -137,6 +146,10 @@ enum kPersonDetailsTableSections {
 }
 
 - (BOOL)savePersonData {
+	if ([[ATConnect sharedConnection] emailRequired] && self.emailTextField.text.length == 0) {
+		return NO;
+	}
+	
 	if (![self emailIsValid]) {
 		return NO;
 	}
@@ -169,7 +182,15 @@ enum kPersonDetailsTableSections {
 }
 
 - (IBAction)donePressed:(id)sender {
-	if ([self savePersonData]) {
+	if ([[ATConnect sharedConnection] emailRequired] && self.emailTextField.text.length == 0) {
+		if (emailRequiredAlert) {
+			[emailRequiredAlert release], emailRequiredAlert = nil;
+		}
+		NSString *title = ATLocalizedString(@"Please enter an email address", @"Email is required and no email was entered alert title.");
+		NSString *message = ATLocalizedString(@"An email address is required for us to respond.", @"Email is required and no email was entered alert message.");
+		emailRequiredAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"OK", @"OK button title"), nil];
+		[emailRequiredAlert show];
+	} else if ([self savePersonData]) {
 		[self.navigationController popViewControllerAnimated:YES];
 	}
 }
@@ -328,4 +349,20 @@ enum kPersonDetailsTableSections {
 		t.scrollIndicatorInsets = previousScrollInsets;
 	} completion:NULL];
 }
+
+#pragma mark UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+	if (emailRequiredAlert && [alertView isEqual:emailRequiredAlert]) {
+		[emailRequiredAlert release], emailRequiredAlert = nil;
+		[self.emailTextField becomeFirstResponder];
+	}
+}
+
+- (void)alertViewCancel:(UIAlertView *)alertView {
+	if (emailRequiredAlert && [alertView isEqual:emailRequiredAlert]) {
+		[emailRequiredAlert release], emailRequiredAlert = nil;
+	}
+}
+
 @end

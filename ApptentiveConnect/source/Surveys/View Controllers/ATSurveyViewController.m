@@ -415,12 +415,13 @@ enum {
 				if (cell == nil) {
 					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ATSurveyTextViewCellIdentifier] autorelease];
 					ATCellTextView *textView = [[ATCellTextView alloc] initWithFrame:CGRectInset(cell.contentView.bounds, 10.0, 10.0)];
+					textView.keyboardType = UIKeyboardTypeDefault;
 					textView.font = [UIFont systemFontOfSize:16];
 					textView.backgroundColor = [UIColor clearColor];
 					textView.tag = kTextViewTag;
 					textView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 					[cell.contentView addSubview:textView];
-					textView.returnKeyType = UIReturnKeyDone;
+					textView.returnKeyType = UIReturnKeyDefault;
 					[textView release], textView = nil;
 					cell.selectionStyle = UITableViewCellSelectionStyleNone;
 				}
@@ -606,10 +607,6 @@ enum {
 
 #pragma mark UITextViewDelegate
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-	if ([text isEqualToString:@"\n"]) {
-		[textView resignFirstResponder];
-		return NO;
-	}
 	return YES;
 }
 
@@ -741,6 +738,7 @@ enum {
 	CGSize maxSize = CGSizeMake(f.size.width, 150);
 	//	CGSize sizeThatFits = [textView.text sizeWithFont:textView.font constrainedToSize:maxSize lineBreakMode:UILineBreakModeWordWrap];
 	CGSize sizeThatFits = [textView sizeThatFits:maxSize];
+	sizeThatFits.height = MAX(55, sizeThatFits.height);
 	if (originalHeight != sizeThatFits.height) {
 		//		NSLog(@"old: %f, new: %f", originalHeight, sizeThatFits.height);
 		f.size.height = sizeThatFits.height;

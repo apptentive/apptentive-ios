@@ -1,3 +1,14 @@
+2013-09-24 wooster v1.2.0
+-------------------------
+Fixes:
+
+* IOS-199 Contact info Name field should have word capitalization set
+* IOS-200 Suggestion for "singleline" survey question type
+* IOS-226 Translations of new strings
+* More aggressive about updating person information.
+
+This release also adds a mechanism to require email addresses via server setting.
+
 2013-09-24 wooster v1.1.1
 -------------------------
 This is a compatibility release for iOS 7.

@@ -433,6 +433,8 @@ enum {
 			textView.question = question;
 			if (question.answerText != nil) {
 				textView.text = question.answerText;
+			} else {
+				textView.text = @"";
 			}
 			//[textView sizeToFit];
 			[self sizeTextView:textView];
@@ -470,6 +472,8 @@ enum {
 			textField.question = question;
 			if (question.answerText != nil) {
 				textField.text = question.answerText;
+			} else {
+				textField.text = @"";
 			}
 		}
 	}

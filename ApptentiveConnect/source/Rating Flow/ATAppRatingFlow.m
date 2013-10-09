@@ -60,6 +60,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 - (void)postNotification:(NSString *)name forButton:(int)button;
 - (NSURL *)URLForRatingApp;
 - (void)openAppStoreToRateApp;
+- (BOOL)shouldOpenAppStoreViaStoreKit;
 - (void)openAppStoreViaURL;
 - (void)openAppStoreViaStoreKit;
 - (void)openMacAppStore;
@@ -295,19 +296,21 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 #if TARGET_IPHONE_SIMULATOR
 	[self showUnableToOpenAppStoreDialog];
 #else
-	BOOL openViaURL = YES;
-
-	if (openViaURL) {
-		[self openAppStoreViaURL];
+	if ([self shouldOpenAppStoreViaStoreKit]) {
+		[self openAppStoreViaStoreKit];
 	}
 	else {
-		[self openAppStoreViaStoreKit];
+		[self openAppStoreViaURL];
 	}
 #endif
 	
 #elif TARGET_OS_MAC
 	[self openMacAppStore];
 #endif
+}
+
+- (BOOL)shouldOpenAppStoreViaStoreKit {
+	return ([SKStoreProductViewController class] != NULL && self.appID && ![ATUtilities osVersionGreaterThanOrEqualTo:@"7"]);
 }
 
 - (void)openAppStoreViaURL {

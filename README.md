@@ -28,7 +28,7 @@ the user if they are happy with the app. If not, then a simplified feedback
 window is opened. If they are happy with the app, they are prompted to rate
 the app in the App Store:
 
-![Popup](etc/screenshots/rating.png?raw=true)
+![Popup](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/rating.png)
 
 
 Required Frameworks
@@ -114,9 +114,9 @@ ATConnect *connection = [ATConnect sharedConnection];
 [connection presentMessageCenterFromViewController:self];
 ```
 
-![Message Center initial feedback](etc/screenshots/messageCenter_giveFeedback.png?raw=true)
+![Message Center Initial Feedback](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/messageCenter_giveFeedback.png)
 
-![Message Center response](etc/screenshots/messageCenter_response.png?raw=true)
+![Message Center Response](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/messageCenter_response.png)
 
 Easy!
 

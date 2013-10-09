@@ -59,7 +59,10 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 - (void)postNotification:(NSString *)name;
 - (void)postNotification:(NSString *)name forButton:(int)button;
 - (NSURL *)URLForRatingApp;
-- (void)openURLForRatingApp;
+- (void)openAppStoreToRateApp;
+- (void)openAppStoreViaURL;
+- (void)openAppStoreViaStoreKit;
+- (void)openMacAppStore;
 - (BOOL)requirementsToShowDialogMet;
 - (BOOL)shouldShowDialog;
 /*! Returns YES if a dialog was shown. */
@@ -201,7 +204,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 		[ratingDialog release], ratingDialog = nil;
 		if (buttonIndex == 1) { // rate
 			[self postNotification:ATAppRatingDidClickRatingButtonNotification forButton:ATAppRatingButtonTypeRateApp];
-			[self openURLForRatingApp];
+			[self openAppStoreToRateApp];
 		} else if (buttonIndex == 2) { // remind later
 			[self postNotification:ATAppRatingDidClickRatingButtonNotification forButton:ATAppRatingButtonTypeRemind];
 			[self setRatingDialogWasShown];
@@ -284,39 +287,71 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 }
 #endif
 
-- (void)openURLForRatingApp {
-	NSURL *url = [self URLForRatingApp];
+- (void)openAppStoreToRateApp {
 	[self setRatedApp:YES];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATAppRatingFlowUserAgreedToRateAppNotification object:nil];
+		
 #if TARGET_OS_IPHONE
-	if ([SKStoreProductViewController class] != NULL && self.appID) {
 #if TARGET_IPHONE_SIMULATOR
-		[self showUnableToOpenAppStoreDialog];
+	[self showUnableToOpenAppStoreDialog];
 #else
+	BOOL openViaURL = YES;
+
+	if (openViaURL) {
+		[self openAppStoreViaURL];
+	}
+	else {
+		[self openAppStoreViaStoreKit];
+	}
+#endif
+	
+#elif TARGET_OS_MAC
+	[self openMacAppStore];
+#endif
+}
+
+- (void)openAppStoreViaURL {
+	if (self.appID) {
+		NSURL *url = [self URLForRatingApp];
+		if (![[UIApplication sharedApplication] canOpenURL:url]) {
+			ATLogError(@"No application can open the URL: %@", url);
+			[self showUnableToOpenAppStoreDialog];
+		}
+		else {
+			[[UIApplication sharedApplication] openURL:url];
+		}
+	}
+	else {
+		[self showUnableToOpenAppStoreDialog];
+	}
+}
+
+- (void)openAppStoreViaStoreKit {
+	if ([SKStoreProductViewController class] != NULL && self.appID) {
 		SKStoreProductViewController *vc = [[[SKStoreProductViewController alloc] init] autorelease];
 		vc.delegate = self;
 		[vc loadProductWithParameters:@{SKStoreProductParameterITunesItemIdentifier:self.appID} completionBlock:^(BOOL result, NSError *error) {
 			if (error) {
-				[self showUnableToOpenAppStoreDialog];
 				ATLogError(@"Error loading product view: %@", error);
+				[self showUnableToOpenAppStoreDialog];
 			} else {
 				UIViewController *presentingVC = [self rootViewControllerForCurrentWindow];
 				[presentingVC presentModalViewController:vc animated:YES];
 			}
 		}];
-#endif
-	} else {
-		if (![[UIApplication sharedApplication] canOpenURL:url]) {
-			ATLogError(@"No application can open the URL: %@", url);
-			[self showUnableToOpenAppStoreDialog];
-		}
-		[[UIApplication sharedApplication] openURL:url];
 	}
-#elif TARGET_OS_MAC
-	[[NSWorkspace sharedWorkspace] openURL:url];
-#endif
-    [[NSNotificationCenter defaultCenter] postNotificationName:ATAppRatingFlowUserAgreedToRateAppNotification object:nil];
+	else {
+		[self showUnableToOpenAppStoreDialog];
+	}
 }
 
+- (void)openMacAppStore {
+#if TARGET_OS_IPHONE
+#elif TARGET_OS_MAC
+	NSURL *url = [self URLForRatingApp];
+	[[NSWorkspace sharedWorkspace] openURL:url];
+#endif
+}
 
 - (BOOL)requirementsToShowDialogMet {
 	BOOL result = NO;
@@ -759,7 +794,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	} else if (result == NSAlertSecondButtonReturn) { // remind me
 		[self setRatingDialogWasShown];
 	} else if (result == NSAlertThirdButtonReturn) { // rate app
-		[self openURLForRatingApp];
+		[self openAppStoreToRateApp];
 	}
 #endif
 }

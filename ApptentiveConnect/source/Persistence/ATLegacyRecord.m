@@ -115,6 +115,10 @@
 	if (distribution) {
 		[client setObject:distribution forKey:@"distribution"];
 	}
+	NSString *distributionVersion = [[ATBackend sharedBackend] distributionVersion];
+	if (distributionVersion) {
+		[client setObject:distributionVersion forKey:@"distribution_version"];
+	}
 	[record setObject:client forKey:@"client"];
 	[d setObject:record forKey:@"record"];
 	
@@ -147,6 +151,10 @@
 	NSString *distribution = [[ATBackend sharedBackend] distributionName];
 	if (distribution) {
 		[d setObject:distribution forKey:@"record[client][distribution]"];
+	}
+	NSString *distributionVersion = [[ATBackend sharedBackend] distributionVersion];
+	if (distributionVersion) {
+		[d setObject:distributionVersion forKey:@"record[client][distribution_version]"];
 	}
 	
 	// Add some app information.

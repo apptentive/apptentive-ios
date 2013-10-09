@@ -48,6 +48,7 @@ NSString *const ATBackendBecameReadyNotification = @"ATBackendBecameReadyNotific
 
 NSString *const ATUUIDPreferenceKey = @"ATUUIDPreferenceKey";
 NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
+NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 @interface ATBackend ()
 - (void)updateConfigurationIfNeeded;
@@ -738,6 +739,15 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 		cachedDistributionName = [(NSString *)[[ATConnect resourceBundle] objectForInfoDictionaryKey:ATInfoDistributionKey] retain];
 	});
 	return cachedDistributionName;
+}
+
+- (NSString *)distributionVersion {
+	static NSString *cachedDistributionVersion = nil;
+	static dispatch_once_t onceToken = 0;
+	dispatch_once(&onceToken, ^{
+		cachedDistributionVersion = [(NSString *)[[ATConnect resourceBundle] objectForInfoDictionaryKey:ATInfoDistributionVersionKey] retain];
+	});
+	return cachedDistributionVersion;
 }
 
 - (NSUInteger)unreadMessageCount {

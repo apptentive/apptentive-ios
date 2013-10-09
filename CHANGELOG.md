@@ -1,8 +1,14 @@
-2013-09 wooster v1.2.1 (in progress)
-----------------------
+2013-10-09 wooster, pkamb v1.2.1 (in progress)
+-------------------------
 Fixes:
 
+* IOS-233 "Write a Review" is grayed out when using StoreKit
+* #59 'Write a Review' button disabled when app store is shown
 * IOS-187 Entering text in one free form field overrides another free form field's data
+
+This release fixes an issue where iOS 7 disabled the "Write a Review" button on an app page when viewed within StoreKit. For this release, we will be switching back to the URL method of opening the page in the App Store app.
+
+We strongly recommend updating to this version.
 
 2013-10-08 wooster v1.2.0
 -------------------------

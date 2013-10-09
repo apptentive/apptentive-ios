@@ -265,8 +265,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	NSString *URLStringFromPreferences = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppRatingReviewURLPreferenceKey];
 	if (URLStringFromPreferences == nil) {
 #if TARGET_OS_IPHONE
-		NSString *osVersion = [[UIDevice currentDevice] systemVersion];
-		if ([ATUtilities versionString:osVersion isGreaterThanVersionString:@"6.0"] || [ATUtilities versionString:osVersion isEqualToVersionString:@"6.0"]) {
+		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"6.0"]) {
 			URLString = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/%@/app/id%@", [[NSLocale currentLocale] objectForKey: NSLocaleCountryCode], self.appID];
 		} else {
 			URLString = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", self.appID];
@@ -293,16 +292,16 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATAppRatingFlowUserAgreedToRateAppNotification object:nil];
 		
 #if TARGET_OS_IPHONE
-#if TARGET_IPHONE_SIMULATOR
+#	if TARGET_IPHONE_SIMULATOR
 	[self showUnableToOpenAppStoreDialog];
-#else
+#	else
 	if ([self shouldOpenAppStoreViaStoreKit]) {
 		[self openAppStoreViaStoreKit];
 	}
 	else {
 		[self openAppStoreViaURL];
 	}
-#endif
+#	endif
 	
 #elif TARGET_OS_MAC
 	[self openMacAppStore];

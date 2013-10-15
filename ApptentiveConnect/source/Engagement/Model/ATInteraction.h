@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+@class ATInteractionUsageData;
 
 @interface ATInteraction : NSObject <NSCoding> {
 	
@@ -21,7 +22,11 @@
 
 + (ATInteraction *)interactionWithJSONDictionary:(NSDictionary *)jsonDictionary;
 
+- (ATInteractionUsageData *)usageDataAtCodePoint:(NSString *)codePoint;
 - (BOOL)criteriaAreMetForCodePoint:(NSString *)codePoint;
-- (BOOL)criteriaAreMetForUsageData:(NSDictionary *)usageData;
+- (BOOL)criteriaAreMetForUsageData:(ATInteractionUsageData *)usageData;
+
+- (NSPredicate *)criteriaPredicate;
++ (NSString *)predicateStringForInteractionCriteria:(NSDictionary *)interactionCriteria hasError:(BOOL *)hasError;
 
 @end

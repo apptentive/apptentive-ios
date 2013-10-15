@@ -8,6 +8,7 @@
 
 #import "ATInteraction.h"
 #import "ATEngagementBackend.h"
+#import "ATInteractionUsageData.h"
 
 @implementation ATInteraction
 
@@ -54,12 +55,16 @@
 	[coder encodeObject:self.version forKey:@"version"];
 }
 
-- (BOOL)criteriaAreMetForCodePoint:(NSString *)codePoint {
-	NSDictionary *usageData = [[ATEngagementBackend sharedBackend] usageDataForInteraction:self atCodePoint:codePoint];
-	return [[self criteriaPredicate] evaluateWithObject:usageData];
+- (ATInteractionUsageData *)usageDataAtCodePoint:(NSString *)codePoint {
+	return [ATInteractionUsageData usageDataForInteraction:self atCodePoint:codePoint];
 }
 
-- (BOOL)criteriaAreMetForUsageData:(NSDictionary *)usageData {
+- (BOOL)criteriaAreMetForCodePoint:(NSString *)codePoint {
+	ATInteractionUsageData *usageDate = [self usageDataAtCodePoint:codePoint];
+	return [self criteriaAreMetForUsageData:usageDate];
+}
+
+- (BOOL)criteriaAreMetForUsageData:(ATInteractionUsageData *)usageData {
 	return [[self criteriaPredicate] evaluateWithObject:usageData];
 }
 

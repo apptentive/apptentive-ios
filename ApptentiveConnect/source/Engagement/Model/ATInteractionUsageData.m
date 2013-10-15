@@ -55,6 +55,17 @@
 	return usageData;
 }
 
+- (NSDictionary *)predicateEvaluationDictionary {
+    NSDictionary *predicateEvaluationDictionary = @{@"days_since_install": self.daysSinceInstall,
+                                                    @"days_since_upgrade" : self.daysSinceUpgrade,
+                                                    @"application_version" : self.applicationVersion,
+                                                    [NSString stringWithFormat:@"code_point_%@_invokes_total", self.codePoint] : self.codePointInvokesTotal,
+                                                    [NSString stringWithFormat:@"code_point_%@_invokes_version", self.codePoint] : self.codePointInvokesVersion,
+                                                    [NSString stringWithFormat:@"interactions_%@_invokes_total", self.interaction.identifier] : self.interactionInvokesTotal,
+                                                    [NSString stringWithFormat:@"interactions_%@_invokes_version", self.interaction.identifier] : self.interactionInvokesVersion};
+	return predicateEvaluationDictionary;
+}
+
 - (NSNumber *)daysSinceInstall {
 	if (!_daysSinceInstall) {
 		NSDate *installDate = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInstallDateKey];

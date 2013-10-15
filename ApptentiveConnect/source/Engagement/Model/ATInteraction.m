@@ -65,7 +65,7 @@
 }
 
 - (BOOL)criteriaAreMetForUsageData:(ATInteractionUsageData *)usageData {
-	return [[self criteriaPredicate] evaluateWithObject:usageData];
+	return [[self criteriaPredicate] evaluateWithObject:[usageData predicateEvaluationDictionary]];
 }
 
 - (NSPredicate *)criteriaPredicate {

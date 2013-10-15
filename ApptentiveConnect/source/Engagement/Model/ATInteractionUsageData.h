@@ -33,4 +33,6 @@
 				  interactionInvokesTotal:(NSNumber *)interactionInvokesTotal
 				interactionInvokesVersion:(NSNumber *)interactionInvokesVersion;
 
+- (NSDictionary *)predicateEvaluationDictionary;
+
 @end

@@ -9,6 +9,7 @@
 #import "ATConversation.h"
 
 #import "ATConnect.h"
+#import "ATBackend.h"
 #import "ATUtilities.h"
 #import "NSDictionary+ATAdditions.h"
 
@@ -104,6 +105,15 @@
 	result[@"programming_language"] = @"Objective-C";
 	result[@"author_name"] = @"Apptentive, Inc.";
 	result[@"platform"] = kATConnectPlatformString;
+	NSString *distribution = [[ATBackend sharedBackend] distributionName];
+	if (distribution) {
+		result[@"distribution"] = distribution;
+	}
+	NSString *distributionVersion = [[ATBackend sharedBackend] distributionVersion];
+	if (distributionVersion) {
+		result[@"distribution_version"] = distributionVersion;
+	}
+
 	return result;
 }
 

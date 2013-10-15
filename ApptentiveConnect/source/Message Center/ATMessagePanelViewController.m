@@ -89,6 +89,7 @@ enum {
 	[_toolbarShadowImage release], _toolbarShadowImage = nil;
 	[noEmailAddressAlert release], noEmailAddressAlert = nil;
 	[invalidEmailAddressAlert release], invalidEmailAddressAlert = nil;
+	[emailRequiredAlert release], emailRequiredAlert = nil;
 	delegate = nil;
 	[super dealloc];
 }
@@ -125,6 +126,9 @@ enum {
 	CGAffineTransform t = [ATMessagePanelViewController viewTransformInWindow:parentWindow];
 	self.window.transform = t;
 	self.window.hidden = NO;
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+		self.window.tintAdjustmentMode = UIViewTintAdjustmentModeNormal;
+	}
 	[parentWindow resignKeyWindow];
 	[self.window makeKeyAndVisible];
 	animationBounds = parentWindow.bounds;
@@ -134,6 +138,10 @@ enum {
 	// Animate in from above.
 	self.window.bounds = animationBounds;
 	self.window.windowLevel = UIWindowLevelNormal;
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"] && originalPresentingWindow) {
+		startingTintAdjustmentMode = originalPresentingWindow.tintAdjustmentMode;
+		originalPresentingWindow.tintAdjustmentMode = UIViewTintAdjustmentModeDimmed;
+	}
 	CGPoint center = animationCenter;
 	center.y = ceilf(center.y);
 	
@@ -154,7 +162,24 @@ enum {
 	CGPoint newViewCenter = CGPointMake(CGRectGetMidX(newFrame), CGRectGetMidY(newFrame));
 	
 	UIView *shadowView = nil;
-	shadowView = [[ATShadowView alloc] initWithFrame:self.window.bounds];
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+		UIScreen *screen = self.window.screen;
+		CGRect statusFrame = [screen applicationFrame];
+		CGRect shadowFrame = self.window.bounds;
+		CGFloat offset = 0;
+		if (statusFrame.origin.x > 0) {
+			offset = statusFrame.origin.x;
+		} else if (statusFrame.origin.y > 0) {
+			offset = statusFrame.origin.y;
+		}
+		shadowFrame.origin.y -= offset;
+		shadowFrame.size.height += offset;
+		shadowView = [[UIView alloc] initWithFrame:shadowFrame];
+		shadowView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+		shadowView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+	} else {
+		shadowView = [[ATShadowView alloc] initWithFrame:self.window.bounds];
+	}
 	shadowView.tag = kMessagePanelGradientLayerTag;
 	[self.window addSubview:shadowView];
 	[self.window sendSubviewToBack:shadowView];
@@ -165,10 +190,14 @@ enum {
 	
 	l.masksToBounds = YES;
 	
-	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-		[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+		[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
 	} else {
-		[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque];
+		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+			[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
+		} else {
+			[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque];
+		}
 	}
 	
 	[UIView animateWithDuration:0.3 animations:^(void){
@@ -264,7 +293,20 @@ enum {
 - (IBAction)sendPressed:(id)sender {
 	[self.emailField resignFirstResponder];
 	[self.feedbackView resignFirstResponder];
-	if (self.showEmailAddressField && [self.emailField.text length] > 0 && ![ATUtilities emailAddressIsValid:self.emailField.text]) {
+	
+	if (self.showEmailAddressField && [[ATConnect sharedConnection] emailRequired] && self.emailField.text.length == 0) {
+		if (emailRequiredAlert) {
+			[emailRequiredAlert release], emailRequiredAlert = nil;
+		}
+		self.window.windowLevel = UIWindowLevelNormal;
+		self.window.userInteractionEnabled = NO;
+		self.window.layer.shouldRasterize = YES;
+		NSString *title = ATLocalizedString(@"Please enter an email address", @"Email is required and no email was entered alert title.");
+		NSString *message = ATLocalizedString(@"An email address is required for us to respond.", @"Email is required and no email was entered alert message.");
+		
+		emailRequiredAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"OK", @"OK button title"), nil];
+		[emailRequiredAlert show];
+	} else if (self.showEmailAddressField && [self.emailField.text length] > 0 && ![ATUtilities emailAddressIsValid:self.emailField.text]) {
 		if (invalidEmailAddressAlert) {
 			[invalidEmailAddressAlert release], invalidEmailAddressAlert = nil;
 		}
@@ -272,7 +314,12 @@ enum {
 		self.window.userInteractionEnabled = NO;
 		self.window.layer.shouldRasterize = YES;
 		NSString *title = ATLocalizedString(@"Invalid Email Address", @"Invalid email dialog title.");
-		NSString *message = ATLocalizedString(@"That doesn't look like an email address. An email address will help us respond.", @"Invalid email dialog message.");
+		NSString *message = nil;
+		if ([[ATConnect sharedConnection] emailRequired]) {
+			message = ATLocalizedString(@"That doesn't look like an email address. An email address is required for us to respond.", @"Invalid email dialog message (email is required).");
+		} else {
+			message = ATLocalizedString(@"That doesn't look like an email address. An email address will help us respond.", @"Invalid email dialog message.");
+		}
 		invalidEmailAddressAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"OK", @"OK button title"), nil];
 		[invalidEmailAddressAlert show];
 	} else if (self.showEmailAddressField && (!self.emailField.text || [self.emailField.text length] == 0)) {
@@ -356,6 +403,9 @@ enum {
 		[self.window removeFromSuperview];
 		self.window.hidden = YES;
 		[[UIApplication sharedApplication] setStatusBarStyle:startingStatusBarStyle];
+		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"] && originalPresentingWindow) {
+			originalPresentingWindow.tintAdjustmentMode = startingTintAdjustmentMode == UIViewTintAdjustmentModeDimmed ? UIViewTintAdjustmentModeAutomatic : startingTintAdjustmentMode;
+		}
 		[self teardown];
 		[self release];
 		
@@ -410,8 +460,10 @@ enum {
 		CGRect newTextViewFrame = oldTextViewRect;
 		newTextViewFrame.size.height -= heightDiff;
 		textView.frame = newTextViewFrame;
-		// Fix for iOS 4.
-		textView.contentInset = UIEdgeInsetsMake(0, -8, 0, 0);
+		if (![ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+			// Fix for iOS 4.
+			textView.contentInset = UIEdgeInsetsMake(0, -8, 0, 0);
+		}
 		if (!CGSizeEqualToSize(self.scrollView.contentSize, newContentSize)) {
 			self.scrollView.contentSize = newContentSize;
 		}
@@ -453,6 +505,10 @@ enum {
 		self.window.userInteractionEnabled = YES;
 		[invalidEmailAddressAlert release], invalidEmailAddressAlert = nil;
 		[self.emailField becomeFirstResponder];
+	} else if (emailRequiredAlert && [alertView isEqual:emailRequiredAlert]) {
+		self.window.userInteractionEnabled = YES;
+		[emailRequiredAlert release], emailRequiredAlert = nil;
+		[self.emailField becomeFirstResponder];
 	}
 }
 
@@ -463,6 +519,8 @@ enum {
 		[noEmailAddressAlert release], noEmailAddressAlert = nil;
 	} else if (invalidEmailAddressAlert && [alertView isEqual:invalidEmailAddressAlert]) {
 		[invalidEmailAddressAlert release], invalidEmailAddressAlert = nil;
+	} else if (emailRequiredAlert && [alertView isEqual:emailRequiredAlert]) {
+		[emailRequiredAlert release], emailRequiredAlert = nil;
 	}
 }
 
@@ -521,8 +579,10 @@ enum {
 	if (self.showEmailAddressField) {
 		offsetY += 5;
 		CGFloat extraHorzontalPadding = 0;
-		// Needs a little extra to line up with new metrics on UITextViews.
-		extraHorzontalPadding = 4;
+		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+			// Needs a little extra to line up with new metrics on UITextViews.
+			extraHorzontalPadding = 4;
+		}
 		CGRect emailFrame = self.scrollView.bounds;
 		emailFrame.origin.x = horizontalPadding + extraHorzontalPadding;
 		emailFrame.origin.y = offsetY;
@@ -531,7 +591,12 @@ enum {
 		emailFrame.size.height = sizedEmail.height;
 		emailFrame.size.width = emailFrame.size.width - (horizontalPadding + extraHorzontalPadding)*2;
 		self.emailField = [[[UITextField alloc] initWithFrame:emailFrame] autorelease];
-		self.emailField.placeholder = ATLocalizedString(@"Your Email", @"Email Address Field Placeholder");
+		if ([[ATConnect sharedConnection] emailRequired]) {
+			self.emailField.placeholder = ATLocalizedString(@"Your Email (required)", @"Email Address Field Placeholder (email is required)");
+		}
+		else {
+			self.emailField.placeholder = ATLocalizedString(@"Your Email", @"Email Address Field Placeholder");
+		}
 		self.emailField.font = emailFont;
 		self.emailField.adjustsFontSizeToFitWidth = YES;
 		self.emailField.keyboardType = UIKeyboardTypeEmailAddress;
@@ -573,8 +638,12 @@ enum {
 	feedbackFrame.size.width = feedbackFrame.size.width - horizontalPadding*2;
 	self.feedbackView = [[[ATDefaultTextView alloc] initWithFrame:feedbackFrame] autorelease];
 	
-	UIEdgeInsets insets = UIEdgeInsetsMake(0, -8, 0, 0);
-	self.feedbackView.contentInset = insets;
+	if (![ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+		UIEdgeInsets insets = UIEdgeInsetsMake(0, -8, 0, 0);
+		self.feedbackView.contentInset = insets;
+	} else {
+		self.feedbackView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+	}
 	self.feedbackView.clipsToBounds = YES;
 	self.feedbackView.font = [UIFont systemFontOfSize:17];
 	self.feedbackView.backgroundColor = [UIColor clearColor];

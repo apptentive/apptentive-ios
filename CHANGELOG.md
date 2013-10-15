@@ -1,3 +1,73 @@
+2013-10-09 wooster, pkamb v1.2.1
+-------------------------
+Fixes:
+
+* IOS-233 "Write a Review" is grayed out when using StoreKit
+* #59 'Write a Review' button disabled when app store is shown
+* IOS-187 Entering text in one free form field overrides another free form field's data
+* IOS-234 Add `distribution_version` to API
+
+This release fixes an issue where iOS 7 disabled the "Write a Review" button on an app page when viewed within StoreKit. For this release, we will be switching back to the URL method of opening the page in the App Store app.
+
+We strongly recommend updating to this version.
+
+2013-10-08 wooster v1.2.0
+-------------------------
+Fixes:
+
+* IOS-199 Contact info Name field should have word capitalization set
+* IOS-200 Suggestion for "singleline" survey question type
+* IOS-226 Translations of new strings
+* More aggressive about updating person information.
+
+This release also adds a mechanism to require email addresses via server setting.
+
+2013-09-24 wooster v1.1.1
+-------------------------
+This is a compatibility release for iOS 7.
+
+Fixes:
+
+* IOS-160 Red glow under FeedbackDemo keyboard
+* IOS-162 White "Message Center" title bar text can't be seen on iOS 7 white title bars.
+* IOS-166 Status bar overlap issues in Message Center "Send a Photo" view
+* IOS-167 Tapping Survey text entry cell results in haphazard scrolling
+* IOS-171 Text entry for messages should be redone for iOS 7
+* IOS-181 App hangs in iOS 7 after "No email Address?" input field alert.
+* IOS-183 Unable to attach screenshot on iPad
+* IOS-184 After selecting image and pressing done no action sheet is presented
+* IOS-190 Survey Description Obscured when Adding Free form Text
+* IOS-193 Contact info panel in MC is scrolled down too far
+* IOS-194 Message Center doesn't handle rapid keyboard appearing/disappearing
+* IOS-195 Handle case where message center is disabled and no valid email address
+
+Other changes:
+
+* Deprecated `useMessageCenter` property in favor of server-based configuration.
+* Added debug messages to the rating flow for debugging ratings flow problems.
+* Renamed English.lproj to en.lproj to fix Application Loader warning on app submission.
+* Made `showTagline` setting work for Apptentive logo on person details screen.
+
+2013-08-29 wooster v1.1.0
+-------------------------
+This release focuses on support for Enterprise Surveys.
+
+These are mostly changes on the web side of things, but there are also some client changes:
+
+* Moved survey responses into Core Data.
+* IOS-119 Implement short v. long survey text response type
+* IOS-116 Implement new survey submission endpoint
+
+Other changes for IOS 7 forward compatibility:
+
+* IOS-181 App hangs in iOS 7 after "No email Address?" input field alert.
+
+Other fixes:
+
+* apptentive-ios#45 Renames `ATMessage` to `ATAbstractMessage` because of naming conflict with `AirTraffic.framework`
+* We accidentally used the Traditional Chinese localization for both Traditional and Simplified Chinese. This has been fixed.
+* Added `useMessageCenter` property on `ATConnect` for those who don't want to use Message Center.
+
 2013-08-18 wooster v1.0.1
 -------------------------
 Deprecating the `-addCustomData:withKey:` and `-removeCustomDataWithKey:` methods in `ATConnect`.

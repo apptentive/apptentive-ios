@@ -11,7 +11,7 @@
 #import "ATData.h"
 #import "ATJSONSerialization.h"
 #import "ATLog.h"
-#import "ATMessage.h"
+#import "ATAbstractMessage.h"
 #import "ATConversationUpdater.h"
 #import "ATWebClient.h"
 #import "ATWebClient+MessageCenter.h"
@@ -63,7 +63,7 @@
 
 - (void)start {
 	if (!request) {
-		ATMessage *message = [[ATMessage findMessageWithPendingID:self.pendingMessageID] retain];
+		ATAbstractMessage *message = [[ATAbstractMessage findMessageWithPendingID:self.pendingMessageID] retain];
 		if (message == nil) {
 			ATLogError(@"Warning: Message was nil in message task.");
 			self.finished = YES;
@@ -128,7 +128,7 @@
 		self.lastErrorTitle = sender.errorTitle;
 		self.lastErrorMessage = sender.errorMessage;
 		
-		ATMessage *message = [[ATMessage findMessageWithPendingID:self.pendingMessageID] retain];
+		ATAbstractMessage *message = [[ATAbstractMessage findMessageWithPendingID:self.pendingMessageID] retain];
 		if (message == nil) {
 			ATLogError(@"Warning: Message went away during task.");
 			self.finished = YES;
@@ -180,7 +180,7 @@
 	ATLogInfo(@"getting json result: %@", jsonMessage);
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
 	
-	ATMessage *message = [[ATMessage findMessageWithPendingID:self.pendingMessageID] retain];
+	ATAbstractMessage *message = [[ATAbstractMessage findMessageWithPendingID:self.pendingMessageID] retain];
 	if (message == nil) {
 		ATLogError(@"Warning: Message went away during task.");
 		return YES;

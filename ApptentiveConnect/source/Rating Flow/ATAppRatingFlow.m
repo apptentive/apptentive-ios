@@ -59,7 +59,11 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 - (void)postNotification:(NSString *)name;
 - (void)postNotification:(NSString *)name forButton:(int)button;
 - (NSURL *)URLForRatingApp;
-- (void)openURLForRatingApp;
+- (void)openAppStoreToRateApp;
+- (BOOL)shouldOpenAppStoreViaStoreKit;
+- (void)openAppStoreViaURL;
+- (void)openAppStoreViaStoreKit;
+- (void)openMacAppStore;
 - (BOOL)requirementsToShowDialogMet;
 - (BOOL)shouldShowDialog;
 /*! Returns YES if a dialog was shown. */
@@ -201,7 +205,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 		[ratingDialog release], ratingDialog = nil;
 		if (buttonIndex == 1) { // rate
 			[self postNotification:ATAppRatingDidClickRatingButtonNotification forButton:ATAppRatingButtonTypeRateApp];
-			[self openURLForRatingApp];
+			[self openAppStoreToRateApp];
 		} else if (buttonIndex == 2) { // remind later
 			[self postNotification:ATAppRatingDidClickRatingButtonNotification forButton:ATAppRatingButtonTypeRemind];
 			[self setRatingDialogWasShown];
@@ -261,8 +265,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	NSString *URLStringFromPreferences = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppRatingReviewURLPreferenceKey];
 	if (URLStringFromPreferences == nil) {
 #if TARGET_OS_IPHONE
-		NSString *osVersion = [[UIDevice currentDevice] systemVersion];
-		if ([ATUtilities versionString:osVersion isGreaterThanVersionString:@"6.0"] || [ATUtilities versionString:osVersion isEqualToVersionString:@"6.0"]) {
+		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"6.0"]) {
 			URLString = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/%@/app/id%@", [[NSLocale currentLocale] objectForKey: NSLocaleCountryCode], self.appID];
 		} else {
 			URLString = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", self.appID];
@@ -284,71 +287,111 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 }
 #endif
 
-- (void)openURLForRatingApp {
-	NSURL *url = [self URLForRatingApp];
+- (void)openAppStoreToRateApp {
 	[self setRatedApp:YES];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATAppRatingFlowUserAgreedToRateAppNotification object:nil];
+		
 #if TARGET_OS_IPHONE
-	if ([SKStoreProductViewController class] != NULL && self.appID) {
-#if TARGET_IPHONE_SIMULATOR
+#	if TARGET_IPHONE_SIMULATOR
+	[self showUnableToOpenAppStoreDialog];
+#	else
+	if ([self shouldOpenAppStoreViaStoreKit]) {
+		[self openAppStoreViaStoreKit];
+	}
+	else {
+		[self openAppStoreViaURL];
+	}
+#	endif
+	
+#elif TARGET_OS_MAC
+	[self openMacAppStore];
+#endif
+}
+
+- (BOOL)shouldOpenAppStoreViaStoreKit {
+	return ([SKStoreProductViewController class] != NULL && self.appID && ![ATUtilities osVersionGreaterThanOrEqualTo:@"7"]);
+}
+
+- (void)openAppStoreViaURL {
+	if (self.appID) {
+		NSURL *url = [self URLForRatingApp];
+		if (![[UIApplication sharedApplication] canOpenURL:url]) {
+			ATLogError(@"No application can open the URL: %@", url);
+			[self showUnableToOpenAppStoreDialog];
+		}
+		else {
+			[[UIApplication sharedApplication] openURL:url];
+		}
+	}
+	else {
 		[self showUnableToOpenAppStoreDialog];
-#else
+	}
+}
+
+- (void)openAppStoreViaStoreKit {
+	if ([SKStoreProductViewController class] != NULL && self.appID) {
 		SKStoreProductViewController *vc = [[[SKStoreProductViewController alloc] init] autorelease];
 		vc.delegate = self;
 		[vc loadProductWithParameters:@{SKStoreProductParameterITunesItemIdentifier:self.appID} completionBlock:^(BOOL result, NSError *error) {
 			if (error) {
-				[self showUnableToOpenAppStoreDialog];
 				ATLogError(@"Error loading product view: %@", error);
+				[self showUnableToOpenAppStoreDialog];
 			} else {
 				UIViewController *presentingVC = [self rootViewControllerForCurrentWindow];
 				[presentingVC presentModalViewController:vc animated:YES];
 			}
 		}];
-#endif
-	} else {
-		if (![[UIApplication sharedApplication] canOpenURL:url]) {
-			ATLogError(@"No application can open the URL: %@", url);
-			[self showUnableToOpenAppStoreDialog];
-		}
-		[[UIApplication sharedApplication] openURL:url];
 	}
-#elif TARGET_OS_MAC
-	[[NSWorkspace sharedWorkspace] openURL:url];
-#endif
-    [[NSNotificationCenter defaultCenter] postNotificationName:ATAppRatingFlowUserAgreedToRateAppNotification object:nil];
+	else {
+		[self showUnableToOpenAppStoreDialog];
+	}
 }
 
+- (void)openMacAppStore {
+#if TARGET_OS_IPHONE
+#elif TARGET_OS_MAC
+	NSURL *url = [self URLForRatingApp];
+	[[NSWorkspace sharedWorkspace] openURL:url];
+#endif
+}
 
 - (BOOL)requirementsToShowDialogMet {
 	BOOL result = NO;
+	NSString *reasonForNotShowingDialog = nil;
 	
 	do { // once
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		
 		// Ratings are disabled, don't show dialog.
 		if ([[defaults objectForKey:ATAppRatingEnabledPreferenceKey] boolValue] == NO) {
+			reasonForNotShowingDialog = @"ratings are disabled.";
 			break;
 		}
 		
 		// No iTunes App ID set, don't show dialog.
 		if (self.appID == nil) {
+			reasonForNotShowingDialog = @"iTunes App ID is not set.";
 			break;
 		}
 		
 		// Check to see if the user has rated the app.
 		NSNumber *rated = [defaults objectForKey:ATAppRatingFlowRatedAppKey];
 		if (rated != nil && [rated boolValue]) {
+			reasonForNotShowingDialog = @"the user already rated this app.";
 			break;
 		}
 		
 		// Check to see if the user has rejected rating this version.
 		NSNumber *rejected = [defaults objectForKey:ATAppRatingFlowDeclinedToRateThisVersionKey];
 		if (rejected != nil && [rejected boolValue]) {
+			reasonForNotShowingDialog = @"the user rejected rating this version of the app.";
 			break;
 		}
 		
 		// Check to see if the user dislikes this version of the app.
 		NSNumber *dislikes = [defaults objectForKey:ATAppRatingFlowUserDislikesThisVersionKey];
 		if (dislikes != nil && [dislikes boolValue]) {
+			reasonForNotShowingDialog = @"the user dislikes this version of the app.";
 			break;
 		}
 		
@@ -357,6 +400,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 		NSString *lastBundleVersion = [defaults objectForKey:ATAppRatingFlowLastUsedVersionKey];
 		if (lastBundleVersion == nil) {
 			[self updateVersionInfo];
+			reasonForNotShowingDialog = @"the latest version number was not yet recorded.";
 			break;
 		}
 		
@@ -366,6 +410,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 		if (lastPrompt != nil && self.daysBeforeRePrompting != 0) {
 			double nextPromptDouble = [lastPrompt timeIntervalSince1970] + 60*60*24*self.daysBeforeRePrompting;
 			if ([[NSDate date] timeIntervalSince1970] < nextPromptDouble) {
+				reasonForNotShowingDialog = @"the user was prompted too recently.";
 				break;
 			}
 		}
@@ -373,9 +418,11 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 		NSInteger promptCount = [[defaults objectForKey:ATAppRatingFlowPromptCountThisVersionKey] integerValue];
 		if (self.daysBeforeRePrompting == 0 && promptCount > 0) {
 			// Don't prompt more than once.
+			reasonForNotShowingDialog = @"we shouldn't prompt more than once.";
 			break;
 		} else if (promptCount > 1) {
 			// Don't prompt more than twice per update.
+			reasonForNotShowingDialog = @"we shouldn't prompt more than twice per update.";
 			break;
 		}
 		
@@ -390,9 +437,21 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 		NSPredicate *predicate = [ATAppRatingFlow_Private predicateForPromptLogic:[defaults objectForKey:ATAppRatingPromptLogicPreferenceKey] withPredicateInfo:info];
 		if (predicate) {
 			result = [ATAppRatingFlow_Private evaluatePredicate:predicate withPredicateInfo:info];
+			if (!result) {
+				reasonForNotShowingDialog = @"the prompt logic was not satisfied.";
+				ATLogInfo(@"Predicate failed evaluation");
+				ATLogInfo(@"Predicate info: %@", [info debugDescription]);
+				ATLogInfo(@"Predicate: %@", predicate);
+			}
+		} else {
+			ATLogError(@"Predicate not correct");
 		}
 		[info release], info = nil;
 	} while (NO);
+	
+	if (reasonForNotShowingDialog) {
+		ATLogInfo(@"Did not show Apptentive ratings dialog because %@", reasonForNotShowingDialog);
+	}
 	
 	return result;
 }
@@ -400,6 +459,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 - (BOOL)shouldShowDialog {
 	// No network connection, don't show dialog.
 	if ([[ATReachability sharedReachability] currentNetworkStatus] == ATNetworkNotReachable) {
+		ATLogInfo(@"shouldShowDialog failed because network not reachable");
 		return NO;
 	}
 	return [self requirementsToShowDialogMet];
@@ -736,7 +796,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	} else if (result == NSAlertSecondButtonReturn) { // remind me
 		[self setRatingDialogWasShown];
 	} else if (result == NSAlertThirdButtonReturn) { // rate app
-		[self openURLForRatingApp];
+		[self openAppStoreToRateApp];
 	}
 #endif
 }

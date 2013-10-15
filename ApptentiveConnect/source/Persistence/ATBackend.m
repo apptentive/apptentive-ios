@@ -35,6 +35,7 @@
 #import "ATTextMessage.h"
 #import "ATLog.h"
 #import "ATPersonUpdater.h"
+#import "ATConnect_Private.h"
 
 typedef NS_ENUM(NSInteger, ATBackendState){
 	ATBackendStateStarting,
@@ -47,6 +48,7 @@ NSString *const ATBackendBecameReadyNotification = @"ATBackendBecameReadyNotific
 
 NSString *const ATUUIDPreferenceKey = @"ATUUIDPreferenceKey";
 NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
+NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 @interface ATBackend ()
 - (void)updateConfigurationIfNeeded;
@@ -406,8 +408,8 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 
 #pragma mark Message Center
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController {
-	NSUInteger messageCount = [ATData countEntityNamed:@"ATMessage" withPredicate:nil];
-	if (messageCount == 0 || ![ATConnect sharedConnection].useMessageCenter) {
+	NSUInteger messageCount = [ATData countEntityNamed:@"ATAbstractMessage" withPredicate:nil];
+	if (messageCount == 0 || ![[ATConnect sharedConnection] messageCenterEnabled]) {
 		NSString *title = ATLocalizedString(@"Give Feedback", @"First feedback screen title.");
 		NSString *body = [NSString stringWithFormat:ATLocalizedString(@"Please let us know how to make %@ better for you!", @"Feedback screen body. Parameter is the app name."), [self appName]];
 		NSString *placeholder = ATLocalizedString(@"How can we help? (required)", @"First feedback placeholder text.");
@@ -513,6 +515,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 		[self sendTextMessageWithBody:message completion:^(NSString *pendingMessageID) {
 			[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroDidSendNotification object:nil userInfo:@{ATMessageCenterMessageNonceKey: pendingMessageID}];
 		}];
+		[self updatePersonIfNeeded];
 	}
 }
 
@@ -523,14 +526,14 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 			if (!messagePanelSentMessageAlert) {
 				
 				NSString *alertTitle, *alertMessage, *cancelButtonTitle, *otherButtonTitle;
-				if ([[ATConnect sharedConnection] useMessageCenter]) {
+				if ([[ATConnect sharedConnection] messageCenterEnabled]) {
 					alertTitle = ATLocalizedString(@"Thanks!", nil);
 					alertMessage = ATLocalizedString(@"Your response has been saved in the Message Center, where you'll be able to view replies and send us other messages.", @"Message panel sent message confirmation dialog text");
 					cancelButtonTitle = ATLocalizedString(@"Close", @"Close alert view title");
 					otherButtonTitle = ATLocalizedString(@"View Messages", @"View messages button title");
 				} else {
-					alertTitle = ATLocalizedString(@"Thanks!", nil);
-					alertMessage = ATLocalizedString(@"We will contact you via email shortly.", @"Message panel sent message but will not show Message Center dialog.");
+					alertTitle = ATLocalizedString(@"Thank you for your feedback!", @"Message panel sent message but will not show Message Center dialog.");
+					alertMessage = nil;
 					cancelButtonTitle = ATLocalizedString(@"Close", @"Close alert view title");
 					otherButtonTitle = nil;
 				}
@@ -738,6 +741,15 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	return cachedDistributionName;
 }
 
+- (NSString *)distributionVersion {
+	static NSString *cachedDistributionVersion = nil;
+	static dispatch_once_t onceToken = 0;
+	dispatch_once(&onceToken, ^{
+		cachedDistributionVersion = [(NSString *)[[ATConnect resourceBundle] objectForInfoDictionaryKey:ATInfoDistributionVersionKey] retain];
+	});
+	return cachedDistributionVersion;
+}
+
 - (NSUInteger)unreadMessageCount {
 	return previousUnreadCount;
 }
@@ -844,6 +856,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 	
 	[ATReachability sharedReachability];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusChanged:) name:ATReachabilityStatusChanged object:nil];
+	[self networkStatusChanged:nil];
 	[self performSelector:@selector(startMonitoringUnreadMessages) withObject:nil afterDelay:0.2];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATBackendBecameReadyNotification object:nil];
@@ -948,7 +961,7 @@ NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 			return;
 		}
 		NSFetchRequest *request = [[NSFetchRequest alloc] init];
-		[request setEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:[self managedObjectContext]]];
+		[request setEntity:[NSEntityDescription entityForName:@"ATAbstractMessage" inManagedObjectContext:[self managedObjectContext]]];
 		[request setFetchBatchSize:20];
 		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
 		[request setSortDescriptors:@[sortDescriptor]];

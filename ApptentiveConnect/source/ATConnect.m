@@ -12,6 +12,7 @@
 #import "ATContactStorage.h"
 #import "ATFeedback.h"
 #import "ATUtilities.h"
+#import "ATAppConfigurationUpdater.h"
 #if TARGET_OS_IPHONE
 #import "ATMessageCenterViewController.h"
 #elif TARGET_OS_MAC
@@ -41,6 +42,10 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 		customPersonData = [[NSMutableDictionary alloc] init];
 		customDeviceData = [[NSMutableDictionary alloc] init];
 		useMessageCenter = YES;
+		
+		NSDictionary *defaults = @{ATAppConfigurationMessageCenterEnabledKey : [NSNumber numberWithBool:YES],
+								   ATAppConfigurationMessageCenterEmailRequiredKey : [NSNumber numberWithBool:NO]};
+		[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 	}
 	return self;
 }
@@ -142,7 +147,7 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 						[object isKindOfClass:[NSNumber class]] ||
 						[object isKindOfClass:[NSNull class]]);
 	
-	NSAssert(allowedData, @"Custom data must be of type NSString, NSNumber, or NSNull. Attempted to add custom data of type %@", NSStringFromClass([object class]));
+	NSAssert(allowedData, @"Apptentive custom data must be of type NSString, NSNumber, NSDate, or NSNull. Attempted to add custom data of type %@", NSStringFromClass([object class]));
 	
 	if (allowedData) {
 		[customData setObject:object forKey:key];
@@ -163,6 +168,14 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 
 - (void)removeCustomDataWithKey:(NSString *)key {
 	[self removeCustomDeviceDataWithKey:key];
+}
+
+- (BOOL)messageCenterEnabled {
+	return [[[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterEnabledKey] boolValue];
+}
+
+- (BOOL)emailRequired {
+	return [[[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterEmailRequiredKey] boolValue];
 }
 
 #if TARGET_OS_IPHONE
@@ -220,13 +233,22 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 		return [bundle autorelease];
 	} else {
 		// Try trigger.io path.
-		bundlePath = [path stringByAppendingPathComponent:@"plugin.bundle"];
+		bundlePath = [path stringByAppendingPathComponent:@"apptentive.bundle"];
 		bundlePath = [bundlePath stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
 		if ([fm fileExistsAtPath:bundlePath]) {
 			NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
 			return [bundle autorelease];
 		} else {
-			return nil;
+			// Try Titanium path.
+			bundlePath = [path stringByAppendingPathComponent:@"modules"];
+			bundlePath = [bundlePath stringByAppendingPathComponent:@"com.apptentive.titanium"];
+			bundlePath = [bundlePath stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
+			if ([fm fileExistsAtPath:bundlePath]) {
+				NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
+				return [bundle autorelease];
+			} else {
+				return nil;
+			}
 		}
 	}
 #elif TARGET_OS_MAC

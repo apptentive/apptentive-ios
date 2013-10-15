@@ -59,10 +59,10 @@
     NSDictionary *predicateEvaluationDictionary = @{@"days_since_install": self.daysSinceInstall,
                                                     @"days_since_upgrade" : self.daysSinceUpgrade,
                                                     @"application_version" : self.applicationVersion,
-                                                    [NSString stringWithFormat:@"code_point_%@_invokes_total", self.codePoint] : self.codePointInvokesTotal,
-                                                    [NSString stringWithFormat:@"code_point_%@_invokes_version", self.codePoint] : self.codePointInvokesVersion,
-                                                    [NSString stringWithFormat:@"interactions_%@_invokes_total", self.interaction.identifier] : self.interactionInvokesTotal,
-                                                    [NSString stringWithFormat:@"interactions_%@_invokes_version", self.interaction.identifier] : self.interactionInvokesVersion};
+                                                    [NSString stringWithFormat:@"code_point/%@/invokes/total", self.codePoint] : self.codePointInvokesTotal,
+                                                    [NSString stringWithFormat:@"code_point/%@/invokes/version", self.codePoint] : self.codePointInvokesVersion,
+                                                    [NSString stringWithFormat:@"interactions/%@/invokes/total", self.interaction.identifier] : self.interactionInvokesTotal,
+                                                    [NSString stringWithFormat:@"interactions/%@/invokes/version", self.interaction.identifier] : self.interactionInvokesVersion};
 	return predicateEvaluationDictionary;
 }
 

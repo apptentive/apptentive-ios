@@ -99,7 +99,6 @@
 	
 	for (NSString *key in interactionCriteria) {
 		NSObject *object = [interactionCriteria objectForKey:key];
-		NSString *escapedKey = [key stringByReplacingOccurrencesOfString:@"." withString:@"_"];
 		
 		if ([object isKindOfClass:[NSArray class]]) {
 			if ([key isEqualToString:@"$and"]) {
@@ -152,18 +151,18 @@
 					*hasError = YES;
 				}
 				
-				NSString *criterion = [NSString stringWithFormat:@"(%@ %@ %@)", escapedKey, equalitySymbol, valueString];
+				NSString *criterion = [NSString stringWithFormat:@"(%@ %@ %@)", key, equalitySymbol, valueString];
 				[criteria addObject:criterion];
 			}
 			
 			[parts addObjectsFromArray:criteria];
 		}
 		else if ([object isKindOfClass:[NSString class]]) {
-			NSString *criterion = [NSString stringWithFormat:@"(%@ == '%@')", escapedKey, (NSString *)object];
+			NSString *criterion = [NSString stringWithFormat:@"(%@ == '%@')", key, (NSString *)object];
 			[parts addObject:criterion];
 		}
 		else if ([object isKindOfClass:[NSNumber class]]) {
-			NSString *criterion = [NSString stringWithFormat:@"(%@ == %@)", escapedKey, (NSNumber *)object];
+			NSString *criterion = [NSString stringWithFormat:@"(%@ == %@)", key, (NSNumber *)object];
 			[parts addObject:criterion];
 		}
 		else {

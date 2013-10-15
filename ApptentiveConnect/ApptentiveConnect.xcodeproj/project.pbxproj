@@ -290,6 +290,9 @@
 		584647C617C426E800BFD6E6 /* ATEngagementManifestParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 584647C417C426E800BFD6E6 /* ATEngagementManifestParser.h */; };
 		584647C717C426E800BFD6E6 /* ATEngagementManifestParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 584647C517C426E800BFD6E6 /* ATEngagementManifestParser.m */; };
 		584647C817C426E800BFD6E6 /* ATEngagementManifestParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 584647C517C426E800BFD6E6 /* ATEngagementManifestParser.m */; };
+		589274A6180CC33A0029E5CE /* ATInteractionUsageData.h in Headers */ = {isa = PBXBuildFile; fileRef = 589274A4180CC33A0029E5CE /* ATInteractionUsageData.h */; };
+		589274A7180CC33A0029E5CE /* ATInteractionUsageData.m in Sources */ = {isa = PBXBuildFile; fileRef = 589274A5180CC33A0029E5CE /* ATInteractionUsageData.m */; };
+		589274A8180CC33A0029E5CE /* ATInteractionUsageData.m in Sources */ = {isa = PBXBuildFile; fileRef = 589274A5180CC33A0029E5CE /* ATInteractionUsageData.m */; };
 		5898DF8C17C2E0CE0048F11F /* ATEngagementGetManifestTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 5898DF8A17C2E0CE0048F11F /* ATEngagementGetManifestTask.h */; };
 		5898DF8D17C2E0CE0048F11F /* ATEngagementGetManifestTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 5898DF8B17C2E0CE0048F11F /* ATEngagementGetManifestTask.m */; };
 		5898DF8E17C2E0CE0048F11F /* ATEngagementGetManifestTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 5898DF8B17C2E0CE0048F11F /* ATEngagementGetManifestTask.m */; };
@@ -562,6 +565,8 @@
 		580B24BA17D90AF300AE2CD0 /* ATEngagementTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATEngagementTests.m; sourceTree = "<group>"; };
 		584647C417C426E800BFD6E6 /* ATEngagementManifestParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATEngagementManifestParser.h; path = Engagement/Model/ATEngagementManifestParser.h; sourceTree = "<group>"; };
 		584647C517C426E800BFD6E6 /* ATEngagementManifestParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATEngagementManifestParser.m; path = Engagement/Model/ATEngagementManifestParser.m; sourceTree = "<group>"; };
+		589274A4180CC33A0029E5CE /* ATInteractionUsageData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATInteractionUsageData.h; path = Engagement/Model/ATInteractionUsageData.h; sourceTree = "<group>"; };
+		589274A5180CC33A0029E5CE /* ATInteractionUsageData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATInteractionUsageData.m; path = Engagement/Model/ATInteractionUsageData.m; sourceTree = "<group>"; };
 		5898DF8A17C2E0CE0048F11F /* ATEngagementGetManifestTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATEngagementGetManifestTask.h; path = source/Engagement/Tasks/ATEngagementGetManifestTask.h; sourceTree = SOURCE_ROOT; };
 		5898DF8B17C2E0CE0048F11F /* ATEngagementGetManifestTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATEngagementGetManifestTask.m; path = source/Engagement/Tasks/ATEngagementGetManifestTask.m; sourceTree = SOURCE_ROOT; };
 		58C5921F17C55ADD000FA428 /* ATEngagementBackend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATEngagementBackend.h; path = Engagement/Persistence/ATEngagementBackend.h; sourceTree = "<group>"; };
@@ -1130,6 +1135,8 @@
 				58EEBE2217C7E8150039A0F5 /* ATInteraction.m */,
 				584647C417C426E800BFD6E6 /* ATEngagementManifestParser.h */,
 				584647C517C426E800BFD6E6 /* ATEngagementManifestParser.m */,
+				589274A4180CC33A0029E5CE /* ATInteractionUsageData.h */,
+				589274A5180CC33A0029E5CE /* ATInteractionUsageData.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -1277,6 +1284,7 @@
 				4935CF56177286C300CFE3DC /* ATPersonDetailsViewController.h in Headers */,
 				496DD4181773BF2700D041B0 /* ATNavigationController.h in Headers */,
 				497A9A0417762512002B6F96 /* ATJSONSerialization.h in Headers */,
+				589274A6180CC33A0029E5CE /* ATInteractionUsageData.h in Headers */,
 				5898DF8C17C2E0CE0048F11F /* ATEngagementGetManifestTask.h in Headers */,
 				584647C617C426E800BFD6E6 /* ATEngagementManifestParser.h in Headers */,
 				58C5922117C55ADD000FA428 /* ATEngagementBackend.h in Headers */,
@@ -1536,6 +1544,7 @@
 				494D1B701708E1F900C3060C /* ATMessageInputView.m in Sources */,
 				49CB6DEB1718FE4400BC9223 /* ATMessageCenterMetrics.m in Sources */,
 				4960A534171F70530082669B /* ATNetworkImageView.m in Sources */,
+				589274A7180CC33A0029E5CE /* ATInteractionUsageData.m in Sources */,
 				496F5782174060CE003BF516 /* ATDataManager.m in Sources */,
 				4995EDD3175983C800AF7268 /* TTTAttributedLabel.m in Sources */,
 				49AAC84C175FE70D00F08879 /* ATMessagePanelViewController.m in Sources */,
@@ -1592,6 +1601,7 @@
 				493AEB3E15990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.m in Sources */,
 				493AEB4115990A4D00DFD4C7 /* ATSurveyViewController.m in Sources */,
 				493AEB4515990A6B00DFD4C7 /* ApptentiveSurveysTests.m in Sources */,
+				589274A8180CC33A0029E5CE /* ATInteractionUsageData.m in Sources */,
 				498EFB6D15BA414A00A1043B /* ATSurveyGetSurveysTask.m in Sources */,
 				498EFB7215BA48B300A1043B /* ATAppConfigurationUpdateTask.m in Sources */,
 				499B56CC15D305880063C23C /* PJSONKit.m in Sources */,

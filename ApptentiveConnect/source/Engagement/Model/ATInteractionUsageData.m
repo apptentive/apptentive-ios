@@ -99,6 +99,9 @@
 - (NSNumber *)codePointInvokesTotal {
 	if (!_codePointInvokesTotal) {
 		_codePointInvokesTotal = [[[[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesTotalKey] objectForKey:self.codePoint] retain];
+		if (!_codePointInvokesTotal) {
+			_codePointInvokesTotal = [@0 retain];
+		}
 	}
 	
 	return _codePointInvokesTotal;
@@ -107,6 +110,9 @@
 - (NSNumber *)codePointInvokesVersion {
 	if (!_codePointInvokesVersion) {
 		_codePointInvokesVersion = [[[[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesVersionKey] objectForKey:self.codePoint] retain];
+		if (!_codePointInvokesVersion) {
+			_codePointInvokesVersion = [@0 retain];
+		}
 	}
 	return _codePointInvokesVersion;
 }
@@ -114,6 +120,9 @@
 - (NSNumber *)interactionInvokesTotal {
 	if (!_interactionInvokesTotal) {
 		_interactionInvokesTotal = [[[[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesTotalKey] objectForKey:self.interaction.identifier] retain];
+		if (!_interactionInvokesTotal) {
+			_interactionInvokesTotal = [@0 retain];
+		}
 	}
 	return _interactionInvokesTotal;
 }
@@ -121,6 +130,9 @@
 - (NSNumber *)interactionInvokesVersion {
 	if (!_interactionInvokesVersion) {
 		_interactionInvokesVersion = [[[[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesVersionKey] objectForKey:self.interaction.identifier] retain];
+		if (!_interactionInvokesVersion) {
+			_interactionInvokesVersion = [@0 retain];
+		}
 	}
 	return _interactionInvokesVersion;
 }

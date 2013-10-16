@@ -93,16 +93,16 @@
 
 + (NSPredicate *)predicateForInteractionCriteria:(NSDictionary *)interactionCriteria hasError:(BOOL *)hasError {
 	NSMutableArray *parts = [NSMutableArray array];
-	BOOL joinWithAnd = YES;
+	NSCompoundPredicateType predicateType = NSAndPredicateType;
 	
 	for (NSString *key in interactionCriteria) {
 		NSObject *object = [interactionCriteria objectForKey:key];
 		
 		if ([object isKindOfClass:[NSArray class]]) {
 			if ([key isEqualToString:@"$and"]) {
-				joinWithAnd = YES;
+				predicateType = NSAndPredicateType;
 			} else if ([key isEqualToString:@"$or"]) {
-				joinWithAnd = NO;
+				predicateType = NSOrPredicateType;
 			} else {
 				*hasError = YES;
 			}
@@ -153,13 +153,7 @@
 		}
 	}
 	
-	NSPredicate *result = nil;
-	if (joinWithAnd) {
-		result = [NSCompoundPredicate andPredicateWithSubpredicates:parts];
-	} else {
-		result = [NSCompoundPredicate orPredicateWithSubpredicates:parts];
-	}
-	
+	NSPredicate *result = [[[NSCompoundPredicate alloc] initWithType:predicateType subpredicates:parts] autorelease];
 	return result;
 }
 

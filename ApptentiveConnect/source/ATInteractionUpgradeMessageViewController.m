@@ -17,6 +17,7 @@
 @implementation ATInteractionUpgradeMessageViewController
 
 - (id)initWithInteraction:(ATInteraction *)interaction {
+	NSAssert([interaction.type isEqualToString:@"UpgradeMessage"], @"Attempted to load an UpgradeMessageViewController with an interaction of type: %@", interaction.type);
 	self = [super initWithNibName:@"ATInteractionUpgradeMessageViewController" bundle:[ATConnect resourceBundle]];
 	if (self != nil) {
 

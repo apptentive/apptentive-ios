@@ -167,6 +167,11 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 }
 
 #if TARGET_OS_IPHONE
+
+- (void)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController {
+	[[ATEngagementBackend sharedBackend] engage:codePoint fromViewController:viewController];
+}
+
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController {
 	[[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController];
 }
@@ -234,10 +239,6 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 	NSBundle *bundle = [NSBundle bundleForClass:[ATConnect class]];
 	return bundle;
 #endif
-}
-
-- (void)engage:(NSString *)codePoint {
-	[[ATEngagementBackend sharedBackend] engage:codePoint];
 }
 
 @end

@@ -53,6 +53,8 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 
 #if TARGET_OS_IPHONE
 
+- (void)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController;
+
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController;
 - (NSUInteger)unreadMessageCount;
 
@@ -81,5 +83,4 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 /*! Deprecated. Use removeCustomDeviceDataWithKey: instead. */
 - (void)removeCustomDataWithKey:(NSString *)key DEPRECATED_ATTRIBUTE;
 
-- (void)engage:(NSString *)codePoint;
 @end

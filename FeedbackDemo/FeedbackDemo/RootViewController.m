@@ -219,7 +219,7 @@ enum kRootTableSections {
 			[[ATConnect sharedConnection] presentMessageCenterFromViewController:self];
 		}
 	} else if (indexPath.section == kEngagementSection) {
-		[[ATConnect sharedConnection] engage:[tableView cellForRowAtIndexPath:indexPath].textLabel.text];
+		[[ATConnect sharedConnection] engage:[tableView cellForRowAtIndexPath:indexPath].textLabel.text fromViewController:self];
 	}
 	
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];

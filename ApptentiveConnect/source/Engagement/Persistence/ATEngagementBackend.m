@@ -158,12 +158,12 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	return nil;
 }
 
-- (void)engage:(NSString *)codePoint {
+- (void)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController {
 	[self codePointWasEngaged:codePoint];
 	
 	ATInteraction *interaction = [self interactionForCodePoint:codePoint];
 	if (interaction) {
-		[self presentInteraction:interaction];
+		[self presentInteraction:interaction fromViewController:viewController];
 		[self interactionWasEngaged:interaction];
 	}
 }
@@ -208,23 +208,21 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	[defaults synchronize];
 }
 
-- (void)presentInteraction:(ATInteraction *)interaction {
+- (void)presentInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
 	if ([interaction.type isEqualToString:@"UpgradeMessage"]) {
-		[self presentUpgradeMessageInteraction:interaction];
+		[self presentUpgradeMessageInteraction:interaction fromViewController:viewController];
 	} else if ([interaction.type isEqualToString:@"EnjoymentDialog"]) {
-		[self presentEnjoymentDialogInteraction:interaction];
+		[self presentEnjoymentDialogInteraction:interaction fromViewController:viewController];
 	}
 }
 
-- (void)presentUpgradeMessageInteraction:(ATInteraction *)interaction {
+- (void)presentUpgradeMessageInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
 	NSAssert([interaction.type isEqualToString:@"UpgradeMessage"], @"Attempted to present an UpgradeMessage interaction with an interaction of type: %@", interaction.type);
-	
 	ATLogError(@"Need to present an UpgradeMessage here!");
 }
 
-- (void)presentEnjoymentDialogInteraction:(ATInteraction *)interaction {
+- (void)presentEnjoymentDialogInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
 	NSAssert([interaction.type isEqualToString:@"EnjoymentDialog"], @"Attempted to present an EnjoymentDialog interaction with an interaction of type: %@", interaction.type);
-	
 	ATLogError(@"Need to present an EnjoymentDialog here!");
 }
 

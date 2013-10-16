@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 NSString *const ATEngagementInstallDateKey;
 NSString *const ATEngagementUpgradeDateKey;
@@ -33,12 +34,12 @@ NSString *const ATEngagementInteractionsInvokesVersionKey;
 - (NSArray *)interactionsForCodePoint:(NSString *)codePoint;
 - (ATInteraction *)interactionForCodePoint:(NSString *)codePoint;
 
-- (void)engage:(NSString *)codePoint;
+- (void)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController;
 - (void)codePointWasEngaged:(NSString *)codePoint;
 - (void)interactionWasEngaged:(ATInteraction *)interaction;
 
-- (void)presentInteraction:(ATInteraction *)interaction;
-- (void)presentUpgradeMessageInteraction:(ATInteraction *)interaction;
-- (void)presentEnjoymentDialogInteraction:(ATInteraction *)interaction;
+- (void)presentInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController;
+- (void)presentUpgradeMessageInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController;
+- (void)presentEnjoymentDialogInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController;
 
 @end

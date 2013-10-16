@@ -33,9 +33,11 @@ NSString *const ATEngagementInteractionsInvokesVersionKey;
 - (ATInteraction *)interactionForCodePoint:(NSString *)codePoint;
 
 - (void)engage:(NSString *)codePoint;
-- (void)presentInteraction:(ATInteraction *)interaction;
-
 - (void)codePointWasEngaged:(NSString *)codePoint;
 - (void)interactionWasEngaged:(ATInteraction *)interaction;
+
+- (void)presentInteraction:(ATInteraction *)interaction;
+- (void)presentUpgradeMessageInteraction:(ATInteraction *)interaction;
+- (void)presentEnjoymentDialogInteraction:(ATInteraction *)interaction;
 
 @end

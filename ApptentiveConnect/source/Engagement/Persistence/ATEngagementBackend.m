@@ -128,6 +128,7 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	NSArray *interactions = [self interactionsForCodePoint:codePoint];
 	for (ATInteraction *interaction in interactions) {
 		if ([interaction criteriaAreMetForCodePoint:codePoint]) {
+			ATLogInfo(@"Found valid interaction for code point: %@", codePoint);
 			return interaction;
 		}
 	}
@@ -161,7 +162,6 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	ATInteraction *interaction = [self interactionForCodePoint:codePoint];
 	if (interaction) {
 		[self presentInteraction:interaction];
-		
 		[self interactionWasEngaged:interaction];
 	}
 	else {
@@ -169,26 +169,9 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	}
 }
 
-- (void)presentInteraction:(ATInteraction *)interaction {
-	ATLogInfo(@"Valid interaction found: %@", interaction);
-    
-#	warning This should show a UIWebView.
-	if ([interaction.type isEqualToString:@"HtmlMessage"]) {
-		NSString *title = [interaction.configuration objectForKey:@"title"];
-		NSString *message = [interaction.configuration objectForKey:@"message"];
-		
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"No", @"no"), ATLocalizedString(@"Yes", @"yes"), nil];
-		[alert show];
-	} else if ([interaction.type isEqualToString:@"RatingDialog"]) {
-		NSString *title = [interaction.configuration objectForKey:@"question_text"];
-		
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:ATLocalizedString(title, @"Rating Dialog title from server") message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"No", @"no"), ATLocalizedString(@"Yes", @"yes"), nil];
-		[alert show];
-	}
-}
-
 - (void)codePointWasEngaged:(NSString *)codePoint {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	
 	NSMutableDictionary *codePointsInvokesTotal = [[defaults objectForKey:ATEngagementCodePointsInvokesTotalKey] mutableCopy];
 	NSNumber *codePointInvokesTotal = [codePointsInvokesTotal objectForKey:codePoint] ?: @0;
 	codePointInvokesTotal = @(codePointInvokesTotal.intValue + 1);
@@ -202,11 +185,13 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	[codePointsInvokesVersion setObject:codePointInvokesVersion forKey:codePoint];
 	[defaults setObject:codePointsInvokesVersion forKey:ATEngagementCodePointsInvokesVersionKey];
 	[codePointsInvokesVersion release];
+	
 	[defaults synchronize];
 }
 
 - (void)interactionWasEngaged:(ATInteraction *)interaction {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	
 	NSMutableDictionary *interactionsInvokesTotal = [[defaults objectForKey:ATEngagementInteractionsInvokesTotalKey] mutableCopy];
 	NSNumber *interactionInvokesTotal = [interactionsInvokesTotal objectForKey:interaction.identifier] ?: @0;
 	interactionInvokesTotal = @(interactionInvokesTotal.intValue + 1);
@@ -220,7 +205,28 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	[interactionsInvokesVersion setObject:interactionInvokesVersion forKey:interaction.identifier];
 	[defaults setObject:interactionsInvokesVersion forKey:ATEngagementInteractionsInvokesVersionKey];
 	[interactionsInvokesVersion release];
+	
 	[defaults synchronize];
+}
+
+- (void)presentInteraction:(ATInteraction *)interaction {
+	if ([interaction.type isEqualToString:@"UpgradeMessage"]) {
+		[self presentUpgradeMessageInteraction:interaction];
+	} else if ([interaction.type isEqualToString:@"EnjoymentDialog"]) {
+		[self presentEnjoymentDialogInteraction:interaction];
+	}
+}
+
+- (void)presentUpgradeMessageInteraction:(ATInteraction *)interaction {
+	NSAssert([interaction.type isEqualToString:@"UpgradeMessage"], @"Attempted to present an UpgradeMessage interaction with an interaction of type: %@", interaction.type);
+	
+	ATLogError(@"Need to present an UpgradeMessage here!");
+}
+
+- (void)presentEnjoymentDialogInteraction:(ATInteraction *)interaction {
+	NSAssert([interaction.type isEqualToString:@"EnjoymentDialog"], @"Attempted to present an EnjoymentDialog interaction with an interaction of type: %@", interaction.type);
+	
+	ATLogError(@"Need to present an EnjoymentDialog here!");
 }
 
 @end

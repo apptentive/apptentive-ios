@@ -7,6 +7,8 @@
 //
 
 #import "ATInteractionUpgradeMessageViewController.h"
+#import "ATConnect_Private.h"
+#import "ATInteraction.h"
 
 @interface ATInteractionUpgradeMessageViewController ()
 
@@ -14,13 +16,12 @@
 
 @implementation ATInteractionUpgradeMessageViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
+- (id)initWithInteraction:(ATInteraction *)interaction {
+	self = [super initWithNibName:@"ATInteractionUpgradeMessageViewController" bundle:[ATConnect resourceBundle]];
+	if (self != nil) {
+
+	}
+	return self;
 }
 
 - (void)viewDidLoad

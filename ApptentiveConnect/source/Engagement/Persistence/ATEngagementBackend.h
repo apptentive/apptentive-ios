@@ -27,6 +27,7 @@ NSString *const ATEngagementInteractionsInvokesVersionKey;
 - (void)checkForEngagementManifest;
 - (BOOL)shouldRetrieveNewEngagementManifest;
 - (void)didReceiveNewCodePointInteractions:(NSDictionary *)codePointInteractions maxAge:(NSTimeInterval)expiresMaxAge;
+- (void)updateVersionInfo;
 + (NSString *)cachedEngagementStoragePath;
 
 - (NSArray *)interactionsForCodePoint:(NSString *)codePoint;

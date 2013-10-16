@@ -113,28 +113,6 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	}
 }
 
-+ (NSString *)cachedEngagementStoragePath {
-	return [[[ATBackend sharedBackend] supportDirectoryPath] stringByAppendingPathComponent:@"cachedinteractions.objects"];
-}
-
-- (NSArray *)interactionsForCodePoint:(NSString *)codePoint {
-	NSArray *interactions = [codePointInteractions objectForKey:codePoint];
-	ATLogInfo(@"Found %lu cached interactions for code point: %@", interactions.count, codePoint);
-	
-	return interactions;
-}
-
-- (ATInteraction *)interactionForCodePoint:(NSString *)codePoint {
-	NSArray *interactions = [self interactionsForCodePoint:codePoint];
-	for (ATInteraction *interaction in interactions) {
-		if ([interaction criteriaAreMetForCodePoint:codePoint]) {
-			ATLogInfo(@"Found valid interaction for code point: %@", codePoint);
-			return interaction;
-		}
-	}
-	return nil;
-}
-
 - (void)updateVersionInfo {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	
@@ -156,6 +134,30 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	[defaults synchronize];
 }
 
++ (NSString *)cachedEngagementStoragePath {
+	return [[[ATBackend sharedBackend] supportDirectoryPath] stringByAppendingPathComponent:@"cachedinteractions.objects"];
+}
+
+- (NSArray *)interactionsForCodePoint:(NSString *)codePoint {
+	NSArray *interactions = [codePointInteractions objectForKey:codePoint];
+	ATLogInfo(@"Found %lu cached interactions for code point: %@", interactions.count, codePoint);
+	
+	return interactions;
+}
+
+- (ATInteraction *)interactionForCodePoint:(NSString *)codePoint {
+	NSArray *interactions = [self interactionsForCodePoint:codePoint];
+	for (ATInteraction *interaction in interactions) {
+		if ([interaction criteriaAreMetForCodePoint:codePoint]) {
+			ATLogInfo(@"Found valid %@ interaction for code point: %@", interaction.type, codePoint);
+			return interaction;
+		}
+	}
+	
+	ATLogInfo(@"No valid Apptentive interactions found for code point: %@", codePoint);
+	return nil;
+}
+
 - (void)engage:(NSString *)codePoint {
 	[self codePointWasEngaged:codePoint];
 	
@@ -163,9 +165,6 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	if (interaction) {
 		[self presentInteraction:interaction];
 		[self interactionWasEngaged:interaction];
-	}
-	else {
-		ATLogInfo(@"No valid Apptentive interactions found for code point: %@", codePoint);
 	}
 }
 

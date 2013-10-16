@@ -23,16 +23,19 @@ NSString *const ATEngagementInteractionsInvokesVersionKey;
 }
 
 + (ATEngagementBackend *)sharedBackend;
+
 - (void)checkForEngagementManifest;
+- (BOOL)shouldRetrieveNewEngagementManifest;
 - (void)didReceiveNewCodePointInteractions:(NSDictionary *)codePointInteractions maxAge:(NSTimeInterval)expiresMaxAge;
 + (NSString *)cachedEngagementStoragePath;
 
 - (NSArray *)interactionsForCodePoint:(NSString *)codePoint;
 - (ATInteraction *)interactionForCodePoint:(NSString *)codePoint;
 
+- (void)engage:(NSString *)codePoint;
+- (void)presentInteraction:(ATInteraction *)interaction;
+
 - (void)codePointWasEngaged:(NSString *)codePoint;
 - (void)interactionWasEngaged:(ATInteraction *)interaction;
-
-- (void)presentInteraction:(ATInteraction *)interaction;
 
 @end

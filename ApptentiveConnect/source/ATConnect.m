@@ -237,17 +237,7 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 }
 
 - (void)engage:(NSString *)codePoint {
-	[[ATEngagementBackend sharedBackend] codePointWasEngaged:codePoint];
-	
-	ATInteraction *interaction = [[ATEngagementBackend sharedBackend] interactionForCodePoint:codePoint];
-	if (interaction) {
-		[[ATEngagementBackend sharedBackend] presentInteraction:interaction];
-		
-		[[ATEngagementBackend sharedBackend] interactionWasEngaged:interaction];
-	}
-	else {
-		ATLogInfo(@"No valid Apptentive interactions found for code point: %@", codePoint);
-	}
+	[[ATEngagementBackend sharedBackend] engage:codePoint];
 }
 
 @end

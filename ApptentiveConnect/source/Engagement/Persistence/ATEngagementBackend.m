@@ -155,6 +155,38 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	[defaults synchronize];
 }
 
+- (void)engage:(NSString *)codePoint {
+	[self codePointWasEngaged:codePoint];
+	
+	ATInteraction *interaction = [self interactionForCodePoint:codePoint];
+	if (interaction) {
+		[self presentInteraction:interaction];
+		
+		[self interactionWasEngaged:interaction];
+	}
+	else {
+		ATLogInfo(@"No valid Apptentive interactions found for code point: %@", codePoint);
+	}
+}
+
+- (void)presentInteraction:(ATInteraction *)interaction {
+	ATLogInfo(@"Valid interaction found: %@", interaction);
+    
+#	warning This should show a UIWebView.
+	if ([interaction.type isEqualToString:@"HtmlMessage"]) {
+		NSString *title = [interaction.configuration objectForKey:@"title"];
+		NSString *message = [interaction.configuration objectForKey:@"message"];
+		
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"No", @"no"), ATLocalizedString(@"Yes", @"yes"), nil];
+		[alert show];
+	} else if ([interaction.type isEqualToString:@"RatingDialog"]) {
+		NSString *title = [interaction.configuration objectForKey:@"question_text"];
+		
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:ATLocalizedString(title, @"Rating Dialog title from server") message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"No", @"no"), ATLocalizedString(@"Yes", @"yes"), nil];
+		[alert show];
+	}
+}
+
 - (void)codePointWasEngaged:(NSString *)codePoint {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSMutableDictionary *codePointsInvokesTotal = [[defaults objectForKey:ATEngagementCodePointsInvokesTotalKey] mutableCopy];
@@ -189,24 +221,6 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	[defaults setObject:interactionsInvokesVersion forKey:ATEngagementInteractionsInvokesVersionKey];
 	[interactionsInvokesVersion release];
 	[defaults synchronize];
-}
-
-- (void)presentInteraction:(ATInteraction *)interaction {
-	ATLogInfo(@"Valid interaction found: %@", interaction);
-
-#	warning This should show a UIWebView.
-	if ([interaction.type isEqualToString:@"HtmlMessage"]) {
-		NSString *title = [interaction.configuration objectForKey:@"title"];
-		NSString *message = [interaction.configuration objectForKey:@"message"];
-		
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"No", @"no"), ATLocalizedString(@"Yes", @"yes"), nil];
-		[alert show];
-	} else if ([interaction.type isEqualToString:@"RatingDialog"]) {
-		NSString *title = [interaction.configuration objectForKey:@"question_text"];
-		
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:ATLocalizedString(title, @"Rating Dialog title from server") message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"No", @"no"), ATLocalizedString(@"Yes", @"yes"), nil];
-		[alert show];
-	}
 }
 
 @end

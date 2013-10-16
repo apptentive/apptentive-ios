@@ -27,6 +27,6 @@
 - (BOOL)criteriaAreMetForUsageData:(ATInteractionUsageData *)usageData;
 
 - (NSPredicate *)criteriaPredicate;
-+ (NSString *)predicateStringForInteractionCriteria:(NSDictionary *)interactionCriteria hasError:(BOOL *)hasError;
++ (NSPredicate *)predicateForInteractionCriteria:(NSDictionary *)interactionCriteria hasError:(BOOL *)hasError;
 
 @end

@@ -83,44 +83,48 @@
 
 - (NSPredicate *)criteriaPredicate {
 	BOOL error = NO;
-	NSString *predicateString = [ATInteraction predicateStringForInteractionCriteria:self.criteria hasError:&error];
-	
-	if (!predicateString || error || [predicateString length] == 0) {
+	NSPredicate *criteriaPredicate = [ATInteraction predicateForInteractionCriteria:self.criteria hasError:&error];
+	if (!criteriaPredicate || error) {
 		return nil;
 	}
 	
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateString];
-	return predicate;
+	return criteriaPredicate;
 }
 
-+ (NSString *)predicateStringForInteractionCriteria:(NSDictionary *)interactionCriteria hasError:(BOOL *)hasError {
++ (NSPredicate *)predicateForInteractionCriteria:(NSDictionary *)interactionCriteria hasError:(BOOL *)hasError {
 	NSMutableArray *parts = [NSMutableArray array];
-	NSString *joinWith = @" AND ";
+	BOOL joinWithAnd = YES;
 	
 	for (NSString *key in interactionCriteria) {
 		NSObject *object = [interactionCriteria objectForKey:key];
 		
 		if ([object isKindOfClass:[NSArray class]]) {
 			if ([key isEqualToString:@"$and"]) {
-				joinWith = @" AND ";
+				joinWithAnd = YES;
 			} else if ([key isEqualToString:@"$or"]) {
-				joinWith = @" OR ";
+				joinWithAnd = NO;
 			} else {
 				*hasError = YES;
 			}
 			
 			NSMutableArray *criteria = [NSMutableArray array];
 			for (NSDictionary *dictionary in (NSArray *)object) {
-				NSString *criterion = [self predicateStringForInteractionCriteria:dictionary hasError:hasError];
+				NSPredicate *criterion = [self predicateForInteractionCriteria:dictionary hasError:hasError];
 				[criteria addObject:criterion];
 			}
 			[parts addObjectsFromArray:criteria];
 		}
-		else if ([object isKindOfClass:[NSDictionary class]]) {
+		else {
+			// Implicit "==" if object is a string/number
+			NSDictionary *equalityDictionary = ([object isKindOfClass:[NSDictionary class]]) ? (NSDictionary *)object : @{@"==" : object};
+			
 			NSMutableArray *criteria = [NSMutableArray array];
-			for (NSString *equalityKey in (NSDictionary *)object) {
+			for (NSString *equalityKey in equalityDictionary) {
 				NSString *equalitySymbol = nil;
-				if ([equalityKey isEqualToString:@"$gt"]) {
+				if ([equalityKey isEqualToString:@"=="]) {
+					equalitySymbol = @"==";
+				}
+				else if ([equalityKey isEqualToString:@"$gt"]) {
 					equalitySymbol = @">";
 				}
 				else if ([equalityKey isEqualToString:@"$gte"]) {
@@ -138,45 +142,22 @@
 				else {
 					*hasError = YES;
 				}
-				
-				NSObject *value = [(NSDictionary *)object objectForKey:equalityKey];
-				NSString *valueString = nil;
-				if ([value isKindOfClass:[NSString class]]) {
-					valueString = [NSString stringWithFormat:@"'%@'", value];
-				}
-				else if ([value isKindOfClass:[NSNumber class]]) {
-					valueString = [NSString stringWithFormat:@"%@", value];
-				}
-				else {
-					*hasError = YES;
-				}
-				
-				NSString *criterion = [NSString stringWithFormat:@"(%@ %@ %@)", key, equalitySymbol, valueString];
+			
+				NSObject *value = [equalityDictionary objectForKey:equalityKey];
+				NSString *placeholder = [[@"(%K "stringByAppendingString:equalitySymbol] stringByAppendingString:@" %@)"];
+				NSPredicate *criterion = [NSCompoundPredicate predicateWithFormat:placeholder argumentArray:@[key, value]];
 				[criteria addObject:criterion];
 			}
 			
 			[parts addObjectsFromArray:criteria];
 		}
-		else if ([object isKindOfClass:[NSString class]]) {
-			NSString *criterion = [NSString stringWithFormat:@"(%@ == '%@')", key, (NSString *)object];
-			[parts addObject:criterion];
-		}
-		else if ([object isKindOfClass:[NSNumber class]]) {
-			NSString *criterion = [NSString stringWithFormat:@"(%@ == %@)", key, (NSNumber *)object];
-			[parts addObject:criterion];
-		}
-		else {
-			*hasError = YES;
-		}
 	}
-		
-	NSString *result = nil;
-	if ([parts count] > 1) {
-		result = [NSString stringWithFormat:@"(%@)", [parts componentsJoinedByString:joinWith]];
-	} else if ([parts count] == 1) {
-		result = [NSString stringWithFormat:@"%@", [parts objectAtIndex:0]];
+	
+	NSPredicate *result = nil;
+	if (joinWithAnd) {
+		result = [NSCompoundPredicate andPredicateWithSubpredicates:parts];
 	} else {
-		*hasError = YES;
+		result = [NSCompoundPredicate orPredicateWithSubpredicates:parts];
 	}
 	
 	return result;

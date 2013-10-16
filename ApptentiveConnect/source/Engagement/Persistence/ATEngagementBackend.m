@@ -118,7 +118,10 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 }
 
 - (NSArray *)interactionsForCodePoint:(NSString *)codePoint {
-	return [codePointInteractions objectForKey:codePoint];
+	NSArray *interactions = [codePointInteractions objectForKey:codePoint];
+	ATLogInfo(@"Found %lu cached interactions for code point: %@", interactions.count, codePoint);
+	
+	return interactions;
 }
 
 - (ATInteraction *)interactionForCodePoint:(NSString *)codePoint {

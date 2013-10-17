@@ -11,6 +11,19 @@
 
 @interface ATInteractionUpgradeMessageViewController : UIViewController
 
+@property (nonatomic, retain) ATInteraction *upgradeMessageInteraction;
+
+@property (nonatomic, retain) IBOutlet UIView *contentView;
+@property (nonatomic, retain) IBOutlet UIImageView *appIconView;
+@property (nonatomic, retain) IBOutlet UIWebView *webView;
+@property (nonatomic, retain) IBOutlet UIView *okButtonBackgroundView;
+@property (nonatomic, retain) IBOutlet UIImageView *poweredByApptentiveIconView;
+
+@property (nonatomic, retain)UIImage *backgroundImage;
+@property (nonatomic, retain) IBOutlet UIImageView *backgroundImageView;
+
 - (id)initWithInteraction:(ATInteraction *)interaction;
+
+- (IBAction)okButtonPressed:(id)sender;
 
 @end

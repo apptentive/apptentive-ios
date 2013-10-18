@@ -10,6 +10,7 @@
 #import "ATConnect_Private.h"
 #import "ATInteraction.h"
 #import "ATBackend.h"
+#import "ATMessagePanelViewController.h"
 
 @interface ATInteractionUpgradeMessageViewController ()
 
@@ -67,7 +68,7 @@
 
 - (UIImage *)appIcon {
 	NSArray *appIconFileNames = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIconFiles"];
-	NSLog(@"%@", appIconFileNames);
+	//NSLog(@"%@", appIconFileNames);
 	
 	// TODO: need to select the best-qualitiy image...
 	UIImage *appIcon = [UIImage imageNamed:[appIconFileNames objectAtIndex:0]];
@@ -112,6 +113,186 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)presentFromViewController:(UIViewController *)newPresentingViewController animated:(BOOL)animated {
+	[self retain];
+	
+	if (presentingViewController != newPresentingViewController) {
+		[presentingViewController release], presentingViewController = nil;
+		presentingViewController = [newPresentingViewController retain];
+		[presentingViewController.view setUserInteractionEnabled:NO];
+	}
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarChanged:) name:UIApplicationDidChangeStatusBarFrameNotification object:nil];
+	
+	CALayer *l = self.view.layer;
+	
+	UIWindow *parentWindow = [self windowForViewController:presentingViewController];
+	if (!parentWindow) {
+		ATLogError(@"Unable to find parentWindow!");
+	}
+	if (originalPresentingWindow != parentWindow) {
+		[originalPresentingWindow release], originalPresentingWindow = nil;
+		originalPresentingWindow = [parentWindow retain];
+	}
+		
+	CGRect animationBounds = CGRectZero;
+	CGPoint animationCenter = CGPointZero;
+	
+	CGAffineTransform t = [ATMessagePanelViewController viewTransformInWindow:parentWindow];
+	self.window.transform = t;
+	self.window.hidden = NO;
+	[parentWindow resignKeyWindow];
+	[self.window makeKeyAndVisible];
+	animationBounds = parentWindow.bounds;
+	animationCenter = parentWindow.center;
+	
+	
+	// Animate in from above.
+	self.window.bounds = animationBounds;
+	self.window.windowLevel = UIWindowLevelNormal;
+	CGPoint center = animationCenter;
+	center.y = ceilf(center.y);
+	
+	CGRect endingFrame = [[UIScreen mainScreen] applicationFrame];
+	
+	[self positionInWindow];
+	
+	self.window.center = CGPointMake(CGRectGetMidX(endingFrame), CGRectGetMidY(endingFrame));
+	self.view.center = [self offscreenPositionOfView];
+	
+	CGRect newFrame = [self onscreenRectOfView];
+	CGPoint newViewCenter = CGPointMake(CGRectGetMidX(newFrame), CGRectGetMidY(newFrame));
+	
+	UIView *shadowView = nil;
+	//shadowView = [[ATShadowView alloc] initWithFrame:self.window.bounds];
+	//shadowView.tag = kMessagePanelGradientLayerTag;
+	[self.window addSubview:shadowView];
+	[self.window sendSubviewToBack:shadowView];
+	shadowView.alpha = 1.0;
+	
+	l.cornerRadius = 10.0;
+	l.backgroundColor = [UIColor whiteColor].CGColor;
+	
+	l.masksToBounds = YES;
+	
+	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+		[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
+	} else {
+		[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque];
+	}
+	[UIView animateWithDuration:0.3 animations:^(void){
+		self.window.center = newViewCenter;
+		self.view.center = newViewCenter;
+		shadowView.alpha = 1.0;
+	} completion:^(BOOL finished) {
+		self.window.hidden = NO;
+	}];
+	[shadowView release], shadowView = nil;
+		
+	//[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroDidShowNotification object:self userInfo:nil];
+}
+
+- (UIWindow *)windowForViewController:(UIViewController *)viewController {
+	UIWindow *result = nil;
+	UIView *rootView = [viewController view];
+	if (rootView.window) {
+		result = rootView.window;
+	}
+	if (!result) {
+		result = [self findMainWindowPreferringMainScreen:YES];
+		if (!result) {
+			result = [self findMainWindowPreferringMainScreen:NO];
+		}
+	}
+	return result;
+}
+
+- (CGRect)onscreenRectOfView {
+	return [[UIScreen mainScreen] bounds];
+}
+
+- (CGPoint)offscreenPositionOfView {
+	CGRect f = [self onscreenRectOfView];
+	NSLog(@"onscreen: (%f, %f) / (%f, %f)", f.origin.x, f.origin.y, f.size.width, f.size.height);
+
+	CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
+	CGFloat statusBarHeight = MIN(statusBarSize.height, statusBarSize.width);
+	CGFloat viewHeight = f.size.height;
+	
+	CGRect offscreenViewRect = f;
+	offscreenViewRect.origin.y = -(viewHeight + statusBarHeight);
+	CGPoint offscreenPoint = CGPointMake(CGRectGetMidX(offscreenViewRect), CGRectGetMidY(offscreenViewRect));
+	
+	NSLog(@"Offscreen: %f, %f", offscreenPoint.x, offscreenPoint.y);
+	
+	return offscreenPoint;
+}
+
+- (BOOL)isIPhoneAppInIPad {
+	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+		NSString *model = [[UIDevice currentDevice] model];
+		if ([model isEqualToString:@"iPad"]) {
+			return YES;
+		}
+	}
+	return NO;
+}
+
+- (void)positionInWindow {
+	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+	
+	CGFloat angle = 0.0;
+	CGRect newFrame = originalPresentingWindow.bounds;
+	CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
+	
+	switch (orientation) {
+		case UIInterfaceOrientationPortraitUpsideDown:
+			angle = M_PI;
+			newFrame.size.height -= statusBarSize.height;
+			break;
+		case UIInterfaceOrientationLandscapeLeft:
+			angle = - M_PI / 2.0f;
+			newFrame.origin.x += statusBarSize.width;
+			newFrame.size.width -= statusBarSize.width;
+			break;
+		case UIInterfaceOrientationLandscapeRight:
+			angle = M_PI / 2.0f;
+			newFrame.size.width -= statusBarSize.width;
+			break;
+		case UIInterfaceOrientationPortrait:
+		default:
+			angle = 0.0;
+			newFrame.origin.y += statusBarSize.height;
+			newFrame.size.height -= statusBarSize.height;
+			break;
+	}
+	
+	/*
+	[self.toolbar sizeToFit];
+	
+	CGRect toolbarBounds = self.toolbar.bounds;
+	UIView *containerView = [self.view viewWithTag:kMessagePanelContainerViewTag];
+	if (containerView != nil) {
+		CGRect containerFrame = containerView.frame;
+		containerFrame.origin.y = toolbarBounds.size.height;
+		containerFrame.size.height = self.view.bounds.size.height - toolbarBounds.size.height;
+		containerView.frame = containerFrame;
+	}
+	CGRect toolbarShadowImageFrame = self.toolbarShadowImage.frame;
+	toolbarShadowImageFrame.origin.y = toolbarBounds.size.height;
+	self.toolbarShadowImage.frame = toolbarShadowImageFrame;
+	
+	self.window.transform = CGAffineTransformMakeRotation(angle);
+	self.window.frame = newFrame;
+	CGRect onscreenRect = [self onscreenRectOfView];
+	self.view.frame = onscreenRect;
+	
+	[self textViewDidChange:self.feedbackView];
+	*/
 }
 
 @end

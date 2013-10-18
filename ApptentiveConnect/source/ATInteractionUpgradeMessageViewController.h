@@ -9,7 +9,11 @@
 #import <UIKit/UIKit.h>
 @class ATInteraction;
 
-@interface ATInteractionUpgradeMessageViewController : UIViewController
+@interface ATInteractionUpgradeMessageViewController : UIViewController {
+    UIViewController *presentingViewController;
+    @private
+    UIWindow *originalPresentingWindow;
+}
 
 @property (nonatomic, retain) ATInteraction *upgradeMessageInteraction;
 
@@ -27,5 +31,7 @@
 - (id)initWithInteraction:(ATInteraction *)interaction;
 
 - (IBAction)okButtonPressed:(id)sender;
+
+- (void)presentFromViewController:(UIViewController *)newPresentingViewController animated:(BOOL)animated;
 
 @end

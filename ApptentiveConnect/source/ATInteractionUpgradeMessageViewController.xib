@@ -14,10 +14,11 @@
                 <outlet property="poweredByApptentiveIconView" destination="kLi-Gu-d2Z" id="bX7-wC-s3k"/>
                 <outlet property="view" destination="1" id="3"/>
                 <outlet property="webView" destination="6WZ-M9-nVf" id="jay-va-efD"/>
+                <outlet property="window" destination="1" id="JCC-gs-nYH"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="1">
+        <view opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="1" customClass="UIWindow">
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>

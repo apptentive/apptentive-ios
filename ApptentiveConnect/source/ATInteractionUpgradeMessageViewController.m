@@ -76,7 +76,36 @@
 
 - (IBAction)okButtonPressed:(id)sender
 {
-	[self dismissViewControllerAnimated:YES completion:nil];
+	//[self.delegate messagePanelDidCancel:self];
+	[self dismissAnimated:YES completion:NULL withAction:nil];
+	//[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroDidCancelNotification object:self userInfo:nil];
+}
+
+- (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion withAction:(ATMessagePanelDismissAction)action {
+	CGPoint endingPoint = [self offscreenPositionOfView];
+		
+	CGFloat duration = 0;
+	if (animated) {
+		duration = 0.3;
+	}
+	
+	[UIView animateWithDuration:duration animations:^(void){
+		self.view.center = endingPoint;
+	} completion:^(BOOL finished) {
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+		[presentingViewController.view setUserInteractionEnabled:YES];
+		[self.window resignKeyWindow];
+		[self.window removeFromSuperview];
+		self.window.hidden = YES;
+		//[[UIApplication sharedApplication] setStatusBarStyle:startingStatusBarStyle];
+		//[self teardown];
+		[self release];
+		
+		if (completion) {
+			completion();
+		}
+		//[self.delegate messagePanel:self didDismissWithAction:action];
+	}];
 }
 
 - (void)didReceiveMemoryWarning

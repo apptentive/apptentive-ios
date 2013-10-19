@@ -52,6 +52,9 @@ typedef enum {
 - (void)presentFromViewController:(UIViewController *)presentingViewController animated:(BOOL)animated;
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion;
 - (void)dismiss:(BOOL)animated;
+
++ (CGAffineTransform)viewTransformInWindow:(UIWindow *)window;
+
 @end
 
 @protocol ATMessagePanelDelegate <NSObject>

@@ -76,7 +76,7 @@
 	NSArray *appIconFileNames = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIconFiles"];
 	//NSLog(@"%@", appIconFileNames);
 	
-	// TODO: need to select the best-qualitiy image...
+#warning Non-retina. Need to select the best-qualitiy image...
 	UIImage *appIcon = [UIImage imageNamed:[appIconFileNames objectAtIndex:0]];
 	return appIcon;
 }
@@ -156,7 +156,6 @@
 	animationBounds = parentWindow.bounds;
 	animationCenter = parentWindow.center;
 	
-	
 	// Animate in from above.
 	self.window.bounds = animationBounds;
 	self.window.windowLevel = UIWindowLevelNormal;
@@ -166,7 +165,6 @@
 	CGRect endingFrame = [[UIScreen mainScreen] applicationFrame];
 	
 	[self positionInWindow];
-	
 	self.window.center = CGPointMake(CGRectGetMidX(endingFrame), CGRectGetMidY(endingFrame));
 	self.view.center = [self offscreenPositionOfView];
 	
@@ -267,29 +265,6 @@
 			newFrame.size.height -= statusBarSize.height;
 			break;
 	}
-	
-	/*
-	[self.toolbar sizeToFit];
-	
-	CGRect toolbarBounds = self.toolbar.bounds;
-	UIView *containerView = [self.view viewWithTag:kMessagePanelContainerViewTag];
-	if (containerView != nil) {
-		CGRect containerFrame = containerView.frame;
-		containerFrame.origin.y = toolbarBounds.size.height;
-		containerFrame.size.height = self.view.bounds.size.height - toolbarBounds.size.height;
-		containerView.frame = containerFrame;
-	}
-	CGRect toolbarShadowImageFrame = self.toolbarShadowImage.frame;
-	toolbarShadowImageFrame.origin.y = toolbarBounds.size.height;
-	self.toolbarShadowImage.frame = toolbarShadowImageFrame;
-	
-	self.window.transform = CGAffineTransformMakeRotation(angle);
-	self.window.frame = newFrame;
-	CGRect onscreenRect = [self onscreenRectOfView];
-	self.view.frame = onscreenRect;
-	
-	[self textViewDidChange:self.feedbackView];
-	*/
 }
 
 @end

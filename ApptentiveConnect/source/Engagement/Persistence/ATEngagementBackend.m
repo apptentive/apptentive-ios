@@ -13,6 +13,7 @@
 #import "ATInteraction.h"
 #import "ATAppRatingFlow_Private.h"
 #import "ATConnect_Private.h"
+#import "ATInteractionUpgradeMessageViewController.h"
 
 NSString *const ATEngagementInstallDateKey = @"ATEngagementInstallDateKey";
 NSString *const ATEngagementUpgradeDateKey = @"ATEngagementUpgradeDateKey";

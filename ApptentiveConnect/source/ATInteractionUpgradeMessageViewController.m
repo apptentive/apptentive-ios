@@ -91,7 +91,7 @@
 	}
 	
 	[UIView animateWithDuration:duration animations:^(void){
-		self.view.center = endingPoint;
+		self.alertView.center = endingPoint;
 	} completion:^(BOOL finished) {
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 		[presentingViewController.view setUserInteractionEnabled:YES];
@@ -128,8 +128,8 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarChanged:) name:UIApplicationDidChangeStatusBarFrameNotification object:nil];
 	
-	CALayer *l = self.view.layer;
-	
+	CALayer *l = self.alertView.layer;
+		
 	UIWindow *parentWindow = [self windowForViewController:presentingViewController];
 	if (!parentWindow) {
 		ATLogError(@"Unable to find parentWindow!");
@@ -167,13 +167,6 @@
 	CGRect newFrame = [self onscreenRectOfView];
 	CGPoint newViewCenter = CGPointMake(CGRectGetMidX(newFrame), CGRectGetMidY(newFrame));
 	
-	UIView *shadowView = nil;
-	//shadowView = [[ATShadowView alloc] initWithFrame:self.window.bounds];
-	//shadowView.tag = kMessagePanelGradientLayerTag;
-	[self.window addSubview:shadowView];
-	[self.window sendSubviewToBack:shadowView];
-	shadowView.alpha = 1.0;
-	
 	l.cornerRadius = 10.0;
 	l.backgroundColor = [UIColor whiteColor].CGColor;
 	
@@ -186,12 +179,10 @@
 	}
 	[UIView animateWithDuration:0.3 animations:^(void){
 		self.window.center = newViewCenter;
-		self.view.center = newViewCenter;
-		shadowView.alpha = 1.0;
+		self.alertView.center = newViewCenter;
 	} completion:^(BOOL finished) {
 		self.window.hidden = NO;
 	}];
-	[shadowView release], shadowView = nil;
 		
 	//[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroDidShowNotification object:self userInfo:nil];
 }

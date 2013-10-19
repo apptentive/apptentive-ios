@@ -11,6 +11,8 @@
 #import "ATInteraction.h"
 #import "ATBackend.h"
 #import "ATMessagePanelViewController.h"
+#import "ATUtilities.h"
+#import "UIImage+ImageEffects.h"
 
 @interface ATInteractionUpgradeMessageViewController ()
 
@@ -31,7 +33,11 @@
 {
     [super viewDidLoad];
 	
-	// TODO: Blur the background image
+	// Blurred background
+	UIImage *screenshot = [ATUtilities screenshot];
+	UIImage *blurred = [screenshot applyLightEffect];
+	[self.backgroundImageView setImage:blurred];
+
 	
 	// App icon
 	if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_app_icon"] boolValue]) {

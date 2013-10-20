@@ -1,3 +1,7 @@
+2013-01-20 wooster v1.1.0compat
+-------------------------------
+This is a compatibility branch for Xcode 4.6 builds.
+
 2013-08-29 wooster v1.1.0
 -------------------------
 This release focuses on support for Enterprise Surveys.

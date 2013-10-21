@@ -90,7 +90,7 @@
 
 - (NSString *)applicationVersion {
 	if (!_applicationVersion) {
-		_applicationVersion = [[[NSUserDefaults standardUserDefaults] objectForKey:ATAppRatingFlowLastUsedVersionKey] retain];
+		_applicationVersion = [ATUtilities appVersionString];
 	}
 	
 	return _applicationVersion;

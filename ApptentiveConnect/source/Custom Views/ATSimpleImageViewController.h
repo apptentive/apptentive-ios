@@ -26,6 +26,7 @@ NSString * const ATImageViewChoseImage;
 	BOOL isFromCamera;
 	
 	UIPopoverController *imagePickerPopover;
+	UIActionSheet *imageActionSheet;
 }
 @property (nonatomic, retain) IBOutlet UIView *containerView;
 

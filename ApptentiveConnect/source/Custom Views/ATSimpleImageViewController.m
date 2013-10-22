@@ -20,6 +20,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 @interface ATSimpleImageViewController (Private)
 - (void)chooseImage;
 - (void)takePhoto;
+- (void)cleanupImageActionSheet;
 @end
 
 @implementation ATSimpleImageViewController
@@ -37,6 +38,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 }
 
 - (void)dealloc {
+	[self cleanupImageActionSheet];
 	[imagePickerPopover release], imagePickerPopover = nil;
 	[delegate release], delegate = nil;
 	[scrollView removeFromSuperview];
@@ -156,6 +158,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 
 - (IBAction)donePressed:(id)sender {
 	shouldResign = YES;
+	[self cleanupImageActionSheet];
 	if ([self respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
 		id blockSelf = [self retain];
 		NSObject<ATSimpleImageViewControllerDelegate> *blockDelegate = [delegate retain];
@@ -172,19 +175,18 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 - (IBAction)takePhoto:(id)sender {
 	ATFeedbackAttachmentOptions options = [delegate attachmentOptionsForImageViewController:self];
 	if (options & ATFeedbackAllowTakePhotoAttachment) {
-		UIActionSheet *actionSheet = nil;
+		[self cleanupImageActionSheet];
 		if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-			actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel Button Title") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Choose From Library", @"Choose Photo Button Title"), ATLocalizedString(@"Take Photo", @"Take Photo Button Title"), nil];
+			imageActionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel Button Title") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Choose From Library", @"Choose Photo Button Title"), ATLocalizedString(@"Take Photo", @"Take Photo Button Title"), nil];
 		} else {
-			actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel Button Title") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Choose From Library", @"Choose Photo Button Title"), nil];
+			imageActionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel Button Title") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Choose From Library", @"Choose Photo Button Title"), nil];
 		}
 		
 		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-			[actionSheet showFromBarButtonItem:self.navigationItem.leftBarButtonItem animated:YES];
+			[imageActionSheet showFromBarButtonItem:self.navigationItem.leftBarButtonItem animated:YES];
 		} else {
-			[actionSheet showInView:self.view];
+			[imageActionSheet showInView:self.view];
 		}
-		[actionSheet autorelease];
 	} else {
 		[self chooseImage];
 	}
@@ -196,6 +198,10 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 		[self chooseImage];
 	} else if (buttonIndex == 1 && [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
 		[self takePhoto];
+	}
+	if (actionSheet && imageActionSheet && [actionSheet isEqual:imageActionSheet]) {
+		imageActionSheet.delegate = nil;
+		[imageActionSheet release], imageActionSheet = nil;
 	}
 }
 
@@ -292,5 +298,13 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 	imagePicker.delegate = self;
 	[self presentModalViewController:imagePicker animated:YES];
 	[imagePicker release];
+}
+
+- (void)cleanupImageActionSheet {
+	if (imageActionSheet) {
+		imageActionSheet.delegate = nil;
+		[imageActionSheet dismissWithClickedButtonIndex:-1 animated:NO];
+		[imageActionSheet release], imageActionSheet = nil;
+	}
 }
 @end

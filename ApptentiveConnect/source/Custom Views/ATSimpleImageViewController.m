@@ -230,7 +230,11 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
-	[self.navigationController dismissModalViewControllerAnimated:YES];
+	if (imagePickerPopover) {
+		[imagePickerPopover dismissPopoverAnimated:YES];
+	} else {
+		[self.navigationController dismissModalViewControllerAnimated:YES];
+	}
 }
 
 #pragma mark Rotation

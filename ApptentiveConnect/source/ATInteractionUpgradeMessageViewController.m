@@ -12,7 +12,7 @@
 #import "ATBackend.h"
 #import "ATMessagePanelViewController.h"
 #import "ATUtilities.h"
-#import "UIImage+ImageEffects.h"
+#import "UIImage+ATImageEffects.h"
 
 @interface ATInteractionUpgradeMessageViewController ()
 

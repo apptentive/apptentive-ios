@@ -1,5 +1,11 @@
 This document tracks changes to the API between versions.
 
+# 1.1.1
+
+## ATConnect
+
+* Deprecated `useMessageCenter` property.
+
 # 1.1.0
 
 We added a method for users who only want to send feedback, not use the entire Message Center.

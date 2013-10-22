@@ -68,9 +68,11 @@
 	ATPersonInfo *person = [[[ATPersonInfo alloc] init] autorelease];
 	[person saveAsCurrentPerson];
 	STAssertTrue([ATPersonInfo currentPerson].emailAddress == nil, @"New person object's email address should be nil");
+	STAssertFalse([[ATPersonInfo currentPerson] hasEmailAddress], @"New person shouldn't have email address.");
 	
 	[ATConnect sharedConnection].initialUserEmailAddress = @"setAfterInit@example.com";
 	STAssertTrue([[ATPersonInfo currentPerson].emailAddress isEqualToString:@"setAfterInit@example.com"], @"Setting the initialUserEmailAddress should set the current person's email address");
+	STAssertTrue([[ATPersonInfo currentPerson] hasEmailAddress], @"Person should have email address after it's set.");
 	
 	[ATConnect sharedConnection].initialUserEmailAddress = @"setToSomethingElse@example.com";
 	STAssertTrue([[ATPersonInfo currentPerson].emailAddress isEqualToString:@"setToSomethingElse@example.com"], @"Should be able to change the initial email address");

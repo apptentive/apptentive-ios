@@ -2,6 +2,7 @@
 from contextlib import contextmanager
 import os
 import biplist
+import json
 import re
 import shutil
 import subprocess
@@ -18,6 +19,9 @@ class Usage(Exception):
 
 def log(msg):
 	print >> sys.stderr, msg
+
+def get_dirname():
+	return os.path.dirname(globals()["__file__"])
 
 @contextmanager
 def chdir(path):
@@ -48,6 +52,7 @@ def run_command(command, verbose=False):
 class Builder(object):
 	COCOAPODS_DIST = "COCOAPODS_DIST"
 	BINARY_DIST = "BINARY_DIST"
+	TRIGGER_IO_DIST = "TRIGGER_IO_DIST"
 	build_root = "/tmp/apptentive_connect_build"
 	dist_type = None
 	def __init__(self, verbose=False, dist_type=None):
@@ -55,7 +60,7 @@ class Builder(object):
 			dist_type = self.BINARY_DIST
 		self.verbose = verbose
 		self.dist_type = dist_type
-		if dist_type not in [self.COCOAPODS_DIST, self.BINARY_DIST]:
+		if dist_type not in [self.COCOAPODS_DIST, self.BINARY_DIST, self.TRIGGER_IO_DIST]:
 			log("Unknown dist_type: %s" % dist_type)
 			sys.exit(1)
 	
@@ -115,10 +120,15 @@ class Builder(object):
 				plist[plist_key] = "CocoaPods"
 			elif self.dist_type == self.BINARY_DIST:
 				plist[plist_key] = "binary"
+			elif self.dist_type == self.TRIGGER_IO_DIST:
+				plist[plist_key] = "Trigger.io"
 			else:
 				log("Unknown dist_type")
 				return False
 			biplist.writePlist(plist, bundle_plist_path)
+		
+		if self.dist_type == self.TRIGGER_IO_DIST:
+			self._triggerio_postprocess()
 		
 		# Try to get the version.
 		version = None
@@ -133,6 +143,8 @@ class Builder(object):
 					filename = 'apptentive_ios_sdk-%s.tar.gz' % version
 				elif self.dist_type == self.COCOAPODS_DIST:
 					filename = 'apptentive_ios_sdk-cocoapods-%s.tar.gz' % version
+				elif self.dist_type == self.TRIGGER_IO_DIST:
+					filename = 'apptentive_ios_sdk-trigger_io-%s.tar.gz' % version
 			tar_command = "tar -zcvf ../%s ." % filename
 			(status, output) = run_command(tar_command, verbose=self.verbose)
 			if status != 0:
@@ -141,9 +153,29 @@ class Builder(object):
 				return False
 			run_command("open .")
 		return True
-		
+	
+	def _triggerio_postprocess(self):
+		with chdir(self._output_dir()):
+			# Generate build_steps.json file.
+			build_steps_json = [
+				{'do': { "add_ios_system_framework" : {"framework":"CoreText.framework"}}},
+				{'do': { "add_ios_system_framework" : {"framework":"CoreTelephony.framework"}}},
+				{'do': { "add_ios_system_framework" : {"framework":"CoreData.framework"}}},
+				{'do': { "add_ios_system_framework" : {"framework":"QuartzCore.framework"}}},
+				{'do': { "add_ios_system_framework" : {"framework":"StoreKit.framework"}}}
+			]
+			with open("build_steps.json", "w") as f:
+				json.dump(build_steps_json, f, indent=4)
+			os.makedirs("bundles/apptentive.bundle")
+			shutil.move("ApptentiveResources.bundle", "bundles/apptentive.bundle/ApptentiveResources.bundle")
+			shutil.move("libApptentiveConnect.a", "module.a")
+			shutil.rmtree("include")
+			os.remove("LICENSE.txt")
+			os.remove("README.md")
+			os.remove("CHANGELOG.md")
+	
 	def _project_dir(self):
-		return os.path.join("..", "..", "ApptentiveConnect")
+		return os.path.realpath(os.path.join(get_dirname(), "..", "..", "ApptentiveConnect"))
 	
 	def _output_dir(self):
 		return os.path.join(self.build_root, "library_dir")
@@ -183,7 +215,7 @@ class Builder(object):
 		return run_command(command, verbose=self.verbose)
 
 if __name__ == "__main__":
-	for dist_type in [Builder.BINARY_DIST, Builder.COCOAPODS_DIST]:
+	for dist_type in [Builder.BINARY_DIST, Builder.COCOAPODS_DIST, Builder.TRIGGER_IO_DIST]:
 		builder = Builder(dist_type=dist_type)
 		result = builder.build()
 		if result == True:

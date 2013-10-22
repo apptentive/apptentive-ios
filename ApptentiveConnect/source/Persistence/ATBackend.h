@@ -90,6 +90,7 @@ NSString *const ATBackendBecameReadyNotification;
 - (NSURL *)apptentivePrivacyPolicyURL;
 
 - (NSString *)distributionName;
+- (NSString *)distributionVersion;
 
 - (NSUInteger)unreadMessageCount;
 

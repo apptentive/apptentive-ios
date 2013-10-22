@@ -415,12 +415,13 @@ enum {
 				if (cell == nil) {
 					cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ATSurveyTextViewCellIdentifier] autorelease];
 					ATCellTextView *textView = [[ATCellTextView alloc] initWithFrame:CGRectInset(cell.contentView.bounds, 10.0, 10.0)];
+					textView.keyboardType = UIKeyboardTypeDefault;
 					textView.font = [UIFont systemFontOfSize:16];
 					textView.backgroundColor = [UIColor clearColor];
 					textView.tag = kTextViewTag;
 					textView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 					[cell.contentView addSubview:textView];
-					textView.returnKeyType = UIReturnKeyDone;
+					textView.returnKeyType = UIReturnKeyDefault;
 					[textView release], textView = nil;
 					cell.selectionStyle = UITableViewCellSelectionStyleNone;
 				}
@@ -433,6 +434,8 @@ enum {
 			textView.question = question;
 			if (question.answerText != nil) {
 				textView.text = question.answerText;
+			} else {
+				textView.text = @"";
 			}
 			//[textView sizeToFit];
 			[self sizeTextView:textView];
@@ -470,6 +473,8 @@ enum {
 			textField.question = question;
 			if (question.answerText != nil) {
 				textField.text = question.answerText;
+			} else {
+				textField.text = @"";
 			}
 		}
 	}
@@ -579,7 +584,9 @@ enum {
 	
 	activeTextField = (ATCellTextField *)[textField retain];
 	activeTextEntryCell = [(UITableViewCell *)activeTextField.superview.superview retain];
-	[tableView scrollRectToVisible:activeTextEntryCell.frame animated:YES];
+	
+	CGRect textEntryCellFrame = [tableView convertRect:activeTextEntryCell.frame fromView:activeTextEntryCell.superview];
+	[tableView scrollRectToVisible:textEntryCellFrame animated:YES];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
@@ -604,10 +611,6 @@ enum {
 
 #pragma mark UITextViewDelegate
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-	if ([text isEqualToString:@"\n"]) {
-		[textView resignFirstResponder];
-		return NO;
-	}
 	return YES;
 }
 
@@ -620,7 +623,8 @@ enum {
 	if ([self sizeTextView:(ATCellTextView *)textView]) {
 		[tableView beginUpdates];
 		[tableView endUpdates];
-		[tableView scrollRectToVisible:CGRectInset(activeTextEntryCell.frame, 0, -10) animated:YES];
+		CGRect textEntryCellFrame = [tableView convertRect:activeTextEntryCell.frame fromView:activeTextEntryCell.superview];
+		[tableView scrollRectToVisible:CGRectInset(textEntryCellFrame, 0, -10) animated:YES];
 	}
 }
 
@@ -632,7 +636,9 @@ enum {
 	
 	activeTextView = (ATCellTextView *)[textView retain];
 	activeTextEntryCell = [(UITableViewCell *)activeTextView.superview.superview retain];
-	[tableView scrollRectToVisible:textView.superview.superview.frame animated:YES];
+	
+	CGRect textEntryCellFrame = [tableView convertRect:activeTextEntryCell.frame fromView:activeTextEntryCell.superview];
+	[tableView scrollRectToVisible:textEntryCellFrame animated:YES];
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
@@ -736,6 +742,7 @@ enum {
 	CGSize maxSize = CGSizeMake(f.size.width, 150);
 	//	CGSize sizeThatFits = [textView.text sizeWithFont:textView.font constrainedToSize:maxSize lineBreakMode:UILineBreakModeWordWrap];
 	CGSize sizeThatFits = [textView sizeThatFits:maxSize];
+	sizeThatFits.height = MAX(55, sizeThatFits.height);
 	if (originalHeight != sizeThatFits.height) {
 		//		NSLog(@"old: %f, new: %f", originalHeight, sizeThatFits.height);
 		f.size.height = sizeThatFits.height;
@@ -760,24 +767,32 @@ enum {
 }
 
 - (void)keyboardWasShown:(NSNotification*)aNotification {
-	NSDictionary* info = [aNotification userInfo];
-	CGRect kbFrame = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
-	CGRect kbAdjustedFrame = [tableView.window convertRect:kbFrame toView:tableView];
-	CGSize kbSize = kbAdjustedFrame.size;
+	NSDictionary *info = [aNotification userInfo];
+	CGRect kbFrame = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+	CGRect kbAdjustedRect = [self.view convertRect:kbFrame fromView:nil];
 	
-	UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
-	tableView.contentInset = contentInsets;
-	tableView.scrollIndicatorInsets = contentInsets;
+	UIScrollView *scrollView = tableView;
+	CGRect scrollViewRect = [self.view convertRect:scrollView.frame fromView:scrollView.superview];
+	
+	CGRect occludedScrollViewRect = CGRectIntersection(scrollViewRect, kbAdjustedRect);
+	if (!CGRectEqualToRect(CGRectZero, occludedScrollViewRect)) {
+		UIEdgeInsets contentInsets = scrollView.contentInset;
+		contentInsets.bottom = occludedScrollViewRect.size.height;
+		scrollView.contentInset = contentInsets;
+		scrollView.scrollIndicatorInsets = contentInsets;
+	}
 	
 	// If active text field is hidden by keyboard, scroll it so it's visible
 	if ((activeTextView != nil || activeTextField != nil) && activeTextEntryCell) {
-		NSObject<ATCellTextEntry> *entry = activeTextView != nil ? activeTextView : activeTextField;
+		UIView<ATCellTextEntry> *entry = activeTextView != nil ? activeTextView : activeTextField;
 		CGRect aRect = tableView.frame;
-		aRect.size.height -= kbSize.height;
+		aRect.size.height -= occludedScrollViewRect.size.height;
 		CGRect r = [activeTextEntryCell convertRect:[entry frame] toView:tableView];
 		if (!CGRectContainsPoint(aRect, r.origin) ) {
 			[entry becomeFirstResponder];
-			[tableView scrollRectToVisible:CGRectInset(activeTextEntryCell.frame, 0, -10) animated:YES];
+			
+			CGRect textEntryCellFrame = [tableView convertRect:entry.frame fromView:entry.superview];
+			[tableView scrollRectToVisible:CGRectInset(textEntryCellFrame, 0, -10) animated:YES];
 		}
 	}
 }
@@ -788,7 +803,8 @@ enum {
 	[UIView beginAnimations:nil context:nil];
 	[UIView setAnimationDuration:[duration floatValue]];
 	[UIView setAnimationCurve:[curve intValue]];
-	UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+	UIEdgeInsets contentInsets = tableView.contentInset;
+	contentInsets.bottom = 0;
 	tableView.contentInset = contentInsets;
 	tableView.scrollIndicatorInsets = contentInsets;
 	[UIView commitAnimations];

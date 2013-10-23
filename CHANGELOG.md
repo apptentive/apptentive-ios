@@ -5,6 +5,7 @@ Fixes:
 
 * IOS-252 Crash when canceling photo selection on iPad + iOS 7
 * IOS-202 UIActionSheet not dismissing in photo selector is causing crash
+* IOS-254 "We're Sorry!" message cut off on iPad
 
 2013-10-09 wooster, pkamb v1.2.1
 -------------------------

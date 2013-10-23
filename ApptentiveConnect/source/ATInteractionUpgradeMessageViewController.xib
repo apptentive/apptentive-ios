@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4510" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4510" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1072" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
@@ -10,10 +10,9 @@
                 <outlet property="alertView" destination="eHm-oF-ye0" id="cxU-Rg-jVy"/>
                 <outlet property="appIconView" destination="cdb-y8-Jty" id="Org-KM-KXe"/>
                 <outlet property="backgroundImageView" destination="nip-Rb-uZo" id="RlP-mq-pMe"/>
-                <outlet property="contentView" destination="wp1-Fu-BfS" id="eAb-Rb-1au"/>
                 <outlet property="okButtonBackgroundView" destination="dHN-ex-Lj6" id="VoI-9m-WcE"/>
                 <outlet property="poweredByApptentiveIconView" destination="kLi-Gu-d2Z" id="bX7-wC-s3k"/>
-                <outlet property="view" destination="iwb-Si-gIs" id="DRn-Xk-gWV"/>
+                <outlet property="view" destination="wp1-Fu-BfS" id="tpf-Fs-EFf"/>
                 <outlet property="webView" destination="5AC-Tj-OQC" id="L22-Uo-BQV"/>
                 <outlet property="window" destination="axh-9Y-xI6" id="ucH-dl-sew"/>
             </connections>
@@ -83,11 +82,5 @@
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </window>
-        <view contentMode="scaleToFill" id="iwb-Si-gIs" userLabel="allView">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
-        </view>
     </objects>
 </document>

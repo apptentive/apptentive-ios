@@ -56,12 +56,12 @@
 	NSString *html = [self.upgradeMessageInteraction.configuration objectForKey:@"body"];
 	[self.webView loadHTMLString:html baseURL:nil];
 
-	// Rounded top corners of webview
-	UIBezierPath *contentMaskPath = [UIBezierPath bezierPathWithRoundedRect:self.contentView.bounds byRoundingCorners:(UIRectCornerTopLeft | UIRectCornerTopRight) cornerRadii:CGSizeMake(10.0, 10.0)];
+	// Rounded top corners of content
+	UIBezierPath *contentMaskPath = [UIBezierPath bezierPathWithRoundedRect:self.view.bounds byRoundingCorners:(UIRectCornerTopLeft | UIRectCornerTopRight) cornerRadii:CGSizeMake(10.0, 10.0)];
 	CAShapeLayer *contentMaskLayer = [CAShapeLayer layer];
 	contentMaskLayer.frame = self.webView.bounds;
 	contentMaskLayer.path = contentMaskPath.CGPath;
-	self.contentView.layer.mask = contentMaskLayer;
+	self.view.layer.mask = contentMaskLayer;
 	
 	// Rounded bottom corners of OK button
 	UIBezierPath *buttonMaskPath = [UIBezierPath bezierPathWithRoundedRect:self.okButtonBackgroundView.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerBottomRight) cornerRadii:CGSizeMake(10.0, 10.0)];

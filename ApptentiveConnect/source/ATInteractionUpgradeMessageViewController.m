@@ -166,7 +166,11 @@
 	
 	[self positionInWindow];
 	self.window.center = CGPointMake(CGRectGetMidX(endingFrame), CGRectGetMidY(endingFrame));
-	self.view.center = [self offscreenPositionOfView];
+	self.view.hidden = NO;
+	
+#warning Need to position self.view offscreen, for it to animate in.
+	//self.view.center = [self offscreenPositionOfView];
+
 	
 	CGRect newFrame = [self onscreenRectOfView];
 	CGPoint newViewCenter = CGPointMake(CGRectGetMidX(newFrame), CGRectGetMidY(newFrame));

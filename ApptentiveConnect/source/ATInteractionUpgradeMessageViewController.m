@@ -42,6 +42,15 @@
 	// App icon
 	if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_app_icon"] boolValue]) {
 		[self.appIconView setImage:[self appIcon]];
+		
+		// Rounded corners
+		CGRect rect = self.appIconView.bounds;
+		CGFloat radius = MIN(rect.size.width, rect.size.height) / 4;
+		UIBezierPath *appIconMaskPath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:radius];
+		CAShapeLayer *appIconMaskLayer = [CAShapeLayer layer];
+		appIconMaskLayer.frame = self.webView.bounds;
+		appIconMaskLayer.path = appIconMaskPath.CGPath;
+		self.appIconView.layer.mask = appIconMaskLayer;
 	}
 	
 	// Powered by Apptentive icon

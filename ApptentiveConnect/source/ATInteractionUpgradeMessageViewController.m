@@ -218,16 +218,19 @@ typedef enum {
 }
 
 - (CGRect)onscreenRectOfView {
-	return [[UIScreen mainScreen] bounds];
+	CGRect screenBounds = [[UIScreen mainScreen] bounds];
+	CGRect alertRect = self.alertView.bounds;
+	alertRect.size.height = screenBounds.size.height - 30 - self.poweredByBackground.bounds.size.height;
+	alertRect.origin.y = 20;
+	alertRect.origin.x = floor((screenBounds.size.width - alertRect.size.width)*0.5);
+	return alertRect;
 }
 
 - (CGPoint)offscreenPositionOfView {
 	CGRect f = [self onscreenRectOfView];
-	CGRect alertRect = self.alertView.bounds;
-	
 	NSLog(@"onscreen: %@", NSStringFromCGRect(f));
+	CGRect offscreenViewRect = CGRectOffset(f, 0, -(f.origin.y + f.size.height + 20));
 	
-	CGRect offscreenViewRect = CGRectOffset(alertRect, 0, -alertRect.size.height);
 	CGPoint offscreenPoint = CGPointMake(CGRectGetMidX(offscreenViewRect), CGRectGetMidY(offscreenViewRect));
 	
 	NSLog(@"Offscreen: %@", NSStringFromCGPoint(offscreenPoint));

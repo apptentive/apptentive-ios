@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4510" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1072" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ATInteractionUpgradeMessageViewController">
@@ -10,9 +10,11 @@
                 <outlet property="alertView" destination="eHm-oF-ye0" id="cxU-Rg-jVy"/>
                 <outlet property="appIconView" destination="cdb-y8-Jty" id="Org-KM-KXe"/>
                 <outlet property="backgroundImageView" destination="nip-Rb-uZo" id="RlP-mq-pMe"/>
+                <outlet property="contentView" destination="wp1-Fu-BfS" id="jUD-hO-Z8n"/>
                 <outlet property="okButtonBackgroundView" destination="dHN-ex-Lj6" id="VoI-9m-WcE"/>
                 <outlet property="poweredByApptentiveIconView" destination="kLi-Gu-d2Z" id="bX7-wC-s3k"/>
-                <outlet property="view" destination="wp1-Fu-BfS" id="tpf-Fs-EFf"/>
+                <outlet property="poweredByBackground" destination="wTc-Hm-DDK" id="a4c-Ox-wAv"/>
+                <outlet property="view" destination="q9d-TL-xVc" id="U9N-Ol-aRb"/>
                 <outlet property="webView" destination="5AC-Tj-OQC" id="L22-Uo-BQV"/>
                 <outlet property="window" destination="axh-9Y-xI6" id="ucH-dl-sew"/>
             </connections>
@@ -22,60 +24,66 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="nip-Rb-uZo" userLabel="backgroundImageView">
-                    <rect key="frame" x="-8" y="0.0" width="336" height="568"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                </imageView>
-                <view contentMode="scaleToFill" id="eHm-oF-ye0" userLabel="Alert View">
-                    <rect key="frame" x="20" y="40" width="280" height="447"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                <view opaque="NO" contentMode="scaleToFill" id="q9d-TL-xVc">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
-                        <view contentMode="scaleToFill" id="wp1-Fu-BfS" userLabel="Content View">
-                            <rect key="frame" x="0.0" y="0.0" width="280" height="386"/>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="nip-Rb-uZo" userLabel="backgroundImageView">
+                            <rect key="frame" x="-8" y="0.0" width="336" height="568"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                        <view contentMode="scaleToFill" id="eHm-oF-ye0" userLabel="Alert View">
+                            <rect key="frame" x="20" y="61" width="280" height="447"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                             <subviews>
-                                <webView contentMode="scaleToFill" id="5AC-Tj-OQC" userLabel="WebView">
-                                    <rect key="frame" x="0.0" y="128" width="280" height="258"/>
+                                <view contentMode="scaleToFill" id="wp1-Fu-BfS" userLabel="Content View">
+                                    <rect key="frame" x="0.0" y="0.0" width="280" height="386"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                </webView>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="cdb-y8-Jty" userLabel="AppIcon">
-                                    <rect key="frame" x="90" y="20" width="100" height="100"/>
+                                    <subviews>
+                                        <webView contentMode="scaleToFill" id="5AC-Tj-OQC" userLabel="WebView">
+                                            <rect key="frame" x="0.0" y="128" width="280" height="258"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </webView>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="cdb-y8-Jty" userLabel="AppIcon">
+                                            <rect key="frame" x="90" y="20" width="100" height="100"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </imageView>
+                                    </subviews>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </view>
+                                <view contentMode="scaleToFill" id="dHN-ex-Lj6" userLabel="okButton">
+                                    <rect key="frame" x="0.0" y="384" width="280" height="53"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="9kO-hO-1kr">
+                                            <rect key="frame" x="0.0" y="0.0" width="280" height="53"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <state key="normal" title="OK">
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="okButtonPressed:" destination="-1" eventType="touchUpInside" id="sgF-aO-dxT"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <color key="backgroundColor" white="1" alpha="0.70000000000000007" colorSpace="calibratedWhite"/>
+                                </view>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        </view>
+                        <view contentMode="scaleToFill" id="wTc-Hm-DDK" userLabel="poweredByBackground">
+                            <rect key="frame" x="0.0" y="508" width="320" height="60"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                            <subviews>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="kLi-Gu-d2Z" userLabel="poweredByImage">
+                                    <rect key="frame" x="79" y="20" width="162" height="20"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </imageView>
                             </subviews>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        </view>
-                        <view contentMode="scaleToFill" id="dHN-ex-Lj6" userLabel="okButton">
-                            <rect key="frame" x="0.0" y="384" width="280" height="53"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="9kO-hO-1kr">
-                                    <rect key="frame" x="0.0" y="0.0" width="280" height="53"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <state key="normal" title="OK">
-                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                    </state>
-                                    <connections>
-                                        <action selector="okButtonPressed:" destination="-1" eventType="touchUpInside" id="sgF-aO-dxT"/>
-                                    </connections>
-                                </button>
-                            </subviews>
-                            <color key="backgroundColor" white="1" alpha="0.70000000000000007" colorSpace="calibratedWhite"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.35000000000000003" colorSpace="calibratedWhite"/>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                </view>
-                <view contentMode="scaleToFill" id="wTc-Hm-DDK" userLabel="poweredByBackground">
-                    <rect key="frame" x="0.0" y="508" width="320" height="60"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="kLi-Gu-d2Z" userLabel="poweredByImage">
-                            <rect key="frame" x="79" y="20" width="162" height="20"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        </imageView>
-                    </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.35000000000000003" colorSpace="calibratedWhite"/>
                 </view>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>

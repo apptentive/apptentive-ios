@@ -130,7 +130,6 @@ enum {
 	animationBounds = parentWindow.bounds;
 	animationCenter = parentWindow.center;
 	
-	
 	// Animate in from above.
 	self.window.bounds = animationBounds;
 	self.window.windowLevel = UIWindowLevelNormal;

@@ -9,6 +9,7 @@
 #import "ATInteractionUsageData.h"
 #import "ATEngagementBackend.h"
 #import "ATAppRatingFlow_Private.h"
+#import "ATUtilities.h"
 
 @implementation ATInteractionUsageData
 
@@ -68,9 +69,10 @@
 
 - (NSNumber *)daysSinceInstall {
 	if (!_daysSinceInstall) {
-		NSDate *installDate = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInstallDateKey];
+		NSDate *installDate = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInstallDateKey] ?: [NSDate date];
 		NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-		_daysSinceInstall = [@([[calendar components:NSDayCalendarUnit fromDate:installDate toDate:[NSDate date] options:0] day] + 1) retain];
+		_daysSinceInstall = @([[calendar components:NSDayCalendarUnit fromDate:installDate toDate:[NSDate date] options:0] day] + 1) ?: @0;
+		[_daysSinceInstall retain];
 		[calendar release];
 	}
 	
@@ -79,9 +81,10 @@
 
 - (NSNumber *)daysSinceUpgrade {
 	if (!_daysSinceUpgrade) {
-		NSDate *upgradeDate = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementUpgradeDateKey];
+		NSDate *upgradeDate = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementUpgradeDateKey] ?: [NSDate date];		
 		NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-		_daysSinceUpgrade = [@([[calendar components:NSDayCalendarUnit fromDate:upgradeDate toDate:[NSDate date] options:0] day] + 1) retain];
+		_daysSinceUpgrade = @([[calendar components:NSDayCalendarUnit fromDate:upgradeDate toDate:[NSDate date] options:0] day] + 1) ?: @0;
+		[_daysSinceUpgrade retain];
 		[calendar release];
 	}
 		
@@ -90,7 +93,8 @@
 
 - (NSString *)applicationVersion {
 	if (!_applicationVersion) {
-		_applicationVersion = [ATUtilities appVersionString];
+		_applicationVersion = [ATUtilities appVersionString] ?: @"";
+		[_applicationVersion retain];
 	}
 	
 	return _applicationVersion;
@@ -98,10 +102,8 @@
 
 - (NSNumber *)codePointInvokesTotal {
 	if (!_codePointInvokesTotal) {
-		_codePointInvokesTotal = [[[[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesTotalKey] objectForKey:self.codePoint] retain];
-		if (!_codePointInvokesTotal) {
-			_codePointInvokesTotal = [@0 retain];
-		}
+		_codePointInvokesTotal = [[[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesTotalKey] objectForKey:self.codePoint] ?: @0;
+		[_codePointInvokesTotal retain];
 	}
 	
 	return _codePointInvokesTotal;
@@ -109,31 +111,28 @@
 
 - (NSNumber *)codePointInvokesVersion {
 	if (!_codePointInvokesVersion) {
-		_codePointInvokesVersion = [[[[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesVersionKey] objectForKey:self.codePoint] retain];
-		if (!_codePointInvokesVersion) {
-			_codePointInvokesVersion = [@0 retain];
-		}
+		_codePointInvokesVersion = [[[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesVersionKey] objectForKey:self.codePoint] ?: @0;
+		[_codePointInvokesVersion retain];
 	}
+	
 	return _codePointInvokesVersion;
 }
 
 - (NSNumber *)interactionInvokesTotal {
 	if (!_interactionInvokesTotal) {
-		_interactionInvokesTotal = [[[[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesTotalKey] objectForKey:self.interaction.identifier] retain];
-		if (!_interactionInvokesTotal) {
-			_interactionInvokesTotal = [@0 retain];
-		}
+		_interactionInvokesTotal = [[[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesTotalKey] objectForKey:self.interaction.identifier] ?: @0;
+		[_interactionInvokesTotal retain];
 	}
+	
 	return _interactionInvokesTotal;
 }
 
 - (NSNumber *)interactionInvokesVersion {
 	if (!_interactionInvokesVersion) {
-		_interactionInvokesVersion = [[[[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesVersionKey] objectForKey:self.interaction.identifier] retain];
-		if (!_interactionInvokesVersion) {
-			_interactionInvokesVersion = [@0 retain];
-		}
+		_interactionInvokesVersion = [[[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesVersionKey] objectForKey:self.interaction.identifier] ?: @0;
+		[_interactionInvokesVersion retain];
 	}
+
 	return _interactionInvokesVersion;
 }
 

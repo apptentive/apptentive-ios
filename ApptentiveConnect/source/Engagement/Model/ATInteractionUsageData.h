@@ -23,7 +23,7 @@
 
 - (id)initWithInteraction:(ATInteraction *)interaction atCodePoint:(NSString *)codePoint;
 + (ATInteractionUsageData *)usageDataForInteraction:(ATInteraction *)interaction atCodePoint:(NSString *)codePoint;
-+ (NSDictionary *)usageDataForInteraction:(ATInteraction *)interaction
++ (ATInteractionUsageData *)usageDataForInteraction:(ATInteraction *)interaction
 							  atCodePoint:(NSString *)codePoint
 						 daysSinceInstall:(NSNumber *)daysSinceInstall
 						 daysSinceUpgrade:(NSNumber *)daysSinceUpgrade

@@ -88,12 +88,7 @@ typedef enum {
 }
 
 - (UIImage *)appIcon {
-	NSArray *appIconFileNames = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIconFiles"];
-	//NSLog(@"%@", appIconFileNames);
-	
-#warning Non-retina. Need to select the best-qualitiy image...
-	UIImage *appIcon = [UIImage imageNamed:[appIconFileNames objectAtIndex:0]];
-	return appIcon;
+	return [UIImage imageNamed: [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIconFiles"] objectAtIndex:0]];
 }
 
 - (IBAction)okButtonPressed:(id)sender {

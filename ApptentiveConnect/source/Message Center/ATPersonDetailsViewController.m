@@ -72,9 +72,9 @@ enum kPersonDetailsTableSections {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-	if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
+#if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_6_1
 		self.edgesForExtendedLayout = UIRectEdgeNone;
-	}
+#endif
 	
 	self.nameTextField.placeholder = ATLocalizedString(@"Name", @"Placeholder text for `Name` field when editing user details.");
 	if ([[ATConnect sharedConnection] emailRequired]) {

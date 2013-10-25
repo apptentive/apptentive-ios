@@ -43,11 +43,10 @@ typedef enum {
 	UIImage *screenshot = [ATUtilities screenshot];
 	UIImage *blurred = [screenshot applyLightEffect];
 	[self.backgroundImageView setImage:blurred];
-
 	
 	// App icon
 	if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_app_icon"] boolValue]) {
-		[self.appIconView setImage:[self appIcon]];
+		[self.appIconView setImage:[ATUtilities appIcon]];
 		
 		// Rounded corners
 		CGRect rect = self.appIconView.bounds;
@@ -85,10 +84,6 @@ typedef enum {
 	buttonMaskLayer.path = buttonMaskPath.CGPath;
 	self.okButtonBackgroundView.layer.mask = buttonMaskLayer;
 	
-}
-
-- (UIImage *)appIcon {
-	return [UIImage imageNamed: [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIconFiles"] objectAtIndex:0]];
 }
 
 - (IBAction)okButtonPressed:(id)sender {

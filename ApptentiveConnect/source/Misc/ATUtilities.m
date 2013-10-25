@@ -547,6 +547,10 @@ static NSDateFormatter *dateFormatter = nil;
 	return localAppLocalizations;
 }
 
++ (UIImage *)appIcon {
+	return [UIImage imageNamed: [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIconFiles"] objectAtIndex:0]];
+}
+
 + (BOOL)bundleVersionIsMainVersion {
 	BOOL result = NO;
 	NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];

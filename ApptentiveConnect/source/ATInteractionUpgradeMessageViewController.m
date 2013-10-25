@@ -186,7 +186,7 @@ typedef enum {
 	
 	CALayer *l = self.alertView.layer;
 	l.cornerRadius = 10.0;
-	l.backgroundColor = [UIColor whiteColor].CGColor;
+	l.backgroundColor = [UIColor clearColor].CGColor;
 	l.masksToBounds = YES;
 	
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {

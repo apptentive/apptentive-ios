@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment defaultVersion="1072" identifier="iOS"/>
+        <deployment version="1792" defaultVersion="1072" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
     </dependencies>
     <objects>
@@ -24,41 +24,54 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <view opaque="NO" contentMode="scaleToFill" id="q9d-TL-xVc">
+                <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q9d-TL-xVc">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="nip-Rb-uZo" userLabel="backgroundImageView">
-                            <rect key="frame" x="-8" y="0.0" width="336" height="568"/>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nip-Rb-uZo" userLabel="backgroundImageView">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
-                        <view contentMode="scaleToFill" id="eHm-oF-ye0" userLabel="Alert View">
-                            <rect key="frame" x="20" y="61" width="280" height="447"/>
+                        <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eHm-oF-ye0" userLabel="Alert View">
+                            <rect key="frame" x="20" y="31" width="280" height="470"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                             <subviews>
-                                <view contentMode="scaleToFill" id="wp1-Fu-BfS" userLabel="Content View">
-                                    <rect key="frame" x="0.0" y="0.0" width="280" height="386"/>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wp1-Fu-BfS" userLabel="Content View">
+                                    <rect key="frame" x="0.0" y="0.0" width="280" height="416"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
-                                        <webView contentMode="scaleToFill" id="5AC-Tj-OQC" userLabel="WebView">
-                                            <rect key="frame" x="0.0" y="128" width="280" height="258"/>
+                                        <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5AC-Tj-OQC" userLabel="WebView">
+                                            <rect key="frame" x="0.0" y="128" width="280" height="288"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </webView>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="cdb-y8-Jty" userLabel="AppIcon">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cdb-y8-Jty" userLabel="AppIcon">
                                             <rect key="frame" x="90" y="20" width="100" height="100"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="100" id="F6u-1d-lcA"/>
+                                                <constraint firstAttribute="height" constant="100" id="gWh-va-NBb"/>
+                                            </constraints>
                                         </imageView>
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <constraints>
+                                        <constraint firstItem="5AC-Tj-OQC" firstAttribute="top" secondItem="cdb-y8-Jty" secondAttribute="bottom" constant="8" id="3zO-Ru-Dtj"/>
+                                        <constraint firstItem="cdb-y8-Jty" firstAttribute="top" secondItem="wp1-Fu-BfS" secondAttribute="top" constant="20" id="9rk-sR-9rH"/>
+                                        <constraint firstAttribute="trailing" secondItem="5AC-Tj-OQC" secondAttribute="trailing" id="Jyh-g9-9Qa"/>
+                                        <constraint firstAttribute="bottom" secondItem="5AC-Tj-OQC" secondAttribute="bottom" id="OAo-pC-fbh"/>
+                                        <constraint firstItem="5AC-Tj-OQC" firstAttribute="leading" secondItem="wp1-Fu-BfS" secondAttribute="leading" id="cby-q9-Edv"/>
+                                        <constraint firstAttribute="centerX" secondItem="cdb-y8-Jty" secondAttribute="centerX" id="wtw-Ov-NWB"/>
+                                    </constraints>
                                 </view>
-                                <view contentMode="scaleToFill" id="dHN-ex-Lj6" userLabel="okButton">
-                                    <rect key="frame" x="0.0" y="384" width="280" height="53"/>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dHN-ex-Lj6" userLabel="okButton">
+                                    <rect key="frame" x="0.0" y="416" width="280" height="54"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="9kO-hO-1kr">
-                                            <rect key="frame" x="0.0" y="0.0" width="280" height="53"/>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9kO-hO-1kr">
+                                            <rect key="frame" x="0.0" y="0.0" width="280" height="54"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <state key="normal" title="OK">
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
@@ -67,26 +80,71 @@
                                             </connections>
                                         </button>
                                     </subviews>
-                                    <color key="backgroundColor" white="1" alpha="0.70000000000000007" colorSpace="calibratedWhite"/>
+                                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.69000000000000006" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstItem="9kO-hO-1kr" firstAttribute="leading" secondItem="dHN-ex-Lj6" secondAttribute="leading" id="2N0-PC-cf8"/>
+                                        <constraint firstItem="9kO-hO-1kr" firstAttribute="top" secondItem="dHN-ex-Lj6" secondAttribute="top" id="7Yr-9P-nFm"/>
+                                        <constraint firstAttribute="bottom" secondItem="9kO-hO-1kr" secondAttribute="bottom" id="LOS-wT-eXT"/>
+                                        <constraint firstAttribute="trailing" secondItem="9kO-hO-1kr" secondAttribute="trailing" id="pvV-E6-eC4"/>
+                                    </constraints>
                                 </view>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="trailing" secondItem="dHN-ex-Lj6" secondAttribute="trailing" id="1U1-dE-i3W"/>
+                                <constraint firstAttribute="bottom" secondItem="dHN-ex-Lj6" secondAttribute="bottom" id="6aM-UG-gvw"/>
+                                <constraint firstAttribute="bottom" secondItem="wp1-Fu-BfS" secondAttribute="bottom" constant="54" id="R9P-rw-Dzi"/>
+                                <constraint firstItem="wp1-Fu-BfS" firstAttribute="leading" secondItem="eHm-oF-ye0" secondAttribute="leading" id="T4R-bQ-slD"/>
+                                <constraint firstItem="dHN-ex-Lj6" firstAttribute="leading" secondItem="eHm-oF-ye0" secondAttribute="leading" id="V0T-pu-oV5"/>
+                                <constraint firstAttribute="width" secondItem="dHN-ex-Lj6" secondAttribute="width" id="Xeu-Li-fYw"/>
+                                <constraint firstItem="wp1-Fu-BfS" firstAttribute="top" secondItem="eHm-oF-ye0" secondAttribute="top" id="Zhc-vt-EuA"/>
+                                <constraint firstItem="dHN-ex-Lj6" firstAttribute="top" secondItem="wp1-Fu-BfS" secondAttribute="bottom" id="h69-sm-vWK"/>
+                                <constraint firstAttribute="trailing" secondItem="wp1-Fu-BfS" secondAttribute="trailing" id="oeJ-Px-aGQ"/>
+                                <constraint firstAttribute="width" secondItem="wp1-Fu-BfS" secondAttribute="width" id="sBn-NK-J0I"/>
+                            </constraints>
                         </view>
-                        <view contentMode="scaleToFill" id="wTc-Hm-DDK" userLabel="poweredByBackground">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wTc-Hm-DDK" userLabel="poweredByBackground">
                             <rect key="frame" x="0.0" y="508" width="320" height="60"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                             <subviews>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="kLi-Gu-d2Z" userLabel="poweredByImage">
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kLi-Gu-d2Z" userLabel="poweredByImage">
                                     <rect key="frame" x="79" y="20" width="162" height="20"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </imageView>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.35000000000000003" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="kLi-Gu-d2Z" firstAttribute="top" secondItem="wTc-Hm-DDK" secondAttribute="top" constant="20" symbolic="YES" id="Idq-VL-pzH"/>
+                                <constraint firstItem="kLi-Gu-d2Z" firstAttribute="leading" secondItem="wTc-Hm-DDK" secondAttribute="leading" constant="79" id="N5k-l0-JYy"/>
+                                <constraint firstAttribute="bottom" secondItem="kLi-Gu-d2Z" secondAttribute="bottom" constant="20" symbolic="YES" id="h3Z-MP-mN6"/>
+                                <constraint firstItem="kLi-Gu-d2Z" firstAttribute="centerX" secondItem="wTc-Hm-DDK" secondAttribute="centerX" id="vJm-3d-YEm"/>
+                            </constraints>
                         </view>
                     </subviews>
+                    <constraints>
+                        <constraint firstItem="nip-Rb-uZo" firstAttribute="leading" secondItem="q9d-TL-xVc" secondAttribute="leading" id="4TR-Fz-PUs"/>
+                        <constraint firstAttribute="centerX" secondItem="eHm-oF-ye0" secondAttribute="centerX" id="HTF-nC-ZhH"/>
+                        <constraint firstAttribute="bottom" secondItem="nip-Rb-uZo" secondAttribute="bottom" id="LRc-re-eqI"/>
+                        <constraint firstItem="wTc-Hm-DDK" firstAttribute="top" secondItem="eHm-oF-ye0" secondAttribute="bottom" constant="7" id="Lfz-h6-YQm"/>
+                        <constraint firstItem="eHm-oF-ye0" firstAttribute="top" secondItem="q9d-TL-xVc" secondAttribute="top" constant="31" id="WSH-7D-236"/>
+                        <constraint firstAttribute="trailing" secondItem="eHm-oF-ye0" secondAttribute="trailing" constant="20" id="dDY-hj-hxD"/>
+                        <constraint firstAttribute="bottom" secondItem="eHm-oF-ye0" secondAttribute="bottom" constant="67" id="i6H-WN-45A"/>
+                        <constraint firstItem="wTc-Hm-DDK" firstAttribute="leading" secondItem="q9d-TL-xVc" secondAttribute="leading" id="iLG-GK-a3w"/>
+                        <constraint firstItem="eHm-oF-ye0" firstAttribute="leading" secondItem="q9d-TL-xVc" secondAttribute="leading" constant="20" id="mm7-ET-DLJ"/>
+                        <constraint firstAttribute="trailing" secondItem="wTc-Hm-DDK" secondAttribute="trailing" id="nND-yx-PAw"/>
+                        <constraint firstAttribute="trailing" secondItem="nip-Rb-uZo" secondAttribute="trailing" id="ozW-Nh-8dS"/>
+                        <constraint firstAttribute="bottom" secondItem="wTc-Hm-DDK" secondAttribute="bottom" id="sw9-H4-b7T"/>
+                        <constraint firstItem="nip-Rb-uZo" firstAttribute="top" secondItem="q9d-TL-xVc" secondAttribute="top" id="vPH-v8-BSS"/>
+                    </constraints>
                 </view>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="q9d-TL-xVc" firstAttribute="leading" secondItem="axh-9Y-xI6" secondAttribute="leading" id="JRl-S2-l1A"/>
+                <constraint firstAttribute="bottom" secondItem="q9d-TL-xVc" secondAttribute="bottom" id="Q4V-IY-GQL"/>
+                <constraint firstAttribute="trailing" secondItem="q9d-TL-xVc" secondAttribute="trailing" id="TmT-OQ-Sug"/>
+                <constraint firstItem="q9d-TL-xVc" firstAttribute="top" secondItem="axh-9Y-xI6" secondAttribute="top" id="cHR-ce-QAh"/>
+            </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </window>

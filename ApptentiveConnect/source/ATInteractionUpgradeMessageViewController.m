@@ -41,7 +41,8 @@ typedef enum {
 	
 	// Blurred background
 	UIImage *screenshot = [ATUtilities screenshot];
-	UIImage *blurred = [screenshot applyLightEffect];
+	UIColor *tintColor = [UIColor colorWithWhite:0 alpha:0.1];
+	UIImage *blurred = [screenshot applyBlurWithRadius:30 tintColor:tintColor saturationDeltaFactor:1.8 maskImage:nil];
 	[self.backgroundImageView setImage:blurred];
 
 	
@@ -194,11 +195,6 @@ typedef enum {
 	CGRect newFrame = [self onscreenRectOfView];
 	CGPoint newViewCenter = CGPointMake(CGRectGetMidX(newFrame), CGRectGetMidY(newFrame));
 	
-	CALayer *l = self.alertView.layer;
-	l.cornerRadius = 10.0;
-	l.backgroundColor = [UIColor whiteColor].CGColor;
-	l.masksToBounds = YES;
-	
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
 		[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
 	} else {
@@ -207,9 +203,11 @@ typedef enum {
 	self.backgroundImageView.alpha = 0;
 	[UIView animateWithDuration:0.3 animations:^(void){
 //		self.window.center = newViewCenter;
+		self.window.frame = animationBounds;
 		self.alertView.center = newViewCenter;
 		self.poweredByBackground.frame = poweredByEndingFrame;
 		self.backgroundImageView.alpha = 1;
+		[self.view layoutIfNeeded];
 	} completion:^(BOOL finished) {
 		self.window.hidden = NO;
 	}];
@@ -252,31 +250,67 @@ typedef enum {
 	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
 	
 	CGFloat angle = 0.0;
-	CGRect newFrame = originalPresentingWindow.bounds;
+	CGRect newFrame = self.window.frame;
 	CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
 	
 	switch (orientation) {
 		case UIInterfaceOrientationPortraitUpsideDown:
 			angle = M_PI;
-			newFrame.size.height -= statusBarSize.height;
+//			newFrame.size.height -= statusBarSize.height;
 			break;
 		case UIInterfaceOrientationLandscapeLeft:
 			angle = - M_PI / 2.0f;
-			newFrame.origin.x += statusBarSize.width;
-			newFrame.size.width -= statusBarSize.width;
+//			newFrame.origin.x += statusBarSize.width;
+//			newFrame.size.width -= statusBarSize.width;
 			break;
 		case UIInterfaceOrientationLandscapeRight:
 			angle = M_PI / 2.0f;
-			newFrame.size.width -= statusBarSize.width;
+//			newFrame.size.width -= statusBarSize.width;
 			break;
 		case UIInterfaceOrientationPortrait:
 		default:
 			angle = 0.0;
-			newFrame.origin.y += statusBarSize.height;
-			newFrame.size.height -= statusBarSize.height;
+//			newFrame.origin.y += statusBarSize.height;
+//			newFrame.size.height -= statusBarSize.height;
 			break;
 	}
-#warning Do layout adjustment here.
+	
+	/*
+	self.alertView.layer.borderColor = [UIColor redColor].CGColor;
+	self.alertView.layer.borderWidth = 1;
+	self.view.layer.borderColor = [UIColor greenColor].CGColor;
+	self.view.layer.borderWidth = 1;
+	self.backgroundImageView.layer.borderColor = [UIColor yellowColor].CGColor;
+	self.backgroundImageView.layer.borderWidth = 1;
+	self.contentView.layer.borderColor = [UIColor blueColor].CGColor;
+	self.contentView.layer.borderWidth = 1;
+	 */
+	CGAffineTransform t = [ATUtilities viewTransformInWindow:originalPresentingWindow];
+	self.window.transform = t;
+	self.window.frame = originalPresentingWindow.bounds;
+	[self.appIconView layoutIfNeeded];
+	[self.backgroundImageView layoutIfNeeded];
+	[self.poweredByBackground layoutIfNeeded];
+	[self.alertView layoutIfNeeded];
+	[self.contentView layoutIfNeeded];
+	UIView *v = self.appIconView;
+	while ((v = (UIView *)v.superview)) {
+		[v layoutSubviews];
+	}
+	
+	// Rounded top corners of content
+	UIBezierPath *contentMaskPath = [UIBezierPath bezierPathWithRoundedRect:self.contentView.bounds byRoundingCorners:(UIRectCornerTopLeft | UIRectCornerTopRight) cornerRadii:CGSizeMake(10.0, 10.0)];
+	CAShapeLayer *contentMaskLayer = [CAShapeLayer layer];
+	contentMaskLayer.frame = self.webView.bounds;
+	contentMaskLayer.path = contentMaskPath.CGPath;
+	self.contentView.layer.mask = contentMaskLayer;
+	
+	// Rounded bottom corners of OK button
+	UIBezierPath *buttonMaskPath = [UIBezierPath bezierPathWithRoundedRect:self.okButtonBackgroundView.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerBottomRight) cornerRadii:CGSizeMake(10.0, 10.0)];
+	CAShapeLayer *buttonMaskLayer = [CAShapeLayer layer];
+	buttonMaskLayer.frame = self.okButtonBackgroundView.bounds;
+	buttonMaskLayer.path = buttonMaskPath.CGPath;
+	self.okButtonBackgroundView.layer.mask = buttonMaskLayer;
 }
 
 - (UIWindow *)findMainWindowPreferringMainScreen:(BOOL)preferMainScreen {

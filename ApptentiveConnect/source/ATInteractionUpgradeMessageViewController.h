@@ -20,11 +20,13 @@
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 
 @property (nonatomic, retain) IBOutlet UIView *alertView;
-@property (retain, nonatomic) IBOutlet UIView *contentView;
+@property (nonatomic, retain) IBOutlet UIView *contentView;
 @property (nonatomic, retain) IBOutlet UIImageView *appIconView;
+@property (nonatomic, retain) IBOutlet UIImageView *appIconBackgroundView;
 @property (nonatomic, retain) IBOutlet UIWebView *webView;
 @property (nonatomic, retain) IBOutlet UIView *okButtonBackgroundView;
-@property (retain, nonatomic) IBOutlet UIView *poweredByBackground;
+@property (nonatomic, retain) IBOutlet UIView *poweredByBackground;
+@property (retain, nonatomic) IBOutlet UILabel *poweredByApptentiveLogo;
 @property (nonatomic, retain) IBOutlet UIImageView *poweredByApptentiveIconView;
 @property (nonatomic, retain) IBOutlet UIImageView *backgroundImageView;
 

@@ -40,37 +40,38 @@ typedef enum {
     [super viewDidLoad];
 	
 	// Blurred background
+	// 10% black over background image
 	UIImage *screenshot = [ATUtilities screenshot];
 	UIColor *tintColor = [UIColor colorWithWhite:0 alpha:0.1];
 	UIImage *blurred = [screenshot applyBlurWithRadius:30 tintColor:tintColor saturationDeltaFactor:1.8 maskImage:nil];
 	[self.backgroundImageView setImage:blurred];
 	
-	// 10% black over background image
-	UIView *black = [[UIView alloc] initWithFrame:self.backgroundImageView.frame];
-	black.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.1f];
-	[self.backgroundImageView addSubview:black];
-	[black release];
-	
 	// App icon
+	// TODO: remove header area if icon is not shown
 	if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_app_icon"] boolValue]) {
 		[self.appIconView setImage:[ATUtilities appIcon]];
-		
+		[self.appIconBackgroundView setImage:[ATBackend imageNamed:@"at_update_icon_shadow"]];
 		// Rounded corners
-		CGRect rect = self.appIconView.bounds;
-		CGFloat radius = MIN(rect.size.width, rect.size.height) / 4;
-		UIBezierPath *appIconMaskPath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:radius];
-		CAShapeLayer *appIconMaskLayer = [CAShapeLayer layer];
-		appIconMaskLayer.frame = self.webView.bounds;
-		appIconMaskLayer.path = appIconMaskPath.CGPath;
-		self.appIconView.layer.mask = appIconMaskLayer;
+		UIImage *maskImage = [ATBackend imageNamed:@"at_update_icon_mask"];
+		CALayer *maskLayer = [[CALayer alloc] init];
+		maskLayer.contents = (id)maskImage.CGImage;
+		maskLayer.frame = (CGRect){CGPointZero, self.appIconView.bounds.size};
+		self.appIconView.layer.mask = maskLayer;
+		[maskLayer release], maskLayer = nil;
 	}
 	
-	// Powered by Apptentive icon
-	// TODO: remove footer area if icon is not shown?
+	// Powered by Apptentive logo
+	// TODO: remove footer area if logo is not shown
 	if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_powered_by"] boolValue]) {
+		self.poweredByApptentiveLogo.text = ATLocalizedString(@"Powered by", @"Powered by followed by Apptentive logo.");
 		self.poweredByApptentiveIconView.contentMode = UIViewContentModeScaleAspectFit;
-		UIImage *poweredByApptentiveIcon = [ATBackend imageNamed:@"at_apptentive_logo"];
+		UIImage *poweredByApptentiveIcon = [ATBackend imageNamed:@"at_update_logo"];
 		[self.poweredByApptentiveIconView setImage:poweredByApptentiveIcon];
+		self.poweredByApptentiveLogo.hidden = NO;
+		self.poweredByApptentiveIconView.hidden = NO;
+	} else {
+		self.poweredByApptentiveLogo.hidden = YES;
+		self.poweredByApptentiveIconView.hidden = YES;
 	}
 		
 	// Web view
@@ -83,12 +84,6 @@ typedef enum {
 	contentMaskLayer.frame = self.webView.bounds;
 	contentMaskLayer.path = contentMaskPath.CGPath;
 	self.contentView.layer.mask = contentMaskLayer;
-	
-	// OK button top border
-	CGRect frame = self.okButtonBackgroundView.frame;
-	frame.origin.y = self.contentView.frame.origin.y + self.contentView.frame.size.height + 1;
-	frame.size.height -= 1;
-	[self.okButtonBackgroundView setFrame:frame];
 	
 	// Rounded bottom corners of OK button
 	UIBezierPath *buttonMaskPath = [UIBezierPath bezierPathWithRoundedRect:self.okButtonBackgroundView.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerBottomRight) cornerRadii:CGSizeMake(10.0, 10.0)];
@@ -408,11 +403,15 @@ typedef enum {
 - (void)dealloc {
 	[_contentView release];
 	[_poweredByBackground release];
+	[_appIconBackgroundView release];
+	[_poweredByApptentiveLogo release];
 	[super dealloc];
 }
 - (void)viewDidUnload {
 	[self setContentView:nil];
 	[self setPoweredByBackground:nil];
+	[self setAppIconBackgroundView:nil];
+	[self setPoweredByApptentiveLogo:nil];
 	[super viewDidUnload];
 }
 @end

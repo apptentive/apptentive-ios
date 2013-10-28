@@ -44,11 +44,16 @@ typedef enum {
 	UIColor *tintColor = [UIColor colorWithWhite:0 alpha:0.1];
 	UIImage *blurred = [screenshot applyBlurWithRadius:30 tintColor:tintColor saturationDeltaFactor:1.8 maskImage:nil];
 	[self.backgroundImageView setImage:blurred];
-
+	
+	// 10% black over background image
+	UIView *black = [[UIView alloc] initWithFrame:self.backgroundImageView.frame];
+	black.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.1f];
+	[self.backgroundImageView addSubview:black];
+	[black release];
 	
 	// App icon
 	if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_app_icon"] boolValue]) {
-		[self.appIconView setImage:[self appIcon]];
+		[self.appIconView setImage:[ATUtilities appIcon]];
 		
 		// Rounded corners
 		CGRect rect = self.appIconView.bounds;
@@ -79,22 +84,18 @@ typedef enum {
 	contentMaskLayer.path = contentMaskPath.CGPath;
 	self.contentView.layer.mask = contentMaskLayer;
 	
+	// OK button top border
+	CGRect frame = self.okButtonBackgroundView.frame;
+	frame.origin.y = self.contentView.frame.origin.y + self.contentView.frame.size.height + 1;
+	frame.size.height -= 1;
+	[self.okButtonBackgroundView setFrame:frame];
+	
 	// Rounded bottom corners of OK button
 	UIBezierPath *buttonMaskPath = [UIBezierPath bezierPathWithRoundedRect:self.okButtonBackgroundView.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerBottomRight) cornerRadii:CGSizeMake(10.0, 10.0)];
 	CAShapeLayer *buttonMaskLayer = [CAShapeLayer layer];
 	buttonMaskLayer.frame = self.okButtonBackgroundView.bounds;
 	buttonMaskLayer.path = buttonMaskPath.CGPath;
 	self.okButtonBackgroundView.layer.mask = buttonMaskLayer;
-	
-}
-
-- (UIImage *)appIcon {
-	NSArray *appIconFileNames = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIconFiles"];
-	//NSLog(@"%@", appIconFileNames);
-	
-#warning Non-retina. Need to select the best-qualitiy image...
-	UIImage *appIcon = [UIImage imageNamed:[appIconFileNames objectAtIndex:0]];
-	return appIcon;
 }
 
 - (IBAction)okButtonPressed:(id)sender {
@@ -194,6 +195,11 @@ typedef enum {
 	
 	CGRect newFrame = [self onscreenRectOfView];
 	CGPoint newViewCenter = CGPointMake(CGRectGetMidX(newFrame), CGRectGetMidY(newFrame));
+	
+	CALayer *l = self.alertView.layer;
+	l.cornerRadius = 10.0;
+	l.backgroundColor = [UIColor clearColor].CGColor;
+	l.masksToBounds = YES;
 	
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
 		[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];

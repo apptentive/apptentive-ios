@@ -43,6 +43,7 @@
 + (BOOL)versionString:(NSString *)a isEqualToVersionString:(NSString *)b;
 
 + (NSArray *)availableAppLocalizations;
++ (UIImage *)appIcon;
 
 /*! Yes if there is only an app version, rather than an app version + build number in standard Cocoa versioning. */
 + (BOOL)bundleVersionIsMainVersion;

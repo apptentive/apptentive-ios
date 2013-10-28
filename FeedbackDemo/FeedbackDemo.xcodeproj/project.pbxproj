@@ -39,6 +39,10 @@
 		49C0031B1334172F0071F088 /* FeedbackDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C0031A1334172F0071F088 /* FeedbackDemoTests.m */; };
 		49E8918B134BF69C00DD098A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E8918A134BF69C00DD098A /* QuartzCore.framework */; };
 		49E891D5134FE40200DD098A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49E891D2134FE40200DD098A /* Localizable.strings */; };
+		584D26681819B0010090BD1B /* icon-120x120.png in Resources */ = {isa = PBXBuildFile; fileRef = 584D26671819B0010090BD1B /* icon-120x120.png */; };
+		584D266D1819BCA70090BD1B /* icon-76x76.png in Resources */ = {isa = PBXBuildFile; fileRef = 584D266A1819BCA70090BD1B /* icon-76x76.png */; };
+		584D266E1819BCA70090BD1B /* icon-144x144.png in Resources */ = {isa = PBXBuildFile; fileRef = 584D266B1819BCA70090BD1B /* icon-144x144.png */; };
+		584D266F1819BCA70090BD1B /* icon-152x152.png in Resources */ = {isa = PBXBuildFile; fileRef = 584D266C1819BCA70090BD1B /* icon-152x152.png */; };
 		58805F3B18120EBA00210DA5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58805F3A18120EBA00210DA5 /* Accelerate.framework */; };
 /* End PBXBuildFile section */
 
@@ -135,6 +139,10 @@
 		49E8918A134BF69C00DD098A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		49E891D3134FE40200DD098A /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		49E891D4134FE40200DD098A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		584D26671819B0010090BD1B /* icon-120x120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-120x120.png"; sourceTree = "<group>"; };
+		584D266A1819BCA70090BD1B /* icon-76x76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-76x76.png"; sourceTree = "<group>"; };
+		584D266B1819BCA70090BD1B /* icon-144x144.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-144x144.png"; sourceTree = "<group>"; };
+		584D266C1819BCA70090BD1B /* icon-152x152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-152x152.png"; sourceTree = "<group>"; };
 		58805F3A18120EBA00210DA5 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		58EA5B3317B4778F00ECEB4B /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		58EA5B3417B4778F00ECEB4B /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -189,6 +197,10 @@
 			isa = PBXGroup;
 			children = (
 				49173D88160176B1002A27CC /* Default-568h@2x.png */,
+				584D266A1819BCA70090BD1B /* icon-76x76.png */,
+				584D266B1819BCA70090BD1B /* icon-144x144.png */,
+				584D266C1819BCA70090BD1B /* icon-152x152.png */,
+				584D26671819B0010090BD1B /* icon-120x120.png */,
 				4960E1221344326B00F6311F /* icon-114x114.png */,
 				4960E1231344326B00F6311F /* icon-29x29.png */,
 				4960E1241344326B00F6311F /* icon-58x58.png */,
@@ -428,10 +440,14 @@
 				493529BD138C712A000E464A /* ApptentiveResources.bundle in Resources */,
 				49C002F61334172F0071F088 /* InfoPlist.strings in Resources */,
 				49C002FF1334172F0071F088 /* MainWindow.xib in Resources */,
+				584D266E1819BCA70090BD1B /* icon-144x144.png in Resources */,
 				49C003051334172F0071F088 /* RootViewController.xib in Resources */,
 				4982ECE6133C2DCF00B91781 /* MainWindow-iPad.xib in Resources */,
+				584D266F1819BCA70090BD1B /* icon-152x152.png in Resources */,
 				4960E1281344326B00F6311F /* icon-114x114.png in Resources */,
 				4960E1291344326B00F6311F /* icon-29x29.png in Resources */,
+				584D26681819B0010090BD1B /* icon-120x120.png in Resources */,
+				584D266D1819BCA70090BD1B /* icon-76x76.png in Resources */,
 				4960E12A1344326B00F6311F /* icon-58x58.png in Resources */,
 				4960E12B1344326B00F6311F /* icon-72x72.png in Resources */,
 				4960E12C1344326B00F6311F /* icon.png in Resources */,

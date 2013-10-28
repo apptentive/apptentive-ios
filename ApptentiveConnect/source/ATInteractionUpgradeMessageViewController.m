@@ -44,6 +44,12 @@ typedef enum {
 	UIImage *blurred = [screenshot applyLightEffect];
 	[self.backgroundImageView setImage:blurred];
 	
+	// 10% black over background image
+	UIView *black = [[UIView alloc] initWithFrame:self.backgroundImageView.frame];
+	black.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.1f];
+	[self.backgroundImageView addSubview:black];
+	[black release];
+	
 	// App icon
 	if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_app_icon"] boolValue]) {
 		[self.appIconView setImage:[ATUtilities appIcon]];
@@ -77,13 +83,18 @@ typedef enum {
 	contentMaskLayer.path = contentMaskPath.CGPath;
 	self.contentView.layer.mask = contentMaskLayer;
 	
+	// OK button top border
+	CGRect frame = self.okButtonBackgroundView.frame;
+	frame.origin.y = self.contentView.frame.origin.y + self.contentView.frame.size.height + 1;
+	frame.size.height -= 1;
+	[self.okButtonBackgroundView setFrame:frame];
+	
 	// Rounded bottom corners of OK button
 	UIBezierPath *buttonMaskPath = [UIBezierPath bezierPathWithRoundedRect:self.okButtonBackgroundView.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerBottomRight) cornerRadii:CGSizeMake(10.0, 10.0)];
 	CAShapeLayer *buttonMaskLayer = [CAShapeLayer layer];
 	buttonMaskLayer.frame = self.okButtonBackgroundView.bounds;
 	buttonMaskLayer.path = buttonMaskPath.CGPath;
 	self.okButtonBackgroundView.layer.mask = buttonMaskLayer;
-	
 }
 
 - (IBAction)okButtonPressed:(id)sender {

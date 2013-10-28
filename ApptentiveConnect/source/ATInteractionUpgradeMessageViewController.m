@@ -23,6 +23,7 @@ typedef enum {
 - (UIWindow *)windowForViewController:(UIViewController *)viewController;
 - (void)statusBarChanged:(NSNotification *)notification;
 - (void)applicationDidBecomeActive:(NSNotification *)notification;
+- (void)applyRoundedCorners;
 @end
 
 @implementation ATInteractionUpgradeMessageViewController
@@ -43,7 +44,7 @@ typedef enum {
 	// 10% black over background image
 	UIImage *screenshot = [ATUtilities screenshot];
 	UIColor *tintColor = [UIColor colorWithWhite:0 alpha:0.1];
-	UIImage *blurred = [screenshot applyBlurWithRadius:30 tintColor:tintColor saturationDeltaFactor:1.8 maskImage:nil];
+	UIImage *blurred = [screenshot at_applyBlurWithRadius:30 tintColor:tintColor saturationDeltaFactor:1.8 maskImage:nil];
 	[self.backgroundImageView setImage:blurred];
 	
 	// App icon
@@ -77,20 +78,8 @@ typedef enum {
 	// Web view
 	NSString *html = [self.upgradeMessageInteraction.configuration objectForKey:@"body"];
 	[self.webView loadHTMLString:html baseURL:nil];
-
-	// Rounded top corners of content
-	UIBezierPath *contentMaskPath = [UIBezierPath bezierPathWithRoundedRect:self.contentView.bounds byRoundingCorners:(UIRectCornerTopLeft | UIRectCornerTopRight) cornerRadii:CGSizeMake(10.0, 10.0)];
-	CAShapeLayer *contentMaskLayer = [CAShapeLayer layer];
-	contentMaskLayer.frame = self.webView.bounds;
-	contentMaskLayer.path = contentMaskPath.CGPath;
-	self.contentView.layer.mask = contentMaskLayer;
 	
-	// Rounded bottom corners of OK button
-	UIBezierPath *buttonMaskPath = [UIBezierPath bezierPathWithRoundedRect:self.okButtonBackgroundView.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerBottomRight) cornerRadii:CGSizeMake(10.0, 10.0)];
-	CAShapeLayer *buttonMaskLayer = [CAShapeLayer layer];
-	buttonMaskLayer.frame = self.okButtonBackgroundView.bounds;
-	buttonMaskLayer.path = buttonMaskPath.CGPath;
-	self.okButtonBackgroundView.layer.mask = buttonMaskLayer;
+	[self applyRoundedCorners];
 }
 
 - (IBAction)okButtonPressed:(id)sender {
@@ -100,7 +89,8 @@ typedef enum {
 }
 
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion withAction:(ATInteractionUpgradeMessageAction)action {
-	CGPoint endingPoint = [self offscreenPositionOfView];
+	CGRect newFrame = self.alertView.frame;
+	CGPoint offscreenCenter = CGPointMake(CGRectGetMidX(newFrame), CGRectGetMidY(newFrame) - (newFrame.origin.y + newFrame.size.height));
 	
 	CGRect poweredByEndingFrame = self.poweredByBackground.frame;
 	poweredByEndingFrame = CGRectOffset(self.poweredByBackground.frame, 0, poweredByEndingFrame.size.height);
@@ -111,7 +101,7 @@ typedef enum {
 	}
 	
 	[UIView animateWithDuration:duration animations:^(void){
-		self.alertView.center = endingPoint;
+		self.alertView.center = offscreenCenter;
 		self.backgroundImageView.alpha = 0.0;
 		self.poweredByBackground.frame = poweredByEndingFrame;
 	} completion:^(BOOL finished) {
@@ -178,17 +168,18 @@ typedef enum {
 	CGPoint center = animationCenter;
 	center.y = ceilf(center.y);
 	
-	CGRect endingFrame = [[UIScreen mainScreen] applicationFrame];
+	CGRect endingFrame = originalPresentingWindow.bounds;//[[UIScreen mainScreen] applicationFrame];
 	
 	[self positionInWindow];
 
 	self.window.center = CGPointMake(CGRectGetMidX(endingFrame), CGRectGetMidY(endingFrame));
-	self.alertView.center = [self offscreenPositionOfView];
 	
 	CGRect poweredByEndingFrame = self.poweredByBackground.frame;
 	self.poweredByBackground.frame = CGRectOffset(poweredByEndingFrame, 0, poweredByEndingFrame.size.height);
 	
-	CGRect newFrame = [self onscreenRectOfView];
+	CGRect newFrame = self.alertView.frame;
+	self.alertView.center = CGPointMake(CGRectGetMidX(newFrame), CGRectGetMidY(newFrame) - (newFrame.origin.y + newFrame.size
+																							.height));
 	CGPoint newViewCenter = CGPointMake(CGRectGetMidX(newFrame), CGRectGetMidY(newFrame));
 	
 	CALayer *l = self.alertView.layer;
@@ -216,27 +207,6 @@ typedef enum {
 	//[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroDidShowNotification object:self userInfo:nil];
 }
 
-- (CGRect)onscreenRectOfView {
-	CGRect screenBounds = [[UIScreen mainScreen] bounds];
-	CGRect alertRect = self.alertView.bounds;
-	alertRect.size.height = screenBounds.size.height - 30 - self.poweredByBackground.bounds.size.height;
-	alertRect.origin.y = 20;
-	alertRect.origin.x = floor((screenBounds.size.width - alertRect.size.width)*0.5);
-	return alertRect;
-}
-
-- (CGPoint)offscreenPositionOfView {
-	CGRect f = [self onscreenRectOfView];
-	NSLog(@"onscreen: %@", NSStringFromCGRect(f));
-	CGRect offscreenViewRect = CGRectOffset(f, 0, -(f.origin.y + f.size.height + 20));
-	
-	CGPoint offscreenPoint = CGPointMake(CGRectGetMidX(offscreenViewRect), CGRectGetMidY(offscreenViewRect));
-	
-	NSLog(@"Offscreen: %@", NSStringFromCGPoint(offscreenPoint));
-	
-	return offscreenPoint;
-}
-
 - (BOOL)isIPhoneAppInIPad {
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
 		NSString *model = [[UIDevice currentDevice] model];
@@ -251,41 +221,23 @@ typedef enum {
 	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
 	
 	CGFloat angle = 0.0;
-	CGRect newFrame = self.window.frame;
-	CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
 	
 	switch (orientation) {
 		case UIInterfaceOrientationPortraitUpsideDown:
 			angle = M_PI;
-//			newFrame.size.height -= statusBarSize.height;
 			break;
 		case UIInterfaceOrientationLandscapeLeft:
 			angle = - M_PI / 2.0f;
-//			newFrame.origin.x += statusBarSize.width;
-//			newFrame.size.width -= statusBarSize.width;
 			break;
 		case UIInterfaceOrientationLandscapeRight:
 			angle = M_PI / 2.0f;
-//			newFrame.size.width -= statusBarSize.width;
 			break;
 		case UIInterfaceOrientationPortrait:
 		default:
 			angle = 0.0;
-//			newFrame.origin.y += statusBarSize.height;
-//			newFrame.size.height -= statusBarSize.height;
 			break;
 	}
 	
-	/*
-	self.alertView.layer.borderColor = [UIColor redColor].CGColor;
-	self.alertView.layer.borderWidth = 1;
-	self.view.layer.borderColor = [UIColor greenColor].CGColor;
-	self.view.layer.borderWidth = 1;
-	self.backgroundImageView.layer.borderColor = [UIColor yellowColor].CGColor;
-	self.backgroundImageView.layer.borderWidth = 1;
-	self.contentView.layer.borderColor = [UIColor blueColor].CGColor;
-	self.contentView.layer.borderWidth = 1;
-	 */
 	CGAffineTransform t = [ATUtilities viewTransformInWindow:originalPresentingWindow];
 	self.window.transform = t;
 	self.window.frame = originalPresentingWindow.bounds;
@@ -294,24 +246,14 @@ typedef enum {
 	[self.poweredByBackground layoutIfNeeded];
 	[self.alertView layoutIfNeeded];
 	[self.contentView layoutIfNeeded];
+	/*
 	UIView *v = self.appIconView;
 	while ((v = (UIView *)v.superview)) {
 		[v layoutSubviews];
 	}
+	 */
 	
-	// Rounded top corners of content
-	UIBezierPath *contentMaskPath = [UIBezierPath bezierPathWithRoundedRect:self.contentView.bounds byRoundingCorners:(UIRectCornerTopLeft | UIRectCornerTopRight) cornerRadii:CGSizeMake(10.0, 10.0)];
-	CAShapeLayer *contentMaskLayer = [CAShapeLayer layer];
-	contentMaskLayer.frame = self.webView.bounds;
-	contentMaskLayer.path = contentMaskPath.CGPath;
-	self.contentView.layer.mask = contentMaskLayer;
-	
-	// Rounded bottom corners of OK button
-	UIBezierPath *buttonMaskPath = [UIBezierPath bezierPathWithRoundedRect:self.okButtonBackgroundView.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerBottomRight) cornerRadii:CGSizeMake(10.0, 10.0)];
-	CAShapeLayer *buttonMaskLayer = [CAShapeLayer layer];
-	buttonMaskLayer.frame = self.okButtonBackgroundView.bounds;
-	buttonMaskLayer.path = buttonMaskPath.CGPath;
-	self.okButtonBackgroundView.layer.mask = buttonMaskLayer;
+	[self applyRoundedCorners];
 }
 
 - (UIWindow *)findMainWindowPreferringMainScreen:(BOOL)preferMainScreen {
@@ -356,6 +298,22 @@ typedef enum {
 		[self unhide:NO];
 	}
 	[pool release], pool = nil;
+}
+
+- (void)applyRoundedCorners {
+	// Rounded top corners of content
+	UIBezierPath *contentMaskPath = [UIBezierPath bezierPathWithRoundedRect:self.contentView.bounds byRoundingCorners:(UIRectCornerTopLeft | UIRectCornerTopRight) cornerRadii:CGSizeMake(10.0, 10.0)];
+	CAShapeLayer *contentMaskLayer = [CAShapeLayer layer];
+	contentMaskLayer.frame = self.webView.bounds;
+	contentMaskLayer.path = contentMaskPath.CGPath;
+	self.contentView.layer.mask = contentMaskLayer;
+	
+	// Rounded bottom corners of OK button
+	UIBezierPath *buttonMaskPath = [UIBezierPath bezierPathWithRoundedRect:self.okButtonBackgroundView.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerBottomRight) cornerRadii:CGSizeMake(10.0, 10.0)];
+	CAShapeLayer *buttonMaskLayer = [CAShapeLayer layer];
+	buttonMaskLayer.frame = self.okButtonBackgroundView.bounds;
+	buttonMaskLayer.path = buttonMaskPath.CGPath;
+	self.okButtonBackgroundView.layer.mask = buttonMaskLayer;
 }
 
 - (void)unhide:(BOOL)animated {

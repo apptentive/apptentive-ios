@@ -11,6 +11,7 @@
 @interface ATConnect ()
 - (NSDictionary *)customPersonData;
 - (NSDictionary *)customDeviceData;
+- (NSDictionary *)integrationConfiguration;
 - (BOOL)messageCenterEnabled;
 - (BOOL)emailRequired;
 

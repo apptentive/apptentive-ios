@@ -33,6 +33,7 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 #endif
 	NSMutableDictionary *customPersonData;
 	NSMutableDictionary *customDeviceData;
+	NSMutableDictionary *integrationConfiguration;
 	NSString *apiKey;
 	BOOL showTagline;
 	BOOL showEmailField;
@@ -84,4 +85,9 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 - (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key DEPRECATED_ATTRIBUTE;
 /*! Deprecated. Use removeCustomDeviceDataWithKey: instead. */
 - (void)removeCustomDataWithKey:(NSString *)key DEPRECATED_ATTRIBUTE;
+
+/*! Add or remove a token for 3rd-party integration services. */
+- (void)addIntegration:(NSString *)integration withToken:(NSString *)token;
+- (void)removeIntegration:(NSString *)integration;
+
 @end

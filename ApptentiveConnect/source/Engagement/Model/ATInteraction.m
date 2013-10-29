@@ -59,7 +59,7 @@
 	return [ATInteractionUsageData usageDataForInteraction:self];
 }
 
-- (BOOL)criteriaAreMetForCodePoint:(NSString *)codePoint {
+- (BOOL)criteriaAreMet {
 	return [self criteriaAreMetForUsageData:[self usageData]];
 }
 

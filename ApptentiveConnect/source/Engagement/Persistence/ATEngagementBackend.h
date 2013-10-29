@@ -40,6 +40,6 @@ NSString *const ATEngagementInteractionsInvokesVersionKey;
 
 - (void)presentInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController;
 - (void)presentUpgradeMessageInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController;
-- (void)presentEnjoymentDialogInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController;
 
+- (void)presentEnjoymentDialogInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController;
 @end

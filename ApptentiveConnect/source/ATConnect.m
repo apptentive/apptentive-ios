@@ -183,6 +183,17 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 	[[ATBackend sharedBackend] presentIntroDialogFromViewController:viewController withTitle:title prompt:body placeholderText:placeholder];
 }
 
+
+- (void)presentUpgradeDialogFromViewControllerIfAvailable:(UIViewController *)viewController {
+	NSArray *interactions = [[ATEngagementBackend sharedBackend] interactionsForCodePoint:@"app.launch"];
+	for (ATInteraction *interaction in interactions) {
+		if ([interaction.type isEqualToString:@"UpgradeMessage"]) {
+			[[ATEngagementBackend sharedBackend] presentUpgradeMessageInteraction:interaction fromViewController:viewController];
+			break;
+		}
+	}
+}
+
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion {
 	[[ATBackend sharedBackend] dismissMessageCenterAnimated:animated completion:completion];
 }

@@ -248,25 +248,24 @@ static NSDateFormatter *dateFormatter = nil;
 	return result;
 }
 
-+ (UIImage *)screenshot
-{
+//TODO: Use iOS 7 snapshotting API.
++ (UIImage *)screenshot {
     // Create a graphics context with the target size
     // On iOS 4 and later, use UIGraphicsBeginImageContextWithOptions to take the scale into consideration
     // On iOS prior to 4, fall back to use UIGraphicsBeginImageContext
 	// https://developer.apple.com/library/ios/qa/qa1703/_index.html
     CGSize imageSize = [[UIScreen mainScreen] bounds].size;
-    if (NULL != UIGraphicsBeginImageContextWithOptions)
+    if (NULL != UIGraphicsBeginImageContextWithOptions) {
         UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0);
-	else
+	} else {
 		UIGraphicsBeginImageContext(imageSize);
+	}
 	
 	CGContextRef context = UIGraphicsGetCurrentContext();
 	
 	// Iterate over every window from back to front
-	for (UIWindow *window in [[UIApplication sharedApplication] windows])
-	{
-		if (![window respondsToSelector:@selector(screen)] || [window screen] == [UIScreen mainScreen])
-		{
+	for (UIWindow *window in [[UIApplication sharedApplication] windows]) {
+		if (![window respondsToSelector:@selector(screen)] || [window screen] == [UIScreen mainScreen]) {
 			// -renderInContext: renders in the coordinate space of the layer,
 			// so we must first apply the layer's geometry to the graphics context
 			CGContextSaveGState(context);

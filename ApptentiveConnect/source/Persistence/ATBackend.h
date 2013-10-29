@@ -23,7 +23,8 @@
 
 NSString *const ATBackendBecameReadyNotification;
 
-#define USE_STAGING 0
+#warning Make 0
+#define USE_STAGING 1
 
 @class ATAppConfigurationUpdater;
 @class ATDataManager;

@@ -13,6 +13,7 @@
 #import "ATInteraction.h"
 #import "ATAppRatingFlow_Private.h"
 #import "ATConnect_Private.h"
+#import "ATInteractionEnjoymentDialogController.h"
 #import "ATInteractionUpgradeMessageViewController.h"
 
 NSString *const ATEngagementInstallDateKey = @"ATEngagementInstallDateKey";
@@ -222,6 +223,7 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	
 	ATInteractionUpgradeMessageViewController *upgradeMessage = [[ATInteractionUpgradeMessageViewController alloc] initWithInteraction:interaction];
 	[upgradeMessage presentFromViewController:viewController animated:YES];
+	[upgradeMessage release];
 }
 
 - (void)presentEnjoymentDialogInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
@@ -229,6 +231,7 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	
 	ATInteractionEnjoymentDialogController *enjoymentDialog = [[ATInteractionEnjoymentDialogController alloc] initWithInteraction:interaction];
 	[enjoymentDialog presentEnjoymentDialogFromViewController:viewController];
+	[enjoymentDialog release];
 }
 
 @end

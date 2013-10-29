@@ -656,10 +656,8 @@ typedef enum {
 }
 
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	static NSString *AutomatedCellIdentifier = @"ATAutomatedMessageCell";
 	static NSString *UserCellIdentifier = @"ATTextMessageUserCell";
 	static NSString *DevCellIdentifier = @"ATTextMessageDevCell";
-	static NSString *FileCellIdentifier = @"ATFileMessageCell";
 	
 	ATMessageCellType cellType = ATMessageCellTypeUnknown;
 	
@@ -821,7 +819,7 @@ typedef enum {
 		
 		cell = textCell;
 	} else if (cellType == ATMessageCellTypeAutomated) {
-		ATAutomatedMessageCell *currentCell = (ATAutomatedMessageCell *)[tableView dequeueReusableCellWithIdentifier:AutomatedCellIdentifier];
+		ATAutomatedMessageCell *currentCell = (ATAutomatedMessageCell *)[tableView dequeueReusableCellWithIdentifier:[ATAutomatedMessageCell reuseIdentifier]];
 		
 		if (!currentCell) {
 			UINib *nib = [UINib nibWithNibName:@"ATAutomatedMessageCell" bundle:[ATConnect resourceBundle]];
@@ -858,7 +856,7 @@ typedef enum {
 		
 		cell = currentCell;
 	} else if (cellType == ATMessageCellTypeFile) {
-		ATFileMessageCell *currentCell = (ATFileMessageCell *)[tableView dequeueReusableCellWithIdentifier:FileCellIdentifier];
+		ATFileMessageCell *currentCell = (ATFileMessageCell *)[tableView dequeueReusableCellWithIdentifier:[ATFileMessageCell reuseIdentifier]];
 		
 		if (!currentCell) {
 			UINib *nib = [UINib nibWithNibName:@"ATFileMessageCell" bundle:[ATConnect resourceBundle]];

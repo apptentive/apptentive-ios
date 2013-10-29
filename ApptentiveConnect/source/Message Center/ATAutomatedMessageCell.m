@@ -34,6 +34,14 @@
 	self.containerView.layer.masksToBounds = NO;
 }
 
++ (NSString *)reuseIdentifier {
+    return @"ATAutomatedMessageCell";
+}
+
+- (NSString *)reuseIdentifier {
+    return [[self class] reuseIdentifier];
+}
+
 - (void)dealloc {
     [dateLabel release];
 	[messageText release];

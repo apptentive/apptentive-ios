@@ -27,4 +27,6 @@
 @property (nonatomic, assign, getter = shouldShowDateLabel) BOOL showDateLabel;
 
 - (void)configureWithFileMessage:(ATFileMessage *)message;
+
++ (NSString *)reuseIdentifier;
 @end

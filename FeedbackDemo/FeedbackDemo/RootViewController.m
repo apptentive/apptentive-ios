@@ -57,9 +57,6 @@ enum kEngagementRows {
 	[imageView release], imageView = nil;
 	[super viewDidLoad];
 	
-#warning Remove before release. Only for testing blurred UpgradeMessage background with colored background.
-	self.tableView.backgroundColor =  [UIColor purpleColor];
-	
     tags = [[NSSet alloc] initWithObjects:@"testsurvey", @"testtag", nil];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyBecameAvailable:) name:ATSurveyNewSurveyAvailableNotification object:nil];

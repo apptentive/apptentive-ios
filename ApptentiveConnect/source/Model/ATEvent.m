@@ -100,7 +100,7 @@
 		@try {
 			result = [NSKeyedUnarchiver unarchiveObjectWithData:self.dictionaryData];
 		} @catch (NSException *exception) {
-			ATLogError(@"Unable to unarchive event: %@", result);
+			ATLogError(@"Unable to unarchive event: %@", exception);
 		}
 		return result;
 	}

@@ -1,5 +1,35 @@
 This document tracks changes to the API between versions.
 
+# 1.1.1
+
+## ATConnect
+
+* Deprecated `useMessageCenter` property.
+
+# 1.1.0
+
+We added a method for users who only want to send feedback, not use the entire Message Center.
+
+## ATConnect
+
+* Added `@property useMessageCenter`
+
+# 1.0.1
+
+We have deprecated a few methods and added some new methods where appropriate.
+
+## ATConnect
+
+* Deprecated `-addCustomData:withKey:`
+* Deprecated `-removeCustomData:withKey:`
+* Added `-addCustomPersonData:withKey:`
+* Added `-removeCustomPersonData:withKey:`
+* Added `-addCustomDeviceData:withKey:`
+* Added `-removeCustomDeviceData:withKey:`
+
+## ATAppRatingFlow
+
+* Deprecated `appName`
 
 # 1.0
 

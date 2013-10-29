@@ -21,7 +21,7 @@ typedef enum {
 
 @class ATMessageDisplayType, ATMessageSender;
 
-@interface ATMessage : ATRecord <ATJSONModel>
+@interface ATAbstractMessage : ATRecord <ATJSONModel>
 
 @property (nonatomic, retain) NSString *pendingMessageID;
 @property (nonatomic, retain) NSNumber *pendingState;
@@ -33,12 +33,12 @@ typedef enum {
 @property (nonatomic, retain) ATMessageSender *sender;
 @property (nonatomic, retain) NSSet *displayTypes;
 
-+ (ATMessage *)findMessageWithID:(NSString *)apptentiveID;
-+ (ATMessage *)findMessageWithPendingID:(NSString *)pendingID;
++ (ATAbstractMessage *)findMessageWithID:(NSString *)apptentiveID;
++ (ATAbstractMessage *)findMessageWithPendingID:(NSString *)pendingID;
 - (NSArray *)errorsFromErrorMessage;
 @end
 
-@interface ATMessage (CoreDataGeneratedAccessors)
+@interface ATAbstractMessage (CoreDataGeneratedAccessors)
 
 - (void)addDisplayTypesObject:(ATMessageDisplayType *)value;
 - (void)removeDisplayTypesObject:(ATMessageDisplayType *)value;

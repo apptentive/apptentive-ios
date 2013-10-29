@@ -1,5 +1,5 @@
 //
-//  ATSurveyResponse.h
+//  ATLegacySurveyResponse.h
 //  ApptentiveSurveys
 //
 //  Created by Andrew Wooster on 11/4/11.
@@ -11,7 +11,7 @@
 
 @class ATSurveyQuestionResponse;
 
-@interface ATSurveyResponse : ATLegacyRecord {
+@interface ATLegacySurveyResponse : ATLegacyRecord {
 	NSMutableArray *questionResponses;
 }
 @property (nonatomic, copy) NSString *identifier;

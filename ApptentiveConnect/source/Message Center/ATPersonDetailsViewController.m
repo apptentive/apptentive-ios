@@ -51,6 +51,7 @@ enum kPersonDetailsTableSections {
 	[_nameTextField release];
 	[_poweredByLabel release];
 	[_logoImage release];
+	[emailRequiredAlert release], emailRequiredAlert = nil;
 	[super dealloc];
 }
 
@@ -71,6 +72,17 @@ enum kPersonDetailsTableSections {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+	if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
+		self.edgesForExtendedLayout = UIRectEdgeNone;
+	}
+	
+	self.nameTextField.placeholder = ATLocalizedString(@"Name", @"Placeholder text for `Name` field when editing user details.");
+	if ([[ATConnect sharedConnection] emailRequired]) {
+		self.emailTextField.placeholder = ATLocalizedString(@"Email (required)", @"Placeholder text for *required* `Email` field when editing user details.");
+	} else {
+		self.emailTextField.placeholder = ATLocalizedString(@"Email", @"Placeholder text for `Email` field when editing user details.");
+	}
+	
 	if ([ATPersonInfo personExists]) {
 		ATPersonInfo *person = [ATPersonInfo currentPerson];
 		self.nameTextField.text = person.name;
@@ -83,8 +95,15 @@ enum kPersonDetailsTableSections {
 	previousScrollInsets = self.tableView.contentInset;
 	UIImage *buttonBackgroundImage = [[ATBackend imageNamed:@"at_contact_button_bg"] stretchableImageWithLeftCapWidth:1 topCapHeight:40];
 	[self.logoButton setBackgroundImage:buttonBackgroundImage forState:UIControlStateNormal];
-	self.logoImage.image = [ATBackend imageNamed:@"at_apptentive_logo"];
-	self.poweredByLabel.text = ATLocalizedString(@"Message Center Powered By", @"Text above Apptentive logo");
+	if ([[ATConnect sharedConnection] showTagline]) {
+		self.logoImage.image = [ATBackend imageNamed:@"at_apptentive_logo"];
+		self.poweredByLabel.text = ATLocalizedString(@"Message Center Powered By", @"Text above Apptentive logo");
+		self.logoImage.hidden = NO;
+		self.poweredByLabel.hidden = NO;
+	} else {
+		self.logoImage.hidden = YES;
+		self.poweredByLabel.hidden = YES;
+	}
 	[self registerForKeyboardNotifications];
 	[self.emailTextField addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];
 	emailValidationLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width - 10, 20)];
@@ -127,6 +146,10 @@ enum kPersonDetailsTableSections {
 }
 
 - (BOOL)savePersonData {
+	if ([[ATConnect sharedConnection] emailRequired] && self.emailTextField.text.length == 0) {
+		return NO;
+	}
+	
 	if (![self emailIsValid]) {
 		return NO;
 	}
@@ -159,15 +182,26 @@ enum kPersonDetailsTableSections {
 }
 
 - (IBAction)donePressed:(id)sender {
-	if ([self savePersonData]) {
+	if ([[ATConnect sharedConnection] emailRequired] && self.emailTextField.text.length == 0) {
+		if (emailRequiredAlert) {
+			[emailRequiredAlert release], emailRequiredAlert = nil;
+		}
+		NSString *title = ATLocalizedString(@"Please enter an email address", @"Email is required and no email was entered alert title.");
+		NSString *message = ATLocalizedString(@"An email address is required for us to respond.", @"Email is required and no email was entered alert message.");
+		emailRequiredAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"OK", @"OK button title"), nil];
+		[emailRequiredAlert show];
+	} else if ([self savePersonData]) {
 		[self.navigationController popViewControllerAnimated:YES];
 	}
 }
 
 - (IBAction)logoPressed:(id)sender {
 	ATInfoViewController *vc = [[ATInfoViewController alloc] init];
-	[self presentModalViewController:vc animated:YES];
+	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
+	nc.modalPresentationStyle = UIModalPresentationFormSheet;
+	[self.navigationController presentModalViewController:nc animated:YES];
 	[vc release], vc = nil;
+	[nc release], nc = nil;
 }
 
 - (BOOL)disablesAutomaticKeyboardDismissal {
@@ -315,4 +349,20 @@ enum kPersonDetailsTableSections {
 		t.scrollIndicatorInsets = previousScrollInsets;
 	} completion:NULL];
 }
+
+#pragma mark UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+	if (emailRequiredAlert && [alertView isEqual:emailRequiredAlert]) {
+		[emailRequiredAlert release], emailRequiredAlert = nil;
+		[self.emailTextField becomeFirstResponder];
+	}
+}
+
+- (void)alertViewCancel:(UIAlertView *)alertView {
+	if (emailRequiredAlert && [alertView isEqual:emailRequiredAlert]) {
+		[emailRequiredAlert release], emailRequiredAlert = nil;
+	}
+}
+
 @end

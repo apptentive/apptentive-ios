@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ATPersonDetailsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
+@interface ATPersonDetailsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate> {
+	@private
+	UIAlertView *emailRequiredAlert;
+}
 @property (retain, nonatomic) IBOutlet UITableView *tableView;
 @property (retain, nonatomic) IBOutlet UIButton *logoButton;
 @property (retain, nonatomic) IBOutlet UITableViewCell *emailCell;

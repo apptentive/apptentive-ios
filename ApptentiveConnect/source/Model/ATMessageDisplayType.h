@@ -15,7 +15,7 @@ typedef enum {
 	ATMessageDisplayTypeTypeMessageCenter,
 } ATMessageDisplayTypeType;
 
-@class ATMessage;
+@class ATAbstractMessage;
 
 @interface ATMessageDisplayType : NSManagedObject
 
@@ -29,8 +29,8 @@ typedef enum {
 
 @interface ATMessageDisplayType (CoreDataGeneratedAccessors)
 
-- (void)addMessagesObject:(ATMessage *)value;
-- (void)removeMessagesObject:(ATMessage *)value;
+- (void)addMessagesObject:(ATAbstractMessage *)value;
+- (void)removeMessagesObject:(ATAbstractMessage *)value;
 - (void)addMessages:(NSSet *)values;
 - (void)removeMessages:(NSSet *)values;
 

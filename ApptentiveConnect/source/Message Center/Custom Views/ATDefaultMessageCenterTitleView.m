@@ -38,15 +38,19 @@
 	title = [[UILabel alloc] initWithFrame:CGRectZero];
 	title.text = titleString;
 	title.minimumFontSize = 10;
-	title.adjustsFontSizeToFitWidth = YES;
-	title.font = [UIFont boldSystemFontOfSize:20.];
-	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-		title.textColor = [UIColor whiteColor];
-		title.shadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4];
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+		title.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+		title.textColor = [UIColor blackColor];
 	} else {
-		title.textColor = [UIColor colorWithRed:113/255. green:120/255. blue:128/255. alpha:1];
-		title.shadowColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.7];
-		title.shadowOffset = CGSizeMake(0, 1);
+		title.font = [UIFont boldSystemFontOfSize:20.];
+		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+			title.textColor = [UIColor whiteColor];
+			title.shadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4];
+		} else {
+			title.textColor = [UIColor colorWithRed:113/255. green:120/255. blue:128/255. alpha:1];
+			title.shadowColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.7];
+			title.shadowOffset = CGSizeMake(0, 1);
+		}
 	}
 	
 	title.textAlignment = UITextAlignmentLeft;

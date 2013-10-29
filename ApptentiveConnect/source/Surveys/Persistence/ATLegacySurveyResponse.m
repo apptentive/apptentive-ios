@@ -1,18 +1,18 @@
 //
-//  ATSurveyResponse.m
+//  ATLegacySurveyResponse.m
 //  ApptentiveSurveys
 //
 //  Created by Andrew Wooster on 11/4/11.
 //  Copyright (c) 2011 Apptentive. All rights reserved.
 //
 
-#import "ATSurveyResponse.h"
+#import "ATLegacySurveyResponse.h"
 #import "ATWebClient+SurveyAdditions.h"
 
 #define kATSurveyStorageVersion 1
 #define kATSurveyQuestionResponseStorageVersion 1
 
-@implementation ATSurveyResponse
+@implementation ATLegacySurveyResponse
 @synthesize identifier;
 @synthesize completionSeconds;
 
@@ -118,7 +118,7 @@
 }
 
 - (ATAPIRequest *)requestForSendingRecord {
-	return [[ATWebClient sharedClient] requestForPostingSurveyResponse:self];
+	return [[ATWebClient sharedClient] requestForPostingLegacySurveyResponse:self];
 }
 @end
 

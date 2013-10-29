@@ -12,26 +12,24 @@
 @interface ATInteractionUsageData : NSObject
 
 @property (nonatomic, retain) ATInteraction *interaction;
-@property (nonatomic, retain) NSString *codePoint;
 @property (nonatomic, retain) NSNumber *daysSinceInstall;
 @property (nonatomic, retain) NSNumber *daysSinceUpgrade;
 @property (nonatomic, retain) NSString *applicationVersion;
-@property (nonatomic, retain) NSNumber *codePointInvokesTotal;
-@property (nonatomic, retain) NSNumber *codePointInvokesVersion;
-@property (nonatomic, retain) NSNumber *interactionInvokesTotal;
-@property (nonatomic, retain) NSNumber *interactionInvokesVersion;
+@property (nonatomic, retain) NSDictionary *codePointInvokesTotal;
+@property (nonatomic, retain) NSDictionary *codePointInvokesVersion;
+@property (nonatomic, retain) NSDictionary *interactionInvokesTotal;
+@property (nonatomic, retain) NSDictionary *interactionInvokesVersion;
 
-- (id)initWithInteraction:(ATInteraction *)interaction atCodePoint:(NSString *)codePoint;
-+ (ATInteractionUsageData *)usageDataForInteraction:(ATInteraction *)interaction atCodePoint:(NSString *)codePoint;
+- (id)initWithInteraction:(ATInteraction *)interaction;
++ (ATInteractionUsageData *)usageDataForInteraction:(ATInteraction *)interaction;
 + (ATInteractionUsageData *)usageDataForInteraction:(ATInteraction *)interaction
-							  atCodePoint:(NSString *)codePoint
-						 daysSinceInstall:(NSNumber *)daysSinceInstall
-						 daysSinceUpgrade:(NSNumber *)daysSinceUpgrade
-					   applicationVersion:(NSString *)applicationVersion
-					codePointInvokesTotal:(NSNumber *)codePointInvokesTotal
-				  codePointInvokesVersion:(NSNumber *)codePointInvokesVersion
-				  interactionInvokesTotal:(NSNumber *)interactionInvokesTotal
-				interactionInvokesVersion:(NSNumber *)interactionInvokesVersion;
+								   daysSinceInstall:(NSNumber *)daysSinceInstall
+								   daysSinceUpgrade:(NSNumber *)daysSinceUpgrade
+								 applicationVersion:(NSString *)applicationVersion
+							  codePointInvokesTotal:(NSDictionary *)codePointInvokesTotal
+							codePointInvokesVersion:(NSDictionary *)codePointInvokesVersion
+							interactionInvokesTotal:(NSDictionary *)interactionInvokesTotal
+						  interactionInvokesVersion:(NSDictionary *)interactionInvokesVersion;
 
 - (NSDictionary *)predicateEvaluationDictionary;
 

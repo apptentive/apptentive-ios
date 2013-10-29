@@ -21,30 +21,28 @@
 @synthesize interactionInvokesTotal = _interactionInvokesTotal;
 @synthesize interactionInvokesVersion = _interactionInvokesVersion;
 
-- (id)initWithInteraction:(ATInteraction *)interaction atCodePoint:(NSString *)codePoint {
+- (id)initWithInteraction:(ATInteraction *)interaction {
 	if (self = [super init]) {
 		_interaction = interaction;
-		_codePoint = codePoint;
 	}
 	return self;
 }
 
-+ (ATInteractionUsageData *)usageDataForInteraction:(ATInteraction *)interaction atCodePoint:(NSString *)codePoint {
-	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] initWithInteraction:interaction atCodePoint:codePoint];
++ (ATInteractionUsageData *)usageDataForInteraction:(ATInteraction *)interaction {
+	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] initWithInteraction:interaction];
 	return [usageData autorelease];
 }
 
 + (ATInteractionUsageData *)usageDataForInteraction:(ATInteraction *)interaction
-							  atCodePoint:(NSString *)codePoint
 						 daysSinceInstall:(NSNumber *)daysSinceInstall
 						 daysSinceUpgrade:(NSNumber *)daysSinceUpgrade
 					   applicationVersion:(NSString *)applicationVersion
-					codePointInvokesTotal:(NSNumber *)codePointInvokesTotal
-				  codePointInvokesVersion:(NSNumber *)codePointInvokesVersion
-				  interactionInvokesTotal:(NSNumber *)interactionInvokesTotal
-				interactionInvokesVersion:(NSNumber *)interactionInvokesVersion
+					codePointInvokesTotal:(NSDictionary *)codePointInvokesTotal
+				  codePointInvokesVersion:(NSDictionary *)codePointInvokesVersion
+				  interactionInvokesTotal:(NSDictionary *)interactionInvokesTotal
+				interactionInvokesVersion:(NSDictionary *)interactionInvokesVersion
 {
-	ATInteractionUsageData *usageData = [ATInteractionUsageData usageDataForInteraction:interaction atCodePoint:codePoint];
+	ATInteractionUsageData *usageData = [ATInteractionUsageData usageDataForInteraction:interaction];
 	usageData.daysSinceInstall = daysSinceInstall;
 	usageData.daysSinceUpgrade = daysSinceUpgrade;
 	usageData.applicationVersion = applicationVersion;
@@ -57,13 +55,14 @@
 }
 
 - (NSDictionary *)predicateEvaluationDictionary {
-    NSDictionary *predicateEvaluationDictionary = @{@"days_since_install": self.daysSinceInstall,
-                                                    @"days_since_upgrade" : self.daysSinceUpgrade,
-                                                    @"application_version" : self.applicationVersion,
-                                                    [NSString stringWithFormat:@"code_point/%@/invokes/total", self.codePoint] : self.codePointInvokesTotal,
-                                                    [NSString stringWithFormat:@"code_point/%@/invokes/version", self.codePoint] : self.codePointInvokesVersion,
-                                                    [NSString stringWithFormat:@"interactions/%@/invokes/total", self.interaction.identifier] : self.interactionInvokesTotal,
-                                                    [NSString stringWithFormat:@"interactions/%@/invokes/version", self.interaction.identifier] : self.interactionInvokesVersion};
+	 NSMutableDictionary *predicateEvaluationDictionary = [NSMutableDictionary dictionaryWithDictionary:@{@"days_since_install": self.daysSinceInstall,
+																										  @"days_since_upgrade" : self.daysSinceUpgrade,
+																										  @"application_version" : self.applicationVersion}];
+	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesTotal];
+	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesVersion];
+	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesTotal];
+	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesVersion];
+	
 	return predicateEvaluationDictionary;
 }
 
@@ -100,37 +99,64 @@
 	return _applicationVersion;
 }
 
-- (NSNumber *)codePointInvokesTotal {
+- (NSDictionary *)codePointInvokesTotal {
 	if (!_codePointInvokesTotal) {
-		_codePointInvokesTotal = [[[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesTotalKey] objectForKey:self.codePoint] ?: @0;
-		[_codePointInvokesTotal retain];
+		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
+		NSDictionary *codePointsInvokesTotal = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesTotalKey];
+		for (NSString *codePoint in codePointsInvokesTotal) {
+			[predicateSyntax setObject:[codePointsInvokesTotal objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/total", codePoint]];
+		}
+		
+#warning Need to add any codepoints that were not in NSUserDefaults but *are* in the interaction criteria.
+		
+		_codePointInvokesTotal = [predicateSyntax retain];
 	}
 	
 	return _codePointInvokesTotal;
 }
 
-- (NSNumber *)codePointInvokesVersion {
+- (NSDictionary *)codePointInvokesVersion {
 	if (!_codePointInvokesVersion) {
-		_codePointInvokesVersion = [[[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesVersionKey] objectForKey:self.codePoint] ?: @0;
-		[_codePointInvokesVersion retain];
+		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
+		NSDictionary *codePointsInvokesVersion = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesVersionKey];
+		for (NSString *codePoint in codePointsInvokesVersion) {
+			[predicateSyntax setObject:[codePointsInvokesVersion objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/version", codePoint]];
+		}
+		
+#warning Need to add any codepoints that were not in NSUserDefaults but *are* in the interaction criteria.
+
+		_codePointInvokesVersion = [predicateSyntax retain];
 	}
-	
 	return _codePointInvokesVersion;
 }
 
-- (NSNumber *)interactionInvokesTotal {
+- (NSDictionary *)interactionInvokesTotal {
 	if (!_interactionInvokesTotal) {
-		_interactionInvokesTotal = [[[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesTotalKey] objectForKey:self.interaction.identifier] ?: @0;
-		[_interactionInvokesTotal retain];
+		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
+		NSDictionary *interactionsInvokesTotal = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesTotalKey];
+		for (NSString *interactionID in interactionsInvokesTotal) {
+			[predicateSyntax setObject:[interactionsInvokesTotal objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/total", interactionID]];
+		}
+		
+#warning Need to add any interactions that were not in NSUserDefaults but *are* in the interaction criteria.
+
+		_interactionInvokesTotal = [predicateSyntax retain];
 	}
 	
 	return _interactionInvokesTotal;
 }
 
-- (NSNumber *)interactionInvokesVersion {
+- (NSDictionary *)interactionInvokesVersion {
 	if (!_interactionInvokesVersion) {
-		_interactionInvokesVersion = [[[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesVersionKey] objectForKey:self.interaction.identifier] ?: @0;
-		[_interactionInvokesVersion retain];
+		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
+		NSDictionary *interactionsInvokesVersion = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesVersionKey];
+		for (NSString *interactionID in interactionsInvokesVersion) {
+			[predicateSyntax setObject:[interactionsInvokesVersion objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/version", interactionID]];
+		}
+		
+#warning Need to add any interactions that were not in NSUserDefaults but *are* in the interaction criteria.
+
+		_interactionInvokesVersion = [predicateSyntax retain];
 	}
 
 	return _interactionInvokesVersion;

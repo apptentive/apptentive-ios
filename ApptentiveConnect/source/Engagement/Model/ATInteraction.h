@@ -22,7 +22,7 @@
 
 + (ATInteraction *)interactionWithJSONDictionary:(NSDictionary *)jsonDictionary;
 
-- (ATInteractionUsageData *)usageDataAtCodePoint:(NSString *)codePoint;
+- (ATInteractionUsageData *)usageData;
 - (BOOL)criteriaAreMetForCodePoint:(NSString *)codePoint;
 - (BOOL)criteriaAreMetForUsageData:(ATInteractionUsageData *)usageData;
 

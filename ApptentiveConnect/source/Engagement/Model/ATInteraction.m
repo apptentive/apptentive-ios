@@ -55,13 +55,12 @@
 	[coder encodeObject:self.version forKey:@"version"];
 }
 
-- (ATInteractionUsageData *)usageDataAtCodePoint:(NSString *)codePoint {
-	return [ATInteractionUsageData usageDataForInteraction:self atCodePoint:codePoint];
+- (ATInteractionUsageData *)usageData {
+	return [ATInteractionUsageData usageDataForInteraction:self];
 }
 
 - (BOOL)criteriaAreMetForCodePoint:(NSString *)codePoint {
-	ATInteractionUsageData *usageDate = [self usageDataAtCodePoint:codePoint];
-	return [self criteriaAreMetForUsageData:usageDate];
+	return [self criteriaAreMetForUsageData:[self usageData]];
 }
 
 - (BOOL)criteriaAreMetForUsageData:(ATInteractionUsageData *)usageData {
@@ -144,7 +143,7 @@
 				}
 			
 				NSObject *value = [equalityDictionary objectForKey:equalityKey];
-				NSString *placeholder = [[@"(%K "stringByAppendingString:equalitySymbol] stringByAppendingString:@" %@)"];
+				NSString *placeholder = [[@"(%K " stringByAppendingString:equalitySymbol] stringByAppendingString:@" %@)"];
 				NSPredicate *criterion = [NSCompoundPredicate predicateWithFormat:placeholder argumentArray:@[key, value]];
 				[criteria addObject:criterion];
 			}

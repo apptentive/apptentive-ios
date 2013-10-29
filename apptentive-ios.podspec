@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.source_files   = 'ApptentiveConnect/source/**/*.{h,m}','ApptentiveConnect/ext/**/*.{h,m}'
   s.exclude_files = 'ApptentiveConnect/ext/PrefixedTTTAttributedLabel/Example/*.*'
   s.requires_arc = false
-  s.frameworks     = 'CoreGraphics', 'Foundation', 'QuartzCore', 'SystemConfiguration', 'UIKit', 'CoreData', 'CoreText'
+  s.frameworks     = 'Accelerate', 'CoreGraphics', 'Foundation', 'QuartzCore', 'SystemConfiguration', 'UIKit', 'CoreData', 'CoreText'
   s.resource_bundle = { 'ApptentiveResources' => ['ApptentiveConnect/source/Model/*.xcdatamodeld', 'ApptentiveConnect/xibs/**/*.*', 'ApptentiveConnect/resources/localization/*.lproj','ApptentiveConnect/art/generated/**/*.*'] }
   s.weak_frameworks = 'StoreKit', 'CoreTelephony'
   s.prefix_header_contents = '#import "ATLog.h"'

@@ -36,6 +36,7 @@ Required Frameworks
 In order to use `ApptentiveConnect`, your project must link against the
 following frameworks:
 
+* Accelerate
 * CoreData
 * CoreText
 * CoreGraphics

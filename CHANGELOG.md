@@ -1,6 +1,8 @@
 2013-10-22 wooster, pkamb v1.2.2 (in progress)
 --------------------------------
 
+Note that you'll need to add Accelerate.framework to your project now, if it's not already there.
+
 Fixes:
 
 * IOS-252 Crash when canceling photo selection on iPad + iOS 7

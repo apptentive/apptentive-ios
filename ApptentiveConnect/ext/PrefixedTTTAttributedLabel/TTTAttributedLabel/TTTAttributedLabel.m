@@ -54,6 +54,20 @@ static inline CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode
 	}
 }
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_6_1
+static inline CTLineBreakMode CTLineBreakModeFromNSLineBreakMode(NSLineBreakMode lineBreakMode) {
+	switch (lineBreakMode) {
+		case NSLineBreakByWordWrapping: return kCTLineBreakByWordWrapping;
+		case NSLineBreakByCharWrapping: return kCTLineBreakByCharWrapping;
+		case NSLineBreakByClipping: return kCTLineBreakByClipping;
+		case NSLineBreakByTruncatingHead: return kCTLineBreakByTruncatingHead;
+		case NSLineBreakByTruncatingTail: return kCTLineBreakByTruncatingTail;
+		case NSLineBreakByTruncatingMiddle: return kCTLineBreakByTruncatingMiddle;
+		default: return 0;
+	}
+}
+#endif
+
 static inline NSTextCheckingType NSTextCheckingTypeFromUIDataDetectorType(UIDataDetectorTypes dataDetectorType) {
     NSTextCheckingType textCheckingType = 0;
     if (dataDetectorType & UIDataDetectorTypeAddress) {
@@ -106,7 +120,11 @@ static inline NSDictionary * NSAttributedStringAttributesFromLabel(TTTATTRIBUTED
 
         [mutableAttributes setObject:(id)[label.textColor CGColor] forKey:(NSString *)kCTForegroundColorAttributeName];
 
+#		if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_6_1
+        CTTextAlignment alignment = NSTextAlignmentToCTTextAlignment(label.textAlignment);
+#		else
         CTTextAlignment alignment = CTTextAlignmentFromUITextAlignment(label.textAlignment);
+#		endif
         CGFloat lineSpacing = label.leading;
         CGFloat lineSpacingAdjustment = ceilf(label.font.lineHeight - label.font.ascender + label.font.descender);
         CGFloat lineHeightMultiple = label.lineHeightMultiple;
@@ -120,7 +138,11 @@ static inline NSDictionary * NSAttributedStringAttributesFromLabel(TTTATTRIBUTED
         if (label.numberOfLines != 1) {
             lineBreakMode = CTLineBreakModeFromUILineBreakMode(UILineBreakModeWordWrap);
         } else {
+#		if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_6_1
+			lineBreakMode = CTLineBreakModeFromNSLineBreakMode(label.lineBreakMode);
+#		else
             lineBreakMode = CTLineBreakModeFromUILineBreakMode(label.lineBreakMode);
+#endif
         }
 
         CTParagraphStyleSetting paragraphStyles[10] = {
@@ -538,22 +560,26 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
                 // Get correct truncationType and attribute position
                 CTLineTruncationType truncationType;
                 NSUInteger truncationAttributePosition = lastLineRange.location;
-                UILineBreakMode lineBreakMode = self.lineBreakMode;
+#				if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_6_1
+				CTLineBreakMode lineBreakMode = CTLineBreakModeFromNSLineBreakMode(self.lineBreakMode);
+#				else
+                UILineBreakMode lineBreakMode = CTLineBreakModeFromUILineBreakMode(self.lineBreakMode);
+#				endif
                 
                 // Multiple lines, only use UILineBreakModeTailTruncation
                 if (numberOfLines != 1) {
-                    lineBreakMode = UILineBreakModeTailTruncation;
+                    lineBreakMode = kCTLineBreakByTruncatingTail;
                 }
                 
                 switch (lineBreakMode) {
-                    case UILineBreakModeHeadTruncation:
+                    case kCTLineBreakByTruncatingHead:
                         truncationType = kCTLineTruncationStart;
                         break;
-                    case UILineBreakModeMiddleTruncation:
+                    case kCTLineBreakByTruncatingMiddle:
                         truncationType = kCTLineTruncationMiddle;
                         truncationAttributePosition += (lastLineRange.length / 2);
                         break;
-                    case UILineBreakModeTailTruncation:
+                    case kCTLineBreakByTruncatingTail:
                     default:
                         truncationType = kCTLineTruncationEnd;
                         truncationAttributePosition += (lastLineRange.length - 1);

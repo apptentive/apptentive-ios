@@ -925,7 +925,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 - (void)checkForMessages {
 	@autoreleasepool {
 		@synchronized(self) {
-			if (![self isReady]) {
+			if (![self isReady] || shouldStopWorking) {
 				return;
 			}
 			ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];

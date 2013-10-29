@@ -43,6 +43,7 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 		self.showTagline = YES;
 		customPersonData = [[NSMutableDictionary alloc] init];
 		customDeviceData = [[NSMutableDictionary alloc] init];
+		integrationConfiguration = [[NSMutableDictionary alloc] init];
 		useMessageCenter = YES;
 		
 		NSDictionary *defaults = @{ATAppConfigurationMessageCenterEnabledKey : [NSNumber numberWithBool:YES],
@@ -62,6 +63,7 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 #endif
 	[customPersonData release], customPersonData = nil;
 	[customDeviceData release], customDeviceData = nil;
+	[integrationConfiguration release], integrationConfiguration = nil;
 	[customPlaceholderText release], customPlaceholderText = nil;
 	[apiKey release], apiKey = nil;
 	[initialUserName release], initialUserName = nil;
@@ -170,6 +172,18 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 
 - (void)removeCustomDataWithKey:(NSString *)key {
 	[self removeCustomDeviceDataWithKey:key];
+}
+
+- (NSDictionary *)integrationConfiguration {
+	return integrationConfiguration;
+}
+
+- (void)addIntegration:(NSString *)integration withToken:(NSString *)token {
+	[integrationConfiguration setObject:token forKey:integration];
+}
+
+- (void)removeIntegration:(NSString *)integration {
+	[integrationConfiguration removeObjectForKey:integration];
 }
 
 - (BOOL)messageCenterEnabled {

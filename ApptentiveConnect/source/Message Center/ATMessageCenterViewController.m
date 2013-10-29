@@ -969,7 +969,7 @@ typedef enum {
 		for (ATAbstractMessage *message in results) {
 			[message setSeenByUser:@(YES)];
 			if (message.apptentiveID != nil && [message.sentByUser boolValue] != YES) {
-				[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidReadNotification object:@{ATMessageCenterMessageIDKey:message.apptentiveID}];
+				[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidReadNotification object:self userInfo:@{ATMessageCenterMessageIDKey:message.apptentiveID}];
 			}
 		}
 		[ATData save];

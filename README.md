@@ -214,13 +214,16 @@ are more general.
 To check if a survey with a given set of tags is available to be shown, call:
 
 ```objective-c
+NSSet *tags = [NSSet setWithArray:@[@"finishedTutorial", @"beatFirstBoss"]];
+
 if ([ATSurveys hasSurveyAvailableWithTags:tags]) {
     [ATSurveys presentSurveyControllerWithTags:tags fromViewController:viewController];
 }
 ```
 
-where tags is an `NSSet` consisting of strings like `aftervideo` that you set as tags
-on your survey on the Apptentive website.
+where `tags` is an `NSSet` consisting of strings like `"finishedTutorial"` that you set as tags
+on your survey on the Apptentive website. This allows you to only present the survey to certain
+users of your app.
 
 To show a survey without tags, use:
 

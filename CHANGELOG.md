@@ -9,6 +9,8 @@ Fixes:
 * Fixes [Issue #62](https://github.com/apptentive/apptentive-ios/issues/62) Make font fits width on message composer screen
 * IOS-257 Message Center read event not including message ID
 * IOS-230 Message hyperlinks are not clickable on iOS
+* IOS-249 Ensure background message fetch doesn't resurrect task queue
+* IOS-241 FeedbackDemo: Remove the beta symbol
 
 2013-10-09 wooster, pkamb v1.2.1
 -------------------------

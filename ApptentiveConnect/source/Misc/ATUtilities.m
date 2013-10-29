@@ -189,7 +189,7 @@ static NSDateFormatter *dateFormatter = nil;
 	bitsPerComponent = 8;
 	colorSpaceRef = CGColorSpaceCreateDeviceRGB();
 	
-	bitmapContext = CGBitmapContextCreate(NULL, newWidth, newHeight, bitsPerComponent, bytesPerRow, colorSpaceRef, newAlphaInfo);
+	bitmapContext = CGBitmapContextCreate(NULL, newWidth, newHeight, bitsPerComponent, bytesPerRow, colorSpaceRef, (CGBitmapInfo)newAlphaInfo);
 	CGColorSpaceRelease(colorSpaceRef), colorSpaceRef = NULL;
 	CGContextSetInterpolationQuality(bitmapContext, kCGInterpolationHigh);
 	

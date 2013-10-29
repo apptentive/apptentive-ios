@@ -547,7 +547,24 @@ static NSDateFormatter *dateFormatter = nil;
 }
 
 + (UIImage *)appIcon {
-	return [UIImage imageNamed: [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIconFiles"] objectAtIndex:0]];
+	static UIImage *iconFile = nil;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		NSArray *iconFiles = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIconFiles"];
+		UIImage *maxImage = nil;
+		for (NSString *path in iconFiles) {
+			UIImage *image = [UIImage imageNamed:path];
+			if (maxImage == nil || maxImage.size.width < image.size.width) {
+				if (image.size.width >= 512) {
+					// Just in case someone stuck iTunesArtwork in there.
+					continue;
+				}
+				maxImage = image;
+			}
+		}
+		iconFile = maxImage;
+	});
+	return iconFile;
 }
 
 + (BOOL)bundleVersionIsMainVersion {

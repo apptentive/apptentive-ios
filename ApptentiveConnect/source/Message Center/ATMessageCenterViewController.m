@@ -754,7 +754,6 @@ typedef enum {
 			backgroundView.backgroundColor = [UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]];
 			textCell.backgroundView = backgroundView;
 			[backgroundView release];
-			textCell.messageText.dataDetectorTypes = UIDataDetectorTypeAll;
 		}
 		textCell.composing = NO;
 		if (cellSubType != ATTextMessageCellTypeUser) {
@@ -829,7 +828,6 @@ typedef enum {
 			[automatedCell release], automatedCell = nil;
 			
 			currentCell.selectionStyle = UITableViewCellSelectionStyleNone;
-			currentCell.messageText.dataDetectorTypes = UIDataDetectorTypeAll;
 		}
 		if ([message isKindOfClass:[ATAutomatedMessage class]]) {
 			ATAutomatedMessage *automatedMessage = (ATAutomatedMessage *)message;

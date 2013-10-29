@@ -21,6 +21,7 @@
 
 @property (nonatomic, retain) IBOutlet UIView *alertView;
 @property (nonatomic, retain) IBOutlet UIView *contentView;
+@property (retain, nonatomic) IBOutlet UIView *appIconContainer;
 @property (nonatomic, retain) IBOutlet UIImageView *appIconView;
 @property (nonatomic, retain) IBOutlet UIImageView *appIconBackgroundView;
 @property (nonatomic, retain) IBOutlet UIWebView *webView;

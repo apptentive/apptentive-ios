@@ -48,10 +48,12 @@ typedef enum {
 	[self.backgroundImageView setImage:blurred];
 	
 	// App icon
-	// TODO: remove header area if icon is not shown
 	if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_app_icon"] boolValue]) {
+		self.appIconContainer.hidden = NO;
 		[self.appIconView setImage:[ATUtilities appIcon]];
 		[self.appIconBackgroundView setImage:[ATBackend imageNamed:@"at_update_icon_shadow"]];
+		NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:self.appIconContainer attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:100];
+		[self.appIconContainer addConstraint:constraint];
 		// Rounded corners
 		UIImage *maskImage = [ATBackend imageNamed:@"at_update_icon_mask"];
 		CALayer *maskLayer = [[CALayer alloc] init];
@@ -59,20 +61,25 @@ typedef enum {
 		maskLayer.frame = (CGRect){CGPointZero, self.appIconView.bounds.size};
 		self.appIconView.layer.mask = maskLayer;
 		[maskLayer release], maskLayer = nil;
+	} else {
+		NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:self.appIconContainer attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0];
+		[self.appIconContainer addConstraint:constraint];
+		self.appIconContainer.hidden = YES;
 	}
 	
 	// Powered by Apptentive logo
-	// TODO: remove footer area if logo is not shown
 	if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_powered_by"] boolValue]) {
 		self.poweredByApptentiveLogo.text = ATLocalizedString(@"Powered by", @"Powered by followed by Apptentive logo.");
 		self.poweredByApptentiveIconView.contentMode = UIViewContentModeScaleAspectFit;
 		UIImage *poweredByApptentiveIcon = [ATBackend imageNamed:@"at_update_logo"];
 		[self.poweredByApptentiveIconView setImage:poweredByApptentiveIcon];
-		self.poweredByApptentiveLogo.hidden = NO;
-		self.poweredByApptentiveIconView.hidden = NO;
+		self.poweredByBackground.hidden = NO;
+		NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:self.poweredByBackground attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:60];
+		[self.poweredByBackground addConstraint:constraint];
 	} else {
-		self.poweredByApptentiveLogo.hidden = YES;
-		self.poweredByApptentiveIconView.hidden = YES;
+		NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:self.poweredByBackground attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0];
+		[self.poweredByBackground addConstraint:constraint];
+		self.poweredByBackground.hidden = YES;
 	}
 		
 	// Web view
@@ -218,26 +225,6 @@ typedef enum {
 }
 
 - (void)positionInWindow {
-	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-	
-	CGFloat angle = 0.0;
-	
-	switch (orientation) {
-		case UIInterfaceOrientationPortraitUpsideDown:
-			angle = M_PI;
-			break;
-		case UIInterfaceOrientationLandscapeLeft:
-			angle = - M_PI / 2.0f;
-			break;
-		case UIInterfaceOrientationLandscapeRight:
-			angle = M_PI / 2.0f;
-			break;
-		case UIInterfaceOrientationPortrait:
-		default:
-			angle = 0.0;
-			break;
-	}
-	
 	CGAffineTransform t = [ATUtilities viewTransformInWindow:originalPresentingWindow];
 	self.window.transform = t;
 	self.window.frame = originalPresentingWindow.bounds;
@@ -363,6 +350,7 @@ typedef enum {
 	[_poweredByBackground release];
 	[_appIconBackgroundView release];
 	[_poweredByApptentiveLogo release];
+	[_appIconContainer release];
 	[super dealloc];
 }
 - (void)viewDidUnload {
@@ -370,6 +358,7 @@ typedef enum {
 	[self setPoweredByBackground:nil];
 	[self setAppIconBackgroundView:nil];
 	[self setPoweredByApptentiveLogo:nil];
+	[self setAppIconContainer:nil];
 	[super viewDidUnload];
 }
 @end

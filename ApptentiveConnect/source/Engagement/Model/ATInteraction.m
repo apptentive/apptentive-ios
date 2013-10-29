@@ -9,6 +9,7 @@
 #import "ATInteraction.h"
 #import "ATEngagementBackend.h"
 #import "ATInteractionUsageData.h"
+#import "ATUtilities.h"
 
 @implementation ATInteraction
 
@@ -61,7 +62,12 @@
 
 - (BOOL)criteriaAreMetForCodePoint:(NSString *)codePoint {
 	ATInteractionUsageData *usageDate = [self usageDataAtCodePoint:codePoint];
-	return [self criteriaAreMetForUsageData:usageDate];
+	BOOL criteriaMet = [self criteriaAreMetForUsageData:usageDate];
+	if (criteriaMet && [self.type isEqualToString:@"UpgradeMessage"] && ![ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+		// Don't show upgrade messages on anything except iOS 7 and above.
+		criteriaMet = NO;
+	}
+	return criteriaMet;
 }
 
 - (BOOL)criteriaAreMetForUsageData:(ATInteractionUsageData *)usageData {

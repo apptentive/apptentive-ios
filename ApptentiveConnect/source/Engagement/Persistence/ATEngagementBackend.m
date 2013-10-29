@@ -15,6 +15,7 @@
 #import "ATConnect_Private.h"
 #import "ATInteractionEnjoymentDialogController.h"
 #import "ATInteractionUpgradeMessageViewController.h"
+#import "ATUtilities.h"
 
 NSString *const ATEngagementInstallDateKey = @"ATEngagementInstallDateKey";
 NSString *const ATEngagementUpgradeDateKey = @"ATEngagementUpgradeDateKey";
@@ -220,6 +221,10 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 
 - (void)presentUpgradeMessageInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
 	NSAssert([interaction.type isEqualToString:@"UpgradeMessage"], @"Attempted to present an UpgradeMessage interaction with an interaction of type: %@", interaction.type);
+	if (![ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+		// Don't show upgrade messages on anything except iOS 7 and above.
+		return;
+	}
 	
 	ATInteractionUpgradeMessageViewController *upgradeMessage = [[ATInteractionUpgradeMessageViewController alloc] initWithInteraction:interaction];
 	[upgradeMessage presentFromViewController:viewController animated:YES];

@@ -20,11 +20,11 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 @interface ATSimpleImageViewController (Private)
 - (void)chooseImage;
 - (void)takePhoto;
+- (void)cleanupImageActionSheet;
 @end
 
 @implementation ATSimpleImageViewController
 @synthesize containerView;
-@synthesize cameraButtonItem;
 
 - (id)initWithDelegate:(NSObject<ATSimpleImageViewControllerDelegate> *)aDelegate {
 	self = [super initWithNibName:@"ATSimpleImageViewController" bundle:[ATConnect resourceBundle]];
@@ -38,13 +38,13 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 }
 
 - (void)dealloc {
+	[self cleanupImageActionSheet];
 	[imagePickerPopover release], imagePickerPopover = nil;
 	[delegate release], delegate = nil;
 	[scrollView removeFromSuperview];
 	[scrollView release], scrollView = nil;
 	[containerView removeFromSuperview];
 	[containerView release], containerView = nil;
-	[cameraButtonItem release], cameraButtonItem = nil;
 	[super dealloc];
 }
 
@@ -53,6 +53,13 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 }
 
 #pragma mark - View lifecycle
+- (void)viewDidLoad {
+	[super viewDidLoad];
+	self.navigationItem.title = ATLocalizedString(@"Screenshot", @"Screenshot view title");
+	self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(takePhoto:)] autorelease];
+	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)] autorelease];
+}
+
 - (void)setupScrollView {
 	if (scrollView) {
 		[scrollView removeFromSuperview];
@@ -146,31 +153,40 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 - (void)viewDidUnload {
 	[containerView removeFromSuperview];
 	[containerView release], containerView = nil;
-	[self setCameraButtonItem:nil];
 	[super viewDidUnload];
 }
 
 - (IBAction)donePressed:(id)sender {
 	shouldResign = YES;
-	[self dismissModalViewControllerAnimated:YES];
+	[self cleanupImageActionSheet];
+	if ([self respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
+		id blockSelf = [self retain];
+		NSObject<ATSimpleImageViewControllerDelegate> *blockDelegate = [delegate retain];
+		[self.navigationController dismissViewControllerAnimated:YES completion:^{
+			[blockDelegate imageViewControllerDidDismiss:self];
+			[blockSelf release];
+			[blockDelegate release];
+		}];
+	} else {
+		[self dismissModalViewControllerAnimated:YES];
+	}
 }
 
 - (IBAction)takePhoto:(id)sender {
 	ATFeedbackAttachmentOptions options = [delegate attachmentOptionsForImageViewController:self];
 	if (options & ATFeedbackAllowTakePhotoAttachment) {
-		UIActionSheet *actionSheet = nil;
+		[self cleanupImageActionSheet];
 		if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-			actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel Button Title") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Choose From Library", @"Choose Photo Button Title"), ATLocalizedString(@"Take Photo", @"Take Photo Button Title"), nil];
+			imageActionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel Button Title") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Choose From Library", @"Choose Photo Button Title"), ATLocalizedString(@"Take Photo", @"Take Photo Button Title"), nil];
 		} else {
-			actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel Button Title") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Choose From Library", @"Choose Photo Button Title"), nil];
+			imageActionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel Button Title") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Choose From Library", @"Choose Photo Button Title"), nil];
 		}
 		
 		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-			[actionSheet showFromBarButtonItem:self.cameraButtonItem animated:YES];
+			[imageActionSheet showFromBarButtonItem:self.navigationItem.leftBarButtonItem animated:YES];
 		} else {
-			[actionSheet showInView:self.view];
+			[imageActionSheet showInView:self.view];
 		}
-		[actionSheet autorelease];
 	} else {
 		[self chooseImage];
 	}
@@ -182,6 +198,10 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 		[self chooseImage];
 	} else if (buttonIndex == 1 && [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
 		[self takePhoto];
+	}
+	if (actionSheet && imageActionSheet && [actionSheet isEqual:imageActionSheet]) {
+		imageActionSheet.delegate = nil;
+		[imageActionSheet release], imageActionSheet = nil;
 	}
 }
 
@@ -204,13 +224,23 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 			[imagePickerPopover dismissPopoverAnimated:YES];
 		}
 	}
-	if (self.modalViewController) {
-		[self dismissModalViewControllerAnimated:YES];
+	if ([self respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
+		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+			[self dismissViewControllerAnimated:YES completion:^{
+				// pass
+			}];
+		}
+	} else if (self.modalViewController) {
+		[self.navigationController dismissModalViewControllerAnimated:YES];
 	}
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
-	[picker dismissModalViewControllerAnimated:YES];
+	if (imagePickerPopover) {
+		[imagePickerPopover dismissPopoverAnimated:YES];
+	} else {
+		[self.navigationController dismissModalViewControllerAnimated:YES];
+	}
 }
 
 #pragma mark Rotation
@@ -253,7 +283,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 		}
 		imagePickerPopover = [[UIPopoverController alloc] initWithContentViewController:imagePicker];
 		imagePickerPopover.delegate = self;
-		[imagePickerPopover presentPopoverFromBarButtonItem:self.cameraButtonItem permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+		[imagePickerPopover presentPopoverFromBarButtonItem:self.navigationItem.leftBarButtonItem permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
 	} else {
 		[self presentModalViewController:imagePicker animated:YES];
 	}
@@ -268,5 +298,13 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 	imagePicker.delegate = self;
 	[self presentModalViewController:imagePicker animated:YES];
 	[imagePicker release];
+}
+
+- (void)cleanupImageActionSheet {
+	if (imageActionSheet) {
+		imageActionSheet.delegate = nil;
+		[imageActionSheet dismissWithClickedButtonIndex:-1 animated:NO];
+		[imageActionSheet release], imageActionSheet = nil;
+	}
 }
 @end

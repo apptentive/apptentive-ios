@@ -23,6 +23,7 @@ typedef enum {
 - (UIWindow *)windowForViewController:(UIViewController *)viewController;
 - (void)statusBarChanged:(NSNotification *)notification;
 - (void)applicationDidBecomeActive:(NSNotification *)notification;
+- (void)applyRoundedCorners;
 @end
 
 @implementation ATInteractionUpgradeMessageViewController
@@ -40,61 +41,52 @@ typedef enum {
     [super viewDidLoad];
 	
 	// Blurred background
-	UIImage *screenshot = [ATUtilities screenshot];
-	UIImage *blurred = [screenshot applyLightEffect];
-	[self.backgroundImageView setImage:blurred];
-	
 	// 10% black over background image
-	UIView *black = [[UIView alloc] initWithFrame:self.backgroundImageView.frame];
-	black.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.1f];
-	[self.backgroundImageView addSubview:black];
-	[black release];
+	UIImage *screenshot = [ATUtilities screenshot];
+	UIColor *tintColor = [UIColor colorWithWhite:0 alpha:0.1];
+	UIImage *blurred = [screenshot at_applyBlurWithRadius:30 tintColor:tintColor saturationDeltaFactor:1.8 maskImage:nil];
+	[self.backgroundImageView setImage:blurred];
 	
 	// App icon
 	if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_app_icon"] boolValue]) {
+		self.appIconContainer.hidden = NO;
 		[self.appIconView setImage:[ATUtilities appIcon]];
-		
+		[self.appIconBackgroundView setImage:[ATBackend imageNamed:@"at_update_icon_shadow"]];
+		NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:self.appIconContainer attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:100];
+		[self.appIconContainer addConstraint:constraint];
 		// Rounded corners
-		CGRect rect = self.appIconView.bounds;
-		CGFloat radius = MIN(rect.size.width, rect.size.height) / 4;
-		UIBezierPath *appIconMaskPath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:radius];
-		CAShapeLayer *appIconMaskLayer = [CAShapeLayer layer];
-		appIconMaskLayer.frame = self.webView.bounds;
-		appIconMaskLayer.path = appIconMaskPath.CGPath;
-		self.appIconView.layer.mask = appIconMaskLayer;
+		UIImage *maskImage = [ATBackend imageNamed:@"at_update_icon_mask"];
+		CALayer *maskLayer = [[CALayer alloc] init];
+		maskLayer.contents = (id)maskImage.CGImage;
+		maskLayer.frame = (CGRect){CGPointZero, self.appIconView.bounds.size};
+		self.appIconView.layer.mask = maskLayer;
+		[maskLayer release], maskLayer = nil;
+	} else {
+		NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:self.appIconContainer attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0];
+		[self.appIconContainer addConstraint:constraint];
+		self.appIconContainer.hidden = YES;
 	}
 	
-	// Powered by Apptentive icon
-	// TODO: remove footer area if icon is not shown?
+	// Powered by Apptentive logo
 	if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_powered_by"] boolValue]) {
+		self.poweredByApptentiveLogo.text = ATLocalizedString(@"Powered by", @"Powered by followed by Apptentive logo.");
 		self.poweredByApptentiveIconView.contentMode = UIViewContentModeScaleAspectFit;
-		UIImage *poweredByApptentiveIcon = [ATBackend imageNamed:@"at_apptentive_logo"];
+		UIImage *poweredByApptentiveIcon = [ATBackend imageNamed:@"at_update_logo"];
 		[self.poweredByApptentiveIconView setImage:poweredByApptentiveIcon];
+		self.poweredByBackground.hidden = NO;
+		NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:self.poweredByBackground attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:60];
+		[self.poweredByBackground addConstraint:constraint];
+	} else {
+		NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:self.poweredByBackground attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0];
+		[self.poweredByBackground addConstraint:constraint];
+		self.poweredByBackground.hidden = YES;
 	}
 		
 	// Web view
 	NSString *html = [self.upgradeMessageInteraction.configuration objectForKey:@"body"];
 	[self.webView loadHTMLString:html baseURL:nil];
-
-	// Rounded top corners of content
-	UIBezierPath *contentMaskPath = [UIBezierPath bezierPathWithRoundedRect:self.contentView.bounds byRoundingCorners:(UIRectCornerTopLeft | UIRectCornerTopRight) cornerRadii:CGSizeMake(10.0, 10.0)];
-	CAShapeLayer *contentMaskLayer = [CAShapeLayer layer];
-	contentMaskLayer.frame = self.webView.bounds;
-	contentMaskLayer.path = contentMaskPath.CGPath;
-	self.contentView.layer.mask = contentMaskLayer;
 	
-	// OK button top border
-	CGRect frame = self.okButtonBackgroundView.frame;
-	frame.origin.y = self.contentView.frame.origin.y + self.contentView.frame.size.height + 1;
-	frame.size.height -= 1;
-	[self.okButtonBackgroundView setFrame:frame];
-	
-	// Rounded bottom corners of OK button
-	UIBezierPath *buttonMaskPath = [UIBezierPath bezierPathWithRoundedRect:self.okButtonBackgroundView.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerBottomRight) cornerRadii:CGSizeMake(10.0, 10.0)];
-	CAShapeLayer *buttonMaskLayer = [CAShapeLayer layer];
-	buttonMaskLayer.frame = self.okButtonBackgroundView.bounds;
-	buttonMaskLayer.path = buttonMaskPath.CGPath;
-	self.okButtonBackgroundView.layer.mask = buttonMaskLayer;
+	[self applyRoundedCorners];
 }
 
 - (IBAction)okButtonPressed:(id)sender {
@@ -104,7 +96,8 @@ typedef enum {
 }
 
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion withAction:(ATInteractionUpgradeMessageAction)action {
-	CGPoint endingPoint = [self offscreenPositionOfView];
+	CGRect newFrame = self.alertView.frame;
+	CGPoint offscreenCenter = CGPointMake(CGRectGetMidX(newFrame), CGRectGetMidY(newFrame) - (newFrame.origin.y + newFrame.size.height));
 	
 	CGRect poweredByEndingFrame = self.poweredByBackground.frame;
 	poweredByEndingFrame = CGRectOffset(self.poweredByBackground.frame, 0, poweredByEndingFrame.size.height);
@@ -115,7 +108,7 @@ typedef enum {
 	}
 	
 	[UIView animateWithDuration:duration animations:^(void){
-		self.alertView.center = endingPoint;
+		self.alertView.center = offscreenCenter;
 		self.backgroundImageView.alpha = 0.0;
 		self.poweredByBackground.frame = poweredByEndingFrame;
 	} completion:^(BOOL finished) {
@@ -182,17 +175,18 @@ typedef enum {
 	CGPoint center = animationCenter;
 	center.y = ceilf(center.y);
 	
-	CGRect endingFrame = [[UIScreen mainScreen] applicationFrame];
+	CGRect endingFrame = originalPresentingWindow.bounds;//[[UIScreen mainScreen] applicationFrame];
 	
 	[self positionInWindow];
 
 	self.window.center = CGPointMake(CGRectGetMidX(endingFrame), CGRectGetMidY(endingFrame));
-	self.alertView.center = [self offscreenPositionOfView];
 	
 	CGRect poweredByEndingFrame = self.poweredByBackground.frame;
 	self.poweredByBackground.frame = CGRectOffset(poweredByEndingFrame, 0, poweredByEndingFrame.size.height);
 	
-	CGRect newFrame = [self onscreenRectOfView];
+	CGRect newFrame = self.alertView.frame;
+	self.alertView.center = CGPointMake(CGRectGetMidX(newFrame), CGRectGetMidY(newFrame) - (newFrame.origin.y + newFrame.size
+																							.height));
 	CGPoint newViewCenter = CGPointMake(CGRectGetMidX(newFrame), CGRectGetMidY(newFrame));
 	
 	CALayer *l = self.alertView.layer;
@@ -208,35 +202,16 @@ typedef enum {
 	self.backgroundImageView.alpha = 0;
 	[UIView animateWithDuration:0.3 animations:^(void){
 //		self.window.center = newViewCenter;
+		self.window.frame = animationBounds;
 		self.alertView.center = newViewCenter;
 		self.poweredByBackground.frame = poweredByEndingFrame;
 		self.backgroundImageView.alpha = 1;
+		[self.view layoutIfNeeded];
 	} completion:^(BOOL finished) {
 		self.window.hidden = NO;
 	}];
 		
 	//[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroDidShowNotification object:self userInfo:nil];
-}
-
-- (CGRect)onscreenRectOfView {
-	CGRect screenBounds = [[UIScreen mainScreen] bounds];
-	CGRect alertRect = self.alertView.bounds;
-	alertRect.size.height = screenBounds.size.height - 30 - self.poweredByBackground.bounds.size.height;
-	alertRect.origin.y = 20;
-	alertRect.origin.x = floor((screenBounds.size.width - alertRect.size.width)*0.5);
-	return alertRect;
-}
-
-- (CGPoint)offscreenPositionOfView {
-	CGRect f = [self onscreenRectOfView];
-	NSLog(@"onscreen: %@", NSStringFromCGRect(f));
-	CGRect offscreenViewRect = CGRectOffset(f, 0, -(f.origin.y + f.size.height + 20));
-	
-	CGPoint offscreenPoint = CGPointMake(CGRectGetMidX(offscreenViewRect), CGRectGetMidY(offscreenViewRect));
-	
-	NSLog(@"Offscreen: %@", NSStringFromCGPoint(offscreenPoint));
-	
-	return offscreenPoint;
 }
 
 - (BOOL)isIPhoneAppInIPad {
@@ -250,34 +225,22 @@ typedef enum {
 }
 
 - (void)positionInWindow {
-	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-	
-	CGFloat angle = 0.0;
-	CGRect newFrame = originalPresentingWindow.bounds;
-	CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
-	
-	switch (orientation) {
-		case UIInterfaceOrientationPortraitUpsideDown:
-			angle = M_PI;
-			newFrame.size.height -= statusBarSize.height;
-			break;
-		case UIInterfaceOrientationLandscapeLeft:
-			angle = - M_PI / 2.0f;
-			newFrame.origin.x += statusBarSize.width;
-			newFrame.size.width -= statusBarSize.width;
-			break;
-		case UIInterfaceOrientationLandscapeRight:
-			angle = M_PI / 2.0f;
-			newFrame.size.width -= statusBarSize.width;
-			break;
-		case UIInterfaceOrientationPortrait:
-		default:
-			angle = 0.0;
-			newFrame.origin.y += statusBarSize.height;
-			newFrame.size.height -= statusBarSize.height;
-			break;
+	CGAffineTransform t = [ATUtilities viewTransformInWindow:originalPresentingWindow];
+	self.window.transform = t;
+	self.window.frame = originalPresentingWindow.bounds;
+	[self.appIconView layoutIfNeeded];
+	[self.backgroundImageView layoutIfNeeded];
+	[self.poweredByBackground layoutIfNeeded];
+	[self.alertView layoutIfNeeded];
+	[self.contentView layoutIfNeeded];
+	/*
+	UIView *v = self.appIconView;
+	while ((v = (UIView *)v.superview)) {
+		[v layoutSubviews];
 	}
-#warning Do layout adjustment here.
+	 */
+	
+	[self applyRoundedCorners];
 }
 
 - (UIWindow *)findMainWindowPreferringMainScreen:(BOOL)preferMainScreen {
@@ -322,6 +285,22 @@ typedef enum {
 		[self unhide:NO];
 	}
 	[pool release], pool = nil;
+}
+
+- (void)applyRoundedCorners {
+	// Rounded top corners of content
+	UIBezierPath *contentMaskPath = [UIBezierPath bezierPathWithRoundedRect:self.contentView.bounds byRoundingCorners:(UIRectCornerTopLeft | UIRectCornerTopRight) cornerRadii:CGSizeMake(10.0, 10.0)];
+	CAShapeLayer *contentMaskLayer = [CAShapeLayer layer];
+	contentMaskLayer.frame = self.webView.bounds;
+	contentMaskLayer.path = contentMaskPath.CGPath;
+	self.contentView.layer.mask = contentMaskLayer;
+	
+	// Rounded bottom corners of OK button
+	UIBezierPath *buttonMaskPath = [UIBezierPath bezierPathWithRoundedRect:self.okButtonBackgroundView.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerBottomRight) cornerRadii:CGSizeMake(10.0, 10.0)];
+	CAShapeLayer *buttonMaskLayer = [CAShapeLayer layer];
+	buttonMaskLayer.frame = self.okButtonBackgroundView.bounds;
+	buttonMaskLayer.path = buttonMaskPath.CGPath;
+	self.okButtonBackgroundView.layer.mask = buttonMaskLayer;
 }
 
 - (void)unhide:(BOOL)animated {
@@ -369,11 +348,17 @@ typedef enum {
 - (void)dealloc {
 	[_contentView release];
 	[_poweredByBackground release];
+	[_appIconBackgroundView release];
+	[_poweredByApptentiveLogo release];
+	[_appIconContainer release];
 	[super dealloc];
 }
 - (void)viewDidUnload {
 	[self setContentView:nil];
 	[self setPoweredByBackground:nil];
+	[self setAppIconBackgroundView:nil];
+	[self setPoweredByApptentiveLogo:nil];
+	[self setAppIconContainer:nil];
 	[super viewDidUnload];
 }
 @end

@@ -21,6 +21,15 @@ enum kRootTableSections {
 	kSectionCount
 };
 
+enum kEngagementRows {
+	kEngagementRowShowUpgrade,
+	kEngagementRowAppLaunch,
+	kEngagementRowComplexCriteria,
+	kEngagementRowBigWin,
+	kEngagementRowOrClause,
+	kEngagementRowCount
+};
+
 @interface RootViewController ()
 - (void)surveyBecameAvailable:(NSNotification *)notification;
 - (void)unreadMessageCountChanged:(NSNotification *)notification;
@@ -47,9 +56,6 @@ enum kRootTableSections {
 	self.tableView.tableHeaderView = imageView;
 	[imageView release], imageView = nil;
 	[super viewDidLoad];
-	
-#warning Remove before release. Only for testing blurred UpgradeMessage background with colored background.
-	self.tableView.backgroundColor =  [UIColor purpleColor];
 	
     tags = [[NSSet alloc] initWithObjects:@"testsurvey", @"testtag", nil];
 	
@@ -115,7 +121,7 @@ enum kRootTableSections {
     } else if (section == kMessageCenterSection) {
 		return 1;
 	} else if (section == kEngagementSection) {
-		return 4;
+		return kEngagementRowCount;
 	}
 	return 1;
 }
@@ -179,25 +185,23 @@ enum kRootTableSections {
 		}
 	} else if (indexPath.section == kEngagementSection) {
 		switch (indexPath.row) {
-			case 0:
+			case kEngagementRowShowUpgrade:
+				cell.textLabel.text = @"Show Upgrade Message if Available";
+				break;
+			case kEngagementRowAppLaunch:
 				cell.textLabel.text = @"app.launch";
 				break;
-			case 1:
+			case kEngagementRowComplexCriteria:
 				cell.textLabel.text = @"complex_criteria";
 				break;
-			case 2:
+			case kEngagementRowBigWin:
 				cell.textLabel.text = @"big.win";
 				break;
-			case 3:
+			case kEngagementRowOrClause:
 				cell.textLabel.text = @"or_clause";
 				break;
 			default:
 				break;
-		}
-		
-		if (indexPath.row == 0) {
-		}
-		if (indexPath.row == 1) {
 		}
 	}
     
@@ -222,7 +226,17 @@ enum kRootTableSections {
 			[[ATConnect sharedConnection] presentMessageCenterFromViewController:self];
 		}
 	} else if (indexPath.section == kEngagementSection) {
-		[[ATConnect sharedConnection] engage:[tableView cellForRowAtIndexPath:indexPath].textLabel.text fromViewController:self];
+		if ([@[@(kEngagementRowAppLaunch), @(kEngagementRowBigWin), @(kEngagementRowComplexCriteria), @(kEngagementRowOrClause)] containsObject:@(indexPath.row)]) {
+			[[ATConnect sharedConnection] engage:[tableView cellForRowAtIndexPath:indexPath].textLabel.text fromViewController:self];
+		} else if (indexPath.row == kEngagementRowShowUpgrade) {
+			// This is just here as an example. Don't use this in production apps.
+			if ([[ATConnect sharedConnection] respondsToSelector:@selector(presentUpgradeDialogFromViewControllerIfAvailable:)]) {
+#				pragma clang diagnostic push
+#				pragma clang diagnostic ignored "-Wobjc-method-access"
+				[[ATConnect sharedConnection] presentUpgradeDialogFromViewControllerIfAvailable:self];
+#				pragma clang diagnostic pop
+			}
+		}
 	}
 	
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];

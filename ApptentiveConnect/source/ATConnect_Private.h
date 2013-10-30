@@ -11,9 +11,13 @@
 @interface ATConnect ()
 - (NSDictionary *)customPersonData;
 - (NSDictionary *)customDeviceData;
+- (NSDictionary *)integrationConfiguration;
+- (BOOL)messageCenterEnabled;
+- (BOOL)emailRequired;
 
 #if TARGET_OS_IPHONE
 - (void)presentFeedbackDialogFromViewController:(UIViewController *)viewController;
+- (void)presentUpgradeDialogFromViewControllerIfAvailable:(UIViewController *)viewController;
 #endif
 
 /*!

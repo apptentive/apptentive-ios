@@ -7,12 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+
 @class ATInteractionUsageData;
 
-@interface ATInteraction : NSObject <NSCoding> {
-	
-}
-
+@interface ATInteraction : NSObject <NSCoding>
 @property (nonatomic, retain) NSString *identifier;
 @property (nonatomic, assign) int priority;
 @property (nonatomic, retain) NSString *type;
@@ -28,5 +26,4 @@
 
 - (NSPredicate *)criteriaPredicate;
 + (NSPredicate *)predicateForInteractionCriteria:(NSDictionary *)interactionCriteria hasError:(BOOL *)hasError;
-
 @end

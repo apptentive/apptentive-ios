@@ -8,6 +8,7 @@
 
 #import "ATPersonUpdater.h"
 #import "ATWebClient+MessageCenter.h"
+#import "ATConversationUpdater.h"
 
 NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 
@@ -33,11 +34,19 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 }
 
 + (BOOL)shouldUpdate {
-	ATPersonInfo *person = [ATPersonInfo currentPerson];
-	if (!person) {
-		// Avoid creating a person "just because".
+	if (![ATConversationUpdater conversationExists]) {
 		return NO;
 	}
+	
+	ATPersonInfo *person = nil;
+	if ([ATPersonInfo personExists]) {
+		person = [ATPersonInfo currentPerson];
+	} else {
+		person = [[[ATPersonInfo alloc] init] autorelease];
+		person.needsUpdate = YES;
+		[person saveAsCurrentPerson];
+	}
+	
 	return person.needsUpdate;
 }
 

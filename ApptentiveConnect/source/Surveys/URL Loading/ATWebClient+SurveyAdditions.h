@@ -9,10 +9,12 @@
 #import "ATWebClient.h"
 
 @class ATAPIRequest;
+@class ATLegacySurveyResponse;
 @class ATSurveyResponse;
 
 @interface ATWebClient (SurveyAdditions)
 - (ATAPIRequest *)requestForGettingSurveys;
+- (ATAPIRequest *)requestForPostingLegacySurveyResponse:(ATLegacySurveyResponse *)surveyResponse;
 - (ATAPIRequest *)requestForPostingSurveyResponse:(ATSurveyResponse *)surveyResponse;
 @end
 

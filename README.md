@@ -28,7 +28,7 @@ the user if they are happy with the app. If not, then a simplified feedback
 window is opened. If they are happy with the app, they are prompted to rate
 the app in the App Store:
 
-![Popup](etc/screenshots/rating.png?raw=true)
+![Popup](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/rating.png)
 
 
 Required Frameworks
@@ -36,6 +36,7 @@ Required Frameworks
 In order to use `ApptentiveConnect`, your project must link against the
 following frameworks:
 
+* Accelerate
 * CoreData
 * CoreText
 * CoreGraphics
@@ -55,7 +56,7 @@ The instructions below are for source integration. For binary releases, see our 
 
 There is a video demoing integration in Xcode 4 here:
 
-http://vimeo.com/23710908
+http://vimeo.com/73020193
 
 Drag the `ApptentiveConnect.xcodeproj` project to your project in Xcode 4 and
 add it as a subproject. You can do the same with a workspace.
@@ -63,7 +64,9 @@ add it as a subproject. You can do the same with a workspace.
 In your target's `Build Settings` section, add the following to your 
 `Other Linker Flags` settings:
 
-    -ObjC -all_load
+``` objective-c
+-ObjC -all_load
+```
 
 In your target's `Build Phases` section, add the `ApptentiveConnect` and
 `ApptentiveResources` targets to your `Target Dependencies`.
@@ -114,9 +117,9 @@ ATConnect *connection = [ATConnect sharedConnection];
 [connection presentMessageCenterFromViewController:self];
 ```
 
-![Message Center initial feedback](etc/screenshots/messageCenter_giveFeedback.png?raw=true)
+![Message Center Initial Feedback](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/messageCenter_giveFeedback.png)
 
-![Message Center response](etc/screenshots/messageCenter_response.png?raw=true)
+![Message Center Response](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/messageCenter_response.png)
 
 Easy!
 
@@ -141,9 +144,9 @@ You can also [listen](https://developer.apple.com/library/mac/#documentation/Coc
 
 ``` objective-c
 [[NSNotificationCenter defaultCenter] addObserver:self
-										 selector:@selector(unreadMessageCountChanged:)
-										     name:ATMessageCenterUnreadCountChangedNotification
-									       object:nil];
+                                         selector:@selector(unreadMessageCountChanged:)
+                                             name:ATMessageCenterUnreadCountChangedNotification
+                                           object:nil];
 ```
 
 App Rating Flow
@@ -212,17 +215,20 @@ are more general.
 To check if a survey with a given set of tags is available to be shown, call:
 
 ```objective-c
+NSSet *tags = [NSSet setWithArray:@[@"finishedTutorial", @"beatFirstBoss"]];
+
 if ([ATSurveys hasSurveyAvailableWithTags:tags]) {
     [ATSurveys presentSurveyControllerWithTags:tags fromViewController:viewController];
 }
 ```
 
-where tags is an `NSSet` consisting of strings like `aftervideo` that you set as tags
-on your survey on the Apptentive website.
+where `tags` is an `NSSet` consisting of strings like `"finishedTutorial"` that you set as tags
+on your survey on the Apptentive website. This allows you to only present the survey to certain
+users of your app.
 
 To show a survey without tags, use:
 
-```objective-c
+``` objective-c
 if ([ATSurveys hasSurveyAvailableWithNoTags]) {
     [ATSurveys presentSurveyControllerWithNoTagsFromViewController:viewController];
 }
@@ -230,7 +236,7 @@ if ([ATSurveys hasSurveyAvailableWithNoTags]) {
 
 So, the full flow looks like:
 
-```objective-c
+``` objective-c
 #include "ATSurveys.h"
 // ...
 - (void)applicationDidFinishLaunching:(UIApplication *)application /* ... */ {
@@ -242,7 +248,6 @@ So, the full flow looks like:
 	// Present survey here as appropriate.
 }
 ```
-
 
 **Finding Your iTunes App ID**
 In [iTunesConnect](https://itunesconnect.apple.com/), go to "Manage Your 

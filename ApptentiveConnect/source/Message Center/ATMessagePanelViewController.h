@@ -24,12 +24,14 @@ typedef enum {
 	UIViewController *presentingViewController;
 @private
 	UIStatusBarStyle startingStatusBarStyle;
+	UIViewTintAdjustmentMode startingTintAdjustmentMode;
 	BOOL showEmailAddressField;
 	UIWindow *originalPresentingWindow;
 	NSObject<ATMessagePanelDelegate> *delegate;
 	
 	UIAlertView *noEmailAddressAlert;
 	UIAlertView *invalidEmailAddressAlert;
+	UIAlertView *emailRequiredAlert;
 }
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet ATCustomButton *cancelButton;

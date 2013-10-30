@@ -78,6 +78,11 @@
 		device[@"custom_data"] = extraInfo;
 	}
 	
+	NSDictionary *integrationConfiguration = [[ATConnect sharedConnection] integrationConfiguration];
+	if (integrationConfiguration && [integrationConfiguration count]) {
+		device[@"integration_config"] = integrationConfiguration;
+	}
+	
 	return @{@"device":device};
 }
 @end

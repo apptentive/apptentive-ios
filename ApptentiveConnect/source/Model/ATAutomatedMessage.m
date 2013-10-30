@@ -22,7 +22,7 @@
 	NSString *apptentiveID = [json at_safeObjectForKey:@"id"];
 	
 	if (apptentiveID) {
-		message = [(ATAutomatedMessage *)[ATMessage findMessageWithID:apptentiveID] retain];
+		message = [(ATAutomatedMessage *)[ATAbstractMessage findMessageWithID:apptentiveID] retain];
 	}
 	if (message == nil) {
 		message = [[ATAutomatedMessage alloc] initWithEntity:[NSEntityDescription entityForName:@"ATAutomatedMessage" inManagedObjectContext:context] insertIntoManagedObjectContext:context];

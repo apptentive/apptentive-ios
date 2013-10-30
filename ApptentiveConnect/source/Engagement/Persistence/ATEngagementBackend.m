@@ -13,7 +13,6 @@
 #import "ATInteraction.h"
 #import "ATAppRatingFlow_Private.h"
 #import "ATConnect_Private.h"
-#import "ATInteractionEnjoymentDialogController.h"
 #import "ATInteractionUpgradeMessageViewController.h"
 #import "ATUtilities.h"
 
@@ -265,10 +264,7 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 
 - (void)presentEnjoymentDialogInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
 	NSAssert([interaction.type isEqualToString:@"EnjoymentDialog"], @"Attempted to present an EnjoymentDialog interaction with an interaction of type: %@", interaction.type);
-	
-	ATInteractionEnjoymentDialogController *enjoymentDialog = [[ATInteractionEnjoymentDialogController alloc] initWithInteraction:interaction];
-	[enjoymentDialog presentEnjoymentDialogFromViewController:viewController];
-	[enjoymentDialog release];
+	ATLogError(@"Need to present an EnjoymentDialog here!");
 }
 
 @end

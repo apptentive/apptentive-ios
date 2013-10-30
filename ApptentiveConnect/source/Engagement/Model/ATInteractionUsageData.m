@@ -106,9 +106,6 @@
 		for (NSString *codePoint in codePointsInvokesTotal) {
 			[predicateSyntax setObject:[codePointsInvokesTotal objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/total", codePoint]];
 		}
-		
-#warning Need to add any codepoints that were not in NSUserDefaults but *are* in the interaction criteria.
-		
 		_codePointInvokesTotal = [predicateSyntax retain];
 	}
 	
@@ -122,9 +119,6 @@
 		for (NSString *codePoint in codePointsInvokesVersion) {
 			[predicateSyntax setObject:[codePointsInvokesVersion objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/version", codePoint]];
 		}
-		
-#warning Need to add any codepoints that were not in NSUserDefaults but *are* in the interaction criteria.
-
 		_codePointInvokesVersion = [predicateSyntax retain];
 	}
 	return _codePointInvokesVersion;
@@ -137,9 +131,6 @@
 		for (NSString *interactionID in interactionsInvokesTotal) {
 			[predicateSyntax setObject:[interactionsInvokesTotal objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/total", interactionID]];
 		}
-		
-#warning Need to add any interactions that were not in NSUserDefaults but *are* in the interaction criteria.
-
 		_interactionInvokesTotal = [predicateSyntax retain];
 	}
 	
@@ -153,9 +144,6 @@
 		for (NSString *interactionID in interactionsInvokesVersion) {
 			[predicateSyntax setObject:[interactionsInvokesVersion objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/version", interactionID]];
 		}
-		
-#warning Need to add any interactions that were not in NSUserDefaults but *are* in the interaction criteria.
-
 		_interactionInvokesVersion = [predicateSyntax retain];
 	}
 

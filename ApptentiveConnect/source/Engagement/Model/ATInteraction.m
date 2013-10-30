@@ -146,6 +146,16 @@
 				NSString *placeholder = [[@"(%K " stringByAppendingString:equalitySymbol] stringByAppendingString:@" %@)"];
 				NSPredicate *criterion = [NSCompoundPredicate predicateWithFormat:placeholder argumentArray:@[key, value]];
 				[criteria addObject:criterion];
+				
+				// Save the codepoint/interaction, to later be used in predicate evaluation object.
+				if ([key hasPrefix:@"code_point/"]) {
+					NSString *codePoint = [[key componentsSeparatedByString:@"/"] objectAtIndex:1];
+					[[ATEngagementBackend sharedBackend] codePointWasSeen:codePoint];
+				}
+				else if ([key hasPrefix:@"interactions/"]) {
+					NSString *interactionID = [[key componentsSeparatedByString:@"/"] objectAtIndex:1];
+					[[ATEngagementBackend sharedBackend] interactionWasSeen:interactionID];
+				}
 			}
 			
 			[parts addObjectsFromArray:criteria];

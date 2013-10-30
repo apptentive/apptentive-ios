@@ -149,7 +149,7 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 - (ATInteraction *)interactionForCodePoint:(NSString *)codePoint {
 	NSArray *interactions = [self interactionsForCodePoint:codePoint];
 	for (ATInteraction *interaction in interactions) {
-		if ([interaction criteriaAreMetForCodePoint:codePoint]) {
+		if ([interaction criteriaAreMet]) {
 			ATLogInfo(@"Found valid %@ interaction for code point: %@", interaction.type, codePoint);
 			return interaction;
 		}
@@ -166,6 +166,22 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	if (interaction) {
 		[self presentInteraction:interaction fromViewController:viewController];
 		[self interactionWasEngaged:interaction];
+	}
+}
+
+- (void)codePointWasSeen:(NSString *)codePoint {
+	NSDictionary *invokesTotal = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesTotalKey];
+	if (![invokesTotal objectForKey:codePoint]) {
+		NSMutableDictionary *addedCodePoint = [NSMutableDictionary dictionaryWithDictionary:invokesTotal];
+		[addedCodePoint setObject:@0 forKey:codePoint];
+		[[NSUserDefaults standardUserDefaults] setObject:addedCodePoint forKey:ATEngagementCodePointsInvokesTotalKey];
+	}
+	
+	NSDictionary *invokesVersion = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesVersionKey];
+	if (![invokesVersion objectForKey:codePoint]) {
+		NSMutableDictionary *addedCodePoint = [NSMutableDictionary dictionaryWithDictionary:invokesVersion];
+		[addedCodePoint setObject:@0 forKey:codePoint];
+		[[NSUserDefaults standardUserDefaults] setObject:addedCodePoint forKey:ATEngagementCodePointsInvokesVersionKey];
 	}
 }
 
@@ -187,6 +203,22 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	[codePointsInvokesVersion release];
 	
 	[defaults synchronize];
+}
+
+- (void)interactionWasSeen:(NSString *)interactionID {
+	NSDictionary *invokesTotal = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesTotalKey];
+	if (![invokesTotal objectForKey:interactionID]) {
+		NSMutableDictionary *addedInteraction = [NSMutableDictionary dictionaryWithDictionary:invokesTotal];
+		[addedInteraction setObject:@0 forKey:interactionID];
+		[[NSUserDefaults standardUserDefaults] setObject:addedInteraction forKey:ATEngagementInteractionsInvokesTotalKey];
+	}
+	
+	NSDictionary *invokesVersion = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesVersionKey];
+	if (![invokesVersion objectForKey:interactionID]) {
+		NSMutableDictionary *addedInteraction = [NSMutableDictionary dictionaryWithDictionary:invokesVersion];
+		[addedInteraction setObject:@0 forKey:interactionID];
+		[[NSUserDefaults standardUserDefaults] setObject:addedInteraction forKey:ATEngagementInteractionsInvokesVersionKey];
+	}
 }
 
 - (void)interactionWasEngaged:(ATInteraction *)interaction {

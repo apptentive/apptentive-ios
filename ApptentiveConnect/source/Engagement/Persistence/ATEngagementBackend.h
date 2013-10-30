@@ -35,7 +35,9 @@ NSString *const ATEngagementInteractionsInvokesVersionKey;
 - (ATInteraction *)interactionForCodePoint:(NSString *)codePoint;
 
 - (void)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController;
+- (void)codePointWasSeen:(NSString *)codePoint;
 - (void)codePointWasEngaged:(NSString *)codePoint;
+- (void)interactionWasSeen:(NSString *)interactionID;
 - (void)interactionWasEngaged:(ATInteraction *)interaction;
 
 - (void)presentInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController;

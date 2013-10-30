@@ -28,14 +28,13 @@
 	
 	interaction.criteria = @{@"days_since_install" : @{@"$gt" : @5, @"$lt" : @7}};
 	usageData = [ATInteractionUsageData usageDataForInteraction:interaction
-													atCodePoint:@"code.point"
 											   daysSinceInstall:@6
 											   daysSinceUpgrade:@6
 											 applicationVersion:@"1.8.9"
-										  codePointInvokesTotal:@8
-										codePointInvokesVersion:@8
-										interactionInvokesTotal:@8
-									  interactionInvokesVersion:@8];
+										  codePointInvokesTotal:@{}
+										codePointInvokesVersion:@{}
+										interactionInvokesTotal:@{}
+									  interactionInvokesVersion:@{}];
 	
 	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Install date");
 }
@@ -92,75 +91,125 @@
 	ATInteraction *interaction = [[ATInteraction alloc] init];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
 	
-	interaction.criteria = @{@"code_point/app.launch/invokes/version" : @1};
-	usageData.codePoint = @"app.launch";
-	usageData.codePointInvokesVersion = @1;
+	interaction.criteria = @{@"code_point/app.launch/invokes/version": @1};
+	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @1};
 	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"This version has been invoked 1 time.");
-	usageData.codePointInvokesVersion = @0;
+	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @0};
 	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
-	usageData.codePointInvokesVersion = @2;
+	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @2};
 	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
 
 	
 	interaction.criteria = @{@"code_point/big.win/invokes/version" : @7};
-	usageData.codePoint = @"big.win";
-	usageData.codePointInvokesVersion = @7;
+	usageData.codePointInvokesVersion = @{@"code_point/big.win/invokes/version": @7};
 	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
-	usageData.codePointInvokesVersion = @1;
+	usageData.codePointInvokesVersion = @{@"code_point/big.win/invokes/version": @1};
 	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
-	usageData.codePointInvokesVersion = @19;
+	usageData.codePointInvokesVersion = @{@"code_point/big.win/invokes/version": @19};
 	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
 
-	interaction.criteria = @{@"code_point/big.win/invokes/version" : @{@"$gte" : @5, @"$lte" : @5}};
-	usageData.codePoint = @"big.win";
-	usageData.codePointInvokesVersion = @5;
+	interaction.criteria = @{@"code_point/big.win/invokes/version" : @{@"$gte": @5, @"$lte" : @5}};
+	usageData.codePointInvokesVersion = @{@"code_point/big.win/invokes/version": @5};
 	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
-	usageData.codePointInvokesVersion = @3;
+	usageData.codePointInvokesVersion = @{@"code_point/big.win/invokes/version": @3};
 	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
-	usageData.codePointInvokesVersion = @19;
+	usageData.codePointInvokesVersion = @{@"code_point/big.win/invokes/version": @19};
 	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
 }
 
 - (void)testUpgradeMessageCriteria {
 	ATInteraction *interaction = [[ATInteraction alloc] init];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
-	usageData.codePoint = @"app.launch";
 	
-	interaction.criteria = @{@"code_point/app.launch/invokes/version" : @1,
+	interaction.criteria = @{@"code_point/app.launch/invokes/version": @1,
 							 @"application_version" : @"1.3.0"};
-	usageData.codePointInvokesVersion = @1;
+	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @1};
 	usageData.applicationVersion = @"1.3.0";
 	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
-	usageData.codePointInvokesVersion = @2;
+	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @2};
 	usageData.applicationVersion = @"1.3.0";
 	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
-	usageData.codePointInvokesVersion = @1;
+	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @1};
 	usageData.applicationVersion = @"1.3.1";
 	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
 
-	interaction.criteria = @{@"application_version" : @"1.3.0",
-							 @"code_point/app.launch/invokes/version" : @{@"$gte" : @1}};
-	usageData.codePointInvokesVersion = @1;
+	interaction.criteria = @{@"application_version": @"1.3.0",
+							 @"code_point/app.launch/invokes/version" : @{@"$gte": @1}};
+	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @1};
 	usageData.applicationVersion = @"1.3.0";
 	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
-	usageData.codePointInvokesVersion = @2;
+	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @2};
 	usageData.applicationVersion = @"1.3.0";
 	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
-	usageData.codePointInvokesVersion = @0;
+	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @0};
 	usageData.applicationVersion = @"1.3.0";
 	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
 	
 	interaction.criteria = @{@"application_version" : @"1.3.0",
-							 @"code_point/app.launch/invokes/version" : @{@"$lte" : @4}};
-	usageData.codePointInvokesVersion = @1;
+							 @"code_point/app.launch/invokes/version": @{@"$lte" : @4}};
+	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @1};
 	usageData.applicationVersion = @"1.3.0";
 	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
-	usageData.codePointInvokesVersion = @4;
+	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @4};
 	usageData.applicationVersion = @"1.3.0";
 	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
-	usageData.codePointInvokesVersion = @5;
+	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @5};
 	usageData.applicationVersion = @"1.3.0";
 	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
+}
+
+- (void)testComplexCriteria {
+	NSString *jsonString = @"{\"interactions\":{\"app.launch\":[{\"id\":\"526fe2836dd8bf546a00000c\",\"priority\":2,\"criteria\":{\"days_since_upgrade\":{\"$lt\":3},\"code_point/app.launch/invokes/total\":2,\"interactions/526fe2836dd8bf546a00000b/invokes/version\":0},\"type\":\"RatingDialog\",\"version\":null,\"active\":true,\"configuration\":{\"active\":true,\"question_text\":\"Do you love Jelly Bean GO SMS Pro?\"}}],\"big.win\":[{\"id\":\"526fe2836dd8bf546a00000d\",\"priority\":1,\"criteria\":{},\"type\":\"RatingDialog\",\"version\":null,\"active\":true,\"configuration\":{\"active\":true,\"question_text\":\"Do you love Jelly Bean GO SMS Pro?\"}}],\"or_clause\":[{\"id\":\"526fe2836dd8bf546a00000e\",\"priority\":1,\"criteria\":{\"$or\":[{\"days_since_upgrade\":{\"$lt\":3}},{\"code_point/app.launch/invokes/total\":2},{\"interactions/526fe2836dd8bf546a00000b/invokes/version\":0}]},\"type\":\"RatingDialog\",\"version\":null,\"active\":true,\"configuration\":{\"active\":true,\"question_text\":\"Do you love Jelly Bean GO SMS Pro?\"}}],\"complext_criteria\":[{\"id\":\"526fe2836dd8bf546a00000f\",\"priority\":1,\"criteria\":{\"$or\":[{\"days_since_upgrade\":{\"$lt\":3}},{\"$and\":[{\"code_point/app.launch/invokes/total\":2},{\"interactions/526fe2836dd8bf546a00000b/invokes/version\":0},{\"$or\":[{\"code_point/small.win/invokes/total\":2},{\"code_point/big.win/invokes/total\":2}]}]}]},\"type\":\"RatingDialog\",\"version\":null,\"active\":true,\"configuration\":{\"active\":true,\"question_text\":\"Do you love Jelly Bean GO SMS Pro?\"}}]}}";
+
+	/*
+	criteria = {
+		"$or" = ({
+			"days_since_upgrade" = {
+				"$lt" = 3;
+			};
+		},
+		{
+			"$and" = ({
+				"code_point/app.launch/invokes/total" = 2;
+			},
+			{
+				"interactions/526fe2836dd8bf546a00000b/invokes/version" = 0;
+			},
+			{
+				"$or" = ({
+					"code_point/small.win/invokes/total" = 2;
+				},
+				{
+					"code_point/big.win/invokes/total" = 2;
+				});
+			});
+		});
+	};
+	*/
+	
+
+	NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+	NSDictionary *interactions = [NSJSONSerialization JSONObjectWithData:jsonData
+																 options:NSJSONReadingAllowFragments
+																   error:nil];
+	
+	
+	NSDictionary *codePoints = [interactions objectForKey:@"interactions"];
+	NSDictionary *complexInteractionDictionary = [[codePoints objectForKey:@"complext_criteria"] objectAtIndex:0];
+	
+	ATInteraction *complexInteraction = [ATInteraction interactionWithJSONDictionary:complexInteractionDictionary];
+	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	
+	usageData.daysSinceUpgrade = @2;
+	STAssertTrue([complexInteraction criteriaAreMetForUsageData:usageData], @"2 satisfies the inital OR clause; passes regardless of the next condition.");
+	usageData.daysSinceUpgrade = @0;
+	STAssertTrue([complexInteraction criteriaAreMetForUsageData:usageData], @"0 satisfies the inital OR clause; passes regardless of the next condition.");
+	
+	usageData.daysSinceUpgrade = @3;
+	usageData.codePointInvokesTotal = @{@"code_point/app.launch/invokes/total": @8};
+	STAssertFalse([complexInteraction criteriaAreMetForUsageData:usageData], @"3 fails the initial OR clause.");
+
+
 }
 
 @end

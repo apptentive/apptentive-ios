@@ -560,6 +560,7 @@
 		49F8AFFD16CC56570070FFEA /* ATEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATEvent.h; sourceTree = "<group>"; };
 		49F8AFFE16CC56570070FFEA /* ATEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATEvent.m; sourceTree = "<group>"; };
 		49FECBE217D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v1 to v2.xcmappingmodel"; sourceTree = "<group>"; };
+		58CD20121821B4D40071CC72 /* ATDataModel 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ATDataModel 3.xcdatamodel"; sourceTree = "<group>"; };
 		58EA5B3617B4781600ECEB4B /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		58EA5B3B17B479A500ECEB4B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		58EA5B4117B47AAC00ECEB4B /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -1875,6 +1876,7 @@
 			isa = XCVersionGroup;
 			children = (
 				49B7E913178BA4E50059E776 /* ATDataModel 2.xcdatamodel */,
+				58CD20121821B4D40071CC72 /* ATDataModel 3.xcdatamodel */,
 				49AB227E1746EE9500175F4D /* ATDataModel.xcdatamodel */,
 			);
 			currentVersion = 49B7E913178BA4E50059E776 /* ATDataModel 2.xcdatamodel */;

@@ -21,7 +21,6 @@
 + (UIImage *)imageByScalingImage:(UIImage *)image toSize:(CGSize)size scale:(CGFloat)contentScale fromITouchCamera:(BOOL)isFromITouchCamera;
 + (CGFloat)rotationOfViewHierarchyInRadians:(UIView *)leafView;
 + (CGAffineTransform)viewTransformInWindow:(UIWindow *)window;
-+ (UIImage *)screenshot;
 #elif TARGET_OS_MAC
 + (NSData *)pngRepresentationOfImage:(NSImage *)image;
 #endif

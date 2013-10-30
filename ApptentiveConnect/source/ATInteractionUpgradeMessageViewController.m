@@ -42,7 +42,7 @@ typedef enum {
 	
 	// Blurred background
 	// 10% black over background image
-	UIImage *screenshot = [ATUtilities screenshot];
+	UIImage *screenshot = [ATUtilities imageByTakingScreenshot];
 	UIColor *tintColor = [UIColor colorWithWhite:0 alpha:0.1];
 	UIImage *blurred = [screenshot at_applyBlurWithRadius:30 tintColor:tintColor saturationDeltaFactor:1.8 maskImage:nil];
 	[self.backgroundImageView setImage:blurred];

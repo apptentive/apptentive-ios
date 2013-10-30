@@ -197,6 +197,16 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 	[[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController];
 }
 
+- (void)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData {
+	NSMutableDictionary *allowedCustomMessageData = [NSMutableDictionary dictionary];
+	
+	for (NSString *key in [customData allKeys]) {
+		[self addCustomData:[customData objectForKey:key] withKey:key toCustomDataDictionary:allowedCustomMessageData];
+	}
+	
+	[[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController withCustomData:allowedCustomMessageData];
+}
+
 - (void)presentFeedbackDialogFromViewController:(UIViewController *)viewController {
 	NSString *title = ATLocalizedString(@"Give Feedback", @"First feedback screen title.");
 	NSString *body = [NSString stringWithFormat:ATLocalizedString(@"Please let us know how to make %@ better for you!", @"Feedback screen body. Parameter is the app name."), [[ATBackend sharedBackend] appName]];

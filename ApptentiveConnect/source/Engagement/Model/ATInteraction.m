@@ -155,12 +155,19 @@
 				
 				// Save the codepoint/interaction, to later be used in predicate evaluation object.
 				if ([key hasPrefix:@"code_point/"]) {
-					NSString *codePoint = [[key componentsSeparatedByString:@"/"] objectAtIndex:1];
-					[[ATEngagementBackend sharedBackend] codePointWasSeen:codePoint];
+					NSArray *components = [key componentsSeparatedByString:@"/"];
+					if (components.count > 1) {
+						NSString *codePoint = [components objectAtIndex:1];
+						[[ATEngagementBackend sharedBackend] codePointWasSeen:codePoint];
+					}
 				}
 				else if ([key hasPrefix:@"interactions/"]) {
-					NSString *interactionID = [[key componentsSeparatedByString:@"/"] objectAtIndex:1];
-					[[ATEngagementBackend sharedBackend] interactionWasSeen:interactionID];
+					NSArray *components = [key componentsSeparatedByString:@"/"];
+					if (components.count > 1) {
+						NSString *interactionID = [components objectAtIndex:1];
+						[[ATEngagementBackend sharedBackend] interactionWasSeen:interactionID];
+					}
+					
 				}
 			}
 			

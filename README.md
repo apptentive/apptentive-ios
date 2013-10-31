@@ -10,7 +10,7 @@ Note: For developers with apps created before June 28, 2013, please contact us t
 
 This guide will walk you through implementing Apptentive within your iOS app. Below is a video demonstration of how quick and easy this integration is.
 
-[![iOS Install Guide Video](etc/screenshots/iOS-video.png?raw=true "iOS Install Guide Video")](https://vimeo.com/73020193)
+[![iOS Install Guide Video](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-video.png "iOS Install Guide Video")](https://vimeo.com/73020193)
 
 -
 
@@ -50,7 +50,7 @@ $ pod install
 
 First, drag the `ApptentiveConnect.xcodeproj` project file (located in the `Apptentive Connect` folder of our source code) to your project in Xcode 4 and add it as a subproject.
 
-![ApptentiveConnect drag](etc/screenshots/iOS-apptentive-connect.png?raw=true)
+![ApptentiveConnect drag](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-apptentive-connect.png)
 
 ------------------------------------------------------------------------------------
 
@@ -77,7 +77,7 @@ want to filter them based upon your managed object context. Learn more from [App
 3. Expand "Link Binary With Libraries".
 4. Click on the `+` button and add the frameworks listed above.
 
-![iOS Frameworks](etc/screenshots/iOS-frameworks.png?raw=true)
+![iOS Frameworks](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-frameworks.png)
 
 #### Configure Apptentive
 
@@ -93,20 +93,20 @@ want to filter them based upon your managed object context. Learn more from [App
     -ObjC -all_load
 ```
 
-![iOS Linker Flags](etc/screenshots/iOS-linker-flags.png?raw=true)
+![iOS Linker Flags](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-linker-flags.png)
 
 ##### Add Apptentive Connect and Resources
 
 1. Go back to your Xcode project's `Build Phases` tab.
 2. Add the `ApptentiveConnect` and `ApptentiveResources` as targets in your project's `Target Dependencies`.
 
-![iOS Target Dependencies](etc/screenshots/iOS-target-dependencies.png?raw=true)
+![iOS Target Dependencies](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-target-dependencies.png)
 
 ##### Link Apptentive Library
 
 Under `Link Binary With Libraries`, add `libApptentiveConnect.a`.
 
-![Apptentive Library](etc/screenshots/iOS-apptentive-library.png?raw=true)
+![Apptentive Library](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-apptentive-library.png)
 
 ##### Build Apptentive Resources for iOS Devices
 
@@ -126,7 +126,7 @@ Building for iOS devices first works around a bug in Xcode 4.
 4. Drag `ApptentiveResources.bundle` from the `ApptentiveConnect` products in the
 file navigator into `Copy Bundle Resources`.
 
-![iOS Bundle Resources](etc/screenshots/iOS-bundle-resources.png?raw=true)
+![iOS Bundle Resources](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-bundle-resources.png)
 
 ##### Add the ApptentiveConnect Header File
 
@@ -180,7 +180,7 @@ ATConnect *connection = [ATConnect sharedConnection];
 [connection presentMessageCenterFromViewController:viewController];
 ```
 
-![Message Center initial feedback](etc/screenshots/iOS-message-center.png?raw=true) ![alt text](etc/screenshots/space.png?raw=true) ![Message Center response](etc/screenshots/iOS-sample-message-center.png?raw=true)
+![Message Center initial feedback](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-message-center.png) ![alt text](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/space.png) ![Message Center response](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-sample-message-center.png)
 
 #### Ratings
 
@@ -309,4 +309,4 @@ the user if they are happy with the app. If not, then a simplified feedback
 window is opened. If they are happy with the app, they are prompted to rate
 the app in the App Store:
 
-![Popup](etc/screenshots/rating.png?raw=true)
+![Popup](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/rating.png)

@@ -33,7 +33,7 @@ Please note that if you use CocoaPods to get Apptentive, you can skip workspace 
 
 ```
 platform :ios, '6.0'
-pod 'apptentive-ios',   '~> 1.0.1'
+pod 'apptentive-ios'
 ```
 
 ##### Install Pods

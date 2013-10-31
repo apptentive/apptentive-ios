@@ -256,7 +256,7 @@ surveys that should be shown only in certain instances.
 To check if a survey with a given set of tags is available to be shown, call:
 
 ```objective-c
-NSSet *tags = [@"bigWin", @"endOfLevel", @"usedItem"];
+NSSet *tags = [NSSet setWithArray:@[@"bigWin", @"endOfLevel", @"usedItem"]];
 
 if ([ATSurveys hasSurveyAvailableWithTags:tags]) {
     [ATSurveys presentSurveyControllerWithTags:tags fromViewController:viewController];

@@ -48,7 +48,7 @@ $ pod install
 
 ### Setup Xcode Project
 
-First, drag the `ApptentiveConnect.xcodeproj` project file (located in the `Apptentive Connect` folder of our source code) to your project in Xcode 4 and add it as a subproject.
+First, drag the `ApptentiveConnect.xcodeproj` project file (located in the `ApptentiveConnect` folder of our source code) to your project in Xcode 5 and add it as a subproject.
 
 ![ApptentiveConnect drag](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-apptentive-connect.png)
 
@@ -110,7 +110,7 @@ Under `Link Binary With Libraries`, add `libApptentiveConnect.a`.
 
 ##### Build Apptentive Resources for iOS Devices
 
-Building for iOS devices first works around a bug in Xcode 4.
+Building for iOS devices first works around a bug in Xcode 5.
 
 1. In the upper right-hand corner of your Xcode window, click on your project name.
 2. Select `Apptentive Resources`.

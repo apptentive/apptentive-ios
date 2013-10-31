@@ -33,6 +33,7 @@ typedef enum {
 	self = [super initWithNibName:@"ATInteractionUpgradeMessageViewController" bundle:[ATConnect resourceBundle]];
 	if (self != nil) {
 		_upgradeMessageInteraction = interaction;
+		_backgroundScreenshot = [ATUtilities imageByTakingScreenshot];
 	}
 	return self;
 }
@@ -42,7 +43,7 @@ typedef enum {
 	
 	// Blurred background
 	// 10% black over background image
-	UIImage *screenshot = [ATUtilities imageByTakingScreenshot];
+	UIImage *screenshot = self.backgroundScreenshot ?: [ATUtilities imageByTakingScreenshot];
 	UIColor *tintColor = [UIColor colorWithWhite:0 alpha:0.1];
 	UIImage *blurred = [screenshot at_applyBlurWithRadius:30 tintColor:tintColor saturationDeltaFactor:1.8 maskImage:nil];
 	UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];

@@ -74,7 +74,7 @@ typedef enum {
 		UIImage *poweredByApptentiveIcon = [ATBackend imageNamed:@"at_update_logo"];
 		[self.poweredByApptentiveIconView setImage:poweredByApptentiveIcon];
 		self.poweredByBackground.hidden = NO;
-		NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:self.poweredByBackground attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:60];
+		NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:self.poweredByBackground attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:40];
 		[self.poweredByBackground addConstraint:constraint];
 	} else {
 		NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:self.poweredByBackground attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0];

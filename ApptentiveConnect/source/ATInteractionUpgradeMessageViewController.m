@@ -45,6 +45,8 @@ typedef enum {
 	UIImage *screenshot = [ATUtilities imageByTakingScreenshot];
 	UIColor *tintColor = [UIColor colorWithWhite:0 alpha:0.1];
 	UIImage *blurred = [screenshot at_applyBlurWithRadius:30 tintColor:tintColor saturationDeltaFactor:1.8 maskImage:nil];
+	UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+	blurred = [ATUtilities imageByRotatingImage:blurred toInterfaceOrientation:interfaceOrientation];
 	[self.backgroundImageView setImage:blurred];
 	
 	// App icon

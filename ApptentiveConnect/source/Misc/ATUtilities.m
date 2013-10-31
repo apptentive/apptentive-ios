@@ -79,6 +79,29 @@ static NSDateFormatter *dateFormatter = nil;
 	return image;
 }
 
++ (UIImage *)imageByRotatingImage:(UIImage *)image toInterfaceOrientation:(UIInterfaceOrientation)orientation {
+	UIImageOrientation imageOrientation = UIImageOrientationUp;
+	switch (orientation) {
+		case UIInterfaceOrientationPortrait:
+			imageOrientation = UIImageOrientationUp;
+			break;
+		case UIInterfaceOrientationPortraitUpsideDown:
+			imageOrientation = UIImageOrientationDown;
+			break;
+		case UIInterfaceOrientationLandscapeLeft:
+			imageOrientation = UIImageOrientationRight;
+			break;
+		case UIInterfaceOrientationLandscapeRight:
+			imageOrientation = UIImageOrientationLeft;
+			break;
+		default:
+			break;
+	}
+	UIImage *rotated = [[[UIImage alloc] initWithCGImage:[image CGImage] scale:1 orientation:imageOrientation] autorelease];
+	
+	return rotated;
+}
+
 + (UIImage *)imageByRotatingImage:(UIImage *)image byRadians:(CGFloat)radians {
 	UIImage *result = nil;
 	

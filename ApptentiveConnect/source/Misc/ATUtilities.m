@@ -79,6 +79,40 @@ static NSDateFormatter *dateFormatter = nil;
 	return image;
 }
 
++ (UIImage*)imageByTakingScreenshotIncludingBlankStatusBarArea {
+	UIImage *screenshot = [self imageByTakingScreenshot];
+	
+	CGSize screenSize = [[UIScreen mainScreen] bounds].size;
+	UIGraphicsBeginImageContextWithOptions(screenSize, NO, 0);
+	
+	CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
+    CGFloat statusBarHeight = MIN(statusBarSize.width, statusBarSize.height);
+	
+	CGPoint origin = CGPointMake(0, 0);
+	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+	switch (orientation) {
+		case UIInterfaceOrientationPortrait:
+			origin = CGPointMake(0, statusBarHeight);
+			break;
+		case UIInterfaceOrientationPortraitUpsideDown:
+			origin = CGPointMake(0, 0);
+			break;
+		case UIInterfaceOrientationLandscapeLeft:
+			origin = CGPointMake(statusBarHeight, 0);
+			break;
+		case UIInterfaceOrientationLandscapeRight:
+			origin = CGPointMake(0, 0);
+			break;
+		default:
+			break;
+	}
+	[screenshot drawAtPoint:origin];
+	UIImage* screenshotPlusStatusBar = UIGraphicsGetImageFromCurrentImageContext();
+	UIGraphicsEndImageContext();
+	
+	return screenshotPlusStatusBar;
+}
+
 + (UIImage *)imageByRotatingImage:(UIImage *)image toInterfaceOrientation:(UIInterfaceOrientation)orientation {
 	UIImageOrientation imageOrientation = UIImageOrientationUp;
 	switch (orientation) {

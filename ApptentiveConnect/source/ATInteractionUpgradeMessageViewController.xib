@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment version="1792" defaultVersion="1072" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ATInteractionUpgradeMessageViewController">
@@ -137,8 +137,8 @@
                             <rect key="frame" x="0.0" y="528" width="320" height="40"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                             <subviews>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kLi-Gu-d2Z" userLabel="poweredByImage">
-                                    <rect key="frame" x="163" y="9" width="102" height="20"/>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kLi-Gu-d2Z" userLabel="poweredByImage">
+                                    <rect key="frame" x="163" y="10" width="102" height="20"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <constraints>
@@ -163,7 +163,7 @@
                                 <constraint firstAttribute="centerY" secondItem="kLi-Gu-d2Z" secondAttribute="centerY" id="dIK-Fu-sck"/>
                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="kLi-Gu-d2Z" secondAttribute="trailing" constant="1" id="eW8-g8-25h"/>
                                 <constraint firstItem="Kpa-1y-X4e" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="wTc-Hm-DDK" secondAttribute="leading" constant="1" id="gsX-cz-yYl"/>
-                                <constraint firstAttribute="centerX" secondItem="Kpa-1y-X4e" secondAttribute="centerX" constant="45" id="jjJ-25-odV"/>
+                                <constraint firstAttribute="centerX" secondItem="Kpa-1y-X4e" secondAttribute="centerX" constant="40" id="jjJ-25-odV"/>
                             </constraints>
                         </view>
                     </subviews>

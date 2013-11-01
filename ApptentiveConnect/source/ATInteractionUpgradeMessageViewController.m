@@ -18,6 +18,9 @@ typedef enum {
 	ATInteractionUpgradeMessageOkPressed,
 } ATInteractionUpgradeMessageAction;
 
+NSString *const ATInteractionUpgradeMessageLaunch = @"ATInteractionUpgradeMessageLaunch";
+NSString *const ATInteractionUpgradeMessageClose = @"ATInteractionUpgradeMessageClose";
+
 @interface ATInteractionUpgradeMessageViewController ()
 - (UIWindow *)findMainWindowPreferringMainScreen:(BOOL)preferMainScreen;
 - (UIWindow *)windowForViewController:(UIViewController *)viewController;
@@ -93,9 +96,7 @@ typedef enum {
 }
 
 - (IBAction)okButtonPressed:(id)sender {
-	//[self.delegate messagePanelDidCancel:self];
 	[self dismissAnimated:YES completion:NULL withAction:ATInteractionUpgradeMessageOkPressed];
-	//[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroDidCancelNotification object:self userInfo:nil];
 }
 
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion withAction:(ATInteractionUpgradeMessageAction)action {
@@ -127,8 +128,9 @@ typedef enum {
 		if (completion) {
 			completion();
 		}
-		//[self.delegate messagePanel:self didDismissWithAction:action];
 	}];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:ATInteractionUpgradeMessageClose object:self];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -214,7 +216,7 @@ typedef enum {
 		self.window.hidden = NO;
 	}];
 		
-	//[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroDidShowNotification object:self userInfo:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ATInteractionUpgradeMessageLaunch object:self];
 }
 
 - (BOOL)isIPhoneAppInIPad {

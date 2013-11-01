@@ -163,7 +163,7 @@
                                 <constraint firstAttribute="centerY" secondItem="kLi-Gu-d2Z" secondAttribute="centerY" id="dIK-Fu-sck"/>
                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="kLi-Gu-d2Z" secondAttribute="trailing" constant="1" id="eW8-g8-25h"/>
                                 <constraint firstItem="Kpa-1y-X4e" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="wTc-Hm-DDK" secondAttribute="leading" constant="1" id="gsX-cz-yYl"/>
-                                <constraint firstAttribute="centerX" secondItem="Kpa-1y-X4e" secondAttribute="centerX" constant="40" id="jjJ-25-odV"/>
+                                <constraint firstAttribute="centerX" secondItem="Kpa-1y-X4e" secondAttribute="centerX" constant="45" id="jjJ-25-odV"/>
                             </constraints>
                         </view>
                     </subviews>

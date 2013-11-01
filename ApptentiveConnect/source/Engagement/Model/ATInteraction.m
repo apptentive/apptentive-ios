@@ -60,7 +60,7 @@
 	return [ATInteractionUsageData usageDataForInteraction:self];
 }
 
-- (BOOL)criteriaAreMet:(NSString *)codePoint {
+- (BOOL)criteriaAreMet {
 	BOOL criteriaMet = [self criteriaAreMetForUsageData:[self usageData]];
 	if (criteriaMet && [self.type isEqualToString:@"UpgradeMessage"] && ![ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
 		// Don't show upgrade messages on anything except iOS 7 and above.

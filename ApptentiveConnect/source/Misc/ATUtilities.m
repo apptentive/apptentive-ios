@@ -28,12 +28,16 @@ static NSDateFormatter *dateFormatter = nil;
 
 @implementation ATUtilities
 
++ (UIImage*)imageByTakingScreenshot {
+	return [self imageByTakingScreenshotExcludingWindow:nil];
+}
+
 #if TARGET_OS_IPHONE
 // From QA1703:
 // http://developer.apple.com/library/ios/#qa/qa1703/_index.html
 // with changes to account for the application frame.
 //TODO: Use iOS 7 snapshotting API.
-+ (UIImage*)imageByTakingScreenshot {
++ (UIImage*)imageByTakingScreenshotExcludingWindow:(UIWindow *)excludedWindow {
 	// Create a graphics context with the target size
 	// On iOS 4 and later, use UIGraphicsBeginImageContextWithOptions to take the scale into consideration
 	// On iOS prior to 4, fall back to use UIGraphicsBeginImageContext
@@ -49,6 +53,10 @@ static NSDateFormatter *dateFormatter = nil;
 	
 	// Iterate over every window from back to front
 	for (UIWindow *window in [[UIApplication sharedApplication] windows])  {
+		if (window == excludedWindow) {
+			continue;
+		}
+		
 		if (![window respondsToSelector:@selector(screen)] || [window screen] == [UIScreen mainScreen]) {
 			// -renderInContext: renders in the coordinate space of the layer,
 			// so we must first apply the layer's geometry to the graphics context
@@ -79,39 +87,43 @@ static NSDateFormatter *dateFormatter = nil;
 	return image;
 }
 
-+ (UIImage*)imageByTakingScreenshotIncludingBlankStatusBarArea {
-	UIImage *screenshot = [self imageByTakingScreenshot];
-	
-	CGSize screenSize = [[UIScreen mainScreen] bounds].size;
-	UIGraphicsBeginImageContextWithOptions(screenSize, NO, 0);
-	
-	CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
-    CGFloat statusBarHeight = MIN(statusBarSize.width, statusBarSize.height);
-	
-	CGPoint origin;
-	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-	switch (orientation) {
-		case UIInterfaceOrientationPortrait:
-			origin = CGPointMake(0, statusBarHeight);
-			break;
-		case UIInterfaceOrientationPortraitUpsideDown:
-			origin = CGPointMake(0, 0);
-			break;
-		case UIInterfaceOrientationLandscapeLeft:
-			origin = CGPointMake(statusBarHeight, 0);
-			break;
-		case UIInterfaceOrientationLandscapeRight:
-			origin = CGPointMake(0, 0);
-			break;
-		default:
-			origin = CGPointMake(0, 0);
-			break;
++ (UIImage*)imageByTakingScreenshotIncludingBlankStatusBarArea:(BOOL)includeStatusBar excludingWindow:(UIWindow *)window  {
+	UIImage *screenshot = [self imageByTakingScreenshotExcludingWindow:window];
+
+	if (includeStatusBar) {
+		CGSize screenSize = [[UIScreen mainScreen] bounds].size;
+		UIGraphicsBeginImageContextWithOptions(screenSize, NO, 0);
+		
+		CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
+		CGFloat statusBarHeight = MIN(statusBarSize.width, statusBarSize.height);
+		
+		CGPoint origin;
+		UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+		switch (orientation) {
+			case UIInterfaceOrientationPortrait:
+				origin = CGPointMake(0, statusBarHeight);
+				break;
+			case UIInterfaceOrientationPortraitUpsideDown:
+				origin = CGPointMake(0, 0);
+				break;
+			case UIInterfaceOrientationLandscapeLeft:
+				origin = CGPointMake(statusBarHeight, 0);
+				break;
+			case UIInterfaceOrientationLandscapeRight:
+				origin = CGPointMake(0, 0);
+				break;
+			default:
+				origin = CGPointMake(0, 0);
+				break;
+		}
+		[screenshot drawAtPoint:origin];
+		UIImage* screenshotPlusStatusBar = UIGraphicsGetImageFromCurrentImageContext();
+		UIGraphicsEndImageContext();
+		
+		screenshot = screenshotPlusStatusBar;
 	}
-	[screenshot drawAtPoint:origin];
-	UIImage* screenshotPlusStatusBar = UIGraphicsGetImageFromCurrentImageContext();
-	UIGraphicsEndImageContext();
 	
-	return screenshotPlusStatusBar;
+	return screenshot;
 }
 
 + (UIImage *)imageByRotatingImage:(UIImage *)image toInterfaceOrientation:(UIInterfaceOrientation)orientation {

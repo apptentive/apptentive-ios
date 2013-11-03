@@ -1,39 +1,60 @@
-Apptentive iOS SDK
-==================
+# Apptentive iOS SDK
 
-This iOS library allows you to add a quick and easy in-app-feedback mechanism
-to your iOS applications. Feedback is sent to the Apptentive web service.
+The Apptentive iOS SDK lets you provide a powerful and simple channel to your customers. With it, you can manage your app's ratings, let your customers give you feedback, respond to customer feedback, show surveys at specific points within your app, and more.
 
 There have been many recent API changes for the 1.0 release. Please see `docs/APIChanges.md`.
 
-For developers with apps created before June 28, 2013, please contact us to have your account
-upgraded to the new Message Center UI on our website.
+Note: For developers with apps created before June 28, 2013, please contact us to have your account upgraded to the new Message Center UI on our website.
 
-Quickstart
-==========
+## Install Guide
 
-There are no external dependencies for this SDK.
+This guide will walk you through implementing Apptentive within your iOS app. Below is a video demonstration of how quick and easy this integration is.
 
-Sample Application
-------------------
-The sample application FeedbackDemo demonstrates how to integrate the SDK
-with your application.
+[![iOS Install Guide Video](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-video.png "iOS Install Guide Video")](https://vimeo.com/73020193)
 
-The demo app includes integration of the message center, surveys, and the
-ratings flow. You use it by editing the `defines.h` file and entering in
-the Apple ID for your app and your Apptentive API token. 
+-
 
-The rating flow can be activated by clicking on the Ratings button. It asks
-the user if they are happy with the app. If not, then a simplified feedback
-window is opened. If they are happy with the app, they are prompted to rate
-the app in the App Store:
+### Get Apptentive
 
-![Popup](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/rating.png)
+All of our client code is open source and available on [GitHub](https://github.com/apptentive/apptentive-ios).
 
+#### Using Git
 
-Required Frameworks
--------------------
-In order to use `ApptentiveConnect`, your project must link against the
+You can clone our iOS SDK using git: `git clone https://github.com:apptentive/apptentive-ios.git`.
+
+#### Using CocoaPods
+
+Please note that if you use CocoaPods to get Apptentive, you can skip workspace configuration and go directly to Apptentive implementation below.
+
+##### Create Podfile
+
+1. Search for Apptentive's pod information on [CocoaPods](https://cocoapods.org).
+2. List and save the dependencies in a text file named "Podfile" in your Xcode project directory. It should look something like this:
+
+```
+platform :ios, '6.0'
+pod 'apptentive-ios'
+```
+
+##### Install Pods
+
+Now you can install the dependencies in your project. Run this command in your Xcode project directory in Terminal:
+
+```
+$ pod install
+```
+
+-
+
+### Setup Xcode Project
+
+First, drag the `ApptentiveConnect.xcodeproj` project file (located in the `ApptentiveConnect` folder of our source code) to your project in Xcode 5 and add it as a subproject.
+
+![ApptentiveConnect drag](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-apptentive-connect.png)
+
+------------------------------------------------------------------------------------
+
+Next, in order to use `ApptentiveConnect`, your project must link against the
 following frameworks:
 
 * CoreData
@@ -47,129 +68,154 @@ following frameworks:
 * UIKit
 
 *Note:* If your app uses Core Data and you listen for Core Data related notifications, you will
-want to filter them based upon your managed object context. [Learn more from Apple's documentation.](https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/CoreDataFramework/Classes/NSManagedObjectContext_Class/NSManagedObjectContext.html)
+want to filter them based upon your managed object context. Learn more from [Apple's documentation](https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/CoreDataFramework/Classes/NSManagedObjectContext_Class/NSManagedObjectContext.html).
 
-Project Settings for Xcode 4
-----------------------------
-The instructions below are for source integration. For binary releases, see our [Binary Distributions](https://github.com/apptentive/apptentive-ios/wiki/Binary-Distributions) page.
+##### How To
 
-There is a video demoing integration in Xcode 4 here:
+1. Click on your Xcode project in the file browser sidebar.
+2. Go to your Xcode project's `Build Phases` tab.
+3. Expand "Link Binary With Libraries".
+4. Click on the `+` button and add the frameworks listed above.
 
-http://vimeo.com/73020193
+![iOS Frameworks](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-frameworks.png)
 
-Drag the `ApptentiveConnect.xcodeproj` project to your project in Xcode 4 and
-add it as a subproject. You can do the same with a workspace.
+#### Configure Apptentive
 
-In your target's `Build Settings` section, add the following to your 
-`Other Linker Flags` settings:
+##### Setup Linker Flags
 
-``` objective-c
--ObjC -all_load
+1. Click on your Xcode project in the file navigator sidebar.
+2. Go to your Xcode project's `Build Settings` tab.
+3. Search for `Other Linker Flags`
+4. Double click in the blank area to the right of `Other Linker Flags` but under the "Yes" of `Link With Standard Libraries`
+5. Click on the `+` button and add the following:
+
+```
+    -ObjC -all_load
 ```
 
-In your target's `Build Phases` section, add the `ApptentiveConnect` and
-`ApptentiveResources` targets to your `Target Dependencies`.
+![iOS Linker Flags](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-linker-flags.png)
 
-Then, add `libApptentiveConnect.a` to `Link Binary With Libraries`
+##### Add Apptentive Connect and Resources
 
-Build the `ApptentiveResources` target for iOS devices. Then, add the
-`ApptentiveResources.bundle` from the `ApptentiveConnect` products in the
-file navigator into your `Copy Bundle Resources` build phase. Building
-for iOS devices first works around a bug in Xcode 4.
+1. Go back to your Xcode project's `Build Phases` tab.
+2. Add the `ApptentiveConnect` and `ApptentiveResources` as targets in your project's `Target Dependencies`.
 
-Now, drag `ATConnect.h` from `ApptentiveConnect.xcodeproj` to your app's 
-file list.
+![iOS Target Dependencies](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-target-dependencies.png)
 
-Now see "Using the Library", below, for instructions on using the library in your code.
+##### Link Apptentive Library
 
-Using the Library
------------------
+Under `Link Binary With Libraries`, add `libApptentiveConnect.a`.
+
+![Apptentive Library](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-apptentive-library.png)
+
+##### Build Apptentive Resources for iOS Devices
+
+Building for iOS devices first works around a bug in Xcode 5.
+
+1. In the upper right-hand corner of your Xcode window, click on your project name.
+2. Select `Apptentive Resources`.
+3. Click to the right of the arrow next to `Apptentive Resources`.
+4. Select `iOS Devices`.
+5. Under `Project` in your Mac's menu bar, click on `Build`.
+
+##### Copy Apptentive Resources Bundle
+
+1. In the file navigator, expand the ApptentiveConnect project.
+2. Expand `Products`.
+3. Under your Xcode project's `Build Phases`, expand `Copy Bundle Resources`.
+4. Drag `ApptentiveResources.bundle` from the `ApptentiveConnect` products in the
+file navigator into `Copy Bundle Resources`.
+
+![iOS Bundle Resources](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-bundle-resources.png)
+
+##### Add the ApptentiveConnect Header File
+
+1. In the file navigator, expand `source` under the ApptentiveConnect project.
+2. Drag `ATConnect.h` from `ApptentiveConnect.xcodeproj` to your app's file list.
+
+-
+
+### Implement Apptentive in Project
+
+#### Message Center
 
 `ApptentiveConnect` queues feedback and attempts to upload in the background. This
 is intended to provide as quick a mechanism for submitting feedback as possible.
 
 In order for queued/interrupted feedback uploads to continue uploading, we 
 recommending instantiating `ATConnect` and setting the API key at application
-startup, like:
+startup.
+
+1. Open up your app's `AppDelegate.m` file.
+2. Under `#import "AppDelegate.h"`, import the `ATConnect.h` file.
+3. Under implementation, edit the `applicationDidFinishLaunching` method to look like so:
 
 ``` objective-c
 #include "ATConnect.h"
 // ...
 - (void)applicationDidFinishLaunching:(UIApplication *)application /* ... */ {
     ATConnect *connection = [ATConnect sharedConnection];
-    connection.apiKey = kApptentiveAPIKey;
+    connection.apiKey = @"<Your API Key>";
     // ...
 }
 ```
 
-Where `kApptentiveAPIKey` is an `NSString` containing your API key. As soon
-as you set the API key on the shared connection object, any queued feedback
+If there isn't an `applicationDidFinishLaunching` method, add the above code snippet to your App Delegate's implementation.
+
+As soon as you set the API key on the shared connection object, any queued feedback
 will start to upload, pending network availability. You also should not have
 to set the API key again on the shared connection object.
 
-Now, you can show the Apptentive feedback UI from a `UIViewController` with:
+------------------------------------------------------------------------------------
+
+Now, whereever you want to launch the Apptentive feedback UI from... 
+
+1. Include the `ATConnect.h` header file.
+2. Add the following code to whichever method responds to feedback.
 
 ``` objective-c
 #include "ATConnect.h"
 // ...
 ATConnect *connection = [ATConnect sharedConnection];
-[connection presentMessageCenterFromViewController:self];
+[connection presentMessageCenterFromViewController:viewController];
 ```
 
-![Message Center Initial Feedback](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/messageCenter_giveFeedback.png)
+![Message Center initial feedback](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-message-center.png) ![alt text](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/space.png) ![Message Center response](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-sample-message-center.png)
 
-![Message Center Response](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/messageCenter_response.png)
+#### Ratings
 
-Easy!
-
-Message Center
------------------
-
-Show the Apptentive Message Center with `presentMessageCenterFromViewController:`:
-
-``` objective-c
-[[ATConnect sharedConnection] presentMessageCenterFromViewController:viewController];
-```
-
-The first time your app opens Message Center, the user will be presented with a feedback form. On subsequent showings they will be taken directly to the Message Center.
-
-Use `unreadMessageCount` to check if there are any unread Message Center messages:
-
-``` objective-c
-NSUInteger *unreadMessageCount = [[ATConnect sharedConnection] unreadMessageCount];
-```
-
-You can also [listen](https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/NSNotificationCenter_Class/Reference/Reference.html) for the `ATMessageCenterUnreadCountChangedNotification` notification, which we post when the unread message count changes. 
-
-``` objective-c
-[[NSNotificationCenter defaultCenter] addObserver:self
-                                         selector:@selector(unreadMessageCountChanged:)
-                                             name:ATMessageCenterUnreadCountChangedNotification
-                                           object:nil];
-```
-
-App Rating Flow
----------------
 `ApptentiveConnect` now provides an app rating flow similar to other projects
-such as [appirator](https://github.com/arashpayan/appirater). This uses the number
+such as [Appirater](https://github.com/arashpayan/appirater). This uses the number
 of launches of your application, the amount of time users have been using it, and
 the number of significant events the user has completed (for example, levels passed)
 to determine when to display a ratings dialog.
 
-To use it, add the `ATAppRatingFlow.h` header file to your project.
+To use it...
 
-Then, at startup, instantiate a shared `ATAppRatingFlow` object with your 
-iTunes app ID (see "Finding Your iTunes App ID" below):
+1. Open your project's `AppDelegate.m` file.
+2. Add the `ATAppRatingFlow.h` header file to your project.
+3. Instantiate a shared `ATAppRatingFlow` object with your iTunes App ID (see "Finding Your iTunes App ID" below):
 
 ``` objective-c
 #include "ATAppRatingFlow.h"
 // ...
 - (void)applicationDidFinishLaunching:(UIApplication *)application /* ... */ {
     ATAppRatingFlow *sharedFlow = [ATAppRatingFlow sharedRatingFlow];
-    sharedFlow.appID = @"<your iTunes app ID>";
+    sharedFlow.appID = @"<Your iTunes App ID>";
     // ...
 }
 ```
+
+------------------------------------------------------------------------------------
+
+**Finding Your iTunes App ID**
+
+In [iTunesConnect](https://itunesconnect.apple.com/), go to "Manage Your 
+Applications" and click on your application. In the "App Information" 
+section of the page, look for the "Apple ID". It will be a number. This is
+your iTunes application ID.
+
+------------------------------------------------------------------------------------
 
 The ratings flow won't show unless you call the following:
 
@@ -190,37 +236,34 @@ increment the number of significant events by calling:
 ```
 
 You can modify the parameters which determine when the ratings dialog will be
-shown in your app settings on apptentive.com.
+shown in your app settings on [Apptentive](https://apptentive.com).
 
+#### Surveys
 
-Metrics
--------
-Metrics provide insight into exactly where people begin and end interactions
-with your app and with feedback, ratings, and surveys. You can enable and disable
-metrics on your app settings page on apptentive.com.
+Surveys can be created on our website and presented, in-app, to users.
 
+Surveys are **cached** and will only be re-downloaded every 24 hours, to cut down on network connections. When developing your app and testing Apptentive, force a cache refresh by delete the app from your device and re-running.
 
-Surveys
--------
-To use surveys, add the `ATSurveys.h` header to your project.
+To begin using surveys...
 
-New surveys will be retrieved automatically. When a new survey becomes available,
-the `ATSurveyNewSurveyAvailableNotification` notification will be sent.
+1. In the file navigator, expand `source` under the ApptentiveConnect project.
+2. Drag `ATConnect.h` from `ApptentiveConnect.xcodeproj` to your app's file list.
+3. Import `ATSurveys.h` into the file where you need it.
 
 There are both tagged surveys and untagged surveys. Tags are useful for defining
-surveys that should be shown only in certain locations, whereas untagged surveys
-are more general.
+surveys that should be shown only in certain instances.
 
 To check if a survey with a given set of tags is available to be shown, call:
 
 ```objective-c
+NSSet *tags = [NSSet setWithArray:@[@"bigWin", @"endOfLevel", @"usedItem"]];
+
 if ([ATSurveys hasSurveyAvailableWithTags:tags]) {
     [ATSurveys presentSurveyControllerWithTags:tags fromViewController:viewController];
 }
 ```
 
-where tags is an `NSSet` consisting of strings like `aftervideo` that you set as tags
-on your survey on the Apptentive website.
+Note: Tags for a particular survey are set on the Apptentive website.
 
 To show a survey without tags, use:
 
@@ -230,7 +273,8 @@ if ([ATSurveys hasSurveyAvailableWithNoTags]) {
 }
 ```
 
-So, the full flow looks like:
+New surveys will be retrieved automatically. When a new survey becomes available,
+the `ATSurveyNewSurveyAvailableNotification` notification will be sent.
 
 ``` objective-c
 #include "ATSurveys.h"
@@ -241,22 +285,28 @@ So, the full flow looks like:
 }
 
 - (void)surveyBecameAvailable:(NSNotification *)notification {
-	// Present survey here as appropriate.
+    // Present survey here as appropriate.
 }
 ```
 
-**Finding Your iTunes App ID**
-In [iTunesConnect](https://itunesconnect.apple.com/), go to "Manage Your 
-Applications" and click on your application. In the "App Information" 
-section of the page, look for the "Apple ID". It will be a number. This is
-your iTunes application ID.
+#### Metrics
 
-Contributing
-------------
-We love contributions!
+Metrics provide insight into exactly where people begin and end interactions
+with your app and with feedback, ratings, and surveys. You can enable and disable
+metrics on your app settings page on [Apptentive](https://apptentive.com).
 
-Any contributions to the master apptentive-ios project must sign the [Individual Contributor License Agreement (CLA)](https://docs.google.com/a/apptentive.com/spreadsheet/viewform?formkey=dDhMaXJKQnRoX0dRMzZNYnp5bk1Sbmc6MQ#gid=0). It's a doc that makes our lawyers happy and ensures we can provide a solid open source project.
+#### Sample Application
 
-When you want to submit a change, send us a [pull request](https://github.com/apptentive/apptentive-ios/pulls). Before we merge, we'll check to make sure you're on the list of people who've signed our CLA.
+The sample application FeedbackDemo demonstrates how to integrate the SDK
+with your application.
 
-Thanks!
+The demo app includes integration of the message center, surveys, and the
+ratings flow. You use it by editing the `defines.h` file and entering in
+the Apple ID for your app and your Apptentive API token. 
+
+The rating flow can be activated by clicking on the Ratings button. It asks
+the user if they are happy with the app. If not, then a simplified feedback
+window is opened. If they are happy with the app, they are prompted to rate
+the app in the App Store:
+
+![Popup](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/rating.png)

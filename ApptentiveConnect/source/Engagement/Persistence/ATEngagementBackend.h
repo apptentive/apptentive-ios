@@ -44,4 +44,8 @@ NSString *const ATEngagementInteractionsInvokesVersionKey;
 - (void)presentUpgradeMessageInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController;
 
 - (void)presentEnjoymentDialogInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController;
+
+
+// Used for debugging only.
+- (void)resetUpgradeVersionInfo;
 @end

@@ -267,4 +267,13 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	ATLogError(@"Need to present an EnjoymentDialog here!");
 }
 
+
+- (void)resetUpgradeVersionInfo {
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[defaults removeObjectForKey:ATEngagementLastUsedVersionKey];
+	[defaults removeObjectForKey:ATEngagementUpgradeDateKey];
+	[defaults setObject:@{} forKey:ATEngagementCodePointsInvokesVersionKey];
+	[defaults setObject:@{} forKey:ATEngagementInteractionsInvokesVersionKey];
+	[defaults synchronize];
+}
 @end

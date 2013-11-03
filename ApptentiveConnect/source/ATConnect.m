@@ -222,6 +222,10 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 	}
 }
 
+- (void)resetUpgradeData {
+	[[ATEngagementBackend sharedBackend] resetUpgradeVersionInfo];
+}
+
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion {
 	[[ATBackend sharedBackend] dismissMessageCenterAnimated:animated completion:completion];
 }

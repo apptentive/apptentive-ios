@@ -23,10 +23,7 @@ enum kRootTableSections {
 
 enum kEngagementRows {
 	kEngagementRowShowUpgrade,
-	kEngagementRowAppLaunch,
-	kEngagementRowComplexCriteria,
-	kEngagementRowBigWin,
-	kEngagementRowOrClause,
+	kEngagementRowResetUpgrade,
 	kEngagementRowCount
 };
 
@@ -188,17 +185,8 @@ enum kEngagementRows {
 			case kEngagementRowShowUpgrade:
 				cell.textLabel.text = @"Show Upgrade Message if Available";
 				break;
-			case kEngagementRowAppLaunch:
-				cell.textLabel.text = @"app.launch";
-				break;
-			case kEngagementRowComplexCriteria:
-				cell.textLabel.text = @"complex_criteria";
-				break;
-			case kEngagementRowBigWin:
-				cell.textLabel.text = @"big.win";
-				break;
-			case kEngagementRowOrClause:
-				cell.textLabel.text = @"or_clause";
+			case kEngagementRowResetUpgrade:
+				cell.textLabel.text = @"Reset Upgrade Data";
 				break;
 			default:
 				break;
@@ -226,17 +214,15 @@ enum kEngagementRows {
 			[[ATConnect sharedConnection] presentMessageCenterFromViewController:self];
 		}
 	} else if (indexPath.section == kEngagementSection) {
-		if ([@[@(kEngagementRowAppLaunch), @(kEngagementRowBigWin), @(kEngagementRowComplexCriteria), @(kEngagementRowOrClause)] containsObject:@(indexPath.row)]) {
-			[[ATConnect sharedConnection] engage:[tableView cellForRowAtIndexPath:indexPath].textLabel.text fromViewController:self];
-		} else if (indexPath.row == kEngagementRowShowUpgrade) {
+#		pragma clang diagnostic push
+#		pragma clang diagnostic ignored "-Wobjc-method-access"
+		if (indexPath.row == kEngagementRowShowUpgrade) {
 			// This is just here as an example. Don't use this in production apps.
-			if ([[ATConnect sharedConnection] respondsToSelector:@selector(presentUpgradeDialogFromViewControllerIfAvailable:)]) {
-#				pragma clang diagnostic push
-#				pragma clang diagnostic ignored "-Wobjc-method-access"
-				[[ATConnect sharedConnection] presentUpgradeDialogFromViewControllerIfAvailable:self];
-#				pragma clang diagnostic pop
-			}
+			[[ATConnect sharedConnection] presentUpgradeDialogFromViewControllerIfAvailable:self];
+		} else if (indexPath.row == kEngagementRowResetUpgrade) {
+			[[ATConnect sharedConnection] resetUpgradeData];
 		}
+#		pragma clang diagnostic pop
 	}
 	
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];

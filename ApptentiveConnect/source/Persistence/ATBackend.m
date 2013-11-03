@@ -187,6 +187,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[apiKey release], apiKey = nil;
 	[currentFeedback release], currentFeedback = nil;
+	[_currentCustomData release], _currentCustomData = nil;
 	[dataManager release], dataManager = nil;
 #if TARGET_OS_IPHONE
 	if (presentedMessageCenterViewController) {
@@ -251,6 +252,9 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	message.body = body;
 	message.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
 	message.sentByUser = @YES;
+	if (self.currentCustomData) {
+		[message addCustomDataFromDictionary:self.currentCustomData];
+	}
 	[message updateClientCreationTime];
 	NSError *error = nil;
 	if (![[self managedObjectContext] save:&error]) {
@@ -277,6 +281,9 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	message.body = body;
 	message.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
 	message.sentByUser = @YES;
+	if (self.currentCustomData) {
+		[message addCustomDataFromDictionary:self.currentCustomData];
+	}
 	[message updateClientCreationTime];
 	NSError *error = nil;
 	if (![[self managedObjectContext] save:&error]) {
@@ -408,6 +415,12 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 #pragma mark Message Center
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController {
+	[self presentMessageCenterFromViewController:viewController withCustomData:nil];
+}
+
+- (void)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData {
+	self.currentCustomData = customData;
+	
 	NSUInteger messageCount = [ATData countEntityNamed:@"ATAbstractMessage" withPredicate:nil];
 	if (messageCount == 0 || ![[ATConnect sharedConnection] messageCenterEnabled]) {
 		NSString *title = ATLocalizedString(@"Give Feedback", @"First feedback screen title.");
@@ -436,6 +449,8 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 }
 
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion {
+	self.currentCustomData = nil;
+	
 	if (currentMessagePanelController != nil) {
 		[currentMessagePanelController dismissAnimated:animated completion:completion];
 		return;

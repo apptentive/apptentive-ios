@@ -61,6 +61,7 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 - (void)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController;
 
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController;
+- (void)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
 - (NSUInteger)unreadMessageCount;
 
 /*!

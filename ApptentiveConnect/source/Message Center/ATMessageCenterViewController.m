@@ -394,6 +394,9 @@ typedef enum {
 		composingMessage.body = [inputView text];
 		composingMessage.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
 		composingMessage.sentByUser = @YES;
+		if ([ATBackend sharedBackend].currentCustomData) {
+			[composingMessage addCustomDataFromDictionary:[ATBackend sharedBackend].currentCustomData];
+		}
 		[composingMessage updateClientCreationTime];
 		
 		[[[ATBackend sharedBackend] managedObjectContext] save:nil];

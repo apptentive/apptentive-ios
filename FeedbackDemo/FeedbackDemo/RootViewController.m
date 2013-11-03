@@ -211,7 +211,13 @@ enum kEngagementRows {
         }
 	} else if (indexPath.section == kMessageCenterSection) {
 		if (indexPath.row == 0) {
-			[[ATConnect sharedConnection] presentMessageCenterFromViewController:self];
+			BOOL sendWithCustomData = arc4random_uniform(2);
+			if (sendWithCustomData) {
+				[[ATConnect sharedConnection] presentMessageCenterFromViewController:self withCustomData:@{@"sentViaFeedbackDemo": @YES,
+																										   @"randomlyChosenToHaveCustomData": @YES}];
+			} else {
+				[[ATConnect sharedConnection] presentMessageCenterFromViewController:self];
+			}
 		}
 	} else if (indexPath.section == kEngagementSection) {
 #		pragma clang diagnostic push

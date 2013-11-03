@@ -85,7 +85,7 @@
 	} else {
 		mutableDictionary = [[dictionary mutableCopy] autorelease];
 	}
-	if (dictionary != nil) {
+	if (incomingDictionary != nil) {
 		[mutableDictionary addEntriesFromDictionary:incomingDictionary];
 	}
 	[self setDictionaryData:[self dataForDictionary:mutableDictionary]];

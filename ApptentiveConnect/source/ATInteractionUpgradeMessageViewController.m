@@ -13,6 +13,7 @@
 #import "ATMessagePanelViewController.h"
 #import "ATUtilities.h"
 #import "UIImage+ATImageEffects.h"
+#import "UIViewController+ATSwizzle.h"
 
 typedef enum {
 	ATInteractionUpgradeMessageOkPressed,
@@ -20,6 +21,7 @@ typedef enum {
 
 NSString *const ATInteractionUpgradeMessageLaunch = @"ATInteractionUpgradeMessageLaunch";
 NSString *const ATInteractionUpgradeMessageClose = @"ATInteractionUpgradeMessageClose";
+NSString *const ATInteractionUpgradeMessagePresentingViewControllerSwizzledDidRotateNotification = @"ATInteractionUpgradeMessagePresentingViewControllerSwizzledDidRotateNotification";
 
 @interface ATInteractionUpgradeMessageViewController ()
 - (UIWindow *)findMainWindowPreferringMainScreen:(BOOL)preferMainScreen;
@@ -109,7 +111,10 @@ NSString *const ATInteractionUpgradeMessageClose = @"ATInteractionUpgradeMessage
 		self.backgroundImageView.alpha = 0.0;
 		self.poweredByBackground.frame = poweredByEndingFrame;
 	} completion:^(BOOL finished) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarFrameNotification object:nil];
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:ATInteractionUpgradeMessagePresentingViewControllerSwizzledDidRotateNotification object:nil];
 		[presentingViewController.view setUserInteractionEnabled:YES];
 		[self.window resignKeyWindow];
 		[self.window removeFromSuperview];
@@ -136,6 +141,9 @@ NSString *const ATInteractionUpgradeMessageClose = @"ATInteractionUpgradeMessage
 	// For viewDidLoad…
 	__unused UIView *v = [self view];
 	
+	// Swizzle the presentingViewController's `didRotateFromInterfaceOrientation:` method to get a notifiction when the background view finishes animating to the new orientation.
+	[newPresentingViewController swizzleDidRotateFromInterfaceOrientation];
+	
 	if (presentingViewController != newPresentingViewController) {
 		[presentingViewController release], presentingViewController = nil;
 		presentingViewController = [newPresentingViewController retain];
@@ -145,6 +153,7 @@ NSString *const ATInteractionUpgradeMessageClose = @"ATInteractionUpgradeMessage
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarChanged:) name:UIApplicationDidChangeStatusBarFrameNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(presentingViewControllerDidRotate:) name:ATInteractionUpgradeMessagePresentingViewControllerSwizzledDidRotateNotification object:nil];
 	
 		
 	UIWindow *parentWindow = [self windowForViewController:presentingViewController];
@@ -273,11 +282,14 @@ NSString *const ATInteractionUpgradeMessageClose = @"ATInteractionUpgradeMessage
 }
 
 - (void)statusBarChanged:(NSNotification *)notification {
-	UIImage *blurred = [self blurredBackgroundScreenshot];
-	[self.backgroundImageView setImage:blurred];
-	
 	[self positionInWindow];
 }
+
+- (void)presentingViewControllerDidRotate:(NSNotification *)notification {
+	UIImage *blurred = [self blurredBackgroundScreenshot];
+	[self.backgroundImageView setImage:blurred];
+}
+
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];

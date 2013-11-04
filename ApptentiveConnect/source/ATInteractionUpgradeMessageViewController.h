@@ -14,9 +14,13 @@ NSString *const ATInteractionUpgradeMessageClose;
 NSString *const ATInteractionUpgradeMessagePresentingViewControllerSwizzledDidRotateNotification;
 
 @interface ATInteractionUpgradeMessageViewController : UIViewController {
-    UIViewController *presentingViewController;
-    @private
-    UIWindow *originalPresentingWindow;
+	UIViewController *presentingViewController;
+	@private
+	UIWindow *originalPresentingWindow;
+	
+	// Used when handling view rotation.
+	CGRect lastSeenPresentingViewControllerFrame;
+	CGAffineTransform lastSeenPresentingViewControllerTransform;
 }
 
 @property (nonatomic, retain) ATInteraction *upgradeMessageInteraction;

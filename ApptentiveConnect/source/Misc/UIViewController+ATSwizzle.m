@@ -13,25 +13,28 @@
 @implementation UIViewController (ATSwizzle)
 
 typedef void (*voidIMP) (id, SEL, ...);
-static voidIMP originalDidRotate = NULL;
+static voidIMP at_originalDidRotate = NULL;
 
-- (void)swizzleDidRotateFromInterfaceOrientation {
-	if (!originalDidRotate) {
+- (void)at_swizzleDidRotateFromInterfaceOrientation {
+	if (!at_originalDidRotate) {
 		SEL sel = @selector(didRotateFromInterfaceOrientation:);
-		originalDidRotate = (void *)[self swizzleSelector:sel withIMP:(IMP)swizzledDidRotateFromInterfaceOrientation];
+		at_originalDidRotate = (void *)[self at_swizzleSelector:sel withIMP:(IMP)at_swizzledDidRotateFromInterfaceOrientation];
 	}	
 }
 
-static void swizzledDidRotateFromInterfaceOrientation(id self, SEL _cmd, id  observer, SEL selector, NSString *name, id object) {
-	NSAssert(originalDidRotate, @"Original `didRotateFromInterfaceOrientation:` method was not found.");
-    
-    // New implementation
+static void at_swizzledDidRotateFromInterfaceOrientation(id self, SEL _cmd, id  observer, SEL selector, NSString *name, id object) {
+	NSAssert(at_originalDidRotate, @"Original `didRotateFromInterfaceOrientation:` method was not found.");
+	
+	// New implementation
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATInteractionUpgradeMessagePresentingViewControllerSwizzledDidRotateNotification object:nil];
-    
-    // Original implementation
-	if (originalDidRotate) {
-        originalDidRotate(self, _cmd, observer, selector, name, object);
+	
+	// Original implementation
+	if (at_originalDidRotate) {
+		at_originalDidRotate(self, _cmd, observer, selector, name, object);
 	}
 }
-
 @end
+
+void ATSwizzle_UIViewController_Bootstrap() {
+	NSLog(@"Loading ATSwizzle_UIViewController_Bootstrap");
+}

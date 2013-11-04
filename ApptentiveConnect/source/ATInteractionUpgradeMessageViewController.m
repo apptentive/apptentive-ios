@@ -43,7 +43,7 @@ NSString *const ATInteractionUpgradeMessagePresentingViewControllerSwizzledDidRo
 }
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
+	[super viewDidLoad];
 	
 	self.backgroundImageView.contentMode = UIViewContentModeScaleAspectFill;
 	UIImage *blurred = [self blurredBackgroundScreenshot];
@@ -112,9 +112,9 @@ NSString *const ATInteractionUpgradeMessagePresentingViewControllerSwizzledDidRo
 		self.backgroundImageView.alpha = 0.0;
 		self.poweredByBackground.frame = poweredByEndingFrame;
 	} completion:^(BOOL finished) {
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarFrameNotification object:nil];
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarFrameNotification object:nil];
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:ATInteractionUpgradeMessagePresentingViewControllerSwizzledDidRotateNotification object:nil];
 		[presentingViewController.view setUserInteractionEnabled:YES];
 		[self.window resignKeyWindow];
@@ -128,13 +128,13 @@ NSString *const ATInteractionUpgradeMessagePresentingViewControllerSwizzledDidRo
 			completion();
 		}
 	}];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:ATInteractionUpgradeMessageClose object:self];
+
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATInteractionUpgradeMessageClose object:self];
 }
 
 - (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+	[super didReceiveMemoryWarning];
+	// Dispose of any resources that can be recreated.
 }
 
 - (void)presentFromViewController:(UIViewController *)newPresentingViewController animated:(BOOL)animated {
@@ -142,8 +142,10 @@ NSString *const ATInteractionUpgradeMessagePresentingViewControllerSwizzledDidRo
 	// For viewDidLoad…
 	__unused UIView *v = [self view];
 	
-	// Swizzle the presentingViewController's `didRotateFromInterfaceOrientation:` method to get a notifiction when the background view finishes animating to the new orientation.
-	[newPresentingViewController swizzleDidRotateFromInterfaceOrientation];
+	// Swizzle the presentingViewController's `didRotateFromInterfaceOrientation:` method to get a notifiction
+	// when the background view finishes animating to the new orientation.
+	//TODO: I would like to find a better solution to this.
+	[newPresentingViewController at_swizzleDidRotateFromInterfaceOrientation];
 	
 	if (presentingViewController != newPresentingViewController) {
 		[presentingViewController release], presentingViewController = nil;
@@ -183,7 +185,7 @@ NSString *const ATInteractionUpgradeMessagePresentingViewControllerSwizzledDidRo
 	CGPoint center = animationCenter;
 	center.y = ceilf(center.y);
 	
-	CGRect endingFrame = originalPresentingWindow.bounds;//[[UIScreen mainScreen] applicationFrame];
+	CGRect endingFrame = originalPresentingWindow.bounds;
 	
 	[self positionInWindow];
 
@@ -209,7 +211,6 @@ NSString *const ATInteractionUpgradeMessagePresentingViewControllerSwizzledDidRo
 	}
 	self.backgroundImageView.alpha = 0;
 	[UIView animateWithDuration:0.3 animations:^(void){
-//		self.window.center = newViewCenter;
 		self.window.frame = animationBounds;
 		self.alertView.center = newViewCenter;
 		self.poweredByBackground.frame = poweredByEndingFrame;
@@ -219,7 +220,7 @@ NSString *const ATInteractionUpgradeMessagePresentingViewControllerSwizzledDidRo
 		self.window.hidden = NO;
 	}];
 		
-    [[NSNotificationCenter defaultCenter] postNotificationName:ATInteractionUpgradeMessageLaunch object:self];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATInteractionUpgradeMessageLaunch object:self];
 }
 
 - (BOOL)isIPhoneAppInIPad {
@@ -241,12 +242,6 @@ NSString *const ATInteractionUpgradeMessagePresentingViewControllerSwizzledDidRo
 	[self.poweredByBackground layoutIfNeeded];
 	[self.alertView layoutIfNeeded];
 	[self.contentView layoutIfNeeded];
-	/*
-	UIView *v = self.appIconView;
-	while ((v = (UIView *)v.superview)) {
-		[v layoutSubviews];
-	}
-	 */
 	
 	[self applyRoundedCorners];
 }
@@ -287,6 +282,17 @@ NSString *const ATInteractionUpgradeMessagePresentingViewControllerSwizzledDidRo
 }
 
 - (void)presentingViewControllerDidRotate:(NSNotification *)notification {
+	// Only pay attention to the presenting view controller.
+	if (!presentingViewController) {
+		return;
+	}
+	CGRect f = presentingViewController.view.frame;
+	CGAffineTransform t = presentingViewController.view.transform;
+	if (CGRectEqualToRect(lastSeenPresentingViewControllerFrame, f) && CGAffineTransformEqualToTransform(lastSeenPresentingViewControllerTransform, t)) {
+		return;
+	}
+	lastSeenPresentingViewControllerFrame = f;
+	lastSeenPresentingViewControllerTransform = t;
 	UIImage *blurred = [self blurredBackgroundScreenshot];
 	[UIView transitionWithView:self.backgroundImageView
 					  duration:0.3f
@@ -374,6 +380,7 @@ NSString *const ATInteractionUpgradeMessagePresentingViewControllerSwizzledDidRo
 	[self positionInWindow];
 	[self release];
 }
+
 - (void)dealloc {
 	[_contentView release];
 	[_poweredByBackground release];
@@ -382,6 +389,7 @@ NSString *const ATInteractionUpgradeMessagePresentingViewControllerSwizzledDidRo
 	[_appIconContainer release];
 	[super dealloc];
 }
+
 - (void)viewDidUnload {
 	[self setContentView:nil];
 	[self setPoweredByBackground:nil];

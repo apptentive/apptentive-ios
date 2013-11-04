@@ -5,13 +5,12 @@
 //  Created by Peter Kamb on 11/3/13.
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
-
-#import "NSObject+ATSwizzle.h"
 #import <objc/runtime.h>
 
-@implementation NSObject (ATSwizzle)
+#import "NSObject+ATSwizzle.h"
 
-- (IMP)swizzleSelector:(SEL)originalSelector withIMP:(IMP)newIMP {
+@implementation NSObject (ATSwizzle)
+- (IMP)at_swizzleSelector:(SEL)originalSelector withIMP:(IMP)newIMP {
 	Class class = [self class];
 	Method originalMethod = class_getInstanceMethod(class, originalSelector);
 	IMP originalIMP = method_getImplementation(originalMethod);
@@ -22,5 +21,8 @@
 	
 	return originalIMP;
 }
-
 @end
+
+void ATSwizzle_NSObject_Bootstrap() {
+	NSLog(@"Loading ATSwizzle_NSObject_Bootstrap");
+}

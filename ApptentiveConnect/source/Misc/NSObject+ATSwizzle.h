@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface NSObject (ATSwizzle)
-
-- (IMP)swizzleSelector:(SEL)originalSelector withIMP:(IMP)newIMP;
-
+- (IMP)at_swizzleSelector:(SEL)originalSelector withIMP:(IMP)newIMP;
 @end
+
+void ATSwizzle_NSObject_Bootstrap();

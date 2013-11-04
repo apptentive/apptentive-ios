@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface UIViewController (ATSwizzle)
-
-- (void)swizzleDidRotateFromInterfaceOrientation;
-
+- (void)at_swizzleDidRotateFromInterfaceOrientation;
 @end
+
+void ATSwizzle_UIViewController_Bootstrap();

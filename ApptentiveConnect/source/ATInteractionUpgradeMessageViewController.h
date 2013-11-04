@@ -27,7 +27,6 @@ NSString *const ATInteractionUpgradeMessageClose;
 @property (retain, nonatomic) IBOutlet UIView *appIconContainer;
 @property (nonatomic, retain) IBOutlet UIImageView *appIconView;
 @property (nonatomic, retain) IBOutlet UIImageView *appIconBackgroundView;
-@property (nonatomic, retain) UIImage *backgroundScreenshot;
 @property (nonatomic, retain) IBOutlet UIWebView *webView;
 @property (nonatomic, retain) IBOutlet UIView *okButtonBackgroundView;
 @property (nonatomic, retain) IBOutlet UIView *poweredByBackground;
@@ -38,6 +37,8 @@ NSString *const ATInteractionUpgradeMessageClose;
 - (id)initWithInteraction:(ATInteraction *)interaction;
 
 - (IBAction)okButtonPressed:(id)sender;
+- (void)applyRoundedCorners;
+- (UIImage *)blurredBackgroundScreenshot;
 
 - (void)presentFromViewController:(UIViewController *)newPresentingViewController animated:(BOOL)animated;
 

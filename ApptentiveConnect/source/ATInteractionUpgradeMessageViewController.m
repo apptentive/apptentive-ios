@@ -36,7 +36,6 @@ NSString *const ATInteractionUpgradeMessageClose = @"ATInteractionUpgradeMessage
 	self = [super initWithNibName:@"ATInteractionUpgradeMessageViewController" bundle:[ATConnect resourceBundle]];
 	if (self != nil) {
 		_upgradeMessageInteraction = interaction;
-		_backgroundScreenshot = [ATUtilities imageByTakingScreenshotIncludingBlankStatusBarArea:YES excludingWindow:nil];
 	}
 	return self;
 }
@@ -44,13 +43,7 @@ NSString *const ATInteractionUpgradeMessageClose = @"ATInteractionUpgradeMessage
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
-	// Blurred background
-	// 10% black over background image
-	UIImage *screenshot = self.backgroundScreenshot ?: [ATUtilities imageByTakingScreenshotIncludingBlankStatusBarArea:YES excludingWindow:self.window];
-	UIColor *tintColor = [UIColor colorWithWhite:0 alpha:0.1];
-	UIImage *blurred = [screenshot at_applyBlurWithRadius:30 tintColor:tintColor saturationDeltaFactor:1.8 maskImage:nil];
-	UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
-	blurred = [ATUtilities imageByRotatingImage:blurred toInterfaceOrientation:interfaceOrientation];
+	UIImage *blurred = [self blurredBackgroundScreenshot];
 	[self.backgroundImageView setImage:blurred];
 	
 	// App icon
@@ -280,11 +273,7 @@ NSString *const ATInteractionUpgradeMessageClose = @"ATInteractionUpgradeMessage
 }
 
 - (void)statusBarChanged:(NSNotification *)notification {
-	UIImage *screenshot = [ATUtilities imageByTakingScreenshotIncludingBlankStatusBarArea:YES excludingWindow:self.window];
-	UIColor *tintColor = [UIColor colorWithWhite:0 alpha:0.1];
-	UIImage *blurred = [screenshot at_applyBlurWithRadius:30 tintColor:tintColor saturationDeltaFactor:3.8 maskImage:nil];
-	UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
-	blurred = [ATUtilities imageByRotatingImage:blurred toInterfaceOrientation:interfaceOrientation];
+	UIImage *blurred = [self blurredBackgroundScreenshot];
 	[self.backgroundImageView setImage:blurred];
 	
 	[self positionInWindow];
@@ -313,6 +302,16 @@ NSString *const ATInteractionUpgradeMessageClose = @"ATInteractionUpgradeMessage
 	buttonMaskLayer.frame = self.okButtonBackgroundView.bounds;
 	buttonMaskLayer.path = buttonMaskPath.CGPath;
 	self.okButtonBackgroundView.layer.mask = buttonMaskLayer;
+}
+
+- (UIImage *)blurredBackgroundScreenshot {
+	UIImage *screenshot = [ATUtilities imageByTakingScreenshotIncludingBlankStatusBarArea:YES excludingWindow:self.window];
+	UIColor *tintColor = [UIColor colorWithWhite:0 alpha:0.1];
+	UIImage *blurred = [screenshot at_applyBlurWithRadius:30 tintColor:tintColor saturationDeltaFactor:3.8 maskImage:nil];
+	UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+	blurred = [ATUtilities imageByRotatingImage:blurred toInterfaceOrientation:interfaceOrientation];
+	
+	return blurred;
 }
 
 - (void)unhide:(BOOL)animated {

@@ -45,6 +45,7 @@ NSString *const ATInteractionUpgradeMessagePresentingViewControllerSwizzledDidRo
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
+	self.backgroundImageView.contentMode = UIViewContentModeScaleAspectFill;
 	UIImage *blurred = [self blurredBackgroundScreenshot];
 	[self.backgroundImageView setImage:blurred];
 	
@@ -287,7 +288,12 @@ NSString *const ATInteractionUpgradeMessagePresentingViewControllerSwizzledDidRo
 
 - (void)presentingViewControllerDidRotate:(NSNotification *)notification {
 	UIImage *blurred = [self blurredBackgroundScreenshot];
-	[self.backgroundImageView setImage:blurred];
+	[UIView transitionWithView:self.backgroundImageView
+					  duration:0.3f
+					   options:UIViewAnimationOptionTransitionCrossDissolve
+					animations:^{
+						self.backgroundImageView.image = blurred;
+					} completion:nil];
 }
 
 

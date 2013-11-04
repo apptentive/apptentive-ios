@@ -5,6 +5,10 @@ Note that you'll need to add Accelerate.framework to your project now, if it's n
 
 Fixes:
 
+* IOS-223 UpgradeMessage UI: Display a message when users upgrade their app to the latest version
+* IOS-258 3rd-Party notification services configuration
+* IOS-237 Support for custom data on messages
+* IOS-222 Generalized engagement framework for interactions
 * IOS-252 Crash when canceling photo selection on iPad + iOS 7
 * IOS-202 UIActionSheet not dismissing in photo selector is causing crash
 * IOS-254 "We're Sorry!" message cut off on iPad

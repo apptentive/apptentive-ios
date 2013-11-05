@@ -17,7 +17,6 @@ enum kRootTableSections {
 	kMessageCenterSection,
 	kRatingSection,
 	kSurveySection,
-	kEngagementSection,
 	kSectionCount
 };
 
@@ -30,12 +29,6 @@ enum kSurveyRows {
 	kSurveyRowShowSurvey,
 	kSurveyRowShowSurveyWithTags,
 	kSurveyRowCount
-};
-
-enum kEngagementRows {
-	kEngagementRowShowUpgrade,
-	kEngagementRowResetUpgrade,
-	kEngagementRowCount
 };
 
 @interface RootViewController ()
@@ -128,8 +121,6 @@ enum kEngagementRows {
 		return kSurveyRowCount;
 	} else if (section == kMessageCenterSection) {
 		return kMessageCenterRowCount;
-	} else if (section == kEngagementSection) {
-		return kEngagementRowCount;
 	}
 	return 1;
 }
@@ -191,17 +182,6 @@ enum kEngagementRows {
 			
 			cell.accessoryView = [unreadLabel autorelease];
 		}
-	} else if (indexPath.section == kEngagementSection) {
-		switch (indexPath.row) {
-			case kEngagementRowShowUpgrade:
-				cell.textLabel.text = @"Show Upgrade Message if Available";
-				break;
-			case kEngagementRowResetUpgrade:
-				cell.textLabel.text = @"Reset Upgrade Data";
-				break;
-			default:
-				break;
-		}
 	}
 	
 	return cell;
@@ -229,16 +209,6 @@ enum kEngagementRows {
 				[[ATConnect sharedConnection] presentMessageCenterFromViewController:self];
 			}
 		}
-	} else if (indexPath.section == kEngagementSection) {
-#		pragma clang diagnostic push
-#		pragma clang diagnostic ignored "-Wobjc-method-access"
-		if (indexPath.row == kEngagementRowShowUpgrade) {
-			// This is just here as an example. Don't use this in production apps.
-			[[ATConnect sharedConnection] presentUpgradeDialogFromViewControllerIfAvailable:self];
-		} else if (indexPath.row == kEngagementRowResetUpgrade) {
-			[[ATConnect sharedConnection] resetUpgradeData];
-		}
-#		pragma clang diagnostic pop
 	}
 	
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -250,8 +220,6 @@ enum kEngagementRows {
 		title = @"Ratings";
 	} else if (section == kSurveySection) {
 		title = @"Surveys";
-	} else if (section == kEngagementSection) {
-		title = @"Engagement";
 	}
 	return title;
 }
@@ -262,7 +230,7 @@ enum kEngagementRows {
 		title = nil;
 	} else if (section == kSurveySection) {
 		title = nil;
-	} else if (section == kEngagementSection) {
+	} else if (section == kSurveySection) {
 		title = [NSString stringWithFormat:@"ApptentiveConnect v%@", kATConnectVersionString];
 	}
 	return title;

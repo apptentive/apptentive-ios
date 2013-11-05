@@ -58,11 +58,17 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 
 #if TARGET_OS_IPHONE
 
-- (void)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController;
-
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController;
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
 - (NSUInteger)unreadMessageCount;
+
+/*! 
+ Call with a specific code point where interactions should happen.
+ 
+ For example, if you have an upgrade message to display on app launch, you might call with codePoint set to 
+ @"app.launch" here, along with the view controller an upgrade message might be displayed from.
+ */
+- (void)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController;
 
 /*!
  * Dismisses the message center. You normally won't need to call this.

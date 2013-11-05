@@ -28,7 +28,7 @@ static NSDateFormatter *dateFormatter = nil;
 
 @implementation ATUtilities
 
-+ (UIImage*)imageByTakingScreenshot {
++ (UIImage *)imageByTakingScreenshot {
 	return [self imageByTakingScreenshotExcludingWindow:nil];
 }
 
@@ -37,7 +37,7 @@ static NSDateFormatter *dateFormatter = nil;
 // http://developer.apple.com/library/ios/#qa/qa1703/_index.html
 // with changes to account for the application frame.
 //TODO: Use iOS 7 snapshotting API.
-+ (UIImage*)imageByTakingScreenshotExcludingWindow:(UIWindow *)excludedWindow {
++ (UIImage *)imageByTakingScreenshotExcludingWindow:(UIWindow *)excludedWindow {
 	// Create a graphics context with the target size
 	// On iOS 4 and later, use UIGraphicsBeginImageContextWithOptions to take the scale into consideration
 	// On iOS prior to 4, fall back to use UIGraphicsBeginImageContext
@@ -87,7 +87,7 @@ static NSDateFormatter *dateFormatter = nil;
 	return image;
 }
 
-+ (UIImage*)imageByTakingScreenshotIncludingBlankStatusBarArea:(BOOL)includeStatusBar excludingWindow:(UIWindow *)window  {
++ (UIImage *)imageByTakingScreenshotIncludingBlankStatusBarArea:(BOOL)includeStatusBar excludingWindow:(UIWindow *)window {
 	UIImage *screenshot = [self imageByTakingScreenshotExcludingWindow:window];
 
 	if (includeStatusBar) {
@@ -117,7 +117,7 @@ static NSDateFormatter *dateFormatter = nil;
 				break;
 		}
 		[screenshot drawAtPoint:origin];
-		UIImage* screenshotPlusStatusBar = UIGraphicsGetImageFromCurrentImageContext();
+		UIImage *screenshotPlusStatusBar = UIGraphicsGetImageFromCurrentImageContext();
 		UIGraphicsEndImageContext();
 		
 		screenshot = screenshotPlusStatusBar;
@@ -801,7 +801,7 @@ extern CGRect ATCGRectOfEvenSize(CGRect inRect) {
 }
 
 CGSize ATThumbnailSizeOfMaxSize(CGSize imageSize, CGSize maxSize) {
-    CGFloat ratio = MIN(maxSize.width/imageSize.width, maxSize.height/imageSize.height);
+	CGFloat ratio = MIN(maxSize.width/imageSize.width, maxSize.height/imageSize.height);
 	if (ratio < 1.0) {
 		return CGSizeMake(floor(ratio * imageSize.width), floor(ratio * imageSize.height));
 	} else {
@@ -810,7 +810,7 @@ CGSize ATThumbnailSizeOfMaxSize(CGSize imageSize, CGSize maxSize) {
 }
 
 CGRect ATThumbnailCropRectForThumbnailSize(CGSize imageSize, CGSize thumbnailSize) {
-    CGFloat cropRatio = thumbnailSize.width/thumbnailSize.height;
+	CGFloat cropRatio = thumbnailSize.width/thumbnailSize.height;
 	CGFloat sizeRatio = imageSize.width/imageSize.height;
 	
 	if (cropRatio < sizeRatio) {

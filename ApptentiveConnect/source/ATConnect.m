@@ -178,8 +178,8 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 	return integrationConfiguration;
 }
 
-- (void)addIntegration:(NSString *)integration withToken:(NSString *)token {
-	[integrationConfiguration setObject:token forKey:integration];
+- (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration {
+	[integrationConfiguration setObject:configuration forKey:integration];
 }
 
 - (void)removeIntegration:(NSString *)integration {

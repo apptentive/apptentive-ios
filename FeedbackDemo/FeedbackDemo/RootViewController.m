@@ -229,8 +229,6 @@ enum kSurveyRows {
 	if (section == kRatingSection) {
 		title = nil;
 	} else if (section == kSurveySection) {
-		title = nil;
-	} else if (section == kSurveySection) {
 		title = [NSString stringWithFormat:@"ApptentiveConnect v%@", kATConnectVersionString];
 	}
 	return title;

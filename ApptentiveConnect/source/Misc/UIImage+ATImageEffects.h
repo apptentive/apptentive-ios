@@ -97,12 +97,12 @@
 #import <UIKit/UIKit.h>
 
 @interface UIImage (ATImageEffects)
-
 - (UIImage *)at_applyLightEffect;
 - (UIImage *)at_applyExtraLightEffect;
 - (UIImage *)at_applyDarkEffect;
 - (UIImage *)at_applyTintEffectWithColor:(UIColor *)tintColor;
 
 - (UIImage *)at_applyBlurWithRadius:(CGFloat)blurRadius tintColor:(UIColor *)tintColor saturationDeltaFactor:(CGFloat)saturationDeltaFactor maskImage:(UIImage *)maskImage;
-
 @end
+
+void ATImageEffects_UIImage_Bootstrap();

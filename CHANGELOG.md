@@ -1,22 +1,27 @@
-2013-10-22 wooster, pkamb v1.2.2 (in progress)
+2013-10-22 wooster, pkamb v1.2.2
 --------------------------------
+
+This release focuses on adding upgrade messages support. See the readme for information on how to use this feature.
+
+We also added custom data on individual messages. See the docs/APIChanges.md for details.
 
 Note that you'll need to add Accelerate.framework to your project now, if it's not already there.
 
 Fixes:
 
-* IOS-223 UpgradeMessage UI: Display a message when users upgrade their app to the latest version
-* IOS-258 3rd-Party notification services configuration
-* IOS-237 Support for custom data on messages
-* IOS-222 Generalized engagement framework for interactions
-* IOS-252 Crash when canceling photo selection on iPad + iOS 7
 * IOS-202 UIActionSheet not dismissing in photo selector is causing crash
-* IOS-254 "We're Sorry!" message cut off on iPad
 * Fixes [Issue #62](https://github.com/apptentive/apptentive-ios/issues/62) Make font fits width on message composer screen
-* IOS-257 Message Center read event not including message ID
+* IOS-222 Generalized engagement framework for interactions
+* IOS-223 UpgradeMessage UI: Display a message when users upgrade their app to the latest version
 * IOS-230 Message hyperlinks are not clickable on iOS
-* IOS-249 Ensure background message fetch doesn't resurrect task queue
+* IOS-237 Support for custom data on messages
+* IOS-240 FeedbackDemo: Change text for after they click 'Rate'
 * IOS-241 FeedbackDemo: Remove the beta symbol
+* IOS-249 Ensure background message fetch doesn't resurrect task queue
+* IOS-252 Crash when canceling photo selection on iPad + iOS 7
+* IOS-254 "We're Sorry!" message cut off on iPad
+* IOS-257 Message Center read event not including message ID
+* IOS-258 3rd-Party notification services configuration
 
 2013-10-09 wooster, pkamb v1.2.1
 -------------------------

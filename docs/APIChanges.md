@@ -1,5 +1,14 @@
 This document tracks changes to the API between versions.
 
+# 1.2.2
+
+## ATConnect
+
+* Added `- (void)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;`
+* Added `- (void)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController;`
+* Added `- (void)addIntegration:(NSString *)integration withToken:(NSString *)token;`
+* Added `- (void)removeIntegration:(NSString *)integration;`
+
 # 1.1.1
 
 ## ATConnect

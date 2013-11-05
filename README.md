@@ -241,9 +241,9 @@ shown in your app settings on [Apptentive](https://apptentive.com).
 
 #### Upgrade Messages
 
-In iOS 7, users are upgraded automatically when a new version of your app is released. Unfortunately, this means they will never see your App Store release notes!
+In iOS 7, users are upgraded automatically when a new version of your app is released. Unfortunately, this means they will rarely (if ever) see your App Store release notes!
 
-Apptentive's Upgrade Message feature allows you to display a brief message when your app has been updated. You can speak directly to your users, and let them know what has changed in the release.
+Apptentive's Upgrade Message feature allows you to display a brief message when your app has been updated. You can speak directly to your users and let them know what has changed in the release.
 
 To present an upgrade message, engage the code point `app.launch` when your application becomes active:
 
@@ -253,7 +253,7 @@ To present an upgrade message, engage the code point `app.launch` when your appl
 }
 ```
 
-Upgrade Messages are created and configured online in your Apptentive dashboard.
+Upgrade Messages are created and configured online via your Apptentive dashboard.
 
 #### Surveys
 

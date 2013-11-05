@@ -38,10 +38,10 @@
 	title = [[UILabel alloc] initWithFrame:CGRectZero];
 	title.text = titleString;
 	title.minimumFontSize = 10;
-	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+#if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_6_1
 		title.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
 		title.textColor = [UIColor blackColor];
-	} else {
+#else
 		title.font = [UIFont boldSystemFontOfSize:20.];
 		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
 			title.textColor = [UIColor whiteColor];
@@ -51,7 +51,7 @@
 			title.shadowColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.7];
 			title.shadowOffset = CGSizeMake(0, 1);
 		}
-	}
+#endif
 	
 	title.textAlignment = UITextAlignmentLeft;
 	title.lineBreakMode = UILineBreakModeMiddleTruncation;

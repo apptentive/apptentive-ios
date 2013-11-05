@@ -42,12 +42,12 @@
 - (void)configureAttachmentsButton:(UIButton *)button forMessageCenterViewController:(ATMessageCenterViewController *)vc {
 	[button setTitle:@"" forState:UIControlStateNormal];
 	
-	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+#if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_6_1
 		UIImage *cameraImage = [[ATBackend imageNamed:@"at_camera_button_v7"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 		[button setImage:cameraImage forState:UIControlStateNormal];
-	} else {
+#else
 		[button setImage:[ATBackend imageNamed:@"at_plus_button_flat"] forState:UIControlStateNormal];
-	}
+#endif
 }
 
 - (UIImage *)backgroundImageForMessageForMessageCenterViewController:(ATMessageCenterViewController *)vc {

@@ -126,9 +126,9 @@ enum {
 	CGAffineTransform t = [ATMessagePanelViewController viewTransformInWindow:parentWindow];
 	self.window.transform = t;
 	self.window.hidden = NO;
-	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+#if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_6_1
 		self.window.tintAdjustmentMode = UIViewTintAdjustmentModeNormal;
-	}
+#endif
 	[parentWindow resignKeyWindow];
 	[self.window makeKeyAndVisible];
 	animationBounds = parentWindow.bounds;
@@ -137,10 +137,12 @@ enum {
 	// Animate in from above.
 	self.window.bounds = animationBounds;
 	self.window.windowLevel = UIWindowLevelNormal;
-	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"] && originalPresentingWindow) {
+#if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_6_1
+	if (originalPresentingWindow) {
 		startingTintAdjustmentMode = originalPresentingWindow.tintAdjustmentMode;
 		originalPresentingWindow.tintAdjustmentMode = UIViewTintAdjustmentModeDimmed;
 	}
+#endif
 	CGPoint center = animationCenter;
 	center.y = ceilf(center.y);
 	
@@ -402,9 +404,11 @@ enum {
 		[self.window removeFromSuperview];
 		self.window.hidden = YES;
 		[[UIApplication sharedApplication] setStatusBarStyle:startingStatusBarStyle];
-		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"] && originalPresentingWindow) {
+#if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_6_1
+		if (originalPresentingWindow) {
 			originalPresentingWindow.tintAdjustmentMode = startingTintAdjustmentMode == UIViewTintAdjustmentModeDimmed ? UIViewTintAdjustmentModeAutomatic : startingTintAdjustmentMode;
 		}
+#endif
 		[self teardown];
 		[self release];
 		

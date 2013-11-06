@@ -252,9 +252,6 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	message.body = body;
 	message.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
 	message.sentByUser = @YES;
-	if (self.currentCustomData) {
-		[message addCustomDataFromDictionary:self.currentCustomData];
-	}
 	[message updateClientCreationTime];
 	NSError *error = nil;
 	if (![[self managedObjectContext] save:&error]) {
@@ -281,9 +278,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	message.body = body;
 	message.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
 	message.sentByUser = @YES;
-	if (self.currentCustomData) {
-		[message addCustomDataFromDictionary:self.currentCustomData];
-	}
+	[self attachCustomDataToMessage:message];
 	[message updateClientCreationTime];
 	NSError *error = nil;
 	if (![[self managedObjectContext] save:&error]) {
@@ -446,6 +441,14 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	}
 	presentedMessageCenterViewController = nc;
 	[vc release], vc = nil;
+}
+
+- (void)attachCustomDataToMessage:(ATAbstractMessage *)message {
+	if (self.currentCustomData) {
+		[message addCustomDataFromDictionary:self.currentCustomData];
+		// Only attach custom data to the first message.
+		self.currentCustomData = nil;
+	}
 }
 
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion {

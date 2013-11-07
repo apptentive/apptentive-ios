@@ -17,8 +17,10 @@
 @property (nonatomic, retain) NSString *applicationVersion;
 @property (nonatomic, retain) NSDictionary *codePointInvokesTotal;
 @property (nonatomic, retain) NSDictionary *codePointInvokesVersion;
+@property (nonatomic, retain) NSDictionary *codePointInvokesTimeAgo;
 @property (nonatomic, retain) NSDictionary *interactionInvokesTotal;
 @property (nonatomic, retain) NSDictionary *interactionInvokesVersion;
+@property (nonatomic, retain) NSDictionary *interactionInvokesTimeAgo;
 
 - (id)initWithInteraction:(ATInteraction *)interaction;
 + (ATInteractionUsageData *)usageDataForInteraction:(ATInteraction *)interaction;
@@ -28,8 +30,10 @@
 								 applicationVersion:(NSString *)applicationVersion
 							  codePointInvokesTotal:(NSDictionary *)codePointInvokesTotal
 							codePointInvokesVersion:(NSDictionary *)codePointInvokesVersion
+							codePointInvokesTimeAgo:(NSDictionary *)codePointInvokesTimeAgo
 							interactionInvokesTotal:(NSDictionary *)interactionInvokesTotal
-						  interactionInvokesVersion:(NSDictionary *)interactionInvokesVersion;
+						  interactionInvokesVersion:(NSDictionary *)interactionInvokesVersion
+						  interactionInvokesTimeAgo:(NSDictionary *)interactionInvokesTimeAgo;
 
 - (NSDictionary *)predicateEvaluationDictionary;
 

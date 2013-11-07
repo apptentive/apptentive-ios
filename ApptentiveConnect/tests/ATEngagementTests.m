@@ -9,6 +9,7 @@
 #import "ATEngagementTests.h"
 #import "ATInteraction.h"
 #import "ATInteractionUsageData.h"
+#import "ATEngagementBackend.h"
 
 @implementation ATEngagementTests
 
@@ -33,13 +34,15 @@
 											 applicationVersion:@"1.8.9"
 										  codePointInvokesTotal:@{}
 										codePointInvokesVersion:@{}
+										codePointInvokesTimeAgo:@{}
 										interactionInvokesTotal:@{}
-									  interactionInvokesVersion:@{}];
+									  interactionInvokesVersion:@{}
+									  interactionInvokesTimeAgo:@{}];
 	
 	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Install date");
 }
 
-- (void)testInteractionCriteriaDaysSinceInstall {
+- (void)testInteractionCriteriaDaysSnceInstall {
 	ATInteraction *interaction = [[ATInteraction alloc] init];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
 	
@@ -227,6 +230,85 @@
 										@"code_point/big.win/invokes/total": @1};
 	usageData.interactionInvokesVersion = @{@"interactions/526fe2836dd8bf546a00000b/invokes/version": @8};
 	STAssertFalse([complexInteraction criteriaAreMetForUsageData:usageData], @"The middle case is incorrect.");
+}
+
+- (void)testTimeAgoCriteria {
+	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	
+	interaction.criteria = @{@"code_point/app.launch/invokes/time_ago": @100,
+							 @"interactions/big.win/invokes/time_ago": @1000};
+	
+	usageData.codePointInvokesTimeAgo = @{@"code_point/app.launch/invokes/time_ago": @100};
+	usageData.interactionInvokesTimeAgo = @{@"interactions/big.win/invokes/time_ago": @1000};
+	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	
+	
+	interaction.criteria = @{@"code_point/app.launch/invokes/time_ago": @{@"$gte": @500},
+							 @"interactions/big.win/invokes/time_ago": @{@"$lte": @1000}};
+	usageData.codePointInvokesTimeAgo = @{@"code_point/app.launch/invokes/time_ago": @800};
+	usageData.interactionInvokesTimeAgo = @{@"interactions/big.win/invokes/time_ago": @100};
+	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+}
+
+- (void)testTimeAgoCodePointCriteriaViaDatesInNSUserDefaults {
+	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+
+	interaction.criteria = @{@"code_point/app.launch/invokes/time_ago": @{@"$lte": @500}};
+	usageData.codePointInvokesTimeAgo = nil;
+	[[NSUserDefaults standardUserDefaults] setObject:@{@"app.launch": [NSDate distantPast]} forKey:ATEngagementCodePointsInvokesLastDateKey];
+	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo: distantPast -> now time interval > 500");
+	
+	interaction.criteria = @{@"code_point/app.launch/invokes/time_ago": @{@"$gte": @500}};
+	usageData.codePointInvokesTimeAgo = nil;
+	[[NSUserDefaults standardUserDefaults] setObject:@{@"app.launch": [NSDate distantPast]} forKey:ATEngagementCodePointsInvokesLastDateKey];
+	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	
+	interaction.criteria = @{@"code_point/app.launch/invokes/time_ago": @{@"$gte": @500}};
+	usageData.codePointInvokesTimeAgo = nil;
+	[[NSUserDefaults standardUserDefaults] setObject:@{@"app.launch": [NSDate dateWithTimeIntervalSinceNow:-600]} forKey:ATEngagementCodePointsInvokesLastDateKey];
+	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	
+	interaction.criteria = @{@"code_point/app.launch/invokes/time_ago": @{@"$gte": @500}};
+	usageData.codePointInvokesTimeAgo = nil;
+	[[NSUserDefaults standardUserDefaults] setObject:@{@"app.launch": (NSDate *)[NSDate dateWithTimeIntervalSinceNow:-400]} forKey:ATEngagementCodePointsInvokesLastDateKey];
+	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	
+	interaction.criteria = @{@"code_point/app.launch/invokes/time_ago": @{@"$gte": @500}};
+	usageData.codePointInvokesTimeAgo = nil;
+	[[NSUserDefaults standardUserDefaults] setObject:@{@"app.launch": (NSDate *)[NSDate dateWithTimeIntervalSinceNow:-501]} forKey:ATEngagementCodePointsInvokesLastDateKey];
+	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+}
+
+- (void)testTimeAgoInteractionCriteriaViaDatesInNSUserDefaults {
+	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	
+	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/time_ago": @{@"$lte": @500}};
+	usageData.interactionInvokesTimeAgo = nil;
+	[[NSUserDefaults standardUserDefaults] setObject:@{@"526fe2836dd8bf546a00000b": [NSDate distantPast]} forKey:ATEngagementInteractionsInvokesLastDateKey];
+	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo: distantPast -> now time interval > 500");
+	
+	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/time_ago": @{@"$gte": @500}};
+	usageData.interactionInvokesTimeAgo = nil;
+	[[NSUserDefaults standardUserDefaults] setObject:@{@"526fe2836dd8bf546a00000b": [NSDate distantPast]} forKey:ATEngagementInteractionsInvokesLastDateKey];
+	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	
+	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/time_ago": @{@"$gte": @500}};
+	usageData.interactionInvokesTimeAgo = nil;
+	[[NSUserDefaults standardUserDefaults] setObject:@{@"526fe2836dd8bf546a00000b": [NSDate dateWithTimeIntervalSinceNow:-600]} forKey:ATEngagementInteractionsInvokesLastDateKey];
+	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	
+	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/time_ago": @{@"$gte": @500}};
+	usageData.interactionInvokesTimeAgo = nil;
+	[[NSUserDefaults standardUserDefaults] setObject:@{@"526fe2836dd8bf546a00000b": (NSDate *)[NSDate dateWithTimeIntervalSinceNow:-400]} forKey:ATEngagementInteractionsInvokesLastDateKey];
+	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	
+	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/time_ago": @{@"$gte": @500}};
+	usageData.interactionInvokesTimeAgo = nil;
+	[[NSUserDefaults standardUserDefaults] setObject:@{@"526fe2836dd8bf546a00000b": (NSDate *)[NSDate dateWithTimeIntervalSinceNow:-501]} forKey:ATEngagementInteractionsInvokesLastDateKey];
+	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
 }
 
 @end

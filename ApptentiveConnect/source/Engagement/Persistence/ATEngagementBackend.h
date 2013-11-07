@@ -13,8 +13,10 @@ NSString *const ATEngagementInstallDateKey;
 NSString *const ATEngagementUpgradeDateKey;
 NSString *const ATEngagementCodePointsInvokesTotalKey;
 NSString *const ATEngagementCodePointsInvokesVersionKey;
+NSString *const ATEngagementCodePointsInvokesLastDateKey;
 NSString *const ATEngagementInteractionsInvokesTotalKey;
 NSString *const ATEngagementInteractionsInvokesVersionKey;
+NSString *const ATEngagementInteractionsInvokesLastDateKey;
 
 @class ATInteraction;
 

@@ -275,3 +275,7 @@
     return outputImage;
 }
 @end
+
+void ATImageEffects_UIImage_Bootstrap() {
+	NSLog(@"Loading ATImageEffects_UIImage_Bootstrap");
+}

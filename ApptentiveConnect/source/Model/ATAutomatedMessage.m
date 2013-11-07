@@ -43,6 +43,11 @@
 	}
 	result[@"type"] = @"AutomatedMessage";
 	
+	// Make sure we don't include custom data on automated messages.
+	if (result[@"custom_data"]) {
+		[result removeObjectForKey:@"custom_data"];
+	}
+	
 	return result;
 }
 

@@ -16,6 +16,7 @@
 #import "ATWebClient+MessageCenter.h"
 #import "ATWebClient_Private.h"
 #import "NSObject+ATSwizzle.h"
+#import "UIImage+ATImageEffects.h"
 #import "UIViewController+ATSwizzle.h"
 
 @implementation ATStaticLibraryBootstrap
@@ -27,6 +28,7 @@
 	ATWebClient_Private_Bootstrap();
 	ATWebClient_MessageCenter_Bootstrap();
 	ATToolbar_Bootstrap();
+	ATImageEffects_UIImage_Bootstrap();
 	ATSwizzle_NSObject_Bootstrap();
 	ATSwizzle_UIViewController_Bootstrap();
 }

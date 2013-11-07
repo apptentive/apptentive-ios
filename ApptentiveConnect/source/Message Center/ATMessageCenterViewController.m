@@ -394,9 +394,7 @@ typedef enum {
 		composingMessage.body = [inputView text];
 		composingMessage.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
 		composingMessage.sentByUser = @YES;
-		if ([ATBackend sharedBackend].currentCustomData) {
-			[composingMessage addCustomDataFromDictionary:[ATBackend sharedBackend].currentCustomData];
-		}
+		[[ATBackend sharedBackend] attachCustomDataToMessage:composingMessage];
 		[composingMessage updateClientCreationTime];
 		
 		[[[ATBackend sharedBackend] managedObjectContext] save:nil];
@@ -527,7 +525,7 @@ typedef enum {
 					fileMessage.sentByUser = @(YES);
 					[fileMessage updateClientCreationTime];
 					fileMessage.fileAttachment = fileAttachment;
-					
+					[[ATBackend sharedBackend] attachCustomDataToMessage:fileMessage];
 					[fileAttachment setFileData:UIImageJPEGRepresentation(pickedImage, 1.0)];
 					[fileAttachment setMimeType:@"image/jpeg"];
 					

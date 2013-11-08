@@ -98,4 +98,8 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 /*! Add or remove a token for 3rd-party integration services. */
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration;
 - (void)removeIntegration:(NSString *)integration;
+
+/*! Keys for supported 3rd-party integrations.*/
+extern NSString *const ATIntegrationKeyUrbanAirship;
+
 @end

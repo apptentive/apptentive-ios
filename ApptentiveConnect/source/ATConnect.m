@@ -25,6 +25,8 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 NSString *const ATInitialUserNameKey = @"ATInitialUserNameKey";
 NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 
+NSString *const ATIntegrationKeyUrbanAirship = @"urban_airship";
+
 @implementation ATConnect
 @synthesize apiKey, showTagline, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText, useMessageCenter;
 

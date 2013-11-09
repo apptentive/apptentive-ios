@@ -113,11 +113,11 @@ Under `Link Binary With Libraries`, add `libApptentiveConnect.a`.
 
 Building for iOS devices first works around a bug in Xcode 5.
 
-1. In the upper right-hand corner of your Xcode window, click on your project name.
+1. In the upper left corner of your Xcode window, click on your project name in the scheme picker.
 2. Select `Apptentive Resources`.
 3. Click to the right of the arrow next to `Apptentive Resources`.
 4. Select `iOS Devices`.
-5. Under `Project` in your Mac's menu bar, click on `Build`.
+5. Under `Product` in your Mac's menu bar, click on `Build`.
 
 ##### Copy Apptentive Resources Bundle
 

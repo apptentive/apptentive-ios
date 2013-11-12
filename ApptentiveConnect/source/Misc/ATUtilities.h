@@ -17,6 +17,10 @@
 @interface ATUtilities : NSObject
 #if TARGET_OS_IPHONE
 + (UIImage *)imageByTakingScreenshot;
++ (UIImage *)imageByTakingScreenshotExcludingWindow:(UIWindow *)excludedWindow;
++ (UIImage *)imageByTakingScreenshotIncludingBlankStatusBarArea:(BOOL)includeStatusBar excludingWindow:(UIWindow *)window;
+
++ (UIImage *)imageByRotatingImage:(UIImage *)image toInterfaceOrientation:(UIInterfaceOrientation)orientation;
 + (UIImage *)imageByRotatingImage:(UIImage *)image byRadians:(CGFloat)radians;
 + (UIImage *)imageByScalingImage:(UIImage *)image toSize:(CGSize)size scale:(CGFloat)contentScale fromITouchCamera:(BOOL)isFromITouchCamera;
 + (CGFloat)rotationOfViewHierarchyInRadians:(UIView *)leafView;
@@ -42,6 +46,7 @@
 + (BOOL)versionString:(NSString *)a isEqualToVersionString:(NSString *)b;
 
 + (NSArray *)availableAppLocalizations;
++ (UIImage *)appIcon;
 
 /*! Yes if there is only an app version, rather than an app version + build number in standard Cocoa versioning. */
 + (BOOL)bundleVersionIsMainVersion;

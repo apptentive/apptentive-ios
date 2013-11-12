@@ -89,6 +89,7 @@ enum {
 	[_toolbarShadowImage release], _toolbarShadowImage = nil;
 	[noEmailAddressAlert release], noEmailAddressAlert = nil;
 	[invalidEmailAddressAlert release], invalidEmailAddressAlert = nil;
+	[emailRequiredAlert release], emailRequiredAlert = nil;
 	delegate = nil;
 	[super dealloc];
 }
@@ -132,7 +133,6 @@ enum {
 	[self.window makeKeyAndVisible];
 	animationBounds = parentWindow.bounds;
 	animationCenter = parentWindow.center;
-	
 	
 	// Animate in from above.
 	self.window.bounds = animationBounds;
@@ -292,7 +292,20 @@ enum {
 - (IBAction)sendPressed:(id)sender {
 	[self.emailField resignFirstResponder];
 	[self.feedbackView resignFirstResponder];
-	if (self.showEmailAddressField && [self.emailField.text length] > 0 && ![ATUtilities emailAddressIsValid:self.emailField.text]) {
+	
+	if (self.showEmailAddressField && [[ATConnect sharedConnection] emailRequired] && self.emailField.text.length == 0) {
+		if (emailRequiredAlert) {
+			[emailRequiredAlert release], emailRequiredAlert = nil;
+		}
+		self.window.windowLevel = UIWindowLevelNormal;
+		self.window.userInteractionEnabled = NO;
+		self.window.layer.shouldRasterize = YES;
+		NSString *title = ATLocalizedString(@"Please enter an email address", @"Email is required and no email was entered alert title.");
+		NSString *message = ATLocalizedString(@"An email address is required for us to respond.", @"Email is required and no email was entered alert message.");
+		
+		emailRequiredAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"OK", @"OK button title"), nil];
+		[emailRequiredAlert show];
+	} else if (self.showEmailAddressField && [self.emailField.text length] > 0 && ![ATUtilities emailAddressIsValid:self.emailField.text]) {
 		if (invalidEmailAddressAlert) {
 			[invalidEmailAddressAlert release], invalidEmailAddressAlert = nil;
 		}
@@ -300,7 +313,12 @@ enum {
 		self.window.userInteractionEnabled = NO;
 		self.window.layer.shouldRasterize = YES;
 		NSString *title = ATLocalizedString(@"Invalid Email Address", @"Invalid email dialog title.");
-		NSString *message = ATLocalizedString(@"That doesn't look like an email address. An email address will help us respond.", @"Invalid email dialog message.");
+		NSString *message = nil;
+		if ([[ATConnect sharedConnection] emailRequired]) {
+			message = ATLocalizedString(@"That doesn't look like an email address. An email address is required for us to respond.", @"Invalid email dialog message (email is required).");
+		} else {
+			message = ATLocalizedString(@"That doesn't look like an email address. An email address will help us respond.", @"Invalid email dialog message.");
+		}
 		invalidEmailAddressAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"OK", @"OK button title"), nil];
 		[invalidEmailAddressAlert show];
 	} else if (self.showEmailAddressField && (!self.emailField.text || [self.emailField.text length] == 0)) {
@@ -385,7 +403,7 @@ enum {
 		self.window.hidden = YES;
 		[[UIApplication sharedApplication] setStatusBarStyle:startingStatusBarStyle];
 		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"] && originalPresentingWindow) {
-			originalPresentingWindow.tintAdjustmentMode = startingTintAdjustmentMode;
+			originalPresentingWindow.tintAdjustmentMode = startingTintAdjustmentMode == UIViewTintAdjustmentModeDimmed ? UIViewTintAdjustmentModeAutomatic : startingTintAdjustmentMode;
 		}
 		[self teardown];
 		[self release];
@@ -486,6 +504,10 @@ enum {
 		self.window.userInteractionEnabled = YES;
 		[invalidEmailAddressAlert release], invalidEmailAddressAlert = nil;
 		[self.emailField becomeFirstResponder];
+	} else if (emailRequiredAlert && [alertView isEqual:emailRequiredAlert]) {
+		self.window.userInteractionEnabled = YES;
+		[emailRequiredAlert release], emailRequiredAlert = nil;
+		[self.emailField becomeFirstResponder];
 	}
 }
 
@@ -496,6 +518,8 @@ enum {
 		[noEmailAddressAlert release], noEmailAddressAlert = nil;
 	} else if (invalidEmailAddressAlert && [alertView isEqual:invalidEmailAddressAlert]) {
 		[invalidEmailAddressAlert release], invalidEmailAddressAlert = nil;
+	} else if (emailRequiredAlert && [alertView isEqual:emailRequiredAlert]) {
+		[emailRequiredAlert release], emailRequiredAlert = nil;
 	}
 }
 
@@ -566,7 +590,12 @@ enum {
 		emailFrame.size.height = sizedEmail.height;
 		emailFrame.size.width = emailFrame.size.width - (horizontalPadding + extraHorzontalPadding)*2;
 		self.emailField = [[[UITextField alloc] initWithFrame:emailFrame] autorelease];
-		self.emailField.placeholder = ATLocalizedString(@"Your Email", @"Email Address Field Placeholder");
+		if ([[ATConnect sharedConnection] emailRequired]) {
+			self.emailField.placeholder = ATLocalizedString(@"Your Email (required)", @"Email Address Field Placeholder (email is required)");
+		}
+		else {
+			self.emailField.placeholder = ATLocalizedString(@"Your Email", @"Email Address Field Placeholder");
+		}
 		self.emailField.font = emailFont;
 		self.emailField.adjustsFontSizeToFitWidth = YES;
 		self.emailField.keyboardType = UIKeyboardTypeEmailAddress;

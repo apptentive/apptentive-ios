@@ -34,4 +34,8 @@
 	// For example, we will do the following with a copy of an old data model.
 	[self performTestWithStoreName:@"ATDataModelv1"];
 }
+
+- (void)testV2Upgrade {
+	[self performTestWithStoreName:@"ATDataModelv2"];
+}
 @end

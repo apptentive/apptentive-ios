@@ -309,21 +309,8 @@ typedef enum {
 	tableFrame.size.height = composerFrame.origin.y;
 	containerFrame.size.height = tableFrame.size.height + composerFrame.size.height;
 	
-	//containerView.frame = containerFrame;
-	//[containerView setNeedsLayout];
 	tableView.frame = tableFrame;
 	inputContainerView.frame = composerFrame;
-	/*
-	 if (!CGRectEqualToRect(composerFrame, composerView.frame)) {
-	 NSLog(@"composerFrame: %@ != %@", NSStringFromCGRect(composerFrame), NSStringFromCGRect(composerView.frame));
-	 }
-	 if (!CGRectEqualToRect(attachmentFrame, attachmentView.frame)) {
-	 NSLog(@"attachmentFrame: %@ != %@", NSStringFromCGRect(attachmentFrame), NSStringFromCGRect(attachmentView.frame));
-	 }
-	 if (!CGRectEqualToRect(containerFrame, containerView.frame)) {
-	 NSLog(@"containerFrame: %@ != %@", NSStringFromCGRect(containerFrame), NSStringFromCGRect(containerView.frame));
-	 }
-	 */
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
@@ -407,6 +394,9 @@ typedef enum {
 		composingMessage.body = [inputView text];
 		composingMessage.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
 		composingMessage.sentByUser = @YES;
+		if ([ATBackend sharedBackend].currentCustomData) {
+			[composingMessage addCustomDataFromDictionary:[ATBackend sharedBackend].currentCustomData];
+		}
 		[composingMessage updateClientCreationTime];
 		
 		[[[ATBackend sharedBackend] managedObjectContext] save:nil];
@@ -466,6 +456,7 @@ typedef enum {
 			[self relayoutSubviews];
 		} completion:^(BOOL finished) {
 			animatingTransition = NO;
+			[self relayoutSubviews];
 			[self scrollToBottomOfTableView];
 		}];
 	} else {
@@ -489,6 +480,7 @@ typedef enum {
 			[self relayoutSubviews];
 		} completion:^(BOOL finished) {
 			animatingTransition = NO;
+			[self relayoutSubviews];
 			[self scrollToBottomOfTableView];
 		}];
 	} else {
@@ -667,10 +659,8 @@ typedef enum {
 }
 
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	static NSString *AutomatedCellIdentifier = @"ATAutomatedMessageCell";
 	static NSString *UserCellIdentifier = @"ATTextMessageUserCell";
 	static NSString *DevCellIdentifier = @"ATTextMessageDevCell";
-	static NSString *FileCellIdentifier = @"ATFileMessageCell";
 	
 	ATMessageCellType cellType = ATMessageCellTypeUnknown;
 	
@@ -767,7 +757,6 @@ typedef enum {
 			backgroundView.backgroundColor = [UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]];
 			textCell.backgroundView = backgroundView;
 			[backgroundView release];
-			textCell.messageText.dataDetectorTypes = UIDataDetectorTypeAll;
 		}
 		textCell.composing = NO;
 		if (cellSubType != ATTextMessageCellTypeUser) {
@@ -832,7 +821,7 @@ typedef enum {
 		
 		cell = textCell;
 	} else if (cellType == ATMessageCellTypeAutomated) {
-		ATAutomatedMessageCell *currentCell = (ATAutomatedMessageCell *)[tableView dequeueReusableCellWithIdentifier:AutomatedCellIdentifier];
+		ATAutomatedMessageCell *currentCell = (ATAutomatedMessageCell *)[tableView dequeueReusableCellWithIdentifier:[ATAutomatedMessageCell reuseIdentifier]];
 		
 		if (!currentCell) {
 			UINib *nib = [UINib nibWithNibName:@"ATAutomatedMessageCell" bundle:[ATConnect resourceBundle]];
@@ -842,7 +831,6 @@ typedef enum {
 			[automatedCell release], automatedCell = nil;
 			
 			currentCell.selectionStyle = UITableViewCellSelectionStyleNone;
-			currentCell.messageText.dataDetectorTypes = UIDataDetectorTypeAll;
 		}
 		if ([message isKindOfClass:[ATAutomatedMessage class]]) {
 			ATAutomatedMessage *automatedMessage = (ATAutomatedMessage *)message;
@@ -869,7 +857,7 @@ typedef enum {
 		
 		cell = currentCell;
 	} else if (cellType == ATMessageCellTypeFile) {
-		ATFileMessageCell *currentCell = (ATFileMessageCell *)[tableView dequeueReusableCellWithIdentifier:FileCellIdentifier];
+		ATFileMessageCell *currentCell = (ATFileMessageCell *)[tableView dequeueReusableCellWithIdentifier:[ATFileMessageCell reuseIdentifier]];
 		
 		if (!currentCell) {
 			UINib *nib = [UINib nibWithNibName:@"ATFileMessageCell" bundle:[ATConnect resourceBundle]];
@@ -982,7 +970,7 @@ typedef enum {
 		for (ATAbstractMessage *message in results) {
 			[message setSeenByUser:@(YES)];
 			if (message.apptentiveID != nil && [message.sentByUser boolValue] != YES) {
-				[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidReadNotification object:@{ATMessageCenterMessageIDKey:message.apptentiveID}];
+				[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidReadNotification object:self userInfo:@{ATMessageCenterMessageIDKey:message.apptentiveID}];
 			}
 		}
 		[ATData save];

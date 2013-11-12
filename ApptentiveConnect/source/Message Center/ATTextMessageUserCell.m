@@ -14,12 +14,26 @@
 @synthesize dateLabel, chatBubbleContainer, userIcon, messageBubbleImage, usernameLabel, messageText, composingBubble, composing, showDateLabel;
 @synthesize cellType;
 
+- (void)setup {
+	self.messageText.delegate = self;
+	UIDataDetectorTypes types = UIDataDetectorTypeLink;
+	if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel://"]]) {
+		types |= UIDataDetectorTypePhoneNumber;
+	}
+	self.messageText.dataDetectorTypes = types;
+}
+
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
 	self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
 	if (self) {
-		// Initialization code
+		[self setup];
 	}
 	return self;
+}
+
+- (void)awakeFromNib {
+	[super awakeFromNib];
+	[self setup];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -66,6 +80,7 @@
 }
 
 - (void)dealloc {
+	messageText.delegate = nil;
 	[userIcon release], userIcon = nil;
 	[messageBubbleImage release], messageBubbleImage = nil;
 	[messageText release], messageText = nil;
@@ -95,5 +110,21 @@
 
 	} while (NO);
 	return cellHeight;
+}
+
+#pragma mark TTTAttributedLabelDelegate
+- (void)attributedLabel:(ATTTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url {
+	if ([[UIApplication sharedApplication] canOpenURL:url]) {
+		[[UIApplication sharedApplication] openURL:url];
+	}
+}
+
+- (void)attributedLabel:(TTTATTRIBUTEDLABEL_PREPEND(TTTAttributedLabel) *)label
+didSelectLinkWithPhoneNumber:(NSString *)phoneNumber {
+	NSString *phoneString = [NSString stringWithFormat:@"tel:%@", phoneNumber];
+	NSURL *url = [NSURL URLWithString:phoneString];
+	if ([[UIApplication sharedApplication] canOpenURL:url]) {
+		[[UIApplication sharedApplication] openURL:url];
+	}
 }
 @end

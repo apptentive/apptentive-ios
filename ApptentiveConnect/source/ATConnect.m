@@ -10,8 +10,11 @@
 #import "ATConnect_Private.h"
 #import "ATBackend.h"
 #import "ATContactStorage.h"
+#import "ATEngagementBackend.h"
 #import "ATFeedback.h"
+#import "ATInteraction.h"
 #import "ATUtilities.h"
+#import "ATAppConfigurationUpdater.h"
 #if TARGET_OS_IPHONE
 #import "ATMessageCenterViewController.h"
 #elif TARGET_OS_MAC
@@ -40,7 +43,12 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 		self.showTagline = YES;
 		customPersonData = [[NSMutableDictionary alloc] init];
 		customDeviceData = [[NSMutableDictionary alloc] init];
+		integrationConfiguration = [[NSMutableDictionary alloc] init];
 		useMessageCenter = YES;
+		
+		NSDictionary *defaults = @{ATAppConfigurationMessageCenterEnabledKey : [NSNumber numberWithBool:YES],
+								   ATAppConfigurationMessageCenterEmailRequiredKey : [NSNumber numberWithBool:NO]};
+		[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 	}
 	return self;
 }
@@ -55,6 +63,7 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 #endif
 	[customPersonData release], customPersonData = nil;
 	[customDeviceData release], customDeviceData = nil;
+	[integrationConfiguration release], integrationConfiguration = nil;
 	[customPlaceholderText release], customPlaceholderText = nil;
 	[apiKey release], apiKey = nil;
 	[initialUserName release], initialUserName = nil;
@@ -142,7 +151,7 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 						[object isKindOfClass:[NSNumber class]] ||
 						[object isKindOfClass:[NSNull class]]);
 	
-	NSAssert(allowedData, @"Apptentive custom data must be of type NSString, NSNumber, or NSNull. Attempted to add custom data of type %@", NSStringFromClass([object class]));
+	NSAssert(allowedData, @"Apptentive custom data must be of type NSString, NSNumber, NSDate, or NSNull. Attempted to add custom data of type %@", NSStringFromClass([object class]));
 	
 	if (allowedData) {
 		[customData setObject:object forKey:key];
@@ -165,9 +174,44 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 	[self removeCustomDeviceDataWithKey:key];
 }
 
+- (NSDictionary *)integrationConfiguration {
+	return integrationConfiguration;
+}
+
+- (void)addIntegration:(NSString *)integration withToken:(NSString *)token {
+	[integrationConfiguration setObject:token forKey:integration];
+}
+
+- (void)removeIntegration:(NSString *)integration {
+	[integrationConfiguration removeObjectForKey:integration];
+}
+
+- (BOOL)messageCenterEnabled {
+	return [[[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterEnabledKey] boolValue];
+}
+
+- (BOOL)emailRequired {
+	return [[[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterEmailRequiredKey] boolValue];
+}
+
 #if TARGET_OS_IPHONE
+
+- (void)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController {
+	[[ATEngagementBackend sharedBackend] engage:codePoint fromViewController:viewController];
+}
+
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController {
 	[[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController];
+}
+
+- (void)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData {
+	NSMutableDictionary *allowedCustomMessageData = [NSMutableDictionary dictionary];
+	
+	for (NSString *key in [customData allKeys]) {
+		[self addCustomData:[customData objectForKey:key] withKey:key toCustomDataDictionary:allowedCustomMessageData];
+	}
+	
+	[[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController withCustomData:allowedCustomMessageData];
 }
 
 - (void)presentFeedbackDialogFromViewController:(UIViewController *)viewController {
@@ -175,6 +219,21 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 	NSString *body = [NSString stringWithFormat:ATLocalizedString(@"Please let us know how to make %@ better for you!", @"Feedback screen body. Parameter is the app name."), [[ATBackend sharedBackend] appName]];
 	NSString *placeholder = ATLocalizedString(@"How can we help? (required)", @"First feedback placeholder text.");
 	[[ATBackend sharedBackend] presentIntroDialogFromViewController:viewController withTitle:title prompt:body placeholderText:placeholder];
+}
+
+
+- (void)presentUpgradeDialogFromViewControllerIfAvailable:(UIViewController *)viewController {
+	NSArray *interactions = [[ATEngagementBackend sharedBackend] interactionsForCodePoint:@"app.launch"];
+	for (ATInteraction *interaction in interactions) {
+		if ([interaction.type isEqualToString:@"UpgradeMessage"]) {
+			[[ATEngagementBackend sharedBackend] presentUpgradeMessageInteraction:interaction fromViewController:viewController];
+			break;
+		}
+	}
+}
+
+- (void)resetUpgradeData {
+	[[ATEngagementBackend sharedBackend] resetUpgradeVersionInfo];
 }
 
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion {
@@ -220,13 +279,22 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 		return [bundle autorelease];
 	} else {
 		// Try trigger.io path.
-		bundlePath = [path stringByAppendingPathComponent:@"plugin.bundle"];
+		bundlePath = [path stringByAppendingPathComponent:@"apptentive.bundle"];
 		bundlePath = [bundlePath stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
 		if ([fm fileExistsAtPath:bundlePath]) {
 			NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
 			return [bundle autorelease];
 		} else {
-			return nil;
+			// Try Titanium path.
+			bundlePath = [path stringByAppendingPathComponent:@"modules"];
+			bundlePath = [bundlePath stringByAppendingPathComponent:@"com.apptentive.titanium"];
+			bundlePath = [bundlePath stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
+			if ([fm fileExistsAtPath:bundlePath]) {
+				NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
+				return [bundle autorelease];
+			} else {
+				return nil;
+			}
 		}
 	}
 #elif TARGET_OS_MAC
@@ -234,6 +302,7 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 	return bundle;
 #endif
 }
+
 @end
 
 NSString *ATLocalizedString(NSString *key, NSString *comment) {

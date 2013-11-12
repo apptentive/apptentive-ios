@@ -13,8 +13,6 @@
 #import "ATSurveys.h"
 
 @implementation FeedbackDemoAppDelegate
-
-
 @synthesize window=_window;
 
 @synthesize navigationController=_navigationController;
@@ -42,6 +40,12 @@
 	
 	ATAppRatingFlow *flow = [ATAppRatingFlow sharedRatingFlowWithAppID:kApptentiveAppID];
 	[flow showRatingFlowFromViewControllerIfConditionsAreMet:self.navigationController];
+	
+	double delayInSeconds = 2.0;
+	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+		[[ATConnect sharedConnection] engage:@"app.launch" fromViewController:self.navigationController];
+	});
 	
 	return YES;
 }

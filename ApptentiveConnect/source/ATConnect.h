@@ -13,7 +13,7 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
-#define kATConnectVersionString @"1.1.0"
+#define kATConnectVersionString @"1.2.2"
 
 #if TARGET_OS_IPHONE
 #	define kATConnectPlatformString @"iOS"
@@ -33,6 +33,7 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 #endif
 	NSMutableDictionary *customPersonData;
 	NSMutableDictionary *customDeviceData;
+	NSMutableDictionary *integrationConfiguration;
 	NSString *apiKey;
 	BOOL showTagline;
 	BOOL showEmailField;
@@ -49,15 +50,25 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 /*! Set this if you want some custom text to appear as a placeholder in the
  feedback text box. */
 @property (nonatomic, copy) NSString *customPlaceholderText;
-/*! Set this to NO if you don't want to use Message Center, and instead just want unidirectional in-app feedback. */
-@property (nonatomic, assign) BOOL useMessageCenter;
+/*! Set this to NO if you don't want to use Message Center, and instead just want unidirectional in-app feedback.
+ Deprecated in 1.1.1 in favor of server-based configuration of Message Center. */
+@property (nonatomic, assign) BOOL useMessageCenter DEPRECATED_ATTRIBUTE;
 
 + (ATConnect *)sharedConnection;
 
 #if TARGET_OS_IPHONE
 
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController;
+- (void)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
 - (NSUInteger)unreadMessageCount;
+
+/*! 
+ Call with a specific code point where interactions should happen.
+ 
+ For example, if you have an upgrade message to display on app launch, you might call with codePoint set to 
+ @"app.launch" here, along with the view controller an upgrade message might be displayed from.
+ */
+- (void)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController;
 
 /*!
  * Dismisses the message center. You normally won't need to call this.
@@ -83,4 +94,8 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 - (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key DEPRECATED_ATTRIBUTE;
 /*! Deprecated. Use removeCustomDeviceDataWithKey: instead. */
 - (void)removeCustomDataWithKey:(NSString *)key DEPRECATED_ATTRIBUTE;
+
+/*! Add or remove a token for 3rd-party integration services. */
+- (void)addIntegration:(NSString *)integration withToken:(NSString *)token;
+- (void)removeIntegration:(NSString *)integration;
 @end

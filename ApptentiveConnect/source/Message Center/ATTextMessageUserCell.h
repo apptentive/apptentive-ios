@@ -17,7 +17,7 @@ typedef enum {
 	ATTextMessageCellTypeDeveloper,
 } ATTextMessageCellType;
 
-@interface ATTextMessageUserCell : UITableViewCell <ATMessageCenterCell>
+@interface ATTextMessageUserCell : UITableViewCell <ATMessageCenterCell, ATTTTAttributedLabelDelegate>
 @property (retain, nonatomic) IBOutlet UILabel *dateLabel;
 @property (retain, nonatomic) IBOutlet UIView *chatBubbleContainer;
 @property (retain, nonatomic) IBOutlet ATNetworkImageView *userIcon;

@@ -109,6 +109,14 @@
 	}
 }
 
++ (NSString *)reuseIdentifier {
+    return @"ATFileMessageCell";
+}
+
+- (NSString *)reuseIdentifier {
+    return [[self class] reuseIdentifier];
+}
+
 - (void)dealloc {
 	[dateLabel release], dateLabel = nil;
 	[userIcon release], userIcon = nil;

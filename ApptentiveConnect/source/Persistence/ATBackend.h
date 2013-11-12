@@ -58,6 +58,7 @@ NSString *const ATBackendBecameReadyNotification;
 @property (nonatomic, copy) NSString *apiKey;
 /*! The feedback currently being worked on by the user. */
 @property (nonatomic, retain) ATFeedback *currentFeedback;
+@property (nonatomic, retain) NSDictionary *currentCustomData;
 @property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
@@ -66,6 +67,7 @@ NSString *const ATBackendBecameReadyNotification;
 #if TARGET_OS_IPHONE
 + (UIImage *)imageNamed:(NSString *)name;
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController;
+- (void)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion;
 - (void)presentIntroDialogFromViewController:(UIViewController *)viewController;
 - (void)presentIntroDialogFromViewController:(UIViewController *)viewController withTitle:(NSString *)title prompt:(NSString *)prompt placeholderText:(NSString *)placeholder;
@@ -90,6 +92,7 @@ NSString *const ATBackendBecameReadyNotification;
 - (NSURL *)apptentivePrivacyPolicyURL;
 
 - (NSString *)distributionName;
+- (NSString *)distributionVersion;
 
 - (NSUInteger)unreadMessageCount;
 

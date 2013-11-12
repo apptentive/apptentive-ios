@@ -8,11 +8,11 @@ build/*
 *.perspectivev3
 xcuserdata/*
 xcuserdata/
+*.xccheckout
 
 # OSX noise
 .DS_Store
 profile
-Icon*
 
 # Emacs noise
 *~

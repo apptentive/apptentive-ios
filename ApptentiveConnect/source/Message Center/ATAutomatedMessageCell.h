@@ -19,4 +19,5 @@
 @property (retain, nonatomic) IBOutlet ATTTTAttributedLabel *messageText;
 @property (nonatomic, assign, getter = shouldShowDateLabel) BOOL showDateLabel;
 
++ (NSString *)reuseIdentifier;
 @end

@@ -11,7 +11,7 @@
 // 
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -53,6 +53,20 @@ static inline CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode
 		default: return 0;
 	}
 }
+
+#if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_6_1
+static inline CTLineBreakMode CTLineBreakModeFromNSLineBreakMode(NSLineBreakMode lineBreakMode) {
+	switch (lineBreakMode) {
+		case NSLineBreakByWordWrapping: return kCTLineBreakByWordWrapping;
+		case NSLineBreakByCharWrapping: return kCTLineBreakByCharWrapping;
+		case NSLineBreakByClipping: return kCTLineBreakByClipping;
+		case NSLineBreakByTruncatingHead: return kCTLineBreakByTruncatingHead;
+		case NSLineBreakByTruncatingTail: return kCTLineBreakByTruncatingTail;
+		case NSLineBreakByTruncatingMiddle: return kCTLineBreakByTruncatingMiddle;
+		default: return 0;
+	}
+}
+#endif
 
 static inline NSTextCheckingType NSTextCheckingTypeFromUIDataDetectorType(UIDataDetectorTypes dataDetectorType) {
     NSTextCheckingType textCheckingType = 0;
@@ -106,7 +120,11 @@ static inline NSDictionary * NSAttributedStringAttributesFromLabel(TTTATTRIBUTED
 
         [mutableAttributes setObject:(id)[label.textColor CGColor] forKey:(NSString *)kCTForegroundColorAttributeName];
 
+#		if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_6_1
+        CTTextAlignment alignment = NSTextAlignmentToCTTextAlignment(label.textAlignment);
+#		else
         CTTextAlignment alignment = CTTextAlignmentFromUITextAlignment(label.textAlignment);
+#		endif
         CGFloat lineSpacing = label.leading;
         CGFloat lineSpacingAdjustment = ceilf(label.font.lineHeight - label.font.ascender + label.font.descender);
         CGFloat lineHeightMultiple = label.lineHeightMultiple;
@@ -120,7 +138,11 @@ static inline NSDictionary * NSAttributedStringAttributesFromLabel(TTTATTRIBUTED
         if (label.numberOfLines != 1) {
             lineBreakMode = CTLineBreakModeFromUILineBreakMode(UILineBreakModeWordWrap);
         } else {
+#		if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_6_1
+			lineBreakMode = CTLineBreakModeFromNSLineBreakMode(label.lineBreakMode);
+#		else
             lineBreakMode = CTLineBreakModeFromUILineBreakMode(label.lineBreakMode);
+#endif
         }
 
         CTParagraphStyleSetting paragraphStyles[10] = {
@@ -192,8 +214,6 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
 @interface TTTATTRIBUTEDLABEL_PREPEND(TTTAttributedLabel) ()
 @property (readwrite, nonatomic, copy) NSAttributedString *inactiveAttributedText;
 @property (readwrite, nonatomic, copy) NSAttributedString *renderedAttributedText;
-@property (readwrite, nonatomic, assign) CTFramesetterRef framesetter;
-@property (readwrite, nonatomic, assign) CTFramesetterRef highlightFramesetter;
 @property (readwrite, nonatomic, strong) NSDataDetector *dataDetector;
 @property (readwrite, nonatomic, strong) NSArray *links;
 @property (readwrite, nonatomic, strong) NSTextCheckingResult *activeLink;
@@ -218,14 +238,14 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
 @implementation TTTATTRIBUTEDLABEL_PREPEND(TTTAttributedLabel) {
 @private
     BOOL _needsFramesetter;
+    CTFramesetterRef _framesetter;
+    CTFramesetterRef _highlightFramesetter;
 }
 
 @dynamic text;
 @synthesize attributedText = _attributedText;
 @synthesize inactiveAttributedText = _inactiveAttributedText;
 @synthesize renderedAttributedText = _renderedAttributedText;
-@synthesize framesetter = _framesetter;
-@synthesize highlightFramesetter = _highlightFramesetter;
 @synthesize delegate = _delegate;
 @synthesize dataDetectorTypes = _dataDetectorTypes;
 @synthesize dataDetector = _dataDetector;
@@ -329,16 +349,44 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
 - (CTFramesetterRef)framesetter {
     if (_needsFramesetter) {
         @synchronized(self) {
-            if (_framesetter) CFRelease(_framesetter);
-            if (_highlightFramesetter) CFRelease(_highlightFramesetter);
-            
-            self.framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)self.renderedAttributedText);
-            self.highlightFramesetter = nil;
+            CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)self.renderedAttributedText);
+            [self setFramesetter:framesetter];
+            CFRelease(framesetter);
+            [self setHighlightFramesetter:nil];
             _needsFramesetter = NO;
         }
     }
     
     return _framesetter;
+}
+
+- (void)setFramesetter:(CTFramesetterRef)framesetter
+{
+    CTFramesetterRef oldFramesetter = _framesetter;
+    _framesetter = framesetter;
+    if (_framesetter) {
+        CFRetain(_framesetter);
+    }
+    if (oldFramesetter) {
+        CFRelease(oldFramesetter);
+    }
+}
+
+- (CTFramesetterRef)highlightFramesetter
+{
+    return _highlightFramesetter;
+}
+
+- (void)setHighlightFramesetter:(CTFramesetterRef)highlightFramesetter
+{
+    CTFramesetterRef oldHighlightFramesetter = _highlightFramesetter;
+    _highlightFramesetter = highlightFramesetter;
+    if (_highlightFramesetter) {
+        CFRetain(_highlightFramesetter);
+    }
+    if (oldHighlightFramesetter) {
+        CFRelease(oldHighlightFramesetter);
+    }
 }
 
 - (NSAttributedString *)renderedAttributedText {
@@ -538,22 +586,26 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
                 // Get correct truncationType and attribute position
                 CTLineTruncationType truncationType;
                 NSUInteger truncationAttributePosition = lastLineRange.location;
-                UILineBreakMode lineBreakMode = self.lineBreakMode;
+#				if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_6_1
+				CTLineBreakMode lineBreakMode = CTLineBreakModeFromNSLineBreakMode(self.lineBreakMode);
+#				else
+                UILineBreakMode lineBreakMode = CTLineBreakModeFromUILineBreakMode(self.lineBreakMode);
+#				endif
                 
                 // Multiple lines, only use UILineBreakModeTailTruncation
                 if (numberOfLines != 1) {
-                    lineBreakMode = UILineBreakModeTailTruncation;
+                    lineBreakMode = kCTLineBreakByTruncatingTail;
                 }
                 
                 switch (lineBreakMode) {
-                    case UILineBreakModeHeadTruncation:
+                    case kCTLineBreakByTruncatingHead:
                         truncationType = kCTLineTruncationStart;
                         break;
-                    case UILineBreakModeMiddleTruncation:
+                    case kCTLineBreakByTruncatingMiddle:
                         truncationType = kCTLineTruncationMiddle;
                         truncationAttributePosition += (lastLineRange.length / 2);
                         break;
-                    case UILineBreakModeTailTruncation:
+                    case kCTLineBreakByTruncatingTail:
                     default:
                         truncationType = kCTLineTruncationEnd;
                         truncationAttributePosition += (lastLineRange.length - 1);
@@ -765,6 +817,7 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
                 CGContextAddLineToPoint(c, runBounds.origin.x + runBounds.size.width, y);
                 
                 CGContextStrokePath(c);
+				CFRelease(font);
             }
         }
         
@@ -957,12 +1010,14 @@ afterInheritingLabelAttributesAndConfiguringWithBlock:(NSMutableAttributedString
             [highlightAttributedString addAttribute:(__bridge NSString *)kCTForegroundColorAttributeName value:(id)[self.highlightedTextColor CGColor] range:NSMakeRange(0, highlightAttributedString.length)];
             
             if (!self.highlightFramesetter) {
-                self.highlightFramesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)highlightAttributedString);
+				CTFramesetterRef highlightFramesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)highlightAttributedString);
+				[self setHighlightFramesetter:highlightFramesetter];
+				CFRelease(highlightFramesetter);
             }
             
-            [self drawFramesetter:self.highlightFramesetter attributedString:highlightAttributedString textRange:textRange inRect:textRect context:c];
+            [self drawFramesetter:[self highlightFramesetter] attributedString:highlightAttributedString textRange:textRange inRect:textRect context:c];
         } else {
-            [self drawFramesetter:self.framesetter attributedString:self.renderedAttributedText textRange:textRange inRect:textRect context:c];
+            [self drawFramesetter:[self framesetter] attributedString:self.renderedAttributedText textRange:textRange inRect:textRect context:c];
         }  
         
         // If we adjusted the font size, set it back to its original size

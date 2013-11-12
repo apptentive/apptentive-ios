@@ -106,7 +106,6 @@
 		493AEB4015990A4D00DFD4C7 /* ATSurveyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB2915990A4D00DFD4C7 /* ATSurveyViewController.m */; };
 		493AEB4115990A4D00DFD4C7 /* ATSurveyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB2915990A4D00DFD4C7 /* ATSurveyViewController.m */; };
 		493AEB4515990A6B00DFD4C7 /* ApptentiveSurveysTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB4415990A6B00DFD4C7 /* ApptentiveSurveysTests.m */; };
-		493F8D1B1672A551000B5151 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49AAA17A1633716F00B26851 /* StoreKit.framework */; };
 		493F8D8C1672DEFD000B5151 /* ATStaticLibraryBootstrap.h in Headers */ = {isa = PBXBuildFile; fileRef = 493F8D8A1672DEFD000B5151 /* ATStaticLibraryBootstrap.h */; };
 		493F8D8D1672DEFD000B5151 /* ATStaticLibraryBootstrap.m in Sources */ = {isa = PBXBuildFile; fileRef = 493F8D8B1672DEFD000B5151 /* ATStaticLibraryBootstrap.m */; };
 		493F8D8E1672DEFD000B5151 /* ATStaticLibraryBootstrap.m in Sources */ = {isa = PBXBuildFile; fileRef = 493F8D8B1672DEFD000B5151 /* ATStaticLibraryBootstrap.m */; };
@@ -245,6 +244,7 @@
 		49CEFF5F15168B54006D8BA8 /* ATAppConfigurationUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 49CEFF5C15168B53006D8BA8 /* ATAppConfigurationUpdater.m */; };
 		49CEFF8115193EC2006D8BA8 /* ATAppRatingFlow_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 49CEFF7F15193EC2006D8BA8 /* ATAppRatingFlow_Private.h */; };
 		49CEFF8215193EC2006D8BA8 /* ATAppRatingFlow_Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 49CEFF8015193EC2006D8BA8 /* ATAppRatingFlow_Private.m */; };
+		49D07DD017F29A1F0042FCFD /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49D07DCE17F29A1F0042FCFD /* Localizable.strings */; };
 		49D1123C13359BA000603373 /* NSData+ATBase64.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D1123A13359BA000603373 /* NSData+ATBase64.h */; };
 		49D1123D13359BA000603373 /* NSData+ATBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D1123B13359BA000603373 /* NSData+ATBase64.m */; };
 		49D1124F13368CC200603373 /* ATTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D1124D13368CC200603373 /* ATTask.h */; };
@@ -294,8 +294,44 @@
 		49F8AFFC16CC4D860070FFEA /* ATRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFFA16CC4D860070FFEA /* ATRecord.m */; };
 		49F8AFFF16CC56580070FFEA /* ATEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 49F8AFFD16CC56570070FFEA /* ATEvent.h */; };
 		49F8B00016CC56580070FFEA /* ATEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFFE16CC56570070FFEA /* ATEvent.m */; };
+		580B24BB17D90AF300AE2CD0 /* ATEngagementTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 580B24BA17D90AF300AE2CD0 /* ATEngagementTests.m */; };
+		584647C617C426E800BFD6E6 /* ATEngagementManifestParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 584647C417C426E800BFD6E6 /* ATEngagementManifestParser.h */; };
+		584647C717C426E800BFD6E6 /* ATEngagementManifestParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 584647C517C426E800BFD6E6 /* ATEngagementManifestParser.m */; };
+		584647C817C426E800BFD6E6 /* ATEngagementManifestParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 584647C517C426E800BFD6E6 /* ATEngagementManifestParser.m */; };
+		58805F3618120BBF00210DA5 /* UIImage+ATImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 58805F3418120BBF00210DA5 /* UIImage+ATImageEffects.m */; };
+		58805F3718120BBF00210DA5 /* UIImage+ATImageEffects.h in Headers */ = {isa = PBXBuildFile; fileRef = 58805F3518120BBF00210DA5 /* UIImage+ATImageEffects.h */; };
+		58805F3918120DE100210DA5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58805F3818120DE100210DA5 /* Accelerate.framework */; };
+		589274A6180CC33A0029E5CE /* ATInteractionUsageData.h in Headers */ = {isa = PBXBuildFile; fileRef = 589274A4180CC33A0029E5CE /* ATInteractionUsageData.h */; };
+		589274A7180CC33A0029E5CE /* ATInteractionUsageData.m in Sources */ = {isa = PBXBuildFile; fileRef = 589274A5180CC33A0029E5CE /* ATInteractionUsageData.m */; };
+		589274A8180CC33A0029E5CE /* ATInteractionUsageData.m in Sources */ = {isa = PBXBuildFile; fileRef = 589274A5180CC33A0029E5CE /* ATInteractionUsageData.m */; };
+		5898DF8C17C2E0CE0048F11F /* ATEngagementGetManifestTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 5898DF8A17C2E0CE0048F11F /* ATEngagementGetManifestTask.h */; };
+		5898DF8D17C2E0CE0048F11F /* ATEngagementGetManifestTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 5898DF8B17C2E0CE0048F11F /* ATEngagementGetManifestTask.m */; };
+		5898DF8E17C2E0CE0048F11F /* ATEngagementGetManifestTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 5898DF8B17C2E0CE0048F11F /* ATEngagementGetManifestTask.m */; };
+		58C5922117C55ADD000FA428 /* ATEngagementBackend.h in Headers */ = {isa = PBXBuildFile; fileRef = 58C5921F17C55ADD000FA428 /* ATEngagementBackend.h */; };
+		58C5922217C55ADD000FA428 /* ATEngagementBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C5922017C55ADD000FA428 /* ATEngagementBackend.m */; };
+		58C5922317C55ADD000FA428 /* ATEngagementBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C5922017C55ADD000FA428 /* ATEngagementBackend.m */; };
+		58C5922B17C59BE3000FA428 /* ATWebClient+EngagementAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 58C5922917C59BE3000FA428 /* ATWebClient+EngagementAdditions.h */; };
+		58C5922C17C59BE3000FA428 /* ATWebClient+EngagementAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C5922A17C59BE3000FA428 /* ATWebClient+EngagementAdditions.m */; };
+		58C5922D17C59BE3000FA428 /* ATWebClient+EngagementAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C5922A17C59BE3000FA428 /* ATWebClient+EngagementAdditions.m */; };
+		58C97B57182752F6001EB5BD /* NSObject+ATSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = 58C97B55182752F6001EB5BD /* NSObject+ATSwizzle.h */; };
+		58C97B58182752F6001EB5BD /* NSObject+ATSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C97B56182752F6001EB5BD /* NSObject+ATSwizzle.m */; };
+		58C97B59182752F6001EB5BD /* NSObject+ATSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C97B56182752F6001EB5BD /* NSObject+ATSwizzle.m */; };
+		58C97B5C18276427001EB5BD /* UIViewController+ATSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = 58C97B5A18276427001EB5BD /* UIViewController+ATSwizzle.h */; };
+		58C97B5D18276427001EB5BD /* UIViewController+ATSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C97B5B18276427001EB5BD /* UIViewController+ATSwizzle.m */; };
+		58C97B5E18276427001EB5BD /* UIViewController+ATSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C97B5B18276427001EB5BD /* UIViewController+ATSwizzle.m */; };
+		58DCC0D5180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 58DCC0D2180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.h */; };
+		58DCC0D6180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DCC0D3180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m */; };
+		58DCC0D7180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DCC0D3180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m */; };
+		58DCC0D9180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 58DCC0D4180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.xib */; };
+		58DCC0DA180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 58DCC0D4180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.xib */; };
+		58EEBE2317C7E8150039A0F5 /* ATInteraction.h in Headers */ = {isa = PBXBuildFile; fileRef = 58EEBE2117C7E8150039A0F5 /* ATInteraction.h */; };
+		58EEBE2417C7E8150039A0F5 /* ATInteraction.m in Sources */ = {isa = PBXBuildFile; fileRef = 58EEBE2217C7E8150039A0F5 /* ATInteraction.m */; };
+		58EEBE2517C7E8150039A0F5 /* ATInteraction.m in Sources */ = {isa = PBXBuildFile; fileRef = 58EEBE2217C7E8150039A0F5 /* ATInteraction.m */; };
 		49FECBE317D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49FECBE217D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel */; };
 		49FECBE417D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49FECBE217D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel */; };
+		58AA40A01821C162000799D8 /* ATDataModelv2.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 58AA409F1821C162000799D8 /* ATDataModelv2.sqlite */; };
+		58CD20151821B7A70071CC72 /* ATDataModel v2 to v3.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 58CD20131821B78D0071CC72 /* ATDataModel v2 to v3.xcmappingmodel */; };
+		58CD20161821B7A80071CC72 /* ATDataModel v2 to v3.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 58CD20131821B78D0071CC72 /* ATDataModel v2 to v3.xcmappingmodel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -500,7 +536,6 @@
 		49C002881334137E0071F088 /* ApptentiveConnectTests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ApptentiveConnectTests-Prefix.pch"; sourceTree = "<group>"; };
 		49C002891334137E0071F088 /* ApptentiveConnectTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveConnectTests.h; sourceTree = "<group>"; };
 		49C0028A1334137E0071F088 /* ApptentiveConnectTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveConnectTests.m; sourceTree = "<group>"; };
-		49C0028C1334137E0071F088 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		49C00296133413BB0071F088 /* ApptentiveConnect-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ApptentiveConnect-Prefix.pch"; path = "../ApptentiveConnect-Prefix.pch"; sourceTree = "<group>"; };
 		49C00297133413BB0071F088 /* ATConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATConnect.h; sourceTree = "<group>"; };
 		49C00298133413BB0071F088 /* ATConnect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATConnect.m; sourceTree = "<group>"; };
@@ -513,6 +548,7 @@
 		49CEFF5C15168B53006D8BA8 /* ATAppConfigurationUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAppConfigurationUpdater.m; sourceTree = "<group>"; };
 		49CEFF7F15193EC2006D8BA8 /* ATAppRatingFlow_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAppRatingFlow_Private.h; sourceTree = "<group>"; };
 		49CEFF8015193EC2006D8BA8 /* ATAppRatingFlow_Private.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAppRatingFlow_Private.m; sourceTree = "<group>"; };
+		49D07DCF17F29A1F0042FCFD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
 		49D1118C13341A7C00603373 /* ApptentiveResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApptentiveResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		49D1123A13359BA000603373 /* NSData+ATBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "NSData+ATBase64.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		49D1123B13359BA000603373 /* NSData+ATBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "NSData+ATBase64.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -527,12 +563,12 @@
 		49E6208516C5E8C2000C9F5A /* NSDictionary+ATAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+ATAdditions.h"; sourceTree = "<group>"; };
 		49E6208616C5E8C2000C9F5A /* NSDictionary+ATAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+ATAdditions.m"; sourceTree = "<group>"; };
 		49E847A017E921B800CFA6EC /* ATMessageInputViewV7.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATMessageInputViewV7.xib; sourceTree = "<group>"; };
-		49E891CE134FE2AB00DD098A /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		49E891CF134FE2AB00DD098A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		49EA5AAE14BD08AD004F8A4D /* ATLegacyRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATLegacyRecord.h; sourceTree = "<group>"; };
 		49EA5AAF14BD08AD004F8A4D /* ATLegacyRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATLegacyRecord.m; sourceTree = "<group>"; };
 		49EA5ABB14BD0F4D004F8A4D /* ATRecordTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATRecordTask.h; sourceTree = "<group>"; };
 		49EA5ABC14BD0F4D004F8A4D /* ATRecordTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATRecordTask.m; sourceTree = "<group>"; };
+		49EA62C317F50D9400C5A638 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		49EF340D14AA7F2D00077F76 /* ATAppRatingMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAppRatingMetrics.h; sourceTree = "<group>"; };
 		49EF340E14AA7F2D00077F76 /* ATAppRatingMetrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAppRatingMetrics.m; sourceTree = "<group>"; };
 		49F8AFCD16CC4A550070FFEA /* ATConversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATConversation.h; sourceTree = "<group>"; };
@@ -559,13 +595,40 @@
 		49F8AFFA16CC4D860070FFEA /* ATRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATRecord.m; sourceTree = "<group>"; };
 		49F8AFFD16CC56570070FFEA /* ATEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATEvent.h; sourceTree = "<group>"; };
 		49F8AFFE16CC56570070FFEA /* ATEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATEvent.m; sourceTree = "<group>"; };
+		580B24B917D90AF300AE2CD0 /* ATEngagementTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATEngagementTests.h; sourceTree = "<group>"; };
+		580B24BA17D90AF300AE2CD0 /* ATEngagementTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATEngagementTests.m; sourceTree = "<group>"; };
+		584647C417C426E800BFD6E6 /* ATEngagementManifestParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATEngagementManifestParser.h; path = Engagement/Model/ATEngagementManifestParser.h; sourceTree = "<group>"; };
+		584647C517C426E800BFD6E6 /* ATEngagementManifestParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATEngagementManifestParser.m; path = Engagement/Model/ATEngagementManifestParser.m; sourceTree = "<group>"; };
+		58805F3418120BBF00210DA5 /* UIImage+ATImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ATImageEffects.m"; sourceTree = "<group>"; };
+		58805F3518120BBF00210DA5 /* UIImage+ATImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ATImageEffects.h"; sourceTree = "<group>"; };
+		58805F3818120DE100210DA5 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		589274A4180CC33A0029E5CE /* ATInteractionUsageData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATInteractionUsageData.h; path = Engagement/Model/ATInteractionUsageData.h; sourceTree = "<group>"; };
+		589274A5180CC33A0029E5CE /* ATInteractionUsageData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATInteractionUsageData.m; path = Engagement/Model/ATInteractionUsageData.m; sourceTree = "<group>"; };
+		5898DF8A17C2E0CE0048F11F /* ATEngagementGetManifestTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATEngagementGetManifestTask.h; path = source/Engagement/Tasks/ATEngagementGetManifestTask.h; sourceTree = SOURCE_ROOT; };
+		5898DF8B17C2E0CE0048F11F /* ATEngagementGetManifestTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATEngagementGetManifestTask.m; path = source/Engagement/Tasks/ATEngagementGetManifestTask.m; sourceTree = SOURCE_ROOT; };
+		58C5921F17C55ADD000FA428 /* ATEngagementBackend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATEngagementBackend.h; path = Engagement/Persistence/ATEngagementBackend.h; sourceTree = "<group>"; };
+		58C5922017C55ADD000FA428 /* ATEngagementBackend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATEngagementBackend.m; path = Engagement/Persistence/ATEngagementBackend.m; sourceTree = "<group>"; };
+		58C5922917C59BE3000FA428 /* ATWebClient+EngagementAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ATWebClient+EngagementAdditions.h"; path = "Engagement/URL Loading/ATWebClient+EngagementAdditions.h"; sourceTree = "<group>"; };
+		58C5922A17C59BE3000FA428 /* ATWebClient+EngagementAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "ATWebClient+EngagementAdditions.m"; path = "Engagement/URL Loading/ATWebClient+EngagementAdditions.m"; sourceTree = "<group>"; };
+		58C97B55182752F6001EB5BD /* NSObject+ATSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+ATSwizzle.h"; sourceTree = "<group>"; };
+		58C97B56182752F6001EB5BD /* NSObject+ATSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+ATSwizzle.m"; sourceTree = "<group>"; };
+		58C97B5A18276427001EB5BD /* UIViewController+ATSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+ATSwizzle.h"; sourceTree = "<group>"; };
+		58C97B5B18276427001EB5BD /* UIViewController+ATSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+ATSwizzle.m"; sourceTree = "<group>"; };
+		58DCC0D2180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATInteractionUpgradeMessageViewController.h; sourceTree = "<group>"; };
+		58DCC0D3180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATInteractionUpgradeMessageViewController.m; sourceTree = "<group>"; };
+		58DCC0D4180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATInteractionUpgradeMessageViewController.xib; sourceTree = "<group>"; };
 		49FECBE217D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v1 to v2.xcmappingmodel"; sourceTree = "<group>"; };
+		58AA409F1821C162000799D8 /* ATDataModelv2.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = ATDataModelv2.sqlite; sourceTree = "<group>"; };
+		58CD20121821B4D40071CC72 /* ATDataModel 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ATDataModel 3.xcdatamodel"; sourceTree = "<group>"; };
+		58CD20131821B78D0071CC72 /* ATDataModel v2 to v3.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v2 to v3.xcmappingmodel"; sourceTree = "<group>"; };
 		58EA5B3617B4781600ECEB4B /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		58EA5B3B17B479A500ECEB4B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		58EA5B4117B47AAC00ECEB4B /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		58EA5B4717B47BAB00ECEB4B /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		58EA5B4E17B47E0C00ECEB4B /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/Localizable.strings; sourceTree = "<group>"; };
 		58EA5B4F17B47E0C00ECEB4B /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		58EEBE2117C7E8150039A0F5 /* ATInteraction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATInteraction.h; path = Engagement/Model/ATInteraction.h; sourceTree = "<group>"; };
+		58EEBE2217C7E8150039A0F5 /* ATInteraction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATInteraction.m; path = Engagement/Model/ATInteraction.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -573,6 +636,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58805F3918120DE100210DA5 /* Accelerate.framework in Frameworks */,
 				49ADE8DC1626167F00DD8634 /* CoreText.framework in Frameworks */,
 				4988FB5416212BD4000A7CB7 /* CoreData.framework in Frameworks */,
 				49AAA17B1633716F00B26851 /* StoreKit.framework in Frameworks */,
@@ -599,7 +663,6 @@
 				49509E1C135840A000793EEC /* UIKit.framework in Frameworks */,
 				492F2F0716E320010030E48A /* CoreText.framework in Frameworks */,
 				492F2F0816E320040030E48A /* CoreData.framework in Frameworks */,
-				493F8D1B1672A551000B5151 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -663,6 +726,10 @@
 		4936AE741379DEBB00A4B17F /* Misc */ = {
 			isa = PBXGroup;
 			children = (
+				58C97B55182752F6001EB5BD /* NSObject+ATSwizzle.h */,
+				58C97B56182752F6001EB5BD /* NSObject+ATSwizzle.m */,
+				58C97B5A18276427001EB5BD /* UIViewController+ATSwizzle.h */,
+				58C97B5B18276427001EB5BD /* UIViewController+ATSwizzle.m */,
 				49C00296133413BB0071F088 /* ApptentiveConnect-Prefix.pch */,
 				4936AE751379DEBB00A4B17F /* ATUtilities.h */,
 				4936AE761379DEBB00A4B17F /* ATUtilities.m */,
@@ -672,6 +739,8 @@
 				495E9C1B16EABD8E00AE3B03 /* ATLogger.m */,
 				49E6208516C5E8C2000C9F5A /* NSDictionary+ATAdditions.h */,
 				49E6208616C5E8C2000C9F5A /* NSDictionary+ATAdditions.m */,
+				58805F3518120BBF00210DA5 /* UIImage+ATImageEffects.h */,
+				58805F3418120BBF00210DA5 /* UIImage+ATImageEffects.m */,
 				49AAC853175FFA4800F08879 /* ATTypes.h */,
 				493F8D8B1672DEFD000B5151 /* ATStaticLibraryBootstrap.m */,
 				497A9A0217762512002B6F96 /* ATJSONSerialization.h */,
@@ -840,6 +909,7 @@
 		496DC3811333D35600743F65 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				58805F3818120DE100210DA5 /* Accelerate.framework */,
 				49ADE8DB1626167F00DD8634 /* CoreText.framework */,
 				4988FB5316212BD4000A7CB7 /* CoreData.framework */,
 				49AAA17A1633716F00B26851 /* StoreKit.framework */,
@@ -997,6 +1067,8 @@
 				493AEB4415990A6B00DFD4C7 /* ApptentiveSurveysTests.m */,
 				49129ED2174068720026C2E1 /* ApptentiveMigrationTests.h */,
 				49129ED3174068730026C2E1 /* ApptentiveMigrationTests.m */,
+				580B24B917D90AF300AE2CD0 /* ATEngagementTests.h */,
+				580B24BA17D90AF300AE2CD0 /* ATEngagementTests.m */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -1033,6 +1105,7 @@
 				4936AE7A1379DECE00A4B17F /* Persistence */,
 				4942CC8E13C7AD2D009BF758 /* Rating Flow */,
 				49509A5E135658CD00793EEC /* Reachability */,
+				5898DF8817C2D8E60048F11F /* Engagement */,
 				493AEB1515990A4D00DFD4C7 /* Surveys */,
 				49D1124C13368CA800603373 /* Tasks */,
 				491748B11341176E00A7D11E /* URL Loading */,
@@ -1044,8 +1117,17 @@
 			isa = PBXGroup;
 			children = (
 				49C54BD71790B783009CCD5D /* ATDataModelv1.sqlite */,
+				58AA409F1821C162000799D8 /* ATDataModelv2.sqlite */,
 			);
 			path = data;
+			sourceTree = "<group>";
+		};
+		49D07DCD17F29A1F0042FCFD /* en.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				49D07DCE17F29A1F0042FCFD /* Localizable.strings */,
+			);
+			path = en.lproj;
 			sourceTree = "<group>";
 		};
 		49D1123913359BA000603373 /* ext */ = {
@@ -1083,6 +1165,7 @@
 			isa = PBXGroup;
 			children = (
 				49E891CD134FE2AB00DD098A /* Localizable.strings */,
+				49D07DCD17F29A1F0042FCFD /* en.lproj */,
 			);
 			name = localization;
 			path = resources/localization;
@@ -1092,6 +1175,7 @@
 			isa = PBXGroup;
 			children = (
 				49AB227D1746EE9500175F4D /* ATDataModel.xcdatamodeld */,
+				58CD20131821B78D0071CC72 /* ATDataModel v2 to v3.xcmappingmodel */,
 				49FECBE217D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel */,
 				49F8AFCD16CC4A550070FFEA /* ATConversation.h */,
 				49F8AFCE16CC4A550070FFEA /* ATConversation.m */,
@@ -1125,6 +1209,68 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		584647C917C426ED00BFD6E6 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				58EEBE2117C7E8150039A0F5 /* ATInteraction.h */,
+				58EEBE2217C7E8150039A0F5 /* ATInteraction.m */,
+				584647C417C426E800BFD6E6 /* ATEngagementManifestParser.h */,
+				584647C517C426E800BFD6E6 /* ATEngagementManifestParser.m */,
+				589274A4180CC33A0029E5CE /* ATInteractionUsageData.h */,
+				589274A5180CC33A0029E5CE /* ATInteractionUsageData.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		5898DF8817C2D8E60048F11F /* Engagement */ = {
+			isa = PBXGroup;
+			children = (
+				584647C917C426ED00BFD6E6 /* Model */,
+				58DCC0D1180F43E200A3A7AE /* Interactions */,
+				58C5921E17C55A83000FA428 /* Persistence */,
+				5898DF8917C2D8F70048F11F /* URL Loading */,
+				5898DF8F17C2E0DA0048F11F /* Tasks */,
+			);
+			name = Engagement;
+			sourceTree = "<group>";
+		};
+		5898DF8917C2D8F70048F11F /* URL Loading */ = {
+			isa = PBXGroup;
+			children = (
+				58C5922917C59BE3000FA428 /* ATWebClient+EngagementAdditions.h */,
+				58C5922A17C59BE3000FA428 /* ATWebClient+EngagementAdditions.m */,
+			);
+			name = "URL Loading";
+			sourceTree = "<group>";
+		};
+		5898DF8F17C2E0DA0048F11F /* Tasks */ = {
+			isa = PBXGroup;
+			children = (
+				5898DF8A17C2E0CE0048F11F /* ATEngagementGetManifestTask.h */,
+				5898DF8B17C2E0CE0048F11F /* ATEngagementGetManifestTask.m */,
+			);
+			name = Tasks;
+			sourceTree = "<group>";
+		};
+		58C5921E17C55A83000FA428 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				58C5921F17C55ADD000FA428 /* ATEngagementBackend.h */,
+				58C5922017C55ADD000FA428 /* ATEngagementBackend.m */,
+			);
+			name = Persistence;
+			sourceTree = "<group>";
+		};
+		58DCC0D1180F43E200A3A7AE /* Interactions */ = {
+			isa = PBXGroup;
+			children = (
+				58DCC0D2180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.h */,
+				58DCC0D3180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m */,
+				58DCC0D4180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.xib */,
+			);
+			name = Interactions;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1153,6 +1299,7 @@
 				4936AE851379DECE00A4B17F /* ATContactStorage.h in Headers */,
 				4936AE891379DECE00A4B17F /* ATFeedback.h in Headers */,
 				49AA101F138B44C00082887A /* ATInfoViewController.h in Headers */,
+				58C97B57182752F6001EB5BD /* NSObject+ATSwizzle.h in Headers */,
 				49352AC4138C97A2000E464A /* ATAPIRequest.h in Headers */,
 				49352ADD138CA1DC000E464A /* ATURLConnection_Private.h in Headers */,
 				490B8158144274EF009801E9 /* ATCustomButton.h in Headers */,
@@ -1160,6 +1307,7 @@
 				49BC2A5A144F75E20041E789 /* ATShadowView.h in Headers */,
 				49B877111464958C00594A5D /* ATWebClient_Private.h in Headers */,
 				49EF340F14AA7F2D00077F76 /* ATAppRatingMetrics.h in Headers */,
+				58C97B5C18276427001EB5BD /* UIViewController+ATSwizzle.h in Headers */,
 				49EA5AB014BD08AD004F8A4D /* ATLegacyRecord.h in Headers */,
 				49EA5ABD14BD0F4D004F8A4D /* ATRecordTask.h in Headers */,
 				49CEFF5D15168B54006D8BA8 /* ATAppConfigurationUpdater.h in Headers */,
@@ -1185,6 +1333,7 @@
 				4961A402161BBD7000E30037 /* ATMessageTask.h in Headers */,
 				4961A40B161BBE0800E30037 /* ATPersonUpdater.h in Headers */,
 				4961A40F161BBE1F00E30037 /* ATDeviceUpdater.h in Headers */,
+				58805F3718120BBF00210DA5 /* UIImage+ATImageEffects.h in Headers */,
 				490B24A71624B70E0055B812 /* ATTextMessageUserCell.h in Headers */,
 				49E3A26F1628F4FF000675B4 /* ATGetMessagesTask.h in Headers */,
 				49AF27CF16321F0C005E1E9D /* ATAutomatedMessageCell.h in Headers */,
@@ -1226,10 +1375,17 @@
 				49AAC851175FFA0D00F08879 /* ATLabel.h in Headers */,
 				49AAC854175FFA4800F08879 /* ATTypes.h in Headers */,
 				49AAC857175FFDB900F08879 /* ATCustomView.h in Headers */,
+				58DCC0D5180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.h in Headers */,
 				493F8D8C1672DEFD000B5151 /* ATStaticLibraryBootstrap.h in Headers */,
 				4935CF56177286C300CFE3DC /* ATPersonDetailsViewController.h in Headers */,
 				496DD4181773BF2700D041B0 /* ATNavigationController.h in Headers */,
 				497A9A0417762512002B6F96 /* ATJSONSerialization.h in Headers */,
+				589274A6180CC33A0029E5CE /* ATInteractionUsageData.h in Headers */,
+				5898DF8C17C2E0CE0048F11F /* ATEngagementGetManifestTask.h in Headers */,
+				584647C617C426E800BFD6E6 /* ATEngagementManifestParser.h in Headers */,
+				58C5922117C55ADD000FA428 /* ATEngagementBackend.h in Headers */,
+				58C5922B17C59BE3000FA428 /* ATWebClient+EngagementAdditions.h in Headers */,
+				58EEBE2317C7E8150039A0F5 /* ATInteraction.h in Headers */,
 				49B7E916178BA8060059E776 /* ATSurveyResponse.h in Headers */,
 				49B7E91B178BAB8D0059E776 /* ATSurveyResponseTask.h in Headers */,
 			);
@@ -1299,7 +1455,7 @@
 		496DC3761333D35600743F65 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Apptentive, Inc.";
 			};
 			buildConfigurationList = 496DC3791333D35600743F65 /* Build configuration list for PBXProject "ApptentiveConnect" */;
@@ -1321,6 +1477,7 @@
 				da,
 				fr,
 				zh,
+				sv,
 			);
 			mainGroup = 496DC3741333D35600743F65;
 			productRefGroup = 496DC3801333D35600743F65 /* Products */;
@@ -1341,7 +1498,9 @@
 			files = (
 				49C0028F1334137E0071F088 /* InfoPlist.strings in Resources */,
 				49AA1023138B498C0082887A /* ATInfoViewController.xib in Resources */,
+				58AA40A01821C162000799D8 /* ATDataModelv2.sqlite in Resources */,
 				49AA1025138B49A50082887A /* ATInfoViewController_iPad.xib in Resources */,
+				58DCC0D9180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.xib in Resources */,
 				49352A21138C73B8000E464A /* ATAboutApptentiveView.xib in Resources */,
 				49C54BD51790A95E009CCD5D /* ApptentiveResources.bundle in Resources */,
 				49C54BD81790B783009CCD5D /* ATDataModelv1.sqlite in Resources */,
@@ -1352,6 +1511,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49D07DD017F29A1F0042FCFD /* Localizable.strings in Resources */,
 				4960E154134A578F00F6311F /* generated in Resources */,
 				49E891D0134FE2AB00DD098A /* Localizable.strings in Resources */,
 				493529FF138C7253000E464A /* ATInfoViewController.xib in Resources */,
@@ -1368,6 +1528,7 @@
 				494D1B721708E20A00C3060C /* ATMessageInputView.xib in Resources */,
 				49AAC84E175FE88D00F08879 /* ATMessagePanelViewController.xib in Resources */,
 				4935CF59177286E500CFE3DC /* ATPersonDetailsViewController.xib in Resources */,
+				58DCC0DA180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1399,7 +1560,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"Configuration is: ${CONFIGURATION}\"\nif [ \"${CONFIGURATION}\" = 'Release' ]; then\n    echo \"b\"\n    if [ -e \"${PROJECT_DIR}/resources/localization/English.lproj/Localizable.strings\" ]; then\n        echo \"c\"\n        rm \"${PROJECT_DIR}/resources/localization/English.lproj/Localizable.strings\"\n    fi\n    find \"${PROJECT_DIR}/source/\" -name *.m -print0 | xargs -0 genstrings -s ATLocalizedString -o \"${PROJECT_DIR}/resources/localization/English.lproj\"\nfi\n";
+			shellScript = "echo \"Configuration is: ${CONFIGURATION}\"\nif [ \"${CONFIGURATION}\" = 'Release' ]; then\n    echo \"b\"\n    if [ -e \"${PROJECT_DIR}/resources/localization/en.lproj/Localizable.strings\" ]; then\n        echo \"c\"\n        rm \"${PROJECT_DIR}/resources/localization/en.lproj/Localizable.strings\"\n    fi\n    find \"${PROJECT_DIR}/source/\" -name *.m -print0 | xargs -0 genstrings -s ATLocalizedString -o \"${PROJECT_DIR}/resources/localization/en.lproj\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1415,6 +1576,7 @@
 				49D112741337CC9F00603373 /* ATTaskQueue.m in Sources */,
 				491748BB1341177000A7D11E /* ATConnectionChannel.m in Sources */,
 				491748BD1341177000A7D11E /* ATConnectionManager.m in Sources */,
+				58DCC0D6180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m in Sources */,
 				491748BF1341177000A7D11E /* ATURLConnection.m in Sources */,
 				491748C11341177000A7D11E /* ATWebClient.m in Sources */,
 				49509A62135658E200793EEC /* ATReachability.m in Sources */,
@@ -1439,6 +1601,7 @@
 				49CEFF8215193EC2006D8BA8 /* ATAppRatingFlow_Private.m in Sources */,
 				4987FA81157ACAB500AF2078 /* ATSurveyMetrics.m in Sources */,
 				4987FA86157ACB0B00AF2078 /* ATFeedbackMetrics.m in Sources */,
+				58805F3618120BBF00210DA5 /* UIImage+ATImageEffects.m in Sources */,
 				4987FA9D157AE53700AF2078 /* ApptentiveMetrics.m in Sources */,
 				4987FAA0157AE53700AF2078 /* ATMetric.m in Sources */,
 				4987FAA3157AE53700AF2078 /* ATWebClient+Metrics.m in Sources */,
@@ -1467,12 +1630,14 @@
 				49F8AFE416CC4A550070FFEA /* ATConversation.m in Sources */,
 				49F8AFE616CC4A550070FFEA /* ATData.m in Sources */,
 				49F8AFE916CC4A550070FFEA /* ATDeviceInfo.m in Sources */,
+				58C97B5D18276427001EB5BD /* UIViewController+ATSwizzle.m in Sources */,
 				49F8AFEB16CC4A550070FFEA /* ATAutomatedMessage.m in Sources */,
 				49F8AFED16CC4A550070FFEA /* ATAbstractMessage.m in Sources */,
 				49F8AFEF16CC4A550070FFEA /* ATMessageDisplayType.m in Sources */,
 				49F8AFF116CC4A550070FFEA /* ATMessageSender.m in Sources */,
 				49F8AFF316CC4A550070FFEA /* ATPersonInfo.m in Sources */,
 				49F8AFF516CC4A550070FFEA /* ATTextMessage.m in Sources */,
+				58C97B58182752F6001EB5BD /* NSObject+ATSwizzle.m in Sources */,
 				49F8AFF716CC4A550070FFEA /* ATUpgradeRequestMessage.m in Sources */,
 				49F8AFFC16CC4D860070FFEA /* ATRecord.m in Sources */,
 				49F8B00016CC56580070FFEA /* ATEvent.m in Sources */,
@@ -1488,6 +1653,7 @@
 				494D1B701708E1F900C3060C /* ATMessageInputView.m in Sources */,
 				49CB6DEB1718FE4400BC9223 /* ATMessageCenterMetrics.m in Sources */,
 				4960A534171F70530082669B /* ATNetworkImageView.m in Sources */,
+				589274A7180CC33A0029E5CE /* ATInteractionUsageData.m in Sources */,
 				496F5782174060CE003BF516 /* ATDataManager.m in Sources */,
 				4995EDD3175983C800AF7268 /* TTTAttributedLabel.m in Sources */,
 				49AAC84C175FE70D00F08879 /* ATMessagePanelViewController.m in Sources */,
@@ -1497,6 +1663,11 @@
 				4935CF57177286C300CFE3DC /* ATPersonDetailsViewController.m in Sources */,
 				496DD4191773BF2700D041B0 /* ATNavigationController.m in Sources */,
 				497A9A0517762512002B6F96 /* ATJSONSerialization.m in Sources */,
+				5898DF8D17C2E0CE0048F11F /* ATEngagementGetManifestTask.m in Sources */,
+				584647C717C426E800BFD6E6 /* ATEngagementManifestParser.m in Sources */,
+				58C5922217C55ADD000FA428 /* ATEngagementBackend.m in Sources */,
+				58C5922C17C59BE3000FA428 /* ATWebClient+EngagementAdditions.m in Sources */,
+				58EEBE2417C7E8150039A0F5 /* ATInteraction.m in Sources */,
 				49B7E917178BA8060059E776 /* ATSurveyResponse.m in Sources */,
 				49B7E91C178BAB8D0059E776 /* ATSurveyResponseTask.m in Sources */,
 			);
@@ -1514,12 +1685,15 @@
 				4936AE621379DE3100A4B17F /* ATSimpleImageViewController.m in Sources */,
 				4936AE791379DEBB00A4B17F /* ATUtilities.m in Sources */,
 				4936AE8B1379DECE00A4B17F /* ATBackend.m in Sources */,
+				58CD20151821B7A70071CC72 /* ATDataModel v2 to v3.xcmappingmodel in Sources */,
 				4936AE8C1379DECE00A4B17F /* ATContactStorage.m in Sources */,
 				4936AE8E1379DECE00A4B17F /* ATFeedback.m in Sources */,
 				49AA1021138B44C00082887A /* ATInfoViewController.m in Sources */,
 				49352AC3138C97A2000E464A /* ATAPIRequest.m in Sources */,
+				58C97B5E18276427001EB5BD /* UIViewController+ATSwizzle.m in Sources */,
 				4942CC9313C7AD2D009BF758 /* ATAppRatingFlow.m in Sources */,
 				490B815A144274EF009801E9 /* ATCustomButton.m in Sources */,
+				58DCC0D7180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m in Sources */,
 				490B815F1442751F009801E9 /* ATToolbar.m in Sources */,
 				49EF341114AA7F2D00077F76 /* ATAppRatingMetrics.m in Sources */,
 				49EA5AB214BD08AD004F8A4D /* ATLegacyRecord.m in Sources */,
@@ -1541,6 +1715,7 @@
 				493AEB3E15990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.m in Sources */,
 				493AEB4115990A4D00DFD4C7 /* ATSurveyViewController.m in Sources */,
 				493AEB4515990A6B00DFD4C7 /* ApptentiveSurveysTests.m in Sources */,
+				589274A8180CC33A0029E5CE /* ATInteractionUsageData.m in Sources */,
 				498EFB6D15BA414A00A1043B /* ATSurveyGetSurveysTask.m in Sources */,
 				498EFB7215BA48B300A1043B /* ATAppConfigurationUpdateTask.m in Sources */,
 				499B56CC15D305880063C23C /* PJSONKit.m in Sources */,
@@ -1557,6 +1732,13 @@
 				49AB227F1746EE9500175F4D /* ATDataModel.xcdatamodeld in Sources */,
 				4995EDD4175983C800AF7268 /* TTTAttributedLabel.m in Sources */,
 				497A9A0617762512002B6F96 /* ATJSONSerialization.m in Sources */,
+				5898DF8E17C2E0CE0048F11F /* ATEngagementGetManifestTask.m in Sources */,
+				584647C817C426E800BFD6E6 /* ATEngagementManifestParser.m in Sources */,
+				58C97B59182752F6001EB5BD /* NSObject+ATSwizzle.m in Sources */,
+				58C5922317C55ADD000FA428 /* ATEngagementBackend.m in Sources */,
+				58C5922D17C59BE3000FA428 /* ATWebClient+EngagementAdditions.m in Sources */,
+				58EEBE2517C7E8150039A0F5 /* ATInteraction.m in Sources */,
+				580B24BB17D90AF300AE2CD0 /* ATEngagementTests.m in Sources */,
 				49B7E918178BA8060059E776 /* ATSurveyResponse.m in Sources */,
 				49B7E91D178BAB8D0059E776 /* ATSurveyResponseTask.m in Sources */,
 				49FECBE317D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel in Sources */,
@@ -1569,6 +1751,7 @@
 			files = (
 				49AB22801746EE9500175F4D /* ATDataModel.xcdatamodeld in Sources */,
 				49FECBE417D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel in Sources */,
+				58CD20161821B7A80071CC72 /* ATDataModel v2 to v3.xcmappingmodel in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1591,16 +1774,22 @@
 		49C0028B1334137E0071F088 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				49C0028C1334137E0071F088 /* en */,
 				58EA5B4F17B47E0C00ECEB4B /* zh */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
+		49D07DCE17F29A1F0042FCFD /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				49D07DCF17F29A1F0042FCFD /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		49E891CD134FE2AB00DD098A /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				49E891CE134FE2AB00DD098A /* English */,
 				49E891CF134FE2AB00DD098A /* es */,
 				4995EDC3175959EC00AF7268 /* de */,
 				4995EDC417595A0500AF7268 /* ja */,
@@ -1612,6 +1801,7 @@
 				58EA5B4117B47AAC00ECEB4B /* da */,
 				58EA5B4717B47BAB00ECEB4B /* fr */,
 				58EA5B4E17B47E0C00ECEB4B /* zh */,
+				49EA62C317F50D9400C5A638 /* sv */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1622,7 +1812,9 @@
 		496DC3A01333D35600743F65 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -1637,10 +1829,14 @@
 				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
 				"GCC_THUMB_SUPPORT[arch=armv7]" = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1650,7 +1846,9 @@
 		496DC3A11333D35600743F65 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -1660,8 +1858,11 @@
 				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
 				"GCC_THUMB_SUPPORT[arch=armv7]" = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = iphoneos;
@@ -1847,9 +2048,10 @@
 			isa = XCVersionGroup;
 			children = (
 				49B7E913178BA4E50059E776 /* ATDataModel 2.xcdatamodel */,
+				58CD20121821B4D40071CC72 /* ATDataModel 3.xcdatamodel */,
 				49AB227E1746EE9500175F4D /* ATDataModel.xcdatamodel */,
 			);
-			currentVersion = 49B7E913178BA4E50059E776 /* ATDataModel 2.xcdatamodel */;
+			currentVersion = 58CD20121821B4D40071CC72 /* ATDataModel 3.xcdatamodel */;
 			path = ATDataModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

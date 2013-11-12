@@ -34,6 +34,14 @@
 	self.containerView.layer.masksToBounds = NO;
 }
 
++ (NSString *)reuseIdentifier {
+    return @"ATAutomatedMessageCell";
+}
+
+- (NSString *)reuseIdentifier {
+    return [[self class] reuseIdentifier];
+}
+
 - (void)dealloc {
     [dateLabel release];
 	[messageText release];
@@ -54,11 +62,15 @@
 		if (showDateLabel) {
 			cellHeight += self.dateLabel.bounds.size.height;
 		}
-		CGFloat textWidth = width - 101;
-		CGFloat heightPadding = 30;
+		CGFloat textWidth = width - 60 /* padding between text and edges of cell */;
+		CGFloat heightPadding = 8 /* padding at bottom */ +
+								2 /* padding above title */ +
+								18 /* title text */ +
+								3 /* gray line and padding above it */ +
+								5 /* padding below gray line */ +
+								9 /* padding below main text */;
 		CGSize textSize = [self.messageText sizeThatFits:CGSizeMake(textWidth, 2000)];
-		//	CGSize textSize = [self.messageText.text sizeWithFont:self.messageText.font constrainedToSize:CGSizeMake(textWidth, 2000) lineBreakMode:self.messageText.lineBreakMode];
-		cellHeight += MAX(60, textSize.height + heightPadding);
+		cellHeight += MAX(heightPadding + 18 /* one line */, textSize.height + heightPadding);
 		
 	} while (NO);
 	return cellHeight;

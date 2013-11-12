@@ -21,7 +21,6 @@
 #import "ATLog.h"
 #import "ATAbstractMessage.h"
 #import "ATDefaultMessageCenterTheme.h"
-#import "ATInfoViewController.h"
 #import "ATMessageCenterCell.h"
 #import "ATMessageCenterMetrics.h"
 #import "ATMessageSender.h"
@@ -49,9 +48,7 @@ typedef enum {
 - (void)keyboardWillBeShown:(NSNotification *)aNotification;
 - (void)keyboardWasShown:(NSNotification *)aNotification;
 - (void)keyboardWillBeHidden:(NSNotification *)aNotification;
-- (NSFetchedResultsController *)fetchedMessagesController;
 - (void)scrollToBottomOfTableView;
-- (void)markAllMessagesAsRead;
 @end
 
 @implementation ATMessageCenterViewController {
@@ -60,7 +57,6 @@ typedef enum {
 	BOOL showAttachSheetOnBecomingVisible;
 	CGRect currentKeyboardFrameInView;
 	CGFloat composerFieldHeight;
-	NSFetchedResultsController *fetchedMessagesController;
 	ATTextMessage *composingMessage;
 	BOOL animatingTransition;
 	NSDateFormatter *messageDateFormatter;
@@ -70,6 +66,8 @@ typedef enum {
 	UIActionSheet *sendImageActionSheet;
 	ATAbstractMessage *retryMessage;
 	UIActionSheet *retryMessageActionSheet;
+	
+	ATMessageCenterDataSource *dataSource;
 	
 	UINib *inputViewNib;
 	ATMessageInputView *inputView;
@@ -83,33 +81,21 @@ typedef enum {
 	if (self != nil) {
 		themeDelegate = aThemeDelegate;
 		defaultTheme = [[ATDefaultMessageCenterTheme alloc] init];
+		dataSource = [[ATMessageCenterDataSource alloc] initWithDelegate:self];
 	}
 	return self;
 }
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	[[ATBackend sharedBackend] messageCenterEnteredForeground];
 	
-	[self markAllMessagesAsRead];
-	NSError *error = nil;
-	if (![self.fetchedMessagesController performFetch:&error]) {
-		ATLogError(@"Got an error loading messages: %@", error);
-		//TODO: Handle this error.
-	}
+	[dataSource start];
 	[self.tableView reloadData];
-	
-	NSUInteger messageCount = [ATData countEntityNamed:@"ATAbstractMessage" withPredicate:nil];
-	if (messageCount == 0) {
-		NSString *title = ATLocalizedString(@"Welcome", @"Welcome");
-		NSString *body = ATLocalizedString(@"This is our Message Center. If you have questions, suggestions, concerns or just want to get in touch, please send us a message. We love talking with our customers!", @"Placeholder welcome message.");
-		[[ATBackend sharedBackend] sendAutomatedMessageWithTitle:title body:body];
-	}
 	
 	messageDateFormatter = [[NSDateFormatter alloc] init];
 	messageDateFormatter.dateStyle = NSDateFormatterMediumStyle;
 	messageDateFormatter.timeStyle = NSDateFormatterShortStyle;
-	[ATTextMessage clearComposingMessages];
+	
 	self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 	self.tableView.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.0];
 	self.tableView.scrollsToTop = YES;
@@ -195,8 +181,6 @@ typedef enum {
 	[tableView release];
 	[containerView release];
 	[inputContainerView release];
-	fetchedMessagesController.delegate = nil;
-	[fetchedMessagesController release], fetchedMessagesController = nil;
 	[defaultTheme release], defaultTheme = nil;
 	themeDelegate = nil;
 	dismissalDelegate = nil;
@@ -211,7 +195,7 @@ typedef enum {
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-	[self markAllMessagesAsRead];
+	[dataSource markAllMessagesAsRead];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -254,15 +238,6 @@ typedef enum {
 	ATPersonDetailsViewController *vc = [[ATPersonDetailsViewController alloc] initWithNibName:@"ATPersonDetailsViewController" bundle:[ATConnect resourceBundle]];
 	[self.navigationController pushViewController:vc animated:YES];
 	[vc release], vc = nil;
-}
-
-- (IBAction)showInfoView:(id)sender {
-	ATInfoViewController *vc = [[ATInfoViewController alloc] init];
-	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
-	nc.modalPresentationStyle = UIModalPresentationFormSheet;
-	[self.navigationController presentModalViewController:nc animated:YES];
-	[vc release], vc = nil;
-	[nc release], nc = nil;
 }
 
 - (IBAction)cameraPressed:(id)sender {
@@ -327,29 +302,6 @@ typedef enum {
 - (void)styleTextView {
 }
 
-
-- (NSFetchedResultsController *)fetchedMessagesController {
-	@synchronized(self) {
-		if (!fetchedMessagesController) {
-			[NSFetchedResultsController deleteCacheWithName:@"at-messages-cache"];
-			NSFetchRequest *request = [[NSFetchRequest alloc] init];
-			[request setEntity:[NSEntityDescription entityForName:@"ATAbstractMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
-			[request setFetchBatchSize:20];
-			NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
-			[request setSortDescriptors:@[sortDescriptor]];
-			[sortDescriptor release], sortDescriptor = nil;
-			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"clientCreationTime != %d", 0];
-			[request setPredicate:predicate];
-			
-			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:nil cacheName:@"at-messages-cache"];
-			newController.delegate = self;
-			fetchedMessagesController = newController;
-			
-			[request release], request = nil;
-		}
-	}
-	return fetchedMessagesController;
-}
 
 - (void)scrollToBottomOfTableView {
 	if ([self.tableView numberOfSections] > 0) {
@@ -620,7 +572,7 @@ typedef enum {
 
 #pragma mark UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	ATAbstractMessage *message = (ATAbstractMessage *)[self.fetchedMessagesController objectAtIndexPath:indexPath];
+	ATAbstractMessage *message = (ATAbstractMessage *)[dataSource.fetchedMessagesController objectAtIndexPath:indexPath];
 	if (message != nil && [message.sentByUser boolValue] && [message.pendingState intValue] == ATPendingMessageStateError) {
 		if (retryMessageActionSheet) {
 			[retryMessageActionSheet autorelease], retryMessageActionSheet = nil;
@@ -654,7 +606,7 @@ typedef enum {
 
 #pragma mark UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
-	id<NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedMessagesController sections] objectAtIndex:0];
+	id<NSFetchedResultsSectionInfo> sectionInfo = [[dataSource.fetchedMessagesController sections] objectAtIndex:0];
 	return [sectionInfo numberOfObjects];
 }
 
@@ -665,7 +617,7 @@ typedef enum {
 	ATMessageCellType cellType = ATMessageCellTypeUnknown;
 	
 	UITableViewCell *cell = nil;
-	ATAbstractMessage *message = (ATAbstractMessage *)[self.fetchedMessagesController objectAtIndexPath:indexPath];
+	ATAbstractMessage *message = (ATAbstractMessage *)[dataSource.fetchedMessagesController objectAtIndexPath:indexPath];
 	
 	if ([message isKindOfClass:[ATAutomatedMessage class]]) {
 		cellType = ATMessageCellTypeAutomated;
@@ -683,7 +635,7 @@ typedef enum {
 	if (indexPath.row == 0) {
 		showDate = YES;
 	} else {
-		ATAbstractMessage *previousMessage = (ATAbstractMessage *)[self.fetchedMessagesController objectAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
+		ATAbstractMessage *previousMessage = (ATAbstractMessage *)[dataSource.fetchedMessagesController objectAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
 		if ([message.creationTime doubleValue] - [previousMessage.creationTime doubleValue] > 60 * 5) {
 			showDate = YES;
 		}
@@ -949,32 +901,5 @@ typedef enum {
 		default:
 			break;
 	}
-}
-
-- (void)markAllMessagesAsRead {
-	NSFetchRequest *request = [[NSFetchRequest alloc] init];
-	[request setEntity:[NSEntityDescription entityForName:@"ATAbstractMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
-	[request setFetchBatchSize:20];
-	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
-	[request setSortDescriptors:@[sortDescriptor]];
-	[sortDescriptor release], sortDescriptor = nil;
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"seenByUser == %d", 0];
-	[request setPredicate:predicate];
-	
-	NSManagedObjectContext *moc = [ATData moc];
-	NSError *error = nil;
-	NSArray *results = [moc executeFetchRequest:request error:&error];
-	if (!results) {
-		ATLogError(@"Error exceuting fetch request: %@", error);
-	} else {
-		for (ATAbstractMessage *message in results) {
-			[message setSeenByUser:@(YES)];
-			if (message.apptentiveID != nil && [message.sentByUser boolValue] != YES) {
-				[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidReadNotification object:self userInfo:@{ATMessageCenterMessageIDKey:message.apptentiveID}];
-			}
-		}
-		[ATData save];
-	}
-	[request release], request = nil;
 }
 @end

@@ -10,6 +10,7 @@
 
 #import "ATAutomatedMessageCell.h"
 #import "ATFileMessageCell.h"
+#import "ATMessageCenterDataSource.h"
 #import "ATMessageInputView.h"
 #import "ATSimpleImageViewController.h"
 #import "ATTextMessageUserCell.h"
@@ -17,7 +18,7 @@
 @protocol ATMessageCenterThemeDelegate;
 @protocol ATMessageCenterDismissalDelegate;
 
-@interface ATMessageCenterViewController : UIViewController <ATMessageInputViewDelegate, ATSimpleImageViewControllerDelegate, NSFetchedResultsControllerDelegate, UIActionSheetDelegate, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface ATMessageCenterViewController : UIViewController <ATMessageCenterDataSourceDelegate, ATMessageInputViewDelegate, ATSimpleImageViewControllerDelegate, UIActionSheetDelegate, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate>
 @property (retain, nonatomic) IBOutlet UITableView *tableView;
 @property (retain, nonatomic) IBOutlet UIView *containerView;
 @property (retain, nonatomic) IBOutlet UIView *inputContainerView;
@@ -32,7 +33,6 @@
 
 - (IBAction)donePressed:(id)sender;
 - (IBAction)settingsPressed:(id)sender;
-- (IBAction)showInfoView:(id)sender;
 - (IBAction)cameraPressed:(id)sender;
 @end
 

@@ -96,6 +96,12 @@ want to filter them based upon your managed object context. Learn more from [App
 
 ![iOS Linker Flags](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-linker-flags.png)
 
+**Note:** If you can't use the `-all_load` flag in your project, you can use the `-force_load` flag instead:
+
+```
+-force_load $(BUILT_PRODUCTS_DIR)/libApptentiveConnect.a
+```
+
 ##### Add Apptentive Connect and Resources
 
 1. Go back to your Xcode project's `Build Phases` tab.

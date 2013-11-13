@@ -142,6 +142,12 @@
 		4967273A16B8A41400C679B8 /* ATMessageCenterCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 4967273916B8A41400C679B8 /* ATMessageCenterCell.h */; };
 		4967278216B9D9CB00C679B8 /* ATConnect_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4967278116B9D9CB00C679B8 /* ATConnect_Private.h */; };
 		4967278416B9FE6400C679B8 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4967278316B9FE6400C679B8 /* Info.plist */; };
+		4968698D1832FDFA00DA8B95 /* ATMessageCenterV7ViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4968698B1832FDFA00DA8B95 /* ATMessageCenterV7ViewController.h */; };
+		4968698E1832FDFA00DA8B95 /* ATMessageCenterV7ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4968698C1832FDFA00DA8B95 /* ATMessageCenterV7ViewController.m */; };
+		496869921833066500DA8B95 /* ATMessageCenterV7ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 496869911833066500DA8B95 /* ATMessageCenterV7ViewController.xib */; };
+		4968699518330D5800DA8B95 /* ATAutomatedMessageCellV7.h in Headers */ = {isa = PBXBuildFile; fileRef = 4968699318330D5800DA8B95 /* ATAutomatedMessageCellV7.h */; };
+		4968699818330E0700DA8B95 /* ATAutomatedMessageCellV7.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4968699718330E0700DA8B95 /* ATAutomatedMessageCellV7.xib */; };
+		4968699A18330E1900DA8B95 /* ATAutomatedMessageCellV7.m in Sources */ = {isa = PBXBuildFile; fileRef = 4968699418330D5800DA8B95 /* ATAutomatedMessageCellV7.m */; };
 		496AE63E16FFB31500CC6F2F /* ATDefaultMessageCenterTheme.h in Headers */ = {isa = PBXBuildFile; fileRef = 496AE63C16FFB31500CC6F2F /* ATDefaultMessageCenterTheme.h */; };
 		496AE63F16FFB31500CC6F2F /* ATDefaultMessageCenterTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 496AE63D16FFB31500CC6F2F /* ATDefaultMessageCenterTheme.m */; };
 		496DC3831333D35600743F65 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3821333D35600743F65 /* Foundation.framework */; };
@@ -457,6 +463,12 @@
 		4967273916B8A41400C679B8 /* ATMessageCenterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATMessageCenterCell.h; path = "Message Center/ATMessageCenterCell.h"; sourceTree = "<group>"; };
 		4967278116B9D9CB00C679B8 /* ATConnect_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATConnect_Private.h; sourceTree = "<group>"; };
 		4967278316B9FE6400C679B8 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = resources/ApptentiveResources/Info.plist; sourceTree = SOURCE_ROOT; };
+		4968698B1832FDFA00DA8B95 /* ATMessageCenterV7ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATMessageCenterV7ViewController.h; path = "Message Center/ATMessageCenterV7ViewController.h"; sourceTree = "<group>"; };
+		4968698C1832FDFA00DA8B95 /* ATMessageCenterV7ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATMessageCenterV7ViewController.m; path = "Message Center/ATMessageCenterV7ViewController.m"; sourceTree = "<group>"; };
+		496869911833066500DA8B95 /* ATMessageCenterV7ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ATMessageCenterV7ViewController.xib; path = xibs/ATMessageCenterV7ViewController.xib; sourceTree = SOURCE_ROOT; };
+		4968699318330D5800DA8B95 /* ATAutomatedMessageCellV7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATAutomatedMessageCellV7.h; path = "Message Center/ATAutomatedMessageCellV7.h"; sourceTree = "<group>"; };
+		4968699418330D5800DA8B95 /* ATAutomatedMessageCellV7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATAutomatedMessageCellV7.m; path = "Message Center/ATAutomatedMessageCellV7.m"; sourceTree = "<group>"; };
+		4968699718330E0700DA8B95 /* ATAutomatedMessageCellV7.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ATAutomatedMessageCellV7.xib; path = xibs/ATAutomatedMessageCellV7.xib; sourceTree = SOURCE_ROOT; };
 		496AE63C16FFB31500CC6F2F /* ATDefaultMessageCenterTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATDefaultMessageCenterTheme.h; path = "Message Center/ATDefaultMessageCenterTheme.h"; sourceTree = "<group>"; };
 		496AE63D16FFB31500CC6F2F /* ATDefaultMessageCenterTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATDefaultMessageCenterTheme.m; path = "Message Center/ATDefaultMessageCenterTheme.m"; sourceTree = "<group>"; };
 		496DC37F1333D35600743F65 /* libApptentiveConnect.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libApptentiveConnect.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -981,6 +993,9 @@
 				4999128216165BD400FDA15F /* ATMessageCenterViewController.h */,
 				4999128316165BD400FDA15F /* ATMessageCenterViewController.m */,
 				4999128716165BF200FDA15F /* ATMessageCenterViewController.xib */,
+				4968698B1832FDFA00DA8B95 /* ATMessageCenterV7ViewController.h */,
+				4968698C1832FDFA00DA8B95 /* ATMessageCenterV7ViewController.m */,
+				496869911833066500DA8B95 /* ATMessageCenterV7ViewController.xib */,
 				49735D601832DF1F00D48DE7 /* ATMessageCenterDataSource.h */,
 				49735D611832DF1F00D48DE7 /* ATMessageCenterDataSource.m */,
 				496AE63C16FFB31500CC6F2F /* ATDefaultMessageCenterTheme.h */,
@@ -995,6 +1010,9 @@
 				492B81E216D5C8AC0031BEF6 /* ATFileMessageCell.h */,
 				492B81E316D5C8AC0031BEF6 /* ATFileMessageCell.m */,
 				492B81E716D5C8E20031BEF6 /* ATFileMessageCell.xib */,
+				4968699318330D5800DA8B95 /* ATAutomatedMessageCellV7.h */,
+				4968699418330D5800DA8B95 /* ATAutomatedMessageCellV7.m */,
+				4968699718330E0700DA8B95 /* ATAutomatedMessageCellV7.xib */,
 				4961A408161BBDBE00E30037 /* Persistence */,
 				49AC178B16C0A09200BE1615 /* Protocols */,
 				4961A3FF161BBD5200E30037 /* Tasks */,
@@ -1357,6 +1375,7 @@
 				4967278216B9D9CB00C679B8 /* ATConnect_Private.h in Headers */,
 				49AC178216C0987400BE1615 /* ATConversationUpdater.h in Headers */,
 				49AC178D16C0A0BC00BE1615 /* ATJSONModel.h in Headers */,
+				4968698D1832FDFA00DA8B95 /* ATMessageCenterV7ViewController.h in Headers */,
 				49E6208716C5E8C2000C9F5A /* NSDictionary+ATAdditions.h in Headers */,
 				49F8AFE316CC4A550070FFEA /* ATConversation.h in Headers */,
 				49F8AFE516CC4A550070FFEA /* ATData.h in Headers */,
@@ -1374,6 +1393,7 @@
 				492B81DA16D595A00031BEF6 /* ATFileAttachment.h in Headers */,
 				492B81E416D5C8AD0031BEF6 /* ATFileMessageCell.h in Headers */,
 				492F2F0E16E3F9660030E48A /* ATDefaultMessageCenterTitleView.h in Headers */,
+				4968699518330D5800DA8B95 /* ATAutomatedMessageCellV7.h in Headers */,
 				49881DDD16E839540061D888 /* ATLogViewController.h in Headers */,
 				495E9C1C16EABD8E00AE3B03 /* ATLogger.h in Headers */,
 				492F2F1C16ED597F0030E48A /* ATRecordRequestTask.h in Headers */,
@@ -1533,6 +1553,7 @@
 				49352A20138C73B8000E464A /* ATAboutApptentiveView.xib in Resources */,
 				49352B3F138DB3AA000E464A /* ATTaskProgressCell.xib in Resources */,
 				496F29E014496711005B7C01 /* ATSimpleImageViewController.xib in Resources */,
+				4968699818330E0700DA8B95 /* ATAutomatedMessageCellV7.xib in Resources */,
 				4999128F16166C2F00FDA15F /* ATMessageCenterViewController.xib in Resources */,
 				490B24A31624B6D50055B812 /* ATTextMessageUserCell.xib in Resources */,
 				4967278416B9FE6400C679B8 /* Info.plist in Resources */,
@@ -1542,6 +1563,7 @@
 				494D1B721708E20A00C3060C /* ATMessageInputView.xib in Resources */,
 				49AAC84E175FE88D00F08879 /* ATMessagePanelViewController.xib in Resources */,
 				4935CF59177286E500CFE3DC /* ATPersonDetailsViewController.xib in Resources */,
+				496869921833066500DA8B95 /* ATMessageCenterV7ViewController.xib in Resources */,
 				58DCC0DA180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1680,6 +1702,8 @@
 				496DD4191773BF2700D041B0 /* ATNavigationController.m in Sources */,
 				497A9A0517762512002B6F96 /* ATJSONSerialization.m in Sources */,
 				5898DF8D17C2E0CE0048F11F /* ATEngagementGetManifestTask.m in Sources */,
+				4968698E1832FDFA00DA8B95 /* ATMessageCenterV7ViewController.m in Sources */,
+				4968699A18330E1900DA8B95 /* ATAutomatedMessageCellV7.m in Sources */,
 				584647C717C426E800BFD6E6 /* ATEngagementManifestParser.m in Sources */,
 				58C5922217C55ADD000FA428 /* ATEngagementBackend.m in Sources */,
 				58C5922C17C59BE3000FA428 /* ATWebClient+EngagementAdditions.m in Sources */,

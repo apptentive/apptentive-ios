@@ -166,6 +166,7 @@ typedef enum {
 	return YES;
 }
 
+#pragma mark UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)aTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCell *cell = [self tableView:aTableView cellForRowAtIndexPath:indexPath];
 	if ([cell conformsToProtocol:@protocol(ATMessageCenterCell)]) {
@@ -174,7 +175,6 @@ typedef enum {
 	return 44;
 }
 
-#pragma mark UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	ATAbstractMessage *message = (ATAbstractMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:indexPath];
 	if (message != nil && [message.sentByUser boolValue] && [message.pendingState intValue] == ATPendingMessageStateError) {

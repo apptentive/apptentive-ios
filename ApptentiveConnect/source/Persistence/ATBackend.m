@@ -434,7 +434,12 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 		ATLogInfo(@"Apptentive message center controller already shown.");
 		return;
 	}
-	ATMessageCenterViewController *vc = [[ATMessageCenterViewController alloc] init];
+	ATMessageCenterBaseViewController *vc = nil;
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+		vc = [[ATMessageCenterV7ViewController alloc] init];
+	} else {
+		vc = [[ATMessageCenterViewController alloc] init];
+	}
 	vc.dismissalDelegate = self;
 	ATNavigationController *nc = [[ATNavigationController alloc] initWithRootViewController:vc];
 	nc.disablesAutomaticKeyboardDismissal = NO;
@@ -734,7 +739,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 }
 
 #if TARGET_OS_IPHONE
-- (void)messageCenterWillDismiss:(ATMessageCenterViewController *)messageCenter {
+- (void)messageCenterWillDismiss:(ATMessageCenterBaseViewController *)messageCenter {
 	if (presentedMessageCenterViewController) {
 		[presentedMessageCenterViewController release], presentedMessageCenterViewController = nil;
 	}

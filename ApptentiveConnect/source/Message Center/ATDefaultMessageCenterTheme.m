@@ -13,7 +13,7 @@
 #import "ATUtilities.h"
 
 @implementation ATDefaultMessageCenterTheme
-- (UIView *)titleViewForMessageCenterViewController:(ATMessageCenterViewController *)vc {
+- (UIView *)titleViewForMessageCenterViewController:(ATMessageCenterBaseViewController *)vc {
 	return [[[ATDefaultMessageCenterTitleView alloc] initWithFrame:vc.navigationController.navigationBar.bounds] autorelease];
 }
 
@@ -39,7 +39,7 @@
 	}
 }
 
-- (void)configureAttachmentsButton:(UIButton *)button forMessageCenterViewController:(ATMessageCenterViewController *)vc {
+- (void)configureAttachmentsButton:(UIButton *)button forMessageCenterViewController:(ATMessageCenterBaseViewController *)vc {
 	[button setTitle:@"" forState:UIControlStateNormal];
 	
 	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
@@ -50,7 +50,7 @@
 	}
 }
 
-- (UIImage *)backgroundImageForMessageForMessageCenterViewController:(ATMessageCenterViewController *)vc {
+- (UIImage *)backgroundImageForMessageForMessageCenterViewController:(ATMessageCenterBaseViewController *)vc {
 	UIImage *flatInputBackgroundImage = [ATBackend imageNamed:@"at_flat_input_bg"];
 	UIEdgeInsets capInsets = UIEdgeInsetsMake(16, 44, flatInputBackgroundImage.size.height - 16 - 1, flatInputBackgroundImage.size.width - 44 - 1);
 	

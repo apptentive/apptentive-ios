@@ -434,7 +434,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 		ATLogInfo(@"Apptentive message center controller already shown.");
 		return;
 	}
-	ATMessageCenterViewController *vc = [[ATMessageCenterViewController alloc] initWithThemeDelegate:nil];
+	ATMessageCenterViewController *vc = [[ATMessageCenterViewController alloc] init];
 	vc.dismissalDelegate = self;
 	ATNavigationController *nc = [[ATNavigationController alloc] initWithRootViewController:vc];
 	nc.disablesAutomaticKeyboardDismissal = NO;

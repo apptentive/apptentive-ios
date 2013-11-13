@@ -40,48 +40,16 @@ typedef enum {
 
 #define TextViewPadding 2
 
-@interface ATMessageCenterViewController ()
-- (void)relayoutSubviews;
-- (CGRect)formRectToShow;
-- (void)showSendImageUIIfNecessary;
-- (void)registerForKeyboardNotifications;
-- (void)keyboardWillBeShown:(NSNotification *)aNotification;
-- (void)keyboardWasShown:(NSNotification *)aNotification;
-- (void)keyboardWillBeHidden:(NSNotification *)aNotification;
-- (void)scrollToBottomOfTableView;
-@end
-
 @implementation ATMessageCenterViewController {
 	BOOL firstLoad;
-	BOOL attachmentsVisible;
-	BOOL showAttachSheetOnBecomingVisible;
-	CGRect currentKeyboardFrameInView;
-	CGFloat composerFieldHeight;
-	ATTextMessage *composingMessage;
-	BOOL animatingTransition;
 	NSDateFormatter *messageDateFormatter;
-	UIImage *pickedImage;
-	ATFeedbackImageSource pickedImageSource;
-	ATDefaultMessageCenterTheme *defaultTheme;
-	UIActionSheet *sendImageActionSheet;
-	ATAbstractMessage *retryMessage;
-	UIActionSheet *retryMessageActionSheet;
-	
-	ATMessageCenterDataSource *dataSource;
-	
-	UINib *inputViewNib;
-	ATMessageInputView *inputView;
 }
-@synthesize tableView, containerView, inputContainerView, automatedCell;
+@synthesize tableView, automatedCell;
 @synthesize userCell, developerCell, userFileMessageCell;
-@synthesize themeDelegate, dismissalDelegate;
 
-- (id)initWithThemeDelegate:(NSObject<ATMessageCenterThemeDelegate> *)aThemeDelegate {
+- (id)init {
 	self = [super initWithNibName:@"ATMessageCenterViewController" bundle:[ATConnect resourceBundle]];
 	if (self != nil) {
-		themeDelegate = aThemeDelegate;
-		defaultTheme = [[ATDefaultMessageCenterTheme alloc] init];
-		dataSource = [[ATMessageCenterDataSource alloc] initWithDelegate:self];
 	}
 	return self;
 }
@@ -89,7 +57,6 @@ typedef enum {
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
-	[dataSource start];
 	[self.tableView reloadData];
 	
 	messageDateFormatter = [[NSDateFormatter alloc] init];
@@ -99,64 +66,11 @@ typedef enum {
 	self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 	self.tableView.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.0];
 	self.tableView.scrollsToTop = YES;
-	firstLoad = YES;
-	[self registerForKeyboardNotifications];
 	
-	if (themeDelegate && [themeDelegate respondsToSelector:@selector(titleViewForMessageCenterViewController:)]) {
-		self.navigationItem.titleView = [themeDelegate titleViewForMessageCenterViewController:self];
-	} else {
-		self.navigationItem.titleView = [defaultTheme titleViewForMessageCenterViewController:self];
-	}
-	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)] autorelease];
-	if ([self.navigationItem.rightBarButtonItem respondsToSelector:@selector(initWithImage:landscapeImagePhone:style:target:action:)]) {
-		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[ATBackend imageNamed:@"at_user_button_image"] landscapeImagePhone:[ATBackend imageNamed:@"at_user_button_image_landscape"] style:UIBarButtonItemStylePlain target:self action:@selector(settingsPressed:)]autorelease];
-	} else {
-		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[ATBackend imageNamed:@"at_user_button_image"] style:UIBarButtonItemStylePlain target:self action:@selector(settingsPressed:)]autorelease];
-	}
-	
-//	self.composerBackgroundView.image = [[ATBackend imageNamed:@"at_inbox_composer_bg"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 0, 29, 19)];
 	[self.tableView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]]];
 	[self.containerView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]]];
-		
-	[self.view addSubview:self.containerView];
-	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
-		inputViewNib = [UINib nibWithNibName:@"ATMessageInputViewV7" bundle:[ATConnect resourceBundle]];
-	} else {
-		inputViewNib = [UINib nibWithNibName:@"ATMessageInputView" bundle:[ATConnect resourceBundle]];
-	}
-	NSArray *views = [inputViewNib instantiateWithOwner:self options:NULL];
-	if ([views count] == 0) {
-		ATLogError(@"Unable to load message input view.");
-	} else {
-		inputView = [views objectAtIndex:0];
-		CGRect inputContainerFrame = self.inputContainerView.frame;
-		[inputContainerView removeFromSuperview];
-		self.inputContainerView = nil;
-		[self.view addSubview:inputView];
-		inputView.frame = inputContainerFrame;
-		inputView.delegate = self;
-		self.inputContainerView = inputView;
-	}
 	
-	if (themeDelegate && [themeDelegate respondsToSelector:@selector(configureSendButton:forMessageCenterViewController:)]) {
-		[themeDelegate configureSendButton:inputView.sendButton forMessageCenterViewController:self];
-	} else {
-		[defaultTheme configureSendButton:inputView.sendButton forMessageCenterViewController:self];
-	}
-	
-	if (themeDelegate && [themeDelegate respondsToSelector:@selector(configureAttachmentsButton:forMessageCenterViewController:)]) {
-		[themeDelegate configureAttachmentsButton:inputView.attachButton forMessageCenterViewController:self];
-	} else {
-		[defaultTheme configureAttachmentsButton:inputView.attachButton forMessageCenterViewController:self];
-	}
-	
-	if (themeDelegate && [themeDelegate respondsToSelector:@selector(backgroundImageForMessageForMessageCenterViewController:)]) {
-		inputView.backgroundImage = [themeDelegate backgroundImageForMessageForMessageCenterViewController:self];
-	} else {
-		inputView.backgroundImage = [defaultTheme backgroundImageForMessageForMessageCenterViewController:self];
-	}
-	
-	inputView.placeholder = ATLocalizedString(@"Type a message…", @"Placeholder for message center text input.");
+	firstLoad = YES;
 	
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
 		[self relayoutSubviews];
@@ -175,15 +89,9 @@ typedef enum {
 - (void)dealloc {
 	[[ATBackend sharedBackend] messageCenterLeftForeground];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[pickedImage release], pickedImage = nil;
 	[messageDateFormatter release];
 	tableView.delegate = nil;
 	[tableView release];
-	[containerView release];
-	[inputContainerView release];
-	[defaultTheme release], defaultTheme = nil;
-	themeDelegate = nil;
-	dismissalDelegate = nil;
 	[super dealloc];
 }
 
@@ -194,22 +102,6 @@ typedef enum {
 	[super viewDidUnload];
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-	[dataSource markAllMessagesAsRead];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-	[super viewDidAppear:animated];
-	
-	[self showSendImageUIIfNecessary];
-	
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidShowNotification object:nil];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
-}
-
 - (void)viewDidDisappear:(BOOL)animated {
 	[super viewDidDisappear:animated];
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidHideNotification object:nil];
@@ -218,65 +110,22 @@ typedef enum {
 	}
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-	// Return YES for supported orientations
-	return YES;
+- (void)scrollToBottom {
+	[self scrollToBottomOfTableView];
 }
 
-- (IBAction)donePressed:(id)sender {
-	if (self.dismissalDelegate) {
-		[self.dismissalDelegate messageCenterWillDismiss:self];
-	}
-	if ([[self navigationController] respondsToSelector:@selector(presentingViewController)]) {
-		[self.navigationController.presentingViewController dismissModalViewControllerAnimated:YES];
-	} else {
-		[self.navigationController dismissModalViewControllerAnimated:YES];
-	}
-}
-
-- (IBAction)settingsPressed:(id)sender {
-	ATPersonDetailsViewController *vc = [[ATPersonDetailsViewController alloc] initWithNibName:@"ATPersonDetailsViewController" bundle:[ATConnect resourceBundle]];
-	[self.navigationController pushViewController:vc animated:YES];
-	[vc release], vc = nil;
-}
-
-- (IBAction)cameraPressed:(id)sender {
-	ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithDelegate:self];
-	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
-	nc.modalPresentationStyle = UIModalPresentationFormSheet;
-	[self.navigationController presentModalViewController:nc animated:YES];
-	[vc release], vc = nil;
-	[nc release], nc = nil;
-}
-
-- (void)showSendImageUIIfNecessary {
-	if (showAttachSheetOnBecomingVisible) {
-		showAttachSheetOnBecomingVisible = NO;
-		if (sendImageActionSheet) {
-			[sendImageActionSheet autorelease], sendImageActionSheet = nil;
-		}
-		sendImageActionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Send Image", @"Send image button title"), nil];
-		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-			[sendImageActionSheet showFromRect:inputView.sendButton.bounds inView:inputView.sendButton animated:YES];
-		} else {
-			[sendImageActionSheet showInView:self.view];
-		}
-	}
-}
-
-#pragma mark Private
 - (void)relayoutSubviews {
 	CGFloat viewHeight = self.view.bounds.size.height;
 	
-	CGRect composerFrame = inputContainerView.frame;
+	CGRect composerFrame = self.inputContainerView.frame;
 	CGRect tableFrame = tableView.frame;
-	CGRect containerFrame = containerView.frame;
+	CGRect containerFrame = self.containerView.frame;
 	
-	composerFrame.origin.y = viewHeight - inputContainerView.frame.size.height;
+	composerFrame.origin.y = viewHeight - self.inputContainerView.frame.size.height;
 	
-	if (!CGRectEqualToRect(CGRectZero, currentKeyboardFrameInView)) {
+	if (!CGRectEqualToRect(CGRectZero, self.currentKeyboardFrameInView)) {
 		CGFloat bottomOffset = viewHeight - composerFrame.size.height;
-		CGFloat keyboardOffset = currentKeyboardFrameInView.origin.y - composerFrame.size.height;
+		CGFloat keyboardOffset = self.currentKeyboardFrameInView.origin.y - composerFrame.size.height;
 		composerFrame.origin.y = MIN(bottomOffset, keyboardOffset);
 	}
 	
@@ -285,23 +134,21 @@ typedef enum {
 	containerFrame.size.height = tableFrame.size.height + composerFrame.size.height;
 	
 	tableView.frame = tableFrame;
-	inputContainerView.frame = composerFrame;
+	self.inputContainerView.frame = composerFrame;
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
 	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 	[self relayoutSubviews];
 	
-	CGRect containerFrame = containerView.frame;
+	CGRect containerFrame = self.containerView.frame;
 	containerFrame.size.height = self.tableView.frame.size.height + self.inputContainerView.frame.size.height;
-	containerView.frame = containerFrame;
-	[containerView setNeedsLayout];
+	self.containerView.frame = containerFrame;
+	[self.containerView setNeedsLayout];
 	[self relayoutSubviews];
 }
 
-- (void)styleTextView {
-}
-
+#pragma mark Private
 
 - (void)scrollToBottomOfTableView {
 	if ([self.tableView numberOfSections] > 0) {
@@ -311,249 +158,6 @@ typedef enum {
 			NSIndexPath *path = [NSIndexPath indexPathForRow:row inSection:0];
 			[self.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 		}
-	}
-}
-
-#pragma mark ATMessageInputViewDelegate
-- (void)messageInputViewDidChange:(ATMessageInputView *)anInputView {
-	if (anInputView.text && ![anInputView.text isEqualToString:@""]) {
-		if (!composingMessage) {
-			composingMessage = (ATTextMessage *)[ATData newEntityNamed:@"ATTextMessage"];
-			[composingMessage setup];
-		}
-	} else {
-		if (composingMessage) {
-			NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
-			[context deleteObject:composingMessage];
-			[composingMessage release], composingMessage = nil;
-		}
-	}
-	[self relayoutSubviews];
-	[self scrollToBottomOfTableView];
-}
-
-- (void)messageInputView:(ATMessageInputView *)anInputView didChangeHeight:(CGFloat)height {
-	[self relayoutSubviews];
-	[self scrollToBottomOfTableView];
-}
-
-- (void)messageInputViewSendPressed:(ATMessageInputView *)anInputView {
-	@synchronized(self) {
-		if (composingMessage == nil) {
-			composingMessage = (ATTextMessage *)[ATData newEntityNamed:@"ATTextMessage"];
-			[composingMessage setup];
-		}
-		composingMessage.body = [inputView text];
-		composingMessage.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
-		composingMessage.sentByUser = @YES;
-		if ([ATBackend sharedBackend].currentCustomData) {
-			[composingMessage addCustomDataFromDictionary:[ATBackend sharedBackend].currentCustomData];
-		}
-		[composingMessage updateClientCreationTime];
-		
-		[[[ATBackend sharedBackend] managedObjectContext] save:nil];
-		
-		[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidSendNotification object:@{ATMessageCenterMessageNonceKey:composingMessage.pendingMessageID}];
-		
-		// Give it a wee bit o' delay.
-		NSString *pendingMessageID = [composingMessage pendingMessageID];
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
-			ATMessageTask *task = [[ATMessageTask alloc] init];
-			task.pendingMessageID = pendingMessageID;
-			[[ATTaskQueue sharedTaskQueue] addTask:task];
-			[[ATTaskQueue sharedTaskQueue] start];
-			[task release], task = nil;
-		});
-		[composingMessage release], composingMessage = nil;
-		inputView.text = @"";
-	}
-	
-}
-
-- (void)messageInputViewAttachPressed:(ATMessageInputView *)anInputView {
-	ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithDelegate:self];
-	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
-	nc.modalPresentationStyle = UIModalPresentationFormSheet;
-	[self.navigationController presentModalViewController:nc animated:YES];
-	[vc release], vc = nil;
-	[nc release], nc = nil;
-}
-
-#pragma mark Keyboard Handling
-- (CGRect)formRectToShow {
-	CGRect result = self.inputContainerView.frame;
-	return result;
-}
-
-- (void)registerForKeyboardNotifications {
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeShown:) name:UIKeyboardWillShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardDidShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];
-}
-
-
-- (void)keyboardWillBeShown:(NSNotification *)aNotification {
-	attachmentsVisible = NO;
-	NSDictionary *info = [aNotification userInfo];
-	CGRect kbFrame = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-	CGRect kbAdjustedFrame = [self.view.window convertRect:kbFrame toView:self.view];
-	NSNumber *duration = [[aNotification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-	NSNumber *curve = [[aNotification userInfo] objectForKey:UIKeyboardAnimationCurveUserInfoKey];
-	
-	if (!animatingTransition) {
-		[UIView animateWithDuration:[duration floatValue] animations:^(void){
-			animatingTransition = YES;
-			[UIView setAnimationCurve:[curve intValue]];
-			currentKeyboardFrameInView = CGRectIntersection(self.view.frame, kbAdjustedFrame);
-			[self relayoutSubviews];
-		} completion:^(BOOL finished) {
-			animatingTransition = NO;
-			[self relayoutSubviews];
-			[self scrollToBottomOfTableView];
-		}];
-	} else {
-		currentKeyboardFrameInView = CGRectIntersection(self.view.frame, kbAdjustedFrame);
-	}
-}
-
-- (void)keyboardWasShown:(NSNotification *)aNotification {
-	[self scrollToBottomOfTableView];
-}
-
-- (void)keyboardWillBeHidden:(NSNotification *)aNotification {
-	NSNumber *duration = [[aNotification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-	NSNumber *curve = [[aNotification userInfo] objectForKey:UIKeyboardAnimationCurveUserInfoKey];
-	
-	if (!animatingTransition) {
-		[UIView animateWithDuration:[duration floatValue] animations:^(void){
-			animatingTransition = YES;
-			[UIView setAnimationCurve:[curve intValue]];
-			currentKeyboardFrameInView = CGRectZero;
-			[self relayoutSubviews];
-		} completion:^(BOOL finished) {
-			animatingTransition = NO;
-			[self relayoutSubviews];
-			[self scrollToBottomOfTableView];
-		}];
-	} else {
-		currentKeyboardFrameInView = CGRectZero;
-	}
-}
-
-#pragma mark ATSimpleImageViewControllerDelegate
-- (void)imageViewController:(ATSimpleImageViewController *)vc pickedImage:(UIImage *)image fromSource:(ATFeedbackImageSource)source {
-	if (pickedImage != image) {
-		[pickedImage release], pickedImage = nil;
-		pickedImage = [image retain];
-		pickedImageSource = source;
-	}
-}
-
-- (void)imageViewControllerWillDismiss:(ATSimpleImageViewController *)vc animated:(BOOL)animated {
-	if (pickedImage) {
-		showAttachSheetOnBecomingVisible = YES;
-	}
-}
-
-- (void)imageViewControllerDidDismiss:(ATSimpleImageViewController *)vc {
-	[self showSendImageUIIfNecessary];
-}
-
-- (ATFeedbackAttachmentOptions)attachmentOptionsForImageViewController:(ATSimpleImageViewController *)vc {
-	return ATFeedbackAllowPhotoAttachment | ATFeedbackAllowTakePhotoAttachment;
-}
-
-- (UIImage *)defaultImageForImageViewController:(ATSimpleImageViewController *)vc {
-	return pickedImage;
-}
-
-#pragma mark UIActionSheetDelegate
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-	if (actionSheet == sendImageActionSheet) {
-		if (buttonIndex == 0) {
-			if (pickedImage) {
-				@synchronized(self) {
-					ATFileMessage *fileMessage = (ATFileMessage *)[ATData newEntityNamed:@"ATFileMessage"];
-					ATFileAttachment *fileAttachment = (ATFileAttachment *)[ATData newEntityNamed:@"ATFileAttachment"];
-					fileMessage.pendingState = @(ATPendingMessageStateSending);
-					fileMessage.sentByUser = @(YES);
-					[fileMessage updateClientCreationTime];
-					fileMessage.fileAttachment = fileAttachment;
-					
-					[fileAttachment setFileData:UIImageJPEGRepresentation(pickedImage, 1.0)];
-					[fileAttachment setMimeType:@"image/jpeg"];
-					
-					switch (pickedImageSource) {
-						case ATFeedbackImageSourceCamera:
-						case ATFeedbackImageSourcePhotoLibrary:
-							[fileAttachment setSource:@(ATFileAttachmentSourceCamera)];
-							break;
-							/* for now we're going to assume camera…
-							[fileAttachment setSource:@(ATFileAttachmentSourcePhotoLibrary)];
-							break;
-							 */
-						case ATFeedbackImageSourceScreenshot:
-							[fileAttachment setSource:@(ATFileAttachmentSourceScreenshot)];
-							break;
-						default:
-							[fileAttachment setSource:@(ATFileAttachmentSourceUnknown)];
-							break;
-					}
-					
-					
-					[[[ATBackend sharedBackend] managedObjectContext] save:nil];
-					
-					// Give it a wee bit o' delay.
-					NSString *pendingMessageID = [fileMessage pendingMessageID];
-					dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
-						ATMessageTask *task = [[ATMessageTask alloc] init];
-						task.pendingMessageID = pendingMessageID;
-						[[ATTaskQueue sharedTaskQueue] addTask:task];
-						[[ATTaskQueue sharedTaskQueue] start];
-						[task release], task = nil;
-					});
-					[fileMessage release], fileMessage = nil;
-					[fileAttachment release], fileAttachment = nil;
-					[pickedImage release], pickedImage = nil;
-				}
-
-			}
-		} else if (buttonIndex == 1) {
-			[pickedImage release], pickedImage = nil;
-		}
-		[sendImageActionSheet autorelease], sendImageActionSheet = nil;
-	} else if (actionSheet == retryMessageActionSheet) {
-		if (buttonIndex == 0) {
-			retryMessage.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
-			[[[ATBackend sharedBackend] managedObjectContext] save:nil];
-			
-			// Give it a wee bit o' delay.
-			NSString *pendingMessageID = [retryMessage pendingMessageID];
-			dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
-				ATMessageTask *task = [[ATMessageTask alloc] init];
-				task.pendingMessageID = pendingMessageID;
-				[[ATTaskQueue sharedTaskQueue] addTask:task];
-				[[ATTaskQueue sharedTaskQueue] start];
-				[task release], task = nil;
-			});
-			
-			[retryMessage release], retryMessage = nil;
-		} else if (buttonIndex == 1) {
-			[ATData deleteManagedObject:retryMessage];
-			[retryMessage release], retryMessage = nil;
-		}
-		[retryMessageActionSheet autorelease], retryMessageActionSheet = nil;
-	}
-}
-
-- (void)actionSheetCancel:(UIActionSheet *)actionSheet {
-	if (actionSheet == sendImageActionSheet) {
-		if (pickedImage) {
-			[pickedImage release], pickedImage = nil;
-		}
-		[sendImageActionSheet autorelease], sendImageActionSheet = nil;
-	} else if (actionSheet == retryMessageActionSheet) {
-		[retryMessageActionSheet autorelease], retryMessageActionSheet = nil;
 	}
 }
 
@@ -572,28 +176,9 @@ typedef enum {
 
 #pragma mark UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	ATAbstractMessage *message = (ATAbstractMessage *)[dataSource.fetchedMessagesController objectAtIndexPath:indexPath];
+	ATAbstractMessage *message = (ATAbstractMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:indexPath];
 	if (message != nil && [message.sentByUser boolValue] && [message.pendingState intValue] == ATPendingMessageStateError) {
-		if (retryMessageActionSheet) {
-			[retryMessageActionSheet autorelease], retryMessageActionSheet = nil;
-		}
-		if (retryMessage) {
-			[retryMessage release], retryMessage = nil;
-		}
-		retryMessage = [message retain];
-		NSArray *errors = [message errorsFromErrorMessage];
-		NSString *errorString = nil;
-		if (errors != nil && [errors count] != 0) {
-			errorString = [NSString stringWithFormat:ATLocalizedString(@"Error Sending Message: %@", @"Title of action sheet for messages with errors. Parameter is the error."), [errors componentsJoinedByString:@"\n"]];
-		} else {
-			errorString = ATLocalizedString(@"Error Sending Message", @"Title of action sheet for messages with errors, but no error details.");
-		}
-		retryMessageActionSheet = [[UIActionSheet alloc] initWithTitle:errorString delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Retry Sending", @"Retry sending message title"), nil];
-		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-			[retryMessageActionSheet showFromRect:inputView.sendButton.bounds inView:inputView.sendButton animated:YES];
-		} else {
-			[retryMessageActionSheet showInView:self.view];
-		}
+		[super showRetryMessageActionSheetWithMessage:message];
 	}
 }
 
@@ -606,7 +191,7 @@ typedef enum {
 
 #pragma mark UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
-	id<NSFetchedResultsSectionInfo> sectionInfo = [[dataSource.fetchedMessagesController sections] objectAtIndex:0];
+	id<NSFetchedResultsSectionInfo> sectionInfo = [[[self dataSource].fetchedMessagesController sections] objectAtIndex:0];
 	return [sectionInfo numberOfObjects];
 }
 
@@ -617,7 +202,7 @@ typedef enum {
 	ATMessageCellType cellType = ATMessageCellTypeUnknown;
 	
 	UITableViewCell *cell = nil;
-	ATAbstractMessage *message = (ATAbstractMessage *)[dataSource.fetchedMessagesController objectAtIndexPath:indexPath];
+	ATAbstractMessage *message = (ATAbstractMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:indexPath];
 	
 	if ([message isKindOfClass:[ATAutomatedMessage class]]) {
 		cellType = ATMessageCellTypeAutomated;
@@ -635,7 +220,7 @@ typedef enum {
 	if (indexPath.row == 0) {
 		showDate = YES;
 	} else {
-		ATAbstractMessage *previousMessage = (ATAbstractMessage *)[dataSource.fetchedMessagesController objectAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
+		ATAbstractMessage *previousMessage = (ATAbstractMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
 		if ([message.creationTime doubleValue] - [previousMessage.creationTime doubleValue] > 60 * 5) {
 			showDate = YES;
 		}

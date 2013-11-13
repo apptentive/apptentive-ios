@@ -32,9 +32,9 @@
 }
 
 - (void)dealloc {
-	delegate = nil;
 	fetchedMessagesController.delegate = nil;
 	[fetchedMessagesController release], fetchedMessagesController = nil;
+	delegate = nil;
 	[super dealloc];
 }
 

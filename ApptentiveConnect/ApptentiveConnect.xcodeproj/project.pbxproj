@@ -154,6 +154,8 @@
 		496F5782174060CE003BF516 /* ATDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 496F5780174060CE003BF516 /* ATDataManager.m */; };
 		49735D621832DF1F00D48DE7 /* ATMessageCenterDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 49735D601832DF1F00D48DE7 /* ATMessageCenterDataSource.h */; };
 		49735D631832DF1F00D48DE7 /* ATMessageCenterDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 49735D611832DF1F00D48DE7 /* ATMessageCenterDataSource.m */; };
+		49735D661832E79400D48DE7 /* ATMessageCenterBaseViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 49735D641832E79400D48DE7 /* ATMessageCenterBaseViewController.h */; };
+		49735D671832E79400D48DE7 /* ATMessageCenterBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49735D651832E79400D48DE7 /* ATMessageCenterBaseViewController.m */; };
 		497A9A0417762512002B6F96 /* ATJSONSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = 497A9A0217762512002B6F96 /* ATJSONSerialization.h */; };
 		497A9A0517762512002B6F96 /* ATJSONSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 497A9A0317762512002B6F96 /* ATJSONSerialization.m */; };
 		497A9A0617762512002B6F96 /* ATJSONSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 497A9A0317762512002B6F96 /* ATJSONSerialization.m */; };
@@ -467,6 +469,8 @@
 		496F5780174060CE003BF516 /* ATDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATDataManager.m; path = source/Persistence/ATDataManager.m; sourceTree = SOURCE_ROOT; };
 		49735D601832DF1F00D48DE7 /* ATMessageCenterDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATMessageCenterDataSource.h; path = "Message Center/ATMessageCenterDataSource.h"; sourceTree = "<group>"; };
 		49735D611832DF1F00D48DE7 /* ATMessageCenterDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATMessageCenterDataSource.m; path = "Message Center/ATMessageCenterDataSource.m"; sourceTree = "<group>"; };
+		49735D641832E79400D48DE7 /* ATMessageCenterBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATMessageCenterBaseViewController.h; path = "Message Center/ATMessageCenterBaseViewController.h"; sourceTree = "<group>"; };
+		49735D651832E79400D48DE7 /* ATMessageCenterBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATMessageCenterBaseViewController.m; path = "Message Center/ATMessageCenterBaseViewController.m"; sourceTree = "<group>"; };
 		497A9A0217762512002B6F96 /* ATJSONSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATJSONSerialization.h; sourceTree = "<group>"; };
 		497A9A0317762512002B6F96 /* ATJSONSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATJSONSerialization.m; sourceTree = "<group>"; };
 		4987FA7E157ACAB500AF2078 /* ATSurveyMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATSurveyMetrics.h; path = Metrics/ATSurveyMetrics.h; sourceTree = "<group>"; };
@@ -972,6 +976,8 @@
 			children = (
 				492F2F0C16E3F9660030E48A /* ATDefaultMessageCenterTitleView.h */,
 				492F2F0D16E3F9660030E48A /* ATDefaultMessageCenterTitleView.m */,
+				49735D641832E79400D48DE7 /* ATMessageCenterBaseViewController.h */,
+				49735D651832E79400D48DE7 /* ATMessageCenterBaseViewController.m */,
 				4999128216165BD400FDA15F /* ATMessageCenterViewController.h */,
 				4999128316165BD400FDA15F /* ATMessageCenterViewController.m */,
 				4999128716165BF200FDA15F /* ATMessageCenterViewController.xib */,
@@ -1330,6 +1336,7 @@
 				493AEB3315990A4D00DFD4C7 /* ATSurveyQuestion.h in Headers */,
 				493AEB3615990A4D00DFD4C7 /* ATLegacySurveyResponse.h in Headers */,
 				493AEB3915990A4D00DFD4C7 /* ATSurveysBackend.h in Headers */,
+				49735D661832E79400D48DE7 /* ATMessageCenterBaseViewController.h in Headers */,
 				493AEB3C15990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.h in Headers */,
 				493AEB3F15990A4D00DFD4C7 /* ATSurveyViewController.h in Headers */,
 				498EFB6B15BA414A00A1043B /* ATSurveyGetSurveysTask.h in Headers */,
@@ -1623,6 +1630,7 @@
 				493AEB4015990A4D00DFD4C7 /* ATSurveyViewController.m in Sources */,
 				498EFB6C15BA414A00A1043B /* ATSurveyGetSurveysTask.m in Sources */,
 				498EFB7115BA48B300A1043B /* ATAppConfigurationUpdateTask.m in Sources */,
+				49735D671832E79400D48DE7 /* ATMessageCenterBaseViewController.m in Sources */,
 				499B56CB15D305880063C23C /* PJSONKit.m in Sources */,
 				4999128616165BD400FDA15F /* ATMessageCenterViewController.m in Sources */,
 				493F8D8D1672DEFD000B5151 /* ATStaticLibraryBootstrap.m in Sources */,

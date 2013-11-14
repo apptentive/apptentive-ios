@@ -87,6 +87,14 @@
 	 */
 }
 
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    [[ATConnect sharedConnection] didReceiveRemoteNotification:userInfo fromViewController:self.navigationController];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
+	[[ATConnect sharedConnection] didReceiveRemoteNotification:userInfo fromViewController:self.navigationController];
+}
+
 - (void)dealloc {
 	[_window release], _window = nil;
 	[_navigationController release], _navigationController = nil;

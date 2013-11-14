@@ -216,6 +216,17 @@ NSString *const ATIntegrationKeyUrbanAirship = @"urban_airship";
 	[[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController withCustomData:allowedCustomMessageData];
 }
 
+- (void)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController {
+	NSDictionary *apptentivePayload = [[userInfo objectForKey:@"aps"] objectForKey:@"apptentive"];
+	if (apptentivePayload) {
+		BOOL presentMessageCenter = [[apptentivePayload objectForKey:@"present_message_center"] boolValue];
+		
+		if (presentMessageCenter) {
+			[self presentMessageCenterFromViewController:viewController];
+		}
+	}
+}
+
 - (void)presentFeedbackDialogFromViewController:(UIViewController *)viewController {
 	NSString *title = ATLocalizedString(@"Give Feedback", @"First feedback screen title.");
 	NSString *body = [NSString stringWithFormat:ATLocalizedString(@"Please let us know how to make %@ better for you!", @"Feedback screen body. Parameter is the app name."), [[ATBackend sharedBackend] appName]];

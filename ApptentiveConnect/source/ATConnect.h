@@ -64,6 +64,12 @@ extern NSString *const ATIntegrationKeyUrbanAirship;
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
 - (NSUInteger)unreadMessageCount;
 
+/*!
+ Forward push notifications from your application delegate to Apptentive.
+ If if the push notification was sent by Apptentive, Message Center will be presented from the view controller.
+ */
+- (void)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController;
+
 /*! 
  Call with a specific code point where interactions should happen.
  

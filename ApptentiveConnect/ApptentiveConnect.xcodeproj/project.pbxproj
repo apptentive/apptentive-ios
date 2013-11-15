@@ -115,6 +115,11 @@
 		4942CC9113C7AD2D009BF758 /* ATAppRatingFlow.h in Headers */ = {isa = PBXBuildFile; fileRef = 4942CC8F13C7AD2D009BF758 /* ATAppRatingFlow.h */; settings = {ATTRIBUTES = (); }; };
 		4942CC9213C7AD2D009BF758 /* ATAppRatingFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4942CC9013C7AD2D009BF758 /* ATAppRatingFlow.m */; };
 		4942CC9313C7AD2D009BF758 /* ATAppRatingFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4942CC9013C7AD2D009BF758 /* ATAppRatingFlow.m */; };
+		49477B751835B529001D37AD /* ATTextMessageUserCellV7.h in Headers */ = {isa = PBXBuildFile; fileRef = 49477B731835B529001D37AD /* ATTextMessageUserCellV7.h */; };
+		49477B761835B529001D37AD /* ATTextMessageUserCellV7.m in Sources */ = {isa = PBXBuildFile; fileRef = 49477B741835B529001D37AD /* ATTextMessageUserCellV7.m */; };
+		49477B781835B541001D37AD /* ATTextMessageUserCellV7.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49477B771835B541001D37AD /* ATTextMessageUserCellV7.xib */; };
+		49477B7B1835C700001D37AD /* ATExpandingTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 49477B791835C700001D37AD /* ATExpandingTextView.h */; };
+		49477B7C1835C700001D37AD /* ATExpandingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 49477B7A1835C700001D37AD /* ATExpandingTextView.m */; };
 		494D1B6F1708E1F900C3060C /* ATMessageInputView.h in Headers */ = {isa = PBXBuildFile; fileRef = 494D1B6D1708E1F900C3060C /* ATMessageInputView.h */; };
 		494D1B701708E1F900C3060C /* ATMessageInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 494D1B6E1708E1F900C3060C /* ATMessageInputView.m */; };
 		494D1B721708E20A00C3060C /* ATMessageInputView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 494D1B711708E20A00C3060C /* ATMessageInputView.xib */; };
@@ -441,6 +446,11 @@
 		493F8D921672E15F000B5151 /* ATWebClient_Private.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATWebClient_Private.m; sourceTree = "<group>"; };
 		4942CC8F13C7AD2D009BF758 /* ATAppRatingFlow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAppRatingFlow.h; sourceTree = "<group>"; };
 		4942CC9013C7AD2D009BF758 /* ATAppRatingFlow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAppRatingFlow.m; sourceTree = "<group>"; };
+		49477B731835B529001D37AD /* ATTextMessageUserCellV7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATTextMessageUserCellV7.h; path = "Message Center/ATTextMessageUserCellV7.h"; sourceTree = "<group>"; };
+		49477B741835B529001D37AD /* ATTextMessageUserCellV7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATTextMessageUserCellV7.m; path = "Message Center/ATTextMessageUserCellV7.m"; sourceTree = "<group>"; };
+		49477B771835B541001D37AD /* ATTextMessageUserCellV7.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ATTextMessageUserCellV7.xib; path = xibs/ATTextMessageUserCellV7.xib; sourceTree = SOURCE_ROOT; };
+		49477B791835C700001D37AD /* ATExpandingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATExpandingTextView.h; path = "Custom Views/ATExpandingTextView.h"; sourceTree = "<group>"; };
+		49477B7A1835C700001D37AD /* ATExpandingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATExpandingTextView.m; path = "Custom Views/ATExpandingTextView.m"; sourceTree = "<group>"; };
 		494D1B6D1708E1F900C3060C /* ATMessageInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageInputView.h; sourceTree = "<group>"; };
 		494D1B6E1708E1F900C3060C /* ATMessageInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageInputView.m; sourceTree = "<group>"; };
 		494D1B711708E20A00C3060C /* ATMessageInputView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATMessageInputView.xib; sourceTree = "<group>"; };
@@ -1013,6 +1023,11 @@
 				4968699318330D5800DA8B95 /* ATAutomatedMessageCellV7.h */,
 				4968699418330D5800DA8B95 /* ATAutomatedMessageCellV7.m */,
 				4968699718330E0700DA8B95 /* ATAutomatedMessageCellV7.xib */,
+				49477B731835B529001D37AD /* ATTextMessageUserCellV7.h */,
+				49477B741835B529001D37AD /* ATTextMessageUserCellV7.m */,
+				49477B771835B541001D37AD /* ATTextMessageUserCellV7.xib */,
+				49477B791835C700001D37AD /* ATExpandingTextView.h */,
+				49477B7A1835C700001D37AD /* ATExpandingTextView.m */,
 				4961A408161BBDBE00E30037 /* Persistence */,
 				49AC178B16C0A09200BE1615 /* Protocols */,
 				4961A3FF161BBD5200E30037 /* Tasks */,
@@ -1394,6 +1409,7 @@
 				492B81E416D5C8AD0031BEF6 /* ATFileMessageCell.h in Headers */,
 				492F2F0E16E3F9660030E48A /* ATDefaultMessageCenterTitleView.h in Headers */,
 				4968699518330D5800DA8B95 /* ATAutomatedMessageCellV7.h in Headers */,
+				49477B751835B529001D37AD /* ATTextMessageUserCellV7.h in Headers */,
 				49881DDD16E839540061D888 /* ATLogViewController.h in Headers */,
 				495E9C1C16EABD8E00AE3B03 /* ATLogger.h in Headers */,
 				492F2F1C16ED597F0030E48A /* ATRecordRequestTask.h in Headers */,
@@ -1401,6 +1417,7 @@
 				494D1B6F1708E1F900C3060C /* ATMessageInputView.h in Headers */,
 				49CB6DEA1718FE4400BC9223 /* ATMessageCenterMetrics.h in Headers */,
 				4960A533171F70530082669B /* ATNetworkImageView.h in Headers */,
+				49477B7B1835C700001D37AD /* ATExpandingTextView.h in Headers */,
 				496F5781174060CE003BF516 /* ATDataManager.h in Headers */,
 				49C24F56174B0EC5002F2338 /* ATAppRatingFlow+Internal.h in Headers */,
 				49C24F5B174BFEB7002F2338 /* ATSurveys_Private.h in Headers */,
@@ -1559,6 +1576,7 @@
 				4967278416B9FE6400C679B8 /* Info.plist in Resources */,
 				492B81E816D5C8E20031BEF6 /* ATFileMessageCell.xib in Resources */,
 				49E847A117E921B800CFA6EC /* ATMessageInputViewV7.xib in Resources */,
+				49477B781835B541001D37AD /* ATTextMessageUserCellV7.xib in Resources */,
 				492F2F0A16E3F77C0030E48A /* ATAutomatedMessageCell.xib in Resources */,
 				494D1B721708E20A00C3060C /* ATMessageInputView.xib in Resources */,
 				49AAC84E175FE88D00F08879 /* ATMessagePanelViewController.xib in Resources */,
@@ -1650,6 +1668,7 @@
 				493AEB3A15990A4D00DFD4C7 /* ATSurveysBackend.m in Sources */,
 				493AEB3D15990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.m in Sources */,
 				493AEB4015990A4D00DFD4C7 /* ATSurveyViewController.m in Sources */,
+				49477B761835B529001D37AD /* ATTextMessageUserCellV7.m in Sources */,
 				498EFB6C15BA414A00A1043B /* ATSurveyGetSurveysTask.m in Sources */,
 				498EFB7115BA48B300A1043B /* ATAppConfigurationUpdateTask.m in Sources */,
 				49735D671832E79400D48DE7 /* ATMessageCenterBaseViewController.m in Sources */,
@@ -1683,6 +1702,7 @@
 				492B81DB16D595A00031BEF6 /* ATFileAttachment.m in Sources */,
 				492B81E516D5C8AD0031BEF6 /* ATFileMessageCell.m in Sources */,
 				492F2F0F16E3F9660030E48A /* ATDefaultMessageCenterTitleView.m in Sources */,
+				49477B7C1835C700001D37AD /* ATExpandingTextView.m in Sources */,
 				49881DDE16E839540061D888 /* ATLogViewController.m in Sources */,
 				495E9C1D16EABD8E00AE3B03 /* ATLogger.m in Sources */,
 				492F2F1D16ED597F0030E48A /* ATRecordRequestTask.m in Sources */,

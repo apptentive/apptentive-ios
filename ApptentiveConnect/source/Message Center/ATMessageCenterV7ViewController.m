@@ -16,6 +16,7 @@
 #import "ATFileMessage.h"
 #import "ATMessageCenterMetrics.h"
 #import "ATTextMessage.h"
+#import "ATTextMessageUserCellV7.h"
 #import "ATUtilities.h"
 #import "UIImage+ATImageEffects.h"
 
@@ -27,6 +28,7 @@ typedef enum {
 } ATMessageCellType;
 
 static NSString *const ATAutomatedMessageCellV7Identifier = @"ATAutomatedMessageCellV7";
+static NSString *const ATTextMessageUserCellV7Identifier = @"ATTextMessageUserCellV7";
 
 @interface ATMessageCenterV7ViewController ()
 - (void)scrollToBottomOfCollectionView;
@@ -40,6 +42,7 @@ static NSString *const ATAutomatedMessageCellV7Identifier = @"ATAutomatedMessage
 	NSMutableArray *fetchedSectionChanges;
 	
 	ATAutomatedMessageCellV7 *sizingAutomatedCell;
+	ATTextMessageUserCellV7 *sizingUserTextCell;
 }
 @synthesize collectionView;
 
@@ -60,9 +63,18 @@ static NSString *const ATAutomatedMessageCellV7Identifier = @"ATAutomatedMessage
 	[self.backgroundImageView setImage:blurred];
 	
 	UINib *automatedCellNib = [UINib nibWithNibName:@"ATAutomatedMessageCellV7" bundle:[ATConnect resourceBundle]];
+	UINib *userTextCellNib = [UINib nibWithNibName:@"ATTextMessageUserCellV7" bundle:[ATConnect resourceBundle]];
 	sizingAutomatedCell = [[[automatedCellNib instantiateWithOwner:self options:nil] objectAtIndex:0] retain];
+	sizingUserTextCell = [[[userTextCellNib instantiateWithOwner:self options:nil] objectAtIndex:0] retain];
 	[self.collectionView registerNib:automatedCellNib forCellWithReuseIdentifier:ATAutomatedMessageCellV7Identifier];
+	[self.collectionView registerNib:userTextCellNib forCellWithReuseIdentifier:ATTextMessageUserCellV7Identifier];
 	[self.collectionView reloadData];
+	
+	// TODO: Not perfect.
+	self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length + self.navigationController.navigationBar.bounds.size.height + 20, 0, 0, 0);
+	UIEdgeInsets inset = self.collectionView.scrollIndicatorInsets;
+	inset.top = self.collectionView.contentInset.top;
+	self.collectionView.scrollIndicatorInsets = inset;
 	
 	messageDateFormatter = [[NSDateFormatter alloc] init];
 	messageDateFormatter.dateStyle = NSDateFormatterMediumStyle;
@@ -143,11 +155,13 @@ static NSString *const ATAutomatedMessageCellV7Identifier = @"ATAutomatedMessage
 	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 //	[self relayoutSubviews];
 	
+	/*
 	CGRect containerFrame = self.containerView.frame;
 	containerFrame.size.height = self.collectionView.frame.size.height + self.inputContainerView.frame.size.height;
 	self.containerView.frame = containerFrame;
-	[self.containerView setNeedsLayout];
+	 */
 	[self relayoutSubviews];
+//	[self.flowLayout invalidateLayout];
 }
 
 #pragma mark Private
@@ -192,6 +206,11 @@ static NSString *const ATAutomatedMessageCellV7Identifier = @"ATAutomatedMessage
 	cell.message = (ATAutomatedMessage *)message;
 }
 
+- (void)configureUserTextCell:(ATTextMessageUserCellV7 *)cell forIndexPath:(NSIndexPath *)indexPath {
+	ATAbstractMessage *message = (ATAbstractMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:indexPath];
+	cell.message = (ATTextMessage *)message;
+}
+
 #pragma mark UICollectionViewDelegate
 
 #pragma mark UICollectionViewDataSource
@@ -214,6 +233,10 @@ static NSString *const ATAutomatedMessageCellV7Identifier = @"ATAutomatedMessage
 		ATAutomatedMessageCellV7 *c = [self.collectionView dequeueReusableCellWithReuseIdentifier:ATAutomatedMessageCellV7Identifier forIndexPath:indexPath];
 		[self configureAutomatedCell:c forIndexPath:indexPath];
 		cell = c;
+	} else if (cellType == ATMessageCellTypeText && [message.sentByUser boolValue]) {
+		ATTextMessageUserCellV7 *c = [self.collectionView dequeueReusableCellWithReuseIdentifier:ATTextMessageUserCellV7Identifier forIndexPath:indexPath];
+		[self configureUserTextCell:c forIndexPath:indexPath];
+		cell = c;
 	} else {
 		cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:ATAutomatedMessageCellV7Identifier forIndexPath:indexPath];
 	}
@@ -232,11 +255,25 @@ static NSString *const ATAutomatedMessageCellV7Identifier = @"ATAutomatedMessage
 		cell = sizingAutomatedCell;
 		cell.frame = CGRectMake(0, 0, self.collectionView.bounds.size.width, 200);
 		
-//		NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:cell attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:self.collectionView.bounds.size.width];
-//		[cell addConstraint:constraint];
-		CGSize s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
-//		[cell removeConstraint:constraint];
-		s.width = self.collectionView.bounds.size.width;
+		CGSize s;
+		if (NO) {
+			s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+			s.width = self.collectionView.bounds.size.width;
+		} else {
+			s = CGSizeMake(self.collectionView.bounds.size.width, [sizingAutomatedCell cellHeightForWidth:self.collectionView.bounds.size.width]);
+		}
+		
+		return s;
+	} else if (cellType == ATMessageCellTypeText && message.sentByUser) {
+		[self configureUserTextCell:sizingUserTextCell forIndexPath:indexPath];
+		cell = sizingUserTextCell;
+		CGSize s;
+		if (NO) {
+			s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+			s.width = self.collectionView.bounds.size.width;
+		} else {
+			s = CGSizeMake(self.collectionView.bounds.size.width, [sizingUserTextCell cellHeightForWidth:self.collectionView.bounds.size.width]);
+		}
 		return s;
 	} else {
 		cell = sizingAutomatedCell;

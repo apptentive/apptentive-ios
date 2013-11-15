@@ -72,4 +72,16 @@
 		[self setup];
 	}
 }
+
+- (CGFloat)cellHeightForWidth:(CGFloat)width {
+	static CGFloat labelDiff = -1;
+	if (labelDiff == -1) {
+		CGRect labelRectAbsolute = [self convertRect:self.messageLabel.frame fromView:self.messageLabel.superview];
+		CGFloat labelWidthDiff = labelRectAbsolute.origin.x + (self.bounds.size.width - CGRectGetMaxX(labelRectAbsolute));
+		labelDiff = labelWidthDiff;
+	}
+	CGSize labelSize = [self.messageLabel sizeThatFits:CGSizeMake(width - labelDiff, CGFLOAT_MAX)];
+	
+	return MAX(labelSize.height + 30, 45);
+}
 @end

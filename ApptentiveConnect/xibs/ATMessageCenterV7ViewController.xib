@@ -10,6 +10,7 @@
                 <outlet property="backgroundImageView" destination="ReE-xW-ZeP" id="8W6-Oy-gVv"/>
                 <outlet property="collectionView" destination="0cF-aT-BY2" id="4KL-QJ-bLF"/>
                 <outlet property="containerView" destination="WbQ-9j-jtc" id="H0g-lM-Lzb"/>
+                <outlet property="flowLayout" destination="jTO-qm-1fj" id="sqG-Kp-kMt"/>
                 <outlet property="inputContainerView" destination="Cjb-HA-Ke8" id="LdL-gB-XSb"/>
                 <outlet property="view" destination="1" id="d0K-Vr-WDS"/>
             </connections>

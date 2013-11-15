@@ -7,32 +7,46 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ATAutomatedMessageCellV7" id="HjA-aD-eFD" customClass="ATAutomatedMessageCellV7">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="infinite" reuseIdentifier="ATAutomatedMessageCellV7" id="HjA-aD-eFD" customClass="ATAutomatedMessageCellV7">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="55"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="55"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pz3-Bg-0ac">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="HY2-vg-cwa">
+                        <rect key="frame" x="14" y="10" width="25" height="25"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="320" id="k2I-v4-1nM"/>
-                            <constraint firstAttribute="height" constant="50" id="rfP-3k-gN9"/>
+                            <constraint firstAttribute="height" constant="25" id="NzJ-An-sWt"/>
+                            <constraint firstAttribute="width" constant="25" id="deZ-lb-rt5"/>
                         </constraints>
-                    </view>
+                    </imageView>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="256" translatesAutoresizingMaskIntoConstraints="NO" id="hQd-S4-wWW">
+                        <rect key="frame" x="44" y="10" width="256" height="21"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
-            <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.70000000000000007" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="pz3-Bg-0ac" secondAttribute="trailing" id="Dni-Qo-crk"/>
-                <constraint firstItem="pz3-Bg-0ac" firstAttribute="top" secondItem="HjA-aD-eFD" secondAttribute="top" id="VQA-P7-Fd9"/>
-                <constraint firstAttribute="bottom" secondItem="pz3-Bg-0ac" secondAttribute="bottom" id="aYj-iv-XFc"/>
-                <constraint firstItem="pz3-Bg-0ac" firstAttribute="leading" secondItem="HjA-aD-eFD" secondAttribute="leading" id="z0m-7H-hKq"/>
+                <constraint firstItem="hQd-S4-wWW" firstAttribute="top" secondItem="HjA-aD-eFD" secondAttribute="top" constant="10" id="78U-dV-z5q"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="HY2-vg-cwa" secondAttribute="bottom" constant="20" id="as3-c4-DeI"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="hQd-S4-wWW" secondAttribute="bottom" constant="20" id="fpR-hX-YOd"/>
+                <constraint firstItem="HY2-vg-cwa" firstAttribute="leading" secondItem="HjA-aD-eFD" secondAttribute="leading" constant="14" id="nwE-QH-HUY"/>
+                <constraint firstItem="hQd-S4-wWW" firstAttribute="leading" secondItem="HY2-vg-cwa" secondAttribute="trailing" constant="5" id="peE-i4-kYZ"/>
+                <constraint firstItem="HY2-vg-cwa" firstAttribute="top" secondItem="HjA-aD-eFD" secondAttribute="top" constant="10" id="pzJ-0d-5yL"/>
+                <constraint firstAttribute="trailing" secondItem="hQd-S4-wWW" secondAttribute="trailing" constant="20" id="sGh-u7-Ukt"/>
             </constraints>
+            <size key="customSize" width="320" height="9"/>
+            <connections>
+                <outlet property="appIcon" destination="HY2-vg-cwa" id="46L-7Q-3ED"/>
+                <outlet property="messageLabel" destination="hQd-S4-wWW" id="haT-IF-Ymd"/>
+            </connections>
         </collectionViewCell>
     </objects>
 </document>

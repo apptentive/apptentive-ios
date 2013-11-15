@@ -8,12 +8,25 @@
 
 #import "ATMessageCenterV7ViewController.h"
 
+#import "ATAutomatedMessage.h"
+#import "ATAutomatedMessageCellV7.h"
 #import "ATBackend.h"
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
+#import "ATFileMessage.h"
 #import "ATMessageCenterMetrics.h"
+#import "ATTextMessage.h"
 #import "ATUtilities.h"
 #import "UIImage+ATImageEffects.h"
+
+typedef enum {
+	ATMessageCellTypeUnknown,
+	ATMessageCellTypeAutomated,
+	ATMessageCellTypeText,
+	ATMessageCellTypeFile
+} ATMessageCellType;
+
+static NSString *const ATAutomatedMessageCellV7Identifier = @"ATAutomatedMessageCellV7";
 
 @interface ATMessageCenterV7ViewController ()
 - (void)scrollToBottomOfCollectionView;
@@ -25,6 +38,8 @@
 	
 	NSMutableArray *fetchedObjectChanges;
 	NSMutableArray *fetchedSectionChanges;
+	
+	ATAutomatedMessageCellV7 *sizingAutomatedCell;
 }
 @synthesize collectionView;
 
@@ -45,7 +60,8 @@
 	[self.backgroundImageView setImage:blurred];
 	
 	UINib *automatedCellNib = [UINib nibWithNibName:@"ATAutomatedMessageCellV7" bundle:[ATConnect resourceBundle]];
-	[self.collectionView registerNib:automatedCellNib forCellWithReuseIdentifier:@"ATAutomatedMessageCellV7"];
+	sizingAutomatedCell = [[[automatedCellNib instantiateWithOwner:self options:nil] objectAtIndex:0] retain];
+	[self.collectionView registerNib:automatedCellNib forCellWithReuseIdentifier:ATAutomatedMessageCellV7Identifier];
 	[self.collectionView reloadData];
 	
 	messageDateFormatter = [[NSDateFormatter alloc] init];
@@ -73,6 +89,8 @@
 	[fetchedObjectChanges release], fetchedObjectChanges = nil;
 	[fetchedSectionChanges release], fetchedSectionChanges = nil;
 	[_backgroundImageView release];
+	[sizingAutomatedCell release], sizingAutomatedCell = nil;
+	[_flowLayout release];
 	[super dealloc];
 }
 
@@ -81,6 +99,7 @@
 	[self setContainerView:nil];
 	[self setInputContainerView:nil];
 	[self setBackgroundImageView:nil];
+	[self setFlowLayout:nil];
 	[super viewDidUnload];
 }
 
@@ -117,11 +136,12 @@
 	
 	collectionView.frame = collectionFrame;
 	self.inputContainerView.frame = composerFrame;
+	[self.flowLayout invalidateLayout];
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
 	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-	[self relayoutSubviews];
+//	[self relayoutSubviews];
 	
 	CGRect containerFrame = self.containerView.frame;
 	containerFrame.size.height = self.collectionView.frame.size.height + self.inputContainerView.frame.size.height;
@@ -153,6 +173,25 @@
 	return blurred;
 }
 
+- (ATMessageCellType)cellTypeForMessage:(ATAbstractMessage *)message {
+	ATMessageCellType cellType = ATMessageCellTypeUnknown;
+	if ([message isKindOfClass:[ATAutomatedMessage class]]) {
+		cellType = ATMessageCellTypeAutomated;
+	} else if ([message isKindOfClass:[ATTextMessage class]]) {
+		cellType = ATMessageCellTypeText;
+	} else if ([message isKindOfClass:[ATFileMessage class]]) {
+		cellType = ATMessageCellTypeFile;
+	} else {
+		NSAssert(NO, @"Unknown cell type");
+	}
+	return cellType;
+}
+
+- (void)configureAutomatedCell:(ATAutomatedMessageCellV7 *)cell forIndexPath:(NSIndexPath *)indexPath {
+	ATAbstractMessage *message = (ATAbstractMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:indexPath];
+	cell.message = (ATAutomatedMessage *)message;
+}
+
 #pragma mark UICollectionViewDelegate
 
 #pragma mark UICollectionViewDataSource
@@ -167,9 +206,43 @@
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)aCollectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-	return [self.collectionView dequeueReusableCellWithReuseIdentifier:@"ATAutomatedMessageCellV7" forIndexPath:indexPath];
+	UICollectionViewCell *cell = nil;
+	ATAbstractMessage *message = (ATAbstractMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:indexPath];
+	ATMessageCellType cellType = [self cellTypeForMessage:message];
+	
+	if (cellType == ATMessageCellTypeAutomated) {
+		ATAutomatedMessageCellV7 *c = [self.collectionView dequeueReusableCellWithReuseIdentifier:ATAutomatedMessageCellV7Identifier forIndexPath:indexPath];
+		[self configureAutomatedCell:c forIndexPath:indexPath];
+		cell = c;
+	} else {
+		cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:ATAutomatedMessageCellV7Identifier forIndexPath:indexPath];
+	}
+	
+	return cell;
 }
 
+#pragma mark UICollectionViewDelegateFlowLayout
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+	UICollectionViewCell *cell = nil;
+	ATAbstractMessage *message = (ATAbstractMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:indexPath];
+	ATMessageCellType cellType = [self cellTypeForMessage:message];
+	
+	if (cellType == ATMessageCellTypeAutomated) {
+		[self configureAutomatedCell:sizingAutomatedCell forIndexPath:indexPath];
+		cell = sizingAutomatedCell;
+		cell.frame = CGRectMake(0, 0, self.collectionView.bounds.size.width, 200);
+		
+//		NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:cell attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:self.collectionView.bounds.size.width];
+//		[cell addConstraint:constraint];
+		CGSize s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+//		[cell removeConstraint:constraint];
+		s.width = self.collectionView.bounds.size.width;
+		return s;
+	} else {
+		cell = sizingAutomatedCell;
+		return CGSizeMake(self.collectionView.bounds.size.width, 40);
+	}
+}
 
 #pragma mark NSFetchedResultsControllerDelegate
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {

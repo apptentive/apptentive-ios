@@ -266,9 +266,9 @@ static NSString *const ATTextMessageUserCellV7Identifier = @"ATTextMessageUserCe
 		return s;
 	} else if (cellType == ATMessageCellTypeText && message.sentByUser) {
 		[self configureUserTextCell:sizingUserTextCell forIndexPath:indexPath];
-		cell = sizingUserTextCell;
 		CGSize s;
 		if (NO) {
+			cell = sizingUserTextCell;
 			s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 			s.width = self.collectionView.bounds.size.width;
 		} else {
@@ -276,7 +276,6 @@ static NSString *const ATTextMessageUserCellV7Identifier = @"ATTextMessageUserCe
 		}
 		return s;
 	} else {
-		cell = sizingAutomatedCell;
 		return CGSizeMake(self.collectionView.bounds.size.width, 40);
 	}
 }

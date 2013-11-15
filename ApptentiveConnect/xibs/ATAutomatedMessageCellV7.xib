@@ -42,7 +42,7 @@
                 <constraint firstItem="HY2-vg-cwa" firstAttribute="top" secondItem="HjA-aD-eFD" secondAttribute="top" constant="10" id="pzJ-0d-5yL"/>
                 <constraint firstAttribute="trailing" secondItem="hQd-S4-wWW" secondAttribute="trailing" constant="20" id="sGh-u7-Ukt"/>
             </constraints>
-            <size key="customSize" width="320" height="9"/>
+            <size key="customSize" width="320" height="-21"/>
             <connections>
                 <outlet property="appIcon" destination="HY2-vg-cwa" id="46L-7Q-3ED"/>
                 <outlet property="messageLabel" destination="hQd-S4-wWW" id="haT-IF-Ymd"/>

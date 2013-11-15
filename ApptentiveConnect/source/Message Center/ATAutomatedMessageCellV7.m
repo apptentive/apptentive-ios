@@ -82,6 +82,6 @@
 	}
 	CGSize labelSize = [self.messageLabel sizeThatFits:CGSizeMake(width - labelDiff, CGFLOAT_MAX)];
 	
-	return MAX(labelSize.height + 30, 45);
+	return MAX(labelSize.height + 30, 55);
 }
 @end

@@ -68,6 +68,6 @@
 		textDiff = textWidthDiff;
 	}
 	CGSize textViewSize = [self.textView sizeGivenWidth:width - textDiff];
-	return MAX(textViewSize.height + 12, 58);
+	return MAX(textViewSize.height + 12, 63);
 }
 @end

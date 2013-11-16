@@ -43,6 +43,9 @@ static NSString *const ATTextMessageUserCellV7Identifier = @"ATTextMessageUserCe
 	
 	ATAutomatedMessageCellV7 *sizingAutomatedCell;
 	ATTextMessageUserCellV7 *sizingUserTextCell;
+	
+	CGFloat sizingAutomatedCellHorizontalPadding;
+	CGFloat sizingUserTextCellHorizontalPadding;
 }
 @synthesize collectionView;
 
@@ -66,6 +69,10 @@ static NSString *const ATTextMessageUserCellV7Identifier = @"ATTextMessageUserCe
 	UINib *userTextCellNib = [UINib nibWithNibName:@"ATTextMessageUserCellV7" bundle:[ATConnect resourceBundle]];
 	sizingAutomatedCell = [[[automatedCellNib instantiateWithOwner:self options:nil] objectAtIndex:0] retain];
 	sizingUserTextCell = [[[userTextCellNib instantiateWithOwner:self options:nil] objectAtIndex:0] retain];
+	
+	sizingAutomatedCellHorizontalPadding = CGRectGetWidth(sizingAutomatedCell.bounds) - CGRectGetWidth(sizingAutomatedCell.messageLabel.bounds);
+	sizingUserTextCellHorizontalPadding = CGRectGetWidth(sizingUserTextCell.bounds) - CGRectGetWidth(sizingUserTextCell.messageLabel.bounds);
+	
 	[self.collectionView registerNib:automatedCellNib forCellWithReuseIdentifier:ATAutomatedMessageCellV7Identifier];
 	[self.collectionView registerNib:userTextCellNib forCellWithReuseIdentifier:ATTextMessageUserCellV7Identifier];
 	[self.collectionView reloadData];
@@ -151,17 +158,13 @@ static NSString *const ATTextMessageUserCellV7Identifier = @"ATTextMessageUserCe
 	[self.flowLayout invalidateLayout];
 }
 
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+	[self relayoutSubviews];
+}
+
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
 	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-//	[self relayoutSubviews];
-	
-	/*
-	CGRect containerFrame = self.containerView.frame;
-	containerFrame.size.height = self.collectionView.frame.size.height + self.inputContainerView.frame.size.height;
-	self.containerView.frame = containerFrame;
-	 */
-	[self relayoutSubviews];
-//	[self.flowLayout invalidateLayout];
 }
 
 #pragma mark Private
@@ -253,27 +256,19 @@ static NSString *const ATTextMessageUserCellV7Identifier = @"ATTextMessageUserCe
 	if (cellType == ATMessageCellTypeAutomated) {
 		[self configureAutomatedCell:sizingAutomatedCell forIndexPath:indexPath];
 		cell = sizingAutomatedCell;
-		cell.frame = CGRectMake(0, 0, self.collectionView.bounds.size.width, 200);
+		sizingAutomatedCell.messageLabel.preferredMaxLayoutWidth = self.collectionView.bounds.size.width - sizingAutomatedCellHorizontalPadding;
 		
-		CGSize s;
-		if (NO) {
-			s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
-			s.width = self.collectionView.bounds.size.width;
-		} else {
-			s = CGSizeMake(self.collectionView.bounds.size.width, [sizingAutomatedCell cellHeightForWidth:self.collectionView.bounds.size.width]);
-		}
+		CGSize s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+		s.width = self.collectionView.bounds.size.width;
 		
 		return s;
 	} else if (cellType == ATMessageCellTypeText && message.sentByUser) {
+		sizingUserTextCell.messageLabel.preferredMaxLayoutWidth = self.collectionView.bounds.size.width - sizingUserTextCellHorizontalPadding;
+		
 		[self configureUserTextCell:sizingUserTextCell forIndexPath:indexPath];
-		CGSize s;
-		if (NO) {
-			cell = sizingUserTextCell;
-			s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
-			s.width = self.collectionView.bounds.size.width;
-		} else {
-			s = CGSizeMake(self.collectionView.bounds.size.width, [sizingUserTextCell cellHeightForWidth:self.collectionView.bounds.size.width]);
-		}
+		cell = sizingUserTextCell;
+		CGSize s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+		s.width = self.collectionView.bounds.size.width;
 		return s;
 	} else {
 		return CGSizeMake(self.collectionView.bounds.size.width, 40);

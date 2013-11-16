@@ -19,7 +19,7 @@
 		NSAttributedString *body = [[[NSAttributedString alloc] initWithString:self.message.body attributes:attrs] autorelease];
 		[s appendAttributedString:body];
 	}
-	self.textView.attributedText = s;
+	self.messageLabel.attributedText = s;
 	[s release], s = nil;
 	
 	self.textContainerView.backgroundColor = [UIColor colorWithWhite:1 alpha:0.7];
@@ -29,6 +29,13 @@
 	self.userIconView.imageURL = [NSURL URLWithString:self.message.sender.profilePhotoURL];
 	self.userIconView.layer.cornerRadius = self.userIconView.bounds.size.width*0.5;
 	self.userIconView.layer.masksToBounds = YES;
+	
+	self.messageLabel.delegate = self;
+	UIDataDetectorTypes types = UIDataDetectorTypeLink;
+	if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel://"]]) {
+		types |= UIDataDetectorTypePhoneNumber;
+	}
+	self.messageLabel.dataDetectorTypes = types;
 }
 
 - (id)initWithFrame:(CGRect)frame {
@@ -46,7 +53,7 @@
 
 - (void)dealloc {
 	[_textContainerView release];
-	[_textView release];
+	[_messageLabel release];
 	[_userIconView release];
 	[super dealloc];
 }
@@ -60,14 +67,19 @@
 	}
 }
 
-- (CGFloat)cellHeightForWidth:(CGFloat)width {
-	static CGFloat textDiff = -1;
-	if (textDiff == -1) {
-		CGRect textRectAbsolute = [self convertRect:self.textView.frame fromView:self.textView.superview];
-		CGFloat textWidthDiff = textRectAbsolute.origin.x + (self.bounds.size.width - CGRectGetMaxX(textRectAbsolute));
-		textDiff = textWidthDiff;
+#pragma mark TTTAttributedLabelDelegate
+- (void)attributedLabel:(ATTTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url {
+	if ([[UIApplication sharedApplication] canOpenURL:url]) {
+		[[UIApplication sharedApplication] openURL:url];
 	}
-	CGSize textViewSize = [self.textView sizeGivenWidth:width - textDiff];
-	return MAX(textViewSize.height + 12, 63);
+}
+
+- (void)attributedLabel:(TTTATTRIBUTEDLABEL_PREPEND(TTTAttributedLabel) *)label
+didSelectLinkWithPhoneNumber:(NSString *)phoneNumber {
+	NSString *phoneString = [NSString stringWithFormat:@"tel:%@", phoneNumber];
+	NSURL *url = [NSURL URLWithString:phoneString];
+	if ([[UIApplication sharedApplication] canOpenURL:url]) {
+		[[UIApplication sharedApplication] openURL:url];
+	}
 }
 @end

@@ -18,23 +18,21 @@
                         <rect key="frame" x="15" y="4" width="273" height="53"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="infinite" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U9E-Fw-P57" customClass="ATExpandingTextView">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="269" translatesAutoresizingMaskIntoConstraints="NO" id="6Dr-cr-mAu" customClass="ATTTTAttributedLabel">
                                 <rect key="frame" x="2" y="2" width="269" height="49"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="U9E-Fw-P57" firstAttribute="leading" secondItem="J5f-9B-Qxf" secondAttribute="leading" constant="2" id="39P-4V-hna"/>
-                            <constraint firstItem="U9E-Fw-P57" firstAttribute="top" secondItem="J5f-9B-Qxf" secondAttribute="top" constant="2" id="9Zd-Xz-5Gm"/>
+                            <constraint firstAttribute="bottom" secondItem="6Dr-cr-mAu" secondAttribute="bottom" constant="2" id="1dF-kZ-d1i"/>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="E1n-nW-8Vb"/>
-                            <constraint firstAttribute="trailing" secondItem="U9E-Fw-P57" secondAttribute="trailing" constant="2" id="ooT-GB-ZHk"/>
-                            <constraint firstAttribute="bottom" secondItem="U9E-Fw-P57" secondAttribute="bottom" constant="2" id="wj2-dv-OGY"/>
+                            <constraint firstItem="6Dr-cr-mAu" firstAttribute="top" secondItem="J5f-9B-Qxf" secondAttribute="top" constant="2" id="Njk-EL-NWF"/>
+                            <constraint firstAttribute="trailing" secondItem="6Dr-cr-mAu" secondAttribute="trailing" constant="2" id="btL-ID-Z68"/>
+                            <constraint firstItem="6Dr-cr-mAu" firstAttribute="leading" secondItem="J5f-9B-Qxf" secondAttribute="leading" constant="2" id="riA-Ib-rUJ"/>
                         </constraints>
                     </view>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Uin-DY-X3o" customClass="ATNetworkImageView">
@@ -58,8 +56,8 @@
             </constraints>
             <size key="customSize" width="320" height="38"/>
             <connections>
+                <outlet property="messageLabel" destination="6Dr-cr-mAu" id="v5I-s0-Ufa"/>
                 <outlet property="textContainerView" destination="J5f-9B-Qxf" id="FCg-3L-ldN"/>
-                <outlet property="textView" destination="U9E-Fw-P57" id="R7D-za-TDt"/>
                 <outlet property="userIconView" destination="Uin-DY-X3o" id="9yQ-gR-Fzs"/>
             </connections>
         </collectionViewCell>

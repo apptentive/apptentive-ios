@@ -37,7 +37,6 @@
 		CGFloat width = CGRectGetWidth(insetRect);
 		CGRect textSize = [self.attributedText boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
 		
-		CGFloat insetHeight = self.textContainerInset.top + self.textContainerInset.bottom + self.contentInset.top + self.contentInset.bottom;
 		CGFloat verticalPadding = rect.size.height - insetRect.size.height;
 		CGFloat actualHeight = ceil(CGRectGetHeight(textSize) + verticalPadding);
 		

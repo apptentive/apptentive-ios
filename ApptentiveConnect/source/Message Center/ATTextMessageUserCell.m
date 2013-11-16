@@ -103,7 +103,7 @@
 			cellHeight += self.dateLabel.bounds.size.height;
 		}
 		cellHeight += self.usernameLabel.bounds.size.height;
-		CGFloat textWidth = width - 101;
+		CGFloat textWidth = width - 115;
 		CGFloat heightPadding = 19 + 6;
 		CGSize textSize = [self.messageText sizeThatFits:CGSizeMake(textWidth, 2000)];
 		cellHeight += MAX(60, textSize.height + heightPadding);

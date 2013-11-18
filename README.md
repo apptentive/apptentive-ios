@@ -239,6 +239,20 @@ increment the number of significant events by calling:
 You can modify the parameters which determine when the ratings dialog will be
 shown in your app settings on [Apptentive](https://apptentive.com).
 
+#### Unread Messages
+
+Use `unreadMessageCount` to determine when the user has unread messages:
+
+``` objective-c
+NSUInteger unreadMessageCount = [[ATConnect sharedConnection] unreadMessageCount];
+```
+
+You can also listen for our `ATMessageCenterUnreadCountChangedNotification` notification to be alerted immediately when a new message arrives:
+
+``` objective-c
+[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unreadMessageCountChanged:) name:ATMessageCenterUnreadCountChangedNotification object:nil];
+```
+
 #### Upgrade Messages
 
 In iOS 7, users are upgraded automatically when a new version of your app is released. Unfortunately, this means they will rarely (if ever) see your App Store release notes!

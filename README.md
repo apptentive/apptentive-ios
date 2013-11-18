@@ -334,6 +334,27 @@ Custom data should be of type `NSString`, `NSNumber`, `NSDate`, or `NSNull`.
 
 When Message Center is presented with custom data, that custom data will be attached to the first message in the Message Center session.
 
+#### Push Notifications
+
+Apptentive can integrate with your existing [Urban Airship](http://urbanairship.com/) account to offer push notifications when new Apptentive messages are available.
+
+First, add your Urban Airship configuration as an integration:  
+
+``` objective-c
+[[ATConnect sharedConnection] addIntegration:ATIntegrationKeyUrbanAirship withConfiguration:@{@"token": @"YOUR_URBAN_AIRSHIP_TOKEN"}];
+```
+
+When push notifications arrive, pass them to Apptentive:  
+
+``` objective-c
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
+    // Pass the push Notificaton userInfo dictionary to Apptentive
+    [[ATConnect sharedConnection] didReceiveRemoteNotification:userInfo fromViewController:viewController];
+}
+```
+
+If the push notification was sent by Apptentive, we will then present Message Center from the `viewController` parameter.
+
 #### Metrics
 
 Metrics provide insight into exactly where people begin and end interactions

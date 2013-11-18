@@ -312,6 +312,20 @@ the `ATSurveyNewSurveyAvailableNotification` notification will be sent.
 }
 ```
 
+#### Custom Data
+
+Custom data can be attached to a device, Apptentive user, or individual message. This data will then be displayed for reference alongside the conversation on the Apptentive website.
+
+Custom data should be of type `NSString`, `NSNumber`, `NSDate`, or `NSNull`.
+
+``` objective-c
+- (void)addCustomPersonData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
+- (void)addCustomDeviceData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
+- (void)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
+```
+
+When Message Center is presented with custom data, that custom data will be attached to the first message in the Message Center session.
+
 #### Metrics
 
 Metrics provide insight into exactly where people begin and end interactions

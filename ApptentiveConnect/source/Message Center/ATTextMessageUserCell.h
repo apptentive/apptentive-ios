@@ -27,5 +27,6 @@ typedef enum {
 @property (retain, nonatomic) IBOutlet UIImageView *composingBubble;
 @property (nonatomic, assign, getter = isComposing) BOOL composing;
 @property (nonatomic, assign, getter = shouldShowDateLabel) BOOL showDateLabel;
+@property (nonatomic, assign, getter = isTooLong) BOOL tooLong;
 @property (nonatomic, assign) ATTextMessageCellType cellType;
 @end

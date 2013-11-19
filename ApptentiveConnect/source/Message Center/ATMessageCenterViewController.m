@@ -30,6 +30,7 @@
 #import "ATPersonUpdater.h"
 #import "ATTaskQueue.h"
 #import "ATTextMessage.h"
+#import "ATLongMessageViewController.h"
 #import "ATUtilities.h"
 
 typedef enum {
@@ -617,7 +618,7 @@ typedef enum {
 }
 
 #pragma mark UITableViewDelegate
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	ATAbstractMessage *message = (ATAbstractMessage *)[self.fetchedMessagesController objectAtIndexPath:indexPath];
 	if (message != nil && [message.sentByUser boolValue] && [message.pendingState intValue] == ATPendingMessageStateError) {
 		if (retryMessageActionSheet) {
@@ -639,6 +640,18 @@ typedef enum {
 			[retryMessageActionSheet showFromRect:inputView.sendButton.bounds inView:inputView.sendButton animated:YES];
 		} else {
 			[retryMessageActionSheet showInView:self.view];
+		}
+	} else if (message != nil) {
+		UITableViewCell *cell = [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
+		if ([cell isKindOfClass:[ATTextMessageUserCell class]] && [message isKindOfClass:[ATTextMessage class]]) {
+			ATTextMessageUserCell *textCell = (ATTextMessageUserCell *)cell;
+			ATTextMessage *textMessage = (ATTextMessage *)message;
+			if ([textCell isTooLong]) {
+				ATLongMessageViewController *vc = [[ATLongMessageViewController alloc] initWithNibName:@"ATLongMessageViewController" bundle:[ATConnect resourceBundle]];
+				[vc setText:textMessage.body];
+				[self.navigationController pushViewController:vc animated:YES];
+				[vc release], vc = nil;
+			}
 		}
 	}
 }
@@ -815,7 +828,25 @@ typedef enum {
 		} else {
 			textCell.showDateLabel = NO;
 		}
+		textCell.tooLong = NO;
 		textCell.backgroundColor = [UIColor clearColor];
+		
+		if (!textCell.composing) {
+			CGFloat height = [textCell cellHeightForWidth:aTableView.bounds.size.width];
+			if (height > 1024) {
+				textCell.tooLong = YES;
+				NSString *fullText = NSLocalizedString(@"Message is very long. Tap to read.", @"Message bubble text for very long messages.");
+				[textCell.messageText setText:fullText afterInheritingLabelAttributesAndConfiguringWithBlock:^ NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
+					UIColor *blueColor = [UIColor blueColor];
+					NSRange range = NSMakeRange(0, [fullText length]);
+					[mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)blueColor.CGColor range:range];
+					if ([ATUtilities osVersionGreaterThanOrEqualTo:@"6"]) {
+						[mutableAttributedString addAttribute:(NSString *)NSUnderlineStyleAttributeName value:[NSNumber numberWithInt:NSUnderlineStyleSingle] range:range];
+					}
+					return mutableAttributedString;
+				}];
+			}
+		}
 		
 		cell = textCell;
 	} else if (cellType == ATMessageCellTypeAutomated) {

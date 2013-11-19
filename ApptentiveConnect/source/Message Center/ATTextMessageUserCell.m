@@ -10,11 +10,16 @@
 #import "ATTextMessageUserCell.h"
 
 
-@implementation ATTextMessageUserCell
-@synthesize dateLabel, chatBubbleContainer, userIcon, messageBubbleImage, usernameLabel, messageText, composingBubble, composing, showDateLabel;
+@implementation ATTextMessageUserCell {
+	CGFloat horizontalCellPadding;
+}
+
+@synthesize dateLabel, chatBubbleContainer, userIcon, messageBubbleImage, usernameLabel, messageText, composingBubble, composing, showDateLabel, tooLong;
 @synthesize cellType;
 
 - (void)setup {
+	horizontalCellPadding = CGRectGetWidth(self.bounds) - CGRectGetWidth(self.messageText.bounds);
+	
 	self.messageText.delegate = self;
 	UIDataDetectorTypes types = UIDataDetectorTypeLink;
 	if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel://"]]) {
@@ -42,7 +47,7 @@
 	// Configure the view for the selected state
 }
 
-- (void)setIsComposing:(BOOL)comp {
+- (void)setComposing:(BOOL)comp {
 	if (composing != comp) {
 		composing = comp;
 		if (composing) {
@@ -55,6 +60,13 @@
 - (void)setShowDateLabel:(BOOL)show {
 	if (showDateLabel != show) {
 		showDateLabel = show;
+		[self setNeedsLayout];
+	}
+}
+
+- (void)setTooLong:(BOOL)isTooLong {
+	if (tooLong != isTooLong) {
+		tooLong = isTooLong;
 		[self setNeedsLayout];
 	}
 }
@@ -103,11 +115,10 @@
 			cellHeight += self.dateLabel.bounds.size.height;
 		}
 		cellHeight += self.usernameLabel.bounds.size.height;
-		CGFloat textWidth = width - 101;
+		CGFloat textWidth = width - horizontalCellPadding;
 		CGFloat heightPadding = 19 + 6;
-		CGSize textSize = [self.messageText sizeThatFits:CGSizeMake(textWidth, 2000)];
+		CGSize textSize = [self.messageText sizeThatFits:CGSizeMake(textWidth, CGFLOAT_MAX)];
 		cellHeight += MAX(60, textSize.height + heightPadding);
-
 	} while (NO);
 	return cellHeight;
 }

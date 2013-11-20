@@ -369,6 +369,8 @@ typedef enum {
 		if (!composingMessage) {
 			composingMessage = (ATTextMessage *)[ATData newEntityNamed:@"ATTextMessage"];
 			[composingMessage setup];
+			composingMessage.sentByUser = @YES;
+			composingMessage.seenByUser = @YES;
 		}
 	} else {
 		if (composingMessage) {

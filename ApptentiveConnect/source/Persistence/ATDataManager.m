@@ -83,18 +83,15 @@ typedef enum {
 	NSManagedObjectContext *moc = [self managedObjectContext];
 	@try {
 		// Due to a migration error from v2 to v3, these items may not have customData fields.
-		NSArray *classesToCheck = @[@"ATAbstractMessage", @"ATTextMessage", @"ATFileMessage"];
-		for (NSString *entityString in classesToCheck) {
-			NSFetchRequest *request = [[NSFetchRequest alloc] init];
-			[request setEntity:[NSEntityDescription entityForName:@"ATAbstractMessage" inManagedObjectContext:moc]];
-			[request setFetchBatchSize:20];
-			NSArray *results = [moc executeFetchRequest:request error:nil];
-			for (NSManagedObject *c in results) {
-				__unused NSObject *c = [c valueForKey:@"customData"];
-				break;
-			}
-			[request release], request = nil;
+		NSFetchRequest *request = [[NSFetchRequest alloc] init];
+		[request setEntity:[NSEntityDescription entityForName:@"ATAbstractMessage" inManagedObjectContext:moc]];
+		[request setFetchBatchSize:20];
+		NSArray *results = [moc executeFetchRequest:request error:nil];
+		for (NSManagedObject *c in results) {
+			__unused NSObject *d = [c valueForKey:@"customData"];
+			break;
 		}
+		[request release], request = nil;
 	}
 	@catch (NSException *exception) {
 		ATLogError(@"Caught exception attempting to test classes: %@", exception);

@@ -81,9 +81,9 @@ typedef enum {
 	}
 	
 	NSManagedObjectContext *moc = [self managedObjectContext];
+	NSFetchRequest *request = [[NSFetchRequest alloc] init];
 	@try {
 		// Due to a migration error from v2 to v3, these items may not have customData fields.
-		NSFetchRequest *request = [[NSFetchRequest alloc] init];
 		[request setEntity:[NSEntityDescription entityForName:@"ATAbstractMessage" inManagedObjectContext:moc]];
 		[request setFetchBatchSize:20];
 		NSArray *results = [moc executeFetchRequest:request error:nil];
@@ -91,7 +91,6 @@ typedef enum {
 			__unused NSObject *d = [c valueForKey:@"customData"];
 			break;
 		}
-		[request release], request = nil;
 	}
 	@catch (NSException *exception) {
 		ATLogError(@"Caught exception attempting to test classes: %@", exception);
@@ -99,6 +98,9 @@ typedef enum {
 		[persistentStoreCoordinator release], persistentStoreCoordinator = nil;
 		ATLogError(@"Removing persistent store and starting over.");
 		[self removePersistentStore];
+	}
+	@finally {
+		[request release], request = nil;
 	}
 	
 	if (![self persistentStoreCoordinator]) {

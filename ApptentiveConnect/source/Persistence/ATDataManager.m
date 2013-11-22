@@ -8,6 +8,8 @@
 
 #import "ATDataManager.h"
 
+NSString *const ATDataManagerUpgradeCanaryKey = @"ATDataManagerUpgradeCanaryKey";
+
 typedef enum {
 	ATMigrationMergedModelErrorCode = -100,
 	ATMigrationNoModelsFoundErrorCode = -101,
@@ -36,6 +38,14 @@ typedef enum {
 		modelName = [aModelName retain];
 		bundle = [aBundle retain];
 		supportDirectoryPath = [path retain];
+		
+		// Check the canary.
+		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+		if ([defaults boolForKey:ATDataManagerUpgradeCanaryKey]) {
+			[self removePersistentStore];
+		}
+		[defaults setBool:NO forKey:ATDataManagerUpgradeCanaryKey];
+		[defaults synchronize];
 	}
 	return self;
 }
@@ -76,7 +86,13 @@ typedef enum {
 }
 
 - (BOOL)setupAndVerify {
+	// Set the canary.
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[defaults setBool:YES forKey:ATDataManagerUpgradeCanaryKey];
+	[defaults synchronize];
+	
 	if (![self persistentStoreCoordinator]) {
+		// This is almost certainly something bad.
 		return NO;
 	}
 	
@@ -106,6 +122,9 @@ typedef enum {
 	if (![self persistentStoreCoordinator]) {
 		return NO;
 	}
+	// Seems to have gone well, so remove canary.
+	[defaults setBool:NO forKey:ATDataManagerUpgradeCanaryKey];
+	[defaults synchronize];
 	return YES;
 }
 

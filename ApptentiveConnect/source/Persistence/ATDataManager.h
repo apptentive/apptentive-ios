@@ -17,4 +17,5 @@
 - (id)initWithModelName:(NSString *)modelName inBundle:(NSBundle *)bundle storagePath:(NSString *)path;
 
 - (NSURL *)persistentStoreURL;
+- (BOOL)setupAndVerify;
 @end

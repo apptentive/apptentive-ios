@@ -18,6 +18,7 @@ typedef enum {
 - (BOOL)isMigrationNecessary:(NSPersistentStoreCoordinator *)psc;
 - (BOOL)migrateStoreError:(NSError **)error;
 - (BOOL)progressivelyMigrateURL:(NSURL *)sourceStoreURL ofType:(NSString *)type toModel:(NSManagedObjectModel *)finalModel error:(NSError **)error;
+- (BOOL)removeSQLiteSidecarsForPath:(NSString *)sourcePath;
 @end
 
 @implementation ATDataManager {
@@ -74,6 +75,41 @@ typedef enum {
     return managedObjectModel;
 }
 
+- (BOOL)setupAndVerify {
+	if (![self persistentStoreCoordinator]) {
+		return NO;
+	}
+	
+	NSManagedObjectContext *moc = [self managedObjectContext];
+	@try {
+		// Due to a migration error from v2 to v3, these items may not have customData fields.
+		NSArray *classesToCheck = @[@"ATAbstractMessage", @"ATTextMessage", @"ATFileMessage"];
+		for (NSString *entityString in classesToCheck) {
+			NSFetchRequest *request = [[NSFetchRequest alloc] init];
+			[request setEntity:[NSEntityDescription entityForName:@"ATAbstractMessage" inManagedObjectContext:moc]];
+			[request setFetchBatchSize:20];
+			NSArray *results = [moc executeFetchRequest:request error:nil];
+			for (NSManagedObject *c in results) {
+				__unused NSObject *c = [c valueForKey:@"customData"];
+				break;
+			}
+			[request release], request = nil;
+		}
+	}
+	@catch (NSException *exception) {
+		ATLogError(@"Caught exception attempting to test classes: %@", exception);
+		[managedObjectContext release], managedObjectContext = nil;
+		[persistentStoreCoordinator release], persistentStoreCoordinator = nil;
+		ATLogError(@"Removing persistent store and starting over.");
+		[self removePersistentStore];
+	}
+	
+	if (![self persistentStoreCoordinator]) {
+		return NO;
+	}
+	return YES;
+}
+
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
 	@synchronized(self) {
 		if (persistentStoreCoordinator != nil) {
@@ -90,15 +126,12 @@ typedef enum {
 			ATLogError(@"Unable to setup persistent store: %@", exception);
 			return nil;
 		}
-		persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
 		BOOL storeExists = [[NSFileManager defaultManager] fileExistsAtPath:[storeURL path]];
 		
 		if (storeExists && [self isMigrationNecessary:persistentStoreCoordinator]) {
 			if (![self migrateStoreError:&error]) {
 				ATLogError(@"Failed to migrate store. Need to start over from scratch: %@", error);
-				if (![[NSFileManager defaultManager] removeItemAtURL:storeURL error:&error]) {
-					ATLogError(@"Failed to delete the store: %@", error);
-				}
+				[self removePersistentStore];
 			}
 		}
 		
@@ -106,8 +139,10 @@ typedef enum {
 		// iOS 4 and earlier: NSFileProtectionNone
 		// iOS 5 and later: NSFileProtectionCompleteUntilFirstUserAuthentication
 		// So, there's no need to set these explicitly for our purposes.
-		if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
+		NSDictionary *options = @{NSSQLitePragmasOption: @{@"journal_mode": @"DELETE"}};
+		if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
 			ATLogError(@"Unable to create new persistent store: %@", error);
+			[persistentStoreCoordinator release], persistentStoreCoordinator = nil;
 			return nil;
 		}
 	}
@@ -120,6 +155,19 @@ typedef enum {
 	return [[NSURL fileURLWithPath:supportDirectoryPath] URLByAppendingPathComponent:sqliteFilename];
 }
 
+- (void)removePersistentStore {
+	NSURL *storeURL = [self persistentStoreURL];
+	NSString *sourcePath = [storeURL path];
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	
+	if ([fileManager fileExistsAtPath:sourcePath]) {
+		NSError *error = nil;
+		if (![[NSFileManager defaultManager] removeItemAtURL:storeURL error:&error]) {
+			ATLogError(@"Failed to delete the store: %@", error);
+		}
+	}
+	[self removeSQLiteSidecarsForPath:sourcePath];
+}
 @end
 
 
@@ -217,7 +265,9 @@ typedef enum {
 	NSString *storePath = [[sourceStoreURL path] stringByDeletingPathExtension];
 	storePath = [NSString stringWithFormat:@"%@.%@.%@", storePath, localModelName, storeExtension];
 	NSURL *destinationStoreURL = [NSURL fileURLWithPath:storePath];
-	if (![manager migrateStoreFromURL:sourceStoreURL type:type options:nil withMappingModel:mappingModel toDestinationURL:destinationStoreURL destinationType:type destinationOptions:nil error:error]) {
+	
+	NSDictionary *options = @{NSSQLitePragmasOption: @{@"journal_mode": @"DELETE"}};
+	if (![manager migrateStoreFromURL:sourceStoreURL type:type options:nil withMappingModel:mappingModel toDestinationURL:destinationStoreURL destinationType:type destinationOptions:options error:error]) {
 		[manager release], manager = nil;
 		return NO;
 	}
@@ -240,8 +290,32 @@ typedef enum {
 		[fileManager moveItemAtPath:backupPath toPath:[sourceStoreURL path] error:nil];
 		ATLogError(@"Unable to move new store into place.");
 		return NO;
+	} else {
+		// Kill any remaining -wal or -shm files. Kill them with fire.
+		// See: http://pablin.org/2013/05/24/problems-with-core-data-migration-manager-and-journal-mode-wal/
+		// Also: http://stackoverflow.com/questions/17487306/ios-coredata-are-there-any-disadvantages-to-enabling-sqlite-wal-write-ahead
+		NSString *sourcePath = [sourceStoreURL path];
+		[self removeSQLiteSidecarsForPath:sourcePath];
 	}
 	
 	return [self progressivelyMigrateURL:sourceStoreURL ofType:type toModel:finalModel error:error];
+}
+
+- (BOOL)removeSQLiteSidecarsForPath:(NSString *)sourcePath {
+	NSArray *extensions = @[@"-shm", @"-wal"];
+	BOOL success = YES;
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	for (NSString *ext in extensions) {
+		NSString *obsoletePath = [sourcePath stringByAppendingString:ext];
+		BOOL isDir = NO;
+		NSError *localError = nil;
+		if ([fileManager fileExistsAtPath:obsoletePath isDirectory:&isDir] && !isDir) {
+			if (![fileManager removeItemAtPath:obsoletePath error:&localError]) {
+				ATLogError(@"Unable to remove obsolete WAL file %@ with error: %@", obsoletePath, localError);
+				success = NO;
+			}
+		}
+	}
+	return success;
 }
 @end

@@ -73,6 +73,7 @@ static NSString *const ATTextMessageUserCellV7Identifier = @"ATTextMessageUserCe
 	sizingAutomatedCellHorizontalPadding = CGRectGetWidth(sizingAutomatedCell.bounds) - CGRectGetWidth(sizingAutomatedCell.messageLabel.bounds);
 	sizingUserTextCellHorizontalPadding = CGRectGetWidth(sizingUserTextCell.bounds) - CGRectGetWidth(sizingUserTextCell.messageLabel.bounds);
 	
+	self.collectionView.alwaysBounceVertical = YES;
 	[self.collectionView registerNib:automatedCellNib forCellWithReuseIdentifier:ATAutomatedMessageCellV7Identifier];
 	[self.collectionView registerNib:userTextCellNib forCellWithReuseIdentifier:ATTextMessageUserCellV7Identifier];
 	[self.collectionView reloadData];

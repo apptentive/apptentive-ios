@@ -32,6 +32,7 @@ typedef enum {
 	NSBundle *bundle;
 	NSString *supportDirectoryPath;
 }
+@synthesize didRemovePersistentStore, didFailToMigrateStore, didMigrateStore;
 
 - (id)initWithModelName:(NSString *)aModelName inBundle:(NSBundle *)aBundle storagePath:(NSString *)path {
 	if ((self = [super init])) {
@@ -149,7 +150,10 @@ typedef enum {
 		if (storeExists && [self isMigrationNecessary:persistentStoreCoordinator]) {
 			if (![self migrateStoreError:&error]) {
 				ATLogError(@"Failed to migrate store. Need to start over from scratch: %@", error);
+				didFailToMigrateStore = YES;
 				[self removePersistentStore];
+			} else {
+				didMigrateStore = YES;
 			}
 		}
 		
@@ -185,6 +189,7 @@ typedef enum {
 		}
 	}
 	[self removeSQLiteSidecarsForPath:sourcePath];
+	didRemovePersistentStore = YES;
 }
 @end
 

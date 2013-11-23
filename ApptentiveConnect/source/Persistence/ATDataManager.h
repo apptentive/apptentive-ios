@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-/// Used to indicate a database upgrade or check was in progress and didn't complete.
+// Used to indicate a database upgrade or check was in progress and didn't complete.
 extern NSString *const ATDataManagerUpgradeCanaryKey;
 
 @interface ATDataManager : NSObject

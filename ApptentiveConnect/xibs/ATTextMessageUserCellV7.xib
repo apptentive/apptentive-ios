@@ -17,7 +17,7 @@
                     <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lip-0o-eBP" userLabel="User Icon Offset View">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="0.88" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="4" placeholder="YES" id="8Ta-zc-OJT"/>
                             <constraint firstAttribute="height" priority="718" constant="14" id="ahx-vr-j4e"/>

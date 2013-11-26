@@ -36,7 +36,6 @@
 		types |= UIDataDetectorTypePhoneNumber;
 	}
 	self.messageLabel.dataDetectorTypes = types;
-//	NSLog(@"%p constraint is: %f", self, self.userIconOffsetConstraint.constant);
 }
 
 - (id)initWithFrame:(CGRect)frame {
@@ -56,16 +55,6 @@
 	[super prepareForReuse];
 	self.userIconOffsetConstraint.constant = 4;
 	self.message = nil;
-}
-
-- (void)layoutSubviews {
-	[super layoutSubviews];
-	NSLog(@"did layout subviews: %@", NSStringFromCGRect(self.userIconView.frame));
-}
-
-- (void)updateConstraints {
-	[super updateConstraints];
-	NSLog(@"constraint updated: %f", self.userIconOffsetConstraint.constant);
 }
 
 - (void)dealloc {

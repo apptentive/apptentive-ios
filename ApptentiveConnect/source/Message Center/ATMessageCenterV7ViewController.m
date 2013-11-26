@@ -55,6 +55,7 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	CGFloat sizingUserTextCellHorizontalPadding;
 	
 	NSMutableDictionary *cachedIconTopOffset;
+	NSMutableDictionary *cachedCell;
 }
 @synthesize collectionView;
 
@@ -64,6 +65,7 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 		fetchedObjectChanges = [[NSMutableArray alloc] init];
 		fetchedSectionChanges = [[NSMutableArray alloc] init];
 		cachedIconTopOffset = [[NSMutableDictionary alloc] init];
+		cachedCell = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -247,9 +249,7 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	}
 	cell.message = (ATTextMessage *)message;
 	[cell setNeedsUpdateConstraints];
-//	[self.collectionView.layer setNeedsLayout];
-//	[cell setNeedsLayout];
-//	[cell layoutSubviews];
+	[cell setNeedsDisplay];
 }
 
 - (CGSize)configureUserFileCell:(ATFileMessageUserCellV7 *)cell forIndexPath:(NSIndexPath *)indexPath {
@@ -272,7 +272,7 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 		ATAbstractMessage *message = (ATAbstractMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:indexPath];
 		ATMessageCellType cellType = [self cellTypeForMessage:message];
 		if (cellType == ATMessageCellTypeText && [message.sentByUser boolValue]) {
-			ATTextMessageUserCellV7 *cell = (ATTextMessageUserCellV7 *)[self collectionView:self.collectionView cellForItemAtIndexPath:indexPath];
+			ATTextMessageUserCellV7 *cell = cachedCell[indexPath] ? cachedCell[indexPath] : (ATTextMessageUserCellV7 *)[self collectionView:self.collectionView cellForItemAtIndexPath:indexPath];
 			
 			CGRect iconInset = [layoutAttributes frame];
 			CGFloat topOffset = -(self.collectionView.contentInset.top + self.collectionView.contentOffset.y);
@@ -289,9 +289,8 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 			cell.userIconOffsetConstraint.constant = newValue;
 			NSString *key = [NSString stringWithFormat:@"%d", indexPath.item];
 			cachedIconTopOffset[key] = @((double)newValue);
-			NSLog(@"%@ -> %f", key, newValue);
-			[cell setNeedsUpdateConstraints];
-			[cell setNeedsLayout];
+//			[cell setNeedsUpdateConstraints];
+//			[cell setNeedsLayout];
 		}
 	}
 	[self.collectionView setNeedsLayout];
@@ -323,6 +322,7 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	} else if (cellType == ATMessageCellTypeText && [message.sentByUser boolValue]) {
 		ATTextMessageUserCellV7 *c = [self.collectionView dequeueReusableCellWithReuseIdentifier:ATTextMessageUserCellV7Identifier forIndexPath:indexPath];
 		[self configureUserTextCell:c forIndexPath:indexPath];
+		cachedCell[indexPath] = c;
 		cell = c;
 	} else if (cellType == ATMessageCellTypeText && ![message.sentByUser boolValue]) {
 		ATTextMessageDevCellV7 *c = [self.collectionView dequeueReusableCellWithReuseIdentifier:ATTextMessageDevCellV7Identifier forIndexPath:indexPath];
@@ -384,6 +384,7 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
 	@try {
+		[cachedCell removeAllObjects];
 		if ([fetchedSectionChanges count]) {
 			[self.collectionView performBatchUpdates:^{
 				for (NSDictionary *sectionChange in fetchedSectionChanges) {

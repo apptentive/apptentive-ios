@@ -36,25 +36,47 @@
 		types |= UIDataDetectorTypePhoneNumber;
 	}
 	self.messageLabel.dataDetectorTypes = types;
+//	NSLog(@"%p constraint is: %f", self, self.userIconOffsetConstraint.constant);
 }
 
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        [self setup];
+//        [self setup];
     }
     return self;
 }
 
 - (void)awakeFromNib {
 	[super awakeFromNib];
-	[self setup];
+//	[self setup];
+}
+
+- (void)prepareForReuse {
+	[super prepareForReuse];
+	self.userIconOffsetConstraint.constant = 4;
+	self.message = nil;
+}
+
+- (void)layoutSubviews {
+	[super layoutSubviews];
+	NSLog(@"did layout subviews: %@", NSStringFromCGRect(self.userIconView.frame));
+}
+
+- (void)updateConstraints {
+	[super updateConstraints];
+	NSLog(@"constraint updated: %f", self.userIconOffsetConstraint.constant);
 }
 
 - (void)dealloc {
 	[_textContainerView release];
 	[_messageLabel release];
 	[_userIconView release];
+	if (_userIconOffsetConstraint) {
+		[_userIconOffsetView removeConstraint:_userIconOffsetConstraint];
+	}
+	[_userIconOffsetView release];
+	[_userIconOffsetConstraint release];
 	[super dealloc];
 }
 

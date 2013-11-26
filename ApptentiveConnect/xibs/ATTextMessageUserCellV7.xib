@@ -14,6 +14,15 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="63"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lip-0o-eBP" userLabel="User Icon Offset View">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="14"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="0.88" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="4" placeholder="YES" id="8Ta-zc-OJT"/>
+                            <constraint firstAttribute="height" priority="718" constant="14" id="ahx-vr-j4e"/>
+                        </constraints>
+                    </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J5f-9B-Qxf" userLabel="Text Container">
                         <rect key="frame" x="15" y="4" width="273" height="53"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -36,7 +45,7 @@
                         </constraints>
                     </view>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Uin-DY-X3o" customClass="ATNetworkImageView">
-                        <rect key="frame" x="280" y="20" width="28" height="28"/>
+                        <rect key="frame" x="280" y="14" width="28" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="28" id="gFS-LX-H0S"/>
@@ -47,17 +56,22 @@
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="Uin-DY-X3o" secondAttribute="bottom" constant="15" id="123-La-O8u"/>
                 <constraint firstItem="Uin-DY-X3o" firstAttribute="leading" secondItem="J5f-9B-Qxf" secondAttribute="trailing" constant="-8" id="3Pn-uO-vZF"/>
+                <constraint firstItem="lip-0o-eBP" firstAttribute="top" secondItem="79u-bX-TFj" secondAttribute="top" id="3ih-I2-hcv"/>
+                <constraint firstItem="Uin-DY-X3o" firstAttribute="top" secondItem="lip-0o-eBP" secondAttribute="bottom" id="6PR-4c-CrI"/>
                 <constraint firstAttribute="trailing" secondItem="J5f-9B-Qxf" secondAttribute="trailing" constant="32" id="LFT-HW-vhn"/>
                 <constraint firstAttribute="bottom" secondItem="J5f-9B-Qxf" secondAttribute="bottom" constant="6" id="NYR-vq-6Ym"/>
+                <constraint firstItem="lip-0o-eBP" firstAttribute="leading" secondItem="79u-bX-TFj" secondAttribute="leading" id="NnP-tA-sBg"/>
                 <constraint firstItem="J5f-9B-Qxf" firstAttribute="top" secondItem="79u-bX-TFj" secondAttribute="top" constant="4" id="ZBq-S3-dSF"/>
+                <constraint firstAttribute="trailing" secondItem="lip-0o-eBP" secondAttribute="trailing" id="paK-8L-eed"/>
                 <constraint firstItem="J5f-9B-Qxf" firstAttribute="leading" secondItem="79u-bX-TFj" secondAttribute="leading" constant="15" id="qKn-qk-yTh"/>
             </constraints>
             <size key="customSize" width="320" height="38"/>
             <connections>
                 <outlet property="messageLabel" destination="6Dr-cr-mAu" id="v5I-s0-Ufa"/>
                 <outlet property="textContainerView" destination="J5f-9B-Qxf" id="FCg-3L-ldN"/>
+                <outlet property="userIconOffsetConstraint" destination="ahx-vr-j4e" id="TTb-Mo-JrD"/>
+                <outlet property="userIconOffsetView" destination="lip-0o-eBP" id="0ix-pG-5Wq"/>
                 <outlet property="userIconView" destination="Uin-DY-X3o" id="9yQ-gR-Fzs"/>
             </connections>
         </collectionViewCell>

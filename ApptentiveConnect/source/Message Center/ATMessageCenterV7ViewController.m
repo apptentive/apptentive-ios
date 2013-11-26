@@ -53,6 +53,8 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	CGFloat sizingAutomatedCellHorizontalPadding;
 	CGFloat sizingDevTextCellHorizontalPadding;
 	CGFloat sizingUserTextCellHorizontalPadding;
+	
+	NSMutableDictionary *cachedIconTopOffset;
 }
 @synthesize collectionView;
 
@@ -61,6 +63,7 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
     if (self) {
 		fetchedObjectChanges = [[NSMutableArray alloc] init];
 		fetchedSectionChanges = [[NSMutableArray alloc] init];
+		cachedIconTopOffset = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -125,6 +128,7 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	[_backgroundImageView release];
 	[sizingAutomatedCell release], sizingAutomatedCell = nil;
 	[_flowLayout release];
+	[cachedIconTopOffset release];
 	[super dealloc];
 }
 
@@ -231,7 +235,21 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 
 - (void)configureUserTextCell:(ATTextMessageUserCellV7 *)cell forIndexPath:(NSIndexPath *)indexPath {
 	ATAbstractMessage *message = (ATAbstractMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:indexPath];
+	
+	NSString *key = [NSString stringWithFormat:@"%d", indexPath.item];
+	if (cachedIconTopOffset[key]) {
+		double offset = [(NSNumber *)cachedIconTopOffset[key] doubleValue];
+		if (cell.userIconOffsetConstraint.constant != offset) {
+			cell.userIconOffsetConstraint.constant = offset;
+		}
+	} else {
+		cell.userIconOffsetConstraint.constant = 4;
+	}
 	cell.message = (ATTextMessage *)message;
+	[cell setNeedsUpdateConstraints];
+//	[self.collectionView.layer setNeedsLayout];
+//	[cell setNeedsLayout];
+//	[cell layoutSubviews];
 }
 
 - (CGSize)configureUserFileCell:(ATFileMessageUserCellV7 *)cell forIndexPath:(NSIndexPath *)indexPath {
@@ -241,6 +259,43 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	CGSize thumbnailSize = ATThumbnailSizeOfMaxSize(imageFile.size, CGSizeMake(self.collectionView.bounds.size.width, 320));
 	CGSize cellSize = thumbnailSize;
 	return cellSize;
+}
+
+#pragma mark UIScrollViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+	// Get all the cells in the current rect.
+	NSArray *layoutItems = [self.collectionView.collectionViewLayout layoutAttributesForElementsInRect:CGRectMake(scrollView.contentOffset.x, scrollView.contentOffset.y, scrollView.bounds.size.width, scrollView.bounds.size.height)];
+	for (UICollectionViewLayoutAttributes *layoutAttributes in layoutItems) {
+		NSIndexPath *indexPath = [layoutAttributes indexPath];
+		
+		ATAbstractMessage *message = (ATAbstractMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:indexPath];
+		ATMessageCellType cellType = [self cellTypeForMessage:message];
+		if (cellType == ATMessageCellTypeText && [message.sentByUser boolValue]) {
+			ATTextMessageUserCellV7 *cell = (ATTextMessageUserCellV7 *)[self collectionView:self.collectionView cellForItemAtIndexPath:indexPath];
+			
+			CGRect iconInset = [layoutAttributes frame];
+			CGFloat topOffset = -(self.collectionView.contentInset.top + self.collectionView.contentOffset.y);
+			iconInset.origin.y += topOffset;
+			
+			CGFloat minOffset = 4;
+			CGFloat minBottomOffset = 10;
+			CGFloat maxOffset = CGRectGetHeight(cell.bounds) - CGRectGetHeight(cell.userIconView.bounds) - minBottomOffset;
+			
+			CGFloat iconInsetY = -CGRectGetMinY(iconInset);
+			
+			CGFloat newValue = MAX(minOffset, MIN(maxOffset, iconInsetY));
+			
+			cell.userIconOffsetConstraint.constant = newValue;
+			NSString *key = [NSString stringWithFormat:@"%d", indexPath.item];
+			cachedIconTopOffset[key] = @((double)newValue);
+			NSLog(@"%@ -> %f", key, newValue);
+			[cell setNeedsUpdateConstraints];
+			[cell setNeedsLayout];
+		}
+	}
+	[self.collectionView setNeedsLayout];
+	[self.collectionView setNeedsDisplay];
 }
 
 #pragma mark UICollectionViewDelegate

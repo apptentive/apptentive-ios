@@ -8,7 +8,7 @@
 
 #import "ATMessageCenterBaseViewController.h"
 
-@interface ATMessageCenterV7ViewController : ATMessageCenterBaseViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
+@interface ATMessageCenterV7ViewController : ATMessageCenterBaseViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate>
 @property (retain, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (retain, nonatomic) IBOutlet UIImageView *backgroundImageView;
 @property (retain, nonatomic) IBOutlet UICollectionViewFlowLayout *flowLayout;

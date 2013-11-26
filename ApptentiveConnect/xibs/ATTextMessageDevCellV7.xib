@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment version="1792" defaultVersion="1072" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ATTextMessageDevCellV7" id="UBr-NN-cPX" customClass="ATTextMessageDevCellV7">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="63"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="63"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m9E-pd-6Ic" userLabel="Text Container">
+                        <rect key="frame" x="32" y="4" width="273" height="53"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="261" translatesAutoresizingMaskIntoConstraints="NO" id="xS3-Uc-7d4" customClass="ATTTTAttributedLabel">
+                                <rect key="frame" x="10" y="2" width="261" height="49"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="xS3-Uc-7d4" firstAttribute="top" secondItem="m9E-pd-6Ic" secondAttribute="top" constant="2" id="Nve-A1-6Wt"/>
+                            <constraint firstAttribute="trailing" secondItem="xS3-Uc-7d4" secondAttribute="trailing" constant="2" id="YWi-ur-BfK"/>
+                            <constraint firstAttribute="bottom" secondItem="xS3-Uc-7d4" secondAttribute="bottom" constant="2" id="fu5-sv-bnz"/>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="gLQ-Fl-aPo"/>
+                            <constraint firstItem="xS3-Uc-7d4" firstAttribute="leading" secondItem="m9E-pd-6Ic" secondAttribute="leading" constant="10" id="hNB-qE-2ch"/>
+                        </constraints>
+                    </view>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="tNi-da-PTR" customClass="ATNetworkImageView">
+                        <rect key="frame" x="12" y="20" width="28" height="28"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="28" id="Drd-Mx-cQX"/>
+                            <constraint firstAttribute="width" constant="28" id="JnX-Mc-9jf"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            </view>
+            <constraints>
+                <constraint firstItem="m9E-pd-6Ic" firstAttribute="top" secondItem="UBr-NN-cPX" secondAttribute="top" constant="4" id="FbF-TW-bgw"/>
+                <constraint firstAttribute="bottom" secondItem="m9E-pd-6Ic" secondAttribute="bottom" constant="6" id="LNu-kJ-npr"/>
+                <constraint firstAttribute="bottom" secondItem="tNi-da-PTR" secondAttribute="bottom" constant="15" id="PBf-ky-KN2"/>
+                <constraint firstItem="m9E-pd-6Ic" firstAttribute="leading" secondItem="UBr-NN-cPX" secondAttribute="leading" constant="32" id="TEW-Ea-ykP"/>
+                <constraint firstAttribute="trailing" secondItem="m9E-pd-6Ic" secondAttribute="trailing" constant="15" id="UUg-Cn-iqW"/>
+                <constraint firstItem="m9E-pd-6Ic" firstAttribute="leading" secondItem="tNi-da-PTR" secondAttribute="trailing" constant="-8" id="hEk-JA-SCG"/>
+            </constraints>
+            <size key="customSize" width="320" height="38"/>
+            <connections>
+                <outlet property="messageLabel" destination="xS3-Uc-7d4" id="Q9c-Wv-CqB"/>
+                <outlet property="textContainerView" destination="m9E-pd-6Ic" id="bXo-cm-rhy"/>
+                <outlet property="userIconView" destination="tNi-da-PTR" id="7CO-Nq-Ymp"/>
+            </connections>
+        </collectionViewCell>
+    </objects>
+</document>

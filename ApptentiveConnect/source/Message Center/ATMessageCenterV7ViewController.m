@@ -14,8 +14,10 @@
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
 #import "ATFileMessage.h"
+#import "ATFileMessageUserCellV7.h"
 #import "ATMessageCenterMetrics.h"
 #import "ATTextMessage.h"
+#import "ATTextMessageDevCellV7.h"
 #import "ATTextMessageUserCellV7.h"
 #import "ATUtilities.h"
 #import "UIImage+ATImageEffects.h"
@@ -28,7 +30,9 @@ typedef enum {
 } ATMessageCellType;
 
 static NSString *const ATAutomatedMessageCellV7Identifier = @"ATAutomatedMessageCellV7";
+static NSString *const ATTextMessageDevCellV7Identifier = @"ATTextMessageDevCellV7";
 static NSString *const ATTextMessageUserCellV7Identifier = @"ATTextMessageUserCellV7";
+static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCellV7";
 
 @interface ATMessageCenterV7ViewController ()
 - (void)scrollToBottomOfCollectionView;
@@ -42,9 +46,12 @@ static NSString *const ATTextMessageUserCellV7Identifier = @"ATTextMessageUserCe
 	NSMutableArray *fetchedSectionChanges;
 	
 	ATAutomatedMessageCellV7 *sizingAutomatedCell;
+	ATTextMessageDevCellV7 *sizingDevTextCell;
 	ATTextMessageUserCellV7 *sizingUserTextCell;
+	ATFileMessageUserCellV7 *sizingUserFileCell;
 	
 	CGFloat sizingAutomatedCellHorizontalPadding;
+	CGFloat sizingDevTextCellHorizontalPadding;
 	CGFloat sizingUserTextCellHorizontalPadding;
 }
 @synthesize collectionView;
@@ -66,16 +73,23 @@ static NSString *const ATTextMessageUserCellV7Identifier = @"ATTextMessageUserCe
 	[self.backgroundImageView setImage:blurred];
 	
 	UINib *automatedCellNib = [UINib nibWithNibName:@"ATAutomatedMessageCellV7" bundle:[ATConnect resourceBundle]];
+	UINib *devTextCellNib = [UINib nibWithNibName:@"ATTextMessageDevCellV7" bundle:[ATConnect resourceBundle]];
 	UINib *userTextCellNib = [UINib nibWithNibName:@"ATTextMessageUserCellV7" bundle:[ATConnect resourceBundle]];
+	UINib *userFileCellNib = [UINib nibWithNibName:@"ATFileMessageUserCellV7" bundle:[ATConnect resourceBundle]];
 	sizingAutomatedCell = [[[automatedCellNib instantiateWithOwner:self options:nil] objectAtIndex:0] retain];
+	sizingDevTextCell = [[[devTextCellNib instantiateWithOwner:self options:nil] objectAtIndex:0] retain];
 	sizingUserTextCell = [[[userTextCellNib instantiateWithOwner:self options:nil] objectAtIndex:0] retain];
+	sizingUserFileCell = [[[userFileCellNib instantiateWithOwner:self options:nil] objectAtIndex:0] retain];
 	
 	sizingAutomatedCellHorizontalPadding = CGRectGetWidth(sizingAutomatedCell.bounds) - CGRectGetWidth(sizingAutomatedCell.messageLabel.bounds);
+	sizingDevTextCellHorizontalPadding = CGRectGetWidth(sizingDevTextCell.bounds) - CGRectGetWidth(sizingDevTextCell.messageLabel.bounds);
 	sizingUserTextCellHorizontalPadding = CGRectGetWidth(sizingUserTextCell.bounds) - CGRectGetWidth(sizingUserTextCell.messageLabel.bounds);
 	
 	self.collectionView.alwaysBounceVertical = YES;
 	[self.collectionView registerNib:automatedCellNib forCellWithReuseIdentifier:ATAutomatedMessageCellV7Identifier];
+	[self.collectionView registerNib:devTextCellNib forCellWithReuseIdentifier:ATTextMessageDevCellV7Identifier];
 	[self.collectionView registerNib:userTextCellNib forCellWithReuseIdentifier:ATTextMessageUserCellV7Identifier];
+	[self.collectionView registerNib:userFileCellNib forCellWithReuseIdentifier:ATFileMessageUserCellV7Identifier];
 	[self.collectionView reloadData];
 	
 	// TODO: Not perfect.
@@ -210,9 +224,23 @@ static NSString *const ATTextMessageUserCellV7Identifier = @"ATTextMessageUserCe
 	cell.message = (ATAutomatedMessage *)message;
 }
 
+- (void)configureDevTextCell:(ATTextMessageDevCellV7 *)cell forIndexPath:(NSIndexPath *)indexPath {
+	ATAbstractMessage *message = (ATAbstractMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:indexPath];
+	cell.message = (ATTextMessage *)message;
+}
+
 - (void)configureUserTextCell:(ATTextMessageUserCellV7 *)cell forIndexPath:(NSIndexPath *)indexPath {
 	ATAbstractMessage *message = (ATAbstractMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:indexPath];
 	cell.message = (ATTextMessage *)message;
+}
+
+- (CGSize)configureUserFileCell:(ATFileMessageUserCellV7 *)cell forIndexPath:(NSIndexPath *)indexPath {
+	ATFileMessage *message = (ATFileMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:indexPath];
+	[cell setMessage:message];
+	UIImage *imageFile = [UIImage imageWithContentsOfFile:[message.fileAttachment fullLocalPath]];
+	CGSize thumbnailSize = ATThumbnailSizeOfMaxSize(imageFile.size, CGSizeMake(self.collectionView.bounds.size.width, 320));
+	CGSize cellSize = thumbnailSize;
+	return cellSize;
 }
 
 #pragma mark UICollectionViewDelegate
@@ -241,6 +269,14 @@ static NSString *const ATTextMessageUserCellV7Identifier = @"ATTextMessageUserCe
 		ATTextMessageUserCellV7 *c = [self.collectionView dequeueReusableCellWithReuseIdentifier:ATTextMessageUserCellV7Identifier forIndexPath:indexPath];
 		[self configureUserTextCell:c forIndexPath:indexPath];
 		cell = c;
+	} else if (cellType == ATMessageCellTypeText && ![message.sentByUser boolValue]) {
+		ATTextMessageDevCellV7 *c = [self.collectionView dequeueReusableCellWithReuseIdentifier:ATTextMessageDevCellV7Identifier forIndexPath:indexPath];
+		[self configureDevTextCell:c forIndexPath:indexPath];
+		cell = c;
+	} else if (cellType == ATMessageCellTypeFile && [message.sentByUser boolValue]) {
+		ATFileMessageUserCellV7 *c = [self.collectionView dequeueReusableCellWithReuseIdentifier:ATFileMessageUserCellV7Identifier forIndexPath:indexPath];
+		[self configureUserFileCell:c forIndexPath:indexPath];
+		cell = c;
 	} else {
 		cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:ATAutomatedMessageCellV7Identifier forIndexPath:indexPath];
 	}
@@ -263,13 +299,24 @@ static NSString *const ATTextMessageUserCellV7Identifier = @"ATTextMessageUserCe
 		s.width = self.collectionView.bounds.size.width;
 		
 		return s;
-	} else if (cellType == ATMessageCellTypeText && message.sentByUser) {
+	} else if (cellType == ATMessageCellTypeText && [message.sentByUser boolValue]) {
 		sizingUserTextCell.messageLabel.preferredMaxLayoutWidth = self.collectionView.bounds.size.width - sizingUserTextCellHorizontalPadding;
 		
 		[self configureUserTextCell:sizingUserTextCell forIndexPath:indexPath];
 		cell = sizingUserTextCell;
 		CGSize s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 		s.width = self.collectionView.bounds.size.width;
+		return s;
+	} else if (cellType == ATMessageCellTypeText && ![message.sentByUser boolValue]) {
+		sizingDevTextCell.messageLabel.preferredMaxLayoutWidth = self.collectionView.bounds.size.width - sizingDevTextCellHorizontalPadding;
+		
+		[self configureDevTextCell:sizingDevTextCell forIndexPath:indexPath];
+		cell = sizingDevTextCell;
+		CGSize s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+		s.width = self.collectionView.bounds.size.width;
+		return s;
+	} else if (cellType == ATMessageCellTypeFile && [message.sentByUser boolValue]) {
+		CGSize s = [self configureUserFileCell:sizingUserFileCell forIndexPath:indexPath];
 		return s;
 	} else {
 		return CGSizeMake(self.collectionView.bounds.size.width, 40);

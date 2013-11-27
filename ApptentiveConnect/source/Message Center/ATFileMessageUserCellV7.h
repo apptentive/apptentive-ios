@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+#import "ATBaseMessageCellV7.h"
 #import "ATNetworkImageView.h"
 #import "ATFileMessage.h"
 
-@interface ATFileMessageUserCellV7 : UICollectionViewCell
+@interface ATFileMessageUserCellV7 : ATBaseMessageCellV7
 @property (retain, nonatomic) IBOutlet ATNetworkImageView *userIconView;
 @property (retain, nonatomic) IBOutlet UIView *imageContainerView;
 @property (retain, nonatomic) ATFileMessage *message;

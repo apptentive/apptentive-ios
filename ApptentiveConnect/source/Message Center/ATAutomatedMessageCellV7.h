@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 
 #import "ATAutomatedMessage.h"
+#import "ATBaseMessageCellV7.h"
 
-@interface ATAutomatedMessageCellV7 : UICollectionViewCell
+@interface ATAutomatedMessageCellV7 : ATBaseMessageCellV7
 @property (retain, nonatomic) IBOutlet UILabel *messageLabel;
 @property (retain, nonatomic) IBOutlet UIImageView *appIcon;
 @property (retain, nonatomic) ATAutomatedMessage *message;

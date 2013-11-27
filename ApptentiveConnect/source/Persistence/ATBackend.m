@@ -973,7 +973,10 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	}
 	
 	dataManager = [[ATDataManager alloc] initWithModelName:@"ATDataModel" inBundle:[ATConnect resourceBundle] storagePath:[self supportDirectoryPath]];
-	if (![dataManager persistentStoreCoordinator]) {
+	if (![dataManager setupAndVerify]) {
+		ATLogError(@"Unable to setup and verify data manager.");
+		[self continueStartupWithDataManagerFailure];
+	} else if (![dataManager persistentStoreCoordinator]) {
 		ATLogError(@"There was a problem setting up the persistent store coordinator!");
 		[self continueStartupWithDataManagerFailure];
 	} else {

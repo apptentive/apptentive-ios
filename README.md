@@ -96,6 +96,12 @@ want to filter them based upon your managed object context. Learn more from [App
 
 ![iOS Linker Flags](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-linker-flags.png)
 
+**Note:** If you can't use the `-all_load` flag in your project, you can use the `-force_load` flag instead:
+
+```
+-force_load $(BUILT_PRODUCTS_DIR)/libApptentiveConnect.a
+```
+
 ##### Add Apptentive Connect and Resources
 
 1. Go back to your Xcode project's `Build Phases` tab.
@@ -113,11 +119,11 @@ Under `Link Binary With Libraries`, add `libApptentiveConnect.a`.
 
 Building for iOS devices first works around a bug in Xcode 5.
 
-1. In the upper right-hand corner of your Xcode window, click on your project name.
+1. In the upper left corner of your Xcode window, click on your project name in the scheme picker.
 2. Select `Apptentive Resources`.
 3. Click to the right of the arrow next to `Apptentive Resources`.
 4. Select `iOS Devices`.
-5. Under `Project` in your Mac's menu bar, click on `Build`.
+5. Under `Product` in your Mac's menu bar, click on `Build`.
 
 ##### Copy Apptentive Resources Bundle
 

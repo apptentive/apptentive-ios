@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment version="1792" defaultVersion="1072" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -14,6 +14,24 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="63"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4XI-Ow-VGt" userLabel="User Icon Offset View">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="14"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="height" priority="718" constant="14" id="9tB-iR-ll7"/>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="4" placeholder="YES" id="ibJ-z0-TJL"/>
+                        </constraints>
+                    </view>
+                    <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qUF-Uz-7O7" customClass="ATMessageBubbleArrowViewV7">
+                        <rect key="frame" x="21" y="42" width="11" height="11"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="11" id="4Zn-tP-hQ1"/>
+                            <constraint firstAttribute="width" constant="11" id="8zR-yH-D8w"/>
+                        </constraints>
+                    </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m9E-pd-6Ic" userLabel="Text Container">
                         <rect key="frame" x="32" y="4" width="273" height="53"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -36,7 +54,7 @@
                         </constraints>
                     </view>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="tNi-da-PTR" customClass="ATNetworkImageView">
-                        <rect key="frame" x="12" y="20" width="28" height="28"/>
+                        <rect key="frame" x="12" y="14" width="28" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="28" id="Drd-Mx-cQX"/>
@@ -48,16 +66,23 @@
             </view>
             <constraints>
                 <constraint firstItem="m9E-pd-6Ic" firstAttribute="top" secondItem="UBr-NN-cPX" secondAttribute="top" constant="4" id="FbF-TW-bgw"/>
+                <constraint firstItem="4XI-Ow-VGt" firstAttribute="leading" secondItem="UBr-NN-cPX" secondAttribute="leading" id="LD8-5A-G3S"/>
                 <constraint firstAttribute="bottom" secondItem="m9E-pd-6Ic" secondAttribute="bottom" constant="6" id="LNu-kJ-npr"/>
-                <constraint firstAttribute="bottom" secondItem="tNi-da-PTR" secondAttribute="bottom" constant="15" id="PBf-ky-KN2"/>
                 <constraint firstItem="m9E-pd-6Ic" firstAttribute="leading" secondItem="UBr-NN-cPX" secondAttribute="leading" constant="32" id="TEW-Ea-ykP"/>
                 <constraint firstAttribute="trailing" secondItem="m9E-pd-6Ic" secondAttribute="trailing" constant="15" id="UUg-Cn-iqW"/>
+                <constraint firstAttribute="trailing" secondItem="4XI-Ow-VGt" secondAttribute="trailing" id="fag-dI-Fh2"/>
+                <constraint firstItem="4XI-Ow-VGt" firstAttribute="top" secondItem="UBr-NN-cPX" secondAttribute="top" id="ge4-gO-Z6Y"/>
                 <constraint firstItem="m9E-pd-6Ic" firstAttribute="leading" secondItem="tNi-da-PTR" secondAttribute="trailing" constant="-8" id="hEk-JA-SCG"/>
+                <constraint firstItem="tNi-da-PTR" firstAttribute="top" secondItem="4XI-Ow-VGt" secondAttribute="bottom" id="nlI-l6-KXm"/>
+                <constraint firstItem="qUF-Uz-7O7" firstAttribute="top" secondItem="tNi-da-PTR" secondAttribute="bottom" id="sju-m3-0bm"/>
+                <constraint firstItem="m9E-pd-6Ic" firstAttribute="leading" secondItem="qUF-Uz-7O7" secondAttribute="trailing" id="xHr-SO-V7d"/>
             </constraints>
             <size key="customSize" width="320" height="38"/>
             <connections>
+                <outlet property="arrowView" destination="qUF-Uz-7O7" id="SIW-ih-Lj3"/>
                 <outlet property="messageLabel" destination="xS3-Uc-7d4" id="Q9c-Wv-CqB"/>
                 <outlet property="textContainerView" destination="m9E-pd-6Ic" id="bXo-cm-rhy"/>
+                <outlet property="userIconOffsetConstraint" destination="9tB-iR-ll7" id="IGy-VT-3rC"/>
                 <outlet property="userIconView" destination="tNi-da-PTR" id="7CO-Nq-Ymp"/>
             </connections>
         </collectionViewCell>

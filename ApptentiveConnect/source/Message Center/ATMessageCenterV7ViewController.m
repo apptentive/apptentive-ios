@@ -283,8 +283,9 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 		
 		ATAbstractMessage *message = (ATAbstractMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:indexPath];
 		ATMessageCellType cellType = [self cellTypeForMessage:message];
-		if (cellType == ATMessageCellTypeText && [message.sentByUser boolValue]) {
-			ATTextMessageUserCellV7 *cell = cachedCell[key] ? cachedCell[key] : (ATTextMessageUserCellV7 *)[self collectionView:self.collectionView cellForItemAtIndexPath:indexPath];
+		if (cellType == ATMessageCellTypeText) {
+			//TODO: Refactor
+			ATBaseMessageCellV7 *cell = cachedCell[key] ? cachedCell[key] : [self collectionView:self.collectionView cellForItemAtIndexPath:indexPath];
 			
 			CGRect iconInset = [layoutAttributes frame];
 			CGFloat topOffset = -(self.collectionView.contentInset.top + self.collectionView.contentOffset.y);
@@ -292,16 +293,27 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 			
 			CGFloat minOffset = 4;
 			CGFloat minBottomOffset = 21;
-			CGFloat maxOffset = CGRectGetHeight(cell.bounds) - CGRectGetHeight(cell.userIconView.bounds) - minBottomOffset;
-			
-			CGFloat iconInsetY = -CGRectGetMinY(iconInset);
-			
-			CGFloat newValue = MAX(minOffset, MIN(maxOffset, iconInsetY));
-			cell.userIconOffsetConstraint.constant = newValue;
-			NSString *key = [NSString stringWithFormat:@"%d", indexPath.item];
-			cachedIconTopOffset[key] = @((double)newValue);
-//			[cell setNeedsUpdateConstraints];
-//			[cell setNeedsLayout];
+			if ([message.sentByUser boolValue]) {
+				ATTextMessageUserCellV7 *c = (ATTextMessageUserCellV7 *)cell;
+				CGFloat maxOffset = CGRectGetHeight(cell.bounds) - CGRectGetHeight(c.userIconView.bounds) - minBottomOffset;
+				
+				CGFloat iconInsetY = -CGRectGetMinY(iconInset);
+				
+				CGFloat newValue = MAX(minOffset, MIN(maxOffset, iconInsetY));
+				NSString *key = [NSString stringWithFormat:@"%d", indexPath.item];
+				cachedIconTopOffset[key] = @((double)newValue);
+				c.userIconOffsetConstraint.constant = newValue;
+			} else {
+				ATTextMessageDevCellV7 *c = (ATTextMessageDevCellV7 *)cell;
+				CGFloat maxOffset = CGRectGetHeight(cell.bounds) - CGRectGetHeight(c.userIconView.bounds) - minBottomOffset;
+				
+				CGFloat iconInsetY = -CGRectGetMinY(iconInset);
+				
+				CGFloat newValue = MAX(minOffset, MIN(maxOffset, iconInsetY));
+				NSString *key = [NSString stringWithFormat:@"%d", indexPath.item];
+				cachedIconTopOffset[key] = @((double)newValue);
+				c.userIconOffsetConstraint.constant = newValue;
+			}
 		}
 	}
 	[self.collectionView setNeedsLayout];

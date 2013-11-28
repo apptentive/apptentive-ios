@@ -30,6 +30,9 @@
 	self.userIconView.layer.cornerRadius = self.userIconView.bounds.size.width*0.5;
 	self.userIconView.layer.masksToBounds = YES;
 	
+	self.arrowView.direction = ATMessageBubbleArrowDirectionLeft;
+	self.arrowView.color = self.textContainerView.backgroundColor;
+	
 	self.messageLabel.delegate = self;
 	UIDataDetectorTypes types = UIDataDetectorTypeLink;
 	if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel://"]]) {
@@ -55,6 +58,8 @@
 	[_textContainerView release];
 	[_messageLabel release];
 	[_userIconView release];
+    [_userIconOffsetConstraint release];
+	[_arrowView release];
 	[super dealloc];
 }
 

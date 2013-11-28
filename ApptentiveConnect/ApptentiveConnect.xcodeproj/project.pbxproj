@@ -276,6 +276,8 @@
 		49D112741337CC9F00603373 /* ATTaskQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D112721337CC9F00603373 /* ATTaskQueue.m */; };
 		49D261C3184691E800798B89 /* ATBaseMessageCellV7.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D261C1184691E800798B89 /* ATBaseMessageCellV7.h */; };
 		49D261C4184691E900798B89 /* ATBaseMessageCellV7.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D261C2184691E800798B89 /* ATBaseMessageCellV7.m */; };
+		49D261C71846B26100798B89 /* ATMessageBubbleArrowViewV7.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D261C51846B26100798B89 /* ATMessageBubbleArrowViewV7.h */; };
+		49D261C81846B26200798B89 /* ATMessageBubbleArrowViewV7.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D261C61846B26100798B89 /* ATMessageBubbleArrowViewV7.m */; };
 		49E3A26F1628F4FF000675B4 /* ATGetMessagesTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 49E3A26D1628F4FF000675B4 /* ATGetMessagesTask.h */; };
 		49E3A2701628F4FF000675B4 /* ATGetMessagesTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 49E3A26E1628F4FF000675B4 /* ATGetMessagesTask.m */; };
 		49E6208716C5E8C2000C9F5A /* NSDictionary+ATAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 49E6208516C5E8C2000C9F5A /* NSDictionary+ATAdditions.h */; };
@@ -604,6 +606,8 @@
 		49D112721337CC9F00603373 /* ATTaskQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATTaskQueue.m; sourceTree = "<group>"; };
 		49D261C1184691E800798B89 /* ATBaseMessageCellV7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATBaseMessageCellV7.h; path = "Message Center/ATBaseMessageCellV7.h"; sourceTree = "<group>"; };
 		49D261C2184691E800798B89 /* ATBaseMessageCellV7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATBaseMessageCellV7.m; path = "Message Center/ATBaseMessageCellV7.m"; sourceTree = "<group>"; };
+		49D261C51846B26100798B89 /* ATMessageBubbleArrowViewV7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATMessageBubbleArrowViewV7.h; path = "Message Center/ATMessageBubbleArrowViewV7.h"; sourceTree = "<group>"; };
+		49D261C61846B26100798B89 /* ATMessageBubbleArrowViewV7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATMessageBubbleArrowViewV7.m; path = "Message Center/ATMessageBubbleArrowViewV7.m"; sourceTree = "<group>"; };
 		49E3A26D1628F4FF000675B4 /* ATGetMessagesTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATGetMessagesTask.h; path = "Message Center/Tasks/ATGetMessagesTask.h"; sourceTree = "<group>"; };
 		49E3A26E1628F4FF000675B4 /* ATGetMessagesTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATGetMessagesTask.m; path = "Message Center/Tasks/ATGetMessagesTask.m"; sourceTree = "<group>"; };
 		49E6208516C5E8C2000C9F5A /* NSDictionary+ATAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+ATAdditions.h"; sourceTree = "<group>"; };
@@ -1052,6 +1056,8 @@
 				49B71CA418417CAC00315AAF /* ATFileMessageUserCellV7.xib */,
 				49477B791835C700001D37AD /* ATExpandingTextView.h */,
 				49477B7A1835C700001D37AD /* ATExpandingTextView.m */,
+				49D261C51846B26100798B89 /* ATMessageBubbleArrowViewV7.h */,
+				49D261C61846B26100798B89 /* ATMessageBubbleArrowViewV7.m */,
 				4961A408161BBDBE00E30037 /* Persistence */,
 				49AC178B16C0A09200BE1615 /* Protocols */,
 				4961A3FF161BBD5200E30037 /* Tasks */,
@@ -1358,6 +1364,7 @@
 				491748BC1341177000A7D11E /* ATConnectionManager.h in Headers */,
 				491748BE1341177000A7D11E /* ATURLConnection.h in Headers */,
 				491748C01341177000A7D11E /* ATWebClient.h in Headers */,
+				49D261C71846B26100798B89 /* ATMessageBubbleArrowViewV7.h in Headers */,
 				49509A61135658E200793EEC /* ATReachability.h in Headers */,
 				4936AE511379DE3100A4B17F /* ATCenteringImageScrollView.h in Headers */,
 				4936AE531379DE3100A4B17F /* ATDefaultTextView.h in Headers */,
@@ -1688,6 +1695,7 @@
 				4987FA86157ACB0B00AF2078 /* ATFeedbackMetrics.m in Sources */,
 				58805F3618120BBF00210DA5 /* UIImage+ATImageEffects.m in Sources */,
 				49B71C9D1841793F00315AAF /* ATTextMessageDevCellV7.m in Sources */,
+				49D261C81846B26200798B89 /* ATMessageBubbleArrowViewV7.m in Sources */,
 				4987FA9D157AE53700AF2078 /* ApptentiveMetrics.m in Sources */,
 				4987FAA0157AE53700AF2078 /* ATMetric.m in Sources */,
 				4987FAA3157AE53700AF2078 /* ATWebClient+Metrics.m in Sources */,

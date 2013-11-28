@@ -36,6 +36,8 @@
 		types |= UIDataDetectorTypePhoneNumber;
 	}
 	self.messageLabel.dataDetectorTypes = types;
+	self.arrowView.direction = ATMessageBubbleArrowDirectionRight;
+	self.arrowView.color = self.textContainerView.backgroundColor;
 }
 
 - (id)initWithFrame:(CGRect)frame {
@@ -66,6 +68,7 @@
 	}
 	[_userIconOffsetView release];
 	[_userIconOffsetConstraint release];
+	[_arrowView release];
 	[super dealloc];
 }
 

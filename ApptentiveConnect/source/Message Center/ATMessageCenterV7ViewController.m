@@ -288,16 +288,15 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 			
 			CGRect iconInset = [layoutAttributes frame];
 			CGFloat topOffset = -(self.collectionView.contentInset.top + self.collectionView.contentOffset.y);
-			iconInset.origin.y += topOffset;
+			iconInset.origin.y += topOffset - 2;
 			
 			CGFloat minOffset = 4;
-			CGFloat minBottomOffset = 10;
+			CGFloat minBottomOffset = 21;
 			CGFloat maxOffset = CGRectGetHeight(cell.bounds) - CGRectGetHeight(cell.userIconView.bounds) - minBottomOffset;
 			
 			CGFloat iconInsetY = -CGRectGetMinY(iconInset);
 			
 			CGFloat newValue = MAX(minOffset, MIN(maxOffset, iconInsetY));
-			
 			cell.userIconOffsetConstraint.constant = newValue;
 			NSString *key = [NSString stringWithFormat:@"%d", indexPath.item];
 			cachedIconTopOffset[key] = @((double)newValue);

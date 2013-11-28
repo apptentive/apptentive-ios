@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment version="1792" defaultVersion="1072" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -21,6 +21,15 @@
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="4" placeholder="YES" id="8Ta-zc-OJT"/>
                             <constraint firstAttribute="height" priority="718" constant="14" id="ahx-vr-j4e"/>
+                        </constraints>
+                    </view>
+                    <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bpu-JQ-1ip" customClass="ATMessageBubbleArrowViewV7">
+                        <rect key="frame" x="288" y="42" width="11" height="11"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="11" id="xHs-5Z-0vu"/>
+                            <constraint firstAttribute="width" constant="11" id="xkp-SL-A8X"/>
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J5f-9B-Qxf" userLabel="Text Container">
@@ -62,12 +71,15 @@
                 <constraint firstAttribute="trailing" secondItem="J5f-9B-Qxf" secondAttribute="trailing" constant="32" id="LFT-HW-vhn"/>
                 <constraint firstAttribute="bottom" secondItem="J5f-9B-Qxf" secondAttribute="bottom" constant="6" id="NYR-vq-6Ym"/>
                 <constraint firstItem="lip-0o-eBP" firstAttribute="leading" secondItem="79u-bX-TFj" secondAttribute="leading" id="NnP-tA-sBg"/>
+                <constraint firstItem="bpu-JQ-1ip" firstAttribute="leading" secondItem="J5f-9B-Qxf" secondAttribute="trailing" id="WHL-8R-ZPx"/>
                 <constraint firstItem="J5f-9B-Qxf" firstAttribute="top" secondItem="79u-bX-TFj" secondAttribute="top" constant="4" id="ZBq-S3-dSF"/>
                 <constraint firstAttribute="trailing" secondItem="lip-0o-eBP" secondAttribute="trailing" id="paK-8L-eed"/>
                 <constraint firstItem="J5f-9B-Qxf" firstAttribute="leading" secondItem="79u-bX-TFj" secondAttribute="leading" constant="15" id="qKn-qk-yTh"/>
+                <constraint firstItem="bpu-JQ-1ip" firstAttribute="top" secondItem="Uin-DY-X3o" secondAttribute="bottom" id="vpi-C3-qhp"/>
             </constraints>
             <size key="customSize" width="320" height="38"/>
             <connections>
+                <outlet property="arrowView" destination="bpu-JQ-1ip" id="Kl8-yy-gWu"/>
                 <outlet property="messageLabel" destination="6Dr-cr-mAu" id="v5I-s0-Ufa"/>
                 <outlet property="textContainerView" destination="J5f-9B-Qxf" id="FCg-3L-ldN"/>
                 <outlet property="userIconOffsetConstraint" destination="ahx-vr-j4e" id="TTb-Mo-JrD"/>

@@ -60,6 +60,7 @@
 	[_userIconView release];
     [_userIconOffsetConstraint release];
 	[_arrowView release];
+	[_userIconOffsetView release];
 	[super dealloc];
 }
 

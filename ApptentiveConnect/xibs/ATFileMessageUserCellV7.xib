@@ -1,26 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment version="1792" defaultVersion="1072" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="fxk-ew-dj5" customClass="ATFileMessageUserCellV7">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="93"/>
+            <rect key="frame" x="0.0" y="0.0" width="320" height="116"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="93"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="116"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="October 4, 1980" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W01-rh-Ufy" userLabel="Date Label">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="17"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                        <nil key="highlightedColor"/>
+                        <size key="shadowOffset" width="0.0" height="0.0"/>
+                    </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WNo-OQ-A26">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="93"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="96"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="OfD-GH-vSw" customClass="ATNetworkImageView">
-                        <rect key="frame" x="280" y="12" width="28" height="28"/>
+                        <rect key="frame" x="280" y="32" width="28" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="28" id="UCm-MM-Mcd"/>
@@ -31,15 +38,19 @@
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
             <constraints>
+                <constraint firstItem="OfD-GH-vSw" firstAttribute="top" secondItem="W01-rh-Ufy" secondAttribute="bottom" constant="15" id="9wL-7a-zIj"/>
                 <constraint firstAttribute="trailing" secondItem="OfD-GH-vSw" secondAttribute="trailing" constant="12" id="D84-2W-VXT"/>
+                <constraint firstItem="W01-rh-Ufy" firstAttribute="top" secondItem="fxk-ew-dj5" secondAttribute="top" id="Qaz-TE-u8j"/>
                 <constraint firstAttribute="trailing" secondItem="WNo-OQ-A26" secondAttribute="trailing" id="Rbp-mo-eEN"/>
-                <constraint firstItem="OfD-GH-vSw" firstAttribute="top" secondItem="fxk-ew-dj5" secondAttribute="top" constant="12" id="X2A-go-ctq"/>
                 <constraint firstAttribute="bottom" secondItem="WNo-OQ-A26" secondAttribute="bottom" id="cgT-0V-g45"/>
-                <constraint firstItem="WNo-OQ-A26" firstAttribute="top" secondItem="fxk-ew-dj5" secondAttribute="top" id="m2h-XQ-XBv"/>
+                <constraint firstAttribute="trailing" secondItem="W01-rh-Ufy" secondAttribute="trailing" id="gTI-ZJ-euY"/>
+                <constraint firstItem="WNo-OQ-A26" firstAttribute="top" secondItem="W01-rh-Ufy" secondAttribute="bottom" constant="3" id="uPW-Ab-DcW"/>
                 <constraint firstItem="WNo-OQ-A26" firstAttribute="leading" secondItem="fxk-ew-dj5" secondAttribute="leading" id="w22-Ax-jm0"/>
+                <constraint firstItem="W01-rh-Ufy" firstAttribute="leading" secondItem="fxk-ew-dj5" secondAttribute="leading" id="xNZ-Xf-vU9"/>
             </constraints>
             <size key="customSize" width="320" height="93"/>
             <connections>
+                <outlet property="dateLabel" destination="W01-rh-Ufy" id="TDo-JG-9Zb"/>
                 <outlet property="imageContainerView" destination="WNo-OQ-A26" id="PhM-fe-OSo"/>
                 <outlet property="userIconView" destination="OfD-GH-vSw" id="gWx-dl-qyJ"/>
             </connections>

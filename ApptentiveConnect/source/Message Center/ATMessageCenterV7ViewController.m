@@ -229,19 +229,46 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	return cellType;
 }
 
+- (NSString *)dateForCellAtIndexPath:(NSIndexPath *)indexPath {
+	BOOL showDate = NO;
+	NSString *dateString = nil;
+	ATAbstractMessage *message = (ATAbstractMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:indexPath];
+	
+	if (indexPath.row == 0) {
+		showDate = YES;
+	} else {
+		ATAbstractMessage *previousMessage = (ATAbstractMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
+		if ([message.creationTime doubleValue] - [previousMessage.creationTime doubleValue] > 60 * 5) {
+			showDate = YES;
+		}
+	}
+	if ([message isKindOfClass:[ATAutomatedMessage class]]) {
+		showDate = YES;
+	}
+	
+	if (showDate) {
+		NSTimeInterval t = (NSTimeInterval)[message.creationTime doubleValue];
+		NSDate *date = [NSDate dateWithTimeIntervalSince1970:t];
+		dateString = [messageDateFormatter stringFromDate:date];
+	}
+	return dateString;
+}
+
 - (void)configureAutomatedCell:(ATAutomatedMessageCellV7 *)cell forIndexPath:(NSIndexPath *)indexPath {
 	ATAbstractMessage *message = (ATAbstractMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:indexPath];
+	cell.dateLabel.text = [self dateForCellAtIndexPath:indexPath];
 	cell.message = (ATAutomatedMessage *)message;
 }
 
 - (void)configureDevTextCell:(ATTextMessageDevCellV7 *)cell forIndexPath:(NSIndexPath *)indexPath {
 	ATAbstractMessage *message = (ATAbstractMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:indexPath];
+	cell.dateLabel.text = [self dateForCellAtIndexPath:indexPath];
 	cell.message = (ATTextMessage *)message;
 }
 
 - (void)configureUserTextCell:(ATTextMessageUserCellV7 *)cell forIndexPath:(NSIndexPath *)indexPath {
 	ATAbstractMessage *message = (ATAbstractMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:indexPath];
-	
+	/*
 	if (cachedIconTopOffset[indexPath]) {
 		double offset = [(NSNumber *)cachedIconTopOffset[indexPath] doubleValue];
 		if (cell.userIconOffsetConstraint.constant != offset) {
@@ -250,17 +277,25 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	} else {
 		cell.userIconOffsetConstraint.constant = 4;
 	}
+	 */
+	cell.dateLabel.text = [self dateForCellAtIndexPath:indexPath];
 	cell.message = (ATTextMessage *)message;
-	[cell setNeedsUpdateConstraints];
-	[cell setNeedsDisplay];
+//	[cell setNeedsUpdateConstraints];
+//	[cell setNeedsDisplay];
 }
 
 - (CGSize)configureUserFileCell:(ATFileMessageUserCellV7 *)cell forIndexPath:(NSIndexPath *)indexPath {
 	ATFileMessage *message = (ATFileMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:indexPath];
+	cell.dateLabel.text = [self dateForCellAtIndexPath:indexPath];
 	[cell setMessage:message];
 	UIImage *imageFile = [UIImage imageWithContentsOfFile:[message.fileAttachment fullLocalPath]];
 	CGSize thumbnailSize = ATThumbnailSizeOfMaxSize(imageFile.size, CGSizeMake(self.collectionView.bounds.size.width, 320));
 	CGSize cellSize = thumbnailSize;
+	CGFloat ratio = cellSize.height/cellSize.width;
+	if (cellSize.width < self.collectionView.bounds.size.width) {
+		cellSize.width = self.collectionView.bounds.size.width;
+		cellSize.height = self.collectionView.bounds.size.width/ratio;
+	}
 	return cellSize;
 }
 
@@ -295,7 +330,7 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 			CGFloat minBottomOffset = 21;
 			if ([message.sentByUser boolValue]) {
 				ATTextMessageUserCellV7 *c = (ATTextMessageUserCellV7 *)cell;
-				CGFloat maxOffset = CGRectGetHeight(cell.bounds) - CGRectGetHeight(c.userIconView.bounds) - minBottomOffset;
+				CGFloat maxOffset = CGRectGetHeight(cell.bounds) - CGRectGetHeight(c.userIconView.bounds) - minBottomOffset - CGRectGetMinY(c.userIconOffsetView.frame);
 				
 				CGFloat iconInsetY = -CGRectGetMinY(iconInset);
 				
@@ -305,7 +340,7 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 				c.userIconOffsetConstraint.constant = newValue;
 			} else {
 				ATTextMessageDevCellV7 *c = (ATTextMessageDevCellV7 *)cell;
-				CGFloat maxOffset = CGRectGetHeight(cell.bounds) - CGRectGetHeight(c.userIconView.bounds) - minBottomOffset;
+				CGFloat maxOffset = CGRectGetHeight(cell.bounds) - CGRectGetHeight(c.userIconView.bounds) - minBottomOffset - CGRectGetMinY(c.userIconOffsetView.frame);
 				
 				CGFloat iconInsetY = -CGRectGetMinY(iconInset);
 				
@@ -357,6 +392,8 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	} else {
 		cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:ATAutomatedMessageCellV7Identifier forIndexPath:indexPath];
 	}
+	
+	[cell setNeedsUpdateConstraints];
 	
 	NSString *key = [self keyForIndexPath:indexPath];
 	cachedCell[key] = cell;

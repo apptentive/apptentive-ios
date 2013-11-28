@@ -11,6 +11,7 @@
 @protocol ATMessageCellV7CachingDelegate;
 
 @interface ATBaseMessageCellV7 : UICollectionViewCell
+@property (nonatomic, retain) IBOutlet UILabel *dateLabel;
 - (void)setCachingDelegate:(NSObject<ATMessageCellV7CachingDelegate> *)cachingDelegate andIndexPath:(NSIndexPath *)indexPath;
 @end
 

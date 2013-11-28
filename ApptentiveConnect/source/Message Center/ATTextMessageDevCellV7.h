@@ -19,6 +19,7 @@
 @property (retain, nonatomic) IBOutlet UIView *textContainerView;
 @property (retain, nonatomic) IBOutlet ATTTTAttributedLabel *messageLabel;
 @property (retain, nonatomic) IBOutlet ATNetworkImageView *userIconView;
+@property (retain, nonatomic) IBOutlet UIView *userIconOffsetView;
 @property (retain, nonatomic) IBOutlet ATMessageBubbleArrowViewV7 *arrowView;
 @property (retain, nonatomic) ATTextMessage *message;
 @property (retain, nonatomic) IBOutlet NSLayoutConstraint *userIconOffsetConstraint;

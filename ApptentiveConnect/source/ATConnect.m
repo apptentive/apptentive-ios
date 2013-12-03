@@ -220,7 +220,7 @@ NSString *const ATIntegrationKeyUrbanAirship = @"urban_airship";
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController {
 	NSDictionary *apptentivePayload = [userInfo objectForKey:@"apptentive"];
 	if (apptentivePayload) {
-		BOOL presentMessageCenter = [[apptentivePayload objectForKey:@"present_message_center"] boolValue];
+		BOOL presentMessageCenter = [[apptentivePayload objectForKey:@"pmc"] boolValue];
 		
 		if (presentMessageCenter) {
 			[self presentMessageCenterFromViewController:viewController];

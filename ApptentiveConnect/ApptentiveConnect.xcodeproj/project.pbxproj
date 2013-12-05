@@ -28,6 +28,8 @@
 		491748C11341177000A7D11E /* ATWebClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 491748B91341177000A7D11E /* ATWebClient.m */; };
 		491E03CE163F261C00DC3E18 /* ATLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 491E03CC163F261C00DC3E18 /* ATLog.h */; };
 		491E03D91640D01F00DC3E18 /* ATFeedbackTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 491E03D81640D01F00DC3E18 /* ATFeedbackTypes.h */; };
+		491F374E18500D2600C7E4BB /* ATTextMessageCellV7.h in Headers */ = {isa = PBXBuildFile; fileRef = 491F374C18500D2600C7E4BB /* ATTextMessageCellV7.h */; };
+		491F374F18500D2600C7E4BB /* ATTextMessageCellV7.m in Sources */ = {isa = PBXBuildFile; fileRef = 491F374D18500D2600C7E4BB /* ATTextMessageCellV7.m */; };
 		492B81D516D595740031BEF6 /* ATFileMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 492B81D316D595740031BEF6 /* ATFileMessage.h */; };
 		492B81D616D595740031BEF6 /* ATFileMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 492B81D416D595740031BEF6 /* ATFileMessage.m */; };
 		492B81D716D595740031BEF6 /* ATFileMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 492B81D416D595740031BEF6 /* ATFileMessage.m */; };
@@ -396,6 +398,8 @@
 		491748B91341177000A7D11E /* ATWebClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATWebClient.m; sourceTree = "<group>"; };
 		491E03CC163F261C00DC3E18 /* ATLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATLog.h; sourceTree = "<group>"; };
 		491E03D81640D01F00DC3E18 /* ATFeedbackTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATFeedbackTypes.h; sourceTree = "<group>"; };
+		491F374C18500D2600C7E4BB /* ATTextMessageCellV7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATTextMessageCellV7.h; path = "Message Center/ATTextMessageCellV7.h"; sourceTree = "<group>"; };
+		491F374D18500D2600C7E4BB /* ATTextMessageCellV7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATTextMessageCellV7.m; path = "Message Center/ATTextMessageCellV7.m"; sourceTree = "<group>"; };
 		492B81D316D595740031BEF6 /* ATFileMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATFileMessage.h; sourceTree = "<group>"; };
 		492B81D416D595740031BEF6 /* ATFileMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATFileMessage.m; sourceTree = "<group>"; };
 		492B81D816D595A00031BEF6 /* ATFileAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATFileAttachment.h; sourceTree = "<group>"; };
@@ -1045,6 +1049,8 @@
 				4968699318330D5800DA8B95 /* ATAutomatedMessageCellV7.h */,
 				4968699418330D5800DA8B95 /* ATAutomatedMessageCellV7.m */,
 				4968699718330E0700DA8B95 /* ATAutomatedMessageCellV7.xib */,
+				491F374C18500D2600C7E4BB /* ATTextMessageCellV7.h */,
+				491F374D18500D2600C7E4BB /* ATTextMessageCellV7.m */,
 				49477B731835B529001D37AD /* ATTextMessageUserCellV7.h */,
 				49477B741835B529001D37AD /* ATTextMessageUserCellV7.m */,
 				49477B771835B541001D37AD /* ATTextMessageUserCellV7.xib */,
@@ -1355,6 +1361,7 @@
 			files = (
 				49C002A1133413BB0071F088 /* ApptentiveConnect-Prefix.pch in Headers */,
 				49D1123C13359BA000603373 /* NSData+ATBase64.h in Headers */,
+				491F374E18500D2600C7E4BB /* ATTextMessageCellV7.h in Headers */,
 				49C002A2133413BB0071F088 /* ATConnect.h in Headers */,
 				49D1124F13368CC200603373 /* ATTask.h in Headers */,
 				49D1125313368CEF00603373 /* ATFeedbackTask.h in Headers */,
@@ -1703,6 +1710,7 @@
 				493AEB2E15990A4D00DFD4C7 /* ATSurvey.m in Sources */,
 				493AEB3115990A4D00DFD4C7 /* ATSurveyParser.m in Sources */,
 				493AEB3415990A4D00DFD4C7 /* ATSurveyQuestion.m in Sources */,
+				491F374F18500D2600C7E4BB /* ATTextMessageCellV7.m in Sources */,
 				493AEB3715990A4D00DFD4C7 /* ATLegacySurveyResponse.m in Sources */,
 				493AEB3A15990A4D00DFD4C7 /* ATSurveysBackend.m in Sources */,
 				493AEB3D15990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.m in Sources */,

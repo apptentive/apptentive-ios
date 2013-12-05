@@ -45,6 +45,7 @@
 		[self.color setFill];
 		[bezierPath fill];
 	} else {
+		CGContextSaveGState(context);
 		UIBezierPath *bezierPath = [UIBezierPath bezierPath];
 		[bezierPath moveToPoint: CGPointMake(2.49, 18.5)];
 		[bezierPath addCurveToPoint: CGPointMake(10.99, 1) controlPoint1: CGPointMake(12.12, 13.45) controlPoint2: CGPointMake(10.99, 1)];
@@ -52,6 +53,7 @@
 		[bezierPath addCurveToPoint: CGPointMake(-11.01, 13) controlPoint1: CGPointMake(-8.37, 8.53) controlPoint2: CGPointMake(-10.54, 7.58)];
 		[bezierPath addCurveToPoint: CGPointMake(2.49, 18.5) controlPoint1: CGPointMake(-11.47, 18.42) controlPoint2: CGPointMake(-7.14, 23.55)];
 		[bezierPath closePath];
+		[bezierPath applyTransform:CGAffineTransformMakeTranslation(25, 0)];
 		[self.color setFill];
 		[bezierPath fill];
 	}

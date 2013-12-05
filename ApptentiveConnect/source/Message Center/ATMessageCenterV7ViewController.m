@@ -97,12 +97,6 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	[self.collectionView registerNib:userFileCellNib forCellWithReuseIdentifier:ATFileMessageUserCellV7Identifier];
 	[self.collectionView reloadData];
 	
-	// TODO: Not perfect.
-	self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length + self.navigationController.navigationBar.bounds.size.height + 20, 0, 0, 0);
-	UIEdgeInsets inset = self.collectionView.scrollIndicatorInsets;
-	inset.top = self.collectionView.contentInset.top;
-	self.collectionView.scrollIndicatorInsets = inset;
-	
 	messageDateFormatter = [[NSDateFormatter alloc] init];
 	messageDateFormatter.dateStyle = NSDateFormatterMediumStyle;
 	messageDateFormatter.timeStyle = NSDateFormatterShortStyle;
@@ -156,6 +150,11 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 }
 
 - (void)relayoutSubviews {
+	self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, 0, 0, 0);
+	UIEdgeInsets inset = self.collectionView.scrollIndicatorInsets;
+	inset.top = self.collectionView.contentInset.top;
+	self.collectionView.scrollIndicatorInsets = inset;
+	
 	CGFloat viewHeight = self.view.bounds.size.height;
 	
 	CGRect composerFrame = self.inputContainerView.frame;
@@ -186,6 +185,7 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
 	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+	[self relayoutSubviews];
 }
 
 #pragma mark Private
@@ -324,7 +324,8 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 			
 			CGRect iconInset = [layoutAttributes frame];
 			CGFloat topOffset = -(self.collectionView.contentInset.top + self.collectionView.contentOffset.y);
-			iconInset.origin.y += topOffset - 2;
+			iconInset.origin.y += topOffset - 1;
+			iconInset.origin.y += CGRectGetMaxY(cell.dateLabel.bounds);
 			
 			CGFloat minOffset = 4;
 			CGFloat minBottomOffset = 21;

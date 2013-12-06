@@ -328,7 +328,7 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 			iconInset.origin.y += CGRectGetMaxY(cell.dateLabel.bounds);
 			
 			CGFloat minOffset = 4;
-			CGFloat minBottomOffset = 24;
+			CGFloat minBottomOffset = 16;
 			if ([message.sentByUser boolValue]) {
 				ATTextMessageUserCellV7 *c = (ATTextMessageUserCellV7 *)cell;
 				CGFloat maxOffset = CGRectGetHeight(cell.bounds) - CGRectGetHeight(c.userIconView.bounds) - minBottomOffset - CGRectGetMinY(c.userIconOffsetView.frame);

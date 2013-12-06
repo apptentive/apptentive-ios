@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment version="1792" defaultVersion="1072" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -34,7 +34,7 @@
                         </constraints>
                     </view>
                     <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bpu-JQ-1ip" customClass="ATMessageBubbleArrowViewV7">
-                        <rect key="frame" x="265" y="66" width="21" height="11"/>
+                        <rect key="frame" x="265" y="65" width="21" height="11"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -88,7 +88,7 @@
                 <constraint firstAttribute="trailing" secondItem="lip-0o-eBP" secondAttribute="trailing" id="paK-8L-eed"/>
                 <constraint firstItem="J5f-9B-Qxf" firstAttribute="leading" secondItem="79u-bX-TFj" secondAttribute="leading" constant="15" id="qKn-qk-yTh"/>
                 <constraint firstItem="0Si-rd-yA7" firstAttribute="top" secondItem="79u-bX-TFj" secondAttribute="top" id="rQE-a0-Zsf"/>
-                <constraint firstItem="bpu-JQ-1ip" firstAttribute="top" secondItem="Uin-DY-X3o" secondAttribute="bottom" id="vpi-C3-qhp"/>
+                <constraint firstItem="bpu-JQ-1ip" firstAttribute="top" secondItem="Uin-DY-X3o" secondAttribute="bottom" constant="-1" id="vpi-C3-qhp"/>
             </constraints>
             <size key="customSize" width="320" height="38"/>
             <connections>

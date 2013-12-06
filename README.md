@@ -366,6 +366,9 @@ When push notifications arrive, pass them to Apptentive:
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
     // Pass the push Notificaton userInfo dictionary to Apptentive
     [[ATConnect sharedConnection] didReceiveRemoteNotification:userInfo fromViewController:viewController];
+	
+	// You are in charge of clearing badges and/or notifications, if desired. Apptentive does not reset them.
+	application.applicationIconBadgeNumber = 0;
 }
 ```
 

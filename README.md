@@ -367,7 +367,7 @@ When push notifications arrive, pass them to Apptentive:
     // Pass the push Notificaton userInfo dictionary to Apptentive
     [[ATConnect sharedConnection] didReceiveRemoteNotification:userInfo fromViewController:viewController];
 	
-	// You are in charge of clearing badges and/or notifications, if desired. Apptentive does not reset them.
+	// You are responsible for clearing badges and/or notifications, if desired. Apptentive does not reset them.
 	application.applicationIconBadgeNumber = 0;
 }
 ```

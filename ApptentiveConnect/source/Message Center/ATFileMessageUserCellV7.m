@@ -22,6 +22,18 @@
 	self.userIconView.imageURL = [NSURL URLWithString:self.message.sender.profilePhotoURL];
 	self.userIconView.layer.cornerRadius = self.userIconView.bounds.size.width*0.5;
 	self.userIconView.layer.masksToBounds = YES;
+	
+	self.imageContainerView.layer.cornerRadius = 4;
+	self.imageContainerView.clipsToBounds = YES;
+	
+	self.imageShadowView.clipsToBounds = NO;
+	self.imageShadowView.userInteractionEnabled = NO;
+	self.imageShadowView.layer.shadowColor = [UIColor blackColor].CGColor;
+	self.imageShadowView.layer.shadowRadius = 3;
+	self.imageShadowView.layer.shadowOpacity = 0.22;
+	self.imageShadowView.layer.shadowOffset = CGSizeMake(0, 0);
+	
+	self.arrowView.direction = ATMessageBubbleArrowDirectionRight;
 }
 
 - (id)initWithFrame:(CGRect)frame {
@@ -41,6 +53,9 @@
 	[_userIconView release];
 	[currentImage release];
 	[_imageContainerView release];
+	[_imageWidthConstraint release];
+	[_imageHeightConstraint release];
+	[_imageShadowView release];
 	[super dealloc];
 }
 
@@ -50,19 +65,23 @@
 		_message = [message retain];
 		
 		UIImage *imageFile = [UIImage imageWithContentsOfFile:[message.fileAttachment fullLocalPath]];
-		CGSize thumbnailSize = ATThumbnailSizeOfMaxSize(imageFile.size, CGSizeMake(320, 320));
+		//TODO: Sizing on iPad
+		CGSize thumbnailSize = ATThumbnailSizeOfMaxSize(imageFile.size, CGSizeMake(260, 260));
 		CGFloat scale = [[UIScreen mainScreen] scale];
-		thumbnailSize.width *= scale;
-		thumbnailSize.height *= scale;
+		CGSize scaledThumbnailSize = thumbnailSize;
+		scaledThumbnailSize.width *= scale;
+		scaledThumbnailSize.height *= scale;
 		
-		UIImage *thumbnail = [message.fileAttachment thumbnailOfSize:thumbnailSize];
+		UIImage *thumbnail = [message.fileAttachment thumbnailOfSize:scaledThumbnailSize];
 		if (thumbnail) {
 			[currentImage release], currentImage = nil;
 			currentImage = [thumbnail retain];
+			self.imageWidthConstraint.constant = thumbnailSize.width;
+			self.imageHeightConstraint.constant = thumbnailSize.height;
 			self.imageContainerView.layer.contents = (id)currentImage.CGImage;
 		} else {
 			[self setCurrentImage:nil];
-			[message.fileAttachment createThumbnailOfSize:thumbnailSize completion:^{
+			[message.fileAttachment createThumbnailOfSize:scaledThumbnailSize completion:^{
 				UIImage *image = [UIImage imageWithContentsOfFile:[message.fileAttachment fullLocalPath]];
 				[self setCurrentImage:image];
 			}];
@@ -77,6 +96,9 @@
 		[currentImage release], currentImage = nil;
 		currentImage = [image retain];
 		if (currentImage != nil) {
+			CGSize thumbnailSize = ATThumbnailSizeOfMaxSize(currentImage.size, CGSizeMake(260, 260));
+			self.imageWidthConstraint.constant = thumbnailSize.width;
+			self.imageHeightConstraint.constant = thumbnailSize.height;
 			self.imageContainerView.layer.contents = (id)currentImage.CGImage;
 			self.imageContainerView.layer.contentsGravity = kCAGravityResizeAspect;
 		}

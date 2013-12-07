@@ -350,6 +350,26 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 				cachedIconTopOffset[key] = @((double)newValue);
 				c.userIconOffsetConstraint.constant = newValue;
 			}
+		} else if (cellType == ATMessageCellTypeFile) {
+			ATFileMessageUserCellV7 *cell = cachedCell[key] ? cachedCell[key] : [self collectionView:self.collectionView cellForItemAtIndexPath:indexPath];
+			
+			CGRect iconInset = [layoutAttributes frame];
+			CGFloat topOffset = -(self.collectionView.contentInset.top + self.collectionView.contentOffset.y);
+			iconInset.origin.y += topOffset - 1;
+			iconInset.origin.y += CGRectGetMaxY(cell.dateLabel.bounds);
+			
+			CGFloat minOffset = 4;
+			CGFloat minBottomOffset = 16;
+			if ([message.sentByUser boolValue]) {
+				CGFloat maxOffset = CGRectGetHeight(cell.bounds) - CGRectGetHeight(cell.userIconView.bounds) - minBottomOffset - CGRectGetMinY(cell.userIconOffsetView.frame);
+				
+				CGFloat iconInsetY = -CGRectGetMinY(iconInset);
+				
+				CGFloat newValue = MAX(minOffset, MIN(maxOffset, iconInsetY));
+				NSString *key = [NSString stringWithFormat:@"%d", indexPath.item];
+				cachedIconTopOffset[key] = @((double)newValue);
+				cell.userIconOffsetConstraint.constant = newValue;
+			}
 		}
 	}
 	[self.collectionView setNeedsLayout];
@@ -434,7 +454,10 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 		s.width = self.collectionView.bounds.size.width;
 		return s;
 	} else if (cellType == ATMessageCellTypeFile && [message.sentByUser boolValue]) {
-		CGSize s = [self configureUserFileCell:sizingUserFileCell forIndexPath:indexPath];
+		[self configureUserFileCell:sizingUserFileCell forIndexPath:indexPath];
+		cell = sizingUserFileCell;
+		CGSize s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+		s.width = self.collectionView.bounds.size.width;
 		return s;
 	} else {
 		return CGSizeMake(self.collectionView.bounds.size.width, 40);

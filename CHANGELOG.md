@@ -1,3 +1,9 @@
+2013-12-?? wooster, pkamb v1.2.4 (in progress)
+--------------------------------
+Fixes:
+
+* [Issue #65](https://github.com/apptentive/apptentive-ios/issues/65) Long response is truncated in message centre on the device
+
 2013-11-22 wooster, pkamb v1.2.3
 --------------------------------
 This is a release solely to fix a crash related to database migration in iOS 7.

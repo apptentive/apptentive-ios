@@ -67,6 +67,12 @@
 - (void)setTooLong:(BOOL)isTooLong {
 	if (tooLong != isTooLong) {
 		tooLong = isTooLong;
+		self.tooLongLabel.hidden = !tooLong;
+		NSLog(@"setting too long to %d", tooLong);
+		if (tooLong) {
+			NSString *fullText = NSLocalizedString(@"Show full message.", @"Message bubble text for very long messages.");
+			self.tooLongLabel.text = fullText;
+		}
 		[self setNeedsLayout];
 	}
 }
@@ -100,6 +106,7 @@
 	[dateLabel release], dateLabel = nil;
 	[chatBubbleContainer release], chatBubbleContainer = nil;
 	[usernameLabel release], usernameLabel = nil;
+	[_tooLongLabel release];
 	[super dealloc];
 }
 

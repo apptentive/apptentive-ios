@@ -837,16 +837,6 @@ typedef enum {
 			CGFloat height = [textCell cellHeightForWidth:aTableView.bounds.size.width];
 			if (height > 1024) {
 				textCell.tooLong = YES;
-				NSString *fullText = NSLocalizedString(@"Message is very long. Tap to read.", @"Message bubble text for very long messages.");
-				[textCell.messageText setText:fullText afterInheritingLabelAttributesAndConfiguringWithBlock:^ NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
-					UIColor *blueColor = [UIColor blueColor];
-					NSRange range = NSMakeRange(0, [fullText length]);
-					[mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)blueColor.CGColor range:range];
-					if ([ATUtilities osVersionGreaterThanOrEqualTo:@"6"]) {
-						[mutableAttributedString addAttribute:(NSString *)NSUnderlineStyleAttributeName value:[NSNumber numberWithInt:NSUnderlineStyleSingle] range:range];
-					}
-					return mutableAttributedString;
-				}];
 			}
 		}
 		

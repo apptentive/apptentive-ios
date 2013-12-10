@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment version="1024" defaultVersion="1072" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ATMessageCenterViewController">
@@ -42,6 +42,14 @@
                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Too Long" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" id="JZs-QS-jeV" userLabel="Too Long Label">
+                            <rect key="frame" x="10" y="59" width="347" height="21"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.90000000000000002" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
@@ -66,6 +74,7 @@
                 <outlet property="dateLabel" destination="26" id="27"/>
                 <outlet property="messageBubbleImage" destination="18" id="20"/>
                 <outlet property="messageText" destination="21" id="52"/>
+                <outlet property="tooLongLabel" destination="JZs-QS-jeV" id="r9b-W7-dvK"/>
                 <outlet property="userIcon" destination="3" id="19"/>
                 <outlet property="usernameLabel" destination="45" id="53"/>
             </connections>
@@ -102,6 +111,14 @@
                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Too Long" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" id="M38-8F-O15" userLabel="Too Long Label">
+                            <rect key="frame" x="20" y="60" width="367" height="21"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                            <color key="backgroundColor" red="0.88627457618713379" green="0.89019614458084106" blue="0.92156869173049927" alpha="0.90000000000000002" colorSpace="deviceRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" red="0.0" green="0.50196081399917603" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
@@ -121,6 +138,7 @@
                 <outlet property="dateLabel" destination="33" id="40"/>
                 <outlet property="messageBubbleImage" destination="37" id="41"/>
                 <outlet property="messageText" destination="36" id="51"/>
+                <outlet property="tooLongLabel" destination="M38-8F-O15" id="1Be-6Y-fc1"/>
                 <outlet property="userIcon" destination="35" id="38"/>
                 <outlet property="usernameLabel" destination="46" id="50"/>
             </connections>

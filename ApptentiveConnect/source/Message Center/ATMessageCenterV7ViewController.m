@@ -174,6 +174,8 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	collectionView.frame = collectionFrame;
 	self.inputContainerView.frame = composerFrame;
 	[self.flowLayout invalidateLayout];
+	
+	[self scrollViewDidScroll:self.collectionView];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {

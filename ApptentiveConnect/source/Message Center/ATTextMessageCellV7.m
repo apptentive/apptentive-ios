@@ -81,6 +81,19 @@
 	}
 }
 
+- (void)collection:(UICollectionView *)collectionView didScroll:(CGFloat)topOffset {
+	CGRect iconInset = [collectionView convertRect:self.frame fromView:self.superview];
+	iconInset.origin.y += topOffset - 1;
+	iconInset.origin.y += CGRectGetMaxY(self.dateLabel.bounds);
+	
+	CGFloat minOffset = 4;
+	CGFloat minBottomOffset = 16;
+	CGFloat maxOffset = CGRectGetHeight(self.bounds) - CGRectGetHeight(self.userIconView.bounds) - minBottomOffset - CGRectGetMinY(self.userIconOffsetView.frame);
+	CGFloat iconInsetY = -CGRectGetMinY(iconInset);
+	CGFloat newValue = MAX(minOffset, MIN(maxOffset, iconInsetY));
+	self.userIconOffsetConstraint.constant = newValue;
+}
+
 #pragma mark TTTAttributedLabelDelegate
 - (void)attributedLabel:(ATTTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url {
 	if ([[UIApplication sharedApplication] canOpenURL:url]) {

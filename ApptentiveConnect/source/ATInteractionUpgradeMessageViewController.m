@@ -10,6 +10,7 @@
 #import "ATConnect_Private.h"
 #import "ATInteraction.h"
 #import "ATBackend.h"
+#import "ATLog.h"
 #import "ATMessagePanelViewController.h"
 #import "ATUtilities.h"
 #import "UIImage+ATImageEffects.h"

@@ -8,31 +8,38 @@
 
 #import "ATBaseMessageCellV7.h"
 
-@implementation ATBaseMessageCellV7 {
-	NSObject<ATMessageCellV7CachingDelegate> *cachingDelegate;
-	NSIndexPath *currentIndexPath;
+NSString *const ATMessageCollectionDidScroll = @"ATMessageCollectionDidScroll";
+NSString *const ATMessageCollectionTopOffsetKey = @"topOffset";
+
+@implementation ATBaseMessageCellV7
+
+- (void)didScroll:(NSNotification *)notification {
+	NSDictionary *userInfo = [notification userInfo];
+	NSNumber *offset = userInfo[ATMessageCollectionTopOffsetKey];
+	if (offset) {
+		CGFloat topOffset = CGFLOAT_IS_DOUBLE ? [offset doubleValue] : [offset floatValue];
+		UIView *collectionView = self;
+		while ((collectionView = [collectionView superview])) {
+			if ([collectionView isKindOfClass:[UICollectionView class]]) {
+				break;
+			}
+		}
+		if (collectionView && [collectionView isKindOfClass:[UICollectionView class]]) {
+			[self collection:(UICollectionView *)collectionView didScroll:topOffset];
+		}
+	}
 }
 
-- (void)setCachingDelegate:(NSObject<ATMessageCellV7CachingDelegate> *)aCachingDelegate andIndexPath:(NSIndexPath *)indexPath {
-	if (cachingDelegate != aCachingDelegate) {
-		cachingDelegate = aCachingDelegate;
-	}
-	if (indexPath != currentIndexPath) {
-		[currentIndexPath release], currentIndexPath = nil;
-		indexPath = [indexPath copy];
-	}
-}
-
-- (void)prepareForReuse {
-	[super prepareForReuse];
-	if (cachingDelegate) {
-		[cachingDelegate messageCell:self preparingForReuseAtPath:currentIndexPath];
-	}
+- (void)awakeFromNib {
+	[super awakeFromNib];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didScroll:) name:ATMessageCollectionDidScroll object:nil];
 }
 
 - (void)dealloc {
-	[currentIndexPath release], currentIndexPath = nil;
-	cachingDelegate = nil;
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[super dealloc];
+}
+
+- (void)collection:(UICollectionView *)collectionView didScroll:(CGFloat)topOffset {
 }
 @end

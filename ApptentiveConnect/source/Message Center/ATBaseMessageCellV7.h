@@ -8,14 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol ATMessageCellV7CachingDelegate;
+extern NSString *const ATMessageCollectionDidScroll;
+extern NSString *const ATMessageCollectionTopOffsetKey;
 
 @interface ATBaseMessageCellV7 : UICollectionViewCell
 @property (nonatomic, retain) IBOutlet UILabel *dateLabel;
-- (void)setCachingDelegate:(NSObject<ATMessageCellV7CachingDelegate> *)cachingDelegate andIndexPath:(NSIndexPath *)indexPath;
-@end
 
-
-@protocol ATMessageCellV7CachingDelegate <NSObject>
-- (void)messageCell:(ATBaseMessageCellV7 *)cell preparingForReuseAtPath:(NSIndexPath *)path;
+/*! Do not call directly. You may override this to perform layout on scrolling. */
+- (void)collection:(UICollectionView *)collectionView didScroll:(CGFloat)topOffset;
 @end

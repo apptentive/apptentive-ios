@@ -30,6 +30,7 @@
 #import "ATMessageDisplayType.h"
 #import "ATGetMessagesTask.h"
 #import "ATMessageCenterMetrics.h"
+#import "ATMessageSender.h"
 #import "ATMessageTask.h"
 #import "ATMessagePanelViewController.h"
 #import "ATTextMessage.h"
@@ -278,6 +279,13 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	message.body = body;
 	message.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
 	message.sentByUser = @YES;
+	ATConversation *conversation = [ATConversationUpdater currentConversation];
+	if (conversation) {
+		ATMessageSender *sender = [ATMessageSender findSenderWithID:conversation.personID];
+		if (sender) {
+			message.sender = sender;
+		}
+	}
 	[self attachCustomDataToMessage:message];
 	[message updateClientCreationTime];
 	NSError *error = nil;

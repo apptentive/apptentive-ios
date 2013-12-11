@@ -412,7 +412,14 @@
 					ATFileMessage *fileMessage = (ATFileMessage *)[ATData newEntityNamed:@"ATFileMessage"];
 					ATFileAttachment *fileAttachment = (ATFileAttachment *)[ATData newEntityNamed:@"ATFileAttachment"];
 					fileMessage.pendingState = @(ATPendingMessageStateSending);
-					fileMessage.sentByUser = @(YES);
+					fileMessage.sentByUser = @YES;
+					ATConversation *conversation = [ATConversationUpdater currentConversation];
+					if (conversation) {
+						ATMessageSender *sender = [ATMessageSender findSenderWithID:conversation.personID];
+						if (sender) {
+							fileMessage.sender = sender;
+						}
+					}
 					[fileMessage updateClientCreationTime];
 					fileMessage.fileAttachment = fileAttachment;
 					

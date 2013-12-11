@@ -38,6 +38,12 @@
 	self.messageLabel.dataDetectorTypes = types;
 	self.arrowView.direction = self.arrowDirection;
 	self.arrowView.color = self.textContainerView.backgroundColor;
+	
+	if ([[self.message pendingState] intValue] == ATPendingMessageStateComposing) {
+		self.composingImageView.hidden = NO;
+	} else {
+		self.composingImageView.hidden = YES;
+	}
 }
 
 - (id)initWithFrame:(CGRect)frame {
@@ -50,6 +56,7 @@
 
 - (void)awakeFromNib {
 	[super awakeFromNib];
+	self.composingImageView.image = [ATBackend imageNamed:@"at_mc_text_compose_ellipsis"];
 	//	[self setup];
 }
 
@@ -69,6 +76,7 @@
 	[_userIconOffsetView release];
 	[_userIconOffsetConstraint release];
 	[_arrowView release];
+	[_composingImageView release];
 	[super dealloc];
 }
 

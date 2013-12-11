@@ -18,6 +18,7 @@
 #import "ATLog.h"
 #import "ATMessageCenterDataSource.h"
 #import "ATMessageCenterMetrics.h"
+#import "ATMessageSender.h"
 #import "ATMessageTask.h"
 #import "ATPersonDetailsViewController.h"
 #import "ATTaskQueue.h"
@@ -240,6 +241,13 @@
 	if (anInputView.text && ![anInputView.text isEqualToString:@""]) {
 		if (!composingMessage) {
 			composingMessage = (ATTextMessage *)[ATData newEntityNamed:@"ATTextMessage"];
+			ATConversation *conversation = [ATConversationUpdater currentConversation];
+			if (conversation) {
+				ATMessageSender *sender = [ATMessageSender findSenderWithID:conversation.personID];
+				if (sender) {
+					composingMessage.sender = sender;
+				}
+			}
 			[composingMessage setup];
 		}
 	} else {

@@ -66,6 +66,7 @@
 	[[ATBackend sharedBackend] messageCenterEnteredForeground];
 	
 	[self markAllMessagesAsRead];
+	[ATTextMessage clearComposingMessages];
 	
 	NSError *error = nil;
 	if (![self.fetchedMessagesController performFetch:&error]) {
@@ -73,7 +74,6 @@
 		//TODO: Handle this error.
 	}
 	
-	[ATTextMessage clearComposingMessages];
 	[self createIntroMessageIfNecessary];
 }
 

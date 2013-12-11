@@ -28,7 +28,6 @@
 		491748C11341177000A7D11E /* ATWebClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 491748B91341177000A7D11E /* ATWebClient.m */; };
 		491E03CE163F261C00DC3E18 /* ATLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 491E03CC163F261C00DC3E18 /* ATLog.h */; };
 		491E03D91640D01F00DC3E18 /* ATFeedbackTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 491E03D81640D01F00DC3E18 /* ATFeedbackTypes.h */; };
-		491F374E18500D2600C7E4BB /* ATTextMessageCellV7.h in Headers */ = {isa = PBXBuildFile; fileRef = 491F374C18500D2600C7E4BB /* ATTextMessageCellV7.h */; };
 		491F374F18500D2600C7E4BB /* ATTextMessageCellV7.m in Sources */ = {isa = PBXBuildFile; fileRef = 491F374D18500D2600C7E4BB /* ATTextMessageCellV7.m */; };
 		492B81D516D595740031BEF6 /* ATFileMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 492B81D316D595740031BEF6 /* ATFileMessage.h */; };
 		492B81D616D595740031BEF6 /* ATFileMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 492B81D416D595740031BEF6 /* ATFileMessage.m */; };
@@ -162,6 +161,7 @@
 		496DC3941333D35600743F65 /* libApptentiveConnect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC37F1333D35600743F65 /* libApptentiveConnect.a */; };
 		496DD4181773BF2700D041B0 /* ATNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 496DD4161773BF2700D041B0 /* ATNavigationController.h */; };
 		496DD4191773BF2700D041B0 /* ATNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 496DD4171773BF2700D041B0 /* ATNavigationController.m */; };
+		496ED75E1857F849001C14FC /* ATTextMessageCellV7.h in Headers */ = {isa = PBXBuildFile; fileRef = 491F374C18500D2600C7E4BB /* ATTextMessageCellV7.h */; };
 		496F29E014496711005B7C01 /* ATSimpleImageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 496F29DE14496702005B7C01 /* ATSimpleImageViewController.xib */; };
 		496F5781174060CE003BF516 /* ATDataManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 496F577F174060CE003BF516 /* ATDataManager.h */; };
 		496F5782174060CE003BF516 /* ATDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 496F5780174060CE003BF516 /* ATDataManager.m */; };
@@ -1361,7 +1361,7 @@
 			files = (
 				49C002A1133413BB0071F088 /* ApptentiveConnect-Prefix.pch in Headers */,
 				49D1123C13359BA000603373 /* NSData+ATBase64.h in Headers */,
-				491F374E18500D2600C7E4BB /* ATTextMessageCellV7.h in Headers */,
+				496ED75E1857F849001C14FC /* ATTextMessageCellV7.h in Headers */,
 				49C002A2133413BB0071F088 /* ATConnect.h in Headers */,
 				49D1124F13368CC200603373 /* ATTask.h in Headers */,
 				49D1125313368CEF00603373 /* ATFeedbackTask.h in Headers */,

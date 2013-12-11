@@ -92,6 +92,8 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	[self.collectionView registerNib:userTextCellNib forCellWithReuseIdentifier:ATTextMessageUserCellV7Identifier];
 	[self.collectionView registerNib:userFileCellNib forCellWithReuseIdentifier:ATFileMessageUserCellV7Identifier];
 	self.collectionView.alwaysBounceVertical = YES;
+	self.collectionView.dataSource = self;
+	self.collectionView.delegate = self;
 	[self.collectionView reloadData];
 	
 	messageDateFormatter = [[NSDateFormatter alloc] init];
@@ -308,20 +310,25 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	ATBaseMessageCellV7 *cell = nil;
 	ATAbstractMessage *message = (ATAbstractMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:indexPath];
 	ATMessageCellType cellType = [self cellTypeForMessage:message];
+	BOOL fromUser = [message.sentByUser boolValue];
+	
+	if ([[message pendingState] intValue] == ATPendingMessageStateComposing || [[message pendingState] intValue] == ATPendingMessageStateSending) {
+		fromUser = YES;
+	}
 	
 	if (cellType == ATMessageCellTypeAutomated) {
 		ATAutomatedMessageCellV7 *c = [self.collectionView dequeueReusableCellWithReuseIdentifier:ATAutomatedMessageCellV7Identifier forIndexPath:indexPath];
 		[self configureAutomatedCell:c forIndexPath:indexPath];
 		cell = c;
-	} else if (cellType == ATMessageCellTypeText && [message.sentByUser boolValue]) {
+	} else if (cellType == ATMessageCellTypeText && fromUser) {
 		ATTextMessageUserCellV7 *c = [self.collectionView dequeueReusableCellWithReuseIdentifier:ATTextMessageUserCellV7Identifier forIndexPath:indexPath];
 		[self configureUserTextCell:c forIndexPath:indexPath];
 		cell = c;
-	} else if (cellType == ATMessageCellTypeText && ![message.sentByUser boolValue]) {
+	} else if (cellType == ATMessageCellTypeText && !fromUser) {
 		ATTextMessageDevCellV7 *c = [self.collectionView dequeueReusableCellWithReuseIdentifier:ATTextMessageDevCellV7Identifier forIndexPath:indexPath];
 		[self configureDevTextCell:c forIndexPath:indexPath];
 		cell = c;
-	} else if (cellType == ATMessageCellTypeFile && [message.sentByUser boolValue]) {
+	} else if (cellType == ATMessageCellTypeFile && fromUser) {
 		ATFileMessageUserCellV7 *c = [self.collectionView dequeueReusableCellWithReuseIdentifier:ATFileMessageUserCellV7Identifier forIndexPath:indexPath];
 		[self configureUserFileCell:c forIndexPath:indexPath];
 		cell = c;

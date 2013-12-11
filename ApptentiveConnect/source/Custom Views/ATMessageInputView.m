@@ -98,7 +98,7 @@ UIEdgeInsets insetsForView(UIView *v) {
 	}
 	CGFloat previousHeight = self.frame.size.height;
 	
-	CGFloat newTextHeight = previousHeight;
+	CGFloat newTextHeight;
 	
 	if (([[[UIDevice currentDevice] systemVersion] compare:@"7" options:NSNumericSearch] != NSOrderedAscending)) {
 		if ([string hasSuffix:@"\n"]) {

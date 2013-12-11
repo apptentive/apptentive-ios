@@ -13,14 +13,9 @@
 
 @implementation ATTextMessageCellV7
 - (void)setup {
-	NSMutableAttributedString *s = [[NSMutableAttributedString alloc] init];
-	if (self.message.body) {
-		NSDictionary *attrs = @{NSFontAttributeName: [UIFont preferredFontForTextStyle:UIFontTextStyleBody]};
-		NSAttributedString *body = [[[NSAttributedString alloc] initWithString:self.message.body attributes:attrs] autorelease];
-		[s appendAttributedString:body];
-	}
-	self.messageLabel.attributedText = s;
-	[s release], s = nil;
+	self.messageLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+	self.messageLabel.textColor = [UIColor blackColor];
+	self.messageLabel.text = self.message.body;
 	
 	self.textContainerView.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:1];
 	self.textContainerView.layer.cornerRadius = 10;
@@ -58,7 +53,6 @@
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-		//        [self setup];
     }
     return self;
 }
@@ -66,7 +60,6 @@
 - (void)awakeFromNib {
 	[super awakeFromNib];
 	self.composingImageView.image = [ATBackend imageNamed:@"at_mc_text_compose_ellipsis"];
-	//	[self setup];
 }
 
 - (void)prepareForReuse {

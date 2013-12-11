@@ -588,7 +588,7 @@ static NSDateFormatter *dateFormatter = nil;
 				maxImage = image;
 			}
 		}
-		iconFile = maxImage;
+		iconFile = [maxImage retain];
 	});
 	return [[iconFile retain] autorelease];
 }

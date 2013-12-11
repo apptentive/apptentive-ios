@@ -34,13 +34,15 @@
 }
 
 + (ATInteractionUsageData *)usageDataForInteraction:(ATInteraction *)interaction
-						 daysSinceInstall:(NSNumber *)daysSinceInstall
-						 daysSinceUpgrade:(NSNumber *)daysSinceUpgrade
-					   applicationVersion:(NSString *)applicationVersion
-					codePointInvokesTotal:(NSDictionary *)codePointInvokesTotal
-				  codePointInvokesVersion:(NSDictionary *)codePointInvokesVersion
-				  interactionInvokesTotal:(NSDictionary *)interactionInvokesTotal
-				interactionInvokesVersion:(NSDictionary *)interactionInvokesVersion
+								   daysSinceInstall:(NSNumber *)daysSinceInstall
+								   daysSinceUpgrade:(NSNumber *)daysSinceUpgrade
+								 applicationVersion:(NSString *)applicationVersion
+							  codePointInvokesTotal:(NSDictionary *)codePointInvokesTotal
+							codePointInvokesVersion:(NSDictionary *)codePointInvokesVersion
+							codePointInvokesTimeAgo:(NSDictionary *)codePointInvokesTimeAgo
+							interactionInvokesTotal:(NSDictionary *)interactionInvokesTotal
+						  interactionInvokesVersion:(NSDictionary *)interactionInvokesVersion
+						  interactionInvokesTimeAgo:(NSDictionary *)interactionInvokesTimeAgo
 {
 	ATInteractionUsageData *usageData = [ATInteractionUsageData usageDataForInteraction:interaction];
 	usageData.daysSinceInstall = daysSinceInstall;
@@ -48,8 +50,10 @@
 	usageData.applicationVersion = applicationVersion;
 	usageData.codePointInvokesTotal = codePointInvokesTotal;
 	usageData.codePointInvokesVersion = codePointInvokesVersion;
+	usageData.codePointInvokesTimeAgo = codePointInvokesTimeAgo;
 	usageData.interactionInvokesTotal = interactionInvokesTotal;
 	usageData.interactionInvokesVersion = interactionInvokesVersion;
+	usageData.interactionInvokesTimeAgo = interactionInvokesTimeAgo;
 	
 	return usageData;
 }
@@ -60,8 +64,10 @@
 																										  @"application_version" : self.applicationVersion}];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesTotal];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesVersion];
+	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesTimeAgo];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesTotal];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesVersion];
+	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesTimeAgo];
 	
 	return predicateEvaluationDictionary;
 }
@@ -124,6 +130,20 @@
 	return _codePointInvokesVersion;
 }
 
+- (NSDictionary *)codePointInvokesTimeAgo {
+	if (!_codePointInvokesTimeAgo) {
+		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
+		NSDictionary *codePointsInvokesLastDate = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesLastDateKey];
+		for (NSString *codePoint in codePointsInvokesLastDate) {
+			NSDate *lastDate = [codePointsInvokesLastDate objectForKey:codePoint] ?: [NSDate distantPast];
+			NSTimeInterval timeAgo = [[NSDate date] timeIntervalSinceDate:lastDate];
+			[predicateSyntax setObject:@(timeAgo) forKey:[NSString stringWithFormat:@"code_point/%@/invokes/time_ago", codePoint]];
+		}
+		_codePointInvokesTimeAgo = [predicateSyntax retain];
+	}
+	return _codePointInvokesTimeAgo;
+}
+
 - (NSDictionary *)interactionInvokesTotal {
 	if (!_interactionInvokesTotal) {
 		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
@@ -148,6 +168,20 @@
 	}
 
 	return _interactionInvokesVersion;
+}
+
+- (NSDictionary *)interactionInvokesTimeAgo {
+	if (!_interactionInvokesTimeAgo) {
+		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
+		NSDictionary *interactionInvokesLastDate = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesLastDateKey];
+		for (NSString *interactionID in interactionInvokesLastDate) {
+			NSDate *lastDate = [interactionInvokesLastDate objectForKey:interactionID] ?: [NSDate distantPast];
+			NSTimeInterval timeAgo = [[NSDate date] timeIntervalSinceDate:lastDate];
+			[predicateSyntax setObject:@(timeAgo) forKey:[NSString stringWithFormat:@"interactions/%@/invokes/time_ago", interactionID]];
+		}
+		_interactionInvokesTimeAgo = [predicateSyntax retain];
+	}
+	return _interactionInvokesTimeAgo;
 }
 
 @end

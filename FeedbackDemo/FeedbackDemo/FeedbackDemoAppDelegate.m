@@ -38,6 +38,8 @@
 	[self.window makeKeyAndVisible];
 	[[ATConnect sharedConnection] setApiKey:kApptentiveAPIKey];
 	
+	[[ATConnect sharedConnection] addIntegration:@"feedback_demo_integration_configuration" withConfiguration:@{@"fake_apiKey": @"ABC-123-XYZ"}];
+	
 	ATAppRatingFlow *flow = [ATAppRatingFlow sharedRatingFlowWithAppID:kApptentiveAppID];
 	[flow showRatingFlowFromViewControllerIfConditionsAreMet:self.navigationController];
 	

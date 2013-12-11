@@ -24,6 +24,8 @@
 
 extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 
+/*! Keys for supported 3rd-party integrations. */
+extern NSString *const ATIntegrationKeyUrbanAirship;
 
 @interface ATConnect : NSObject {
 @private
@@ -96,6 +98,7 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 - (void)removeCustomDataWithKey:(NSString *)key DEPRECATED_ATTRIBUTE;
 
 /*! Add or remove a token for 3rd-party integration services. */
-- (void)addIntegration:(NSString *)integration withToken:(NSString *)token;
+- (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration;
 - (void)removeIntegration:(NSString *)integration;
+
 @end

@@ -25,6 +25,8 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 NSString *const ATInitialUserNameKey = @"ATInitialUserNameKey";
 NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 
+NSString *const ATIntegrationKeyUrbanAirship = @"urban_airship";
+
 @implementation ATConnect
 @synthesize apiKey, showTagline, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText, useMessageCenter;
 
@@ -178,8 +180,8 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 	return integrationConfiguration;
 }
 
-- (void)addIntegration:(NSString *)integration withToken:(NSString *)token {
-	[integrationConfiguration setObject:token forKey:integration];
+- (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration {
+	[integrationConfiguration setObject:configuration forKey:integration];
 }
 
 - (void)removeIntegration:(NSString *)integration {

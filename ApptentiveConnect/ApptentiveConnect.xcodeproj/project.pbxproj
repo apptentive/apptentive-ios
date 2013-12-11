@@ -336,6 +336,7 @@
 		5898DF8C17C2E0CE0048F11F /* ATEngagementGetManifestTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 5898DF8A17C2E0CE0048F11F /* ATEngagementGetManifestTask.h */; };
 		5898DF8D17C2E0CE0048F11F /* ATEngagementGetManifestTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 5898DF8B17C2E0CE0048F11F /* ATEngagementGetManifestTask.m */; };
 		5898DF8E17C2E0CE0048F11F /* ATEngagementGetManifestTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 5898DF8B17C2E0CE0048F11F /* ATEngagementGetManifestTask.m */; };
+		589C85AC182B1E4D00253F4F /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58805F3818120DE100210DA5 /* Accelerate.framework */; };
 		58AA40A01821C162000799D8 /* ATDataModelv2.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 58AA409F1821C162000799D8 /* ATDataModelv2.sqlite */; };
 		58C5922117C55ADD000FA428 /* ATEngagementBackend.h in Headers */ = {isa = PBXBuildFile; fileRef = 58C5921F17C55ADD000FA428 /* ATEngagementBackend.h */; };
 		58C5922217C55ADD000FA428 /* ATEngagementBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C5922017C55ADD000FA428 /* ATEngagementBackend.m */; };
@@ -707,6 +708,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				589C85AC182B1E4D00253F4F /* Accelerate.framework in Frameworks */,
 				49F3404E16BC8B1A008AA02B /* StoreKit.framework in Frameworks */,
 				496DC38F1333D35600743F65 /* Foundation.framework in Frameworks */,
 				496DC3941333D35600743F65 /* libApptentiveConnect.a in Frameworks */,

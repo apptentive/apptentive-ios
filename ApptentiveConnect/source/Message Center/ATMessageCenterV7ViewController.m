@@ -55,6 +55,8 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	CGFloat sizingAutomatedCellHorizontalPadding;
 	CGFloat sizingDevTextCellHorizontalPadding;
 	CGFloat sizingUserTextCellHorizontalPadding;
+	
+	UIImage *blurredImage;
 }
 @synthesize collectionView;
 
@@ -63,6 +65,7 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
     if (self) {
 		fetchedObjectChanges = [[NSMutableArray alloc] init];
 		fetchedSectionChanges = [[NSMutableArray alloc] init];
+		blurredImage = [[self blurredBackgroundScreenshot] retain];
     }
     return self;
 }
@@ -70,9 +73,8 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
-	self.backgroundImageView.contentMode = UIViewContentModeScaleAspectFill;
-	UIImage *blurred = [self blurredBackgroundScreenshot];
-	[self.backgroundImageView setImage:blurred];
+	self.backgroundImageView.contentMode = UIViewContentModeCenter;
+	[self.backgroundImageView setImage:blurredImage];
 	
 	UINib *automatedCellNib = [UINib nibWithNibName:@"ATAutomatedMessageCellV7" bundle:[ATConnect resourceBundle]];
 	UINib *devTextCellNib = [UINib nibWithNibName:@"ATTextMessageDevCellV7" bundle:[ATConnect resourceBundle]];
@@ -115,6 +117,7 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 }
 
 - (void)dealloc {
+	[blurredImage release], blurredImage = nil;
 	[[ATBackend sharedBackend] messageCenterLeftForeground];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[messageDateFormatter release], messageDateFormatter = nil;
@@ -212,7 +215,7 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 }
 
 - (UIImage *)blurredBackgroundScreenshot {
-	UIImage *screenshot = [ATUtilities imageByTakingScreenshotIncludingBlankStatusBarArea:YES excludingWindow:self.view.window];
+	UIImage *screenshot = [ATUtilities imageByTakingScreenshotIncludingBlankStatusBarArea:NO excludingWindow:nil];
 	UIColor *tintColor = [UIColor colorWithWhite:0 alpha:0.1];
 	UIImage *blurred = [screenshot at_applyBlurWithRadius:30 tintColor:tintColor saturationDeltaFactor:3.8 maskImage:nil];
 	UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];

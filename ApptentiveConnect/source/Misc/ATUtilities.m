@@ -590,7 +590,7 @@ static NSDateFormatter *dateFormatter = nil;
 		}
 		iconFile = maxImage;
 	});
-	return iconFile;
+	return [[iconFile retain] autorelease];
 }
 
 + (BOOL)bundleVersionIsMainVersion {

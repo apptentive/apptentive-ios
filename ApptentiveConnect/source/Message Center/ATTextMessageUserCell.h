@@ -25,7 +25,9 @@ typedef enum {
 @property (retain, nonatomic) IBOutlet UILabel *usernameLabel;
 @property (retain, nonatomic) IBOutlet ATTTTAttributedLabel *messageText;
 @property (retain, nonatomic) IBOutlet UIImageView *composingBubble;
+@property (retain, nonatomic) IBOutlet UILabel *tooLongLabel;
 @property (nonatomic, assign, getter = isComposing) BOOL composing;
 @property (nonatomic, assign, getter = shouldShowDateLabel) BOOL showDateLabel;
+@property (nonatomic, assign, getter = isTooLong) BOOL tooLong;
 @property (nonatomic, assign) ATTextMessageCellType cellType;
 @end

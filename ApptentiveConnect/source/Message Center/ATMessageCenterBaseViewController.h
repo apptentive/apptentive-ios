@@ -12,6 +12,7 @@
 #import "ATAbstractMessage.h"
 #import "ATMessageCenterDataSource.h"
 #import "ATMessageInputView.h"
+#import "ATTextMessage.h"
 
 @protocol ATMessageCenterDismissalDelegate;
 
@@ -26,6 +27,7 @@
 
 - (ATMessageCenterDataSource *)dataSource;
 - (void)showRetryMessageActionSheetWithMessage:(ATAbstractMessage *)message;
+- (void)showLongMessageControllerWithMessage:(ATTextMessage *)message;
 - (void)relayoutSubviews;
 - (void)scrollToBottom;
 - (CGRect)currentKeyboardFrameInView;

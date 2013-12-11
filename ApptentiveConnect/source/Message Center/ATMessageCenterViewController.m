@@ -179,7 +179,17 @@ typedef enum {
 	ATAbstractMessage *message = (ATAbstractMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:indexPath];
 	if (message != nil && [message.sentByUser boolValue] && [message.pendingState intValue] == ATPendingMessageStateError) {
 		[super showRetryMessageActionSheetWithMessage:message];
+	} else if (message != nil) {
+		UITableViewCell *cell = [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
+		if ([cell isKindOfClass:[ATTextMessageUserCell class]] && [message isKindOfClass:[ATTextMessage class]]) {
+			ATTextMessageUserCell *textCell = (ATTextMessageUserCell *)cell;
+			ATTextMessage *textMessage = (ATTextMessage *)message;
+			if ([textCell isTooLong]) {
+				[super showLongMessageControllerWithMessage:textMessage];
+			}
+		}
 	}
+	[self.tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
 - (void)tableView:(UITableView *)aTableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -354,7 +364,15 @@ typedef enum {
 		} else {
 			textCell.showDateLabel = NO;
 		}
+		textCell.tooLong = NO;
 		textCell.backgroundColor = [UIColor clearColor];
+		
+		if (!textCell.composing) {
+			CGFloat height = [textCell cellHeightForWidth:aTableView.bounds.size.width];
+			if (height > 1024) {
+				textCell.tooLong = YES;
+			}
+		}
 		
 		cell = textCell;
 	} else if (cellType == ATMessageCellTypeAutomated) {

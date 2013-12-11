@@ -53,6 +53,13 @@
                                 <color key="textColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LrI-cR-MEd" userLabel="Too Long Label">
+                                <rect key="frame" x="11" y="21" width="229" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4Tb-T2-BQN">
                                 <rect key="frame" x="196" y="22" width="44" height="10"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -65,12 +72,16 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="6Dr-cr-mAu" secondAttribute="bottom" constant="11" id="1dF-kZ-d1i"/>
+                            <constraint firstAttribute="bottom" secondItem="LrI-cR-MEd" secondAttribute="bottom" constant="11" id="4Cu-68-0Jn"/>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="42" id="E1n-nW-8Vb"/>
+                            <constraint firstAttribute="height" relation="lessThanOrEqual" constant="1000" id="Iox-np-xkr"/>
                             <constraint firstItem="6Dr-cr-mAu" firstAttribute="top" secondItem="J5f-9B-Qxf" secondAttribute="top" constant="11" id="Njk-EL-NWF"/>
                             <constraint firstAttribute="trailing" secondItem="6Dr-cr-mAu" secondAttribute="trailing" constant="20" id="btL-ID-Z68"/>
                             <constraint firstAttribute="trailing" secondItem="4Tb-T2-BQN" secondAttribute="trailing" constant="20" id="gmX-xS-U6t"/>
                             <constraint firstAttribute="centerY" secondItem="4Tb-T2-BQN" secondAttribute="centerY" id="q2e-cu-30e"/>
                             <constraint firstItem="6Dr-cr-mAu" firstAttribute="leading" secondItem="J5f-9B-Qxf" secondAttribute="leading" constant="11" id="riA-Ib-rUJ"/>
+                            <constraint firstItem="LrI-cR-MEd" firstAttribute="leading" secondItem="J5f-9B-Qxf" secondAttribute="leading" constant="11" id="vIh-Ua-fyx"/>
+                            <constraint firstAttribute="trailing" secondItem="LrI-cR-MEd" secondAttribute="trailing" constant="20" id="zfz-2S-bh7"/>
                         </constraints>
                     </view>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Uin-DY-X3o" customClass="ATNetworkImageView">
@@ -107,6 +118,7 @@
                 <outlet property="dateLabel" destination="0Si-rd-yA7" id="ZvF-ha-v1Q"/>
                 <outlet property="messageLabel" destination="6Dr-cr-mAu" id="v5I-s0-Ufa"/>
                 <outlet property="textContainerView" destination="J5f-9B-Qxf" id="FCg-3L-ldN"/>
+                <outlet property="tooLongLabel" destination="LrI-cR-MEd" id="YAg-ha-wcv"/>
                 <outlet property="userIconOffsetConstraint" destination="ahx-vr-j4e" id="TTb-Mo-JrD"/>
                 <outlet property="userIconOffsetView" destination="lip-0o-eBP" id="0ix-pG-5Wq"/>
                 <outlet property="userIconView" destination="Uin-DY-X3o" id="9yQ-gR-Fzs"/>

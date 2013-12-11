@@ -96,6 +96,12 @@ want to filter them based upon your managed object context. Learn more from [App
 
 ![iOS Linker Flags](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-linker-flags.png)
 
+**Note:** If you can't use the `-all_load` flag in your project, you can use the `-force_load` flag instead:
+
+```
+-force_load $(BUILT_PRODUCTS_DIR)/libApptentiveConnect.a
+```
+
 ##### Add Apptentive Connect and Resources
 
 1. Go back to your Xcode project's `Build Phases` tab.
@@ -239,6 +245,20 @@ increment the number of significant events by calling:
 You can modify the parameters which determine when the ratings dialog will be
 shown in your app settings on [Apptentive](https://apptentive.com).
 
+#### Unread Messages
+
+Use `unreadMessageCount` to determine when the user has unread messages:
+
+``` objective-c
+NSUInteger unreadMessageCount = [[ATConnect sharedConnection] unreadMessageCount];
+```
+
+You can also listen for our `ATMessageCenterUnreadCountChangedNotification` notification to be alerted immediately when a new message arrives:
+
+``` objective-c
+[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unreadMessageCountChanged:) name:ATMessageCenterUnreadCountChangedNotification object:nil];
+```
+
 #### Upgrade Messages
 
 In iOS 7, users are upgraded automatically when a new version of your app is released. Unfortunately, this means they will rarely (if ever) see your App Store release notes!
@@ -305,6 +325,54 @@ the `ATSurveyNewSurveyAvailableNotification` notification will be sent.
     // Present survey here as appropriate.
 }
 ```
+
+#### Custom Data
+
+Custom data can be attached to a device, Apptentive user, or individual message. This data will then be displayed for reference alongside the conversation on the Apptentive website.
+
+Custom data should be of type `NSString`, `NSNumber`, `NSDate`, or `NSNull`.
+
+``` objective-c
+- (void)addCustomPersonData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
+- (void)addCustomDeviceData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
+- (void)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
+```
+
+When Message Center is presented with custom data, that custom data will be attached to the first message in the Message Center session.
+
+#### Push Notifications
+
+Apptentive can integrate with your existing [Urban Airship](http://urbanairship.com/) account to offer push notifications when new Apptentive messages are available.
+
+First, register an Urban Airship configuration with your device token. If you are using the [Urban Airship library](http://docs.urbanairship.com/build/ios.html#download-install-our-library-frameworks), the device token can be obtained in your app delegate's `didRegisterForRemoteNotificationsWithDeviceToken:` method:
+
+``` objective-c
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    // Device token string
+    const unsigned *tokenBytes = [deviceToken bytes];
+    NSString *token = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
+                       ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
+                       ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
+                       ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
+
+   // Register the device token with Apptentive
+   [[ATConnect sharedConnection] addIntegration:ATIntegrationKeyUrbanAirship withConfiguration:@{@"token": token}];
+}
+```
+
+When push notifications arrive, pass them to Apptentive:  
+
+``` objective-c
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
+    // Pass the push Notificaton userInfo dictionary to Apptentive
+    [[ATConnect sharedConnection] didReceiveRemoteNotification:userInfo fromViewController:viewController];
+	
+	// You are responsible for clearing badges and/or notifications, if desired. Apptentive does not reset them.
+	application.applicationIconBadgeNumber = 0;
+}
+```
+
+If the push notification was sent by Apptentive, we will then present Message Center from the `viewController` parameter.
 
 #### Metrics
 

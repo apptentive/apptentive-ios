@@ -20,7 +20,6 @@
 @property (nonatomic, retain) NSNumber *clientCreationUTCOffset;
 
 + (NSTimeInterval)timeIntervalForServerTime:(NSNumber *)timestamp;
-+ (NSNumber *)serverFormatForTimeInterval:(NSTimeInterval)timestamp;
 
 - (void)setup;
 - (void)updateClientCreationTime;

@@ -1,3 +1,21 @@
+2013-12-?? wooster, pkamb v1.2.4 (in progress)
+--------------------------------
+Fixes:
+
+* [Issue #65](https://github.com/apptentive/apptentive-ios/issues/65) Long response is truncated in message centre on the device
+
+2013-11-22 wooster, pkamb v1.2.3
+--------------------------------
+This is a release solely to fix a crash related to database migration in iOS 7.
+
+iOS 7 switched the SQLite backing store for Core Data to use write ahead logging (WAL), which make the datastore no longer consist of a single file, but several. When performing database migrations, we were creating an upgraded database then moving it into the location of the old database. Unfortunately, the `-wal` and `-shm` sidecar files that now accompanied that old database were there alongside the new upgraded database. Since these were no longer valid when SQLite tried to load them along with the new database, there were some weird exceptions and crashes happening.
+
+This release attempts to fix those problems. All new databases are created with the previous iOS default, DELETE mode. When we migrate databases with WAL mode set, we now delete the `-wal` and `-shm` sidecars before moving the new database into place. We also attempt to detect corrupt databases in existing installations and remove them if they exist. Finally, we've added a canary to tell us if we crashed while setting up our database. If we did, we delete the database and start it over from scratch.
+
+Fixes:
+
+* [Issue #71](https://github.com/apptentive/apptentive-ios/issues/71) SQLite error in Apptentive DB
+
 2013-10-22 wooster, pkamb v1.2.2
 --------------------------------
 

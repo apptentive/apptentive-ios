@@ -152,11 +152,12 @@ NSString *const ATIntegrationKeyUrbanAirship = @"urban_airship";
 	BOOL allowedData = ([object isKindOfClass:[NSString class]] ||
 						[object isKindOfClass:[NSNumber class]] ||
 						[object isKindOfClass:[NSNull class]]);
-	
-	NSAssert(allowedData, @"Apptentive custom data must be of type NSString, NSNumber, NSDate, or NSNull. Attempted to add custom data of type %@", NSStringFromClass([object class]));
-	
+		
 	if (allowedData) {
 		[customData setObject:object forKey:key];
+	}
+	else {
+		ATLogError(@"Apptentive custom data must be of type NSString, NSNumber, NSDate, or NSNull. Attempted to add custom data of type %@", NSStringFromClass([object class]));
 	}
 }
 
@@ -214,6 +215,17 @@ NSString *const ATIntegrationKeyUrbanAirship = @"urban_airship";
 	}
 	
 	[[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController withCustomData:allowedCustomMessageData];
+}
+
+- (void)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController {
+	NSDictionary *apptentivePayload = [userInfo objectForKey:@"apptentive"];
+	if (apptentivePayload) {
+		NSString *action = [apptentivePayload objectForKey:@"action"];
+		
+		if ([action isEqualToString:@"pmc"]) {
+			[self presentMessageCenterFromViewController:viewController];
+		}
+	}
 }
 
 - (void)presentFeedbackDialogFromViewController:(UIViewController *)viewController {

@@ -102,6 +102,8 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	
 	firstLoad = YES;
 	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fontPreferencesChanged:) name:UIContentSizeCategoryDidChangeNotification object:nil];
+	
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
 		[self relayoutSubviews];
 	});
@@ -185,6 +187,10 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
 	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+	[self relayoutSubviews];
+}
+
+- (void)fontPreferencesChanged:(NSNotification *)notification {
 	[self relayoutSubviews];
 }
 
@@ -296,6 +302,17 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 }
 
 #pragma mark UICollectionViewDelegate
+- (void)collectionView:(UICollectionView *)collection didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+	ATAbstractMessage *message = (ATAbstractMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:indexPath];
+	ATMessageCellType cellType = [self cellTypeForMessage:message];
+	UICollectionViewCell *cell = [self collectionView:collectionView cellForItemAtIndexPath:indexPath];
+	if (cellType == ATMessageCellTypeText) {
+		ATTextMessageCellV7 *c = (ATTextMessageCellV7 *)cell;
+		if ([c isTooLong]) {
+			[super showLongMessageControllerWithMessage:(ATTextMessage *)message];
+		}
+	}
+}
 
 #pragma mark UICollectionViewDataSource
 
@@ -325,10 +342,21 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	} else if (cellType == ATMessageCellTypeText && fromUser) {
 		ATTextMessageUserCellV7 *c = [self.collectionView dequeueReusableCellWithReuseIdentifier:ATTextMessageUserCellV7Identifier forIndexPath:indexPath];
 		[self configureUserTextCell:c forIndexPath:indexPath];
+		
+		if (c.bounds.size.height >= 1000) {
+			c.tooLong = YES;
+		} else {
+			c.tooLong = NO;
+		}
 		cell = c;
 	} else if (cellType == ATMessageCellTypeText && !fromUser) {
 		ATTextMessageDevCellV7 *c = [self.collectionView dequeueReusableCellWithReuseIdentifier:ATTextMessageDevCellV7Identifier forIndexPath:indexPath];
 		[self configureDevTextCell:c forIndexPath:indexPath];
+		if (c.bounds.size.height >= 1000) {
+			c.tooLong = YES;
+		} else {
+			c.tooLong = NO;
+		}
 		cell = c;
 	} else if (cellType == ATMessageCellTypeFile && fromUser) {
 		ATFileMessageUserCellV7 *c = [self.collectionView dequeueReusableCellWithReuseIdentifier:ATFileMessageUserCellV7Identifier forIndexPath:indexPath];
@@ -363,6 +391,7 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 		[self configureUserTextCell:sizingUserTextCell forIndexPath:indexPath];
 		cell = sizingUserTextCell;
 		CGSize s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+		
 		s.width = self.collectionView.bounds.size.width;
 		return s;
 	} else if (cellType == ATMessageCellTypeText && ![message.sentByUser boolValue]) {

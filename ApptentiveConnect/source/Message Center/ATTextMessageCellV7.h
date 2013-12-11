@@ -23,8 +23,10 @@
 @property (retain, nonatomic) IBOutlet ATNetworkImageView *userIconView;
 @property (retain, nonatomic) IBOutlet ATMessageBubbleArrowViewV7 *arrowView;
 @property (retain, nonatomic) IBOutlet UIImageView *composingImageView;
+@property (retain, nonatomic) IBOutlet UILabel *tooLongLabel;
 @property (retain, nonatomic) ATTextMessage *message;
 @property (retain, nonatomic) IBOutlet NSLayoutConstraint *userIconOffsetConstraint;
+@property (assign, nonatomic, getter = isTooLong) BOOL tooLong;
 
 - (void)setup;
 @end

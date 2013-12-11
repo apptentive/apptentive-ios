@@ -54,6 +54,13 @@
                                 <color key="textColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E9Q-70-Mld" userLabel="Too Long Label">
+                                <rect key="frame" x="20" y="18" width="229" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.50196081399917603" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5Go-QL-bgo">
                                 <rect key="frame" x="20" y="20" width="44" height="10"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -66,11 +73,15 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="xS3-Uc-7d4" firstAttribute="top" secondItem="m9E-pd-6Ic" secondAttribute="top" constant="11" id="Nve-A1-6Wt"/>
+                            <constraint firstItem="E9Q-70-Mld" firstAttribute="leading" secondItem="m9E-pd-6Ic" secondAttribute="leading" constant="20" id="T9p-8h-0GR"/>
+                            <constraint firstAttribute="trailing" secondItem="E9Q-70-Mld" secondAttribute="trailing" constant="11" id="TR3-tv-2F2"/>
                             <constraint firstAttribute="trailing" secondItem="xS3-Uc-7d4" secondAttribute="trailing" constant="11" id="YWi-ur-BfK"/>
+                            <constraint firstAttribute="height" relation="lessThanOrEqual" constant="1000" id="eLE-Ya-llU"/>
                             <constraint firstAttribute="bottom" secondItem="xS3-Uc-7d4" secondAttribute="bottom" constant="11" id="fu5-sv-bnz"/>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="42" id="gLQ-Fl-aPo"/>
                             <constraint firstItem="xS3-Uc-7d4" firstAttribute="leading" secondItem="m9E-pd-6Ic" secondAttribute="leading" constant="20" id="hNB-qE-2ch"/>
                             <constraint firstAttribute="centerY" secondItem="5Go-QL-bgo" secondAttribute="centerY" id="hva-dD-iGH"/>
+                            <constraint firstAttribute="bottom" secondItem="E9Q-70-Mld" secondAttribute="bottom" constant="11" id="n7D-RI-5L0"/>
                             <constraint firstItem="5Go-QL-bgo" firstAttribute="leading" secondItem="m9E-pd-6Ic" secondAttribute="leading" constant="20" id="weX-EI-9xp"/>
                         </constraints>
                     </view>
@@ -107,6 +118,7 @@
                 <outlet property="dateLabel" destination="GvP-QR-R2j" id="dNS-Kq-XWJ"/>
                 <outlet property="messageLabel" destination="xS3-Uc-7d4" id="Q9c-Wv-CqB"/>
                 <outlet property="textContainerView" destination="m9E-pd-6Ic" id="bXo-cm-rhy"/>
+                <outlet property="tooLongLabel" destination="E9Q-70-Mld" id="CRU-Ne-xO3"/>
                 <outlet property="userIconOffsetConstraint" destination="9tB-iR-ll7" id="IGy-VT-3rC"/>
                 <outlet property="userIconOffsetView" destination="4XI-Ow-VGt" id="qQw-LL-5Gb"/>
                 <outlet property="userIconView" destination="tNi-da-PTR" id="7CO-Nq-Ymp"/>

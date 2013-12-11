@@ -16,6 +16,7 @@
 #import "ATDefaultMessageCenterTheme.h"
 #import "ATFileMessage.h"
 #import "ATLog.h"
+#import "ATLongMessageViewController.h"
 #import "ATMessageCenterDataSource.h"
 #import "ATMessageCenterMetrics.h"
 #import "ATMessageSender.h"
@@ -222,6 +223,13 @@
 	} else {
 		[retryMessageActionSheet showInView:self.view];
 	}
+}
+
+- (void)showLongMessageControllerWithMessage:(ATTextMessage *)message {
+	ATLongMessageViewController *vc = [[ATLongMessageViewController alloc] initWithNibName:@"ATLongMessageViewController" bundle:[ATConnect resourceBundle]];
+	[vc setText:message.body];
+	[self.navigationController pushViewController:vc animated:YES];
+	[vc release], vc = nil;
 }
 
 - (void)relayoutSubviews {

@@ -24,10 +24,6 @@
 	return clientTimestamp;
 }
 
-+ (NSNumber *)serverFormatForTimeInterval:(NSTimeInterval)timestamp {
-	return @((long long)(timestamp));
-}
-
 + (NSObject *)newInstanceWithJSON:(NSDictionary *)json {
 	NSAssert(NO, @"Abstract method called.");
 	return nil;
@@ -57,7 +53,7 @@
 - (NSDictionary *)apiJSON {
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
 	if (self.clientCreationTime != nil) {
-		result[@"client_created_at"] = [ATRecord serverFormatForTimeInterval:(NSTimeInterval)[self.clientCreationTime doubleValue]];
+		result[@"client_created_at"] = self.clientCreationTime;
 	}
 	if (self.clientCreationTimezone != nil) {
 		result[@"client_created_at_timezone"] = self.clientCreationTimezone;

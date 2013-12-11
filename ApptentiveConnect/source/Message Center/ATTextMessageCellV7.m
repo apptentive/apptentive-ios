@@ -44,6 +44,15 @@
 	} else {
 		self.composingImageView.hidden = YES;
 	}
+	
+	if ([self isTooLong]) {
+		self.tooLongLabel.hidden = NO;
+		//TODO: replace with real text.
+		self.tooLongLabel.text = NSLocalizedString(@"Tap to see rest of message.", nil);
+		self.tooLongLabel.backgroundColor = self.textContainerView.backgroundColor;
+	} else {
+		self.tooLongLabel.hidden = YES;
+	}
 }
 
 - (id)initWithFrame:(CGRect)frame {
@@ -77,6 +86,7 @@
 	[_userIconOffsetConstraint release];
 	[_arrowView release];
 	[_composingImageView release];
+	[_tooLongLabel release];
 	[super dealloc];
 }
 
@@ -85,6 +95,13 @@
 		[_message release], _message = nil;
 		_message = [message retain];
 		
+		[self setup];
+	}
+}
+
+- (void)setTooLong:(BOOL)isTooLong {
+	if (_tooLong != isTooLong) {
+		_tooLong = isTooLong;
 		[self setup];
 	}
 }

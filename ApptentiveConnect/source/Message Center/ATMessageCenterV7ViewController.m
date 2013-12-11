@@ -281,19 +281,10 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	cell.message = (ATTextMessage *)message;
 }
 
-- (CGSize)configureUserFileCell:(ATFileMessageUserCellV7 *)cell forIndexPath:(NSIndexPath *)indexPath {
+- (void)configureUserFileCell:(ATFileMessageUserCellV7 *)cell forIndexPath:(NSIndexPath *)indexPath {
 	ATFileMessage *message = (ATFileMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:indexPath];
 	cell.dateLabel.text = [self dateForCellAtIndexPath:indexPath];
 	[cell setMessage:message];
-	UIImage *imageFile = [UIImage imageWithContentsOfFile:[message.fileAttachment fullLocalPath]];
-	CGSize thumbnailSize = ATThumbnailSizeOfMaxSize(imageFile.size, CGSizeMake(self.collectionView.bounds.size.width, 320));
-	CGSize cellSize = thumbnailSize;
-	CGFloat ratio = cellSize.height/cellSize.width;
-	if (cellSize.width < self.collectionView.bounds.size.width) {
-		cellSize.width = self.collectionView.bounds.size.width;
-		cellSize.height = self.collectionView.bounds.size.width/ratio;
-	}
-	return cellSize;
 }
 
 #pragma mark UIScrollViewDelegate

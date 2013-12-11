@@ -59,11 +59,22 @@
 	[super dealloc];
 }
 
+- (void)prepareForReuse {
+	[super prepareForReuse];
+	self.message = nil;
+	
+	self.imageWidthConstraint.constant = 0;
+	self.imageHeightConstraint.constant = 0;
+}
+
 - (void)setMessage:(ATFileMessage *)message {
 	if (_message != message) {
 		[_message release], _message = nil;
 		_message = [message retain];
-		
+		if (_message == nil) {
+			[self setCurrentImage:nil];
+			return;
+		}
 		UIImage *imageFile = [UIImage imageWithContentsOfFile:[message.fileAttachment fullLocalPath]];
 		//TODO: Sizing on iPad
 		CGSize thumbnailSize = ATThumbnailSizeOfMaxSize(imageFile.size, CGSizeMake(260, 260));

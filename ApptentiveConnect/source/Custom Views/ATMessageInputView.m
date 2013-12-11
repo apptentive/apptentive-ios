@@ -96,46 +96,70 @@ UIEdgeInsets insetsForView(UIView *v) {
 	if (!string || [string length] == 0) {
 		string = @"YWM";
 	}
-	
-	CGFloat textViewWidth = textView.bounds.size.width;
 	CGFloat previousHeight = self.frame.size.height;
-	CGSize optimisticSize = [string sizeWithFont:textView.font];
-	CGSize pessimisticSize = [string sizeWithFont:textView.font constrainedToSize:CGSizeMake(textViewWidth, maxTextFieldHeight) lineBreakMode:NSLineBreakByWordWrapping];
-	CGSize contentSize = textView.contentSize;
 	
-	if ([string hasSuffix:@"\n"]) {
-		pessimisticSize.height += textView.font.lineHeight;
-	} else if (contentSize.height - textView.font.lineHeight > pessimisticSize.height) {
-		pessimisticSize.height = contentSize.height - textView.font.lineHeight + 2;
-	}
-	NSTimeInterval time = animated ? 0.1 : 0;
-	[UIView animateWithDuration:time delay:0 options:0 animations:^{
-		CGFloat newTextHeight = MIN(maxTextFieldHeight, MAX(minTextFieldHeight, MAX(optimisticSize.height, pessimisticSize.height)));
+	CGFloat newTextHeight = previousHeight;
+	
+	if (([[[UIDevice currentDevice] systemVersion] compare:@"7" options:NSNumericSearch] != NSOrderedAscending)) {
+		if ([string hasSuffix:@"\n"]) {
+			string = [NSString stringWithFormat:@"%@-", string];
+		}
+		CGRect rect = CGRectMake(0, 0, textView.bounds.size.width, 10000);
+		CGRect insetRect = UIEdgeInsetsInsetRect(rect, textView.textContainerInset);
+		insetRect = UIEdgeInsetsInsetRect(insetRect, textView.contentInset);
+		insetRect = CGRectInset(insetRect, textView.textContainer.lineFragmentPadding, 0);
+		
+		CGFloat width = CGRectGetWidth(insetRect);
+		NSDictionary *attrs = [textView typingAttributes];
+		NSAttributedString *attributedText = [[[NSAttributedString alloc] initWithString:string attributes:attrs] autorelease];
+		CGRect textSize = [attributedText boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
+		
+		CGFloat verticalPadding = rect.size.height - insetRect.size.height;
+		CGFloat actualHeight = ceil(CGRectGetHeight(textSize) + verticalPadding);
+		
+		CGSize intrinsicContentSize = textView.contentSize;
+		intrinsicContentSize.height = actualHeight;
+		intrinsicContentSize.width = CGRectGetWidth(rect);
+		
+		newTextHeight = MIN(maxTextFieldHeight, intrinsicContentSize.height);
+	} else {
+		CGFloat textViewWidth = textView.bounds.size.width;
+		CGSize optimisticSize = [string sizeWithFont:textView.font];
+		CGSize pessimisticSize = [string sizeWithFont:textView.font constrainedToSize:CGSizeMake(textViewWidth, maxTextFieldHeight) lineBreakMode:NSLineBreakByWordWrapping];
+		CGSize contentSize = textView.contentSize;
+		
+		if ([string hasSuffix:@"\n"]) {
+			pessimisticSize.height += textView.font.lineHeight;
+		} else if (contentSize.height - textView.font.lineHeight > pessimisticSize.height) {
+			pessimisticSize.height = contentSize.height - textView.font.lineHeight + 2;
+		}
+		newTextHeight = MIN(maxTextFieldHeight, MAX(minTextFieldHeight, MAX(optimisticSize.height, pessimisticSize.height)));
 		newTextHeight += -(textView.contentInset.top + textView.contentInset.bottom);
-		CGFloat currentTextHeight = textView.bounds.size.height;
-		CGFloat textHeightDelta = newTextHeight - currentTextHeight;
-		
-		textView.overflowing = (BOOL)(newTextHeight > maxTextFieldHeight);
+	}
+	CGFloat currentTextHeight = textView.bounds.size.height;
+	CGFloat textHeightDelta = newTextHeight - currentTextHeight;
+	
+	CGRect newFrame = self.frame;
+	CGFloat newHeight = MAX(minHeight, MIN(newTextHeight + textViewInsets.top + textViewInsets.bottom, newFrame.size.height + textHeightDelta));
+	
+	CGFloat heightDelta = newHeight - newFrame.size.height;
+	newFrame.origin.y = newFrame.origin.y - heightDelta;
+	newFrame.size.height = newFrame.size.height + heightDelta;
+	
+	CGRect newTextFrame = textView.frame;
+	newTextFrame.origin.y = textViewInsets.top;
+	newTextFrame.size.height = newTextHeight;
+	
+	NSTimeInterval time = animated ? 0.1 : 0;
+	[UIView animateWithDuration:time animations:^{
+		textView.overflowing = (BOOL)(newTextHeight >= maxTextFieldHeight);
 		textView.scrollEnabled = textView.overflowing;
-		
-		CGRect newFrame = self.frame;
-		CGFloat newHeight = MAX(minHeight, MIN(newTextHeight + textViewInsets.top + textViewInsets.bottom , newFrame.size.height + textHeightDelta));
-		
-		CGFloat heightDelta = newHeight - newFrame.size.height;
-		newFrame.origin.y = newFrame.origin.y - heightDelta;
-		newFrame.size.height = newFrame.size.height + heightDelta;
-		
 		self.frame = newFrame;
-		
-		CGRect newTextFrame = textView.frame;
-		newTextFrame.origin.y = textViewInsets.top;
-		newTextFrame.size.height = newTextHeight;
 		textView.frame = newTextFrame;
-		
+	} completion:^(BOOL finished) {
 		if (previousHeight != newFrame.size.height) {
 			[self.delegate messageInputView:self didChangeHeight:newFrame.size.height];
 		}
-	} completion:^(BOOL finished) {
 	}];
 }
 

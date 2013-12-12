@@ -68,7 +68,7 @@
 			version = [coder decodeIntForKey:@"version"];
 			hasVersion = NO;
 		}
-		if ((hasVersion == NO && (version == 1 || version == 2)) || hasVersion == YES) {
+		if ((hasVersion == NO && (version == 1 || version == 2)) || hasVersion) {
 			self.uuid = [coder decodeObjectForKey:@"uuid"];
 			self.model = [coder decodeObjectForKey:@"model"];
 			self.os_version = [coder decodeObjectForKey:@"os_version"];

@@ -95,11 +95,11 @@ static dispatch_queue_t loggingQueue;
 	BOOL isDir = NO;
 
 	BOOL pathExists = [fm fileExistsAtPath:newPath isDirectory:&isDir];
-	if (pathExists == NO && isDir == YES) {
+	if (pathExists == NO && isDir) {
 		NSLog(@"ATLog path exists but is a directory: %@", newPath);
 		creatingLogPathFailed = YES;
 		return nil;
-	} else if (pathExists == YES) {
+	} else if (pathExists) {
 		return newPath;
 	}
 
@@ -141,7 +141,7 @@ static dispatch_queue_t loggingQueue;
 		
 		NSFileManager *fm = [NSFileManager defaultManager];
 		BOOL isDir = NO;
-		if ([fm fileExistsAtPath:[self logFilePath] isDirectory:&isDir] == YES && isDir == NO) {
+		if ([fm fileExistsAtPath:[self logFilePath] isDirectory:&isDir] && isDir == NO) {
 			[fm removeItemAtPath:[self backupLogFilePath] error:nil];
 			NSError *error = nil;
 			if ([fm moveItemAtPath:[self logFilePath] toPath:[self backupLogFilePath] error:&error] == NO) {
@@ -170,7 +170,7 @@ static dispatch_queue_t loggingQueue;
 		creatingLogPathFailed = YES;
 		return NO;
 	}
-	if (creatingLogPathFailed == YES) {
+	if (creatingLogPathFailed) {
 		NSLog(@"Creating log path failed. Not starting new log.");
 		return NO;
 	}

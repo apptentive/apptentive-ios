@@ -848,7 +848,7 @@ enum {
 	NSString *trimmedText = [self.feedbackView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	BOOL empty = [trimmedText length] == 0;
 	self.sendButton.enabled = !empty;
-	self.sendButton.style = empty == YES ? UIBarButtonItemStyleBordered : UIBarButtonItemStyleDone;
+	self.sendButton.style = empty ? UIBarButtonItemStyleBordered : UIBarButtonItemStyleDone;
 }
 @end
 

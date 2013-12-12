@@ -22,7 +22,7 @@ typedef enum {
 
 @interface ATMessagePanelViewController : UIViewController <UIScrollViewDelegate, UITextFieldDelegate, UITextViewDelegate> {
 	UIViewController *presentingViewController;
-@private
+
 	UIStatusBarStyle startingStatusBarStyle;
 	UIViewTintAdjustmentMode startingTintAdjustmentMode;
 	BOOL showEmailAddressField;
@@ -39,8 +39,10 @@ typedef enum {
 @property (nonatomic, retain) IBOutlet ATToolbar *toolbar;
 @property (nonatomic, retain) IBOutlet UIImageView *toolbarShadowImage;
 @property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
+@property (nonatomic, retain) IBOutlet UIView *containerView;
 @property (nonatomic, retain) UITextField *emailField;
 @property (nonatomic, retain) ATDefaultTextView *feedbackView;
+@property (nonatomic, retain) UIView *promptContainer;
 @property (nonatomic, copy) NSString *promptTitle;
 @property (nonatomic, copy) NSString *promptText;
 @property (nonatomic, copy) NSString *customPlaceholderText;

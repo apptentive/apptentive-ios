@@ -37,6 +37,7 @@ enum {
 @end
 
 @interface ATMessagePanelViewController (Private)
+- (void)setupContainerView;
 - (void)setupScrollView;
 - (void)teardown;
 - (BOOL)shouldReturn:(UIView *)view;
@@ -67,8 +68,10 @@ enum {
 @synthesize sendButton;
 @synthesize toolbar;
 @synthesize scrollView;
+@synthesize containerView;
 @synthesize emailField;
 @synthesize feedbackView;
+@synthesize promptContainer;
 @synthesize promptTitle;
 @synthesize promptText;
 @synthesize customPlaceholderText;
@@ -155,10 +158,12 @@ enum {
 	}
 	
 	self.window.center = CGPointMake(CGRectGetMidX(endingFrame), CGRectGetMidY(endingFrame));
-	self.view.center = [self offscreenPositionOfView];
+	self.containerView.center = [self offscreenPositionOfView];
 	
 	CGRect newFrame = [self onscreenRectOfView];
 	CGPoint newViewCenter = CGPointMake(CGRectGetMidX(newFrame), CGRectGetMidY(newFrame));
+	
+	[self setupContainerView];
 	
 	UIView *shadowView = nil;
 	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
@@ -184,7 +189,7 @@ enum {
 	[self.window sendSubviewToBack:shadowView];
 	shadowView.alpha = 1.0;
 	
-	l.cornerRadius = 10.0;
+	self.containerView.layer.cornerRadius = 10.0;
 	l.backgroundColor = [UIColor whiteColor].CGColor;
 	
 	l.masksToBounds = YES;
@@ -200,7 +205,7 @@ enum {
 	}
 	
 	[UIView animateWithDuration:0.3 animations:^(void){
-		self.view.center = newViewCenter;
+		self.containerView.center = newViewCenter;
 		shadowView.alpha = 1.0;
 	} completion:^(BOOL finished) {
 		self.window.hidden = NO;
@@ -388,7 +393,7 @@ enum {
 		duration = 0.3;
 	}
 	[UIView animateWithDuration:duration animations:^(void){
-		self.view.center = endingPoint;
+		self.containerView.center = endingPoint;
 		gradientView.alpha = 0.0;
 	} completion:^(BOOL finished) {
 		[self.emailField resignFirstResponder];
@@ -532,6 +537,11 @@ enum {
 @end
 
 @implementation ATMessagePanelViewController (Private)
+
+- (void)setupContainerView {
+
+}
+
 - (void)setupScrollView {
 	CGFloat offsetY = 0;
 	CGFloat horizontalPadding = 7;
@@ -554,6 +564,7 @@ enum {
 		UIView *promptContainer = [[UIView alloc] initWithFrame:containerFrame];
 		promptContainer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		promptContainer.backgroundColor = [UIColor whiteColor];
+				
 		CGRect labelFrame = CGRectInset(containerFrame, labelPadding, labelPadding);
 		promptLabel.frame = labelFrame;
 		[promptContainer addSubview:promptLabel];
@@ -914,7 +925,7 @@ enum {
 		}
 	}
 	
-	CGRect f = self.view.frame;
+	CGRect f = self.containerView.frame;
 	f.origin.y = originY;
 	f.origin.x = originX;
 	f.size.width = viewWidth;
@@ -981,8 +992,10 @@ enum {
 	self.window.transform = CGAffineTransformMakeRotation(angle);
 	self.window.frame = newFrame;
 	CGRect onscreenRect = [self onscreenRectOfView];
-	self.view.frame = onscreenRect;
+	self.containerView.frame = onscreenRect;
 	
 	[self textViewDidChange:self.feedbackView];
+	
+	[self setupContainerView];
 }
 @end

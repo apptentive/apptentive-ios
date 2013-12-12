@@ -36,6 +36,7 @@
 #import "ATLog.h"
 #import "ATPersonUpdater.h"
 #import "ATEngagementBackend.h"
+#import "ATMessagePanelNewUIViewController.h"
 
 typedef NS_ENUM(NSInteger, ATBackendState){
 	ATBackendStateStarting,
@@ -487,7 +488,14 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 			return;
 		}
 		
-		ATMessagePanelViewController *vc = [[ATMessagePanelViewController alloc] initWithDelegate:self];
+		ATMessagePanelViewController *vc;
+		if (TRUE && [ATUtilities osVersionGreaterThanOrEqualTo:@"7.0"]) {
+			vc = [[ATMessagePanelNewUIViewController alloc] initWithDelegate:self];
+		}
+		else {
+			vc = [[ATMessagePanelViewController alloc] initWithDelegate:self];
+		}
+		
 		if (title) {
 			vc.promptTitle = title;
 		}

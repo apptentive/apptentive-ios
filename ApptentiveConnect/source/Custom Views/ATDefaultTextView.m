@@ -17,6 +17,7 @@
 
 @implementation ATDefaultTextView
 @synthesize placeholder;
+@synthesize placeholderColor;
 @synthesize at_drawRectBlock;
 
 - (id)initWithFrame:(CGRect)frame {
@@ -53,6 +54,15 @@
 	}
 }
 
+- (void)setPlaceholderColor:(UIColor *)newPlaceholderColor {
+	if (placeholderColor != newPlaceholderColor) {
+		[placeholderColor release];
+		placeholderColor = nil;
+		placeholderColor = [newPlaceholderColor retain];
+		[self setupPlaceholder];
+	}
+}
+
 - (BOOL)isDefault {
 	if (!self.text || [self.text length] == 0) return YES;
 	return NO;
@@ -74,7 +84,7 @@
 	placeholderLabel.userInteractionEnabled = NO;
 	placeholderLabel.backgroundColor = [UIColor clearColor];
 	placeholderLabel.opaque = NO;
-	placeholderLabel.textColor = [UIColor lightGrayColor];
+	placeholderLabel.textColor = self.placeholderColor ?: [UIColor lightGrayColor];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEdit:) name:UITextViewTextDidBeginEditingNotification object:self];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEdit:) name:UITextViewTextDidChangeNotification object:self];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEdit:) name:UITextViewTextDidEndEditingNotification object:self];
@@ -86,6 +96,7 @@
 	if ([self isDefault]) {
 		placeholderLabel.text = self.placeholder;
 		placeholderLabel.font = self.font;
+		placeholderLabel.textColor = self.placeholderColor ?: [UIColor lightGrayColor];
 		placeholderLabel.textAlignment = self.textAlignment;
 		placeholderLabel.numberOfLines = 0;
 		placeholderLabel.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;

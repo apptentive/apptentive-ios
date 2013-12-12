@@ -16,6 +16,7 @@
 	ATDrawRectBlock at_drawRectBlock;
 }
 @property (nonatomic, copy) NSString *placeholder;
+@property (nonatomic, copy) UIColor *placeholderColor;
 @property (nonatomic, readwrite, copy) ATDrawRectBlock at_drawRectBlock;
 - (BOOL)isDefault;
 @end

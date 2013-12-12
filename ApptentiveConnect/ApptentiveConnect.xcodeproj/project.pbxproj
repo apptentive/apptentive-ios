@@ -261,7 +261,6 @@
 		49E6208716C5E8C2000C9F5A /* NSDictionary+ATAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 49E6208516C5E8C2000C9F5A /* NSDictionary+ATAdditions.h */; };
 		49E6208816C5E8C2000C9F5A /* NSDictionary+ATAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 49E6208616C5E8C2000C9F5A /* NSDictionary+ATAdditions.m */; };
 		49E6208916C5E8C2000C9F5A /* NSDictionary+ATAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 49E6208616C5E8C2000C9F5A /* NSDictionary+ATAdditions.m */; };
-		49E7408618403A7D00413697 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58805F3818120DE100210DA5 /* Accelerate.framework */; };
 		49E7408818403E6200413697 /* v2CorruptDatabase in Resources */ = {isa = PBXBuildFile; fileRef = 49E7408718403E6200413697 /* v2CorruptDatabase */; };
 		49E7408B184045C900413697 /* v2WALDatabase in Resources */ = {isa = PBXBuildFile; fileRef = 49E7408A184045C900413697 /* v2WALDatabase */; };
 		49E7408F1840497600413697 /* v3WALDatabase in Resources */ = {isa = PBXBuildFile; fileRef = 49E7408E1840497600413697 /* v3WALDatabase */; };
@@ -305,6 +304,9 @@
 		49FECBE317D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49FECBE217D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel */; };
 		49FECBE417D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49FECBE217D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel */; };
 		580B24BB17D90AF300AE2CD0 /* ATEngagementTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 580B24BA17D90AF300AE2CD0 /* ATEngagementTests.m */; };
+		582FF580184E903F00547919 /* ATMessagePanelNewUIViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 582FF57D184E903F00547919 /* ATMessagePanelNewUIViewController.h */; };
+		582FF581184E903F00547919 /* ATMessagePanelNewUIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 582FF57E184E903F00547919 /* ATMessagePanelNewUIViewController.m */; };
+		583B4707185630AF00FFE745 /* ATMessagePanelNewUIViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 582FF57F184E903F00547919 /* ATMessagePanelNewUIViewController.xib */; };
 		584647C617C426E800BFD6E6 /* ATEngagementManifestParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 584647C417C426E800BFD6E6 /* ATEngagementManifestParser.h */; };
 		584647C717C426E800BFD6E6 /* ATEngagementManifestParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 584647C517C426E800BFD6E6 /* ATEngagementManifestParser.m */; };
 		584647C817C426E800BFD6E6 /* ATEngagementManifestParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 584647C517C426E800BFD6E6 /* ATEngagementManifestParser.m */; };
@@ -613,6 +615,9 @@
 		49FECBE217D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v1 to v2.xcmappingmodel"; sourceTree = "<group>"; };
 		580B24B917D90AF300AE2CD0 /* ATEngagementTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATEngagementTests.h; sourceTree = "<group>"; };
 		580B24BA17D90AF300AE2CD0 /* ATEngagementTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATEngagementTests.m; sourceTree = "<group>"; };
+		582FF57D184E903F00547919 /* ATMessagePanelNewUIViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessagePanelNewUIViewController.h; sourceTree = "<group>"; };
+		582FF57E184E903F00547919 /* ATMessagePanelNewUIViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessagePanelNewUIViewController.m; sourceTree = "<group>"; };
+		582FF57F184E903F00547919 /* ATMessagePanelNewUIViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATMessagePanelNewUIViewController.xib; sourceTree = "<group>"; };
 		584647C417C426E800BFD6E6 /* ATEngagementManifestParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATEngagementManifestParser.h; path = Engagement/Model/ATEngagementManifestParser.h; sourceTree = "<group>"; };
 		584647C517C426E800BFD6E6 /* ATEngagementManifestParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATEngagementManifestParser.m; path = Engagement/Model/ATEngagementManifestParser.m; sourceTree = "<group>"; };
 		58805F3418120BBF00210DA5 /* UIImage+ATImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ATImageEffects.m"; sourceTree = "<group>"; };
@@ -668,7 +673,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				589C85AC182B1E4D00253F4F /* Accelerate.framework in Frameworks */,
 				49F3404E16BC8B1A008AA02B /* StoreKit.framework in Frameworks */,
 				496DC38F1333D35600743F65 /* Foundation.framework in Frameworks */,
 				496DC3941333D35600743F65 /* libApptentiveConnect.a in Frameworks */,
@@ -1009,6 +1013,9 @@
 				49AAC849175FE70D00F08879 /* ATMessagePanelViewController.h */,
 				49AAC84A175FE70D00F08879 /* ATMessagePanelViewController.m */,
 				4935CF53177286C300CFE3DC /* ATPersonDetailsViewController.h */,
+				582FF57D184E903F00547919 /* ATMessagePanelNewUIViewController.h */,
+				582FF57E184E903F00547919 /* ATMessagePanelNewUIViewController.m */,
+				582FF57F184E903F00547919 /* ATMessagePanelNewUIViewController.xib */,
 				4935CF54177286C300CFE3DC /* ATPersonDetailsViewController.m */,
 			);
 			name = "Message Center";
@@ -1359,6 +1366,7 @@
 				58805F3718120BBF00210DA5 /* UIImage+ATImageEffects.h in Headers */,
 				490B24A71624B70E0055B812 /* ATTextMessageUserCell.h in Headers */,
 				49E3A26F1628F4FF000675B4 /* ATGetMessagesTask.h in Headers */,
+				582FF580184E903F00547919 /* ATMessagePanelNewUIViewController.h in Headers */,
 				49AF27CF16321F0C005E1E9D /* ATAutomatedMessageCell.h in Headers */,
 				491E03CE163F261C00DC3E18 /* ATLog.h in Headers */,
 				491E03D91640D01F00DC3E18 /* ATFeedbackTypes.h in Headers */,
@@ -1546,6 +1554,7 @@
 				493529FF138C7253000E464A /* ATInfoViewController.xib in Resources */,
 				49352A00138C7257000E464A /* ATInfoViewController_iPad.xib in Resources */,
 				49352A20138C73B8000E464A /* ATAboutApptentiveView.xib in Resources */,
+				583B4707185630AF00FFE745 /* ATMessagePanelNewUIViewController.xib in Resources */,
 				49352B3F138DB3AA000E464A /* ATTaskProgressCell.xib in Resources */,
 				496F29E014496711005B7C01 /* ATSimpleImageViewController.xib in Resources */,
 				4999128F16166C2F00FDA15F /* ATMessageCenterViewController.xib in Resources */,
@@ -1635,6 +1644,7 @@
 				4987FAA0157AE53700AF2078 /* ATMetric.m in Sources */,
 				4987FAA3157AE53700AF2078 /* ATWebClient+Metrics.m in Sources */,
 				493AEB2B15990A4D00DFD4C7 /* ATSurveys.m in Sources */,
+				582FF581184E903F00547919 /* ATMessagePanelNewUIViewController.m in Sources */,
 				493AEB2E15990A4D00DFD4C7 /* ATSurvey.m in Sources */,
 				493AEB3115990A4D00DFD4C7 /* ATSurveyParser.m in Sources */,
 				493AEB3415990A4D00DFD4C7 /* ATSurveyQuestion.m in Sources */,

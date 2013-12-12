@@ -136,6 +136,19 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	return sharedRatingFlow;
 }
 
+- (void)dealloc {
+#if	TARGET_OS_IPHONE
+	enjoymentDialog.delegate = nil;
+	[enjoymentDialog release], enjoymentDialog = nil;
+	ratingDialog.delegate = nil;
+	[ratingDialog release], ratingDialog = nil;
+	self.viewController = nil;
+#endif
+	[lastUseOfApp release], lastUseOfApp = nil;
+	[appID release], appID = nil;
+	[super dealloc];
+}
+
 #if TARGET_OS_IPHONE
 - (void)showRatingFlowFromViewControllerIfConditionsAreMet:(UIViewController *)vc {
 	self.viewController = vc;

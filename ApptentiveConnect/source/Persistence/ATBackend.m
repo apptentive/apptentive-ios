@@ -183,6 +183,8 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 }
 
 - (void)dealloc {
+	messagePanelSentMessageAlert.delegate = nil;
+	[messagePanelSentMessageAlert release], messagePanelSentMessageAlert = nil;
 	[messageRetrievalTimer invalidate];
 	[messageRetrievalTimer release], messageRetrievalTimer = nil;
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -599,6 +601,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 		} else {
 			[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroThankYouDidCloseNotification object:self userInfo:nil];
 		}
+		messagePanelSentMessageAlert.delegate = nil;
 		[messagePanelSentMessageAlert release], messagePanelSentMessageAlert = nil;
 	}
 }

@@ -87,8 +87,11 @@ enum {
 
 - (void)dealloc {
 	[_toolbarShadowImage release], _toolbarShadowImage = nil;
+	noEmailAddressAlert.delegate = nil;
 	[noEmailAddressAlert release], noEmailAddressAlert = nil;
+	invalidEmailAddressAlert.delegate = nil;
 	[invalidEmailAddressAlert release], invalidEmailAddressAlert = nil;
+	emailRequiredAlert.delegate = nil;
 	[emailRequiredAlert release], emailRequiredAlert = nil;
 	delegate = nil;
 	[super dealloc];
@@ -295,6 +298,7 @@ enum {
 	
 	if (self.showEmailAddressField && [[ATConnect sharedConnection] emailRequired] && self.emailField.text.length == 0) {
 		if (emailRequiredAlert) {
+			emailRequiredAlert.delegate = nil;
 			[emailRequiredAlert release], emailRequiredAlert = nil;
 		}
 		self.window.windowLevel = UIWindowLevelNormal;
@@ -323,6 +327,7 @@ enum {
 		[invalidEmailAddressAlert show];
 	} else if (self.showEmailAddressField && (!self.emailField.text || [self.emailField.text length] == 0)) {
 		if (noEmailAddressAlert) {
+			noEmailAddressAlert.delegate = nil;
 			[noEmailAddressAlert release], noEmailAddressAlert = nil;
 		}
 		self.window.windowLevel = UIWindowLevelNormal;
@@ -502,10 +507,12 @@ enum {
 		[self sendMessageAndDismiss];
 	} else if (invalidEmailAddressAlert && [alertView isEqual:invalidEmailAddressAlert]) {
 		self.window.userInteractionEnabled = YES;
+		invalidEmailAddressAlert.delegate = nil;
 		[invalidEmailAddressAlert release], invalidEmailAddressAlert = nil;
 		[self.emailField becomeFirstResponder];
 	} else if (emailRequiredAlert && [alertView isEqual:emailRequiredAlert]) {
 		self.window.userInteractionEnabled = YES;
+		emailRequiredAlert.delegate = nil;
 		[emailRequiredAlert release], emailRequiredAlert = nil;
 		[self.emailField becomeFirstResponder];
 	}

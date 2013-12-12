@@ -568,17 +568,17 @@ enum {
 		CGSize fitSize = [promptLabel sizeThatFits:CGSizeMake(containerFrame.size.width - labelPadding*2, CGFLOAT_MAX)];
 		containerFrame.size.height = fitSize.height + labelPadding*2;
 		
-		UIView *promptContainer = [[UIView alloc] initWithFrame:containerFrame];
-		promptContainer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		promptContainer.backgroundColor = [UIColor whiteColor];
+		UIView *promptView = [[UIView alloc] initWithFrame:containerFrame];
+		promptView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		promptView.backgroundColor = [UIColor whiteColor];
 				
 		CGRect labelFrame = CGRectInset(containerFrame, labelPadding, labelPadding);
 		promptLabel.frame = labelFrame;
-		[promptContainer addSubview:promptLabel];
+		[promptView addSubview:promptLabel];
 		
-		[self.scrollView addSubview:promptContainer];
-		offsetY += promptContainer.bounds.size.height;
-		[promptContainer release], promptContainer = nil;
+		[self.scrollView addSubview:promptView];
+		offsetY += promptView.bounds.size.height;
+		[promptView release], promptView = nil;
 		[promptLabel release], promptLabel = nil;
 	}
 	
@@ -985,12 +985,12 @@ enum {
 	[self.toolbar sizeToFit];
 	
 	CGRect toolbarBounds = self.toolbar.bounds;
-	UIView *containerView = [self.view viewWithTag:kMessagePanelContainerViewTag];
-	if (containerView != nil) {
-		CGRect containerFrame = containerView.frame;
+	UIView *container = [self.view viewWithTag:kMessagePanelContainerViewTag];
+	if (container != nil) {
+		CGRect containerFrame = container.frame;
 		containerFrame.origin.y = toolbarBounds.size.height;
 		containerFrame.size.height = self.view.bounds.size.height - toolbarBounds.size.height;
-		containerView.frame = containerFrame;
+		container.frame = containerFrame;
 	}
 	CGRect toolbarShadowImageFrame = self.toolbarShadowImage.frame;
 	toolbarShadowImageFrame.origin.y = toolbarBounds.size.height;

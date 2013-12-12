@@ -43,6 +43,8 @@ enum kPersonDetailsTableSections {
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	_tableView.delegate = nil;
+	_tableView.dataSource = nil;
 	[_tableView release];
 	[_logoButton release];
 	[_emailCell release];
@@ -59,6 +61,8 @@ enum kPersonDetailsTableSections {
 - (void)viewDidUnload {
 	self.nameTextField.delegate = nil;
 	self.emailTextField.delegate = nil;
+	self.tableView.delegate = nil;
+	self.tableView.dataSource = nil;
 	[self setTableView:nil];
 	[self setLogoButton:nil];
 	[self setEmailCell:nil];

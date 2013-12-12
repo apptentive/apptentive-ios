@@ -68,6 +68,7 @@
 }
 
 - (void)dealloc {
+	inputView.delegate = nil;
 	dataSource.delegate = nil;
 	[dataSource release], dataSource = nil;
 	dismissalDelegate = nil;

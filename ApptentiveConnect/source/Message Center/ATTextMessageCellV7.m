@@ -70,6 +70,7 @@
 
 - (void)dealloc {
 	[_textContainerView release];
+	_messageLabel.delegate = nil;
 	[_messageLabel release];
 	[_userIconView release];
 	if (_userIconOffsetConstraint) {

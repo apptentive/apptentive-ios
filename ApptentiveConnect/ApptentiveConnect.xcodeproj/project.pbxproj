@@ -1647,11 +1647,8 @@
 				493529FF138C7253000E464A /* ATInfoViewController.xib in Resources */,
 				49352A00138C7257000E464A /* ATInfoViewController_iPad.xib in Resources */,
 				49352A20138C73B8000E464A /* ATAboutApptentiveView.xib in Resources */,
-<<<<<<< HEAD
 				583B4707185630AF00FFE745 /* ATMessagePanelNewUIViewController.xib in Resources */,
-=======
 				49B71C9F1841795900315AAF /* ATTextMessageDevCellV7.xib in Resources */,
->>>>>>> iOS7UIRefresh
 				49352B3F138DB3AA000E464A /* ATTaskProgressCell.xib in Resources */,
 				496F29E014496711005B7C01 /* ATSimpleImageViewController.xib in Resources */,
 				4968699818330E0700DA8B95 /* ATAutomatedMessageCellV7.xib in Resources */,

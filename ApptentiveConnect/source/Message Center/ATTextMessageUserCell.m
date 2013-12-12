@@ -67,13 +67,19 @@
 - (void)setTooLong:(BOOL)isTooLong {
 	if (tooLong != isTooLong) {
 		tooLong = isTooLong;
+		self.tooLongLabel.hidden = !tooLong;
+		NSLog(@"setting too long to %d", tooLong);
+		if (tooLong) {
+			NSString *fullText = NSLocalizedString(@"Show full message.", @"Message bubble text for very long messages.");
+			self.tooLongLabel.text = fullText;
+		}
 		[self setNeedsLayout];
 	}
 }
 
 - (void)layoutSubviews {
 	[super layoutSubviews];
-	if (showDateLabel == NO || composing == YES) {
+	if (showDateLabel == NO || composing) {
 		self.dateLabel.hidden = YES;
 		CGRect chatBubbleRect = self.chatBubbleContainer.frame;
 		chatBubbleRect.size.height = self.bounds.size.height;
@@ -100,6 +106,7 @@
 	[dateLabel release], dateLabel = nil;
 	[chatBubbleContainer release], chatBubbleContainer = nil;
 	[usernameLabel release], usernameLabel = nil;
+	[_tooLongLabel release];
 	[super dealloc];
 }
 

@@ -18,6 +18,7 @@
 #import "ATPersonUpdater.h"
 #if TARGET_OS_IPHONE
 #import "ATMessageCenterViewController.h"
+#import "ATMessageCenterV7ViewController.h"
 #import "ATMessagePanelViewController.h"
 #endif
 

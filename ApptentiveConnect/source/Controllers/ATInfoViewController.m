@@ -88,6 +88,8 @@ enum {
 	[self setGotoPrivacyPolicyButton:nil];
 	[super viewDidUnload];
 	[headerView release], headerView = nil;
+	self.tableView.delegate = nil;
+	self.tableView.dataSource = nil;
 	self.tableView = nil;
 }
 
@@ -283,6 +285,8 @@ enum {
 - (void)teardown {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[headerView release], headerView = nil;
+	tableView.delegate = nil;
+	tableView.dataSource = nil;
 	[tableView release], tableView = nil;
 }
 

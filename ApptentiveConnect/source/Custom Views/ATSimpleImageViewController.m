@@ -41,6 +41,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 	[self cleanupImageActionSheet];
 	[imagePickerPopover release], imagePickerPopover = nil;
 	[delegate release], delegate = nil;
+	scrollView.delegate = nil;
 	[scrollView removeFromSuperview];
 	[scrollView release], scrollView = nil;
 	[containerView removeFromSuperview];
@@ -62,6 +63,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 
 - (void)setupScrollView {
 	if (scrollView) {
+		scrollView.delegate = nil;
 		[scrollView removeFromSuperview];
 		[scrollView release];
 		scrollView = nil;

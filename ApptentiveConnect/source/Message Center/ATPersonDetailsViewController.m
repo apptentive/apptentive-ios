@@ -43,6 +43,8 @@ enum kPersonDetailsTableSections {
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	_tableView.delegate = nil;
+	_tableView.dataSource = nil;
 	[_tableView release];
 	[_logoButton release];
 	[_emailCell release];
@@ -51,6 +53,7 @@ enum kPersonDetailsTableSections {
 	[_nameTextField release];
 	[_poweredByLabel release];
 	[_logoImage release];
+	emailRequiredAlert.delegate = nil;
 	[emailRequiredAlert release], emailRequiredAlert = nil;
 	[super dealloc];
 }
@@ -58,6 +61,8 @@ enum kPersonDetailsTableSections {
 - (void)viewDidUnload {
 	self.nameTextField.delegate = nil;
 	self.emailTextField.delegate = nil;
+	self.tableView.delegate = nil;
+	self.tableView.dataSource = nil;
 	[self setTableView:nil];
 	[self setLogoButton:nil];
 	[self setEmailCell:nil];
@@ -184,6 +189,7 @@ enum kPersonDetailsTableSections {
 - (IBAction)donePressed:(id)sender {
 	if ([[ATConnect sharedConnection] emailRequired] && self.emailTextField.text.length == 0) {
 		if (emailRequiredAlert) {
+			emailRequiredAlert.delegate = nil;
 			[emailRequiredAlert release], emailRequiredAlert = nil;
 		}
 		NSString *title = ATLocalizedString(@"Please enter an email address", @"Email is required and no email was entered alert title.");
@@ -354,6 +360,7 @@ enum kPersonDetailsTableSections {
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	if (emailRequiredAlert && [alertView isEqual:emailRequiredAlert]) {
+		emailRequiredAlert.delegate = nil;
 		[emailRequiredAlert release], emailRequiredAlert = nil;
 		[self.emailTextField becomeFirstResponder];
 	}
@@ -361,6 +368,7 @@ enum kPersonDetailsTableSections {
 
 - (void)alertViewCancel:(UIAlertView *)alertView {
 	if (emailRequiredAlert && [alertView isEqual:emailRequiredAlert]) {
+		emailRequiredAlert.delegate = nil;
 		[emailRequiredAlert release], emailRequiredAlert = nil;
 	}
 }

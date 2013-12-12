@@ -23,6 +23,7 @@
 }
 
 - (void)dealloc {
+	textView.delegate = nil;
 	[textView removeFromSuperview];
 	[textView release], textView = nil;
 	[super dealloc];

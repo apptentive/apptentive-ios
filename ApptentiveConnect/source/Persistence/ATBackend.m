@@ -30,6 +30,7 @@
 #import "ATMessageDisplayType.h"
 #import "ATGetMessagesTask.h"
 #import "ATMessageCenterMetrics.h"
+#import "ATMessageSender.h"
 #import "ATMessageTask.h"
 #import "ATMessagePanelViewController.h"
 #import "ATTextMessage.h"
@@ -183,6 +184,8 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 }
 
 - (void)dealloc {
+	messagePanelSentMessageAlert.delegate = nil;
+	[messagePanelSentMessageAlert release], messagePanelSentMessageAlert = nil;
 	[messageRetrievalTimer invalidate];
 	[messageRetrievalTimer release], messageRetrievalTimer = nil;
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -279,6 +282,13 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	message.body = body;
 	message.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
 	message.sentByUser = @YES;
+	ATConversation *conversation = [ATConversationUpdater currentConversation];
+	if (conversation) {
+		ATMessageSender *sender = [ATMessageSender findSenderWithID:conversation.personID];
+		if (sender) {
+			message.sender = sender;
+		}
+	}
 	[self attachCustomDataToMessage:message];
 	[message updateClientCreationTime];
 	NSError *error = nil;
@@ -430,7 +440,12 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 		ATLogInfo(@"Apptentive message center controller already shown.");
 		return;
 	}
-	ATMessageCenterViewController *vc = [[ATMessageCenterViewController alloc] initWithThemeDelegate:nil];
+	ATMessageCenterBaseViewController *vc = nil;
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+		vc = [[ATMessageCenterV7ViewController alloc] init];
+	} else {
+		vc = [[ATMessageCenterViewController alloc] init];
+	}
 	vc.dismissalDelegate = self;
 	ATNavigationController *nc = [[ATNavigationController alloc] initWithRootViewController:vc];
 	nc.disablesAutomaticKeyboardDismissal = NO;
@@ -594,6 +609,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 		} else {
 			[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroThankYouDidCloseNotification object:self userInfo:nil];
 		}
+		messagePanelSentMessageAlert.delegate = nil;
 		[messagePanelSentMessageAlert release], messagePanelSentMessageAlert = nil;
 	}
 }
@@ -745,7 +761,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 }
 
 #if TARGET_OS_IPHONE
-- (void)messageCenterWillDismiss:(ATMessageCenterViewController *)messageCenter {
+- (void)messageCenterWillDismiss:(ATMessageCenterBaseViewController *)messageCenter {
 	if (presentedMessageCenterViewController) {
 		[presentedMessageCenterViewController release], presentedMessageCenterViewController = nil;
 	}

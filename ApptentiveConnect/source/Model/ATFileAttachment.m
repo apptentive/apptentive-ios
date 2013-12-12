@@ -152,12 +152,16 @@
 	NSString *fullThumbnailPath = [self fullLocalPathForFilename:filename];
     BOOL isFromITouchCamera = ([self.source intValue] == ATFileAttachmentSourceCamera);
 	
+	[self retain];
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
 		UIImage *image = [UIImage imageWithContentsOfFile:fullLocalPath];
 		UIImage *thumb = [ATUtilities imageByScalingImage:image toSize:size scale:scale fromITouchCamera:isFromITouchCamera];
 		[UIImagePNGRepresentation(thumb) writeToFile:fullThumbnailPath atomically:YES];
 		dispatch_sync(dispatch_get_main_queue(), ^{
-			completion();
+			if (completion) {
+				completion();
+			}
+			[self release];
 		});
 	});
 }

@@ -7,6 +7,7 @@
 //
 
 #import "ATLongMessageViewController.h"
+#import "ATUtilities.h"
 
 @interface ATLongMessageViewController ()
 
@@ -25,6 +26,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	self.textView.text = self.text;
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+		self.textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+	}
 }
 
 - (void)didReceiveMemoryWarning {

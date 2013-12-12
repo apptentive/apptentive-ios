@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "ATMessageCenterViewController.h"
+#import "ATMessageCenterBaseViewController.h"
 
 @interface ATDefaultMessageCenterTheme : NSObject<ATMessageCenterThemeDelegate>
 

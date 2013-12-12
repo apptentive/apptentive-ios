@@ -406,7 +406,7 @@ enum {
 				cell.accessoryType = UITableViewCellAccessoryNone;
 			}
 			[cell layoutSubviews];
-		} else if (question.type == ATSurveyQuestionTypeSingeLine && question.multiline == YES) {
+		} else if (question.type == ATSurveyQuestionTypeSingeLine && question.multiline) {
 			// Make a text entry cell.
 			if (activeTextView != nil && activeTextEntryCell != nil && activeTextView.cellPath.row == indexPath.row && activeTextView.cellPath.section == indexPath.section) {
 				cell = activeTextEntryCell;
@@ -538,7 +538,7 @@ enum {
 				} else if (isChecked == NO) {
 					cell.accessoryType = UITableViewCellAccessoryCheckmark;
 					[question addSelectedAnswerChoice:answer];
-				} else if (isChecked == YES) {
+				} else if (isChecked) {
 					cell.accessoryType = UITableViewCellAccessoryNone;
 					[question removeSelectedAnswerChoice:answer];
 				}

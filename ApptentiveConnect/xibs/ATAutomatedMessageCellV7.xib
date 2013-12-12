@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment version="1792" defaultVersion="1072" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="infinite" reuseIdentifier="ATAutomatedMessageCellV7" id="HjA-aD-eFD" customClass="ATAutomatedMessageCellV7">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="75"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="75"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="October 4, 1980" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nwj-O2-nOT" userLabel="Date Label">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="17"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                        <color key="textColor" white="0.0" alpha="0.69999999999999996" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                        <size key="shadowOffset" width="0.0" height="0.0"/>
+                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OR5-3d-eLd">
+                        <rect key="frame" x="0.0" y="19" width="320" height="56"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.69999999999999996" colorSpace="calibratedRGB"/>
+                    </view>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="HY2-vg-cwa">
+                        <rect key="frame" x="15" y="28" width="25" height="25"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="25" id="NzJ-An-sWt"/>
+                            <constraint firstAttribute="width" constant="25" id="deZ-lb-rt5"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="239" translatesAutoresizingMaskIntoConstraints="NO" id="hQd-S4-wWW">
+                        <rect key="frame" x="51" y="28" width="239" height="21"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            </view>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="nwj-O2-nOT" firstAttribute="leading" secondItem="HjA-aD-eFD" secondAttribute="leading" id="0EO-ox-xFy"/>
+                <constraint firstAttribute="trailing" secondItem="OR5-3d-eLd" secondAttribute="trailing" id="43s-jn-oME"/>
+                <constraint firstItem="hQd-S4-wWW" firstAttribute="top" secondItem="nwj-O2-nOT" secondAttribute="bottom" constant="11" id="HBg-Ra-GFx"/>
+                <constraint firstAttribute="bottom" secondItem="OR5-3d-eLd" secondAttribute="bottom" id="SIi-a5-v5O"/>
+                <constraint firstAttribute="trailing" secondItem="nwj-O2-nOT" secondAttribute="trailing" id="UCI-uj-Sd3"/>
+                <constraint firstItem="HY2-vg-cwa" firstAttribute="top" secondItem="nwj-O2-nOT" secondAttribute="bottom" constant="11" id="X5J-rL-VWM"/>
+                <constraint firstItem="OR5-3d-eLd" firstAttribute="top" secondItem="nwj-O2-nOT" secondAttribute="bottom" constant="2" id="aNv-OU-7yl"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="HY2-vg-cwa" secondAttribute="bottom" constant="20" id="as3-c4-DeI"/>
+                <constraint firstItem="nwj-O2-nOT" firstAttribute="top" secondItem="HjA-aD-eFD" secondAttribute="top" id="eg7-nd-iGx"/>
+                <constraint firstItem="OR5-3d-eLd" firstAttribute="leading" secondItem="HjA-aD-eFD" secondAttribute="leading" id="f8n-Di-Mwo"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="hQd-S4-wWW" secondAttribute="bottom" constant="20" id="fpR-hX-YOd"/>
+                <constraint firstItem="HY2-vg-cwa" firstAttribute="leading" secondItem="HjA-aD-eFD" secondAttribute="leading" constant="15" id="nwE-QH-HUY"/>
+                <constraint firstItem="hQd-S4-wWW" firstAttribute="leading" secondItem="HY2-vg-cwa" secondAttribute="trailing" constant="11" id="peE-i4-kYZ"/>
+                <constraint firstAttribute="trailing" secondItem="hQd-S4-wWW" secondAttribute="trailing" constant="30" id="sGh-u7-Ukt"/>
+            </constraints>
+            <size key="customSize" width="320" height="-21"/>
+            <connections>
+                <outlet property="appIcon" destination="HY2-vg-cwa" id="46L-7Q-3ED"/>
+                <outlet property="dateLabel" destination="nwj-O2-nOT" id="bq0-vG-evU"/>
+                <outlet property="messageLabel" destination="hQd-S4-wWW" id="haT-IF-Ymd"/>
+            </connections>
+        </collectionViewCell>
+    </objects>
+</document>

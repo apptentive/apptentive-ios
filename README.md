@@ -344,10 +344,20 @@ When Message Center is presented with custom data, that custom data will be atta
 
 Apptentive can integrate with your existing [Urban Airship](http://urbanairship.com/) account to offer push notifications when new Apptentive messages are available.
 
-First, add your Urban Airship configuration as an integration:  
+First, register an Urban Airship configuration with your device token. If you are using the [Urban Airship library](http://docs.urbanairship.com/build/ios.html#download-install-our-library-frameworks), the device token can be obtained in your app delegate's `didRegisterForRemoteNotificationsWithDeviceToken:` method:
 
 ``` objective-c
-[[ATConnect sharedConnection] addIntegration:ATIntegrationKeyUrbanAirship withConfiguration:@{@"token": @"YOUR_URBAN_AIRSHIP_TOKEN"}];
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    // Device token string
+    const unsigned *tokenBytes = [deviceToken bytes];
+    NSString *token = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
+                       ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
+                       ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
+                       ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
+
+   // Register the device token with Apptentive
+   [[ATConnect sharedConnection] addIntegration:ATIntegrationKeyUrbanAirship withConfiguration:@{@"token": token}];
+}
 ```
 
 When push notifications arrive, pass them to Apptentive:  
@@ -356,6 +366,9 @@ When push notifications arrive, pass them to Apptentive:
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
     // Pass the push Notificaton userInfo dictionary to Apptentive
     [[ATConnect sharedConnection] didReceiveRemoteNotification:userInfo fromViewController:viewController];
+	
+	// You are responsible for clearing badges and/or notifications, if desired. Apptentive does not reset them.
+	application.applicationIconBadgeNumber = 0;
 }
 ```
 

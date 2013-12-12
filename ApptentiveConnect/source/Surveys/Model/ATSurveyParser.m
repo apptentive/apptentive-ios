@@ -35,7 +35,7 @@
 		}
 	}
 	
-	if (failed == YES) {
+	if (failed) {
 		[answer release], answer = nil;
 	}
 	return [answer autorelease];
@@ -108,7 +108,7 @@
 		failed = NO;
 	} while (NO);
 	
-	if (failed == YES) {
+	if (failed) {
 		[question release], question = nil;
 	}
 	

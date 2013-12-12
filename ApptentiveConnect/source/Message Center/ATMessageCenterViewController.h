@@ -10,44 +10,18 @@
 
 #import "ATAutomatedMessageCell.h"
 #import "ATFileMessageCell.h"
+#import "ATMessageCenterBaseViewController.h"
+#import "ATMessageCenterDataSource.h"
 #import "ATMessageInputView.h"
 #import "ATSimpleImageViewController.h"
 #import "ATTextMessageUserCell.h"
 
-@protocol ATMessageCenterThemeDelegate;
-@protocol ATMessageCenterDismissalDelegate;
-
-@interface ATMessageCenterViewController : UIViewController <ATMessageInputViewDelegate, ATSimpleImageViewControllerDelegate, NSFetchedResultsControllerDelegate, UIActionSheetDelegate, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface ATMessageCenterViewController : ATMessageCenterBaseViewController <ATMessageCenterDataSourceDelegate, ATMessageInputViewDelegate, UIActionSheetDelegate, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate>
 @property (retain, nonatomic) IBOutlet UITableView *tableView;
-@property (retain, nonatomic) IBOutlet UIView *containerView;
-@property (retain, nonatomic) IBOutlet UIView *inputContainerView;
 @property (retain, nonatomic) IBOutlet ATAutomatedMessageCell *automatedCell;
 @property (retain, nonatomic) IBOutlet ATTextMessageUserCell *userCell;
 @property (retain, nonatomic) IBOutlet ATTextMessageUserCell *developerCell;
 @property (retain, nonatomic) IBOutlet ATFileMessageCell *userFileMessageCell;
-@property (readonly, nonatomic) NSObject<ATMessageCenterThemeDelegate> *themeDelegate;
-@property (assign, nonatomic) NSObject<ATMessageCenterDismissalDelegate> *dismissalDelegate;
 
-- (id)initWithThemeDelegate:(NSObject<ATMessageCenterThemeDelegate> *)themeDelegate;
-
-- (IBAction)donePressed:(id)sender;
-- (IBAction)settingsPressed:(id)sender;
-- (IBAction)showInfoView:(id)sender;
-- (IBAction)cameraPressed:(id)sender;
-@end
-
-
-
-@protocol ATMessageCenterThemeDelegate <NSObject>
-@optional
-- (UIView *)titleViewForMessageCenterViewController:(ATMessageCenterViewController *)vc;
-- (void)configureSendButton:(UIButton *)sendButton forMessageCenterViewController:(ATMessageCenterViewController *)vc;
-- (void)configureAttachmentsButton:(UIButton *)button forMessageCenterViewController:(ATMessageCenterViewController *)vc;
-- (UIImage *)backgroundImageForMessageForMessageCenterViewController:(ATMessageCenterViewController *)vc;
-@end
-
-@protocol ATMessageCenterDismissalDelegate <NSObject>
-- (void)messageCenterWillDismiss:(ATMessageCenterViewController *)messageCenter;
-@optional
-- (void)messageCenterDidDismiss:(ATMessageCenterViewController *)messageCenter;
+- (id)init;
 @end

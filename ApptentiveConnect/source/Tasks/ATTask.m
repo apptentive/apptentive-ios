@@ -87,7 +87,7 @@
 	[parts addObject:[NSString stringWithFormat:@"taskName: %@", [self taskName]]];
 	
 	NSString *d = [parts componentsJoinedByString:@", "];
-	[parts dealloc], parts = nil;
+	[parts release], parts = nil;
 	return [NSString stringWithFormat:@"<%@ %p: %@>", NSStringFromClass([self class]), self, d];
 }
 @end

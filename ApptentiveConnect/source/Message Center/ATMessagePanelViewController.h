@@ -55,6 +55,7 @@ typedef enum {
 
 - (void)presentFromViewController:(UIViewController *)presentingViewController animated:(BOOL)animated;
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion;
+- (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion withAction:(ATMessagePanelDismissAction)action;
 - (void)dismiss:(BOOL)animated;
 @end
 

@@ -10,6 +10,7 @@
 
 @interface UIViewController (ATSwizzle)
 - (void)at_swizzleDidRotateFromInterfaceOrientation;
+- (void)at_swizzleMessagePanelDidRotateFromInterfaceOrientation;
 @end
 
 void ATSwizzle_UIViewController_Bootstrap();

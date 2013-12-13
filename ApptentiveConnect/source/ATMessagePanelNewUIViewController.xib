@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ATMessagePanelNewUIViewController">
             <connections>
+                <outlet property="backgroundImageView" destination="bDc-jy-683" id="q0k-Sj-85I"/>
                 <outlet property="buttonFrame" destination="Iep-UB-ir2" id="bh9-ct-3du"/>
                 <outlet property="cancelButtonNewUI" destination="3ru-Mm-7OC" id="uoV-zp-5Vx"/>
                 <outlet property="cancelButtonPading" destination="Rfl-h1-uHw" id="LjG-ML-3pG"/>
@@ -23,59 +24,70 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <view clipsSubviews="YES" contentMode="scaleToFill" id="mbB-4j-05F" userLabel="View">
-                    <rect key="frame" x="8" y="32" width="302" height="237"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                <view contentMode="scaleToFill" id="IdQ-Ll-2QN">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <view clipsSubviews="YES" tag="1009" contentMode="scaleToFill" id="lSe-RN-8Ub">
-                            <rect key="frame" x="0.0" y="0.0" width="302" height="193"/>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="bDc-jy-683" userLabel="Blurred Background">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        </imageView>
+                        <view clipsSubviews="YES" contentMode="scaleToFill" id="mbB-4j-05F" userLabel="View">
+                            <rect key="frame" x="9" y="166" width="302" height="237"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <view clipsSubviews="YES" contentMode="scaleToFill" id="pvN-Ps-u2U" userLabel="Scroll View" customClass="UIScrollView">
+                                <view clipsSubviews="YES" tag="1009" contentMode="scaleToFill" id="lSe-RN-8Ub">
                                     <rect key="frame" x="0.0" y="0.0" width="302" height="193"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <view clipsSubviews="YES" contentMode="scaleToFill" id="pvN-Ps-u2U" userLabel="Scroll View" customClass="UIScrollView">
+                                            <rect key="frame" x="0.0" y="0.0" width="302" height="193"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
-                            </subviews>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        </view>
-                        <view contentMode="scaleToFill" id="Iep-UB-ir2">
-                            <rect key="frame" x="0.0" y="193" width="302" height="44"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <subviews>
-                                <view alpha="0.69999999999999996" contentMode="scaleToFill" id="Rfl-h1-uHw">
-                                    <rect key="frame" x="0.0" y="0.0" width="150" height="44"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <view contentMode="scaleToFill" id="Iep-UB-ir2">
+                                    <rect key="frame" x="0.0" y="193" width="302" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="3ru-Mm-7OC">
-                                            <rect key="frame" x="51" y="7" width="48" height="30"/>
+                                        <view alpha="0.69999999999999996" contentMode="scaleToFill" id="Rfl-h1-uHw">
+                                            <rect key="frame" x="0.0" y="0.0" width="150" height="44"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                            <state key="normal" title="Cancel">
-                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                            </state>
-                                            <connections>
-                                                <action selector="cancelPressed:" destination="-1" eventType="touchUpInside" id="wlg-gW-ZAe"/>
-                                            </connections>
-                                        </button>
-                                    </subviews>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </view>
-                                <view alpha="0.69999999999999996" contentMode="scaleToFill" id="fRg-ly-lWg">
-                                    <rect key="frame" x="152" y="0.0" width="150" height="44"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                    <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Gkx-fy-LwA">
-                                            <rect key="frame" x="51" y="7" width="36" height="30"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="3ru-Mm-7OC">
+                                                    <rect key="frame" x="51" y="7" width="48" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                    <state key="normal" title="Cancel">
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="cancelPressed:" destination="-1" eventType="touchUpInside" id="wlg-gW-ZAe"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <view alpha="0.69999999999999996" contentMode="scaleToFill" id="fRg-ly-lWg">
+                                            <rect key="frame" x="152" y="0.0" width="150" height="44"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                            <state key="normal" title="Send">
-                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                            </state>
-                                            <connections>
-                                                <action selector="sendPressed:" destination="-1" eventType="touchUpInside" id="Muh-0R-Lgs"/>
-                                            </connections>
-                                        </button>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Gkx-fy-LwA">
+                                                    <rect key="frame" x="51" y="7" width="36" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                    <state key="normal" title="Send">
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="sendPressed:" destination="-1" eventType="touchUpInside" id="Muh-0R-Lgs"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </view>
                                     </subviews>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>

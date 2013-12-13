@@ -33,7 +33,7 @@ enum {
 };
 
 @interface ATMessagePanelViewController ()
-- (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion withAction:(ATMessagePanelDismissAction)action;
+
 @end
 
 @interface ATMessagePanelViewController (Private)

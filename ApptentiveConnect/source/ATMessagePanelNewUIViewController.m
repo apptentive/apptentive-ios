@@ -26,12 +26,23 @@
 #import "ATMessageCenterMetrics.h"
 #import "ATUtilities.h"
 #import "ATShadowView.h"
+#import "UIViewController+ATSwizzle.h"
+#import "UIImage+ATImageEffects.h"
+
+NSString *const ATMessagePanelPresentingViewControllerSwizzledDidRotateNotification = @"ATMessagePanelPresentingViewControllerSwizzledDidRotateNotification";
 
 @interface ATMessagePanelNewUIViewController ()
 
 @end
 
 @implementation ATMessagePanelNewUIViewController
+
+@synthesize backgroundImageView = _backgroundImageView;
+@synthesize buttonFrame = _buttonFrame;
+@synthesize sendButtonNewUI = _sendButtonNewUI;
+@synthesize sendButtonPading = _sendButtonPading;
+@synthesize cancelButtonNewUI = _cancelButtonNewUI;
+@synthesize cancelButtonPading = _cancelButtonPading;
 
 - (id)initWithDelegate:(NSObject<ATMessagePanelDelegate> *)aDelegate {
 	self = [super initWithNibName:@"ATMessagePanelNewUIViewController" bundle:[ATConnect resourceBundle]];
@@ -55,13 +66,70 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+	
+	self.backgroundImageView.contentMode = UIViewContentModeScaleAspectFill;
+	UIImage *blurred = [self blurredBackgroundScreenshot];
+	[self.backgroundImageView setImage:blurred];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)presentFromViewController:(UIViewController *)newPresentingViewController animated:(BOOL)animated {
+	// Swizzle the presentingViewController's `didRotateFromInterfaceOrientation:` method to get a notifiction
+	// when the background view finishes animating to the new orientation.
+	//TODO: we would like to find a better solution to this.
+	[newPresentingViewController at_swizzleMessagePanelDidRotateFromInterfaceOrientation];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(presentingViewControllerDidRotate:) name:ATMessagePanelPresentingViewControllerSwizzledDidRotateNotification object:nil];
+	
+	[super presentFromViewController:newPresentingViewController animated:animated];
+	
+	self.backgroundImageView.alpha = 0;
+	[UIView animateWithDuration:0.3 animations:^(void){
+		self.backgroundImageView.alpha = 1;
+	} completion:^(BOOL finished) {
+
+	}];
+}
+
+- (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion withAction:(ATMessagePanelDismissAction)action {
+	[super dismissAnimated:animated completion:completion withAction:action];
+	
+	CGFloat duration = animated ? 0.3 : 0;
+	[UIView animateWithDuration:duration animations:^(void){
+		self.backgroundImageView.alpha = 0.0;
+	} completion:^(BOOL finished) {
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:ATMessagePanelPresentingViewControllerSwizzledDidRotateNotification object:nil];
+	}];
+}
+
+- (void)presentingViewControllerDidRotate:(NSNotification *)notification {
+	// Only pay attention to the presenting view controller.
+	if (!presentingViewController) {
+		return;
+	}
+	CGRect f = presentingViewController.view.frame;
+	CGAffineTransform t = presentingViewController.view.transform;
+	if (CGRectEqualToRect(lastSeenPresentingViewControllerFrame, f) && CGAffineTransformEqualToTransform(lastSeenPresentingViewControllerTransform, t)) {
+		return;
+	}
+	lastSeenPresentingViewControllerFrame = f;
+	lastSeenPresentingViewControllerTransform = t;
+	UIImage *blurred = [self blurredBackgroundScreenshot];
+	[UIView transitionWithView:self.backgroundImageView
+					  duration:0.3f
+					   options:UIViewAnimationOptionTransitionCrossDissolve
+					animations:^{
+						self.backgroundImageView.image = blurred;
+					} completion:nil];
+}
+
+- (UIImage *)blurredBackgroundScreenshot {
+	UIImage *screenshot = [ATUtilities imageByTakingScreenshotIncludingBlankStatusBarArea:NO excludingWindow:self.window];
+	UIColor *tintColor = [UIColor colorWithWhite:0 alpha:0.1];
+	UIImage *blurred = [screenshot at_applyBlurWithRadius:30 tintColor:tintColor saturationDeltaFactor:3.8 maskImage:nil];
+	UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+	blurred = [ATUtilities imageByRotatingImage:blurred toInterfaceOrientation:interfaceOrientation];
+	
+	return blurred;
 }
 
 - (void)setupContainerView {

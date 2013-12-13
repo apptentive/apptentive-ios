@@ -267,7 +267,6 @@
 		}
 	}
 	[self relayoutSubviews];
-	[self scrollToBottom];
 }
 
 - (void)messageInputView:(ATMessageInputView *)anInputView didChangeHeight:(CGFloat)height {

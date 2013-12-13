@@ -107,7 +107,7 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fontPreferencesChanged:) name:UIContentSizeCategoryDidChangeNotification object:nil];
 	
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
-		[self relayoutSubviews];
+		[self relayoutSubviews:YES];
 	});
 }
 
@@ -153,6 +153,10 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 }
 
 - (void)relayoutSubviews {
+	[self relayoutSubviews:NO];
+}
+
+- (void)relayoutSubviews:(BOOL)invalidateLayout {
 	self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, 0, 0, 0);
 	UIEdgeInsets inset = self.collectionView.scrollIndicatorInsets;
 	inset.top = self.collectionView.contentInset.top;
@@ -176,25 +180,29 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	collectionFrame.size.height = composerFrame.origin.y;
 	containerFrame.size.height = collectionFrame.size.height + composerFrame.size.height;
 	
-	collectionView.frame = collectionFrame;
-	self.inputContainerView.frame = composerFrame;
-	[self.flowLayout invalidateLayout];
-	
-	[self scrollViewDidScroll:self.collectionView];
+	if (!CGRectEqualToRect(collectionView.frame, collectionFrame) || !CGRectEqualToRect(self.inputContainerView.frame, composerFrame)) {
+		collectionView.frame = collectionFrame;
+		self.inputContainerView.frame = composerFrame;
+		
+		[self scrollViewDidScroll:self.collectionView];
+	}
+	if (invalidateLayout) {
+		[self.flowLayout invalidateLayout];
+	}
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-	[self relayoutSubviews];
+	[self relayoutSubviews:YES];
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
 	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-	[self relayoutSubviews];
+	[self relayoutSubviews:YES];
 }
 
 - (void)fontPreferencesChanged:(NSNotification *)notification {
-	[self relayoutSubviews];
+	[self relayoutSubviews:YES];
 }
 
 #pragma mark Private

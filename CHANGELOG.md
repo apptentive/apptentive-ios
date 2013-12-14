@@ -3,6 +3,7 @@
 Fixes:
 
 * [Issue #65](https://github.com/apptentive/apptentive-ios/issues/65) Long response is truncated in message centre on the device
+* Fixes a crash caused by setting link attributes after text on TTTAttributedLabels.
 
 2013-11-22 wooster, pkamb v1.2.3
 --------------------------------

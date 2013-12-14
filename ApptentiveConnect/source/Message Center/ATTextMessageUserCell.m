@@ -21,11 +21,11 @@
 	horizontalCellPadding = CGRectGetWidth(self.bounds) - CGRectGetWidth(self.messageText.bounds);
 	
 	self.messageText.delegate = self;
-	UIDataDetectorTypes types = UIDataDetectorTypeLink;
+	NSTextCheckingType types = NSTextCheckingTypeLink;
 	if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel://"]]) {
-		types |= UIDataDetectorTypePhoneNumber;
+		types |= NSTextCheckingTypePhoneNumber;
 	}
-	self.messageText.dataDetectorTypes = types;
+	self.messageText.enabledTextCheckingTypes = types;
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {

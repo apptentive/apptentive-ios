@@ -13,6 +13,11 @@
 
 @implementation ATTextMessageCellV7
 - (void)setup {
+	NSTextCheckingType types = NSTextCheckingTypeLink;
+	if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel://"]]) {
+		types |= NSTextCheckingTypePhoneNumber;
+	}
+	self.messageLabel.enabledTextCheckingTypes = types;
 	self.messageLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 	self.messageLabel.textColor = [UIColor blackColor];
 	self.messageLabel.text = self.message.body;
@@ -26,11 +31,6 @@
 	self.userIconView.layer.masksToBounds = YES;
 	
 	self.messageLabel.delegate = self;
-	UIDataDetectorTypes types = UIDataDetectorTypeLink;
-	if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel://"]]) {
-		types |= UIDataDetectorTypePhoneNumber;
-	}
-	self.messageLabel.dataDetectorTypes = types;
 	self.arrowView.direction = self.arrowDirection;
 	self.arrowView.color = self.textContainerView.backgroundColor;
 	

@@ -114,7 +114,7 @@ static inline NSRegularExpression * ParenthesisRegularExpression() {
         [mutableAttributedString replaceCharactersInRange:nameRange withString:[[[mutableAttributedString string] substringWithRange:nameRange] uppercaseString]];
         
         regexp = ParenthesisRegularExpression();
-        [regexp enumerateMatchesInString:[mutableAttributedString string] options:0 range:stringRange usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {            
+        [regexp enumerateMatchesInString:[mutableAttributedString string] options:0 range:stringRange usingBlock:^(NSTextCheckingResult *result, __unused NSMatchingFlags flags, __unused BOOL *stop) {
             UIFont *italicSystemFont = [UIFont italicSystemFontOfSize:kEspressoDescriptionTextFontSize];
             CTFontRef italicFont = CTFontCreateWithName((__bridge CFStringRef)italicSystemFont.fontName, italicSystemFont.pointSize, NULL);
             if (italicFont) {
@@ -137,10 +137,17 @@ static inline NSRegularExpression * ParenthesisRegularExpression() {
 }
 
 + (CGFloat)heightForCellWithText:(NSString *)text {
-    CGFloat height = 10.0f;
-    height += ceilf([text sizeWithFont:[UIFont systemFontOfSize:kEspressoDescriptionTextFontSize] constrainedToSize:CGSizeMake(270.0f, CGFLOAT_MAX) lineBreakMode:UILineBreakModeWordWrap].height);
-    height += kAttributedTableViewCellVerticalMargin;
-    return height;
+    static CGFloat padding = 10.0;
+
+    UIFont *systemFont = [UIFont systemFontOfSize:kEspressoDescriptionTextFontSize];
+    CGSize textSize = CGSizeMake(275.0, CGFLOAT_MAX);
+    CGSize sizeWithFont = [text sizeWithFont:systemFont constrainedToSize:textSize lineBreakMode:NSLineBreakByWordWrapping];
+
+#if defined(__LP64__) && __LP64__
+    return ceil(sizeWithFont.height) + padding;
+#else
+    return ceilf(sizeWithFont.height) + padding;
+#endif
 }
 
 #pragma mark - UIView

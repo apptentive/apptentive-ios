@@ -504,7 +504,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 		}
 		
 		ATMessagePanelViewController *vc;
-		if (TRUE && [ATUtilities osVersionGreaterThanOrEqualTo:@"7.0"]) {
+		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7.0"]) {
 			vc = [[ATMessagePanelNewUIViewController alloc] initWithDelegate:self];
 		}
 		else {

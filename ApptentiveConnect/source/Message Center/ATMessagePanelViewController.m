@@ -711,12 +711,15 @@ enum {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[self.window removeFromSuperview];
 	self.window = nil;
-		
+	
 	self.cancelButton = nil;
 	self.sendButton = nil;
 	self.toolbar = nil;
+	self.scrollView.delegate = nil;
 	self.scrollView = nil;
+	self.emailField.delegate = nil;
 	self.emailField = nil;
+	self.feedbackView.delegate = nil;
 	self.feedbackView = nil;
 	self.customPlaceholderText = nil;
 	[originalPresentingWindow makeKeyWindow];

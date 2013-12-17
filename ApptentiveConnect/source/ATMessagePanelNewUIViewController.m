@@ -171,7 +171,7 @@
 	// Resize view
 	CGRect viewFrame = self.containerView.bounds;
 	viewFrame.size.height -= buttonHeight;
-	self.view.bounds = viewFrame;
+	self.view.frame = viewFrame;
 	
 	[self setupScrollView];
 }

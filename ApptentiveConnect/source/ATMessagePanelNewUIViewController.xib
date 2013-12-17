@@ -52,7 +52,7 @@
                                     <rect key="frame" x="0.0" y="193" width="302" height="44"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
-                                        <view alpha="0.69999999999999996" contentMode="scaleToFill" id="Rfl-h1-uHw">
+                                        <view alpha="0.90000000000000002" contentMode="scaleToFill" id="Rfl-h1-uHw">
                                             <rect key="frame" x="0.0" y="0.0" width="150" height="44"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <subviews>
@@ -69,7 +69,7 @@
                                             </subviews>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </view>
-                                        <view alpha="0.69999999999999996" contentMode="scaleToFill" id="fRg-ly-lWg">
+                                        <view alpha="0.90000000000000002" contentMode="scaleToFill" id="fRg-ly-lWg">
                                             <rect key="frame" x="152" y="0.0" width="150" height="44"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <subviews>

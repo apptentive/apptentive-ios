@@ -182,7 +182,7 @@ enum {
 		shadowFrame.origin.y -= offset;
 		shadowFrame.size.height += offset;
 		shadowView = [[UIView alloc] initWithFrame:shadowFrame];
-		shadowView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+		shadowView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4];
 		shadowView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 	} else {
 		shadowView = [[ATShadowView alloc] initWithFrame:self.window.bounds];

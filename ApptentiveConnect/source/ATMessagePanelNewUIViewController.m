@@ -29,6 +29,8 @@
 #import "UIViewController+ATSwizzle.h"
 #import "UIImage+ATImageEffects.h"
 
+#define USE_BLUR 0
+
 @interface ATMessagePanelNewUIViewController ()
 
 @end
@@ -65,10 +67,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-	
+#if USE_BLUR
 	self.backgroundImageView.contentMode = UIViewContentModeScaleAspectFill;
 	UIImage *blurred = [self blurredBackgroundScreenshot];
 	[self.backgroundImageView setImage:blurred];
+#endif
 }
 
 - (void)dealloc {
@@ -127,6 +130,7 @@
 	}
 	lastSeenPresentingViewControllerFrame = f;
 	lastSeenPresentingViewControllerTransform = t;
+#if USE_BLUR
 	UIImage *blurred = [self blurredBackgroundScreenshot];
 	[UIView transitionWithView:self.backgroundImageView
 					  duration:0.3f
@@ -134,6 +138,7 @@
 					animations:^{
 						self.backgroundImageView.image = blurred;
 					} completion:nil];
+#endif
 }
 
 - (UIImage *)blurredBackgroundScreenshot {

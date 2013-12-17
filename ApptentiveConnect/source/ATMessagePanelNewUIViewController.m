@@ -29,8 +29,6 @@
 #import "UIViewController+ATSwizzle.h"
 #import "UIImage+ATImageEffects.h"
 
-NSString *const ATMessagePanelPresentingViewControllerSwizzledDidRotateNotification = @"ATMessagePanelPresentingViewControllerSwizzledDidRotateNotification";
-
 @interface ATMessagePanelNewUIViewController ()
 
 @end

@@ -11,7 +11,6 @@
 
 NSString *const ATInteractionUpgradeMessageLaunch;
 NSString *const ATInteractionUpgradeMessageClose;
-NSString *const ATInteractionUpgradeMessagePresentingViewControllerSwizzledDidRotateNotification;
 
 @interface ATInteractionUpgradeMessageViewController : UIViewController {
 	UIViewController *presentingViewController;

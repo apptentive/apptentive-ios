@@ -8,8 +8,6 @@
 
 #import "ATMessagePanelViewController.h"
 
-NSString *const ATMessagePanelPresentingViewControllerSwizzledDidRotateNotification;
-
 @interface ATMessagePanelNewUIViewController : ATMessagePanelViewController {
 	// Used when handling view rotation.
 	CGRect lastSeenPresentingViewControllerFrame;

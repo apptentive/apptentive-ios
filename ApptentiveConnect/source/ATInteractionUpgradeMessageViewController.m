@@ -22,7 +22,6 @@ typedef enum {
 
 NSString *const ATInteractionUpgradeMessageLaunch = @"ATInteractionUpgradeMessageLaunch";
 NSString *const ATInteractionUpgradeMessageClose = @"ATInteractionUpgradeMessageClose";
-NSString *const ATInteractionUpgradeMessagePresentingViewControllerSwizzledDidRotateNotification = @"ATInteractionUpgradeMessagePresentingViewControllerSwizzledDidRotateNotification";
 
 @interface ATInteractionUpgradeMessageViewController ()
 - (UIWindow *)findMainWindowPreferringMainScreen:(BOOL)preferMainScreen;
@@ -146,7 +145,7 @@ NSString *const ATInteractionUpgradeMessagePresentingViewControllerSwizzledDidRo
 	// Swizzle the presentingViewController's `didRotateFromInterfaceOrientation:` method to get a notifiction
 	// when the background view finishes animating to the new orientation.
 	//TODO: I would like to find a better solution to this.
-	[newPresentingViewController at_swizzleDidRotateFromInterfaceOrientation];
+	[newPresentingViewController at_swizzleUpgradeMessageDidRotateFromInterfaceOrientation];
 	
 	if (presentingViewController != newPresentingViewController) {
 		[presentingViewController release], presentingViewController = nil;

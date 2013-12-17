@@ -104,4 +104,6 @@ NSString *const ATBackendBecameReadyNotification;
 - (NSString *)appName;
 
 - (BOOL)isReady;
+
+- (NSURLCache *)imageCache;
 @end

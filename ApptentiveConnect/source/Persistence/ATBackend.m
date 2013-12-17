@@ -52,6 +52,8 @@ NSString *const ATUUIDPreferenceKey = @"ATUUIDPreferenceKey";
 NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
+static NSURLCache *imageCache = nil;
+
 @interface ATBackend ()
 - (void)updateConfigurationIfNeeded;
 @end
@@ -204,6 +206,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 		[presentingViewController release], presentingViewController = nil;
 	}
 #endif
+	[imageCache release], imageCache = nil;
 	[super dealloc];
 }
 
@@ -417,6 +420,42 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 - (BOOL)isReady {
 	return (state == ATBackendStateReady);
+}
+
+- (NSString *)cacheDirectoryPath {
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+	NSString *path = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+	
+	NSString *newPath = [path stringByAppendingPathComponent:@"com.apptentive"];
+	NSFileManager *fm = [NSFileManager defaultManager];
+	NSError *error = nil;
+	BOOL result = [fm createDirectoryAtPath:newPath withIntermediateDirectories:YES attributes:nil error:&error];
+	if (!result) {
+		ATLogError(@"Failed to create support directory: %@", newPath);
+		ATLogError(@"Error was: %@", error);
+		return nil;
+	}
+	return newPath;
+}
+
+- (NSString *)imageCachePath {
+	NSString *cachePath = [self cacheDirectoryPath];
+	if (!cachePath) {
+		return nil;
+	}
+	NSString *imageCachePath = [cachePath stringByAppendingPathComponent:@"images.cache"];
+	return imageCachePath;
+}
+
+- (NSURLCache *)imageCache {
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		NSString *imageCachePath = [self imageCachePath];
+		if (imageCachePath) {
+			imageCache = [[NSURLCache alloc] initWithMemoryCapacity:1*1024*1024 diskCapacity:10*1024*1024 diskPath:imageCachePath];
+		}
+	});
+	return imageCache;
 }
 
 #pragma mark Message Center

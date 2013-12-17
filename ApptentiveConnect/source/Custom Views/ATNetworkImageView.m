@@ -8,6 +8,8 @@
 
 #import "ATNetworkImageView.h"
 
+#import "ATBackend.h"
+
 @implementation ATNetworkImageView {
 	NSURLConnection *connection;
 	NSMutableData *imageData;
@@ -18,8 +20,14 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+		self.useCache = YES;
     }
     return self;
+}
+
+- (void)awakeFromNib {
+	[super awakeFromNib];
+	self.useCache = YES;
 }
 
 - (void)dealloc {
@@ -37,9 +45,25 @@
 	}
 	if (self.imageURL) {
 		NSURLRequest *request = [NSURLRequest requestWithURL:self.imageURL];
-		connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
-		[connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
-		[connection start];
+		
+		NSURLCache *cache = [[ATBackend sharedBackend] imageCache];
+		BOOL cacheHit = NO;
+		if (cache) {
+			NSCachedURLResponse *cachedResponse = [cache cachedResponseForRequest:request];
+			if (cachedResponse && self.useCache) {
+				UIImage *i = [UIImage imageWithData:cachedResponse.data];
+				if (i) {
+					self.image = i;
+					cacheHit = YES;
+				}
+			}
+		}
+		
+		if (!cacheHit) {
+			connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
+			[connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+			[connection start];
+		}
 	}
 }
 

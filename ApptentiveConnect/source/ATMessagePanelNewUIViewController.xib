@@ -10,11 +10,11 @@
                 <outlet property="backgroundImageView" destination="bDc-jy-683" id="q0k-Sj-85I"/>
                 <outlet property="buttonFrame" destination="Iep-UB-ir2" id="bh9-ct-3du"/>
                 <outlet property="cancelButtonNewUI" destination="3ru-Mm-7OC" id="uoV-zp-5Vx"/>
-                <outlet property="cancelButtonPading" destination="Rfl-h1-uHw" id="LjG-ML-3pG"/>
+                <outlet property="cancelButtonPadding" destination="Rfl-h1-uHw" id="8wE-cA-St7"/>
                 <outlet property="containerView" destination="mbB-4j-05F" id="uc2-fK-BI0"/>
                 <outlet property="scrollView" destination="pvN-Ps-u2U" id="dWF-p8-beJ"/>
                 <outlet property="sendButtonNewUI" destination="Gkx-fy-LwA" id="23H-ox-udH"/>
-                <outlet property="sendButtonPading" destination="fRg-ly-lWg" id="oh0-4f-vbx"/>
+                <outlet property="sendButtonPadding" destination="fRg-ly-lWg" id="W30-72-Gbn"/>
                 <outlet property="view" destination="lSe-RN-8Ub" id="Lmz-4q-EcF"/>
                 <outlet property="window" destination="QkO-YN-hl7" id="Oxf-gC-iJv"/>
             </connections>

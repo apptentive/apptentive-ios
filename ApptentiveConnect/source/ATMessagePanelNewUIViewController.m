@@ -43,9 +43,9 @@
 @synthesize backgroundImageView = _backgroundImageView;
 @synthesize buttonFrame = _buttonFrame;
 @synthesize sendButtonNewUI = _sendButtonNewUI;
-@synthesize sendButtonPading = _sendButtonPading;
+@synthesize sendButtonPadding = _sendButtonPadding;
 @synthesize cancelButtonNewUI = _cancelButtonNewUI;
-@synthesize cancelButtonPading = _cancelButtonPading;
+@synthesize cancelButtonPadding = _cancelButtonPadding;
 
 - (id)initWithDelegate:(NSObject<ATMessagePanelDelegate> *)aDelegate {
 	self = [super initWithNibName:@"ATMessagePanelNewUIViewController" bundle:[ATConnect resourceBundle]];
@@ -79,8 +79,8 @@
 	[_buttonFrame release], _buttonFrame = nil;
 	[_sendButtonNewUI release], _sendButtonNewUI = nil;
 	[_cancelButtonNewUI release], _cancelButtonNewUI = nil;
-	[_sendButtonPading release], _sendButtonPading = nil;
-	[_cancelButtonPading release], _cancelButtonPading = nil;
+	[_sendButtonPadding release], _sendButtonPadding = nil;
+	[_cancelButtonPadding release], _cancelButtonPadding = nil;
 
 	[promptLabel release], promptLabel = nil;
 	[thinBlueLineView release], thinBlueLineView = nil;
@@ -164,14 +164,14 @@
 	
 	CGRect leftFrame = self.buttonFrame.bounds;
 	leftFrame.size.width = leftFrame.size.width / 2;
-	self.cancelButtonPading.frame = leftFrame;
-	self.cancelButtonNewUI.frame = self.cancelButtonPading.bounds;
+	self.cancelButtonPadding.frame = leftFrame;
+	self.cancelButtonNewUI.frame = self.cancelButtonPadding.bounds;
 	
 	CGRect rightFrame = self.buttonFrame.bounds;
 	rightFrame.origin.x = rightFrame.size.width / 2 + 1;
 	rightFrame.size.width = rightFrame.size.width / 2 - 1;
-	self.sendButtonPading.frame = rightFrame;
-	self.sendButtonNewUI.frame = self.sendButtonPading.bounds;
+	self.sendButtonPadding.frame = rightFrame;
+	self.sendButtonNewUI.frame = self.sendButtonPadding.bounds;
 	
 	// Resize view
 	CGRect viewFrame = self.containerView.bounds;

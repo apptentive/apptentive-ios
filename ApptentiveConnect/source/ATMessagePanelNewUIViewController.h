@@ -17,8 +17,8 @@
 @property (nonatomic, retain) IBOutlet UIImageView *backgroundImageView;
 @property (nonatomic, retain) IBOutlet UIView *buttonFrame;
 @property (nonatomic, retain) IBOutlet UIButton *sendButtonNewUI;
-@property (nonatomic, retain) IBOutlet UIView *sendButtonPading;
+@property (nonatomic, retain) IBOutlet UIView *sendButtonPadding;
 @property (nonatomic, retain) IBOutlet UIButton *cancelButtonNewUI;
-@property (nonatomic, retain) IBOutlet UIView *cancelButtonPading;
+@property (nonatomic, retain) IBOutlet UIView *cancelButtonPadding;
 
 @end

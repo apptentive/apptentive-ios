@@ -37,8 +37,10 @@ extern NSString *const ATAppRatingFlowUserAgreedToRateAppNotification;
 	
 	NSDate *lastUseOfApp;
 }
-/*! Set to a custom app name if you'd like to use something other than the bundle display name. 
- Deprecated in 1.0.1 in favor of server-based configuration of the app display name. */
+/*! 
+ Set to a custom app name if you'd like to use something other than the bundle display name.
+ Deprecated in 1.0.1 in favor of server-based configuration of the app display name. 
+ */
 @property (nonatomic, copy) NSString *appName DEPRECATED_ATTRIBUTE;
 
 @property (nonatomic, copy) NSString *appID;
@@ -49,8 +51,11 @@ extern NSString *const ATAppRatingFlowUserAgreedToRateAppNotification;
 + (ATAppRatingFlow *)sharedRatingFlowWithAppID:(NSString *)iTunesAppID;
 
 #if TARGET_OS_IPHONE
-/*! Will show the ratings flow from the given viewController if the conditions to do so are met. */
-- (void)showRatingFlowFromViewControllerIfConditionsAreMet:(UIViewController *)viewController;
+/*!
+ Will show the ratings flow from the given viewController if the conditions to do so are met.
+ Returns BOOL indicating if the ratings flow was shown or not.
+ */
+- (BOOL)showRatingFlowFromViewControllerIfConditionsAreMet:(UIViewController *)viewController;
 
 #elif TARGET_OS_MAC
 - (void)showRatingFlowIfConditionsAreMet;

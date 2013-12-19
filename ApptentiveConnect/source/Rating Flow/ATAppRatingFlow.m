@@ -137,7 +137,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 }
 
 #if TARGET_OS_IPHONE
-- (void)showRatingFlowFromViewControllerIfConditionsAreMet:(UIViewController *)vc {
+- (BOOL)showRatingFlowFromViewControllerIfConditionsAreMet:(UIViewController *)vc {
 	self.viewController = vc;
 #	if TARGET_IPHONE_SIMULATOR
 	[self logDefaults];
@@ -146,7 +146,9 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	BOOL showedDialog = [self showDialogIfNecessary];
 	if (!showedDialog) {
 		self.viewController = nil;
+		[[NSNotificationCenter defaultCenter] postNotificationName:ATAppRatingDidNotPromptForEnjoymentNotification object:nil];
 	}
+	return showedDialog;
 }
 #endif
 

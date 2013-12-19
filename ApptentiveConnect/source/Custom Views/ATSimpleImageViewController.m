@@ -11,6 +11,7 @@
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
 #import "ATFeedback.h"
+#import "ATUtilities.h"
 
 NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 
@@ -286,7 +287,17 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 		}
 		imagePickerPopover = [[UIPopoverController alloc] initWithContentViewController:imagePicker];
 		imagePickerPopover.delegate = self;
-		[imagePickerPopover presentPopoverFromBarButtonItem:self.navigationItem.leftBarButtonItem permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+
+		/*! Fix for iPad crash when authenticating Photo access via UIImagePickerController in a UIPopoverControl from a UIBarButtonItem.
+		 http://stackoverflow.com/questions/18939537/uiimagepickercontroller-crash-only-on-ios-7-ipad
+		 http://openradar.appspot.com/radar?id=6369788687286272
+		 TODO: move back to `presentPopoverFromBarButtonItem:` when crash has been fixed in iOS.
+		*/
+		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad && [ATUtilities osVersionGreaterThanOrEqualTo:@"7.0"]) {
+			[imagePickerPopover presentPopoverFromRect:self.view.frame inView:self.view permittedArrowDirections:NO animated:YES];
+		} else {
+			[imagePickerPopover presentPopoverFromBarButtonItem:self.navigationItem.leftBarButtonItem permittedArrowDirections:NO animated:YES];
+		}
 	} else if ([self respondsToSelector:@selector(presentViewController:animated:completion:)]) {
 		[self presentViewController:imagePicker animated:YES completion:NULL];
 	} else {

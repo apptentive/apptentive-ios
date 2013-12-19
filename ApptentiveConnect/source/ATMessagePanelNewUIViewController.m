@@ -153,23 +153,25 @@
 
 - (void)setupContainerView {
 	self.containerView.backgroundColor = [UIColor clearColor];
-	self.containerView.layer.cornerRadius = 10.0;
+	self.containerView.layer.cornerRadius = 7.0;
 	
 	NSInteger buttonHeight = ([[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationPortrait) ? 44 : 30;
 	
+	CGFloat pixelLineWidth = [[UIScreen mainScreen] scale] == 2 ? 0.25 : 0.5;
+	
 	CGRect buttonFrame = self.containerView.bounds;
-	buttonFrame.size.height = buttonHeight;
-	buttonFrame.origin.y = self.containerView.bounds.size.height - buttonFrame.size.height + 1;
+	buttonFrame.size.height = buttonHeight - pixelLineWidth;
+	buttonFrame.origin.y = self.containerView.bounds.size.height - buttonFrame.size.height + pixelLineWidth;
 	self.buttonFrame.frame = buttonFrame;
 	
 	CGRect leftFrame = self.buttonFrame.bounds;
-	leftFrame.size.width = leftFrame.size.width / 2;
+	leftFrame.size.width = leftFrame.size.width / 2 - pixelLineWidth;
 	self.cancelButtonPadding.frame = leftFrame;
 	self.cancelButtonNewUI.frame = self.cancelButtonPadding.bounds;
 	
 	CGRect rightFrame = self.buttonFrame.bounds;
-	rightFrame.origin.x = rightFrame.size.width / 2 + 1;
-	rightFrame.size.width = rightFrame.size.width / 2 - 1;
+	rightFrame.origin.x = rightFrame.size.width / 2 + pixelLineWidth;
+	rightFrame.size.width = rightFrame.size.width / 2 - pixelLineWidth;
 	self.sendButtonPadding.frame = rightFrame;
 	self.sendButtonNewUI.frame = self.sendButtonPadding.bounds;
 	
@@ -191,7 +193,7 @@
 	CGFloat width = CGRectGetWidth(self.scrollView.bounds);
 	
 	if (self.promptText) {
-		CGFloat labelPadding = 4;
+		UIEdgeInsets labelInsets = UIEdgeInsetsMake(10, 12, 10, 12);
 		
 		if (!promptLabel) {
 			promptLabel = [[ATLabel alloc] initWithFrame:CGRectMake(0, 0, width, 100)];
@@ -202,13 +204,13 @@
 			promptLabel.lineBreakMode = UILineBreakModeWordWrap;
 			promptLabel.numberOfLines = 0;
 		}
-		CGSize fitSize = [promptLabel sizeThatFits:CGSizeMake(width - labelPadding*2, CGFLOAT_MAX)];
-		CGFloat promptContainerHeight = fitSize.height + labelPadding*2;
+		
+		CGSize fitSize = [promptLabel sizeThatFits:CGSizeMake(width - labelInsets.left - labelInsets.right, CGFLOAT_MAX)];
+		CGFloat promptContainerHeight = fitSize.height + labelInsets.top + labelInsets.bottom;
 		
 		CGRect promptContainerBounds = CGRectMake(0, 0, width, promptContainerHeight);
 		CGRect promptContainerFrame = CGRectOffset(promptContainerBounds, 0, offsetY);
-		CGRect promptLabelFrame = CGRectInset(promptContainerBounds, labelPadding, labelPadding);
-		
+		CGRect promptLabelFrame = UIEdgeInsetsInsetRect(promptContainerBounds, labelInsets);
 		
 		if (!self.promptContainer) {
 			self.promptContainer = [[[UIView alloc] initWithFrame:promptContainerFrame] autorelease];

@@ -294,9 +294,9 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 		 TODO: move back to `presentPopoverFromBarButtonItem:` when crash has been fixed in iOS.
 		*/
 		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad && [ATUtilities osVersionGreaterThanOrEqualTo:@"7.0"]) {
-			[imagePickerPopover presentPopoverFromRect:self.view.frame inView:self.view permittedArrowDirections:NO animated:YES];
+			[imagePickerPopover presentPopoverFromRect:self.view.frame inView:self.view permittedArrowDirections:0 animated:YES];
 		} else {
-			[imagePickerPopover presentPopoverFromBarButtonItem:self.navigationItem.leftBarButtonItem permittedArrowDirections:NO animated:YES];
+			[imagePickerPopover presentPopoverFromBarButtonItem:self.navigationItem.leftBarButtonItem permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
 		}
 	} else if ([self respondsToSelector:@selector(presentViewController:animated:completion:)]) {
 		[self presentViewController:imagePicker animated:YES completion:NULL];

@@ -6,5 +6,5 @@
 //  Copyright 2011 Apptentive, Inc.. All rights reserved.
 //
 
-#define kApptentiveAPIKey @"<your key here>"
+#define kApptentiveAPIKey @"ApptentiveApiKey"
 #define kApptentiveAppID @"ExampleAppID"

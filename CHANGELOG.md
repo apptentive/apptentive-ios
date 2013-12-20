@@ -1,11 +1,27 @@
-2013-12-?? wooster, pkamb v1.2.4 (in progress)
+2013-12-20 wooster, pkamb v1.2.4
 --------------------------------
+This release includes a UI refresh for iOS 7. Specifically, the message center and message panel both have completely new UIs.
+
+Our previous UI should still work for iOS 4.3-6, with the new UI showing up on iOS 7+. There were a significant number of changes made, so we suggest you take a look and test things out with your app to see if we missed anything or if things don't look nice inside your app.
+
 Fixes:
 
 * [Issue #65](https://github.com/apptentive/apptentive-ios/issues/65) Long response is truncated in message centre on the device
 * Fixes a crash caused by setting link attributes after text on TTTAttributedLabels.
-* Fixes IOS-332 Message Center avatars are fetched from server on every load
-* Fixes IOS-337 Crash and/or hang taking photos on iPad
+* IOS-165 Skeuomorphic "note pad" background of Message Center in iOS 7?
+* IOS-201 Gravatar icon doesn't show up properly
+* IOS-230 Message hyperlinks are not clickable on iOS
+* IOS-259 Add `time_ago` Interaction criteria
+* IOS-276 Send milliseconds in Apptentive metrics
+* IOS-281 Blur screen behind Message Center UI
+* IOS-287 Message custom data should only be sent with the first message in a Message Center session
+* IOS-288 Don't send custom data with automated messages
+* IOS-293 Send customData with ATFileMessages
+* IOS-303 Urban Airship push notifications.
+* IOS-332 Message Center avatars are fetched from server on every load
+* IOS-336 Crash when selecting a photo
+* IOS-337 Crash and/or hang taking photos on iPad
+* IOS-340 Notification or return value when rating flow was not shown.
 
 2013-11-22 wooster, pkamb v1.2.3
 --------------------------------

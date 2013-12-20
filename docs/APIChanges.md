@@ -9,7 +9,7 @@ Added methods for configuring 3rd-party integration services and handling incomi
 `[[ATConnect sharedConnection] addIntegration:ATIntegrationKeyUrbanAirship withConfiguration:@{@"token": @"YourUrbanAirshipToken"}];`
 
 * Added `addIntegration:withConfiguration:`
-* Added `removeIntegration:
+* Added `removeIntegration:`
 * Added `didReceiveRemoteNotification:fromViewController:`
 
 ## ATAppRatingFlow

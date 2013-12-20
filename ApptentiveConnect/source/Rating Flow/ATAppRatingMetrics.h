@@ -11,6 +11,7 @@
 #pragma mark Constants for Metrics
 
 NSString *const ATAppRatingDidPromptForEnjoymentNotification;
+NSString *const ATAppRatingDidNotPromptForEnjoymentNotification;
 NSString *const ATAppRatingDidClickEnjoymentButtonNotification;
 
 NSString *const ATAppRatingDidPromptForRatingNotification;

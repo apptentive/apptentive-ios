@@ -68,6 +68,7 @@ static NSString *ATMetricNameInteractionUpgradeMessageClose = @"upgrade_message.
 
 - (ATAppRatingEnjoymentButtonType)appEnjoymentButtonTypeFromNotification:(NSNotification *)notification;
 - (void)ratingDidShowEnjoyment:(NSNotification *)notification;
+- (void)ratingDidNotShowEnjoyment:(NSNotification *)notification;
 - (void)ratingDidClickEnjoyment:(NSNotification *)notification;
 
 - (ATAppRatingButtonType)appRatingButtonTypeFromNotification:(NSNotification *)notification;
@@ -134,6 +135,7 @@ static NSString *ATMetricNameInteractionUpgradeMessageClose = @"upgrade_message.
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackDidShowWindow:) name:ATFeedbackDidShowWindowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackDidHideWindow:) name:ATFeedbackDidHideWindowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingDidShowEnjoyment:) name:ATAppRatingDidPromptForEnjoymentNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingDidNotShowEnjoyment:) name:ATAppRatingDidNotPromptForEnjoymentNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingDidClickEnjoyment:) name:ATAppRatingDidClickEnjoymentButtonNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingDidShowRating:) name:ATAppRatingDidPromptForRatingNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingDidClickRating:) name:ATAppRatingDidClickRatingButtonNotification object:nil];
@@ -299,6 +301,10 @@ static NSString *ATMetricNameInteractionUpgradeMessageClose = @"upgrade_message.
 
 - (void)ratingDidShowEnjoyment:(NSNotification *)notification {
 	[self addMetricWithName:ATMetricNameEnjoymentDialogLaunch info:nil];
+}
+
+- (void)ratingDidNotShowEnjoyment:(NSNotification *)notification {
+	// Not logging metrics for non-shown Enjoyment dialogs.
 }
 
 - (void)ratingDidClickEnjoyment:(NSNotification *)notification {

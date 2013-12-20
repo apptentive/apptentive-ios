@@ -9,6 +9,7 @@
 #import "ATAppRatingMetrics.h"
 
 NSString *const ATAppRatingDidPromptForEnjoymentNotification = @"ATAppRatingDidPromptForEnjoymentNotification";
+NSString *const ATAppRatingDidNotPromptForEnjoymentNotification = @"ATAppRatingDidNotPromptForEnjoymentNotification";
 NSString *const ATAppRatingDidClickEnjoymentButtonNotification = @"ATAppRatingDidClickEnjoymentButtonNotification";
 
 NSString *const ATAppRatingDidPromptForRatingNotification = @"ATAppRatingDidPromptForRatingNotification";

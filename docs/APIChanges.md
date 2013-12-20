@@ -1,5 +1,24 @@
 This document tracks changes to the API between versions.
 
+# 1.2.4
+
+## ATConnect
+
+Added methods for configuring 3rd-party integration services and handling incoming push notifications. Current support for Urban Airship.
+
+`[[ATConnect sharedConnection] addIntegration:ATIntegrationKeyUrbanAirship withConfiguration:@{@"token": @"YourUrbanAirshipToken"}];`
+
+* Added `addIntegration:withConfiguration:`
+* Added `removeIntegration:
+* Added `didReceiveRemoteNotification:fromViewController:`
+
+## ATAppRatingFlow
+
+Added methods to determine if the Apptentive Rating Flow was shown for a particular call of `showRatingFlowFromViewControllerIfConditionsAreMet:`
+
+* Replace `- (void)showRatingFlowFromViewControllerIfConditionsAreMet:` with `- (BOOL)showRatingFlowFromViewControllerIfConditionsAreMet:`
+* Now posting `ATAppRatingDidNotPromptForEnjoymentNotification` NSNotification when rating flow is not shown.
+
 # 1.2.2
 
 ## ATConnect

@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "TTTAttributedLabel.h"
+#import "PrefixedTTTAttributedLabel.h"
 
 #import <Availability.h>
 
@@ -36,41 +36,41 @@ NSString * const TTTATTRIBUTEDLABEL_PREPEND(kTTTBackgroundLineWidthAttributeName
 NSString * const TTTATTRIBUTEDLABEL_PREPEND(kTTTBackgroundCornerRadiusAttributeName) = @"TTTBackgroundCornerRadius";
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 60000
-const NSTextAlignment TTTTextAlignmentLeft = NSTextAlignmentLeft;
-const NSTextAlignment TTTTextAlignmentCenter = NSTextAlignmentCenter;
-const NSTextAlignment TTTTextAlignmentRigth = NSTextAlignmentRight;
-const NSTextAlignment TTTTextAlignmentJustified = NSTextAlignmentJustified;
-const NSTextAlignment TTTTextAlignmentNatural = NSTextAlignmentNatural;
+const NSTextAlignment TTTATTRIBUTEDLABEL_PREPEND(TTTTextAlignmentLeft) = NSTextAlignmentLeft;
+const NSTextAlignment TTTATTRIBUTEDLABEL_PREPEND(TTTTextAlignmentCenter) = NSTextAlignmentCenter;
+const NSTextAlignment TTTATTRIBUTEDLABEL_PREPEND(TTTTextAlignmentRigth) = NSTextAlignmentRight;
+const NSTextAlignment TTTATTRIBUTEDLABEL_PREPEND(TTTTextAlignmentJustified) = NSTextAlignmentJustified;
+const NSTextAlignment TTTATTRIBUTEDLABEL_PREPEND(TTTTextAlignmentNatural) = NSTextAlignmentNatural;
 
-const NSLineBreakMode TTTLineBreakByWordWrapping = NSLineBreakByWordWrapping;
-const NSLineBreakMode TTTLineBreakByCharWrapping = NSLineBreakByCharWrapping;
-const NSLineBreakMode TTTLineBreakByClipping = NSLineBreakByClipping;
-const NSLineBreakMode TTTLineBreakByTruncatingHead = NSLineBreakByTruncatingHead;
-const NSLineBreakMode TTTLineBreakByTruncatingMiddle = NSLineBreakByTruncatingMiddle;
-const NSLineBreakMode TTTLineBreakByTruncatingTail = NSLineBreakByTruncatingTail;
+const NSLineBreakMode TTTATTRIBUTEDLABEL_PREPEND(TTTLineBreakByWordWrapping) = NSLineBreakByWordWrapping;
+const NSLineBreakMode TTTATTRIBUTEDLABEL_PREPEND(TTTLineBreakByCharWrapping) = NSLineBreakByCharWrapping;
+const NSLineBreakMode TTTATTRIBUTEDLABEL_PREPEND(TTTLineBreakByClipping) = NSLineBreakByClipping;
+const NSLineBreakMode TTTATTRIBUTEDLABEL_PREPEND(TTTLineBreakByTruncatingHead) = NSLineBreakByTruncatingHead;
+const NSLineBreakMode TTTATTRIBUTEDLABEL_PREPEND(TTTLineBreakByTruncatingMiddle) = NSLineBreakByTruncatingMiddle;
+const NSLineBreakMode TTTATTRIBUTEDLABEL_PREPEND(TTTLineBreakByTruncatingTail) = NSLineBreakByTruncatingTail;
 
-typedef NSTextAlignment TTTTextAlignment;
-typedef NSLineBreakMode TTTLineBreakMode;
+typedef NSTextAlignment TTTATTRIBUTEDLABEL_PREPEND(TTTTextAlignment);
+typedef NSLineBreakMode TTTATTRIBUTEDLABEL_PREPEND(TTTLineBreakMode);
 #else
-const UITextAlignment TTTTextAlignmentLeft = NSTextAlignmentLeft;
-const UITextAlignment TTTTextAlignmentCenter = NSTextAlignmentCenter;
-const UITextAlignment TTTTextAlignmentRigth = NSTextAlignmentRight;
-const UITextAlignment TTTTextAlignmentJustified = NSTextAlignmentJustified;
-const UITextAlignment TTTTextAlignmentNatural = NSTextAlignmentNatural;
+const UITextAlignment TTTATTRIBUTEDLABEL_PREPEND(TTTTextAlignmentLeft) = NSTextAlignmentLeft;
+const UITextAlignment TTTATTRIBUTEDLABEL_PREPEND(TTTTextAlignmentCenter) = NSTextAlignmentCenter;
+const UITextAlignment TTTATTRIBUTEDLABEL_PREPEND(TTTTextAlignmentRigth) = NSTextAlignmentRight;
+const UITextAlignment TTTATTRIBUTEDLABEL_PREPEND(TTTTextAlignmentJustified) = NSTextAlignmentJustified;
+const UITextAlignment TTTATTRIBUTEDLABEL_PREPEND(TTTTextAlignmentNatural) = NSTextAlignmentNatural;
 
-const UITextAlignment TTTLineBreakByWordWrapping = NSLineBreakByWordWrapping;
-const UITextAlignment TTTLineBreakByCharWrapping = NSLineBreakByCharWrapping;
-const UITextAlignment TTTLineBreakByClipping = NSLineBreakByClipping;
-const UITextAlignment TTTLineBreakByTruncatingHead = NSLineBreakByTruncatingHead;
-const UITextAlignment TTTLineBreakByTruncatingMiddle = NSLineBreakByTruncatingMiddle;
-const UITextAlignment TTTLineBreakByTruncatingTail = NSLineBreakByTruncatingTail;
+const UITextAlignment TTTATTRIBUTEDLABEL_PREPEND(TTTLineBreakByWordWrapping) = NSLineBreakByWordWrapping;
+const UITextAlignment TTTATTRIBUTEDLABEL_PREPEND(TTTLineBreakByCharWrapping) = NSLineBreakByCharWrapping;
+const UITextAlignment TTTATTRIBUTEDLABEL_PREPEND(TTTLineBreakByClipping) = NSLineBreakByClipping;
+const UITextAlignment TTTATTRIBUTEDLABEL_PREPEND(TTTLineBreakByTruncatingHead) = NSLineBreakByTruncatingHead;
+const UITextAlignment TTTATTRIBUTEDLABEL_PREPEND(TTTLineBreakByTruncatingMiddle) = NSLineBreakByTruncatingMiddle;
+const UITextAlignment TTTATTRIBUTEDLABEL_PREPEND(TTTLineBreakByTruncatingTail) = NSLineBreakByTruncatingTail;
 
-typedef UITextAlignment TTTTextAlignment;
-typedef UILineBreakMode TTTLineBreakMode;
+typedef UITextAlignment TTTATTRIBUTEDLABEL_PREPEND(TTTTextAlignment);
+typedef UILineBreakMode TTTATTRIBUTEDLABEL_PREPEND(TTTLineBreakMode);
 #endif
 
 
-static inline CTTextAlignment CTTextAlignmentFromTTTTextAlignment(TTTTextAlignment alignment) {
+static inline CTTextAlignment CTTextAlignmentFromTTTTextAlignment(TTTATTRIBUTEDLABEL_PREPEND(TTTTextAlignment) alignment) {
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 60000
   switch (alignment) {
 		case NSTextAlignmentLeft: return kCTLeftTextAlignment;
@@ -88,7 +88,7 @@ static inline CTTextAlignment CTTextAlignmentFromTTTTextAlignment(TTTTextAlignme
 #endif
 }
 
-static inline CTLineBreakMode CTLineBreakModeFromTTTLineBreakMode(TTTLineBreakMode lineBreakMode) {
+static inline CTLineBreakMode CTLineBreakModeFromTTTLineBreakMode(TTTATTRIBUTEDLABEL_PREPEND(TTTLineBreakMode) lineBreakMode) {
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 60000
 	switch (lineBreakMode) {
 		case NSLineBreakByWordWrapping: return kCTLineBreakByWordWrapping;
@@ -119,7 +119,7 @@ static inline CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode
 #pragma clang diagnostic pop
 }
 
-static inline UILineBreakMode UILineBreakModeFromTTTLineBreakMode(TTTLineBreakMode lineBreakMode) {
+static inline UILineBreakMode UILineBreakModeFromTTTLineBreakMode(TTTATTRIBUTEDLABEL_PREPEND(TTTLineBreakMode) lineBreakMode) {
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 60000
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -618,7 +618,7 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
     
     CFArrayRef lines = CTFrameGetLines(frame);
     NSInteger numberOfLines = self.numberOfLines > 0 ? MIN(self.numberOfLines, CFArrayGetCount(lines)) : CFArrayGetCount(lines);
-    BOOL truncateLastLine = (self.lineBreakMode == TTTLineBreakByTruncatingHead || self.lineBreakMode == TTTLineBreakByTruncatingMiddle || self.lineBreakMode == TTTLineBreakByTruncatingTail);
+    BOOL truncateLastLine = (self.lineBreakMode == TTTATTRIBUTEDLABEL_PREPEND(TTTLineBreakByTruncatingHead) || self.lineBreakMode == TTTATTRIBUTEDLABEL_PREPEND(TTTLineBreakByTruncatingMiddle) || self.lineBreakMode == TTTATTRIBUTEDLABEL_PREPEND(TTTLineBreakByTruncatingTail));
 	
     CGPoint lineOrigins[numberOfLines];
     CTFrameGetLineOrigins(frame, CFRangeMake(0, numberOfLines), lineOrigins);
@@ -636,22 +636,22 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
                 // Get correct truncationType and attribute position
                 CTLineTruncationType truncationType;
                 CFIndex truncationAttributePosition = lastLineRange.location;
-                TTTLineBreakMode lineBreakMode = self.lineBreakMode;
+                TTTATTRIBUTEDLABEL_PREPEND(TTTLineBreakMode) lineBreakMode = self.lineBreakMode;
                 
                 // Multiple lines, only use UILineBreakModeTailTruncation
                 if (numberOfLines != 1) {
-                    lineBreakMode = TTTLineBreakByTruncatingTail;
+                    lineBreakMode = TTTATTRIBUTEDLABEL_PREPEND(TTTLineBreakByTruncatingTail);
                 }
                 
                 switch (lineBreakMode) {
-                    case TTTLineBreakByTruncatingHead:
+                    case TTTATTRIBUTEDLABEL_PREPEND(TTTLineBreakByTruncatingHead):
                         truncationType = kCTLineTruncationStart;
                         break;
-                    case TTTLineBreakByTruncatingMiddle:
+                    case TTTATTRIBUTEDLABEL_PREPEND(TTTLineBreakByTruncatingMiddle):
                         truncationType = kCTLineTruncationMiddle;
                         truncationAttributePosition += (lastLineRange.length / 2);
                         break;
-                    case TTTLineBreakByTruncatingTail:
+                    case TTTATTRIBUTEDLABEL_PREPEND(TTTLineBreakByTruncatingTail):
                     default:
                         truncationType = kCTLineTruncationEnd;
                         truncationAttributePosition += (lastLineRange.length - 1);
@@ -695,13 +695,13 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
                 // Adjust pen offset for flush depending on text alignment
                 CGFloat flushFactor = 0.0f;
                 switch (self.textAlignment) {
-                    case TTTTextAlignmentCenter:
+                    case TTTATTRIBUTEDLABEL_PREPEND(TTTTextAlignmentCenter):
                         flushFactor = 0.5f;
                         break;
-                    case TTTTextAlignmentRigth:
+                    case TTTATTRIBUTEDLABEL_PREPEND(TTTTextAlignmentRigth):
                         flushFactor = 1.0f;
                         break;
-                    case TTTTextAlignmentLeft:
+                    case TTTATTRIBUTEDLABEL_PREPEND(TTTTextAlignmentLeft):
                     default:
                         break;
                 }
@@ -1030,7 +1030,7 @@ afterInheritingLabelAttributesAndConfiguringWithBlock:(NSMutableAttributedString
         
         CGFloat textWidth = [self sizeThatFits:maxSize].width;
         CGFloat availableWidth = self.frame.size.width * self.numberOfLines;
-        if (self.numberOfLines > 1 && self.lineBreakMode == TTTLineBreakByWordWrapping) {
+        if (self.numberOfLines > 1 && self.lineBreakMode == TTTATTRIBUTEDLABEL_PREPEND(TTTLineBreakByWordWrapping)) {
             textWidth *= kTTTLineBreakWordWrapTextWidthScalingFactor;
         }
         

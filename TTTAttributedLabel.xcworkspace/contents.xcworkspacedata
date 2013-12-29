@@ -5,10 +5,10 @@
       location = "group:TTTAttributedLabel"
       name = "TTTAttributedLabel">
       <FileRef
-         location = "group:TTTAttributedLabel.h">
+         location = "group:PrefixedTTTAttributedLabel.h">
       </FileRef>
       <FileRef
-         location = "group:TTTAttributedLabel.m">
+         location = "group:PrefixedTTTAttributedLabel.m">
       </FileRef>
    </Group>
    <FileRef

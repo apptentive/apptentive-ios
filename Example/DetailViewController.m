@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import "DetailViewController.h"
-#import "TTTAttributedLabel.h"
+#import "PrefixedTTTAttributedLabel.h"
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"

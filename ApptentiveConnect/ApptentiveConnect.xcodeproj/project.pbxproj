@@ -119,11 +119,11 @@
 		49477B751835B529001D37AD /* ATTextMessageUserCellV7.h in Headers */ = {isa = PBXBuildFile; fileRef = 49477B731835B529001D37AD /* ATTextMessageUserCellV7.h */; };
 		49477B761835B529001D37AD /* ATTextMessageUserCellV7.m in Sources */ = {isa = PBXBuildFile; fileRef = 49477B741835B529001D37AD /* ATTextMessageUserCellV7.m */; };
 		49477B781835B541001D37AD /* ATTextMessageUserCellV7.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49477B771835B541001D37AD /* ATTextMessageUserCellV7.xib */; };
+		49477B7B1835C700001D37AD /* ATExpandingTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 49477B791835C700001D37AD /* ATExpandingTextView.h */; };
+		49477B7C1835C700001D37AD /* ATExpandingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 49477B7A1835C700001D37AD /* ATExpandingTextView.m */; };
 		49477BCD183AF5F5001D37AD /* ATLongMessageViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 49477BCA183AF5F5001D37AD /* ATLongMessageViewController.h */; };
 		49477BCE183AF5F5001D37AD /* ATLongMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49477BCB183AF5F5001D37AD /* ATLongMessageViewController.m */; };
 		49477BCF183AF5FE001D37AD /* ATLongMessageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49477BCC183AF5F5001D37AD /* ATLongMessageViewController.xib */; };
-		49477B7B1835C700001D37AD /* ATExpandingTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 49477B791835C700001D37AD /* ATExpandingTextView.h */; };
-		49477B7C1835C700001D37AD /* ATExpandingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 49477B7A1835C700001D37AD /* ATExpandingTextView.m */; };
 		494D1B6F1708E1F900C3060C /* ATMessageInputView.h in Headers */ = {isa = PBXBuildFile; fileRef = 494D1B6D1708E1F900C3060C /* ATMessageInputView.h */; };
 		494D1B701708E1F900C3060C /* ATMessageInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 494D1B6E1708E1F900C3060C /* ATMessageInputView.m */; };
 		494D1B721708E20A00C3060C /* ATMessageInputView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 494D1B711708E20A00C3060C /* ATMessageInputView.xib */; };
@@ -201,9 +201,9 @@
 		498EFB7015BA48B300A1043B /* ATAppConfigurationUpdateTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 498EFB6E15BA48B200A1043B /* ATAppConfigurationUpdateTask.h */; };
 		498EFB7115BA48B300A1043B /* ATAppConfigurationUpdateTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 498EFB6F15BA48B300A1043B /* ATAppConfigurationUpdateTask.m */; };
 		498EFB7215BA48B300A1043B /* ATAppConfigurationUpdateTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 498EFB6F15BA48B300A1043B /* ATAppConfigurationUpdateTask.m */; };
-		4995EDD2175983C800AF7268 /* TTTAttributedLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 4995EDD0175983C800AF7268 /* TTTAttributedLabel.h */; };
-		4995EDD3175983C800AF7268 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4995EDD1175983C800AF7268 /* TTTAttributedLabel.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4995EDD4175983C800AF7268 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4995EDD1175983C800AF7268 /* TTTAttributedLabel.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4995EDD2175983C800AF7268 /* PrefixedTTTAttributedLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 4995EDD0175983C800AF7268 /* PrefixedTTTAttributedLabel.h */; };
+		4995EDD3175983C800AF7268 /* PrefixedTTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4995EDD1175983C800AF7268 /* PrefixedTTTAttributedLabel.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4995EDD4175983C800AF7268 /* PrefixedTTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4995EDD1175983C800AF7268 /* PrefixedTTTAttributedLabel.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4999128516165BD400FDA15F /* ATMessageCenterViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4999128216165BD400FDA15F /* ATMessageCenterViewController.h */; };
 		4999128616165BD400FDA15F /* ATMessageCenterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4999128316165BD400FDA15F /* ATMessageCenterViewController.m */; };
 		4999128F16166C2F00FDA15F /* ATMessageCenterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4999128716165BF200FDA15F /* ATMessageCenterViewController.xib */; };
@@ -473,11 +473,11 @@
 		49477B731835B529001D37AD /* ATTextMessageUserCellV7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATTextMessageUserCellV7.h; path = "Message Center/ATTextMessageUserCellV7.h"; sourceTree = "<group>"; };
 		49477B741835B529001D37AD /* ATTextMessageUserCellV7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATTextMessageUserCellV7.m; path = "Message Center/ATTextMessageUserCellV7.m"; sourceTree = "<group>"; };
 		49477B771835B541001D37AD /* ATTextMessageUserCellV7.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ATTextMessageUserCellV7.xib; path = xibs/ATTextMessageUserCellV7.xib; sourceTree = SOURCE_ROOT; };
+		49477B791835C700001D37AD /* ATExpandingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATExpandingTextView.h; path = "Custom Views/ATExpandingTextView.h"; sourceTree = "<group>"; };
+		49477B7A1835C700001D37AD /* ATExpandingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATExpandingTextView.m; path = "Custom Views/ATExpandingTextView.m"; sourceTree = "<group>"; };
 		49477BCA183AF5F5001D37AD /* ATLongMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATLongMessageViewController.h; path = "Message Center/ATLongMessageViewController.h"; sourceTree = "<group>"; };
 		49477BCB183AF5F5001D37AD /* ATLongMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATLongMessageViewController.m; path = "Message Center/ATLongMessageViewController.m"; sourceTree = "<group>"; };
 		49477BCC183AF5F5001D37AD /* ATLongMessageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ATLongMessageViewController.xib; path = "Message Center/ATLongMessageViewController.xib"; sourceTree = "<group>"; };
-		49477B791835C700001D37AD /* ATExpandingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATExpandingTextView.h; path = "Custom Views/ATExpandingTextView.h"; sourceTree = "<group>"; };
-		49477B7A1835C700001D37AD /* ATExpandingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATExpandingTextView.m; path = "Custom Views/ATExpandingTextView.m"; sourceTree = "<group>"; };
 		494D1B6D1708E1F900C3060C /* ATMessageInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageInputView.h; sourceTree = "<group>"; };
 		494D1B6E1708E1F900C3060C /* ATMessageInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageInputView.m; sourceTree = "<group>"; };
 		494D1B711708E20A00C3060C /* ATMessageInputView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATMessageInputView.xib; sourceTree = "<group>"; };
@@ -548,8 +548,8 @@
 		4995EDC517595A0E00AF7268 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4995EDC617595A1800AF7268 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4995EDC717595A2200AF7268 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		4995EDD0175983C800AF7268 /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTTAttributedLabel.h; path = PrefixedTTTAttributedLabel/TTTAttributedLabel/TTTAttributedLabel.h; sourceTree = "<group>"; };
-		4995EDD1175983C800AF7268 /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TTTAttributedLabel.m; path = PrefixedTTTAttributedLabel/TTTAttributedLabel/TTTAttributedLabel.m; sourceTree = "<group>"; };
+		4995EDD0175983C800AF7268 /* PrefixedTTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PrefixedTTTAttributedLabel.h; path = PrefixedTTTAttributedLabel/TTTAttributedLabel/PrefixedTTTAttributedLabel.h; sourceTree = "<group>"; };
+		4995EDD1175983C800AF7268 /* PrefixedTTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PrefixedTTTAttributedLabel.m; path = PrefixedTTTAttributedLabel/TTTAttributedLabel/PrefixedTTTAttributedLabel.m; sourceTree = "<group>"; };
 		4999128216165BD400FDA15F /* ATMessageCenterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATMessageCenterViewController.h; path = "Message Center/ATMessageCenterViewController.h"; sourceTree = "<group>"; };
 		4999128316165BD400FDA15F /* ATMessageCenterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATMessageCenterViewController.m; path = "Message Center/ATMessageCenterViewController.m"; sourceTree = "<group>"; };
 		4999128716165BF200FDA15F /* ATMessageCenterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ATMessageCenterViewController.xib; path = xibs/ATMessageCenterViewController.xib; sourceTree = SOURCE_ROOT; };
@@ -1244,8 +1244,8 @@
 		49D1123913359BA000603373 /* ext */ = {
 			isa = PBXGroup;
 			children = (
-				4995EDD0175983C800AF7268 /* TTTAttributedLabel.h */,
-				4995EDD1175983C800AF7268 /* TTTAttributedLabel.m */,
+				4995EDD0175983C800AF7268 /* PrefixedTTTAttributedLabel.h */,
+				4995EDD1175983C800AF7268 /* PrefixedTTTAttributedLabel.m */,
 				49D1123A13359BA000603373 /* NSData+ATBase64.h */,
 				49D1123B13359BA000603373 /* NSData+ATBase64.m */,
 				499B56C415D305880063C23C /* PrefixedJSONKit */,
@@ -1494,7 +1494,7 @@
 				496F5781174060CE003BF516 /* ATDataManager.h in Headers */,
 				49C24F56174B0EC5002F2338 /* ATAppRatingFlow+Internal.h in Headers */,
 				49C24F5B174BFEB7002F2338 /* ATSurveys_Private.h in Headers */,
-				4995EDD2175983C800AF7268 /* TTTAttributedLabel.h in Headers */,
+				4995EDD2175983C800AF7268 /* PrefixedTTTAttributedLabel.h in Headers */,
 				49AAC84B175FE70D00F08879 /* ATMessagePanelViewController.h in Headers */,
 				49AAC851175FFA0D00F08879 /* ATLabel.h in Headers */,
 				49AAC854175FFA4800F08879 /* ATTypes.h in Headers */,
@@ -1801,7 +1801,7 @@
 				4960A534171F70530082669B /* ATNetworkImageView.m in Sources */,
 				589274A7180CC33A0029E5CE /* ATInteractionUsageData.m in Sources */,
 				496F5782174060CE003BF516 /* ATDataManager.m in Sources */,
-				4995EDD3175983C800AF7268 /* TTTAttributedLabel.m in Sources */,
+				4995EDD3175983C800AF7268 /* PrefixedTTTAttributedLabel.m in Sources */,
 				49AAC84C175FE70D00F08879 /* ATMessagePanelViewController.m in Sources */,
 				49AAC852175FFA0D00F08879 /* ATLabel.m in Sources */,
 				49AAC858175FFDB900F08879 /* ATCustomView.m in Sources */,
@@ -1878,7 +1878,7 @@
 				49129ED4174068730026C2E1 /* ApptentiveMigrationTests.m in Sources */,
 				49129ED51740687A0026C2E1 /* ATDataManager.m in Sources */,
 				49AB227F1746EE9500175F4D /* ATDataModel.xcdatamodeld in Sources */,
-				4995EDD4175983C800AF7268 /* TTTAttributedLabel.m in Sources */,
+				4995EDD4175983C800AF7268 /* PrefixedTTTAttributedLabel.m in Sources */,
 				497A9A0617762512002B6F96 /* ATJSONSerialization.m in Sources */,
 				5898DF8E17C2E0CE0048F11F /* ATEngagementGetManifestTask.m in Sources */,
 				584647C817C426E800BFD6E6 /* ATEngagementManifestParser.m in Sources */,

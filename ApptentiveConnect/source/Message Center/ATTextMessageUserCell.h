@@ -10,7 +10,7 @@
 
 #import "ATMessageCenterCell.h"
 #import "ATNetworkImageView.h"
-#import "TTTAttributedLabel.h"
+#import "PrefixedTTTAttributedLabel.h"
 
 typedef enum {
 	ATTextMessageCellTypeUser,

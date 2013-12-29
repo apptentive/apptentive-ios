@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 #import "ATMessageCenterCell.h"
-#import "TTTAttributedLabel.h"
+#import "PrefixedTTTAttributedLabel.h"
 
 @interface ATAutomatedMessageCell : UITableViewCell <ATMessageCenterCell>
 @property (retain, nonatomic) IBOutlet UIView *containerView;

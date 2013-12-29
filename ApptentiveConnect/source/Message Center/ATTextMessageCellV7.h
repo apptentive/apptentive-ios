@@ -13,7 +13,7 @@
 #import "ATNetworkImageView.h"
 #import "ATTextMessage.h"
 #import "ATTextMessageCellV7.h"
-#import "TTTAttributedLabel.h"
+#import "PrefixedTTTAttributedLabel.h"
 
 @interface ATTextMessageCellV7 : ATBaseMessageCellV7 <ATTTTAttributedLabelDelegate>
 @property (assign, nonatomic) ATMessageBubbleArrowDirection arrowDirection;

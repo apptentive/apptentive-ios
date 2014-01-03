@@ -168,7 +168,7 @@ enum kSurveyRows {
 			unreadLabel.text = [NSString stringWithFormat:@"%d", [[ATConnect sharedConnection] unreadMessageCount]];
 			unreadLabel.backgroundColor = [UIColor grayColor];
 			unreadLabel.textColor = [UIColor whiteColor];
-			unreadLabel.textAlignment = UITextAlignmentCenter;
+			unreadLabel.textAlignment = NSTextAlignmentCenter;
 			unreadLabel.font = [UIFont boldSystemFontOfSize:17];
 			[unreadLabel sizeToFit];
 			

@@ -269,7 +269,9 @@ static NSURLCache *imageCache = nil;
 	
 	// Give it a wee bit o' delay.
 	NSString *pendingMessageID = [message pendingMessageID];
-	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
+	double delayInSeconds = 1.5;
+	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
 		ATMessageTask *task = [[ATMessageTask alloc] init];
 		task.pendingMessageID = pendingMessageID;
 		[[ATTaskQueue sharedTaskQueue] addTask:task];
@@ -308,7 +310,9 @@ static NSURLCache *imageCache = nil;
 	
 	// Give it a wee bit o' delay.
 	NSString *pendingMessageID = [message pendingMessageID];
-	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
+	double delayInSeconds = 1.5;
+	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
 		ATMessageTask *task = [[ATMessageTask alloc] init];
 		task.pendingMessageID = pendingMessageID;
 		[[ATTaskQueue sharedTaskQueue] addTask:task];
@@ -492,7 +496,10 @@ static NSURLCache *imageCache = nil;
 	if ([viewController respondsToSelector:@selector(presentViewController:animated:completion:)]) {
 		[viewController presentViewController:nc animated:YES completion:^{}];
 	} else {
+#		pragma clang diagnostic push
+#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
 		[viewController presentModalViewController:nc animated:YES];
+#		pragma clang diagnostic pop
 	}
 	presentedMessageCenterViewController = nc;
 	[vc release], vc = nil;
@@ -525,7 +532,10 @@ static NSURLCache *imageCache = nil;
 		}
 		if (!didDismiss) {
 			// Gnarly hack for iOS 4.
+#			pragma clang diagnostic push
+#			pragma clang diagnostic ignored "-Wdeprecated-declarations"
 			[presentedMessageCenterViewController dismissModalViewControllerAnimated:YES];
+#			pragma clang diagnostic pop
 			[presentedMessageCenterViewController release], presentedMessageCenterViewController = nil;
 			
 			double delayInSeconds = 1.0;

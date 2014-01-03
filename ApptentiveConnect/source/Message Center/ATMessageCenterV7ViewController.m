@@ -106,7 +106,9 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fontPreferencesChanged:) name:UIContentSizeCategoryDidChangeNotification object:nil];
 	
-	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
+	double delayInSeconds = 0.1;
+	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
 		[self relayoutSubviews:YES];
 	});
 }

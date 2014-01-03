@@ -121,7 +121,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 			label.font = [UIFont boldSystemFontOfSize:16.0];
 			label.textColor = [UIColor whiteColor];
 			label.userInteractionEnabled = NO;
-			label.textAlignment = UITextAlignmentCenter;
+			label.textAlignment = NSTextAlignmentCenter;
 			label.text = ATLocalizedString(@"You can include a screenshot by choosing a photo from your photo library above.\n\nTo take a screenshot, hold down the power and home buttons at the same time.", @"Description of what to do when there is no screenshot.");
 		}
 		[self.containerView addSubview:container];
@@ -173,7 +173,14 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 			[blockDelegate release];
 		}];
 	} else {
-		[self dismissModalViewControllerAnimated:YES];
+		if ([self respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
+			[self dismissViewControllerAnimated:YES completion:NULL];
+		} else {
+#			pragma clang diagnostic push
+#			pragma clang diagnostic ignored "-Wdeprecated-declarations"
+			[self dismissModalViewControllerAnimated:YES];
+#			pragma clang diagnostic pop
+		}
 	}
 }
 
@@ -226,6 +233,8 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 	[self setupScrollView];
 	
 	[self dismissImagePickerPopover];
+#	pragma clang diagnostic push
+#	pragma clang diagnostic ignored "-Wdeprecated-declarations"
 	if ([self respondsToSelector:@selector(dismissViewControllerAnimated:completion:)] && [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
 		[self dismissViewControllerAnimated:YES completion:^{
 			// pass
@@ -233,10 +242,14 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 	} else if (self.modalViewController) {
 		[self.navigationController dismissModalViewControllerAnimated:YES];
 	}
+#	pragma clang diagnostic pop
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
 	[self dismissImagePickerPopover];
+	
+#	pragma clang diagnostic push
+#	pragma clang diagnostic ignored "-Wdeprecated-declarations"
 	if ([self respondsToSelector:@selector(dismissViewControllerAnimated:completion:)] && [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
 		[self dismissViewControllerAnimated:YES completion:^{
 			// pass
@@ -244,6 +257,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 	} else if (self.modalViewController) {
 		[self.navigationController dismissModalViewControllerAnimated:YES];
 	}
+#	pragma clang diagnostic pop
 }
 
 #pragma mark Rotation
@@ -301,7 +315,10 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 	} else if ([self respondsToSelector:@selector(presentViewController:animated:completion:)]) {
 		[self presentViewController:imagePicker animated:YES completion:NULL];
 	} else {
+#		pragma clang diagnostic push
+#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
 		[self presentModalViewController:imagePicker animated:YES];
+#		pragma clang diagnostic pop
 	}
 	[imagePicker release];
 }
@@ -317,7 +334,10 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 	if ([self respondsToSelector:@selector(presentViewController:animated:completion:)]) {
 		[self presentViewController:imagePicker animated:YES completion:NULL];
 	} else {
+#		pragma clang diagnostic push
+#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
 		[self presentModalViewController:imagePicker animated:YES];
+#		pragma clang diagnostic pop
 	}
 	[imagePicker release];
 }

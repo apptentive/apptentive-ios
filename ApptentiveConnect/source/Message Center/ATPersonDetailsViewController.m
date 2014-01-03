@@ -117,9 +117,9 @@ enum kPersonDetailsTableSections {
 	emailValidationLabel.font = [UIFont systemFontOfSize:15];
 	emailValidationLabel.shadowColor = [UIColor whiteColor];
 	emailValidationLabel.shadowOffset = CGSizeMake(0, 1);
-	emailValidationLabel.textAlignment = UITextAlignmentCenter;
+	emailValidationLabel.textAlignment = NSTextAlignmentCenter;
 	emailValidationLabel.numberOfLines = 0;
-	emailValidationLabel.lineBreakMode = UILineBreakModeWordWrap;
+	emailValidationLabel.lineBreakMode = NSLineBreakByWordWrapping;
 	emailValidationLabel.backgroundColor = [UIColor clearColor];
 	emailValidationLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	
@@ -205,7 +205,14 @@ enum kPersonDetailsTableSections {
 	ATInfoViewController *vc = [[ATInfoViewController alloc] init];
 	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
 	nc.modalPresentationStyle = UIModalPresentationFormSheet;
-	[self.navigationController presentModalViewController:nc animated:YES];
+	if ([self.navigationController respondsToSelector:@selector(presentViewController:animated:completion:)]) {
+		[self.navigationController presentViewController:nc animated:YES completion:^{}];
+	} else {
+#		pragma clang diagnostic push
+#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
+		[self.navigationController presentModalViewController:nc animated:YES];
+#		pragma clang diagnostic pop
+	}
 	[vc release], vc = nil;
 	[nc release], nc = nil;
 }
@@ -253,7 +260,7 @@ enum kPersonDetailsTableSections {
 		if (cell == nil) {
 			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ATForgetInfoCellIdentifier] autorelease];
 			cell.accessoryView = nil;
-			cell.textLabel.textAlignment = UITextAlignmentCenter;
+			cell.textLabel.textAlignment = NSTextAlignmentCenter;
 		}
 		cell.textLabel.textColor = [UIColor blackColor];
 		cell.textLabel.text = ATLocalizedString(@"Forget Info", @"Title of button to forget contact information");

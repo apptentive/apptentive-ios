@@ -200,11 +200,14 @@ enum {
 	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
 		[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
 	} else {
+#		pragma clang diagnostic push
+#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
 		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
 			[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
 		} else {
 			[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque];
 		}
+#		pragma clang diagnostic pop
 	}
 	
 	[UIView animateWithDuration:0.3 animations:^(void){
@@ -258,8 +261,15 @@ enum {
 		titleLabel.text = ATLocalizedString(@"Give Feedback", @"Title of feedback screen.");
 	}
 	titleLabel.adjustsFontSizeToFitWidth = YES;
-	titleLabel.minimumFontSize = 10;
-	titleLabel.textAlignment = UITextAlignmentCenter;
+	if ([titleLabel respondsToSelector:@selector(setMinimumScaleFactor:)]) {
+		titleLabel.minimumScaleFactor = 0.5;
+	} else {
+#		pragma clang diagnostic push
+#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
+		titleLabel.minimumFontSize = 10;
+#		pragma clang diagnostic pop
+	}
+	titleLabel.textAlignment = NSTextAlignmentCenter;
 	titleLabel.textColor = [UIColor colorWithRed:105/256. green:105/256. blue:105/256. alpha:1.0];
 	titleLabel.shadowColor = [UIColor whiteColor];
 	titleLabel.shadowOffset = CGSizeMake(0.0, 1.0);
@@ -563,7 +573,7 @@ enum {
 		promptLabel.textColor = [UIColor colorWithRed:128/255. green:128/255. blue:128/255. alpha:1];
 		promptLabel.font = [UIFont fontWithName:@"Helvetica Neue" size:18];
 		promptLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		promptLabel.lineBreakMode = UILineBreakModeWordWrap;
+		promptLabel.lineBreakMode = NSLineBreakByWordWrapping;
 		promptLabel.numberOfLines = 0;
 		CGSize fitSize = [promptLabel sizeThatFits:CGSizeMake(containerFrame.size.width - labelPadding*2, CGFLOAT_MAX)];
 		containerFrame.size.height = fitSize.height + labelPadding*2;
@@ -604,7 +614,16 @@ enum {
 		emailFrame.origin.x = horizontalPadding + extraHorzontalPadding;
 		emailFrame.origin.y = offsetY;
 		UIFont *emailFont = [UIFont systemFontOfSize:17];
-		CGSize sizedEmail = [@"XXYyI|" sizeWithFont:emailFont];
+		CGSize sizedEmail = CGSizeZero;
+		NSString *sizingString = @"XXYyI|";
+		if ([sizingString respondsToSelector:@selector(sizeWithAttributes:)]) {
+			sizedEmail = [sizingString sizeWithAttributes:@{NSFontAttributeName:emailFont}];
+		} else {
+#			pragma clang diagnostic push
+#			pragma clang diagnostic ignored "-Wdeprecated-declarations"
+			sizedEmail = [sizingString sizeWithFont:emailFont];
+#			pragma clang diagnostic pop
+		}
 		emailFrame.size.height = sizedEmail.height;
 		emailFrame.size.width = emailFrame.size.width - (horizontalPadding + extraHorzontalPadding)*2;
 		self.emailField = [[[UITextField alloc] initWithFrame:emailFrame] autorelease];

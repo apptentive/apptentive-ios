@@ -204,10 +204,17 @@ NSString *const ATInteractionUpgradeMessageClose = @"ATInteractionUpgradeMessage
 	l.backgroundColor = [UIColor clearColor].CGColor;
 	l.masksToBounds = YES;
 	
-	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-		[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+		[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
 	} else {
-		[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque];
+#		pragma clang diagnostic push
+#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
+		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+			[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
+		} else {
+			[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque];
+		}
+#		pragma clang diagnostic pop
 	}
 	self.backgroundImageView.alpha = 0;
 	[UIView animateWithDuration:0.3 animations:^(void){

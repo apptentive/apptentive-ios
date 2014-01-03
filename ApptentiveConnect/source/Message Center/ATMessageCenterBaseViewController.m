@@ -177,10 +177,13 @@
 	if (self.dismissalDelegate) {
 		[self.dismissalDelegate messageCenterWillDismiss:self];
 	}
-	if ([[self navigationController] respondsToSelector:@selector(presentingViewController)]) {
-		[self.navigationController.presentingViewController dismissModalViewControllerAnimated:YES];
+	if ([self.navigationController respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
+		[self.navigationController dismissViewControllerAnimated:YES completion:NULL];
 	} else {
+#		pragma clang diagnostic push
+#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
 		[self.navigationController dismissModalViewControllerAnimated:YES];
+#		pragma clang diagnostic pop
 	}
 }
 
@@ -194,7 +197,14 @@
 	ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithDelegate:self];
 	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
 	nc.modalPresentationStyle = UIModalPresentationFormSheet;
-	[self.navigationController presentModalViewController:nc animated:YES];
+	if ([self.navigationController respondsToSelector:@selector(presentViewController:animated:completion:)]) {
+		[self.navigationController presentViewController:nc animated:YES completion:^{}];
+	} else {
+#		pragma clang diagnostic push
+#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
+		[self.navigationController presentModalViewController:nc animated:YES];
+#		pragma clang diagnostic pop
+	}
 	[vc release], vc = nil;
 	[nc release], nc = nil;
 }
@@ -294,7 +304,9 @@
 		
 		// Give it a wee bit o' delay.
 		NSString *pendingMessageID = [composingMessage pendingMessageID];
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
+		double delayInSeconds = 1.5;
+		dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+		dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
 			ATMessageTask *task = [[ATMessageTask alloc] init];
 			task.pendingMessageID = pendingMessageID;
 			[[ATTaskQueue sharedTaskQueue] addTask:task];
@@ -311,7 +323,14 @@
 	ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithDelegate:self];
 	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
 	nc.modalPresentationStyle = UIModalPresentationFormSheet;
-	[self.navigationController presentModalViewController:nc animated:YES];
+	if ([self.navigationController respondsToSelector:@selector(presentViewController:animated:completion:)]) {
+		[self.navigationController presentViewController:nc animated:YES completion:^{}];
+	} else {
+#		pragma clang diagnostic push
+#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
+		[self.navigationController presentModalViewController:nc animated:YES];
+#		pragma clang diagnostic pop
+	}
 	[vc release], vc = nil;
 	[nc release], nc = nil;
 }
@@ -448,7 +467,9 @@
 					
 					// Give it a wee bit o' delay.
 					NSString *pendingMessageID = [fileMessage pendingMessageID];
-					dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
+					double delayInSeconds = 1.5;
+					dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+					dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
 						ATMessageTask *task = [[ATMessageTask alloc] init];
 						task.pendingMessageID = pendingMessageID;
 						[[ATTaskQueue sharedTaskQueue] addTask:task];
@@ -472,7 +493,9 @@
 			
 			// Give it a wee bit o' delay.
 			NSString *pendingMessageID = [retryMessage pendingMessageID];
-			dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
+			double delayInSeconds = 1.5;
+			dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+			dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
 				ATMessageTask *task = [[ATMessageTask alloc] init];
 				task.pendingMessageID = pendingMessageID;
 				[[ATTaskQueue sharedTaskQueue] addTask:task];

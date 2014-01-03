@@ -201,7 +201,7 @@
 			promptLabel.textColor = [UIColor colorWithRed:128/255. green:128/255. blue:128/255. alpha:1];
 			promptLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 			promptLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-			promptLabel.lineBreakMode = UILineBreakModeWordWrap;
+			promptLabel.lineBreakMode = NSLineBreakByWordWrapping;
 			promptLabel.numberOfLines = 0;
 		}
 		
@@ -233,7 +233,16 @@
 			extraHorzontalPadding = 4;
 		}
 		UIFont *emailFont = [UIFont systemFontOfSize:17];
-		CGSize sizedEmail = [@"XXYyI|" sizeWithFont:emailFont];
+		CGSize sizedEmail = CGSizeZero;
+		NSString *sizingString = @"XXYyI|";
+		if ([sizingString respondsToSelector:@selector(sizeWithAttributes:)]) {
+			sizedEmail = [sizingString sizeWithAttributes:@{NSFontAttributeName:emailFont}];
+		} else {
+#			pragma clang diagnostic push
+#			pragma clang diagnostic ignored "-Wdeprecated-declarations"
+			sizedEmail = [sizingString sizeWithFont:emailFont];
+#			pragma clang diagnostic pop
+		}
 		CGRect emailFrame = CGRectMake(0, offsetY, width, sizedEmail.height);
 		emailFrame = CGRectInset(emailFrame, horizontalPadding+extraHorzontalPadding, 0);
 		

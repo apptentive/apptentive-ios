@@ -72,7 +72,9 @@ typedef enum {
 	
 	firstLoad = YES;
 	
-	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
+	double delayInSeconds = 0.1;
+	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
 		[self relayoutSubviews];
 	});
 }
@@ -392,7 +394,7 @@ typedef enum {
 			NSString *messageTitle = automatedMessage.title;
 			NSString *messageBody = automatedMessage.body;
 			
-			currentCell.titleText.textAlignment = UITextAlignmentCenter;
+			currentCell.titleText.textAlignment = NSTextAlignmentCenter;
 			[currentCell.titleText setText:messageTitle afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
 				NSRange boldRange = NSMakeRange(0, [mutableAttributedString length]);
 				

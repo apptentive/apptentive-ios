@@ -111,11 +111,16 @@ NSString *const ATSurveyCachedSurveysExpirationPreferenceKey = @"ATSurveyCachedS
 	ATSurveyViewController *vc = [[ATSurveyViewController alloc] initWithSurvey:currentSurvey];
 	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
 	
-	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-		[viewController presentModalViewController:nc animated:YES];
-	} else {
+	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
 		nc.modalPresentationStyle = UIModalPresentationFormSheet;
+	}
+	if ([viewController respondsToSelector:@selector(presentViewController:animated:completion:)]) {
+		[viewController presentViewController:nc animated:YES completion:^{}];
+	} else {
+#		pragma clang diagnostic push
+#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
 		[viewController presentModalViewController:nc animated:YES];
+#		pragma clang diagnostic pop
 	}
 	[nc release];
 	[vc release];

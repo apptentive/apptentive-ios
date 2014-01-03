@@ -127,8 +127,8 @@
 	label.opaque = NO;
 	label.textColor = [UIColor whiteColor];
 	label.font = [UIFont boldSystemFontOfSize:17.0];
-	label.textAlignment = UITextAlignmentCenter;
-	label.lineBreakMode = UILineBreakModeWordWrap;
+	label.textAlignment = NSTextAlignmentCenter;
+	label.lineBreakMode = NSLineBreakByWordWrapping;
 	label.adjustsFontSizeToFitWidth = YES;
 	label.numberOfLines = 0;
 	[self addSubview:label];

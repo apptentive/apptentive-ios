@@ -101,8 +101,15 @@
 
 - (CGSize)sizeThatFits:(CGSize)size {
 	CGSize s = [super sizeThatFits:size];
-	
-	CGSize textSize = [self.titleLabel.text sizeWithFont:self.titleLabel.font];
+	CGSize textSize = CGSizeZero;
+	if ([self.titleLabel.text respondsToSelector:@selector(sizeWithAttributes:)]) {
+		textSize = [self.titleLabel.text sizeWithAttributes:@{NSFontAttributeName: self.titleLabel.font}];
+	} else {
+#		pragma clang diagnostic push
+#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
+		textSize = [self.titleLabel.text sizeWithFont:self.titleLabel.font];
+#		pragma clang diagnostic pop
+	}
 	s.height = size.height < 30  && CGSizeEqualToSize(CGSizeZero, size) == NO ? 23 : 30;
 	s.width = textSize.width + 20.0;
 	

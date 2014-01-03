@@ -37,7 +37,14 @@
 	}
 	title = [[UILabel alloc] initWithFrame:CGRectZero];
 	title.text = titleString;
-	title.minimumFontSize = 10;
+	if ([title respondsToSelector:@selector(setMinimumScaleFactor:)]) {
+		title.minimumScaleFactor = 0.5;
+	} else {
+#		pragma clang diagnostic push
+#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
+		title.minimumFontSize = 10;
+#		pragma clang diagnostic pop
+	}
 	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
 		title.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
 		title.textColor = [UIColor blackColor];
@@ -53,31 +60,39 @@
 		}
 	}
 	
-	title.textAlignment = UITextAlignmentLeft;
-	title.lineBreakMode = UILineBreakModeMiddleTruncation;
+	title.textAlignment = NSTextAlignmentLeft;
+	title.lineBreakMode = NSLineBreakByTruncatingMiddle;
 	title.backgroundColor = [UIColor clearColor];
 	title.opaque = NO;
 	title.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	
 	if ([[UINavigationBar class] respondsToSelector:@selector(appearance)]) {
 		NSDictionary *titleTextAttributes = [[UINavigationBar appearance] titleTextAttributes];
-		UIColor *textColor = (UIColor *)titleTextAttributes[UITextAttributeTextColor];
-		UIColor *shadowColor = (UIColor *)titleTextAttributes[UITextAttributeTextShadowColor];
-		UIFont *font = (UIFont *)titleTextAttributes[UITextAttributeFont];
-		NSValue *shadowOffset = (NSValue *)titleTextAttributes[UITextAttributeTextShadowOffset];
 		
-		if (textColor) {
-			title.textColor = textColor;
-		}
-		if (shadowColor) {
-			title.shadowColor = shadowColor;
-		}
-		if (font) {
-			title.font = [UIFont fontWithName:font.fontName size:20];
-		}
-		if (shadowOffset) {
-			UIOffset offset = [shadowOffset UIOffsetValue];
-			title.shadowOffset = CGSizeMake(offset.horizontal, offset.vertical);
+		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+			title.attributedText = [[NSAttributedString alloc] initWithString:title.text attributes:titleTextAttributes];
+		} else {
+#			pragma clang diagnostic push
+#			pragma clang diagnostic ignored "-Wdeprecated-declarations"
+			UIColor *textColor = (UIColor *)titleTextAttributes[UITextAttributeTextColor];
+			UIColor *shadowColor = (UIColor *)titleTextAttributes[UITextAttributeTextShadowColor];
+			UIFont *font = (UIFont *)titleTextAttributes[UITextAttributeFont];
+			NSValue *shadowOffset = (NSValue *)titleTextAttributes[UITextAttributeTextShadowOffset];
+			
+			if (textColor) {
+				title.textColor = textColor;
+			}
+			if (shadowColor) {
+				title.shadowColor = shadowColor;
+			}
+			if (font) {
+				title.font = [UIFont fontWithName:font.fontName size:20];
+			}
+			if (shadowOffset) {
+				UIOffset offset = [shadowOffset UIOffsetValue];
+				title.shadowOffset = CGSizeMake(offset.horizontal, offset.vertical);
+			}
+#			pragma clang diagnostic pop
 		}
 	}
 	

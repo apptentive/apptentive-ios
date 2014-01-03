@@ -100,7 +100,7 @@ UIEdgeInsets insetsForView(UIView *v) {
 	
 	CGFloat newTextHeight;
 	
-	if (([[[UIDevice currentDevice] systemVersion] compare:@"7" options:NSNumericSearch] != NSOrderedAscending)) {
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
 		if ([string hasSuffix:@"\n"]) {
 			string = [NSString stringWithFormat:@"%@-", string];
 		}
@@ -123,6 +123,8 @@ UIEdgeInsets insetsForView(UIView *v) {
 		
 		newTextHeight = MIN(maxTextFieldHeight, intrinsicContentSize.height);
 	} else {
+#		pragma clang diagnostic push
+#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
 		CGFloat textViewWidth = textView.bounds.size.width;
 		CGSize optimisticSize = [string sizeWithFont:textView.font];
 		CGSize pessimisticSize = [string sizeWithFont:textView.font constrainedToSize:CGSizeMake(textViewWidth, maxTextFieldHeight) lineBreakMode:NSLineBreakByWordWrapping];
@@ -135,6 +137,7 @@ UIEdgeInsets insetsForView(UIView *v) {
 		}
 		newTextHeight = MIN(maxTextFieldHeight, MAX(minTextFieldHeight, MAX(optimisticSize.height, pessimisticSize.height)));
 		newTextHeight += -(textView.contentInset.top + textView.contentInset.bottom);
+#		pragma clang diagnostic pop
 	}
 	CGFloat currentTextHeight = textView.bounds.size.height;
 	CGFloat textHeightDelta = newTextHeight - currentTextHeight;

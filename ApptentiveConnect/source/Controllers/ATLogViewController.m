@@ -55,7 +55,14 @@
 }
 
 - (void)done:(id)sender {
-	[self dismissModalViewControllerAnimated:YES];
+	if ([self respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
+		[self dismissViewControllerAnimated:YES completion:NULL];
+	} else {
+#		pragma clang diagnostic push
+#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
+		[self dismissModalViewControllerAnimated:YES];
+#		pragma clang diagnostic pop
+	}
 }
 
 - (IBAction)reloadLogs:(id)sender {

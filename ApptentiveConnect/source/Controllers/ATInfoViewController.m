@@ -103,7 +103,14 @@ enum {
 }
 
 - (IBAction)done:(id)sender {
-	[self dismissModalViewControllerAnimated:YES];
+	if ([self respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
+		[self dismissViewControllerAnimated:YES completion:NULL];
+	} else {
+#		pragma clang diagnostic push
+#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
+		[self dismissModalViewControllerAnimated:YES];
+#		pragma clang diagnostic pop
+	}
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATFeedbackDidHideWindowNotification object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:ATFeedbackWindowTypeInfo] forKey:ATFeedbackWindowTypeKey]];
 }
 
@@ -123,7 +130,14 @@ enum {
 		showingDebugController = YES;
 		ATLogViewController *vc = [[ATLogViewController alloc] init];
 		UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
-		[self presentModalViewController:nc animated:YES];
+		if ([self respondsToSelector:@selector(presentViewController:animated:completion:)]) {
+			[self presentViewController:nc animated:YES completion:^{}];
+		} else {
+#			pragma clang diagnostic push
+#			pragma clang diagnostic ignored "-Wdeprecated-declarations"
+			[self presentModalViewController:nc animated:YES];
+#			pragma clang diagnostic pop
+		}
 		[vc release], vc = nil;
 		[nc release], nc = nil;
 	}

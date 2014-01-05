@@ -11,6 +11,8 @@
 #import "ATBackend.h"
 #import "ATMessageSender.h"
 
+#define kMinimumIconConstraint 4
+
 @implementation ATTextMessageCellV7
 - (void)setup {
 	NSTextCheckingType types = NSTextCheckingTypeLink;
@@ -59,12 +61,13 @@
 
 - (void)awakeFromNib {
 	[super awakeFromNib];
+	self.userIconOffsetConstraint.constant = kMinimumIconConstraint;
 	self.composingImageView.image = [ATBackend imageNamed:@"at_mc_text_compose_ellipsis"];
 }
 
 - (void)prepareForReuse {
 	[super prepareForReuse];
-	self.userIconOffsetConstraint.constant = 4;
+	self.userIconOffsetConstraint.constant = kMinimumIconConstraint;
 	self.message = nil;
 }
 
@@ -105,7 +108,7 @@
 	iconInset.origin.y += topOffset - 1;
 	iconInset.origin.y += CGRectGetMaxY(self.dateLabel.bounds);
 	
-	CGFloat minOffset = 4;
+	CGFloat minOffset = kMinimumIconConstraint;
 	CGFloat minBottomOffset = 16;
 	CGFloat maxOffset = CGRectGetHeight(self.bounds) - CGRectGetHeight(self.userIconView.bounds) - minBottomOffset - CGRectGetMinY(self.userIconOffsetView.frame);
 	CGFloat iconInsetY = -CGRectGetMinY(iconInset);

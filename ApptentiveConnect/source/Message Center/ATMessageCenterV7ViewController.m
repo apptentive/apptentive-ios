@@ -299,10 +299,14 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 
 #pragma mark UIScrollViewDelegate
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+- (void)postScrollNotification {
 	CGFloat topOffset = -(self.collectionView.contentInset.top + self.collectionView.contentOffset.y);
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCollectionDidScroll object:nil userInfo:@{ATMessageCollectionTopOffsetKey: @(topOffset)}];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+	[self postScrollNotification];
 }
 
 #pragma mark UICollectionViewDelegate
@@ -444,6 +448,7 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 				}
 			} completion:^(BOOL finished) {
 				[self scrollToBottomOfCollectionView];
+				[self postScrollNotification];
 			}];
 		} else if ([fetchedObjectChanges count]) {
 			[self.collectionView performBatchUpdates:^{
@@ -475,6 +480,7 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 				}
 			} completion:^(BOOL finished) {
 				[self scrollToBottomOfCollectionView];
+				[self postScrollNotification];
 			}];
 		}
 		[fetchedObjectChanges removeAllObjects];

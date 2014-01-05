@@ -95,23 +95,12 @@ enum {
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATFeedbackDidHideWindowNotification object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:ATFeedbackWindowTypeInfo] forKey:ATFeedbackWindowTypeKey]];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 	// Return YES for supported orientations
 	return YES;
-}
-
-- (IBAction)done:(id)sender {
-	if ([self respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
-		[self dismissViewControllerAnimated:YES completion:NULL];
-	} else {
-#		pragma clang diagnostic push
-#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		[self dismissModalViewControllerAnimated:YES];
-#		pragma clang diagnostic pop
-	}
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATFeedbackDidHideWindowNotification object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:ATFeedbackWindowTypeInfo] forKey:ATFeedbackWindowTypeKey]];
 }
 
 - (IBAction)openApptentiveDotCom:(id)sender {
@@ -129,17 +118,8 @@ enum {
 	if (section == kSectionDebugLog) {
 		showingDebugController = YES;
 		ATLogViewController *vc = [[ATLogViewController alloc] init];
-		UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
-		if ([self respondsToSelector:@selector(presentViewController:animated:completion:)]) {
-			[self presentViewController:nc animated:YES completion:^{}];
-		} else {
-#			pragma clang diagnostic push
-#			pragma clang diagnostic ignored "-Wdeprecated-declarations"
-			[self presentModalViewController:nc animated:YES];
-#			pragma clang diagnostic pop
-		}
+		[self.navigationController pushViewController:vc animated:YES];
 		[vc release], vc = nil;
-		[nc release], nc = nil;
 	}
 	[aTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -284,7 +264,6 @@ enum {
 	
 	
 	self.navigationItem.title = ATLocalizedString(@"About Apptentive", @"About Apptentive");
-	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)] autorelease];
 	self.apptentiveDescriptionTextView.text = ATLocalizedString(@"Apptentive is a feedback and communication service which allows the people who make this app to quickly get your feedback and better listen to you.", @"Description of Apptentive service in information screen.");
 	[self.findOutMoreButton setTitle:ATLocalizedString(@"Find out more at apptentive.com", @"Title of button to open Apptentive.com") forState:UIControlStateNormal];
 	self.apptentivePrivacyTextView.text = ATLocalizedString(@"Your feedback is hosted by Apptentive and is subject to Apptentive's privacy policy and the privacy policy of the developer of this app.", @"Description of Apptentive privacy policy.");

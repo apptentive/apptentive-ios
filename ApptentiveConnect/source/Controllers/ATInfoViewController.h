@@ -24,7 +24,6 @@
 @property (retain, nonatomic) IBOutlet UIButton *gotoPrivacyPolicyButton;
 
 - (id)init;
-- (IBAction)done:(id)sender;
 - (IBAction)openApptentiveDotCom:(id)sender;
 - (IBAction)openPrivacyPolicy:(id)sender;
 @end

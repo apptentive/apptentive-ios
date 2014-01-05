@@ -38,8 +38,7 @@
 	[self.view addSubview:textView];
 	
 	self.navigationItem.title = @"Debug Logs";
-	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)];
-	self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reloadLogs:)];
+	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reloadLogs:)];
 	
 	ATLogInfo(@"%@", [[ATTaskQueue sharedTaskQueue] queueDescription]);
 	
@@ -52,17 +51,6 @@
 	[super didReceiveMemoryWarning];
 	[textView removeFromSuperview];
 	[textView release], textView = nil;
-}
-
-- (void)done:(id)sender {
-	if ([self respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
-		[self dismissViewControllerAnimated:YES completion:NULL];
-	} else {
-#		pragma clang diagnostic push
-#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		[self dismissModalViewControllerAnimated:YES];
-#		pragma clang diagnostic pop
-	}
 }
 
 - (IBAction)reloadLogs:(id)sender {

@@ -32,6 +32,7 @@
 											   daysSinceInstall:@6
 											   daysSinceUpgrade:@6
 											 applicationVersion:@"1.8.9"
+											   applicationBuild:@"39"
 										  codePointInvokesTotal:@{}
 										codePointInvokesVersion:@{}
 										codePointInvokesTimeAgo:@{}
@@ -90,6 +91,25 @@
 	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Version number must not have a 'v' in front!");
 }
 
+- (void)testInteractionCriteriaBuild {
+	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	
+	interaction.criteria = @{@"application_build": @"39"};
+	usageData.applicationBuild = @"39";
+	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Build number");
+	
+	usageData.applicationBuild = @"v39";
+	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Build number must not have a 'v' in front!");
+	
+	interaction.criteria = @{@"application_build": @"v3.0"};
+	usageData.applicationBuild = @"v3.0";
+	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Build number");
+	
+	usageData.applicationBuild = @"3.0";
+	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Build number must not have a 'v' in front!");
+}
+
 - (void)testCodePointInvokesVersion {
 	ATInteraction *interaction = [[ATInteraction alloc] init];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
@@ -125,9 +145,12 @@
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
 	
 	interaction.criteria = @{@"code_point/app.launch/invokes/version": @1,
-							 @"application_version": @"1.3.0"};
+							 @"application_version": @"1.3.0",
+							 @"application_build": @"39"};
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @1};
 	usageData.applicationVersion = @"1.3.0";
+	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message without build number.");
+	usageData.applicationBuild = @"39";
 	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @2};
 	usageData.applicationVersion = @"1.3.0";

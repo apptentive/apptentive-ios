@@ -15,6 +15,7 @@
 @property (nonatomic, retain) NSNumber *daysSinceInstall;
 @property (nonatomic, retain) NSNumber *daysSinceUpgrade;
 @property (nonatomic, retain) NSString *applicationVersion;
+@property (nonatomic, retain) NSString *applicationBuild;
 @property (nonatomic, retain) NSDictionary *codePointInvokesTotal;
 @property (nonatomic, retain) NSDictionary *codePointInvokesVersion;
 @property (nonatomic, retain) NSDictionary *codePointInvokesTimeAgo;
@@ -28,6 +29,7 @@
 								   daysSinceInstall:(NSNumber *)daysSinceInstall
 								   daysSinceUpgrade:(NSNumber *)daysSinceUpgrade
 								 applicationVersion:(NSString *)applicationVersion
+								   applicationBuild:(NSString *)applicationBuild
 							  codePointInvokesTotal:(NSDictionary *)codePointInvokesTotal
 							codePointInvokesVersion:(NSDictionary *)codePointInvokesVersion
 							codePointInvokesTimeAgo:(NSDictionary *)codePointInvokesTimeAgo

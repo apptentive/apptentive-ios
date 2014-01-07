@@ -16,6 +16,7 @@
 @synthesize daysSinceInstall = _daysSinceInstall;
 @synthesize daysSinceUpgrade = _daysSinceUpgrade;
 @synthesize applicationVersion = _applicationVersion;
+@synthesize applicationBuild = _applicationBuild;
 @synthesize codePointInvokesTotal = _codePointInvokesTotal;
 @synthesize codePointInvokesVersion = _codePointInvokesVersion;
 @synthesize interactionInvokesTotal = _interactionInvokesTotal;
@@ -37,6 +38,7 @@
 								   daysSinceInstall:(NSNumber *)daysSinceInstall
 								   daysSinceUpgrade:(NSNumber *)daysSinceUpgrade
 								 applicationVersion:(NSString *)applicationVersion
+								   applicationBuild:(NSString *)applicationBuild
 							  codePointInvokesTotal:(NSDictionary *)codePointInvokesTotal
 							codePointInvokesVersion:(NSDictionary *)codePointInvokesVersion
 							codePointInvokesTimeAgo:(NSDictionary *)codePointInvokesTimeAgo
@@ -48,6 +50,7 @@
 	usageData.daysSinceInstall = daysSinceInstall;
 	usageData.daysSinceUpgrade = daysSinceUpgrade;
 	usageData.applicationVersion = applicationVersion;
+	usageData.applicationBuild = applicationBuild;
 	usageData.codePointInvokesTotal = codePointInvokesTotal;
 	usageData.codePointInvokesVersion = codePointInvokesVersion;
 	usageData.codePointInvokesTimeAgo = codePointInvokesTimeAgo;
@@ -58,10 +61,28 @@
 	return usageData;
 }
 
+- (NSString *)description {
+	NSString *title = [NSString stringWithFormat:@"Usage Data For interaction %@", self.interaction.identifier];
+	NSDictionary *data = @{@"daysSinceInstall" : self.daysSinceInstall ?: [NSNull null],
+						   @"daysSinceUpgrade" : self.daysSinceUpgrade ?: [NSNull null],
+						   @"applicationVersion" : self.applicationVersion ?: [NSNull null],
+						   @"applicationBuild" : self.applicationBuild ?: [NSNull null],
+						   @"codePointInvokesTotal" : self.codePointInvokesTotal ?: [NSNull null],
+						   @"codePointInvokesVersion" : self.codePointInvokesVersion ?: [NSNull null],
+						   @"codePointInvokesTimeAgo" : self.codePointInvokesTimeAgo ?: [NSNull null],
+						   @"interactionInvokesTotal" : self.interactionInvokesTotal ?: [NSNull null],
+						   @"interactionInvokesVersion" : self.interactionInvokesVersion ?: [NSNull null],
+						   @"interactionInvokesTimeAgo" : self.interactionInvokesTimeAgo ?: [NSNull null]};
+	NSDictionary *description = @{title : data};
+
+	return [description description];
+}
+
 - (NSDictionary *)predicateEvaluationDictionary {
 	 NSMutableDictionary *predicateEvaluationDictionary = [NSMutableDictionary dictionaryWithDictionary:@{@"days_since_install": self.daysSinceInstall,
 																										  @"days_since_upgrade" : self.daysSinceUpgrade,
-																										  @"application_version" : self.applicationVersion}];
+																										  @"application_version" : self.applicationVersion,
+																										  @"application_build" : self.applicationBuild}];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesTotal];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesVersion];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesTimeAgo];
@@ -103,6 +124,15 @@
 	}
 	
 	return _applicationVersion;
+}
+
+- (NSString *)applicationBuild {
+	if (!_applicationBuild) {
+		_applicationBuild = [ATUtilities buildNumberString] ?: @"";
+		[_applicationBuild retain];
+	}
+	
+	return _applicationBuild;
 }
 
 - (NSDictionary *)codePointInvokesTotal {

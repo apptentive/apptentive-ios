@@ -337,6 +337,7 @@
 		584647C617C426E800BFD6E6 /* ATEngagementManifestParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 584647C417C426E800BFD6E6 /* ATEngagementManifestParser.h */; };
 		584647C717C426E800BFD6E6 /* ATEngagementManifestParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 584647C517C426E800BFD6E6 /* ATEngagementManifestParser.m */; };
 		584647C817C426E800BFD6E6 /* ATEngagementManifestParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 584647C517C426E800BFD6E6 /* ATEngagementManifestParser.m */; };
+		586FE260187C8DAE00067116 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58805F3818120DE100210DA5 /* Accelerate.framework */; };
 		58805F3618120BBF00210DA5 /* UIImage+ATImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 58805F3418120BBF00210DA5 /* UIImage+ATImageEffects.m */; };
 		58805F3718120BBF00210DA5 /* UIImage+ATImageEffects.h in Headers */ = {isa = PBXBuildFile; fileRef = 58805F3518120BBF00210DA5 /* UIImage+ATImageEffects.h */; };
 		58805F3918120DE100210DA5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58805F3818120DE100210DA5 /* Accelerate.framework */; };
@@ -727,6 +728,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				586FE260187C8DAE00067116 /* Accelerate.framework in Frameworks */,
 				49F3404E16BC8B1A008AA02B /* StoreKit.framework in Frameworks */,
 				496DC38F1333D35600743F65 /* Foundation.framework in Frameworks */,
 				496DC3941333D35600743F65 /* libApptentiveConnect.a in Frameworks */,

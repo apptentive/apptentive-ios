@@ -58,7 +58,7 @@ enum kSurveyRows {
 	[imageView release], imageView = nil;
 	[super viewDidLoad];
 	
-	tags = [[NSSet alloc] initWithObjects:@"testsurvey", @"testtag", nil];
+	tags = [[NSSet alloc] initWithObjects:@"demoTag", nil];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyBecameAvailable:) name:ATSurveyNewSurveyAvailableNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unreadMessageCountChanged:) name:ATMessageCenterUnreadCountChangedNotification object:nil];
@@ -158,8 +158,8 @@ enum kSurveyRows {
 				cell.textLabel.text = @"No Survey Available With Tags";
 				cell.textLabel.textColor = [UIColor grayColor];
 			}
-			NSArray *tagArray = [tags allObjects];
-			cell.detailTextLabel.text = [NSString stringWithFormat:@"tags: %@", [tagArray componentsJoinedByString:@", "]];
+			NSString *plural = (tags.count == 1) ? @"tag" : @"tags";
+			cell.detailTextLabel.text = [NSString stringWithFormat:@"%@: %@", plural, [[tags allObjects] componentsJoinedByString:@", "]];
 		}
 	} else if (indexPath.section == kMessageCenterSection) {
 		if (indexPath.row == kMessageCenterRowShowMessageCenter) {

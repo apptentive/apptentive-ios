@@ -30,6 +30,7 @@ static NSString *ATMetricNameRatingDialogLaunch = @"rating_dialog.launch";
 static NSString *ATMetricNameRatingDialogRate = @"rating_dialog.rate";
 static NSString *ATMetricNameRatingDialogRemind = @"rating_dialog.remind";
 static NSString *ATMetricNameRatingDialogDecline = @"rating_dialog.decline";
+static NSString *ATMetricNameRatingDidManuallyOpenAppStore = @"app_store.manual_open";
 
 static NSString *ATMetricNameFeedbackDialogLaunch = @"feedback_dialog.launch";
 static NSString *ATMetricNameFeedbackDialogCancel = @"feedback_dialog.cancel";
@@ -74,6 +75,7 @@ static NSString *ATMetricNameInteractionUpgradeMessageClose = @"upgrade_message.
 - (ATAppRatingButtonType)appRatingButtonTypeFromNotification:(NSNotification *)notification;
 - (void)ratingDidShowRating:(NSNotification *)notification;
 - (void)ratingDidClickRating:(NSNotification *)notification;
+- (void)ratingDidManuallyOpenAppStore:(NSNotification *)notification;
 
 - (ATSurveyEvent)surveyEventTypeFromNotification:(NSNotification *)notification;
 - (void)surveyDidShow:(NSNotification *)notification;
@@ -139,6 +141,7 @@ static NSString *ATMetricNameInteractionUpgradeMessageClose = @"upgrade_message.
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingDidClickEnjoyment:) name:ATAppRatingDidClickEnjoymentButtonNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingDidShowRating:) name:ATAppRatingDidPromptForRatingNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingDidClickRating:) name:ATAppRatingDidClickRatingButtonNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingDidManuallyOpenAppStore:) name:ATAppRatingDidManuallyOpenAppStoreToRateAppNotification object:nil];
 		
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyDidShow:) name:ATSurveyDidShowWindowNotification object:nil];
@@ -344,6 +347,10 @@ static NSString *ATMetricNameInteractionUpgradeMessageClose = @"upgrade_message.
 	if (name != nil) {
 		[self addMetricWithName:name info:nil];
 	}
+}
+
+- (void)ratingDidManuallyOpenAppStore:(NSNotification *)notification {
+	[self addMetricWithName:ATMetricNameRatingDidManuallyOpenAppStore info:nil];
 }
 
 - (ATSurveyEvent)surveyEventTypeFromNotification:(NSNotification *)notification {

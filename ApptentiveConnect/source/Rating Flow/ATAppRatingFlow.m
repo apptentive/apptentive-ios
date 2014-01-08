@@ -181,6 +181,8 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 }
 
 - (void)openAppStore {
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATAppRatingDidManuallyOpenAppStoreToRateAppNotification object:nil];
+
 	[self openAppStoreToRateApp];
 }
 

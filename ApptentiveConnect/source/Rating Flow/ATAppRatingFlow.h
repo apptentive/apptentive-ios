@@ -74,4 +74,15 @@ extern NSString *const ATAppRatingFlowUserAgreedToRateAppNotification;
  after each level.
  */
 - (void)logSignificantEvent;
+
+/*!
+ Call to open your app's page on the App Store or Mac App Store.
+ This method can be used to power, for example, a "Rate this app" button in your settings screen.
+ It opens the app store directly, without the normal Apptentive Ratings Flow.
+ If the app store is manually opened, the Rating Flow will not prompt again for this version.
+ Depending on the iOS version, the App Store will either be opened via the App Store app or as
+ a Store Kit view inside your app.
+ */
+- (void)openAppStore;
+
 @end

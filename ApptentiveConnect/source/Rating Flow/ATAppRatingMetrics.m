@@ -8,6 +8,8 @@
 
 #import "ATAppRatingMetrics.h"
 
+NSString *const ATAppRatingDidManuallyOpenAppStoreToRateAppNotification = @"ATAppRatingDidManuallyOpenAppStoreToRateAppNotification";
+
 NSString *const ATAppRatingDidPromptForEnjoymentNotification = @"ATAppRatingDidPromptForEnjoymentNotification";
 NSString *const ATAppRatingDidNotPromptForEnjoymentNotification = @"ATAppRatingDidNotPromptForEnjoymentNotification";
 NSString *const ATAppRatingDidClickEnjoymentButtonNotification = @"ATAppRatingDidClickEnjoymentButtonNotification";

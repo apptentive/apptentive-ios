@@ -59,6 +59,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 - (void)postNotification:(NSString *)name;
 - (void)postNotification:(NSString *)name forButton:(int)button;
 - (NSURL *)URLForRatingApp;
+- (void)userAgreedToRateApp;
 - (void)openAppStoreToRateApp;
 - (BOOL)shouldOpenAppStoreViaStoreKit;
 - (void)openAppStoreViaURL;
@@ -179,6 +180,12 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	[self userDidSignificantEvent];
 }
 
+- (void)openAppStore {
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATAppRatingDidManuallyOpenAppStoreToRateAppNotification object:nil];
+
+	[self openAppStoreToRateApp];
+}
+
 #pragma mark Properties
 
 - (void)setAppName:(NSString *)anAppName {
@@ -220,7 +227,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 		[ratingDialog release], ratingDialog = nil;
 		if (buttonIndex == 1) { // rate
 			[self postNotification:ATAppRatingDidClickRatingButtonNotification forButton:ATAppRatingButtonTypeRateApp];
-			[self openAppStoreToRateApp];
+			[self userAgreedToRateApp];
 		} else if (buttonIndex == 2) { // remind later
 			[self postNotification:ATAppRatingDidClickRatingButtonNotification forButton:ATAppRatingButtonTypeRemind];
 			[self setRatingDialogWasShown];
@@ -309,9 +316,14 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 }
 #endif
 
+- (void)userAgreedToRateApp {
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATAppRatingFlowUserAgreedToRateAppNotification object:nil];
+	
+	[self openAppStoreToRateApp];
+}
+
 - (void)openAppStoreToRateApp {
 	[self setRatedApp:YES];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATAppRatingFlowUserAgreedToRateAppNotification object:nil];
 		
 #if TARGET_OS_IPHONE
 #	if TARGET_IPHONE_SIMULATOR
@@ -828,7 +840,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	} else if (result == NSAlertSecondButtonReturn) { // remind me
 		[self setRatingDialogWasShown];
 	} else if (result == NSAlertThirdButtonReturn) { // rate app
-		[self openAppStoreToRateApp];
+		[self userAgreedToRateApp];
 	}
 #endif
 }

@@ -27,7 +27,8 @@
 
 - (void)testExample
 {
-    //STFail(@"Unit tests are not implemented yet in FeedbackDemoTests");
+	XCTAssertTrue(YES, @"1 Passing Test");
+    //XCTFail(@"Unit tests are not implemented yet in FeedbackDemoTests");
 }
 
 @end

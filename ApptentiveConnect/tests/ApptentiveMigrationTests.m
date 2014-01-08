@@ -23,7 +23,7 @@
 	NSError *error = nil;
 	[fileManager removeItemAtURL:[dataManager persistentStoreURL] error:nil];
 	if (![fileManager copyItemAtURL:storeURL toURL:[dataManager persistentStoreURL] error:&error]) {
-		STFail(@"Unable to copy item: %@", error);
+		XCTFail(@"Unable to copy item: %@", error);
 		[dataManager release];
 		return nil;
 	}
@@ -34,33 +34,33 @@
 	// For example, we will do the following with a copy of an old data model.
 	ATDataManager *dataManager = [self dataManagerWithStoreName:@"ATDataModelv1"];
 	
-	STAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
-	STAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil");
-	STAssertTrue([dataManager didMigrateStore], @"Should have had to migrate the datastore.");
-	STAssertFalse([dataManager didFailToMigrateStore], @"Failed to migrate the datastore.");
-	STAssertFalse([dataManager didRemovePersistentStore], @"Shouldn't have had to delete datastore.");
+	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
+	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil");
+	XCTAssertTrue([dataManager didMigrateStore], @"Should have had to migrate the datastore.");
+	XCTAssertFalse([dataManager didFailToMigrateStore], @"Failed to migrate the datastore.");
+	XCTAssertFalse([dataManager didRemovePersistentStore], @"Shouldn't have had to delete datastore.");
 	[dataManager release];
 }
 
 - (void)testV2Upgrade {
 	ATDataManager *dataManager = [self dataManagerWithStoreName:@"ATDataModelv2"];
 	
-	STAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
-	STAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil");
-	STAssertTrue([dataManager didMigrateStore], @"Should have had to migrate the datastore.");
-	STAssertFalse([dataManager didFailToMigrateStore], @"Failed to migrate the datastore.");
-	STAssertFalse([dataManager didRemovePersistentStore], @"Shouldn't have had to delete datastore.");
+	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
+	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil");
+	XCTAssertTrue([dataManager didMigrateStore], @"Should have had to migrate the datastore.");
+	XCTAssertFalse([dataManager didFailToMigrateStore], @"Failed to migrate the datastore.");
+	XCTAssertFalse([dataManager didRemovePersistentStore], @"Shouldn't have had to delete datastore.");
 	[dataManager release];
 }
 
 - (void)testCurrentDatabaseVersion {
 	ATDataManager *dataManager = [self dataManagerWithStoreName:@"ATDataModelv3"];
 	
-	STAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
-	STAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil");
-	STAssertFalse([dataManager didMigrateStore], @"Should not have had to migrate the datastore.");
-	STAssertFalse([dataManager didFailToMigrateStore], @"Failed to migrate the datastore.");
-	STAssertFalse([dataManager didRemovePersistentStore], @"Shouldn't have had to delete datastore.");
+	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
+	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil");
+	XCTAssertFalse([dataManager didMigrateStore], @"Should not have had to migrate the datastore.");
+	XCTAssertFalse([dataManager didFailToMigrateStore], @"Failed to migrate the datastore.");
+	XCTAssertFalse([dataManager didRemovePersistentStore], @"Shouldn't have had to delete datastore.");
 	[dataManager release];
 }
 
@@ -82,10 +82,10 @@
 		
 		[fileManager removeItemAtPath:destination error:nil];
 		if (![fileManager fileExistsAtPath:source isDirectory:NULL]) {
-			STFail(@"Unable to find file: %@", source);
+			XCTFail(@"Unable to find file: %@", source);
 		}
 		if (![fileManager copyItemAtPath:source toPath:destination error:&error]) {
-			STFail(@"Unable to copy item: %@", error);
+			XCTFail(@"Unable to copy item: %@", error);
 			return nil;
 		}
 	}
@@ -98,11 +98,11 @@
 	// A valid v2 database, albeit in WAL format.
 	ATDataManager *dataManager = [self dataManagerByCopyingSQLFilesInDirectory:@"v2WALDatabase"];
 	
-	STAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
-	STAssertNotNil([dataManager persistentStoreCoordinator], @"Should be able to use existing WAL database.");
-	STAssertTrue([dataManager didMigrateStore], @"Should have had to migrate the datastore.");
-	STAssertFalse([dataManager didFailToMigrateStore], @"Should not have failed to migrate the persistent store.");
-	STAssertFalse([dataManager didRemovePersistentStore], @"Should not have had to delete the persistent store.");
+	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
+	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Should be able to use existing WAL database.");
+	XCTAssertTrue([dataManager didMigrateStore], @"Should have had to migrate the datastore.");
+	XCTAssertFalse([dataManager didFailToMigrateStore], @"Should not have failed to migrate the persistent store.");
+	XCTAssertFalse([dataManager didRemovePersistentStore], @"Should not have had to delete the persistent store.");
 	[dataManager release];
 }
 
@@ -110,11 +110,11 @@
 	// A valid v3 database, albeit in WAL format.
 	ATDataManager *dataManager = [self dataManagerByCopyingSQLFilesInDirectory:@"v3WALDatabase"];
 	
-	STAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
-	STAssertNotNil([dataManager persistentStoreCoordinator], @"Should be able to use existing WAL database.");
-	STAssertFalse([dataManager didMigrateStore], @"Should not have had to migrate the datastore.");
-	STAssertFalse([dataManager didFailToMigrateStore], @"Should not have failed to migrate the persistent store.");
-	STAssertFalse([dataManager didRemovePersistentStore], @"Should not have had to delete the persistent store.");
+	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
+	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Should be able to use existing WAL database.");
+	XCTAssertFalse([dataManager didMigrateStore], @"Should not have had to migrate the datastore.");
+	XCTAssertFalse([dataManager didFailToMigrateStore], @"Should not have failed to migrate the persistent store.");
+	XCTAssertFalse([dataManager didRemovePersistentStore], @"Should not have had to delete the persistent store.");
 	[dataManager release];
 }
 
@@ -122,9 +122,9 @@
 	// A corrupt v3 database in WAL format.
 	ATDataManager *dataManager = [self dataManagerByCopyingSQLFilesInDirectory:@"v2CorruptDatabase"];
 	
-	STAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
-	STAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil after fixing it.");
-	STAssertTrue([dataManager didRemovePersistentStore], @"Should have had to delete the persistent store.");
+	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
+	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil after fixing it.");
+	XCTAssertTrue([dataManager didRemovePersistentStore], @"Should have had to delete the persistent store.");
 	[dataManager release];
 }
 @end

@@ -6,8 +6,8 @@
 //  Copyright (c) 2011 Apptentive. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
-@interface ApptentiveMetricsTests : SenTestCase
+@interface ApptentiveMetricsTests : XCTestCase
 
 @end

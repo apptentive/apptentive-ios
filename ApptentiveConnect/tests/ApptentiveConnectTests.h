@@ -6,10 +6,10 @@
 //  Copyright 2011 Apptentive, Inc.. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
 
-@interface ApptentiveConnectTests : SenTestCase {
+@interface ApptentiveConnectTests : XCTestCase {
 @private
 	
 }

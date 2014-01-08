@@ -124,10 +124,10 @@
 		49C002FB1334172F0071F088 /* FeedbackDemoAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeedbackDemoAppDelegate.m; sourceTree = "<group>"; };
 		49C003001334172F0071F088 /* RootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		49C003011334172F0071F088 /* RootViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
-		49C0030B1334172F0071F088 /* FeedbackDemoTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FeedbackDemoTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		49C0030B1334172F0071F088 /* FeedbackDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FeedbackDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		49C003131334172F0071F088 /* FeedbackDemoTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FeedbackDemoTests-Info.plist"; sourceTree = "<group>"; };
 		49C003171334172F0071F088 /* FeedbackDemoTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FeedbackDemoTests-Prefix.pch"; sourceTree = "<group>"; };
-		49C003181334172F0071F088 /* FeedbackDemoTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeedbackDemoTests.h; sourceTree = "<group>"; };
+		49C003181334172F0071F088 /* FeedbackDemoTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = FeedbackDemoTests.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		49C0031A1334172F0071F088 /* FeedbackDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeedbackDemoTests.m; sourceTree = "<group>"; };
 		49C00324133417390071F088 /* ApptentiveConnect.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ApptentiveConnect.xcodeproj; path = ../ApptentiveConnect/ApptentiveConnect.xcodeproj; sourceTree = "<group>"; };
 		49C00332133417790071F088 /* libApptentiveConnect.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libApptentiveConnect.a; sourceTree = SOURCE_ROOT; };
@@ -226,7 +226,7 @@
 			isa = PBXGroup;
 			children = (
 				49C002E71334172E0071F088 /* FeedbackDemo.app */,
-				49C0030B1334172F0071F088 /* FeedbackDemoTests.octest */,
+				49C0030B1334172F0071F088 /* FeedbackDemoTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -301,7 +301,7 @@
 			isa = PBXGroup;
 			children = (
 				49C0032D133417390071F088 /* libApptentiveConnect.a */,
-				49C0032F133417390071F088 /* ApptentiveConnectTests.octest */,
+				49C0032F133417390071F088 /* ApptentiveConnectTests.xctest */,
 				49D111A013341A7C00603373 /* ApptentiveResources.bundle */,
 			);
 			name = Products;
@@ -345,7 +345,6 @@
 				49C003061334172F0071F088 /* Sources */,
 				49C003071334172F0071F088 /* Frameworks */,
 				49C003081334172F0071F088 /* Resources */,
-				49C003091334172F0071F088 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -354,8 +353,8 @@
 			);
 			name = FeedbackDemoTests;
 			productName = FeedbackDemoTests;
-			productReference = 49C0030B1334172F0071F088 /* FeedbackDemoTests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productReference = 49C0030B1334172F0071F088 /* FeedbackDemoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -410,10 +409,10 @@
 			remoteRef = 49C0032C133417390071F088 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		49C0032F133417390071F088 /* ApptentiveConnectTests.octest */ = {
+		49C0032F133417390071F088 /* ApptentiveConnectTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = ApptentiveConnectTests.octest;
+			path = ApptentiveConnectTests.xctest;
 			remoteRef = 49C0032E133417390071F088 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -461,22 +460,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		49C003091334172F0071F088 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		49C002E31334172E0071F088 /* Sources */ = {
@@ -652,20 +635,15 @@
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FeedbackDemo.app/FeedbackDemo";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+					"$(inherited)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FeedbackDemoTests/FeedbackDemoTests-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "FeedbackDemoTests/FeedbackDemoTests-Info.plist";
-				OTHER_LDFLAGS = (
-					"-framework",
-					SenTestingKit,
-				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Debug;
 		};
@@ -676,20 +654,15 @@
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FeedbackDemo.app/FeedbackDemo";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+					"$(inherited)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FeedbackDemoTests/FeedbackDemoTests-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "FeedbackDemoTests/FeedbackDemoTests-Info.plist";
-				OTHER_LDFLAGS = (
-					"-framework",
-					SenTestingKit,
-				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
 		};

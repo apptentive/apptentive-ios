@@ -40,7 +40,7 @@
 									  interactionInvokesVersion:@{}
 									  interactionInvokesTimeAgo:@{}];
 	
-	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Install date");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Install date");
 }
 
 - (void)testInteractionCriteriaDaysSnceInstall {
@@ -49,29 +49,29 @@
 	
 	interaction.criteria = @{@"days_since_install": @6};
 	usageData.daysSinceInstall = @6;
-	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Install date");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Install date");
 	usageData.daysSinceInstall = @5;
-	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Install date");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Install date");
 	usageData.daysSinceInstall = @7;
-	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Install date");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Install date");
 	
 	interaction.criteria = @{@"days_since_install": @{@"$gt": @5, @"$lt": @7}};
 	usageData.daysSinceInstall = @6;
-	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Install date");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Install date");
 	usageData.daysSinceInstall = @5;
-	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Install date");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Install date");
 	usageData.daysSinceInstall = @7;
-	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Install date");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Install date");
 	
 	interaction.criteria = @{@"days_since_install": @{@"$lte": @5, @"$gt": @3}};
 	usageData.daysSinceInstall = @3;
-	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Install date");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Install date");
 	usageData.daysSinceInstall = @4;
-	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Install date");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Install date");
 	usageData.daysSinceInstall = @5;
-	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Install date");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Install date");
 	usageData.daysSinceInstall = @6;
-	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Install date");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Install date");
 }
 
 - (void)testInteractionCriteriaVersion {
@@ -80,15 +80,15 @@
 	
 	interaction.criteria = @{@"application_version": @"1.2.8"};
 	usageData.applicationVersion = @"1.2.8";
-	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Version number");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Version number");
 	usageData.applicationVersion = @"v1.2.8";
-	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Version number must not have a 'v' in front!");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Version number must not have a 'v' in front!");
 	
 	interaction.criteria = @{@"application_version": @"v3.0"};
 	usageData.applicationVersion = @"v3.0";
-	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Version number");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Version number");
 	usageData.applicationVersion = @"3.0";
-	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Version number must not have a 'v' in front!");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Version number must not have a 'v' in front!");
 }
 
 - (void)testInteractionCriteriaBuild {
@@ -97,17 +97,17 @@
 	
 	interaction.criteria = @{@"application_build": @"39"};
 	usageData.applicationBuild = @"39";
-	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Build number");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Build number");
 	
 	usageData.applicationBuild = @"v39";
-	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Build number must not have a 'v' in front!");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Build number must not have a 'v' in front!");
 	
 	interaction.criteria = @{@"application_build": @"v3.0"};
 	usageData.applicationBuild = @"v3.0";
-	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Build number");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Build number");
 	
 	usageData.applicationBuild = @"3.0";
-	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Build number must not have a 'v' in front!");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Build number must not have a 'v' in front!");
 }
 
 - (void)testCodePointInvokesVersion {
@@ -116,28 +116,28 @@
 	
 	interaction.criteria = @{@"code_point/app.launch/invokes/version": @1};
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @1};
-	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"This version has been invoked 1 time.");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"This version has been invoked 1 time.");
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @0};
-	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @2};
-	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
 
 	
 	interaction.criteria = @{@"code_point/big.win/invokes/version": @7};
 	usageData.codePointInvokesVersion = @{@"code_point/big.win/invokes/version": @7};
-	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
 	usageData.codePointInvokesVersion = @{@"code_point/big.win/invokes/version": @1};
-	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
 	usageData.codePointInvokesVersion = @{@"code_point/big.win/invokes/version": @19};
-	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
 
 	interaction.criteria = @{@"code_point/big.win/invokes/version": @{@"$gte": @5, @"$lte": @5}};
 	usageData.codePointInvokesVersion = @{@"code_point/big.win/invokes/version": @5};
-	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
 	usageData.codePointInvokesVersion = @{@"code_point/big.win/invokes/version": @3};
-	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
 	usageData.codePointInvokesVersion = @{@"code_point/big.win/invokes/version": @19};
-	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
 }
 
 - (void)testUpgradeMessageCriteria {
@@ -149,39 +149,39 @@
 							 @"application_build": @"39"};
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @1};
 	usageData.applicationVersion = @"1.3.0";
-	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message without build number.");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message without build number.");
 	usageData.applicationBuild = @"39";
-	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @2};
 	usageData.applicationVersion = @"1.3.0";
-	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @1};
 	usageData.applicationVersion = @"1.3.1";
-	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
 
 	interaction.criteria = @{@"application_version": @"1.3.0",
 							 @"code_point/app.launch/invokes/version": @{@"$gte": @1}};
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @1};
 	usageData.applicationVersion = @"1.3.0";
-	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @2};
 	usageData.applicationVersion = @"1.3.0";
-	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @0};
 	usageData.applicationVersion = @"1.3.0";
-	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
 	
 	interaction.criteria = @{@"application_version": @"1.3.0",
 							 @"code_point/app.launch/invokes/version": @{@"$lte": @4}};
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @1};
 	usageData.applicationVersion = @"1.3.0";
-	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @4};
 	usageData.applicationVersion = @"1.3.0";
-	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @5};
 	usageData.applicationVersion = @"1.3.0";
-	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
 }
 
 - (void)testComplexCriteria {
@@ -226,33 +226,33 @@
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
 	
 	usageData.daysSinceUpgrade = @2;
-	STAssertTrue([complexInteraction criteriaAreMetForUsageData:usageData], @"2 satisfies the inital OR clause; passes regardless of the next condition.");
+	XCTAssertTrue([complexInteraction criteriaAreMetForUsageData:usageData], @"2 satisfies the inital OR clause; passes regardless of the next condition.");
 	usageData.daysSinceUpgrade = @0;
-	STAssertTrue([complexInteraction criteriaAreMetForUsageData:usageData], @"0 satisfies the inital OR clause; passes regardless of the next condition.");
+	XCTAssertTrue([complexInteraction criteriaAreMetForUsageData:usageData], @"0 satisfies the inital OR clause; passes regardless of the next condition.");
 	
 	usageData.daysSinceUpgrade = @3;
 	usageData.codePointInvokesTotal = @{@"code_point/app.launch/invokes/total": @8};
-	STAssertFalse([complexInteraction criteriaAreMetForUsageData:usageData], @"3 fails the initial OR clause. 8 fails the other clause.");
+	XCTAssertFalse([complexInteraction criteriaAreMetForUsageData:usageData], @"3 fails the initial OR clause. 8 fails the other clause.");
 
 	usageData.daysSinceUpgrade = @3;
 	usageData.interactionInvokesVersion = @{@"interactions/526fe2836dd8bf546a00000b/invokes/version": @0};
 	usageData.codePointInvokesTotal = @{@"code_point/app.launch/invokes/total": @2,
 										@"code_point/small.win/invokes/total": @0,
 										@"code_point/big.win/invokes/total": @2};
-	STAssertTrue([complexInteraction criteriaAreMetForUsageData:usageData], @"complex");
+	XCTAssertTrue([complexInteraction criteriaAreMetForUsageData:usageData], @"complex");
 	usageData.codePointInvokesTotal = @{@"code_point/app.launch/invokes/total": @2,
 										@"code_point/small.win/invokes/total": @2,
 										@"code_point/big.win/invokes/total": @19};
-	STAssertTrue([complexInteraction criteriaAreMetForUsageData:usageData], @"complex");
+	XCTAssertTrue([complexInteraction criteriaAreMetForUsageData:usageData], @"complex");
 	usageData.codePointInvokesTotal = @{@"code_point/app.launch/invokes/total": @2,
 										@"code_point/small.win/invokes/total": @19,
 										@"code_point/big.win/invokes/total": @19};
-	STAssertFalse([complexInteraction criteriaAreMetForUsageData:usageData], @"Neither of the last two ORed code_point totals are right.");
+	XCTAssertFalse([complexInteraction criteriaAreMetForUsageData:usageData], @"Neither of the last two ORed code_point totals are right.");
 	usageData.codePointInvokesTotal = @{@"code_point/app.launch/invokes/total": @2,
 										@"code_point/small.win/invokes/total": @2,
 										@"code_point/big.win/invokes/total": @1};
 	usageData.interactionInvokesVersion = @{@"interactions/526fe2836dd8bf546a00000b/invokes/version": @8};
-	STAssertFalse([complexInteraction criteriaAreMetForUsageData:usageData], @"The middle case is incorrect.");
+	XCTAssertFalse([complexInteraction criteriaAreMetForUsageData:usageData], @"The middle case is incorrect.");
 }
 
 - (void)testTimeAgoCriteria {
@@ -264,14 +264,14 @@
 	
 	usageData.codePointInvokesTimeAgo = @{@"code_point/app.launch/invokes/time_ago": @100};
 	usageData.interactionInvokesTimeAgo = @{@"interactions/big.win/invokes/time_ago": @1000};
-	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
 	
 	
 	interaction.criteria = @{@"code_point/app.launch/invokes/time_ago": @{@"$gte": @500},
 							 @"interactions/big.win/invokes/time_ago": @{@"$lte": @1000}};
 	usageData.codePointInvokesTimeAgo = @{@"code_point/app.launch/invokes/time_ago": @800};
 	usageData.interactionInvokesTimeAgo = @{@"interactions/big.win/invokes/time_ago": @100};
-	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
 }
 
 - (void)testTimeAgoCodePointCriteriaViaDatesInNSUserDefaults {
@@ -281,27 +281,27 @@
 	interaction.criteria = @{@"code_point/app.launch/invokes/time_ago": @{@"$lte": @500}};
 	usageData.codePointInvokesTimeAgo = nil;
 	[[NSUserDefaults standardUserDefaults] setObject:@{@"app.launch": [NSDate distantPast]} forKey:ATEngagementCodePointsInvokesLastDateKey];
-	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo: distantPast -> now time interval > 500");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo: distantPast -> now time interval > 500");
 	
 	interaction.criteria = @{@"code_point/app.launch/invokes/time_ago": @{@"$gte": @500}};
 	usageData.codePointInvokesTimeAgo = nil;
 	[[NSUserDefaults standardUserDefaults] setObject:@{@"app.launch": [NSDate distantPast]} forKey:ATEngagementCodePointsInvokesLastDateKey];
-	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
 	
 	interaction.criteria = @{@"code_point/app.launch/invokes/time_ago": @{@"$gte": @500}};
 	usageData.codePointInvokesTimeAgo = nil;
 	[[NSUserDefaults standardUserDefaults] setObject:@{@"app.launch": [NSDate dateWithTimeIntervalSinceNow:-600]} forKey:ATEngagementCodePointsInvokesLastDateKey];
-	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
 	
 	interaction.criteria = @{@"code_point/app.launch/invokes/time_ago": @{@"$gte": @500}};
 	usageData.codePointInvokesTimeAgo = nil;
 	[[NSUserDefaults standardUserDefaults] setObject:@{@"app.launch": (NSDate *)[NSDate dateWithTimeIntervalSinceNow:-400]} forKey:ATEngagementCodePointsInvokesLastDateKey];
-	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
 	
 	interaction.criteria = @{@"code_point/app.launch/invokes/time_ago": @{@"$gte": @500}};
 	usageData.codePointInvokesTimeAgo = nil;
 	[[NSUserDefaults standardUserDefaults] setObject:@{@"app.launch": (NSDate *)[NSDate dateWithTimeIntervalSinceNow:-501]} forKey:ATEngagementCodePointsInvokesLastDateKey];
-	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
 }
 
 - (void)testTimeAgoInteractionCriteriaViaDatesInNSUserDefaults {
@@ -311,27 +311,27 @@
 	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/time_ago": @{@"$lte": @500}};
 	usageData.interactionInvokesTimeAgo = nil;
 	[[NSUserDefaults standardUserDefaults] setObject:@{@"526fe2836dd8bf546a00000b": [NSDate distantPast]} forKey:ATEngagementInteractionsInvokesLastDateKey];
-	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo: distantPast -> now time interval > 500");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo: distantPast -> now time interval > 500");
 	
 	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/time_ago": @{@"$gte": @500}};
 	usageData.interactionInvokesTimeAgo = nil;
 	[[NSUserDefaults standardUserDefaults] setObject:@{@"526fe2836dd8bf546a00000b": [NSDate distantPast]} forKey:ATEngagementInteractionsInvokesLastDateKey];
-	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
 	
 	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/time_ago": @{@"$gte": @500}};
 	usageData.interactionInvokesTimeAgo = nil;
 	[[NSUserDefaults standardUserDefaults] setObject:@{@"526fe2836dd8bf546a00000b": [NSDate dateWithTimeIntervalSinceNow:-600]} forKey:ATEngagementInteractionsInvokesLastDateKey];
-	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
 	
 	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/time_ago": @{@"$gte": @500}};
 	usageData.interactionInvokesTimeAgo = nil;
 	[[NSUserDefaults standardUserDefaults] setObject:@{@"526fe2836dd8bf546a00000b": (NSDate *)[NSDate dateWithTimeIntervalSinceNow:-400]} forKey:ATEngagementInteractionsInvokesLastDateKey];
-	STAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
 	
 	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/time_ago": @{@"$gte": @500}};
 	usageData.interactionInvokesTimeAgo = nil;
 	[[NSUserDefaults standardUserDefaults] setObject:@{@"526fe2836dd8bf546a00000b": (NSDate *)[NSDate dateWithTimeIntervalSinceNow:-501]} forKey:ATEngagementInteractionsInvokesLastDateKey];
-	STAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
 }
 
 @end

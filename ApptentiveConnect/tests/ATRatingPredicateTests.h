@@ -6,11 +6,11 @@
 //  Copyright (c) 2012 Apptentive, Inc. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 #import "ATAppRatingFlow.h"
 #import "ATAppRatingFlow_Private.h"
 
-@interface ATRatingPredicateTests : SenTestCase
+@interface ATRatingPredicateTests : XCTestCase
 - (void)testPredicateStrings;
 - (void)testDefaultPredicate1;
 @end

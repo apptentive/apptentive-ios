@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
-@interface ApptentiveMigrationTests : SenTestCase
+@interface ApptentiveMigrationTests : XCTestCase
 
 @end

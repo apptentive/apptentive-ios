@@ -147,11 +147,43 @@ NSString *const ATSurveyViewDatesKey = @"ATSurveyViewDatesKey";
 }
 
 - (BOOL)isEligibleToBeShown {
-	BOOL eligible = ([self isActive] && [self isStarted] && ![self isEnded] && [self isWithinViewLimits]);
+	BOOL eligible = NO;
+	NSString *reasonForNotShowingSurvey = nil;
 	
-	BOOL responseAllowed = (![self wasAlreadySubmitted] || [self multipleResponsesAllowed]);
+	do { // once
+		if (![self isActive]) {
+			reasonForNotShowingSurvey = @"survey is not active.";
+			break;
+		}
+		
+		if (![self isStarted]) {
+			reasonForNotShowingSurvey = @"survey is not started.";
+			break;
+		}
+		
+		if ([self isEnded]) {
+			reasonForNotShowingSurvey = @"survey has ended.";
+			break;
+		}
+		
+		if (![self isWithinViewLimits]) {
+			reasonForNotShowingSurvey = @"survey is not within view limits.";
+			break;
+		}
+				
+		if ([self wasAlreadySubmitted] && ![self multipleResponsesAllowed]) {
+			reasonForNotShowingSurvey = @"survey was already submitted and multiple responses are not allowed.";
+			break;
+		}
+		
+		eligible = YES;
+	} while (NO);
 	
-	return (eligible && responseAllowed);
+	if (reasonForNotShowingSurvey) {
+		ATLogInfo(@"Did not show Apptentive survey %@ because %@", self.identifier, reasonForNotShowingSurvey);
+	}
+	
+	return eligible;
 }
 
 - (BOOL)isStarted {

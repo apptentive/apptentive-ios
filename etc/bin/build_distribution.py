@@ -33,9 +33,9 @@ def chdir(path):
 		os.chdir(curdir)
 
 def escape_arg(argument):
-    """Escapes an argument to a command line utility."""
-    argument = argument.replace('\\', "\\\\").replace("'", "\'").replace('"', '\\"').replace("!", "\\!").replace("`", "\\`")
-    return "\"%s\"" % argument
+	"""Escapes an argument to a command line utility."""
+	argument = argument.replace('\\', "\\\\").replace("'", "\'").replace('"', '\\"').replace("!", "\\!").replace("`", "\\`")
+	return "\"%s\"" % argument
 
 def run_command(command, verbose=False):
 	if verbose:
@@ -64,20 +64,18 @@ class Builder(object):
 			sys.exit(1)
 	
 	def build(self):
-		# First, build the simulator target.
 		with chdir(self._project_dir()):
-			sim_build_command = self._build_command(is_simulator=True)
-			(status, output) = run_command(sim_build_command, verbose=self.verbose)
-			if status != 0:
-				log("Building for simulator failed with code: %d" % status)
-				log(output)
-				return False
-			dev_build_command = self._build_command()
-			(status, output) = run_command(dev_build_command, verbose=self.verbose)
-			if status != 0:
-				log("Building for device failed with code: %d" % status)
-				log(output)
-				return False
+			# Build for simulator and device, each 64bit and not.
+			for is_simulator in [True, False]:
+				for is_64bit in [True, False]:
+					build_command = self._build_command(is_simulator=is_simulator, is_64bit=is_64bit)
+					(status, output) = run_command(build_command, verbose=self.verbose)
+					if status != 0:
+						target_type = "simulator" if is_simulator else "device"
+						arch_type = "64bit" if is_64bit else "not 64bit"
+						log("Building for %s %s failed with code: %d" % (target_type, arch_type, status))
+						log(output)
+						return False
 			library_dir = self._output_dir()
 			try:
 				if os.path.exists(library_dir):
@@ -152,14 +150,16 @@ class Builder(object):
 	def _output_dir(self):
 		return os.path.join(self.build_root, "library_dir")
 	
-	def _products_dir(self, is_simulator=False):
+	def _products_dir(self, is_simulator=False, is_64bit=False):
 		products_dir = os.path.join(self.build_root, "device_product")
 		if is_simulator:
 			products_dir = os.path.join(self.build_root, "simulator_product")
+		if is_64bit:
+			products_dir += "_64bit"
 		return products_dir
 	
-	def _xcode_options(self, is_simulator=False):
-		products_dir = self._products_dir(is_simulator=is_simulator)
+	def _xcode_options(self, is_simulator=False, is_64bit=False):
+		products_dir = self._products_dir(is_simulator=is_simulator, is_64bit=is_64bit)
 		symroot = os.path.join(self.build_root, "symroot")
 		temp_dir = os.path.join(self.build_root, "target_temp_dir")
 		return "CONFIGURATION_BUILD_DIR=%s SYMROOT=%s TARGET_TEMP_DIR=%s" % (escape_arg(products_dir), escape_arg(symroot), escape_arg(temp_dir))
@@ -170,13 +170,20 @@ class Builder(object):
 		output_library = os.path.join(output_dir, lib)
 		input_a = os.path.join(self._products_dir(is_simulator=True), lib)
 		input_b = os.path.join(self._products_dir(is_simulator=False), lib)
-		return """xcrun lipo -create -output %s %s %s""" % (escape_arg(output_library), escape_arg(input_a), escape_arg(input_b))
+		input_c = os.path.join(self._products_dir(is_simulator=True, is_64bit=True), lib)
+		input_d = os.path.join(self._products_dir(is_simulator=False, is_64bit=True), lib)
+		return """xcrun lipo -create -output %s %s %s %s %s""" % (escape_arg(output_library), escape_arg(input_a), escape_arg(input_b), escape_arg(input_c), escape_arg(input_d))
 	
-	def _build_command(self, is_simulator=False):
+	def _build_command(self, is_simulator=False, is_64bit=False):
 		sdk = 'iphoneos'
 		if is_simulator:
 			sdk = 'iphonesimulator'
-		return """xcrun xcodebuild -target ApptentiveConnect -configuration Debug -sdk %s %s""" % (sdk, self._xcode_options(is_simulator=is_simulator))
+		command = """xcrun xcodebuild -target ApptentiveConnect -configuration Debug -sdk %s %s""" % (sdk, self._xcode_options(is_simulator=is_simulator, is_64bit=is_64bit))
+		if is_64bit and is_simulator:
+			command += " ARCHS='x86_64' IPHONEOS_DEPLOYMENT_TARGET='7.0' VALID_ARCHS='x86_64'"
+		elif is_64bit:
+			command += " ARCHS='arm64' IPHONEOS_DEPLOYMENT_TARGET='7.0'"
+		return command
 	
 	def _project_path(self, filename):
 		"""Returns the file within the project directory for the given filename."""

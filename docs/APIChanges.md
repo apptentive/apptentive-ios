@@ -1,5 +1,11 @@
 This document tracks changes to the API between versions.
 
+# 1.2.5
+
+## ATAppRatingFlow
+
+* Added `openAppStore` method that immediately opens the app's page on the App Store without going through the Apptentive Ratings Flow.
+
 # 1.2.4
 
 ## ATConnect

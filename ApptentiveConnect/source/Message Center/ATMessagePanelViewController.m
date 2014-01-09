@@ -319,6 +319,7 @@ enum {
 		self.window.windowLevel = UIWindowLevelNormal;
 		self.window.userInteractionEnabled = NO;
 		self.window.layer.shouldRasterize = YES;
+		self.window.layer.rasterizationScale = [[UIScreen mainScreen] scale];
 		NSString *title = ATLocalizedString(@"Please enter an email address", @"Email is required and no email was entered alert title.");
 		NSString *message = ATLocalizedString(@"An email address is required for us to respond.", @"Email is required and no email was entered alert message.");
 		
@@ -331,6 +332,7 @@ enum {
 		self.window.windowLevel = UIWindowLevelNormal;
 		self.window.userInteractionEnabled = NO;
 		self.window.layer.shouldRasterize = YES;
+		self.window.layer.rasterizationScale = [[UIScreen mainScreen] scale];
 		NSString *title = ATLocalizedString(@"Invalid Email Address", @"Invalid email dialog title.");
 		NSString *message = nil;
 		if ([[ATConnect sharedConnection] emailRequired]) {
@@ -348,6 +350,7 @@ enum {
 		self.window.windowLevel = UIWindowLevelNormal;
 		self.window.userInteractionEnabled = NO;
 		self.window.layer.shouldRasterize = YES;
+		self.window.layer.rasterizationScale = [[UIScreen mainScreen] scale];
 		NSString *title = ATLocalizedString(@"No email address?", @"Lack of email dialog title.");
 		NSString *message = ATLocalizedString(@"An email address will help us respond.", @"Lack of email dialog message.");
 		noEmailAddressAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Send Feedback", @"Send button title"), nil];
@@ -505,6 +508,7 @@ enum {
 #pragma mark UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	self.window.layer.shouldRasterize = NO;
+	self.window.layer.rasterizationScale = [[UIScreen mainScreen] scale];
 	if (noEmailAddressAlert && [alertView isEqual:noEmailAddressAlert]) {
 		BOOL useNativeTextField = [noEmailAddressAlert respondsToSelector:@selector(alertViewStyle)];
 		
@@ -535,6 +539,7 @@ enum {
 
 - (void)alertViewCancel:(UIAlertView *)alertView {
 	self.window.layer.shouldRasterize = NO;
+	self.window.layer.rasterizationScale = [[UIScreen mainScreen] scale];
 	self.window.userInteractionEnabled = YES;
 	if (noEmailAddressAlert && [alertView isEqual:noEmailAddressAlert]) {
 		[noEmailAddressAlert release], noEmailAddressAlert = nil;

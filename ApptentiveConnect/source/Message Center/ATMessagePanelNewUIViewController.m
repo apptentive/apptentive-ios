@@ -152,7 +152,7 @@
 }
 
 - (void)setupContainerView {
-	self.containerView.backgroundColor = [UIColor clearColor];
+	self.containerView.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
 	self.containerView.layer.cornerRadius = 7.0;
 	
 	NSInteger buttonHeight = ([[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationPortrait) ? 44 : 30;

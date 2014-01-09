@@ -33,7 +33,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "496DC38B1333D35600743F65"
-               BuildableName = "ApptentiveConnectTests.octest"
+               BuildableName = "ApptentiveConnectTests.xctest"
                BlueprintName = "ApptentiveConnectTests"
                ReferencedContainer = "container:ApptentiveConnect.xcodeproj">
             </BuildableReference>

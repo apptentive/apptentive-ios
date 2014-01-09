@@ -187,7 +187,7 @@ ATConnect *connection = [ATConnect sharedConnection];
 [connection presentMessageCenterFromViewController:viewController];
 ```
 
-![Message Center initial feedback](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-message-center.png) ![alt text](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/space.png) ![Message Center response](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-sample-message-center.png)
+![Message Center initial feedback](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-love-dialog.png) ![alt text](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/space.png) ![Message Center response](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-message-center.png)
 
 #### Ratings
 

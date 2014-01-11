@@ -1,4 +1,4 @@
-2014-01-?? wooster, pkamb v1.2.5 (in progress)
+2014-01-10 wooster, pkamb v1.2.5
 --------------------------------
 This release fixes some minor issues and bugs. It includes some compatibility fixes for CocoaPods users and fixes for some visual issues on iOS 7.
 
@@ -10,6 +10,7 @@ Fixes:
 * IOS-229 Log debug info about why Survey was not shown.
 * IOS-242 FeedbackDemo: Survey text and tag
 * IOS-331 Profile page has both back and done buttons.
+* IOS-338 Text behind "No Email Address?" alert becomes pixelated.
 * IOS-343 Add `application_build` to engagement framework.
 * IOS-345 Message Center arrow visual issue
 * IOS-347 Switch to using XCTest from SenTest

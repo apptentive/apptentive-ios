@@ -8,7 +8,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "ATTextMessageUserCell.h"
-
+#import "ATUtilities.h"
 
 @implementation ATTextMessageUserCell {
 	CGFloat horizontalCellPadding;
@@ -25,7 +25,9 @@
 	if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel://"]]) {
 		types |= NSTextCheckingTypePhoneNumber;
 	}
-	self.messageText.enabledTextCheckingTypes = types;
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"5"]) {
+		self.messageText.enabledTextCheckingTypes = types;
+	}
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {

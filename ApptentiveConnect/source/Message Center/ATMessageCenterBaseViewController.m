@@ -268,6 +268,8 @@
 				}
 			}
 			[composingMessage setup];
+			composingMessage.sentByUser = @YES;
+			composingMessage.seenByUser = @YES;
 		}
 	} else {
 		if (composingMessage) {
@@ -293,6 +295,7 @@
 		composingMessage.body = [inputView text];
 		composingMessage.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
 		composingMessage.sentByUser = @YES;
+		composingMessage.seenByUser = @YES;
 		if ([ATBackend sharedBackend].currentCustomData) {
 			[composingMessage addCustomDataFromDictionary:[ATBackend sharedBackend].currentCustomData];
 		}

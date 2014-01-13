@@ -65,10 +65,12 @@ enum kSurveyRows {
 }
 
 - (void)surveyBecameAvailable:(NSNotification *)notification {
+	NSLog(@"Apptentive Notification: survey became available");
 	[self.tableView reloadData];
 }
 
 - (void)unreadMessageCountChanged:(NSNotification *)notification {
+	NSLog(@"Apptentive Notification: unread message count changed");
 	[self.tableView reloadData];
 }
 

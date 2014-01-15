@@ -753,6 +753,27 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	usesBeforePrompt = [(NSNumber *)[defaults objectForKey:ATAppRatingUsesBeforePromptPreferenceKey] unsignedIntegerValue];
 	significantEventsBeforePrompt = [(NSNumber *)[defaults objectForKey:ATAppRatingSignificantEventsBeforePromptPreferenceKey] unsignedIntegerValue];
 	daysBeforeRePrompting = [(NSNumber *)[defaults objectForKey:ATAppRatingDaysBetweenPromptsPreferenceKey] unsignedIntegerValue];
+	
+	// Log info about current rating flow configuration
+	ATAppRatingFlowPredicateInfo *info = [[ATAppRatingFlowPredicateInfo alloc] init];
+	info.firstUse = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppRatingFlowLastUsedVersionFirstUseDateKey];
+	info.significantEvents = [[[NSUserDefaults standardUserDefaults] objectForKey:ATAppRatingFlowSignificantEventsCountKey] unsignedIntegerValue];
+	info.appUses = [[[NSUserDefaults standardUserDefaults] objectForKey:ATAppRatingFlowUseCountKey] unsignedIntegerValue];
+	info.daysBeforePrompt = self.daysBeforePrompt;
+	info.significantEventsBeforePrompt = self.significantEventsBeforePrompt;
+	info.usesBeforePrompt = self.usesBeforePrompt;
+	NSPredicate *predicate = [ATAppRatingFlow_Private predicateForPromptLogic:[[NSUserDefaults standardUserDefaults] objectForKey:ATAppRatingPromptLogicPreferenceKey] withPredicateInfo:info];
+	NSString *usageData = [NSString stringWithFormat:@"appUses: %ld, usesBeforePrompt: %ld, significantEvents: %ld, significantEventsBeforePrompt: %ld, firstUse: %@, daysBeforePrompt: %ld,", (long)info.appUses, (long)info.usesBeforePrompt, (long)info.significantEvents, (long)info.significantEventsBeforePrompt, info.firstUse, (long)info.daysBeforePrompt];
+
+	BOOL fromServer = [[NSUserDefaults standardUserDefaults] boolForKey:ATAppRatingSettingsAreFromServerPreferenceKey];
+	if (fromServer) {
+		ATLogInfo(@"Rating Flow: Using custom configuration retrieved from Apptentive");
+	} else {
+		ATLogInfo(@"Rating Flow: Using defaults until custom configuration can be retrieved from Apptentive");
+	}
+	ATLogInfo(@"Rating Flow usage data: %@", usageData);
+	ATLogInfo(@"Rating Flow conditions: %@", predicate);
+	[info release], info = nil;
 }
 @end
 

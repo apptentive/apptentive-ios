@@ -783,6 +783,7 @@ static NSURLCache *imageCache = nil;
 			// Queued tasks can probably start now.
 			ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
 			[queue start];
+			[self updateConfigurationIfNeeded];
 			[self updateDeviceIfNeeded];
 			[self updatePersonIfNeeded];
 		}

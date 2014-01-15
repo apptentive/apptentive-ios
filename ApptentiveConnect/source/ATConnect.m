@@ -29,6 +29,9 @@ NSString *const ATIntegrationKeyUrbanAirship = @"urban_airship";
 
 @implementation ATConnect
 @synthesize apiKey, showTagline, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText, useMessageCenter;
+#if TARGET_OS_IPHONE
+@synthesize tintColor;
+#endif
 
 + (ATConnect *)sharedConnection {
 	static ATConnect *sharedConnection = nil;
@@ -57,6 +60,7 @@ NSString *const ATIntegrationKeyUrbanAirship = @"urban_airship";
 
 - (void)dealloc {
 #if TARGET_OS_IPHONE
+	[tintColor release], tintColor = nil;
 #elif IF_TARGET_OS_MAC
 	if (feedbackWindowController) {
 		[feedbackWindowController release];

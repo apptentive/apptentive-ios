@@ -83,6 +83,10 @@
     [super viewDidLoad];
 	[dataSource start];
 	
+	if ([[ATConnect sharedConnection] tintColor] && [self.view respondsToSelector:@selector(setTintColor:)]) {
+		[self.navigationController.view setTintColor:[[ATConnect sharedConnection] tintColor]];
+	}
+	
 	self.navigationItem.titleView = [defaultTheme titleViewForMessageCenterViewController:self];
 	self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)] autorelease];
 	if ([self.navigationItem.leftBarButtonItem respondsToSelector:@selector(initWithImage:landscapeImagePhone:style:target:action:)]) {

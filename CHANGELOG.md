@@ -1,3 +1,10 @@
+2014-01-?? wooster, pkamb v1.2.6 (in progress)
+--------------------------------
+
+Fixes:
+
+* IOS-356 Can't see send button in Message Center with white tintColor
+
 2014-01-10 wooster, pkamb v1.2.5
 --------------------------------
 This release fixes some minor issues and bugs. It includes some compatibility fixes for CocoaPods users and fixes for some visual issues on iOS 7.

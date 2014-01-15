@@ -1,5 +1,11 @@
 This document tracks changes to the API between versions.
 
+# 1.2.6
+
+## ATConnect
+
+* Added `@property tintColor` for overriding the tint color in our UI, in case you're using one that doesn't work well with it in your app.
+
 # 1.2.5
 
 ## ATAppRatingFlow

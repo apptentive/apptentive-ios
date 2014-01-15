@@ -45,6 +45,10 @@ NSString *const ATInteractionUpgradeMessageClose = @"ATInteractionUpgradeMessage
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
+	if ([[ATConnect sharedConnection] tintColor] && [self.view respondsToSelector:@selector(setTintColor:)]) {
+		[self.window setTintColor:[[ATConnect sharedConnection] tintColor]];
+	}
+	
 	self.backgroundImageView.contentMode = UIViewContentModeScaleAspectFill;
 	UIImage *blurred = [self blurredBackgroundScreenshot];
 	[self.backgroundImageView setImage:blurred];

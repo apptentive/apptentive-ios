@@ -13,7 +13,7 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
-#define kATConnectVersionString @"1.2.5"
+#define kATConnectVersionString @"1.2.6a"
 
 #if TARGET_OS_IPHONE
 #	define kATConnectPlatformString @"iOS"
@@ -30,6 +30,7 @@ extern NSString *const ATIntegrationKeyUrbanAirship;
 @interface ATConnect : NSObject {
 @private
 #if TARGET_OS_IPHONE
+	UIColor *tintColor;
 #elif TARGET_OS_MAC
 	ATFeedbackWindowController *feedbackWindowController;
 #endif
@@ -55,6 +56,11 @@ extern NSString *const ATIntegrationKeyUrbanAirship;
 /*! Set this to NO if you don't want to use Message Center, and instead just want unidirectional in-app feedback.
  Deprecated in 1.1.1 in favor of server-based configuration of Message Center. */
 @property (nonatomic, assign) BOOL useMessageCenter DEPRECATED_ATTRIBUTE;
+#if TARGET_OS_IPHONE
+/*! Overrides the default tintColor acquired from your app, in case you're using one that doesn't
+    look great. */
+@property (nonatomic, retain) UIColor *tintColor;
+#endif
 
 + (ATConnect *)sharedConnection;
 

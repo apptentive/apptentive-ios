@@ -233,6 +233,9 @@ enum {
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
+	if ([[ATConnect sharedConnection] tintColor] && [self.view respondsToSelector:@selector(setTintColor:)]) {
+		[self.window setTintColor:[[ATConnect sharedConnection] tintColor]];
+	}
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackChanged:) name:UITextViewTextDidChangeNotification object:self.feedbackView];
 	self.cancelButton = [[[ATCustomButton alloc] initWithButtonStyle:ATCustomButtonStyleCancel] autorelease];
 	[self.cancelButton setAction:@selector(cancelPressed:) forTarget:self];

@@ -27,6 +27,7 @@
 @dynamic sender;
 @dynamic displayTypes;
 @dynamic customData;
+@dynamic hidden;
 
 + (NSObject *)newInstanceWithJSON:(NSDictionary *)json {
 	NSAssert(NO, @"Abstract method called.");

@@ -33,6 +33,7 @@ typedef enum {
 @property (nonatomic, retain) ATMessageSender *sender;
 @property (nonatomic, retain) NSSet *displayTypes;
 @property (nonatomic, retain) NSData *customData;
+@property (nonatomic, retain) NSNumber *hidden;
 
 + (ATAbstractMessage *)findMessageWithID:(NSString *)apptentiveID;
 + (ATAbstractMessage *)findMessageWithPendingID:(NSString *)pendingID;

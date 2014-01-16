@@ -30,6 +30,17 @@
 	return dataManager;
 }
 
+- (void)testCurrentDatabaseVersion {
+	ATDataManager *dataManager = [self dataManagerWithStoreName:@"ATDataModelv4"];
+	
+	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
+	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil");
+	XCTAssertFalse([dataManager didMigrateStore], @"Should not have had to migrate the datastore.");
+	XCTAssertFalse([dataManager didFailToMigrateStore], @"Failed to migrate the datastore.");
+	XCTAssertFalse([dataManager didRemovePersistentStore], @"Shouldn't have had to delete datastore.");
+	[dataManager release];
+}
+
 - (void)testV1Upgrade {
 	// For example, we will do the following with a copy of an old data model.
 	ATDataManager *dataManager = [self dataManagerWithStoreName:@"ATDataModelv1"];
@@ -53,12 +64,12 @@
 	[dataManager release];
 }
 
-- (void)testCurrentDatabaseVersion {
+- (void)testV3Upgrade {
 	ATDataManager *dataManager = [self dataManagerWithStoreName:@"ATDataModelv3"];
 	
 	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
 	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil");
-	XCTAssertFalse([dataManager didMigrateStore], @"Should not have had to migrate the datastore.");
+	XCTAssertTrue([dataManager didMigrateStore], @"Should have had to migrate the datastore.");
 	XCTAssertFalse([dataManager didFailToMigrateStore], @"Failed to migrate the datastore.");
 	XCTAssertFalse([dataManager didRemovePersistentStore], @"Shouldn't have had to delete datastore.");
 	[dataManager release];
@@ -112,7 +123,7 @@
 	
 	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
 	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Should be able to use existing WAL database.");
-	XCTAssertFalse([dataManager didMigrateStore], @"Should not have had to migrate the datastore.");
+	XCTAssertTrue([dataManager didMigrateStore], @"Should have had to migrate the datastore (from v3 to a later version).");
 	XCTAssertFalse([dataManager didFailToMigrateStore], @"Should not have failed to migrate the persistent store.");
 	XCTAssertFalse([dataManager didRemovePersistentStore], @"Should not have had to delete the persistent store.");
 	[dataManager release];
@@ -124,7 +135,7 @@
 	
 	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
 	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil after fixing it.");
-	XCTAssertTrue([dataManager didRemovePersistentStore], @"Should have had to delete the persistent store.");
+	XCTAssertFalse([dataManager didRemovePersistentStore], @"Should not have had to delete the persistent store, now that we have v4.");
 	[dataManager release];
 }
 @end

@@ -335,6 +335,9 @@
 		582FF580184E903F00547919 /* ATMessagePanelNewUIViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 582FF57D184E903F00547919 /* ATMessagePanelNewUIViewController.h */; };
 		582FF581184E903F00547919 /* ATMessagePanelNewUIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 582FF57E184E903F00547919 /* ATMessagePanelNewUIViewController.m */; };
 		583B4707185630AF00FFE745 /* ATMessagePanelNewUIViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 582FF57F184E903F00547919 /* ATMessagePanelNewUIViewController.xib */; };
+		5843F81B1887690100C9D096 /* ATDataModel v3 to v4.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 5843F819188768F500C9D096 /* ATDataModel v3 to v4.xcmappingmodel */; };
+		5843F81C1887690200C9D096 /* ATDataModel v3 to v4.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 5843F819188768F500C9D096 /* ATDataModel v3 to v4.xcmappingmodel */; };
+		5843F81E188778B000C9D096 /* ATDataModelv4.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 5843F81D188778B000C9D096 /* ATDataModelv4.sqlite */; };
 		584647C617C426E800BFD6E6 /* ATEngagementManifestParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 584647C417C426E800BFD6E6 /* ATEngagementManifestParser.h */; };
 		584647C717C426E800BFD6E6 /* ATEngagementManifestParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 584647C517C426E800BFD6E6 /* ATEngagementManifestParser.m */; };
 		584647C817C426E800BFD6E6 /* ATEngagementManifestParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 584647C517C426E800BFD6E6 /* ATEngagementManifestParser.m */; };
@@ -675,6 +678,9 @@
 		582FF57D184E903F00547919 /* ATMessagePanelNewUIViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATMessagePanelNewUIViewController.h; path = "Message Center/ATMessagePanelNewUIViewController.h"; sourceTree = "<group>"; };
 		582FF57E184E903F00547919 /* ATMessagePanelNewUIViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATMessagePanelNewUIViewController.m; path = "Message Center/ATMessagePanelNewUIViewController.m"; sourceTree = "<group>"; };
 		582FF57F184E903F00547919 /* ATMessagePanelNewUIViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ATMessagePanelNewUIViewController.xib; path = ../xibs/ATMessagePanelNewUIViewController.xib; sourceTree = "<group>"; };
+		5843F8181887675F00C9D096 /* ATDataModel 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ATDataModel 4.xcdatamodel"; sourceTree = "<group>"; };
+		5843F819188768F500C9D096 /* ATDataModel v3 to v4.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v3 to v4.xcmappingmodel"; sourceTree = "<group>"; };
+		5843F81D188778B000C9D096 /* ATDataModelv4.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = ATDataModelv4.sqlite; sourceTree = "<group>"; };
 		584647C417C426E800BFD6E6 /* ATEngagementManifestParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATEngagementManifestParser.h; path = Engagement/Model/ATEngagementManifestParser.h; sourceTree = "<group>"; };
 		584647C517C426E800BFD6E6 /* ATEngagementManifestParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATEngagementManifestParser.m; path = Engagement/Model/ATEngagementManifestParser.m; sourceTree = "<group>"; };
 		58805F3418120BBF00210DA5 /* UIImage+ATImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ATImageEffects.m"; sourceTree = "<group>"; };
@@ -1235,6 +1241,7 @@
 				49C54BD71790B783009CCD5D /* ATDataModelv1.sqlite */,
 				58AA409F1821C162000799D8 /* ATDataModelv2.sqlite */,
 				49E740901840498100413697 /* ATDataModelv3.sqlite */,
+				5843F81D188778B000C9D096 /* ATDataModelv4.sqlite */,
 			);
 			path = data;
 			sourceTree = "<group>";
@@ -1292,6 +1299,7 @@
 			isa = PBXGroup;
 			children = (
 				49AB227D1746EE9500175F4D /* ATDataModel.xcdatamodeld */,
+				5843F819188768F500C9D096 /* ATDataModel v3 to v4.xcmappingmodel */,
 				58CD20131821B78D0071CC72 /* ATDataModel v2 to v3.xcmappingmodel */,
 				49FECBE217D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel */,
 				49F8AFCD16CC4A550070FFEA /* ATConversation.h */,
@@ -1625,6 +1633,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5843F81E188778B000C9D096 /* ATDataModelv4.sqlite in Resources */,
 				49C0028F1334137E0071F088 /* InfoPlist.strings in Resources */,
 				49AA1023138B498C0082887A /* ATInfoViewController.xib in Resources */,
 				58AA40A01821C162000799D8 /* ATDataModelv2.sqlite in Resources */,
@@ -1836,6 +1845,7 @@
 				58DCC0D7180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m in Sources */,
 				490B815F1442751F009801E9 /* ATToolbar.m in Sources */,
 				49EF341114AA7F2D00077F76 /* ATAppRatingMetrics.m in Sources */,
+				5843F81B1887690100C9D096 /* ATDataModel v3 to v4.xcmappingmodel in Sources */,
 				49EA5AB214BD08AD004F8A4D /* ATLegacyRecord.m in Sources */,
 				49EA5ABF14BD0F4D004F8A4D /* ATRecordTask.m in Sources */,
 				49CEFF5F15168B54006D8BA8 /* ATAppConfigurationUpdater.m in Sources */,
@@ -1892,6 +1902,7 @@
 				49AB22801746EE9500175F4D /* ATDataModel.xcdatamodeld in Sources */,
 				49FECBE417D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel in Sources */,
 				58CD20161821B7A80071CC72 /* ATDataModel v2 to v3.xcmappingmodel in Sources */,
+				5843F81C1887690200C9D096 /* ATDataModel v3 to v4.xcmappingmodel in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2191,9 +2202,10 @@
 			children = (
 				49B7E913178BA4E50059E776 /* ATDataModel 2.xcdatamodel */,
 				58CD20121821B4D40071CC72 /* ATDataModel 3.xcdatamodel */,
+				5843F8181887675F00C9D096 /* ATDataModel 4.xcdatamodel */,
 				49AB227E1746EE9500175F4D /* ATDataModel.xcdatamodel */,
 			);
-			currentVersion = 58CD20121821B4D40071CC72 /* ATDataModel 3.xcdatamodel */;
+			currentVersion = 5843F8181887675F00C9D096 /* ATDataModel 4.xcdatamodel */;
 			path = ATDataModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

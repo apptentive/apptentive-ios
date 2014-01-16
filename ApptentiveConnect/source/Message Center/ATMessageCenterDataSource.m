@@ -48,7 +48,7 @@
 			NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
 			[request setSortDescriptors:@[sortDescriptor]];
 			[sortDescriptor release], sortDescriptor = nil;
-			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"clientCreationTime != %d", 0];
+			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"clientCreationTime != %d AND hidden != %@", 0, @YES];
 			[request setPredicate:predicate];
 			
 			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:nil cacheName:@"at-messages-cache"];

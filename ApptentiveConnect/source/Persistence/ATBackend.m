@@ -323,6 +323,67 @@ static NSURLCache *imageCache = nil;
 	return YES;
 }
 
+- (BOOL)sendImageMessageWithImage:(UIImage *)image fromSource:(ATFeedbackImageSource)imageSource {
+	NSData *imageData = UIImageJPEGRepresentation(image, 1.0);
+	NSString *mimeType = @"image/jpeg";
+	ATFIleAttachmentSource source;
+	switch (imageSource) {
+		case ATFeedbackImageSourceCamera:
+		case ATFeedbackImageSourcePhotoLibrary:
+			source = ATFileAttachmentSourceCamera;
+			break;
+			/* for now we're going to assume camera…
+			 source = ATFileAttachmentSourcePhotoLibrary;
+			 break;
+			 */
+		case ATFeedbackImageSourceScreenshot:
+			source = ATFileAttachmentSourceScreenshot;
+			break;
+		default:
+			source = ATFileAttachmentSourceUnknown;
+			break;
+	}
+	
+	return [self sendFileMessageWithFileData:imageData andMimeType:mimeType fromSource:source];
+}
+
+- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType fromSource:(ATFIleAttachmentSource)source {
+	ATFileMessage *fileMessage = (ATFileMessage *)[ATData newEntityNamed:@"ATFileMessage"];
+	fileMessage.pendingState = @(ATPendingMessageStateSending);
+	fileMessage.sentByUser = @YES;
+	ATConversation *conversation = [ATConversationUpdater currentConversation];
+	if (conversation) {
+		ATMessageSender *sender = [ATMessageSender findSenderWithID:conversation.personID];
+		if (sender) {
+			fileMessage.sender = sender;
+		}
+	}
+	[fileMessage updateClientCreationTime];
+	
+	ATFileAttachment *fileAttachment = (ATFileAttachment *)[ATData newEntityNamed:@"ATFileAttachment"];
+	[fileAttachment setFileData:fileData];
+	[fileAttachment setMimeType:mimeType];
+	[fileAttachment setSource:@(source)];
+	fileMessage.fileAttachment = fileAttachment;
+	
+	[[[ATBackend sharedBackend] managedObjectContext] save:nil];
+	
+	// Give it a wee bit o' delay.
+	NSString *pendingMessageID = [fileMessage pendingMessageID];
+	double delayInSeconds = 1.5;
+	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+		ATMessageTask *task = [[ATMessageTask alloc] init];
+		task.pendingMessageID = pendingMessageID;
+		[[ATTaskQueue sharedTaskQueue] addTask:task];
+		[[ATTaskQueue sharedTaskQueue] start];
+		[task release], task = nil;
+	});
+	[fileMessage release], fileMessage = nil;
+	[fileAttachment release], fileAttachment = nil;
+	return YES;
+}
+
 - (NSString *)supportDirectoryPath {
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
 	NSString *path = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;

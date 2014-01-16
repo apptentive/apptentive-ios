@@ -434,60 +434,8 @@
 	if (actionSheet == sendImageActionSheet) {
 		if (buttonIndex == 0) {
 			if (pickedImage) {
-				@synchronized(self) {
-					ATFileMessage *fileMessage = (ATFileMessage *)[ATData newEntityNamed:@"ATFileMessage"];
-					ATFileAttachment *fileAttachment = (ATFileAttachment *)[ATData newEntityNamed:@"ATFileAttachment"];
-					fileMessage.pendingState = @(ATPendingMessageStateSending);
-					fileMessage.sentByUser = @YES;
-					ATConversation *conversation = [ATConversationUpdater currentConversation];
-					if (conversation) {
-						ATMessageSender *sender = [ATMessageSender findSenderWithID:conversation.personID];
-						if (sender) {
-							fileMessage.sender = sender;
-						}
-					}
-					[fileMessage updateClientCreationTime];
-					fileMessage.fileAttachment = fileAttachment;
-					
-					[fileAttachment setFileData:UIImageJPEGRepresentation(pickedImage, 1.0)];
-					[fileAttachment setMimeType:@"image/jpeg"];
-					
-					switch (pickedImageSource) {
-						case ATFeedbackImageSourceCamera:
-						case ATFeedbackImageSourcePhotoLibrary:
-							[fileAttachment setSource:@(ATFileAttachmentSourceCamera)];
-							break;
-							/* for now we're going to assume camera…
-							 [fileAttachment setSource:@(ATFileAttachmentSourcePhotoLibrary)];
-							 break;
-							 */
-						case ATFeedbackImageSourceScreenshot:
-							[fileAttachment setSource:@(ATFileAttachmentSourceScreenshot)];
-							break;
-						default:
-							[fileAttachment setSource:@(ATFileAttachmentSourceUnknown)];
-							break;
-					}
-					
-					
-					[[[ATBackend sharedBackend] managedObjectContext] save:nil];
-					
-					// Give it a wee bit o' delay.
-					NSString *pendingMessageID = [fileMessage pendingMessageID];
-					double delayInSeconds = 1.5;
-					dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-					dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-						ATMessageTask *task = [[ATMessageTask alloc] init];
-						task.pendingMessageID = pendingMessageID;
-						[[ATTaskQueue sharedTaskQueue] addTask:task];
-						[[ATTaskQueue sharedTaskQueue] start];
-						[task release], task = nil;
-					});
-					[fileMessage release], fileMessage = nil;
-					[fileAttachment release], fileAttachment = nil;
-					[pickedImage release], pickedImage = nil;
-				}
-				
+				[[ATBackend sharedBackend] sendImageMessageWithImage:pickedImage fromSource:pickedImageSource];
+				[pickedImage release], pickedImage = nil;
 			}
 		} else if (buttonIndex == 1) {
 			[pickedImage release], pickedImage = nil;

@@ -84,6 +84,13 @@ NSString *const ATBackendBecameReadyNotification;
 /*! Use this to send an automated message. */
 - (void)sendAutomatedMessageWithTitle:(NSString *)title body:(NSString *)body;
 
+/*! Use this to send an ATTextMessage. */
+- (BOOL)sendTextMessageWithBody:(NSString *)body completion:(void (^)(NSString *pendingMessageID))completion;
+
+/*! Send ATFileMessage messages.*/
+- (BOOL)sendImageMessageWithImage:(UIImage *)image fromSource:(ATFeedbackImageSource)imageSource;
+- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType fromSource:(ATFIleAttachmentSource)source;
+
 - (NSString *)supportDirectoryPath;
 
 /*! Path to directory for storing attachments. */

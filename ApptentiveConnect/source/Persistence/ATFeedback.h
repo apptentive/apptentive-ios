@@ -30,6 +30,7 @@ typedef enum {
 	ATFeedbackImageSourceScreenshot,
 	ATFeedbackImageSourceCamera,
 	ATFeedbackImageSourcePhotoLibrary,
+	ATFeedbackImageSourceProgrammatic,
 } ATFeedbackImageSource;
 
 @interface ATFeedback : ATLegacyRecord <NSCoding> {

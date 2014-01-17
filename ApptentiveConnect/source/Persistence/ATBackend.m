@@ -282,11 +282,17 @@ static NSURLCache *imageCache = nil;
 }
 
 - (BOOL)sendTextMessageWithBody:(NSString *)body completion:(void (^)(NSString *pendingMessageID))completion {
+	return [self sendTextMessageWithBody:body hiddenOnClient:NO completion:completion];
+}
+
+- (BOOL)sendTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden completion:(void (^)(NSString *pendingMessageID))completion {
 	ATTextMessage *message = (ATTextMessage *)[ATData newEntityNamed:@"ATTextMessage"];
 	[message setup];
 	message.body = body;
 	message.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
 	message.sentByUser = @YES;
+	message.hidden = @(hidden);
+	
 	ATConversation *conversation = [ATConversationUpdater currentConversation];
 	if (conversation) {
 		ATMessageSender *sender = [ATMessageSender findSenderWithID:conversation.personID];
@@ -324,6 +330,10 @@ static NSURLCache *imageCache = nil;
 }
 
 - (BOOL)sendImageMessageWithImage:(UIImage *)image fromSource:(ATFeedbackImageSource)imageSource {
+	return [self sendImageMessageWithImage:image hiddenOnClient:NO fromSource:imageSource];
+}
+
+- (BOOL)sendImageMessageWithImage:(UIImage *)image hiddenOnClient:(BOOL)hidden fromSource:(ATFeedbackImageSource)imageSource {
 	NSData *imageData = UIImageJPEGRepresentation(image, 1.0);
 	NSString *mimeType = @"image/jpeg";
 	ATFIleAttachmentSource source;
@@ -339,18 +349,28 @@ static NSURLCache *imageCache = nil;
 		case ATFeedbackImageSourceScreenshot:
 			source = ATFileAttachmentSourceScreenshot;
 			break;
+		case ATFeedbackImageSourceProgrammatic:
+			source = ATFIleAttachmentSourceProgrammatic;
+			break;
 		default:
 			source = ATFileAttachmentSourceUnknown;
 			break;
 	}
 	
-	return [self sendFileMessageWithFileData:imageData andMimeType:mimeType fromSource:source];
+	return [self sendFileMessageWithFileData:imageData andMimeType:mimeType hiddenOnClient:hidden fromSource:source];
 }
 
+
 - (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType fromSource:(ATFIleAttachmentSource)source {
+	return [self sendFileMessageWithFileData:fileData andMimeType:mimeType hiddenOnClient:NO fromSource:source];
+}
+
+- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType hiddenOnClient:(BOOL)hidden fromSource:(ATFIleAttachmentSource)source {
 	ATFileMessage *fileMessage = (ATFileMessage *)[ATData newEntityNamed:@"ATFileMessage"];
 	fileMessage.pendingState = @(ATPendingMessageStateSending);
 	fileMessage.sentByUser = @YES;
+	fileMessage.hidden = @(hidden);
+	
 	ATConversation *conversation = [ATConversationUpdater currentConversation];
 	if (conversation) {
 		ATMessageSender *sender = [ATMessageSender findSenderWithID:conversation.personID];

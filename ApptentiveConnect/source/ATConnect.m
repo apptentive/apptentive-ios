@@ -131,6 +131,18 @@ NSString *const ATIntegrationKeyUrbanAirship = @"urban_airship";
 	}
 }
 
+- (void)sendAttachmentText:(NSString *)text {
+    [[ATBackend sharedBackend] sendTextMessageWithBody:text hiddenOnClient:YES completion:nil];
+}
+
+- (void)sendAttachmentImage:(UIImage *)image {
+	[[ATBackend sharedBackend] sendImageMessageWithImage:image hiddenOnClient:YES fromSource:ATFeedbackImageSourceProgrammatic];
+}
+
+- (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType {
+	[[ATBackend sharedBackend] sendFileMessageWithFileData:fileData andMimeType:mimeType hiddenOnClient:YES fromSource:ATFIleAttachmentSourceProgrammatic];
+}
+
 - (NSDictionary *)customPersonData {
 	return customPersonData;
 }

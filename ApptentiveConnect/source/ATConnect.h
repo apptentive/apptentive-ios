@@ -96,7 +96,16 @@ extern NSString *const ATIntegrationKeyUrbanAirship;
 - (IBAction)showFeedbackWindow:(id)sender;
 #endif
 
-/*! Adds an additional data field to any feedback sent. object should be an NSDate, NSNumber, or NSString. */
+/*!
+ * Attach text, images, or files to the user's feedback.
+ * These attachments will appear in your online Apptentive dashboard,
+ * but will *not* appear in Message Center on the device.
+ */
+- (void)sendAttachmentText:(NSString *)text;
+- (void)sendAttachmentImage:(UIImage *)image;
+- (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType;
+
+/*! Adds an additional data field to any feedback sent. Object should be an NSDate, NSNumber, or NSString. */
 - (void)addCustomPersonData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
 - (void)addCustomDeviceData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
 

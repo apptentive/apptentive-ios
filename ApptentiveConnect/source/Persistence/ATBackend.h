@@ -81,8 +81,19 @@ NSString *const ATBackendBecameReadyNotification;
     will be sent in the background. */
 - (void)sendFeedback:(ATFeedback *)feedback;
 
-/*! Use this to send an automated message. */
+/*! Send ATAutomatedMessage messages. */
 - (void)sendAutomatedMessageWithTitle:(NSString *)title body:(NSString *)body;
+
+/*! Send ATTextMessage messages. */
+- (BOOL)sendTextMessageWithBody:(NSString *)body completion:(void (^)(NSString *pendingMessageID))completion;
+- (BOOL)sendTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden completion:(void (^)(NSString *pendingMessageID))completion;
+
+/*! Send ATFileMessage messages. */
+- (BOOL)sendImageMessageWithImage:(UIImage *)image fromSource:(ATFeedbackImageSource)imageSource;
+- (BOOL)sendImageMessageWithImage:(UIImage *)image hiddenOnClient:(BOOL)hidden fromSource:(ATFeedbackImageSource)imageSource;
+
+- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType fromSource:(ATFIleAttachmentSource)source;
+- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType hiddenOnClient:(BOOL)hidden fromSource:(ATFIleAttachmentSource)source;
 
 - (NSString *)supportDirectoryPath;
 

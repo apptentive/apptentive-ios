@@ -16,6 +16,7 @@ typedef enum {
 	ATFileAttachmentSourceScreenshot,
 	ATFileAttachmentSourceCamera,
 	ATFileAttachmentSourcePhotoLibrary,
+	ATFIleAttachmentSourceProgrammatic,
 } ATFIleAttachmentSource;
 
 //TODO: Add CGSize for images?

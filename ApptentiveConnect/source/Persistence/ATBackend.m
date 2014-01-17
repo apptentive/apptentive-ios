@@ -282,11 +282,17 @@ static NSURLCache *imageCache = nil;
 }
 
 - (BOOL)sendTextMessageWithBody:(NSString *)body completion:(void (^)(NSString *pendingMessageID))completion {
+	return [self sendTextMessageWithBody:body hiddenOnClient:NO completion:completion];
+}
+
+- (BOOL)sendTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden completion:(void (^)(NSString *pendingMessageID))completion {
 	ATTextMessage *message = (ATTextMessage *)[ATData newEntityNamed:@"ATTextMessage"];
 	[message setup];
 	message.body = body;
 	message.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
 	message.sentByUser = @YES;
+	message.hidden = @(hidden);
+	
 	ATConversation *conversation = [ATConversationUpdater currentConversation];
 	if (conversation) {
 		ATMessageSender *sender = [ATMessageSender findSenderWithID:conversation.personID];
@@ -294,7 +300,11 @@ static NSURLCache *imageCache = nil;
 			message.sender = sender;
 		}
 	}
-	[self attachCustomDataToMessage:message];
+	
+	if (!hidden) {
+		[self attachCustomDataToMessage:message];
+	}
+	
 	[message updateClientCreationTime];
 	NSError *error = nil;
 	if (![[self managedObjectContext] save:&error]) {
@@ -320,6 +330,81 @@ static NSURLCache *imageCache = nil;
 		[task release], task = nil;
 	});
 	[message release], message = nil;
+	return YES;
+}
+
+- (BOOL)sendImageMessageWithImage:(UIImage *)image fromSource:(ATFeedbackImageSource)imageSource {
+	return [self sendImageMessageWithImage:image hiddenOnClient:NO fromSource:imageSource];
+}
+
+- (BOOL)sendImageMessageWithImage:(UIImage *)image hiddenOnClient:(BOOL)hidden fromSource:(ATFeedbackImageSource)imageSource {
+	NSData *imageData = UIImageJPEGRepresentation(image, 1.0);
+	NSString *mimeType = @"image/jpeg";
+	ATFIleAttachmentSource source;
+	switch (imageSource) {
+		case ATFeedbackImageSourceCamera:
+		case ATFeedbackImageSourcePhotoLibrary:
+			source = ATFileAttachmentSourceCamera;
+			break;
+			/* for now we're going to assume camera…
+			 source = ATFileAttachmentSourcePhotoLibrary;
+			 break;
+			 */
+		case ATFeedbackImageSourceScreenshot:
+			source = ATFileAttachmentSourceScreenshot;
+			break;
+		case ATFeedbackImageSourceProgrammatic:
+			source = ATFIleAttachmentSourceProgrammatic;
+			break;
+		default:
+			source = ATFileAttachmentSourceUnknown;
+			break;
+	}
+	
+	return [self sendFileMessageWithFileData:imageData andMimeType:mimeType hiddenOnClient:hidden fromSource:source];
+}
+
+
+- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType fromSource:(ATFIleAttachmentSource)source {
+	return [self sendFileMessageWithFileData:fileData andMimeType:mimeType hiddenOnClient:NO fromSource:source];
+}
+
+- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType hiddenOnClient:(BOOL)hidden fromSource:(ATFIleAttachmentSource)source {
+	ATFileMessage *fileMessage = (ATFileMessage *)[ATData newEntityNamed:@"ATFileMessage"];
+	fileMessage.pendingState = @(ATPendingMessageStateSending);
+	fileMessage.sentByUser = @YES;
+	fileMessage.hidden = @(hidden);
+	
+	ATConversation *conversation = [ATConversationUpdater currentConversation];
+	if (conversation) {
+		ATMessageSender *sender = [ATMessageSender findSenderWithID:conversation.personID];
+		if (sender) {
+			fileMessage.sender = sender;
+		}
+	}
+	[fileMessage updateClientCreationTime];
+	
+	ATFileAttachment *fileAttachment = (ATFileAttachment *)[ATData newEntityNamed:@"ATFileAttachment"];
+	[fileAttachment setFileData:fileData];
+	[fileAttachment setMimeType:mimeType];
+	[fileAttachment setSource:@(source)];
+	fileMessage.fileAttachment = fileAttachment;
+	
+	[[[ATBackend sharedBackend] managedObjectContext] save:nil];
+	
+	// Give it a wee bit o' delay.
+	NSString *pendingMessageID = [fileMessage pendingMessageID];
+	double delayInSeconds = 1.5;
+	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+		ATMessageTask *task = [[ATMessageTask alloc] init];
+		task.pendingMessageID = pendingMessageID;
+		[[ATTaskQueue sharedTaskQueue] addTask:task];
+		[[ATTaskQueue sharedTaskQueue] start];
+		[task release], task = nil;
+	});
+	[fileMessage release], fileMessage = nil;
+	[fileAttachment release], fileAttachment = nil;
 	return YES;
 }
 
@@ -470,7 +555,8 @@ static NSURLCache *imageCache = nil;
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData {
 	self.currentCustomData = customData;
 	
-	NSUInteger messageCount = [ATData countEntityNamed:@"ATAbstractMessage" withPredicate:nil];
+	NSPredicate *notHidden = [NSPredicate predicateWithFormat:@"hidden != %@", @YES];
+	NSUInteger messageCount = [ATData countEntityNamed:@"ATAbstractMessage" withPredicate:notHidden];
 	if (messageCount == 0 || ![[ATConnect sharedConnection] messageCenterEnabled]) {
 		NSString *title = ATLocalizedString(@"Give Feedback", @"First feedback screen title.");
 		NSString *body = [NSString stringWithFormat:ATLocalizedString(@"Please let us know how to make %@ better for you!", @"Feedback screen body. Parameter is the app name."), [self appName]];

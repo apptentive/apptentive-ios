@@ -149,6 +149,10 @@
 			result[@"custom_data"] = customDataDictionary;
 		}
 	}
+	if (self.hidden != nil) {
+		result[@"hidden"] = self.hidden;
+	}
+	
 	return result;
 }
 

@@ -938,7 +938,6 @@ static inline CGSize TTTATTRIBUTEDLABEL_PREPEND(CTFramesetterSuggestFrameSizeFor
                 CGContextAddLineToPoint(c, runBounds.origin.x + runBounds.size.width, y);
                 
                 CGContextStrokePath(c);
-				CFRelease(font);
             }
         }
         

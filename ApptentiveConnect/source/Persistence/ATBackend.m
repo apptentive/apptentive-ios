@@ -555,7 +555,8 @@ static NSURLCache *imageCache = nil;
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData {
 	self.currentCustomData = customData;
 	
-	NSUInteger messageCount = [ATData countEntityNamed:@"ATAbstractMessage" withPredicate:nil];
+	NSPredicate *notHidden = [NSPredicate predicateWithFormat:@"hidden != %@", @YES];
+	NSUInteger messageCount = [ATData countEntityNamed:@"ATAbstractMessage" withPredicate:notHidden];
 	if (messageCount == 0 || ![[ATConnect sharedConnection] messageCenterEnabled]) {
 		NSString *title = ATLocalizedString(@"Give Feedback", @"First feedback screen title.");
 		NSString *body = [NSString stringWithFormat:ATLocalizedString(@"Please let us know how to make %@ better for you!", @"Feedback screen body. Parameter is the app name."), [self appName]];

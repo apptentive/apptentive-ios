@@ -300,7 +300,11 @@ static NSURLCache *imageCache = nil;
 			message.sender = sender;
 		}
 	}
-	[self attachCustomDataToMessage:message];
+	
+	if (!hidden) {
+		[self attachCustomDataToMessage:message];
+	}
+	
 	[message updateClientCreationTime];
 	NSError *error = nil;
 	if (![[self managedObjectContext] save:&error]) {

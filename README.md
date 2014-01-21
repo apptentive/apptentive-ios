@@ -155,19 +155,19 @@ startup.
 
 1. Open up your app's `AppDelegate.m` file.
 2. Under `#import "AppDelegate.h"`, import the `ATConnect.h` file.
-3. Under implementation, edit the `applicationDidFinishLaunching` method to look like so:
+3. Under implementation, edit the `application:didFinishLaunchingWithOptions:` method to look like so:
 
 ``` objective-c
 #include "ATConnect.h"
 // ...
-- (void)applicationDidFinishLaunching:(UIApplication *)application /* ... */ {
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     ATConnect *connection = [ATConnect sharedConnection];
     connection.apiKey = @"<Your API Key>";
     // ...
 }
 ```
 
-If there isn't an `applicationDidFinishLaunching` method, add the above code snippet to your App Delegate's implementation.
+If there isn't an `application:didFinishLaunchingWithOptions:` method, add the above code snippet elsewhere in your App Delegate's implementation.
 
 As soon as you set the API key on the shared connection object, any queued feedback
 will start to upload, pending network availability. You also should not have

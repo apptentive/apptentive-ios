@@ -4,7 +4,7 @@
         <attribute name="customData" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="errorMessageJSON" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="errorOccurred" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
-        <attribute name="hidden" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="hidden" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="pendingMessageID" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="pendingState" attributeType="Integer 32" defaultValueString="YES" syncable="YES"/>
         <attribute name="priority" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -64,16 +64,16 @@
         <attribute name="forced" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
     </entity>
     <elements>
-        <element name="ATAbstractMessage" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="ATAutomatedMessage" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="ATEvent" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="ATFileAttachment" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="ATFileMessage" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="ATMessageDisplayType" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="ATMessageSender" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="ATRecord" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="ATSurveyResponse" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="ATTextMessage" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="ATUpgradeRequestMessage" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ATAbstractMessage" positionX="0" positionY="0" width="128" height="208"/>
+        <element name="ATAutomatedMessage" positionX="0" positionY="0" width="128" height="60"/>
+        <element name="ATEvent" positionX="0" positionY="0" width="128" height="90"/>
+        <element name="ATFileAttachment" positionX="0" positionY="0" width="128" height="150"/>
+        <element name="ATFileMessage" positionX="0" positionY="0" width="128" height="60"/>
+        <element name="ATMessageDisplayType" positionX="0" positionY="0" width="128" height="75"/>
+        <element name="ATMessageSender" positionX="0" positionY="0" width="128" height="120"/>
+        <element name="ATRecord" positionX="0" positionY="0" width="128" height="120"/>
+        <element name="ATSurveyResponse" positionX="0" positionY="0" width="128" height="105"/>
+        <element name="ATTextMessage" positionX="0" positionY="0" width="128" height="60"/>
+        <element name="ATUpgradeRequestMessage" positionX="0" positionY="0" width="128" height="60"/>
     </elements>
 </model>

@@ -3,7 +3,11 @@
 
 Fixes:
 
+* [Issue #70](https://github.com/apptentive/apptentive-ios/issues/70) unreadCount incremented when typing a message
+* IOS-310 unreadMessageCount incremented when typing a message
+* IOS-341 Investigate loading of initial config file at app launch.
 * IOS-356 Can't see send button in Message Center with white tintColor
+* IOS-357 Add support for hidden text/file messages
 
 2014-01-10 wooster, pkamb v1.2.5
 --------------------------------

@@ -2,9 +2,16 @@ This document tracks changes to the API between versions.
 
 # 1.2.6
 
+We added a workaround for inherited `tintColor` values which don't look good with our UI.
+
+We also added some new methods for adding files to the user's feedback. The files will not be shown in message center, and are useful for sending debug logs.
+
 ## ATConnect
 
 * Added `@property tintColor` for overriding the tint color in our UI, in case you're using one that doesn't work well with it in your app.
+* Added `- (void)sendAttachmentText:(NSString *)text`
+* Added `- (void)sendAttachmentImage:(UIImage *)image`
+* Added `- (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType`
 
 # 1.2.5
 

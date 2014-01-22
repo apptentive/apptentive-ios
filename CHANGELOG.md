@@ -3,6 +3,7 @@
 
 Fixes:
 
+* IOS-172 Prevent duplicate Message Center automated messages
 * [Issue #70](https://github.com/apptentive/apptentive-ios/issues/70) unreadCount incremented when typing a message
 * IOS-310 unreadMessageCount incremented when typing a message
 * IOS-341 Investigate loading of initial config file at app launch.

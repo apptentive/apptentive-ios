@@ -115,7 +115,11 @@
 	ATSurveyQuestionValidationErrorType error = ATSurveyQuestionValidationErrorNone;
 	
 	if (self.type == ATSurveyQuestionTypeSingeLine) {
-		if (self.responseIsRequired && (self.answerText == nil || [self.answerText length] == 0)) {
+		NSString *trimmedText = self.answerText;
+		if (trimmedText) {
+			trimmedText = [trimmedText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+		}
+		if (self.responseIsRequired && (trimmedText == nil || [trimmedText length] == 0)) {
 			error = ATSurveyQuestionValidationErrorMissingRequiredAnswer;
 		}
 	} else if (self.type == ATSurveyQuestionTypeMultipleChoice) {

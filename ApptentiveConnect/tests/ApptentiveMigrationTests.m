@@ -8,6 +8,8 @@
 
 #import "ApptentiveMigrationTests.h"
 #import "ATDataManager.h"
+#import "ATAbstractMessage.h"
+#import "ATTextMessage.h"
 
 @implementation ApptentiveMigrationTests
 - (ATDataManager *)dataManagerWithStoreName:(NSString *)name {
@@ -38,6 +40,27 @@
 	XCTAssertFalse([dataManager didMigrateStore], @"Should not have had to migrate the datastore.");
 	XCTAssertFalse([dataManager didFailToMigrateStore], @"Failed to migrate the datastore.");
 	XCTAssertFalse([dataManager didRemovePersistentStore], @"Shouldn't have had to delete datastore.");
+	
+	// Test that default value of hidden is NO for existing objects.
+	NSManagedObjectContext *moc = [dataManager managedObjectContext];
+	NSFetchRequest *request = [[NSFetchRequest alloc] init];
+	@try {
+		[request setEntity:[NSEntityDescription entityForName:@"ATAbstractMessage" inManagedObjectContext:moc]];
+		[request setFetchBatchSize:20];
+		NSArray *results = [moc executeFetchRequest:request error:nil];
+		XCTAssertTrue([results count] > 0, @"No messages found after database migration.");
+		for (NSManagedObject *c in results) {
+			ATAbstractMessage *message = (ATAbstractMessage *)c;
+			XCTAssertNotNil(message.hidden, @"Messages should be visible by default after migration.");
+			XCTAssertFalse([(NSNumber *)message.hidden boolValue], @"Messages should be visible by default after migration.");
+		}
+	}
+	@catch (NSException *exception) {
+		XCTFail(@"Unable to perform query: %@", exception);
+	}
+	@finally {
+		[request release], request = nil;
+	}
 	[dataManager release];
 }
 

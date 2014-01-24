@@ -65,18 +65,6 @@
 	}
 }
 
-- (void)setValue:(id)value forKey:(NSString *)key {
-	NSDictionary *dictionary = [self dictionaryForCurrentData];
-	NSMutableDictionary *mutableDictionary = nil;
-	if (dictionary == nil) {
-		mutableDictionary = [NSMutableDictionary dictionary];
-	} else {
-		mutableDictionary = [[dictionary mutableCopy] autorelease];
-	}
-	[mutableDictionary setValue:value forKey:key];
-	[self setDictionaryData:[self dataForDictionary:mutableDictionary]];
-}
-
 - (void)addEntriesFromDictionary:(NSDictionary *)incomingDictionary {
 	NSDictionary *dictionary = [self dictionaryForCurrentData];
 	NSMutableDictionary *mutableDictionary = nil;

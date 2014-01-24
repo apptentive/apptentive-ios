@@ -20,6 +20,5 @@
 @property (nonatomic, retain) NSData *dictionaryData;
 @property (nonatomic, retain) NSString *label;
 
-- (void)setValue:(id)value forKey:(NSString *)key;
 - (void)addEntriesFromDictionary:(NSDictionary *)dictionary;
 @end

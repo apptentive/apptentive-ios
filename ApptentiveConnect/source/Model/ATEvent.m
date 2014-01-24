@@ -47,6 +47,11 @@
 	if (self.pendingEventID != nil) {
 		result[@"nonce"] = self.pendingEventID;
 	}
+	
+	// Monitor that the Event payload has not been dropped on retry
+	NSAssert((result && result.count > 0), @"Event json should return a result.");
+	NSAssert((result[@"nonce"] && result[@"label"]), @"Event json should include a `label` and `nonce`.");
+		
 	return @{@"event":result};
 }
 

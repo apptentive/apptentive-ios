@@ -326,4 +326,9 @@
 	[self textViewDidChange:self.feedbackView];
 }
 
+- (void)updateSendButtonState {
+	NSString *trimmedText = [self.feedbackView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	self.sendButtonNewUI.enabled = [trimmedText length] > 0;
+}
+
 @end

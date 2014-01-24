@@ -15,6 +15,9 @@
 #include <sys/sysctl.h>
 #endif
 #include <stdlib.h>
+#if TARGET_OS_IPHONE
+#import <sys/utsname.h>
+#endif
 
 #define KINDA_EQUALS(a, b) (fabs(a - b) < 0.1)
 #define DEG_TO_RAD(angle) ((M_PI * angle) / 180.0)
@@ -332,7 +335,9 @@ static NSDateFormatter *dateFormatter = nil;
 
 + (NSString *)currentMachineName {
 #if TARGET_OS_IPHONE
-	return [[UIDevice currentDevice] model];
+	struct utsname systemInfo;
+	uname(&systemInfo);
+	return [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
 #elif TARGET_OS_MAC
 	char modelBuffer[256];
 	size_t sz = sizeof(modelBuffer);
@@ -344,6 +349,7 @@ static NSDateFormatter *dateFormatter = nil;
 	return result;
 #endif
 }
+
 + (NSString *)currentSystemName {
 #if TARGET_OS_IPHONE
 	return [[UIDevice currentDevice] systemName];

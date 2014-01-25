@@ -43,6 +43,41 @@
 	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Install date");
 }
 
+- (void)testUnknownKeyInCriteria {
+	ATInteraction *interaction = [[ATInteraction alloc] init];
+	interaction.criteria = @{@"days_since_install": @6, @"days_since_upgrade": @6};
+	ATInteractionUsageData *usageData = [ATInteractionUsageData usageDataForInteraction:interaction
+																	   daysSinceInstall:@6
+																	   daysSinceUpgrade:@6
+																	 applicationVersion:@"1.8.9"
+																	   applicationBuild:@"39"
+																  codePointInvokesTotal:@{}
+																codePointInvokesVersion:@{}
+																codePointInvokesTimeAgo:@{}
+																interactionInvokesTotal:@{}
+															  interactionInvokesVersion:@{}
+															  interactionInvokesTimeAgo:@{}];
+		
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"All keys are known, thus the criteria is met.");
+	
+	interaction.criteria = @{@"days_since_install": @6, @"unknown_key": @"criteria_should_not_be_met"};
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Criteria should not be met if the criteria includes a key that the client does not recognize.");
+}
+
+- (void)testEmptyCriteria {
+	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	
+	interaction.criteria = nil;
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Dictionary with nil criteria");
+
+	interaction.criteria = @{};
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Empty criteria dictionary with no keys");
+	
+	interaction.criteria = @{@"": @6};
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Criteria with a key that is an empty string should fail (if usage data does not match).");
+}
+
 - (void)testInteractionCriteriaDaysSnceInstall {
 	ATInteraction *interaction = [[ATInteraction alloc] init];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];

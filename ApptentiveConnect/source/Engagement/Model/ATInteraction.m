@@ -71,16 +71,22 @@
 
 - (BOOL)criteriaAreMetForUsageData:(ATInteractionUsageData *)usageData {
 	BOOL criteriaAreMet = NO;
-	NSPredicate *predicate = [self criteriaPredicate];
-	if (predicate) {
-		criteriaAreMet = [predicate evaluateWithObject:[usageData predicateEvaluationDictionary]];
-		if (!criteriaAreMet) {
-			ATLogInfo(@"Interaction predicate failed evaluation.");
-			ATLogInfo(@"Predicate: %@", predicate);
-			ATLogInfo(@"Interaction usage data: %@", [usageData predicateEvaluationDictionary]);
-		}
+	
+	// Interactions without criteria should evaluate to True.
+	if (!self.criteria || self.criteria.count == 0) {
+		criteriaAreMet = YES;
 	} else {
-		ATLogError(@"Interaction predicate not correct");
+		NSPredicate *predicate = [self criteriaPredicate];
+		if (predicate) {
+			criteriaAreMet = [predicate evaluateWithObject:[usageData predicateEvaluationDictionary]];
+			if (!criteriaAreMet) {
+				ATLogInfo(@"Interaction predicate failed evaluation.");
+				ATLogInfo(@"Predicate: %@", predicate);
+				ATLogInfo(@"Interaction usage data: %@", [usageData predicateEvaluationDictionary]);
+			}
+		} else {
+			ATLogError(@"Interaction predicate not correct");
+		}
 	}
 	
 	return criteriaAreMet;

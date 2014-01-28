@@ -69,10 +69,10 @@
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
 	
 	interaction.criteria = nil;
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Dictionary with nil criteria");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Dictionary with nil criteria should evaluate to False.");
 
 	interaction.criteria = @{};
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Empty criteria dictionary with no keys");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Empty criteria dictionary with no keys should evaluate to True.");
 	
 	interaction.criteria = @{@"": @6};
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Criteria with a key that is an empty string should fail (if usage data does not match).");

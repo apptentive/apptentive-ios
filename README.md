@@ -340,6 +340,18 @@ Custom data should be of type `NSString`, `NSNumber`, `NSDate`, or `NSNull`.
 
 When Message Center is presented with custom data, that custom data will be attached to the first message in the Message Center session.
 
+#### Attachments
+
+The methods below can be used to attach text, images, or files to the user's feedback.
+
+These attachments will appear in your online Apptentive dashboard, but will *not* appear in Message Center on the user's device. They may be useful for sending debug logs or other pertinent information.
+ 
+``` objective-c
+- (void)sendAttachmentText:(NSString *)text;
+- (void)sendAttachmentImage:(UIImage *)image;
+- (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType;
+```
+
 #### Push Notifications
 
 Apptentive can integrate with your existing [Urban Airship](http://urbanairship.com/) account to offer push notifications when new Apptentive messages are available.

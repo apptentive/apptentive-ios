@@ -1,8 +1,10 @@
-2014-01-?? wooster, pkamb v1.2.6 (in progress)
+2014-01-27 wooster, pkamb v1.2.6
 --------------------------------
 
 Fixes:
 
+* IOS-368 Added cases for always or never showing an interaction based on its criteria.
+* IOS-363 Changed key to "hardware" from "model". Human readable string "model" will now be set on server.
 * IOS-172 Prevent duplicate Message Center automated messages
 * [Issue #70](https://github.com/apptentive/apptentive-ios/issues/70) unreadCount incremented when typing a message
 * IOS-310 unreadMessageCount incremented when typing a message

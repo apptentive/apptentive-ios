@@ -46,7 +46,12 @@
 	double delayInSeconds = 2.0;
 	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
 	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-		[[ATConnect sharedConnection] engage:@"app.launch" fromViewController:self.navigationController];
+		BOOL didEngageInteraction = [[ATConnect sharedConnection] engage:@"app.launch" fromViewController:self.navigationController];
+		if (didEngageInteraction) {
+			NSLog(@"Successfully engaged an interaction for code point \"app.launch\"");
+		} else {
+			NSLog(@"Did not engage any interactions for code point \"app.launch\"");
+		}
 	});
 	
 	return YES;

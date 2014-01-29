@@ -215,8 +215,8 @@ NSString *const ATIntegrationKeyUrbanAirship = @"urban_airship";
 
 #if TARGET_OS_IPHONE
 
-- (void)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController {
-	[[ATEngagementBackend sharedBackend] engage:codePoint fromViewController:viewController];
+- (BOOL)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController {
+	return [[ATEngagementBackend sharedBackend] engage:codePoint fromViewController:viewController];
 }
 
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController {

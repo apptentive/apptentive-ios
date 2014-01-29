@@ -81,8 +81,10 @@ extern NSString *const ATIntegrationKeyUrbanAirship;
  
  For example, if you have an upgrade message to display on app launch, you might call with codePoint set to 
  @"app.launch" here, along with the view controller an upgrade message might be displayed from.
+ 
+ Returns whether or not an interaction was successfully found and run.
  */
-- (void)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController;
+- (BOOL)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController;
 
 /*!
  * Dismisses the message center. You normally won't need to call this.

@@ -1,5 +1,13 @@
+2014-02-?? wooster, pkamb v1.2.7a
+--------------------------------
+
+Fixes:
+
+* IOS-354 Add BOOL return type to `engage:` method
+
 2014-01-27 wooster, pkamb v1.2.6
 --------------------------------
+This release adds support for message attachments. These text, image, or file attachments will be seen in your Apptentive online dashboard, but will not be visible in Message Center on the device.
 
 Fixes:
 

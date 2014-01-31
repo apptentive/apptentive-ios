@@ -164,14 +164,18 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	return nil;
 }
 
-- (void)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController {
+- (BOOL)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController {
 	[self codePointWasEngaged:codePoint];
 	
+	BOOL didEngageInteraction = NO;
 	ATInteraction *interaction = [self interactionForCodePoint:codePoint];
 	if (interaction) {
 		[self presentInteraction:interaction fromViewController:viewController];
 		[self interactionWasEngaged:interaction];
+		didEngageInteraction = YES;
 	}
+	
+	return didEngageInteraction;
 }
 
 - (void)codePointWasSeen:(NSString *)codePoint {

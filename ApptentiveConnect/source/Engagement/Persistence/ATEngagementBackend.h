@@ -36,7 +36,7 @@ NSString *const ATEngagementInteractionsInvokesLastDateKey;
 - (NSArray *)interactionsForCodePoint:(NSString *)codePoint;
 - (ATInteraction *)interactionForCodePoint:(NSString *)codePoint;
 
-- (void)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController;
+- (BOOL)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController;
 - (void)codePointWasSeen:(NSString *)codePoint;
 - (void)codePointWasEngaged:(NSString *)codePoint;
 - (void)interactionWasSeen:(NSString *)interactionID;

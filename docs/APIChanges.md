@@ -1,5 +1,13 @@
 This document tracks changes to the API between versions.
 
+# 1.2.7
+
+Added a `BOOL` return type to the `engage:` method.
+
+## ATConnect
+
+* Replace `- (void)engage:fromViewController:' with `- (BOOL)engage:fromViewController:`
+
 # 1.2.6
 
 We added a workaround for inherited `tintColor` values which don't look good with our UI.

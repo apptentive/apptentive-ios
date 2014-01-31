@@ -49,8 +49,15 @@
 	}
 	
 	// Monitor that the Event payload has not been dropped on retry
-	NSAssert((result && result.count > 0), @"Event json should return a result.");
-	NSAssert((result[@"nonce"] && result[@"label"]), @"Event json should include a `label` and `nonce`.");
+	if (!result || result.count == 0) {
+		ATLogError(@"Event json should return a result.");
+	}
+	if (!result[@"label"]) {
+		ATLogError(@"Event json should include a `label`.");
+	}
+	if (!result[@"nonce"]) {
+		ATLogError(@"Event json should include a `nonce`.");
+	}
 		
 	return @{@"event":result};
 }

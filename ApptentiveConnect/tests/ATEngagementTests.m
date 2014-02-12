@@ -14,9 +14,16 @@
 @implementation ATEngagementTests
 
 /*
- days_since_install - The total number of days since the app was first launched (irrespective of app version).  (integer)
- days_since_upgrade - The number of days since the current version of the app was first launched.  (integer)
+ time_since_install/total - The total time in seconds since the app was installed (double)
+ time_since_install/version - The total time in seconds since the current app version name was installed (double)
+ time_since_install/build - The total time in seconds since the current app build number was installed (double)
+ 
  application_version - The currently running application version (string).
+ application_build - The currently running application build "number" (string).
+ 
+ is_update/version - Returns true if we have seen a version prior to the current one.
+ is_update/build - Returns true if we have seen a build prior to the current one.
+ 
  code_point.code_point_name.invokes.total - The total number of times code_point_name has been invoked across all versions of the app (regardless if an Interaction was shown at that point)  (integer)
  code_point.code_point_name.invokes.version - The number of times code_point_name has been invoked in the current version of the app (regardless if an Interaction was shown at that point) (integer)
  interactions.interaction_instance_id.invokes.total - The number of times the Interaction Instance with id interaction_instance_id has been invoked (irrespective of app version) (integer)
@@ -27,12 +34,15 @@
 	ATInteraction *interaction = [[ATInteraction alloc] init];
 	ATInteractionUsageData *usageData;
 	
-	interaction.criteria = @{@"days_since_install": @{@"$gt": @5, @"$lt": @7}};
+	interaction.criteria = @{@"time_since_install/total": @{@"$gt": @(5 * 60 * 60 * 24), @"$lt": @(7 * 60 * 60 * 24)}};
 	usageData = [ATInteractionUsageData usageDataForInteraction:interaction
-											   daysSinceInstall:@6
-											   daysSinceUpgrade:@6
+										  timeSinceInstallTotal:@(6 * 60 * 60 * 24)
+										timeSinceInstallVersion:@(6 * 60 * 60 * 24)
+										  timeSinceInstallBuild:@(6 * 60 * 60 * 24)
 											 applicationVersion:@"1.8.9"
 											   applicationBuild:@"39"
+												isUpdateVersion:@NO
+												  isUpdateBuild:@NO
 										  codePointInvokesTotal:@{}
 										codePointInvokesVersion:@{}
 										codePointInvokesTimeAgo:@{}
@@ -45,12 +55,15 @@
 
 - (void)testUnknownKeyInCriteria {
 	ATInteraction *interaction = [[ATInteraction alloc] init];
-	interaction.criteria = @{@"days_since_install": @6, @"days_since_upgrade": @6};
+	interaction.criteria = @{@"time_since_install/total": @(6 * 60 * 60 * 24), @"time_since_install/version": @(6 * 60 * 60 * 24)};
 	ATInteractionUsageData *usageData = [ATInteractionUsageData usageDataForInteraction:interaction
-																	   daysSinceInstall:@6
-																	   daysSinceUpgrade:@6
+																  timeSinceInstallTotal:@(6 * 60 * 60 * 24)
+																timeSinceInstallVersion:@(6 * 60 * 60 * 24)
+																  timeSinceInstallBuild:@(6 * 60 * 60 * 24)
 																	 applicationVersion:@"1.8.9"
 																	   applicationBuild:@"39"
+																		isUpdateVersion:@NO
+																		  isUpdateBuild:@NO
 																  codePointInvokesTotal:@{}
 																codePointInvokesVersion:@{}
 																codePointInvokesTimeAgo:@{}
@@ -60,7 +73,7 @@
 		
 	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"All keys are known, thus the criteria is met.");
 	
-	interaction.criteria = @{@"days_since_install": @6, @"unknown_key": @"criteria_should_not_be_met"};
+	interaction.criteria = @{@"time_since_install/total": @6, @"unknown_key": @"criteria_should_not_be_met"};
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Criteria should not be met if the criteria includes a key that the client does not recognize.");
 }
 
@@ -82,30 +95,32 @@
 	ATInteraction *interaction = [[ATInteraction alloc] init];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
 	
-	interaction.criteria = @{@"days_since_install": @6};
-	usageData.daysSinceInstall = @6;
+	NSTimeInterval dayTimeInterval = 60 * 60 * 24;
+	
+	interaction.criteria = @{@"time_since_install/total": @(6 * dayTimeInterval)};
+	usageData.timeSinceInstallTotal = @(6 * dayTimeInterval);
 	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Install date");
-	usageData.daysSinceInstall = @5;
+	usageData.timeSinceInstallTotal = @(5 * dayTimeInterval);
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Install date");
-	usageData.daysSinceInstall = @7;
+	usageData.timeSinceInstallTotal = @(7 * dayTimeInterval);
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Install date");
 	
-	interaction.criteria = @{@"days_since_install": @{@"$gt": @5, @"$lt": @7}};
-	usageData.daysSinceInstall = @6;
+	interaction.criteria = @{@"time_since_install/total": @{@"$gt": @(5 * dayTimeInterval), @"$lt": @(7 * dayTimeInterval)}};
+	usageData.timeSinceInstallTotal = @(6 * dayTimeInterval);
 	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Install date");
-	usageData.daysSinceInstall = @5;
+	usageData.timeSinceInstallTotal = @(5 * dayTimeInterval);
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Install date");
-	usageData.daysSinceInstall = @7;
+	usageData.timeSinceInstallTotal = @(7 * dayTimeInterval);
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Install date");
 	
-	interaction.criteria = @{@"days_since_install": @{@"$lte": @5, @"$gt": @3}};
-	usageData.daysSinceInstall = @3;
+	interaction.criteria = @{@"time_since_install/total": @{@"$lte": @(5 * dayTimeInterval), @"$gt": @(3 * dayTimeInterval)}};
+	usageData.timeSinceInstallTotal = @(3 * dayTimeInterval);
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Install date");
-	usageData.daysSinceInstall = @4;
+	usageData.timeSinceInstallTotal = @(4 * dayTimeInterval);
 	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Install date");
-	usageData.daysSinceInstall = @5;
+	usageData.timeSinceInstallTotal = @(5 * dayTimeInterval);
 	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Install date");
-	usageData.daysSinceInstall = @6;
+	usageData.timeSinceInstallTotal = @(6 * dayTimeInterval);
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Install date");
 }
 
@@ -220,7 +235,7 @@
 }
 
 - (void)testComplexCriteria {
-	NSString *jsonString = @"{\"interactions\":{\"app.launch\":[{\"id\":\"526fe2836dd8bf546a00000c\",\"priority\":2,\"criteria\":{\"days_since_upgrade\":{\"$lt\":3},\"code_point/app.launch/invokes/total\":2,\"interactions/526fe2836dd8bf546a00000b/invokes/version\":0},\"type\":\"RatingDialog\",\"version\":null,\"active\":true,\"configuration\":{\"active\":true,\"question_text\":\"Do you love Jelly Bean GO SMS Pro?\"}}],\"big.win\":[{\"id\":\"526fe2836dd8bf546a00000d\",\"priority\":1,\"criteria\":{},\"type\":\"RatingDialog\",\"version\":null,\"active\":true,\"configuration\":{\"active\":true,\"question_text\":\"Do you love Jelly Bean GO SMS Pro?\"}}],\"or_clause\":[{\"id\":\"526fe2836dd8bf546a00000e\",\"priority\":1,\"criteria\":{\"$or\":[{\"days_since_upgrade\":{\"$lt\":3}},{\"code_point/app.launch/invokes/total\":2},{\"interactions/526fe2836dd8bf546a00000b/invokes/version\":0}]},\"type\":\"RatingDialog\",\"version\":null,\"active\":true,\"configuration\":{\"active\":true,\"question_text\":\"Do you love Jelly Bean GO SMS Pro?\"}}],\"complext_criteria\":[{\"id\":\"526fe2836dd8bf546a00000f\",\"priority\":1,\"criteria\":{\"$or\":[{\"days_since_upgrade\":{\"$lt\":3}},{\"$and\":[{\"code_point/app.launch/invokes/total\":2},{\"interactions/526fe2836dd8bf546a00000b/invokes/version\":0},{\"$or\":[{\"code_point/small.win/invokes/total\":2},{\"code_point/big.win/invokes/total\":2}]}]}]},\"type\":\"RatingDialog\",\"version\":null,\"active\":true,\"configuration\":{\"active\":true,\"question_text\":\"Do you love Jelly Bean GO SMS Pro?\"}}]}}";
+	NSString *jsonString = @"{\"interactions\":{\"app.launch\":[{\"id\":\"526fe2836dd8bf546a00000c\",\"priority\":2,\"criteria\":{\"time_since_install/version\":{\"$lt\":259200},\"code_point/app.launch/invokes/total\":2,\"interactions/526fe2836dd8bf546a00000b/invokes/version\":0},\"type\":\"RatingDialog\",\"version\":null,\"active\":true,\"configuration\":{\"active\":true,\"question_text\":\"Do you love Jelly Bean GO SMS Pro?\"}}],\"big.win\":[{\"id\":\"526fe2836dd8bf546a00000d\",\"priority\":1,\"criteria\":{},\"type\":\"RatingDialog\",\"version\":null,\"active\":true,\"configuration\":{\"active\":true,\"question_text\":\"Do you love Jelly Bean GO SMS Pro?\"}}],\"or_clause\":[{\"id\":\"526fe2836dd8bf546a00000e\",\"priority\":1,\"criteria\":{\"$or\":[{\"time_since_install/version\":{\"$lt\":259200}},{\"code_point/app.launch/invokes/total\":2},{\"interactions/526fe2836dd8bf546a00000b/invokes/version\":0}]},\"type\":\"RatingDialog\",\"version\":null,\"active\":true,\"configuration\":{\"active\":true,\"question_text\":\"Do you love Jelly Bean GO SMS Pro?\"}}],\"complext_criteria\":[{\"id\":\"526fe2836dd8bf546a00000f\",\"priority\":1,\"criteria\":{\"$or\":[{\"time_since_install/version\":{\"$lt\":259200}},{\"$and\":[{\"code_point/app.launch/invokes/total\":2},{\"interactions/526fe2836dd8bf546a00000b/invokes/version\":0},{\"$or\":[{\"code_point/small.win/invokes/total\":2},{\"code_point/big.win/invokes/total\":2}]}]}]},\"type\":\"RatingDialog\",\"version\":null,\"active\":true,\"configuration\":{\"active\":true,\"question_text\":\"Do you love Jelly Bean GO SMS Pro?\"}}]}}";
 
 	/*
 	criteria = {
@@ -260,16 +275,18 @@
 	ATInteraction *complexInteraction = [ATInteraction interactionWithJSONDictionary:complexInteractionDictionary];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
 	
-	usageData.daysSinceUpgrade = @2;
+	NSTimeInterval dayTimeInterval = 60 * 60 * 24;
+	
+	usageData.timeSinceInstallVersion = @(2 * dayTimeInterval);
 	XCTAssertTrue([complexInteraction criteriaAreMetForUsageData:usageData], @"2 satisfies the inital OR clause; passes regardless of the next condition.");
-	usageData.daysSinceUpgrade = @0;
+	usageData.timeSinceInstallVersion = @(0 * dayTimeInterval);
 	XCTAssertTrue([complexInteraction criteriaAreMetForUsageData:usageData], @"0 satisfies the inital OR clause; passes regardless of the next condition.");
 	
-	usageData.daysSinceUpgrade = @3;
+	usageData.timeSinceInstallVersion = @(3 * dayTimeInterval);
 	usageData.codePointInvokesTotal = @{@"code_point/app.launch/invokes/total": @8};
 	XCTAssertFalse([complexInteraction criteriaAreMetForUsageData:usageData], @"3 fails the initial OR clause. 8 fails the other clause.");
 
-	usageData.daysSinceUpgrade = @3;
+	usageData.timeSinceInstallVersion = @(3 * dayTimeInterval);
 	usageData.interactionInvokesVersion = @{@"interactions/526fe2836dd8bf546a00000b/invokes/version": @0};
 	usageData.codePointInvokesTotal = @{@"code_point/app.launch/invokes/total": @2,
 										@"code_point/small.win/invokes/total": @0,
@@ -367,6 +384,46 @@
 	usageData.interactionInvokesTimeAgo = nil;
 	[[NSUserDefaults standardUserDefaults] setObject:@{@"526fe2836dd8bf546a00000b": (NSDate *)[NSDate dateWithTimeIntervalSinceNow:-501]} forKey:ATEngagementInteractionsInvokesLastDateKey];
 	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+}
+
+- (void)testIsUpdateVersionsAndBuilds {
+	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	
+	//Version
+	interaction.criteria = @{@"is_update/version": @YES};
+	usageData.isUpdateVersion = @YES;
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test isUpdate");
+	
+	interaction.criteria = @{@"is_update/version": @NO};
+	usageData.isUpdateVersion = @NO;
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test isUpdate");
+	
+	interaction.criteria = @{@"is_update/version": @YES};
+	usageData.isUpdateVersion = @NO;
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test isUpdate");
+	
+	interaction.criteria = @{@"is_update/version": @NO};
+	usageData.isUpdateVersion = @YES;
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test isUpdate");
+
+	//Build
+	interaction.criteria = @{@"is_update/build": @YES};
+	usageData.isUpdateBuild = @YES;
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test isUpdate");
+	
+	interaction.criteria = @{@"is_update/build": @NO};
+	usageData.isUpdateBuild = @NO;
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test isUpdate");
+	
+	interaction.criteria = @{@"is_update/build": @YES};
+	usageData.isUpdateBuild = @NO;
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test isUpdate");
+	
+	interaction.criteria = @{@"is_update/build": @NO};
+	usageData.isUpdateBuild = @YES;
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test isUpdate");
+
 }
 
 @end

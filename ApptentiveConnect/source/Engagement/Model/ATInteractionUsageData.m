@@ -22,8 +22,12 @@
 @synthesize isUpdateBuild = _isUpdateBuild;
 @synthesize codePointInvokesTotal = _codePointInvokesTotal;
 @synthesize codePointInvokesVersion = _codePointInvokesVersion;
+@synthesize codePointInvokesBuild = _codePointInvokesBuild;
+@synthesize codePointInvokesTimeAgo = _codePointInvokesTimeAgo;
 @synthesize interactionInvokesTotal = _interactionInvokesTotal;
 @synthesize interactionInvokesVersion = _interactionInvokesVersion;
+@synthesize interactionInvokesBuild = _interactionInvokesBuild;
+@synthesize interactionInvokesTimeAgo = _interactionInvokesTimeAgo;
 
 - (id)initWithInteraction:(ATInteraction *)interaction {
 	if (self = [super init]) {
@@ -37,39 +41,6 @@
 	return [usageData autorelease];
 }
 
-+ (ATInteractionUsageData *)usageDataForInteraction:(ATInteraction *)interaction
-							  timeSinceInstallTotal:(NSNumber *)timeSinceInstallTotal
-							timeSinceInstallVersion:(NSNumber *)timeSinceInstallVersion
-							  timeSinceInstallBuild:(NSNumber *)timeSinceInstallBuild
-								 applicationVersion:(NSString *)applicationVersion
-								   applicationBuild:(NSString *)applicationBuild
-									isUpdateVersion:(NSNumber *)isUpdateVersion
-									  isUpdateBuild:(NSNumber *)isUpdateBuild
-							  codePointInvokesTotal:(NSDictionary *)codePointInvokesTotal
-							codePointInvokesVersion:(NSDictionary *)codePointInvokesVersion
-							codePointInvokesTimeAgo:(NSDictionary *)codePointInvokesTimeAgo
-							interactionInvokesTotal:(NSDictionary *)interactionInvokesTotal
-						  interactionInvokesVersion:(NSDictionary *)interactionInvokesVersion
-						  interactionInvokesTimeAgo:(NSDictionary *)interactionInvokesTimeAgo
-{
-	ATInteractionUsageData *usageData = [ATInteractionUsageData usageDataForInteraction:interaction];
-	usageData.timeSinceInstallTotal = timeSinceInstallTotal;
-	usageData.timeSinceInstallVersion = timeSinceInstallVersion;
-	usageData.timeSinceInstallBuild = timeSinceInstallBuild;
-	usageData.applicationVersion = applicationVersion;
-	usageData.applicationBuild = applicationBuild;
-	usageData.isUpdateVersion = isUpdateVersion;
-	usageData.isUpdateBuild = isUpdateBuild;
-	usageData.codePointInvokesTotal = codePointInvokesTotal;
-	usageData.codePointInvokesVersion = codePointInvokesVersion;
-	usageData.codePointInvokesTimeAgo = codePointInvokesTimeAgo;
-	usageData.interactionInvokesTotal = interactionInvokesTotal;
-	usageData.interactionInvokesVersion = interactionInvokesVersion;
-	usageData.interactionInvokesTimeAgo = interactionInvokesTimeAgo;
-	
-	return usageData;
-}
-
 - (NSString *)description {
 	NSString *title = [NSString stringWithFormat:@"Usage Data For interaction %@", self.interaction.identifier];
 	NSDictionary *data = @{@"timeSinceInstallTotal" : self.timeSinceInstallTotal ?: [NSNull null],
@@ -81,9 +52,11 @@
 						   @"isUpdateBuild" : self.isUpdateBuild ?: [NSNull null],
 						   @"codePointInvokesTotal" : self.codePointInvokesTotal ?: [NSNull null],
 						   @"codePointInvokesVersion" : self.codePointInvokesVersion ?: [NSNull null],
+						   @"codePointInvokesBuild" : self.codePointInvokesBuild ?: [NSNull null],
 						   @"codePointInvokesTimeAgo" : self.codePointInvokesTimeAgo ?: [NSNull null],
 						   @"interactionInvokesTotal" : self.interactionInvokesTotal ?: [NSNull null],
 						   @"interactionInvokesVersion" : self.interactionInvokesVersion ?: [NSNull null],
+						   @"interactionInovkesBuild" : self.interactionInvokesBuild ?: [NSNull null],
 						   @"interactionInvokesTimeAgo" : self.interactionInvokesTimeAgo ?: [NSNull null]};
 	NSDictionary *description = @{title : data};
 
@@ -100,9 +73,11 @@
 																										  @"is_update/build" : self.isUpdateBuild}];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesTotal];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesVersion];
+	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesBuild];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesTimeAgo];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesTotal];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesVersion];
+	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesBuild];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesTimeAgo];
 	
 	return predicateEvaluationDictionary;
@@ -199,6 +174,18 @@
 	return _codePointInvokesVersion;
 }
 
+- (NSDictionary *)codePointInvokesBuild {
+	if (!_codePointInvokesBuild) {
+		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
+		NSDictionary *codePointsInvokesBuild = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesBuildKey];
+		for (NSString *codePoint in codePointsInvokesBuild) {
+			[predicateSyntax setObject:[codePointsInvokesBuild objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/build", codePoint]];
+		}
+		_codePointInvokesBuild = [predicateSyntax retain];
+	}
+	return _codePointInvokesBuild;
+}
+
 - (NSDictionary *)codePointInvokesTimeAgo {
 	if (!_codePointInvokesTimeAgo) {
 		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
@@ -237,6 +224,19 @@
 	}
 
 	return _interactionInvokesVersion;
+}
+
+- (NSDictionary *)interactionInvokesBuild {
+	if (!_interactionInvokesBuild) {
+		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
+		NSDictionary *interactionsInvokesBuild = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesBuildKey];
+		for (NSString *interactionID in interactionsInvokesBuild) {
+			[predicateSyntax setObject:[interactionsInvokesBuild objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/build", interactionID]];
+		}
+		_interactionInvokesBuild = [predicateSyntax retain];
+	}
+	
+	return _interactionInvokesBuild;
 }
 
 - (NSDictionary *)interactionInvokesTimeAgo {

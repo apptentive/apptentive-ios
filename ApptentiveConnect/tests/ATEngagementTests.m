@@ -32,23 +32,22 @@
 
 - (void)testInteractionCriteria {
 	ATInteraction *interaction = [[ATInteraction alloc] init];
-	ATInteractionUsageData *usageData;
-	
 	interaction.criteria = @{@"time_since_install/total": @{@"$gt": @(5 * 60 * 60 * 24), @"$lt": @(7 * 60 * 60 * 24)}};
-	usageData = [ATInteractionUsageData usageDataForInteraction:interaction
-										  timeSinceInstallTotal:@(6 * 60 * 60 * 24)
-										timeSinceInstallVersion:@(6 * 60 * 60 * 24)
-										  timeSinceInstallBuild:@(6 * 60 * 60 * 24)
-											 applicationVersion:@"1.8.9"
-											   applicationBuild:@"39"
-												isUpdateVersion:@NO
-												  isUpdateBuild:@NO
-										  codePointInvokesTotal:@{}
-										codePointInvokesVersion:@{}
-										codePointInvokesTimeAgo:@{}
-										interactionInvokesTotal:@{}
-									  interactionInvokesVersion:@{}
-									  interactionInvokesTimeAgo:@{}];
+	
+	ATInteractionUsageData *usageData = [ATInteractionUsageData usageDataForInteraction:interaction];
+	usageData.timeSinceInstallTotal = @(6 * 60 * 60 * 24);
+	usageData.timeSinceInstallVersion = @(6 * 60 * 60 * 24);
+	usageData.timeSinceInstallBuild = @(6 * 60 * 60 * 24);
+	usageData.applicationVersion = @"1.8.9";
+	usageData.applicationBuild = @"39";
+	usageData.isUpdateVersion = @NO;
+	usageData.isUpdateBuild = @NO;
+	usageData.codePointInvokesTotal = @{};
+	usageData.codePointInvokesVersion = @{};
+	usageData.codePointInvokesTimeAgo = @{};
+	usageData.interactionInvokesTotal = @{};
+	usageData.interactionInvokesVersion = @{};
+	usageData.interactionInvokesTimeAgo = @{};
 	
 	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Install date");
 }
@@ -56,21 +55,21 @@
 - (void)testUnknownKeyInCriteria {
 	ATInteraction *interaction = [[ATInteraction alloc] init];
 	interaction.criteria = @{@"time_since_install/total": @(6 * 60 * 60 * 24), @"time_since_install/version": @(6 * 60 * 60 * 24)};
-	ATInteractionUsageData *usageData = [ATInteractionUsageData usageDataForInteraction:interaction
-																  timeSinceInstallTotal:@(6 * 60 * 60 * 24)
-																timeSinceInstallVersion:@(6 * 60 * 60 * 24)
-																  timeSinceInstallBuild:@(6 * 60 * 60 * 24)
-																	 applicationVersion:@"1.8.9"
-																	   applicationBuild:@"39"
-																		isUpdateVersion:@NO
-																		  isUpdateBuild:@NO
-																  codePointInvokesTotal:@{}
-																codePointInvokesVersion:@{}
-																codePointInvokesTimeAgo:@{}
-																interactionInvokesTotal:@{}
-															  interactionInvokesVersion:@{}
-															  interactionInvokesTimeAgo:@{}];
-		
+	
+	ATInteractionUsageData *usageData = [ATInteractionUsageData usageDataForInteraction:interaction];
+	usageData.timeSinceInstallTotal = @(6 * 60 * 60 * 24);
+	usageData.timeSinceInstallVersion = @(6 * 60 * 60 * 24);
+	usageData.timeSinceInstallBuild = @(6 * 60 * 60 * 24);
+	usageData.applicationVersion = @"1.8.9";
+	usageData.applicationBuild = @"39";
+	usageData.isUpdateVersion = @NO;
+	usageData.isUpdateBuild = @NO;
+	usageData.codePointInvokesTotal = @{};
+	usageData.codePointInvokesVersion = @{};
+	usageData.codePointInvokesTimeAgo = @{};
+	usageData.interactionInvokesTotal = @{};
+	usageData.interactionInvokesVersion = @{};
+	usageData.interactionInvokesTimeAgo = @{};
 	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"All keys are known, thus the criteria is met.");
 	
 	interaction.criteria = @{@"time_since_install/total": @6, @"unknown_key": @"criteria_should_not_be_met"};
@@ -474,7 +473,52 @@
 	interaction.criteria = @{@"is_update/build": @NO};
 	usageData.isUpdateBuild = @YES;
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test isUpdate");
-
 }
+
+- (void)testInvokesVersion {
+	ATInteraction *interaction = [[ATInteraction alloc] init];
+	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/version": @{@"$lte": @6}};
+	
+	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Invokes version should default to 0 when not set.");
+	
+	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/version": @{@"$gte": @6}};
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Invokes version should default to 0 when not set.");
+	
+	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/version": @{@"$lte": @6}};
+	usageData.interactionInvokesVersion = @{@"interactions/526fe2836dd8bf546a00000b/invokes/version": @1};
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Invokes version");
+
+	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/version": @{@"$lte": @6}};
+	usageData.interactionInvokesVersion = @{@"interactions/526fe2836dd8bf546a00000b/invokes/version": @7};
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Invokes version");
+}
+
+- (void)testInvokesBuild {
+	ATInteraction *interaction = [[ATInteraction alloc] init];
+	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/build": @{@"$lte": @6}};
+	
+	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Invokes build should default to 0 when not set.");
+	
+	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/build": @{@"$gte": @6}};
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Invokes build should default to 0 when not set.");
+
+	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/build": @{@"$lte": @6}};
+	usageData.interactionInvokesBuild = @{@"interactions/526fe2836dd8bf546a00000b/invokes/build": @1};
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Invokes build");
+	
+	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/build": @{@"$lte": @6}};
+	usageData.interactionInvokesBuild = @{@"interactions/526fe2836dd8bf546a00000b/invokes/build": @7};
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Invokes build");
+}
+
+
+
+
+
+
+
+
 
 @end

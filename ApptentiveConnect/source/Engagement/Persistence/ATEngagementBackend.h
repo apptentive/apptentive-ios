@@ -16,9 +16,11 @@ NSString *const ATEngagementIsUpdateVersionKey;
 NSString *const ATEngagementIsUpdateBuildKey;
 NSString *const ATEngagementCodePointsInvokesTotalKey;
 NSString *const ATEngagementCodePointsInvokesVersionKey;
+NSString *const ATEngagementCodePointsInvokesBuildKey;
 NSString *const ATEngagementCodePointsInvokesLastDateKey;
 NSString *const ATEngagementInteractionsInvokesTotalKey;
 NSString *const ATEngagementInteractionsInvokesVersionKey;
+NSString *const ATEngagementInteractionsInvokesBuildKey;
 NSString *const ATEngagementInteractionsInvokesLastDateKey;
 
 @class ATInteraction;

@@ -13,10 +13,13 @@
 
 @implementation ATInteractionUsageData
 
-@synthesize daysSinceInstall = _daysSinceInstall;
-@synthesize daysSinceUpgrade = _daysSinceUpgrade;
+@synthesize timeSinceInstallTotal = _timeSinceInstallTotal;
+@synthesize timeSinceInstallVersion = _timeSinceInstallVersion;
+@synthesize timeSinceInstallBuild = _timeSinceInstallBuild;
 @synthesize applicationVersion = _applicationVersion;
 @synthesize applicationBuild = _applicationBuild;
+@synthesize isUpdateVersion = _isUpdateVersion;
+@synthesize isUpdateBuild = _isUpdateBuild;
 @synthesize codePointInvokesTotal = _codePointInvokesTotal;
 @synthesize codePointInvokesVersion = _codePointInvokesVersion;
 @synthesize interactionInvokesTotal = _interactionInvokesTotal;
@@ -35,10 +38,13 @@
 }
 
 + (ATInteractionUsageData *)usageDataForInteraction:(ATInteraction *)interaction
-								   daysSinceInstall:(NSNumber *)daysSinceInstall
-								   daysSinceUpgrade:(NSNumber *)daysSinceUpgrade
+							  timeSinceInstallTotal:(NSNumber *)timeSinceInstallTotal
+							timeSinceInstallVersion:(NSNumber *)timeSinceInstallVersion
+							  timeSinceInstallBuild:(NSNumber *)timeSinceInstallBuild
 								 applicationVersion:(NSString *)applicationVersion
 								   applicationBuild:(NSString *)applicationBuild
+									isUpdateVersion:(NSNumber *)isUpdateVersion
+									  isUpdateBuild:(NSNumber *)isUpdateBuild
 							  codePointInvokesTotal:(NSDictionary *)codePointInvokesTotal
 							codePointInvokesVersion:(NSDictionary *)codePointInvokesVersion
 							codePointInvokesTimeAgo:(NSDictionary *)codePointInvokesTimeAgo
@@ -47,10 +53,13 @@
 						  interactionInvokesTimeAgo:(NSDictionary *)interactionInvokesTimeAgo
 {
 	ATInteractionUsageData *usageData = [ATInteractionUsageData usageDataForInteraction:interaction];
-	usageData.daysSinceInstall = daysSinceInstall;
-	usageData.daysSinceUpgrade = daysSinceUpgrade;
+	usageData.timeSinceInstallTotal = timeSinceInstallTotal;
+	usageData.timeSinceInstallVersion = timeSinceInstallVersion;
+	usageData.timeSinceInstallBuild = timeSinceInstallBuild;
 	usageData.applicationVersion = applicationVersion;
 	usageData.applicationBuild = applicationBuild;
+	usageData.isUpdateVersion = isUpdateVersion;
+	usageData.isUpdateBuild = isUpdateBuild;
 	usageData.codePointInvokesTotal = codePointInvokesTotal;
 	usageData.codePointInvokesVersion = codePointInvokesVersion;
 	usageData.codePointInvokesTimeAgo = codePointInvokesTimeAgo;
@@ -63,10 +72,13 @@
 
 - (NSString *)description {
 	NSString *title = [NSString stringWithFormat:@"Usage Data For interaction %@", self.interaction.identifier];
-	NSDictionary *data = @{@"daysSinceInstall" : self.daysSinceInstall ?: [NSNull null],
-						   @"daysSinceUpgrade" : self.daysSinceUpgrade ?: [NSNull null],
+	NSDictionary *data = @{@"timeSinceInstallTotal" : self.timeSinceInstallTotal ?: [NSNull null],
+						   @"timeSinceInstallVersion" : self.timeSinceInstallVersion ?: [NSNull null],
+						   @"timeSinceInstallBuild" : self.timeSinceInstallBuild ?: [NSNull null],
 						   @"applicationVersion" : self.applicationVersion ?: [NSNull null],
 						   @"applicationBuild" : self.applicationBuild ?: [NSNull null],
+						   @"isUpdateVersion" : self.isUpdateVersion ?: [NSNull null],
+						   @"isUpdateBuild" : self.isUpdateBuild ?: [NSNull null],
 						   @"codePointInvokesTotal" : self.codePointInvokesTotal ?: [NSNull null],
 						   @"codePointInvokesVersion" : self.codePointInvokesVersion ?: [NSNull null],
 						   @"codePointInvokesTimeAgo" : self.codePointInvokesTimeAgo ?: [NSNull null],
@@ -79,10 +91,13 @@
 }
 
 - (NSDictionary *)predicateEvaluationDictionary {
-	 NSMutableDictionary *predicateEvaluationDictionary = [NSMutableDictionary dictionaryWithDictionary:@{@"days_since_install": self.daysSinceInstall,
-																										  @"days_since_upgrade" : self.daysSinceUpgrade,
+	 NSMutableDictionary *predicateEvaluationDictionary = [NSMutableDictionary dictionaryWithDictionary:@{@"time_since_install/total": self.timeSinceInstallTotal,
+																										  @"time_since_install/version" : self.timeSinceInstallVersion,
+																										  @"time_since_install/build" : self.timeSinceInstallBuild,
 																										  @"application_version" : self.applicationVersion,
-																										  @"application_build" : self.applicationBuild}];
+																										  @"application_build" : self.applicationBuild,
+																										  @"is_update/version" : self.isUpdateVersion,
+																										  @"is_update/build" : self.isUpdateBuild}];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesTotal];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesVersion];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesTimeAgo];
@@ -93,28 +108,34 @@
 	return predicateEvaluationDictionary;
 }
 
-- (NSNumber *)daysSinceInstall {
-	if (!_daysSinceInstall) {
+- (NSNumber *)timeSinceInstallTotal {
+	if (!_timeSinceInstallTotal) {
 		NSDate *installDate = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInstallDateKey] ?: [NSDate date];
-		NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-		_daysSinceInstall = @([[calendar components:NSDayCalendarUnit fromDate:installDate toDate:[NSDate date] options:0] day] + 1) ?: @0;
-		[_daysSinceInstall retain];
-		[calendar release];
+		_timeSinceInstallTotal = @(fabs([installDate timeIntervalSinceNow]));
+		[_timeSinceInstallTotal retain];
 	}
 	
-	return _daysSinceInstall;
+	return _timeSinceInstallTotal;
 }
 
-- (NSNumber *)daysSinceUpgrade {
-	if (!_daysSinceUpgrade) {
-		NSDate *upgradeDate = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementUpgradeDateKey] ?: [NSDate date];		
-		NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-		_daysSinceUpgrade = @([[calendar components:NSDayCalendarUnit fromDate:upgradeDate toDate:[NSDate date] options:0] day] + 1) ?: @0;
-		[_daysSinceUpgrade retain];
-		[calendar release];
+- (NSNumber *)timeSinceInstallVersion {
+	if (!_timeSinceInstallVersion) {
+		NSDate *versionInstallDate = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementUpgradeDateKey] ?: [NSDate date];
+		_timeSinceInstallVersion = @(fabs([versionInstallDate timeIntervalSinceNow]));
+		[_timeSinceInstallVersion retain];
 	}
-		
-	return _daysSinceUpgrade;
+	
+	return _timeSinceInstallVersion;
+}
+
+- (NSNumber *)timeSinceInstallBuild {
+	if (!_timeSinceInstallBuild) {
+		NSDate *buildInstallDate = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementUpgradeDateKey] ?: [NSDate date];
+		_timeSinceInstallBuild = @(fabs([buildInstallDate timeIntervalSinceNow]));
+		[_timeSinceInstallBuild retain];
+	}
+	
+	return _timeSinceInstallBuild;
 }
 
 - (NSString *)applicationVersion {
@@ -133,6 +154,24 @@
 	}
 	
 	return _applicationBuild;
+}
+
+- (NSNumber *)isUpdateVersion {
+	if (!_isUpdateVersion) {
+		_isUpdateVersion = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementIsUpdateVersionKey];
+		[_isUpdateVersion retain];
+	}
+	
+	return _isUpdateVersion;
+}
+
+- (NSNumber *)isUpdateBuild {
+	if (!_isUpdateBuild) {
+		_isUpdateBuild = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementIsUpdateBuildKey];
+		[_isUpdateBuild retain];
+	}
+	
+	return _isUpdateBuild;
 }
 
 - (NSDictionary *)codePointInvokesTotal {

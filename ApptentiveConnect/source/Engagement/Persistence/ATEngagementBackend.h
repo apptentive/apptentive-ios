@@ -11,6 +11,9 @@
 
 NSString *const ATEngagementInstallDateKey;
 NSString *const ATEngagementUpgradeDateKey;
+NSString *const ATEngagementLastUsedVersionKey;
+NSString *const ATEngagementIsUpdateVersionKey;
+NSString *const ATEngagementIsUpdateBuildKey;
 NSString *const ATEngagementCodePointsInvokesTotalKey;
 NSString *const ATEngagementCodePointsInvokesVersionKey;
 NSString *const ATEngagementCodePointsInvokesLastDateKey;

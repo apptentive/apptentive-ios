@@ -19,6 +19,8 @@
 NSString *const ATEngagementInstallDateKey = @"ATEngagementInstallDateKey";
 NSString *const ATEngagementUpgradeDateKey = @"ATEngagementUpgradeDateKey";
 NSString *const ATEngagementLastUsedVersionKey = @"ATEngagementLastUsedVersionKey";
+NSString *const ATEngagementIsUpdateVersionKey = @"ATEngagementIsUpdateVersionKey";
+NSString *const ATEngagementIsUpdateBuildKey = @"ATEngagementIsUpdateBuildKey";
 NSString *const ATEngagementCodePointsInvokesTotalKey = @"ATEngagementCodePointsInvokesTotalKey";
 NSString *const ATEngagementCodePointsInvokesVersionKey = @"ATEngagementCodePointsInvokesVersionKey";
 NSString *const ATEngagementCodePointsInvokesLastDateKey = @"ATEngagementCodePointsInvokesLastDateKey";
@@ -43,7 +45,9 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	if ((self = [super init])) {
 		codePointInteractions = [[NSMutableDictionary alloc] init];
 		
-		NSDictionary *defaults = @{ATEngagementCodePointsInvokesTotalKey: @{},
+		NSDictionary *defaults = @{ATEngagementIsUpdateVersionKey: @NO,
+								   ATEngagementIsUpdateBuildKey: @NO,
+								   ATEngagementCodePointsInvokesTotalKey: @{},
 								   ATEngagementCodePointsInvokesVersionKey: @{},
 								   ATEngagementCodePointsInvokesLastDateKey: @{},
 								   ATEngagementInteractionsInvokesTotalKey: @{},
@@ -129,6 +133,13 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	
 	NSString *currentBundleVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
 	NSString *lastBundleVersion = [defaults objectForKey:ATEngagementLastUsedVersionKey];
+	
+	// Both version and build are required (by iTunes Connect) to be updated upon App Store release.
+	// If the bundle version has changed, we can mark both version and build as updated.
+	if (lastBundleVersion && ![lastBundleVersion isEqualToString:currentBundleVersion]) {
+		[defaults setObject:@YES forKey:ATEngagementIsUpdateVersionKey];
+		[defaults setObject:@YES forKey:ATEngagementIsUpdateBuildKey];
+	}
 	
 	if (lastBundleVersion == nil || ![lastBundleVersion isEqualToString:currentBundleVersion]) {
 		[defaults setObject:currentBundleVersion forKey:ATEngagementLastUsedVersionKey];

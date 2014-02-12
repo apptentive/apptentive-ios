@@ -12,10 +12,13 @@
 @interface ATInteractionUsageData : NSObject
 
 @property (nonatomic, retain) ATInteraction *interaction;
-@property (nonatomic, retain) NSNumber *daysSinceInstall;
-@property (nonatomic, retain) NSNumber *daysSinceUpgrade;
+@property (nonatomic, retain) NSNumber *timeSinceInstallTotal;
+@property (nonatomic, retain) NSNumber *timeSinceInstallVersion;
+@property (nonatomic, retain) NSNumber *timeSinceInstallBuild;
 @property (nonatomic, retain) NSString *applicationVersion;
 @property (nonatomic, retain) NSString *applicationBuild;
+@property (nonatomic, retain) NSNumber *isUpdateVersion;
+@property (nonatomic, retain) NSNumber *isUpdateBuild;
 @property (nonatomic, retain) NSDictionary *codePointInvokesTotal;
 @property (nonatomic, retain) NSDictionary *codePointInvokesVersion;
 @property (nonatomic, retain) NSDictionary *codePointInvokesTimeAgo;
@@ -26,10 +29,13 @@
 - (id)initWithInteraction:(ATInteraction *)interaction;
 + (ATInteractionUsageData *)usageDataForInteraction:(ATInteraction *)interaction;
 + (ATInteractionUsageData *)usageDataForInteraction:(ATInteraction *)interaction
-								   daysSinceInstall:(NSNumber *)daysSinceInstall
-								   daysSinceUpgrade:(NSNumber *)daysSinceUpgrade
+							  timeSinceInstallTotal:(NSNumber *)timeSinceInstallTotal
+							timeSinceInstallVersion:(NSNumber *)timeSinceInstallVersion
+							  timeSinceInstallBuild:(NSNumber *)timeSinceInstallBuild
 								 applicationVersion:(NSString *)applicationVersion
 								   applicationBuild:(NSString *)applicationBuild
+									isUpdateVersion:(NSNumber *)isUpdateVersion
+									  isUpdateBuild:(NSNumber *)isUpdateBuild
 							  codePointInvokesTotal:(NSDictionary *)codePointInvokesTotal
 							codePointInvokesVersion:(NSDictionary *)codePointInvokesVersion
 							codePointInvokesTimeAgo:(NSDictionary *)codePointInvokesTimeAgo

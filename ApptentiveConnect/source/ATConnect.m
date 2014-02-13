@@ -50,8 +50,9 @@ NSString *const ATIntegrationKeyUrbanAirship = @"urban_airship";
 		customDeviceData = [[NSMutableDictionary alloc] init];
 		integrationConfiguration = [[NSMutableDictionary alloc] init];
 		useMessageCenter = YES;
+		_initiallyUseMessageCenter = YES;
 		
-		NSDictionary *defaults = @{ATAppConfigurationMessageCenterEnabledKey : [NSNumber numberWithBool:YES],
+		NSDictionary *defaults = @{ATAppConfigurationMessageCenterEnabledKey : [NSNumber numberWithBool:_initiallyUseMessageCenter],
 								   ATAppConfigurationMessageCenterEmailRequiredKey : [NSNumber numberWithBool:NO]};
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 	}
@@ -84,6 +85,11 @@ NSString *const ATIntegrationKeyUrbanAirship = @"urban_airship";
 		apiKey = [anAPIKey retain];
 		[[ATBackend sharedBackend] setApiKey:self.apiKey];
 	}
+}
+
+- (void)setInitiallyUseMessageCenter:(BOOL)initiallyUseMessageCenter {
+	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ATAppConfigurationMessageCenterEnabledKey: @(initiallyUseMessageCenter)}];
+	_initiallyUseMessageCenter = initiallyUseMessageCenter;
 }
 
 - (void)setInitialUserName:(NSString *)anInitialUserName {

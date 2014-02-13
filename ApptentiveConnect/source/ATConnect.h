@@ -56,6 +56,9 @@ extern NSString *const ATIntegrationKeyUrbanAirship;
 /*! Set this to NO if you don't want to use Message Center, and instead just want unidirectional in-app feedback.
  Deprecated in 1.1.1 in favor of server-based configuration of Message Center. */
 @property (nonatomic, assign) BOOL useMessageCenter DEPRECATED_ATTRIBUTE;
+/*! Set this to NO to disable Message Center locally on the first launch of your app.
+Note, though, that Message Center setting will be overridden by server-based configuration when it is downloaded. */
+@property (nonatomic, assign) BOOL initiallyUseMessageCenter;
 #if TARGET_OS_IPHONE
 /*! Overrides the default tintColor acquired from your app, in case you're using one that doesn't
     look great. */

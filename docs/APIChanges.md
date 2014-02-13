@@ -4,9 +4,12 @@ This document tracks changes to the API between versions.
 
 Added a `BOOL` return type to the `engage:` method.
 
+Added the property `initiallyUseMessageCenter` to set the local, initial Message Center setting. This will be overridden by the server-based Message Center configuration when it is downloaded. 
+
 ## ATConnect
 
 * Replace `- (void)engage:fromViewController:' with `- (BOOL)engage:fromViewController:`
+* Added `initiallyUseMessageCenter` property.
 
 # 1.2.6
 

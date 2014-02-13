@@ -513,12 +513,4 @@
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Invokes build");
 }
 
-
-
-
-
-
-
-
-
 @end

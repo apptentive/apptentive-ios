@@ -247,16 +247,28 @@ shown in your app settings on [Apptentive](https://apptentive.com).
 
 #### Unread Messages
 
-Use `unreadMessageCount` to determine when the user has unread messages:
+Use `unreadMessageCount` to get the current number of unread messages:
 
 ``` objective-c
 NSUInteger unreadMessageCount = [[ATConnect sharedConnection] unreadMessageCount];
 ```
 
-You can also listen for our `ATMessageCenterUnreadCountChangedNotification` notification to be alerted immediately when a new message arrives:
+You can also listen for the `ATMessageCenterUnreadCountChangedNotification` notification to be alerted immediately when a new message arrives:
 
 ``` objective-c
 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unreadMessageCountChanged:) name:ATMessageCenterUnreadCountChangedNotification object:nil];
+```
+
+If listening for the notification via the code above, you would then implement the `unreadMessageCountChanged:` method. This will be called every time the unread message count changes.
+
+``` objective-c
+- (void)unreadMessageCountChanged:(NSNotification *)notification {
+	// Unread message count is contained in the notification's userInfo dictionary.
+	NSNumber *unreadMessageCount = [notification.userInfo objectForKey:@"count"];
+
+	// Update your UI or alert the user when a new message arrives.
+	NSLog(@"You have %@ unread Apptentive messages", unreadMessageCount);
+}
 ```
 
 #### Upgrade Messages

@@ -1,9 +1,19 @@
-2014-02-?? wooster, pkamb v1.2.7a
+2014-02-12 wooster, pkamb v1.2.7
 --------------------------------
+
+This release adds a `BOOL` return type to the `engage:` method, allowing the developer to take action if an interaction is or isn't shown. The `initiallyUseMessageCenter` property has been added to set the initial Message Center state; this will be overridden when the Apptentive configuration file is first downloaded.
+
+This release also makes some behind-the-scenes tweaks to the Engagement Framework. 
 
 Fixes:
 
 * IOS-354 Add BOOL return type to `engage:` method
+* Change ATEvent monitoring from NSAssert to ATLogError.
+* Made changes to Engagement Framework criteria:
+* IOS-375 Add `is_update_version` to Enagagement Framework criteria
+* IOS-377 Change `days_since...` to `time_since...` in Engagement Framework criteria.
+* IOS-373 Add `build` property to Interactions.
+* IOS-378 Add API method to set initial/local `useMessageCenter` setting
 
 2014-01-27 wooster, pkamb v1.2.6
 --------------------------------

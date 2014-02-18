@@ -7,7 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+@class ATInteraction;
 
 @interface ATInteractionEnjoymentDialogController : NSObject
+
+@property (nonatomic, retain) ATInteraction *enjoymentDialogInteraction;
+
+- (id)initWithInteraction:(ATInteraction *)interaction;
+
+- (void)showRatingFlowFromViewController:(UIViewController *)viewController;
 
 @end

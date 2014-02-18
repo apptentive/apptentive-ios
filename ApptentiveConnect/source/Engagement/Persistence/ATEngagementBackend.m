@@ -13,8 +13,9 @@
 #import "ATInteraction.h"
 #import "ATAppRatingFlow_Private.h"
 #import "ATConnect_Private.h"
-#import "ATInteractionUpgradeMessageViewController.h"
 #import "ATUtilities.h"
+#import "ATInteractionUpgradeMessageViewController.h"
+#import "ATInteractionEnjoymentDialogController.h"
 
 NSString *const ATEngagementInstallDateKey = @"ATEngagementInstallDateKey";
 NSString *const ATEngagementUpgradeDateKey = @"ATEngagementUpgradeDateKey";
@@ -343,9 +344,11 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 
 - (void)presentEnjoymentDialogInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
 	NSAssert([interaction.type isEqualToString:@"EnjoymentDialog"], @"Attempted to present an EnjoymentDialog interaction with an interaction of type: %@", interaction.type);
-	ATLogError(@"Need to present an EnjoymentDialog here!");
-}
 
+	ATInteractionEnjoymentDialogController *enjoymentDialog = [[ATInteractionEnjoymentDialogController alloc] initWithInteraction:interaction];
+	[enjoymentDialog showRatingFlowFromViewController:viewController];
+	[enjoymentDialog release];
+}
 
 - (void)resetUpgradeVersionInfo {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

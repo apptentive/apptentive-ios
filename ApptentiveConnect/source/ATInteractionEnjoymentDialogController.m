@@ -7,7 +7,21 @@
 //
 
 #import "ATInteractionEnjoymentDialogController.h"
+#import "ATInteraction.h"
 
 @implementation ATInteractionEnjoymentDialogController
+
+- (id)initWithInteraction:(ATInteraction *)interaction {
+	NSAssert([interaction.type isEqualToString:@"EnjoymentDialog"], @"Attempted to load an EnjoymentDialogController with an interaction of type: %@", interaction.type);
+	self = [super init];
+	if (self != nil) {
+		_enjoymentDialogInteraction = interaction;
+	}
+	return self;
+}
+
+- (void)showRatingFlowFromViewController:(UIViewController *)viewController {
+	
+}
 
 @end

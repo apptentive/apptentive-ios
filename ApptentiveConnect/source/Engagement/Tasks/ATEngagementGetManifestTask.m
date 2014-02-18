@@ -35,6 +35,7 @@
 
 - (BOOL)canStart {
 	if ([[ATBackend sharedBackend] apiKey] == nil) {
+		ATLogDebug(@"Failed to download Apptentive configuration because API key is not set!");
 		return NO;
 	}
 	if (![ATConversationUpdater conversationExists]) {

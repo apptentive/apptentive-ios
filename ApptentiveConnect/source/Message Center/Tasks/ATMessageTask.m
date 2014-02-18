@@ -53,6 +53,7 @@
 
 - (BOOL)canStart {
 	if ([[ATBackend sharedBackend] apiKey] == nil) {
+		ATLogDebug(@"Failed to send message because Apptentive API key is not set!");
 		return NO;
 	}
 	if (![ATConversationUpdater conversationExists]) {

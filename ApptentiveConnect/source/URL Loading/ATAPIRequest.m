@@ -122,6 +122,9 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 			}
 			ATLogError(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
 			ATLogInfo(@"Status was: %d", sender.statusCode);
+			if (sender.statusCode == 401) {
+				ATLogDebug(@"Your Apptentive API key may not be set correctly!");
+			}
 			ATLogDebug(@"Request was: %@", [connection requestAsString]);
 			ATLogDebug(@"Response was: %@", responseString);
 		}

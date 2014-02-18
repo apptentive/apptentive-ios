@@ -761,6 +761,10 @@ done:
 #endif
 
 + (BOOL)emailAddressIsValid:(NSString *)emailAddress {
+	if (!emailAddress) {
+		return NO;
+	}
+	
 	NSError *error = nil;
 	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^\\s*[^\\s@]+@[^\\s@]+\\s*$" options:NSRegularExpressionCaseInsensitive error:&error];
 	if (!regex) {
@@ -768,11 +772,9 @@ done:
 		return NO;
 	}
 	NSUInteger count = [regex numberOfMatchesInString:emailAddress options:NSMatchingAnchored range:NSMakeRange(0, [emailAddress length])];
-	if (count == 0) {
-		return NO;
-	} else {
-		return YES;
-	}
+	BOOL isValid = (count > 0);
+	
+	return isValid;
 }
 @end
 

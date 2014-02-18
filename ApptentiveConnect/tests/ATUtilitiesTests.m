@@ -252,5 +252,7 @@
 	XCTAssertFalse([ATUtilities emailAddressIsValid:@".com"], @"Shouldn't be valid");
 	XCTAssertFalse([ATUtilities emailAddressIsValid:@"\n"], @"Shouldn't be valid");
 //	XCTAssertFalse([ATUtilities emailAddressIsValid:@"foo@yarg"], @"Shouldn't be valid");
+	XCTAssertFalse([ATUtilities emailAddressIsValid:@""], @"empty string email shouldn't be valid");
+	XCTAssertFalse([ATUtilities emailAddressIsValid:nil], @"nil email shouldn't be valid");
 }
 @end

@@ -26,6 +26,7 @@ NSString *const ATInitialUserNameKey = @"ATInitialUserNameKey";
 NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 
 NSString *const ATIntegrationKeyUrbanAirship = @"urban_airship";
+NSString *const ATIntegrationKeyKahuna = @"kahuna";
 
 @implementation ATConnect
 @synthesize apiKey, showTagline, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText, useMessageCenter;

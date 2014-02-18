@@ -26,6 +26,7 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 
 /*! Keys for supported 3rd-party integrations. */
 extern NSString *const ATIntegrationKeyUrbanAirship;
+extern NSString *const ATIntegrationKeyKahuna;
 
 @interface ATConnect : NSObject {
 @private

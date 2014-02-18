@@ -102,7 +102,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 		if ([result isKindOfClass:[NSDictionary class]] && [self processResult:(NSDictionary *)result]) {
 			self.finished = YES;
 		} else {
-			ATLogError(@"Messages result is not NSDictionary!");
+			ATLogError(@"Could not process the Get Message Task result!");
 			self.failed = YES;
 		}
 		[self stop];

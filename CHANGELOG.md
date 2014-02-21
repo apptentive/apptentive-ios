@@ -1,3 +1,17 @@
+2014-02-20 pkamb v1.2.8
+--------------------------------
+
+This release fixes several issues reported by developers. We now strip NSAssert calls from the Apptentive static library. Also fixes an issue where setting a nil email address caused problems with the email validator. Additional debug logging added to make API key issues easier to recognize and debug.
+
+Fixes:
+
+* IOS-387 and #79 Set `ENABLE_NS_ASSERTIONS` to `NO` in both Debug and Release builds. (NSAssert calls now ignored).
+* IOS-386 Fixes crash when setting nil email for `initialEmailAddress`.
+* IOS-383 Added debug messages to help developer notice when API key is invalid or not set.
+* IOS-384 Added Kahuna integration key constant.
+* IOS-379 Added additional information to readme about responding to 'Unread Message' notifications.
+* Added Swedish localization file to FeedbackDemo.
+
 2014-02-12 wooster, pkamb v1.2.7
 --------------------------------
 

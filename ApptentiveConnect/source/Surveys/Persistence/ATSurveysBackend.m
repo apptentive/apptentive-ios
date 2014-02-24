@@ -135,10 +135,12 @@ NSString *const ATSurveyCachedSurveysExpirationPreferenceKey = @"ATSurveyCachedS
 		[self resetSurvey];
 	}
 	currentSurvey = [[self surveyWithNoTags] retain];
-	if (currentSurvey == nil) {
-		return;
+	if (currentSurvey) {
+		[self presentSurveyControllerFromViewControllerWithCurrentSurvey:viewController];
+	} else {
+		ATLogInfo(@"No surveys without tags found!");
+		ATLogInfo(@"Apptentive surveys have a 24 hour caching period. If you've recently created a survey, please reset your device/simulator and try again.");
 	}
-	[self presentSurveyControllerFromViewControllerWithCurrentSurvey:viewController];
 }
 
 - (void)presentSurveyControllerWithTags:(NSSet *)tags fromViewController:(UIViewController *)viewController {
@@ -146,10 +148,14 @@ NSString *const ATSurveyCachedSurveysExpirationPreferenceKey = @"ATSurveyCachedS
 		[self resetSurvey];
 	}
 	currentSurvey = [[self surveyWithTags:tags] retain];
-	if (currentSurvey == nil) {
-		return;
+	
+	if (currentSurvey) {
+		[self presentSurveyControllerFromViewControllerWithCurrentSurvey:viewController];
+	} else {
+		NSString *tagsString = [[[tags allObjects] valueForKey:@"description"] componentsJoinedByString:@", "];
+		ATLogInfo(@"No surveys with tags [%@] found!", tagsString);
+		ATLogInfo(@"Apptentive surveys have a 24 hour caching period. If you've recently created a survey, please reset your device/simulator and try again.");
 	}
-	[self presentSurveyControllerFromViewControllerWithCurrentSurvey:viewController];
 }
 
 - (void)setDidSendSurvey:(ATSurvey *)survey {
@@ -194,20 +200,23 @@ NSString *const ATSurveyCachedSurveysExpirationPreferenceKey = @"ATSurveyCachedS
 
 - (BOOL)hasSurveyAvailableWithNoTags {
 	ATSurvey *survey = [self surveyWithNoTags];
-	if (survey) {
-		return YES;
-	} else {
-		return NO;
+	if (!survey) {
+		ATLogInfo(@"No surveys without tags found!");
+		ATLogInfo(@"Apptentive surveys have a 24 hour caching period. If you've recently created a survey, please reset your device/simulator and try again.");
 	}
+	
+	return (survey != nil);
 }
 
 - (BOOL)hasSurveyAvailableWithTags:(NSSet *)tags {
 	ATSurvey *survey = [self surveyWithTags:tags];
-	if (survey) {
-		return YES;
-	} else {
-		return NO;
+	if (!survey) {
+		NSString *tagsString = [[[tags allObjects] valueForKey:@"description"] componentsJoinedByString:@", "];
+		ATLogInfo(@"No surveys with tags [%@] found!", tagsString);
+		ATLogInfo(@"Apptentive surveys have a 24 hour caching period. If you've recently created a survey, please reset your device/simulator and try again.");
 	}
+		
+	return (survey != nil);
 }
 @end
 

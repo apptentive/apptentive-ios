@@ -9,6 +9,7 @@
 
 #import "ATTextMessageCellV7.h"
 #import "ATBackend.h"
+#import "ATConnect_Private.h"
 #import "ATMessageSender.h"
 
 #define kMinimumIconConstraint 4
@@ -22,7 +23,41 @@
 	self.messageLabel.enabledTextCheckingTypes = types;
 	self.messageLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 	self.messageLabel.textColor = [UIColor blackColor];
-	self.messageLabel.text = self.message.body;
+	
+	NSString *messageBody = self.message.body;
+	if ([[self.message pendingState] intValue] == ATPendingMessageStateSending) {
+		NSString *sendingText = ATLocalizedString(@"Sending:", @"Sending prefix on messages that are sending");
+		NSString *fullText = [NSString stringWithFormat:@"%@ %@", sendingText, messageBody];
+		[self.messageLabel setText:fullText afterInheritingLabelAttributesAndConfiguringWithBlock:^ NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
+			NSRange boldRange = NSMakeRange(0, [sendingText length]);
+			
+			UIFont *boldFont = [UIFont boldSystemFontOfSize:15];
+			CTFontRef font = CTFontCreateWithName((CFStringRef)[boldFont fontName], [boldFont pointSize], NULL);
+			if (font) {
+				[mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(id)font range:boldRange];
+				CFRelease(font), font = NULL;
+			}
+			return mutableAttributedString;
+		}];
+	} else if ([[self.message pendingState] intValue] == ATPendingMessageStateError) {
+		NSString *sendingText = NSLocalizedString(@"Error:", @"Error prefix on messages that failed to send");
+		NSString *fullText = [NSString stringWithFormat:@"%@ %@", sendingText, messageBody];
+		[self.messageLabel setText:fullText afterInheritingLabelAttributesAndConfiguringWithBlock:^ NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
+			NSRange boldRange = NSMakeRange(0, [sendingText length]);
+			
+			UIFont *boldFont = [UIFont boldSystemFontOfSize:15];
+			UIColor *redColor = [UIColor redColor];
+			CTFontRef font = CTFontCreateWithName((CFStringRef)[boldFont fontName], [boldFont pointSize], NULL);
+			if (font) {
+				[mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(id)font range:boldRange];
+				CFRelease(font), font = NULL;
+			}
+			[mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)redColor.CGColor range:boldRange];
+			return mutableAttributedString;
+		}];
+	} else {
+		self.messageLabel.text = messageBody;
+	}
 	
 	self.textContainerView.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:1];
 	self.textContainerView.layer.cornerRadius = 10;

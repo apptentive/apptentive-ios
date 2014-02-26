@@ -1,5 +1,12 @@
+2014-02-?? wooster, pkamb v1.2.9 (in progress)
+----------------------------------------------
+
+Fixes:
+
+* IOS-380 Re-add "sending..." label to pending messages
+
 2014-02-20 pkamb v1.2.8
---------------------------------
+-----------------------
 
 This release fixes several issues reported by developers. We now strip NSAssert calls from the Apptentive static library. Also fixes an issue where setting a nil email address caused problems with the email validator. Additional debug logging added to make API key issues easier to recognize and debug.
 

@@ -46,11 +46,7 @@ static NSDateFormatter *dateFormatter = nil;
 	// On iOS prior to 4, fall back to use UIGraphicsBeginImageContext
 	CGRect applicationFrame = [[UIScreen mainScreen] applicationFrame];
 	CGSize imageSize = applicationFrame.size;
-	if (NULL != UIGraphicsBeginImageContextWithOptions) {
-		UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
-	} else {
-		UIGraphicsBeginImageContext(imageSize);
-	}
+	UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
 	
 	CGContextRef context = UIGraphicsGetCurrentContext();
 	
@@ -100,7 +96,7 @@ static NSDateFormatter *dateFormatter = nil;
 		CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
 		CGFloat statusBarHeight = MIN(statusBarSize.width, statusBarSize.height);
 		
-		CGPoint origin;
+		CGPoint origin = CGPointMake(0, 0);
 		UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
 		switch (orientation) {
 			case UIInterfaceOrientationPortrait:
@@ -113,9 +109,6 @@ static NSDateFormatter *dateFormatter = nil;
 				origin = CGPointMake(statusBarHeight, 0);
 				break;
 			case UIInterfaceOrientationLandscapeRight:
-				origin = CGPointMake(0, 0);
-				break;
-			default:
 				origin = CGPointMake(0, 0);
 				break;
 		}
@@ -143,8 +136,6 @@ static NSDateFormatter *dateFormatter = nil;
 			break;
 		case UIInterfaceOrientationLandscapeRight:
 			imageOrientation = UIImageOrientationLeft;
-			break;
-		default:
 			break;
 	}
 	UIImage *rotated = [[[UIImage alloc] initWithCGImage:[image CGImage] scale:1 orientation:imageOrientation] autorelease];

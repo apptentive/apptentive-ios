@@ -349,7 +349,7 @@ static NSURLCache *imageCache = nil;
 - (BOOL)sendImageMessageWithImage:(UIImage *)image hiddenOnClient:(BOOL)hidden fromSource:(ATFeedbackImageSource)imageSource {
 	NSData *imageData = UIImageJPEGRepresentation(image, 1.0);
 	NSString *mimeType = @"image/jpeg";
-	ATFIleAttachmentSource source;
+	ATFIleAttachmentSource source = ATFileAttachmentSourceUnknown;
 	switch (imageSource) {
 		case ATFeedbackImageSourceCamera:
 		case ATFeedbackImageSourcePhotoLibrary:
@@ -364,9 +364,6 @@ static NSURLCache *imageCache = nil;
 			break;
 		case ATFeedbackImageSourceProgrammatic:
 			source = ATFIleAttachmentSourceProgrammatic;
-			break;
-		default:
-			source = ATFileAttachmentSourceUnknown;
 			break;
 	}
 	

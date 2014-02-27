@@ -46,11 +46,7 @@ static NSDateFormatter *dateFormatter = nil;
 	// On iOS prior to 4, fall back to use UIGraphicsBeginImageContext
 	CGRect applicationFrame = [[UIScreen mainScreen] applicationFrame];
 	CGSize imageSize = applicationFrame.size;
-	if (NULL != UIGraphicsBeginImageContextWithOptions) {
-		UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
-	} else {
-		UIGraphicsBeginImageContext(imageSize);
-	}
+	UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
 	
 	CGContextRef context = UIGraphicsGetCurrentContext();
 	
@@ -115,9 +111,6 @@ static NSDateFormatter *dateFormatter = nil;
 			case UIInterfaceOrientationLandscapeRight:
 				origin = CGPointMake(0, 0);
 				break;
-			default:
-				origin = CGPointMake(0, 0);
-				break;
 		}
 		[screenshot drawAtPoint:origin];
 		UIImage *screenshotPlusStatusBar = UIGraphicsGetImageFromCurrentImageContext();
@@ -143,8 +136,6 @@ static NSDateFormatter *dateFormatter = nil;
 			break;
 		case UIInterfaceOrientationLandscapeRight:
 			imageOrientation = UIImageOrientationLeft;
-			break;
-		default:
 			break;
 	}
 	UIImage *rotated = [[[UIImage alloc] initWithCGImage:[image CGImage] scale:1 orientation:imageOrientation] autorelease];

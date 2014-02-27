@@ -8,6 +8,7 @@
 
 #import "ATSurveyGetSurveysTask.h"
 #import "ATBackend.h"
+#import "ATDeviceUpdater.h"
 #import "ATSurveyParser.h"
 #import "ATSurveysBackend.h"
 #import "ATWebClient.h"
@@ -38,6 +39,10 @@
 		return NO;
 	}
 	if (![ATConversationUpdater conversationExists]) {
+		return NO;
+	}
+	if ([ATDeviceUpdater shouldUpdate]) {
+		// Surveys may depend upon device attributes.
 		return NO;
 	}
 	return YES;

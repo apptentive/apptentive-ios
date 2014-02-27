@@ -24,6 +24,7 @@
 }
 
 - (void)showRatingFlowFromViewController:(UIViewController *)viewController {
+	self.viewController = viewController;
 	
 	//TODO: appName should come from server.
 	NSString *title = [NSString stringWithFormat:ATLocalizedString(@"Do you love %@?", @"Title for enjoyment alert view. Parameter is app name."), [[ATBackend sharedBackend] appName]];

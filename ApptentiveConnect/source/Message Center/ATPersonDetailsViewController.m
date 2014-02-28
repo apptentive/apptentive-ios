@@ -77,6 +77,9 @@ enum kPersonDetailsTableSections {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+	if ([self.tableView respondsToSelector:@selector(setAccessibilityIdentifier:)]) {
+		[self.tableView setAccessibilityIdentifier:@"ATContactInfoTable"];
+	}
 	if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
 		self.edgesForExtendedLayout = UIRectEdgeNone;
 	}

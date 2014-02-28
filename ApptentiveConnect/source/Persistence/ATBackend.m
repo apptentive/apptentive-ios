@@ -561,6 +561,10 @@ static NSURLCache *imageCache = nil;
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData {
 	self.currentCustomData = customData;
 	
+	if (!viewController) {
+		ATLogError(@"Attempting to present Apptentive Message Center from a nil View Controller.");
+	}
+	
 	NSPredicate *notHidden = [NSPredicate predicateWithFormat:@"hidden != %@", @YES];
 	NSUInteger messageCount = [ATData countEntityNamed:@"ATAbstractMessage" withPredicate:notHidden];
 	if (messageCount == 0 || ![[ATConnect sharedConnection] messageCenterEnabled]) {

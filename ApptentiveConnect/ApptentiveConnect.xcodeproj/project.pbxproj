@@ -1390,14 +1390,30 @@
 			name = Persistence;
 			sourceTree = "<group>";
 		};
-		58DCC0D1180F43E200A3A7AE /* Interactions */ = {
+		58D17D4318C5656100D123BC /* Upgrade Message */ = {
 			isa = PBXGroup;
 			children = (
 				58DCC0D2180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.h */,
 				58DCC0D3180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m */,
 				58DCC0D4180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.xib */,
+			);
+			name = "Upgrade Message";
+			sourceTree = "<group>";
+		};
+		58D17D4418C5656D00D123BC /* Rating Flow */ = {
+			isa = PBXGroup;
+			children = (
 				586C47A718B424E900725C22 /* ATInteractionEnjoymentDialogController.h */,
 				586C47A818B424E900725C22 /* ATInteractionEnjoymentDialogController.m */,
+			);
+			name = "Rating Flow";
+			sourceTree = "<group>";
+		};
+		58DCC0D1180F43E200A3A7AE /* Interactions */ = {
+			isa = PBXGroup;
+			children = (
+				58D17D4318C5656100D123BC /* Upgrade Message */,
+				58D17D4418C5656D00D123BC /* Rating Flow */,
 			);
 			name = Interactions;
 			sourceTree = "<group>";

@@ -368,6 +368,12 @@
 		58C97B5E18276427001EB5BD /* UIViewController+ATSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C97B5B18276427001EB5BD /* UIViewController+ATSwizzle.m */; };
 		58CD20151821B7A70071CC72 /* ATDataModel v2 to v3.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 58CD20131821B78D0071CC72 /* ATDataModel v2 to v3.xcmappingmodel */; };
 		58CD20161821B7A80071CC72 /* ATDataModel v2 to v3.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 58CD20131821B78D0071CC72 /* ATDataModel v2 to v3.xcmappingmodel */; };
+		58D17D4718C5674000D123BC /* ATInteractionRatingDialogController.h in Headers */ = {isa = PBXBuildFile; fileRef = 58D17D4518C5674000D123BC /* ATInteractionRatingDialogController.h */; };
+		58D17D4818C5674000D123BC /* ATInteractionRatingDialogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D17D4618C5674000D123BC /* ATInteractionRatingDialogController.m */; };
+		58D17D4B18C5675E00D123BC /* ATInteractionFeedbackDialogController.h in Headers */ = {isa = PBXBuildFile; fileRef = 58D17D4918C5675E00D123BC /* ATInteractionFeedbackDialogController.h */; };
+		58D17D4C18C5675E00D123BC /* ATInteractionFeedbackDialogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D17D4A18C5675E00D123BC /* ATInteractionFeedbackDialogController.m */; };
+		58D17D4F18C5676F00D123BC /* ATInteractionMessageCenterController.h in Headers */ = {isa = PBXBuildFile; fileRef = 58D17D4D18C5676F00D123BC /* ATInteractionMessageCenterController.h */; };
+		58D17D5018C5676F00D123BC /* ATInteractionMessageCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D17D4E18C5676F00D123BC /* ATInteractionMessageCenterController.m */; };
 		58DCC0D5180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 58DCC0D2180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.h */; };
 		58DCC0D6180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DCC0D3180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m */; };
 		58DCC0D7180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DCC0D3180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m */; };
@@ -705,6 +711,12 @@
 		58C97B5B18276427001EB5BD /* UIViewController+ATSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+ATSwizzle.m"; sourceTree = "<group>"; };
 		58CD20121821B4D40071CC72 /* ATDataModel 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ATDataModel 3.xcdatamodel"; sourceTree = "<group>"; };
 		58CD20131821B78D0071CC72 /* ATDataModel v2 to v3.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v2 to v3.xcmappingmodel"; sourceTree = "<group>"; };
+		58D17D4518C5674000D123BC /* ATInteractionRatingDialogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATInteractionRatingDialogController.h; sourceTree = "<group>"; };
+		58D17D4618C5674000D123BC /* ATInteractionRatingDialogController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATInteractionRatingDialogController.m; sourceTree = "<group>"; };
+		58D17D4918C5675E00D123BC /* ATInteractionFeedbackDialogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATInteractionFeedbackDialogController.h; sourceTree = "<group>"; };
+		58D17D4A18C5675E00D123BC /* ATInteractionFeedbackDialogController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATInteractionFeedbackDialogController.m; sourceTree = "<group>"; };
+		58D17D4D18C5676F00D123BC /* ATInteractionMessageCenterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATInteractionMessageCenterController.h; sourceTree = "<group>"; };
+		58D17D4E18C5676F00D123BC /* ATInteractionMessageCenterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATInteractionMessageCenterController.m; sourceTree = "<group>"; };
 		58DCC0D2180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATInteractionUpgradeMessageViewController.h; path = "Upgrade Message/ATInteractionUpgradeMessageViewController.h"; sourceTree = "<group>"; };
 		58DCC0D3180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATInteractionUpgradeMessageViewController.m; path = "Upgrade Message/ATInteractionUpgradeMessageViewController.m"; sourceTree = "<group>"; };
 		58DCC0D4180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ATInteractionUpgradeMessageViewController.xib; path = ../xibs/ATInteractionUpgradeMessageViewController.xib; sourceTree = "<group>"; };
@@ -1405,6 +1417,12 @@
 			children = (
 				586C47A718B424E900725C22 /* ATInteractionEnjoymentDialogController.h */,
 				586C47A818B424E900725C22 /* ATInteractionEnjoymentDialogController.m */,
+				58D17D4518C5674000D123BC /* ATInteractionRatingDialogController.h */,
+				58D17D4618C5674000D123BC /* ATInteractionRatingDialogController.m */,
+				58D17D4918C5675E00D123BC /* ATInteractionFeedbackDialogController.h */,
+				58D17D4A18C5675E00D123BC /* ATInteractionFeedbackDialogController.m */,
+				58D17D4D18C5676F00D123BC /* ATInteractionMessageCenterController.h */,
+				58D17D4E18C5676F00D123BC /* ATInteractionMessageCenterController.m */,
 			);
 			name = "Rating Flow";
 			sourceTree = "<group>";
@@ -1454,6 +1472,7 @@
 				49352ADD138CA1DC000E464A /* ATURLConnection_Private.h in Headers */,
 				490B8158144274EF009801E9 /* ATCustomButton.h in Headers */,
 				490B815D1442751F009801E9 /* ATToolbar.h in Headers */,
+				58D17D4B18C5675E00D123BC /* ATInteractionFeedbackDialogController.h in Headers */,
 				49BC2A5A144F75E20041E789 /* ATShadowView.h in Headers */,
 				49B877111464958C00594A5D /* ATWebClient_Private.h in Headers */,
 				49EF340F14AA7F2D00077F76 /* ATAppRatingMetrics.h in Headers */,
@@ -1504,6 +1523,7 @@
 				49F8AFE516CC4A550070FFEA /* ATData.h in Headers */,
 				49F8AFE816CC4A550070FFEA /* ATDeviceInfo.h in Headers */,
 				49F8AFEA16CC4A550070FFEA /* ATAutomatedMessage.h in Headers */,
+				58D17D4F18C5676F00D123BC /* ATInteractionMessageCenterController.h in Headers */,
 				49F8AFEC16CC4A550070FFEA /* ATAbstractMessage.h in Headers */,
 				49F8AFEE16CC4A550070FFEA /* ATMessageDisplayType.h in Headers */,
 				49F8AFF016CC4A550070FFEA /* ATMessageSender.h in Headers */,
@@ -1549,6 +1569,7 @@
 				58EEBE2317C7E8150039A0F5 /* ATInteraction.h in Headers */,
 				49B7E916178BA8060059E776 /* ATSurveyResponse.h in Headers */,
 				49B7E91B178BAB8D0059E776 /* ATSurveyResponseTask.h in Headers */,
+				58D17D4718C5674000D123BC /* ATInteractionRatingDialogController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1736,6 +1757,7 @@
 				491748BB1341177000A7D11E /* ATConnectionChannel.m in Sources */,
 				491748BD1341177000A7D11E /* ATConnectionManager.m in Sources */,
 				58DCC0D6180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m in Sources */,
+				58D17D5018C5676F00D123BC /* ATInteractionMessageCenterController.m in Sources */,
 				491748BF1341177000A7D11E /* ATURLConnection.m in Sources */,
 				491748C11341177000A7D11E /* ATWebClient.m in Sources */,
 				49509A62135658E200793EEC /* ATReachability.m in Sources */,
@@ -1826,6 +1848,7 @@
 				4960A534171F70530082669B /* ATNetworkImageView.m in Sources */,
 				589274A7180CC33A0029E5CE /* ATInteractionUsageData.m in Sources */,
 				496F5782174060CE003BF516 /* ATDataManager.m in Sources */,
+				58D17D4C18C5675E00D123BC /* ATInteractionFeedbackDialogController.m in Sources */,
 				4995EDD3175983C800AF7268 /* PrefixedTTTAttributedLabel.m in Sources */,
 				49AAC84C175FE70D00F08879 /* ATMessagePanelViewController.m in Sources */,
 				49AAC852175FFA0D00F08879 /* ATLabel.m in Sources */,
@@ -1842,6 +1865,7 @@
 				58C5922C17C59BE3000FA428 /* ATWebClient+EngagementAdditions.m in Sources */,
 				58EEBE2417C7E8150039A0F5 /* ATInteraction.m in Sources */,
 				49B7E917178BA8060059E776 /* ATSurveyResponse.m in Sources */,
+				58D17D4818C5674000D123BC /* ATInteractionRatingDialogController.m in Sources */,
 				49B7E91C178BAB8D0059E776 /* ATSurveyResponseTask.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -12,14 +12,11 @@
 
 @interface ATInteractionEnjoymentDialogController : NSObject
 
-@property (nonatomic, retain) ATInteraction *enjoymentDialogInteraction;
-
+@property (nonatomic, retain) ATInteraction *interaction;
 @property (nonatomic, retain) UIAlertView *enjoymentDialog;
-@property (nonatomic, retain) UIAlertView *ratingDialog;
 @property (nonatomic, retain) UIViewController *viewController;
 
 - (id)initWithInteraction:(ATInteraction *)interaction;
-
-- (void)showRatingFlowFromViewController:(UIViewController *)viewController;
+- (void)showEnjoymentDialogFromViewController:(UIViewController *)viewController;
 
 @end

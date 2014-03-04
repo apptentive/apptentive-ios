@@ -346,7 +346,8 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	NSAssert([interaction.type isEqualToString:@"EnjoymentDialog"], @"Attempted to present an EnjoymentDialog interaction with an interaction of type: %@", interaction.type);
 
 	ATInteractionEnjoymentDialogController *enjoymentDialog = [[ATInteractionEnjoymentDialogController alloc] initWithInteraction:interaction];
-	[enjoymentDialog showRatingFlowFromViewController:viewController];
+	[enjoymentDialog showEnjoymentDialogFromViewController:viewController];
+	
 	[enjoymentDialog release];
 }
 

@@ -16,6 +16,9 @@
 #import "ATUtilities.h"
 #import "ATInteractionUpgradeMessageViewController.h"
 #import "ATInteractionEnjoymentDialogController.h"
+#import "ATInteractionRatingDialogController.h"
+#import "ATInteractionFeedbackDialogController.h"
+#import "ATInteractionMessageCenterController.h"
 
 NSString *const ATEngagementInstallDateKey = @"ATEngagementInstallDateKey";
 NSString *const ATEngagementUpgradeDateKey = @"ATEngagementUpgradeDateKey";
@@ -327,6 +330,12 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 		[self presentUpgradeMessageInteraction:interaction fromViewController:viewController];
 	} else if ([interaction.type isEqualToString:@"EnjoymentDialog"]) {
 		[self presentEnjoymentDialogInteraction:interaction fromViewController:viewController];
+	} else if ([interaction.type isEqualToString:@"RatingDialog"]) {
+		[self presentRatingDialogInteraction:interaction fromViewController:viewController];
+	} else if ([interaction.type isEqualToString:@"FeedbackDialog"]) {
+		[self presentFeedbackDialogInteraction:interaction fromViewController:viewController];
+	} else if ([interaction.type isEqualToString:@"MessageCenter"]) {
+		[self presentMessageCenterInteraction:interaction fromViewController:viewController];
 	}
 }
 
@@ -349,6 +358,33 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	[enjoymentDialog showEnjoymentDialogFromViewController:viewController];
 	
 	[enjoymentDialog release];
+}
+
+- (void)presentRatingDialogInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
+	NSAssert([interaction.type isEqualToString:@"RatingDialog"], @"Attempted to present a RatingDialog interaction with an interaction of type: %@", interaction.type);
+	
+	ATInteractionRatingDialogController *ratingDialog = [[ATInteractionRatingDialogController alloc] initWithInteraction:interaction];
+	[ratingDialog showRatingDialogFromViewController:viewController];
+	
+	[ratingDialog release];
+}
+
+- (void)presentFeedbackDialogInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
+	NSAssert([interaction.type isEqualToString:@"FeedbackDialog"], @"Attempted to present a FeedbackDialog interaction with an interaction of type: %@", interaction.type);
+	
+	ATInteractionFeedbackDialogController *feedbackDialog = [[ATInteractionFeedbackDialogController alloc] initWithInteraction:interaction];
+	[feedbackDialog showFeedbackDialogFromViewController:viewController];
+	
+	[feedbackDialog release];
+}
+
+- (void)presentMessageCenterInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
+	NSAssert([interaction.type isEqualToString:@"MessageCenter"], @"Attempted to present a MessageCenter interaction with an interaction of type: %@", interaction.type);
+	
+	ATInteractionMessageCenterController *messageCenter = [[ATInteractionMessageCenterController alloc] initWithInteraction:interaction];
+	[messageCenter showMessageCenterFromViewController:viewController];
+	
+	[messageCenter release];
 }
 
 - (void)resetUpgradeVersionInfo {

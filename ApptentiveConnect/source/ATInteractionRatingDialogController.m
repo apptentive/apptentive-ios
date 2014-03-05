@@ -30,13 +30,13 @@ NSString *const ATInteractionRatingDialogDecline = @"ATInteractionRatingDialogDe
 - (void)showRatingDialogFromViewController:(UIViewController *)viewController {
 	self.viewController = viewController;
 	
-	//TODO: title, etc., should come from interaction
+	NSDictionary *config = self.interaction.configuration;
 
-	NSString *title = ATLocalizedString(@"Thank You", @"Rate app title.");
-	NSString *message = [NSString stringWithFormat:ATLocalizedString(@"We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us.", @"Rate app message. Parameter is app name."), [[ATBackend sharedBackend] appName]];
-	NSString *rateAppTitle = [NSString stringWithFormat:ATLocalizedString(@"Rate %@", @"Rate app button title"), [[ATBackend sharedBackend] appName]];
-	NSString *noThanksTitle = ATLocalizedString(@"No Thanks", @"cancel title for app rating dialog");
-	NSString *remindMeTitle = ATLocalizedString(@"Remind Me Later", @"Remind me later button title");
+	NSString *title = config[@"title"] ?: ATLocalizedString(@"Thank You", @"Rate app title.");
+	NSString *message = config[@"body"] ?: [NSString stringWithFormat:ATLocalizedString(@"We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us.", @"Rate app message. Parameter is app name."), [[ATBackend sharedBackend] appName]];
+	NSString *rateAppTitle = config[@"rate_text"] ?: [NSString stringWithFormat:ATLocalizedString(@"Rate %@", @"Rate app button title"), [[ATBackend sharedBackend] appName]];
+	NSString *noThanksTitle = config[@"no_text"] ?: ATLocalizedString(@"No Thanks", @"cancel title for app rating dialog");
+	NSString *remindMeTitle = config[@"remind_text"] ?: ATLocalizedString(@"Remind Me Later", @"Remind me later button title");
 	
 	if (!self.ratingDialog) {
 		self.ratingDialog = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:noThanksTitle otherButtonTitles:rateAppTitle, remindMeTitle, nil];

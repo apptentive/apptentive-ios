@@ -7,7 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+@class ATInteraction;
 
 @interface ATInteractionFeedbackDialogController : NSObject
+
+@property (nonatomic, retain) ATInteraction *interaction;
+@property (nonatomic, retain) UIViewController *viewController;
+
+- (id)initWithInteraction:(ATInteraction *)interaction;
+- (void)showFeedbackDialogFromViewController:(UIViewController *)viewController;
 
 @end

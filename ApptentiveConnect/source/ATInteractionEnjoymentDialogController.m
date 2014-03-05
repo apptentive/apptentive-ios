@@ -54,19 +54,6 @@ NSString *const ATInteractionEnjoymentDialogYes = @"ATInteractionEnjoymentDialog
 				}
 			}
 			
-			/*
-			if (!self.viewController) {
-				ATLogError(@"No view controller to present feedback interface!!");
-			} else {
-				
-				//TODO: move to FeedbackDialog interaction
-				NSString *title = ATLocalizedString(@"We're Sorry!", @"We're sorry text");
-				NSString *body = ATLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
-				[[ATBackend sharedBackend] sendAutomatedMessageWithTitle:title body:body];
-				[[ATBackend sharedBackend] presentIntroDialogFromViewController:self.viewController withTitle:title prompt:body placeholderText:nil];
-			}
-			*/
-			
 			[[ATConnect sharedConnection] engage:ATInteractionEnjoymentDialogNo fromViewController:self.viewController];
 			
 		} else if (buttonIndex == 1) { // yes

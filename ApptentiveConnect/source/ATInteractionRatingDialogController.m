@@ -12,6 +12,10 @@
 #import "ATConnect_Private.h"
 #import "ATAppRatingMetrics.h"
 
+NSString *const ATInteractionRatingDialogRate = @"ATInteractionRatingDialogRate";
+NSString *const ATInteractionRatingDialogRemind = @"ATInteractionRatingDialogRemind";
+NSString *const ATInteractionRatingDialogDecline = @"ATInteractionRatingDialogDecline";
+
 @implementation ATInteractionRatingDialogController
 
 - (id)initWithInteraction:(ATInteraction *)interaction {
@@ -40,22 +44,23 @@
 	}
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATAppRatingDidPromptForRatingNotification object:nil];
-	//[self setRatingDialogWasShown];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	if (alertView == self.ratingDialog) {
 		[self.ratingDialog release], self.ratingDialog = nil;
+		
 		if (buttonIndex == 1) { // rate
 			[self postNotification:ATAppRatingDidClickRatingButtonNotification forButton:ATAppRatingButtonTypeRateApp];
-			//[self userAgreedToRateApp];
+			[[ATConnect sharedConnection] engage:ATInteractionRatingDialogRate fromViewController:self.viewController];
 		} else if (buttonIndex == 2) { // remind later
 			[self postNotification:ATAppRatingDidClickRatingButtonNotification forButton:ATAppRatingButtonTypeRemind];
-			//[self setRatingDialogWasShown];
+			[[ATConnect sharedConnection] engage:ATInteractionRatingDialogRemind fromViewController:self.viewController];
 		} else if (buttonIndex == 0) { // no thanks
 			[self postNotification:ATAppRatingDidClickRatingButtonNotification forButton:ATAppRatingButtonTypeNo];
-			//[self setDeclinedToRateThisVersion];
+			[[ATConnect sharedConnection] engage:ATInteractionRatingDialogDecline fromViewController:self.viewController];
 		}
+		
 		self.viewController = nil;
 	}
 }

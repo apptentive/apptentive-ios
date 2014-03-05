@@ -29,11 +29,14 @@ NSString *const ATInteractionEnjoymentDialogYes = @"ATInteractionEnjoymentDialog
 - (void)showEnjoymentDialogFromViewController:(UIViewController *)viewController {
 	self.viewController = viewController;
 	
-	//TODO: appName should come from server.
-	NSString *title = [NSString stringWithFormat:ATLocalizedString(@"Do you love %@?", @"Title for enjoyment alert view. Parameter is app name."), [[ATBackend sharedBackend] appName]];
+	NSDictionary *config = self.interaction.configuration;
+	
+	NSString *title = config[@"body"] ?: [NSString stringWithFormat:ATLocalizedString(@"Do you love %@?", @"Title for enjoyment alert view. Parameter is app name."), [[ATBackend sharedBackend] appName]];
+	NSString *yesText = config[@"yes_text"] ?: ATLocalizedString(@"Yes", @"yes");
+	NSString *noText = config[@"no_text"] ?: ATLocalizedString(@"No", @"no");
 	
 	if (!self.enjoymentDialog) {
-		self.enjoymentDialog = [[UIAlertView alloc] initWithTitle:title message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"No", @"no"), ATLocalizedString(@"Yes", @"yes"), nil];
+		self.enjoymentDialog = [[UIAlertView alloc] initWithTitle:title message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:noText, yesText, nil];
 		[self.enjoymentDialog show];
 	}
 

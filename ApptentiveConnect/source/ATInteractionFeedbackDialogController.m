@@ -29,10 +29,11 @@
 	if (!self.viewController) {
 		ATLogError(@"No view controller to present feedback interface!!");
 	} else {
-		//TODO: pull text from interaction
-		NSString *title = ATLocalizedString(@"We're Sorry!", @"We're sorry text");
-		NSString *body = ATLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
+		NSDictionary *config = self.interaction.configuration;
+		NSString *title = config[@"TODO_MESSAGE_TITLE"] ?: ATLocalizedString(@"We're Sorry!", @"We're sorry text");
+		NSString *body = config[@"TODO_MESSAGE_BODY"] ?: ATLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
 		[[ATBackend sharedBackend] sendAutomatedMessageWithTitle:title body:body];
+		
 		[[ATBackend sharedBackend] presentIntroDialogFromViewController:self.viewController withTitle:title prompt:body placeholderText:nil];
 	}
 }

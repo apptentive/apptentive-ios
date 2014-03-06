@@ -48,7 +48,6 @@ NSString *const ATInteractionEnjoymentDialogYes = @"ATInteractionEnjoymentDialog
 		[self.enjoymentDialog release], self.enjoymentDialog = nil;
 		if (buttonIndex == 0) { // no
 			[self postNotification:ATAppRatingDidClickEnjoymentButtonNotification forButton:ATAppRatingEnjoymentButtonTypeNo];
-			//[self setUserDislikesThisVersion];
 			
 			if (!self.viewController) {
 				UIViewController *candidateVC = [self rootViewControllerForCurrentWindow];

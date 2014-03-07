@@ -12,8 +12,8 @@
 #import "ATConnect_Private.h"
 #import "ATAppRatingMetrics.h"
 
-NSString *const ATInteractionEnjoymentDialogNo = @"ATInteractionEnjoymentDialogNo";
-NSString *const ATInteractionEnjoymentDialogYes = @"ATInteractionEnjoymentDialogYes";
+NSString *const ATInteractionEnjoymentDialogNo = @"com.apptentive/enjoyment_dialog/no";
+NSString *const ATInteractionEnjoymentDialogYes = @"com.apptentive/enjoyment_dialog/yes";
 
 @implementation ATInteractionEnjoymentDialogController
 

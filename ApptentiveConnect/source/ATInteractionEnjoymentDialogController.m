@@ -27,6 +27,8 @@ NSString *const ATInteractionEnjoymentDialogYes = @"com.apptentive/enjoyment_dia
 }
 
 - (void)showEnjoymentDialogFromViewController:(UIViewController *)viewController {
+	[self retain];
+
 	self.viewController = viewController;
 	
 	NSDictionary *config = self.interaction.configuration;

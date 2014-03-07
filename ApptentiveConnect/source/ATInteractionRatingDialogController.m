@@ -28,6 +28,8 @@ NSString *const ATInteractionRatingDialogDecline = @"ATInteractionRatingDialogDe
 }
 
 - (void)showRatingDialogFromViewController:(UIViewController *)viewController {
+	[self retain];
+	
 	self.viewController = viewController;
 	
 	NSDictionary *config = self.interaction.configuration;

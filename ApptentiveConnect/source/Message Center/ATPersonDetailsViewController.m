@@ -169,9 +169,19 @@ enum kPersonDetailsTableSections {
 	NSString *emailAddress = self.emailTextField.text;
 	NSString *name = self.nameTextField.text;
 	if (emailAddress && ![emailAddress isEqualToString:person.emailAddress]) {
-		person.emailAddress = emailAddress;
-		person.needsUpdate = YES;
+		// Do not save empty string as person's email address
+		if (emailAddress.length > 0) {
+			person.emailAddress = emailAddress;
+			person.needsUpdate = YES;
+		}
+		
+		// Deleted email address from form, then submitted.
+		if ([emailAddress isEqualToString:@""] && person.emailAddress) {
+			person.emailAddress = @"";
+			person.needsUpdate = YES;
+		}
 	}
+	
 	if (name && ![name isEqualToString:person.name]) {
 		person.name = name;
 		person.needsUpdate = YES;

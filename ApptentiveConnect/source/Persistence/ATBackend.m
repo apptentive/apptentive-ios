@@ -693,9 +693,19 @@ static NSURLCache *imageCache = nil;
 			person = [[[ATPersonInfo alloc] init] autorelease];
 		}
 		if (emailAddress && ![emailAddress isEqualToString:person.emailAddress]) {
-			person.emailAddress = emailAddress;
-			person.needsUpdate = YES;
+			// Do not save empty string as person's email address
+			if (emailAddress.length > 0) {
+				person.emailAddress = emailAddress;
+				person.needsUpdate = YES;
+			}
+			
+			// Deleted email address from form, then submitted.
+			if ([emailAddress isEqualToString:@""] && person.emailAddress) {
+				person.emailAddress = @"";
+				person.needsUpdate = YES;
+			}
 		}
+		
 		[person saveAsCurrentPerson];
 		
 		[self sendTextMessageWithBody:message completion:^(NSString *pendingMessageID) {

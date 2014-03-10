@@ -17,7 +17,10 @@ NSString *const ATMessageCollectionTopOffsetKey = @"topOffset";
 	NSDictionary *userInfo = [notification userInfo];
 	NSNumber *offset = userInfo[ATMessageCollectionTopOffsetKey];
 	if (offset) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunreachable-code"
 		CGFloat topOffset = CGFLOAT_IS_DOUBLE ? [offset doubleValue] : [offset floatValue];
+#pragma clang diagnostic pop
 		UIView *collectionView = self;
 		while ((collectionView = [collectionView superview])) {
 			if ([collectionView isKindOfClass:[UICollectionView class]]) {

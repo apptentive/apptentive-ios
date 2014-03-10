@@ -120,8 +120,6 @@ fail:
 			case ATRecordRequestTaskFinishedResult:
 				self.finished = YES;
 				break;
-			default:
-				break;
 		}
 		[self stop];
 		[self release];

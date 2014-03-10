@@ -349,7 +349,7 @@ static NSURLCache *imageCache = nil;
 - (BOOL)sendImageMessageWithImage:(UIImage *)image hiddenOnClient:(BOOL)hidden fromSource:(ATFeedbackImageSource)imageSource {
 	NSData *imageData = UIImageJPEGRepresentation(image, 1.0);
 	NSString *mimeType = @"image/jpeg";
-	ATFIleAttachmentSource source;
+	ATFIleAttachmentSource source = ATFileAttachmentSourceUnknown;
 	switch (imageSource) {
 		case ATFeedbackImageSourceCamera:
 		case ATFeedbackImageSourcePhotoLibrary:
@@ -364,9 +364,6 @@ static NSURLCache *imageCache = nil;
 			break;
 		case ATFeedbackImageSourceProgrammatic:
 			source = ATFIleAttachmentSourceProgrammatic;
-			break;
-		default:
-			source = ATFileAttachmentSourceUnknown;
 			break;
 	}
 	
@@ -564,6 +561,10 @@ static NSURLCache *imageCache = nil;
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData {
 	self.currentCustomData = customData;
 	
+	if (!viewController) {
+		ATLogError(@"Attempting to present Apptentive Message Center from a nil View Controller.");
+	}
+	
 	NSPredicate *notHidden = [NSPredicate predicateWithFormat:@"hidden != %@", @YES];
 	NSUInteger messageCount = [ATData countEntityNamed:@"ATAbstractMessage" withPredicate:notHidden];
 	if (messageCount == 0 || ![[ATConnect sharedConnection] messageCenterEnabled]) {
@@ -692,9 +693,19 @@ static NSURLCache *imageCache = nil;
 			person = [[[ATPersonInfo alloc] init] autorelease];
 		}
 		if (emailAddress && ![emailAddress isEqualToString:person.emailAddress]) {
-			person.emailAddress = emailAddress;
-			person.needsUpdate = YES;
+			// Do not save empty string as person's email address
+			if (emailAddress.length > 0) {
+				person.emailAddress = emailAddress;
+				person.needsUpdate = YES;
+			}
+			
+			// Deleted email address from form, then submitted.
+			if ([emailAddress isEqualToString:@""] && person.emailAddress) {
+				person.emailAddress = @"";
+				person.needsUpdate = YES;
+			}
 		}
+		
 		[person saveAsCurrentPerson];
 		
 		[self sendTextMessageWithBody:message completion:^(NSString *pendingMessageID) {

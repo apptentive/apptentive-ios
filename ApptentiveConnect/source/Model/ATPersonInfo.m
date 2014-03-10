@@ -125,9 +125,14 @@
 	if (self.facebookID) {
 		[person setObject:self.facebookID forKey:@"facebook_id"];
 	}
+	
 	if (self.emailAddress && [self.emailAddress length] > 0 && [ATUtilities emailAddressIsValid:self.emailAddress]) {
 		[person setObject:self.emailAddress forKey:@"email"];
+	} else if ([[self.emailAddress stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]) {
+		// Delete a previously entered email
+		[person setObject:[NSNull null] forKey:@"email"];
 	}
+
 	if (self.secret) {
 		[person setObject:self.secret forKey:@"secret"];
 	}

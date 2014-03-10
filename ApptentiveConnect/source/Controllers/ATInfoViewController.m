@@ -277,6 +277,9 @@ enum {
 	self.apptentivePrivacyTextView.text = ATLocalizedString(@"Your feedback is hosted by Apptentive and is subject to Apptentive's privacy policy and the privacy policy of the developer of this app.", @"Description of Apptentive privacy policy.");
 	[self.gotoPrivacyPolicyButton setTitle:ATLocalizedString(@"Go to Apptentive's Privacy Policy", @"Title for button to open Apptentive's privacy policy") forState:UIControlStateNormal];
 	
+	if ([tableView respondsToSelector:@selector(setAccessibilityIdentifier:)]) {
+		[tableView setAccessibilityIdentifier:@"ATInfoViewTable"];
+	}
 	tableView.delegate = self;
 	tableView.dataSource = self;
 	tableView.tableHeaderView = self.headerView;

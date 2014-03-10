@@ -152,6 +152,10 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 
 #if TARGET_OS_IPHONE
 - (BOOL)showRatingFlowFromViewControllerIfConditionsAreMet:(UIViewController *)vc {
+	if (!viewController) {
+		ATLogError(@"Attempting to show Apptentive Rating Flow from a nil View Controller.");
+	}
+	
 	self.viewController = vc;
 #	if TARGET_IPHONE_SIMULATOR
 	[self logDefaults];

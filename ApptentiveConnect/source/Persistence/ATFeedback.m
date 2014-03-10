@@ -268,6 +268,7 @@
 		case ATFeedbackSourceEnjoymentDialog:
 			result = @"enjoyment_dialog";
 			break;
+		case ATFeedbackSourceUnknown:
 		default:
 			break;
 	}

@@ -1,5 +1,19 @@
+2014-03-10 wooster, pkamb v1.2.9
+----------------------------------------------
+
+This release adds several small fixes to alleviate common support requests.
+
+Fixes:
+
+* IOS-415 Allow `initialUserEmailAddress` to be updated after sending feedback with no email
+* IOS-418 Ability to delete a previously entered email
+* Compressed images with ImageOptim
+* IOS-394 Log warning if passed view controller is nil 
+* IOS-364 Don't fetch surveys until at least one DeviceInfo has been sent
+* IOS-380 Re-add "sending..." label to pending messages
+
 2014-02-20 pkamb v1.2.8
---------------------------------
+-----------------------
 
 This release fixes several issues reported by developers. We now strip NSAssert calls from the Apptentive static library. Also fixes an issue where setting a nil email address caused problems with the email validator. Additional debug logging added to make API key issues easier to recognize and debug.
 

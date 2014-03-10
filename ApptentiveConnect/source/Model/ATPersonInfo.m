@@ -128,7 +128,7 @@
 	
 	if (self.emailAddress && [self.emailAddress length] > 0 && [ATUtilities emailAddressIsValid:self.emailAddress]) {
 		[person setObject:self.emailAddress forKey:@"email"];
-	} else if ([self.emailAddress isEqualToString:@""]) {
+	} else if ([[self.emailAddress stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]) {
 		// Delete a previously entered email
 		[person setObject:[NSNull null] forKey:@"email"];
 	}

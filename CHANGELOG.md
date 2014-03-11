@@ -4,6 +4,7 @@
 Fixes:
 
 * IOS-408 Dragging down in message center moves the keyboard as well
+* IOS-388 Change `build_distribution.py` to build Release rather than Debug builds
 
 2014-03-10 wooster, pkamb v1.2.9
 --------------------------------

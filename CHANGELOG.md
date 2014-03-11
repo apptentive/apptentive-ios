@@ -1,5 +1,12 @@
+2014-03-10 wooster, pkamb v1.3.0 (in progress)
+--------------------------------
+
+Fixes:
+
+* IOS-408 Dragging down in message center moves the keyboard as well
+
 2014-03-10 wooster, pkamb v1.2.9
-----------------------------------------------
+--------------------------------
 
 This release adds several small fixes to alleviate common support requests.
 

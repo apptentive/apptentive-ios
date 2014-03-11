@@ -202,7 +202,7 @@ if __name__ == "__main__":
 		builder = Builder(dist_type=dist_type)
 		result = builder.build()
 		if result == True:
-			log("Build suceeded")
+			log("Build succeeded")
 		else:
 			log("Build failed!")
 			break

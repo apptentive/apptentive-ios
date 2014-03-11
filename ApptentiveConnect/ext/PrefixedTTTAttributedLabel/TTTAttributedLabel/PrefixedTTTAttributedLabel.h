@@ -36,11 +36,11 @@
 /**
  Vertical alignment for text in a label whose bounds are larger than its text bounds
  */
-typedef enum {
+typedef NS_ENUM(NSInteger, TTTATTRIBUTEDLABEL_PREPEND(TTTAttributedLabelVerticalAlignment))  {
     TTTATTRIBUTEDLABEL_PREPEND(TTTAttributedLabelVerticalAlignmentCenter)   = 0,
     TTTATTRIBUTEDLABEL_PREPEND(TTTAttributedLabelVerticalAlignmentTop)      = 1,
     TTTATTRIBUTEDLABEL_PREPEND(TTTAttributedLabelVerticalAlignmentBottom)   = 2,
-} TTTATTRIBUTEDLABEL_PREPEND(TTTAttributedLabelVerticalAlignment);
+};
 
 /**
  Determines whether the text to which this attribute applies has a strikeout drawn through itself.
@@ -144,6 +144,11 @@ extern NSString * const TTTATTRIBUTEDLABEL_PREPEND(kTTTBackgroundCornerRadiusAtt
  */
 @property (nonatomic, strong) NSDictionary *activeLinkAttributes;
 
+/**
+ A dictionary containing the `NSAttributedString` attributes to be applied to links when they are in the inactive state, which is triggered a change in `tintColor` in iOS 7. Supply `nil` or an empty dictionary to opt out of inactive link styling. The default inactive link style is gray and unadorned.
+ */
+@property (nonatomic, strong) NSDictionary *inactiveLinkAttributes;
+
 ///---------------------------------------
 /// @name Acccessing Text Style Attributes
 ///---------------------------------------
@@ -165,6 +170,11 @@ extern NSString * const TTTATTRIBUTEDLABEL_PREPEND(kTTTBackgroundCornerRadiusAtt
  The shadow color for the label when the label's `highlighted` property is `YES`. The default value is `nil` (no shadow color).
  */
 @property (nonatomic, strong) UIColor *highlightedShadowColor;
+
+/**
+ The amount to kern the next character. Default is standard kerning. If this attribute is set to 0.0, no kerning is done at all.
+ */
+@property (nonatomic, assign) CGFloat kern;
 
 ///--------------------------------------------
 /// @name Acccessing Paragraph Style Attributes

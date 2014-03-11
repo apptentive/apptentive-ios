@@ -82,7 +82,7 @@
 	[parts addObject:[NSString stringWithFormat:@"inProgress: %@", inProgress ? @"YES" : @"NO"]];
 	[parts addObject:[NSString stringWithFormat:@"finished: %@", finished ? @"YES" : @"NO"]];
 	[parts addObject:[NSString stringWithFormat:@"failed: %@", failed ? @"YES" : @"NO"]];
-	[parts addObject:[NSString stringWithFormat:@"failureCount: %d", failureCount]];
+	[parts addObject:[NSString stringWithFormat:@"failureCount: %lu", (unsigned long)failureCount]];
 	[parts addObject:[NSString stringWithFormat:@"percentComplete: %f", [self percentComplete]]];
 	[parts addObject:[NSString stringWithFormat:@"taskName: %@", [self taskName]]];
 	

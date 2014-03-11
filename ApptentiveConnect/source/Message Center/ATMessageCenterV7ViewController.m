@@ -212,7 +212,7 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 #pragma mark Private
 
 - (NSString *)keyForIndexPath:(NSIndexPath *)indexPath {
-	return [NSString stringWithFormat:@"item:%d", indexPath.item];
+	return [NSString stringWithFormat:@"item:%ld", (long)indexPath.item];
 }
 
 - (void)scrollToBottomOfCollectionView {

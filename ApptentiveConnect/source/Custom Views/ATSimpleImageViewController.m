@@ -106,22 +106,23 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 		[self.containerView addSubview:scrollView];
 	} else {
 		UIView *container = nil;
-		UITextView *label = nil;
+		UILabel *label = nil;
 		if ([self.containerView viewWithTag:kATContainerViewTag]) {
 			container = [[self.containerView viewWithTag:kATContainerViewTag] retain];
-			label = [(UITextView *)[self.containerView viewWithTag:kATLabelViewTag] retain];
+			label = [(UILabel *)[self.containerView viewWithTag:kATLabelViewTag] retain];
 		} else {
 			container = [[UIView alloc] initWithFrame:self.containerView.bounds];
 			container.tag = kATContainerViewTag;
 			container.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 			container.backgroundColor = [UIColor blackColor];
-			label = [[UITextView alloc] initWithFrame:CGRectZero];
+			label = [[UILabel alloc] initWithFrame:CGRectZero];
 			label.tag = kATLabelViewTag;
 			label.backgroundColor = [UIColor clearColor];
 			label.font = [UIFont boldSystemFontOfSize:16.0];
 			label.textColor = [UIColor whiteColor];
 			label.userInteractionEnabled = NO;
 			label.textAlignment = NSTextAlignmentCenter;
+			label.numberOfLines = 0;
 			label.text = ATLocalizedString(@"You can include a screenshot by choosing a photo from your photo library above.\n\nTo take a screenshot, hold down the power and home buttons at the same time.", @"Description of what to do when there is no screenshot.");
 		}
 		[self.containerView addSubview:container];

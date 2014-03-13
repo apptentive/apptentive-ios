@@ -1,5 +1,9 @@
 This document tracks changes to the API between versions.
 
+# 1.3.0
+
+* Added `addUrbanAirshipIntegrationWithDeviceToken:` convenience method for integrating with Urban Airship.
+
 # 1.2.9
 
 The `initialUserEmailAddress` can now be updated after a user sends feedback with no email address.

@@ -3,6 +3,7 @@
 
 Fixes:
 
+* IOS-414 Add convenience method for integrating with Urban Airship (`addUrbanAirshipIntegrationWithDeviceToken:`)
 * IOS-408 Dragging down in message center moves the keyboard as well
 * IOS-388 Change `build_distribution.py` to build Release rather than Debug builds
 

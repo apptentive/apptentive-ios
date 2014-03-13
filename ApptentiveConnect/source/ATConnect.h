@@ -127,5 +127,6 @@ Note, though, that Message Center setting will be overridden by server-based con
 /*! Add or remove a token for 3rd-party integration services. */
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration;
 - (void)removeIntegration:(NSString *)integration;
+- (void)addUrbanAirshipIntegrationWithDeviceToken:(NSString *)token;
 
 @end

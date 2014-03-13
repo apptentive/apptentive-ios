@@ -212,6 +212,10 @@ NSString *const ATIntegrationKeyKahuna = @"kahuna";
 	[integrationConfiguration removeObjectForKey:integration];
 }
 
+- (void)addUrbanAirshipIntegrationWithDeviceToken:(NSString *)token {
+    [self addIntegration:ATIntegrationKeyUrbanAirship withConfiguration:@{@"token": token}];
+}
+
 - (BOOL)messageCenterEnabled {
 	return [[[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterEnabledKey] boolValue];
 }

@@ -119,16 +119,17 @@ NSString *const ATIntegrationKeyKahuna = @"kahuna";
 		return;
 	}
 		
-	if (initialUserEmailAddress != anInitialUserEmailAddress) {		
+	if (![initialUserEmailAddress isEqualToString:anInitialUserEmailAddress]) {
 		[initialUserEmailAddress release];
 		initialUserEmailAddress = nil;
 		initialUserEmailAddress = [anInitialUserEmailAddress retain];
 		
-		// Set person object's email. Only overwrites previous *initial* emails.
-		NSString *previousInitialUserEmailAddress = [[NSUserDefaults standardUserDefaults] objectForKey:ATInitialUserEmailAddressKey];
 		if ([ATPersonInfo personExists]) {
 			ATPersonInfo *person = [ATPersonInfo currentPerson];
-			if (!person.emailAddress || [person.emailAddress isEqualToString:previousInitialUserEmailAddress]) {
+			
+			// Only overwrites previous *initial* emails.
+			NSString *previousInitialUserEmailAddress = [[NSUserDefaults standardUserDefaults] objectForKey:ATInitialUserEmailAddressKey];
+			if (!person.emailAddress || ([person.emailAddress caseInsensitiveCompare:previousInitialUserEmailAddress] == NSOrderedSame)) {
 				person.emailAddress = initialUserEmailAddress;
 				person.needsUpdate = YES;
 				[person saveAsCurrentPerson];

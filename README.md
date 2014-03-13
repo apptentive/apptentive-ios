@@ -162,7 +162,7 @@ startup.
 // ...
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     ATConnect *connection = [ATConnect sharedConnection];
-    connection.apiKey = @"<Your API Key>";
+    connection.apiKey = @"Your_Apptentive_API_Key";
     // ...
 }
 ```
@@ -208,7 +208,7 @@ To use it...
 // ...
 - (void)applicationDidFinishLaunching:(UIApplication *)application /* ... */ {
     ATAppRatingFlow *sharedFlow = [ATAppRatingFlow sharedRatingFlow];
-    sharedFlow.appID = @"<Your iTunes App ID>";
+    sharedFlow.appID = @"Your_iTunes_App_Store_ID";
     // ...
 }
 ```

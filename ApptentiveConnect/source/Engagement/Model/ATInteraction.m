@@ -189,4 +189,14 @@
 	return result;
 }
 
+- (void)dealloc {
+	[_identifier release], _identifier = nil;
+	[_type release], _type = nil;
+	[_configuration release], _configuration = nil;
+	[_criteria release], _criteria = nil;
+	[_version release], _version = nil;
+	
+	[super dealloc];
+}
+
 @end

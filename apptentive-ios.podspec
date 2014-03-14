@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
   s.homepage = 'https://www.apptentive.com/'
   s.author   = { "Andrew Wooster" => "andrew@apptentive.com" }
   s.source   = { :git => 'git@github.com:apptentive/apptentive-ios.git', :tag => "#{s.version}" }
-  s.platform = :ios, '4.3'
+  s.platform = :ios, '5.1.1'
   s.source_files   = 'ApptentiveConnect/source/**/*.{h,m}','ApptentiveConnect/ext/**/*.{h,m}'
   s.exclude_files = 'ApptentiveConnect/ext/PrefixedTTTAttributedLabel/**/*.*'
   s.subspec 'arc-files' do |sna|

@@ -19,8 +19,6 @@
 #import "ATUtilities.h"
 #import "ATWebClient_Private.h"
 
-#import "NSData+ATBase64.h"
-
 NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 
 #define kUserAgentFormat (@"ApptentiveConnect/%@ (%@)")

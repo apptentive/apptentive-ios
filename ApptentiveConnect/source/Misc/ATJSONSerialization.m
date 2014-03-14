@@ -7,33 +7,10 @@
 //
 
 #import "ATJSONSerialization.h"
-#import "PJSONKit.h"
 
 @implementation ATJSONSerialization
 + (NSData *)dataWithJSONObject:(id)obj options:(ATJSONWritingOptions)opt error:(NSError **)error {
-	if ([NSJSONSerialization class]) {
-		return [NSJSONSerialization dataWithJSONObject:obj options:opterr error:error];
-	} else {
-		ATJKSerializeOptionFlags flags = 0;
-		if (opt & ATJSONWritingPrettyPrinted) {
-			flags = flags | ATJSONWritingPrettyPrinted;
-		}
-		if ([obj isKindOfClass:[NSString class]]) {
-			NSString *s = (NSString *)obj;
-			return [s ATJSONDataWithOptions:flags includeQuotes:YES error:error];
-		} else if ([obj isKindOfClass:[NSArray class]]) {
-			NSArray *a = (NSArray *)obj;
-			return [a ATJSONDataWithOptions:flags error:error];
-		} else if ([obj isKindOfClass:[NSDictionary class]]) {
-			NSDictionary *d = (NSDictionary *)obj;
-			return [d ATJSONDataWithOptions:flags error:error];
-		} else {
-			if (error != NULL) {
-				*error = [[[NSError alloc] initWithDomain:@"ATErrorDomain" code:-1L userInfo:@{NSLocalizedDescriptionKey:@"Cannot serialize object of unknown type."}] autorelease];
-			}
-			return nil;
-		}
-	}
+	return [NSJSONSerialization dataWithJSONObject:obj options:opterr error:error];
 }
 
 + (NSString *)stringWithJSONObject:(id)obj options:(ATJSONWritingOptions)opt error:(NSError **)error {
@@ -46,13 +23,7 @@
 }
 
 + (id)JSONObjectWithData:(NSData *)data error:(NSError **)error {
-	if ([NSJSONSerialization class]) {
-		return [NSJSONSerialization JSONObjectWithData:data options:0 error:error];
-	} else {
-		ATJSONDecoder *decoder = [ATJSONDecoder decoder];
-		id decodedObject = [decoder objectWithData:data error:error];
-		return decodedObject;
-	}
+	return [NSJSONSerialization JSONObjectWithData:data options:0 error:error];
 }
 
 + (id)JSONObjectWithString:(NSString *)string error:(NSError **)error {

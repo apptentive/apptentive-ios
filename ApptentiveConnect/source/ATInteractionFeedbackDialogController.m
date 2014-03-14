@@ -38,4 +38,11 @@
 	}
 }
 
+- (void)dealloc {
+	[_interaction release], _interaction = nil;
+	[_viewController release], _viewController = nil;
+	
+	[super dealloc];
+}
+
 @end

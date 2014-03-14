@@ -50,8 +50,6 @@ NSString *const ATInteractionRatingDialogDecline = @"ATInteractionRatingDialogDe
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	if (alertView == self.ratingDialog) {
-		[self.ratingDialog release], self.ratingDialog = nil;
-		
 		if (buttonIndex == 1) { // rate
 			[self postNotification:ATAppRatingDidClickRatingButtonNotification forButton:ATAppRatingButtonTypeRateApp];
 			[[ATConnect sharedConnection] engage:ATInteractionRatingDialogRate fromViewController:self.viewController];
@@ -63,13 +61,21 @@ NSString *const ATInteractionRatingDialogDecline = @"ATInteractionRatingDialogDe
 			[[ATConnect sharedConnection] engage:ATInteractionRatingDialogDecline fromViewController:self.viewController];
 		}
 		
-		self.viewController = nil;
+		[self release];
 	}
 }
 
 - (void)postNotification:(NSString *)name forButton:(ATAppRatingButtonType)button {
 	NSDictionary *userInfo = @{ATAppRatingButtonTypeKey: @(button)};
 	[[NSNotificationCenter defaultCenter] postNotificationName:name object:self userInfo:userInfo];
+}
+
+- (void)dealloc {
+	[_interaction release], _interaction = nil;
+	[_ratingDialog release], _ratingDialog = nil;
+	[_viewController release], _viewController = nil;
+	
+	[super dealloc];
 }
 
 @end

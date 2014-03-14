@@ -12,7 +12,7 @@
 
 @interface ATInteractionEnjoymentDialogController : NSObject
 
-@property (nonatomic, retain) ATInteraction *interaction;
+@property (nonatomic, retain, readonly) ATInteraction *interaction;
 @property (nonatomic, retain) UIAlertView *enjoymentDialog;
 @property (nonatomic, retain) UIViewController *viewController;
 

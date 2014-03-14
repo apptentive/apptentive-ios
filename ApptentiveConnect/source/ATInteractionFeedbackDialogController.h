@@ -12,7 +12,7 @@
 
 @interface ATInteractionFeedbackDialogController : NSObject
 
-@property (nonatomic, retain) ATInteraction *interaction;
+@property (nonatomic, retain, readonly) ATInteraction *interaction;
 @property (nonatomic, retain) UIViewController *viewController;
 
 - (id)initWithInteraction:(ATInteraction *)interaction;

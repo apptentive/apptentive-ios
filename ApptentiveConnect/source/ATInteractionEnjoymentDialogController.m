@@ -48,7 +48,6 @@ NSString *const ATInteractionEnjoymentDialogYes = @"com.apptentive/enjoyment_dia
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	if (alertView == self.enjoymentDialog) {
-		[self.enjoymentDialog release], self.enjoymentDialog = nil;
 		if (buttonIndex == 0) { // no
 			[self postNotification:ATAppRatingDidClickEnjoymentButtonNotification forButton:ATAppRatingEnjoymentButtonTypeNo];
 			
@@ -66,12 +65,22 @@ NSString *const ATInteractionEnjoymentDialogYes = @"com.apptentive/enjoyment_dia
 			
 			[[ATConnect sharedConnection] engage:ATInteractionEnjoymentDialogYes fromViewController:self.viewController];
 		}
+		
+		[self release];
 	}
 }
 
 - (void)postNotification:(NSString *)name forButton:(ATAppRatingEnjoymentButtonType)button {
 	NSDictionary *userInfo = @{ATAppRatingButtonTypeKey: @(button)};
 	[[NSNotificationCenter defaultCenter] postNotificationName:name object:self userInfo:userInfo];
+}
+
+- (void)dealloc {
+	[_interaction release], _interaction = nil;
+	[_enjoymentDialog release], _enjoymentDialog = nil;
+	[_viewController release], _viewController = nil;
+	
+	[super dealloc];
 }
 
 @end

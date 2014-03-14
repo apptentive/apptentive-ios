@@ -12,7 +12,7 @@
 
 @interface ATInteractionRatingDialogController : NSObject
 
-@property (nonatomic, retain) ATInteraction *interaction;
+@property (nonatomic, retain, readonly) ATInteraction *interaction;
 @property (nonatomic, retain) UIAlertView *ratingDialog;
 @property (nonatomic, retain) UIViewController *viewController;
 

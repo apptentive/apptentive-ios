@@ -10,7 +10,7 @@
 
 @class ATInteractionUsageData;
 
-@interface ATInteraction : NSObject <NSCoding>
+@interface ATInteraction : NSObject <NSCoding, NSCopying>
 @property (nonatomic, retain) NSString *identifier;
 @property (nonatomic, assign) int priority;
 @property (nonatomic, retain) NSString *type;

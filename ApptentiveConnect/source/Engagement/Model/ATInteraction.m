@@ -56,6 +56,22 @@
 	[coder encodeObject:self.version forKey:@"version"];
 }
 
+- (id)copyWithZone:(NSZone *)zone
+{
+    ATInteraction *copy = [[ATInteraction alloc] init];
+	
+    if (copy) {
+		copy.identifier = self.identifier;
+		copy.priority = self.priority;
+		copy.type = self.type;
+		copy.configuration = self.configuration;
+		copy.criteria = self.criteria;
+		copy.version = self.version;
+    }
+	
+    return copy;
+}
+
 - (ATInteractionUsageData *)usageData {
 	return [ATInteractionUsageData usageDataForInteraction:self];
 }

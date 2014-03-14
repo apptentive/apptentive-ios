@@ -589,14 +589,7 @@ static NSURLCache *imageCache = nil;
 	ATNavigationController *nc = [[ATNavigationController alloc] initWithRootViewController:vc];
 	nc.disablesAutomaticKeyboardDismissal = NO;
 	nc.modalPresentationStyle = UIModalPresentationFormSheet;
-	if ([viewController respondsToSelector:@selector(presentViewController:animated:completion:)]) {
-		[viewController presentViewController:nc animated:YES completion:^{}];
-	} else {
-#		pragma clang diagnostic push
-#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		[viewController presentModalViewController:nc animated:YES];
-#		pragma clang diagnostic pop
-	}
+	[viewController presentViewController:nc animated:YES completion:^{}];
 	presentedMessageCenterViewController = nc;
 	[vc release], vc = nil;
 }
@@ -618,26 +611,8 @@ static NSURLCache *imageCache = nil;
 	}
 	
 	if (presentedMessageCenterViewController != nil) {
-		BOOL didDismiss = NO;
-		if ([presentedMessageCenterViewController respondsToSelector:@selector(presentingViewController)]) {
-			UIViewController *vc = [presentedMessageCenterViewController presentingViewController];
-			if ([vc respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
-				didDismiss = YES;
-				[vc dismissViewControllerAnimated:animated completion:completion];
-			}
-		}
-		if (!didDismiss) {
-			// Gnarly hack for iOS 4.
-#			pragma clang diagnostic push
-#			pragma clang diagnostic ignored "-Wdeprecated-declarations"
-			[presentedMessageCenterViewController dismissModalViewControllerAnimated:YES];
-#			pragma clang diagnostic pop
-			[presentedMessageCenterViewController release], presentedMessageCenterViewController = nil;
-			
-			double delayInSeconds = 1.0;
-			dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-			dispatch_after(popTime, dispatch_get_main_queue(), completion);
-		}
+		UIViewController *vc = [presentedMessageCenterViewController presentingViewController];
+		[vc dismissViewControllerAnimated:YES completion:completion];
 	}
 }
 

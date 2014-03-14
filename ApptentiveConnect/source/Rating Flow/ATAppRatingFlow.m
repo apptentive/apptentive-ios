@@ -256,14 +256,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 
 #pragma mark SKStoreProductViewControllerDelegate
 - (void)productViewControllerDidFinish:(SKStoreProductViewController *)productViewController {
-	if ([productViewController respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
-		[productViewController dismissViewControllerAnimated:YES completion:NULL];
-	} else {
-#		pragma clang diagnostic push
-#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		[productViewController dismissModalViewControllerAnimated:YES];
-#		pragma clang diagnostic pop
-	}
+	[productViewController dismissViewControllerAnimated:YES completion:NULL];
 }
 #endif
 @end
@@ -376,14 +369,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 				[self showUnableToOpenAppStoreDialog];
 			} else {
 				UIViewController *presentingVC = [self rootViewControllerForCurrentWindow];
-				if ([presentingVC respondsToSelector:@selector(presentViewController:animated:completion:)]) {
-					[presentingVC presentViewController:vc animated:YES completion:^{}];
-				} else {
-#					pragma clang diagnostic push
-#					pragma clang diagnostic ignored "-Wdeprecated-declarations"
-					[presentingVC presentModalViewController:vc animated:YES];
-#					pragma clang diagnostic pop
-				}
+				[presentingVC presentViewController:vc animated:YES completion:^{}];
 			}
 		}];
 	}
@@ -685,12 +671,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 		if ([vc respondsToSelector:@selector(presentedViewController)] && [vc presentedViewController]) {
 			return [vc presentedViewController];
 		}
-#		pragma clang diagnostic push
-#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		if ([vc respondsToSelector:@selector(modalViewController)] && [vc modalViewController]) {
-			return [vc modalViewController];
-		}
-#		pragma clang diagnostic pop
 		return vc;
 	} else {
 		return nil;

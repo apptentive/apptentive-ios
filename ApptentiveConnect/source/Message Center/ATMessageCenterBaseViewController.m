@@ -182,14 +182,7 @@
 	if (self.dismissalDelegate) {
 		[self.dismissalDelegate messageCenterWillDismiss:self];
 	}
-	if ([self.navigationController respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
-		[self.navigationController dismissViewControllerAnimated:YES completion:NULL];
-	} else {
-#		pragma clang diagnostic push
-#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		[self.navigationController dismissModalViewControllerAnimated:YES];
-#		pragma clang diagnostic pop
-	}
+	[self.navigationController dismissViewControllerAnimated:YES completion:NULL];
 }
 
 - (IBAction)settingsPressed:(id)sender {
@@ -202,14 +195,7 @@
 	ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithDelegate:self];
 	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
 	nc.modalPresentationStyle = UIModalPresentationFormSheet;
-	if ([self.navigationController respondsToSelector:@selector(presentViewController:animated:completion:)]) {
-		[self.navigationController presentViewController:nc animated:YES completion:^{}];
-	} else {
-#		pragma clang diagnostic push
-#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		[self.navigationController presentModalViewController:nc animated:YES];
-#		pragma clang diagnostic pop
-	}
+	[self.navigationController presentViewController:nc animated:YES completion:^{}];
 	[vc release], vc = nil;
 	[nc release], nc = nil;
 }
@@ -331,14 +317,7 @@
 	ATSimpleImageViewController *vc = [[ATSimpleImageViewController alloc] initWithDelegate:self];
 	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
 	nc.modalPresentationStyle = UIModalPresentationFormSheet;
-	if ([self.navigationController respondsToSelector:@selector(presentViewController:animated:completion:)]) {
-		[self.navigationController presentViewController:nc animated:YES completion:^{}];
-	} else {
-#		pragma clang diagnostic push
-#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		[self.navigationController presentModalViewController:nc animated:YES];
-#		pragma clang diagnostic pop
-	}
+	[self.navigationController presentViewController:nc animated:YES completion:^{}];
 	[vc release], vc = nil;
 	[nc release], nc = nil;
 }

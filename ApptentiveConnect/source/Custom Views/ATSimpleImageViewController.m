@@ -174,14 +174,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 			[blockDelegate release];
 		}];
 	} else {
-		if ([self respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
-			[self dismissViewControllerAnimated:YES completion:NULL];
-		} else {
-#			pragma clang diagnostic push
-#			pragma clang diagnostic ignored "-Wdeprecated-declarations"
-			[self dismissModalViewControllerAnimated:YES];
-#			pragma clang diagnostic pop
-		}
+		[self dismissViewControllerAnimated:YES completion:NULL];
 	}
 }
 
@@ -241,7 +234,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 			// pass
 		}];
 	} else if (self.modalViewController) {
-		[self.navigationController dismissModalViewControllerAnimated:YES];
+		[self.navigationController dismissViewControllerAnimated:YES completion:NULL];
 	}
 #	pragma clang diagnostic pop
 }
@@ -256,7 +249,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 			// pass
 		}];
 	} else if (self.modalViewController) {
-		[self.navigationController dismissModalViewControllerAnimated:YES];
+		[self.navigationController dismissViewControllerAnimated:YES completion:NULL];
 	}
 #	pragma clang diagnostic pop
 }
@@ -313,13 +306,8 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 		} else {
 			[imagePickerPopover presentPopoverFromBarButtonItem:self.navigationItem.leftBarButtonItem permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
 		}
-	} else if ([self respondsToSelector:@selector(presentViewController:animated:completion:)]) {
-		[self presentViewController:imagePicker animated:YES completion:NULL];
 	} else {
-#		pragma clang diagnostic push
-#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		[self presentModalViewController:imagePicker animated:YES];
-#		pragma clang diagnostic pop
+		[self presentViewController:imagePicker animated:YES completion:NULL];
 	}
 	[imagePicker release];
 }
@@ -332,14 +320,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 	UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
 	imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
 	imagePicker.delegate = self;
-	if ([self respondsToSelector:@selector(presentViewController:animated:completion:)]) {
-		[self presentViewController:imagePicker animated:YES completion:NULL];
-	} else {
-#		pragma clang diagnostic push
-#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		[self presentModalViewController:imagePicker animated:YES];
-#		pragma clang diagnostic pop
-	}
+	[self presentViewController:imagePicker animated:YES completion:NULL];
 	[imagePicker release];
 }
 

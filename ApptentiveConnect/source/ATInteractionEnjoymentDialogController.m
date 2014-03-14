@@ -11,6 +11,7 @@
 #import "ATBackend.h"
 #import "ATConnect_Private.h"
 #import "ATAppRatingMetrics.h"
+#import "ATUtilities.h"
 
 NSString *const ATInteractionEnjoymentDialogNo = @"com.apptentive/enjoyment_dialog/no";
 NSString *const ATInteractionEnjoymentDialogYes = @"com.apptentive/enjoyment_dialog/yes";
@@ -52,7 +53,7 @@ NSString *const ATInteractionEnjoymentDialogYes = @"com.apptentive/enjoyment_dia
 			[self postNotification:ATAppRatingDidClickEnjoymentButtonNotification forButton:ATAppRatingEnjoymentButtonTypeNo];
 			
 			if (!self.viewController) {
-				UIViewController *candidateVC = [self rootViewControllerForCurrentWindow];
+				UIViewController *candidateVC = [ATUtilities rootViewControllerForCurrentWindow];
 				if (candidateVC) {
 					self.viewController = candidateVC;
 				}
@@ -65,35 +66,6 @@ NSString *const ATInteractionEnjoymentDialogYes = @"com.apptentive/enjoyment_dia
 			
 			[[ATConnect sharedConnection] engage:ATInteractionEnjoymentDialogYes fromViewController:self.viewController];
 		}
-	}
-}
-
-- (UIViewController *)rootViewControllerForCurrentWindow {
-	UIWindow *window = nil;
-	if (self.viewController && self.viewController.view && self.viewController.view.window) {
-		window = self.viewController.view.window;
-	} else {
-		for (UIWindow *tmpWindow in [[UIApplication sharedApplication] windows]) {
-			if ([[tmpWindow screen] isEqual:[UIScreen mainScreen]] && [tmpWindow isKeyWindow]) {
-				window = tmpWindow;
-				break;
-			}
-		}
-	}
-	if (window && [window respondsToSelector:@selector(rootViewController)]) {
-		UIViewController *vc = [window rootViewController];
-		if ([vc respondsToSelector:@selector(presentedViewController)] && [vc presentedViewController]) {
-			return [vc presentedViewController];
-		}
-#		pragma clang diagnostic push
-#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		if ([vc respondsToSelector:@selector(modalViewController)] && [vc modalViewController]) {
-			return [vc modalViewController];
-		}
-#		pragma clang diagnostic pop
-		return vc;
-	} else {
-		return nil;
 	}
 }
 

@@ -315,16 +315,13 @@ static NSDateFormatter *dateFormatter = nil;
 
 + (UIViewController *)rootViewControllerForCurrentWindow {
 	UIWindow *window = nil;
-	if (self.viewController && self.viewController.view && self.viewController.view.window) {
-		window = self.viewController.view.window;
-	} else {
-		for (UIWindow *tmpWindow in [[UIApplication sharedApplication] windows]) {
-			if ([[tmpWindow screen] isEqual:[UIScreen mainScreen]] && [tmpWindow isKeyWindow]) {
-				window = tmpWindow;
-				break;
-			}
+	for (UIWindow *tmpWindow in [[UIApplication sharedApplication] windows]) {
+		if ([[tmpWindow screen] isEqual:[UIScreen mainScreen]] && [tmpWindow isKeyWindow]) {
+			window = tmpWindow;
+			break;
 		}
 	}
+
 	if (window && [window respondsToSelector:@selector(rootViewController)]) {
 		UIViewController *vc = [window rootViewController];
 		if ([vc respondsToSelector:@selector(presentedViewController)] && [vc presentedViewController]) {

@@ -67,7 +67,7 @@ NSString *const ATInteractionRatingDialogDecline = @"ATInteractionRatingDialogDe
 	}
 }
 
-- (void)postNotification:(NSString *)name forButton:(int)button {
+- (void)postNotification:(NSString *)name forButton:(ATAppRatingButtonType)button {
 	NSDictionary *userInfo = @{ATAppRatingButtonTypeKey: @(button)};
 	[[NSNotificationCenter defaultCenter] postNotificationName:name object:self userInfo:userInfo];
 }

@@ -69,7 +69,7 @@ NSString *const ATInteractionEnjoymentDialogYes = @"com.apptentive/enjoyment_dia
 	}
 }
 
-- (void)postNotification:(NSString *)name forButton:(int)button {
+- (void)postNotification:(NSString *)name forButton:(ATAppRatingEnjoymentButtonType)button {
 	NSDictionary *userInfo = @{ATAppRatingButtonTypeKey: @(button)};
 	[[NSNotificationCenter defaultCenter] postNotificationName:name object:self userInfo:userInfo];
 }

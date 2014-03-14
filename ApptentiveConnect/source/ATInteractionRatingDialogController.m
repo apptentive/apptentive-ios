@@ -22,7 +22,7 @@ NSString *const ATInteractionRatingDialogDecline = @"ATInteractionRatingDialogDe
 	NSAssert([interaction.type isEqualToString:@"RatingDialog"], @"Attempted to load a Rating Dialog with an interaction of type: %@", interaction.type);
 	self = [super init];
 	if (self != nil) {
-		_interaction = interaction;
+		_interaction = [interaction copy];
 	}
 	return self;
 }

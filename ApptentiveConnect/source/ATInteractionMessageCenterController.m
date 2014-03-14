@@ -18,7 +18,7 @@
 	NSAssert([interaction.type isEqualToString:@"MessageCenter"], @"Attempted to load a MessageCenterController with an interaction of type: %@", interaction.type);
 	self = [super init];
 	if (self != nil) {
-		_interaction = interaction;
+		_interaction = [interaction copy];
 	}
 	return self;
 }

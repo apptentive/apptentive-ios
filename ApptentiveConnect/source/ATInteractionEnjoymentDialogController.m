@@ -22,7 +22,7 @@ NSString *const ATInteractionEnjoymentDialogYes = @"com.apptentive/enjoyment_dia
 	NSAssert([interaction.type isEqualToString:@"EnjoymentDialog"], @"Attempted to load an EnjoymentDialogController with an interaction of type: %@", interaction.type);
 	self = [super init];
 	if (self != nil) {
-		_interaction = interaction;
+		_interaction = [interaction copy];
 	}
 	return self;
 }

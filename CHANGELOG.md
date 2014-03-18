@@ -1,11 +1,16 @@
-2014-03-10 wooster, pkamb v1.3.0 (in progress)
+2014-03-10 wooster, pkamb v1.4.0 (in progress)
 --------------------------------
 
 Fixes:
 
+* IOS-426 Drop iOS 4 Support
 * IOS-414 Add convenience method for integrating with Urban Airship (`addUrbanAirshipIntegrationWithDeviceToken:`)
 * IOS-408 Dragging down in message center moves the keyboard as well
 * IOS-388 Change `build_distribution.py` to build Release rather than Debug builds
+* IOS-429 Remove unused images in SDK
+* IOS-420 Text clipped in screenshot instructions
+* IOS-398 Crash in TTTAttributedLabel
+* IOS-421 Pull in image compression improvements
 
 2014-03-10 wooster, pkamb v1.2.9
 --------------------------------

@@ -29,8 +29,12 @@
 	if (!self.viewController) {
 		ATLogError(@"No view controller to present Message Center interface!!");
 	} else {
-		//TODO: present Message Center
+		// Message Center interaction, Phase 1.
+		// Simply call old Message Center. Not customizable.
+		[[ATConnect sharedConnection] presentMessageCenterFromViewController:viewController];
 	}
+	
+	[self release];
 }
 
 - (void)dealloc {

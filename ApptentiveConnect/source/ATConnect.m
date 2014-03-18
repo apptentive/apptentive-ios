@@ -56,6 +56,8 @@ NSString *const ATIntegrationKeyKahuna = @"kahuna";
 		NSDictionary *defaults = @{ATAppConfigurationMessageCenterEnabledKey : [NSNumber numberWithBool:_initiallyUseMessageCenter],
 								   ATAppConfigurationMessageCenterEmailRequiredKey : [NSNumber numberWithBool:NO]};
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
+		
+		ATLogInfo(@"Apptentive SDK Version %@", kATConnectVersionString);
 	}
 	return self;
 }

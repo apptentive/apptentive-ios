@@ -36,12 +36,13 @@ NSString *const ATInteractionEnjoymentDialogNo = @"com.apptentive#EnjoymentDialo
 	
 	NSDictionary *config = self.interaction.configuration;
 	
-	NSString *title = config[@"body"] ?: [NSString stringWithFormat:ATLocalizedString(@"Do you love %@?", @"Title for enjoyment alert view. Parameter is app name."), [[ATBackend sharedBackend] appName]];
+	NSString *title = config[@"title"] ?: [NSString stringWithFormat:ATLocalizedString(@"Do you love %@?", @"Title for enjoyment alert view. Parameter is app name."), [[ATBackend sharedBackend] appName]];
+	NSString *body = nil;
 	NSString *yesText = config[@"yes_text"] ?: ATLocalizedString(@"Yes", @"yes");
 	NSString *noText = config[@"no_text"] ?: ATLocalizedString(@"No", @"no");
 	
 	if (!self.enjoymentDialog) {
-		self.enjoymentDialog = [[UIAlertView alloc] initWithTitle:title message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:noText, yesText, nil];
+		self.enjoymentDialog = [[UIAlertView alloc] initWithTitle:title message:body delegate:self cancelButtonTitle:nil otherButtonTitles:noText, yesText, nil];
 		[self.enjoymentDialog show];
 	}
 

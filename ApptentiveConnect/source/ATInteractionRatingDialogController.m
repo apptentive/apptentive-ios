@@ -17,9 +17,11 @@
 #import "ATAppRatingFlow.h"
 #import "ATAppRatingFlow_Private.h"
 
-NSString *const ATInteractionRatingDialogRate = @"ATInteractionRatingDialogRate";
-NSString *const ATInteractionRatingDialogRemind = @"ATInteractionRatingDialogRemind";
-NSString *const ATInteractionRatingDialogDecline = @"ATInteractionRatingDialogDecline";
+NSString *const ATInteractionRatingDialogLaunch = @"com.apptentive#RatingDialog#launch";
+NSString *const ATInteractionRatingDialogCancel = @"com.apptentive#RatingDialog#cancel";
+NSString *const ATInteractionRatingDialogRate = @"com.apptentive#RatingDialog#rate";
+NSString *const ATInteractionRatingDialogRemind = @"com.apptentive#RatingDialog#remind";
+NSString *const ATInteractionRatingDialogDecline = @"com.apptentive#RatingDialog#decline";
 
 @implementation ATInteractionRatingDialogController
 

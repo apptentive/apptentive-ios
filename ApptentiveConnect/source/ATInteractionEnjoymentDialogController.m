@@ -13,8 +13,10 @@
 #import "ATAppRatingMetrics.h"
 #import "ATUtilities.h"
 
-NSString *const ATInteractionEnjoymentDialogNo = @"com.apptentive/enjoyment_dialog/no";
-NSString *const ATInteractionEnjoymentDialogYes = @"com.apptentive/enjoyment_dialog/yes";
+NSString *const ATInteractionEnjoymentDialogLaunch = @"com.apptentive#EnjoymentDialog#launch";
+NSString *const ATInteractionEnjoymentDialogCancel = @"com.apptentive#EnjoymentDialog#cancel";
+NSString *const ATInteractionEnjoymentDialogYes = @"com.apptentive#EnjoymentDialog#yes";
+NSString *const ATInteractionEnjoymentDialogNo = @"com.apptentive#EnjoymentDialog#no";
 
 @implementation ATInteractionEnjoymentDialogController
 

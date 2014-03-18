@@ -12,6 +12,13 @@
 #import "ATConnect_Private.h"
 #import "ATAppRatingMetrics.h"
 
+NSString *const ATInteractionFeedbackDialogLaunch = @"com.apptentive#FeebackDialog#launch";
+NSString *const ATInteractionFeedbackDialogDismiss = @"com.apptentive#FeebackDialog#dismiss";
+NSString *const ATInteractionFeedbackDialogCancel = @"com.apptentive#FeebackDialog#cancel";
+NSString *const ATInteractionFeedbackDialogSubmit = @"com.apptentive#FeebackDialog#submit";
+NSString *const ATInteractionFeedbackDialogSkipViewMessages = @"com.apptentive#FeebackDialog#skip_view_messages";
+NSString *const ATInteractionFeedbackDialogViewMessages = @"com.apptentive#FeebackDialog#view_messages";
+
 @implementation ATInteractionFeedbackDialogController
 
 - (id)initWithInteraction:(ATInteraction *)interaction {

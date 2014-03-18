@@ -8,9 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <StoreKit/StoreKit.h>
+
 @class ATInteraction;
 
 @interface ATInteractionRatingDialogController : NSObject
+#if TARGET_OS_IPHONE
+<SKStoreProductViewControllerDelegate, UIAlertViewDelegate>
+#endif
 
 @property (nonatomic, retain, readonly) ATInteraction *interaction;
 @property (nonatomic, retain) UIAlertView *ratingDialog;

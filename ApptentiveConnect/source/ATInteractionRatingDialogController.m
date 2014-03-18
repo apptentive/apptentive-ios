@@ -55,12 +55,19 @@ NSString *const ATInteractionRatingDialogDecline = @"ATInteractionRatingDialogDe
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	if (alertView == self.ratingDialog) {
+		
+		BOOL shouldClose = YES;
+		
 		if (buttonIndex == 1) { // rate
 			[self postNotification:ATAppRatingDidClickRatingButtonNotification forButton:ATAppRatingButtonTypeRateApp];
 			
 			[[NSNotificationCenter defaultCenter] postNotificationName:ATAppRatingFlowUserAgreedToRateAppNotification object:nil];
 			
 			[[ATConnect sharedConnection] engage:ATInteractionRatingDialogRate fromViewController:self.viewController];
+			
+			if ([self shouldOpenAppStoreViaStoreKit]) {
+				shouldClose = NO;
+			}
 						
 			[self openAppStoreToRateApp];
 			
@@ -74,7 +81,9 @@ NSString *const ATInteractionRatingDialogDecline = @"ATInteractionRatingDialogDe
 			[[ATConnect sharedConnection] engage:ATInteractionRatingDialogDecline fromViewController:self.viewController];
 		}
 		
-		[self release];
+		if (shouldClose) {
+			[self release];
+		}
 	}
 }
 
@@ -177,6 +186,20 @@ NSString *const ATInteractionRatingDialogDecline = @"ATInteractionRatingDialogDe
 	else {
 		[self showUnableToOpenAppStoreDialog];
 	}
+}
+
+#pragma mark SKStoreProductViewControllerDelegate
+- (void)productViewControllerDidFinish:(SKStoreProductViewController *)productViewController {
+	if ([productViewController respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
+		[productViewController dismissViewControllerAnimated:YES completion:NULL];
+	} else {
+#		pragma clang diagnostic push
+#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
+		[productViewController dismissModalViewControllerAnimated:YES];
+#		pragma clang diagnostic pop
+	}
+	
+	[self release];
 }
 
 - (void)openMacAppStore {

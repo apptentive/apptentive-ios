@@ -11,6 +11,8 @@ Fixes:
 * IOS-420 Text clipped in screenshot instructions
 * IOS-398 Crash in TTTAttributedLabel
 * IOS-421 Pull in image compression improvements
+* #84 dismissMessageCenterAnimated does not call completion block in some cases
+* #83 Calling dismissMessageCenterAnimated can break future calls to presentMessageCenterFromViewController
 
 2014-03-10 wooster, pkamb v1.2.9
 --------------------------------

@@ -606,13 +606,25 @@ static NSURLCache *imageCache = nil;
 	self.currentCustomData = nil;
 	
 	if (currentMessagePanelController != nil) {
-		[currentMessagePanelController dismissAnimated:animated completion:completion];
+		[currentMessagePanelController dismissAnimated:animated completion:^{
+			[currentMessagePanelController release], currentMessagePanelController = nil;
+			completion();
+		}];
 		return;
 	}
 	
 	if (presentedMessageCenterViewController != nil) {
 		UIViewController *vc = [presentedMessageCenterViewController presentingViewController];
-		[vc dismissViewControllerAnimated:YES completion:completion];
+		[vc dismissViewControllerAnimated:YES completion:^{
+			[presentedMessageCenterViewController release], presentedMessageCenterViewController = nil;
+			completion();
+		}];
+		return;
+	}
+	
+	if (completion) {
+		// Call completion block even if we do nothing.
+		completion();
 	}
 }
 

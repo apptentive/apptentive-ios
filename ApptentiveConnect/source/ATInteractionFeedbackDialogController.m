@@ -35,6 +35,8 @@ NSString *const ATInteractionFeedbackDialogViewMessages = @"com.apptentive#Feeba
 	[self retain];
 	
 	self.viewController = viewController;
+	
+	[[ATConnect sharedConnection] engage:ATInteractionFeedbackDialogLaunch fromViewController:self.viewController];
 		
 	if (!self.viewController) {
 		ATLogError(@"No view controller to present feedback interface!!");
@@ -80,14 +82,17 @@ NSString *const ATInteractionFeedbackDialogViewMessages = @"com.apptentive#Feeba
 }
 
 - (void)messagePanelDidCancel:(ATMessagePanelViewController *)messagePanel {
+	[[ATConnect sharedConnection] engage:ATInteractionFeedbackDialogCancel fromViewController:self.viewController];
 	
 }
 
 - (void)messagePanel:(ATMessagePanelViewController *)messagePanel didSendMessage:(NSString *)message withEmailAddress:(NSString *)emailAddress {
+	[[ATConnect sharedConnection] engage:ATInteractionFeedbackDialogSubmit fromViewController:self.viewController];
 	
 }
 
 - (void)messagePanel:(ATMessagePanelViewController *)messagePanel didDismissWithAction:(ATMessagePanelDismissAction)action {
+	[[ATConnect sharedConnection] engage:ATInteractionFeedbackDialogDismiss fromViewController:self.viewController];
 	
 	[self release];
 }

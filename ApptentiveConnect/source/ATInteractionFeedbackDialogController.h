@@ -8,9 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "ATMessagePanelViewController.h"
 @class ATInteraction;
 
-@interface ATInteractionFeedbackDialogController : NSObject
+@interface ATInteractionFeedbackDialogController : NSObject <ATMessagePanelDelegate>
 
 @property (nonatomic, retain, readonly) ATInteraction *interaction;
 @property (nonatomic, retain) UIViewController *viewController;

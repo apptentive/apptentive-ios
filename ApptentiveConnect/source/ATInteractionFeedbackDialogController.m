@@ -10,7 +10,8 @@
 #import "ATInteraction.h"
 #import "ATBackend.h"
 #import "ATConnect_Private.h"
-#import "ATAppRatingMetrics.h"
+#import "ATMessagePanelNewUIViewController.h"
+#import "ATUtilities.h"
 
 NSString *const ATInteractionFeedbackDialogLaunch = @"com.apptentive#FeebackDialog#launch";
 NSString *const ATInteractionFeedbackDialogDismiss = @"com.apptentive#FeebackDialog#dismiss";
@@ -59,6 +60,29 @@ NSString *const ATInteractionFeedbackDialogViewMessages = @"com.apptentive#Feeba
 	NSString *body = config[@"body"] ?: ATLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
 	
 	[[ATBackend sharedBackend] sendAutomatedMessageWithTitle:title body:body];
+}
+
+- (void)messagePanelDidCancel:(ATMessagePanelViewController *)messagePanel {
+	
+}
+
+- (void)messagePanel:(ATMessagePanelViewController *)messagePanel didSendMessage:(NSString *)message withEmailAddress:(NSString *)emailAddress {
+	
+}
+
+- (void)messagePanel:(ATMessagePanelViewController *)messagePanel didDismissWithAction:(ATMessagePanelDismissAction)action {
+	
+	[self release];
+}
+
+- (NSString *)initialEmailAddressForMessagePanel:(ATMessagePanelViewController *)messagePanel {
+	NSString *email = [ATConnect sharedConnection].initialUserEmailAddress;
+	
+	if ([ATPersonInfo personExists]) {
+		email = [ATPersonInfo currentPerson].emailAddress;
+	}
+	
+	return email;
 }
 
 @end

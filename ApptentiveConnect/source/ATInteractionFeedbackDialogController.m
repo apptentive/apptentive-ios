@@ -32,18 +32,35 @@ NSString *const ATInteractionFeedbackDialogViewMessages = @"com.apptentive#Feeba
 }
 
 - (void)showFeedbackDialogFromViewController:(UIViewController *)viewController {
+	[self retain];
+	
 	self.viewController = viewController;
 		
 	if (!self.viewController) {
 		ATLogError(@"No view controller to present feedback interface!!");
 	} else {
+		//TODO: sending "We're Sorry!" should be its own interaction.
 		[self sendSorryMessage];
+		
+		ATMessagePanelViewController *messagePanel;
+		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7.0"]) {
+			messagePanel = [[ATMessagePanelNewUIViewController alloc] initWithDelegate:self];
+		}
+		else {
+			messagePanel = [[ATMessagePanelViewController alloc] initWithDelegate:self];
+		}
 		
 		NSDictionary *config = self.interaction.configuration;
 		NSString *title = config[@"title"] ?: ATLocalizedString(@"We're Sorry!", @"We're sorry text");
-		NSString *body = config[@"body"] ?: ATLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
+		messagePanel.promptTitle = title;
 		
-		[[ATBackend sharedBackend] presentIntroDialogFromViewController:self.viewController withTitle:title prompt:body placeholderText:nil];
+		NSString *body = config[@"body"] ?: ATLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
+		messagePanel.promptText = body;
+		
+		BOOL showEmailAddressField = [config[@"ask_for_email"] boolValue] ?: YES;
+		messagePanel.showEmailAddressField = showEmailAddressField;
+		
+		[messagePanel presentFromViewController:self.viewController animated:YES];
 	}
 }
 

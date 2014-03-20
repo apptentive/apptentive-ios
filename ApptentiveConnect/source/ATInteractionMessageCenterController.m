@@ -24,6 +24,8 @@
 }
 
 - (void)showMessageCenterFromViewController:(UIViewController *)viewController {
+	[self retain];
+	
 	self.viewController = viewController;
 	
 	if (!self.viewController) {

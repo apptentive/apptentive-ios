@@ -11,9 +11,8 @@
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
 #import "ATFeedback.h"
+#import "ATLargeImageResizer.h"
 #import "ATUtilities.h"
-
-NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 
 #define kATContainerViewTag (5)
 #define kATLabelViewTag (6)
@@ -25,7 +24,9 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 - (void)dismissImagePickerPopover;
 @end
 
-@implementation ATSimpleImageViewController
+@implementation ATSimpleImageViewController {
+	ATLargeImageResizer *imageResizer;
+}
 @synthesize containerView;
 
 - (id)initWithDelegate:(NSObject<ATSimpleImageViewControllerDelegate> *)aDelegate {
@@ -40,6 +41,10 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 }
 
 - (void)dealloc {
+	if (imageResizer) {
+		[imageResizer cancel];
+		[imageResizer release], imageResizer = nil;
+	}
 	[self cleanupImageActionSheet];
 	imagePickerPopover.delegate = nil;
 	[imagePickerPopover release], imagePickerPopover = nil;
@@ -49,6 +54,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 	[scrollView release], scrollView = nil;
 	[containerView removeFromSuperview];
 	[containerView release], containerView = nil;
+	[_activityIndicator release];
 	[super dealloc];
 }
 
@@ -59,6 +65,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 #pragma mark - View lifecycle
 - (void)viewDidLoad {
 	[super viewDidLoad];
+	self.activityIndicator.hidden = YES;
 	self.navigationItem.title = ATLocalizedString(@"Screenshot", @"Screenshot view title");
 	self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(takePhoto:)] autorelease];
 	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)] autorelease];
@@ -78,6 +85,9 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 	}
 	if (defaultScreenshot) {
 		for (UIView *subview in self.containerView.subviews) {
+			if ([subview isEqual:self.activityIndicator]) {
+				continue;
+			}
 			[subview removeFromSuperview];
 		}
 		scrollView = [[ATCenteringImageScrollView alloc] initWithImage:defaultScreenshot];
@@ -104,7 +114,16 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 		[scrollView setZoomScale:minScale];
 		scrollView.frame = self.containerView.bounds;
 		[self.containerView addSubview:scrollView];
+	} else if (!self.activityIndicator.hidden) {
+		// We are resizing an image.
+		for (UIView *subview in self.containerView.subviews) {
+			if ([subview isEqual:self.activityIndicator]) {
+				continue;
+			}
+			[subview removeFromSuperview];
+		}
 	} else {
+		// No image, not resizing.
 		UIView *container = nil;
 		UILabel *label = nil;
 		if ([self.containerView viewWithTag:kATContainerViewTag]) {
@@ -159,6 +178,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 - (void)viewDidUnload {
 	[containerView removeFromSuperview];
 	[containerView release], containerView = nil;
+	[self setActivityIndicator:nil];
 	[super viewDidUnload];
 }
 
@@ -199,6 +219,27 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 	}
 }
 
+#pragma mark ATLargeImageResizerDelegate
+- (void)imageResizerDoneResizing:(ATLargeImageResizer *)resizer result:(UIImage *)image {
+	self.activityIndicator.hidden = YES;
+	if (image) {
+		[delegate imageViewController:self pickedImage:image fromSource:isFromCamera ? ATFeedbackImageSourceCamera : ATFeedbackImageSourcePhotoLibrary];
+	}
+	imageResizer.delegate = nil;
+	[imageResizer release], imageResizer = nil;
+	[self setupScrollView];
+}
+
+- (void)imageResizerFailed:(ATLargeImageResizer *)resizer {
+	self.activityIndicator.hidden = YES;
+	imageResizer.delegate = nil;
+	[imageResizer release], imageResizer = nil;
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Unable to Use Image", @"Title of unable to use image alert.") message:ATLocalizedString(@"Unable to resize the image you picked.", @"Message of unable to use image alert.") delegate:nil cancelButtonTitle:ATLocalizedString(@"OK", @"OK button title") otherButtonTitles:nil];
+	[alert show];
+	[alert autorelease];
+	[self setupScrollView];
+}
+
 #pragma mark UIActionSheetDelegate
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
 	if (buttonIndex == 0) {
@@ -214,29 +255,25 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 
 #pragma mark UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-	UIImage *image = nil;
-	if ([info objectForKey:UIImagePickerControllerEditedImage]) {
-		image = [info objectForKey:UIImagePickerControllerEditedImage];
-	} else if ([info objectForKey:UIImagePickerControllerOriginalImage]) {
-		image = [info objectForKey:UIImagePickerControllerOriginalImage];
+	if (imageResizer) {
+		[imageResizer cancel];
+		[imageResizer release], imageResizer = nil;
 	}
-	if (image) {
-		[delegate imageViewController:self pickedImage:image fromSource:isFromCamera ? ATFeedbackImageSourceCamera : ATFeedbackImageSourcePhotoLibrary];
-		[[NSNotificationCenter defaultCenter] postNotificationName:ATImageViewChoseImage object:self];
-	}
+	NSURL *imageURL = [info objectForKey:UIImagePickerControllerReferenceURL];
+	imageResizer = [[ATLargeImageResizer alloc] initWithImageAssetURL:imageURL delegate:self];
+	self.activityIndicator.hidden = NO;
 	[self setupScrollView];
+	[self.containerView bringSubviewToFront:self.activityIndicator];
 	
-	[self dismissImagePickerPopover];
-#	pragma clang diagnostic push
-#	pragma clang diagnostic ignored "-Wdeprecated-declarations"
-	if ([self respondsToSelector:@selector(dismissViewControllerAnimated:completion:)] && [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+	CGSize maxSize = CGSizeMake(1024, 1024);
+	if (imagePickerPopover) {
+		[imagePickerPopover dismissPopoverAnimated:YES];
+		[imageResizer resizeWithMaximumSize:maxSize];
+	} else {
 		[self dismissViewControllerAnimated:YES completion:^{
-			// pass
+			[imageResizer resizeWithMaximumSize:maxSize];
 		}];
-	} else if (self.modalViewController) {
-		[self.navigationController dismissViewControllerAnimated:YES completion:NULL];
 	}
-#	pragma clang diagnostic pop
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {

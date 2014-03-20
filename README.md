@@ -58,6 +58,7 @@ Next, in order to use `ApptentiveConnect`, your project must link against the
 following frameworks:
 
 * Accelerate
+* AssetsLibrary
 * CoreData
 * CoreText
 * CoreGraphics

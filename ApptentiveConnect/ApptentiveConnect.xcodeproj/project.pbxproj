@@ -296,6 +296,11 @@
 		49EA5ABD14BD0F4D004F8A4D /* ATRecordTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EA5ABB14BD0F4D004F8A4D /* ATRecordTask.h */; };
 		49EA5ABE14BD0F4D004F8A4D /* ATRecordTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EA5ABC14BD0F4D004F8A4D /* ATRecordTask.m */; };
 		49EA5ABF14BD0F4D004F8A4D /* ATRecordTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EA5ABC14BD0F4D004F8A4D /* ATRecordTask.m */; };
+		49EF002B18DA4C7300661F7C /* ATLargeImageResizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EF002918DA4C7300661F7C /* ATLargeImageResizer.h */; };
+		49EF002C18DA4C7300661F7C /* ATLargeImageResizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EF002A18DA4C7300661F7C /* ATLargeImageResizer.m */; };
+		49EF002D18DA4C7300661F7C /* ATLargeImageResizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EF002A18DA4C7300661F7C /* ATLargeImageResizer.m */; };
+		49EF003218DB8F6700661F7C /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49EF003118DB8F6700661F7C /* AssetsLibrary.framework */; };
+		49EF003318DB8F6E00661F7C /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49EF003118DB8F6700661F7C /* AssetsLibrary.framework */; };
 		49EF340F14AA7F2D00077F76 /* ATAppRatingMetrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EF340D14AA7F2D00077F76 /* ATAppRatingMetrics.h */; };
 		49EF341014AA7F2D00077F76 /* ATAppRatingMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EF340E14AA7F2D00077F76 /* ATAppRatingMetrics.m */; };
 		49EF341114AA7F2D00077F76 /* ATAppRatingMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EF340E14AA7F2D00077F76 /* ATAppRatingMetrics.m */; };
@@ -637,6 +642,9 @@
 		49EA5ABB14BD0F4D004F8A4D /* ATRecordTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATRecordTask.h; sourceTree = "<group>"; };
 		49EA5ABC14BD0F4D004F8A4D /* ATRecordTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATRecordTask.m; sourceTree = "<group>"; };
 		49EA62C317F50D9400C5A638 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
+		49EF002918DA4C7300661F7C /* ATLargeImageResizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATLargeImageResizer.h; sourceTree = "<group>"; };
+		49EF002A18DA4C7300661F7C /* ATLargeImageResizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATLargeImageResizer.m; sourceTree = "<group>"; };
+		49EF003118DB8F6700661F7C /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		49EF340D14AA7F2D00077F76 /* ATAppRatingMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAppRatingMetrics.h; sourceTree = "<group>"; };
 		49EF340E14AA7F2D00077F76 /* ATAppRatingMetrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAppRatingMetrics.m; sourceTree = "<group>"; };
 		49F8AFCD16CC4A550070FFEA /* ATConversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATConversation.h; sourceTree = "<group>"; };
@@ -710,6 +718,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49EF003218DB8F6700661F7C /* AssetsLibrary.framework in Frameworks */,
 				58805F3918120DE100210DA5 /* Accelerate.framework in Frameworks */,
 				49ADE8DC1626167F00DD8634 /* CoreText.framework in Frameworks */,
 				4988FB5416212BD4000A7CB7 /* CoreData.framework in Frameworks */,
@@ -727,6 +736,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49EF003318DB8F6E00661F7C /* AssetsLibrary.framework in Frameworks */,
 				497FDD9E187DEC5B00DE8F89 /* XCTest.framework in Frameworks */,
 				586FE260187C8DAE00067116 /* Accelerate.framework in Frameworks */,
 				49F3404E16BC8B1A008AA02B /* StoreKit.framework in Frameworks */,
@@ -821,6 +831,8 @@
 				493F8D8B1672DEFD000B5151 /* ATStaticLibraryBootstrap.m */,
 				497A9A0217762512002B6F96 /* ATJSONSerialization.h */,
 				497A9A0317762512002B6F96 /* ATJSONSerialization.m */,
+				49EF002918DA4C7300661F7C /* ATLargeImageResizer.h */,
+				49EF002A18DA4C7300661F7C /* ATLargeImageResizer.m */,
 			);
 			path = Misc;
 			sourceTree = "<group>";
@@ -985,6 +997,7 @@
 		496DC3811333D35600743F65 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				49EF003118DB8F6700661F7C /* AssetsLibrary.framework */,
 				497FDD9D187DEC5B00DE8F89 /* XCTest.framework */,
 				58805F3818120DE100210DA5 /* Accelerate.framework */,
 				49ADE8DB1626167F00DD8634 /* CoreText.framework */,
@@ -1460,6 +1473,7 @@
 				49F8AFEA16CC4A550070FFEA /* ATAutomatedMessage.h in Headers */,
 				49F8AFEC16CC4A550070FFEA /* ATAbstractMessage.h in Headers */,
 				49F8AFEE16CC4A550070FFEA /* ATMessageDisplayType.h in Headers */,
+				49EF002B18DA4C7300661F7C /* ATLargeImageResizer.h in Headers */,
 				49F8AFF016CC4A550070FFEA /* ATMessageSender.h in Headers */,
 				49F8AFF216CC4A550070FFEA /* ATPersonInfo.h in Headers */,
 				49F8AFF416CC4A550070FFEA /* ATTextMessage.h in Headers */,
@@ -1709,6 +1723,7 @@
 				49BC2A5B144F75E20041E789 /* ATShadowView.m in Sources */,
 				49EF341014AA7F2D00077F76 /* ATAppRatingMetrics.m in Sources */,
 				49EA5AB114BD08AD004F8A4D /* ATLegacyRecord.m in Sources */,
+				49EF002C18DA4C7300661F7C /* ATLargeImageResizer.m in Sources */,
 				49EA5ABE14BD0F4D004F8A4D /* ATRecordTask.m in Sources */,
 				49CEFF5E15168B54006D8BA8 /* ATAppConfigurationUpdater.m in Sources */,
 				49CEFF8215193EC2006D8BA8 /* ATAppRatingFlow_Private.m in Sources */,
@@ -1862,6 +1877,7 @@
 				58C5922317C55ADD000FA428 /* ATEngagementBackend.m in Sources */,
 				58C5922D17C59BE3000FA428 /* ATWebClient+EngagementAdditions.m in Sources */,
 				58EEBE2517C7E8150039A0F5 /* ATInteraction.m in Sources */,
+				49EF002D18DA4C7300661F7C /* ATLargeImageResizer.m in Sources */,
 				580B24BB17D90AF300AE2CD0 /* ATEngagementTests.m in Sources */,
 				49B7E918178BA8060059E776 /* ATSurveyResponse.m in Sources */,
 				49B7E91D178BAB8D0059E776 /* ATSurveyResponseTask.m in Sources */,

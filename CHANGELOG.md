@@ -1,6 +1,11 @@
 2014-03-10 wooster, pkamb v1.4.0 (in progress)
 --------------------------------
 
+Important: 
+
+* We've (provisionally) dropped iOS 4.x support. If you really need iOS 4.x support, please contact us.
+* We added `AssetsLibrary` to the list of required frameworks in this version (part of the fix for IOS-409).
+
 Fixes:
 
 * IOS-426 Drop iOS 4 Support
@@ -11,6 +16,7 @@ Fixes:
 * IOS-420 Text clipped in screenshot instructions
 * IOS-398 Crash in TTTAttributedLabel
 * IOS-421 Pull in image compression improvements
+* IOS-409 Sending horizontal panorama photos crashes message center
 * #84 dismissMessageCenterAnimated does not call completion block in some cases
 * #83 Calling dismissMessageCenterAnimated can break future calls to presentMessageCenterFromViewController
 

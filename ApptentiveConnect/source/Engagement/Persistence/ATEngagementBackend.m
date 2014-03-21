@@ -36,6 +36,11 @@ NSString *const ATEngagementInteractionsInvokesBuildKey = @"ATEngagementInteract
 
 NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEngagementCachedInteractionsExpirationPreferenceKey";
 
+NSString *const ATEngagementCodePointHostAppVendorKey = @"local";
+NSString *const ATEngagementCodePointHostAppInteractionKey = @"app";
+NSString *const ATEngagementCodePointApptentiveVendorKey = @"com.apptentive";
+NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
+
 @implementation ATEngagementBackend
 
 + (ATEngagementBackend *)sharedBackend {
@@ -181,6 +186,24 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	
 	ATLogInfo(@"No valid Apptentive interactions found for code point: %@", codePoint);
 	return nil;
+}
+
+- (BOOL)engageLocalEvent:(NSString *)eventLabel fromViewController:(UIViewController *)viewController {
+	return [[ATEngagementBackend sharedBackend] engageEvent:eventLabel fromVendor:ATEngagementCodePointHostAppVendorKey fromInteraction:ATEngagementCodePointHostAppInteractionKey fromViewController:viewController];
+}
+
+- (BOOL)engageApptentiveEvent:(NSString *)eventLabel fromInteraction:(NSString *)interaction fromViewController:(UIViewController *)viewController {
+	return [[ATEngagementBackend sharedBackend] engageEvent:eventLabel fromVendor:ATEngagementCodePointApptentiveVendorKey fromInteraction:interaction fromViewController:viewController];
+}
+
+- (BOOL)engageApptentiveAppEvent:(NSString *)eventLabel fromViewController:(UIViewController *)viewController {
+	return [[ATEngagementBackend sharedBackend] engageApptentiveEvent:eventLabel fromInteraction:ATEngagementCodePointApptentiveAppInteractionKey fromViewController:viewController];
+}
+
+- (BOOL)engageEvent:(NSString *)eventLabel fromVendor:(NSString *)vendor fromInteraction:(NSString *)interaction fromViewController:(UIViewController *)viewController {
+	NSString *namespacedCodePoint = [NSString stringWithFormat:@"%@#%@#%@", vendor, interaction, eventLabel];
+	
+	return [[ATEngagementBackend sharedBackend] engage:namespacedCodePoint fromViewController:viewController];
 }
 
 - (BOOL)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController {

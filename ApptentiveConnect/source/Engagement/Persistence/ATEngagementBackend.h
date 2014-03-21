@@ -41,7 +41,12 @@ NSString *const ATEngagementInteractionsInvokesLastDateKey;
 - (NSArray *)interactionsForCodePoint:(NSString *)codePoint;
 - (ATInteraction *)interactionForCodePoint:(NSString *)codePoint;
 
+- (BOOL)engageLocalEvent:(NSString *)eventLabel fromViewController:(UIViewController *)viewController;
+- (BOOL)engageApptentiveEvent:(NSString *)eventLabel fromInteraction:(NSString *)interaction fromViewController:(UIViewController *)viewController;
+- (BOOL)engageApptentiveAppEvent:(NSString *)eventLabel fromViewController:(UIViewController *)viewController;
+- (BOOL)engageEvent:(NSString *)eventLabel fromVendor:(NSString *)vendor fromInteraction:(NSString *)interaction fromViewController:(UIViewController *)viewController;
 - (BOOL)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController;
+
 - (void)codePointWasSeen:(NSString *)codePoint;
 - (void)codePointWasEngaged:(NSString *)codePoint;
 - (void)interactionWasSeen:(NSString *)interactionID;

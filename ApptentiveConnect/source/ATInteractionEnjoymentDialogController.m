@@ -12,11 +12,12 @@
 #import "ATConnect_Private.h"
 #import "ATAppRatingMetrics.h"
 #import "ATUtilities.h"
+#import "ATEngagementBackend.h"
 
-NSString *const ATInteractionEnjoymentDialogLaunch = @"com.apptentive#EnjoymentDialog#launch";
-NSString *const ATInteractionEnjoymentDialogCancel = @"com.apptentive#EnjoymentDialog#cancel";
-NSString *const ATInteractionEnjoymentDialogYes = @"com.apptentive#EnjoymentDialog#yes";
-NSString *const ATInteractionEnjoymentDialogNo = @"com.apptentive#EnjoymentDialog#no";
+NSString *const ATInteractionEnjoymentDialogEventLabelLaunch = @"launch";
+NSString *const ATInteractionEnjoymentDialogEventLabelCancel = @"cancel";
+NSString *const ATInteractionEnjoymentDialogEventLabelYes = @"yes";
+NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 
 @implementation ATInteractionEnjoymentDialogController
 
@@ -61,12 +62,12 @@ NSString *const ATInteractionEnjoymentDialogNo = @"com.apptentive#EnjoymentDialo
 				}
 			}
 			
-			[[ATConnect sharedConnection] engage:ATInteractionEnjoymentDialogNo fromViewController:self.viewController];
+			[self engageEvent:ATInteractionEnjoymentDialogEventLabelNo];
 			
 		} else if (buttonIndex == 1) { // yes
 			[self postNotification:ATAppRatingDidClickEnjoymentButtonNotification forButton:ATAppRatingEnjoymentButtonTypeYes];
 			
-			[[ATConnect sharedConnection] engage:ATInteractionEnjoymentDialogYes fromViewController:self.viewController];
+			[self engageEvent:ATInteractionEnjoymentDialogEventLabelYes];
 		}
 		
 		[self release];
@@ -76,6 +77,10 @@ NSString *const ATInteractionEnjoymentDialogNo = @"com.apptentive#EnjoymentDialo
 - (void)postNotification:(NSString *)name forButton:(ATAppRatingEnjoymentButtonType)button {
 	NSDictionary *userInfo = @{ATAppRatingButtonTypeKey: @(button)};
 	[[NSNotificationCenter defaultCenter] postNotificationName:name object:self userInfo:userInfo];
+}
+
+- (BOOL)engageEvent:(NSString *)eventLabel {
+	return [[ATEngagementBackend sharedBackend] engageApptentiveEvent:eventLabel fromInteraction:self.interaction.type fromViewController:self.viewController];
 }
 
 - (void)dealloc {

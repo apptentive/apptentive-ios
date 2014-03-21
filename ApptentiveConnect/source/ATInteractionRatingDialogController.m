@@ -12,16 +12,17 @@
 #import "ATConnect_Private.h"
 #import "ATAppRatingMetrics.h"
 #import "ATUtilities.h"
+#import "ATEngagementBackend.h"
 
 // TODO: Remove, soon. All info should come from interaction's configuration.
 #import "ATAppRatingFlow.h"
 #import "ATAppRatingFlow_Private.h"
 
-NSString *const ATInteractionRatingDialogLaunch = @"com.apptentive#RatingDialog#launch";
-NSString *const ATInteractionRatingDialogCancel = @"com.apptentive#RatingDialog#cancel";
-NSString *const ATInteractionRatingDialogRate = @"com.apptentive#RatingDialog#rate";
-NSString *const ATInteractionRatingDialogRemind = @"com.apptentive#RatingDialog#remind";
-NSString *const ATInteractionRatingDialogDecline = @"com.apptentive#RatingDialog#decline";
+NSString *const ATInteractionRatingDialogEventLabelLaunch = @"launch";
+NSString *const ATInteractionRatingDialogEventLabelCancel = @"cancel";
+NSString *const ATInteractionRatingDialogEventLabelRate = @"rate";
+NSString *const ATInteractionRatingDialogEventLabelRemind = @"remind";
+NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 
 @implementation ATInteractionRatingDialogController
 
@@ -65,7 +66,7 @@ NSString *const ATInteractionRatingDialogDecline = @"com.apptentive#RatingDialog
 			
 			[[NSNotificationCenter defaultCenter] postNotificationName:ATAppRatingFlowUserAgreedToRateAppNotification object:nil];
 			
-			[[ATConnect sharedConnection] engage:ATInteractionRatingDialogRate fromViewController:self.viewController];
+			[self engageEvent:ATInteractionRatingDialogEventLabelRate];
 			
 			if ([self shouldOpenAppStoreViaStoreKit]) {
 				shouldClose = NO;
@@ -76,11 +77,11 @@ NSString *const ATInteractionRatingDialogDecline = @"com.apptentive#RatingDialog
 		} else if (buttonIndex == 2) { // remind later
 			[self postNotification:ATAppRatingDidClickRatingButtonNotification forButton:ATAppRatingButtonTypeRemind];
 			
-			[[ATConnect sharedConnection] engage:ATInteractionRatingDialogRemind fromViewController:self.viewController];
+			[self engageEvent:ATInteractionRatingDialogEventLabelRemind];
 		} else if (buttonIndex == 0) { // no thanks
 			[self postNotification:ATAppRatingDidClickRatingButtonNotification forButton:ATAppRatingButtonTypeNo];
 			
-			[[ATConnect sharedConnection] engage:ATInteractionRatingDialogDecline fromViewController:self.viewController];
+			[self engageEvent:ATInteractionRatingDialogEventLabelDecline];
 		}
 		
 		if (shouldClose) {
@@ -215,6 +216,10 @@ NSString *const ATInteractionRatingDialogDecline = @"com.apptentive#RatingDialog
 // TODO: appID should come from the interaction's configuration.
 - (NSString *)appID {
 	return [ATAppRatingFlow sharedRatingFlow].appID;
+}
+
+- (BOOL)engageEvent:(NSString *)eventLabel {
+	return [[ATEngagementBackend sharedBackend] engageApptentiveEvent:eventLabel fromInteraction:self.interaction.type fromViewController:self.viewController];
 }
 
 - (void)dealloc {

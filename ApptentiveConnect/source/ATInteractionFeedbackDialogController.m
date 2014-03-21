@@ -12,13 +12,14 @@
 #import "ATConnect_Private.h"
 #import "ATMessagePanelNewUIViewController.h"
 #import "ATUtilities.h"
+#import "ATEngagementBackend.h"
 
-NSString *const ATInteractionFeedbackDialogLaunch = @"com.apptentive#FeebackDialog#launch";
-NSString *const ATInteractionFeedbackDialogDismiss = @"com.apptentive#FeebackDialog#dismiss";
-NSString *const ATInteractionFeedbackDialogCancel = @"com.apptentive#FeebackDialog#cancel";
-NSString *const ATInteractionFeedbackDialogSubmit = @"com.apptentive#FeebackDialog#submit";
-NSString *const ATInteractionFeedbackDialogSkipViewMessages = @"com.apptentive#FeedbackDialog#skip_view_messages";
-NSString *const ATInteractionFeedbackDialogViewMessages = @"com.apptentive#FeedbackDialog#view_messages";
+NSString *const ATInteractionFeedbackDialogEventLabelLaunch = @"launch";
+NSString *const ATInteractionFeedbackDialogEventLabelDismiss = @"dismiss";
+NSString *const ATInteractionFeedbackDialogEventLabelCancel = @"cancel";
+NSString *const ATInteractionFeedbackDialogEventLabelSubmit = @"submit";
+NSString *const ATInteractionFeedbackDialogEventLabelSkipViewMessages = @"skip_view_messages";
+NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messages";
 
 @implementation ATInteractionFeedbackDialogController
 
@@ -36,7 +37,7 @@ NSString *const ATInteractionFeedbackDialogViewMessages = @"com.apptentive#Feedb
 	
 	self.viewController = viewController;
 	
-	[[ATConnect sharedConnection] engage:ATInteractionFeedbackDialogLaunch fromViewController:self.viewController];
+	[self engageEvent:ATInteractionFeedbackDialogEventLabelLaunch];
 		
 	if (!self.viewController) {
 		ATLogError(@"No view controller to present feedback interface!!");
@@ -82,17 +83,15 @@ NSString *const ATInteractionFeedbackDialogViewMessages = @"com.apptentive#Feedb
 }
 
 - (void)messagePanelDidCancel:(ATMessagePanelViewController *)messagePanel {
-	[[ATConnect sharedConnection] engage:ATInteractionFeedbackDialogCancel fromViewController:self.viewController];
-	
+	[self engageEvent:ATInteractionFeedbackDialogEventLabelCancel];
 }
 
 - (void)messagePanel:(ATMessagePanelViewController *)messagePanel didSendMessage:(NSString *)message withEmailAddress:(NSString *)emailAddress {
-	[[ATConnect sharedConnection] engage:ATInteractionFeedbackDialogSubmit fromViewController:self.viewController];
-	
+	[self engageEvent:ATInteractionFeedbackDialogEventLabelSubmit];
 }
 
 - (void)messagePanel:(ATMessagePanelViewController *)messagePanel didDismissWithAction:(ATMessagePanelDismissAction)action {
-	[[ATConnect sharedConnection] engage:ATInteractionFeedbackDialogDismiss fromViewController:self.viewController];
+	[self engageEvent:ATInteractionFeedbackDialogEventLabelDismiss];
 	
 	if (action == ATMessagePanelDidSendMessage) {
 		if (!self.didSendFeedbackAlert) {
@@ -122,11 +121,11 @@ NSString *const ATInteractionFeedbackDialogViewMessages = @"com.apptentive#Feedb
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	if (alertView == self.didSendFeedbackAlert) {
 		if (buttonIndex == 0) { // Cancel
-			[[ATConnect sharedConnection] engage:ATInteractionFeedbackDialogSkipViewMessages fromViewController:self.viewController];
+			[self engageEvent:ATInteractionFeedbackDialogEventLabelSkipViewMessages];
 			
 			//[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroThankYouDidCloseNotification object:self userInfo:nil];
 		} else if (buttonIndex == 1) { // View Messages
-			[[ATConnect sharedConnection] engage:ATInteractionFeedbackDialogViewMessages fromViewController:self.viewController];
+			[self engageEvent:ATInteractionFeedbackDialogEventLabelViewMessages];
 
 			//[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroThankYouHitMessagesNotification object:self userInfo:nil];
 		}
@@ -146,6 +145,10 @@ NSString *const ATInteractionFeedbackDialogViewMessages = @"com.apptentive#Feedb
 	}
 	
 	return email;
+}
+
+- (BOOL)engageEvent:(NSString *)eventLabel {
+	return [[ATEngagementBackend sharedBackend] engageApptentiveEvent:eventLabel fromInteraction:self.interaction.type fromViewController:self.viewController];
 }
 
 @end

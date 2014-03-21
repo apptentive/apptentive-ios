@@ -8,6 +8,7 @@
 
 #import "ATEngagementGetManifestTask.h"
 #import "ATBackend.h"
+#import "ATDeviceUpdater.h"
 #import "ATWebClient+EngagementAdditions.h"
 #import "ATEngagementManifestParser.h"
 #import "ATEngagementBackend.h"
@@ -41,6 +42,11 @@
 	if (![ATConversationUpdater conversationExists]) {
 		return NO;
 	}
+	if ([ATDeviceUpdater shouldUpdate]) {
+		// Interactions may depend on device attributes.
+		return NO;
+	}
+	
 	return YES;
 }
 

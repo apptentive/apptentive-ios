@@ -19,6 +19,7 @@ Fixes:
 * IOS-409 Sending horizontal panorama photos crashes message center
 * #84 dismissMessageCenterAnimated does not call completion block in some cases
 * #83 Calling dismissMessageCenterAnimated can break future calls to presentMessageCenterFromViewController
+* IOS-422 Ensure device info is sent before retrieving Interactions.
 
 2014-03-10 wooster, pkamb v1.2.9
 --------------------------------

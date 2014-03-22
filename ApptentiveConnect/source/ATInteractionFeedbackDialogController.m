@@ -13,6 +13,7 @@
 #import "ATMessagePanelNewUIViewController.h"
 #import "ATUtilities.h"
 #import "ATEngagementBackend.h"
+#import "ATMessageCenterMetrics.h"
 
 NSString *const ATInteractionFeedbackDialogEventLabelLaunch = @"launch";
 NSString *const ATInteractionFeedbackDialogEventLabelDismiss = @"dismiss";
@@ -88,6 +89,25 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 
 - (void)messagePanel:(ATMessagePanelViewController *)messagePanel didSendMessage:(NSString *)message withEmailAddress:(NSString *)emailAddress {
 	[self engageEvent:ATInteractionFeedbackDialogEventLabelSubmit];
+
+	ATPersonInfo *person = nil;
+	if ([ATPersonInfo personExists]) {
+		person = [ATPersonInfo currentPerson];
+	} else {
+		person = [[[ATPersonInfo alloc] init] autorelease];
+	}
+	if (emailAddress && ![emailAddress isEqualToString:person.emailAddress]) {
+		person.emailAddress = emailAddress;
+		person.needsUpdate = YES;
+	}
+	[person saveAsCurrentPerson];
+	
+	[[ATBackend sharedBackend] sendTextMessageWithBody:message completion:^(NSString *pendingMessageID) {
+		[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroDidSendNotification object:nil userInfo:@{ATMessageCenterMessageNonceKey: pendingMessageID}];
+	}];
+	
+	//TODO
+	//[[ATBackend sharedBackend] updatePersonIfNeeded];
 }
 
 - (void)messagePanel:(ATMessagePanelViewController *)messagePanel didDismissWithAction:(ATMessagePanelDismissAction)action {

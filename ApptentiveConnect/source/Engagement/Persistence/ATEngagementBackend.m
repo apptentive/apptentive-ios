@@ -207,6 +207,9 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 }
 
 - (BOOL)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController {
+	
+	ATLogDebug(@"Engaging CodePoint: %@", codePoint);
+	
 	[self codePointWasEngaged:codePoint];
 	
 	BOOL didEngageInteraction = NO;

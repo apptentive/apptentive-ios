@@ -223,7 +223,7 @@ NSString *const ATIntegrationKeyKahuna = @"kahuna";
 #if TARGET_OS_IPHONE
 
 - (BOOL)engage:(NSString *)eventLabel fromViewController:(UIViewController *)viewController {
-	return [[ATEngagementBackend sharedBackend] engage:eventLabel fromViewController:viewController];
+	return [[ATEngagementBackend sharedBackend] engageLocalEvent:eventLabel fromViewController:viewController];
 }
 
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController {

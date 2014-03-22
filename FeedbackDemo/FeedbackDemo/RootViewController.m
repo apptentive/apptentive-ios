@@ -138,7 +138,7 @@ enum kSurveyRows {
 	}
 	cell.textLabel.textColor = [UIColor blackColor];
 	if (indexPath.section == kRatingSection) {
-		cell.textLabel.text = @"Start Rating Flow";
+		cell.textLabel.text = @"Engage Rating Flow Event";
 	} else if (indexPath.section == kSurveySection) {
 		if (indexPath.row == kSurveyRowShowSurvey) {
 			if ([ATSurveys hasSurveyAvailableWithNoTags]) {
@@ -191,7 +191,11 @@ enum kSurveyRows {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (indexPath.section == kRatingSection) {
-		[self showRating:nil];
+		// Engagement Rating Flow Testing
+		[[ATConnect sharedConnection] engage:@"init" fromViewController:self];
+		
+		// Prior method of forcing Ratings Flow
+		//[self showRating:nil];
 	} else if (indexPath.section == kSurveySection) {
 		if (indexPath.row == kSurveyRowShowSurvey) {
 			if ([ATSurveys hasSurveyAvailableWithNoTags]) {

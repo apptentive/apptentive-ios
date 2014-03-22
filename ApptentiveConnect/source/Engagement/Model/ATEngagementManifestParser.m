@@ -34,6 +34,14 @@
 			NSMutableArray *interactions = [NSMutableArray array];
 			for (NSDictionary *jsonInteraction in jsonInteractions) {
 				ATInteraction *interaction = [ATInteraction interactionWithJSONDictionary:jsonInteraction];
+				
+#warning REMOVE
+				// Remove interaction's criteria, so it always evaluates.
+				// Easier for testing engagement ratings flow.
+				if (TRUE) {
+					interaction.criteria = @{};
+				}
+				
 				[interactions addObject:interaction];
 			}
 			[codePoints setObject:interactions forKey:codePointName];

@@ -958,6 +958,7 @@ static inline CGSize TTTATTRIBUTEDLABEL_PREPEND(CTFramesetterSuggestFrameSizeFor
     self.links = [NSArray array];
     if (self.attributedText && self.enabledTextCheckingTypes) {
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < 50000
+#error This will cause a crash if compiled. Make sure to compile with at least a 5.0 target.
         __unsafe_unretained __typeof(self)weakSelf = self;
 #else
         __weak __typeof(self)weakSelf = self;

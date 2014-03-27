@@ -383,7 +383,7 @@ Next, in your iOS app, register an Urban Airship configuration with your device 
                        ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
 
    // Register the device token with Apptentive
-   [[ATConnect sharedConnection] addIntegration:ATIntegrationKeyUrbanAirship withConfiguration:@{@"token": token}];
+   [[ATConnect sharedConnection] addUrbanAirshipIntegrationWithDeviceToken:token];
 }
 ```
 

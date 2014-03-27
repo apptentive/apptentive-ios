@@ -57,21 +57,13 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	if (alertView == self.ratingDialog) {
-		
-		BOOL shouldClose = YES;
-		
+				
 		if (buttonIndex == 1) { // rate
 			[self postNotification:ATAppRatingDidClickRatingButtonNotification forButton:ATAppRatingButtonTypeRateApp];
 			
 			[[NSNotificationCenter defaultCenter] postNotificationName:ATAppRatingFlowUserAgreedToRateAppNotification object:nil];
 			
 			[self engageEvent:ATInteractionRatingDialogEventLabelRate];
-			
-			if ([self shouldOpenAppStoreViaStoreKit]) {
-				shouldClose = NO;
-			}
-						
-			[self openAppStoreToRateApp];
 			
 		} else if (buttonIndex == 2) { // remind later
 			[self postNotification:ATAppRatingDidClickRatingButtonNotification forButton:ATAppRatingButtonTypeRemind];
@@ -83,9 +75,7 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 			[self engageEvent:ATInteractionRatingDialogEventLabelDecline];
 		}
 		
-		if (shouldClose) {
-			[self release];
-		}
+		[self release];
 	}
 }
 

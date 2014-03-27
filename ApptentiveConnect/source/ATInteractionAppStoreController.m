@@ -9,12 +9,30 @@
 #import "ATInteractionAppStoreController.h"
 #import "ATConnect_Private.h"
 #import "ATUtilities.h"
+#import "ATInteraction.h"
 
 // TODO: Remove, soon. All info should come from interaction's configuration.
 #import "ATAppRatingFlow.h"
 #import "ATAppRatingFlow_Private.h"
 
 @implementation ATInteractionAppStoreController
+
+- (id)initWithInteraction:(ATInteraction *)interaction {
+	NSAssert([interaction.type isEqualToString:@"AppStore"], @"Attempted to load an App Store interaction with an interaction of type: %@", interaction.type);
+	self = [super init];
+	if (self != nil) {
+		_interaction = [interaction copy];
+	}
+	return self;
+}
+
+- (void)openAppStoreFromViewController:(UIViewController *)viewController {
+	[self retain];
+	
+	self.viewController = viewController;
+	
+	[self openAppStoreToRateApp];
+}
 
 - (void)openAppStoreToRateApp {
 #if TARGET_OS_IPHONE
@@ -36,7 +54,7 @@
 
 #if TARGET_OS_IPHONE
 - (void)showUnableToOpenAppStoreDialog {
-	UIAlertView *errorAlert = [[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Oops!", @"Unable to load the App Store title") message:ATLocalizedString(@"Unable to load the App Store", @"Unable to load the App Store message") delegate:nil cancelButtonTitle:ATLocalizedString(@"OK", @"OK button title") otherButtonTitles:nil] autorelease];
+	UIAlertView *errorAlert = [[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Oops!", @"Unable to load the App Store title") message:ATLocalizedString(@"Unable to load the App Store", @"Unable to load the App Store message") delegate:self cancelButtonTitle:ATLocalizedString(@"OK", @"OK button title") otherButtonTitles:nil] autorelease];
 	[errorAlert show];
 }
 #endif
@@ -75,6 +93,8 @@
 		}
 		else {
 			[[UIApplication sharedApplication] openURL:url];
+			
+			[self release];
 		}
 	}
 	else {
@@ -126,17 +146,34 @@
 	[self release];
 }
 
+#pragma mark UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+	//Unable to open app store
+	
+	[self release];
+}
+
 - (void)openMacAppStore {
 #if TARGET_OS_IPHONE
 #elif TARGET_OS_MAC
 	NSURL *url = [self URLForRatingApp];
 	[[NSWorkspace sharedWorkspace] openURL:url];
+	
+	[self release];
 #endif
 }
 
 // TODO: appID should come from the interaction's configuration.
 - (NSString *)appID {
 	return [ATAppRatingFlow sharedRatingFlow].appID;
+}
+
+
+- (void)dealloc {
+	[_interaction release], _interaction = nil;
+	[_viewController release], _viewController = nil;
+	
+	[super dealloc];
 }
 
 @end

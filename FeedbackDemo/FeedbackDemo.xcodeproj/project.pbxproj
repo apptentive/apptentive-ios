@@ -595,6 +595,7 @@
 					"$(DSTROOT)/usr/local/include",
 				);
 				INFOPLIST_FILE = "FeedbackDemo/FeedbackDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -622,6 +623,7 @@
 					"$(DSTROOT)/usr/local/include",
 				);
 				INFOPLIST_FILE = "FeedbackDemo/FeedbackDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",

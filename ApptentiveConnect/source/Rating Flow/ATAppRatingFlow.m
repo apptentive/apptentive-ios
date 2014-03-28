@@ -619,9 +619,12 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 - (void)logDefaults {
 	NSArray *keys = [NSArray arrayWithObjects:ATAppRatingFlowLastUsedVersionKey, ATAppRatingFlowLastUsedVersionFirstUseDateKey, ATAppRatingFlowDeclinedToRateThisVersionKey, ATAppRatingFlowUserDislikesThisVersionKey, ATAppRatingFlowPromptCountThisVersionKey, ATAppRatingFlowLastPromptDateKey, ATAppRatingFlowUseCountKey, ATAppRatingFlowSignificantEventsCountKey, ATAppRatingFlowRatedAppKey, nil];
 	ATLogDebug(@"-- BEGIN ATAppRatingFlow DEFAULTS --");
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-variable"
 	for (NSString *key in keys) {
 		ATLogDebug(@"%@ == %@", key, [[NSUserDefaults standardUserDefaults] objectForKey:key]);
 	}
+#pragma clang diagnostic pop
 	ATLogDebug(@"-- END ATAppRatingFlow DEFAULTS --");
 }
 

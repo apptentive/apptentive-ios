@@ -73,8 +73,14 @@
 	return ([SKStoreProductViewController class] != NULL && [self appID] && ![ATUtilities osVersionGreaterThanOrEqualTo:@"7"]);
 }
 
-// TODO: rating URL should come from the interaction's configuration.
 - (NSURL *)URLForRatingApp {
+	NSString *urlString = self.interaction.configuration[@"url"];
+	NSURL *ratingURL = (urlString) ? [NSURL URLWithString:urlString] : [self LegacyURLForRatingApp];
+
+	return ratingURL;
+}
+
+- (NSURL *)LegacyURLForRatingApp {
 	NSString *URLString = nil;
 	NSString *URLStringFromPreferences = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppRatingReviewURLPreferenceKey];
 	if (URLStringFromPreferences == nil) {

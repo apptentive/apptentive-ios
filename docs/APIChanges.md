@@ -2,7 +2,9 @@ This document tracks changes to the API between versions.
 
 # 1.3.0
 
-* Added `addUrbanAirshipIntegrationWithDeviceToken:` convenience method for integrating with Urban Airship.
+* Added convenience methods for integrating with Apptentive:
+ - `addIntegration:withDeviceToken:`
+ - `addUrbanAirshipIntegrationWithDeviceToken:`
 
 # 1.2.9
 

@@ -375,15 +375,8 @@ Next, in your iOS app, register an Urban Airship configuration with your device 
 
 ``` objective-c
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    // Device token string
-    const unsigned *tokenBytes = [deviceToken bytes];
-    NSString *token = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
-                       ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
-                       ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
-                       ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
-
    // Register the device token with Apptentive
-   [[ATConnect sharedConnection] addUrbanAirshipIntegrationWithDeviceToken:token];
+   [[ATConnect sharedConnection] addUrbanAirshipIntegrationWithDeviceToken:deviceToken];
 }
 ```
 

@@ -181,6 +181,7 @@ enum kSurveyRows {
 			}
 			unreadLabel.frame = paddedFrame;
 			unreadLabel.layer.cornerRadius = unreadLabel.frame.size.height / 2;
+			unreadLabel.layer.masksToBounds = YES;
 			
 			cell.accessoryView = [unreadLabel autorelease];
 		}

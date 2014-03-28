@@ -248,6 +248,7 @@
 		
 		if (!self.emailField) {
 			self.emailField = [[[UITextField alloc] initWithFrame:emailFrame] autorelease];
+			self.emailField.delegate = self;
 			if ([[ATConnect sharedConnection] emailRequired]) {
 				self.emailField.placeholder = ATLocalizedString(@"Email (required)", @"Email Address Field Placeholder (email is required)");
 			}

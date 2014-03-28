@@ -34,6 +34,15 @@
 	[self openAppStoreToRateApp];
 }
 
+- (NSString *)appID {
+	NSString *appID = self.interaction.configuration[@"store_id"];
+	if (!appID) {
+		appID = [ATAppRatingFlow sharedRatingFlow].appID;
+	}
+		
+	return appID;
+}
+
 - (void)openAppStoreToRateApp {
 #if TARGET_OS_IPHONE
 #	if TARGET_IPHONE_SIMULATOR
@@ -162,12 +171,6 @@
 	[self release];
 #endif
 }
-
-// TODO: appID should come from the interaction's configuration.
-- (NSString *)appID {
-	return [ATAppRatingFlow sharedRatingFlow].appID;
-}
-
 
 - (void)dealloc {
 	[_interaction release], _interaction = nil;

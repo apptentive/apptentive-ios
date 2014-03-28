@@ -1,4 +1,4 @@
-2014-03-10 wooster, pkamb v1.4.0 (in progress)
+2014-03-28 wooster, pkamb v1.3.0
 --------------------------------
 
 Important: 
@@ -20,6 +20,7 @@ Fixes:
 * #84 dismissMessageCenterAnimated does not call completion block in some cases
 * #83 Calling dismissMessageCenterAnimated can break future calls to presentMessageCenterFromViewController
 * IOS-422 Ensure device info is sent before retrieving Interactions.
+* IOS-449 Clicking next from email entry doesn't highlight message text entry.
 
 2014-03-10 wooster, pkamb v1.2.9
 --------------------------------

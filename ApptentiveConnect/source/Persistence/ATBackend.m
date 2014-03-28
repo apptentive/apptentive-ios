@@ -568,7 +568,7 @@ static NSURLCache *imageCache = nil;
 	NSPredicate *notHidden = [NSPredicate predicateWithFormat:@"hidden != %@", @YES];
 	NSUInteger messageCount = [ATData countEntityNamed:@"ATAbstractMessage" withPredicate:notHidden];
 	if (messageCount == 0 || ![[ATConnect sharedConnection] messageCenterEnabled]) {
-		NSString *title = ATLocalizedString(@"Give Feedback", @"First feedback screen title.");
+		NSString *title = ATLocalizedString(@"Give Feedback", @"Title of feedback screen.");
 		NSString *body = [NSString stringWithFormat:ATLocalizedString(@"Please let us know how to make %@ better for you!", @"Feedback screen body. Parameter is the app name."), [self appName]];
 		NSString *placeholder = ATLocalizedString(@"How can we help? (required)", @"First feedback placeholder text.");
 		[self presentIntroDialogFromViewController:viewController withTitle:title prompt:body placeholderText:placeholder];

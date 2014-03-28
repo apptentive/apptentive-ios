@@ -259,7 +259,7 @@ NSString *const ATIntegrationKeyKahuna = @"kahuna";
 }
 
 - (void)presentFeedbackDialogFromViewController:(UIViewController *)viewController {
-	NSString *title = ATLocalizedString(@"Give Feedback", @"First feedback screen title.");
+	NSString *title = ATLocalizedString(@"Give Feedback", @"Title of feedback screen.");
 	NSString *body = [NSString stringWithFormat:ATLocalizedString(@"Please let us know how to make %@ better for you!", @"Feedback screen body. Parameter is the app name."), [[ATBackend sharedBackend] appName]];
 	NSString *placeholder = ATLocalizedString(@"How can we help? (required)", @"First feedback placeholder text.");
 	[[ATBackend sharedBackend] presentIntroDialogFromViewController:viewController withTitle:title prompt:body placeholderText:placeholder];

@@ -86,7 +86,7 @@ enum kPersonDetailsTableSections {
 	
 	self.nameTextField.placeholder = ATLocalizedString(@"Name", @"Placeholder text for `Name` field when editing user details.");
 	if ([[ATConnect sharedConnection] emailRequired]) {
-		self.emailTextField.placeholder = ATLocalizedString(@"Email (required)", @"Placeholder text for *required* `Email` field when editing user details.");
+		self.emailTextField.placeholder = ATLocalizedString(@"Email (required)", @"Email Address Field Placeholder (email is required)");
 	} else {
 		self.emailTextField.placeholder = ATLocalizedString(@"Email", @"Placeholder text for `Email` field when editing user details.");
 	}

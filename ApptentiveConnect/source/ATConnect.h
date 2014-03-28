@@ -198,9 +198,10 @@ Note, though, that Message Center setting will be overridden by server-based con
 
 /*! Add a token for 3rd-party integration services. */
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration;
+- (void)addIntegration:(NSString *)integration withDeviceToken:(NSData *)deviceToken;
 /*! Removes a 3rd-party integration with the given name. */
 - (void)removeIntegration:(NSString *)integration;
 /*! Adds Urban Airship integration with the given device token. */
-- (void)addUrbanAirshipIntegrationWithDeviceToken:(NSString *)token;
+- (void)addUrbanAirshipIntegrationWithDeviceToken:(NSData *)deviceToken;
 
 @end

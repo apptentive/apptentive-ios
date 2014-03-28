@@ -211,12 +211,22 @@ NSString *const ATIntegrationKeyKahuna = @"kahuna";
 	[integrationConfiguration setObject:configuration forKey:integration];
 }
 
+- (void)addIntegration:(NSString *)integration withDeviceToken:(NSData *)deviceToken {
+    const unsigned *tokenBytes = [deviceToken bytes];
+    NSString *token = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
+                       ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
+                       ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
+                       ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
+	
+	[[ATConnect sharedConnection] addIntegration:integration withConfiguration:@{@"token": token}];
+}
+
 - (void)removeIntegration:(NSString *)integration {
 	[integrationConfiguration removeObjectForKey:integration];
 }
 
-- (void)addUrbanAirshipIntegrationWithDeviceToken:(NSString *)token {
-    [self addIntegration:ATIntegrationKeyUrbanAirship withConfiguration:@{@"token": token}];
+- (void)addUrbanAirshipIntegrationWithDeviceToken:(NSData *)deviceToken {
+	[self addIntegration:ATIntegrationKeyUrbanAirship withDeviceToken:deviceToken];
 }
 
 - (BOOL)messageCenterEnabled {

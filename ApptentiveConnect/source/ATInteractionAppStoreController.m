@@ -18,7 +18,7 @@
 @implementation ATInteractionAppStoreController
 
 - (id)initWithInteraction:(ATInteraction *)interaction {
-	NSAssert([interaction.type isEqualToString:@"AppStore"], @"Attempted to load an App Store interaction with an interaction of type: %@", interaction.type);
+	NSAssert([interaction.type isEqualToString:@"AppStoreRating"], @"Attempted to load an AppStoreRating interaction with an interaction of type: %@", interaction.type);
 	self = [super init];
 	if (self != nil) {
 		_interaction = [interaction copy];

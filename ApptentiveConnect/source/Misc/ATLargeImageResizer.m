@@ -14,13 +14,15 @@
 
 @implementation ATLargeImageResizer {
 	NSURL *imageURL;
+	UIImage *originalImage;
 	BOOL shouldCancel;
 }
 @synthesize delegate;
 
-- (instancetype)initWithImageAssetURL:(NSURL *)url delegate:(NSObject<ATLargeImageResizerDelegate> *)aDelegate {
+- (instancetype)initWithImageAssetURL:(NSURL *)url originalImage:(UIImage *)image delegate:(NSObject<ATLargeImageResizerDelegate> *)aDelegate {
 	if ((self = [super init])) {
 		imageURL = [url copy];
+		originalImage = [image retain];
 		delegate = aDelegate;
 	}
 	return self;
@@ -28,6 +30,7 @@
 
 - (void)dealloc {
 	[imageURL release], imageURL = nil;
+	[originalImage release], originalImage = nil;
 	[super dealloc];
 }
 
@@ -39,31 +42,56 @@
 - (void)resizeWithMaximumSize:(CGSize)maxSize {
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
 		@autoreleasepool {
+			if (originalImage &&
+				originalImage.size.width < maxSize.width &&
+				originalImage.size.height < maxSize.height) {
+				ATLogInfo(@"Using original image");
+				dispatch_async(dispatch_get_main_queue(), ^{
+					[self.delegate imageResizerDoneResizing:self result:originalImage];
+				});
+				return;
+			}
+			
 			ALAssetsLibrary *assetLibrary = [[ALAssetsLibrary alloc] init];
 			[assetLibrary assetForURL:imageURL resultBlock:^(ALAsset *asset) {
 				ALAssetRepresentation *rep = [asset defaultRepresentation];
-				CGImageRef fullscreenImageRef = [rep fullScreenImage];
-				if (!fullscreenImageRef) {
-					ATLogError(@"Unable to get full screen image representation.");
-					[delegate imageResizerFailed:self];
+				CGImageRef usableImageRef = NULL;
+				UIImage *sourceImage = nil;
+				usableImageRef = [rep fullScreenImage];
+				if (!usableImageRef) {
+					usableImageRef = [rep fullResolutionImage];
+				}
+				if (usableImageRef) {
+					sourceImage = [UIImage imageWithCGImage:usableImageRef];
+				} else {
+					sourceImage = originalImage;
+				}
+				if (!sourceImage) {
+					ATLogError(@"Unable to get image to resize.");
+					dispatch_async(dispatch_get_main_queue(), ^{
+						[delegate imageResizerFailed:self];
+					});
 					return;
 				}
-				UIImage *sourceImage = [UIImage imageWithCGImage:fullscreenImageRef];
 				CGSize sourceResolution;
 				sourceResolution.width = CGImageGetWidth(sourceImage.CGImage);
 				sourceResolution.height = CGImageGetHeight(sourceImage.CGImage);
 				if (maxSize.height <= sourceResolution.height && maxSize.width <= sourceResolution.width) {
-					[delegate imageResizerDoneResizing:self result:sourceImage];
+					dispatch_async(dispatch_get_main_queue(), ^{
+						[delegate imageResizerDoneResizing:self result:sourceImage];
+					});
 					return;
 				}
-				
 				CGSize destinationResolution = ATThumbnailSizeOfMaxSize(sourceResolution, maxSize);
 				UIImage *image = [ATUtilities imageByScalingImage:sourceImage toSize:destinationResolution scale:1 fromITouchCamera:YES];
-				if (image) {
-					[delegate imageResizerDoneResizing:self result:image];
-				} else {
-					[delegate imageResizerFailed:self];
-				}
+				
+				dispatch_async(dispatch_get_main_queue(), ^{
+					if (image) {
+						[delegate imageResizerDoneResizing:self result:image];
+					} else {
+						[delegate imageResizerFailed:self];
+					}
+				});
 			} failureBlock:^(NSError *error) {
 				ATLogError(@"Unable to get asset: %@", error);
 				[delegate imageResizerFailed:self];

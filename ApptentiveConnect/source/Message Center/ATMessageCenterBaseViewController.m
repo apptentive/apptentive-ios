@@ -323,6 +323,12 @@
 }
 
 #pragma mark ATSimpleImageViewControllerDelegate
+- (void)imageViewControllerVoidedDefaultImage:(ATSimpleImageViewController *)vc {
+	if (pickedImage) {
+		[pickedImage release], pickedImage = nil;
+	}
+}
+
 - (void)imageViewController:(ATSimpleImageViewController *)vc pickedImage:(UIImage *)image fromSource:(ATFeedbackImageSource)source {
 	if (pickedImage != image) {
 		[pickedImage release], pickedImage = nil;

@@ -90,6 +90,7 @@
 			}
 			[subview removeFromSuperview];
 		}
+		
 		scrollView = [[ATCenteringImageScrollView alloc] initWithImage:defaultScreenshot];
 		scrollView.backgroundColor = [UIColor blackColor];
 		CGSize boundsSize = self.containerView.bounds.size;
@@ -259,13 +260,23 @@
 		[imageResizer cancel];
 		[imageResizer release], imageResizer = nil;
 	}
+	if (delegate) {
+		[delegate imageViewControllerVoidedDefaultImage:self];
+	}
+	
 	NSURL *imageURL = [info objectForKey:UIImagePickerControllerReferenceURL];
-	imageResizer = [[ATLargeImageResizer alloc] initWithImageAssetURL:imageURL delegate:self];
+	UIImage *image = nil;
+	if ([info objectForKey:UIImagePickerControllerEditedImage]) {
+		image = [info objectForKey:UIImagePickerControllerEditedImage];
+	} else if ([info objectForKey:UIImagePickerControllerOriginalImage]) {
+		image = [info objectForKey:UIImagePickerControllerOriginalImage];
+	}
+	imageResizer = [[ATLargeImageResizer alloc] initWithImageAssetURL:imageURL originalImage:image delegate:self];
 	self.activityIndicator.hidden = NO;
 	[self setupScrollView];
 	[self.containerView bringSubviewToFront:self.activityIndicator];
 	
-	CGSize maxSize = CGSizeMake(1024, 1024);
+	CGSize maxSize = CGSizeMake(1136, 1136);
 	if (imagePickerPopover) {
 		[imagePickerPopover dismissPopoverAnimated:YES];
 		[imageResizer resizeWithMaximumSize:maxSize];

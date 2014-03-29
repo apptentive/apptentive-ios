@@ -36,6 +36,7 @@
 @end
 
 @protocol ATSimpleImageViewControllerDelegate <NSObject>
+- (void)imageViewControllerVoidedDefaultImage:(ATSimpleImageViewController *)vc;
 - (void)imageViewController:(ATSimpleImageViewController *)vc pickedImage:(UIImage *)image fromSource:(ATFeedbackImageSource)source;
 - (void)imageViewControllerWillDismiss:(ATSimpleImageViewController *)vc animated:(BOOL)animated;
 /*! Not always called. */

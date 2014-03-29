@@ -43,8 +43,8 @@
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
 		@autoreleasepool {
 			if (originalImage &&
-				originalImage.size.width < maxSize.width &&
-				originalImage.size.height < maxSize.height) {
+				originalImage.size.width <= maxSize.width &&
+				originalImage.size.height <= maxSize.height) {
 				ATLogInfo(@"Using original image");
 				dispatch_async(dispatch_get_main_queue(), ^{
 					[self.delegate imageResizerDoneResizing:self result:originalImage];
@@ -73,10 +73,8 @@
 					});
 					return;
 				}
-				CGSize sourceResolution;
-				sourceResolution.width = CGImageGetWidth(sourceImage.CGImage);
-				sourceResolution.height = CGImageGetHeight(sourceImage.CGImage);
-				if (maxSize.height <= sourceResolution.height && maxSize.width <= sourceResolution.width) {
+				CGSize sourceResolution = sourceImage.size;
+				if (sourceResolution.height <= maxSize.height && sourceResolution.width <= maxSize.width) {
 					dispatch_async(dispatch_get_main_queue(), ^{
 						[delegate imageResizerDoneResizing:self result:sourceImage];
 					});

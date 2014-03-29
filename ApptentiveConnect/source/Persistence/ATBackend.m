@@ -347,7 +347,7 @@ static NSURLCache *imageCache = nil;
 }
 
 - (BOOL)sendImageMessageWithImage:(UIImage *)image hiddenOnClient:(BOOL)hidden fromSource:(ATFeedbackImageSource)imageSource {
-	NSData *imageData = UIImageJPEGRepresentation(image, 0.9);
+	NSData *imageData = UIImageJPEGRepresentation(image, 0.95);
 	NSString *mimeType = @"image/jpeg";
 	ATFIleAttachmentSource source = ATFileAttachmentSourceUnknown;
 	switch (imageSource) {

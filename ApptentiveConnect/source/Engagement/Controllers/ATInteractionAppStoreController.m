@@ -75,12 +75,12 @@
 
 - (NSURL *)URLForRatingApp {
 	NSString *urlString = self.interaction.configuration[@"url"];
-	NSURL *ratingURL = (urlString) ? [NSURL URLWithString:urlString] : [self LegacyURLForRatingApp];
+	NSURL *ratingURL = (urlString) ? [NSURL URLWithString:urlString] : [self legacyURLForRatingApp];
 
 	return ratingURL;
 }
 
-- (NSURL *)LegacyURLForRatingApp {
+- (NSURL *)legacyURLForRatingApp {
 	NSString *URLString = nil;
 	NSString *URLStringFromPreferences = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppRatingReviewURLPreferenceKey];
 	if (URLStringFromPreferences == nil) {

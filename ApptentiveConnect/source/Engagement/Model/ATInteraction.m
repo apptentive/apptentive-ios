@@ -16,7 +16,7 @@
 + (ATInteraction *)interactionWithJSONDictionary:(NSDictionary *)jsonDictionary {
 	ATInteraction *interaction = [[ATInteraction alloc] init];
 	interaction.identifier = [jsonDictionary objectForKey:@"id"];
-	interaction.priority = [[jsonDictionary objectForKey:@"priority"] intValue];
+	interaction.priority = [[jsonDictionary objectForKey:@"priority"] integerValue];
 	interaction.type = [jsonDictionary objectForKey:@"type"];
 	interaction.configuration = [jsonDictionary objectForKey:@"configuration"];
 	interaction.criteria = [jsonDictionary objectForKey:@"criteria"];
@@ -26,7 +26,7 @@
 
 - (NSString *)description {	
 	NSDictionary *description = @{@"identifier" : self.identifier ?: [NSNull null],
-								  @"priority" : [NSNumber numberWithInt:self.priority] ?: [NSNull null],
+								  @"priority" : [NSNumber numberWithInteger:self.priority] ?: [NSNull null],
 								  @"type" : self.type ?: [NSNull null],
 								  @"configuration" : self.configuration ?: [NSNull null],
 								  @"criteria" : self.criteria ?: [NSNull null],
@@ -49,15 +49,14 @@
 
 - (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeObject:self.identifier forKey:@"identifier"];
-	[coder encodeInt:self.priority forKey:@"priority"];
+	[coder encodeInteger:self.priority forKey:@"priority"];
 	[coder encodeObject:self.type forKey:@"type"];
 	[coder encodeObject:self.configuration forKey:@"configuration"];
 	[coder encodeObject:self.criteria forKey:@"criteria"];
 	[coder encodeObject:self.version forKey:@"version"];
 }
 
-- (id)copyWithZone:(NSZone *)zone
-{
+- (id)copyWithZone:(NSZone *)zone {
     ATInteraction *copy = [[ATInteraction alloc] init];
 	
     if (copy) {

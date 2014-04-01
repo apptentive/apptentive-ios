@@ -191,14 +191,7 @@ enum {
 	
 	[[ATSurveysBackend sharedBackend] setDidSendSurvey:survey];
 	[[ATSurveysBackend sharedBackend] resetSurvey];
-	if ([self.navigationController respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
-		[self.navigationController dismissViewControllerAnimated:YES completion:NULL];
-	} else {
-#		pragma clang diagnostic push
-#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		[self.navigationController dismissModalViewControllerAnimated:YES];
-#		pragma clang diagnostic pop
-	}
+	[self.navigationController dismissViewControllerAnimated:YES completion:NULL];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveySentNotification object:nil userInfo:notificationInfo];
 	[notificationInfo release], notificationInfo = nil;
@@ -779,14 +772,7 @@ enum {
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidHideWindowNotification object:nil userInfo:metricsInfo];
 	[metricsInfo release], metricsInfo = nil;
 	
-	if ([self.navigationController respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
-		[self.navigationController dismissViewControllerAnimated:YES completion:NULL];
-	} else {
-#		pragma clang diagnostic push
-#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		[self.navigationController dismissModalViewControllerAnimated:YES];
-#		pragma clang diagnostic pop
-	}
+	[self.navigationController dismissViewControllerAnimated:YES completion:NULL];
 }
 
 #pragma mark Keyboard Handling

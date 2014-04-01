@@ -248,6 +248,7 @@
 		
 		if (!self.emailField) {
 			self.emailField = [[[UITextField alloc] initWithFrame:emailFrame] autorelease];
+			self.emailField.delegate = self;
 			if ([[ATConnect sharedConnection] emailRequired]) {
 				self.emailField.placeholder = ATLocalizedString(@"Email (required)", @"Email Address Field Placeholder (email is required)");
 			}
@@ -318,7 +319,7 @@
 	} else {
 		self.feedbackView.placeholder = ATLocalizedString(@"Message (required)", @"Message placeholder in iOS 7 message panel");
 	}
-	self.feedbackView.placeholderColor = [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
+	self.feedbackView.placeholderColor = [self.view tintColor];
 	
 	CGSize contentSize = CGSizeMake(self.scrollView.bounds.size.width, offsetY);
 	

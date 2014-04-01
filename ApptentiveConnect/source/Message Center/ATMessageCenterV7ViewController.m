@@ -76,6 +76,8 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	self.backgroundImageView.contentMode = UIViewContentModeCenter;
 	[self.backgroundImageView setImage:blurredImage];
 	
+	self.collectionView.keyboardDismissMode = UIScrollViewKeyboardDismissModeNone;
+	
 	UINib *automatedCellNib = [UINib nibWithNibName:@"ATAutomatedMessageCellV7" bundle:[ATConnect resourceBundle]];
 	UINib *devTextCellNib = [UINib nibWithNibName:@"ATTextMessageDevCellV7" bundle:[ATConnect resourceBundle]];
 	UINib *userTextCellNib = [UINib nibWithNibName:@"ATTextMessageUserCellV7" bundle:[ATConnect resourceBundle]];
@@ -210,7 +212,7 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 #pragma mark Private
 
 - (NSString *)keyForIndexPath:(NSIndexPath *)indexPath {
-	return [NSString stringWithFormat:@"item:%d", indexPath.item];
+	return [NSString stringWithFormat:@"item:%ld", (long)indexPath.item];
 }
 
 - (void)scrollToBottomOfCollectionView {

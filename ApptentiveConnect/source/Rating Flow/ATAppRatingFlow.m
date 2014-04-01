@@ -152,6 +152,10 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 
 #if TARGET_OS_IPHONE
 - (BOOL)showRatingFlowFromViewControllerIfConditionsAreMet:(UIViewController *)vc {
+	if (!viewController) {
+		ATLogError(@"Attempting to show Apptentive Rating Flow from a nil View Controller.");
+	}
+	
 	self.viewController = vc;
 #	if TARGET_IPHONE_SIMULATOR
 	[self logDefaults];
@@ -252,14 +256,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 
 #pragma mark SKStoreProductViewControllerDelegate
 - (void)productViewControllerDidFinish:(SKStoreProductViewController *)productViewController {
-	if ([productViewController respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
-		[productViewController dismissViewControllerAnimated:YES completion:NULL];
-	} else {
-#		pragma clang diagnostic push
-#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		[productViewController dismissModalViewControllerAnimated:YES];
-#		pragma clang diagnostic pop
-	}
+	[productViewController dismissViewControllerAnimated:YES completion:NULL];
 }
 #endif
 @end
@@ -372,14 +369,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 				[self showUnableToOpenAppStoreDialog];
 			} else {
 				UIViewController *presentingVC = [self rootViewControllerForCurrentWindow];
-				if ([presentingVC respondsToSelector:@selector(presentViewController:animated:completion:)]) {
-					[presentingVC presentViewController:vc animated:YES completion:^{}];
-				} else {
-#					pragma clang diagnostic push
-#					pragma clang diagnostic ignored "-Wdeprecated-declarations"
-					[presentingVC presentModalViewController:vc animated:YES];
-#					pragma clang diagnostic pop
-				}
+				[presentingVC presentViewController:vc animated:YES completion:^{}];
 			}
 		}];
 	}
@@ -629,9 +619,12 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 - (void)logDefaults {
 	NSArray *keys = [NSArray arrayWithObjects:ATAppRatingFlowLastUsedVersionKey, ATAppRatingFlowLastUsedVersionFirstUseDateKey, ATAppRatingFlowDeclinedToRateThisVersionKey, ATAppRatingFlowUserDislikesThisVersionKey, ATAppRatingFlowPromptCountThisVersionKey, ATAppRatingFlowLastPromptDateKey, ATAppRatingFlowUseCountKey, ATAppRatingFlowSignificantEventsCountKey, ATAppRatingFlowRatedAppKey, nil];
 	ATLogDebug(@"-- BEGIN ATAppRatingFlow DEFAULTS --");
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-variable"
 	for (NSString *key in keys) {
 		ATLogDebug(@"%@ == %@", key, [[NSUserDefaults standardUserDefaults] objectForKey:key]);
 	}
+#pragma clang diagnostic pop
 	ATLogDebug(@"-- END ATAppRatingFlow DEFAULTS --");
 }
 
@@ -681,12 +674,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 		if ([vc respondsToSelector:@selector(presentedViewController)] && [vc presentedViewController]) {
 			return [vc presentedViewController];
 		}
-#		pragma clang diagnostic push
-#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		if ([vc respondsToSelector:@selector(modalViewController)] && [vc modalViewController]) {
-			return [vc modalViewController];
-		}
-#		pragma clang diagnostic pop
 		return vc;
 	} else {
 		return nil;
@@ -699,48 +686,48 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 		[self performSelectorOnMainThread:@selector(tryToShowDialogWaitingForReachability) withObject:nil waitUntilDone:NO];
 		return;
 	}
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	@autoreleasepool {
 #if TARGET_OS_IPHONE
-	UIViewController *vc = [self rootViewControllerForCurrentWindow];
-	
-	if (vc && [self requirementsToShowDialogMet]) {
-		// We can get a root view controller and we should be showing a dialog.
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChangedAndPendingDialog:) name:ATReachabilityStatusChanged object:nil];
-	}
+		UIViewController *vc = [self rootViewControllerForCurrentWindow];
+		
+		if (vc && [self requirementsToShowDialogMet]) {
+			// We can get a root view controller and we should be showing a dialog.
+			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChangedAndPendingDialog:) name:ATReachabilityStatusChanged object:nil];
+		}
 #elif TARGET_OS_MAC
-	if ([self requirementsToShowDialogMet]) {
-		// We should show a ratings dialog.
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChangedAndPendingDialog:) name:ATReachabilityStatusChanged object:nil];
-	}
+		if ([self requirementsToShowDialogMet]) {
+			// We should show a ratings dialog.
+			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChangedAndPendingDialog:) name:ATReachabilityStatusChanged object:nil];
+		}
 #endif
-	[pool release], pool = nil;
+	}
 }
 
 - (void)reachabilityChangedAndPendingDialog:(NSNotification *)notification {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ATReachabilityStatusChanged object:nil];
+	@autoreleasepool {
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:ATReachabilityStatusChanged object:nil];
 
 #if TARGET_OS_IPHONE
-	UIViewController *vc = [self rootViewControllerForCurrentWindow];
-	
-	if (vc && [self requirementsToShowDialogMet]) {
-		if ([[ATReachability sharedReachability] currentNetworkStatus] == ATNetworkNotReachable) {
-			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChangedAndPendingDialog:) name:ATReachabilityStatusChanged object:nil];
-		} else {
-			[self showEnjoymentDialog:vc];
-		}
+		UIViewController *vc = [self rootViewControllerForCurrentWindow];
 		
-	}
-#elif TARGET_OS_MAC
-	if ([self requirementsToShowDialogMet]) {
-		if ([[ATReachability sharedReachability] currentNetworkStatus] == ATNetworkNotReachable) {
-			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChangedAndPendingDialog:) name:ATReachabilityStatusChanged object:nil];
-		} else {
-			[self showEnjoymentDialog:self];
+		if (vc && [self requirementsToShowDialogMet]) {
+			if ([[ATReachability sharedReachability] currentNetworkStatus] == ATNetworkNotReachable) {
+				[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChangedAndPendingDialog:) name:ATReachabilityStatusChanged object:nil];
+			} else {
+				[self showEnjoymentDialog:vc];
+			}
+			
 		}
-	}
+#elif TARGET_OS_MAC
+		if ([self requirementsToShowDialogMet]) {
+			if ([[ATReachability sharedReachability] currentNetworkStatus] == ATNetworkNotReachable) {
+				[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChangedAndPendingDialog:) name:ATReachabilityStatusChanged object:nil];
+			} else {
+				[self showEnjoymentDialog:self];
+			}
+		}
 #endif
-	[pool release], pool = nil;
+	}
 }
 
 - (void)preferencesChanged:(NSNotification *)notification {

@@ -15,13 +15,25 @@ extern NSString *const ATSurveySentNotification;
 extern NSString *const ATSurveyIDKey;
 
 /*!
-When a survey is submitted by the user, the ATSurveySentNotification will be sent.
-The userInfo dictionary will have a key named ATSurveyIDKey, with a value of the id of the survey that was sent.
+ A class for interacting with surveys.
+ 
+ ## Notifications
+ 
+ `ATSurveySentNotification`
+ 
+ Sent when a survey is submitted by the user.
+ The userInfo dictionary will have a key named `ATSurveyIDKey`, with a value of the id of the survey that was sent.
+ 
+ `ATSurveyNewSurveyAvailableNotification`
+ 
+ Sent when a new survey becomes available.
 */
 @interface ATSurveys : NSObject
 /*! Returns YES if there are any surveys available which have no tags. Returns NO otherwise. */
 + (BOOL)hasSurveyAvailableWithNoTags;
-/*! Returns YES if there are any surveys which have all of the given tags. Returns NO otherwise. If no tags are given, returns surveys which have tags. */
+/*! 
+ Returns YES if there are any surveys which have all of the given tags. Returns NO otherwise.
+ If no tags are given, returns surveys which have tags. */
 + (BOOL)hasSurveyAvailableWithTags:(NSSet *)tags;
 
 #if TARGET_OS_IPHONE

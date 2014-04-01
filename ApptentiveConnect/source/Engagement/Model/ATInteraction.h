@@ -12,7 +12,7 @@
 
 @interface ATInteraction : NSObject <NSCoding, NSCopying>
 @property (nonatomic, retain) NSString *identifier;
-@property (nonatomic, assign) int priority;
+@property (nonatomic, assign) NSInteger priority;
 @property (nonatomic, retain) NSString *type;
 @property (nonatomic, retain) NSDictionary *configuration;
 @property (nonatomic, retain) NSDictionary *criteria;

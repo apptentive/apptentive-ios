@@ -87,7 +87,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	@synchronized(self) {
 		if (cancelled) return;
 	}
-	int statusCode = sender.statusCode;
+	NSInteger statusCode = sender.statusCode;
 	expiresMaxAge = [sender expiresMaxAge];
 	switch (statusCode) {
 		case 200:

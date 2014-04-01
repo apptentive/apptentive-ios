@@ -56,6 +56,8 @@ NSString *const ATIntegrationKeyKahuna = @"kahuna";
 		NSDictionary *defaults = @{ATAppConfigurationMessageCenterEnabledKey : [NSNumber numberWithBool:_initiallyUseMessageCenter],
 								   ATAppConfigurationMessageCenterEmailRequiredKey : [NSNumber numberWithBool:NO]};
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
+		
+		ATLogInfo(@"Apptentive SDK Version %@", kATConnectVersionString);
 	}
 	return self;
 }
@@ -119,16 +121,17 @@ NSString *const ATIntegrationKeyKahuna = @"kahuna";
 		return;
 	}
 		
-	if (initialUserEmailAddress != anInitialUserEmailAddress) {		
+	if (![initialUserEmailAddress isEqualToString:anInitialUserEmailAddress]) {
 		[initialUserEmailAddress release];
 		initialUserEmailAddress = nil;
 		initialUserEmailAddress = [anInitialUserEmailAddress retain];
 		
-		// Set person object's email. Only overwrites previous *initial* emails.
-		NSString *previousInitialUserEmailAddress = [[NSUserDefaults standardUserDefaults] objectForKey:ATInitialUserEmailAddressKey];
 		if ([ATPersonInfo personExists]) {
 			ATPersonInfo *person = [ATPersonInfo currentPerson];
-			if (!person.emailAddress || [person.emailAddress isEqualToString:previousInitialUserEmailAddress]) {
+			
+			// Only overwrites previous *initial* emails.
+			NSString *previousInitialUserEmailAddress = [[NSUserDefaults standardUserDefaults] objectForKey:ATInitialUserEmailAddressKey];
+			if (!person.emailAddress || ([person.emailAddress caseInsensitiveCompare:previousInitialUserEmailAddress] == NSOrderedSame)) {
 				person.emailAddress = initialUserEmailAddress;
 				person.needsUpdate = YES;
 				[person saveAsCurrentPerson];
@@ -208,8 +211,22 @@ NSString *const ATIntegrationKeyKahuna = @"kahuna";
 	[integrationConfiguration setObject:configuration forKey:integration];
 }
 
+- (void)addIntegration:(NSString *)integration withDeviceToken:(NSData *)deviceToken {
+    const unsigned *tokenBytes = [deviceToken bytes];
+    NSString *token = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
+                       ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
+                       ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
+                       ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
+	
+	[[ATConnect sharedConnection] addIntegration:integration withConfiguration:@{@"token": token}];
+}
+
 - (void)removeIntegration:(NSString *)integration {
 	[integrationConfiguration removeObjectForKey:integration];
+}
+
+- (void)addUrbanAirshipIntegrationWithDeviceToken:(NSData *)deviceToken {
+	[self addIntegration:ATIntegrationKeyUrbanAirship withDeviceToken:deviceToken];
 }
 
 - (BOOL)messageCenterEnabled {
@@ -252,7 +269,7 @@ NSString *const ATIntegrationKeyKahuna = @"kahuna";
 }
 
 - (void)presentFeedbackDialogFromViewController:(UIViewController *)viewController {
-	NSString *title = ATLocalizedString(@"Give Feedback", @"First feedback screen title.");
+	NSString *title = ATLocalizedString(@"Give Feedback", @"Title of feedback screen.");
 	NSString *body = [NSString stringWithFormat:ATLocalizedString(@"Please let us know how to make %@ better for you!", @"Feedback screen body. Parameter is the app name."), [[ATBackend sharedBackend] appName]];
 	NSString *placeholder = ATLocalizedString(@"How can we help? (required)", @"First feedback placeholder text.");
 	[[ATBackend sharedBackend] presentIntroDialogFromViewController:viewController withTitle:title prompt:body placeholderText:placeholder];

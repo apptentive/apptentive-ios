@@ -184,21 +184,20 @@
 	ATSurvey *survey = nil;
 	BOOL success = NO;
 	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	NSError *error = nil;
-	id decodedObject = [ATJSONSerialization JSONObjectWithData:jsonSurvey error:&error];
-	if (decodedObject && [decodedObject isKindOfClass:[NSDictionary class]]) {
-		success = YES;
-		NSDictionary *values = (NSDictionary *)decodedObject;
-		survey = [self surveyWithJSONDictionary:values];
-		[survey retain];
-	} else {
-		[parserError release], parserError = nil;
-		parserError = [error retain];
-		success = NO;
+	@autoreleasepool {
+		NSError *error = nil;
+		id decodedObject = [ATJSONSerialization JSONObjectWithData:jsonSurvey error:&error];
+		if (decodedObject && [decodedObject isKindOfClass:[NSDictionary class]]) {
+			success = YES;
+			NSDictionary *values = (NSDictionary *)decodedObject;
+			survey = [self surveyWithJSONDictionary:values];
+			[survey retain];
+		} else {
+			[parserError release], parserError = nil;
+			parserError = [error retain];
+			success = NO;
+		}
 	}
-	
-	[pool release], pool = nil;
 	if (!success) {
 		survey = nil;
 	} else {
@@ -211,33 +210,31 @@
 	NSMutableArray *result = [NSMutableArray array];
 	BOOL success = NO;
 	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-	NSError *error = nil;
-	id decodedObject = [ATJSONSerialization JSONObjectWithData:jsonSurveys error:&error];
-	
-	if (decodedObject && [decodedObject isKindOfClass:[NSDictionary class]]) {
-		NSDictionary *surveysContainer = (NSDictionary *)decodedObject;
-		NSArray *surveys = [surveysContainer objectForKey:@"surveys"];
-		if (surveys) {
-			success = YES;
-			for (NSObject *obj in surveys) {
-				if ([obj isKindOfClass:[NSDictionary class]]) {
-					NSDictionary *dict = (NSDictionary *)obj;
-					ATSurvey *survey = [self surveyWithJSONDictionary:dict];
-					if (survey != nil) {
-						[result addObject:survey];
+	@autoreleasepool {
+		NSError *error = nil;
+		id decodedObject = [ATJSONSerialization JSONObjectWithData:jsonSurveys error:&error];
+		
+		if (decodedObject && [decodedObject isKindOfClass:[NSDictionary class]]) {
+			NSDictionary *surveysContainer = (NSDictionary *)decodedObject;
+			NSArray *surveys = [surveysContainer objectForKey:@"surveys"];
+			if (surveys) {
+				success = YES;
+				for (NSObject *obj in surveys) {
+					if ([obj isKindOfClass:[NSDictionary class]]) {
+						NSDictionary *dict = (NSDictionary *)obj;
+						ATSurvey *survey = [self surveyWithJSONDictionary:dict];
+						if (survey != nil) {
+							[result addObject:survey];
+						}
 					}
 				}
 			}
+		} else {
+			[parserError release], parserError = nil;
+			parserError = [error retain];
+			success = NO;
 		}
-	} else {
-		[parserError release], parserError = nil;
-		parserError = [error retain];
-		success = NO;
 	}
-	
-	[pool release], pool = nil;
 	
 	if (!success) {
 		result = nil;

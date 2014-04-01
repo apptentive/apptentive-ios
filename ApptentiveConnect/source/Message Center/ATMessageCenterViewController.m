@@ -79,7 +79,6 @@ typedef enum {
 	});
 }
 
-//TODO: Handle relayouting on iOS 4.
 - (void)viewDidLayoutSubviews {
 	[self relayoutSubviews];
 }

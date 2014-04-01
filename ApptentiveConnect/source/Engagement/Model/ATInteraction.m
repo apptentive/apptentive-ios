@@ -56,8 +56,7 @@
 	[coder encodeObject:self.version forKey:@"version"];
 }
 
-- (id)copyWithZone:(NSZone *)zone
-{
+- (id)copyWithZone:(NSZone *)zone {
     ATInteraction *copy = [[ATInteraction alloc] init];
 	
     if (copy) {

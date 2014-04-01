@@ -18,43 +18,42 @@
 	NSDictionary *codePointInteractions = nil;
 	BOOL success = NO;
 	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	NSError *error = nil;
-	
-	id decodedObject = [ATJSONSerialization JSONObjectWithData:jsonManifest error:&error];
-	if (decodedObject && [decodedObject isKindOfClass:[NSDictionary class]]) {
-		success = YES;
-		NSDictionary *jsonManifest = (NSDictionary *)decodedObject;
-		NSDictionary *jsonCodePoints = [jsonManifest objectForKey:@"interactions"];
+	@autoreleasepool {
+		NSError *error = nil;
 		
-		NSMutableDictionary *codePoints = [[NSMutableDictionary alloc] init];
-		for (NSString *codePointName in [jsonCodePoints allKeys]) {
-			NSArray *jsonInteractions = [jsonCodePoints objectForKey:codePointName];
+		id decodedObject = [ATJSONSerialization JSONObjectWithData:jsonManifest error:&error];
+		if (decodedObject && [decodedObject isKindOfClass:[NSDictionary class]]) {
+			success = YES;
+			NSDictionary *jsonManifest = (NSDictionary *)decodedObject;
+			NSDictionary *jsonCodePoints = [jsonManifest objectForKey:@"interactions"];
 			
-			NSMutableArray *interactions = [NSMutableArray array];
-			for (NSDictionary *jsonInteraction in jsonInteractions) {
-				ATInteraction *interaction = [ATInteraction interactionWithJSONDictionary:jsonInteraction];
+			NSMutableDictionary *codePoints = [[NSMutableDictionary alloc] init];
+			for (NSString *codePointName in [jsonCodePoints allKeys]) {
+				NSArray *jsonInteractions = [jsonCodePoints objectForKey:codePointName];
 				
-#warning REMOVE
-				// Remove interaction's criteria, so it always evaluates.
-				// Easier for testing engagement ratings flow.
-				if (TRUE) {
-					interaction.criteria = @{};
+				NSMutableArray *interactions = [NSMutableArray array];
+				for (NSDictionary *jsonInteraction in jsonInteractions) {
+					ATInteraction *interaction = [ATInteraction interactionWithJSONDictionary:jsonInteraction];
+					
+	#warning REMOVE
+					// Remove interaction's criteria, so it always evaluates.
+					// Easier for testing engagement ratings flow.
+					if (TRUE) {
+						interaction.criteria = @{};
+					}
+					
+					[interactions addObject:interaction];
 				}
-				
-				[interactions addObject:interaction];
+				[codePoints setObject:interactions forKey:codePointName];
 			}
-			[codePoints setObject:interactions forKey:codePointName];
+			
+			codePointInteractions = codePoints;
+		} else {
+			[parserError release], parserError = nil;
+			parserError = [error retain];
+			success = NO;
 		}
-		
-		codePointInteractions = codePoints;
-	} else {
-		[parserError release], parserError = nil;
-		parserError = [error retain];
-		success = NO;
 	}
-	
-	[pool release], pool = nil;
 	if (!success) {
 		codePointInteractions = nil;
 	} else {

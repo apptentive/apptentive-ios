@@ -168,7 +168,7 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 }
 
 - (BOOL)engageEvent:(NSString *)eventLabel {
-	return [[ATEngagementBackend sharedBackend] engageApptentiveEvent:eventLabel fromInteraction:self.interaction.type fromViewController:self.viewController];
+	return [[ATEngagementBackend sharedBackend] engageApptentiveEvent:eventLabel fromInteraction:self.interaction fromViewController:self.viewController];
 }
 
 @end

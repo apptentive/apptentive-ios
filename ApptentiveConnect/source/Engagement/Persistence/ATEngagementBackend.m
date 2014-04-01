@@ -189,25 +189,24 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 }
 
 - (BOOL)engageLocalEvent:(NSString *)eventLabel fromViewController:(UIViewController *)viewController {
-	return [[ATEngagementBackend sharedBackend] engageEvent:eventLabel fromVendor:ATEngagementCodePointHostAppVendorKey fromInteraction:ATEngagementCodePointHostAppInteractionKey fromViewController:viewController];
+	return [[ATEngagementBackend sharedBackend] engageEvent:eventLabel fromVendor:ATEngagementCodePointHostAppVendorKey fromInteraction:ATEngagementCodePointHostAppInteractionKey userInfo:nil fromViewController:viewController];
 }
 
-- (BOOL)engageApptentiveEvent:(NSString *)eventLabel fromInteraction:(NSString *)interaction fromViewController:(UIViewController *)viewController {
-	return [[ATEngagementBackend sharedBackend] engageEvent:eventLabel fromVendor:ATEngagementCodePointApptentiveVendorKey fromInteraction:interaction fromViewController:viewController];
+- (BOOL)engageApptentiveAppEvent:(NSString *)eventLabel userInfo:(NSDictionary *)userInfo {
+	return [[ATEngagementBackend sharedBackend] engageEvent:eventLabel fromVendor:ATEngagementCodePointApptentiveVendorKey fromInteraction:ATEngagementCodePointApptentiveAppInteractionKey userInfo:userInfo fromViewController:nil];
 }
 
-- (BOOL)engageApptentiveAppEvent:(NSString *)eventLabel fromViewController:(UIViewController *)viewController {
-	return [[ATEngagementBackend sharedBackend] engageApptentiveEvent:eventLabel fromInteraction:ATEngagementCodePointApptentiveAppInteractionKey fromViewController:viewController];
+- (BOOL)engageApptentiveEvent:(NSString *)eventLabel fromInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
+	return [[ATEngagementBackend sharedBackend] engageEvent:eventLabel fromVendor:ATEngagementCodePointApptentiveVendorKey fromInteraction:interaction.type userInfo:nil fromViewController:viewController];
 }
 
-- (BOOL)engageEvent:(NSString *)eventLabel fromVendor:(NSString *)vendor fromInteraction:(NSString *)interaction fromViewController:(UIViewController *)viewController {
+- (BOOL)engageEvent:(NSString *)eventLabel fromVendor:(NSString *)vendor fromInteraction:(NSString *)interaction userInfo:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController {
 	NSString *namespacedCodePoint = [NSString stringWithFormat:@"%@#%@#%@", vendor, interaction, eventLabel];
 	
-	return [[ATEngagementBackend sharedBackend] engage:namespacedCodePoint fromViewController:viewController];
+	return [[ATEngagementBackend sharedBackend] engage:namespacedCodePoint userInfo:userInfo fromViewController:viewController];
 }
 
-- (BOOL)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController {
-	
+- (BOOL)engage:(NSString *)codePoint userInfo:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController {
 	ATLogDebug(@"Engaging CodePoint: %@", codePoint);
 	
 	[self codePointWasEngaged:codePoint];

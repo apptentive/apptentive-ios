@@ -90,6 +90,7 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 
 - (void)dealloc {
 	[_interaction release], _interaction = nil;
+	_ratingDialog.delegate = nil;
 	[_ratingDialog release], _ratingDialog = nil;
 	[_viewController release], _viewController = nil;
 	

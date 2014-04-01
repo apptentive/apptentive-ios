@@ -85,6 +85,7 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 
 - (void)dealloc {
 	[_interaction release], _interaction = nil;
+	_enjoymentDialog.delegate = nil;
 	[_enjoymentDialog release], _enjoymentDialog = nil;
 	[_viewController release], _viewController = nil;
 	

@@ -1,12 +1,16 @@
-2014-02-?? wooster, pkamb v1.2.9 (in progress)
+2014-03-10 wooster, pkamb v1.2.9
 ----------------------------------------------
+
+This release adds several small fixes to alleviate common support requests.
 
 Fixes:
 
+* IOS-415 Allow `initialUserEmailAddress` to be updated after sending feedback with no email
+* IOS-418 Ability to delete a previously entered email
+* Compressed images with ImageOptim
+* IOS-394 Log warning if passed view controller is nil 
 * IOS-364 Don't fetch surveys until at least one DeviceInfo has been sent
 * IOS-380 Re-add "sending..." label to pending messages
-
-Going with a more general fix of not retrieving	new surveys if the device info needs to	be updated.
 
 2014-02-20 pkamb v1.2.8
 -----------------------

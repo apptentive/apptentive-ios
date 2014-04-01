@@ -4,6 +4,10 @@ This document tracks changes to the API between versions.
 
 * Argument `codePoint` renamed to `eventLabel` in `engage:fromViewController:`
 
+# 1.2.9
+
+The `initialUserEmailAddress` can now be updated after a user sends feedback with no email address.
+
 # 1.2.7
 
 Added a `BOOL` return type to the `engage:` method.

@@ -33,6 +33,7 @@
 - (NSDictionary *)apiJSON {
 	NSDictionary *parentJSON = [super apiJSON];
 	NSMutableDictionary *result = [[[NSMutableDictionary alloc] init] autorelease];
+
 	if (parentJSON) {
 		[result addEntriesFromDictionary:parentJSON];
 	}
@@ -49,7 +50,10 @@
 	}
 	
 	// Monitor that the Event payload has not been dropped on retry
-	if (!result || result.count == 0) {
+	if (!result) {
+		ATLogError(@"Event json should not be nil.");
+	}
+	if (result.count == 0) {
 		ATLogError(@"Event json should return a result.");
 	}
 	if (!result[@"label"]) {
@@ -59,7 +63,7 @@
 		ATLogError(@"Event json should include a `nonce`.");
 	}
 		
-	return @{@"event":result};
+	return @{@"event": result};
 }
 
 - (void)setup {

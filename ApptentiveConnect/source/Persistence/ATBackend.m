@@ -347,7 +347,7 @@ static NSURLCache *imageCache = nil;
 }
 
 - (BOOL)sendImageMessageWithImage:(UIImage *)image hiddenOnClient:(BOOL)hidden fromSource:(ATFeedbackImageSource)imageSource {
-	NSData *imageData = UIImageJPEGRepresentation(image, 1.0);
+	NSData *imageData = UIImageJPEGRepresentation(image, 0.95);
 	NSString *mimeType = @"image/jpeg";
 	ATFIleAttachmentSource source = ATFileAttachmentSourceUnknown;
 	switch (imageSource) {
@@ -568,7 +568,7 @@ static NSURLCache *imageCache = nil;
 	NSPredicate *notHidden = [NSPredicate predicateWithFormat:@"hidden != %@", @YES];
 	NSUInteger messageCount = [ATData countEntityNamed:@"ATAbstractMessage" withPredicate:notHidden];
 	if (messageCount == 0 || ![[ATConnect sharedConnection] messageCenterEnabled]) {
-		NSString *title = ATLocalizedString(@"Give Feedback", @"First feedback screen title.");
+		NSString *title = ATLocalizedString(@"Give Feedback", @"Title of feedback screen.");
 		NSString *body = [NSString stringWithFormat:ATLocalizedString(@"Please let us know how to make %@ better for you!", @"Feedback screen body. Parameter is the app name."), [self appName]];
 		NSString *placeholder = ATLocalizedString(@"How can we help? (required)", @"First feedback placeholder text.");
 		[self presentIntroDialogFromViewController:viewController withTitle:title prompt:body placeholderText:placeholder];
@@ -589,14 +589,7 @@ static NSURLCache *imageCache = nil;
 	ATNavigationController *nc = [[ATNavigationController alloc] initWithRootViewController:vc];
 	nc.disablesAutomaticKeyboardDismissal = NO;
 	nc.modalPresentationStyle = UIModalPresentationFormSheet;
-	if ([viewController respondsToSelector:@selector(presentViewController:animated:completion:)]) {
-		[viewController presentViewController:nc animated:YES completion:^{}];
-	} else {
-#		pragma clang diagnostic push
-#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		[viewController presentModalViewController:nc animated:YES];
-#		pragma clang diagnostic pop
-	}
+	[viewController presentViewController:nc animated:YES completion:^{}];
 	presentedMessageCenterViewController = nc;
 	[vc release], vc = nil;
 }
@@ -613,31 +606,25 @@ static NSURLCache *imageCache = nil;
 	self.currentCustomData = nil;
 	
 	if (currentMessagePanelController != nil) {
-		[currentMessagePanelController dismissAnimated:animated completion:completion];
+		[currentMessagePanelController dismissAnimated:animated completion:^{
+			[currentMessagePanelController release], currentMessagePanelController = nil;
+			completion();
+		}];
 		return;
 	}
 	
 	if (presentedMessageCenterViewController != nil) {
-		BOOL didDismiss = NO;
-		if ([presentedMessageCenterViewController respondsToSelector:@selector(presentingViewController)]) {
-			UIViewController *vc = [presentedMessageCenterViewController presentingViewController];
-			if ([vc respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
-				didDismiss = YES;
-				[vc dismissViewControllerAnimated:animated completion:completion];
-			}
-		}
-		if (!didDismiss) {
-			// Gnarly hack for iOS 4.
-#			pragma clang diagnostic push
-#			pragma clang diagnostic ignored "-Wdeprecated-declarations"
-			[presentedMessageCenterViewController dismissModalViewControllerAnimated:YES];
-#			pragma clang diagnostic pop
+		UIViewController *vc = [presentedMessageCenterViewController presentingViewController];
+		[vc dismissViewControllerAnimated:YES completion:^{
 			[presentedMessageCenterViewController release], presentedMessageCenterViewController = nil;
-			
-			double delayInSeconds = 1.0;
-			dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-			dispatch_after(popTime, dispatch_get_main_queue(), completion);
-		}
+			completion();
+		}];
+		return;
+	}
+	
+	if (completion) {
+		// Call completion block even if we do nothing.
+		completion();
 	}
 }
 

@@ -114,14 +114,7 @@ NSString *const ATSurveyCachedSurveysExpirationPreferenceKey = @"ATSurveyCachedS
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
 		nc.modalPresentationStyle = UIModalPresentationFormSheet;
 	}
-	if ([viewController respondsToSelector:@selector(presentViewController:animated:completion:)]) {
-		[viewController presentViewController:nc animated:YES completion:^{}];
-	} else {
-#		pragma clang diagnostic push
-#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		[viewController presentModalViewController:nc animated:YES];
-#		pragma clang diagnostic pop
-	}
+	[viewController presentViewController:nc animated:YES completion:^{}];
 	[nc release];
 	[vc release];
 	

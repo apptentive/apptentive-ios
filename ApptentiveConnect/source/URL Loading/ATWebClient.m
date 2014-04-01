@@ -19,8 +19,6 @@
 #import "ATUtilities.h"
 #import "ATWebClient_Private.h"
 
-#import "NSData+ATBase64.h"
-
 NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 
 #define kUserAgentFormat (@"ApptentiveConnect/%@ (%@)")
@@ -150,8 +148,8 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 	[self addAPIHeaders:conn];
 	[conn setHTTPMethod:@"POST"];
 	[conn setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
-	int length = [body lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
-	[conn setValue:[NSString stringWithFormat:@"%d", length] forHTTPHeaderField:@"Content-Length"];
+	NSUInteger length = [body lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+	[conn setValue:[NSString stringWithFormat:@"%lu", (unsigned long)length] forHTTPHeaderField:@"Content-Length"];
 	[conn setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
 	return [conn autorelease];
 }
@@ -167,8 +165,8 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 	[self addAPIHeaders:conn];
 	[conn setHTTPMethod:@"POST"];
 	[conn setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-	int length = [body lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
-	[conn setValue:[NSString stringWithFormat:@"%d", length] forHTTPHeaderField:@"Content-Length"];
+	NSUInteger length = [body lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+	[conn setValue:[NSString stringWithFormat:@"%lu", (unsigned long)length] forHTTPHeaderField:@"Content-Length"];
 	[conn setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
 	return [conn autorelease];
 }
@@ -259,7 +257,6 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 	NSData *fileData = nil;
 	if (path && [fm fileExistsAtPath:path]) {
 		NSError *error = nil;
-		//TODO: Determine behavior on iOS 4. Seems to work, but unknown if mapped file is being used.
 		fileData = [NSData dataWithContentsOfFile:path options:NSDataReadingMappedIfSafe error:&error];
 		if (!fileData) {
 			ATLogError(@"Unable to get contents of file path for uploading: %@", error);
@@ -330,7 +327,7 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 		
 		[multipartEncodedData appendData:[multipartHeader dataUsingEncoding:NSUTF8StringEncoding]];
 		[multipartEncodedData appendData:fileData];
-		[debugString appendFormat:@"<NSData of length: %d>", [fileData length]];
+		[debugString appendFormat:@"<NSData of length: %lu>", (unsigned long)[fileData length]];
 	}
 	NSString *finalBoundary = [NSString stringWithFormat:@"\r\n--%@--\r\n", boundary];
 	[multipartEncodedData appendData:[finalBoundary dataUsingEncoding:NSUTF8StringEncoding]];

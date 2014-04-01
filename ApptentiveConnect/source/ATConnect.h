@@ -28,6 +28,24 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 extern NSString *const ATIntegrationKeyUrbanAirship;
 extern NSString *const ATIntegrationKeyKahuna;
 
+/*!
+ `ATConnect` is a singleton which is used as the main point of entry for the Apptentive service.
+ 
+ ## Notifications
+ 
+ `ATMessageCenterUnreadCountChangedNotification`
+ 
+ Sent when the number of unread messages changes.
+ The notification object is undefined. The `userInfo` dictionary contains a `count` key, the value of which 
+ is the number of unread messages.
+ 
+ ## 3rd Party Integration
+ 
+ There are two constant keys for currently supported third party integrations:
+ 
+ * `ATIntegrationKeyUrbanAirship` - For Urban Airship
+ * `ATIntegrationKeyKahuna` - For Kahuna
+ */
 @interface ATConnect : NSObject {
 @private
 #if TARGET_OS_IPHONE
@@ -46,11 +64,25 @@ extern NSString *const ATIntegrationKeyKahuna;
 	NSString *customPlaceholderText;
 	BOOL useMessageCenter;
 }
+
+///---------------------------------
+/// @name Basic Usage
+///---------------------------------
+/*! The API key for Apptentive. */
 @property (nonatomic, copy) NSString *apiKey;
+
+/*! The shared singleton of `ATConnect`. */
++ (ATConnect *)sharedConnection;
+
+
+///---------------------------------
+/// @name Interface Customization
+///---------------------------------
+
+/*! Toggles much of the Apptentive branding on and off. `YES` by default. */
 @property (nonatomic, assign) BOOL showTagline;
+/*! Toggles the display of an email field in the message panel. `YES` by default. */
 @property (nonatomic, assign) BOOL showEmailField;
-@property (nonatomic, copy) NSString *initialUserName;
-@property (nonatomic, copy) NSString *initialUserEmailAddress;
 /*! Set this if you want some custom text to appear as a placeholder in the
  feedback text box. */
 @property (nonatomic, copy) NSString *customPlaceholderText;
@@ -66,7 +98,9 @@ Note, though, that Message Center setting will be overridden by server-based con
 @property (nonatomic, retain) UIColor *tintColor;
 #endif
 
-+ (ATConnect *)sharedConnection;
+///---------------------------------
+/// @name Managing Callback Queues
+///---------------------------------
 
 #if TARGET_OS_IPHONE
 
@@ -97,35 +131,77 @@ Note, though, that Message Center setting will be overridden by server-based con
 
 #elif TARGET_OS_MAC
 /*!
- * Presents a feedback window.
+ * Presents a feedback window (OS X framework only).
  */
 - (IBAction)showFeedbackWindow:(id)sender;
 #endif
 
+///-------------------------------------
+/// @name Attach Text, Images, and Files
+///-------------------------------------
+
 /*!
- * Attach text, images, or files to the user's feedback.
- * These attachments will appear in your online Apptentive dashboard,
+ * Attach text to the user's feedback. This will appear in your online Apptentive dashboard,
  * but will *not* appear in Message Center on the device.
  */
 - (void)sendAttachmentText:(NSString *)text;
+
+/*!
+ * Attach an image the user's feedback. This will appear in your online Apptentive dashboard,
+ * but will *not* appear in Message Center on the device.
+ */
 - (void)sendAttachmentImage:(UIImage *)image;
+
+/*!
+ * Attach a file with the given MIME type the user's feedback. This will appear in your online Apptentive dashboard,
+ * but will *not* appear in Message Center on the device.
+ */
 - (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType;
 
-/*! Adds an additional data field to any feedback sent. Object should be an NSDate, NSNumber, or NSString. */
+///---------------------------------------
+/// @name Add Custom Device or Person Data
+///---------------------------------------
+/*! The initial name of the app user when communicating with Apptentive. */
+@property (nonatomic, copy) NSString *initialUserName;
+/*! The initial email address of the app user in form fields and communicating with Apptentive. */
+@property (nonatomic, copy) NSString *initialUserEmailAddress;
+
+/*!
+ Adds an additional data field to any feedback sent. This will show up in the person data in the
+ conversation on your Apptentive dashboard.
+ 
+ Object should be an `NSDate`, `NSNumber`, or `NSString`.
+ */
 - (void)addCustomPersonData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
+
+/*!
+ Adds an additional data field to any feedback sent. This will show up in the device data in the
+ conversation on your Apptentive dashboard.
+ 
+ Object should be an `NSDate`, `NSNumber`, or `NSString`.
+ */
 - (void)addCustomDeviceData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
 
 /*! Removes an additional data field from the feedback sent. */
 - (void)removeCustomPersonDataWithKey:(NSString *)key;
+/*! Removes an additional data field from the feedback sent. */
 - (void)removeCustomDeviceDataWithKey:(NSString *)key;
 
-/*! Deprecated. Use addCustomDeviceData:withKey: instead. */
+/*! Deprecated. Use `-addCustomDeviceData:withKey:` instead. */
 - (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key DEPRECATED_ATTRIBUTE;
-/*! Deprecated. Use removeCustomDeviceDataWithKey: instead. */
+/*! Deprecated. Use `-removeCustomDeviceDataWithKey:` instead. */
 - (void)removeCustomDataWithKey:(NSString *)key DEPRECATED_ATTRIBUTE;
 
-/*! Add or remove a token for 3rd-party integration services. */
+///------------------------------------
+/// @name Integrate With Other Services
+///------------------------------------
+
+/*! Add a token for 3rd-party integration services. */
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration;
+- (void)addIntegration:(NSString *)integration withDeviceToken:(NSData *)deviceToken;
+/*! Removes a 3rd-party integration with the given name. */
 - (void)removeIntegration:(NSString *)integration;
+/*! Adds Urban Airship integration with the given device token. */
+- (void)addUrbanAirshipIntegrationWithDeviceToken:(NSData *)deviceToken;
 
 @end

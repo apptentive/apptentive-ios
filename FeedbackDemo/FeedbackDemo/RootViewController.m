@@ -167,7 +167,7 @@ enum kSurveyRows {
 		if (indexPath.row == kMessageCenterRowShowMessageCenter) {
 			cell.textLabel.text = @"Message Center";
 			UILabel *unreadLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-			unreadLabel.text = [NSString stringWithFormat:@"%d", [[ATConnect sharedConnection] unreadMessageCount]];
+			unreadLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)[[ATConnect sharedConnection] unreadMessageCount]];
 			unreadLabel.backgroundColor = [UIColor grayColor];
 			unreadLabel.textColor = [UIColor whiteColor];
 			unreadLabel.textAlignment = NSTextAlignmentCenter;
@@ -181,6 +181,7 @@ enum kSurveyRows {
 			}
 			unreadLabel.frame = paddedFrame;
 			unreadLabel.layer.cornerRadius = unreadLabel.frame.size.height / 2;
+			unreadLabel.layer.masksToBounds = YES;
 			
 			cell.accessoryView = [unreadLabel autorelease];
 		}

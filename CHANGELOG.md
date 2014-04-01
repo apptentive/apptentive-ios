@@ -1,5 +1,29 @@
+2014-03-29 wooster, pkamb v1.3.0
+--------------------------------
+
+Important: 
+
+* We've (provisionally) dropped iOS 4.x support. If you really need iOS 4.x support, please contact us.
+* We added `AssetsLibrary` to the list of required frameworks in this version (part of the fix for IOS-409).
+
+Fixes:
+
+* IOS-426 Drop iOS 4 Support
+* IOS-414 Add convenience method for integrating with Urban Airship (`addUrbanAirshipIntegrationWithDeviceToken:`)
+* IOS-408 Dragging down in message center moves the keyboard as well
+* IOS-388 Change `build_distribution.py` to build Release rather than Debug builds
+* IOS-429 Remove unused images in SDK
+* IOS-420 Text clipped in screenshot instructions
+* IOS-398 Crash in TTTAttributedLabel
+* IOS-421 Pull in image compression improvements
+* IOS-409 Sending horizontal panorama photos crashes message center
+* #84 dismissMessageCenterAnimated does not call completion block in some cases
+* #83 Calling dismissMessageCenterAnimated can break future calls to presentMessageCenterFromViewController
+* IOS-422 Ensure device info is sent before retrieving Interactions.
+* IOS-449 Clicking next from email entry doesn't highlight message text entry.
+
 2014-03-10 wooster, pkamb v1.2.9
-----------------------------------------------
+--------------------------------
 
 This release adds several small fixes to alleviate common support requests.
 

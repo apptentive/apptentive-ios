@@ -210,9 +210,6 @@
 		4999128F16166C2F00FDA15F /* ATMessageCenterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4999128716165BF200FDA15F /* ATMessageCenterViewController.xib */; };
 		499912A8161B6AF700FDA15F /* ATWebClient+MessageCenter.h in Headers */ = {isa = PBXBuildFile; fileRef = 499912A6161B6AF700FDA15F /* ATWebClient+MessageCenter.h */; };
 		499912A9161B6AF700FDA15F /* ATWebClient+MessageCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 499912A7161B6AF700FDA15F /* ATWebClient+MessageCenter.m */; };
-		499B56CA15D305880063C23C /* PJSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 499B56C615D305880063C23C /* PJSONKit.h */; };
-		499B56CB15D305880063C23C /* PJSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 499B56C715D305880063C23C /* PJSONKit.m */; };
-		499B56CC15D305880063C23C /* PJSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 499B56C715D305880063C23C /* PJSONKit.m */; };
 		49AA101F138B44C00082887A /* ATInfoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AA101D138B44C00082887A /* ATInfoViewController.h */; };
 		49AA1020138B44C00082887A /* ATInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AA101E138B44C00082887A /* ATInfoViewController.m */; };
 		49AA1021138B44C00082887A /* ATInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AA101E138B44C00082887A /* ATInfoViewController.m */; };
@@ -272,8 +269,6 @@
 		49CEFF8115193EC2006D8BA8 /* ATAppRatingFlow_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 49CEFF7F15193EC2006D8BA8 /* ATAppRatingFlow_Private.h */; };
 		49CEFF8215193EC2006D8BA8 /* ATAppRatingFlow_Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 49CEFF8015193EC2006D8BA8 /* ATAppRatingFlow_Private.m */; };
 		49D07DD017F29A1F0042FCFD /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49D07DCE17F29A1F0042FCFD /* Localizable.strings */; };
-		49D1123C13359BA000603373 /* NSData+ATBase64.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D1123A13359BA000603373 /* NSData+ATBase64.h */; };
-		49D1123D13359BA000603373 /* NSData+ATBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D1123B13359BA000603373 /* NSData+ATBase64.m */; };
 		49D1124F13368CC200603373 /* ATTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D1124D13368CC200603373 /* ATTask.h */; };
 		49D1125013368CC200603373 /* ATTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D1124E13368CC200603373 /* ATTask.m */; };
 		49D1125313368CEF00603373 /* ATFeedbackTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D1125113368CEE00603373 /* ATFeedbackTask.h */; };
@@ -301,6 +296,11 @@
 		49EA5ABD14BD0F4D004F8A4D /* ATRecordTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EA5ABB14BD0F4D004F8A4D /* ATRecordTask.h */; };
 		49EA5ABE14BD0F4D004F8A4D /* ATRecordTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EA5ABC14BD0F4D004F8A4D /* ATRecordTask.m */; };
 		49EA5ABF14BD0F4D004F8A4D /* ATRecordTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EA5ABC14BD0F4D004F8A4D /* ATRecordTask.m */; };
+		49EF002B18DA4C7300661F7C /* ATLargeImageResizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EF002918DA4C7300661F7C /* ATLargeImageResizer.h */; };
+		49EF002C18DA4C7300661F7C /* ATLargeImageResizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EF002A18DA4C7300661F7C /* ATLargeImageResizer.m */; };
+		49EF002D18DA4C7300661F7C /* ATLargeImageResizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EF002A18DA4C7300661F7C /* ATLargeImageResizer.m */; };
+		49EF003218DB8F6700661F7C /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49EF003118DB8F6700661F7C /* AssetsLibrary.framework */; };
+		49EF003318DB8F6E00661F7C /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49EF003118DB8F6700661F7C /* AssetsLibrary.framework */; };
 		49EF340F14AA7F2D00077F76 /* ATAppRatingMetrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EF340D14AA7F2D00077F76 /* ATAppRatingMetrics.h */; };
 		49EF341014AA7F2D00077F76 /* ATAppRatingMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EF340E14AA7F2D00077F76 /* ATAppRatingMetrics.m */; };
 		49EF341114AA7F2D00077F76 /* ATAppRatingMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EF340E14AA7F2D00077F76 /* ATAppRatingMetrics.m */; };
@@ -572,8 +572,6 @@
 		4999128716165BF200FDA15F /* ATMessageCenterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ATMessageCenterViewController.xib; path = xibs/ATMessageCenterViewController.xib; sourceTree = SOURCE_ROOT; };
 		499912A6161B6AF700FDA15F /* ATWebClient+MessageCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ATWebClient+MessageCenter.h"; path = "Message Center/URL Loading/ATWebClient+MessageCenter.h"; sourceTree = "<group>"; };
 		499912A7161B6AF700FDA15F /* ATWebClient+MessageCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "ATWebClient+MessageCenter.m"; path = "Message Center/URL Loading/ATWebClient+MessageCenter.m"; sourceTree = "<group>"; };
-		499B56C615D305880063C23C /* PJSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PJSONKit.h; sourceTree = "<group>"; };
-		499B56C715D305880063C23C /* PJSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PJSONKit.m; sourceTree = "<group>"; };
 		49AA101D138B44C00082887A /* ATInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATInfoViewController.h; sourceTree = "<group>"; };
 		49AA101E138B44C00082887A /* ATInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATInfoViewController.m; sourceTree = "<group>"; };
 		49AA1022138B498C0082887A /* ATInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATInfoViewController.xib; sourceTree = "<group>"; };
@@ -630,8 +628,6 @@
 		49CEFF8015193EC2006D8BA8 /* ATAppRatingFlow_Private.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAppRatingFlow_Private.m; sourceTree = "<group>"; };
 		49D07DCF17F29A1F0042FCFD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
 		49D1118C13341A7C00603373 /* ApptentiveResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApptentiveResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
-		49D1123A13359BA000603373 /* NSData+ATBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "NSData+ATBase64.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		49D1123B13359BA000603373 /* NSData+ATBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "NSData+ATBase64.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		49D1124D13368CC200603373 /* ATTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATTask.h; sourceTree = "<group>"; };
 		49D1124E13368CC200603373 /* ATTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATTask.m; sourceTree = "<group>"; };
 		49D1125113368CEE00603373 /* ATFeedbackTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATFeedbackTask.h; sourceTree = "<group>"; };
@@ -657,6 +653,9 @@
 		49EA5ABB14BD0F4D004F8A4D /* ATRecordTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATRecordTask.h; sourceTree = "<group>"; };
 		49EA5ABC14BD0F4D004F8A4D /* ATRecordTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATRecordTask.m; sourceTree = "<group>"; };
 		49EA62C317F50D9400C5A638 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
+		49EF002918DA4C7300661F7C /* ATLargeImageResizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATLargeImageResizer.h; sourceTree = "<group>"; };
+		49EF002A18DA4C7300661F7C /* ATLargeImageResizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATLargeImageResizer.m; sourceTree = "<group>"; };
+		49EF003118DB8F6700661F7C /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		49EF340D14AA7F2D00077F76 /* ATAppRatingMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAppRatingMetrics.h; sourceTree = "<group>"; };
 		49EF340E14AA7F2D00077F76 /* ATAppRatingMetrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAppRatingMetrics.m; sourceTree = "<group>"; };
 		49F8AFCD16CC4A550070FFEA /* ATConversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATConversation.h; sourceTree = "<group>"; };
@@ -740,6 +739,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49EF003218DB8F6700661F7C /* AssetsLibrary.framework in Frameworks */,
 				58805F3918120DE100210DA5 /* Accelerate.framework in Frameworks */,
 				49ADE8DC1626167F00DD8634 /* CoreText.framework in Frameworks */,
 				4988FB5416212BD4000A7CB7 /* CoreData.framework in Frameworks */,
@@ -757,6 +757,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49EF003318DB8F6E00661F7C /* AssetsLibrary.framework in Frameworks */,
 				497FDD9E187DEC5B00DE8F89 /* XCTest.framework in Frameworks */,
 				586FE260187C8DAE00067116 /* Accelerate.framework in Frameworks */,
 				49F3404E16BC8B1A008AA02B /* StoreKit.framework in Frameworks */,
@@ -851,6 +852,8 @@
 				493F8D8B1672DEFD000B5151 /* ATStaticLibraryBootstrap.m */,
 				497A9A0217762512002B6F96 /* ATJSONSerialization.h */,
 				497A9A0317762512002B6F96 /* ATJSONSerialization.m */,
+				49EF002918DA4C7300661F7C /* ATLargeImageResizer.h */,
+				49EF002A18DA4C7300661F7C /* ATLargeImageResizer.m */,
 			);
 			path = Misc;
 			sourceTree = "<group>";
@@ -1015,6 +1018,7 @@
 		496DC3811333D35600743F65 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				49EF003118DB8F6700661F7C /* AssetsLibrary.framework */,
 				497FDD9D187DEC5B00DE8F89 /* XCTest.framework */,
 				58805F3818120DE100210DA5 /* Accelerate.framework */,
 				49ADE8DB1626167F00DD8634 /* CoreText.framework */,
@@ -1144,15 +1148,6 @@
 			name = "URL Loading";
 			sourceTree = "<group>";
 		};
-		499B56C415D305880063C23C /* PrefixedJSONKit */ = {
-			isa = PBXGroup;
-			children = (
-				499B56C615D305880063C23C /* PJSONKit.h */,
-				499B56C715D305880063C23C /* PJSONKit.m */,
-			);
-			path = PrefixedJSONKit;
-			sourceTree = "<group>";
-		};
 		49AC178B16C0A09200BE1615 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -1280,9 +1275,6 @@
 			children = (
 				4995EDD0175983C800AF7268 /* PrefixedTTTAttributedLabel.h */,
 				4995EDD1175983C800AF7268 /* PrefixedTTTAttributedLabel.m */,
-				49D1123A13359BA000603373 /* NSData+ATBase64.h */,
-				49D1123B13359BA000603373 /* NSData+ATBase64.m */,
-				499B56C415D305880063C23C /* PrefixedJSONKit */,
 			);
 			path = ext;
 			sourceTree = "<group>";
@@ -1451,7 +1443,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				49C002A1133413BB0071F088 /* ApptentiveConnect-Prefix.pch in Headers */,
-				49D1123C13359BA000603373 /* NSData+ATBase64.h in Headers */,
 				496ED75E1857F849001C14FC /* ATTextMessageCellV7.h in Headers */,
 				49C002A2133413BB0071F088 /* ATConnect.h in Headers */,
 				49D1124F13368CC200603373 /* ATTask.h in Headers */,
@@ -1504,7 +1495,6 @@
 				493AEB3F15990A4D00DFD4C7 /* ATSurveyViewController.h in Headers */,
 				498EFB6B15BA414A00A1043B /* ATSurveyGetSurveysTask.h in Headers */,
 				498EFB7015BA48B300A1043B /* ATAppConfigurationUpdateTask.h in Headers */,
-				499B56CA15D305880063C23C /* PJSONKit.h in Headers */,
 				4999128516165BD400FDA15F /* ATMessageCenterViewController.h in Headers */,
 				499912A8161B6AF700FDA15F /* ATWebClient+MessageCenter.h in Headers */,
 				4961A402161BBD7000E30037 /* ATMessageTask.h in Headers */,
@@ -1533,6 +1523,7 @@
 				58D17D4F18C5676F00D123BC /* ATInteractionMessageCenterController.h in Headers */,
 				49F8AFEC16CC4A550070FFEA /* ATAbstractMessage.h in Headers */,
 				49F8AFEE16CC4A550070FFEA /* ATMessageDisplayType.h in Headers */,
+				49EF002B18DA4C7300661F7C /* ATLargeImageResizer.h in Headers */,
 				49F8AFF016CC4A550070FFEA /* ATMessageSender.h in Headers */,
 				49F8AFF216CC4A550070FFEA /* ATPersonInfo.h in Headers */,
 				49F8AFF416CC4A550070FFEA /* ATTextMessage.h in Headers */,
@@ -1644,7 +1635,7 @@
 		496DC3761333D35600743F65 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Apptentive, Inc.";
 			};
 			buildConfigurationList = 496DC3791333D35600743F65 /* Build configuration list for PBXProject "ApptentiveConnect" */;
@@ -1758,7 +1749,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				49C002A3133413BB0071F088 /* ATConnect.m in Sources */,
-				49D1123D13359BA000603373 /* NSData+ATBase64.m in Sources */,
 				49D1125013368CC200603373 /* ATTask.m in Sources */,
 				49D1125413368CEF00603373 /* ATFeedbackTask.m in Sources */,
 				49D112741337CC9F00603373 /* ATTaskQueue.m in Sources */,
@@ -1787,6 +1777,7 @@
 				49BC2A5B144F75E20041E789 /* ATShadowView.m in Sources */,
 				49EF341014AA7F2D00077F76 /* ATAppRatingMetrics.m in Sources */,
 				49EA5AB114BD08AD004F8A4D /* ATLegacyRecord.m in Sources */,
+				49EF002C18DA4C7300661F7C /* ATLargeImageResizer.m in Sources */,
 				49EA5ABE14BD0F4D004F8A4D /* ATRecordTask.m in Sources */,
 				49CEFF5E15168B54006D8BA8 /* ATAppConfigurationUpdater.m in Sources */,
 				49CEFF8215193EC2006D8BA8 /* ATAppRatingFlow_Private.m in Sources */,
@@ -1815,7 +1806,6 @@
 				498EFB7115BA48B300A1043B /* ATAppConfigurationUpdateTask.m in Sources */,
 				58AB415818E3A9870034FAA5 /* ATInteractionAppStoreController.m in Sources */,
 				49735D671832E79400D48DE7 /* ATMessageCenterBaseViewController.m in Sources */,
-				499B56CB15D305880063C23C /* PJSONKit.m in Sources */,
 				4999128616165BD400FDA15F /* ATMessageCenterViewController.m in Sources */,
 				493F8D8D1672DEFD000B5151 /* ATStaticLibraryBootstrap.m in Sources */,
 				499912A9161B6AF700FDA15F /* ATWebClient+MessageCenter.m in Sources */,
@@ -1926,7 +1916,6 @@
 				589274A8180CC33A0029E5CE /* ATInteractionUsageData.m in Sources */,
 				498EFB6D15BA414A00A1043B /* ATSurveyGetSurveysTask.m in Sources */,
 				498EFB7215BA48B300A1043B /* ATAppConfigurationUpdateTask.m in Sources */,
-				499B56CC15D305880063C23C /* PJSONKit.m in Sources */,
 				49AC178416C0987400BE1615 /* ATConversationUpdater.m in Sources */,
 				49E6208916C5E8C2000C9F5A /* NSDictionary+ATAdditions.m in Sources */,
 				493F8D8E1672DEFD000B5151 /* ATStaticLibraryBootstrap.m in Sources */,
@@ -1946,6 +1935,7 @@
 				58C5922317C55ADD000FA428 /* ATEngagementBackend.m in Sources */,
 				58C5922D17C59BE3000FA428 /* ATWebClient+EngagementAdditions.m in Sources */,
 				58EEBE2517C7E8150039A0F5 /* ATInteraction.m in Sources */,
+				49EF002D18DA4C7300661F7C /* ATLargeImageResizer.m in Sources */,
 				580B24BB17D90AF300AE2CD0 /* ATEngagementTests.m in Sources */,
 				49B7E918178BA8060059E776 /* ATSurveyResponse.m in Sources */,
 				49B7E91D178BAB8D0059E776 /* ATSurveyResponseTask.m in Sources */,
@@ -2044,8 +2034,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
-				ONLY_ACTIVE_ARCH = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2073,7 +2063,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";

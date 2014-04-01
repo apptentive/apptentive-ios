@@ -10,14 +10,13 @@
 
 #import "ATFeedback.h"
 #import "ATFeedbackTypes.h"
+#import "ATLargeImageResizer.h"
 
 @class ATCenteringImageScrollView;
 
-NSString * const ATImageViewChoseImage;
-
 @protocol ATSimpleImageViewControllerDelegate;
 
-@interface ATSimpleImageViewController : UIViewController <UIActionSheetDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverControllerDelegate> {
+@interface ATSimpleImageViewController : UIViewController <ATLargeImageResizerDelegate, UIActionSheetDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverControllerDelegate> {
 @private
 	NSObject<ATSimpleImageViewControllerDelegate> *delegate;
 	ATCenteringImageScrollView *scrollView;
@@ -29,6 +28,7 @@ NSString * const ATImageViewChoseImage;
 	UIActionSheet *imageActionSheet;
 }
 @property (nonatomic, retain) IBOutlet UIView *containerView;
+@property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 - (id)initWithDelegate:(NSObject<ATSimpleImageViewControllerDelegate> *)delegate;
 - (IBAction)donePressed:(id)sender;
@@ -36,6 +36,7 @@ NSString * const ATImageViewChoseImage;
 @end
 
 @protocol ATSimpleImageViewControllerDelegate <NSObject>
+- (void)imageViewControllerVoidedDefaultImage:(ATSimpleImageViewController *)vc;
 - (void)imageViewController:(ATSimpleImageViewController *)vc pickedImage:(UIImage *)image fromSource:(ATFeedbackImageSource)source;
 - (void)imageViewControllerWillDismiss:(ATSimpleImageViewController *)vc animated:(BOOL)animated;
 /*! Not always called. */

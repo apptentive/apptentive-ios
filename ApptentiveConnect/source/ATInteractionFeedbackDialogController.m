@@ -22,7 +22,9 @@ NSString *const ATInteractionFeedbackDialogEventLabelSubmit = @"submit";
 NSString *const ATInteractionFeedbackDialogEventLabelSkipViewMessages = @"skip_view_messages";
 NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messages";
 
-@implementation ATInteractionFeedbackDialogController
+@implementation ATInteractionFeedbackDialogController {
+	UIAlertView *didSendFeedbackAlert;
+}
 
 - (id)initWithInteraction:(ATInteraction *)interaction {
 	NSAssert([interaction.type isEqualToString:@"FeedbackDialog"], @"Attempted to load a FeedbackDialogController with an interaction of type: %@", interaction.type);
@@ -69,6 +71,9 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 }
 
 - (void)dealloc {
+	if (didSendFeedbackAlert) {
+		[didSendFeedbackAlert release], didSendFeedbackAlert = nil;
+	}
 	[_interaction release], _interaction = nil;
 	[_viewController release], _viewController = nil;
 	
@@ -114,7 +119,7 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 	[self engageEvent:ATInteractionFeedbackDialogEventLabelDismiss];
 	
 	if (action == ATMessagePanelDidSendMessage) {
-		if (!self.didSendFeedbackAlert) {
+		if (!didSendFeedbackAlert) {
 			NSDictionary *config = self.interaction.configuration;
 			
 			NSString *alertTitle = config[@"thank_you_title"] ?: ATLocalizedString(@"Thanks!", nil);
@@ -127,8 +132,8 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 				otherButtonTitle = nil;
 			}
 			
-			self.didSendFeedbackAlert = [[UIAlertView alloc] initWithTitle:alertTitle message:alertMessage delegate:self cancelButtonTitle:cancelButtonTitle otherButtonTitles:otherButtonTitle, nil];
-			[self.didSendFeedbackAlert show];
+			didSendFeedbackAlert = [[UIAlertView alloc] initWithTitle:alertTitle message:alertMessage delegate:self cancelButtonTitle:cancelButtonTitle otherButtonTitles:otherButtonTitle, nil];
+			[didSendFeedbackAlert show];
 			
 			//[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroThankYouDidShowNotification object:self userInfo:nil];
 		}
@@ -139,7 +144,7 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 
 #pragma mark UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-	if (alertView == self.didSendFeedbackAlert) {
+	if (alertView == didSendFeedbackAlert) {
 		if (buttonIndex == 0) { // Cancel
 			[self engageEvent:ATInteractionFeedbackDialogEventLabelSkipViewMessages];
 			
@@ -150,8 +155,8 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 			//[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroThankYouHitMessagesNotification object:self userInfo:nil];
 		}
 		
-		self.didSendFeedbackAlert.delegate = nil;
-		[self.didSendFeedbackAlert release], self.didSendFeedbackAlert = nil;
+		didSendFeedbackAlert.delegate = nil;
+		[didSendFeedbackAlert release], didSendFeedbackAlert = nil;
 		
 		[self release];
 	}

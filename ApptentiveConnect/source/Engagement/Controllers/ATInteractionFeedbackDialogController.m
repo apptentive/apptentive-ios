@@ -56,6 +56,8 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 			messagePanel = [[ATMessagePanelViewController alloc] initWithDelegate:self];
 		}
 		
+		messagePanel.interaction = self.interaction;
+		
 		NSDictionary *config = self.interaction.configuration;
 		NSString *title = config[@"title"] ?: ATLocalizedString(@"We're Sorry!", @"We're sorry text");
 		messagePanel.promptTitle = title;

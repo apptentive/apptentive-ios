@@ -62,7 +62,6 @@ static NSString *ATMetricNameInteractionUpgradeMessageClose = @"upgrade_message.
 
 @interface ApptentiveMetrics (Private)
 - (void)addLaunchMetric;
-- (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo;
 - (ATFeedbackWindowType)windowTypeFromNotification:(NSNotification *)notification;
 - (void)feedbackDidShowWindow:(NSNotification *)notification;
 - (void)feedbackDidHideWindow:(NSNotification *)notification;
@@ -125,6 +124,27 @@ static NSString *ATMetricNameInteractionUpgradeMessageClose = @"upgrade_message.
 	 [NSNumber numberWithBool:YES], ATAppConfigurationMetricsEnabledPreferenceKey,
 	 nil];
 	[defaults registerDefaults:defaultPreferences];
+}
+
+
+- (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo {
+	if (metricsEnabled == NO) {
+		return;
+	}
+	ATEvent *event = (ATEvent *)[ATData newEntityNamed:@"ATEvent"];
+	[event setup];
+	event.label = name;
+	[event addEntriesFromDictionary:userInfo];
+	if (![ATData save]) {
+		[event release], event = nil;
+		return;
+	}
+	
+	ATRecordRequestTask *task = [[ATRecordRequestTask alloc] init];
+	[task setTaskProvider:event];
+	[[ATTaskQueue sharedTaskQueue] addTask:task];
+	[event release], event = nil;
+	[task release], task = nil;
 }
 
 - (void)backendBecameAvailable:(NSNotification *)notification {
@@ -225,26 +245,6 @@ static NSString *ATMetricNameInteractionUpgradeMessageClose = @"upgrade_message.
 	@autoreleasepool {
 		[self addMetricWithName:ATMetricNameAppLaunch info:nil];
 	}
-}
-
-- (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo {
-	if (metricsEnabled == NO) {
-		return;
-	}
-	ATEvent *event = (ATEvent *)[ATData newEntityNamed:@"ATEvent"];
-	[event setup];
-	event.label = name;
-	[event addEntriesFromDictionary:userInfo];
-	if (![ATData save]) {
-		[event release], event = nil;
-		return;
-	}
-	
-	ATRecordRequestTask *task = [[ATRecordRequestTask alloc] init];
-	[task setTaskProvider:event];
-	[[ATTaskQueue sharedTaskQueue] addTask:task];
-	[event release], event = nil;
-	[task release], task = nil;
 }
 
 - (ATFeedbackWindowType)windowTypeFromNotification:(NSNotification *)notification {

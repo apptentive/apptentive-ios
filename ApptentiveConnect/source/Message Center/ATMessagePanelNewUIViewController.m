@@ -194,7 +194,7 @@
 	if (self.interaction.configuration[@"submit_text"]) {
 		[self.sendButtonNewUI setTitle:self.interaction.configuration[@"submit_text"] forState:UIControlStateNormal];
 	} else {
-		NSString *sendTitle = ATLocalizedString(@"Cancel", @"Button title to Send a message using the feedback dialog.");
+		NSString *sendTitle = ATLocalizedString(@"Send", @"Button title to Send a message using the feedback dialog.");
 		[self.sendButtonNewUI setTitle:sendTitle forState:UIControlStateNormal];
 	}
 	

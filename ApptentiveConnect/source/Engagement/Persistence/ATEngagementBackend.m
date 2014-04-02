@@ -19,6 +19,7 @@
 #import "ATInteractionRatingDialogController.h"
 #import "ATInteractionFeedbackDialogController.h"
 #import "ATInteractionMessageCenterController.h"
+#import "ApptentiveMetrics.h"
 
 NSString *const ATEngagementInstallDateKey = @"ATEngagementInstallDateKey";
 NSString *const ATEngagementUpgradeDateKey = @"ATEngagementUpgradeDateKey";

@@ -36,6 +36,25 @@
 	return self;
 }
 
+- (void)dealloc {
+	[_timeSinceInstallTotal release], _timeSinceInstallTotal = nil;
+	[_timeSinceInstallVersion release], _timeSinceInstallVersion = nil;
+	[_timeSinceInstallBuild release], _timeSinceInstallBuild = nil;
+	[_applicationVersion release], _applicationVersion = nil;
+	[_applicationBuild release], _applicationBuild = nil;
+	[_isUpdateVersion release], _isUpdateVersion = nil;
+	[_isUpdateBuild release], _isUpdateBuild = nil;
+	[_codePointInvokesTotal release], _codePointInvokesTotal = nil;
+	[_codePointInvokesVersion release], _codePointInvokesVersion = nil;
+	[_codePointInvokesBuild release], _codePointInvokesBuild = nil;
+	[_codePointInvokesTimeAgo release], _codePointInvokesTimeAgo = nil;
+	[_interactionInvokesTotal release], _interactionInvokesTotal = nil;
+	[_interactionInvokesVersion release], _interactionInvokesVersion = nil;
+	[_interactionInvokesBuild release], _interactionInvokesBuild = nil;
+	[_interactionInvokesTimeAgo release], _interactionInvokesTimeAgo = nil;
+	[super dealloc];
+}
+
 + (ATInteractionUsageData *)usageDataForInteraction:(ATInteraction *)interaction {
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] initWithInteraction:interaction];
 	return [usageData autorelease];
@@ -90,7 +109,7 @@
 		[_timeSinceInstallTotal retain];
 	}
 	
-	return _timeSinceInstallTotal;
+	return [[_timeSinceInstallTotal retain] autorelease];
 }
 
 - (NSNumber *)timeSinceInstallVersion {
@@ -100,7 +119,7 @@
 		[_timeSinceInstallVersion retain];
 	}
 	
-	return _timeSinceInstallVersion;
+	return [[_timeSinceInstallVersion retain] autorelease];
 }
 
 - (NSNumber *)timeSinceInstallBuild {
@@ -110,7 +129,7 @@
 		[_timeSinceInstallBuild retain];
 	}
 	
-	return _timeSinceInstallBuild;
+	return [[_timeSinceInstallBuild retain] autorelease];
 }
 
 - (NSString *)applicationVersion {
@@ -119,7 +138,7 @@
 		[_applicationVersion retain];
 	}
 	
-	return _applicationVersion;
+	return [[_applicationVersion retain] autorelease];
 }
 
 - (NSString *)applicationBuild {
@@ -128,7 +147,7 @@
 		[_applicationBuild retain];
 	}
 	
-	return _applicationBuild;
+	return [[_applicationBuild retain] autorelease];
 }
 
 - (NSNumber *)isUpdateVersion {
@@ -137,7 +156,7 @@
 		[_isUpdateVersion retain];
 	}
 	
-	return _isUpdateVersion;
+	return [[_isUpdateVersion retain] autorelease];
 }
 
 - (NSNumber *)isUpdateBuild {
@@ -146,7 +165,7 @@
 		[_isUpdateBuild retain];
 	}
 	
-	return _isUpdateBuild;
+	return [[_isUpdateBuild retain] autorelease];
 }
 
 - (NSDictionary *)codePointInvokesTotal {
@@ -156,10 +175,10 @@
 		for (NSString *codePoint in codePointsInvokesTotal) {
 			[predicateSyntax setObject:[codePointsInvokesTotal objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/total", codePoint]];
 		}
-		_codePointInvokesTotal = [predicateSyntax retain];
+		_codePointInvokesTotal = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
 	
-	return _codePointInvokesTotal;
+	return [[_codePointInvokesTotal retain] autorelease];
 }
 
 - (NSDictionary *)codePointInvokesVersion {
@@ -169,9 +188,9 @@
 		for (NSString *codePoint in codePointsInvokesVersion) {
 			[predicateSyntax setObject:[codePointsInvokesVersion objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/version", codePoint]];
 		}
-		_codePointInvokesVersion = [predicateSyntax retain];
+		_codePointInvokesVersion = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
-	return _codePointInvokesVersion;
+	return [[_codePointInvokesVersion retain] autorelease];
 }
 
 - (NSDictionary *)codePointInvokesBuild {
@@ -181,9 +200,9 @@
 		for (NSString *codePoint in codePointsInvokesBuild) {
 			[predicateSyntax setObject:[codePointsInvokesBuild objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/build", codePoint]];
 		}
-		_codePointInvokesBuild = [predicateSyntax retain];
+		_codePointInvokesBuild = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
-	return _codePointInvokesBuild;
+	return [[_codePointInvokesBuild retain] autorelease];
 }
 
 - (NSDictionary *)codePointInvokesTimeAgo {
@@ -195,9 +214,9 @@
 			NSTimeInterval timeAgo = [[NSDate date] timeIntervalSinceDate:lastDate];
 			[predicateSyntax setObject:@(timeAgo) forKey:[NSString stringWithFormat:@"code_point/%@/invokes/time_ago", codePoint]];
 		}
-		_codePointInvokesTimeAgo = [predicateSyntax retain];
+		_codePointInvokesTimeAgo = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
-	return _codePointInvokesTimeAgo;
+	return [[_codePointInvokesTimeAgo retain] autorelease];
 }
 
 - (NSDictionary *)interactionInvokesTotal {
@@ -207,10 +226,10 @@
 		for (NSString *interactionID in interactionsInvokesTotal) {
 			[predicateSyntax setObject:[interactionsInvokesTotal objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/total", interactionID]];
 		}
-		_interactionInvokesTotal = [predicateSyntax retain];
+		_interactionInvokesTotal = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
 	
-	return _interactionInvokesTotal;
+	return [[_interactionInvokesTotal retain] autorelease];
 }
 
 - (NSDictionary *)interactionInvokesVersion {
@@ -220,10 +239,10 @@
 		for (NSString *interactionID in interactionsInvokesVersion) {
 			[predicateSyntax setObject:[interactionsInvokesVersion objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/version", interactionID]];
 		}
-		_interactionInvokesVersion = [predicateSyntax retain];
+		_interactionInvokesVersion = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
 
-	return _interactionInvokesVersion;
+	return [[_interactionInvokesVersion retain] autorelease];
 }
 
 - (NSDictionary *)interactionInvokesBuild {
@@ -233,10 +252,10 @@
 		for (NSString *interactionID in interactionsInvokesBuild) {
 			[predicateSyntax setObject:[interactionsInvokesBuild objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/build", interactionID]];
 		}
-		_interactionInvokesBuild = [predicateSyntax retain];
+		_interactionInvokesBuild = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
 	
-	return _interactionInvokesBuild;
+	return [[_interactionInvokesBuild retain] autorelease];
 }
 
 - (NSDictionary *)interactionInvokesTimeAgo {
@@ -248,9 +267,9 @@
 			NSTimeInterval timeAgo = [[NSDate date] timeIntervalSinceDate:lastDate];
 			[predicateSyntax setObject:@(timeAgo) forKey:[NSString stringWithFormat:@"interactions/%@/invokes/time_ago", interactionID]];
 		}
-		_interactionInvokesTimeAgo = [predicateSyntax retain];
+		_interactionInvokesTimeAgo = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
-	return _interactionInvokesTimeAgo;
+	return [[_interactionInvokesTimeAgo retain] autorelease];
 }
 
 @end

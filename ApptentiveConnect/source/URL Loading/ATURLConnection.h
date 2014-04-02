@@ -15,6 +15,8 @@
 	
 	NSMutableURLRequest *request;
 	NSURLConnection *connection;
+	NSString *statusLine;
+	NSDictionary *responseHeaders;
 	NSMutableData *data;
 	BOOL executing;
 	BOOL finished;
@@ -65,10 +67,18 @@
 - (BOOL)isExecuting;
 - (BOOL)isCancelled;
 - (BOOL)isFinished;
+/*! A localized description of the response status code. */
+- (NSString *)statusLine;
+/*! The response headers. */
+- (NSDictionary *)responseHeaders;
 - (NSData *)responseData;
 
-- (NSString *)requestAsString;
+/*! The request headers. */
 - (NSDictionary *)headers;
+
+#pragma mark Debugging
+- (NSString *)requestAsString;
+- (NSString *)responseAsString;
 @end
 
 

@@ -9,9 +9,6 @@
 #import <UIKit/UIKit.h>
 @class ATInteraction;
 
-NSString *const ATInteractionUpgradeMessageLaunch;
-NSString *const ATInteractionUpgradeMessageClose;
-
 @interface ATInteractionUpgradeMessageViewController : UIViewController {
 	UIViewController *presentingViewController;
 	@private

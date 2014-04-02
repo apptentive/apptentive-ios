@@ -207,7 +207,7 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 }
 
 - (BOOL)engage:(NSString *)codePoint userInfo:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController {
-	ATLogDebug(@"Engaging CodePoint: %@", codePoint);
+	[[ApptentiveMetrics sharedMetrics] addMetricWithName:codePoint info:userInfo];
 	
 	[self codePointWasEngaged:codePoint];
 	

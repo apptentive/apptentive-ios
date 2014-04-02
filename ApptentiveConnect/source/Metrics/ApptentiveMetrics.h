@@ -18,7 +18,12 @@
 @private
 	BOOL metricsEnabled;
 }
+
 + (ApptentiveMetrics *)sharedMetrics;
+
+- (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo;
+
 - (BOOL)upgradeLegacyMetric:(ATMetric *)metric;
+
 @end
 

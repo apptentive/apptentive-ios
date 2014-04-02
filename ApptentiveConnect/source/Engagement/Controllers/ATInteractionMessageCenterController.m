@@ -10,7 +10,6 @@
 #import "ATInteraction.h"
 #import "ATBackend.h"
 #import "ATConnect_Private.h"
-#import "ATAppRatingMetrics.h"
 
 @implementation ATInteractionMessageCenterController
 

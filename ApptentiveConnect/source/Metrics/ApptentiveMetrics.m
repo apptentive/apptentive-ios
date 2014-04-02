@@ -20,7 +20,6 @@
 #import "ATRecordRequestTask.h"
 #import "ATSurveyMetrics.h"
 #import "ATTaskQueue.h"
-#import "ATInteractionUpgradeMessageViewController.h"
 
 static NSString *ATMetricNameEnjoymentDialogLaunch = @"enjoyment_dialog.launch";
 static NSString *ATMetricNameEnjoymentDialogYes = @"enjoyment_dialog.yes";
@@ -57,12 +56,8 @@ static NSString *ATMetricNameMessageCenterThankYouLaunch = @"message_center.than
 static NSString *ATMetricNameMessageCenterThankYouMessages = @"message_center.thank_you.messages";
 static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank_you.close";
 
-static NSString *ATMetricNameInteractionUpgradeMessageLaunch = @"upgrade_message.launch";
-static NSString *ATMetricNameInteractionUpgradeMessageClose = @"upgrade_message.close";
-
 @interface ApptentiveMetrics (Private)
 - (void)addLaunchMetric;
-- (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo;
 - (ATFeedbackWindowType)windowTypeFromNotification:(NSNotification *)notification;
 - (void)feedbackDidShowWindow:(NSNotification *)notification;
 - (void)feedbackDidHideWindow:(NSNotification *)notification;
@@ -99,9 +94,6 @@ static NSString *ATMetricNameInteractionUpgradeMessageClose = @"upgrade_message.
 - (void)messageCenterIntroThankYouHitMessages:(NSNotification *)notification;
 - (void)messageCenterIntroThankYouDidClose:(NSNotification *)notification;
 
-- (void)interactionUpgradeMessageDidLaunch:(NSNotification *)notification;
-- (void)interactionUpgradeMessageDidClose:(NSNotification *)notification;
-
 - (void)preferencesChanged:(NSNotification *)notification;
 
 - (void)updateWithCurrentPreferences;
@@ -125,6 +117,27 @@ static NSString *ATMetricNameInteractionUpgradeMessageClose = @"upgrade_message.
 	 [NSNumber numberWithBool:YES], ATAppConfigurationMetricsEnabledPreferenceKey,
 	 nil];
 	[defaults registerDefaults:defaultPreferences];
+}
+
+
+- (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo {
+	if (metricsEnabled == NO) {
+		return;
+	}
+	ATEvent *event = (ATEvent *)[ATData newEntityNamed:@"ATEvent"];
+	[event setup];
+	event.label = name;
+	[event addEntriesFromDictionary:userInfo];
+	if (![ATData save]) {
+		[event release], event = nil;
+		return;
+	}
+	
+	ATRecordRequestTask *task = [[ATRecordRequestTask alloc] init];
+	[task setTaskProvider:event];
+	[[ATTaskQueue sharedTaskQueue] addTask:task];
+	[event release], event = nil;
+	[task release], task = nil;
 }
 
 - (void)backendBecameAvailable:(NSNotification *)notification {
@@ -174,9 +187,6 @@ static NSString *ATMetricNameInteractionUpgradeMessageClose = @"upgrade_message.
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroThankYouDidLaunch:) name:ATMessageCenterIntroThankYouDidShowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroThankYouHitMessages:) name:ATMessageCenterIntroThankYouHitMessagesNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroThankYouDidClose:) name:ATMessageCenterIntroThankYouDidCloseNotification object:nil];
-		
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(interactionUpgradeMessageDidLaunch:) name:ATInteractionUpgradeMessageLaunch object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(interactionUpgradeMessageDidClose:) name:ATInteractionUpgradeMessageClose object:nil];
 	}
 }
 
@@ -225,26 +235,6 @@ static NSString *ATMetricNameInteractionUpgradeMessageClose = @"upgrade_message.
 	@autoreleasepool {
 		[self addMetricWithName:ATMetricNameAppLaunch info:nil];
 	}
-}
-
-- (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo {
-	if (metricsEnabled == NO) {
-		return;
-	}
-	ATEvent *event = (ATEvent *)[ATData newEntityNamed:@"ATEvent"];
-	[event setup];
-	event.label = name;
-	[event addEntriesFromDictionary:userInfo];
-	if (![ATData save]) {
-		[event release], event = nil;
-		return;
-	}
-	
-	ATRecordRequestTask *task = [[ATRecordRequestTask alloc] init];
-	[task setTaskProvider:event];
-	[[ATTaskQueue sharedTaskQueue] addTask:task];
-	[event release], event = nil;
-	[task release], task = nil;
 }
 
 - (ATFeedbackWindowType)windowTypeFromNotification:(NSNotification *)notification {
@@ -482,14 +472,6 @@ static NSString *ATMetricNameInteractionUpgradeMessageClose = @"upgrade_message.
 
 - (void)messageCenterIntroThankYouDidClose:(NSNotification *)notification {
 	[self addMetricWithName:ATMetricNameMessageCenterThankYouClose info:nil];
-}
-
-- (void)interactionUpgradeMessageDidLaunch:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameInteractionUpgradeMessageLaunch info:nil];
-}
-
-- (void)interactionUpgradeMessageDidClose:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameInteractionUpgradeMessageClose info:nil];
 }
 
 - (void)preferencesChanged:(NSNotification *)notification {

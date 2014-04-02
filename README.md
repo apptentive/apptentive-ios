@@ -415,3 +415,7 @@ window is opened. If they are happy with the app, they are prompted to rate
 the app in the App Store:
 
 ![Popup](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/rating.png)
+
+#### Customization
+
+For information on customizing the UI and text of `apptentive-ios`, please see [Customization](docs/Customization.md).

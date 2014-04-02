@@ -34,8 +34,9 @@ If you change the `tintColor` of your app, we will automatically pick it up.
 Similarly, you can change the attributes of the text of the navigation bar, and we should take those attributes:
 
 ```objective-c
-    [[UINavigationBar appearance] setTitleTextAttributes:@{UITextAttributeTextColor: [UIColor orangeColor],
-                                                           UITextAttributeFont: [UIFont fontWithName:@"Copperplate" size:20]}];
+    NSDictionary *attributes = @{UITextAttributeTextColor: [UIColor orangeColor],
+                                 UITextAttributeFont: [UIFont fontWithName:@"Copperplate" size:20]};
+    [[UINavigationBar appearance] setTitleTextAttributes:attributes];
 ```
 
 <img src="images/customization-navTextAttributes.png" data-src2x="images/customization-navTextAttributes@2x.png">
@@ -45,10 +46,13 @@ Unfortunately, you'll currently need to set some appearance attributes on our cu
 ```objective-c
     Class apptentiveNavigationController = NSClassFromString(@"ATNavigationController");
     if (apptentiveNavigationController) {
-        [[UINavigationBar appearanceWhenContainedIn:apptentiveNavigationController, nil] setBarTintColor:[UIColor redColor]];
-        [[UINavigationBar appearanceWhenContainedIn:apptentiveNavigationController, nil] setTintColor:[UIColor whiteColor]];
+        [[UINavigationBar appearanceWhenContainedIn:apptentiveNavigationController, nil] 
+            setBarTintColor:[UIColor redColor]];
+        [[UINavigationBar appearanceWhenContainedIn:apptentiveNavigationController, nil] 
+            setTintColor:[UIColor whiteColor]];
     }
-    [[UINavigationBar appearance] setTitleTextAttributes:@{UITextAttributeTextColor: [UIColor whiteColor]}];
+    NSDictionary *attributes = @{UITextAttributeTextColor: [UIColor whiteColor]};
+    [[UINavigationBar appearance] setTitleTextAttributes:attributes];
 ```
 
 which yields:
@@ -59,14 +63,15 @@ That is, unless you disable our branding with the `-setShowTagline:` method:
 
 ```objective-c
     [[ATConnect sharedConnection] setShowTagline:NO];
-    [[UINavigationBar appearance] setTitleTextAttributes:@{UITextAttributeTextColor: [UIColor purpleColor]}];
+    NSDictionary *attributes = @{UITextAttributeTextColor: [UIColor purpleColor]};
+    [[UINavigationBar appearance] setTitleTextAttributes:attributes];
 ```
 
 In which case you'll get:
 
 <img src="images/customization-noTagline.png" data-src2x="images/customization-noTagline@2x.png">
 
-We will likely change this moving forward to be more consistent.
+*Note:* We will likely change this moving forward to be more consistent, API-wise.
 
 ## Removing Apptentive Branding
 

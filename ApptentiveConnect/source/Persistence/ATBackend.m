@@ -49,6 +49,7 @@ typedef NS_ENUM(NSInteger, ATBackendState){
 NSString *const ATBackendBecameReadyNotification = @"ATBackendBecameReadyNotification";
 
 NSString *const ATUUIDPreferenceKey = @"ATUUIDPreferenceKey";
+NSString *const ATLegacyUUIDPreferenceKey = @"ATLegacyUUIDPreferenceKey";
 NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
@@ -94,6 +95,8 @@ static NSURLCache *imageCache = nil;
 	
 	UIViewController *presentingViewController;
 	UIAlertView *messagePanelSentMessageAlert;
+	
+	NSString *cachedDeviceUUID;
 }
 @synthesize presentingViewController;
 #endif
@@ -207,6 +210,7 @@ static NSURLCache *imageCache = nil;
 	}
 #endif
 	[imageCache release], imageCache = nil;
+	[cachedDeviceUUID release], cachedDeviceUUID = nil;
 	[super dealloc];
 }
 
@@ -448,21 +452,41 @@ static NSURLCache *imageCache = nil;
 
 - (NSString *)deviceUUID {
 #if TARGET_OS_IPHONE
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSString *uuid = [defaults objectForKey:ATUUIDPreferenceKey];
-	if (!uuid) {
-		CFUUIDRef uuidRef = CFUUIDCreate(NULL);
-		CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+		NSString *uuid = [defaults objectForKey:ATUUIDPreferenceKey];
 		
-		uuid = [NSString stringWithFormat:@"ios:%@", (NSString *)uuidStringRef];
+		if (uuid && [uuid hasPrefix:@"ios:"]) {
+			// Existing UUID is a legacy value. Back it up.
+			[defaults setObject:uuid forKey:ATLegacyUUIDPreferenceKey];
+			[defaults synchronize];
+		}
 		
-		CFRelease(uuidRef), uuidRef = NULL;
-		CFRelease(uuidStringRef), uuidStringRef = NULL;
-		
-		[defaults setObject:uuid forKey:ATUUIDPreferenceKey];
-		[defaults synchronize];
-	}
-	return uuid;
+		UIDevice *device = [UIDevice currentDevice];
+		if ([NSUUID class] && [device respondsToSelector:@selector(identifierForVendor)]) {
+			NSString *vendorID = [[device identifierForVendor] UUIDString];
+			if (vendorID && ![vendorID isEqualToString:uuid]) {
+				uuid = vendorID;
+				[defaults setObject:uuid forKey:ATUUIDPreferenceKey];
+				[defaults synchronize];
+			}
+		}
+		if (!uuid) {
+			// Fall back.
+			CFUUIDRef uuidRef = CFUUIDCreate(NULL);
+			CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
+			
+			uuid = [NSString stringWithFormat:@"ios:%@", (NSString *)uuidStringRef];
+			
+			CFRelease(uuidRef), uuidRef = NULL;
+			CFRelease(uuidStringRef), uuidStringRef = NULL;
+			[defaults setObject:uuid forKey:ATUUIDPreferenceKey];
+			[defaults synchronize];
+		}
+		cachedDeviceUUID = [uuid copy];
+	});
+	return cachedDeviceUUID;
 #elif TARGET_OS_MAC
 	static CFStringRef keyRef = CFSTR("apptentiveUUID");
 	static CFStringRef appIDRef = CFSTR("com.apptentive.feedback");

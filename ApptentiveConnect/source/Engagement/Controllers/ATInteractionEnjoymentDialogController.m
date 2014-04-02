@@ -37,7 +37,7 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 	NSDictionary *config = self.interaction.configuration;
 	
 	NSString *title = config[@"title"] ?: [NSString stringWithFormat:ATLocalizedString(@"Do you love %@?", @"Title for enjoyment alert view. Parameter is app name."), [[ATBackend sharedBackend] appName]];
-	NSString *body = nil;
+	NSString *body = config[@"body"] ?: nil;
 	NSString *yesText = config[@"yes_text"] ?: ATLocalizedString(@"Yes", @"yes");
 	NSString *noText = config[@"no_text"] ?: ATLocalizedString(@"No", @"no");
 	

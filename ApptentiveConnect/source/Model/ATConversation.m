@@ -76,8 +76,9 @@
 - (NSDictionary *)apiJSON {
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
 	
-	if (self.deviceID) {
-		NSDictionary *deviceInfo = @{@"uuid":self.deviceID};
+	NSString *deviceUUID = [[ATBackend sharedBackend] deviceUUID];
+	if (deviceUUID) {
+		NSDictionary *deviceInfo = @{@"uuid":deviceUUID};
 		result[@"device"] = deviceInfo;
 	}
 	result[@"app_release"] = [self appReleaseJSON];

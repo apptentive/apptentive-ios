@@ -10,7 +10,6 @@
 #import "ATInteraction.h"
 #import "ATBackend.h"
 #import "ATConnect_Private.h"
-#import "ATAppRatingMetrics.h"
 #import "ATUtilities.h"
 #import "ATEngagementBackend.h"
 
@@ -47,14 +46,12 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 		[self.enjoymentDialog show];
 	}
 
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATAppRatingDidPromptForEnjoymentNotification object:self];
+	[self engageEvent:ATInteractionEnjoymentDialogEventLabelLaunch];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	if (alertView == self.enjoymentDialog) {
 		if (buttonIndex == 0) { // no
-			[self postNotification:ATAppRatingDidClickEnjoymentButtonNotification forButton:ATAppRatingEnjoymentButtonTypeNo];
-			
 			if (!self.viewController) {
 				UIViewController *candidateVC = [ATUtilities rootViewControllerForCurrentWindow];
 				if (candidateVC) {
@@ -63,20 +60,12 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 			}
 			
 			[self engageEvent:ATInteractionEnjoymentDialogEventLabelNo];
-			
 		} else if (buttonIndex == 1) { // yes
-			[self postNotification:ATAppRatingDidClickEnjoymentButtonNotification forButton:ATAppRatingEnjoymentButtonTypeYes];
-			
 			[self engageEvent:ATInteractionEnjoymentDialogEventLabelYes];
 		}
 		
 		[self release];
 	}
-}
-
-- (void)postNotification:(NSString *)name forButton:(ATAppRatingEnjoymentButtonType)button {
-	NSDictionary *userInfo = @{ATAppRatingButtonTypeKey: @(button)};
-	[[NSNotificationCenter defaultCenter] postNotificationName:name object:self userInfo:userInfo];
 }
 
 - (BOOL)engageEvent:(NSString *)eventLabel {

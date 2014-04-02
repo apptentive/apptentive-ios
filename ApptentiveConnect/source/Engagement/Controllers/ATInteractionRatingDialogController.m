@@ -10,12 +10,8 @@
 #import "ATInteraction.h"
 #import "ATBackend.h"
 #import "ATConnect_Private.h"
-#import "ATAppRatingMetrics.h"
 #import "ATUtilities.h"
 #import "ATEngagementBackend.h"
-
-// TODO: Remove, soon. All info should come from interaction's configuration.
-#import "ATAppRatingFlow.h"
 
 NSString *const ATInteractionRatingDialogEventLabelLaunch = @"launch";
 NSString *const ATInteractionRatingDialogEventLabelCancel = @"cancel";
@@ -52,36 +48,21 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 		[self.ratingDialog show];
 	}
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATAppRatingDidPromptForRatingNotification object:nil];
+	[self engageEvent:ATInteractionRatingDialogEventLabelLaunch];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	if (alertView == self.ratingDialog) {
-				
 		if (buttonIndex == 1) { // rate
-			[self postNotification:ATAppRatingDidClickRatingButtonNotification forButton:ATAppRatingButtonTypeRateApp];
-			
-			[[NSNotificationCenter defaultCenter] postNotificationName:ATAppRatingFlowUserAgreedToRateAppNotification object:nil];
-			
 			[self engageEvent:ATInteractionRatingDialogEventLabelRate];
-			
 		} else if (buttonIndex == 2) { // remind later
-			[self postNotification:ATAppRatingDidClickRatingButtonNotification forButton:ATAppRatingButtonTypeRemind];
-			
 			[self engageEvent:ATInteractionRatingDialogEventLabelRemind];
 		} else if (buttonIndex == 0) { // no thanks
-			[self postNotification:ATAppRatingDidClickRatingButtonNotification forButton:ATAppRatingButtonTypeNo];
-			
 			[self engageEvent:ATInteractionRatingDialogEventLabelDecline];
 		}
 		
 		[self release];
 	}
-}
-
-- (void)postNotification:(NSString *)name forButton:(ATAppRatingButtonType)button {
-	NSDictionary *userInfo = @{ATAppRatingButtonTypeKey: @(button)};
-	[[NSNotificationCenter defaultCenter] postNotificationName:name object:self userInfo:userInfo];
 }
 
 - (BOOL)engageEvent:(NSString *)eventLabel {

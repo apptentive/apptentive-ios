@@ -20,6 +20,7 @@
 #import "ATRecordRequestTask.h"
 #import "ATSurveyMetrics.h"
 #import "ATTaskQueue.h"
+#import "ATEngagementBackend.h"
 
 static NSString *ATMetricNameEnjoymentDialogLaunch = @"enjoyment_dialog.launch";
 static NSString *ATMetricNameEnjoymentDialogYes = @"enjoyment_dialog.yes";
@@ -40,8 +41,8 @@ static NSString *ATMetricNameSurveyCancel = @"survey.cancel";
 static NSString *ATMetricNameSurveySubmit = @"survey.submit";
 static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 
-static NSString *ATMetricNameAppLaunch = @"app.launch";
-static NSString *ATMetricNameAppExit = @"app.exit";
+static NSString *ATInteractionAppEventLabelLaunch = @"launch";
+static NSString *ATInteractionAppEventLabelExit = @"exit";
 
 static NSString *ATMetricNameMessageCenterLaunch = @"message_center.launch";
 static NSString *ATMetricNameMessageCenterClose = @"message_center.close";
@@ -233,7 +234,7 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 @implementation ApptentiveMetrics (Private)
 - (void)addLaunchMetric {
 	@autoreleasepool {
-		[self addMetricWithName:ATMetricNameAppLaunch info:nil];
+		[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch userInfo:nil];
 	}
 }
 
@@ -401,15 +402,15 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 }
 
 - (void)appWillTerminate:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameAppExit info:nil];
+	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:ATInteractionAppEventLabelExit userInfo:nil];
 }
 
 - (void)appDidEnterBackground:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameAppExit info:nil];
+	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:ATInteractionAppEventLabelExit userInfo:nil];
 }
 
 - (void)appWillEnterForeground:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameAppLaunch info:nil];
+	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch userInfo:nil];
 }
 
 - (void)messageCenterDidLaunch:(NSNotification *)notification {

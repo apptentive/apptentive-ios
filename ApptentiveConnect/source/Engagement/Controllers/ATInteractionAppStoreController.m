@@ -44,6 +44,20 @@
 }
 
 - (void)openAppStoreToRateApp {
+	NSString *method = self.interaction.configuration[@"method"];
+	
+	if ([method isEqualToString:@"app_store"]) {
+		[self openAppStoreViaURL];
+	} else if ([method isEqualToString:@"store_kit"]) {
+		[self openAppStoreViaStoreKit];
+	} else if ([method isEqualToString:@"mac_app_store"]) {
+		[self openMacAppStore];
+	} else {
+		[self legacyOpenAppStoreToRateApp];
+	}
+}
+
+- (void)legacyOpenAppStoreToRateApp {
 #if TARGET_OS_IPHONE
 #	if TARGET_IPHONE_SIMULATOR
 	[self showUnableToOpenAppStoreDialog];
@@ -68,13 +82,13 @@
 }
 #endif
 
-// TODO: method of opening App Store should come from interaction's configuration.
 - (BOOL)shouldOpenAppStoreViaStoreKit {
 	return ([SKStoreProductViewController class] != NULL && [self appID] && ![ATUtilities osVersionGreaterThanOrEqualTo:@"7"]);
 }
 
 - (NSURL *)URLForRatingApp {
 	NSString *urlString = self.interaction.configuration[@"url"];
+
 	NSURL *ratingURL = (urlString) ? [NSURL URLWithString:urlString] : [self legacyURLForRatingApp];
 
 	return ratingURL;

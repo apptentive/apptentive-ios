@@ -19,6 +19,7 @@
 #import "ATInteractionRatingDialogController.h"
 #import "ATInteractionFeedbackDialogController.h"
 #import "ATInteractionMessageCenterController.h"
+#import "ATInteractionAppStoreController.h"
 #import "ApptentiveMetrics.h"
 
 NSString *const ATEngagementInstallDateKey = @"ATEngagementInstallDateKey";
@@ -362,6 +363,8 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 		[self presentFeedbackDialogInteraction:interaction fromViewController:viewController];
 	} else if ([interaction.type isEqualToString:@"MessageCenter"]) {
 		[self presentMessageCenterInteraction:interaction fromViewController:viewController];
+	} else if ([interaction.type isEqualToString:@"AppStoreRating"]) {
+		[self presentAppStoreRatingInteraction:interaction fromViewController:viewController];
 	}
 }
 
@@ -411,6 +414,15 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	[messageCenter showMessageCenterFromViewController:viewController];
 	
 	[messageCenter release];
+}
+
+- (void)presentAppStoreRatingInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
+	NSAssert([interaction.type isEqualToString:@"AppStoreRating"], @"Attempted to present an App Store Rating interaction with an interaction of type: %@", interaction.type);
+	
+	ATInteractionAppStoreController *appStore = [[ATInteractionAppStoreController alloc] initWithInteraction:interaction];
+	[appStore openAppStoreFromViewController:viewController];
+	
+	[appStore release];
 }
 
 - (void)resetUpgradeVersionInfo {

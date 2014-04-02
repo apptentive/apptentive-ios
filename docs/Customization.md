@@ -34,9 +34,9 @@ If you change the `tintColor` of your app, we will automatically pick it up.
 Similarly, you can change the attributes of the text of the navigation bar, and we should take those attributes:
 
 ```objective-c
-    NSDictionary *attributes = @{UITextAttributeTextColor: [UIColor orangeColor],
-                                 UITextAttributeFont: [UIFont fontWithName:@"Copperplate" size:20]};
-    [[UINavigationBar appearance] setTitleTextAttributes:attributes];
+NSDictionary *attributes = @{UITextAttributeTextColor: [UIColor orangeColor],
+                             UITextAttributeFont: [UIFont fontWithName:@"Copperplate" size:20]};
+[[UINavigationBar appearance] setTitleTextAttributes:attributes];
 ```
 
 <img src="images/customization-navTextAttributes.png" data-src2x="images/customization-navTextAttributes@2x.png">
@@ -44,15 +44,15 @@ Similarly, you can change the attributes of the text of the navigation bar, and 
 Unfortunately, you'll currently need to set some appearance attributes on our custom subclass of `UINavigationController`, as below:
 
 ```objective-c
-    Class apptentiveNavigationController = NSClassFromString(@"ATNavigationController");
-    if (apptentiveNavigationController) {
-        [[UINavigationBar appearanceWhenContainedIn:apptentiveNavigationController, nil] 
-            setBarTintColor:[UIColor redColor]];
-        [[UINavigationBar appearanceWhenContainedIn:apptentiveNavigationController, nil] 
-            setTintColor:[UIColor whiteColor]];
-    }
-    NSDictionary *attributes = @{UITextAttributeTextColor: [UIColor whiteColor]};
-    [[UINavigationBar appearance] setTitleTextAttributes:attributes];
+Class apptentiveNavigationController = NSClassFromString(@"ATNavigationController");
+if (apptentiveNavigationController) {
+    [[UINavigationBar appearanceWhenContainedIn:apptentiveNavigationController, nil] 
+        setBarTintColor:[UIColor redColor]];
+    [[UINavigationBar appearanceWhenContainedIn:apptentiveNavigationController, nil] 
+        setTintColor:[UIColor whiteColor]];
+}
+NSDictionary *attributes = @{UITextAttributeTextColor: [UIColor whiteColor]};
+[[UINavigationBar appearance] setTitleTextAttributes:attributes];
 ```
 
 which yields:
@@ -62,9 +62,9 @@ which yields:
 That is, unless you disable our branding with the `-setShowTagline:` method:
 
 ```objective-c
-    [[ATConnect sharedConnection] setShowTagline:NO];
-    NSDictionary *attributes = @{UITextAttributeTextColor: [UIColor purpleColor]};
-    [[UINavigationBar appearance] setTitleTextAttributes:attributes];
+[[ATConnect sharedConnection] setShowTagline:NO];
+NSDictionary *attributes = @{UITextAttributeTextColor: [UIColor purpleColor]};
+[[UINavigationBar appearance] setTitleTextAttributes:attributes];
 ```
 
 In which case you'll get:
@@ -78,7 +78,7 @@ In which case you'll get:
 The `-setShowTagline:` method:
 
 ```objective-c
-    [[ATConnect sharedConnection] setShowTagline:NO];
+[[ATConnect sharedConnection] setShowTagline:NO];
 ```
 
 Can be used to disable showing the Apptentive logo at the top of the Message Center and on the Contact Settings screen.

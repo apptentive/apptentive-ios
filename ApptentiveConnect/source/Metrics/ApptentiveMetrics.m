@@ -22,6 +22,13 @@
 #import "ATTaskQueue.h"
 #import "ATEngagementBackend.h"
 
+// Engagement event labels
+
+static NSString *ATInteractionAppEventLabelLaunch = @"launch";
+static NSString *ATInteractionAppEventLabelExit = @"exit";
+
+// Legacy metric event labels
+
 static NSString *ATMetricNameEnjoymentDialogLaunch = @"enjoyment_dialog.launch";
 static NSString *ATMetricNameEnjoymentDialogYes = @"enjoyment_dialog.yes";
 static NSString *ATMetricNameEnjoymentDialogNo = @"enjoyment_dialog.no";
@@ -40,9 +47,6 @@ static NSString *ATMetricNameSurveyLaunch = @"survey.launch";
 static NSString *ATMetricNameSurveyCancel = @"survey.cancel";
 static NSString *ATMetricNameSurveySubmit = @"survey.submit";
 static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
-
-static NSString *ATInteractionAppEventLabelLaunch = @"launch";
-static NSString *ATInteractionAppEventLabelExit = @"exit";
 
 static NSString *ATMetricNameMessageCenterLaunch = @"message_center.launch";
 static NSString *ATMetricNameMessageCenterClose = @"message_center.close";

@@ -254,6 +254,8 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 		[addedCodePoint setObject:[NSDate distantPast] forKey:codePoint];
 		[defaults setObject:addedCodePoint forKey:ATEngagementCodePointsInvokesLastDateKey];
 	}
+	
+	[defaults synchronize];
 }
 
 - (void)codePointWasEngaged:(NSString *)codePoint {
@@ -318,6 +320,8 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 		[addedInteraction setObject:[NSDate distantPast] forKey:interactionID];
 		[defaults setObject:addedInteraction forKey:ATEngagementInteractionsInvokesLastDateKey];
 	}
+	
+	[defaults synchronize];
 }
 
 - (void)interactionWasEngaged:(ATInteraction *)interaction {

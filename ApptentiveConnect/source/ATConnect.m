@@ -277,7 +277,7 @@ NSString *const ATIntegrationKeyKahuna = @"kahuna";
 
 
 - (void)presentUpgradeDialogFromViewControllerIfAvailable:(UIViewController *)viewController {
-	NSArray *interactions = [[ATEngagementBackend sharedBackend] interactionsForCodePoint:@"app.launch"];
+	NSArray *interactions = [[ATEngagementBackend sharedBackend] interactionsForCodePoint:@"local#app#init"];
 	for (ATInteraction *interaction in interactions) {
 		if ([interaction.type isEqualToString:@"UpgradeMessage"]) {
 			[[ATEngagementBackend sharedBackend] presentUpgradeMessageInteraction:interaction fromViewController:viewController];

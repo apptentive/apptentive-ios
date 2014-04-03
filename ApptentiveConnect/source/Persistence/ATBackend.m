@@ -460,7 +460,6 @@ static NSURLCache *imageCache = nil;
 		if (uuid && [uuid hasPrefix:@"ios:"]) {
 			// Existing UUID is a legacy value. Back it up.
 			[defaults setObject:uuid forKey:ATLegacyUUIDPreferenceKey];
-			[defaults synchronize];
 		}
 		
 		UIDevice *device = [UIDevice currentDevice];
@@ -469,7 +468,6 @@ static NSURLCache *imageCache = nil;
 			if (vendorID && ![vendorID isEqualToString:uuid]) {
 				uuid = vendorID;
 				[defaults setObject:uuid forKey:ATUUIDPreferenceKey];
-				[defaults synchronize];
 			}
 		}
 		if (!uuid) {

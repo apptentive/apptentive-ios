@@ -239,7 +239,6 @@ NSString *const ATSurveyCachedSurveysExpirationPreferenceKey = @"ATSurveyCachedS
 			NSDate *date = [NSDate dateWithTimeInterval:expiresMaxAge sinceDate:[NSDate date]];
 			NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 			[defaults setObject:date forKey:ATSurveyCachedSurveysExpirationPreferenceKey];
-			[defaults synchronize];
 		}
 		
 		[availableSurveys removeAllObjects];

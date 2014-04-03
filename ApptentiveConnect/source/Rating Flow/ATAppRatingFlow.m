@@ -538,10 +538,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 		[defaults setObject:[NSNumber numberWithBool:NO] forKey:ATAppRatingFlowDeclinedToRateThisVersionKey];
 		[defaults setObject:[NSNumber numberWithBool:NO] forKey:ATAppRatingFlowUserDislikesThisVersionKey];
 		[defaults setObject:[NSNumber numberWithInteger:0] forKey:ATAppRatingFlowPromptCountThisVersionKey];
-		
-		[defaults synchronize];
 	}
-	
 }
 
 - (void)userDidUseApp {
@@ -565,7 +562,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	count++;
 	
 	[defaults setObject:[NSNumber numberWithUnsignedInteger:count] forKey:ATAppRatingFlowUseCountKey];
-	[defaults synchronize];
 	
 	[self updateVersionInfo];
 }
@@ -580,7 +576,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	}
 	
 	[defaults setObject:[NSNumber numberWithUnsignedInteger:count+1] forKey:ATAppRatingFlowSignificantEventsCountKey];
-	[defaults synchronize];
 	
 }
 

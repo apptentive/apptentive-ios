@@ -126,7 +126,6 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 			NSDate *date = [NSDate dateWithTimeInterval:expiresMaxAge sinceDate:[NSDate date]];
 			NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 			[defaults setObject:date forKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
-			[defaults synchronize];
 		}
 		
 		[codePointInteractions removeAllObjects];
@@ -162,8 +161,6 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 		[defaults setObject:@{} forKey:ATEngagementInteractionsInvokesVersionKey];
 		[defaults setObject:@{} forKey:ATEngagementInteractionsInvokesBuildKey];
 	}
-	
-	[defaults synchronize];
 }
 
 + (NSString *)cachedEngagementStoragePath {
@@ -254,8 +251,6 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 		[addedCodePoint setObject:[NSDate distantPast] forKey:codePoint];
 		[defaults setObject:addedCodePoint forKey:ATEngagementCodePointsInvokesLastDateKey];
 	}
-	
-	[defaults synchronize];
 }
 
 - (void)codePointWasEngaged:(NSString *)codePoint {
@@ -286,8 +281,6 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	[codePointsInvokesTimeAgo setObject:[NSDate date] forKey:codePoint];
 	[defaults setObject:codePointsInvokesTimeAgo forKey:ATEngagementCodePointsInvokesLastDateKey];
 	[codePointsInvokesTimeAgo release];
-	
-	[defaults synchronize];
 }
 
 - (void)interactionWasSeen:(NSString *)interactionID {
@@ -320,8 +313,6 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 		[addedInteraction setObject:[NSDate distantPast] forKey:interactionID];
 		[defaults setObject:addedInteraction forKey:ATEngagementInteractionsInvokesLastDateKey];
 	}
-	
-	[defaults synchronize];
 }
 
 - (void)interactionWasEngaged:(ATInteraction *)interaction {
@@ -352,8 +343,6 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	[interactionsInvokesLastDate setObject:[NSDate date] forKey:interaction.identifier];
 	[defaults setObject:interactionsInvokesLastDate forKey:ATEngagementInteractionsInvokesLastDateKey];
 	[interactionsInvokesLastDate release];
-	
-	[defaults synchronize];
 }
 
 - (void)presentInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {

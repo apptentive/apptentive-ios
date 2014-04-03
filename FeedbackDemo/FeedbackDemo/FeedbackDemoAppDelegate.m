@@ -23,7 +23,6 @@
 	[defaults removeObjectForKey:@"ATAppRatingFlowUserDislikesThisVersionKey"];
 	[defaults removeObjectForKey:@"ATAppRatingFlowLastUsedVersionKey"];
 	[defaults removeObjectForKey:@"ATAppRatingFlowLastPromptDateKey"];
-	[defaults synchronize];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {

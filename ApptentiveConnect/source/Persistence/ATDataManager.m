@@ -8,7 +8,8 @@
 
 #import "ATDataManager.h"
 
-NSString *const ATDataManagerUpgradeCanaryKey = @"ATDataManagerUpgradeCanaryKey";
+// Used to indicate a database upgrade or check was in progress and didn't complete.
+NSString *const ATDataManagerUpgradeCanaryFilename = @"ATDataManagerUpgradeCanary";
 
 typedef enum {
 	ATMigrationMergedModelErrorCode = -100,
@@ -41,12 +42,10 @@ typedef enum {
 		supportDirectoryPath = [path retain];
 		
 		// Check the canary.
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		if ([defaults boolForKey:ATDataManagerUpgradeCanaryKey]) {
+		if ([self canaryFileExists]) {
 			[self removePersistentStore];
+			[self removeCanaryFile];
 		}
-		[defaults setBool:NO forKey:ATDataManagerUpgradeCanaryKey];
-		[defaults synchronize];
 	}
 	return self;
 }
@@ -88,9 +87,9 @@ typedef enum {
 
 - (BOOL)setupAndVerify {
 	// Set the canary.
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[defaults setBool:YES forKey:ATDataManagerUpgradeCanaryKey];
-	[defaults synchronize];
+	if (![self createCanaryFile]) {
+		return NO;
+	}
 	
 	if (![self persistentStoreCoordinator]) {
 		// This is almost certainly something bad.
@@ -124,8 +123,9 @@ typedef enum {
 		return NO;
 	}
 	// Seems to have gone well, so remove canary.
-	[defaults setBool:NO forKey:ATDataManagerUpgradeCanaryKey];
-	[defaults synchronize];
+	if (![self removeCanaryFile]) {
+		return NO;
+	}
 	return YES;
 }
 
@@ -190,6 +190,33 @@ typedef enum {
 	}
 	[self removeSQLiteSidecarsForPath:sourcePath];
 	didRemovePersistentStore = YES;
+}
+
+#pragma mark - Upgrade Canary
+- (NSString  *)canaryFilePath {
+	return [supportDirectoryPath stringByAppendingPathComponent:ATDataManagerUpgradeCanaryFilename];
+}
+
+- (BOOL)canaryFileExists {
+	BOOL isDirectory = NO;
+	if ([[NSFileManager defaultManager] fileExistsAtPath:[self canaryFilePath] isDirectory:&isDirectory] && !isDirectory) {
+		return YES;
+	}
+	return NO;
+}
+
+- (BOOL)createCanaryFile {
+	NSDictionary *data = @{@"upgrading":@YES};
+	return [data writeToFile:[self canaryFilePath] atomically:YES];
+}
+
+- (BOOL)removeCanaryFile {
+	NSError *error = nil;
+	if ([[NSFileManager defaultManager] removeItemAtPath:[self canaryFilePath] error:&error]) {
+		return YES;
+	}
+	ATLogError(@"Error removing upgrade canary: %@", error);
+	return NO;
 }
 @end
 

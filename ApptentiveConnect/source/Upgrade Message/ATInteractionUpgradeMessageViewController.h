@@ -19,7 +19,7 @@
 	CGAffineTransform lastSeenPresentingViewControllerTransform;
 }
 
-@property (nonatomic, retain) ATInteraction *upgradeMessageInteraction;
+@property (nonatomic, retain, readonly) ATInteraction *upgradeMessageInteraction;
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 

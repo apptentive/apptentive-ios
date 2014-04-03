@@ -272,12 +272,12 @@ If listening for the notification via the code above, you would then implement t
 }
 ```
 
-#### Event
+#### Events
 An **Event** is a record of your customer performing an action in your app. Generate events by calling `engage:fromViewController:`. Apptentive stores a record of all events, which you can later use show specific interactions to your customer.
 
 	[[ATConnect sharedConnection] engage:@"completed_level" fromViewController:self.viewController];
 
-#### Interaction
+#### Interactions
 An **Interaction** is a specific piece of your app that can be shown in response to a person's events. For example, Surveys, Message Center, and the Apptentive Rating Flow are all unique interactions. When users engage certain events, you can decide (based on pre-defined conditions) to show a specific interaction in your app.
 
 #### Interactions are Configurable from the Apptentive Website

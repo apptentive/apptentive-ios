@@ -393,6 +393,13 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	do { // once
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		
+		// Legacy Rating Flow is disabled in favor of the Engagement Framework ratings flow
+		BOOL disableLegacyRatingFlow = YES;
+		if (disableLegacyRatingFlow) {
+			reasonForNotShowingDialog = @"legacy rating flow is disabled. Please use Events and the Rating Flow Interaction instead.";
+			break;
+		}
+		
 		// Ratings are disabled, don't show dialog.
 		if ([[defaults objectForKey:ATAppRatingEnabledPreferenceKey] boolValue] == NO) {
 			reasonForNotShowingDialog = @"ratings are disabled.";

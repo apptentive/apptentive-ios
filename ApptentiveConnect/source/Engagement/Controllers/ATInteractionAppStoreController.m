@@ -10,10 +10,16 @@
 #import "ATConnect_Private.h"
 #import "ATUtilities.h"
 #import "ATInteraction.h"
+#import "ATEngagementBackend.h"
 
-// TODO: Remove, soon. All info should come from interaction's configuration.
 #import "ATAppRatingFlow.h"
 #import "ATAppRatingFlow_Private.h"
+
+NSString *const ATInteractionAppStoreRatingEventLabelLaunch = @"launch";
+NSString *const ATInteractionAppStoreRatingEventLabelOpenAppStoreURL = @"open_app_store_url";
+NSString *const ATInteractionAppStoreRatingEventLabelOpenStoreKit = @"open_store_kit";
+NSString *const ATInteractionAppStoreRatingEventLabelOpenMacAppStore = @"open_mac_app_store";
+NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_rate";
 
 @implementation ATInteractionAppStoreController
 
@@ -77,6 +83,8 @@
 
 #if TARGET_OS_IPHONE
 - (void)showUnableToOpenAppStoreDialog {
+	[[ATEngagementBackend sharedBackend] engageApptentiveEvent:ATInteractionAppStoreRatingEventLabelUnableToRate fromInteraction:self.interaction fromViewController:self.viewController];
+	
 	UIAlertView *errorAlert = [[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Oops!", @"Unable to load the App Store title") message:ATLocalizedString(@"Unable to load the App Store", @"Unable to load the App Store message") delegate:self cancelButtonTitle:ATLocalizedString(@"OK", @"OK button title") otherButtonTitles:nil] autorelease];
 	[errorAlert show];
 }
@@ -121,6 +129,8 @@
 			[self showUnableToOpenAppStoreDialog];
 		}
 		else {
+			[[ATEngagementBackend sharedBackend] engageApptentiveEvent:ATInteractionAppStoreRatingEventLabelOpenAppStoreURL fromInteraction:self.interaction fromViewController:self.viewController];
+			
 			[[UIApplication sharedApplication] openURL:url];
 			
 			[self release];
@@ -140,11 +150,10 @@
 				ATLogError(@"Error loading product view: %@", error);
 				[self showUnableToOpenAppStoreDialog];
 			} else {
-				//UIViewController *presentingVC = [ATUtilities rootViewControllerForCurrentWindow];
+				[[ATEngagementBackend sharedBackend] engageApptentiveEvent:ATInteractionAppStoreRatingEventLabelOpenStoreKit fromInteraction:self.interaction fromViewController:self.viewController];
 				
 				UIViewController *presentingVC = self.viewController;
-				
-				
+
 				if ([presentingVC respondsToSelector:@selector(presentViewController:animated:completion:)]) {
 					[presentingVC presentViewController:vc animated:YES completion:^{}];
 				} else {
@@ -183,6 +192,8 @@
 }
 
 - (void)openMacAppStore {
+	[[ATEngagementBackend sharedBackend] engageApptentiveEvent:ATInteractionAppStoreRatingEventLabelOpenMacAppStore fromInteraction:self.interaction fromViewController:self.viewController];
+	
 #if TARGET_OS_IPHONE
 #elif TARGET_OS_MAC
 	NSURL *url = [self URLForRatingApp];

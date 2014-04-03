@@ -272,6 +272,35 @@ If listening for the notification via the code above, you would then implement t
 }
 ```
 
+#### Event
+An **Event** is a record of your customer performing an action in your app. Generate events by calling `engage:fromViewController:`. Apptentive stores a record of all events, which you can later use show specific interactions to your customer.
+
+	[[ATConnect sharedConnection] engage:@"completed_level" fromViewController:self.viewController];
+
+#### Interaction
+An **Interaction** is a specific piece of your app that can be shown in response to a person's events. For example, Surveys, Message Center, and the Apptentive Rating Flow are all unique interactions. When users engage certain events, you can decide (based on pre-defined conditions) to show a specific interaction in your app.
+
+#### Interactions are Configurable from the Apptentive Website
+The real strengths of Apptentive Events and Interactions come from their remote configurability. 
+
+Prior to releasing your app on the App Store, "seed" your app with certain events. An event for when the app finishes launching. An event when your customer makes a purchase. An event for all the important steps in your app's lifecycle.
+
+For example, if you were releasing a game, you would want engage some of the following events:
+
+ - Completed Level
+ - Ran Out of Lives
+ - Quit Level
+ - Made In-App Purchase
+ - Etc.
+ 
+Later, after shipping the app, you can configure the interactions that will run whenever a customer hits one of your events.
+
+ - The 10th time they complete a level, ask them to rate the app.
+ - When they beat the game, ask for feedback about their experience.
+ - After making an in-app purchase, ask them to take a survey.
+ 
+Interactions can be modified, remotely, without shipping 
+
 #### Upgrade Messages
 
 In iOS 7, users are upgraded automatically when a new version of your app is released. Unfortunately, this means they will rarely (if ever) see your App Store release notes!

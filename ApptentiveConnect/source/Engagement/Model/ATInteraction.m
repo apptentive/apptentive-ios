@@ -123,12 +123,12 @@
 
 + (NSPredicate *)predicateForInteractionCriteria:(NSDictionary *)interactionCriteria hasError:(BOOL *)hasError {
 	NSMutableArray *parts = [NSMutableArray array];
-	NSCompoundPredicateType predicateType = NSAndPredicateType;
 	
 	for (NSString *key in interactionCriteria) {
 		NSObject *object = [interactionCriteria objectForKey:key];
 		
 		if ([object isKindOfClass:[NSArray class]]) {
+			NSCompoundPredicateType predicateType = NSAndPredicateType;
 			if ([key isEqualToString:@"$and"]) {
 				predicateType = NSAndPredicateType;
 			} else if ([key isEqualToString:@"$or"]) {
@@ -142,7 +142,9 @@
 				NSPredicate *criterion = [self predicateForInteractionCriteria:dictionary hasError:hasError];
 				[criteria addObject:criterion];
 			}
-			[parts addObjectsFromArray:criteria];
+			
+			NSPredicate *combined = [[[NSCompoundPredicate alloc] initWithType:predicateType subpredicates:criteria] autorelease];
+			[parts addObject:combined];
 		}
 		else {
 			// Implicit "==" if object is a string/number
@@ -200,7 +202,7 @@
 		}
 	}
 	
-	NSPredicate *result = [[[NSCompoundPredicate alloc] initWithType:predicateType subpredicates:parts] autorelease];
+	NSPredicate *result = [[[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:parts] autorelease];
 	return result;
 }
 

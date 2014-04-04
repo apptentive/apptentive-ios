@@ -62,6 +62,8 @@ enum kSurveyRows {
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyBecameAvailable:) name:ATSurveyNewSurveyAvailableNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unreadMessageCountChanged:) name:ATMessageCenterUnreadCountChangedNotification object:nil];
+	
+	[[ATConnect sharedConnection] engage:@"init" fromViewController:self];
 }
 
 - (void)surveyBecameAvailable:(NSNotification *)notification {
@@ -193,9 +195,9 @@ enum kSurveyRows {
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (indexPath.section == kRatingSection) {
 		// Engagement Rating Flow Testing
-		[[ATConnect sharedConnection] engage:@"init" fromViewController:self];
+		[[ATConnect sharedConnection] engage:@"testRatingFlow" fromViewController:self];
 		
-		// Prior method of forcing Ratings Flow
+		// Legacy method for forcing Ratings Flow to show
 		//[self showRating:nil];
 	} else if (indexPath.section == kSurveySection) {
 		if (indexPath.row == kSurveyRowShowSurvey) {

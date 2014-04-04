@@ -35,12 +35,11 @@
 		[self.window addSubview:self.navigationController.view];
 	}
 	[self.window makeKeyAndVisible];
+	
 	[[ATConnect sharedConnection] setApiKey:kApptentiveAPIKey];
-	
+	[ATAppRatingFlow sharedRatingFlow].appID = kApptentiveAppID;
+
 	[[ATConnect sharedConnection] addIntegration:@"feedback_demo_integration_configuration" withConfiguration:@{@"fake_apiKey": @"ABC-123-XYZ"}];
-	
-	ATAppRatingFlow *flow = [ATAppRatingFlow sharedRatingFlowWithAppID:kApptentiveAppID];
-	[flow showRatingFlowFromViewControllerIfConditionsAreMet:self.navigationController];
 	
 	double delayInSeconds = 2.0;
 	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));

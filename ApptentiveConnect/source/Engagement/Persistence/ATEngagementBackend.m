@@ -216,6 +216,8 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 		[self presentInteraction:interaction fromViewController:viewController];
 		[self interactionWasEngaged:interaction];
 		didEngageInteraction = YES;
+		// Sync defaults so user doesn't see interaction more than once.
+		[[NSUserDefaults standardUserDefaults] synchronize];
 	}
 	
 	return didEngageInteraction;

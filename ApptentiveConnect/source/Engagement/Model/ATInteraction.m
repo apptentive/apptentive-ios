@@ -122,7 +122,7 @@
 }
 
 + (NSPredicate *)predicateForInteractionCriteria:(NSDictionary *)interactionCriteria hasError:(BOOL *)hasError {
-	NSMutableArray *parts = [NSMutableArray array];
+	NSMutableArray *subPredicates = [NSMutableArray array];
 	
 	for (NSString *key in interactionCriteria) {
 		NSObject *object = [interactionCriteria objectForKey:key];
@@ -143,8 +143,8 @@
 				[criteria addObject:criterion];
 			}
 			
-			NSPredicate *combined = [[[NSCompoundPredicate alloc] initWithType:predicateType subpredicates:criteria] autorelease];
-			[parts addObject:combined];
+			NSPredicate *compoundPredicate = [[[NSCompoundPredicate alloc] initWithType:predicateType subpredicates:criteria] autorelease];
+			[subPredicates addObject:compoundPredicate];
 		}
 		else {
 			// Implicit "==" if object is a string/number
@@ -198,11 +198,11 @@
 				}
 			}
 			
-			[parts addObjectsFromArray:criteria];
+			[subPredicates addObjectsFromArray:criteria];
 		}
 	}
 	
-	NSPredicate *result = [[[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:parts] autorelease];
+	NSPredicate *result = [[[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:subPredicates] autorelease];
 	return result;
 }
 

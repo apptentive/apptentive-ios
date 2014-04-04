@@ -34,7 +34,7 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 
 
 @interface ATAppConfigurationUpdater (Private)
-- (void)processResult:(NSDictionary *)jsonRatingConfiguration;
+- (void)processResult:(NSDictionary *)jsonRatingConfiguration maxAge:(NSTimeInterval)expiresMaxAge;
 @end
 
 @implementation ATAppConfigurationUpdater
@@ -120,7 +120,7 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(NSObject *)result {
 	@synchronized (self) {
 		if ([result isKindOfClass:[NSDictionary class]]) {
-			[self processResult:(NSDictionary *)result];
+			[self processResult:(NSDictionary *)result maxAge:[sender expiresMaxAge]];
 			[delegate configurationUpdaterDidFinish:YES];
 		} else {
 			ATLogError(@"App configuration result is not NSDictionary!");
@@ -143,7 +143,7 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 @end
 
 @implementation ATAppConfigurationUpdater (Private)
-- (void)processResult:(NSDictionary *)jsonConfiguration {
+- (void)processResult:(NSDictionary *)jsonConfiguration maxAge:(NSTimeInterval)expiresMaxAge {
 	BOOL hasConfigurationChanges = NO;
 	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -207,12 +207,12 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 		[defaults setObject:reviewURLString forKey:ATAppRatingReviewURLPreferenceKey];
 	}
 	
-	if ([jsonConfiguration objectForKey:@"cache-expiration"]) {
-		NSString *expirationDateString = [jsonConfiguration objectForKey:@"cache-expiration"];
-		NSDate *expirationDate = [ATUtilities dateFromISO8601String:expirationDateString];
-		if (expirationDate) {
-			[defaults setObject:expirationDate forKey:ATAppConfigurationExpirationPreferenceKey];
-		}
+	// Store expiration.
+	if (expiresMaxAge > 0) {
+		NSDate *date = [NSDate dateWithTimeInterval:expiresMaxAge sinceDate:[NSDate date]];
+		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+		[defaults setObject:date forKey:ATAppConfigurationExpirationPreferenceKey];
+		[defaults synchronize];
 	}
 	
 	if ([jsonConfiguration objectForKey:@"message_center"]) {

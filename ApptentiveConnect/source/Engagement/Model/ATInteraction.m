@@ -112,20 +112,11 @@
 }
 
 - (NSPredicate *)criteriaPredicate {
-	NSMutableArray *subPredicates = [NSMutableArray array];
-	for (NSString *key in [self.criteria allKeys]) {
-		NSDictionary *subDictionary = @{key: [self.criteria objectForKey:key]};
-		
-		BOOL error = NO;
-		NSPredicate *subPredicate = [ATInteraction predicateForInteractionCriteria:subDictionary hasError:&error];
-		if (!subPredicate || error) {
-			return nil;
-		}
-		
-		[subPredicates addObject:subPredicate];
+	BOOL error = NO;
+	NSPredicate *criteriaPredicate = [ATInteraction predicateForInteractionCriteria:self.criteria hasError:&error];
+	if (!criteriaPredicate || error) {
+		return nil;
 	}
-	
-	NSPredicate *criteriaPredicate = [[[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:subPredicates] autorelease];
 	
 	return criteriaPredicate;
 }

@@ -222,7 +222,7 @@ An **event** is a record of your customer performing an action in your app. Gene
 
 ``` objective-c
 	[[ATConnect sharedConnection] engage:@"completed_level" fromViewController:self.viewController];
-``` objective-c
+```
 
 #### Seed your App with Events
 

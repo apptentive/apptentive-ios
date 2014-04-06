@@ -2,9 +2,7 @@
 
 The Apptentive iOS SDK lets you provide a powerful and simple channel to your customers. With it, you can manage your app's ratings, let your customers give you feedback, respond to customer feedback, show surveys at specific points within your app, and more.
 
-There have been many recent API changes for the 1.0 release. Please see `docs/APIChanges.md`.
-
-Note: For developers with apps created before June 28, 2013, please contact us to have your account upgraded to the new Message Center UI on our website.
+There have been many recent API changes for the 1.4 release. Please see `docs/APIChanges.md`.
 
 ## Install Guide
 
@@ -221,20 +219,36 @@ The rating prompt and other Apptentive **interactions** are targeted to certain 
 An **event** is a record of your customer performing an action in your app. Generate events by calling `engage:fromViewController:`. Apptentive stores a record of all events, which you can later use show specific interactions to your customer.
 
 ``` objective-c
-	[[ATConnect sharedConnection] engage:@"completed_level" fromViewController:self.viewController];
+	[[ATConnect sharedConnection] engage:@"completed_level" fromViewController:viewController];
 ```
 
-#### Seed your App with Events
+The `viewController` parameter is necessary in order to show the feedback view controller if a user is unhappy with your app.
 
 The events you choose to log will be different depending on the specifics of your app. For example, if you were to release a game, you would want engage some of the following events:
 
- - Completed Level
- - Ran Out of Lives
- - Quit Level
+ - Completed Level (`engage:@"completed_level_8"`)
+ - Ran Out of Lives (`engage:@"game_over"`)
+ - Quit Level (`engage:@"quit_level_9"`)
  - Made In-App Purchase
  - Etc.
 
+You'll want to add calls to `engage:fromViewController:` wherever it makes sense in the context of your app. Engage more events than you think you will need, as you may want to use them later.
+
+#### Seed your App with Events
+
 You should *seed* your app with certain Apptentive events at important events in your app. An event for when the app finishes launching. An event when your customer makes a purchase. An event for all the important steps in your app's lifecycle.
+
+Common app events that we recommend logging include:
+
+ - When your app finishes loading and is ready to present a view. (`engage:@"init"` or `did_finish_loading`)
+ - Completes an in-app purchase. (`engage:@"completed_in_app_purchase"`)
+ - User finishes logging in. (`did_log_in`)
+ - Completes a level. (`completed_level_8`)
+ - Finishes watching a video. (`finished_video`)
+ - Exits out of a video before completing it.
+ - Sends a message.
+ - Switches navigation tabs.
+ - Etc., depending on the specifics of your app.
 
 Be sure to add these events *prior* to uploading the app to the App Store, even if you are not currently using all of the events to show interactions. Later, without having to re-upload a new version, you can re-target the rating prompt or other Apptentive interactions to different events.
 
@@ -260,19 +274,15 @@ Interactions can be modified, remotely, without shipping a new app update to the
 
 Apptentive provides an app rating prompt interaction that aims to provide the best feedback for both you and your customers.
 
-Customers who love your app are asked to rate the app on the App Store. Those who dislike your app are instead directed to the Apptentive Message Center, where they can directly with your team. You are then able to respond directly to customer issues or feature requests.
+Customers who love your app are asked to rate the app on the App Store. Those who dislike your app are instead directed to the Apptentive Message Center, where they can communicate directly with your team. You are then able to respond directly to customer issues or feature requests.
 
 The rating prompt is configured online in your Apptentive dashboard. At that time you will choose to trigger it at a certain Apptentive event.
 
 Thus, the only code needed to display a Rating Prompt is to engage events using the `engage:fromViewController:` method. The rating prompt is otherwise configured from your Apptentive dashboard.
 
 ``` objective-c
-	[[ATConnect sharedConnection] engage:@"completed_level" fromViewController:self.viewController];
+	[[ATConnect sharedConnection] engage:@"completed_level" fromViewController:viewController];
 ```
-
-You'll want to add calls to `engage:fromViewController:` wherever it makes sense in the context of your app. Engage more events than you think you will need, as you may want to use them later.
-
-The `viewController` parameter is necessary in order to show the feedback view controller if a user is unhappy with your app.
 
 One you have engaged some events, you can create a rating prompt and modify the parameters which determine when it will be shown in your interaction settings on [Apptentive](https://apptentive.com).
 

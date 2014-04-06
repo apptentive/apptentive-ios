@@ -1,3 +1,16 @@
+2014-04-?? wooster, pkamb v1.4.0 (in progress)
+--------------------------------
+
+This marks the first release of a more generalized engagement framework. This will allow us to chain interactions together in interesting ways, provide better server-side configuration of what customers see and when they see it, and lay the foundation for some very interesting features in the future.
+
+If you were using a version prior to 1.4.0, please read [MigratingTo_1.4.0md](docs/MigratingTo_1.4.0.md) for information on how to migrate your API calls to this release. We're sorry for the inconvenience, but we hope the new features will more than make up for it!
+
+Fixes:
+
+* Lots of changes for the engagement framework.
+* IOS-447 Add `identifierForVendor` as device property.
+* [Fix](https://github.com/apptentive/apptentive-ios/commit/58e098850d75bb35fb5572cfd9d63b79aa45949f) for a memory leak in `ATInteractionUsageData`.
+
 2014-03-29 wooster, pkamb v1.3.0
 --------------------------------
 

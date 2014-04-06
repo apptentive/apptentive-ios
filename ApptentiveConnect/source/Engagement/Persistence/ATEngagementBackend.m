@@ -97,6 +97,9 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 }
 
 - (BOOL)shouldRetrieveNewEngagementManifest {
+#if APPTENTIVE_DEBUG
+	return YES;
+#endif
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	
 	NSDate *expiration = [defaults objectForKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
@@ -216,6 +219,8 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 		[self presentInteraction:interaction fromViewController:viewController];
 		[self interactionWasEngaged:interaction];
 		didEngageInteraction = YES;
+		// Sync defaults so user doesn't see interaction more than once.
+		[[NSUserDefaults standardUserDefaults] synchronize];
 	}
 	
 	return didEngageInteraction;

@@ -268,7 +268,7 @@ Thus, the only code needed to display a Rating Prompt is to engage events using 
 
 ``` objective-c
 	[[ATConnect sharedConnection] engage:@"completed_level" fromViewController:self.viewController];
-``` objective-c
+```
 
 You'll want to add calls to `engage:fromViewController:` wherever it makes sense in the context of your app. Engage more events than you think you will need, as you may want to use them later.
 

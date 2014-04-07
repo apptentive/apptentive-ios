@@ -1,4 +1,4 @@
-2014-04-?? wooster, pkamb v1.4.0 (in progress)
+2014-04-07 wooster, pkamb v1.4.0
 --------------------------------
 
 This marks the first release of a more generalized engagement framework. This will allow us to chain interactions together in interesting ways, provide better server-side configuration of what customers see and when they see it, and lay the foundation for some very interesting features in the future.

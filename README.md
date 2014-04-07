@@ -22,11 +22,11 @@ You can clone our iOS SDK using git: `git clone https://github.com:apptentive/ap
 
 #### Using CocoaPods
 
-Please note that if you use CocoaPods to get Apptentive, you can skip workspace configuration and go directly to Apptentive implementation below.
+Please note that if you use CocoaPods to integrate Apptentive, you can skip the "Setup Xcode Project" section and proceed directly to the ["Implement Apptentive in Project"](https://github.com/apptentive/apptentive-ios#implement-apptentive-in-project) directions below.
 
 ##### Create Podfile
 
-1. Search for Apptentive's pod information on [CocoaPods](https://cocoapods.org).
+1. Find [Apptentive's pod information](http://cocoapods.org/?q=apptentive-ios) on [CocoaPods](http://cocoapods.org).
 2. List and save the dependencies in a text file named "Podfile" in your Xcode project directory. It should look something like this:
 
 ```
@@ -143,7 +143,7 @@ file navigator into `Copy Bundle Resources`.
 
 ### Implement Apptentive in Project
 
-#### Message Center
+#### Set Apptentive API key
 
 `ApptentiveConnect` queues feedback and attempts to upload in the background. This
 is intended to provide as quick a mechanism for submitting feedback as possible.
@@ -154,14 +154,14 @@ startup.
 
 1. Open up your app's `AppDelegate.m` file.
 2. Under `#import "AppDelegate.h"`, import the `ATConnect.h` file.
-3. Under implementation, edit the `application:didFinishLaunchingWithOptions:` method to look like so:
+3. Under implementation, set your Apptentive API key in the `application:didFinishLaunchingWithOptions:` method:
 
 ``` objective-c
 #include "ATConnect.h"
 // ...
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-    ATConnect *connection = [ATConnect sharedConnection];
-    connection.apiKey = @"Your_Apptentive_API_Key";
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    // ...
+	[ATConnect sharedConnection].apiKey = @"Your_Apptentive_API_Key";
     // ...
 }
 ```
@@ -172,12 +172,13 @@ As soon as you set the API key on the shared connection object, any queued feedb
 will start to upload, pending network availability. You also should not have
 to set the API key again on the shared connection object.
 
-------------------------------------------------------------------------------------
+#### Message Center
 
-Now, wherever you want to launch the Apptentive feedback UI: 
+The Apptentive Message Center provides an interface for you to communicate directly with your customers. People using your app are able to send you messages, which are routed to your Apptentive dashboard. When you reply to customer feedback, your response will immediately show up in the Message Center in their app.
 
-1. Include the `ATConnect.h` header file.
-2. Add the following code to whichever method responds to feedback.
+You might have a menu item in your settings menu, for example, titled "Feedback". When the user clicks on this item, you will open the Message Center. People might also be routed to Message Center through other interactions, such as the rating prompt.
+
+When you want to launch the Apptentive Message Center and feedback UI, import `ATConnect.h` then call `presentMessageCenterFromViewController:`:
 
 ``` objective-c
 #include "ATConnect.h"
@@ -236,7 +237,7 @@ You'll want to add calls to `engage:fromViewController:` wherever it makes sense
 
 #### Seed your App with Events
 
-You should *seed* your app with certain Apptentive events at important events in your app. An event for when the app finishes launching. An event when your customer makes a purchase. An event for all the important steps in your app's lifecycle.
+You should *seed* your app with certain Apptentive events at important points in your app. An event for when the app finishes launching. An event when your customer makes a purchase. An event for all the important steps in your app's lifecycle.
 
 Common app events that we recommend logging include:
 
@@ -258,7 +259,7 @@ An Apptentive **interaction** is a specific piece of your app that can be shown 
 
 #### Interactions are Configurable via the Apptentive Website
 
-The real strengths of Apptentive Events and Interactions come from their remote configurability. 
+The real strength of Apptentive Events and Interactions come from their remote configurability. 
 
 Prior to releasing your app on the App Store, seed your app with certain events. 
  
@@ -284,7 +285,7 @@ Thus, the only code needed to display a Rating Prompt is to engage events using 
 	[[ATConnect sharedConnection] engage:@"completed_level" fromViewController:viewController];
 ```
 
-One you have engaged some events, you can create a rating prompt and modify the parameters which determine when it will be shown in your interaction settings on [Apptentive](https://apptentive.com).
+One you have engaged some events, you can create a rating prompt and modify the parameters which determine when it will be shown in your interaction settings on [Apptentive](http://www.apptentive.com).
 
 ### Upgrade Messages
 
@@ -410,9 +411,7 @@ If the push notification was sent by Apptentive, we will then present Message Ce
 
 #### Metrics
 
-Metrics provide insight into exactly where people begin and end interactions
-with your app and with feedback, ratings, and surveys. You can enable and disable
-metrics on your app settings page on [Apptentive](https://apptentive.com).
+Metrics provide insight into how people are engaging with your app, and exactly which Apptentive events and interactions are being used.
 
 #### Sample Application
 

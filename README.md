@@ -431,4 +431,4 @@ the app in the App Store:
 
 #### Customization
 
-For information on customizing the UI and text of `apptentive-ios`, please see [Customization](docs/Customization.md).
+For information on customizing the UI and text of `apptentive-ios`, please see [Customization](https://github.com/apptentive/apptentive-ios/blob/master/docs/Customization.md).

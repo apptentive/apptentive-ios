@@ -178,7 +178,7 @@
 }
 
 - (BOOL)processResult:(NSDictionary *)jsonMessage {
-	ATLogInfo(@"getting json result: %@", jsonMessage);
+	ATLogDebug(@"getting json result: %@", jsonMessage);
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
 	
 	ATAbstractMessage *message = [[ATAbstractMessage findMessageWithPendingID:self.pendingMessageID] retain];

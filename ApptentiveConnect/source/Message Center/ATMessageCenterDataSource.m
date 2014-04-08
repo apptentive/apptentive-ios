@@ -95,7 +95,7 @@
 	NSError *error = nil;
 	NSArray *results = [moc executeFetchRequest:request error:&error];
 	if (!results) {
-		ATLogError(@"Error exceuting fetch request: %@", error);
+		ATLogError(@"Error executing fetch request: %@", error);
 	} else {
 		for (ATAbstractMessage *message in results) {
 			[message setSeenByUser:@(YES)];

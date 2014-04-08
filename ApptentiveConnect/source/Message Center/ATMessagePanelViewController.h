@@ -11,6 +11,7 @@
 @class ATCustomButton;
 @class ATDefaultTextView;
 @class ATToolbar;
+@class ATInteraction;
 
 @protocol ATMessagePanelDelegate;
 
@@ -48,6 +49,7 @@ typedef enum {
 @property (nonatomic, copy) NSString *customPlaceholderText;
 @property (nonatomic, assign) BOOL showEmailAddressField;
 @property (nonatomic, assign) NSObject<ATMessagePanelDelegate> *delegate;
+@property (nonatomic, copy) ATInteraction *interaction;
 
 - (id)initWithDelegate:(NSObject<ATMessagePanelDelegate> *)delegate;
 - (IBAction)cancelPressed:(id)sender;

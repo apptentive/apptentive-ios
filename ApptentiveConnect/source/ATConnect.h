@@ -13,7 +13,7 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
-#define kATConnectVersionString @"1.3.0"
+#define kATConnectVersionString @"1.4.0"
 
 #if TARGET_OS_IPHONE
 #	define kATConnectPlatformString @"iOS"
@@ -24,7 +24,7 @@
 
 extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 
-// Keys for supported 3rd-party integrations.
+/*! Keys for supported 3rd-party integrations. */
 extern NSString *const ATIntegrationKeyUrbanAirship;
 extern NSString *const ATIntegrationKeyKahuna;
 
@@ -117,12 +117,12 @@ Note, though, that Message Center setting will be overridden by server-based con
 /*! 
  Call with a specific code point where interactions should happen.
  
- For example, if you have an upgrade message to display on app launch, you might call with codePoint set to 
+ For example, if you have an upgrade message to display on app launch, you might call with event label set to
  @"app.launch" here, along with the view controller an upgrade message might be displayed from.
  
  Returns whether or not an interaction was successfully found and run.
  */
-- (BOOL)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController;
+- (BOOL)engage:(NSString *)eventLabel fromViewController:(UIViewController *)viewController;
 
 /*!
  * Dismisses the message center. You normally won't need to call this.

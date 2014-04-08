@@ -150,7 +150,6 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	[ATAppConfigurationUpdater registerDefaults];
 	[ATAppRatingFlow_Private registerDefaults];
 	[defaults setObject:[NSDate date] forKey:ATAppConfigurationLastUpdatePreferenceKey];
-	[defaults synchronize];
 	
 	NSDictionary *numberObjects = 
 		[NSDictionary dictionaryWithObjectsAndKeys:
@@ -266,7 +265,6 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	
 	if (hasConfigurationChanges) {
 		[defaults setObject:[NSNumber numberWithBool:YES] forKey:ATAppRatingSettingsAreFromServerPreferenceKey];
-		[defaults synchronize];
 		[[NSNotificationCenter defaultCenter] postNotificationName:ATConfigurationPreferencesChangedNotification object:nil];
 	}
 }

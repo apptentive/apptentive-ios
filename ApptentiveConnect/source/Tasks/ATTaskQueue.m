@@ -184,26 +184,25 @@ static ATTaskQueue *sharedTaskQueue = nil;
 		[self performSelectorOnMainThread:@selector(start) withObject:nil waitUntilDone:NO];
 		return;
 	}
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	@synchronized(self) {
-		if (activeTask) {
-			[pool release], pool = nil;
-			return;
-		}
-		
-		if ([tasks count]) {
-			for (ATTask *task in tasks) {
-				if ([task canStart]) {
-					activeTask = task;
-					[activeTask addObserver:self forKeyPath:@"finished" options:NSKeyValueObservingOptionNew context:NULL];
-					[activeTask addObserver:self forKeyPath:@"failed" options:NSKeyValueObservingOptionNew context:NULL];
-					[activeTask start];
-					break;
+	@autoreleasepool {
+		@synchronized(self) {
+			if (activeTask) {
+				return;
+			}
+			
+			if ([tasks count]) {
+				for (ATTask *task in tasks) {
+					if ([task canStart]) {
+						activeTask = task;
+						[activeTask addObserver:self forKeyPath:@"finished" options:NSKeyValueObservingOptionNew context:NULL];
+						[activeTask addObserver:self forKeyPath:@"failed" options:NSKeyValueObservingOptionNew context:NULL];
+						[activeTask start];
+						break;
+					}
 				}
 			}
 		}
 	}
-	[pool release], pool = nil;
 }
 
 - (void)stop {

@@ -15,13 +15,14 @@
 #import "ATUtilities.h"
 #import "UIImage+ATImageEffects.h"
 #import "UIViewController+ATSwizzle.h"
+#import "ATEngagementBackend.h"
 
 typedef enum {
 	ATInteractionUpgradeMessageOkPressed,
 } ATInteractionUpgradeMessageAction;
 
-NSString *const ATInteractionUpgradeMessageLaunch = @"ATInteractionUpgradeMessageLaunch";
-NSString *const ATInteractionUpgradeMessageClose = @"ATInteractionUpgradeMessageClose";
+NSString *const ATInteractionUpgradeMessageEventLabelLaunch = @"launch";
+NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 
 @interface ATInteractionUpgradeMessageViewController ()
 - (UIWindow *)findMainWindowPreferringMainScreen:(BOOL)preferMainScreen;
@@ -37,7 +38,7 @@ NSString *const ATInteractionUpgradeMessageClose = @"ATInteractionUpgradeMessage
 	NSAssert([interaction.type isEqualToString:@"UpgradeMessage"], @"Attempted to load an UpgradeMessageViewController with an interaction of type: %@", interaction.type);
 	self = [super initWithNibName:@"ATInteractionUpgradeMessageViewController" bundle:[ATConnect resourceBundle]];
 	if (self != nil) {
-		_upgradeMessageInteraction = interaction;
+		_upgradeMessageInteraction = [interaction copy];
 	}
 	return self;
 }
@@ -133,7 +134,7 @@ NSString *const ATInteractionUpgradeMessageClose = @"ATInteractionUpgradeMessage
 		}
 	}];
 
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATInteractionUpgradeMessageClose object:self];
+	[[ATEngagementBackend sharedBackend] engageApptentiveEvent:ATInteractionUpgradeMessageEventLabelClose fromInteraction:self.upgradeMessageInteraction fromViewController:self.presentingViewController];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -231,7 +232,7 @@ NSString *const ATInteractionUpgradeMessageClose = @"ATInteractionUpgradeMessage
 		self.window.hidden = NO;
 	}];
 		
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATInteractionUpgradeMessageLaunch object:self];
+	[[ATEngagementBackend sharedBackend] engageApptentiveEvent:ATInteractionUpgradeMessageEventLabelLaunch fromInteraction:self.upgradeMessageInteraction fromViewController:self.presentingViewController];
 }
 
 - (BOOL)isIPhoneAppInIPad {
@@ -315,12 +316,12 @@ NSString *const ATInteractionUpgradeMessageClose = @"ATInteractionUpgradeMessage
 
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	if (self.window.hidden == NO) {
-		[self retain];
-		[self unhide:NO];
+	@autoreleasepool {
+		if (self.window.hidden == NO) {
+			[self retain];
+			[self unhide:NO];
+		}
 	}
-	[pool release], pool = nil;
 }
 
 - (void)applyRoundedCorners {

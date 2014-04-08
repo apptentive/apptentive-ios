@@ -229,31 +229,30 @@ static NSURLCache *imageCache = nil;
 }
 
 - (void)sendFeedback:(ATFeedback *)feedback {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	if ([[NSThread currentThread] isMainThread]) {
-		[feedback retain];
-		[self performSelectorInBackground:@selector(sendFeedback:) withObject:feedback];
-		[pool release], pool = nil;
-		return;
+	@autoreleasepool {
+		if ([[NSThread currentThread] isMainThread]) {
+			[feedback retain];
+			[self performSelectorInBackground:@selector(sendFeedback:) withObject:feedback];
+			return;
+		}
+		if (feedback == self.currentFeedback) {
+			self.currentFeedback = nil;
+		}
+		ATContactStorage *contact = [ATContactStorage sharedContactStorage];
+		contact.name = feedback.name;
+		contact.email = feedback.email;
+		contact.phone = feedback.phone;
+		[ATContactStorage releaseSharedContactStorage];
+		contact = nil;
+		
+		ATFeedbackTask *task = [[ATFeedbackTask alloc] init];
+		task.feedback = feedback;
+		[[ATTaskQueue sharedTaskQueue] addTask:task];
+		[task release];
+		task = nil;
+		
+		[feedback release];
 	}
-	if (feedback == self.currentFeedback) {
-		self.currentFeedback = nil;
-	}
-	ATContactStorage *contact = [ATContactStorage sharedContactStorage];
-	contact.name = feedback.name;
-	contact.email = feedback.email;
-	contact.phone = feedback.phone;
-	[ATContactStorage releaseSharedContactStorage];
-	contact = nil;
-	
-	ATFeedbackTask *task = [[ATFeedbackTask alloc] init];
-	task.feedback = feedback;
-	[[ATTaskQueue sharedTaskQueue] addTask:task];
-	[task release];
-	task = nil;
-	
-	[feedback release];
-	[pool release];
 }
 
 - (void)sendAutomatedMessageWithTitle:(NSString *)title body:(NSString *)body {
@@ -461,7 +460,6 @@ static NSURLCache *imageCache = nil;
 		if (uuid && [uuid hasPrefix:@"ios:"]) {
 			// Existing UUID is a legacy value. Back it up.
 			[defaults setObject:uuid forKey:ATLegacyUUIDPreferenceKey];
-			[defaults synchronize];
 		}
 		
 		UIDevice *device = [UIDevice currentDevice];
@@ -470,7 +468,6 @@ static NSURLCache *imageCache = nil;
 			if (vendorID && ![vendorID isEqualToString:uuid]) {
 				uuid = vendorID;
 				[defaults setObject:uuid forKey:ATUUIDPreferenceKey];
-				[defaults synchronize];
 			}
 		}
 		if (!uuid) {

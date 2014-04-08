@@ -1,10 +1,8 @@
 # Apptentive iOS SDK
 
-The Apptentive iOS SDK lets you provide a powerful and simple channel to your customers. With it, you can manage your app's ratings, let your customers give you feedback, respond to customer feedback, show surveys at specific points within your app, and more.
+The Apptentive iOS SDK provides a powerful and simple channel to communicate with your customers in-app. With it, you can manage your app's ratings, let your customers give you feedback, respond to customer feedback, show surveys at specific points within your app, and more.
 
-There have been many recent API changes for the 1.0 release. Please see `docs/APIChanges.md`.
-
-Note: For developers with apps created before June 28, 2013, please contact us to have your account upgraded to the new Message Center UI on our website.
+There have been many recent API changes for the 1.4 release. Please see `docs/APIChanges.md`.
 
 ## Install Guide
 
@@ -24,11 +22,11 @@ You can clone our iOS SDK using git: `git clone https://github.com:apptentive/ap
 
 #### Using CocoaPods
 
-Please note that if you use CocoaPods to get Apptentive, you can skip workspace configuration and go directly to Apptentive implementation below.
+Please note that if you use CocoaPods to integrate Apptentive, you can skip the "Setup Xcode Project" section and proceed directly to the ["Implement Apptentive in Project"](https://github.com/apptentive/apptentive-ios#implement-apptentive-in-project) directions below.
 
 ##### Create Podfile
 
-1. Search for Apptentive's pod information on [CocoaPods](https://cocoapods.org).
+1. Find [Apptentive's pod information](http://cocoapods.org/?q=apptentive-ios) on [CocoaPods](http://cocoapods.org).
 2. List and save the dependencies in a text file named "Podfile" in your Xcode project directory. It should look something like this:
 
 ```
@@ -145,7 +143,7 @@ file navigator into `Copy Bundle Resources`.
 
 ### Implement Apptentive in Project
 
-#### Message Center
+#### Set Apptentive API key
 
 `ApptentiveConnect` queues feedback and attempts to upload in the background. This
 is intended to provide as quick a mechanism for submitting feedback as possible.
@@ -156,14 +154,14 @@ startup.
 
 1. Open up your app's `AppDelegate.m` file.
 2. Under `#import "AppDelegate.h"`, import the `ATConnect.h` file.
-3. Under implementation, edit the `application:didFinishLaunchingWithOptions:` method to look like so:
+3. Under implementation, set your Apptentive API key in the `application:didFinishLaunchingWithOptions:` method:
 
 ``` objective-c
 #include "ATConnect.h"
 // ...
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-    ATConnect *connection = [ATConnect sharedConnection];
-    connection.apiKey = @"Your_Apptentive_API_Key";
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    // ...
+	[ATConnect sharedConnection].apiKey = @"Your_Apptentive_API_Key";
     // ...
 }
 ```
@@ -174,77 +172,21 @@ As soon as you set the API key on the shared connection object, any queued feedb
 will start to upload, pending network availability. You also should not have
 to set the API key again on the shared connection object.
 
-------------------------------------------------------------------------------------
+#### Message Center
 
-Now, whereever you want to launch the Apptentive feedback UI from... 
+The Apptentive Message Center provides an interface for you to communicate directly with your customers. People using your app are able to send you messages, which are routed to your Apptentive dashboard. When you reply to customer feedback, your response will immediately show up in the Message Center in their app.
 
-1. Include the `ATConnect.h` header file.
-2. Add the following code to whichever method responds to feedback.
+You might have a menu item in your settings menu, for example, titled "Feedback". When the user clicks on this item, you will open the Message Center. People might also be routed to Message Center through other interactions, such as the rating prompt.
+
+When you want to launch the Apptentive Message Center and feedback UI, import `ATConnect.h` then call `presentMessageCenterFromViewController:`:
 
 ``` objective-c
 #include "ATConnect.h"
 // ...
-ATConnect *connection = [ATConnect sharedConnection];
-[connection presentMessageCenterFromViewController:viewController];
+[[ATConnect sharedConnection] presentMessageCenterFromViewController:viewController];
 ```
 
 ![Message Center initial feedback](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-love-dialog.png) ![alt text](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/space.png) ![Message Center response](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-message-center.png)
-
-#### Ratings
-
-`ApptentiveConnect` now provides an app rating flow similar to other projects
-such as [Appirater](https://github.com/arashpayan/appirater). This uses the number
-of launches of your application, the amount of time users have been using it, and
-the number of significant events the user has completed (for example, levels passed)
-to determine when to display a ratings dialog.
-
-To use it...
-
-1. Open your project's `AppDelegate.m` file.
-2. Add the `ATAppRatingFlow.h` header file to your project.
-3. Instantiate a shared `ATAppRatingFlow` object with your iTunes App ID (see "Finding Your iTunes App ID" below):
-
-``` objective-c
-#include "ATAppRatingFlow.h"
-// ...
-- (void)applicationDidFinishLaunching:(UIApplication *)application /* ... */ {
-    ATAppRatingFlow *sharedFlow = [ATAppRatingFlow sharedRatingFlow];
-    sharedFlow.appID = @"Your_iTunes_App_Store_ID";
-    // ...
-}
-```
-
-------------------------------------------------------------------------------------
-
-**Finding Your iTunes App ID**
-
-In [iTunesConnect](https://itunesconnect.apple.com/), go to "Manage Your 
-Applications" and click on your application. In the "App Information" 
-section of the page, look for the "Apple ID". It will be a number. This is
-your iTunes application ID.
-
-------------------------------------------------------------------------------------
-
-The ratings flow won't show unless you call the following:
-
-``` objective-c
-[[ATAppRatingFlow sharedRatingFlow] showRatingFlowFromViewControllerIfConditionsAreMet:viewController];
-```
-
-The `viewController` parameter is necessary in order to be able to show the 
-feedback view controller if a user is unhappy with your app.
-
-You'll want to add calls to `-showRatingFlowFromViewControllerIfConditionsAreMet:` wherever it makes sense in the context of your app.
-
-If you're using significant events to determine when to show the ratings flow, you can
-increment the number of significant events by calling:
-
-``` objective-c
-[sharedFlow logSignificantEvent];
-```
-
-You can modify the parameters which determine when the ratings dialog will be
-shown in your app settings on [Apptentive](https://apptentive.com).
 
 #### Unread Messages
 
@@ -271,22 +213,95 @@ If listening for the notification via the code above, you would then implement t
 	NSLog(@"You have %@ unread Apptentive messages", unreadMessageCount);
 }
 ```
+### Events
 
-#### Upgrade Messages
+The rating prompt and other Apptentive **interactions** are targeted to certain Apptentive **events**. For example, you could decide to show the rating prompt at the event `user_completed_level`. You can then, later, reconfigure the rating prompt interaction to show at `user_logged_in`. 
+
+An **event** is a record of your customer performing an action in your app. Generate events by calling `engage:fromViewController:`. Apptentive stores a record of all events, which you can later use show specific interactions to your customer.
+
+``` objective-c
+	[[ATConnect sharedConnection] engage:@"completed_level" fromViewController:viewController];
+```
+
+The `viewController` parameter is necessary in order to show the feedback view controller if a user is unhappy with your app.
+
+The events you choose to log will be different depending on the specifics of your app. For example, if you were to release a game, you would want engage some of the following events:
+
+ - Completed Level (`engage:@"completed_level_8"`)
+ - Ran Out of Lives (`engage:@"game_over"`)
+ - Quit Level (`engage:@"quit_level_9"`)
+ - Made In-App Purchase
+ - Etc.
+
+You'll want to add calls to `engage:fromViewController:` wherever it makes sense in the context of your app. Engage more events than you think you will need, as you may want to use them later.
+
+#### Seed your App with Events
+
+You should *seed* your app with certain Apptentive events at important points in your app. An event for when the app finishes launching. An event when your customer makes a purchase. An event for all the important steps in your app's lifecycle.
+
+Common app events that we recommend logging include:
+
+ - When your app finishes loading and is ready to present a view. (`engage:@"init"` or `did_finish_loading`)
+ - Completes an in-app purchase. (`engage:@"completed_in_app_purchase"`)
+ - User finishes logging in. (`did_log_in`)
+ - Completes a level. (`completed_level_8`)
+ - Finishes watching a video. (`finished_video`)
+ - Exits out of a video before completing it.
+ - Sends a message.
+ - Switches navigation tabs.
+ - Etc., depending on the specifics of your app.
+
+Be sure to add these events *prior* to uploading the app to the App Store, even if you are not currently using all of the events to show interactions. Later, without having to re-upload a new version, you can re-target the rating prompt or other Apptentive interactions to different events.
+
+### Interactions
+
+An Apptentive **interaction** is a specific piece of your app that can be shown in response to a person's events. For example, Surveys, Message Center, and the Apptentive Rating Flow are all unique interactions. When users engage certain **events**, you can decide (based on pre-defined conditions) to show a specific interaction in your app.
+
+#### Interactions are Configurable via the Apptentive Website
+
+The real strength of Apptentive Events and Interactions come from their remote configurability. 
+
+Prior to releasing your app on the App Store, seed your app with certain events. 
+ 
+Later, after shipping the app, you can configure the interactions that will run whenever a customer hits one of your events.
+
+ - The 10th time they complete a level, ask them to rate the app.
+ - When they beat the game, ask for feedback about their experience.
+ - After making an in-app purchase, ask them to take a survey.
+ 
+Interactions can be modified, remotely, without shipping a new app update to the App Store. The remote configurability of Apptentive interactions make them perfect for A/B testing and 
+
+### Rating Prompt
+
+Apptentive provides an app rating prompt interaction that aims to provide the best feedback for both you and your customers.
+
+Customers who love your app are asked to rate the app on the App Store. Those who dislike your app are instead directed to the Apptentive Message Center, where they can communicate directly with your team. You are then able to respond directly to customer issues or feature requests.
+
+The rating prompt is configured online in your Apptentive dashboard. At that time you will choose to trigger it at a certain Apptentive event.
+
+Thus, the only code needed to display a Rating Prompt is to engage events using the `engage:fromViewController:` method. The rating prompt is otherwise configured from your Apptentive dashboard.
+
+``` objective-c
+	[[ATConnect sharedConnection] engage:@"completed_level" fromViewController:viewController];
+```
+
+One you have engaged some events, you can create a rating prompt and modify the parameters which determine when it will be shown in your interaction settings on [Apptentive](http://www.apptentive.com).
+
+### Upgrade Messages
 
 In iOS 7, users are upgraded automatically when a new version of your app is released. Unfortunately, this means they will rarely (if ever) see your App Store release notes!
 
 Apptentive's Upgrade Message feature allows you to display a brief message when your app has been updated. You can speak directly to your users and let them know what has changed in the release.
 
-To present an upgrade message, engage the code point `app.launch` when your application becomes active:
+To present an upgrade message, engage the code point `init` when your application becomes active and is able to display a view:
 
 ```objective-c
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-	[[ATConnect sharedConnection] engage:@"app.launch" fromViewController:viewController];
+	[[ATConnect sharedConnection] engage:@"init" fromViewController:viewController];
 }
 ```
 
-Upgrade Messages are created and configured online via your Apptentive dashboard.
+Like the rating dialog, upgrade messages are created and configured online via your Apptentive dashboard.
 
 #### Surveys
 
@@ -396,9 +411,7 @@ If the push notification was sent by Apptentive, we will then present Message Ce
 
 #### Metrics
 
-Metrics provide insight into exactly where people begin and end interactions
-with your app and with feedback, ratings, and surveys. You can enable and disable
-metrics on your app settings page on [Apptentive](https://apptentive.com).
+Metrics provide insight into how people are engaging with your app, and exactly which Apptentive events and interactions are being used.
 
 #### Sample Application
 
@@ -415,3 +428,7 @@ window is opened. If they are happy with the app, they are prompted to rate
 the app in the App Store:
 
 ![Popup](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/rating.png)
+
+#### Customization
+
+For information on customizing the UI and text of `apptentive-ios`, please see [Customization](docs/Customization.md).

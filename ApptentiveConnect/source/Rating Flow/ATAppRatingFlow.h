@@ -52,10 +52,11 @@ extern NSString *const ATAppRatingFlowUserAgreedToRateAppNotification;
 
 #if TARGET_OS_IPHONE
 /*!
- Will show the ratings flow from the given viewController if the conditions to do so are met.
- Returns BOOL indicating if the ratings flow was shown or not.
+ Deprecated. Use the Rating Flow Interaction instead.
+ Call `engage:fromViewController:` for certain events in your app.
+ Then, set up a rating flow interaciton via the Apptentive website.
  */
-- (BOOL)showRatingFlowFromViewControllerIfConditionsAreMet:(UIViewController *)viewController;
+- (BOOL)showRatingFlowFromViewControllerIfConditionsAreMet:(UIViewController *)viewController DEPRECATED_ATTRIBUTE;
 
 #elif TARGET_OS_MAC
 - (void)showRatingFlowIfConditionsAreMet;
@@ -68,12 +69,11 @@ extern NSString *const ATAppRatingFlowUserAgreedToRateAppNotification;
 #endif
 
 /*!
- Call whenever a significant event occurs in the application. So, for example,
- if you want to have a rating show up after the user has played 20 levels of
- a game, you would set significantEventsBeforePrompt to 20, and call this
- after each level.
+ Deprecated. Log events using the `engage:fromViewController:` method instead.
+ The new engagements events are more powerful, and can be used to selectively
+ display interactions based on a wide range of individual event types.
  */
-- (void)logSignificantEvent;
+- (void)logSignificantEvent DEPRECATED_ATTRIBUTE;
 
 /*!
  Call to open your app's page on the App Store or Mac App Store.

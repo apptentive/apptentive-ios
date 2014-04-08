@@ -28,6 +28,7 @@
 #import "ATShadowView.h"
 #import "UIViewController+ATSwizzle.h"
 #import "UIImage+ATImageEffects.h"
+#import "ATInteraction.h"
 
 #define USE_BLUR 0
 
@@ -190,6 +191,20 @@
 	self.view.backgroundColor = [UIColor clearColor];
 	self.scrollView.delegate = self;
 	
+	if (self.interaction.configuration[@"submit_text"]) {
+		[self.sendButtonNewUI setTitle:self.interaction.configuration[@"submit_text"] forState:UIControlStateNormal];
+	} else {
+		NSString *sendTitle = ATLocalizedString(@"Send", @"Button title to Send a message using the feedback dialog.");
+		[self.sendButtonNewUI setTitle:sendTitle forState:UIControlStateNormal];
+	}
+	
+	if (self.interaction.configuration[@"decline_text"]) {
+		[self.cancelButtonNewUI setTitle:self.interaction.configuration[@"decline_text"] forState:UIControlStateNormal];
+	} else {
+		NSString *cancelTitle = ATLocalizedString(@"Cancel", @"Button title to Cancel a feedback dialog message.");
+		[self.cancelButtonNewUI setTitle:cancelTitle forState:UIControlStateNormal];
+	}
+	
 	CGFloat width = CGRectGetWidth(self.scrollView.bounds);
 	
 	if (self.promptText) {
@@ -249,7 +264,10 @@
 		if (!self.emailField) {
 			self.emailField = [[[UITextField alloc] initWithFrame:emailFrame] autorelease];
 			self.emailField.delegate = self;
-			if ([[ATConnect sharedConnection] emailRequired]) {
+			if (self.interaction.configuration[@"email_hint_text"]) {
+				self.emailField.placeholder = self.interaction.configuration[@"email_hint_text"];
+			}
+			else if ([[ATConnect sharedConnection] emailRequired]) {
 				self.emailField.placeholder = ATLocalizedString(@"Email (required)", @"Email Address Field Placeholder (email is required)");
 			}
 			else {
@@ -314,7 +332,10 @@
 	self.feedbackView.frame = feedbackFrame;
 	offsetY += CGRectGetHeight(self.feedbackView.bounds);
 	
-	if (self.customPlaceholderText) {
+	if (self.interaction.configuration[@"message_hint_text"]) {
+		self.feedbackView.placeholder = self.interaction.configuration[@"message_hint_text"];
+	}
+	else if (self.customPlaceholderText) {
 		self.feedbackView.placeholder = self.customPlaceholderText;
 	} else {
 		self.feedbackView.placeholder = ATLocalizedString(@"Message (required)", @"Message placeholder in iOS 7 message panel");

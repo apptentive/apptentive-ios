@@ -104,37 +104,36 @@
 
 - (void)start {
 	@synchronized (self) {
-		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-		
-		do { // once
-			if ([self isCancelled]) {
-				self.finished = YES;
-				break;
-			}
-			if ([self isFinished]) {
-				break;
-			}
-			if (request) {
-				[request release], request = nil;
-			}
-			request = [[NSMutableURLRequest alloc] initWithURL:self.targetURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:timeoutInterval];
-			for (NSString *key in headers) {
-				[request setValue:[headers objectForKey:key] forHTTPHeaderField:key];
-			}
-			if (HTTPMethod) {
-				[request setHTTPMethod:HTTPMethod];
-			}
-			if (HTTPBody) {
-				[request setHTTPBody:HTTPBody];
-			} else if (HTTPBodyStream) {
-				[request setHTTPBodyStream:HTTPBodyStream];
-			}
-			self.connection = [[[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO] autorelease];
-			[self.connection scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
-			[self.connection start];
-			self.executing = YES;
-		} while (NO);
-		[pool drain];
+		@autoreleasepool {
+			do { // once
+				if ([self isCancelled]) {
+					self.finished = YES;
+					break;
+				}
+				if ([self isFinished]) {
+					break;
+				}
+				if (request) {
+					[request release], request = nil;
+				}
+				request = [[NSMutableURLRequest alloc] initWithURL:self.targetURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:timeoutInterval];
+				for (NSString *key in headers) {
+					[request setValue:[headers objectForKey:key] forHTTPHeaderField:key];
+				}
+				if (HTTPMethod) {
+					[request setHTTPMethod:HTTPMethod];
+				}
+				if (HTTPBody) {
+					[request setHTTPBody:HTTPBody];
+				} else if (HTTPBodyStream) {
+					[request setHTTPBodyStream:HTTPBodyStream];
+				}
+				self.connection = [[[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO] autorelease];
+				[self.connection scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+				[self.connection start];
+				self.executing = YES;
+			} while (NO);
+		}
 	}
 }
 

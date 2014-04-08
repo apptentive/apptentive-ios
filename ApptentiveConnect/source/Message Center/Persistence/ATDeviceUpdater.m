@@ -102,12 +102,7 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 		
 		[defaults setObject:[NSDate date] forKey:ATDeviceLastUpdatePreferenceKey];
 		[defaults setObject:currentValueDictionary forKey:ATDeviceLastUpdateValuePreferenceKey];
-		if (![defaults synchronize]) {
-			ATLogError(@"Unable to synchronize defaults for device update.");
-			[delegate deviceUpdater:self didFinish:NO];
-		} else {
-			[delegate deviceUpdater:self didFinish:YES];
-		}
+		[delegate deviceUpdater:self didFinish:YES];
 	}
 }
 

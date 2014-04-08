@@ -188,7 +188,9 @@
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		NSData *personData = [NSKeyedArchiver archivedDataWithRootObject:self];
 		[defaults setObject:personData forKey:ATCurrentPersonPreferenceKey];
-		[defaults synchronize];
+		if (!currentPerson || !currentPerson.apptentiveID) {
+			[defaults synchronize];
+		}
 	}
 }
 

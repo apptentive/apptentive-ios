@@ -16,7 +16,7 @@
 + (ATInteraction *)interactionWithJSONDictionary:(NSDictionary *)jsonDictionary {
 	ATInteraction *interaction = [[ATInteraction alloc] init];
 	interaction.identifier = [jsonDictionary objectForKey:@"id"];
-	interaction.priority = [[jsonDictionary objectForKey:@"priority"] intValue];
+	interaction.priority = [[jsonDictionary objectForKey:@"priority"] integerValue];
 	interaction.type = [jsonDictionary objectForKey:@"type"];
 	interaction.configuration = [jsonDictionary objectForKey:@"configuration"];
 	interaction.criteria = [jsonDictionary objectForKey:@"criteria"];
@@ -26,7 +26,7 @@
 
 - (NSString *)description {	
 	NSDictionary *description = @{@"identifier" : self.identifier ?: [NSNull null],
-								  @"priority" : [NSNumber numberWithInt:self.priority] ?: [NSNull null],
+								  @"priority" : [NSNumber numberWithInteger:self.priority] ?: [NSNull null],
 								  @"type" : self.type ?: [NSNull null],
 								  @"configuration" : self.configuration ?: [NSNull null],
 								  @"criteria" : self.criteria ?: [NSNull null],
@@ -49,11 +49,26 @@
 
 - (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeObject:self.identifier forKey:@"identifier"];
-	[coder encodeInt:self.priority forKey:@"priority"];
+	[coder encodeInteger:self.priority forKey:@"priority"];
 	[coder encodeObject:self.type forKey:@"type"];
 	[coder encodeObject:self.configuration forKey:@"configuration"];
 	[coder encodeObject:self.criteria forKey:@"criteria"];
 	[coder encodeObject:self.version forKey:@"version"];
+}
+
+- (id)copyWithZone:(NSZone *)zone {
+    ATInteraction *copy = [[ATInteraction alloc] init];
+	
+    if (copy) {
+		copy.identifier = self.identifier;
+		copy.priority = self.priority;
+		copy.type = self.type;
+		copy.configuration = self.configuration;
+		copy.criteria = self.criteria;
+		copy.version = self.version;
+    }
+	
+    return copy;
 }
 
 - (ATInteractionUsageData *)usageData {
@@ -107,13 +122,13 @@
 }
 
 + (NSPredicate *)predicateForInteractionCriteria:(NSDictionary *)interactionCriteria hasError:(BOOL *)hasError {
-	NSMutableArray *parts = [NSMutableArray array];
-	NSCompoundPredicateType predicateType = NSAndPredicateType;
+	NSMutableArray *subPredicates = [NSMutableArray array];
 	
 	for (NSString *key in interactionCriteria) {
 		NSObject *object = [interactionCriteria objectForKey:key];
 		
 		if ([object isKindOfClass:[NSArray class]]) {
+			NSCompoundPredicateType predicateType = NSAndPredicateType;
 			if ([key isEqualToString:@"$and"]) {
 				predicateType = NSAndPredicateType;
 			} else if ([key isEqualToString:@"$or"]) {
@@ -127,7 +142,9 @@
 				NSPredicate *criterion = [self predicateForInteractionCriteria:dictionary hasError:hasError];
 				[criteria addObject:criterion];
 			}
-			[parts addObjectsFromArray:criteria];
+			
+			NSPredicate *compoundPredicate = [[[NSCompoundPredicate alloc] initWithType:predicateType subpredicates:criteria] autorelease];
+			[subPredicates addObject:compoundPredicate];
 		}
 		else {
 			// Implicit "==" if object is a string/number
@@ -181,12 +198,22 @@
 				}
 			}
 			
-			[parts addObjectsFromArray:criteria];
+			[subPredicates addObjectsFromArray:criteria];
 		}
 	}
 	
-	NSPredicate *result = [[[NSCompoundPredicate alloc] initWithType:predicateType subpredicates:parts] autorelease];
+	NSPredicate *result = [[[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:subPredicates] autorelease];
 	return result;
+}
+
+- (void)dealloc {
+	[_identifier release], _identifier = nil;
+	[_type release], _type = nil;
+	[_configuration release], _configuration = nil;
+	[_criteria release], _criteria = nil;
+	[_version release], _version = nil;
+	
+	[super dealloc];
 }
 
 @end

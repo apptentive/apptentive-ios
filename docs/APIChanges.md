@@ -1,5 +1,9 @@
 This document tracks changes to the API between versions.
 
+# 1.4.0
+
+* Argument `codePoint` renamed to `eventLabel` in `engage:fromViewController:`
+
 # 1.3.0
 
 * Added convenience methods for integrating with Apptentive:

@@ -513,4 +513,36 @@
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Invokes build");
 }
 
+- (void)testEnjoymentDialogCriteria {
+	ATInteraction *interaction = [[ATInteraction alloc] init];
+	interaction.criteria = @{@"$or": @[@{@"code_point/local#app#init/invokes/version": @{@"$gte": @10}},
+									   @{@"time_since_install/total": @{@"$gt": @864000}},
+									   @{@"code_point/local#app#testRatingFlow/invokes/total": @{@"$gt":@10}}
+									   ],
+							 @"interactions/533ed97a7724c5457e00003f/invokes/version": @0};
+	
+	
+	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	usageData.codePointInvokesVersion = @{@"code_point/local#app#init/invokes/version": @9};
+	usageData.timeSinceInstallTotal = @863999;
+	usageData.codePointInvokesTotal = @{@"code_point/local#app#testRatingFlow/invokes/total": @9};
+	usageData.interactionInvokesVersion = @{@"interactions/533ed97a7724c5457e00003f/invokes/version": @0};
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"The OR clauses are failing.");
+	
+	usageData.codePointInvokesVersion = @{@"code_point/local#app#init/invokes/version": @11};
+	usageData.timeSinceInstallTotal = @863999;
+	usageData.codePointInvokesTotal = @{@"code_point/local#app#testRatingFlow/invokes/total": @9};
+	usageData.interactionInvokesVersion = @{@"interactions/533ed97a7724c5457e00003f/invokes/version": @0};
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"One of the OR clauses is true. The other ANDed clause is also true. Should work.");
+	
+	usageData.codePointInvokesVersion = @{@"code_point/local#app#init/invokes/version": @11};
+	usageData.timeSinceInstallTotal = @864001;
+	usageData.codePointInvokesTotal = @{@"code_point/local#app#testRatingFlow/invokes/total": @11};
+	usageData.interactionInvokesVersion = @{@"interactions/533ed97a7724c5457e00003f/invokes/version": @0};
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"All of the OR clauses are true. The other ANDed clause is also true. Should work.");
+	
+	usageData.interactionInvokesVersion = @{@"interactions/533ed97a7724c5457e00003f/invokes/version": @1};
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"All the OR clauses are true. The other ANDed clause is not true. Should fail.");
+}
+
 @end

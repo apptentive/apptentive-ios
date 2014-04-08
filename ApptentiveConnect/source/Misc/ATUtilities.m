@@ -313,6 +313,32 @@ static NSDateFormatter *dateFormatter = nil;
 	return result;
 }
 
++ (UIViewController *)rootViewControllerForCurrentWindow {
+	UIWindow *window = nil;
+	for (UIWindow *tmpWindow in [[UIApplication sharedApplication] windows]) {
+		if ([[tmpWindow screen] isEqual:[UIScreen mainScreen]] && [tmpWindow isKeyWindow]) {
+			window = tmpWindow;
+			break;
+		}
+	}
+
+	if (window && [window respondsToSelector:@selector(rootViewController)]) {
+		UIViewController *vc = [window rootViewController];
+		if ([vc respondsToSelector:@selector(presentedViewController)] && [vc presentedViewController]) {
+			return [vc presentedViewController];
+		}
+#		pragma clang diagnostic push
+#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
+		if ([vc respondsToSelector:@selector(modalViewController)] && [vc modalViewController]) {
+			return [vc modalViewController];
+		}
+#		pragma clang diagnostic pop
+		return vc;
+	} else {
+		return nil;
+	}
+}
+
 #elif TARGET_OS_MAC
 
 + (NSData *)pngRepresentationOfImage:(NSImage *)image {

@@ -175,7 +175,7 @@
 		for (NSString *codePoint in codePointsInvokesTotal) {
 			[predicateSyntax setObject:[codePointsInvokesTotal objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/total", codePoint]];
 		}
-		_codePointInvokesTotal = [[NSDictionary alloc] initWithDictionary:predicateSyntax];;
+		_codePointInvokesTotal = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
 	
 	return [[_codePointInvokesTotal retain] autorelease];
@@ -188,7 +188,7 @@
 		for (NSString *codePoint in codePointsInvokesVersion) {
 			[predicateSyntax setObject:[codePointsInvokesVersion objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/version", codePoint]];
 		}
-		_codePointInvokesVersion = [[NSDictionary alloc] initWithDictionary:predicateSyntax];;
+		_codePointInvokesVersion = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
 	return [[_codePointInvokesVersion retain] autorelease];
 }
@@ -200,7 +200,7 @@
 		for (NSString *codePoint in codePointsInvokesBuild) {
 			[predicateSyntax setObject:[codePointsInvokesBuild objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/build", codePoint]];
 		}
-		_codePointInvokesBuild = [[NSDictionary alloc] initWithDictionary:predicateSyntax];;
+		_codePointInvokesBuild = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
 	return [[_codePointInvokesBuild retain] autorelease];
 }
@@ -214,7 +214,7 @@
 			NSTimeInterval timeAgo = [[NSDate date] timeIntervalSinceDate:lastDate];
 			[predicateSyntax setObject:@(timeAgo) forKey:[NSString stringWithFormat:@"code_point/%@/invokes/time_ago", codePoint]];
 		}
-		_codePointInvokesTimeAgo = [[NSDictionary alloc] initWithDictionary:predicateSyntax];;
+		_codePointInvokesTimeAgo = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
 	return [[_codePointInvokesTimeAgo retain] autorelease];
 }
@@ -226,7 +226,7 @@
 		for (NSString *interactionID in interactionsInvokesTotal) {
 			[predicateSyntax setObject:[interactionsInvokesTotal objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/total", interactionID]];
 		}
-		_interactionInvokesTotal = [[NSDictionary alloc] initWithDictionary:predicateSyntax];;
+		_interactionInvokesTotal = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
 	
 	return [[_interactionInvokesTotal retain] autorelease];
@@ -239,7 +239,7 @@
 		for (NSString *interactionID in interactionsInvokesVersion) {
 			[predicateSyntax setObject:[interactionsInvokesVersion objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/version", interactionID]];
 		}
-		_interactionInvokesVersion = [[NSDictionary alloc] initWithDictionary:predicateSyntax];;
+		_interactionInvokesVersion = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
 
 	return [[_interactionInvokesVersion retain] autorelease];
@@ -252,7 +252,7 @@
 		for (NSString *interactionID in interactionsInvokesBuild) {
 			[predicateSyntax setObject:[interactionsInvokesBuild objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/build", interactionID]];
 		}
-		_interactionInvokesBuild = [[NSDictionary alloc] initWithDictionary:predicateSyntax];;
+		_interactionInvokesBuild = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
 	
 	return [[_interactionInvokesBuild retain] autorelease];

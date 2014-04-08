@@ -239,8 +239,8 @@ NSString *const ATIntegrationKeyKahuna = @"kahuna";
 
 #if TARGET_OS_IPHONE
 
-- (BOOL)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController {
-	return [[ATEngagementBackend sharedBackend] engage:codePoint fromViewController:viewController];
+- (BOOL)engage:(NSString *)eventLabel fromViewController:(UIViewController *)viewController {
+	return [[ATEngagementBackend sharedBackend] engageLocalEvent:eventLabel fromViewController:viewController];
 }
 
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController {
@@ -277,7 +277,7 @@ NSString *const ATIntegrationKeyKahuna = @"kahuna";
 
 
 - (void)presentUpgradeDialogFromViewControllerIfAvailable:(UIViewController *)viewController {
-	NSArray *interactions = [[ATEngagementBackend sharedBackend] interactionsForCodePoint:@"app.launch"];
+	NSArray *interactions = [[ATEngagementBackend sharedBackend] interactionsForCodePoint:@"local#app#init"];
 	for (ATInteraction *interaction in interactions) {
 		if ([interaction.type isEqualToString:@"UpgradeMessage"]) {
 			[[ATEngagementBackend sharedBackend] presentUpgradeMessageInteraction:interaction fromViewController:viewController];

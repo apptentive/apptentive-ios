@@ -22,6 +22,7 @@
 #import "ATMessageCenterMetrics.h"
 #import "ATUtilities.h"
 #import "ATShadowView.h"
+#import "ATInteraction.h"
 
 #define DEG_TO_RAD(angle) ((M_PI * angle) / 180.0)
 #define RAD_TO_DEG(radians) (radians * (180.0/M_PI))
@@ -96,6 +97,7 @@ enum {
 	[invalidEmailAddressAlert release], invalidEmailAddressAlert = nil;
 	emailRequiredAlert.delegate = nil;
 	[emailRequiredAlert release], emailRequiredAlert = nil;
+	[_interaction release], _interaction = nil;
 	delegate = nil;
 	[super dealloc];
 }
@@ -378,7 +380,11 @@ enum {
 		field.keyboardType = UIKeyboardTypeEmailAddress;
 		field.delegate = self;
 		field.autocapitalizationType = UITextAutocapitalizationTypeNone;
-		field.placeholder = ATLocalizedString(@"Email Address", @"Email address popup placeholder text.");
+		if (self.interaction.configuration[@"email_hint_text"]) {
+			field.placeholder = self.interaction.configuration[@"email_hint_text"];
+		} else {
+			field.placeholder = ATLocalizedString(@"Email Address", @"Email address popup placeholder text.");
+		}
 		field.tag = kATEmailAlertTextFieldTag;
 		
 		if (!useNativeTextField) {
@@ -635,11 +641,15 @@ enum {
 		emailFrame.size.height = sizedEmail.height;
 		emailFrame.size.width = emailFrame.size.width - (horizontalPadding + extraHorzontalPadding)*2;
 		self.emailField = [[[UITextField alloc] initWithFrame:emailFrame] autorelease];
-		if ([[ATConnect sharedConnection] emailRequired]) {
-			self.emailField.placeholder = ATLocalizedString(@"Your Email (required)", @"Email Address Field Placeholder (email is required)");
-		}
-		else {
-			self.emailField.placeholder = ATLocalizedString(@"Your Email", @"Email Address Field Placeholder");
+		if (self.interaction.configuration[@"email_hint_text"]) {
+			self.emailField.placeholder = self.interaction.configuration[@"email_hint_text"];
+		} else {
+			if ([[ATConnect sharedConnection] emailRequired]) {
+				self.emailField.placeholder = ATLocalizedString(@"Your Email (required)", @"Email Address Field Placeholder (email is required)");
+			}
+			else {
+				self.emailField.placeholder = ATLocalizedString(@"Your Email", @"Email Address Field Placeholder");
+			}
 		}
 		self.emailField.font = emailFont;
 		self.emailField.adjustsFontSizeToFitWidth = YES;
@@ -697,7 +707,10 @@ enum {
 	[self.scrollView addSubview:self.feedbackView];
 	offsetY += self.feedbackView.bounds.size.height;
 	
-	if (self.customPlaceholderText) {
+	if (self.interaction.configuration[@"message_hint_text"]) {
+		self.feedbackView.placeholder = self.interaction.configuration[@"message_hint_text"];
+	}
+	else if (self.customPlaceholderText) {
 		self.feedbackView.placeholder = self.customPlaceholderText;
 	} else {
 		self.feedbackView.placeholder = ATLocalizedString(@"Feedback (required)", @"Feedback placeholder");
@@ -835,12 +848,12 @@ enum {
 
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	if (self.window.hidden == NO) {
-		[self retain];
-		[self unhide:NO];
+	@autoreleasepool {
+		if (self.window.hidden == NO) {
+			[self retain];
+			[self unhide:NO];
+		}
 	}
-	[pool release], pool = nil;
 }
 
 - (void)feedbackChanged:(NSNotification *)notification {

@@ -393,6 +393,13 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	do { // once
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		
+		// Legacy Rating Flow is disabled in favor of the Engagement Framework ratings flow
+		BOOL disableLegacyRatingFlow = YES;
+		if (disableLegacyRatingFlow) {
+			reasonForNotShowingDialog = @"legacy rating flow is disabled. Please use Events and the Rating Flow Interaction instead.";
+			break;
+		}
+		
 		// Ratings are disabled, don't show dialog.
 		if ([[defaults objectForKey:ATAppRatingEnabledPreferenceKey] boolValue] == NO) {
 			reasonForNotShowingDialog = @"ratings are disabled.";
@@ -538,10 +545,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 		[defaults setObject:[NSNumber numberWithBool:NO] forKey:ATAppRatingFlowDeclinedToRateThisVersionKey];
 		[defaults setObject:[NSNumber numberWithBool:NO] forKey:ATAppRatingFlowUserDislikesThisVersionKey];
 		[defaults setObject:[NSNumber numberWithInteger:0] forKey:ATAppRatingFlowPromptCountThisVersionKey];
-		
-		[defaults synchronize];
 	}
-	
 }
 
 - (void)userDidUseApp {
@@ -565,7 +569,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	count++;
 	
 	[defaults setObject:[NSNumber numberWithUnsignedInteger:count] forKey:ATAppRatingFlowUseCountKey];
-	[defaults synchronize];
 	
 	[self updateVersionInfo];
 }
@@ -580,7 +583,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	}
 	
 	[defaults setObject:[NSNumber numberWithUnsignedInteger:count+1] forKey:ATAppRatingFlowSignificantEventsCountKey];
-	[defaults synchronize];
 	
 }
 
@@ -686,48 +688,48 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 		[self performSelectorOnMainThread:@selector(tryToShowDialogWaitingForReachability) withObject:nil waitUntilDone:NO];
 		return;
 	}
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	@autoreleasepool {
 #if TARGET_OS_IPHONE
-	UIViewController *vc = [self rootViewControllerForCurrentWindow];
-	
-	if (vc && [self requirementsToShowDialogMet]) {
-		// We can get a root view controller and we should be showing a dialog.
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChangedAndPendingDialog:) name:ATReachabilityStatusChanged object:nil];
-	}
+		UIViewController *vc = [self rootViewControllerForCurrentWindow];
+		
+		if (vc && [self requirementsToShowDialogMet]) {
+			// We can get a root view controller and we should be showing a dialog.
+			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChangedAndPendingDialog:) name:ATReachabilityStatusChanged object:nil];
+		}
 #elif TARGET_OS_MAC
-	if ([self requirementsToShowDialogMet]) {
-		// We should show a ratings dialog.
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChangedAndPendingDialog:) name:ATReachabilityStatusChanged object:nil];
-	}
+		if ([self requirementsToShowDialogMet]) {
+			// We should show a ratings dialog.
+			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChangedAndPendingDialog:) name:ATReachabilityStatusChanged object:nil];
+		}
 #endif
-	[pool release], pool = nil;
+	}
 }
 
 - (void)reachabilityChangedAndPendingDialog:(NSNotification *)notification {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ATReachabilityStatusChanged object:nil];
+	@autoreleasepool {
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:ATReachabilityStatusChanged object:nil];
 
 #if TARGET_OS_IPHONE
-	UIViewController *vc = [self rootViewControllerForCurrentWindow];
-	
-	if (vc && [self requirementsToShowDialogMet]) {
-		if ([[ATReachability sharedReachability] currentNetworkStatus] == ATNetworkNotReachable) {
-			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChangedAndPendingDialog:) name:ATReachabilityStatusChanged object:nil];
-		} else {
-			[self showEnjoymentDialog:vc];
-		}
+		UIViewController *vc = [self rootViewControllerForCurrentWindow];
 		
-	}
-#elif TARGET_OS_MAC
-	if ([self requirementsToShowDialogMet]) {
-		if ([[ATReachability sharedReachability] currentNetworkStatus] == ATNetworkNotReachable) {
-			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChangedAndPendingDialog:) name:ATReachabilityStatusChanged object:nil];
-		} else {
-			[self showEnjoymentDialog:self];
+		if (vc && [self requirementsToShowDialogMet]) {
+			if ([[ATReachability sharedReachability] currentNetworkStatus] == ATNetworkNotReachable) {
+				[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChangedAndPendingDialog:) name:ATReachabilityStatusChanged object:nil];
+			} else {
+				[self showEnjoymentDialog:vc];
+			}
+			
 		}
-	}
+#elif TARGET_OS_MAC
+		if ([self requirementsToShowDialogMet]) {
+			if ([[ATReachability sharedReachability] currentNetworkStatus] == ATNetworkNotReachable) {
+				[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChangedAndPendingDialog:) name:ATReachabilityStatusChanged object:nil];
+			} else {
+				[self showEnjoymentDialog:self];
+			}
+		}
 #endif
-	[pool release], pool = nil;
+	}
 }
 
 - (void)preferencesChanged:(NSNotification *)notification {

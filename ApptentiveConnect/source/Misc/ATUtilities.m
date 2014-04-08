@@ -785,7 +785,7 @@ done:
 	NSError *error = nil;
 	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^\\s*[^\\s@]+@[^\\s@]+\\s*$" options:NSRegularExpressionCaseInsensitive error:&error];
 	if (!regex) {
-		NSLog(@"Unable to build email regular expression: %@", error);
+		ATLogError(@"Unable to build email regular expression: %@", error);
 		return NO;
 	}
 	NSUInteger count = [regex numberOfMatchesInString:emailAddress options:NSMatchingAnchored range:NSMakeRange(0, [emailAddress length])];

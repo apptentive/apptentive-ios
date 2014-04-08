@@ -6,9 +6,7 @@ There have been many recent API changes for the 1.4 release. Please see `docs/AP
 
 ## Install Guide
 
-This guide will walk you through implementing Apptentive within your iOS app. Below is a video demonstration of how quick and easy this integration is.
-
-[![iOS Install Guide Video](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-video.png "iOS Install Guide Video")](https://vimeo.com/73020193)
+This guide will walk you through implementing Apptentive within your iOS app.
 
 -
 

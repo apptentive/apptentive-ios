@@ -1,5 +1,9 @@
 This document tracks changes to the API between versions.
 
+# 1.5.0
+
+* Added `addAWSIntegrationWithDeviceToken:` convenience method for integrating with Amazon Web Services.
+
 # 1.4.0
 
 * Argument `codePoint` renamed to `eventLabel` in `engage:fromViewController:`

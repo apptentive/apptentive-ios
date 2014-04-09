@@ -14,13 +14,14 @@
 #import "ATAppRatingFlow_Private.h"
 #import "ATConnect_Private.h"
 #import "ATUtilities.h"
+#import "ApptentiveMetrics.h"
 #import "ATInteractionUpgradeMessageViewController.h"
 #import "ATInteractionEnjoymentDialogController.h"
 #import "ATInteractionRatingDialogController.h"
 #import "ATInteractionFeedbackDialogController.h"
 #import "ATInteractionMessageCenterController.h"
 #import "ATInteractionAppStoreController.h"
-#import "ApptentiveMetrics.h"
+#import "ATInteractionSurveyController.h"
 
 NSString *const ATEngagementInstallDateKey = @"ATEngagementInstallDateKey";
 NSString *const ATEngagementUpgradeDateKey = @"ATEngagementUpgradeDateKey";
@@ -363,6 +364,8 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 		[self presentMessageCenterInteraction:interaction fromViewController:viewController];
 	} else if ([interaction.type isEqualToString:@"AppStoreRating"]) {
 		[self presentAppStoreRatingInteraction:interaction fromViewController:viewController];
+	} else if ([interaction.type isEqualToString:@"Survey"]) {
+		[self presentSurveyInteraction:interaction fromViewController:viewController];
 	}
 }
 
@@ -421,6 +424,15 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	[appStore openAppStoreFromViewController:viewController];
 	
 	[appStore release];
+}
+
+- (void)presentSurveyInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
+	NSAssert([interaction.type isEqualToString:@"Survey"], @"Attempted to present a Survey interaction with an interaction of type: %@", interaction.type);
+	
+	ATInteractionSurveyController *survey = [[ATInteractionSurveyController alloc] initWithInteraction:interaction];
+	[survey showSurveyFromViewController:viewController];
+	
+	[survey release];
 }
 
 - (void)resetUpgradeVersionInfo {

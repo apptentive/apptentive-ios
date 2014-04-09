@@ -7,7 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+@class ATInteraction;
 
 @interface ATInteractionSurveyController : NSObject
+
+@property (nonatomic, retain, readonly) ATInteraction *interaction;
+@property (nonatomic, retain) UIViewController *viewController;
+
+- (id)initWithInteraction:(ATInteraction *)interaction;
+- (void)showSurveyFromViewController:(UIViewController *)viewController;
 
 @end

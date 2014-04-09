@@ -73,6 +73,8 @@
 		device[@"locale_language_code"] = languageCode;
 	}
 	
+	device[@"utc_offset"] = @([[NSTimeZone systemTimeZone] secondsFromGMT]);
+	
 	NSDictionary *extraInfo = [[ATConnect sharedConnection] customDeviceData];
 	if (extraInfo && [extraInfo count]) {
 		device[@"custom_data"] = extraInfo;

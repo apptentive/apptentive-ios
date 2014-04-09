@@ -357,6 +357,8 @@
 		58AB415718E3A9870034FAA5 /* ATInteractionAppStoreController.h in Headers */ = {isa = PBXBuildFile; fileRef = 58AB415518E3A9870034FAA5 /* ATInteractionAppStoreController.h */; };
 		58AB415818E3A9870034FAA5 /* ATInteractionAppStoreController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58AB415618E3A9870034FAA5 /* ATInteractionAppStoreController.m */; };
 		58AB415918E3A9870034FAA5 /* ATInteractionAppStoreController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58AB415618E3A9870034FAA5 /* ATInteractionAppStoreController.m */; };
+		58AB416718F608500034FAA5 /* ATInteractionSurveyController.h in Headers */ = {isa = PBXBuildFile; fileRef = 58AB416518F608500034FAA5 /* ATInteractionSurveyController.h */; };
+		58AB416818F608500034FAA5 /* ATInteractionSurveyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58AB416618F608500034FAA5 /* ATInteractionSurveyController.m */; };
 		58C5922117C55ADD000FA428 /* ATEngagementBackend.h in Headers */ = {isa = PBXBuildFile; fileRef = 58C5921F17C55ADD000FA428 /* ATEngagementBackend.h */; };
 		58C5922217C55ADD000FA428 /* ATEngagementBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C5922017C55ADD000FA428 /* ATEngagementBackend.m */; };
 		58C5922317C55ADD000FA428 /* ATEngagementBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C5922017C55ADD000FA428 /* ATEngagementBackend.m */; };
@@ -705,6 +707,8 @@
 		58AA409F1821C162000799D8 /* ATDataModelv2.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = ATDataModelv2.sqlite; sourceTree = "<group>"; };
 		58AB415518E3A9870034FAA5 /* ATInteractionAppStoreController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATInteractionAppStoreController.h; path = Engagement/Controllers/ATInteractionAppStoreController.h; sourceTree = "<group>"; };
 		58AB415618E3A9870034FAA5 /* ATInteractionAppStoreController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATInteractionAppStoreController.m; path = Engagement/Controllers/ATInteractionAppStoreController.m; sourceTree = "<group>"; };
+		58AB416518F608500034FAA5 /* ATInteractionSurveyController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATInteractionSurveyController.h; sourceTree = "<group>"; };
+		58AB416618F608500034FAA5 /* ATInteractionSurveyController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATInteractionSurveyController.m; sourceTree = "<group>"; };
 		58C5921F17C55ADD000FA428 /* ATEngagementBackend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATEngagementBackend.h; path = Engagement/Persistence/ATEngagementBackend.h; sourceTree = "<group>"; };
 		58C5922017C55ADD000FA428 /* ATEngagementBackend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATEngagementBackend.m; path = Engagement/Persistence/ATEngagementBackend.m; sourceTree = "<group>"; };
 		58C5922917C59BE3000FA428 /* ATWebClient+EngagementAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ATWebClient+EngagementAdditions.h"; path = "Engagement/URL Loading/ATWebClient+EngagementAdditions.h"; sourceTree = "<group>"; };
@@ -1390,6 +1394,15 @@
 			name = Tasks;
 			sourceTree = "<group>";
 		};
+		58AB416918F608560034FAA5 /* Surveys */ = {
+			isa = PBXGroup;
+			children = (
+				58AB416518F608500034FAA5 /* ATInteractionSurveyController.h */,
+				58AB416618F608500034FAA5 /* ATInteractionSurveyController.m */,
+			);
+			name = Surveys;
+			sourceTree = "<group>";
+		};
 		58C5921E17C55A83000FA428 /* Persistence */ = {
 			isa = PBXGroup;
 			children = (
@@ -1429,8 +1442,9 @@
 		58DCC0D1180F43E200A3A7AE /* Interactions */ = {
 			isa = PBXGroup;
 			children = (
-				58D17D4318C5656100D123BC /* Upgrade Message */,
+				58AB416918F608560034FAA5 /* Surveys */,
 				58D17D4418C5656D00D123BC /* Rating Flow */,
+				58D17D4318C5656100D123BC /* Upgrade Message */,
 			);
 			name = Interactions;
 			sourceTree = "<group>";
@@ -1566,6 +1580,7 @@
 				58C5922117C55ADD000FA428 /* ATEngagementBackend.h in Headers */,
 				58C5922B17C59BE3000FA428 /* ATWebClient+EngagementAdditions.h in Headers */,
 				58EEBE2317C7E8150039A0F5 /* ATInteraction.h in Headers */,
+				58AB416718F608500034FAA5 /* ATInteractionSurveyController.h in Headers */,
 				49B7E916178BA8060059E776 /* ATSurveyResponse.h in Headers */,
 				49B7E91B178BAB8D0059E776 /* ATSurveyResponseTask.h in Headers */,
 				58D17D4718C5674000D123BC /* ATInteractionRatingDialogController.h in Headers */,
@@ -1839,6 +1854,7 @@
 				49477B7C1835C700001D37AD /* ATExpandingTextView.m in Sources */,
 				49881DDE16E839540061D888 /* ATLogViewController.m in Sources */,
 				495E9C1D16EABD8E00AE3B03 /* ATLogger.m in Sources */,
+				58AB416818F608500034FAA5 /* ATInteractionSurveyController.m in Sources */,
 				492F2F1D16ED597F0030E48A /* ATRecordRequestTask.m in Sources */,
 				493F8D901672E07D000B5151 /* ATURLConnection_Private.m in Sources */,
 				496AE63F16FFB31500CC6F2F /* ATDefaultMessageCenterTheme.m in Sources */,

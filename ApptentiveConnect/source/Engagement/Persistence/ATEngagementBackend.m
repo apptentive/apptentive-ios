@@ -203,10 +203,9 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 }
 
 - (BOOL)engageEvent:(NSString *)eventLabel fromVendor:(NSString *)vendor fromInteraction:(NSString *)interaction userInfo:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController {
-	NSString *escapeCharacters = @"!*'();:@&=+$,/?%#[]";
-	NSString *urlEncodedEventLabel = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)eventLabel, NULL, (CFStringRef)escapeCharacters, kCFStringEncodingUTF8);
-	NSString *urlEncodedVendor = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)vendor, NULL, (CFStringRef)escapeCharacters, kCFStringEncodingUTF8);
-	NSString *urlEncodedInteraction = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)interaction, NULL, (CFStringRef)escapeCharacters, kCFStringEncodingUTF8);
+	NSString *urlEncodedEventLabel = [ATUtilities stringByEscapingForURLArguments:eventLabel];
+	NSString *urlEncodedVendor = [ATUtilities stringByEscapingForURLArguments:vendor];
+	NSString *urlEncodedInteraction = [ATUtilities stringByEscapingForURLArguments:interaction];
 
 	NSString *namespacedCodePoint = [NSString stringWithFormat:@"%@#%@#%@", urlEncodedVendor, urlEncodedInteraction, urlEncodedEventLabel];
 	

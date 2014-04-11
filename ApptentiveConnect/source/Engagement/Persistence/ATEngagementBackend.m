@@ -193,9 +193,9 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 + (NSString *)stringByEscapingCodePointSeparatorCharactersInString:(NSString *)string {
 	// Escape "%", "/", and "#".
 	NSMutableString *escape = [string mutableCopy];
-	[escape replaceOccurrencesOfString:@"%" withString:@"%25" options:NSLiteralSearch range:NSMakeRange(0, string.length)];
-	[escape replaceOccurrencesOfString:@"/" withString:@"%2F" options:NSLiteralSearch range:NSMakeRange(0, string.length)];
-	[escape replaceOccurrencesOfString:@"#" withString:@"%23" options:NSLiteralSearch range:NSMakeRange(0, string.length)];
+	[escape replaceOccurrencesOfString:@"%" withString:@"%25" options:NSLiteralSearch range:NSMakeRange(0, escape.length)];
+	[escape replaceOccurrencesOfString:@"/" withString:@"%2F" options:NSLiteralSearch range:NSMakeRange(0, escape.length)];
+	[escape replaceOccurrencesOfString:@"#" withString:@"%23" options:NSLiteralSearch range:NSMakeRange(0, escape.length)];
 	
 	return [escape autorelease];
 }

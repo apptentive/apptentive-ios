@@ -197,13 +197,15 @@ Note, though, that Message Center setting will be overridden by server-based con
 /// @name Integrate With Other Services
 ///------------------------------------
 
-/*! Add a token for 3rd-party integration services. */
+/*! Add a custom configuration for a 3rd-party integration service. */
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration;
+/*! Add a device token for a 3rd-party integration service. */
 - (void)addIntegration:(NSString *)integration withDeviceToken:(NSData *)deviceToken;
 /*! Removes a 3rd-party integration with the given name. */
 - (void)removeIntegration:(NSString *)integration;
-/*! Add a specific service's integration with the given device token. */
+/*! Adds Urban Airship integration with the given device token. */
 - (void)addUrbanAirshipIntegrationWithDeviceToken:(NSData *)deviceToken;
+/*! Adds Amazon Simple Notification Service (SNS) integration with the given device token. */
 - (void)addAWSSimpleNotificationServiceIntegrationWithDeviceToken:(NSData *)deviceToken;
 
 @end

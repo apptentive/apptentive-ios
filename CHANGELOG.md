@@ -1,3 +1,14 @@
+2014-04-11 pkamb v1.4.1
+-----------------------
+
+Bug fix release for interaction codepoint encoding.
+
+Code points are returned from the server with their components URL encoded. This fix makes the client properly recognize them.
+
+Fixes:
+
+* IOS-479 URL encode each token of a codepoint
+
 2014-04-07 wooster, pkamb v1.4.0
 --------------------------------
 

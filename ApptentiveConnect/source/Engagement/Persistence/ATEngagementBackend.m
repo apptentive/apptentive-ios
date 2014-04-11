@@ -191,7 +191,8 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 }
 
 + (NSString *)stringByEscapingCodePointSeparatorCharactersInString:(NSString *)string {
-	// Escape "%", "/", and "#".
+	// Only escape "%", "/", and "#".
+	// Do not change unless the server spec changes.
 	NSMutableString *escape = [string mutableCopy];
 	[escape replaceOccurrencesOfString:@"%" withString:@"%25" options:NSLiteralSearch range:NSMakeRange(0, escape.length)];
 	[escape replaceOccurrencesOfString:@"/" withString:@"%2F" options:NSLiteralSearch range:NSMakeRange(0, escape.length)];

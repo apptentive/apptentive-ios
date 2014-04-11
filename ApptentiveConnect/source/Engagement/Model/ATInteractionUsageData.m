@@ -10,6 +10,8 @@
 #import "ATEngagementBackend.h"
 #import "ATAppRatingFlow_Private.h"
 #import "ATUtilities.h"
+#import "ATDeviceInfo.h"
+#import "ATPersonInfo.h"
 
 @implementation ATInteractionUsageData
 
@@ -98,6 +100,30 @@
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesVersion];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesBuild];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesTimeAgo];
+	
+	ATDeviceInfo *deviceInfo = [[[ATDeviceInfo alloc] init] autorelease];
+	NSDictionary *deviceData = [[deviceInfo apiJSON] objectForKey:@"device"];
+	for (NSString *key in [deviceData allKeys]) {
+		NSObject *value = [deviceData objectForKey:key];
+		NSString *criteriaKey = [NSString stringWithFormat:@"device/%@", [ATUtilities stringByEscapingForURLArguments:key]];
+		
+		if (value) {
+			predicateEvaluationDictionary[criteriaKey] = value;
+		}
+	}
+
+	ATPersonInfo *personInfo = [ATPersonInfo currentPerson];
+	if (personInfo) {
+		NSDictionary *personData = [[personInfo apiJSON] objectForKey:@"person"];
+		for (NSString *key in [personData allKeys]) {
+			NSObject *value = [personData objectForKey:key];
+			NSString *criteriaKey = [NSString stringWithFormat:@"person/%@", [ATUtilities stringByEscapingForURLArguments:key]];
+			
+			if (value) {
+				predicateEvaluationDictionary[criteriaKey] = value;
+			}
+		}
+	}
 	
 	return predicateEvaluationDictionary;
 }

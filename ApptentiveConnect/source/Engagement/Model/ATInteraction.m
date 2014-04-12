@@ -154,6 +154,8 @@
 				equalitySymbol = @"<=";
 			} else if ([operator isEqualToString:@"$ne"]) {
 				equalitySymbol = @"!=";
+			} else if ([operator isEqualToString:@"$contains"]) {
+				equalitySymbol = @"CONTAINS";
 			} else {
 				ATLogError(@"Unrecognized operator symbol: %@", operator);
 				*hasError = YES;

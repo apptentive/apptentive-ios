@@ -570,4 +570,18 @@
 	usageData.interactionInvokesBuild = @{@"interactions/526fe2836dd8bf546a00000b/invokes/build": @1};
 	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Should pass because 6 is not > 1.");
 }
+
+- (void)testContainsCriteria {
+	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	interaction.criteria = @{@"application_version": @{@"$contains": @"a"}};
+	usageData.applicationVersion = @"1.2.3a";
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Should pass because a is in 1.2.3a");
+	
+	interaction = [[ATInteraction alloc] init];
+	usageData = [[ATInteractionUsageData alloc] init];
+	interaction.criteria = @{@"application_version": @{@"$contains": @"1.4"}};
+	usageData.applicationVersion = @"1.2.3a";
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail because 1.4 is not in 1.2.3a");
+}
 @end

@@ -545,4 +545,29 @@
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"All the OR clauses are true. The other ANDed clause is not true. Should fail.");
 }
 
+- (void)testNotInCriteria {
+	ATInteraction *interaction = [[ATInteraction alloc] init];
+	interaction.criteria = @{@"$and": @[@{@"code_point/local#app#init/invokes/version": @{@"$not": @{@"$gte": @10}}},
+									   @{@"time_since_install/total": @{@"$not": @{@"$gt": @864000}}},
+									   @{@"code_point/local#app#testRatingFlow/invokes/total": @{@"$gt":@10}}
+									   ],
+							 @"interactions/533ed97a7724c5457e00003f/invokes/version": @0
+							};
+	
+	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	usageData.codePointInvokesVersion = @{@"code_point/local#app#init/invokes/version": @9};
+	usageData.timeSinceInstallTotal = @863999;
+	usageData.codePointInvokesTotal = @{@"code_point/local#app#testRatingFlow/invokes/total": @9};
+	usageData.interactionInvokesVersion = @{@"interactions/533ed97a7724c5457e00003f/invokes/version": @0};
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail due to invokes/version being 9.");
+	
+	usageData.codePointInvokesTotal = @{@"code_point/local#app#testRatingFlow/invokes/total": @11};
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Should pass due to invokes being 11.");
+	
+	interaction = [[ATInteraction alloc] init];
+	usageData = [[ATInteractionUsageData alloc] init];
+	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/build": @{@"$not": @{@"$gt": @6}}};
+	usageData.interactionInvokesBuild = @{@"interactions/526fe2836dd8bf546a00000b/invokes/build": @1};
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Should pass because 6 is not > 1.");
+}
 @end

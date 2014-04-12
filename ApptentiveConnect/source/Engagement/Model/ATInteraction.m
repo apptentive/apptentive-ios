@@ -142,6 +142,7 @@
 			[predicate release], predicate = nil;
 		} else {
 			NSString *equalitySymbol = nil;
+			BOOL isExists = NO;
 			if ([operator isEqualToString:@"=="]) {
 				equalitySymbol = @"==";
 			} else if ([operator isEqualToString:@"$gt"]) {
@@ -156,15 +157,34 @@
 				equalitySymbol = @"!=";
 			} else if ([operator isEqualToString:@"$contains"]) {
 				equalitySymbol = @"CONTAINS";
+			} else if ([operator isEqualToString:@"$exists"]) {
+				isExists = YES;
 			} else {
 				ATLogError(@"Unrecognized operator symbol: %@", operator);
 				*hasError = YES;
 				break;
 			}
 			
-			NSString *placeholder = [[@"(%K " stringByAppendingString:equalitySymbol] stringByAppendingString:@" %@)"];
-			NSPredicate *predicate = [NSCompoundPredicate predicateWithFormat:placeholder argumentArray:@[criteria, value]];
-			[predicates addObject:predicate];
+			if (isExists) {
+				if (![value isKindOfClass:[NSNumber class]]) {
+					ATLogError(@"Given non-bool argument to $exists.");
+					*hasError = YES;
+					break;
+				}
+				BOOL operandValue = [(NSNumber *)value boolValue];
+				if (operandValue) {
+					equalitySymbol = @"!=";
+				} else {
+					equalitySymbol = @"==";
+				}
+				NSString *placeholder = [[@"(%K " stringByAppendingString:equalitySymbol] stringByAppendingString:@" nil)"];
+				NSPredicate *predicate = [NSPredicate predicateWithFormat:placeholder, criteria];
+				[predicates addObject:predicate];
+			} else {
+				NSString *placeholder = [[@"(%K " stringByAppendingString:equalitySymbol] stringByAppendingString:@" %@)"];
+				NSPredicate *predicate = [NSCompoundPredicate predicateWithFormat:placeholder argumentArray:@[criteria, value]];
+				[predicates addObject:predicate];
+			}
 			
 			// Save the codepoint/interaction, to later be used in predicate evaluation object.
 			if ([criteria hasPrefix:@"code_point/"]) {

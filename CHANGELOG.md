@@ -1,4 +1,4 @@
-2014-04-11 pkamb v1.4.1
+2014-04-13 wooster, pkamb v1.4.1
 -----------------------
 
 Bug fix release for interaction codepoint encoding.

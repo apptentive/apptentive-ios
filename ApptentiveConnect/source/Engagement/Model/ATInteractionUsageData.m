@@ -42,6 +42,7 @@
 	[_timeSinceInstallBuild release], _timeSinceInstallBuild = nil;
 	[_applicationVersion release], _applicationVersion = nil;
 	[_applicationBuild release], _applicationBuild = nil;
+	[_currentTime release], _currentTime = nil;
 	[_isUpdateVersion release], _isUpdateVersion = nil;
 	[_isUpdateBuild release], _isUpdateBuild = nil;
 	[_codePointInvokesTotal release], _codePointInvokesTotal = nil;
@@ -94,6 +95,7 @@
 	if (self.applicationBuild) {
 		predicateEvaluationDictionary[@"application_build"] = self.applicationBuild;
 	}
+	predicateEvaluationDictionary[@"current_time"] = self.currentTime;
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesTotal];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesVersion];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesBuild];
@@ -150,6 +152,13 @@
 	}
 	
 	return [[_applicationBuild retain] autorelease];
+}
+
+- (NSNumber *)currentTime {
+	if (!_currentTime) {
+		_currentTime = [@([[NSDate date] timeIntervalSince1970]) retain];
+	}
+	return [[_currentTime retain] autorelease];
 }
 
 - (NSNumber *)isUpdateVersion {

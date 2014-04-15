@@ -94,16 +94,22 @@
 		// Interactions with no keys in the criteria dictionary should evaluate to TRUE.
 		criteriaAreMet = YES;
 	} else {
-		NSPredicate *predicate = [self criteriaPredicate];
-		if (predicate) {
-			criteriaAreMet = [predicate evaluateWithObject:[usageData predicateEvaluationDictionary]];
-			if (!criteriaAreMet) {
-				ATLogInfo(@"Interaction predicate failed evaluation.");
-				ATLogInfo(@"Predicate: %@", predicate);
-				ATLogInfo(@"Interaction usage data: %@", [usageData predicateEvaluationDictionary]);
+		@try {
+			NSPredicate *predicate = [self criteriaPredicate];
+			if (predicate) {
+				criteriaAreMet = [predicate evaluateWithObject:[usageData predicateEvaluationDictionary]];
+				if (!criteriaAreMet) {
+					ATLogInfo(@"Interaction predicate failed evaluation.");
+					ATLogInfo(@"Predicate: %@", predicate);
+					ATLogInfo(@"Interaction usage data: %@", [usageData predicateEvaluationDictionary]);
+				}
+			} else {
+				ATLogError(@"Could not create a valid criteria predicate for the Interaction criteria: %@", self.criteria);
+				criteriaAreMet = NO;
 			}
-		} else {
-			ATLogError(@"Could not create a valid criteria predicate for the Interaction criteria: %@", self.criteria);
+		}
+		@catch (NSException *exception) {
+			ATLogError(@"Exception while processing critera.");
 			criteriaAreMet = NO;
 		}
 	}

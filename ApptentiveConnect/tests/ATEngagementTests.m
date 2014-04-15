@@ -20,6 +20,7 @@
  
  application_version - The currently running application version (string).
  application_build - The currently running application build "number" (string).
+ current_time - The current time as a numeric Unix timestamp in seconds.
  
  is_update/version - Returns true if we have seen a version prior to the current one.
  is_update/build - Returns true if we have seen a build prior to the current one.
@@ -194,6 +195,30 @@
 	
 	usageData.applicationBuild = @"3.0";
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Build number must not have a 'v' in front!");
+}
+
+- (void)testInteractionCriteriaCurrentTime {
+	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	
+	interaction.criteria = @{@"current_time": @{@"$exists": @YES}};
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Must have default current time.");
+	// Make sure it's actually a reasonable value…
+	NSTimeInterval currentTimestamp = [[NSDate date] timeIntervalSince1970];
+	NSTimeInterval timestamp = [usageData.currentTime doubleValue];
+	XCTAssertTrue(timestamp < currentTimestamp && timestamp > (currentTimestamp - 5), @"Current time not a believable value.");
+	
+	interaction.criteria = @{@"current_time":@{@"$gt": @1397598108.63843}};
+	usageData.currentTime = @1397598109;
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Current time criteria not met.");
+	
+	interaction.criteria = @{@"current_time":@{@"$lt": @1183135260, @"$gt": @465498000}};
+	usageData.currentTime = @1183135259.5;
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Current time criteria not met.");
+	
+	interaction.criteria = @{@"current_time":@{@"$gt": @"1183135260"}};
+	usageData.currentTime = @1397598109;
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail because of type but not crash.");
 }
 
 - (void)testCodePointInvokesVersion {

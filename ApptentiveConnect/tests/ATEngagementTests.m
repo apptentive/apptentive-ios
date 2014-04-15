@@ -22,6 +22,9 @@
  application_build - The currently running application build "number" (string).
  current_time - The current time as a numeric Unix timestamp in seconds.
  
+ app_release/version - The currently running application version (string).
+ app_release/build - The currently running application build "number" (string).
+ 
  is_update/version - Returns true if we have seen a version prior to the current one.
  is_update/build - Returns true if we have seen a build prior to the current one.
  
@@ -176,6 +179,19 @@
 	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Version number");
 	usageData.applicationVersion = @"3.0";
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Version number must not have a 'v' in front!");
+	
+	usageData = [[ATInteractionUsageData alloc] init];
+	interaction.criteria = @{@"app_release/version": @"1.2.8"};
+	usageData.applicationVersion = @"1.2.8";
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Version number");
+	usageData.applicationVersion = @"v1.2.8";
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Version number must not have a 'v' in front!");
+	
+	interaction.criteria = @{@"app_release/version": @"v3.0"};
+	usageData.applicationVersion = @"v3.0";
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Version number");
+	usageData.applicationVersion = @"3.0";
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Version number must not have a 'v' in front!");
 }
 
 - (void)testInteractionCriteriaBuild {
@@ -190,6 +206,21 @@
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Build number must not have a 'v' in front!");
 	
 	interaction.criteria = @{@"application_build": @"v3.0"};
+	usageData.applicationBuild = @"v3.0";
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Build number");
+	
+	usageData.applicationBuild = @"3.0";
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Build number must not have a 'v' in front!");
+	
+	usageData = [[ATInteractionUsageData alloc] init];
+	interaction.criteria = @{@"app_release/build": @"39"};
+	usageData.applicationBuild = @"39";
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Build number");
+	
+	usageData.applicationBuild = @"v39";
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Build number must not have a 'v' in front!");
+	
+	interaction.criteria = @{@"app_release/build": @"v3.0"};
 	usageData.applicationBuild = @"v3.0";
 	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Build number");
 	

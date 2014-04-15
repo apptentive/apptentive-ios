@@ -91,9 +91,11 @@
 																										  @"is_update/build" : self.isUpdateBuild}];
 	if (self.applicationVersion) {
 		predicateEvaluationDictionary[@"application_version"] = self.applicationVersion;
+		predicateEvaluationDictionary[@"app_release/version"] = self.applicationVersion;
 	}
 	if (self.applicationBuild) {
 		predicateEvaluationDictionary[@"application_build"] = self.applicationBuild;
+		predicateEvaluationDictionary[@"app_release/build"] = self.applicationBuild;
 	}
 	predicateEvaluationDictionary[@"current_time"] = self.currentTime;
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesTotal];

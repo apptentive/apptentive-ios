@@ -219,7 +219,7 @@
 		if (!result) {
 			*hasError = YES;
 		}
-		return result;
+		return [result autorelease];
 	}
 }
 

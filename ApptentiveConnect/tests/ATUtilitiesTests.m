@@ -255,4 +255,10 @@
 	XCTAssertFalse([ATUtilities emailAddressIsValid:@""], @"empty string email shouldn't be valid");
 	XCTAssertFalse([ATUtilities emailAddressIsValid:nil], @"nil email shouldn't be valid");
 }
+
+- (void)testStringEscaping {
+	NSString *aString = @"foo% bar/#haha";
+	NSString *result = [ATUtilities stringByEscapingForURLArguments:aString];
+	XCTAssertEqualObjects(@"foo%25%20bar%2F%23haha", result, @"Unexpected result: %@", result);
+}
 @end

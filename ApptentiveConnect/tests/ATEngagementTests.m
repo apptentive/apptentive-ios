@@ -30,6 +30,43 @@
  interactions.interaction_instance_id.invokes.version  - The number of times the Interaction Instance with id interaction_instance_id has been invoked within the current version of the app (integer)
 */
 
+- (void)testEventLabelsContainingCodePointSeparatorCharacters {
+	//Escape "%", "/", and "#".
+	
+	NSString *i, *o;
+	i = @"testEventLabelSeparators";
+	o = @"testEventLabelSeparators";
+	XCTAssertTrue([[ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
+	
+	i = @"test#Event#Label#Separators";
+	o = @"test%23Event%23Label%23Separators";
+	XCTAssertTrue([[ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
+
+	i = @"test/Event/Label/Separators";
+	o = @"test%2FEvent%2FLabel%2FSeparators";
+	XCTAssertTrue([[ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
+
+	i = @"test%Event/Label#Separators";
+	o = @"test%25Event%2FLabel%23Separators";
+	XCTAssertTrue([[ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
+
+	i = @"test#Event/Label%Separators";
+	o = @"test%23Event%2FLabel%25Separators";
+	XCTAssertTrue([[ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
+
+	i = @"test###Event///Label%%%Separators";
+	o = @"test%23%23%23Event%2F%2F%2FLabel%25%25%25Separators";
+	XCTAssertTrue([[ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
+	
+	i = @"test#%///#%//%%/#Event_!@#$%^&*(){}Label1234567890[]`~Separators";
+	o = @"test%23%25%2F%2F%2F%23%25%2F%2F%25%25%2F%23Event_!@%23$%25^&*(){}Label1234567890[]`~Separators";
+	XCTAssertTrue([[ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
+	
+	i = @"test%/#";
+	o = @"test%25%2F%23";
+	XCTAssertTrue([[ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
+}
+
 - (void)testInteractionCriteria {
 	ATInteraction *interaction = [[ATInteraction alloc] init];
 	interaction.criteria = @{@"time_since_install/total": @{@"$gt": @(5 * 60 * 60 * 24), @"$lt": @(7 * 60 * 60 * 24)}};

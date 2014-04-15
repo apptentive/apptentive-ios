@@ -41,11 +41,10 @@ NSString *const ATEngagementInteractionsInvokesLastDateKey;
 - (NSArray *)interactionsForCodePoint:(NSString *)codePoint;
 - (ATInteraction *)interactionForCodePoint:(NSString *)codePoint;
 
++ (NSString *)stringByEscapingCodePointSeparatorCharactersInString:(NSString *)string;
 - (BOOL)engageLocalEvent:(NSString *)eventLabel fromViewController:(UIViewController *)viewController;
-
 - (BOOL)engageApptentiveAppEvent:(NSString *)eventLabel userInfo:(NSDictionary *)userInfo;
 - (BOOL)engageApptentiveEvent:(NSString *)eventLabel fromInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController;
-
 - (BOOL)engageEvent:(NSString *)eventLabel fromVendor:(NSString *)vendor fromInteraction:(NSString *)interaction userInfo:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController;
 - (BOOL)engage:(NSString *)codePoint userInfo:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController;
 

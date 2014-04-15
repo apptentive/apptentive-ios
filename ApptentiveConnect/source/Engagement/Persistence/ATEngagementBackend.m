@@ -190,6 +190,17 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	return nil;
 }
 
++ (NSString *)stringByEscapingCodePointSeparatorCharactersInString:(NSString *)string {
+	// Only escape "%", "/", and "#".
+	// Do not change unless the server spec changes.
+	NSMutableString *escape = [string mutableCopy];
+	[escape replaceOccurrencesOfString:@"%" withString:@"%25" options:NSLiteralSearch range:NSMakeRange(0, escape.length)];
+	[escape replaceOccurrencesOfString:@"/" withString:@"%2F" options:NSLiteralSearch range:NSMakeRange(0, escape.length)];
+	[escape replaceOccurrencesOfString:@"#" withString:@"%23" options:NSLiteralSearch range:NSMakeRange(0, escape.length)];
+	
+	return [escape autorelease];
+}
+
 - (BOOL)engageLocalEvent:(NSString *)eventLabel fromViewController:(UIViewController *)viewController {
 	return [[ATEngagementBackend sharedBackend] engageEvent:eventLabel fromVendor:ATEngagementCodePointHostAppVendorKey fromInteraction:ATEngagementCodePointHostAppInteractionKey userInfo:nil fromViewController:viewController];
 }
@@ -203,13 +214,13 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 }
 
 - (BOOL)engageEvent:(NSString *)eventLabel fromVendor:(NSString *)vendor fromInteraction:(NSString *)interaction userInfo:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController {
-	NSString *urlEncodedEventLabel = [ATUtilities stringByEscapingForURLArguments:eventLabel];
-	NSString *urlEncodedVendor = [ATUtilities stringByEscapingForURLArguments:vendor];
-	NSString *urlEncodedInteraction = [ATUtilities stringByEscapingForURLArguments:interaction];
-
-	NSString *namespacedCodePoint = [NSString stringWithFormat:@"%@#%@#%@", urlEncodedVendor, urlEncodedInteraction, urlEncodedEventLabel];
+	NSString *encodedVendor = [ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:vendor];
+	NSString *encodedInteraction = [ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:interaction];
+	NSString *encodedEventLabel = [ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:eventLabel];
 	
-	return [[ATEngagementBackend sharedBackend] engage:namespacedCodePoint userInfo:userInfo fromViewController:viewController];
+	NSString *codePoint = [NSString stringWithFormat:@"%@#%@#%@", encodedVendor, encodedInteraction, encodedEventLabel];
+
+	return [[ATEngagementBackend sharedBackend] engage:codePoint userInfo:userInfo fromViewController:viewController];
 }
 
 - (BOOL)engage:(NSString *)codePoint userInfo:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController {

@@ -19,30 +19,36 @@
 	BOOL success = NO;
 	
 	@autoreleasepool {
-		NSError *error = nil;
-		
-		id decodedObject = [ATJSONSerialization JSONObjectWithData:jsonManifest error:&error];
-		if (decodedObject && [decodedObject isKindOfClass:[NSDictionary class]]) {
-			success = YES;
-			NSDictionary *jsonManifest = (NSDictionary *)decodedObject;
-			NSDictionary *jsonCodePoints = [jsonManifest objectForKey:@"interactions"];
+		@try {
+			NSError *error = nil;
 			
-			NSMutableDictionary *codePoints = [[NSMutableDictionary alloc] init];
-			for (NSString *codePointName in [jsonCodePoints allKeys]) {
-				NSArray *jsonInteractions = [jsonCodePoints objectForKey:codePointName];
+			id decodedObject = [ATJSONSerialization JSONObjectWithData:jsonManifest error:&error];
+			if (decodedObject && [decodedObject isKindOfClass:[NSDictionary class]]) {
+				success = YES;
+				NSDictionary *jsonManifest = (NSDictionary *)decodedObject;
+				NSDictionary *jsonCodePoints = [jsonManifest objectForKey:@"interactions"];
 				
-				NSMutableArray *interactions = [NSMutableArray array];
-				for (NSDictionary *jsonInteraction in jsonInteractions) {
-					ATInteraction *interaction = [ATInteraction interactionWithJSONDictionary:jsonInteraction];
-					[interactions addObject:interaction];
+				NSMutableDictionary *codePoints = [[NSMutableDictionary alloc] init];
+				for (NSString *codePointName in [jsonCodePoints allKeys]) {
+					NSArray *jsonInteractions = [jsonCodePoints objectForKey:codePointName];
+					
+					NSMutableArray *interactions = [NSMutableArray array];
+					for (NSDictionary *jsonInteraction in jsonInteractions) {
+						ATInteraction *interaction = [ATInteraction interactionWithJSONDictionary:jsonInteraction];
+						[interactions addObject:interaction];
+					}
+					[codePoints setObject:interactions forKey:codePointName];
 				}
-				[codePoints setObject:interactions forKey:codePointName];
+				
+				codePointInteractions = codePoints;
+			} else {
+				[parserError release], parserError = nil;
+				parserError = [error retain];
+				success = NO;
 			}
-			
-			codePointInteractions = codePoints;
-		} else {
-			[parserError release], parserError = nil;
-			parserError = [error retain];
+		}
+		@catch (NSException *exception) {
+			ATLogError(@"Exception parsing engagement manifest: %@", exception);
 			success = NO;
 		}
 	}

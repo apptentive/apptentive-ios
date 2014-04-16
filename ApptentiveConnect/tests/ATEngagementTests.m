@@ -10,6 +10,7 @@
 #import "ATInteraction.h"
 #import "ATInteractionUsageData.h"
 #import "ATEngagementBackend.h"
+#import "ATEngagementManifestParser.h"
 
 @implementation ATEngagementTests
 
@@ -115,6 +116,9 @@
 	
 	interaction.criteria = @{@"time_since_install/total": @6, @"unknown_key": @"criteria_should_not_be_met"};
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Criteria should not be met if the criteria includes a key that the client does not recognize.");
+	
+	interaction.criteria = @{@6:@"this is weird"};
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Criteria should not be met if the criteria includes a key that the client does not recognize.");
 }
 
 - (void)testEmptyCriteria {
@@ -123,6 +127,9 @@
 	
 	interaction.criteria = nil;
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Dictionary with nil criteria should evaluate to False.");
+	
+	interaction.criteria = @{[NSNull null]: [NSNull null]};
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Dictionary with Null criteria should evaluate to False.");
 
 	interaction.criteria = @{};
 	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Empty criteria dictionary with no keys should evaluate to True.");
@@ -162,6 +169,10 @@
 	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Install date");
 	usageData.timeSinceInstallTotal = @(6 * dayTimeInterval);
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Install date");
+	
+	
+	interaction.criteria = @{@"time_since_install/total": @{@"$lte": @"5", @"$gt": @"3"}};
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
 }
 
 - (void)testInteractionCriteriaVersion {
@@ -192,6 +203,10 @@
 	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Version number");
 	usageData.applicationVersion = @"3.0";
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Version number must not have a 'v' in front!");
+	
+	
+	interaction.criteria = @{@"app_release/version": @{@"$gt": @3.0}};
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
 }
 
 - (void)testInteractionCriteriaBuild {
@@ -226,6 +241,10 @@
 	
 	usageData.applicationBuild = @"3.0";
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Build number must not have a 'v' in front!");
+	
+	
+	interaction.criteria = @{@"app_release/build": @{@"$contains":@3.0}};
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
 }
 
 - (void)testInteractionCriteriaCurrentTime {
@@ -250,6 +269,9 @@
 	interaction.criteria = @{@"current_time":@{@"$gt": @"1183135260"}};
 	usageData.currentTime = @1397598109;
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail because of type but not crash.");
+	
+	interaction.criteria = @{@"current_time": @"1397598109"};
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
 }
 
 - (void)testCodePointInvokesVersion {
@@ -280,6 +302,11 @@
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
 	usageData.codePointInvokesVersion = @{@"code_point/big.win/invokes/version": @19};
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
+	
+	
+	interaction.criteria = @{@"code_point/big.win/invokes/version": @{@"$gte": @"5", @"$lte": @"5"}};
+	usageData.codePointInvokesVersion = @{@"code_point/big.win/invokes/version": @5};
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
 }
 
 - (void)testUpgradeMessageCriteria {
@@ -324,6 +351,15 @@
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @5};
 	usageData.applicationVersion = @"1.3.0";
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
+	
+	
+	interaction.criteria = @{@"code_point/app.launch/invokes/version": @[@1],
+							 @"application_version": @"1.3.0",
+							 @"application_build": @"39"};
+	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @1};
+	usageData.applicationVersion = @"1.3.0";
+	usageData.applicationBuild = @"39";
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
 }
 
 - (void)testNewUpgradeMessageCriteria {
@@ -566,6 +602,14 @@
 	interaction.criteria = @{@"is_update/build": @NO};
 	usageData.isUpdateBuild = @YES;
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test isUpdate");
+	
+	
+	interaction.criteria = @{@"is_update/build": @[[NSNull null]]};
+	usageData.isUpdateBuild = @NO;
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
+	interaction.criteria = @{@"is_update/build": @{@"$gt":@"lajd;fl ajsd;flj"}};
+	usageData.isUpdateBuild = @NO;
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
 }
 
 - (void)testInvokesVersion {
@@ -729,5 +773,24 @@
 	usageData.interactionInvokesTimeAgo = @{};
 	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
 	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Should pass because invokes/time_ago exists.");
+}
+
+- (void)testInvalidJSON {
+	NSString *json = @"";
+	ATEngagementManifestParser *parser = [[ATEngagementManifestParser alloc] init];
+	NSDictionary *interactions = [parser codePointInteractionsForEngagementManifest:[json dataUsingEncoding:NSUTF8StringEncoding]];
+	XCTAssertNil(interactions, @"Interactions should be nil");
+	
+	json = @"[]";
+	interactions = [parser codePointInteractionsForEngagementManifest:[json dataUsingEncoding:NSUTF8StringEncoding]];
+	XCTAssertNil(interactions, @"Interactions should be nil");
+	
+	json = @"{}";
+	interactions = [parser codePointInteractionsForEngagementManifest:[json dataUsingEncoding:NSUTF8StringEncoding]];
+	XCTAssertEqualObjects(@{}, interactions, @"Should be empty");
+	
+	json = @"{\"interactions\":[]}";
+	interactions = [parser codePointInteractionsForEngagementManifest:[json dataUsingEncoding:NSUTF8StringEncoding]];
+	XCTAssertNil(interactions, @"Interactions should be nil");
 }
 @end

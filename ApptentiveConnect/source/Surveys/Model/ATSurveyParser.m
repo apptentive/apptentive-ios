@@ -115,6 +115,45 @@
 	return [question autorelease];
 }
 
+- (ATSurvey *)surveyWithInteraction:(ATInteraction *)interaction {
+	ATSurvey *survey = [[ATSurvey alloc] init];
+	
+	NSMutableDictionary *surveyData = [NSMutableDictionary dictionary];
+	
+	if (interaction.identifier) {
+		[surveyData setObject:interaction.identifier forKey:@"identifier"];
+	}
+	
+	if (interaction.configuration[@"name"]) {
+		[surveyData setObject:interaction.configuration[@"name"] forKey:@"name"];
+	}
+	
+	if (interaction.configuration[@"description"]) {
+		[surveyData setObject:interaction.configuration[@"description"] forKey:@"surveyDescription"];
+	}
+	
+	if (interaction.configuration[@"success_message"]) {
+		[surveyData setObject:interaction.configuration[@"success_message"] forKey:@"successMessage"];
+	}
+
+	[survey setValuesForKeysWithDictionary:surveyData];
+	
+	NSArray *questions = interaction.configuration[@"questions"];
+	if ([questions isKindOfClass:[NSArray class]]) {
+		for (NSObject *question in questions) {
+			if ([question isKindOfClass:[NSDictionary class]]) {
+				ATSurveyQuestion *result = [self questionWithJSONDictionary:(NSDictionary *)question];
+				
+				if (result) {
+					[survey addQuestion:result];
+				}
+			}
+		}
+	}
+	
+	return [survey autorelease];
+}
+
 - (ATSurvey *)surveyWithJSONDictionary:(NSDictionary *)jsonDictionary {
 	ATSurvey *survey = [[ATSurvey alloc] init];
 	

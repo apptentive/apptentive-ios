@@ -10,6 +10,8 @@
 
 #import "ATInteraction.h"
 #import "ATBackend.h"
+#import "ATSurveyParser.h"
+#import "ATSurveyViewController.h"
 
 @implementation ATInteractionSurveyController
 
@@ -26,6 +28,20 @@
 	[self retain];
 	
 	self.viewController = viewController;
+	
+	ATSurveyParser *parser = [[ATSurveyParser alloc] init];
+	ATSurvey *survey = [parser surveyWithInteraction:self.interaction];
+	[parser release];
+	
+	ATSurveyViewController *vc = [[ATSurveyViewController alloc] initWithSurvey:survey];
+	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
+	
+	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+		nc.modalPresentationStyle = UIModalPresentationFormSheet;
+	}
+	[viewController presentViewController:nc animated:YES completion:^{}];
+	[nc release];
+	[vc release];
 }
 
 - (void)dealloc {

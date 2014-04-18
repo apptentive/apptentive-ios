@@ -143,6 +143,13 @@ enum kSurveyRows {
 		cell.textLabel.text = @"Engage Rating Flow Event";
 	} else if (indexPath.section == kSurveySection) {
 		if (indexPath.row == kSurveyRowShowSurvey) {
+			
+			// Engagement Surveys
+			cell.textLabel.text = @"Show Survey Interaction";
+			cell.textLabel.textColor = [UIColor blackColor];
+			
+			// Legacy Surveys
+			/*
 			if ([ATSurveys hasSurveyAvailableWithNoTags]) {
 				cell.textLabel.text = @"Show Survey";
 				cell.textLabel.textColor = [UIColor blackColor];
@@ -150,6 +157,7 @@ enum kSurveyRows {
 				cell.textLabel.text = @"No Survey Available";
 				cell.textLabel.textColor = [UIColor grayColor];
 			}
+			*/
 		} else if (indexPath.row == kSurveyRowShowSurveyWithTags) {
 			cell = [tableView dequeueReusableCellWithIdentifier:SurveyTagsCell];
 			if (cell == nil) {
@@ -201,9 +209,17 @@ enum kSurveyRows {
 		//[self showRating:nil];
 	} else if (indexPath.section == kSurveySection) {
 		if (indexPath.row == kSurveyRowShowSurvey) {
+			
+			// Engagement Survey testing
+			[[ATConnect sharedConnection] engage:@"presentSurvey" fromViewController:self];
+			
+			// Legacy Surveys
+			/*
 			if ([ATSurveys hasSurveyAvailableWithNoTags]) {
 				[ATSurveys presentSurveyControllerWithNoTagsFromViewController:self];
 			}
+			*/
+			
 		} else if (indexPath.row == kSurveyRowShowSurveyWithTags) {
 			if ([ATSurveys hasSurveyAvailableWithTags:tags]) {
 				[ATSurveys presentSurveyControllerWithTags:tags fromViewController:self];

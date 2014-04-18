@@ -48,3 +48,28 @@ field.
 ## Upgrade Messages
 
 Prior to version 1.4.0, Upgrade Messages were displayed using the "app.launch" event. Starting with 1.4.0, Upgrade Messages will instead be targeted to the "init" event, which should be logged when your app's UI is finished initializing. If you previously used Upgrade Messages with an older version of the SDK, please ensure that the "init" event is logged and that you have tested displaying Upgrade Messages.
+
+## Surveys
+
+Prior to version 1.5.0, Surveys were displayed using `presentSurveyControllerWithTags:fromViewController:`. You would pass in a set of tags and, if the tags matched an available survey, a survey with those tags would be displayed.
+
+In version 1.5.0, Surveys have moved entirely to the Engagement Framework. Like all other interactions, Surveys are created on the Apptentive website and targeted at an *event* you log with `engage:fromViewController`.
+
+The previous methods for showing a survey, `presentSurveyControllerWithNoTagsFromViewController:` and `presentSurveyControllerWithTags:fromViewController:`, have been deprecated. You will need to replace them in 1.5.0 with a call to `engage:fromViewController:`.
+
+Rather than using Tags to segment surveys, you will now use the logic editor on the Apptentive website. You can target a survey using a variety of device and person attributes. You can also show the survey only to people who have logged a certain number of events.
+
+For example, you might have previously created a survey with the tags "hasEmail", "completedInAppPurchase", and "completedGame":
+
+	[ATSurveys presentSurveyControllerWithTags:[NSSet setWithArray:@[@"hasEmail", @"completedInAppPurchase", @"completedGame"]] fromViewController:viewController];
+
+In the new system, you do not need to log those tags when you want to show the survey. Instead, you should create an event when you may want to present a survey:  
+
+	[[ATConnect sharedConnection] engage:@"completedGame" fromViewController:viewController];
+
+Then, on the Apptentive website, create a survey targeted at the event "completedGame". Use the logic editor to set the conditions for showing that survey:
+
+ - Player has an email address.
+ - Player has hit the "completedInAppPurchase" event at least once.
+ 
+By moving the survey invocation to a single event, and the survey conditions to the event logic editor, you are now better able to target surveys without re-releasing to the App Store.

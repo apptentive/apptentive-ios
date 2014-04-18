@@ -27,7 +27,7 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 /*! Keys for supported 3rd-party integrations. */
 extern NSString *const ATIntegrationKeyUrbanAirship;
 extern NSString *const ATIntegrationKeyKahuna;
-extern NSString *const ATIntegrationKeyAWSSimpleNotificationService;
+extern NSString *const ATIntegrationKeyAmazonSNS;
 
 /*!
  `ATConnect` is a singleton which is used as the main point of entry for the Apptentive service.
@@ -205,7 +205,7 @@ Note, though, that Message Center setting will be overridden by server-based con
 - (void)removeIntegration:(NSString *)integration;
 /*! Adds Urban Airship integration with the given device token. */
 - (void)addUrbanAirshipIntegrationWithDeviceToken:(NSData *)deviceToken;
-/*! Adds Amazon Simple Notification Service (SNS) integration with the given device token. */
-- (void)addAWSSimpleNotificationServiceIntegrationWithDeviceToken:(NSData *)deviceToken;
+/*! Adds Amazon Web Services (AWS) Simple Notification Service (SNS) integration with the given device token. */
+- (void)addAmazonSNSIntegrationWithDeviceToken:(NSData *)deviceToken;
 
 @end

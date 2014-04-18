@@ -1,8 +1,8 @@
 This document tracks changes to the API between versions.
 
-# 1.5.0
+# 1.4.2
 
-* Added `addAWSSimpleNotificationServiceIntegrationWithDeviceToken:` method for integrating with Amazon Web Services' Simple Notification Service.
+* Added `addAmazonSNSIntegrationWithDeviceToken:` method for integrating with Amazon Web Services (AWS) Simple Notification Service (SNS).
 
 # 1.4.0
 

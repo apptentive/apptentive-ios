@@ -27,7 +27,7 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 
 NSString *const ATIntegrationKeyUrbanAirship = @"urban_airship";
 NSString *const ATIntegrationKeyKahuna = @"kahuna";
-NSString *const ATIntegrationKeyAWSSimpleNotificationService = @"aws_sns";
+NSString *const ATIntegrationKeyAmazonSNS = @"aws_sns";
 
 @implementation ATConnect
 @synthesize apiKey, showTagline, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText, useMessageCenter;
@@ -230,8 +230,8 @@ NSString *const ATIntegrationKeyAWSSimpleNotificationService = @"aws_sns";
 	[self addIntegration:ATIntegrationKeyUrbanAirship withDeviceToken:deviceToken];
 }
 
-- (void)addAWSSimpleNotificationServiceIntegrationWithDeviceToken:(NSData *)deviceToken {
-	[self addIntegration:ATIntegrationKeyAWSSimpleNotificationService withDeviceToken:deviceToken];
+- (void)addAmazonSNSIntegrationWithDeviceToken:(NSData *)deviceToken {
+	[self addIntegration:ATIntegrationKeyAmazonSNS withDeviceToken:deviceToken];
 }
 
 - (BOOL)messageCenterEnabled {

@@ -12,6 +12,9 @@
 #import "ATBackend.h"
 #import "ATSurveyParser.h"
 #import "ATSurveyViewController.h"
+#import "ATEngagementBackend.h"
+
+NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 
 @implementation ATInteractionSurveyController
 
@@ -34,11 +37,15 @@
 	[parser release];
 	
 	ATSurveyViewController *vc = [[ATSurveyViewController alloc] initWithSurvey:survey];
+	vc.interaction = self.interaction;
 	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
 	
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
 		nc.modalPresentationStyle = UIModalPresentationFormSheet;
 	}
+	
+	[[ATEngagementBackend sharedBackend] engageApptentiveEvent:ATInteractionSurveyEventLabelLaunch fromInteraction:self.interaction fromViewController:self.viewController];
+	
 	[viewController presentViewController:nc animated:YES completion:^{}];
 	[nc release];
 	[vc release];

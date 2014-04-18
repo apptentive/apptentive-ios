@@ -22,9 +22,13 @@
 #import "ATSurveyResponseTask.h"
 #import "ATLegacySurveyResponse.h"
 #import "ATTaskQueue.h"
+#import "ATEngagementBackend.h"
 
 #define DEBUG_CELL_HEIGHT_PROBLEM 0
 #define kAssociatedQuestionKey ("associated_question")
+
+NSString *const ATInteractionSurveyEventLabelSend = @"send";
+NSString *const ATInteractionSurveyEventLabelCancel = @"cancel";
 
 enum {
 	kTextViewTag = 1,
@@ -86,6 +90,7 @@ enum {
 	[errorText release], errorText = nil;
 	[sentNotificationsAboutQuestionIDs release], sentNotificationsAboutQuestionIDs = nil;
 	[startedSurveyDate release], startedSurveyDate = nil;
+	[_interaction release], _interaction = nil;
 	[super dealloc];
 }
 
@@ -185,6 +190,9 @@ enum {
 	
 	NSDictionary *notificationInfo = [[NSDictionary alloc] initWithObjectsAndKeys:survey.identifier, ATSurveyIDKey, nil];
 	NSDictionary *metricsInfo = [[NSDictionary alloc] initWithObjectsAndKeys:survey.identifier, ATSurveyMetricsSurveyIDKey, [NSNumber numberWithInt:ATSurveyWindowTypeSurvey], ATSurveyWindowTypeKey, [NSNumber numberWithInt:ATSurveyEventTappedSend], ATSurveyMetricsEventKey, nil];
+	
+	[[ATEngagementBackend sharedBackend] engageApptentiveEvent:ATInteractionSurveyEventLabelSend fromInteraction:self.interaction fromViewController:self userInfo:metricsInfo];
+
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidHideWindowNotification object:nil userInfo:metricsInfo];
 	[metricsInfo release], metricsInfo = nil;
 	
@@ -769,6 +777,9 @@ enum {
 
 - (void)cancel:(id)sender {
 	NSDictionary *metricsInfo = [[NSDictionary alloc] initWithObjectsAndKeys:survey.identifier, ATSurveyMetricsSurveyIDKey, [NSNumber numberWithInt:ATSurveyWindowTypeSurvey], ATSurveyWindowTypeKey, [NSNumber numberWithInt:ATSurveyEventTappedCancel], ATSurveyMetricsEventKey, nil];
+	
+	[[ATEngagementBackend sharedBackend] engageApptentiveEvent:ATInteractionSurveyEventLabelCancel fromInteraction:self.interaction fromViewController:self userInfo:metricsInfo];
+	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidHideWindowNotification object:nil userInfo:metricsInfo];
 	[metricsInfo release], metricsInfo = nil;
 	

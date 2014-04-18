@@ -1,3 +1,16 @@
+2014-04-18 wooster, pkamb v1.4.2
+-----------------------
+
+This release adds push notification integration with Amazon Web Services (AWS) Simple Notification Service (SNS). 
+
+Use `addAmazonSNSIntegrationWithDeviceToken:` to enable SNS push notifications.
+
+Fixes:
+
+* IOS-461 Add integration with Amazon SNS
+* #90 ATLogger fails to catch exception if no space left on device
+* #91 ATAppConfigurationUpdateTask needs to retain self before updating task state
+
 2014-04-13 wooster, pkamb v1.4.1
 -----------------------
 

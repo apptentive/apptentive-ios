@@ -203,6 +203,10 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	return [[ATEngagementBackend sharedBackend] engageEvent:eventLabel fromVendor:ATEngagementCodePointApptentiveVendorKey fromInteraction:interaction.type userInfo:nil fromViewController:viewController];
 }
 
+- (BOOL)engageApptentiveEvent:(NSString *)eventLabel fromInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController userInfo:(NSDictionary *)userInfo {
+	return [[ATEngagementBackend sharedBackend] engageEvent:eventLabel fromVendor:ATEngagementCodePointApptentiveVendorKey fromInteraction:interaction.type userInfo:userInfo fromViewController:viewController];
+}
+
 - (BOOL)engageEvent:(NSString *)eventLabel fromVendor:(NSString *)vendor fromInteraction:(NSString *)interaction userInfo:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController {
 	NSString *namespacedCodePoint = [NSString stringWithFormat:@"%@#%@#%@", vendor, interaction, eventLabel];
 	

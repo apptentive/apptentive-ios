@@ -11,13 +11,17 @@
 #import "ATSurvey.h"
 #import "ATSurveyGetSurveysTask.h"
 #import "ATSurveyMetrics.h"
-#import "ATSurveys.h"
 #import "ATSurveyParser.h"
 #import "ATSurveyViewController.h"
 #import "ATTaskQueue.h"
 
 NSString *const ATSurveySentSurveysPreferenceKey = @"ATSurveySentSurveysPreferenceKey";
 NSString *const ATSurveyCachedSurveysExpirationPreferenceKey = @"ATSurveyCachedSurveysExpirationPreferenceKey";
+
+NSString *const ATSurveyNewSurveyAvailableNotification = @"ATSurveyNewSurveyAvailableNotification";
+NSString *const ATSurveySentNotification = @"ATSurveySentNotification";
+
+NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 
 @interface ATSurveysBackend ()
 + (NSString *)cachedSurveysStoragePath;

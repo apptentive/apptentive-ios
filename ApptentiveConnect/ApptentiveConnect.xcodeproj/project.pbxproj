@@ -82,9 +82,6 @@
 		4936AE8B1379DECE00A4B17F /* ATBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE7C1379DECE00A4B17F /* ATBackend.m */; };
 		4936AE8C1379DECE00A4B17F /* ATContactStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE7E1379DECE00A4B17F /* ATContactStorage.m */; };
 		4936AE8E1379DECE00A4B17F /* ATFeedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE821379DECE00A4B17F /* ATFeedback.m */; };
-		493AEB2A15990A4D00DFD4C7 /* ATSurveys.h in Headers */ = {isa = PBXBuildFile; fileRef = 493AEB1615990A4D00DFD4C7 /* ATSurveys.h */; };
-		493AEB2B15990A4D00DFD4C7 /* ATSurveys.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB1715990A4D00DFD4C7 /* ATSurveys.m */; };
-		493AEB2C15990A4D00DFD4C7 /* ATSurveys.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB1715990A4D00DFD4C7 /* ATSurveys.m */; };
 		493AEB2D15990A4D00DFD4C7 /* ATSurvey.h in Headers */ = {isa = PBXBuildFile; fileRef = 493AEB1915990A4D00DFD4C7 /* ATSurvey.h */; };
 		493AEB2E15990A4D00DFD4C7 /* ATSurvey.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB1A15990A4D00DFD4C7 /* ATSurvey.m */; };
 		493AEB2F15990A4D00DFD4C7 /* ATSurvey.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB1A15990A4D00DFD4C7 /* ATSurvey.m */; };
@@ -258,7 +255,6 @@
 		49C002A2133413BB0071F088 /* ATConnect.h in Headers */ = {isa = PBXBuildFile; fileRef = 49C00297133413BB0071F088 /* ATConnect.h */; settings = {ATTRIBUTES = (); }; };
 		49C002A3133413BB0071F088 /* ATConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C00298133413BB0071F088 /* ATConnect.m */; };
 		49C24F56174B0EC5002F2338 /* ATAppRatingFlow+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 49C24F54174B0EC5002F2338 /* ATAppRatingFlow+Internal.h */; };
-		49C24F5B174BFEB7002F2338 /* ATSurveys_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 49C24F59174BFEB7002F2338 /* ATSurveys_Private.h */; };
 		49C54BD51790A95E009CCD5D /* ApptentiveResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 49D1118C13341A7C00603373 /* ApptentiveResources.bundle */; };
 		49C54BD81790B783009CCD5D /* ATDataModelv1.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 49C54BD71790B783009CCD5D /* ATDataModelv1.sqlite */; };
 		49CB6DEA1718FE4400BC9223 /* ATMessageCenterMetrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 49CB6DE81718FE4400BC9223 /* ATMessageCenterMetrics.h */; };
@@ -464,8 +460,6 @@
 		4936AE7E1379DECE00A4B17F /* ATContactStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATContactStorage.m; sourceTree = "<group>"; };
 		4936AE811379DECE00A4B17F /* ATFeedback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATFeedback.h; sourceTree = "<group>"; };
 		4936AE821379DECE00A4B17F /* ATFeedback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATFeedback.m; sourceTree = "<group>"; };
-		493AEB1615990A4D00DFD4C7 /* ATSurveys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATSurveys.h; path = Surveys/ATSurveys.h; sourceTree = "<group>"; };
-		493AEB1715990A4D00DFD4C7 /* ATSurveys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveys.m; sourceTree = "<group>"; };
 		493AEB1915990A4D00DFD4C7 /* ATSurvey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurvey.h; sourceTree = "<group>"; };
 		493AEB1A15990A4D00DFD4C7 /* ATSurvey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurvey.m; sourceTree = "<group>"; };
 		493AEB1B15990A4D00DFD4C7 /* ATSurveyParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveyParser.h; sourceTree = "<group>"; };
@@ -620,7 +614,6 @@
 		49C00297133413BB0071F088 /* ATConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATConnect.h; sourceTree = "<group>"; };
 		49C00298133413BB0071F088 /* ATConnect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATConnect.m; sourceTree = "<group>"; };
 		49C24F54174B0EC5002F2338 /* ATAppRatingFlow+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ATAppRatingFlow+Internal.h"; sourceTree = "<group>"; };
-		49C24F59174BFEB7002F2338 /* ATSurveys_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveys_Private.h; sourceTree = "<group>"; };
 		49C54BD71790B783009CCD5D /* ATDataModelv1.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = ATDataModelv1.sqlite; sourceTree = "<group>"; };
 		49CB6DE81718FE4400BC9223 /* ATMessageCenterMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATMessageCenterMetrics.h; path = Metrics/ATMessageCenterMetrics.h; sourceTree = "<group>"; };
 		49CB6DE91718FE4400BC9223 /* ATMessageCenterMetrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATMessageCenterMetrics.m; path = Metrics/ATMessageCenterMetrics.m; sourceTree = "<group>"; };
@@ -884,8 +877,6 @@
 		493AEB1515990A4D00DFD4C7 /* Surveys */ = {
 			isa = PBXGroup;
 			children = (
-				493AEB1715990A4D00DFD4C7 /* ATSurveys.m */,
-				49C24F59174BFEB7002F2338 /* ATSurveys_Private.h */,
 				493AEB1815990A4D00DFD4C7 /* Model */,
 				493AEB1F15990A4D00DFD4C7 /* Persistence */,
 				493AEB2415990A4D00DFD4C7 /* URL Loading */,
@@ -1233,7 +1224,6 @@
 			children = (
 				49C00297133413BB0071F088 /* ATConnect.h */,
 				49C00298133413BB0071F088 /* ATConnect.m */,
-				493AEB1615990A4D00DFD4C7 /* ATSurveys.h */,
 				4967278116B9D9CB00C679B8 /* ATConnect_Private.h */,
 				4936AE681379DE6A00A4B17F /* Controllers */,
 				49B3D964133D843D00B5A5CD /* Custom Views */,
@@ -1498,7 +1488,6 @@
 				4987FA9C157AE53700AF2078 /* ApptentiveMetrics.h in Headers */,
 				4987FA9F157AE53700AF2078 /* ATMetric.h in Headers */,
 				4987FAA2157AE53700AF2078 /* ATWebClient+Metrics.h in Headers */,
-				493AEB2A15990A4D00DFD4C7 /* ATSurveys.h in Headers */,
 				493AEB2D15990A4D00DFD4C7 /* ATSurvey.h in Headers */,
 				493AEB3015990A4D00DFD4C7 /* ATSurveyParser.h in Headers */,
 				493AEB3315990A4D00DFD4C7 /* ATSurveyQuestion.h in Headers */,
@@ -1563,7 +1552,6 @@
 				49477B7B1835C700001D37AD /* ATExpandingTextView.h in Headers */,
 				496F5781174060CE003BF516 /* ATDataManager.h in Headers */,
 				49C24F56174B0EC5002F2338 /* ATAppRatingFlow+Internal.h in Headers */,
-				49C24F5B174BFEB7002F2338 /* ATSurveys_Private.h in Headers */,
 				4995EDD2175983C800AF7268 /* PrefixedTTTAttributedLabel.h in Headers */,
 				49AAC84B175FE70D00F08879 /* ATMessagePanelViewController.h in Headers */,
 				49AAC851175FFA0D00F08879 /* ATLabel.h in Headers */,
@@ -1805,7 +1793,6 @@
 				4987FA9D157AE53700AF2078 /* ApptentiveMetrics.m in Sources */,
 				4987FAA0157AE53700AF2078 /* ATMetric.m in Sources */,
 				4987FAA3157AE53700AF2078 /* ATWebClient+Metrics.m in Sources */,
-				493AEB2B15990A4D00DFD4C7 /* ATSurveys.m in Sources */,
 				582FF581184E903F00547919 /* ATMessagePanelNewUIViewController.m in Sources */,
 				493AEB2E15990A4D00DFD4C7 /* ATSurvey.m in Sources */,
 				493AEB3115990A4D00DFD4C7 /* ATSurveyParser.m in Sources */,
@@ -1919,7 +1906,6 @@
 				4987FAA1157AE53700AF2078 /* ATMetric.m in Sources */,
 				4987FAA4157AE53700AF2078 /* ATWebClient+Metrics.m in Sources */,
 				4987FAA7157AE59D00AF2078 /* ApptentiveMetricsTests.m in Sources */,
-				493AEB2C15990A4D00DFD4C7 /* ATSurveys.m in Sources */,
 				493AEB2F15990A4D00DFD4C7 /* ATSurvey.m in Sources */,
 				493AEB3215990A4D00DFD4C7 /* ATSurveyParser.m in Sources */,
 				493AEB3515990A4D00DFD4C7 /* ATSurveyQuestion.m in Sources */,

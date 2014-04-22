@@ -10,7 +10,6 @@
 #import "ATConnect.h"
 #import "ATAppRatingFlow.h"
 #import "defines.h"
-#import "ATSurveys.h"
 
 @implementation FeedbackDemoAppDelegate
 @synthesize window=_window;

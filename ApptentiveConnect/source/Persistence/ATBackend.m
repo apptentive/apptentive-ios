@@ -21,9 +21,8 @@
 #import "ATNavigationController.h"
 #import "ApptentiveMetrics.h"
 #import "ATReachability.h"
-#import "ATSurveys.h"
+#import "ATSurveysBackend.h"
 #import "ATStaticLibraryBootstrap.h"
-#import "ATSurveys_Private.h"
 #import "ATTaskQueue.h"
 #import "ATUtilities.h"
 #import "ATWebClient.h"
@@ -1115,7 +1114,7 @@ static NSURLCache *imageCache = nil;
 		if (![self isReady]) {
 			return;
 		}
-		[ATSurveys checkForAvailableSurveys];
+		[[ATSurveysBackend sharedBackend] checkForAvailableSurveys];
 	}
 }
 

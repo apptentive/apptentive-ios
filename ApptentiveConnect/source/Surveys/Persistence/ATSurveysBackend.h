@@ -10,6 +10,11 @@
 
 @class ATSurvey;
 
+extern NSString *const ATSurveyNewSurveyAvailableNotification;
+extern NSString *const ATSurveySentNotification;
+
+extern NSString *const ATSurveyIDKey;
+
 @interface ATSurveysBackend : NSObject {
 @private
 	NSMutableArray *availableSurveys;

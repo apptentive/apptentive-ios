@@ -94,7 +94,6 @@
 
 /* Begin PBXFileReference section */
 		49173D88160176B1002A27CC /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "art/Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
-		493AEB4615990AB800DFD4C7 /* ATSurveys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATSurveys.h; path = ../ApptentiveConnect/source/Surveys/ATSurveys.h; sourceTree = "<group>"; };
 		4942CD5E13C8D68E009BF758 /* ATAppRatingFlow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATAppRatingFlow.h; path = "../ApptentiveConnect/source/Rating Flow/ATAppRatingFlow.h"; sourceTree = SOURCE_ROOT; };
 		4960E1221344326B00F6311F /* icon-114x114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-114x114.png"; sourceTree = "<group>"; };
 		4960E1231344326B00F6311F /* icon-29x29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-29x29.png"; sourceTree = "<group>"; };
@@ -216,7 +215,6 @@
 			children = (
 				4960E13E13455ACE00F6311F /* ATConnect.h */,
 				4942CD5E13C8D68E009BF758 /* ATAppRatingFlow.h */,
-				493AEB4615990AB800DFD4C7 /* ATSurveys.h */,
 				49C00324133417390071F088 /* ApptentiveConnect.xcodeproj */,
 				49C002F11334172F0071F088 /* FeedbackDemo */,
 				49C003111334172F0071F088 /* FeedbackDemoTests */,

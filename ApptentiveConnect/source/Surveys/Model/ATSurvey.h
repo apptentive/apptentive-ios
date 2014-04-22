@@ -12,7 +12,6 @@
 @interface ATSurvey : NSObject <NSCoding> {
 @private
 	NSMutableArray *questions;
-	NSMutableArray *tags;
 }
 @property (nonatomic, getter=isActive) BOOL active;
 @property (nonatomic, copy) NSDate *date;
@@ -26,14 +25,9 @@
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *surveyDescription;
 @property (nonatomic, readonly) NSArray *questions;
-@property (nonatomic, readonly) NSArray *tags;
 @property (nonatomic, copy) NSString *successMessage;
 
 - (void)addQuestion:(ATSurveyQuestion *)question;
-- (void)addTag:(NSString *)tag;
-
-- (BOOL)surveyHasNoTags;
-- (BOOL)surveyHasTags:(NSSet *)tagsToCheck;
 
 - (BOOL)isEligibleToBeShown;
 

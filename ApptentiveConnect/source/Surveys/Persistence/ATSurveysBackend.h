@@ -17,7 +17,6 @@ extern NSString *const ATSurveyIDKey;
 
 @interface ATSurveysBackend : NSObject {
 @private
-	NSMutableArray *availableSurveys;
 	ATSurvey *currentSurvey;
 }
 + (ATSurveysBackend *)sharedBackend;

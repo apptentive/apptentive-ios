@@ -49,22 +49,12 @@ NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 
 - (id)init {
 	if ((self = [super init])) {
-		availableSurveys = [[NSMutableArray alloc] init];
-		NSFileManager *fm = [NSFileManager defaultManager];
-		if ([fm fileExistsAtPath:[ATSurveysBackend cachedSurveysStoragePath]]) {
-			@try {
-				NSArray *surveys = [NSKeyedUnarchiver unarchiveObjectWithFile:[ATSurveysBackend cachedSurveysStoragePath]];
-				[availableSurveys addObjectsFromArray:surveys];
-			} @catch (NSException *exception) {
-				ATLogError(@"Unable to unarchive surveys: %@", exception);
-			}
-		}
+		
 	}
 	return self;
 }
 
 - (void)dealloc {
-	[availableSurveys release], availableSurveys = nil;
 	[super dealloc];
 }
 
@@ -139,13 +129,7 @@ NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 - (ATSurvey *)surveyWithNoTags {
 	ATSurvey *result = nil;
 	@synchronized(self) {
-		for (ATSurvey *survey in availableSurveys) {
-			if ([survey surveyHasNoTags]) {
-				if ([survey isEligibleToBeShown]) {
-					result = survey;
-				}
-			}
-		}
+		
 	}
 	return result;
 }
@@ -153,13 +137,7 @@ NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 - (ATSurvey *)surveyWithTags:(NSSet *)tags {
 	ATSurvey *result = nil;
 	@synchronized(self) {
-		for (ATSurvey *survey in availableSurveys) {
-			if ([survey surveyHasTags:tags]) {
-				if ([survey isEligibleToBeShown]) {
-					result = survey;
-				}
-			}
-		}
+		
 	}
 	return result;
 }

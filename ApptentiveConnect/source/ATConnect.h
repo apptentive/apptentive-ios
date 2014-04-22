@@ -13,7 +13,7 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
-#define kATConnectVersionString @"1.4.0"
+#define kATConnectVersionString @"1.4.1"
 
 #if TARGET_OS_IPHONE
 #	define kATConnectPlatformString @"iOS"
@@ -27,7 +27,7 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 /*! Keys for supported 3rd-party integrations. */
 extern NSString *const ATIntegrationKeyUrbanAirship;
 extern NSString *const ATIntegrationKeyKahuna;
-extern NSString *const ATIntegrationKeyAWSSimpleNotificationService;
+extern NSString *const ATIntegrationKeyAmazonSNS;
 
 /*!
  `ATConnect` is a singleton which is used as the main point of entry for the Apptentive service.
@@ -197,13 +197,15 @@ Note, though, that Message Center setting will be overridden by server-based con
 /// @name Integrate With Other Services
 ///------------------------------------
 
-/*! Add a token for 3rd-party integration services. */
+/*! Add a custom configuration for a 3rd-party integration service. */
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration;
+/*! Add a device token for a 3rd-party integration service. */
 - (void)addIntegration:(NSString *)integration withDeviceToken:(NSData *)deviceToken;
 /*! Removes a 3rd-party integration with the given name. */
 - (void)removeIntegration:(NSString *)integration;
-/*! Add a specific service's integration with the given device token. */
+/*! Adds Urban Airship integration with the given device token. */
 - (void)addUrbanAirshipIntegrationWithDeviceToken:(NSData *)deviceToken;
-- (void)addAWSSimpleNotificationServiceIntegrationWithDeviceToken:(NSData *)deviceToken;
+/*! Adds Amazon Web Services (AWS) Simple Notification Service (SNS) integration with the given device token. */
+- (void)addAmazonSNSIntegrationWithDeviceToken:(NSData *)deviceToken;
 
 @end

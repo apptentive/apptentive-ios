@@ -44,6 +44,7 @@
 	[_timeSinceInstallBuild release], _timeSinceInstallBuild = nil;
 	[_applicationVersion release], _applicationVersion = nil;
 	[_applicationBuild release], _applicationBuild = nil;
+	[_currentTime release], _currentTime = nil;
 	[_isUpdateVersion release], _isUpdateVersion = nil;
 	[_isUpdateBuild release], _isUpdateBuild = nil;
 	[_codePointInvokesTotal release], _codePointInvokesTotal = nil;
@@ -88,10 +89,17 @@
 	 NSMutableDictionary *predicateEvaluationDictionary = [NSMutableDictionary dictionaryWithDictionary:@{@"time_since_install/total": self.timeSinceInstallTotal,
 																										  @"time_since_install/version" : self.timeSinceInstallVersion,
 																										  @"time_since_install/build" : self.timeSinceInstallBuild,
-																										  @"application_version" : self.applicationVersion,
-																										  @"application_build" : self.applicationBuild,
 																										  @"is_update/version" : self.isUpdateVersion,
 																										  @"is_update/build" : self.isUpdateBuild}];
+	if (self.applicationVersion) {
+		predicateEvaluationDictionary[@"application_version"] = self.applicationVersion;
+		predicateEvaluationDictionary[@"app_release/version"] = self.applicationVersion;
+	}
+	if (self.applicationBuild) {
+		predicateEvaluationDictionary[@"application_build"] = self.applicationBuild;
+		predicateEvaluationDictionary[@"app_release/build"] = self.applicationBuild;
+	}
+	predicateEvaluationDictionary[@"current_time"] = self.currentTime;
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesTotal];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesVersion];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesBuild];
@@ -160,8 +168,7 @@
 
 - (NSString *)applicationVersion {
 	if (!_applicationVersion) {
-		_applicationVersion = [ATUtilities appVersionString] ?: @"";
-		[_applicationVersion retain];
+		_applicationVersion = [[ATUtilities appVersionString] retain];
 	}
 	
 	return [[_applicationVersion retain] autorelease];
@@ -169,11 +176,17 @@
 
 - (NSString *)applicationBuild {
 	if (!_applicationBuild) {
-		_applicationBuild = [ATUtilities buildNumberString] ?: @"";
-		[_applicationBuild retain];
+		_applicationBuild = [[ATUtilities buildNumberString] retain];
 	}
 	
 	return [[_applicationBuild retain] autorelease];
+}
+
+- (NSNumber *)currentTime {
+	if (!_currentTime) {
+		_currentTime = [@([[NSDate date] timeIntervalSince1970]) retain];
+	}
+	return [[_currentTime retain] autorelease];
 }
 
 - (NSNumber *)isUpdateVersion {

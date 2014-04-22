@@ -78,6 +78,7 @@
 #pragma mark ATAppConfigurationUpdaterDelegate
 - (void)configurationUpdaterDidFinish:(BOOL)success {
 	@synchronized(self) {
+		[self retain];
 		if (configurationUpdater) {
 			if (!success) {
 				self.failed = YES;
@@ -86,6 +87,7 @@
 				self.finished = YES;
 			}
 		}
+		[self release];
 	}
 }
 @end

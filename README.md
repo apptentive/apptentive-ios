@@ -6,9 +6,7 @@ There have been many recent API changes for the 1.4 release. Please see `docs/AP
 
 ## Install Guide
 
-This guide will walk you through implementing Apptentive within your iOS app. Below is a video demonstration of how quick and easy this integration is.
-
-[![iOS Install Guide Video](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-video.png "iOS Install Guide Video")](https://vimeo.com/73020193)
+This guide will walk you through implementing Apptentive within your iOS app.
 
 -
 
@@ -269,7 +267,7 @@ Later, after shipping the app, you can configure the interactions that will run 
  - When they beat the game, ask for feedback about their experience.
  - After making an in-app purchase, ask them to take a survey.
  
-Interactions can be modified, remotely, without shipping a new app update to the App Store. The remote configurability of Apptentive interactions make them perfect for A/B testing and 
+Interactions can be modified, remotely, without shipping a new app update to the App Store. You can easily change a particular event to show a Survey rather than collect Feedback.  The remote configurability of Apptentive interactions make them perfect for A/B testing and quick iteration.
 
 ### Rating Prompt
 
@@ -382,16 +380,19 @@ These attachments will appear in your online Apptentive dashboard, but will *not
 
 #### Push Notifications
 
-Apptentive can integrate with your existing [Urban Airship](http://urbanairship.com/) account to offer push notifications when new Apptentive messages arrive.
+Apptentive can integrate with your existing [Urban Airship](http://urbanairship.com/) or [Amazon AWS SNS](http://aws.amazon.com/sns/) account to offer push notifications when new Apptentive messages arrive.
 
-First, log in to your Apptentive dashboard on the web. Under "App Settings", select "Integrations". Add a new Urban Airship integration by entering your App Key, App Secret, and App Master Secret.
+First, log in to your Apptentive dashboard on the web. Under "App Settings", select "Integrations". Add a new integration by entering the required information and keys.
 
-Next, in your iOS app, register an Urban Airship configuration with your device token. If you are using the [Urban Airship library](http://docs.urbanairship.com/build/ios.html#download-install-our-library-frameworks), the device token can be obtained in your app delegate's `didRegisterForRemoteNotificationsWithDeviceToken:` method:
+Next, in your iOS app, add an Apptentive integration with your device token. This device token will be obtained from your app delegate's `application:didRegisterForRemoteNotificationsWithDeviceToken:` method:
 
 ``` objective-c
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-   // Register the device token with Apptentive
+   // Urban Airship
    [[ATConnect sharedConnection] addUrbanAirshipIntegrationWithDeviceToken:deviceToken];
+   
+   // Amazon AWS SNS
+   [[ATConnect sharedConnection] addAmazonSNSIntegrationWithDeviceToken:deviceToken];
 }
 ```
 
@@ -399,9 +400,9 @@ When push notifications arrive, pass them to Apptentive:
 
 ``` objective-c
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
-    // Pass the push Notification userInfo dictionary to Apptentive
-    [[ATConnect sharedConnection] didReceiveRemoteNotification:userInfo fromViewController:viewController];
-	
+	// Pass the push notification userInfo dictionary to Apptentive
+	[[ATConnect sharedConnection] didReceiveRemoteNotification:userInfo fromViewController:viewController];
+
 	// You are responsible for clearing badges and/or notifications, if desired. Apptentive does not reset them.
 	application.applicationIconBadgeNumber = 0;
 }
@@ -431,4 +432,4 @@ the app in the App Store:
 
 #### Customization
 
-For information on customizing the UI and text of `apptentive-ios`, please see [Customization](docs/Customization.md).
+For information on customizing the UI and text of `apptentive-ios`, please see [Customization](https://github.com/apptentive/apptentive-ios/blob/master/docs/Customization.md).

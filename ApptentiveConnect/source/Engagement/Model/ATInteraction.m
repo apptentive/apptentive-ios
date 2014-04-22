@@ -94,16 +94,22 @@
 		// Interactions with no keys in the criteria dictionary should evaluate to TRUE.
 		criteriaAreMet = YES;
 	} else {
-		NSPredicate *predicate = [self criteriaPredicate];
-		if (predicate) {
-			criteriaAreMet = [predicate evaluateWithObject:[usageData predicateEvaluationDictionary]];
-			if (!criteriaAreMet) {
-				ATLogInfo(@"Interaction predicate failed evaluation.");
-				ATLogInfo(@"Predicate: %@", predicate);
-				ATLogInfo(@"Interaction usage data: %@", [usageData predicateEvaluationDictionary]);
+		@try {
+			NSPredicate *predicate = [self criteriaPredicate];
+			if (predicate) {
+				criteriaAreMet = [predicate evaluateWithObject:[usageData predicateEvaluationDictionary]];
+				if (!criteriaAreMet) {
+					ATLogInfo(@"Interaction predicate failed evaluation.");
+					ATLogInfo(@"Predicate: %@", predicate);
+					ATLogInfo(@"Interaction usage data: %@", [usageData predicateEvaluationDictionary]);
+				}
+			} else {
+				ATLogError(@"Could not create a valid criteria predicate for the Interaction criteria: %@", self.criteria);
+				criteriaAreMet = NO;
 			}
-		} else {
-			ATLogError(@"Could not create a valid criteria predicate for the Interaction criteria: %@", self.criteria);
+		}
+		@catch (NSException *exception) {
+			ATLogError(@"Exception while processing critera.");
 			criteriaAreMet = NO;
 		}
 	}
@@ -119,6 +125,102 @@
 	}
 	
 	return criteriaPredicate;
+}
+
++ (NSPredicate *)predicateForCriteria:(NSString *)criteria operatorExpression:(NSDictionary *)operatorExpression hasError:(BOOL *)hasError {
+	NSMutableArray *predicates = [NSMutableArray array];
+	
+	for (NSString *operator in operatorExpression) {
+		NSObject *value = operatorExpression[operator];
+		if ([operator isEqualToString:@"$not"]) {
+			if (![value isKindOfClass:[NSDictionary class]]) {
+				ATLogError(@"Expected operator of $not expression to be dictionary.");
+				*hasError = YES;
+				break;
+			}
+			NSDictionary *subExpression = (NSDictionary *)value;
+			NSPredicate *subPredicate = [ATInteraction predicateForCriteria:criteria operatorExpression:subExpression hasError:hasError];
+			if (!subPredicate || *hasError) {
+				break;
+			}
+			NSCompoundPredicate *predicate = [[NSCompoundPredicate alloc] initWithType:NSNotPredicateType subpredicates:@[subPredicate]];
+			[predicates addObject:predicate];
+			[predicate release], predicate = nil;
+		} else {
+			NSString *equalitySymbol = nil;
+			BOOL isExists = NO;
+			if ([operator isEqualToString:@"=="]) {
+				equalitySymbol = @"==";
+			} else if ([operator isEqualToString:@"$gt"]) {
+				equalitySymbol = @">";
+			} else if ([operator isEqualToString:@"$gte"]) {
+				equalitySymbol = @">=";
+			} else if ([operator isEqualToString:@"$lt"]) {
+				equalitySymbol = @"<";
+			} else if ([operator isEqualToString:@"$lte"]) {
+				equalitySymbol = @"<=";
+			} else if ([operator isEqualToString:@"$ne"]) {
+				equalitySymbol = @"!=";
+			} else if ([operator isEqualToString:@"$contains"]) {
+				equalitySymbol = @"CONTAINS";
+			} else if ([operator isEqualToString:@"$exists"]) {
+				isExists = YES;
+			} else {
+				ATLogError(@"Unrecognized operator symbol: %@", operator);
+				*hasError = YES;
+				break;
+			}
+			
+			if (isExists) {
+				if (![value isKindOfClass:[NSNumber class]]) {
+					ATLogError(@"Given non-bool argument to $exists.");
+					*hasError = YES;
+					break;
+				}
+				BOOL operandValue = [(NSNumber *)value boolValue];
+				if (operandValue) {
+					equalitySymbol = @"!=";
+				} else {
+					equalitySymbol = @"==";
+				}
+				NSString *placeholder = [[@"(%K " stringByAppendingString:equalitySymbol] stringByAppendingString:@" nil)"];
+				NSPredicate *predicate = [NSPredicate predicateWithFormat:placeholder, criteria];
+				[predicates addObject:predicate];
+			} else {
+				NSString *placeholder = [[@"(%K " stringByAppendingString:equalitySymbol] stringByAppendingString:@" %@)"];
+				NSPredicate *predicate = [NSCompoundPredicate predicateWithFormat:placeholder argumentArray:@[criteria, value]];
+				[predicates addObject:predicate];
+			}
+			
+			// Save the codepoint/interaction, to later be used in predicate evaluation object.
+			if ([criteria hasPrefix:@"code_point/"]) {
+				NSArray *components = [criteria componentsSeparatedByString:@"/"];
+				if (components.count > 1) {
+					NSString *codePoint = [components objectAtIndex:1];
+					[[ATEngagementBackend sharedBackend] codePointWasSeen:codePoint];
+				}
+			}
+			else if ([criteria hasPrefix:@"interactions/"]) {
+				NSArray *components = [criteria componentsSeparatedByString:@"/"];
+				if (components.count > 1) {
+					NSString *interactionID = [components objectAtIndex:1];
+					[[ATEngagementBackend sharedBackend] interactionWasSeen:interactionID];
+				}
+				
+			}
+		}
+	}
+	
+	
+	if (*hasError) {
+		return nil;
+	} else {
+		NSCompoundPredicate *result = [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:predicates];
+		if (!result) {
+			*hasError = YES;
+		}
+		return [result autorelease];
+	}
 }
 
 + (NSPredicate *)predicateForInteractionCriteria:(NSDictionary *)interactionCriteria hasError:(BOOL *)hasError {
@@ -149,56 +251,10 @@
 		else {
 			// Implicit "==" if object is a string/number
 			NSDictionary *equalityDictionary = ([object isKindOfClass:[NSDictionary class]]) ? (NSDictionary *)object : @{@"==" : object};
-			
-			NSMutableArray *criteria = [NSMutableArray array];
-			for (NSString *equalityKey in equalityDictionary) {
-				NSString *equalitySymbol = nil;
-				if ([equalityKey isEqualToString:@"=="]) {
-					equalitySymbol = @"==";
-				}
-				else if ([equalityKey isEqualToString:@"$gt"]) {
-					equalitySymbol = @">";
-				}
-				else if ([equalityKey isEqualToString:@"$gte"]) {
-					equalitySymbol = @">=";
-				}
-				else if ([equalityKey isEqualToString:@"$lt"]) {
-					equalitySymbol = @"<";
-				}
-				else if ([equalityKey isEqualToString:@"$lte"]) {
-					equalitySymbol = @"<=";
-				}
-				else if ([equalityKey isEqualToString:@"$ne"]) {
-					equalitySymbol = @"!=";
-				}
-				else {
-					*hasError = YES;
-				}
-			
-				NSObject *value = [equalityDictionary objectForKey:equalityKey];
-				NSString *placeholder = [[@"(%K " stringByAppendingString:equalitySymbol] stringByAppendingString:@" %@)"];
-				NSPredicate *criterion = [NSCompoundPredicate predicateWithFormat:placeholder argumentArray:@[key, value]];
-				[criteria addObject:criterion];
-				
-				// Save the codepoint/interaction, to later be used in predicate evaluation object.
-				if ([key hasPrefix:@"code_point/"]) {
-					NSArray *components = [key componentsSeparatedByString:@"/"];
-					if (components.count > 1) {
-						NSString *codePoint = [components objectAtIndex:1];
-						[[ATEngagementBackend sharedBackend] codePointWasSeen:codePoint];
-					}
-				}
-				else if ([key hasPrefix:@"interactions/"]) {
-					NSArray *components = [key componentsSeparatedByString:@"/"];
-					if (components.count > 1) {
-						NSString *interactionID = [components objectAtIndex:1];
-						[[ATEngagementBackend sharedBackend] interactionWasSeen:interactionID];
-					}
-					
-				}
+			NSPredicate *subPredicate = [ATInteraction predicateForCriteria:key operatorExpression:equalityDictionary hasError:hasError];
+			if (subPredicate) {
+				[subPredicates addObject:subPredicate];
 			}
-			
-			[subPredicates addObjectsFromArray:criteria];
 		}
 	}
 	

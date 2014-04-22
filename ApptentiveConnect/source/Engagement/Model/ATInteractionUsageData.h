@@ -15,8 +15,9 @@
 @property (nonatomic, retain) NSNumber *timeSinceInstallTotal;
 @property (nonatomic, retain) NSNumber *timeSinceInstallVersion;
 @property (nonatomic, retain) NSNumber *timeSinceInstallBuild;
-@property (nonatomic, retain) NSString *applicationVersion;
-@property (nonatomic, retain) NSString *applicationBuild;
+@property (nonatomic, copy) NSString *applicationVersion;
+@property (nonatomic, copy) NSString *applicationBuild;
+@property (nonatomic, retain) NSNumber *currentTime;
 @property (nonatomic, retain) NSNumber *isUpdateVersion;
 @property (nonatomic, retain) NSNumber *isUpdateBuild;
 @property (nonatomic, retain) NSDictionary *codePointInvokesTotal;

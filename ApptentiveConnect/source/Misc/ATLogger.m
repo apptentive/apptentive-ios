@@ -198,7 +198,12 @@ static dispatch_queue_t loggingQueue;
 				if ([fileLogMessage hasSuffix:@"\n"] == NO) {
 					[fileLogMessage appendString:@"\n"];
 				}
-				[logHandle writeData:[fileLogMessage dataUsingEncoding:NSUTF8StringEncoding]];
+				@try {
+					[logHandle writeData:[fileLogMessage dataUsingEncoding:NSUTF8StringEncoding]];
+				}
+				@catch (NSException *exception) {
+					// Probably out of space on the device.
+				}
 			}
 			[fullMessage release], fullMessage = nil;
 		}

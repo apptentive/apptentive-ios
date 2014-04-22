@@ -16,23 +16,6 @@
 #import "ATURLConnection.h"
 
 @implementation ATWebClient (SurveyAdditions)
-- (ATAPIRequest *)requestForGettingSurveys {
-	ATConversation *conversation = [ATConversationUpdater currentConversation];
-	if (!conversation) {
-		ATLogError(@"No current conversation.");
-		return nil;
-	}
-	
-	NSString *urlString = [NSString stringWithFormat:@"%@/surveys", [self baseURLString]];
-	ATURLConnection *conn = [self connectionToGet:[NSURL URLWithString:urlString]];
-	conn.timeoutInterval = 20.0;
-	[self updateConnection:conn withOAuthToken:conversation.token];
-	
-	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:[self commonChannelName]];
-	request.returnType = ATAPIRequestReturnTypeData;
-	return [request autorelease];
-}
-
 
 - (ATAPIRequest *)requestForPostingLegacySurveyResponse:(ATLegacySurveyResponse *)surveyResponse {
 	NSError *error = nil;

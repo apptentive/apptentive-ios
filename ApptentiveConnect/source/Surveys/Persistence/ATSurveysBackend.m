@@ -9,7 +9,6 @@
 #import "ATSurveysBackend.h"
 #import "ATBackend.h"
 #import "ATSurvey.h"
-#import "ATSurveyGetSurveysTask.h"
 #import "ATSurveyMetrics.h"
 #import "ATSurveyParser.h"
 #import "ATSurveyViewController.h"
@@ -25,7 +24,6 @@ NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 
 @interface ATSurveysBackend ()
 + (NSString *)cachedSurveysStoragePath;
-- (BOOL)shouldRetrieveNewSurveys;
 - (void)presentSurveyControllerFromViewControllerWithCurrentSurvey:(UIViewController *)viewController;
 - (ATSurvey *)surveyWithTags:(NSSet *)tags;
 @end
@@ -70,35 +68,6 @@ NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 	[super dealloc];
 }
 
-- (BOOL)shouldRetrieveNewSurveys {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	
-	NSDate *expiration = [defaults objectForKey:ATSurveyCachedSurveysExpirationPreferenceKey];
-	if (expiration) {
-		NSDate *now = [NSDate date];
-		NSComparisonResult comparison = [expiration compare:now];
-		if (comparison == NSOrderedSame || comparison == NSOrderedAscending) {
-			return YES;
-		} else {
-			NSFileManager *fm = [NSFileManager defaultManager];
-			if (![fm fileExistsAtPath:[ATSurveysBackend cachedSurveysStoragePath]]) {
-				// If no file, check anyway.
-				return YES;
-			}
-			return NO;
-		}
-	} else {
-		return YES;
-	}
-}
-
-- (void)checkForAvailableSurveys {
-	if ([self shouldRetrieveNewSurveys]) {
-		ATSurveyGetSurveysTask *task = [[ATSurveyGetSurveysTask alloc] init];
-		[[ATTaskQueue sharedTaskQueue] addTask:task];
-		[task release], task = nil;
-	}
-}
 
 - (ATSurvey *)currentSurvey {
 	return currentSurvey;
@@ -228,29 +197,4 @@ NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 	return sentSurvey;
 }
 
-- (void)didReceiveNewSurveys:(NSArray *)surveys maxAge:(NSTimeInterval)expiresMaxAge {
-	BOOL hasNewSurvey = NO;
-	for (ATSurvey *survey in surveys) {
-		if (![self surveyAlreadySubmitted:survey]) {
-			hasNewSurvey = YES;
-		}
-	}
-	
-	@synchronized(self) {
-		[NSKeyedArchiver archiveRootObject:surveys toFile:[ATSurveysBackend cachedSurveysStoragePath]];
-		// Store expiration.
-		if (expiresMaxAge > 0) {
-			NSDate *date = [NSDate dateWithTimeInterval:expiresMaxAge sinceDate:[NSDate date]];
-			NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-			[defaults setObject:date forKey:ATSurveyCachedSurveysExpirationPreferenceKey];
-		}
-		
-		[availableSurveys removeAllObjects];
-		[availableSurveys addObjectsFromArray:surveys];
-	}
-	
-	if (hasNewSurvey) {
-		[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyNewSurveyAvailableNotification object:nil];
-	}
-}
 @end

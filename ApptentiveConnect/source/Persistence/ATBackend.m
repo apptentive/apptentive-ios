@@ -68,7 +68,6 @@ static NSURLCache *imageCache = nil;
 - (void)networkStatusChanged:(NSNotification *)notification;
 - (void)stopWorking:(NSNotification *)notification;
 - (void)startWorking:(NSNotification *)notification;
-- (void)checkForSurveys;
 - (void)checkForMessages;
 - (void)startMonitoringUnreadMessages;
 - (void)checkForProperConfiguration;
@@ -1028,7 +1027,6 @@ static NSURLCache *imageCache = nil;
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWorking:) name:UIApplicationWillEnterForegroundNotification object:nil];
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkForMessages) name:UIApplicationWillEnterForegroundNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkForSurveys) name:UIApplicationWillEnterForegroundNotification object:nil];
 	}
 #elif TARGET_OS_MAC
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:NSApplicationWillTerminateNotification object:nil];
@@ -1055,7 +1053,6 @@ static NSURLCache *imageCache = nil;
 	// One-shot actions at startup.
 	[self performSelector:@selector(checkForProperConfiguration) withObject:nil afterDelay:1];
 	[self performSelector:@selector(checkForEngagementManifest) withObject:nil afterDelay:3];
-	[self performSelector:@selector(checkForSurveys) withObject:nil afterDelay:4];
 	[self performSelector:@selector(updateDeviceIfNeeded) withObject:nil afterDelay:7];
 	[self performSelector:@selector(checkForMessages) withObject:nil afterDelay:8];
 	[self performSelector:@selector(updatePersonIfNeeded) withObject:nil afterDelay:9];
@@ -1107,15 +1104,6 @@ static NSURLCache *imageCache = nil;
 - (void)startWorking:(NSNotification *)notification {
 	shouldStopWorking = NO;
 	[self updateWorking];
-}
-
-- (void)checkForSurveys {
-	@autoreleasepool {
-		if (![self isReady]) {
-			return;
-		}
-		[[ATSurveysBackend sharedBackend] checkForAvailableSurveys];
-	}
 }
 
 - (void)checkForEngagementManifest {

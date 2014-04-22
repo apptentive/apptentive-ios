@@ -21,7 +21,6 @@ extern NSString *const ATSurveyIDKey;
 	ATSurvey *currentSurvey;
 }
 + (ATSurveysBackend *)sharedBackend;
-- (void)checkForAvailableSurveys;
 - (ATSurvey *)currentSurvey;
 - (void)resetSurvey;
 - (void)presentSurveyControllerWithNoTagsFromViewController:(UIViewController *)viewController;
@@ -31,8 +30,6 @@ extern NSString *const ATSurveyIDKey;
 - (BOOL)hasSurveyAvailableWithTags:(NSSet *)tags;
 @end
 
-
 @interface ATSurveysBackend (Private)
 - (BOOL)surveyAlreadySubmitted:(ATSurvey *)survey;
-- (void)didReceiveNewSurveys:(NSArray *)surveys maxAge:(NSTimeInterval)expiresMaxAge;
 @end

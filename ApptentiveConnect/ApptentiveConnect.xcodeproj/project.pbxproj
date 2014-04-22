@@ -193,9 +193,6 @@
 		49881DDE16E839540061D888 /* ATLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49881DDC16E839540061D888 /* ATLogViewController.m */; };
 		4988FB5416212BD4000A7CB7 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4988FB5316212BD4000A7CB7 /* CoreData.framework */; };
 		498B8E3E1519691900CA9A58 /* ATRatingPredicateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 498B8E3D1519691900CA9A58 /* ATRatingPredicateTests.m */; };
-		498EFB6B15BA414A00A1043B /* ATSurveyGetSurveysTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 498EFB6915BA414A00A1043B /* ATSurveyGetSurveysTask.h */; };
-		498EFB6C15BA414A00A1043B /* ATSurveyGetSurveysTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 498EFB6A15BA414A00A1043B /* ATSurveyGetSurveysTask.m */; };
-		498EFB6D15BA414A00A1043B /* ATSurveyGetSurveysTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 498EFB6A15BA414A00A1043B /* ATSurveyGetSurveysTask.m */; };
 		498EFB7015BA48B300A1043B /* ATAppConfigurationUpdateTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 498EFB6E15BA48B200A1043B /* ATAppConfigurationUpdateTask.h */; };
 		498EFB7115BA48B300A1043B /* ATAppConfigurationUpdateTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 498EFB6F15BA48B300A1043B /* ATAppConfigurationUpdateTask.m */; };
 		498EFB7215BA48B300A1043B /* ATAppConfigurationUpdateTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 498EFB6F15BA48B300A1043B /* ATAppConfigurationUpdateTask.m */; };
@@ -552,8 +549,6 @@
 		4988FB5316212BD4000A7CB7 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		498B8E3C1519691900CA9A58 /* ATRatingPredicateTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ATRatingPredicateTests.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		498B8E3D1519691900CA9A58 /* ATRatingPredicateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATRatingPredicateTests.m; sourceTree = "<group>"; };
-		498EFB6915BA414A00A1043B /* ATSurveyGetSurveysTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATSurveyGetSurveysTask.h; path = Tasks/ATSurveyGetSurveysTask.h; sourceTree = "<group>"; };
-		498EFB6A15BA414A00A1043B /* ATSurveyGetSurveysTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATSurveyGetSurveysTask.m; path = Tasks/ATSurveyGetSurveysTask.m; sourceTree = "<group>"; };
 		498EFB6E15BA48B200A1043B /* ATAppConfigurationUpdateTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAppConfigurationUpdateTask.h; sourceTree = "<group>"; };
 		498EFB6F15BA48B300A1043B /* ATAppConfigurationUpdateTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAppConfigurationUpdateTask.m; sourceTree = "<group>"; };
 		4995EDC3175959EC00AF7268 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -1061,8 +1056,6 @@
 		498EFB6715BA412100A1043B /* Tasks */ = {
 			isa = PBXGroup;
 			children = (
-				498EFB6915BA414A00A1043B /* ATSurveyGetSurveysTask.h */,
-				498EFB6A15BA414A00A1043B /* ATSurveyGetSurveysTask.m */,
 				49B7E919178BAB8D0059E776 /* ATSurveyResponseTask.h */,
 				49B7E91A178BAB8D0059E776 /* ATSurveyResponseTask.m */,
 			);
@@ -1496,7 +1489,6 @@
 				49735D661832E79400D48DE7 /* ATMessageCenterBaseViewController.h in Headers */,
 				493AEB3C15990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.h in Headers */,
 				493AEB3F15990A4D00DFD4C7 /* ATSurveyViewController.h in Headers */,
-				498EFB6B15BA414A00A1043B /* ATSurveyGetSurveysTask.h in Headers */,
 				498EFB7015BA48B300A1043B /* ATAppConfigurationUpdateTask.h in Headers */,
 				4999128516165BD400FDA15F /* ATMessageCenterViewController.h in Headers */,
 				499912A8161B6AF700FDA15F /* ATWebClient+MessageCenter.h in Headers */,
@@ -1804,7 +1796,6 @@
 				49D261C4184691E900798B89 /* ATBaseMessageCellV7.m in Sources */,
 				493AEB4015990A4D00DFD4C7 /* ATSurveyViewController.m in Sources */,
 				49477B761835B529001D37AD /* ATTextMessageUserCellV7.m in Sources */,
-				498EFB6C15BA414A00A1043B /* ATSurveyGetSurveysTask.m in Sources */,
 				498EFB7115BA48B300A1043B /* ATAppConfigurationUpdateTask.m in Sources */,
 				58AB415818E3A9870034FAA5 /* ATInteractionAppStoreController.m in Sources */,
 				49735D671832E79400D48DE7 /* ATMessageCenterBaseViewController.m in Sources */,
@@ -1916,7 +1907,6 @@
 				58AB415918E3A9870034FAA5 /* ATInteractionAppStoreController.m in Sources */,
 				493AEB4515990A6B00DFD4C7 /* ApptentiveSurveysTests.m in Sources */,
 				589274A8180CC33A0029E5CE /* ATInteractionUsageData.m in Sources */,
-				498EFB6D15BA414A00A1043B /* ATSurveyGetSurveysTask.m in Sources */,
 				498EFB7215BA48B300A1043B /* ATAppConfigurationUpdateTask.m in Sources */,
 				49AC178416C0987400BE1615 /* ATConversationUpdater.m in Sources */,
 				49E6208916C5E8C2000C9F5A /* NSDictionary+ATAdditions.m in Sources */,

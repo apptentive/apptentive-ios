@@ -24,7 +24,6 @@ NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 
 @interface ATSurveysBackend ()
 + (NSString *)cachedSurveysStoragePath;
-- (ATSurvey *)surveyWithTags:(NSSet *)tags;
 @end
 
 @implementation ATSurveysBackend
@@ -69,42 +68,6 @@ NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 	}
 }
 
-- (ATSurvey *)surveyWithNoTags {
-	ATSurvey *result = nil;
-	@synchronized(self) {
-		
-	}
-	return result;
-}
-
-- (ATSurvey *)surveyWithTags:(NSSet *)tags {
-	ATSurvey *result = nil;
-	@synchronized(self) {
-		
-	}
-	return result;
-}
-
-- (BOOL)hasSurveyAvailableWithNoTags {
-	ATSurvey *survey = [self surveyWithNoTags];
-	if (!survey) {
-		ATLogInfo(@"No surveys without tags found!");
-		ATLogInfo(@"Apptentive surveys have a 24 hour caching period. If you've recently created a survey, please reset your device/simulator and try again.");
-	}
-	
-	return (survey != nil);
-}
-
-- (BOOL)hasSurveyAvailableWithTags:(NSSet *)tags {
-	ATSurvey *survey = [self surveyWithTags:tags];
-	if (!survey) {
-		NSString *tagsString = [[[tags allObjects] valueForKey:@"description"] componentsJoinedByString:@", "];
-		ATLogInfo(@"No surveys with tags [%@] found!", tagsString);
-		ATLogInfo(@"Apptentive surveys have a 24 hour caching period. If you've recently created a survey, please reset your device/simulator and try again.");
-	}
-		
-	return (survey != nil);
-}
 @end
 
 

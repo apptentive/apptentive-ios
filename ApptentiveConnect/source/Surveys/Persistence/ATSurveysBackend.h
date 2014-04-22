@@ -20,8 +20,6 @@ extern NSString *const ATSurveyIDKey;
 }
 + (ATSurveysBackend *)sharedBackend;
 - (void)setDidSendSurvey:(ATSurvey *)survey;
-- (BOOL)hasSurveyAvailableWithNoTags;
-- (BOOL)hasSurveyAvailableWithTags:(NSSet *)tags;
 @end
 
 @interface ATSurveysBackend (Private)

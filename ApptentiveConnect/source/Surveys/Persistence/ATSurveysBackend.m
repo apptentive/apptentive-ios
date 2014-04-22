@@ -18,9 +18,6 @@ NSString *const ATSurveySentSurveysPreferenceKey = @"ATSurveySentSurveysPreferen
 NSString *const ATSurveyCachedSurveysExpirationPreferenceKey = @"ATSurveyCachedSurveysExpirationPreferenceKey";
 
 NSString *const ATSurveyNewSurveyAvailableNotification = @"ATSurveyNewSurveyAvailableNotification";
-NSString *const ATSurveySentNotification = @"ATSurveySentNotification";
-
-NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 
 @interface ATSurveysBackend ()
 + (NSString *)cachedSurveysStoragePath;

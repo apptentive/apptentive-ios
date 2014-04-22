@@ -22,8 +22,6 @@ extern NSString *const ATSurveyIDKey;
 + (ATSurveysBackend *)sharedBackend;
 - (ATSurvey *)currentSurvey;
 - (void)resetSurvey;
-- (void)presentSurveyControllerWithNoTagsFromViewController:(UIViewController *)viewController;
-- (void)presentSurveyControllerWithTags:(NSSet *)tags fromViewController:(UIViewController *)viewController;
 - (void)setDidSendSurvey:(ATSurvey *)survey;
 - (BOOL)hasSurveyAvailableWithNoTags;
 - (BOOL)hasSurveyAvailableWithTags:(NSSet *)tags;

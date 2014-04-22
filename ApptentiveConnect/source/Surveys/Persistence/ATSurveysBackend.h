@@ -10,15 +10,10 @@
 
 @class ATSurvey;
 
-extern NSString *const ATSurveyNewSurveyAvailableNotification;
-
 @interface ATSurveysBackend : NSObject {
 	
 }
-+ (ATSurveysBackend *)sharedBackend;
-- (void)setDidSendSurvey:(ATSurvey *)survey;
-@end
 
-@interface ATSurveysBackend (Private)
-- (BOOL)surveyAlreadySubmitted:(ATSurvey *)survey;
++ (ATSurveysBackend *)sharedBackend;
+
 @end

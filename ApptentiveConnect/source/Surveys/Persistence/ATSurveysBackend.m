@@ -14,15 +14,6 @@
 #import "ATSurveyViewController.h"
 #import "ATTaskQueue.h"
 
-NSString *const ATSurveySentSurveysPreferenceKey = @"ATSurveySentSurveysPreferenceKey";
-NSString *const ATSurveyCachedSurveysExpirationPreferenceKey = @"ATSurveyCachedSurveysExpirationPreferenceKey";
-
-NSString *const ATSurveyNewSurveyAvailableNotification = @"ATSurveyNewSurveyAvailableNotification";
-
-@interface ATSurveysBackend ()
-+ (NSString *)cachedSurveysStoragePath;
-@end
-
 @implementation ATSurveysBackend
 
 + (ATSurveysBackend *)sharedBackend {
@@ -30,16 +21,12 @@ NSString *const ATSurveyNewSurveyAvailableNotification = @"ATSurveyNewSurveyAvai
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		NSDictionary *defaultPreferences = [NSDictionary dictionaryWithObject:[NSArray array] forKey:ATSurveySentSurveysPreferenceKey];
+		NSDictionary *defaultPreferences = @{};
 		[defaults registerDefaults:defaultPreferences];
 		
 		sharedBackend = [[ATSurveysBackend alloc] init];
 	});
 	return sharedBackend;
-}
-
-+ (NSString *)cachedSurveysStoragePath {
-	return [[[ATBackend sharedBackend] supportDirectoryPath] stringByAppendingPathComponent:@"cachedsurveys.objects"];
 }
 
 - (id)init {
@@ -51,31 +38,6 @@ NSString *const ATSurveyNewSurveyAvailableNotification = @"ATSurveyNewSurveyAvai
 
 - (void)dealloc {
 	[super dealloc];
-}
-
-- (void)setDidSendSurvey:(ATSurvey *)survey {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSArray *sentSurveys = [defaults objectForKey:ATSurveySentSurveysPreferenceKey];
-	if (![sentSurveys containsObject:survey.identifier]) {
-		NSMutableArray *replacementSurveys = [sentSurveys mutableCopy];
-		[replacementSurveys addObject:survey.identifier];
-		[defaults setObject:replacementSurveys forKey:ATSurveySentSurveysPreferenceKey];
-		[defaults synchronize];
-		[replacementSurveys release], replacementSurveys = nil;
-	}
-}
-
-@end
-
-
-@implementation ATSurveysBackend (Private)
-- (BOOL)surveyAlreadySubmitted:(ATSurvey *)survey {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	BOOL sentSurvey = NO;
-	if ([[defaults objectForKey:ATSurveySentSurveysPreferenceKey] containsObject:survey.identifier]) {
-		sentSurvey = YES;
-	}
-	return sentSurvey;
 }
 
 @end

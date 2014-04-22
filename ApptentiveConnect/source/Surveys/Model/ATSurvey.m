@@ -7,7 +7,6 @@
 //
 
 #import "ATSurvey.h"
-#import "ATSurveysBackend.h"
 
 #define kATSurveyStorageVersion 1
 
@@ -170,11 +169,6 @@ NSString *const ATSurveyViewDatesKey = @"ATSurveyViewDatesKey";
 			reasonForNotShowingSurvey = @"survey is not within view limits.";
 			break;
 		}
-				
-		if ([self wasAlreadySubmitted] && ![self multipleResponsesAllowed]) {
-			reasonForNotShowingSurvey = @"survey was already submitted and multiple responses are not allowed.";
-			break;
-		}
 		
 		eligible = YES;
 	} while (NO);
@@ -200,10 +194,6 @@ NSString *const ATSurveyViewDatesKey = @"ATSurveyViewDatesKey";
 	}
 	
 	return ([self.endTime compare:[NSDate date]] == NSOrderedAscending);
-}
-
-- (BOOL)wasAlreadySubmitted {
-	return [[ATSurveysBackend sharedBackend] surveyAlreadySubmitted:self];
 }
 
 - (NSArray *)viewDates {

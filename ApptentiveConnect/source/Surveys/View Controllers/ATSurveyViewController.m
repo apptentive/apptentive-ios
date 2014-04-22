@@ -198,8 +198,6 @@ enum {
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidHideWindowNotification object:nil userInfo:metricsInfo];
 	[metricsInfo release], metricsInfo = nil;
 	
-	
-	[[ATSurveysBackend sharedBackend] setDidSendSurvey:survey];
 	[self.navigationController dismissViewControllerAnimated:YES completion:NULL];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveySentNotification object:nil userInfo:notificationInfo];

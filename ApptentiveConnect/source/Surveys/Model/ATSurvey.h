@@ -39,7 +39,6 @@
 
 - (BOOL)isStarted;
 - (BOOL)isEnded;
-- (BOOL)wasAlreadySubmitted;
 - (BOOL)isWithinViewLimits;
 
 - (NSArray *)viewDates;

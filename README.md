@@ -267,7 +267,7 @@ Later, after shipping the app, you can configure the interactions that will run 
  - When they beat the game, ask for feedback about their experience.
  - After making an in-app purchase, ask them to take a survey.
  
-Interactions can be modified, remotely, without shipping a new app update to the App Store. The remote configurability of Apptentive interactions make them perfect for A/B testing and 
+Interactions can be modified, remotely, without shipping a new app update to the App Store. You can easily change a particular event to show a Survey rather than collect Feedback.  The remote configurability of Apptentive interactions make them perfect for A/B testing and quick iteration.
 
 ### Rating Prompt
 

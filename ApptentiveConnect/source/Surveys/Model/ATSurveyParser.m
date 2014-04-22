@@ -14,7 +14,6 @@
 @interface ATSurveyParser ()
 - (ATSurveyQuestionAnswer *)answerWithJSONDictionary:(NSDictionary *)jsonDictionary;
 - (ATSurveyQuestion *)questionWithJSONDictionary:(NSDictionary *)jsonDictionary;
-- (ATSurvey *)surveyWithJSONDictionary:(NSDictionary *)jsonDictionary;
 @end
 
 @implementation ATSurveyParser
@@ -143,7 +142,6 @@
 		for (NSObject *question in questions) {
 			if ([question isKindOfClass:[NSDictionary class]]) {
 				ATSurveyQuestion *result = [self questionWithJSONDictionary:(NSDictionary *)question];
-				
 				if (result) {
 					[survey addQuestion:result];
 				}
@@ -152,134 +150,6 @@
 	}
 	
 	return [survey autorelease];
-}
-
-- (ATSurvey *)surveyWithJSONDictionary:(NSDictionary *)jsonDictionary {
-	ATSurvey *survey = [[ATSurvey alloc] init];
-	
-	NSDictionary *keyMapping = [NSDictionary dictionaryWithObjectsAndKeys:@"surveyDescription", @"description", @"identifier", @"id", @"name", @"name", @"successMessage", @"success_message", nil];
-	
-	for (NSString *key in keyMapping) {
-		NSString *ivarName = [keyMapping objectForKey:key];
-		NSObject *value = [jsonDictionary objectForKey:key];
-		if (value && [value isKindOfClass:[NSString class]]) {
-			[survey setValue:value forKey:ivarName];
-		}
-	}
-	
-	if ([jsonDictionary objectForKey:@"active"] != nil) {
-		survey.active = [(NSNumber *)[jsonDictionary objectForKey:@"active"] boolValue];
-	}
-	
-	if ([jsonDictionary objectForKey:@"date"] != nil) {
-		survey.date = [ATUtilities dateFromISO8601String:[jsonDictionary objectForKey:@"date"]];
-	}
-	
-	if ([jsonDictionary objectForKey:@"start_time"] != nil) {
-		survey.startTime = [ATUtilities dateFromISO8601String:[jsonDictionary objectForKey:@"start_time"]];
-	}
-	
-	if ([jsonDictionary objectForKey:@"end_time"] != nil) {
-		survey.endTime = [ATUtilities dateFromISO8601String:[jsonDictionary objectForKey:@"end_time"]];		
-	}
-	
-	if ([jsonDictionary objectForKey:@"view_count"] != nil) {
-		survey.viewCount = [jsonDictionary objectForKey:@"view_count"];
-	}
-	
-	if ([jsonDictionary objectForKey:@"view_period"] != nil) {
-		survey.viewPeriod = [jsonDictionary objectForKey:@"view_period"];
-	}
-	
-	if ([jsonDictionary objectForKey:@"required"] != nil) {
-		survey.responseRequired = [(NSNumber *)[jsonDictionary objectForKey:@"required"] boolValue];
-	}
-	
-	if ([jsonDictionary objectForKey:@"multiple_responses"] != nil) {
-		survey.multipleResponsesAllowed = [(NSNumber *)[jsonDictionary objectForKey:@"multiple_responses"] boolValue];
-	}
-	if ([jsonDictionary objectForKey:@"tags"] != nil) {
-		for (NSString *tag in [jsonDictionary objectForKey:@"tags"]) {
-			[survey addTag:tag];
-		}
-	}
-	
-	NSObject *questions = [jsonDictionary objectForKey:@"questions"];
-	if ([questions isKindOfClass:[NSArray class]]) {
-		for (NSObject *question in (NSArray *)questions) {
-			if ([question isKindOfClass:[NSDictionary class]]) {
-				ATSurveyQuestion *result = [self questionWithJSONDictionary:(NSDictionary *)question];
-				if (result != nil) {
-					[survey addQuestion:result];
-				}
-			}
-		}
-	}
-	
-	return [survey autorelease];
-}
-
-- (ATSurvey *)parseSurvey:(NSData *)jsonSurvey {
-	ATSurvey *survey = nil;
-	BOOL success = NO;
-	
-	@autoreleasepool {
-		NSError *error = nil;
-		id decodedObject = [ATJSONSerialization JSONObjectWithData:jsonSurvey error:&error];
-		if (decodedObject && [decodedObject isKindOfClass:[NSDictionary class]]) {
-			success = YES;
-			NSDictionary *values = (NSDictionary *)decodedObject;
-			survey = [self surveyWithJSONDictionary:values];
-			[survey retain];
-		} else {
-			[parserError release], parserError = nil;
-			parserError = [error retain];
-			success = NO;
-		}
-	}
-	if (!success) {
-		survey = nil;
-	} else {
-		[survey autorelease];
-	}
-	return survey;
-}
-
-- (NSArray *)parseMultipleSurveys:(NSData *)jsonSurveys {
-	NSMutableArray *result = [NSMutableArray array];
-	BOOL success = NO;
-	
-	@autoreleasepool {
-		NSError *error = nil;
-		id decodedObject = [ATJSONSerialization JSONObjectWithData:jsonSurveys error:&error];
-		
-		if (decodedObject && [decodedObject isKindOfClass:[NSDictionary class]]) {
-			NSDictionary *surveysContainer = (NSDictionary *)decodedObject;
-			NSArray *surveys = [surveysContainer objectForKey:@"surveys"];
-			if (surveys) {
-				success = YES;
-				for (NSObject *obj in surveys) {
-					if ([obj isKindOfClass:[NSDictionary class]]) {
-						NSDictionary *dict = (NSDictionary *)obj;
-						ATSurvey *survey = [self surveyWithJSONDictionary:dict];
-						if (survey != nil) {
-							[result addObject:survey];
-						}
-					}
-				}
-			}
-		} else {
-			[parserError release], parserError = nil;
-			parserError = [error retain];
-			success = NO;
-		}
-	}
-	
-	if (!success) {
-		result = nil;
-	}
-	
-	return result;
 }
 
 - (NSError *)parserError {

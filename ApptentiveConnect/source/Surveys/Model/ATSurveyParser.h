@@ -14,8 +14,6 @@
 @private
 	NSError *parserError;
 }
-- (ATSurvey *)parseSurvey:(NSData *)jsonSurvey;
-- (NSArray *)parseMultipleSurveys:(NSData *)jsonSurveys;
 - (NSError *)parserError;
 
 - (ATSurvey *)surveyWithInteraction:(ATInteraction *)interaction;

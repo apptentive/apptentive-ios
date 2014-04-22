@@ -197,7 +197,6 @@ enum {
 	
 	
 	[[ATSurveysBackend sharedBackend] setDidSendSurvey:survey];
-	[[ATSurveysBackend sharedBackend] resetSurvey];
 	[self.navigationController dismissViewControllerAnimated:YES completion:NULL];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveySentNotification object:nil userInfo:notificationInfo];

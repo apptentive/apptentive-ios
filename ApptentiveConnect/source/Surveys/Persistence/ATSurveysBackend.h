@@ -16,12 +16,9 @@ extern NSString *const ATSurveySentNotification;
 extern NSString *const ATSurveyIDKey;
 
 @interface ATSurveysBackend : NSObject {
-@private
-	ATSurvey *currentSurvey;
+	
 }
 + (ATSurveysBackend *)sharedBackend;
-- (ATSurvey *)currentSurvey;
-- (void)resetSurvey;
 - (void)setDidSendSurvey:(ATSurvey *)survey;
 - (BOOL)hasSurveyAvailableWithNoTags;
 - (BOOL)hasSurveyAvailableWithTags:(NSSet *)tags;

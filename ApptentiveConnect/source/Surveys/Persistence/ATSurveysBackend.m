@@ -57,18 +57,6 @@ NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 	[super dealloc];
 }
 
-
-- (ATSurvey *)currentSurvey {
-	return currentSurvey;
-}
-
-- (void)resetSurvey {
-	@synchronized(self) {
-		[currentSurvey reset];
-		[currentSurvey release], currentSurvey = nil;
-	}
-}
-
 - (void)setDidSendSurvey:(ATSurvey *)survey {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSArray *sentSurveys = [defaults objectForKey:ATSurveySentSurveysPreferenceKey];

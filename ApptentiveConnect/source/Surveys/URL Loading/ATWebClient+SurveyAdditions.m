@@ -11,7 +11,6 @@
 #import "ATAPIRequest.h"
 #import "ATConversationUpdater.h"
 #import "ATJSONSerialization.h"
-#import "ATLegacySurveyResponse.h"
 #import "ATSurveyResponse.h"
 #import "ATURLConnection.h"
 

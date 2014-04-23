@@ -18,7 +18,6 @@
 #import "ATSurveyQuestion.h"
 #import "ATSurveyResponse.h"
 #import "ATSurveyResponseTask.h"
-#import "ATLegacySurveyResponse.h"
 #import "ATTaskQueue.h"
 #import "ATEngagementBackend.h"
 #import "ATSurveyQuestionResponse.h"

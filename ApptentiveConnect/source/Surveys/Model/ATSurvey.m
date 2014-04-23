@@ -14,7 +14,6 @@
 @synthesize responseRequired;
 @synthesize multipleResponsesAllowed;
 @synthesize active;
-@synthesize date, startTime, endTime;
 @synthesize identifier;
 @synthesize name;
 @synthesize surveyDescription;
@@ -34,9 +33,6 @@
 		questions = [[NSMutableArray alloc] init];
 		if (version == kATSurveyStorageVersion) {
 			self.active = [coder decodeBoolForKey:@"active"];
-			self.date = [coder decodeObjectForKey:@"date"];
-			self.startTime = [coder decodeObjectForKey:@"startTime"];
-			self.endTime = [coder decodeObjectForKey:@"endTime"];
 			self.responseRequired = [coder decodeBoolForKey:@"responseRequired"];
 			self.multipleResponsesAllowed = [coder decodeBoolForKey:@"multipleResponsesAllowed"];
 			self.identifier = [coder decodeObjectForKey:@"identifier"];
@@ -59,9 +55,6 @@
 	[coder encodeInt:kATSurveyStorageVersion forKey:@"version"];
 	[coder encodeObject:self.identifier forKey:@"identifier"];
 	[coder encodeBool:self.isActive forKey:@"active"];
-	[coder encodeObject:self.date forKey:@"date"];
-	[coder encodeObject:self.startTime forKey:@"startTime"];
-	[coder encodeObject:self.endTime forKey:@"endTime"];
 	[coder encodeBool:self.responseIsRequired forKey:@"responseRequired"];
 	[coder encodeBool:self.multipleResponsesAllowed forKey:@"multipleResponsesAllowed"];
 	[coder encodeObject:self.name forKey:@"name"];
@@ -76,9 +69,6 @@
 	[name release], name = nil;
 	[surveyDescription release], surveyDescription = nil;
 	[successMessage release], successMessage = nil;
-	[date release], date = nil;
-	[startTime release], startTime = nil;
-	[endTime release], endTime = nil;	
 	[super dealloc];
 }
 
@@ -100,16 +90,6 @@
 			break;
 		}
 		
-		if (![self isStarted]) {
-			reasonForNotShowingSurvey = @"survey is not started.";
-			break;
-		}
-		
-		if ([self isEnded]) {
-			reasonForNotShowingSurvey = @"survey has ended.";
-			break;
-		}
-		
 		eligible = YES;
 	} while (NO);
 	
@@ -118,22 +98,6 @@
 	}
 	
 	return eligible;
-}
-
-- (BOOL)isStarted {
-	if (self.startTime == nil) {
-		return YES;
-	}
-	
-	return ([self.startTime compare:[NSDate date]] == NSOrderedAscending);
-}
-
-- (BOOL)isEnded {
-	if (self.endTime == nil) {
-		return NO;
-	}
-	
-	return ([self.endTime compare:[NSDate date]] == NSOrderedAscending);
 }
 
 - (void)reset {

@@ -13,11 +13,12 @@
 @private
 	NSMutableArray *questions;
 }
-@property (nonatomic, getter=responseIsRequired) BOOL responseRequired;
+
 @property (nonatomic, copy) NSString *identifier;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *surveyDescription;
 @property (nonatomic, readonly) NSArray *questions;
+@property (nonatomic, getter=responseIsRequired) BOOL responseRequired;
 @property (nonatomic, copy) NSString *successMessage;
 
 - (void)addQuestion:(ATSurveyQuestion *)question;

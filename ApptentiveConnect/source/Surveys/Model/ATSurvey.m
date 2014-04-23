@@ -11,11 +11,11 @@
 #define kATSurveyStorageVersion 1
 
 @implementation ATSurvey
-@synthesize responseRequired;
 @synthesize identifier;
 @synthesize name;
 @synthesize surveyDescription;
 @synthesize questions;
+@synthesize responseRequired;
 @synthesize successMessage;
 
 - (id)init {

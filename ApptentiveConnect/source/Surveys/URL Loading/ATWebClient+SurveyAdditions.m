@@ -16,25 +16,6 @@
 
 @implementation ATWebClient (SurveyAdditions)
 
-- (ATAPIRequest *)requestForPostingLegacySurveyResponse:(ATLegacySurveyResponse *)surveyResponse {
-	NSError *error = nil;
-	NSString *postString = [ATJSONSerialization stringWithJSONObject:[surveyResponse apiJSON] options:ATJSONWritingPrettyPrinted error:&error];
-	if (!postString && error != nil) {
-		ATLogError(@"ATWebClient+SurveyAdditions: Error while encoding JSON: %@", error);
-		return nil;
-	}
-	
-	NSString *url = [self apiURLStringWithPath:@"records"];
-	ATURLConnection *conn = nil;
-	
-	conn = [self connectionToPost:[NSURL URLWithString:url] JSON:postString];
-	
-	conn.timeoutInterval = 240.0;
-	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:ATWebClientDefaultChannelName];
-	request.returnType = ATAPIRequestReturnTypeJSON;
-	return [request autorelease];
-}
-
 - (ATAPIRequest *)requestForPostingSurveyResponse:(ATSurveyResponse *)surveyResponse {
 	ATConversation *conversation = [ATConversationUpdater currentConversation];
 	if (!conversation) {

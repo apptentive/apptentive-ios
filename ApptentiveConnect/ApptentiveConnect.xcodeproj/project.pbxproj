@@ -708,8 +708,8 @@
 		58DCC0D2180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATInteractionUpgradeMessageViewController.h; path = "Upgrade Message/ATInteractionUpgradeMessageViewController.h"; sourceTree = "<group>"; };
 		58DCC0D3180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATInteractionUpgradeMessageViewController.m; path = "Upgrade Message/ATInteractionUpgradeMessageViewController.m"; sourceTree = "<group>"; };
 		58DCC0D4180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ATInteractionUpgradeMessageViewController.xib; path = ../xibs/ATInteractionUpgradeMessageViewController.xib; sourceTree = "<group>"; };
-		58E95808190740BC005063DC /* ATSurveyQuestionResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveyQuestionResponse.h; sourceTree = "<group>"; };
-		58E95809190740BC005063DC /* ATSurveyQuestionResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveyQuestionResponse.m; sourceTree = "<group>"; };
+		58E95808190740BC005063DC /* ATSurveyQuestionResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATSurveyQuestionResponse.h; path = ../Persistence/ATSurveyQuestionResponse.h; sourceTree = "<group>"; };
+		58E95809190740BC005063DC /* ATSurveyQuestionResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATSurveyQuestionResponse.m; path = ../Persistence/ATSurveyQuestionResponse.m; sourceTree = "<group>"; };
 		58EA5B3617B4781600ECEB4B /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		58EA5B3B17B479A500ECEB4B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		58EA5B4117B47AAC00ECEB4B /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -867,7 +867,6 @@
 			isa = PBXGroup;
 			children = (
 				493AEB1815990A4D00DFD4C7 /* Model */,
-				493AEB1F15990A4D00DFD4C7 /* Persistence */,
 				493AEB2415990A4D00DFD4C7 /* URL Loading */,
 				493AEB2715990A4D00DFD4C7 /* View Controllers */,
 				498EFB6715BA412100A1043B /* Tasks */,
@@ -886,17 +885,10 @@
 				493AEB1E15990A4D00DFD4C7 /* ATSurveyQuestion.m */,
 				49B7E914178BA8060059E776 /* ATSurveyResponse.h */,
 				49B7E915178BA8060059E776 /* ATSurveyResponse.m */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		493AEB1F15990A4D00DFD4C7 /* Persistence */ = {
-			isa = PBXGroup;
-			children = (
 				58E95808190740BC005063DC /* ATSurveyQuestionResponse.h */,
 				58E95809190740BC005063DC /* ATSurveyQuestionResponse.m */,
 			);
-			path = Persistence;
+			path = Model;
 			sourceTree = "<group>";
 		};
 		493AEB2415990A4D00DFD4C7 /* URL Loading */ = {

@@ -13,7 +13,6 @@
 @class ATSurveyResponse;
 
 @interface ATWebClient (SurveyAdditions)
-- (ATAPIRequest *)requestForPostingLegacySurveyResponse:(ATLegacySurveyResponse *)surveyResponse;
 - (ATAPIRequest *)requestForPostingSurveyResponse:(ATSurveyResponse *)surveyResponse;
 @end
 

@@ -12,8 +12,6 @@
 
 @implementation ATSurvey
 @synthesize responseRequired;
-@synthesize multipleResponsesAllowed;
-@synthesize active;
 @synthesize identifier;
 @synthesize name;
 @synthesize surveyDescription;
@@ -32,9 +30,7 @@
 		int version = [coder decodeIntForKey:@"version"];
 		questions = [[NSMutableArray alloc] init];
 		if (version == kATSurveyStorageVersion) {
-			self.active = [coder decodeBoolForKey:@"active"];
 			self.responseRequired = [coder decodeBoolForKey:@"responseRequired"];
-			self.multipleResponsesAllowed = [coder decodeBoolForKey:@"multipleResponsesAllowed"];
 			self.identifier = [coder decodeObjectForKey:@"identifier"];
 			self.name = [coder decodeObjectForKey:@"name"];
 			self.surveyDescription = [coder decodeObjectForKey:@"surveyDescription"];
@@ -54,9 +50,7 @@
 - (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeInt:kATSurveyStorageVersion forKey:@"version"];
 	[coder encodeObject:self.identifier forKey:@"identifier"];
-	[coder encodeBool:self.isActive forKey:@"active"];
 	[coder encodeBool:self.responseIsRequired forKey:@"responseRequired"];
-	[coder encodeBool:self.multipleResponsesAllowed forKey:@"multipleResponsesAllowed"];
 	[coder encodeObject:self.name forKey:@"name"];
 	[coder encodeObject:self.surveyDescription forKey:@"surveyDescription"];
 	[coder encodeObject:self.questions forKey:@"questions"];
@@ -78,26 +72,6 @@
 
 - (void)addQuestion:(ATSurveyQuestion *)question {
 	[questions addObject:question];
-}
-
-- (BOOL)isEligibleToBeShown {
-	BOOL eligible = NO;
-	NSString *reasonForNotShowingSurvey = nil;
-	
-	do { // once
-		if (![self isActive]) {
-			reasonForNotShowingSurvey = @"survey is not active.";
-			break;
-		}
-		
-		eligible = YES;
-	} while (NO);
-	
-	if (reasonForNotShowingSurvey) {
-		ATLogInfo(@"Did not show Apptentive survey %@ because %@", self.identifier, reasonForNotShowingSurvey);
-	}
-	
-	return eligible;
 }
 
 - (void)reset {

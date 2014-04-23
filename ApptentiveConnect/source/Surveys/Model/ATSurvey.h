@@ -13,9 +13,7 @@
 @private
 	NSMutableArray *questions;
 }
-@property (nonatomic, getter=isActive) BOOL active;
 @property (nonatomic, getter=responseIsRequired) BOOL responseRequired;
-@property (nonatomic) BOOL multipleResponsesAllowed;
 @property (nonatomic, copy) NSString *identifier;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *surveyDescription;
@@ -23,8 +21,6 @@
 @property (nonatomic, copy) NSString *successMessage;
 
 - (void)addQuestion:(ATSurveyQuestion *)question;
-
-- (BOOL)isEligibleToBeShown;
 
 - (void)reset;
 

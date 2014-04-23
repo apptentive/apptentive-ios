@@ -21,6 +21,7 @@
 #import "ATLegacySurveyResponse.h"
 #import "ATTaskQueue.h"
 #import "ATEngagementBackend.h"
+#import "ATSurveyQuestionResponse.h"
 
 #define DEBUG_CELL_HEIGHT_PROBLEM 0
 #define kAssociatedQuestionKey ("associated_question")

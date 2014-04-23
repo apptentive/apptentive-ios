@@ -21,11 +21,3 @@
 - (NSDictionary *)apiJSON;
 - (NSDictionary *)apiDictionary;
 @end
-
-
-@interface ATSurveyQuestionResponse : NSObject <NSCoding> {
-@private
-}
-@property (nonatomic, copy) NSString *identifier;
-@property (nonatomic, retain) NSObject<NSCoding> *response;
-@end

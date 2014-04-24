@@ -8,6 +8,7 @@
 
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
+#import "ATConnect_Debugging.h"
 #import "ATBackend.h"
 #import "ATContactStorage.h"
 #import "ATEngagementBackend.h"
@@ -21,6 +22,14 @@
 #import "ATFeedbackWindowController.h"
 #endif
 
+// Can't get CocoaPods to do the right thing for debug builds.
+// So, do it explicitly.
+#if COCOAPODS
+#    if DEBUG
+#	     define APPTENTIVE_DEBUG_LOG_VIEWER 1
+#    endif
+#endif
+
 NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCenterUnreadCountChangedNotification";
 NSString *const ATInitialUserNameKey = @"ATInitialUserNameKey";
 NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
@@ -30,7 +39,7 @@ NSString *const ATIntegrationKeyKahuna = @"kahuna";
 NSString *const ATIntegrationKeyAmazonSNS = @"aws_sns";
 
 @implementation ATConnect
-@synthesize apiKey, showTagline, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText, useMessageCenter;
+@synthesize apiKey, debuggingOptions, showTagline, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText, useMessageCenter;
 #if TARGET_OS_IPHONE
 @synthesize tintColor;
 #endif
@@ -59,6 +68,10 @@ NSString *const ATIntegrationKeyAmazonSNS = @"aws_sns";
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 		
 		ATLogInfo(@"Apptentive SDK Version %@", kATConnectVersionString);
+		
+#if APPTENTIVE_DEBUG_LOG_VIEWER
+		self.debuggingOptions = ATConnectDebuggingOptionsShowDebugPanel;
+#endif
 	}
 	return self;
 }
@@ -182,8 +195,7 @@ NSString *const ATIntegrationKeyAmazonSNS = @"aws_sns";
 		
 	if (allowedData) {
 		[customData setObject:object forKey:key];
-	}
-	else {
+	} else {
 		ATLogError(@"Apptentive custom data must be of type NSString, NSNumber, NSDate, or NSNull. Attempted to add custom data of type %@", NSStringFromClass([object class]));
 	}
 }

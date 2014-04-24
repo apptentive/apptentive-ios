@@ -1,5 +1,5 @@
 2014-04-18 wooster, pkamb v1.4.2
------------------------
+--------------------------------
 
 This release adds push notification integration with Amazon Web Services (AWS) Simple Notification Service (SNS). 
 
@@ -12,7 +12,7 @@ Fixes:
 * #91 ATAppConfigurationUpdateTask needs to retain self before updating task state
 
 2014-04-13 wooster, pkamb v1.4.1
------------------------
+--------------------------------
 
 Bug fix release for interaction codepoint encoding.
 

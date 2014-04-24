@@ -43,7 +43,7 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 - (NSString *)appID {
 	NSString *appID = self.interaction.configuration[@"store_id"];
 	if (!appID) {
-		appID = [ATAppRatingFlow sharedRatingFlow].appID;
+		appID = [ATConnect sharedConnection].appID;
 	}
 		
 	return appID;

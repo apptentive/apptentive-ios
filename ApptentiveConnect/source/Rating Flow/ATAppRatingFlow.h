@@ -24,7 +24,6 @@ extern NSString *const ATAppRatingFlowUserAgreedToRateAppNotification;
 #endif
 {
 @private
-	NSString *appID;
 #if TARGET_OS_IPHONE
 	UIAlertView *enjoymentDialog;
 	UIAlertView *ratingDialog;
@@ -43,7 +42,6 @@ extern NSString *const ATAppRatingFlowUserAgreedToRateAppNotification;
  */
 @property (nonatomic, copy) NSString *appName DEPRECATED_ATTRIBUTE;
 
-@property (nonatomic, copy) NSString *appID;
 
 /*! The default singleton constructor. */
 + (ATAppRatingFlow *)sharedRatingFlow;

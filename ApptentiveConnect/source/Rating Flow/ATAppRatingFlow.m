@@ -96,7 +96,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 
 @implementation ATAppRatingFlow
 @synthesize daysBeforePrompt, usesBeforePrompt, significantEventsBeforePrompt, daysBeforeRePrompting;
-@synthesize appID;
 #if TARGET_OS_IPHONE
 @synthesize viewController;
 #endif
@@ -133,7 +132,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 
 + (ATAppRatingFlow *)sharedRatingFlowWithAppID:(NSString *)iTunesAppID {
 	ATAppRatingFlow *sharedRatingFlow = [self sharedRatingFlow];
-	sharedRatingFlow.appID = iTunesAppID;
+	[ATConnect sharedConnection].appID = iTunesAppID;
 	return sharedRatingFlow;
 }
 
@@ -146,7 +145,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	self.viewController = nil;
 #endif
 	[lastUseOfApp release], lastUseOfApp = nil;
-	[appID release], appID = nil;
 	[super dealloc];
 }
 
@@ -292,9 +290,9 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	if (URLStringFromPreferences == nil) {
 #if TARGET_OS_IPHONE
 		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"6.0"]) {
-			URLString = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/%@/app/id%@", [[NSLocale currentLocale] objectForKey: NSLocaleCountryCode], self.appID];
+			URLString = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/%@/app/id%@", [[NSLocale currentLocale] objectForKey: NSLocaleCountryCode], [ATConnect sharedConnection].appID];
 		} else {
-			URLString = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", self.appID];
+			URLString = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", [ATConnect sharedConnection].appID];
 		}
 #elif TARGET_OS_MAC
 		URLString = [NSString stringWithFormat:@"macappstore://itunes.apple.com/app/id%@?mt=12", self.appID];
@@ -340,11 +338,11 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 }
 
 - (BOOL)shouldOpenAppStoreViaStoreKit {
-	return ([SKStoreProductViewController class] != NULL && self.appID && ![ATUtilities osVersionGreaterThanOrEqualTo:@"7"]);
+	return ([SKStoreProductViewController class] != NULL && [ATConnect sharedConnection].appID && ![ATUtilities osVersionGreaterThanOrEqualTo:@"7"]);
 }
 
 - (void)openAppStoreViaURL {
-	if (self.appID) {
+	if ([ATConnect sharedConnection].appID) {
 		NSURL *url = [self URLForRatingApp];
 		if (![[UIApplication sharedApplication] canOpenURL:url]) {
 			ATLogError(@"No application can open the URL: %@", url);
@@ -360,10 +358,10 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 }
 
 - (void)openAppStoreViaStoreKit {
-	if ([SKStoreProductViewController class] != NULL && self.appID) {
+	if ([SKStoreProductViewController class] != NULL && [ATConnect sharedConnection].appID) {
 		SKStoreProductViewController *vc = [[[SKStoreProductViewController alloc] init] autorelease];
 		vc.delegate = self;
-		[vc loadProductWithParameters:@{SKStoreProductParameterITunesItemIdentifier:self.appID} completionBlock:^(BOOL result, NSError *error) {
+		[vc loadProductWithParameters:@{SKStoreProductParameterITunesItemIdentifier:[ATConnect sharedConnection].appID} completionBlock:^(BOOL result, NSError *error) {
 			if (error) {
 				ATLogError(@"Error loading product view: %@", error);
 				[self showUnableToOpenAppStoreDialog];
@@ -407,7 +405,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 		}
 		
 		// No iTunes App ID set, don't show dialog.
-		if (self.appID == nil) {
+		if ([ATConnect sharedConnection].appID == nil) {
 			reasonForNotShowingDialog = @"iTunes App ID is not set.";
 			break;
 		}

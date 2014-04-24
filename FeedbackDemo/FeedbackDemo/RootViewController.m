@@ -41,7 +41,7 @@ enum kSurveyRows {
 
 - (IBAction)showRating:(id)sender {
 	ATAppRatingFlow *flow = [ATAppRatingFlow sharedRatingFlow];
-	flow.appID = kApptentiveAppID;
+	[ATConnect sharedConnection].appID = kApptentiveAppID;
 	// Don't do this in production apps.
 	if ([flow respondsToSelector:@selector(showEnjoymentDialog:)]) {
 		[flow performSelector:@selector(showEnjoymentDialog:) withObject:self];

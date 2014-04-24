@@ -37,7 +37,7 @@
 	[self.window makeKeyAndVisible];
 	
 	[[ATConnect sharedConnection] setApiKey:kApptentiveAPIKey];
-	[ATAppRatingFlow sharedRatingFlow].appID = kApptentiveAppID;
+	[ATConnect sharedConnection].appID = kApptentiveAppID;
 
 	[[ATConnect sharedConnection] addIntegration:@"feedback_demo_integration_configuration" withConfiguration:@{@"fake_apiKey": @"ABC-123-XYZ"}];
 	

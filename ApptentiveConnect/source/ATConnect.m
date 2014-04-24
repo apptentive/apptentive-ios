@@ -30,7 +30,7 @@ NSString *const ATIntegrationKeyKahuna = @"kahuna";
 NSString *const ATIntegrationKeyAmazonSNS = @"aws_sns";
 
 @implementation ATConnect
-@synthesize apiKey, showTagline, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText, useMessageCenter;
+@synthesize apiKey, appID, showTagline, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText, useMessageCenter;
 #if TARGET_OS_IPHONE
 @synthesize tintColor;
 #endif
@@ -77,6 +77,7 @@ NSString *const ATIntegrationKeyAmazonSNS = @"aws_sns";
 	[integrationConfiguration release], integrationConfiguration = nil;
 	[customPlaceholderText release], customPlaceholderText = nil;
 	[apiKey release], apiKey = nil;
+	[appID release], appID = nil;
 	[initialUserName release], initialUserName = nil;
 	[initialUserEmailAddress release], initialUserEmailAddress = nil;
 	[super dealloc];

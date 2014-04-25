@@ -103,21 +103,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	return self;
 }
 
-+ (ATAppRatingFlow *)sharedRatingFlow {
-	static ATAppRatingFlow *sharedRatingFlow = nil;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		sharedRatingFlow = [[ATAppRatingFlow alloc] init];
-	});
-	return sharedRatingFlow;
-}
-
-+ (ATAppRatingFlow *)sharedRatingFlowWithAppID:(NSString *)iTunesAppID {
-	ATAppRatingFlow *sharedRatingFlow = [self sharedRatingFlow];
-	[ATConnect sharedConnection].appID = iTunesAppID;
-	return sharedRatingFlow;
-}
-
 - (void)dealloc {
 #if	TARGET_OS_IPHONE
 	self.viewController = nil;
@@ -156,15 +141,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 }
 
 #pragma mark Properties
-
-- (void)setAppName:(NSString *)anAppName {
-	// Do nothing.
-}
-
-// TODO: Remove this once deployed on server.
-- (NSString *)appName {
-	return [[ATBackend sharedBackend] appName];
-}
 
 #if TARGET_OS_IPHONE
 

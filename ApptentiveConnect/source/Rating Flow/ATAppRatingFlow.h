@@ -24,17 +24,6 @@ extern NSString *const ATAppRatingFlowUserAgreedToRateAppNotification;
 #endif
 {
 }
-/*! 
- Set to a custom app name if you'd like to use something other than the bundle display name.
- Deprecated in 1.0.1 in favor of server-based configuration of the app display name. 
- */
-@property (nonatomic, copy) NSString *appName DEPRECATED_ATTRIBUTE;
-
-
-/*! The default singleton constructor. */
-+ (ATAppRatingFlow *)sharedRatingFlow;
-
-+ (ATAppRatingFlow *)sharedRatingFlowWithAppID:(NSString *)iTunesAppID;
 
 #if TARGET_OS_IPHONE
 /*!

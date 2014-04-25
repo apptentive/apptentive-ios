@@ -23,13 +23,6 @@ extern NSString *const ATAppRatingFlowUserAgreedToRateAppNotification;
 <SKStoreProductViewControllerDelegate, UIAlertViewDelegate>
 #endif
 {
-@private
-	NSUInteger daysBeforePrompt;
-	NSUInteger usesBeforePrompt;
-	NSUInteger significantEventsBeforePrompt;
-	NSUInteger daysBeforeRePrompting;
-	
-	NSDate *lastUseOfApp;
 }
 /*! 
  Set to a custom app name if you'd like to use something other than the bundle display name.

@@ -122,7 +122,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 #if	TARGET_OS_IPHONE
 	self.viewController = nil;
 #endif
-	[lastUseOfApp release], lastUseOfApp = nil;
 	[super dealloc];
 }
 

@@ -92,28 +92,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	[super dealloc];
 }
 
-#if TARGET_OS_IPHONE
-- (BOOL)showRatingFlowFromViewControllerIfConditionsAreMet:(UIViewController *)vc {
-	if (!viewController) {
-		ATLogError(@"Attempting to show Apptentive Rating Flow from a nil View Controller.");
-	}
-	
-	self.viewController = vc;
-
-	return NO;
-}
-#endif
-
-#if TARGET_OS_IPHONE
-#elif TARGET_OS_MAC
-- (void)appDidLaunch:(BOOL)canPromptForRating {
-	[self userDidUseApp];
-	if (canPromptForRating) {
-
-	}
-}
-#endif
-
 - (void)openAppStore {
 	[self openAppStoreToRateApp];
 }

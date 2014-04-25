@@ -22,24 +22,6 @@
 {
 }
 
-#if TARGET_OS_IPHONE
-/*!
- Deprecated. Use the Rating Flow Interaction instead.
- Call `engage:fromViewController:` for certain events in your app.
- Then, set up a rating flow interaciton via the Apptentive website.
- */
-- (BOOL)showRatingFlowFromViewControllerIfConditionsAreMet:(UIViewController *)viewController DEPRECATED_ATTRIBUTE;
-
-#elif TARGET_OS_MAC
-- (void)showRatingFlowIfConditionsAreMet;
-
-/*! 
- Call when the application is done launching. If we should be able to
- prompt for a rating, pass YES.
- */
-- (void)appDidLaunch:(BOOL)canPromptForRating;
-#endif
-
 /*!
  Call to open your app's page on the App Store or Mac App Store.
  This method can be used to power, for example, a "Rate this app" button in your settings screen.

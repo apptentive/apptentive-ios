@@ -9,7 +9,6 @@
 #import "FeedbackDemoAppDelegate.h"
 #import "ATConnect.h"
 #import "defines.h"
-#import "ATSurveys.h"
 
 @implementation FeedbackDemoAppDelegate
 @synthesize window=_window;

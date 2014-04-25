@@ -24,11 +24,6 @@ extern NSString *const ATAppRatingFlowUserAgreedToRateAppNotification;
 #endif
 {
 @private
-#if TARGET_OS_IPHONE
-	UIAlertView *enjoymentDialog;
-	UIAlertView *ratingDialog;
-#endif
-	
 	NSUInteger daysBeforePrompt;
 	NSUInteger usesBeforePrompt;
 	NSUInteger significantEventsBeforePrompt;

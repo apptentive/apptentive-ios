@@ -19,7 +19,6 @@
 #import "ATReachability.h"
 #import "ATAppRatingMetrics.h"
 #import "ATAppRatingFlow_Private.h"
-#import "ATAppRatingFlow+Internal.h"
 #import "ATUtilities.h"
 #import "ATWebClient.h"
 
@@ -67,8 +66,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 - (void)openMacAppStore;
 - (BOOL)requirementsToShowDialogMet;
 - (BOOL)shouldShowDialog;
-/*! Returns YES if a dialog was shown. */
-- (BOOL)showDialogIfNecessary;
 - (void)updateVersionInfo;
 - (void)userDidUseApp;
 - (void)userDidSignificantEvent;
@@ -137,10 +134,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 
 - (void)dealloc {
 #if	TARGET_OS_IPHONE
-	enjoymentDialog.delegate = nil;
-	[enjoymentDialog release], enjoymentDialog = nil;
-	ratingDialog.delegate = nil;
-	[ratingDialog release], ratingDialog = nil;
 	self.viewController = nil;
 #endif
 	[lastUseOfApp release], lastUseOfApp = nil;
@@ -158,12 +151,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	[self logDefaults];
 #	endif
 
-	BOOL showedDialog = [self showDialogIfNecessary];
-	if (!showedDialog) {
-		self.viewController = nil;
-		[[NSNotificationCenter defaultCenter] postNotificationName:ATAppRatingDidNotPromptForEnjoymentNotification object:nil];
-	}
-	return showedDialog;
+	return NO;
 }
 #endif
 
@@ -172,7 +160,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 - (void)appDidLaunch:(BOOL)canPromptForRating {
 	[self userDidUseApp];
 	if (canPromptForRating) {
-		[self showDialogIfNecessary];
+
 	}
 }
 #endif
@@ -199,57 +187,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 }
 
 #if TARGET_OS_IPHONE
-#pragma mark UIAlertViewDelegate
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-	if (alertView == enjoymentDialog) {
-		[enjoymentDialog release], enjoymentDialog = nil;
-		if (buttonIndex == 0) { // no
-			[self postNotification:ATAppRatingDidClickEnjoymentButtonNotification forButton:ATAppRatingEnjoymentButtonTypeNo];
-			[self setUserDislikesThisVersion];
-			if (!self.viewController) {
-				UIViewController *candidateVC = [self rootViewControllerForCurrentWindow];
-				if (candidateVC) {
-					self.viewController = candidateVC;
-				}
-			}
-			if (!self.viewController) {
-				ATLogError(@"No view controller to present feedback interface!!");
-			} else {
-				NSString *title = ATLocalizedString(@"We're Sorry!", @"We're sorry text");
-				NSString *body = ATLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
-				[[ATBackend sharedBackend] sendAutomatedMessageWithTitle:title body:body];
-				[[ATBackend sharedBackend] presentIntroDialogFromViewController:self.viewController withTitle:title prompt:body placeholderText:nil];
-			}
-		} else if (buttonIndex == 1) { // yes
-			[self postNotification:ATAppRatingDidClickEnjoymentButtonNotification forButton:ATAppRatingEnjoymentButtonTypeYes];
-			[self showRatingDialog:self.viewController];
-		}
-	} else if (alertView == ratingDialog) {
-		[ratingDialog release], ratingDialog = nil;
-		if (buttonIndex == 1) { // rate
-			[self postNotification:ATAppRatingDidClickRatingButtonNotification forButton:ATAppRatingButtonTypeRateApp];
-			[self userAgreedToRateApp];
-		} else if (buttonIndex == 2) { // remind later
-			[self postNotification:ATAppRatingDidClickRatingButtonNotification forButton:ATAppRatingButtonTypeRemind];
-			[self setRatingDialogWasShown];
-		} else if (buttonIndex == 0) { // no thanks
-			[self postNotification:ATAppRatingDidClickRatingButtonNotification forButton:ATAppRatingButtonTypeNo];
-			[self setDeclinedToRateThisVersion];
-		}
-		self.viewController = nil;
-	}
-}
 
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-	ATLogDebug(@"ATAppRatingFlow dismissing alert view %@, %d", alertView, buttonIndex);
-	if (alertView == enjoymentDialog) {
-		[enjoymentDialog release], enjoymentDialog = nil;
-		self.viewController = nil;
-	} else if (alertView == ratingDialog) {
-		[ratingDialog release], ratingDialog = nil;
-		self.viewController = nil;
-	}
-}
 
 #pragma mark SKStoreProductViewControllerDelegate
 - (void)productViewControllerDidFinish:(SKStoreProductViewController *)productViewController {
@@ -500,27 +438,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	return [self requirementsToShowDialogMet];
 }
 
-- (BOOL)showDialogIfNecessary {
-	if (![[ATBackend sharedBackend] isReady]) {
-		return NO;
-	}
-#if TARGET_OS_IPHONE
-	if ([self shouldShowDialog]) {
-		[self showEnjoymentDialog:self.viewController];
-		return YES;
-	} else if ([ATUtilities rootViewControllerForCurrentWindow]) {
-		[self tryToShowDialogWaitingForReachability];
-	}
-#elif TARGET_OS_MAC
-	if ([self shouldShowDialog]) {
-		[self showEnjoymentDialog:self];
-	} else {
-		[self tryToShowDialogWaitingForReachability];
-	}
-#endif
-	return NO;
-}
-
 - (void)updateVersionInfo {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	
@@ -646,12 +563,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 
 - (void)appWillEnterBackground:(NSNotification *)notification {
 	// We want to hide any dialogs here.
-	if (enjoymentDialog) {
-		[enjoymentDialog dismissWithClickedButtonIndex:3 animated:NO];
-	}
-	if (ratingDialog) {
-		[ratingDialog dismissWithClickedButtonIndex:3 animated:NO];
-	}
+	
 	[self updateLastUseOfApp];
 }
 
@@ -690,7 +602,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 			if ([[ATReachability sharedReachability] currentNetworkStatus] == ATNetworkNotReachable) {
 				[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChangedAndPendingDialog:) name:ATReachabilityStatusChanged object:nil];
 			} else {
-				[self showEnjoymentDialog:vc];
+
 			}
 			
 		}
@@ -739,94 +651,3 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	[info release], info = nil;
 }
 @end
-
-@implementation ATAppRatingFlow (Internal)
-#if TARGET_OS_IPHONE
-- (void)showEnjoymentDialog:(UIViewController *)vc
-#elif TARGET_OS_MAC
-- (IBAction)showEnjoymentDialog:(id)sender
-#endif
-{
-	NSString *title = [NSString stringWithFormat:ATLocalizedString(@"Do you love %@?", @"Title for enjoyment alert view. Parameter is app name."), [[ATBackend sharedBackend] appName]];
-#if TARGET_OS_IPHONE
-	self.viewController = vc;
-	if (!enjoymentDialog) {
-		enjoymentDialog = [[UIAlertView alloc] initWithTitle:title message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"No", @"no"), ATLocalizedString(@"Yes", @"yes"), nil];
-		[enjoymentDialog show];
-	}
-	[self postNotification:ATAppRatingDidPromptForEnjoymentNotification];
-	[self incrementPromptCount];
-	[self setRatingDialogWasShown];
-#elif TARGET_OS_MAC
-	NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-	[alert addButtonWithTitle:ATLocalizedString(@"Yes", @"yes")];
-	[alert addButtonWithTitle:ATLocalizedString(@"No", @"no")];
-	[alert setMessageText:title];
-	[alert setInformativeText:ATLocalizedString(@"You've been using this app for a while. Do you love it?", @"Enjoyment dialog text")];
-	[alert setAlertStyle:NSInformationalAlertStyle];
-	[alert setIcon:[NSImage imageNamed:NSImageNameApplicationIcon]];
-	[self postNotification:ATAppRatingDidPromptForEnjoymentNotification];
-	[self incrementPromptCount];
-	[self setRatingDialogWasShown];
-	NSUInteger result = [alert runModal];
-	if (result == NSAlertFirstButtonReturn) { // yes
-		[self showRatingDialog:self];
-	} else if (result == NSAlertSecondButtonReturn) { // no
-		[self setUserDislikesThisVersion];
-		
-		[[ATBackend sharedBackend] setCurrentFeedback:nil];
-		ATConnect *connection = [ATConnect sharedConnection];
-		connection.customPlaceholderText = ATLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
-		ATFeedbackControllerType oldType = connection.feedbackControllerType;
-		connection.feedbackControllerType = ATFeedbackControllerSimple;
-		[connection showFeedbackWindow:self];
-		ATFeedback *inProgressFeedback = [[ATBackend sharedBackend] currentFeedback];
-		inProgressFeedback.source = ATFeedbackSourceEnjoymentDialog;
-		connection.customPlaceholderText = nil;
-		connection.feedbackControllerType = oldType;
-	}
-#endif
-}
-
-#if TARGET_OS_IPHONE
-- (void)showRatingDialog:(UIViewController *)vc
-#elif TARGET_OS_MAC
-- (IBAction)showRatingDialog:(id)sender
-#endif
-{
-	NSString *title = ATLocalizedString(@"Thank You", @"Rate app title.");
-	NSString *message = [NSString stringWithFormat:ATLocalizedString(@"We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us.", @"Rate app message. Parameter is app name."), [[ATBackend sharedBackend] appName]];
-	NSString *rateAppTitle = [NSString stringWithFormat:ATLocalizedString(@"Rate %@", @"Rate app button title"), [[ATBackend sharedBackend] appName]];
-	NSString *noThanksTitle = ATLocalizedString(@"No Thanks", @"cancel title for app rating dialog");
-	NSString *remindMeTitle = ATLocalizedString(@"Remind Me Later", @"Remind me later button title");
-#if TARGET_OS_IPHONE
-	self.viewController = vc;
-	if (!ratingDialog) {
-		ratingDialog = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:noThanksTitle otherButtonTitles:rateAppTitle, remindMeTitle, nil];
-		[ratingDialog show];
-	}
-	[self postNotification:ATAppRatingDidPromptForRatingNotification];
-	[self setRatingDialogWasShown];
-#elif TARGET_OS_MAC
-	NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-	[alert addButtonWithTitle:noThanksTitle];
-	[alert addButtonWithTitle:remindMeTitle];
-	[alert addButtonWithTitle:rateAppTitle];
-	[alert setMessageText:title];
-	[alert setInformativeText:message];
-	[alert setAlertStyle:NSInformationalAlertStyle];
-	[alert setIcon:[NSImage imageNamed:NSImageNameApplicationIcon]];
-	[self postNotification:ATAppRatingDidPromptForRatingNotification];
-	[self setRatingDialogWasShown];
-	NSUInteger result = [alert runModal];
-	if (result == NSAlertFirstButtonReturn) { // cancel
-		[self setDeclinedToRateThisVersion];
-	} else if (result == NSAlertSecondButtonReturn) { // remind me
-		[self setRatingDialogWasShown];
-	} else if (result == NSAlertThirdButtonReturn) { // rate app
-		[self userAgreedToRateApp];
-	}
-#endif
-}
-@end
-

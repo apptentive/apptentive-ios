@@ -113,9 +113,6 @@
 		493F8D901672E07D000B5151 /* ATURLConnection_Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 493F8D8F1672E07D000B5151 /* ATURLConnection_Private.m */; };
 		493F8D911672E07D000B5151 /* ATURLConnection_Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 493F8D8F1672E07D000B5151 /* ATURLConnection_Private.m */; };
 		493F8D931672E15F000B5151 /* ATWebClient_Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 493F8D921672E15F000B5151 /* ATWebClient_Private.m */; };
-		4942CC9113C7AD2D009BF758 /* ATAppRatingFlow.h in Headers */ = {isa = PBXBuildFile; fileRef = 4942CC8F13C7AD2D009BF758 /* ATAppRatingFlow.h */; settings = {ATTRIBUTES = (); }; };
-		4942CC9213C7AD2D009BF758 /* ATAppRatingFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4942CC9013C7AD2D009BF758 /* ATAppRatingFlow.m */; };
-		4942CC9313C7AD2D009BF758 /* ATAppRatingFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4942CC9013C7AD2D009BF758 /* ATAppRatingFlow.m */; };
 		49477B751835B529001D37AD /* ATTextMessageUserCellV7.h in Headers */ = {isa = PBXBuildFile; fileRef = 49477B731835B529001D37AD /* ATTextMessageUserCellV7.h */; };
 		49477B761835B529001D37AD /* ATTextMessageUserCellV7.m in Sources */ = {isa = PBXBuildFile; fileRef = 49477B741835B529001D37AD /* ATTextMessageUserCellV7.m */; };
 		49477B781835B541001D37AD /* ATTextMessageUserCellV7.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49477B771835B541001D37AD /* ATTextMessageUserCellV7.xib */; };
@@ -477,8 +474,6 @@
 		493F8D8B1672DEFD000B5151 /* ATStaticLibraryBootstrap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATStaticLibraryBootstrap.m; sourceTree = "<group>"; };
 		493F8D8F1672E07D000B5151 /* ATURLConnection_Private.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATURLConnection_Private.m; sourceTree = "<group>"; };
 		493F8D921672E15F000B5151 /* ATWebClient_Private.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATWebClient_Private.m; sourceTree = "<group>"; };
-		4942CC8F13C7AD2D009BF758 /* ATAppRatingFlow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAppRatingFlow.h; sourceTree = "<group>"; };
-		4942CC9013C7AD2D009BF758 /* ATAppRatingFlow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAppRatingFlow.m; sourceTree = "<group>"; };
 		49477B731835B529001D37AD /* ATTextMessageUserCellV7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATTextMessageUserCellV7.h; path = "Message Center/ATTextMessageUserCellV7.h"; sourceTree = "<group>"; };
 		49477B741835B529001D37AD /* ATTextMessageUserCellV7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATTextMessageUserCellV7.m; path = "Message Center/ATTextMessageUserCellV7.m"; sourceTree = "<group>"; };
 		49477B771835B541001D37AD /* ATTextMessageUserCellV7.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ATTextMessageUserCellV7.xib; path = xibs/ATTextMessageUserCellV7.xib; sourceTree = SOURCE_ROOT; };
@@ -921,15 +916,6 @@
 			path = "View Controllers";
 			sourceTree = "<group>";
 		};
-		4942CC8E13C7AD2D009BF758 /* Rating Flow */ = {
-			isa = PBXGroup;
-			children = (
-				4942CC8F13C7AD2D009BF758 /* ATAppRatingFlow.h */,
-				4942CC9013C7AD2D009BF758 /* ATAppRatingFlow.m */,
-			);
-			path = "Rating Flow";
-			sourceTree = "<group>";
-		};
 		49509A5E135658CD00793EEC /* Reachability */ = {
 			isa = PBXGroup;
 			children = (
@@ -1218,7 +1204,6 @@
 				4936AE741379DEBB00A4B17F /* Misc */,
 				49F8AFCC16CC4A550070FFEA /* Model */,
 				4936AE7A1379DECE00A4B17F /* Persistence */,
-				4942CC8E13C7AD2D009BF758 /* Rating Flow */,
 				49509A5E135658CD00793EEC /* Reachability */,
 				493AEB1515990A4D00DFD4C7 /* Surveys */,
 				49D1124C13368CA800603373 /* Tasks */,
@@ -1428,7 +1413,6 @@
 				49D1125313368CEF00603373 /* ATFeedbackTask.h in Headers */,
 				49D112731337CC9F00603373 /* ATTaskQueue.h in Headers */,
 				491748BA1341177000A7D11E /* ATConnectionChannel.h in Headers */,
-				4942CC9113C7AD2D009BF758 /* ATAppRatingFlow.h in Headers */,
 				491748BC1341177000A7D11E /* ATConnectionManager.h in Headers */,
 				491748BE1341177000A7D11E /* ATURLConnection.h in Headers */,
 				491748C01341177000A7D11E /* ATWebClient.h in Headers */,
@@ -1747,7 +1731,6 @@
 				49AA1020138B44C00082887A /* ATInfoViewController.m in Sources */,
 				49352AC5138C97A2000E464A /* ATAPIRequest.m in Sources */,
 				49B71CA318417C5B00315AAF /* ATFileMessageUserCellV7.m in Sources */,
-				4942CC9213C7AD2D009BF758 /* ATAppRatingFlow.m in Sources */,
 				490B8159144274EF009801E9 /* ATCustomButton.m in Sources */,
 				490B815E1442751F009801E9 /* ATToolbar.m in Sources */,
 				49BC2A5B144F75E20041E789 /* ATShadowView.m in Sources */,
@@ -1861,7 +1844,6 @@
 				49AA1021138B44C00082887A /* ATInfoViewController.m in Sources */,
 				49352AC3138C97A2000E464A /* ATAPIRequest.m in Sources */,
 				58C97B5E18276427001EB5BD /* UIViewController+ATSwizzle.m in Sources */,
-				4942CC9313C7AD2D009BF758 /* ATAppRatingFlow.m in Sources */,
 				490B815A144274EF009801E9 /* ATCustomButton.m in Sources */,
 				58DCC0D7180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m in Sources */,
 				490B815F1442751F009801E9 /* ATToolbar.m in Sources */,

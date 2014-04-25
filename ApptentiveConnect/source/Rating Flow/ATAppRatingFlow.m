@@ -521,12 +521,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 }
 
 - (void)loadPreferences {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	daysBeforePrompt = [(NSNumber *)[defaults objectForKey:ATAppRatingDaysBeforePromptPreferenceKey] unsignedIntegerValue];
-	usesBeforePrompt = [(NSNumber *)[defaults objectForKey:ATAppRatingUsesBeforePromptPreferenceKey] unsignedIntegerValue];
-	significantEventsBeforePrompt = [(NSNumber *)[defaults objectForKey:ATAppRatingSignificantEventsBeforePromptPreferenceKey] unsignedIntegerValue];
-	daysBeforeRePrompting = [(NSNumber *)[defaults objectForKey:ATAppRatingDaysBetweenPromptsPreferenceKey] unsignedIntegerValue];
-
 	BOOL fromServer = [[NSUserDefaults standardUserDefaults] boolForKey:ATAppRatingSettingsAreFromServerPreferenceKey];
 	if (fromServer) {
 		ATLogInfo(@"Rating Flow: Using custom configuration retrieved from Apptentive");

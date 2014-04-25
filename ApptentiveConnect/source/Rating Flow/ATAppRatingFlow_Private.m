@@ -16,12 +16,6 @@
 NSString *const ATAppRatingClearCountsOnUpgradePreferenceKey  = @"ATAppRatingClearCountsOnUpgradePreferenceKey";
 NSString *const ATAppRatingEnabledPreferenceKey = @"ATAppRatingEnabledPreferenceKey";
 
-NSString *const ATAppRatingUsesBeforePromptPreferenceKey = @"ATAppRatingUsesBeforePromptPreferenceKey";
-NSString *const ATAppRatingDaysBeforePromptPreferenceKey = @"ATAppRatingDaysBeforePromptPreferenceKey";
-NSString *const ATAppRatingDaysBetweenPromptsPreferenceKey = @"ATAppRatingDaysBetweenPromptsPreferenceKey";
-NSString *const ATAppRatingSignificantEventsBeforePromptPreferenceKey = @"ATAppRatingSignificantEventsBeforePromptPreferenceKey";
-NSString *const ATAppRatingPromptLogicPreferenceKey = @"ATAppRatingPromptLogicPreferenceKey";
-
 NSString *const ATAppRatingSettingsAreFromServerPreferenceKey = @"ATAppRatingSettingsAreFromServerPreferenceKey";
 
 NSString *const ATAppRatingReviewURLPreferenceKey = @"ATAppRatingReviewURLPreferenceKey";
@@ -40,19 +34,11 @@ NSString *const ATAppRatingFlowSignificantEventsCountKey = @"ATAppRatingFlowSign
 @implementation ATAppRatingFlow_Private
 + (void)registerDefaults {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	
-	NSDictionary *innerPromptLogic = [NSDictionary dictionaryWithObjectsAndKeys:[NSArray arrayWithObjects:@"events", @"uses", nil], @"or", nil];
-	NSDictionary *defaultPromptLogic = [NSDictionary dictionaryWithObjectsAndKeys:[NSArray arrayWithObjects:@"days", innerPromptLogic, nil], @"and", nil];
-	
+		
 	NSDictionary *defaultPreferences = 
 		[NSDictionary dictionaryWithObjectsAndKeys:
 		 [NSNumber numberWithBool:NO], ATAppRatingClearCountsOnUpgradePreferenceKey,
-		 [NSNumber numberWithUnsignedInteger:kATAppRatingDefaultUsesBeforePrompt], ATAppRatingUsesBeforePromptPreferenceKey, 
-		 [NSNumber numberWithUnsignedInteger:kATAppRatingDefaultDaysBeforePrompt], ATAppRatingDaysBeforePromptPreferenceKey, 
-		 [NSNumber numberWithUnsignedInteger:kATAppRatingDefaultDaysBetweenPrompts], ATAppRatingDaysBetweenPromptsPreferenceKey, 
-		 [NSNumber numberWithUnsignedInteger:kATAppRatingDefaultSignificantEventsBeforePrompt], ATAppRatingSignificantEventsBeforePromptPreferenceKey,
 		 [NSNumber numberWithInteger:0], ATAppRatingFlowPromptCountThisVersionKey,
-		 defaultPromptLogic, ATAppRatingPromptLogicPreferenceKey, 
 		 [NSNumber numberWithBool:NO], ATAppRatingSettingsAreFromServerPreferenceKey, 
 		 [NSNumber numberWithBool:YES], ATAppRatingEnabledPreferenceKey,
 		 nil];

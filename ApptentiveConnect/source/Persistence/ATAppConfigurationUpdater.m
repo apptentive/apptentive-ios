@@ -155,10 +155,6 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 		[NSDictionary dictionaryWithObjectsAndKeys:
 		 @"ratings_clear_on_upgrade", ATAppRatingClearCountsOnUpgradePreferenceKey, 
 		 @"ratings_enabled", ATAppRatingEnabledPreferenceKey,
-		 @"ratings_days_before_prompt", ATAppRatingDaysBeforePromptPreferenceKey, 
-		 @"ratings_days_between_prompts", ATAppRatingDaysBetweenPromptsPreferenceKey, 
-		 @"ratings_events_before_prompt", ATAppRatingSignificantEventsBeforePromptPreferenceKey, 
-		 @"ratings_uses_before_prompt", ATAppRatingUsesBeforePromptPreferenceKey,
 		 @"metrics_enabled", ATAppConfigurationMetricsEnabledPreferenceKey,
 		 @"message_center_enabled", ATAppConfigurationMessageCenterEnabledKey,
 		 nil];

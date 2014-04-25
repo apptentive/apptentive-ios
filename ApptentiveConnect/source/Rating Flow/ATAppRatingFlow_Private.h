@@ -11,12 +11,6 @@
 NSString *const ATAppRatingClearCountsOnUpgradePreferenceKey;
 NSString *const ATAppRatingEnabledPreferenceKey;
 
-NSString *const ATAppRatingUsesBeforePromptPreferenceKey;
-NSString *const ATAppRatingDaysBeforePromptPreferenceKey;
-NSString *const ATAppRatingDaysBetweenPromptsPreferenceKey;
-NSString *const ATAppRatingSignificantEventsBeforePromptPreferenceKey;
-NSString *const ATAppRatingPromptLogicPreferenceKey;
-
 NSString *const ATAppRatingSettingsAreFromServerPreferenceKey;
 
 NSString *const ATAppRatingReviewURLPreferenceKey;

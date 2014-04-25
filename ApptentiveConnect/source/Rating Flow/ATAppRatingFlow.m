@@ -17,7 +17,6 @@
 #import "ATFeedback.h"
 #import "ATMessageSender.h"
 #import "ATReachability.h"
-#import "ATAppRatingMetrics.h"
 #import "ATUtilities.h"
 #import "ATWebClient.h"
 
@@ -154,8 +153,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 }
 
 - (void)openAppStore {
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATAppRatingDidManuallyOpenAppStoreToRateAppNotification object:nil];
-
 	[self openAppStoreToRateApp];
 }
 
@@ -188,8 +185,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 }
 
 - (void)postNotification:(NSString *)name forButton:(int)button {
-	NSDictionary *userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:button] forKey:ATAppRatingButtonTypeKey];
-	[[NSNotificationCenter defaultCenter] postNotificationName:name object:self userInfo:userInfo];
+
 }
 
 - (NSURL *)URLForRatingApp {

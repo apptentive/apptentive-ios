@@ -13,11 +13,6 @@
 #define kATAppRatingDefaultDaysBetweenPrompts 5
 #define kATAppRatingDefaultSignificantEventsBeforePrompt 10
 
-NSString *const ATAppRatingClearCountsOnUpgradePreferenceKey  = @"ATAppRatingClearCountsOnUpgradePreferenceKey";
-NSString *const ATAppRatingEnabledPreferenceKey = @"ATAppRatingEnabledPreferenceKey";
-
-NSString *const ATAppRatingSettingsAreFromServerPreferenceKey = @"ATAppRatingSettingsAreFromServerPreferenceKey";
-
 NSString *const ATAppRatingReviewURLPreferenceKey = @"ATAppRatingReviewURLPreferenceKey";
 
 NSString *const ATAppRatingFlowLastUsedVersionKey = @"ATAppRatingFlowLastUsedVersionKey";
@@ -37,10 +32,7 @@ NSString *const ATAppRatingFlowSignificantEventsCountKey = @"ATAppRatingFlowSign
 		
 	NSDictionary *defaultPreferences = 
 		[NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithBool:NO], ATAppRatingClearCountsOnUpgradePreferenceKey,
 		 [NSNumber numberWithInteger:0], ATAppRatingFlowPromptCountThisVersionKey,
-		 [NSNumber numberWithBool:NO], ATAppRatingSettingsAreFromServerPreferenceKey, 
-		 [NSNumber numberWithBool:YES], ATAppRatingEnabledPreferenceKey,
 		 nil];
 	[defaults registerDefaults:defaultPreferences];
 }

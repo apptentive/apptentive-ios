@@ -8,14 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-NSString *const ATAppRatingClearCountsOnUpgradePreferenceKey;
-NSString *const ATAppRatingEnabledPreferenceKey;
-
-NSString *const ATAppRatingSettingsAreFromServerPreferenceKey;
-
 NSString *const ATAppRatingReviewURLPreferenceKey;
-
-
 
 NSString *const ATAppRatingFlowLastUsedVersionKey;
 NSString *const ATAppRatingFlowLastUsedVersionFirstUseDateKey;

@@ -355,13 +355,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	NSString *lastBundleVersion = [defaults objectForKey:ATAppRatingFlowLastUsedVersionKey];
 	
 	if (lastBundleVersion == nil || ![lastBundleVersion isEqualToString:currentBundleVersion]) {
-		BOOL clearCounts = [(NSNumber *)[defaults objectForKey:ATAppRatingClearCountsOnUpgradePreferenceKey] boolValue];
-		if (clearCounts) {
-			// Clear the counters.
-			[defaults setObject:[NSNumber numberWithUnsignedInteger:0] forKey:ATAppRatingFlowUseCountKey];
-			[defaults setObject:[NSNumber numberWithUnsignedInteger:0] forKey:ATAppRatingFlowSignificantEventsCountKey];
-			[defaults setObject:[NSNumber numberWithBool:NO] forKey:ATAppRatingFlowRatedAppKey];
-		}
 		
 		[defaults setObject:currentBundleVersion forKey:ATAppRatingFlowLastUsedVersionKey];
 		
@@ -521,11 +514,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 }
 
 - (void)loadPreferences {
-	BOOL fromServer = [[NSUserDefaults standardUserDefaults] boolForKey:ATAppRatingSettingsAreFromServerPreferenceKey];
-	if (fromServer) {
-		ATLogInfo(@"Rating Flow: Using custom configuration retrieved from Apptentive");
-	} else {
-		ATLogInfo(@"Rating Flow: Using defaults until custom configuration can be retrieved from Apptentive");
-	}
+
 }
 @end

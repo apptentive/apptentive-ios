@@ -13,26 +13,6 @@
 #define kATAppRatingDefaultDaysBetweenPrompts 5
 #define kATAppRatingDefaultSignificantEventsBeforePrompt 10
 
-NSString *const ATAppRatingFlowLastUsedVersionKey = @"ATAppRatingFlowLastUsedVersionKey";
-NSString *const ATAppRatingFlowLastUsedVersionFirstUseDateKey = @"ATAppRatingFlowLastUsedVersionFirstUseDateKey";
-NSString *const ATAppRatingFlowDeclinedToRateThisVersionKey = @"ATAppRatingFlowDeclinedToRateThisVersionKey";
-NSString *const ATAppRatingFlowUserDislikesThisVersionKey = @"ATAppRatingFlowUserDislikesThisVersionKey";
-NSString *const ATAppRatingFlowPromptCountThisVersionKey = @"ATAppRatingFlowPromptCountThisVersionKey";
-NSString *const ATAppRatingFlowLastPromptDateKey = @"ATAppRatingFlowLastPromptDateKey";
-NSString *const ATAppRatingFlowRatedAppKey = @"ATAppRatingFlowRatedAppKey";
-
-NSString *const ATAppRatingFlowUseCountKey = @"ATAppRatingFlowUseCountKey";
-NSString *const ATAppRatingFlowSignificantEventsCountKey = @"ATAppRatingFlowSignificantEventsCountKey";
-
 @implementation ATAppRatingFlow_Private
-+ (void)registerDefaults {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		
-	NSDictionary *defaultPreferences = 
-		[NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInteger:0], ATAppRatingFlowPromptCountThisVersionKey,
-		 nil];
-	[defaults registerDefaults:defaultPreferences];
-}
 
 @end

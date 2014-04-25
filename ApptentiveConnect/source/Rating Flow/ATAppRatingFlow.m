@@ -54,7 +54,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 
 
 @interface ATAppRatingFlow (Private)
-- (void)updateLastUseOfApp;
 - (void)postNotification:(NSString *)name;
 - (void)postNotification:(NSString *)name forButton:(int)button;
 - (NSURL *)URLForRatingApp;
@@ -66,14 +65,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 - (void)openMacAppStore;
 - (BOOL)requirementsToShowDialogMet;
 - (BOOL)shouldShowDialog;
-- (void)updateVersionInfo;
-- (void)userDidUseApp;
-- (void)userDidSignificantEvent;
-- (void)incrementPromptCount;
-- (void)setRatingDialogWasShown;
-- (void)setUserDislikesThisVersion;
-- (void)setDeclinedToRateThisVersion;
-- (void)setRatedApp:(BOOL)hasRated;
 
 #if TARGET_OS_IPHONE
 - (void)appDidFinishLaunching:(NSNotification *)notification;
@@ -102,7 +93,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 
 - (id)init {
 	if ((self = [super init])) {
-		[ATAppRatingFlow_Private registerDefaults];
 		[self loadPreferences];
 #if TARGET_OS_IPHONE
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidFinishLaunching:) name:UIApplicationDidFinishLaunchingNotification object:nil];
@@ -111,7 +101,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
 #endif
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(preferencesChanged:) name:ATConfigurationPreferencesChangedNotification object:nil];
-		[self userDidUseApp];
 	}
 	return self;
 }
@@ -162,7 +151,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 #endif
 
 - (void)logSignificantEvent {
-	[self userDidSignificantEvent];
+
 }
 
 - (void)openAppStore {
@@ -194,19 +183,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 
 
 @implementation ATAppRatingFlow (Private)
-- (void)updateLastUseOfApp {
-	NSDate *date = nil;
-	if (lastUseOfApp == nil && ratingsLoadTime != 0) {
-		date = [[NSDate alloc] initWithTimeIntervalSinceReferenceDate:(NSTimeInterval)ratingsLoadTime];
-	} else {
-		date = [[NSDate alloc] init];
-	}
-	
-	if (lastUseOfApp) {
-		[lastUseOfApp release], lastUseOfApp = nil;
-	}
-	lastUseOfApp = date;
-}
 
 - (void)postNotification:(NSString *)name {
 	[[NSNotificationCenter defaultCenter] postNotificationName:name object:self];
@@ -240,7 +216,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 - (void)showUnableToOpenAppStoreDialog {
 	UIAlertView *errorAlert = [[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Oops!", @"Unable to load the App Store title") message:ATLocalizedString(@"Unable to load the App Store", @"Unable to load the App Store message") delegate:nil cancelButtonTitle:ATLocalizedString(@"OK", @"OK button title") otherButtonTitles:nil] autorelease];
 	[errorAlert show];
-	[self setRatedApp:NO];
 }
 #endif
 
@@ -251,7 +226,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 }
 
 - (void)openAppStoreToRateApp {
-	[self setRatedApp:YES];
 		
 #if TARGET_OS_IPHONE
 #	if TARGET_IPHONE_SIMULATOR
@@ -348,114 +322,25 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	return [self requirementsToShowDialogMet];
 }
 
-- (void)updateVersionInfo {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	
-	NSString *currentBundleVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
-	NSString *lastBundleVersion = [defaults objectForKey:ATAppRatingFlowLastUsedVersionKey];
-	
-	if (lastBundleVersion == nil || ![lastBundleVersion isEqualToString:currentBundleVersion]) {
-		
-		[defaults setObject:currentBundleVersion forKey:ATAppRatingFlowLastUsedVersionKey];
-		
-		[defaults setObject:[NSDate date] forKey:ATAppRatingFlowLastUsedVersionFirstUseDateKey];
-		[defaults setObject:[NSNumber numberWithBool:NO] forKey:ATAppRatingFlowDeclinedToRateThisVersionKey];
-		[defaults setObject:[NSNumber numberWithBool:NO] forKey:ATAppRatingFlowUserDislikesThisVersionKey];
-		[defaults setObject:[NSNumber numberWithInteger:0] forKey:ATAppRatingFlowPromptCountThisVersionKey];
-	}
-}
-
-- (void)userDidUseApp {
-	if (lastUseOfApp != nil) {
-		NSTimeInterval interval = [lastUseOfApp timeIntervalSinceNow];
-		
-		if (interval >= -kATAppAppUsageMinimumInterval) {
-			[self updateLastUseOfApp];
-			return;
-		}
-	}
-	[self updateLastUseOfApp];
-	
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	
-	NSNumber *useCount = [defaults objectForKey:ATAppRatingFlowUseCountKey];
-	NSUInteger count = 0;
-	if (useCount != nil) {
-		count = [useCount unsignedIntegerValue];
-	}
-	count++;
-	
-	[defaults setObject:[NSNumber numberWithUnsignedInteger:count] forKey:ATAppRatingFlowUseCountKey];
-	
-	[self updateVersionInfo];
-}
-
-- (void)userDidSignificantEvent {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	
-	NSNumber *eventCount = [defaults objectForKey:ATAppRatingFlowSignificantEventsCountKey];
-	NSUInteger count = 0;
-	if (eventCount != nil) {
-		count = [eventCount unsignedIntegerValue];
-	}
-	
-	[defaults setObject:[NSNumber numberWithUnsignedInteger:count+1] forKey:ATAppRatingFlowSignificantEventsCountKey];
-	
-}
-
-- (void)incrementPromptCount {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSInteger promptCount = [[defaults objectForKey:ATAppRatingFlowPromptCountThisVersionKey] integerValue];
-	promptCount += 1;
-	[defaults setObject:[NSNumber numberWithInteger:promptCount] forKey:ATAppRatingFlowPromptCountThisVersionKey];
-	[defaults synchronize];
-}
-
-- (void)setRatingDialogWasShown {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[defaults setObject:[NSDate date] forKey:ATAppRatingFlowLastPromptDateKey];
-	[defaults synchronize];
-}
-
-- (void)setUserDislikesThisVersion {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[defaults setObject:[NSNumber numberWithBool:YES] forKey:ATAppRatingFlowUserDislikesThisVersionKey];
-	[defaults synchronize];
-}
-
-- (void)setDeclinedToRateThisVersion {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[defaults setObject:[NSNumber numberWithBool:YES] forKey:ATAppRatingFlowDeclinedToRateThisVersionKey];
-	[defaults synchronize];
-}
-
-- (void)setRatedApp:(BOOL)hasRated {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[defaults setObject:[NSNumber numberWithBool:hasRated] forKey:ATAppRatingFlowRatedAppKey];
-	[defaults synchronize];
-}
-
 #if TARGET_OS_IPHONE
 - (void)appDidFinishLaunching:(NSNotification *)notification {
-	[self userDidUseApp];
+
 }
 
 - (void)appDidEnterBackground:(NSNotification *)notification {
-	[self updateLastUseOfApp];
+
 }
 
 - (void)appWillEnterForeground:(NSNotification *)notification {
-	[self userDidUseApp];
+
 }
 
 - (void)appWillResignActive:(NSNotification *)notification {
-	[self updateLastUseOfApp];
+
 }
 
 - (void)appWillEnterBackground:(NSNotification *)notification {
 	// We want to hide any dialogs here.
-	
-	[self updateLastUseOfApp];
 }
 
 #endif

@@ -8,19 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-NSString *const ATAppRatingFlowLastUsedVersionKey;
-NSString *const ATAppRatingFlowLastUsedVersionFirstUseDateKey;
-NSString *const ATAppRatingFlowDeclinedToRateThisVersionKey;
-NSString *const ATAppRatingFlowUserDislikesThisVersionKey;
-NSString *const ATAppRatingFlowPromptCountThisVersionKey;
-NSString *const ATAppRatingFlowLastPromptDateKey;
-NSString *const ATAppRatingFlowRatedAppKey;
-
-NSString *const ATAppRatingFlowUseCountKey;
-NSString *const ATAppRatingFlowSignificantEventsCountKey;
-
 @interface ATAppRatingFlow_Private : NSObject
-+ (void)registerDefaults;
 
 @end
 

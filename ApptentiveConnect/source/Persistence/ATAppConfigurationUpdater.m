@@ -7,7 +7,6 @@
 //
 
 #import "ATAppConfigurationUpdater.h"
-#import "ATAppRatingFlow_Private.h"
 #import "ATContactStorage.h"
 #import "ATUtilities.h"
 #import "ATWebClient.h"
@@ -148,7 +147,6 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	[ATAppConfigurationUpdater registerDefaults];
-	[ATAppRatingFlow_Private registerDefaults];
 	[defaults setObject:[NSDate date] forKey:ATAppConfigurationLastUpdatePreferenceKey];
 	
 	NSDictionary *numberObjects = 

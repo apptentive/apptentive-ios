@@ -8,7 +8,6 @@
 
 #import "ATInteractionUsageData.h"
 #import "ATEngagementBackend.h"
-#import "ATAppRatingFlow_Private.h"
 #import "ATUtilities.h"
 
 @implementation ATInteractionUsageData

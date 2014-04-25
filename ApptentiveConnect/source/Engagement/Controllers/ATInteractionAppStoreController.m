@@ -12,9 +12,6 @@
 #import "ATInteraction.h"
 #import "ATEngagementBackend.h"
 
-#import "ATAppRatingFlow.h"
-#import "ATAppRatingFlow_Private.h"
-
 NSString *const ATInteractionAppStoreRatingEventLabelLaunch = @"launch";
 NSString *const ATInteractionAppStoreRatingEventLabelOpenAppStoreURL = @"open_app_store_url";
 NSString *const ATInteractionAppStoreRatingEventLabelOpenStoreKit = @"open_store_kit";

@@ -11,7 +11,6 @@
 #import "ATEngagementGetManifestTask.h"
 #import "ATTaskQueue.h"
 #import "ATInteraction.h"
-#import "ATAppRatingFlow_Private.h"
 #import "ATConnect_Private.h"
 #import "ATUtilities.h"
 #import "ATInteractionUpgradeMessageViewController.h"

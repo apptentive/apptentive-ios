@@ -264,8 +264,6 @@
 		49CEFF5D15168B54006D8BA8 /* ATAppConfigurationUpdater.h in Headers */ = {isa = PBXBuildFile; fileRef = 49CEFF5B15168B53006D8BA8 /* ATAppConfigurationUpdater.h */; };
 		49CEFF5E15168B54006D8BA8 /* ATAppConfigurationUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 49CEFF5C15168B53006D8BA8 /* ATAppConfigurationUpdater.m */; };
 		49CEFF5F15168B54006D8BA8 /* ATAppConfigurationUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 49CEFF5C15168B53006D8BA8 /* ATAppConfigurationUpdater.m */; };
-		49CEFF8115193EC2006D8BA8 /* ATAppRatingFlow_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 49CEFF7F15193EC2006D8BA8 /* ATAppRatingFlow_Private.h */; };
-		49CEFF8215193EC2006D8BA8 /* ATAppRatingFlow_Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 49CEFF8015193EC2006D8BA8 /* ATAppRatingFlow_Private.m */; };
 		49D07DD017F29A1F0042FCFD /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49D07DCE17F29A1F0042FCFD /* Localizable.strings */; };
 		49D1124F13368CC200603373 /* ATTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D1124D13368CC200603373 /* ATTask.h */; };
 		49D1125013368CC200603373 /* ATTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 49D1124E13368CC200603373 /* ATTask.m */; };
@@ -619,8 +617,6 @@
 		49CB6DE91718FE4400BC9223 /* ATMessageCenterMetrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATMessageCenterMetrics.m; path = Metrics/ATMessageCenterMetrics.m; sourceTree = "<group>"; };
 		49CEFF5B15168B53006D8BA8 /* ATAppConfigurationUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAppConfigurationUpdater.h; sourceTree = "<group>"; };
 		49CEFF5C15168B53006D8BA8 /* ATAppConfigurationUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAppConfigurationUpdater.m; sourceTree = "<group>"; };
-		49CEFF7F15193EC2006D8BA8 /* ATAppRatingFlow_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAppRatingFlow_Private.h; sourceTree = "<group>"; };
-		49CEFF8015193EC2006D8BA8 /* ATAppRatingFlow_Private.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAppRatingFlow_Private.m; sourceTree = "<group>"; };
 		49D07DCF17F29A1F0042FCFD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
 		49D1118C13341A7C00603373 /* ApptentiveResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApptentiveResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		49D1124D13368CC200603373 /* ATTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATTask.h; sourceTree = "<group>"; };
@@ -935,8 +931,6 @@
 			children = (
 				4942CC8F13C7AD2D009BF758 /* ATAppRatingFlow.h */,
 				4942CC9013C7AD2D009BF758 /* ATAppRatingFlow.m */,
-				49CEFF7F15193EC2006D8BA8 /* ATAppRatingFlow_Private.h */,
-				49CEFF8015193EC2006D8BA8 /* ATAppRatingFlow_Private.m */,
 				49EF340D14AA7F2D00077F76 /* ATAppRatingMetrics.h */,
 				49EF340E14AA7F2D00077F76 /* ATAppRatingMetrics.m */,
 			);
@@ -1470,7 +1464,6 @@
 				49EA5AB014BD08AD004F8A4D /* ATLegacyRecord.h in Headers */,
 				49EA5ABD14BD0F4D004F8A4D /* ATRecordTask.h in Headers */,
 				49CEFF5D15168B54006D8BA8 /* ATAppConfigurationUpdater.h in Headers */,
-				49CEFF8115193EC2006D8BA8 /* ATAppRatingFlow_Private.h in Headers */,
 				4987FA80157ACAB500AF2078 /* ATSurveyMetrics.h in Headers */,
 				4987FA85157ACB0B00AF2078 /* ATFeedbackMetrics.h in Headers */,
 				4987FA9C157AE53700AF2078 /* ApptentiveMetrics.h in Headers */,
@@ -1771,7 +1764,6 @@
 				49EF002C18DA4C7300661F7C /* ATLargeImageResizer.m in Sources */,
 				49EA5ABE14BD0F4D004F8A4D /* ATRecordTask.m in Sources */,
 				49CEFF5E15168B54006D8BA8 /* ATAppConfigurationUpdater.m in Sources */,
-				49CEFF8215193EC2006D8BA8 /* ATAppRatingFlow_Private.m in Sources */,
 				49735D631832DF1F00D48DE7 /* ATMessageCenterDataSource.m in Sources */,
 				4987FA81157ACAB500AF2078 /* ATSurveyMetrics.m in Sources */,
 				4987FA86157ACB0B00AF2078 /* ATFeedbackMetrics.m in Sources */,

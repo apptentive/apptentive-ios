@@ -18,7 +18,6 @@
 #import "ATMessageSender.h"
 #import "ATReachability.h"
 #import "ATAppRatingMetrics.h"
-#import "ATAppRatingFlow_Private.h"
 #import "ATUtilities.h"
 #import "ATWebClient.h"
 

@@ -37,13 +37,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 @interface ATAppRatingFlow (Private)
 - (void)postNotification:(NSString *)name;
 - (void)postNotification:(NSString *)name forButton:(int)button;
-- (NSURL *)URLForRatingApp;
-- (void)userAgreedToRateApp;
-- (void)openAppStoreToRateApp;
-- (BOOL)shouldOpenAppStoreViaStoreKit;
-- (void)openAppStoreViaURL;
-- (void)openAppStoreViaStoreKit;
-- (void)openMacAppStore;
 - (BOOL)requirementsToShowDialogMet;
 - (BOOL)shouldShowDialog;
 
@@ -92,10 +85,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	[super dealloc];
 }
 
-- (void)openAppStore {
-	[self openAppStoreToRateApp];
-}
-
 #pragma mark Properties
 
 #if TARGET_OS_IPHONE
@@ -117,102 +106,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 
 - (void)postNotification:(NSString *)name forButton:(int)button {
 
-}
-
-- (NSURL *)URLForRatingApp {
-	NSString *URLString = nil;
-	NSString *URLStringFromPreferences = nil;
-	if (URLStringFromPreferences == nil) {
-#if TARGET_OS_IPHONE
-		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"6.0"]) {
-			URLString = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/%@/app/id%@", [[NSLocale currentLocale] objectForKey: NSLocaleCountryCode], [ATConnect sharedConnection].appID];
-		} else {
-			URLString = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", [ATConnect sharedConnection].appID];
-		}
-#elif TARGET_OS_MAC
-		URLString = [NSString stringWithFormat:@"macappstore://itunes.apple.com/app/id%@?mt=12", self.appID];
-#endif
-	} else {
-		URLString = URLStringFromPreferences;
-	}
-	return [NSURL URLWithString:URLString];
-}
-
-#if TARGET_OS_IPHONE
-- (void)showUnableToOpenAppStoreDialog {
-	UIAlertView *errorAlert = [[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Oops!", @"Unable to load the App Store title") message:ATLocalizedString(@"Unable to load the App Store", @"Unable to load the App Store message") delegate:nil cancelButtonTitle:ATLocalizedString(@"OK", @"OK button title") otherButtonTitles:nil] autorelease];
-	[errorAlert show];
-}
-#endif
-
-- (void)userAgreedToRateApp {
-	[self openAppStoreToRateApp];
-}
-
-- (void)openAppStoreToRateApp {
-		
-#if TARGET_OS_IPHONE
-#	if TARGET_IPHONE_SIMULATOR
-	[self showUnableToOpenAppStoreDialog];
-#	else
-	if ([self shouldOpenAppStoreViaStoreKit]) {
-		[self openAppStoreViaStoreKit];
-	}
-	else {
-		[self openAppStoreViaURL];
-	}
-#	endif
-	
-#elif TARGET_OS_MAC
-	[self openMacAppStore];
-#endif
-}
-
-- (BOOL)shouldOpenAppStoreViaStoreKit {
-	return ([SKStoreProductViewController class] != NULL && [ATConnect sharedConnection].appID && ![ATUtilities osVersionGreaterThanOrEqualTo:@"7"]);
-}
-
-- (void)openAppStoreViaURL {
-	if ([ATConnect sharedConnection].appID) {
-		NSURL *url = [self URLForRatingApp];
-		if (![[UIApplication sharedApplication] canOpenURL:url]) {
-			ATLogError(@"No application can open the URL: %@", url);
-			[self showUnableToOpenAppStoreDialog];
-		}
-		else {
-			[[UIApplication sharedApplication] openURL:url];
-		}
-	}
-	else {
-		[self showUnableToOpenAppStoreDialog];
-	}
-}
-
-- (void)openAppStoreViaStoreKit {
-	if ([SKStoreProductViewController class] != NULL && [ATConnect sharedConnection].appID) {
-		SKStoreProductViewController *vc = [[[SKStoreProductViewController alloc] init] autorelease];
-		vc.delegate = self;
-		[vc loadProductWithParameters:@{SKStoreProductParameterITunesItemIdentifier:[ATConnect sharedConnection].appID} completionBlock:^(BOOL result, NSError *error) {
-			if (error) {
-				ATLogError(@"Error loading product view: %@", error);
-				[self showUnableToOpenAppStoreDialog];
-			} else {
-				UIViewController *presentingVC = [ATUtilities rootViewControllerForCurrentWindow];
-				[presentingVC presentViewController:vc animated:YES completion:^{}];
-			}
-		}];
-	}
-	else {
-		[self showUnableToOpenAppStoreDialog];
-	}
-}
-
-- (void)openMacAppStore {
-#if TARGET_OS_IPHONE
-#elif TARGET_OS_MAC
-	NSURL *url = [self URLForRatingApp];
-	[[NSWorkspace sharedWorkspace] openURL:url];
-#endif
 }
 
 - (BOOL)requirementsToShowDialogMet {

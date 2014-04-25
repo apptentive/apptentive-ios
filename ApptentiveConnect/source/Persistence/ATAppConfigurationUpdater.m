@@ -164,7 +164,6 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 		 nil];
 	
 	NSArray *boolPreferences = [NSArray arrayWithObjects:@"ratings_clear_on_upgrade", @"ratings_enabled", @"metrics_enabled", @"message_center_enabled", nil];
-	NSObject *ratingsPromptLogic = [jsonConfiguration objectForKey:@"ratings_prompt_logic"];
 	
 	for (NSString *key in numberObjects) {
 		NSObject *value = [jsonConfiguration objectForKey:[numberObjects objectForKey:key]];
@@ -188,14 +187,6 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 			[defaults setObject:replacementValue forKey:key];
 		}
 		hasConfigurationChanges = YES;
-	}
-	
-	if (ratingsPromptLogic) {
-		NSPredicate *predicate = [ATAppRatingFlow_Private predicateForPromptLogic:ratingsPromptLogic withPredicateInfo:nil];
-		if (predicate) {
-			[defaults setObject:ratingsPromptLogic forKey:ATAppRatingPromptLogicPreferenceKey];
-			hasConfigurationChanges = YES;
-		}
 	}
 	
 	if ([jsonConfiguration objectForKey:@"review_url"]) {

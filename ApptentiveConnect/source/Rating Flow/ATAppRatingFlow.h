@@ -41,13 +41,6 @@
 #endif
 
 /*!
- Deprecated. Log events using the `engage:fromViewController:` method instead.
- The new engagements events are more powerful, and can be used to selectively
- display interactions based on a wide range of individual event types.
- */
-- (void)logSignificantEvent DEPRECATED_ATTRIBUTE;
-
-/*!
  Call to open your app's page on the App Store or Mac App Store.
  This method can be used to power, for example, a "Rate this app" button in your settings screen.
  It opens the app store directly, without the normal Apptentive Ratings Flow.

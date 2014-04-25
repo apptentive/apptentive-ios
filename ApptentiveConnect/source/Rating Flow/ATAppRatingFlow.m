@@ -114,10 +114,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 }
 #endif
 
-- (void)logSignificantEvent {
-
-}
-
 - (void)openAppStore {
 	[self openAppStoreToRateApp];
 }

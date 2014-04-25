@@ -74,7 +74,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 - (void)setUserDislikesThisVersion;
 - (void)setDeclinedToRateThisVersion;
 - (void)setRatedApp:(BOOL)hasRated;
-- (void)logDefaults;
 
 #if TARGET_OS_IPHONE
 - (void)appDidFinishLaunching:(NSNotification *)notification;
@@ -147,9 +146,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	}
 	
 	self.viewController = vc;
-#	if TARGET_IPHONE_SIMULATOR
-	[self logDefaults];
-#	endif
 
 	return NO;
 }
@@ -530,18 +526,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	[defaults setObject:[NSNumber numberWithBool:hasRated] forKey:ATAppRatingFlowRatedAppKey];
 	[defaults synchronize];
-}
-
-- (void)logDefaults {
-	NSArray *keys = [NSArray arrayWithObjects:ATAppRatingFlowLastUsedVersionKey, ATAppRatingFlowLastUsedVersionFirstUseDateKey, ATAppRatingFlowDeclinedToRateThisVersionKey, ATAppRatingFlowUserDislikesThisVersionKey, ATAppRatingFlowPromptCountThisVersionKey, ATAppRatingFlowLastPromptDateKey, ATAppRatingFlowUseCountKey, ATAppRatingFlowSignificantEventsCountKey, ATAppRatingFlowRatedAppKey, nil];
-	ATLogDebug(@"-- BEGIN ATAppRatingFlow DEFAULTS --");
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-variable"
-	for (NSString *key in keys) {
-		ATLogDebug(@"%@ == %@", key, [[NSUserDefaults standardUserDefaults] objectForKey:key]);
-	}
-#pragma clang diagnostic pop
-	ATLogDebug(@"-- END ATAppRatingFlow DEFAULTS --");
 }
 
 #if TARGET_OS_IPHONE

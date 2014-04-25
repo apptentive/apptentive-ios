@@ -126,10 +126,14 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 			if (sender.statusCode == 401) {
 				ATLogDebug(@"Your Apptentive API key may not be set correctly!");
 			}
-			if ([ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogHTTPFailures) {
+			if ([ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogHTTPFailures ||
+				[ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogAllHTTPRequests) {
 				ATLogDebug(@"Request was:\n%@", [connection requestAsString]);
 				ATLogDebug(@"Response was:\n%@", [connection responseAsString]);
 			}
+		} else if ([ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogAllHTTPRequests) {
+			ATLogDebug(@"Request was:\n%@", [connection requestAsString]);
+			ATLogDebug(@"Response was:\n%@", [connection responseAsString]);
 		}
 		
 		if (!d) break;
@@ -188,7 +192,8 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 		[responseString release], responseString = nil;
 	}
 	
-	if ([ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogHTTPFailures) {
+	if ([ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogHTTPFailures ||
+		[ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogAllHTTPRequests) {
 		ATLogError(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
 		ATLogInfo(@"Status was: %d", sender.statusCode);
 		ATLogDebug(@"Request was:\n%@", [connection requestAsString]);

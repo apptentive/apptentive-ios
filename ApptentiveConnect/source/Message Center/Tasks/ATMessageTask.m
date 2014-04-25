@@ -59,6 +59,10 @@
 	if (![ATConversationUpdater conversationExists]) {
 		return NO;
 	}
+	if ([[ATBackend sharedBackend] isUpdatingPerson]) {
+		// Don't send until the person is done being updated.
+		return NO;
+	}
 	return YES;
 }
 

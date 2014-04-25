@@ -298,6 +298,7 @@ static NSURLCache *imageCache = nil;
 }
 
 - (BOOL)sendTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden completion:(void (^)(NSString *pendingMessageID))completion {
+	[self updatePersonIfNeeded];
 	ATTextMessage *message = (ATTextMessage *)[ATData newEntityNamed:@"ATTextMessage"];
 	[message setup];
 	message.body = body;
@@ -350,6 +351,7 @@ static NSURLCache *imageCache = nil;
 }
 
 - (BOOL)sendImageMessageWithImage:(UIImage *)image hiddenOnClient:(BOOL)hidden fromSource:(ATFeedbackImageSource)imageSource {
+	[self updatePersonIfNeeded];
 	NSData *imageData = UIImageJPEGRepresentation(image, 0.95);
 	NSString *mimeType = @"image/jpeg";
 	ATFIleAttachmentSource source = ATFileAttachmentSourceUnknown;
@@ -379,6 +381,7 @@ static NSURLCache *imageCache = nil;
 }
 
 - (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType hiddenOnClient:(BOOL)hidden fromSource:(ATFIleAttachmentSource)source {
+	[self updatePersonIfNeeded];
 	ATFileMessage *fileMessage = (ATFileMessage *)[ATData newEntityNamed:@"ATFileMessage"];
 	fileMessage.pendingState = @(ATPendingMessageStateSending);
 	fileMessage.sentByUser = @YES;
@@ -719,7 +722,6 @@ static NSURLCache *imageCache = nil;
 		[self sendTextMessageWithBody:message completion:^(NSString *pendingMessageID) {
 			[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroDidSendNotification object:nil userInfo:@{ATMessageCenterMessageNonceKey: pendingMessageID}];
 		}];
-		[self updatePersonIfNeeded];
 	}
 }
 
@@ -859,6 +861,10 @@ static NSURLCache *imageCache = nil;
 	}
 }
 
+- (BOOL)isUpdatingPerson {
+	return personUpdater != nil;
+}
+
 - (void)updateConfigurationIfNeeded {
 	if (![ATConversationUpdater conversationExists]) {
 		return;
@@ -921,6 +927,11 @@ static NSURLCache *imageCache = nil;
 - (void)personUpdater:(ATPersonUpdater *)aPersonUpdater didFinish:(BOOL)success {
 	if (personUpdater == aPersonUpdater) {
 		[personUpdater release], personUpdater = nil;
+		// Give task queue a bump if necessary.
+		if (success && [self isReady] && !shouldStopWorking) {
+			ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
+			[queue start];
+		}
 	}
 }
 

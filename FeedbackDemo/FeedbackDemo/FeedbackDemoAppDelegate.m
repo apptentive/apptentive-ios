@@ -7,9 +7,11 @@
 //
 
 #import "FeedbackDemoAppDelegate.h"
+
+#import "defines.h"
+
 #import "ATConnect.h"
 #import "ATAppRatingFlow.h"
-#import "defines.h"
 #import "ATSurveys.h"
 
 @implementation FeedbackDemoAppDelegate

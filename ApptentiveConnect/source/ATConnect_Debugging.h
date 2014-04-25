@@ -14,6 +14,7 @@ typedef NS_OPTIONS(NSInteger, ATConnectDebuggingOptions) {
 	ATConnectDebuggingOptionsNone = 0,
 	ATConnectDebuggingOptionsShowDebugPanel = 1 << 0,
 	ATConnectDebuggingOptionsLogHTTPFailures = 1 << 1,
+	ATConnectDebuggingOptionsLogAllHTTPRequests = 1 << 2,
 };
 
 @interface ATConnect ()

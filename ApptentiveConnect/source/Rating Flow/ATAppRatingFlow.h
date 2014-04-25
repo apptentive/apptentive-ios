@@ -13,9 +13,6 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
-/*! Notification sent when the user has agreed to rate the application. */
-extern NSString *const ATAppRatingFlowUserAgreedToRateAppNotification;
-
 /*! A workflow for a user either giving feedback on or rating the current
  application. */
 @interface ATAppRatingFlow : NSObject

@@ -20,9 +20,6 @@
 #import "ATUtilities.h"
 #import "ATWebClient.h"
 
-
-NSString *const ATAppRatingFlowUserAgreedToRateAppNotification = @"ATAppRatingFlowUserAgreedToRateAppNotification";
-
 // Set when the ratings module is loaded.
 static CFAbsoluteTime ratingsLoadTime = 0.0;
 
@@ -190,8 +187,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 #endif
 
 - (void)userAgreedToRateApp {
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATAppRatingFlowUserAgreedToRateAppNotification object:nil];
-	
 	[self openAppStoreToRateApp];
 }
 

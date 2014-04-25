@@ -329,7 +329,6 @@
 		49F8AFFC16CC4D860070FFEA /* ATRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFFA16CC4D860070FFEA /* ATRecord.m */; };
 		49F8AFFF16CC56580070FFEA /* ATEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 49F8AFFD16CC56570070FFEA /* ATEvent.h */; };
 		49F8B00016CC56580070FFEA /* ATEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFFE16CC56570070FFEA /* ATEvent.m */; };
-		49FD7AF319089F5400A707C2 /* ATConnect_Debugging.h in Sources */ = {isa = PBXBuildFile; fileRef = 49FD7AF219089F1500A707C2 /* ATConnect_Debugging.h */; };
 		49FECBE317D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49FECBE217D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel */; };
 		49FECBE417D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49FECBE217D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel */; };
 		580B24BB17D90AF300AE2CD0 /* ATEngagementTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 580B24BA17D90AF300AE2CD0 /* ATEngagementTests.m */; };
@@ -1840,7 +1839,6 @@
 				492B81E516D5C8AD0031BEF6 /* ATFileMessageCell.m in Sources */,
 				492F2F0F16E3F9660030E48A /* ATDefaultMessageCenterTitleView.m in Sources */,
 				49477B7C1835C700001D37AD /* ATExpandingTextView.m in Sources */,
-				49FD7AF319089F5400A707C2 /* ATConnect_Debugging.h in Sources */,
 				49881DDE16E839540061D888 /* ATLogViewController.m in Sources */,
 				495E9C1D16EABD8E00AE3B03 /* ATLogger.m in Sources */,
 				492F2F1D16ED597F0030E48A /* ATRecordRequestTask.m in Sources */,

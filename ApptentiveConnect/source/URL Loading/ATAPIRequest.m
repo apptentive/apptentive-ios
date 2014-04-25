@@ -8,6 +8,7 @@
 
 #import "ATAPIRequest.h"
 #import "ATConnect.h"
+#import "ATConnect_Debugging.h"
 #import "ATConnect_Private.h"
 #import "ATConnectionManager.h"
 #import "ATJSONSerialization.h"
@@ -125,6 +126,12 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 			if (sender.statusCode == 401) {
 				ATLogDebug(@"Your Apptentive API key may not be set correctly!");
 			}
+			if ([ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogHTTPFailures ||
+				[ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogAllHTTPRequests) {
+				ATLogDebug(@"Request was:\n%@", [connection requestAsString]);
+				ATLogDebug(@"Response was:\n%@", [connection responseAsString]);
+			}
+		} else if ([ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogAllHTTPRequests) {
 			ATLogDebug(@"Request was:\n%@", [connection requestAsString]);
 			ATLogDebug(@"Response was:\n%@", [connection responseAsString]);
 		}
@@ -185,16 +192,13 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 		[responseString release], responseString = nil;
 	}
 	
-	/*!!!!! Prefix line with // to debug HTTP stuff.
-	 if (YES) {
-	 NSData *d = [sender responseData];
-	 NSString *a = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];
-	 ATLogError(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
-	 ATLogInfo(@"Status was: %d", sender.statusCode);
-	 ATLogDebug(@"Request was: %@", [connection requestAsString]);
-	 ATLogDebug(@"Response was: %@", a);
-	 }
-	 // */
+	if ([ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogHTTPFailures ||
+		[ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogAllHTTPRequests) {
+		ATLogError(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
+		ATLogInfo(@"Status was: %d", sender.statusCode);
+		ATLogDebug(@"Request was:\n%@", [connection requestAsString]);
+		ATLogDebug(@"Response was:\n%@", [connection responseAsString]);
+	}
 	if (delegate) {
 		[delegate at_APIRequestDidFail:self];
 	}

@@ -113,9 +113,6 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 	[[ATBackend sharedBackend] sendTextMessageWithBody:message completion:^(NSString *pendingMessageID) {
 		[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroDidSendNotification object:nil userInfo:@{ATMessageCenterMessageNonceKey: pendingMessageID}];
 	}];
-	
-	//TODO
-	//[[ATBackend sharedBackend] updatePersonIfNeeded];
 }
 
 - (void)messagePanel:(ATMessagePanelViewController *)messagePanel didDismissWithAction:(ATMessagePanelDismissAction)action {

@@ -728,6 +728,13 @@
 	usageData.applicationVersion = @"1.2.3a";
 	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail because 1.4 is not in 1.2.3a");
+	
+	interaction = [[ATInteraction alloc] init];
+	usageData = [[ATInteractionUsageData alloc] init];
+	interaction.criteria = @{@"application_version": @{@"$contains": @"abc"}};
+	usageData.applicationVersion = @"AbC";
+	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Contains should be case insensitive.");
 }
 
 - (void)testExistsCriteria {

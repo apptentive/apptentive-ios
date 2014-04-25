@@ -10,6 +10,7 @@
 #import "ATAPIRequest.h"
 #import "ATBackend.h"
 #import "ATConnect.h"
+#import "ATConnect_Debugging.h"
 #import "ATConnect_Private.h"
 #import "ATData.h"
 #import "ATFeedback.h"
@@ -21,13 +22,6 @@
 #import "ATTaskQueue.h"
 #import "ATTextMessage.h"
 
-// Can't get CocoaPods to do the right thing for debug builds.
-// So, do it explicitly.
-#if COCOAPODS
-#    if DEBUG
-#	     define APPTENTIVE_DEBUG_LOG_VIEWER 1
-#    endif
-#endif
 
 enum {
 	kSectionTasks,
@@ -256,9 +250,9 @@ enum {
 	}
 	logicalSections = [[NSMutableArray alloc] init];
 	[logicalSections addObject:@(kSectionTasks)];
-#if APPTENTIVE_DEBUG_LOG_VIEWER
-	[logicalSections addObject:@(kSectionDebugLog)];
-#endif
+	if ([ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsShowDebugPanel) {
+		[logicalSections addObject:@(kSectionDebugLog)];
+	}
 	[logicalSections addObject:@(kSectionVersion)];
 	
 	UIImage *logoImage = [ATBackend imageNamed:@"at_logo_info"];

@@ -116,5 +116,8 @@ NSString *const ATBackendBecameReadyNotification;
 
 - (BOOL)isReady;
 
+/*! True if the backend is currently updating the person. */
+- (BOOL)isUpdatingPerson;
+
 - (NSURLCache *)imageCache;
 @end

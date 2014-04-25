@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-NSString *const ATAppRatingReviewURLPreferenceKey;
-
 NSString *const ATAppRatingFlowLastUsedVersionKey;
 NSString *const ATAppRatingFlowLastUsedVersionFirstUseDateKey;
 NSString *const ATAppRatingFlowDeclinedToRateThisVersionKey;

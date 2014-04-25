@@ -183,15 +183,6 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 		hasConfigurationChanges = YES;
 	}
 	
-	if ([jsonConfiguration objectForKey:@"review_url"]) {
-		NSString *reviewURLString = [jsonConfiguration objectForKey:@"review_url"];
-		NSString *oldReviewURLString = [defaults objectForKey:ATAppRatingReviewURLPreferenceKey];
-		if (![reviewURLString isEqualToString:oldReviewURLString]) {
-			hasConfigurationChanges = YES;
-		}
-		[defaults setObject:reviewURLString forKey:ATAppRatingReviewURLPreferenceKey];
-	}
-	
 	// Store expiration.
 	if (expiresMaxAge > 0) {
 		NSDate *date = [NSDate dateWithTimeInterval:expiresMaxAge sinceDate:[NSDate date]];

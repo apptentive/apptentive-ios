@@ -219,7 +219,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 
 - (NSURL *)URLForRatingApp {
 	NSString *URLString = nil;
-	NSString *URLStringFromPreferences = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppRatingReviewURLPreferenceKey];
+	NSString *URLStringFromPreferences = nil;
 	if (URLStringFromPreferences == nil) {
 #if TARGET_OS_IPHONE
 		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"6.0"]) {

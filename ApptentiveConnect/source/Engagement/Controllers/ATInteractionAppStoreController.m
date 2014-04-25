@@ -104,20 +104,17 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 
 - (NSURL *)legacyURLForRatingApp {
 	NSString *URLString = nil;
-	NSString *URLStringFromPreferences = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppRatingReviewURLPreferenceKey];
-	if (URLStringFromPreferences == nil) {
+	
 #if TARGET_OS_IPHONE
-		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"6.0"]) {
-			URLString = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/%@/app/id%@", [[NSLocale currentLocale] objectForKey: NSLocaleCountryCode], [self appID]];
-		} else {
-			URLString = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", [self appID]];
-		}
-#elif TARGET_OS_MAC
-		URLString = [NSString stringWithFormat:@"macappstore://itunes.apple.com/app/id%@?mt=12", [self appID]];
-#endif
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"6.0"]) {
+		URLString = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/%@/app/id%@", [[NSLocale currentLocale] objectForKey: NSLocaleCountryCode], [self appID]];
 	} else {
-		URLString = URLStringFromPreferences;
+		URLString = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", [self appID]];
 	}
+#elif TARGET_OS_MAC
+	URLString = [NSString stringWithFormat:@"macappstore://itunes.apple.com/app/id%@?mt=12", [self appID]];
+#endif
+	
 	return [NSURL URLWithString:URLString];
 }
 

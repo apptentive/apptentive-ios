@@ -85,7 +85,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 - (void)appWillEnterForeground:(NSNotification *)notification;
 - (void)appWillResignActive:(NSNotification *)notification;
 
-- (UIViewController *)rootViewControllerForCurrentWindow;
 #endif
 - (void)tryToShowDialogWaitingForReachability;
 - (void)reachabilityChangedAndPendingDialog:(NSNotification *)notification;
@@ -366,7 +365,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 				ATLogError(@"Error loading product view: %@", error);
 				[self showUnableToOpenAppStoreDialog];
 			} else {
-				UIViewController *presentingVC = [self rootViewControllerForCurrentWindow];
+				UIViewController *presentingVC = [ATUtilities rootViewControllerForCurrentWindow];
 				[presentingVC presentViewController:vc animated:YES completion:^{}];
 			}
 		}];
@@ -509,7 +508,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	if ([self shouldShowDialog]) {
 		[self showEnjoymentDialog:self.viewController];
 		return YES;
-	} else if ([self rootViewControllerForCurrentWindow]) {
+	} else if ([ATUtilities rootViewControllerForCurrentWindow]) {
 		[self tryToShowDialogWaitingForReachability];
 	}
 #elif TARGET_OS_MAC
@@ -656,29 +655,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	[self updateLastUseOfApp];
 }
 
-
-- (UIViewController *)rootViewControllerForCurrentWindow {
-	UIWindow *window = nil;
-	if (self.viewController && self.viewController.view && self.viewController.view.window) {
-		window = self.viewController.view.window;
-	} else {
-		for (UIWindow *tmpWindow in [[UIApplication sharedApplication] windows]) {
-			if ([[tmpWindow screen] isEqual:[UIScreen mainScreen]] && [tmpWindow isKeyWindow]) {
-				window = tmpWindow;
-				break;
-			}
-		}
-	}
-	if (window && [window respondsToSelector:@selector(rootViewController)]) {
-		UIViewController *vc = [window rootViewController];
-		if ([vc respondsToSelector:@selector(presentedViewController)] && [vc presentedViewController]) {
-			return [vc presentedViewController];
-		}
-		return vc;
-	} else {
-		return nil;
-	}
-}
 #endif
 
 - (void)tryToShowDialogWaitingForReachability {
@@ -688,7 +664,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	}
 	@autoreleasepool {
 #if TARGET_OS_IPHONE
-		UIViewController *vc = [self rootViewControllerForCurrentWindow];
+		UIViewController *vc = [ATUtilities rootViewControllerForCurrentWindow];
 		
 		if (vc && [self requirementsToShowDialogMet]) {
 			// We can get a root view controller and we should be showing a dialog.
@@ -708,7 +684,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:ATReachabilityStatusChanged object:nil];
 
 #if TARGET_OS_IPHONE
-		UIViewController *vc = [self rootViewControllerForCurrentWindow];
+		UIViewController *vc = [ATUtilities rootViewControllerForCurrentWindow];
 		
 		if (vc && [self requirementsToShowDialogMet]) {
 			if ([[ATReachability sharedReachability] currentNetworkStatus] == ATNetworkNotReachable) {

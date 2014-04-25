@@ -9,7 +9,6 @@
 
 #import "RootViewController.h"
 #import "ATConnect.h"
-#import "ATAppRatingFlow.h"
 #import "ATSurveys.h"
 #import "defines.h"
 
@@ -38,15 +37,6 @@ enum kSurveyRows {
 @end
 
 @implementation RootViewController
-
-- (IBAction)showRating:(id)sender {
-	ATAppRatingFlow *flow = [ATAppRatingFlow sharedRatingFlow];
-	[ATConnect sharedConnection].appID = kApptentiveAppID;
-	// Don't do this in production apps.
-	if ([flow respondsToSelector:@selector(showEnjoymentDialog:)]) {
-		[flow performSelector:@selector(showEnjoymentDialog:) withObject:self];
-	}
-}
 
 - (void)viewDidLoad {
 	ATConnect *connection = [ATConnect sharedConnection];

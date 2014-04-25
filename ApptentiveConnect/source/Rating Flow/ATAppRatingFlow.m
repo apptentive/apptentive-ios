@@ -33,20 +33,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 @end
 #endif
 
-@interface ATAppRatingFlow ()
-/* Days since first app use when the user will first be prompted. */
-@property (nonatomic, readonly) NSUInteger daysBeforePrompt;
-
-/* Number of app uses before which the user will first be prompted. */
-@property (nonatomic, readonly) NSUInteger usesBeforePrompt;
-
-/* Significant events before the user will be prompted. */
-@property (nonatomic, readonly) NSUInteger significantEventsBeforePrompt;
-
-/* Days before the user will be re-prompted after having pressed the "Remind Me Later" button. */
-@property (nonatomic, readonly) NSUInteger daysBeforeRePrompting;
-@end
-
 
 @interface ATAppRatingFlow (Private)
 - (void)postNotification:(NSString *)name;
@@ -76,7 +62,6 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 
 
 @implementation ATAppRatingFlow
-@synthesize daysBeforePrompt, usesBeforePrompt, significantEventsBeforePrompt, daysBeforeRePrompting;
 #if TARGET_OS_IPHONE
 @synthesize viewController;
 #endif

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-NSString *const ATCurrentPersonPreferenceKey;
+extern NSString *const ATCurrentPersonPreferenceKey;
 
 @interface ATPersonInfo : NSObject <NSCoding> {
 @private

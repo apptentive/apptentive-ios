@@ -8,6 +8,9 @@
 
 #import "ATConnect.h"
 
+extern NSString *const ATConnectCustomPersonDataChangedNotification;
+extern NSString *const ATConnectCustomDeviceDataChangedNotification;
+
 @interface ATConnect ()
 - (NSDictionary *)customPersonData;
 - (NSDictionary *)customDeviceData;

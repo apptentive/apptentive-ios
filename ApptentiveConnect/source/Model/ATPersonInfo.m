@@ -12,6 +12,8 @@
 #import "ATUtilities.h"
 #import "NSDictionary+ATAdditions.h"
 
+NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
+
 #define kATPersonCodingVersion 1
 
 @implementation ATPersonInfo

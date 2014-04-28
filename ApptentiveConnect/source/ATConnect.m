@@ -38,6 +38,9 @@ NSString *const ATIntegrationKeyUrbanAirship = @"urban_airship";
 NSString *const ATIntegrationKeyKahuna = @"kahuna";
 NSString *const ATIntegrationKeyAmazonSNS = @"aws_sns";
 
+NSString *const ATConnectCustomPersonDataChangedNotification = @"ATConnectCustomPersonDataChangedNotification";
+NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustomDeviceDataChangedNotification";
+
 @implementation ATConnect
 @synthesize apiKey, debuggingOptions, showTagline, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText, useMessageCenter;
 #if TARGET_OS_IPHONE
@@ -177,10 +180,12 @@ NSString *const ATIntegrationKeyAmazonSNS = @"aws_sns";
 
 - (void)addCustomPersonData:(NSObject *)object withKey:(NSString *)key {
 	[self addCustomData:object withKey:key toCustomDataDictionary:customPersonData];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomPersonDataChangedNotification object:customPersonData];
 }
 
 - (void)addCustomDeviceData:(NSObject *)object withKey:(NSString *)key {
 	[self addCustomData:object withKey:key toCustomDataDictionary:customDeviceData];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:customDeviceData];
 }
 
 - (void)addCustomData:(NSObject *)object withKey:(NSString *)key toCustomDataDictionary:(NSMutableDictionary *)customData {
@@ -202,10 +207,12 @@ NSString *const ATIntegrationKeyAmazonSNS = @"aws_sns";
 
 - (void)removeCustomPersonDataWithKey:(NSString *)key {
 	[customPersonData removeObjectForKey:key];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomPersonDataChangedNotification object:customPersonData];
 }
 
 - (void)removeCustomDeviceDataWithKey:(NSString *)key {
 	[customDeviceData removeObjectForKey:key];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:customDeviceData];
 }
 
 - (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key {

@@ -69,6 +69,8 @@ static NSURLCache *imageCache = nil;
 - (void)networkStatusChanged:(NSNotification *)notification;
 - (void)stopWorking:(NSNotification *)notification;
 - (void)startWorking:(NSNotification *)notification;
+- (void)personDataChanged:(NSNotification *)notification;
+- (void)deviceDataChanged:(NSNotification *)notification;
 - (void)checkForSurveys;
 - (void)checkForMessages;
 - (void)startMonitoringUnreadMessages;
@@ -837,11 +839,9 @@ static NSURLCache *imageCache = nil;
 	if (![ATConversationUpdater conversationExists]) {
 		return;
 	}
-	if (!deviceUpdater) {
-		if ([ATDeviceUpdater shouldUpdate]) {
-			deviceUpdater = [[ATDeviceUpdater alloc] initWithDelegate:self];
-			[deviceUpdater update];
-		}
+	if (!deviceUpdater && [ATDeviceUpdater shouldUpdate]) {
+		deviceUpdater = [[ATDeviceUpdater alloc] initWithDelegate:self];
+		[deviceUpdater update];
 	}
 }
 
@@ -853,11 +853,9 @@ static NSURLCache *imageCache = nil;
 	if (![ATConversationUpdater conversationExists]) {
 		return;
 	}
-	if (!personUpdater) {
-		if ([ATPersonUpdater shouldUpdate]) {
-			personUpdater = [[ATPersonUpdater alloc] initWithDelegate:self];
-			[personUpdater update];
-		}
+	if (!personUpdater && [ATPersonUpdater shouldUpdate]) {
+		personUpdater = [[ATPersonUpdater alloc] initWithDelegate:self];
+		[personUpdater update];
 	}
 }
 
@@ -1078,6 +1076,10 @@ static NSURLCache *imageCache = nil;
 	[self performSelector:@selector(startMonitoringUnreadMessages) withObject:nil afterDelay:0.2];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATBackendBecameReadyNotification object:nil];
+	
+	// Monitor changes to custom data.
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(personDataChanged:) name:ATConnectCustomPersonDataChangedNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDataChanged:) name:ATConnectCustomDeviceDataChangedNotification object:nil];
 }
 
 - (void)continueStartupWithDataManagerFailure {
@@ -1119,6 +1121,14 @@ static NSURLCache *imageCache = nil;
 - (void)startWorking:(NSNotification *)notification {
 	shouldStopWorking = NO;
 	[self updateWorking];
+}
+
+- (void)personDataChanged:(NSNotification *)notification {
+	[self performSelector:@selector(updatePersonIfNeeded) withObject:nil afterDelay:1];
+}
+
+- (void)deviceDataChanged:(NSNotification *)notification {
+	[self performSelector:@selector(updateDeviceIfNeeded) withObject:nil afterDelay:1];
 }
 
 - (void)checkForSurveys {

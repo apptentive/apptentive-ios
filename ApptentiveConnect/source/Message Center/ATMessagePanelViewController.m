@@ -47,6 +47,7 @@ enum {
 + (CGFloat)rotationOfViewHierarchyInRadians:(UIView *)leafView;
 + (CGAffineTransform)viewTransformInWindow:(UIWindow *)window;
 - (void)statusBarChanged:(NSNotification *)notification;
+- (void)keyboardWasShown:(NSNotification *)notification;
 - (void)applicationDidBecomeActive:(NSNotification *)notification;
 - (void)feedbackChanged:(NSNotification *)notification;
 - (void)hide:(BOOL)animated;
@@ -63,7 +64,9 @@ enum {
 - (void)positionInWindow;
 @end
 
-@implementation ATMessagePanelViewController
+@implementation ATMessagePanelViewController {
+	CGRect lastKeyboardRect;
+}
 @synthesize window;
 @synthesize cancelButton;
 @synthesize sendButton;
@@ -114,6 +117,8 @@ enum {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarChanged:) name:UIApplicationDidChangeStatusBarFrameNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardWillShowNotification object:nil];
 	
 	CALayer *l = self.view.layer;
 	
@@ -846,6 +851,21 @@ enum {
 	[self positionInWindow];
 }
 
+- (void)keyboardWasShown:(NSNotification *)notification {
+	NSValue *keyboardRectValue = [[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey];
+	CGRect keyboardRect = [keyboardRectValue CGRectValue];
+	CGRect convertedKeyboardRect = [self.window convertRect:keyboardRect fromWindow:originalPresentingWindow];
+	if (!CGRectEqualToRect(CGRectZero, convertedKeyboardRect)) {
+		if (CGRectEqualToRect(lastKeyboardRect, convertedKeyboardRect)) {
+			return;
+		}
+		lastKeyboardRect = convertedKeyboardRect;
+		NSNumber *animationDuration = [[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+		if (animationDuration) {
+			[self performSelector:@selector(positionInWindow) withObject:nil afterDelay:0.1];
+		}
+	}
+}
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification {
 	@autoreleasepool {
@@ -960,14 +980,24 @@ enum {
 	CGFloat originX = 0.0;
 	
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-		viewHeight = isLandscape ? 368.0 : 368.0;
+		if (CGRectEqualToRect(CGRectZero, lastKeyboardRect)) {
+			viewHeight = isLandscape ? 368.0 : 368.0;
+		} else {
+			CGFloat keyboardHeight = lastKeyboardRect.size.height;
+			viewHeight = self.view.window.bounds.size.height - (isLandscape ? keyboardHeight + 40 : keyboardHeight + 100 + 200);
+		}
 		originY = isLandscape ? 20.0 : 200;
 		viewWidth = windowWidth - 12*2 - 100.0;
 		originX = floorf((windowWidth - viewWidth)/2.0);
 	} else {
-		CGFloat landscapeKeyboardHeight = 162;
-		CGFloat portraitKeyboardHeight = 216;
-		viewHeight = self.view.window.bounds.size.height - (isLandscape ? landscapeKeyboardHeight + 8 - 6 : portraitKeyboardHeight + 8);
+		if (CGRectEqualToRect(CGRectZero, lastKeyboardRect)) {
+			CGFloat landscapeKeyboardHeight = 162;
+			CGFloat portraitKeyboardHeight = 216;
+			viewHeight = self.view.window.bounds.size.height - (isLandscape ? landscapeKeyboardHeight + 8 - 6 : portraitKeyboardHeight + 8);
+		} else {
+			CGFloat keyboardHeight = lastKeyboardRect.size.height;
+			viewHeight = self.view.window.bounds.size.height - (isLandscape ? keyboardHeight + 8 - 6 : keyboardHeight + 8);
+		}
 		viewWidth = windowWidth - 12;
 		originX = 6.0;
 		if (constrainViewWidth) {
@@ -998,6 +1028,10 @@ enum {
 }
 
 - (void)positionInWindow {
+	if (![[NSThread currentThread] isMainThread]) {
+		[self performSelectorOnMainThread:@selector(positionInWindow) withObject:nil waitUntilDone:NO];
+		return;
+	}
 	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
 	
 	CGFloat angle = 0.0;

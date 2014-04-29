@@ -16,7 +16,7 @@ All of our client code is open source and available on [GitHub](https://github.c
 
 #### Using Git
 
-You can clone our iOS SDK using git: `git clone https://github.com:apptentive/apptentive-ios.git`.
+You can clone our iOS SDK using git: `git clone https://github.com/apptentive/apptentive-ios.git`.
 
 #### Using CocoaPods
 

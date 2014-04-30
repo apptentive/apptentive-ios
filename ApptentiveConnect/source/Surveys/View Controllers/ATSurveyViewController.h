@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ATDefaultTextView.h"
+#import "ATInteraction.h"
 
 @class ATCellTextView;
 @class ATCellTextField;
@@ -28,6 +29,7 @@
 	
 	NSDate *startedSurveyDate;
 }
+@property (nonatomic, copy) ATInteraction *interaction;
 @property (nonatomic, copy) NSString *errorText;
 - (id)initWithSurvey:(ATSurvey *)survey;
 - (IBAction)sendSurvey;

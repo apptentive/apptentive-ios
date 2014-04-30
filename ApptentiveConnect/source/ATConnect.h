@@ -72,6 +72,9 @@ extern NSString *const ATIntegrationKeyAmazonSNS;
 /*! The API key for Apptentive. */
 @property (nonatomic, copy) NSString *apiKey;
 
+/*! The app's iTunes App ID. */
+@property (nonatomic, copy) NSString *appID;
+
 /*! The shared singleton of `ATConnect`. */
 + (ATConnect *)sharedConnection;
 

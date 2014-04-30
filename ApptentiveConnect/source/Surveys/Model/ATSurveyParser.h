@@ -7,13 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AtSurvey.h"
+#import "ATSurvey.h"
+#import "ATInteraction.h"
 
 @interface ATSurveyParser : NSObject {
 @private
 	NSError *parserError;
 }
-- (ATSurvey *)parseSurvey:(NSData *)jsonSurvey;
-- (NSArray *)parseMultipleSurveys:(NSData *)jsonSurveys;
 - (NSError *)parserError;
+
+- (ATSurvey *)surveyWithInteraction:(ATInteraction *)interaction;
+
 @end

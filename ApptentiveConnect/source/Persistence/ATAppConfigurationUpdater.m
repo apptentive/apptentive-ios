@@ -7,7 +7,6 @@
 //
 
 #import "ATAppConfigurationUpdater.h"
-#import "ATAppRatingFlow_Private.h"
 #import "ATContactStorage.h"
 #import "ATUtilities.h"
 #import "ATWebClient.h"
@@ -148,23 +147,15 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	[ATAppConfigurationUpdater registerDefaults];
-	[ATAppRatingFlow_Private registerDefaults];
 	[defaults setObject:[NSDate date] forKey:ATAppConfigurationLastUpdatePreferenceKey];
 	
 	NSDictionary *numberObjects = 
 		[NSDictionary dictionaryWithObjectsAndKeys:
-		 @"ratings_clear_on_upgrade", ATAppRatingClearCountsOnUpgradePreferenceKey, 
-		 @"ratings_enabled", ATAppRatingEnabledPreferenceKey,
-		 @"ratings_days_before_prompt", ATAppRatingDaysBeforePromptPreferenceKey, 
-		 @"ratings_days_between_prompts", ATAppRatingDaysBetweenPromptsPreferenceKey, 
-		 @"ratings_events_before_prompt", ATAppRatingSignificantEventsBeforePromptPreferenceKey, 
-		 @"ratings_uses_before_prompt", ATAppRatingUsesBeforePromptPreferenceKey,
 		 @"metrics_enabled", ATAppConfigurationMetricsEnabledPreferenceKey,
 		 @"message_center_enabled", ATAppConfigurationMessageCenterEnabledKey,
 		 nil];
 	
 	NSArray *boolPreferences = [NSArray arrayWithObjects:@"ratings_clear_on_upgrade", @"ratings_enabled", @"metrics_enabled", @"message_center_enabled", nil];
-	NSObject *ratingsPromptLogic = [jsonConfiguration objectForKey:@"ratings_prompt_logic"];
 	
 	for (NSString *key in numberObjects) {
 		NSObject *value = [jsonConfiguration objectForKey:[numberObjects objectForKey:key]];
@@ -188,23 +179,6 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 			[defaults setObject:replacementValue forKey:key];
 		}
 		hasConfigurationChanges = YES;
-	}
-	
-	if (ratingsPromptLogic) {
-		NSPredicate *predicate = [ATAppRatingFlow_Private predicateForPromptLogic:ratingsPromptLogic withPredicateInfo:nil];
-		if (predicate) {
-			[defaults setObject:ratingsPromptLogic forKey:ATAppRatingPromptLogicPreferenceKey];
-			hasConfigurationChanges = YES;
-		}
-	}
-	
-	if ([jsonConfiguration objectForKey:@"review_url"]) {
-		NSString *reviewURLString = [jsonConfiguration objectForKey:@"review_url"];
-		NSString *oldReviewURLString = [defaults objectForKey:ATAppRatingReviewURLPreferenceKey];
-		if (![reviewURLString isEqualToString:oldReviewURLString]) {
-			hasConfigurationChanges = YES;
-		}
-		[defaults setObject:reviewURLString forKey:ATAppRatingReviewURLPreferenceKey];
 	}
 	
 	// Store expiration.
@@ -264,7 +238,6 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	}
 	
 	if (hasConfigurationChanges) {
-		[defaults setObject:[NSNumber numberWithBool:YES] forKey:ATAppRatingSettingsAreFromServerPreferenceKey];
 		[[NSNotificationCenter defaultCenter] postNotificationName:ATConfigurationPreferencesChangedNotification object:nil];
 	}
 }

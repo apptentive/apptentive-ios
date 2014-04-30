@@ -9,8 +9,6 @@
 
 #import "RootViewController.h"
 #import "ATConnect.h"
-#import "ATAppRatingFlow.h"
-#import "ATSurveys.h"
 #import "defines.h"
 
 enum kRootTableSections {
@@ -39,15 +37,6 @@ enum kSurveyRows {
 
 @implementation RootViewController
 
-- (IBAction)showRating:(id)sender {
-	ATAppRatingFlow *flow = [ATAppRatingFlow sharedRatingFlow];
-	flow.appID = kApptentiveAppID;
-	// Don't do this in production apps.
-	if ([flow respondsToSelector:@selector(showEnjoymentDialog:)]) {
-		[flow performSelector:@selector(showEnjoymentDialog:) withObject:self];
-	}
-}
-
 - (void)viewDidLoad {
 	ATConnect *connection = [ATConnect sharedConnection];
 	connection.apiKey = kApptentiveAPIKey;
@@ -60,7 +49,6 @@ enum kSurveyRows {
 	
 	tags = [[NSSet alloc] initWithObjects:@"demoTag", nil];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyBecameAvailable:) name:ATSurveyNewSurveyAvailableNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unreadMessageCountChanged:) name:ATMessageCenterUnreadCountChangedNotification object:nil];
 	
 	[[ATConnect sharedConnection] engage:@"init" fromViewController:self];
@@ -143,27 +131,18 @@ enum kSurveyRows {
 		cell.textLabel.text = @"Engage Rating Flow Event";
 	} else if (indexPath.section == kSurveySection) {
 		if (indexPath.row == kSurveyRowShowSurvey) {
-			if ([ATSurveys hasSurveyAvailableWithNoTags]) {
-				cell.textLabel.text = @"Show Survey";
-				cell.textLabel.textColor = [UIColor blackColor];
-			} else {
-				cell.textLabel.text = @"No Survey Available";
-				cell.textLabel.textColor = [UIColor grayColor];
-			}
+			// Engagement Surveys
+			cell.textLabel.text = @"Engage 'showSurvey' event";
+			cell.textLabel.textColor = [UIColor blackColor];
 		} else if (indexPath.row == kSurveyRowShowSurveyWithTags) {
 			cell = [tableView dequeueReusableCellWithIdentifier:SurveyTagsCell];
 			if (cell == nil) {
 				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:SurveyTagsCell] autorelease];
 			}
-			if ([ATSurveys hasSurveyAvailableWithTags:tags]) {
-				cell.textLabel.text = @"Show Survey With Tags";
-				cell.textLabel.textColor = [UIColor blackColor];
-			} else {
-				cell.textLabel.text = @"No Survey Available With Tags";
-				cell.textLabel.textColor = [UIColor grayColor];
-			}
-			NSString *plural = (tags.count == 1) ? @"tag" : @"tags";
-			cell.detailTextLabel.text = [NSString stringWithFormat:@"%@: %@", plural, [[tags allObjects] componentsJoinedByString:@", "]];
+			
+			cell.textLabel.text = @"Engage 'presentSurvey' event";
+			cell.textLabel.textColor = [UIColor blackColor];
+			//cell.detailTextLabel.text = [NSString stringWithFormat:@"presentSurvey"];
 		}
 	} else if (indexPath.section == kMessageCenterSection) {
 		if (indexPath.row == kMessageCenterRowShowMessageCenter) {
@@ -201,13 +180,9 @@ enum kSurveyRows {
 		//[self showRating:nil];
 	} else if (indexPath.section == kSurveySection) {
 		if (indexPath.row == kSurveyRowShowSurvey) {
-			if ([ATSurveys hasSurveyAvailableWithNoTags]) {
-				[ATSurveys presentSurveyControllerWithNoTagsFromViewController:self];
-			}
+			[[ATConnect sharedConnection] engage:@"showSurvey" fromViewController:self];
 		} else if (indexPath.row == kSurveyRowShowSurveyWithTags) {
-			if ([ATSurveys hasSurveyAvailableWithTags:tags]) {
-				[ATSurveys presentSurveyControllerWithTags:tags fromViewController:self];
-			}
+			[[ATConnect sharedConnection] engage:@"presentSurvey" fromViewController:self];
 		}
 	} else if (indexPath.section == kMessageCenterSection) {
 		if (indexPath.row == kMessageCenterRowShowMessageCenter) {

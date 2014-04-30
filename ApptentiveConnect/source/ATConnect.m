@@ -42,7 +42,7 @@ NSString *const ATConnectCustomPersonDataChangedNotification = @"ATConnectCustom
 NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustomDeviceDataChangedNotification";
 
 @implementation ATConnect
-@synthesize apiKey, debuggingOptions, showTagline, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText, useMessageCenter;
+@synthesize apiKey, appID, debuggingOptions, showTagline, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText, useMessageCenter;
 #if TARGET_OS_IPHONE
 @synthesize tintColor;
 #endif
@@ -93,6 +93,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	[integrationConfiguration release], integrationConfiguration = nil;
 	[customPlaceholderText release], customPlaceholderText = nil;
 	[apiKey release], apiKey = nil;
+	[appID release], appID = nil;
 	[initialUserName release], initialUserName = nil;
 	[initialUserEmailAddress release], initialUserEmailAddress = nil;
 	[super dealloc];

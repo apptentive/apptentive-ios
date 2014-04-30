@@ -11,7 +11,6 @@
 #import "ATAppConfigurationUpdater.h"
 #import "ATBackend.h"
 #import "ATFeedbackMetrics.h"
-#import "ATAppRatingMetrics.h"
 #import "ATData.h"
 #import "ATEvent.h"
 #import "ATMessageCenterMetrics.h"
@@ -28,16 +27,6 @@ static NSString *ATInteractionAppEventLabelLaunch = @"launch";
 static NSString *ATInteractionAppEventLabelExit = @"exit";
 
 // Legacy metric event labels
-
-static NSString *ATMetricNameEnjoymentDialogLaunch = @"enjoyment_dialog.launch";
-static NSString *ATMetricNameEnjoymentDialogYes = @"enjoyment_dialog.yes";
-static NSString *ATMetricNameEnjoymentDialogNo = @"enjoyment_dialog.no";
-
-static NSString *ATMetricNameRatingDialogLaunch = @"rating_dialog.launch";
-static NSString *ATMetricNameRatingDialogRate = @"rating_dialog.rate";
-static NSString *ATMetricNameRatingDialogRemind = @"rating_dialog.remind";
-static NSString *ATMetricNameRatingDialogDecline = @"rating_dialog.decline";
-static NSString *ATMetricNameRatingDidManuallyOpenAppStore = @"app_store.manual_open";
 
 static NSString *ATMetricNameFeedbackDialogLaunch = @"feedback_dialog.launch";
 static NSString *ATMetricNameFeedbackDialogCancel = @"feedback_dialog.cancel";
@@ -66,16 +55,6 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 - (ATFeedbackWindowType)windowTypeFromNotification:(NSNotification *)notification;
 - (void)feedbackDidShowWindow:(NSNotification *)notification;
 - (void)feedbackDidHideWindow:(NSNotification *)notification;
-
-- (ATAppRatingEnjoymentButtonType)appEnjoymentButtonTypeFromNotification:(NSNotification *)notification;
-- (void)ratingDidShowEnjoyment:(NSNotification *)notification;
-- (void)ratingDidNotShowEnjoyment:(NSNotification *)notification;
-- (void)ratingDidClickEnjoyment:(NSNotification *)notification;
-
-- (ATAppRatingButtonType)appRatingButtonTypeFromNotification:(NSNotification *)notification;
-- (void)ratingDidShowRating:(NSNotification *)notification;
-- (void)ratingDidClickRating:(NSNotification *)notification;
-- (void)ratingDidManuallyOpenAppStore:(NSNotification *)notification;
 
 - (ATSurveyEvent)surveyEventTypeFromNotification:(NSNotification *)notification;
 - (void)surveyDidShow:(NSNotification *)notification;
@@ -154,13 +133,6 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackDidShowWindow:) name:ATFeedbackDidShowWindowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackDidHideWindow:) name:ATFeedbackDidHideWindowNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingDidShowEnjoyment:) name:ATAppRatingDidPromptForEnjoymentNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingDidNotShowEnjoyment:) name:ATAppRatingDidNotPromptForEnjoymentNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingDidClickEnjoyment:) name:ATAppRatingDidClickEnjoymentButtonNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingDidShowRating:) name:ATAppRatingDidPromptForRatingNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingDidClickRating:) name:ATAppRatingDidClickRatingButtonNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingDidManuallyOpenAppStore:) name:ATAppRatingDidManuallyOpenAppStoreToRateAppNotification object:nil];
-		
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyDidShow:) name:ATSurveyDidShowWindowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyDidHide:) name:ATSurveyDidHideWindowNotification object:nil];
@@ -284,68 +256,6 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 	} else if (windowType == ATFeedbackWindowTypeInfo) {
 		// pass, for now
 	}
-}
-
-- (ATAppRatingEnjoymentButtonType)appEnjoymentButtonTypeFromNotification:(NSNotification *)notification {
-	ATAppRatingEnjoymentButtonType buttonType = ATAppRatingEnjoymentButtonTypeUnknown;
-	if ([[notification userInfo] objectForKey:ATAppRatingButtonTypeKey]) {
-		buttonType = [(NSNumber *)[[notification userInfo] objectForKey:ATAppRatingButtonTypeKey] intValue];
-	}
-	if (buttonType != ATAppRatingEnjoymentButtonTypeYes && buttonType != ATAppRatingEnjoymentButtonTypeNo) {
-		ATLogError(@"Unknown button type: %d", buttonType);
-	}
-	return buttonType;
-}
-
-- (void)ratingDidShowEnjoyment:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameEnjoymentDialogLaunch info:nil];
-}
-
-- (void)ratingDidNotShowEnjoyment:(NSNotification *)notification {
-	// Not logging metrics for non-shown Enjoyment dialogs.
-}
-
-- (void)ratingDidClickEnjoyment:(NSNotification *)notification {
-	ATAppRatingEnjoymentButtonType buttonType = [self appEnjoymentButtonTypeFromNotification:notification];
-	if (buttonType == ATAppRatingEnjoymentButtonTypeYes) {
-		[self addMetricWithName:ATMetricNameEnjoymentDialogYes info:nil];
-	} else if (buttonType == ATAppRatingEnjoymentButtonTypeNo) {
-		[self addMetricWithName:ATMetricNameEnjoymentDialogNo info:nil];
-	}
-}
-
-- (ATAppRatingButtonType)appRatingButtonTypeFromNotification:(NSNotification *)notification {
-	ATAppRatingButtonType buttonType = ATAppRatingButtonTypeUnknown;
-	if ([[notification userInfo] objectForKey:ATAppRatingButtonTypeKey]) {
-		buttonType = [(NSNumber *)[[notification userInfo] objectForKey:ATAppRatingButtonTypeKey] intValue];
-	}
-	if (buttonType != ATAppRatingButtonTypeNo && buttonType != ATAppRatingButtonTypeRemind && buttonType != ATAppRatingButtonTypeRateApp) {
-		ATLogError(@"Unknown button type: %d", buttonType);
-	}
-	return buttonType;
-}
-
-- (void)ratingDidShowRating:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameRatingDialogLaunch info:nil];
-}
-
-- (void)ratingDidClickRating:(NSNotification *)notification {
-	ATAppRatingButtonType buttonType = [self appRatingButtonTypeFromNotification:notification];
-	NSString *name = nil;
-	if (buttonType == ATAppRatingButtonTypeNo) {
-		name = ATMetricNameRatingDialogDecline;
-	} else if (buttonType == ATAppRatingButtonTypeRateApp) {
-		name = ATMetricNameRatingDialogRate;
-	} else if (buttonType == ATAppRatingButtonTypeRemind) {
-		name = ATMetricNameRatingDialogRemind;
-	}
-	if (name != nil) {
-		[self addMetricWithName:name info:nil];
-	}
-}
-
-- (void)ratingDidManuallyOpenAppStore:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameRatingDidManuallyOpenAppStore info:nil];
 }
 
 - (ATSurveyEvent)surveyEventTypeFromNotification:(NSNotification *)notification {

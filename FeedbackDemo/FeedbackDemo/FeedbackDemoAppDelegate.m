@@ -7,28 +7,15 @@
 //
 
 #import "FeedbackDemoAppDelegate.h"
-
-#import "defines.h"
-
 #import "ATConnect.h"
-#import "ATAppRatingFlow.h"
-#import "ATSurveys.h"
+#import "defines.h"
 
 @implementation FeedbackDemoAppDelegate
 @synthesize window=_window;
 
 @synthesize navigationController=_navigationController;
-- (void)resetApptentiveRatings {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[defaults removeObjectForKey:@"ATAppRatingFlowRatedAppKey"];
-	[defaults removeObjectForKey:@"ATAppRatingFlowDeclinedToRateThisVersionKey"];
-	[defaults removeObjectForKey:@"ATAppRatingFlowUserDislikesThisVersionKey"];
-	[defaults removeObjectForKey:@"ATAppRatingFlowLastUsedVersionKey"];
-	[defaults removeObjectForKey:@"ATAppRatingFlowLastPromptDateKey"];
-}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-	[self resetApptentiveRatings];
 	// Override point for customization after application launch.
 	// Add the navigation controller's view to the window and display.
 	if ([self.window respondsToSelector:@selector(setRootViewController:)]) {
@@ -39,7 +26,7 @@
 	[self.window makeKeyAndVisible];
 	
 	[[ATConnect sharedConnection] setApiKey:kApptentiveAPIKey];
-	[ATAppRatingFlow sharedRatingFlow].appID = kApptentiveAppID;
+	[ATConnect sharedConnection].appID = kApptentiveAppID;
 
 	[[ATConnect sharedConnection] addIntegration:@"feedback_demo_integration_configuration" withConfiguration:@{@"fake_apiKey": @"ABC-123-XYZ"}];
 	

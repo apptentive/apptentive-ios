@@ -1,5 +1,9 @@
 This document tracks changes to the API between versions.
 
+# 1.4.3
+
+* Added `debuggingOptions` property on ATConnect that allows the developer to specify debug logging preferences for their app.
+
 # 1.4.2
 
 * Added `addAmazonSNSIntegrationWithDeviceToken:` method for integrating with Amazon Web Services (AWS) Simple Notification Service (SNS).

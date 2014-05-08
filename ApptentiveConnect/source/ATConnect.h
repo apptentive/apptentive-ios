@@ -165,6 +165,7 @@ Note, though, that Message Center setting will be overridden by server-based con
 ///---------------------------------------
 /// @name Add Custom Device or Person Data
 ///---------------------------------------
+
 /*! The initial name of the app user when communicating with Apptentive. */
 @property (nonatomic, copy) NSString *initialUserName;
 /*! The initial email address of the app user in form fields and communicating with Apptentive. */
@@ -195,6 +196,17 @@ Note, though, that Message Center setting will be overridden by server-based con
 - (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key DEPRECATED_ATTRIBUTE;
 /*! Deprecated. Use `-removeCustomDeviceDataWithKey:` instead. */
 - (void)removeCustomDataWithKey:(NSString *)key DEPRECATED_ATTRIBUTE;
+
+///---------------------------------------
+/// @name Open App Store
+///---------------------------------------
+
+/*!
+ Call to open your app's page on the App Store or Mac App Store.
+ This method can be used to power, for example, a "Rate this app" button in your settings screen.
+ It opens the app store directly, without the normal Apptentive Ratings Flow.
+ */
+- (void)openAppStore;
 
 ///------------------------------------
 /// @name Integrate With Other Services

@@ -224,6 +224,27 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	[self removeCustomDeviceDataWithKey:key];
 }
 
+
+- (void)openAppStore {
+	if (!self.appID) {
+		ATLogError(@"Cannot open App Store because `[ATConnect sharedConnection.appID` is not set to your app's iTunes App ID.");
+		return;
+	}
+	
+	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:@"open_app_store_manually" userInfo:nil];
+	
+	ATInteraction *appStoreInteraction = [[[ATInteraction alloc] init] autorelease];
+	appStoreInteraction.type = @"AppStoreRating";
+	appStoreInteraction.priority = 1;
+	appStoreInteraction.version = @"1.0.0";
+	appStoreInteraction.identifier = @"OpenAppStore";
+	appStoreInteraction.criteria = @{};
+	appStoreInteraction.configuration = @{@"store_id": self.appID,
+										  @"method": @"app_store"};
+	
+	[[ATEngagementBackend sharedBackend] presentInteraction:appStoreInteraction fromViewController:nil];
+}
+
 - (NSDictionary *)integrationConfiguration {
 	return integrationConfiguration;
 }

@@ -22,7 +22,11 @@
 @class ATFeedbackWindowController;
 #endif
 
+/*! Notification sent when Message Center unread messages count changes. */
 extern NSString *const ATMessageCenterUnreadCountChangedNotification;
+
+/*! Notification sent when the user has agreed to rate the application. */
+extern NSString *const ATAppRatingFlowUserAgreedToRateAppNotification;
 
 /*! Keys for supported 3rd-party integrations. */
 extern NSString *const ATIntegrationKeyUrbanAirship;

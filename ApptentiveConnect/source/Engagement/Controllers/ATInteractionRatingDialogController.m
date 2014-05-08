@@ -54,6 +54,8 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	if (alertView == self.ratingDialog) {
 		if (buttonIndex == 1) { // rate
+			[[NSNotificationCenter defaultCenter] postNotificationName:ATAppRatingFlowUserAgreedToRateAppNotification object:nil];
+
 			[self engageEvent:ATInteractionRatingDialogEventLabelRate];
 		} else if (buttonIndex == 2) { // remind later
 			[self engageEvent:ATInteractionRatingDialogEventLabelRemind];

@@ -85,4 +85,11 @@ extern NSString *const ATAppRatingFlowUserAgreedToRateAppNotification;
  */
 - (void)openAppStore;
 
+
+/*!
+ Call to know if the user have already oppened the App Store or Mac App Store to rate your
+ application.
+*/
+- (BOOL)userAlreadyRatedApp;
+
 @end

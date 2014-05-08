@@ -190,6 +190,12 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 	[self openAppStoreToRateApp];
 }
 
+- (BOOL)userAlreadyRatedApp {
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSNumber *rated = [defaults objectForKey:ATAppRatingFlowRatedAppKey];
+	return (rated != nil && [rated boolValue]);
+}
+
 #pragma mark Properties
 
 - (void)setAppName:(NSString *)anAppName {
@@ -413,8 +419,7 @@ static CFAbsoluteTime ratingsLoadTime = 0.0;
 		}
 		
 		// Check to see if the user has rated the app.
-		NSNumber *rated = [defaults objectForKey:ATAppRatingFlowRatedAppKey];
-		if (rated != nil && [rated boolValue]) {
+		if([self userAlreadyRatedApp]){
 			reasonForNotShowingDialog = @"the user already rated this app.";
 			break;
 		}

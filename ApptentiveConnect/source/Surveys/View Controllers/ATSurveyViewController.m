@@ -28,9 +28,6 @@
 NSString *const ATInteractionSurveyEventLabelSend = @"send";
 NSString *const ATInteractionSurveyEventLabelCancel = @"cancel";
 
-NSString *const ATSurveySentNotification = @"ATSurveySentNotification";
-NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
-
 enum {
 	kTextViewTag = 1,
 	kTextFieldTag = 2

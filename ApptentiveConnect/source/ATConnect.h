@@ -22,24 +22,42 @@
 @class ATFeedbackWindowController;
 #endif
 
-/*! Notification sent when Message Center unread messages count changes. */
+/** Notification sent when Message Center unread messages count changes. */
 extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 
-/*! Notification sent when the user has agreed to rate the application. */
+/** Notification sent when the user has agreed to rate the application. */
 extern NSString *const ATAppRatingFlowUserAgreedToRateAppNotification;
 
-/*! Notification sent when a survey is submitted by the user. */
-/*! The userInfo dictionary will have a key named `ATSurveyIDKey`, with a value of the id of the survey that was sent. */
+/** Notification sent when a survey is submitted by the user. */
+/** The userInfo dictionary will have a key named `ATSurveyIDKey`, with a value of the id of the survey that was sent. */
 extern NSString *const ATSurveySentNotification;
 extern NSString *const ATSurveyIDKey;
 
-/*! Keys for supported 3rd-party integrations. */
+/** Keys for supported 3rd-party integrations. */
 extern NSString *const ATIntegrationKeyUrbanAirship;
 extern NSString *const ATIntegrationKeyKahuna;
 extern NSString *const ATIntegrationKeyAmazonSNS;
 
-/*!
+/**
  `ATConnect` is a singleton which is used as the main point of entry for the Apptentive service.
+ 
+ ## Configuration
+ 
+ On first use, you'll want to set the API key, you'd do that like so:
+ 
+     [[ATConnect sharedConnection].apiKey = @"your API key here";
+ 
+ ## Engagement Events
+ 
+ The rating prompt and other Apptentive interactions are targeted to certain Apptentive events. For example, 
+ you could decide to show the rating prompt at the event user_completed_level. You can then, later, 
+ reconfigure the rating prompt interaction to show at user_logged_in.
+ 
+ You would add calls at these points to optionally engage with the user:
+ 
+     [[ATConnect sharedConnection] engage:@"completed_level" fromViewController:viewController];
+ 
+ See the readme for more information.
  
  ## Notifications
  
@@ -49,11 +67,21 @@ extern NSString *const ATIntegrationKeyAmazonSNS;
  The notification object is undefined. The `userInfo` dictionary contains a `count` key, the value of which 
  is the number of unread messages.
  
+ `ATAppRatingFlowUserAgreedToRateAppNotification`
+ 
+ Sent when the user has agreed to rate the application.
+ 
+ `ATSurveySentNotification`
+ 
+ Sent when a survey is submitted by the user. The userInfo dictionary will have a key named `ATSurveyIDKey`, 
+ with a value of the id of the survey that was sent.
+ 
  ## 3rd Party Integration
  
  There are two constant keys for currently supported third party integrations:
  
  * `ATIntegrationKeyUrbanAirship` - For Urban Airship
+ * `ATIntegrationKeyAmazonSNS` - For Amazon SNS
  * `ATIntegrationKeyKahuna` - For Kahuna
  */
 @interface ATConnect : NSObject {
@@ -78,96 +106,158 @@ extern NSString *const ATIntegrationKeyAmazonSNS;
 ///---------------------------------
 /// @name Basic Usage
 ///---------------------------------
-/*! The API key for Apptentive. */
+/**
+ The API key for Apptentive.
+ 
+ This key is found on the Apptentive website under Settings, API & Development.
+ */
 @property (nonatomic, copy) NSString *apiKey;
 
-/*! The app's iTunes App ID. */
+/**
+ The app's iTunes App ID.
+ 
+ You can find this in iTunes Connect, and is the numeric "Apple ID" shown on your app details page.
+ */
 @property (nonatomic, copy) NSString *appID;
 
-/*! The shared singleton of `ATConnect`. */
+/** The shared singleton of `ATConnect`. */
 + (ATConnect *)sharedConnection;
 
 
 ///---------------------------------
 /// @name Interface Customization
 ///---------------------------------
-
-/*! Toggles much of the Apptentive branding on and off. `YES` by default. */
+/** Toggles much of the Apptentive branding on and off. `YES` by default. */
 @property (nonatomic, assign) BOOL showTagline;
-/*! Toggles the display of an email field in the message panel. `YES` by default. */
+/** Toggles the display of an email field in the message panel. `YES` by default. */
 @property (nonatomic, assign) BOOL showEmailField;
-/*! Set this if you want some custom text to appear as a placeholder in the
- feedback text box. */
+/** Set this if you want some custom text to appear as a placeholder in the feedback text box. */
 @property (nonatomic, copy) NSString *customPlaceholderText;
-/*! Set this to NO if you don't want to use Message Center, and instead just want unidirectional in-app feedback.
- Deprecated in 1.1.1 in favor of server-based configuration of Message Center. */
+/** 
+ Set this to NO if you don't want to use Message Center, and instead just want unidirectional in-app feedback.
+ 
+ Deprecated in 1.1.1 in favor of server-based configuration of Message Center.
+ */
 @property (nonatomic, assign) BOOL useMessageCenter DEPRECATED_ATTRIBUTE;
-/*! Set this to NO to disable Message Center locally on the first launch of your app.
-Note, though, that Message Center setting will be overridden by server-based configuration when it is downloaded. */
+/** 
+ Set this to NO to disable Message Center locally on the first launch of your app.
+ 
+ @note This setting will be overridden by server-based configuration when it is downloaded.
+ */
 @property (nonatomic, assign) BOOL initiallyUseMessageCenter;
 #if TARGET_OS_IPHONE
-/*! Overrides the default tintColor acquired from your app, in case you're using one that doesn't
-    look great. */
+/**
+ A tint color to use in Apptentive-specific UI.
+ 
+ Overrides the default tintColor acquired from your app, in case you're using one that doesn't look great
+ with Apptentive-specific UI.
+ */
 @property (nonatomic, retain) UIColor *tintColor;
 #endif
 
-///---------------------------------
-/// @name Managing Callback Queues
-///---------------------------------
 
 #if TARGET_OS_IPHONE
 
+///--------------------
+/// @name Presenting UI
+///--------------------
+
+/**
+ Presents Message Center from a given view controller.
+ 
+ @param viewController The view controller to present the Message Center from.
+ */
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController;
+
+/**
+ Presents Message Center from a given view controller with custom data.
+ 
+ @param viewController The view controller to present the Message Center from.
+ @param customData A dictionary of key/value pairs to be associated with any messages sent via Message Center.
+ */
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
+
+/**
+ Returns the current number of unread messages in Message Center.
+ 
+ These are the messages sent via the Apptentive website to this user.
+ */
 - (NSUInteger)unreadMessageCount;
 
-/*!
- Forward push notifications from your application delegate to Apptentive.
- If the push notification was sent by Apptentive, Message Center will be presented from the view controller.
+/**
+ Forwards a push notification from your application delegate to Apptentive Connect.
+ 
+ If the push notification originated from Apptentive, Message Center will be presented from the view controller.
+ 
+ @param userInfo The `userInfo` dictionary of the notification.
+ @param viewController The view controller Message Center may be presented from.
  */
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController;
 
-/*! 
- Call with a specific code point where interactions should happen.
+/** 
+ Shows interaction UI, if applicable, related to a given event.
  
  For example, if you have an upgrade message to display on app launch, you might call with event label set to
- @"app.launch" here, along with the view controller an upgrade message might be displayed from.
+ `@"app.launch"` here, along with the view controller an upgrade message might be displayed from.
  
  Returns whether or not an interaction was successfully found and run.
+ 
+ @param eventLabel A string representing the name of the event.
+ @param viewController A view controller Apptentive UI may be presented from.
  */
 - (BOOL)engage:(NSString *)eventLabel fromViewController:(UIViewController *)viewController;
 
-/*!
- * Dismisses the message center. You normally won't need to call this.
+/**
+ Dismisses the message center. You normally won't need to call this.
+ 
+ @param animated `YES` to animate the dismissal, otherwise `NO`.
+ @param completion A block called at the conclusion of the message center being dismissed.
  */
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion;
 
 #elif TARGET_OS_MAC
-/*!
- * Presents a feedback window (OS X framework only).
+
+///---------------------------
+/// @name Presenting UI (OS X)
+///---------------------------
+/**
+ Presents a feedback window (OS X framework only).
+ 
+ @param sender The originator of the action.
  */
 - (IBAction)showFeedbackWindow:(id)sender;
 #endif
+
 
 ///-------------------------------------
 /// @name Attach Text, Images, and Files
 ///-------------------------------------
 
-/*!
- * Attach text to the user's feedback. This will appear in your online Apptentive dashboard,
- * but will *not* appear in Message Center on the device.
+/**
+ Attaches text to the user's feedback.
+ 
+ This will appear in your online Apptentive dashboard, but will *not* appear in Message Center on the device.
+ 
+ @param text The text to attach to the user's feedback as a file.
  */
 - (void)sendAttachmentText:(NSString *)text;
 
-/*!
- * Attach an image the user's feedback. This will appear in your online Apptentive dashboard,
- * but will *not* appear in Message Center on the device.
+/**
+ Attaches an image the user's feedback.
+ 
+ This will appear in your online Apptentive dashboard, but will *not* appear in Message Center on the device.
+ 
+ @param image The image to attach to the user's feedback as a file.
  */
 - (void)sendAttachmentImage:(UIImage *)image;
 
-/*!
- * Attach a file with the given MIME type the user's feedback. This will appear in your online Apptentive dashboard,
- * but will *not* appear in Message Center on the device.
+/**
+ Attaches an arbitrary file to the user's feedback.
+ 
+ This will appear in your online Apptentive dashboard, but will *not* appear in Message Center on the device.
+ 
+ @param fileData The contents of the file as data.
+ @param mimeType The MIME type of the file data.
  */
 - (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType;
 
@@ -175,43 +265,74 @@ Note, though, that Message Center setting will be overridden by server-based con
 /// @name Add Custom Device or Person Data
 ///---------------------------------------
 
-/*! The initial name of the app user when communicating with Apptentive. */
+/** The initial name of the app user when communicating with Apptentive. */
 @property (nonatomic, copy) NSString *initialUserName;
-/*! The initial email address of the app user in form fields and communicating with Apptentive. */
+/** The initial email address of the app user in form fields and communicating with Apptentive. */
 @property (nonatomic, copy) NSString *initialUserEmailAddress;
 
-/*!
+/**
+ Adds custom data associated with the current person.
+ 
  Adds an additional data field to any feedback sent. This will show up in the person data in the
  conversation on your Apptentive dashboard.
  
- Object should be an `NSDate`, `NSNumber`, or `NSString`.
+ @param object Custom data of type `NSDate`, `NSNumber`, or `NSString`.
+ @param key A key to associate the data with.
  */
 - (void)addCustomPersonData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
 
-/*!
+/**
+ Adds custom data associated with the current device.
+ 
  Adds an additional data field to any feedback sent. This will show up in the device data in the
  conversation on your Apptentive dashboard.
  
- Object should be an `NSDate`, `NSNumber`, or `NSString`.
+ @param object Custom data of type `NSDate`, `NSNumber`, or `NSString`.
+ @param key A key to associate the data with.
  */
 - (void)addCustomDeviceData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
 
-/*! Removes an additional data field from the feedback sent. */
+/** 
+ Removes custom data associated with the current person.
+ 
+ Will remove data, if any, associated with the current person with the key `key`.
+ 
+ @param key The key of the data.
+ */
 - (void)removeCustomPersonDataWithKey:(NSString *)key;
-/*! Removes an additional data field from the feedback sent. */
+
+/**
+ Removes custom data associated with the current device.
+ 
+ Will remove data, if any, associated with the current device with the key `key`.
+ 
+ @param key The key of the data.
+ */
 - (void)removeCustomDeviceDataWithKey:(NSString *)key;
 
-/*! Deprecated. Use `-addCustomDeviceData:withKey:` instead. */
+/** 
+ Deprecated. Use `-addCustomDeviceData:withKey:` instead. 
+ 
+ @warning Deprecated!
+ @param object The custom data.
+ @param key The key of the data.
+ */
 - (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key DEPRECATED_ATTRIBUTE;
-/*! Deprecated. Use `-removeCustomDeviceDataWithKey:` instead. */
+
+/** Deprecated. Use `-removeCustomDeviceDataWithKey:` instead. 
+ 
+ @warning Deprecated!
+ @param key The key of the data.
+ */
 - (void)removeCustomDataWithKey:(NSString *)key DEPRECATED_ATTRIBUTE;
 
 ///---------------------------------------
 /// @name Open App Store
 ///---------------------------------------
 
-/*!
- Call to open your app's page on the App Store or Mac App Store.
+/**
+ Open your app's page on the App Store or Mac App Store.
+ 
  This method can be used to power, for example, a "Rate this app" button in your settings screen.
  It opens the app store directly, without the normal Apptentive Ratings Flow.
  */
@@ -221,15 +342,41 @@ Note, though, that Message Center setting will be overridden by server-based con
 /// @name Integrate With Other Services
 ///------------------------------------
 
-/*! Add a custom configuration for a 3rd-party integration service. */
+/** 
+ Adds a custom configuration for a 3rd-party integration service.
+ 
+ @param integration The name of the integration.
+ @param configuration The service-specific configuration keys and values.
+ */
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration;
-/*! Add a device token for a 3rd-party integration service. */
+
+/**
+ Adds a device token for a 3rd-party integration service.
+ 
+ @param integration The name of the integration.
+ @param deviceToken The device token expected by the integration.
+ */
 - (void)addIntegration:(NSString *)integration withDeviceToken:(NSData *)deviceToken;
-/*! Removes a 3rd-party integration with the given name. */
+
+/**
+ Removes a 3rd-party integration with the given name.
+ 
+ @param integration The name of the integration.
+ */
 - (void)removeIntegration:(NSString *)integration;
-/*! Adds Urban Airship integration with the given device token. */
+
+/**
+ Adds Urban Airship integration with the given device token.
+ 
+ @param deviceToken The device token expected by Urban Airship.
+ */
 - (void)addUrbanAirshipIntegrationWithDeviceToken:(NSData *)deviceToken;
-/*! Adds Amazon Web Services (AWS) Simple Notification Service (SNS) integration with the given device token. */
+
+/**
+ Adds Amazon Web Services (AWS) Simple Notification Service (SNS) integration with the given device token.
+ 
+ @param deviceToken The device token expected by AWS SNS.
+ */
 - (void)addAmazonSNSIntegrationWithDeviceToken:(NSData *)deviceToken;
 
 @end

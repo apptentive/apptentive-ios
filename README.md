@@ -305,7 +305,7 @@ Like the rating dialog, upgrade messages are created and configured online via y
 
 Surveys can be created on our website and presented, in-app, to users.
 
-Surveys are **cached** and will only be re-downloaded every 24 hours, to cut down on network connections. When developing your app and testing Apptentive, force a cache refresh by delete the app from your device and re-running.
+Surveys are **cached** and are only re-downloaded intermittently to cut down on network connections. If you create a survey online, you may not immediately see it on your device. To test the survey, force a cache refresh by deleting and re-running your app or reseting the iOS simulator.
 
 To begin using surveys...
 

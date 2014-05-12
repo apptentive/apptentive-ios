@@ -7,6 +7,8 @@
 //
 
 #import "ATInteractionUsageData.h"
+#import "ATBackend.h"
+#import "ATConnect.h"
 #import "ATEngagementBackend.h"
 #import "ATUtilities.h"
 #import "ATDeviceInfo.h"
@@ -19,6 +21,9 @@
 @synthesize timeSinceInstallBuild = _timeSinceInstallBuild;
 @synthesize applicationVersion = _applicationVersion;
 @synthesize applicationBuild = _applicationBuild;
+@synthesize sdkVersion = _sdkVersion;
+@synthesize sdkDistribution = _sdkDistribution;
+@synthesize sdkDistributionVersion = _sdkDistributionVersion;
 @synthesize isUpdateVersion = _isUpdateVersion;
 @synthesize isUpdateBuild = _isUpdateBuild;
 @synthesize codePointInvokesTotal = _codePointInvokesTotal;
@@ -43,6 +48,9 @@
 	[_timeSinceInstallBuild release], _timeSinceInstallBuild = nil;
 	[_applicationVersion release], _applicationVersion = nil;
 	[_applicationBuild release], _applicationBuild = nil;
+	[_sdkVersion release], _sdkVersion = nil;
+	[_sdkDistribution release], _sdkDistribution = nil;
+	[_sdkDistributionVersion release], _sdkDistributionVersion = nil;
 	[_currentTime release], _currentTime = nil;
 	[_isUpdateVersion release], _isUpdateVersion = nil;
 	[_isUpdateBuild release], _isUpdateBuild = nil;
@@ -69,6 +77,9 @@
 						   @"timeSinceInstallBuild" : self.timeSinceInstallBuild ?: [NSNull null],
 						   @"applicationVersion" : self.applicationVersion ?: [NSNull null],
 						   @"applicationBuild" : self.applicationBuild ?: [NSNull null],
+						   @"sdkVersion" : self.sdkVersion ? [NSNull null],
+						   @"sdkDistribution" : self.sdkDistribution ? [NSNull null],
+						   @"sdkDistributionVersion" : self.sdkDistributionVersion ? [NSNull null],
 						   @"isUpdateVersion" : self.isUpdateVersion ?: [NSNull null],
 						   @"isUpdateBuild" : self.isUpdateBuild ?: [NSNull null],
 						   @"codePointInvokesTotal" : self.codePointInvokesTotal ?: [NSNull null],
@@ -97,6 +108,15 @@
 	if (self.applicationBuild) {
 		predicateEvaluationDictionary[@"application_build"] = self.applicationBuild;
 		predicateEvaluationDictionary[@"app_release/build"] = self.applicationBuild;
+	}
+	if (self.sdkVersion) {
+		predicateEvaluationDictionary[@"sdk/version"] = self.sdkVersion;
+	}
+	if (self.sdkDistribution) {
+		predicateEvaluationDictionary[@"sdk/distribution"] = self.sdkDistribution;
+	}
+	if (self.sdkDistributionVersion) {
+		predicateEvaluationDictionary[@"sdk/distribution_version"] = self.sdkDistributionVersion;
 	}
 	predicateEvaluationDictionary[@"current_time"] = self.currentTime;
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesTotal];
@@ -167,7 +187,7 @@
 
 - (NSString *)applicationVersion {
 	if (!_applicationVersion) {
-		_applicationVersion = [[ATUtilities appVersionString] retain];
+		_applicationVersion = [[ATUtilities appVersionString] copy];
 	}
 	
 	return [[_applicationVersion retain] autorelease];
@@ -175,10 +195,31 @@
 
 - (NSString *)applicationBuild {
 	if (!_applicationBuild) {
-		_applicationBuild = [[ATUtilities buildNumberString] retain];
+		_applicationBuild = [[ATUtilities buildNumberString] copy];
 	}
 	
 	return [[_applicationBuild retain] autorelease];
+}
+
+- (NSString *)sdkVersion {
+	if (!_sdkVersion) {
+		_sdkVersion = [kATConnectVersionString copy];
+	}
+	return [[_sdkVersion retain] autorelease];
+}
+
+- (NSString *)sdkDistribution {
+	if (!_sdkDistribution) {
+		_sdkDistribution = [[[ATBackend sharedBackend] distributionName] copy];
+	}
+	return [[_sdkDistribution retain] autorelease];
+}
+
+- (NSString *)sdkDistributionVersion {
+	if (!_sdkDistributionVersion) {
+		_sdkDistributionVersion = [[[ATBackend sharedBackend] distributionVersion] copy];
+	}
+	return [[_sdkDistributionVersion retain] autorelease];
 }
 
 - (NSNumber *)currentTime {

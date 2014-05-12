@@ -7,6 +7,7 @@
 //
 
 #import "ATEngagementTests.h"
+#import "ATConnect.h"
 #import "ATInteraction.h"
 #import "ATInteractionUsageData.h"
 #import "ATEngagementBackend.h"
@@ -25,6 +26,10 @@
  
  app_release/version - The currently running application version (string).
  app_release/build - The currently running application build "number" (string).
+ 
+ sdk/version - The currently running SDK version (string).
+ sdk/distribution - The current SDK distribution, if available (string).
+ sdk/distribution_version - The current version of the SDK distribution, if available (string).
  
  is_update/version - Returns true if we have seen a version prior to the current one.
  is_update/build - Returns true if we have seen a build prior to the current one.
@@ -245,6 +250,39 @@
 	
 	interaction.criteria = @{@"app_release/build": @{@"$contains":@3.0}};
 	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
+}
+
+- (void)testInteractionCriteriaSDK {
+	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	
+	interaction.criteria = @{@"sdk/version": kATConnectVersionString};
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Default value should be current version.");
+	
+	interaction.criteria = @{@"sdk/version": @"1.4.2"};
+	usageData.sdkVersion = @"1.4.2";
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"SDK Version should be 1.4.2");
+	
+	usageData.sdkVersion = @"1.4";
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"SDK Version isn't 1.4");
+	
+	usageData.sdkVersion = @"1.5.0";
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"SDK Version isn't 1.5.0");
+	
+	interaction.criteria = @{@"sdk/version": @{@"$contains":@3.0}};
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
+	
+	interaction.criteria = @{@"sdk/distribution": @"CocoaPods-Source"};
+	usageData.sdkDistribution = @"CocoaPods-Source";
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"SDK Distribution should be CocoaPods-Source");
+	
+	interaction.criteria = @{@"sdk/distribution": @{@"$contains":@"CocoaPods"}};
+	usageData.sdkDistribution = @"CocoaPods-Source";
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"SDK Distribution should contain CocoaPods");
+	
+	interaction.criteria = @{@"sdk/distribution_version": @"foo"};
+	usageData.sdkDistributionVersion = @"foo";
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"SDK Distribution Version should match.");
 }
 
 - (void)testInteractionCriteriaCurrentTime {

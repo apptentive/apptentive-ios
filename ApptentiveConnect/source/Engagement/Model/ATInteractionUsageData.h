@@ -17,6 +17,9 @@
 @property (nonatomic, retain) NSNumber *timeSinceInstallBuild;
 @property (nonatomic, copy) NSString *applicationVersion;
 @property (nonatomic, copy) NSString *applicationBuild;
+@property (nonatomic, copy) NSString *sdkVersion;
+@property (nonatomic, copy) NSString *sdkDistribution;
+@property (nonatomic, copy) NSString *sdkDistributionVersion;
 @property (nonatomic, retain) NSNumber *currentTime;
 @property (nonatomic, retain) NSNumber *isUpdateVersion;
 @property (nonatomic, retain) NSNumber *isUpdateBuild;

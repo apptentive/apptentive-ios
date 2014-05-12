@@ -737,6 +737,68 @@
 	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Contains should be case insensitive.");
 }
 
+- (void)testStartsWithCriteria {
+	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	interaction.criteria = @{@"application_version": @{@"$starts_with": @"1.2."}};
+	usageData.applicationVersion = @"1.2.3a";
+	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Should pass because 1.2.3a starts with 1.2.");
+	
+	interaction = [[ATInteraction alloc] init];
+	usageData = [[ATInteractionUsageData alloc] init];
+	interaction.criteria = @{@"application_version": @{@"$starts_with": @"1.4"}};
+	usageData.applicationVersion = @"1.2.3a";
+	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail because 1.2.3a doesn't start with 1.4");
+	
+	// Test directionality.
+	interaction = [[ATInteraction alloc] init];
+	usageData = [[ATInteractionUsageData alloc] init];
+	interaction.criteria = @{@"application_version": @{@"$starts_with": @"abcd"}};
+	usageData.applicationVersion = @"abc";
+	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail because abc doesn't start with abcd.");
+	
+	interaction = [[ATInteraction alloc] init];
+	usageData = [[ATInteractionUsageData alloc] init];
+	interaction.criteria = @{@"application_version": @{@"$starts_with": @"abc"}};
+	usageData.applicationVersion = @"AbCdEF";
+	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"starts_with should be case insensitive.");
+}
+
+- (void)testEndsWithCriteria {
+	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	interaction.criteria = @{@"application_version": @{@"$ends_with": @"a"}};
+	usageData.applicationVersion = @"1.2.3a";
+	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Should pass because 1.2.3a ends with a");
+	
+	interaction = [[ATInteraction alloc] init];
+	usageData = [[ATInteractionUsageData alloc] init];
+	interaction.criteria = @{@"application_version": @{@"$ends_with": @"1.4"}};
+	usageData.applicationVersion = @"1.2.3a";
+	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail because 1.2.3a doesn't end in 1.4");
+	
+	// Test directionality
+	interaction = [[ATInteraction alloc] init];
+	usageData = [[ATInteractionUsageData alloc] init];
+	interaction.criteria = @{@"application_version": @{@"$ends_with": @"abcd"}};
+	usageData.applicationVersion = @"bcd";
+	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail because bcd doesn't end with abcd.");
+	
+	interaction = [[ATInteraction alloc] init];
+	usageData = [[ATInteractionUsageData alloc] init];
+	interaction.criteria = @{@"application_version": @{@"$ends_with": @"DEF"}};
+	usageData.applicationVersion = @"AbCdEf";
+	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Ends with should be case insensitive.");
+}
+
 - (void)testExistsCriteria {
 	ATInteraction *interaction = [[ATInteraction alloc] init];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];

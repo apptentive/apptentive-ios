@@ -163,6 +163,10 @@
 				equalitySymbol = @"!=";
 			} else if ([operator isEqualToString:@"$contains"]) {
 				equalitySymbol = @"CONTAINS[c]";
+			} else if ([operator isEqualToString:@"$starts_with"]) {
+				equalitySymbol = @"BEGINSWITH[c]";
+			} else if ([operator isEqualToString:@"$ends_with"]) {
+				equalitySymbol = @"ENDSWITH[c]";
 			} else if ([operator isEqualToString:@"$exists"]) {
 				isExists = YES;
 			} else {
@@ -247,8 +251,7 @@
 			
 			NSPredicate *compoundPredicate = [[[NSCompoundPredicate alloc] initWithType:predicateType subpredicates:criteria] autorelease];
 			[subPredicates addObject:compoundPredicate];
-		}
-		else {
+		} else {
 			// Implicit "==" if object is a string/number
 			NSDictionary *equalityDictionary = ([object isKindOfClass:[NSDictionary class]]) ? (NSDictionary *)object : @{@"==" : object};
 			NSPredicate *subPredicate = [ATInteraction predicateForCriteria:key operatorExpression:equalityDictionary hasError:hasError];

@@ -1222,7 +1222,7 @@ static NSURLCache *imageCache = nil;
 	checkedAlready = YES;
 #if TARGET_IPHONE_SIMULATOR
 	if ([ATConnect resourceBundle] == nil) {
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unable to Find Resources" message:@"Unable to find ApptentiveResources.bundle in the app. Did you remember to add it to the project?" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unable to Find Resources" message:@"Unable to find `ApptentiveResources.bundle`. Did you remember to add it to your target's Copy Bundle Resources build phase?" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
 		[alert show];
 		[alert autorelease];
 	} else if (self.persistentStoreCoordinator == nil || self.managedObjectContext == nil) {

@@ -8,7 +8,35 @@ There have been many recent API changes for the 1.4 release. Please see `docs/AP
 
 This guide will walk you through implementing Apptentive within your iOS app.
 
-### Implement Apptentive in Project
+### Install using CocoaPods
+
+The Apptentive iOS SDK is available via [CocoaPods](http://cocoapods.org/), a dependency manager for Objective-C.
+
+Please follow our [CocoaPods installation guide]() to use Apptentive via CocoaPods.
+
+### Install as an Xcode subproject
+
+The Apptentive iOS SDK can also be installed manually as an Xcode subproject.
+
+Please follow our [Xcode Project setup guide]() to install Apptentive manually as an Xcode subproject or git submodule.
+
+### Start using Apptentive
+
+Be sure to first integrate Apptentive as an Xcode subproject or by using CocoaPods. Please see the sections above.
+
+Once Apptentive has been added to your Xcode project you can begin using its features. Import the `ATConnect.h` header file to use Apptentive in your project files:  
+
+``` objective-c
+#import "ATConnect.h"
+```
+
+You will primarily interact with Apptentive's `sharedConnection` [shared instance singleton](https://developer.apple.com/library/mac/documentation/general/conceptual/devpedia-cocoacore/Singleton.html).
+
+``` objective-c
+[ATConnect sharedConnection]
+```
+
+The following sections will explain how to integrate Apptentive's features in your app.
 
 #### Set Apptentive API key
 
@@ -19,12 +47,11 @@ In order for queued/interrupted feedback uploads to continue uploading, we
 recommending instantiating `ATConnect` and setting the API key at application
 startup.
 
-1. Open up your app's `AppDelegate.m` file.
-2. Under `#import "AppDelegate.h"`, import the `ATConnect.h` file.
-3. Under implementation, set your Apptentive API key in the `application:didFinishLaunchingWithOptions:` method:
+1. In your app's `AppDelegate.m` file, import `ATConnect.h`.
+2. Set your Apptentive API key in the app delegate's `application:didFinishLaunchingWithOptions:` method:
 
 ``` objective-c
-#include "ATConnect.h"
+#import "ATConnect.h"
 // ...
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // ...
@@ -33,7 +60,7 @@ startup.
 }
 ```
 
-If there isn't an `application:didFinishLaunchingWithOptions:` method, add the above code snippet elsewhere in your App Delegate's implementation.
+If there isn't an `application:didFinishLaunchingWithOptions:` method, add the above code snippet elsewhere in your app delegate's implementation.
 
 As soon as you set the API key on the shared connection object, any queued feedback
 will start to upload, pending network availability. You also should not have

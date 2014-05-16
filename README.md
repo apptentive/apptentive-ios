@@ -70,9 +70,7 @@ to set the API key again on the shared connection object.
 
 The Apptentive Message Center provides an interface for you to communicate directly with your customers. People using your app are able to send you messages, which are routed to your Apptentive dashboard. When you reply to customer feedback, your response will immediately show up in the Message Center in their app.
 
-You might have a menu item in your settings menu, for example, titled "Feedback". When the user clicks on this item, you will open the Message Center. People might also be routed to Message Center through other interactions, such as the rating prompt.
-
-When you want to launch the Apptentive Message Center and feedback UI, import `ATConnect.h` then call `presentMessageCenterFromViewController:`:
+To launch the Apptentive Message Center, import `ATConnect.h` and then call `presentMessageCenterFromViewController:`:
 
 ``` objective-c
 #include "ATConnect.h"
@@ -81,6 +79,19 @@ When you want to launch the Apptentive Message Center and feedback UI, import `A
 ```
 
 ![Message Center initial feedback](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-love-dialog.png) ![alt text](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/space.png) ![Message Center response](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-message-center.png)
+
+#### Feedback Button
+
+Your app should implement a Feedback button that takes people to Message Center. 
+
+This button is very important, as it allows users to get back to your Apptentive support channel at any time. They might want to add additional information or tell you that their problem has resolved itself.
+
+You might title the button "Contact Us", "Give Feedback", or "Support". Developers often put this button in their settings menu. 
+
+When the user taps this button, you should open Message Center using `presentMessageCenterFromViewController:`.
+
+![Give Feedback button](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/give-feedback-button.png)
+
 
 #### Unread Messages
 

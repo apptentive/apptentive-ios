@@ -194,54 +194,24 @@ One you have engaged some events, you can create a rating prompt and modify the 
 
 #### Surveys
 
-Surveys can be created on our website and presented, in-app, to users.
+Apptentive Surveys are created on the Apptentive dashboard and presented natively in your app.
 
 Surveys are **cached** and are only re-downloaded intermittently to cut down on network connections. If you create a survey online, you may not immediately see it on your device. To test the survey, force a cache refresh by deleting and re-running your app or reseting the iOS simulator.
 
-To begin using surveys...
-
-1. In the file navigator, expand `source` under the ApptentiveConnect project.
-2. Drag `ATConnect.h` from `ApptentiveConnect.xcodeproj` to your app's file list.
-3. Import `ATSurveys.h` into the file where you need it.
-
-There are both tagged surveys and untagged surveys. Tags are useful for defining
-surveys that should be shown only in certain instances.
-
-To check if a survey with a given set of tags is available to be shown, call:
-
-```objective-c
-NSSet *tags = [NSSet setWithArray:@[@"bigWin", @"endOfLevel", @"usedItem"]];
-
-if ([ATSurveys hasSurveyAvailableWithTags:tags]) {
-    [ATSurveys presentSurveyControllerWithTags:tags fromViewController:viewController];
-}
-```
-
-Note: Tags for a particular survey are set on the Apptentive website.
-
-To show a survey without tags, use:
+Like all Apptentive interactions, Surveys are targeted at an event you engage in your app:
 
 ``` objective-c
-if ([ATSurveys hasSurveyAvailableWithNoTags]) {
-    [ATSurveys presentSurveyControllerWithNoTagsFromViewController:viewController];
-}
+	[[ATConnect sharedConnection] engage:@"completed_in_app_purchase" fromViewController:viewController];
 ```
 
-New surveys will be retrieved automatically. When a new survey becomes available,
-the `ATSurveyNewSurveyAvailableNotification` notification will be sent.
+Engaging the `completed_in_app_purchase` event above will allow you to show a survey after users of your app complete an in-app purchase. Target the event during the survey creation process:  
 
-``` objective-c
-#include "ATSurveys.h"
-// ...
-- (void)applicationDidFinishLaunching:(UIApplication *)application /* ... */ {
-    // ...
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyBecameAvailable:) name:ATSurveyNewSurveyAvailableNotification object:nil];
-}
+![Target a survey to an event.](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/survey_target_event.png)
 
-- (void)surveyBecameAvailable:(NSNotification *)notification {
-    // Present survey here as appropriate.
-}
-```
+When your survey goes live, it will be presented to app users who engage an in-app purchase event:  
+
+![Apptentive Survey screenshot.](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/survey_screenshot.png)
+
 
 ### Upgrade Messages
 

@@ -78,7 +78,7 @@ To launch the Apptentive Message Center, import `ATConnect.h` and then call `pre
 [[ATConnect sharedConnection] presentMessageCenterFromViewController:viewController];
 ```
 
-![Message Center initial feedback](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-love-dialog.png) ![alt text](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/space.png) ![Message Center response](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-message-center.png)
+![Message Center initial feedback](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-love-dialog.png) ![spacer image](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/space.png) ![Message Center response](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/iOS-message-center.png)
 
 #### Feedback Button
 
@@ -182,7 +182,7 @@ Apptentive provides an app rating prompt interaction that aims to provide the be
 
 Customers who love your app are asked to rate the app on the App Store. Those who dislike your app are instead directed to the Apptentive Message Center, where they can communicate directly with your team. You are then able to respond directly to customer issues or feature requests.
 
-The rating prompt is configured online in your Apptentive dashboard. At that time you will choose to trigger it at a certain Apptentive event.
+The rating prompt is configured online in your Apptentive dashboard. At that time you will configure it to be shown when a certain event is engaged. You can also edit the exact text that will be displayed.
 
 Thus, the only code needed to display a Rating Prompt is to engage events using the `engage:fromViewController:` method. The rating prompt is otherwise configured from your Apptentive dashboard.
 
@@ -191,6 +191,8 @@ Thus, the only code needed to display a Rating Prompt is to engage events using 
 ```
 
 One you have engaged some events, you can create a rating prompt and modify the parameters which determine when it will be shown in your interaction settings on [Apptentive](http://www.apptentive.com).
+
+![Enjoyment dialog](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/rating_prompt_enjoyment_dialog.png) ![spacer image](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/space.png) ![Rating dialog](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/rating_prompt_rating_dialog.png) ![spacer image](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/space.png) ![feedback dialog image](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/rating_prompt_feedback_dialog.png)
 
 #### Surveys
 

@@ -192,22 +192,6 @@ Thus, the only code needed to display a Rating Prompt is to engage events using 
 
 One you have engaged some events, you can create a rating prompt and modify the parameters which determine when it will be shown in your interaction settings on [Apptentive](http://www.apptentive.com).
 
-### Upgrade Messages
-
-In iOS 7, users are upgraded automatically when a new version of your app is released. Unfortunately, this means they will rarely (if ever) see your App Store release notes!
-
-Apptentive's Upgrade Message feature allows you to display a brief message when your app has been updated. You can speak directly to your users and let them know what has changed in the release.
-
-To present an upgrade message, engage the code point `init` when your application becomes active and is able to display a view:
-
-```objective-c
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-	[[ATConnect sharedConnection] engage:@"init" fromViewController:viewController];
-}
-```
-
-Like the rating dialog, upgrade messages are created and configured online via your Apptentive dashboard.
-
 #### Surveys
 
 Surveys can be created on our website and presented, in-app, to users.
@@ -258,6 +242,22 @@ the `ATSurveyNewSurveyAvailableNotification` notification will be sent.
     // Present survey here as appropriate.
 }
 ```
+
+### Upgrade Messages
+
+In iOS 7, users are upgraded automatically when a new version of your app is released. Unfortunately, this means they will rarely (if ever) see your App Store release notes!
+
+Apptentive's Upgrade Message feature allows you to display a brief message when your app has been updated. You can speak directly to your users and let them know what has changed in the release.
+
+To present an upgrade message, engage the code point `init` when your application becomes active and is able to display a view:
+
+```objective-c
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+	[[ATConnect sharedConnection] engage:@"init" fromViewController:viewController];
+}
+```
+
+Like the rating dialog, upgrade messages are created and configured online via your Apptentive dashboard.
 
 #### Custom Data
 

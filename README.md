@@ -102,7 +102,7 @@ You might title the button "Contact Us", "Give Feedback", or "Support". Develope
 
 When the user taps this button, you should open Message Center using `presentMessageCenterFromViewController:`.
 
-![Give Feedback button](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/give-feedback-button.png)
+![Give Feedback button](https://raw.github.com/apptentive/apptentive-ios/readme/etc/screenshots/give-feedback-button.png)
 
 
 #### Unread Messages
@@ -204,7 +204,7 @@ Thus, the only code needed to display a Rating Prompt is to engage events using 
 
 One you have engaged some events, you can create a rating prompt and modify the parameters which determine when it will be shown in your interaction settings on [Apptentive](http://www.apptentive.com).
 
-![Enjoyment dialog](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/rating_prompt_enjoyment_dialog.png) ![spacer image](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/space.png) ![Rating dialog](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/rating_prompt_rating_dialog.png) ![spacer image](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/space.png) ![feedback dialog image](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/rating_prompt_feedback_dialog.png)
+![Enjoyment dialog](https://raw.github.com/apptentive/apptentive-ios/readme/etc/screenshots/rating_prompt_enjoyment_dialog.png) ![spacer image](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/space.png) ![Rating dialog](https://raw.github.com/apptentive/apptentive-ios/readme/etc/screenshots/rating_prompt_rating_dialog.png) ![spacer image](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/space.png) ![feedback dialog image](https://raw.github.com/apptentive/apptentive-ios/readme/etc/screenshots/rating_prompt_feedback_dialog.png)
 
 #### Surveys
 
@@ -220,11 +220,11 @@ Like all Apptentive interactions, Surveys are targeted at an event you engage in
 
 Engaging the `completed_in_app_purchase` event above will allow you to show a survey after users of your app complete an in-app purchase. Target the event during the survey creation process:  
 
-![Target a survey to an event.](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/survey_target_event.png)
+![Target a survey to an event.](https://raw.github.com/apptentive/apptentive-ios/readme/etc/screenshots/survey_target_event.png)
 
 When your survey goes live, it will be presented to app users who engage an in-app purchase event:  
 
-![Apptentive Survey screenshot.](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/survey_screenshot.png)
+![Apptentive Survey screenshot.](https://raw.github.com/apptentive/apptentive-ios/readme/etc/screenshots/survey_screenshot.png)
 
 
 ### Upgrade Messages

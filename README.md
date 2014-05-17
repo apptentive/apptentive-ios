@@ -4,6 +4,22 @@ The Apptentive iOS SDK provides a powerful and simple channel to communicate wit
 
 There have been many recent API changes for the 1.4 release. Please see `docs/APIChanges.md`.
 
+## Sample Application
+
+The sample application FeedbackDemo demonstrates how to integrate the SDK
+with your application.
+
+The demo app includes integration of the message center, surveys, and the
+ratings flow. You use it by editing the `defines.h` file and entering in
+the Apple ID for your app and your Apptentive API token. 
+
+The rating flow can be activated by clicking on the Ratings button. It asks
+the user if they are happy with the app. If not, then a simplified feedback
+window is opened. If they are happy with the app, they are prompted to rate
+the app in the App Store:
+
+![Popup](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/rating.png)
+
 ## Install Guide
 
 This guide will walk you through implementing Apptentive within your iOS app.
@@ -292,22 +308,6 @@ If the push notification was sent by Apptentive, we will then present Message Ce
 #### Metrics
 
 Metrics provide insight into how people are engaging with your app, and exactly which Apptentive events and interactions are being used.
-
-#### Sample Application
-
-The sample application FeedbackDemo demonstrates how to integrate the SDK
-with your application.
-
-The demo app includes integration of the message center, surveys, and the
-ratings flow. You use it by editing the `defines.h` file and entering in
-the Apple ID for your app and your Apptentive API token. 
-
-The rating flow can be activated by clicking on the Ratings button. It asks
-the user if they are happy with the app. If not, then a simplified feedback
-window is opened. If they are happy with the app, they are prompted to rate
-the app in the App Store:
-
-![Popup](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/rating.png)
 
 #### Customization
 

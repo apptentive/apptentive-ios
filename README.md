@@ -304,3 +304,12 @@ If the push notification was sent by Apptentive, we will then present Message Ce
 #### Customization
 
 For information on customizing the UI and text of `apptentive-ios`, please see [Customization](https://github.com/apptentive/apptentive-ios/blob/master/docs/Customization.md).
+
+## Testing Apptentive Features
+
+Apptentive interactions are only shown if the conditions set on your Apptentive dashboard are met. Your Rating Prompt might only show 3 days after installing the app, for example.
+
+This can make some Apptentive features somewhat hard to invoke and test. An interaction may or may not be shown whenever you engage and event in your app.
+
+Please see the [Apptentive testing guide](docs/testing_guide.md) for directions on how to test that the Rating Prompt, Surveys, and other Apptentive features have been configured correctly.
+

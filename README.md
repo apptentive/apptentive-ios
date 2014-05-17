@@ -301,10 +301,6 @@ When push notifications arrive, pass them to Apptentive:
 
 If the push notification was sent by Apptentive, we will then present Message Center from the `viewController` parameter.
 
-#### Metrics
-
-Metrics provide insight into how people are engaging with your app, and exactly which Apptentive events and interactions are being used.
-
 #### Customization
 
 For information on customizing the UI and text of `apptentive-ios`, please see [Customization](https://github.com/apptentive/apptentive-ios/blob/master/docs/Customization.md).

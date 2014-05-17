@@ -34,13 +34,10 @@ Engage a new event in your application, "test_event":
 
 Run your app, then engage the event by calling the above method. The best way to accomplish this is to hook the method up to a button in your app that you can easily press at will.
 
-Once a single instance of your event has been recorded, you can target a rating prompt to that event. Returning to your online Apptentive dashboard, you will now see the event appear:  
+Once a single instance of your event has been recorded, you can target a rating prompt to that event. Select the Rating Prompt from your dashboard's Interaction's tab. In the "Who & When" section, you can now select "test_event" from the event target menu:
 
-	[SCREENSHOT OF EVENTS]
+![Target a rating prompt to an event.](https://raw.github.com/apptentive/apptentive-ios/readme/etc/screenshots/rating_prompt_target_event.png)
 
-Select the Rating Prompt from your dashboard's Interaction's tab. In the "Who & When" section, you can now select "test_event" from the event target menu:
-
-	[SCREENSHOT OF EVENT MENU]
 
 #### Trigger the Rating Prompt
 

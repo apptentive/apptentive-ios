@@ -6,21 +6,13 @@ Use Apptentive features to manage your app's ratings, collect and respond to cus
 
 There have been many recent API changes for the 1.4 release. Please see `docs/APIChanges.md`.
 
-## Sample Application
+## Apptentive Demo App
 
-The sample application FeedbackDemo demonstrates how to integrate the SDK
-with your application.
+The Apptentive sample application `FeedbackDemo` is included in this repository along with the SDK.
 
-The demo app includes integration of the message center, surveys, and the
-ratings flow. You use it by editing the `defines.h` file and entering in
-the Apple ID for your app and your Apptentive API token. 
+Use FeedbackDemo to test Apptentive's features. Edit the `defines.h` file to include your Apptentive **API Key** and iTunes **App ID** where specified.
 
-The rating flow can be activated by clicking on the Ratings button. It asks
-the user if they are happy with the app. If not, then a simplified feedback
-window is opened. If they are happy with the app, they are prompted to rate
-the app in the App Store:
-
-![Popup](https://raw.github.com/apptentive/apptentive-ios/master/etc/screenshots/rating.png)
+Message Center, the Ratings Prompt, Surveys, and other Apptentive interactions can all be tested before integrating Apptentive in your own app. 
 
 ## Install Guide
 

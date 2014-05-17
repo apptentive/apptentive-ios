@@ -35,7 +35,7 @@ CocoaPods has created an Xcode Workspace containing your original project plus a
 
 After running `pod install`, open the newly created Xcode Workspace.
 
-You can now begin using Apptentive. For example, set your API key:  
+You can now begin [using Apptentive in your project](../README.md). For example, set your API key:  
 
 ```
 #import "ATConnect.h"

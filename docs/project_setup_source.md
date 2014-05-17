@@ -104,6 +104,16 @@ You should now build `ApptentiveResources.bundle`, the Apptentive assets bundle 
 ### Add Apptentive header files
 
 1. In the file navigator, expand the `source` directory of the ApptentiveConnect project.
-2. Drag the file `ATConnect.h` into to your app's file list.
+2. Drag the file `ATConnect.h` out of the ApptentiveConnect project and into to your main project's files.
+
+### Begin using Apptentive
+
+You can now begin [using Apptentive in your project](../README.md). For example, set your API key:  
+
+```
+#import "ATConnect.h"
+...
+[ATConnect sharedConnection].apiKey = @"abc_xyz_abc_xyz";
+```
 
 -

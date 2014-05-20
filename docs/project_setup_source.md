@@ -1,6 +1,6 @@
 ### Get Apptentive
 
-All of our client code is open source and available on GitHub](https://github.com/apptentive/apptentive-ios).
+All of our client code is open source and [available on GitHub](https://github.com/apptentive/apptentive-ios).
 
 #### Using Git
 

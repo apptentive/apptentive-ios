@@ -30,6 +30,22 @@ The Apptentive iOS SDK can also be installed manually as an Xcode subproject.
 
 Please see the Apptentive [Xcode project setup guide](docs/project_setup_source.md) to install Apptentive manually as an Xcode subproject or git submodule.
 
+## Using Apptentive in your App
+
+After integrating the Apptentive SDK into your project, you can begin using Apptentive features in your app.
+
+You should begin by engaging Apptentive events at various places in your app:
+
+``` objective-c
+	#import "ATConnect.h"
+	...
+	[[ATConnect sharedConnection] engage:@"event_name" fromViewController:viewController];
+```
+
+Later, on your Apptentive dashboard, you will target these events with Apptentive features such as Message Center, Ratings Prompts, and Surveys.
+
+Please see our [iOS integration guide]() for more on this subject.
+
 ## Testing Apptentive Features
 
 Apptentive interactions are only shown if the conditions set on your Apptentive dashboard are met. Your Rating Prompt might only show 3 days after installing the app, for example.

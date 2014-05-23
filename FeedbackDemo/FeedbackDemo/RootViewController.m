@@ -128,7 +128,7 @@ enum kSurveyRows {
 	}
 	cell.textLabel.textColor = [UIColor blackColor];
 	if (indexPath.section == kRatingSection) {
-		cell.textLabel.text = @"Engage `ratingFlow` event";
+		cell.textLabel.text = @"Engage `testRatingFlow` event";
 	} else if (indexPath.section == kSurveySection) {
 		if (indexPath.row == kSurveyRowShowSurvey) {
 			// Engagement Surveys

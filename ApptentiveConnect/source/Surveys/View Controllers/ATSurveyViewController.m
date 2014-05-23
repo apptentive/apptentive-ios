@@ -214,6 +214,7 @@ enum {
 	
 	if ([[ATConnect sharedConnection] tintColor] && [self.view respondsToSelector:@selector(setTintColor:)]) {
 		[self.navigationController.view setTintColor:[[ATConnect sharedConnection] tintColor]];
+		[self.view setTintColor:[[ATConnect sharedConnection] tintColor]];
 	}
 	
 	if (![survey responseIsRequired]) {
@@ -352,7 +353,7 @@ enum {
 			buttonCell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ATSurveySendCellIdentifier] autorelease];
 			buttonCell.textLabel.text = ATLocalizedString(@"Send Response", @"Survey send response button title");
 			buttonCell.textLabel.textAlignment = NSTextAlignmentCenter;
-			buttonCell.textLabel.textColor = [UIColor blueColor];
+			buttonCell.textLabel.textColor = self.view.tintColor;
 			buttonCell.selectionStyle = UITableViewCellSelectionStyleBlue;
 		}
 		return buttonCell;

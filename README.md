@@ -18,17 +18,8 @@ Apptentive can be installed manually as an Xcode subproject or via the dependenc
 
 The following linked guides walk you through the integration process.
 
-#### Install using CocoaPods
-
-The Apptentive iOS SDK is available via [CocoaPods](http://cocoapods.org/), a dependency manager for Objective-C.
-
-Please see the Apptentive [CocoaPods installation guide](docs/project_setup_cocoapods.md) to integrate Apptentive via CocoaPods.
-
-#### Install as an Xcode subproject
-
-The Apptentive iOS SDK can also be installed manually as an Xcode subproject.
-
-Please see the Apptentive [Xcode project setup guide](docs/project_setup_source.md) to install Apptentive manually as an Xcode subproject or git submodule.
+ - [Xcode project setup guide](docs/project_setup_source.md)
+ - [CocoaPods installation guide](docs/project_setup_cocoapods.md)
 
 ## Using Apptentive in your App
 

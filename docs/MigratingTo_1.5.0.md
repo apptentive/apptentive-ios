@@ -1,4 +1,4 @@
-# Migration to Apptentive v1.4.0
+# Migration to Apptentive v1.5.0
 
 If you have integrated a previous version of Apptentive's ratings, you will need to migrate to our new
 **Interaction** and **Event** based API. The new API provides a generic interface through which all future
@@ -8,7 +8,7 @@ If you have integrated a previous version of Apptentive's ratings, you will need
 
 ### Displaying Ratings
 
-The previous method for showing the rating flow, `showRatingFlowFromViewControllerIfConditionsAreMet:`, has been deprecated. You will need to replace it with a call to `engage:fromViewController:`. The parameter `eventLabel` is a string that identifies each specific place in your code where you call `engage:`.
+The previous method for showing the rating flow, `showRatingFlowFromViewControllerIfConditionsAreMet:`, has been removed in version 1.4.0. You will need to replace it with a call to `engage:fromViewController:`. The parameter `eventLabel` is a string that identifies each specific place in your code where you call `engage:`.
 
 Rather than calling `showRatingFlowFromViewControllerIfConditionsAreMet:`, you should now seed your app with a variety of events. Then, on the Apptentive dashboard, you will create a Rating Prompt Interaction and target it to run in response to one of the events that you have created.
 

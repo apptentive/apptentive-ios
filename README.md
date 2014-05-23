@@ -2,7 +2,7 @@
 
 The Apptentive iOS SDK provides a simple and powerful channel to communicate in-app with your customers. 
 
-Use Apptentive features to improve your app's App Store ratings, collect and respond to customers' feedback, show surveys at specific points within your app, and more.
+Use Apptentive features to improve your app's App Store ratings, collect and respond to customer feedback, show surveys at specific points within your app, and more.
 
 ## Apptentive Demo App
 

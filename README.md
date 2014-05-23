@@ -2,7 +2,7 @@
 
 The Apptentive iOS SDK provides a simple and powerful channel to communicate in-app with your customers. 
 
-Use Apptentive features to improve your app's App Store ratings, collect and respond to customers feedback, show surveys at specific points within your app, and more.
+Use Apptentive features to improve your app's App Store ratings, collect and respond to customers' feedback, show surveys at specific points within your app, and more.
 
 ## Apptentive Demo App
 
@@ -18,8 +18,8 @@ Apptentive can be installed manually as an Xcode subproject or via the dependenc
 
 The following linked guides walk you through the integration process.
 
- - [Xcode project setup guide](http://www.apptentive.com/docs/ios/setup/cocoapods)
- - [CocoaPods installation guide](http://www.apptentive.com/docs/setup/xcode/)
+ - [Xcode project setup guide](http://www.apptentive.com/docs/setup/xcode/)
+ - [CocoaPods installation guide](http://www.apptentive.com/docs/ios/setup/cocoapods)
 
 ## Using Apptentive in your App
 

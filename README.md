@@ -28,9 +28,9 @@ After integrating the Apptentive SDK into your project, you can [begin using App
 You should begin by engaging Apptentive events at various places in your app:
 
 ``` objective-c
-	#import "ATConnect.h"
-	...
-	[[ATConnect sharedConnection] engage:@"event_name" fromViewController:viewController];
+#import "ATConnect.h"
+...
+[[ATConnect sharedConnection] engage:@"event_name" fromViewController:viewController];
 ```
 
 Later, on your Apptentive dashboard, you will target these events with [Apptentive features]() such as Message Center, Ratings Prompts, and Surveys.

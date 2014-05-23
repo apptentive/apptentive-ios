@@ -37,6 +37,12 @@ Later, on your Apptentive dashboard, you will target these events with [Apptenti
 
 Please see our [iOS integration guide](http://www.apptentive.com/docs/ios/integration/) for more on this subject.
 
+## API Documentation
+
+Please see our docs site for the Apptentive iOS SDK's [API documentation](http://www.apptentive.com/docs/ios/api/Classes/ATConnect.html).
+
+Apptentive's [API changelog](docs/APIChanges.md) is also updated alongside the SDK.
+
 ## Testing Apptentive Features
 
 Please see the [Apptentive testing guide](http://www.apptentive.com/docs/ios/testing/) for directions on how to test that the Rating Prompt, Surveys, and other Apptentive features have been configured correctly.

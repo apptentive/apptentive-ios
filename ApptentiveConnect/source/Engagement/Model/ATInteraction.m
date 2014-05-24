@@ -102,6 +102,11 @@
 		
 		//TODO: Check interaction's version.
 		
+		if (self.interactionType == ATInteractionTypeUpgradeMessage && ![ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
+			// Don't show upgrade messages on anything except iOS 7 and above.
+			break;
+		}
+		
 		if (![self criteriaAreMet]) {
 			break;
 		}
@@ -117,12 +122,7 @@
 }
 
 - (BOOL)criteriaAreMet {
-	BOOL criteriaMet = [self criteriaAreMetForUsageData:[self usageData]];
-	if (criteriaMet && [self.type isEqualToString:@"UpgradeMessage"] && ![ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
-		// Don't show upgrade messages on anything except iOS 7 and above.
-		criteriaMet = NO;
-	}
-	return criteriaMet;
+	return [self criteriaAreMetForUsageData:[self usageData]];
 }
 
 - (BOOL)criteriaAreMetForUsageData:(ATInteractionUsageData *)usageData {

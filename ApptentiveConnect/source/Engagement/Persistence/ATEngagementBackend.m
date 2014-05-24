@@ -180,7 +180,7 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 - (ATInteraction *)interactionForCodePoint:(NSString *)codePoint {
 	NSArray *interactions = [self interactionsForCodePoint:codePoint];
 	for (ATInteraction *interaction in interactions) {
-		if ([interaction criteriaAreMet]) {
+		if ([interaction isValid]) {
 			ATLogInfo(@"Found valid %@ interaction for code point: %@", interaction.type, codePoint);
 			return interaction;
 		}

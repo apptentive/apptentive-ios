@@ -33,6 +33,8 @@ typedef NS_ENUM(NSInteger, ATInteractionType){
 
 - (ATInteractionType)interactionType;
 
+- (BOOL)isValid;
+
 - (ATInteractionUsageData *)usageData;
 - (BOOL)criteriaAreMet;
 - (BOOL)criteriaAreMetForUsageData:(ATInteractionUsageData *)usageData;

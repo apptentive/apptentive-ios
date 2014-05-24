@@ -92,6 +92,26 @@
     return copy;
 }
 
+- (BOOL)isValid {
+	BOOL isValid = NO;
+	
+	do { // once
+		if (self.interactionType == ATInteractionTypeUnknown) {
+			break;
+		}
+		
+		//TODO: Check interaction's version.
+		
+		if (![self criteriaAreMet]) {
+			break;
+		}
+		
+		isValid = YES;
+	} while (NO);
+	
+	return isValid;
+}
+
 - (ATInteractionUsageData *)usageData {
 	return [ATInteractionUsageData usageDataForInteraction:self];
 }

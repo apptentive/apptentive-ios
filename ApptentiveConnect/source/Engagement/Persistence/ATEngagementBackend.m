@@ -370,20 +370,32 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 }
 
 - (void)presentInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
-	if ([interaction.type isEqualToString:@"UpgradeMessage"]) {
-		[self presentUpgradeMessageInteraction:interaction fromViewController:viewController];
-	} else if ([interaction.type isEqualToString:@"EnjoymentDialog"]) {
-		[self presentEnjoymentDialogInteraction:interaction fromViewController:viewController];
-	} else if ([interaction.type isEqualToString:@"RatingDialog"]) {
-		[self presentRatingDialogInteraction:interaction fromViewController:viewController];
-	} else if ([interaction.type isEqualToString:@"FeedbackDialog"]) {
-		[self presentFeedbackDialogInteraction:interaction fromViewController:viewController];
-	} else if ([interaction.type isEqualToString:@"MessageCenter"]) {
-		[self presentMessageCenterInteraction:interaction fromViewController:viewController];
-	} else if ([interaction.type isEqualToString:@"AppStoreRating"]) {
-		[self presentAppStoreRatingInteraction:interaction fromViewController:viewController];
-	} else if ([interaction.type isEqualToString:@"Survey"]) {
-		[self presentSurveyInteraction:interaction fromViewController:viewController];
+	switch (interaction.interactionType) {
+		case ATInteractionTypeUpgradeMessage:
+			[self presentUpgradeMessageInteraction:interaction fromViewController:viewController];
+			break;
+		case ATInteractionTypeEnjoymentDialog:
+			[self presentEnjoymentDialogInteraction:interaction fromViewController:viewController];
+			break;
+		case ATInteractionTypeRatingDialog:
+			[self presentRatingDialogInteraction:interaction fromViewController:viewController];
+			break;
+		case ATInteractionTypeFeedbackDialog:
+			[self presentFeedbackDialogInteraction:interaction fromViewController:viewController];
+			break;
+		case ATInteractionTypeMessageCenter:
+			[self presentMessageCenterInteraction:interaction fromViewController:viewController];
+			break;
+		case ATInteractionTypeAppStoreRating:
+			[self presentAppStoreRatingInteraction:interaction fromViewController:viewController];
+			break;
+		case ATInteractionTypeSurvey:
+			[self presentSurveyInteraction:interaction fromViewController:viewController];
+			break;
+		case ATInteractionTypeUnknown:
+		default:
+			ATLogError(@"Attempting to present an unknown interaction type!");
+			break;
 	}
 }
 

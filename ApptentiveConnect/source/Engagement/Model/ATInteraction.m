@@ -24,6 +24,27 @@
 	return [interaction autorelease];
 }
 
+- (ATInteractionType)interactionType {
+	ATInteractionType interactionType = ATInteractionTypeUnknown;
+	if ([self.type isEqualToString:@"UpgradeMessage"]) {
+		interactionType = ATInteractionTypeUpgradeMessage;
+	} else if ([self.type isEqualToString:@"EnjoymentDialog"]) {
+		interactionType = ATInteractionTypeEnjoymentDialog;
+	} else if ([self.type isEqualToString:@"RatingDialog"]) {
+		interactionType = ATInteractionTypeRatingDialog;
+	} else if ([self.type isEqualToString:@"FeedbackDialog"]) {
+		interactionType = ATInteractionTypeFeedbackDialog;
+	} else if ([self.type isEqualToString:@"MessageCenter"]) {
+		interactionType = ATInteractionTypeMessageCenter;
+	} else if ([self.type isEqualToString:@"AppStoreRating"]) {
+		interactionType = ATInteractionTypeAppStoreRating;
+	} else if ([self.type isEqualToString:@"Survey"]) {
+		interactionType = ATInteractionTypeSurvey;
+	}
+	
+	return interactionType;
+}
+
 - (NSString *)description {	
 	NSDictionary *description = @{@"identifier" : self.identifier ?: [NSNull null],
 								  @"priority" : [NSNumber numberWithInteger:self.priority] ?: [NSNull null],

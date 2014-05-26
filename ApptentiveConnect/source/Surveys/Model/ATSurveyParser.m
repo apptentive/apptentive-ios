@@ -117,18 +117,16 @@
 - (ATSurvey *)surveyWithInteraction:(ATInteraction *)interaction {
 	ATSurvey *survey = [[ATSurvey alloc] init];
 	
-	NSMutableDictionary *surveyData = [NSMutableDictionary dictionary];
-	
 	if (interaction.identifier) {
-		[surveyData setObject:interaction.identifier forKey:@"identifier"];
+		survey.identifier = interaction.identifier;
 	}
 	
 	if (interaction.configuration[@"name"]) {
-		[surveyData setObject:interaction.configuration[@"name"] forKey:@"name"];
+		survey.name = interaction.configuration[@"name"];
 	}
 	
 	if (interaction.configuration[@"description"]) {
-		[surveyData setObject:interaction.configuration[@"description"] forKey:@"surveyDescription"];
+		survey.surveyDescription = interaction.configuration[@"description"];
 	}
 	
 	if (interaction.configuration[@"show_success_message"]) {
@@ -136,10 +134,8 @@
 	}
 	
 	if (interaction.configuration[@"success_message"]) {
-		[surveyData setObject:interaction.configuration[@"success_message"] forKey:@"successMessage"];
+		survey.successMessage = interaction.configuration[@"success_message"];
 	}
-
-	[survey setValuesForKeysWithDictionary:surveyData];
 	
 	NSArray *questions = interaction.configuration[@"questions"];
 	if ([questions isKindOfClass:[NSArray class]]) {

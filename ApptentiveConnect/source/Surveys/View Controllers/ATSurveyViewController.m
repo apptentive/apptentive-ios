@@ -174,15 +174,15 @@ enum {
 		[task release], task = nil;
 	});
 	
-	if (!survey.successMessage) {
+	if (survey.showSuccessMessage && survey.successMessage) {
+		UIAlertView *successAlert = [[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Thanks!", @"Text in thank you display upon submitting survey.") message:survey.successMessage delegate:nil cancelButtonTitle:ATLocalizedString(@"OK", @"OK button title") otherButtonTitles:nil] autorelease];
+		[successAlert show];
+	} else {
 		ATHUDView *hud = [[ATHUDView alloc] initWithWindow:self.view.window];
 		hud.label.text = ATLocalizedString(@"Thanks!", @"Text in thank you display upon submitting survey.");
 		hud.fadeOutDuration = 5.0;
 		[hud show];
 		[hud autorelease];
-	} else {
-		UIAlertView *successAlert = [[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Thanks!", @"Text in thank you display upon submitting survey.") message:survey.successMessage delegate:nil cancelButtonTitle:ATLocalizedString(@"OK", @"OK button title") otherButtonTitles:nil] autorelease];
-		[successAlert show];
 	}
 	
 	NSDictionary *notificationInfo = [[NSDictionary alloc] initWithObjectsAndKeys:survey.identifier, ATSurveyIDKey, nil];

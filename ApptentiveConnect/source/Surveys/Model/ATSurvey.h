@@ -19,6 +19,7 @@
 @property (nonatomic, copy) NSString *surveyDescription;
 @property (nonatomic, readonly) NSArray *questions;
 @property (nonatomic, getter=responseIsRequired) BOOL responseRequired;
+@property (nonatomic, assign) BOOL showSuccessMessage;
 @property (nonatomic, copy) NSString *successMessage;
 
 - (void)addQuestion:(ATSurveyQuestion *)question;

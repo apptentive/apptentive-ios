@@ -131,6 +131,10 @@
 		[surveyData setObject:interaction.configuration[@"description"] forKey:@"surveyDescription"];
 	}
 	
+	if (interaction.configuration[@"show_success_message"]) {
+		survey.showSuccessMessage = [interaction.configuration[@"show_success_message"] boolValue];
+	}
+	
 	if (interaction.configuration[@"success_message"]) {
 		[surveyData setObject:interaction.configuration[@"success_message"] forKey:@"successMessage"];
 	}

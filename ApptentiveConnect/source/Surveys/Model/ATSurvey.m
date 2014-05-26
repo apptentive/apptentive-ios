@@ -16,6 +16,7 @@
 @synthesize surveyDescription;
 @synthesize questions;
 @synthesize responseRequired;
+@synthesize showSuccessMessage;
 @synthesize successMessage;
 
 - (id)init {
@@ -38,6 +39,7 @@
 			if (decodedQuestions) {
 				[questions addObjectsFromArray:decodedQuestions];
 			}
+			self.showSuccessMessage = [[coder decodeObjectForKey:@"showSuccessMessage"] boolValue];
 			self.successMessage = [coder decodeObjectForKey:@"successMessage"];
 		} else {
 			[self release];
@@ -54,6 +56,7 @@
 	[coder encodeObject:self.name forKey:@"name"];
 	[coder encodeObject:self.surveyDescription forKey:@"surveyDescription"];
 	[coder encodeObject:self.questions forKey:@"questions"];
+	[coder encodeObject:@(self.showSuccessMessage) forKey:@"showSuccessMessage"];
 	[coder encodeObject:self.successMessage forKey:@"successMessage"];
 }
 

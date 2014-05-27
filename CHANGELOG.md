@@ -3,7 +3,7 @@
 
 This release moves Surveys to the engagement framework. You will now be able to target surveys to events that you `engage:` in your app. This change enables surveys to be chained with other interactions, such as the Ratings Prompt. From your Apptentive dashboard, you can now present a Survey if someone answers "No" to your "Do you Love App_Name?" prompt.
 
-This release also fully removes the `ATAppRatingFlow.h" and `ATSurveys.h` header files. You can now simply import `ATConnect.h` when using Apptentive. 
+This release also fully removes the `ATAppRatingFlow.h` and `ATSurveys.h` header files. You can now simply import `ATConnect.h` when using Apptentive. 
 
 If you were using a version prior to 1.5.0, please read [MigratingTo_1.5.0.md](docs/MigratingTo_1.5.0.md) for information on how to migrate your API calls to this release. We are sorry for the inconvenience, but we hope the new features will more than make up for it!
 

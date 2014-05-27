@@ -1,3 +1,21 @@
+2014-05-05 wooster, pkamb v1.4.3
+--------------------------------
+
+This release adds checks to ensure that custom person data is sent in a timely manner and is immediately visible in the dashboard alongside messages.
+
+Added `debuggingOptions` property on ATConnect that allows the developer to specify debug logging preferences for their app. Use `debuggingOptions` to hide the debug panel or limit the debug logging of HTTP requests.
+
+Also fixes an issue where Chinese and Japanese keyboard input could hide buttons in the Feedback dialog.
+
+Fixes:
+
+* IOS-489 Chinese input hides feedback dialog buttons.
+* IOS-381 Japanese input hides feedback dialog buttons.
+* IOS-478 Issue where setting custom person data is not synced to server.
+* IOS-370 Investigate sending order of Person and Message.
+* IOS-485 HTML Response logs contents of the HTML.
+* `Contains` operator should be case insensitive.
+
 2014-04-18 wooster, pkamb v1.4.2
 --------------------------------
 

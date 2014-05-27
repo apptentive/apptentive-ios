@@ -1,3 +1,15 @@
+2014-05-27 wooster, pkamb v1.5.0
+--------------------------------
+
+This release moves Surveys to the engagement framework. You will now be able to target surveys to events that you `engage:` in your app. This change enables surveys to be chained with other interactions, such as the Ratings Prompt. From your Apptentive dashboard, you can now present a Survey if someone answers "No" to your "Do you Love App_Name?" prompt.
+
+This release also fully removes the `ATAppRatingFlow.h" and `ATSurveys.h` header files. You can now simply import `ATConnect.h` when using Apptentive. 
+
+If you were using a version prior to 1.5.0, please read [MigratingTo_1.5.0.md](docs/MigratingTo_1.5.0.md) for information on how to migrate your API calls to this release. We are sorry for the inconvenience, but we hope the new features will more than make up for it!
+
+Finally, we have migrated and improved our documentation for this release. The GitHub README now presents a smaller and simpler overview of Apptentive, and links to relevant sections on the [Apptentive Documentation](http://www.apptentive.com/docs/) site.
+
+
 2014-05-05 wooster, pkamb v1.4.3
 --------------------------------
 
@@ -45,7 +57,7 @@ Fixes:
 
 This marks the first release of a more generalized engagement framework. This will allow us to chain interactions together in interesting ways, provide better server-side configuration of what customers see and when they see it, and lay the foundation for some very interesting features in the future.
 
-If you were using a version prior to 1.4.0, please read [MigratingTo_1.4.0md](docs/MigratingTo_1.4.0.md) for information on how to migrate your API calls to this release. We're sorry for the inconvenience, but we hope the new features will more than make up for it!
+If you were using a version prior to 1.4.0, please read [MigratingTo_1.5.0.md](docs/MigratingTo_1.5.0.md) for information on how to migrate your API calls to this release. We are sorry for the inconvenience, but we hope the new features will more than make up for it!
 
 Fixes:
 

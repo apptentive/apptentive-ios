@@ -8,9 +8,9 @@ Use Apptentive features to improve your app's App Store ratings, collect and res
 
 Apptentive can be installed manually as an Xcode subproject or via the dependency manager CocoaPods.
 
-The following linked guides walk you through the integration process.
+The following guides explain the integration process:
 
- - [Xcode project setup guide](http://www.apptentive.com/docs/setup/xcode/)
+ - [Xcode project setup guide](http://www.apptentive.com/docs/ios/setup/xcode/)
  - [CocoaPods installation guide](http://www.apptentive.com/docs/ios/setup/cocoapods)
 
 ## Using Apptentive in your App
@@ -35,7 +35,7 @@ Please see our [iOS integration guide](http://www.apptentive.com/docs/ios/integr
 
 Please see our docs site for the Apptentive iOS SDK's [API documentation](http://www.apptentive.com/docs/ios/api/Classes/ATConnect.html).
 
-Apptentive's [API changelog](docs/APIChanges.md) is also updated alongside the SDK.
+Apptentive's [API changelog](docs/APIChanges.md) is also updated with each release of the SDK.
 
 ## Testing Apptentive Features
 

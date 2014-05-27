@@ -27,7 +27,7 @@ You should begin by setting your app's API key, then engaging Apptentive events 
 [[ATConnect sharedConnection] engage:@"event_name" fromViewController:viewController];
 ```
 
-Later, on your Apptentive dashboard, you will target these events with [Apptentive features](http://www.apptentive.com/docs/ios/features/) such as Message Center, Ratings Prompts, and Surveys.
+Later, on your Apptentive dashboard, you will target these events with Apptentive features such as Message Center, Ratings Prompts, and Surveys.
 
 Please see our [iOS integration guide](http://www.apptentive.com/docs/ios/integration/) for more on this subject.
 

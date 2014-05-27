@@ -17,10 +17,12 @@ The following linked guides walk you through the integration process.
 
 After integrating the Apptentive SDK into your project, you can [begin using Apptentive features in your app](http://www.apptentive.com/docs/ios/integration/).
 
-You should begin by engaging Apptentive events at various places in your app:
+You should begin by setting your app's API key, then engaging Apptentive events at various places in your app:
 
 ``` objective-c
 #import "ATConnect.h"
+...
+[ATConnect sharedConnection].apiKey = @"APPTENTIVE_API_KEY";
 ...
 [[ATConnect sharedConnection] engage:@"event_name" fromViewController:viewController];
 ```

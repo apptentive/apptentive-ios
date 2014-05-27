@@ -4,14 +4,6 @@ The Apptentive iOS SDK provides a simple and powerful channel to communicate in-
 
 Use Apptentive features to improve your app's App Store ratings, collect and respond to customer feedback, show surveys at specific points within your app, and more.
 
-## Apptentive Demo App
-
-The Apptentive sample application `FeedbackDemo` is included in this repository along with the SDK.
-
-Use FeedbackDemo to test Apptentive's features. Edit the `defines.h` file to include your Apptentive **API Key** and iTunes **App ID** where specified.
-
-Message Center, the Ratings Prompt, Surveys, and [other Apptentive interactions](http://www.apptentive.com/docs/ios/features/) can all be tested before integrating Apptentive in your own app. 
-
 ## Install Guide
 
 Apptentive can be installed manually as an Xcode subproject or via the dependency manager CocoaPods.
@@ -46,6 +38,14 @@ Apptentive's [API changelog](docs/APIChanges.md) is also updated alongside the S
 ## Testing Apptentive Features
 
 Please see the [Apptentive testing guide](http://www.apptentive.com/docs/ios/testing/) for directions on how to test that the Rating Prompt, Surveys, and other Apptentive features have been configured correctly.
+
+## Apptentive Demo App
+
+The Apptentive sample application `FeedbackDemo` is included in this repository along with the SDK.
+
+Use FeedbackDemo to test Apptentive's features before integrating the SDK in your app. Edit the `defines.h` file to include your Apptentive **API Key** and iTunes **App ID** where specified.
+
+Message Center, the Ratings Prompt, Surveys, and [other Apptentive interactions](http://www.apptentive.com/docs/ios/features/) can all be tested before integrating Apptentive in your own app. 
 
 ## Contributing
 

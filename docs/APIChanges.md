@@ -2,7 +2,14 @@ This document tracks changes to the API between versions.
 
 # 1.5.0
 
-* Removed `ATSurveyNewSurveyAvailableNotification`
+Surveys are now targeted at Apptentive events via your online dashboard. Log events in your app by calling `engage:fromViewController`.
+
+* Removed `ASurveys.h` header file.
+* Moved `ATSurveySentNotification` and `ATSurveyIDKey` from `ATAppRatingFlow` to `ATConnect`.
+* Removed `ATSurveyNewSurveyAvailableNotification`.
+* Removed `ATAppRatingFlow.h` header file.
+* Moved `apiKey` property from `ATAppRatingFlow` to `ATConnect`.
+* Moved `ATAppRatingFlowUserAgreedToRateAppNotification` notification from `ATAppRatingFlow` to `ATConnect`.
 
 # 1.4.3
 

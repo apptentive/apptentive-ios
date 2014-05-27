@@ -93,7 +93,7 @@ class Builder(object):
 				log("Unable to lipo static libraries")
 				log(output)
 				return False
-			paths_to_copy = [("source/ATConnect.h", "include/ATConnect.h"), ("source/Rating Flow/ATAppRatingFlow.h", "include/ATAppRatingFlow.h"), ("source/Surveys/ATSurveys.h", "include/ATSurveys.h"), ("../LICENSE.txt", "LICENSE.txt"), ("../README.md", "README.md"), ("../CHANGELOG.md", "CHANGELOG.md")]
+			paths_to_copy = [("source/ATConnect.h", "include/ATConnect.h"), ("../LICENSE.txt", "LICENSE.txt"), ("../README.md", "README.md"), ("../CHANGELOG.md", "CHANGELOG.md")]
 			for (project_path, destination_path) in paths_to_copy:
 				full_project_path = project_path
 				full_destination_path = os.path.join(self._output_dir(), destination_path)

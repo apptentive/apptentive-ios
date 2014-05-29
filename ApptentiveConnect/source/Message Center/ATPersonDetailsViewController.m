@@ -107,9 +107,11 @@ enum kPersonDetailsTableSections {
 		self.poweredByLabel.text = ATLocalizedString(@"Message Center Powered By", @"Text above Apptentive logo");
 		self.logoImage.hidden = NO;
 		self.poweredByLabel.hidden = NO;
+		self.logoButton.hidden = NO;
 	} else {
 		self.logoImage.hidden = YES;
 		self.poweredByLabel.hidden = YES;
+		self.logoButton.hidden = YES;
 	}
 	[self registerForKeyboardNotifications];
 	[self.emailTextField addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];

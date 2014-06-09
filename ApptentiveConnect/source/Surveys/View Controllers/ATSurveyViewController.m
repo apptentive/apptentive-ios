@@ -353,7 +353,9 @@ enum {
 			buttonCell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ATSurveySendCellIdentifier] autorelease];
 			buttonCell.textLabel.text = ATLocalizedString(@"Send Response", @"Survey send response button title");
 			buttonCell.textLabel.textAlignment = NSTextAlignmentCenter;
-			buttonCell.textLabel.textColor = self.view.tintColor;
+			if ([self.view respondsToSelector:@selector(tintColor:)]) {
+				buttonCell.textLabel.textColor = self.view.tintColor;
+			}
 			buttonCell.selectionStyle = UITableViewCellSelectionStyleBlue;
 		}
 		return buttonCell;

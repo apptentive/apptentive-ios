@@ -1,3 +1,15 @@
+2014-06-10 wooster, pkamb v1.5.1
+--------------------------------
+
+This release fixes a crash when showing Surveys in iOS 5 or iOS 6 from Apptentive v1.5.0. Surveys have additionally been disabled remotely for devices using Apptentive 1.5.0 and running an OS version prior to iOS 7. We recommend upgrading immediately from 1.5.0 if you are using Surveys and support legacy devices.
+
+This release also includes fixes for the new [CocoaPods Trunk](http://blog.cocoapods.org/CocoaPods-Trunk/) service and release process.
+
+The `showTagLine` property of `ATConnect` now makes the "Powered By Apptentive" logo in Message Center unclickable in addition to hidden.
+
+Finally, we have changed the language code used for delivering localizations to use `[[NSLocale preferredLanguages] firstObject]` rather than use the `NSLocaleLanguageCode` locale component.
+
+
 2014-05-27 wooster, pkamb v1.5.0
 --------------------------------
 

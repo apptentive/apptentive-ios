@@ -12,6 +12,7 @@ Pod::Spec.new do |s|
   s.subspec 'arc-files' do |sna|
     sna.requires_arc = true
     sna.source_files = 'ApptentiveConnect/ext/PrefixedTTTAttributedLabel/TTTAttributedLabel/*.{h,m}'
+    sna.prefix_header_contents = ''
   end
   s.requires_arc = false
   s.frameworks     = 'Accelerate', 'AssetsLibrary', 'CoreGraphics', 'Foundation', 'QuartzCore', 'SystemConfiguration', 'UIKit', 'CoreData', 'CoreText'

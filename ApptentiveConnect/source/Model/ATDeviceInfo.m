@@ -62,15 +62,16 @@
 	NSString *localeIdentifier = [locale localeIdentifier];
 	NSDictionary *localeComponents = [NSLocale componentsFromLocaleIdentifier:localeIdentifier];
 	NSString *countryCode = [localeComponents objectForKey:NSLocaleCountryCode];
-	NSString *languageCode = [localeComponents objectForKey:NSLocaleLanguageCode];
 	if (localeIdentifier) {
 		device[@"locale_raw"] = localeIdentifier;
 	}
 	if (countryCode) {
 		device[@"locale_country_code"] = countryCode;
 	}
-	if (languageCode) {
-		device[@"locale_language_code"] = languageCode;
+	
+	NSString *preferredLanguage = [[NSLocale preferredLanguages] firstObject];
+	if (preferredLanguage) {
+		device[@"locale_language_code"] = preferredLanguage;
 	}
 	
 	device[@"utc_offset"] = @([[NSTimeZone systemTimeZone] secondsFromGMT]);

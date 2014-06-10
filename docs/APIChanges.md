@@ -1,5 +1,10 @@
 This document tracks changes to the API between versions.
 
+# 1.5.1
+
+ * The `showTagLine` property of `ATConnect` now makes the "Powered By Apptentive" logo in Message Center unclickable.
+ * The language code used for delivering localizations now uses `[[NSLocale preferredLanguages] firstObject]` rather than the `NSLocaleLanguageCode` locale component.
+
 # 1.5.0
 
 Surveys are now targeted at Apptentive events via your online dashboard. Log events in your app by calling `engage:fromViewController`.

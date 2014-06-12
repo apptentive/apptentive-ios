@@ -76,7 +76,7 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 		shouldUpdate = YES;
 	} else {
 		NSDictionary *lastValueDictionary = (NSDictionary *)lastValue;
-		NSDictionary *currentValueDictionary = [person apiJSON];
+		NSDictionary *currentValueDictionary = [person safeApiJSON];
 		if (![ATUtilities dictionary:currentValueDictionary isEqualToDictionary:lastValueDictionary]) {
 			shouldUpdate = YES;
 		}
@@ -92,7 +92,7 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 		person.needsUpdate = YES;
 		[person saveAsCurrentPerson];
 	}
-	self.sentPersonJSON = [person apiJSON];
+	self.sentPersonJSON = [person safeApiJSON];
 	request = [[[ATWebClient sharedClient] requestForUpdatingPerson:person] retain];
 	request.delegate = self;
 	[request start];

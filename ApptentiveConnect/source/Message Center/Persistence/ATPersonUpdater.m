@@ -27,12 +27,9 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 
 
 + (void)registerDefaults {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSDictionary *defaultPreferences =
-	[NSDictionary dictionaryWithObjectsAndKeys:
-	 [NSDictionary dictionary], ATPersonLastUpdateValuePreferenceKey,
-	 nil];
-	[defaults registerDefaults:defaultPreferences];
+	NSDictionary *defaultPreferences = @{ATPersonLastUpdateValuePreferenceKey: @{}};
+	
+	[[NSUserDefaults standardUserDefaults] registerDefaults:defaultPreferences];
 }
 
 - (id)initWithDelegate:(NSObject<ATPersonUpdaterDelegate> *)aDelegate {
@@ -72,9 +69,9 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 	}
 	
 	// Otherwise, check to see if value has changed since last sent to the server.
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSObject *lastValue = [defaults objectForKey:ATPersonLastUpdateValuePreferenceKey];
 	BOOL shouldUpdate = NO;
+	
+	NSObject *lastValue = [[NSUserDefaults standardUserDefaults] objectForKey:ATPersonLastUpdateValuePreferenceKey];
 	if (lastValue == nil || ![lastValue isKindOfClass:[NSDictionary class]]) {
 		shouldUpdate = YES;
 	} else {
@@ -151,8 +148,7 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 		[person saveAsCurrentPerson];
 		
 		// Save out the value we sent to the server.
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		[defaults setObject:self.sentPersonJSON forKey:ATPersonLastUpdateValuePreferenceKey];
+		[[NSUserDefaults standardUserDefaults] setObject:self.sentPersonJSON forKey:ATPersonLastUpdateValuePreferenceKey];
 		
 		[delegate personUpdater:self didFinish:YES];
 	} else {

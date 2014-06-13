@@ -1,3 +1,10 @@
+2014-06-12 pkamb v1.5.2
+--------------------------------
+
+This release fixes a crash when submitting a piece of Feedback without an email address after tapping "No" on the Enjoyment Dialog. This bug affected versions 1.4.3, 1.5.0, and 1.5.1. If you are using one of these releases, we strongly recommend you upgrade your Apptentive SDK as soon as possible.
+
+Additionally, the current iOS version is now logged as, for example, "7.1.1" whereas it was formerly "Version 7.1.1 (Build 11D201)".
+
 2014-06-10 wooster, pkamb v1.5.1
 --------------------------------
 

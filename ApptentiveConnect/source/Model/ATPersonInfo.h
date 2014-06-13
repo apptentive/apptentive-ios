@@ -32,6 +32,8 @@ extern NSString *const ATCurrentPersonPreferenceKey;
 + (ATPersonInfo *)newPersonFromJSON:(NSDictionary *)json;
 
 - (NSDictionary *)apiJSON;
+- (NSDictionary *)safeApiJSON;
+
 - (void)saveAsCurrentPerson;
 
 - (BOOL)hasEmailAddress;

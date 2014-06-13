@@ -383,7 +383,7 @@ static NSDateFormatter *dateFormatter = nil;
 }
 
 + (NSString *)currentSystemVersion {
-#if TARGET_OS_PHONE
+#if TARGET_OS_IPHONE
 	return [[UIDevice currentDevice] systemVersion];
 #elif TARGET_OS_MAC
 	NSProcessInfo *info = [NSProcessInfo processInfo];

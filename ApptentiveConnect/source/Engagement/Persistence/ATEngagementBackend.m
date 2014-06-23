@@ -172,7 +172,6 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 
 - (NSArray *)interactionsForCodePoint:(NSString *)codePoint {
 	NSArray *interactions = [codePointInteractions objectForKey:codePoint];
-	ATLogInfo(@"Found %lu cached interactions for code point: %@", interactions.count, codePoint);
 	
 	return interactions;
 }
@@ -181,12 +180,10 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	NSArray *interactions = [self interactionsForCodePoint:codePoint];
 	for (ATInteraction *interaction in interactions) {
 		if ([interaction isValid]) {
-			ATLogInfo(@"Found valid %@ interaction for code point: %@", interaction.type, codePoint);
 			return interaction;
 		}
 	}
 	
-	ATLogInfo(@"No valid Apptentive interactions found for code point: %@", codePoint);
 	return nil;
 }
 
@@ -228,18 +225,29 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 }
 
 - (BOOL)engage:(NSString *)codePoint userInfo:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController {
+	ATLogInfo(@"Engage Apptentive event: %@", codePoint);
 	[[ApptentiveMetrics sharedMetrics] addMetricWithName:codePoint info:userInfo];
-	
 	[self codePointWasEngaged:codePoint];
-	
 	BOOL didEngageInteraction = NO;
-	ATInteraction *interaction = [self interactionForCodePoint:codePoint];
-	if (interaction) {
-		[self presentInteraction:interaction fromViewController:viewController];
-		[self interactionWasEngaged:interaction];
-		didEngageInteraction = YES;
-		// Sync defaults so user doesn't see interaction more than once.
-		[[NSUserDefaults standardUserDefaults] synchronize];
+	
+	NSArray *interactions = [codePointInteractions objectForKey:codePoint];
+	ATLogInfo(@"%@", [NSString stringWithFormat:@"--Found %tu available interaction%@.", interactions.count, (interactions.count == 1) ? @"" : @"s"]);
+	
+	if (interactions.count > 0) {
+		ATInteraction *interaction = [self interactionForCodePoint:codePoint];
+		if (interaction) {
+			ATLogInfo(@"--Running valid %@ interaction.", interaction.type, codePoint);
+			ATLogInfo(@"");
+			[self presentInteraction:interaction fromViewController:viewController];
+			[self interactionWasEngaged:interaction];
+			didEngageInteraction = YES;
+			// Sync defaults so user doesn't see interaction more than once.
+			[[NSUserDefaults standardUserDefaults] synchronize];
+		} else {
+			ATLogInfo(@"--Criteria not met for available interaction%@.", (interactions.count == 1) ? @"" : @"s");
+			ATLogInfo(@"--There are no valid Apptentive interactions to run at this time.");
+			ATLogInfo(@"");
+		}
 	}
 	
 	return didEngageInteraction;

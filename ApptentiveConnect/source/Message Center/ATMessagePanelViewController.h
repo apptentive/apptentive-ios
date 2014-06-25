@@ -44,8 +44,6 @@ typedef enum {
 @property (nonatomic, retain) UITextField *emailField;
 @property (nonatomic, retain) ATDefaultTextView *feedbackView;
 @property (nonatomic, retain) UIView *promptContainer;
-@property (nonatomic, copy) NSString *promptTitle;
-@property (nonatomic, copy) NSString *promptText;
 @property (nonatomic, copy) NSString *customPlaceholderText;
 @property (nonatomic, assign) BOOL showEmailAddressField;
 @property (nonatomic, assign) NSObject<ATMessagePanelDelegate> *delegate;

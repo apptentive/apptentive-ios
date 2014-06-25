@@ -76,8 +76,6 @@ enum {
 @synthesize emailField;
 @synthesize feedbackView;
 @synthesize promptContainer;
-@synthesize promptTitle;
-@synthesize promptText;
 @synthesize customPlaceholderText;
 @synthesize showEmailAddressField;
 @synthesize delegate;
@@ -265,8 +263,9 @@ enum {
 	[toolbarItems addObject:self.sendButton];
 	
 	UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-	if (self.promptTitle) {
-		titleLabel.text = self.promptTitle;
+	
+	if (self.interaction.configuration[@"title"]) {
+		titleLabel.text = self.interaction.configuration[@"title"];
 	} else {
 		titleLabel.text = ATLocalizedString(@"Give Feedback", @"Title of feedback screen.");
 	}
@@ -585,12 +584,14 @@ enum {
 	CGFloat horizontalPadding = 7;
 	self.scrollView.backgroundColor = [UIColor colorWithRed:240/255. green:240/255. blue:240/255. alpha:1];
 	self.scrollView.delegate = self;
-	if (self.promptText) {
+	
+	NSString *body = self.interaction.configuration[@"body"];
+	if (body) {
 		CGRect containerFrame = self.scrollView.bounds;
 		CGFloat labelPadding = 4;
 		
 		ATLabel *promptLabel = [[ATLabel alloc] initWithFrame:containerFrame];
-		promptLabel.text = self.promptText;
+		promptLabel.text = body;
 		promptLabel.textColor = [UIColor colorWithRed:128/255. green:128/255. blue:128/255. alpha:1];
 		promptLabel.font = [UIFont fontWithName:@"Helvetica Neue" size:18];
 		promptLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;

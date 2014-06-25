@@ -207,12 +207,13 @@
 	
 	CGFloat width = CGRectGetWidth(self.scrollView.bounds);
 	
-	if (self.promptText) {
+	NSString *body = self.interaction.configuration[@"body"];
+	if (body) {
 		UIEdgeInsets labelInsets = UIEdgeInsetsMake(10, 12, 10, 12);
 		
 		if (!promptLabel) {
 			promptLabel = [[ATLabel alloc] initWithFrame:CGRectMake(0, 0, width, 100)];
-			promptLabel.text = self.promptText;
+			promptLabel.text = body;
 			promptLabel.textColor = [UIColor colorWithRed:128/255. green:128/255. blue:128/255. alpha:1];
 			promptLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 			promptLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;

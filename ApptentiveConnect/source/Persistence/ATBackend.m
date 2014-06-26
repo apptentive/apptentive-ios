@@ -36,6 +36,7 @@
 #import "ATPersonUpdater.h"
 #import "ATEngagementBackend.h"
 #import "ATMessagePanelNewUIViewController.h"
+#import "ATInteraction.h"
 
 typedef NS_ENUM(NSInteger, ATBackendState){
 	ATBackendStateStarting,
@@ -675,7 +676,15 @@ static NSURLCache *imageCache = nil;
 }
 
 - (void)presentIntroDialogFromViewController:(UIViewController *)viewController {
-	[self presentIntroDialogFromViewController:viewController withTitle:nil prompt:nil placeholderText:nil];
+	ATInteraction *introDialog = [[[ATInteraction alloc] init] autorelease];
+	introDialog.type = @"FeedbackDialog";
+	introDialog.priority = 1;
+	introDialog.version = @"1.0.0";
+	introDialog.identifier = @"IntroDialog";
+	introDialog.criteria = @{};
+	introDialog.configuration = @{};
+	
+	[self presentIntroDialogWithInteraction:introDialog fromViewController:viewController];
 }
 
 #if TARGET_OS_IPHONE

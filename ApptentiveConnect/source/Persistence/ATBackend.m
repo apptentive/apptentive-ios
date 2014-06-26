@@ -676,6 +676,10 @@ static NSURLCache *imageCache = nil;
 }
 
 - (void)presentIntroDialogFromViewController:(UIViewController *)viewController {
+	[self presentIntroDialogFromViewController:viewController withTitle:nil prompt:nil placeholderText:nil];
+}
+
+- (void)presentIntroDialogFromViewController:(UIViewController *)viewController withTitle:(NSString *)title prompt:(NSString *)prompt placeholderText:(NSString *)placeholder {
 	ATInteraction *introDialog = [[[ATInteraction alloc] init] autorelease];
 	introDialog.type = @"FeedbackDialog";
 	introDialog.priority = 1;
@@ -684,12 +688,13 @@ static NSURLCache *imageCache = nil;
 	introDialog.criteria = @{};
 	
 	NSMutableDictionary *config = [NSMutableDictionary dictionary];
-	config[@"title"] = ATLocalizedString(@"Give Feedback", @"Title of feedback screen.");
-	config[@"email_hint_text"] = ATLocalizedString(@"Email Address", @"Email address popup placeholder text.");
-	config[@"message_hint_text"] = ATLocalizedString(@"Feedback (required)", @"Feedback placeholder");
+
+	config[@"title"] = title ?: ATLocalizedString(@"Give Feedback", @"Title of feedback screen.");
+	config[@"body"] = prompt ?: [NSString stringWithFormat:ATLocalizedString(@"Please let us know how to make %@ better for you!", @"Feedback screen body. Parameter is the app name."), [[ATBackend sharedBackend] appName]];
+	config[@"message_hint_text"]  = placeholder ?: ATLocalizedString(@"How can we help? (required)", @"First feedback placeholder text.");
+	
 	config[@"submit_text"] = ATLocalizedString(@"Send", @"Button title to Send a message using the feedback dialog.");
 	config[@"decline_text"] = ATLocalizedString(@"Cancel", @"Button title to Cancel a feedback dialog message.");
-	config[@"message_hint_text"] = ATLocalizedString(@"Message (required)", @"Message placeholder in iOS 7 message panel");
 	
 	BOOL emailRequired = [[ATConnect sharedConnection] emailRequired];
 	config[@"email_required"] = @(emailRequired);

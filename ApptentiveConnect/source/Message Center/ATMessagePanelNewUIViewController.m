@@ -191,19 +191,8 @@
 	self.view.backgroundColor = [UIColor clearColor];
 	self.scrollView.delegate = self;
 	
-	if (self.interaction.configuration[@"submit_text"]) {
-		[self.sendButtonNewUI setTitle:self.interaction.configuration[@"submit_text"] forState:UIControlStateNormal];
-	} else {
-		NSString *sendTitle = ATLocalizedString(@"Send", @"Button title to Send a message using the feedback dialog.");
-		[self.sendButtonNewUI setTitle:sendTitle forState:UIControlStateNormal];
-	}
-	
-	if (self.interaction.configuration[@"decline_text"]) {
-		[self.cancelButtonNewUI setTitle:self.interaction.configuration[@"decline_text"] forState:UIControlStateNormal];
-	} else {
-		NSString *cancelTitle = ATLocalizedString(@"Cancel", @"Button title to Cancel a feedback dialog message.");
-		[self.cancelButtonNewUI setTitle:cancelTitle forState:UIControlStateNormal];
-	}
+	[self.sendButtonNewUI setTitle:(self.interaction.configuration[@"submit_text"] ?: @"") forState:UIControlStateNormal];
+	[self.cancelButtonNewUI setTitle:(self.interaction.configuration[@"decline_text"] ?: @"") forState:UIControlStateNormal];
 	
 	CGFloat width = CGRectGetWidth(self.scrollView.bounds);
 	
@@ -265,17 +254,9 @@
 		if (!self.emailField) {
 			self.emailField = [[[UITextField alloc] initWithFrame:emailFrame] autorelease];
 			self.emailField.delegate = self;
-			if (self.interaction.configuration[@"email_hint_text"]) {
-				self.emailField.placeholder = self.interaction.configuration[@"email_hint_text"];
-			}
-			else if ([self.interaction.configuration[@"email_required"] boolValue]) {
-				self.emailField.placeholder = ATLocalizedString(@"Email (required)", @"Email Address Field Placeholder (email is required)");
-			}
-			else {
-				self.emailField.placeholder = ATLocalizedString(@"Email", @"Email Address Field Placeholder");
-			}
 			[self.emailField setValue:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0] forKeyPath:@"_placeholderLabel.textColor"];
 			
+			self.emailField.placeholder = self.interaction.configuration[@"email_hint_text"] ?: @"";
 			self.emailField.font = emailFont;
 			self.emailField.adjustsFontSizeToFitWidth = YES;
 			self.emailField.keyboardType = UIKeyboardTypeEmailAddress;
@@ -333,12 +314,7 @@
 	self.feedbackView.frame = feedbackFrame;
 	offsetY += CGRectGetHeight(self.feedbackView.bounds);
 	
-	if (self.interaction.configuration[@"message_hint_text"]) {
-		self.feedbackView.placeholder = self.interaction.configuration[@"message_hint_text"];
-	}
-	else {
-		self.feedbackView.placeholder = ATLocalizedString(@"Message (required)", @"Message placeholder in iOS 7 message panel");
-	}
+	self.feedbackView.placeholder = self.interaction.configuration[@"message_hint_text"] ?: @"";
 	self.feedbackView.placeholderColor = [self.view tintColor];
 	
 	CGSize contentSize = CGSizeMake(self.scrollView.bounds.size.width, offsetY);

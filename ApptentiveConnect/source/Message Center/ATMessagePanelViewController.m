@@ -261,12 +261,7 @@ enum {
 	[toolbarItems addObject:self.sendButton];
 	
 	UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-	
-	if (self.interaction.configuration[@"title"]) {
-		titleLabel.text = self.interaction.configuration[@"title"];
-	} else {
-		titleLabel.text = ATLocalizedString(@"Give Feedback", @"Title of feedback screen.");
-	}
+	titleLabel.text = self.interaction.configuration[@"title"] ?: @"";
 	titleLabel.adjustsFontSizeToFitWidth = YES;
 	if ([titleLabel respondsToSelector:@selector(setMinimumScaleFactor:)]) {
 		titleLabel.minimumScaleFactor = 0.5;
@@ -382,11 +377,7 @@ enum {
 		field.keyboardType = UIKeyboardTypeEmailAddress;
 		field.delegate = self;
 		field.autocapitalizationType = UITextAutocapitalizationTypeNone;
-		if (self.interaction.configuration[@"email_hint_text"]) {
-			field.placeholder = self.interaction.configuration[@"email_hint_text"];
-		} else {
-			field.placeholder = ATLocalizedString(@"Email Address", @"Email address popup placeholder text.");
-		}
+		field.placeholder = self.interaction.configuration[@"email_hint_text"] ?: @"";
 		field.tag = kATEmailAlertTextFieldTag;
 		
 		if (!useNativeTextField) {
@@ -645,16 +636,7 @@ enum {
 		emailFrame.size.height = sizedEmail.height;
 		emailFrame.size.width = emailFrame.size.width - (horizontalPadding + extraHorzontalPadding)*2;
 		self.emailField = [[[UITextField alloc] initWithFrame:emailFrame] autorelease];
-		if (self.interaction.configuration[@"email_hint_text"]) {
-			self.emailField.placeholder = self.interaction.configuration[@"email_hint_text"];
-		} else {
-			if ([self.interaction.configuration[@"email_required"] boolValue]) {
-				self.emailField.placeholder = ATLocalizedString(@"Your Email (required)", @"Email Address Field Placeholder (email is required)");
-			}
-			else {
-				self.emailField.placeholder = ATLocalizedString(@"Your Email", @"Email Address Field Placeholder");
-			}
-		}
+		self.emailField.placeholder = self.interaction.configuration[@"email_hint_text"] ?: @"";
 		self.emailField.font = emailFont;
 		self.emailField.adjustsFontSizeToFitWidth = YES;
 		self.emailField.keyboardType = UIKeyboardTypeEmailAddress;
@@ -704,19 +686,13 @@ enum {
 	}
 	self.feedbackView.clipsToBounds = YES;
 	self.feedbackView.font = [UIFont systemFontOfSize:17];
+	self.feedbackView.placeholder = self.interaction.configuration[@"message_hint_text"] ?: @"";
 	self.feedbackView.backgroundColor = [UIColor clearColor];
 	self.feedbackView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.feedbackView.scrollEnabled = NO;
 	self.feedbackView.delegate = self;
 	[self.scrollView addSubview:self.feedbackView];
 	offsetY += self.feedbackView.bounds.size.height;
-	
-	if (self.interaction.configuration[@"message_hint_text"]) {
-		self.feedbackView.placeholder = self.interaction.configuration[@"message_hint_text"];
-	}
-	else {
-		self.feedbackView.placeholder = ATLocalizedString(@"Feedback (required)", @"Feedback placeholder");
-	}
 	
 	self.feedbackView.at_drawRectBlock = ^(NSObject *caller, CGRect rect) {
 		ATDefaultTextView *textView = (ATDefaultTextView *)caller;

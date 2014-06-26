@@ -651,7 +651,7 @@ static NSURLCache *imageCache = nil;
 	}
 }
 
-- (void)presentIntroDialogFromViewController:(UIViewController *)viewController withTitle:(NSString *)title prompt:(NSString *)prompt placeholderText:(NSString *)placeholder {
+- (void)presentIntroDialogWithInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
 	@synchronized(self) {
 		if (currentMessagePanelController) {
 			ATLogInfo(@"Apptentive message panel controller already shown.");
@@ -665,18 +665,10 @@ static NSURLCache *imageCache = nil;
 		else {
 			vc = [[ATMessagePanelViewController alloc] initWithDelegate:self];
 		}
+		vc.interaction = interaction;
 		
-		if (title) {
-			vc.promptTitle = title;
-		}
-		if (prompt) {
-			vc.promptText = prompt;
-		}
-		if (placeholder) {
-			vc.customPlaceholderText = placeholder;
-		}
-		[vc setShowEmailAddressField:[[ATConnect sharedConnection] showEmailField]];
 		[vc presentFromViewController:viewController animated:YES];
+		
 		currentMessagePanelController = vc;
 		self.presentingViewController = viewController;
 	}

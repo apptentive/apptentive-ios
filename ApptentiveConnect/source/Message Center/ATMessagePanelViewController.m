@@ -76,7 +76,6 @@ enum {
 @synthesize emailField;
 @synthesize feedbackView;
 @synthesize promptContainer;
-@synthesize customPlaceholderText;
 @synthesize showEmailAddressField;
 @synthesize delegate;
 
@@ -718,9 +717,7 @@ enum {
 	if (self.interaction.configuration[@"message_hint_text"]) {
 		self.feedbackView.placeholder = self.interaction.configuration[@"message_hint_text"];
 	}
-	else if (self.customPlaceholderText) {
-		self.feedbackView.placeholder = self.customPlaceholderText;
-	} else {
+	else {
 		self.feedbackView.placeholder = ATLocalizedString(@"Feedback (required)", @"Feedback placeholder");
 	}
 	
@@ -769,7 +766,6 @@ enum {
 	self.emailField = nil;
 	self.feedbackView.delegate = nil;
 	self.feedbackView = nil;
-	self.customPlaceholderText = nil;
 	[originalPresentingWindow makeKeyWindow];
 	[presentingViewController release], presentingViewController = nil;
 	[originalPresentingWindow release], originalPresentingWindow = nil;

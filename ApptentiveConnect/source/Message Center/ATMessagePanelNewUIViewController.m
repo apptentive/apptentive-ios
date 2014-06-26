@@ -268,7 +268,7 @@
 			if (self.interaction.configuration[@"email_hint_text"]) {
 				self.emailField.placeholder = self.interaction.configuration[@"email_hint_text"];
 			}
-			else if ([[ATConnect sharedConnection] emailRequired]) {
+			else if ([self.interaction.configuration[@"email_required"] boolValue]) {
 				self.emailField.placeholder = ATLocalizedString(@"Email (required)", @"Email Address Field Placeholder (email is required)");
 			}
 			else {

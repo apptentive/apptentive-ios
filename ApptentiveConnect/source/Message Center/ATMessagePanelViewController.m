@@ -318,9 +318,7 @@ enum {
 	[self.emailField resignFirstResponder];
 	[self.feedbackView resignFirstResponder];
 	
-	BOOL emailRequired = self.interaction ? [self.interaction.configuration[@"email_required"] boolValue] : [[ATConnect sharedConnection] emailRequired];
-	
-	if ([self.interaction.configuration[@"ask_for_email"] boolValue] && emailRequired && self.emailField.text.length == 0) {
+	if ([self.interaction.configuration[@"ask_for_email"] boolValue] && [self.interaction.configuration[@"email_required"] boolValue] && self.emailField.text.length == 0) {
 		if (emailRequiredAlert) {
 			emailRequiredAlert.delegate = nil;
 			[emailRequiredAlert release], emailRequiredAlert = nil;
@@ -344,7 +342,7 @@ enum {
 		self.window.layer.rasterizationScale = [[UIScreen mainScreen] scale];
 		NSString *title = ATLocalizedString(@"Invalid Email Address", @"Invalid email dialog title.");
 		NSString *message = nil;
-		if (emailRequired) {
+		if ([self.interaction.configuration[@"email_required"] boolValue]) {
 			message = ATLocalizedString(@"That doesn't look like an email address. An email address is required for us to respond.", @"Invalid email dialog message (email is required).");
 		} else {
 			message = ATLocalizedString(@"That doesn't look like an email address. An email address will help us respond.", @"Invalid email dialog message.");
@@ -650,7 +648,7 @@ enum {
 		if (self.interaction.configuration[@"email_hint_text"]) {
 			self.emailField.placeholder = self.interaction.configuration[@"email_hint_text"];
 		} else {
-			if ([[ATConnect sharedConnection] emailRequired]) {
+			if ([self.interaction.configuration[@"email_required"] boolValue]) {
 				self.emailField.placeholder = ATLocalizedString(@"Your Email (required)", @"Email Address Field Placeholder (email is required)");
 			}
 			else {

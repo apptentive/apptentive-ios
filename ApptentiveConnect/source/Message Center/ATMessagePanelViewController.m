@@ -76,7 +76,6 @@ enum {
 @synthesize emailField;
 @synthesize feedbackView;
 @synthesize promptContainer;
-@synthesize showEmailAddressField;
 @synthesize delegate;
 
 - (id)initWithDelegate:(NSObject<ATMessagePanelDelegate> *)aDelegate {
@@ -158,7 +157,7 @@ enum {
 	
 	[self positionInWindow];
 	
-	if ([self.emailField.text isEqualToString:@""] && self.showEmailAddressField) {
+	if ([self.emailField.text isEqualToString:@""] && [self.interaction.configuration[@"ask_for_email"] boolValue]) {
 		[self.emailField becomeFirstResponder];
 	} else {
 		[self.feedbackView becomeFirstResponder];
@@ -219,7 +218,7 @@ enum {
 		shadowView.alpha = 1.0;
 	} completion:^(BOOL finished) {
 		self.window.hidden = NO;
-		if ([self.emailField.text isEqualToString:@""] && self.showEmailAddressField) {
+		if ([self.emailField.text isEqualToString:@""] && [self.interaction.configuration[@"ask_for_email"] boolValue]) {
 			[self.emailField becomeFirstResponder];
 		} else {
 			[self.feedbackView becomeFirstResponder];
@@ -321,7 +320,7 @@ enum {
 	
 	BOOL emailRequired = self.interaction ? [self.interaction.configuration[@"email_required"] boolValue] : [[ATConnect sharedConnection] emailRequired];
 	
-	if (self.showEmailAddressField && emailRequired && self.emailField.text.length == 0) {
+	if ([self.interaction.configuration[@"ask_for_email"] boolValue] && emailRequired && self.emailField.text.length == 0) {
 		if (emailRequiredAlert) {
 			emailRequiredAlert.delegate = nil;
 			[emailRequiredAlert release], emailRequiredAlert = nil;
@@ -335,7 +334,7 @@ enum {
 		
 		emailRequiredAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"OK", @"OK button title"), nil];
 		[emailRequiredAlert show];
-	} else if (self.showEmailAddressField && [self.emailField.text length] > 0 && ![ATUtilities emailAddressIsValid:self.emailField.text]) {
+	} else if ([self.interaction.configuration[@"ask_for_email"] boolValue] && [self.emailField.text length] > 0 && ![ATUtilities emailAddressIsValid:self.emailField.text]) {
 		if (invalidEmailAddressAlert) {
 			[invalidEmailAddressAlert release], invalidEmailAddressAlert = nil;
 		}
@@ -352,7 +351,7 @@ enum {
 		}
 		invalidEmailAddressAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"OK", @"OK button title"), nil];
 		[invalidEmailAddressAlert show];
-	} else if (self.showEmailAddressField && (!self.emailField.text || [self.emailField.text length] == 0)) {
+	} else if ([self.interaction.configuration[@"ask_for_email"] boolValue] && (!self.emailField.text || [self.emailField.text length] == 0)) {
 		if (noEmailAddressAlert) {
 			noEmailAddressAlert.delegate = nil;
 			[noEmailAddressAlert release], noEmailAddressAlert = nil;
@@ -624,7 +623,7 @@ enum {
 	offsetY += blueLineView.bounds.size.height;
 	[blueLineView release], blueLineView = nil;
 	
-	if (self.showEmailAddressField) {
+	if ([self.interaction.configuration[@"ask_for_email"] boolValue]) {
 		offsetY += 5;
 		CGFloat extraHorzontalPadding = 0;
 		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
@@ -911,7 +910,7 @@ enum {
 	self.window.alpha = 1.0;
 	[self.window makeKeyAndVisible];
 	[self positionInWindow];
-	if (self.showEmailAddressField) {
+	if ([self.interaction.configuration[@"ask_for_email"] boolValue]) {
 		[self.emailField becomeFirstResponder];
 	} else {
 		[self.feedbackView becomeFirstResponder];

@@ -241,7 +241,7 @@
 		offsetY += CGRectGetHeight(self.promptContainer.bounds);
 	}
 			
-	if (self.showEmailAddressField) {
+	if ([self.interaction.configuration[@"ask_for_email"] boolValue]) {
 		offsetY += 5;
 		CGFloat extraHorzontalPadding = 0;
 		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {

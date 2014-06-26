@@ -706,6 +706,24 @@ static NSURLCache *imageCache = nil;
 		config[@"email_hint_text"] = ATLocalizedString(@"Your Email", @"Email Address Field Placeholder");
 	}
 	
+	BOOL messageCenterEnabled = [[ATConnect sharedConnection] messageCenterEnabled];
+	config[@"enable_message_center"] = @(messageCenterEnabled);
+	if (messageCenterEnabled) {
+		
+		//TODO
+		// The Thank You Dialog should use the text from the interaction.
+		
+		config[@"thank_you_title"] = ATLocalizedString(@"Thanks!", nil);
+		config[@"thank_you_body"] = ATLocalizedString(@"Your response has been saved in the Message Center, where you'll be able to view replies and send us other messages.", @"Message panel sent message confirmation dialog text");
+		config[@"thank_you_view_messages_text"] = ATLocalizedString(@"View Messages", @"View messages button title");
+		config[@"thank_you_close_text"] = ATLocalizedString(@"Close", @"Close alert view title");
+	} else {
+		config[@"thank_you_title"] = ATLocalizedString(@"Thank you for your feedback!", @"Message panel sent message but will not show Message Center dialog.");
+		//config[@"thank_you_body"];
+		//config[@"thank_you_view_messages_text"]
+		config[@"thank_you_close_text"] = ATLocalizedString(@"Close", @"Close alert view title");
+	}
+
 	introDialog.configuration = config;
 	
 	[self presentIntroDialogWithInteraction:introDialog fromViewController:viewController];

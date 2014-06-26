@@ -696,6 +696,8 @@ static NSURLCache *imageCache = nil;
 	config[@"submit_text"] = ATLocalizedString(@"Send", @"Button title to Send a message using the feedback dialog.");
 	config[@"decline_text"] = ATLocalizedString(@"Cancel", @"Button title to Cancel a feedback dialog message.");
 	
+	config[@"ask_for_email"] = @([[ATConnect sharedConnection] showEmailField]);
+	
 	BOOL emailRequired = [[ATConnect sharedConnection] emailRequired];
 	config[@"email_required"] = @(emailRequired);
 	if (emailRequired) {

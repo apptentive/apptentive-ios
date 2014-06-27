@@ -152,7 +152,7 @@
 			}
 		}
 		@catch (NSException *exception) {
-			ATLogError(@"Exception while processing critera.");
+			ATLogError(@"Exception while processing criteria.");
 			criteriaAreMet = NO;
 		}
 	}

@@ -75,7 +75,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 	}
 	
 	// Powered by Apptentive logo
-	if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_powered_by"] boolValue]) {
+	if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_powered_by"] boolValue] && ![ATBackend sharedBackend].hideBranding) {
 		self.poweredByApptentiveLogo.text = ATLocalizedString(@"Powered by", @"Powered by followed by Apptentive logo.");
 		self.poweredByApptentiveIconView.contentMode = UIViewContentModeScaleAspectFit;
 		UIImage *poweredByApptentiveIcon = [ATBackend imageNamed:@"at_update_logo"];

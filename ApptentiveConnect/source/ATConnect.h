@@ -95,7 +95,6 @@ extern NSString *const ATIntegrationKeyAmazonSNS;
 	NSMutableDictionary *customDeviceData;
 	NSMutableDictionary *integrationConfiguration;
 	NSString *apiKey;
-	BOOL showTagline;
 	BOOL showEmailField;
 	NSString *initialUserName;
 	NSString *initialUserEmailAddress;
@@ -127,8 +126,6 @@ extern NSString *const ATIntegrationKeyAmazonSNS;
 ///---------------------------------
 /// @name Interface Customization
 ///---------------------------------
-/** Toggles much of the Apptentive branding on and off. `YES` by default. */
-@property (nonatomic, assign) BOOL showTagline;
 /** Toggles the display of an email field in the message panel. `YES` by default. */
 @property (nonatomic, assign) BOOL showEmailField;
 /** Set this if you want some custom text to appear as a placeholder in the feedback text box. */
@@ -145,6 +142,12 @@ extern NSString *const ATIntegrationKeyAmazonSNS;
  @note This setting will be overridden by server-based configuration when it is downloaded.
  */
 @property (nonatomic, assign) BOOL initiallyUseMessageCenter;
+/**
+ Set this to NO to hide Apptentive branding locally on the first launch of your app.
+ 
+ @note This setting will be overridden by server-based configuration when it is downloaded.
+ */
+@property (nonatomic, assign) BOOL initiallyHideBranding;
 #if TARGET_OS_IPHONE
 /**
  A tint color to use in Apptentive-specific UI.

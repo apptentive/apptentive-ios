@@ -1,5 +1,11 @@
 This document tracks changes to the API between versions.
 
+# 1.5.3
+ 
+ * Added ability to remotely hide Apptentive branding in your app via the Apptentive dashboard, contingent upon your account plan.
+ * Added `initiallyHideBranding` property, which hides Apptentive branding in the time prior to the app's initial configuration being retrieved.
+ * Removed `showTagLine` property, which has been replaced by `initiallyHideBranding` and the remote configuration.
+
 # 1.5.1
 
  * The `showTagLine` property of `ATConnect` now makes the "Powered By Apptentive" logo in Message Center unclickable.

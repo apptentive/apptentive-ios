@@ -817,6 +817,10 @@ static NSURLCache *imageCache = nil;
 
 #pragma mark -
 
+- (BOOL)hideBranding {
+	return [[NSUserDefaults standardUserDefaults] boolForKey:ATAppConfigurationHideBrandingKey];
+}
+
 - (void)updateConversationIfNeeded {
 	if (![[NSThread currentThread] isMainThread]) {
 		[self performSelectorOnMainThread:@selector(updateConversationIfNeeded) withObject:nil waitUntilDone:NO];

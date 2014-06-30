@@ -15,13 +15,12 @@
 #import "ATUtilities.h"
 
 @implementation ATDefaultMessageCenterTitleView {
-	BOOL showTagline;
+
 }
 @synthesize title;
 @synthesize imageView;
 
 - (void)setup {
-	showTagline = [[ATConnect sharedConnection] showTagline];
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSString *titleString = [defaults objectForKey:ATAppConfigurationMessageCenterTitleKey];
 	if (titleString == nil) {
@@ -30,7 +29,7 @@
 	
 	self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	//self.backgroundColor = [UIColor clearColor];
-	if (showTagline) {
+	if (![ATBackend sharedBackend].hideBranding) {
 		UIImage *image = [ATBackend imageNamed:@"at_apptentive_icon_small"];
 		imageView = [[UIImageView alloc] initWithImage:image];
 		[self addSubview:imageView];

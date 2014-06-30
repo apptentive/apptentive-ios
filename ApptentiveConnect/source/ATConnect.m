@@ -48,7 +48,7 @@ NSString *const ATConnectCustomPersonDataChangedNotification = @"ATConnectCustom
 NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustomDeviceDataChangedNotification";
 
 @implementation ATConnect
-@synthesize apiKey, appID, debuggingOptions, showTagline, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText, useMessageCenter;
+@synthesize apiKey, appID, debuggingOptions, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText, useMessageCenter;
 #if TARGET_OS_IPHONE
 @synthesize tintColor;
 #endif
@@ -65,15 +65,17 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 - (id)init {
 	if ((self = [super init])) {
 		self.showEmailField = YES;
-		self.showTagline = YES;
 		customPersonData = [[NSMutableDictionary alloc] init];
 		customDeviceData = [[NSMutableDictionary alloc] init];
 		integrationConfiguration = [[NSMutableDictionary alloc] init];
 		useMessageCenter = YES;
 		_initiallyUseMessageCenter = YES;
+		_initiallyHideBranding = NO;
 		
-		NSDictionary *defaults = @{ATAppConfigurationMessageCenterEnabledKey : [NSNumber numberWithBool:_initiallyUseMessageCenter],
-								   ATAppConfigurationMessageCenterEmailRequiredKey : [NSNumber numberWithBool:NO]};
+		NSDictionary *defaults = @{ATAppConfigurationMessageCenterEnabledKey: @(_initiallyUseMessageCenter),
+								   ATAppConfigurationMessageCenterEmailRequiredKey: @NO,
+								   ATAppConfigurationHideBrandingKey: @(_initiallyHideBranding)
+								   };
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 		
 		ATLogInfo(@"Apptentive SDK Version %@", kATConnectVersionString);
@@ -112,6 +114,11 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		apiKey = [anAPIKey retain];
 		[[ATBackend sharedBackend] setApiKey:self.apiKey];
 	}
+}
+
+- (void)setInitiallyHideBranding:(BOOL)initiallyHideBranding {
+	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ATAppConfigurationHideBrandingKey: @(initiallyHideBranding)}];
+	_initiallyHideBranding = initiallyHideBranding;
 }
 
 - (void)setInitiallyUseMessageCenter:(BOOL)initiallyUseMessageCenter {

@@ -64,6 +64,8 @@ NSString *const ATBackendBecameReadyNotification;
 @property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
 
+@property (nonatomic, assign, readonly) BOOL hideBranding;
+
 + (ATBackend *)sharedBackend;
 #if TARGET_OS_IPHONE
 + (UIImage *)imageNamed:(NSString *)name;

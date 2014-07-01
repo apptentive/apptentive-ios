@@ -1,3 +1,12 @@
+2014-06-30 pkamb v1.5.3
+--------------------------------
+
+This release fixes an issue where the Rating Prompt's "Require Email" option was not being utilized.
+
+Support has also been added for remote configuration of Apptentive branding. Depending on your Apptentive plan, branding can now be toggled remotely.
+
+Branding was formerly controlled by the `showTagLine` property, which has now been removed. The `initiallyHideBranding` property has been provided to control the app's initial experience before Apptentive's server-based configuration can be fetched.
+
 2014-06-12 pkamb v1.5.2
 --------------------------------
 

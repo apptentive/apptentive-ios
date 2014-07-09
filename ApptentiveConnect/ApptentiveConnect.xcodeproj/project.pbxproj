@@ -318,7 +318,6 @@
 		584647C617C426E800BFD6E6 /* ATEngagementManifestParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 584647C417C426E800BFD6E6 /* ATEngagementManifestParser.h */; };
 		584647C717C426E800BFD6E6 /* ATEngagementManifestParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 584647C517C426E800BFD6E6 /* ATEngagementManifestParser.m */; };
 		584647C817C426E800BFD6E6 /* ATEngagementManifestParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 584647C517C426E800BFD6E6 /* ATEngagementManifestParser.m */; };
-		5855D271196C7405000CB84A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49D07DCE17F29A1F0042FCFD /* Localizable.strings */; };
 		586C47A918B424E900725C22 /* ATInteractionEnjoymentDialogController.h in Headers */ = {isa = PBXBuildFile; fileRef = 586C47A718B424E900725C22 /* ATInteractionEnjoymentDialogController.h */; };
 		586C47AA18B424E900725C22 /* ATInteractionEnjoymentDialogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 586C47A818B424E900725C22 /* ATInteractionEnjoymentDialogController.m */; };
 		586FE260187C8DAE00067116 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58805F3818120DE100210DA5 /* Accelerate.framework */; };
@@ -658,7 +657,6 @@
 		5843F81D188778B000C9D096 /* ATDataModelv4.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = ATDataModelv4.sqlite; sourceTree = "<group>"; };
 		584647C417C426E800BFD6E6 /* ATEngagementManifestParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATEngagementManifestParser.h; path = Engagement/Model/ATEngagementManifestParser.h; sourceTree = "<group>"; };
 		584647C517C426E800BFD6E6 /* ATEngagementManifestParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATEngagementManifestParser.m; path = Engagement/Model/ATEngagementManifestParser.m; sourceTree = "<group>"; };
-		5855D270196C7405000CB84A /* fr_CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr_CA; path = fr_CA.lproj/Localizable.strings; sourceTree = "<group>"; };
 		586C47A718B424E900725C22 /* ATInteractionEnjoymentDialogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATInteractionEnjoymentDialogController.h; path = Engagement/Controllers/ATInteractionEnjoymentDialogController.h; sourceTree = "<group>"; };
 		586C47A818B424E900725C22 /* ATInteractionEnjoymentDialogController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATInteractionEnjoymentDialogController.m; path = Engagement/Controllers/ATInteractionEnjoymentDialogController.m; sourceTree = "<group>"; };
 		58805F3418120BBF00210DA5 /* UIImage+ATImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ATImageEffects.m"; sourceTree = "<group>"; };
@@ -1600,7 +1598,6 @@
 				fr,
 				zh,
 				sv,
-				fr_CA,
 			);
 			mainGroup = 496DC3741333D35600743F65;
 			productRefGroup = 496DC3801333D35600743F65 /* Products */;
@@ -1622,7 +1619,6 @@
 				5843F81E188778B000C9D096 /* ATDataModelv4.sqlite in Resources */,
 				49C0028F1334137E0071F088 /* InfoPlist.strings in Resources */,
 				49AA1023138B498C0082887A /* ATInfoViewController.xib in Resources */,
-				5855D271196C7405000CB84A /* Localizable.strings in Resources */,
 				58AA40A01821C162000799D8 /* ATDataModelv2.sqlite in Resources */,
 				49AA1025138B49A50082887A /* ATInfoViewController_iPad.xib in Resources */,
 				49E7408B184045C900413697 /* v2WALDatabase in Resources */,
@@ -1933,7 +1929,6 @@
 				58EA5B4717B47BAB00ECEB4B /* fr */,
 				58EA5B4E17B47E0C00ECEB4B /* zh */,
 				49EA62C317F50D9400C5A638 /* sv */,
-				5855D270196C7405000CB84A /* fr_CA */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

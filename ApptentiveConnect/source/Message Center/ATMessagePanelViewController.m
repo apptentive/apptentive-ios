@@ -76,10 +76,6 @@ enum {
 @synthesize emailField;
 @synthesize feedbackView;
 @synthesize promptContainer;
-@synthesize promptTitle;
-@synthesize promptText;
-@synthesize customPlaceholderText;
-@synthesize showEmailAddressField;
 @synthesize delegate;
 
 - (id)initWithDelegate:(NSObject<ATMessagePanelDelegate> *)aDelegate {
@@ -161,7 +157,7 @@ enum {
 	
 	[self positionInWindow];
 	
-	if ([self.emailField.text isEqualToString:@""] && self.showEmailAddressField) {
+	if ([self.emailField.text isEqualToString:@""] && [self.interaction.configuration[@"ask_for_email"] boolValue]) {
 		[self.emailField becomeFirstResponder];
 	} else {
 		[self.feedbackView becomeFirstResponder];
@@ -222,7 +218,7 @@ enum {
 		shadowView.alpha = 1.0;
 	} completion:^(BOOL finished) {
 		self.window.hidden = NO;
-		if ([self.emailField.text isEqualToString:@""] && self.showEmailAddressField) {
+		if ([self.emailField.text isEqualToString:@""] && [self.interaction.configuration[@"ask_for_email"] boolValue]) {
 			[self.emailField becomeFirstResponder];
 		} else {
 			[self.feedbackView becomeFirstResponder];
@@ -265,11 +261,7 @@ enum {
 	[toolbarItems addObject:self.sendButton];
 	
 	UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-	if (self.promptTitle) {
-		titleLabel.text = self.promptTitle;
-	} else {
-		titleLabel.text = ATLocalizedString(@"Give Feedback", @"Title of feedback screen.");
-	}
+	titleLabel.text = self.interaction.configuration[@"title"] ?: @"";
 	titleLabel.adjustsFontSizeToFitWidth = YES;
 	if ([titleLabel respondsToSelector:@selector(setMinimumScaleFactor:)]) {
 		titleLabel.minimumScaleFactor = 0.5;
@@ -321,9 +313,7 @@ enum {
 	[self.emailField resignFirstResponder];
 	[self.feedbackView resignFirstResponder];
 	
-	BOOL emailRequired = self.interaction ? [self.interaction.configuration[@"email_required"] boolValue] : [[ATConnect sharedConnection] emailRequired];
-	
-	if (self.showEmailAddressField && emailRequired && self.emailField.text.length == 0) {
+	if ([self.interaction.configuration[@"ask_for_email"] boolValue] && [self.interaction.configuration[@"email_required"] boolValue] && self.emailField.text.length == 0) {
 		if (emailRequiredAlert) {
 			emailRequiredAlert.delegate = nil;
 			[emailRequiredAlert release], emailRequiredAlert = nil;
@@ -337,7 +327,7 @@ enum {
 		
 		emailRequiredAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"OK", @"OK button title"), nil];
 		[emailRequiredAlert show];
-	} else if (self.showEmailAddressField && [self.emailField.text length] > 0 && ![ATUtilities emailAddressIsValid:self.emailField.text]) {
+	} else if ([self.interaction.configuration[@"ask_for_email"] boolValue] && [self.emailField.text length] > 0 && ![ATUtilities emailAddressIsValid:self.emailField.text]) {
 		if (invalidEmailAddressAlert) {
 			[invalidEmailAddressAlert release], invalidEmailAddressAlert = nil;
 		}
@@ -347,14 +337,14 @@ enum {
 		self.window.layer.rasterizationScale = [[UIScreen mainScreen] scale];
 		NSString *title = ATLocalizedString(@"Invalid Email Address", @"Invalid email dialog title.");
 		NSString *message = nil;
-		if (emailRequired) {
+		if ([self.interaction.configuration[@"email_required"] boolValue]) {
 			message = ATLocalizedString(@"That doesn't look like an email address. An email address is required for us to respond.", @"Invalid email dialog message (email is required).");
 		} else {
 			message = ATLocalizedString(@"That doesn't look like an email address. An email address will help us respond.", @"Invalid email dialog message.");
 		}
 		invalidEmailAddressAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:ATLocalizedString(@"OK", @"OK button title"), nil];
 		[invalidEmailAddressAlert show];
-	} else if (self.showEmailAddressField && (!self.emailField.text || [self.emailField.text length] == 0)) {
+	} else if ([self.interaction.configuration[@"ask_for_email"] boolValue] && (!self.emailField.text || [self.emailField.text length] == 0)) {
 		if (noEmailAddressAlert) {
 			noEmailAddressAlert.delegate = nil;
 			[noEmailAddressAlert release], noEmailAddressAlert = nil;
@@ -387,11 +377,7 @@ enum {
 		field.keyboardType = UIKeyboardTypeEmailAddress;
 		field.delegate = self;
 		field.autocapitalizationType = UITextAutocapitalizationTypeNone;
-		if (self.interaction.configuration[@"email_hint_text"]) {
-			field.placeholder = self.interaction.configuration[@"email_hint_text"];
-		} else {
-			field.placeholder = ATLocalizedString(@"Email Address", @"Email address popup placeholder text.");
-		}
+		field.placeholder = self.interaction.configuration[@"email_hint_text"] ?: @"";
 		field.tag = kATEmailAlertTextFieldTag;
 		
 		if (!useNativeTextField) {
@@ -585,12 +571,14 @@ enum {
 	CGFloat horizontalPadding = 7;
 	self.scrollView.backgroundColor = [UIColor colorWithRed:240/255. green:240/255. blue:240/255. alpha:1];
 	self.scrollView.delegate = self;
-	if (self.promptText) {
+	
+	NSString *body = self.interaction.configuration[@"body"];
+	if (body) {
 		CGRect containerFrame = self.scrollView.bounds;
 		CGFloat labelPadding = 4;
 		
 		ATLabel *promptLabel = [[ATLabel alloc] initWithFrame:containerFrame];
-		promptLabel.text = self.promptText;
+		promptLabel.text = body;
 		promptLabel.textColor = [UIColor colorWithRed:128/255. green:128/255. blue:128/255. alpha:1];
 		promptLabel.font = [UIFont fontWithName:@"Helvetica Neue" size:18];
 		promptLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -624,7 +612,7 @@ enum {
 	offsetY += blueLineView.bounds.size.height;
 	[blueLineView release], blueLineView = nil;
 	
-	if (self.showEmailAddressField) {
+	if ([self.interaction.configuration[@"ask_for_email"] boolValue]) {
 		offsetY += 5;
 		CGFloat extraHorzontalPadding = 0;
 		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
@@ -648,16 +636,7 @@ enum {
 		emailFrame.size.height = sizedEmail.height;
 		emailFrame.size.width = emailFrame.size.width - (horizontalPadding + extraHorzontalPadding)*2;
 		self.emailField = [[[UITextField alloc] initWithFrame:emailFrame] autorelease];
-		if (self.interaction.configuration[@"email_hint_text"]) {
-			self.emailField.placeholder = self.interaction.configuration[@"email_hint_text"];
-		} else {
-			if ([[ATConnect sharedConnection] emailRequired]) {
-				self.emailField.placeholder = ATLocalizedString(@"Your Email (required)", @"Email Address Field Placeholder (email is required)");
-			}
-			else {
-				self.emailField.placeholder = ATLocalizedString(@"Your Email", @"Email Address Field Placeholder");
-			}
-		}
+		self.emailField.placeholder = self.interaction.configuration[@"email_hint_text"] ?: @"";
 		self.emailField.font = emailFont;
 		self.emailField.adjustsFontSizeToFitWidth = YES;
 		self.emailField.keyboardType = UIKeyboardTypeEmailAddress;
@@ -707,21 +686,13 @@ enum {
 	}
 	self.feedbackView.clipsToBounds = YES;
 	self.feedbackView.font = [UIFont systemFontOfSize:17];
+	self.feedbackView.placeholder = self.interaction.configuration[@"message_hint_text"] ?: @"";
 	self.feedbackView.backgroundColor = [UIColor clearColor];
 	self.feedbackView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.feedbackView.scrollEnabled = NO;
 	self.feedbackView.delegate = self;
 	[self.scrollView addSubview:self.feedbackView];
 	offsetY += self.feedbackView.bounds.size.height;
-	
-	if (self.interaction.configuration[@"message_hint_text"]) {
-		self.feedbackView.placeholder = self.interaction.configuration[@"message_hint_text"];
-	}
-	else if (self.customPlaceholderText) {
-		self.feedbackView.placeholder = self.customPlaceholderText;
-	} else {
-		self.feedbackView.placeholder = ATLocalizedString(@"Feedback (required)", @"Feedback placeholder");
-	}
 	
 	self.feedbackView.at_drawRectBlock = ^(NSObject *caller, CGRect rect) {
 		ATDefaultTextView *textView = (ATDefaultTextView *)caller;
@@ -768,7 +739,6 @@ enum {
 	self.emailField = nil;
 	self.feedbackView.delegate = nil;
 	self.feedbackView = nil;
-	self.customPlaceholderText = nil;
 	[originalPresentingWindow makeKeyWindow];
 	[presentingViewController release], presentingViewController = nil;
 	[originalPresentingWindow release], originalPresentingWindow = nil;
@@ -914,7 +884,7 @@ enum {
 	self.window.alpha = 1.0;
 	[self.window makeKeyAndVisible];
 	[self positionInWindow];
-	if (self.showEmailAddressField) {
+	if ([self.interaction.configuration[@"ask_for_email"] boolValue]) {
 		[self.emailField becomeFirstResponder];
 	} else {
 		[self.feedbackView becomeFirstResponder];

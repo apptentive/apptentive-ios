@@ -36,6 +36,7 @@
 #import "ATPersonUpdater.h"
 #import "ATEngagementBackend.h"
 #import "ATMessagePanelNewUIViewController.h"
+#import "ATInteraction.h"
 
 typedef NS_ENUM(NSInteger, ATBackendState){
 	ATBackendStateStarting,
@@ -651,7 +652,7 @@ static NSURLCache *imageCache = nil;
 	}
 }
 
-- (void)presentIntroDialogFromViewController:(UIViewController *)viewController withTitle:(NSString *)title prompt:(NSString *)prompt placeholderText:(NSString *)placeholder {
+- (void)presentIntroDialogWithInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
 	@synchronized(self) {
 		if (currentMessagePanelController) {
 			ATLogInfo(@"Apptentive message panel controller already shown.");
@@ -665,18 +666,10 @@ static NSURLCache *imageCache = nil;
 		else {
 			vc = [[ATMessagePanelViewController alloc] initWithDelegate:self];
 		}
+		vc.interaction = interaction;
 		
-		if (title) {
-			vc.promptTitle = title;
-		}
-		if (prompt) {
-			vc.promptText = prompt;
-		}
-		if (placeholder) {
-			vc.customPlaceholderText = placeholder;
-		}
-		[vc setShowEmailAddressField:[[ATConnect sharedConnection] showEmailField]];
 		[vc presentFromViewController:viewController animated:YES];
+		
 		currentMessagePanelController = vc;
 		self.presentingViewController = viewController;
 	}
@@ -684,6 +677,56 @@ static NSURLCache *imageCache = nil;
 
 - (void)presentIntroDialogFromViewController:(UIViewController *)viewController {
 	[self presentIntroDialogFromViewController:viewController withTitle:nil prompt:nil placeholderText:nil];
+}
+
+- (void)presentIntroDialogFromViewController:(UIViewController *)viewController withTitle:(NSString *)title prompt:(NSString *)prompt placeholderText:(NSString *)placeholder {
+	ATInteraction *introDialog = [[[ATInteraction alloc] init] autorelease];
+	introDialog.type = @"FeedbackDialog";
+	introDialog.priority = 1;
+	introDialog.version = @"1.0.0";
+	introDialog.identifier = @"IntroDialog";
+	introDialog.criteria = @{};
+	
+	NSMutableDictionary *config = [NSMutableDictionary dictionary];
+
+	config[@"title"] = title ?: ATLocalizedString(@"Give Feedback", @"Title of feedback screen.");
+	config[@"body"] = prompt ?: [NSString stringWithFormat:ATLocalizedString(@"Please let us know how to make %@ better for you!", @"Feedback screen body. Parameter is the app name."), [[ATBackend sharedBackend] appName]];
+	config[@"message_hint_text"]  = placeholder ?: ATLocalizedString(@"How can we help? (required)", @"First feedback placeholder text.");
+	
+	config[@"submit_text"] = ATLocalizedString(@"Send", @"Button title to Send a message using the feedback dialog.");
+	config[@"decline_text"] = ATLocalizedString(@"Cancel", @"Button title to Cancel a feedback dialog message.");
+	
+	config[@"ask_for_email"] = @([[ATConnect sharedConnection] showEmailField]);
+	
+	BOOL emailRequired = [[ATConnect sharedConnection] emailRequired];
+	config[@"email_required"] = @(emailRequired);
+	if (emailRequired) {
+		config[@"email_hint_text"] = ATLocalizedString(@"Your Email (required)", @"Email Address Field Placeholder (email is required)");
+	} else {
+		config[@"email_hint_text"] = ATLocalizedString(@"Your Email", @"Email Address Field Placeholder");
+	}
+	
+	BOOL messageCenterEnabled = [[ATConnect sharedConnection] messageCenterEnabled];
+	config[@"enable_message_center"] = @(messageCenterEnabled);
+	if (messageCenterEnabled) {
+		
+		//TODO
+		// The Thank You Dialog should use the text from the interaction.
+		
+		config[@"thank_you_title"] = ATLocalizedString(@"Thanks!", nil);
+		config[@"thank_you_body"] = ATLocalizedString(@"Your response has been saved in the Message Center, where you'll be able to view replies and send us other messages.", @"Message panel sent message confirmation dialog text");
+		config[@"thank_you_view_messages_text"] = ATLocalizedString(@"View Messages", @"View messages button title");
+		config[@"thank_you_close_text"] = ATLocalizedString(@"Close", @"Close alert view title");
+	} else {
+		config[@"thank_you_title"] = ATLocalizedString(@"Thank you for your feedback!", @"Message panel sent message but will not show Message Center dialog.");
+		//config[@"thank_you_body"];
+		//config[@"thank_you_view_messages_text"]
+		config[@"thank_you_close_text"] = ATLocalizedString(@"Close", @"Close alert view title");
+	}
+
+	introDialog.configuration = config;
+	
+	[self presentIntroDialogWithInteraction:introDialog fromViewController:viewController];
 }
 
 #if TARGET_OS_IPHONE

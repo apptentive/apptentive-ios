@@ -75,6 +75,8 @@ NSString *const ATBackendBecameReadyNotification;
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion;
 - (void)presentIntroDialogFromViewController:(UIViewController *)viewController;
 - (void)presentIntroDialogFromViewController:(UIViewController *)viewController withTitle:(NSString *)title prompt:(NSString *)prompt placeholderText:(NSString *)placeholder;
+- (void)presentIntroDialogWithInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController;
+
 #elif TARGET_OS_MAC
 + (NSImage *)imageNamed:(NSString *)name;
 #endif

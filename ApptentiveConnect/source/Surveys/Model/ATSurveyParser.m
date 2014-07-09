@@ -80,11 +80,23 @@
 			question.responseRequired = [(NSNumber *)[jsonDictionary objectForKey:@"required"] boolValue];
 		}
 		
+		NSUInteger answerChoicesCount = [(NSArray *)[jsonDictionary objectForKey:@"answer_choices"] count];
+		
 		if ([jsonDictionary objectForKey:@"max_selections"] != nil) {
 			question.maxSelectionCount = [(NSNumber *)[jsonDictionary objectForKey:@"max_selections"] unsignedIntegerValue];
+		} else {
+			question.maxSelectionCount = answerChoicesCount;
 		}
+		
 		if ([jsonDictionary objectForKey:@"min_selections"] != nil) {
 			question.minSelectionCount = [(NSNumber *)[jsonDictionary objectForKey:@"min_selections"] unsignedIntegerValue];
+		} else {
+			// If question is required, at least one selection is required by defult.
+			if (question.responseRequired && answerChoicesCount >= 1) {
+				question.minSelectionCount = 1;
+			} else {
+				question.minSelectionCount = 0;
+			}
 		}
 		
 		if (question.type == ATSurveyQuestionTypeMultipleChoice || question.type == ATSurveyQuestionTypeMultipleSelect) {

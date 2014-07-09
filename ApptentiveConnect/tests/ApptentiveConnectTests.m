@@ -27,8 +27,6 @@
 }
 
 - (void)testExample {
-#warning Remove!
-	XCTFail(@"Test Jenkins integration");
 }
 
 - (void)testInitialUserName {

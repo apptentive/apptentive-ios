@@ -101,9 +101,9 @@
 			button.frame = CGRectMake(0.0, 0.0, buttonImage.size.width, buttonImage.size.height);
 			[button addTarget:self action:@selector(settingsPressed:) forControlEvents:UIControlEventTouchUpInside];
 			
-			profileButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+			profileButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:button] autorelease];
 		} else {
-			profileButtonItem = [[[UIBarButtonItem alloc] initWithImage:[ATBackend imageNamed:@"at_user_button_image"] landscapeImagePhone:[ATBackend imageNamed:@"at_user_button_image_landscape"] style:UIBarButtonItemStylePlain target:self action:@selector(settingsPressed:)]autorelease];
+			profileButtonItem = [[[UIBarButtonItem alloc] initWithImage:[ATBackend imageNamed:@"at_user_button_image"] landscapeImagePhone:[ATBackend imageNamed:@"at_user_button_image_landscape"] style:UIBarButtonItemStylePlain target:self action:@selector(settingsPressed:)] autorelease];
 		}
 		
 		self.navigationItem.rightBarButtonItem = profileButtonItem;

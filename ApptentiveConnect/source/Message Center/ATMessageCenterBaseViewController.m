@@ -25,6 +25,7 @@
 #import "ATTaskQueue.h"
 #import "ATTextMessage.h"
 #import "ATUtilities.h"
+#import "UIImage+ATImageEffects.h"
 
 @interface ATMessageCenterBaseViewController ()
 - (void)showSendImageUIIfNecessary;
@@ -90,7 +91,22 @@
 	self.navigationItem.titleView = [defaultTheme titleViewForMessageCenterViewController:self];
 	self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)] autorelease];
 	if ([self.navigationItem.leftBarButtonItem respondsToSelector:@selector(initWithImage:landscapeImagePhone:style:target:action:)]) {
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[ATBackend imageNamed:@"at_user_button_image"] landscapeImagePhone:[ATBackend imageNamed:@"at_user_button_image_landscape"] style:UIBarButtonItemStylePlain target:self action:@selector(settingsPressed:)]autorelease];
+		UIBarButtonItem *profileButtonItem;
+		
+		if (![ATUtilities osVersionGreaterThanOrEqualTo:@"7.0"] && [ATConnect sharedConnection].tintColor) {
+			// Tint color for the profile button in iOS 6 and below.
+			UIImage *buttonImage = [[ATBackend imageNamed:@"at_user_button_image"] imageByTintingWithColor:[ATConnect sharedConnection].tintColor];
+			UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+			[button setImage:buttonImage forState:UIControlStateNormal];
+			button.frame = CGRectMake(0.0, 0.0, buttonImage.size.width, buttonImage.size.height);
+			[button addTarget:self action:@selector(settingsPressed:) forControlEvents:UIControlEventTouchUpInside];
+			
+			profileButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+		} else {
+			profileButtonItem = [[[UIBarButtonItem alloc] initWithImage:[ATBackend imageNamed:@"at_user_button_image"] landscapeImagePhone:[ATBackend imageNamed:@"at_user_button_image_landscape"] style:UIBarButtonItemStylePlain target:self action:@selector(settingsPressed:)]autorelease];
+		}
+		
+		self.navigationItem.rightBarButtonItem = profileButtonItem;
 		self.navigationItem.rightBarButtonItem.accessibilityLabel = ATLocalizedString(@"Contact Settings", @"Title of contact information edit screen");
 	} else {
 		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[ATBackend imageNamed:@"at_user_button_image"] style:UIBarButtonItemStylePlain target:self action:@selector(settingsPressed:)]autorelease];

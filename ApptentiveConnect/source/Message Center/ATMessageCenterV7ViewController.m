@@ -74,7 +74,7 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
     [super viewDidLoad];
 	
 	self.backgroundImageView.contentMode = UIViewContentModeCenter;
-	[self.backgroundImageView setImage:blurredImage];
+	self.backgroundImageView.backgroundColor = [UIColor whiteColor];
 	
 	self.collectionView.keyboardDismissMode = UIScrollViewKeyboardDismissModeNone;
 	

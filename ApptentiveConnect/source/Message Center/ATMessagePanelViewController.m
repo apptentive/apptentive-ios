@@ -149,7 +149,6 @@ enum {
 	
 	// Animate in from above.
 	self.window.bounds = animationBounds;
-	self.window.windowLevel = UIWindowLevelNormal;
 	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"] && originalPresentingWindow) {
 		startingTintAdjustmentMode = originalPresentingWindow.tintAdjustmentMode;
 		originalPresentingWindow.tintAdjustmentMode = UIViewTintAdjustmentModeDimmed;
@@ -243,6 +242,10 @@ enum {
 	if ([[ATConnect sharedConnection] tintColor] && [self.view respondsToSelector:@selector(setTintColor:)]) {
 		[self.window setTintColor:[[ATConnect sharedConnection] tintColor]];
 	}
+	
+	// Higher window level fixes issue where text selection loupe showed through Message Panel to the view beneath.
+    self.window.windowLevel = UIWindowLevelNormal + 0.1;
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackChanged:) name:UITextViewTextDidChangeNotification object:self.feedbackView];
 	self.cancelButton = [[[ATCustomButton alloc] initWithButtonStyle:ATCustomButtonStyleCancel] autorelease];
 	[self.cancelButton setAction:@selector(cancelPressed:) forTarget:self];
@@ -328,7 +331,6 @@ enum {
 			emailRequiredAlert.delegate = nil;
 			[emailRequiredAlert release], emailRequiredAlert = nil;
 		}
-		self.window.windowLevel = UIWindowLevelNormal;
 		self.window.userInteractionEnabled = NO;
 		self.window.layer.shouldRasterize = YES;
 		self.window.layer.rasterizationScale = [[UIScreen mainScreen] scale];
@@ -341,7 +343,6 @@ enum {
 		if (invalidEmailAddressAlert) {
 			[invalidEmailAddressAlert release], invalidEmailAddressAlert = nil;
 		}
-		self.window.windowLevel = UIWindowLevelNormal;
 		self.window.userInteractionEnabled = NO;
 		self.window.layer.shouldRasterize = YES;
 		self.window.layer.rasterizationScale = [[UIScreen mainScreen] scale];
@@ -359,7 +360,6 @@ enum {
 			noEmailAddressAlert.delegate = nil;
 			[noEmailAddressAlert release], noEmailAddressAlert = nil;
 		}
-		self.window.windowLevel = UIWindowLevelNormal;
 		self.window.userInteractionEnabled = NO;
 		self.window.layer.shouldRasterize = YES;
 		self.window.layer.rasterizationScale = [[UIScreen mainScreen] scale];
@@ -463,7 +463,6 @@ enum {
 }
 
 - (void)unhide:(BOOL)animated {
-	self.window.windowLevel = UIWindowLevelNormal;
 	self.window.hidden = NO;
 	if (animated) {
 		[UIView animateWithDuration:0.2 animations:^(void){
@@ -887,7 +886,6 @@ enum {
 - (void)hide:(BOOL)animated {
 	[self retain];
 	
-	self.window.windowLevel = UIWindowLevelNormal;
 	[self.emailField resignFirstResponder];
 	[self.feedbackView resignFirstResponder];
 	

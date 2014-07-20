@@ -52,6 +52,12 @@ enum kSurveyRows {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unreadMessageCountChanged:) name:ATMessageCenterUnreadCountChangedNotification object:nil];
 	
 	[[ATConnect sharedConnection] engage:@"init" fromViewController:self];
+	
+	// Engage an event with customData and extendedData
+	NSDictionary *commerceItem = [ATConnect extendedDataCommerceItemWithItemID:@"SKU_123" name:@"unlock_everything" category:@"in_app_purchase" price:@(4.99) quantity:@(1) currency:@"USD"];
+	NSDictionary *commerce = [ATConnect extendedDataCommerceWithTransactionID:@"123" affiliation:@"app_store" revenue:@(4.99) shipping:@(0) tax:@(1) currency:@"USD" commerceItems:@[commerceItem]];
+	NSArray *extendedData = @[[ATConnect extendedDataTime], [ATConnect extendedDataLocationForLatitude:14 longitude:10], commerce];
+	[[ATConnect sharedConnection] engage:@"event_with_data" withCustomData:@{@"customDataKey":@"customDataValue"} withExtendedData:extendedData fromViewController:self];
 }
 
 - (void)surveyBecameAvailable:(NSNotification *)notification {

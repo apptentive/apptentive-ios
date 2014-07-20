@@ -250,6 +250,59 @@ extern NSString *const ATIntegrationKeyAmazonSNS;
 - (IBAction)showFeedbackWindow:(id)sender;
 #endif
 
+///--------------------
+/// @name Extended Data for Events
+///--------------------
+
+/**
+ Dictionary representing the current time, to be passed in an event's extended data.
+ */
++ (NSDictionary *)extendedDataTime;
+
+/**
+ Dictionary representing a location, to be passed in an event's extended data.
+ 
+ @param latitude A location's latitude coordinate.
+ @param longitude A location's longitude coordinate.
+ */
++ (NSDictionary *)extendedDataLocationForLatitude:(double)latitude longitude:(double)longitude;
+
+/**
+ Dictionary representing a commerce transation, to be passed in an event's extended data.
+ 
+ @param transactionID The transaction's ID.
+ @param affiliation The store or affiliation from which this transaction occurred.
+ @param revenue The transaction's revenue.
+ @param shipping The transaction's shipping cost.
+ @param tax Tax on the transaction.
+ @param currency Currency for revenue/shipping/tax values.
+ @param commerceItems An array of commerce items contained in the transaction. Create commerce items with [ATConnect extendedDataCommerceItem...].
+ */
++ (NSDictionary *)extendedDataCommerceWithTransactionID:(NSString *)transactionID
+											affiliation:(NSString *)affiliation
+												revenue:(NSNumber *)revenue
+											   shipping:(NSNumber *)shipping
+													tax:(NSNumber *)tax
+											   currency:(NSString *)currency
+										  commerceItems:(NSArray *)commerceItems;
+
+/**
+ Dictionary representing a single item in a commerce transation, to be passed in an event's extended data.
+ 
+ @param itemID The transaction item's ID.
+ @param name The transaction item's name.
+ @param category The transaction item's category.
+ @param price The individual item price.
+ @param quantity The number of units purchased.
+ @param currency Currency for price.
+ */
++ (NSDictionary *)extendedDataCommerceItemWithItemID:(NSString *)itemID
+												name:(NSString *)name
+											category:(NSString *)category
+											   price:(NSNumber *)price
+											quantity:(NSNumber *)quantity
+											currency:(NSString *)currency;
+
 
 ///-------------------------------------
 /// @name Attach Text, Images, and Files

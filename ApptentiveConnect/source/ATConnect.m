@@ -309,6 +309,65 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 - (BOOL)engage:(NSString *)eventLabel withCustomData:(NSDictionary *)customData withExtendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {
 	return [[ATEngagementBackend sharedBackend] engageLocalEvent:eventLabel userInfo:nil customData:customData extendedData:extendedData fromViewController:viewController];
 }
+
++ (NSDictionary *)extendedDataTime {
+	NSDictionary *time = @{@"time": @{@"version": @1,
+									  @"timestamp": @([[NSDate date] timeIntervalSince1970])
+									  }
+						   };
+	return time;
+}
+
++ (NSDictionary *)extendedDataLocationForLatitude:(double)latitude longitude:(double)longitude {
+	// Coordinates sent to server in order (longitude, latitude)
+	NSDictionary *location = @{@"location": @{@"version": @1,
+											  @"coordinates": @[@(longitude), @(latitude)]
+											  }
+							   };
+	
+	return location;
+}
+
+
++ (NSDictionary *)extendedDataCommerceWithTransactionID:(NSString *)transactionID
+											affiliation:(NSString *)affiliation
+												revenue:(NSNumber *)revenue
+											   shipping:(NSNumber *)shipping
+													tax:(NSNumber *)tax
+											   currency:(NSString *)currency
+										  commerceItems:(NSArray *)commerceItems
+{
+	NSDictionary *commerce = @{@"commerce": @{@"version": @1,
+											  @"id": transactionID ?: [NSNull null],
+											  @"affiliation": affiliation ?: [NSNull null],
+											  @"revenue": revenue ?: [NSNull null],
+											  @"shipping": shipping ?: [NSNull null],
+											  @"tax": tax ?: [NSNull null],
+											  @"currency": currency ?: [NSNull null],
+											  @"items": commerceItems ?: [NSNull null]
+											  }
+							   };
+	
+	return commerce;
+}
+
++ (NSDictionary *)extendedDataCommerceItemWithItemID:(NSString *)itemID
+												name:(NSString *)name
+											category:(NSString *)category
+											   price:(NSNumber *)price
+											quantity:(NSNumber *)quantity
+											currency:(NSString *)currency
+{
+	NSDictionary *commerceItem = @{@"version": @1,
+								   @"name": itemID ?: [NSNull null],
+								   @"category": category ?: [NSNull null],
+								   @"price": price ?: [NSNull null],
+								   @"quantity": quantity ?: [NSNull null],
+								   @"currency": currency ?: [NSNull null]
+								   };
+	return commerceItem;
+}
+
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController {
 	[[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController];
 }

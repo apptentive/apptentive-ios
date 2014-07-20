@@ -13,6 +13,8 @@
 #import "ATConnectionManager.h"
 #import "ATJSONSerialization.h"
 #import "ATURLConnection.h"
+#import "ATWebClient.h"
+#import "ATWebClient_Private.h"
 
 #if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
@@ -102,6 +104,11 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 			self.errorTitle = ATLocalizedString(@"Authentication Failed", @"");
 			self.errorMessage = ATLocalizedString(@"Wrong username and/or password.", @"");
 			break;
+		case 422:
+			self.failed = YES;
+			self.errorTitle = ATLocalizedString(@"Unprocessable Entity", @"");
+			self.errorMessage = ATLocalizedString(@"The request was well-formed but was unable to be followed due to semantic errors.", @"");
+			break;
 		case 304:
 			break;
 		default:
@@ -125,6 +132,11 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 			ATLogInfo(@"Status was: %d", sender.statusCode);
 			if (sender.statusCode == 401) {
 				ATLogDebug(@"Your Apptentive API key may not be set correctly!");
+			}
+			if (sender.statusCode == 422) {
+				if ([[connection.targetURL absoluteString] isEqualToString:[[ATWebClient sharedClient] apiURLStringWithPath:@"events"]]) {
+					ATLogDebug(@"Event was invalid; sent with malformed customData or extendedData.");
+				}
 			}
 			if ([ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogHTTPFailures ||
 				[ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogAllHTTPRequests) {

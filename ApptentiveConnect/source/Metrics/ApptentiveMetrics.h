@@ -22,6 +22,7 @@
 + (ApptentiveMetrics *)sharedMetrics;
 
 - (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo;
+- (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData;
 
 - (BOOL)upgradeLegacyMetric:(ATMetric *)metric;
 

@@ -105,6 +105,10 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 
 
 - (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo {
+	[self addMetricWithName:name info:userInfo customData:nil extendedData:nil];
+}
+
+- (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData {
 	if (metricsEnabled == NO) {
 		return;
 	}

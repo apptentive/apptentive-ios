@@ -310,9 +310,9 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	return [[ATEngagementBackend sharedBackend] engageLocalEvent:eventLabel userInfo:nil customData:customData extendedData:extendedData fromViewController:viewController];
 }
 
-+ (NSDictionary *)extendedDataTime {
++ (NSDictionary *)extendedDataDate:(NSDate *)date {
 	NSDictionary *time = @{@"time": @{@"version": @1,
-									  @"timestamp": @([[NSDate date] timeIntervalSince1970])
+									  @"timestamp": @([date timeIntervalSince1970])
 									  }
 						   };
 	return time;

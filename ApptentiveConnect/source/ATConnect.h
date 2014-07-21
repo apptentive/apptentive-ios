@@ -224,7 +224,7 @@ extern NSString *const ATIntegrationKeyAmazonSNS;
  
  @param eventLabel A string representing the name of the event.
  @param customData A dictionary of key/value pairs to be associated with the event.
- @param extendedData An array of dictionaries with specific Apptentive formatting. For example, [ATConnect extendedDataTime].
+ @param extendedData An array of dictionaries with specific Apptentive formatting. For example, [ATConnect extendedDataDate:[NSDate date]].
  @param viewController A view controller Apptentive UI may be presented from.
  */
 - (BOOL)engage:(NSString *)eventLabel withCustomData:(NSDictionary *)customData withExtendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController;
@@ -255,12 +255,14 @@ extern NSString *const ATIntegrationKeyAmazonSNS;
 ///--------------------
 
 /**
- Dictionary representing the current time, to be passed in an event's extended data.
+ Extended data dictionary representing a date, to be included in an event's extended data.
+ 
+ @param date A date to be included in an event's extended data.
  */
-+ (NSDictionary *)extendedDataTime;
++ (NSDictionary *)extendedDataDate:(NSDate *)date;
 
 /**
- Dictionary representing a location, to be passed in an event's extended data.
+ Extended data dictionary representing a location, to be passed in an event's extended data.
  
  @param latitude A location's latitude coordinate.
  @param longitude A location's longitude coordinate.
@@ -268,7 +270,7 @@ extern NSString *const ATIntegrationKeyAmazonSNS;
 + (NSDictionary *)extendedDataLocationForLatitude:(double)latitude longitude:(double)longitude;
 
 /**
- Dictionary representing a commerce transation, to be passed in an event's extended data.
+ Extended data dictionary representing a commerce transation, to be passed in an event's extended data.
  
  @param transactionID The transaction's ID.
  @param affiliation The store or affiliation from which this transaction occurred.
@@ -287,7 +289,7 @@ extern NSString *const ATIntegrationKeyAmazonSNS;
 										  commerceItems:(NSArray *)commerceItems;
 
 /**
- Dictionary representing a single item in a commerce transation, to be passed in an event's extended data.
+ Extended data dictionary representing a single item in a commerce transation, to be passed in an event's extended data.
  
  @param itemID The transaction item's ID.
  @param name The transaction item's name.

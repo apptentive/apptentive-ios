@@ -224,7 +224,7 @@ extern NSString *const ATIntegrationKeyAmazonSNS;
  
  @param eventLabel A string representing the name of the event.
  @param customData A dictionary of key/value pairs to be associated with the event.
- @param extendedData An array of dictionaries with specific Apptentive formatting. For example, [ATConnect extendedDataTime].
+ @param extendedData An array of dictionaries with specific Apptentive formatting. For example, [ATConnect extendedDataDate:[NSDate date]].
  @param viewController A view controller Apptentive UI may be presented from.
  */
 - (BOOL)engage:(NSString *)eventLabel withCustomData:(NSDictionary *)customData withExtendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController;

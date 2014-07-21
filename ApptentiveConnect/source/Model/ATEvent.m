@@ -42,7 +42,7 @@
 	}
 	if (self.dictionaryData) {
 		NSDictionary *dictionary = [self dictionaryForCurrentData];
-		result[@"data"] = dictionary;
+		[result addEntriesFromDictionary:dictionary];
 	}
 	
 	if (self.pendingEventID != nil) {

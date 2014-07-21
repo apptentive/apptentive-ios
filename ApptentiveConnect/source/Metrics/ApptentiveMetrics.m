@@ -105,13 +105,31 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 
 
 - (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo {
+	[self addMetricWithName:name info:userInfo customData:nil extendedData:nil];
+}
+
+- (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData {
 	if (metricsEnabled == NO) {
 		return;
 	}
 	ATEvent *event = (ATEvent *)[ATData newEntityNamed:@"ATEvent"];
 	[event setup];
 	event.label = name;
-	[event addEntriesFromDictionary:userInfo];
+	
+	if (userInfo) {
+		[event addEntriesFromDictionary:@{@"data": userInfo}];
+	}
+	if (customData) {
+		[event addEntriesFromDictionary:@{@"custom_data": customData}];
+	}
+
+	if (extendedData) {
+		for (NSDictionary *data in extendedData) {
+			// Extended data items are not added for key "extended_data", but rather for key of extended data type: "time", "location", etc.
+			[event addEntriesFromDictionary:data];
+		}
+	}
+	
 	if (![ATData save]) {
 		[event release], event = nil;
 		return;

@@ -255,14 +255,14 @@ extern NSString *const ATIntegrationKeyAmazonSNS;
 ///--------------------
 
 /**
- Extended data dictionary representing a date, to be included in an event's extended data.
+ Extended data dictionary representing a point in time, to be included in an event's extended data.
  
- @param date A date to be included in an event's extended data.
+ @param date A date and time to be included in an event's extended data.
  */
 + (NSDictionary *)extendedDataDate:(NSDate *)date;
 
 /**
- Extended data dictionary representing a location, to be passed in an event's extended data.
+ Extended data dictionary representing a location, to be included in an event's extended data.
  
  @param latitude A location's latitude coordinate.
  @param longitude A location's longitude coordinate.
@@ -270,7 +270,7 @@ extern NSString *const ATIntegrationKeyAmazonSNS;
 + (NSDictionary *)extendedDataLocationForLatitude:(double)latitude longitude:(double)longitude;
 
 /**
- Extended data dictionary representing a commerce transation, to be passed in an event's extended data.
+ Extended data dictionary representing a commerce transation, to be included in an event's extended data.
  
  @param transactionID The transaction's ID.
  @param affiliation The store or affiliation from which this transaction occurred.
@@ -289,7 +289,7 @@ extern NSString *const ATIntegrationKeyAmazonSNS;
 										  commerceItems:(NSArray *)commerceItems;
 
 /**
- Extended data dictionary representing a single item in a commerce transation, to be passed in an event's extended data.
+ Extended data dictionary representing a single item in a commerce transation, to be included in an event's extended data.
  
  @param itemID The transaction item's ID.
  @param name The transaction item's name.

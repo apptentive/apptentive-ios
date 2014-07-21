@@ -103,7 +103,9 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 	NSString *URLString = nil;
 	
 #if TARGET_OS_IPHONE
-	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"6.0"]) {
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7.1"]) {
+		URLString = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", [self appID]];
+	} else if ([ATUtilities osVersionGreaterThanOrEqualTo:@"6.0"]) {
 		URLString = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/%@/app/id%@", [[NSLocale currentLocale] objectForKey: NSLocaleCountryCode], [self appID]];
 	} else {
 		URLString = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", [self appID]];

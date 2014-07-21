@@ -900,4 +900,10 @@
 	interactions = [parser codePointInteractionsForEngagementManifest:[json dataUsingEncoding:NSUTF8StringEncoding]];
 	XCTAssertNil(interactions, @"Interactions should be nil");
 }
+
+- (void)testCustomDataAndExtendedData {
+	XCTAssertNoThrow([[ATConnect sharedConnection] engage:@"test_event" withCustomData:nil fromViewController:nil], @"nil custom data should not throw exception!");
+	XCTAssertNoThrow([[ATConnect sharedConnection] engage:@"test_event" withCustomData:nil withExtendedData:nil fromViewController:nil], @"nil custom data or extended data should not throw exception!");
+}
+
 @end

@@ -337,18 +337,39 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 											   currency:(NSString *)currency
 										  commerceItems:(NSArray *)commerceItems
 {
-	NSDictionary *commerce = @{@"commerce": @{@"version": @1,
-											  @"id": transactionID ?: [NSNull null],
-											  @"affiliation": affiliation ?: [NSNull null],
-											  @"revenue": revenue ?: [NSNull null],
-											  @"shipping": shipping ?: [NSNull null],
-											  @"tax": tax ?: [NSNull null],
-											  @"currency": currency ?: [NSNull null],
-											  @"items": commerceItems ?: [NSNull null]
-											  }
-							   };
 	
-	return commerce;
+	NSMutableDictionary *commerce = [NSMutableDictionary dictionary];
+	commerce[@"version"] = @1;
+	
+	if (transactionID) {
+		commerce[@"id"] = transactionID;
+	}
+	
+	if (affiliation) {
+		commerce[@"affiliation"] = affiliation;
+	}
+	
+	if (revenue) {
+		commerce[@"revenue"] = revenue;
+	}
+	
+	if (shipping) {
+		commerce[@"shipping"] = shipping;
+	}
+	
+	if (tax) {
+		commerce[@"tax"] = tax;
+	}
+	
+	if (currency) {
+		commerce[@"currency"] = currency;
+	}
+	
+	if (commerceItems) {
+		commerce[@"items"] = commerceItems;
+	}
+	
+	return @{@"commerce": commerce};
 }
 
 + (NSDictionary *)extendedDataCommerceItemWithItemID:(NSString *)itemID
@@ -358,13 +379,33 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 											quantity:(NSNumber *)quantity
 											currency:(NSString *)currency
 {
-	NSDictionary *commerceItem = @{@"version": @1,
-								   @"name": itemID ?: [NSNull null],
-								   @"category": category ?: [NSNull null],
-								   @"price": price ?: [NSNull null],
-								   @"quantity": quantity ?: [NSNull null],
-								   @"currency": currency ?: [NSNull null]
-								   };
+	NSMutableDictionary *commerceItem = [NSMutableDictionary dictionary];
+	commerceItem[@"version"] = @1;
+
+	if (itemID) {
+		commerceItem[@"id"] = itemID;
+	}
+	
+	if (name) {
+		commerceItem[@"name"] = name;
+	}
+	
+	if (category) {
+		commerceItem[@"category"] = category;
+	}
+	
+	if (price) {
+		commerceItem[@"price"] = price;
+	}
+	
+	if (quantity) {
+		commerceItem[@"quantity"] = quantity;
+	}
+	
+	if (currency) {
+		commerceItem[@"currency"] = currency;
+	}
+	
 	return commerceItem;
 }
 

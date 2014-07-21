@@ -1,3 +1,24 @@
+2014-07-21 pkamb v1.5.4
+--------------------------------
+
+This release changes the App Store rating URL to open the "Reviews" tab directly in iOS 7.1+. #110
+
+We have also fixed an issue where the text selection loupe showed through Message Panel to the view beneath. #114
+
+French Canadian localization strings have been added to the SDK. iOS 8 is required to differentiate between French and French Canadian.
+
+Finally, we have added new API methods for attaching `customData` and `extendedData` to events:  
+
+  - `engage:withCustomData:fromViewController:` 
+  - `engage:withCustomData:withExtendedData:fromViewController:`
+  
+We have also added methods to easily construct these `extendedData` dictionaries in the specific Apptentive format:  
+
+  - `extendedDataDate:`
+  - `extendedDataLocationForLatitude:longitude:`
+  - `extendedDataCommerceWithTransactionID:affiliation:revenue:shipping:tax:currency:commerceItems:`
+  - `extendedDataCommerceItemWithItemID:name:category:price:quantity:currency:`
+
 2014-06-30 pkamb v1.5.3
 --------------------------------
 

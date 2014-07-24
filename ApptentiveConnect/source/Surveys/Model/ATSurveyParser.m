@@ -85,7 +85,11 @@
 		if ([jsonDictionary objectForKey:@"max_selections"] != nil) {
 			question.maxSelectionCount = [(NSNumber *)[jsonDictionary objectForKey:@"max_selections"] unsignedIntegerValue];
 		} else {
-			question.maxSelectionCount = answerChoicesCount;
+			if (question.type == ATSurveyQuestionTypeMultipleChoice) {
+				question.maxSelectionCount = 1;
+			} else {
+				question.maxSelectionCount = answerChoicesCount;
+			}
 		}
 		
 		if ([jsonDictionary objectForKey:@"min_selections"] != nil) {

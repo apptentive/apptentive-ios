@@ -135,7 +135,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 			}
 			if (sender.statusCode == 422) {
 				if ([[connection.targetURL absoluteString] isEqualToString:[[ATWebClient sharedClient] apiURLStringWithPath:@"events"]]) {
-					ATLogDebug(@"Event was invalid; sent with malformed customData or extendedData.");
+					ATLogWarning(@"Event was invalid; sent with malformed customData or extendedData.");
 				}
 			}
 			if ([ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogHTTPFailures ||

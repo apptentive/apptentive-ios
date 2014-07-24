@@ -71,7 +71,7 @@
 	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)] autorelease];
 
 	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7.0"] && [[ATConnect sharedConnection] tintColor] && [self.navigationController.navigationBar respondsToSelector:@selector(setTintColor:)]) {
-		self.navigationController.navigationBar.tintColor = [UIColor greenColor];
+		self.navigationController.navigationBar.tintColor = [[ATConnect sharedConnection] tintColor];
 	}
 }
 

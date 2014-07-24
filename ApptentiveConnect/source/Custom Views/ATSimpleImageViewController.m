@@ -69,6 +69,10 @@
 	self.navigationItem.title = ATLocalizedString(@"Screenshot", @"Screenshot view title");
 	self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(takePhoto:)] autorelease];
 	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)] autorelease];
+
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7.0"] && [[ATConnect sharedConnection] tintColor] && [self.navigationController.navigationBar respondsToSelector:@selector(setTintColor:)]) {
+		self.navigationController.navigationBar.tintColor = [UIColor greenColor];
+	}
 }
 
 - (void)setupScrollView {

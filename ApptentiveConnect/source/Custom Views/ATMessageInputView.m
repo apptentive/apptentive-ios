@@ -168,6 +168,20 @@ UIEdgeInsets insetsForView(UIView *v) {
 			[self.delegate messageInputView:self didChangeHeight:newFrame.size.height];
 		}
 	}];
+	
+	// Apparent iOS 7 bug where last line of text is not scrolled into view when entering newline characters.
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7.0"]) {
+		CGRect caretRect = [textView caretRectForPosition:textView.selectedTextRange.start];
+		if (!isnan(caretRect.origin.y) && !isinf(caretRect.origin.y)) {
+			CGFloat overflow = caretRect.origin.y + caretRect.size.height - (textView.bounds.size.height + textView.contentOffset.y - textView.contentInset.bottom - textView.contentInset.top);
+			if (overflow > 0){
+				CGPoint offset = textView.contentOffset;
+				offset.y += overflow + 12;
+				
+				[textView setContentOffset:offset animated:animated];
+			}
+		}
+	}
 }
 
 - (void)validateTextField {

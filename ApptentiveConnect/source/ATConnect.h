@@ -37,6 +37,7 @@ extern NSString *const ATSurveyIDKey;
 extern NSString *const ATIntegrationKeyUrbanAirship;
 extern NSString *const ATIntegrationKeyKahuna;
 extern NSString *const ATIntegrationKeyAmazonSNS;
+extern NSString *const ATIntegrationKeyParse;
 
 /**
  `ATConnect` is a singleton which is used as the main point of entry for the Apptentive service.
@@ -83,6 +84,7 @@ extern NSString *const ATIntegrationKeyAmazonSNS;
  * `ATIntegrationKeyUrbanAirship` - For Urban Airship
  * `ATIntegrationKeyAmazonSNS` - For Amazon SNS
  * `ATIntegrationKeyKahuna` - For Kahuna
+ * `ATIntegrationKeyParse` - For Parse
  */
 @interface ATConnect : NSObject {
 @private
@@ -455,5 +457,12 @@ extern NSString *const ATIntegrationKeyAmazonSNS;
  @param deviceToken The device token expected by AWS SNS.
  */
 - (void)addAmazonSNSIntegrationWithDeviceToken:(NSData *)deviceToken;
+
+/**
+ Adds Parse integration with the given device token.
+ 
+ @param deviceToken The device token expected by Parse.
+ */
+- (void)addParseIntegrationWithDeviceToken:(NSData *)deviceToken;
 
 @end

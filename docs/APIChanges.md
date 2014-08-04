@@ -1,5 +1,9 @@
 This document tracks changes to the API between versions.
 
+# 1.5.5
+
+ * Added `addParseIntegrationWithDeviceToken:` for integrating with Parse's Push Notification service.
+
 # 1.5.4
  * Changed the App Store rating URL to open the "Reviews" tab directly in iOS 7.1+.
  

@@ -43,6 +43,7 @@ NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 NSString *const ATIntegrationKeyUrbanAirship = @"urban_airship";
 NSString *const ATIntegrationKeyKahuna = @"kahuna";
 NSString *const ATIntegrationKeyAmazonSNS = @"aws_sns";
+NSString *const ATIntegrationKeyParse = @"parse";
 
 NSString *const ATConnectCustomPersonDataChangedNotification = @"ATConnectCustomPersonDataChangedNotification";
 NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustomDeviceDataChangedNotification";
@@ -286,6 +287,10 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (void)addAmazonSNSIntegrationWithDeviceToken:(NSData *)deviceToken {
 	[self addIntegration:ATIntegrationKeyAmazonSNS withDeviceToken:deviceToken];
+}
+
+- (void)addParseIntegrationWithDeviceToken:(NSData *)deviceToken {
+	[self addIntegration:ATIntegrationKeyParse withDeviceToken:deviceToken];
 }
 
 - (BOOL)messageCenterEnabled {

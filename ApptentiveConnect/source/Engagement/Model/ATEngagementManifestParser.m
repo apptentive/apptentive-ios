@@ -11,10 +11,21 @@
 #import "ATEngagementBackend.h"
 #import "ATInteraction.h"
 #import <UIKit/UIKit.h>
+#import "ATConnect_Debugging.h"
 
 @implementation ATEngagementManifestParser
 
 - (NSDictionary *)codePointInteractionsForEngagementManifest:(NSData *)jsonManifest {
+	
+	if ([ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogAllHTTPRequests) {
+		NSString* interactionsString = [[NSString alloc] initWithData:jsonManifest encoding:NSUTF8StringEncoding];
+		
+		ATLogDebug(@"Retrieved Apptentive Interaction JSON from server:");
+		ATLogDebug(@"%@", interactionsString);
+		
+		[interactionsString release];
+	}
+	
 	NSDictionary *codePointInteractions = nil;
 	BOOL success = NO;
 	

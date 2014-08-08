@@ -145,6 +145,10 @@
 		survey.surveyDescription = interaction.configuration[@"description"];
 	}
 	
+	if (interaction.configuration[@"required"]) {
+		survey.responseRequired = [interaction.configuration[@"required"] boolValue];
+	}
+	
 	if (interaction.configuration[@"show_success_message"]) {
 		survey.showSuccessMessage = [interaction.configuration[@"show_success_message"] boolValue];
 	}

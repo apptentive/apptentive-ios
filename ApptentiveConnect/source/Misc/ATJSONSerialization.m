@@ -11,7 +11,13 @@
 @implementation ATJSONSerialization
 + (NSData *)dataWithJSONObject:(id)obj options:(ATJSONWritingOptions)opt error:(NSError **)error {
 	if ([NSJSONSerialization isValidJSONObject:obj]) {
-		return [NSJSONSerialization dataWithJSONObject:obj options:opterr error:error];
+		NSData *jsonData = nil;
+		@try {
+			jsonData = [NSJSONSerialization dataWithJSONObject:obj options:opterr error:error];
+		} @catch (NSException *exception) {
+			ATLogError(@"Unable to create JSON data from object: %@ Exception: %@", obj, exception);
+		}
+		return jsonData;
 	} else {
 		ATLogError(@"Attempting to create JSON data from an invalid JSON object.");
 		return nil;

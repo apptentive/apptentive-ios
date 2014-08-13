@@ -274,6 +274,28 @@
     UIGraphicsEndImageContext();
     return outputImage;
 }
+
+- (UIImage *)imageByTintingWithColor:(UIColor *)color {
+	UIGraphicsBeginImageContextWithOptions(self.size, NO, [[UIScreen mainScreen] scale]);
+	CGContextRef context = UIGraphicsGetCurrentContext();
+	
+	[color setFill];
+	CGContextSetBlendMode(context, kCGBlendModeNormal);
+	CGContextTranslateCTM(context, 0, self.size.height);
+	CGContextScaleCTM(context, 1.0, -1.0);
+	
+	CGRect rect = CGRectMake(0, 0, self.size.width, self.size.height);
+	CGContextDrawImage(context, rect, self.CGImage);
+	CGContextClipToMask(context, rect, self.CGImage);
+	CGContextAddRect(context, rect);
+	CGContextDrawPath(context, kCGPathFill);
+	
+	UIImage *tinted = UIGraphicsGetImageFromCurrentImageContext();
+	UIGraphicsEndImageContext();
+	
+	return tinted;
+}
+
 @end
 
 void ATImageEffects_UIImage_Bootstrap() {

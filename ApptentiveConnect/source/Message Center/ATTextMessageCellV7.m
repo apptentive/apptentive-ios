@@ -11,6 +11,7 @@
 #import "ATBackend.h"
 #import "ATConnect_Private.h"
 #import "ATMessageSender.h"
+#import "ATUtilities.h"
 #import "UIImage+ATImageEffects.h"
 
 #define kMinimumIconConstraint 4
@@ -23,8 +24,14 @@
 	}
 	self.messageLabel.enabledTextCheckingTypes = types;
 	self.messageLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-	self.messageLabel.textColor = [UIColor blackColor];
 	
+	UIColor *backgroundColor = self.textContainerView.backgroundColor;
+	if (!backgroundColor) {
+		self.textContainerView.backgroundColor = [UIColor colorWithRed:229/255.0 green:229/255.0 blue:229/255.0 alpha:1];
+	}
+	
+	self.messageLabel.textColor = [ATUtilities contrastingTextColorForBackgroundColor:self.textContainerView.backgroundColor];
+		
 	NSString *messageBody = self.message.body;
 	if ([[self.message pendingState] intValue] == ATPendingMessageStateSending) {
 		NSString *sendingText = ATLocalizedString(@"Sending:", @"Sending prefix on messages that are sending");
@@ -60,7 +67,6 @@
 		self.messageLabel.text = messageBody;
 	}
 	
-	self.textContainerView.backgroundColor = [UIColor colorWithRed:229/255.0 green:229/255.0 blue:229/255.0 alpha:1];
 	self.textContainerView.layer.cornerRadius = 10;
 	
 	self.userIconView.image = [ATBackend imageNamed:@"at_mc_user_icon_default"];

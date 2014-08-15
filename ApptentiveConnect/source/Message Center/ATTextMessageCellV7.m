@@ -11,6 +11,7 @@
 #import "ATBackend.h"
 #import "ATConnect_Private.h"
 #import "ATMessageSender.h"
+#import "UIImage+ATImageEffects.h"
 
 #define kMinimumIconConstraint 4
 
@@ -97,7 +98,7 @@
 - (void)awakeFromNib {
 	[super awakeFromNib];
 	self.userIconOffsetConstraint.constant = kMinimumIconConstraint;
-	self.composingImageView.image = [ATBackend imageNamed:@"at_mc_text_compose_ellipsis"];
+	self.composingImageView.image = [[ATBackend imageNamed:@"at_mc_text_compose_ellipsis"] imageByTintingWithColor:[UIColor whiteColor]];
 }
 
 - (void)prepareForReuse {

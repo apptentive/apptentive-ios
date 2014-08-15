@@ -28,6 +28,8 @@
 
 + (UIViewController *)rootViewControllerForCurrentWindow;
 
++ (UIColor *)contrastingTextColorForBackgroundColor:(UIColor *)backgroundColor;
+
 #elif TARGET_OS_MAC
 + (NSData *)pngRepresentationOfImage:(NSImage *)image;
 #endif

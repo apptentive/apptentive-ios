@@ -339,6 +339,22 @@ static NSDateFormatter *dateFormatter = nil;
 	}
 }
 
++ (UIColor *)contrastingTextColorForBackgroundColor:(UIColor *)backgroundColor {
+	const CGFloat *componentColors = CGColorGetComponents(backgroundColor.CGColor);
+	
+    CGFloat colorBrightness = ((componentColors[0] * 299) + (componentColors[1] * 587) + (componentColors[2] * 114)) / 1000;
+    
+	UIColor *textColor;
+	
+	if (colorBrightness < 0.5) {
+		textColor = [UIColor whiteColor];
+    } else {
+		textColor = [UIColor blackColor];
+    }
+	
+	return textColor;
+}
+
 #elif TARGET_OS_MAC
 
 + (NSData *)pngRepresentationOfImage:(NSImage *)image {

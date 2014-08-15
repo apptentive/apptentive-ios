@@ -63,7 +63,7 @@
 	self.textContainerView.backgroundColor = [UIColor colorWithRed:229/255.0 green:229/255.0 blue:229/255.0 alpha:1];
 	self.textContainerView.layer.cornerRadius = 10;
 	
-	self.userIconView.image = [ATBackend imageNamed:@"at_mc_user_icon"];
+	self.userIconView.image = [ATBackend imageNamed:@"at_mc_user_icon_default"];
 	self.userIconView.imageURL = [NSURL URLWithString:self.message.sender.profilePhotoURL];
 	self.userIconView.layer.cornerRadius = self.userIconView.bounds.size.width*0.5;
 	self.userIconView.layer.masksToBounds = YES;

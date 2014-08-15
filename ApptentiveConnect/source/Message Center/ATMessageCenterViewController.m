@@ -276,7 +276,7 @@ typedef enum {
 				}
 				textCell.messageBubbleImage.image = chatBubbleImage;
 				
-				textCell.userIcon.image = [ATBackend imageNamed:@"at_mc_user_icon"];
+				textCell.userIcon.image = [ATBackend imageNamed:@"at_mc_user_icon_default"];
 				textCell.usernameLabel.text = ATLocalizedString(@"You", @"User name for text bubbles from users.");
 			} else {
 				textCell = developerCell;
@@ -291,7 +291,7 @@ typedef enum {
 				}
 				textCell.messageBubbleImage.image = chatBubbleImage;
 				
-				textCell.userIcon.image = [ATBackend imageNamed:@"at_mc_user_icon"];
+				textCell.userIcon.image = [ATBackend imageNamed:@"at_mc_user_icon_default"];
 			}
 			[[textCell retain] autorelease];
 			[userCell release], userCell = nil;
@@ -428,7 +428,7 @@ typedef enum {
 			ATFileMessage *fileMessage = (ATFileMessage *)message;
 			[currentCell configureWithFileMessage:fileMessage];
 		}
-		currentCell.userIcon.image = [ATBackend imageNamed:@"at_mc_user_icon"];
+		currentCell.userIcon.image = [ATBackend imageNamed:@"at_mc_user_icon_default"];
 		
 		
 		

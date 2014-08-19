@@ -1,3 +1,12 @@
+2014-08-19 pkamb v1.5.5
+--------------------------------
+
+This release improves the Message Center user interface. The Message Center background is now white, rather than a transparent panel. Message bubbles now appear in the tint color of your app, or the tint color you set on ATConnect. Default profile pictures have been improved, and other small improvements have been made.
+
+This release also improves error handling when creating Events with `customData`. An Event's `customData` dictionary will only be sent if it conforms to the `isValidJSONObject:` method of `NSJSONSerialization`.
+
+Finally, `addParseIntegrationWithDeviceToken:` has been added for integrating with Parse's Push Notification service.
+
 2014-07-21 pkamb v1.5.4
 --------------------------------
 

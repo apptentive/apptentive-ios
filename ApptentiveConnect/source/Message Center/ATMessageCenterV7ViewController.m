@@ -394,6 +394,12 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 		CGSize s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 		s.width = self.collectionView.bounds.size.width;
 		
+		// Workaround for `systemLayoutSizeFittingSize:` returning height of 0 in iOS 8 beta
+		// http://openradar.appspot.com/17958382
+		if (s.height == 0) {
+			s.height = cell.frame.size.height;
+		}
+		
 		return s;
 	} else if (cellType == ATMessageCellTypeText && [message.sentByUser boolValue]) {
 		sizingUserTextCell.messageLabel.preferredMaxLayoutWidth = self.collectionView.bounds.size.width - sizingUserTextCellHorizontalPadding;
@@ -403,6 +409,13 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 		CGSize s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 		
 		s.width = self.collectionView.bounds.size.width;
+		
+		// Workaround for `systemLayoutSizeFittingSize:` returning height of 0 in iOS 8 beta
+		// http://openradar.appspot.com/17958382
+		if (s.height == 0) {
+			s.height = cell.frame.size.height;
+		}
+		
 		return s;
 	} else if (cellType == ATMessageCellTypeText && ![message.sentByUser boolValue]) {
 		sizingDevTextCell.messageLabel.preferredMaxLayoutWidth = self.collectionView.bounds.size.width - sizingDevTextCellHorizontalPadding;
@@ -411,12 +424,26 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 		cell = sizingDevTextCell;
 		CGSize s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 		s.width = self.collectionView.bounds.size.width;
+		
+		// Workaround for `systemLayoutSizeFittingSize:` returning height of 0 in iOS 8 beta
+		// http://openradar.appspot.com/17958382
+		if (s.height == 0) {
+			s.height = cell.frame.size.height;
+		}
+		
 		return s;
 	} else if (cellType == ATMessageCellTypeFile && [message.sentByUser boolValue]) {
 		[self configureUserFileCell:sizingUserFileCell forIndexPath:indexPath];
 		cell = sizingUserFileCell;
 		CGSize s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 		s.width = self.collectionView.bounds.size.width;
+		
+		// Workaround for `systemLayoutSizeFittingSize:` returning height of 0 in iOS 8 beta
+		// http://openradar.appspot.com/17958382
+		if (s.height == 0) {
+			s.height = cell.frame.size.height;
+		}
+		
 		return s;
 	} else {
 		return CGSizeMake(self.collectionView.bounds.size.width, 40);

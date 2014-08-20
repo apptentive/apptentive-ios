@@ -616,6 +616,11 @@ static NSDateFormatter *dateFormatter = nil;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		NSArray *iconFiles = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIconFiles"];
+		if (!iconFiles) {
+			// Asset Catalog app icons
+			iconFiles = [NSBundle mainBundle].infoDictionary[@"CFBundleIcons"][@"CFBundlePrimaryIcon"][@"CFBundleIconFiles"];
+		}
+		
 		UIImage *maxImage = nil;
 		for (NSString *path in iconFiles) {
 			UIImage *image = [UIImage imageNamed:path];

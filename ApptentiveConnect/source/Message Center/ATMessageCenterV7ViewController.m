@@ -179,6 +179,21 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 		CGFloat bottomOffset = viewHeight - composerFrame.size.height;
 		CGFloat keyboardOffset = self.currentKeyboardFrameInView.origin.y - composerFrame.size.height;
 		composerFrame.origin.y = MIN(bottomOffset, keyboardOffset);
+		
+		// Hack for what I believe is an iPad `UIModalPresentationFormSheet` bug in iOS 8 beta 6.
+		// The `currentKeyboardFrameInView` origin above is offset by the same number of pixels
+		// that `UIModalPresentationFormSheet` is shifted for a landscape keyboard.
+		//  > UIModalPresentationFormSheet
+		//  > If the device is in a landscape orientation and the keyboard is visible,
+		//  > the position of the view is adjusted upward so the view remains visible.
+		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"8.0"]) {
+			if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+				UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+				if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+					composerFrame.origin.y += 54;
+				}
+			}
+		}
 	}
 	
 	collectionFrame.origin.y = 0;

@@ -174,7 +174,8 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	
 	composerFrame.origin.y = viewHeight - self.inputContainerView.frame.size.height;
 	
-	if (!CGRectEqualToRect(CGRectZero, self.currentKeyboardFrameInView)) {
+	BOOL keyboardShown = !CGRectEqualToRect(CGRectZero, self.currentKeyboardFrameInView);
+	if (keyboardShown) {
 		CGFloat bottomOffset = viewHeight - composerFrame.size.height;
 		CGFloat keyboardOffset = self.currentKeyboardFrameInView.origin.y - composerFrame.size.height;
 		composerFrame.origin.y = MIN(bottomOffset, keyboardOffset);

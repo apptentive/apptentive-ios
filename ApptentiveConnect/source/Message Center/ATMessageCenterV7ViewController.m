@@ -174,10 +174,26 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	
 	composerFrame.origin.y = viewHeight - self.inputContainerView.frame.size.height;
 	
-	if (!CGRectEqualToRect(CGRectZero, self.currentKeyboardFrameInView)) {
+	BOOL keyboardShown = !CGRectEqualToRect(CGRectZero, self.currentKeyboardFrameInView);
+	if (keyboardShown) {
 		CGFloat bottomOffset = viewHeight - composerFrame.size.height;
 		CGFloat keyboardOffset = self.currentKeyboardFrameInView.origin.y - composerFrame.size.height;
 		composerFrame.origin.y = MIN(bottomOffset, keyboardOffset);
+		
+		// Hack for what I believe is an iPad `UIModalPresentationFormSheet` bug in iOS 8 beta 6.
+		// The `currentKeyboardFrameInView` origin above is offset by the same number of pixels
+		// that `UIModalPresentationFormSheet` is shifted for a landscape keyboard.
+		//  > UIModalPresentationFormSheet
+		//  > If the device is in a landscape orientation and the keyboard is visible,
+		//  > the position of the view is adjusted upward so the view remains visible.
+		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"8.0"]) {
+			if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+				UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+				if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+					composerFrame.origin.y += 54;
+				}
+			}
+		}
 	}
 	
 	collectionFrame.origin.y = 0;
@@ -394,6 +410,12 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 		CGSize s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 		s.width = self.collectionView.bounds.size.width;
 		
+		// Workaround for `systemLayoutSizeFittingSize:` returning height of 0 in iOS 8 beta
+		// http://openradar.appspot.com/17958382
+		if (s.height == 0) {
+			s.height = cell.frame.size.height;
+		}
+		
 		return s;
 	} else if (cellType == ATMessageCellTypeText && [message.sentByUser boolValue]) {
 		sizingUserTextCell.messageLabel.preferredMaxLayoutWidth = self.collectionView.bounds.size.width - sizingUserTextCellHorizontalPadding;
@@ -403,6 +425,13 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 		CGSize s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 		
 		s.width = self.collectionView.bounds.size.width;
+		
+		// Workaround for `systemLayoutSizeFittingSize:` returning height of 0 in iOS 8 beta
+		// http://openradar.appspot.com/17958382
+		if (s.height == 0) {
+			s.height = cell.frame.size.height;
+		}
+		
 		return s;
 	} else if (cellType == ATMessageCellTypeText && ![message.sentByUser boolValue]) {
 		sizingDevTextCell.messageLabel.preferredMaxLayoutWidth = self.collectionView.bounds.size.width - sizingDevTextCellHorizontalPadding;
@@ -411,12 +440,26 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 		cell = sizingDevTextCell;
 		CGSize s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 		s.width = self.collectionView.bounds.size.width;
+		
+		// Workaround for `systemLayoutSizeFittingSize:` returning height of 0 in iOS 8 beta
+		// http://openradar.appspot.com/17958382
+		if (s.height == 0) {
+			s.height = cell.frame.size.height;
+		}
+		
 		return s;
 	} else if (cellType == ATMessageCellTypeFile && [message.sentByUser boolValue]) {
 		[self configureUserFileCell:sizingUserFileCell forIndexPath:indexPath];
 		cell = sizingUserFileCell;
 		CGSize s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 		s.width = self.collectionView.bounds.size.width;
+		
+		// Workaround for `systemLayoutSizeFittingSize:` returning height of 0 in iOS 8 beta
+		// http://openradar.appspot.com/17958382
+		if (s.height == 0) {
+			s.height = cell.frame.size.height;
+		}
+		
 		return s;
 	} else {
 		return CGSizeMake(self.collectionView.bounds.size.width, 40);

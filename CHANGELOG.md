@@ -1,3 +1,14 @@
+2014-08-24 pkamb v1.5.6
+--------------------------------
+
+This release adds initial iOS 8 support to the Apptentive SDK.
+
+Specifically, an issue has been fixed where Message Center messages are not displayed in iOS 8. An iPad layout issue has also been fixed.
+
+We will continue to add fixes as we test Apptentive with the latest iOS 8 beta releases. If you identify iOS 8 issues in the SDK, please contact us by opening a [GitHub issue](https://github.com/apptentive/apptentive-ios/issues)!
+
+This release also adds support for displaying Asset Catalog app icons.
+
 2014-08-19 pkamb v1.5.5
 --------------------------------
 

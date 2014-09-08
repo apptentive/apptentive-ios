@@ -111,6 +111,8 @@ static NSDateFormatter *dateFormatter = nil;
 			case UIInterfaceOrientationLandscapeRight:
 				origin = CGPointMake(0, 0);
 				break;
+			default:
+				break;
 		}
 		[screenshot drawAtPoint:origin];
 		UIImage *screenshotPlusStatusBar = UIGraphicsGetImageFromCurrentImageContext();
@@ -136,6 +138,8 @@ static NSDateFormatter *dateFormatter = nil;
 			break;
 		case UIInterfaceOrientationLandscapeRight:
 			imageOrientation = UIImageOrientationLeft;
+			break;
+		default:
 			break;
 	}
 	UIImage *rotated = [[[UIImage alloc] initWithCGImage:[image CGImage] scale:1 orientation:imageOrientation] autorelease];

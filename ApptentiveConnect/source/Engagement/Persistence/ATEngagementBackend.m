@@ -97,9 +97,15 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 }
 
 - (BOOL)shouldRetrieveNewEngagementManifest {
+	
+	BOOL alwaysRetrieveManifest = NO;
 #if APPTENTIVE_DEBUG
-	return YES;
+	alwaysRetrieveManifest = YES;
 #endif
+	if (alwaysRetrieveManifest) {
+		return YES;
+	}
+	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	
 	NSDate *expiration = [defaults objectForKey:ATEngagementCachedInteractionsExpirationPreferenceKey];

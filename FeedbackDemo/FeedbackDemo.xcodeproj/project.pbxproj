@@ -213,10 +213,10 @@
 		49C002DC1334172E0071F088 = {
 			isa = PBXGroup;
 			children = (
+				49C002F11334172F0071F088 /* FeedbackDemo */,
 				4960E13E13455ACE00F6311F /* ATConnect.h */,
 				492B9A131909F09D00919442 /* ATConnect_Debugging.h */,
 				49C00324133417390071F088 /* ApptentiveConnect.xcodeproj */,
-				49C002F11334172F0071F088 /* FeedbackDemo */,
 				49C003111334172F0071F088 /* FeedbackDemoTests */,
 				49C002EA1334172E0071F088 /* Frameworks */,
 				49C002E81334172E0071F088 /* Products */,

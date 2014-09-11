@@ -338,7 +338,7 @@
 	else if (self.customPlaceholderText) {
 		self.feedbackView.placeholder = self.customPlaceholderText;
 	} else {
-		self.feedbackView.placeholder = ATLocalizedString(@"Message (required)", @"Message placeholder in iOS 7 message panel");
+		self.feedbackView.placeholder = ATLocalizedString(@"How can we help? (required)", @"First feedback placeholder text.");
 	}
 	self.feedbackView.placeholderColor = [self.view tintColor];
 	

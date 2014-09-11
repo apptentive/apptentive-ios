@@ -47,8 +47,6 @@ UIEdgeInsets insetsForView(UIView *v) {
 	maxTextFieldHeight = textView.font.lineHeight * maxNumberOfLines + (2 * textFieldEdgeInsetHeight);
 	
 	textView.backgroundColor = [UIColor clearColor];
-	textView.backgroundColor = [UIColor yellowColor];
-
 	
 	textView.autoresizingMask = UIViewAutoresizingNone;
 	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {

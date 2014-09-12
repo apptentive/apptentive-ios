@@ -34,6 +34,7 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 
 NSString *const ATAppRatingFlowUserAgreedToRateAppNotification = @"ATAppRatingFlowUserAgreedToRateAppNotification";
 
+NSString *const ATSurveyShownNotification = @"ATSurveyShownNotification";
 NSString *const ATSurveySentNotification = @"ATSurveySentNotification";
 NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 

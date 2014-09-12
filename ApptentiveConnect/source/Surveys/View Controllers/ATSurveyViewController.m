@@ -185,7 +185,6 @@ enum {
 		[hud autorelease];
 	}
 	
-	NSDictionary *notificationInfo = [[NSDictionary alloc] initWithObjectsAndKeys:survey.identifier, ATSurveyIDKey, nil];
 	NSDictionary *metricsInfo = [[NSDictionary alloc] initWithObjectsAndKeys:survey.identifier, ATSurveyMetricsSurveyIDKey, [NSNumber numberWithInt:ATSurveyWindowTypeSurvey], ATSurveyWindowTypeKey, [NSNumber numberWithInt:ATSurveyEventTappedSend], ATSurveyMetricsEventKey, nil];
 	
 	[[ATEngagementBackend sharedBackend] engageApptentiveEvent:ATInteractionSurveyEventLabelSend fromInteraction:self.interaction fromViewController:self userInfo:metricsInfo];
@@ -195,8 +194,8 @@ enum {
 	
 	[self.navigationController dismissViewControllerAnimated:YES completion:NULL];
 	
+	NSDictionary *notificationInfo = @{ATSurveyIDKey: (survey.identifier ?: [NSNull null])};
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveySentNotification object:nil userInfo:notificationInfo];
-	[notificationInfo release], notificationInfo = nil;
 	
 	[response release], response = nil;
 }

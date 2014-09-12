@@ -28,9 +28,16 @@ extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 /** Notification sent when the user has agreed to rate the application. */
 extern NSString *const ATAppRatingFlowUserAgreedToRateAppNotification;
 
+/** Notification sent when a survey is shown. */
+extern NSString *const ATSurveyShownNotification;
+
 /** Notification sent when a survey is submitted by the user. */
-/** The userInfo dictionary will have a key named `ATSurveyIDKey`, with a value of the id of the survey that was sent. */
 extern NSString *const ATSurveySentNotification;
+
+/**
+ When a survey is shown or sent, notification's userInfo dictionary will contain the ATSurveyIDKey key.
+ Value is the ID of the survey that was shown or sent.
+ */
 extern NSString *const ATSurveyIDKey;
 
 /** Keys for supported 3rd-party integrations. */

@@ -7,7 +7,7 @@
 //
 
 #import "ATInteractionSurveyController.h"
-
+#import "ATConnect.h"
 #import "ATInteraction.h"
 #import "ATBackend.h"
 #import "ATSurveyParser.h"
@@ -43,6 +43,9 @@ NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
 		nc.modalPresentationStyle = UIModalPresentationFormSheet;
 	}
+	
+	NSDictionary *notificationInfo = @{ATSurveyIDKey: (survey.identifier ?: [NSNull null])};
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyShownNotification object:nil userInfo:notificationInfo];
 	
 	[[ATEngagementBackend sharedBackend] engageApptentiveEvent:ATInteractionSurveyEventLabelLaunch fromInteraction:self.interaction fromViewController:self.viewController];
 	

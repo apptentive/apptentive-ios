@@ -1,5 +1,9 @@
 This document tracks changes to the API between versions.
 
+# 1.5.7
+
+ * Added `ATSurveyShownNotification` notification when a survey is shown.
+
 # 1.5.5
 
  * Added `addParseIntegrationWithDeviceToken:` for integrating with Parse's Push Notification service.

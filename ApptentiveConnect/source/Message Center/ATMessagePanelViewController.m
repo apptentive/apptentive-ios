@@ -1010,6 +1010,17 @@ enum {
 	f.origin.x = originX;
 	f.size.width = viewWidth;
 	f.size.height = viewHeight;
+
+	// Fix for iOS 8.
+	// Should convert message panel to Auto Layout.
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"8.0"]) {
+		if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+			CGFloat width = screenBounds.size.width - 12;
+			CGFloat height = screenBounds.size.height - lastKeyboardRect.size.height - statusBarSize.height;
+			
+			f = CGRectMake(6, 0, width, height);
+		}
+	}
 	
 	return f;
 }

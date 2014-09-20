@@ -194,6 +194,18 @@ enum {
 		shadowView = [[ATShadowView alloc] initWithFrame:self.window.bounds];
 	}
 	shadowView.tag = kMessagePanelGradientLayerTag;
+	
+	// Fix for iOS 8.
+	// Should convert message panel to Auto Layout.
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"8.0"]) {
+		UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+		if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+			CGRect originZero = self.window.frame;
+			originZero.origin = CGPointZero;
+			self.window.frame = originZero;
+		}
+	}
+	
 	[self.window addSubview:shadowView];
 	[self.window sendSubviewToBack:shadowView];
 	shadowView.alpha = 1.0;

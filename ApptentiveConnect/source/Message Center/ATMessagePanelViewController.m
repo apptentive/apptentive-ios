@@ -1074,9 +1074,59 @@ enum {
 	self.toolbarShadowImage.frame = toolbarShadowImageFrame;
 	
 	self.window.transform = CGAffineTransformMakeRotation(angle);
-	self.window.frame = newFrame;
+	
+	// Fix for iOS 8.
+	// Should convert message panel to Auto Layout.
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"8.0"]) {
+		CGRect windowFrame;
+		switch (orientation) {
+			case UIInterfaceOrientationLandscapeLeft:
+			case UIInterfaceOrientationLandscapeRight:
+			{
+				CGFloat statusBarShift = (orientation == UIInterfaceOrientationLandscapeLeft) ? statusBarSize.height : 0;
+				windowFrame = CGRectMake(statusBarShift, 0, originalPresentingWindow.bounds.size.height - statusBarSize.height, originalPresentingWindow.bounds.size.width);
+				break;
+			}
+			case UIInterfaceOrientationPortraitUpsideDown:
+			case UIInterfaceOrientationPortrait:
+			default:
+				windowFrame = newFrame;
+				break;
+		}
+		self.window.frame = windowFrame;
+	} else {
+		self.window.frame = newFrame;
+	}
+	
+	// Fix for iOS 8.
+	// Should convert message panel to Auto Layout.
 	CGRect onscreenRect = [self onscreenRectOfView];
-	self.containerView.frame = onscreenRect;
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"8.0"]) {
+		CGRect contentFrame;
+		switch (orientation) {
+			case UIInterfaceOrientationLandscapeLeft:
+			case UIInterfaceOrientationLandscapeRight:
+			{
+				CGFloat originY = 2;
+				CGFloat keyboardHeight = lastKeyboardRect.size.height;
+				CGFloat contentHeight = self.view.window.bounds.size.height - keyboardHeight - 2 * originY;
+
+				CGFloat contentWidth = self.view.window.bounds.size.width - 100.0;
+				CGFloat originX = floorf((self.view.window.bounds.size.width - contentWidth) / 2.0);
+
+				contentFrame = CGRectMake(originX, originY, contentWidth, contentHeight);
+				break;
+			}
+			case UIInterfaceOrientationPortraitUpsideDown:
+			case UIInterfaceOrientationPortrait:
+			default:
+				contentFrame = onscreenRect;
+				break;
+		}
+		self.containerView.frame = contentFrame;
+	} else {
+		self.containerView.frame = onscreenRect;
+	}
 	
 	[self textViewDidChange:self.feedbackView];
 	

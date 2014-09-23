@@ -140,6 +140,11 @@
 				continue;
 			}
 			
+			if ([key isEqualToString:@"integration_config"]) {
+				// Skip "integration_config"; not used for targeting.
+				continue;
+			}
+			
 			NSObject *value = deviceData[key];
 			if (value) {
 				NSString *criteriaKey = [NSString stringWithFormat:@"device/%@", [ATUtilities stringByEscapingForURLArguments:key]];

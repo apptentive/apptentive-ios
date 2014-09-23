@@ -906,4 +906,44 @@
 	XCTAssertNoThrow([[ATConnect sharedConnection] engage:@"test_event" withCustomData:nil withExtendedData:nil fromViewController:nil], @"nil custom data or extended data should not throw exception!");
 }
 
+- (void)testCustomDeviceDataCriteria {
+	ATInteraction *interaction = [[ATInteraction alloc] init];
+	interaction.criteria = @{@"device/custom_data/test_device_custom_data": @"test_value"};
+
+	XCTAssertFalse([interaction criteriaAreMet], @"Criteria should not be met before adding custom data.");
+	
+	[[ATConnect sharedConnection] addCustomDeviceData:@"test_value" withKey:@"test_device_custom_data"];
+	
+	XCTAssertTrue([interaction criteriaAreMet], @"Criteria should be met after adding custom data.");
+
+	interaction.criteria = @{@"device/custom_data/test_device_custom_data": @"test_value",
+							 @"device/custom_data/test_version": @"4.5.1"};
+	
+	XCTAssertFalse([interaction criteriaAreMet], @"Criteria should not be met before adding custom data.");
+
+	[[ATConnect sharedConnection] addCustomDeviceData:@"4.5.1" withKey:@"test_version"];
+
+	XCTAssertTrue([interaction criteriaAreMet], @"Criteria should be met after adding custom data.");
+}
+
+- (void)testCustomPersonDataCriteria {
+	ATInteraction *interaction = [[ATInteraction alloc] init];
+	interaction.criteria = @{@"person/custom_data/hair_color": @"black"};
+	
+	XCTAssertFalse([interaction criteriaAreMet], @"Criteria should not be met before adding custom data.");
+	
+	[[ATConnect sharedConnection] addCustomPersonData:@"black" withKey:@"hair_color"];
+	
+	XCTAssertTrue([interaction criteriaAreMet], @"Criteria should be met after adding custom data.");
+	
+	interaction.criteria = @{@"person/custom_data/hair_color": @"black",
+							 @"person/custom_data/age": @"27"};
+	
+	XCTAssertFalse([interaction criteriaAreMet], @"Criteria should not be met before adding custom data.");
+	
+	[[ATConnect sharedConnection] addCustomPersonData:@"27" withKey:@"age"];
+	
+	XCTAssertTrue([interaction criteriaAreMet], @"Criteria should be met after adding custom data.");
+}
+
 @end

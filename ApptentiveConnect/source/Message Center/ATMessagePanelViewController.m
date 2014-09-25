@@ -194,6 +194,18 @@ enum {
 		shadowView = [[ATShadowView alloc] initWithFrame:self.window.bounds];
 	}
 	shadowView.tag = kMessagePanelGradientLayerTag;
+	
+	// Fix for iOS 8.
+	// Should convert message panel to Auto Layout.
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"8.0"]) {
+		UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+		if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+			CGRect originZero = self.window.frame;
+			originZero.origin = CGPointZero;
+			self.window.frame = originZero;
+		}
+	}
+	
 	[self.window addSubview:shadowView];
 	[self.window sendSubviewToBack:shadowView];
 	shadowView.alpha = 1.0;
@@ -1010,6 +1022,17 @@ enum {
 	f.origin.x = originX;
 	f.size.width = viewWidth;
 	f.size.height = viewHeight;
+
+	// Fix for iOS 8.
+	// Should convert message panel to Auto Layout.
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"8.0"]) {
+		if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+			CGFloat width = screenBounds.size.width - 12;
+			CGFloat height = screenBounds.size.height - lastKeyboardRect.size.height - statusBarSize.height;
+			
+			f = CGRectMake(6, 0, width, height);
+		}
+	}
 	
 	return f;
 }
@@ -1074,9 +1097,59 @@ enum {
 	self.toolbarShadowImage.frame = toolbarShadowImageFrame;
 	
 	self.window.transform = CGAffineTransformMakeRotation(angle);
-	self.window.frame = newFrame;
+	
+	// Fix for iOS 8.
+	// Should convert message panel to Auto Layout.
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"8.0"]) {
+		CGRect windowFrame;
+		switch (orientation) {
+			case UIInterfaceOrientationLandscapeLeft:
+			case UIInterfaceOrientationLandscapeRight:
+			{
+				CGFloat statusBarShift = (orientation == UIInterfaceOrientationLandscapeLeft) ? statusBarSize.height : 0;
+				windowFrame = CGRectMake(statusBarShift, 0, originalPresentingWindow.bounds.size.height - statusBarSize.height, originalPresentingWindow.bounds.size.width);
+				break;
+			}
+			case UIInterfaceOrientationPortraitUpsideDown:
+			case UIInterfaceOrientationPortrait:
+			default:
+				windowFrame = newFrame;
+				break;
+		}
+		self.window.frame = windowFrame;
+	} else {
+		self.window.frame = newFrame;
+	}
+	
+	// Fix for iOS 8.
+	// Should convert message panel to Auto Layout.
 	CGRect onscreenRect = [self onscreenRectOfView];
-	self.containerView.frame = onscreenRect;
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"8.0"]) {
+		CGRect contentFrame;
+		switch (orientation) {
+			case UIInterfaceOrientationLandscapeLeft:
+			case UIInterfaceOrientationLandscapeRight:
+			{
+				CGFloat originY = 2;
+				CGFloat keyboardHeight = lastKeyboardRect.size.height;
+				CGFloat contentHeight = self.view.window.bounds.size.height - keyboardHeight - 2 * originY;
+
+				CGFloat contentWidth = self.view.window.bounds.size.width - 100.0;
+				CGFloat originX = floorf((self.view.window.bounds.size.width - contentWidth) / 2.0);
+
+				contentFrame = CGRectMake(originX, originY, contentWidth, contentHeight);
+				break;
+			}
+			case UIInterfaceOrientationPortraitUpsideDown:
+			case UIInterfaceOrientationPortrait:
+			default:
+				contentFrame = onscreenRect;
+				break;
+		}
+		self.containerView.frame = contentFrame;
+	} else {
+		self.containerView.frame = onscreenRect;
+	}
 	
 	[self textViewDidChange:self.feedbackView];
 	

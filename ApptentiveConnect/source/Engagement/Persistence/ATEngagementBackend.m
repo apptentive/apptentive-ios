@@ -251,13 +251,16 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	BOOL didEngageInteraction = NO;
 	
 	NSArray *interactions = [codePointInteractions objectForKey:codePoint];
-	ATLogInfo(@"%@", [NSString stringWithFormat:@"--Found %tu available interaction%@.", interactions.count, (interactions.count == 1) ? @"" : @"s"]);
 	
-	if (interactions.count > 0) {
+	ATLogInfo(@"%@", [NSString stringWithFormat:@"--Found %tu downloaded and available interaction%@ targeted at the event \"%@\".", interactions.count, (interactions.count == 1) ? @"" : @"s", codePoint]);
+	
+	if (interactions.count == 0) {
+		ATLogInfo(@"--If you are expecting an interaction to be available for this event, try resetting the cache by deleting and re-running the app on your device/simulator.");
+	}
+	else if (interactions.count > 0) {
 		ATInteraction *interaction = [self interactionForCodePoint:codePoint];
 		if (interaction) {
-			ATLogInfo(@"--Running valid %@ interaction.", interaction.type, codePoint);
-			ATLogInfo(@"");
+			ATLogInfo(@"--Running valid %@ interaction.", interaction.type);
 			[self presentInteraction:interaction fromViewController:viewController];
 			[self interactionWasEngaged:interaction];
 			didEngageInteraction = YES;
@@ -265,8 +268,7 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 			[[NSUserDefaults standardUserDefaults] synchronize];
 		} else {
 			ATLogInfo(@"--Criteria not met for available interaction%@.", (interactions.count == 1) ? @"" : @"s");
-			ATLogInfo(@"--There are no valid Apptentive interactions to run at this time.");
-			ATLogInfo(@"");
+			ATLogInfo(@"--If you are expecting an interaction to be shown at this time, make sure you have fully met the interaction's requirements as set on your Apptentive dashboard.");
 		}
 	}
 	

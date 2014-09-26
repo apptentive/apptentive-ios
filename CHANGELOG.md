@@ -1,3 +1,9 @@
+2014-09-26 pkamb v1.5.8
+--------------------------------
+This release adds a number of fixes for the landscape presentation of Message Center in iOS 8. If you discover other iOS 8 issues in your app, please contact us!
+
+We have also fixed an issue related to targeting interactions based upon custom data. If you are targeting Surveys or Rating Prompts to show only to people with certain `device` or `person` custom data attributes, you will need to update to this version of the SDK.
+
 2014-09-12 pkamb v1.5.7
 --------------------------------
 

@@ -51,6 +51,12 @@
 	device[@"uuid"] = [[ATBackend sharedBackend] deviceUUID];
 	device[@"os_name"] = [ATUtilities currentSystemName];
 	device[@"os_version"] = [ATUtilities currentSystemVersion];
+	
+	NSString *systemBuild = [ATUtilities currentSystemBuild];
+	if (systemBuild) {
+		device[@"os_build"] = systemBuild;
+	}
+	
 	device[@"hardware"] = [ATUtilities currentMachineName];
 	
 	NSString *carrier = [ATDeviceInfo carrier];

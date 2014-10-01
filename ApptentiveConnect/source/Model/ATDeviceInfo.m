@@ -48,16 +48,30 @@
 - (NSDictionary *)apiJSON {
 	NSMutableDictionary *device = [NSMutableDictionary dictionary];
 	
-	device[@"uuid"] = [[ATBackend sharedBackend] deviceUUID];
-	device[@"os_name"] = [ATUtilities currentSystemName];
-	device[@"os_version"] = [ATUtilities currentSystemVersion];
+	NSString *uuid = [[ATBackend sharedBackend] deviceUUID];
+	if (uuid) {
+		device[@"uuid"] = uuid;
+	}
+	
+	NSString *osName = [ATUtilities currentSystemName];
+	if (osName) {
+		device[@"os_name"] = osName;
+	}
+	
+	NSString *osVersion = [ATUtilities currentSystemVersion];
+	if (osVersion) {
+		device[@"os_version"] = osVersion;
+	}
 	
 	NSString *systemBuild = [ATUtilities currentSystemBuild];
 	if (systemBuild) {
 		device[@"os_build"] = systemBuild;
 	}
 	
-	device[@"hardware"] = [ATUtilities currentMachineName];
+	NSString *machineName = [ATUtilities currentMachineName];
+	if (machineName) {
+		device[@"hardware"] = machineName;
+	}
 	
 	NSString *carrier = [ATDeviceInfo carrier];
 	if (carrier != nil) {

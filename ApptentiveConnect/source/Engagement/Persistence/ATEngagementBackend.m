@@ -193,6 +193,16 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	return nil;
 }
 
+- (BOOL)willShowInteractionForLocalEvent:(NSString *)event {
+	return [self willShowInteractionForCodePoint:[ATEngagementBackend codePointForLocalEvent:event]];
+}
+
+- (BOOL)willShowInteractionForCodePoint:(NSString *)codePoint {
+	ATInteraction *interaction = [[ATEngagementBackend sharedBackend] interactionForCodePoint:codePoint];
+	
+	return (interaction != nil);
+}
+
 + (NSString *)stringByEscapingCodePointSeparatorCharactersInString:(NSString *)string {
 	// Only escape "%", "/", and "#".
 	// Do not change unless the server spec changes.

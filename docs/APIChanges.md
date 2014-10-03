@@ -1,5 +1,9 @@
 This document tracks changes to the API between versions.
 
+# 1.5.9
+
+ * Added `willShowInteractionForEvent:` method for determining if an interaction will be shown the next time you engage the given event.
+
 # 1.5.7
 
  * Added `ATSurveyShownNotification` notification when a survey is shown.

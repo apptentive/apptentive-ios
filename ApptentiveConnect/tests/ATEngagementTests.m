@@ -946,4 +946,26 @@
 	XCTAssertTrue([interaction criteriaAreMet], @"Criteria should be met after adding custom data.");
 }
 
+- (void)testWillShowInteractionForEvent {
+	ATInteraction *willShow = [[ATInteraction alloc] init];
+	willShow.criteria = @{};
+	willShow.type = @"Survey";
+	
+	ATInteraction *willNotShow = [[ATInteraction alloc] init];
+	willNotShow.criteria = @{@"cannot_parse_criteria": @"cannot_parse_criteria"};
+	willShow.type = @"Survey";
+	
+	NSDictionary *codePointInteractions = @{[ATEngagementBackend codePointForLocalEvent:@"willShow"]: @[willShow],
+											[ATEngagementBackend codePointForLocalEvent:@"willNotShow"]: @[willNotShow]};
+	
+	
+	[[ATEngagementBackend sharedBackend] didReceiveNewCodePointInteractions:codePointInteractions maxAge:60];
+	
+	XCTAssertTrue([willShow isValid], @"Event should be valid.");
+	XCTAssertTrue([[ATConnect sharedConnection] willShowInteractionForEvent:@"willShow"], @"If interaction is valid, it will be shown for the next targeted event.");
+	
+	XCTAssertFalse([willNotShow isValid], @"Event should not be valid.");
+	XCTAssertFalse([[ATConnect sharedConnection] willShowInteractionForEvent:@"willNotShow"], @"If interaction is not valid, it will not be shown for the next targeted event.");
+}
+
 @end

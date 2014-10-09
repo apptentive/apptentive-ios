@@ -308,6 +308,10 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 #if TARGET_OS_IPHONE
 
+- (BOOL)willShowInteractionForEvent:(NSString *)event {
+	return [[ATEngagementBackend sharedBackend] willShowInteractionForLocalEvent:event];
+}
+
 - (BOOL)engage:(NSString *)eventLabel fromViewController:(UIViewController *)viewController {
 	return [[ATEngagementBackend sharedBackend] engageLocalEvent:eventLabel fromViewController:viewController];
 }

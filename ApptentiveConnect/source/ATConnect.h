@@ -207,7 +207,7 @@ extern NSString *const ATIntegrationKeyParse;
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController;
 
 /**
- Returns whether or not an interaction will be shown if you engage the given event.
+ Returns YES if engaging the given event will cause an Interaction to be shown, otherwise returns NO.
  
  For example, returns YES if a survey is ready to be shown the next time you engage your survey-targeted event.
  You can use this method to hide a "Show Survey" button in your app if there is no survey to take.

@@ -1,6 +1,6 @@
 This document tracks changes to the API between versions.
 
-# 1.5.9
+# 1.6.0
 
  * Added `willShowInteractionForEvent:` method for determining if an interaction will be shown the next time you engage the given event.
 

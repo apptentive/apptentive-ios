@@ -97,7 +97,7 @@ static NSDateFormatter *dateFormatter = nil;
 		CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
 		CGFloat statusBarHeight = MIN(statusBarSize.width, statusBarSize.height);
 		
-		CGPoint origin;
+		CGPoint origin = CGPointZero;
 		UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
 		switch (orientation) {
 			case UIInterfaceOrientationPortrait:

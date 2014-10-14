@@ -170,10 +170,12 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
 	//NSLog(@"size is: %@", NSStringFromCGRect(self.view.bounds));
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+	[super viewWillDisappear:animated];
 	if (shouldResign) {
 		[delegate imageViewControllerWillDismiss:self animated:animated];
 		[delegate release], delegate = nil;

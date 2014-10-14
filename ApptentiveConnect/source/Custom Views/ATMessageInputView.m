@@ -91,6 +91,7 @@ UIEdgeInsets insetsForView(UIView *v) {
 }
 
 - (BOOL)resignFirstResponder {
+	[super resignFirstResponder];
 	return textView.resignFirstResponder;
 }
 

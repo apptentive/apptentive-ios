@@ -112,6 +112,7 @@ static NSDateFormatter *dateFormatter = nil;
 				origin = CGPointMake(0, 0);
 				break;
 			default:
+				origin = CGPointZero;
 				break;
 		}
 		[screenshot drawAtPoint:origin];

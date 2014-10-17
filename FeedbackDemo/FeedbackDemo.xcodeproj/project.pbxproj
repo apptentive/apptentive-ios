@@ -45,6 +45,7 @@
 		584D266E1819BCA70090BD1B /* icon-144x144.png in Resources */ = {isa = PBXBuildFile; fileRef = 584D266B1819BCA70090BD1B /* icon-144x144.png */; };
 		584D266F1819BCA70090BD1B /* icon-152x152.png in Resources */ = {isa = PBXBuildFile; fileRef = 584D266C1819BCA70090BD1B /* icon-152x152.png */; };
 		58805F3B18120EBA00210DA5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58805F3A18120EBA00210DA5 /* Accelerate.framework */; };
+		58849A5019F0AA4E00641140 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 58849A4F19F0AA4D00641140 /* Launch Screen.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -150,6 +151,7 @@
 		584D266B1819BCA70090BD1B /* icon-144x144.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-144x144.png"; sourceTree = "<group>"; };
 		584D266C1819BCA70090BD1B /* icon-152x152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-152x152.png"; sourceTree = "<group>"; };
 		58805F3A18120EBA00210DA5 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		58849A4F19F0AA4D00641140 /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
 		58EA5B3517B4778F00ECEB4B /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		58EA5B3A17B4795B00ECEB4B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		58EA5B4017B47A4600ECEB4B /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -260,6 +262,7 @@
 				49C002FB1334172F0071F088 /* FeedbackDemoAppDelegate.m */,
 				49C003001334172F0071F088 /* RootViewController.h */,
 				49C003011334172F0071F088 /* RootViewController.m */,
+				58849A4F19F0AA4D00641140 /* Launch Screen.xib */,
 				49E5A52917F24C9F00146FDD /* MainWindow-iPad.xib */,
 				49E5A52A17F24C9F00146FDD /* MainWindow.xib */,
 				49E5A52B17F24C9F00146FDD /* RootViewController.xib */,
@@ -445,6 +448,7 @@
 				4960E1291344326B00F6311F /* icon-29x29.png in Resources */,
 				584D26681819B0010090BD1B /* icon-120x120.png in Resources */,
 				584D266D1819BCA70090BD1B /* icon-76x76.png in Resources */,
+				58849A5019F0AA4E00641140 /* Launch Screen.xib in Resources */,
 				4960E12A1344326B00F6311F /* icon-58x58.png in Resources */,
 				496ED769185829BF001C14FC /* iOS7-Default568h@2x.png in Resources */,
 				4960E12B1344326B00F6311F /* icon-72x72.png in Resources */,

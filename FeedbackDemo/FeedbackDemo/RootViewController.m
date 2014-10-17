@@ -134,11 +134,11 @@ enum kSurveyRows {
 	}
 	cell.textLabel.textColor = [UIColor blackColor];
 	if (indexPath.section == kRatingSection) {
-		cell.textLabel.text = @"Engage `testRatingFlow` event";
+		cell.textLabel.text = [NSString stringWithFormat:@"Engage `%@` event", kApptentiveEvent1];
 	} else if (indexPath.section == kSurveySection) {
 		if (indexPath.row == kSurveyRowShowSurvey) {
 			// Engagement Surveys
-			cell.textLabel.text = @"Engage 'showSurvey' event";
+			cell.textLabel.text = [NSString stringWithFormat:@"Engage `%@` event", kApptentiveEvent2];
 			cell.textLabel.textColor = [UIColor blackColor];
 		} else if (indexPath.row == kSurveyRowShowSurveyWithTags) {
 			cell = [tableView dequeueReusableCellWithIdentifier:SurveyTagsCell];
@@ -146,7 +146,7 @@ enum kSurveyRows {
 				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:SurveyTagsCell] autorelease];
 			}
 			
-			cell.textLabel.text = @"Engage 'presentSurvey' event";
+			cell.textLabel.text = [NSString stringWithFormat:@"Engage `%@` event", kApptentiveEvent3];
 			cell.textLabel.textColor = [UIColor blackColor];
 			//cell.detailTextLabel.text = [NSString stringWithFormat:@"presentSurvey"];
 		}
@@ -180,15 +180,15 @@ enum kSurveyRows {
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (indexPath.section == kRatingSection) {
 		// Engagement Rating Flow Testing
-		[[ATConnect sharedConnection] engage:@"testRatingFlow" fromViewController:self];
+		[[ATConnect sharedConnection] engage:kApptentiveEvent1 fromViewController:self];
 		
 		// Legacy method for forcing Ratings Flow to show
 		//[self showRating:nil];
 	} else if (indexPath.section == kSurveySection) {
 		if (indexPath.row == kSurveyRowShowSurvey) {
-			[[ATConnect sharedConnection] engage:@"showSurvey" fromViewController:self];
+			[[ATConnect sharedConnection] engage:kApptentiveEvent2 fromViewController:self];
 		} else if (indexPath.row == kSurveyRowShowSurveyWithTags) {
-			[[ATConnect sharedConnection] engage:@"presentSurvey" fromViewController:self];
+			[[ATConnect sharedConnection] engage:kApptentiveEvent3 fromViewController:self];
 		}
 	} else if (indexPath.section == kMessageCenterSection) {
 		if (indexPath.row == kMessageCenterRowShowMessageCenter) {

@@ -133,6 +133,8 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 		}
 	}
 	else {
+		ATLogError(@"Could not open App Store because App ID is not set locally or on the Apptentive dashboard.");
+		
 		[self showUnableToOpenAppStoreDialog];
 	}
 }

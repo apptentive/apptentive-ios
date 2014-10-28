@@ -13,7 +13,7 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
-#define kATConnectVersionString @"1.5.6"
+#define kATConnectVersionString @"1.6.0"
 
 #if TARGET_OS_IPHONE
 #	define kATConnectPlatformString @"iOS"
@@ -206,6 +206,16 @@ extern NSString *const ATIntegrationKeyParse;
  */
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController;
 
+/**
+ Returns YES if engaging the given event will cause an Interaction to be shown, otherwise returns NO.
+ 
+ For example, returns YES if a survey is ready to be shown the next time you engage your survey-targeted event.
+ You can use this method to hide a "Show Survey" button in your app if there is no survey to take.
+ 
+ @param event A string representing the name of the event.
+ */
+- (BOOL)willShowInteractionForEvent:(NSString *)event;
+
 /** 
  Shows interaction UI, if applicable, related to a given event.
  
@@ -214,29 +224,29 @@ extern NSString *const ATIntegrationKeyParse;
  
  Returns whether or not an interaction was successfully found and run.
  
- @param eventLabel A string representing the name of the event.
+ @param event A string representing the name of the event.
  @param viewController A view controller Apptentive UI may be presented from.
  */
-- (BOOL)engage:(NSString *)eventLabel fromViewController:(UIViewController *)viewController;
+- (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController;
 
 /**
  Engages an event along with custom data about that event. Interaction UI may be shown, if applicable, for the event.
  
- @param eventLabel A string representing the name of the event.
+ @param event A string representing the name of the event.
  @param customData A dictionary of key/value pairs to be associated with the event. Keys and values should conform to standards of NSJSONSerialization's `isValidJSONObject:`.
  @param viewController A view controller Apptentive UI may be presented from.
  */
-- (BOOL)engage:(NSString *)eventLabel withCustomData:(NSDictionary *)customData fromViewController:(UIViewController *)viewController;
+- (BOOL)engage:(NSString *)event withCustomData:(NSDictionary *)customData fromViewController:(UIViewController *)viewController;
 
 /**
  Engages an event along with custom data and extended data about that event. Interaction UI may be shown, if applicable, for the event.
  
- @param eventLabel A string representing the name of the event.
+ @param event A string representing the name of the event.
  @param customData A dictionary of key/value pairs to be associated with the event. Keys and values should conform to standards of NSJSONSerialization's `isValidJSONObject:`.
  @param extendedData An array of dictionaries with specific Apptentive formatting. For example, [ATConnect extendedDataDate:[NSDate date]].
  @param viewController A view controller Apptentive UI may be presented from.
  */
-- (BOOL)engage:(NSString *)eventLabel withCustomData:(NSDictionary *)customData withExtendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController;
+- (BOOL)engage:(NSString *)event withCustomData:(NSDictionary *)customData withExtendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController;
 
 /**
  Dismisses the message center. You normally won't need to call this.

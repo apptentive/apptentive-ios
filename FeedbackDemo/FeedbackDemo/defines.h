@@ -8,3 +8,7 @@
 
 #define kApptentiveAPIKey @"ApptentiveApiKey"
 #define kApptentiveAppID @"ExampleAppID"
+
+#define kApptentiveEvent1 @"testRatingFlow"
+#define kApptentiveEvent2 @"showSurvey"
+#define kApptentiveEvent3 @"presentSurvey"

@@ -128,26 +128,71 @@
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesBuild];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesTimeAgo];
 	
+	// Device
 	ATDeviceInfo *deviceInfo = [[[ATDeviceInfo alloc] init] autorelease];
-	NSDictionary *deviceData = [[deviceInfo apiJSON] objectForKey:@"device"];
-	for (NSString *key in [deviceData allKeys]) {
-		NSObject *value = [deviceData objectForKey:key];
-		NSString *criteriaKey = [NSString stringWithFormat:@"device/%@", [ATUtilities stringByEscapingForURLArguments:key]];
+	if (deviceInfo) {
+		NSDictionary *deviceData = [deviceInfo apiJSON][@"device"];
+
+		// Device information
+		for (NSString *key in [deviceData allKeys]) {
+			if ([key isEqualToString:@"custom_data"]) {
+				// Custom data is added below.
+				continue;
+			}
+			
+			if ([key isEqualToString:@"integration_config"]) {
+				// Skip "integration_config"; not used for targeting.
+				continue;
+			}
+			
+			NSObject *value = deviceData[key];
+			if (value) {
+				NSString *criteriaKey = [NSString stringWithFormat:@"device/%@", [ATUtilities stringByEscapingForURLArguments:key]];
+				predicateEvaluationDictionary[criteriaKey] = value;
+			}
+		}
 		
-		if (value) {
-			predicateEvaluationDictionary[criteriaKey] = value;
+		// Device custom data
+		NSDictionary *customData = deviceData[@"custom_data"];
+		if (customData) {
+			for (NSString *key in customData) {
+				NSObject *value = customData[key];
+				if (value) {
+					NSString *criteriaKey = [NSString stringWithFormat:@"device/custom_data/%@", [ATUtilities stringByEscapingForURLArguments:key]];
+					predicateEvaluationDictionary[criteriaKey] = value;
+				}
+			}
 		}
 	}
-
+	
+	// Person
 	ATPersonInfo *personInfo = [ATPersonInfo currentPerson];
 	if (personInfo) {
 		NSDictionary *personData = [[personInfo apiJSON] objectForKey:@"person"];
+		
+		// Person information
 		for (NSString *key in [personData allKeys]) {
-			NSObject *value = [personData objectForKey:key];
-			NSString *criteriaKey = [NSString stringWithFormat:@"person/%@", [ATUtilities stringByEscapingForURLArguments:key]];
+			if ([key isEqualToString:@"custom_data"]) {
+				// Custom data is added below.
+				continue;
+			}
 			
+			NSObject *value = personData[key];
 			if (value) {
+				NSString *criteriaKey = [NSString stringWithFormat:@"person/%@", [ATUtilities stringByEscapingForURLArguments:key]];
 				predicateEvaluationDictionary[criteriaKey] = value;
+			}
+		}
+		
+		// Person custom data
+		NSDictionary *customData = personData[@"custom_data"];
+		if (customData) {
+			for (NSString *key in customData) {
+				NSObject *value = customData[key];
+				if (value) {
+					NSString *criteriaKey = [NSString stringWithFormat:@"person/custom_data/%@", [ATUtilities stringByEscapingForURLArguments:key]];
+					predicateEvaluationDictionary[criteriaKey] = value;
+				}
 			}
 		}
 	}

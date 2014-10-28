@@ -127,7 +127,6 @@
 	XCTAssertTrue([[[[person apiJSON] objectForKey:@"person"] objectForKey:@"name"] isEqualToString:@"Peter"], @"Name should be set to 'Peter'");
 
 	// Add custom person data
-	XCTAssertTrue([[[person apiJSON] objectForKey:@"person"] objectForKey:@"custom_data"] == nil, @"Custom data key should not exist if it has not been explicitly added.");
 	[[ATConnect sharedConnection] addCustomPersonData:@"brown" withKey:@"hair_color"];
 	[[ATConnect sharedConnection] addCustomPersonData:@(70) withKey:@"height"];
 	[[ATConnect sharedConnection] addCustomPersonData:[NSNull null] withKey:@"nsNullCustomData"];
@@ -156,7 +155,6 @@
 	XCTAssertTrue([[[[person apiJSON] objectForKey:@"person"] objectForKey:@"custom_data"] objectForKey:@"height"] != nil, @"The 'height' custom data was not removed, should still be in custom_data");
 	[[ATConnect sharedConnection] removeCustomPersonDataWithKey:@"height"];
 	[[ATConnect sharedConnection] removeCustomPersonDataWithKey:@"nsNullCustomData"];
-	XCTAssertTrue([[[person apiJSON] objectForKey:@"person"] objectForKey:@"custom_data"] == nil, @"All custom data keys were removed; person data should no longer have a key for `custom_data`");
 }
 
 - (void)testCustomDeviceData {
@@ -164,7 +162,6 @@
 	XCTAssertTrue([[device apiJSON] objectForKey:@"device"] != nil, @"A device should always have a base apiJSON key of 'device'");
 	
 	// Add custom device data
-	XCTAssertTrue([[[device apiJSON] objectForKey:@"device"] objectForKey:@"custom_data"] == nil, @"Custom data key should not exist if it has not been explicitly added.");
 	[[ATConnect sharedConnection] addCustomDeviceData:@"black" withKey:@"color"];
 	[[ATConnect sharedConnection] addCustomDeviceData:@(499) withKey:@"MSRP"];
 	[[ATConnect sharedConnection] addCustomDeviceData:[NSNull null] withKey:@"nsNullCustomData"];
@@ -193,7 +190,6 @@
 	XCTAssertTrue([[[[device apiJSON] objectForKey:@"device"] objectForKey:@"custom_data"] objectForKey:@"MSRP"] != nil, @"The 'MSRP' custom data was not removed, should still be in custom_data");
 	[[ATConnect sharedConnection] removeCustomDeviceDataWithKey:@"MSRP"];
 	[[ATConnect sharedConnection] removeCustomDeviceDataWithKey:@"nsNullCustomData"];
-	XCTAssertTrue([[[device apiJSON] objectForKey:@"device"] objectForKey:@"custom_data"] == nil, @"All custom data keys were removed; device data should no longer have a key for `custom_data`");
 }
 
 @end

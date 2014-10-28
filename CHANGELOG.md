@@ -1,3 +1,32 @@
+2014-10-20 pkamb v1.6.0
+--------------------------------
+The 1.6.0 release adds the method `willShowInteractionForEvent:`, which returns YES if engaging the given event will cause an Interaction to be shown. 
+
+For example, `willShowInteractionForEvent:` returns YES if a survey is ready to be shown the next time you engage your survey-targeted event. You can thus use this method to hide a "Show Survey" button in your app if there is no survey to take.
+
+We have also fixed an issue with adding photos to Message Center on iOS 8 iPads, as well as some Xcode 6 static analyzer warnings.
+
+Finally, we have added xib-based Launch Images to the Apptentive demo app. This fixes an issue when presenting Message Center from landscape on iPhone 6 and 6 Plus devices. If you are experiencing the same problem, you will most likely need to add Launch Images for the new iPhone screen sizes to your parent app.
+
+2014-09-26 pkamb v1.5.8
+--------------------------------
+This release adds a number of fixes for the landscape presentation of Message Center in iOS 8. If you discover other iOS 8 issues in your app, please contact us!
+
+We have also fixed an issue related to targeting interactions based upon custom data. If you are targeting Surveys or Rating Prompts to show only to people with certain `device` or `person` custom data attributes, you will need to update to this version of the SDK.
+
+2014-09-12 pkamb v1.5.7
+--------------------------------
+
+This release adds a number of small fixes for Xcode 6 and iOS 8. We've updated the project to use Xcode 6's default settings, and fixed a number of warnings that surfaced in Xcode 6.
+
+We have also added an `ATSurveyShownNotification` notification when a survey is shown.
+
+We are now immediately updating new Push Notification integrations to the server, which will make for easier testing of new integrations. These were previously batched with device updates.
+
+This release fixes a malformed image that caused a `pngcrush` error in Xcode CI builds.
+
+Finally, we removed a debug background color that slipped into the iOS 6 Message Center's textfield.
+
 2014-08-24 pkamb v1.5.6
 --------------------------------
 

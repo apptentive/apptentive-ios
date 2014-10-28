@@ -126,6 +126,7 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+	[super viewWillDisappear:animated];
 	[dataSource markAllMessagesAsRead];
 }
 

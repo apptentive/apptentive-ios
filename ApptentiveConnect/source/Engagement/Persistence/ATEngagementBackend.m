@@ -193,6 +193,16 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	return nil;
 }
 
+- (BOOL)willShowInteractionForLocalEvent:(NSString *)event {
+	return [self willShowInteractionForCodePoint:[ATEngagementBackend codePointForLocalEvent:event]];
+}
+
+- (BOOL)willShowInteractionForCodePoint:(NSString *)codePoint {
+	ATInteraction *interaction = [[ATEngagementBackend sharedBackend] interactionForCodePoint:codePoint];
+	
+	return (interaction != nil);
+}
+
 + (NSString *)stringByEscapingCodePointSeparatorCharactersInString:(NSString *)string {
 	// Only escape "%", "/", and "#".
 	// Do not change unless the server spec changes.
@@ -202,6 +212,20 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	[escape replaceOccurrencesOfString:@"#" withString:@"%23" options:NSLiteralSearch range:NSMakeRange(0, escape.length)];
 	
 	return [escape autorelease];
+}
+
++ (NSString *)codePointForLocalEvent:(NSString *)event {
+	return [ATEngagementBackend codePointForVendor:ATEngagementCodePointHostAppVendorKey interaction:ATEngagementCodePointHostAppInteractionKey event:event];
+}
+
++ (NSString *)codePointForVendor:(NSString *)vendor interaction:(NSString *)interaction event:(NSString *)event {
+	NSString *encodedVendor = [ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:vendor];
+	NSString *encodedInteraction = [ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:interaction];
+	NSString *encodedEvent = [ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:event];
+	
+	NSString *codePoint = [NSString stringWithFormat:@"%@#%@#%@", encodedVendor, encodedInteraction, encodedEvent];
+	
+	return codePoint;
 }
 
 - (BOOL)engageLocalEvent:(NSString *)eventLabel fromViewController:(UIViewController *)viewController {
@@ -229,11 +253,7 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 }
 
 - (BOOL)engageEvent:(NSString *)eventLabel fromVendor:(NSString *)vendor fromInteraction:(NSString *)interaction userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {
-	NSString *encodedVendor = [ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:vendor];
-	NSString *encodedInteraction = [ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:interaction];
-	NSString *encodedEventLabel = [ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:eventLabel];
-	
-	NSString *codePoint = [NSString stringWithFormat:@"%@#%@#%@", encodedVendor, encodedInteraction, encodedEventLabel];
+	NSString *codePoint = [ATEngagementBackend codePointForVendor:vendor interaction:interaction event:eventLabel];
 
 	return [[ATEngagementBackend sharedBackend] engage:codePoint userInfo:userInfo customData:customData extendedData:extendedData fromViewController:viewController];
 }
@@ -251,13 +271,16 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	BOOL didEngageInteraction = NO;
 	
 	NSArray *interactions = [codePointInteractions objectForKey:codePoint];
-	ATLogInfo(@"%@", [NSString stringWithFormat:@"--Found %tu available interaction%@.", interactions.count, (interactions.count == 1) ? @"" : @"s"]);
 	
-	if (interactions.count > 0) {
+	ATLogInfo(@"%@", [NSString stringWithFormat:@"--Found %tu downloaded and available interaction%@ targeted at the event \"%@\".", interactions.count, (interactions.count == 1) ? @"" : @"s", codePoint]);
+	
+	if (interactions.count == 0) {
+		ATLogInfo(@"--If you are expecting an interaction to be available for this event, try resetting the cache by deleting and re-running the app on your device/simulator.");
+	}
+	else if (interactions.count > 0) {
 		ATInteraction *interaction = [self interactionForCodePoint:codePoint];
 		if (interaction) {
-			ATLogInfo(@"--Running valid %@ interaction.", interaction.type, codePoint);
-			ATLogInfo(@"");
+			ATLogInfo(@"--Running valid %@ interaction.", interaction.type);
 			[self presentInteraction:interaction fromViewController:viewController];
 			[self interactionWasEngaged:interaction];
 			didEngageInteraction = YES;
@@ -265,8 +288,7 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 			[[NSUserDefaults standardUserDefaults] synchronize];
 		} else {
 			ATLogInfo(@"--Criteria not met for available interaction%@.", (interactions.count == 1) ? @"" : @"s");
-			ATLogInfo(@"--There are no valid Apptentive interactions to run at this time.");
-			ATLogInfo(@"");
+			ATLogInfo(@"--If you are expecting an interaction to be shown at this time, make sure you have fully met the interaction's requirements as set on your Apptentive dashboard.");
 		}
 	}
 	

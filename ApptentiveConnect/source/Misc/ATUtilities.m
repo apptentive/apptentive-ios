@@ -18,6 +18,7 @@
 #if TARGET_OS_IPHONE
 #import <sys/utsname.h>
 #endif
+#import <sys/sysctl.h>
 
 #define KINDA_EQUALS(a, b) (fabs(a - b) < 0.1)
 #define DEG_TO_RAD(angle) ((M_PI * angle) / 180.0)
@@ -96,7 +97,7 @@ static NSDateFormatter *dateFormatter = nil;
 		CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
 		CGFloat statusBarHeight = MIN(statusBarSize.width, statusBarSize.height);
 		
-		CGPoint origin;
+		CGPoint origin = CGPointZero;
 		UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
 		switch (orientation) {
 			case UIInterfaceOrientationPortrait:
@@ -411,6 +412,23 @@ static NSDateFormatter *dateFormatter = nil;
 #endif
 }
 
++ (NSString *)currentSystemBuild {
+	int mib[2] = {CTL_KERN, KERN_OSVERSION};
+	size_t size = 0;
+	
+	sysctl(mib, 2, NULL, &size, NULL, 0);
+	
+	char *answer = malloc(size);
+	int result = sysctl(mib, 2, answer, &size, NULL, 0);
+
+	NSString *results = nil;
+	if (result >= 0) {
+		results = [NSString stringWithCString:answer encoding:NSUTF8StringEncoding];
+	}
+	free(answer);
+	
+	return results;
+}
 
 + (NSString *)stringByEscapingForURLArguments:(NSString *)string {
 	CFStringRef result = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)string, NULL, (CFStringRef)@"%:/?#[]@!$&'()*+,;=", kCFStringEncodingUTF8);

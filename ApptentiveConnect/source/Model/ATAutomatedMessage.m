@@ -28,9 +28,12 @@
 		message = [[ATAutomatedMessage alloc] initWithEntity:[NSEntityDescription entityForName:@"ATAutomatedMessage" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
 	}
 	[message updateWithJSON:json];
+	
+	// If server creation time is set, overwrite client creation time.
 	if (![message isCreationTimeEmpty]) {
 		message.clientCreationTime = message.creationTime;
 	}
+	
 	return message;
 }
 

@@ -131,15 +131,19 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 	if (action == ATMessagePanelDidSendMessage) {
 		if (!didSendFeedbackAlert) {
 			NSDictionary *config = self.interaction.configuration;
+			NSString *alertTitle, *alertMessage, *cancelButtonTitle, *otherButtonTitle;
 			
-			NSString *alertTitle = config[@"thank_you_title"] ?: ATLocalizedString(@"Thanks!", nil);
-			NSString *alertMessage = config[@"thank_you_body"] ?: ATLocalizedString(@"Your response has been saved in the Message Center, where you'll be able to view replies and send us other messages.", @"Message panel sent message confirmation dialog text");
-			NSString *cancelButtonTitle = config[@"thank_you_close_text"] ?: ATLocalizedString(@"Close", @"Close alert view title");
-			NSString *otherButtonTitle = config[@"thank_you_view_messages_text"] ?: ATLocalizedString(@"View Messages", @"View messages button title");
-
-			BOOL messageCenterEnabled = [config[@"enable_message_center"] boolValue];
-			if (!messageCenterEnabled) {
-				otherButtonTitle = nil;
+			BOOL enableMessageCenter = config[@"enable_message_center"] ? [config[@"enable_message_center"] boolValue] : [[ATConnect sharedConnection] messageCenterEnabled];
+			if (enableMessageCenter) {
+				alertTitle = config[@"thank_you_title"] ?: ATLocalizedString(@"Thanks!", nil);
+				alertMessage = config[@"thank_you_body"] ?: ATLocalizedString(@"Your response has been saved in the Message Center, where you'll be able to view replies and send us other messages.", @"Message panel sent message confirmation dialog text");
+				cancelButtonTitle = config[@"thank_you_close_text"] ?: ATLocalizedString(@"Close", @"Close alert view title");
+				otherButtonTitle = config[@"thank_you_view_messages_text"] ?: ATLocalizedString(@"View Messages", @"View messages button title");
+			} else {
+				alertTitle = config[@"thank_you_title"] ?: ATLocalizedString(@"Thank you for your feedback!", @"Message panel sent message but will not show Message Center dialog.");
+				alertMessage = config[@"thank_you_body"] ?: nil;
+				cancelButtonTitle = config[@"thank_you_close_text"] ?: ATLocalizedString(@"Close", @"Close alert view title");
+				otherButtonTitle = config[@"thank_you_view_messages_text"] ?: nil;
 			}
 			
 			didSendFeedbackAlert = [[UIAlertView alloc] initWithTitle:alertTitle message:alertMessage delegate:self cancelButtonTitle:cancelButtonTitle otherButtonTitles:otherButtonTitle, nil];

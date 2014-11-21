@@ -1,3 +1,11 @@
+2014-11-20 pkamb v1.6.1
+--------------------------------
+The 1.6.1 release contains an improved FeedbackDemo project for easily testing your Apptentive events and interactions. Simply input your API Key and custom events in the `defines.h` file, then tap the respective buttons in the demo app to engage those events.
+
+This release also fixes the default message text in the Ratings Prompt, which for some languages may have referenced Message Center when Message Center was disabled.
+
+We have also fixed an issue where some messages were not sorted correctly in Message Center, and toned down Apptentive logging in Release builds.
+
 2014-10-20 pkamb v1.6.0
 --------------------------------
 The 1.6.0 release adds the method `willShowInteractionForEvent:`, which returns YES if engaging the given event will cause an Interaction to be shown. 

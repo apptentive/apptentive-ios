@@ -125,31 +125,22 @@ enum kEventRows {
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	static NSString *CellIdentifier = @"Cell";
-	static NSString *SurveyTagsCell = @"SurveyTagsCell";
 	
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil) {
 		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 		cell.accessoryView = nil;
 	}
+	
 	cell.textLabel.textColor = [UIColor blackColor];
+	
 	if (indexPath.section == kEventSection) {
 		if (indexPath.row == kEventRowEvent1) {
 			cell.textLabel.text = [NSString stringWithFormat:@"Engage `%@` event", kApptentiveEvent1];
-			cell.textLabel.textColor = [UIColor blackColor];
 		} else if (indexPath.row == kEventRowEvent2) {
-			// Engagement Surveys
 			cell.textLabel.text = [NSString stringWithFormat:@"Engage `%@` event", kApptentiveEvent2];
-			cell.textLabel.textColor = [UIColor blackColor];
 		} else if (indexPath.row == kEventRowEvent3) {
-			cell = [tableView dequeueReusableCellWithIdentifier:SurveyTagsCell];
-			if (cell == nil) {
-				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:SurveyTagsCell] autorelease];
-			}
-			
 			cell.textLabel.text = [NSString stringWithFormat:@"Engage `%@` event", kApptentiveEvent3];
-			cell.textLabel.textColor = [UIColor blackColor];
-			//cell.detailTextLabel.text = [NSString stringWithFormat:@"presentSurvey"];
 		}
 	} else if (indexPath.section == kMessageCenterSection) {
 		if (indexPath.row == kMessageCenterRowShowMessageCenter) {

@@ -152,7 +152,10 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 				
 				UIViewController *presentingVC = self.viewController;
 
-				if ([presentingVC respondsToSelector:@selector(presentViewController:animated:completion:)]) {
+				if (!presentingVC) {
+					ATLogError(@"Attempting to open the App Store via StoreKit from a nil View Controller!");
+				}
+				else if ([presentingVC respondsToSelector:@selector(presentViewController:animated:completion:)]) {
 					[presentingVC presentViewController:vc animated:YES completion:^{}];
 				} else {
 #					pragma clang diagnostic push

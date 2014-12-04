@@ -26,6 +26,12 @@ typedef void (^alertActionHandler)(UIAlertAction *);
     // Dispose of any resources that can be recreated.
 }
 
+- (void)presentAlertControllerFromViewController:(UIViewController *)viewController {
+	self.viewController = viewController;
+	
+	[viewController presentViewController:self animated:YES completion:nil];
+}
+
 + (instancetype)alertControllerWithInteraction:(ATInteraction *)interaction {
 	NSDictionary *config = interaction.configuration;
 	NSString *title = config[@"title"];
@@ -42,6 +48,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 	}
 	
 	ATInteractionUIAlertController *alertController = [super alertControllerWithTitle:title message:message preferredStyle:preferredStyle];
+	alertController.interaction = interaction;
 	
 	NSArray *actions = config[@"actions"];
 	for (NSDictionary *action in actions) {

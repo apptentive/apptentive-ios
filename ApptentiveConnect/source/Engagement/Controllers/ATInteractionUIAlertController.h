@@ -11,6 +11,11 @@
 
 @interface ATInteractionUIAlertController : UIAlertController
 
+@property (nonatomic, retain) ATInteraction *interaction;
+@property (nonatomic, retain) UIViewController *viewController;
+
 + (instancetype)alertControllerWithInteraction:(ATInteraction *)interaction;
+
+- (void)presentAlertControllerFromViewController:(UIViewController *)viewController;
 
 @end

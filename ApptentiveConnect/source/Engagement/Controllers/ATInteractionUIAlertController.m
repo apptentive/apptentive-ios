@@ -25,7 +25,23 @@
 }
 
 + (instancetype)alertControllerWithInteraction:(ATInteraction *)interaction {
+	NSDictionary *config = interaction.configuration;
+	NSString *title = config[@"title"];
+	NSString *message = config[@"message"];
+	NSString *style = config[@"style"];
 	
+	UIAlertControllerStyle preferredStyle;
+	if ([style isEqualToString:@"alert"]) {
+		preferredStyle = UIAlertControllerStyleAlert;
+	} else if ([style isEqualToString:@"actionSheet"]) {
+		preferredStyle = UIAlertControllerStyleActionSheet;
+	} else {
+		preferredStyle = UIAlertControllerStyleAlert;
+	}
+	
+	ATInteractionUIAlertController *alert = [super alertControllerWithTitle:title message:message preferredStyle:preferredStyle];
+	
+	return alert;
 }
 
 @end

@@ -63,14 +63,14 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 		alertActionHandler actionHandler;
 		if ([actionType isEqualToString:@"deepLink"]) {
 			NSURL *url = [NSURL URLWithString:@"TODO"];
-			actionHandler = [self createButtonHandlerBlockDeepLink:url];
+			actionHandler = [alertController createButtonHandlerBlockDeepLink:url];
 		} else if ([actionType isEqualToString:@"engageEvent"]) {
 			NSString *event = @"TODO";
-			actionHandler = [self createButtonHandlerBlockEngage:event];
+			actionHandler = [alertController createButtonHandlerBlockEngage:event];
 		} else if ([actionType isEqualToString:@"dismiss"]) {
-			actionHandler = [self createButtonHandlerBlockDismiss];
+			actionHandler = [alertController createButtonHandlerBlockDismiss];
 		} else {
-			actionHandler = [self createButtonHandlerBlockDismiss];
+			actionHandler = [alertController createButtonHandlerBlockDismiss];
 		}
 		
 		UIAlertAction *alertAction = [UIAlertAction actionWithTitle:actionTitle style:alertActionStyle handler:actionHandler];
@@ -87,19 +87,19 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 	return alertController;
 }
 
-+ (alertActionHandler)createButtonHandlerBlockDismiss {
+- (alertActionHandler)createButtonHandlerBlockDismiss {
 	return Block_copy(^(UIAlertAction *action) {
 		ATLogInfo(@"Tapped `Dismiss` button!");
 	});
 }
 
-+ (alertActionHandler)createButtonHandlerBlockEngage:(NSString *)event {
+- (alertActionHandler)createButtonHandlerBlockEngage:(NSString *)event {
 	return Block_copy(^(UIAlertAction *action) {
 		ATLogInfo(@"Tapped `Engage Event` button with event: `%@`", event);
 	});
 }
 
-+ (alertActionHandler)createButtonHandlerBlockDeepLink:(NSURL *)url {
+- (alertActionHandler)createButtonHandlerBlockDeepLink:(NSURL *)url {
 	return Block_copy(^(UIAlertAction *action) {
 		ATLogInfo(@"Tapped `Deep Link` button with URL: `%@`", url);
 	});

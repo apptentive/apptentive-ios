@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ATInteraction.h"
 
 @interface ATInteractionUIAlertController : UIAlertController
+
++ (instancetype)alertControllerWithInteraction:(ATInteraction *)interaction;
 
 @end

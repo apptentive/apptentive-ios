@@ -7,10 +7,9 @@
 //
 
 #import "ATInteractionUIAlertController.h"
+#import "ATEngagementBackend.h"
 
-@interface ATInteractionUIAlertController ()
-
-@end
+NSString *const ATInteractionUIAlertControllerEventLabelDismiss = @"dismiss";
 
 @implementation ATInteractionUIAlertController
 
@@ -72,7 +71,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 			NSURL *url = [NSURL URLWithString:@"TODO"];
 			actionHandler = [alertController createButtonHandlerBlockDeepLink:url];
 		} else if ([actionType isEqualToString:@"engageEvent"]) {
-			NSString *event = @"TODO";
+			NSString *event = action[@"event"];
 			actionHandler = [alertController createButtonHandlerBlockEngage:event];
 		} else if ([actionType isEqualToString:@"dismiss"]) {
 			actionHandler = [alertController createButtonHandlerBlockDismiss];
@@ -96,13 +95,13 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 
 - (alertActionHandler)createButtonHandlerBlockDismiss {
 	return Block_copy(^(UIAlertAction *action) {
-		ATLogInfo(@"Tapped `Dismiss` button!");
+		[[ATEngagementBackend sharedBackend] engageApptentiveEvent:ATInteractionUIAlertControllerEventLabelDismiss fromInteraction:self.interaction fromViewController:self.viewController];
 	});
 }
 
 - (alertActionHandler)createButtonHandlerBlockEngage:(NSString *)event {
 	return Block_copy(^(UIAlertAction *action) {
-		ATLogInfo(@"Tapped `Engage Event` button with event: `%@`", event);
+		[[ATEngagementBackend sharedBackend] engageApptentiveEvent:event fromInteraction:self.interaction fromViewController:self.viewController];
 	});
 }
 

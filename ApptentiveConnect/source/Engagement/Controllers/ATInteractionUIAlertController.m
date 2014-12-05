@@ -68,7 +68,8 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 		NSString *actionType = action[@"type"];
 		alertActionHandler actionHandler;
 		if ([actionType isEqualToString:@"deepLink"]) {
-			NSURL *url = [NSURL URLWithString:@"TODO"];
+			NSString *urlString = action[@"url"];
+			NSURL *url = [NSURL URLWithString:urlString];
 			actionHandler = [alertController createButtonHandlerBlockDeepLink:url];
 		} else if ([actionType isEqualToString:@"engageEvent"]) {
 			NSString *event = action[@"event"];
@@ -107,7 +108,11 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 
 - (alertActionHandler)createButtonHandlerBlockDeepLink:(NSURL *)url {
 	return Block_copy(^(UIAlertAction *action) {
-		ATLogInfo(@"Tapped `Deep Link` button with URL: `%@`", url);
+		if ([[UIApplication sharedApplication] canOpenURL:url]) {
+			[[UIApplication sharedApplication] openURL:url];
+		} else {
+			ATLogError(@"[ATInteractionUIAlertController] Unable to open URL: %@", url);
+		}
 	});
 }
 

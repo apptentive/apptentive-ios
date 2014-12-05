@@ -22,6 +22,9 @@
 #import "ATFeedbackWindowController.h"
 #endif
 
+#warning REMOVE
+#import "ATInteractionUIAlertController.h"
+
 // Can't get CocoaPods to do the right thing for debug builds.
 // So, do it explicitly.
 #if COCOAPODS
@@ -54,6 +57,14 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 #if TARGET_OS_IPHONE
 @synthesize tintColor;
 #endif
+
+#warning REMOVE
+- (void)presentRemoteAlertFromViewController:(UIViewController *)viewController {
+	ATInteraction *interaction = [ATInteractionUIAlertController sampleMessagingInteraction];
+	ATInteractionUIAlertController *alert = [ATInteractionUIAlertController alertControllerWithInteraction:interaction];
+	
+	[alert presentAlertControllerFromViewController:viewController];
+}
 
 + (ATConnect *)sharedConnection {
 	static ATConnect *sharedConnection = nil;

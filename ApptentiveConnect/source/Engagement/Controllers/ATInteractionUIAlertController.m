@@ -25,6 +25,52 @@ typedef void (^alertActionHandler)(UIAlertAction *);
     // Dispose of any resources that can be recreated.
 }
 
+#warning REMOVE
++ (ATInteraction *)sampleMessagingInteraction {
+	ATInteraction *interaction = [[[ATInteraction alloc] init] autorelease];
+	interaction.type = @"UIAlertController";
+	interaction.priority = 1;
+	interaction.version = @"1.0.0";
+	interaction.identifier = @"XYZ";
+	interaction.criteria = @{};
+	
+	NSArray *actions = @[@{@"title": @"App Store Link",
+						   @"style": @"default",
+						   @"type": @"deepLink",
+						   @"url": @"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=471966214"
+						   },
+						 @{@"title": @"Engage `show_survey` Event",
+						   @"style": @"default",
+						   @"type": @"engageEvent",
+						   @"enabled": @YES,
+						   @"event": @"show_survey"
+						   },
+						 @{@"title": @"Disabled Button",
+						   @"style": @"default",
+						   @"type": @"dismiss",
+						   @"enabled": @NO
+						   },
+						 @{@"title": @"Destructive Button",
+						   @"style": @"destructive",
+						   @"type": @"dismiss"
+						   },
+						 @{@"title": @"Cancel Button",
+						   @"style": @"cancel",
+						   @"type": @"dismiss"
+						   }
+						 ];
+	
+	NSDictionary *config = @{@"title": @"TITLE TITLE TITLE",
+							 @"message": @"MESSAGE MESSAGE",
+							 @"style": @"alert",
+							 @"actions": actions
+							 };
+	
+	interaction.configuration = config;
+
+	return interaction;
+}
+
 - (void)presentAlertControllerFromViewController:(UIViewController *)viewController {
 	self.viewController = viewController;
 	

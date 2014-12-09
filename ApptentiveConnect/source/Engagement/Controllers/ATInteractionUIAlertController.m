@@ -28,7 +28,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 #warning REMOVE
 + (ATInteraction *)sampleMessagingInteraction {
 	ATInteraction *interaction = [[[ATInteraction alloc] init] autorelease];
-	interaction.type = @"UIAlertController";
+	interaction.type = @"TextModal";
 	interaction.priority = 1;
 	interaction.version = @"1.0.0";
 	interaction.identifier = @"XYZ";

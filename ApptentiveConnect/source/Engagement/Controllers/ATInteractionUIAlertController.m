@@ -61,7 +61,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 						 ];
 	
 	NSDictionary *config = @{@"title": @"TITLE TITLE TITLE",
-							 @"message": @"MESSAGE MESSAGE",
+							 @"body": @"BODY TEXT BODY TEXT",
 							 @"layout": @"center",
 							 @"actions": actions
 							 };
@@ -80,7 +80,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 + (instancetype)alertControllerWithInteraction:(ATInteraction *)interaction {
 	NSDictionary *config = interaction.configuration;
 	NSString *title = config[@"title"];
-	NSString *message = config[@"message"];
+	NSString *message = config[@"body"];
 	
 	NSString *layout = config[@"layout"];
 	UIAlertControllerStyle preferredStyle;

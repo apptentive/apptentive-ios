@@ -111,17 +111,12 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 			alertActionStyle = UIAlertActionStyleDefault;
 		}
 
-		NSString *actionType = action[@"type"];
+		NSString *actionType = action[@"action"];
 		alertActionHandler actionHandler;
-		if ([actionType isEqualToString:@"deepLink"]) {
-			NSString *urlString = action[@"url"];
-			NSURL *url = [NSURL URLWithString:urlString];
-			actionHandler = [alertController createButtonHandlerBlockDeepLink:url];
-		} else if ([actionType isEqualToString:@"engageEvent"]) {
-			NSString *event = action[@"event"];
-			actionHandler = [alertController createButtonHandlerBlockEngage:event];
-		} else if ([actionType isEqualToString:@"dismiss"]) {
+		if ([actionType isEqualToString:@"dismiss"]) {
 			actionHandler = [alertController createButtonHandlerBlockDismiss];
+		} else if ([actionType isEqualToString:@"interaction"]) {
+			actionHandler = [alertController createButtonHandlerBlockInvokeInteraction];
 		} else {
 			actionHandler = [alertController createButtonHandlerBlockDismiss];
 		}
@@ -146,19 +141,9 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 	});
 }
 
-- (alertActionHandler)createButtonHandlerBlockEngage:(NSString *)event {
+- (alertActionHandler)createButtonHandlerBlockInvokeInteraction {
 	return Block_copy(^(UIAlertAction *action) {
-		[[ATEngagementBackend sharedBackend] engageApptentiveEvent:event fromInteraction:self.interaction fromViewController:self.viewController];
-	});
-}
-
-- (alertActionHandler)createButtonHandlerBlockDeepLink:(NSURL *)url {
-	return Block_copy(^(UIAlertAction *action) {
-		if ([[UIApplication sharedApplication] canOpenURL:url]) {
-			[[UIApplication sharedApplication] openURL:url];
-		} else {
-			ATLogError(@"[ATInteractionUIAlertController] Unable to open URL: %@", url);
-		}
+		//TODO
 	});
 }
 

@@ -34,27 +34,27 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 	interaction.identifier = @"XYZ";
 	interaction.criteria = @{};
 	
-	NSArray *actions = @[@{@"title": @"App Store Link",
+	NSArray *actions = @[@{@"label": @"App Store",
 						   @"style": @"default",
 						   @"type": @"deepLink",
 						   @"url": @"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=471966214"
 						   },
-						 @{@"title": @"Engage `show_survey` Event",
+						 @{@"label": @"Survey",
 						   @"style": @"default",
 						   @"type": @"engageEvent",
 						   @"enabled": @YES,
 						   @"event": @"show_survey"
 						   },
-						 @{@"title": @"Disabled Button",
+						 @{@"label": @"Disabled Button",
 						   @"style": @"default",
 						   @"type": @"dismiss",
 						   @"enabled": @NO
 						   },
-						 @{@"title": @"Destructive Button",
+						 @{@"label": @"Destructive Button",
 						   @"style": @"destructive",
 						   @"type": @"dismiss"
 						   },
-						 @{@"title": @"Cancel Button",
+						 @{@"label": @"Cancel Button",
 						   @"style": @"cancel",
 						   @"type": @"dismiss"
 						   }
@@ -97,7 +97,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 	
 	NSArray *actions = config[@"actions"];
 	for (NSDictionary *action in actions) {
-		NSString *actionTitle = action[@"title"];
+		NSString *actionTitle = action[@"label"];
 		
 		NSString *actionStyle = action[@"style"];
 		UIAlertActionStyle alertActionStyle;

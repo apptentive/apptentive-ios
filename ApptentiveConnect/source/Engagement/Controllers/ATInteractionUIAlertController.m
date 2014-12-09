@@ -62,7 +62,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 	
 	NSDictionary *config = @{@"title": @"TITLE TITLE TITLE",
 							 @"message": @"MESSAGE MESSAGE",
-							 @"style": @"alert",
+							 @"layout": @"center",
 							 @"actions": actions
 							 };
 	
@@ -82,11 +82,11 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 	NSString *title = config[@"title"];
 	NSString *message = config[@"message"];
 	
-	NSString *style = config[@"style"];
+	NSString *layout = config[@"layout"];
 	UIAlertControllerStyle preferredStyle;
-	if ([style isEqualToString:@"alert"]) {
+	if ([layout isEqualToString:@"center"]) {
 		preferredStyle = UIAlertControllerStyleAlert;
-	} else if ([style isEqualToString:@"actionSheet"]) {
+	} else if ([layout isEqualToString:@"bottom"]) {
 		preferredStyle = UIAlertControllerStyleActionSheet;
 	} else {
 		preferredStyle = UIAlertControllerStyleAlert;

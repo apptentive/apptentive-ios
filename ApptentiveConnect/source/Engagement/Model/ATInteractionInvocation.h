@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ATInteractionInvocation : NSObject
+@interface ATInteractionInvocation : NSObject <NSCoding, NSCopying>
 
 @property (nonatomic, copy) NSString *interactionID;
 @property (nonatomic, assign) NSInteger priority;

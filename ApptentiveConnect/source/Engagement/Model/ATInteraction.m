@@ -59,7 +59,7 @@
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
 		self.identifier = [coder decodeObjectForKey:@"identifier"];
-		self.priority = [coder decodeIntForKey:@"priority"];
+		self.priority = [coder decodeIntegerForKey:@"priority"];
 		self.type = [coder decodeObjectForKey:@"type"];
 		self.configuration = [coder decodeObjectForKey:@"configuration"];
 		self.criteria = [coder decodeObjectForKey:@"criteria"];

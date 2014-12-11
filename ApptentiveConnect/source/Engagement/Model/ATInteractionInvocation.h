@@ -10,4 +10,10 @@
 
 @interface ATInteractionInvocation : NSObject
 
+@property (nonatomic, copy) NSString *interactionID;
+@property (nonatomic, assign) NSInteger priority;
+@property (nonatomic, retain) NSDictionary *criteria;
+
++ (ATInteractionInvocation *)invocationWithJSONDictionary:(NSDictionary *)jsonDictionary;
+
 @end

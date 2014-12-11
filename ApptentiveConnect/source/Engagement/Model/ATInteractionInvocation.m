@@ -10,4 +10,13 @@
 
 @implementation ATInteractionInvocation
 
++ (ATInteractionInvocation *)invocationWithJSONDictionary:(NSDictionary *)jsonDictionary {
+	ATInteractionInvocation *invocation = [[[ATInteractionInvocation alloc] init] autorelease];
+	invocation.interactionID = jsonDictionary[@"interaction_id"];
+	invocation.priority = [jsonDictionary[@"priority"] integerValue];
+	invocation.criteria = jsonDictionary[@"criteria"];
+	
+	return invocation;
+}
+
 @end

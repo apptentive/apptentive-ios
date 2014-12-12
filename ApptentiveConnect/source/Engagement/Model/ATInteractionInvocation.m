@@ -72,7 +72,7 @@
 }
 
 - (ATInteractionUsageData *)usageData {
-	return [ATInteractionUsageData usageDataForInteraction:self];
+	return [ATInteractionUsageData usageData];
 }
 
 - (BOOL)criteriaAreMet {

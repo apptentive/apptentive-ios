@@ -35,13 +35,6 @@
 @synthesize interactionInvokesBuild = _interactionInvokesBuild;
 @synthesize interactionInvokesTimeAgo = _interactionInvokesTimeAgo;
 
-- (id)initWithInteraction:(ATInteraction *)interaction {
-	if (self = [super init]) {
-		_interaction = interaction;
-	}
-	return self;
-}
-
 - (void)dealloc {
 	[_timeSinceInstallTotal release], _timeSinceInstallTotal = nil;
 	[_timeSinceInstallVersion release], _timeSinceInstallVersion = nil;
@@ -65,13 +58,22 @@
 	[super dealloc];
 }
 
++ (ATInteractionUsageData *)usageData {
+	ATInteractionUsageData *usageData = [[[ATInteractionUsageData alloc] init] autorelease];
+	
+	return usageData;
+}
+
 + (ATInteractionUsageData *)usageDataForInteraction:(ATInteraction *)interaction {
-	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] initWithInteraction:interaction];
-	return [usageData autorelease];
+	
+	// `interaction` property not actually needed. Global usage data. Leaving this method, for now, for backward compatibility.
+	
+	return [ATInteractionUsageData usageData];
 }
 
 - (NSString *)description {
-	NSString *title = [NSString stringWithFormat:@"Usage Data For interaction %@", self.interaction.identifier];
+	NSString *title = [NSString stringWithFormat:@"Engamement Framework Usage Data:"];
+	
 	NSDictionary *data = @{@"timeSinceInstallTotal" : self.timeSinceInstallTotal ?: [NSNull null],
 						   @"timeSinceInstallVersion" : self.timeSinceInstallVersion ?: [NSNull null],
 						   @"timeSinceInstallBuild" : self.timeSinceInstallBuild ?: [NSNull null],

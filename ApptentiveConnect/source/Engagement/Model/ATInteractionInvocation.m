@@ -7,6 +7,8 @@
 //
 
 #import "ATInteractionInvocation.h"
+#import "ATEngagementBackend.h"
+#import "ATInteractionUsageData.h"
 
 @implementation ATInteractionInvocation
 
@@ -59,17 +61,6 @@
 	BOOL isValid = NO;
 	
 	do { // once
-		if (self.interactionType == ATInteractionTypeUnknown) {
-			break;
-		}
-		
-		//TODO: Check interaction's version.
-		
-		if (self.interactionType == ATInteractionTypeUpgradeMessage && ![ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
-			// Don't show upgrade messages on anything except iOS 7 and above.
-			break;
-		}
-		
 		if (![self criteriaAreMet]) {
 			break;
 		}

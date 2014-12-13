@@ -11,6 +11,7 @@
 #import "ATEngagementGetManifestTask.h"
 #import "ATTaskQueue.h"
 #import "ATInteraction.h"
+#import "ATInteractionInvocation.h"
 #import "ATConnect_Private.h"
 #import "ATUtilities.h"
 #import "ApptentiveMetrics.h"
@@ -201,6 +202,29 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	ATInteraction *interaction = [[ATEngagementBackend sharedBackend] interactionForCodePoint:codePoint];
 	
 	return (interaction != nil);
+}
+
+- (ATInteraction *)interactionForEvent:(NSString *)event {
+	NSString *interactionID = nil;
+	
+	// TODO: get persisted dictionary
+	NSDictionary *targets = @{};
+	NSArray *invocations = targets[event];
+	for (ATInteractionInvocation *invocation in invocations) {
+		if ([invocation isValid]) {
+			interactionID = invocation.interactionID;
+			break;
+		}
+	}
+	
+	ATInteraction *interaction = nil;
+	if (interactionID) {
+		// TODO: get persisted dictionary
+		NSDictionary *interactions = @{};
+		interaction = interactions[interactionID];
+	}
+	
+	return interaction;
 }
 
 + (NSString *)stringByEscapingCodePointSeparatorCharactersInString:(NSString *)string {

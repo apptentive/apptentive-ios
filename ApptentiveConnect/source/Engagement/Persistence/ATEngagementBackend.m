@@ -290,30 +290,20 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	ATLogInfo(@"Engage Apptentive event: %@", codePoint);
 	
 	[[ApptentiveMetrics sharedMetrics] addMetricWithName:codePoint info:userInfo customData:customData extendedData:extendedData];
-	
 	[self codePointWasEngaged:codePoint];
+	
 	BOOL didEngageInteraction = NO;
 	
-	NSArray *interactions = [self interactionsForCodePoint:codePoint];
-	
-	ATLogInfo(@"%@", [NSString stringWithFormat:@"--Found %tu downloaded and available interaction%@ targeted at the event \"%@\".", interactions.count, (interactions.count == 1) ? @"" : @"s", codePoint]);
-	
-	if (interactions.count == 0) {
-		ATLogInfo(@"--If you are expecting an interaction to be available for this event, try resetting the cache by deleting and re-running the app on your device/simulator.");
-	}
-	else if (interactions.count > 0) {
-		ATInteraction *interaction = [self interactionForCodePoint:codePoint];
-		if (interaction) {
-			ATLogInfo(@"--Running valid %@ interaction.", interaction.type);
-			[self presentInteraction:interaction fromViewController:viewController];
-			[self interactionWasEngaged:interaction];
-			didEngageInteraction = YES;
-			// Sync defaults so user doesn't see interaction more than once.
-			[[NSUserDefaults standardUserDefaults] synchronize];
-		} else {
-			ATLogInfo(@"--Criteria not met for available interaction%@.", (interactions.count == 1) ? @"" : @"s");
-			ATLogInfo(@"--If you are expecting an interaction to be shown at this time, make sure you have fully met the interaction's requirements as set on your Apptentive dashboard.");
-		}
+	ATInteraction *interaction = [self interactionForEvent:codePoint];
+	if (interaction) {
+		ATLogInfo(@"--Running valid %@ interaction.", interaction.type);
+		[self presentInteraction:interaction fromViewController:viewController];
+		
+		[self interactionWasEngaged:interaction];
+		didEngageInteraction = YES;
+		
+		// Sync defaults so user doesn't see interaction more than once.
+		[[NSUserDefaults standardUserDefaults] synchronize];
 	}
 	
 	return didEngageInteraction;

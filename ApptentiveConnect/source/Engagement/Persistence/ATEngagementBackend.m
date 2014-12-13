@@ -270,7 +270,7 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	[self codePointWasEngaged:codePoint];
 	BOOL didEngageInteraction = NO;
 	
-	NSArray *interactions = [codePointInteractions objectForKey:codePoint];
+	NSArray *interactions = [self interactionsForCodePoint:codePoint];
 	
 	ATLogInfo(@"%@", [NSString stringWithFormat:@"--Found %tu downloaded and available interaction%@ targeted at the event \"%@\".", interactions.count, (interactions.count == 1) ? @"" : @"s", codePoint]);
 	

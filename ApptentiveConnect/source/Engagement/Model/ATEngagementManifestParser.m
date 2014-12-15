@@ -43,12 +43,12 @@
 				for (NSString *codePointName in [jsonCodePoints allKeys]) {
 					NSArray *jsonInteractions = [jsonCodePoints objectForKey:codePointName];
 					
-					NSMutableArray *interactions = [NSMutableArray array];
+					NSMutableArray *interactionObjects = [NSMutableArray array];
 					for (NSDictionary *jsonInteraction in jsonInteractions) {
 						ATInteraction *interaction = [ATInteraction interactionWithJSONDictionary:jsonInteraction];
-						[interactions addObject:interaction];
+						[interactionObjects addObject:interaction];
 					}
-					[codePoints setObject:interactions forKey:codePointName];
+					[codePoints setObject:interactionObjects forKey:codePointName];
 				}
 				
 				codePointInteractions = codePoints;

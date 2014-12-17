@@ -361,7 +361,7 @@ fail:
 	[conn setValue: @"gzip" forHTTPHeaderField: @"Accept-Encoding"];
 //!!	[conn setValue: @"text/xml" forHTTPHeaderField: @"Accept"];
 	[conn setValue: @"utf-8" forHTTPHeaderField: @"Accept-Charset"];
-	[conn setValue:@"1" forHTTPHeaderField:@"X-API-Version"];
+	[conn setValue:@"2" forHTTPHeaderField:@"X-API-Version"];
 	NSString *apiKey = [[ATBackend sharedBackend] apiKey];
 	if (apiKey) {
 		[self updateConnection:conn withOAuthToken:apiKey];

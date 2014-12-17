@@ -16,7 +16,7 @@
 	NSError *parserError;
 }
 
-- (NSDictionary *)codePointInteractionsForEngagementManifest:(NSData *)jsonManifest;
+- (NSDictionary *)targetsAndInteractionsForEngagementManifest:(NSData *)jsonManifest;
 - (NSError *)parserError;
 
 @end

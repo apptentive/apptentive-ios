@@ -27,16 +27,20 @@ NSString *const ATEngagementInteractionsInvokesLastDateKey;
 
 @interface ATEngagementBackend : NSObject {
 @private
-	NSMutableDictionary *codePointInteractions;
+	NSMutableDictionary *_engagementTargets;
+	NSMutableDictionary *_engagementInteractions;
 }
 
 + (ATEngagementBackend *)sharedBackend;
 
 - (void)checkForEngagementManifest;
 - (BOOL)shouldRetrieveNewEngagementManifest;
-- (void)didReceiveNewCodePointInteractions:(NSDictionary *)codePointInteractions maxAge:(NSTimeInterval)expiresMaxAge;
+
+- (void)didReceiveNewTargets:(NSDictionary *)targets andInteractions:(NSDictionary *)interactions maxAge:(NSTimeInterval)expiresMaxAge;
+
 - (void)updateVersionInfo;
-+ (NSString *)cachedEngagementStoragePath;
++ (NSString *)cachedTargetsStoragePath;
++ (NSString *)cachedInteractionsStoragePath;
 
 - (NSArray *)interactionsForCodePoint:(NSString *)codePoint;
 - (ATInteraction *)interactionForCodePoint:(NSString *)codePoint;

@@ -57,8 +57,6 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 
 - (id)init {
 	if ((self = [super init])) {
-		codePointInteractions = [[NSMutableDictionary alloc] init];
-		
 		NSDictionary *defaults = @{ATEngagementIsUpdateVersionKey: @NO,
 								   ATEngagementIsUpdateBuildKey: @NO,
 								   ATEngagementCodePointsInvokesTotalKey: @{},
@@ -69,23 +67,37 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 								   ATEngagementInteractionsInvokesLastDateKey: @{}};
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 		
-		[self updateVersionInfo];
-		
+		_engagementTargets = [[NSMutableDictionary alloc] init];
 		NSFileManager *fm = [NSFileManager defaultManager];
-		if ([fm fileExistsAtPath:[ATEngagementBackend cachedEngagementStoragePath]]) {
+		if ([fm fileExistsAtPath:[ATEngagementBackend cachedTargetsStoragePath]]) {
 			@try {
-				NSDictionary *archivedInteractions = [NSKeyedUnarchiver unarchiveObjectWithFile:[ATEngagementBackend cachedEngagementStoragePath]];
-				[codePointInteractions addEntriesFromDictionary:archivedInteractions];
+				NSDictionary *archivedTargets = [NSKeyedUnarchiver unarchiveObjectWithFile:[ATEngagementBackend cachedTargetsStoragePath]];
+				[_engagementTargets addEntriesFromDictionary:archivedTargets];
 			} @catch (NSException *exception) {
-				ATLogError(@"Unable to unarchive engagement: %@", exception);
+				ATLogError(@"Unable to unarchive engagement targets: %@", exception);
 			}
 		}
+
+		_engagementInteractions = [[NSMutableDictionary alloc] init];
+		if ([fm fileExistsAtPath:[ATEngagementBackend cachedInteractionsStoragePath]]) {
+			@try {
+				NSDictionary *archivedInteractions = [NSKeyedUnarchiver unarchiveObjectWithFile:[ATEngagementBackend cachedInteractionsStoragePath]];
+				[_engagementInteractions addEntriesFromDictionary:archivedInteractions];
+			} @catch (NSException *exception) {
+				ATLogError(@"Unable to unarchive engagement interactions: %@", exception);
+			}
+		}
+		
+		[self updateVersionInfo];
 	}
+	
 	return self;
 }
 
 - (void)dealloc {
-	[codePointInteractions release], codePointInteractions = nil;
+	[_engagementTargets release], _engagementTargets = nil;
+	[_engagementInteractions release], _engagementInteractions = nil;
+	
 	[super dealloc];
 }
 
@@ -117,10 +129,14 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 			return YES;
 		} else {
 			NSFileManager *fm = [NSFileManager defaultManager];
-			if (![fm fileExistsAtPath:[ATEngagementBackend cachedEngagementStoragePath]]) {
-				// If no file, check anyway.
+			if (![fm fileExistsAtPath:[ATEngagementBackend cachedTargetsStoragePath]]) {
 				return YES;
 			}
+			
+			if (![fm fileExistsAtPath:[ATEngagementBackend cachedInteractionsStoragePath]]) {
+				return YES;
+			}
+			
 			return NO;
 		}
 	} else {
@@ -128,18 +144,26 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	}
 }
 
-- (void)didReceiveNewCodePointInteractions:(NSDictionary *)receivedCodePointInteractions maxAge:(NSTimeInterval)expiresMaxAge {
+- (void)didReceiveNewTargets:(NSDictionary *)targets andInteractions:(NSDictionary *)interactions maxAge:(NSTimeInterval)expiresMaxAge {
+	if (!targets || !interactions) {
+		return;
+	}
+	
 	@synchronized(self) {
-		[NSKeyedArchiver archiveRootObject:receivedCodePointInteractions toFile:[ATEngagementBackend cachedEngagementStoragePath]];
-		// Store expiration.
+		[NSKeyedArchiver archiveRootObject:targets toFile:[ATEngagementBackend cachedTargetsStoragePath]];
+		[NSKeyedArchiver archiveRootObject:interactions toFile:[ATEngagementBackend cachedInteractionsStoragePath]];
+		
 		if (expiresMaxAge > 0) {
 			NSDate *date = [NSDate dateWithTimeInterval:expiresMaxAge sinceDate:[NSDate date]];
 			NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 			[defaults setObject:date forKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
 		}
 		
-		[codePointInteractions removeAllObjects];
-		[codePointInteractions addEntriesFromDictionary:receivedCodePointInteractions];
+		[_engagementTargets removeAllObjects];
+		[_engagementTargets addEntriesFromDictionary:targets];
+		
+		[_engagementInteractions removeAllObjects];
+		[_engagementInteractions addEntriesFromDictionary:interactions];
 		
 		[self updateVersionInfo];
 	}
@@ -173,25 +197,12 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	}
 }
 
-+ (NSString *)cachedEngagementStoragePath {
-	return [[[ATBackend sharedBackend] supportDirectoryPath] stringByAppendingPathComponent:@"cachedinteractions.objects"];
++ (NSString *)cachedTargetsStoragePath {
+	return [[[ATBackend sharedBackend] supportDirectoryPath] stringByAppendingPathComponent:@"cachedtargets.objects"];
 }
 
-- (NSArray *)interactionsForCodePoint:(NSString *)codePoint {
-	NSArray *interactions = [codePointInteractions objectForKey:codePoint];
-	
-	return interactions;
-}
-
-- (ATInteraction *)interactionForCodePoint:(NSString *)codePoint {
-	NSArray *interactions = [self interactionsForCodePoint:codePoint];
-	for (ATInteraction *interaction in interactions) {
-		if ([interaction isValid]) {
-			return interaction;
-		}
-	}
-	
-	return nil;
++ (NSString *)cachedInteractionsStoragePath {
+	return [[[ATBackend sharedBackend] supportDirectoryPath] stringByAppendingPathComponent:@"cachedinteractionsV2.objects"];
 }
 
 - (BOOL)willShowInteractionForLocalEvent:(NSString *)event {
@@ -206,10 +217,7 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 
 - (ATInteraction *)interactionForEvent:(NSString *)event {
 	NSString *interactionID = nil;
-	
-	// TODO: get persisted dictionary
-	NSDictionary *targets = @{};
-	NSArray *invocations = targets[event];
+	NSArray *invocations = _engagementTargets[event];
 	for (ATInteractionInvocation *invocation in invocations) {
 		if ([invocation isValid]) {
 			interactionID = invocation.interactionID;
@@ -219,9 +227,7 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	
 	ATInteraction *interaction = nil;
 	if (interactionID) {
-		// TODO: get persisted dictionary
-		NSDictionary *interactions = @{};
-		interaction = interactions[interactionID];
+		interaction = _engagementInteractions[interactionID];
 	}
 	
 	return interaction;

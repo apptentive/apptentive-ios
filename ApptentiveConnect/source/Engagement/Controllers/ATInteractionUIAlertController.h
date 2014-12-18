@@ -18,7 +18,4 @@
 
 - (void)presentAlertControllerFromViewController:(UIViewController *)viewController;
 
-#warning REMOVE
-+ (ATInteraction *)sampleMessagingInteraction;
-
 @end

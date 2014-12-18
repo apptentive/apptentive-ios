@@ -18,6 +18,7 @@ typedef NS_ENUM(NSInteger, ATInteractionType){
 	ATInteractionTypeFeedbackDialog,
 	ATInteractionTypeMessageCenter,
 	ATInteractionTypeAppStoreRating,
+	ATInteractionTypeTextModal,
 	ATInteractionTypeSurvey
 };
 

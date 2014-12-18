@@ -22,6 +22,7 @@
 #import "ATInteractionMessageCenterController.h"
 #import "ATInteractionAppStoreController.h"
 #import "ATInteractionSurveyController.h"
+#import "ATInteractionUIAlertController.h"
 
 NSString *const ATEngagementInstallDateKey = @"ATEngagementInstallDateKey";
 NSString *const ATEngagementUpgradeDateKey = @"ATEngagementUpgradeDateKey";
@@ -462,6 +463,9 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 		case ATInteractionTypeSurvey:
 			[self presentSurveyInteraction:interaction fromViewController:viewController];
 			break;
+		case ATInteractionTypeTextModal:
+			[self presentTextModalInteraction:interaction fromViewController:viewController];
+			break;
 		case ATInteractionTypeUnknown:
 		default:
 			ATLogError(@"Attempting to present an unknown interaction type!");
@@ -533,6 +537,13 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	[survey showSurveyFromViewController:viewController];
 	
 	[survey release];
+}
+
+- (void)presentTextModalInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
+	NSAssert([interaction.type isEqualToString:@"TextModal"], @"Attempted to present a Text Modal interaction with an interaction of type: %@", interaction.type);
+	
+	ATInteractionUIAlertController *alert = [ATInteractionUIAlertController alertControllerWithInteraction:interaction];
+	[alert presentAlertControllerFromViewController:viewController];
 }
 
 - (void)resetUpgradeVersionInfo {

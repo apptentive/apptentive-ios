@@ -25,7 +25,7 @@
 }
 
 - (ATInteractionType)interactionType {
-	ATInteractionType interactionType = ATInteractionTypeUnknown;
+	ATInteractionType interactionType;
 	if ([self.type isEqualToString:@"UpgradeMessage"]) {
 		interactionType = ATInteractionTypeUpgradeMessage;
 	} else if ([self.type isEqualToString:@"EnjoymentDialog"]) {
@@ -40,6 +40,10 @@
 		interactionType = ATInteractionTypeAppStoreRating;
 	} else if ([self.type isEqualToString:@"Survey"]) {
 		interactionType = ATInteractionTypeSurvey;
+	} else if ([self.type isEqualToString:@"TextModal"]) {
+		interactionType = ATInteractionTypeTextModal;
+	} else {
+		interactionType = ATInteractionTypeUnknown;
 	}
 	
 	return interactionType;

@@ -30,10 +30,10 @@
 			
 			id decodedObject = [ATJSONSerialization JSONObjectWithData:jsonManifest error:&error];
 			if (decodedObject && [decodedObject isKindOfClass:[NSDictionary class]]) {
-				NSDictionary *jsonManifest = (NSDictionary *)decodedObject;
+				NSDictionary *jsonDictionary = (NSDictionary *)decodedObject;
 				
 				// Targets
-				NSDictionary *targetsDictionary = jsonManifest[@"targets"];
+				NSDictionary *targetsDictionary = jsonDictionary[@"targets"];
 				for (NSString *event in [targetsDictionary allKeys]) {
 					NSArray *invocationsJSONArray = targetsDictionary[event];
 					NSArray *invocationsArray = [ATInteractionInvocation invocationsWithJSONArray:invocationsJSONArray];
@@ -41,7 +41,7 @@
 				}
 				
 				// Interactions
-				NSArray *interactionsArray = jsonManifest[@"interactions"];
+				NSArray *interactionsArray = jsonDictionary[@"interactions"];
 				for (NSDictionary *interactionDictionary in interactionsArray) {
 					ATInteraction *interactionObject = [ATInteraction interactionWithJSONDictionary:interactionDictionary];
 					[interactions setObject:interactionObject forKey:interactionObject.identifier];

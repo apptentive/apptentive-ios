@@ -11,11 +11,16 @@
 
 @interface ATInteractionUIAlertController : UIAlertController
 
+typedef void (^alertActionHandler)(UIAlertAction *);
+
 @property (nonatomic, retain) ATInteraction *interaction;
 @property (nonatomic, retain) UIViewController *viewController;
 
 + (instancetype)alertControllerWithInteraction:(ATInteraction *)interaction;
 
 - (void)presentAlertControllerFromViewController:(UIViewController *)viewController;
+
+- (alertActionHandler)createButtonHandlerBlockDismiss;
+- (alertActionHandler)createButtonHandlerBlockWithInvocations:(NSArray *)invocations;
 
 @end

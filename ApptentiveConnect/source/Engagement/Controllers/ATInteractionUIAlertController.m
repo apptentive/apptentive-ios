@@ -13,8 +13,6 @@ NSString *const ATInteractionUIAlertControllerEventLabelDismiss = @"dismiss";
 
 @implementation ATInteractionUIAlertController
 
-typedef void (^alertActionHandler)(UIAlertAction *);
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -95,9 +93,10 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 	});
 }
 
-- (alertActionHandler)createButtonHandlerBlockInvokeInteraction {
+- (alertActionHandler)createButtonHandlerBlockWithInvocations:(NSArray *)invocations {
 	return Block_copy(^(UIAlertAction *action) {
-		//TODO
+		ATInteraction *interaction = [[ATEngagementBackend sharedBackend] interactionForInvocations:invocations];
+		[[ATEngagementBackend sharedBackend] presentInteraction:interaction fromViewController:self.viewController];
 	});
 }
 

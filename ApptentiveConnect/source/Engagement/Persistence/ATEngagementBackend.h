@@ -44,6 +44,8 @@ NSString *const ATEngagementInteractionsInvokesLastDateKey;
 
 - (ATInteraction *)interactionForEvent:(NSString *)event;
 
+- (ATInteraction *)interactionForInvocations:(NSArray *)invocations;
+
 - (BOOL)willShowInteractionForEvent:(NSString *)event;
 - (BOOL)willShowInteractionForLocalEvent:(NSString *)event;
 

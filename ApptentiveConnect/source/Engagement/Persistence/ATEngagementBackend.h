@@ -42,13 +42,10 @@ NSString *const ATEngagementInteractionsInvokesLastDateKey;
 + (NSString *)cachedTargetsStoragePath;
 + (NSString *)cachedInteractionsStoragePath;
 
-- (NSArray *)interactionsForCodePoint:(NSString *)codePoint;
-- (ATInteraction *)interactionForCodePoint:(NSString *)codePoint;
-
 - (ATInteraction *)interactionForEvent:(NSString *)event;
 
+- (BOOL)willShowInteractionForEvent:(NSString *)event;
 - (BOOL)willShowInteractionForLocalEvent:(NSString *)event;
-- (BOOL)willShowInteractionForCodePoint:(NSString *)codePoint;
 
 + (NSString *)stringByEscapingCodePointSeparatorCharactersInString:(NSString *)string;
 + (NSString *)codePointForLocalEvent:(NSString *)event;

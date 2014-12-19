@@ -213,13 +213,13 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	return (interaction != nil);
 }
 
-- (ATInteraction *)interactionForEvent:(NSString *)event {
 - (BOOL)willShowInteractionForLocalEvent:(NSString *)event {
 	return [self willShowInteractionForEvent:[ATEngagementBackend codePointForLocalEvent:event]];
 }
 
+- (ATInteraction *)interactionForInvocations:(NSArray *)invocations {
 	NSString *interactionID = nil;
-	NSArray *invocations = _engagementTargets[event];
+	
 	for (ATInteractionInvocation *invocation in invocations) {
 		if ([invocation isValid]) {
 			interactionID = invocation.interactionID;
@@ -231,6 +231,13 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	if (interactionID) {
 		interaction = _engagementInteractions[interactionID];
 	}
+	
+	return interaction;
+}
+
+- (ATInteraction *)interactionForEvent:(NSString *)event {
+	NSArray *invocations = _engagementTargets[event];
+	ATInteraction *interaction = [self interactionForInvocations:invocations];
 	
 	return interaction;
 }

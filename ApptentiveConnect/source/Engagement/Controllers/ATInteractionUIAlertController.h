@@ -20,6 +20,8 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 
 - (void)presentAlertControllerFromViewController:(UIViewController *)viewController;
 
+- (UIAlertAction *)alertActionWithConfiguration:(NSDictionary *)configuration;
+
 - (alertActionHandler)createButtonHandlerBlockDismiss;
 - (alertActionHandler)createButtonHandlerBlockWithInvocations:(NSArray *)invocations;
 

@@ -220,6 +220,8 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 - (ATInteraction *)interactionForInvocations:(NSArray *)invocations {
 	NSString *interactionID = nil;
 	
+	//this should handle dictionary.
+	
 	for (ATInteractionInvocation *invocation in invocations) {
 		if ([invocation isValid]) {
 			interactionID = invocation.interactionID;

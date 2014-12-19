@@ -8,6 +8,7 @@
 
 #import "ATInteractionUIAlertController.h"
 #import "ATEngagementBackend.h"
+#import "ATInteractionInvocation.h"
 
 NSString *const ATInteractionUIAlertControllerEventLabelDismiss = @"dismiss";
 
@@ -49,42 +50,47 @@ NSString *const ATInteractionUIAlertControllerEventLabelDismiss = @"dismiss";
 	
 	NSArray *actions = config[@"actions"];
 	for (NSDictionary *action in actions) {
-		NSString *actionTitle = action[@"label"];
-		
-		NSString *actionStyle = action[@"style"];
-		UIAlertActionStyle alertActionStyle;
-		if ([actionStyle isEqualToString:@"default"]) {
-			alertActionStyle = UIAlertActionStyleDefault;
-		} else if ([actionStyle isEqualToString:@"cancel"]) {
-			alertActionStyle = UIAlertActionStyleCancel;
-		} else if ([actionStyle isEqualToString:@"destructive"]) {
-			alertActionStyle = UIAlertActionStyleDestructive;
-		} else {
-			alertActionStyle = UIAlertActionStyleDefault;
-		}
-
-		NSString *actionType = action[@"action"];
-		alertActionHandler actionHandler;
-		if ([actionType isEqualToString:@"dismiss"]) {
-			actionHandler = [alertController createButtonHandlerBlockDismiss];
-		} else if ([actionType isEqualToString:@"interaction"]) {
-			actionHandler = [alertController createButtonHandlerBlockInvokeInteraction];
-		} else {
-			actionHandler = [alertController createButtonHandlerBlockDismiss];
-		}
-		
-		UIAlertAction *alertAction = [UIAlertAction actionWithTitle:actionTitle style:alertActionStyle handler:actionHandler];
-		
-		Block_release(actionHandler);
-		
-		BOOL enabled = action[@"enabled"] ? [action[@"enabled"] boolValue] : YES;
-		alertAction.enabled = enabled;
-		
+		UIAlertAction *alertAction = [alertController alertActionWithConfiguration:action];
 		[alertController addAction:alertAction];
-		
 	}
 	
 	return alertController;
+}
+
+- (UIAlertAction *)alertActionWithConfiguration:(NSDictionary *)configuration {
+	NSString *title = configuration[@"label"];
+	
+	NSString *styleString = configuration[@"style"];
+	UIAlertActionStyle style;
+	if ([styleString isEqualToString:@"default"]) {
+		style = UIAlertActionStyleDefault;
+	} else if ([styleString isEqualToString:@"cancel"]) {
+		style = UIAlertActionStyleCancel;
+	} else if ([styleString isEqualToString:@"destructive"]) {
+		style = UIAlertActionStyleDestructive;
+	} else {
+		style = UIAlertActionStyleDefault;
+	}
+	
+	NSString *actionType = configuration[@"action"];
+	alertActionHandler actionHandler;
+	if ([actionType isEqualToString:@"dismiss"]) {
+		actionHandler = [self createButtonHandlerBlockDismiss];
+	} else if ([actionType isEqualToString:@"interaction"]) {
+		NSArray *jsonInvocations = configuration[@"invokes"];
+		NSArray *invocations = [ATInteractionInvocation invocationsWithJSONArray:jsonInvocations];
+		actionHandler = [self createButtonHandlerBlockWithInvocations:invocations];
+	} else {
+		actionHandler = [self createButtonHandlerBlockDismiss];
+	}
+	
+	UIAlertAction *alertAction = [UIAlertAction actionWithTitle:title style:style handler:actionHandler];
+	Block_release(actionHandler);
+	
+	BOOL enabled = configuration[@"enabled"] ? [configuration[@"enabled"] boolValue] : YES;
+	alertAction.enabled = enabled;
+	
+	return alertAction;
 }
 
 - (alertActionHandler)createButtonHandlerBlockDismiss {

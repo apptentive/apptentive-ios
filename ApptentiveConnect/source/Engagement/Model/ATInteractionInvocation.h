@@ -17,6 +17,7 @@
 @property (nonatomic, retain) NSDictionary *criteria;
 
 + (ATInteractionInvocation *)invocationWithJSONDictionary:(NSDictionary *)jsonDictionary;
++ (NSArray *)invocationsWithJSONArray:(NSArray *)jsonArray;
 
 - (BOOL)isValid;
 

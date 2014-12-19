@@ -35,14 +35,9 @@
 				// Targets
 				NSDictionary *targetsDictionary = jsonManifest[@"targets"];
 				for (NSString *event in [targetsDictionary allKeys]) {
-					NSArray *invocationArray = targetsDictionary[event];
-					
-					NSMutableArray *invocationObjects = [NSMutableArray array];
-					for (NSDictionary *jsonInvocation in invocationArray) {
-						ATInteractionInvocation *invocation = [ATInteractionInvocation invocationWithJSONDictionary:jsonInvocation];
-						[invocationObjects addObject:invocation];
-					}
-					[targets setObject:invocationObjects forKey:event];
+					NSArray *invocationsJSONArray = targetsDictionary[event];
+					NSArray *invocationsArray = [ATInteractionInvocation invocationsWithJSONArray:invocationsJSONArray];
+					[targets setObject:invocationsArray forKey:event];
 				}
 				
 				// Interactions

@@ -21,6 +21,28 @@
 	return invocation;
 }
 
++ (NSArray *)invocationsWithJSONArray:(NSArray *)jsonArray {
+	NSMutableArray *invocations = [NSMutableArray array];
+
+	for (NSObject *invocationObject in jsonArray) {
+		ATInteractionInvocation *invocation = nil;
+		
+		// Handle arrays of both Invocation and NSDictionary
+		if ([invocationObject isKindOfClass:[ATInteractionInvocation class]]) {
+			invocation = (ATInteractionInvocation *)invocationObject;
+		}
+		else if ([invocationObject isKindOfClass:[NSDictionary class]]) {
+			invocation = [ATInteractionInvocation invocationWithJSONDictionary:(NSDictionary *)invocationObject];
+		}
+		
+		if (invocation) {
+			[invocations addObject:invocation];
+		}
+	}
+	
+	return invocations;
+}
+
 - (NSString *)description {
 	NSDictionary *description = @{@"interaction_id" : self.interactionID ?: [NSNull null],
 								  @"priority" : [NSNumber numberWithInteger:self.priority] ?: [NSNull null],

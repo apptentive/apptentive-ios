@@ -42,6 +42,8 @@
 		interactionType = ATInteractionTypeSurvey;
 	} else if ([self.type isEqualToString:@"TextModal"]) {
 		interactionType = ATInteractionTypeTextModal;
+	} else if ([self.type isEqualToString:@"NavigateToLink"]) {
+		interactionType = ATInteractionTypeNavigateToLink;
 	} else {
 		interactionType = ATInteractionTypeUnknown;
 	}

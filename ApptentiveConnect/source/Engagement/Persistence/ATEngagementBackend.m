@@ -23,6 +23,7 @@
 #import "ATInteractionAppStoreController.h"
 #import "ATInteractionSurveyController.h"
 #import "ATInteractionUIAlertController.h"
+#import "ATInteractionNavigateToLink.h"
 
 NSString *const ATEngagementInstallDateKey = @"ATEngagementInstallDateKey";
 NSString *const ATEngagementUpgradeDateKey = @"ATEngagementUpgradeDateKey";
@@ -466,6 +467,9 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 		case ATInteractionTypeTextModal:
 			[self presentTextModalInteraction:interaction fromViewController:viewController];
 			break;
+		case ATInteractionTypeNavigateToLink:
+			[self presentNavigateToLinkInteraction:interaction];
+			break;
 		case ATInteractionTypeUnknown:
 		default:
 			ATLogError(@"Attempting to present an unknown interaction type!");
@@ -544,6 +548,13 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	
 	ATInteractionUIAlertController *alert = [ATInteractionUIAlertController alertControllerWithInteraction:interaction];
 	[alert presentAlertControllerFromViewController:viewController];
+}
+
+
+- (void)presentNavigateToLinkInteraction:(ATInteraction *)interaction {
+	NSAssert([interaction.type isEqualToString:@"NavigateToLink"], @"Attempted to present a NavigateToLink interaction with an interaction of type: %@", interaction.type);
+
+	[ATInteractionNavigateToLink navigateToLinkLinkWithInteraction:interaction];
 }
 
 - (void)resetUpgradeVersionInfo {

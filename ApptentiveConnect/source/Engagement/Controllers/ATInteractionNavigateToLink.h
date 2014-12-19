@@ -7,7 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import "ATInteraction.h"
 
 @interface ATInteractionNavigateToLink : NSObject
+
++ (void)navigateToLinkLinkWithInteraction:(ATInteraction *)interaction;
 
 @end

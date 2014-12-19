@@ -76,6 +76,8 @@ NSString *const ATEngagementInteractionsInvokesLastDateKey;
 - (void)presentUpgradeMessageInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController;
 - (void)presentEnjoymentDialogInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController;
 
+- (void)presentNavigateToLinkInteraction:(ATInteraction *)interaction;
+
 // Used for debugging only.
 - (void)resetUpgradeVersionInfo;
 @end

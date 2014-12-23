@@ -70,7 +70,7 @@ NSString *const ATInteractionUIAlertControllerEventLabelDismiss = @"dismiss";
 }
 
 - (UIAlertAction *)alertActionWithConfiguration:(NSDictionary *)configuration {
-	NSString *title = configuration[@"label"];
+	NSString *title = configuration[@"label"] ?: @"button";
 	
 	NSString *styleString = configuration[@"style"];
 	UIAlertActionStyle style;

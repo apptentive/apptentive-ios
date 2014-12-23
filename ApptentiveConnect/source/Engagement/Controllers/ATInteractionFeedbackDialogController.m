@@ -176,16 +176,6 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 	}
 }
 
-- (NSString *)initialEmailAddressForMessagePanel:(ATMessagePanelViewController *)messagePanel {
-	NSString *email = [ATConnect sharedConnection].initialUserEmailAddress;
-	
-	if ([ATPersonInfo personExists]) {
-		email = [ATPersonInfo currentPerson].emailAddress;
-	}
-	
-	return email;
-}
-
 - (BOOL)engageEvent:(NSString *)eventLabel {
 	return [[ATEngagementBackend sharedBackend] engageApptentiveEvent:eventLabel fromInteraction:self.interaction fromViewController:self.viewController];
 }

@@ -752,7 +752,7 @@ static NSURLCache *imageCache = nil;
 	}
 }
 
-- (NSString *)initialEmailAddressForMessagePanel:(ATMessagePanelViewController *)messagePanel {
+- (NSString *)initialEmailAddressForMessagePanel {
 	NSString *email = [ATConnect sharedConnection].initialUserEmailAddress;
 	
 	if ([ATPersonInfo personExists]) {

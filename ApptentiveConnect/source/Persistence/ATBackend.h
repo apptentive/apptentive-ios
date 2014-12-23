@@ -115,6 +115,7 @@ NSString *const ATBackendBecameReadyNotification;
 - (void)messageCenterLeftForeground;
 
 - (NSString *)appName;
+- (NSString *)initialEmailAddressForMessagePanel;
 
 - (BOOL)isReady;
 

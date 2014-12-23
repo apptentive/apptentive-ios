@@ -48,9 +48,21 @@ NSString *const ATInteractionUIAlertControllerEventLabelDismiss = @"dismiss";
 	ATInteractionUIAlertController *alertController = [super alertControllerWithTitle:title message:message preferredStyle:preferredStyle];
 	alertController.interaction = interaction;
 	
+	BOOL cancelActionAdded = NO;
 	NSArray *actions = config[@"actions"];
 	for (NSDictionary *action in actions) {
 		UIAlertAction *alertAction = [alertController alertActionWithConfiguration:action];
+		
+		// Do not add more than 1 cancel action to the alert
+		// 'NSInternalInconsistencyException', reason: 'UIAlertController can only have one action with a style of UIAlertActionStyleCancel'
+		if (alertAction.style == UIAlertActionStyleCancel) {
+			if (!cancelActionAdded) {
+				cancelActionAdded = YES;
+			} else {
+				break;
+			}
+		}
+		
 		[alertController addAction:alertAction];
 	}
 	

@@ -556,7 +556,9 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	NSAssert([interaction.type isEqualToString:@"TextModal"], @"Attempted to present a Text Modal interaction with an interaction of type: %@", interaction.type);
 	
 	ATInteractionUIAlertController *alert = [ATInteractionUIAlertController alertControllerWithInteraction:interaction];
-	[alert presentAlertControllerFromViewController:viewController];
+	if (alert) {
+		[alert presentAlertControllerFromViewController:viewController];
+	}
 }
 
 

@@ -35,6 +35,11 @@ NSString *const ATInteractionUIAlertControllerEventLabelDismiss = @"dismiss";
 	NSString *title = config[@"title"];
 	NSString *message = config[@"body"];
 	
+	if (!title && !message) {
+		ATLogError(@"Cannot show an Apptentive alert without a title or message.");
+		return nil;
+	}
+	
 	NSString *layout = config[@"layout"];
 	UIAlertControllerStyle preferredStyle;
 	if ([layout isEqualToString:@"center"]) {
@@ -53,12 +58,13 @@ NSString *const ATInteractionUIAlertControllerEventLabelDismiss = @"dismiss";
 	for (NSDictionary *action in actions) {
 		UIAlertAction *alertAction = [alertController alertActionWithConfiguration:action];
 		
-		// Do not add more than 1 cancel action to the alert
+		// Adding more than one cancel action to the alert causes crash.
 		// 'NSInternalInconsistencyException', reason: 'UIAlertController can only have one action with a style of UIAlertActionStyleCancel'
 		if (alertAction.style == UIAlertActionStyleCancel) {
 			if (!cancelActionAdded) {
 				cancelActionAdded = YES;
 			} else {
+				// Additional cancel buttons are ignored.
 				break;
 			}
 		}

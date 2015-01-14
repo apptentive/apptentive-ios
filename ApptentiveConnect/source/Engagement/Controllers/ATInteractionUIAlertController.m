@@ -10,7 +10,10 @@
 #import "ATEngagementBackend.h"
 #import "ATInteractionInvocation.h"
 
+NSString *const ATInteractionUIAlertControllerEventLabelLaunch = @"launch";
+NSString *const ATInteractionUIAlertControllerEventLabelCancel = @"cancel";
 NSString *const ATInteractionUIAlertControllerEventLabelDismiss = @"dismiss";
+NSString *const ATInteractionUIAlertControllerEventLabelInteraction = @"interaction";
 
 @implementation ATInteractionUIAlertController
 
@@ -27,7 +30,9 @@ NSString *const ATInteractionUIAlertControllerEventLabelDismiss = @"dismiss";
 - (void)presentAlertControllerFromViewController:(UIViewController *)viewController {
 	self.viewController = viewController;
 	
-	[viewController presentViewController:self animated:YES completion:nil];
+	[viewController presentViewController:self animated:YES completion:^{
+		[[ATEngagementBackend sharedBackend] engageApptentiveEvent:ATInteractionUIAlertControllerEventLabelLaunch fromInteraction:self.interaction fromViewController:self.viewController];
+	}];
 }
 
 + (instancetype)alertControllerWithInteraction:(ATInteraction *)interaction {
@@ -119,6 +124,8 @@ NSString *const ATInteractionUIAlertControllerEventLabelDismiss = @"dismiss";
 
 - (alertActionHandler)createButtonHandlerBlockWithInvocations:(NSArray *)invocations {
 	return Block_copy(^(UIAlertAction *action) {
+		[[ATEngagementBackend sharedBackend] engageApptentiveEvent:ATInteractionUIAlertControllerEventLabelInteraction fromInteraction:self.interaction fromViewController:self.viewController];
+		
 		ATInteraction *interaction = [[ATEngagementBackend sharedBackend] interactionForInvocations:invocations];
 		[[ATEngagementBackend sharedBackend] presentInteraction:interaction fromViewController:self.viewController];
 	});

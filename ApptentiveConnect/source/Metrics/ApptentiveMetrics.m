@@ -103,12 +103,15 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 	[defaults registerDefaults:defaultPreferences];
 }
 
-
 - (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo {
 	[self addMetricWithName:name info:userInfo customData:nil extendedData:nil];
 }
 
 - (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData {
+	[self addMetricWithName:name fromInteraction:nil info:userInfo customData:customData extendedData:extendedData];
+}
+
+- (void)addMetricWithName:(NSString *)name fromInteraction:(ATInteraction *)interaction info:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData {
 	if (metricsEnabled == NO) {
 		return;
 	}
@@ -116,9 +119,17 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 	[event setup];
 	event.label = name;
 	
+	if (interaction) {
+		NSString *interactionID = interaction.identifier;
+		if (interactionID) {
+			[event addEntriesFromDictionary:@{@"interaction_id": interaction.identifier}];
+		}
+	}
+	
 	if (userInfo) {
 		[event addEntriesFromDictionary:@{@"data": userInfo}];
 	}
+	
 	if (customData) {
 		NSDictionary *customDataDictionary = @{@"custom_data": customData};
 		if ([NSJSONSerialization isValidJSONObject:customDataDictionary]) {

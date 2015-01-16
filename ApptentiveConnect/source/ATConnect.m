@@ -313,11 +313,11 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController {
-	return [[ATEngagementBackend sharedBackend] engageLocalEvent:event fromViewController:viewController];
+	return [self engage:event withCustomData:nil fromViewController:viewController];
 }
 
 - (BOOL)engage:(NSString *)event withCustomData:(NSDictionary *)customData fromViewController:(UIViewController *)viewController {
-	return [[ATEngagementBackend sharedBackend] engageLocalEvent:event userInfo:nil customData:customData extendedData:nil fromViewController:viewController];
+	return [self engage:event withCustomData:customData withExtendedData:nil fromViewController:viewController];
 }
 
 - (BOOL)engage:(NSString *)event withCustomData:(NSDictionary *)customData withExtendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {

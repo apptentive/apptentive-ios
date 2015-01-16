@@ -455,17 +455,6 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	[[ATBackend sharedBackend] presentIntroDialogFromViewController:viewController withTitle:title prompt:body placeholderText:placeholder];
 }
 
-
-- (void)presentUpgradeDialogFromViewControllerIfAvailable:(UIViewController *)viewController {
-	NSArray *interactions = [[ATEngagementBackend sharedBackend] interactionsForCodePoint:@"local#app#init"];
-	for (ATInteraction *interaction in interactions) {
-		if ([interaction.type isEqualToString:@"UpgradeMessage"]) {
-			[[ATEngagementBackend sharedBackend] presentUpgradeMessageInteraction:interaction fromViewController:viewController];
-			break;
-		}
-	}
-}
-
 - (void)resetUpgradeData {
 	[[ATEngagementBackend sharedBackend] resetUpgradeVersionInfo];
 }

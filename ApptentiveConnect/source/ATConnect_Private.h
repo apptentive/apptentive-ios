@@ -20,7 +20,6 @@ extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 
 #if TARGET_OS_IPHONE
 - (void)presentFeedbackDialogFromViewController:(UIViewController *)viewController;
-- (void)presentUpgradeDialogFromViewControllerIfAvailable:(UIViewController *)viewController;
 
 // For debugging only.
 - (void)resetUpgradeData;

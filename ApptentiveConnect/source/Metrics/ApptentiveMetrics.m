@@ -111,7 +111,7 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 	[self addMetricWithName:name fromInteraction:nil info:userInfo customData:customData extendedData:extendedData];
 }
 
-- (void)addMetricWithName:(NSString *)name fromInteraction:(ATInteraction *)interaction info:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData {
+- (void)addMetricWithName:(NSString *)name fromInteraction:(ATInteraction *)fromInteraction info:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData {
 	if (metricsEnabled == NO) {
 		return;
 	}
@@ -119,10 +119,10 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 	[event setup];
 	event.label = name;
 	
-	if (interaction) {
-		NSString *interactionID = interaction.identifier;
+	if (fromInteraction) {
+		NSString *interactionID = fromInteraction.identifier;
 		if (interactionID) {
-			[event addEntriesFromDictionary:@{@"interaction_id": interaction.identifier}];
+			[event addEntriesFromDictionary:@{@"interaction_id": interactionID}];
 		}
 	}
 	

@@ -51,7 +51,7 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey;
 
 - (ATInteraction *)interactionForInvocations:(NSArray *)invocations;
 
-- (BOOL)willShowInteractionForEvent:(NSString *)event;
+- (BOOL)willShowInteractionForCodePoint:(NSString *)codePoint;
 - (BOOL)willShowInteractionForLocalEvent:(NSString *)event;
 
 + (NSString *)stringByEscapingCodePointSeparatorCharactersInString:(NSString *)string;

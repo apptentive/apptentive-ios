@@ -321,6 +321,14 @@
 	return _vendor ?: ATEngagementCodePointApptentiveVendorKey;
 }
 
+- (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController {
+	return [self engage:event fromViewController:viewController userInfo:nil];
+}
+
+- (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController userInfo:(NSDictionary *)userInfo {
+	return [[ATEngagementBackend sharedBackend] engageEvent:event fromVendor:self.vendor fromInteraction:self userInfo:userInfo customData:nil extendedData:nil fromViewController:viewController];
+}
+
 - (void)dealloc {
 	[_identifier release], _identifier = nil;
 	[_type release], _type = nil;

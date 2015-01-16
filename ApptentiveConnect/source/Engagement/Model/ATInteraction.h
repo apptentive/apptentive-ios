@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @class ATInteractionUsageData;
 
@@ -45,5 +46,8 @@ typedef NS_ENUM(NSInteger, ATInteractionType){
 - (NSPredicate *)criteriaPredicate;
 + (NSPredicate *)predicateForCriteria:(NSString *)criteria operatorExpression:(NSDictionary *)operatorExpression hasError:(BOOL *)hasError;
 + (NSPredicate *)predicateForInteractionCriteria:(NSDictionary *)interactionCriteria hasError:(BOOL *)hasError;
+
+- (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController;
+- (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController userInfo:(NSDictionary *)userInfo;
 
 @end

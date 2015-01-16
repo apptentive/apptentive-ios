@@ -535,7 +535,7 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 - (void)presentNavigateToLinkInteraction:(ATInteraction *)interaction {
 	NSAssert([interaction.type isEqualToString:@"NavigateToLink"], @"Attempted to present a NavigateToLink interaction with an interaction of type: %@", interaction.type);
 
-	[ATInteractionNavigateToLink navigateToLinkLinkWithInteraction:interaction];
+	[ATInteractionNavigateToLink navigateToLinkWithInteraction:interaction];
 }
 
 - (void)resetUpgradeVersionInfo {

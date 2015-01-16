@@ -12,6 +12,6 @@
 
 @interface ATInteractionNavigateToLink : NSObject
 
-+ (void)navigateToLinkLinkWithInteraction:(ATInteraction *)interaction;
++ (void)navigateToLinkWithInteraction:(ATInteraction *)interaction;
 
 @end

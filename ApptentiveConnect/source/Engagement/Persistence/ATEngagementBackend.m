@@ -275,7 +275,7 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	return [[ATInteraction localAppInteraction] engage:event fromViewController:viewController];
 }
 
-- (BOOL)engage:(NSString *)codePoint fromInteraction:(ATInteraction *)fromInteraction userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {
+- (BOOL)engageCodePoint:(NSString *)codePoint fromInteraction:(ATInteraction *)fromInteraction userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {
 	ATLogInfo(@"Engage Apptentive event: %@", codePoint);
 	
 	[[ApptentiveMetrics sharedMetrics] addMetricWithName:codePoint fromInteraction:fromInteraction info:userInfo customData:customData extendedData:extendedData];

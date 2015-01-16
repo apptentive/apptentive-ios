@@ -60,7 +60,7 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey;
 - (BOOL)engageApptentiveAppEvent:(NSString *)event;
 - (BOOL)engageLocalEvent:(NSString *)event userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController;
 
-- (BOOL)engage:(NSString *)codePoint fromInteraction:(ATInteraction *)fromInteraction userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController;
+- (BOOL)engageCodePoint:(NSString *)codePoint fromInteraction:(ATInteraction *)fromInteraction userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController;
 
 - (void)codePointWasSeen:(NSString *)codePoint;
 - (void)codePointWasEngaged:(NSString *)codePoint;

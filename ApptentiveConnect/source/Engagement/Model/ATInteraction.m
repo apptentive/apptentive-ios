@@ -348,7 +348,7 @@
 - (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController userInfo:(NSDictionary *)userInfo {
 	NSString *codePoint = [self codePointForEvent:event];
 	
-	return [[ATEngagementBackend sharedBackend] engage:codePoint fromInteraction:self userInfo:userInfo customData:nil extendedData:nil fromViewController:viewController];
+	return [[ATEngagementBackend sharedBackend] engageCodePoint:codePoint fromInteraction:self userInfo:userInfo customData:nil extendedData:nil fromViewController:viewController];
 }
 
 - (void)dealloc {

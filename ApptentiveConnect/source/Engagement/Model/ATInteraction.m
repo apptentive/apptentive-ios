@@ -21,6 +21,8 @@
 	interaction.configuration = [jsonDictionary objectForKey:@"configuration"];
 	interaction.criteria = [jsonDictionary objectForKey:@"criteria"];
 	interaction.version = [jsonDictionary objectForKey:@"version"];
+	//NOTE: `vendor` is not currently sent in JSON dictionary.
+	
 	return [interaction autorelease];
 }
 
@@ -314,12 +316,18 @@
 	return result;
 }
 
+- (NSString *)vendor {
+	// Currently, all interactions except local app events use `ATEngagementCodePointApptentiveVendorKey`.
+	return _vendor ?: ATEngagementCodePointApptentiveVendorKey;
+}
+
 - (void)dealloc {
 	[_identifier release], _identifier = nil;
 	[_type release], _type = nil;
 	[_configuration release], _configuration = nil;
 	[_criteria release], _criteria = nil;
 	[_version release], _version = nil;
+	[_vendor release], _vendor = nil;
 	
 	[super dealloc];
 }

@@ -30,6 +30,7 @@ typedef NS_ENUM(NSInteger, ATInteractionType){
 @property (nonatomic, retain) NSDictionary *configuration;
 @property (nonatomic, retain) NSDictionary *criteria;
 @property (nonatomic, copy) NSString *version;
+@property (nonatomic, copy) NSString *vendor;
 
 + (ATInteraction *)interactionWithJSONDictionary:(NSDictionary *)jsonDictionary;
 

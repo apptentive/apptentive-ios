@@ -31,7 +31,7 @@ NSString *const ATInteractionUIAlertControllerEventLabelInteraction = @"interact
 	self.viewController = viewController;
 	
 	[viewController presentViewController:self animated:YES completion:^{
-		[[ATEngagementBackend sharedBackend] engageApptentiveEvent:ATInteractionUIAlertControllerEventLabelLaunch fromInteraction:self.interaction fromViewController:self.viewController];
+		[self.interaction engage:ATInteractionUIAlertControllerEventLabelLaunch fromViewController:self.viewController];
 	}];
 }
 
@@ -118,13 +118,13 @@ NSString *const ATInteractionUIAlertControllerEventLabelInteraction = @"interact
 
 - (alertActionHandler)createButtonHandlerBlockDismiss {
 	return Block_copy(^(UIAlertAction *action) {
-		[[ATEngagementBackend sharedBackend] engageApptentiveEvent:ATInteractionUIAlertControllerEventLabelDismiss fromInteraction:self.interaction fromViewController:self.viewController];
+		[self.interaction engage:ATInteractionUIAlertControllerEventLabelDismiss fromViewController:self.viewController];
 	});
 }
 
 - (alertActionHandler)createButtonHandlerBlockWithInvocations:(NSArray *)invocations {
 	return Block_copy(^(UIAlertAction *action) {
-		[[ATEngagementBackend sharedBackend] engageApptentiveEvent:ATInteractionUIAlertControllerEventLabelInteraction fromInteraction:self.interaction fromViewController:self.viewController];
+		[self.interaction engage:ATInteractionUIAlertControllerEventLabelInteraction fromViewController:self.viewController];
 		
 		ATInteraction *interaction = [[ATEngagementBackend sharedBackend] interactionForInvocations:invocations];
 		[[ATEngagementBackend sharedBackend] presentInteraction:interaction fromViewController:self.viewController];

@@ -80,7 +80,7 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 
 #if TARGET_OS_IPHONE
 - (void)showUnableToOpenAppStoreDialog {
-	[[ATEngagementBackend sharedBackend] engageApptentiveEvent:ATInteractionAppStoreRatingEventLabelUnableToRate fromInteraction:self.interaction fromViewController:self.viewController];
+	[self.interaction engage:ATInteractionAppStoreRatingEventLabelUnableToRate fromViewController:self.viewController];
 	
 	UIAlertView *errorAlert = [[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Oops!", @"Unable to load the App Store title") message:ATLocalizedString(@"Unable to load the App Store", @"Unable to load the App Store message") delegate:self cancelButtonTitle:ATLocalizedString(@"OK", @"OK button title") otherButtonTitles:nil] autorelease];
 	[errorAlert show];
@@ -125,7 +125,7 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 			[self showUnableToOpenAppStoreDialog];
 		}
 		else {
-			[[ATEngagementBackend sharedBackend] engageApptentiveEvent:ATInteractionAppStoreRatingEventLabelOpenAppStoreURL fromInteraction:self.interaction fromViewController:self.viewController];
+			[self.interaction engage:ATInteractionAppStoreRatingEventLabelOpenAppStoreURL fromViewController:self.viewController];
 			
 			[[UIApplication sharedApplication] openURL:url];
 			
@@ -148,7 +148,7 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 				ATLogError(@"Error loading product view: %@", error);
 				[self showUnableToOpenAppStoreDialog];
 			} else {
-				[[ATEngagementBackend sharedBackend] engageApptentiveEvent:ATInteractionAppStoreRatingEventLabelOpenStoreKit fromInteraction:self.interaction fromViewController:self.viewController];
+				[self.interaction engage:ATInteractionAppStoreRatingEventLabelOpenStoreKit fromViewController:self.viewController];
 				
 				UIViewController *presentingVC = self.viewController;
 
@@ -193,7 +193,7 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 }
 
 - (void)openMacAppStore {
-	[[ATEngagementBackend sharedBackend] engageApptentiveEvent:ATInteractionAppStoreRatingEventLabelOpenMacAppStore fromInteraction:self.interaction fromViewController:self.viewController];
+	[self.interaction engage:ATInteractionAppStoreRatingEventLabelOpenMacAppStore fromViewController:self.viewController];
 	
 #if TARGET_OS_IPHONE
 #elif TARGET_OS_MAC

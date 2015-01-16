@@ -250,7 +250,7 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 @implementation ApptentiveMetrics (Private)
 - (void)addLaunchMetric {
 	@autoreleasepool {
-		[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch userInfo:nil];
+		[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch];
 	}
 }
 
@@ -356,15 +356,15 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 }
 
 - (void)appWillTerminate:(NSNotification *)notification {
-	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:ATInteractionAppEventLabelExit userInfo:nil];
+	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:ATInteractionAppEventLabelExit];
 }
 
 - (void)appDidEnterBackground:(NSNotification *)notification {
-	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:ATInteractionAppEventLabelExit userInfo:nil];
+	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:ATInteractionAppEventLabelExit];
 }
 
 - (void)appWillEnterForeground:(NSNotification *)notification {
-	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch userInfo:nil];
+	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch];
 }
 
 - (void)messageCenterDidLaunch:(NSNotification *)notification {

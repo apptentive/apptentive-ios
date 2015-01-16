@@ -40,7 +40,7 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 	
 	self.viewController = viewController;
 	
-	[self engageEvent:ATInteractionFeedbackDialogEventLabelLaunch];
+	[self.interaction engage:ATInteractionFeedbackDialogEventLabelLaunch fromViewController:self.viewController];
 		
 	if (!self.viewController) {
 		ATLogError(@"No view controller to present feedback interface!!");
@@ -92,11 +92,11 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 }
 
 - (void)messagePanelDidCancel:(ATMessagePanelViewController *)messagePanel {
-	[self engageEvent:ATInteractionFeedbackDialogEventLabelCancel];
+	[self.interaction engage:ATInteractionFeedbackDialogEventLabelCancel fromViewController:self.viewController];
 }
 
 - (void)messagePanel:(ATMessagePanelViewController *)messagePanel didSendMessage:(NSString *)message withEmailAddress:(NSString *)emailAddress {
-	[self engageEvent:ATInteractionFeedbackDialogEventLabelSubmit];
+	[self.interaction engage:ATInteractionFeedbackDialogEventLabelSubmit fromViewController:self.viewController];
 
 	ATPersonInfo *person = nil;
 	if ([ATPersonInfo personExists]) {
@@ -126,7 +126,7 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 }
 
 - (void)messagePanel:(ATMessagePanelViewController *)messagePanel didDismissWithAction:(ATMessagePanelDismissAction)action {
-	[self engageEvent:ATInteractionFeedbackDialogEventLabelDismiss];
+	[self.interaction engage:ATInteractionFeedbackDialogEventLabelDismiss fromViewController:self.viewController];
 	
 	if (action == ATMessagePanelDidSendMessage) {
 		if (!didSendFeedbackAlert) {
@@ -160,11 +160,11 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	if (alertView == didSendFeedbackAlert) {
 		if (buttonIndex == 0) { // Cancel
-			[self engageEvent:ATInteractionFeedbackDialogEventLabelSkipViewMessages];
+			[self.interaction engage:ATInteractionFeedbackDialogEventLabelSkipViewMessages fromViewController:self.viewController];
 			
 			//[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroThankYouDidCloseNotification object:self userInfo:nil];
 		} else if (buttonIndex == 1) { // View Messages
-			[self engageEvent:ATInteractionFeedbackDialogEventLabelViewMessages];
+			[self.interaction engage:ATInteractionFeedbackDialogEventLabelViewMessages fromViewController:self.viewController];
 
 			//[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroThankYouHitMessagesNotification object:self userInfo:nil];
 		}
@@ -184,10 +184,6 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 	}
 	
 	return email;
-}
-
-- (BOOL)engageEvent:(NSString *)eventLabel {
-	return [[ATEngagementBackend sharedBackend] engageApptentiveEvent:eventLabel fromInteraction:self.interaction fromViewController:self.viewController];
 }
 
 @end

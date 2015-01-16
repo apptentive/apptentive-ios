@@ -187,7 +187,7 @@ enum {
 	
 	NSDictionary *metricsInfo = [[NSDictionary alloc] initWithObjectsAndKeys:survey.identifier, ATSurveyMetricsSurveyIDKey, [NSNumber numberWithInt:ATSurveyWindowTypeSurvey], ATSurveyWindowTypeKey, [NSNumber numberWithInt:ATSurveyEventTappedSend], ATSurveyMetricsEventKey, nil];
 	
-	[[ATEngagementBackend sharedBackend] engageApptentiveEvent:ATInteractionSurveyEventLabelSend fromInteraction:self.interaction fromViewController:self userInfo:metricsInfo];
+	[self.interaction engage:ATInteractionSurveyEventLabelSend fromViewController:self userInfo:metricsInfo];
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidHideWindowNotification object:nil userInfo:metricsInfo];
 	[metricsInfo release], metricsInfo = nil;
@@ -791,7 +791,7 @@ enum {
 - (void)cancel:(id)sender {
 	NSDictionary *metricsInfo = [[NSDictionary alloc] initWithObjectsAndKeys:survey.identifier, ATSurveyMetricsSurveyIDKey, [NSNumber numberWithInt:ATSurveyWindowTypeSurvey], ATSurveyWindowTypeKey, [NSNumber numberWithInt:ATSurveyEventTappedCancel], ATSurveyMetricsEventKey, nil];
 	
-	[[ATEngagementBackend sharedBackend] engageApptentiveEvent:ATInteractionSurveyEventLabelCancel fromInteraction:self.interaction fromViewController:self userInfo:metricsInfo];
+	[self.interaction engage:ATInteractionSurveyEventLabelCancel fromViewController:self userInfo:metricsInfo];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidHideWindowNotification object:nil userInfo:metricsInfo];
 	[metricsInfo release], metricsInfo = nil;

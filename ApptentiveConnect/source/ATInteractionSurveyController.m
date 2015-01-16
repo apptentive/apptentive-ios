@@ -47,7 +47,7 @@ NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 	NSDictionary *notificationInfo = @{ATSurveyIDKey: (survey.identifier ?: [NSNull null])};
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyShownNotification object:nil userInfo:notificationInfo];
 	
-	[[ATEngagementBackend sharedBackend] engageApptentiveEvent:ATInteractionSurveyEventLabelLaunch fromInteraction:self.interaction fromViewController:self.viewController];
+	[self.interaction engage:ATInteractionSurveyEventLabelLaunch fromViewController:self.viewController];
 	
 	[viewController presentViewController:nc animated:YES completion:^{}];
 	[nc release];

@@ -48,7 +48,7 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 		[self.ratingDialog show];
 	}
 	
-	[self engageEvent:ATInteractionRatingDialogEventLabelLaunch];
+	[self.interaction engage:ATInteractionRatingDialogEventLabelLaunch fromViewController:self.viewController];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -56,19 +56,15 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 		if (buttonIndex == 1) { // rate
 			[[NSNotificationCenter defaultCenter] postNotificationName:ATAppRatingFlowUserAgreedToRateAppNotification object:nil];
 
-			[self engageEvent:ATInteractionRatingDialogEventLabelRate];
+			[self.interaction engage:ATInteractionRatingDialogEventLabelRate fromViewController:self.viewController];
 		} else if (buttonIndex == 2) { // remind later
-			[self engageEvent:ATInteractionRatingDialogEventLabelRemind];
+			[self.interaction engage:ATInteractionRatingDialogEventLabelRemind fromViewController:self.viewController];
 		} else if (buttonIndex == 0) { // no thanks
-			[self engageEvent:ATInteractionRatingDialogEventLabelDecline];
+			[self.interaction engage:ATInteractionRatingDialogEventLabelDecline fromViewController:self.viewController];
 		}
 		
 		[self release];
 	}
-}
-
-- (BOOL)engageEvent:(NSString *)eventLabel {
-	return [[ATEngagementBackend sharedBackend] engageApptentiveEvent:eventLabel fromInteraction:self.interaction fromViewController:self.viewController];
 }
 
 - (void)dealloc {

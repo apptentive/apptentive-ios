@@ -46,7 +46,7 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 		[self.enjoymentDialog show];
 	}
 
-	[self engageEvent:ATInteractionEnjoymentDialogEventLabelLaunch];
+	[self.interaction engage:ATInteractionEnjoymentDialogEventLabelLaunch fromViewController:self.viewController];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -59,17 +59,13 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 				}
 			}
 			
-			[self engageEvent:ATInteractionEnjoymentDialogEventLabelNo];
+			[self.interaction engage:ATInteractionEnjoymentDialogEventLabelNo fromViewController:self.viewController];
 		} else if (buttonIndex == 1) { // yes
-			[self engageEvent:ATInteractionEnjoymentDialogEventLabelYes];
+			[self.interaction engage:ATInteractionEnjoymentDialogEventLabelYes fromViewController:self.viewController];
 		}
 		
 		[self release];
 	}
-}
-
-- (BOOL)engageEvent:(NSString *)eventLabel {
-	return [[ATEngagementBackend sharedBackend] engageApptentiveEvent:eventLabel fromInteraction:self.interaction fromViewController:self.viewController];
 }
 
 - (void)dealloc {

@@ -246,7 +246,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		return;
 	}
 	
-	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:@"open_app_store_manually" userInfo:nil];
+	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:@"open_app_store_manually"];
 	
 	ATInteraction *appStoreInteraction = [[[ATInteraction alloc] init] autorelease];
 	appStoreInteraction.type = @"AppStoreRating";

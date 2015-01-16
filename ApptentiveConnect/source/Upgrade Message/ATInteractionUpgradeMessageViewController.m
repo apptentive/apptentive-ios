@@ -134,7 +134,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 		}
 	}];
 
-	[[ATEngagementBackend sharedBackend] engageApptentiveEvent:ATInteractionUpgradeMessageEventLabelClose fromInteraction:self.upgradeMessageInteraction fromViewController:self.presentingViewController];
+	[self.upgradeMessageInteraction engage:ATInteractionUpgradeMessageEventLabelClose fromViewController:self.presentingViewController];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -232,7 +232,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 		self.window.hidden = NO;
 	}];
 		
-	[[ATEngagementBackend sharedBackend] engageApptentiveEvent:ATInteractionUpgradeMessageEventLabelLaunch fromInteraction:self.upgradeMessageInteraction fromViewController:self.presentingViewController];
+	[self.upgradeMessageInteraction engage:ATInteractionUpgradeMessageEventLabelLaunch fromViewController:self.presentingViewController];
 }
 
 - (BOOL)isIPhoneAppInIPad {

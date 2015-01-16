@@ -207,16 +207,16 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	return [[[ATBackend sharedBackend] supportDirectoryPath] stringByAppendingPathComponent:@"cachedinteractionsV2.objects"];
 }
 
-- (BOOL)willShowInteractionForCodePoint:(NSString *)codePoint {
-	ATInteraction *interaction = [[ATEngagementBackend sharedBackend] interactionForEvent:codePoint];
-	
-	return (interaction != nil);
-}
-
 - (BOOL)willShowInteractionForLocalEvent:(NSString *)event {
 	NSString *codePoint = [[ATInteraction localAppInteraction] codePointForEvent:event];
 	
 	return [self willShowInteractionForCodePoint:codePoint];
+}
+
+- (BOOL)willShowInteractionForCodePoint:(NSString *)codePoint {
+	ATInteraction *interaction = [[ATEngagementBackend sharedBackend] interactionForEvent:codePoint];
+	
+	return (interaction != nil);
 }
 
 - (ATInteraction *)interactionForInvocations:(NSArray *)invocations {

@@ -337,12 +337,18 @@
 	return _vendor ?: ATEngagementCodePointApptentiveVendorKey;
 }
 
+- (NSString *)codePointForEvent:(NSString *)event {
+	return [ATEngagementBackend codePointForVendor:self.vendor interactionType:self.type event:event];
+}
+
 - (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController {
 	return [self engage:event fromViewController:viewController userInfo:nil];
 }
 
 - (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController userInfo:(NSDictionary *)userInfo {
-	return [[ATEngagementBackend sharedBackend] engageEvent:event fromVendor:self.vendor fromInteraction:self userInfo:userInfo customData:nil extendedData:nil fromViewController:viewController];
+	NSString *codePoint = [self codePointForEvent:event];
+	
+	return [[ATEngagementBackend sharedBackend] engage:codePoint fromInteraction:self userInfo:userInfo customData:nil extendedData:nil fromViewController:viewController];
 }
 
 - (void)dealloc {

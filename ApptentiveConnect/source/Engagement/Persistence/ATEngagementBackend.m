@@ -214,7 +214,9 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 }
 
 - (BOOL)willShowInteractionForLocalEvent:(NSString *)event {
-	return [self willShowInteractionForEvent:[ATEngagementBackend codePointForLocalEvent:event]];
+	NSString *codePoint = [[ATInteraction localAppInteraction] codePointForEvent:event];
+	
+	return [self willShowInteractionForEvent:codePoint];
 }
 
 - (ATInteraction *)interactionForInvocations:(NSArray *)invocations {
@@ -255,12 +257,12 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	return [escape autorelease];
 }
 
-+ (NSString *)codePointForVendor:(NSString *)vendor interaction:(ATInteraction *)interaction event:(NSString *)event {
++ (NSString *)codePointForVendor:(NSString *)vendor interactionType:(NSString *)interactionType event:(NSString *)event {
 	NSString *encodedVendor = [ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:vendor];
-	NSString *encodedInteraction = [ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:interaction.type];
+	NSString *encodedInteractionType = [ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:interactionType];
 	NSString *encodedEvent = [ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:event];
 	
-	NSString *codePoint = [NSString stringWithFormat:@"%@#%@#%@", encodedVendor, encodedInteraction, encodedEvent];
+	NSString *codePoint = [NSString stringWithFormat:@"%@#%@#%@", encodedVendor, encodedInteractionType, encodedEvent];
 	
 	return codePoint;
 }
@@ -271,12 +273,6 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 
 - (BOOL)engageLocalEvent:(NSString *)event userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {
 	return [[ATInteraction localAppInteraction] engage:event fromViewController:viewController];
-}
-
-- (BOOL)engageEvent:(NSString *)eventLabel fromVendor:(NSString *)vendor fromInteraction:(ATInteraction *)interaction userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {
-	NSString *codePoint = [ATEngagementBackend codePointForVendor:vendor interaction:interaction event:eventLabel];
-	
-	return [[ATEngagementBackend sharedBackend] engage:codePoint fromInteraction:interaction userInfo:userInfo customData:customData extendedData:extendedData fromViewController:viewController];
 }
 
 - (BOOL)engage:(NSString *)codePoint fromInteraction:(ATInteraction *)fromInteraction userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {

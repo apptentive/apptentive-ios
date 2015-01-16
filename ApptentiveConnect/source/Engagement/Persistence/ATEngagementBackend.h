@@ -55,12 +55,11 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey;
 - (BOOL)willShowInteractionForLocalEvent:(NSString *)event;
 
 + (NSString *)stringByEscapingCodePointSeparatorCharactersInString:(NSString *)string;
-+ (NSString *)codePointForVendor:(NSString *)vendor interaction:(ATInteraction *)interaction event:(NSString *)event;
++ (NSString *)codePointForVendor:(NSString *)vendor interactionType:(NSString *)interactionType event:(NSString *)event;
 
 - (BOOL)engageApptentiveAppEvent:(NSString *)event;
 - (BOOL)engageLocalEvent:(NSString *)event userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController;
 
-- (BOOL)engageEvent:(NSString *)eventLabel fromVendor:(NSString *)vendor fromInteraction:(ATInteraction *)interaction userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController;
 - (BOOL)engage:(NSString *)codePoint fromInteraction:(ATInteraction *)fromInteraction userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController;
 
 - (void)codePointWasSeen:(NSString *)codePoint;

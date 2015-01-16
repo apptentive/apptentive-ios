@@ -51,6 +51,8 @@ typedef NS_ENUM(NSInteger, ATInteractionType){
 + (NSPredicate *)predicateForCriteria:(NSString *)criteria operatorExpression:(NSDictionary *)operatorExpression hasError:(BOOL *)hasError;
 + (NSPredicate *)predicateForInteractionCriteria:(NSDictionary *)interactionCriteria hasError:(BOOL *)hasError;
 
+- (NSString *)codePointForEvent:(NSString *)event;
+
 - (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController;
 - (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController userInfo:(NSDictionary *)userInfo;
 

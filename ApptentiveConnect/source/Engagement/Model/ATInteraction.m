@@ -26,6 +26,22 @@
 	return [interaction autorelease];
 }
 
++ (ATInteraction *)localAppInteraction {
+	ATInteraction *interaction = [[[ATInteraction alloc] init] autorelease];
+	interaction.type = ATEngagementCodePointHostAppInteractionKey;
+	interaction.vendor = ATEngagementCodePointHostAppVendorKey;
+	
+	return interaction;
+}
+
++ (ATInteraction *)apptentiveAppInteraction {
+	ATInteraction *interaction = [[[ATInteraction alloc] init] autorelease];
+	interaction.type = ATEngagementCodePointApptentiveAppInteractionKey;
+	interaction.vendor = ATEngagementCodePointApptentiveVendorKey;
+	
+	return interaction;
+}
+
 - (ATInteractionType)interactionType {
 	ATInteractionType interactionType;
 	if ([self.type isEqualToString:@"UpgradeMessage"]) {

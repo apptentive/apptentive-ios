@@ -35,6 +35,10 @@ typedef NS_ENUM(NSInteger, ATInteractionType){
 
 + (ATInteraction *)interactionWithJSONDictionary:(NSDictionary *)jsonDictionary;
 
+// Used to engage local and app events
++ (ATInteraction *)localAppInteraction;
++ (ATInteraction *)apptentiveAppInteraction;
+
 - (ATInteractionType)interactionType;
 
 - (BOOL)isValid;

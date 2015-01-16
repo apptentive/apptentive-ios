@@ -23,6 +23,11 @@ NSString *const ATEngagementInteractionsInvokesVersionKey;
 NSString *const ATEngagementInteractionsInvokesBuildKey;
 NSString *const ATEngagementInteractionsInvokesLastDateKey;
 
+NSString *const ATEngagementCodePointHostAppVendorKey;
+NSString *const ATEngagementCodePointHostAppInteractionKey;
+NSString *const ATEngagementCodePointApptentiveVendorKey;
+NSString *const ATEngagementCodePointApptentiveAppInteractionKey;
+
 @class ATInteraction;
 
 @interface ATEngagementBackend : NSObject {
@@ -51,6 +56,9 @@ NSString *const ATEngagementInteractionsInvokesLastDateKey;
 
 + (NSString *)stringByEscapingCodePointSeparatorCharactersInString:(NSString *)string;
 + (NSString *)codePointForVendor:(NSString *)vendor interaction:(ATInteraction *)interaction event:(NSString *)event;
+
+- (BOOL)engageApptentiveAppEvent:(NSString *)event;
+- (BOOL)engageLocalEvent:(NSString *)event userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController;
 
 - (BOOL)engageEvent:(NSString *)eventLabel fromVendor:(NSString *)vendor fromInteraction:(ATInteraction *)interaction userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController;
 - (BOOL)engage:(NSString *)codePoint fromInteraction:(ATInteraction *)fromInteraction userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController;

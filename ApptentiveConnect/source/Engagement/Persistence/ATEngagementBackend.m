@@ -265,6 +265,13 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	return codePoint;
 }
 
+- (BOOL)engageApptentiveAppEvent:(NSString *)event {
+	return [[ATInteraction apptentiveAppInteraction] engage:event fromViewController:nil];
+}
+
+- (BOOL)engageLocalEvent:(NSString *)event userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {
+	return [[ATInteraction localAppInteraction] engage:event fromViewController:viewController];
+}
 
 - (BOOL)engageEvent:(NSString *)eventLabel fromVendor:(NSString *)vendor fromInteraction:(ATInteraction *)interaction userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {
 	NSString *codePoint = [ATEngagementBackend codePointForVendor:vendor interaction:interaction event:eventLabel];

@@ -528,9 +528,14 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 - (void)presentTextModalInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
 	NSAssert([interaction.type isEqualToString:@"TextModal"], @"Attempted to present a Text Modal interaction with an interaction of type: %@", interaction.type);
 	
-	ATInteractionUIAlertController *alert = [ATInteractionUIAlertController alertControllerWithInteraction:interaction];
-	if (alert) {
-		[alert presentAlertControllerFromViewController:viewController];
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"8.0"]) {
+		ATInteractionUIAlertController *alert = [ATInteractionUIAlertController alertControllerWithInteraction:interaction];
+		if (alert) {
+			[alert presentAlertControllerFromViewController:viewController];
+		}
+	}
+	else {
+		NSLog(@"UIAlertController requires  iOS 8");
 	}
 }
 

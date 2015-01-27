@@ -7,7 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import "ATInteraction.h"
 
 @interface ATInteractionUIAlertViewController : NSObject
+
+@property (nonatomic, retain) ATInteraction *interaction;
+@property (nonatomic, retain) UIAlertView *alertView;
+
+- (void)presentAlertViewWithInteraction:(ATInteraction *)interaction;
 
 @end

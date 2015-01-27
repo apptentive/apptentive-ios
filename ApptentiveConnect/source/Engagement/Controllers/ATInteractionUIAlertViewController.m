@@ -10,4 +10,27 @@
 
 @implementation ATInteractionUIAlertViewController
 
+- (void)presentAlertViewWithInteraction:(ATInteraction *)interaction {
+	self.interaction = interaction;
+	
+	NSDictionary *config = self.interaction.configuration;
+	NSString *title = config[@"title"];
+	NSString *message = config[@"body"];
+	
+	if (!title && !message) {
+		ATLogError(@"Cannot show an Apptentive alert without a title or message.");
+		return;
+	}
+	
+	self.alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
+	
+	NSArray *actions = config[@"actions"];
+	for (NSDictionary *action in actions) {
+		NSString *title = action[@"label"];
+		[self.alertView addButtonWithTitle:title];
+	}
+	
+	[self.alertView show];
+}
+
 @end

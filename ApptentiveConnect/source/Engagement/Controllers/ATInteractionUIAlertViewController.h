@@ -10,7 +10,7 @@
 #import <UIKit/UIKit.h>
 #import "ATInteraction.h"
 
-@interface ATInteractionUIAlertViewController : NSObject
+@interface ATInteractionUIAlertViewController : NSObject <UIAlertViewDelegate>
 
 @property (nonatomic, retain) ATInteraction *interaction;
 @property (nonatomic, retain) UIAlertView *alertView;

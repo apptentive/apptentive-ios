@@ -33,4 +33,10 @@
 	[self.alertView show];
 }
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+	NSArray *actions = self.interaction.configuration[@"actions"];
+	
+	// TODO
+}
+
 @end

@@ -66,6 +66,86 @@
 	
 	return [alertView autorelease];
 }
+
+- (UIAlertController *)alertControllerWithInteraction:(ATInteraction *)interaction {
+	NSDictionary *config = interaction.configuration;
+	NSString *title = config[@"title"];
+	NSString *message = config[@"body"];
+	
+	if (!title && !message) {
+		ATLogError(@"Cannot show an Apptentive alert without a title or message.");
+		return nil;
+	}
+	
+	NSString *layout = config[@"layout"];
+	UIAlertControllerStyle preferredStyle;
+	if ([layout isEqualToString:@"center"]) {
+		preferredStyle = UIAlertControllerStyleAlert;
+	} else if ([layout isEqualToString:@"bottom"]) {
+		preferredStyle = UIAlertControllerStyleActionSheet;
+	} else {
+		preferredStyle = UIAlertControllerStyleAlert;
+	}
+	
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:preferredStyle];
+	
+	BOOL cancelActionAdded = NO;
+	NSArray *actions = config[@"actions"];
+	for (NSDictionary *action in actions) {
+		UIAlertAction *alertAction = [self alertActionWithConfiguration:action];
+		
+		// Adding more than one cancel action to the alert causes crash.
+		// 'NSInternalInconsistencyException', reason: 'UIAlertController can only have one action with a style of UIAlertActionStyleCancel'
+		if (alertAction.style == UIAlertActionStyleCancel) {
+			if (!cancelActionAdded) {
+				cancelActionAdded = YES;
+			} else {
+				// Additional cancel buttons are ignored.
+				break;
+			}
+		}
+		
+		[alertController addAction:alertAction];
+	}
+	
+	return alertController;
+}
+
+- (UIAlertAction *)alertActionWithConfiguration:(NSDictionary *)configuration {
+	NSString *title = configuration[@"label"] ?: @"button";
+	
+	NSString *styleString = configuration[@"style"];
+	UIAlertActionStyle style;
+	if ([styleString isEqualToString:@"default"]) {
+		style = UIAlertActionStyleDefault;
+	} else if ([styleString isEqualToString:@"cancel"]) {
+		style = UIAlertActionStyleCancel;
+	} else if ([styleString isEqualToString:@"destructive"]) {
+		style = UIAlertActionStyleDestructive;
+	} else {
+		style = UIAlertActionStyleDefault;
+	}
+	
+	NSString *actionType = configuration[@"action"];
+	alertActionHandler actionHandler;
+	if ([actionType isEqualToString:@"dismiss"]) {
+		actionHandler = [self createButtonHandlerBlockDismiss];
+	} else if ([actionType isEqualToString:@"interaction"]) {
+		NSArray *jsonInvocations = configuration[@"invokes"];
+		NSArray *invocations = [ATInteractionInvocation invocationsWithJSONArray:jsonInvocations];
+		actionHandler = [self createButtonHandlerBlockWithInvocations:invocations];
+	} else {
+		actionHandler = [self createButtonHandlerBlockDismiss];
+	}
+	
+	UIAlertAction *alertAction = [UIAlertAction actionWithTitle:title style:style handler:actionHandler];
+	Block_release(actionHandler);
+	
+	BOOL enabled = configuration[@"enabled"] ? [configuration[@"enabled"] boolValue] : YES;
+	alertAction.enabled = enabled;
+	
+	return alertAction;
+}
 - (void)didPresentAlertView:(UIAlertView *)alertView {
 	[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:self.viewController];
 }

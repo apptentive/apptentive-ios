@@ -40,14 +40,18 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"8.0"]) {
 		self.alertController = [self alertControllerWithInteraction:self.interaction];
 		
-		[viewController presentViewController:self.alertController animated:YES completion:^{
-			[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:self.viewController];
-		}];
+		if (self.alertController) {
+			[viewController presentViewController:self.alertController animated:YES completion:^{
+				[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:self.viewController];
+			}];
+		}
 	}
 	else {
 		self.alertView = [self alertViewWithInteraction:self.interaction];
 		
-		[self.alertView show];
+		if (self.alertView) {
+			[self.alertView show];
+		}
 	}
 }
 
@@ -191,19 +195,26 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	NSArray *actions = self.interaction.configuration[@"actions"];
-	
 	NSDictionary *action = [actions objectAtIndex:buttonIndex];
+	
 	if (action) {
-		NSString *actionType = action[@"action"];
-		if ([actionType isEqualToString:@"dismiss"]) {
-			[self.interaction engage:ATInteractionTextModalEventLabelDismiss fromViewController:self.viewController];
-			
-			[self dismissAction];
-			
-		} else if ([actionType isEqualToString:@"interaction"]) {
-			NSArray *jsonInvocations = action[@"invokes"];
-			if (jsonInvocations) {
-				[self interactionActionWithInvocations:jsonInvocations];
+		NSString *actionTitle = action[@"label"];
+		NSString *buttonTitle = [alertView buttonTitleAtIndex:buttonIndex];
+		
+		if (![actionTitle isEqualToString:buttonTitle]) {
+			ATLogError(@"Cannot find an action for the tapped UIAlertView button.");
+		} else {
+			NSString *actionType = action[@"action"];
+			if ([actionType isEqualToString:@"dismiss"]) {
+				[self.interaction engage:ATInteractionTextModalEventLabelDismiss fromViewController:self.viewController];
+				
+				[self dismissAction];
+				
+			} else if ([actionType isEqualToString:@"interaction"]) {
+				NSArray *jsonInvocations = action[@"invokes"];
+				if (jsonInvocations) {
+					[self interactionActionWithInvocations:jsonInvocations];
+				}
 			}
 		}
 	}

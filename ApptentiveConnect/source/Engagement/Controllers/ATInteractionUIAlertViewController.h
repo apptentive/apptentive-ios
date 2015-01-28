@@ -14,7 +14,8 @@
 
 @property (nonatomic, retain) ATInteraction *interaction;
 @property (nonatomic, retain) UIAlertView *alertView;
+@property (nonatomic, retain) UIViewController *viewController;
 
-- (void)presentAlertViewWithInteraction:(ATInteraction *)interaction;
+- (void)presentAlertViewWithInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController;
 
 @end

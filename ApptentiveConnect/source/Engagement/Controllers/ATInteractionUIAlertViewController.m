@@ -10,8 +10,9 @@
 
 @implementation ATInteractionUIAlertViewController
 
-- (void)presentAlertViewWithInteraction:(ATInteraction *)interaction {
+- (void)presentAlertViewWithInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
 	self.interaction = interaction;
+	self.viewController = viewController;
 	
 	NSDictionary *config = self.interaction.configuration;
 	NSString *title = config[@"title"];

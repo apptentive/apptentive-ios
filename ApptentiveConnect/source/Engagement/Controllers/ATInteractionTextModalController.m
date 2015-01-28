@@ -203,4 +203,14 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 	[self release];
 }
 
+- (void)dealloc {
+	[_interaction release], _interaction = nil;
+	[_alertController release], _alertController = nil;
+	_alertView.delegate = nil;
+	[_alertView release], _alertView = nil;
+	[_viewController release], _viewController = nil;
+	
+	[super dealloc];
+}
+
 @end

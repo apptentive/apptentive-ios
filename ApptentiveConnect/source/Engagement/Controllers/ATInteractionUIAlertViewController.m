@@ -37,7 +37,9 @@ NSString *const ATInteractionUIAlertViewControllerEventLabelInteraction = @"inte
 	NSArray *actions = config[@"actions"];
 	for (NSDictionary *action in actions) {
 		NSString *title = action[@"label"];
-		[self.alertView addButtonWithTitle:title];
+		if (title) {
+			[self.alertView addButtonWithTitle:title];
+		}
 	}
 	
 	[self.alertView show];

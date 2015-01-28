@@ -48,7 +48,22 @@ NSString *const ATInteractionUIAlertViewControllerEventLabelInteraction = @"inte
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	NSArray *actions = self.interaction.configuration[@"actions"];
 	
-	// TODO
+	NSDictionary *action = [actions objectAtIndex:buttonIndex];
+	if (action) {
+		NSString *actionType = action[@"action"];
+		if ([actionType isEqualToString:@"dismiss"]) {
+			[self.interaction engage:ATInteractionUIAlertViewControllerEventLabelDismiss fromViewController:self.viewController];
+		} else if ([actionType isEqualToString:@"interaction"]) {
+			NSArray *jsonInvocations = action[@"invokes"];
+			NSArray *invocations = [ATInteractionInvocation invocationsWithJSONArray:jsonInvocations];
+		
+			[self.interaction engage:ATInteractionUIAlertViewControllerEventLabelInteraction fromViewController:self.viewController];
+			
+			ATInteraction *interaction = [[ATEngagementBackend sharedBackend] interactionForInvocations:invocations];
+			
+			[[ATEngagementBackend sharedBackend] presentInteraction:interaction fromViewController:self.viewController];
+		}
+	}
 }
 
 @end

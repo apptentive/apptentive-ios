@@ -10,4 +10,7 @@
 
 @interface ATInteractionTextModalController : NSObject
 
+- (instancetype)initWithInteraction:(ATInteraction *)interaction;
+- (void)presentTextModalAlertFromViewController:(UIViewController *)viewController;
+
 @end

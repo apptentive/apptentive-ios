@@ -7,8 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import "ATInteraction.h"
 
-@interface ATInteractionTextModalController : NSObject
+@interface ATInteractionTextModalController : NSObject <UIAlertViewDelegate>
+
+typedef void (^alertActionHandler)(UIAlertAction *);
+
+@property (nonatomic, retain) ATInteraction *interaction;
+@property (nonatomic, retain) UIViewController *viewController;
+
+@property (nonatomic, retain) UIAlertController *alertController;
+@property (nonatomic, retain) UIAlertView *alertView;
 
 - (instancetype)initWithInteraction:(ATInteraction *)interaction;
 - (void)presentTextModalAlertFromViewController:(UIViewController *)viewController;

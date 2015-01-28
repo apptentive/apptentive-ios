@@ -206,10 +206,7 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 		} else {
 			NSString *actionType = action[@"action"];
 			if ([actionType isEqualToString:@"dismiss"]) {
-				[self.interaction engage:ATInteractionTextModalEventLabelDismiss fromViewController:self.viewController];
-				
 				[self dismissAction];
-				
 			} else if ([actionType isEqualToString:@"interaction"]) {
 				NSArray *jsonInvocations = action[@"invokes"];
 				if (jsonInvocations) {

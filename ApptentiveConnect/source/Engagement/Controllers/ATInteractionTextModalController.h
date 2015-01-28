@@ -17,7 +17,10 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 @property (nonatomic, retain) ATInteraction *interaction;
 @property (nonatomic, retain) UIViewController *viewController;
 
+// Used in iOS 8 and later
 @property (nonatomic, retain) UIAlertController *alertController;
+
+// Used in iOS 7 and previous
 @property (nonatomic, retain) UIAlertView *alertView;
 
 - (instancetype)initWithInteraction:(ATInteraction *)interaction;

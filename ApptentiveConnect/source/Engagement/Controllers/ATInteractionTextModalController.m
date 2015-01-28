@@ -51,6 +51,8 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 	}
 }
 
+#pragma mark UIAlertView
+
 - (UIAlertView *)alertViewWithInteraction:(ATInteraction *)interaction {
 	NSDictionary *config = interaction.configuration;
 	NSString *title = config[@"title"];
@@ -73,6 +75,8 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 	
 	return [alertView autorelease];
 }
+
+#pragma mark UIAlertController
 
 - (UIAlertController *)alertControllerWithInteraction:(ATInteraction *)interaction {
 	NSDictionary *config = interaction.configuration;
@@ -117,6 +121,8 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 	
 	return alertController;
 }
+
+#pragma mark Alert Button Actions
 
 - (UIAlertAction *)alertActionWithConfiguration:(NSDictionary *)configuration {
 	NSString *title = configuration[@"label"] ?: @"button";
@@ -176,6 +182,8 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 		[self interactionActionWithInvocations:invocations];
 	});
 }
+
+#pragma mark UIAlertViewDelegate
 
 - (void)didPresentAlertView:(UIAlertView *)alertView {
 	[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:self.viewController];

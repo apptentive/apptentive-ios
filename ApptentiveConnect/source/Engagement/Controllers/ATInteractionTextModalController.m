@@ -43,4 +43,53 @@
 		[self.alertView show];
 	}
 }
+
+- (UIAlertView *)alertViewWithInteraction:(ATInteraction *)interaction {
+	NSDictionary *config = interaction.configuration;
+	NSString *title = config[@"title"];
+	NSString *message = config[@"body"];
+	
+	if (!title && !message) {
+		ATLogError(@"Cannot show an Apptentive alert without a title or message.");
+		return nil;
+	}
+	
+	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
+	
+	NSArray *actions = config[@"actions"];
+	for (NSDictionary *action in actions) {
+		NSString *title = action[@"label"];
+		if (title) {
+			[alertView addButtonWithTitle:title];
+		}
+	}
+	
+	return [alertView autorelease];
+}
+- (void)didPresentAlertView:(UIAlertView *)alertView {
+	[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:self.viewController];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+	NSArray *actions = self.interaction.configuration[@"actions"];
+	
+	NSDictionary *action = [actions objectAtIndex:buttonIndex];
+	if (action) {
+		NSString *actionType = action[@"action"];
+		if ([actionType isEqualToString:@"dismiss"]) {
+			[self.interaction engage:ATInteractionTextModalEventLabelDismiss fromViewController:self.viewController];
+			
+			[self dismissAction];
+			
+		} else if ([actionType isEqualToString:@"interaction"]) {
+			NSArray *jsonInvocations = action[@"invokes"];
+			if (jsonInvocations) {
+				[self interactionActionWithInvocations:jsonInvocations];
+			}
+		}
+	}
+	
+	[self release];
+}
+
 @end

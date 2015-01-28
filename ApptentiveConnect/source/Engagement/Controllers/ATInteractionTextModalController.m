@@ -146,6 +146,30 @@
 	
 	return alertAction;
 }
+
+- (void)dismissAction {
+	[self.interaction engage:ATInteractionTextModalEventLabelDismiss fromViewController:self.viewController];
+}
+
+- (alertActionHandler)createButtonHandlerBlockDismiss {
+	return Block_copy(^(UIAlertAction *action) {		
+		[self dismissAction];
+	});
+}
+
+- (void)interactionActionWithInvocations:(NSArray *)invocations {
+	[self.interaction engage:ATInteractionTextModalEventLabelInteraction fromViewController:self.viewController];
+	
+	ATInteraction *interaction = [[ATEngagementBackend sharedBackend] interactionForInvocations:invocations];
+	[[ATEngagementBackend sharedBackend] presentInteraction:interaction fromViewController:self.viewController];
+}
+
+- (alertActionHandler)createButtonHandlerBlockWithInvocations:(NSArray *)invocations {
+	return Block_copy(^(UIAlertAction *action) {
+		[self interactionActionWithInvocations:invocations];
+	});
+}
+
 - (void)didPresentAlertView:(UIAlertView *)alertView {
 	[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:self.viewController];
 }

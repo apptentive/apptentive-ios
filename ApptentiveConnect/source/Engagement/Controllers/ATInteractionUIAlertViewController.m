@@ -7,6 +7,13 @@
 //
 
 #import "ATInteractionUIAlertViewController.h"
+#import "ATEngagementBackend.h"
+#import "ATInteractionInvocation.h"
+
+NSString *const ATInteractionUIAlertViewControllerEventLabelLaunch = @"launch";
+NSString *const ATInteractionUIAlertViewControllerEventLabelCancel = @"cancel";
+NSString *const ATInteractionUIAlertViewControllerEventLabelDismiss = @"dismiss";
+NSString *const ATInteractionUIAlertViewControllerEventLabelInteraction = @"interaction";
 
 @implementation ATInteractionUIAlertViewController
 
@@ -32,6 +39,10 @@
 	}
 	
 	[self.alertView show];
+}
+
+- (void)didPresentAlertView:(UIAlertView *)alertView {
+	[self.interaction engage:ATInteractionUIAlertViewControllerEventLabelLaunch fromViewController:self.viewController];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {

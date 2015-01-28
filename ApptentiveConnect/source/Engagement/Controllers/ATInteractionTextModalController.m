@@ -30,7 +30,7 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 
 - (void)presentTextModalAlertFromViewController:(UIViewController *)viewController {
 	if (!self.interaction) {
-		ATLogError(@"Skipping display of Apptentive Note that does not have a title and body");
+		ATLogError(@"Cannot present a TextModal alert without an interaction.");
 		return;
 	}
 	
@@ -63,7 +63,7 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 	NSString *message = config[@"body"];
 	
 	if (!title && !message) {
-		ATLogError(@"Cannot show an Apptentive alert without a title or message.");
+		ATLogError(@"Skipping display of Apptentive Note that does not have a title and body.");
 		return nil;
 	}
 	
@@ -93,7 +93,7 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 	NSString *message = config[@"body"];
 	
 	if (!title && !message) {
-		ATLogError(@"Skipping display of Apptentive Note that does not have a title and body");
+		ATLogError(@"Skipping display of Apptentive Note that does not have a title and body.");
 		return nil;
 	}
 	

@@ -72,9 +72,14 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 	NSArray *actions = config[@"actions"];
 	for (NSDictionary *action in actions) {
 		NSString *title = action[@"label"];
-		if (title) {
-			[alertView addButtonWithTitle:title];
+		
+		// Better to use default button text than to potentially create an un-cancelable alert without any buttons.
+		// 'UIAlertView: Buttons added must have a title.'
+		if(!title) {
+			title = @"button";
 		}
+	
+		[alertView addButtonWithTitle:title];
 	}
 	
 	return [alertView autorelease];
@@ -120,7 +125,9 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 			}
 		}
 		
-		[alertController addAction:alertAction];
+		if (alertAction) {
+			[alertController addAction:alertAction];
+		}
 	}
 	
 	return alertController;
@@ -130,6 +137,12 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 
 - (UIAlertAction *)alertActionWithConfiguration:(NSDictionary *)configuration {
 	NSString *title = configuration[@"label"] ?: @"button";
+	
+	// Better to use default button text than to potentially create an un-cancelable alert without any buttons.
+	// Exception: 'Actions added to UIAlertController must have a title'
+	if (!title) {
+		title = @"button";
+	}
 	
 	NSString *styleString = configuration[@"style"];
 	UIAlertActionStyle style;

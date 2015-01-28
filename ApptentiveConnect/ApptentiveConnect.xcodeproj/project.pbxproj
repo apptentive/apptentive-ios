@@ -322,15 +322,11 @@
 		584647C617C426E800BFD6E6 /* ATEngagementManifestParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 584647C417C426E800BFD6E6 /* ATEngagementManifestParser.h */; };
 		584647C717C426E800BFD6E6 /* ATEngagementManifestParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 584647C517C426E800BFD6E6 /* ATEngagementManifestParser.m */; };
 		584647C817C426E800BFD6E6 /* ATEngagementManifestParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 584647C517C426E800BFD6E6 /* ATEngagementManifestParser.m */; };
-		584EAC6A1A77217800AC7F05 /* ATInteractionUIAlertViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 584EAC681A77217800AC7F05 /* ATInteractionUIAlertViewController.h */; };
-		584EAC6B1A77217800AC7F05 /* ATInteractionUIAlertViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 584EAC691A77217800AC7F05 /* ATInteractionUIAlertViewController.m */; };
 		584EAC6E1A786E4500AC7F05 /* ATInteractionTextModalController.h in Headers */ = {isa = PBXBuildFile; fileRef = 584EAC6C1A786E4500AC7F05 /* ATInteractionTextModalController.h */; };
 		584EAC6F1A786E4500AC7F05 /* ATInteractionTextModalController.m in Sources */ = {isa = PBXBuildFile; fileRef = 584EAC6D1A786E4500AC7F05 /* ATInteractionTextModalController.m */; };
 		586C47A918B424E900725C22 /* ATInteractionEnjoymentDialogController.h in Headers */ = {isa = PBXBuildFile; fileRef = 586C47A718B424E900725C22 /* ATInteractionEnjoymentDialogController.h */; };
 		586C47AA18B424E900725C22 /* ATInteractionEnjoymentDialogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 586C47A818B424E900725C22 /* ATInteractionEnjoymentDialogController.m */; };
 		586FE260187C8DAE00067116 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58805F3818120DE100210DA5 /* Accelerate.framework */; };
-		58729BC41A2D3540008C934B /* ATInteractionUIAlertController.h in Headers */ = {isa = PBXBuildFile; fileRef = 58729BC21A2D3540008C934B /* ATInteractionUIAlertController.h */; };
-		58729BC51A2D3540008C934B /* ATInteractionUIAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58729BC31A2D3540008C934B /* ATInteractionUIAlertController.m */; };
 		58805F3618120BBF00210DA5 /* UIImage+ATImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 58805F3418120BBF00210DA5 /* UIImage+ATImageEffects.m */; };
 		58805F3718120BBF00210DA5 /* UIImage+ATImageEffects.h in Headers */ = {isa = PBXBuildFile; fileRef = 58805F3518120BBF00210DA5 /* UIImage+ATImageEffects.h */; };
 		58805F3918120DE100210DA5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58805F3818120DE100210DA5 /* Accelerate.framework */; };
@@ -671,14 +667,10 @@
 		5843F81D188778B000C9D096 /* ATDataModelv4.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = ATDataModelv4.sqlite; sourceTree = "<group>"; };
 		584647C417C426E800BFD6E6 /* ATEngagementManifestParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATEngagementManifestParser.h; path = Engagement/Model/ATEngagementManifestParser.h; sourceTree = "<group>"; };
 		584647C517C426E800BFD6E6 /* ATEngagementManifestParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATEngagementManifestParser.m; path = Engagement/Model/ATEngagementManifestParser.m; sourceTree = "<group>"; };
-		584EAC681A77217800AC7F05 /* ATInteractionUIAlertViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATInteractionUIAlertViewController.h; path = Engagement/Controllers/ATInteractionUIAlertViewController.h; sourceTree = "<group>"; };
-		584EAC691A77217800AC7F05 /* ATInteractionUIAlertViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATInteractionUIAlertViewController.m; path = Engagement/Controllers/ATInteractionUIAlertViewController.m; sourceTree = "<group>"; };
 		584EAC6C1A786E4500AC7F05 /* ATInteractionTextModalController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATInteractionTextModalController.h; path = Engagement/Controllers/ATInteractionTextModalController.h; sourceTree = "<group>"; };
 		584EAC6D1A786E4500AC7F05 /* ATInteractionTextModalController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATInteractionTextModalController.m; path = Engagement/Controllers/ATInteractionTextModalController.m; sourceTree = "<group>"; };
 		586C47A718B424E900725C22 /* ATInteractionEnjoymentDialogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATInteractionEnjoymentDialogController.h; path = Engagement/Controllers/ATInteractionEnjoymentDialogController.h; sourceTree = "<group>"; };
 		586C47A818B424E900725C22 /* ATInteractionEnjoymentDialogController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATInteractionEnjoymentDialogController.m; path = Engagement/Controllers/ATInteractionEnjoymentDialogController.m; sourceTree = "<group>"; };
-		58729BC21A2D3540008C934B /* ATInteractionUIAlertController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATInteractionUIAlertController.h; path = Engagement/Controllers/ATInteractionUIAlertController.h; sourceTree = "<group>"; };
-		58729BC31A2D3540008C934B /* ATInteractionUIAlertController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATInteractionUIAlertController.m; path = Engagement/Controllers/ATInteractionUIAlertController.m; sourceTree = "<group>"; };
 		58805F3418120BBF00210DA5 /* UIImage+ATImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ATImageEffects.m"; sourceTree = "<group>"; };
 		58805F3518120BBF00210DA5 /* UIImage+ATImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ATImageEffects.h"; sourceTree = "<group>"; };
 		58805F3818120DE100210DA5 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
@@ -1323,10 +1315,6 @@
 			children = (
 				584EAC6C1A786E4500AC7F05 /* ATInteractionTextModalController.h */,
 				584EAC6D1A786E4500AC7F05 /* ATInteractionTextModalController.m */,
-				58729BC21A2D3540008C934B /* ATInteractionUIAlertController.h */,
-				58729BC31A2D3540008C934B /* ATInteractionUIAlertController.m */,
-				584EAC681A77217800AC7F05 /* ATInteractionUIAlertViewController.h */,
-				584EAC691A77217800AC7F05 /* ATInteractionUIAlertViewController.m */,
 				583DF06C1A44CD6E00BF0207 /* ATInteractionNavigateToLink.h */,
 				583DF06D1A44CD6E00BF0207 /* ATInteractionNavigateToLink.m */,
 			);
@@ -1442,7 +1430,6 @@
 				4936AE531379DE3100A4B17F /* ATDefaultTextView.h in Headers */,
 				4936AE551379DE3100A4B17F /* ATHUDView.h in Headers */,
 				49735D621832DF1F00D48DE7 /* ATMessageCenterDataSource.h in Headers */,
-				584EAC6A1A77217800AC7F05 /* ATInteractionUIAlertViewController.h in Headers */,
 				4936AE5B1379DE3100A4B17F /* ATSimpleImageViewController.h in Headers */,
 				4936AE771379DEBB00A4B17F /* ATUtilities.h in Headers */,
 				4936AE831379DECE00A4B17F /* ATBackend.h in Headers */,
@@ -1527,7 +1514,6 @@
 				494D1B6F1708E1F900C3060C /* ATMessageInputView.h in Headers */,
 				49CB6DEA1718FE4400BC9223 /* ATMessageCenterMetrics.h in Headers */,
 				4960A533171F70530082669B /* ATNetworkImageView.h in Headers */,
-				58729BC41A2D3540008C934B /* ATInteractionUIAlertController.h in Headers */,
 				49D261C3184691E800798B89 /* ATBaseMessageCellV7.h in Headers */,
 				49477B7B1835C700001D37AD /* ATExpandingTextView.h in Headers */,
 				496F5781174060CE003BF516 /* ATDataManager.h in Headers */,
@@ -1732,7 +1718,6 @@
 			files = (
 				49C002A3133413BB0071F088 /* ATConnect.m in Sources */,
 				49D1125013368CC200603373 /* ATTask.m in Sources */,
-				58729BC51A2D3540008C934B /* ATInteractionUIAlertController.m in Sources */,
 				49D1125413368CEF00603373 /* ATFeedbackTask.m in Sources */,
 				49D112741337CC9F00603373 /* ATTaskQueue.m in Sources */,
 				491748BB1341177000A7D11E /* ATConnectionChannel.m in Sources */,
@@ -1767,7 +1752,6 @@
 				58805F3618120BBF00210DA5 /* UIImage+ATImageEffects.m in Sources */,
 				49B71C9D1841793F00315AAF /* ATTextMessageDevCellV7.m in Sources */,
 				49D261C81846B26200798B89 /* ATMessageBubbleArrowViewV7.m in Sources */,
-				584EAC6B1A77217800AC7F05 /* ATInteractionUIAlertViewController.m in Sources */,
 				4987FA9D157AE53700AF2078 /* ApptentiveMetrics.m in Sources */,
 				4987FAA0157AE53700AF2078 /* ATMetric.m in Sources */,
 				4987FAA3157AE53700AF2078 /* ATWebClient+Metrics.m in Sources */,

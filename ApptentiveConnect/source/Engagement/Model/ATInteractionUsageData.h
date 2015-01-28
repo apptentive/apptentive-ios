@@ -32,7 +32,6 @@
 @property (nonatomic, retain) NSDictionary *interactionInvokesTimeAgo;
 
 + (ATInteractionUsageData *)usageData;
-+ (ATInteractionUsageData *)usageDataForInteraction:(ATInteraction *)interaction;
 
 - (NSDictionary *)predicateEvaluationDictionary;
 

@@ -21,7 +21,6 @@
 
 - (BOOL)isValid;
 
-- (ATInteractionUsageData *)usageData;
 - (BOOL)criteriaAreMet;
 - (BOOL)criteriaAreMetForUsageData:(ATInteractionUsageData *)usageData;
 

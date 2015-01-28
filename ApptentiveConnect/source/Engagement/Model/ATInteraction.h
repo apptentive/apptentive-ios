@@ -40,8 +40,6 @@ typedef NS_ENUM(NSInteger, ATInteractionType){
 
 - (ATInteractionType)interactionType;
 
-- (ATInteractionUsageData *)usageData;
-
 - (NSString *)codePointForEvent:(NSString *)event;
 
 - (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController;

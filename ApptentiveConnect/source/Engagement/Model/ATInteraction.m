@@ -111,10 +111,6 @@
     return copy;
 }
 
-- (ATInteractionUsageData *)usageData {
-	return [ATInteractionUsageData usageDataForInteraction:self];
-}
-
 - (NSString *)vendor {
 	// Currently, all interactions except local app events use `ATEngagementCodePointApptentiveVendorKey`.
 	return _vendor ?: ATEngagementCodePointApptentiveVendorKey;

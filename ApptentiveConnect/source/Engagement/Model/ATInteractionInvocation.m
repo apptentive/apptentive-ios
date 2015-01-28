@@ -93,12 +93,8 @@
 	return isValid;
 }
 
-- (ATInteractionUsageData *)usageData {
-	return [ATInteractionUsageData usageData];
-}
-
 - (BOOL)criteriaAreMet {
-	return [self criteriaAreMetForUsageData:[self usageData]];
+	return [self criteriaAreMetForUsageData:[ATInteractionUsageData usageData]];
 }
 
 - (BOOL)criteriaAreMetForUsageData:(ATInteractionUsageData *)usageData {

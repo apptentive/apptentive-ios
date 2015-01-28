@@ -64,13 +64,6 @@
 	return usageData;
 }
 
-+ (ATInteractionUsageData *)usageDataForInteraction:(ATInteraction *)interaction {
-	
-	// `interaction` property not actually needed. Global usage data. Leaving this method, for now, for backward compatibility.
-	
-	return [ATInteractionUsageData usageData];
-}
-
 - (NSString *)description {
 	NSString *title = [NSString stringWithFormat:@"Engamement Framework Usage Data:"];
 	

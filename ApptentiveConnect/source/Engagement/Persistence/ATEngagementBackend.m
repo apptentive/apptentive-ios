@@ -22,8 +22,7 @@
 #import "ATInteractionMessageCenterController.h"
 #import "ATInteractionAppStoreController.h"
 #import "ATInteractionSurveyController.h"
-#import "ATInteractionUIAlertController.h"
-#import "ATInteractionUIAlertViewController.h"
+#import "ATInteractionTextModalController.h"
 #import "ATInteractionNavigateToLink.h"
 
 NSString *const ATEngagementInstallDateKey = @"ATEngagementInstallDateKey";
@@ -529,18 +528,10 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 - (void)presentTextModalInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
 	NSAssert([interaction.type isEqualToString:@"TextModal"], @"Attempted to present a Text Modal interaction with an interaction of type: %@", interaction.type);
 	
-	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"8.0"]) {
-		ATInteractionUIAlertController *alert = [ATInteractionUIAlertController alertControllerWithInteraction:interaction];
-		if (alert) {
-			[alert presentAlertControllerFromViewController:viewController];
-		}
-	}
-	else {
-		ATInteractionUIAlertViewController *alertView = [[ATInteractionUIAlertViewController alloc] init];
-		[alertView presentAlertViewWithInteraction:interaction fromViewController:viewController];
-		
-		[alertView release];
-	}
+	ATInteractionTextModalController *textModal = [[ATInteractionTextModalController alloc] initWithInteraction:interaction];
+	[textModal presentTextModalAlertFromViewController:viewController];
+
+	[textModal release];
 }
 
 

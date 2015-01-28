@@ -165,7 +165,8 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 		NSArray *invocations = [ATInteractionInvocation invocationsWithJSONArray:jsonInvocations];
 		actionHandler = [self createButtonHandlerBlockWithInvocations:invocations];
 	} else {
-		actionHandler = [self createButtonHandlerBlockDismiss];
+		ATLogError(@"Unknown Apptentive Note action type.");
+		actionHandler = nil;
 	}
 	
 	UIAlertAction *alertAction = [UIAlertAction actionWithTitle:title style:style handler:actionHandler];
@@ -225,6 +226,8 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 				if (jsonInvocations) {
 					[self interactionActionWithInvocations:jsonInvocations];
 				}
+			} else {
+				ATLogError(@"Unknown Apptentive Note action type.");
 			}
 		}
 	}

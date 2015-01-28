@@ -222,12 +222,23 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 - (ATInteraction *)interactionForInvocations:(NSArray *)invocations {
 	NSString *interactionID = nil;
 	
-	//this should handle dictionary.
-	
-	for (ATInteractionInvocation *invocation in invocations) {
-		if ([invocation isValid]) {
-			interactionID = invocation.interactionID;
-			break;
+	for (NSObject *invocationOrDictionary in invocations) {
+		ATInteractionInvocation *invocation = nil;
+		
+		// Allow parsing of ATInteractionInvocation and NSDictionary invocation objects
+		if ([invocationOrDictionary isKindOfClass:[ATInteractionInvocation class]]) {
+			invocation = (ATInteractionInvocation *)invocationOrDictionary;
+		} else if ([invocationOrDictionary isKindOfClass:[NSDictionary class]]) {
+			invocation = [ATInteractionInvocation invocationWithJSONDictionary:((NSDictionary *)invocationOrDictionary)];
+		} else {
+			ATLogError(@"Attempting to parse an invocation that is neither an ATInteractionInvocation or NSDictionary.");
+		}
+		
+		if (invocation && [invocation isKindOfClass:[ATInteractionInvocation class]]) {
+			if ([invocation isValid]) {
+				interactionID = invocation.interactionID;
+				break;
+			}
 		}
 	}
 	

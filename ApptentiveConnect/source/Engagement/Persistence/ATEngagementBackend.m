@@ -23,6 +23,7 @@
 #import "ATInteractionAppStoreController.h"
 #import "ATInteractionSurveyController.h"
 #import "ATInteractionUIAlertController.h"
+#import "ATInteractionUIAlertViewController.h"
 #import "ATInteractionNavigateToLink.h"
 
 NSString *const ATEngagementInstallDateKey = @"ATEngagementInstallDateKey";
@@ -535,7 +536,10 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 		}
 	}
 	else {
-		NSLog(@"UIAlertController requires  iOS 8");
+		ATInteractionUIAlertViewController *alertView = [[ATInteractionUIAlertViewController alloc] init];
+		[alertView presentAlertViewWithInteraction:interaction fromViewController:viewController];
+		
+		[alertView release];
 	}
 }
 

@@ -18,6 +18,8 @@ NSString *const ATInteractionUIAlertViewControllerEventLabelInteraction = @"inte
 @implementation ATInteractionUIAlertViewController
 
 - (void)presentAlertViewWithInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
+	[self retain];
+	
 	self.interaction = interaction;
 	self.viewController = viewController;
 	
@@ -64,6 +66,17 @@ NSString *const ATInteractionUIAlertViewControllerEventLabelInteraction = @"inte
 			[[ATEngagementBackend sharedBackend] presentInteraction:interaction fromViewController:self.viewController];
 		}
 	}
+	
+	[self release];
+}
+
+- (void)dealloc {
+	[_interaction release], _interaction = nil;
+	_alertView.delegate = nil;
+	[_alertView release], _alertView = nil;
+	[_viewController release], _viewController = nil;
+	
+	[super dealloc];
 }
 
 @end

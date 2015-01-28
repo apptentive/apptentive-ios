@@ -8,6 +8,13 @@
 
 #import "ATInteractionTextModalController.h"
 #import "ATUtilities.h"
+#import "ATInteractionInvocation.h"
+#import "ATEngagementBackend.h"
+
+NSString *const ATInteractionTextModalEventLabelLaunch = @"launch";
+NSString *const ATInteractionTextModalEventLabelCancel = @"cancel";
+NSString *const ATInteractionTextModalEventLabelDismiss = @"dismiss";
+NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 
 @implementation ATInteractionTextModalController
 

@@ -138,7 +138,7 @@
 
 - (NSPredicate *)criteriaPredicate {
 	BOOL error = NO;
-	NSPredicate *criteriaPredicate = [ATInteraction predicateForInteractionCriteria:self.criteria hasError:&error];
+	NSPredicate *criteriaPredicate = [ATInteractionInvocation predicateForInteractionCriteria:self.criteria hasError:&error];
 	if (!criteriaPredicate || error) {
 		return nil;
 	}
@@ -158,7 +158,7 @@
 				break;
 			}
 			NSDictionary *subExpression = (NSDictionary *)value;
-			NSPredicate *subPredicate = [ATInteraction predicateForCriteria:criteria operatorExpression:subExpression hasError:hasError];
+			NSPredicate *subPredicate = [ATInteractionInvocation predicateForCriteria:criteria operatorExpression:subExpression hasError:hasError];
 			if (!subPredicate || *hasError) {
 				break;
 			}
@@ -264,7 +264,7 @@
 			
 			NSMutableArray *criteria = [NSMutableArray array];
 			for (NSDictionary *dictionary in (NSArray *)object) {
-				NSPredicate *criterion = [self predicateForInteractionCriteria:dictionary hasError:hasError];
+				NSPredicate *criterion = [ATInteractionInvocation predicateForInteractionCriteria:dictionary hasError:hasError];
 				[criteria addObject:criterion];
 			}
 			
@@ -273,7 +273,7 @@
 		} else {
 			// Implicit "==" if object is a string/number
 			NSDictionary *equalityDictionary = ([object isKindOfClass:[NSDictionary class]]) ? (NSDictionary *)object : @{@"==" : object};
-			NSPredicate *subPredicate = [ATInteraction predicateForCriteria:key operatorExpression:equalityDictionary hasError:hasError];
+			NSPredicate *subPredicate = [ATInteractionInvocation predicateForCriteria:key operatorExpression:equalityDictionary hasError:hasError];
 			if (subPredicate) {
 				[subPredicates addObject:subPredicate];
 			}

@@ -29,7 +29,6 @@ typedef NS_ENUM(NSInteger, ATInteractionType){
 @property (nonatomic, assign) NSInteger priority;
 @property (nonatomic, copy) NSString *type;
 @property (nonatomic, retain) NSDictionary *configuration;
-@property (nonatomic, retain) NSDictionary *criteria;
 @property (nonatomic, copy) NSString *version;
 @property (nonatomic, copy) NSString *vendor;
 
@@ -41,15 +40,7 @@ typedef NS_ENUM(NSInteger, ATInteractionType){
 
 - (ATInteractionType)interactionType;
 
-- (BOOL)isValid;
-
 - (ATInteractionUsageData *)usageData;
-- (BOOL)criteriaAreMet;
-- (BOOL)criteriaAreMetForUsageData:(ATInteractionUsageData *)usageData;
-
-- (NSPredicate *)criteriaPredicate;
-+ (NSPredicate *)predicateForCriteria:(NSString *)criteria operatorExpression:(NSDictionary *)operatorExpression hasError:(BOOL *)hasError;
-+ (NSPredicate *)predicateForInteractionCriteria:(NSDictionary *)interactionCriteria hasError:(BOOL *)hasError;
 
 - (NSString *)codePointForEvent:(NSString *)event;
 

@@ -253,7 +253,6 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	appStoreInteraction.priority = 1;
 	appStoreInteraction.version = @"1.0.0";
 	appStoreInteraction.identifier = @"OpenAppStore";
-	appStoreInteraction.criteria = @{};
 	appStoreInteraction.configuration = @{@"store_id": self.appID,
 										  @"method": @"app_store"};
 	

@@ -121,7 +121,7 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 				cancelActionAdded = YES;
 			} else {
 				// Additional cancel buttons are ignored.
-				break;
+				continue;
 			}
 		}
 		

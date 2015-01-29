@@ -122,6 +122,7 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 				cancelActionAdded = YES;
 			} else {
 				// Additional cancel buttons are ignored.
+				ATLogError(@"Apptentive Notes cannot have more than one cancel button.");
 				continue;
 			}
 		}

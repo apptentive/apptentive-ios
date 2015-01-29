@@ -9,6 +9,7 @@
 #import "ATEngagementTests.h"
 #import "ATConnect.h"
 #import "ATInteraction.h"
+#import "ATInteractionInvocation.h"
 #import "ATInteractionUsageData.h"
 #import "ATEngagementBackend.h"
 #import "ATEngagementManifestParser.h"
@@ -78,10 +79,10 @@
 }
 
 - (void)testInteractionCriteria {
-	ATInteraction *interaction = [[ATInteraction alloc] init];
-	interaction.criteria = @{@"time_since_install/total": @{@"$gt": @(5 * 60 * 60 * 24), @"$lt": @(7 * 60 * 60 * 24)}};
+	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
+	invocation.criteria = @{@"time_since_install/total": @{@"$gt": @(5 * 60 * 60 * 24), @"$lt": @(7 * 60 * 60 * 24)}};
 	
-	ATInteractionUsageData *usageData = [ATInteractionUsageData usageDataForInteraction:interaction];
+	ATInteractionUsageData *usageData = [ATInteractionUsageData usageData];
 	usageData.timeSinceInstallTotal = @(6 * 60 * 60 * 24);
 	usageData.timeSinceInstallVersion = @(6 * 60 * 60 * 24);
 	usageData.timeSinceInstallBuild = @(6 * 60 * 60 * 24);
@@ -96,14 +97,14 @@
 	usageData.interactionInvokesVersion = @{};
 	usageData.interactionInvokesTimeAgo = @{};
 	
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Install date");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Install date");
 }
 
 - (void)testUnknownKeyInCriteria {
-	ATInteraction *interaction = [[ATInteraction alloc] init];
-	interaction.criteria = @{@"time_since_install/total": @(6 * 60 * 60 * 24), @"time_since_install/version": @(6 * 60 * 60 * 24)};
+	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
+	invocation.criteria = @{@"time_since_install/total": @(6 * 60 * 60 * 24), @"time_since_install/version": @(6 * 60 * 60 * 24)};
 	
-	ATInteractionUsageData *usageData = [ATInteractionUsageData usageDataForInteraction:interaction];
+	ATInteractionUsageData *usageData = [ATInteractionUsageData usageData];
 	usageData.timeSinceInstallTotal = @(6 * 60 * 60 * 24);
 	usageData.timeSinceInstallVersion = @(6 * 60 * 60 * 24);
 	usageData.timeSinceInstallBuild = @(6 * 60 * 60 * 24);
@@ -117,13 +118,13 @@
 	usageData.interactionInvokesTotal = @{};
 	usageData.interactionInvokesVersion = @{};
 	usageData.interactionInvokesTimeAgo = @{};
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"All keys are known, thus the criteria is met.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"All keys are known, thus the criteria is met.");
 	
-	interaction.criteria = @{@"time_since_install/total": @6, @"unknown_key": @"criteria_should_not_be_met"};
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Criteria should not be met if the criteria includes a key that the client does not recognize.");
+	invocation.criteria = @{@"time_since_install/total": @6, @"unknown_key": @"criteria_should_not_be_met"};
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Criteria should not be met if the criteria includes a key that the client does not recognize.");
 	
-	interaction.criteria = @{@6:@"this is weird"};
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Criteria should not be met if the criteria includes a key that the client does not recognize.");
+	invocation.criteria = @{@6:@"this is weird"};
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Criteria should not be met if the criteria includes a key that the client does not recognize.");
 }
 
 - (void)testEmptyCriteria {

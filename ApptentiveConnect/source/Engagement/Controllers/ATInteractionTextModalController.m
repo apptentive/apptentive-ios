@@ -73,9 +73,10 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 	for (NSDictionary *action in actions) {
 		NSString *title = action[@"label"];
 		
-		// Better to use default button text than to potentially create an un-cancelable alert without any buttons.
+		// Better to use default button text than to potentially create an un-cancelable alert with no buttons.
 		// 'UIAlertView: Buttons added must have a title.'
 		if(!title) {
+			ATLogError(@"Apptentive Note button action does not have a title!");
 			title = @"button";
 		}
 	
@@ -138,9 +139,10 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 - (UIAlertAction *)alertActionWithConfiguration:(NSDictionary *)configuration {
 	NSString *title = configuration[@"label"] ?: @"button";
 	
-	// Better to use default button text than to potentially create an un-cancelable alert without any buttons.
+	// Better to use default button text than to potentially create an un-cancelable alert with no buttons.
 	// Exception: 'Actions added to UIAlertController must have a title'
 	if (!title) {
+		ATLogError(@"Apptentive Note button action does not have a title!");
 		title = @"button";
 	}
 	

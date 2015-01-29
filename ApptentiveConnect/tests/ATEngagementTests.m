@@ -526,181 +526,181 @@
 }
 
 - (void)testTimeAgoCriteria {
-	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
 	
-	interaction.criteria = @{@"code_point/app.launch/invokes/time_ago": @100,
+	invocation.criteria = @{@"code_point/app.launch/invokes/time_ago": @100,
 							 @"interactions/big.win/invokes/time_ago": @1000};
 	
 	usageData.codePointInvokesTimeAgo = @{@"code_point/app.launch/invokes/time_ago": @100};
 	usageData.interactionInvokesTimeAgo = @{@"interactions/big.win/invokes/time_ago": @1000};
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test timeAgo");
 	
 	
-	interaction.criteria = @{@"code_point/app.launch/invokes/time_ago": @{@"$gte": @500},
+	invocation.criteria = @{@"code_point/app.launch/invokes/time_ago": @{@"$gte": @500},
 							 @"interactions/big.win/invokes/time_ago": @{@"$lte": @1000}};
 	usageData.codePointInvokesTimeAgo = @{@"code_point/app.launch/invokes/time_ago": @800};
 	usageData.interactionInvokesTimeAgo = @{@"interactions/big.win/invokes/time_ago": @100};
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test timeAgo");
 }
 
 - (void)testTimeAgoCodePointCriteriaViaDatesInNSUserDefaults {
-	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
 
-	interaction.criteria = @{@"code_point/app.launch/invokes/time_ago": @{@"$lte": @500}};
+	invocation.criteria = @{@"code_point/app.launch/invokes/time_ago": @{@"$lte": @500}};
 	usageData.codePointInvokesTimeAgo = nil;
 	[[NSUserDefaults standardUserDefaults] setObject:@{@"app.launch": [NSDate distantPast]} forKey:ATEngagementCodePointsInvokesLastDateKey];
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo: distantPast -> now time interval > 500");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Test timeAgo: distantPast -> now time interval > 500");
 	
-	interaction.criteria = @{@"code_point/app.launch/invokes/time_ago": @{@"$gte": @500}};
+	invocation.criteria = @{@"code_point/app.launch/invokes/time_ago": @{@"$gte": @500}};
 	usageData.codePointInvokesTimeAgo = nil;
 	[[NSUserDefaults standardUserDefaults] setObject:@{@"app.launch": [NSDate distantPast]} forKey:ATEngagementCodePointsInvokesLastDateKey];
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test timeAgo");
 	
-	interaction.criteria = @{@"code_point/app.launch/invokes/time_ago": @{@"$gte": @500}};
+	invocation.criteria = @{@"code_point/app.launch/invokes/time_ago": @{@"$gte": @500}};
 	usageData.codePointInvokesTimeAgo = nil;
 	[[NSUserDefaults standardUserDefaults] setObject:@{@"app.launch": [NSDate dateWithTimeIntervalSinceNow:-600]} forKey:ATEngagementCodePointsInvokesLastDateKey];
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test timeAgo");
 	
-	interaction.criteria = @{@"code_point/app.launch/invokes/time_ago": @{@"$gte": @500}};
+	invocation.criteria = @{@"code_point/app.launch/invokes/time_ago": @{@"$gte": @500}};
 	usageData.codePointInvokesTimeAgo = nil;
 	[[NSUserDefaults standardUserDefaults] setObject:@{@"app.launch": (NSDate *)[NSDate dateWithTimeIntervalSinceNow:-400]} forKey:ATEngagementCodePointsInvokesLastDateKey];
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Test timeAgo");
 	
-	interaction.criteria = @{@"code_point/app.launch/invokes/time_ago": @{@"$gte": @500}};
+	invocation.criteria = @{@"code_point/app.launch/invokes/time_ago": @{@"$gte": @500}};
 	usageData.codePointInvokesTimeAgo = nil;
 	[[NSUserDefaults standardUserDefaults] setObject:@{@"app.launch": (NSDate *)[NSDate dateWithTimeIntervalSinceNow:-501]} forKey:ATEngagementCodePointsInvokesLastDateKey];
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test timeAgo");
 }
 
 - (void)testTimeAgoInteractionCriteriaViaDatesInNSUserDefaults {
-	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
 	
-	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/time_ago": @{@"$lte": @500}};
+	invocation.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/time_ago": @{@"$lte": @500}};
 	usageData.interactionInvokesTimeAgo = nil;
 	[[NSUserDefaults standardUserDefaults] setObject:@{@"526fe2836dd8bf546a00000b": [NSDate distantPast]} forKey:ATEngagementInteractionsInvokesLastDateKey];
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo: distantPast -> now time interval > 500");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Test timeAgo: distantPast -> now time interval > 500");
 	
-	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/time_ago": @{@"$gte": @500}};
+	invocation.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/time_ago": @{@"$gte": @500}};
 	usageData.interactionInvokesTimeAgo = nil;
 	[[NSUserDefaults standardUserDefaults] setObject:@{@"526fe2836dd8bf546a00000b": [NSDate distantPast]} forKey:ATEngagementInteractionsInvokesLastDateKey];
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test timeAgo");
 	
-	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/time_ago": @{@"$gte": @500}};
+	invocation.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/time_ago": @{@"$gte": @500}};
 	usageData.interactionInvokesTimeAgo = nil;
 	[[NSUserDefaults standardUserDefaults] setObject:@{@"526fe2836dd8bf546a00000b": [NSDate dateWithTimeIntervalSinceNow:-600]} forKey:ATEngagementInteractionsInvokesLastDateKey];
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test timeAgo");
 	
-	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/time_ago": @{@"$gte": @500}};
+	invocation.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/time_ago": @{@"$gte": @500}};
 	usageData.interactionInvokesTimeAgo = nil;
 	[[NSUserDefaults standardUserDefaults] setObject:@{@"526fe2836dd8bf546a00000b": (NSDate *)[NSDate dateWithTimeIntervalSinceNow:-400]} forKey:ATEngagementInteractionsInvokesLastDateKey];
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Test timeAgo");
 	
-	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/time_ago": @{@"$gte": @500}};
+	invocation.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/time_ago": @{@"$gte": @500}};
 	usageData.interactionInvokesTimeAgo = nil;
 	[[NSUserDefaults standardUserDefaults] setObject:@{@"526fe2836dd8bf546a00000b": (NSDate *)[NSDate dateWithTimeIntervalSinceNow:-501]} forKey:ATEngagementInteractionsInvokesLastDateKey];
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test timeAgo");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test timeAgo");
 }
 
 - (void)testIsUpdateVersionsAndBuilds {
-	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
 	
 	//Version
-	interaction.criteria = @{@"is_update/version": @YES};
+	invocation.criteria = @{@"is_update/version": @YES};
 	usageData.isUpdateVersion = @YES;
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test isUpdate");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test isUpdate");
 	
-	interaction.criteria = @{@"is_update/version": @NO};
+	invocation.criteria = @{@"is_update/version": @NO};
 	usageData.isUpdateVersion = @NO;
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test isUpdate");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test isUpdate");
 	
-	interaction.criteria = @{@"is_update/version": @YES};
+	invocation.criteria = @{@"is_update/version": @YES};
 	usageData.isUpdateVersion = @NO;
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test isUpdate");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Test isUpdate");
 	
-	interaction.criteria = @{@"is_update/version": @NO};
+	invocation.criteria = @{@"is_update/version": @NO};
 	usageData.isUpdateVersion = @YES;
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test isUpdate");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Test isUpdate");
 
 	//Build
-	interaction.criteria = @{@"is_update/build": @YES};
+	invocation.criteria = @{@"is_update/build": @YES};
 	usageData.isUpdateBuild = @YES;
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test isUpdate");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test isUpdate");
 	
-	interaction.criteria = @{@"is_update/build": @NO};
+	invocation.criteria = @{@"is_update/build": @NO};
 	usageData.isUpdateBuild = @NO;
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test isUpdate");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test isUpdate");
 	
-	interaction.criteria = @{@"is_update/build": @YES};
+	invocation.criteria = @{@"is_update/build": @YES};
 	usageData.isUpdateBuild = @NO;
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test isUpdate");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Test isUpdate");
 	
-	interaction.criteria = @{@"is_update/build": @NO};
+	invocation.criteria = @{@"is_update/build": @NO};
 	usageData.isUpdateBuild = @YES;
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test isUpdate");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Test isUpdate");
 	
 	
-	interaction.criteria = @{@"is_update/build": @[[NSNull null]]};
+	invocation.criteria = @{@"is_update/build": @[[NSNull null]]};
 	usageData.isUpdateBuild = @NO;
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
-	interaction.criteria = @{@"is_update/build": @{@"$gt":@"lajd;fl ajsd;flj"}};
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
+	invocation.criteria = @{@"is_update/build": @{@"$gt":@"lajd;fl ajsd;flj"}};
 	usageData.isUpdateBuild = @NO;
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
 }
 
 - (void)testInvokesVersion {
-	ATInteraction *interaction = [[ATInteraction alloc] init];
-	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/version": @{@"$lte": @6}};
+	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
+	invocation.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/version": @{@"$lte": @6}};
 	
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Invokes version should default to 0 when not set.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Invokes version should default to 0 when not set.");
 	
-	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/version": @{@"$gte": @6}};
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Invokes version should default to 0 when not set.");
+	invocation.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/version": @{@"$gte": @6}};
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Invokes version should default to 0 when not set.");
 	
-	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/version": @{@"$lte": @6}};
+	invocation.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/version": @{@"$lte": @6}};
 	usageData.interactionInvokesVersion = @{@"interactions/526fe2836dd8bf546a00000b/invokes/version": @1};
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Invokes version");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Invokes version");
 
-	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/version": @{@"$lte": @6}};
+	invocation.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/version": @{@"$lte": @6}};
 	usageData.interactionInvokesVersion = @{@"interactions/526fe2836dd8bf546a00000b/invokes/version": @7};
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Invokes version");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Invokes version");
 }
 
 - (void)testInvokesBuild {
-	ATInteraction *interaction = [[ATInteraction alloc] init];
-	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/build": @{@"$lte": @6}};
+	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
+	invocation.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/build": @{@"$lte": @6}};
 	
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
-	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Invokes build should default to 0 when not set.");
+	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Invokes build should default to 0 when not set.");
 	
-	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/build": @{@"$gte": @6}};
-	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Invokes build should default to 0 when not set.");
+	invocation.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/build": @{@"$gte": @6}};
+	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Invokes build should default to 0 when not set.");
 
-	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/build": @{@"$lte": @6}};
-	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
+	invocation.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/build": @{@"$lte": @6}};
+	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
 	usageData.interactionInvokesBuild = @{@"interactions/526fe2836dd8bf546a00000b/invokes/build": @1};
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Invokes build");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Invokes build");
 	
-	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/build": @{@"$lte": @6}};
-	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
+	invocation.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/build": @{@"$lte": @6}};
+	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
 	usageData.interactionInvokesBuild = @{@"interactions/526fe2836dd8bf546a00000b/invokes/build": @7};
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Invokes build");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Invokes build");
 }
 
 - (void)testEnjoymentDialogCriteria {
-	ATInteraction *interaction = [[ATInteraction alloc] init];
-	interaction.criteria = @{@"$or": @[@{@"code_point/local#app#init/invokes/version": @{@"$gte": @10}},
+	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
+	invocation.criteria = @{@"$or": @[@{@"code_point/local#app#init/invokes/version": @{@"$gte": @10}},
 									   @{@"time_since_install/total": @{@"$gt": @864000}},
 									   @{@"code_point/local#app#testRatingFlow/invokes/total": @{@"$gt":@10}}
 									   ],
 							 @"interactions/533ed97a7724c5457e00003f/invokes/version": @0};
-	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
 	
 	
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
@@ -708,179 +708,179 @@
 	usageData.timeSinceInstallTotal = @863999;
 	usageData.codePointInvokesTotal = @{@"code_point/local#app#testRatingFlow/invokes/total": @9};
 	usageData.interactionInvokesVersion = @{@"interactions/533ed97a7724c5457e00003f/invokes/version": @0};
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"The OR clauses are failing.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"The OR clauses are failing.");
 	
 	usageData.codePointInvokesVersion = @{@"code_point/local#app#init/invokes/version": @11};
 	usageData.timeSinceInstallTotal = @863999;
 	usageData.codePointInvokesTotal = @{@"code_point/local#app#testRatingFlow/invokes/total": @9};
 	usageData.interactionInvokesVersion = @{@"interactions/533ed97a7724c5457e00003f/invokes/version": @0};
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"One of the OR clauses is true. The other ANDed clause is also true. Should work.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"One of the OR clauses is true. The other ANDed clause is also true. Should work.");
 	
 	usageData.codePointInvokesVersion = @{@"code_point/local#app#init/invokes/version": @11};
 	usageData.timeSinceInstallTotal = @864001;
 	usageData.codePointInvokesTotal = @{@"code_point/local#app#testRatingFlow/invokes/total": @11};
 	usageData.interactionInvokesVersion = @{@"interactions/533ed97a7724c5457e00003f/invokes/version": @0};
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"All of the OR clauses are true. The other ANDed clause is also true. Should work.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"All of the OR clauses are true. The other ANDed clause is also true. Should work.");
 	
 	usageData.interactionInvokesVersion = @{@"interactions/533ed97a7724c5457e00003f/invokes/version": @1};
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"All the OR clauses are true. The other ANDed clause is not true. Should fail.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"All the OR clauses are true. The other ANDed clause is not true. Should fail.");
 }
 
 - (void)testNotInCriteria {
-	ATInteraction *interaction = [[ATInteraction alloc] init];
-	interaction.criteria = @{@"$and": @[@{@"code_point/local#app#init/invokes/version": @{@"$not": @{@"$gte": @10}}},
+	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
+	invocation.criteria = @{@"$and": @[@{@"code_point/local#app#init/invokes/version": @{@"$not": @{@"$gte": @10}}},
 									   @{@"time_since_install/total": @{@"$not": @{@"$gt": @864000}}},
 									   @{@"code_point/local#app#testRatingFlow/invokes/total": @{@"$gt":@10}}
 									   ],
 							 @"interactions/533ed97a7724c5457e00003f/invokes/version": @0
 							 };
-	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
 	
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
 	usageData.codePointInvokesVersion = @{@"code_point/local#app#init/invokes/version": @9};
 	usageData.timeSinceInstallTotal = @863999;
 	usageData.codePointInvokesTotal = @{@"code_point/local#app#testRatingFlow/invokes/total": @9};
 	usageData.interactionInvokesVersion = @{@"interactions/533ed97a7724c5457e00003f/invokes/version": @0};
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail due to invokes/version being 9.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail due to invokes/version being 9.");
 	
 	usageData.codePointInvokesTotal = @{@"code_point/local#app#testRatingFlow/invokes/total": @11};
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Should pass due to invokes being 11.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Should pass due to invokes being 11.");
 	
-	interaction = [[ATInteraction alloc] init];
+	invocation = [[ATInteractionInvocation alloc] init];
 	usageData = [[ATInteractionUsageData alloc] init];
-	interaction.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/build": @{@"$not": @{@"$gt": @6}}};
+	invocation.criteria = @{@"interactions/526fe2836dd8bf546a00000b/invokes/build": @{@"$not": @{@"$gt": @6}}};
 	usageData.interactionInvokesBuild = @{@"interactions/526fe2836dd8bf546a00000b/invokes/build": @1};
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Should pass because 6 is not > 1.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Should pass because 6 is not > 1.");
 }
 
 - (void)testContainsCriteria {
-	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
-	interaction.criteria = @{@"application_version": @{@"$contains": @"a"}};
+	invocation.criteria = @{@"application_version": @{@"$contains": @"a"}};
 	usageData.applicationVersion = @"1.2.3a";
-	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Should pass because a is in 1.2.3a");
+	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Should pass because a is in 1.2.3a");
 	
-	interaction = [[ATInteraction alloc] init];
+	invocation = [[ATInteractionInvocation alloc] init];
 	usageData = [[ATInteractionUsageData alloc] init];
-	interaction.criteria = @{@"application_version": @{@"$contains": @"1.4"}};
+	invocation.criteria = @{@"application_version": @{@"$contains": @"1.4"}};
 	usageData.applicationVersion = @"1.2.3a";
-	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail because 1.4 is not in 1.2.3a");
+	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail because 1.4 is not in 1.2.3a");
 	
-	interaction = [[ATInteraction alloc] init];
+	invocation = [[ATInteractionInvocation alloc] init];
 	usageData = [[ATInteractionUsageData alloc] init];
-	interaction.criteria = @{@"application_version": @{@"$contains": @"abc"}};
+	invocation.criteria = @{@"application_version": @{@"$contains": @"abc"}};
 	usageData.applicationVersion = @"AbC";
-	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Contains should be case insensitive.");
+	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Contains should be case insensitive.");
 }
 
 - (void)testStartsWithCriteria {
-	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
-	interaction.criteria = @{@"application_version": @{@"$starts_with": @"1.2."}};
+	invocation.criteria = @{@"application_version": @{@"$starts_with": @"1.2."}};
 	usageData.applicationVersion = @"1.2.3a";
-	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Should pass because 1.2.3a starts with 1.2.");
+	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Should pass because 1.2.3a starts with 1.2.");
 	
-	interaction = [[ATInteraction alloc] init];
+	invocation = [[ATInteractionInvocation alloc] init];
 	usageData = [[ATInteractionUsageData alloc] init];
-	interaction.criteria = @{@"application_version": @{@"$starts_with": @"1.4"}};
+	invocation.criteria = @{@"application_version": @{@"$starts_with": @"1.4"}};
 	usageData.applicationVersion = @"1.2.3a";
-	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail because 1.2.3a doesn't start with 1.4");
+	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail because 1.2.3a doesn't start with 1.4");
 	
 	// Test directionality.
-	interaction = [[ATInteraction alloc] init];
+	invocation = [[ATInteractionInvocation alloc] init];
 	usageData = [[ATInteractionUsageData alloc] init];
-	interaction.criteria = @{@"application_version": @{@"$starts_with": @"abcd"}};
+	invocation.criteria = @{@"application_version": @{@"$starts_with": @"abcd"}};
 	usageData.applicationVersion = @"abc";
-	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail because abc doesn't start with abcd.");
+	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail because abc doesn't start with abcd.");
 	
-	interaction = [[ATInteraction alloc] init];
+	invocation = [[ATInteractionInvocation alloc] init];
 	usageData = [[ATInteractionUsageData alloc] init];
-	interaction.criteria = @{@"application_version": @{@"$starts_with": @"abc"}};
+	invocation.criteria = @{@"application_version": @{@"$starts_with": @"abc"}};
 	usageData.applicationVersion = @"AbCdEF";
-	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"starts_with should be case insensitive.");
+	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"starts_with should be case insensitive.");
 }
 
 - (void)testEndsWithCriteria {
-	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
-	interaction.criteria = @{@"application_version": @{@"$ends_with": @"a"}};
+	invocation.criteria = @{@"application_version": @{@"$ends_with": @"a"}};
 	usageData.applicationVersion = @"1.2.3a";
-	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Should pass because 1.2.3a ends with a");
+	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Should pass because 1.2.3a ends with a");
 	
-	interaction = [[ATInteraction alloc] init];
+	invocation = [[ATInteractionInvocation alloc] init];
 	usageData = [[ATInteractionUsageData alloc] init];
-	interaction.criteria = @{@"application_version": @{@"$ends_with": @"1.4"}};
+	invocation.criteria = @{@"application_version": @{@"$ends_with": @"1.4"}};
 	usageData.applicationVersion = @"1.2.3a";
-	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail because 1.2.3a doesn't end in 1.4");
+	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail because 1.2.3a doesn't end in 1.4");
 	
 	// Test directionality
-	interaction = [[ATInteraction alloc] init];
+	invocation = [[ATInteractionInvocation alloc] init];
 	usageData = [[ATInteractionUsageData alloc] init];
-	interaction.criteria = @{@"application_version": @{@"$ends_with": @"abcd"}};
+	invocation.criteria = @{@"application_version": @{@"$ends_with": @"abcd"}};
 	usageData.applicationVersion = @"bcd";
-	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail because bcd doesn't end with abcd.");
+	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail because bcd doesn't end with abcd.");
 	
-	interaction = [[ATInteraction alloc] init];
+	invocation = [[ATInteractionInvocation alloc] init];
 	usageData = [[ATInteractionUsageData alloc] init];
-	interaction.criteria = @{@"application_version": @{@"$ends_with": @"DEF"}};
+	invocation.criteria = @{@"application_version": @{@"$ends_with": @"DEF"}};
 	usageData.applicationVersion = @"AbCdEf";
-	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Ends with should be case insensitive.");
+	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Ends with should be case insensitive.");
 }
 
 - (void)testExistsCriteria {
-	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
-	interaction.criteria = @{@"application_version": @{@"$exists": @YES}};
+	invocation.criteria = @{@"application_version": @{@"$exists": @YES}};
 	usageData.applicationVersion = @"1.2.3a";
-	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Should pass because application_version exists.");
+	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Should pass because application_version exists.");
 	
-	interaction = [[ATInteraction alloc] init];
+	invocation = [[ATInteractionInvocation alloc] init];
 	usageData = [[ATInteractionUsageData alloc] init];
-	interaction.criteria = @{@"application_version": @{@"$exists": @YES}};
-	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail because application_version doesn't exist.");
+	invocation.criteria = @{@"application_version": @{@"$exists": @YES}};
+	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail because application_version doesn't exist.");
 	
-	interaction = [[ATInteraction alloc] init];
+	invocation = [[ATInteractionInvocation alloc] init];
 	usageData = [[ATInteractionUsageData alloc] init];
-	interaction.criteria = @{@"application_version": @{@"$exists": @NO}};
+	invocation.criteria = @{@"application_version": @{@"$exists": @NO}};
 	usageData.applicationVersion = @"1.2.3a";
-	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail because application_version exists.");
+	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail because application_version exists.");
 	
-	interaction = [[ATInteraction alloc] init];
+	invocation = [[ATInteractionInvocation alloc] init];
 	usageData = [[ATInteractionUsageData alloc] init];
-	interaction.criteria = @{@"application_build": @{@"$exists": @NO}};
-	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Should pass because application_build doesn't exist.");
+	invocation.criteria = @{@"application_build": @{@"$exists": @NO}};
+	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Should pass because application_build doesn't exist.");
 	
-	interaction = [[ATInteraction alloc] init];
+	invocation = [[ATInteractionInvocation alloc] init];
 	usageData = [[ATInteractionUsageData alloc] init];
-	interaction.criteria = @{@"application_build": @{@"$exists": @YES}};
+	invocation.criteria = @{@"application_build": @{@"$exists": @YES}};
 	usageData.applicationBuild = @"nil";
-	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Should pass because application_build exists.");
+	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Should pass because application_build exists.");
 	
 	
-	interaction = [[ATInteraction alloc] init];
+	invocation = [[ATInteractionInvocation alloc] init];
 	usageData = [[ATInteractionUsageData alloc] init];
-	interaction.criteria = @{@"code_point/app.launch/invokes/time_ago": @{@"$exists": @YES},
-							 @"interactions/big.win/invokes/time_ago": @{@"$exists": @NO}};
+	invocation.criteria = @{@"code_point/app.launch/invokes/time_ago": @{@"$exists": @YES},
+							@"interactions/big.win/invokes/time_ago": @{@"$exists": @NO}};
 	usageData.codePointInvokesTimeAgo = @{@"code_point/app.launch/invokes/time_ago": @800};
 	usageData.interactionInvokesTimeAgo = @{};
-	XCTAssertNotNil([interaction criteriaPredicate], @"Criteria should parse correctly.");
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Should pass because invokes/time_ago exists.");
+	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Should pass because invokes/time_ago exists.");
 }
 
 - (void)testInvalidJSON {
@@ -908,43 +908,43 @@
 }
 
 - (void)testCustomDeviceDataCriteria {
-	ATInteraction *interaction = [[ATInteraction alloc] init];
-	interaction.criteria = @{@"device/custom_data/test_device_custom_data": @"test_value"};
+	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
+	invocation.criteria = @{@"device/custom_data/test_device_custom_data": @"test_value"};
 
-	XCTAssertFalse([interaction criteriaAreMet], @"Criteria should not be met before adding custom data.");
+	XCTAssertFalse([invocation criteriaAreMet], @"Criteria should not be met before adding custom data.");
 	
 	[[ATConnect sharedConnection] addCustomDeviceData:@"test_value" withKey:@"test_device_custom_data"];
 	
-	XCTAssertTrue([interaction criteriaAreMet], @"Criteria should be met after adding custom data.");
+	XCTAssertTrue([invocation criteriaAreMet], @"Criteria should be met after adding custom data.");
 
-	interaction.criteria = @{@"device/custom_data/test_device_custom_data": @"test_value",
-							 @"device/custom_data/test_version": @"4.5.1"};
+	invocation.criteria = @{@"device/custom_data/test_device_custom_data": @"test_value",
+							@"device/custom_data/test_version": @"4.5.1"};
 	
-	XCTAssertFalse([interaction criteriaAreMet], @"Criteria should not be met before adding custom data.");
+	XCTAssertFalse([invocation criteriaAreMet], @"Criteria should not be met before adding custom data.");
 
 	[[ATConnect sharedConnection] addCustomDeviceData:@"4.5.1" withKey:@"test_version"];
 
-	XCTAssertTrue([interaction criteriaAreMet], @"Criteria should be met after adding custom data.");
+	XCTAssertTrue([invocation criteriaAreMet], @"Criteria should be met after adding custom data.");
 }
 
 - (void)testCustomPersonDataCriteria {
-	ATInteraction *interaction = [[ATInteraction alloc] init];
-	interaction.criteria = @{@"person/custom_data/hair_color": @"black"};
+	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
+	invocation.criteria = @{@"person/custom_data/hair_color": @"black"};
 	
-	XCTAssertFalse([interaction criteriaAreMet], @"Criteria should not be met before adding custom data.");
+	XCTAssertFalse([invocation criteriaAreMet], @"Criteria should not be met before adding custom data.");
 	
 	[[ATConnect sharedConnection] addCustomPersonData:@"black" withKey:@"hair_color"];
 	
-	XCTAssertTrue([interaction criteriaAreMet], @"Criteria should be met after adding custom data.");
+	XCTAssertTrue([invocation criteriaAreMet], @"Criteria should be met after adding custom data.");
 	
-	interaction.criteria = @{@"person/custom_data/hair_color": @"black",
-							 @"person/custom_data/age": @"27"};
+	invocation.criteria = @{@"person/custom_data/hair_color": @"black",
+							@"person/custom_data/age": @"27"};
 	
-	XCTAssertFalse([interaction criteriaAreMet], @"Criteria should not be met before adding custom data.");
+	XCTAssertFalse([invocation criteriaAreMet], @"Criteria should not be met before adding custom data.");
 	
 	[[ATConnect sharedConnection] addCustomPersonData:@"27" withKey:@"age"];
 	
-	XCTAssertTrue([interaction criteriaAreMet], @"Criteria should be met after adding custom data.");
+	XCTAssertTrue([invocation criteriaAreMet], @"Criteria should be met after adding custom data.");
 }
 
 - (void)testWillShowInteractionForEvent {

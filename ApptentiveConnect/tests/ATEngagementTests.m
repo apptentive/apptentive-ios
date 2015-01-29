@@ -128,277 +128,277 @@
 }
 
 - (void)testEmptyCriteria {
-	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
 	
-	interaction.criteria = nil;
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Dictionary with nil criteria should evaluate to False.");
+	invocation.criteria = nil;
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Dictionary with nil criteria should evaluate to False.");
 	
-	interaction.criteria = @{[NSNull null]: [NSNull null]};
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Dictionary with Null criteria should evaluate to False.");
+	invocation.criteria = @{[NSNull null]: [NSNull null]};
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Dictionary with Null criteria should evaluate to False.");
 
-	interaction.criteria = @{};
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Empty criteria dictionary with no keys should evaluate to True.");
+	invocation.criteria = @{};
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Empty criteria dictionary with no keys should evaluate to True.");
 	
-	interaction.criteria = @{@"": @6};
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Criteria with a key that is an empty string should fail (if usage data does not match).");
+	invocation.criteria = @{@"": @6};
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Criteria with a key that is an empty string should fail (if usage data does not match).");
 }
 
 - (void)testInteractionCriteriaDaysSnceInstall {
-	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
 	
 	NSTimeInterval dayTimeInterval = 60 * 60 * 24;
 	
-	interaction.criteria = @{@"time_since_install/total": @(6 * dayTimeInterval)};
+	invocation.criteria = @{@"time_since_install/total": @(6 * dayTimeInterval)};
 	usageData.timeSinceInstallTotal = @(6 * dayTimeInterval);
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Install date");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Install date");
 	usageData.timeSinceInstallTotal = @(5 * dayTimeInterval);
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Install date");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Install date");
 	usageData.timeSinceInstallTotal = @(7 * dayTimeInterval);
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Install date");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Install date");
 	
-	interaction.criteria = @{@"time_since_install/total": @{@"$gt": @(5 * dayTimeInterval), @"$lt": @(7 * dayTimeInterval)}};
+	invocation.criteria = @{@"time_since_install/total": @{@"$gt": @(5 * dayTimeInterval), @"$lt": @(7 * dayTimeInterval)}};
 	usageData.timeSinceInstallTotal = @(6 * dayTimeInterval);
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Install date");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Install date");
 	usageData.timeSinceInstallTotal = @(5 * dayTimeInterval);
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Install date");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Install date");
 	usageData.timeSinceInstallTotal = @(7 * dayTimeInterval);
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Install date");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Install date");
 	
-	interaction.criteria = @{@"time_since_install/total": @{@"$lte": @(5 * dayTimeInterval), @"$gt": @(3 * dayTimeInterval)}};
+	invocation.criteria = @{@"time_since_install/total": @{@"$lte": @(5 * dayTimeInterval), @"$gt": @(3 * dayTimeInterval)}};
 	usageData.timeSinceInstallTotal = @(3 * dayTimeInterval);
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Install date");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Install date");
 	usageData.timeSinceInstallTotal = @(4 * dayTimeInterval);
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Install date");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Install date");
 	usageData.timeSinceInstallTotal = @(5 * dayTimeInterval);
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Install date");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Install date");
 	usageData.timeSinceInstallTotal = @(6 * dayTimeInterval);
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Install date");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Install date");
 	
 	
-	interaction.criteria = @{@"time_since_install/total": @{@"$lte": @"5", @"$gt": @"3"}};
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
+	invocation.criteria = @{@"time_since_install/total": @{@"$lte": @"5", @"$gt": @"3"}};
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
 }
 
 - (void)testInteractionCriteriaVersion {
-	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
 	
-	interaction.criteria = @{@"application_version": @"1.2.8"};
+	invocation.criteria = @{@"application_version": @"1.2.8"};
 	usageData.applicationVersion = @"1.2.8";
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Version number");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Version number");
 	usageData.applicationVersion = @"v1.2.8";
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Version number must not have a 'v' in front!");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Version number must not have a 'v' in front!");
 	
-	interaction.criteria = @{@"application_version": @"v3.0"};
+	invocation.criteria = @{@"application_version": @"v3.0"};
 	usageData.applicationVersion = @"v3.0";
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Version number");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Version number");
 	usageData.applicationVersion = @"3.0";
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Version number must not have a 'v' in front!");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Version number must not have a 'v' in front!");
 	
 	usageData = [[ATInteractionUsageData alloc] init];
-	interaction.criteria = @{@"app_release/version": @"1.2.8"};
+	invocation.criteria = @{@"app_release/version": @"1.2.8"};
 	usageData.applicationVersion = @"1.2.8";
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Version number");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Version number");
 	usageData.applicationVersion = @"v1.2.8";
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Version number must not have a 'v' in front!");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Version number must not have a 'v' in front!");
 	
-	interaction.criteria = @{@"app_release/version": @"v3.0"};
+	invocation.criteria = @{@"app_release/version": @"v3.0"};
 	usageData.applicationVersion = @"v3.0";
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Version number");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Version number");
 	usageData.applicationVersion = @"3.0";
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Version number must not have a 'v' in front!");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Version number must not have a 'v' in front!");
 	
 	
-	interaction.criteria = @{@"app_release/version": @{@"$gt": @3.0}};
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
+	invocation.criteria = @{@"app_release/version": @{@"$gt": @3.0}};
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
 }
 
 - (void)testInteractionCriteriaBuild {
-	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
 	
-	interaction.criteria = @{@"application_build": @"39"};
+	invocation.criteria = @{@"application_build": @"39"};
 	usageData.applicationBuild = @"39";
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Build number");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Build number");
 	
 	usageData.applicationBuild = @"v39";
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Build number must not have a 'v' in front!");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Build number must not have a 'v' in front!");
 	
-	interaction.criteria = @{@"application_build": @"v3.0"};
+	invocation.criteria = @{@"application_build": @"v3.0"};
 	usageData.applicationBuild = @"v3.0";
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Build number");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Build number");
 	
 	usageData.applicationBuild = @"3.0";
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Build number must not have a 'v' in front!");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Build number must not have a 'v' in front!");
 	
 	usageData = [[ATInteractionUsageData alloc] init];
-	interaction.criteria = @{@"app_release/build": @"39"};
+	invocation.criteria = @{@"app_release/build": @"39"};
 	usageData.applicationBuild = @"39";
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Build number");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Build number");
 	
 	usageData.applicationBuild = @"v39";
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Build number must not have a 'v' in front!");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Build number must not have a 'v' in front!");
 	
-	interaction.criteria = @{@"app_release/build": @"v3.0"};
+	invocation.criteria = @{@"app_release/build": @"v3.0"};
 	usageData.applicationBuild = @"v3.0";
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Build number");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Build number");
 	
 	usageData.applicationBuild = @"3.0";
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Build number must not have a 'v' in front!");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Build number must not have a 'v' in front!");
 	
 	
-	interaction.criteria = @{@"app_release/build": @{@"$contains":@3.0}};
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
+	invocation.criteria = @{@"app_release/build": @{@"$contains":@3.0}};
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
 }
 
 - (void)testInteractionCriteriaSDK {
-	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
 	
-	interaction.criteria = @{@"sdk/version": kATConnectVersionString};
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Default value should be current version.");
+	invocation.criteria = @{@"sdk/version": kATConnectVersionString};
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Default value should be current version.");
 	
-	interaction.criteria = @{@"sdk/version": @"1.4.2"};
+	invocation.criteria = @{@"sdk/version": @"1.4.2"};
 	usageData.sdkVersion = @"1.4.2";
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"SDK Version should be 1.4.2");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"SDK Version should be 1.4.2");
 	
 	usageData.sdkVersion = @"1.4";
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"SDK Version isn't 1.4");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"SDK Version isn't 1.4");
 	
 	usageData.sdkVersion = @"1.5.0";
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"SDK Version isn't 1.5.0");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"SDK Version isn't 1.5.0");
 	
-	interaction.criteria = @{@"sdk/version": @{@"$contains":@3.0}};
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
+	invocation.criteria = @{@"sdk/version": @{@"$contains":@3.0}};
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
 	
-	interaction.criteria = @{@"sdk/distribution": @"CocoaPods-Source"};
+	invocation.criteria = @{@"sdk/distribution": @"CocoaPods-Source"};
 	usageData.sdkDistribution = @"CocoaPods-Source";
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"SDK Distribution should be CocoaPods-Source");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"SDK Distribution should be CocoaPods-Source");
 	
-	interaction.criteria = @{@"sdk/distribution": @{@"$contains":@"CocoaPods"}};
+	invocation.criteria = @{@"sdk/distribution": @{@"$contains":@"CocoaPods"}};
 	usageData.sdkDistribution = @"CocoaPods-Source";
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"SDK Distribution should contain CocoaPods");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"SDK Distribution should contain CocoaPods");
 	
-	interaction.criteria = @{@"sdk/distribution_version": @"foo"};
+	invocation.criteria = @{@"sdk/distribution_version": @"foo"};
 	usageData.sdkDistributionVersion = @"foo";
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"SDK Distribution Version should match.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"SDK Distribution Version should match.");
 }
 
 - (void)testInteractionCriteriaCurrentTime {
-	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
 	
-	interaction.criteria = @{@"current_time": @{@"$exists": @YES}};
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Must have default current time.");
+	invocation.criteria = @{@"current_time": @{@"$exists": @YES}};
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Must have default current time.");
 	// Make sure it's actually a reasonable value…
 	NSTimeInterval currentTimestamp = [[NSDate date] timeIntervalSince1970];
 	NSTimeInterval timestamp = [usageData.currentTime doubleValue];
 	XCTAssertTrue(timestamp < currentTimestamp && timestamp > (currentTimestamp - 5), @"Current time not a believable value.");
 	
-	interaction.criteria = @{@"current_time":@{@"$gt": @1397598108.63843}};
+	invocation.criteria = @{@"current_time":@{@"$gt": @1397598108.63843}};
 	usageData.currentTime = @1397598109;
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Current time criteria not met.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Current time criteria not met.");
 	
-	interaction.criteria = @{@"current_time":@{@"$lt": @1183135260, @"$gt": @465498000}};
+	invocation.criteria = @{@"current_time":@{@"$lt": @1183135260, @"$gt": @465498000}};
 	usageData.currentTime = @1183135259.5;
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Current time criteria not met.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Current time criteria not met.");
 	
-	interaction.criteria = @{@"current_time":@{@"$gt": @"1183135260"}};
+	invocation.criteria = @{@"current_time":@{@"$gt": @"1183135260"}};
 	usageData.currentTime = @1397598109;
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail because of type but not crash.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail because of type but not crash.");
 	
-	interaction.criteria = @{@"current_time": @"1397598109"};
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
+	invocation.criteria = @{@"current_time": @"1397598109"};
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
 }
 
 - (void)testCodePointInvokesVersion {
-	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
 	
-	interaction.criteria = @{@"code_point/app.launch/invokes/version": @1};
+	invocation.criteria = @{@"code_point/app.launch/invokes/version": @1};
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @1};
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"This version has been invoked 1 time.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"This version has been invoked 1 time.");
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @0};
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @2};
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
 
 	
-	interaction.criteria = @{@"code_point/big.win/invokes/version": @7};
+	invocation.criteria = @{@"code_point/big.win/invokes/version": @7};
 	usageData.codePointInvokesVersion = @{@"code_point/big.win/invokes/version": @7};
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
 	usageData.codePointInvokesVersion = @{@"code_point/big.win/invokes/version": @1};
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
 	usageData.codePointInvokesVersion = @{@"code_point/big.win/invokes/version": @19};
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
 
-	interaction.criteria = @{@"code_point/big.win/invokes/version": @{@"$gte": @5, @"$lte": @5}};
+	invocation.criteria = @{@"code_point/big.win/invokes/version": @{@"$gte": @5, @"$lte": @5}};
 	usageData.codePointInvokesVersion = @{@"code_point/big.win/invokes/version": @5};
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
 	usageData.codePointInvokesVersion = @{@"code_point/big.win/invokes/version": @3};
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
 	usageData.codePointInvokesVersion = @{@"code_point/big.win/invokes/version": @19};
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
 	
 	
-	interaction.criteria = @{@"code_point/big.win/invokes/version": @{@"$gte": @"5", @"$lte": @"5"}};
+	invocation.criteria = @{@"code_point/big.win/invokes/version": @{@"$gte": @"5", @"$lte": @"5"}};
 	usageData.codePointInvokesVersion = @{@"code_point/big.win/invokes/version": @5};
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
 }
 
 - (void)testUpgradeMessageCriteria {
-	ATInteraction *interaction = [[ATInteraction alloc] init];
+	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
 	
-	interaction.criteria = @{@"code_point/app.launch/invokes/version": @1,
-							 @"application_version": @"1.3.0",
-							 @"application_build": @"39"};
+	invocation.criteria = @{@"code_point/app.launch/invokes/version": @1,
+							@"application_version": @"1.3.0",
+							@"application_build": @"39"};
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @1};
 	usageData.applicationVersion = @"1.3.0";
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message without build number.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Test Upgrade Message without build number.");
 	usageData.applicationBuild = @"39";
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @2};
 	usageData.applicationVersion = @"1.3.0";
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @1};
 	usageData.applicationVersion = @"1.3.1";
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
 
-	interaction.criteria = @{@"application_version": @"1.3.0",
+	invocation.criteria = @{@"application_version": @"1.3.0",
 							 @"code_point/app.launch/invokes/version": @{@"$gte": @1}};
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @1};
 	usageData.applicationVersion = @"1.3.0";
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @2};
 	usageData.applicationVersion = @"1.3.0";
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @0};
 	usageData.applicationVersion = @"1.3.0";
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
 	
-	interaction.criteria = @{@"application_version": @"1.3.0",
-							 @"code_point/app.launch/invokes/version": @{@"$lte": @4}};
+	invocation.criteria = @{@"application_version": @"1.3.0",
+							@"code_point/app.launch/invokes/version": @{@"$lte": @4}};
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @1};
 	usageData.applicationVersion = @"1.3.0";
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @4};
 	usageData.applicationVersion = @"1.3.0";
-	XCTAssertTrue([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @5};
 	usageData.applicationVersion = @"1.3.0";
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
 	
 	
-	interaction.criteria = @{@"code_point/app.launch/invokes/version": @[@1],
-							 @"application_version": @"1.3.0",
-							 @"application_build": @"39"};
+	invocation.criteria = @{@"code_point/app.launch/invokes/version": @[@1],
+							@"application_version": @"1.3.0",
+							@"application_build": @"39"};
 	usageData.codePointInvokesVersion = @{@"code_point/app.launch/invokes/version": @1};
 	usageData.applicationVersion = @"1.3.0";
 	usageData.applicationBuild = @"39";
-	XCTAssertFalse([interaction criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
 }
 
 - (void)testNewUpgradeMessageCriteria {

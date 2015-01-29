@@ -15,6 +15,7 @@ NSString *const ATInteractionTextModalEventLabelLaunch = @"launch";
 NSString *const ATInteractionTextModalEventLabelCancel = @"cancel";
 NSString *const ATInteractionTextModalEventLabelDismiss = @"dismiss";
 NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
+NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action";
 
 @implementation ATInteractionTextModalController
 
@@ -168,8 +169,7 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 		NSArray *invocations = [ATInteractionInvocation invocationsWithJSONArray:jsonInvocations];
 		actionHandler = [self createButtonHandlerBlockWithInvocations:invocations];
 	} else {
-		ATLogError(@"Unknown Apptentive Note action type.");
-		actionHandler = nil;
+		actionHandler = [self createButtonHandlerBlockUnknownAction];
 	}
 	
 	UIAlertAction *alertAction = [UIAlertAction actionWithTitle:title style:style handler:actionHandler];
@@ -204,6 +204,17 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 	});
 }
 
+- (void)unknownAction {
+	ATLogError(@"Unknown Apptentive Note action type.");
+	[self.interaction engage:ATInteractionTextModalEventLabelUnknowAction fromViewController:self.viewController];
+}
+
+- (alertActionHandler)createButtonHandlerBlockUnknownAction {
+	return Block_copy(^(UIAlertAction *action) {
+		[self unknownAction];
+	});
+}
+
 #pragma mark UIAlertViewDelegate
 
 - (void)didPresentAlertView:(UIAlertView *)alertView {
@@ -230,7 +241,7 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 					[self interactionActionWithInvocations:jsonInvocations];
 				}
 			} else {
-				ATLogError(@"Unknown Apptentive Note action type.");
+				[self unknownAction];
 			}
 		}
 	}

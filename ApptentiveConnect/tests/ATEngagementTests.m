@@ -462,76 +462,51 @@
 }
 
 - (void)testComplexCriteria {
-	NSString *jsonString = @"{\"interactions\":{\"app.launch\":[{\"id\":\"526fe2836dd8bf546a00000c\",\"priority\":2,\"criteria\":{\"time_since_install/version\":{\"$lt\":259200},\"code_point/app.launch/invokes/total\":2,\"interactions/526fe2836dd8bf546a00000b/invokes/version\":0},\"type\":\"RatingDialog\",\"version\":null,\"active\":true,\"configuration\":{\"active\":true,\"question_text\":\"Do you love Jelly Bean GO SMS Pro?\"}}],\"big.win\":[{\"id\":\"526fe2836dd8bf546a00000d\",\"priority\":1,\"criteria\":{},\"type\":\"RatingDialog\",\"version\":null,\"active\":true,\"configuration\":{\"active\":true,\"question_text\":\"Do you love Jelly Bean GO SMS Pro?\"}}],\"or_clause\":[{\"id\":\"526fe2836dd8bf546a00000e\",\"priority\":1,\"criteria\":{\"$or\":[{\"time_since_install/version\":{\"$lt\":259200}},{\"code_point/app.launch/invokes/total\":2},{\"interactions/526fe2836dd8bf546a00000b/invokes/version\":0}]},\"type\":\"RatingDialog\",\"version\":null,\"active\":true,\"configuration\":{\"active\":true,\"question_text\":\"Do you love Jelly Bean GO SMS Pro?\"}}],\"complext_criteria\":[{\"id\":\"526fe2836dd8bf546a00000f\",\"priority\":1,\"criteria\":{\"$or\":[{\"time_since_install/version\":{\"$lt\":259200}},{\"$and\":[{\"code_point/app.launch/invokes/total\":2},{\"interactions/526fe2836dd8bf546a00000b/invokes/version\":0},{\"$or\":[{\"code_point/small.win/invokes/total\":2},{\"code_point/big.win/invokes/total\":2}]}]}]},\"type\":\"RatingDialog\",\"version\":null,\"active\":true,\"configuration\":{\"active\":true,\"question_text\":\"Do you love Jelly Bean GO SMS Pro?\"}}]}}";
-
-	/*
-	criteria = {
-		"$or" = ({
-			"days_since_upgrade" = {
-				"$lt" = 3;
-			};
-		},
-		{
-			"$and" = ({
-				"code_point/app.launch/invokes/total" = 2;
-			},
-			{
-				"interactions/526fe2836dd8bf546a00000b/invokes/version" = 0;
-			},
-			{
-				"$or" = ({
-					"code_point/small.win/invokes/total" = 2;
-				},
-				{
-					"code_point/big.win/invokes/total" = 2;
-				});
-			});
-		});
-	};
-	*/
+	NSDictionary *complexCriteria = @{@"$or": @[@{@"time_since_install/version": @{@"$lt": @(259200)}},
+												@{@"$and": @[@{@"code_point/app.launch/invokes/total": @2},
+															@{@"interactions/526fe2836dd8bf546a00000b/invokes/version": @0},
+															@{@"$or": @[@{@"code_point/small.win/invokes/total": @2},
+																		@{@"code_point/big.win/invokes/total": @2}
+																		]}
+															 ]}
+												]
+										  };
 	
-
-	NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-	NSDictionary *interactions = [NSJSONSerialization JSONObjectWithData:jsonData
-																 options:NSJSONReadingAllowFragments
-																   error:nil];
+	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
+	invocation.criteria = complexCriteria;
 	
-	NSDictionary *codePoints = [interactions objectForKey:@"interactions"];
-	NSDictionary *complexInteractionDictionary = [[codePoints objectForKey:@"complext_criteria"] objectAtIndex:0];
-	
-	ATInteraction *complexInteraction = [ATInteraction interactionWithJSONDictionary:complexInteractionDictionary];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
 	
 	NSTimeInterval dayTimeInterval = 60 * 60 * 24;
 	
 	usageData.timeSinceInstallVersion = @(2 * dayTimeInterval);
-	XCTAssertTrue([complexInteraction criteriaAreMetForUsageData:usageData], @"2 satisfies the inital OR clause; passes regardless of the next condition.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"2 satisfies the inital OR clause; passes regardless of the next condition.");
 	usageData.timeSinceInstallVersion = @(0 * dayTimeInterval);
-	XCTAssertTrue([complexInteraction criteriaAreMetForUsageData:usageData], @"0 satisfies the inital OR clause; passes regardless of the next condition.");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"0 satisfies the inital OR clause; passes regardless of the next condition.");
 	
 	usageData.timeSinceInstallVersion = @(3 * dayTimeInterval);
 	usageData.codePointInvokesTotal = @{@"code_point/app.launch/invokes/total": @8};
-	XCTAssertFalse([complexInteraction criteriaAreMetForUsageData:usageData], @"3 fails the initial OR clause. 8 fails the other clause.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"3 fails the initial OR clause. 8 fails the other clause.");
 
 	usageData.timeSinceInstallVersion = @(3 * dayTimeInterval);
 	usageData.interactionInvokesVersion = @{@"interactions/526fe2836dd8bf546a00000b/invokes/version": @0};
 	usageData.codePointInvokesTotal = @{@"code_point/app.launch/invokes/total": @2,
 										@"code_point/small.win/invokes/total": @0,
 										@"code_point/big.win/invokes/total": @2};
-	XCTAssertTrue([complexInteraction criteriaAreMetForUsageData:usageData], @"complex");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"complex");
 	usageData.codePointInvokesTotal = @{@"code_point/app.launch/invokes/total": @2,
 										@"code_point/small.win/invokes/total": @2,
 										@"code_point/big.win/invokes/total": @19};
-	XCTAssertTrue([complexInteraction criteriaAreMetForUsageData:usageData], @"complex");
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"complex");
 	usageData.codePointInvokesTotal = @{@"code_point/app.launch/invokes/total": @2,
 										@"code_point/small.win/invokes/total": @19,
 										@"code_point/big.win/invokes/total": @19};
-	XCTAssertFalse([complexInteraction criteriaAreMetForUsageData:usageData], @"Neither of the last two ORed code_point totals are right.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Neither of the last two ORed code_point totals are right.");
 	usageData.codePointInvokesTotal = @{@"code_point/app.launch/invokes/total": @2,
 										@"code_point/small.win/invokes/total": @2,
 										@"code_point/big.win/invokes/total": @1};
 	usageData.interactionInvokesVersion = @{@"interactions/526fe2836dd8bf546a00000b/invokes/version": @8};
-	XCTAssertFalse([complexInteraction criteriaAreMetForUsageData:usageData], @"The middle case is incorrect.");
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"The middle case is incorrect.");
 }
 
 - (void)testTimeAgoCriteria {

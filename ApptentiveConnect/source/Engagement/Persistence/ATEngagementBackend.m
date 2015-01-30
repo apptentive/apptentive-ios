@@ -152,7 +152,7 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 		return;
 	}
 	
-	ATLogDebug(@"Received remote Interactions from Apptentive.");
+	ATLogInfo(@"Received remote Interactions from Apptentive.");
 	
 	@synchronized(self) {
 		[NSKeyedArchiver archiveRootObject:targets toFile:[ATEngagementBackend cachedTargetsStoragePath]];

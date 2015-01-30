@@ -19,6 +19,9 @@
 
 
 - (NSDictionary *)targetsAndInteractionsForEngagementManifest:(NSData *)jsonManifest {
+	// JSON String for testing. Using "Copy" command on variable in debugger preserves escape characters.
+	//NSString *jsonString = [[[NSString alloc] initWithData:jsonManifest encoding:NSUTF8StringEncoding] autorelease];
+	
 	NSMutableDictionary *targets = [NSMutableDictionary dictionary];
 	NSMutableDictionary *interactions = [NSMutableDictionary dictionary];
 	

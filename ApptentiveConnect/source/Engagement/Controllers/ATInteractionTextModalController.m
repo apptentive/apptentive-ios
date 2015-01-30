@@ -190,7 +190,11 @@ NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action"
 }
 
 - (void)dismissAction:(NSDictionary *)actionConfig {
-	[self.interaction engage:ATInteractionTextModalEventLabelDismiss fromViewController:self.viewController];
+	NSDictionary *userInfo = @{@"label": (actionConfig[@"label"] ?: [NSNull null]),
+							   @"position": (actionConfig[@"position"] ?: [NSNull null])
+							   };
+	
+	[self.interaction engage:ATInteractionTextModalEventLabelDismiss fromViewController:self.viewController userInfo:userInfo];
 }
 
 - (alertActionHandler)createButtonHandlerBlockDismiss:(NSDictionary *)actionConfig {

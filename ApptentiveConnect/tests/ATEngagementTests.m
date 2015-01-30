@@ -402,54 +402,63 @@
 }
 
 - (void)testNewUpgradeMessageCriteria {
-	NSString *jsonString = @"{\"interactions\":{\"app.launch\":[{\"priority\":1,\"criteria\":{\"interactions/52fadf097724c5c09f000012/invokes/total\":0,\"application_version\":\"999\",\"time_since_install/version\":{\"$lt\":604800},\"is_update/version\":true},\"id\":\"52fadf097724c5c09f000012\",\"type\":\"UpgradeMessage\",\"configuration\":{\"show_app_icon\":true,\"show_powered_by\":true,\"body\":\"<html><head><style>\\nbody {\\n  font-family: \\\"Helvetica Neue\\\", Helvetica;\\n  color: #4d4d4d;\\n  font-size: .875em;\\n  line-height: 1.36em;\\n  -webkit-text-size-adjust:none;\\n}\\n\\nh1, h2, h3, h4, h5, h6 {\\n  color: #000000;\\n  line-height: 1.25em;\\n  text-align: center;\\n}\\n\\nh1 {font-size: 22px;}\\nh2 {font-size: 18px;}\\nh3 {font-size: 16px;}\\nh4 {font-size: 14px;}\\nh5, h6 {font-size: 12px;}\\nh6 {font-weight: normal;}\\n\\nblockquote {\\n  margin: 1em 1.75em;\\n  font-style: italic;\\n}\\n\\nul, ol {\\n  padding-left: 1.75em;\\n}\\n\\ntable {\\n  border-collapse: collapse;\\n  border-spacing: 0;\\n  empty-cells: show;\\n}\\n\\ntable caption {\\n  padding: 1em 0;\\n  text-align: center;\\n}\\n\\ntable td,\\ntable th {\\n  border-left: 1px solid #cbcbcb;\\n  border-width: 0 0 0 1px;\\n  font-size: inherit;\\n  margin: 0;\\n  padding: .25em .5em;\\n\\n}\\ntable td:first-child,\\ntable th:first-child {\\n  border-left-width: 0;\\n}\\ntable th:first-child {\\n  border-radius: 4px 0 0 4px;\\n}\\ntable th:last-child {\\n  border-radius: 0 4px 4px 0;\\n}\\n\\ntable thead {\\n  background: #E5E5E5;\\n  color: #000;\\n  text-align: left;\\n  vertical-align: bottom;\\n}\\n\\ntable td {\\n  background-color: transparent;\\n  border-bottom: 1px solid #E5E5E5;\\n}\\n</style></head><body><p>This is a test upgrade message.</p></body></html>\"}}]}}";
+	NSString *jsonString = @"{\"interactions\":[{\"id\":\"52fadf097724c5c09f000012\",\"type\":\"UpgradeMessage\",\"configuration\":{}}],\"targets\":{\"local#app#upgrade_message_test\":[{\"interaction_id\":\"52fadf097724c5c09f000012\",\"criteria\":{\"application_version\":\"999\",\"time_since_install/version\":{\"$lt\":604800},\"is_update/version\":true,\"interactions/52fadf097724c5c09f000012/invokes/total\":0}}]}}";
 	
 	/*
-	criteria =     {
-        "application_version" = 999;
-        "interactions/52fadf097724c5c09f000012/invokes/total" = 0;
-        "is_update/version" = 1;
-        "time_since_install/version" =         {
-            "$lt" = 604800;
-        };
-    };
+	targets = {
+		"local#app#upgrade_message_test" = (
+											{
+												criteria = {
+													"application_version" = 999;
+													"interactions/52fadf097724c5c09f000012/invokes/total" = 0;
+													"is_update/version" = 1;
+													"time_since_install/version" = {
+														"$lt" = 604800;
+													};
+												};
+												"interaction_id" = 52fadf097724c5c09f000012;
+											}
+											);
+	};
 	*/
 	
 	NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-	NSDictionary *interactions = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
+	NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
 	
-	NSDictionary *codePoints = [interactions objectForKey:@"interactions"];
-	NSDictionary *appLaunchInteraction = [[codePoints objectForKey:@"app.launch"] objectAtIndex:0];
+	NSDictionary *targetsDictionary = jsonDictionary[@"targets"];
 	
-	ATInteraction *upgradeMessageInteraction = [ATInteraction interactionWithJSONDictionary:appLaunchInteraction];
+	NSString *targetedEvent = [[ATInteraction localAppInteraction] codePointForEvent:@"upgrade_message_test"];
+	NSDictionary *appLaunchInteraction = [[targetsDictionary objectForKey:targetedEvent] objectAtIndex:0];
+	
+	ATInteractionInvocation *upgradeMessageInteractionInvocation = [ATInteractionInvocation invocationWithJSONDictionary:appLaunchInteraction];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
 	
 	usageData.applicationVersion = @"999";
 	usageData.interactionInvokesTotal = @{@"interactions/52fadf097724c5c09f000012/invokes/total": @0};
 	usageData.isUpdateVersion = @YES;
 	usageData.timeSinceInstallVersion = @(2 * 24 * 60 * 60);
-	XCTAssertTrue([upgradeMessageInteraction criteriaAreMetForUsageData:usageData], @"Upgrade Message criteria met!");
+	XCTAssertTrue([upgradeMessageInteractionInvocation criteriaAreMetForUsageData:usageData], @"Upgrade Message criteria met!");
 	
 	usageData = [[ATInteractionUsageData alloc] init];
 	usageData.applicationVersion = @"998";
 	usageData.interactionInvokesTotal = @{@"interactions/52fadf097724c5c09f000012/invokes/total": @0};
 	usageData.isUpdateVersion = @YES;
 	usageData.timeSinceInstallVersion = @(2 * 24 * 60 * 60);
-	XCTAssertFalse([upgradeMessageInteraction criteriaAreMetForUsageData:usageData], @"Upgrade Message criteria not met!");
+	XCTAssertFalse([upgradeMessageInteractionInvocation criteriaAreMetForUsageData:usageData], @"Upgrade Message criteria not met!");
 	
 	usageData = [[ATInteractionUsageData alloc] init];
 	usageData.applicationVersion = @"999";
 	usageData.interactionInvokesTotal = @{@"interactions/52fadf097724c5c09f000012/invokes/total": @0};
 	usageData.isUpdateVersion = @NO;
 	usageData.timeSinceInstallVersion = @(2 * 24 * 60 * 60);
-	XCTAssertFalse([upgradeMessageInteraction criteriaAreMetForUsageData:usageData], @"Upgrade Message criteria not met!");
+	XCTAssertFalse([upgradeMessageInteractionInvocation criteriaAreMetForUsageData:usageData], @"Upgrade Message criteria not met!");
 	
 	usageData = [[ATInteractionUsageData alloc] init];
 	usageData.applicationVersion = @"999";
 	usageData.interactionInvokesTotal = @{@"interactions/52fadf097724c5c09f000012/invokes/total": @1};
 	usageData.isUpdateVersion = @YES;
 	usageData.timeSinceInstallVersion = @(2 * 24 * 60 * 60);
-	XCTAssertFalse([upgradeMessageInteraction criteriaAreMetForUsageData:usageData], @"Upgrade Message criteria not met!");
+	XCTAssertFalse([upgradeMessageInteractionInvocation criteriaAreMetForUsageData:usageData], @"Upgrade Message criteria not met!");
 }
 
 - (void)testComplexCriteria {

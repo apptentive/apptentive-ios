@@ -186,7 +186,7 @@ NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action"
 }
 
 - (alertActionHandler)createButtonHandlerBlockDismiss {
-	return Block_copy(^(UIAlertAction *action) {		
+	return Block_copy(^(UIAlertAction *alertAction) {		
 		[self dismissAction];
 	});
 }
@@ -199,7 +199,7 @@ NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action"
 }
 
 - (alertActionHandler)createButtonHandlerBlockWithInvocations:(NSArray *)invocations {
-	return Block_copy(^(UIAlertAction *action) {
+	return Block_copy(^(UIAlertAction *alertAction) {
 		[self interactionActionWithInvocations:invocations];
 	});
 }

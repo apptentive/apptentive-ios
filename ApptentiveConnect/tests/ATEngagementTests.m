@@ -895,20 +895,24 @@
 - (void)testInvalidJSON {
 	NSString *json = @"";
 	ATEngagementManifestParser *parser = [[ATEngagementManifestParser alloc] init];
-	NSDictionary *interactions = [parser codePointInteractionsForEngagementManifest:[json dataUsingEncoding:NSUTF8StringEncoding]];
-	XCTAssertNil(interactions, @"Interactions should be nil");
+	
+	NSDictionary *targetsAndInteractions = [parser targetsAndInteractionsForEngagementManifest:[json dataUsingEncoding:NSUTF8StringEncoding]];
+	XCTAssertNil(targetsAndInteractions, @"Interactions should be nil");
 	
 	json = @"[]";
-	interactions = [parser codePointInteractionsForEngagementManifest:[json dataUsingEncoding:NSUTF8StringEncoding]];
-	XCTAssertNil(interactions, @"Interactions should be nil");
+	targetsAndInteractions = [parser targetsAndInteractionsForEngagementManifest:[json dataUsingEncoding:NSUTF8StringEncoding]];
+	XCTAssertNil(targetsAndInteractions, @"Interactions should be nil");
 	
 	json = @"{}";
-	interactions = [parser codePointInteractionsForEngagementManifest:[json dataUsingEncoding:NSUTF8StringEncoding]];
+	targetsAndInteractions = [parser targetsAndInteractionsForEngagementManifest:[json dataUsingEncoding:NSUTF8StringEncoding]];
+	NSDictionary *targets = targetsAndInteractions[@"targets"];
+	XCTAssertEqualObjects(@{}, targets, @"Should be empty");
+	NSDictionary *interactions = targetsAndInteractions[@"interactions"];
 	XCTAssertEqualObjects(@{}, interactions, @"Should be empty");
 	
 	json = @"{\"interactions\":[]}";
-	interactions = [parser codePointInteractionsForEngagementManifest:[json dataUsingEncoding:NSUTF8StringEncoding]];
-	XCTAssertNil(interactions, @"Interactions should be nil");
+	targetsAndInteractions = [parser targetsAndInteractionsForEngagementManifest:[json dataUsingEncoding:NSUTF8StringEncoding]];
+	XCTAssertNil(targetsAndInteractions, @"Interactions should be nil");
 }
 
 - (void)testCustomDataAndExtendedData {

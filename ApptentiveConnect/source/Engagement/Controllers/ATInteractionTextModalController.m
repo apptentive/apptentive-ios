@@ -175,7 +175,7 @@ NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action"
 	} else if ([actionType isEqualToString:@"interaction"]) {
 		NSArray *jsonInvocations = actionConfig[@"invokes"];
 		NSArray *invocations = [ATInteractionInvocation invocationsWithJSONArray:jsonInvocations];
-		actionHandler = [self createButtonHandlerBlockWithInvocations:invocations];
+		actionHandler = [self createButtonHandlerBlockInteractionAction:actionConfig];
 	} else {
 		actionHandler = [self createButtonHandlerBlockUnknownAction];
 	}
@@ -191,7 +191,7 @@ NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action"
 
 - (void)dismissAction:(NSDictionary *)actionConfig {
 	NSDictionary *userInfo = @{@"label": (actionConfig[@"label"] ?: [NSNull null]),
-							   @"position": (actionConfig[@"position"] ?: [NSNull null])
+							   @"position": (actionConfig[@"position"] ?: [NSNull null]),
 							   };
 	
 	[self.interaction engage:ATInteractionTextModalEventLabelDismiss fromViewController:self.viewController userInfo:userInfo];
@@ -203,16 +203,28 @@ NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action"
 	});
 }
 
-- (void)interactionActionWithInvocations:(NSArray *)invocations {
-	[self.interaction engage:ATInteractionTextModalEventLabelInteraction fromViewController:self.viewController];
+- (void)interactionAction:(NSDictionary *)actionConfig {
+	ATInteraction *interaction = nil;
+	NSArray *invocations = actionConfig[@"invokes"];
+	if (invocations) {
+		interaction = [[ATEngagementBackend sharedBackend] interactionForInvocations:invocations];
+	}
 	
-	ATInteraction *interaction = [[ATEngagementBackend sharedBackend] interactionForInvocations:invocations];
-	[[ATEngagementBackend sharedBackend] presentInteraction:interaction fromViewController:self.viewController];
+	NSDictionary *userInfo = @{@"label": (actionConfig[@"label"] ?: [NSNull null]),
+							   @"position": (actionConfig[@"position"] ?: [NSNull null]),
+							   @"invoked_interaction_id": (interaction.identifier ?: [NSNull null]),
+							   };
+	
+	[self.interaction engage:ATInteractionTextModalEventLabelInteraction fromViewController:self.viewController userInfo:userInfo];
+	
+	if (interaction) {
+		[[ATEngagementBackend sharedBackend] presentInteraction:interaction fromViewController:self.viewController];
+	}
 }
 
-- (alertActionHandler)createButtonHandlerBlockWithInvocations:(NSArray *)invocations {
+- (alertActionHandler)createButtonHandlerBlockInteractionAction:(NSDictionary *)actionConfig {
 	return Block_copy(^(UIAlertAction *alertAction) {
-		[self interactionActionWithInvocations:invocations];
+		[self interactionAction:actionConfig];
 	});
 }
 
@@ -254,7 +266,7 @@ NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action"
 			} else if ([actionType isEqualToString:@"interaction"]) {
 				NSArray *jsonInvocations = actionConfig[@"invokes"];
 				if (jsonInvocations) {
-					[self interactionActionWithInvocations:jsonInvocations];
+					[self interactionAction:actionConfig];
 				}
 			} else {
 				[self unknownAction];

@@ -909,10 +909,6 @@
 	XCTAssertEqualObjects(@{}, targets, @"Should be empty");
 	NSDictionary *interactions = targetsAndInteractions[@"interactions"];
 	XCTAssertEqualObjects(@{}, interactions, @"Should be empty");
-	
-	json = @"{\"interactions\":[]}";
-	targetsAndInteractions = [parser targetsAndInteractionsForEngagementManifest:[json dataUsingEncoding:NSUTF8StringEncoding]];
-	XCTAssertNil(targetsAndInteractions, @"Interactions should be nil");
 }
 
 - (void)testCustomDataAndExtendedData {

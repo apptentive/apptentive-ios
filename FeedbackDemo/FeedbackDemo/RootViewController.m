@@ -26,6 +26,8 @@ enum kEventRows {
 	kEventRowEvent1,
 	kEventRowEvent2,
 	kEventRowEvent3,
+	kEventRowEvent4,
+	kEventRowEvent5,
 	kEventRowCount
 };
 
@@ -141,6 +143,10 @@ enum kEventRows {
 			cell.textLabel.text = [NSString stringWithFormat:@"Engage `%@` event", kApptentiveEvent2];
 		} else if (indexPath.row == kEventRowEvent3) {
 			cell.textLabel.text = [NSString stringWithFormat:@"Engage `%@` event", kApptentiveEvent3];
+		} else if (indexPath.row == kEventRowEvent4) {
+			cell.textLabel.text = [NSString stringWithFormat:@"Engage `%@` event", kApptentiveEvent4];
+		} else if (indexPath.row == kEventRowEvent5) {
+			cell.textLabel.text = [NSString stringWithFormat:@"Engage `%@` event", kApptentiveEvent5];
 		}
 	} else if (indexPath.section == kMessageCenterSection) {
 		if (indexPath.row == kMessageCenterRowShowMessageCenter) {
@@ -178,6 +184,10 @@ enum kEventRows {
 			[[ATConnect sharedConnection] engage:kApptentiveEvent2 fromViewController:self];
 		} else if (indexPath.row == kEventRowEvent3) {
 			[[ATConnect sharedConnection] engage:kApptentiveEvent3 fromViewController:self];
+		} else if (indexPath.row == kEventRowEvent4) {
+			[[ATConnect sharedConnection] engage:kApptentiveEvent4 fromViewController:self];
+		} else if (indexPath.row == kEventRowEvent5) {
+			 [[ATConnect sharedConnection] engage:kApptentiveEvent5 fromViewController:self];
 		}
 	} else if (indexPath.section == kMessageCenterSection) {
 		if (indexPath.row == kMessageCenterRowShowMessageCenter) {

@@ -12,3 +12,5 @@
 #define kApptentiveEvent1 @"event_1"
 #define kApptentiveEvent2 @"event_2"
 #define kApptentiveEvent3 @"event_3"
+#define kApptentiveEvent4 @"event_4"
+#define kApptentiveEvent5 @"event_5"

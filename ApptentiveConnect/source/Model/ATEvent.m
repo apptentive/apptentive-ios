@@ -62,8 +62,10 @@
 	if (!result[@"nonce"]) {
 		ATLogError(@"Event json should include a `nonce`.");
 	}
+	
+	NSDictionary *apiJSON = @{@"event": result};
 		
-	return @{@"event": result};
+	return apiJSON;
 }
 
 - (void)setup {

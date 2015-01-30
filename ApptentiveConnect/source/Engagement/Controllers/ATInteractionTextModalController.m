@@ -15,6 +15,7 @@ NSString *const ATInteractionTextModalEventLabelLaunch = @"launch";
 NSString *const ATInteractionTextModalEventLabelCancel = @"cancel";
 NSString *const ATInteractionTextModalEventLabelDismiss = @"dismiss";
 NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
+NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action";
 
 @implementation ATInteractionTextModalController
 
@@ -73,9 +74,10 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 	for (NSDictionary *action in actions) {
 		NSString *title = action[@"label"];
 		
-		// Better to use default button text than to potentially create an un-cancelable alert without any buttons.
+		// Better to use default button text than to potentially create an un-cancelable alert with no buttons.
 		// 'UIAlertView: Buttons added must have a title.'
 		if(!title) {
+			ATLogError(@"Apptentive Note button action does not have a title!");
 			title = @"button";
 		}
 	
@@ -121,7 +123,8 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 				cancelActionAdded = YES;
 			} else {
 				// Additional cancel buttons are ignored.
-				break;
+				ATLogError(@"Apptentive Notes cannot have more than one cancel button.");
+				continue;
 			}
 		}
 		
@@ -138,9 +141,10 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 - (UIAlertAction *)alertActionWithConfiguration:(NSDictionary *)configuration {
 	NSString *title = configuration[@"label"] ?: @"button";
 	
-	// Better to use default button text than to potentially create an un-cancelable alert without any buttons.
+	// Better to use default button text than to potentially create an un-cancelable alert with no buttons.
 	// Exception: 'Actions added to UIAlertController must have a title'
 	if (!title) {
+		ATLogError(@"Apptentive Note button action does not have a title!");
 		title = @"button";
 	}
 	
@@ -165,8 +169,7 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 		NSArray *invocations = [ATInteractionInvocation invocationsWithJSONArray:jsonInvocations];
 		actionHandler = [self createButtonHandlerBlockWithInvocations:invocations];
 	} else {
-		ATLogError(@"Unknown Apptentive Note action type.");
-		actionHandler = nil;
+		actionHandler = [self createButtonHandlerBlockUnknownAction];
 	}
 	
 	UIAlertAction *alertAction = [UIAlertAction actionWithTitle:title style:style handler:actionHandler];
@@ -201,6 +204,17 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 	});
 }
 
+- (void)unknownAction {
+	ATLogError(@"Unknown Apptentive Note action type.");
+	[self.interaction engage:ATInteractionTextModalEventLabelUnknowAction fromViewController:self.viewController];
+}
+
+- (alertActionHandler)createButtonHandlerBlockUnknownAction {
+	return Block_copy(^(UIAlertAction *action) {
+		[self unknownAction];
+	});
+}
+
 #pragma mark UIAlertViewDelegate
 
 - (void)didPresentAlertView:(UIAlertView *)alertView {
@@ -227,7 +241,7 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 					[self interactionActionWithInvocations:jsonInvocations];
 				}
 			} else {
-				ATLogError(@"Unknown Apptentive Note action type.");
+				[self unknownAction];
 			}
 		}
 	}

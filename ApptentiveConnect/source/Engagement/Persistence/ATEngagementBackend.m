@@ -148,8 +148,11 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 
 - (void)didReceiveNewTargets:(NSDictionary *)targets andInteractions:(NSDictionary *)interactions maxAge:(NSTimeInterval)expiresMaxAge {
 	if (!targets || !interactions) {
+		ATLogError(@"Error receviving new Engagement Framework targets and interactions.");
 		return;
 	}
+	
+	ATLogDebug(@"Received remote Interactions from Apptentive.");
 	
 	@synchronized(self) {
 		[NSKeyedArchiver archiveRootObject:targets toFile:[ATEngagementBackend cachedTargetsStoragePath]];

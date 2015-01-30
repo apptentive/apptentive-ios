@@ -948,25 +948,27 @@
 }
 
 - (void)testWillShowInteractionForEvent {
-	ATInteraction *willShow = [[ATInteraction alloc] init];
+	ATInteractionInvocation *willShow = [[ATInteractionInvocation alloc] init];
 	willShow.criteria = @{};
-	willShow.type = @"Survey";
+	willShow.interactionID = @"example_interaction_ID";
 	
-	ATInteraction *willNotShow = [[ATInteraction alloc] init];
+	ATInteractionInvocation *willNotShow = [[ATInteractionInvocation alloc] init];
 	willNotShow.criteria = @{@"cannot_parse_criteria": @"cannot_parse_criteria"};
-	willShow.type = @"Survey";
+	willNotShow.interactionID = @"example_interaction_ID";
 	
-	NSDictionary *codePointInteractions = @{[ATEngagementBackend codePointForLocalEvent:@"willShow"]: @[willShow],
-											[ATEngagementBackend codePointForLocalEvent:@"willNotShow"]: @[willNotShow]};
+	NSDictionary *targets =@{[[ATInteraction localAppInteraction] codePointForEvent:@"willShow"]: @[willShow],
+							 [[ATInteraction localAppInteraction] codePointForEvent:@"willNotShow"]: @[willNotShow]
+							 };
 	
+	NSDictionary *interactions = @{@"example_interaction_ID": [[ATInteraction alloc] init]};
 	
-	[[ATEngagementBackend sharedBackend] didReceiveNewCodePointInteractions:codePointInteractions maxAge:60];
+	[[ATEngagementBackend sharedBackend] didReceiveNewTargets:targets andInteractions:interactions maxAge:60];
 	
-	XCTAssertTrue([willShow isValid], @"Event should be valid.");
-	XCTAssertTrue([[ATConnect sharedConnection] willShowInteractionForEvent:@"willShow"], @"If interaction is valid, it will be shown for the next targeted event.");
+	XCTAssertTrue([willShow isValid], @"Invocation should be valid.");
+	XCTAssertTrue([[ATConnect sharedConnection] willShowInteractionForEvent:@"willShow"], @"If invocation is valid, it will be shown for the next targeted event.");
 	
-	XCTAssertFalse([willNotShow isValid], @"Event should not be valid.");
-	XCTAssertFalse([[ATConnect sharedConnection] willShowInteractionForEvent:@"willNotShow"], @"If interaction is not valid, it will not be shown for the next targeted event.");
+	XCTAssertFalse([willNotShow isValid], @"Invocation should not be valid.");
+	XCTAssertFalse([[ATConnect sharedConnection] willShowInteractionForEvent:@"willNotShow"], @"If invocation is not valid, it will not be shown for the next targeted event.");
 }
 
 @end

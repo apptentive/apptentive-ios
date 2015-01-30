@@ -138,8 +138,8 @@ NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action"
 
 #pragma mark Alert Button Actions
 
-- (UIAlertAction *)alertActionWithConfiguration:(NSDictionary *)configuration {
-	NSString *title = configuration[@"label"] ?: @"button";
+- (UIAlertAction *)alertActionWithConfiguration:(NSDictionary *)actionConfig {
+	NSString *title = actionConfig[@"label"];
 	
 	// Better to use default button text than to potentially create an un-cancelable alert with no buttons.
 	// Exception: 'Actions added to UIAlertController must have a title'
@@ -148,7 +148,7 @@ NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action"
 		title = @"button";
 	}
 	
-	NSString *styleString = configuration[@"style"];
+	NSString *styleString = actionConfig[@"style"];
 	UIAlertActionStyle style;
 	if ([styleString isEqualToString:@"default"]) {
 		style = UIAlertActionStyleDefault;
@@ -160,12 +160,12 @@ NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action"
 		style = UIAlertActionStyleDefault;
 	}
 	
-	NSString *actionType = configuration[@"action"];
+	NSString *actionType = actionConfig[@"action"];
 	alertActionHandler actionHandler;
 	if ([actionType isEqualToString:@"dismiss"]) {
-		actionHandler = [self createButtonHandlerBlockDismiss];
+		actionHandler = [self createButtonHandlerBlockDismiss:actionConfig];
 	} else if ([actionType isEqualToString:@"interaction"]) {
-		NSArray *jsonInvocations = configuration[@"invokes"];
+		NSArray *jsonInvocations = actionConfig[@"invokes"];
 		NSArray *invocations = [ATInteractionInvocation invocationsWithJSONArray:jsonInvocations];
 		actionHandler = [self createButtonHandlerBlockWithInvocations:invocations];
 	} else {
@@ -175,19 +175,19 @@ NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action"
 	UIAlertAction *alertAction = [UIAlertAction actionWithTitle:title style:style handler:actionHandler];
 	Block_release(actionHandler);
 	
-	BOOL enabled = configuration[@"enabled"] ? [configuration[@"enabled"] boolValue] : YES;
+	BOOL enabled = actionConfig[@"enabled"] ? [actionConfig[@"enabled"] boolValue] : YES;
 	alertAction.enabled = enabled;
 	
 	return alertAction;
 }
 
-- (void)dismissAction {
+- (void)dismissAction:(NSDictionary *)actionConfig {
 	[self.interaction engage:ATInteractionTextModalEventLabelDismiss fromViewController:self.viewController];
 }
 
-- (alertActionHandler)createButtonHandlerBlockDismiss {
-	return Block_copy(^(UIAlertAction *alertAction) {		
-		[self dismissAction];
+- (alertActionHandler)createButtonHandlerBlockDismiss:(NSDictionary *)actionConfig {
+	return Block_copy(^(UIAlertAction *alertAction) {
+		[self dismissAction:actionConfig];
 	});
 }
 
@@ -223,20 +223,20 @@ NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action"
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	NSArray *actions = self.interaction.configuration[@"actions"];
-	NSDictionary *action = [actions objectAtIndex:buttonIndex];
+	NSDictionary *actionConfig = [actions objectAtIndex:buttonIndex];
 	
-	if (action) {
-		NSString *actionTitle = action[@"label"];
+	if (actionConfig) {
+		NSString *actionTitle = actionConfig[@"label"];
 		NSString *buttonTitle = [alertView buttonTitleAtIndex:buttonIndex];
 		
 		if (![actionTitle isEqualToString:buttonTitle]) {
 			ATLogError(@"Cannot find an action for the tapped UIAlertView button.");
 		} else {
-			NSString *actionType = action[@"action"];
+			NSString *actionType = actionConfig[@"action"];
 			if ([actionType isEqualToString:@"dismiss"]) {
-				[self dismissAction];
+				[self dismissAction:actionConfig];
 			} else if ([actionType isEqualToString:@"interaction"]) {
-				NSArray *jsonInvocations = action[@"invokes"];
+				NSArray *jsonInvocations = actionConfig[@"invokes"];
 				if (jsonInvocations) {
 					[self interactionActionWithInvocations:jsonInvocations];
 				}

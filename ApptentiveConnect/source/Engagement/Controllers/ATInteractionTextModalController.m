@@ -113,8 +113,16 @@ NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action"
 	
 	BOOL cancelActionAdded = NO;
 	NSArray *actions = config[@"actions"];
-	for (NSDictionary *action in actions) {
-		UIAlertAction *alertAction = [self alertActionWithConfiguration:action];
+	
+	for (int i = 0; i < actions.count; i++) {
+		NSDictionary *actionForButton = actions[i];
+		
+		// Action position saved here and sent when button is tapped.
+		NSMutableDictionary *actionConfig = [NSMutableDictionary dictionary];
+		actionConfig[@"position"] = @(i);
+		[actionConfig addEntriesFromDictionary:actionForButton];
+		
+		UIAlertAction *alertAction = [self alertActionWithConfiguration:actionConfig];
 		
 		// Adding more than one cancel action to the alert causes crash.
 		// 'NSInternalInconsistencyException', reason: 'UIAlertController can only have one action with a style of UIAlertActionStyleCancel'
@@ -223,9 +231,13 @@ NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action"
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	NSArray *actions = self.interaction.configuration[@"actions"];
-	NSDictionary *actionConfig = [actions objectAtIndex:buttonIndex];
+	NSDictionary *actionForButton = [actions objectAtIndex:buttonIndex];
 	
-	if (actionConfig) {
+	if (actionForButton) {
+		NSMutableDictionary *actionConfig = [NSMutableDictionary dictionary];
+		actionConfig[@"position"] = @(buttonIndex);
+		[actionConfig addEntriesFromDictionary:actionForButton];
+		
 		NSString *actionTitle = actionConfig[@"label"];
 		NSString *buttonTitle = [alertView buttonTitleAtIndex:buttonIndex];
 		

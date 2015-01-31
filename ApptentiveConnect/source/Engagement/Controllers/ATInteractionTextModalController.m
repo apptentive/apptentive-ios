@@ -173,8 +173,6 @@ NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action"
 	if ([actionType isEqualToString:@"dismiss"]) {
 		actionHandler = [self createButtonHandlerBlockDismiss:actionConfig];
 	} else if ([actionType isEqualToString:@"interaction"]) {
-		NSArray *jsonInvocations = actionConfig[@"invokes"];
-		NSArray *invocations = [ATInteractionInvocation invocationsWithJSONArray:jsonInvocations];
 		actionHandler = [self createButtonHandlerBlockInteractionAction:actionConfig];
 	} else {
 		actionHandler = [self createButtonHandlerBlockUnknownAction];

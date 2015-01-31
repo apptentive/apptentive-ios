@@ -16,7 +16,8 @@ NSString *const ATInteractionNavigateToLinkEventLabelNavigate = @"navigate";
 	NSAssert([interaction.type isEqualToString:@"NavigateToLink"], @"Attempted to load a NavigateToLink interaction with an interaction of type: %@", interaction.type);
 
 	BOOL openedURL = NO;
-	NSURL *url = [NSURL URLWithString:interaction.configuration[@"url"]];
+	NSString *urlString = interaction.configuration[@"url"];
+	NSURL *url = [NSURL URLWithString:urlString];
 	if (url) {
 		if ([[UIApplication sharedApplication] canOpenURL:url]) {
 			openedURL = [[UIApplication sharedApplication] openURL:url];
@@ -27,7 +28,7 @@ NSString *const ATInteractionNavigateToLinkEventLabelNavigate = @"navigate";
 		ATLogError(@"No URL was included in the NavigateToLink Interaction's configuration.");
 	}
 	
-	NSDictionary *userInfo = @{@"url": (url ?: [NSNull null]),
+	NSDictionary *userInfo = @{@"url": (urlString ?: [NSNull null]),
 							   @"success": @(openedURL),
 							   };
 	

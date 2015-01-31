@@ -156,6 +156,9 @@ NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action"
 		title = @"button";
 	}
 	
+	UIAlertActionStyle style = UIAlertActionStyleDefault;
+	// Future support for configuration of different UIAlertActionStyles
+	/*
 	NSString *styleString = actionConfig[@"style"];
 	UIAlertActionStyle style;
 	if ([styleString isEqualToString:@"default"]) {
@@ -167,6 +170,7 @@ NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action"
 	} else {
 		style = UIAlertActionStyleDefault;
 	}
+	*/
 	
 	NSString *actionType = actionConfig[@"action"];
 	alertActionHandler actionHandler;
@@ -181,8 +185,11 @@ NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action"
 	UIAlertAction *alertAction = [UIAlertAction actionWithTitle:title style:style handler:actionHandler];
 	Block_release(actionHandler);
 	
+	// Future support for configuration of enabled/disabled actions
+	/*
 	BOOL enabled = actionConfig[@"enabled"] ? [actionConfig[@"enabled"] boolValue] : YES;
 	alertAction.enabled = enabled;
+	*/
 	
 	return alertAction;
 }

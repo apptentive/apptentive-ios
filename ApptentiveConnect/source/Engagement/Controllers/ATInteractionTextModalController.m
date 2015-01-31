@@ -179,7 +179,7 @@ NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action"
 	} else if ([actionType isEqualToString:@"interaction"]) {
 		actionHandler = [self createButtonHandlerBlockInteractionAction:actionConfig];
 	} else {
-		actionHandler = [self createButtonHandlerBlockUnknownAction];
+		actionHandler = [self createButtonHandlerBlockUnknownAction:actionConfig];
 	}
 	
 	UIAlertAction *alertAction = [UIAlertAction actionWithTitle:title style:style handler:actionHandler];
@@ -233,14 +233,19 @@ NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action"
 	});
 }
 
-- (void)unknownAction {
+- (void)unknownAction:(NSDictionary *)actionConfig {
 	ATLogError(@"Unknown Apptentive Note action type.");
-	[self.interaction engage:ATInteractionTextModalEventLabelUnknowAction fromViewController:self.viewController];
+	
+	NSDictionary *userInfo = @{@"label": (actionConfig[@"label"] ?: [NSNull null]),
+							   @"position": (actionConfig[@"position"] ?: [NSNull null]),
+							   };
+	
+	[self.interaction engage:ATInteractionTextModalEventLabelUnknowAction fromViewController:self.viewController userInfo:userInfo];
 }
 
-- (alertActionHandler)createButtonHandlerBlockUnknownAction {
+- (alertActionHandler)createButtonHandlerBlockUnknownAction:(NSDictionary *)actionConfig {
 	return Block_copy(^(UIAlertAction *action) {
-		[self unknownAction];
+		[self unknownAction:(NSDictionary *)actionConfig];
 	});
 }
 
@@ -269,12 +274,9 @@ NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action"
 			if ([actionType isEqualToString:@"dismiss"]) {
 				[self dismissAction:actionConfig];
 			} else if ([actionType isEqualToString:@"interaction"]) {
-				NSArray *jsonInvocations = actionConfig[@"invokes"];
-				if (jsonInvocations) {
-					[self interactionAction:actionConfig];
-				}
+				[self interactionAction:actionConfig];
 			} else {
-				[self unknownAction];
+				[self unknownAction:actionConfig];
 			}
 		}
 	}

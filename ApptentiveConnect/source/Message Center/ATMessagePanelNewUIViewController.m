@@ -283,7 +283,7 @@
 			self.emailField.autocapitalizationType = UITextAutocapitalizationTypeNone;
 			self.emailField.backgroundColor = [UIColor clearColor];
 			self.emailField.clearButtonMode = UITextFieldViewModeWhileEditing;
-			self.emailField.text = [self.delegate initialEmailAddressForMessagePanel:self];
+			self.emailField.text = [[ATBackend sharedBackend] initialEmailAddressForMessagePanel];
 			self.emailField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 			
 			[self.scrollView addSubview:self.emailField];

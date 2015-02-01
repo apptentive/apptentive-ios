@@ -65,5 +65,4 @@ typedef enum {
 - (void)messagePanelDidCancel:(ATMessagePanelViewController *)messagePanel;
 - (void)messagePanel:(ATMessagePanelViewController *)messagePanel didSendMessage:(NSString *)message withEmailAddress:(NSString *)emailAddress;
 - (void)messagePanel:(ATMessagePanelViewController *)messagePanel didDismissWithAction:(ATMessagePanelDismissAction)action;
-- (NSString *)initialEmailAddressForMessagePanel:(ATMessagePanelViewController *)messagePanel;
 @end

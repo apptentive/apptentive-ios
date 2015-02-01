@@ -143,7 +143,7 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 				alertTitle = config[@"thank_you_title"] ?: ATLocalizedString(@"Thank you for your feedback!", @"Message panel sent message but will not show Message Center dialog.");
 				alertMessage = config[@"thank_you_body"] ?: nil;
 				cancelButtonTitle = config[@"thank_you_close_text"] ?: ATLocalizedString(@"Close", @"Close alert view title");
-				otherButtonTitle = config[@"thank_you_view_messages_text"] ?: nil;
+				otherButtonTitle = nil;
 			}
 			
 			didSendFeedbackAlert = [[UIAlertView alloc] initWithTitle:alertTitle message:alertMessage delegate:self cancelButtonTitle:cancelButtonTitle otherButtonTitles:otherButtonTitle, nil];
@@ -176,14 +176,8 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 	}
 }
 
-- (NSString *)initialEmailAddressForMessagePanel:(ATMessagePanelViewController *)messagePanel {
-	NSString *email = [ATConnect sharedConnection].initialUserEmailAddress;
-	
-	if ([ATPersonInfo personExists]) {
-		email = [ATPersonInfo currentPerson].emailAddress;
-	}
-	
-	return email;
+- (BOOL)engageEvent:(NSString *)eventLabel {
+	return [[ATEngagementBackend sharedBackend] engageApptentiveEvent:eventLabel fromInteraction:self.interaction fromViewController:self.viewController];
 }
 
 @end

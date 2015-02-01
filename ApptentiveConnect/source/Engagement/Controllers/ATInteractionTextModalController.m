@@ -15,7 +15,6 @@ NSString *const ATInteractionTextModalEventLabelLaunch = @"launch";
 NSString *const ATInteractionTextModalEventLabelCancel = @"cancel";
 NSString *const ATInteractionTextModalEventLabelDismiss = @"dismiss";
 NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
-NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action";
 
 @implementation ATInteractionTextModalController
 
@@ -173,13 +172,13 @@ NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action"
 	*/
 	
 	NSString *actionType = actionConfig[@"action"];
-	alertActionHandler actionHandler;
+	alertActionHandler actionHandler = nil;
 	if ([actionType isEqualToString:@"dismiss"]) {
 		actionHandler = [self createButtonHandlerBlockDismiss:actionConfig];
 	} else if ([actionType isEqualToString:@"interaction"]) {
 		actionHandler = [self createButtonHandlerBlockInteractionAction:actionConfig];
 	} else {
-		actionHandler = [self createButtonHandlerBlockUnknownAction:actionConfig];
+		ATLogError(@"Apptentive note contains an unknown action.");
 	}
 	
 	UIAlertAction *alertAction = [UIAlertAction actionWithTitle:title style:style handler:actionHandler];
@@ -233,22 +232,6 @@ NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action"
 	});
 }
 
-- (void)unknownAction:(NSDictionary *)actionConfig {
-	ATLogError(@"Unknown Apptentive Note action type.");
-	
-	NSDictionary *userInfo = @{@"label": (actionConfig[@"label"] ?: [NSNull null]),
-							   @"position": (actionConfig[@"position"] ?: [NSNull null]),
-							   };
-	
-	[self.interaction engage:ATInteractionTextModalEventLabelUnknowAction fromViewController:self.viewController userInfo:userInfo];
-}
-
-- (alertActionHandler)createButtonHandlerBlockUnknownAction:(NSDictionary *)actionConfig {
-	return Block_copy(^(UIAlertAction *action) {
-		[self unknownAction:(NSDictionary *)actionConfig];
-	});
-}
-
 #pragma mark UIAlertViewDelegate
 
 - (void)didPresentAlertView:(UIAlertView *)alertView {
@@ -276,7 +259,7 @@ NSString *const ATInteractionTextModalEventLabelUnknowAction = @"unknown_action"
 			} else if ([actionType isEqualToString:@"interaction"]) {
 				[self interactionAction:actionConfig];
 			} else {
-				[self unknownAction:actionConfig];
+				ATLogError(@"Apptentive note contains an unknown action.");
 			}
 		}
 	}

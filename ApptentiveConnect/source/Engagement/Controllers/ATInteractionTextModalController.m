@@ -196,6 +196,7 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 - (void)dismissAction:(NSDictionary *)actionConfig {
 	NSDictionary *userInfo = @{@"label": (actionConfig[@"label"] ?: [NSNull null]),
 							   @"position": (actionConfig[@"position"] ?: [NSNull null]),
+							   @"action_id": (actionConfig[@"id"] ?: [NSNull null]),
 							   };
 	
 	[self.interaction engage:ATInteractionTextModalEventLabelDismiss fromViewController:self.viewController userInfo:userInfo];
@@ -217,6 +218,7 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 	NSDictionary *userInfo = @{@"label": (actionConfig[@"label"] ?: [NSNull null]),
 							   @"position": (actionConfig[@"position"] ?: [NSNull null]),
 							   @"invoked_interaction_id": (interaction.identifier ?: [NSNull null]),
+							   @"action_id": (actionConfig[@"id"] ?: [NSNull null]),
 							   };
 	
 	[self.interaction engage:ATInteractionTextModalEventLabelInteraction fromViewController:self.viewController userInfo:userInfo];

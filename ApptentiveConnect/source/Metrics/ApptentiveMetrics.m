@@ -32,7 +32,6 @@ static NSString *ATMetricNameFeedbackDialogLaunch = @"feedback_dialog.launch";
 static NSString *ATMetricNameFeedbackDialogCancel = @"feedback_dialog.cancel";
 static NSString *ATMetricNameFeedbackDialogSubmit = @"feedback_dialog.submit";
 
-static NSString *ATMetricNameSurveyLaunch = @"survey.launch";
 static NSString *ATMetricNameSurveyCancel = @"survey.cancel";
 static NSString *ATMetricNameSurveySubmit = @"survey.submit";
 static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
@@ -57,7 +56,6 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 - (void)feedbackDidHideWindow:(NSNotification *)notification;
 
 - (ATSurveyEvent)surveyEventTypeFromNotification:(NSNotification *)notification;
-- (void)surveyDidShow:(NSNotification *)notification;
 - (void)surveyDidHide:(NSNotification *)notification;
 - (void)surveyDidAnswerQuestion:(NSNotification *)notification;
 
@@ -174,7 +172,6 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackDidShowWindow:) name:ATFeedbackDidShowWindowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackDidHideWindow:) name:ATFeedbackDidHideWindowNotification object:nil];
 		
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyDidShow:) name:ATSurveyDidShowWindowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyDidHide:) name:ATSurveyDidHideWindowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyDidAnswerQuestion:) name:ATSurveyDidAnswerQuestionNotification object:nil];
 		
@@ -308,16 +305,6 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 		ATLogError(@"Unknown survey event type: %d", event);
 	}
 	return event;
-}
-
-- (void)surveyDidShow:(NSNotification *)notification {
-	NSMutableDictionary *info = [[NSMutableDictionary alloc] init];
-	NSString *surveyID = [[notification userInfo] objectForKey:ATSurveyMetricsSurveyIDKey];
-	if (surveyID != nil) {
-		[info setObject:surveyID forKey:@"id"];
-	}
-	[self addMetricWithName:ATMetricNameSurveyLaunch info:info];
-	[info release], info = nil;
 }
 
 - (void)surveyDidHide:(NSNotification *)notification {

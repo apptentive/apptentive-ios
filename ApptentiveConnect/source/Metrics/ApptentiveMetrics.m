@@ -309,10 +309,17 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 
 - (void)surveyDidHide:(NSNotification *)notification {
 	NSMutableDictionary *info = [[NSMutableDictionary alloc] init];
+	
 	NSString *surveyID = [[notification userInfo] objectForKey:ATSurveyMetricsSurveyIDKey];
 	if (surveyID != nil) {
 		[info setObject:surveyID forKey:@"id"];
 	}
+	
+	NSString *surveyInteractionID = [[notification userInfo] objectForKey:@"interaction_id"];
+	if (surveyInteractionID) {
+		info[@"interaction_id"] = surveyInteractionID;
+	}
+	
 	ATSurveyEvent eventType = [self surveyEventTypeFromNotification:notification];
 	
 	if (eventType == ATSurveyEventTappedSend) {
@@ -326,14 +333,22 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 
 - (void)surveyDidAnswerQuestion:(NSNotification *)notification {
 	NSMutableDictionary *info = [[NSMutableDictionary alloc] init];
+	
 	NSString *surveyID = [[notification userInfo] objectForKey:ATSurveyMetricsSurveyIDKey];
-	NSString *questionID = [[notification userInfo] objectForKey:ATSurveyMetricsSurveyQuestionIDKey];
 	if (surveyID != nil) {
 		[info setObject:surveyID forKey:@"survey_id"];
 	}
+	
+	NSString *questionID = [[notification userInfo] objectForKey:ATSurveyMetricsSurveyQuestionIDKey];
 	if (questionID != nil) {
 		[info setObject:questionID forKey:@"id"];
 	}
+	
+	NSString *surveyInteractionID = [[notification userInfo] objectForKey:@"interaction_id"];
+	if (surveyInteractionID) {
+		info[@"interaction_id"] = surveyInteractionID;
+	}
+	
 	ATSurveyEvent eventType = [self surveyEventTypeFromNotification:notification];
 	if (eventType == ATSurveyEventAnsweredQuestion) {
 		[self addMetricWithName:ATMetricNameSurveyAnswerQuestion info:info];

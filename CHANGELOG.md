@@ -1,3 +1,10 @@
+2015-02-03 pkamb v1.7.0
+--------------------------------
+
+The 1.7.0 release contains support for the new "Notes" feature. Use a Note interaction to send an alert with a link or a Survey to people using your app.
+
+Other improvements include fixing an issue where the "View Messages" button could be shown when Message Center was disabled.
+
 2014-11-20 pkamb v1.6.1
 --------------------------------
 The 1.6.1 release contains an improved FeedbackDemo project for easily testing your Apptentive events and interactions. Simply input your API Key and custom events in the `defines.h` file, then tap the respective buttons in the demo app to engage those events.

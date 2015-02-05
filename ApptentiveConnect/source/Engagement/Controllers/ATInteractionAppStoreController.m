@@ -81,8 +81,21 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 #if TARGET_OS_IPHONE
 - (void)showUnableToOpenAppStoreDialog {
 	[self.interaction engage:ATInteractionAppStoreRatingEventLabelUnableToRate fromViewController:self.viewController];
+
+	NSString *title;
+	NSString *message;
+	NSString *cancelButtonTitle;
+#	if TARGET_IPHONE_SIMULATOR
+	title = @"Unable to open the App Store";
+	message = @"The iOS Simulator is unable to open the App Store app. Please try again on a real iOS device.";
+	cancelButtonTitle = @"OK";
+#	else
+	title = ATLocalizedString(@"Oops!", @"Unable to load the App Store title");
+	message = ATLocalizedString(@"Unable to load the App Store", @"Unable to load the App Store message");
+	cancelButtonTitle = ATLocalizedString(@"OK", @"OK button title");
+#	endif
 	
-	UIAlertView *errorAlert = [[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Oops!", @"Unable to load the App Store title") message:ATLocalizedString(@"Unable to load the App Store", @"Unable to load the App Store message") delegate:self cancelButtonTitle:ATLocalizedString(@"OK", @"OK button title") otherButtonTitles:nil] autorelease];
+	UIAlertView *errorAlert = [[[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:cancelButtonTitle otherButtonTitles:nil] autorelease];
 	[errorAlert show];
 }
 #endif

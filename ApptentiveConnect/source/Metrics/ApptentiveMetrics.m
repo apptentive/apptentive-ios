@@ -125,7 +125,20 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 	}
 	
 	if (userInfo) {
-		[event addEntriesFromDictionary:@{@"data": userInfo}];
+		// Surveys and other legacy metrics may pass `interaction_id` as a key in userInfo.
+		// We should pull it out and add it to the top level event, rather than as a child of `data`.
+		// TODO: Surveys should call `engage:` rather than `addMetric...` so this is not needed.
+		NSString *interactionIDFromUserInfo = userInfo[@"interaction_id"];
+		if (interactionIDFromUserInfo) {
+			[event addEntriesFromDictionary:@{@"interaction_id": interactionIDFromUserInfo}];
+			
+			NSMutableDictionary *userInfoMinusInteractionID = [NSMutableDictionary dictionaryWithDictionary:userInfo];
+			[userInfoMinusInteractionID removeObjectForKey:@"interaction_id"];
+
+			[event addEntriesFromDictionary:@{@"data": userInfoMinusInteractionID}];
+		} else {
+			[event addEntriesFromDictionary:@{@"data": userInfo}];
+		}
 	}
 	
 	if (customData) {

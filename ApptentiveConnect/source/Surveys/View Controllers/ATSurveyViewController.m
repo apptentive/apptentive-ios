@@ -25,7 +25,6 @@
 #define DEBUG_CELL_HEIGHT_PROBLEM 0
 #define kAssociatedQuestionKey ("associated_question")
 
-NSString *const ATInteractionSurveyEventLabelSend = @"send";
 NSString *const ATInteractionSurveyEventLabelCancel = @"cancel";
 
 enum {
@@ -190,8 +189,6 @@ enum {
 								  ATSurveyMetricsEventKey: @(ATSurveyEventTappedSend),
 								  @"interaction_id": self.interaction.identifier ?: [NSNull null],
 								  };
-	
-	[self.interaction engage:ATInteractionSurveyEventLabelSend fromViewController:self userInfo:metricsInfo];
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidHideWindowNotification object:nil userInfo:metricsInfo];
 	

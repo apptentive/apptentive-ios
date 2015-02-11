@@ -11,6 +11,7 @@
 @implementation ATTextMessageDevCellV7
 - (void)setup {
 	self.arrowDirection = ATMessageBubbleArrowDirectionLeft;
+	self.textContainerView.backgroundColor = [UIColor colorWithRed:229/255.0 green:229/255.0 blue:229/255.0 alpha:1];
 	[super setup];
 }
 @end

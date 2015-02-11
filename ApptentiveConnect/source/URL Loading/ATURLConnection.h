@@ -15,6 +15,8 @@
 	
 	NSMutableURLRequest *request;
 	NSURLConnection *connection;
+	NSString *statusLine;
+	NSDictionary *responseHeaders;
 	NSMutableData *data;
 	BOOL executing;
 	BOOL finished;
@@ -28,7 +30,7 @@
 	NSData *HTTPBody;
 	NSInputStream *HTTPBodyStream;
 	
-	int statusCode;
+	NSInteger statusCode;
 	BOOL failedAuthentication;
 	NSError *connectionError;
 	
@@ -45,7 +47,7 @@
 @property (nonatomic, readonly) BOOL cancelled;
 @property (nonatomic, assign) NSTimeInterval timeoutInterval;
 @property (nonatomic, retain) NSURLCredential *credential;
-@property (nonatomic, readonly) int statusCode;
+@property (nonatomic, readonly) NSInteger statusCode;
 @property (nonatomic, readonly) BOOL failedAuthentication;
 @property (nonatomic, copy) NSError *connectionError;
 @property (nonatomic, assign) float percentComplete;
@@ -65,10 +67,18 @@
 - (BOOL)isExecuting;
 - (BOOL)isCancelled;
 - (BOOL)isFinished;
+/*! A localized description of the response status code. */
+- (NSString *)statusLine;
+/*! The response headers. */
+- (NSDictionary *)responseHeaders;
 - (NSData *)responseData;
 
-- (NSString *)requestAsString;
+/*! The request headers. */
 - (NSDictionary *)headers;
+
+#pragma mark Debugging
+- (NSString *)requestAsString;
+- (NSString *)responseAsString;
 @end
 
 

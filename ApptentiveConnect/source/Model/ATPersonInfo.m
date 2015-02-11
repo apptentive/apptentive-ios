@@ -12,6 +12,8 @@
 #import "ATUtilities.h"
 #import "NSDictionary+ATAdditions.h"
 
+NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
+
 #define kATPersonCodingVersion 1
 
 @implementation ATPersonInfo
@@ -145,6 +147,17 @@
 	return [NSDictionary dictionaryWithObject:person forKey:@"person"];
 }
 
+- (NSDictionary *)safeApiJSON {
+	// Email is set to `[NSNull null]` in `apiJSON` to delete email from server.
+	// But `[NSNull null]` crashes if saved in NSUserDefaults (by ATPersonUpdater).
+	NSMutableDictionary *safePersonValues = [[[self apiJSON][@"person"] mutableCopy] autorelease];
+	if (safePersonValues[@"email"] == [NSNull null]) {
+		[safePersonValues removeObjectForKey:@"email"];
+	}
+	
+	return @{@"person": safePersonValues};
+}
+
 - (NSDictionary *)comparisonDictionary {
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
 	
@@ -188,7 +201,9 @@
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		NSData *personData = [NSKeyedArchiver archivedDataWithRootObject:self];
 		[defaults setObject:personData forKey:ATCurrentPersonPreferenceKey];
-		[defaults synchronize];
+		if (!currentPerson || !currentPerson.apptentiveID) {
+			[defaults synchronize];
+		}
 	}
 }
 

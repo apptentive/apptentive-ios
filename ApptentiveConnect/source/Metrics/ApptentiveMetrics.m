@@ -11,7 +11,6 @@
 #import "ATAppConfigurationUpdater.h"
 #import "ATBackend.h"
 #import "ATFeedbackMetrics.h"
-#import "ATAppRatingMetrics.h"
 #import "ATData.h"
 #import "ATEvent.h"
 #import "ATMessageCenterMetrics.h"
@@ -20,29 +19,22 @@
 #import "ATRecordRequestTask.h"
 #import "ATSurveyMetrics.h"
 #import "ATTaskQueue.h"
-#import "ATInteractionUpgradeMessageViewController.h"
+#import "ATEngagementBackend.h"
 
-static NSString *ATMetricNameEnjoymentDialogLaunch = @"enjoyment_dialog.launch";
-static NSString *ATMetricNameEnjoymentDialogYes = @"enjoyment_dialog.yes";
-static NSString *ATMetricNameEnjoymentDialogNo = @"enjoyment_dialog.no";
+// Engagement event labels
 
-static NSString *ATMetricNameRatingDialogLaunch = @"rating_dialog.launch";
-static NSString *ATMetricNameRatingDialogRate = @"rating_dialog.rate";
-static NSString *ATMetricNameRatingDialogRemind = @"rating_dialog.remind";
-static NSString *ATMetricNameRatingDialogDecline = @"rating_dialog.decline";
-static NSString *ATMetricNameRatingDidManuallyOpenAppStore = @"app_store.manual_open";
+static NSString *ATInteractionAppEventLabelLaunch = @"launch";
+static NSString *ATInteractionAppEventLabelExit = @"exit";
+
+// Legacy metric event labels
 
 static NSString *ATMetricNameFeedbackDialogLaunch = @"feedback_dialog.launch";
 static NSString *ATMetricNameFeedbackDialogCancel = @"feedback_dialog.cancel";
 static NSString *ATMetricNameFeedbackDialogSubmit = @"feedback_dialog.submit";
 
-static NSString *ATMetricNameSurveyLaunch = @"survey.launch";
 static NSString *ATMetricNameSurveyCancel = @"survey.cancel";
 static NSString *ATMetricNameSurveySubmit = @"survey.submit";
 static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
-
-static NSString *ATMetricNameAppLaunch = @"app.launch";
-static NSString *ATMetricNameAppExit = @"app.exit";
 
 static NSString *ATMetricNameMessageCenterLaunch = @"message_center.launch";
 static NSString *ATMetricNameMessageCenterClose = @"message_center.close";
@@ -57,28 +49,13 @@ static NSString *ATMetricNameMessageCenterThankYouLaunch = @"message_center.than
 static NSString *ATMetricNameMessageCenterThankYouMessages = @"message_center.thank_you.messages";
 static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank_you.close";
 
-static NSString *ATMetricNameInteractionUpgradeMessageLaunch = @"upgrade_message.launch";
-static NSString *ATMetricNameInteractionUpgradeMessageClose = @"upgrade_message.close";
-
 @interface ApptentiveMetrics (Private)
 - (void)addLaunchMetric;
-- (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo;
 - (ATFeedbackWindowType)windowTypeFromNotification:(NSNotification *)notification;
 - (void)feedbackDidShowWindow:(NSNotification *)notification;
 - (void)feedbackDidHideWindow:(NSNotification *)notification;
 
-- (ATAppRatingEnjoymentButtonType)appEnjoymentButtonTypeFromNotification:(NSNotification *)notification;
-- (void)ratingDidShowEnjoyment:(NSNotification *)notification;
-- (void)ratingDidNotShowEnjoyment:(NSNotification *)notification;
-- (void)ratingDidClickEnjoyment:(NSNotification *)notification;
-
-- (ATAppRatingButtonType)appRatingButtonTypeFromNotification:(NSNotification *)notification;
-- (void)ratingDidShowRating:(NSNotification *)notification;
-- (void)ratingDidClickRating:(NSNotification *)notification;
-- (void)ratingDidManuallyOpenAppStore:(NSNotification *)notification;
-
 - (ATSurveyEvent)surveyEventTypeFromNotification:(NSNotification *)notification;
-- (void)surveyDidShow:(NSNotification *)notification;
 - (void)surveyDidHide:(NSNotification *)notification;
 - (void)surveyDidAnswerQuestion:(NSNotification *)notification;
 
@@ -98,9 +75,6 @@ static NSString *ATMetricNameInteractionUpgradeMessageClose = @"upgrade_message.
 - (void)messageCenterIntroThankYouDidLaunch:(NSNotification *)notification;
 - (void)messageCenterIntroThankYouHitMessages:(NSNotification *)notification;
 - (void)messageCenterIntroThankYouDidClose:(NSNotification *)notification;
-
-- (void)interactionUpgradeMessageDidLaunch:(NSNotification *)notification;
-- (void)interactionUpgradeMessageDidClose:(NSNotification *)notification;
 
 - (void)preferencesChanged:(NSNotification *)notification;
 
@@ -127,6 +101,80 @@ static NSString *ATMetricNameInteractionUpgradeMessageClose = @"upgrade_message.
 	[defaults registerDefaults:defaultPreferences];
 }
 
+- (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo {
+	[self addMetricWithName:name info:userInfo customData:nil extendedData:nil];
+}
+
+- (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData {
+	[self addMetricWithName:name fromInteraction:nil info:userInfo customData:customData extendedData:extendedData];
+}
+
+- (void)addMetricWithName:(NSString *)name fromInteraction:(ATInteraction *)fromInteraction info:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData {
+	if (metricsEnabled == NO) {
+		return;
+	}
+	ATEvent *event = (ATEvent *)[ATData newEntityNamed:@"ATEvent"];
+	[event setup];
+	event.label = name;
+	
+	if (fromInteraction) {
+		NSString *interactionID = fromInteraction.identifier;
+		if (interactionID) {
+			[event addEntriesFromDictionary:@{@"interaction_id": interactionID}];
+		}
+	}
+	
+	if (userInfo) {
+		// Surveys and other legacy metrics may pass `interaction_id` as a key in userInfo.
+		// We should pull it out and add it to the top level event, rather than as a child of `data`.
+		// TODO: Surveys should call `engage:` rather than `addMetric...` so this is not needed.
+		NSString *interactionIDFromUserInfo = userInfo[@"interaction_id"];
+		if (interactionIDFromUserInfo) {
+			[event addEntriesFromDictionary:@{@"interaction_id": interactionIDFromUserInfo}];
+			
+			NSMutableDictionary *userInfoMinusInteractionID = [NSMutableDictionary dictionaryWithDictionary:userInfo];
+			[userInfoMinusInteractionID removeObjectForKey:@"interaction_id"];
+
+			[event addEntriesFromDictionary:@{@"data": userInfoMinusInteractionID}];
+		} else {
+			[event addEntriesFromDictionary:@{@"data": userInfo}];
+		}
+	}
+	
+	if (customData) {
+		NSDictionary *customDataDictionary = @{@"custom_data": customData};
+		if ([NSJSONSerialization isValidJSONObject:customDataDictionary]) {
+			[event addEntriesFromDictionary:customDataDictionary];
+		} else {
+			ATLogError(@"Event `customData` cannot be transformed into valid JSON and will be ignored.");
+			ATLogError(@"Please see NSJSONSerialization's `+isValidJSONObject:` for allowed types.");
+		}
+	}
+
+	if (extendedData) {
+		for (NSDictionary *data in extendedData) {
+			if ([NSJSONSerialization isValidJSONObject:data]) {
+				// Extended data items are not added for key "extended_data", but rather for key of extended data type: "time", "location", etc.
+				[event addEntriesFromDictionary:data];
+			} else {
+				ATLogError(@"Event `extendedData` cannot be transformed into valid JSON and will be ignored.");
+				ATLogError(@"Please see NSJSONSerialization's `+isValidJSONObject:` for allowed types.");
+			}
+		}
+	}
+	
+	if (![ATData save]) {
+		[event release], event = nil;
+		return;
+	}
+	
+	ATRecordRequestTask *task = [[ATRecordRequestTask alloc] init];
+	[task setTaskProvider:event];
+	[[ATTaskQueue sharedTaskQueue] addTask:task];
+	[event release], event = nil;
+	[task release], task = nil;
+}
+
 - (void)backendBecameAvailable:(NSNotification *)notification {
 	@autoreleasepool {
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:ATBackendBecameReadyNotification object:nil];
@@ -136,15 +184,7 @@ static NSString *ATMetricNameInteractionUpgradeMessageClose = @"upgrade_message.
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackDidShowWindow:) name:ATFeedbackDidShowWindowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackDidHideWindow:) name:ATFeedbackDidHideWindowNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingDidShowEnjoyment:) name:ATAppRatingDidPromptForEnjoymentNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingDidNotShowEnjoyment:) name:ATAppRatingDidNotPromptForEnjoymentNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingDidClickEnjoyment:) name:ATAppRatingDidClickEnjoymentButtonNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingDidShowRating:) name:ATAppRatingDidPromptForRatingNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingDidClickRating:) name:ATAppRatingDidClickRatingButtonNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ratingDidManuallyOpenAppStore:) name:ATAppRatingDidManuallyOpenAppStoreToRateAppNotification object:nil];
 		
-		
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyDidShow:) name:ATSurveyDidShowWindowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyDidHide:) name:ATSurveyDidHideWindowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyDidAnswerQuestion:) name:ATSurveyDidAnswerQuestionNotification object:nil];
 		
@@ -174,9 +214,6 @@ static NSString *ATMetricNameInteractionUpgradeMessageClose = @"upgrade_message.
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroThankYouDidLaunch:) name:ATMessageCenterIntroThankYouDidShowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroThankYouHitMessages:) name:ATMessageCenterIntroThankYouHitMessagesNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroThankYouDidClose:) name:ATMessageCenterIntroThankYouDidCloseNotification object:nil];
-		
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(interactionUpgradeMessageDidLaunch:) name:ATInteractionUpgradeMessageLaunch object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(interactionUpgradeMessageDidClose:) name:ATInteractionUpgradeMessageClose object:nil];
 	}
 }
 
@@ -223,28 +260,8 @@ static NSString *ATMetricNameInteractionUpgradeMessageClose = @"upgrade_message.
 @implementation ApptentiveMetrics (Private)
 - (void)addLaunchMetric {
 	@autoreleasepool {
-		[self addMetricWithName:ATMetricNameAppLaunch info:nil];
+		[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch];
 	}
-}
-
-- (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo {
-	if (metricsEnabled == NO) {
-		return;
-	}
-	ATEvent *event = (ATEvent *)[ATData newEntityNamed:@"ATEvent"];
-	[event setup];
-	event.label = name;
-	[event addEntriesFromDictionary:userInfo];
-	if (![ATData save]) {
-		[event release], event = nil;
-		return;
-	}
-	
-	ATRecordRequestTask *task = [[ATRecordRequestTask alloc] init];
-	[task setTaskProvider:event];
-	[[ATTaskQueue sharedTaskQueue] addTask:task];
-	[event release], event = nil;
-	[task release], task = nil;
 }
 
 - (ATFeedbackWindowType)windowTypeFromNotification:(NSNotification *)notification {
@@ -291,68 +308,6 @@ static NSString *ATMetricNameInteractionUpgradeMessageClose = @"upgrade_message.
 	}
 }
 
-- (ATAppRatingEnjoymentButtonType)appEnjoymentButtonTypeFromNotification:(NSNotification *)notification {
-	ATAppRatingEnjoymentButtonType buttonType = ATAppRatingEnjoymentButtonTypeUnknown;
-	if ([[notification userInfo] objectForKey:ATAppRatingButtonTypeKey]) {
-		buttonType = [(NSNumber *)[[notification userInfo] objectForKey:ATAppRatingButtonTypeKey] intValue];
-	}
-	if (buttonType != ATAppRatingEnjoymentButtonTypeYes && buttonType != ATAppRatingEnjoymentButtonTypeNo) {
-		ATLogError(@"Unknown button type: %d", buttonType);
-	}
-	return buttonType;
-}
-
-- (void)ratingDidShowEnjoyment:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameEnjoymentDialogLaunch info:nil];
-}
-
-- (void)ratingDidNotShowEnjoyment:(NSNotification *)notification {
-	// Not logging metrics for non-shown Enjoyment dialogs.
-}
-
-- (void)ratingDidClickEnjoyment:(NSNotification *)notification {
-	ATAppRatingEnjoymentButtonType buttonType = [self appEnjoymentButtonTypeFromNotification:notification];
-	if (buttonType == ATAppRatingEnjoymentButtonTypeYes) {
-		[self addMetricWithName:ATMetricNameEnjoymentDialogYes info:nil];
-	} else if (buttonType == ATAppRatingEnjoymentButtonTypeNo) {
-		[self addMetricWithName:ATMetricNameEnjoymentDialogNo info:nil];
-	}
-}
-
-- (ATAppRatingButtonType)appRatingButtonTypeFromNotification:(NSNotification *)notification {
-	ATAppRatingButtonType buttonType = ATAppRatingButtonTypeUnknown;
-	if ([[notification userInfo] objectForKey:ATAppRatingButtonTypeKey]) {
-		buttonType = [(NSNumber *)[[notification userInfo] objectForKey:ATAppRatingButtonTypeKey] intValue];
-	}
-	if (buttonType != ATAppRatingButtonTypeNo && buttonType != ATAppRatingButtonTypeRemind && buttonType != ATAppRatingButtonTypeRateApp) {
-		ATLogError(@"Unknown button type: %d", buttonType);
-	}
-	return buttonType;
-}
-
-- (void)ratingDidShowRating:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameRatingDialogLaunch info:nil];
-}
-
-- (void)ratingDidClickRating:(NSNotification *)notification {
-	ATAppRatingButtonType buttonType = [self appRatingButtonTypeFromNotification:notification];
-	NSString *name = nil;
-	if (buttonType == ATAppRatingButtonTypeNo) {
-		name = ATMetricNameRatingDialogDecline;
-	} else if (buttonType == ATAppRatingButtonTypeRateApp) {
-		name = ATMetricNameRatingDialogRate;
-	} else if (buttonType == ATAppRatingButtonTypeRemind) {
-		name = ATMetricNameRatingDialogRemind;
-	}
-	if (name != nil) {
-		[self addMetricWithName:name info:nil];
-	}
-}
-
-- (void)ratingDidManuallyOpenAppStore:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameRatingDidManuallyOpenAppStore info:nil];
-}
-
 - (ATSurveyEvent)surveyEventTypeFromNotification:(NSNotification *)notification {
 	ATSurveyEvent event = ATSurveyEventUnknown;
 	if ([[notification userInfo] objectForKey:ATSurveyMetricsEventKey]) {
@@ -365,22 +320,19 @@ static NSString *ATMetricNameInteractionUpgradeMessageClose = @"upgrade_message.
 	return event;
 }
 
-- (void)surveyDidShow:(NSNotification *)notification {
-	NSMutableDictionary *info = [[NSMutableDictionary alloc] init];
-	NSString *surveyID = [[notification userInfo] objectForKey:ATSurveyMetricsSurveyIDKey];
-	if (surveyID != nil) {
-		[info setObject:surveyID forKey:@"id"];
-	}
-	[self addMetricWithName:ATMetricNameSurveyLaunch info:info];
-	[info release], info = nil;
-}
-
 - (void)surveyDidHide:(NSNotification *)notification {
 	NSMutableDictionary *info = [[NSMutableDictionary alloc] init];
+	
 	NSString *surveyID = [[notification userInfo] objectForKey:ATSurveyMetricsSurveyIDKey];
 	if (surveyID != nil) {
 		[info setObject:surveyID forKey:@"id"];
 	}
+	
+	NSString *surveyInteractionID = [[notification userInfo] objectForKey:@"interaction_id"];
+	if (surveyInteractionID) {
+		info[@"interaction_id"] = surveyInteractionID;
+	}
+	
 	ATSurveyEvent eventType = [self surveyEventTypeFromNotification:notification];
 	
 	if (eventType == ATSurveyEventTappedSend) {
@@ -394,14 +346,22 @@ static NSString *ATMetricNameInteractionUpgradeMessageClose = @"upgrade_message.
 
 - (void)surveyDidAnswerQuestion:(NSNotification *)notification {
 	NSMutableDictionary *info = [[NSMutableDictionary alloc] init];
+	
 	NSString *surveyID = [[notification userInfo] objectForKey:ATSurveyMetricsSurveyIDKey];
-	NSString *questionID = [[notification userInfo] objectForKey:ATSurveyMetricsSurveyQuestionIDKey];
 	if (surveyID != nil) {
 		[info setObject:surveyID forKey:@"survey_id"];
 	}
+	
+	NSString *questionID = [[notification userInfo] objectForKey:ATSurveyMetricsSurveyQuestionIDKey];
 	if (questionID != nil) {
 		[info setObject:questionID forKey:@"id"];
 	}
+	
+	NSString *surveyInteractionID = [[notification userInfo] objectForKey:@"interaction_id"];
+	if (surveyInteractionID) {
+		info[@"interaction_id"] = surveyInteractionID;
+	}
+	
 	ATSurveyEvent eventType = [self surveyEventTypeFromNotification:notification];
 	if (eventType == ATSurveyEventAnsweredQuestion) {
 		[self addMetricWithName:ATMetricNameSurveyAnswerQuestion info:info];
@@ -411,15 +371,15 @@ static NSString *ATMetricNameInteractionUpgradeMessageClose = @"upgrade_message.
 }
 
 - (void)appWillTerminate:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameAppExit info:nil];
+	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:ATInteractionAppEventLabelExit];
 }
 
 - (void)appDidEnterBackground:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameAppExit info:nil];
+	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:ATInteractionAppEventLabelExit];
 }
 
 - (void)appWillEnterForeground:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameAppLaunch info:nil];
+	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch];
 }
 
 - (void)messageCenterDidLaunch:(NSNotification *)notification {
@@ -482,14 +442,6 @@ static NSString *ATMetricNameInteractionUpgradeMessageClose = @"upgrade_message.
 
 - (void)messageCenterIntroThankYouDidClose:(NSNotification *)notification {
 	[self addMetricWithName:ATMetricNameMessageCenterThankYouClose info:nil];
-}
-
-- (void)interactionUpgradeMessageDidLaunch:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameInteractionUpgradeMessageLaunch info:nil];
-}
-
-- (void)interactionUpgradeMessageDidClose:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameInteractionUpgradeMessageClose info:nil];
 }
 
 - (void)preferencesChanged:(NSNotification *)notification {

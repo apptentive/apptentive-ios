@@ -195,12 +195,7 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 		ATConversation *conversation = [ATConversationUpdater currentConversation];
         [defaults setObject:[conversation apiUpdateJSON] forKey:ATConversationLastUpdateValuePreferenceKey];
         [defaults setObject:[NSDate date] forKey:ATConversationLastUpdatePreferenceKey];
-		if (![defaults synchronize]) {
-			ATLogError(@"Unable to synchronize defaults for conversation update.");
-			[delegate conversationUpdater:self updatedConversationSuccessfully:NO];
-		} else {
-			[delegate conversationUpdater:self updatedConversationSuccessfully:YES];
-		}
+		[delegate conversationUpdater:self updatedConversationSuccessfully:YES];
     }
 }
 @end

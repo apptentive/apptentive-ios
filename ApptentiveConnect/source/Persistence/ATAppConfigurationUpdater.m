@@ -7,7 +7,6 @@
 //
 
 #import "ATAppConfigurationUpdater.h"
-#import "ATAppRatingFlow_Private.h"
 #import "ATContactStorage.h"
 #import "ATUtilities.h"
 #import "ATWebClient.h"
@@ -17,6 +16,7 @@ NSString *const ATAppConfigurationLastUpdatePreferenceKey = @"ATAppConfiguration
 NSString *const ATAppConfigurationExpirationPreferenceKey = @"ATAppConfigurationExpirationPreferenceKey";
 NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigurationMetricsEnabledPreferenceKey";
 NSString *const ATAppConfigurationMessageCenterEnabledKey = @"ATAppConfigurationMessageCenterEnabledKey";
+NSString *const ATAppConfigurationHideBrandingKey = @"ATAppConfigurationHideBrandingKey";
 
 NSString *const ATAppConfigurationMessageCenterTitleKey = @"ATAppConfigurationMessageCenterTitleKey";
 NSString *const ATAppConfigurationMessageCenterForegroundRefreshIntervalKey = @"ATAppConfigurationMessageCenterForegroundRefreshIntervalKey";
@@ -34,7 +34,7 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 
 
 @interface ATAppConfigurationUpdater (Private)
-- (void)processResult:(NSDictionary *)jsonRatingConfiguration;
+- (void)processResult:(NSDictionary *)jsonRatingConfiguration maxAge:(NSTimeInterval)expiresMaxAge;
 @end
 
 @implementation ATAppConfigurationUpdater
@@ -120,7 +120,7 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(NSObject *)result {
 	@synchronized (self) {
 		if ([result isKindOfClass:[NSDictionary class]]) {
-			[self processResult:(NSDictionary *)result];
+			[self processResult:(NSDictionary *)result maxAge:[sender expiresMaxAge]];
 			[delegate configurationUpdaterDidFinish:YES];
 		} else {
 			ATLogError(@"App configuration result is not NSDictionary!");
@@ -143,29 +143,21 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 @end
 
 @implementation ATAppConfigurationUpdater (Private)
-- (void)processResult:(NSDictionary *)jsonConfiguration {
+- (void)processResult:(NSDictionary *)jsonConfiguration maxAge:(NSTimeInterval)expiresMaxAge {
 	BOOL hasConfigurationChanges = NO;
 	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	[ATAppConfigurationUpdater registerDefaults];
-	[ATAppRatingFlow_Private registerDefaults];
 	[defaults setObject:[NSDate date] forKey:ATAppConfigurationLastUpdatePreferenceKey];
-	[defaults synchronize];
 	
 	NSDictionary *numberObjects = 
 		[NSDictionary dictionaryWithObjectsAndKeys:
-		 @"ratings_clear_on_upgrade", ATAppRatingClearCountsOnUpgradePreferenceKey, 
-		 @"ratings_enabled", ATAppRatingEnabledPreferenceKey,
-		 @"ratings_days_before_prompt", ATAppRatingDaysBeforePromptPreferenceKey, 
-		 @"ratings_days_between_prompts", ATAppRatingDaysBetweenPromptsPreferenceKey, 
-		 @"ratings_events_before_prompt", ATAppRatingSignificantEventsBeforePromptPreferenceKey, 
-		 @"ratings_uses_before_prompt", ATAppRatingUsesBeforePromptPreferenceKey,
 		 @"metrics_enabled", ATAppConfigurationMetricsEnabledPreferenceKey,
 		 @"message_center_enabled", ATAppConfigurationMessageCenterEnabledKey,
+		 @"hide_branding", ATAppConfigurationHideBrandingKey,
 		 nil];
 	
-	NSArray *boolPreferences = [NSArray arrayWithObjects:@"ratings_clear_on_upgrade", @"ratings_enabled", @"metrics_enabled", @"message_center_enabled", nil];
-	NSObject *ratingsPromptLogic = [jsonConfiguration objectForKey:@"ratings_prompt_logic"];
+	NSArray *boolPreferences = [NSArray arrayWithObjects:@"ratings_clear_on_upgrade", @"ratings_enabled", @"metrics_enabled", @"message_center_enabled", @"hide_branding", nil];
 	
 	for (NSString *key in numberObjects) {
 		NSObject *value = [jsonConfiguration objectForKey:[numberObjects objectForKey:key]];
@@ -191,29 +183,12 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 		hasConfigurationChanges = YES;
 	}
 	
-	if (ratingsPromptLogic) {
-		NSPredicate *predicate = [ATAppRatingFlow_Private predicateForPromptLogic:ratingsPromptLogic withPredicateInfo:nil];
-		if (predicate) {
-			[defaults setObject:ratingsPromptLogic forKey:ATAppRatingPromptLogicPreferenceKey];
-			hasConfigurationChanges = YES;
-		}
-	}
-	
-	if ([jsonConfiguration objectForKey:@"review_url"]) {
-		NSString *reviewURLString = [jsonConfiguration objectForKey:@"review_url"];
-		NSString *oldReviewURLString = [defaults objectForKey:ATAppRatingReviewURLPreferenceKey];
-		if (![reviewURLString isEqualToString:oldReviewURLString]) {
-			hasConfigurationChanges = YES;
-		}
-		[defaults setObject:reviewURLString forKey:ATAppRatingReviewURLPreferenceKey];
-	}
-	
-	if ([jsonConfiguration objectForKey:@"cache-expiration"]) {
-		NSString *expirationDateString = [jsonConfiguration objectForKey:@"cache-expiration"];
-		NSDate *expirationDate = [ATUtilities dateFromISO8601String:expirationDateString];
-		if (expirationDate) {
-			[defaults setObject:expirationDate forKey:ATAppConfigurationExpirationPreferenceKey];
-		}
+	// Store expiration.
+	if (expiresMaxAge > 0) {
+		NSDate *date = [NSDate dateWithTimeInterval:expiresMaxAge sinceDate:[NSDate date]];
+		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+		[defaults setObject:date forKey:ATAppConfigurationExpirationPreferenceKey];
+		[defaults synchronize];
 	}
 	
 	if ([jsonConfiguration objectForKey:@"message_center"]) {
@@ -265,8 +240,6 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	}
 	
 	if (hasConfigurationChanges) {
-		[defaults setObject:[NSNumber numberWithBool:YES] forKey:ATAppRatingSettingsAreFromServerPreferenceKey];
-		[defaults synchronize];
 		[[NSNotificationCenter defaultCenter] postNotificationName:ATConfigurationPreferencesChangedNotification object:nil];
 	}
 }

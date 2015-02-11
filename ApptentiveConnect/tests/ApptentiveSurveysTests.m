@@ -8,9 +8,9 @@
 
 #import "ApptentiveSurveysTests.h"
 #import "ATSurvey.h"
-#import "ATSurveysBackend.h"
 #import "ATSurveyParser.h"
 #import "ATSurveyQuestion.h"
+#import "ATJSONSerialization.h"
 
 @implementation ApptentiveSurveysTests
 
@@ -28,70 +28,56 @@
 }
 
 - (void)testSurveyParsing {
-	NSString *surveyString = @"{\"surveys\":[{\"id\":\"4eb4877cd4d8f8000100002a\",\"questions\":[{\"id\":\"4eb4877cd4d8f8000100002b\",\"answer_choices\":[{\"id\":\"4eb4877cd4d8f8000100002c\",\"value\":\"BMW 335i\"},{\"id\":\"4eb4877cd4d8f8000100002d\",\"value\":\"BMW 335i\"},{\"id\":\"4eb4877cd4d8f8000100002e\",\"value\":\"Bugatti Veyron\"},{\"id\":\"4eb4877cd4d8f8000100002f\",\"value\":\"Tesla Model S\"},{\"id\":\"4eb4877cd4d8f80001000030\",\"value\":\"Dodge Charger\"},{\"id\":\"4eb4877cd4d8f80001000031\",\"value\":\"Other\"}],\"value\":\"Which car would you rather drive?\",\"type\":\"multichoice\"},{\"id\":\"4eb4877cd4d8f80001000032\",\"value\":\"If Other, Please Elaborate:\",\"type\":\"singleline\"},{\"id\":\"4eb4877cd4d8f80001000033\",\"value\":\"How does a really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really long question appear?\",\"type\":\"singleline\"}],\"responses\":[{\"question\":\"Which car would you rather drive?\",\"type\":\"multichoice\",\"responses\":{}},{\"question\":\"If Other, Please Elaborate:\",\"type\":\"singleline\",\"responses\":[]},{\"question\":\"How does a really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really long question appear?\",\"type\":\"singleline\",\"responses\":[]}],\"name\":\"Happy Fun Test Survey\",\"description\":\"This is a fun test survey with a description like this.\",\"active\":true}]}";
-	NSData *surveyData = [surveyString dataUsingEncoding:NSUTF8StringEncoding];
-	XCTAssertNotNil(surveyData, @"Survey data shouldn't be nil");
+	NSString *surveyInteractionString = @"{\"priority\":1,\"criteria\":{\"interactions/536027f07724c5ba0e000026/invokes/total\":0,\"current_time\":{\"$gte\":1398810401}},\"id\":\"536027f07724c5ba0e000026\",\"type\":\"Survey\",\"configuration\":{\"name\":\"Happy Fun Test Survey\",\"description\":\"This is a fun test survey with a description like this.\",\"multiple_responses\":false,\"show_success_message\":false,\"success_message\":\"Thank you for your input.\",\"questions\":[{\"id\":\"536027f07724c5ba0e000027\",\"answer_choices\":[{\"id\":\"536027f07724c5ba0e000028\",\"value\":\"Yes\"},{\"id\":\"536027f07724c5ba0e000029\",\"value\":\"No\"},{\"id\":\"536027f07724c5ba0e00002a\",\"value\":\"Maybe\"},{\"id\":\"536027f07724c5ba0e00002b\",\"value\":\"So\"},{\"id\":\"536027f07724c5ba0e00002c\",\"value\":\"99\"},{\"id\":\"536027f07724c5ba0e00002d\",\"value\":\"100\"}],\"instructions\":\"select one\",\"value\":\"Question 1\",\"type\":\"multichoice\",\"required\":true},{\"id\":\"536027f07724c5ba0e00002e\",\"answer_choices\":[{\"id\":\"536027f07724c5ba0e00002f\",\"value\":\"Yes\"},{\"id\":\"536027f07724c5ba0e000030\",\"value\":\"No\"}],\"instructions\":\"select one\",\"value\":\"Question 2\",\"type\":\"multichoice\",\"required\":true},{\"id\":\"536027f07724c5ba0e000031\",\"answer_choices\":[{\"id\":\"536027f07724c5ba0e000032\",\"value\":\"Yes\"},{\"id\":\"536027f07724c5ba0e000033\",\"value\":\"No\"}],\"instructions\":\"select one\",\"value\":\"Question 3\",\"type\":\"multichoice\",\"required\":true}]}}";
 	
-	ATSurveyParser *parser = [[ATSurveyParser alloc] init];
-	NSArray *surveys = [parser parseMultipleSurveys:surveyData];
+	NSData *surveyInteractionData = [surveyInteractionString dataUsingEncoding:NSUTF8StringEncoding];
+	XCTAssertNotNil(surveyInteractionData, @"Survey data shouldn't be nil");
+
+	NSError *error = nil;
+	id decodedObject = [ATJSONSerialization JSONObjectWithData:surveyInteractionData error:&error];
 	
-	XCTAssertTrue([surveys count] == 1, @"Should only be 1 survey");
-	
-	ATSurvey *survey = [surveys objectAtIndex:0];
-	XCTAssertTrue([survey.identifier isEqualToString:@"4eb4877cd4d8f8000100002a"], @"id mismatch");
-	XCTAssertTrue([survey.name isEqualToString:@"Happy Fun Test Survey"], @"name mismatch");
-	XCTAssertTrue([survey.surveyDescription isEqualToString:@"This is a fun test survey with a description like this."], @"description mismatch");
-	XCTAssertTrue(survey.isActive, @"Survey should be active");
-	XCTAssertTrue([[survey questions] count] == 3 , @"Should be 3 questions");
-	XCTAssertTrue([survey surveyHasNoTags], @"Survey shouldn't have any tags.");
-	
-	[survey addTag:@"video"];
-	[survey addTag:@"played"];
-	NSSet *goodSet = [NSSet setWithObjects:@"video", @"played", nil];
-	NSSet *badSet = [NSSet setWithObjects:@"video", @"paused", nil];
-	XCTAssertTrue([survey surveyHasTags:goodSet], @"Survey should have some tags.");
-	XCTAssertFalse([survey surveyHasTags:badSet], @"Survey should not have these tags.");
-	
-	ATSurveyQuestion *question = [[survey questions] objectAtIndex:0];
-	XCTAssertTrue([question.answerChoices count] == 6, @"First question should have 6 answers");
-	
-	[parser release], parser = nil;
+	XCTAssertTrue((decodedObject && [decodedObject isKindOfClass:[NSDictionary class]]), @"should decode the interaction");
+	if (decodedObject && [decodedObject isKindOfClass:[NSDictionary class]]) {
+		ATSurveyParser *parser = [[ATSurveyParser alloc] init];
+		ATSurvey *survey = [parser surveyWithInteraction:[ATInteraction interactionWithJSONDictionary:decodedObject]];
+		
+		XCTAssertTrue([survey.identifier isEqualToString:@"536027f07724c5ba0e000026"], @"id mismatch");
+		XCTAssertTrue([survey.name isEqualToString:@"Happy Fun Test Survey"], @"name mismatch");
+		XCTAssertTrue([survey.surveyDescription isEqualToString:@"This is a fun test survey with a description like this."], @"description mismatch");
+		XCTAssertTrue([[survey questions] count] == 3 , @"Should be 3 questions");
+		
+		ATSurveyQuestion *question = [[survey questions] objectAtIndex:0];
+		XCTAssertTrue([question.answerChoices count] == 6, @"First question should have 6 answers");
+		
+		[parser release], parser = nil;
+	}
 }
 
 - (void)testSingleLineParsing {
-	NSString *surveyString = @"{\"surveys\":[{\"id\":\"51bbd4eb4712c7a70d000001\",\"questions\":[{\"id\":\"51bbd4eb4712c7a70d000002\",\"value\":\"Test\",\"type\":\"singleline\",\"required\":false}],\"date\":\"2013-06-15T02:43:55Z\",\"name\":\"Test\",\"description\":\"Test\",\"required\":false,\"multiple_responses\":false,\"show_success_message\":false,\"active\":true},{\"id\":\"51d494cc4712c7012c000059\",\"questions\":[{\"id\":\"51d494cc4712c7012c00005a\",\"multiline\":false,\"value\":\"Single line response type\",\"type\":\"singleline\",\"required\":true},{\"id\":\"51d494cc4712c7012c00005b\",\"multiline\":true,\"value\":\"Multiline response type\",\"type\":\"singleline\",\"required\":true}],\"date\":\"2013-07-03T21:17:00Z\",\"name\":\"Test New Surveys\",\"required\":false,\"multiple_responses\":false,\"show_success_message\":false,\"start_time\":\"2013-07-03T21:15:55Z\",\"active\":true}]}";
-	NSData *surveyData = [surveyString dataUsingEncoding:NSUTF8StringEncoding];
-	XCTAssertNotNil(surveyData, @"Survey data shouldn't be nil");
+	NSString *surveyInteractionString = @"{\"priority\":1,\"criteria\":{\"interactions/53604fedf895936d850105c7/invokes/total\":0,\"current_time\":{\"$gte\":1398820782}},\"id\":\"53604fedf895936d850105c7\",\"type\":\"Survey\",\"configuration\":{\"name\":\"Multi-Line Test\",\"description\":\"test multiple lines\",\"multiple_responses\":false,\"show_success_message\":false,\"success_message\":\"Thank you for your input.\",\"questions\":[{\"id\":\"53604fedf895936d850105c8\",\"value\":\"No multi line attribute.\",\"type\":\"singleline\",\"required\":true},{\"id\":\"53604fedf895936d850105c9\",\"multiline\":false,\"value\":\"Single Line\",\"type\":\"singleline\",\"required\":true},{\"id\":\"53604fedf895936d850105ca\",\"multiline\":true,\"value\":\"Multi Line\",\"type\":\"singleline\",\"required\":true}]}}";
 	
-	ATSurveyParser *parser = [[ATSurveyParser alloc] init];
-	NSArray *surveys = [parser parseMultipleSurveys:surveyData];
+	NSData *surveyInteractionData = [surveyInteractionString dataUsingEncoding:NSUTF8StringEncoding];
+	XCTAssertNotNil(surveyInteractionData, @"Survey data shouldn't be nil");
 	
-	XCTAssertTrue([surveys count] == 2, @"Should be 2 surveys");
+	NSError *error = nil;
+	id decodedObject = [ATJSONSerialization JSONObjectWithData:surveyInteractionData error:&error];
 	
-	ATSurvey *survey = [surveys objectAtIndex:0];
-	ATSurveyQuestion *question = [[survey questions] objectAtIndex:0];
-	XCTAssertTrue(question.multiline, @"Questions without multiline attribute should be multiple lines by default.");
-	
-	
-	survey = [surveys objectAtIndex:1];
-	question = [[survey questions] objectAtIndex:0];
-	XCTAssertFalse(question.multiline, @"Question should be a single line.");
-	
-	question = [[survey questions] objectAtIndex:1];
-	XCTAssertTrue(question.multiline, @"Question should be multiple lines.");
-	
-	[parser release], parser = nil;
-}
+	XCTAssertTrue((decodedObject && [decodedObject isKindOfClass:[NSDictionary class]]), @"should decode the interaction");
+	if (decodedObject && [decodedObject isKindOfClass:[NSDictionary class]]) {
+		ATSurveyParser *parser = [[ATSurveyParser alloc] init];
+		ATSurvey *survey = [parser surveyWithInteraction:[ATInteraction interactionWithJSONDictionary:decodedObject]];
 
-- (void)testEmptySurvey {
-	NSString *surveyString = @"{\"surveys\":[]}";
-	NSData *surveyData = [surveyString dataUsingEncoding:NSUTF8StringEncoding];
-	XCTAssertNotNil(surveyData, @"Survey data shouldn't be nil");
-
-	ATSurveyParser *parser = [[ATSurveyParser alloc] init];
-	NSArray *surveys = [parser parseMultipleSurveys:surveyData];
-	XCTAssertNotNil(surveys, @"shouldn't be nil");
-	XCTAssertTrue([surveys count] == 0, @"Should be zero surveys");
+		ATSurveyQuestion *question = [[survey questions] objectAtIndex:0];
+		XCTAssertTrue(question.multiline, @"Questions without multiline attribute should be multiple lines by default.");
+		
+		question = [[survey questions] objectAtIndex:1];
+		XCTAssertFalse(question.multiline, @"Question should be a single line.");
+		
+		question = [[survey questions] objectAtIndex:2];
+		XCTAssertTrue(question.multiline, @"Question should be multiple lines.");
+		
+		[parser release], parser = nil;
+	}
 }
 
 - (void)testMultipleSelectValidation {
@@ -131,119 +117,4 @@
 	XCTAssertEqual(ATSurveyQuestionValidationErrorNone, [question validateAnswer], @"Should be valid");
 }
 
-- (void)testStartAndEndDates {
-	ATSurvey *survey = [[ATSurvey alloc] init];
-	
-	survey.startTime = nil;
-	XCTAssertTrue([survey isStarted], @"nil start dates should mean the survey is valid to start.");
-	
-	survey.startTime = [NSDate dateWithTimeIntervalSinceNow:100];
-	XCTAssertFalse([survey isStarted], @"Surveys with start times in the future should not have started.");
-	
-	survey.startTime = [NSDate dateWithTimeIntervalSinceNow:-100];
-	XCTAssertTrue([survey isStarted], @"Surveys with start times in the past should have started.");
-	
-	survey.endTime = nil;
-	XCTAssertFalse([survey isEnded], @"nil end dates should mean the survey hasn't ended yet.");
-	
-	survey.endTime = [NSDate dateWithTimeIntervalSinceNow:100];
-	XCTAssertFalse([survey isEnded], @"Surveys with end times in the future should not have ended.");
-	
-	survey.endTime = [NSDate dateWithTimeIntervalSinceNow:-99];
-	XCTAssertTrue([survey isEnded], @"Surveys with end times in the past should have ended.");
-}
-
-- (void)testSurveyViewLimits {
-	ATSurvey *survey = [[ATSurvey alloc] init];
-	survey.identifier = @"1234567890";
-	
-	[survey removeAllViewDates];
-	NSArray *viewDates = [survey viewDates];
-	XCTAssertNotNil(viewDates, @"View dates shouldn't be nil");
-	XCTAssertTrue([viewDates count] == 0, @"Should remove all view dates.");
-	
-	survey.viewCount = @(0);
-	survey.viewPeriod = @(100);
-	[survey removeAllViewDates];
-	[survey addViewDate:[NSDate date]];
-	XCTAssertTrue([survey isWithinViewLimits], @"Surveys with viewCount == 0 should always be within view limits");
-	
-	survey.viewCount = nil;
-	XCTAssertTrue([survey isWithinViewLimits], @"Surveys with nil viewCount should be within view limits");
-
-	survey.viewCount = @(10);
-	survey.viewPeriod = nil;
-	XCTAssertTrue([survey isWithinViewLimits], @"Surveys with nil viewPeriod should be within view limits");
-
-	survey.viewCount = @(3);
-	survey.viewPeriod = @(1000);
-	
-	[survey removeAllViewDates];
-	XCTAssertTrue([survey isWithinViewLimits], @"Surveys with nil viewDates should be within view limits");
-	[survey addViewDate:[NSDate dateWithTimeInterval:-50 sinceDate:[NSDate date]]];
-	[survey addViewDate:[NSDate dateWithTimeInterval:-40 sinceDate:[NSDate date]]];
-	XCTAssertTrue([survey isWithinViewLimits], @"Surveys with viewDates less than viewCount should always be within view limits");
-	[survey addViewDate:[NSDate dateWithTimeInterval:-30 sinceDate:[NSDate date]]];
-	XCTAssertFalse([survey isWithinViewLimits], @"Surveys with viewDates == viewCount (within period) should NOT be within view limits");
-	[survey addViewDate:[NSDate dateWithTimeInterval:-20 sinceDate:[NSDate date]]];
-	XCTAssertFalse([survey isWithinViewLimits], @"Surveys with viewDates > viewCount (within period) should NOT be within view limits");
-	
-	survey.viewCount = @(2);
-	survey.viewPeriod = @(1000);
-	[survey removeAllViewDates];
-	[survey addViewDate:[NSDate dateWithTimeInterval:-4000 sinceDate:[NSDate date]]];
-	[survey addViewDate:[NSDate dateWithTimeInterval:-3000 sinceDate:[NSDate date]]];
-	[survey addViewDate:[NSDate dateWithTimeInterval:-2000 sinceDate:[NSDate date]]];
-	XCTAssertTrue([survey isWithinViewLimits], @"Surveys with many viewDates outside the viewPeriod, but 0 in the viewPeriod, should be within view limits");
-	[survey addViewDate:[NSDate dateWithTimeInterval:-50 sinceDate:[NSDate date]]];
-	XCTAssertTrue([survey isWithinViewLimits], @"Surveys with many viewDates outside the viewPeriod, but viewDates < viewCount in the viewPeriod, should be within view limits");
-	[survey addViewDate:[NSDate dateWithTimeInterval:-40 sinceDate:[NSDate date]]];
-	XCTAssertFalse([survey isWithinViewLimits], @"Surveys with many viewDates outside the viewPeriod, but viewDates == viewCount in the viewPeriod, should not be within view limits");
-	[survey addViewDate:[NSDate dateWithTimeInterval:-30 sinceDate:[NSDate date]]];
-	XCTAssertFalse([survey isWithinViewLimits], @"Surveys with many viewDates outside the viewPeriod, but viewDates > viewCount in the viewPeriod, should not be within view limits");
-	
-	survey.viewCount = @(2);
-	survey.viewPeriod = @(3);
-	[survey removeAllViewDates];
-	[survey addViewDate:[NSDate date]];
-	[survey addViewDate:[NSDate date]];
-	XCTAssertFalse([survey isWithinViewLimits], @"View count was exceeded in the period, should not be within view limits.");
-	[NSThread sleepForTimeInterval:3.0f];
-	XCTAssertTrue([survey isWithinViewLimits], @"View times have lapsed out of period, should now be within view limits.");
-}
-
-- (void)testSurveyEligibilityToBeShown {
-	ATSurvey *survey = [[ATSurvey alloc] init];
-	survey.identifier = @"1234567890";
-	
-	survey.active = YES;
-	survey.startTime = [NSDate dateWithTimeIntervalSinceNow:-100];
-	survey.endTime = [NSDate dateWithTimeIntervalSinceNow:100];
-	survey.viewCount = @(2);
-	survey.viewPeriod = @(100);
-	[survey removeAllViewDates];
-	survey.multipleResponsesAllowed = YES;
-	
-	XCTAssertTrue([survey isEligibleToBeShown], @"Eligible to be shown:active, start time in past, end time in future, within view limits.");
-	survey.active = NO;
-	XCTAssertFalse([survey isEligibleToBeShown], @"Not Eligible to be shown: not active");
-	survey.active = YES;
-	survey.startTime = [NSDate dateWithTimeIntervalSinceNow:20];
-	XCTAssertFalse([survey isEligibleToBeShown], @"Not Eligible to be shown: start time in future.");
-	survey.startTime = [NSDate dateWithTimeIntervalSinceNow:-100];
-	survey.endTime = [NSDate dateWithTimeIntervalSinceNow:-20];
-	XCTAssertFalse([survey isEligibleToBeShown], @"Not Eligible to be shown: end time in past.");
-	survey.endTime = [NSDate dateWithTimeIntervalSinceNow:100];
-	[survey addViewDate:[NSDate date]];
-	[survey addViewDate:[NSDate date]];
-	XCTAssertFalse([survey isEligibleToBeShown], @"Not Eligible to be shown: hit view limits for period");
-	[survey removeAllViewDates];
-	XCTAssertTrue([survey isEligibleToBeShown], @"Eligible to be shown:active, start time in past, end time in future, within view limits.");
-	
-	[[ATSurveysBackend sharedBackend] setDidSendSurvey:survey];
-	survey.multipleResponsesAllowed = NO;
-	XCTAssertFalse([survey isEligibleToBeShown], @"Not Eligible to be shown: Survey was already sent, multiple responses not allowed.");
-	survey.multipleResponsesAllowed = YES;
-	XCTAssertTrue([survey isEligibleToBeShown], @"Eligible to be shown: Survey was already sent, but multiple responses are allowed.");
-}
 @end

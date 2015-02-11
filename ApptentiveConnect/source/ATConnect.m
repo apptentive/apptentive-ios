@@ -8,6 +8,7 @@
 
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
+#import "ATConnect_Debugging.h"
 #import "ATBackend.h"
 #import "ATContactStorage.h"
 #import "ATEngagementBackend.h"
@@ -21,15 +22,35 @@
 #import "ATFeedbackWindowController.h"
 #endif
 
+// Can't get CocoaPods to do the right thing for debug builds.
+// So, do it explicitly.
+#if COCOAPODS
+#    if DEBUG
+#	     define APPTENTIVE_DEBUG_LOG_VIEWER 1
+#    endif
+#endif
+
 NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCenterUnreadCountChangedNotification";
+
+NSString *const ATAppRatingFlowUserAgreedToRateAppNotification = @"ATAppRatingFlowUserAgreedToRateAppNotification";
+
+NSString *const ATSurveyShownNotification = @"ATSurveyShownNotification";
+NSString *const ATSurveySentNotification = @"ATSurveySentNotification";
+NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
+
 NSString *const ATInitialUserNameKey = @"ATInitialUserNameKey";
 NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
 
 NSString *const ATIntegrationKeyUrbanAirship = @"urban_airship";
 NSString *const ATIntegrationKeyKahuna = @"kahuna";
+NSString *const ATIntegrationKeyAmazonSNS = @"aws_sns";
+NSString *const ATIntegrationKeyParse = @"parse";
+
+NSString *const ATConnectCustomPersonDataChangedNotification = @"ATConnectCustomPersonDataChangedNotification";
+NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustomDeviceDataChangedNotification";
 
 @implementation ATConnect
-@synthesize apiKey, showTagline, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText, useMessageCenter;
+@synthesize apiKey, appID, debuggingOptions, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText, useMessageCenter;
 #if TARGET_OS_IPHONE
 @synthesize tintColor;
 #endif
@@ -46,16 +67,24 @@ NSString *const ATIntegrationKeyKahuna = @"kahuna";
 - (id)init {
 	if ((self = [super init])) {
 		self.showEmailField = YES;
-		self.showTagline = YES;
 		customPersonData = [[NSMutableDictionary alloc] init];
 		customDeviceData = [[NSMutableDictionary alloc] init];
 		integrationConfiguration = [[NSMutableDictionary alloc] init];
 		useMessageCenter = YES;
 		_initiallyUseMessageCenter = YES;
+		_initiallyHideBranding = NO;
 		
-		NSDictionary *defaults = @{ATAppConfigurationMessageCenterEnabledKey : [NSNumber numberWithBool:_initiallyUseMessageCenter],
-								   ATAppConfigurationMessageCenterEmailRequiredKey : [NSNumber numberWithBool:NO]};
+		NSDictionary *defaults = @{ATAppConfigurationMessageCenterEnabledKey: @(_initiallyUseMessageCenter),
+								   ATAppConfigurationMessageCenterEmailRequiredKey: @NO,
+								   ATAppConfigurationHideBrandingKey: @(_initiallyHideBranding)
+								   };
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
+		
+		ATLogInfo(@"Apptentive SDK Version %@", kATConnectVersionString);
+		
+#if APPTENTIVE_DEBUG_LOG_VIEWER
+		self.debuggingOptions = ATConnectDebuggingOptionsShowDebugPanel;
+#endif
 	}
 	return self;
 }
@@ -74,6 +103,7 @@ NSString *const ATIntegrationKeyKahuna = @"kahuna";
 	[integrationConfiguration release], integrationConfiguration = nil;
 	[customPlaceholderText release], customPlaceholderText = nil;
 	[apiKey release], apiKey = nil;
+	[appID release], appID = nil;
 	[initialUserName release], initialUserName = nil;
 	[initialUserEmailAddress release], initialUserEmailAddress = nil;
 	[super dealloc];
@@ -86,6 +116,11 @@ NSString *const ATIntegrationKeyKahuna = @"kahuna";
 		apiKey = [anAPIKey retain];
 		[[ATBackend sharedBackend] setApiKey:self.apiKey];
 	}
+}
+
+- (void)setInitiallyHideBranding:(BOOL)initiallyHideBranding {
+	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ATAppConfigurationHideBrandingKey: @(initiallyHideBranding)}];
+	_initiallyHideBranding = initiallyHideBranding;
 }
 
 - (void)setInitiallyUseMessageCenter:(BOOL)initiallyUseMessageCenter {
@@ -119,16 +154,17 @@ NSString *const ATIntegrationKeyKahuna = @"kahuna";
 		return;
 	}
 		
-	if (initialUserEmailAddress != anInitialUserEmailAddress) {		
+	if (![initialUserEmailAddress isEqualToString:anInitialUserEmailAddress]) {
 		[initialUserEmailAddress release];
 		initialUserEmailAddress = nil;
 		initialUserEmailAddress = [anInitialUserEmailAddress retain];
 		
-		// Set person object's email. Only overwrites previous *initial* emails.
-		NSString *previousInitialUserEmailAddress = [[NSUserDefaults standardUserDefaults] objectForKey:ATInitialUserEmailAddressKey];
 		if ([ATPersonInfo personExists]) {
 			ATPersonInfo *person = [ATPersonInfo currentPerson];
-			if (!person.emailAddress || [person.emailAddress isEqualToString:previousInitialUserEmailAddress]) {
+			
+			// Only overwrites previous *initial* emails.
+			NSString *previousInitialUserEmailAddress = [[NSUserDefaults standardUserDefaults] objectForKey:ATInitialUserEmailAddressKey];
+			if (!person.emailAddress || ([person.emailAddress caseInsensitiveCompare:previousInitialUserEmailAddress] == NSOrderedSame)) {
 				person.emailAddress = initialUserEmailAddress;
 				person.needsUpdate = YES;
 				[person saveAsCurrentPerson];
@@ -160,10 +196,12 @@ NSString *const ATIntegrationKeyKahuna = @"kahuna";
 
 - (void)addCustomPersonData:(NSObject *)object withKey:(NSString *)key {
 	[self addCustomData:object withKey:key toCustomDataDictionary:customPersonData];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomPersonDataChangedNotification object:customPersonData];
 }
 
 - (void)addCustomDeviceData:(NSObject *)object withKey:(NSString *)key {
 	[self addCustomData:object withKey:key toCustomDataDictionary:customDeviceData];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:customDeviceData];
 }
 
 - (void)addCustomData:(NSObject *)object withKey:(NSString *)key toCustomDataDictionary:(NSMutableDictionary *)customData {
@@ -178,18 +216,19 @@ NSString *const ATIntegrationKeyKahuna = @"kahuna";
 		
 	if (allowedData) {
 		[customData setObject:object forKey:key];
-	}
-	else {
+	} else {
 		ATLogError(@"Apptentive custom data must be of type NSString, NSNumber, NSDate, or NSNull. Attempted to add custom data of type %@", NSStringFromClass([object class]));
 	}
 }
 
 - (void)removeCustomPersonDataWithKey:(NSString *)key {
 	[customPersonData removeObjectForKey:key];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomPersonDataChangedNotification object:customPersonData];
 }
 
 - (void)removeCustomDeviceDataWithKey:(NSString *)key {
 	[customDeviceData removeObjectForKey:key];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:customDeviceData];
 }
 
 - (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key {
@@ -200,16 +239,62 @@ NSString *const ATIntegrationKeyKahuna = @"kahuna";
 	[self removeCustomDeviceDataWithKey:key];
 }
 
+
+- (void)openAppStore {
+	if (!self.appID) {
+		ATLogError(@"Cannot open App Store because `[ATConnect sharedConnection].appID` is not set to your app's iTunes App ID.");
+		return;
+	}
+	
+	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:@"open_app_store_manually"];
+	
+	ATInteraction *appStoreInteraction = [[[ATInteraction alloc] init] autorelease];
+	appStoreInteraction.type = @"AppStoreRating";
+	appStoreInteraction.priority = 1;
+	appStoreInteraction.version = @"1.0.0";
+	appStoreInteraction.identifier = @"OpenAppStore";
+	appStoreInteraction.configuration = @{@"store_id": self.appID,
+										  @"method": @"app_store"};
+	
+	[[ATEngagementBackend sharedBackend] presentInteraction:appStoreInteraction fromViewController:nil];
+}
+
 - (NSDictionary *)integrationConfiguration {
 	return integrationConfiguration;
 }
 
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration {
 	[integrationConfiguration setObject:configuration forKey:integration];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:customDeviceData];
+}
+
+- (void)addIntegration:(NSString *)integration withDeviceToken:(NSData *)deviceToken {
+    const unsigned *tokenBytes = [deviceToken bytes];
+    NSString *token = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
+                       ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
+                       ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
+                       ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
+	
+	[[ATConnect sharedConnection] addIntegration:integration withConfiguration:@{@"token": token}];
 }
 
 - (void)removeIntegration:(NSString *)integration {
 	[integrationConfiguration removeObjectForKey:integration];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:customDeviceData];
+}
+
+- (void)addUrbanAirshipIntegrationWithDeviceToken:(NSData *)deviceToken {
+	[self addIntegration:ATIntegrationKeyUrbanAirship withDeviceToken:deviceToken];
+}
+
+- (void)addAmazonSNSIntegrationWithDeviceToken:(NSData *)deviceToken {
+	[self addIntegration:ATIntegrationKeyAmazonSNS withDeviceToken:deviceToken];
+}
+
+- (void)addParseIntegrationWithDeviceToken:(NSData *)deviceToken {
+	[self addIntegration:ATIntegrationKeyParse withDeviceToken:deviceToken];
 }
 
 - (BOOL)messageCenterEnabled {
@@ -222,8 +307,119 @@ NSString *const ATIntegrationKeyKahuna = @"kahuna";
 
 #if TARGET_OS_IPHONE
 
-- (BOOL)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController {
-	return [[ATEngagementBackend sharedBackend] engage:codePoint fromViewController:viewController];
+- (BOOL)willShowInteractionForEvent:(NSString *)event {
+	return [[ATEngagementBackend sharedBackend] willShowInteractionForLocalEvent:event];
+}
+
+- (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController {
+	return [self engage:event withCustomData:nil fromViewController:viewController];
+}
+
+- (BOOL)engage:(NSString *)event withCustomData:(NSDictionary *)customData fromViewController:(UIViewController *)viewController {
+	return [self engage:event withCustomData:customData withExtendedData:nil fromViewController:viewController];
+}
+
+- (BOOL)engage:(NSString *)event withCustomData:(NSDictionary *)customData withExtendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {
+	return [[ATEngagementBackend sharedBackend] engageLocalEvent:event userInfo:nil customData:customData extendedData:extendedData fromViewController:viewController];
+}
+
++ (NSDictionary *)extendedDataDate:(NSDate *)date {
+	NSDictionary *time = @{@"time": @{@"version": @1,
+									  @"timestamp": @([date timeIntervalSince1970])
+									  }
+						   };
+	return time;
+}
+
++ (NSDictionary *)extendedDataLocationForLatitude:(double)latitude longitude:(double)longitude {
+	// Coordinates sent to server in order (longitude, latitude)
+	NSDictionary *location = @{@"location": @{@"version": @1,
+											  @"coordinates": @[@(longitude), @(latitude)]
+											  }
+							   };
+	
+	return location;
+}
+
+
++ (NSDictionary *)extendedDataCommerceWithTransactionID:(NSString *)transactionID
+											affiliation:(NSString *)affiliation
+												revenue:(NSNumber *)revenue
+											   shipping:(NSNumber *)shipping
+													tax:(NSNumber *)tax
+											   currency:(NSString *)currency
+										  commerceItems:(NSArray *)commerceItems
+{
+	
+	NSMutableDictionary *commerce = [NSMutableDictionary dictionary];
+	commerce[@"version"] = @1;
+	
+	if (transactionID) {
+		commerce[@"id"] = transactionID;
+	}
+	
+	if (affiliation) {
+		commerce[@"affiliation"] = affiliation;
+	}
+	
+	if (revenue) {
+		commerce[@"revenue"] = revenue;
+	}
+	
+	if (shipping) {
+		commerce[@"shipping"] = shipping;
+	}
+	
+	if (tax) {
+		commerce[@"tax"] = tax;
+	}
+	
+	if (currency) {
+		commerce[@"currency"] = currency;
+	}
+	
+	if (commerceItems) {
+		commerce[@"items"] = commerceItems;
+	}
+	
+	return @{@"commerce": commerce};
+}
+
++ (NSDictionary *)extendedDataCommerceItemWithItemID:(NSString *)itemID
+												name:(NSString *)name
+											category:(NSString *)category
+											   price:(NSNumber *)price
+											quantity:(NSNumber *)quantity
+											currency:(NSString *)currency
+{
+	NSMutableDictionary *commerceItem = [NSMutableDictionary dictionary];
+	commerceItem[@"version"] = @1;
+
+	if (itemID) {
+		commerceItem[@"id"] = itemID;
+	}
+	
+	if (name) {
+		commerceItem[@"name"] = name;
+	}
+	
+	if (category) {
+		commerceItem[@"category"] = category;
+	}
+	
+	if (price) {
+		commerceItem[@"price"] = price;
+	}
+	
+	if (quantity) {
+		commerceItem[@"quantity"] = quantity;
+	}
+	
+	if (currency) {
+		commerceItem[@"currency"] = currency;
+	}
+	
+	return commerceItem;
 }
 
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController {
@@ -252,21 +448,10 @@ NSString *const ATIntegrationKeyKahuna = @"kahuna";
 }
 
 - (void)presentFeedbackDialogFromViewController:(UIViewController *)viewController {
-	NSString *title = ATLocalizedString(@"Give Feedback", @"First feedback screen title.");
+	NSString *title = ATLocalizedString(@"Give Feedback", @"Title of feedback screen.");
 	NSString *body = [NSString stringWithFormat:ATLocalizedString(@"Please let us know how to make %@ better for you!", @"Feedback screen body. Parameter is the app name."), [[ATBackend sharedBackend] appName]];
 	NSString *placeholder = ATLocalizedString(@"How can we help? (required)", @"First feedback placeholder text.");
 	[[ATBackend sharedBackend] presentIntroDialogFromViewController:viewController withTitle:title prompt:body placeholderText:placeholder];
-}
-
-
-- (void)presentUpgradeDialogFromViewControllerIfAvailable:(UIViewController *)viewController {
-	NSArray *interactions = [[ATEngagementBackend sharedBackend] interactionsForCodePoint:@"app.launch"];
-	for (ATInteraction *interaction in interactions) {
-		if ([interaction.type isEqualToString:@"UpgradeMessage"]) {
-			[[ATEngagementBackend sharedBackend] presentUpgradeMessageInteraction:interaction fromViewController:viewController];
-			break;
-		}
-	}
 }
 
 - (void)resetUpgradeData {

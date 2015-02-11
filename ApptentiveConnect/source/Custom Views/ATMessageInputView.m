@@ -24,6 +24,7 @@ UIEdgeInsets insetsForView(UIView *v) {
 
 @implementation ATMessageInputView {
 	CGFloat minHeight;
+	CGFloat textFieldEdgeInsetHeight;
 	CGFloat minTextFieldHeight;
 	CGFloat maxTextFieldHeight;
 	NSUInteger maxNumberOfLines;
@@ -41,14 +42,15 @@ UIEdgeInsets insetsForView(UIView *v) {
 	
 	textView.delegate = self;
 	minHeight = self.bounds.size.height;
-	minTextFieldHeight = textView.font.lineHeight;
-	maxTextFieldHeight = textView.font.lineHeight * maxNumberOfLines;
+	textFieldEdgeInsetHeight = 4;
+	minTextFieldHeight = textView.font.lineHeight + (2 * textFieldEdgeInsetHeight);
+	maxTextFieldHeight = textView.font.lineHeight * maxNumberOfLines + (2 * textFieldEdgeInsetHeight);
 	
 	textView.backgroundColor = [UIColor clearColor];
 	
 	textView.autoresizingMask = UIViewAutoresizingNone;
 	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
-		textViewContentInset = UIEdgeInsetsMake(-4, 0, -4, 0);
+		textViewContentInset = UIEdgeInsetsMake(-textFieldEdgeInsetHeight, 0, -textFieldEdgeInsetHeight, 0);
 		textView.backgroundColor = [UIColor whiteColor];
 		textView.layer.borderColor = [UIColor colorWithRed:222/255. green:222/255. blue:230/255. alpha:1].CGColor;
 		textView.layer.borderWidth = 1;
@@ -56,7 +58,7 @@ UIEdgeInsets insetsForView(UIView *v) {
 		self.backgroundColor = [UIColor colorWithRed:248/255. green:248/255. blue:248/255. alpha:1];
 	} else {
 		//TODO: Get rid of magic numbers here.
-		textViewContentInset = UIEdgeInsetsMake(-4, -2, -4, 0);
+		textViewContentInset = UIEdgeInsetsMake(-textFieldEdgeInsetHeight, -2, -textFieldEdgeInsetHeight, 0);
 	}
 	textView.contentInset = textViewContentInset;
 	textView.showsHorizontalScrollIndicator = NO;
@@ -89,6 +91,7 @@ UIEdgeInsets insetsForView(UIView *v) {
 }
 
 - (BOOL)resignFirstResponder {
+	[super resignFirstResponder];
 	return textView.resignFirstResponder;
 }
 
@@ -164,6 +167,20 @@ UIEdgeInsets insetsForView(UIView *v) {
 			[self.delegate messageInputView:self didChangeHeight:newFrame.size.height];
 		}
 	}];
+	
+	// Apparent iOS 7 bug where last line of text is not scrolled into view when entering newline characters.
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7.0"]) {
+		CGRect caretRect = [textView caretRectForPosition:textView.selectedTextRange.start];
+		if (!isnan(caretRect.origin.y) && !isinf(caretRect.origin.y)) {
+			CGFloat overflow = caretRect.origin.y + caretRect.size.height - (textView.bounds.size.height + textView.contentOffset.y - textView.contentInset.bottom - textView.contentInset.top);
+			if (overflow > 0){
+				CGPoint offset = textView.contentOffset;
+				offset.y += overflow + 12;
+				
+				[textView setContentOffset:offset animated:animated];
+			}
+		}
+	}
 }
 
 - (void)validateTextField {

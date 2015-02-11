@@ -11,5 +11,5 @@
 @interface RootViewController : UITableViewController {
 	NSSet *tags;
 }
-- (IBAction)showRating:(id)sender;
+
 @end

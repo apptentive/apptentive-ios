@@ -22,6 +22,7 @@
 #import "ATMessageCenterMetrics.h"
 #import "ATUtilities.h"
 #import "ATShadowView.h"
+#import "ATInteraction.h"
 
 #define DEG_TO_RAD(angle) ((M_PI * angle) / 180.0)
 #define RAD_TO_DEG(radians) (radians * (180.0/M_PI))
@@ -46,6 +47,7 @@ enum {
 + (CGFloat)rotationOfViewHierarchyInRadians:(UIView *)leafView;
 + (CGAffineTransform)viewTransformInWindow:(UIWindow *)window;
 - (void)statusBarChanged:(NSNotification *)notification;
+- (void)keyboardWasShown:(NSNotification *)notification;
 - (void)applicationDidBecomeActive:(NSNotification *)notification;
 - (void)feedbackChanged:(NSNotification *)notification;
 - (void)hide:(BOOL)animated;
@@ -62,7 +64,9 @@ enum {
 - (void)positionInWindow;
 @end
 
-@implementation ATMessagePanelViewController
+@implementation ATMessagePanelViewController {
+	CGRect lastKeyboardRect;
+}
 @synthesize window;
 @synthesize cancelButton;
 @synthesize sendButton;
@@ -96,6 +100,7 @@ enum {
 	[invalidEmailAddressAlert release], invalidEmailAddressAlert = nil;
 	emailRequiredAlert.delegate = nil;
 	[emailRequiredAlert release], emailRequiredAlert = nil;
+	[_interaction release], _interaction = nil;
 	delegate = nil;
 	[super dealloc];
 }
@@ -112,6 +117,8 @@ enum {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarChanged:) name:UIApplicationDidChangeStatusBarFrameNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardWillShowNotification object:nil];
 	
 	CALayer *l = self.view.layer;
 	
@@ -142,7 +149,6 @@ enum {
 	
 	// Animate in from above.
 	self.window.bounds = animationBounds;
-	self.window.windowLevel = UIWindowLevelNormal;
 	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"] && originalPresentingWindow) {
 		startingTintAdjustmentMode = originalPresentingWindow.tintAdjustmentMode;
 		originalPresentingWindow.tintAdjustmentMode = UIViewTintAdjustmentModeDimmed;
@@ -188,6 +194,18 @@ enum {
 		shadowView = [[ATShadowView alloc] initWithFrame:self.window.bounds];
 	}
 	shadowView.tag = kMessagePanelGradientLayerTag;
+	
+	// Fix for iOS 8.
+	// Should convert message panel to Auto Layout.
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"8.0"]) {
+		UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+		if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+			CGRect originZero = self.window.frame;
+			originZero.origin = CGPointZero;
+			self.window.frame = originZero;
+		}
+	}
+	
 	[self.window addSubview:shadowView];
 	[self.window sendSubviewToBack:shadowView];
 	shadowView.alpha = 1.0;
@@ -236,6 +254,10 @@ enum {
 	if ([[ATConnect sharedConnection] tintColor] && [self.view respondsToSelector:@selector(setTintColor:)]) {
 		[self.window setTintColor:[[ATConnect sharedConnection] tintColor]];
 	}
+	
+	// Higher window level fixes issue where text selection loupe showed through Message Panel to the view beneath.
+    self.window.windowLevel = UIWindowLevelNormal + 0.1;
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackChanged:) name:UITextViewTextDidChangeNotification object:self.feedbackView];
 	self.cancelButton = [[[ATCustomButton alloc] initWithButtonStyle:ATCustomButtonStyleCancel] autorelease];
 	[self.cancelButton setAction:@selector(cancelPressed:) forTarget:self];
@@ -314,12 +336,13 @@ enum {
 	[self.emailField resignFirstResponder];
 	[self.feedbackView resignFirstResponder];
 	
-	if (self.showEmailAddressField && [[ATConnect sharedConnection] emailRequired] && self.emailField.text.length == 0) {
+	BOOL emailRequired = self.interaction ? [self.interaction.configuration[@"email_required"] boolValue] : [[ATConnect sharedConnection] emailRequired];
+	
+	if (self.showEmailAddressField && emailRequired && self.emailField.text.length == 0) {
 		if (emailRequiredAlert) {
 			emailRequiredAlert.delegate = nil;
 			[emailRequiredAlert release], emailRequiredAlert = nil;
 		}
-		self.window.windowLevel = UIWindowLevelNormal;
 		self.window.userInteractionEnabled = NO;
 		self.window.layer.shouldRasterize = YES;
 		self.window.layer.rasterizationScale = [[UIScreen mainScreen] scale];
@@ -332,13 +355,12 @@ enum {
 		if (invalidEmailAddressAlert) {
 			[invalidEmailAddressAlert release], invalidEmailAddressAlert = nil;
 		}
-		self.window.windowLevel = UIWindowLevelNormal;
 		self.window.userInteractionEnabled = NO;
 		self.window.layer.shouldRasterize = YES;
 		self.window.layer.rasterizationScale = [[UIScreen mainScreen] scale];
 		NSString *title = ATLocalizedString(@"Invalid Email Address", @"Invalid email dialog title.");
 		NSString *message = nil;
-		if ([[ATConnect sharedConnection] emailRequired]) {
+		if (emailRequired) {
 			message = ATLocalizedString(@"That doesn't look like an email address. An email address is required for us to respond.", @"Invalid email dialog message (email is required).");
 		} else {
 			message = ATLocalizedString(@"That doesn't look like an email address. An email address will help us respond.", @"Invalid email dialog message.");
@@ -350,7 +372,6 @@ enum {
 			noEmailAddressAlert.delegate = nil;
 			[noEmailAddressAlert release], noEmailAddressAlert = nil;
 		}
-		self.window.windowLevel = UIWindowLevelNormal;
 		self.window.userInteractionEnabled = NO;
 		self.window.layer.shouldRasterize = YES;
 		self.window.layer.rasterizationScale = [[UIScreen mainScreen] scale];
@@ -378,7 +399,11 @@ enum {
 		field.keyboardType = UIKeyboardTypeEmailAddress;
 		field.delegate = self;
 		field.autocapitalizationType = UITextAutocapitalizationTypeNone;
-		field.placeholder = ATLocalizedString(@"Email Address", @"Email address popup placeholder text.");
+		if (self.interaction.configuration[@"email_hint_text"]) {
+			field.placeholder = self.interaction.configuration[@"email_hint_text"];
+		} else {
+			field.placeholder = ATLocalizedString(@"Email Address", @"Email address popup placeholder text.");
+		}
 		field.tag = kATEmailAlertTextFieldTag;
 		
 		if (!useNativeTextField) {
@@ -450,7 +475,6 @@ enum {
 }
 
 - (void)unhide:(BOOL)animated {
-	self.window.windowLevel = UIWindowLevelNormal;
 	self.window.hidden = NO;
 	if (animated) {
 		[UIView animateWithDuration:0.2 animations:^(void){
@@ -635,11 +659,15 @@ enum {
 		emailFrame.size.height = sizedEmail.height;
 		emailFrame.size.width = emailFrame.size.width - (horizontalPadding + extraHorzontalPadding)*2;
 		self.emailField = [[[UITextField alloc] initWithFrame:emailFrame] autorelease];
-		if ([[ATConnect sharedConnection] emailRequired]) {
-			self.emailField.placeholder = ATLocalizedString(@"Your Email (required)", @"Email Address Field Placeholder (email is required)");
-		}
-		else {
-			self.emailField.placeholder = ATLocalizedString(@"Your Email", @"Email Address Field Placeholder");
+		if (self.interaction.configuration[@"email_hint_text"]) {
+			self.emailField.placeholder = self.interaction.configuration[@"email_hint_text"];
+		} else {
+			if ([[ATConnect sharedConnection] emailRequired]) {
+				self.emailField.placeholder = ATLocalizedString(@"Your Email (required)", @"Email Address Field Placeholder (email is required)");
+			}
+			else {
+				self.emailField.placeholder = ATLocalizedString(@"Your Email", @"Email Address Field Placeholder");
+			}
 		}
 		self.emailField.font = emailFont;
 		self.emailField.adjustsFontSizeToFitWidth = YES;
@@ -649,7 +677,7 @@ enum {
 		self.emailField.autocapitalizationType = UITextAutocapitalizationTypeNone;
 		self.emailField.backgroundColor = [UIColor clearColor];
 		self.emailField.clearButtonMode = UITextFieldViewModeWhileEditing;
-		self.emailField.text = [self.delegate initialEmailAddressForMessagePanel:self];
+		self.emailField.text = [[ATBackend sharedBackend] initialEmailAddressForMessagePanel];
 		self.emailField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
 		[self.scrollView addSubview:self.emailField];
@@ -697,7 +725,10 @@ enum {
 	[self.scrollView addSubview:self.feedbackView];
 	offsetY += self.feedbackView.bounds.size.height;
 	
-	if (self.customPlaceholderText) {
+	if (self.interaction.configuration[@"message_hint_text"]) {
+		self.feedbackView.placeholder = self.interaction.configuration[@"message_hint_text"];
+	}
+	else if (self.customPlaceholderText) {
 		self.feedbackView.placeholder = self.customPlaceholderText;
 	} else {
 		self.feedbackView.placeholder = ATLocalizedString(@"Feedback (required)", @"Feedback placeholder");
@@ -833,14 +864,29 @@ enum {
 	[self positionInWindow];
 }
 
+- (void)keyboardWasShown:(NSNotification *)notification {
+	NSValue *keyboardRectValue = [[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey];
+	CGRect keyboardRect = [keyboardRectValue CGRectValue];
+	CGRect convertedKeyboardRect = [self.window convertRect:keyboardRect fromWindow:originalPresentingWindow];
+	if (!CGRectEqualToRect(CGRectZero, convertedKeyboardRect)) {
+		if (CGRectEqualToRect(lastKeyboardRect, convertedKeyboardRect)) {
+			return;
+		}
+		lastKeyboardRect = convertedKeyboardRect;
+		NSNumber *animationDuration = [[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+		if (animationDuration) {
+			[self performSelector:@selector(positionInWindow) withObject:nil afterDelay:0.1];
+		}
+	}
+}
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	if (self.window.hidden == NO) {
-		[self retain];
-		[self unhide:NO];
+	@autoreleasepool {
+		if (self.window.hidden == NO) {
+			[self retain];
+			[self unhide:NO];
+		}
 	}
-	[pool release], pool = nil;
 }
 
 - (void)feedbackChanged:(NSNotification *)notification {
@@ -852,7 +898,6 @@ enum {
 - (void)hide:(BOOL)animated {
 	[self retain];
 	
-	self.window.windowLevel = UIWindowLevelNormal;
 	[self.emailField resignFirstResponder];
 	[self.feedbackView resignFirstResponder];
 	
@@ -947,14 +992,24 @@ enum {
 	CGFloat originX = 0.0;
 	
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-		viewHeight = isLandscape ? 368.0 : 368.0;
+		if (CGRectEqualToRect(CGRectZero, lastKeyboardRect)) {
+			viewHeight = isLandscape ? 368.0 : 368.0;
+		} else {
+			CGFloat keyboardHeight = lastKeyboardRect.size.height;
+			viewHeight = self.view.window.bounds.size.height - (isLandscape ? keyboardHeight + 40 : keyboardHeight + 100 + 200);
+		}
 		originY = isLandscape ? 20.0 : 200;
 		viewWidth = windowWidth - 12*2 - 100.0;
 		originX = floorf((windowWidth - viewWidth)/2.0);
 	} else {
-		CGFloat landscapeKeyboardHeight = 162;
-		CGFloat portraitKeyboardHeight = 216;
-		viewHeight = self.view.window.bounds.size.height - (isLandscape ? landscapeKeyboardHeight + 8 - 6 : portraitKeyboardHeight + 8);
+		if (CGRectEqualToRect(CGRectZero, lastKeyboardRect)) {
+			CGFloat landscapeKeyboardHeight = 162;
+			CGFloat portraitKeyboardHeight = 216;
+			viewHeight = self.view.window.bounds.size.height - (isLandscape ? landscapeKeyboardHeight + 8 - 6 : portraitKeyboardHeight + 8);
+		} else {
+			CGFloat keyboardHeight = lastKeyboardRect.size.height;
+			viewHeight = self.view.window.bounds.size.height - (isLandscape ? keyboardHeight + 8 - 6 : keyboardHeight + 8);
+		}
 		viewWidth = windowWidth - 12;
 		originX = 6.0;
 		if (constrainViewWidth) {
@@ -967,6 +1022,17 @@ enum {
 	f.origin.x = originX;
 	f.size.width = viewWidth;
 	f.size.height = viewHeight;
+
+	// Fix for iOS 8.
+	// Should convert message panel to Auto Layout.
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"8.0"]) {
+		if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+			CGFloat width = screenBounds.size.width - 12;
+			CGFloat height = screenBounds.size.height - lastKeyboardRect.size.height - statusBarSize.height;
+			
+			f = CGRectMake(6, 0, width, height);
+		}
+	}
 	
 	return f;
 }
@@ -985,6 +1051,10 @@ enum {
 }
 
 - (void)positionInWindow {
+	if (![[NSThread currentThread] isMainThread]) {
+		[self performSelectorOnMainThread:@selector(positionInWindow) withObject:nil waitUntilDone:NO];
+		return;
+	}
 	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
 	
 	CGFloat angle = 0.0;
@@ -1027,9 +1097,59 @@ enum {
 	self.toolbarShadowImage.frame = toolbarShadowImageFrame;
 	
 	self.window.transform = CGAffineTransformMakeRotation(angle);
-	self.window.frame = newFrame;
+	
+	// Fix for iOS 8.
+	// Should convert message panel to Auto Layout.
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"8.0"]) {
+		CGRect windowFrame;
+		switch (orientation) {
+			case UIInterfaceOrientationLandscapeLeft:
+			case UIInterfaceOrientationLandscapeRight:
+			{
+				CGFloat statusBarShift = (orientation == UIInterfaceOrientationLandscapeLeft) ? statusBarSize.height : 0;
+				windowFrame = CGRectMake(statusBarShift, 0, originalPresentingWindow.bounds.size.height - statusBarSize.height, originalPresentingWindow.bounds.size.width);
+				break;
+			}
+			case UIInterfaceOrientationPortraitUpsideDown:
+			case UIInterfaceOrientationPortrait:
+			default:
+				windowFrame = newFrame;
+				break;
+		}
+		self.window.frame = windowFrame;
+	} else {
+		self.window.frame = newFrame;
+	}
+	
+	// Fix for iOS 8.
+	// Should convert message panel to Auto Layout.
 	CGRect onscreenRect = [self onscreenRectOfView];
-	self.containerView.frame = onscreenRect;
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"8.0"]) {
+		CGRect contentFrame;
+		switch (orientation) {
+			case UIInterfaceOrientationLandscapeLeft:
+			case UIInterfaceOrientationLandscapeRight:
+			{
+				CGFloat originY = 2;
+				CGFloat keyboardHeight = lastKeyboardRect.size.height;
+				CGFloat contentHeight = self.view.window.bounds.size.height - keyboardHeight - 2 * originY;
+
+				CGFloat contentWidth = self.view.window.bounds.size.width - 100.0;
+				CGFloat originX = floorf((self.view.window.bounds.size.width - contentWidth) / 2.0);
+
+				contentFrame = CGRectMake(originX, originY, contentWidth, contentHeight);
+				break;
+			}
+			case UIInterfaceOrientationPortraitUpsideDown:
+			case UIInterfaceOrientationPortrait:
+			default:
+				contentFrame = onscreenRect;
+				break;
+		}
+		self.containerView.frame = contentFrame;
+	} else {
+		self.containerView.frame = onscreenRect;
+	}
 	
 	[self textViewDidChange:self.feedbackView];
 	

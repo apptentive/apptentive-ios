@@ -11,10 +11,19 @@
 #import "ATEngagementGetManifestTask.h"
 #import "ATTaskQueue.h"
 #import "ATInteraction.h"
-#import "ATAppRatingFlow_Private.h"
+#import "ATInteractionInvocation.h"
 #import "ATConnect_Private.h"
-#import "ATInteractionUpgradeMessageViewController.h"
 #import "ATUtilities.h"
+#import "ApptentiveMetrics.h"
+#import "ATInteractionUpgradeMessageViewController.h"
+#import "ATInteractionEnjoymentDialogController.h"
+#import "ATInteractionRatingDialogController.h"
+#import "ATInteractionFeedbackDialogController.h"
+#import "ATInteractionMessageCenterController.h"
+#import "ATInteractionAppStoreController.h"
+#import "ATInteractionSurveyController.h"
+#import "ATInteractionTextModalController.h"
+#import "ATInteractionNavigateToLink.h"
 
 NSString *const ATEngagementInstallDateKey = @"ATEngagementInstallDateKey";
 NSString *const ATEngagementUpgradeDateKey = @"ATEngagementUpgradeDateKey";
@@ -32,6 +41,11 @@ NSString *const ATEngagementInteractionsInvokesBuildKey = @"ATEngagementInteract
 
 NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEngagementCachedInteractionsExpirationPreferenceKey";
 
+NSString *const ATEngagementCodePointHostAppVendorKey = @"local";
+NSString *const ATEngagementCodePointHostAppInteractionKey = @"app";
+NSString *const ATEngagementCodePointApptentiveVendorKey = @"com.apptentive";
+NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
+
 @implementation ATEngagementBackend
 
 + (ATEngagementBackend *)sharedBackend {
@@ -45,8 +59,6 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 
 - (id)init {
 	if ((self = [super init])) {
-		codePointInteractions = [[NSMutableDictionary alloc] init];
-		
 		NSDictionary *defaults = @{ATEngagementIsUpdateVersionKey: @NO,
 								   ATEngagementIsUpdateBuildKey: @NO,
 								   ATEngagementCodePointsInvokesTotalKey: @{},
@@ -57,23 +69,37 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 								   ATEngagementInteractionsInvokesLastDateKey: @{}};
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 		
-		[self updateVersionInfo];
-		
+		_engagementTargets = [[NSMutableDictionary alloc] init];
 		NSFileManager *fm = [NSFileManager defaultManager];
-		if ([fm fileExistsAtPath:[ATEngagementBackend cachedEngagementStoragePath]]) {
+		if ([fm fileExistsAtPath:[ATEngagementBackend cachedTargetsStoragePath]]) {
 			@try {
-				NSDictionary *archivedInteractions = [NSKeyedUnarchiver unarchiveObjectWithFile:[ATEngagementBackend cachedEngagementStoragePath]];
-				[codePointInteractions addEntriesFromDictionary:archivedInteractions];
+				NSDictionary *archivedTargets = [NSKeyedUnarchiver unarchiveObjectWithFile:[ATEngagementBackend cachedTargetsStoragePath]];
+				[_engagementTargets addEntriesFromDictionary:archivedTargets];
 			} @catch (NSException *exception) {
-				ATLogError(@"Unable to unarchive engagement: %@", exception);
+				ATLogError(@"Unable to unarchive engagement targets: %@", exception);
 			}
 		}
+
+		_engagementInteractions = [[NSMutableDictionary alloc] init];
+		if ([fm fileExistsAtPath:[ATEngagementBackend cachedInteractionsStoragePath]]) {
+			@try {
+				NSDictionary *archivedInteractions = [NSKeyedUnarchiver unarchiveObjectWithFile:[ATEngagementBackend cachedInteractionsStoragePath]];
+				[_engagementInteractions addEntriesFromDictionary:archivedInteractions];
+			} @catch (NSException *exception) {
+				ATLogError(@"Unable to unarchive engagement interactions: %@", exception);
+			}
+		}
+		
+		[self updateVersionInfo];
 	}
+	
 	return self;
 }
 
 - (void)dealloc {
-	[codePointInteractions release], codePointInteractions = nil;
+	[_engagementTargets release], _engagementTargets = nil;
+	[_engagementInteractions release], _engagementInteractions = nil;
+	
 	[super dealloc];
 }
 
@@ -86,6 +112,15 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 }
 
 - (BOOL)shouldRetrieveNewEngagementManifest {
+	
+	BOOL alwaysRetrieveManifest = NO;
+#if APPTENTIVE_DEBUG
+	alwaysRetrieveManifest = YES;
+#endif
+	if (alwaysRetrieveManifest) {
+		return YES;
+	}
+	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	
 	NSDate *expiration = [defaults objectForKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
@@ -96,10 +131,14 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 			return YES;
 		} else {
 			NSFileManager *fm = [NSFileManager defaultManager];
-			if (![fm fileExistsAtPath:[ATEngagementBackend cachedEngagementStoragePath]]) {
-				// If no file, check anyway.
+			if (![fm fileExistsAtPath:[ATEngagementBackend cachedTargetsStoragePath]]) {
 				return YES;
 			}
+			
+			if (![fm fileExistsAtPath:[ATEngagementBackend cachedInteractionsStoragePath]]) {
+				return YES;
+			}
+			
 			return NO;
 		}
 	} else {
@@ -107,19 +146,29 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	}
 }
 
-- (void)didReceiveNewCodePointInteractions:(NSDictionary *)receivedCodePointInteractions maxAge:(NSTimeInterval)expiresMaxAge {
+- (void)didReceiveNewTargets:(NSDictionary *)targets andInteractions:(NSDictionary *)interactions maxAge:(NSTimeInterval)expiresMaxAge {
+	if (!targets || !interactions) {
+		ATLogError(@"Error receiving new Engagement Framework targets and interactions.");
+		return;
+	}
+	
+	ATLogInfo(@"Received remote Interactions from Apptentive.");
+	
 	@synchronized(self) {
-		[NSKeyedArchiver archiveRootObject:receivedCodePointInteractions toFile:[ATEngagementBackend cachedEngagementStoragePath]];
-		// Store expiration.
+		[NSKeyedArchiver archiveRootObject:targets toFile:[ATEngagementBackend cachedTargetsStoragePath]];
+		[NSKeyedArchiver archiveRootObject:interactions toFile:[ATEngagementBackend cachedInteractionsStoragePath]];
+		
 		if (expiresMaxAge > 0) {
 			NSDate *date = [NSDate dateWithTimeInterval:expiresMaxAge sinceDate:[NSDate date]];
 			NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 			[defaults setObject:date forKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
-			[defaults synchronize];
 		}
 		
-		[codePointInteractions removeAllObjects];
-		[codePointInteractions addEntriesFromDictionary:receivedCodePointInteractions];
+		[_engagementTargets removeAllObjects];
+		[_engagementTargets addEntriesFromDictionary:targets];
+		
+		[_engagementInteractions removeAllObjects];
+		[_engagementInteractions addEntriesFromDictionary:interactions];
 		
 		[self updateVersionInfo];
 	}
@@ -151,43 +200,114 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 		[defaults setObject:@{} forKey:ATEngagementInteractionsInvokesVersionKey];
 		[defaults setObject:@{} forKey:ATEngagementInteractionsInvokesBuildKey];
 	}
+}
+
++ (NSString *)cachedTargetsStoragePath {
+	return [[[ATBackend sharedBackend] supportDirectoryPath] stringByAppendingPathComponent:@"cachedtargets.objects"];
+}
+
++ (NSString *)cachedInteractionsStoragePath {
+	return [[[ATBackend sharedBackend] supportDirectoryPath] stringByAppendingPathComponent:@"cachedinteractionsV2.objects"];
+}
+
+- (BOOL)willShowInteractionForLocalEvent:(NSString *)event {
+	NSString *codePoint = [[ATInteraction localAppInteraction] codePointForEvent:event];
 	
-	[defaults synchronize];
+	return [self willShowInteractionForCodePoint:codePoint];
 }
 
-+ (NSString *)cachedEngagementStoragePath {
-	return [[[ATBackend sharedBackend] supportDirectoryPath] stringByAppendingPathComponent:@"cachedinteractions.objects"];
-}
-
-- (NSArray *)interactionsForCodePoint:(NSString *)codePoint {
-	NSArray *interactions = [codePointInteractions objectForKey:codePoint];
-	ATLogInfo(@"Found %lu cached interactions for code point: %@", interactions.count, codePoint);
+- (BOOL)willShowInteractionForCodePoint:(NSString *)codePoint {
+	ATInteraction *interaction = [[ATEngagementBackend sharedBackend] interactionForEvent:codePoint];
 	
-	return interactions;
+	return (interaction != nil);
 }
 
-- (ATInteraction *)interactionForCodePoint:(NSString *)codePoint {
-	NSArray *interactions = [self interactionsForCodePoint:codePoint];
-	for (ATInteraction *interaction in interactions) {
-		if ([interaction criteriaAreMet]) {
-			ATLogInfo(@"Found valid %@ interaction for code point: %@", interaction.type, codePoint);
-			return interaction;
+- (ATInteraction *)interactionForInvocations:(NSArray *)invocations {
+	NSString *interactionID = nil;
+	
+	for (NSObject *invocationOrDictionary in invocations) {
+		ATInteractionInvocation *invocation = nil;
+		
+		// Allow parsing of ATInteractionInvocation and NSDictionary invocation objects
+		if ([invocationOrDictionary isKindOfClass:[ATInteractionInvocation class]]) {
+			invocation = (ATInteractionInvocation *)invocationOrDictionary;
+		} else if ([invocationOrDictionary isKindOfClass:[NSDictionary class]]) {
+			invocation = [ATInteractionInvocation invocationWithJSONDictionary:((NSDictionary *)invocationOrDictionary)];
+		} else {
+			ATLogError(@"Attempting to parse an invocation that is neither an ATInteractionInvocation or NSDictionary.");
+		}
+		
+		if (invocation && [invocation isKindOfClass:[ATInteractionInvocation class]]) {
+			if ([invocation isValid]) {
+				interactionID = invocation.interactionID;
+				break;
+			}
 		}
 	}
 	
-	ATLogInfo(@"No valid Apptentive interactions found for code point: %@", codePoint);
-	return nil;
+	ATInteraction *interaction = nil;
+	if (interactionID) {
+		interaction = _engagementInteractions[interactionID];
+	}
+	
+	return interaction;
 }
 
-- (BOOL)engage:(NSString *)codePoint fromViewController:(UIViewController *)viewController {
+- (ATInteraction *)interactionForEvent:(NSString *)event {
+	NSArray *invocations = _engagementTargets[event];
+	ATInteraction *interaction = [self interactionForInvocations:invocations];
+	
+	return interaction;
+}
+
++ (NSString *)stringByEscapingCodePointSeparatorCharactersInString:(NSString *)string {
+	// Only escape "%", "/", and "#".
+	// Do not change unless the server spec changes.
+	NSMutableString *escape = [string mutableCopy];
+	[escape replaceOccurrencesOfString:@"%" withString:@"%25" options:NSLiteralSearch range:NSMakeRange(0, escape.length)];
+	[escape replaceOccurrencesOfString:@"/" withString:@"%2F" options:NSLiteralSearch range:NSMakeRange(0, escape.length)];
+	[escape replaceOccurrencesOfString:@"#" withString:@"%23" options:NSLiteralSearch range:NSMakeRange(0, escape.length)];
+	
+	return [escape autorelease];
+}
+
++ (NSString *)codePointForVendor:(NSString *)vendor interactionType:(NSString *)interactionType event:(NSString *)event {
+	NSString *encodedVendor = [ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:vendor];
+	NSString *encodedInteractionType = [ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:interactionType];
+	NSString *encodedEvent = [ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:event];
+	
+	NSString *codePoint = [NSString stringWithFormat:@"%@#%@#%@", encodedVendor, encodedInteractionType, encodedEvent];
+	
+	return codePoint;
+}
+
+- (BOOL)engageApptentiveAppEvent:(NSString *)event {
+	return [[ATInteraction apptentiveAppInteraction] engage:event fromViewController:nil];
+}
+
+- (BOOL)engageLocalEvent:(NSString *)event userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {
+	return [[ATInteraction localAppInteraction] engage:event fromViewController:viewController];
+}
+
+- (BOOL)engageCodePoint:(NSString *)codePoint fromInteraction:(ATInteraction *)fromInteraction userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {
+	ATLogInfo(@"Engage Apptentive event: %@", codePoint);
+	
+	[[ApptentiveMetrics sharedMetrics] addMetricWithName:codePoint fromInteraction:fromInteraction info:userInfo customData:customData extendedData:extendedData];
+	
 	[self codePointWasEngaged:codePoint];
 	
 	BOOL didEngageInteraction = NO;
-	ATInteraction *interaction = [self interactionForCodePoint:codePoint];
+	
+	ATInteraction *interaction = [self interactionForEvent:codePoint];
 	if (interaction) {
+		ATLogInfo(@"--Running valid %@ interaction.", interaction.type);
 		[self presentInteraction:interaction fromViewController:viewController];
+		
 		[self interactionWasEngaged:interaction];
 		didEngageInteraction = YES;
+		
+		// Sync defaults so user doesn't see interaction more than once.
+		[[NSUserDefaults standardUserDefaults] synchronize];
 	}
 	
 	return didEngageInteraction;
@@ -253,8 +373,6 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	[codePointsInvokesTimeAgo setObject:[NSDate date] forKey:codePoint];
 	[defaults setObject:codePointsInvokesTimeAgo forKey:ATEngagementCodePointsInvokesLastDateKey];
 	[codePointsInvokesTimeAgo release];
-	
-	[defaults synchronize];
 }
 
 - (void)interactionWasSeen:(NSString *)interactionID {
@@ -317,15 +435,46 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	[interactionsInvokesLastDate setObject:[NSDate date] forKey:interaction.identifier];
 	[defaults setObject:interactionsInvokesLastDate forKey:ATEngagementInteractionsInvokesLastDateKey];
 	[interactionsInvokesLastDate release];
-	
-	[defaults synchronize];
 }
 
 - (void)presentInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
-	if ([interaction.type isEqualToString:@"UpgradeMessage"]) {
-		[self presentUpgradeMessageInteraction:interaction fromViewController:viewController];
-	} else if ([interaction.type isEqualToString:@"EnjoymentDialog"]) {
-		[self presentEnjoymentDialogInteraction:interaction fromViewController:viewController];
+	if (!interaction) {
+		ATLogError(@"Attempting to present an interaction that does not exist!");
+		return;
+	}
+	
+	switch (interaction.interactionType) {
+		case ATInteractionTypeUpgradeMessage:
+			[self presentUpgradeMessageInteraction:interaction fromViewController:viewController];
+			break;
+		case ATInteractionTypeEnjoymentDialog:
+			[self presentEnjoymentDialogInteraction:interaction fromViewController:viewController];
+			break;
+		case ATInteractionTypeRatingDialog:
+			[self presentRatingDialogInteraction:interaction fromViewController:viewController];
+			break;
+		case ATInteractionTypeFeedbackDialog:
+			[self presentFeedbackDialogInteraction:interaction fromViewController:viewController];
+			break;
+		case ATInteractionTypeMessageCenter:
+			[self presentMessageCenterInteraction:interaction fromViewController:viewController];
+			break;
+		case ATInteractionTypeAppStoreRating:
+			[self presentAppStoreRatingInteraction:interaction fromViewController:viewController];
+			break;
+		case ATInteractionTypeSurvey:
+			[self presentSurveyInteraction:interaction fromViewController:viewController];
+			break;
+		case ATInteractionTypeTextModal:
+			[self presentTextModalInteraction:interaction fromViewController:viewController];
+			break;
+		case ATInteractionTypeNavigateToLink:
+			[self presentNavigateToLinkInteraction:interaction];
+			break;
+		case ATInteractionTypeUnknown:
+		default:
+			ATLogError(@"Attempting to present an unknown interaction type!");
+			break;
 	}
 }
 
@@ -343,9 +492,73 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 
 - (void)presentEnjoymentDialogInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
 	NSAssert([interaction.type isEqualToString:@"EnjoymentDialog"], @"Attempted to present an EnjoymentDialog interaction with an interaction of type: %@", interaction.type);
-	ATLogError(@"Need to present an EnjoymentDialog here!");
+
+	ATInteractionEnjoymentDialogController *enjoymentDialog = [[ATInteractionEnjoymentDialogController alloc] initWithInteraction:interaction];
+	[enjoymentDialog showEnjoymentDialogFromViewController:viewController];
+	
+	[enjoymentDialog release];
 }
 
+- (void)presentRatingDialogInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
+	NSAssert([interaction.type isEqualToString:@"RatingDialog"], @"Attempted to present a RatingDialog interaction with an interaction of type: %@", interaction.type);
+	
+	ATInteractionRatingDialogController *ratingDialog = [[ATInteractionRatingDialogController alloc] initWithInteraction:interaction];
+	[ratingDialog showRatingDialogFromViewController:viewController];
+	
+	[ratingDialog release];
+}
+
+- (void)presentFeedbackDialogInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
+	NSAssert([interaction.type isEqualToString:@"FeedbackDialog"], @"Attempted to present a FeedbackDialog interaction with an interaction of type: %@", interaction.type);
+	
+	ATInteractionFeedbackDialogController *feedbackDialog = [[ATInteractionFeedbackDialogController alloc] initWithInteraction:interaction];
+	[feedbackDialog showFeedbackDialogFromViewController:viewController];
+	
+	[feedbackDialog release];
+}
+
+- (void)presentMessageCenterInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
+	NSAssert([interaction.type isEqualToString:@"MessageCenter"], @"Attempted to present a MessageCenter interaction with an interaction of type: %@", interaction.type);
+	
+	ATInteractionMessageCenterController *messageCenter = [[ATInteractionMessageCenterController alloc] initWithInteraction:interaction];
+	[messageCenter showMessageCenterFromViewController:viewController];
+	
+	[messageCenter release];
+}
+
+- (void)presentAppStoreRatingInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
+	NSAssert([interaction.type isEqualToString:@"AppStoreRating"], @"Attempted to present an App Store Rating interaction with an interaction of type: %@", interaction.type);
+	
+	ATInteractionAppStoreController *appStore = [[ATInteractionAppStoreController alloc] initWithInteraction:interaction];
+	[appStore openAppStoreFromViewController:viewController];
+	
+	[appStore release];
+}
+
+- (void)presentSurveyInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
+	NSAssert([interaction.type isEqualToString:@"Survey"], @"Attempted to present a Survey interaction with an interaction of type: %@", interaction.type);
+	
+	ATInteractionSurveyController *survey = [[ATInteractionSurveyController alloc] initWithInteraction:interaction];
+	[survey showSurveyFromViewController:viewController];
+	
+	[survey release];
+}
+
+- (void)presentTextModalInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
+	NSAssert([interaction.type isEqualToString:@"TextModal"], @"Attempted to present a Text Modal interaction with an interaction of type: %@", interaction.type);
+	
+	ATInteractionTextModalController *textModal = [[ATInteractionTextModalController alloc] initWithInteraction:interaction];
+	[textModal presentTextModalAlertFromViewController:viewController];
+
+	[textModal release];
+}
+
+
+- (void)presentNavigateToLinkInteraction:(ATInteraction *)interaction {
+	NSAssert([interaction.type isEqualToString:@"NavigateToLink"], @"Attempted to present a NavigateToLink interaction with an interaction of type: %@", interaction.type);
+
+	[ATInteractionNavigateToLink navigateToLinkWithInteraction:interaction];
+}
 
 - (void)resetUpgradeVersionInfo {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

@@ -14,17 +14,18 @@
 #import "ATHUDView.h"
 #import "ATRecordTask.h"
 #import "ATSurvey.h"
-#import "ATSurveys.h"
-#import "ATSurveysBackend.h"
 #import "ATSurveyMetrics.h"
 #import "ATSurveyQuestion.h"
 #import "ATSurveyResponse.h"
 #import "ATSurveyResponseTask.h"
-#import "ATLegacySurveyResponse.h"
 #import "ATTaskQueue.h"
+#import "ATEngagementBackend.h"
+#import "ATSurveyQuestionResponse.h"
 
 #define DEBUG_CELL_HEIGHT_PROBLEM 0
 #define kAssociatedQuestionKey ("associated_question")
+
+NSString *const ATInteractionSurveyEventLabelCancel = @"cancel";
 
 enum {
 	kTextViewTag = 1,
@@ -56,7 +57,6 @@ enum {
 - (id)initWithSurvey:(ATSurvey *)aSurvey {
 	if ((self = [super init])) {
 		startedSurveyDate = [[NSDate alloc] init];
-		[aSurvey addViewDate:startedSurveyDate];
 				
 		survey = [aSurvey retain];
 		sentNotificationsAboutQuestionIDs = [[NSMutableSet alloc] init];
@@ -86,6 +86,7 @@ enum {
 	[errorText release], errorText = nil;
 	[sentNotificationsAboutQuestionIDs release], sentNotificationsAboutQuestionIDs = nil;
 	[startedSurveyDate release], startedSurveyDate = nil;
+	[_interaction release], _interaction = nil;
 	[super dealloc];
 }
 
@@ -172,36 +173,29 @@ enum {
 		[task release], task = nil;
 	});
 	
-	if (!survey.successMessage) {
+	if (survey.showSuccessMessage && survey.successMessage) {
+		UIAlertView *successAlert = [[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Thanks!", @"Text in thank you display upon submitting survey.") message:survey.successMessage delegate:nil cancelButtonTitle:ATLocalizedString(@"OK", @"OK button title") otherButtonTitles:nil] autorelease];
+		[successAlert show];
+	} else {
 		ATHUDView *hud = [[ATHUDView alloc] initWithWindow:self.view.window];
 		hud.label.text = ATLocalizedString(@"Thanks!", @"Text in thank you display upon submitting survey.");
 		hud.fadeOutDuration = 5.0;
 		[hud show];
 		[hud autorelease];
-	} else {
-		UIAlertView *successAlert = [[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Thanks!", @"Text in thank you display upon submitting survey.") message:survey.successMessage delegate:nil cancelButtonTitle:ATLocalizedString(@"OK", @"OK button title") otherButtonTitles:nil] autorelease];
-		[successAlert show];
 	}
 	
-	NSDictionary *notificationInfo = [[NSDictionary alloc] initWithObjectsAndKeys:survey.identifier, ATSurveyIDKey, nil];
-	NSDictionary *metricsInfo = [[NSDictionary alloc] initWithObjectsAndKeys:survey.identifier, ATSurveyMetricsSurveyIDKey, [NSNumber numberWithInt:ATSurveyWindowTypeSurvey], ATSurveyWindowTypeKey, [NSNumber numberWithInt:ATSurveyEventTappedSend], ATSurveyMetricsEventKey, nil];
+	NSDictionary *metricsInfo = @{ATSurveyMetricsSurveyIDKey: survey.identifier ?: [NSNull null],
+								  ATSurveyWindowTypeKey: @(ATSurveyWindowTypeSurvey),
+								  ATSurveyMetricsEventKey: @(ATSurveyEventTappedSend),
+								  @"interaction_id": self.interaction.identifier ?: [NSNull null],
+								  };
+
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidHideWindowNotification object:nil userInfo:metricsInfo];
-	[metricsInfo release], metricsInfo = nil;
 	
+	[self.navigationController dismissViewControllerAnimated:YES completion:NULL];
 	
-	[[ATSurveysBackend sharedBackend] setDidSendSurvey:survey];
-	[[ATSurveysBackend sharedBackend] resetSurvey];
-	if ([self.navigationController respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
-		[self.navigationController dismissViewControllerAnimated:YES completion:NULL];
-	} else {
-#		pragma clang diagnostic push
-#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		[self.navigationController dismissModalViewControllerAnimated:YES];
-#		pragma clang diagnostic pop
-	}
-	
+	NSDictionary *notificationInfo = @{ATSurveyIDKey: (survey.identifier ?: [NSNull null])};
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveySentNotification object:nil userInfo:notificationInfo];
-	[notificationInfo release], notificationInfo = nil;
 	
 	[response release], response = nil;
 }
@@ -219,6 +213,7 @@ enum {
 	
 	if ([[ATConnect sharedConnection] tintColor] && [self.view respondsToSelector:@selector(setTintColor:)]) {
 		[self.navigationController.view setTintColor:[[ATConnect sharedConnection] tintColor]];
+		[self.view setTintColor:[[ATConnect sharedConnection] tintColor]];
 	}
 	
 	if (![survey responseIsRequired]) {
@@ -357,7 +352,9 @@ enum {
 			buttonCell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ATSurveySendCellIdentifier] autorelease];
 			buttonCell.textLabel.text = ATLocalizedString(@"Send Response", @"Survey send response button title");
 			buttonCell.textLabel.textAlignment = NSTextAlignmentCenter;
-			buttonCell.textLabel.textColor = [UIColor blueColor];
+			if ([self.view respondsToSelector:@selector(tintColor)]) {
+				buttonCell.textLabel.textColor = self.view.tintColor;
+			}
 			buttonCell.selectionStyle = UITableViewCellSelectionStyleBlue;
 		}
 		return buttonCell;
@@ -555,17 +552,34 @@ enum {
 				if (maxSelections == 0) {
 					maxSelections = NSUIntegerMax;
 				}
-				if (isChecked == NO && question.type == ATSurveyQuestionTypeMultipleSelect && [[question selectedAnswerChoices] count] == maxSelections) {
-					// Do nothing if unchecked and have already selected the maximum number of answers.
-				} else if (isChecked == NO) {
-					cell.accessoryType = UITableViewCellAccessoryCheckmark;
-					[question addSelectedAnswerChoice:answer];
-				} else if (isChecked) {
+				
+				BOOL deselectOtherAnswers = NO;
+				
+				if (isChecked) {
+					// Tapping a previously selected answer unselects it.
 					cell.accessoryType = UITableViewCellAccessoryNone;
 					[question removeSelectedAnswerChoice:answer];
+				} else if (!isChecked) {
+					// Select the new answer and deselect previous answer.
+					// A MultipleSelect with 1 max selection is essentially a MultipleChoice.
+					if (question.type == ATSurveyQuestionTypeMultipleChoice || (question.type == ATSurveyQuestionTypeMultipleSelect && maxSelections == 1)) {
+						cell.accessoryType = UITableViewCellAccessoryCheckmark;
+						[question addSelectedAnswerChoice:answer];
+						deselectOtherAnswers = YES;
+					} else if (question.type == ATSurveyQuestionTypeMultipleSelect) {
+						if (question.selectedAnswerChoices.count == maxSelections) {
+							// Do nothing; maximum number of answers have already been selected.
+							// Survey taker must manually deselect previous answers first.
+						} else {
+							cell.accessoryType = UITableViewCellAccessoryCheckmark;
+							[question addSelectedAnswerChoice:answer];
+							deselectOtherAnswers = NO;
+						}
+					}
 				}
-				// Deselect the other cells.
-				if (question.type == ATSurveyQuestionTypeMultipleChoice) {
+				
+				// Deselect previous answers, if needed.
+				if (deselectOtherAnswers) {
 					UITableViewCell *otherCell = nil;
 					for (NSUInteger i = 1; i < [self tableView:aTableView numberOfRowsInSection:indexPath.section]; i++) {
 						if (i != indexPath.row) {
@@ -577,9 +591,14 @@ enum {
 				}
 				
 				// Send notification.
-				NSDictionary *metricsInfo = [[NSDictionary alloc] initWithObjectsAndKeys:survey.identifier, ATSurveyMetricsSurveyIDKey, question.identifier, ATSurveyMetricsSurveyQuestionIDKey, [NSNumber numberWithInt:ATSurveyEventAnsweredQuestion], ATSurveyMetricsEventKey, nil];
+				NSDictionary *metricsInfo = @{ATSurveyMetricsSurveyIDKey:survey.identifier ?: [NSNull null],
+											  ATSurveyMetricsSurveyQuestionIDKey: question.identifier ?: [NSNull null],
+											  ATSurveyMetricsEventKey: @(ATSurveyEventAnsweredQuestion),
+											  @"interaction_id": self.interaction.identifier ?: [NSNull null],
+											  };
+				
 				[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidAnswerQuestionNotification object:nil userInfo:metricsInfo];
-				[metricsInfo release], metricsInfo = nil;
+
 			} else if (question.type == ATSurveyQuestionTypeSingeLine) {
 				ATCellTextView *textView = (ATCellTextView *)[cell viewWithTag:kTextViewTag];
 				[textView becomeFirstResponder];
@@ -691,9 +710,13 @@ enum {
 	
 	// Send notification.
 	if (![sentNotificationsAboutQuestionIDs containsObject:question.identifier]) {
-		NSDictionary *metricsInfo = [[NSDictionary alloc] initWithObjectsAndKeys:survey.identifier, ATSurveyMetricsSurveyIDKey, question.identifier, ATSurveyMetricsSurveyQuestionIDKey, [NSNumber numberWithInt:ATSurveyEventAnsweredQuestion], ATSurveyMetricsEventKey, nil];
+		NSDictionary *metricsInfo = @{ATSurveyMetricsSurveyIDKey: survey.identifier ?: [NSNull null],
+									  ATSurveyMetricsSurveyQuestionIDKey: question.identifier ?: [NSNull null],
+									  ATSurveyMetricsEventKey: @(ATSurveyEventAnsweredQuestion),
+									  @"interaction_id": self.interaction.identifier ?: [NSNull null],
+									  };
+		
 		[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidAnswerQuestionNotification object:nil userInfo:metricsInfo];
-		[metricsInfo release], metricsInfo = nil;
 		
 		[sentNotificationsAboutQuestionIDs addObject:question.identifier];
 	}
@@ -775,18 +798,15 @@ enum {
 }
 
 - (void)cancel:(id)sender {
-	NSDictionary *metricsInfo = [[NSDictionary alloc] initWithObjectsAndKeys:survey.identifier, ATSurveyMetricsSurveyIDKey, [NSNumber numberWithInt:ATSurveyWindowTypeSurvey], ATSurveyWindowTypeKey, [NSNumber numberWithInt:ATSurveyEventTappedCancel], ATSurveyMetricsEventKey, nil];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidHideWindowNotification object:nil userInfo:metricsInfo];
-	[metricsInfo release], metricsInfo = nil;
+	NSDictionary *metricsInfo = @{ATSurveyMetricsSurveyIDKey: survey.identifier ?: [NSNull null],
+								  ATSurveyWindowTypeKey: @(ATSurveyWindowTypeSurvey),
+								  ATSurveyMetricsEventKey: @(ATSurveyEventTappedCancel),
+								  @"interaction_id": self.interaction.identifier ?: [NSNull null],
+								  };
 	
-	if ([self.navigationController respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
-		[self.navigationController dismissViewControllerAnimated:YES completion:NULL];
-	} else {
-#		pragma clang diagnostic push
-#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		[self.navigationController dismissModalViewControllerAnimated:YES];
-#		pragma clang diagnostic pop
-	}
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidHideWindowNotification object:nil userInfo:metricsInfo];
+	
+	[self.navigationController dismissViewControllerAnimated:YES completion:NULL];
 }
 
 #pragma mark Keyboard Handling

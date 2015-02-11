@@ -10,7 +10,6 @@
 #import "ATBackend.h"
 #import "ATTask.h"
 #import "ATLegacyRecord.h"
-#import "ATLegacySurveyResponse.h"
 
 #define kATTaskQueueCodingVersion 1
 // Retry period in seconds.
@@ -50,7 +49,6 @@ static ATTaskQueue *sharedTaskQueue = nil;
 					@try {
 						NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
 						[unarchiver setClass:[ATLegacyRecord class] forClassName:@"ATRecord"];
-						[unarchiver setClass:[ATLegacySurveyResponse class] forClassName:@"ATSurveyResponse"];
 						sharedTaskQueue = [[unarchiver decodeObjectForKey:@"root"] retain];
 						[unarchiver release], unarchiver = nil;
 					} @catch (NSException *exception) {
@@ -184,26 +182,25 @@ static ATTaskQueue *sharedTaskQueue = nil;
 		[self performSelectorOnMainThread:@selector(start) withObject:nil waitUntilDone:NO];
 		return;
 	}
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	@synchronized(self) {
-		if (activeTask) {
-			[pool release], pool = nil;
-			return;
-		}
-		
-		if ([tasks count]) {
-			for (ATTask *task in tasks) {
-				if ([task canStart]) {
-					activeTask = task;
-					[activeTask addObserver:self forKeyPath:@"finished" options:NSKeyValueObservingOptionNew context:NULL];
-					[activeTask addObserver:self forKeyPath:@"failed" options:NSKeyValueObservingOptionNew context:NULL];
-					[activeTask start];
-					break;
+	@autoreleasepool {
+		@synchronized(self) {
+			if (activeTask) {
+				return;
+			}
+			
+			if ([tasks count]) {
+				for (ATTask *task in tasks) {
+					if ([task canStart]) {
+						activeTask = task;
+						[activeTask addObserver:self forKeyPath:@"finished" options:NSKeyValueObservingOptionNew context:NULL];
+						[activeTask addObserver:self forKeyPath:@"failed" options:NSKeyValueObservingOptionNew context:NULL];
+						[activeTask start];
+						break;
+					}
 				}
 			}
 		}
 	}
-	[pool release], pool = nil;
 }
 
 - (void)stop {
@@ -216,7 +213,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 - (NSString *)queueDescription {
 	NSMutableString *result = [[NSMutableString alloc] init];
 	@synchronized(self) {
-		[result appendString:[NSString stringWithFormat:@"<ATTaskQueue: %d task(s) [", [tasks count]]];
+		[result appendString:[NSString stringWithFormat:@"<ATTaskQueue: %lu task(s) [", (unsigned long)[tasks count]]];
 		NSMutableArray *parts = [[NSMutableArray alloc] init];
 		for (ATTask *task in tasks) {
 			[parts addObject:[task taskDescription]];

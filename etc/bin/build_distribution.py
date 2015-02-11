@@ -93,7 +93,7 @@ class Builder(object):
 				log("Unable to lipo static libraries")
 				log(output)
 				return False
-			paths_to_copy = [("source/ATConnect.h", "include/ATConnect.h"), ("source/Rating Flow/ATAppRatingFlow.h", "include/ATAppRatingFlow.h"), ("source/Surveys/ATSurveys.h", "include/ATSurveys.h"), ("../LICENSE.txt", "LICENSE.txt"), ("../README.md", "README.md"), ("../CHANGELOG.md", "CHANGELOG.md")]
+			paths_to_copy = [("source/ATConnect.h", "include/ATConnect.h"), ("../LICENSE.txt", "LICENSE.txt"), ("../README.md", "README.md"), ("../CHANGELOG.md", "CHANGELOG.md")]
 			for (project_path, destination_path) in paths_to_copy:
 				full_project_path = project_path
 				full_destination_path = os.path.join(self._output_dir(), destination_path)
@@ -178,11 +178,15 @@ class Builder(object):
 		sdk = 'iphoneos'
 		if is_simulator:
 			sdk = 'iphonesimulator'
-		command = """xcrun xcodebuild -target ApptentiveConnect -configuration Debug -sdk %s %s""" % (sdk, self._xcode_options(is_simulator=is_simulator, is_64bit=is_64bit))
+		command = """xcrun xcodebuild -target ApptentiveConnect -configuration Release -sdk %s %s""" % (sdk, self._xcode_options(is_simulator=is_simulator, is_64bit=is_64bit))
 		if is_64bit and is_simulator:
 			command += " ARCHS='x86_64' IPHONEOS_DEPLOYMENT_TARGET='7.0' VALID_ARCHS='x86_64'"
+		elif is_simulator and not is_64bit:
+			command += " ARCHS='i386' IPHONEOS_DEPLOYMENT_TARGET='5.0' VALID_ARCHS='i386'"
 		elif is_64bit:
-			command += " ARCHS='arm64' IPHONEOS_DEPLOYMENT_TARGET='7.0'"
+			command += " ARCHS='arm64' IPHONEOS_DEPLOYMENT_TARGET='7.0' VALID_ARCHS='arm64'"
+		elif not is_simulator and not is_64bit:
+			command += " ARCHS='armv7 armv7s' IPHONEOS_DEPLOYMENT_TARGET='5.0' VALID_ARCHS='armv7 armv7s'"
 		return command
 	
 	def _project_path(self, filename):
@@ -198,7 +202,7 @@ if __name__ == "__main__":
 		builder = Builder(dist_type=dist_type)
 		result = builder.build()
 		if result == True:
-			log("Build suceeded")
+			log("Build succeeded")
 		else:
 			log("Build failed!")
 			break

@@ -129,7 +129,7 @@
 {
     const CGFloat EffectColorAlpha = 0.6;
     UIColor *effectColor = tintColor;
-    int componentCount = CGColorGetNumberOfComponents(tintColor.CGColor);
+    size_t componentCount = CGColorGetNumberOfComponents(tintColor.CGColor);
     if (componentCount == 2) {
         CGFloat b;
         if ([tintColor getWhite:&b alpha:NULL]) {
@@ -202,7 +202,7 @@
             // ... if d is odd, use three box-blurs of size 'd', centered on the output pixel.
             // 
             CGFloat inputRadius = blurRadius * [[UIScreen mainScreen] scale];
-            NSUInteger radius = floor(inputRadius * 3. * sqrt(2 * M_PI) / 4 + 0.5);
+            uint32_t radius = floor(inputRadius * 3. * sqrt(2 * M_PI) / 4 + 0.5);
             if (radius % 2 != 1) {
                 radius += 1; // force radius to be odd so that the three box-blur methodology works.
             }
@@ -274,6 +274,28 @@
     UIGraphicsEndImageContext();
     return outputImage;
 }
+
+- (UIImage *)imageByTintingWithColor:(UIColor *)color {
+	UIGraphicsBeginImageContextWithOptions(self.size, NO, [[UIScreen mainScreen] scale]);
+	CGContextRef context = UIGraphicsGetCurrentContext();
+	
+	[color setFill];
+	CGContextSetBlendMode(context, kCGBlendModeNormal);
+	CGContextTranslateCTM(context, 0, self.size.height);
+	CGContextScaleCTM(context, 1.0, -1.0);
+	
+	CGRect rect = CGRectMake(0, 0, self.size.width, self.size.height);
+	CGContextDrawImage(context, rect, self.CGImage);
+	CGContextClipToMask(context, rect, self.CGImage);
+	CGContextAddRect(context, rect);
+	CGContextDrawPath(context, kCGPathFill);
+	
+	UIImage *tinted = UIGraphicsGetImageFromCurrentImageContext();
+	UIGraphicsEndImageContext();
+	
+	return tinted;
+}
+
 @end
 
 void ATImageEffects_UIImage_Bootstrap() {

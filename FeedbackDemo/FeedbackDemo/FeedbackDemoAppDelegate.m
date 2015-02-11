@@ -8,26 +8,14 @@
 
 #import "FeedbackDemoAppDelegate.h"
 #import "ATConnect.h"
-#import "ATAppRatingFlow.h"
 #import "defines.h"
-#import "ATSurveys.h"
 
 @implementation FeedbackDemoAppDelegate
 @synthesize window=_window;
 
 @synthesize navigationController=_navigationController;
-- (void)resetApptentiveRatings {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[defaults removeObjectForKey:@"ATAppRatingFlowRatedAppKey"];
-	[defaults removeObjectForKey:@"ATAppRatingFlowDeclinedToRateThisVersionKey"];
-	[defaults removeObjectForKey:@"ATAppRatingFlowUserDislikesThisVersionKey"];
-	[defaults removeObjectForKey:@"ATAppRatingFlowLastUsedVersionKey"];
-	[defaults removeObjectForKey:@"ATAppRatingFlowLastPromptDateKey"];
-	[defaults synchronize];
-}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-	[self resetApptentiveRatings];
 	// Override point for customization after application launch.
 	// Add the navigation controller's view to the window and display.
 	if ([self.window respondsToSelector:@selector(setRootViewController:)]) {
@@ -36,12 +24,11 @@
 		[self.window addSubview:self.navigationController.view];
 	}
 	[self.window makeKeyAndVisible];
+	
 	[[ATConnect sharedConnection] setApiKey:kApptentiveAPIKey];
-	
+	[ATConnect sharedConnection].appID = kApptentiveAppID;
+
 	[[ATConnect sharedConnection] addIntegration:@"feedback_demo_integration_configuration" withConfiguration:@{@"fake_apiKey": @"ABC-123-XYZ"}];
-	
-	ATAppRatingFlow *flow = [ATAppRatingFlow sharedRatingFlowWithAppID:kApptentiveAppID];
-	[flow showRatingFlowFromViewControllerIfConditionsAreMet:self.navigationController];
 	
 	double delayInSeconds = 2.0;
 	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
@@ -53,6 +40,12 @@
 			NSLog(@"Did not engage any interactions for code point \"app.launch\"");
 		}
 	});
+	
+	return YES;
+}
+
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+	NSLog(@"Apptentive Feedback Demo handled opening the URL: %@", url);
 	
 	return YES;
 }
@@ -81,7 +74,6 @@
 	/*
 	 Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 	 */
-	[[ATAppRatingFlow sharedRatingFlow] showRatingFlowFromViewControllerIfConditionsAreMet:self.navigationController];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

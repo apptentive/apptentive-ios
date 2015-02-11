@@ -79,7 +79,6 @@ typedef enum {
 	});
 }
 
-//TODO: Handle relayouting on iOS 4.
 - (void)viewDidLayoutSubviews {
 	[self relayoutSubviews];
 }
@@ -106,7 +105,10 @@ typedef enum {
 
 - (void)viewDidDisappear:(BOOL)animated {
 	[super viewDidDisappear:animated];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidHideNotification object:nil];
+	
+	// This metric is added in `ATMessageCenterBaseViewController`. Do not add it twice.
+	//[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidHideNotification object:nil];
+	
 	if (self.dismissalDelegate && [self.dismissalDelegate respondsToSelector:@selector(messageCenterDidDismiss:)]) {
 		[self.dismissalDelegate messageCenterDidDismiss:self];
 	}
@@ -277,7 +279,7 @@ typedef enum {
 				}
 				textCell.messageBubbleImage.image = chatBubbleImage;
 				
-				textCell.userIcon.image = [ATBackend imageNamed:@"at_mc_user_icon"];
+				textCell.userIcon.image = [ATBackend imageNamed:@"at_mc_user_icon_default"];
 				textCell.usernameLabel.text = ATLocalizedString(@"You", @"User name for text bubbles from users.");
 			} else {
 				textCell = developerCell;
@@ -292,7 +294,7 @@ typedef enum {
 				}
 				textCell.messageBubbleImage.image = chatBubbleImage;
 				
-				textCell.userIcon.image = [ATBackend imageNamed:@"at_mc_user_icon"];
+				textCell.userIcon.image = [ATBackend imageNamed:@"at_mc_user_icon_default"];
 			}
 			[[textCell retain] autorelease];
 			[userCell release], userCell = nil;
@@ -429,7 +431,7 @@ typedef enum {
 			ATFileMessage *fileMessage = (ATFileMessage *)message;
 			[currentCell configureWithFileMessage:fileMessage];
 		}
-		currentCell.userIcon.image = [ATBackend imageNamed:@"at_mc_user_icon"];
+		currentCell.userIcon.image = [ATBackend imageNamed:@"at_mc_user_icon_default"];
 		
 		
 		
@@ -481,9 +483,10 @@ typedef enum {
 		case NSFetchedResultsChangeInsert:
 			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
 			break;
-			
 		case NSFetchedResultsChangeDelete:
 			[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+			break;
+		default:
 			break;
 	}
 }

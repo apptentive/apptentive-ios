@@ -171,7 +171,7 @@
 }
 
 - (BOOL)processResult:(NSDictionary *)jsonResponse {
-	ATLogInfo(@"Getting json result: %@", jsonResponse);
+	ATLogDebug(@"Getting json result: %@", jsonResponse);
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
 	
 	ATSurveyResponse *response = [[ATSurveyResponse findSurveyResponseWithPendingID:self.pendingSurveyResponseID] retain];

@@ -7,23 +7,42 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @class ATInteractionUsageData;
 
-@interface ATInteraction : NSObject <NSCoding>
-@property (nonatomic, retain) NSString *identifier;
-@property (nonatomic, assign) int priority;
-@property (nonatomic, retain) NSString *type;
+typedef NS_ENUM(NSInteger, ATInteractionType){
+	ATInteractionTypeUnknown,
+	ATInteractionTypeUpgradeMessage,
+	ATInteractionTypeEnjoymentDialog,
+	ATInteractionTypeRatingDialog,
+	ATInteractionTypeFeedbackDialog,
+	ATInteractionTypeMessageCenter,
+	ATInteractionTypeAppStoreRating,
+	ATInteractionTypeSurvey,
+	ATInteractionTypeTextModal,
+	ATInteractionTypeNavigateToLink,
+};
+
+@interface ATInteraction : NSObject <NSCoding, NSCopying>
+@property (nonatomic, copy) NSString *identifier;
+@property (nonatomic, assign) NSInteger priority;
+@property (nonatomic, copy) NSString *type;
 @property (nonatomic, retain) NSDictionary *configuration;
-@property (nonatomic, retain) NSDictionary *criteria;
-@property (nonatomic, retain) NSString *version;
+@property (nonatomic, copy) NSString *version;
+@property (nonatomic, copy) NSString *vendor;
 
 + (ATInteraction *)interactionWithJSONDictionary:(NSDictionary *)jsonDictionary;
 
-- (ATInteractionUsageData *)usageData;
-- (BOOL)criteriaAreMet;
-- (BOOL)criteriaAreMetForUsageData:(ATInteractionUsageData *)usageData;
+// Used to engage local and app events
++ (ATInteraction *)localAppInteraction;
++ (ATInteraction *)apptentiveAppInteraction;
 
-- (NSPredicate *)criteriaPredicate;
-+ (NSPredicate *)predicateForInteractionCriteria:(NSDictionary *)interactionCriteria hasError:(BOOL *)hasError;
+- (ATInteractionType)interactionType;
+
+- (NSString *)codePointForEvent:(NSString *)event;
+
+- (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController;
+- (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController userInfo:(NSDictionary *)userInfo;
+
 @end

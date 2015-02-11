@@ -18,6 +18,7 @@
 #if TARGET_OS_IPHONE
 #import <sys/utsname.h>
 #endif
+#import <sys/sysctl.h>
 
 #define KINDA_EQUALS(a, b) (fabs(a - b) < 0.1)
 #define DEG_TO_RAD(angle) ((M_PI * angle) / 180.0)
@@ -96,7 +97,7 @@ static NSDateFormatter *dateFormatter = nil;
 		CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
 		CGFloat statusBarHeight = MIN(statusBarSize.width, statusBarSize.height);
 		
-		CGPoint origin;
+		CGPoint origin = CGPointZero;
 		UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
 		switch (orientation) {
 			case UIInterfaceOrientationPortrait:
@@ -110,6 +111,8 @@ static NSDateFormatter *dateFormatter = nil;
 				break;
 			case UIInterfaceOrientationLandscapeRight:
 				origin = CGPointMake(0, 0);
+				break;
+			default:
 				break;
 		}
 		[screenshot drawAtPoint:origin];
@@ -136,6 +139,8 @@ static NSDateFormatter *dateFormatter = nil;
 			break;
 		case UIInterfaceOrientationLandscapeRight:
 			imageOrientation = UIImageOrientationLeft;
+			break;
+		default:
 			break;
 	}
 	UIImage *rotated = [[[UIImage alloc] initWithCGImage:[image CGImage] scale:1 orientation:imageOrientation] autorelease];
@@ -313,6 +318,48 @@ static NSDateFormatter *dateFormatter = nil;
 	return result;
 }
 
++ (UIViewController *)rootViewControllerForCurrentWindow {
+	UIWindow *window = nil;
+	for (UIWindow *tmpWindow in [[UIApplication sharedApplication] windows]) {
+		if ([[tmpWindow screen] isEqual:[UIScreen mainScreen]] && [tmpWindow isKeyWindow]) {
+			window = tmpWindow;
+			break;
+		}
+	}
+
+	if (window && [window respondsToSelector:@selector(rootViewController)]) {
+		UIViewController *vc = [window rootViewController];
+		if ([vc respondsToSelector:@selector(presentedViewController)] && [vc presentedViewController]) {
+			return [vc presentedViewController];
+		}
+#		pragma clang diagnostic push
+#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
+		if ([vc respondsToSelector:@selector(modalViewController)] && [vc modalViewController]) {
+			return [vc modalViewController];
+		}
+#		pragma clang diagnostic pop
+		return vc;
+	} else {
+		return nil;
+	}
+}
+
++ (UIColor *)contrastingTextColorForBackgroundColor:(UIColor *)backgroundColor {
+	const CGFloat *componentColors = CGColorGetComponents(backgroundColor.CGColor);
+	
+    CGFloat colorBrightness = ((componentColors[0] * 299) + (componentColors[1] * 587) + (componentColors[2] * 114)) / 1000;
+    
+	UIColor *textColor;
+	
+	if (colorBrightness < 0.5) {
+		textColor = [UIColor whiteColor];
+    } else {
+		textColor = [UIColor blackColor];
+    }
+	
+	return textColor;
+}
+
 #elif TARGET_OS_MAC
 
 + (NSData *)pngRepresentationOfImage:(NSImage *)image {
@@ -357,7 +404,7 @@ static NSDateFormatter *dateFormatter = nil;
 }
 
 + (NSString *)currentSystemVersion {
-#if TARGET_OS_PHONE
+#if TARGET_OS_IPHONE
 	return [[UIDevice currentDevice] systemVersion];
 #elif TARGET_OS_MAC
 	NSProcessInfo *info = [NSProcessInfo processInfo];
@@ -365,6 +412,23 @@ static NSDateFormatter *dateFormatter = nil;
 #endif
 }
 
++ (NSString *)currentSystemBuild {
+	int mib[2] = {CTL_KERN, KERN_OSVERSION};
+	size_t size = 0;
+	
+	sysctl(mib, 2, NULL, &size, NULL, 0);
+	
+	char *answer = malloc(size);
+	int result = sysctl(mib, 2, answer, &size, NULL, 0);
+
+	NSString *results = nil;
+	if (result >= 0) {
+		results = [NSString stringWithCString:answer encoding:NSUTF8StringEncoding];
+	}
+	free(answer);
+	
+	return results;
+}
 
 + (NSString *)stringByEscapingForURLArguments:(NSString *)string {
 	CFStringRef result = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)string, NULL, (CFStringRef)@"%:/?#[]@!$&'()*+,;=", kCFStringEncodingUTF8);
@@ -574,6 +638,11 @@ static NSDateFormatter *dateFormatter = nil;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		NSArray *iconFiles = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIconFiles"];
+		if (!iconFiles) {
+			// Asset Catalog app icons
+			iconFiles = [NSBundle mainBundle].infoDictionary[@"CFBundleIcons"][@"CFBundlePrimaryIcon"][@"CFBundleIconFiles"];
+		}
+		
 		UIImage *maxImage = nil;
 		for (NSString *path in iconFiles) {
 			UIImage *image = [UIImage imageNamed:path];
@@ -759,7 +828,7 @@ done:
 	NSError *error = nil;
 	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^\\s*[^\\s@]+@[^\\s@]+\\s*$" options:NSRegularExpressionCaseInsensitive error:&error];
 	if (!regex) {
-		NSLog(@"Unable to build email regular expression: %@", error);
+		ATLogError(@"Unable to build email regular expression: %@", error);
 		return NO;
 	}
 	NSUInteger count = [regex numberOfMatchesInString:emailAddress options:NSMatchingAnchored range:NSMakeRange(0, [emailAddress length])];

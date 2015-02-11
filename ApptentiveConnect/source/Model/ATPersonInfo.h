@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-NSString *const ATCurrentPersonPreferenceKey;
+extern NSString *const ATCurrentPersonPreferenceKey;
 
 @interface ATPersonInfo : NSObject <NSCoding> {
 @private
@@ -32,6 +32,8 @@ NSString *const ATCurrentPersonPreferenceKey;
 + (ATPersonInfo *)newPersonFromJSON:(NSDictionary *)json;
 
 - (NSDictionary *)apiJSON;
+- (NSDictionary *)safeApiJSON;
+
 - (void)saveAsCurrentPerson;
 
 - (BOOL)hasEmailAddress;

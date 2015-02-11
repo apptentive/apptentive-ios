@@ -104,45 +104,49 @@
 
 - (void)start {
 	@synchronized (self) {
-		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-		
-		do { // once
-			if ([self isCancelled]) {
-				self.finished = YES;
-				break;
-			}
-			if ([self isFinished]) {
-				break;
-			}
-			if (request) {
-				[request release], request = nil;
-			}
-			request = [[NSMutableURLRequest alloc] initWithURL:self.targetURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:timeoutInterval];
-			for (NSString *key in headers) {
-				[request setValue:[headers objectForKey:key] forHTTPHeaderField:key];
-			}
-			if (HTTPMethod) {
-				[request setHTTPMethod:HTTPMethod];
-			}
-			if (HTTPBody) {
-				[request setHTTPBody:HTTPBody];
-			} else if (HTTPBodyStream) {
-				[request setHTTPBodyStream:HTTPBodyStream];
-			}
-			self.connection = [[[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO] autorelease];
-			[self.connection scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
-			[self.connection start];
-			self.executing = YES;
-		} while (NO);
-		[pool drain];
+		@autoreleasepool {
+			do { // once
+				if ([self isCancelled]) {
+					self.finished = YES;
+					break;
+				}
+				if ([self isFinished]) {
+					break;
+				}
+				if (request) {
+					[request release], request = nil;
+				}
+				request = [[NSMutableURLRequest alloc] initWithURL:self.targetURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:timeoutInterval];
+				for (NSString *key in headers) {
+					[request setValue:[headers objectForKey:key] forHTTPHeaderField:key];
+				}
+				if (HTTPMethod) {
+					[request setHTTPMethod:HTTPMethod];
+				}
+				if (HTTPBody) {
+					[request setHTTPBody:HTTPBody];
+				} else if (HTTPBodyStream) {
+					[request setHTTPBodyStream:HTTPBodyStream];
+				}
+				self.connection = [[[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO] autorelease];
+				[self.connection scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+				[self.connection start];
+				self.executing = YES;
+			} while (NO);
+		}
 	}
 }
 
+- (NSString *)statusLine {
+	return [[statusLine retain] autorelease];
+}
+
+- (NSDictionary *)responseHeaders {
+	return [[responseHeaders retain] autorelease];
+}
+
 - (NSData *)responseData {
-	if (data) {
-		return data;
-	}
-	return nil;
+	return [[data retain] autorelease];
 }
 
 #pragma mark Delegate Methods
@@ -151,12 +155,20 @@
 		[data setLength:0];
 		if (response ) {
 			if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+				if (statusLine) {
+					[statusLine release], statusLine = nil;
+				}
+				// Not linking CF networking, so we'll use the localized version of the status line.
+				statusLine = [[NSHTTPURLResponse localizedStringForStatusCode:response.statusCode] retain];
 				statusCode = response.statusCode;
 			} else {
 				statusCode = 200;
 			}
 			
-			NSDictionary *responseHeaders = [response allHeaderFields];
+			if (responseHeaders) {
+				[responseHeaders release], responseHeaders = nil;
+			}
+			responseHeaders = [[response allHeaderFields] copy];
 			NSString *cacheControlHeader = [responseHeaders valueForKey:@"Cache-Control"];
 			if (cacheControlHeader) {
 				expiresMaxAge = [ATUtilities maxAgeFromCacheControlHeader:cacheControlHeader];
@@ -214,7 +226,7 @@
 	}
 }
 
--(void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
 	@synchronized (self) {
 		if (credential && [challenge previousFailureCount] == 0) {
 			[[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
@@ -263,7 +275,10 @@
 	}
 #endif
 	if (r != nil && [r cachePolicy] == NSURLRequestUseProtocolCachePolicy) {
-		NSDictionary *responseHeaders = [httpResponse allHeaderFields];
+		if (responseHeaders) {
+			[responseHeaders release], responseHeaders = nil;
+		}
+		responseHeaders = [[httpResponse allHeaderFields] retain];
 		NSString *cacheControlHeader = [responseHeaders valueForKey:@"Cache-Control"];
 		NSString *expiresHeader = [responseHeaders valueForKey:@"Expires"];
 		if ((cacheControlHeader == nil) && (expiresHeader == nil)) {
@@ -307,8 +322,9 @@
 		if (connection) {
 			[connection release];
 		}
-		[data release];
-		data = nil;
+		[statusLine release], statusLine = nil;
+		[responseHeaders release], responseHeaders = nil;
+		[data release], data = nil;
 		
 		if (credential) {
 			[credential release];
@@ -343,6 +359,24 @@
 	} else if (HTTPBodyStream) {
 		[result appendString:@"<NSInputStream>"];
 	}
+	return result;
+}
+
+- (NSString *)responseAsString {
+	NSMutableString *result = [NSMutableString string];
+	[result appendFormat:@"%ld %@\n", (long)[self statusCode], [self statusLine]];
+	NSDictionary *allHeaders = [self responseHeaders];
+	for (NSString *key in allHeaders) {
+		[result appendFormat:@"%@: %@\n", key, allHeaders[key]];
+	}
+	[result appendString:@"\n\n"];
+	NSString *responseString = [[NSString alloc] initWithData:[self responseData] encoding:NSUTF8StringEncoding];
+	if (responseString != nil) {
+		[result appendString:responseString];
+	} else {
+		[result appendString:@"<NO RESPONSE BODY>"];
+	}
+	[responseString release], responseString = nil;
 	return result;
 }
 @end

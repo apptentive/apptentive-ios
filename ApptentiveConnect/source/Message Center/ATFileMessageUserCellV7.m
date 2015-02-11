@@ -20,7 +20,7 @@
 }
 
 - (void)setup {
-	self.userIconView.image = [ATBackend imageNamed:@"at_mc_user_icon"];
+	self.userIconView.image = [ATBackend imageNamed:@"at_mc_user_icon_default"];
 	self.userIconView.imageURL = [NSURL URLWithString:self.message.sender.profilePhotoURL];
 	
 	self.userIconView.layer.cornerRadius = self.userIconView.bounds.size.width*0.5;

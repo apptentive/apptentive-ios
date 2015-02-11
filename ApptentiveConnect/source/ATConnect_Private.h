@@ -8,6 +8,9 @@
 
 #import "ATConnect.h"
 
+extern NSString *const ATConnectCustomPersonDataChangedNotification;
+extern NSString *const ATConnectCustomDeviceDataChangedNotification;
+
 @interface ATConnect ()
 - (NSDictionary *)customPersonData;
 - (NSDictionary *)customDeviceData;
@@ -17,7 +20,6 @@
 
 #if TARGET_OS_IPHONE
 - (void)presentFeedbackDialogFromViewController:(UIViewController *)viewController;
-- (void)presentUpgradeDialogFromViewControllerIfAvailable:(UIViewController *)viewController;
 
 // For debugging only.
 - (void)resetUpgradeData;

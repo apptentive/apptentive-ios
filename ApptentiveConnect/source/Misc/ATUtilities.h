@@ -25,12 +25,18 @@
 + (UIImage *)imageByScalingImage:(UIImage *)image toSize:(CGSize)size scale:(CGFloat)contentScale fromITouchCamera:(BOOL)isFromITouchCamera;
 + (CGFloat)rotationOfViewHierarchyInRadians:(UIView *)leafView;
 + (CGAffineTransform)viewTransformInWindow:(UIWindow *)window;
+
++ (UIViewController *)rootViewControllerForCurrentWindow;
+
++ (UIColor *)contrastingTextColorForBackgroundColor:(UIColor *)backgroundColor;
+
 #elif TARGET_OS_MAC
 + (NSData *)pngRepresentationOfImage:(NSImage *)image;
 #endif
 + (NSString *)currentMachineName;
 + (NSString *)currentSystemName;
 + (NSString *)currentSystemVersion;
++ (NSString *)currentSystemBuild;
 
 + (NSString *)stringByEscapingForURLArguments:(NSString *)string;
 + (NSString *)randomStringOfLength:(NSUInteger)length;

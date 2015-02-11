@@ -30,6 +30,10 @@
 #	define AT_LOGGING_LEVEL_INFO 0
 #endif
 
+#ifndef AT_LOGGING_LEVEL_WARNING
+#	define AT_LOGGING_LEVEL_WARNING 1
+#endif
+
 #ifndef AT_LOGGING_LEVEL_ERROR
 #	define AT_LOGGING_LEVEL_ERROR 1
 #endif
@@ -37,6 +41,7 @@
 #if !(defined(AT_LOGGING_ENABLED) && AT_LOGGING_ENABLED)
 #	undef AT_LOGGING_LEVEL_DEBUG
 #	undef AT_LOGGING_LEVEL_INFO
+#	undef AT_LOGGING_LEVEL_WARNING
 #	undef AT_LOGGING_LEVEL_ERROR
 #endif
 
@@ -52,6 +57,12 @@
 #	define ATLogInfo(s, ...) AT_LOG_FORMAT(s, @"info", ##__VA_ARGS__)
 #else
 #	define ATLogInfo(s, ...)
+#endif
+
+#if AT_LOGGING_LEVEL_WARNING
+#	define ATLogWarning(s, ...) AT_LOG_FORMAT(s, @"warning", ##__VA_ARGS__)
+#else
+#	define ATLogWarning(s, ...)
 #endif
 
 #if AT_LOGGING_LEVEL_ERROR

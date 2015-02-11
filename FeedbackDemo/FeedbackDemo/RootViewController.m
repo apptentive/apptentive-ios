@@ -9,14 +9,11 @@
 
 #import "RootViewController.h"
 #import "ATConnect.h"
-#import "ATAppRatingFlow.h"
-#import "ATSurveys.h"
 #import "defines.h"
 
 enum kRootTableSections {
 	kMessageCenterSection,
-	kRatingSection,
-	kSurveySection,
+	kEventSection,
 	kSectionCount
 };
 
@@ -25,10 +22,13 @@ enum kMessageCenterRows {
 	kMessageCenterRowCount
 };
 
-enum kSurveyRows {
-	kSurveyRowShowSurvey,
-	kSurveyRowShowSurveyWithTags,
-	kSurveyRowCount
+enum kEventRows {
+	kEventRowEvent1,
+	kEventRowEvent2,
+	kEventRowEvent3,
+	kEventRowEvent4,
+	kEventRowEvent5,
+	kEventRowCount
 };
 
 @interface RootViewController ()
@@ -38,15 +38,6 @@ enum kSurveyRows {
 @end
 
 @implementation RootViewController
-
-- (IBAction)showRating:(id)sender {
-	ATAppRatingFlow *flow = [ATAppRatingFlow sharedRatingFlow];
-	flow.appID = kApptentiveAppID;
-	// Don't do this in production apps.
-	if ([flow respondsToSelector:@selector(showEnjoymentDialog:)]) {
-		[flow performSelector:@selector(showEnjoymentDialog:) withObject:self];
-	}
-}
 
 - (void)viewDidLoad {
 	ATConnect *connection = [ATConnect sharedConnection];
@@ -60,8 +51,13 @@ enum kSurveyRows {
 	
 	tags = [[NSSet alloc] initWithObjects:@"demoTag", nil];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyBecameAvailable:) name:ATSurveyNewSurveyAvailableNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unreadMessageCountChanged:) name:ATMessageCenterUnreadCountChangedNotification object:nil];
+	
+	// Engage an event with customData and extendedData
+	NSDictionary *commerceItem = [ATConnect extendedDataCommerceItemWithItemID:@"SKU_123" name:@"unlock_everything" category:@"in_app_purchase" price:@(4.99) quantity:@(1) currency:@"USD"];
+	NSDictionary *commerce = [ATConnect extendedDataCommerceWithTransactionID:@"123" affiliation:@"app_store" revenue:@(4.99) shipping:@(0) tax:@(1) currency:@"USD" commerceItems:@[commerceItem]];
+	NSArray *extendedData = @[[ATConnect extendedDataDate:[NSDate date]], [ATConnect extendedDataLocationForLatitude:14 longitude:10], commerce];
+	[[ATConnect sharedConnection] engage:@"event_with_data" withCustomData:@{@"customDataKey":@"customDataValue"} withExtendedData:extendedData fromViewController:self];
 }
 
 - (void)surveyBecameAvailable:(NSNotification *)notification {
@@ -119,8 +115,8 @@ enum kSurveyRows {
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	if (section == kSurveySection) {
-		return kSurveyRowCount;
+	if (section == kEventSection) {
+		return kEventRowCount;
 	} else if (section == kMessageCenterSection) {
 		return kMessageCenterRowCount;
 	}
@@ -129,45 +125,32 @@ enum kSurveyRows {
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	static NSString *CellIdentifier = @"Cell";
-	static NSString *SurveyTagsCell = @"SurveyTagsCell";
 	
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil) {
 		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 		cell.accessoryView = nil;
 	}
+	
 	cell.textLabel.textColor = [UIColor blackColor];
-	if (indexPath.section == kRatingSection) {
-		cell.textLabel.text = @"Start Rating Flow";
-	} else if (indexPath.section == kSurveySection) {
-		if (indexPath.row == kSurveyRowShowSurvey) {
-			if ([ATSurveys hasSurveyAvailableWithNoTags]) {
-				cell.textLabel.text = @"Show Survey";
-				cell.textLabel.textColor = [UIColor blackColor];
-			} else {
-				cell.textLabel.text = @"No Survey Available";
-				cell.textLabel.textColor = [UIColor grayColor];
-			}
-		} else if (indexPath.row == kSurveyRowShowSurveyWithTags) {
-			cell = [tableView dequeueReusableCellWithIdentifier:SurveyTagsCell];
-			if (cell == nil) {
-				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:SurveyTagsCell] autorelease];
-			}
-			if ([ATSurveys hasSurveyAvailableWithTags:tags]) {
-				cell.textLabel.text = @"Show Survey With Tags";
-				cell.textLabel.textColor = [UIColor blackColor];
-			} else {
-				cell.textLabel.text = @"No Survey Available With Tags";
-				cell.textLabel.textColor = [UIColor grayColor];
-			}
-			NSString *plural = (tags.count == 1) ? @"tag" : @"tags";
-			cell.detailTextLabel.text = [NSString stringWithFormat:@"%@: %@", plural, [[tags allObjects] componentsJoinedByString:@", "]];
+	
+	if (indexPath.section == kEventSection) {
+		if (indexPath.row == kEventRowEvent1) {
+			cell.textLabel.text = [NSString stringWithFormat:@"Engage `%@` event", kApptentiveEvent1];
+		} else if (indexPath.row == kEventRowEvent2) {
+			cell.textLabel.text = [NSString stringWithFormat:@"Engage `%@` event", kApptentiveEvent2];
+		} else if (indexPath.row == kEventRowEvent3) {
+			cell.textLabel.text = [NSString stringWithFormat:@"Engage `%@` event", kApptentiveEvent3];
+		} else if (indexPath.row == kEventRowEvent4) {
+			cell.textLabel.text = [NSString stringWithFormat:@"Engage `%@` event", kApptentiveEvent4];
+		} else if (indexPath.row == kEventRowEvent5) {
+			cell.textLabel.text = [NSString stringWithFormat:@"Engage `%@` event", kApptentiveEvent5];
 		}
 	} else if (indexPath.section == kMessageCenterSection) {
 		if (indexPath.row == kMessageCenterRowShowMessageCenter) {
 			cell.textLabel.text = @"Message Center";
 			UILabel *unreadLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-			unreadLabel.text = [NSString stringWithFormat:@"%d", [[ATConnect sharedConnection] unreadMessageCount]];
+			unreadLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)[[ATConnect sharedConnection] unreadMessageCount]];
 			unreadLabel.backgroundColor = [UIColor grayColor];
 			unreadLabel.textColor = [UIColor whiteColor];
 			unreadLabel.textAlignment = NSTextAlignmentCenter;
@@ -181,6 +164,7 @@ enum kSurveyRows {
 			}
 			unreadLabel.frame = paddedFrame;
 			unreadLabel.layer.cornerRadius = unreadLabel.frame.size.height / 2;
+			unreadLabel.layer.masksToBounds = YES;
 			
 			cell.accessoryView = [unreadLabel autorelease];
 		}
@@ -190,17 +174,18 @@ enum kSurveyRows {
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	if (indexPath.section == kRatingSection) {
-		[self showRating:nil];
-	} else if (indexPath.section == kSurveySection) {
-		if (indexPath.row == kSurveyRowShowSurvey) {
-			if ([ATSurveys hasSurveyAvailableWithNoTags]) {
-				[ATSurveys presentSurveyControllerWithNoTagsFromViewController:self];
-			}
-		} else if (indexPath.row == kSurveyRowShowSurveyWithTags) {
-			if ([ATSurveys hasSurveyAvailableWithTags:tags]) {
-				[ATSurveys presentSurveyControllerWithTags:tags fromViewController:self];
-			}
+	
+	if (indexPath.section == kEventSection) {
+		if (indexPath.row == kEventRowEvent1) {
+			[[ATConnect sharedConnection] engage:kApptentiveEvent1 fromViewController:self];
+		} else if (indexPath.row == kEventRowEvent2) {
+			[[ATConnect sharedConnection] engage:kApptentiveEvent2 fromViewController:self];
+		} else if (indexPath.row == kEventRowEvent3) {
+			[[ATConnect sharedConnection] engage:kApptentiveEvent3 fromViewController:self];
+		} else if (indexPath.row == kEventRowEvent4) {
+			[[ATConnect sharedConnection] engage:kApptentiveEvent4 fromViewController:self];
+		} else if (indexPath.row == kEventRowEvent5) {
+			 [[ATConnect sharedConnection] engage:kApptentiveEvent5 fromViewController:self];
 		}
 	} else if (indexPath.section == kMessageCenterSection) {
 		if (indexPath.row == kMessageCenterRowShowMessageCenter) {
@@ -218,19 +203,18 @@ enum kSurveyRows {
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 	NSString *title = nil;
-	if (section == kRatingSection) {
-		title = @"Ratings";
-	} else if (section == kSurveySection) {
-		title = @"Surveys";
+	if (section == kMessageCenterSection) {
+		title = @"Message Center";
+	} else if (section == kEventSection) {
+		title = @"Events";
 	}
+	
 	return title;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
 	NSString *title = nil;
-	if (section == kRatingSection) {
-		title = nil;
-	} else if (section == kSurveySection) {
+	if (section == kEventSection) {
 		title = [NSString stringWithFormat:@"ApptentiveConnect v%@", kATConnectVersionString];
 	}
 	return title;

@@ -86,7 +86,7 @@ enum kPersonDetailsTableSections {
 	
 	self.nameTextField.placeholder = ATLocalizedString(@"Name", @"Placeholder text for `Name` field when editing user details.");
 	if ([[ATConnect sharedConnection] emailRequired]) {
-		self.emailTextField.placeholder = ATLocalizedString(@"Email (required)", @"Placeholder text for *required* `Email` field when editing user details.");
+		self.emailTextField.placeholder = ATLocalizedString(@"Email (required)", @"Email Address Field Placeholder (email is required)");
 	} else {
 		self.emailTextField.placeholder = ATLocalizedString(@"Email", @"Placeholder text for `Email` field when editing user details.");
 	}
@@ -102,14 +102,16 @@ enum kPersonDetailsTableSections {
 	previousScrollInsets = self.tableView.contentInset;
 	UIImage *buttonBackgroundImage = [[ATBackend imageNamed:@"at_contact_button_bg"] stretchableImageWithLeftCapWidth:1 topCapHeight:40];
 	[self.logoButton setBackgroundImage:buttonBackgroundImage forState:UIControlStateNormal];
-	if ([[ATConnect sharedConnection] showTagline]) {
+	if (![ATBackend sharedBackend].hideBranding) {
 		self.logoImage.image = [ATBackend imageNamed:@"at_apptentive_logo"];
 		self.poweredByLabel.text = ATLocalizedString(@"Message Center Powered By", @"Text above Apptentive logo");
 		self.logoImage.hidden = NO;
 		self.poweredByLabel.hidden = NO;
+		self.logoButton.hidden = NO;
 	} else {
 		self.logoImage.hidden = YES;
 		self.poweredByLabel.hidden = YES;
+		self.logoButton.hidden = YES;
 	}
 	[self registerForKeyboardNotifications];
 	[self.emailTextField addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];

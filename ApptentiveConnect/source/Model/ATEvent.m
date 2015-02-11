@@ -42,7 +42,7 @@
 	}
 	if (self.dictionaryData) {
 		NSDictionary *dictionary = [self dictionaryForCurrentData];
-		result[@"data"] = dictionary;
+		[result addEntriesFromDictionary:dictionary];
 	}
 	
 	if (self.pendingEventID != nil) {
@@ -62,8 +62,10 @@
 	if (!result[@"nonce"]) {
 		ATLogError(@"Event json should include a `nonce`.");
 	}
+	
+	NSDictionary *apiJSON = @{@"event": result};
 		
-	return @{@"event": result};
+	return apiJSON;
 }
 
 - (void)setup {

@@ -11,9 +11,8 @@
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
 #import "ATFeedback.h"
+#import "ATLargeImageResizer.h"
 #import "ATUtilities.h"
-
-NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 
 #define kATContainerViewTag (5)
 #define kATLabelViewTag (6)
@@ -25,7 +24,9 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 - (void)dismissImagePickerPopover;
 @end
 
-@implementation ATSimpleImageViewController
+@implementation ATSimpleImageViewController {
+	ATLargeImageResizer *imageResizer;
+}
 @synthesize containerView;
 
 - (id)initWithDelegate:(NSObject<ATSimpleImageViewControllerDelegate> *)aDelegate {
@@ -40,6 +41,10 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 }
 
 - (void)dealloc {
+	if (imageResizer) {
+		[imageResizer cancel];
+		[imageResizer release], imageResizer = nil;
+	}
 	[self cleanupImageActionSheet];
 	imagePickerPopover.delegate = nil;
 	[imagePickerPopover release], imagePickerPopover = nil;
@@ -49,6 +54,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 	[scrollView release], scrollView = nil;
 	[containerView removeFromSuperview];
 	[containerView release], containerView = nil;
+	[_activityIndicator release];
 	[super dealloc];
 }
 
@@ -59,9 +65,14 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 #pragma mark - View lifecycle
 - (void)viewDidLoad {
 	[super viewDidLoad];
+	self.activityIndicator.hidden = YES;
 	self.navigationItem.title = ATLocalizedString(@"Screenshot", @"Screenshot view title");
 	self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(takePhoto:)] autorelease];
 	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)] autorelease];
+
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7.0"] && [[ATConnect sharedConnection] tintColor] && [self.navigationController.navigationBar respondsToSelector:@selector(setTintColor:)]) {
+		self.navigationController.navigationBar.tintColor = [[ATConnect sharedConnection] tintColor];
+	}
 }
 
 - (void)setupScrollView {
@@ -78,8 +89,12 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 	}
 	if (defaultScreenshot) {
 		for (UIView *subview in self.containerView.subviews) {
+			if ([subview isEqual:self.activityIndicator]) {
+				continue;
+			}
 			[subview removeFromSuperview];
 		}
+		
 		scrollView = [[ATCenteringImageScrollView alloc] initWithImage:defaultScreenshot];
 		scrollView.backgroundColor = [UIColor blackColor];
 		CGSize boundsSize = self.containerView.bounds.size;
@@ -104,24 +119,34 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 		[scrollView setZoomScale:minScale];
 		scrollView.frame = self.containerView.bounds;
 		[self.containerView addSubview:scrollView];
+	} else if (!self.activityIndicator.hidden) {
+		// We are resizing an image.
+		for (UIView *subview in self.containerView.subviews) {
+			if ([subview isEqual:self.activityIndicator]) {
+				continue;
+			}
+			[subview removeFromSuperview];
+		}
 	} else {
+		// No image, not resizing.
 		UIView *container = nil;
-		UITextView *label = nil;
+		UILabel *label = nil;
 		if ([self.containerView viewWithTag:kATContainerViewTag]) {
 			container = [[self.containerView viewWithTag:kATContainerViewTag] retain];
-			label = [(UITextView *)[self.containerView viewWithTag:kATLabelViewTag] retain];
+			label = [(UILabel *)[self.containerView viewWithTag:kATLabelViewTag] retain];
 		} else {
 			container = [[UIView alloc] initWithFrame:self.containerView.bounds];
 			container.tag = kATContainerViewTag;
 			container.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 			container.backgroundColor = [UIColor blackColor];
-			label = [[UITextView alloc] initWithFrame:CGRectZero];
+			label = [[UILabel alloc] initWithFrame:CGRectZero];
 			label.tag = kATLabelViewTag;
 			label.backgroundColor = [UIColor clearColor];
 			label.font = [UIFont boldSystemFontOfSize:16.0];
 			label.textColor = [UIColor whiteColor];
 			label.userInteractionEnabled = NO;
 			label.textAlignment = NSTextAlignmentCenter;
+			label.numberOfLines = 0;
 			label.text = ATLocalizedString(@"You can include a screenshot by choosing a photo from your photo library above.\n\nTo take a screenshot, hold down the power and home buttons at the same time.", @"Description of what to do when there is no screenshot.");
 		}
 		[self.containerView addSubview:container];
@@ -145,10 +170,12 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
 	//NSLog(@"size is: %@", NSStringFromCGRect(self.view.bounds));
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+	[super viewWillDisappear:animated];
 	if (shouldResign) {
 		[delegate imageViewControllerWillDismiss:self animated:animated];
 		[delegate release], delegate = nil;
@@ -158,6 +185,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 - (void)viewDidUnload {
 	[containerView removeFromSuperview];
 	[containerView release], containerView = nil;
+	[self setActivityIndicator:nil];
 	[super viewDidUnload];
 }
 
@@ -173,14 +201,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 			[blockDelegate release];
 		}];
 	} else {
-		if ([self respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
-			[self dismissViewControllerAnimated:YES completion:NULL];
-		} else {
-#			pragma clang diagnostic push
-#			pragma clang diagnostic ignored "-Wdeprecated-declarations"
-			[self dismissModalViewControllerAnimated:YES];
-#			pragma clang diagnostic pop
-		}
+		[self dismissViewControllerAnimated:YES completion:NULL];
 	}
 }
 
@@ -190,9 +211,9 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 		[self cleanupImageActionSheet];
 		[self dismissImagePickerPopover];
 		if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-			imageActionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel Button Title") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Choose From Library", @"Choose Photo Button Title"), ATLocalizedString(@"Take Photo", @"Take Photo Button Title"), nil];
+			imageActionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel button title") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Choose From Library", @"Choose Photo Button Title"), ATLocalizedString(@"Take Photo", @"Take Photo Button Title"), nil];
 		} else {
-			imageActionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel Button Title") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Choose From Library", @"Choose Photo Button Title"), nil];
+			imageActionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:ATLocalizedString(@"Cancel", @"Cancel button title") destructiveButtonTitle:nil otherButtonTitles:ATLocalizedString(@"Choose From Library", @"Choose Photo Button Title"), nil];
 		}
 		
 		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
@@ -205,8 +226,29 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 	}
 }
 
+#pragma mark ATLargeImageResizerDelegate
+- (void)imageResizerDoneResizing:(ATLargeImageResizer *)resizer result:(UIImage *)image {
+	self.activityIndicator.hidden = YES;
+	if (image) {
+		[delegate imageViewController:self pickedImage:image fromSource:isFromCamera ? ATFeedbackImageSourceCamera : ATFeedbackImageSourcePhotoLibrary];
+	}
+	imageResizer.delegate = nil;
+	[imageResizer release], imageResizer = nil;
+	[self setupScrollView];
+}
+
+- (void)imageResizerFailed:(ATLargeImageResizer *)resizer {
+	self.activityIndicator.hidden = YES;
+	imageResizer.delegate = nil;
+	[imageResizer release], imageResizer = nil;
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Unable to Use Image", @"Title of unable to use image alert.") message:ATLocalizedString(@"Unable to resize the image you picked.", @"Message of unable to use image alert.") delegate:nil cancelButtonTitle:ATLocalizedString(@"OK", @"OK button title") otherButtonTitles:nil];
+	[alert show];
+	[alert autorelease];
+	[self setupScrollView];
+}
+
 #pragma mark UIActionSheetDelegate
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
 	if (buttonIndex == 0) {
 		[self chooseImage];
 	} else if (buttonIndex == 1 && [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
@@ -220,29 +262,35 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 
 #pragma mark UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+	if (imageResizer) {
+		[imageResizer cancel];
+		[imageResizer release], imageResizer = nil;
+	}
+	if (delegate) {
+		[delegate imageViewControllerVoidedDefaultImage:self];
+	}
+	
+	NSURL *imageURL = [info objectForKey:UIImagePickerControllerReferenceURL];
 	UIImage *image = nil;
 	if ([info objectForKey:UIImagePickerControllerEditedImage]) {
 		image = [info objectForKey:UIImagePickerControllerEditedImage];
 	} else if ([info objectForKey:UIImagePickerControllerOriginalImage]) {
 		image = [info objectForKey:UIImagePickerControllerOriginalImage];
 	}
-	if (image) {
-		[delegate imageViewController:self pickedImage:image fromSource:isFromCamera ? ATFeedbackImageSourceCamera : ATFeedbackImageSourcePhotoLibrary];
-		[[NSNotificationCenter defaultCenter] postNotificationName:ATImageViewChoseImage object:self];
-	}
+	imageResizer = [[ATLargeImageResizer alloc] initWithImageAssetURL:imageURL originalImage:image delegate:self];
+	self.activityIndicator.hidden = NO;
 	[self setupScrollView];
+	[self.containerView bringSubviewToFront:self.activityIndicator];
 	
-	[self dismissImagePickerPopover];
-#	pragma clang diagnostic push
-#	pragma clang diagnostic ignored "-Wdeprecated-declarations"
-	if ([self respondsToSelector:@selector(dismissViewControllerAnimated:completion:)] && [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+	CGSize maxSize = CGSizeMake(1136, 1136);
+	if (imagePickerPopover) {
+		[imagePickerPopover dismissPopoverAnimated:YES];
+		[imageResizer resizeWithMaximumSize:maxSize];
+	} else {
 		[self dismissViewControllerAnimated:YES completion:^{
-			// pass
+			[imageResizer resizeWithMaximumSize:maxSize];
 		}];
-	} else if (self.modalViewController) {
-		[self.navigationController dismissModalViewControllerAnimated:YES];
 	}
-#	pragma clang diagnostic pop
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
@@ -255,7 +303,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 			// pass
 		}];
 	} else if (self.modalViewController) {
-		[self.navigationController dismissModalViewControllerAnimated:YES];
+		[self.navigationController dismissViewControllerAnimated:YES completion:NULL];
 	}
 #	pragma clang diagnostic pop
 }
@@ -312,13 +360,8 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 		} else {
 			[imagePickerPopover presentPopoverFromBarButtonItem:self.navigationItem.leftBarButtonItem permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
 		}
-	} else if ([self respondsToSelector:@selector(presentViewController:animated:completion:)]) {
-		[self presentViewController:imagePicker animated:YES completion:NULL];
 	} else {
-#		pragma clang diagnostic push
-#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		[self presentModalViewController:imagePicker animated:YES];
-#		pragma clang diagnostic pop
+		[self presentViewController:imagePicker animated:YES completion:NULL];
 	}
 	[imagePicker release];
 }
@@ -331,14 +374,7 @@ NSString * const ATImageViewChoseImage = @"ATImageViewChoseImage";
 	UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
 	imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
 	imagePicker.delegate = self;
-	if ([self respondsToSelector:@selector(presentViewController:animated:completion:)]) {
-		[self presentViewController:imagePicker animated:YES completion:NULL];
-	} else {
-#		pragma clang diagnostic push
-#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		[self presentModalViewController:imagePicker animated:YES];
-#		pragma clang diagnostic pop
-	}
+	[self presentViewController:imagePicker animated:YES completion:NULL];
 	[imagePicker release];
 }
 

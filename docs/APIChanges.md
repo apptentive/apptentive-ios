@@ -1,5 +1,71 @@
 This document tracks changes to the API between versions.
 
+# 1.6.0
+
+ * Added `willShowInteractionForEvent:` method for determining if an interaction will be shown the next time you engage the given event.
+ * Renamed `engage:(NSString *)...` parameter name from `eventLabel` to `event`.
+
+# 1.5.7
+
+ * Added `ATSurveyShownNotification` notification when a survey is shown.
+
+# 1.5.5
+
+ * Added `addParseIntegrationWithDeviceToken:` for integrating with Parse's Push Notification service.
+
+# 1.5.4
+ * Changed the App Store rating URL to open the "Reviews" tab directly in iOS 7.1+.
+ 
+ * Added API methods for attaching `customData` and `extendedData` to events:  
+  - `engage:withCustomData:fromViewController:` 
+  - `engage:withCustomData:withExtendedData:fromViewController:`
+  
+ * Added methods to easily construct `extendedData` dictionaries in the specific Apptentive format:  
+  - `extendedDataDate:`
+  - `extendedDataLocationForLatitude:longitude:`
+  - `extendedDataCommerceWithTransactionID:affiliation:revenue:shipping:tax:currency:commerceItems:`
+  - `extendedDataCommerceItemWithItemID:name:category:price:quantity:currency:`
+  
+# 1.5.3
+ 
+ * Added ability to remotely hide Apptentive branding in your app via the Apptentive dashboard, contingent upon your account plan.
+ * Added `initiallyHideBranding` property, which hides Apptentive branding in the time prior to the app's initial configuration being retrieved.
+ * Removed `showTagLine` property, which has been replaced by `initiallyHideBranding` and the remote configuration.
+
+# 1.5.1
+
+ * The `showTagLine` property of `ATConnect` now makes the "Powered By Apptentive" logo in Message Center unclickable.
+ * The language code used for delivering localizations now uses `[[NSLocale preferredLanguages] firstObject]` rather than the `NSLocaleLanguageCode` locale component.
+
+# 1.5.0
+
+Surveys are now targeted at Apptentive events via your online dashboard. Log events in your app by calling `engage:fromViewController`.
+
+* Removed `ASurveys.h` header file.
+* Moved `ATSurveySentNotification` and `ATSurveyIDKey` from `ATAppRatingFlow` to `ATConnect`.
+* Removed `ATSurveyNewSurveyAvailableNotification`.
+* Removed `ATAppRatingFlow.h` header file.
+* Moved `apiKey` property from `ATAppRatingFlow` to `ATConnect`.
+* Moved `ATAppRatingFlowUserAgreedToRateAppNotification` notification from `ATAppRatingFlow` to `ATConnect`.
+
+# 1.4.3
+
+* Added `debuggingOptions` property on ATConnect that allows the developer to specify debug logging preferences for their app.
+
+# 1.4.2
+
+* Added `addAmazonSNSIntegrationWithDeviceToken:` method for integrating with Amazon Web Services (AWS) Simple Notification Service (SNS).
+
+# 1.4.0
+
+* Argument `codePoint` renamed to `eventLabel` in `engage:fromViewController:`
+
+# 1.3.0
+
+* Added convenience methods for integrating with Apptentive:
+ - `addIntegration:withDeviceToken:`
+ - `addUrbanAirshipIntegrationWithDeviceToken:`
+
 # 1.2.9
 
 The `initialUserEmailAddress` can now be updated after a user sends feedback with no email address.

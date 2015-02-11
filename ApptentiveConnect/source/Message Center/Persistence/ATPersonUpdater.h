@@ -11,6 +11,8 @@
 #import "ATAPIRequest.h"
 #import "ATPersonInfo.h"
 
+extern NSString *const ATPersonLastUpdateValuePreferenceKey;
+
 @protocol ATPersonUpdaterDelegate;
 
 @interface ATPersonUpdater : NSObject <ATAPIRequestDelegate> {

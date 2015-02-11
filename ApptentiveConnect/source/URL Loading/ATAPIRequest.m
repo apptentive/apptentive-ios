@@ -8,10 +8,13 @@
 
 #import "ATAPIRequest.h"
 #import "ATConnect.h"
+#import "ATConnect_Debugging.h"
 #import "ATConnect_Private.h"
 #import "ATConnectionManager.h"
 #import "ATJSONSerialization.h"
 #import "ATURLConnection.h"
+#import "ATWebClient.h"
+#import "ATWebClient_Private.h"
 
 #if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
@@ -87,7 +90,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	@synchronized(self) {
 		if (cancelled) return;
 	}
-	int statusCode = sender.statusCode;
+	NSInteger statusCode = sender.statusCode;
 	expiresMaxAge = [sender expiresMaxAge];
 	switch (statusCode) {
 		case 200:
@@ -100,6 +103,11 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 			self.failed = YES;
 			self.errorTitle = ATLocalizedString(@"Authentication Failed", @"");
 			self.errorMessage = ATLocalizedString(@"Wrong username and/or password.", @"");
+			break;
+		case 422:
+			self.failed = YES;
+			self.errorTitle = ATLocalizedString(@"Unprocessable Entity", @"");
+			self.errorMessage = ATLocalizedString(@"The request was well-formed but was unable to be followed due to semantic errors.", @"");
 			break;
 		case 304:
 			break;
@@ -125,8 +133,19 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 			if (sender.statusCode == 401) {
 				ATLogDebug(@"Your Apptentive API key may not be set correctly!");
 			}
-			ATLogDebug(@"Request was: %@", [connection requestAsString]);
-			ATLogDebug(@"Response was: %@", responseString);
+			if (sender.statusCode == 422) {
+				if ([[connection.targetURL absoluteString] isEqualToString:[[ATWebClient sharedClient] apiURLStringWithPath:@"events"]]) {
+					ATLogWarning(@"Event was invalid; sent with malformed customData or extendedData.");
+				}
+			}
+			if ([ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogHTTPFailures ||
+				[ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogAllHTTPRequests) {
+				ATLogDebug(@"Request was:\n%@", [connection requestAsString]);
+				ATLogDebug(@"Response was:\n%@", [connection responseAsString]);
+			}
+		} else if ([ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogAllHTTPRequests) {
+			ATLogDebug(@"Request was:\n%@", [connection requestAsString]);
+			ATLogDebug(@"Response was:\n%@", [connection responseAsString]);
 		}
 		
 		if (!d) break;
@@ -185,16 +204,13 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 		[responseString release], responseString = nil;
 	}
 	
-	/*!!!!! Prefix line with // to debug HTTP stuff.
-	 if (YES) {
-	 NSData *d = [sender responseData];
-	 NSString *a = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];
-	 ATLogError(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
-	 ATLogInfo(@"Status was: %d", sender.statusCode);
-	 ATLogDebug(@"Request was: %@", [connection requestAsString]);
-	 ATLogDebug(@"Response was: %@", a);
-	 }
-	 // */
+	if ([ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogHTTPFailures ||
+		[ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogAllHTTPRequests) {
+		ATLogError(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
+		ATLogInfo(@"Status was: %d", sender.statusCode);
+		ATLogDebug(@"Request was:\n%@", [connection requestAsString]);
+		ATLogDebug(@"Response was:\n%@", [connection responseAsString]);
+	}
 	if (delegate) {
 		[delegate at_APIRequestDidFail:self];
 	}

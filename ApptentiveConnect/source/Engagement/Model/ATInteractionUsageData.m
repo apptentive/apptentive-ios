@@ -7,9 +7,12 @@
 //
 
 #import "ATInteractionUsageData.h"
+#import "ATBackend.h"
+#import "ATConnect.h"
 #import "ATEngagementBackend.h"
-#import "ATAppRatingFlow_Private.h"
 #import "ATUtilities.h"
+#import "ATDeviceInfo.h"
+#import "ATPersonInfo.h"
 
 @implementation ATInteractionUsageData
 
@@ -18,6 +21,9 @@
 @synthesize timeSinceInstallBuild = _timeSinceInstallBuild;
 @synthesize applicationVersion = _applicationVersion;
 @synthesize applicationBuild = _applicationBuild;
+@synthesize sdkVersion = _sdkVersion;
+@synthesize sdkDistribution = _sdkDistribution;
+@synthesize sdkDistributionVersion = _sdkDistributionVersion;
 @synthesize isUpdateVersion = _isUpdateVersion;
 @synthesize isUpdateBuild = _isUpdateBuild;
 @synthesize codePointInvokesTotal = _codePointInvokesTotal;
@@ -29,25 +35,46 @@
 @synthesize interactionInvokesBuild = _interactionInvokesBuild;
 @synthesize interactionInvokesTimeAgo = _interactionInvokesTimeAgo;
 
-- (id)initWithInteraction:(ATInteraction *)interaction {
-	if (self = [super init]) {
-		_interaction = interaction;
-	}
-	return self;
+- (void)dealloc {
+	[_timeSinceInstallTotal release], _timeSinceInstallTotal = nil;
+	[_timeSinceInstallVersion release], _timeSinceInstallVersion = nil;
+	[_timeSinceInstallBuild release], _timeSinceInstallBuild = nil;
+	[_applicationVersion release], _applicationVersion = nil;
+	[_applicationBuild release], _applicationBuild = nil;
+	[_sdkVersion release], _sdkVersion = nil;
+	[_sdkDistribution release], _sdkDistribution = nil;
+	[_sdkDistributionVersion release], _sdkDistributionVersion = nil;
+	[_currentTime release], _currentTime = nil;
+	[_isUpdateVersion release], _isUpdateVersion = nil;
+	[_isUpdateBuild release], _isUpdateBuild = nil;
+	[_codePointInvokesTotal release], _codePointInvokesTotal = nil;
+	[_codePointInvokesVersion release], _codePointInvokesVersion = nil;
+	[_codePointInvokesBuild release], _codePointInvokesBuild = nil;
+	[_codePointInvokesTimeAgo release], _codePointInvokesTimeAgo = nil;
+	[_interactionInvokesTotal release], _interactionInvokesTotal = nil;
+	[_interactionInvokesVersion release], _interactionInvokesVersion = nil;
+	[_interactionInvokesBuild release], _interactionInvokesBuild = nil;
+	[_interactionInvokesTimeAgo release], _interactionInvokesTimeAgo = nil;
+	[super dealloc];
 }
 
-+ (ATInteractionUsageData *)usageDataForInteraction:(ATInteraction *)interaction {
-	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] initWithInteraction:interaction];
-	return [usageData autorelease];
++ (ATInteractionUsageData *)usageData {
+	ATInteractionUsageData *usageData = [[[ATInteractionUsageData alloc] init] autorelease];
+	
+	return usageData;
 }
 
 - (NSString *)description {
-	NSString *title = [NSString stringWithFormat:@"Usage Data For interaction %@", self.interaction.identifier];
+	NSString *title = [NSString stringWithFormat:@"Engamement Framework Usage Data:"];
+	
 	NSDictionary *data = @{@"timeSinceInstallTotal" : self.timeSinceInstallTotal ?: [NSNull null],
 						   @"timeSinceInstallVersion" : self.timeSinceInstallVersion ?: [NSNull null],
 						   @"timeSinceInstallBuild" : self.timeSinceInstallBuild ?: [NSNull null],
 						   @"applicationVersion" : self.applicationVersion ?: [NSNull null],
 						   @"applicationBuild" : self.applicationBuild ?: [NSNull null],
+						   @"sdkVersion" : self.sdkVersion ? [NSNull null],
+						   @"sdkDistribution" : self.sdkDistribution ? [NSNull null],
+						   @"sdkDistributionVersion" : self.sdkDistributionVersion ? [NSNull null],
 						   @"isUpdateVersion" : self.isUpdateVersion ?: [NSNull null],
 						   @"isUpdateBuild" : self.isUpdateBuild ?: [NSNull null],
 						   @"codePointInvokesTotal" : self.codePointInvokesTotal ?: [NSNull null],
@@ -67,10 +94,26 @@
 	 NSMutableDictionary *predicateEvaluationDictionary = [NSMutableDictionary dictionaryWithDictionary:@{@"time_since_install/total": self.timeSinceInstallTotal,
 																										  @"time_since_install/version" : self.timeSinceInstallVersion,
 																										  @"time_since_install/build" : self.timeSinceInstallBuild,
-																										  @"application_version" : self.applicationVersion,
-																										  @"application_build" : self.applicationBuild,
 																										  @"is_update/version" : self.isUpdateVersion,
 																										  @"is_update/build" : self.isUpdateBuild}];
+	if (self.applicationVersion) {
+		predicateEvaluationDictionary[@"application_version"] = self.applicationVersion;
+		predicateEvaluationDictionary[@"app_release/version"] = self.applicationVersion;
+	}
+	if (self.applicationBuild) {
+		predicateEvaluationDictionary[@"application_build"] = self.applicationBuild;
+		predicateEvaluationDictionary[@"app_release/build"] = self.applicationBuild;
+	}
+	if (self.sdkVersion) {
+		predicateEvaluationDictionary[@"sdk/version"] = self.sdkVersion;
+	}
+	if (self.sdkDistribution) {
+		predicateEvaluationDictionary[@"sdk/distribution"] = self.sdkDistribution;
+	}
+	if (self.sdkDistributionVersion) {
+		predicateEvaluationDictionary[@"sdk/distribution_version"] = self.sdkDistributionVersion;
+	}
+	predicateEvaluationDictionary[@"current_time"] = self.currentTime;
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesTotal];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesVersion];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesBuild];
@@ -79,6 +122,75 @@
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesVersion];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesBuild];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesTimeAgo];
+	
+	// Device
+	ATDeviceInfo *deviceInfo = [[[ATDeviceInfo alloc] init] autorelease];
+	if (deviceInfo) {
+		NSDictionary *deviceData = [deviceInfo apiJSON][@"device"];
+
+		// Device information
+		for (NSString *key in [deviceData allKeys]) {
+			if ([key isEqualToString:@"custom_data"]) {
+				// Custom data is added below.
+				continue;
+			}
+			
+			if ([key isEqualToString:@"integration_config"]) {
+				// Skip "integration_config"; not used for targeting.
+				continue;
+			}
+			
+			NSObject *value = deviceData[key];
+			if (value) {
+				NSString *criteriaKey = [NSString stringWithFormat:@"device/%@", [ATUtilities stringByEscapingForURLArguments:key]];
+				predicateEvaluationDictionary[criteriaKey] = value;
+			}
+		}
+		
+		// Device custom data
+		NSDictionary *customData = deviceData[@"custom_data"];
+		if (customData) {
+			for (NSString *key in customData) {
+				NSObject *value = customData[key];
+				if (value) {
+					NSString *criteriaKey = [NSString stringWithFormat:@"device/custom_data/%@", [ATUtilities stringByEscapingForURLArguments:key]];
+					predicateEvaluationDictionary[criteriaKey] = value;
+				}
+			}
+		}
+	}
+	
+	// Person
+	ATPersonInfo *personInfo = [ATPersonInfo currentPerson];
+	if (personInfo) {
+		NSDictionary *personData = [[personInfo apiJSON] objectForKey:@"person"];
+		
+		// Person information
+		for (NSString *key in [personData allKeys]) {
+			if ([key isEqualToString:@"custom_data"]) {
+				// Custom data is added below.
+				continue;
+			}
+			
+			NSObject *value = personData[key];
+			if (value) {
+				NSString *criteriaKey = [NSString stringWithFormat:@"person/%@", [ATUtilities stringByEscapingForURLArguments:key]];
+				predicateEvaluationDictionary[criteriaKey] = value;
+			}
+		}
+		
+		// Person custom data
+		NSDictionary *customData = personData[@"custom_data"];
+		if (customData) {
+			for (NSString *key in customData) {
+				NSObject *value = customData[key];
+				if (value) {
+					NSString *criteriaKey = [NSString stringWithFormat:@"person/custom_data/%@", [ATUtilities stringByEscapingForURLArguments:key]];
+					predicateEvaluationDictionary[criteriaKey] = value;
+				}
+			}
+		}
+	}
 	
 	return predicateEvaluationDictionary;
 }
@@ -90,7 +202,7 @@
 		[_timeSinceInstallTotal retain];
 	}
 	
-	return _timeSinceInstallTotal;
+	return [[_timeSinceInstallTotal retain] autorelease];
 }
 
 - (NSNumber *)timeSinceInstallVersion {
@@ -100,7 +212,7 @@
 		[_timeSinceInstallVersion retain];
 	}
 	
-	return _timeSinceInstallVersion;
+	return [[_timeSinceInstallVersion retain] autorelease];
 }
 
 - (NSNumber *)timeSinceInstallBuild {
@@ -110,25 +222,51 @@
 		[_timeSinceInstallBuild retain];
 	}
 	
-	return _timeSinceInstallBuild;
+	return [[_timeSinceInstallBuild retain] autorelease];
 }
 
 - (NSString *)applicationVersion {
 	if (!_applicationVersion) {
-		_applicationVersion = [ATUtilities appVersionString] ?: @"";
-		[_applicationVersion retain];
+		_applicationVersion = [[ATUtilities appVersionString] copy];
 	}
 	
-	return _applicationVersion;
+	return [[_applicationVersion retain] autorelease];
 }
 
 - (NSString *)applicationBuild {
 	if (!_applicationBuild) {
-		_applicationBuild = [ATUtilities buildNumberString] ?: @"";
-		[_applicationBuild retain];
+		_applicationBuild = [[ATUtilities buildNumberString] copy];
 	}
 	
-	return _applicationBuild;
+	return [[_applicationBuild retain] autorelease];
+}
+
+- (NSString *)sdkVersion {
+	if (!_sdkVersion) {
+		_sdkVersion = [kATConnectVersionString copy];
+	}
+	return [[_sdkVersion retain] autorelease];
+}
+
+- (NSString *)sdkDistribution {
+	if (!_sdkDistribution) {
+		_sdkDistribution = [[[ATBackend sharedBackend] distributionName] copy];
+	}
+	return [[_sdkDistribution retain] autorelease];
+}
+
+- (NSString *)sdkDistributionVersion {
+	if (!_sdkDistributionVersion) {
+		_sdkDistributionVersion = [[[ATBackend sharedBackend] distributionVersion] copy];
+	}
+	return [[_sdkDistributionVersion retain] autorelease];
+}
+
+- (NSNumber *)currentTime {
+	if (!_currentTime) {
+		_currentTime = [@([[NSDate date] timeIntervalSince1970]) retain];
+	}
+	return [[_currentTime retain] autorelease];
 }
 
 - (NSNumber *)isUpdateVersion {
@@ -137,7 +275,7 @@
 		[_isUpdateVersion retain];
 	}
 	
-	return _isUpdateVersion;
+	return [[_isUpdateVersion retain] autorelease];
 }
 
 - (NSNumber *)isUpdateBuild {
@@ -146,7 +284,7 @@
 		[_isUpdateBuild retain];
 	}
 	
-	return _isUpdateBuild;
+	return [[_isUpdateBuild retain] autorelease];
 }
 
 - (NSDictionary *)codePointInvokesTotal {
@@ -156,10 +294,10 @@
 		for (NSString *codePoint in codePointsInvokesTotal) {
 			[predicateSyntax setObject:[codePointsInvokesTotal objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/total", codePoint]];
 		}
-		_codePointInvokesTotal = [predicateSyntax retain];
+		_codePointInvokesTotal = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
 	
-	return _codePointInvokesTotal;
+	return [[_codePointInvokesTotal retain] autorelease];
 }
 
 - (NSDictionary *)codePointInvokesVersion {
@@ -169,9 +307,9 @@
 		for (NSString *codePoint in codePointsInvokesVersion) {
 			[predicateSyntax setObject:[codePointsInvokesVersion objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/version", codePoint]];
 		}
-		_codePointInvokesVersion = [predicateSyntax retain];
+		_codePointInvokesVersion = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
-	return _codePointInvokesVersion;
+	return [[_codePointInvokesVersion retain] autorelease];
 }
 
 - (NSDictionary *)codePointInvokesBuild {
@@ -181,9 +319,9 @@
 		for (NSString *codePoint in codePointsInvokesBuild) {
 			[predicateSyntax setObject:[codePointsInvokesBuild objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/build", codePoint]];
 		}
-		_codePointInvokesBuild = [predicateSyntax retain];
+		_codePointInvokesBuild = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
-	return _codePointInvokesBuild;
+	return [[_codePointInvokesBuild retain] autorelease];
 }
 
 - (NSDictionary *)codePointInvokesTimeAgo {
@@ -195,9 +333,9 @@
 			NSTimeInterval timeAgo = [[NSDate date] timeIntervalSinceDate:lastDate];
 			[predicateSyntax setObject:@(timeAgo) forKey:[NSString stringWithFormat:@"code_point/%@/invokes/time_ago", codePoint]];
 		}
-		_codePointInvokesTimeAgo = [predicateSyntax retain];
+		_codePointInvokesTimeAgo = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
-	return _codePointInvokesTimeAgo;
+	return [[_codePointInvokesTimeAgo retain] autorelease];
 }
 
 - (NSDictionary *)interactionInvokesTotal {
@@ -207,10 +345,10 @@
 		for (NSString *interactionID in interactionsInvokesTotal) {
 			[predicateSyntax setObject:[interactionsInvokesTotal objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/total", interactionID]];
 		}
-		_interactionInvokesTotal = [predicateSyntax retain];
+		_interactionInvokesTotal = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
 	
-	return _interactionInvokesTotal;
+	return [[_interactionInvokesTotal retain] autorelease];
 }
 
 - (NSDictionary *)interactionInvokesVersion {
@@ -220,10 +358,10 @@
 		for (NSString *interactionID in interactionsInvokesVersion) {
 			[predicateSyntax setObject:[interactionsInvokesVersion objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/version", interactionID]];
 		}
-		_interactionInvokesVersion = [predicateSyntax retain];
+		_interactionInvokesVersion = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
 
-	return _interactionInvokesVersion;
+	return [[_interactionInvokesVersion retain] autorelease];
 }
 
 - (NSDictionary *)interactionInvokesBuild {
@@ -233,10 +371,10 @@
 		for (NSString *interactionID in interactionsInvokesBuild) {
 			[predicateSyntax setObject:[interactionsInvokesBuild objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/build", interactionID]];
 		}
-		_interactionInvokesBuild = [predicateSyntax retain];
+		_interactionInvokesBuild = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
 	
-	return _interactionInvokesBuild;
+	return [[_interactionInvokesBuild retain] autorelease];
 }
 
 - (NSDictionary *)interactionInvokesTimeAgo {
@@ -248,9 +386,9 @@
 			NSTimeInterval timeAgo = [[NSDate date] timeIntervalSinceDate:lastDate];
 			[predicateSyntax setObject:@(timeAgo) forKey:[NSString stringWithFormat:@"interactions/%@/invokes/time_ago", interactionID]];
 		}
-		_interactionInvokesTimeAgo = [predicateSyntax retain];
+		_interactionInvokesTimeAgo = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
-	return _interactionInvokesTimeAgo;
+	return [[_interactionInvokesTimeAgo retain] autorelease];
 }
 
 @end

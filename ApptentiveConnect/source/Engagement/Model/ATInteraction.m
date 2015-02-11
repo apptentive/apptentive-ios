@@ -16,20 +16,63 @@
 + (ATInteraction *)interactionWithJSONDictionary:(NSDictionary *)jsonDictionary {
 	ATInteraction *interaction = [[ATInteraction alloc] init];
 	interaction.identifier = [jsonDictionary objectForKey:@"id"];
-	interaction.priority = [[jsonDictionary objectForKey:@"priority"] intValue];
+	interaction.priority = [[jsonDictionary objectForKey:@"priority"] integerValue];
 	interaction.type = [jsonDictionary objectForKey:@"type"];
 	interaction.configuration = [jsonDictionary objectForKey:@"configuration"];
-	interaction.criteria = [jsonDictionary objectForKey:@"criteria"];
 	interaction.version = [jsonDictionary objectForKey:@"version"];
+	//NOTE: `vendor` is not currently sent in JSON dictionary.
+	
 	return [interaction autorelease];
+}
+
++ (ATInteraction *)localAppInteraction {
+	ATInteraction *interaction = [[[ATInteraction alloc] init] autorelease];
+	interaction.type = ATEngagementCodePointHostAppInteractionKey;
+	interaction.vendor = ATEngagementCodePointHostAppVendorKey;
+	
+	return interaction;
+}
+
++ (ATInteraction *)apptentiveAppInteraction {
+	ATInteraction *interaction = [[[ATInteraction alloc] init] autorelease];
+	interaction.type = ATEngagementCodePointApptentiveAppInteractionKey;
+	interaction.vendor = ATEngagementCodePointApptentiveVendorKey;
+	
+	return interaction;
+}
+
+- (ATInteractionType)interactionType {
+	ATInteractionType interactionType;
+	if ([self.type isEqualToString:@"UpgradeMessage"]) {
+		interactionType = ATInteractionTypeUpgradeMessage;
+	} else if ([self.type isEqualToString:@"EnjoymentDialog"]) {
+		interactionType = ATInteractionTypeEnjoymentDialog;
+	} else if ([self.type isEqualToString:@"RatingDialog"]) {
+		interactionType = ATInteractionTypeRatingDialog;
+	} else if ([self.type isEqualToString:@"FeedbackDialog"]) {
+		interactionType = ATInteractionTypeFeedbackDialog;
+	} else if ([self.type isEqualToString:@"MessageCenter"]) {
+		interactionType = ATInteractionTypeMessageCenter;
+	} else if ([self.type isEqualToString:@"AppStoreRating"]) {
+		interactionType = ATInteractionTypeAppStoreRating;
+	} else if ([self.type isEqualToString:@"Survey"]) {
+		interactionType = ATInteractionTypeSurvey;
+	} else if ([self.type isEqualToString:@"TextModal"]) {
+		interactionType = ATInteractionTypeTextModal;
+	} else if ([self.type isEqualToString:@"NavigateToLink"]) {
+		interactionType = ATInteractionTypeNavigateToLink;
+	} else {
+		interactionType = ATInteractionTypeUnknown;
+	}
+	
+	return interactionType;
 }
 
 - (NSString *)description {	
 	NSDictionary *description = @{@"identifier" : self.identifier ?: [NSNull null],
-								  @"priority" : [NSNumber numberWithInt:self.priority] ?: [NSNull null],
+								  @"priority" : [NSNumber numberWithInteger:self.priority] ?: [NSNull null],
 								  @"type" : self.type ?: [NSNull null],
 								  @"configuration" : self.configuration ?: [NSNull null],
-								  @"criteria" : self.criteria ?: [NSNull null],
 								  @"version" : self.version ?: [NSNull null]};
 	
 	return [description description];
@@ -38,10 +81,9 @@
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
 		self.identifier = [coder decodeObjectForKey:@"identifier"];
-		self.priority = [coder decodeIntForKey:@"priority"];
+		self.priority = [coder decodeIntegerForKey:@"priority"];
 		self.type = [coder decodeObjectForKey:@"type"];
 		self.configuration = [coder decodeObjectForKey:@"configuration"];
-		self.criteria = [coder decodeObjectForKey:@"criteria"];
 		self.version = [coder decodeObjectForKey:@"version"];
 	}
 	return self;
@@ -49,144 +91,53 @@
 
 - (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeObject:self.identifier forKey:@"identifier"];
-	[coder encodeInt:self.priority forKey:@"priority"];
+	[coder encodeInteger:self.priority forKey:@"priority"];
 	[coder encodeObject:self.type forKey:@"type"];
 	[coder encodeObject:self.configuration forKey:@"configuration"];
-	[coder encodeObject:self.criteria forKey:@"criteria"];
 	[coder encodeObject:self.version forKey:@"version"];
 }
 
-- (ATInteractionUsageData *)usageData {
-	return [ATInteractionUsageData usageDataForInteraction:self];
+- (id)copyWithZone:(NSZone *)zone {
+    ATInteraction *copy = [[ATInteraction alloc] init];
+	
+    if (copy) {
+		copy.identifier = self.identifier;
+		copy.priority = self.priority;
+		copy.type = self.type;
+		copy.configuration = self.configuration;
+		copy.version = self.version;
+    }
+	
+    return copy;
 }
 
-- (BOOL)criteriaAreMet {
-	BOOL criteriaMet = [self criteriaAreMetForUsageData:[self usageData]];
-	if (criteriaMet && [self.type isEqualToString:@"UpgradeMessage"] && ![ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
-		// Don't show upgrade messages on anything except iOS 7 and above.
-		criteriaMet = NO;
-	}
-	return criteriaMet;
+- (NSString *)vendor {
+	// Currently, all interactions except local app events use `ATEngagementCodePointApptentiveVendorKey`.
+	return _vendor ?: ATEngagementCodePointApptentiveVendorKey;
 }
 
-- (BOOL)criteriaAreMetForUsageData:(ATInteractionUsageData *)usageData {
-	BOOL criteriaAreMet = NO;
-	
-	if (!self.criteria) {
-		// Interactions without a criteria object should evaluate to FALSE.
-		criteriaAreMet = NO;
-	} else if (self.criteria && self.criteria.count == 0) {
-		// Interactions with no keys in the criteria dictionary should evaluate to TRUE.
-		criteriaAreMet = YES;
-	} else {
-		NSPredicate *predicate = [self criteriaPredicate];
-		if (predicate) {
-			criteriaAreMet = [predicate evaluateWithObject:[usageData predicateEvaluationDictionary]];
-			if (!criteriaAreMet) {
-				ATLogInfo(@"Interaction predicate failed evaluation.");
-				ATLogInfo(@"Predicate: %@", predicate);
-				ATLogInfo(@"Interaction usage data: %@", [usageData predicateEvaluationDictionary]);
-			}
-		} else {
-			ATLogError(@"Could not create a valid criteria predicate for the Interaction criteria: %@", self.criteria);
-			criteriaAreMet = NO;
-		}
-	}
-	
-	return criteriaAreMet;
+- (NSString *)codePointForEvent:(NSString *)event {
+	return [ATEngagementBackend codePointForVendor:self.vendor interactionType:self.type event:event];
 }
 
-- (NSPredicate *)criteriaPredicate {
-	BOOL error = NO;
-	NSPredicate *criteriaPredicate = [ATInteraction predicateForInteractionCriteria:self.criteria hasError:&error];
-	if (!criteriaPredicate || error) {
-		return nil;
-	}
-	
-	return criteriaPredicate;
+- (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController {
+	return [self engage:event fromViewController:viewController userInfo:nil];
 }
 
-+ (NSPredicate *)predicateForInteractionCriteria:(NSDictionary *)interactionCriteria hasError:(BOOL *)hasError {
-	NSMutableArray *parts = [NSMutableArray array];
-	NSCompoundPredicateType predicateType = NSAndPredicateType;
+- (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController userInfo:(NSDictionary *)userInfo {
+	NSString *codePoint = [self codePointForEvent:event];
 	
-	for (NSString *key in interactionCriteria) {
-		NSObject *object = [interactionCriteria objectForKey:key];
-		
-		if ([object isKindOfClass:[NSArray class]]) {
-			if ([key isEqualToString:@"$and"]) {
-				predicateType = NSAndPredicateType;
-			} else if ([key isEqualToString:@"$or"]) {
-				predicateType = NSOrPredicateType;
-			} else {
-				*hasError = YES;
-			}
-			
-			NSMutableArray *criteria = [NSMutableArray array];
-			for (NSDictionary *dictionary in (NSArray *)object) {
-				NSPredicate *criterion = [self predicateForInteractionCriteria:dictionary hasError:hasError];
-				[criteria addObject:criterion];
-			}
-			[parts addObjectsFromArray:criteria];
-		}
-		else {
-			// Implicit "==" if object is a string/number
-			NSDictionary *equalityDictionary = ([object isKindOfClass:[NSDictionary class]]) ? (NSDictionary *)object : @{@"==" : object};
-			
-			NSMutableArray *criteria = [NSMutableArray array];
-			for (NSString *equalityKey in equalityDictionary) {
-				NSString *equalitySymbol = nil;
-				if ([equalityKey isEqualToString:@"=="]) {
-					equalitySymbol = @"==";
-				}
-				else if ([equalityKey isEqualToString:@"$gt"]) {
-					equalitySymbol = @">";
-				}
-				else if ([equalityKey isEqualToString:@"$gte"]) {
-					equalitySymbol = @">=";
-				}
-				else if ([equalityKey isEqualToString:@"$lt"]) {
-					equalitySymbol = @"<";
-				}
-				else if ([equalityKey isEqualToString:@"$lte"]) {
-					equalitySymbol = @"<=";
-				}
-				else if ([equalityKey isEqualToString:@"$ne"]) {
-					equalitySymbol = @"!=";
-				}
-				else {
-					*hasError = YES;
-				}
-			
-				NSObject *value = [equalityDictionary objectForKey:equalityKey];
-				NSString *placeholder = [[@"(%K " stringByAppendingString:equalitySymbol] stringByAppendingString:@" %@)"];
-				NSPredicate *criterion = [NSCompoundPredicate predicateWithFormat:placeholder argumentArray:@[key, value]];
-				[criteria addObject:criterion];
-				
-				// Save the codepoint/interaction, to later be used in predicate evaluation object.
-				if ([key hasPrefix:@"code_point/"]) {
-					NSArray *components = [key componentsSeparatedByString:@"/"];
-					if (components.count > 1) {
-						NSString *codePoint = [components objectAtIndex:1];
-						[[ATEngagementBackend sharedBackend] codePointWasSeen:codePoint];
-					}
-				}
-				else if ([key hasPrefix:@"interactions/"]) {
-					NSArray *components = [key componentsSeparatedByString:@"/"];
-					if (components.count > 1) {
-						NSString *interactionID = [components objectAtIndex:1];
-						[[ATEngagementBackend sharedBackend] interactionWasSeen:interactionID];
-					}
-					
-				}
-			}
-			
-			[parts addObjectsFromArray:criteria];
-		}
-	}
+	return [[ATEngagementBackend sharedBackend] engageCodePoint:codePoint fromInteraction:self userInfo:userInfo customData:nil extendedData:nil fromViewController:viewController];
+}
+
+- (void)dealloc {
+	[_identifier release], _identifier = nil;
+	[_type release], _type = nil;
+	[_configuration release], _configuration = nil;
+	[_version release], _version = nil;
+	[_vendor release], _vendor = nil;
 	
-	NSPredicate *result = [[[NSCompoundPredicate alloc] initWithType:predicateType subpredicates:parts] autorelease];
-	return result;
+	[super dealloc];
 }
 
 @end

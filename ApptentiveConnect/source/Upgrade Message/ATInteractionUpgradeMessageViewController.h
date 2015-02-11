@@ -9,9 +9,6 @@
 #import <UIKit/UIKit.h>
 @class ATInteraction;
 
-NSString *const ATInteractionUpgradeMessageLaunch;
-NSString *const ATInteractionUpgradeMessageClose;
-
 @interface ATInteractionUpgradeMessageViewController : UIViewController {
 	UIViewController *presentingViewController;
 	@private
@@ -22,19 +19,19 @@ NSString *const ATInteractionUpgradeMessageClose;
 	CGAffineTransform lastSeenPresentingViewControllerTransform;
 }
 
-@property (nonatomic, retain) ATInteraction *upgradeMessageInteraction;
+@property (nonatomic, retain, readonly) ATInteraction *upgradeMessageInteraction;
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 
 @property (nonatomic, retain) IBOutlet UIView *alertView;
 @property (nonatomic, retain) IBOutlet UIView *contentView;
-@property (retain, nonatomic) IBOutlet UIView *appIconContainer;
+@property (nonatomic, retain) IBOutlet UIView *appIconContainer;
 @property (nonatomic, retain) IBOutlet UIImageView *appIconView;
 @property (nonatomic, retain) IBOutlet UIImageView *appIconBackgroundView;
 @property (nonatomic, retain) IBOutlet UIWebView *webView;
 @property (nonatomic, retain) IBOutlet UIView *okButtonBackgroundView;
 @property (nonatomic, retain) IBOutlet UIView *poweredByBackground;
-@property (retain, nonatomic) IBOutlet UILabel *poweredByApptentiveLogo;
+@property (nonatomic, retain) IBOutlet UILabel *poweredByApptentiveLogo;
 @property (nonatomic, retain) IBOutlet UIImageView *poweredByApptentiveIconView;
 @property (nonatomic, retain) IBOutlet UIImageView *backgroundImageView;
 

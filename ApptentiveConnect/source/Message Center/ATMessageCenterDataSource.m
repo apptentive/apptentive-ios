@@ -45,10 +45,10 @@
 			NSFetchRequest *request = [[NSFetchRequest alloc] init];
 			[request setEntity:[NSEntityDescription entityForName:@"ATAbstractMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
 			[request setFetchBatchSize:20];
-			NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
+			NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"creationTime" ascending:YES];
 			[request setSortDescriptors:@[sortDescriptor]];
 			[sortDescriptor release], sortDescriptor = nil;
-			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"clientCreationTime != %d AND hidden != %@", 0, @YES];
+			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"creationTime != %d AND hidden != %@", 0, @YES];
 			[request setPredicate:predicate];
 			
 			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:nil cacheName:@"at-messages-cache"];
@@ -95,7 +95,7 @@
 	NSError *error = nil;
 	NSArray *results = [moc executeFetchRequest:request error:&error];
 	if (!results) {
-		ATLogError(@"Error exceuting fetch request: %@", error);
+		ATLogError(@"Error executing fetch request: %@", error);
 	} else {
 		for (ATAbstractMessage *message in results) {
 			[message setSeenByUser:@(YES)];

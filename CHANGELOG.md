@@ -1,5 +1,211 @@
+2015-02-10 pkamb v1.7.1
+--------------------------------
+
+The 1.7.1 release contains support for the new "Notes" feature. Use a Note interaction to send an alert with a link or a Survey to people using your app.
+
+Other improvements include fixing an issue where the "View Messages" button could be shown when Message Center was disabled.
+
+The Notes feature is currently in Beta. If you would like to create Notes via your Apptentive dashboard, please contact us: support@apptentive.com
+
+2014-11-20 pkamb v1.6.1
+--------------------------------
+The 1.6.1 release contains an improved FeedbackDemo project for easily testing your Apptentive events and interactions. Simply input your API Key and custom events in the `defines.h` file, then tap the respective buttons in the demo app to engage those events.
+
+This release also fixes the default message text in the Ratings Prompt, which for some languages may have referenced Message Center when Message Center was disabled.
+
+We have also fixed an issue where some messages were not sorted correctly in Message Center, and toned down Apptentive logging in Release builds.
+
+2014-10-20 pkamb v1.6.0
+--------------------------------
+The 1.6.0 release adds the method `willShowInteractionForEvent:`, which returns YES if engaging the given event will cause an Interaction to be shown. 
+
+For example, `willShowInteractionForEvent:` returns YES if a survey is ready to be shown the next time you engage your survey-targeted event. You can thus use this method to hide a "Show Survey" button in your app if there is no survey to take.
+
+We have also fixed an issue with adding photos to Message Center on iOS 8 iPads, as well as some Xcode 6 static analyzer warnings.
+
+Finally, we have added xib-based Launch Images to the Apptentive demo app. This fixes an issue when presenting Message Center from landscape on iPhone 6 and 6 Plus devices. If you are experiencing the same problem, you will most likely need to add Launch Images for the new iPhone screen sizes to your parent app.
+
+2014-09-26 pkamb v1.5.8
+--------------------------------
+This release adds a number of fixes for the landscape presentation of Message Center in iOS 8. If you discover other iOS 8 issues in your app, please contact us!
+
+We have also fixed an issue related to targeting interactions based upon custom data. If you are targeting Surveys or Rating Prompts to show only to people with certain `device` or `person` custom data attributes, you will need to update to this version of the SDK.
+
+2014-09-12 pkamb v1.5.7
+--------------------------------
+
+This release adds a number of small fixes for Xcode 6 and iOS 8. We've updated the project to use Xcode 6's default settings, and fixed a number of warnings that surfaced in Xcode 6.
+
+We have also added an `ATSurveyShownNotification` notification when a survey is shown.
+
+We are now immediately updating new Push Notification integrations to the server, which will make for easier testing of new integrations. These were previously batched with device updates.
+
+This release fixes a malformed image that caused a `pngcrush` error in Xcode CI builds.
+
+Finally, we removed a debug background color that slipped into the iOS 6 Message Center's textfield.
+
+2014-08-24 pkamb v1.5.6
+--------------------------------
+
+This release adds initial iOS 8 support to the Apptentive SDK.
+
+Specifically, an issue has been fixed where Message Center messages are not displayed in iOS 8. An iPad layout issue has also been fixed.
+
+We will continue to add fixes as we test Apptentive with the latest iOS 8 beta releases. If you identify iOS 8 issues in the SDK, please contact us by opening a [GitHub issue](https://github.com/apptentive/apptentive-ios/issues)!
+
+This release also adds support for displaying Asset Catalog app icons.
+
+2014-08-19 pkamb v1.5.5
+--------------------------------
+
+This release improves the Message Center user interface. The Message Center background is now white, rather than a transparent panel. Message bubbles now appear in the tint color of your app, or the tint color you set on ATConnect. Default profile pictures have been improved, and other small improvements have been made.
+
+This release also improves error handling when creating Events with `customData`. An Event's `customData` dictionary will only be sent if it conforms to the `isValidJSONObject:` method of `NSJSONSerialization`.
+
+Finally, `addParseIntegrationWithDeviceToken:` has been added for integrating with Parse's Push Notification service.
+
+2014-07-21 pkamb v1.5.4
+--------------------------------
+
+This release changes the App Store rating URL to open the "Reviews" tab directly in iOS 7.1+. #110
+
+We have also fixed an issue where the text selection loupe showed through Message Panel to the view beneath. #114
+
+French Canadian localization strings have been added to the SDK. iOS 8 is required to differentiate between French and French Canadian.
+
+Finally, we have added new API methods for attaching `customData` and `extendedData` to events:  
+
+  - `engage:withCustomData:fromViewController:` 
+  - `engage:withCustomData:withExtendedData:fromViewController:`
+  
+We have also added methods to easily construct these `extendedData` dictionaries in the specific Apptentive format:  
+
+  - `extendedDataDate:`
+  - `extendedDataLocationForLatitude:longitude:`
+  - `extendedDataCommerceWithTransactionID:affiliation:revenue:shipping:tax:currency:commerceItems:`
+  - `extendedDataCommerceItemWithItemID:name:category:price:quantity:currency:`
+
+2014-06-30 pkamb v1.5.3
+--------------------------------
+
+This release fixes an issue where the Rating Prompt's "Require Email" option was not being utilized.
+
+Support has also been added for remote configuration of Apptentive branding. Depending on your Apptentive plan, branding can now be toggled remotely.
+
+Branding was formerly controlled by the `showTagLine` property, which has now been removed. The `initiallyHideBranding` property has been provided to control the app's initial experience before Apptentive's server-based configuration can be fetched.
+
+2014-06-12 pkamb v1.5.2
+--------------------------------
+
+This release fixes a crash when submitting a piece of Feedback without an email address after tapping "No" on the Enjoyment Dialog. This bug affected versions 1.4.3, 1.5.0, and 1.5.1. If you are using one of these releases, we strongly recommend you upgrade your Apptentive SDK as soon as possible.
+
+Additionally, the current iOS version is now logged as, for example, "7.1.1" whereas it was formerly "Version 7.1.1 (Build 11D201)".
+
+2014-06-10 wooster, pkamb v1.5.1
+--------------------------------
+
+This release fixes a crash when showing Surveys in iOS 5 or iOS 6 from Apptentive v1.5.0. Surveys have additionally been disabled remotely for devices using Apptentive 1.5.0 and running an OS version prior to iOS 7. We recommend upgrading immediately from 1.5.0 if you are using Surveys and support legacy devices.
+
+This release also includes fixes for the new [CocoaPods Trunk](http://blog.cocoapods.org/CocoaPods-Trunk/) service and release process.
+
+The `showTagLine` property of `ATConnect` now makes the "Powered By Apptentive" logo in Message Center unclickable in addition to hidden.
+
+Finally, we have changed the language code used for delivering localizations to use `[[NSLocale preferredLanguages] firstObject]` rather than use the `NSLocaleLanguageCode` locale component.
+
+
+2014-05-27 wooster, pkamb v1.5.0
+--------------------------------
+
+This release moves Surveys to the engagement framework. You will now be able to target surveys to events that you `engage:` in your app. This change enables surveys to be chained with other interactions, such as the Ratings Prompt. From your Apptentive dashboard, you can now present a Survey if someone answers "No" to your "Do you Love App_Name?" prompt.
+
+This release also fully removes the `ATAppRatingFlow.h` and `ATSurveys.h` header files. You can now simply import `ATConnect.h` when using Apptentive. 
+
+If you were using a version prior to 1.5.0, please read [MigratingTo_1.5.0.md](docs/MigratingTo_1.5.0.md) for information on how to migrate your API calls to this release. We are sorry for the inconvenience, but we hope the new features will more than make up for it!
+
+Finally, we have migrated and improved our documentation for this release. The GitHub README now presents a smaller and simpler overview of Apptentive, and links to relevant sections on the [Apptentive Documentation](http://www.apptentive.com/docs/) site.
+
+
+2014-05-05 wooster, pkamb v1.4.3
+--------------------------------
+
+This release adds checks to ensure that custom person data is sent in a timely manner and is immediately visible in the dashboard alongside messages.
+
+Added `debuggingOptions` property on ATConnect that allows the developer to specify debug logging preferences for their app. Use `debuggingOptions` to hide the debug panel or limit the debug logging of HTTP requests.
+
+Also fixes an issue where Chinese and Japanese keyboard input could hide buttons in the Feedback dialog.
+
+Fixes:
+
+* IOS-489 Chinese input hides feedback dialog buttons.
+* IOS-381 Japanese input hides feedback dialog buttons.
+* IOS-478 Issue where setting custom person data is not synced to server.
+* IOS-370 Investigate sending order of Person and Message.
+* IOS-485 HTML Response logs contents of the HTML.
+* `Contains` operator should be case insensitive.
+
+2014-04-18 wooster, pkamb v1.4.2
+--------------------------------
+
+This release adds push notification integration with Amazon Web Services (AWS) Simple Notification Service (SNS). 
+
+Use `addAmazonSNSIntegrationWithDeviceToken:` to enable SNS push notifications.
+
+Fixes:
+
+* IOS-461 Add integration with Amazon SNS
+* #90 ATLogger fails to catch exception if no space left on device
+* #91 ATAppConfigurationUpdateTask needs to retain self before updating task state
+
+2014-04-13 wooster, pkamb v1.4.1
+--------------------------------
+
+Bug fix release for interaction codepoint encoding.
+
+Code points are returned from the server with their components URL encoded. This fix makes the client properly recognize them.
+
+Fixes:
+
+* IOS-479 URL encode each token of a codepoint
+
+2014-04-07 wooster, pkamb v1.4.0
+--------------------------------
+
+This marks the first release of a more generalized engagement framework. This will allow us to chain interactions together in interesting ways, provide better server-side configuration of what customers see and when they see it, and lay the foundation for some very interesting features in the future.
+
+If you were using a version prior to 1.4.0, please read [MigratingTo_1.5.0.md](docs/MigratingTo_1.5.0.md) for information on how to migrate your API calls to this release. We are sorry for the inconvenience, but we hope the new features will more than make up for it!
+
+Fixes:
+
+* Lots of changes for the engagement framework.
+* IOS-447 Add `identifierForVendor` as device property.
+* [Fix](https://github.com/apptentive/apptentive-ios/commit/58e098850d75bb35fb5572cfd9d63b79aa45949f) for a memory leak in `ATInteractionUsageData`.
+
+2014-03-29 wooster, pkamb v1.3.0
+--------------------------------
+
+Important: 
+
+* We've (provisionally) dropped iOS 4.x support. If you really need iOS 4.x support, please contact us.
+* We added `AssetsLibrary` to the list of required frameworks in this version (part of the fix for IOS-409).
+
+Fixes:
+
+* IOS-426 Drop iOS 4 Support
+* IOS-414 Add convenience method for integrating with Urban Airship (`addUrbanAirshipIntegrationWithDeviceToken:`)
+* IOS-408 Dragging down in message center moves the keyboard as well
+* IOS-388 Change `build_distribution.py` to build Release rather than Debug builds
+* IOS-429 Remove unused images in SDK
+* IOS-420 Text clipped in screenshot instructions
+* IOS-398 Crash in TTTAttributedLabel
+* IOS-421 Pull in image compression improvements
+* IOS-409 Sending horizontal panorama photos crashes message center
+* #84 dismissMessageCenterAnimated does not call completion block in some cases
+* #83 Calling dismissMessageCenterAnimated can break future calls to presentMessageCenterFromViewController
+* IOS-422 Ensure device info is sent before retrieving Interactions.
+* IOS-449 Clicking next from email entry doesn't highlight message text entry.
+
 2014-03-10 wooster, pkamb v1.2.9
-----------------------------------------------
+--------------------------------
 
 This release adds several small fixes to alleviate common support requests.
 

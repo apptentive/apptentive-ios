@@ -103,6 +103,9 @@
 - (UIImage *)at_applyTintEffectWithColor:(UIColor *)tintColor;
 
 - (UIImage *)at_applyBlurWithRadius:(CGFloat)blurRadius tintColor:(UIColor *)tintColor saturationDeltaFactor:(CGFloat)saturationDeltaFactor maskImage:(UIImage *)maskImage;
+
+- (UIImage *)imageByTintingWithColor:(UIColor *)color;
+
 @end
 
 void ATImageEffects_UIImage_Bootstrap();

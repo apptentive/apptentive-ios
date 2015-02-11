@@ -8,6 +8,7 @@
 
 #import "ATEngagementGetManifestTask.h"
 #import "ATBackend.h"
+#import "ATDeviceUpdater.h"
 #import "ATWebClient+EngagementAdditions.h"
 #import "ATEngagementManifestParser.h"
 #import "ATEngagementBackend.h"
@@ -41,6 +42,11 @@
 	if (![ATConversationUpdater conversationExists]) {
 		return NO;
 	}
+	if ([ATDeviceUpdater shouldUpdate]) {
+		// Interactions may depend on device attributes.
+		return NO;
+	}
+	
 	return YES;
 }
 
@@ -88,12 +94,15 @@
 		[self retain];
 		if (request == checkManifestRequest) {
 			ATEngagementManifestParser *parser = [[ATEngagementManifestParser alloc] init];
-						
-			NSDictionary *codePointInteractions = [parser codePointInteractionsForEngagementManifest:(NSData *)result];
-			if (codePointInteractions == nil) {
-				ATLogError(@"An error occurred parsing the engagement manifest: %@", [parser parserError]);
+			
+			NSDictionary *targetsAndInteractions = [parser targetsAndInteractionsForEngagementManifest:(NSData *)result];
+			NSDictionary *targets = targetsAndInteractions[@"targets"];
+			NSDictionary *interactions = targetsAndInteractions[@"interactions"];
+			
+			if (targets && interactions) {
+				[[ATEngagementBackend sharedBackend] didReceiveNewTargets:targets andInteractions:interactions maxAge:[request expiresMaxAge]];
 			} else {
-				[[ATEngagementBackend sharedBackend] didReceiveNewCodePointInteractions:codePointInteractions maxAge:[request expiresMaxAge]];
+				ATLogError(@"An error occurred parsing the engagement manifest: %@", [parser parserError]);
 			}
 
 			checkManifestRequest.delegate = nil;

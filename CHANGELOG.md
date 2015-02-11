@@ -1,9 +1,11 @@
-2015-02-03 pkamb v1.7.0
+2015-02-10 pkamb v1.7.1
 --------------------------------
 
-The 1.7.0 release contains support for the new "Notes" feature. Use a Note interaction to send an alert with a link or a Survey to people using your app.
+The 1.7.1 release contains support for the new "Notes" feature. Use a Note interaction to send an alert with a link or a Survey to people using your app.
 
 Other improvements include fixing an issue where the "View Messages" button could be shown when Message Center was disabled.
+
+The Notes feature is currently in Beta. If you would like to create Notes via your Apptentive dashboard, please contact us: support@apptentive.com
 
 2014-11-20 pkamb v1.6.1
 --------------------------------

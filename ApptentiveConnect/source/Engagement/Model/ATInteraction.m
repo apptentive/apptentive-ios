@@ -41,6 +41,14 @@
 	return interaction;
 }
 
++ (ATInteraction *)messageCenterInteraction {
+	ATInteraction *interaction = [[[ATInteraction alloc] init] autorelease];
+	interaction.type = @"MessageCenter";
+	interaction.vendor = ATEngagementCodePointApptentiveVendorKey;
+	
+	return interaction;
+}
+
 - (ATInteractionType)interactionType {
 	ATInteractionType interactionType;
 	if ([self.type isEqualToString:@"UpgradeMessage"]) {

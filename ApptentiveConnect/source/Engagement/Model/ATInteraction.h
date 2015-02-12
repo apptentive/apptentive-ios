@@ -38,6 +38,10 @@ typedef NS_ENUM(NSInteger, ATInteractionType){
 + (ATInteraction *)localAppInteraction;
 + (ATInteraction *)apptentiveAppInteraction;
 
+// Used to engage Message Center events.
+// TODO: transition to a model that uses an interaction from the server.
++ (ATInteraction *)messageCenterInteraction;
+
 - (ATInteractionType)interactionType;
 
 - (NSString *)codePointForEvent:(NSString *)event;

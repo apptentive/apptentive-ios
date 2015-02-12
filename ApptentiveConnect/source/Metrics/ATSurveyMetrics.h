@@ -10,14 +10,9 @@
 
 NSString *const ATSurveyDidAnswerQuestionNotification; // survey.question_response
 
-NSString *const ATSurveyWindowTypeKey;
 NSString *const ATSurveyMetricsEventKey;
 NSString *const ATSurveyMetricsSurveyIDKey;
 NSString *const ATSurveyMetricsSurveyQuestionIDKey;
-
-typedef enum {
-	ATSurveyWindowTypeSurvey,
-} ATSurveyWindowType;
 
 typedef enum {
 	ATSurveyEventUnknown,

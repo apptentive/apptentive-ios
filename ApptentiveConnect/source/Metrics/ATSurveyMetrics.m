@@ -10,7 +10,6 @@
 
 NSString *const ATSurveyDidAnswerQuestionNotification = @"ATSurveyDidAnswerQuestionNotification";
 
-NSString *const ATSurveyWindowTypeKey = @"ATSurveyWindowTypeKey";
 NSString *const ATSurveyMetricsEventKey = @"ATSurveyMetricsEventKey";
 NSString *const ATSurveyMetricsSurveyIDKey = @"ATSurveyMetricsSurveyIDKey";
 NSString *const ATSurveyMetricsSurveyQuestionIDKey = @"ATSurveyMetricsSurveyQuestionIDKey";

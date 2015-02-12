@@ -36,7 +36,6 @@ static NSString *ATMetricNameMessageCenterAttach = @"message_center.attach";
 static NSString *ATMetricNameMessageCenterRead = @"message_center.read";
 static NSString *ATMetricNameMessageCenterSend = @"message_center.send";
 
-static NSString *ATMetricNameMessageCenterIntroLaunch = @"message_center.intro.launch";
 static NSString *ATMetricNameMessageCenterIntroSend = @"message_center.intro.send";
 static NSString *ATMetricNameMessageCenterIntroCancel = @"message_center.intro.cancel";
 static NSString *ATMetricNameMessageCenterThankYouLaunch = @"message_center.thank_you.launch";
@@ -58,7 +57,6 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 - (void)messageCenterDidRead:(NSNotification *)notification;
 - (void)messageCenterDidSend:(NSNotification *)notification;
 
-- (void)messageCenterIntroDidLaunch:(NSNotification *)notification;
 - (void)messageCenterIntroDidSend:(NSNotification *)notification;
 - (void)messageCenterIntroDidCancel:(NSNotification *)notification;
 - (void)messageCenterIntroThankYouDidLaunch:(NSNotification *)notification;
@@ -190,7 +188,6 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterDidRead:) name:ATMessageCenterDidReadNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterDidSend:) name:ATMessageCenterDidSendNotification object:nil];
 		
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroDidLaunch:) name:ATMessageCenterIntroDidShowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroDidSend:) name:ATMessageCenterIntroDidSendNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroDidCancel:) name:ATMessageCenterIntroDidCancelNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroThankYouDidLaunch:) name:ATMessageCenterIntroThankYouDidShowNotification object:nil];
@@ -328,10 +325,6 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 	}
 	[self addMetricWithName:ATMetricNameMessageCenterSend info:info];
 	[info release], info = nil;
-}
-
-- (void)messageCenterIntroDidLaunch:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameMessageCenterIntroLaunch info:nil];
 }
 
 - (void)messageCenterIntroDidSend:(NSNotification *)notification {

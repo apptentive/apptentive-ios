@@ -27,6 +27,8 @@
 #define DEG_TO_RAD(angle) ((M_PI * angle) / 180.0)
 #define RAD_TO_DEG(radians) (radians * (180.0/M_PI))
 
+NSString *const ATInteractionMessageCenterEventLabelIntroLaunch = @"intro.launch";
+
 enum {
 	kMessagePanelContainerViewTag = 1009,
 	kATEmailAlertTextFieldTag = 1010,
@@ -241,7 +243,7 @@ enum {
 	}];
 	[shadowView release], shadowView = nil;
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroDidShowNotification object:self userInfo:nil];
+	[self.interaction engage:ATInteractionMessageCenterEventLabelIntroLaunch fromViewController:self];
 }
 
 - (void)didReceiveMemoryWarning {

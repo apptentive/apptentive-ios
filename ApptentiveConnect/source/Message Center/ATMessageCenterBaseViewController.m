@@ -25,6 +25,9 @@
 #import "ATTaskQueue.h"
 #import "ATTextMessage.h"
 #import "ATUtilities.h"
+#import "ATInteraction.h"
+
+NSString *const ATInteractionMessageCenterEventLabelLaunch = @"launch";
 
 @interface ATMessageCenterBaseViewController ()
 - (void)showSendImageUIIfNecessary;
@@ -139,7 +142,7 @@
 	
 	[self showSendImageUIIfNecessary];
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidShowNotification object:nil];
+	[[ATInteraction messageCenterInteraction] engage:ATInteractionMessageCenterEventLabelLaunch fromViewController:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

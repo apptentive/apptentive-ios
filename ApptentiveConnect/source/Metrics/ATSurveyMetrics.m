@@ -8,8 +8,6 @@
 
 #import "ATSurveyMetrics.h"
 
-NSString *const ATSurveyDidAnswerQuestionNotification = @"ATSurveyDidAnswerQuestionNotification";
-
 NSString *const ATSurveyMetricsEventKey = @"ATSurveyMetricsEventKey";
 NSString *const ATSurveyMetricsSurveyIDKey = @"ATSurveyMetricsSurveyIDKey";
 NSString *const ATSurveyMetricsSurveyQuestionIDKey = @"ATSurveyMetricsSurveyQuestionIDKey";

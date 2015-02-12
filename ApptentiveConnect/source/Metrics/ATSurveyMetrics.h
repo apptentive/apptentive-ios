@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-NSString *const ATSurveyDidAnswerQuestionNotification; // survey.question_response
-
 NSString *const ATSurveyMetricsEventKey;
 NSString *const ATSurveyMetricsSurveyIDKey;
 NSString *const ATSurveyMetricsSurveyQuestionIDKey;

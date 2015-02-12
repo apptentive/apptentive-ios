@@ -26,6 +26,7 @@
 #define kAssociatedQuestionKey ("associated_question")
 
 NSString *const ATInteractionSurveyEventLabelCancel = @"cancel";
+NSString *const ATInteractionSurveyEventLabelQuestionResponse = @"question_response";
 NSString *const ATInteractionSurveyEventLabelSubmit = @"submit";
 
 enum {
@@ -586,14 +587,11 @@ enum {
 					}
 				}
 				
-				// Send notification.
-				NSDictionary *metricsInfo = @{ATSurveyMetricsSurveyIDKey:survey.identifier ?: [NSNull null],
-											  ATSurveyMetricsSurveyQuestionIDKey: question.identifier ?: [NSNull null],
-											  ATSurveyMetricsEventKey: @(ATSurveyEventAnsweredQuestion),
-											  @"interaction_id": self.interaction.identifier ?: [NSNull null],
-											  };
+				NSDictionary *userInfo = @{@"survey_id": survey.identifier ?: [NSNull null],
+										   @"id": question.identifier ?: [NSNull null],
+										   };
 				
-				[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidAnswerQuestionNotification object:nil userInfo:metricsInfo];
+				[self.interaction engage:ATInteractionSurveyEventLabelQuestionResponse fromViewController:self userInfo:userInfo];
 
 			} else if (question.type == ATSurveyQuestionTypeSingeLine) {
 				ATCellTextView *textView = (ATCellTextView *)[cell viewWithTag:kTextViewTag];
@@ -704,20 +702,16 @@ enum {
 		return;
 	}
 	
-	// Send notification.
 	if (![sentNotificationsAboutQuestionIDs containsObject:question.identifier]) {
-		NSDictionary *metricsInfo = @{ATSurveyMetricsSurveyIDKey: survey.identifier ?: [NSNull null],
-									  ATSurveyMetricsSurveyQuestionIDKey: question.identifier ?: [NSNull null],
-									  ATSurveyMetricsEventKey: @(ATSurveyEventAnsweredQuestion),
-									  @"interaction_id": self.interaction.identifier ?: [NSNull null],
-									  };
+		NSDictionary *userInfo = @{@"survey_id": survey.identifier ?: [NSNull null],
+								   @"id": question.identifier ?: [NSNull null],
+								   };
 		
-		[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidAnswerQuestionNotification object:nil userInfo:metricsInfo];
+		[self.interaction engage:ATInteractionSurveyEventLabelQuestionResponse fromViewController:self userInfo:userInfo];
 		
 		[sentNotificationsAboutQuestionIDs addObject:question.identifier];
 	}
 }
-
 
 - (ATSurveyQuestion *)questionAtIndexPath:(NSIndexPath *)indexPath {
 	if (indexPath.section >= [[survey questions] count]) {

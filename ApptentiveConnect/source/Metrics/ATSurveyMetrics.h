@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-NSString *const ATSurveyDidHideWindowNotification; // survey.cancel or survey.submit
 NSString *const ATSurveyDidAnswerQuestionNotification; // survey.question_response
 
 NSString *const ATSurveyWindowTypeKey;

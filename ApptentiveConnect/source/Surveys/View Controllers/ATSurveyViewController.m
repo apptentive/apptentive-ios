@@ -26,6 +26,7 @@
 #define kAssociatedQuestionKey ("associated_question")
 
 NSString *const ATInteractionSurveyEventLabelCancel = @"cancel";
+NSString *const ATInteractionSurveyEventLabelSubmit = @"submit";
 
 enum {
 	kTextViewTag = 1,
@@ -184,13 +185,8 @@ enum {
 		[hud autorelease];
 	}
 	
-	NSDictionary *metricsInfo = @{ATSurveyMetricsSurveyIDKey: survey.identifier ?: [NSNull null],
-								  ATSurveyWindowTypeKey: @(ATSurveyWindowTypeSurvey),
-								  ATSurveyMetricsEventKey: @(ATSurveyEventTappedSend),
-								  @"interaction_id": self.interaction.identifier ?: [NSNull null],
-								  };
-
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidHideWindowNotification object:nil userInfo:metricsInfo];
+	NSDictionary *userInfo = @{@"id": survey.identifier ?: [NSNull null]};
+	[self.interaction engage:ATInteractionSurveyEventLabelSubmit fromViewController:self userInfo:userInfo];
 	
 	[self.navigationController dismissViewControllerAnimated:YES completion:NULL];
 	
@@ -798,13 +794,8 @@ enum {
 }
 
 - (void)cancel:(id)sender {
-	NSDictionary *metricsInfo = @{ATSurveyMetricsSurveyIDKey: survey.identifier ?: [NSNull null],
-								  ATSurveyWindowTypeKey: @(ATSurveyWindowTypeSurvey),
-								  ATSurveyMetricsEventKey: @(ATSurveyEventTappedCancel),
-								  @"interaction_id": self.interaction.identifier ?: [NSNull null],
-								  };
-	
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidHideWindowNotification object:nil userInfo:metricsInfo];
+	NSDictionary *userInfo = @{@"id": survey.identifier ?: [NSNull null]};
+	[self.interaction engage:ATInteractionSurveyEventLabelCancel fromViewController:self userInfo:userInfo];
 	
 	[self.navigationController dismissViewControllerAnimated:YES completion:NULL];
 }

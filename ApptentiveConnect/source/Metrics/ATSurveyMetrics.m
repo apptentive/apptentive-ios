@@ -8,7 +8,6 @@
 
 #import "ATSurveyMetrics.h"
 
-NSString *const ATSurveyDidHideWindowNotification = @"ATSurveyDidHideWindowNotification";
 NSString *const ATSurveyDidAnswerQuestionNotification = @"ATSurveyDidAnswerQuestionNotification";
 
 NSString *const ATSurveyWindowTypeKey = @"ATSurveyWindowTypeKey";

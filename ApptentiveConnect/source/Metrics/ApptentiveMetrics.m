@@ -17,7 +17,6 @@
 #import "ATMetric.h"
 #import "ATRecordTask.h"
 #import "ATRecordRequestTask.h"
-#import "ATSurveyMetrics.h"
 #import "ATTaskQueue.h"
 #import "ATEngagementBackend.h"
 
@@ -50,8 +49,6 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 - (ATFeedbackWindowType)windowTypeFromNotification:(NSNotification *)notification;
 - (void)feedbackDidShowWindow:(NSNotification *)notification;
 - (void)feedbackDidHideWindow:(NSNotification *)notification;
-
-- (ATSurveyEvent)surveyEventTypeFromNotification:(NSNotification *)notification;
 
 - (void)appWillTerminate:(NSNotification *)notification;
 - (void)appDidEnterBackground:(NSNotification *)notification;
@@ -296,18 +293,6 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 	} else if (windowType == ATFeedbackWindowTypeInfo) {
 		// pass, for now
 	}
-}
-
-- (ATSurveyEvent)surveyEventTypeFromNotification:(NSNotification *)notification {
-	ATSurveyEvent event = ATSurveyEventUnknown;
-	if ([[notification userInfo] objectForKey:ATSurveyMetricsEventKey]) {
-		event = [(NSNumber *)[[notification userInfo] objectForKey:ATSurveyMetricsEventKey] intValue];
-	}
-	if (event != ATSurveyEventTappedSend && event != ATSurveyEventTappedCancel && event != ATSurveyEventAnsweredQuestion) {
-		event = ATSurveyEventUnknown;
-		ATLogError(@"Unknown survey event type: %d", event);
-	}
-	return event;
 }
 
 - (void)appWillTerminate:(NSNotification *)notification {

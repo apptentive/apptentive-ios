@@ -6,7 +6,7 @@
 //  Copyright 2011 Apptentive, Inc.. All rights reserved.
 //
 
-CI_test12
+// CI_test12
 
 #if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>

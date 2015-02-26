@@ -15,6 +15,6 @@ PATH=/Library/Frameworks/Python.framework/Versions/3.4/bin:$PATH
 # Set build status on GitHub
 cavejohnson setGithubStatus
 
-#test
+#test2
 
 echo "Finished running Xcode Bot's Run Script Trigger"

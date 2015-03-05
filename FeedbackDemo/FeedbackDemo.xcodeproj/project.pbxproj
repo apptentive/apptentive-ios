@@ -373,6 +373,11 @@
 			attributes = {
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Apptentive, Inc.";
+				TargetAttributes = {
+					49C002E61334172E0071F088 = {
+						DevelopmentTeam = 86WML2UN43;
+					};
+				};
 			};
 			buildConfigurationList = 49C002E11334172E0071F088 /* Build configuration list for PBXProject "FeedbackDemo" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -603,7 +608,7 @@
 					"$(DSTROOT)/usr/local/include",
 				);
 				INFOPLIST_FILE = "FeedbackDemo/FeedbackDemo-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -633,7 +638,7 @@
 					"$(DSTROOT)/usr/local/include",
 				);
 				INFOPLIST_FILE = "FeedbackDemo/FeedbackDemo-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",

@@ -443,6 +443,13 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 		return;
 	}
 	
+	if (![[NSThread currentThread] isMainThread]) {
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[self presentInteraction:interaction fromViewController:viewController];
+		});
+		return;
+	}
+	
 	switch (interaction.interactionType) {
 		case ATInteractionTypeUpgradeMessage:
 			[self presentUpgradeMessageInteraction:interaction fromViewController:viewController];

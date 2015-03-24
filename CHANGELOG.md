@@ -1,3 +1,8 @@
+2015-03-23 pkamb, wooster v1.7.2
+--------------------------------
+
+The 1.7.2 release contains a fix for multithreaded execution of `engage:` calls. Engaging events from a background thread had the possibility to cause Core Data issues. In 1.7.2, all `engage:` calls are made on the Main Thread.
+
 2015-02-10 pkamb v1.7.1
 --------------------------------
 

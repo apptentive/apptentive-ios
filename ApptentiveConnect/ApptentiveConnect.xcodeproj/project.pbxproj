@@ -673,6 +673,8 @@
 		586C47A818B424E900725C22 /* ATInteractionEnjoymentDialogController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATInteractionEnjoymentDialogController.m; path = Engagement/Controllers/ATInteractionEnjoymentDialogController.m; sourceTree = "<group>"; };
 		5871B2281AC373C0005C010A /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5871B2291AC373F7005C010A /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5871B22A1AC37576005C010A /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5871B22B1AC37590005C010A /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Localizable.strings; sourceTree = "<group>"; };
 		58805F3418120BBF00210DA5 /* UIImage+ATImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ATImageEffects.m"; sourceTree = "<group>"; };
 		58805F3518120BBF00210DA5 /* UIImage+ATImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ATImageEffects.h"; sourceTree = "<group>"; };
 		58805F3818120DE100210DA5 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
@@ -1629,6 +1631,7 @@
 				zh,
 				sv,
 				ar,
+				el,
 			);
 			mainGroup = 496DC3741333D35600743F65;
 			productRefGroup = 496DC3801333D35600743F65 /* Products */;
@@ -1945,6 +1948,7 @@
 			children = (
 				49D07DCF17F29A1F0042FCFD /* en */,
 				5871B2281AC373C0005C010A /* ar */,
+				5871B22A1AC37576005C010A /* el */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1965,6 +1969,7 @@
 				58EA5B4E17B47E0C00ECEB4B /* zh */,
 				49EA62C317F50D9400C5A638 /* sv */,
 				5871B2291AC373F7005C010A /* ar */,
+				5871B22B1AC37590005C010A /* el */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

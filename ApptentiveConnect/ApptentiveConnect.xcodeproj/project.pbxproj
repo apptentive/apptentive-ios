@@ -675,6 +675,8 @@
 		5871B2291AC373F7005C010A /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5871B22A1AC37576005C010A /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5871B22B1AC37590005C010A /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5871B22C1AC375FF005C010A /* fr-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "fr-CA"; path = "fr-CA.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		5871B22D1AC37620005C010A /* fr-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "fr-CA"; path = "fr-CA.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		58805F3418120BBF00210DA5 /* UIImage+ATImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ATImageEffects.m"; sourceTree = "<group>"; };
 		58805F3518120BBF00210DA5 /* UIImage+ATImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ATImageEffects.h"; sourceTree = "<group>"; };
 		58805F3818120DE100210DA5 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
@@ -1632,6 +1634,7 @@
 				sv,
 				ar,
 				el,
+				"fr-CA",
 			);
 			mainGroup = 496DC3741333D35600743F65;
 			productRefGroup = 496DC3801333D35600743F65 /* Products */;
@@ -1949,6 +1952,7 @@
 				49D07DCF17F29A1F0042FCFD /* en */,
 				5871B2281AC373C0005C010A /* ar */,
 				5871B22A1AC37576005C010A /* el */,
+				5871B22C1AC375FF005C010A /* fr-CA */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1970,6 +1974,7 @@
 				49EA62C317F50D9400C5A638 /* sv */,
 				5871B2291AC373F7005C010A /* ar */,
 				5871B22B1AC37590005C010A /* el */,
+				5871B22D1AC37620005C010A /* fr-CA */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

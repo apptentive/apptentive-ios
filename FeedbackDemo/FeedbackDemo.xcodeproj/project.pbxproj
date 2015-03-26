@@ -156,6 +156,7 @@
 		58849A4F19F0AA4D00641140 /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
 		58C908BB1AC4967600DF8C4C /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		58C908BD1AC496E100DF8C4C /* es-ES */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-ES"; path = "es-ES.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		58C908BE1AC49F3A00DF8C4C /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		58EA5B3517B4778F00ECEB4B /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		58EA5B3A17B4795B00ECEB4B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		58EA5B4017B47A4600ECEB4B /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -397,6 +398,7 @@
 				sv,
 				tr,
 				"es-ES",
+				ar,
 			);
 			mainGroup = 49C002DC1334172E0071F088;
 			productRefGroup = 49C002E81334172E0071F088 /* Products */;
@@ -547,6 +549,7 @@
 				5825F10518AD592C00315374 /* zh */,
 				58C908BB1AC4967600DF8C4C /* tr */,
 				58C908BD1AC496E100DF8C4C /* es-ES */,
+				58C908BE1AC49F3A00DF8C4C /* ar */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

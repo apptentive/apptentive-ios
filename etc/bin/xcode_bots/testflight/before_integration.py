@@ -9,4 +9,7 @@ PATH=/Library/Frameworks/Python.framework/Versions/3.4/bin:$PATH
 # Set unique Build Number prior to TestFlight upload
 cavejohnson setBuildNumber --plist-path ./apptentive-ios/FeedbackDemo/FeedbackDemo/FeedbackDemo-Info.plist
 
+# Set internal Apptentive API Key for TestFlight
+cavejohnson setPlistValueForKey --plist-path ./apptentive-ios/FeedbackDemo/FeedbackDemo/FeedbackDemo-Info.plist --value INSERT_TESTFLIGHT_API_KEY --key ATTestFlightAPIKey
+
 echo "Finished running Before Integration script"

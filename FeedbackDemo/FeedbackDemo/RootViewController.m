@@ -40,9 +40,8 @@ enum kEventRows {
 @implementation RootViewController
 
 - (void)viewDidLoad {
-	ATConnect *connection = [ATConnect sharedConnection];
-	connection.apiKey = kApptentiveAPIKey;
 	self.navigationItem.title = @"Apptentive Demo";
+	
 	UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"at_logo_info"]];
 	imageView.contentMode = UIViewContentModeCenter;
 	self.tableView.tableHeaderView = imageView;

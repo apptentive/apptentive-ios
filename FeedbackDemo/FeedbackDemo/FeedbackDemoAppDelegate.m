@@ -33,7 +33,12 @@
 		[ATConnect sharedConnection].apiKey = kApptentiveAPIKey;
 	}
 	
-	[ATConnect sharedConnection].appID = kApptentiveAppID;
+	NSString *testFlightAppID = plist[@"ATTestFlightAppIDKey"];
+	if (testFlightAppID) {
+		[ATConnect sharedConnection].appID = testFlightAppID;
+	} else {
+		[ATConnect sharedConnection].appID = kApptentiveAppID;
+	}
 
 	[[ATConnect sharedConnection] addIntegration:@"feedback_demo_integration_configuration" withConfiguration:@{@"fake_apiKey": @"ABC-123-XYZ"}];
 	

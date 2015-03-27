@@ -76,7 +76,9 @@ enum kEventRows {
 		return;
 	}
 	checkedAlready = YES;
-	if ([kApptentiveAPIKey isEqualToString:@"ApptentiveApiKey"]) {
+	
+	NSString *apiKey = [ATConnect sharedConnection].apiKey ?: kApptentiveAPIKey;
+	if ([apiKey isEqualToString:@"ApptentiveApiKey"]) {
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Please Set API Key" message:@"This demo app will not work properly until you set your API key in defines.h" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
 		[alert show];
 		[alert autorelease];

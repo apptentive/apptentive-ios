@@ -78,11 +78,12 @@ enum kEventRows {
 	checkedAlready = YES;
 	
 	NSString *apiKey = [ATConnect sharedConnection].apiKey ?: kApptentiveAPIKey;
+	NSString *appID = [ATConnect sharedConnection].appID ?: kApptentiveAppID;
 	if ([apiKey isEqualToString:@"ApptentiveApiKey"]) {
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Please Set API Key" message:@"This demo app will not work properly until you set your API key in defines.h" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
 		[alert show];
 		[alert autorelease];
-	} else if ([kApptentiveAppID isEqualToString:@"ExampleAppID"]) {
+	} else if ([appID isEqualToString:@"ExampleAppID"]) {
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Please Set App ID" message:@"This demo app won't be able to show your app in the app store until you set your App ID in defines.h" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
 		[alert show];
 		[alert autorelease];

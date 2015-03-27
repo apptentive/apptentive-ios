@@ -185,8 +185,7 @@ enum {
 		[hud autorelease];
 	}
 	
-	NSDictionary *userInfo = @{@"id": survey.identifier ?: [NSNull null]};
-	[self.interaction engage:ATInteractionSurveyEventLabelSubmit fromViewController:self userInfo:userInfo];
+	[self.interaction engage:ATInteractionSurveyEventLabelSubmit fromViewController:self];
 	
 	[self.navigationController dismissViewControllerAnimated:YES completion:NULL];
 	
@@ -586,9 +585,7 @@ enum {
 					}
 				}
 				
-				NSDictionary *userInfo = @{@"survey_id": survey.identifier ?: [NSNull null],
-										   @"id": question.identifier ?: [NSNull null],
-										   };
+				NSDictionary *userInfo = @{@"id": question.identifier ?: [NSNull null]};
 				
 				[self.interaction engage:ATInteractionSurveyEventLabelQuestionResponse fromViewController:self userInfo:userInfo];
 
@@ -702,9 +699,7 @@ enum {
 	}
 	
 	if (![sentNotificationsAboutQuestionIDs containsObject:question.identifier]) {
-		NSDictionary *userInfo = @{@"survey_id": survey.identifier ?: [NSNull null],
-								   @"id": question.identifier ?: [NSNull null],
-								   };
+		NSDictionary *userInfo = @{@"id": question.identifier ?: [NSNull null]};
 		
 		[self.interaction engage:ATInteractionSurveyEventLabelQuestionResponse fromViewController:self userInfo:userInfo];
 		
@@ -787,8 +782,7 @@ enum {
 }
 
 - (void)cancel:(id)sender {
-	NSDictionary *userInfo = @{@"id": survey.identifier ?: [NSNull null]};
-	[self.interaction engage:ATInteractionSurveyEventLabelCancel fromViewController:self userInfo:userInfo];
+	[self.interaction engage:ATInteractionSurveyEventLabelCancel fromViewController:self];
 	
 	[self.navigationController dismissViewControllerAnimated:YES completion:NULL];
 }

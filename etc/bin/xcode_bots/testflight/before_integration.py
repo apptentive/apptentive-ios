@@ -8,3 +8,5 @@ PATH=/Library/Frameworks/Python.framework/Versions/3.4/bin:$PATH
 
 # Set unique Build Number prior to TestFlight upload
 cavejohnson setBuildNumber --plist-path ./apptentive-ios/FeedbackDemo/FeedbackDemo/FeedbackDemo-Info.plist
+
+echo "Finished running Before Integration script"

@@ -78,7 +78,12 @@
 	}
 	
 	self.bounds = CGRectIntegral(insetAllRect);
-	self.center = CGPointMake(floorf(parentWindow.center.x), floorf(parentWindow.center.y));
+	
+	CGPoint centerPoint = parentWindow.center;
+	CGPoint orientationAdjustedCenterPoint = CGPointMake(MIN(centerPoint.x, centerPoint.y), MAX(centerPoint.x, centerPoint.y));
+	
+	self.center = CGPointMake(floorf(orientationAdjustedCenterPoint.x), floorf(orientationAdjustedCenterPoint.y));
+	
 	label.frame = CGRectIntegral(finalLabelRect);
 	icon.frame = CGRectIntegral(finalImageRect);
 }

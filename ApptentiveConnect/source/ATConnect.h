@@ -57,9 +57,9 @@ extern NSString *const ATIntegrationKeyParse;
  
  ## Engagement Events
  
- The rating prompt and other Apptentive interactions are targeted to certain Apptentive events. For example, 
- you could decide to show the rating prompt at the event user_completed_level. You can then, later, 
- reconfigure the rating prompt interaction to show at user_logged_in.
+ The Ratings Prompt and other Apptentive interactions are targeted to certain Apptentive events. For example,
+ you could decide to show the Ratings Prompt at the event user_completed_level. You can then, later,
+ reconfigure the Ratings Prompt interaction to show at user_logged_in.
  
  You would add calls at these points to optionally engage with the user:
  
@@ -430,7 +430,7 @@ extern NSString *const ATIntegrationKeyParse;
  Open your app's page on the App Store or Mac App Store.
  
  This method can be used to power, for example, a "Rate this app" button in your settings screen.
- It opens the app store directly, without the normal Apptentive Ratings Flow.
+ `openAppStore` opens the app store directly, without the normal Apptentive Ratings Prompt.
  */
 - (void)openAppStore;
 

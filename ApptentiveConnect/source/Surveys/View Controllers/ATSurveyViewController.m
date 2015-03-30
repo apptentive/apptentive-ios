@@ -439,6 +439,7 @@ enum {
 					textView.backgroundColor = [UIColor clearColor];
 					textView.tag = kTextViewTag;
 					textView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+					textView.scrollEnabled = NO;
 					[cell.contentView addSubview:textView];
 					textView.returnKeyType = UIReturnKeyDefault;
 					[textView release], textView = nil;

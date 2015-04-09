@@ -156,7 +156,11 @@
 	self.containerView.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
 	self.containerView.layer.cornerRadius = 7.0;
 	
-	NSInteger buttonHeight = ([[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationPortrait) ? 44 : 30;
+	NSInteger buttonHeight = 44;
+	
+	if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone &&  UIDeviceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]) ) {
+		buttonHeight = 33;
+	}
 	
 	CGFloat pixelLineWidth = [[UIScreen mainScreen] scale] == 2 ? 0.25 : 0.5;
 	

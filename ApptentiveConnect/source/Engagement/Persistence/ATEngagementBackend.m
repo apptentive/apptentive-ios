@@ -578,4 +578,9 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	[defaults setObject:@{} forKey:ATEngagementInteractionsInvokesVersionKey];
 	[defaults synchronize];
 }
+
+- (NSArray *)allEngagementInteractions {
+	return [_engagementInteractions allValues];
+}
+
 @end

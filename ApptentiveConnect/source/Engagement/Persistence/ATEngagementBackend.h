@@ -75,4 +75,5 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey;
 
 // Used for debugging only.
 - (void)resetUpgradeVersionInfo;
+- (NSArray *)allEngagementInteractions;
 @end

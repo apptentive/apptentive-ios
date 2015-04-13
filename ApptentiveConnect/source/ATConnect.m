@@ -106,6 +106,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	[appID release], appID = nil;
 	[initialUserName release], initialUserName = nil;
 	[initialUserEmailAddress release], initialUserEmailAddress = nil;
+	[engagementInteractions release], engagementInteractions = nil;
 	[super dealloc];
 }
 
@@ -456,6 +457,34 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (void)resetUpgradeData {
 	[[ATEngagementBackend sharedBackend] resetUpgradeVersionInfo];
+}
+
+- (NSArray *) engagementInteractions {
+	if (!engagementInteractions) {
+		engagementInteractions = [[[ATEngagementBackend sharedBackend] allEngagementInteractions] retain];
+	}
+
+	return engagementInteractions;
+}
+
+- (NSInteger)numberOfEngagementInteractions {
+	return [[self engagementInteractions] count];
+}
+
+- (NSString *)engagementInteractionNameAtIndex:(NSInteger)index {
+	ATInteraction *interaction = [[self engagementInteractions] objectAtIndex:index];
+
+	return [interaction.configuration objectForKey:@"name"] ?: [interaction.configuration objectForKey:@"title"] ?: @"Untitled Interaction";
+}
+
+- (NSString *)engagementInteractionTypeAtIndex:(NSInteger)index {
+	ATInteraction *interaction = [[self engagementInteractions] objectAtIndex:index];
+
+	return interaction.type;
+}
+
+- (void)presentInteractionAtIndex:(NSInteger)index fromViewController:(UIViewController *)viewController {
+	[[ATEngagementBackend sharedBackend] presentInteraction:[self.engagementInteractions objectAtIndex:index] fromViewController:viewController];
 }
 
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion {

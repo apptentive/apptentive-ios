@@ -11,9 +11,12 @@
 #import "ATConnect.h"
 #import "defines.h"
 
+#import "ATConnect_Private.h"
+
 enum kRootTableSections {
 	kMessageCenterSection,
 	kEventSection,
+	kInteractionSection,
 	kSectionCount
 };
 
@@ -119,6 +122,8 @@ enum kEventRows {
 		return kEventRowCount;
 	} else if (section == kMessageCenterSection) {
 		return kMessageCenterRowCount;
+	} else if (section == kInteractionSection) {
+		return [[ATConnect sharedConnection] numberOfEngagementInteractions];
 	}
 	return 1;
 }
@@ -128,13 +133,16 @@ enum kEventRows {
 	
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil) {
-		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier] autorelease];
 		cell.accessoryView = nil;
 	}
 	
 	cell.textLabel.textColor = [UIColor blackColor];
 	
 	if (indexPath.section == kEventSection) {
+		cell.detailTextLabel.text = nil;
+		cell.accessoryView = nil;
+
 		if (indexPath.row == kEventRowEvent1) {
 			cell.textLabel.text = [NSString stringWithFormat:@"Engage `%@` event", kApptentiveEvent1];
 		} else if (indexPath.row == kEventRowEvent2) {
@@ -147,6 +155,8 @@ enum kEventRows {
 			cell.textLabel.text = [NSString stringWithFormat:@"Engage `%@` event", kApptentiveEvent5];
 		}
 	} else if (indexPath.section == kMessageCenterSection) {
+		cell.detailTextLabel.text = nil;
+
 		if (indexPath.row == kMessageCenterRowShowMessageCenter) {
 			cell.textLabel.text = @"Message Center";
 			UILabel *unreadLabel = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -168,6 +178,11 @@ enum kEventRows {
 			
 			cell.accessoryView = [unreadLabel autorelease];
 		}
+	} else if (indexPath.section == kInteractionSection) {
+		cell.accessoryView = nil;
+
+		cell.textLabel.text = [[ATConnect sharedConnection] engagementInteractionNameAtIndex:indexPath.row];
+		cell.detailTextLabel.text = [[ATConnect sharedConnection] engagementInteractionTypeAtIndex:indexPath.row];
 	}
 	
 	return cell;
@@ -196,7 +211,9 @@ enum kEventRows {
 				[[ATConnect sharedConnection] presentMessageCenterFromViewController:self];
 			}
 		}
-	}
+	} else if (indexPath.section == kInteractionSection) {
+        [[ATConnect sharedConnection] presentInteractionAtIndex:indexPath.row fromViewController:self];
+    }
 	
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -207,6 +224,8 @@ enum kEventRows {
 		title = @"Message Center";
 	} else if (section == kEventSection) {
 		title = @"Events";
+	} else if (section == kInteractionSection) {
+		title = @"Interactions";
 	}
 	
 	return title;
@@ -214,7 +233,7 @@ enum kEventRows {
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
 	NSString *title = nil;
-	if (section == kEventSection) {
+	if (section == kSectionCount - 1) {
 		title = [NSString stringWithFormat:@"ApptentiveConnect v%@", kATConnectVersionString];
 	}
 	return title;

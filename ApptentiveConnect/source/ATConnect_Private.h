@@ -11,7 +11,9 @@
 extern NSString *const ATConnectCustomPersonDataChangedNotification;
 extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 
-@interface ATConnect ()
+@interface ATConnect () {
+	NSArray *engagementInteractions;
+}
 - (NSDictionary *)customPersonData;
 - (NSDictionary *)customDeviceData;
 - (NSDictionary *)integrationConfiguration;
@@ -30,6 +32,13 @@ extern NSString *const ATConnectCustomDeviceDataChangedNotification;
  * images, xibs, strings files, etc.
  */
 + (NSBundle *)resourceBundle;
+
+// Debug/test interactions by invoking them directly
+- (NSInteger)numberOfEngagementInteractions;
+- (NSString *)engagementInteractionNameAtIndex:(NSInteger)index;
+- (NSString *)engagementInteractionTypeAtIndex:(NSInteger)index;
+- (void)presentInteractionAtIndex:(NSInteger)index fromViewController:(UIViewController *)viewController;
+
 @end
 
 /*! Replacement for NSLocalizedString within ApptentiveConnect. Pulls

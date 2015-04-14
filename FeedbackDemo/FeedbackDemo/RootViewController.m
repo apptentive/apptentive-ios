@@ -11,6 +11,8 @@
 #import "ATConnect.h"
 #import "defines.h"
 
+// The "ATConnect_Private" header is used only for testing purposes in the demo app.
+// Please do not use it in any live apps in the App Store.
 #import "ATConnect_Private.h"
 
 enum kRootTableSections {
@@ -33,6 +35,8 @@ enum kEventRows {
 	kEventRowEvent5,
 	kEventRowCount
 };
+
+NSInteger const refreshInteractionsCellTag = 555;
 
 @interface RootViewController ()
 - (void)surveyBecameAvailable:(NSNotification *)notification;
@@ -123,7 +127,9 @@ enum kEventRows {
 	} else if (section == kMessageCenterSection) {
 		return kMessageCenterRowCount;
 	} else if (section == kInteractionSection) {
-		return [[ATConnect sharedConnection] numberOfEngagementInteractions];
+		NSInteger interactionsCount = [[ATConnect sharedConnection] engagementInteractions].count;
+
+		return interactionsCount ?: 1;
 	}
 	return 1;
 }
@@ -179,17 +185,26 @@ enum kEventRows {
 			cell.accessoryView = [unreadLabel autorelease];
 		}
 	} else if (indexPath.section == kInteractionSection) {
-		cell.accessoryView = nil;
-
-		cell.textLabel.text = [[ATConnect sharedConnection] engagementInteractionNameAtIndex:indexPath.row];
-		cell.detailTextLabel.text = [[ATConnect sharedConnection] engagementInteractionTypeAtIndex:indexPath.row];
+		NSInteger interactionsCount = [[ATConnect sharedConnection] engagementInteractions].count;
+		
+		if (interactionsCount == 0) {
+			cell.textLabel.text = @"Refresh Interactions...";
+			cell.detailTextLabel.text = nil;
+			cell.accessoryView = nil;
+			cell.tag = refreshInteractionsCellTag;
+		}
+		else {
+			cell.textLabel.text = [[ATConnect sharedConnection] engagementInteractionNameAtIndex:indexPath.row];
+			cell.detailTextLabel.text = [[ATConnect sharedConnection] engagementInteractionTypeAtIndex:indexPath.row];
+			cell.accessoryView = nil;
+			cell.tag = 0;
+		}
 	}
 	
 	return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	
 	if (indexPath.section == kEventSection) {
 		if (indexPath.row == kEventRowEvent1) {
 			[[ATConnect sharedConnection] engage:kApptentiveEvent1 fromViewController:self];
@@ -212,7 +227,14 @@ enum kEventRows {
 			}
 		}
 	} else if (indexPath.section == kInteractionSection) {
-        [[ATConnect sharedConnection] presentInteractionAtIndex:indexPath.row fromViewController:self];
+		if (indexPath.row == 0 && [tableView cellForRowAtIndexPath:indexPath].tag == refreshInteractionsCellTag) {
+			[self.tableView reloadData];
+		}
+		else if (indexPath.row < [[ATConnect sharedConnection] engagementInteractions].count) {
+			[[ATConnect sharedConnection] presentInteractionAtIndex:indexPath.row fromViewController:self];
+		} else {
+			[self.tableView reloadData];
+		}
     }
 	
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];

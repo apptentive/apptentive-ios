@@ -11,9 +11,8 @@
 extern NSString *const ATConnectCustomPersonDataChangedNotification;
 extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 
-@interface ATConnect () {
-	NSArray *engagementInteractions;
-}
+@interface ATConnect ()
+
 - (NSDictionary *)customPersonData;
 - (NSDictionary *)customDeviceData;
 - (NSDictionary *)integrationConfiguration;
@@ -34,7 +33,7 @@ extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 + (NSBundle *)resourceBundle;
 
 // Debug/test interactions by invoking them directly
-- (NSInteger)numberOfEngagementInteractions;
+- (NSArray *)engagementInteractions;
 - (NSString *)engagementInteractionNameAtIndex:(NSInteger)index;
 - (NSString *)engagementInteractionTypeAtIndex:(NSInteger)index;
 - (void)presentInteractionAtIndex:(NSInteger)index fromViewController:(UIViewController *)viewController;

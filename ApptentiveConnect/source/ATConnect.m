@@ -106,7 +106,6 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	[appID release], appID = nil;
 	[initialUserName release], initialUserName = nil;
 	[initialUserEmailAddress release], initialUserEmailAddress = nil;
-	[engagementInteractions release], engagementInteractions = nil;
 	[super dealloc];
 }
 
@@ -459,12 +458,8 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	[[ATEngagementBackend sharedBackend] resetUpgradeVersionInfo];
 }
 
-- (NSArray *) engagementInteractions {
-	if (!engagementInteractions) {
-		engagementInteractions = [[[ATEngagementBackend sharedBackend] allEngagementInteractions] retain];
-	}
-
-	return engagementInteractions;
+- (NSArray *)engagementInteractions {
+	return [[ATEngagementBackend sharedBackend] allEngagementInteractions];
 }
 
 - (NSInteger)numberOfEngagementInteractions {

@@ -25,8 +25,20 @@
 	}
 	[self.window makeKeyAndVisible];
 	
-	[[ATConnect sharedConnection] setApiKey:kApptentiveAPIKey];
-	[ATConnect sharedConnection].appID = kApptentiveAppID;
+	NSDictionary *plist = [[NSBundle mainBundle] infoDictionary];
+	NSString *testFlightAPIKey = plist[@"ATTestFlightAPIKey"];
+	if (testFlightAPIKey) {
+		[ATConnect sharedConnection].apiKey = testFlightAPIKey;
+	} else {
+		[ATConnect sharedConnection].apiKey = kApptentiveAPIKey;
+	}
+	
+	NSString *testFlightAppID = plist[@"ATTestFlightAppIDKey"];
+	if (testFlightAppID) {
+		[ATConnect sharedConnection].appID = testFlightAppID;
+	} else {
+		[ATConnect sharedConnection].appID = kApptentiveAppID;
+	}
 
 	[[ATConnect sharedConnection] addIntegration:@"feedback_demo_integration_configuration" withConfiguration:@{@"fake_apiKey": @"ABC-123-XYZ"}];
 	

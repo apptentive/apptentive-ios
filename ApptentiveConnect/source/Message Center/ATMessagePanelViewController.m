@@ -49,6 +49,7 @@ enum {
 - (void)statusBarChanged:(NSNotification *)notification;
 - (void)keyboardWasShown:(NSNotification *)notification;
 - (void)applicationDidBecomeActive:(NSNotification *)notification;
+- (void)applicationWillResignActive:(NSNotification *)notification;
 - (void)feedbackChanged:(NSNotification *)notification;
 - (void)hide:(BOOL)animated;
 - (void)finishHide;
@@ -115,6 +116,7 @@ enum {
 	}
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarChanged:) name:UIApplicationDidChangeStatusBarFrameNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardDidShowNotification object:nil];
@@ -882,11 +884,13 @@ enum {
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification {
 	@autoreleasepool {
-		if (self.window.hidden == NO) {
-			[self retain];
-			[self unhide:NO];
-		}
+		[self retain];
+		[self unhide:NO];
 	}
+}
+
+- (void)applicationWillResignActive:(NSNotification *)notification {
+	[self hide:NO];
 }
 
 - (void)feedbackChanged:(NSNotification *)notification {

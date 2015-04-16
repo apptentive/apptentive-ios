@@ -4,7 +4,5 @@
 <dict>
 	<key>application-identifier</key>
 	<string>$(AppIdentifierPrefix)$(CFBundleIdentifier)</string>
-	<key>beta-reports-active</key>
-	<true/>
 </dict>
 </plist>

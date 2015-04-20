@@ -1,13 +1,16 @@
 Pod::Spec.new do |s|
-  s.name     = 'apptentive-ios'
-  s.version  = '1.7.2'
+  s.name     = 'Apptentive'
+  s.module_name = 'Apptentive'
+  s.public_header_files = ['ApptentiveConnect/source/ATConnect.h']
+  s.version  = '2.Swift'
   s.license  = 'BSD'
   s.summary  = 'Apptentive Customer Communications SDK.'
   s.homepage = 'https://www.apptentive.com/'
   s.authors  = { "Andrew Wooster" => "andrew@apptentive.com",
-                 "Peter Kamb" => "peter@apptentive.com" }
+                 "Peter Kamb" => "peter@apptentive.com",
+                 "Frank Schmitt" => "frank@apptentive.com"}
   s.source   = { :git => 'https://github.com/apptentive/apptentive-ios.git', :tag => "v#{s.version}" }
-  s.platform = :ios, '5.0'
+  s.platform = :ios, '8.0'
   s.source_files   = 'ApptentiveConnect/source/**/*.{h,m}','ApptentiveConnect/ext/**/*.{h,m}'
   s.exclude_files = 'ApptentiveConnect/ext/PrefixedTTTAttributedLabel/**/*.*'
   s.subspec 'arc-files' do |sna|

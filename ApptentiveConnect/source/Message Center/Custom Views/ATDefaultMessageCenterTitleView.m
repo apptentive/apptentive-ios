@@ -66,7 +66,7 @@
 	title.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	
 	if ([[UINavigationBar class] respondsToSelector:@selector(appearance)]) {
-		NSMutableDictionary *titleTextAttributes = [[[[UINavigationBar appearance] titleTextAttributes] mutableCopy] autorelease];
+		NSMutableDictionary *titleTextAttributes = [NSMutableDictionary dictionaryWithDictionary:[[UINavigationBar appearance] titleTextAttributes]];
 		titleTextAttributes[NSBackgroundColorAttributeName] = [UIColor clearColor];
 		
 		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {

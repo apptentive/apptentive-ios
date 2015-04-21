@@ -79,23 +79,21 @@
 	
 	self.bounds = CGRectIntegral(insetAllRect);
 	
-	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"8.0"]) {
-		switch ([UIApplication sharedApplication].statusBarOrientation) {
-			case UIInterfaceOrientationLandscapeRight:
-				self.transform = CGAffineTransformMakeRotation(M_PI_2);
-				break;
-				
-			case UIInterfaceOrientationLandscapeLeft:
-				self.transform = CGAffineTransformMakeRotation(-M_PI_2);
-				break;
-				
-			case UIInterfaceOrientationPortraitUpsideDown:
-				self.transform = CGAffineTransformMakeRotation(M_PI);
-				break;
-				
-			default:
-				break;
-		}
+	switch ([UIApplication sharedApplication].statusBarOrientation) {
+		case UIInterfaceOrientationLandscapeRight:
+			self.transform = CGAffineTransformMakeRotation(M_PI_2);
+			break;
+			
+		case UIInterfaceOrientationLandscapeLeft:
+			self.transform = CGAffineTransformMakeRotation(-M_PI_2);
+			break;
+			
+		case UIInterfaceOrientationPortraitUpsideDown:
+			self.transform = CGAffineTransformMakeRotation(M_PI);
+			break;
+			
+		default:
+			break;
 	}
 	
 	CGPoint centerPoint = parentWindow.center;

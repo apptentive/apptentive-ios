@@ -79,6 +79,23 @@
 	
 	self.bounds = CGRectIntegral(insetAllRect);
 	
+	switch ([UIApplication sharedApplication].statusBarOrientation) {
+		case UIInterfaceOrientationLandscapeRight:
+			self.transform = CGAffineTransformMakeRotation(M_PI_2);
+			break;
+			
+		case UIInterfaceOrientationLandscapeLeft:
+			self.transform = CGAffineTransformMakeRotation(-M_PI_2);
+			break;
+			
+		case UIInterfaceOrientationPortraitUpsideDown:
+			self.transform = CGAffineTransformMakeRotation(M_PI);
+			break;
+			
+		default:
+			break;
+	}
+	
 	CGPoint centerPoint = parentWindow.center;
 	CGPoint orientationAdjustedCenterPoint = CGPointMake(MIN(centerPoint.x, centerPoint.y), MAX(centerPoint.x, centerPoint.y));
 	

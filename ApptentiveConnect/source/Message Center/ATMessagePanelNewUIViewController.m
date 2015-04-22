@@ -131,6 +131,16 @@
 	}
 	lastSeenPresentingViewControllerFrame = f;
 	lastSeenPresentingViewControllerTransform = t;
+
+	// Show keyboard on rotation
+	if (self.emailField.isFirstResponder || self.feedbackView.isFirstResponder) {
+		// Remain first responder
+	} else if ([self.emailField.text isEqualToString:@""] && self.showEmailAddressField) {
+		[self.emailField becomeFirstResponder];
+	} else {
+		[self.feedbackView becomeFirstResponder];
+	}
+	
 #if USE_BLUR
 	UIImage *blurred = [self blurredBackgroundScreenshot];
 	[UIView transitionWithView:self.backgroundImageView

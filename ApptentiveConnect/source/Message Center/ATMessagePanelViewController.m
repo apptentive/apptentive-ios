@@ -162,10 +162,18 @@ enum {
 	
 	[self positionInWindow];
 	
-	if ([self.emailField.text isEqualToString:@""] && self.showEmailAddressField) {
-		[self.emailField becomeFirstResponder];
+	BOOL iPhoneIdiom = ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
+	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+	BOOL landScapeOrientation = (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight);
+	
+	if (iPhoneIdiom && landScapeOrientation) {
+		// Don't initial show keyboard
 	} else {
-		[self.feedbackView becomeFirstResponder];
+		if ([self.emailField.text isEqualToString:@""] && self.showEmailAddressField) {
+			[self.emailField becomeFirstResponder];
+		} else {
+			[self.feedbackView becomeFirstResponder];
+		}
 	}
 	
 	self.window.center = CGPointMake(CGRectGetMidX(endingFrame), CGRectGetMidY(endingFrame));
@@ -235,10 +243,19 @@ enum {
 		shadowView.alpha = 1.0;
 	} completion:^(BOOL finished) {
 		self.window.hidden = NO;
-		if ([self.emailField.text isEqualToString:@""] && self.showEmailAddressField) {
-			[self.emailField becomeFirstResponder];
+
+		BOOL iPhoneIdiom = ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
+		UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+		BOOL landScapeOrientation = (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight);
+		
+		if (iPhoneIdiom && landScapeOrientation) {
+			// Don't initial show keyboard
 		} else {
-			[self.feedbackView becomeFirstResponder];
+			if ([self.emailField.text isEqualToString:@""] && self.showEmailAddressField) {
+				[self.emailField becomeFirstResponder];
+			} else {
+				[self.feedbackView becomeFirstResponder];
+			}
 		}
 	}];
 	[shadowView release], shadowView = nil;

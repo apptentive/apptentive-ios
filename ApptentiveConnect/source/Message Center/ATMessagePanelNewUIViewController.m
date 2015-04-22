@@ -262,6 +262,12 @@
 			sizedEmail = [sizingString sizeWithFont:emailFont];
 #			pragma clang diagnostic pop
 		}
+		
+		// Larger email field for iPad
+		CGFloat minEmailHeght = ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) ? 44 : 33;
+		CGFloat emailHeight = MAX(minEmailHeght, sizedEmail.height);
+		sizedEmail = CGSizeMake(sizedEmail.width, emailHeight);
+		
 		CGRect emailFrame = CGRectMake(0, offsetY, width, sizedEmail.height);
 		emailFrame = CGRectInset(emailFrame, horizontalPadding+extraHorzontalPadding, 0);
 		

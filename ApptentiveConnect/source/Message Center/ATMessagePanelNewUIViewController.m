@@ -364,6 +364,9 @@
 	
 	CGSize contentSize = CGSizeMake(self.scrollView.bounds.size.width, offsetY);
 	
+	self.scrollView.showsHorizontalScrollIndicator = NO;
+	self.scrollView.showsVerticalScrollIndicator = NO;
+	
 	self.scrollView.contentSize = contentSize;
 	[self textViewDidChange:self.feedbackView];
 }

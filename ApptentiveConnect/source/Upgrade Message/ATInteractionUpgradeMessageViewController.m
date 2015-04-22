@@ -24,14 +24,18 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 @property (nonatomic, retain, readonly) ATInteraction *upgradeMessageInteraction;
 
 @property (nonatomic, retain) IBOutlet UIView *appIconContainer;
-@property (nonatomic, retain) IBOutlet UIImageView *appIconBackgroundView;
-@property (retain, nonatomic) IBOutlet NSLayoutConstraint *appIconHeight;
+@property (nonatomic, retain) IBOutlet UIButton *OKButton;
 @property (nonatomic, retain) IBOutlet UIImageView *appIconView;
 @property (nonatomic, retain) IBOutlet UIImageView *poweredByApptentiveIconView;
 @property (nonatomic, retain) IBOutlet UILabel *poweredByApptentiveLogo;
 @property (nonatomic, retain) IBOutlet UIView *poweredByBackground;
 @property (retain, nonatomic) IBOutlet NSLayoutConstraint *poweredByHeight;
 @property (nonatomic, retain) IBOutlet UIWebView *webView;
+
+@property (retain, nonatomic) IBOutlet NSLayoutConstraint *appIconContainerHeight;
+@property (retain, nonatomic) IBOutlet NSLayoutConstraint *OKButtonHeight;
+@property (retain, nonatomic) IBOutlet NSLayoutConstraint *poweredByBottomSpace;
+@property (retain, nonatomic) IBOutlet NSLayoutConstraint *OKButtonBottomSpace;
 
 - (IBAction)okButtonPressed:(id)sender;
 
@@ -56,10 +60,15 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 		[self.view setTintColor:[[ATConnect sharedConnection] tintColor]];
 	}
 	
+	self.appIconContainer.layer.borderColor = [UIColor colorWithWhite:0.87 alpha:1.0].CGColor;
+	self.appIconContainer.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
+	
+	self.OKButton.layer.borderColor = [UIColor colorWithWhite:0.87 alpha:1.0].CGColor;
+	self.OKButton.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
+	
 	// App icon
 	if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_app_icon"] boolValue]) {
 		[self.appIconView setImage:[ATUtilities appIcon]];
-		[self.appIconBackgroundView setImage:[ATBackend imageNamed:@"at_update_icon_shadow"]];
 
 		// Rounded corners
 		UIImage *maskImage = [ATBackend imageNamed:@"at_update_icon_mask"];
@@ -69,8 +78,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 		self.appIconView.layer.mask = maskLayer;
 		[maskLayer release], maskLayer = nil;
 	} else {
-		self.appIconHeight.constant = 0.0;
-		self.appIconContainer.hidden = YES;
+		self.appIconView.hidden = YES;
 	}
 	
 	// Powered by Apptentive logo
@@ -87,6 +95,10 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 	// Web view
 	NSString *html = [self.upgradeMessageInteraction.configuration objectForKey:@"body"];
 	[self.webView loadHTMLString:html baseURL:nil];
+	self.webView.scrollView.showsHorizontalScrollIndicator = NO;
+	self.webView.scrollView.showsVerticalScrollIndicator = NO;
+	
+	[self updateIconContainerHeightForOrientation:[UIApplication sharedApplication].statusBarOrientation];
 }
 
 - (IBAction)okButtonPressed:(id)sender {
@@ -110,12 +122,39 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 	[self.upgradeMessageInteraction engage:ATInteractionUpgradeMessageEventLabelLaunch fromViewController:self.presentingViewController];
 }
 
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+	[self updateIconContainerHeightForOrientation:toInterfaceOrientation];
+	
+	[UIView animateWithDuration:duration animations:^{
+		[self.view layoutIfNeeded];
+	}];
+}
+
+- (void)updateIconContainerHeightForOrientation:(UIInterfaceOrientation)orientation {
+	BOOL isPortrait = UIInterfaceOrientationIsPortrait(orientation);
+	BOOL isIPad = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad;
+	
+	if (isIPad || isPortrait) {
+		self.appIconContainerHeight.constant = 124.0;
+		self.webView.scrollView.contentInset = UIEdgeInsetsMake(90.0, 0.0, 0.0, 0.0);
+		self.OKButtonHeight.constant = 44.0;
+		
+		if (isIPad) {
+			self.OKButtonBottomSpace.constant = 0.0;
+			self.poweredByBottomSpace.constant = 44.0;
+		}
+	} else {
+		self.appIconContainerHeight.constant = 73.0;
+		self.webView.scrollView.contentInset = UIEdgeInsetsMake(73.0, 0.0, 0.0, 0.0);
+		self.OKButtonHeight.constant = 33.0;
+	}
+	
+}
+
 - (void)dealloc {
 	[_upgradeMessageInteraction release];
 	
 	[_appIconContainer release];
-	[_appIconBackgroundView release];
-	[_appIconHeight release];
 	[_appIconView release];
 	[_poweredByApptentiveIconView release];
 	[_poweredByApptentiveLogo release];
@@ -123,7 +162,28 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 	[_poweredByHeight release];
 	[_webView release];
 	
+	[_appIconContainerHeight release];
+	[_OKButtonHeight release];
+	[_poweredByBottomSpace release];
+	[_OKButtonBottomSpace release];
+	
 	[super dealloc];
 }
 
+- (void)viewDidUnload {
+	[self setAppIconContainer:nil];
+	[self setAppIconView:nil];
+	[self setPoweredByApptentiveIconView:nil];
+	[self setPoweredByApptentiveLogo:nil];
+	[self setPoweredByBackground:nil];
+	[self setPoweredByHeight:nil];
+	[self setWebView:nil];
+
+	[self setAppIconContainerHeight:nil];
+	[self setOKButtonHeight:nil];
+	[self setPoweredByBottomSpace:nil];
+	[self setOKButtonBottomSpace:nil];
+
+	[super viewDidUnload];
+}
 @end

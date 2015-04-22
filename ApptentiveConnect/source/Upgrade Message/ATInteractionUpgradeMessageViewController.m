@@ -33,9 +33,9 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 @property (nonatomic, retain) IBOutlet UIWebView *webView;
 
 @property (retain, nonatomic) IBOutlet NSLayoutConstraint *appIconContainerHeight;
+@property (retain, nonatomic) IBOutlet NSLayoutConstraint *OKButtonBottomSpace;
 @property (retain, nonatomic) IBOutlet NSLayoutConstraint *OKButtonHeight;
 @property (retain, nonatomic) IBOutlet NSLayoutConstraint *poweredByBottomSpace;
-@property (retain, nonatomic) IBOutlet NSLayoutConstraint *OKButtonBottomSpace;
 
 - (IBAction)okButtonPressed:(id)sender;
 
@@ -60,6 +60,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 		[self.view setTintColor:[[ATConnect sharedConnection] tintColor]];
 	}
 	
+	// Borders
 	self.appIconContainer.layer.borderColor = [UIColor colorWithWhite:0.87 alpha:1.0].CGColor;
 	self.appIconContainer.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
 	
@@ -87,9 +88,8 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 		UIImage *poweredByApptentiveIcon = [ATBackend imageNamed:@"at_update_logo"];
 		[self.poweredByApptentiveIconView setImage:poweredByApptentiveIcon];
 	} else {
-		self.poweredByApptentiveIconView.hidden = YES;
-		self.poweredByApptentiveLogo.hidden = YES;
-		self.poweredByHeight.constant = 1.0 / [UIScreen mainScreen].scale;
+		self.OKButtonBottomSpace.constant = 0.0;
+		self.poweredByBackground.hidden = YES;
 	}
 	
 	// Web view
@@ -133,10 +133,12 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 - (void)updateIconContainerHeightForOrientation:(UIInterfaceOrientation)orientation {
 	BOOL isPortrait = UIInterfaceOrientationIsPortrait(orientation);
 	BOOL isIPad = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad;
+	CGFloat topInset = 0.0;
 	
 	if (isIPad || isPortrait) {
+		topInset = self.appIconView.hidden ? 50.0 : 90.0;
+		
 		self.appIconContainerHeight.constant = 124.0;
-		self.webView.scrollView.contentInset = UIEdgeInsetsMake(90.0, 0.0, 0.0, 0.0);
 		self.OKButtonHeight.constant = 44.0;
 		
 		if (isIPad) {
@@ -144,11 +146,13 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 			self.poweredByBottomSpace.constant = 44.0;
 		}
 	} else {
+		topInset = self.appIconView.hidden ? 33.0 : 73.0;
+
 		self.appIconContainerHeight.constant = 73.0;
-		self.webView.scrollView.contentInset = UIEdgeInsetsMake(73.0, 0.0, 0.0, 0.0);
 		self.OKButtonHeight.constant = 33.0;
 	}
-	
+
+	self.webView.scrollView.contentInset = UIEdgeInsetsMake(topInset, 0.0, 0.0, 0.0);
 }
 
 - (void)dealloc {
@@ -161,11 +165,11 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 	[_poweredByBackground release];
 	[_poweredByHeight release];
 	[_webView release];
-	
+
 	[_appIconContainerHeight release];
+	[_OKButtonBottomSpace release];
 	[_OKButtonHeight release];
 	[_poweredByBottomSpace release];
-	[_OKButtonBottomSpace release];
 	
 	[super dealloc];
 }
@@ -178,11 +182,11 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 	[self setPoweredByBackground:nil];
 	[self setPoweredByHeight:nil];
 	[self setWebView:nil];
-
+	
 	[self setAppIconContainerHeight:nil];
+	[self setOKButtonBottomSpace:nil];
 	[self setOKButtonHeight:nil];
 	[self setPoweredByBottomSpace:nil];
-	[self setOKButtonBottomSpace:nil];
 
 	[super viewDidUnload];
 }

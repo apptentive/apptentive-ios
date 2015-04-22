@@ -9,19 +9,19 @@
 #import <Foundation/Foundation.h>
 #import "ATAPIRequest.h"
 
-NSString *const ATConfigurationPreferencesChangedNotification;
-NSString *const ATAppConfigurationLastUpdatePreferenceKey;
-NSString *const ATAppConfigurationExpirationPreferenceKey;
-NSString *const ATAppConfigurationMetricsEnabledPreferenceKey;
-NSString *const ATAppConfigurationMessageCenterEnabledKey;
-NSString *const ATAppConfigurationHideBrandingKey;
+extern NSString *const ATConfigurationPreferencesChangedNotification;
+extern NSString *const ATAppConfigurationLastUpdatePreferenceKey;
+extern NSString *const ATAppConfigurationExpirationPreferenceKey;
+extern NSString *const ATAppConfigurationMetricsEnabledPreferenceKey;
+extern NSString *const ATAppConfigurationMessageCenterEnabledKey;
+extern NSString *const ATAppConfigurationHideBrandingKey;
 
-NSString *const ATAppConfigurationMessageCenterTitleKey;
-NSString *const ATAppConfigurationMessageCenterForegroundRefreshIntervalKey;
-NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey;
-NSString *const ATAppConfigurationMessageCenterEmailRequiredKey;
+extern NSString *const ATAppConfigurationMessageCenterTitleKey;
+extern NSString *const ATAppConfigurationMessageCenterForegroundRefreshIntervalKey;
+extern NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey;
+extern NSString *const ATAppConfigurationMessageCenterEmailRequiredKey;
 
-NSString *const ATAppConfigurationAppDisplayNameKey;
+extern NSString *const ATAppConfigurationAppDisplayNameKey;
 
 @protocol ATAppConfigurationUpdaterDelegate <NSObject>
 - (void)configurationUpdaterDidFinish:(BOOL)success;

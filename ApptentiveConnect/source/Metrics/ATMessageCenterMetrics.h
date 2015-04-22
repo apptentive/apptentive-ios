@@ -8,18 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
-NSString *const ATMessageCenterDidShowNotification;
-NSString *const ATMessageCenterDidHideNotification;
-NSString *const ATMessageCenterDidAttachNotification;
-NSString *const ATMessageCenterDidReadNotification;
-NSString *const ATMessageCenterDidSendNotification;
+extern NSString *const ATMessageCenterDidShowNotification;
+extern NSString *const ATMessageCenterDidHideNotification;
+extern NSString *const ATMessageCenterDidAttachNotification;
+extern NSString *const ATMessageCenterDidReadNotification;
+extern NSString *const ATMessageCenterDidSendNotification;
 
-NSString *const ATMessageCenterMessageIDKey;
-NSString *const ATMessageCenterMessageNonceKey;
+extern NSString *const ATMessageCenterMessageIDKey;
+extern NSString *const ATMessageCenterMessageNonceKey;
 
-NSString *const ATMessageCenterIntroDidShowNotification;
-NSString *const ATMessageCenterIntroDidSendNotification;
-NSString *const ATMessageCenterIntroDidCancelNotification;
-NSString *const ATMessageCenterIntroThankYouDidShowNotification;
-NSString *const ATMessageCenterIntroThankYouHitMessagesNotification;
-NSString *const ATMessageCenterIntroThankYouDidCloseNotification;
+extern NSString *const ATMessageCenterIntroDidShowNotification;
+extern NSString *const ATMessageCenterIntroDidSendNotification;
+extern NSString *const ATMessageCenterIntroDidCancelNotification;
+extern NSString *const ATMessageCenterIntroThankYouDidShowNotification;
+extern NSString *const ATMessageCenterIntroThankYouHitMessagesNotification;
+extern NSString *const ATMessageCenterIntroThankYouDidCloseNotification;

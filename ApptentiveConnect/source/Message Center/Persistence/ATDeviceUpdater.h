@@ -10,8 +10,8 @@
 
 #import "ATAPIRequest.h"
 
-NSString *const ATDeviceLastUpdatePreferenceKey;
-NSString *const ATDeviceLastUpdateValuePreferenceKey;
+extern NSString *const ATDeviceLastUpdatePreferenceKey;
+extern NSString *const ATDeviceLastUpdateValuePreferenceKey;
 
 @protocol ATDeviceUpdaterDelegate;
 

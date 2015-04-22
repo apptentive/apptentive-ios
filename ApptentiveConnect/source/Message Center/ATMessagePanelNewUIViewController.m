@@ -158,7 +158,7 @@
 	
 	NSInteger buttonHeight = 44;
 	
-	if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone &&  UIDeviceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]) ) {
+	if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone &&  UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]) ) {
 		buttonHeight = 33;
 	}
 	

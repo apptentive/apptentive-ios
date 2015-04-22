@@ -15,7 +15,7 @@ typedef enum {
 	ATNetworkWWANReachable
 } ATNetworkStatus;
 
-NSString *const ATReachabilityStatusChanged;
+extern NSString *const ATReachabilityStatusChanged;
 
 @interface ATReachability : NSObject {
 	SCNetworkReachabilityRef reachabilityRef;

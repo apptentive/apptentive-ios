@@ -11,7 +11,7 @@
 #import "ATAPIRequest.h"
 #import "ATConversation.h"
 
-NSString *const ATCurrentConversationPreferenceKey;
+extern NSString *const ATCurrentConversationPreferenceKey;
 
 @protocol ATConversationUpdaterDelegate;
 

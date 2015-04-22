@@ -8,13 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-NSString *const ATSurveyDidHideWindowNotification; // survey.cancel or survey.submit
-NSString *const ATSurveyDidAnswerQuestionNotification; // survey.question_response
+extern NSString *const ATSurveyDidHideWindowNotification; // survey.cancel or survey.submit
+extern NSString *const ATSurveyDidAnswerQuestionNotification; // survey.question_response
 
-NSString *const ATSurveyWindowTypeKey;
-NSString *const ATSurveyMetricsEventKey;
-NSString *const ATSurveyMetricsSurveyIDKey;
-NSString *const ATSurveyMetricsSurveyQuestionIDKey;
+extern NSString *const ATSurveyWindowTypeKey;
+extern NSString *const ATSurveyMetricsEventKey;
+extern NSString *const ATSurveyMetricsSurveyIDKey;
+extern NSString *const ATSurveyMetricsSurveyQuestionIDKey;
 
 typedef enum {
 	ATSurveyWindowTypeSurvey,

@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-NSString *const ATInteractionUpgradeMessagePresentingViewControllerSwizzledDidRotateNotification;
-NSString *const ATMessagePanelPresentingViewControllerSwizzledDidRotateNotification;
+extern NSString *const ATInteractionUpgradeMessagePresentingViewControllerSwizzledDidRotateNotification;
+extern NSString *const ATMessagePanelPresentingViewControllerSwizzledDidRotateNotification;
 
 @interface UIViewController (ATSwizzle)
 - (void)at_swizzleUpgradeMessageDidRotateFromInterfaceOrientation;

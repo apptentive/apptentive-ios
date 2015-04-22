@@ -159,7 +159,7 @@ static NSDateFormatter *dateFormatter = nil;
 	CGSize size = image.size;
 	BOOL onSide = NO;
 	
-	if (KINDA_EQUALS(fabsf(radians), M_PI)) {
+	if (KINDA_EQUALS(fabs(radians), M_PI)) {
 		// Upside down, weeeee.
 		t = CGAffineTransformTranslate(t, size.width, size.height);
 		t = CGAffineTransformRotate(t, M_PI);
@@ -469,7 +469,7 @@ static NSDateFormatter *dateFormatter = nil;
 		
 		NSInteger timeZoneOffset = [timeZone secondsFromGMT];
 		NSString *sign = (timeZoneOffset >= 0) ? @"+" : @"-";
-		NSInteger hoursOffset = abs(floor(timeZoneOffset/60/60));
+		NSInteger hoursOffset = fabs(floor(timeZoneOffset/60/60));
 		NSInteger minutesOffset = abs((int)floor(timeZoneOffset/60) % 60);
 		NSString *timeZoneString = [NSString stringWithFormat:@"%@%.2d%.2d", sign, (int)hoursOffset, (int)minutesOffset];
 		

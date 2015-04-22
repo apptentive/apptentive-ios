@@ -10,7 +10,7 @@
 
 #import "ATURLConnection.h"
 
-NSString *const ATAPIRequestStatusChanged;
+extern NSString *const ATAPIRequestStatusChanged;
 
 @class ATAPIRequest;
 

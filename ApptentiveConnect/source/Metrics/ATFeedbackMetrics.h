@@ -8,11 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-NSString *const ATFeedbackDidShowWindowNotification;
-NSString *const ATFeedbackDidHideWindowNotification;
+extern NSString *const ATFeedbackDidShowWindowNotification;
+extern NSString *const ATFeedbackDidHideWindowNotification;
 
-NSString *const ATFeedbackWindowTypeKey;
-NSString *const ATFeedbackWindowHideEventKey;
+extern NSString *const ATFeedbackWindowTypeKey;
+extern NSString *const ATFeedbackWindowHideEventKey;
 
 typedef enum {
 	ATFeedbackWindowTypeFeedback,

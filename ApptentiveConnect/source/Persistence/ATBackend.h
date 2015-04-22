@@ -22,7 +22,7 @@
 #import "ATMessagePanelViewController.h"
 #endif
 
-NSString *const ATBackendBecameReadyNotification;
+extern NSString *const ATBackendBecameReadyNotification;
 
 #define USE_STAGING 0
 

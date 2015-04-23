@@ -973,30 +973,35 @@ enum {
 - (CGRect)onscreenRectOfView {
 	BOOL constrainViewWidth = [self isIPhoneAppInIPad];
 	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-	CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
 	CGRect screenBounds = [[UIScreen mainScreen] bounds];
-	CGFloat w = statusBarSize.width;
-	CGFloat h = statusBarSize.height;
-	if (CGSizeEqualToSize(CGSizeZero, statusBarSize)) {
-		w = screenBounds.size.width;
-		h = screenBounds.size.height;
-	}
+	CGFloat w = screenBounds.size.width;
+	CGFloat h = screenBounds.size.height;
 	
 	BOOL isLandscape = NO;
 	
 	CGFloat windowWidth = 0.0;
+	CGFloat windowHeight = 0.0;
 	
-	switch (orientation) {
-		case UIInterfaceOrientationLandscapeLeft:
-		case UIInterfaceOrientationLandscapeRight:
-			isLandscape = YES;
-			windowWidth = h;
-			break;
-		case UIInterfaceOrientationPortraitUpsideDown:
-		case UIInterfaceOrientationPortrait:
-		default:
-			windowWidth = w;
-			break;
+	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"8.0"]) {
+		w = screenBounds.size.width;
+		h = screenBounds.size.height;
+		windowWidth = w;
+		windowHeight = h;
+	} else {
+		switch (orientation) {
+			case UIInterfaceOrientationLandscapeLeft:
+			case UIInterfaceOrientationLandscapeRight:
+				isLandscape = YES;
+				windowWidth = h;
+				windowHeight = w;
+				break;
+			case UIInterfaceOrientationPortraitUpsideDown:
+			case UIInterfaceOrientationPortrait:
+			default:
+				windowWidth = w;
+				windowHeight = h;
+				break;
+		}
 	}
 	
 	CGFloat viewHeight = 0.0;
@@ -1005,15 +1010,14 @@ enum {
 	CGFloat originX = 0.0;
 	
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-		if (CGRectEqualToRect(CGRectZero, lastKeyboardRect)) {
-			viewHeight = isLandscape ? 368.0 : 368.0;
-		} else {
-			CGFloat keyboardHeight = lastKeyboardRect.size.height;
-			viewHeight = self.view.window.bounds.size.height - (isLandscape ? keyboardHeight + 40 : keyboardHeight + 100 + 200);
-		}
-		originY = isLandscape ? 20.0 : 200;
-		viewWidth = windowWidth - 12*2 - 100.0;
-		originX = floorf((windowWidth - viewWidth)/2.0);
+		CGFloat keyboardHeight = lastKeyboardRect.size.height;
+		
+		viewWidth = 532;
+		viewHeight = 328;
+		
+		originX = floorf((windowWidth - viewWidth) / 2.0);
+		originY = floorf((windowHeight - viewHeight - keyboardHeight) / 2.0);
+		
 	} else {
 		if (CGRectEqualToRect(CGRectZero, lastKeyboardRect)) {
 			CGFloat landscapeKeyboardHeight = 162;
@@ -1035,17 +1039,6 @@ enum {
 	f.origin.x = originX;
 	f.size.width = viewWidth;
 	f.size.height = viewHeight;
-
-	// Fix for iOS 8.
-	// Should convert message panel to Auto Layout.
-	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"8.0"]) {
-		if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
-			CGFloat width = screenBounds.size.width - 12;
-			CGFloat height = screenBounds.size.height - lastKeyboardRect.size.height - statusBarSize.height;
-			
-			f = CGRectMake(6, 0, width, height);
-		}
-	}
 	
 	return f;
 }
@@ -1134,35 +1127,7 @@ enum {
 		self.window.frame = newFrame;
 	}
 	
-	// Fix for iOS 8.
-	// Should convert message panel to Auto Layout.
-	CGRect onscreenRect = [self onscreenRectOfView];
-	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"8.0"]) {
-		CGRect contentFrame;
-		switch (orientation) {
-			case UIInterfaceOrientationLandscapeLeft:
-			case UIInterfaceOrientationLandscapeRight:
-			{
-				CGFloat originY = 2;
-				CGFloat keyboardHeight = lastKeyboardRect.size.height;
-				CGFloat contentHeight = self.view.window.bounds.size.height - keyboardHeight - 2 * originY;
-
-				CGFloat contentWidth = self.view.window.bounds.size.width - 100.0;
-				CGFloat originX = floorf((self.view.window.bounds.size.width - contentWidth) / 2.0);
-
-				contentFrame = CGRectMake(originX, originY, contentWidth, contentHeight);
-				break;
-			}
-			case UIInterfaceOrientationPortraitUpsideDown:
-			case UIInterfaceOrientationPortrait:
-			default:
-				contentFrame = onscreenRect;
-				break;
-		}
-		self.containerView.frame = contentFrame;
-	} else {
-		self.containerView.frame = onscreenRect;
-	}
+	self.containerView.frame = [self onscreenRectOfView];
 	
 	[self textViewDidChange:self.feedbackView];
 	

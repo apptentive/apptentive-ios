@@ -987,6 +987,9 @@ enum {
 		h = screenBounds.size.height;
 		windowWidth = w;
 		windowHeight = h;
+		if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+			isLandscape = YES;
+		}
 	} else {
 		switch (orientation) {
 			case UIInterfaceOrientationLandscapeLeft:
@@ -1020,9 +1023,14 @@ enum {
 		
 	} else {
 		if (CGRectEqualToRect(CGRectZero, lastKeyboardRect)) {
-			CGFloat landscapeKeyboardHeight = 162;
-			CGFloat portraitKeyboardHeight = 216;
-			viewHeight = self.view.window.bounds.size.height - (isLandscape ? landscapeKeyboardHeight + 8 - 6 : portraitKeyboardHeight + 8);
+			if (isLandscape) {
+				CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
+				viewHeight = windowHeight - 6 - MIN(statusBarSize.height, statusBarSize.width);
+			} else {
+				CGFloat landscapeKeyboardHeight = 162;
+				CGFloat portraitKeyboardHeight = 216;
+				viewHeight = self.view.window.bounds.size.height - (isLandscape ? landscapeKeyboardHeight + 8 - 6 : portraitKeyboardHeight + 8);
+			}
 		} else {
 			CGFloat keyboardHeight = lastKeyboardRect.size.height;
 			viewHeight = self.view.window.bounds.size.height - (isLandscape ? keyboardHeight + 8 - 6 : keyboardHeight + 8);

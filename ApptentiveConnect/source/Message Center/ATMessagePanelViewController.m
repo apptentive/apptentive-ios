@@ -503,6 +503,11 @@ enum {
 	return [self shouldReturn:textField];
 }
 
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+	[self.scrollView scrollRectToVisible:textField.frame animated:YES];
+}
+
+
 #pragma mark UITextViewDelegate
 - (void)textViewDidChange:(UITextView *)textView {
 	if (textView == self.feedbackView) {
@@ -528,6 +533,10 @@ enum {
 			self.scrollView.contentSize = newContentSize;
 		}
 	}
+}
+
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+	[self.scrollView scrollRectToVisible:textView.frame animated:YES];
 }
 
 #pragma mark UIScrollViewDelegate

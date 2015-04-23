@@ -7,7 +7,7 @@ The Feedback Dialog has received a number of UI improvements. Upgrade Messages a
 
 Localization files have been added for Arabic, Brazilian Portuguese, French Canadian, Korean, Spanish (Spain), and Turkish.
 
-Finally, the Feedback Demo example applicaton now allows you to easily select and display any interaction created on your Apptentive account. This allows for easy testing of any given interaction, such as a Survey or Upgrade Message, without needing to first engage the required events or satisfy any time limits.
+Finally, the Feedback Demo example application now allows you to easily select and display any interaction created on your Apptentive account. This allows for easy testing of any given interaction, such as a Survey or Upgrade Message, without needing to first engage the required events or satisfy any time limits.
 
 2015-03-23 pkamb, wooster v1.7.2
 --------------------------------

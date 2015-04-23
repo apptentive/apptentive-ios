@@ -1,3 +1,14 @@
+2015-04-23 pkamb, frankus v1.7.3
+--------------------------------
+
+The 1.7.3 release contains a variety of small enhancements.
+
+The Feedback Dialog has received a number of UI improvements. Upgrade Messages are now displayed in full screen, and a rotation bug has been fixed. Warnings introduced by Xcode 6.3 have been fixed.
+
+Localization files have been added for Arabic, Brazilian Portuguese, French Canadian, Korean, Spanish (Spain), and Turkish.
+
+Finally, the Feedback Demo example applicaton now allows you to easily select and display any interaction created on your Apptentive account. This allows for easy testing of any given interaction, such as a Survey or Upgrade Message, without needing to first engage the required events or satisfy any time limits.
+
 2015-03-23 pkamb, wooster v1.7.2
 --------------------------------
 

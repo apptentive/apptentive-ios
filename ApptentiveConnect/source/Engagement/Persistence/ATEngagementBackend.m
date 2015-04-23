@@ -453,6 +453,11 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 		return;
 	}
 	
+	if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive) {
+		// Only present interaction UI in Active state.
+		return;
+	}
+	
 	switch (interaction.interactionType) {
 		case ATInteractionTypeUpgradeMessage:
 			[self presentUpgradeMessageInteraction:interaction fromViewController:viewController];

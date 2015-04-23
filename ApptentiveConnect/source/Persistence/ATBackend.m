@@ -582,6 +582,12 @@ static NSURLCache *imageCache = nil;
 }
 
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData {
+	
+	if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive) {
+		// Only present Message Center UI in Active state.
+		return;
+	}
+	
 	self.currentCustomData = customData;
 	
 	if (!viewController) {

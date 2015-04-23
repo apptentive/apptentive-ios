@@ -162,19 +162,7 @@ enum {
 	
 	[self positionInWindow];
 	
-	BOOL iPhoneIdiom = ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
-	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-	BOOL landScapeOrientation = (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight);
-	
-	if (iPhoneIdiom && landScapeOrientation) {
-		// Don't initial show keyboard
-	} else {
-		if ([self.emailField.text isEqualToString:@""] && self.showEmailAddressField) {
-			[self.emailField becomeFirstResponder];
-		} else {
-			[self.feedbackView becomeFirstResponder];
-		}
-	}
+	[self selectFirstResponder];
 	
 	self.window.center = CGPointMake(CGRectGetMidX(endingFrame), CGRectGetMidY(endingFrame));
 	self.containerView.center = [self offscreenPositionOfView];
@@ -243,24 +231,28 @@ enum {
 		shadowView.alpha = 1.0;
 	} completion:^(BOOL finished) {
 		self.window.hidden = NO;
-
-		BOOL iPhoneIdiom = ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
-		UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-		BOOL landScapeOrientation = (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight);
 		
-		if (iPhoneIdiom && landScapeOrientation) {
-			// Don't initial show keyboard
-		} else {
-			if ([self.emailField.text isEqualToString:@""] && self.showEmailAddressField) {
-				[self.emailField becomeFirstResponder];
-			} else {
-				[self.feedbackView becomeFirstResponder];
-			}
-		}
+		[self selectFirstResponder];
 	}];
 	[shadowView release], shadowView = nil;
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroDidShowNotification object:self userInfo:nil];
+}
+
+- (void)selectFirstResponder {
+	BOOL iPhoneIdiom = ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
+	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+	BOOL landScapeOrientation = (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight);
+	
+	if (iPhoneIdiom && landScapeOrientation) {
+		// Don't initial show keyboard
+	} else {
+		if ([self.emailField.text isEqualToString:@""] && self.showEmailAddressField) {
+			[self.emailField becomeFirstResponder];
+		} else {
+			[self.feedbackView becomeFirstResponder];
+		}
+	}
 }
 
 - (void)didReceiveMemoryWarning {

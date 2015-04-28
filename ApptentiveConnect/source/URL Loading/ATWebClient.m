@@ -248,6 +248,7 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 }
 
 - (ATURLConnection *)connectionToPost:(NSURL *)theURL JSON:(NSString *)body withFile:(NSString *)path ofMimeType:(NSString *)mimeType {
+{
 	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL];
 	[self addAPIHeaders:conn];
 	[conn setHTTPMethod:@"POST"];
@@ -344,9 +345,8 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 	 NSLog(@"-data: %@", [NSString stringWithUTF8String:[multipartEncodedData bytes]]);
 	 */
 	return [conn autorelease];
-
+}
 fail:
-	[conn release], conn = nil;
 	return nil;
 }
 

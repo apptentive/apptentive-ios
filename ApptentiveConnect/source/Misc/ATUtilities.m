@@ -432,7 +432,8 @@ static NSDateFormatter *dateFormatter = nil;
 
 + (NSString *)stringByEscapingForURLArguments:(NSString *)string {
 	CFStringRef result = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)string, NULL, (CFStringRef)@"%:/?#[]@!$&'()*+,;=", kCFStringEncodingUTF8);
-	return [NSMakeCollectable(result) autorelease];
+	
+	return CFBridgingRelease(result);
 }
 
 + (NSString *)randomStringOfLength:(NSUInteger)length {

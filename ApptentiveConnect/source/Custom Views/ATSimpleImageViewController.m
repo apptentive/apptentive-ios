@@ -187,7 +187,6 @@
 	shouldResign = YES;
 	[self cleanupImageActionSheet];
 	if ([self respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
-		id blockSelf = self;
 		NSObject<ATSimpleImageViewControllerDelegate> *blockDelegate = delegate;
 		[self.navigationController dismissViewControllerAnimated:YES completion:^{
 			[blockDelegate imageViewControllerDidDismiss:self];

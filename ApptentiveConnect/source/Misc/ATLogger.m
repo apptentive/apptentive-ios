@@ -135,7 +135,6 @@ static dispatch_queue_t loggingQueue;
 		if (logHandle) {
 			[logHandle synchronizeFile];
 			[logHandle closeFile];
-			logHandle, logHandle = nil;
 		}
 		
 		NSFileManager *fm = [NSFileManager defaultManager];
@@ -204,7 +203,6 @@ static dispatch_queue_t loggingQueue;
 					// Probably out of space on the device.
 				}
 			}
-			fullMessage, fullMessage = nil;
 		}
 	});
 }

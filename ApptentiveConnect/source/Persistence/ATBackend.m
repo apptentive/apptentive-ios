@@ -277,7 +277,6 @@ static NSURLCache *imageCache = nil;
 		task.pendingMessageID = pendingMessageID;
 		[[ATTaskQueue sharedTaskQueue] addTask:task];
 		[[ATTaskQueue sharedTaskQueue] start];
-		task, task = nil;
 	});
 	message = nil;
 }
@@ -329,7 +328,6 @@ static NSURLCache *imageCache = nil;
 		task.pendingMessageID = pendingMessageID;
 		[[ATTaskQueue sharedTaskQueue] addTask:task];
 		[[ATTaskQueue sharedTaskQueue] start];
-		task, task = nil;
 	});
 	message = nil;
 	return YES;
@@ -402,7 +400,6 @@ static NSURLCache *imageCache = nil;
 		task.pendingMessageID = pendingMessageID;
 		[[ATTaskQueue sharedTaskQueue] addTask:task];
 		[[ATTaskQueue sharedTaskQueue] start];
-		task, task = nil;
 	});
 	fileMessage = nil;
 	fileAttachment = nil;
@@ -621,7 +618,6 @@ static NSURLCache *imageCache = nil;
 	
 	if (currentMessagePanelController != nil) {
 		[currentMessagePanelController dismissAnimated:animated completion:^{
-			currentMessagePanelController, currentMessagePanelController = nil;
 			completion();
 		}];
 		return;
@@ -630,7 +626,6 @@ static NSURLCache *imageCache = nil;
 	if (presentedMessageCenterViewController != nil) {
 		UIViewController *vc = [presentedMessageCenterViewController presentingViewController];
 		[vc dismissViewControllerAnimated:YES completion:^{
-			presentedMessageCenterViewController, presentedMessageCenterViewController = nil;
 			completion();
 		}];
 		return;

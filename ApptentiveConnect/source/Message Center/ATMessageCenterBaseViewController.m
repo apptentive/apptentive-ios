@@ -303,7 +303,6 @@
 			task.pendingMessageID = pendingMessageID;
 			[[ATTaskQueue sharedTaskQueue] addTask:task];
 			[[ATTaskQueue sharedTaskQueue] start];
-			task, task = nil;
 		});
 		composingMessage = nil;
 		inputView.text = @"";
@@ -439,7 +438,6 @@
 				task.pendingMessageID = pendingMessageID;
 				[[ATTaskQueue sharedTaskQueue] addTask:task];
 				[[ATTaskQueue sharedTaskQueue] start];
-				task, task = nil;
 			});
 			
 			retryMessage = nil;

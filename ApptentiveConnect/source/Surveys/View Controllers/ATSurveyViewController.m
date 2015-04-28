@@ -167,7 +167,6 @@ enum {
 		ATSurveyResponseTask *task = [[ATSurveyResponseTask alloc] init];
 		task.pendingSurveyResponseID = pendingSurveyResponseID;
 		[[ATTaskQueue sharedTaskQueue] addTask:task];
-		task, task = nil;
 	});
 	
 	if (survey.showSuccessMessage && survey.successMessage) {

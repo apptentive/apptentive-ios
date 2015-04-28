@@ -25,8 +25,6 @@
 - (void)dealloc {
 	textView.delegate = nil;
 	[textView removeFromSuperview];
-	[textView release], textView = nil;
-	[super dealloc];
 }
 
 - (void)viewDidLoad {
@@ -50,7 +48,7 @@
 - (void)didReceiveMemoryWarning {
 	[super didReceiveMemoryWarning];
 	[textView removeFromSuperview];
-	[textView release], textView = nil;
+	textView = nil;
 }
 
 - (IBAction)reloadLogs:(id)sender {

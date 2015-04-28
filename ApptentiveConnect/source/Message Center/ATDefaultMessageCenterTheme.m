@@ -14,7 +14,7 @@
 
 @implementation ATDefaultMessageCenterTheme
 - (UIView *)titleViewForMessageCenterViewController:(ATMessageCenterBaseViewController *)vc {
-	return [[[ATDefaultMessageCenterTitleView alloc] initWithFrame:vc.navigationController.navigationBar.bounds] autorelease];
+	return [[ATDefaultMessageCenterTitleView alloc] initWithFrame:vc.navigationController.navigationBar.bounds];
 }
 
 - (void)configureSendButton:(UIButton *)sendButton forMessageCenterViewController:(ATMessageCenterViewController *)vc {

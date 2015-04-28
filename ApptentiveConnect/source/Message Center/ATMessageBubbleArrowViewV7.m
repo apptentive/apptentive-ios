@@ -25,10 +25,6 @@
 	self.backgroundColor = [UIColor clearColor];
 }
 
-- (void)dealloc {
-	[_color release], _color = nil;
-	[super dealloc];
-}
 
 - (void)drawRect:(CGRect)rect {
 	CGContextRef context = UIGraphicsGetCurrentContext();
@@ -64,8 +60,8 @@
 
 - (void)setColor:(UIColor *)color {
 	if (_color != color) {
-		[_color release], _color = nil;
-		_color = [color retain];
+		_color = nil;
+		_color = color;
 		[self setNeedsDisplay];
 	}
 }

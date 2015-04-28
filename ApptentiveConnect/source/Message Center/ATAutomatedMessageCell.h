@@ -12,11 +12,11 @@
 #import "PrefixedTTTAttributedLabel.h"
 
 @interface ATAutomatedMessageCell : UITableViewCell <ATMessageCenterCell>
-@property (retain, nonatomic) IBOutlet UIView *containerView;
-@property (retain, nonatomic) IBOutlet UILabel *dateLabel;
-@property (retain, nonatomic) IBOutlet ATTTTAttributedLabel *titleText;
-@property (retain, nonatomic) IBOutlet UIView *grayLineView;
-@property (retain, nonatomic) IBOutlet ATTTTAttributedLabel *messageText;
+@property (strong, nonatomic) IBOutlet UIView *containerView;
+@property (strong, nonatomic) IBOutlet UILabel *dateLabel;
+@property (strong, nonatomic) IBOutlet ATTTTAttributedLabel *titleText;
+@property (strong, nonatomic) IBOutlet UIView *grayLineView;
+@property (strong, nonatomic) IBOutlet ATTTTAttributedLabel *messageText;
 @property (nonatomic, assign, getter = shouldShowDateLabel) BOOL showDateLabel;
 
 + (NSString *)reuseIdentifier;

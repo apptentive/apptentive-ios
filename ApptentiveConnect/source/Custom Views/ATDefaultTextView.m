@@ -33,11 +33,9 @@
 }
 
 - (void)dealloc {
-	self.placeholder = nil;
 	[placeholderLabel removeFromSuperview];
-	[placeholderLabel release], placeholderLabel = nil;
-	[at_drawRectBlock release], at_drawRectBlock = nil;
-	[super dealloc];
+	placeholderLabel = nil;
+	at_drawRectBlock = nil;
 }
 
 - (void)layoutSubviews {
@@ -47,18 +45,16 @@
 
 - (void)setPlaceholder:(NSString *)newPlaceholder {
 	if (placeholder != newPlaceholder) {
-		[placeholder release];
 		placeholder = nil;
-		placeholder = [newPlaceholder retain];
+		placeholder = newPlaceholder;
 		[self setupPlaceholder];
 	}
 }
 
 - (void)setPlaceholderColor:(UIColor *)newPlaceholderColor {
 	if (placeholderColor != newPlaceholderColor) {
-		[placeholderColor release];
 		placeholderColor = nil;
-		placeholderColor = [newPlaceholderColor retain];
+		placeholderColor = newPlaceholderColor;
 		[self setupPlaceholder];
 	}
 }

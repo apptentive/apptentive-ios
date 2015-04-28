@@ -83,22 +83,19 @@
 
 - (void)setHTTPMethod:(NSString *)method {
 	if (HTTPMethod != method) {
-		[HTTPMethod release];
-		HTTPMethod = [method retain];
+		HTTPMethod = method;
 	}
 }
 
 - (void)setHTTPBody:(NSData *)body {
 	if (HTTPBody != body) {
-		[HTTPBody release];
-		HTTPBody = [body retain];
+		HTTPBody = body;
 	}
 }
 
 - (void)setHTTPBodyStream:(NSInputStream *)stream {
 	if (HTTPBodyStream != stream) {
-		[HTTPBodyStream release];
-		HTTPBodyStream = [stream retain];
+		HTTPBodyStream = stream;
 	}
 }
 
@@ -114,7 +111,7 @@
 					break;
 				}
 				if (request) {
-					[request release], request = nil;
+					request = nil;
 				}
 				request = [[NSMutableURLRequest alloc] initWithURL:self.targetURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:timeoutInterval];
 				for (NSString *key in headers) {
@@ -128,7 +125,7 @@
 				} else if (HTTPBodyStream) {
 					[request setHTTPBodyStream:HTTPBodyStream];
 				}
-				self.connection = [[[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO] autorelease];
+				self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
 				[self.connection scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
 				[self.connection start];
 				self.executing = YES;
@@ -138,15 +135,15 @@
 }
 
 - (NSString *)statusLine {
-	return [[statusLine retain] autorelease];
+	return statusLine;
 }
 
 - (NSDictionary *)responseHeaders {
-	return [[responseHeaders retain] autorelease];
+	return responseHeaders;
 }
 
 - (NSData *)responseData {
-	return [[data retain] autorelease];
+	return data;
 }
 
 #pragma mark Delegate Methods
@@ -156,17 +153,17 @@
 		if (response ) {
 			if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
 				if (statusLine) {
-					[statusLine release], statusLine = nil;
+					statusLine = nil;
 				}
 				// Not linking CF networking, so we'll use the localized version of the status line.
-				statusLine = [[NSHTTPURLResponse localizedStringForStatusCode:response.statusCode] retain];
+				statusLine = [NSHTTPURLResponse localizedStringForStatusCode:response.statusCode];
 				statusCode = response.statusCode;
 			} else {
 				statusCode = 200;
 			}
 			
 			if (responseHeaders) {
-				[responseHeaders release], responseHeaders = nil;
+				responseHeaders = nil;
 			}
 			responseHeaders = [[response allHeaderFields] copy];
 			NSString *cacheControlHeader = [responseHeaders valueForKey:@"Cache-Control"];
@@ -212,7 +209,6 @@
 					ATLogError(@"Orphaned connection. No delegate or nonresponsive delegate.");
 				}
 			}
-			[data release];
 			data = nil;
 		} else if (delegate && ![self isCancelled]) {
 			if (delegate && [delegate respondsToSelector:@selector(connectionFailed:)]){
@@ -276,9 +272,9 @@
 #endif
 	if (r != nil && [r cachePolicy] == NSURLRequestUseProtocolCachePolicy) {
 		if (responseHeaders) {
-			[responseHeaders release], responseHeaders = nil;
+			responseHeaders = nil;
 		}
-		responseHeaders = [[httpResponse allHeaderFields] retain];
+		responseHeaders = [httpResponse allHeaderFields];
 		NSString *cacheControlHeader = [responseHeaders valueForKey:@"Cache-Control"];
 		NSString *expiresHeader = [responseHeaders valueForKey:@"Expires"];
 		if ((cacheControlHeader == nil) && (expiresHeader == nil)) {
@@ -290,7 +286,7 @@
 
 - (NSURLRequest *)connection:(NSURLConnection *)inConnection willSendRequest:(NSURLRequest *)inRequest redirectResponse: (NSURLResponse *)inRedirectResponse {
 	if (inRedirectResponse) {
-		NSMutableURLRequest *r = [[request mutableCopy] autorelease];
+		NSMutableURLRequest *r = [request mutableCopy];
 		[r setURL:[inRequest URL]];
 		return r;
 	} else {
@@ -317,28 +313,15 @@
 - (void)dealloc {
 	@synchronized (self) {
 		delegate = nil;
-		[request release], request = nil;
-		[targetURL release];
-		if (connection) {
-			[connection release];
-		}
-		[statusLine release], statusLine = nil;
-		[responseHeaders release], responseHeaders = nil;
-		[data release], data = nil;
+		request = nil;
+		statusLine = nil;
+		responseHeaders = nil;
+		data = nil;
 		
-		if (credential) {
-			[credential release];
-		}
-		if (connectionError) {
-			[connectionError release];
-		}
 		
-		[headers release];
-		[HTTPMethod release];
-		[HTTPBody release], HTTPBody = nil;
-		[HTTPBodyStream release], HTTPBodyStream = nil;
+		HTTPBody = nil;
+		HTTPBodyStream = nil;
 	}
-	[super dealloc];
 }
 
 - (NSString *)requestAsString {
@@ -350,7 +333,7 @@
 	}
 	[result appendString:@"\n\n"];
 	if (HTTPBody) {
-		NSString *a = [[[NSString alloc] initWithData:HTTPBody encoding:NSUTF8StringEncoding] autorelease];
+		NSString *a = [[NSString alloc] initWithData:HTTPBody encoding:NSUTF8StringEncoding];
 		if (a) {
 			[result appendString:a];
 		} else {
@@ -376,7 +359,7 @@
 	} else {
 		[result appendString:@"<NO RESPONSE BODY>"];
 	}
-	[responseString release], responseString = nil;
+	responseString = nil;
 	return result;
 }
 @end

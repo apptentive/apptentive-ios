@@ -22,7 +22,7 @@
 @property (nonatomic, copy) NSString *model;
 @property (nonatomic, copy) NSString *os_version;
 @property (nonatomic, copy) NSString *carrier;
-@property (nonatomic, retain) NSDate *date;
+@property (nonatomic, strong) NSDate *date;
 
 - (NSString *)formattedDate:(NSDate *)aDate;
 

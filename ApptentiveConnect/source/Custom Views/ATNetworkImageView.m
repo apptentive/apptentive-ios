@@ -33,17 +33,16 @@
 
 - (void)dealloc {
     [connection cancel];
-    [connection release], connection = nil;
-	[imageURL release], imageURL = nil;
-    [imageData release], imageData = nil;
-	[response release], response = nil;
-	[super dealloc];
+    connection = nil;
+	imageURL = nil;
+    imageData = nil;
+	response = nil;
 }
 
 - (void)restartDownload {
 	if (connection) {
 		[connection cancel];
-		[connection release], connection = nil;
+		connection = nil;
 	}
 	if (self.imageURL) {
 		NSURLRequest *request = [NSURLRequest requestWithURL:self.imageURL];
@@ -71,7 +70,7 @@
 
 - (void)setImageURL:(NSURL *)anImageURL {
 	if (imageURL != anImageURL) {
-		[imageURL release], imageURL = nil;
+		imageURL = nil;
 		imageURL = [anImageURL copy];
 		[self restartDownload];
 	}
@@ -81,7 +80,7 @@
 - (void)connection:(NSURLConnection *)aConnection didFailWithError:(NSError *)error {
     if (aConnection == connection) {
         ATLogError(@"Unable to download image at %@: %@", self.imageURL, error);
-        [connection release], connection = nil;
+        connection = nil;
     }
 }
 
@@ -89,11 +88,11 @@
 - (void)connection:(NSURLConnection *)aConnection didReceiveResponse:(NSURLResponse *)aResponse {
     if (aConnection == connection) {
         if (imageData) {
-            [imageData release], imageData = nil;
+            imageData = nil;
         }
         imageData = [[NSMutableData alloc] init];
 		if (response) {
-			[response release], response = nil;
+			response = nil;
 		}
 		response = [aResponse copy];
     }
@@ -115,7 +114,7 @@
 				NSURLCache *cache = [[ATBackend sharedBackend] imageCache];
 				NSCachedURLResponse *cachedResponse = [[NSCachedURLResponse alloc] initWithResponse:response data:imageData userInfo:nil storagePolicy:NSURLCacheStorageAllowed];
 				[cache storeCachedResponse:cachedResponse forRequest:request];
-				[cachedResponse release], cachedResponse = nil;
+				cachedResponse = nil;
 			}
         }
     }

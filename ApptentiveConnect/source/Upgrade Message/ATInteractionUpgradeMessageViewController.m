@@ -21,21 +21,21 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 
 @interface ATInteractionUpgradeMessageViewController ()
 
-@property (nonatomic, retain, readonly) ATInteraction *upgradeMessageInteraction;
+@property (nonatomic, strong, readonly) ATInteraction *upgradeMessageInteraction;
 
-@property (nonatomic, retain) IBOutlet UIView *appIconContainer;
-@property (nonatomic, retain) IBOutlet UIButton *OKButton;
-@property (nonatomic, retain) IBOutlet UIImageView *appIconView;
-@property (nonatomic, retain) IBOutlet UIImageView *poweredByApptentiveIconView;
-@property (nonatomic, retain) IBOutlet UILabel *poweredByApptentiveLogo;
-@property (nonatomic, retain) IBOutlet UIView *poweredByBackground;
-@property (retain, nonatomic) IBOutlet NSLayoutConstraint *poweredByHeight;
-@property (nonatomic, retain) IBOutlet UIWebView *webView;
+@property (nonatomic, strong) IBOutlet UIView *appIconContainer;
+@property (nonatomic, strong) IBOutlet UIButton *OKButton;
+@property (nonatomic, strong) IBOutlet UIImageView *appIconView;
+@property (nonatomic, strong) IBOutlet UIImageView *poweredByApptentiveIconView;
+@property (nonatomic, strong) IBOutlet UILabel *poweredByApptentiveLogo;
+@property (nonatomic, strong) IBOutlet UIView *poweredByBackground;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *poweredByHeight;
+@property (nonatomic, strong) IBOutlet UIWebView *webView;
 
-@property (retain, nonatomic) IBOutlet NSLayoutConstraint *appIconContainerHeight;
-@property (retain, nonatomic) IBOutlet NSLayoutConstraint *OKButtonBottomSpace;
-@property (retain, nonatomic) IBOutlet NSLayoutConstraint *OKButtonHeight;
-@property (retain, nonatomic) IBOutlet NSLayoutConstraint *poweredByBottomSpace;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *appIconContainerHeight;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *OKButtonBottomSpace;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *OKButtonHeight;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *poweredByBottomSpace;
 
 - (IBAction)okButtonPressed:(id)sender;
 
@@ -77,7 +77,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 		maskLayer.contents = (id)maskImage.CGImage;
 		maskLayer.frame = self.appIconView.bounds;
 		self.appIconView.layer.mask = maskLayer;
-		[maskLayer release], maskLayer = nil;
+		maskLayer = nil;
 	} else {
 		self.appIconView.hidden = YES;
 	}
@@ -110,11 +110,9 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 	
 	[self.upgradeMessageInteraction engage:ATInteractionUpgradeMessageEventLabelClose fromViewController:self.presentingViewController];
 	
-	[self release];
 }
 
 - (void)presentFromViewController:(UIViewController *)newPresentingViewController animated:(BOOL)animated {
-	[self retain];
 	
 	self.modalPresentationStyle = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad ? UIModalPresentationFormSheet : UIModalPresentationFullScreen;
 	[newPresentingViewController presentViewController:self animated:animated completion:nil];
@@ -155,24 +153,6 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 	self.webView.scrollView.contentInset = UIEdgeInsetsMake(topInset, 0.0, 0.0, 0.0);
 }
 
-- (void)dealloc {
-	[_upgradeMessageInteraction release];
-	
-	[_appIconContainer release];
-	[_appIconView release];
-	[_poweredByApptentiveIconView release];
-	[_poweredByApptentiveLogo release];
-	[_poweredByBackground release];
-	[_poweredByHeight release];
-	[_webView release];
-
-	[_appIconContainerHeight release];
-	[_OKButtonBottomSpace release];
-	[_OKButtonHeight release];
-	[_poweredByBottomSpace release];
-	
-	[super dealloc];
-}
 
 - (void)viewDidUnload {
 	[self setAppIconContainer:nil];

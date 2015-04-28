@@ -35,7 +35,6 @@
 
 - (void)dealloc {
 	[self teardown];
-	[super dealloc];
 }
 
 - (void)layoutSubviews {
@@ -175,10 +174,8 @@
 
 - (void)teardown {
 	[icon removeFromSuperview];
-	[icon release];
 	icon = nil;
 	[label removeFromSuperview];
-	[label release];
 	label = nil;
 	parentWindow = nil;
 }

@@ -23,7 +23,6 @@
 }
 
 - (void)showMessageCenterFromViewController:(UIViewController *)viewController {
-	[self retain];
 	
 	self.viewController = viewController;
 	
@@ -35,14 +34,7 @@
 		[[ATConnect sharedConnection] presentMessageCenterFromViewController:viewController];
 	}
 	
-	[self release];
 }
 
-- (void)dealloc {
-	[_interaction release], _interaction = nil;
-	[_viewController release], _viewController = nil;
-	
-	[super dealloc];
-}
 
 @end

@@ -22,16 +22,15 @@
 - (instancetype)initWithImageAssetURL:(NSURL *)url originalImage:(UIImage *)image delegate:(NSObject<ATLargeImageResizerDelegate> *)aDelegate {
 	if ((self = [super init])) {
 		imageURL = [url copy];
-		originalImage = [image retain];
+		originalImage = image;
 		delegate = aDelegate;
 	}
 	return self;
 }
 
 - (void)dealloc {
-	[imageURL release], imageURL = nil;
-	[originalImage release], originalImage = nil;
-	[super dealloc];
+	imageURL = nil;
+	originalImage = nil;
 }
 
 - (void)cancel {

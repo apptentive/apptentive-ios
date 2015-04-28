@@ -172,15 +172,15 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 	}
 	
 	if (![ATData save]) {
-		[event release], event = nil;
+		event = nil;
 		return;
 	}
 	
 	ATRecordRequestTask *task = [[ATRecordRequestTask alloc] init];
 	[task setTaskProvider:event];
 	[[ATTaskQueue sharedTaskQueue] addTask:task];
-	[event release], event = nil;
-	[task release], task = nil;
+	event = nil;
+	task = nil;
 }
 
 - (void)backendBecameAvailable:(NSNotification *)notification {
@@ -237,7 +237,6 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[super dealloc];
 }
 
 - (BOOL)upgradeLegacyMetric:(ATMetric *)metric {
@@ -250,15 +249,15 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 	event.label = metric.name;
 	[event addEntriesFromDictionary:[metric info]];
 	if (![ATData save]) {
-		[event release], event = nil;
+		event = nil;
 		return NO;
 	}
 	
 	ATRecordRequestTask *task = [[ATRecordRequestTask alloc] init];
 	[task setTaskProvider:event];
 	[[ATTaskQueue sharedTaskQueue] addTask:task];
-	[event release], event = nil;
-	[task release], task = nil;
+	event = nil;
+	task = nil;
 	return YES;
 }
 @end
@@ -349,7 +348,7 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 		[self addMetricWithName:ATMetricNameSurveyCancel info:info];
 	}
 	
-	[info release], info = nil;
+	info = nil;
 }
 
 - (void)surveyDidAnswerQuestion:(NSNotification *)notification {
@@ -375,7 +374,7 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 		[self addMetricWithName:ATMetricNameSurveyAnswerQuestion info:info];
 	}
 	
-	[info release], info = nil;
+	info = nil;
 }
 
 - (void)appWillTerminate:(NSNotification *)notification {
@@ -409,7 +408,7 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 		info[@"message_id"] = messageID;
 	}
 	[self addMetricWithName:ATMetricNameMessageCenterRead info:info];
-	[info release], info = nil;
+	info = nil;
 }
 
 - (void)messageCenterDidSend:(NSNotification *)notification {
@@ -419,7 +418,7 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 		info[@"nonce"] = nonce;
 	}
 	[self addMetricWithName:ATMetricNameMessageCenterSend info:info];
-	[info release], info = nil;
+	info = nil;
 }
 
 - (void)messageCenterIntroDidLaunch:(NSNotification *)notification {
@@ -433,7 +432,7 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 		info[@"nonce"] = nonce;
 	}
 	[self addMetricWithName:ATMetricNameMessageCenterIntroSend info:info];
-	[info release], info = nil;
+	info = nil;
 }
 
 - (void)messageCenterIntroDidCancel:(NSNotification *)notification {

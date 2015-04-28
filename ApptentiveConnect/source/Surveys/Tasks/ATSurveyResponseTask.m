@@ -28,7 +28,6 @@
 		if (version == kATPendingMessageTaskCodingVersion) {
 			self.pendingSurveyResponseID = [coder decodeObjectForKey:@"pendingSurveyResponseID"];
 		} else {
-			[self release];
 			return nil;
 		}
 	}
@@ -42,8 +41,6 @@
 
 - (void)dealloc {
 	[self teardown];
-	[pendingSurveyResponseID release], pendingSurveyResponseID = nil;
-	[super dealloc];
 }
 
 - (BOOL)canStart {
@@ -58,13 +55,13 @@
 
 - (void)start {
 	if (!request) {
-		ATSurveyResponse *response = [[ATSurveyResponse findSurveyResponseWithPendingID:self.pendingSurveyResponseID] retain];
+		ATSurveyResponse *response = [ATSurveyResponse findSurveyResponseWithPendingID:self.pendingSurveyResponseID];
 		if (response == nil) {
 			ATLogError(@"Warning: Response was nil in survey response task.");
 			self.finished = YES;
 			return;
 		}
-		request = [[[ATWebClient sharedClient] requestForPostingSurveyResponse:response] retain];
+		request = [[ATWebClient sharedClient] requestForPostingSurveyResponse:response];
 		if (request != nil) {
 			request.delegate = self;
 			[request start];
@@ -72,7 +69,7 @@
 		} else {
 			self.finished = YES;
 		}
-		[response release], response = nil;
+		response = nil;
 	}
 }
 
@@ -80,7 +77,7 @@
 	if (request) {
 		request.delegate = nil;
 		[request cancel];
-		[request release], request = nil;
+		request = nil;
 		self.inProgress = NO;
 	}
 }
@@ -100,7 +97,6 @@
 #pragma mark ATAPIRequestDelegate
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(NSObject *)result {
 	@synchronized(self) {
-		[self retain];
 		
 		if ([result isKindOfClass:[NSDictionary class]] && [self processResult:(NSDictionary *)result]) {
 			self.finished = YES;
@@ -109,7 +105,6 @@
 			self.failed = YES;
 		}
 		[self stop];
-		[self release];
 	}
 }
 
@@ -119,11 +114,10 @@
 
 - (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
 	@synchronized(self) {
-		[self retain];
 		self.lastErrorTitle = sender.errorTitle;
 		self.lastErrorMessage = sender.errorMessage;
 		
-		ATSurveyResponse *response = [[ATSurveyResponse findSurveyResponseWithPendingID:self.pendingSurveyResponseID] retain];
+		ATSurveyResponse *response = [ATSurveyResponse findSurveyResponseWithPendingID:self.pendingSurveyResponseID];
 		if (response == nil) {
 			ATLogError(@"Warning: Survey response went away during task.");
 			self.finished = YES;
@@ -155,8 +149,7 @@
 			self.failed = YES;
 		}
 		[self stop];
-		[response release], response = nil;
-		[self release];
+		response = nil;
 	}
 }
 @end
@@ -174,7 +167,7 @@
 	ATLogDebug(@"Getting json result: %@", jsonResponse);
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
 	
-	ATSurveyResponse *response = [[ATSurveyResponse findSurveyResponseWithPendingID:self.pendingSurveyResponseID] retain];
+	ATSurveyResponse *response = [ATSurveyResponse findSurveyResponseWithPendingID:self.pendingSurveyResponseID];
 	if (response == nil) {
 		ATLogError(@"Warning: Response went away during task.");
 		return YES;
@@ -185,10 +178,10 @@
 	NSError *error = nil;
 	if (![context save:&error]) {
 		ATLogError(@"Failed to save new response: %@", error);
-		[response release], response = nil;
+		response = nil;
 		return NO;
 	}
-	[response release], response = nil;
+	response = nil;
 	return YES;
 }
 @end

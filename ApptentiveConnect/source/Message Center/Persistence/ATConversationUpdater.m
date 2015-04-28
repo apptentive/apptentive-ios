@@ -44,7 +44,6 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 - (void)dealloc {
 	delegate = nil;
 	[self cancel];
-	[super dealloc];
 }
 
 - (void)createOrUpdateConversation {
@@ -56,13 +55,13 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
         creatingConversation = YES;
         ATConversation *conversation = [[ATConversation alloc] init];
         conversation.deviceID = [[ATBackend sharedBackend] deviceUUID];
-        request = [[[ATWebClient sharedClient] requestForCreatingConversation:conversation] retain];
+        request = [[ATWebClient sharedClient] requestForCreatingConversation:conversation];
         request.delegate = self;
         [request start];
-        [conversation release], conversation = nil;
+        conversation = nil;
     } else {
         creatingConversation = NO;
-        request = [[[ATWebClient sharedClient] requestForUpdatingConversation:currentConversation] retain];
+        request = [[ATWebClient sharedClient] requestForUpdatingConversation:currentConversation];
         request.delegate = self;
         [request start];
     }
@@ -72,7 +71,7 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 	if (request) {
 		request.delegate = nil;
 		[request cancel];
-		[request release], request = nil;
+		request = nil;
 	}
 }
 
@@ -189,7 +188,7 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 			ATLogError(@"Unable to create conversation");
             [delegate conversationUpdater:self createdConversationSuccessfully:NO];
         }
-        [conversation release], conversation = nil;
+        conversation = nil;
     } else {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		ATConversation *conversation = [ATConversationUpdater currentConversation];

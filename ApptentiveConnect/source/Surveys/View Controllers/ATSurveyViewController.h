@@ -48,8 +48,8 @@
 	NSIndexPath *cellPath;
 	ATSurveyQuestion *question;
 }
-@property (nonatomic, retain) NSIndexPath *cellPath;
-@property (nonatomic, retain) ATSurveyQuestion *question;
+@property (nonatomic, strong) NSIndexPath *cellPath;
+@property (nonatomic, strong) ATSurveyQuestion *question;
 @end
 
 @interface ATCellTextField : UITextField <ATCellTextEntry> {
@@ -57,6 +57,6 @@
 	NSIndexPath *cellPath;
 	ATSurveyQuestion *question;
 }
-@property (nonatomic, retain) NSIndexPath *cellPath;
-@property (nonatomic, retain) ATSurveyQuestion *question;
+@property (nonatomic, strong) NSIndexPath *cellPath;
+@property (nonatomic, strong) ATSurveyQuestion *question;
 @end

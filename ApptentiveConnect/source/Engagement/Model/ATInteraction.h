@@ -28,7 +28,7 @@ typedef NS_ENUM(NSInteger, ATInteractionType){
 @property (nonatomic, copy) NSString *identifier;
 @property (nonatomic, assign) NSInteger priority;
 @property (nonatomic, copy) NSString *type;
-@property (nonatomic, retain) NSDictionary *configuration;
+@property (nonatomic, strong) NSDictionary *configuration;
 @property (nonatomic, copy) NSString *version;
 @property (nonatomic, copy) NSString *vendor;
 

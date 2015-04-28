@@ -18,13 +18,13 @@
 	IBOutlet ATMessageTextView *textView;
 	IBOutlet UIImageView *backgroundImageView;
 }
-@property (nonatomic, retain) IBOutlet UIButton *sendButton;
-@property (nonatomic, retain) IBOutlet UIButton *attachButton;
-@property (nonatomic, assign) NSObject<ATMessageInputViewDelegate> *delegate;
+@property (nonatomic, strong) IBOutlet UIButton *sendButton;
+@property (nonatomic, strong) IBOutlet UIButton *attachButton;
+@property (nonatomic, weak) NSObject<ATMessageInputViewDelegate> *delegate;
 @property (nonatomic, copy) NSString *text;
 @property (nonatomic, copy) NSString *placeholder;
 @property (nonatomic, assign) BOOL allowsEmptyText;
-@property (nonatomic, retain) UIImage *backgroundImage;
+@property (nonatomic, strong) UIImage *backgroundImage;
 
 - (IBAction)sendPressed:(id)sender;
 - (IBAction)attachPressed:(id)sender;

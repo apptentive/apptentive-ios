@@ -25,18 +25,12 @@
 		if (version >= 2) {
 			self.failureCount = [(NSNumber *)[coder decodeObjectForKey:@"failureCount"] unsignedIntegerValue];
 		} else {
-			[self release];
 			return nil;
 		}
 	}
 	return self;
 }
 
-- (void)dealloc {
-	[lastErrorTitle release], lastErrorTitle = nil;
-	[lastErrorMessage release], lastErrorMessage = nil;
-	[super dealloc];
-}
 
 - (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeInt:kATTaskCodingVersion forKey:@"version"];
@@ -87,7 +81,7 @@
 	[parts addObject:[NSString stringWithFormat:@"taskName: %@", [self taskName]]];
 	
 	NSString *d = [parts componentsJoinedByString:@", "];
-	[parts release], parts = nil;
+	parts = nil;
 	return [NSString stringWithFormat:@"<%@ %p: %@>", NSStringFromClass([self class]), self, d];
 }
 @end

@@ -14,7 +14,7 @@
 
 @property (nonatomic, copy) NSString *interactionID;
 @property (nonatomic, assign) NSInteger priority;
-@property (nonatomic, retain) NSDictionary *criteria;
+@property (nonatomic, strong) NSDictionary *criteria;
 
 + (ATInteractionInvocation *)invocationWithJSONDictionary:(NSDictionary *)jsonDictionary;
 + (NSArray *)invocationsWithJSONArray:(NSArray *)jsonArray;

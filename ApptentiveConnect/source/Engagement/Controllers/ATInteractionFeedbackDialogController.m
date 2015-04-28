@@ -36,7 +36,6 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 }
 
 - (void)showFeedbackDialogFromViewController:(UIViewController *)viewController {
-	[self retain];
 	
 	self.viewController = viewController;
 	
@@ -75,12 +74,9 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 - (void)dealloc {
 	if (didSendFeedbackAlert) {
 		didSendFeedbackAlert.delegate = nil;
-		[didSendFeedbackAlert release], didSendFeedbackAlert = nil;
+		didSendFeedbackAlert = nil;
 	}
-	[_interaction release], _interaction = nil;
-	[_viewController release], _viewController = nil;
 	
-	[super dealloc];
 }
 
 - (void)sendSorryMessage {
@@ -102,7 +98,7 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 	if ([ATPersonInfo personExists]) {
 		person = [ATPersonInfo currentPerson];
 	} else {
-		person = [[[ATPersonInfo alloc] init] autorelease];
+		person = [[ATPersonInfo alloc] init];
 	}
 	if (emailAddress && ![emailAddress isEqualToString:person.emailAddress]) {
 		// Do not save empty string as person's email address
@@ -152,7 +148,6 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 			//[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroThankYouDidShowNotification object:self userInfo:nil];
 		}
 	} else {
-		[self release];
 	}
 }
 
@@ -170,9 +165,8 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 		}
 		
 		didSendFeedbackAlert.delegate = nil;
-		[didSendFeedbackAlert release], didSendFeedbackAlert = nil;
+		didSendFeedbackAlert = nil;
 		
-		[self release];
 	}
 }
 

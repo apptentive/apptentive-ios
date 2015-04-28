@@ -30,7 +30,7 @@
 }
 
 - (void)testInitialUserName {
-	ATPersonInfo *person = [[[ATPersonInfo alloc] init] autorelease];
+	ATPersonInfo *person = [[ATPersonInfo alloc] init];
 	[person saveAsCurrentPerson];
 	XCTAssertTrue([ATPersonInfo currentPerson].name == nil, @"New person object's name should be nil");
 	
@@ -56,7 +56,7 @@
 	
 	// Set initial name prior to creating new person object
 	[ATConnect sharedConnection].initialUserName = @"setBeforeInit";
-	person = [[[ATPersonInfo alloc] init] autorelease];
+	person = [[ATPersonInfo alloc] init];
 	[person saveAsCurrentPerson];
 	XCTAssertTrue([[ATPersonInfo currentPerson].name isEqualToString:@"setBeforeInit"], @"A new person object should pick up the set initialUserName.");
 	
@@ -65,7 +65,7 @@
 }
 
 - (void)testInitialUserEmailAddress {
-	ATPersonInfo *person = [[[ATPersonInfo alloc] init] autorelease];
+	ATPersonInfo *person = [[ATPersonInfo alloc] init];
 	[person saveAsCurrentPerson];
 	XCTAssertTrue([ATPersonInfo currentPerson].emailAddress == nil, @"New person object's email address should be nil");
 	XCTAssertFalse([[ATPersonInfo currentPerson] hasEmailAddress], @"New person shouldn't have email address.");
@@ -93,7 +93,7 @@
 	
 	// Set initial email address prior to creating new person object
 	[ATConnect sharedConnection].initialUserEmailAddress = @"setBeforeInit@example.com";
-	person = [[[ATPersonInfo alloc] init] autorelease];
+	person = [[ATPersonInfo alloc] init];
 	[person saveAsCurrentPerson];
 	XCTAssertTrue([[ATPersonInfo currentPerson].emailAddress isEqualToString:@"setBeforeInit@example.com"], @"A new person object should pick up the set initialUserEmailAddress.");
 	
@@ -105,7 +105,7 @@
 	XCTAssertTrue([ATUtilities emailAddressIsValid:valid], @"Valid email is valid.");
 	NSString *invalid = @"INVALID";
 	XCTAssertFalse([ATUtilities emailAddressIsValid:invalid], @"Invalid email is invalid.");
-	person = [[[ATPersonInfo alloc] init] autorelease];
+	person = [[ATPersonInfo alloc] init];
 	[person saveAsCurrentPerson];
 	[ATConnect sharedConnection].initialUserEmailAddress = valid;
 	XCTAssertTrue([[ATConnect sharedConnection].initialUserEmailAddress isEqualToString:valid], @"Initial email should only be set to a valid email address.");
@@ -118,7 +118,7 @@
 
 
 - (void)testCustomPersonData {
-	ATPersonInfo *person = [[[ATPersonInfo alloc] init] autorelease];
+	ATPersonInfo *person = [[ATPersonInfo alloc] init];
 	XCTAssertTrue([[person apiJSON] objectForKey:@"person"] != nil, @"A person should always have a base apiJSON key of 'person'");
 	
 	// Add standard types of data
@@ -158,7 +158,7 @@
 }
 
 - (void)testCustomDeviceData {
-	ATDeviceInfo *device = [[[ATDeviceInfo alloc] init] autorelease];
+	ATDeviceInfo *device = [[ATDeviceInfo alloc] init];
 	XCTAssertTrue([[device apiJSON] objectForKey:@"device"] != nil, @"A device should always have a base apiJSON key of 'device'");
 	
 	// Add custom device data

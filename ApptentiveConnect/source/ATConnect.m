@@ -91,29 +91,24 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (void)dealloc {
 #if TARGET_OS_IPHONE
-	[tintColor release], tintColor = nil;
 #elif IF_TARGET_OS_MAC
 	if (feedbackWindowController) {
 		[feedbackWindowController release];
 		feedbackWindowController = nil;
 	}
 #endif
-	[customPersonData release], customPersonData = nil;
-	[customDeviceData release], customDeviceData = nil;
-	[integrationConfiguration release], integrationConfiguration = nil;
-	[customPlaceholderText release], customPlaceholderText = nil;
-	[apiKey release], apiKey = nil;
-	[appID release], appID = nil;
-	[initialUserName release], initialUserName = nil;
-	[initialUserEmailAddress release], initialUserEmailAddress = nil;
-	[super dealloc];
+	customPersonData = nil;
+	customDeviceData = nil;
+	integrationConfiguration = nil;
+	apiKey = nil;
+	initialUserName = nil;
+	initialUserEmailAddress = nil;
 }
 
 - (void)setApiKey:(NSString *)anAPIKey {
 	if (apiKey != anAPIKey) {
-		[apiKey release];
 		apiKey = nil;
-		apiKey = [anAPIKey retain];
+		apiKey = anAPIKey;
 		[[ATBackend sharedBackend] setApiKey:self.apiKey];
 	}
 }
@@ -130,9 +125,8 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (void)setInitialUserName:(NSString *)anInitialUserName {
 	if (initialUserName != anInitialUserName) {
-		[initialUserName release];
 		initialUserName = nil;
-		initialUserName = [anInitialUserName retain];
+		initialUserName = anInitialUserName;
 		
 		// Set person object's name. Only overwrites previous *initial* names.
 		NSString *previousInitialUserName = [[NSUserDefaults standardUserDefaults] objectForKey:ATInitialUserNameKey];
@@ -155,9 +149,8 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	}
 		
 	if (![initialUserEmailAddress isEqualToString:anInitialUserEmailAddress]) {
-		[initialUserEmailAddress release];
 		initialUserEmailAddress = nil;
-		initialUserEmailAddress = [anInitialUserEmailAddress retain];
+		initialUserEmailAddress = anInitialUserEmailAddress;
 		
 		if ([ATPersonInfo personExists]) {
 			ATPersonInfo *person = [ATPersonInfo currentPerson];
@@ -248,7 +241,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	
 	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:@"open_app_store_manually"];
 	
-	ATInteraction *appStoreInteraction = [[[ATInteraction alloc] init] autorelease];
+	ATInteraction *appStoreInteraction = [[ATInteraction alloc] init];
 	appStoreInteraction.type = @"AppStoreRating";
 	appStoreInteraction.priority = 1;
 	appStoreInteraction.version = @"1.0.0";
@@ -522,14 +515,14 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	NSFileManager *fm = [NSFileManager defaultManager];
 	if ([fm fileExistsAtPath:bundlePath]) {
 		NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
-		return [bundle autorelease];
+		return bundle;
 	} else {
 		// Try trigger.io path.
 		bundlePath = [path stringByAppendingPathComponent:@"apptentive.bundle"];
 		bundlePath = [bundlePath stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
 		if ([fm fileExistsAtPath:bundlePath]) {
 			NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
-			return [bundle autorelease];
+			return bundle;
 		} else {
 			// Try Titanium path.
 			bundlePath = [path stringByAppendingPathComponent:@"modules"];
@@ -537,7 +530,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 			bundlePath = [bundlePath stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
 			if ([fm fileExistsAtPath:bundlePath]) {
 				NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
-				return [bundle autorelease];
+				return bundle;
 			} else {
 				return nil;
 			}
@@ -554,7 +547,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 NSString *ATLocalizedString(NSString *key, NSString *comment) {
 	static NSBundle *bundle = nil;
 	if (!bundle) {
-		bundle = [[ATConnect resourceBundle] retain];
+		bundle = [ATConnect resourceBundle];
 	}
 	NSString *result = [bundle localizedStringForKey:key value:key table:nil];
 	return result;

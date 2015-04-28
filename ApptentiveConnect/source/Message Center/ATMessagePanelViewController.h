@@ -28,27 +28,27 @@ typedef enum {
 	UIViewTintAdjustmentMode startingTintAdjustmentMode;
 	BOOL showEmailAddressField;
 	UIWindow *originalPresentingWindow;
-	NSObject<ATMessagePanelDelegate> *delegate;
+	NSObject<ATMessagePanelDelegate> *__weak delegate;
 	
 	UIAlertView *noEmailAddressAlert;
 	UIAlertView *invalidEmailAddressAlert;
 	UIAlertView *emailRequiredAlert;
 }
-@property (nonatomic, retain) IBOutlet UIWindow *window;
-@property (nonatomic, retain) IBOutlet ATCustomButton *cancelButton;
-@property (nonatomic, retain) IBOutlet ATCustomButton *sendButton;
-@property (nonatomic, retain) IBOutlet ATToolbar *toolbar;
-@property (nonatomic, retain) IBOutlet UIImageView *toolbarShadowImage;
-@property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
-@property (nonatomic, retain) IBOutlet UIView *containerView;
-@property (nonatomic, retain) UITextField *emailField;
-@property (nonatomic, retain) ATDefaultTextView *feedbackView;
-@property (nonatomic, retain) UIView *promptContainer;
+@property (nonatomic, strong) IBOutlet UIWindow *window;
+@property (nonatomic, strong) IBOutlet ATCustomButton *cancelButton;
+@property (nonatomic, strong) IBOutlet ATCustomButton *sendButton;
+@property (nonatomic, strong) IBOutlet ATToolbar *toolbar;
+@property (nonatomic, strong) IBOutlet UIImageView *toolbarShadowImage;
+@property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
+@property (nonatomic, strong) IBOutlet UIView *containerView;
+@property (nonatomic, strong) UITextField *emailField;
+@property (nonatomic, strong) ATDefaultTextView *feedbackView;
+@property (nonatomic, strong) UIView *promptContainer;
 @property (nonatomic, copy) NSString *promptTitle;
 @property (nonatomic, copy) NSString *promptText;
 @property (nonatomic, copy) NSString *customPlaceholderText;
 @property (nonatomic, assign) BOOL showEmailAddressField;
-@property (nonatomic, assign) NSObject<ATMessagePanelDelegate> *delegate;
+@property (nonatomic, weak) NSObject<ATMessagePanelDelegate> *delegate;
 @property (nonatomic, copy) ATInteraction *interaction;
 
 - (id)initWithDelegate:(NSObject<ATMessagePanelDelegate> *)delegate;

@@ -71,7 +71,6 @@ static void ATReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 		CFRelease(reachabilityRef);
 		reachabilityRef = NULL;
 	}
-	[super dealloc];
 }
 
 - (ATNetworkStatus)currentNetworkStatus {
@@ -119,7 +118,7 @@ static void ATReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 @implementation ATReachability (Private)
 - (BOOL)start {
 	BOOL result = NO;
-	SCNetworkReachabilityContext context = {0, self, NULL, NULL, NULL};
+	SCNetworkReachabilityContext context = {0, (__bridge void *)(self), NULL, NULL, NULL};
 	do { // once
 		if (!SCNetworkReachabilitySetCallback(reachabilityRef, ATReachabilityCallback, &context)) {
 			break;

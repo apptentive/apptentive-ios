@@ -126,8 +126,7 @@
 - (void)dealloc {
 	if (shadowView) {
 		[shadowView removeFromSuperview];
-		[shadowView release], shadowView = nil;
+		shadowView = nil;
 	}
-	[super dealloc];
 }
 @end

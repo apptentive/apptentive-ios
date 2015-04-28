@@ -30,7 +30,6 @@
 		if (version == kATRecordTaskCodingVersion) {
 			self.record = [coder decodeObjectForKey:@"record"];
 		} else {
-			[self release];
 			return nil;
 		}
 	}
@@ -44,8 +43,6 @@
 
 - (void)dealloc {
 	[self teardown];
-	[record release], record = nil;
-	[super dealloc];
 }
 
 - (BOOL)canStart {
@@ -61,7 +58,7 @@
 		return;
 	}
 	if (!request) {
-		request = [[self.record requestForSendingRecord] retain];
+		request = [self.record requestForSendingRecord];
 		if (request != nil) {
 			request.delegate = self;
 			[request start];
@@ -76,7 +73,7 @@
 	if (request) {
 		request.delegate = nil;
 		[request cancel];
-		[request release], request = nil;
+		request = nil;
 		self.inProgress = NO;
 	}
 }
@@ -100,10 +97,8 @@
 #pragma mark ATAPIRequestDelegate
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(id)result {
 	@synchronized(self) {
-		[self retain];
 		[self stop];
 		self.finished = YES;
-		[self release];
 	}
 }
 
@@ -113,13 +108,11 @@
 
 - (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
 	@synchronized(self) {
-		[self retain];
 		self.failed = YES;
 		self.lastErrorTitle = sender.errorTitle;
 		self.lastErrorMessage = sender.errorMessage;
 		ATLogInfo(@"ATAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
 		[self stop];
-		[self release];
 	}
 }
 @end

@@ -40,7 +40,7 @@ static ATContactStorage *sharedContactStorage = nil;
 		if (sharedContactStorage == nil) {
 			if ([ATContactStorage serializedVersionExists]) {
 				@try {
-					sharedContactStorage = [[NSKeyedUnarchiver unarchiveObjectWithFile:[ATContactStorage contactStoragePath]] retain];
+					sharedContactStorage = [NSKeyedUnarchiver unarchiveObjectWithFile:[ATContactStorage contactStoragePath]];
 				} @catch (NSException *exception) {
 					ATLogError(@"Unable to unarchive cstorage: %@", exception);
 				}
@@ -57,7 +57,6 @@ static ATContactStorage *sharedContactStorage = nil;
 	@synchronized(self) {
 		if (sharedContactStorage != nil) {
 			[sharedContactStorage save];
-			[sharedContactStorage release];
 			sharedContactStorage = nil;
 		}
 	}
@@ -77,7 +76,6 @@ static ATContactStorage *sharedContactStorage = nil;
 			self.email = [coder decodeObjectForKey:@"email"];
 			self.phone = [coder decodeObjectForKey:@"phone"];
 		} else {
-			[self release];
 			return nil;
 		}
 	}
@@ -93,7 +91,6 @@ static ATContactStorage *sharedContactStorage = nil;
 
 - (void)dealloc {
 	[self teardown];
-	[super dealloc];
 }
 @end
 

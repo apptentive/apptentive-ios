@@ -12,7 +12,7 @@
 
 /*! A helper class for resizing images from the Asset Library. */
 @interface ATLargeImageResizer : NSObject
-@property (nonatomic, assign) NSObject<ATLargeImageResizerDelegate> *delegate;
+@property (nonatomic, weak) NSObject<ATLargeImageResizerDelegate> *delegate;
 - (instancetype)initWithImageAssetURL:(NSURL *)url originalImage:(UIImage *)originalImage delegate:(NSObject<ATLargeImageResizerDelegate> *)delegate;
 - (void)cancel;
 - (void)resizeWithMaximumSize:(CGSize)size;

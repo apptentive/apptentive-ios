@@ -30,12 +30,6 @@
 	return self;
 }
 
-- (void)dealloc {
-	[token release], token = nil;
-	[personID release], personID = nil;
-	[deviceID release], deviceID = nil;
-	[super dealloc];
-}
 
 - (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeInt:kATConversationCodingVersion forKey:@"version"];

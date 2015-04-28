@@ -35,7 +35,7 @@
 		self.modalPresentationStyle = UIModalPresentationFormSheet;
 	}
 	if (self != nil) {
-		delegate = [aDelegate retain];
+		delegate = aDelegate;
 	}
 	return self;
 }
@@ -43,19 +43,16 @@
 - (void)dealloc {
 	if (imageResizer) {
 		[imageResizer cancel];
-		[imageResizer release], imageResizer = nil;
+		imageResizer = nil;
 	}
 	[self cleanupImageActionSheet];
 	imagePickerPopover.delegate = nil;
-	[imagePickerPopover release], imagePickerPopover = nil;
-	[delegate release], delegate = nil;
+	imagePickerPopover = nil;
+	delegate = nil;
 	scrollView.delegate = nil;
 	[scrollView removeFromSuperview];
-	[scrollView release], scrollView = nil;
+	scrollView = nil;
 	[containerView removeFromSuperview];
-	[containerView release], containerView = nil;
-	[_activityIndicator release];
-	[super dealloc];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -67,8 +64,8 @@
 	[super viewDidLoad];
 	self.activityIndicator.hidden = YES;
 	self.navigationItem.title = ATLocalizedString(@"Screenshot", @"Screenshot view title");
-	self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(takePhoto:)] autorelease];
-	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)] autorelease];
+	self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(takePhoto:)];
+	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)];
 
 	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7.0"] && [[ATConnect sharedConnection] tintColor] && [self.navigationController.navigationBar respondsToSelector:@selector(setTintColor:)]) {
 		self.navigationController.navigationBar.tintColor = [[ATConnect sharedConnection] tintColor];
@@ -79,7 +76,6 @@
 	if (scrollView) {
 		scrollView.delegate = nil;
 		[scrollView removeFromSuperview];
-		[scrollView release];
 		scrollView = nil;
 	}
 	
@@ -132,8 +128,8 @@
 		UIView *container = nil;
 		UILabel *label = nil;
 		if ([self.containerView viewWithTag:kATContainerViewTag]) {
-			container = [[self.containerView viewWithTag:kATContainerViewTag] retain];
-			label = [(UILabel *)[self.containerView viewWithTag:kATLabelViewTag] retain];
+			container = [self.containerView viewWithTag:kATContainerViewTag];
+			label = (UILabel *)[self.containerView viewWithTag:kATLabelViewTag];
 		} else {
 			container = [[UIView alloc] initWithFrame:self.containerView.bounds];
 			container.tag = kATContainerViewTag;
@@ -159,8 +155,6 @@
 		CGRect labelRect = CGRectMake(20, topOffset, labelWidth, labelSize.height);
 		label.frame = labelRect;
 		label.center = container.center;
-		[label release];
-		[container release];
 	}
 }
 
@@ -178,13 +172,13 @@
 	[super viewWillDisappear:animated];
 	if (shouldResign) {
 		[delegate imageViewControllerWillDismiss:self animated:animated];
-		[delegate release], delegate = nil;
+		delegate = nil;
 	}
 }
 
 - (void)viewDidUnload {
 	[containerView removeFromSuperview];
-	[containerView release], containerView = nil;
+	containerView = nil;
 	[self setActivityIndicator:nil];
 	[super viewDidUnload];
 }
@@ -193,12 +187,10 @@
 	shouldResign = YES;
 	[self cleanupImageActionSheet];
 	if ([self respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
-		id blockSelf = [self retain];
-		NSObject<ATSimpleImageViewControllerDelegate> *blockDelegate = [delegate retain];
+		id blockSelf = self;
+		NSObject<ATSimpleImageViewControllerDelegate> *blockDelegate = delegate;
 		[self.navigationController dismissViewControllerAnimated:YES completion:^{
 			[blockDelegate imageViewControllerDidDismiss:self];
-			[blockSelf release];
-			[blockDelegate release];
 		}];
 	} else {
 		[self dismissViewControllerAnimated:YES completion:NULL];
@@ -233,14 +225,14 @@
 		[delegate imageViewController:self pickedImage:image fromSource:isFromCamera ? ATFeedbackImageSourceCamera : ATFeedbackImageSourcePhotoLibrary];
 	}
 	imageResizer.delegate = nil;
-	[imageResizer release], imageResizer = nil;
+	imageResizer = nil;
 	[self setupScrollView];
 }
 
 - (void)imageResizerFailed:(ATLargeImageResizer *)resizer {
 	self.activityIndicator.hidden = YES;
 	imageResizer.delegate = nil;
-	[imageResizer release], imageResizer = nil;
+	imageResizer = nil;
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Unable to Use Image", @"Title of unable to use image alert.") message:ATLocalizedString(@"Unable to resize the image you picked.", @"Message of unable to use image alert.") delegate:nil cancelButtonTitle:ATLocalizedString(@"OK", @"OK button title") otherButtonTitles:nil];
 	[alert show];
 	[self setupScrollView];
@@ -255,7 +247,7 @@
 	}
 	if (actionSheet && imageActionSheet && [actionSheet isEqual:imageActionSheet]) {
 		imageActionSheet.delegate = nil;
-		[imageActionSheet release], imageActionSheet = nil;
+		imageActionSheet = nil;
 	}
 }
 
@@ -263,7 +255,7 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
 	if (imageResizer) {
 		[imageResizer cancel];
-		[imageResizer release], imageResizer = nil;
+		imageResizer = nil;
 	}
 	if (delegate) {
 		[delegate imageViewControllerVoidedDefaultImage:self];
@@ -329,7 +321,7 @@
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
 	if (popoverController == imagePickerPopover) {
 		imagePickerPopover.delegate = nil;
-		[imagePickerPopover release], imagePickerPopover = nil;
+		imagePickerPopover = nil;
 	}
 }
 
@@ -344,7 +336,7 @@
 		if (imagePickerPopover) {
 			imagePickerPopover.delegate = nil;
 			[imagePickerPopover dismissPopoverAnimated:NO];
-			[imagePickerPopover release], imagePickerPopover = nil;
+			imagePickerPopover = nil;
 		}
 		imagePickerPopover = [[UIPopoverController alloc] initWithContentViewController:imagePicker];
 		imagePickerPopover.delegate = self;
@@ -362,7 +354,6 @@
 	} else {
 		[self presentViewController:imagePicker animated:YES completion:NULL];
 	}
-	[imagePicker release];
 }
 
 - (void)takePhoto {
@@ -374,14 +365,13 @@
 	imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
 	imagePicker.delegate = self;
 	[self presentViewController:imagePicker animated:YES completion:NULL];
-	[imagePicker release];
 }
 
 - (void)cleanupImageActionSheet {
 	if (imageActionSheet) {
 		imageActionSheet.delegate = nil;
 		[imageActionSheet dismissWithClickedButtonIndex:-1 animated:NO];
-		[imageActionSheet release], imageActionSheet = nil;
+		imageActionSheet = nil;
 	}
 }
 

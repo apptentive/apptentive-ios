@@ -20,7 +20,6 @@
 			self.identifier = [coder decodeObjectForKey:@"identifier"];
 			self.response = [coder decodeObjectForKey:@"response"];
 		} else {
-			[self release];
 			return nil;
 		}
 	}
@@ -33,9 +32,4 @@
 	[coder encodeObject:self.response forKey:@"response"];
 }
 
-- (void)dealloc {
-	[identifier release], identifier = nil;
-	[response release], response = nil;
-	[super dealloc];
-}
 @end

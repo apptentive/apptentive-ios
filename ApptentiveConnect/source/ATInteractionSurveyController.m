@@ -28,13 +28,11 @@ NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 }
 
 - (void)showSurveyFromViewController:(UIViewController *)viewController {
-	[self retain];
 	
 	self.viewController = viewController;
 	
 	ATSurveyParser *parser = [[ATSurveyParser alloc] init];
 	ATSurvey *survey = [parser surveyWithInteraction:self.interaction];
-	[parser release];
 	
 	ATSurveyViewController *vc = [[ATSurveyViewController alloc] initWithSurvey:survey];
 	vc.interaction = self.interaction;
@@ -50,15 +48,7 @@ NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 	[self.interaction engage:ATInteractionSurveyEventLabelLaunch fromViewController:self.viewController];
 	
 	[viewController presentViewController:nc animated:YES completion:^{}];
-	[nc release];
-	[vc release];
 }
 
-- (void)dealloc {
-	[_interaction release], _interaction = nil;
-	[_viewController release], _viewController = nil;
-	
-	[super dealloc];
-}
 
 @end

@@ -42,7 +42,7 @@ typedef enum {
 	NSString *errorMessage;
 	NSString *errorResponse;
 	NSTimeInterval timeoutInterval;
-	NSObject<ATAPIRequestDelegate> *delegate;
+	NSObject<ATAPIRequestDelegate> *__weak delegate;
 	
 	NSTimeInterval expiresMaxAge;
 }
@@ -52,7 +52,7 @@ typedef enum {
 @property (nonatomic, copy) NSString *errorMessage;
 @property (nonatomic, copy) NSString *errorResponse;
 @property (nonatomic, assign) NSTimeInterval timeoutInterval;
-@property (nonatomic, assign) NSObject<ATAPIRequestDelegate> *delegate;
+@property (nonatomic, weak) NSObject<ATAPIRequestDelegate> *delegate;
 
 - (id)initWithConnection:(ATURLConnection *)connection channelName:(NSString *)channelName;
 - (void)start;

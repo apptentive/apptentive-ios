@@ -31,7 +31,6 @@
 
 - (void)dealloc {
 	[self teardown];
-	[super dealloc];
 }
 
 - (BOOL)canStart {
@@ -58,7 +57,7 @@
 	self.failureOkay = YES;
 	if (checkManifestRequest == nil) {
 		ATWebClient *client = [ATWebClient sharedClient];
-		checkManifestRequest = [[client requestForGettingEngagementManifest] retain];
+		checkManifestRequest = [client requestForGettingEngagementManifest];
 		checkManifestRequest.delegate = self;
 		self.inProgress = YES;
 		[checkManifestRequest start];
@@ -71,7 +70,7 @@
 	if (checkManifestRequest) {
 		checkManifestRequest.delegate = nil;
 		[checkManifestRequest cancel];
-		[checkManifestRequest release], checkManifestRequest = nil;
+		checkManifestRequest = nil;
 		self.inProgress = NO;
 	}
 }
@@ -91,7 +90,6 @@
 #pragma mark ATAPIRequestDelegate
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)request result:(NSObject *)result {
 	@synchronized(self) {
-		[self retain];
 		if (request == checkManifestRequest) {
 			ATEngagementManifestParser *parser = [[ATEngagementManifestParser alloc] init];
 			
@@ -106,17 +104,15 @@
 			}
 
 			checkManifestRequest.delegate = nil;
-			[checkManifestRequest release], checkManifestRequest = nil;
-			[parser release], parser = nil;
+			checkManifestRequest = nil;
+			parser = nil;
 			self.finished = YES;
 		}
-		[self release];
 	}
 }
 
 - (void)at_APIRequestDidFail:(ATAPIRequest *)request {
     @synchronized(self) {
-		[self retain];
 		if (request == checkManifestRequest) {
 			ATLogError(@"Engagement manifest request failed: %@: %@", request.errorTitle, request.errorMessage);
 			self.lastErrorTitle = request.errorTitle;
@@ -124,7 +120,6 @@
 			self.failed = YES;
 			[self stop];
 		}
-		[self release];
 	}
 }
 @end

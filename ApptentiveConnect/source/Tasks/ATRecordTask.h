@@ -16,6 +16,6 @@
 	ATAPIRequest *request;
 	ATLegacyRecord *record;
 }
-@property (nonatomic, retain) ATLegacyRecord *record;
+@property (nonatomic, strong) ATLegacyRecord *record;
 
 @end

@@ -61,7 +61,6 @@
 				self.multiline = YES;
 			}
 		} else {
-			[self release];
 			return nil;
 		}
 	}
@@ -83,16 +82,6 @@
 	[coder encodeObject:[NSNumber numberWithBool:self.multiline] forKey:@"multiline"];
 }
 
-- (void)dealloc {
-	[identifier release], identifier = nil;
-	[questionText release], questionText = nil;
-	[instructionsText release], instructionsText = nil;
-	[value release], value = nil;
-	[answerChoices release], answerChoices = nil;
-	[answerText release], answerText = nil;
-	[selectedAnswerChoices release], selectedAnswerChoices = nil;
-	[super dealloc];
-}
 
 - (void)addAnswerChoice:(ATSurveyQuestionAnswer *)answer {
 	[self.answerChoices addObject:answer];
@@ -157,7 +146,6 @@
 			self.identifier = [coder decodeObjectForKey:@"identifier"];
 			self.value = [coder decodeObjectForKey:@"value"];
 		} else {
-			[self release];
 			return nil;
 		}
 	}
@@ -170,9 +158,4 @@
 	[coder encodeObject:value forKey:@"value"];
 }
 
-- (void)dealloc {
-	[identifier release], identifier = nil;
-	[value release], value = nil;
-	[super dealloc];
-}
 @end

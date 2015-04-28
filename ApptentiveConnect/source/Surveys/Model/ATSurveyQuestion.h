@@ -36,7 +36,7 @@ typedef enum {
 @property (nonatomic, readonly) NSMutableArray *answerChoices;
 @property (nonatomic, copy) NSString *answerText;
 // If this is a multiple choice or multiple select question:
-@property (nonatomic, retain) NSMutableArray *selectedAnswerChoices;
+@property (nonatomic, strong) NSMutableArray *selectedAnswerChoices;
 @property (nonatomic, assign) NSUInteger minSelectionCount;
 @property (nonatomic, assign) NSUInteger maxSelectionCount;
 @property (nonatomic, assign) BOOL multiline;

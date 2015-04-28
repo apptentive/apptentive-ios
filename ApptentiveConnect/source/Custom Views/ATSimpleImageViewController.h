@@ -27,8 +27,8 @@
 	UIPopoverController *imagePickerPopover;
 	UIActionSheet *imageActionSheet;
 }
-@property (nonatomic, retain) IBOutlet UIView *containerView;
-@property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (nonatomic, strong) IBOutlet UIView *containerView;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 - (id)initWithDelegate:(NSObject<ATSimpleImageViewControllerDelegate> *)delegate;
 - (IBAction)donePressed:(id)sender;

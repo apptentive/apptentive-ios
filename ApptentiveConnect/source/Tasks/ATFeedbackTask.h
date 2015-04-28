@@ -18,6 +18,6 @@
 	ATAPIRequest *request;
 	ATFeedback *feedback;
 }
-@property (nonatomic, retain) ATFeedback *feedback;
+@property (nonatomic, strong) ATFeedback *feedback;
 
 @end

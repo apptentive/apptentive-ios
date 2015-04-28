@@ -12,7 +12,7 @@ extern NSString *const ATMessageCollectionDidScroll;
 extern NSString *const ATMessageCollectionTopOffsetKey;
 
 @interface ATBaseMessageCellV7 : UICollectionViewCell
-@property (nonatomic, retain) IBOutlet UILabel *dateLabel;
+@property (nonatomic, strong) IBOutlet UILabel *dateLabel;
 
 /*! Do not call directly. You may override this to perform layout on scrolling. */
 - (void)collection:(UICollectionView *)collectionView didScroll:(CGFloat)topOffset;

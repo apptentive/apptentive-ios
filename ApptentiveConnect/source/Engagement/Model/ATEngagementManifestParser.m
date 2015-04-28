@@ -52,8 +52,8 @@
 				
 				success = YES;
 			} else {
-				[parserError release], parserError = nil;
-				parserError = [error retain];
+				parserError = nil;
+				parserError = error;
 				success = NO;
 			}
 		}
@@ -77,8 +77,7 @@
 }
 
 - (void)dealloc {
-	[parserError release], parserError = nil;
-	[super dealloc];
+	parserError = nil;
 }
 
 @end

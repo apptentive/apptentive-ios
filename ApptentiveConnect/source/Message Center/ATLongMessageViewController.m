@@ -36,11 +36,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)dealloc {
-	[_textView release];
-	[_text release];
-	[super dealloc];
-}
 - (void)viewDidUnload {
 	[self setTextView:nil];
 	[super viewDidUnload];

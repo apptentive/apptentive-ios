@@ -45,7 +45,7 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 		NSDictionary *lastValueDictionary = (NSDictionary *)lastValue;
 		ATDeviceInfo *deviceInfo = [[ATDeviceInfo alloc] init];
 		NSDictionary *currentValueDictionary = [deviceInfo apiJSON];
-		[deviceInfo release], deviceInfo = nil;
+		deviceInfo = nil;
 		if (![ATUtilities dictionary:currentValueDictionary isEqualToDictionary:lastValueDictionary]) {
 			shouldUpdate = YES;
 		}
@@ -64,23 +64,22 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 - (void)dealloc {
 	delegate = nil;
 	[self cancel];
-	[super dealloc];
 }
 
 - (void)update {
 	[self cancel];
 	ATDeviceInfo *deviceInfo = [[ATDeviceInfo alloc] init];
-	request = [[[ATWebClient sharedClient] requestForUpdatingDevice:deviceInfo] retain];
+	request = [[ATWebClient sharedClient] requestForUpdatingDevice:deviceInfo];
 	request.delegate = self;
 	[request start];
-	[deviceInfo release], deviceInfo = nil;
+	deviceInfo = nil;
 }
 
 - (void)cancel {
 	if (request) {
 		request.delegate = nil;
 		[request cancel];
-		[request release], request = nil;
+		request = nil;
 	}
 }
 
@@ -98,7 +97,7 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		ATDeviceInfo *deviceInfo = [[ATDeviceInfo alloc] init];
 		NSDictionary *currentValueDictionary = [deviceInfo apiJSON];
-		[deviceInfo release], deviceInfo = nil;
+		deviceInfo = nil;
 		
 		[defaults setObject:[NSDate date] forKey:ATDeviceLastUpdatePreferenceKey];
 		[defaults setObject:currentValueDictionary forKey:ATDeviceLastUpdateValuePreferenceKey];

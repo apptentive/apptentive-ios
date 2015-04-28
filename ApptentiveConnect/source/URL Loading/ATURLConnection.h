@@ -11,7 +11,7 @@
 
 @interface ATURLConnection : NSObject {
 	NSURL *targetURL;
-	NSObject<ATURLConnectionDelegate> *delegate;
+	NSObject<ATURLConnectionDelegate> *__weak delegate;
 	
 	NSMutableURLRequest *request;
 	NSURLConnection *connection;
@@ -39,14 +39,14 @@
 	NSTimeInterval expiresMaxAge;
 }
 @property (nonatomic, readonly, copy) NSURL *targetURL;
-@property (nonatomic, assign) NSObject<ATURLConnectionDelegate> *delegate;
-@property (nonatomic, retain) NSURLConnection *connection;
+@property (nonatomic, weak) NSObject<ATURLConnectionDelegate> *delegate;
+@property (nonatomic, strong) NSURLConnection *connection;
 @property (nonatomic, assign) BOOL executing;
 @property (nonatomic, assign) BOOL finished;
 @property (nonatomic, assign) BOOL failed;
 @property (nonatomic, readonly) BOOL cancelled;
 @property (nonatomic, assign) NSTimeInterval timeoutInterval;
-@property (nonatomic, retain) NSURLCredential *credential;
+@property (nonatomic, strong) NSURLCredential *credential;
 @property (nonatomic, readonly) NSInteger statusCode;
 @property (nonatomic, readonly) BOOL failedAuthentication;
 @property (nonatomic, copy) NSError *connectionError;

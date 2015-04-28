@@ -42,14 +42,6 @@
     return [[self class] reuseIdentifier];
 }
 
-- (void)dealloc {
-    [dateLabel release];
-	[messageText release];
-	[titleText release];
-	[grayLineView release];
-	[containerView release];
-    [super dealloc];
-}
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

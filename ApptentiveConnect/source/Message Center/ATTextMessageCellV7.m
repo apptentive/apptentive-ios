@@ -114,25 +114,16 @@
 }
 
 - (void)dealloc {
-	[_textContainerView release];
 	_messageLabel.delegate = nil;
-	[_messageLabel release];
-	[_userIconView release];
 	if (_userIconOffsetConstraint) {
 		[_userIconOffsetView removeConstraint:_userIconOffsetConstraint];
 	}
-	[_userIconOffsetView release];
-	[_userIconOffsetConstraint release];
-	[_arrowView release];
-	[_composingImageView release];
-	[_tooLongLabel release];
-	[super dealloc];
 }
 
 - (void)setMessage:(ATTextMessage *)message {
 	if (_message != message) {
-		[_message release], _message = nil;
-		_message = [message retain];
+		_message = nil;
+		_message = message;
 		
 		[self setup];
 	}

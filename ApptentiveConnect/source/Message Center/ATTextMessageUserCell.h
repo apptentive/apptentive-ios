@@ -18,14 +18,14 @@ typedef enum {
 } ATTextMessageCellType;
 
 @interface ATTextMessageUserCell : UITableViewCell <ATMessageCenterCell, ATTTTAttributedLabelDelegate>
-@property (retain, nonatomic) IBOutlet UILabel *dateLabel;
-@property (retain, nonatomic) IBOutlet UIView *chatBubbleContainer;
-@property (retain, nonatomic) IBOutlet ATNetworkImageView *userIcon;
-@property (retain, nonatomic) IBOutlet UIImageView *messageBubbleImage;
-@property (retain, nonatomic) IBOutlet UILabel *usernameLabel;
-@property (retain, nonatomic) IBOutlet ATTTTAttributedLabel *messageText;
-@property (retain, nonatomic) IBOutlet UIImageView *composingBubble;
-@property (retain, nonatomic) IBOutlet UILabel *tooLongLabel;
+@property (strong, nonatomic) IBOutlet UILabel *dateLabel;
+@property (strong, nonatomic) IBOutlet UIView *chatBubbleContainer;
+@property (strong, nonatomic) IBOutlet ATNetworkImageView *userIcon;
+@property (strong, nonatomic) IBOutlet UIImageView *messageBubbleImage;
+@property (strong, nonatomic) IBOutlet UILabel *usernameLabel;
+@property (strong, nonatomic) IBOutlet ATTTTAttributedLabel *messageText;
+@property (strong, nonatomic) IBOutlet UIImageView *composingBubble;
+@property (strong, nonatomic) IBOutlet UILabel *tooLongLabel;
 @property (nonatomic, assign, getter = isComposing) BOOL composing;
 @property (nonatomic, assign, getter = shouldShowDateLabel) BOOL showDateLabel;
 @property (nonatomic, assign, getter = isTooLong) BOOL tooLong;

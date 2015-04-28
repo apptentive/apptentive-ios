@@ -15,9 +15,9 @@
 <UIAlertViewDelegate>
 #endif
 
-@property (nonatomic, retain, readonly) ATInteraction *interaction;
-@property (nonatomic, retain) UIAlertView *ratingDialog;
-@property (nonatomic, retain) UIViewController *viewController;
+@property (nonatomic, strong, readonly) ATInteraction *interaction;
+@property (nonatomic, strong) UIAlertView *ratingDialog;
+@property (nonatomic, strong) UIViewController *viewController;
 
 - (id)initWithInteraction:(ATInteraction *)interaction;
 - (void)showRatingDialogFromViewController:(UIViewController *)viewController;

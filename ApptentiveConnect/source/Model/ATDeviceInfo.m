@@ -24,9 +24,6 @@
 	return self;
 }
 
-- (void)dealloc {
-	[super dealloc];
-}
 
 + (NSString *)carrier {
 #if TARGET_OS_IPHONE
@@ -37,7 +34,7 @@
 		if (c.carrierName) {
 			result = c.carrierName;
 		}
-		[netInfo release], netInfo = nil;
+		netInfo = nil;
 	}
 	return result;
 #elif TARGET_OS_MAC

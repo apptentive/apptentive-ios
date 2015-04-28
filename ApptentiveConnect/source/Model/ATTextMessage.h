@@ -13,8 +13,8 @@
 
 @interface ATTextMessage : ATAbstractMessage
 
-@property (nonatomic, retain) NSString *body;
-@property (nonatomic, retain) NSString *title;
+@property (nonatomic, strong) NSString *body;
+@property (nonatomic, strong) NSString *title;
 
 + (void)clearComposingMessages;
 @end

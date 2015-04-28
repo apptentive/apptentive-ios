@@ -19,7 +19,6 @@
 }
 
 - (void)dealloc {
-	[at_drawRectBlock release], at_drawRectBlock = nil;
-	[super dealloc];
+	at_drawRectBlock = nil;
 }
 @end

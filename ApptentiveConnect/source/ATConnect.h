@@ -164,7 +164,7 @@ extern NSString *const ATIntegrationKeyParse;
  Overrides the default tintColor acquired from your app, in case you're using one that doesn't look great
  with Apptentive-specific UI.
  */
-@property (nonatomic, retain) UIColor *tintColor;
+@property (nonatomic, strong) UIColor *tintColor;
 #endif
 
 

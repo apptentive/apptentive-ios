@@ -23,9 +23,7 @@
 
 - (void)dealloc {
 	[imageView removeFromSuperview];
-	[imageView release];
 	imageView = nil;
-	[super dealloc];
 }
 
 - (UIImageView *)imageView {

@@ -15,6 +15,6 @@
 	ATAPIRequest *request;
 	NSString *pendingMessageID;
 }
-@property (nonatomic, retain) NSString *pendingMessageID;
+@property (nonatomic, strong) NSString *pendingMessageID;
 
 @end

@@ -90,10 +90,7 @@ typedef enum {
 - (void)dealloc {
 	[[ATBackend sharedBackend] messageCenterLeftForeground];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[messageDateFormatter release];
 	tableView.delegate = nil;
-	[tableView release];
-	[super dealloc];
 }
 
 - (void)viewDidUnload {
@@ -296,8 +293,8 @@ typedef enum {
 				
 				textCell.userIcon.image = [ATBackend imageNamed:@"at_mc_user_icon_default"];
 			}
-			[userCell release], userCell = nil;
-			[developerCell release], developerCell = nil;
+			userCell = nil;
+			developerCell = nil;
 			textCell.selectionStyle = UITableViewCellSelectionStyleNone;
 			textCell.userIcon.layer.cornerRadius = 4.0;
 			textCell.userIcon.layer.masksToBounds = YES;
@@ -306,7 +303,6 @@ typedef enum {
 			UIView *backgroundView = [[UIView alloc] init];
 			backgroundView.backgroundColor = [UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]];
 			textCell.backgroundView = backgroundView;
-			[backgroundView release];
 		}
 		textCell.composing = NO;
 		if (cellSubType != ATTextMessageCellTypeUser) {
@@ -385,7 +381,7 @@ typedef enum {
 			UINib *nib = [UINib nibWithNibName:@"ATAutomatedMessageCell" bundle:[ATConnect resourceBundle]];
 			[nib instantiateWithOwner:self options:nil];
 			currentCell = automatedCell;
-			[automatedCell release], automatedCell = nil;
+			automatedCell = nil;
 			
 			currentCell.selectionStyle = UITableViewCellSelectionStyleNone;
 		}
@@ -420,7 +416,7 @@ typedef enum {
 			UINib *nib = [UINib nibWithNibName:@"ATFileMessageCell" bundle:[ATConnect resourceBundle]];
 			[nib instantiateWithOwner:self options:nil];
 			currentCell = userFileMessageCell;
-			[userFileMessageCell release], userFileMessageCell = nil;
+			userFileMessageCell = nil;
 			
 			currentCell.selectionStyle = UITableViewCellSelectionStyleNone;
 		}

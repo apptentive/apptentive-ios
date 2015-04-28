@@ -51,13 +51,8 @@ enum {
 }
 
 - (void)dealloc {
-	[logicalSections release], logicalSections = nil;
+	logicalSections = nil;
 	[self teardown];
-	[_apptentiveDescriptionTextView release];
-	[_apptentivePrivacyTextView release];
-	[_findOutMoreButton release];
-	[_gotoPrivacyPolicyButton release];
-	[super dealloc];
 }
 
 
@@ -89,7 +84,7 @@ enum {
 	[self setFindOutMoreButton:nil];
 	[self setGotoPrivacyPolicyButton:nil];
 	[super viewDidUnload];
-	[headerView release], headerView = nil;
+	headerView = nil;
 	self.tableView.delegate = nil;
 	self.tableView.dataSource = nil;
 	self.tableView = nil;
@@ -121,7 +116,7 @@ enum {
 		showingDebugController = YES;
 		ATLogViewController *vc = [[ATLogViewController alloc] init];
 		[self.navigationController pushViewController:vc animated:YES];
-		[vc release], vc = nil;
+		vc = nil;
 	}
 	[aTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -156,7 +151,7 @@ enum {
 			UINib *nib = [UINib nibWithNibName:@"ATTaskProgressCell" bundle:[ATConnect resourceBundle]];
 			[nib instantiateWithOwner:self options:nil];
 			result = progressCell;
-			[progressCell release], progressCell = nil;
+			progressCell = nil;
 		}
 		
 		UILabel *label = (UILabel *)[result viewWithTag:1];
@@ -198,7 +193,7 @@ enum {
 	} else if (section == kSectionDebugLog) {
 		result = [aTableView dequeueReusableCellWithIdentifier:logCellIdentifier];
 		if (!result) {
-			result = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:logCellIdentifier] autorelease];
+			result = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:logCellIdentifier];
 		}
 		result.textLabel.text = @"View Debug Logs";
 	} else {
@@ -242,10 +237,10 @@ enum {
 @implementation ATInfoViewController (Private)
 - (void)setup {
 	if (headerView) {
-		[headerView release], headerView = nil;
+		headerView = nil;
 	}
 	if (logicalSections) {
-		[logicalSections release], logicalSections = nil;
+		logicalSections = nil;
 	}
 	logicalSections = [[NSMutableArray alloc] init];
 	[logicalSections addObject:@(kSectionTasks)];
@@ -281,10 +276,10 @@ enum {
 
 - (void)teardown {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[headerView release], headerView = nil;
+	headerView = nil;
 	tableView.delegate = nil;
 	tableView.dataSource = nil;
-	[tableView release], tableView = nil;
+	tableView = nil;
 }
 
 - (void)reload {

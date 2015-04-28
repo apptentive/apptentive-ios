@@ -23,17 +23,17 @@ typedef enum {
 
 @interface ATAbstractMessage : ATRecord <ATJSONModel>
 
-@property (nonatomic, retain) NSString *pendingMessageID;
-@property (nonatomic, retain) NSNumber *pendingState;
-@property (nonatomic, retain) NSNumber *priority;
-@property (nonatomic, retain) NSNumber *seenByUser;
-@property (nonatomic, retain) NSNumber *sentByUser;
-@property (nonatomic, retain) NSNumber *errorOccurred;
-@property (nonatomic, retain) NSString *errorMessageJSON;
-@property (nonatomic, retain) ATMessageSender *sender;
-@property (nonatomic, retain) NSSet *displayTypes;
-@property (nonatomic, retain) NSData *customData;
-@property (nonatomic, retain) NSNumber *hidden;
+@property (nonatomic, strong) NSString *pendingMessageID;
+@property (nonatomic, strong) NSNumber *pendingState;
+@property (nonatomic, strong) NSNumber *priority;
+@property (nonatomic, strong) NSNumber *seenByUser;
+@property (nonatomic, strong) NSNumber *sentByUser;
+@property (nonatomic, strong) NSNumber *errorOccurred;
+@property (nonatomic, strong) NSString *errorMessageJSON;
+@property (nonatomic, strong) ATMessageSender *sender;
+@property (nonatomic, strong) NSSet *displayTypes;
+@property (nonatomic, strong) NSData *customData;
+@property (nonatomic, strong) NSNumber *hidden;
 
 + (ATAbstractMessage *)findMessageWithID:(NSString *)apptentiveID;
 + (ATAbstractMessage *)findMessageWithPendingID:(NSString *)pendingID;

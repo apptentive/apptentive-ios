@@ -19,7 +19,7 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 @end
 
 @interface ATPersonUpdater ()
-@property (nonatomic, retain) NSDictionary *sentPersonJSON;
+@property (nonatomic, strong) NSDictionary *sentPersonJSON;
 @end
 
 @implementation ATPersonUpdater
@@ -43,8 +43,6 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 - (void)dealloc {
 	delegate = nil;
 	[self cancel];
-	[sentPersonJSON release], sentPersonJSON = nil;
-	[super dealloc];
 }
 
 + (BOOL)shouldUpdate {
@@ -58,7 +56,7 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 	if ([ATPersonInfo personExists]) {
 		person = [ATPersonInfo currentPerson];
 	} else {
-		person = [[[ATPersonInfo alloc] init] autorelease];
+		person = [[ATPersonInfo alloc] init];
 		person.needsUpdate = YES;
 		[person saveAsCurrentPerson];
 	}
@@ -93,7 +91,7 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 		[person saveAsCurrentPerson];
 	}
 	self.sentPersonJSON = [person safeApiJSON];
-	request = [[[ATWebClient sharedClient] requestForUpdatingPerson:person] retain];
+	request = [[ATWebClient sharedClient] requestForUpdatingPerson:person];
 	request.delegate = self;
 	[request start];
 }
@@ -102,7 +100,7 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 	if (request) {
 		request.delegate = nil;
 		[request cancel];
-		[request release], request = nil;
+		request = nil;
 	}
 }
 
@@ -154,6 +152,6 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 	} else {
 		[delegate personUpdater:self didFinish:NO];
 	}
-	[person release], person = nil;
+	person = nil;
 }
 @end

@@ -15,7 +15,7 @@
 	ATAPIRequest *request;
 	NSString *pendingSurveyResponseID;
 }
-@property (nonatomic, retain) NSString *pendingSurveyResponseID;
+@property (nonatomic, strong) NSString *pendingSurveyResponseID;
 
 
 @end

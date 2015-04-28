@@ -30,7 +30,6 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 }
 
 - (void)showEnjoymentDialogFromViewController:(UIViewController *)viewController {
-	[self retain];
 
 	self.viewController = viewController;
 	
@@ -64,17 +63,12 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 			[self.interaction engage:ATInteractionEnjoymentDialogEventLabelYes fromViewController:self.viewController];
 		}
 		
-		[self release];
 	}
 }
 
 - (void)dealloc {
-	[_interaction release], _interaction = nil;
 	_enjoymentDialog.delegate = nil;
-	[_enjoymentDialog release], _enjoymentDialog = nil;
-	[_viewController release], _viewController = nil;
 	
-	[super dealloc];
 }
 
 @end

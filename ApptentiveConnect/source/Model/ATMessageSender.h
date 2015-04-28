@@ -13,12 +13,12 @@
 
 @interface ATMessageSender : NSManagedObject
 
-@property (nonatomic, retain) NSString *apptentiveID;
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *emailAddress;
-@property (nonatomic, retain) NSString *profilePhotoURL;
-@property (nonatomic, retain) NSSet *sentMessages;
-@property (nonatomic, retain) NSSet *receivedMessages;
+@property (nonatomic, strong) NSString *apptentiveID;
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *emailAddress;
+@property (nonatomic, strong) NSString *profilePhotoURL;
+@property (nonatomic, strong) NSSet *sentMessages;
+@property (nonatomic, strong) NSSet *receivedMessages;
 
 + (ATMessageSender *)findSenderWithID:(NSString *)apptentiveID;
 + (ATMessageSender *)newOrExistingMessageSenderFromJSON:(NSDictionary *)json;

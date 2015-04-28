@@ -16,12 +16,12 @@
 @private
     NSMutableArray *logicalSections;
 }
-@property (nonatomic, retain) IBOutlet UITableView *tableView;
-@property (retain, nonatomic) IBOutlet UIView *headerView;
-@property (retain, nonatomic) IBOutlet UITextView *apptentiveDescriptionTextView;
-@property (retain, nonatomic) IBOutlet UITextView *apptentivePrivacyTextView;
-@property (retain, nonatomic) IBOutlet UIButton *findOutMoreButton;
-@property (retain, nonatomic) IBOutlet UIButton *gotoPrivacyPolicyButton;
+@property (nonatomic, strong) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet UIView *headerView;
+@property (strong, nonatomic) IBOutlet UITextView *apptentiveDescriptionTextView;
+@property (strong, nonatomic) IBOutlet UITextView *apptentivePrivacyTextView;
+@property (strong, nonatomic) IBOutlet UIButton *findOutMoreButton;
+@property (strong, nonatomic) IBOutlet UIButton *gotoPrivacyPolicyButton;
 
 - (id)init;
 - (IBAction)openApptentiveDotCom:(id)sender;

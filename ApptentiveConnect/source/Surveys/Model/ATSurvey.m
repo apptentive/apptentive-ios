@@ -42,7 +42,6 @@
 			self.showSuccessMessage = [[coder decodeObjectForKey:@"showSuccessMessage"] boolValue];
 			self.successMessage = [coder decodeObjectForKey:@"successMessage"];
 		} else {
-			[self release];
 			return nil;
 		}
 	}
@@ -60,14 +59,6 @@
 	[coder encodeObject:self.successMessage forKey:@"successMessage"];
 }
 
-- (void)dealloc {
-	[questions release], questions = nil;
-	[identifier release], identifier = nil;
-	[name release], name = nil;
-	[surveyDescription release], surveyDescription = nil;
-	[successMessage release], successMessage = nil;
-	[super dealloc];
-}
 
 - (NSString *)description {
 	return [NSString stringWithFormat:@"<ATSurvey: %p {name:%@, identifier:%@}>", self, self.name, self.identifier];

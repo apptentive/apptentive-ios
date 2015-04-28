@@ -27,9 +27,9 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 
 - (id)initWithConnection:(ATURLConnection *)aConnection channelName:(NSString *)aChannelName {
 	if ((self = [super init])) {
-		connection = [aConnection retain];
+		connection = aConnection;
 		connection.delegate = self;
-		channelName = [aChannelName retain];
+		channelName = aChannelName;
 	}
 	return self;
 }
@@ -39,14 +39,10 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	if (connection) {
 		connection.delegate = nil;
 		[[ATConnectionManager sharedSingleton] cancelConnection:connection inChannel:channelName];
-		[connection release], connection = nil;
+		connection = nil;
 	}
-	[errorTitle release], errorTitle = nil;
-	[errorMessage release], errorMessage = nil;
-	[errorResponse release], errorResponse = nil;
-	[channelName release], channelName = nil;
+	channelName = nil;
 	
-	[super dealloc];
 }
 
 - (void)start {
@@ -72,7 +68,6 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 #if TARGET_OS_IPHONE
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:self.errorTitle message:self.errorMessage delegate:nil cancelButtonTitle:ATLocalizedString(@"Close", nil) otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 #endif
 	}
 }
@@ -126,7 +121,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 			NSString *responseString = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
 			if (responseString != nil) {
 				self.errorResponse = responseString;
-				[responseString release], responseString = nil;
+				responseString = nil;
 			}
 			ATLogError(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
 			ATLogInfo(@"Status was: %d", sender.statusCode);
@@ -154,7 +149,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 			break;
 		}
 		
-		NSString *s = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];
+		NSString *s = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
 		if (!s) break;
 		if (self.returnType == ATAPIRequestReturnTypeString) {
 			result = s;
@@ -201,7 +196,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	NSString *responseString = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
 	if (responseString != nil) {
 		self.errorResponse = responseString;
-		[responseString release], responseString = nil;
+		responseString = nil;
 	}
 	
 	if ([ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogHTTPFailures ||

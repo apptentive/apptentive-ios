@@ -65,15 +65,15 @@
 
 - (void)setCurrentImage:(UIImage *)image {
 	if (currentImage != image) {
-		[currentImage release], currentImage = nil;
-		currentImage = [image retain];
+		currentImage = nil;
+		currentImage = image;
 		if (currentImage != nil) {
 			self.imageContainer.layer.contents = (id)currentImage.CGImage;
 			self.imageContainer.layer.contentsGravity = kCAGravityResizeAspect;
 		}
 	}
 	if (currentImage == nil) {
-		currentImage = [[ATBackend imageNamed:@"at_mc_file_default"] retain];
+		currentImage = [ATBackend imageNamed:@"at_mc_file_default"];
 		self.imageContainer.layer.contentsGravity = kCAGravityResizeAspect;
 		self.imageContainer.layer.contents = (id)currentImage.CGImage;
 	}
@@ -81,9 +81,9 @@
 
 - (void)configureWithFileMessage:(ATFileMessage *)message {
 	if (message != fileMessage) {
-		[fileMessage release], fileMessage = nil;
-		[currentImage release], currentImage = nil;
-		fileMessage = [message retain];
+		fileMessage = nil;
+		currentImage = nil;
+		fileMessage = message;
 		
 		UIImage *imageFile = [UIImage imageWithContentsOfFile:[message.fileAttachment fullLocalPath]];
 		CGSize thumbnailSize = ATThumbnailSizeOfMaxSize(imageFile.size, CGSizeMake(320, 320));
@@ -94,8 +94,8 @@
 		
 		UIImage *thumbnail = [message.fileAttachment thumbnailOfSize:thumbnailSize];
 		if (thumbnail) {
-			[currentImage release], currentImage = nil;
-			currentImage = [thumbnail retain];
+			currentImage = nil;
+			currentImage = thumbnail;
 			self.imageContainer.layer.contents = (id)currentImage.CGImage;
 		} else {
 			[self setCurrentImage:nil];
@@ -118,14 +118,8 @@
 }
 
 - (void)dealloc {
-	[dateLabel release], dateLabel = nil;
-	[userIcon release], userIcon = nil;
-	[imageContainer release];
-	[fileMessage release], fileMessage = nil;
-	[currentImage release], currentImage = nil;
-	[_chatBubbleContainer release];
-	[_messageBubbleImage release];
-	[super dealloc];
+	fileMessage = nil;
+	currentImage = nil;
 }
 
 - (CGFloat)cellHeightForWidth:(CGFloat)width {

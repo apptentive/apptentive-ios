@@ -14,11 +14,11 @@
 	CGAffineTransform lastSeenPresentingViewControllerTransform;
 }
 
-@property (nonatomic, retain) IBOutlet UIImageView *backgroundImageView;
-@property (nonatomic, retain) IBOutlet UIView *buttonFrame;
-@property (nonatomic, retain) IBOutlet UIButton *sendButtonNewUI;
-@property (nonatomic, retain) IBOutlet UIView *sendButtonPadding;
-@property (nonatomic, retain) IBOutlet UIButton *cancelButtonNewUI;
-@property (nonatomic, retain) IBOutlet UIView *cancelButtonPadding;
+@property (nonatomic, strong) IBOutlet UIImageView *backgroundImageView;
+@property (nonatomic, strong) IBOutlet UIView *buttonFrame;
+@property (nonatomic, strong) IBOutlet UIButton *sendButtonNewUI;
+@property (nonatomic, strong) IBOutlet UIView *sendButtonPadding;
+@property (nonatomic, strong) IBOutlet UIButton *cancelButtonNewUI;
+@property (nonatomic, strong) IBOutlet UIView *cancelButtonPadding;
 
 @end

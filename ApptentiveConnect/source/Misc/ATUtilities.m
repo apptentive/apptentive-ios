@@ -143,7 +143,7 @@ static NSDateFormatter *dateFormatter = nil;
 		default:
 			break;
 	}
-	UIImage *rotated = [[[UIImage alloc] initWithCGImage:[image CGImage] scale:1 orientation:imageOrientation] autorelease];
+	UIImage *rotated = [[UIImage alloc] initWithCGImage:[image CGImage] scale:1 orientation:imageOrientation];
 	
 	return rotated;
 }
@@ -492,7 +492,7 @@ static NSDateFormatter *dateFormatter = nil;
 				// For some reason, we couldn't find the decimal place.
 				result = [NSString stringWithFormat:@"%@.%ld %@", dateString, (long)(fractionalSeconds * 1000), timeZoneString];
 			}
-			[f release], f= nil;
+			f= nil;
 		}
 	}
 	return result;
@@ -533,7 +533,7 @@ static NSDateFormatter *dateFormatter = nil;
 			if (![ymdScanner scanInteger:&day]) break;
 			components.day = day;
 		} while (NO);
-		[ymdScanner release], ymdScanner = nil;
+		ymdScanner = nil;
 	} else {
 		[components setYear:[nowComponents year]];
 		[components setMonth:[nowComponents month]];
@@ -589,12 +589,12 @@ static NSDateFormatter *dateFormatter = nil;
 		} while (NO);
 	}
 	
-	[calendar release], calendar = nil;
-	[scanner release], scanner = nil;
+	calendar = nil;
+	scanner = nil;
 	if (validDate) {
 		result = [components date];
 	}
-	[components release], components = nil;
+	components = nil;
 	return result;
 }
 
@@ -655,9 +655,9 @@ static NSDateFormatter *dateFormatter = nil;
 				maxImage = image;
 			}
 		}
-		iconFile = [maxImage retain];
+		iconFile = maxImage;
 	});
-	return [[iconFile retain] autorelease];
+	return iconFile;
 }
 
 + (BOOL)bundleVersionIsMainVersion {
@@ -718,7 +718,7 @@ static NSDateFormatter *dateFormatter = nil;
 			maxAge = 0;
 		}
 	}
-	[scanner release], scanner = nil;
+	scanner = nil;
 	return maxAge;
 }
 
@@ -845,8 +845,8 @@ done:
 	@synchronized(self) {
 		if (dateFormatter == nil) {
 			dateFormatter = [[NSDateFormatter alloc] init];
-			NSLocale *enUSLocale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] autorelease];
-			NSCalendar *calendar = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] autorelease];
+			NSLocale *enUSLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+			NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
 			[dateFormatter setLocale:enUSLocale];
 			[dateFormatter setCalendar:calendar];
 			[dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];

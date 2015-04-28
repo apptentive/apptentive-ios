@@ -27,7 +27,6 @@
 
 - (void)dealloc {
 	[self teardown];
-	[super dealloc];
 }
 
 - (BOOL)canStart {
@@ -57,7 +56,6 @@
 - (void)stop {
 	if (configurationUpdater) {
 		[configurationUpdater cancel];
-		[configurationUpdater release];
 		configurationUpdater = nil;
 		self.inProgress = NO;
 	}
@@ -78,7 +76,6 @@
 #pragma mark ATAppConfigurationUpdaterDelegate
 - (void)configurationUpdaterDidFinish:(BOOL)success {
 	@synchronized(self) {
-		[self retain];
 		if (configurationUpdater) {
 			if (!success) {
 				self.failed = YES;
@@ -87,7 +84,6 @@
 				self.finished = YES;
 			}
 		}
-		[self release];
 	}
 }
 @end

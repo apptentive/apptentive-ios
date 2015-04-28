@@ -12,14 +12,14 @@
 	@private
 	UIAlertView *emailRequiredAlert;
 }
-@property (retain, nonatomic) IBOutlet UITableView *tableView;
-@property (retain, nonatomic) IBOutlet UIButton *logoButton;
-@property (retain, nonatomic) IBOutlet UITableViewCell *emailCell;
-@property (retain, nonatomic) IBOutlet UITableViewCell *nameCell;
-@property (retain, nonatomic) IBOutlet UITextField *emailTextField;
-@property (retain, nonatomic) IBOutlet UITextField *nameTextField;
-@property (retain, nonatomic) IBOutlet UILabel *poweredByLabel;
-@property (retain, nonatomic) IBOutlet UIImageView *logoImage;
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet UIButton *logoButton;
+@property (strong, nonatomic) IBOutlet UITableViewCell *emailCell;
+@property (strong, nonatomic) IBOutlet UITableViewCell *nameCell;
+@property (strong, nonatomic) IBOutlet UITextField *emailTextField;
+@property (strong, nonatomic) IBOutlet UITextField *nameTextField;
+@property (strong, nonatomic) IBOutlet UILabel *poweredByLabel;
+@property (strong, nonatomic) IBOutlet UIImageView *logoImage;
 
 - (IBAction)donePressed:(id)sender;
 - (IBAction)logoPressed:(id)sender;

@@ -31,7 +31,6 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 }
 
 - (void)showRatingDialogFromViewController:(UIViewController *)viewController {
-	[self retain];
 	
 	self.viewController = viewController;
 	
@@ -63,17 +62,12 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 			[self.interaction engage:ATInteractionRatingDialogEventLabelDecline fromViewController:self.viewController];
 		}
 		
-		[self release];
 	}
 }
 
 - (void)dealloc {
-	[_interaction release], _interaction = nil;
 	_ratingDialog.delegate = nil;
-	[_ratingDialog release], _ratingDialog = nil;
-	[_viewController release], _viewController = nil;
 	
-	[super dealloc];
 }
 
 @end

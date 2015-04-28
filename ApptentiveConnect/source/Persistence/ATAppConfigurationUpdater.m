@@ -90,12 +90,11 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 - (void)dealloc {
 	delegate = nil;
 	[self cancel];
-	[super dealloc];
 }
 
 - (void)update {
 	[self cancel];
-	request = [[[ATWebClient sharedClient] requestForGettingAppConfiguration] retain];
+	request = [[ATWebClient sharedClient] requestForGettingAppConfiguration];
 	request.delegate = self;
 	[request start];
 }
@@ -104,7 +103,7 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	if (request) {
 		request.delegate = nil;
 		[request cancel];
-		[request release], request = nil;
+		request = nil;
 	}
 }
 

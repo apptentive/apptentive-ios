@@ -37,9 +37,9 @@ typedef enum {
 
 - (id)initWithModelName:(NSString *)aModelName inBundle:(NSBundle *)aBundle storagePath:(NSString *)path {
 	if ((self = [super init])) {
-		modelName = [aModelName retain];
-		bundle = [aBundle retain];
-		supportDirectoryPath = [path retain];
+		modelName = aModelName;
+		bundle = aBundle;
+		supportDirectoryPath = path;
 		
 		// Check the canary.
 		if ([self canaryFileExists]) {
@@ -51,13 +51,12 @@ typedef enum {
 }
 
 - (void)dealloc {
-	[persistentStoreCoordinator release], persistentStoreCoordinator = nil;
-	[managedObjectContext release], managedObjectContext = nil;
-	[managedObjectModel release], managedObjectModel = nil;
-	[modelName release], modelName = nil;
-	[bundle release], bundle = nil;
-	[supportDirectoryPath release], supportDirectoryPath = nil;
-	[super dealloc];
+	persistentStoreCoordinator = nil;
+	managedObjectContext = nil;
+	managedObjectModel = nil;
+	modelName = nil;
+	bundle = nil;
+	supportDirectoryPath = nil;
 }
 
 #pragma mark Properties
@@ -110,13 +109,13 @@ typedef enum {
 	}
 	@catch (NSException *exception) {
 		ATLogError(@"Caught exception attempting to test classes: %@", exception);
-		[managedObjectContext release], managedObjectContext = nil;
-		[persistentStoreCoordinator release], persistentStoreCoordinator = nil;
+		managedObjectContext = nil;
+		persistentStoreCoordinator = nil;
 		ATLogError(@"Removing persistent store and starting over.");
 		[self removePersistentStore];
 	}
 	@finally {
-		[request release], request = nil;
+		request = nil;
 	}
 	
 	if (![self persistentStoreCoordinator]) {
@@ -164,7 +163,7 @@ typedef enum {
 		NSDictionary *options = @{NSSQLitePragmasOption: @{@"journal_mode": @"DELETE"}};
 		if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
 			ATLogError(@"Unable to create new persistent store: %@", error);
-			[persistentStoreCoordinator release], persistentStoreCoordinator = nil;
+			persistentStoreCoordinator = nil;
 			return nil;
 		}
 	}
@@ -297,7 +296,7 @@ typedef enum {
 		if (mappingModel) {
 			break;
 		}
-		[targetModel release], targetModel = nil;
+		targetModel = nil;
 	}
 	
 	if (!mappingModel) {
@@ -317,10 +316,10 @@ typedef enum {
 	
 	NSDictionary *options = @{NSSQLitePragmasOption: @{@"journal_mode": @"DELETE"}};
 	if (![manager migrateStoreFromURL:sourceStoreURL type:type options:nil withMappingModel:mappingModel toDestinationURL:destinationStoreURL destinationType:type destinationOptions:options error:error]) {
-		[manager release], manager = nil;
+		manager = nil;
 		return NO;
 	}
-	[manager release], manager = nil;
+	manager = nil;
 	
 	// Move files around.
 	NSString *guid = [[NSProcessInfo processInfo] globallyUniqueString];

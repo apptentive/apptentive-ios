@@ -13,8 +13,8 @@
 
 @interface ATInteractionFeedbackDialogController : NSObject <ATMessagePanelDelegate, UIAlertViewDelegate>
 
-@property (nonatomic, retain, readonly) ATInteraction *interaction;
-@property (nonatomic, retain) UIViewController *viewController;
+@property (nonatomic, strong, readonly) ATInteraction *interaction;
+@property (nonatomic, strong) UIViewController *viewController;
 
 - (id)initWithInteraction:(ATInteraction *)interaction;
 - (void)showFeedbackDialogFromViewController:(UIViewController *)viewController;

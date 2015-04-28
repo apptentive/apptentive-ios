@@ -21,7 +21,7 @@
 	NSString *apptentiveID = [json at_safeObjectForKey:@"id"];
 	
 	if (apptentiveID) {
-		message = [(ATUpgradeRequestMessage *)[ATAbstractMessage findMessageWithID:apptentiveID] retain];
+		message = (ATUpgradeRequestMessage *)[ATAbstractMessage findMessageWithID:apptentiveID];
 	}
 	if (message == nil) {
 		message = [[ATUpgradeRequestMessage alloc] initWithEntity:[NSEntityDescription entityForName:@"ATUpgradeRequestMessage" inManagedObjectContext:context] insertIntoManagedObjectContext:context];

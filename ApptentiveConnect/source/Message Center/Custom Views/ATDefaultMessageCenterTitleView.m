@@ -70,7 +70,7 @@
 		titleTextAttributes[NSBackgroundColorAttributeName] = [UIColor clearColor];
 		
 		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
-			title.attributedText = [[[NSAttributedString alloc] initWithString:title.text attributes:titleTextAttributes] autorelease];
+			title.attributedText = [[NSAttributedString alloc] initWithString:title.text attributes:titleTextAttributes];
 		} else {
 #			pragma clang diagnostic push
 #			pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -111,11 +111,6 @@
 	[self setup];
 }
 
-- (void)dealloc {
-	[title release], title = nil;
-	[imageView release], imageView = nil;
-	[super dealloc];
-}
 
 - (void)layoutSubviews {
 	CGFloat padding = 4;

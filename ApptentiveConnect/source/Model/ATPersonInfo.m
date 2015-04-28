@@ -46,14 +46,6 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 	return self;
 }
 
-- (void)dealloc {
-	[apptentiveID release], apptentiveID = nil;
-	[name release], name = nil;
-	[facebookID release], facebookID = nil;
-	[emailAddress release], emailAddress = nil;
-	[secret release], secret = nil;
-	[super dealloc];
-}
 
 - (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeInt:kATPersonCodingVersion forKey:@"version"];
@@ -111,7 +103,7 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 	} while (NO);
 	
 	if (result != nil && success == NO) {
-		[result release], result = nil;
+		result = nil;
 	}
 	
 	
@@ -150,7 +142,7 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 - (NSDictionary *)safeApiJSON {
 	// Email is set to `[NSNull null]` in `apiJSON` to delete email from server.
 	// But `[NSNull null]` crashes if saved in NSUserDefaults (by ATPersonUpdater).
-	NSMutableDictionary *safePersonValues = [[[self apiJSON][@"person"] mutableCopy] autorelease];
+	NSMutableDictionary *safePersonValues = [[self apiJSON][@"person"] mutableCopy];
 	if (safePersonValues[@"email"] == [NSNull null]) {
 		[safePersonValues removeObjectForKey:@"email"];
 	}

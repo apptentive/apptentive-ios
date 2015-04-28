@@ -32,7 +32,7 @@
 
 - (NSDictionary *)apiJSON {
 	NSDictionary *parentJSON = [super apiJSON];
-	NSMutableDictionary *result = [[[NSMutableDictionary alloc] init] autorelease];
+	NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
 
 	if (parentJSON) {
 		[result addEntriesFromDictionary:parentJSON];
@@ -89,7 +89,7 @@
 	if (dictionary == nil) {
 		mutableDictionary = [NSMutableDictionary dictionary];
 	} else {
-		mutableDictionary = [[dictionary mutableCopy] autorelease];
+		mutableDictionary = [dictionary mutableCopy];
 	}
 	if (incomingDictionary != nil) {
 		[mutableDictionary addEntriesFromDictionary:incomingDictionary];

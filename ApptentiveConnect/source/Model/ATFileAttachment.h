@@ -21,13 +21,13 @@ typedef enum {
 
 //TODO: Add CGSize for images?
 @interface ATFileAttachment : NSManagedObject
-@property (nonatomic, retain) NSString *localPath;
-@property (nonatomic, retain) NSString *mimeType;
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSNumber *source;
-@property (nonatomic, retain) NSNumber *transient;
-@property (nonatomic, retain) NSNumber *userVisible;
-@property (nonatomic, retain) ATFileMessage *fileMessage;
+@property (nonatomic, strong) NSString *localPath;
+@property (nonatomic, strong) NSString *mimeType;
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSNumber *source;
+@property (nonatomic, strong) NSNumber *transient;
+@property (nonatomic, strong) NSNumber *userVisible;
+@property (nonatomic, strong) ATFileMessage *fileMessage;
 
 - (void)setFileData:(NSData *)data;
 - (void)setFileFromSourcePath:(NSString *)sourceFilename;

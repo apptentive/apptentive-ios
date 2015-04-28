@@ -21,7 +21,7 @@ typedef enum {
 	ATAPIRequest *request;
 	NSObject<ATRequestTaskProvider> *taskProvider;
 }
-@property (nonatomic, retain) NSObject<ATRequestTaskProvider> *taskProvider;
+@property (nonatomic, strong) NSObject<ATRequestTaskProvider> *taskProvider;
 @end
 
 

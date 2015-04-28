@@ -243,7 +243,6 @@
 	[imageResizer release], imageResizer = nil;
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Unable to Use Image", @"Title of unable to use image alert.") message:ATLocalizedString(@"Unable to resize the image you picked.", @"Message of unable to use image alert.") delegate:nil cancelButtonTitle:ATLocalizedString(@"OK", @"OK button title") otherButtonTitles:nil];
 	[alert show];
-	[alert autorelease];
 	[self setupScrollView];
 }
 

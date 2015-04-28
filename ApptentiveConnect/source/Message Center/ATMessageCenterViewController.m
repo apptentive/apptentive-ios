@@ -296,7 +296,6 @@ typedef enum {
 				
 				textCell.userIcon.image = [ATBackend imageNamed:@"at_mc_user_icon_default"];
 			}
-			[[textCell retain] autorelease];
 			[userCell release], userCell = nil;
 			[developerCell release], developerCell = nil;
 			textCell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -331,7 +330,7 @@ typedef enum {
 					UIFont *boldFont = [UIFont boldSystemFontOfSize:15];
 					CTFontRef font = CTFontCreateWithName((CFStringRef)[boldFont fontName], [boldFont pointSize], NULL);
 					if (font) {
-						[mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(id)font range:boldRange];
+						[mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(__bridge id)font range:boldRange];
 						CFRelease(font), font = NULL;
 					}
 					return mutableAttributedString;
@@ -349,7 +348,7 @@ typedef enum {
 					UIColor *redColor = [UIColor redColor];
 					CTFontRef font = CTFontCreateWithName((CFStringRef)[boldFont fontName], [boldFont pointSize], NULL);
 					if (font) {
-						[mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(id)font range:boldRange];
+						[mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(__bridge id)font range:boldRange];
 						CFRelease(font), font = NULL;
 					}
 					[mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)redColor.CGColor range:boldRange];
@@ -386,7 +385,6 @@ typedef enum {
 			UINib *nib = [UINib nibWithNibName:@"ATAutomatedMessageCell" bundle:[ATConnect resourceBundle]];
 			[nib instantiateWithOwner:self options:nil];
 			currentCell = automatedCell;
-			[[currentCell retain] autorelease];
 			[automatedCell release], automatedCell = nil;
 			
 			currentCell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -403,7 +401,7 @@ typedef enum {
 				UIFont *boldFont = [UIFont fontWithName:@"AmericanTypewriter-Bold" size:15];
 				CTFontRef font = CTFontCreateWithName((CFStringRef)[boldFont fontName], [boldFont pointSize], NULL);
 				if (font) {
-					[mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(id)font range:boldRange];
+					[mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(__bridge id)font range:boldRange];
 					CFRelease(font), font = NULL;
 				}
 				return mutableAttributedString;
@@ -422,7 +420,6 @@ typedef enum {
 			UINib *nib = [UINib nibWithNibName:@"ATFileMessageCell" bundle:[ATConnect resourceBundle]];
 			[nib instantiateWithOwner:self options:nil];
 			currentCell = userFileMessageCell;
-			[[currentCell retain] autorelease];
 			[userFileMessageCell release], userFileMessageCell = nil;
 			
 			currentCell.selectionStyle = UITableViewCellSelectionStyleNone;

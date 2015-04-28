@@ -477,7 +477,7 @@ static NSURLCache *imageCache = nil;
 			CFUUIDRef uuidRef = CFUUIDCreate(NULL);
 			CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
 			
-			uuid = [NSString stringWithFormat:@"ios:%@", (NSString *)uuidStringRef];
+			uuid = [NSString stringWithFormat:@"ios:%@", (__bridge NSString *)uuidStringRef];
 			
 			CFRelease(uuidRef), uuidRef = NULL;
 			CFRelease(uuidStringRef), uuidStringRef = NULL;
@@ -1225,11 +1225,9 @@ static NSURLCache *imageCache = nil;
 	if ([ATConnect resourceBundle] == nil) {
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unable to Find Resources" message:@"Unable to find `ApptentiveResources.bundle`. Did you remember to add it to your target's Copy Bundle Resources build phase?" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
 		[alert show];
-		[alert autorelease];
 	} else if (self.persistentStoreCoordinator == nil || self.managedObjectContext == nil) {
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unable to Setup Core Data" message:@"Unable to setup Core Data store. Did you link against Core Data? If so, something else may be wrong." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
 		[alert show];
-		[alert autorelease];
 	}
 #endif
 }

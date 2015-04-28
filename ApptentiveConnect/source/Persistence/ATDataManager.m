@@ -299,7 +299,6 @@ typedef enum {
 		}
 		[targetModel release], targetModel = nil;
 	}
-	[targetModel autorelease];
 	
 	if (!mappingModel) {
 		if (error) {

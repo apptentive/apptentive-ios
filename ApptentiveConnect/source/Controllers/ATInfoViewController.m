@@ -156,7 +156,6 @@ enum {
 			UINib *nib = [UINib nibWithNibName:@"ATTaskProgressCell" bundle:[ATConnect resourceBundle]];
 			[nib instantiateWithOwner:self options:nil];
 			result = progressCell;
-			[[result retain] autorelease];
 			[progressCell release], progressCell = nil;
 		}
 		

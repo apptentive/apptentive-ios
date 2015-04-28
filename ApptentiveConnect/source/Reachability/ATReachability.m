@@ -42,9 +42,9 @@ NSString *const ATReachabilityStatusChanged = @"ATReachabilityStatusChanged";
 static void ATReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReachabilityFlags flags, void *info) {
 	@autoreleasepool {
 		if (info == NULL) return;
-		if (![(NSObject *)info isKindOfClass:[ATReachability class]]) return;
+		if (![(__bridge NSObject *)info isKindOfClass:[ATReachability class]]) return;
 		
-		ATReachability *reachability = (ATReachability *)info;
+		ATReachability *reachability = (__bridge ATReachability *)info;
 		
 		[[ATReachability sharedReachability] updateDeviceInfoWithCurrentNetworkType:reachability];
 		

@@ -76,7 +76,7 @@
 		CFUUIDRef uuidRef = CFUUIDCreate(NULL);
 		CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
 		
-		self.pendingEventID = [NSString stringWithFormat:@"event:%@", (NSString *)uuidStringRef];
+		self.pendingEventID = [NSString stringWithFormat:@"event:%@", (__bridge NSString *)uuidStringRef];
 		
 		CFRelease(uuidRef), uuidRef = NULL;
 		CFRelease(uuidStringRef), uuidStringRef = NULL;

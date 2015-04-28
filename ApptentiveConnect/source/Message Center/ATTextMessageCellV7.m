@@ -42,7 +42,7 @@
 			UIFont *boldFont = [UIFont boldSystemFontOfSize:15];
 			CTFontRef font = CTFontCreateWithName((CFStringRef)[boldFont fontName], [boldFont pointSize], NULL);
 			if (font) {
-				[mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(id)font range:boldRange];
+				[mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(__bridge id)font range:boldRange];
 				CFRelease(font), font = NULL;
 			}
 			return mutableAttributedString;
@@ -57,7 +57,7 @@
 			UIColor *redColor = [UIColor redColor];
 			CTFontRef font = CTFontCreateWithName((CFStringRef)[boldFont fontName], [boldFont pointSize], NULL);
 			if (font) {
-				[mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(id)font range:boldRange];
+				[mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(__bridge id)font range:boldRange];
 				CFRelease(font), font = NULL;
 			}
 			[mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)redColor.CGColor range:boldRange];

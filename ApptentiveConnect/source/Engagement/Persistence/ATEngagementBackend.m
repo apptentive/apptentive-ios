@@ -155,6 +155,7 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	ATLogInfo(@"Received remote Interactions from Apptentive.");
 	
 	@synchronized(self) {
+		if ([[ATBackend sharedBackend] supportDirectoryPath]) {
 		[NSKeyedArchiver archiveRootObject:targets toFile:[ATEngagementBackend cachedTargetsStoragePath]];
 		[NSKeyedArchiver archiveRootObject:interactions toFile:[ATEngagementBackend cachedInteractionsStoragePath]];
 		
@@ -171,6 +172,7 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 		[_engagementInteractions addEntriesFromDictionary:interactions];
 		
 		[self updateVersionInfo];
+		}
 	}
 }
 

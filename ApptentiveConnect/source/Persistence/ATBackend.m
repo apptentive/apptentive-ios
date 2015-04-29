@@ -43,7 +43,6 @@ typedef NS_ENUM(NSInteger, ATBackendState){
 	ATBackendStateReady
 };
 
-
 NSString *const ATBackendBecameReadyNotification = @"ATBackendBecameReadyNotification";
 
 NSString *const ATUUIDPreferenceKey = @"ATUUIDPreferenceKey";
@@ -100,6 +99,7 @@ static NSURLCache *imageCache = nil;
 @synthesize presentingViewController;
 #endif
 @synthesize apiKey, working, currentFeedback, persistentStoreCoordinator;
+@synthesize supportDirectoryPath = _supportDirectoryPath;
 
 + (ATBackend *)sharedBackend {
 	static ATBackend *sharedBackend = nil;
@@ -420,19 +420,27 @@ static NSURLCache *imageCache = nil;
 }
 
 - (NSString *)supportDirectoryPath {
-	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-	NSString *path = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+	if (!_supportDirectoryPath) {
+		NSString *appSupportDirectoryPath = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES).firstObject;
+		NSString *apptentiveDirectoryPath = [appSupportDirectoryPath stringByAppendingPathComponent:@"com.apptentive.feedback"];
+		NSFileManager *fm = [NSFileManager defaultManager];
+		NSError *error = nil;
+		
+		if (![fm createDirectoryAtPath:apptentiveDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
+			ATLogError(@"Failed to create support directory: %@", apptentiveDirectoryPath);
+			ATLogError(@"Error was: %@", error);
+			return nil;
+		}
+		
+		if (![fm setAttributes:@{ NSFileProtectionKey: NSFileProtectionCompleteUntilFirstUserAuthentication } ofItemAtPath:apptentiveDirectoryPath error:&error]) {
+			ATLogError(@"Failed to set file protection level: %@", apptentiveDirectoryPath);
+			ATLogError(@"Error was: %@", error);
+		}
 	
-	NSString *newPath = [path stringByAppendingPathComponent:@"com.apptentive.feedback"];
-	NSFileManager *fm = [NSFileManager defaultManager];
-	NSError *error = nil;
-	BOOL result = [fm createDirectoryAtPath:newPath withIntermediateDirectories:YES attributes:nil error:&error];
-	if (!result) {
-		ATLogError(@"Failed to create support directory: %@", newPath);
-		ATLogError(@"Error was: %@", error);
-		return nil;
+		_supportDirectoryPath = apptentiveDirectoryPath;
 	}
-	return newPath;
+	
+	return _supportDirectoryPath;
 }
 
 - (NSString *)attachmentDirectoryPath {

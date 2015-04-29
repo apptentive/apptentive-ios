@@ -17,7 +17,7 @@ typedef enum {
 	UIWindow *parentWindow;
 	UIImageView *icon;
 }
-@property (weak, nonatomic, readonly) UILabel *label;
+@property (nonatomic, strong, readonly) UILabel *label;
 @property (nonatomic, assign) ATHUDMarkType markType;
 @property (nonatomic, assign) CGSize size;
 @property (nonatomic, assign) CGFloat cornerRadius;

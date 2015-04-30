@@ -2,16 +2,15 @@
 //  main.m
 //  FeedbackDemo
 //
-//  Created by Andrew Wooster on 3/18/11.
-//  Copyright 2011 Apptentive, Inc.. All rights reserved.
+//  Created by Frank Schmitt on 4/30/15.
+//  Copyright (c) 2015 Apptentive. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
+#import "AppDelegate.h"
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char * argv[]) {
 	@autoreleasepool {
-		int retVal = UIApplicationMain(argc, argv, nil, nil);
-		return retVal;
+	    return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
 	}
 }

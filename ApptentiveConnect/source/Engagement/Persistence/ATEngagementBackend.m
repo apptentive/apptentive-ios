@@ -156,22 +156,22 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	
 	@synchronized(self) {
 		if ([[ATBackend sharedBackend] supportDirectoryPath]) {
-		[NSKeyedArchiver archiveRootObject:targets toFile:[ATEngagementBackend cachedTargetsStoragePath]];
-		[NSKeyedArchiver archiveRootObject:interactions toFile:[ATEngagementBackend cachedInteractionsStoragePath]];
+			[NSKeyedArchiver archiveRootObject:targets toFile:[ATEngagementBackend cachedTargetsStoragePath]];
+			[NSKeyedArchiver archiveRootObject:interactions toFile:[ATEngagementBackend cachedInteractionsStoragePath]];
 		
-		if (expiresMaxAge > 0) {
-			NSDate *date = [NSDate dateWithTimeInterval:expiresMaxAge sinceDate:[NSDate date]];
-			NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-			[defaults setObject:date forKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
-		}
+			if (expiresMaxAge > 0) {
+				NSDate *date = [NSDate dateWithTimeInterval:expiresMaxAge sinceDate:[NSDate date]];
+				NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+				[defaults setObject:date forKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
+			}
 		
-		[_engagementTargets removeAllObjects];
-		[_engagementTargets addEntriesFromDictionary:targets];
+			[_engagementTargets removeAllObjects];
+			[_engagementTargets addEntriesFromDictionary:targets];
 		
-		[_engagementInteractions removeAllObjects];
-		[_engagementInteractions addEntriesFromDictionary:interactions];
+			[_engagementInteractions removeAllObjects];
+			[_engagementInteractions addEntriesFromDictionary:interactions];
 		
-		[self updateVersionInfo];
+			[self updateVersionInfo];
 		}
 	}
 }

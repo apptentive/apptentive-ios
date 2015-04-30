@@ -432,7 +432,7 @@ static NSURLCache *imageCache = nil;
 			return nil;
 		}
 		
-		if (![fm setAttributes:@{ NSFileProtectionKey: NSFileProtectionCompleteUntilFirstUserAuthentication } ofItemAtPath:apptentiveDirectoryPath error:&error]) {
+		if (![fm setAttributes:@{NSFileProtectionKey: NSFileProtectionCompleteUntilFirstUserAuthentication} ofItemAtPath:apptentiveDirectoryPath error:&error]) {
 			ATLogError(@"Failed to set file protection level: %@", apptentiveDirectoryPath);
 			ATLogError(@"Error was: %@", error);
 		}

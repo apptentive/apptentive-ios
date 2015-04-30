@@ -63,6 +63,7 @@ extern NSString *const ATBackendBecameReadyNotification;
 @property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
+@property (nonatomic, retain, readonly) NSString *supportDirectoryPath;
 
 @property (nonatomic, assign, readonly) BOOL hideBranding;
 
@@ -96,8 +97,6 @@ extern NSString *const ATBackendBecameReadyNotification;
 
 - (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType fromSource:(ATFIleAttachmentSource)source;
 - (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType hiddenOnClient:(BOOL)hidden fromSource:(ATFIleAttachmentSource)source;
-
-- (NSString *)supportDirectoryPath;
 
 /*! Path to directory for storing attachments. */
 - (NSString *)attachmentDirectoryPath;

@@ -155,22 +155,24 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	ATLogInfo(@"Received remote Interactions from Apptentive.");
 	
 	@synchronized(self) {
-		[NSKeyedArchiver archiveRootObject:targets toFile:[ATEngagementBackend cachedTargetsStoragePath]];
-		[NSKeyedArchiver archiveRootObject:interactions toFile:[ATEngagementBackend cachedInteractionsStoragePath]];
+		if ([[ATBackend sharedBackend] supportDirectoryPath]) {
+			[NSKeyedArchiver archiveRootObject:targets toFile:[ATEngagementBackend cachedTargetsStoragePath]];
+			[NSKeyedArchiver archiveRootObject:interactions toFile:[ATEngagementBackend cachedInteractionsStoragePath]];
 		
-		if (expiresMaxAge > 0) {
-			NSDate *date = [NSDate dateWithTimeInterval:expiresMaxAge sinceDate:[NSDate date]];
-			NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-			[defaults setObject:date forKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
+			if (expiresMaxAge > 0) {
+				NSDate *date = [NSDate dateWithTimeInterval:expiresMaxAge sinceDate:[NSDate date]];
+				NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+				[defaults setObject:date forKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
+			}
+		
+			[_engagementTargets removeAllObjects];
+			[_engagementTargets addEntriesFromDictionary:targets];
+		
+			[_engagementInteractions removeAllObjects];
+			[_engagementInteractions addEntriesFromDictionary:interactions];
+		
+			[self updateVersionInfo];
 		}
-		
-		[_engagementTargets removeAllObjects];
-		[_engagementTargets addEntriesFromDictionary:targets];
-		
-		[_engagementInteractions removeAllObjects];
-		[_engagementInteractions addEntriesFromDictionary:interactions];
-		
-		[self updateVersionInfo];
 	}
 }
 

@@ -65,7 +65,9 @@ static ATContactStorage *sharedContactStorage = nil;
 
 - (void)save {
 	@synchronized(self) {
-		[NSKeyedArchiver archiveRootObject:sharedContactStorage toFile:[ATContactStorage contactStoragePath]];
+		if ([ATContactStorage contactStoragePath]) {
+			[NSKeyedArchiver archiveRootObject:sharedContactStorage toFile:[ATContactStorage contactStoragePath]];
+		}
 	}
 }
 

@@ -297,8 +297,10 @@ static ATTaskQueue *sharedTaskQueue = nil;
 
 - (void)archive {
 	@synchronized(self) {
-		if (![NSKeyedArchiver archiveRootObject:sharedTaskQueue toFile:[ATTaskQueue taskQueuePath]]) {
-			ATLogError(@"Unable to archive task queue to: %@", [ATTaskQueue taskQueuePath]);
+		if ([ATTaskQueue taskQueuePath]) {
+			if (![NSKeyedArchiver archiveRootObject:sharedTaskQueue toFile:[ATTaskQueue taskQueuePath]]) {
+				ATLogError(@"Unable to archive task queue to: %@", [ATTaskQueue taskQueuePath]);
+			}
 		}
 	}
 }

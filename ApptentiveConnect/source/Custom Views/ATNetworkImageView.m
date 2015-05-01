@@ -33,10 +33,6 @@
 
 - (void)dealloc {
     [connection cancel];
-    connection = nil;
-	imageURL = nil;
-    imageData = nil;
-	response = nil;
 }
 
 - (void)restartDownload {

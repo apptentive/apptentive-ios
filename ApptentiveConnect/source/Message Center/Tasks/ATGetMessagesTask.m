@@ -22,8 +22,6 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 
 
 @interface ATGetMessagesTask (Private)
-- (void)setup;
-- (void)teardown;
 - (BOOL)processResult:(NSDictionary *)jsonMessage;
 @end
 
@@ -41,8 +39,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 }
 
 - (void)dealloc {
-	[self teardown];
-	lastMessage = nil;
+	[self stop];
 }
 
 - (BOOL)shouldArchive {
@@ -123,13 +120,6 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 @end
 
 @implementation ATGetMessagesTask (Private)
-- (void)setup {
-	
-}
-
-- (void)teardown {
-	[self stop];
-}
 
 - (BOOL)processResult:(NSDictionary *)jsonMessages {
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];

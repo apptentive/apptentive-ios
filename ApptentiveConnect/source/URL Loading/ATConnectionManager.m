@@ -82,6 +82,5 @@ static ATConnectionManager *sharedSingleton = nil;
 - (void)dealloc {
 	[self stop];
 	[channels removeAllObjects];
-	channels = nil;
 }
 @end

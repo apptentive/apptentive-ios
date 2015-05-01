@@ -74,9 +74,7 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 - (void)dealloc {
 	if (didSendFeedbackAlert) {
 		didSendFeedbackAlert.delegate = nil;
-		didSendFeedbackAlert = nil;
-	}
-	
+	}	
 }
 
 - (void)sendSorryMessage {

@@ -50,15 +50,6 @@ typedef enum {
 	return self;
 }
 
-- (void)dealloc {
-	persistentStoreCoordinator = nil;
-	managedObjectContext = nil;
-	managedObjectModel = nil;
-	modelName = nil;
-	bundle = nil;
-	supportDirectoryPath = nil;
-}
-
 #pragma mark Properties
 - (NSManagedObjectContext *)managedObjectContext {
 	@synchronized(self) {

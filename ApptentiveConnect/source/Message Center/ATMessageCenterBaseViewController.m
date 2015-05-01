@@ -67,15 +67,6 @@
     return self;
 }
 
-- (void)dealloc {
-	inputView.delegate = nil;
-	dataSource.delegate = nil;
-	dataSource = nil;
-	dismissalDelegate = nil;
-	pickedImage = nil;
-	defaultTheme = nil;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
 	[dataSource start];

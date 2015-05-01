@@ -21,11 +21,6 @@
 	return self;
 }
 
-- (void)dealloc {
-	[imageView removeFromSuperview];
-	imageView = nil;
-}
-
 - (UIImageView *)imageView {
 	return imageView;
 }

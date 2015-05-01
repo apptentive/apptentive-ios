@@ -17,7 +17,6 @@
 
 @interface ATHUDView (Private)
 - (void)setup;
-- (void)teardown;
 - (void)animateIn;
 - (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context;
 @end
@@ -31,10 +30,6 @@
 		[self setup];
 	}
 	return self;
-}
-
-- (void)dealloc {
-	[self teardown];
 }
 
 - (void)layoutSubviews {
@@ -170,14 +165,6 @@
 	self.opaque = NO;
 	[self setNeedsLayout];
 	[self setNeedsDisplay];
-}
-
-- (void)teardown {
-	[icon removeFromSuperview];
-	icon = nil;
-	[label removeFromSuperview];
-	label = nil;
-	parentWindow = nil;
 }
 
 - (void)animateIn {

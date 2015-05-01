@@ -17,8 +17,4 @@
 		at_drawRectBlock(self, rect);
 	}
 }
-
-- (void)dealloc {
-	at_drawRectBlock = nil;
-}
 @end

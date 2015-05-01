@@ -43,16 +43,10 @@
 - (void)dealloc {
 	if (imageResizer) {
 		[imageResizer cancel];
-		imageResizer = nil;
 	}
 	[self cleanupImageActionSheet];
 	imagePickerPopover.delegate = nil;
-	imagePickerPopover = nil;
-	delegate = nil;
 	scrollView.delegate = nil;
-	[scrollView removeFromSuperview];
-	scrollView = nil;
-	[containerView removeFromSuperview];
 }
 
 - (void)didReceiveMemoryWarning {

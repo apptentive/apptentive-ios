@@ -13,11 +13,6 @@
 
 #define kATFeedbackTaskCodingVersion 1
 
-@interface ATFeedbackTask (Private)
-- (void)setup;
-- (void)teardown;
-@end
-
 @implementation ATFeedbackTask
 @synthesize feedback;
 
@@ -39,7 +34,7 @@
 }
 
 - (void)dealloc {
-	[self teardown];
+	[self stop];
 }
 
 - (BOOL)canStart {
@@ -107,15 +102,5 @@
 
 - (void)cleanup {
 	[feedback cleanup];
-}
-@end
-
-@implementation ATFeedbackTask (Private)
-- (void)setup {
-	
-}
-
-- (void)teardown {
-	[self stop];
 }
 @end

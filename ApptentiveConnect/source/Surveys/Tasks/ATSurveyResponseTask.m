@@ -14,8 +14,6 @@
 #define kATPendingMessageTaskCodingVersion 1
 
 @interface ATSurveyResponseTask (Private)
-- (void)setup;
-- (void)teardown;
 - (BOOL)processResult:(NSDictionary *)jsonMessage;
 @end
 
@@ -40,7 +38,7 @@
 }
 
 - (void)dealloc {
-	[self teardown];
+	[self stop];
 }
 
 - (BOOL)canStart {
@@ -155,13 +153,6 @@
 @end
 
 @implementation ATSurveyResponseTask (Private)
-- (void)setup {
-	
-}
-
-- (void)teardown {
-	[self stop];
-}
 
 - (BOOL)processResult:(NSDictionary *)jsonResponse {
 	ATLogDebug(@"Getting json result: %@", jsonResponse);

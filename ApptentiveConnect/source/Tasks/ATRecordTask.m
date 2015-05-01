@@ -16,8 +16,6 @@
 #define kATRecordTaskCodingVersion 1
 
 @interface ATRecordTask (Private)
-- (void)setup;
-- (void)teardown;
 - (BOOL)handleLegacyRecord;
 @end
 
@@ -42,7 +40,7 @@
 }
 
 - (void)dealloc {
-	[self teardown];
+	[self stop];
 }
 
 - (BOOL)canStart {
@@ -118,14 +116,6 @@
 @end
 
 @implementation ATRecordTask (Private)
-- (void)setup {
-	
-}
-
-- (void)teardown {
-	[self stop];
-}
-
 - (BOOL)handleLegacyRecord {
 	if ([self.record isKindOfClass:[ATMetric class]]) {
 		if ([[ApptentiveMetrics sharedMetrics] upgradeLegacyMetric:(ATMetric *)self.record]) {

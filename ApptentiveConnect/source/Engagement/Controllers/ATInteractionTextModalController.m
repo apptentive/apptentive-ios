@@ -267,8 +267,7 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 }
 
 - (void)dealloc {
-	_alertView.delegate = nil;
-	
+	_alertView.delegate = nil;	
 }
 
 @end

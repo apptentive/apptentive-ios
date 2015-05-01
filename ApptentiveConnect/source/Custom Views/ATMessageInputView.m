@@ -70,10 +70,7 @@ UIEdgeInsets insetsForView(UIView *v) {
 }
 
 - (void)dealloc {
-	delegate = nil;
 	textView.delegate = nil;
-	textView = nil;
-	backgroundImageView = nil;
 }
 
 - (void)layoutSubviews {

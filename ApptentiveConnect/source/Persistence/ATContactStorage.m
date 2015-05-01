@@ -17,11 +17,6 @@
 
 static ATContactStorage *sharedContactStorage = nil;
 
-@interface ATContactStorage (Private)
-- (void)setup;
-- (void)teardown;
-@end
-
 @implementation ATContactStorage
 @synthesize name, email, phone;
 
@@ -87,21 +82,5 @@ static ATContactStorage *sharedContactStorage = nil;
 	[coder encodeObject:self.name forKey:@"name"];
 	[coder encodeObject:self.email forKey:@"email"];
 	[coder encodeObject:self.phone forKey:@"phone"];
-}
-
-- (void)dealloc {
-	[self teardown];
-}
-@end
-
-@implementation ATContactStorage (Private)
-- (void)setup {
-	
-}
-
-- (void)teardown {
-	self.name = nil;
-	self.phone = nil;
-	self.email = nil;
 }
 @end

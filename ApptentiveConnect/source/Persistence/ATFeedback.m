@@ -39,12 +39,6 @@
 	return self;
 }
 
-- (void)dealloc {
-	extraData = nil;
-	screenshot = nil;
-	screenshotFilename = nil;
-}
-
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super initWithCoder:coder])) {
 		[self setup];

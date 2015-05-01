@@ -46,7 +46,6 @@ enum kPersonDetailsTableSections {
 	_tableView.delegate = nil;
 	_tableView.dataSource = nil;
 	emailRequiredAlert.delegate = nil;
-	emailRequiredAlert = nil;
 }
 
 - (void)viewDidUnload {

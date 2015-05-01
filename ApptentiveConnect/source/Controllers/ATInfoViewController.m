@@ -31,7 +31,6 @@ enum {
 
 @interface ATInfoViewController (Private)
 - (void)setup;
-- (void)teardown;
 - (void)reload;
 @end
 
@@ -51,10 +50,8 @@ enum {
 }
 
 - (void)dealloc {
-	logicalSections = nil;
-	[self teardown];
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
-
 
 - (void)didReceiveMemoryWarning {
 	// Releases the view if it doesn't have a superview.
@@ -272,14 +269,6 @@ enum {
 	tableView.dataSource = self;
 	tableView.tableHeaderView = self.headerView;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reload) name:ATAPIRequestStatusChanged object:nil];
-}
-
-- (void)teardown {
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	headerView = nil;
-	tableView.delegate = nil;
-	tableView.dataSource = nil;
-	tableView = nil;
 }
 
 - (void)reload {

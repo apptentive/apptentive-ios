@@ -13,11 +13,6 @@
 #import "ATEngagementManifestParser.h"
 #import "ATEngagementBackend.h"
 
-@interface ATEngagementGetManifestTask (Private)
-- (void)setup;
-- (void)teardown;
-@end
-
 @implementation ATEngagementGetManifestTask
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
@@ -30,7 +25,7 @@
 }
 
 - (void)dealloc {
-	[self teardown];
+	[self stop];
 }
 
 - (BOOL)canStart {
@@ -121,16 +116,6 @@
 			[self stop];
 		}
 	}
-}
-@end
-
-@implementation ATEngagementGetManifestTask (Private)
-- (void)setup {
-	
-}
-
-- (void)teardown {
-	[self stop];
 }
 @end
 

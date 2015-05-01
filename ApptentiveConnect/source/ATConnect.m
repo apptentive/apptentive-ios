@@ -89,22 +89,6 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	return self;
 }
 
-- (void)dealloc {
-#if TARGET_OS_IPHONE
-#elif IF_TARGET_OS_MAC
-	if (feedbackWindowController) {
-		[feedbackWindowController release];
-		feedbackWindowController = nil;
-	}
-#endif
-	customPersonData = nil;
-	customDeviceData = nil;
-	integrationConfiguration = nil;
-	apiKey = nil;
-	initialUserName = nil;
-	initialUserEmailAddress = nil;
-}
-
 - (void)setApiKey:(NSString *)anAPIKey {
 	if (apiKey != anAPIKey) {
 		apiKey = nil;

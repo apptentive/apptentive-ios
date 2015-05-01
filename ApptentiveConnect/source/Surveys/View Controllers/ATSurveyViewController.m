@@ -67,24 +67,11 @@ enum {
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	if (tableView) {
-		[tableView removeFromSuperview];
-		tableView.delegate = nil;
-		tableView.dataSource = nil;
-		tableView = nil;
-	}
-	if (activeTextField) {
-		activeTextField.delegate = nil;
-	}
-	if (activeTextView) {
-		activeTextView.delegate = nil;
-	}
-	activeTextEntryCell = nil;
-	activeTextView = nil;
-	activeTextField = nil;
-	survey = nil;
-	sentNotificationsAboutQuestionIDs = nil;
-	startedSurveyDate = nil;
+
+	tableView.delegate = nil;
+	tableView.dataSource = nil;
+	activeTextField.delegate = nil;
+	activeTextView.delegate = nil;
 }
 
 - (void)didReceiveMemoryWarning {

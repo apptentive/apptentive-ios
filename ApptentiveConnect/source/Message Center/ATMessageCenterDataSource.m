@@ -33,8 +33,6 @@
 
 - (void)dealloc {
 	fetchedMessagesController.delegate = nil;
-	fetchedMessagesController = nil;
-	delegate = nil;
 }
 
 - (NSFetchedResultsController *)fetchedMessagesController {

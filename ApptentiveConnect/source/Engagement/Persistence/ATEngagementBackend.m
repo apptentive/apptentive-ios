@@ -96,12 +96,6 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	return self;
 }
 
-- (void)dealloc {
-	_engagementTargets = nil;
-	_engagementInteractions = nil;
-	
-}
-
 - (void)checkForEngagementManifest {
 	if ([self shouldRetrieveNewEngagementManifest]) {
 		ATEngagementGetManifestTask *task = [[ATEngagementGetManifestTask alloc] init];

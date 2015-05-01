@@ -75,9 +75,4 @@
 - (NSError *)parserError {
 	return parserError;
 }
-
-- (void)dealloc {
-	parserError = nil;
-}
-
 @end

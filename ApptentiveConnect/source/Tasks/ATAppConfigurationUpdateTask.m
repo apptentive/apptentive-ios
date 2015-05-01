@@ -9,12 +9,6 @@
 #import "ATAppConfigurationUpdateTask.h"
 #import "ATBackend.h"
 
-
-@interface ATAppConfigurationUpdateTask (Private)
-- (void)setup;
-- (void)teardown;
-@end
-
 @implementation ATAppConfigurationUpdateTask
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
@@ -26,7 +20,7 @@
 }
 
 - (void)dealloc {
-	[self teardown];
+	[self stop];
 }
 
 - (BOOL)canStart {
@@ -85,15 +79,5 @@
 			}
 		}
 	}
-}
-@end
-
-@implementation ATAppConfigurationUpdateTask (Private)
-- (void)setup {
-	
-}
-
-- (void)teardown {
-	[self stop];
 }
 @end

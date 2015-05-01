@@ -43,7 +43,6 @@ static dispatch_queue_t loggingQueue;
 	if (logHandle != nil) {
 		[logHandle synchronizeFile];
 		[logHandle closeFile];
-		logHandle = nil;
 	}
 }
 

@@ -122,11 +122,4 @@
 	shadowView.frame = self.bounds;
 	[self bringSubviewToFront:shadowView];
 }
-
-- (void)dealloc {
-	if (shadowView) {
-		[shadowView removeFromSuperview];
-		shadowView = nil;
-	}
-}
 @end

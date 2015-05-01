@@ -113,13 +113,6 @@
 	self.message = nil;
 }
 
-- (void)dealloc {
-	_messageLabel.delegate = nil;
-	if (_userIconOffsetConstraint) {
-		[_userIconOffsetView removeConstraint:_userIconOffsetConstraint];
-	}
-}
-
 - (void)setMessage:(ATTextMessage *)message {
 	if (_message != message) {
 		_message = nil;

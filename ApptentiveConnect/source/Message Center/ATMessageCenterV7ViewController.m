@@ -121,14 +121,9 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 }
 
 - (void)dealloc {
-	blurredImage = nil;
 	[[ATBackend sharedBackend] messageCenterLeftForeground];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	messageDateFormatter = nil;
 	collectionView.delegate = nil;
-	fetchedObjectChanges = nil;
-	fetchedSectionChanges = nil;
-	sizingAutomatedCell = nil;
 }
 
 - (void)viewDidUnload {

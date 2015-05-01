@@ -117,11 +117,6 @@
     return [[self class] reuseIdentifier];
 }
 
-- (void)dealloc {
-	fileMessage = nil;
-	currentImage = nil;
-}
-
 - (CGFloat)cellHeightForWidth:(CGFloat)width {
 	CGFloat cellHeight = 0;
 	if (showDateLabel) {

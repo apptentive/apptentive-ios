@@ -39,10 +39,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	if (connection) {
 		connection.delegate = nil;
 		[[ATConnectionManager sharedSingleton] cancelConnection:connection inChannel:channelName];
-		connection = nil;
 	}
-	channelName = nil;
-	
 }
 
 - (void)start {

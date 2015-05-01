@@ -75,12 +75,6 @@
 #endif
 }
 
-- (void)dealloc {
-
-	promptLabel = nil;
-	thinBlueLineView = nil;
-}
-
 - (void)presentFromViewController:(UIViewController *)newPresentingViewController animated:(BOOL)animated {
 	// Swizzle the presentingViewController's `didRotateFromInterfaceOrientation:` method to get a notifiction
 	// when the background view finishes animating to the new orientation.

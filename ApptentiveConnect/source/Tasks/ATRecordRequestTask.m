@@ -14,11 +14,6 @@
 
 #define kATRecordRequestTaskCodingVersion 1
 
-@interface ATRecordRequestTask (Private)
-- (void)setup;
-- (void)teardown;
-@end
-
 @implementation ATRecordRequestTask
 @synthesize taskProvider;
 
@@ -54,7 +49,7 @@ fail:
 }
 
 - (void)dealloc {
-	[self teardown];
+	[self stop];
 }
 
 - (BOOL)canStart {
@@ -134,15 +129,5 @@ fail:
 		ATLogInfo(@"ATAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
 		[self stop];
 	}
-}
-@end
-
-@implementation ATRecordRequestTask (Private)
-- (void)setup {
-	
-}
-
-- (void)teardown {
-	[self stop];
 }
 @end

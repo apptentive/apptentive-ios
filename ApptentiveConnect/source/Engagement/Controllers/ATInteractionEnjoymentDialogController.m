@@ -67,8 +67,7 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 }
 
 - (void)dealloc {
-	_enjoymentDialog.delegate = nil;
-	
+	_enjoymentDialog.delegate = nil;	
 }
 
 @end

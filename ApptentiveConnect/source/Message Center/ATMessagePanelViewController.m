@@ -95,12 +95,8 @@ enum {
 
 - (void)dealloc {
 	noEmailAddressAlert.delegate = nil;
-	noEmailAddressAlert = nil;
 	invalidEmailAddressAlert.delegate = nil;
-	invalidEmailAddressAlert = nil;
 	emailRequiredAlert.delegate = nil;
-	emailRequiredAlert = nil;
-	delegate = nil;
 }
 
 - (void)presentFromViewController:(UIViewController *)newPresentingViewController animated:(BOOL)animated {

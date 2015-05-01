@@ -24,7 +24,6 @@
 
 - (void)dealloc {
 	textView.delegate = nil;
-	[textView removeFromSuperview];
 }
 
 - (void)viewDidLoad {

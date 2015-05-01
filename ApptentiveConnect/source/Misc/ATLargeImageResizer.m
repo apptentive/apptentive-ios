@@ -28,11 +28,6 @@
 	return self;
 }
 
-- (void)dealloc {
-	imageURL = nil;
-	originalImage = nil;
-}
-
 - (void)cancel {
 	delegate = nil;
 	shouldCancel = YES;

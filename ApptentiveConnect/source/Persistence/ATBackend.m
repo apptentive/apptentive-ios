@@ -189,22 +189,8 @@ static NSURLCache *imageCache = nil;
 
 - (void)dealloc {
 	messagePanelSentMessageAlert.delegate = nil;
-	messagePanelSentMessageAlert = nil;
 	[messageRetrievalTimer invalidate];
-	messageRetrievalTimer = nil;
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	apiKey = nil;
-	dataManager = nil;
-#if TARGET_OS_IPHONE
-	if (presentedMessageCenterViewController) {
-		presentedMessageCenterViewController = nil;
-	}
-	if (currentMessagePanelController) {
-		currentMessagePanelController = nil;
-	}
-#endif
-	imageCache = nil;
-	cachedDeviceUUID = nil;
 }
 
 - (void)setApiKey:(NSString *)anAPIKey {

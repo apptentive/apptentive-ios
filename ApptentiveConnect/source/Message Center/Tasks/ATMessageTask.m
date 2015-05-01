@@ -19,8 +19,6 @@
 #define kATMessageTaskCodingVersion 2
 
 @interface ATMessageTask (Private)
-- (void)setup;
-- (void)teardown;
 - (BOOL)processResult:(NSDictionary *)jsonMessage;
 @end
 
@@ -45,7 +43,7 @@
 }
 
 - (void)dealloc {
-	[self teardown];
+	[self stop];
 }
 
 - (BOOL)canStart {
@@ -166,13 +164,6 @@
 @end
 
 @implementation ATMessageTask (Private)
-- (void)setup {
-	
-}
-
-- (void)teardown {
-	[self stop];
-}
 
 - (BOOL)processResult:(NSDictionary *)jsonMessage {
 	ATLogDebug(@"getting json result: %@", jsonMessage);

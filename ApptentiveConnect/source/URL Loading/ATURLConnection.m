@@ -310,20 +310,6 @@
 	
 }
 
-- (void)dealloc {
-	@synchronized (self) {
-		delegate = nil;
-		request = nil;
-		statusLine = nil;
-		responseHeaders = nil;
-		data = nil;
-		
-		
-		HTTPBody = nil;
-		HTTPBodyStream = nil;
-	}
-}
-
 - (NSString *)requestAsString {
 	NSMutableString *result = [NSMutableString string];
 	[result appendFormat:@"%@ %@\n", HTTPMethod ? HTTPMethod : @"GET", [targetURL absoluteURL]];

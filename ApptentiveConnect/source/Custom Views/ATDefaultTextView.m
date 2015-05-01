@@ -32,12 +32,6 @@
 	[self setup];
 }
 
-- (void)dealloc {
-	[placeholderLabel removeFromSuperview];
-	placeholderLabel = nil;
-	at_drawRectBlock = nil;
-}
-
 - (void)layoutSubviews {
 	[super layoutSubviews];
 	[self setupPlaceholder];

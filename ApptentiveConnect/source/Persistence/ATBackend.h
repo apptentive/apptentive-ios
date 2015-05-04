@@ -36,26 +36,7 @@ extern NSString *const ATBackendBecameReadyNotification;
 #if TARGET_OS_IPHONE
 , NSFetchedResultsControllerDelegate, ATMessageCenterDismissalDelegate, ATMessagePanelDelegate, UIAlertViewDelegate
 #endif
-> {
-@private
-	NSString *apiKey;
-	ATFeedback *currentFeedback;
-	BOOL networkAvailable;
-	BOOL apiKeySet;
-	BOOL shouldStopWorking;
-	BOOL working;
-	
-	ATConversationUpdater *conversationUpdater;
-	ATDeviceUpdater *deviceUpdater;
-	ATPersonUpdater *personUpdater;
-	
-	NSTimer *messageRetrievalTimer;
-	ATDataManager *dataManager;
-#if TARGET_OS_IPHONE
-	NSFetchedResultsController *unreadCountController;
-	NSInteger previousUnreadCount;
-#endif
-}
+> 
 @property (nonatomic, copy) NSString *apiKey;
 /*! The feedback currently being worked on by the user. */
 @property (nonatomic, strong) ATFeedback *currentFeedback;

@@ -51,7 +51,18 @@ enum {
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification;
 @end
 
-@implementation ATSurveyViewController
+@implementation ATSurveyViewController {
+	ATSurvey *survey;
+	UITableView *tableView;
+	UITableViewCell *activeTextEntryCell;
+	ATCellTextView *activeTextView;
+	ATCellTextField *activeTextField;
+		
+	NSMutableSet *sentNotificationsAboutQuestionIDs;
+	
+	NSDate *startedSurveyDate;
+}
+
 @synthesize errorText;
 
 - (id)initWithSurvey:(ATSurvey *)aSurvey {

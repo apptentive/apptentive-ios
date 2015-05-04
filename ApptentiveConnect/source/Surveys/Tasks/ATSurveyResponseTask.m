@@ -17,7 +17,10 @@
 - (BOOL)processResult:(NSDictionary *)jsonMessage;
 @end
 
-@implementation ATSurveyResponseTask
+@implementation ATSurveyResponseTask {
+	ATAPIRequest *request;
+}
+
 @synthesize pendingSurveyResponseID;
 
 - (id)initWithCoder:(NSCoder *)coder {

@@ -21,7 +21,11 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 - (void)processResult:(NSDictionary *)jsonActivityFeed;
 @end
 
-@implementation ATConversationUpdater
+@implementation ATConversationUpdater {
+	ATAPIRequest *request;
+	BOOL creatingConversation;
+}
+
 @synthesize delegate;
 
 + (void)registerDefaults {

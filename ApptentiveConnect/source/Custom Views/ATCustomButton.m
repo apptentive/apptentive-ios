@@ -10,6 +10,7 @@
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
 
+
 @implementation ATCustomButton
 
 - (id)initWithButtonStyle:(ATCustomButtonStyle)style {
@@ -77,7 +78,10 @@
 @end
 
 
-@implementation ATTrackingButton
+@implementation ATTrackingButton {
+	UIImageView *shadowView;
+}
+
 @synthesize padding;
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {

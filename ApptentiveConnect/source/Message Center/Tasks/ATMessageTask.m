@@ -22,7 +22,10 @@
 - (BOOL)processResult:(NSDictionary *)jsonMessage;
 @end
 
-@implementation ATMessageTask
+@implementation ATMessageTask {
+	ATAPIRequest *request;
+}
+
 @synthesize pendingMessageID;
 
 - (id)initWithCoder:(NSCoder *)coder {

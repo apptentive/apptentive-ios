@@ -9,7 +9,9 @@
 #import "ATCenteringImageScrollView.h"
 
 
-@implementation ATCenteringImageScrollView
+@implementation ATCenteringImageScrollView {
+	UIImageView *imageView;
+}
 
 - (id)initWithImage:(UIImage *)image {
 	if ((self = [super init])) {

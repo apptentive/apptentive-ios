@@ -9,9 +9,5 @@
 #import "ATTask.h"
 #import "ATAPIRequest.h"
 
-@interface ATEngagementGetManifestTask : ATTask <ATAPIRequestDelegate> {
-@private
-	ATAPIRequest *checkManifestRequest;
-}
-
+@interface ATEngagementGetManifestTask : ATTask <ATAPIRequestDelegate>
 @end

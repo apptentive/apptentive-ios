@@ -10,8 +10,6 @@
 
 #import "ATTypes.h"
 
-@interface ATCustomView : UIView {
-	ATDrawRectBlock at_drawRectBlock;
-}
+@interface ATCustomView : UIView
 @property (nonatomic, readwrite, copy) ATDrawRectBlock at_drawRectBlock;
 @end

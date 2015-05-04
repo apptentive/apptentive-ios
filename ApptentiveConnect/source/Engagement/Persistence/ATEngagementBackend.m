@@ -46,7 +46,11 @@ NSString *const ATEngagementCodePointHostAppInteractionKey = @"app";
 NSString *const ATEngagementCodePointApptentiveVendorKey = @"com.apptentive";
 NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 
-@implementation ATEngagementBackend
+@implementation ATEngagementBackend {
+	NSMutableDictionary *_engagementTargets;
+	NSMutableDictionary *_engagementInteractions;
+}
+
 
 + (ATEngagementBackend *)sharedBackend {
 	static ATEngagementBackend *sharedBackend = nil;

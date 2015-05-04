@@ -17,16 +17,30 @@
 #define kATContainerViewTag (5)
 #define kATLabelViewTag (6)
 
+
 @interface ATSimpleImageViewController ()
+
+@property (nonatomic, strong) IBOutlet UIView *containerView;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+
 - (void)chooseImage;
 - (void)takePhoto;
 - (void)cleanupImageActionSheet;
 - (void)dismissImagePickerPopover;
+
 @end
 
 @implementation ATSimpleImageViewController {
 	ATLargeImageResizer *imageResizer;
+	NSObject<ATSimpleImageViewControllerDelegate> *delegate;
+	ATCenteringImageScrollView *scrollView;
+	BOOL shouldResign;
+	BOOL isFromCamera;
+	
+	UIPopoverController *imagePickerPopover;
+	UIActionSheet *imageActionSheet;
 }
+
 @synthesize containerView;
 
 - (id)initWithDelegate:(NSObject<ATSimpleImageViewControllerDelegate> *)aDelegate {

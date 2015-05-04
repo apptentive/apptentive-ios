@@ -22,25 +22,11 @@ typedef enum {
 } ATMessagePanelDismissAction;
 
 @interface ATMessagePanelViewController : UIViewController <UIScrollViewDelegate, UITextFieldDelegate, UITextViewDelegate> {
-	UIViewController *presentingViewController;
-
-	UIStatusBarStyle startingStatusBarStyle;
-	UIViewTintAdjustmentMode startingTintAdjustmentMode;
 	BOOL showEmailAddressField;
-	UIWindow *originalPresentingWindow;
 	NSObject<ATMessagePanelDelegate> *__weak delegate;
-	
-	UIAlertView *noEmailAddressAlert;
-	UIAlertView *invalidEmailAddressAlert;
-	UIAlertView *emailRequiredAlert;
+	UIStatusBarStyle startingStatusBarStyle;
+	UIViewController *presentingViewController;
 }
-@property (nonatomic, strong) IBOutlet UIWindow *window;
-@property (nonatomic, strong) IBOutlet ATCustomButton *cancelButton;
-@property (nonatomic, strong) IBOutlet ATCustomButton *sendButton;
-@property (nonatomic, strong) IBOutlet ATToolbar *toolbar;
-@property (nonatomic, strong) IBOutlet UIImageView *toolbarShadowImage;
-@property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
-@property (nonatomic, strong) IBOutlet UIView *containerView;
 @property (nonatomic, strong) UITextField *emailField;
 @property (nonatomic, strong) ATDefaultTextView *feedbackView;
 @property (nonatomic, strong) UIView *promptContainer;
@@ -50,6 +36,15 @@ typedef enum {
 @property (nonatomic, assign) BOOL showEmailAddressField;
 @property (nonatomic, weak) NSObject<ATMessagePanelDelegate> *delegate;
 @property (nonatomic, copy) ATInteraction *interaction;
+
+@property (nonatomic, strong) IBOutlet UIWindow *window;
+@property (nonatomic, strong) IBOutlet ATCustomButton *cancelButton;
+@property (nonatomic, strong) IBOutlet ATCustomButton *sendButton;
+@property (nonatomic, strong) IBOutlet ATToolbar *toolbar;
+@property (nonatomic, strong) IBOutlet UIImageView *toolbarShadowImage;
+@property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
+@property (nonatomic, strong) IBOutlet UIView *containerView;
+
 
 - (id)initWithDelegate:(NSObject<ATMessagePanelDelegate> *)delegate;
 - (IBAction)cancelPressed:(id)sender;

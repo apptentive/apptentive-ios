@@ -21,7 +21,11 @@
 - (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context;
 @end
 
-@implementation ATHUDView
+@implementation ATHUDView {
+	UIWindow *parentWindow;
+	UIImageView *icon;
+}
+
 @synthesize label, markType, size, cornerRadius, fadeOutDuration;
 
 - (id)initWithWindow:(UIWindow *)window {

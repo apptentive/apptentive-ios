@@ -10,11 +10,7 @@
 
 #import "ATTypes.h"
 
-@interface ATDefaultTextView : UITextView  {
-@private
-	UILabel *placeholderLabel;
-	ATDrawRectBlock at_drawRectBlock;
-}
+@interface ATDefaultTextView : UITextView
 @property (nonatomic, copy) NSString *placeholder;
 @property (nonatomic, copy) UIColor *placeholderColor;
 @property (nonatomic, readwrite, copy) ATDrawRectBlock at_drawRectBlock;

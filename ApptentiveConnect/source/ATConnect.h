@@ -93,23 +93,7 @@ extern NSString *const ATIntegrationKeyParse;
  * `ATIntegrationKeyKahuna` - For Kahuna
  * `ATIntegrationKeyParse` - For Parse
  */
-@interface ATConnect : NSObject {
-@private
-#if TARGET_OS_IPHONE
-	UIColor *tintColor;
-#elif TARGET_OS_MAC
-	ATFeedbackWindowController *feedbackWindowController;
-#endif
-	NSMutableDictionary *customPersonData;
-	NSMutableDictionary *customDeviceData;
-	NSMutableDictionary *integrationConfiguration;
-	NSString *apiKey;
-	BOOL showEmailField;
-	NSString *initialUserName;
-	NSString *initialUserEmailAddress;
-	NSString *customPlaceholderText;
-	BOOL useMessageCenter;
-}
+@interface ATConnect : NSObject
 
 ///---------------------------------
 /// @name Basic Usage

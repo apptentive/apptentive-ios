@@ -16,7 +16,9 @@
 - (ATSurveyQuestion *)questionWithJSONDictionary:(NSDictionary *)jsonDictionary;
 @end
 
-@implementation ATSurveyParser
+@implementation ATSurveyParser {
+	NSError *parserError;
+}
 
 - (ATSurveyQuestionAnswer *)answerWithJSONDictionary:(NSDictionary *)jsonDictionary {
 	ATSurveyQuestionAnswer *answer = [[ATSurveyQuestionAnswer alloc] init];

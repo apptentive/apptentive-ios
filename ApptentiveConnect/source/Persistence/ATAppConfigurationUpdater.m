@@ -37,7 +37,11 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 - (void)processResult:(NSDictionary *)jsonRatingConfiguration maxAge:(NSTimeInterval)expiresMaxAge;
 @end
 
-@implementation ATAppConfigurationUpdater
+@implementation ATAppConfigurationUpdater {
+	ATAPIRequest *request;
+	NSObject<ATAppConfigurationUpdaterDelegate> *delegate;
+}
+
 + (void)registerDefaults {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSDictionary *defaultPreferences = 

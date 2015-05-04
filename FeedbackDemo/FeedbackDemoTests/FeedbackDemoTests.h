@@ -9,9 +9,6 @@
 #import <XCTest/XCTest.h>
 
 
-@interface FeedbackDemoTests : XCTestCase {
-@private
-    
-}
+@interface FeedbackDemoTests : XCTestCase
 
 @end

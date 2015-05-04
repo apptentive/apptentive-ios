@@ -15,20 +15,7 @@
 @class ATSurvey;
 @class ATSurveyQuestion;
 
-@interface ATSurveyViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate> {
-@private
-	ATSurvey *survey;
-	UITableView *tableView;
-	UITableViewCell *activeTextEntryCell;
-	ATCellTextView *activeTextView;
-	ATCellTextField *activeTextField;
-	
-	NSString *errorText;
-	
-	NSMutableSet *sentNotificationsAboutQuestionIDs;
-	
-	NSDate *startedSurveyDate;
-}
+@interface ATSurveyViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate>
 @property (nonatomic, copy) ATInteraction *interaction;
 @property (nonatomic, copy) NSString *errorText;
 - (id)initWithSurvey:(ATSurvey *)survey;
@@ -44,7 +31,6 @@
 @end
 
 @interface ATCellTextView : ATDefaultTextView <ATCellTextEntry> {
-@private
 	NSIndexPath *cellPath;
 	ATSurveyQuestion *question;
 }

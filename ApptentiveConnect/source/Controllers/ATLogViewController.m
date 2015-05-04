@@ -11,6 +11,12 @@
 #import "ATLogger.h"
 #import "ATTaskQueue.h"
 
+@interface ATLogViewController ()
+
+@property (nonatomic, strong) UITextView *textView;
+
+@end
+
 @implementation ATLogViewController
 @synthesize textView;
 

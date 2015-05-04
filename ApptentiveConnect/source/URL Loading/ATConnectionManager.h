@@ -9,9 +9,7 @@
 
 @class ATURLConnection;
 
-@interface ATConnectionManager : NSObject {
-	NSMutableDictionary *channels;
-}
+@interface ATConnectionManager : NSObject
 + (ATConnectionManager *)sharedSingleton;
 - (void)start;
 - (void)stop;

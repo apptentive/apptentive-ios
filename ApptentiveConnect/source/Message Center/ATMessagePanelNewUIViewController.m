@@ -33,12 +33,19 @@
 #define USE_BLUR 0
 
 @interface ATMessagePanelNewUIViewController ()
-
+@property (nonatomic, strong) IBOutlet UIImageView *backgroundImageView;
+@property (nonatomic, strong) IBOutlet UIView *buttonFrame;
+@property (nonatomic, strong) IBOutlet UIButton *sendButtonNewUI;
+@property (nonatomic, strong) IBOutlet UIView *sendButtonPadding;
+@property (nonatomic, strong) IBOutlet UIButton *cancelButtonNewUI;
+@property (nonatomic, strong) IBOutlet UIView *cancelButtonPadding;
 @end
 
 @implementation ATMessagePanelNewUIViewController {
 	ATLabel *promptLabel;
 	ATCustomView *thinBlueLineView;
+	CGRect lastSeenPresentingViewControllerFrame;
+	CGAffineTransform lastSeenPresentingViewControllerTransform;
 }
 
 @synthesize backgroundImageView = _backgroundImageView;

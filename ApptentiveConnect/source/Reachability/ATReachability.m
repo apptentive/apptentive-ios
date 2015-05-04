@@ -18,7 +18,10 @@ NSString *const ATReachabilityStatusChanged = @"ATReachabilityStatusChanged";
 @end
 
 
-@implementation ATReachability
+@implementation ATReachability {
+	SCNetworkReachabilityRef reachabilityRef;
+}
+
 + (ATReachability *)sharedReachability {
 	static ATReachability *sharedSingleton = nil;
 	static dispatch_once_t onceToken;

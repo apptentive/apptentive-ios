@@ -30,7 +30,16 @@
 - (void)deleteScreenshotSidecar;
 @end
 
-@implementation ATFeedback
+@implementation ATFeedback {
+	NSMutableDictionary *extraData;
+#if TARGET_OS_IPHONE
+	UIImage *screenshot;
+#elif TARGET_OS_MAC
+	NSImage *screenshot;
+#endif	
+	NSString *screenshotFilename;
+}
+
 @synthesize type, text, name, email, phone, source, imageSource;
 - (id)init {
 	if ((self = [super init])) {

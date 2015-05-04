@@ -29,6 +29,17 @@ enum {
 	kSectionVersion,
 };
 
+@interface ATInfoViewController ()
+
+@property (nonatomic, strong) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet UIView *headerView;
+@property (strong, nonatomic) IBOutlet UITextView *apptentiveDescriptionTextView;
+@property (strong, nonatomic) IBOutlet UITextView *apptentivePrivacyTextView;
+@property (strong, nonatomic) IBOutlet UIButton *findOutMoreButton;
+@property (strong, nonatomic) IBOutlet UIButton *gotoPrivacyPolicyButton;
+
+@end
+
 @interface ATInfoViewController (Private)
 - (void)setup;
 - (void)reload;
@@ -36,7 +47,10 @@ enum {
 
 @implementation ATInfoViewController {
 	BOOL showingDebugController;
+	IBOutlet UITableViewCell *progressCell;
+	NSMutableArray *logicalSections;
 }
+
 @synthesize tableView, headerView;
 
 - (id)init {
@@ -232,6 +246,7 @@ enum {
 
 
 @implementation ATInfoViewController (Private)
+
 - (void)setup {
 	if (headerView) {
 		headerView = nil;

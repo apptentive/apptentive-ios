@@ -38,6 +38,11 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 
 @interface ATMessageCenterV7ViewController ()
 - (void)scrollToBottomOfCollectionView;
+
+@property (strong, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (strong, nonatomic) IBOutlet UIImageView *backgroundImageView;
+@property (strong, nonatomic) IBOutlet UICollectionViewFlowLayout *flowLayout;
+
 @end
 
 @implementation ATMessageCenterV7ViewController {

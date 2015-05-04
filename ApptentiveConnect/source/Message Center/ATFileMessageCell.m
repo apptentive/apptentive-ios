@@ -14,6 +14,8 @@
 
 @implementation ATFileMessageCell {
 	CGSize cachedThumbnailSize;
+	ATFileMessage *fileMessage;
+	UIImage *currentImage;
 }
 @synthesize dateLabel, userIcon, imageContainer, showDateLabel;
 

@@ -11,7 +11,7 @@
 #define kATSurveyQuestionStorageVersion 1
 #define kATSurveyQuestionAnswerStorageVersion 1
 
-@implementation ATSurveyQuestion
+@implementation ATSurveyQuestion 
 @synthesize type;
 @synthesize responseRequired;
 @synthesize identifier;

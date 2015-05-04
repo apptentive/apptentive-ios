@@ -9,10 +9,7 @@
 #import <UIKit/UIKit.h>
 
 
-@interface ATCenteringImageScrollView : UIScrollView {
-@private
-	UIImageView *imageView;
-}
+@interface ATCenteringImageScrollView : UIScrollView
 - (id)initWithImage:(UIImage *)image;
 - (UIImageView *)imageView;
 @end

@@ -9,7 +9,11 @@
 #import "ATURLConnection.h"
 #import "ATURLConnection_Private.h"
 
-@implementation ATConnectionChannel
+@implementation ATConnectionChannel {
+	NSMutableSet *active;
+	NSMutableArray *waiting;
+}
+
 @synthesize maximumConnections;
 
 - (id)init {

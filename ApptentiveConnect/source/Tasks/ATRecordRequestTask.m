@@ -14,7 +14,10 @@
 
 #define kATRecordRequestTaskCodingVersion 1
 
-@implementation ATRecordRequestTask
+@implementation ATRecordRequestTask {
+	ATAPIRequest *request;
+}
+
 @synthesize taskProvider;
 
 - (id)initWithCoder:(NSCoder *)coder {

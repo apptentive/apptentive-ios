@@ -13,7 +13,10 @@
 #import "ATEngagementManifestParser.h"
 #import "ATEngagementBackend.h"
 
-@implementation ATEngagementGetManifestTask
+@implementation ATEngagementGetManifestTask {
+	ATAPIRequest *checkManifestRequest;
+}
+
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
 	}

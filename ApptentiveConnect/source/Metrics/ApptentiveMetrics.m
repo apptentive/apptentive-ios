@@ -81,7 +81,9 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 - (void)updateWithCurrentPreferences;
 @end
 
-@implementation ApptentiveMetrics
+@implementation ApptentiveMetrics {
+	BOOL metricsEnabled;
+}
 
 + (ApptentiveMetrics *)sharedMetrics {
 	static ApptentiveMetrics *sharedSingleton = nil;

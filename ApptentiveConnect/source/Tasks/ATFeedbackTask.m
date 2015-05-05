@@ -13,7 +13,10 @@
 
 #define kATFeedbackTaskCodingVersion 1
 
-@implementation ATFeedbackTask
+@implementation ATFeedbackTask {
+	ATAPIRequest *request;
+}
+
 @synthesize feedback;
 
 - (id)initWithCoder:(NSCoder *)coder {

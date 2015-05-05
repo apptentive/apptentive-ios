@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
 extern NSString *const ATEngagementInstallDateKey;
@@ -30,12 +29,7 @@ extern NSString *const ATEngagementCodePointApptentiveAppInteractionKey;
 
 @class ATInteraction;
 
-@interface ATEngagementBackend : NSObject {
-@private
-	NSMutableDictionary *_engagementTargets;
-	NSMutableDictionary *_engagementInteractions;
-}
-
+@interface ATEngagementBackend : NSObject
 + (ATEngagementBackend *)sharedBackend;
 
 - (void)checkForEngagementManifest;

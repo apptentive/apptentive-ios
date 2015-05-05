@@ -9,11 +9,7 @@
 
 @class ATURLConnection;
 
-@interface ATConnectionChannel : NSObject {
-	NSInteger maximumConnections;
-	NSMutableSet *active;
-	NSMutableArray *waiting;
-}
+@interface ATConnectionChannel : NSObject
 @property (nonatomic, assign) NSInteger maximumConnections;
 
 - (void)update;

@@ -16,7 +16,10 @@ static ATConnectionManager *sharedSingleton = nil;
 - (ATConnectionChannel *)channelForName:(NSString *)channelName;
 @end
 
-@implementation ATConnectionManager
+@implementation ATConnectionManager {
+	NSMutableDictionary *channels;
+}
+
 + (ATConnectionManager *)sharedSingleton {
 	@synchronized(self) {
 		if (!sharedSingleton) {

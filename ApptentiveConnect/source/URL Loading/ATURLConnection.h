@@ -9,35 +9,7 @@
 
 @protocol ATURLConnectionDelegate;
 
-@interface ATURLConnection : NSObject {
-	NSURL *targetURL;
-	NSObject<ATURLConnectionDelegate> *__weak delegate;
-	
-	NSMutableURLRequest *request;
-	NSURLConnection *connection;
-	NSString *statusLine;
-	NSDictionary *responseHeaders;
-	NSMutableData *data;
-	BOOL executing;
-	BOOL finished;
-	BOOL failed;
-	BOOL cancelled;
-	NSTimeInterval timeoutInterval;
-	NSURLCredential *credential;
-	
-	NSMutableDictionary *headers;
-	NSString *HTTPMethod;
-	NSData *HTTPBody;
-	NSInputStream *HTTPBodyStream;
-	
-	NSInteger statusCode;
-	BOOL failedAuthentication;
-	NSError *connectionError;
-	
-	float percentComplete;
-	
-	NSTimeInterval expiresMaxAge;
-}
+@interface ATURLConnection : NSObject
 @property (nonatomic, readonly, copy) NSURL *targetURL;
 @property (nonatomic, weak) NSObject<ATURLConnectionDelegate> *delegate;
 @property (nonatomic, strong) NSURLConnection *connection;

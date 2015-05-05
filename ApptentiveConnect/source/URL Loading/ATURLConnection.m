@@ -14,7 +14,17 @@
 @end
 
 
-@implementation ATURLConnection
+@implementation ATURLConnection {
+	NSMutableURLRequest *request;
+	NSString *statusLine;
+	NSDictionary *responseHeaders;
+	NSMutableData *data;
+	NSMutableDictionary *headers;
+	NSString *HTTPMethod;
+	NSData *HTTPBody;
+	NSInputStream *HTTPBodyStream;
+}
+
 @synthesize targetURL;
 @synthesize delegate;
 @synthesize connection;

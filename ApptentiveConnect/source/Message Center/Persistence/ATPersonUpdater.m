@@ -22,7 +22,10 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 @property (nonatomic, strong) NSDictionary *sentPersonJSON;
 @end
 
-@implementation ATPersonUpdater
+@implementation ATPersonUpdater {
+	ATAPIRequest *request;
+}
+
 @synthesize delegate, sentPersonJSON;
 
 

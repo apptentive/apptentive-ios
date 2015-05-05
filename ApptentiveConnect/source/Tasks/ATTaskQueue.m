@@ -26,7 +26,11 @@ static ATTaskQueue *sharedTaskQueue = nil;
 - (void)unsetActiveTask;
 @end
 
-@implementation ATTaskQueue
+@implementation ATTaskQueue  {
+	ATTask *activeTask;
+	NSMutableArray *tasks;
+}
+
 + (NSString *)taskQueuePath {
 	return [[[ATBackend sharedBackend] supportDirectoryPath] stringByAppendingPathComponent:@"tasks.objects"];
 }

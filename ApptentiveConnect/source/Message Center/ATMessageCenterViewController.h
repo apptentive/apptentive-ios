@@ -17,11 +17,4 @@
 #import "ATTextMessageUserCell.h"
 
 @interface ATMessageCenterViewController : ATMessageCenterBaseViewController <ATMessageCenterDataSourceDelegate, ATMessageInputViewDelegate, UIActionSheetDelegate, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate>
-@property (strong, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) IBOutlet ATAutomatedMessageCell *automatedCell;
-@property (strong, nonatomic) IBOutlet ATTextMessageUserCell *userCell;
-@property (strong, nonatomic) IBOutlet ATTextMessageUserCell *developerCell;
-@property (strong, nonatomic) IBOutlet ATFileMessageCell *userFileMessageCell;
-
-- (id)init;
 @end

@@ -8,9 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ATSurveyQuestionResponse : NSObject <NSCoding> {
-@private
-}
+@interface ATSurveyQuestionResponse : NSObject <NSCoding>
 @property (nonatomic, copy) NSString *identifier;
 @property (nonatomic, strong) NSObject<NSCoding> *response;
 

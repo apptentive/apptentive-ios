@@ -17,6 +17,7 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 #define kATPersonCodingVersion 1
 
 @implementation ATPersonInfo
+
 @synthesize apptentiveID;
 @synthesize name;
 @synthesize facebookID;

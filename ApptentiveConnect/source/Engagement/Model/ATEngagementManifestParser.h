@@ -9,14 +9,8 @@
 #import <Foundation/Foundation.h>
 
 #import "ATInteraction.h"
-//@class ATInteraction;
 
-@interface ATEngagementManifestParser : NSObject {
-@private
-	NSError *parserError;
-}
-
+@interface ATEngagementManifestParser : NSObject
 - (NSDictionary *)targetsAndInteractionsForEngagementManifest:(NSData *)jsonManifest;
 - (NSError *)parserError;
-
 @end

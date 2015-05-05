@@ -31,6 +31,8 @@ UIEdgeInsets insetsForView(UIView *v) {
 	UIEdgeInsets textViewInsets;
 	
 	UIEdgeInsets textViewContentInset;
+	IBOutlet ATMessageTextView *textView;
+	IBOutlet UIImageView *backgroundImageView;
 }
 @synthesize sendButton, attachButton, delegate, text, allowsEmptyText;
 

@@ -21,16 +21,20 @@ enum kPersonDetailsTableSections {
 
 
 @interface ATPersonDetailsViewController ()
-- (BOOL)emailIsValid;
-- (BOOL)savePersonData;
-- (void)registerForKeyboardNotifications;
-- (void)keyboardWillBeShown:(NSNotification *)aNotification;
-- (void)keyboardWillBeHidden:(NSNotification *)aNotification;
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet UIButton *logoButton;
+@property (strong, nonatomic) IBOutlet UITableViewCell *emailCell;
+@property (strong, nonatomic) IBOutlet UITableViewCell *nameCell;
+@property (strong, nonatomic) IBOutlet UITextField *emailTextField;
+@property (strong, nonatomic) IBOutlet UITextField *nameTextField;
+@property (strong, nonatomic) IBOutlet UILabel *poweredByLabel;
+@property (strong, nonatomic) IBOutlet UIImageView *logoImage;
 @end
 
 @implementation ATPersonDetailsViewController {
 	UIEdgeInsets previousScrollInsets;
 	UILabel *emailValidationLabel;
+	UIAlertView *emailRequiredAlert;
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {

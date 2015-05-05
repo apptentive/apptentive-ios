@@ -9,7 +9,10 @@
 #import "ATAppConfigurationUpdateTask.h"
 #import "ATBackend.h"
 
-@implementation ATAppConfigurationUpdateTask
+@implementation ATAppConfigurationUpdateTask {
+	ATAppConfigurationUpdater *configurationUpdater;
+}
+
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
 	}

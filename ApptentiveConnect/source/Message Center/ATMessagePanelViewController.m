@@ -34,7 +34,6 @@ enum {
 };
 
 @interface ATMessagePanelViewController ()
-
 @end
 
 @interface ATMessagePanelViewController (Private)
@@ -67,6 +66,13 @@ enum {
 
 @implementation ATMessagePanelViewController {
 	CGRect lastKeyboardRect;
+	
+	UIViewTintAdjustmentMode startingTintAdjustmentMode;
+	UIWindow *originalPresentingWindow;
+	
+	UIAlertView *noEmailAddressAlert;
+	UIAlertView *invalidEmailAddressAlert;
+	UIAlertView *emailRequiredAlert;
 }
 @synthesize window;
 @synthesize cancelButton;

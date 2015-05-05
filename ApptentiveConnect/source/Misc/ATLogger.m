@@ -19,7 +19,12 @@
 - (void)queueLogWithLevel:(NSString *)level file:(const char *)file function:(const char *)function line:(int)line message:(NSString *)message;
 @end
 
-@implementation ATLogger
+@implementation ATLogger {
+	// Tracks whether or not we can actually log to the log file.
+	BOOL creatingLogPathFailed;
+	
+	NSFileHandle *logHandle;
+}
 
 static dispatch_queue_t loggingQueue;
 

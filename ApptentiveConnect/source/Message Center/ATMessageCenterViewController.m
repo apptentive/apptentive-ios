@@ -40,6 +40,16 @@ typedef enum {
 
 #define TextViewPadding 2
 
+@interface ATMessageCenterViewController ()
+
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet ATAutomatedMessageCell *automatedCell;
+@property (strong, nonatomic) IBOutlet ATTextMessageUserCell *userCell;
+@property (strong, nonatomic) IBOutlet ATTextMessageUserCell *developerCell;
+@property (strong, nonatomic) IBOutlet ATFileMessageCell *userFileMessageCell;
+
+@end
+
 @implementation ATMessageCenterViewController {
 	BOOL firstLoad;
 	NSDateFormatter *messageDateFormatter;

@@ -15,7 +15,10 @@
 - (void)didEdit:(NSNotification *)notification;
 @end
 
-@implementation ATDefaultTextView
+@implementation ATDefaultTextView {
+	UILabel *placeholderLabel;
+}
+
 @synthesize placeholder;
 @synthesize placeholderColor;
 @synthesize at_drawRectBlock;

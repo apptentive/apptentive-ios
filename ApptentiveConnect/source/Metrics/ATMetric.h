@@ -9,11 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "ATLegacyRecord.h"
 
-@interface ATMetric : ATLegacyRecord <NSCoding> {
-@private
-	NSString *name;
-	NSMutableDictionary *info;
-}
+@interface ATMetric : ATLegacyRecord <NSCoding>
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, readonly) NSDictionary *info;
 

@@ -14,7 +14,10 @@
 
 #define kATMetricStorageVersion 1
 
-@implementation ATMetric
+@implementation ATMetric {
+	NSMutableDictionary *info;
+}
+
 @synthesize name, info;
 
 - (id)init {

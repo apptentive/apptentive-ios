@@ -17,9 +17,11 @@
 @protocol ATMessageCenterDismissalDelegate;
 
 @interface ATMessageCenterBaseViewController : UIViewController <ATMessageCenterDataSourceDelegate, ATMessageInputViewDelegate, ATSimpleImageViewControllerDelegate, UIActionSheetDelegate>
+@property (weak, nonatomic) NSObject<ATMessageCenterDismissalDelegate> *dismissalDelegate;
+
 @property (strong, nonatomic) IBOutlet UIView *containerView;
 @property (strong, nonatomic) IBOutlet UIView *inputContainerView;
-@property (weak, nonatomic) NSObject<ATMessageCenterDismissalDelegate> *dismissalDelegate;
+
 
 - (IBAction)donePressed:(id)sender;
 - (IBAction)settingsPressed:(id)sender;

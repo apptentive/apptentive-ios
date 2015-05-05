@@ -15,12 +15,7 @@ extern NSString *const ATPersonLastUpdateValuePreferenceKey;
 
 @protocol ATPersonUpdaterDelegate;
 
-@interface ATPersonUpdater : NSObject <ATAPIRequestDelegate> {
-@private
-	NSObject<ATPersonUpdaterDelegate> *__weak delegate;
-	ATAPIRequest *request;
-}
-@property (nonatomic, weak) NSObject<ATPersonUpdaterDelegate> *delegate;
+@interface ATPersonUpdater : NSObject <ATAPIRequestDelegate>@property (nonatomic, weak) NSObject<ATPersonUpdaterDelegate> *delegate;
 
 + (BOOL)shouldUpdate;
 

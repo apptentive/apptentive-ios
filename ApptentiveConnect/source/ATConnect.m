@@ -49,7 +49,16 @@ NSString *const ATIntegrationKeyParse = @"parse";
 NSString *const ATConnectCustomPersonDataChangedNotification = @"ATConnectCustomPersonDataChangedNotification";
 NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustomDeviceDataChangedNotification";
 
-@implementation ATConnect
+@implementation ATConnect {
+#if TARGET_OS_IPHONE
+	UIColor *tintColor;
+#elif TARGET_OS_MAC
+	ATFeedbackWindowController *feedbackWindowController;
+#endif
+	NSMutableDictionary *customPersonData;
+	NSMutableDictionary *customDeviceData;
+	NSMutableDictionary *integrationConfiguration;
+}
 @synthesize apiKey, appID, debuggingOptions, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText, useMessageCenter;
 #if TARGET_OS_IPHONE
 @synthesize tintColor;

@@ -11,6 +11,8 @@
 
 @interface ATLongMessageViewController ()
 
+@property (strong, nonatomic) IBOutlet UITextView *textView;
+
 @end
 
 @implementation ATLongMessageViewController

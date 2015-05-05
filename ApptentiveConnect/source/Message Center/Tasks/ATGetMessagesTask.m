@@ -25,7 +25,10 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 - (BOOL)processResult:(NSDictionary *)jsonMessage;
 @end
 
-@implementation ATGetMessagesTask
+@implementation ATGetMessagesTask {
+	ATAPIRequest *request;
+	ATAbstractMessage *lastMessage;
+}
 
 - (id)init {
 	if ((self = [super init])) {

@@ -84,9 +84,23 @@ static NSURLCache *imageCache = nil;
 - (void)updatePersonIfNeeded;
 @end
 
-@implementation ATBackend
+@implementation ATBackend {
+	NSString *apiKey;
+	ATFeedback *currentFeedback;
+	BOOL networkAvailable;
+	BOOL apiKeySet;
+	BOOL shouldStopWorking;
+	BOOL working;
+	
+	ATConversationUpdater *conversationUpdater;
+	ATDeviceUpdater *deviceUpdater;
+	ATPersonUpdater *personUpdater;
+	
+	NSTimer *messageRetrievalTimer;
+	ATDataManager *dataManager;
 #if TARGET_OS_IPHONE
-{
+	NSFetchedResultsController *unreadCountController;
+	NSInteger previousUnreadCount;
 	ATBackendState state;
 	
 	UIViewController *presentedMessageCenterViewController;
@@ -96,7 +110,10 @@ static NSURLCache *imageCache = nil;
 	UIAlertView *messagePanelSentMessageAlert;
 	
 	NSString *cachedDeviceUUID;
+#endif
 }
+
+#if TARGET_OS_IPHONE
 @synthesize presentingViewController;
 #endif
 @synthesize apiKey, working, currentFeedback, persistentStoreCoordinator;

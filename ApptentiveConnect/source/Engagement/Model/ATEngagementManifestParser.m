@@ -14,9 +14,9 @@
 #import "ATConnect_Debugging.h"
 #import "ATInteractionInvocation.h"
 
-@implementation ATEngagementManifestParser
-
-
+@implementation ATEngagementManifestParser {
+	NSError *parserError;
+}
 
 - (NSDictionary *)targetsAndInteractionsForEngagementManifest:(NSData *)jsonManifest {
 	// JSON String for testing. Using "Copy" command on variable in debugger preserves escape characters.

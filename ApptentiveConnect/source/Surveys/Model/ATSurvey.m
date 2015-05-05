@@ -10,7 +10,10 @@
 
 #define kATSurveyStorageVersion 1
 
-@implementation ATSurvey
+@implementation ATSurvey {
+	NSMutableArray *questions;
+}
+
 @synthesize identifier;
 @synthesize name;
 @synthesize surveyDescription;

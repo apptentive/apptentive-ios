@@ -15,11 +15,7 @@ typedef enum {
 	ATCustomButtonStyleSend
 } ATCustomButtonStyle;
 
-@interface ATTrackingButton : UIButton {
-@private
-	UIImageView *shadowView;
-	UIEdgeInsets padding;
-}
+@interface ATTrackingButton : UIButton
 @property (nonatomic, assign) UIEdgeInsets padding;
 @end
 

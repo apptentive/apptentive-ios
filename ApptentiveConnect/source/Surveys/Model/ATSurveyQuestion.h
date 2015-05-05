@@ -24,9 +24,7 @@ typedef enum {
 
 @class ATSurveyQuestionAnswer;
 
-@interface ATSurveyQuestion : NSObject <NSCoding> {
-@private
-}
+@interface ATSurveyQuestion : NSObject <NSCoding>
 @property (nonatomic, assign) ATSurveyQuestionType type;
 @property (nonatomic, copy) NSString *identifier;
 @property (nonatomic, getter=responseIsRequired) BOOL responseRequired;
@@ -50,9 +48,7 @@ typedef enum {
 - (void)reset;
 @end
 
-@interface ATSurveyQuestionAnswer : NSObject <NSCoding> {
-@private
-}
+@interface ATSurveyQuestionAnswer : NSObject <NSCoding>
 @property (nonatomic, copy) NSString *identifier;
 @property (nonatomic, copy) NSString *value;
 @end

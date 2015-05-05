@@ -19,7 +19,10 @@
 - (BOOL)handleLegacyRecord;
 @end
 
-@implementation ATRecordTask
+@implementation ATRecordTask {
+	ATAPIRequest *request;
+}
+
 @synthesize record;
 
 - (id)initWithCoder:(NSCoder *)coder {

@@ -10,15 +10,7 @@
 
 @class ATAPIRequest;
 
-@interface ATLegacyRecord : NSObject <NSCoding> {
-@private
-	NSString *uuid;
-	NSString *model;
-	NSString *os_version;
-	NSString *carrier;
-	NSDate *date;
-}
-@property (nonatomic, copy) NSString *uuid;
+@interface ATLegacyRecord : NSObject <NSCoding>@property (nonatomic, copy) NSString *uuid;
 @property (nonatomic, copy) NSString *model;
 @property (nonatomic, copy) NSString *os_version;
 @property (nonatomic, copy) NSString *carrier;

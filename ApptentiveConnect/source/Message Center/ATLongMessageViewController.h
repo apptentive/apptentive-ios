@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface ATLongMessageViewController : UIViewController
-@property (strong, nonatomic) IBOutlet UITextView *textView;
+
 @property (copy, nonatomic) NSString *text;
 
 @end

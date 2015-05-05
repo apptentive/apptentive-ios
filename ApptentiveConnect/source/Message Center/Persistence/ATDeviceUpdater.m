@@ -16,7 +16,10 @@
 NSString *const ATDeviceLastUpdatePreferenceKey = @"ATDeviceLastUpdatePreferenceKey";
 NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValuePreferenceKey";
 
-@implementation ATDeviceUpdater
+@implementation ATDeviceUpdater {
+	ATAPIRequest *request;
+}
+
 @synthesize delegate;
 
 + (void)registerDefaults {

@@ -16,11 +16,7 @@
 
 @class ATMetric;
 
-@interface ApptentiveMetrics : NSObject {
-@private
-	BOOL metricsEnabled;
-}
-
+@interface ApptentiveMetrics : NSObject
 + (ApptentiveMetrics *)sharedMetrics;
 
 - (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo;

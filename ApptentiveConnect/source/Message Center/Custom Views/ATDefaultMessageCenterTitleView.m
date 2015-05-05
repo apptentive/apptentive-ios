@@ -14,9 +14,7 @@
 #import "ATAppConfigurationUpdater.h"
 #import "ATUtilities.h"
 
-@implementation ATDefaultMessageCenterTitleView {
-
-}
+@implementation ATDefaultMessageCenterTitleView
 @synthesize title;
 @synthesize imageView;
 

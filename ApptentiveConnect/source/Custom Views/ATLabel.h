@@ -10,9 +10,6 @@
 
 #import "ATTypes.h"
 
-@interface ATLabel : UILabel {
-	ATDrawRectBlock at_drawRectBlock;
-}
+@interface ATLabel : UILabel
 @property (nonatomic, readwrite, copy) ATDrawRectBlock at_drawRectBlock;
-
 @end

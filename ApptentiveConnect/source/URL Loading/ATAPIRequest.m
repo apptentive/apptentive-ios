@@ -22,7 +22,14 @@
 
 NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 
-@implementation ATAPIRequest
+@implementation ATAPIRequest {
+	ATURLConnection *connection;
+	NSString *channelName;
+	BOOL cancelled;
+	float percentageComplete;
+	NSTimeInterval expiresMaxAge;
+}
+
 @synthesize returnType, failed, errorTitle, errorMessage, errorResponse, timeoutInterval, delegate;
 
 - (id)initWithConnection:(ATURLConnection *)aConnection channelName:(NSString *)aChannelName {

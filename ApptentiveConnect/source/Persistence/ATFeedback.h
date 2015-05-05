@@ -33,25 +33,7 @@ typedef enum {
 	ATFeedbackImageSourceProgrammatic,
 } ATFeedbackImageSource;
 
-@interface ATFeedback : ATLegacyRecord <NSCoding> {
-@private
-	NSMutableDictionary *extraData;
-	ATFeedbackType type;
-	NSString *text;
-	NSString *name;
-	NSString *email;
-	NSString *phone;
-	ATFeedbackSource source;
-#if TARGET_OS_IPHONE
-	UIImage *screenshot;
-#elif TARGET_OS_MAC
-	NSImage *screenshot;
-#endif
-	ATFeedbackImageSource imageSource;
-	
-	NSString *screenshotFilename;
-}
-@property (nonatomic, assign) ATFeedbackType type;
+@interface ATFeedback : ATLegacyRecord <NSCoding>@property (nonatomic, assign) ATFeedbackType type;
 @property (nonatomic, copy) NSString *text;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *email;

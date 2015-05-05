@@ -12,10 +12,5 @@
 
 static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey;
 
-@interface ATGetMessagesTask : ATTask <ATAPIRequestDelegate> {
-@private
-	ATAPIRequest *request;
-	ATAbstractMessage *lastMessage;
-}
-
+@interface ATGetMessagesTask : ATTask <ATAPIRequestDelegate>
 @end

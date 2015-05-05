@@ -16,20 +16,7 @@
 
 @protocol ATSimpleImageViewControllerDelegate;
 
-@interface ATSimpleImageViewController : UIViewController <ATLargeImageResizerDelegate, UIActionSheetDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverControllerDelegate> {
-@private
-	NSObject<ATSimpleImageViewControllerDelegate> *delegate;
-	ATCenteringImageScrollView *scrollView;
-	BOOL shouldResign;
-	UIView *containerView;
-	BOOL isFromCamera;
-	
-	UIPopoverController *imagePickerPopover;
-	UIActionSheet *imageActionSheet;
-}
-@property (nonatomic, strong) IBOutlet UIView *containerView;
-@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
-
+@interface ATSimpleImageViewController : UIViewController <ATLargeImageResizerDelegate, UIActionSheetDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverControllerDelegate>
 - (id)initWithDelegate:(NSObject<ATSimpleImageViewControllerDelegate> *)delegate;
 - (IBAction)donePressed:(id)sender;
 - (IBAction)takePhoto:(id)sender;

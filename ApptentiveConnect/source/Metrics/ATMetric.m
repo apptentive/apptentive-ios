@@ -15,14 +15,12 @@
 #define kATMetricStorageVersion 1
 
 @implementation ATMetric {
-	NSMutableDictionary *info;
+	NSMutableDictionary *_info;
 }
-
-@synthesize name, info;
 
 - (id)init {
 	if ((self = [super init])) {
-		info = [[NSMutableDictionary alloc] init];
+		_info = [[NSMutableDictionary alloc] init];
 	}
 	return self;
 }
@@ -33,13 +31,13 @@
 		if (version == kATMetricStorageVersion) {
 			self.name = [coder decodeObjectForKey:@"name"];
 			NSDictionary *d = [coder decodeObjectForKey:@"info"];
-			if (info) {
-				info = nil;
+			if (_info) {
+				_info = nil;
 			}
 			if (d != nil) {
-				info = [d mutableCopy];
+				_info = [d mutableCopy];
 			} else {
-				info = [[NSMutableDictionary alloc] init];
+				_info = [[NSMutableDictionary alloc] init];
 			}
 		} else {
 			return nil;
@@ -57,12 +55,12 @@
 
 
 - (void)setValue:(id)value forKey:(NSString *)key {
-	[info setValue:value forKey:key];
+	[_info setValue:value forKey:key];
 }
 
 - (void)addEntriesFromDictionary:(NSDictionary *)dictionary {
 	if (dictionary != nil) {
-		[info addEntriesFromDictionary:dictionary];
+		[_info addEntriesFromDictionary:dictionary];
 	}
 }
 
@@ -72,9 +70,9 @@
 	if (self.name) [d setObject:self.name forKey:@"record[metric][event]"];
 	
 	if (self.info) {
-		for (NSString *key in info) {
+		for (NSString *key in self.info) {
 			NSString *recordKey = [NSString stringWithFormat:@"record[metric][data][%@]", key];
-			NSObject *value = [info objectForKey:key];
+			NSObject *value = [self.info objectForKey:key];
 			if ([value isKindOfClass:[NSDate class]]) {
 				value = [ATUtilities stringRepresentationOfDate:(NSDate *)value];
 			}

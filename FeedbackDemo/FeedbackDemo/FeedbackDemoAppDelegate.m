@@ -11,9 +11,9 @@
 #import "defines.h"
 
 @implementation FeedbackDemoAppDelegate
-@synthesize window=_window;
+//@synthesize window=_window;
 
-@synthesize navigationController=_navigationController;
+//@synthesize navigationController=_navigationController;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	// Override point for customization after application launch.

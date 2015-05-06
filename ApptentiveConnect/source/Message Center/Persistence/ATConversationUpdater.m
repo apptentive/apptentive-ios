@@ -26,7 +26,7 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 	BOOL creatingConversation;
 }
 
-@synthesize delegate;
+////@synthesize delegate;
 
 + (void)registerDefaults {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -38,15 +38,15 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 	[defaults registerDefaults:defaultPreferences];
 }
 
-- (id)initWithDelegate:(NSObject<ATConversationUpdaterDelegate> *)aDelegate {
+- (id)initWithDelegate:(NSObject<ATConversationUpdaterDelegate> *)delegate {
 	if ((self = [super init])) {
-		delegate = aDelegate;
+		_delegate = delegate;
 	}
 	return self;
 }
 
 - (void)dealloc {
-	delegate = nil;
+	self.delegate = nil;
 	[self cancel];
 }
 
@@ -145,9 +145,9 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 		} else {
 			ATLogError(@"Activity feed result is not NSDictionary!");
             if (creatingConversation) {
-                [delegate conversationUpdater:self createdConversationSuccessfully:NO];
+                [self.delegate conversationUpdater:self createdConversationSuccessfully:NO];
             } else {
-                [delegate conversationUpdater:self updatedConversationSuccessfully:NO];
+                [self.delegate conversationUpdater:self updatedConversationSuccessfully:NO];
             }
 		}
 	}
@@ -161,9 +161,9 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 	@synchronized(self) {
 		ATLogInfo(@"Conversation request failed: %@, %@", sender.errorTitle, sender.errorMessage);
         if (creatingConversation) {
-            [delegate conversationUpdater:self createdConversationSuccessfully:NO];
+            [self.delegate conversationUpdater:self createdConversationSuccessfully:NO];
         } else {
-            [delegate conversationUpdater:self updatedConversationSuccessfully:NO];
+            [self.delegate conversationUpdater:self updatedConversationSuccessfully:NO];
         }
 	}
 }
@@ -183,14 +183,14 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
             [defaults setObject:[NSDate date] forKey:ATConversationLastUpdatePreferenceKey];
 			if (![defaults synchronize]) {
 				ATLogError(@"Unable to synchronize defaults for conversation creation.");
-				[delegate conversationUpdater:self createdConversationSuccessfully:NO];
+				[self.delegate conversationUpdater:self createdConversationSuccessfully:NO];
 			} else {
 				ATLogInfo(@"Conversation created successfully.");
-				[delegate conversationUpdater:self createdConversationSuccessfully:YES];
+				[self.delegate conversationUpdater:self createdConversationSuccessfully:YES];
 			}
         } else {
 			ATLogError(@"Unable to create conversation");
-            [delegate conversationUpdater:self createdConversationSuccessfully:NO];
+            [self.delegate conversationUpdater:self createdConversationSuccessfully:NO];
         }
         conversation = nil;
     } else {
@@ -198,7 +198,7 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 		ATConversation *conversation = [ATConversationUpdater currentConversation];
         [defaults setObject:[conversation apiUpdateJSON] forKey:ATConversationLastUpdateValuePreferenceKey];
         [defaults setObject:[NSDate date] forKey:ATConversationLastUpdatePreferenceKey];
-		[delegate conversationUpdater:self updatedConversationSuccessfully:YES];
+		[self.delegate conversationUpdater:self updatedConversationSuccessfully:YES];
     }
 }
 @end

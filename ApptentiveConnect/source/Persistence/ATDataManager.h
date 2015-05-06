@@ -10,6 +10,7 @@
 #import <CoreData/CoreData.h>
 
 @interface ATDataManager : NSObject
+
 @property (nonatomic, strong, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (nonatomic, strong, readonly) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong, readonly) NSManagedObjectModel *managedObjectModel;
@@ -21,4 +22,5 @@
 
 - (NSURL *)persistentStoreURL;
 - (BOOL)setupAndVerify;
+
 @end

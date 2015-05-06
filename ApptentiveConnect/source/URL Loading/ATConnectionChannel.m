@@ -9,18 +9,20 @@
 #import "ATURLConnection.h"
 #import "ATURLConnection_Private.h"
 
-@implementation ATConnectionChannel {
-	NSMutableSet *active;
-	NSMutableArray *waiting;
-}
+@interface ATConnectionChannel ()
 
-@synthesize maximumConnections;
+@property (nonatomic, strong) NSMutableSet *active;
+@property (nonatomic, strong) NSMutableArray *waiting;
+
+@end
+
+@implementation ATConnectionChannel
 
 - (id)init {
 	if ((self = [super init])) {
-		maximumConnections = 2;
-		active = [[NSMutableSet alloc] init];
-		waiting = [[NSMutableArray alloc] init];
+		_maximumConnections = 2;
+		_active = [[NSMutableSet alloc] init];
+		_waiting = [[NSMutableArray alloc] init];
 		return self;
 	}
 	return nil;
@@ -34,11 +36,11 @@
 	
 	@synchronized(self) {
 		@autoreleasepool {
-			while ([active count] < maximumConnections && [waiting count] > 0) {
-				ATURLConnection *loader = [waiting objectAtIndex:0];
-				[active addObject:loader];
+			while ([self.active count] < self.maximumConnections && [self.waiting count] > 0) {
+				ATURLConnection *loader = [self.waiting objectAtIndex:0];
+				[self.active addObject:loader];
 				[loader addObserver:self forKeyPath:@"isFinished" options:NSKeyValueObservingOptionNew context:NULL];
-				[waiting removeObjectAtIndex:0];
+				[self.waiting removeObjectAtIndex:0];
 				[loader start];
 			}
 		}
@@ -47,36 +49,36 @@
 
 - (void)addConnection:(ATURLConnection *)connection {
 	@synchronized(self) {
-		[waiting addObject:connection];
+		[self.waiting addObject:connection];
 		[self update];
 	}
 }
 
 - (void)cancelAllConnections {
 	@synchronized (self) {
-		for (ATURLConnection *loader in active) {
+		for (ATURLConnection *loader in self.active) {
 			[loader removeObserver:self forKeyPath:@"isFinished"];
 			[loader cancel];
 		}
-		[active removeAllObjects];
-		for (ATURLConnection *loader in waiting) {
+		[self.active removeAllObjects];
+		for (ATURLConnection *loader in self.waiting) {
 			[loader cancel];
 		}
-		[waiting removeAllObjects];
+		[self.waiting removeAllObjects];
 	}
 }
 
 - (void)cancelConnection:(ATURLConnection *)connection {
 	@synchronized(self) {
-		if ([active containsObject:connection]) {
+		if ([self.active containsObject:connection]) {
 			[connection removeObserver:self forKeyPath:@"isFinished"];
 			[connection cancel];
-			[active removeObject:connection];
+			[self.active removeObject:connection];
 		}
 		
-		if ([waiting containsObject:connection]) {
+		if ([self.waiting containsObject:connection]) {
 			[connection cancel];
-			[waiting removeObject:connection];
+			[self.waiting removeObject:connection];
 		}
 	}
 }
@@ -85,7 +87,7 @@
 	if ([keyPath isEqual:@"isFinished"] && [(ATURLConnection *)object isFinished]) {
 		@synchronized(self) {
 			[object removeObserver:self forKeyPath:@"isFinished"];
-			[active removeObject:object];
+			[self.active removeObject:object];
 		}
 		[self update];
 	}

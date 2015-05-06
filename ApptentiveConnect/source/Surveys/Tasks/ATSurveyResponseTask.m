@@ -21,7 +21,7 @@
 	ATAPIRequest *request;
 }
 
-@synthesize pendingSurveyResponseID;
+//@synthesize pendingSurveyResponseID;
 
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {

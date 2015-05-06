@@ -12,23 +12,11 @@
 #define kATSurveyQuestionAnswerStorageVersion 1
 
 @implementation ATSurveyQuestion 
-@synthesize type;
-@synthesize responseRequired;
-@synthesize identifier;
-@synthesize questionText;
-@synthesize instructionsText;
-@synthesize value;
-@synthesize answerChoices;
-@synthesize answerText;
-@synthesize selectedAnswerChoices;
-@synthesize minSelectionCount;
-@synthesize maxSelectionCount;
-@synthesize multiline;
 
 - (id)init {
 	if ((self = [super init])) {
-		answerChoices = [[NSMutableArray alloc] init];
-		selectedAnswerChoices = [[NSMutableArray alloc] init];
+		_answerChoices = [[NSMutableArray alloc] init];
+		_selectedAnswerChoices = [[NSMutableArray alloc] init];
 		self.multiline = YES;
 	}
 	return self;
@@ -37,8 +25,8 @@
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
 		int version = [coder decodeIntForKey:@"version"];
-		answerChoices = [[NSMutableArray alloc] init];
-		selectedAnswerChoices = [[NSMutableArray alloc] init];
+		_answerChoices = [[NSMutableArray alloc] init];
+		_selectedAnswerChoices = [[NSMutableArray alloc] init];
 		if (version == kATSurveyQuestionStorageVersion) {
 			self.type = [coder decodeIntForKey:@"type"];
 			self.identifier = [coder decodeObjectForKey:@"identifier"];
@@ -49,7 +37,7 @@
 			
 			NSArray *decodedAnswerChoices = [coder decodeObjectForKey:@"answerChoices"];
 			if (decodedAnswerChoices) {
-				[answerChoices addObjectsFromArray:decodedAnswerChoices];
+				[_answerChoices addObjectsFromArray:decodedAnswerChoices];
 			}
 			
 			self.answerText = [coder decodeObjectForKey:@"answerText"];
@@ -69,16 +57,16 @@
 
 - (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeInt:kATSurveyQuestionStorageVersion forKey:@"version"];
-	[coder encodeInt:type forKey:@"type"];
-	[coder encodeObject:identifier forKey:@"identifier"];
-	[coder encodeBool:responseRequired forKey:@"responseRequired"];
-	[coder encodeObject:questionText forKey:@"questionText"];
-	[coder encodeObject:instructionsText forKey:@"instructionsText"];
-	[coder encodeObject:value forKey:@"value"];
-	[coder encodeObject:answerChoices forKey:@"answerChoices"];
-	[coder encodeObject:answerText forKey:@"answerText"];
-	[coder encodeObject:[NSNumber numberWithUnsignedInteger:minSelectionCount] forKey:@"minSelectionCount"];
-	[coder encodeObject:[NSNumber numberWithUnsignedInteger:maxSelectionCount] forKey:@"maxSelectionCount"];
+	[coder encodeInt:self.type forKey:@"type"];
+	[coder encodeObject:self.identifier forKey:@"identifier"];
+	[coder encodeBool:self.responseRequired forKey:@"responseRequired"];
+	[coder encodeObject:self.questionText forKey:@"questionText"];
+	[coder encodeObject:self.instructionsText forKey:@"instructionsText"];
+	[coder encodeObject:self.value forKey:@"value"];
+	[coder encodeObject:self.answerChoices forKey:@"answerChoices"];
+	[coder encodeObject:self.answerText forKey:@"answerText"];
+	[coder encodeObject:[NSNumber numberWithUnsignedInteger:self.minSelectionCount] forKey:@"minSelectionCount"];
+	[coder encodeObject:[NSNumber numberWithUnsignedInteger:self.maxSelectionCount] forKey:@"maxSelectionCount"];
 	[coder encodeObject:[NSNumber numberWithBool:self.multiline] forKey:@"multiline"];
 }
 
@@ -119,9 +107,9 @@
 		NSUInteger answerCount = [self.selectedAnswerChoices count];
 		
 		if (self.responseIsRequired || answerCount > 0) {
-			if (minSelectionCount != 0 && answerCount < minSelectionCount) {
+			if (self.minSelectionCount != 0 && answerCount < self.minSelectionCount) {
 				error = ATSurveyQuestionValidationErrorTooFewAnswers;
-			} else if (maxSelectionCount != 0 && answerCount > maxSelectionCount) {
+			} else if (self.maxSelectionCount != 0 && answerCount > self.maxSelectionCount) {
 				error = ATSurveyQuestionValidationErrorTooManyAnswers;
 			}
 		}
@@ -130,14 +118,12 @@
 }
 
 - (void)reset {
-	[selectedAnswerChoices removeAllObjects];
+	[self.selectedAnswerChoices removeAllObjects];
 	self.answerText = nil;
 }
 @end
 
 @implementation ATSurveyQuestionAnswer
-@synthesize identifier;
-@synthesize value;
 
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
@@ -154,8 +140,8 @@
 
 - (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeInt:kATSurveyQuestionAnswerStorageVersion forKey:@"version"];
-	[coder encodeObject:identifier forKey:@"identifier"];
-	[coder encodeObject:value forKey:@"value"];
+	[coder encodeObject:self.identifier forKey:@"identifier"];
+	[coder encodeObject:self.value forKey:@"value"];
 }
 
 @end

@@ -26,7 +26,7 @@
 	ATAPIRequest *request;
 }
 
-@synthesize pendingMessageID;
+//@synthesize pendingMessageID;
 
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {

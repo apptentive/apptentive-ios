@@ -23,7 +23,7 @@
 	ATAPIRequest *request;
 }
 
-@synthesize record;
+//@synthesize record;
 
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
@@ -92,7 +92,7 @@
 }
 
 - (void)cleanup {
-	[record cleanup];
+	[self.record cleanup];
 }
 
 #pragma mark ATAPIRequestDelegate

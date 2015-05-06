@@ -14,9 +14,14 @@
 #import "ATAppConfigurationUpdater.h"
 #import "ATUtilities.h"
 
+@interface ATDefaultMessageCenterTitleView ()
+
+@property (strong, nonatomic, readwrite) UILabel *title;
+@property (strong, nonatomic, readwrite) UIImageView *imageView;
+
+@end
+
 @implementation ATDefaultMessageCenterTitleView
-@synthesize title;
-@synthesize imageView;
 
 - (void)setup {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -29,46 +34,46 @@
 	//self.backgroundColor = [UIColor clearColor];
 	if (![ATBackend sharedBackend].hideBranding) {
 		UIImage *image = [ATBackend imageNamed:@"at_apptentive_icon_small"];
-		imageView = [[UIImageView alloc] initWithImage:image];
-		[self addSubview:imageView];
+		self.imageView = [[UIImageView alloc] initWithImage:image];
+		[self addSubview:self.imageView];
 	}
-	title = [[UILabel alloc] initWithFrame:CGRectZero];
-	title.text = titleString;
-	if ([title respondsToSelector:@selector(setMinimumScaleFactor:)]) {
-		title.minimumScaleFactor = 0.5;
+	self.title = [[UILabel alloc] initWithFrame:CGRectZero];
+	self.title.text = titleString;
+	if ([self.title respondsToSelector:@selector(setMinimumScaleFactor:)]) {
+		self.title.minimumScaleFactor = 0.5;
 	} else {
 #		pragma clang diagnostic push
 #		pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		title.minimumFontSize = 10;
+		self.title.minimumFontSize = 10;
 #		pragma clang diagnostic pop
 	}
 	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
-		title.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
-		title.textColor = [UIColor blackColor];
+		self.title.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+		self.title.textColor = [UIColor blackColor];
 	} else {
-		title.font = [UIFont boldSystemFontOfSize:20.];
+		self.title.font = [UIFont boldSystemFontOfSize:20.];
 		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-			title.textColor = [UIColor whiteColor];
-			title.shadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4];
+			self.title.textColor = [UIColor whiteColor];
+			self.title.shadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4];
 		} else {
-			title.textColor = [UIColor colorWithRed:113/255. green:120/255. blue:128/255. alpha:1];
-			title.shadowColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.7];
-			title.shadowOffset = CGSizeMake(0, 1);
+			self.title.textColor = [UIColor colorWithRed:113/255. green:120/255. blue:128/255. alpha:1];
+			self.title.shadowColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.7];
+			self.title.shadowOffset = CGSizeMake(0, 1);
 		}
 	}
 	
-	title.textAlignment = NSTextAlignmentLeft;
-	title.lineBreakMode = NSLineBreakByTruncatingMiddle;
-	title.backgroundColor = [UIColor clearColor];
-	title.opaque = NO;
-	title.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	self.title.textAlignment = NSTextAlignmentLeft;
+	self.title.lineBreakMode = NSLineBreakByTruncatingMiddle;
+	self.title.backgroundColor = [UIColor clearColor];
+	self.title.opaque = NO;
+	self.title.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	
 	if ([[UINavigationBar class] respondsToSelector:@selector(appearance)]) {
 		NSMutableDictionary *titleTextAttributes = [NSMutableDictionary dictionaryWithDictionary:[[UINavigationBar appearance] titleTextAttributes]];
 		titleTextAttributes[NSBackgroundColorAttributeName] = [UIColor clearColor];
 		
 		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
-			title.attributedText = [[NSAttributedString alloc] initWithString:title.text attributes:titleTextAttributes];
+			self.title.attributedText = [[NSAttributedString alloc] initWithString:self.title.text attributes:titleTextAttributes];
 		} else {
 #			pragma clang diagnostic push
 #			pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -78,23 +83,23 @@
 			NSValue *shadowOffset = (NSValue *)titleTextAttributes[UITextAttributeTextShadowOffset];
 			
 			if (textColor) {
-				title.textColor = textColor;
+				self.title.textColor = textColor;
 			}
 			if (shadowColor) {
-				title.shadowColor = shadowColor;
+				self.title.shadowColor = shadowColor;
 			}
 			if (font) {
-				title.font = [UIFont fontWithName:font.fontName size:20];
+				self.title.font = [UIFont fontWithName:font.fontName size:20];
 			}
 			if (shadowOffset) {
 				UIOffset offset = [shadowOffset UIOffsetValue];
-				title.shadowOffset = CGSizeMake(offset.horizontal, offset.vertical);
+				self.title.shadowOffset = CGSizeMake(offset.horizontal, offset.vertical);
 			}
 #			pragma clang diagnostic pop
 		}
 	}
 	
-	[self addSubview:title];
+	[self addSubview:self.title];
 }
 
 - (id)initWithFrame:(CGRect)frame {
@@ -109,13 +114,12 @@
 	[self setup];
 }
 
-
 - (void)layoutSubviews {
 	CGFloat padding = 4;
 	CGRect imageRect = self.imageView ? self.imageView.frame : CGRectZero;
 	
-	[title sizeToFit];
-	CGFloat titleWidth = title.bounds.size.width;
+	[self.title sizeToFit];
+	CGFloat titleWidth = self.title.bounds.size.width;
 	CGFloat imageSpace = imageRect.size.width + padding;
 	if (titleWidth > (self.bounds.size.width - imageSpace)) {
 		titleWidth -= imageSpace;
@@ -134,4 +138,5 @@
 	titleRect.size.height = self.bounds.size.height;
 	self.title.frame = titleRect;
 }
+
 @end

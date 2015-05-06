@@ -12,12 +12,15 @@
 #import "ATBackend.h"
 #import "ATUtilities.h"
 
-@implementation ATFileMessageCell {
-	CGSize cachedThumbnailSize;
-	ATFileMessage *fileMessage;
-	UIImage *currentImage;
-}
-@synthesize dateLabel, userIcon, imageContainer, showDateLabel;
+@interface ATFileMessageCell ()
+
+@property (assign, nonatomic) CGSize cachedThumbnailSize;
+@property (strong, nonatomic) ATFileMessage *fileMessage;
+@property (strong, nonatomic) UIImage *currentImage;
+
+@end
+
+@implementation ATFileMessageCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
 	self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -34,8 +37,8 @@
 }
 
 - (void)setShowDateLabel:(BOOL)show {
-	if (showDateLabel != show) {
-		showDateLabel = show;
+	if (_showDateLabel != show) {
+		_showDateLabel = show;
 		[self setNeedsLayout];
 	}
 }
@@ -43,7 +46,7 @@
 - (void)layoutSubviews {
 	[super layoutSubviews];
 	
-	if (showDateLabel == NO) {
+	if (self.showDateLabel == NO) {
 		self.dateLabel.hidden = YES;
 		CGRect chatBubbleRect = self.chatBubbleContainer.frame;
 		chatBubbleRect.size.height = self.bounds.size.height;
@@ -66,41 +69,38 @@
 }
 
 - (void)setCurrentImage:(UIImage *)image {
-	if (currentImage != image) {
-		currentImage = nil;
-		currentImage = image;
-		if (currentImage != nil) {
-			self.imageContainer.layer.contents = (id)currentImage.CGImage;
+	if (_currentImage != image) {
+		_currentImage = image;
+		if (_currentImage != nil) {
+			self.imageContainer.layer.contents = (id)self.currentImage.CGImage;
 			self.imageContainer.layer.contentsGravity = kCAGravityResizeAspect;
 		}
 	}
-	if (currentImage == nil) {
-		currentImage = [ATBackend imageNamed:@"at_mc_file_default"];
+	if (_currentImage == nil) {
+		_currentImage = [ATBackend imageNamed:@"at_mc_file_default"];
 		self.imageContainer.layer.contentsGravity = kCAGravityResizeAspect;
-		self.imageContainer.layer.contents = (id)currentImage.CGImage;
+		self.imageContainer.layer.contents = (id)self.currentImage.CGImage;
 	}
 }
 
 - (void)configureWithFileMessage:(ATFileMessage *)message {
-	if (message != fileMessage) {
-		fileMessage = nil;
-		currentImage = nil;
-		fileMessage = message;
+	if (message != self.fileMessage) {
+		self.currentImage = nil;
+		self.fileMessage = message;
 		
 		UIImage *imageFile = [UIImage imageWithContentsOfFile:[message.fileAttachment fullLocalPath]];
 		CGSize thumbnailSize = ATThumbnailSizeOfMaxSize(imageFile.size, CGSizeMake(320, 320));
-		cachedThumbnailSize = thumbnailSize;
+		self.cachedThumbnailSize = thumbnailSize;
 		CGFloat scale = [[UIScreen mainScreen] scale];
 		thumbnailSize.width *= scale;
 		thumbnailSize.height *= scale;
 		
 		UIImage *thumbnail = [message.fileAttachment thumbnailOfSize:thumbnailSize];
 		if (thumbnail) {
-			currentImage = nil;
-			currentImage = thumbnail;
-			self.imageContainer.layer.contents = (id)currentImage.CGImage;
+			self.currentImage = thumbnail;
+			self.imageContainer.layer.contents = (id)self.currentImage.CGImage;
 		} else {
-			[self setCurrentImage:nil];
+			self.currentImage = nil;
 			[message.fileAttachment createThumbnailOfSize:thumbnailSize completion:^{
 				UIImage *image = [UIImage imageWithContentsOfFile:[message.fileAttachment fullLocalPath]];
 				[self setCurrentImage:image];
@@ -121,11 +121,11 @@
 
 - (CGFloat)cellHeightForWidth:(CGFloat)width {
 	CGFloat cellHeight = 0;
-	if (showDateLabel) {
+	if (self.showDateLabel) {
 		cellHeight += self.dateLabel.bounds.size.height;
 	}
 	
-	CGSize thumbSize = cachedThumbnailSize;
+	CGSize thumbSize = self.cachedThumbnailSize;
 	if (CGSizeEqualToSize(CGSizeZero, thumbSize)) {
 		thumbSize = CGSizeMake(320, 320);
 	}
@@ -141,4 +141,5 @@
 	cellHeight += imageInsets.top + imageInsets.bottom;
 	return cellHeight;
 }
+
 @end

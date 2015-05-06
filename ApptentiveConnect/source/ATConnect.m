@@ -18,8 +18,6 @@
 #import "ATAppConfigurationUpdater.h"
 #if TARGET_OS_IPHONE
 #import "ATMessageCenterViewController.h"
-#elif TARGET_OS_MAC
-#import "ATFeedbackWindowController.h"
 #endif
 
 // Can't get CocoaPods to do the right thing for debug builds.
@@ -50,19 +48,10 @@ NSString *const ATConnectCustomPersonDataChangedNotification = @"ATConnectCustom
 NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustomDeviceDataChangedNotification";
 
 @implementation ATConnect {
-#if TARGET_OS_IPHONE
-	UIColor *tintColor;
-#elif TARGET_OS_MAC
-	ATFeedbackWindowController *feedbackWindowController;
-#endif
-	NSMutableDictionary *customPersonData;
-	NSMutableDictionary *customDeviceData;
-	NSMutableDictionary *integrationConfiguration;
+	NSMutableDictionary *_customPersonData;
+	NSMutableDictionary *_customDeviceData;
+	NSMutableDictionary *_integrationConfiguration;
 }
-@synthesize apiKey, appID, debuggingOptions, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText, useMessageCenter;
-#if TARGET_OS_IPHONE
-@synthesize tintColor;
-#endif
 
 + (ATConnect *)sharedConnection {
 	static ATConnect *sharedConnection = nil;
@@ -76,10 +65,10 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 - (id)init {
 	if ((self = [super init])) {
 		self.showEmailField = YES;
-		customPersonData = [[NSMutableDictionary alloc] init];
-		customDeviceData = [[NSMutableDictionary alloc] init];
-		integrationConfiguration = [[NSMutableDictionary alloc] init];
-		useMessageCenter = YES;
+		_customPersonData = [[NSMutableDictionary alloc] init];
+		_customDeviceData = [[NSMutableDictionary alloc] init];
+		_integrationConfiguration = [[NSMutableDictionary alloc] init];
+		_useMessageCenter = YES;
 		_initiallyUseMessageCenter = YES;
 		_initiallyHideBranding = NO;
 		
@@ -98,10 +87,9 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	return self;
 }
 
-- (void)setApiKey:(NSString *)anAPIKey {
-	if (apiKey != anAPIKey) {
-		apiKey = nil;
-		apiKey = anAPIKey;
+- (void)setApiKey:(NSString *)APIKey {
+	if (_apiKey != APIKey) {
+		_apiKey = APIKey;
 		[[ATBackend sharedBackend] setApiKey:self.apiKey];
 	}
 }
@@ -116,10 +104,9 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	_initiallyUseMessageCenter = initiallyUseMessageCenter;
 }
 
-- (void)setInitialUserName:(NSString *)anInitialUserName {
-	if (initialUserName != anInitialUserName) {
-		initialUserName = nil;
-		initialUserName = anInitialUserName;
+- (void)setInitialUserName:(NSString *)initialUserName {
+	if (_initialUserName != initialUserName) {
+		initialUserName = initialUserName;
 		
 		// Set person object's name. Only overwrites previous *initial* names.
 		NSString *previousInitialUserName = [[NSUserDefaults standardUserDefaults] objectForKey:ATInitialUserNameKey];
@@ -135,15 +122,14 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	}
 }
 
-- (void)setInitialUserEmailAddress:(NSString *)anInitialUserEmailAddress {
-	if (![ATUtilities emailAddressIsValid:anInitialUserEmailAddress]) {
-		ATLogInfo(@"Attempting to set an invalid initial user email address: %@", anInitialUserEmailAddress);
+- (void)setInitialUserEmailAddress:(NSString *)initialUserEmailAddress {
+	if (![ATUtilities emailAddressIsValid:initialUserEmailAddress]) {
+		ATLogInfo(@"Attempting to set an invalid initial user email address: %@", initialUserEmailAddress);
 		return;
 	}
 		
-	if (![initialUserEmailAddress isEqualToString:anInitialUserEmailAddress]) {
-		initialUserEmailAddress = nil;
-		initialUserEmailAddress = anInitialUserEmailAddress;
+	if (![_initialUserEmailAddress isEqualToString:initialUserEmailAddress]) {
+		_initialUserEmailAddress = initialUserEmailAddress;
 		
 		if ([ATPersonInfo personExists]) {
 			ATPersonInfo *person = [ATPersonInfo currentPerson];
@@ -151,7 +137,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 			// Only overwrites previous *initial* emails.
 			NSString *previousInitialUserEmailAddress = [[NSUserDefaults standardUserDefaults] objectForKey:ATInitialUserEmailAddressKey];
 			if (!person.emailAddress || ([person.emailAddress caseInsensitiveCompare:previousInitialUserEmailAddress] == NSOrderedSame)) {
-				person.emailAddress = initialUserEmailAddress;
+				person.emailAddress = _initialUserEmailAddress;
 				person.needsUpdate = YES;
 				[person saveAsCurrentPerson];
 			}			
@@ -173,21 +159,21 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (NSDictionary *)customPersonData {
-	return customPersonData;
+	return _customPersonData;
 }
 
 - (NSDictionary *)customDeviceData {
-	return customDeviceData;
+	return _customDeviceData;
 }
 
 - (void)addCustomPersonData:(NSObject *)object withKey:(NSString *)key {
-	[self addCustomData:object withKey:key toCustomDataDictionary:customPersonData];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomPersonDataChangedNotification object:customPersonData];
+	[self addCustomData:object withKey:key toCustomDataDictionary:_customPersonData];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomPersonDataChangedNotification object:self.customPersonData];
 }
 
 - (void)addCustomDeviceData:(NSObject *)object withKey:(NSString *)key {
-	[self addCustomData:object withKey:key toCustomDataDictionary:customDeviceData];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:customDeviceData];
+	[self addCustomData:object withKey:key toCustomDataDictionary:_customDeviceData];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:self.customDeviceData];
 }
 
 - (void)addCustomData:(NSObject *)object withKey:(NSString *)key toCustomDataDictionary:(NSMutableDictionary *)customData {
@@ -208,13 +194,13 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (void)removeCustomPersonDataWithKey:(NSString *)key {
-	[customPersonData removeObjectForKey:key];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomPersonDataChangedNotification object:customPersonData];
+	[_customPersonData removeObjectForKey:key];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomPersonDataChangedNotification object:self.customPersonData];
 }
 
 - (void)removeCustomDeviceDataWithKey:(NSString *)key {
-	[customDeviceData removeObjectForKey:key];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:customDeviceData];
+	[_customDeviceData removeObjectForKey:key];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:self.customDeviceData];
 }
 
 - (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key {
@@ -246,13 +232,13 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (NSDictionary *)integrationConfiguration {
-	return integrationConfiguration;
+	return _integrationConfiguration;
 }
 
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration {
-	[integrationConfiguration setObject:configuration forKey:integration];
+	[_integrationConfiguration setObject:configuration forKey:integration];
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:customDeviceData];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:self.customDeviceData];
 }
 
 - (void)addIntegration:(NSString *)integration withDeviceToken:(NSData *)deviceToken {
@@ -266,9 +252,9 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (void)removeIntegration:(NSString *)integration {
-	[integrationConfiguration removeObjectForKey:integration];
+	[_integrationConfiguration removeObjectForKey:integration];
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:customDeviceData];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:self.customDeviceData];
 }
 
 - (void)addUrbanAirshipIntegrationWithDeviceToken:(NSData *)deviceToken {

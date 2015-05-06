@@ -24,22 +24,30 @@ typedef enum {
 - (BOOL)removeSQLiteSidecarsForPath:(NSString *)sourcePath;
 @end
 
-@implementation ATDataManager {
-	NSPersistentStoreCoordinator *persistentStoreCoordinator;
-	NSManagedObjectContext *managedObjectContext;
-	NSManagedObjectModel *managedObjectModel;
-	
-	NSString *modelName;
-	NSBundle *bundle;
-	NSString *supportDirectoryPath;
-}
-@synthesize didRemovePersistentStore, didFailToMigrateStore, didMigrateStore;
+@interface ATDataManager ()
+
+
+@property (strong, readwrite, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (strong, readwrite, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (strong, readwrite, nonatomic) NSManagedObjectModel *managedObjectModel;
+
+@property (nonatomic, readwrite) BOOL didRemovePersistentStore;
+@property (nonatomic, readwrite) BOOL didFailToMigrateStore;
+@property (nonatomic, readwrite) BOOL didMigrateStore;
+
+@property (strong, nonatomic) NSString *modelName;
+@property (strong, nonatomic) NSBundle *bundle;
+@property (strong, nonatomic) NSString *supportDirectoryPath;
+
+@end
+
+@implementation ATDataManager
 
 - (id)initWithModelName:(NSString *)aModelName inBundle:(NSBundle *)aBundle storagePath:(NSString *)path {
 	if ((self = [super init])) {
-		modelName = aModelName;
-		bundle = aBundle;
-		supportDirectoryPath = path;
+		_modelName = aModelName;
+		_bundle = aBundle;
+		_supportDirectoryPath = path;
 		
 		// Check the canary.
 		if ([self canaryFileExists]) {
@@ -53,26 +61,26 @@ typedef enum {
 #pragma mark Properties
 - (NSManagedObjectContext *)managedObjectContext {
 	@synchronized(self) {
-		if (managedObjectContext != nil) {
-			return managedObjectContext;
+		if (_managedObjectContext != nil) {
+			return _managedObjectContext;
 		}
 		
 		NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
 		if (coordinator != nil) {
-			managedObjectContext = [[NSManagedObjectContext alloc] init];
-			[managedObjectContext setPersistentStoreCoordinator:coordinator];
+			_managedObjectContext = [[NSManagedObjectContext alloc] init];
+			[_managedObjectContext setPersistentStoreCoordinator:coordinator];
 		}
 	}
-    return managedObjectContext;
+    return _managedObjectContext;
 }
 
 - (NSManagedObjectModel *)managedObjectModel {
-    if (managedObjectModel != nil) {
-        return managedObjectModel;
+    if (_managedObjectModel != nil) {
+        return _managedObjectModel;
     }
-    NSURL *modelURL = [bundle URLForResource:modelName withExtension:@"momd"];
-    managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-    return managedObjectModel;
+    NSURL *modelURL = [self.bundle URLForResource:self.modelName withExtension:@"momd"];
+    _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    return _managedObjectModel;
 }
 
 - (BOOL)setupAndVerify {
@@ -100,8 +108,8 @@ typedef enum {
 	}
 	@catch (NSException *exception) {
 		ATLogError(@"Caught exception attempting to test classes: %@", exception);
-		managedObjectContext = nil;
-		persistentStoreCoordinator = nil;
+		self.managedObjectContext = nil;
+		self.persistentStoreCoordinator = nil;
 		ATLogError(@"Removing persistent store and starting over.");
 		[self removePersistentStore];
 	}
@@ -121,15 +129,15 @@ typedef enum {
 
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
 	@synchronized(self) {
-		if (persistentStoreCoordinator != nil) {
-			return persistentStoreCoordinator;
+		if (_persistentStoreCoordinator != nil) {
+			return _persistentStoreCoordinator;
 		}
 		
 		NSURL *storeURL = [self persistentStoreURL];
 		
 		NSError *error = nil;
 		@try {
-			persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+			_persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
 		}
 		@catch (NSException *exception) {
 			ATLogError(@"Unable to setup persistent store: %@", exception);
@@ -137,13 +145,13 @@ typedef enum {
 		}
 		BOOL storeExists = [[NSFileManager defaultManager] fileExistsAtPath:[storeURL path]];
 		
-		if (storeExists && [self isMigrationNecessary:persistentStoreCoordinator]) {
+		if (storeExists && [self isMigrationNecessary:_persistentStoreCoordinator]) {
 			if (![self migrateStoreError:&error]) {
 				ATLogError(@"Failed to migrate store. Need to start over from scratch: %@", error);
-				didFailToMigrateStore = YES;
+				self.didFailToMigrateStore = YES;
 				[self removePersistentStore];
 			} else {
-				didMigrateStore = YES;
+				self.didMigrateStore = YES;
 			}
 		}
 		
@@ -152,19 +160,19 @@ typedef enum {
 		// iOS 5 and later: NSFileProtectionCompleteUntilFirstUserAuthentication
 		// So, there's no need to set these explicitly for our purposes.
 		NSDictionary *options = @{NSSQLitePragmasOption: @{@"journal_mode": @"DELETE"}};
-		if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
+		if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
 			ATLogError(@"Unable to create new persistent store: %@", error);
-			persistentStoreCoordinator = nil;
+			_persistentStoreCoordinator = nil;
 			return nil;
 		}
 	}
-	return persistentStoreCoordinator;
+	return _persistentStoreCoordinator;
 }
 
 #pragma mark -
 - (NSURL *)persistentStoreURL {
-	NSString *sqliteFilename = [modelName stringByAppendingPathExtension:@"sqlite"];
-	return [[NSURL fileURLWithPath:supportDirectoryPath] URLByAppendingPathComponent:sqliteFilename];
+	NSString *sqliteFilename = [self.modelName stringByAppendingPathExtension:@"sqlite"];
+	return [[NSURL fileURLWithPath:self.supportDirectoryPath] URLByAppendingPathComponent:sqliteFilename];
 }
 
 - (void)removePersistentStore {
@@ -179,12 +187,12 @@ typedef enum {
 		}
 	}
 	[self removeSQLiteSidecarsForPath:sourcePath];
-	didRemovePersistentStore = YES;
+	self.didRemovePersistentStore = YES;
 }
 
 #pragma mark - Upgrade Canary
 - (NSString  *)canaryFilePath {
-	return [supportDirectoryPath stringByAppendingPathComponent:ATDataManagerUpgradeCanaryFilename];
+	return [self.supportDirectoryPath stringByAppendingPathComponent:ATDataManagerUpgradeCanaryFilename];
 }
 
 - (BOOL)canaryFileExists {
@@ -247,7 +255,7 @@ typedef enum {
 	}
 	
 	// Find source model.
-	NSArray *bundlesForSourceModel = @[bundle];
+	NSArray *bundlesForSourceModel = @[ self.bundle ];
 	NSManagedObjectModel *sourceModel = [NSManagedObjectModel mergedModelFromBundles:bundlesForSourceModel forStoreMetadata:sourceMetadata];
 	if (sourceModel == nil) {
 		ATLogError(@"Failed to find source model.");
@@ -258,15 +266,15 @@ typedef enum {
 	}
 	
 	NSMutableArray *modelPaths = [NSMutableArray array];
-	NSArray *momdPaths = [bundle pathsForResourcesOfType:@"momd" inDirectory:nil];
+	NSArray *momdPaths = [self.bundle pathsForResourcesOfType:@"momd" inDirectory:nil];
 	
 	for (NSString *momdPath in momdPaths) {
 		NSString *resourceSubpath = [momdPath lastPathComponent];
-		NSArray *array = [bundle pathsForResourcesOfType:@"mom" inDirectory:resourceSubpath];
+		NSArray *array = [self.bundle pathsForResourcesOfType:@"mom" inDirectory:resourceSubpath];
 		[modelPaths addObjectsFromArray:array];
 	}
 	
-	NSArray *otherModels = [bundle pathsForResourcesOfType:@"mom" inDirectory:nil];
+	NSArray *otherModels = [self.bundle pathsForResourcesOfType:@"mom" inDirectory:nil];
 	[modelPaths addObjectsFromArray:otherModels];
 	
 	if (!modelPaths || ![modelPaths count]) {
@@ -280,7 +288,7 @@ typedef enum {
 	NSMappingModel *mappingModel = nil;
 	NSManagedObjectModel *targetModel = nil;
 	NSString *modelPath = nil;
-	NSArray *bundlesForTargetModel = @[bundle];
+	NSArray *bundlesForTargetModel = @[ self.bundle ];
 	for (modelPath in modelPaths) {
 		targetModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:[NSURL fileURLWithPath:modelPath]];
 		mappingModel = [NSMappingModel mappingModelFromBundles:bundlesForTargetModel forSourceModel:sourceModel destinationModel:targetModel];

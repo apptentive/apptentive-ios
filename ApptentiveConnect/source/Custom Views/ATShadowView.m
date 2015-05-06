@@ -9,7 +9,7 @@
 #import "ATShadowView.h"
 
 @implementation ATShadowView
-@synthesize centerAt, spotlightSize;
+//@synthesize centerAt, spotlightSize;
 
 - (id)initWithFrame:(CGRect)frame {
 	self = [super initWithFrame:frame];

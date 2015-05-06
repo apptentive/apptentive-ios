@@ -16,11 +16,13 @@
 NSString *const ATDeviceLastUpdatePreferenceKey = @"ATDeviceLastUpdatePreferenceKey";
 NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValuePreferenceKey";
 
-@implementation ATDeviceUpdater {
-	ATAPIRequest *request;
-}
+@interface ATDeviceUpdater ()
 
-@synthesize delegate;
+@property (strong, nonatomic) ATAPIRequest *request;
+
+@end
+
+@implementation ATDeviceUpdater
 
 + (void)registerDefaults {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -59,36 +61,36 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 
 - (id)initWithDelegate:(NSObject<ATDeviceUpdaterDelegate> *)aDelegate {
 	if ((self = [super init])) {
-		delegate = aDelegate;
+		_delegate = aDelegate;
 	}
 	return self;
 }
 
 - (void)dealloc {
-	delegate = nil;
+	_delegate = nil;
 	[self cancel];
 }
 
 - (void)update {
 	[self cancel];
 	ATDeviceInfo *deviceInfo = [[ATDeviceInfo alloc] init];
-	request = [[ATWebClient sharedClient] requestForUpdatingDevice:deviceInfo];
-	request.delegate = self;
-	[request start];
+	self.request = [[ATWebClient sharedClient] requestForUpdatingDevice:deviceInfo];
+	self.request.delegate = self;
+	[self.request start];
 	deviceInfo = nil;
 }
 
 - (void)cancel {
-	if (request) {
-		request.delegate = nil;
-		[request cancel];
-		request = nil;
+	if (self.request) {
+		self.request.delegate = nil;
+		[self.request cancel];
+		self.request = nil;
 	}
 }
 
 - (float)percentageComplete {
-	if (request) {
-		return [request percentageComplete];
+	if (self.request) {
+		return [self.request percentageComplete];
 	} else {
 		return 0.0f;
 	}
@@ -104,7 +106,7 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 		
 		[defaults setObject:[NSDate date] forKey:ATDeviceLastUpdatePreferenceKey];
 		[defaults setObject:currentValueDictionary forKey:ATDeviceLastUpdateValuePreferenceKey];
-		[delegate deviceUpdater:self didFinish:YES];
+		[self.delegate deviceUpdater:self didFinish:YES];
 	}
 }
 
@@ -116,7 +118,7 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 	@synchronized(self) {
 		ATLogInfo(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
 		
-		[delegate deviceUpdater:self didFinish:NO];
+		[self.delegate deviceUpdater:self didFinish:NO];
 	}
 }
 

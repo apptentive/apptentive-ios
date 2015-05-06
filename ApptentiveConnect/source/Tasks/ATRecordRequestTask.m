@@ -14,11 +14,13 @@
 
 #define kATRecordRequestTaskCodingVersion 1
 
-@implementation ATRecordRequestTask {
-	ATAPIRequest *request;
-}
+@interface ATRecordRequestTask ()
 
-@synthesize taskProvider;
+@property (strong, nonatomic) ATAPIRequest *request;
+
+@end
+
+@implementation ATRecordRequestTask
 
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
@@ -30,7 +32,7 @@
 				ATLogError(@"Unarchived task can't be found in CoreData");
 				self.finished = YES;
 			} else if ([obj conformsToProtocol:@protocol(ATRequestTaskProvider)]) {
-				taskProvider = (NSObject<ATRequestTaskProvider> *)obj;
+				_taskProvider = (NSObject<ATRequestTaskProvider> *)obj;
 			} else {
 				ATLogError(@"Unarchived task doesn't conform to ATRequestTaskProvider protocol.");
 				goto fail;
@@ -47,7 +49,7 @@ fail:
 
 - (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeInt:kATRecordRequestTaskCodingVersion forKey:@"version"];
-	NSURL *URL = [taskProvider managedObjectURIRepresentationForTask:self];
+	NSURL *URL = [self.taskProvider managedObjectURIRepresentationForTask:self];
 	[coder encodeObject:URL forKey:@"managedObjectURIRepresentation"];
 }
 
@@ -66,11 +68,11 @@ fail:
 }
 
 - (void)start {
-	if (!request) {
-		request = [self.taskProvider requestForTask:self];
-		if (request != nil) {
-			request.delegate = self;
-			[request start];
+	if (!self.request) {
+		self.request = [self.taskProvider requestForTask:self];
+		if (self.request != nil) {
+			self.request.delegate = self;
+			[self.request start];
 			self.inProgress = YES;
 		} else {
 			self.finished = YES;
@@ -79,17 +81,17 @@ fail:
 }
 
 - (void)stop {
-	if (request) {
-		request.delegate = nil;
-		[request cancel];
-		request = nil;
+	if (self.request) {
+		self.request.delegate = nil;
+		[self.request cancel];
+		self.request = nil;
 		self.inProgress = NO;
 	}
 }
 
 - (float)percentComplete {
-	if (request) {
-		return [request percentageComplete];
+	if (self.request) {
+		return [self.request percentageComplete];
 	} else {
 		return 0.0f;
 	}
@@ -100,7 +102,7 @@ fail:
 }
 
 - (void)cleanup {
-	[taskProvider cleanupAfterTask:self];
+	[self.taskProvider cleanupAfterTask:self];
 }
 
 #pragma mark ATAPIRequestDelegate

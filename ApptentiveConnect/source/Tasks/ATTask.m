@@ -11,12 +11,6 @@
 #define kATTaskCodingVersion 2
 
 @implementation ATTask
-@synthesize inProgress;
-@synthesize finished;
-@synthesize failed;
-@synthesize failureCount;
-@synthesize lastErrorTitle, lastErrorMessage;
-@synthesize failureOkay;
 
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
@@ -67,16 +61,16 @@
 
 - (NSString *)taskDescription {
 	NSMutableArray *parts = [[NSMutableArray alloc] init];
-	if (lastErrorTitle) {
-		[parts addObject:[NSString stringWithFormat:@"lastErrorTitle: %@", lastErrorTitle]];
+	if (self.lastErrorTitle) {
+		[parts addObject:[NSString stringWithFormat:@"lastErrorTitle: %@", self.lastErrorTitle]];
 	}
-	if (lastErrorMessage) {
-		[parts addObject:[NSString stringWithFormat:@"lastErrorMessage: %@", lastErrorMessage]];
+	if (self.lastErrorMessage) {
+		[parts addObject:[NSString stringWithFormat:@"lastErrorMessage: %@", self.lastErrorMessage]];
 	}
-	[parts addObject:[NSString stringWithFormat:@"inProgress: %@", inProgress ? @"YES" : @"NO"]];
-	[parts addObject:[NSString stringWithFormat:@"finished: %@", finished ? @"YES" : @"NO"]];
-	[parts addObject:[NSString stringWithFormat:@"failed: %@", failed ? @"YES" : @"NO"]];
-	[parts addObject:[NSString stringWithFormat:@"failureCount: %lu", (unsigned long)failureCount]];
+	[parts addObject:[NSString stringWithFormat:@"inProgress: %@", self.inProgress ? @"YES" : @"NO"]];
+	[parts addObject:[NSString stringWithFormat:@"finished: %@", self.finished ? @"YES" : @"NO"]];
+	[parts addObject:[NSString stringWithFormat:@"failed: %@", self.failed ? @"YES" : @"NO"]];
+	[parts addObject:[NSString stringWithFormat:@"failureCount: %lu", (unsigned long)self.failureCount]];
 	[parts addObject:[NSString stringWithFormat:@"percentComplete: %f", [self percentComplete]]];
 	[parts addObject:[NSString stringWithFormat:@"taskName: %@", [self taskName]]];
 	

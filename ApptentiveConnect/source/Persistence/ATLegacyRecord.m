@@ -24,7 +24,7 @@
 @end
 
 @implementation ATLegacyRecord
-@synthesize uuid, model, os_version, carrier, date;
+//@synthesize uuid, model, os_version, carrier, date;
 - (id)init {
 	if ((self = [super init])) {
 		self.uuid = [[ATBackend sharedBackend] deviceUUID];

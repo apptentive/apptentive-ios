@@ -30,19 +30,12 @@
 - (BOOL)becomeFirstResponder;
 @end
 
-@interface ATCellTextView : ATDefaultTextView <ATCellTextEntry> {
-	NSIndexPath *cellPath;
-	ATSurveyQuestion *question;
-}
+@interface ATCellTextView : ATDefaultTextView <ATCellTextEntry>
 @property (nonatomic, strong) NSIndexPath *cellPath;
 @property (nonatomic, strong) ATSurveyQuestion *question;
 @end
 
-@interface ATCellTextField : UITextField <ATCellTextEntry> {
-@private
-	NSIndexPath *cellPath;
-	ATSurveyQuestion *question;
-}
+@interface ATCellTextField : UITextField <ATCellTextEntry>
 @property (nonatomic, strong) NSIndexPath *cellPath;
 @property (nonatomic, strong) ATSurveyQuestion *question;
 @end

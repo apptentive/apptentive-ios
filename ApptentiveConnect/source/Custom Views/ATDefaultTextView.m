@@ -9,19 +9,13 @@
 #import "ATDefaultTextView.h"
 #import "ATUtilities.h"
 
-@interface ATDefaultTextView (Private)
-- (void)setup;
-- (void)setupPlaceholder;
-- (void)didEdit:(NSNotification *)notification;
+@interface ATDefaultTextView ()
+
+@property (strong, nonatomic) UILabel *placeholderLabel;
+
 @end
 
-@implementation ATDefaultTextView {
-	UILabel *placeholderLabel;
-}
-
-@synthesize placeholder;
-@synthesize placeholderColor;
-@synthesize at_drawRectBlock;
+@implementation ATDefaultTextView
 
 - (id)initWithFrame:(CGRect)frame {
 	if ((self = [super initWithFrame:frame])) {
@@ -41,17 +35,15 @@
 }
 
 - (void)setPlaceholder:(NSString *)newPlaceholder {
-	if (placeholder != newPlaceholder) {
-		placeholder = nil;
-		placeholder = newPlaceholder;
+	if (_placeholder != newPlaceholder) {
+		_placeholder = newPlaceholder;
 		[self setupPlaceholder];
 	}
 }
 
 - (void)setPlaceholderColor:(UIColor *)newPlaceholderColor {
-	if (placeholderColor != newPlaceholderColor) {
-		placeholderColor = nil;
-		placeholderColor = newPlaceholderColor;
+	if (_placeholderColor != newPlaceholderColor) {
+		_placeholderColor = newPlaceholderColor;
 		[self setupPlaceholder];
 	}
 }
@@ -62,22 +54,20 @@
 }
 
 - (void)drawRect:(CGRect)rect {
-	if (at_drawRectBlock) {
-		at_drawRectBlock(self, rect);
+	if (self.at_drawRectBlock) {
+		self.at_drawRectBlock(self, rect);
 	}
 }
-@end
 
-
-@implementation ATDefaultTextView (Private)
+#pragma mark - Private
 
 - (void)setup {
 	self.text = @"";
-	placeholderLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-	placeholderLabel.userInteractionEnabled = NO;
-	placeholderLabel.backgroundColor = [UIColor clearColor];
-	placeholderLabel.opaque = NO;
-	placeholderLabel.textColor = self.placeholderColor ?: [UIColor lightGrayColor];
+	self.placeholderLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+	self.placeholderLabel.userInteractionEnabled = NO;
+	self.placeholderLabel.backgroundColor = [UIColor clearColor];
+	self.placeholderLabel.opaque = NO;
+	self.placeholderLabel.textColor = self.placeholderColor ?: [UIColor lightGrayColor];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEdit:) name:UITextViewTextDidBeginEditingNotification object:self];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEdit:) name:UITextViewTextDidChangeNotification object:self];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEdit:) name:UITextViewTextDidEndEditingNotification object:self];
@@ -87,14 +77,14 @@
 
 - (void)setupPlaceholder {
 	if ([self isDefault]) {
-		placeholderLabel.text = self.placeholder;
-		placeholderLabel.font = self.font;
-		placeholderLabel.textColor = self.placeholderColor ?: [UIColor lightGrayColor];
-		placeholderLabel.textAlignment = self.textAlignment;
-		placeholderLabel.numberOfLines = 0;
-		placeholderLabel.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-		[placeholderLabel sizeToFit];
-		[self addSubview:placeholderLabel];
+		self.placeholderLabel.text = self.placeholder;
+		self.placeholderLabel.font = self.font;
+		self.placeholderLabel.textColor = self.placeholderColor ?: [UIColor lightGrayColor];
+		self.placeholderLabel.textAlignment = self.textAlignment;
+		self.placeholderLabel.numberOfLines = 0;
+		self.placeholderLabel.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+		[self.placeholderLabel sizeToFit];
+		[self addSubview:self.placeholderLabel];
 		
 		CGFloat paddingX = 0;
 		CGPoint origin = CGPointZero;
@@ -107,15 +97,15 @@
 			origin = CGPointMake(8, 8);
 		}
 		
-		CGRect b = placeholderLabel.bounds;
+		CGRect b = self.placeholderLabel.bounds;
 		b.size.width = self.bounds.size.width - paddingX*2.0;
-		placeholderLabel.bounds = b;
-		CGRect f = placeholderLabel.frame;
+		self.placeholderLabel.bounds = b;
+		CGRect f = self.placeholderLabel.frame;
 		f.origin = origin;
-		placeholderLabel.frame = f;
-		[self sendSubviewToBack:placeholderLabel];
+		self.placeholderLabel.frame = f;
+		[self sendSubviewToBack:self.placeholderLabel];
 	} else {
-		[placeholderLabel removeFromSuperview];
+		[self.placeholderLabel removeFromSuperview];
 	}
 }
 
@@ -124,4 +114,5 @@
 		[self setupPlaceholder];
 	}
 }
+
 @end

@@ -36,7 +36,7 @@
 
 - (NSFetchedResultsController *)fetchedMessagesController {
 	@synchronized(self) {
-		if (!self.fetchedMessagesController) {
+		if (!_fetchedMessagesController) {
 			[NSFetchedResultsController deleteCacheWithName:@"at-messages-cache"];
 			NSFetchRequest *request = [[NSFetchRequest alloc] init];
 			[request setEntity:[NSEntityDescription entityForName:@"ATAbstractMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
@@ -49,12 +49,12 @@
 			
 			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:nil cacheName:@"at-messages-cache"];
 			newController.delegate = self;
-			self.fetchedMessagesController = newController;
+			_fetchedMessagesController = newController;
 			
 			request = nil;
 		}
 	}
-	return self.fetchedMessagesController;
+	return _fetchedMessagesController;
 }
 
 

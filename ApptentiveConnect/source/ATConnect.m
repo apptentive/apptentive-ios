@@ -106,7 +106,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (void)setInitialUserName:(NSString *)initialUserName {
 	if (_initialUserName != initialUserName) {
-		initialUserName = initialUserName;
+		_initialUserName = initialUserName;
 		
 		// Set person object's name. Only overwrites previous *initial* names.
 		NSString *previousInitialUserName = [[NSUserDefaults standardUserDefaults] objectForKey:ATInitialUserNameKey];

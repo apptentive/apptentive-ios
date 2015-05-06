@@ -28,8 +28,6 @@
 
 @implementation ATHUDView
 
-//@synthesize label, markType, size, cornerRadius, fadeOutDuration;
-
 - (id)initWithWindow:(UIWindow *)window {
 	if ((self = [super initWithFrame:CGRectMake(0.0, 0.0, 100.0, 100.0)])) {
 		_parentWindow = window;

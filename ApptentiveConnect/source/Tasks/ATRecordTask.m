@@ -19,11 +19,13 @@
 - (BOOL)handleLegacyRecord;
 @end
 
-@implementation ATRecordTask {
-	ATAPIRequest *request;
-}
+@interface ATRecordTask ()
 
-//@synthesize record;
+@property (strong, nonatomic) ATAPIRequest *request;
+
+@end
+
+@implementation ATRecordTask
 
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
@@ -58,11 +60,11 @@
 		self.finished = YES;
 		return;
 	}
-	if (!request) {
-		request = [self.record requestForSendingRecord];
-		if (request != nil) {
-			request.delegate = self;
-			[request start];
+	if (!self.request) {
+		self.request = [self.record requestForSendingRecord];
+		if (self.request != nil) {
+			self.request.delegate = self;
+			[self.request start];
 			self.inProgress = YES;
 		} else {
 			self.finished = YES;
@@ -71,17 +73,17 @@
 }
 
 - (void)stop {
-	if (request) {
-		request.delegate = nil;
-		[request cancel];
-		request = nil;
+	if (self.request) {
+		self.request.delegate = nil;
+		[self.request cancel];
+		self.request = nil;
 		self.inProgress = NO;
 	}
 }
 
 - (float)percentComplete {
-	if (request) {
-		return [request percentageComplete];
+	if (self.request) {
+		return [self.request percentageComplete];
 	} else {
 		return 0.0f;
 	}

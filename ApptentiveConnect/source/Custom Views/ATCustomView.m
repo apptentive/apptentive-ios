@@ -9,7 +9,6 @@
 #import "ATCustomView.h"
 
 @implementation ATCustomView
-//@synthesize at_drawRectBlock;
 
 - (void)drawRect:(CGRect)rect {
 	[super drawRect:rect];

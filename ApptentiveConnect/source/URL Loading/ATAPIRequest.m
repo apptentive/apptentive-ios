@@ -30,8 +30,6 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	NSTimeInterval expiresMaxAge;
 }
 
-//@synthesize returnType, failed, errorTitle, errorMessage, errorResponse, timeoutInterval, delegate;
-
 - (id)initWithConnection:(ATURLConnection *)aConnection channelName:(NSString *)aChannelName {
 	if ((self = [super init])) {
 		connection = aConnection;

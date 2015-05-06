@@ -18,7 +18,6 @@
 static ATContactStorage *sharedContactStorage = nil;
 
 @implementation ATContactStorage
-////@synthesize name, email, phone;
 
 + (NSString *)contactStoragePath {
 	return [[[ATBackend sharedBackend] supportDirectoryPath] stringByAppendingPathComponent:@"contactinfo.objects"];

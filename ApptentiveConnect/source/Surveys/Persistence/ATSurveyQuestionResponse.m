@@ -11,7 +11,6 @@
 #define kATSurveyQuestionResponseStorageVersion 1
 
 @implementation ATSurveyQuestionResponse
-//@synthesize identifier, response;
 
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {

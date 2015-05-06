@@ -18,14 +18,6 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 
 @implementation ATPersonInfo
 
-//@synthesize apptentiveID;
-//@synthesize name;
-//@synthesize facebookID;
-//@synthesize emailAddress;
-//@synthesize secret;
-//@synthesize needsUpdate;
-
-
 - (id)init {
 	if (self = [super init]) {
 		self.name = [ATConnect sharedConnection].initialUserName;

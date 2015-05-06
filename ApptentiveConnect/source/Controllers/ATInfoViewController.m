@@ -48,8 +48,7 @@ enum {
 - (void)reload;
 @end
 
-@implementation ATInfoViewController {
-}
+@implementation ATInfoViewController
 
 - (id)init {
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {

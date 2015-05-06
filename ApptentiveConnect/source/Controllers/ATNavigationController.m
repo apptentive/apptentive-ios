@@ -9,6 +9,5 @@
 #import "ATNavigationController.h"
 
 @implementation ATNavigationController
-//@synthesize disablesAutomaticKeyboardDismissal;
 
 @end

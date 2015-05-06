@@ -74,20 +74,6 @@ enum {
 	UIAlertView *invalidEmailAddressAlert;
 	UIAlertView *emailRequiredAlert;
 }
-//@synthesize window;
-//@synthesize cancelButton;
-//@synthesize sendButton;
-//@synthesize toolbar;
-//@synthesize scrollView;
-//@synthesize containerView;
-//@synthesize emailField;
-//@synthesize feedbackView;
-//@synthesize promptContainer;
-//@synthesize promptTitle;
-//@synthesize promptText;
-//@synthesize customPlaceholderText;
-//@synthesize showEmailAddressField;
-//@synthesize delegate;
 
 - (id)initWithDelegate:(NSObject<ATMessagePanelDelegate> *)aDelegate {
 	self = [super initWithNibName:@"ATMessagePanelViewController" bundle:[ATConnect resourceBundle]];

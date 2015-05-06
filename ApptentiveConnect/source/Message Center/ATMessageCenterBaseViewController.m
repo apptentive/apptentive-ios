@@ -56,9 +56,7 @@
 - (void)keyboardWillBeHidden:(NSNotification *)aNotification;
 @end
 
-@implementation ATMessageCenterBaseViewController {
-}
-//@synthesize containerView, inputContainerView, dismissalDelegate;
+@implementation ATMessageCenterBaseViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];

@@ -26,8 +26,6 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 	BOOL creatingConversation;
 }
 
-////@synthesize delegate;
-
 + (void)registerDefaults {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSDictionary *defaultPreferences =

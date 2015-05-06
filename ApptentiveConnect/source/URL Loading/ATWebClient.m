@@ -150,7 +150,7 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 	[conn setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
 	NSUInteger length = [body lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
 	[conn setValue:[NSString stringWithFormat:@"%lu", (unsigned long)length] forHTTPHeaderField:@"Content-Length"];
-	[conn setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
+	[conn setHTTPBody:[[body dataUsingEncoding:NSUTF8StringEncoding] mutableCopy]];
 	return conn;
 }
 
@@ -167,7 +167,7 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 	[conn setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
 	NSUInteger length = [body lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
 	[conn setValue:[NSString stringWithFormat:@"%lu", (unsigned long)length] forHTTPHeaderField:@"Content-Length"];
-	[conn setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
+	[conn setHTTPBody:[[body dataUsingEncoding:NSUTF8StringEncoding] mutableCopy]];
 	return conn;
 }
 

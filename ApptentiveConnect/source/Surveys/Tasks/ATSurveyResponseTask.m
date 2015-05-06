@@ -17,11 +17,13 @@
 - (BOOL)processResult:(NSDictionary *)jsonMessage;
 @end
 
-@implementation ATSurveyResponseTask {
-	ATAPIRequest *request;
-}
+@interface ATSurveyResponseTask ()
 
-@synthesize pendingSurveyResponseID;
+@property (strong, nonatomic) ATAPIRequest *request;
+
+@end
+
+@implementation ATSurveyResponseTask
 
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
@@ -55,17 +57,17 @@
 }
 
 - (void)start {
-	if (!request) {
+	if (!self.request) {
 		ATSurveyResponse *response = [ATSurveyResponse findSurveyResponseWithPendingID:self.pendingSurveyResponseID];
 		if (response == nil) {
 			ATLogError(@"Warning: Response was nil in survey response task.");
 			self.finished = YES;
 			return;
 		}
-		request = [[ATWebClient sharedClient] requestForPostingSurveyResponse:response];
-		if (request != nil) {
-			request.delegate = self;
-			[request start];
+		self.request = [[ATWebClient sharedClient] requestForPostingSurveyResponse:response];
+		if (self.request != nil) {
+			self.request.delegate = self;
+			[self.request start];
 			self.inProgress = YES;
 		} else {
 			self.finished = YES;
@@ -75,17 +77,17 @@
 }
 
 - (void)stop {
-	if (request) {
-		request.delegate = nil;
-		[request cancel];
-		request = nil;
+	if (self.request) {
+		self.request.delegate = nil;
+		[self.request cancel];
+		self.request = nil;
 		self.inProgress = NO;
 	}
 }
 
 - (float)percentComplete {
-	if (request) {
-		return [request percentageComplete];
+	if (self.request) {
+		return [self.request percentageComplete];
 	} else {
 		return 0.0f;
 	}

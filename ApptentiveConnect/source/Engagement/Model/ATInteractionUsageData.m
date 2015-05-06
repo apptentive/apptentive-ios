@@ -16,26 +16,6 @@
 
 @implementation ATInteractionUsageData
 
-@synthesize timeSinceInstallTotal = _timeSinceInstallTotal;
-@synthesize timeSinceInstallVersion = _timeSinceInstallVersion;
-@synthesize timeSinceInstallBuild = _timeSinceInstallBuild;
-@synthesize applicationVersion = _applicationVersion;
-@synthesize applicationBuild = _applicationBuild;
-@synthesize sdkVersion = _sdkVersion;
-@synthesize sdkDistribution = _sdkDistribution;
-@synthesize sdkDistributionVersion = _sdkDistributionVersion;
-@synthesize isUpdateVersion = _isUpdateVersion;
-@synthesize isUpdateBuild = _isUpdateBuild;
-@synthesize codePointInvokesTotal = _codePointInvokesTotal;
-@synthesize codePointInvokesVersion = _codePointInvokesVersion;
-@synthesize codePointInvokesBuild = _codePointInvokesBuild;
-@synthesize codePointInvokesTimeAgo = _codePointInvokesTimeAgo;
-@synthesize interactionInvokesTotal = _interactionInvokesTotal;
-@synthesize interactionInvokesVersion = _interactionInvokesVersion;
-@synthesize interactionInvokesBuild = _interactionInvokesBuild;
-@synthesize interactionInvokesTimeAgo = _interactionInvokesTimeAgo;
-
-
 + (ATInteractionUsageData *)usageData {
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
 	

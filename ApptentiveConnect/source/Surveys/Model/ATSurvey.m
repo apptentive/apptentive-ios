@@ -11,20 +11,12 @@
 #define kATSurveyStorageVersion 1
 
 @implementation ATSurvey {
-	NSMutableArray *questions;
+	NSMutableArray *_questions;
 }
-
-@synthesize identifier;
-@synthesize name;
-@synthesize surveyDescription;
-@synthesize questions;
-@synthesize responseRequired;
-@synthesize showSuccessMessage;
-@synthesize successMessage;
 
 - (id)init {
 	if ((self = [super init])) {
-		questions = [[NSMutableArray alloc] init];
+		_questions = [[NSMutableArray alloc] init];
 	}
 	return self;
 }
@@ -32,7 +24,7 @@
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
 		int version = [coder decodeIntForKey:@"version"];
-		questions = [[NSMutableArray alloc] init];
+		_questions = [[NSMutableArray alloc] init];
 		if (version == kATSurveyStorageVersion) {
 			self.responseRequired = [coder decodeBoolForKey:@"responseRequired"];
 			self.identifier = [coder decodeObjectForKey:@"identifier"];
@@ -40,7 +32,7 @@
 			self.surveyDescription = [coder decodeObjectForKey:@"surveyDescription"];
 			NSArray *decodedQuestions = [coder decodeObjectForKey:@"questions"];
 			if (decodedQuestions) {
-				[questions addObjectsFromArray:decodedQuestions];
+				[_questions addObjectsFromArray:decodedQuestions];
 			}
 			self.showSuccessMessage = [[coder decodeObjectForKey:@"showSuccessMessage"] boolValue];
 			self.successMessage = [coder decodeObjectForKey:@"successMessage"];
@@ -68,11 +60,11 @@
 }
 
 - (void)addQuestion:(ATSurveyQuestion *)question {
-	[questions addObject:question];
+	[_questions addObject:question];
 }
 
 - (void)reset {
-	for (ATSurveyQuestion *question in questions) {
+	for (ATSurveyQuestion *question in self.questions) {
 		[question reset];
 	}
 }

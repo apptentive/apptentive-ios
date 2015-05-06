@@ -26,8 +26,6 @@
 	ATAPIRequest *request;
 }
 
-@synthesize pendingMessageID;
-
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
 		int version = [coder decodeIntForKey:@"version"];

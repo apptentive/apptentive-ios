@@ -16,9 +16,6 @@
 #define kATConversationCodingVersion 1
 
 @implementation ATConversation
-@synthesize token;
-@synthesize personID;
-@synthesize deviceID;
 
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {

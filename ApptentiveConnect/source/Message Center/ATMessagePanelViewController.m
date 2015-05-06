@@ -74,27 +74,13 @@ enum {
 	UIAlertView *invalidEmailAddressAlert;
 	UIAlertView *emailRequiredAlert;
 }
-@synthesize window;
-@synthesize cancelButton;
-@synthesize sendButton;
-@synthesize toolbar;
-@synthesize scrollView;
-@synthesize containerView;
-@synthesize emailField;
-@synthesize feedbackView;
-@synthesize promptContainer;
-@synthesize promptTitle;
-@synthesize promptText;
-@synthesize customPlaceholderText;
-@synthesize showEmailAddressField;
-@synthesize delegate;
 
 - (id)initWithDelegate:(NSObject<ATMessagePanelDelegate> *)aDelegate {
 	self = [super initWithNibName:@"ATMessagePanelViewController" bundle:[ATConnect resourceBundle]];
 	if (self != nil) {
-		showEmailAddressField = YES;
-		startingStatusBarStyle = [[UIApplication sharedApplication] statusBarStyle];
-		delegate = aDelegate;
+		_showEmailAddressField = YES;
+		_startingStatusBarStyle = [[UIApplication sharedApplication] statusBarStyle];
+		_delegate = aDelegate;
 	}
 	return self;
 }
@@ -460,7 +446,7 @@ enum {
 		[self.window resignKeyWindow];
 		[self.window removeFromSuperview];
 		self.window.hidden = YES;
-		[[UIApplication sharedApplication] setStatusBarStyle:startingStatusBarStyle];
+		[[UIApplication sharedApplication] setStatusBarStyle:self.startingStatusBarStyle];
 		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"] && originalPresentingWindow) {
 			originalPresentingWindow.tintAdjustmentMode = startingTintAdjustmentMode == UIViewTintAdjustmentModeDimmed ? UIViewTintAdjustmentModeAutomatic : startingTintAdjustmentMode;
 		}
@@ -517,7 +503,7 @@ enum {
 		
 		CGSize newContentSize = oldContentSize;
 		newContentSize.height -= heightDiff;
-		newContentSize.width = scrollView.bounds.size.width;
+		newContentSize.width = self.scrollView.bounds.size.width;
 		CGRect newTextViewFrame = oldTextViewRect;
 		newTextViewFrame.size.height -= heightDiff;
 		textView.frame = newTextViewFrame;

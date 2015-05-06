@@ -25,14 +25,14 @@
 @property (nonatomic, assign) float percentComplete;
 @property (nonatomic, readonly) NSTimeInterval expiresMaxAge;
 
+@property (strong, nonatomic) NSMutableData *HTTPBody;
+@property (strong, nonatomic) NSString *HTTPMethod;
+
 /*! The delegate for this class is a weak reference. */
 - (id)initWithURL:(NSURL *)url delegate:(NSObject<ATURLConnectionDelegate> *)aDelegate;
 - (id)initWithURL:(NSURL *)url;
 - (void)setValue:(NSString *)value forHTTPHeaderField:(NSString *)field;
 - (void)removeHTTPHeaderField:(NSString *)field;
-- (void)setHTTPMethod:(NSString *)method;
-- (void)setHTTPBody:(NSData *)body;
-- (void)setHTTPBodyStream:(NSInputStream *)HTTPBodyStream;
 
 - (void)start;
 

@@ -33,6 +33,15 @@ enum {
 };
 
 @interface ATSurveyViewController ()
+
+@property (strong, nonatomic) ATSurvey *survey;
+@property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) UITableViewCell *activeTextEntryCell;
+@property (strong, nonatomic) ATCellTextView *activeTextView;
+@property (strong, nonatomic) ATCellTextField *activeTextField;
+@property (strong, nonatomic) NSMutableSet *sentNotificationsAboutQuestionIDs;
+@property (strong, nonatomic) NSDate *startedSurveyDate;
+
 - (void)textFieldChangedNotification:(NSNotification *)notification;
 @end
 
@@ -51,26 +60,14 @@ enum {
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification;
 @end
 
-@implementation ATSurveyViewController {
-	ATSurvey *survey;
-	UITableView *tableView;
-	UITableViewCell *activeTextEntryCell;
-	ATCellTextView *activeTextView;
-	ATCellTextField *activeTextField;
-		
-	NSMutableSet *sentNotificationsAboutQuestionIDs;
-	
-	NSDate *startedSurveyDate;
-}
-
-@synthesize errorText;
+@implementation ATSurveyViewController
 
 - (id)initWithSurvey:(ATSurvey *)aSurvey {
 	if ((self = [super init])) {
-		startedSurveyDate = [[NSDate alloc] init];
+		self.startedSurveyDate = [[NSDate alloc] init];
 				
-		survey = aSurvey;
-		sentNotificationsAboutQuestionIDs = [[NSMutableSet alloc] init];
+		self.survey = aSurvey;
+		self.sentNotificationsAboutQuestionIDs = [[NSMutableSet alloc] init];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldChangedNotification:) name:UITextFieldTextDidChangeNotification object:nil];
 	}
 	return self;
@@ -79,10 +76,10 @@ enum {
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 
-	tableView.delegate = nil;
-	tableView.dataSource = nil;
-	activeTextField.delegate = nil;
-	activeTextView.delegate = nil;
+	_tableView.delegate = nil;
+	_tableView.dataSource = nil;
+	_activeTextField.delegate = nil;
+	_activeTextView.delegate = nil;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -91,8 +88,8 @@ enum {
 
 - (IBAction)sendSurvey {
 	// Send text view notification, if applicable.
-	if (activeTextView || activeTextField) {
-		NSObject<ATCellTextEntry> *textEntry = activeTextView != nil ? activeTextView : activeTextField;
+	if (self.activeTextView || self.activeTextField) {
+		NSObject<ATCellTextEntry> *textEntry = self.activeTextView != nil ? self.activeTextView : self.activeTextField;
 		NSString *text = textEntry.text;
 		ATSurveyQuestion *question = textEntry.question;
 		
@@ -105,11 +102,11 @@ enum {
 	ATSurveyResponse *response = (ATSurveyResponse *)[ATData newEntityNamed:@"ATSurveyResponse"];
 	[response setup];
 	response.pendingState = [NSNumber numberWithInt:ATPendingSurveyResponseStateSending];
-	response.surveyID = survey.identifier;
+	response.surveyID = self.survey.identifier;
 	[response updateClientCreationTime];
 	
 	NSMutableDictionary *answers = [NSMutableDictionary dictionary];
-	for (ATSurveyQuestion *question in [survey questions]) {
+	for (ATSurveyQuestion *question in [self.survey questions]) {
 		if (question.type == ATSurveyQuestionTypeSingeLine) {
 			ATSurveyQuestionResponse *answer = [[ATSurveyQuestionResponse alloc] init];
 			answer.identifier = question.identifier;
@@ -167,8 +164,8 @@ enum {
 		[[ATTaskQueue sharedTaskQueue] addTask:task];
 	});
 	
-	if (survey.showSuccessMessage && survey.successMessage) {
-		UIAlertView *successAlert = [[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Thanks!", @"Text in thank you display upon submitting survey.") message:survey.successMessage delegate:nil cancelButtonTitle:ATLocalizedString(@"OK", @"OK button title") otherButtonTitles:nil];
+	if (self.survey.showSuccessMessage && self.survey.successMessage) {
+		UIAlertView *successAlert = [[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Thanks!", @"Text in thank you display upon submitting survey.") message:self.survey.successMessage delegate:nil cancelButtonTitle:ATLocalizedString(@"OK", @"OK button title") otherButtonTitles:nil];
 		[successAlert show];
 	} else {
 		ATHUDView *hud = [[ATHUDView alloc] initWithWindow:self.view.window];
@@ -177,7 +174,7 @@ enum {
 		[hud show];
 	}
 	
-	NSDictionary *metricsInfo = @{ATSurveyMetricsSurveyIDKey: survey.identifier ?: [NSNull null],
+	NSDictionary *metricsInfo = @{ATSurveyMetricsSurveyIDKey: self.survey.identifier ?: [NSNull null],
 								  ATSurveyWindowTypeKey: @(ATSurveyWindowTypeSurvey),
 								  ATSurveyMetricsEventKey: @(ATSurveyEventTappedSend),
 								  @"interaction_id": self.interaction.identifier ?: [NSNull null],
@@ -187,7 +184,7 @@ enum {
 	
 	[self.navigationController dismissViewControllerAnimated:YES completion:NULL];
 	
-	NSDictionary *notificationInfo = @{ATSurveyIDKey: (survey.identifier ?: [NSNull null])};
+	NSDictionary *notificationInfo = @{ATSurveyIDKey: (self.survey.identifier ?: [NSNull null])};
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveySentNotification object:nil userInfo:notificationInfo];
 	
 	response = nil;
@@ -196,9 +193,9 @@ enum {
 - (void)loadView {
 	[super loadView];
 	self.view.backgroundColor = [UIColor whiteColor];
-	tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
-	tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;	
-	[self.view addSubview:tableView];
+	self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
+	self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	[self.view addSubview:self.tableView];
 }
 
 - (void)viewDidLoad {
@@ -209,25 +206,25 @@ enum {
 		[self.view setTintColor:[[ATConnect sharedConnection] tintColor]];
 	}
 	
-	if (![survey responseIsRequired]) {
+	if (![self.survey responseIsRequired]) {
 		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
 	}
 	
 	self.title = ATLocalizedString(@"Survey", @"Survey view title");
 	
-	tableView.delegate = self;
-	tableView.dataSource = self;
-	[tableView reloadData];
+	self.tableView.delegate = self;
+	self.tableView.dataSource = self;
+	[self.tableView reloadData];
 	[self registerForKeyboardNotifications];
 }
 
 - (void)viewDidUnload {
 	[super viewDidUnload];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[tableView removeFromSuperview];
-	tableView.delegate = nil;
-	tableView.dataSource = nil;
-	tableView = nil;
+	[self.tableView removeFromSuperview];
+	self.tableView.delegate = nil;
+	self.tableView.dataSource = nil;
+	self.tableView = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -235,7 +232,7 @@ enum {
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-	if (activeTextView != nil) {
+	if (self.activeTextView != nil) {
 		
 	}
 }
@@ -243,13 +240,13 @@ enum {
 #pragma mark UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView {
-	return [[survey questions] count] + 1;
+	return [[self.survey questions] count] + 1;
 }
 
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
-	if (section < [[survey questions] count]) {
+	if (section < [[self.survey questions] count]) {
 		NSUInteger result = 0;
-		ATSurveyQuestion *question = [[survey questions] objectAtIndex:section];
+		ATSurveyQuestion *question = [[self.survey questions] objectAtIndex:section];
 		if (question.type == ATSurveyQuestionTypeSingeLine) {
 			result = 2;
 		} else if (question.type == ATSurveyQuestionTypeMultipleChoice || question.type == ATSurveyQuestionTypeMultipleSelect) {
@@ -259,14 +256,14 @@ enum {
 			result++;
 		}
 		return result;
-	} else if (section == [[survey questions] count]) {
+	} else if (section == [[self.survey questions] count]) {
 		return 1;
 	}
 	return 0;
 }
 
 - (CGFloat)tableView:(UITableView *)aTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
+	UITableViewCell *cell = [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
 	ATCellTextView *textViewCell = (ATCellTextView *)[cell viewWithTag:kTextViewTag];
 	UITextField *textFieldCell = (UITextField *)[cell viewWithTag:kTextFieldTag];
 	CGFloat cellHeight = 0;
@@ -338,9 +335,9 @@ enum {
 	static NSString *ATSurveyQuestionCellIdentifier = @"ATSurveyQuestionCellIdentifier";
 	static NSString *ATSurveySendCellIdentifier = @"ATSurveySendCellIdentifier";
 	
-	if (indexPath.section == [[survey questions] count]) {
+	if (indexPath.section == [[self.survey questions] count]) {
 		UITableViewCell *buttonCell = nil;
-		buttonCell = [tableView dequeueReusableCellWithIdentifier:ATSurveySendCellIdentifier];
+		buttonCell = [self.tableView dequeueReusableCellWithIdentifier:ATSurveySendCellIdentifier];
 		if (!buttonCell) {
 			buttonCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ATSurveySendCellIdentifier];
 			buttonCell.textLabel.text = ATLocalizedString(@"Send Response", @"Survey send response button title");
@@ -351,14 +348,14 @@ enum {
 			buttonCell.selectionStyle = UITableViewCellSelectionStyleBlue;
 		}
 		return buttonCell;
-	} else if (indexPath.section >= [[survey questions] count]) {
+	} else if (indexPath.section >= [[self.survey questions] count]) {
 		return nil;
 	}
 	ATSurveyQuestion *question = [self questionAtIndexPath:indexPath];
 	UITableViewCell *cell = nil;
 	if (indexPath.row == 0) {
 		// Show the question row.
-		cell = [tableView dequeueReusableCellWithIdentifier:ATSurveyQuestionCellIdentifier];
+		cell = [self.tableView dequeueReusableCellWithIdentifier:ATSurveyQuestionCellIdentifier];
 		if (cell == nil) {
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ATSurveyQuestionCellIdentifier];
 			cell.textLabel.numberOfLines = 0;
@@ -374,7 +371,7 @@ enum {
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		[cell layoutIfNeeded];
 	} else if (indexPath.row == 1 && [self questionHasExtraInfo:question]) {
-		cell = [tableView dequeueReusableCellWithIdentifier:ATSurveyExtraInfoCellIdentifier];
+		cell = [self.tableView dequeueReusableCellWithIdentifier:ATSurveyExtraInfoCellIdentifier];
 		if (cell == nil) {
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ATSurveyExtraInfoCellIdentifier];
 			cell.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.0];
@@ -403,7 +400,7 @@ enum {
 		if (question.type == ATSurveyQuestionTypeMultipleChoice || question.type == ATSurveyQuestionTypeMultipleSelect) {
 			ATSurveyQuestionAnswer *answer = [question.answerChoices objectAtIndex:answerIndex];
 			// Make a checkbox cell.
-			cell = [tableView dequeueReusableCellWithIdentifier:ATSurveyCheckboxCellIdentifier];
+			cell = [self.tableView dequeueReusableCellWithIdentifier:ATSurveyCheckboxCellIdentifier];
 			if (cell == nil) {
 				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ATSurveyCheckboxCellIdentifier];
 			}
@@ -420,10 +417,10 @@ enum {
 			[cell layoutSubviews];
 		} else if (question.type == ATSurveyQuestionTypeSingeLine && question.multiline) {
 			// Make a text entry cell.
-			if (activeTextView != nil && activeTextEntryCell != nil && activeTextView.cellPath.row == indexPath.row && activeTextView.cellPath.section == indexPath.section) {
-				cell = activeTextEntryCell;
+			if (self.activeTextView != nil && self.activeTextEntryCell != nil && self.activeTextView.cellPath.row == indexPath.row && self.activeTextView.cellPath.section == indexPath.section) {
+				cell = self.activeTextEntryCell;
 			} else {
-				cell = [tableView dequeueReusableCellWithIdentifier:ATSurveyTextViewCellIdentifier];
+				cell = [self.tableView dequeueReusableCellWithIdentifier:ATSurveyTextViewCellIdentifier];
 				if (cell == nil) {
 					cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ATSurveyTextViewCellIdentifier];
 					ATCellTextView *textView = [[ATCellTextView alloc] initWithFrame:CGRectInset(cell.contentView.bounds, 10.0, 10.0)];
@@ -459,10 +456,10 @@ enum {
 			 */
 		} else if (question.type == ATSurveyQuestionTypeSingeLine && question.multiline == NO) {
 			// Make a single-line text entry cell.
-			if (activeTextField != nil && activeTextEntryCell != nil && activeTextField.cellPath.row == indexPath.row && activeTextField.cellPath.section == indexPath.section) {
-				cell = activeTextEntryCell;
+			if (self.activeTextField != nil && self.activeTextEntryCell != nil && self.activeTextField.cellPath.row == indexPath.row && self.activeTextField.cellPath.section == indexPath.section) {
+				cell = self.activeTextEntryCell;
 			} else {
-				cell = [tableView dequeueReusableCellWithIdentifier:ATSurveyTextFieldCellIdentifier];
+				cell = [self.tableView dequeueReusableCellWithIdentifier:ATSurveyTextFieldCellIdentifier];
 				if (cell == nil) {
 					cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ATSurveyTextFieldCellIdentifier];
 					ATCellTextField *textField = [[ATCellTextField alloc] initWithFrame:CGRectInset(cell.contentView.bounds, 10, 10)];
@@ -498,32 +495,32 @@ enum {
 #pragma mark UITableViewDelegate
 
 - (NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {
-	if ([survey surveyDescription] != nil && section == 0) {
-		return [survey surveyDescription];
+	if ([self.survey surveyDescription] != nil && section == 0) {
+		return [self.survey surveyDescription];
 	}
 	return nil;
 }
 
 - (NSString *)tableView:(UITableView *)aTableView titleForFooterInSection:(NSInteger)section {
-	if (section == [[survey questions] count] && errorText != nil) {
-		return errorText;
+	if (section == [[self.survey questions] count] && self.errorText != nil) {
+		return self.errorText;
 	}
 	return nil;
 }
 
 - (void)scrollToBottom {
-	if (tableView) {
-		NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:[[survey questions] count]];
-		[tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionTop animated:YES];
+	if (self.tableView) {
+		NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:[[self.survey questions] count]];
+		[self.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionTop animated:YES];
 	}
 }
 
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	if (indexPath.section == [[survey questions] count]) {
+	if (indexPath.section == [[self.survey questions] count]) {
 		if ([self validateSurvey]) {
 			[self sendSurvey];
 		} else {
-			[tableView reloadData];
+			[self.tableView reloadData];
 			[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.1];
 		}
 	} else {
@@ -585,7 +582,7 @@ enum {
 				}
 				
 				// Send notification.
-				NSDictionary *metricsInfo = @{ATSurveyMetricsSurveyIDKey:survey.identifier ?: [NSNull null],
+				NSDictionary *metricsInfo = @{ATSurveyMetricsSurveyIDKey:self.survey.identifier ?: [NSNull null],
 											  ATSurveyMetricsSurveyQuestionIDKey: question.identifier ?: [NSNull null],
 											  ATSurveyMetricsEventKey: @(ATSurveyEventAnsweredQuestion),
 											  @"interaction_id": self.interaction.identifier ?: [NSNull null],
@@ -599,7 +596,7 @@ enum {
 			}
 		}
 	}
-	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+	[self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark UITextFieldDelegate
@@ -613,15 +610,15 @@ enum {
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-	activeTextEntryCell = nil;
-	activeTextView = nil;
-	activeTextField = nil;
+	self.activeTextEntryCell = nil;
+	self.activeTextView = nil;
+	self.activeTextField = nil;
 	
-	activeTextField = (ATCellTextField *)textField;
-	activeTextEntryCell = (UITableViewCell *)activeTextField.superview.superview;
+	self.activeTextField = (ATCellTextField *)textField;
+	self.activeTextEntryCell = (UITableViewCell *)self.activeTextField.superview.superview;
 	
-	CGRect textEntryCellFrame = [tableView convertRect:activeTextEntryCell.frame fromView:activeTextEntryCell.superview];
-	[tableView scrollRectToVisible:textEntryCellFrame animated:YES];
+	CGRect textEntryCellFrame = [self.tableView convertRect:self.activeTextEntryCell.frame fromView:self.activeTextEntryCell.superview];
+	[self.tableView scrollRectToVisible:textEntryCellFrame animated:YES];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
@@ -634,13 +631,13 @@ enum {
 			[self sendNotificationAboutTextQuestion:question];
 		}
 	}
-	activeTextEntryCell = nil;
-	activeTextField = nil;
+	self.activeTextEntryCell = nil;
+	self.activeTextField = nil;
 }
 
 - (void)textFieldChangedNotification:(NSNotification *)notification {
-	if (activeTextField) {
-		activeTextField.question.answerText = activeTextField.text;
+	if (self.activeTextField) {
+		self.activeTextField.question.answerText = self.activeTextField.text;
 	}
 }
 
@@ -656,24 +653,24 @@ enum {
 	}
 	
 	if ([self sizeTextView:(ATCellTextView *)textView]) {
-		[tableView beginUpdates];
-		[tableView endUpdates];
-		CGRect textEntryCellFrame = [tableView convertRect:activeTextEntryCell.frame fromView:activeTextEntryCell.superview];
-		[tableView scrollRectToVisible:CGRectInset(textEntryCellFrame, 0, -10) animated:YES];
+		[self.tableView beginUpdates];
+		[self.tableView endUpdates];
+		CGRect textEntryCellFrame = [self.tableView convertRect:self.activeTextEntryCell.frame fromView:self.activeTextEntryCell.superview];
+		[self.tableView scrollRectToVisible:CGRectInset(textEntryCellFrame, 0, -10) animated:YES];
 	}
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
 	[textView flashScrollIndicators];
-	activeTextEntryCell = nil;
-	activeTextView = nil;
-	activeTextField = nil;
+	self.activeTextEntryCell = nil;
+	self.activeTextView = nil;
+	self.activeTextField = nil;
 	
-	activeTextView = (ATCellTextView *)textView;
-	activeTextEntryCell = (UITableViewCell *)activeTextView.superview.superview;
+	self.activeTextView = (ATCellTextView *)textView;
+	self.activeTextEntryCell = (UITableViewCell *)self.activeTextView.superview.superview;
 	
-	CGRect textEntryCellFrame = [tableView convertRect:activeTextEntryCell.frame fromView:activeTextEntryCell.superview];
-	[tableView scrollRectToVisible:textEntryCellFrame animated:YES];
+	CGRect textEntryCellFrame = [self.tableView convertRect:self.activeTextEntryCell.frame fromView:self.activeTextEntryCell.superview];
+	[self.tableView scrollRectToVisible:textEntryCellFrame animated:YES];
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
@@ -686,8 +683,8 @@ enum {
 			[self sendNotificationAboutTextQuestion:question];
 		}
 	}
-	activeTextEntryCell = nil;
-	activeTextView = nil;
+	self.activeTextEntryCell = nil;
+	self.activeTextView = nil;
 }
 
 - (BOOL)textViewShouldEndEditing:(UITextView *)textView {
@@ -703,8 +700,8 @@ enum {
 	}
 	
 	// Send notification.
-	if (![sentNotificationsAboutQuestionIDs containsObject:question.identifier]) {
-		NSDictionary *metricsInfo = @{ATSurveyMetricsSurveyIDKey: survey.identifier ?: [NSNull null],
+	if (![self.sentNotificationsAboutQuestionIDs containsObject:question.identifier]) {
+		NSDictionary *metricsInfo = @{ATSurveyMetricsSurveyIDKey: self.survey.identifier ?: [NSNull null],
 									  ATSurveyMetricsSurveyQuestionIDKey: question.identifier ?: [NSNull null],
 									  ATSurveyMetricsEventKey: @(ATSurveyEventAnsweredQuestion),
 									  @"interaction_id": self.interaction.identifier ?: [NSNull null],
@@ -712,16 +709,16 @@ enum {
 		
 		[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidAnswerQuestionNotification object:nil userInfo:metricsInfo];
 		
-		[sentNotificationsAboutQuestionIDs addObject:question.identifier];
+		[self.sentNotificationsAboutQuestionIDs addObject:question.identifier];
 	}
 }
 
 
 - (ATSurveyQuestion *)questionAtIndexPath:(NSIndexPath *)indexPath {
-	if (indexPath.section >= [[survey questions] count]) {
+	if (indexPath.section >= [[self.survey questions] count]) {
 		return nil;
 	}
-	return [[survey questions] objectAtIndex:indexPath.section];
+	return [[self.survey questions] objectAtIndex:indexPath.section];
 }
 
 - (BOOL)questionHasExtraInfo:(ATSurveyQuestion *)question {
@@ -741,7 +738,7 @@ enum {
 	NSUInteger missingAnswerCount = 0;
 	NSUInteger tooFewAnswersCount = 0;
 	NSUInteger tooManyAnswersCount = 0;
-	for (ATSurveyQuestion *question in [survey questions]) {
+	for (ATSurveyQuestion *question in [self.survey questions]) {
 		ATSurveyQuestionValidationErrorType error = [question validateAnswer];
 		if (error == ATSurveyQuestionValidationErrorMissingRequiredAnswer) {
 			missingAnswerCount++;
@@ -792,7 +789,7 @@ enum {
 }
 
 - (void)cancel:(id)sender {
-	NSDictionary *metricsInfo = @{ATSurveyMetricsSurveyIDKey: survey.identifier ?: [NSNull null],
+	NSDictionary *metricsInfo = @{ATSurveyMetricsSurveyIDKey: self.survey.identifier ?: [NSNull null],
 								  ATSurveyWindowTypeKey: @(ATSurveyWindowTypeSurvey),
 								  ATSurveyMetricsEventKey: @(ATSurveyEventTappedCancel),
 								  @"interaction_id": self.interaction.identifier ?: [NSNull null],
@@ -814,7 +811,7 @@ enum {
 	CGRect kbFrame = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
 	CGRect kbAdjustedRect = [self.view convertRect:kbFrame fromView:nil];
 	
-	UIScrollView *scrollView = tableView;
+	UIScrollView *scrollView = self.tableView;
 	CGRect scrollViewRect = [self.view convertRect:scrollView.frame fromView:scrollView.superview];
 	
 	CGRect occludedScrollViewRect = CGRectIntersection(scrollViewRect, kbAdjustedRect);
@@ -826,16 +823,16 @@ enum {
 	}
 	
 	// If active text field is hidden by keyboard, scroll it so it's visible
-	if ((activeTextView != nil || activeTextField != nil) && activeTextEntryCell) {
-		UIView<ATCellTextEntry> *entry = activeTextView != nil ? activeTextView : activeTextField;
-		CGRect aRect = tableView.frame;
+	if ((self.activeTextView != nil || self.activeTextField != nil) && self.activeTextEntryCell) {
+		UIView<ATCellTextEntry> *entry = self.activeTextView != nil ? self.activeTextView : self.activeTextField;
+		CGRect aRect = self.tableView.frame;
 		aRect.size.height -= occludedScrollViewRect.size.height;
-		CGRect r = [activeTextEntryCell convertRect:[entry frame] toView:tableView];
+		CGRect r = [self.activeTextEntryCell convertRect:[entry frame] toView:self.tableView];
 		if (!CGRectContainsPoint(aRect, r.origin) ) {
 			[entry becomeFirstResponder];
 			
-			CGRect textEntryCellFrame = [tableView convertRect:entry.frame fromView:entry.superview];
-			[tableView scrollRectToVisible:CGRectInset(textEntryCellFrame, 0, -10) animated:YES];
+			CGRect textEntryCellFrame = [self.tableView convertRect:entry.frame fromView:entry.superview];
+			[self.tableView scrollRectToVisible:CGRectInset(textEntryCellFrame, 0, -10) animated:YES];
 		}
 	}
 }
@@ -846,18 +843,16 @@ enum {
 	[UIView beginAnimations:nil context:nil];
 	[UIView setAnimationDuration:[duration floatValue]];
 	[UIView setAnimationCurve:[curve intValue]];
-	UIEdgeInsets contentInsets = tableView.contentInset;
+	UIEdgeInsets contentInsets = self.tableView.contentInset;
 	contentInsets.bottom = 0;
-	tableView.contentInset = contentInsets;
-	tableView.scrollIndicatorInsets = contentInsets;
+	self.tableView.contentInset = contentInsets;
+	self.tableView.scrollIndicatorInsets = contentInsets;
 	[UIView commitAnimations];
 }
 @end
 
 @implementation ATCellTextView
-@synthesize cellPath, question;
 @end
 
 @implementation ATCellTextField
-@synthesize cellPath, question;
 @end

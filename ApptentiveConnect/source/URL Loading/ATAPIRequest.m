@@ -30,8 +30,6 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	NSTimeInterval expiresMaxAge;
 }
 
-@synthesize returnType, failed, errorTitle, errorMessage, errorResponse, timeoutInterval, delegate;
-
 - (id)initWithConnection:(ATURLConnection *)aConnection channelName:(NSString *)aChannelName {
 	if ((self = [super init])) {
 		connection = aConnection;
@@ -174,11 +172,11 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 		}
 	} while (NO);
 	
-	if (delegate) {
+	if (self.delegate) {
 		if (self.failed) {
-			[delegate at_APIRequestDidFail:self];
+			[self.delegate at_APIRequestDidFail:self];
 		} else {
-			[delegate at_APIRequestDidFinish:self result:result];
+			[self.delegate at_APIRequestDidFinish:self result:result];
 		}
 	}
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATAPIRequestStatusChanged object:self];
@@ -210,16 +208,16 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 		ATLogDebug(@"Request was:\n%@", [connection requestAsString]);
 		ATLogDebug(@"Response was:\n%@", [connection responseAsString]);
 	}
-	if (delegate) {
-		[delegate at_APIRequestDidFail:self];
+	if (self.delegate) {
+		[self.delegate at_APIRequestDidFail:self];
 	}
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATAPIRequestStatusChanged object:self];
 }
 
 - (void)connectionDidProgress:(ATURLConnection *)sender {
 	percentageComplete = sender.percentComplete;
-	if (delegate && [delegate respondsToSelector:@selector(at_APIRequestDidProgress:)]) {
-		[delegate at_APIRequestDidProgress:self];
+	if (self.delegate && [self.delegate respondsToSelector:@selector(at_APIRequestDidProgress:)]) {
+		[self.delegate at_APIRequestDidProgress:self];
 	}
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATAPIRequestStatusChanged object:self];
 }

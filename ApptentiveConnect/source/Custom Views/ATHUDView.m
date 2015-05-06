@@ -15,22 +15,22 @@
 
 #define DRAW_ROUND_RECT 0
 
-@interface ATHUDView (Private)
+@interface ATHUDView ()
 - (void)setup;
 - (void)animateIn;
 - (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context;
+
+@property (strong, nonatomic) UIWindow *parentWindow;
+@property (strong, nonatomic) UIImageView *icon;
+@property (nonatomic, strong, readwrite) UILabel *label;
+
 @end
 
-@implementation ATHUDView {
-	UIWindow *parentWindow;
-	UIImageView *icon;
-}
-
-@synthesize label, markType, size, cornerRadius, fadeOutDuration;
+@implementation ATHUDView
 
 - (id)initWithWindow:(UIWindow *)window {
 	if ((self = [super initWithFrame:CGRectMake(0.0, 0.0, 100.0, 100.0)])) {
-		parentWindow = window;
+		_parentWindow = window;
 		[self setup];
 	}
 	return self;
@@ -42,12 +42,12 @@
 	self.layer.cornerRadius = self.cornerRadius;
 #endif
 	
-	[label sizeToFit];
+	[self.label sizeToFit];
 	
 	CGFloat labelTopPadding = 2.0;
-	CGSize imageSize = icon.image.size;
-	[label sizeToFit];
-	CGSize labelSize = [label sizeThatFits:CGSizeMake(200.0, label.bounds.size.height)];
+	CGSize imageSize = self.icon.image.size;
+	[self.label sizeToFit];
+	CGSize labelSize = [self.label sizeThatFits:CGSizeMake(200.0, self.label.bounds.size.height)];
 	
 	CGRect imageRect = CGRectMake(0.0, 0.0, imageSize.width, imageSize.height);
 	CGRect labelRect = CGRectMake(0.0, imageSize.height + labelTopPadding, labelSize.width, labelSize.height);
@@ -94,13 +94,13 @@
 			break;
 	}
 	
-	CGPoint centerPoint = parentWindow.center;
+	CGPoint centerPoint = self.parentWindow.center;
 	CGPoint orientationAdjustedCenterPoint = CGPointMake(MIN(centerPoint.x, centerPoint.y), MAX(centerPoint.x, centerPoint.y));
 	
 	self.center = CGPointMake(floorf(orientationAdjustedCenterPoint.x), floorf(orientationAdjustedCenterPoint.y));
 	
-	label.frame = CGRectIntegral(finalLabelRect);
-	icon.frame = CGRectIntegral(finalImageRect);
+	self.label.frame = CGRectIntegral(finalLabelRect);
+	self.icon.frame = CGRectIntegral(finalImageRect);
 }
 
 - (void)show {
@@ -133,31 +133,30 @@
 }
 #endif
 
-@end
+#pragma mark - Private
 
-@implementation ATHUDView (Private)
 - (void)setup {
 	self.fadeOutDuration = 3.0;
-	self.transform = [ATUtilities viewTransformInWindow:parentWindow];
+	self.transform = [ATUtilities viewTransformInWindow:self.parentWindow];
 	
 	[self setUserInteractionEnabled:NO];
 	
-	label = [[UILabel alloc] initWithFrame:CGRectZero];
-	label.backgroundColor = [UIColor clearColor];
-	label.opaque = NO;
-	label.textColor = [UIColor whiteColor];
-	label.font = [UIFont boldSystemFontOfSize:17.0];
-	label.textAlignment = NSTextAlignmentCenter;
-	label.lineBreakMode = NSLineBreakByWordWrapping;
-	label.adjustsFontSizeToFitWidth = YES;
-	label.numberOfLines = 0;
-	[self addSubview:label];
+	self.label = [[UILabel alloc] initWithFrame:CGRectZero];
+	self.label.backgroundColor = [UIColor clearColor];
+	self.label.opaque = NO;
+	self.label.textColor = [UIColor whiteColor];
+	self.label.font = [UIFont boldSystemFontOfSize:17.0];
+	self.label.textAlignment = NSTextAlignmentCenter;
+	self.label.lineBreakMode = NSLineBreakByWordWrapping;
+	self.label.adjustsFontSizeToFitWidth = YES;
+	self.label.numberOfLines = 0;
+	[self addSubview:self.label];
 	
 	UIImage *iconImage = [ATBackend imageNamed:@"at_checkmark"];
-	icon = [[UIImageView alloc] initWithImage:iconImage];
-	icon.backgroundColor = [UIColor clearColor];
-	icon.opaque = NO;
-	[self addSubview:icon];
+	self.icon = [[UIImageView alloc] initWithImage:iconImage];
+	self.icon.backgroundColor = [UIColor clearColor];
+	self.icon.opaque = NO;
+	[self addSubview:self.icon];
 	
 	self.size = CGSizeMake(100.0, 100.0);
 	self.cornerRadius = 10.0;
@@ -176,7 +175,7 @@
 	[self layoutSubviews];
 	self.windowLevel = UIWindowLevelAlert;
 	[self makeKeyAndVisible];
-	self.center = parentWindow.center;
+	self.center = self.parentWindow.center;
 	
 	[UIView beginAnimations:@"animateIn" context:NULL];
 	[UIView setAnimationDuration:self.fadeOutDuration];
@@ -195,7 +194,7 @@
 		self.alpha = 0.0;
 		[UIView commitAnimations];
 	} else {
-		[[parentWindow window] makeKeyAndVisible]; 
+		[[self.parentWindow window] makeKeyAndVisible];
 	}
 }
 @end

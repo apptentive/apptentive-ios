@@ -13,11 +13,13 @@
 
 #define kATFeedbackTaskCodingVersion 1
 
-@implementation ATFeedbackTask {
-	ATAPIRequest *request;
-}
+@interface ATFeedbackTask ()
 
-@synthesize feedback;
+@property (strong, nonatomic) ATAPIRequest *request;
+
+@end
+
+@implementation ATFeedbackTask
 
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
@@ -48,11 +50,11 @@
 }
 
 - (void)start {
-	if (!request) {
-		request = [self.feedback requestForSendingRecord];
-		if (request != nil) {
-			request.delegate = self;
-			[request start];
+	if (!self.request) {
+		self.request = [self.feedback requestForSendingRecord];
+		if (self.request != nil) {
+			self.request.delegate = self;
+			[self.request start];
 			self.inProgress = YES;
 		} else {
 			self.finished = YES;
@@ -61,17 +63,17 @@
 }
 
 - (void)stop {
-	if (request) {
-		request.delegate = nil;
-		[request cancel];
-		request = nil;
+	if (self.request) {
+		self.request.delegate = nil;
+		[self.request cancel];
+		self.request = nil;
 		self.inProgress = NO;
 	}
 }
 
 - (float)percentComplete {
-	if (request) {
-		return [request percentageComplete];
+	if (self.request) {
+		return [self.request percentageComplete];
 	} else {
 		return 0.0f;
 	}
@@ -104,6 +106,6 @@
 }
 
 - (void)cleanup {
-	[feedback cleanup];
+	[self.feedback cleanup];
 }
 @end

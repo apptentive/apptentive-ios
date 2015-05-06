@@ -17,27 +17,26 @@
 
 @interface ATMessageCenterDataSource () <NSFetchedResultsControllerDelegate>
 
+@property (weak, nonatomic, readwrite) NSFetchedResultsController *fetchedMessagesController;
+
 @end
 
-@implementation ATMessageCenterDataSource {
-	NSFetchedResultsController *fetchedMessagesController;
-}
-@synthesize delegate;
+@implementation ATMessageCenterDataSource
 
 - (id)initWithDelegate:(NSObject<ATMessageCenterDataSourceDelegate> *)aDelegate {
 	if ((self = [super init])) {
-		delegate = aDelegate;
+		_delegate = aDelegate;
 	}
 	return self;
 }
 
 - (void)dealloc {
-	fetchedMessagesController.delegate = nil;
+	self.fetchedMessagesController.delegate = nil;
 }
 
 - (NSFetchedResultsController *)fetchedMessagesController {
 	@synchronized(self) {
-		if (!fetchedMessagesController) {
+		if (!_fetchedMessagesController) {
 			[NSFetchedResultsController deleteCacheWithName:@"at-messages-cache"];
 			NSFetchRequest *request = [[NSFetchRequest alloc] init];
 			[request setEntity:[NSEntityDescription entityForName:@"ATAbstractMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
@@ -50,12 +49,12 @@
 			
 			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:nil cacheName:@"at-messages-cache"];
 			newController.delegate = self;
-			fetchedMessagesController = newController;
+			_fetchedMessagesController = newController;
 			
 			request = nil;
 		}
 	}
-	return fetchedMessagesController;
+	return _fetchedMessagesController;
 }
 
 

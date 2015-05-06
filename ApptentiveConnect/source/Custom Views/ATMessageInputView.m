@@ -18,76 +18,74 @@ UIEdgeInsets insetsForView(UIView *v) {
 }
 
 @interface ATMessageInputView ()
-- (void)resizeTextViewWithString:(NSString *)string animated:(BOOL)animated;
-- (void)validateTextField;
+
+@property (assign, nonatomic) CGFloat minHeight;
+@property (assign, nonatomic) CGFloat textFieldEdgeInsetHeight;
+@property (assign, nonatomic) CGFloat minTextFieldHeight;
+@property (assign, nonatomic) CGFloat maxTextFieldHeight;
+@property (assign, nonatomic) NSUInteger maxNumberOfLines;
+@property (assign, nonatomic) UIEdgeInsets textViewInsets;
+
+@property (assign, nonatomic) UIEdgeInsets textViewContentInset;
+@property (strong, nonatomic) IBOutlet ATMessageTextView *textView;
+@property (strong, nonatomic) IBOutlet UIImageView *backgroundImageView;
+
 @end
 
-@implementation ATMessageInputView {
-	CGFloat minHeight;
-	CGFloat textFieldEdgeInsetHeight;
-	CGFloat minTextFieldHeight;
-	CGFloat maxTextFieldHeight;
-	NSUInteger maxNumberOfLines;
-	UIEdgeInsets textViewInsets;
-	
-	UIEdgeInsets textViewContentInset;
-	IBOutlet ATMessageTextView *textView;
-	IBOutlet UIImageView *backgroundImageView;
-}
-@synthesize sendButton, attachButton, delegate, text, allowsEmptyText;
+@implementation ATMessageInputView
 
 - (void)awakeFromNib {
 	[super awakeFromNib];
-	maxNumberOfLines = 5;
+	self.maxNumberOfLines = 5;
 	
-	textViewInsets = insetsForView(textView);
+	self.textViewInsets = insetsForView(self.textView);
 	
-	textView.delegate = self;
-	minHeight = self.bounds.size.height;
-	textFieldEdgeInsetHeight = 4;
-	minTextFieldHeight = textView.font.lineHeight + (2 * textFieldEdgeInsetHeight);
-	maxTextFieldHeight = textView.font.lineHeight * maxNumberOfLines + (2 * textFieldEdgeInsetHeight);
+	self.textView.delegate = self;
+	self.minHeight = self.bounds.size.height;
+	self.textFieldEdgeInsetHeight = 4;
+	self.minTextFieldHeight = self.textView.font.lineHeight + (2 * self.textFieldEdgeInsetHeight);
+	self.maxTextFieldHeight = self.textView.font.lineHeight * self.maxNumberOfLines + (2 * self.textFieldEdgeInsetHeight);
 	
-	textView.backgroundColor = [UIColor clearColor];
+	self.textView.backgroundColor = [UIColor clearColor];
 	
-	textView.autoresizingMask = UIViewAutoresizingNone;
+	self.textView.autoresizingMask = UIViewAutoresizingNone;
 	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
-		textViewContentInset = UIEdgeInsetsMake(-textFieldEdgeInsetHeight, 0, -textFieldEdgeInsetHeight, 0);
-		textView.backgroundColor = [UIColor whiteColor];
-		textView.layer.borderColor = [UIColor colorWithRed:222/255. green:222/255. blue:230/255. alpha:1].CGColor;
-		textView.layer.borderWidth = 1;
-		textView.layer.cornerRadius = 6;
+		self.textViewContentInset = UIEdgeInsetsMake(-self.textFieldEdgeInsetHeight, 0, -self.textFieldEdgeInsetHeight, 0);
+		self.textView.backgroundColor = [UIColor whiteColor];
+		self.textView.layer.borderColor = [UIColor colorWithRed:222/255. green:222/255. blue:230/255. alpha:1].CGColor;
+		self.textView.layer.borderWidth = 1;
+		self.textView.layer.cornerRadius = 6;
 		self.backgroundColor = [UIColor colorWithRed:248/255. green:248/255. blue:248/255. alpha:1];
 	} else {
 		//TODO: Get rid of magic numbers here.
-		textViewContentInset = UIEdgeInsetsMake(-textFieldEdgeInsetHeight, -2, -textFieldEdgeInsetHeight, 0);
+		self.textViewContentInset = UIEdgeInsetsMake(-self.textFieldEdgeInsetHeight, -2, -self.textFieldEdgeInsetHeight, 0);
 	}
-	textView.contentInset = textViewContentInset;
-	textView.showsHorizontalScrollIndicator = NO;
+	self.textView.contentInset = self.textViewContentInset;
+	self.textView.showsHorizontalScrollIndicator = NO;
 	
 	[self.sendButton setTitle:ATLocalizedString(@"Send", @"Send button title") forState:UIControlStateNormal];
 	
 	[self validateTextField];
-	[self resizeTextViewWithString:textView.text animated:NO];
+	[self resizeTextViewWithString:self.textView.text animated:NO];
 }
 
 - (void)dealloc {
-	textView.delegate = nil;
+	self.textView.delegate = nil;
 }
 
 - (void)layoutSubviews {
 	[super layoutSubviews];
-	CGRect textFrame = textView.frame;
-	textFrame.origin.x = textViewInsets.left;
-	textFrame.size.width = self.bounds.size.width - textViewInsets.left - textViewInsets.right;
-	textView.frame = textFrame;
-	textView.contentInset = textViewContentInset;
-	[self resizeTextViewWithString:textView.text animated:NO];
+	CGRect textFrame = self.textView.frame;
+	textFrame.origin.x = self.textViewInsets.left;
+	textFrame.size.width = self.bounds.size.width - self.textViewInsets.left - self.textViewInsets.right;
+	self.textView.frame = textFrame;
+	self.textView.contentInset = self.textViewContentInset;
+	[self resizeTextViewWithString:self.textView.text animated:NO];
 }
 
 - (BOOL)resignFirstResponder {
 	[super resignFirstResponder];
-	return textView.resignFirstResponder;
+	return self.textView.resignFirstResponder;
 }
 
 - (void)resizeTextViewWithString:(NSString *)string animated:(BOOL)animated {
@@ -102,61 +100,61 @@ UIEdgeInsets insetsForView(UIView *v) {
 		if ([string hasSuffix:@"\n"]) {
 			string = [NSString stringWithFormat:@"%@-", string];
 		}
-		CGRect rect = CGRectMake(0, 0, textView.bounds.size.width, 10000);
-		CGRect insetRect = UIEdgeInsetsInsetRect(rect, textView.textContainerInset);
-		insetRect = UIEdgeInsetsInsetRect(insetRect, textView.contentInset);
-		insetRect = CGRectInset(insetRect, textView.textContainer.lineFragmentPadding, 0);
+		CGRect rect = CGRectMake(0, 0, self.textView.bounds.size.width, 10000);
+		CGRect insetRect = UIEdgeInsetsInsetRect(rect, self.textView.textContainerInset);
+		insetRect = UIEdgeInsetsInsetRect(insetRect, self.textView.contentInset);
+		insetRect = CGRectInset(insetRect, self.textView.textContainer.lineFragmentPadding, 0);
 		
 		CGFloat width = CGRectGetWidth(insetRect);
-		NSDictionary *attrs = [textView typingAttributes];
+		NSDictionary *attrs = [self.textView typingAttributes];
 		NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:string attributes:attrs];
 		CGRect textSize = [attributedText boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
 		
 		CGFloat verticalPadding = rect.size.height - insetRect.size.height;
 		CGFloat actualHeight = ceil(CGRectGetHeight(textSize) + verticalPadding);
 		
-		CGSize intrinsicContentSize = textView.contentSize;
+		CGSize intrinsicContentSize = self.textView.contentSize;
 		intrinsicContentSize.height = actualHeight;
 		intrinsicContentSize.width = CGRectGetWidth(rect);
 		
-		newTextHeight = MIN(maxTextFieldHeight, intrinsicContentSize.height);
+		newTextHeight = MIN(self.maxTextFieldHeight, intrinsicContentSize.height);
 	} else {
 #		pragma clang diagnostic push
 #		pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		CGFloat textViewWidth = textView.bounds.size.width;
-		CGSize optimisticSize = [string sizeWithFont:textView.font];
-		CGSize pessimisticSize = [string sizeWithFont:textView.font constrainedToSize:CGSizeMake(textViewWidth, maxTextFieldHeight) lineBreakMode:NSLineBreakByWordWrapping];
-		CGSize contentSize = textView.contentSize;
+		CGFloat textViewWidth = self.textView.bounds.size.width;
+		CGSize optimisticSize = [string sizeWithFont:self.textView.font];
+		CGSize pessimisticSize = [string sizeWithFont:self.textView.font constrainedToSize:CGSizeMake(textViewWidth, self.maxTextFieldHeight) lineBreakMode:NSLineBreakByWordWrapping];
+		CGSize contentSize = self.textView.contentSize;
 		
 		if ([string hasSuffix:@"\n"]) {
-			pessimisticSize.height += textView.font.lineHeight;
-		} else if (contentSize.height - textView.font.lineHeight > pessimisticSize.height) {
-			pessimisticSize.height = contentSize.height - textView.font.lineHeight + 2;
+			pessimisticSize.height += self.textView.font.lineHeight;
+		} else if (contentSize.height - self.textView.font.lineHeight > pessimisticSize.height) {
+			pessimisticSize.height = contentSize.height - self.textView.font.lineHeight + 2;
 		}
-		newTextHeight = MIN(maxTextFieldHeight, MAX(minTextFieldHeight, MAX(optimisticSize.height, pessimisticSize.height)));
-		newTextHeight += -(textView.contentInset.top + textView.contentInset.bottom);
+		newTextHeight = MIN(self.maxTextFieldHeight, MAX(self.minTextFieldHeight, MAX(optimisticSize.height, pessimisticSize.height)));
+		newTextHeight += -(self.textView.contentInset.top + self.textView.contentInset.bottom);
 #		pragma clang diagnostic pop
 	}
-	CGFloat currentTextHeight = textView.bounds.size.height;
+	CGFloat currentTextHeight = self.textView.bounds.size.height;
 	CGFloat textHeightDelta = newTextHeight - currentTextHeight;
 	
 	CGRect newFrame = self.frame;
-	CGFloat newHeight = MAX(minHeight, MIN(newTextHeight + textViewInsets.top + textViewInsets.bottom, newFrame.size.height + textHeightDelta));
+	CGFloat newHeight = MAX(self.minHeight, MIN(newTextHeight + self.textViewInsets.top + self.textViewInsets.bottom, newFrame.size.height + textHeightDelta));
 	
 	CGFloat heightDelta = newHeight - newFrame.size.height;
 	newFrame.origin.y = newFrame.origin.y - heightDelta;
 	newFrame.size.height = newFrame.size.height + heightDelta;
 	
-	CGRect newTextFrame = textView.frame;
-	newTextFrame.origin.y = textViewInsets.top;
+	CGRect newTextFrame = self.textView.frame;
+	newTextFrame.origin.y = self.textViewInsets.top;
 	newTextFrame.size.height = newTextHeight;
 	
 	NSTimeInterval time = animated ? 0.1 : 0;
 	[UIView animateWithDuration:time animations:^{
-		textView.overflowing = (BOOL)(newTextHeight >= maxTextFieldHeight);
-		textView.scrollEnabled = textView.overflowing;
+		self.textView.overflowing = (BOOL)(newTextHeight >= self.maxTextFieldHeight);
+		self.textView.scrollEnabled = self.textView.overflowing;
 		self.frame = newFrame;
-		textView.frame = newTextFrame;
+		self.textView.frame = newTextFrame;
 	} completion:^(BOOL finished) {
 		if (previousHeight != newFrame.size.height) {
 			[self.delegate messageInputView:self didChangeHeight:newFrame.size.height];
@@ -165,14 +163,14 @@ UIEdgeInsets insetsForView(UIView *v) {
 	
 	// Apparent iOS 7 bug where last line of text is not scrolled into view when entering newline characters.
 	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7.0"]) {
-		CGRect caretRect = [textView caretRectForPosition:textView.selectedTextRange.start];
+		CGRect caretRect = [self.textView caretRectForPosition:self.textView.selectedTextRange.start];
 		if (!isnan(caretRect.origin.y) && !isinf(caretRect.origin.y)) {
-			CGFloat overflow = caretRect.origin.y + caretRect.size.height - (textView.bounds.size.height + textView.contentOffset.y - textView.contentInset.bottom - textView.contentInset.top);
+			CGFloat overflow = caretRect.origin.y + caretRect.size.height - (self.textView.bounds.size.height + self.textView.contentOffset.y - self.textView.contentInset.bottom - self.textView.contentInset.top);
 			if (overflow > 0){
-				CGPoint offset = textView.contentOffset;
+				CGPoint offset = self.textView.contentOffset;
 				offset.y += overflow + 12;
 				
-				[textView setContentOffset:offset animated:animated];
+				[self.textView setContentOffset:offset animated:animated];
 			}
 		}
 	}
@@ -182,7 +180,7 @@ UIEdgeInsets insetsForView(UIView *v) {
 	if (self.allowsEmptyText) {
 		self.sendButton.enabled = YES;
 	} else {
-		NSString *trimmedText = [textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+		NSString *trimmedText = [self.textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 		BOOL textIsEmpty = (trimmedText == nil || [trimmedText length] == 0);
 		self.sendButton.enabled = !textIsEmpty;
 	}
@@ -198,75 +196,74 @@ UIEdgeInsets insetsForView(UIView *v) {
 
 #pragma mark Properties
 - (void)setText:(NSString *)string {
-	textView.text = string;
+	self.textView.text = string;
 	// The text view delegate method is not called on a direct change to the text property.
-	[self textViewDidChange:textView];
+	[self textViewDidChange:self.textView];
 }
 
 - (NSString *)text {
-	return textView.text;
+	return self.textView.text;
 }
 
 - (NSString *)placeholder {
-	return [textView placeholder];
+	return [self.textView placeholder];
 }
 
 - (void)setPlaceholder:(NSString *)placeholder {
-	[textView setPlaceholder:placeholder];
+	[self.textView setPlaceholder:placeholder];
 }
 
 - (void)setAllowsEmptyText:(BOOL)allow {
-	if (allow != allowsEmptyText) {
-		allowsEmptyText = allow;
+	if (allow != self.allowsEmptyText) {
+		self.allowsEmptyText = allow;
 		[self validateTextField];
 	}
 }
 
 - (void)setBackgroundImage:(UIImage *)backgroundImage {
-	backgroundImageView.image = backgroundImage;
+	self.backgroundImageView.image = backgroundImage;
 }
 
 - (UIImage *)backgroundImage {
-	return backgroundImageView.image;
+	return self.backgroundImageView.image;
 }
 
 #pragma mark UITextViewDelegate
 - (void)textViewDidBeginEditing:(UITextView *)aTextView {
-	[self resizeTextViewWithString:textView.text animated:YES];
+	[self resizeTextViewWithString:self.textView.text animated:YES];
 	[self.delegate messageInputViewDidChange:self];
 }
 
 - (void)textViewDidEndEditing:(UITextView *)aTextView {
-	[self resizeTextViewWithString:textView.text animated:YES];
+	[self resizeTextViewWithString:self.textView.text animated:YES];
 	[self.delegate messageInputViewDidChange:self];
 }
 
 - (void)textViewDidChange:(UITextView *)aTextView {
 	[self validateTextField];
-	[self resizeTextViewWithString:textView.text animated:YES];
+	[self resizeTextViewWithString:self.textView.text animated:YES];
 	[self.delegate messageInputViewDidChange:self];
 }
 
 - (BOOL)textView:(UITextView *)aTextView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)string {
 	// We want to size for the new string, not the old.
-	NSString *newString = [textView.text stringByReplacingCharactersInRange:range withString:string];
+	NSString *newString = [self.textView.text stringByReplacingCharactersInRange:range withString:string];
 	[self resizeTextViewWithString:newString animated:YES];
 	return YES;
 }
 
 - (void)textViewDidChangeSelection:(UITextView *)aTextView {
-	NSRange selectedRange = [textView selectedRange];
+	NSRange selectedRange = [self.textView selectedRange];
 	if (selectedRange.location != NSNotFound) {
-		[textView scrollRangeToVisible:selectedRange];
+		[self.textView scrollRangeToVisible:selectedRange];
 	}
 }
 @end
 
 @implementation ATMessageTextView
-@synthesize overflowing;
 
 - (void)setContentOffset:(CGPoint)offset animated:(BOOL)animated {
-	if (overflowing == NO) {
+	if (self.overflowing == NO) {
 		// Don't scroll if we're not overflowing.
 		[super setContentOffset:CGPointZero animated:animated];
 	} else if (offset.y < (self.contentSize.height - self.bounds.size.height + self.contentInset.bottom + self.contentInset.top)) {
@@ -280,4 +277,5 @@ UIEdgeInsets insetsForView(UIView *v) {
 		[super setContentOffset:scrollpoint animated:animated];
 	}
 }
+
 @end

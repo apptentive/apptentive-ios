@@ -20,14 +20,11 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 
 @interface ATPersonUpdater ()
 @property (nonatomic, strong) NSDictionary *sentPersonJSON;
+@property (strong, nonatomic) ATAPIRequest *request;
+
 @end
 
-@implementation ATPersonUpdater {
-	ATAPIRequest *request;
-}
-
-@synthesize delegate, sentPersonJSON;
-
+@implementation ATPersonUpdater
 
 + (void)registerDefaults {
 	NSDictionary *defaultPreferences = @{ATPersonLastUpdateValuePreferenceKey: @{}};
@@ -38,13 +35,13 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 - (id)initWithDelegate:(NSObject<ATPersonUpdaterDelegate> *)aDelegate {
 	if ((self = [super init])) {
 		[ATPersonUpdater registerDefaults];
-		delegate = aDelegate;
+		_delegate = aDelegate;
 	}
 	return self;
 }
 
 - (void)dealloc {
-	delegate = nil;
+	_delegate = nil;
 	[self cancel];
 }
 
@@ -94,22 +91,22 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 		[person saveAsCurrentPerson];
 	}
 	self.sentPersonJSON = [person safeApiJSON];
-	request = [[ATWebClient sharedClient] requestForUpdatingPerson:person];
-	request.delegate = self;
-	[request start];
+	self.request = [[ATWebClient sharedClient] requestForUpdatingPerson:person];
+	self.request.delegate = self;
+	[self.request start];
 }
 
 - (void)cancel {
-	if (request) {
-		request.delegate = nil;
-		[request cancel];
-		request = nil;
+	if (self.request) {
+		self.request.delegate = nil;
+		[self.request cancel];
+		self.request = nil;
 	}
 }
 
 - (float)percentageComplete {
-	if (request) {
-		return [request percentageComplete];
+	if (self.request) {
+		return [self.request percentageComplete];
 	} else {
 		return 0.0f;
 	}
@@ -122,7 +119,7 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 			[self processResult:(NSDictionary *)result];
 		} else {
 			ATLogError(@"Person result is not NSDictionary!");
-			[delegate personUpdater:self didFinish:NO];
+			[self.delegate personUpdater:self didFinish:NO];
 		}
 	}
 }
@@ -135,7 +132,7 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 	@synchronized(self) {
 		ATLogInfo(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
 		
-		[delegate personUpdater:self didFinish:NO];
+		[self.delegate personUpdater:self didFinish:NO];
 	}
 }
 @end
@@ -151,9 +148,9 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 		// Save out the value we sent to the server.
 		[[NSUserDefaults standardUserDefaults] setObject:self.sentPersonJSON forKey:ATPersonLastUpdateValuePreferenceKey];
 		
-		[delegate personUpdater:self didFinish:YES];
+		[self.delegate personUpdater:self didFinish:YES];
 	} else {
-		[delegate personUpdater:self didFinish:NO];
+		[self.delegate personUpdater:self didFinish:NO];
 	}
 	person = nil;
 }

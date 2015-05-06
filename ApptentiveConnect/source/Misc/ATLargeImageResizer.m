@@ -12,42 +12,45 @@
 
 #import "ATUtilities.h"
 
-@implementation ATLargeImageResizer {
-	NSURL *imageURL;
-	UIImage *originalImage;
-	BOOL shouldCancel;
-}
-@synthesize delegate;
+@interface ATLargeImageResizer ()
+
+@property (strong, nonatomic) NSURL *imageURL;
+@property (strong, nonatomic) UIImage *originalImage;
+@property (assign, nonatomic) BOOL shouldCancel;
+
+@end
+
+@implementation ATLargeImageResizer
 
 - (instancetype)initWithImageAssetURL:(NSURL *)url originalImage:(UIImage *)image delegate:(NSObject<ATLargeImageResizerDelegate> *)aDelegate {
 	if ((self = [super init])) {
-		imageURL = [url copy];
-		originalImage = image;
-		delegate = aDelegate;
+		_imageURL = [url copy];
+		_originalImage = image;
+		_delegate = aDelegate;
 	}
 	return self;
 }
 
 - (void)cancel {
-	delegate = nil;
-	shouldCancel = YES;
+	self.delegate = nil;
+	self.shouldCancel = YES;
 }
 
 - (void)resizeWithMaximumSize:(CGSize)maxSize {
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
 		@autoreleasepool {
-			if (originalImage &&
-				originalImage.size.width <= maxSize.width &&
-				originalImage.size.height <= maxSize.height) {
+			if (self.originalImage &&
+				self.originalImage.size.width <= maxSize.width &&
+				self.originalImage.size.height <= maxSize.height) {
 				ATLogInfo(@"Using original image");
 				dispatch_async(dispatch_get_main_queue(), ^{
-					[self.delegate imageResizerDoneResizing:self result:originalImage];
+					[self.delegate imageResizerDoneResizing:self result:self.originalImage];
 				});
 				return;
 			}
 			
 			ALAssetsLibrary *assetLibrary = [[ALAssetsLibrary alloc] init];
-			[assetLibrary assetForURL:imageURL resultBlock:^(ALAsset *asset) {
+			[assetLibrary assetForURL:self.imageURL resultBlock:^(ALAsset *asset) {
 				ALAssetRepresentation *rep = [asset defaultRepresentation];
 				CGImageRef usableImageRef = NULL;
 				UIImage *sourceImage = nil;
@@ -58,19 +61,19 @@
 				if (usableImageRef) {
 					sourceImage = [UIImage imageWithCGImage:usableImageRef];
 				} else {
-					sourceImage = originalImage;
+					sourceImage = self.originalImage;
 				}
 				if (!sourceImage) {
 					ATLogError(@"Unable to get image to resize.");
 					dispatch_async(dispatch_get_main_queue(), ^{
-						[delegate imageResizerFailed:self];
+						[self.delegate imageResizerFailed:self];
 					});
 					return;
 				}
 				CGSize sourceResolution = sourceImage.size;
 				if (sourceResolution.height <= maxSize.height && sourceResolution.width <= maxSize.width) {
 					dispatch_async(dispatch_get_main_queue(), ^{
-						[delegate imageResizerDoneResizing:self result:sourceImage];
+						[self.delegate imageResizerDoneResizing:self result:sourceImage];
 					});
 					return;
 				}
@@ -79,14 +82,14 @@
 				
 				dispatch_async(dispatch_get_main_queue(), ^{
 					if (image) {
-						[delegate imageResizerDoneResizing:self result:image];
+						[self.delegate imageResizerDoneResizing:self result:image];
 					} else {
-						[delegate imageResizerFailed:self];
+						[self.delegate imageResizerFailed:self];
 					}
 				});
 			} failureBlock:^(NSError *error) {
 				ATLogError(@"Unable to get asset: %@", error);
-				[delegate imageResizerFailed:self];
+				[self.delegate imageResizerFailed:self];
 			}];
 		}
 	});

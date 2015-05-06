@@ -40,7 +40,6 @@
 	NSString *screenshotFilename;
 }
 
-@synthesize type, text, name, email, phone, source, imageSource;
 - (id)init {
 	if ((self = [super init])) {
 		[self setup];

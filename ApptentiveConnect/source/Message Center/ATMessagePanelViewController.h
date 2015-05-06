@@ -22,11 +22,10 @@ typedef enum {
 } ATMessagePanelDismissAction;
 
 @interface ATMessagePanelViewController : UIViewController <UIScrollViewDelegate, UITextFieldDelegate, UITextViewDelegate> {
-	BOOL showEmailAddressField;
-	NSObject<ATMessagePanelDelegate> *__weak delegate;
-	UIStatusBarStyle startingStatusBarStyle;
 	UIViewController *presentingViewController;
 }
+@property (assign, nonatomic) UIStatusBarStyle startingStatusBarStyle;
+
 @property (nonatomic, strong) UITextField *emailField;
 @property (nonatomic, strong) ATDefaultTextView *feedbackView;
 @property (nonatomic, strong) UIView *promptContainer;

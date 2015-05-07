@@ -25,7 +25,7 @@
 @property (nonatomic, assign) float percentComplete;
 @property (nonatomic, readonly) NSTimeInterval expiresMaxAge;
 
-@property (strong, nonatomic) NSMutableData *HTTPBody;
+@property (strong, nonatomic) NSData *HTTPBody;
 @property (strong, nonatomic) NSString *HTTPMethod;
 
 /*! The delegate for this class is a weak reference. */

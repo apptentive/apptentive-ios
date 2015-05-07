@@ -77,12 +77,6 @@
 	}
 }
 
-- (void)setHTTPMethod:(NSString *)method {
-	if (_HTTPMethod != method) {
-		_HTTPMethod = method;
-	}
-}
-
 - (void)start {
 	@synchronized (self) {
 		@autoreleasepool {

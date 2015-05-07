@@ -9,13 +9,10 @@
 #import "ATAppConfigurationUpdateTask.h"
 #import "ATBackend.h"
 
+@implementation ATAppConfigurationUpdateTask {
+	ATAppConfigurationUpdater *configurationUpdater;
+}
 
-@interface ATAppConfigurationUpdateTask (Private)
-- (void)setup;
-- (void)teardown;
-@end
-
-@implementation ATAppConfigurationUpdateTask
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
 	}
@@ -26,8 +23,7 @@
 }
 
 - (void)dealloc {
-	[self teardown];
-	[super dealloc];
+	[self stop];
 }
 
 - (BOOL)canStart {
@@ -57,7 +53,6 @@
 - (void)stop {
 	if (configurationUpdater) {
 		[configurationUpdater cancel];
-		[configurationUpdater release];
 		configurationUpdater = nil;
 		self.inProgress = NO;
 	}
@@ -78,7 +73,6 @@
 #pragma mark ATAppConfigurationUpdaterDelegate
 - (void)configurationUpdaterDidFinish:(BOOL)success {
 	@synchronized(self) {
-		[self retain];
 		if (configurationUpdater) {
 			if (!success) {
 				self.failed = YES;
@@ -87,17 +81,6 @@
 				self.finished = YES;
 			}
 		}
-		[self release];
 	}
-}
-@end
-
-@implementation ATAppConfigurationUpdateTask (Private)
-- (void)setup {
-	
-}
-
-- (void)teardown {
-	[self stop];
 }
 @end

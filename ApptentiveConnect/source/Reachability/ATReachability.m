@@ -18,7 +18,10 @@ NSString *const ATReachabilityStatusChanged = @"ATReachabilityStatusChanged";
 @end
 
 
-@implementation ATReachability
+@implementation ATReachability {
+	SCNetworkReachabilityRef reachabilityRef;
+}
+
 + (ATReachability *)sharedReachability {
 	static ATReachability *sharedSingleton = nil;
 	static dispatch_once_t onceToken;
@@ -42,9 +45,9 @@ NSString *const ATReachabilityStatusChanged = @"ATReachabilityStatusChanged";
 static void ATReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReachabilityFlags flags, void *info) {
 	@autoreleasepool {
 		if (info == NULL) return;
-		if (![(NSObject *)info isKindOfClass:[ATReachability class]]) return;
+		if (![(__bridge NSObject *)info isKindOfClass:[ATReachability class]]) return;
 		
-		ATReachability *reachability = (ATReachability *)info;
+		ATReachability *reachability = (__bridge ATReachability *)info;
 		
 		[[ATReachability sharedReachability] updateDeviceInfoWithCurrentNetworkType:reachability];
 		
@@ -71,7 +74,6 @@ static void ATReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 		CFRelease(reachabilityRef);
 		reachabilityRef = NULL;
 	}
-	[super dealloc];
 }
 
 - (ATNetworkStatus)currentNetworkStatus {
@@ -119,7 +121,7 @@ static void ATReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 @implementation ATReachability (Private)
 - (BOOL)start {
 	BOOL result = NO;
-	SCNetworkReachabilityContext context = {0, self, NULL, NULL, NULL};
+	SCNetworkReachabilityContext context = {0, (__bridge void *)(self), NULL, NULL, NULL};
 	do { // once
 		if (!SCNetworkReachabilitySetCallback(reachabilityRef, ATReachabilityCallback, &context)) {
 			break;

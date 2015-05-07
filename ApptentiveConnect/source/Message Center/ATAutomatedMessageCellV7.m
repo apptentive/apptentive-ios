@@ -18,20 +18,20 @@
 	NSMutableAttributedString *s = [[NSMutableAttributedString alloc] init];
 	if (self.message.title) {
 		NSDictionary *attrs = @{NSFontAttributeName: [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline]};
-		NSAttributedString *title = [[[NSAttributedString alloc] initWithString:self.message.title attributes:attrs] autorelease];
+		NSAttributedString *title = [[NSAttributedString alloc] initWithString:self.message.title attributes:attrs];
 		[s appendAttributedString:title];
 		if (self.message.body) {
-			NSAttributedString *newline = [[[NSAttributedString alloc] initWithString:@"\n" attributes:attrs] autorelease];
+			NSAttributedString *newline = [[NSAttributedString alloc] initWithString:@"\n" attributes:attrs];
 			[s appendAttributedString:newline];
 		}
 	}
 	if (self.message.body) {
 		NSDictionary *attrs = @{NSFontAttributeName: [UIFont preferredFontForTextStyle:UIFontTextStyleBody]};
-		NSAttributedString *body = [[[NSAttributedString alloc] initWithString:self.message.body attributes:attrs] autorelease];
+		NSAttributedString *body = [[NSAttributedString alloc] initWithString:self.message.body attributes:attrs];
 		[s appendAttributedString:body];
 	}
 	self.messageLabel.attributedText = s;
-	[s release], s = nil;
+	s = nil;
 	
 	if (self.message && !self.appIcon.image) {
 		[self.appIcon setImage:[ATUtilities appIcon]];
@@ -41,7 +41,7 @@
 		maskLayer.contents = (id)maskImage.CGImage;
 		maskLayer.frame = (CGRect){CGPointZero, self.appIcon.bounds.size};
 		self.appIcon.layer.mask = maskLayer;
-		[maskLayer release], maskLayer = nil;
+		maskLayer = nil;
 	}
 }
 
@@ -58,16 +58,11 @@
 	[self setup];
 }
 
-- (void)dealloc {
-	[_messageLabel release];
-	[_appIcon release];
-	[super dealloc];
-}
 
 - (void)setMessage:(ATAutomatedMessage *)message {
 	if (_message != message) {
-		[_message release], _message = nil;
-		_message = [message retain];
+		_message = nil;
+		_message = message;
 		
 		[self setup];
 	}

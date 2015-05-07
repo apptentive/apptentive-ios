@@ -61,7 +61,7 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 	conn.timeoutInterval = 240.0;
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:[self commonChannelName]];
 	request.returnType = ATAPIRequestReturnTypeData;
-	return [request autorelease];
+	return request;
 }
 
 - (ATAPIRequest *)requestForGettingAppConfiguration {
@@ -75,7 +75,7 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:[self commonChannelName]];
 	request.returnType = ATAPIRequestReturnTypeJSON;
-	return [request autorelease];
+	return request;
 }
 @end
 
@@ -104,7 +104,7 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 			appendAmpersand = YES;
 		}
 	} while (NO);
-	return [result autorelease];
+	return result;
 }
 
 - (NSString *)stringForParameter:(id)value {
@@ -133,14 +133,14 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 - (ATURLConnection *)connectionToGet:(NSURL *)theURL {
 	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL];
 	[self addAPIHeaders:conn];
-	return [conn autorelease];
+	return conn;
 }
 
 - (ATURLConnection *)connectionToPost:(NSURL *)theURL {
 	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL];
 	[self addAPIHeaders:conn];
 	[conn setHTTPMethod:@"POST"];
-	return [conn autorelease];
+	return conn;
 }
 
 - (ATURLConnection *)connectionToPost:(NSURL *)theURL JSON:(NSString *)body {
@@ -150,8 +150,8 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 	[conn setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
 	NSUInteger length = [body lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
 	[conn setValue:[NSString stringWithFormat:@"%lu", (unsigned long)length] forHTTPHeaderField:@"Content-Length"];
-	[conn setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
-	return [conn autorelease];
+	[conn setHTTPBody:[[body dataUsingEncoding:NSUTF8StringEncoding] mutableCopy]];
+	return conn;
 }
 
 - (ATURLConnection *)connectionToPost:(NSURL *)theURL parameters:(NSDictionary *)parameters {
@@ -167,8 +167,8 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 	[conn setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
 	NSUInteger length = [body lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
 	[conn setValue:[NSString stringWithFormat:@"%lu", (unsigned long)length] forHTTPHeaderField:@"Content-Length"];
-	[conn setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
-	return [conn autorelease];
+	[conn setHTTPBody:[[body dataUsingEncoding:NSUTF8StringEncoding] mutableCopy]];
+	return conn;
 }
 
 - (ATURLConnection *)connectionToPost:(NSURL *)theURL withFileData:(NSData *)data ofMimeType:(NSString *)mimeType fileDataKey:(NSString *)fileDataKey parameters:(NSDictionary *)parameters {
@@ -203,7 +203,7 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 				if ([value isKindOfClass:[NSObject class]]) {
 					className = [NSString stringWithCString:object_getClassName((NSObject *)value) encoding:NSUTF8StringEncoding];
 				}
-				[conn release], conn = nil;
+				conn = nil;
 				@throw [NSException exceptionWithName:@"ATWebClientException" reason:[NSString stringWithFormat:@"Can't encode form data of class: %@", className] userInfo:nil];
 			}
 		}
@@ -244,10 +244,11 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 	 NSLog(@"-length: %d", [multipartEncodedData length]);
 	 NSLog(@"-data: %@", [NSString stringWithUTF8String:[multipartEncodedData bytes]]);
 	 */
-	return [conn autorelease];
+	return conn;
 }
 
 - (ATURLConnection *)connectionToPost:(NSURL *)theURL JSON:(NSString *)body withFile:(NSString *)path ofMimeType:(NSString *)mimeType {
+{
 	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL];
 	[self addAPIHeaders:conn];
 	[conn setHTTPMethod:@"POST"];
@@ -343,10 +344,9 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 	 NSLog(@"-length: %d", [multipartEncodedData length]);
 	 NSLog(@"-data: %@", [NSString stringWithUTF8String:[multipartEncodedData bytes]]);
 	 */
-	return [conn autorelease];
-
+	return conn;
+}
 fail:
-	[conn release], conn = nil;
 	return nil;
 }
 

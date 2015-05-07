@@ -30,7 +30,6 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 }
 
 - (void)openAppStoreFromViewController:(UIViewController *)viewController {
-	[self retain];
 	
 	self.viewController = viewController;
 	
@@ -95,7 +94,7 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 	cancelButtonTitle = ATLocalizedString(@"OK", @"OK button title");
 #	endif
 	
-	UIAlertView *errorAlert = [[[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:cancelButtonTitle otherButtonTitles:nil] autorelease];
+	UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:cancelButtonTitle otherButtonTitles:nil];
 	[errorAlert show];
 }
 #endif
@@ -142,7 +141,6 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 			
 			[[UIApplication sharedApplication] openURL:url];
 			
-			[self release];
 		}
 	}
 	else {
@@ -154,7 +152,7 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 
 - (void)openAppStoreViaStoreKit {
 	if ([SKStoreProductViewController class] != NULL && [self appID]) {
-		SKStoreProductViewController *vc = [[[SKStoreProductViewController alloc] init] autorelease];
+		SKStoreProductViewController *vc = [[SKStoreProductViewController alloc] init];
 		vc.delegate = self;
 		[vc loadProductWithParameters:@{SKStoreProductParameterITunesItemIdentifier:self.appID} completionBlock:^(BOOL result, NSError *error) {
 			if (error) {
@@ -195,14 +193,12 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 #		pragma clang diagnostic pop
 	}
 	
-	[self release];
 }
 
 #pragma mark UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	//Unable to open app store
 	
-	[self release];
 }
 
 - (void)openMacAppStore {
@@ -217,11 +213,5 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 #endif
 }
 
-- (void)dealloc {
-	[_interaction release], _interaction = nil;
-	[_viewController release], _viewController = nil;
-	
-	[super dealloc];
-}
 
 @end

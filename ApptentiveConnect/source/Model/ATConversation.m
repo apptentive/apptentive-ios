@@ -16,9 +16,6 @@
 #define kATConversationCodingVersion 1
 
 @implementation ATConversation
-@synthesize token;
-@synthesize personID;
-@synthesize deviceID;
 
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
@@ -30,12 +27,6 @@
 	return self;
 }
 
-- (void)dealloc {
-	[token release], token = nil;
-	[personID release], personID = nil;
-	[deviceID release], deviceID = nil;
-	[super dealloc];
-}
 
 - (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeInt:kATConversationCodingVersion forKey:@"version"];

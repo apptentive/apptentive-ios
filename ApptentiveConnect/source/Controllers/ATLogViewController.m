@@ -11,8 +11,13 @@
 #import "ATLogger.h"
 #import "ATTaskQueue.h"
 
+@interface ATLogViewController ()
+
+@property (nonatomic, strong) UITextView *textView;
+
+@end
+
 @implementation ATLogViewController
-@synthesize textView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
 	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -23,19 +28,16 @@
 }
 
 - (void)dealloc {
-	textView.delegate = nil;
-	[textView removeFromSuperview];
-	[textView release], textView = nil;
-	[super dealloc];
+	_textView.delegate = nil;
 }
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	textView = [[UITextView alloc] initWithFrame:self.view.bounds];
-	textView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	textView.delegate = self;
-	textView.showsHorizontalScrollIndicator = YES;
-	[self.view addSubview:textView];
+	self.textView = [[UITextView alloc] initWithFrame:self.view.bounds];
+	self.textView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	self.textView.delegate = self;
+	self.textView.showsHorizontalScrollIndicator = YES;
+	[self.view addSubview:self.textView];
 	
 	self.navigationItem.title = @"Debug Logs";
 	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reloadLogs:)];
@@ -49,8 +51,8 @@
 
 - (void)didReceiveMemoryWarning {
 	[super didReceiveMemoryWarning];
-	[textView removeFromSuperview];
-	[textView release], textView = nil;
+	[self.textView removeFromSuperview];
+	self.textView = nil;
 }
 
 - (IBAction)reloadLogs:(id)sender {
@@ -62,4 +64,5 @@
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
 	return NO;
 }
+
 @end

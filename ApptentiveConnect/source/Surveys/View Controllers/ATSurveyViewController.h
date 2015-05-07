@@ -15,20 +15,7 @@
 @class ATSurvey;
 @class ATSurveyQuestion;
 
-@interface ATSurveyViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate> {
-@private
-	ATSurvey *survey;
-	UITableView *tableView;
-	UITableViewCell *activeTextEntryCell;
-	ATCellTextView *activeTextView;
-	ATCellTextField *activeTextField;
-	
-	NSString *errorText;
-	
-	NSMutableSet *sentNotificationsAboutQuestionIDs;
-	
-	NSDate *startedSurveyDate;
-}
+@interface ATSurveyViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate>
 @property (nonatomic, copy) ATInteraction *interaction;
 @property (nonatomic, copy) NSString *errorText;
 - (id)initWithSurvey:(ATSurvey *)survey;
@@ -43,20 +30,12 @@
 - (BOOL)becomeFirstResponder;
 @end
 
-@interface ATCellTextView : ATDefaultTextView <ATCellTextEntry> {
-@private
-	NSIndexPath *cellPath;
-	ATSurveyQuestion *question;
-}
-@property (nonatomic, retain) NSIndexPath *cellPath;
-@property (nonatomic, retain) ATSurveyQuestion *question;
+@interface ATCellTextView : ATDefaultTextView <ATCellTextEntry>
+@property (nonatomic, strong) NSIndexPath *cellPath;
+@property (nonatomic, strong) ATSurveyQuestion *question;
 @end
 
-@interface ATCellTextField : UITextField <ATCellTextEntry> {
-@private
-	NSIndexPath *cellPath;
-	ATSurveyQuestion *question;
-}
-@property (nonatomic, retain) NSIndexPath *cellPath;
-@property (nonatomic, retain) ATSurveyQuestion *question;
+@interface ATCellTextField : UITextField <ATCellTextEntry>
+@property (nonatomic, strong) NSIndexPath *cellPath;
+@property (nonatomic, strong) ATSurveyQuestion *question;
 @end

@@ -9,7 +9,9 @@
 #import "ATCenteringImageScrollView.h"
 
 
-@implementation ATCenteringImageScrollView
+@implementation ATCenteringImageScrollView {
+	UIImageView *imageView;
+}
 
 - (id)initWithImage:(UIImage *)image {
 	if ((self = [super init])) {
@@ -19,13 +21,6 @@
 		self.contentSize = imageView.bounds.size;
 	}
 	return self;
-}
-
-- (void)dealloc {
-	[imageView removeFromSuperview];
-	[imageView release];
-	imageView = nil;
-	[super dealloc];
 }
 
 - (UIImageView *)imageView {

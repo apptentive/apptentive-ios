@@ -29,16 +29,26 @@ enum {
 	kSectionVersion,
 };
 
+@interface ATInfoViewController ()
+
+@property (nonatomic, strong) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet UIView *headerView;
+@property (strong, nonatomic) IBOutlet UITextView *apptentiveDescriptionTextView;
+@property (strong, nonatomic) IBOutlet UITextView *apptentivePrivacyTextView;
+@property (strong, nonatomic) IBOutlet UIButton *findOutMoreButton;
+@property (strong, nonatomic) IBOutlet UIButton *gotoPrivacyPolicyButton;
+@property (strong, nonatomic) IBOutlet UITableViewCell *progressCell;
+@property (assign, nonatomic) BOOL showingDebugController;
+@property (strong, nonatomic) NSMutableArray *logicalSections;
+
+@end
+
 @interface ATInfoViewController (Private)
 - (void)setup;
-- (void)teardown;
 - (void)reload;
 @end
 
-@implementation ATInfoViewController {
-	BOOL showingDebugController;
-}
-@synthesize tableView, headerView;
+@implementation ATInfoViewController
 
 - (id)init {
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
@@ -51,15 +61,8 @@ enum {
 }
 
 - (void)dealloc {
-	[logicalSections release], logicalSections = nil;
-	[self teardown];
-	[_apptentiveDescriptionTextView release];
-	[_apptentivePrivacyTextView release];
-	[_findOutMoreButton release];
-	[_gotoPrivacyPolicyButton release];
-	[super dealloc];
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
-
 
 - (void)didReceiveMemoryWarning {
 	// Releases the view if it doesn't have a superview.
@@ -71,8 +74,8 @@ enum {
 #pragma mark - View lifecycle
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	if (showingDebugController) {
-		showingDebugController = NO;
+	if (self.showingDebugController) {
+		self.showingDebugController = NO;
 	} else {
 		[[NSNotificationCenter defaultCenter] postNotificationName:ATFeedbackDidShowWindowNotification object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:ATFeedbackWindowTypeInfo] forKey:ATFeedbackWindowTypeKey]];
 	}
@@ -89,7 +92,7 @@ enum {
 	[self setFindOutMoreButton:nil];
 	[self setGotoPrivacyPolicyButton:nil];
 	[super viewDidUnload];
-	[headerView release], headerView = nil;
+	self.headerView = nil;
 	self.tableView.delegate = nil;
 	self.tableView.dataSource = nil;
 	self.tableView = nil;
@@ -116,19 +119,19 @@ enum {
 #pragma mark UITableViewDelegate
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	NSUInteger physicalSection = indexPath.section;
-	NSUInteger section = [[logicalSections objectAtIndex:physicalSection] integerValue];
+	NSUInteger section = [[self.logicalSections objectAtIndex:physicalSection] integerValue];
 	if (section == kSectionDebugLog) {
-		showingDebugController = YES;
+		self.showingDebugController = YES;
 		ATLogViewController *vc = [[ATLogViewController alloc] init];
 		[self.navigationController pushViewController:vc animated:YES];
-		[vc release], vc = nil;
+		vc = nil;
 	}
 	[aTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)physicalSection {
-	NSUInteger section = [[logicalSections objectAtIndex:physicalSection] integerValue];
+	NSUInteger section = [[self.logicalSections objectAtIndex:physicalSection] integerValue];
 	
 	if (section == kSectionTasks) {
 		ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
@@ -146,7 +149,7 @@ enum {
 	UITableViewCell *result = nil;
 	
 	NSUInteger physicalSection = indexPath.section;
-	NSUInteger section = [[logicalSections objectAtIndex:physicalSection] integerValue];
+	NSUInteger section = [[self.logicalSections objectAtIndex:physicalSection] integerValue];
 	
 	if (section == kSectionTasks) {
 		ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
@@ -155,9 +158,8 @@ enum {
 		if (!result) {
 			UINib *nib = [UINib nibWithNibName:@"ATTaskProgressCell" bundle:[ATConnect resourceBundle]];
 			[nib instantiateWithOwner:self options:nil];
-			result = progressCell;
-			[[result retain] autorelease];
-			[progressCell release], progressCell = nil;
+			result = self.progressCell;
+			self.progressCell = nil;
 		}
 		
 		UILabel *label = (UILabel *)[result viewWithTag:1];
@@ -199,7 +201,7 @@ enum {
 	} else if (section == kSectionDebugLog) {
 		result = [aTableView dequeueReusableCellWithIdentifier:logCellIdentifier];
 		if (!result) {
-			result = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:logCellIdentifier] autorelease];
+			result = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:logCellIdentifier];
 		}
 		result.textLabel.text = @"View Debug Logs";
 	} else {
@@ -209,13 +211,13 @@ enum {
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView {
-	return [logicalSections count];
+	return [self.logicalSections count];
 }
 
 - (NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)physicalSection {
 	NSString *result = nil;
 	
-	NSUInteger section = [[logicalSections objectAtIndex:physicalSection] integerValue];
+	NSUInteger section = [[self.logicalSections objectAtIndex:physicalSection] integerValue];
 	if (section == kSectionTasks) {
 		result = ATLocalizedString(@"Running Tasks", @"Running tasks section header");
 	}
@@ -224,7 +226,7 @@ enum {
 
 - (NSString *)tableView:(UITableView *)aTableView titleForFooterInSection:(NSInteger)physicalSection {
 	NSString *result = nil;
-	NSUInteger section = [[logicalSections objectAtIndex:physicalSection] integerValue];
+	NSUInteger section = [[self.logicalSections objectAtIndex:physicalSection] integerValue];
 	if (section == kSectionTasks) {
 		ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
 		if ([queue count]) {
@@ -241,24 +243,22 @@ enum {
 
 
 @implementation ATInfoViewController (Private)
+
 - (void)setup {
-	if (headerView) {
-		[headerView release], headerView = nil;
+	if (self.headerView) {
+		self.headerView = nil;
 	}
-	if (logicalSections) {
-		[logicalSections release], logicalSections = nil;
-	}
-	logicalSections = [[NSMutableArray alloc] init];
-	[logicalSections addObject:@(kSectionTasks)];
+	self.logicalSections = [[NSMutableArray alloc] init];
+	[self.logicalSections addObject:@(kSectionTasks)];
 	if ([ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsShowDebugPanel) {
-		[logicalSections addObject:@(kSectionDebugLog)];
+		[self.logicalSections addObject:@(kSectionDebugLog)];
 	}
-	[logicalSections addObject:@(kSectionVersion)];
+	[self.logicalSections addObject:@(kSectionVersion)];
 	
 	UIImage *logoImage = [ATBackend imageNamed:@"at_logo_info"];
 	UINib *nib = [UINib nibWithNibName:@"ATAboutApptentiveView" bundle:[ATConnect resourceBundle]];
 	[nib instantiateWithOwner:self options:nil];
-	UIImageView *logoView = (UIImageView *)[headerView viewWithTag:2];
+	UIImageView *logoView = (UIImageView *)[self.headerView viewWithTag:2];
 	logoView.image = logoImage;
 	CGRect f = logoView.frame;
 	f.size = logoImage.size;
@@ -271,21 +271,11 @@ enum {
 	self.apptentivePrivacyTextView.text = ATLocalizedString(@"Your feedback is hosted by Apptentive and is subject to Apptentive's privacy policy and the privacy policy of the developer of this app.", @"Description of Apptentive privacy policy.");
 	[self.gotoPrivacyPolicyButton setTitle:ATLocalizedString(@"Go to Apptentive's Privacy Policy", @"Title for button to open Apptentive's privacy policy") forState:UIControlStateNormal];
 	
-	if ([tableView respondsToSelector:@selector(setAccessibilityIdentifier:)]) {
-		[tableView setAccessibilityIdentifier:@"ATInfoViewTable"];
-	}
-	tableView.delegate = self;
-	tableView.dataSource = self;
-	tableView.tableHeaderView = self.headerView;
+	[self.tableView setAccessibilityIdentifier:@"ATInfoViewTable"];
+	self.tableView.delegate = self;
+	self.tableView.dataSource = self;
+	self.tableView.tableHeaderView = self.headerView;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reload) name:ATAPIRequestStatusChanged object:nil];
-}
-
-- (void)teardown {
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[headerView release], headerView = nil;
-	tableView.delegate = nil;
-	tableView.dataSource = nil;
-	[tableView release], tableView = nil;
 }
 
 - (void)reload {

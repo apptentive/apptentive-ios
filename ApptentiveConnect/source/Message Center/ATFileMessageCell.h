@@ -12,18 +12,11 @@
 #import "ATNetworkImageView.h"
 #import "ATFileMessage.h"
 
-@interface ATFileMessageCell : UITableViewCell <ATMessageCenterCell> {
-	UILabel *dateLabel;
-	ATNetworkImageView *userIcon;
-	BOOL showDateLabel;
-	ATFileMessage *fileMessage;
-	UIImage *currentImage;
-}
-@property (retain, nonatomic) IBOutlet UILabel *dateLabel;
-@property (retain, nonatomic) IBOutlet ATNetworkImageView *userIcon;
-@property (retain, nonatomic) IBOutlet UIView *imageContainer;
-@property (retain, nonatomic) IBOutlet UIView *chatBubbleContainer;
-@property (retain, nonatomic) IBOutlet UIImageView *messageBubbleImage;
+@interface ATFileMessageCell : UITableViewCell <ATMessageCenterCell>@property (strong, nonatomic) IBOutlet UILabel *dateLabel;
+@property (strong, nonatomic) IBOutlet ATNetworkImageView *userIcon;
+@property (strong, nonatomic) IBOutlet UIView *imageContainer;
+@property (strong, nonatomic) IBOutlet UIView *chatBubbleContainer;
+@property (strong, nonatomic) IBOutlet UIImageView *messageBubbleImage;
 @property (nonatomic, assign, getter = shouldShowDateLabel) BOOL showDateLabel;
 
 - (void)configureWithFileMessage:(ATFileMessage *)message;

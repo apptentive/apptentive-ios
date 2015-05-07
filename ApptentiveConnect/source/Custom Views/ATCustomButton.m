@@ -10,6 +10,7 @@
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
 
+
 @implementation ATCustomButton
 
 - (id)initWithButtonStyle:(ATCustomButtonStyle)style {
@@ -76,26 +77,30 @@
 }
 @end
 
+@interface ATTrackingButton ()
+
+@property (strong, nonatomic) UIImageView *shadowView;
+
+@end
 
 @implementation ATTrackingButton
-@synthesize padding;
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
-	CGRect padded = UIEdgeInsetsInsetRect(self.bounds, padding);
+	CGRect padded = UIEdgeInsetsInsetRect(self.bounds, self.padding);
 	return CGRectContainsPoint(padded, point);
 }
 
 - (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
-	CGRect padded = UIEdgeInsetsInsetRect(self.bounds, padding);
+	CGRect padded = UIEdgeInsetsInsetRect(self.bounds, self.padding);
 	return CGRectContainsPoint(padded, [touch locationInView:self]);
 }
 
 - (void)setupButtonShadow {
-	if (shadowView == nil) {
+	if (self.shadowView == nil) {
 		UIImage *shadowImage = [[ATBackend imageNamed:@"at_button_shadow_overlay"] stretchableImageWithLeftCapWidth:5 topCapHeight:5];
-		shadowView = [[UIImageView alloc] initWithImage:shadowImage];
+		self.shadowView = [[UIImageView alloc] initWithImage:shadowImage];
 		//shadowView.backgroundColor = [UIColor redColor];
-		[self addSubview:shadowView];
+		[self addSubview:self.shadowView];
 	}
 }
 
@@ -119,15 +124,7 @@
 - (void)layoutSubviews {
 	[super layoutSubviews];
 	[self setupButtonShadow];
-	shadowView.frame = self.bounds;
-	[self bringSubviewToFront:shadowView];
-}
-
-- (void)dealloc {
-	if (shadowView) {
-		[shadowView removeFromSuperview];
-		[shadowView release], shadowView = nil;
-	}
-	[super dealloc];
+	self.shadowView.frame = self.bounds;
+	[self bringSubviewToFront:self.shadowView];
 }
 @end

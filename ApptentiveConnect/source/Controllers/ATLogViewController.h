@@ -9,7 +9,4 @@
 #import <UIKit/UIKit.h>
 
 @interface ATLogViewController : UIViewController <UITextViewDelegate>
-@property (nonatomic, retain) UITextView *textView;
-
-- (IBAction)reloadLogs:(id)sender;
 @end

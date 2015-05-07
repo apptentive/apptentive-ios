@@ -29,30 +29,14 @@ typedef enum {
 
 /*! API request for the apptentive.com service. Encapsulates the connection
  connection state, completion percentage, etc. */
-@interface ATAPIRequest : NSObject <ATURLConnectionDelegate> {
-@private
-	ATURLConnection *connection;
-	NSString *channelName;
-	BOOL cancelled;
-	float percentageComplete;
-	
-	ATAPIRequestReturnType returnType;
-	BOOL failed;
-	NSString *errorTitle;
-	NSString *errorMessage;
-	NSString *errorResponse;
-	NSTimeInterval timeoutInterval;
-	NSObject<ATAPIRequestDelegate> *delegate;
-	
-	NSTimeInterval expiresMaxAge;
-}
+@interface ATAPIRequest : NSObject <ATURLConnectionDelegate>
 @property (nonatomic, assign) ATAPIRequestReturnType returnType;
 @property (nonatomic, assign) BOOL failed;
 @property (nonatomic, copy) NSString *errorTitle;
 @property (nonatomic, copy) NSString *errorMessage;
 @property (nonatomic, copy) NSString *errorResponse;
 @property (nonatomic, assign) NSTimeInterval timeoutInterval;
-@property (nonatomic, assign) NSObject<ATAPIRequestDelegate> *delegate;
+@property (nonatomic, weak) NSObject<ATAPIRequestDelegate> *delegate;
 
 - (id)initWithConnection:(ATURLConnection *)connection channelName:(NSString *)channelName;
 - (void)start;

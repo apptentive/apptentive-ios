@@ -6,18 +6,14 @@
 //  Copyright (c) 2014 Apptentive, Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 @class ATInteraction;
 
-@interface ATInteractionRatingDialogController : NSObject
-#if TARGET_OS_IPHONE
-<UIAlertViewDelegate>
-#endif
+@interface ATInteractionRatingDialogController : NSObject <UIAlertViewDelegate>
 
-@property (nonatomic, retain, readonly) ATInteraction *interaction;
-@property (nonatomic, retain) UIAlertView *ratingDialog;
-@property (nonatomic, retain) UIViewController *viewController;
+@property (nonatomic, strong, readonly) ATInteraction *interaction;
+@property (nonatomic, strong) UIAlertView *ratingDialog;
+@property (nonatomic, strong) UIViewController *viewController;
 
 - (id)initWithInteraction:(ATInteraction *)interaction;
 - (void)showRatingDialogFromViewController:(UIViewController *)viewController;

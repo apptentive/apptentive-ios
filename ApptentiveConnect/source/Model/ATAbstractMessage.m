@@ -66,7 +66,7 @@
 		CFUUIDRef uuidRef = CFUUIDCreate(NULL);
 		CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
 		
-		self.pendingMessageID = [NSString stringWithFormat:@"pending-message:%@", (NSString *)uuidStringRef];
+		self.pendingMessageID = [NSString stringWithFormat:@"pending-message:%@", (__bridge NSString *)uuidStringRef];
 		
 		CFRelease(uuidRef), uuidRef = NULL;
 		CFRelease(uuidStringRef), uuidStringRef = NULL;
@@ -94,7 +94,7 @@
 		NSDictionary *errorDictionary = (NSDictionary *)errorObject;
 		NSObject *errors = [errorDictionary objectForKey:@"errors"];
 		if (errors != nil && [errors isKindOfClass:[NSArray class]]) {
-			return [[(NSArray *)errors copy] autorelease];
+			return [(NSArray *)errors copy];
 		}
 	}
 	return nil;
@@ -107,7 +107,7 @@
 	if (senderDict != nil) {
 		ATMessageSender *sender = [ATMessageSender newOrExistingMessageSenderFromJSON:senderDict];
 		[self setValue:sender forKey:@"sender"];
-		[sender release], sender = nil;
+		sender = nil;
 	}
 	
 	ATMessageDisplayType *messageCenterType = [ATMessageDisplayType messageCenterType];
@@ -162,7 +162,7 @@
 	if (customData == nil) {
 		mutableCustomData = [NSMutableDictionary dictionary];
 	} else {
-		mutableCustomData = [[customData mutableCopy] autorelease];
+		mutableCustomData = [customData mutableCopy];
 	}
 	[mutableCustomData setValue:value forKey:key];
 	self.customData = [self dataForDictionary:mutableCustomData];
@@ -174,7 +174,7 @@
 	if (customData == nil) {
 		mutableCustomData = [NSMutableDictionary dictionary];
 	} else {
-		mutableCustomData = [[customData mutableCopy] autorelease];
+		mutableCustomData = [customData mutableCopy];
 	}
 	if (dictionary != nil) {
 		[mutableCustomData addEntriesFromDictionary:dictionary];

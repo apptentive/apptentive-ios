@@ -16,7 +16,10 @@ static ATConnectionManager *sharedSingleton = nil;
 - (ATConnectionChannel *)channelForName:(NSString *)channelName;
 @end
 
-@implementation ATConnectionManager
+@implementation ATConnectionManager {
+	NSMutableDictionary *channels;
+}
+
 + (ATConnectionManager *)sharedSingleton {
 	@synchronized(self) {
 		if (!sharedSingleton) {
@@ -75,7 +78,6 @@ static ATConnectionManager *sharedSingleton = nil;
 	if (!channel) {
 		channel = [[ATConnectionChannel alloc] init];
 		[channels setObject:channel forKey:channelName];
-		[channel release];
 	}
 	return channel;
 }
@@ -83,8 +85,5 @@ static ATConnectionManager *sharedSingleton = nil;
 - (void)dealloc {
 	[self stop];
 	[channels removeAllObjects];
-	[channels release];
-	channels = nil;
-	[super dealloc];
 }
 @end

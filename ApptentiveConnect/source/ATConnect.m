@@ -18,8 +18,6 @@
 #import "ATAppConfigurationUpdater.h"
 #if TARGET_OS_IPHONE
 #import "ATMessageCenterViewController.h"
-#elif TARGET_OS_MAC
-#import "ATFeedbackWindowController.h"
 #endif
 
 // Can't get CocoaPods to do the right thing for debug builds.
@@ -49,11 +47,11 @@ NSString *const ATIntegrationKeyParse = @"parse";
 NSString *const ATConnectCustomPersonDataChangedNotification = @"ATConnectCustomPersonDataChangedNotification";
 NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustomDeviceDataChangedNotification";
 
-@implementation ATConnect
-@synthesize apiKey, appID, debuggingOptions, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText, useMessageCenter;
-#if TARGET_OS_IPHONE
-@synthesize tintColor;
-#endif
+@implementation ATConnect {
+	NSMutableDictionary *_customPersonData;
+	NSMutableDictionary *_customDeviceData;
+	NSMutableDictionary *_integrationConfiguration;
+}
 
 + (ATConnect *)sharedConnection {
 	static ATConnect *sharedConnection = nil;
@@ -67,10 +65,10 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 - (id)init {
 	if ((self = [super init])) {
 		self.showEmailField = YES;
-		customPersonData = [[NSMutableDictionary alloc] init];
-		customDeviceData = [[NSMutableDictionary alloc] init];
-		integrationConfiguration = [[NSMutableDictionary alloc] init];
-		useMessageCenter = YES;
+		_customPersonData = [[NSMutableDictionary alloc] init];
+		_customDeviceData = [[NSMutableDictionary alloc] init];
+		_integrationConfiguration = [[NSMutableDictionary alloc] init];
+		_useMessageCenter = YES;
 		_initiallyUseMessageCenter = YES;
 		_initiallyHideBranding = NO;
 		
@@ -89,31 +87,9 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	return self;
 }
 
-- (void)dealloc {
-#if TARGET_OS_IPHONE
-	[tintColor release], tintColor = nil;
-#elif IF_TARGET_OS_MAC
-	if (feedbackWindowController) {
-		[feedbackWindowController release];
-		feedbackWindowController = nil;
-	}
-#endif
-	[customPersonData release], customPersonData = nil;
-	[customDeviceData release], customDeviceData = nil;
-	[integrationConfiguration release], integrationConfiguration = nil;
-	[customPlaceholderText release], customPlaceholderText = nil;
-	[apiKey release], apiKey = nil;
-	[appID release], appID = nil;
-	[initialUserName release], initialUserName = nil;
-	[initialUserEmailAddress release], initialUserEmailAddress = nil;
-	[super dealloc];
-}
-
-- (void)setApiKey:(NSString *)anAPIKey {
-	if (apiKey != anAPIKey) {
-		[apiKey release];
-		apiKey = nil;
-		apiKey = [anAPIKey retain];
+- (void)setApiKey:(NSString *)APIKey {
+	if (_apiKey != APIKey) {
+		_apiKey = APIKey;
 		[[ATBackend sharedBackend] setApiKey:self.apiKey];
 	}
 }
@@ -128,11 +104,9 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	_initiallyUseMessageCenter = initiallyUseMessageCenter;
 }
 
-- (void)setInitialUserName:(NSString *)anInitialUserName {
-	if (initialUserName != anInitialUserName) {
-		[initialUserName release];
-		initialUserName = nil;
-		initialUserName = [anInitialUserName retain];
+- (void)setInitialUserName:(NSString *)initialUserName {
+	if (_initialUserName != initialUserName) {
+		_initialUserName = initialUserName;
 		
 		// Set person object's name. Only overwrites previous *initial* names.
 		NSString *previousInitialUserName = [[NSUserDefaults standardUserDefaults] objectForKey:ATInitialUserNameKey];
@@ -148,16 +122,14 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	}
 }
 
-- (void)setInitialUserEmailAddress:(NSString *)anInitialUserEmailAddress {
-	if (![ATUtilities emailAddressIsValid:anInitialUserEmailAddress]) {
-		ATLogInfo(@"Attempting to set an invalid initial user email address: %@", anInitialUserEmailAddress);
+- (void)setInitialUserEmailAddress:(NSString *)initialUserEmailAddress {
+	if (![ATUtilities emailAddressIsValid:initialUserEmailAddress]) {
+		ATLogInfo(@"Attempting to set an invalid initial user email address: %@", initialUserEmailAddress);
 		return;
 	}
 		
-	if (![initialUserEmailAddress isEqualToString:anInitialUserEmailAddress]) {
-		[initialUserEmailAddress release];
-		initialUserEmailAddress = nil;
-		initialUserEmailAddress = [anInitialUserEmailAddress retain];
+	if (![_initialUserEmailAddress isEqualToString:initialUserEmailAddress]) {
+		_initialUserEmailAddress = initialUserEmailAddress;
 		
 		if ([ATPersonInfo personExists]) {
 			ATPersonInfo *person = [ATPersonInfo currentPerson];
@@ -165,7 +137,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 			// Only overwrites previous *initial* emails.
 			NSString *previousInitialUserEmailAddress = [[NSUserDefaults standardUserDefaults] objectForKey:ATInitialUserEmailAddressKey];
 			if (!person.emailAddress || ([person.emailAddress caseInsensitiveCompare:previousInitialUserEmailAddress] == NSOrderedSame)) {
-				person.emailAddress = initialUserEmailAddress;
+				person.emailAddress = _initialUserEmailAddress;
 				person.needsUpdate = YES;
 				[person saveAsCurrentPerson];
 			}			
@@ -187,21 +159,21 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (NSDictionary *)customPersonData {
-	return customPersonData;
+	return _customPersonData;
 }
 
 - (NSDictionary *)customDeviceData {
-	return customDeviceData;
+	return _customDeviceData;
 }
 
 - (void)addCustomPersonData:(NSObject *)object withKey:(NSString *)key {
-	[self addCustomData:object withKey:key toCustomDataDictionary:customPersonData];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomPersonDataChangedNotification object:customPersonData];
+	[self addCustomData:object withKey:key toCustomDataDictionary:_customPersonData];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomPersonDataChangedNotification object:self.customPersonData];
 }
 
 - (void)addCustomDeviceData:(NSObject *)object withKey:(NSString *)key {
-	[self addCustomData:object withKey:key toCustomDataDictionary:customDeviceData];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:customDeviceData];
+	[self addCustomData:object withKey:key toCustomDataDictionary:_customDeviceData];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:self.customDeviceData];
 }
 
 - (void)addCustomData:(NSObject *)object withKey:(NSString *)key toCustomDataDictionary:(NSMutableDictionary *)customData {
@@ -222,13 +194,13 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (void)removeCustomPersonDataWithKey:(NSString *)key {
-	[customPersonData removeObjectForKey:key];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomPersonDataChangedNotification object:customPersonData];
+	[_customPersonData removeObjectForKey:key];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomPersonDataChangedNotification object:self.customPersonData];
 }
 
 - (void)removeCustomDeviceDataWithKey:(NSString *)key {
-	[customDeviceData removeObjectForKey:key];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:customDeviceData];
+	[_customDeviceData removeObjectForKey:key];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:self.customDeviceData];
 }
 
 - (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key {
@@ -248,7 +220,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	
 	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:@"open_app_store_manually"];
 	
-	ATInteraction *appStoreInteraction = [[[ATInteraction alloc] init] autorelease];
+	ATInteraction *appStoreInteraction = [[ATInteraction alloc] init];
 	appStoreInteraction.type = @"AppStoreRating";
 	appStoreInteraction.priority = 1;
 	appStoreInteraction.version = @"1.0.0";
@@ -260,13 +232,13 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (NSDictionary *)integrationConfiguration {
-	return integrationConfiguration;
+	return _integrationConfiguration;
 }
 
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration {
-	[integrationConfiguration setObject:configuration forKey:integration];
+	[_integrationConfiguration setObject:configuration forKey:integration];
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:customDeviceData];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:self.customDeviceData];
 }
 
 - (void)addIntegration:(NSString *)integration withDeviceToken:(NSData *)deviceToken {
@@ -280,9 +252,9 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (void)removeIntegration:(NSString *)integration {
-	[integrationConfiguration removeObjectForKey:integration];
+	[_integrationConfiguration removeObjectForKey:integration];
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:customDeviceData];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:self.customDeviceData];
 }
 
 - (void)addUrbanAirshipIntegrationWithDeviceToken:(NSData *)deviceToken {
@@ -522,14 +494,14 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	NSFileManager *fm = [NSFileManager defaultManager];
 	if ([fm fileExistsAtPath:bundlePath]) {
 		NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
-		return [bundle autorelease];
+		return bundle;
 	} else {
 		// Try trigger.io path.
 		bundlePath = [path stringByAppendingPathComponent:@"apptentive.bundle"];
 		bundlePath = [bundlePath stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
 		if ([fm fileExistsAtPath:bundlePath]) {
 			NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
-			return [bundle autorelease];
+			return bundle;
 		} else {
 			// Try Titanium path.
 			bundlePath = [path stringByAppendingPathComponent:@"modules"];
@@ -537,7 +509,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 			bundlePath = [bundlePath stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
 			if ([fm fileExistsAtPath:bundlePath]) {
 				NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
-				return [bundle autorelease];
+				return bundle;
 			} else {
 				return nil;
 			}
@@ -554,7 +526,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 NSString *ATLocalizedString(NSString *key, NSString *comment) {
 	static NSBundle *bundle = nil;
 	if (!bundle) {
-		bundle = [[ATConnect resourceBundle] retain];
+		bundle = [ATConnect resourceBundle];
 	}
 	NSString *result = [bundle localizedStringForKey:key value:key table:nil];
 	return result;

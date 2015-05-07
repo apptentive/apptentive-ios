@@ -17,48 +17,44 @@
 
 @interface ATMessageCenterDataSource () <NSFetchedResultsControllerDelegate>
 
+@property (weak, nonatomic, readwrite) NSFetchedResultsController *fetchedMessagesController;
+
 @end
 
-@implementation ATMessageCenterDataSource {
-	NSFetchedResultsController *fetchedMessagesController;
-}
-@synthesize delegate;
+@implementation ATMessageCenterDataSource
 
 - (id)initWithDelegate:(NSObject<ATMessageCenterDataSourceDelegate> *)aDelegate {
 	if ((self = [super init])) {
-		delegate = aDelegate;
+		_delegate = aDelegate;
 	}
 	return self;
 }
 
 - (void)dealloc {
-	fetchedMessagesController.delegate = nil;
-	[fetchedMessagesController release], fetchedMessagesController = nil;
-	delegate = nil;
-	[super dealloc];
+	self.fetchedMessagesController.delegate = nil;
 }
 
 - (NSFetchedResultsController *)fetchedMessagesController {
 	@synchronized(self) {
-		if (!fetchedMessagesController) {
+		if (!_fetchedMessagesController) {
 			[NSFetchedResultsController deleteCacheWithName:@"at-messages-cache"];
 			NSFetchRequest *request = [[NSFetchRequest alloc] init];
 			[request setEntity:[NSEntityDescription entityForName:@"ATAbstractMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
 			[request setFetchBatchSize:20];
 			NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"creationTime" ascending:YES];
 			[request setSortDescriptors:@[sortDescriptor]];
-			[sortDescriptor release], sortDescriptor = nil;
+			sortDescriptor = nil;
 			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"creationTime != %d AND hidden != %@", 0, @YES];
 			[request setPredicate:predicate];
 			
 			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:nil cacheName:@"at-messages-cache"];
 			newController.delegate = self;
-			fetchedMessagesController = newController;
+			_fetchedMessagesController = newController;
 			
-			[request release], request = nil;
+			request = nil;
 		}
 	}
-	return fetchedMessagesController;
+	return _fetchedMessagesController;
 }
 
 
@@ -87,7 +83,7 @@
 	[request setFetchBatchSize:20];
 	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
 	[request setSortDescriptors:@[sortDescriptor]];
-	[sortDescriptor release], sortDescriptor = nil;
+	sortDescriptor = nil;
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"seenByUser == %d", 0];
 	[request setPredicate:predicate];
 	
@@ -105,7 +101,7 @@
 		}
 		[ATData save];
 	}
-	[request release], request = nil;
+	request = nil;
 }
 
 - (void)createIntroMessageIfNecessary {

@@ -9,17 +9,12 @@
 #import "ATLabel.h"
 
 @implementation ATLabel
-@synthesize at_drawRectBlock;
 
 - (void)drawRect:(CGRect)rect {
 	[super drawRect:rect];
-	if (at_drawRectBlock) {
-		at_drawRectBlock(self, rect);
+	if (self.at_drawRectBlock) {
+		self.at_drawRectBlock(self, rect);
 	}
 }
 
-- (void)dealloc {
-	[at_drawRectBlock release], at_drawRectBlock = nil;
-	[super dealloc];
-}
 @end

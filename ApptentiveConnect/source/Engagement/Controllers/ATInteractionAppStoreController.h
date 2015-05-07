@@ -6,7 +6,6 @@
 //  Copyright (c) 2014 Apptentive, Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <StoreKit/StoreKit.h>
 @class ATInteraction;
@@ -16,8 +15,8 @@
 <SKStoreProductViewControllerDelegate, UIAlertViewDelegate>
 #endif
 
-@property (nonatomic, retain, readonly) ATInteraction *interaction;
-@property (nonatomic, retain) UIViewController *viewController;
+@property (nonatomic, strong, readonly) ATInteraction *interaction;
+@property (nonatomic, strong) UIViewController *viewController;
 
 - (id)initWithInteraction:(ATInteraction *)interaction;
 - (void)openAppStoreFromViewController:(UIViewController *)viewController;

@@ -17,9 +17,6 @@ typedef enum {
 
 extern NSString *const ATReachabilityStatusChanged;
 
-@interface ATReachability : NSObject {
-	SCNetworkReachabilityRef reachabilityRef;
-}
-+ (ATReachability *)sharedReachability;
+@interface ATReachability : NSObject + (ATReachability *)sharedReachability;
 - (ATNetworkStatus)currentNetworkStatus;
 @end

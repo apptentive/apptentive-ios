@@ -42,7 +42,7 @@
 			UIFont *boldFont = [UIFont boldSystemFontOfSize:15];
 			CTFontRef font = CTFontCreateWithName((CFStringRef)[boldFont fontName], [boldFont pointSize], NULL);
 			if (font) {
-				[mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(id)font range:boldRange];
+				[mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(__bridge id)font range:boldRange];
 				CFRelease(font), font = NULL;
 			}
 			return mutableAttributedString;
@@ -57,7 +57,7 @@
 			UIColor *redColor = [UIColor redColor];
 			CTFontRef font = CTFontCreateWithName((CFStringRef)[boldFont fontName], [boldFont pointSize], NULL);
 			if (font) {
-				[mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(id)font range:boldRange];
+				[mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(__bridge id)font range:boldRange];
 				CFRelease(font), font = NULL;
 			}
 			[mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)redColor.CGColor range:boldRange];
@@ -113,26 +113,10 @@
 	self.message = nil;
 }
 
-- (void)dealloc {
-	[_textContainerView release];
-	_messageLabel.delegate = nil;
-	[_messageLabel release];
-	[_userIconView release];
-	if (_userIconOffsetConstraint) {
-		[_userIconOffsetView removeConstraint:_userIconOffsetConstraint];
-	}
-	[_userIconOffsetView release];
-	[_userIconOffsetConstraint release];
-	[_arrowView release];
-	[_composingImageView release];
-	[_tooLongLabel release];
-	[super dealloc];
-}
-
 - (void)setMessage:(ATTextMessage *)message {
 	if (_message != message) {
-		[_message release], _message = nil;
-		_message = [message retain];
+		_message = nil;
+		_message = message;
 		
 		[self setup];
 	}

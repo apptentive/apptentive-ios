@@ -53,15 +53,6 @@
 	[self setup];
 }
 
-- (void)dealloc {
-	[_userIconView release];
-	[currentImage release];
-	[_imageContainerView release];
-	[_imageWidthConstraint release];
-	[_imageHeightConstraint release];
-	[_imageShadowView release];
-	[super dealloc];
-}
 
 - (void)prepareForReuse {
 	[super prepareForReuse];
@@ -74,8 +65,8 @@
 
 - (void)setMessage:(ATFileMessage *)message {
 	if (_message != message) {
-		[_message release], _message = nil;
-		_message = [message retain];
+		_message = nil;
+		_message = message;
 		if (_message == nil) {
 			[self setCurrentImage:nil];
 			return;
@@ -90,8 +81,8 @@
 		
 		UIImage *thumbnail = [message.fileAttachment thumbnailOfSize:scaledThumbnailSize];
 		if (thumbnail) {
-			[currentImage release], currentImage = nil;
-			currentImage = [thumbnail retain];
+			currentImage = nil;
+			currentImage = thumbnail;
 			self.imageWidthConstraint.constant = thumbnailSize.width;
 			self.imageHeightConstraint.constant = thumbnailSize.height;
 			self.imageContainerView.layer.contents = (id)currentImage.CGImage;
@@ -109,8 +100,8 @@
 
 - (void)setCurrentImage:(UIImage *)image {
 	if (currentImage != image) {
-		[currentImage release], currentImage = nil;
-		currentImage = [image retain];
+		currentImage = nil;
+		currentImage = image;
 		if (currentImage != nil) {
 			CGSize thumbnailSize = ATThumbnailSizeOfMaxSize(currentImage.size, CGSizeMake(260, 260));
 			self.imageWidthConstraint.constant = thumbnailSize.width;
@@ -120,7 +111,7 @@
 		}
 	}
 	if (currentImage == nil) {
-		currentImage = [[ATBackend imageNamed:@"at_mc_file_default"] retain];
+		currentImage = [ATBackend imageNamed:@"at_mc_file_default"];
 		self.imageContainerView.layer.contentsGravity = kCAGravityResizeAspect;
 		self.imageContainerView.layer.contents = (id)currentImage.CGImage;
 	}

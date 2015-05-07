@@ -10,19 +10,7 @@
 
 /*! View controller for showing information about Apptentive, as well as the
  tasks which are currently in progress. */
-@interface ATInfoViewController : UIViewController <UITableViewDataSource, UITableViewDelegate> {
-	IBOutlet UIView *headerView;
-	IBOutlet UITableViewCell *progressCell;
-@private
-    NSMutableArray *logicalSections;
-}
-@property (nonatomic, retain) IBOutlet UITableView *tableView;
-@property (retain, nonatomic) IBOutlet UIView *headerView;
-@property (retain, nonatomic) IBOutlet UITextView *apptentiveDescriptionTextView;
-@property (retain, nonatomic) IBOutlet UITextView *apptentivePrivacyTextView;
-@property (retain, nonatomic) IBOutlet UIButton *findOutMoreButton;
-@property (retain, nonatomic) IBOutlet UIButton *gotoPrivacyPolicyButton;
-
+@interface ATInfoViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 - (id)init;
 - (IBAction)openApptentiveDotCom:(id)sender;
 - (IBAction)openPrivacyPolicy:(id)sender;

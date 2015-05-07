@@ -16,13 +16,16 @@
 #define kATRecordTaskCodingVersion 1
 
 @interface ATRecordTask (Private)
-- (void)setup;
-- (void)teardown;
 - (BOOL)handleLegacyRecord;
 @end
 
+@interface ATRecordTask ()
+
+@property (strong, nonatomic) ATAPIRequest *request;
+
+@end
+
 @implementation ATRecordTask
-@synthesize record;
 
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
@@ -30,7 +33,6 @@
 		if (version == kATRecordTaskCodingVersion) {
 			self.record = [coder decodeObjectForKey:@"record"];
 		} else {
-			[self release];
 			return nil;
 		}
 	}
@@ -43,9 +45,7 @@
 }
 
 - (void)dealloc {
-	[self teardown];
-	[record release], record = nil;
-	[super dealloc];
+	[self stop];
 }
 
 - (BOOL)canStart {
@@ -60,11 +60,11 @@
 		self.finished = YES;
 		return;
 	}
-	if (!request) {
-		request = [[self.record requestForSendingRecord] retain];
-		if (request != nil) {
-			request.delegate = self;
-			[request start];
+	if (!self.request) {
+		self.request = [self.record requestForSendingRecord];
+		if (self.request != nil) {
+			self.request.delegate = self;
+			[self.request start];
 			self.inProgress = YES;
 		} else {
 			self.finished = YES;
@@ -73,17 +73,17 @@
 }
 
 - (void)stop {
-	if (request) {
-		request.delegate = nil;
-		[request cancel];
-		[request release], request = nil;
+	if (self.request) {
+		self.request.delegate = nil;
+		[self.request cancel];
+		self.request = nil;
 		self.inProgress = NO;
 	}
 }
 
 - (float)percentComplete {
-	if (request) {
-		return [request percentageComplete];
+	if (self.request) {
+		return [self.request percentageComplete];
 	} else {
 		return 0.0f;
 	}
@@ -94,16 +94,14 @@
 }
 
 - (void)cleanup {
-	[record cleanup];
+	[self.record cleanup];
 }
 
 #pragma mark ATAPIRequestDelegate
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(id)result {
 	@synchronized(self) {
-		[self retain];
 		[self stop];
 		self.finished = YES;
-		[self release];
 	}
 }
 
@@ -113,26 +111,16 @@
 
 - (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
 	@synchronized(self) {
-		[self retain];
 		self.failed = YES;
 		self.lastErrorTitle = sender.errorTitle;
 		self.lastErrorMessage = sender.errorMessage;
 		ATLogInfo(@"ATAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
 		[self stop];
-		[self release];
 	}
 }
 @end
 
 @implementation ATRecordTask (Private)
-- (void)setup {
-	
-}
-
-- (void)teardown {
-	[self stop];
-}
-
 - (BOOL)handleLegacyRecord {
 	if ([self.record isKindOfClass:[ATMetric class]]) {
 		if ([[ApptentiveMetrics sharedMetrics] upgradeLegacyMetric:(ATMetric *)self.record]) {

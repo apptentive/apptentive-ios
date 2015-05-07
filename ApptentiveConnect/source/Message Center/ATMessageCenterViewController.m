@@ -40,12 +40,20 @@ typedef enum {
 
 #define TextViewPadding 2
 
-@implementation ATMessageCenterViewController {
-	BOOL firstLoad;
-	NSDateFormatter *messageDateFormatter;
-}
-@synthesize tableView, automatedCell;
-@synthesize userCell, developerCell, userFileMessageCell;
+@interface ATMessageCenterViewController ()
+
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet ATAutomatedMessageCell *automatedCell;
+@property (strong, nonatomic) IBOutlet ATTextMessageUserCell *userCell;
+@property (strong, nonatomic) IBOutlet ATTextMessageUserCell *developerCell;
+@property (strong, nonatomic) IBOutlet ATFileMessageCell *userFileMessageCell;
+
+@property (assign, nonatomic) BOOL firstLoad;
+@property (strong, nonatomic) NSDateFormatter *messageDateFormatter;
+
+@end
+
+@implementation ATMessageCenterViewController
 
 - (id)init {
 	self = [super initWithNibName:@"ATMessageCenterViewController" bundle:[ATConnect resourceBundle]];
@@ -59,9 +67,9 @@ typedef enum {
 	
 	[self.tableView reloadData];
 	
-	messageDateFormatter = [[NSDateFormatter alloc] init];
-	messageDateFormatter.dateStyle = NSDateFormatterMediumStyle;
-	messageDateFormatter.timeStyle = NSDateFormatterShortStyle;
+	self.messageDateFormatter = [[NSDateFormatter alloc] init];
+	self.messageDateFormatter.dateStyle = NSDateFormatterMediumStyle;
+	self.messageDateFormatter.timeStyle = NSDateFormatterShortStyle;
 	
 	self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 	self.tableView.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.0];
@@ -70,7 +78,7 @@ typedef enum {
 	[self.tableView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]]];
 	[self.containerView setBackgroundColor:[UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]]];
 	
-	firstLoad = YES;
+	self.firstLoad = YES;
 	
 	double delayInSeconds = 0.1;
 	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
@@ -90,10 +98,7 @@ typedef enum {
 - (void)dealloc {
 	[[ATBackend sharedBackend] messageCenterLeftForeground];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[messageDateFormatter release];
-	tableView.delegate = nil;
-	[tableView release];
-	[super dealloc];
+	self.tableView.delegate = nil;
 }
 
 - (void)viewDidUnload {
@@ -122,7 +127,7 @@ typedef enum {
 	CGFloat viewHeight = self.view.bounds.size.height;
 	
 	CGRect composerFrame = self.inputContainerView.frame;
-	CGRect tableFrame = tableView.frame;
+	CGRect tableFrame = self.tableView.frame;
 	CGRect containerFrame = self.containerView.frame;
 	
 	composerFrame.origin.y = viewHeight - self.inputContainerView.frame.size.height;
@@ -137,7 +142,7 @@ typedef enum {
 	tableFrame.size.height = composerFrame.origin.y;
 	containerFrame.size.height = tableFrame.size.height + composerFrame.size.height;
 	
-	tableView.frame = tableFrame;
+	self.tableView.frame = tableFrame;
 	self.inputContainerView.frame = composerFrame;
 }
 
@@ -197,8 +202,8 @@ typedef enum {
 }
 
 - (void)tableView:(UITableView *)aTableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-	if (firstLoad && indexPath.row == 0 && indexPath.section == 0) {
-		firstLoad = NO;
+	if (self.firstLoad && indexPath.row == 0 && indexPath.section == 0) {
+		self.firstLoad = NO;
 		[self scrollToBottomOfTableView];
 	}
 }
@@ -246,7 +251,7 @@ typedef enum {
 	if (showDate) {
 		NSTimeInterval t = (NSTimeInterval)[message.creationTime doubleValue];
 		NSDate *date = [NSDate dateWithTimeIntervalSince1970:t];
-		dateString = [messageDateFormatter stringFromDate:date];
+		dateString = [self.messageDateFormatter stringFromDate:date];
 	}
 	
 	if (cellType == ATMessageCellTypeText) {
@@ -257,9 +262,9 @@ typedef enum {
 		}
 		
 		if (cellSubType == ATTextMessageCellTypeUser) {
-			textCell = (ATTextMessageUserCell *)[tableView dequeueReusableCellWithIdentifier:UserCellIdentifier];
+			textCell = (ATTextMessageUserCell *)[self.tableView dequeueReusableCellWithIdentifier:UserCellIdentifier];
 		} else if (cellSubType == ATTextMessageCellTypeDeveloper) {
-			textCell = (ATTextMessageUserCell *)[tableView dequeueReusableCellWithIdentifier:DevCellIdentifier];
+			textCell = (ATTextMessageUserCell *)[self.tableView dequeueReusableCellWithIdentifier:DevCellIdentifier];
 		}
 		
 		
@@ -267,7 +272,7 @@ typedef enum {
 			UINib *nib = [UINib nibWithNibName:@"ATTextMessageUserCell" bundle:[ATConnect resourceBundle]];
 			[nib instantiateWithOwner:self options:nil];
 			if (cellSubType == ATTextMessageCellTypeUser) {
-				textCell = userCell;
+				textCell = self.userCell;
 				
 				UIEdgeInsets chatInsets = UIEdgeInsetsMake(15, 15, 27, 21);
 				UIImage *chatBubbleBase = [ATBackend imageNamed:@"at_chat_bubble"];
@@ -282,7 +287,7 @@ typedef enum {
 				textCell.userIcon.image = [ATBackend imageNamed:@"at_mc_user_icon_default"];
 				textCell.usernameLabel.text = ATLocalizedString(@"You", @"User name for text bubbles from users.");
 			} else {
-				textCell = developerCell;
+				textCell = self.developerCell;
 				
 				UIEdgeInsets chatInsets = UIEdgeInsetsMake(15, 21, 27, 15);
 				UIImage *chatBubbleBase = [ATBackend imageNamed:@"at_dev_chat_bubble"];
@@ -296,9 +301,8 @@ typedef enum {
 				
 				textCell.userIcon.image = [ATBackend imageNamed:@"at_mc_user_icon_default"];
 			}
-			[[textCell retain] autorelease];
-			[userCell release], userCell = nil;
-			[developerCell release], developerCell = nil;
+			self.userCell = nil;
+			self.developerCell = nil;
 			textCell.selectionStyle = UITableViewCellSelectionStyleNone;
 			textCell.userIcon.layer.cornerRadius = 4.0;
 			textCell.userIcon.layer.masksToBounds = YES;
@@ -307,7 +311,6 @@ typedef enum {
 			UIView *backgroundView = [[UIView alloc] init];
 			backgroundView.backgroundColor = [UIColor colorWithPatternImage:[ATBackend imageNamed:@"at_chat_bg"]];
 			textCell.backgroundView = backgroundView;
-			[backgroundView release];
 		}
 		textCell.composing = NO;
 		if (cellSubType != ATTextMessageCellTypeUser) {
@@ -331,7 +334,7 @@ typedef enum {
 					UIFont *boldFont = [UIFont boldSystemFontOfSize:15];
 					CTFontRef font = CTFontCreateWithName((CFStringRef)[boldFont fontName], [boldFont pointSize], NULL);
 					if (font) {
-						[mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(id)font range:boldRange];
+						[mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(__bridge id)font range:boldRange];
 						CFRelease(font), font = NULL;
 					}
 					return mutableAttributedString;
@@ -349,7 +352,7 @@ typedef enum {
 					UIColor *redColor = [UIColor redColor];
 					CTFontRef font = CTFontCreateWithName((CFStringRef)[boldFont fontName], [boldFont pointSize], NULL);
 					if (font) {
-						[mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(id)font range:boldRange];
+						[mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(__bridge id)font range:boldRange];
 						CFRelease(font), font = NULL;
 					}
 					[mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)redColor.CGColor range:boldRange];
@@ -380,14 +383,13 @@ typedef enum {
 		
 		cell = textCell;
 	} else if (cellType == ATMessageCellTypeAutomated) {
-		ATAutomatedMessageCell *currentCell = (ATAutomatedMessageCell *)[tableView dequeueReusableCellWithIdentifier:[ATAutomatedMessageCell reuseIdentifier]];
+		ATAutomatedMessageCell *currentCell = (ATAutomatedMessageCell *)[self.tableView dequeueReusableCellWithIdentifier:[ATAutomatedMessageCell reuseIdentifier]];
 		
 		if (!currentCell) {
 			UINib *nib = [UINib nibWithNibName:@"ATAutomatedMessageCell" bundle:[ATConnect resourceBundle]];
 			[nib instantiateWithOwner:self options:nil];
-			currentCell = automatedCell;
-			[[currentCell retain] autorelease];
-			[automatedCell release], automatedCell = nil;
+			currentCell = self.automatedCell;
+			self.automatedCell = nil;
 			
 			currentCell.selectionStyle = UITableViewCellSelectionStyleNone;
 		}
@@ -403,7 +405,7 @@ typedef enum {
 				UIFont *boldFont = [UIFont fontWithName:@"AmericanTypewriter-Bold" size:15];
 				CTFontRef font = CTFontCreateWithName((CFStringRef)[boldFont fontName], [boldFont pointSize], NULL);
 				if (font) {
-					[mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(id)font range:boldRange];
+					[mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(__bridge id)font range:boldRange];
 					CFRelease(font), font = NULL;
 				}
 				return mutableAttributedString;
@@ -416,14 +418,13 @@ typedef enum {
 		
 		cell = currentCell;
 	} else if (cellType == ATMessageCellTypeFile) {
-		ATFileMessageCell *currentCell = (ATFileMessageCell *)[tableView dequeueReusableCellWithIdentifier:[ATFileMessageCell reuseIdentifier]];
+		ATFileMessageCell *currentCell = (ATFileMessageCell *)[self.tableView dequeueReusableCellWithIdentifier:[ATFileMessageCell reuseIdentifier]];
 		
 		if (!currentCell) {
 			UINib *nib = [UINib nibWithNibName:@"ATFileMessageCell" bundle:[ATConnect resourceBundle]];
 			[nib instantiateWithOwner:self options:nil];
-			currentCell = userFileMessageCell;
-			[[currentCell retain] autorelease];
-			[userFileMessageCell release], userFileMessageCell = nil;
+			currentCell = self.userFileMessageCell;
+			self.userFileMessageCell = nil;
 			
 			currentCell.selectionStyle = UITableViewCellSelectionStyleNone;
 		}

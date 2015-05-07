@@ -10,15 +10,16 @@
 #import "ATTextMessageUserCell.h"
 #import "ATUtilities.h"
 
-@implementation ATTextMessageUserCell {
-	CGFloat horizontalCellPadding;
-}
+@interface ATTextMessageUserCell ()
 
-@synthesize dateLabel, chatBubbleContainer, userIcon, messageBubbleImage, usernameLabel, messageText, composingBubble, composing, showDateLabel, tooLong;
-@synthesize cellType;
+@property (assign, nonatomic) CGFloat horizontalCellPadding;
+
+@end
+
+@implementation ATTextMessageUserCell
 
 - (void)setup {
-	horizontalCellPadding = CGRectGetWidth(self.bounds) - CGRectGetWidth(self.messageText.bounds);
+	self.horizontalCellPadding = CGRectGetWidth(self.bounds) - CGRectGetWidth(self.messageText.bounds);
 	
 	self.messageText.delegate = self;
 	NSTextCheckingType types = NSTextCheckingTypeLink;
@@ -50,9 +51,9 @@
 }
 
 - (void)setComposing:(BOOL)comp {
-	if (composing != comp) {
-		composing = comp;
-		if (composing) {
+	if (_composing != comp) {
+		_composing = comp;
+		if (_composing) {
 			self.showDateLabel = NO;
 		}
 		[self setNeedsLayout];
@@ -60,18 +61,18 @@
 }
 
 - (void)setShowDateLabel:(BOOL)show {
-	if (showDateLabel != show) {
-		showDateLabel = show;
+	if (_showDateLabel != show) {
+		_showDateLabel = show;
 		[self setNeedsLayout];
 	}
 }
 
 - (void)setTooLong:(BOOL)isTooLong {
-	if (tooLong != isTooLong) {
-		tooLong = isTooLong;
-		self.tooLongLabel.hidden = !tooLong;
-		ATLogDebug(@"setting too long to %d", tooLong);
-		if (tooLong) {
+	if (_tooLong != isTooLong) {
+		_tooLong = isTooLong;
+		self.tooLongLabel.hidden = !_tooLong;
+		ATLogDebug(@"setting too long to %d", _tooLong);
+		if (_tooLong) {
 			NSString *fullText = NSLocalizedString(@"Show full message.", @"Message bubble text for very long messages.");
 			self.tooLongLabel.text = fullText;
 		}
@@ -81,7 +82,7 @@
 
 - (void)layoutSubviews {
 	[super layoutSubviews];
-	if (showDateLabel == NO || composing) {
+	if (self.showDateLabel == NO || self.composing) {
 		self.dateLabel.hidden = YES;
 		CGRect chatBubbleRect = self.chatBubbleContainer.frame;
 		chatBubbleRect.size.height = self.bounds.size.height;
@@ -95,21 +96,12 @@
 		chatBubbleRect.origin.y = dateLabelRect.size.height;
 		self.chatBubbleContainer.frame = chatBubbleRect;
 	}
-	self.chatBubbleContainer.hidden = composing;
-	self.composingBubble.hidden = !composing;
+	self.chatBubbleContainer.hidden = self.composing;
+	self.composingBubble.hidden = !self.composing;
 }
 
 - (void)dealloc {
-	messageText.delegate = nil;
-	[userIcon release], userIcon = nil;
-	[messageBubbleImage release], messageBubbleImage = nil;
-	[messageText release], messageText = nil;
-	[composingBubble release], composingBubble = nil;
-	[dateLabel release], dateLabel = nil;
-	[chatBubbleContainer release], chatBubbleContainer = nil;
-	[usernameLabel release], usernameLabel = nil;
-	[_tooLongLabel release];
-	[super dealloc];
+	_messageText.delegate = nil;
 }
 
 - (CGFloat)cellHeightForWidth:(CGFloat)width {
@@ -120,11 +112,11 @@
 			cellHeight += 60;
 			break;
 		}
-		if (showDateLabel) {
+		if (self.showDateLabel) {
 			cellHeight += self.dateLabel.bounds.size.height;
 		}
 		cellHeight += self.usernameLabel.bounds.size.height;
-		CGFloat textWidth = width - horizontalCellPadding;
+		CGFloat textWidth = width - self.horizontalCellPadding;
 		CGFloat heightPadding = 19 + 6;
 		CGSize textSize = [self.messageText sizeThatFits:CGSizeMake(textWidth, CGFLOAT_MAX)];
 		cellHeight += MAX(60, textSize.height + heightPadding);

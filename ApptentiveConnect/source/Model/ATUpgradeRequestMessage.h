@@ -12,5 +12,5 @@
 
 
 @interface ATUpgradeRequestMessage : ATTextMessage
-@property (nonatomic, retain) NSNumber *forced;
+@property (nonatomic, strong) NSNumber *forced;
 @end

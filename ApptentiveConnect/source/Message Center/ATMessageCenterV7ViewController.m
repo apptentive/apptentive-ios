@@ -38,34 +38,38 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 
 @interface ATMessageCenterV7ViewController ()
 - (void)scrollToBottomOfCollectionView;
+
+@property (strong, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (strong, nonatomic) IBOutlet UIImageView *backgroundImageView;
+@property (strong, nonatomic) IBOutlet UICollectionViewFlowLayout *flowLayout;
+
+@property (assign, nonatomic) BOOL firstLoad;
+@property (strong, nonatomic) NSDateFormatter *messageDateFormatter;
+
+@property (strong, nonatomic) NSMutableArray *fetchedObjectChanges;
+@property (strong, nonatomic) NSMutableArray *fetchedSectionChanges;
+
+@property (strong, nonatomic) ATAutomatedMessageCellV7 *sizingAutomatedCell;
+@property (strong, nonatomic) ATTextMessageDevCellV7 *sizingDevTextCell;
+@property (strong, nonatomic) ATTextMessageUserCellV7 *sizingUserTextCell;
+@property (strong, nonatomic) ATFileMessageUserCellV7 *sizingUserFileCell;
+
+@property (assign, nonatomic) CGFloat sizingAutomatedCellHorizontalPadding;
+@property (assign, nonatomic) CGFloat sizingDevTextCellHorizontalPadding;
+@property (assign, nonatomic) CGFloat sizingUserTextCellHorizontalPadding;
+
+@property (strong, nonatomic) UIImage *blurredImage;
+
 @end
 
-@implementation ATMessageCenterV7ViewController {
-	BOOL firstLoad;
-	NSDateFormatter *messageDateFormatter;
-	
-	NSMutableArray *fetchedObjectChanges;
-	NSMutableArray *fetchedSectionChanges;
-	
-	ATAutomatedMessageCellV7 *sizingAutomatedCell;
-	ATTextMessageDevCellV7 *sizingDevTextCell;
-	ATTextMessageUserCellV7 *sizingUserTextCell;
-	ATFileMessageUserCellV7 *sizingUserFileCell;
-	
-	CGFloat sizingAutomatedCellHorizontalPadding;
-	CGFloat sizingDevTextCellHorizontalPadding;
-	CGFloat sizingUserTextCellHorizontalPadding;
-	
-	UIImage *blurredImage;
-}
-@synthesize collectionView;
+@implementation ATMessageCenterV7ViewController
 
 - (id)init {
     self = [super initWithNibName:@"ATMessageCenterV7ViewController" bundle:[ATConnect resourceBundle]];
     if (self) {
-		fetchedObjectChanges = [[NSMutableArray alloc] init];
-		fetchedSectionChanges = [[NSMutableArray alloc] init];
-		blurredImage = [[self blurredBackgroundScreenshot] retain];
+		_fetchedObjectChanges = [[NSMutableArray alloc] init];
+		_fetchedSectionChanges = [[NSMutableArray alloc] init];
+		_blurredImage = [self blurredBackgroundScreenshot];
     }
     return self;
 }
@@ -82,14 +86,14 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	UINib *devTextCellNib = [UINib nibWithNibName:@"ATTextMessageDevCellV7" bundle:[ATConnect resourceBundle]];
 	UINib *userTextCellNib = [UINib nibWithNibName:@"ATTextMessageUserCellV7" bundle:[ATConnect resourceBundle]];
 	UINib *userFileCellNib = [UINib nibWithNibName:@"ATFileMessageUserCellV7" bundle:[ATConnect resourceBundle]];
-	sizingAutomatedCell = [[[automatedCellNib instantiateWithOwner:self options:nil] objectAtIndex:0] retain];
-	sizingDevTextCell = [[[devTextCellNib instantiateWithOwner:self options:nil] objectAtIndex:0] retain];
-	sizingUserTextCell = [[[userTextCellNib instantiateWithOwner:self options:nil] objectAtIndex:0] retain];
-	sizingUserFileCell = [[[userFileCellNib instantiateWithOwner:self options:nil] objectAtIndex:0] retain];
+	self.sizingAutomatedCell = [[automatedCellNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+	self.sizingDevTextCell = [[devTextCellNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+	self.sizingUserTextCell = [[userTextCellNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+	self.sizingUserFileCell = [[userFileCellNib instantiateWithOwner:self options:nil] objectAtIndex:0];
 	
-	sizingAutomatedCellHorizontalPadding = CGRectGetWidth(sizingAutomatedCell.bounds) - CGRectGetWidth(sizingAutomatedCell.messageLabel.bounds);
-	sizingDevTextCellHorizontalPadding = CGRectGetWidth(sizingDevTextCell.bounds) - CGRectGetWidth(sizingDevTextCell.messageLabel.bounds);
-	sizingUserTextCellHorizontalPadding = CGRectGetWidth(sizingUserTextCell.bounds) - CGRectGetWidth(sizingUserTextCell.messageLabel.bounds);
+	self.sizingAutomatedCellHorizontalPadding = CGRectGetWidth(self.sizingAutomatedCell.bounds) - CGRectGetWidth(self.sizingAutomatedCell.messageLabel.bounds);
+	self.sizingDevTextCellHorizontalPadding = CGRectGetWidth(self.sizingDevTextCell.bounds) - CGRectGetWidth(self.sizingDevTextCell.messageLabel.bounds);
+	self.sizingUserTextCellHorizontalPadding = CGRectGetWidth(self.sizingUserTextCell.bounds) - CGRectGetWidth(self.sizingUserTextCell.messageLabel.bounds);
 	
 	[self.collectionView registerNib:automatedCellNib forCellWithReuseIdentifier:ATAutomatedMessageCellV7Identifier];
 	[self.collectionView registerNib:devTextCellNib forCellWithReuseIdentifier:ATTextMessageDevCellV7Identifier];
@@ -100,11 +104,11 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	self.collectionView.delegate = self;
 	[self.collectionView reloadData];
 	
-	messageDateFormatter = [[NSDateFormatter alloc] init];
-	messageDateFormatter.dateStyle = NSDateFormatterMediumStyle;
-	messageDateFormatter.timeStyle = NSDateFormatterShortStyle;
+	self.messageDateFormatter = [[NSDateFormatter alloc] init];
+	self.messageDateFormatter.dateStyle = NSDateFormatterMediumStyle;
+	self.messageDateFormatter.timeStyle = NSDateFormatterShortStyle;
 	
-	firstLoad = YES;
+	self.firstLoad = YES;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fontPreferencesChanged:) name:UIContentSizeCategoryDidChangeNotification object:nil];
 	
@@ -121,18 +125,9 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 }
 
 - (void)dealloc {
-	[blurredImage release], blurredImage = nil;
 	[[ATBackend sharedBackend] messageCenterLeftForeground];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[messageDateFormatter release], messageDateFormatter = nil;
-	collectionView.delegate = nil;
-	[collectionView release], collectionView = nil;
-	[fetchedObjectChanges release], fetchedObjectChanges = nil;
-	[fetchedSectionChanges release], fetchedSectionChanges = nil;
-	[_backgroundImageView release];
-	[sizingAutomatedCell release], sizingAutomatedCell = nil;
-	[_flowLayout release];
-	[super dealloc];
+	_collectionView.delegate = nil;
 }
 
 - (void)viewDidUnload {
@@ -203,8 +198,8 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	collectionFrame.size.height = composerFrame.origin.y;
 	containerFrame.size.height = collectionFrame.size.height + composerFrame.size.height;
 	
-	if (!CGRectEqualToRect(collectionView.frame, collectionFrame) || !CGRectEqualToRect(self.inputContainerView.frame, composerFrame)) {
-		collectionView.frame = collectionFrame;
+	if (!CGRectEqualToRect(self.collectionView.frame, collectionFrame) || !CGRectEqualToRect(self.inputContainerView.frame, composerFrame)) {
+		self.collectionView.frame = collectionFrame;
 		self.inputContainerView.frame = composerFrame;
 		
 		[self scrollViewDidScroll:self.collectionView];
@@ -289,7 +284,7 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	if (showDate) {
 		NSTimeInterval t = (NSTimeInterval)[message.creationTime doubleValue];
 		NSDate *date = [NSDate dateWithTimeIntervalSince1970:t];
-		dateString = [messageDateFormatter stringFromDate:date];
+		dateString = [self.messageDateFormatter stringFromDate:date];
 	}
 	return dateString;
 }
@@ -334,7 +329,7 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 - (void)collectionView:(UICollectionView *)collection didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 	ATAbstractMessage *message = (ATAbstractMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:indexPath];
 	ATMessageCellType cellType = [self cellTypeForMessage:message];
-	UICollectionViewCell *cell = [self collectionView:collectionView cellForItemAtIndexPath:indexPath];
+	UICollectionViewCell *cell = [self collectionView:self.collectionView cellForItemAtIndexPath:indexPath];
 	if (cellType == ATMessageCellTypeText) {
 		ATTextMessageCellV7 *c = (ATTextMessageCellV7 *)cell;
 		if ([c isTooLong]) {
@@ -406,9 +401,9 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	ATMessageCellType cellType = [self cellTypeForMessage:message];
 	
 	if (cellType == ATMessageCellTypeAutomated) {
-		[self configureAutomatedCell:sizingAutomatedCell forIndexPath:indexPath];
-		cell = sizingAutomatedCell;
-		sizingAutomatedCell.messageLabel.preferredMaxLayoutWidth = self.collectionView.bounds.size.width - sizingAutomatedCellHorizontalPadding;
+		[self configureAutomatedCell:self.sizingAutomatedCell forIndexPath:indexPath];
+		cell = self.sizingAutomatedCell;
+		self.sizingAutomatedCell.messageLabel.preferredMaxLayoutWidth = self.collectionView.bounds.size.width - self.sizingAutomatedCellHorizontalPadding;
 		
 		CGSize s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 		s.width = self.collectionView.bounds.size.width;
@@ -421,10 +416,10 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 		
 		return s;
 	} else if (cellType == ATMessageCellTypeText && [message.sentByUser boolValue]) {
-		sizingUserTextCell.messageLabel.preferredMaxLayoutWidth = self.collectionView.bounds.size.width - sizingUserTextCellHorizontalPadding;
+		self.sizingUserTextCell.messageLabel.preferredMaxLayoutWidth = self.collectionView.bounds.size.width - self.sizingUserTextCellHorizontalPadding;
 		
-		[self configureUserTextCell:sizingUserTextCell forIndexPath:indexPath];
-		cell = sizingUserTextCell;
+		[self configureUserTextCell:self.sizingUserTextCell forIndexPath:indexPath];
+		cell = self.sizingUserTextCell;
 		CGSize s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 		
 		s.width = self.collectionView.bounds.size.width;
@@ -437,10 +432,10 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 		
 		return s;
 	} else if (cellType == ATMessageCellTypeText && ![message.sentByUser boolValue]) {
-		sizingDevTextCell.messageLabel.preferredMaxLayoutWidth = self.collectionView.bounds.size.width - sizingDevTextCellHorizontalPadding;
+		self.sizingDevTextCell.messageLabel.preferredMaxLayoutWidth = self.collectionView.bounds.size.width - self.sizingDevTextCellHorizontalPadding;
 		
-		[self configureDevTextCell:sizingDevTextCell forIndexPath:indexPath];
-		cell = sizingDevTextCell;
+		[self configureDevTextCell:self.sizingDevTextCell forIndexPath:indexPath];
+		cell = self.sizingDevTextCell;
 		CGSize s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 		s.width = self.collectionView.bounds.size.width;
 		
@@ -452,8 +447,8 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 		
 		return s;
 	} else if (cellType == ATMessageCellTypeFile && [message.sentByUser boolValue]) {
-		[self configureUserFileCell:sizingUserFileCell forIndexPath:indexPath];
-		cell = sizingUserFileCell;
+		[self configureUserFileCell:self.sizingUserFileCell forIndexPath:indexPath];
+		cell = self.sizingUserFileCell;
 		CGSize s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 		s.width = self.collectionView.bounds.size.width;
 		
@@ -475,9 +470,9 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
 	@try {
-		if ([fetchedSectionChanges count]) {
+		if ([self.fetchedSectionChanges count]) {
 			[self.collectionView performBatchUpdates:^{
-				for (NSDictionary *sectionChange in fetchedSectionChanges) {
+				for (NSDictionary *sectionChange in self.fetchedSectionChanges) {
 					[sectionChange enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
 						NSFetchedResultsChangeType changeType = (NSFetchedResultsChangeType)[(NSNumber *)key unsignedIntegerValue];
 						NSUInteger sectionIndex = [(NSNumber *)obj unsignedIntegerValue];
@@ -498,9 +493,9 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 				[self scrollToBottomOfCollectionView];
 				[self postScrollNotification];
 			}];
-		} else if ([fetchedObjectChanges count]) {
+		} else if ([self.fetchedObjectChanges count]) {
 			[self.collectionView performBatchUpdates:^{
-				for (NSDictionary *objectChange in fetchedObjectChanges) {
+				for (NSDictionary *objectChange in self.fetchedObjectChanges) {
 					[objectChange enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
 						NSFetchedResultsChangeType changeType = (NSFetchedResultsChangeType)[(NSNumber *)key unsignedIntegerValue];
 						if (changeType == NSFetchedResultsChangeMove) {
@@ -531,8 +526,8 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 				[self postScrollNotification];
 			}];
 		}
-		[fetchedObjectChanges removeAllObjects];
-		[fetchedSectionChanges removeAllObjects];
+		[self.fetchedObjectChanges removeAllObjects];
+		[self.fetchedSectionChanges removeAllObjects];
 	}
 	@catch (NSException *exception) {
 		ATLogError(@"Caught exception: %@: %@", [exception name], [exception description]);
@@ -541,23 +536,23 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
 		   atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
-	[fetchedSectionChanges addObject:@{@(type): @(sectionIndex)}];
+	[self.fetchedSectionChanges addObject:@{@(type): @(sectionIndex)}];
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
 	
 	switch (type) {
 		case NSFetchedResultsChangeInsert:
-			[fetchedObjectChanges addObject:@{@(type): newIndexPath}];
+			[self.fetchedObjectChanges addObject:@{@(type): newIndexPath}];
 			break;
 		case NSFetchedResultsChangeDelete:
-			[fetchedObjectChanges addObject:@{@(type): indexPath}];
+			[self.fetchedObjectChanges addObject:@{@(type): indexPath}];
 			break;
 		case NSFetchedResultsChangeMove:
-			[fetchedObjectChanges addObject:@{@(type): @[indexPath, newIndexPath]}];
+			[self.fetchedObjectChanges addObject:@{@(type): @[indexPath, newIndexPath]}];
 			break;
 		case NSFetchedResultsChangeUpdate:
-			[fetchedObjectChanges addObject:@{@(type): indexPath}];
+			[self.fetchedObjectChanges addObject:@{@(type): indexPath}];
 			break;
 		default:
 			break;

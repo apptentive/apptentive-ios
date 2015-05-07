@@ -34,7 +34,6 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 		return;
 	}
 	
-	[self retain];
 	self.viewController = viewController;
 	
 	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"8.0"]) {
@@ -83,7 +82,7 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 		[alertView addButtonWithTitle:title];
 	}
 	
-	return [alertView autorelease];
+	return alertView;
 }
 
 #pragma mark UIAlertController
@@ -182,7 +181,6 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 	}
 	
 	UIAlertAction *alertAction = [UIAlertAction actionWithTitle:title style:style handler:actionHandler];
-	Block_release(actionHandler);
 	
 	// Future support for configuration of enabled/disabled actions
 	/*
@@ -203,9 +201,9 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 }
 
 - (alertActionHandler)createButtonHandlerBlockDismiss:(NSDictionary *)actionConfig {
-	return Block_copy(^(UIAlertAction *alertAction) {
+	return [^(UIAlertAction *alertAction) {
 		[self dismissAction:actionConfig];
-	});
+	} copy];
 }
 
 - (void)interactionAction:(NSDictionary *)actionConfig {
@@ -229,9 +227,9 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 }
 
 - (alertActionHandler)createButtonHandlerBlockInteractionAction:(NSDictionary *)actionConfig {
-	return Block_copy(^(UIAlertAction *alertAction) {
+	return [^(UIAlertAction *alertAction) {
 		[self interactionAction:actionConfig];
-	});
+	} copy];
 }
 
 #pragma mark UIAlertViewDelegate
@@ -266,17 +264,10 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 		}
 	}
 	
-	[self release];
 }
 
 - (void)dealloc {
-	[_interaction release], _interaction = nil;
-	[_alertController release], _alertController = nil;
-	_alertView.delegate = nil;
-	[_alertView release], _alertView = nil;
-	[_viewController release], _viewController = nil;
-	
-	[super dealloc];
+	_alertView.delegate = nil;	
 }
 
 @end

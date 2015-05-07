@@ -29,7 +29,7 @@
 	if (!d) {
 		return nil;
 	}
-	NSString *s = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];
+	NSString *s = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
 	return s;
 }
 

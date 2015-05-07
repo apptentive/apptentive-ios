@@ -12,8 +12,8 @@
 #import "ATBaseMessageCellV7.h"
 
 @interface ATAutomatedMessageCellV7 : ATBaseMessageCellV7
-@property (retain, nonatomic) IBOutlet UILabel *messageLabel;
-@property (retain, nonatomic) IBOutlet UIImageView *appIcon;
-@property (retain, nonatomic) ATAutomatedMessage *message;
+@property (strong, nonatomic) IBOutlet UILabel *messageLabel;
+@property (strong, nonatomic) IBOutlet UIImageView *appIcon;
+@property (strong, nonatomic) ATAutomatedMessage *message;
 
 @end

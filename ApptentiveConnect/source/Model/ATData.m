@@ -28,7 +28,7 @@
 		ATLogError(@"Error executing fetch request: %@", fetchError);
 		fetchArray = nil;
 	}
-	[fetchType release], fetchType = nil;
+	fetchType = nil;
 	
 	return fetchArray;
 }
@@ -59,7 +59,7 @@
 		ATLogError(@"Error executing fetch request: %@", fetchError);
 		count = 0;
 	}
-	[fetchType release], fetchType = nil;
+	fetchType = nil;
 	
 	return count;
 }
@@ -80,7 +80,7 @@
 		[context save:nil];
 	}
 	
-	[fetchTypes release], fetchTypes = nil;
+	fetchTypes = nil;
 }
 
 + (void)deleteManagedObject:(NSManagedObject *)object {

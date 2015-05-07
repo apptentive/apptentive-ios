@@ -13,5 +13,5 @@
 #import "ATFileAttachment.h"
 
 @interface ATFileMessage : ATAbstractMessage
-@property (nonatomic, retain) ATFileAttachment *fileAttachment;
+@property (nonatomic, strong) ATFileAttachment *fileAttachment;
 @end

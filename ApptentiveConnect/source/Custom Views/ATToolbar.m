@@ -10,7 +10,6 @@
 #import "ATCustomButton.h"
 
 @implementation ATToolbar
-@synthesize at_drawRectBlock;
 
 //!! Hack to adjust frame origin of left-most custom view and to force
 //!! custom views to resize on orientation changes.
@@ -124,14 +123,9 @@
 }
 
 - (void)drawRect:(CGRect)rect {
-	if (at_drawRectBlock) {
-		at_drawRectBlock(self, rect);
+	if (self.at_drawRectBlock) {
+		self.at_drawRectBlock(self, rect);
 	}
-}
-
-- (void)dealloc {
-	[at_drawRectBlock release], at_drawRectBlock = nil;
-	[super dealloc];
 }
 @end
 

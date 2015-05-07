@@ -45,7 +45,6 @@
 		sender = (ATMessageSender *)[ATData newEntityNamed:@"ATMessageSender"];
 		sender.apptentiveID = apptentiveID;
 	} else {
-		[sender retain];
 	}
 	NSString *senderEmail = [json at_safeObjectForKey:@"email"];
 	NSString *senderName = [json at_safeObjectForKey:@"name"];

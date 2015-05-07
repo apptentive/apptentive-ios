@@ -377,16 +377,6 @@ static inline CGSize TTTATTRIBUTEDLABEL_PREPEND(CTFramesetterSuggestFrameSizeFor
     self.inactiveLinkAttributes = [NSDictionary dictionaryWithDictionary:mutableInactiveLinkAttributes];
 }
 
-- (void)dealloc {
-    if (_framesetter) {
-        CFRelease(_framesetter);
-    }
-
-    if (_highlightFramesetter) {
-        CFRelease(_highlightFramesetter);
-    }
-}
-
 #pragma mark -
 
 + (CGSize)sizeThatFitsAttributedString:(NSAttributedString *)attributedString

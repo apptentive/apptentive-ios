@@ -33,27 +33,28 @@
 #define USE_BLUR 0
 
 @interface ATMessagePanelNewUIViewController ()
+@property (nonatomic, strong) IBOutlet UIImageView *backgroundImageView;
+@property (nonatomic, strong) IBOutlet UIView *buttonFrame;
+@property (nonatomic, strong) IBOutlet UIButton *sendButtonNewUI;
+@property (nonatomic, strong) IBOutlet UIView *sendButtonPadding;
+@property (nonatomic, strong) IBOutlet UIButton *cancelButtonNewUI;
+@property (nonatomic, strong) IBOutlet UIView *cancelButtonPadding;
+
+@property (nonatomic, strong) ATLabel *promptLabel;
+@property (nonatomic, strong) ATCustomView *thinBlueLineView;
+@property (nonatomic, assign) CGRect lastSeenPresentingViewControllerFrame;
+@property (nonatomic, assign) CGAffineTransform lastSeenPresentingViewControllerTransform;
 
 @end
 
-@implementation ATMessagePanelNewUIViewController {
-	ATLabel *promptLabel;
-	ATCustomView *thinBlueLineView;
-}
-
-@synthesize backgroundImageView = _backgroundImageView;
-@synthesize buttonFrame = _buttonFrame;
-@synthesize sendButtonNewUI = _sendButtonNewUI;
-@synthesize sendButtonPadding = _sendButtonPadding;
-@synthesize cancelButtonNewUI = _cancelButtonNewUI;
-@synthesize cancelButtonPadding = _cancelButtonPadding;
+@implementation ATMessagePanelNewUIViewController
 
 - (id)initWithDelegate:(NSObject<ATMessagePanelDelegate> *)aDelegate {
 	self = [super initWithNibName:@"ATMessagePanelNewUIViewController" bundle:[ATConnect resourceBundle]];
 	if (self != nil) {
-		showEmailAddressField = YES;
-		startingStatusBarStyle = [[UIApplication sharedApplication] statusBarStyle];
-		delegate = aDelegate;
+		self.showEmailAddressField = YES;
+		self.startingStatusBarStyle = [[UIApplication sharedApplication] statusBarStyle];
+		self.delegate = aDelegate;
 	}
 	return self;
 }
@@ -73,19 +74,6 @@
 	UIImage *blurred = [self blurredBackgroundScreenshot];
 	[self.backgroundImageView setImage:blurred];
 #endif
-}
-
-- (void)dealloc {
-	[_backgroundImageView release], _backgroundImageView = nil;
-	[_buttonFrame release], _buttonFrame = nil;
-	[_sendButtonNewUI release], _sendButtonNewUI = nil;
-	[_cancelButtonNewUI release], _cancelButtonNewUI = nil;
-	[_sendButtonPadding release], _sendButtonPadding = nil;
-	[_cancelButtonPadding release], _cancelButtonPadding = nil;
-
-	[promptLabel release], promptLabel = nil;
-	[thinBlueLineView release], thinBlueLineView = nil;
-	[super dealloc];
 }
 
 - (void)presentFromViewController:(UIViewController *)newPresentingViewController animated:(BOOL)animated {
@@ -108,14 +96,12 @@
 
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion withAction:(ATMessagePanelDismissAction)action {
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ATMessagePanelPresentingViewControllerSwizzledDidRotateNotification object:nil];
-	[self retain];
 	[super dismissAnimated:animated completion:completion withAction:action];
 	
 	CGFloat duration = animated ? 0.3 : 0;
 	[UIView animateWithDuration:duration animations:^(void){
 		self.backgroundImageView.alpha = 0.0;
 	} completion:^(BOOL finished) {
-		[self release];
 	}];
 }
 
@@ -126,11 +112,11 @@
 	}
 	CGRect f = presentingViewController.view.frame;
 	CGAffineTransform t = presentingViewController.view.transform;
-	if (CGRectEqualToRect(lastSeenPresentingViewControllerFrame, f) && CGAffineTransformEqualToTransform(lastSeenPresentingViewControllerTransform, t)) {
+	if (CGRectEqualToRect(self.lastSeenPresentingViewControllerFrame, f) && CGAffineTransformEqualToTransform(self.lastSeenPresentingViewControllerTransform, t)) {
 		return;
 	}
-	lastSeenPresentingViewControllerFrame = f;
-	lastSeenPresentingViewControllerTransform = t;
+	self.lastSeenPresentingViewControllerFrame = f;
+	self.lastSeenPresentingViewControllerTransform = t;
 
 	// Show keyboard on rotation
 	if (self.emailField.isFirstResponder || self.feedbackView.isFirstResponder) {
@@ -224,17 +210,17 @@
 	if (self.promptText) {
 		UIEdgeInsets labelInsets = UIEdgeInsetsMake(10, 12, 10, 12);
 		
-		if (!promptLabel) {
-			promptLabel = [[ATLabel alloc] initWithFrame:CGRectMake(0, 0, width, 100)];
-			promptLabel.text = self.promptText;
-			promptLabel.textColor = [UIColor colorWithRed:128/255. green:128/255. blue:128/255. alpha:1];
-			promptLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-			promptLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-			promptLabel.lineBreakMode = NSLineBreakByWordWrapping;
-			promptLabel.numberOfLines = 0;
+		if (!self.promptLabel) {
+			self.promptLabel = [[ATLabel alloc] initWithFrame:CGRectMake(0, 0, width, 100)];
+			self.promptLabel.text = self.promptText;
+			self.promptLabel.textColor = [UIColor colorWithRed:128/255. green:128/255. blue:128/255. alpha:1];
+			self.promptLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+			self.promptLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+			self.promptLabel.lineBreakMode = NSLineBreakByWordWrapping;
+			self.promptLabel.numberOfLines = 0;
 		}
 		
-		CGSize fitSize = [promptLabel sizeThatFits:CGSizeMake(width - labelInsets.left - labelInsets.right, CGFLOAT_MAX)];
+		CGSize fitSize = [self.promptLabel sizeThatFits:CGSizeMake(width - labelInsets.left - labelInsets.right, CGFLOAT_MAX)];
 		CGFloat promptContainerHeight = fitSize.height + labelInsets.top + labelInsets.bottom;
 		
 		CGRect promptContainerBounds = CGRectMake(0, 0, width, promptContainerHeight);
@@ -242,14 +228,14 @@
 		CGRect promptLabelFrame = UIEdgeInsetsInsetRect(promptContainerBounds, labelInsets);
 		
 		if (!self.promptContainer) {
-			self.promptContainer = [[[UIView alloc] initWithFrame:promptContainerFrame] autorelease];
+			self.promptContainer = [[UIView alloc] initWithFrame:promptContainerFrame];
 			self.promptContainer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 			self.promptContainer.backgroundColor = [UIColor colorWithRed:248/255.0 green:248/255.0 blue:248/255.0 alpha:1];
-			[self.promptContainer addSubview:promptLabel];
+			[self.promptContainer addSubview:self.promptLabel];
 			[self.scrollView addSubview:self.promptContainer];
 		}
 		self.promptContainer.frame = promptContainerFrame;
-		promptLabel.frame = promptLabelFrame;
+		self.promptLabel.frame = promptLabelFrame;
 		
 		offsetY += CGRectGetHeight(self.promptContainer.bounds);
 	}
@@ -282,7 +268,7 @@
 		emailFrame = CGRectInset(emailFrame, horizontalPadding+extraHorzontalPadding, 0);
 		
 		if (!self.emailField) {
-			self.emailField = [[[UITextField alloc] initWithFrame:emailFrame] autorelease];
+			self.emailField = [[UITextField alloc] initWithFrame:emailFrame];
 			self.emailField.delegate = self;
 			if (self.interaction.configuration[@"email_hint_text"]) {
 				self.emailField.placeholder = self.interaction.configuration[@"email_hint_text"];
@@ -311,21 +297,21 @@
 		self.emailField.frame = emailFrame;
 		offsetY += CGRectGetHeight(self.emailField.bounds) + 5;
 		
-		if (!thinBlueLineView) {
-			thinBlueLineView = [[ATCustomView alloc] initWithFrame:CGRectZero];
-			thinBlueLineView.at_drawRectBlock = ^(NSObject *caller, CGRect rect) {
+		if (!self.thinBlueLineView) {
+			self.thinBlueLineView = [[ATCustomView alloc] initWithFrame:CGRectZero];
+			self.thinBlueLineView.at_drawRectBlock = ^(NSObject *caller, CGRect rect) {
 				UIColor *color = [UIColor colorWithRed:133/255. green:149/255. blue:160/255. alpha:1];
 				UIBezierPath *rectanglePath = [UIBezierPath bezierPathWithRect:rect];
 				[color setFill];
 				[rectanglePath fill];
 			};
-			thinBlueLineView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-			[self.scrollView addSubview:thinBlueLineView];
+			self.thinBlueLineView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+			[self.scrollView addSubview:self.thinBlueLineView];
 		}
 		CGFloat linePadding = 2;
 		CGRect lineFrame = CGRectMake(0, offsetY, width, 1);
 		lineFrame = CGRectInset(lineFrame, linePadding, 0);
-		thinBlueLineView.frame = lineFrame;
+		self.thinBlueLineView.frame = lineFrame;
 		
 		offsetY += CGRectGetHeight(lineFrame);
 	}
@@ -333,7 +319,7 @@
 	CGRect feedbackFrame = CGRectMake(0, offsetY, width, 20);
 	feedbackFrame = CGRectInset(feedbackFrame, horizontalPadding, 0);
 	if (!self.feedbackView) {
-		self.feedbackView = [[[ATDefaultTextView alloc] initWithFrame:feedbackFrame] autorelease];
+		self.feedbackView = [[ATDefaultTextView alloc] initWithFrame:feedbackFrame];
 		
 		if (![ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
 			UIEdgeInsets insets = UIEdgeInsetsMake(0, -8, 0, 0);

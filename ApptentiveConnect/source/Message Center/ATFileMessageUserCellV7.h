@@ -14,14 +14,14 @@
 #import "ATFileMessage.h"
 
 @interface ATFileMessageUserCellV7 : ATBaseMessageCellV7
-@property (retain, nonatomic) IBOutlet UIView *userIconOffsetView;
-@property (retain, nonatomic) IBOutlet NSLayoutConstraint *userIconOffsetConstraint;
-@property (retain, nonatomic) IBOutlet ATNetworkImageView *userIconView;
-@property (retain, nonatomic) IBOutlet ATMessageBubbleArrowViewV7 *arrowView;
-@property (retain, nonatomic) IBOutlet UIView *imageContainerView;
-@property (retain, nonatomic) IBOutlet UIView *imageShadowView;
-@property (retain, nonatomic) ATFileMessage *message;
+@property (strong, nonatomic) IBOutlet UIView *userIconOffsetView;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *userIconOffsetConstraint;
+@property (strong, nonatomic) IBOutlet ATNetworkImageView *userIconView;
+@property (strong, nonatomic) IBOutlet ATMessageBubbleArrowViewV7 *arrowView;
+@property (strong, nonatomic) IBOutlet UIView *imageContainerView;
+@property (strong, nonatomic) IBOutlet UIView *imageShadowView;
+@property (strong, nonatomic) ATFileMessage *message;
 
-@property (retain, nonatomic) IBOutlet NSLayoutConstraint *imageWidthConstraint;
-@property (retain, nonatomic) IBOutlet NSLayoutConstraint *imageHeightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *imageWidthConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *imageHeightConstraint;
 @end

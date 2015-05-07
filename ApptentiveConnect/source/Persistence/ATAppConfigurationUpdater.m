@@ -37,7 +37,11 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 - (void)processResult:(NSDictionary *)jsonRatingConfiguration maxAge:(NSTimeInterval)expiresMaxAge;
 @end
 
-@implementation ATAppConfigurationUpdater
+@implementation ATAppConfigurationUpdater {
+	ATAPIRequest *request;
+	NSObject<ATAppConfigurationUpdaterDelegate> *delegate;
+}
+
 + (void)registerDefaults {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSDictionary *defaultPreferences = 
@@ -90,12 +94,11 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 - (void)dealloc {
 	delegate = nil;
 	[self cancel];
-	[super dealloc];
 }
 
 - (void)update {
 	[self cancel];
-	request = [[[ATWebClient sharedClient] requestForGettingAppConfiguration] retain];
+	request = [[ATWebClient sharedClient] requestForGettingAppConfiguration];
 	request.delegate = self;
 	[request start];
 }
@@ -104,7 +107,7 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	if (request) {
 		request.delegate = nil;
 		[request cancel];
-		[request release], request = nil;
+		request = nil;
 	}
 }
 

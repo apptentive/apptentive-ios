@@ -9,17 +9,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface ATTask : NSObject <NSCoding> {
-@private
-	BOOL inProgress;
-	BOOL finished;
-	BOOL failed;
-	NSUInteger failureCount;
-	NSString *lastErrorTitle;
-	NSString *lastErrorMessage;
-	BOOL failureOkay;
-}
-@property (nonatomic, assign) BOOL inProgress;
+@interface ATTask : NSObject <NSCoding>@property (nonatomic, assign) BOOL inProgress;
 @property (nonatomic, assign) BOOL finished;
 @property (nonatomic, assign) BOOL failed;
 @property (nonatomic, assign) NSUInteger failureCount;

@@ -8,17 +8,5 @@
 
 #import "ATMessagePanelViewController.h"
 
-@interface ATMessagePanelNewUIViewController : ATMessagePanelViewController {
-	// Used when handling view rotation.
-	CGRect lastSeenPresentingViewControllerFrame;
-	CGAffineTransform lastSeenPresentingViewControllerTransform;
-}
-
-@property (nonatomic, retain) IBOutlet UIImageView *backgroundImageView;
-@property (nonatomic, retain) IBOutlet UIView *buttonFrame;
-@property (nonatomic, retain) IBOutlet UIButton *sendButtonNewUI;
-@property (nonatomic, retain) IBOutlet UIView *sendButtonPadding;
-@property (nonatomic, retain) IBOutlet UIButton *cancelButtonNewUI;
-@property (nonatomic, retain) IBOutlet UIView *cancelButtonPadding;
-
+@interface ATMessagePanelNewUIViewController : ATMessagePanelViewController
 @end

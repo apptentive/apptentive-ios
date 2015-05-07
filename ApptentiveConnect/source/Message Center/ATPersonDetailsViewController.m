@@ -21,16 +21,20 @@ enum kPersonDetailsTableSections {
 
 
 @interface ATPersonDetailsViewController ()
-- (BOOL)emailIsValid;
-- (BOOL)savePersonData;
-- (void)registerForKeyboardNotifications;
-- (void)keyboardWillBeShown:(NSNotification *)aNotification;
-- (void)keyboardWillBeHidden:(NSNotification *)aNotification;
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet UIButton *logoButton;
+@property (strong, nonatomic) IBOutlet UITableViewCell *emailCell;
+@property (strong, nonatomic) IBOutlet UITableViewCell *nameCell;
+@property (strong, nonatomic) IBOutlet UITextField *emailTextField;
+@property (strong, nonatomic) IBOutlet UITextField *nameTextField;
+@property (strong, nonatomic) IBOutlet UILabel *poweredByLabel;
+@property (strong, nonatomic) IBOutlet UIImageView *logoImage;
 @end
 
 @implementation ATPersonDetailsViewController {
 	UIEdgeInsets previousScrollInsets;
 	UILabel *emailValidationLabel;
+	UIAlertView *emailRequiredAlert;
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -45,17 +49,7 @@ enum kPersonDetailsTableSections {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	_tableView.delegate = nil;
 	_tableView.dataSource = nil;
-	[_tableView release];
-	[_logoButton release];
-	[_emailCell release];
-	[_nameCell release];
-	[_emailTextField release];
-	[_nameTextField release];
-	[_poweredByLabel release];
-	[_logoImage release];
 	emailRequiredAlert.delegate = nil;
-	[emailRequiredAlert release], emailRequiredAlert = nil;
-	[super dealloc];
 }
 
 - (void)viewDidUnload {
@@ -71,7 +65,7 @@ enum kPersonDetailsTableSections {
 	[self setNameTextField:nil];
 	[self setPoweredByLabel:nil];
 	[self setLogoImage:nil];
-	[emailValidationLabel release], emailValidationLabel = nil;
+	emailValidationLabel = nil;
 	[super viewDidUnload];
 }
 
@@ -166,7 +160,7 @@ enum kPersonDetailsTableSections {
 	if ([ATPersonInfo personExists]) {
 		person = [ATPersonInfo currentPerson];
 	} else {
-		person = [[[ATPersonInfo alloc] init] autorelease];
+		person = [[ATPersonInfo alloc] init];
 	}
 	NSString *emailAddress = self.emailTextField.text;
 	NSString *name = self.nameTextField.text;
@@ -221,7 +215,7 @@ enum kPersonDetailsTableSections {
 - (IBAction)logoPressed:(id)sender {
 	ATInfoViewController *vc = [[ATInfoViewController alloc] init];
 	[self.navigationController pushViewController:vc animated:YES];
-	[vc release], vc = nil;
+	vc = nil;
 }
 
 - (BOOL)disablesAutomaticKeyboardDismissal {
@@ -265,7 +259,7 @@ enum kPersonDetailsTableSections {
 	if (indexPath.section == kForgetInfoSection) {
 		cell = [tableView dequeueReusableCellWithIdentifier:ATForgetInfoCellIdentifier];
 		if (cell == nil) {
-			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ATForgetInfoCellIdentifier] autorelease];
+			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ATForgetInfoCellIdentifier];
 			cell.accessoryView = nil;
 			cell.textLabel.textAlignment = NSTextAlignmentCenter;
 		}
@@ -382,7 +376,7 @@ enum kPersonDetailsTableSections {
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	if (emailRequiredAlert && [alertView isEqual:emailRequiredAlert]) {
 		emailRequiredAlert.delegate = nil;
-		[emailRequiredAlert release], emailRequiredAlert = nil;
+		emailRequiredAlert = nil;
 		[self.emailTextField becomeFirstResponder];
 	}
 }
@@ -390,7 +384,7 @@ enum kPersonDetailsTableSections {
 - (void)alertViewCancel:(UIAlertView *)alertView {
 	if (emailRequiredAlert && [alertView isEqual:emailRequiredAlert]) {
 		emailRequiredAlert.delegate = nil;
-		[emailRequiredAlert release], emailRequiredAlert = nil;
+		emailRequiredAlert = nil;
 	}
 }
 

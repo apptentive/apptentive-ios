@@ -36,34 +36,23 @@ extern NSString *const ATBackendBecameReadyNotification;
 #if TARGET_OS_IPHONE
 , NSFetchedResultsControllerDelegate, ATMessageCenterDismissalDelegate, ATMessagePanelDelegate, UIAlertViewDelegate
 #endif
-> {
-@private
-	NSString *apiKey;
-	ATFeedback *currentFeedback;
-	BOOL networkAvailable;
-	BOOL apiKeySet;
-	BOOL shouldStopWorking;
-	BOOL working;
-	
-	ATConversationUpdater *conversationUpdater;
-	ATDeviceUpdater *deviceUpdater;
-	ATPersonUpdater *personUpdater;
-	
-	NSTimer *messageRetrievalTimer;
-	ATDataManager *dataManager;
-#if TARGET_OS_IPHONE
-	NSFetchedResultsController *unreadCountController;
-	NSInteger previousUnreadCount;
-#endif
-}
+> 
 @property (nonatomic, copy) NSString *apiKey;
 /*! The feedback currently being worked on by the user. */
+<<<<<<< HEAD
 @property (nonatomic, retain) ATFeedback *currentFeedback;
 @property (nonatomic, retain) NSDictionary *currentCustomData;
 @property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
 @property (nonatomic, retain, readonly) NSString *supportDirectoryPath;
+=======
+@property (nonatomic, strong) ATFeedback *currentFeedback;
+@property (nonatomic, strong) NSDictionary *currentCustomData;
+@property (nonatomic, strong, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (nonatomic, strong, readonly) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, strong, readonly) NSManagedObjectModel *managedObjectModel;
+>>>>>>> ARC
 
 @property (nonatomic, assign, readonly) BOOL hideBranding;
 

@@ -9,58 +9,30 @@
 
 @protocol ATURLConnectionDelegate;
 
-@interface ATURLConnection : NSObject {
-	NSURL *targetURL;
-	NSObject<ATURLConnectionDelegate> *delegate;
-	
-	NSMutableURLRequest *request;
-	NSURLConnection *connection;
-	NSString *statusLine;
-	NSDictionary *responseHeaders;
-	NSMutableData *data;
-	BOOL executing;
-	BOOL finished;
-	BOOL failed;
-	BOOL cancelled;
-	NSTimeInterval timeoutInterval;
-	NSURLCredential *credential;
-	
-	NSMutableDictionary *headers;
-	NSString *HTTPMethod;
-	NSData *HTTPBody;
-	NSInputStream *HTTPBodyStream;
-	
-	NSInteger statusCode;
-	BOOL failedAuthentication;
-	NSError *connectionError;
-	
-	float percentComplete;
-	
-	NSTimeInterval expiresMaxAge;
-}
+@interface ATURLConnection : NSObject
 @property (nonatomic, readonly, copy) NSURL *targetURL;
-@property (nonatomic, assign) NSObject<ATURLConnectionDelegate> *delegate;
-@property (nonatomic, retain) NSURLConnection *connection;
+@property (nonatomic, weak) NSObject<ATURLConnectionDelegate> *delegate;
+@property (nonatomic, strong) NSURLConnection *connection;
 @property (nonatomic, assign) BOOL executing;
 @property (nonatomic, assign) BOOL finished;
 @property (nonatomic, assign) BOOL failed;
 @property (nonatomic, readonly) BOOL cancelled;
 @property (nonatomic, assign) NSTimeInterval timeoutInterval;
-@property (nonatomic, retain) NSURLCredential *credential;
+@property (nonatomic, strong) NSURLCredential *credential;
 @property (nonatomic, readonly) NSInteger statusCode;
 @property (nonatomic, readonly) BOOL failedAuthentication;
 @property (nonatomic, copy) NSError *connectionError;
 @property (nonatomic, assign) float percentComplete;
 @property (nonatomic, readonly) NSTimeInterval expiresMaxAge;
 
+@property (strong, nonatomic) NSMutableData *HTTPBody;
+@property (strong, nonatomic) NSString *HTTPMethod;
+
 /*! The delegate for this class is a weak reference. */
 - (id)initWithURL:(NSURL *)url delegate:(NSObject<ATURLConnectionDelegate> *)aDelegate;
 - (id)initWithURL:(NSURL *)url;
 - (void)setValue:(NSString *)value forHTTPHeaderField:(NSString *)field;
 - (void)removeHTTPHeaderField:(NSString *)field;
-- (void)setHTTPMethod:(NSString *)method;
-- (void)setHTTPBody:(NSData *)body;
-- (void)setHTTPBodyStream:(NSInputStream *)HTTPBodyStream;
 
 - (void)start;
 

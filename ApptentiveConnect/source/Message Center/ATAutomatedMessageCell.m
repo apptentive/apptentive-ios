@@ -11,7 +11,6 @@
 #import "ATBackend.h"
 
 @implementation ATAutomatedMessageCell
-@synthesize dateLabel, showDateLabel, messageText, titleText, grayLineView, containerView;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -42,14 +41,6 @@
     return [[self class] reuseIdentifier];
 }
 
-- (void)dealloc {
-    [dateLabel release];
-	[messageText release];
-	[titleText release];
-	[grayLineView release];
-	[containerView release];
-    [super dealloc];
-}
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
@@ -59,7 +50,7 @@
 	CGFloat cellHeight = 0;
 	
 	do { // once
-		if (showDateLabel) {
+		if (self.showDateLabel) {
 			cellHeight += self.dateLabel.bounds.size.height;
 		}
 		CGFloat textWidth = width - 60 /* padding between text and edges of cell */;
@@ -75,4 +66,5 @@
 	} while (NO);
 	return cellHeight;
 }
+
 @end

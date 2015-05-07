@@ -348,10 +348,10 @@
 		58C5922C17C59BE3000FA428 /* ATWebClient+EngagementAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C5922A17C59BE3000FA428 /* ATWebClient+EngagementAdditions.m */; };
 		58C5922D17C59BE3000FA428 /* ATWebClient+EngagementAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C5922A17C59BE3000FA428 /* ATWebClient+EngagementAdditions.m */; };
 		58C97B57182752F6001EB5BD /* NSObject+ATSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = 58C97B55182752F6001EB5BD /* NSObject+ATSwizzle.h */; };
-		58C97B58182752F6001EB5BD /* NSObject+ATSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C97B56182752F6001EB5BD /* NSObject+ATSwizzle.m */; };
+		58C97B58182752F6001EB5BD /* NSObject+ATSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C97B56182752F6001EB5BD /* NSObject+ATSwizzle.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		58C97B59182752F6001EB5BD /* NSObject+ATSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C97B56182752F6001EB5BD /* NSObject+ATSwizzle.m */; };
 		58C97B5C18276427001EB5BD /* UIViewController+ATSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = 58C97B5A18276427001EB5BD /* UIViewController+ATSwizzle.h */; };
-		58C97B5D18276427001EB5BD /* UIViewController+ATSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C97B5B18276427001EB5BD /* UIViewController+ATSwizzle.m */; };
+		58C97B5D18276427001EB5BD /* UIViewController+ATSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C97B5B18276427001EB5BD /* UIViewController+ATSwizzle.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		58C97B5E18276427001EB5BD /* UIViewController+ATSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C97B5B18276427001EB5BD /* UIViewController+ATSwizzle.m */; };
 		58CD20151821B7A70071CC72 /* ATDataModel v2 to v3.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 58CD20131821B78D0071CC72 /* ATDataModel v2 to v3.xcmappingmodel */; };
 		58CD20161821B7A80071CC72 /* ATDataModel v2 to v3.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 58CD20131821B78D0071CC72 /* ATDataModel v2 to v3.xcmappingmodel */; };
@@ -2044,6 +2044,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
 				DSTROOT = /tmp/ApptentiveConnect.dst;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -2073,6 +2074,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
 				DSTROOT = /tmp/ApptentiveConnect.dst;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -2096,6 +2098,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
@@ -2125,6 +2128,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",

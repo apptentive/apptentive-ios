@@ -40,7 +40,6 @@ NSString *const ATMessageCollectionTopOffsetKey = @"topOffset";
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[super dealloc];
 }
 
 - (void)collection:(UICollectionView *)collectionView didScroll:(CGFloat)topOffset {

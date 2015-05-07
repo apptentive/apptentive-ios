@@ -16,7 +16,9 @@
 - (ATSurveyQuestion *)questionWithJSONDictionary:(NSDictionary *)jsonDictionary;
 @end
 
-@implementation ATSurveyParser
+@implementation ATSurveyParser {
+	NSError *parserError;
+}
 
 - (ATSurveyQuestionAnswer *)answerWithJSONDictionary:(NSDictionary *)jsonDictionary {
 	ATSurveyQuestionAnswer *answer = [[ATSurveyQuestionAnswer alloc] init];
@@ -35,9 +37,9 @@
 	}
 	
 	if (failed) {
-		[answer release], answer = nil;
+		answer = nil;
 	}
-	return [answer autorelease];
+	return answer;
 }
 
 - (ATSurveyQuestion *)questionWithJSONDictionary:(NSDictionary *)jsonDictionary {
@@ -124,10 +126,10 @@
 	} while (NO);
 	
 	if (failed) {
-		[question release], question = nil;
+		question = nil;
 	}
 	
-	return [question autorelease];
+	return question;
 }
 
 - (ATSurvey *)surveyWithInteraction:(ATInteraction *)interaction {
@@ -169,15 +171,10 @@
 		}
 	}
 	
-	return [survey autorelease];
+	return survey;
 }
 
 - (NSError *)parserError {
 	return parserError;
-}
-
-- (void)dealloc {
-	[parserError release], parserError = nil;
-	[super dealloc];
 }
 @end

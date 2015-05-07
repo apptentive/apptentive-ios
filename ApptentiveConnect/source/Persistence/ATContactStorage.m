@@ -17,13 +17,7 @@
 
 static ATContactStorage *sharedContactStorage = nil;
 
-@interface ATContactStorage (Private)
-- (void)setup;
-- (void)teardown;
-@end
-
 @implementation ATContactStorage
-@synthesize name, email, phone;
 
 + (NSString *)contactStoragePath {
 	return [[[ATBackend sharedBackend] supportDirectoryPath] stringByAppendingPathComponent:@"contactinfo.objects"];
@@ -40,7 +34,7 @@ static ATContactStorage *sharedContactStorage = nil;
 		if (sharedContactStorage == nil) {
 			if ([ATContactStorage serializedVersionExists]) {
 				@try {
-					sharedContactStorage = [[NSKeyedUnarchiver unarchiveObjectWithFile:[ATContactStorage contactStoragePath]] retain];
+					sharedContactStorage = [NSKeyedUnarchiver unarchiveObjectWithFile:[ATContactStorage contactStoragePath]];
 				} @catch (NSException *exception) {
 					ATLogError(@"Unable to unarchive cstorage: %@", exception);
 				}
@@ -57,7 +51,6 @@ static ATContactStorage *sharedContactStorage = nil;
 	@synchronized(self) {
 		if (sharedContactStorage != nil) {
 			[sharedContactStorage save];
-			[sharedContactStorage release];
 			sharedContactStorage = nil;
 		}
 	}
@@ -79,7 +72,6 @@ static ATContactStorage *sharedContactStorage = nil;
 			self.email = [coder decodeObjectForKey:@"email"];
 			self.phone = [coder decodeObjectForKey:@"phone"];
 		} else {
-			[self release];
 			return nil;
 		}
 	}
@@ -91,22 +83,5 @@ static ATContactStorage *sharedContactStorage = nil;
 	[coder encodeObject:self.name forKey:@"name"];
 	[coder encodeObject:self.email forKey:@"email"];
 	[coder encodeObject:self.phone forKey:@"phone"];
-}
-
-- (void)dealloc {
-	[self teardown];
-	[super dealloc];
-}
-@end
-
-@implementation ATContactStorage (Private)
-- (void)setup {
-	
-}
-
-- (void)teardown {
-	self.name = nil;
-	self.phone = nil;
-	self.email = nil;
 }
 @end

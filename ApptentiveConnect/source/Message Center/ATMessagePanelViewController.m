@@ -34,6 +34,9 @@ enum {
 };
 
 @interface ATMessagePanelViewController ()
+
+@property (strong, nonatomic) ATMessagePanelViewController *selfReference;
+
 @end
 
 @interface ATMessagePanelViewController (Private)
@@ -92,6 +95,7 @@ enum {
 }
 
 - (void)presentFromViewController:(UIViewController *)newPresentingViewController animated:(BOOL)animated {
+	self.selfReference = self;
 	
 	if (presentingViewController != newPresentingViewController) {
 		presentingViewController = nil;
@@ -457,6 +461,8 @@ enum {
 		}
 		[self.delegate messagePanel:self didDismissWithAction:action];
 	}];
+	
+	self.selfReference = nil;
 }
 
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion {

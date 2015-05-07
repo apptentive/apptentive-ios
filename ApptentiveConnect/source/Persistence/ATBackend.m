@@ -98,25 +98,7 @@ static NSURLCache *imageCache = nil;
 @end
 
 @implementation ATBackend
-<<<<<<< HEAD
-#if TARGET_OS_IPHONE
-{
-	ATBackendState state;
-	
-	UIViewController *presentedMessageCenterViewController;
-	ATMessagePanelViewController *currentMessagePanelController;
-	
-	UIViewController *presentingViewController;
-	UIAlertView *messagePanelSentMessageAlert;
-	
-	NSString *cachedDeviceUUID;
-}
-@synthesize presentingViewController;
-#endif
-@synthesize apiKey, working, currentFeedback, persistentStoreCoordinator;
 @synthesize supportDirectoryPath = _supportDirectoryPath;
-=======
->>>>>>> ARC
 
 + (ATBackend *)sharedBackend {
 	static ATBackend *sharedBackend = nil;

@@ -843,13 +843,13 @@ done:
 			if ([newValue isEqual:@""] && ![oldValue isEqual:@""]) {
 				// Treat new empty strings as null
 				result[key] = [NSNull null];
-			} else if ([newValue isKindOfClass:[NSDictionary class]] && [oldValue isKindOfClass:[NSDictionary class]]) {
+			}/* else if ([newValue isKindOfClass:[NSDictionary class]] && [oldValue isKindOfClass:[NSDictionary class]]) {
 				NSDictionary *temp = [self diffDictionary:newValue againstDictionary:oldValue];
 				
 				if (temp.count) {
 					result[key] = temp;
 				}
-			} else if ([newValue isKindOfClass:[NSArray class]] && [oldValue isKindOfClass:[NSArray class]]) {
+			}*/ else if ([newValue isKindOfClass:[NSArray class]] && [oldValue isKindOfClass:[NSArray class]]) {
 				if (![[newValue sortedArrayUsingSelector:@selector(compare:)] isEqualToArray:[oldValue sortedArrayUsingSelector:@selector(compare:)]]) {
 					result[key] = newValue;
 				}

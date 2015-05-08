@@ -294,16 +294,6 @@
 	XCTAssertEqualObjects(result, @{});
 }
 
-- (void)testDictionaryDiff3 {
-	NSDictionary *oldPerson = @{ @"custom_data": @{ @"pet_name": @"Sumo" } };
-	NSDictionary *newPerson = @{ @"custom_data": @{} };
-	
-	NSDictionary *result = [ATUtilities diffDictionary:newPerson againstDictionary:oldPerson];
-	
-	XCTAssertNotNil(result[@"custom_data"][@"pet_name"]);
-	XCTAssertEqualObjects(result[@"custom_data"][@"pet_name"], [NSNull null]);
-}
-
 - (void)testDictionaryDiff4 {
 	NSDictionary *oldPerson = nil;
 	NSDictionary *newPerson = @{ @"custom_data": @{ @"pet_name": @"Sumo" } };;

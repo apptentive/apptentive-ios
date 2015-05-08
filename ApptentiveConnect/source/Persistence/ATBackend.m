@@ -666,12 +666,8 @@ static NSURLCache *imageCache = nil;
 
 - (void)messagePanel:(ATMessagePanelViewController *)messagePanel didSendMessage:(NSString *)message withEmailAddress:(NSString *)emailAddress {
 	if (self.currentMessagePanelController == messagePanel) {
-		ATPersonInfo *person = nil;
-		if ([ATPersonInfo personExists]) {
-			person = [ATPersonInfo currentPerson];
-		} else {
-			person = [[ATPersonInfo alloc] init];
-		}
+		ATPersonInfo *person = [ATPersonInfo currentPerson] ?: [[ATPersonInfo alloc] init];
+		
 		if (emailAddress && ![emailAddress isEqualToString:person.emailAddress]) {
 			// Do not save empty string as person's email address
 			if (emailAddress.length > 0) {
@@ -724,7 +720,7 @@ static NSURLCache *imageCache = nil;
 - (NSString *)initialEmailAddressForMessagePanel {
 	NSString *email = [ATConnect sharedConnection].initialUserEmailAddress;
 	
-	if ([ATPersonInfo personExists]) {
+	if ([ATPersonInfo currentPerson]) {
 		email = [ATPersonInfo currentPerson].emailAddress;
 	}
 	

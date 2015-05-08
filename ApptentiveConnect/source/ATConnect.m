@@ -110,8 +110,8 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		
 		// Set person object's name. Only overwrites previous *initial* names.
 		NSString *previousInitialUserName = [[NSUserDefaults standardUserDefaults] objectForKey:ATInitialUserNameKey];
-		if ([ATPersonInfo personExists]) {
-			ATPersonInfo *person = [ATPersonInfo currentPerson];
+		ATPersonInfo *person = [ATPersonInfo currentPerson];
+		if (person != nil) {
 			if (!person.name || [person.name isEqualToString:previousInitialUserName]) {
 				person.name = initialUserName;
 				person.needsUpdate = YES;
@@ -131,9 +131,8 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	if (![_initialUserEmailAddress isEqualToString:initialUserEmailAddress]) {
 		_initialUserEmailAddress = initialUserEmailAddress;
 		
-		if ([ATPersonInfo personExists]) {
-			ATPersonInfo *person = [ATPersonInfo currentPerson];
-			
+		ATPersonInfo *person = [ATPersonInfo currentPerson];
+		if (person != nil) {
 			// Only overwrites previous *initial* emails.
 			NSString *previousInitialUserEmailAddress = [[NSUserDefaults standardUserDefaults] objectForKey:ATInitialUserEmailAddressKey];
 			if (!person.emailAddress || ([person.emailAddress caseInsensitiveCompare:previousInitialUserEmailAddress] == NSOrderedSame)) {

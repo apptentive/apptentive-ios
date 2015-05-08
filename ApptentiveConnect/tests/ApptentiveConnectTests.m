@@ -119,12 +119,12 @@
 
 - (void)testCustomPersonData {
 	ATPersonInfo *person = [[ATPersonInfo alloc] init];
-	XCTAssertTrue([[person apiJSON] objectForKey:@"person"] != nil, @"A person should always have a base apiJSON key of 'person'");
+	XCTAssertTrue([[person dictionaryRepresentation] objectForKey:@"person"] != nil, @"A person should always have a base apiJSON key of 'person'");
 	
 	// Add standard types of data
-	XCTAssertTrue([[[person apiJSON] objectForKey:@"person"] objectForKey:@"name"] == nil, @"Name should not be set.");
+	XCTAssertTrue([[[person dictionaryRepresentation] objectForKey:@"person"] objectForKey:@"name"] == nil, @"Name should not be set.");
 	person.name = @"Peter";
-	XCTAssertTrue([[[[person apiJSON] objectForKey:@"person"] objectForKey:@"name"] isEqualToString:@"Peter"], @"Name should be set to 'Peter'");
+	XCTAssertTrue([[[[person dictionaryRepresentation] objectForKey:@"person"] objectForKey:@"name"] isEqualToString:@"Peter"], @"Name should be set to 'Peter'");
 
 	// Add custom person data
 	[[ATConnect sharedConnection] addCustomPersonData:@"brown" withKey:@"hair_color"];
@@ -140,19 +140,19 @@
 		XCTAssertTrue(e != nil, @"Attempting to add a dictionary to custom_data should throw an exception: %@", e);
 	}
 	@finally {
-		XCTAssertTrue([[[[person apiJSON] objectForKey:@"person"] objectForKey:@"custom_data"] objectForKey:@"customDictionary"] == nil, @"Dictionaries should not be added to custom_data");
+		XCTAssertTrue([[[[person dictionaryRepresentation] objectForKey:@"person"] objectForKey:@"custom_data"] objectForKey:@"customDictionary"] == nil, @"Dictionaries should not be added to custom_data");
 	}
 	
 	// Test custom person data
-	XCTAssertTrue(([[[person apiJSON] objectForKey:@"person"] objectForKey:@"custom_data"] != nil), @"The person should have a `custom_data` parent attribute.");
-	XCTAssertTrue([[[[[person apiJSON] objectForKey:@"person"] objectForKey:@"custom_data"] objectForKey:@"hair_color"] isEqualToString:@"brown"], @"Custom data 'hair_color' should be 'brown'");
-	XCTAssertTrue([[[[[person apiJSON] objectForKey:@"person"] objectForKey:@"custom_data"] objectForKey:@"height"] isEqualToNumber:@(70)], @"Custom data 'height' should be '70'");
-	XCTAssertTrue([[[[[person apiJSON] objectForKey:@"person"] objectForKey:@"custom_data"] objectForKey:@"nsNullCustomData"] isEqual:[NSNull null]], @"Custom data 'nsNullCustomData' should be equal to '[NSNull null]'");
+	XCTAssertTrue(([[[person dictionaryRepresentation] objectForKey:@"person"] objectForKey:@"custom_data"] != nil), @"The person should have a `custom_data` parent attribute.");
+	XCTAssertTrue([[[[[person dictionaryRepresentation] objectForKey:@"person"] objectForKey:@"custom_data"] objectForKey:@"hair_color"] isEqualToString:@"brown"], @"Custom data 'hair_color' should be 'brown'");
+	XCTAssertTrue([[[[[person dictionaryRepresentation] objectForKey:@"person"] objectForKey:@"custom_data"] objectForKey:@"height"] isEqualToNumber:@(70)], @"Custom data 'height' should be '70'");
+	XCTAssertTrue([[[[[person dictionaryRepresentation] objectForKey:@"person"] objectForKey:@"custom_data"] objectForKey:@"nsNullCustomData"] isEqual:[NSNull null]], @"Custom data 'nsNullCustomData' should be equal to '[NSNull null]'");
 
 	// Remove custom person data
 	[[ATConnect sharedConnection] removeCustomPersonDataWithKey:@"hair_color"];
-	XCTAssertTrue([[[[person apiJSON] objectForKey:@"person"] objectForKey:@"custom_data"] objectForKey:@"hair_color"] == nil, @"The 'hair_color' custom data was removed, should no longer be in custom_data");
-	XCTAssertTrue([[[[person apiJSON] objectForKey:@"person"] objectForKey:@"custom_data"] objectForKey:@"height"] != nil, @"The 'height' custom data was not removed, should still be in custom_data");
+	XCTAssertTrue([[[[person dictionaryRepresentation] objectForKey:@"person"] objectForKey:@"custom_data"] objectForKey:@"hair_color"] == nil, @"The 'hair_color' custom data was removed, should no longer be in custom_data");
+	XCTAssertTrue([[[[person dictionaryRepresentation] objectForKey:@"person"] objectForKey:@"custom_data"] objectForKey:@"height"] != nil, @"The 'height' custom data was not removed, should still be in custom_data");
 	[[ATConnect sharedConnection] removeCustomPersonDataWithKey:@"height"];
 	[[ATConnect sharedConnection] removeCustomPersonDataWithKey:@"nsNullCustomData"];
 }

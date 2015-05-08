@@ -18,6 +18,7 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 
 @interface ATDeviceUpdater ()
 
+@property (strong, nonatomic) NSDictionary *updatedDeviceDictionary;
 @property (strong, nonatomic) ATAPIRequest *request;
 
 @end
@@ -37,26 +38,14 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 + (BOOL)shouldUpdate {
 	[ATDeviceUpdater registerDefaults];
 	
-	if (![ATConversationUpdater conversationExists]) {
-		return NO;
-	}
+	return [self changesSinceLastUpdate].count > 0;
+}
+
++ (NSDictionary *)changesSinceLastUpdate {
+	NSDictionary *lastValue = [[NSUserDefaults standardUserDefaults] dictionaryForKey:ATDeviceLastUpdateValuePreferenceKey];
+	NSDictionary *currentValue = [[ATDeviceInfo alloc] init].apiJSON;
 	
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSObject *lastValue = [defaults objectForKey:ATDeviceLastUpdateValuePreferenceKey];
-	BOOL shouldUpdate = NO;
-	if (lastValue == nil || ![lastValue isKindOfClass:[NSDictionary class]]) {
-		shouldUpdate = YES;
-	} else {
-		NSDictionary *lastValueDictionary = (NSDictionary *)lastValue;
-		ATDeviceInfo *deviceInfo = [[ATDeviceInfo alloc] init];
-		NSDictionary *currentValueDictionary = [deviceInfo apiJSON];
-		deviceInfo = nil;
-		if (![ATUtilities dictionary:currentValueDictionary isEqualToDictionary:lastValueDictionary]) {
-			shouldUpdate = YES;
-		}
-	}
-	
-	return shouldUpdate;
+	return [ATUtilities diffDictionary:currentValue againstDictionary:lastValue];
 }
 
 - (id)initWithDelegate:(NSObject<ATDeviceUpdaterDelegate> *)aDelegate {
@@ -73,11 +62,11 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 
 - (void)update {
 	[self cancel];
-	ATDeviceInfo *deviceInfo = [[ATDeviceInfo alloc] init];
-	self.request = [[ATWebClient sharedClient] requestForUpdatingDevice:deviceInfo];
+	
+	self.request = [[ATWebClient sharedClient] requestForUpdatingDevice:[[self class] changesSinceLastUpdate]];
+	self.updatedDeviceDictionary = [[ATDeviceInfo alloc] init].apiJSON;
 	self.request.delegate = self;
 	[self.request start];
-	deviceInfo = nil;
 }
 
 - (void)cancel {
@@ -100,12 +89,9 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(NSObject *)result {
 	@synchronized (self) {
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		ATDeviceInfo *deviceInfo = [[ATDeviceInfo alloc] init];
-		NSDictionary *currentValueDictionary = [deviceInfo apiJSON];
-		deviceInfo = nil;
 		
 		[defaults setObject:[NSDate date] forKey:ATDeviceLastUpdatePreferenceKey];
-		[defaults setObject:currentValueDictionary forKey:ATDeviceLastUpdateValuePreferenceKey];
+		[defaults setObject:self.updatedDeviceDictionary forKey:ATDeviceLastUpdateValuePreferenceKey];
 		[self.delegate deviceUpdater:self didFinish:YES];
 	}
 }

@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01A88FF81AFBFFAE002C49E7 /* testJsonDiffing.1.expected.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF31AFBFDB6002C49E7 /* testJsonDiffing.1.expected.json */; };
+		01A88FF91AFBFFAE002C49E7 /* testJsonDiffing.1.new.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF41AFBFDB6002C49E7 /* testJsonDiffing.1.new.json */; };
+		01A88FFA1AFBFFAE002C49E7 /* testJsonDiffing.1.old.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF51AFBFDB6002C49E7 /* testJsonDiffing.1.old.json */; };
+		01A88FFB1AFBFFAE002C49E7 /* testJsonDiffing.2.new.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF61AFBFDB6002C49E7 /* testJsonDiffing.2.new.json */; };
+		01A88FFC1AFBFFAE002C49E7 /* testJsonDiffing.2.old.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF71AFBFDB6002C49E7 /* testJsonDiffing.2.old.json */; };
 		490B24A31624B6D50055B812 /* ATTextMessageUserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 490B24A21624B6D50055B812 /* ATTextMessageUserCell.xib */; };
 		490B24A71624B70E0055B812 /* ATTextMessageUserCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 490B24A51624B70D0055B812 /* ATTextMessageUserCell.h */; };
 		490B24A81624B70E0055B812 /* ATTextMessageUserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 490B24A61624B70D0055B812 /* ATTextMessageUserCell.m */; };
@@ -391,6 +396,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		01A88FF31AFBFDB6002C49E7 /* testJsonDiffing.1.expected.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.1.expected.json; sourceTree = "<group>"; };
+		01A88FF41AFBFDB6002C49E7 /* testJsonDiffing.1.new.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.1.new.json; sourceTree = "<group>"; };
+		01A88FF51AFBFDB6002C49E7 /* testJsonDiffing.1.old.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.1.old.json; sourceTree = "<group>"; };
+		01A88FF61AFBFDB6002C49E7 /* testJsonDiffing.2.new.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.2.new.json; sourceTree = "<group>"; };
+		01A88FF71AFBFDB6002C49E7 /* testJsonDiffing.2.old.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.2.old.json; sourceTree = "<group>"; };
 		490B24A21624B6D50055B812 /* ATTextMessageUserCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ATTextMessageUserCell.xib; path = xibs/ATTextMessageUserCell.xib; sourceTree = SOURCE_ROOT; };
 		490B24A51624B70D0055B812 /* ATTextMessageUserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATTextMessageUserCell.h; path = "Message Center/ATTextMessageUserCell.h"; sourceTree = "<group>"; };
 		490B24A61624B70D0055B812 /* ATTextMessageUserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATTextMessageUserCell.m; path = "Message Center/ATTextMessageUserCell.m"; sourceTree = "<group>"; };
@@ -1205,6 +1215,11 @@
 		49C54BD61790B783009CCD5D /* data */ = {
 			isa = PBXGroup;
 			children = (
+				01A88FF31AFBFDB6002C49E7 /* testJsonDiffing.1.expected.json */,
+				01A88FF41AFBFDB6002C49E7 /* testJsonDiffing.1.new.json */,
+				01A88FF51AFBFDB6002C49E7 /* testJsonDiffing.1.old.json */,
+				01A88FF61AFBFDB6002C49E7 /* testJsonDiffing.2.new.json */,
+				01A88FF71AFBFDB6002C49E7 /* testJsonDiffing.2.old.json */,
 				49E7408718403E6200413697 /* v2CorruptDatabase */,
 				49E7408A184045C900413697 /* v2WALDatabase */,
 				49E7408E1840497600413697 /* v3WALDatabase */,
@@ -1653,14 +1668,19 @@
 				49AA1023138B498C0082887A /* ATInfoViewController.xib in Resources */,
 				58AA40A01821C162000799D8 /* ATDataModelv2.sqlite in Resources */,
 				49AA1025138B49A50082887A /* ATInfoViewController_iPad.xib in Resources */,
+				01A88FF81AFBFFAE002C49E7 /* testJsonDiffing.1.expected.json in Resources */,
+				01A88FFC1AFBFFAE002C49E7 /* testJsonDiffing.2.old.json in Resources */,
 				49E7408B184045C900413697 /* v2WALDatabase in Resources */,
 				49E7408818403E6200413697 /* v2CorruptDatabase in Resources */,
+				01A88FFB1AFBFFAE002C49E7 /* testJsonDiffing.2.new.json in Resources */,
+				01A88FF91AFBFFAE002C49E7 /* testJsonDiffing.1.new.json in Resources */,
 				58DCC0D9180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.xib in Resources */,
 				49E7408F1840497600413697 /* v3WALDatabase in Resources */,
 				49352A21138C73B8000E464A /* ATAboutApptentiveView.xib in Resources */,
 				49E740911840498100413697 /* ATDataModelv3.sqlite in Resources */,
 				49C54BD51790A95E009CCD5D /* ApptentiveResources.bundle in Resources */,
 				49C54BD81790B783009CCD5D /* ATDataModelv1.sqlite in Resources */,
+				01A88FFA1AFBFFAE002C49E7 /* testJsonDiffing.1.old.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

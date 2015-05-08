@@ -802,6 +802,75 @@ done:
 	return isEqual;
 }
 
+// Returns a dictionary consisting of:
+//
+// 1. Any key-value pairs that appear in new but not old
+// 2. The keys that appear in old but not new with the values set to [NSNull null]
+// 3. Any keys whose values have changed (with the new value)
++ (NSDictionary *)diffDictionary:(NSDictionary *)new againstDictionary:(NSDictionary *)old {
+	NSMutableDictionary *result = [NSMutableDictionary dictionary];
+	
+	NSArray *newKeys = [new.allKeys sortedArrayUsingSelector:@selector(compare:)];
+	NSArray *oldKeys = [old.allKeys sortedArrayUsingSelector:@selector(compare:)];
+	NSInteger i = 0, j = 0;
+	
+	while (i < [newKeys count] || j < [oldKeys count]) {
+		NSComparisonResult comp = NSOrderedSame;
+		NSString *newKey;
+		NSString *oldKey;
+		
+		if (i < [newKeys count] && j < [oldKeys count]) {
+			newKey = newKeys[i];
+			oldKey = oldKeys[j];
+			comp = [newKey compare:oldKey];
+		} if (i >= [newKeys count]) {
+			oldKey = oldKeys[j];
+			newKey = nil;
+			comp = NSOrderedDescending;
+		} else if (j >= [oldKeys count]) {
+			newKey = newKeys[i];
+			oldKey = nil;
+			comp = NSOrderedAscending;
+		}
+		
+		if (comp == NSOrderedSame) {
+			// Same key, value may have changed
+			NSString *key = newKey;
+			
+			id newValue = new[key];
+			id oldValue = old[key];
+			
+			if ([newValue isEqual:@""] && ![oldValue isEqual:@""]) {
+				// Treat new empty strings as null
+				result[key] = [NSNull null];
+			} else if ([newValue isKindOfClass:[NSDictionary class]] && [oldValue isKindOfClass:[NSDictionary class]]) {
+				NSDictionary *temp = [self diffDictionary:newValue againstDictionary:oldValue];
+				
+				if (temp.count) {
+					result[key] = temp;
+				}
+			} else if ([newValue isKindOfClass:[NSArray class]] && [oldValue isKindOfClass:[NSArray class]]) {
+				if (![[newValue sortedArrayUsingSelector:@selector(compare:)] isEqualToArray:[oldValue sortedArrayUsingSelector:@selector(compare:)]]) {
+					result[key] = newValue;
+				}
+			} else if (![newValue isEqual:oldValue]) {
+				result[key] = newValue;
+			}
+			
+			i++, j++;
+		} else if (comp == NSOrderedAscending) {
+			// New key appeared
+			result[newKey] = new[newKey];
+			i++;
+		} else if (comp == NSOrderedDescending) {
+			// Old key disappeared
+			result[oldKey] = [NSNull null];
+			j++;
+		}
+	}
+	
+	return result;
+}
 
 #if TARGET_OS_IPHONE
 + (UIEdgeInsets)edgeInsetsOfView:(UIView *)view {

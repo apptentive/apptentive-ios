@@ -20,9 +20,8 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 
 - (id)init {
 	if (self = [super init]) {
-		self.name = [ATConnect sharedConnection].initialUserName;
-		self.emailAddress = [ATConnect sharedConnection].initialUserEmailAddress;
-		// Note: customPersonData is appended in the `apiJSON` method, never added to the person object.
+		_name = [ATConnect sharedConnection].initialUserName;
+		_emailAddress = [ATConnect sharedConnection].initialUserEmailAddress;
 	}
 	return self;
 }
@@ -39,7 +38,6 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 	return self;
 }
 
-
 - (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeInt:kATPersonCodingVersion forKey:@"version"];
 	
@@ -49,15 +47,6 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 	[coder encodeObject:self.emailAddress forKey:@"emailAddress"];
 	[coder encodeObject:self.secret forKey:@"secret"];
 	[coder encodeBool:self.needsUpdate forKey:@"needsUpdate"];
-}
-
-+ (BOOL)personExists {
-	ATPersonInfo *currentPerson = [ATPersonInfo currentPerson];
-	if (currentPerson == nil) {
-		return NO;
-	} else {
-		return YES;
-	}
 }
 
 + (ATPersonInfo *)currentPerson {
@@ -78,27 +67,16 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 }
 
 + (ATPersonInfo *)newPersonFromJSON:(NSDictionary *)json {
-	ATPersonInfo *result = nil;
-	BOOL success = NO;
+	if (json == nil)
+		return nil;
 	
-	do { // once
-		if (!json) break;
-		NSDictionary *p = json;
-		
-		result = [[ATPersonInfo alloc] init];
-		result.apptentiveID = [p at_safeObjectForKey:@"id"];
-		result.name = [p at_safeObjectForKey:@"name"];
-		result.facebookID = [p at_safeObjectForKey:@"facebook_id"];
-		result.emailAddress = [p at_safeObjectForKey:@"email"];
-		result.secret = [p at_safeObjectForKey:@"secret"];
-		
-		success = YES;
-	} while (NO);
-	
-	if (result != nil && success == NO) {
-		result = nil;
-	}
-	
+	ATPersonInfo *result = [[ATPersonInfo alloc] init];
+	result = [[ATPersonInfo alloc] init];
+	result.apptentiveID = [json at_safeObjectForKey:@"id"];
+	result.name = [json at_safeObjectForKey:@"name"];
+	result.facebookID = [json at_safeObjectForKey:@"facebook_id"];
+	result.emailAddress = [json at_safeObjectForKey:@"email"];
+	result.secret = [json at_safeObjectForKey:@"secret"];
 	
 	return result;
 }
@@ -124,23 +102,10 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 		[person setObject:self.secret forKey:@"secret"];
 	}
 	
-	NSDictionary *customPersonData = [[ATConnect sharedConnection] customPersonData];
-	if (customPersonData && [customPersonData count]) {
-		[person setObject:customPersonData forKey:@"custom_data"];
-	}
+	NSDictionary *customPersonData = [[ATConnect sharedConnection] customPersonData] ?: @{};
+	[person setObject:customPersonData forKey:@"custom_data"];
 	
 	return [NSDictionary dictionaryWithObject:person forKey:@"person"];
-}
-
-- (NSDictionary *)safeApiJSON {
-	// Email is set to `[NSNull null]` in `apiJSON` to delete email from server.
-	// But `[NSNull null]` crashes if saved in NSUserDefaults (by ATPersonUpdater).
-	NSMutableDictionary *safePersonValues = [[self apiJSON][@"person"] mutableCopy];
-	if (safePersonValues[@"email"] == [NSNull null]) {
-		[safePersonValues removeObjectForKey:@"email"];
-	}
-	
-	return @{@"person": safePersonValues};
 }
 
 - (NSDictionary *)comparisonDictionary {
@@ -198,4 +163,5 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 	}
 	return NO;
 }
+
 @end

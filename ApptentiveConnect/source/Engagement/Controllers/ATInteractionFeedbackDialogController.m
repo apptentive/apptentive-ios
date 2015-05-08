@@ -92,12 +92,8 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 - (void)messagePanel:(ATMessagePanelViewController *)messagePanel didSendMessage:(NSString *)message withEmailAddress:(NSString *)emailAddress {
 	[self.interaction engage:ATInteractionFeedbackDialogEventLabelSubmit fromViewController:self.viewController];
 
-	ATPersonInfo *person = nil;
-	if ([ATPersonInfo personExists]) {
-		person = [ATPersonInfo currentPerson];
-	} else {
-		person = [[ATPersonInfo alloc] init];
-	}
+	ATPersonInfo *person = [ATPersonInfo currentPerson] ?: [[ATPersonInfo alloc] init];
+
 	if (emailAddress && ![emailAddress isEqualToString:person.emailAddress]) {
 		// Do not save empty string as person's email address
 		if (emailAddress.length > 0) {

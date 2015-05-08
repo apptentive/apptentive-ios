@@ -11,15 +11,13 @@
 #import "ATConversationUpdater.h"
 #import "ATUtilities.h"
 #import "ATWebClient+MessageCenter.h"
+#import "ATConnect_Private.h"
 
 NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValuePreferenceKey";
 
-@interface ATPersonUpdater (Private)
-- (void)processResult:(NSDictionary *)jsonPerson;
-@end
-
 @interface ATPersonUpdater ()
-@property (nonatomic, strong) NSDictionary *sentPersonJSON;
+
+@property (nonatomic, strong) NSDictionary *updatedPersonDictionary;
 @property (strong, nonatomic) ATAPIRequest *request;
 
 @end
@@ -30,6 +28,27 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 	NSDictionary *defaultPreferences = @{ATPersonLastUpdateValuePreferenceKey: @{}};
 	
 	[[NSUserDefaults standardUserDefaults] registerDefaults:defaultPreferences];
+}
+
++ (BOOL)shouldUpdate {
+	[ATPersonUpdater registerDefaults];
+	
+	ATPersonInfo *person = [ATPersonInfo currentPerson];
+	
+	if (person == nil) {
+		person = [[ATPersonInfo alloc] init];
+		person.needsUpdate = YES;
+		[person saveAsCurrentPerson];
+	}
+	
+	return (person.needsUpdate || [self changesSinceLastUpdate].count > 0);
+}
+
++ (NSDictionary *)changesSinceLastUpdate {
+	NSDictionary *lastValue = [[NSUserDefaults standardUserDefaults] dictionaryForKey:ATPersonLastUpdateValuePreferenceKey];
+	NSDictionary *currentValue = [ATPersonInfo currentPerson].apiJSON;
+	
+	return [ATUtilities diffDictionary:currentValue againstDictionary:lastValue];
 }
 
 - (id)initWithDelegate:(NSObject<ATPersonUpdaterDelegate> *)aDelegate {
@@ -45,53 +64,11 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 	[self cancel];
 }
 
-+ (BOOL)shouldUpdate {
-	[ATPersonUpdater registerDefaults];
-	
-	if (![ATConversationUpdater conversationExists]) {
-		return NO;
-	}
-	
-	ATPersonInfo *person = nil;
-	if ([ATPersonInfo personExists]) {
-		person = [ATPersonInfo currentPerson];
-	} else {
-		person = [[ATPersonInfo alloc] init];
-		person.needsUpdate = YES;
-		[person saveAsCurrentPerson];
-	}
-	
-	// If person needsUpdate, then do so.
-	if (!person || person.needsUpdate) {
-		return YES;
-	}
-	
-	// Otherwise, check to see if value has changed since last sent to the server.
-	BOOL shouldUpdate = NO;
-	
-	NSObject *lastValue = [[NSUserDefaults standardUserDefaults] objectForKey:ATPersonLastUpdateValuePreferenceKey];
-	if (lastValue == nil || ![lastValue isKindOfClass:[NSDictionary class]]) {
-		shouldUpdate = YES;
-	} else {
-		NSDictionary *lastValueDictionary = (NSDictionary *)lastValue;
-		NSDictionary *currentValueDictionary = [person safeApiJSON];
-		if (![ATUtilities dictionary:currentValueDictionary isEqualToDictionary:lastValueDictionary]) {
-			shouldUpdate = YES;
-		}
-	}
-	
-	return shouldUpdate;
-}
-
 - (void)update {
 	[self cancel];
-	ATPersonInfo *person = [ATPersonInfo currentPerson];
-	if (person) {
-		person.needsUpdate = YES;
-		[person saveAsCurrentPerson];
-	}
-	self.sentPersonJSON = [person safeApiJSON];
-	self.request = [[ATWebClient sharedClient] requestForUpdatingPerson:person];
+	
+	self.request = [[ATWebClient sharedClient] requestForUpdatingPerson:[[self class] changesSinceLastUpdate]];
+	self.updatedPersonDictionary = [ATPersonInfo currentPerson].apiJSON;
 	self.request.delegate = self;
 	[self.request start];
 }
@@ -135,9 +112,9 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 		[self.delegate personUpdater:self didFinish:NO];
 	}
 }
-@end
 
-@implementation ATPersonUpdater (Private)
+#pragma mark - Private
+
 - (void)processResult:(NSDictionary *)jsonPerson {
 	ATPersonInfo *person = [ATPersonInfo newPersonFromJSON:jsonPerson];
 	
@@ -146,7 +123,8 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 		[person saveAsCurrentPerson];
 		
 		// Save out the value we sent to the server.
-		[[NSUserDefaults standardUserDefaults] setObject:self.sentPersonJSON forKey:ATPersonLastUpdateValuePreferenceKey];
+		// TODO: Save the value we got back from the server?
+		[[NSUserDefaults standardUserDefaults] setObject:self.updatedPersonDictionary forKey:ATPersonLastUpdateValuePreferenceKey];
 		
 		[self.delegate personUpdater:self didFinish:YES];
 	} else {
@@ -154,4 +132,5 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 	}
 	person = nil;
 }
+
 @end

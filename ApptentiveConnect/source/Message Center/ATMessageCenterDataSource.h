@@ -12,7 +12,7 @@
 @protocol ATMessageCenterDataSourceDelegate;
 
 @interface ATMessageCenterDataSource : NSObject
-@property (weak, nonatomic, readonly) NSFetchedResultsController *fetchedMessagesController;
+@property (nonatomic, strong, readonly) NSFetchedResultsController *fetchedMessagesController;
 @property (nonatomic, weak) NSObject<ATMessageCenterDataSourceDelegate> *delegate;
 
 - (id)initWithDelegate:(NSObject<ATMessageCenterDataSourceDelegate> *)delegate;

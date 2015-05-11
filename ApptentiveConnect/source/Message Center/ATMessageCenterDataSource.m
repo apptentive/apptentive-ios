@@ -17,7 +17,7 @@
 
 @interface ATMessageCenterDataSource () <NSFetchedResultsControllerDelegate>
 
-@property (weak, nonatomic, readwrite) NSFetchedResultsController *fetchedMessagesController;
+@property (nonatomic, strong, readwrite) NSFetchedResultsController *fetchedMessagesController;
 
 @end
 

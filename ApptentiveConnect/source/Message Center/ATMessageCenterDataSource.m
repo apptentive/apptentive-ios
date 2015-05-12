@@ -94,10 +94,7 @@
 		ATLogError(@"Error executing fetch request: %@", error);
 	} else {
 		for (ATAbstractMessage *message in results) {
-			[message setSeenByUser:@(YES)];
-			if (message.apptentiveID != nil && [message.sentByUser boolValue] != YES) {
-				[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidReadNotification object:self userInfo:@{ATMessageCenterMessageIDKey:message.apptentiveID}];
-			}
+			[message markAsRead];
 		}
 		[ATData save];
 	}

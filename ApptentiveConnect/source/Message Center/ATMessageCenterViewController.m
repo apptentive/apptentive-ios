@@ -223,6 +223,9 @@ typedef enum {
 	UITableViewCell *cell = nil;
 	ATAbstractMessage *message = (ATAbstractMessage *)[[self dataSource].fetchedMessagesController objectAtIndexPath:indexPath];
 	
+	// Mark message as read when rendered
+	[message markAsRead];
+	
 	if ([message isKindOfClass:[ATAutomatedMessage class]]) {
 		cellType = ATMessageCellTypeAutomated;
 	} else if ([message isKindOfClass:[ATTextMessage class]]) {

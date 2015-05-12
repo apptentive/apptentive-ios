@@ -53,4 +53,6 @@ typedef enum {
 - (NSDictionary *)dictionaryForCustomData;
 - (NSData *)dataForDictionary:(NSDictionary *)dictionary;
 
+- (void)markAsRead;
+
 @end

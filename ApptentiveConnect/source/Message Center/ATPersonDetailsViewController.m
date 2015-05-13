@@ -85,8 +85,8 @@ enum kPersonDetailsTableSections {
 		self.emailTextField.placeholder = ATLocalizedString(@"Email", @"Placeholder text for `Email` field when editing user details.");
 	}
 	
-	if ([ATPersonInfo currentPerson] != nil) {
-		ATPersonInfo *person = [ATPersonInfo currentPerson];
+	ATPersonInfo *person = [ATPersonInfo currentPerson];
+	if (person != nil) {
 		self.nameTextField.text = person.name;
 		self.emailTextField.text = person.emailAddress;
 	}

@@ -17,7 +17,7 @@
 - (ATAPIRequest *)requestForCreatingConversation:(ATConversation *)conversation;
 - (ATAPIRequest *)requestForUpdatingConversation:(ATConversation *)conversation;
 
-- (ATAPIRequest *)requestForUpdatingDevice:(NSDictionary *)deviceInfo;
+- (ATAPIRequest *)requestForUpdatingDevice:(NSDictionary *)deviceDiffs;
 - (ATAPIRequest *)requestForUpdatingPerson:(NSDictionary *)personDiffs;
 - (ATAPIRequest *)requestForPostingMessage:(ATAbstractMessage *)message;
 - (ATAPIRequest *)requestForRetrievingMessagesSinceMessage:(ATAbstractMessage *)message;

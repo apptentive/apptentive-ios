@@ -267,8 +267,8 @@ static NSURLCache *imageCache = nil;
 	ATTextMessage *message = (ATTextMessage *)[ATData newEntityNamed:@"ATTextMessage"];
 	[message setup];
 	message.body = body;
-	message.pendingState = @(ATPendingMessageStateSending);
 	message.sentByUser = @YES;
+	message.seenByUser = @YES;
 	message.hidden = @(hidden);
 	
 	if (!hidden) {
@@ -287,6 +287,8 @@ static NSURLCache *imageCache = nil;
 }
 
 - (BOOL)sendTextMessage:(ATTextMessage *)message completion:(void (^)(NSString *pendingMessageID))completion {
+	message.pendingState = @(ATPendingMessageStateSending);
+
 	[self updatePersonIfNeeded];
 	[message updateClientCreationTime];
 	

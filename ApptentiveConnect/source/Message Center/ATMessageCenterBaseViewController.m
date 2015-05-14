@@ -239,8 +239,7 @@
 - (void)messageInputViewDidChange:(ATMessageInputView *)anInputView {
 	if (anInputView.text && ![anInputView.text isEqualToString:@""]) {
 		if (!self.composingMessage) {
-			self.composingMessage = [[ATBackend sharedBackend] createTextMessageWithBody:anInputView.text hiddenOnClient:NO];
-			self.composingMessage.seenByUser = @YES;
+			self.composingMessage = [[ATBackend sharedBackend] createTextMessageWithBody:nil hiddenOnClient:NO];
 		}
 	} else {
 		if (self.composingMessage) {
@@ -262,8 +261,6 @@
 		if (self.composingMessage == nil) {
 			self.composingMessage = [[ATBackend sharedBackend] createTextMessageWithBody:self.inputView.text hiddenOnClient:NO];
 		}
-
-		self.composingMessage.seenByUser = @YES;
 
 		[[ATBackend sharedBackend] sendTextMessage:self.composingMessage completion:^(NSString *pendingMessageID){
 			self.composingMessage = nil;

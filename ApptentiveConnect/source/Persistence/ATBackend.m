@@ -252,17 +252,7 @@ static NSURLCache *imageCache = nil;
 		return;
 	}
 	
-	// Give it a wee bit o' delay.
-	NSString *pendingMessageID = [message pendingMessageID];
-	double delayInSeconds = 1.5;
-	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-		ATMessageTask *task = [[ATMessageTask alloc] init];
-		task.pendingMessageID = pendingMessageID;
-		[[ATTaskQueue sharedTaskQueue] addTask:task];
-		[[ATTaskQueue sharedTaskQueue] start];
-	});
-	message = nil;
+	[self sendMessage:message];
 }
 
 - (BOOL)sendTextMessageWithBody:(NSString *)body completion:(void (^)(NSString *pendingMessageID))completion {
@@ -270,13 +260,20 @@ static NSURLCache *imageCache = nil;
 }
 
 - (BOOL)sendTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden completion:(void (^)(NSString *pendingMessageID))completion {
-	[self updatePersonIfNeeded];
+	return [self sendTextMessage:[self createTextMessageWithBody:body hiddenOnClient:hidden] completion:completion];
+}
+
+- (ATTextMessage *)createTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden {
 	ATTextMessage *message = (ATTextMessage *)[ATData newEntityNamed:@"ATTextMessage"];
 	[message setup];
 	message.body = body;
-	message.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
+	message.pendingState = @(ATPendingMessageStateSending);
 	message.sentByUser = @YES;
 	message.hidden = @(hidden);
+	
+	if (!hidden) {
+		[self attachCustomDataToMessage:message];
+	}
 	
 	ATConversation *conversation = [ATConversationUpdater currentConversation];
 	if (conversation) {
@@ -285,36 +282,28 @@ static NSURLCache *imageCache = nil;
 			message.sender = sender;
 		}
 	}
-	
-	if (!hidden) {
-		[self attachCustomDataToMessage:message];
-	}
-	
+
+	return message;
+}
+
+- (BOOL)sendTextMessage:(ATTextMessage *)message completion:(void (^)(NSString *pendingMessageID))completion {
+	[self updatePersonIfNeeded];
 	[message updateClientCreationTime];
+	
 	NSError *error = nil;
 	if (![[self managedObjectContext] save:&error]) {
-		ATLogError(@"Unable to send text message with body: %@, error: %@", body, error);
+		ATLogError(@"Unable to send text message with body: %@, error: %@", message.body, error);
 		message = nil;
 		return NO;
 	}
+	
 	if (completion) {
 		completion(message.pendingMessageID);
 	}
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidSendNotification object:@{ATMessageCenterMessageNonceKey:message.pendingMessageID}];
 	
-	// Give it a wee bit o' delay.
-	NSString *pendingMessageID = [message pendingMessageID];
-	double delayInSeconds = 1.5;
-	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-		ATMessageTask *task = [[ATMessageTask alloc] init];
-		task.pendingMessageID = pendingMessageID;
-		[[ATTaskQueue sharedTaskQueue] addTask:task];
-		[[ATTaskQueue sharedTaskQueue] start];
-	});
-	message = nil;
-	return YES;
+	return [self sendMessage:message];
 }
 
 - (BOOL)sendImageMessageWithImage:(UIImage *)image fromSource:(ATFeedbackImageSource)imageSource {
@@ -322,10 +311,9 @@ static NSURLCache *imageCache = nil;
 }
 
 - (BOOL)sendImageMessageWithImage:(UIImage *)image hiddenOnClient:(BOOL)hidden fromSource:(ATFeedbackImageSource)imageSource {
-	[self updatePersonIfNeeded];
 	NSData *imageData = UIImageJPEGRepresentation(image, 0.95);
 	NSString *mimeType = @"image/jpeg";
-	ATFIleAttachmentSource source = ATFileAttachmentSourceUnknown;
+	ATFileAttachmentSource source = ATFileAttachmentSourceUnknown;
 	switch (imageSource) {
 		case ATFeedbackImageSourceCamera:
 		case ATFeedbackImageSourcePhotoLibrary:
@@ -347,11 +335,11 @@ static NSURLCache *imageCache = nil;
 }
 
 
-- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType fromSource:(ATFIleAttachmentSource)source {
+- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType fromSource:(ATFileAttachmentSource)source {
 	return [self sendFileMessageWithFileData:fileData andMimeType:mimeType hiddenOnClient:NO fromSource:source];
 }
 
-- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType hiddenOnClient:(BOOL)hidden fromSource:(ATFIleAttachmentSource)source {
+- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType hiddenOnClient:(BOOL)hidden fromSource:(ATFileAttachmentSource)source {
 	[self updatePersonIfNeeded];
 	ATFileMessage *fileMessage = (ATFileMessage *)[ATData newEntityNamed:@"ATFileMessage"];
 	fileMessage.pendingState = @(ATPendingMessageStateSending);
@@ -375,8 +363,12 @@ static NSURLCache *imageCache = nil;
 	
 	[[[ATBackend sharedBackend] managedObjectContext] save:nil];
 	
+	return [self sendMessage:fileMessage];
+}
+
+- (BOOL)sendMessage:(ATAbstractMessage *)message {
 	// Give it a wee bit o' delay.
-	NSString *pendingMessageID = [fileMessage pendingMessageID];
+	NSString *pendingMessageID = [message pendingMessageID];
 	double delayInSeconds = 1.5;
 	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
 	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
@@ -385,8 +377,7 @@ static NSURLCache *imageCache = nil;
 		[[ATTaskQueue sharedTaskQueue] addTask:task];
 		[[ATTaskQueue sharedTaskQueue] start];
 	});
-	fileMessage = nil;
-	fileAttachment = nil;
+	message = nil;
 	return YES;
 }
 

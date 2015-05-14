@@ -17,7 +17,7 @@ typedef enum {
 	ATFileAttachmentSourceCamera,
 	ATFileAttachmentSourcePhotoLibrary,
 	ATFIleAttachmentSourceProgrammatic,
-} ATFIleAttachmentSource;
+} ATFileAttachmentSource;
 
 //TODO: Add CGSize for images?
 @interface ATFileAttachment : NSManagedObject

@@ -239,16 +239,7 @@
 - (void)messageInputViewDidChange:(ATMessageInputView *)anInputView {
 	if (anInputView.text && ![anInputView.text isEqualToString:@""]) {
 		if (!self.composingMessage) {
-			self.composingMessage = (ATTextMessage *)[ATData newEntityNamed:@"ATTextMessage"];
-			ATConversation *conversation = [ATConversationUpdater currentConversation];
-			if (conversation) {
-				ATMessageSender *sender = [ATMessageSender findSenderWithID:conversation.personID];
-				if (sender) {
-					self.composingMessage.sender = sender;
-				}
-			}
-			[self.composingMessage setup];
-			self.composingMessage.sentByUser = @YES;
+			self.composingMessage = [[ATBackend sharedBackend] createTextMessageWithBody:anInputView.text hiddenOnClient:NO];
 			self.composingMessage.seenByUser = @YES;
 		}
 	} else {
@@ -268,7 +259,15 @@
 
 - (void)messageInputViewSendPressed:(ATMessageInputView *)anInputView {
 	@synchronized(self) {
-		[[ATBackend sharedBackend] sendTextMessageWithBody:[self.inputView text] completion:nil];
+		if (self.composingMessage == nil) {
+			self.composingMessage = [[ATBackend sharedBackend] createTextMessageWithBody:self.inputView.text hiddenOnClient:NO];
+		}
+
+		self.composingMessage.seenByUser = @YES;
+
+		[[ATBackend sharedBackend] sendTextMessage:self.composingMessage completion:^(NSString *pendingMessageID){
+			self.composingMessage = nil;
+		}];
 		self.inputView.text = @"";
 	}
 }

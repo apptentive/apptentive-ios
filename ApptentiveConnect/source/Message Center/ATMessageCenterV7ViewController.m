@@ -359,6 +359,9 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 		fromUser = YES;
 	}
 	
+	// Mark message as read when rendered
+	[message markAsRead];
+	
 	if (cellType == ATMessageCellTypeAutomated) {
 		ATAutomatedMessageCellV7 *c = [self.collectionView dequeueReusableCellWithReuseIdentifier:ATAutomatedMessageCellV7Identifier forIndexPath:indexPath];
 		[self configureAutomatedCell:c forIndexPath:indexPath];

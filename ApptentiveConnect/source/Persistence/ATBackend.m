@@ -719,9 +719,10 @@ static NSURLCache *imageCache = nil;
 
 - (NSString *)initialEmailAddressForMessagePanel {
 	NSString *email = [ATConnect sharedConnection].initialUserEmailAddress;
+	ATPersonInfo *person = [ATPersonInfo currentPerson];
 	
-	if ([ATPersonInfo currentPerson]) {
-		email = [ATPersonInfo currentPerson].emailAddress;
+	if (person) {
+		email = person.emailAddress;
 	}
 	
 	return email;

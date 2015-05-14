@@ -61,7 +61,6 @@
 - (void)start {
 	[[ATBackend sharedBackend] messageCenterEnteredForeground];
 	
-	[self markAllMessagesAsRead];
 	[ATTextMessage clearComposingMessages];
 	
 	NSError *error = nil;

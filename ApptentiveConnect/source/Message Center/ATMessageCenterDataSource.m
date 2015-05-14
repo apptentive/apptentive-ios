@@ -76,30 +76,6 @@
 	
 }
 
-- (void)markAllMessagesAsRead {
-	NSFetchRequest *request = [[NSFetchRequest alloc] init];
-	[request setEntity:[NSEntityDescription entityForName:@"ATAbstractMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
-	[request setFetchBatchSize:20];
-	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
-	[request setSortDescriptors:@[sortDescriptor]];
-	sortDescriptor = nil;
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"seenByUser == %d", 0];
-	[request setPredicate:predicate];
-	
-	NSManagedObjectContext *moc = [ATData moc];
-	NSError *error = nil;
-	NSArray *results = [moc executeFetchRequest:request error:&error];
-	if (!results) {
-		ATLogError(@"Error executing fetch request: %@", error);
-	} else {
-		for (ATAbstractMessage *message in results) {
-			[message markAsRead];
-		}
-		[ATData save];
-	}
-	request = nil;
-}
-
 - (void)createIntroMessageIfNecessary {
 	NSUInteger messageCount = [ATData countEntityNamed:@"ATAbstractMessage" withPredicate:nil];
 	if (messageCount == 0) {

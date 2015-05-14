@@ -18,10 +18,9 @@
 - (id)initWithDelegate:(NSObject<ATMessageCenterDataSourceDelegate> *)delegate;
 - (void)start;
 - (void)stop;
-- (void)markAllMessagesAsRead;
 - (void)createIntroMessageIfNecessary;
-@end
 
+@end
 
 @protocol ATMessageCenterDataSourceDelegate <NSObject, NSFetchedResultsControllerDelegate>
 

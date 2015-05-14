@@ -67,11 +67,11 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 }
 
 + (ATPersonInfo *)newPersonFromJSON:(NSDictionary *)json {
-	if (json == nil)
+	if (json == nil) {
 		return nil;
+	}
 	
 	ATPersonInfo *result = [[ATPersonInfo alloc] init];
-	result = [[ATPersonInfo alloc] init];
 	result.apptentiveID = [json at_safeObjectForKey:@"id"];
 	result.name = [json at_safeObjectForKey:@"name"];
 	result.facebookID = [json at_safeObjectForKey:@"facebook_id"];

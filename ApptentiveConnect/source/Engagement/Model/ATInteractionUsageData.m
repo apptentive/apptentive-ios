@@ -121,7 +121,7 @@
 	// Person
 	ATPersonInfo *personInfo = [ATPersonInfo currentPerson];
 	if (personInfo) {
-		NSDictionary *personData = [personInfo.apiJSON objectForKey:@"person"];
+		NSDictionary *personData = personInfo.apiJSON[@"person"];
 		
 		// Person information
 		for (NSString *key in [personData allKeys]) {

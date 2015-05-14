@@ -211,6 +211,8 @@
 		if (self.apptentiveID && ![self.sentByUser boolValue]) {
 			[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidReadNotification object:self userInfo:@{ATMessageCenterMessageIDKey:self.apptentiveID}];
 		}
+		
+		[ATData save];
 	}
 }
 

@@ -260,6 +260,8 @@
 	@synchronized(self) {
 		if (self.composingMessage == nil) {
 			self.composingMessage = [[ATBackend sharedBackend] createTextMessageWithBody:self.inputView.text hiddenOnClient:NO];
+		} else {
+			self.composingMessage.body = self.inputView.text;
 		}
 
 		[[ATBackend sharedBackend] sendTextMessage:self.composingMessage completion:^(NSString *pendingMessageID){

@@ -238,17 +238,7 @@
 - (void)messageInputViewDidChange:(ATMessageInputView *)anInputView {
 	if (anInputView.text && ![anInputView.text isEqualToString:@""]) {
 		if (!self.composingMessage) {
-			self.composingMessage = (ATTextMessage *)[ATData newEntityNamed:@"ATTextMessage"];
-			ATConversation *conversation = [ATConversationUpdater currentConversation];
-			if (conversation) {
-				ATMessageSender *sender = [ATMessageSender findSenderWithID:conversation.personID];
-				if (sender) {
-					self.composingMessage.sender = sender;
-				}
-			}
-			[self.composingMessage setup];
-			self.composingMessage.sentByUser = @YES;
-			self.composingMessage.seenByUser = @YES;
+			self.composingMessage = [[ATBackend sharedBackend] createTextMessageWithBody:nil hiddenOnClient:NO];
 		}
 	} else {
 		if (self.composingMessage) {
@@ -268,36 +258,16 @@
 - (void)messageInputViewSendPressed:(ATMessageInputView *)anInputView {
 	@synchronized(self) {
 		if (self.composingMessage == nil) {
-			self.composingMessage = (ATTextMessage *)[ATData newEntityNamed:@"ATTextMessage"];
-			[self.composingMessage setup];
+			self.composingMessage = [[ATBackend sharedBackend] createTextMessageWithBody:self.inputView.text hiddenOnClient:NO];
+		} else {
+			self.composingMessage.body = self.inputView.text;
 		}
-		self.composingMessage.body = [self.inputView text];
-		self.composingMessage.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
-		self.composingMessage.sentByUser = @YES;
-		self.composingMessage.seenByUser = @YES;
-		if ([ATBackend sharedBackend].currentCustomData) {
-			[self.composingMessage addCustomDataFromDictionary:[ATBackend sharedBackend].currentCustomData];
-		}
-		[self.composingMessage updateClientCreationTime];
-		
-		[[[ATBackend sharedBackend] managedObjectContext] save:nil];
-		
-		[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidSendNotification object:@{ATMessageCenterMessageNonceKey:self.composingMessage.pendingMessageID}];
-		
-		// Give it a wee bit o' delay.
-		NSString *pendingMessageID = [self.composingMessage pendingMessageID];
-		double delayInSeconds = 1.5;
-		dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-		dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-			ATMessageTask *task = [[ATMessageTask alloc] init];
-			task.pendingMessageID = pendingMessageID;
-			[[ATTaskQueue sharedTaskQueue] addTask:task];
-			[[ATTaskQueue sharedTaskQueue] start];
-		});
-		self.composingMessage = nil;
+
+		[[ATBackend sharedBackend] sendTextMessage:self.composingMessage completion:^(NSString *pendingMessageID){
+			self.composingMessage = nil;
+		}];
 		self.inputView.text = @"";
 	}
-	
 }
 
 - (void)messageInputViewAttachPressed:(ATMessageInputView *)anInputView {

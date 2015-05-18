@@ -63,7 +63,6 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 	return [[NSUserDefaults standardUserDefaults] dictionaryForKey:ATPersonLastUpdateValuePreferenceKey];
 }
 
-
 - (void)update {
 	[self cancel];
 	ATPersonInfo *person = [ATPersonInfo currentPerson];

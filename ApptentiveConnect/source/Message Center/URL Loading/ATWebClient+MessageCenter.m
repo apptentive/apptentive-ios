@@ -67,10 +67,11 @@
 	return request;
 }
 
-- (ATAPIRequest *)requestForUpdatingDevice:(NSDictionary *)deviceDiffs {
+- (ATAPIRequest *)requestForUpdatingDevice:(ATDeviceInfo *)deviceInfo from:(NSDictionary *)lastVersion {
 	NSError *error = nil;
+	NSDictionary *postJSON = [deviceInfo apiJSONComparedWith:lastVersion];
 	
-	NSString *postString = [ATJSONSerialization stringWithJSONObject:deviceDiffs options:ATJSONWritingPrettyPrinted error:&error];
+	NSString *postString = [ATJSONSerialization stringWithJSONObject:postJSON options:ATJSONWritingPrettyPrinted error:&error];
 	if (!postString && error != nil) {
 		ATLogError(@"Error while encoding JSON: %@", error);
 		return nil;
@@ -92,10 +93,11 @@
 	return request;
 }
 
-- (ATAPIRequest *)requestForUpdatingPerson:(NSDictionary *)personDiffs {
+- (ATAPIRequest *)requestForUpdatingPerson:(ATPersonInfo *)personInfo from:(NSDictionary *)lastVersion {
 	NSError *error = nil;
+	NSDictionary *postJSON = [personInfo apiJSONComparedWith:lastVersion];
 	
-	NSString *postString = [ATJSONSerialization stringWithJSONObject:personDiffs options:ATJSONWritingPrettyPrinted error:&error];
+	NSString *postString = [ATJSONSerialization stringWithJSONObject:postJSON options:ATJSONWritingPrettyPrinted error:&error];
 	if (!postString && error != nil) {
 		ATLogError(@"Error while encoding JSON: %@", error);
 		return nil;

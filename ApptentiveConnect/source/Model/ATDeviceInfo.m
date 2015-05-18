@@ -42,7 +42,7 @@
 #endif
 }
 
-- (NSDictionary *)apiJSON {
+- (NSDictionary *)dictionaryRepresentation {
 	NSMutableDictionary *device = [NSMutableDictionary dictionary];
 	
 	NSString *uuid = [[ATBackend sharedBackend] deviceUUID];
@@ -104,5 +104,9 @@
 	}
 	
 	return @{@"device":device};
+}
+
+- (NSDictionary *)apiJSONComparedWith:(NSDictionary *)lastVersion {
+	return [ATUtilities diffDictionary:self.dictionaryRepresentation[@"device"] againstDictionary:lastVersion[@"device"]];
 }
 @end

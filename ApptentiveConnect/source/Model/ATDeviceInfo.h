@@ -10,9 +10,11 @@
 
 
 @interface ATDeviceInfo : NSObject
+@property (nonatomic, readonly) NSDictionary *dictionaryRepresentation;
+
 + (NSString *)carrier;
 
-- (NSDictionary *)apiJSON;
+- (NSDictionary *)apiJSONComparedWith:(NSDictionary *)lastVersion;
 @end
 
 

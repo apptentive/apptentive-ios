@@ -16,6 +16,11 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 
 #define kATPersonCodingVersion 1
 
+@interface ATPersonInfo ()
+
+
+@end
+
 @implementation ATPersonInfo
 
 - (id)init {
@@ -81,7 +86,7 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 	return result;
 }
 
-- (NSDictionary *)apiJSON {
+- (NSDictionary *)dictionaryRepresentation {
 	NSMutableDictionary *person = [NSMutableDictionary dictionary];
 	
 	if (self.name) {
@@ -106,6 +111,10 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 	[person setObject:customPersonData forKey:@"custom_data"];
 	
 	return [NSDictionary dictionaryWithObject:person forKey:@"person"];
+}
+
+- (NSDictionary *)apiJSONComparedWith:(NSDictionary *)lastVersion {
+	return [ATUtilities diffDictionary:self.dictionaryRepresentation againstDictionary:lastVersion];
 }
 
 - (NSDictionary *)comparisonDictionary {

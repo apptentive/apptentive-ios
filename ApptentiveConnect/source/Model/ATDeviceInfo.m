@@ -16,6 +16,7 @@
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
 #import "ATUtilities.h"
+#import "ATDeviceUpdater.h"
 
 @implementation ATDeviceInfo
 - (id)init {
@@ -106,7 +107,7 @@
 	return @{@"device":device};
 }
 
-- (NSDictionary *)apiJSONComparedWith:(NSDictionary *)lastVersion {
-	return [ATUtilities diffDictionary:self.dictionaryRepresentation[@"device"] againstDictionary:lastVersion[@"device"]];
+- (NSDictionary *)apiJSON {
+	return [ATUtilities diffDictionary:self.dictionaryRepresentation[@"device"] againstDictionary:[ATDeviceUpdater lastSavedVersion][@"device"]];
 }
 @end

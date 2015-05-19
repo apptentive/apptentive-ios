@@ -67,9 +67,9 @@
 	return request;
 }
 
-- (ATAPIRequest *)requestForUpdatingDevice:(ATDeviceInfo *)deviceInfo from:(NSDictionary *)lastVersion {
+- (ATAPIRequest *)requestForUpdatingDevice:(ATDeviceInfo *)deviceInfo {
 	NSError *error = nil;
-	NSDictionary *postJSON = [deviceInfo apiJSONComparedWith:lastVersion];
+	NSDictionary *postJSON = [deviceInfo apiJSON];
 	
 	NSString *postString = [ATJSONSerialization stringWithJSONObject:postJSON options:ATJSONWritingPrettyPrinted error:&error];
 	if (!postString && error != nil) {
@@ -93,9 +93,9 @@
 	return request;
 }
 
-- (ATAPIRequest *)requestForUpdatingPerson:(ATPersonInfo *)personInfo from:(NSDictionary *)lastVersion {
+- (ATAPIRequest *)requestForUpdatingPerson:(ATPersonInfo *)personInfo {
 	NSError *error = nil;
-	NSDictionary *postJSON = [personInfo apiJSONComparedWith:lastVersion];
+	NSDictionary *postJSON = [personInfo apiJSON];
 	
 	NSString *postString = [ATJSONSerialization stringWithJSONObject:postJSON options:ATJSONWritingPrettyPrinted error:&error];
 	if (!postString && error != nil) {

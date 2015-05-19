@@ -11,6 +11,7 @@
 #import "ATConnect_Private.h"
 #import "ATUtilities.h"
 #import "NSDictionary+ATAdditions.h"
+#import "ATPersonUpdater.h"
 
 NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 
@@ -113,8 +114,8 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 	return [NSDictionary dictionaryWithObject:person forKey:@"person"];
 }
 
-- (NSDictionary *)apiJSONComparedWith:(NSDictionary *)lastVersion {
-	return [ATUtilities diffDictionary:self.dictionaryRepresentation againstDictionary:lastVersion];
+- (NSDictionary *)apiJSON {
+	return [ATUtilities diffDictionary:self.dictionaryRepresentation againstDictionary:[ATPersonUpdater lastSavedVersion]];
 }
 
 - (NSDictionary *)comparisonDictionary {

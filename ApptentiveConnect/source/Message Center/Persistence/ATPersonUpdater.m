@@ -56,10 +56,10 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 		[person saveAsCurrentPerson];
 	}
 	
-	return person.needsUpdate || [person apiJSONComparedWith:[self lastSavedPerson]].count > 0;
+	return person.needsUpdate || [person apiJSON].count > 0;
 }
 
-+ (NSDictionary *)lastSavedPerson {
++ (NSDictionary *)lastSavedVersion {
 	return [[NSUserDefaults standardUserDefaults] dictionaryForKey:ATPersonLastUpdateValuePreferenceKey];
 }
 
@@ -71,7 +71,7 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 		[person saveAsCurrentPerson];
 	}
 	self.sentPersonJSON = [ATPersonInfo currentPerson].dictionaryRepresentation;
-	self.request = [[ATWebClient sharedClient] requestForUpdatingPerson:[ATPersonInfo currentPerson] from:[[self class] lastSavedPerson]];
+	self.request = [[ATWebClient sharedClient] requestForUpdatingPerson:[ATPersonInfo currentPerson]];
 	self.request.delegate = self;
 	[self.request start];
 }

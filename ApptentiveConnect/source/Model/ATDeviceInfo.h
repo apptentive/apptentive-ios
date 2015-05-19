@@ -14,7 +14,7 @@
 
 + (NSString *)carrier;
 
-- (NSDictionary *)apiJSONComparedWith:(NSDictionary *)lastVersion;
+- (NSDictionary *)apiJSON;
 @end
 
 

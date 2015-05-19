@@ -24,7 +24,7 @@ extern NSString *const ATCurrentPersonPreferenceKey;
 /*! If json is nil will not create a new person and will return nil. */
 + (ATPersonInfo *)newPersonFromJSON:(NSDictionary *)json;
 
-- (NSDictionary *)apiJSONComparedWith:(NSDictionary *)lastVersion;
+- (NSDictionary *)apiJSON;
 - (void)saveAsCurrentPerson;
 
 @end

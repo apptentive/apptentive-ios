@@ -18,6 +18,7 @@ extern NSString *const ATPersonLastUpdateValuePreferenceKey;
 @interface ATPersonUpdater : NSObject <ATAPIRequestDelegate>@property (nonatomic, weak) NSObject<ATPersonUpdaterDelegate> *delegate;
 
 + (BOOL)shouldUpdate;
++ (NSDictionary *)lastSavedVersion;
 
 - (id)initWithDelegate:(NSObject<ATPersonUpdaterDelegate> *)delegate;
 - (void)update;

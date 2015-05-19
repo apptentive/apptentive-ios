@@ -40,7 +40,7 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 	
 	ATDeviceInfo *deviceInfo = [[ATDeviceInfo alloc] init];
 	
-	return [deviceInfo apiJSONComparedWith:[self lastSavedVersion]].count > 0;
+	return [deviceInfo apiJSON].count > 0;
 }
 
 + (NSDictionary *)lastSavedVersion {
@@ -63,7 +63,7 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 	[self cancel];
 	ATDeviceInfo *deviceInfo = [[ATDeviceInfo alloc] init];
 	self.sentDeviceJSON = deviceInfo.dictionaryRepresentation;
-	self.request = [[ATWebClient sharedClient] requestForUpdatingDevice:deviceInfo from:[[self class] lastSavedVersion]];
+	self.request = [[ATWebClient sharedClient] requestForUpdatingDevice:deviceInfo];
 	self.request.delegate = self;
 	[self.request start];
 	deviceInfo = nil;

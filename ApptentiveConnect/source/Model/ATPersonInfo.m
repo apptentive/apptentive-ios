@@ -17,11 +17,6 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 
 #define kATPersonCodingVersion 1
 
-@interface ATPersonInfo ()
-
-
-@end
-
 @implementation ATPersonInfo
 
 - (id)init {

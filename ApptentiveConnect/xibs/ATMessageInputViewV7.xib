@@ -1,54 +1,73 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment defaultVersion="1072" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ATMessageInputView"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="JBB-TH-PDN" customClass="ATMessageInputView">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="38"/>
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" id="Vmx-V6-xl4">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="1"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                </view>
-                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="UVm-jL-DHC" customClass="ATMessageTextView">
-                    <rect key="frame" x="38" y="5" width="208" height="27"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UVm-jL-DHC" customClass="ATMessageTextView">
+                    <rect key="frame" x="50" y="6" width="213" height="33"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="180" id="nDA-uU-18H"/>
+                    </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="TE3-qJ-uyJ">
-                    <rect key="frame" x="250" y="6" width="65" height="26"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TE3-qJ-uyJ">
+                    <rect key="frame" x="263" y="6" width="57" height="33"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="57" id="gvv-jd-GhE"/>
+                    </constraints>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                    <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                     <state key="normal" title="Send"/>
                     <connections>
                         <action selector="sendPressed:" destination="JBB-TH-PDN" eventType="touchUpInside" id="JSR-Ga-Nj3"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="1By-ug-JkY">
-                    <rect key="frame" x="4" y="6" width="26" height="26"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                    <state key="normal" title="+">
-                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <state key="highlighted">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1By-ug-JkY">
+                    <rect key="frame" x="4" y="6" width="46" height="33"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="35" id="lGO-yD-LQb"/>
+                    </constraints>
+                    <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
+                    <state key="normal" image="at_camera_button_v7.png"/>
                     <connections>
                         <action selector="attachPressed:" destination="JBB-TH-PDN" eventType="touchUpInside" id="2F3-BZ-BAg"/>
                     </connections>
                 </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vmx-V6-xl4">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="1"/>
+                    <color key="backgroundColor" red="0.2196078431372549" green="0.57647058823529407" blue="0.63137254901960782" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="RW7-nc-d1P"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" red="0.7019608021" green="0.7019608021" blue="0.7019608021" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="1By-ug-JkY" firstAttribute="leading" secondItem="JBB-TH-PDN" secondAttribute="leading" constant="4" id="8Bc-li-y0q"/>
+                <constraint firstItem="TE3-qJ-uyJ" firstAttribute="top" secondItem="Vmx-V6-xl4" secondAttribute="bottom" constant="5" id="BrE-oi-aSb"/>
+                <constraint firstAttribute="bottom" secondItem="1By-ug-JkY" secondAttribute="bottom" constant="5" id="Ixh-Nl-Kxx"/>
+                <constraint firstItem="TE3-qJ-uyJ" firstAttribute="leading" secondItem="UVm-jL-DHC" secondAttribute="trailing" id="Ub2-av-T9S"/>
+                <constraint firstAttribute="bottom" secondItem="TE3-qJ-uyJ" secondAttribute="bottom" constant="5" id="VNm-Jr-b6d"/>
+                <constraint firstItem="1By-ug-JkY" firstAttribute="top" secondItem="Vmx-V6-xl4" secondAttribute="bottom" constant="5" id="WIc-bM-X4n"/>
+                <constraint firstItem="Vmx-V6-xl4" firstAttribute="top" secondItem="JBB-TH-PDN" secondAttribute="top" id="b2a-EL-XsK"/>
+                <constraint firstItem="Vmx-V6-xl4" firstAttribute="leading" secondItem="JBB-TH-PDN" secondAttribute="leading" id="iBj-f1-nO6"/>
+                <constraint firstItem="UVm-jL-DHC" firstAttribute="top" secondItem="Vmx-V6-xl4" secondAttribute="bottom" constant="5" id="mG9-gp-1In"/>
+                <constraint firstAttribute="trailing" secondItem="Vmx-V6-xl4" secondAttribute="trailing" id="ndB-w9-eob"/>
+                <constraint firstAttribute="bottom" secondItem="UVm-jL-DHC" secondAttribute="bottom" constant="5" id="qjr-fe-lBD"/>
+                <constraint firstAttribute="trailing" secondItem="TE3-qJ-uyJ" secondAttribute="trailing" id="vvc-Q0-JZF"/>
+                <constraint firstItem="UVm-jL-DHC" firstAttribute="leading" secondItem="1By-ug-JkY" secondAttribute="trailing" id="wi1-g0-YxY"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="attachButton" destination="1By-ug-JkY" id="xFf-jD-NQF"/>
                 <outlet property="sendButton" destination="TE3-qJ-uyJ" id="HR9-k7-SzU"/>
@@ -56,4 +75,12 @@
             </connections>
         </view>
     </objects>
+    <resources>
+        <image name="at_camera_button_v7.png" width="26" height="19"/>
+    </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
 </document>

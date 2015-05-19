@@ -74,7 +74,7 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
     [super viewDidLoad];
 	
 	self.backgroundImageView.contentMode = UIViewContentModeCenter;
-	self.backgroundImageView.backgroundColor = [UIColor whiteColor];
+	self.backgroundImageView.backgroundColor = self.collectionView.backgroundColor;
 	
 	self.collectionView.keyboardDismissMode = UIScrollViewKeyboardDismissModeNone;
 	
@@ -113,6 +113,15 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
 		[self relayoutSubviews:YES];
 	});
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+	
+	[super viewDidAppear:animated];
+	
+	[self relayoutSubviews:YES];
+	[self.collectionView.collectionViewLayout invalidateLayout];
+	[self.collectionView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -421,13 +430,26 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 		
 		return s;
 	} else if (cellType == ATMessageCellTypeText && [message.sentByUser boolValue]) {
-		sizingUserTextCell.messageLabel.preferredMaxLayoutWidth = self.collectionView.bounds.size.width - sizingUserTextCellHorizontalPadding;
+		sizingUserTextCell.messageLabel.preferredMaxLayoutWidth = self.collectionView.bounds.size.width - 55;
 		
 		[self configureUserTextCell:sizingUserTextCell forIndexPath:indexPath];
 		cell = sizingUserTextCell;
-		CGSize s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 		
+		CGSize s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 		s.width = self.collectionView.bounds.size.width;
+
+		s = [ATTTTAttributedLabel sizeThatFitsAttributedString:[[sizingUserTextCell messageLabel] attributedText] withConstraints:CGSizeMake(self.collectionView.bounds.size.width  - 55, CGFLOAT_MAX) limitedToNumberOfLines:0];
+		//s = [[sizingUserTextCell messageLabel] sizeThatFits:CGSizeMake(self.collectionView.bounds.size.width  - 55, CGFLOAT_MAX)];
+		s.width = self.collectionView.bounds.size.width;
+		s.height += 31; // Previously 27
+		
+		if ([[sizingUserTextCell messageLabel] text] == nil) {
+			s.height += 17;
+		}
+
+		if ([[sizingUserTextCell dateLabel] text] == nil) {
+			s.height -= 5;
+		}
 		
 		// Workaround for `systemLayoutSizeFittingSize:` returning height of 0 in iOS 8 beta
 		// http://openradar.appspot.com/17958382
@@ -441,8 +463,22 @@ static NSString *const ATFileMessageUserCellV7Identifier = @"ATFileMessageUserCe
 		
 		[self configureDevTextCell:sizingDevTextCell forIndexPath:indexPath];
 		cell = sizingDevTextCell;
+		
 		CGSize s = [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 		s.width = self.collectionView.bounds.size.width;
+		
+		s = [ATTTTAttributedLabel sizeThatFitsAttributedString:[[sizingDevTextCell messageLabel] attributedText] withConstraints:CGSizeMake(self.collectionView.bounds.size.width  - 55, CGFLOAT_MAX) limitedToNumberOfLines:0];
+		//s = [[sizingDevTextCell messageLabel] sizeThatFits:CGSizeMake(self.collectionView.bounds.size.width  - sizingAutomatedCellHorizontalPadding, CGFLOAT_MAX)];
+		s.width = self.collectionView.bounds.size.width;
+		s.height += 31; // Previously 27
+		
+		if ([[sizingDevTextCell messageLabel] text] == nil) {
+			s.height += 17;
+		}
+		
+		if ([[sizingDevTextCell dateLabel] text] == nil) {
+			s.height -= 5;
+		}
 		
 		// Workaround for `systemLayoutSizeFittingSize:` returning height of 0 in iOS 8 beta
 		// http://openradar.appspot.com/17958382

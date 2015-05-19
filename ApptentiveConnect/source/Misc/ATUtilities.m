@@ -807,6 +807,9 @@ done:
 // 1. Any key-value pairs that appear in new but not old
 // 2. The keys that appear in old but not new with the values set to [NSNull null]
 // 3. Any keys whose values have changed (with the new value)
+//
+// Nested dictionaries (e.g. custom_data) are sent in their entirety
+// if they have changed (in order to match what the server is expecting).
 + (NSDictionary *)diffDictionary:(NSDictionary *)new againstDictionary:(NSDictionary *)old {
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
 	

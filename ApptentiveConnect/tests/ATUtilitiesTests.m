@@ -262,6 +262,7 @@
 	XCTAssertEqualObjects(@"foo%25%20bar%2F%23haha", result, @"Unexpected result: %@", result);
 }
 
+// The JSON blobs loaded here should be identical to those for the Android SDK.
 - (NSDictionary *)loadJSONBlobsWithNames:(NSArray *)names {
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
 	

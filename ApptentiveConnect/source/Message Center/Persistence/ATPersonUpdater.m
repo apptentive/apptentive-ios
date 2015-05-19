@@ -48,39 +48,19 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 + (BOOL)shouldUpdate {
 	[ATPersonUpdater registerDefaults];
 	
-	if (![ATConversationUpdater conversationExists]) {
-		return NO;
-	}
+	ATPersonInfo *person = [ATPersonInfo currentPerson];
 	
-	ATPersonInfo *person = nil;
-	if ([ATPersonInfo personExists]) {
-		person = [ATPersonInfo currentPerson];
-	} else {
+	if (person == nil) {
 		person = [[ATPersonInfo alloc] init];
 		person.needsUpdate = YES;
 		[person saveAsCurrentPerson];
 	}
 	
-	// If person needsUpdate, then do so.
-	if (!person || person.needsUpdate) {
-		return YES;
-	}
-	
-	// Otherwise, check to see if value has changed since last sent to the server.
-	BOOL shouldUpdate = NO;
-	
-	NSObject *lastValue = [[NSUserDefaults standardUserDefaults] objectForKey:ATPersonLastUpdateValuePreferenceKey];
-	if (lastValue == nil || ![lastValue isKindOfClass:[NSDictionary class]]) {
-		shouldUpdate = YES;
-	} else {
-		NSDictionary *lastValueDictionary = (NSDictionary *)lastValue;
-		NSDictionary *currentValueDictionary = [person safeApiJSON];
-		if (![ATUtilities dictionary:currentValueDictionary isEqualToDictionary:lastValueDictionary]) {
-			shouldUpdate = YES;
-		}
-	}
-	
-	return shouldUpdate;
+	return person.needsUpdate || [person apiJSON].count > 0;
+}
+
++ (NSDictionary *)lastSavedVersion {
+	return [[NSUserDefaults standardUserDefaults] dictionaryForKey:ATPersonLastUpdateValuePreferenceKey];
 }
 
 - (void)update {
@@ -90,8 +70,8 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 		person.needsUpdate = YES;
 		[person saveAsCurrentPerson];
 	}
-	self.sentPersonJSON = [person safeApiJSON];
-	self.request = [[ATWebClient sharedClient] requestForUpdatingPerson:person];
+	self.sentPersonJSON = [ATPersonInfo currentPerson].dictionaryRepresentation;
+	self.request = [[ATWebClient sharedClient] requestForUpdatingPerson:[ATPersonInfo currentPerson]];
 	self.request.delegate = self;
 	[self.request start];
 }

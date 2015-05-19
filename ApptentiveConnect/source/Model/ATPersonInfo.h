@@ -16,17 +16,15 @@ extern NSString *const ATCurrentPersonPreferenceKey;
 @property (nonatomic, copy) NSString *emailAddress;
 @property (nonatomic, copy) NSString *secret;
 @property (nonatomic, assign) BOOL needsUpdate;
+@property (nonatomic, readonly) BOOL hasEmailAddress;
+@property (nonatomic, readonly) NSDictionary *dictionaryRepresentation;
 
-+ (BOOL)personExists;
 + (ATPersonInfo *)currentPerson;
 
 /*! If json is nil will not create a new person and will return nil. */
 + (ATPersonInfo *)newPersonFromJSON:(NSDictionary *)json;
 
 - (NSDictionary *)apiJSON;
-- (NSDictionary *)safeApiJSON;
-
 - (void)saveAsCurrentPerson;
 
-- (BOOL)hasEmailAddress;
 @end

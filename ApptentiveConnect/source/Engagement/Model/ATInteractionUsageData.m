@@ -84,7 +84,7 @@
 	// Device
 	ATDeviceInfo *deviceInfo = [[ATDeviceInfo alloc] init];
 	if (deviceInfo) {
-		NSDictionary *deviceData = [deviceInfo apiJSON][@"device"];
+		NSDictionary *deviceData = deviceInfo.dictionaryRepresentation[@"device"];
 
 		// Device information
 		for (NSString *key in [deviceData allKeys]) {
@@ -121,7 +121,7 @@
 	// Person
 	ATPersonInfo *personInfo = [ATPersonInfo currentPerson];
 	if (personInfo) {
-		NSDictionary *personData = [[personInfo apiJSON] objectForKey:@"person"];
+		NSDictionary *personData = personInfo.dictionaryRepresentation[@"person"];
 		
 		// Person information
 		for (NSString *key in [personData allKeys]) {

@@ -18,8 +18,8 @@
 }
 @property (nonatomic, retain) IBOutlet UITableView *tableView;
 @property (retain, nonatomic) IBOutlet UIView *headerView;
-@property (retain, nonatomic) IBOutlet UITextView *apptentiveDescriptionTextView;
-@property (retain, nonatomic) IBOutlet UITextView *apptentivePrivacyTextView;
+@property (retain, nonatomic) IBOutlet UILabel *apptentiveDescriptionTextView;
+@property (retain, nonatomic) IBOutlet UILabel *apptentivePrivacyTextView;
 @property (retain, nonatomic) IBOutlet UIButton *findOutMoreButton;
 @property (retain, nonatomic) IBOutlet UIButton *gotoPrivacyPolicyButton;
 

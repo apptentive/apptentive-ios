@@ -51,11 +51,12 @@ UIEdgeInsets insetsForView(UIView *v) {
 	textView.autoresizingMask = UIViewAutoresizingNone;
 	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
 		textViewContentInset = UIEdgeInsetsMake(-textFieldEdgeInsetHeight, 0, -textFieldEdgeInsetHeight, 0);
-		textView.backgroundColor = [UIColor whiteColor];
-		textView.layer.borderColor = [UIColor colorWithRed:222/255. green:222/255. blue:230/255. alpha:1].CGColor;
+		textView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.8];
+		textView.layer.borderColor = [UIColor colorWithRed:56./255. green:147./255. blue:161./255. alpha:0.2].CGColor;//[UIColor colorWithRed:222/255. green:222/255. blue:230/255. alpha:1].CGColor;
 		textView.layer.borderWidth = 1;
 		textView.layer.cornerRadius = 6;
-		self.backgroundColor = [UIColor colorWithRed:248/255. green:248/255. blue:248/255. alpha:1];
+		self.backgroundColor = [UIColor colorWithRed:239/255. green:247/255. blue:250/255. alpha:1];
+		//self.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"tabbar-bg"]];
 	} else {
 		//TODO: Get rid of magic numbers here.
 		textViewContentInset = UIEdgeInsetsMake(-textFieldEdgeInsetHeight, -2, -textFieldEdgeInsetHeight, 0);
@@ -122,7 +123,7 @@ UIEdgeInsets insetsForView(UIView *v) {
 		
 		CGSize intrinsicContentSize = textView.contentSize;
 		intrinsicContentSize.height = actualHeight;
-		intrinsicContentSize.width = CGRectGetWidth(rect);
+		intrinsicContentSize.width = textView.bounds.size.width;
 		
 		newTextHeight = MIN(maxTextFieldHeight, intrinsicContentSize.height);
 	} else {

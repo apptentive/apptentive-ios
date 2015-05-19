@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4510" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment version="1072" defaultVersion="1072" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ATPersonDetailsViewController">
@@ -23,18 +23,20 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="4">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="4">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <color key="backgroundColor" red="0.90588235859999999" green="0.90588235859999999" blue="0.90588235859999999" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.94901960780000005" green="0.96470588239999999" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="separatorColor" red="0.80000000000000004" green="0.89019607840000003" blue="0.91372549020000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="9"/>
                         <outlet property="delegate" destination="-1" id="10"/>
                     </connections>
                 </tableView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" id="16">
-                    <rect key="frame" x="0.0" y="490" width="320" height="79"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="16">
+                    <rect key="frame" x="0.0" y="488" width="320" height="80"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="80" id="4cC-2C-vMX"/>
+                    </constraints>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                     <state key="normal">
                         <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -51,21 +53,37 @@
                         <action selector="logoPressed:" destination="-1" eventType="touchUpInside" id="17"/>
                     </connections>
                 </button>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" id="34">
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="34">
                     <rect key="frame" x="20" y="502" width="280" height="21"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="jDs-FR-EjD"/>
+                    </constraints>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
                     <color key="textColor" red="0.48627451059999999" green="0.48627451059999999" blue="0.48627451059999999" alpha="1" colorSpace="deviceRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="33">
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="at_apptentive_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="33">
                     <rect key="frame" x="80" y="524" width="161" height="28"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="28" id="c4v-0n-Yf6"/>
+                    </constraints>
                 </imageView>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+            <color key="backgroundColor" red="0.94901960780000005" green="0.96470588239999999" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="4" secondAttribute="bottom" id="0tH-65-5vH"/>
+                <constraint firstItem="16" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="2m5-sK-Kug"/>
+                <constraint firstAttribute="trailing" secondItem="16" secondAttribute="trailing" id="7Jq-LE-Lmi"/>
+                <constraint firstItem="4" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="98O-Zu-OlY"/>
+                <constraint firstItem="4" firstAttribute="top" secondItem="1" secondAttribute="top" id="Fhm-ft-Hea"/>
+                <constraint firstItem="34" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="20" id="GX8-z1-8St"/>
+                <constraint firstAttribute="bottom" secondItem="16" secondAttribute="bottom" id="XEr-WO-xrS"/>
+                <constraint firstAttribute="trailing" secondItem="34" secondAttribute="trailing" constant="20" id="Z0q-N0-M2k"/>
+                <constraint firstAttribute="bottom" secondItem="33" secondAttribute="bottom" constant="16" id="iqk-lE-pzu"/>
+                <constraint firstAttribute="trailing" secondItem="4" secondAttribute="trailing" id="lfG-33-bQF"/>
+                <constraint firstItem="33" firstAttribute="top" secondItem="34" secondAttribute="bottom" constant="1" id="uID-is-byC"/>
+                <constraint firstAttribute="centerX" secondItem="33" secondAttribute="centerX" id="zAx-E9-3YH"/>
+            </constraints>
         </view>
         <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="ATPersonEmailCell" id="19">
             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -74,9 +92,8 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" minimumFontSize="17" clearButtonMode="whileEditing" id="20">
-                        <rect key="frame" x="8" y="4" width="304" height="36"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="20">
+                        <rect key="frame" x="8" y="0.0" width="304" height="43"/>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                         <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress" returnKeyType="next"/>
                         <connections>
@@ -84,6 +101,12 @@
                         </connections>
                     </textField>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="20" firstAttribute="top" secondItem="I4X-q2-3RQ" secondAttribute="top" id="2rM-sR-xAc"/>
+                    <constraint firstAttribute="bottom" secondItem="20" secondAttribute="bottom" id="SnT-P5-tYz"/>
+                    <constraint firstItem="20" firstAttribute="leading" secondItem="I4X-q2-3RQ" secondAttribute="leadingMargin" id="gxm-GA-svX"/>
+                    <constraint firstItem="20" firstAttribute="trailing" secondItem="I4X-q2-3RQ" secondAttribute="trailingMargin" id="ikY-eA-jvr"/>
+                </constraints>
             </tableViewCellContentView>
         </tableViewCell>
         <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="ATPersonNameCell" id="25">
@@ -93,9 +116,8 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Name" minimumFontSize="17" clearButtonMode="whileEditing" id="26">
-                        <rect key="frame" x="8" y="4" width="304" height="36"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Name" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="26">
+                        <rect key="frame" x="8" y="0.0" width="304" height="43"/>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                         <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" returnKeyType="done"/>
                         <connections>
@@ -103,7 +125,21 @@
                         </connections>
                     </textField>
                 </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="26" secondAttribute="bottom" id="FIL-TZ-wAa"/>
+                    <constraint firstItem="26" firstAttribute="top" secondItem="UTt-zO-Wpb" secondAttribute="top" id="QGY-3g-o1Z"/>
+                    <constraint firstItem="26" firstAttribute="trailing" secondItem="UTt-zO-Wpb" secondAttribute="trailingMargin" id="RK8-a2-ZKD"/>
+                    <constraint firstItem="26" firstAttribute="leading" secondItem="UTt-zO-Wpb" secondAttribute="leadingMargin" id="rzz-gm-74W"/>
+                </constraints>
             </tableViewCellContentView>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="at_apptentive_logo.png" width="161" height="28"/>
+    </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
 </document>

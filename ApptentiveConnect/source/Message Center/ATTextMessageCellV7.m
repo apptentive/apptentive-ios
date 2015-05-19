@@ -67,7 +67,7 @@
 		self.messageLabel.text = messageBody;
 	}
 	
-	self.textContainerView.layer.cornerRadius = 10;
+	self.textContainerView.layer.cornerRadius = 13;
 	
 	self.userIconView.image = [ATBackend imageNamed:@"at_mc_user_icon_default"];
 	self.userIconView.imageURL = [NSURL URLWithString:self.message.sender.profilePhotoURL];
@@ -92,6 +92,11 @@
 	} else {
 		self.tooLongLabel.hidden = YES;
 	}
+	
+	[self.messageLabel sizeToFit];
+	[self setNeedsLayout];
+	[self setNeedsUpdateConstraints];
+	[self setNeedsDisplay];
 }
 
 - (id)initWithFrame:(CGRect)frame {
@@ -103,13 +108,13 @@
 
 - (void)awakeFromNib {
 	[super awakeFromNib];
-	self.userIconOffsetConstraint.constant = kMinimumIconConstraint;
+	//self.userIconOffsetConstraint.constant = kMinimumIconConstraint;
 	self.composingImageView.image = [[ATBackend imageNamed:@"at_mc_text_compose_ellipsis"] imageByTintingWithColor:[UIColor whiteColor]];
 }
 
 - (void)prepareForReuse {
 	[super prepareForReuse];
-	self.userIconOffsetConstraint.constant = kMinimumIconConstraint;
+	//self.userIconOffsetConstraint.constant = kMinimumIconConstraint;
 	self.message = nil;
 }
 
@@ -146,7 +151,7 @@
 }
 
 - (void)collection:(UICollectionView *)collectionView didScroll:(CGFloat)topOffset {
-	CGRect iconInset = [collectionView convertRect:self.frame fromView:self.superview];
+	/*CGRect iconInset = [collectionView convertRect:self.frame fromView:self.superview];
 	iconInset.origin.y += topOffset - 1;
 	iconInset.origin.y += CGRectGetMaxY(self.dateLabel.bounds);
 	
@@ -155,7 +160,7 @@
 	CGFloat maxOffset = CGRectGetHeight(self.bounds) - CGRectGetHeight(self.userIconView.bounds) - minBottomOffset - CGRectGetMinY(self.userIconOffsetView.frame);
 	CGFloat iconInsetY = -CGRectGetMinY(iconInset);
 	CGFloat newValue = MAX(minOffset, MIN(maxOffset, iconInsetY));
-	self.userIconOffsetConstraint.constant = newValue;
+	self.userIconOffsetConstraint.constant = newValue;*/
 }
 
 #pragma mark TTTAttributedLabelDelegate

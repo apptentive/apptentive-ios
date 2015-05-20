@@ -2,19 +2,22 @@
 //  ATMessageCenterViewController.h
 //  ApptentiveConnect
 //
-//  Created by Andrew Wooster on 9/28/12.
-//  Copyright (c) 2012 Apptentive, Inc. All rights reserved.
+//  Created by Frank Schmitt on 5/20/15.
+//  Copyright (c) 2015 Apptentive, Inc. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-#import "ATAutomatedMessageCell.h"
-#import "ATFileMessageCell.h"
-#import "ATMessageCenterBaseViewController.h"
-#import "ATMessageCenterDataSource.h"
-#import "ATMessageInputView.h"
-#import "ATSimpleImageViewController.h"
-#import "ATTextMessageUserCell.h"
+@protocol ATMessageCenterDismissalDelegate;
 
-@interface ATMessageCenterViewController : ATMessageCenterBaseViewController <ATMessageCenterDataSourceDelegate, ATMessageInputViewDelegate, UIActionSheetDelegate, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface ATMessageCenterViewController : UICollectionViewController
+
+@property (weak, nonatomic) NSObject<ATMessageCenterDismissalDelegate> *dismissalDelegate;
+
+@end
+
+@protocol ATMessageCenterDismissalDelegate <NSObject>
+- (void)messageCenterWillDismiss:(ATMessageCenterViewController *)messageCenter;
+@optional
+- (void)messageCenterDidDismiss:(ATMessageCenterViewController *)messageCenter;
 @end

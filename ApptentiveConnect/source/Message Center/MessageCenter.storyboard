@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -28,10 +29,10 @@
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="yF3-Yk-QvY">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="ciN-1c-UtB">
                             <size key="itemSize" width="320" height="50"/>
-                            <size key="headerReferenceSize" width="50" height="177"/>
+                            <size key="headerReferenceSize" width="320" height="256"/>
                             <size key="footerReferenceSize" width="50" height="50"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
@@ -83,21 +84,67 @@
                                 </constraints>
                             </collectionViewCell>
                         </cells>
-                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Greeting" id="4xj-ct-OSg" userLabel="Greeting View">
+                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Greeting" id="4xj-ct-OSg" userLabel="Greeting View" customClass="ATMessageCenterGreetingView">
                             <rect key="frame" x="0.0" y="64" width="320" height="177"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Greetings and Salutations" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aFB-po-gFo">
-                                    <rect key="frame" x="61" y="78" width="198" height="21"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="at_apptentive_icon_small.png" translatesAutoresizingMaskIntoConstraints="NO" id="Ktg-yI-WuD">
+                                    <rect key="frame" x="108" y="50" width="104" height="104"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" secondItem="Ktg-yI-WuD" secondAttribute="height" multiplier="1:1" id="0dL-WN-bKE"/>
+                                        <constraint firstAttribute="width" constant="104" id="fSG-lY-WaO"/>
+                                    </constraints>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                    </userDefinedRuntimeAttributes>
+                                </imageView>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bIy-Cx-hL3">
+                                    <rect key="frame" x="11" y="184" width="298" height="71"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Please leave us some feedback so we can make the app better for you." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V4O-Rz-Gct">
+                                            <rect key="frame" x="8" y="37" width="282" height="34"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                                            <color key="textColor" red="0.56470588235294117" green="0.56470588235294117" blue="0.56470588235294117" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="I'm sorry to hear that!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MNp-ZZ-5tH">
+                                            <rect key="frame" x="8" y="0.0" width="282" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="MNp-ZZ-5tH" secondAttribute="trailing" constant="8" id="3ot-XP-L6T"/>
+                                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="320" id="6s8-Bw-YfS"/>
+                                        <constraint firstItem="MNp-ZZ-5tH" firstAttribute="leading" secondItem="bIy-Cx-hL3" secondAttribute="leading" constant="8" id="CFn-pX-Tsz"/>
+                                        <constraint firstItem="V4O-Rz-Gct" firstAttribute="top" secondItem="MNp-ZZ-5tH" secondAttribute="bottom" constant="16" id="CTh-3j-36Q"/>
+                                        <constraint firstItem="V4O-Rz-Gct" firstAttribute="leading" secondItem="bIy-Cx-hL3" secondAttribute="leading" constant="8" id="Fed-Zp-u8y"/>
+                                        <constraint firstAttribute="height" constant="71" id="N0u-lh-iSN"/>
+                                        <constraint firstAttribute="trailing" secondItem="V4O-Rz-Gct" secondAttribute="trailing" constant="8" id="V8j-KZ-t1U"/>
+                                        <constraint firstAttribute="bottom" secondItem="V4O-Rz-Gct" secondAttribute="bottom" id="clm-0c-wjJ"/>
+                                        <constraint firstItem="MNp-ZZ-5tH" firstAttribute="top" secondItem="bIy-Cx-hL3" secondAttribute="top" id="th0-ms-37t"/>
+                                    </constraints>
+                                </view>
                             </subviews>
                             <constraints>
-                                <constraint firstAttribute="centerX" secondItem="aFB-po-gFo" secondAttribute="centerX" id="Q4d-fA-fmE"/>
-                                <constraint firstAttribute="centerY" secondItem="aFB-po-gFo" secondAttribute="centerY" id="YTg-zO-o44"/>
+                                <constraint firstAttribute="centerX" secondItem="bIy-Cx-hL3" secondAttribute="centerX" priority="500" id="ImW-cX-dMM"/>
+                                <constraint firstAttribute="centerY" secondItem="bIy-Cx-hL3" secondAttribute="centerY" priority="500" constant="-92" id="Wev-Zw-wDH"/>
+                                <constraint firstAttribute="centerX" secondItem="Ktg-yI-WuD" secondAttribute="centerX" priority="500" id="aBk-nf-LiU"/>
+                                <constraint firstAttribute="centerY" secondItem="Ktg-yI-WuD" secondAttribute="centerY" priority="500" constant="26" id="i8y-3S-GeY"/>
                             </constraints>
+                            <connections>
+                                <outlet property="imageCenterXConstraint" destination="aBk-nf-LiU" id="VRO-Ye-O8j"/>
+                                <outlet property="imageCenterYConstraint" destination="i8y-3S-GeY" id="7Xi-e0-QLn"/>
+                                <outlet property="imageView" destination="Ktg-yI-WuD" id="Ji2-iN-SfK"/>
+                                <outlet property="imageWidthConstraint" destination="fSG-lY-WaO" id="8p1-hC-fiz"/>
+                                <outlet property="messageLabel" destination="V4O-Rz-Gct" id="1eu-36-xgR"/>
+                                <outlet property="textCenterXConstraint" destination="ImW-cX-dMM" id="vVd-Yr-H1e"/>
+                                <outlet property="textCenterYConstraint" destination="Wev-Zw-wDH" id="Der-Ex-nSD"/>
+                                <outlet property="textContainerView" destination="bIy-Cx-hL3" id="XlN-69-OH6"/>
+                                <outlet property="textHeightConstraint" destination="N0u-lh-iSN" id="QpL-LZ-gfK"/>
+                                <outlet property="titleLabel" destination="MNp-ZZ-5tH" id="eOE-0r-lAr"/>
+                            </connections>
                         </collectionReusableView>
                         <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Thanks" id="5b6-68-6Nd" userLabel="Thanks View">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
@@ -133,6 +180,9 @@
             <point key="canvasLocation" x="742" y="656"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="at_apptentive_icon_small.png" width="17" height="18"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

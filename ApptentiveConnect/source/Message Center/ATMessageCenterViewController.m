@@ -7,8 +7,13 @@
 //
 
 #import "ATMessageCenterViewController.h"
+#import "ATMessageCenterGreetingView.h"
+#import "ATBackend.h"
+#import "ATConnect.h"
 
 @interface ATMessageCenterViewController ()
+
+@property (weak, nonatomic) ATMessageCenterGreetingView *greeting;
 
 @end
 
@@ -36,6 +41,16 @@
 	}];
 }
 
+#pragma mark Rotation
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+	CGFloat headerHeight = UIInterfaceOrientationIsLandscape(toInterfaceOrientation) ? 128 : 256;
+	UICollectionViewFlowLayout *flowLayout = (id)self.collectionViewLayout;
+	
+	flowLayout.headerReferenceSize = CGSizeMake(self.view.bounds.size.width, headerHeight);
+	[flowLayout invalidateLayout];
+}
+
 #pragma mark <UICollectionViewDataSource>
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
@@ -59,13 +74,21 @@
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-	NSString *reuseIdentifier = [kind isEqualToString:UICollectionElementKindSectionHeader] ? @"Greeting" : @"Thanks";
-	
-	UICollectionReusableView *view = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-	
-	// TODO: configure the view
-	
-	return view;
+	if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+		ATMessageCenterGreetingView *greeting = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"Greeting" forIndexPath:indexPath];
+		
+		greeting.titleLabel.text = @"I’m sorry to hear that!";
+		greeting.messageLabel.text = @"Please leave us some feedback so we can make the app better for you.";
+		greeting.imageView.image = [ATBackend imageNamed:@"at_apptentive_icon_small"];
+		
+		self.greeting = greeting;
+		
+		return greeting;
+	} else {
+		UICollectionReusableView *thanks = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"Thanks" forIndexPath:indexPath];
+		
+		return thanks;
+	}
 }
 
 #pragma mark <UICollectionViewDelegate>

@@ -9,7 +9,7 @@
 #import "ATMessageCenterGreetingView.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define IMAGE_TEXT_HORIZONTAL_SPACING 8.0
+#define IMAGE_TEXT_HORIZONTAL_SPACING 0.0
 #define IMAGE_TEXT_VERTICAL_SPACING 30.0
 
 #define VERTICAL_OFFSET 50.0
@@ -27,7 +27,6 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *textWidthConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *textHeightConstraint;
 
-@property (weak, nonatomic) IBOutlet UIView *textContainerView;
 @end
 
 @implementation ATMessageCenterGreetingView
@@ -40,17 +39,15 @@
 		self.imageCenterYConstraint.constant = 0.0;
 		self.textCenterYConstraint.constant = 0.0;
 		
-		CGFloat textWidth = self.textContainerView.bounds.size.width;
-		
-		self.imageCenterXConstraint.constant = textWidth / 2.0 + IMAGE_TEXT_HORIZONTAL_SPACING / 2.0;
-		self.textCenterXConstraint.constant = -(self.imageWidthConstraint.constant / 2.0 + IMAGE_TEXT_HORIZONTAL_SPACING / 2.0);
+		self.imageCenterXConstraint.constant = self.textWidthConstraint.constant / 2.0;
+		self.textCenterXConstraint.constant = -self.imageWidthConstraint.constant / 2.0;
 	} else {
 		// Portrait/iPad
 		self.imageCenterXConstraint.constant = 0.0;
 		self.textCenterXConstraint.constant = 0.0;
 		
-		self.imageCenterYConstraint.constant = self.textHeightConstraint.constant / 2.0 + IMAGE_TEXT_VERTICAL_SPACING / 2.0;
-		self.textCenterYConstraint.constant = -(self.imageWidthConstraint.constant / 2.0 + IMAGE_TEXT_VERTICAL_SPACING / 2.0);
+		self.imageCenterYConstraint.constant = self.textHeightConstraint.constant / 2.0;
+		self.textCenterYConstraint.constant = -self.imageWidthConstraint.constant / 2.0;
 	}
 }
 

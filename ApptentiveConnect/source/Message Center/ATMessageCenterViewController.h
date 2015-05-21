@@ -10,9 +10,9 @@
 
 @protocol ATMessageCenterDismissalDelegate;
 
-@interface ATMessageCenterViewController : UICollectionViewController
+@interface ATMessageCenterViewController : UITableViewController
 
-@property (weak, nonatomic) NSObject<ATMessageCenterDismissalDelegate> *dismissalDelegate;
+@property (nonatomic, weak) NSObject<ATMessageCenterDismissalDelegate> *dismissalDelegate;
 
 @end
 
@@ -21,3 +21,4 @@
 @optional
 - (void)messageCenterDidDismiss:(ATMessageCenterViewController *)messageCenter;
 @end
+

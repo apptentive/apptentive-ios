@@ -130,7 +130,7 @@ static NSURLCache *imageCache = nil;
 			imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"png" inDirectory:@"generated"];
 		}
 	}
-	
+
 	if (imagePath) {
 		result = [UIImage imageWithContentsOfFile:imagePath];
 	} else {

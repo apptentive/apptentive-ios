@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ATMessageCenterGreetingView : UICollectionReusableView
+@interface ATMessageCenterGreetingView : UIView
 
 @property (retain, nonatomic) IBOutlet UIImageView *imageView;
 @property (retain, nonatomic) IBOutlet UILabel *titleLabel;

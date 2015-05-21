@@ -9,12 +9,7 @@
 #import "ATMessageCenterGreetingView.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define IMAGE_TEXT_HORIZONTAL_SPACING 0.0
-#define IMAGE_TEXT_VERTICAL_SPACING 30.0
-
-#define VERTICAL_OFFSET 50.0
 #define LINE_BREAK_HEIGHT 150.0
-
 
 @interface ATMessageCenterGreetingView ()
 

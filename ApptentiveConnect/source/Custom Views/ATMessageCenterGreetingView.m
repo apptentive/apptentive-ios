@@ -29,8 +29,6 @@
 @implementation ATMessageCenterGreetingView
 
 - (void)updateConstraints {
-	[super updateConstraints];
-	
 	if (CGRectGetHeight(self.bounds) < LINE_BREAK_HEIGHT) {
 		// Landscape on phone: Center vertically, offset horizontally
 		self.imageCenterYConstraint.constant = 0.0;
@@ -46,6 +44,8 @@
 		self.imageCenterYConstraint.constant = self.textContainerView.bounds.size.height / 2.0;
 		self.textCenterYConstraint.constant = -self.imageWidthConstraint.constant / 2.0;
 	}
+	
+	[super updateConstraints];
 }
 
 - (void)layoutSubviews {

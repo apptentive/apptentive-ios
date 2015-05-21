@@ -305,9 +305,6 @@
 		58C97B57182752F6001EB5BD /* NSObject+ATSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = 58C97B55182752F6001EB5BD /* NSObject+ATSwizzle.h */; };
 		58C97B58182752F6001EB5BD /* NSObject+ATSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C97B56182752F6001EB5BD /* NSObject+ATSwizzle.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		58C97B59182752F6001EB5BD /* NSObject+ATSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C97B56182752F6001EB5BD /* NSObject+ATSwizzle.m */; };
-		58C97B5C18276427001EB5BD /* UIViewController+ATSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = 58C97B5A18276427001EB5BD /* UIViewController+ATSwizzle.h */; };
-		58C97B5D18276427001EB5BD /* UIViewController+ATSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C97B5B18276427001EB5BD /* UIViewController+ATSwizzle.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		58C97B5E18276427001EB5BD /* UIViewController+ATSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C97B5B18276427001EB5BD /* UIViewController+ATSwizzle.m */; };
 		58CD20151821B7A70071CC72 /* ATDataModel v2 to v3.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 58CD20131821B78D0071CC72 /* ATDataModel v2 to v3.xcmappingmodel */; };
 		58CD20161821B7A80071CC72 /* ATDataModel v2 to v3.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 58CD20131821B78D0071CC72 /* ATDataModel v2 to v3.xcmappingmodel */; };
 		58D17D4718C5674000D123BC /* ATInteractionRatingDialogController.h in Headers */ = {isa = PBXBuildFile; fileRef = 58D17D4518C5674000D123BC /* ATInteractionRatingDialogController.h */; };
@@ -608,8 +605,6 @@
 		58C5922A17C59BE3000FA428 /* ATWebClient+EngagementAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "ATWebClient+EngagementAdditions.m"; path = "Engagement/URL Loading/ATWebClient+EngagementAdditions.m"; sourceTree = "<group>"; };
 		58C97B55182752F6001EB5BD /* NSObject+ATSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+ATSwizzle.h"; sourceTree = "<group>"; };
 		58C97B56182752F6001EB5BD /* NSObject+ATSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+ATSwizzle.m"; sourceTree = "<group>"; };
-		58C97B5A18276427001EB5BD /* UIViewController+ATSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+ATSwizzle.h"; sourceTree = "<group>"; };
-		58C97B5B18276427001EB5BD /* UIViewController+ATSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+ATSwizzle.m"; sourceTree = "<group>"; };
 		58CD20121821B4D40071CC72 /* ATDataModel 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ATDataModel 3.xcdatamodel"; sourceTree = "<group>"; };
 		58CD20131821B78D0071CC72 /* ATDataModel v2 to v3.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v2 to v3.xcmappingmodel"; sourceTree = "<group>"; };
 		58D17D4518C5674000D123BC /* ATInteractionRatingDialogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATInteractionRatingDialogController.h; path = Engagement/Controllers/ATInteractionRatingDialogController.h; sourceTree = "<group>"; };
@@ -735,8 +730,6 @@
 			children = (
 				58C97B55182752F6001EB5BD /* NSObject+ATSwizzle.h */,
 				58C97B56182752F6001EB5BD /* NSObject+ATSwizzle.m */,
-				58C97B5A18276427001EB5BD /* UIViewController+ATSwizzle.h */,
-				58C97B5B18276427001EB5BD /* UIViewController+ATSwizzle.m */,
 				49C00296133413BB0071F088 /* ApptentiveConnect-Prefix.pch */,
 				4936AE751379DEBB00A4B17F /* ATUtilities.h */,
 				4936AE761379DEBB00A4B17F /* ATUtilities.m */,
@@ -1311,7 +1304,6 @@
 				58D17D4B18C5675E00D123BC /* ATInteractionFeedbackDialogController.h in Headers */,
 				49BC2A5A144F75E20041E789 /* ATShadowView.h in Headers */,
 				49B877111464958C00594A5D /* ATWebClient_Private.h in Headers */,
-				58C97B5C18276427001EB5BD /* UIViewController+ATSwizzle.h in Headers */,
 				49EA5AB014BD08AD004F8A4D /* ATLegacyRecord.h in Headers */,
 				49EA5ABD14BD0F4D004F8A4D /* ATRecordTask.h in Headers */,
 				49CEFF5D15168B54006D8BA8 /* ATAppConfigurationUpdater.h in Headers */,
@@ -1622,7 +1614,6 @@
 				49F8AFE416CC4A550070FFEA /* ATConversation.m in Sources */,
 				49F8AFE616CC4A550070FFEA /* ATData.m in Sources */,
 				49F8AFE916CC4A550070FFEA /* ATDeviceInfo.m in Sources */,
-				58C97B5D18276427001EB5BD /* UIViewController+ATSwizzle.m in Sources */,
 				49F8AFEB16CC4A550070FFEA /* ATAutomatedMessage.m in Sources */,
 				49F8AFED16CC4A550070FFEA /* ATAbstractMessage.m in Sources */,
 				49F8AFEF16CC4A550070FFEA /* ATMessageDisplayType.m in Sources */,
@@ -1682,7 +1673,6 @@
 				4936AE8E1379DECE00A4B17F /* ATFeedback.m in Sources */,
 				49AA1021138B44C00082887A /* ATInfoViewController.m in Sources */,
 				49352AC3138C97A2000E464A /* ATAPIRequest.m in Sources */,
-				58C97B5E18276427001EB5BD /* UIViewController+ATSwizzle.m in Sources */,
 				490B815A144274EF009801E9 /* ATCustomButton.m in Sources */,
 				58DCC0D7180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m in Sources */,
 				490B815F1442751F009801E9 /* ATToolbar.m in Sources */,

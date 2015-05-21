@@ -17,7 +17,6 @@
 #import "ATWebClient_Private.h"
 #import "NSObject+ATSwizzle.h"
 #import "UIImage+ATImageEffects.h"
-#import "UIViewController+ATSwizzle.h"
 
 @implementation ATStaticLibraryBootstrap
 + (void)forceStaticLibrarySymbolUsage {
@@ -30,6 +29,5 @@
 	ATToolbar_Bootstrap();
 	ATImageEffects_UIImage_Bootstrap();
 	ATSwizzle_NSObject_Bootstrap();
-	ATSwizzle_UIViewController_Bootstrap();
 }
 @end

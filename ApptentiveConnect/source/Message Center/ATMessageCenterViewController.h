@@ -8,6 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol ATMessageCenterDismissalDelegate;
+
 @interface ATMessageCenterViewController : UICollectionViewController
 
+@property (weak, nonatomic) NSObject<ATMessageCenterDismissalDelegate> *dismissalDelegate;
+
+@end
+
+@protocol ATMessageCenterDismissalDelegate <NSObject>
+- (void)messageCenterWillDismiss:(ATMessageCenterViewController *)messageCenter;
+@optional
+- (void)messageCenterDidDismiss:(ATMessageCenterViewController *)messageCenter;
 @end

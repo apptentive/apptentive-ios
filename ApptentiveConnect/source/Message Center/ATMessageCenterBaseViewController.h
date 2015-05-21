@@ -35,12 +35,6 @@
 - (CGRect)currentKeyboardFrameInView;
 @end
 
-@protocol ATMessageCenterDismissalDelegate <NSObject>
-- (void)messageCenterWillDismiss:(ATMessageCenterBaseViewController *)messageCenter;
-@optional
-- (void)messageCenterDidDismiss:(ATMessageCenterBaseViewController *)messageCenter;
-@end
-
 @protocol ATMessageCenterThemeDelegate <NSObject>
 @optional
 - (UIView *)titleViewForMessageCenterViewController:(ATMessageCenterBaseViewController *)vc;

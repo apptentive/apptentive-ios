@@ -16,6 +16,7 @@
 #import "ATConversationUpdater.h"
 #import "ATDeviceUpdater.h"
 #import "ATPersonUpdater.h"
+#import "ATFileAttachment.h"
 #if TARGET_OS_IPHONE
 #import "ATMessageCenterViewController.h"
 #import "ATMessageCenterV7ViewController.h"

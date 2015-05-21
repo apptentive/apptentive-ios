@@ -555,7 +555,6 @@ static NSURLCache *imageCache = nil;
 }
 
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData {
-	
 	if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive) {
 		// Only present Message Center UI in Active state.
 		return;
@@ -567,34 +566,19 @@ static NSURLCache *imageCache = nil;
 		ATLogError(@"Attempting to present Apptentive Message Center from a nil View Controller.");
 	}
 	
-	NSPredicate *notHidden = [NSPredicate predicateWithFormat:@"hidden != %@", @YES];
-	NSUInteger messageCount = [ATData countEntityNamed:@"ATAbstractMessage" withPredicate:notHidden];
-	if (messageCount == 0 || ![[ATConnect sharedConnection] messageCenterEnabled]) {
-		NSString *title = ATLocalizedString(@"Give Feedback", @"Title of feedback screen.");
-		NSString *body = [NSString stringWithFormat:ATLocalizedString(@"Please let us know how to make %@ better for you!", @"Feedback screen body. Parameter is the app name."), [self appName]];
-		NSString *placeholder = [ATConnect sharedConnection].customPlaceholderText ?: ATLocalizedString(@"How can we help? (required)", @"First feedback placeholder text.");
-		
-		[self presentIntroDialogFromViewController:viewController withTitle:title prompt:body placeholderText:placeholder];
-		return;
-	}
-	
 	if (self.presentedMessageCenterViewController != nil) {
 		ATLogInfo(@"Apptentive message center controller already shown.");
 		return;
 	}
-	ATMessageCenterBaseViewController *vc = nil;
-	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
-		vc = [[ATMessageCenterV7ViewController alloc] init];
-	} else {
-		vc = [[ATMessageCenterViewController alloc] init];
-	}
-	vc.dismissalDelegate = self;
-	ATNavigationController *nc = [[ATNavigationController alloc] initWithRootViewController:vc];
-	nc.disablesAutomaticKeyboardDismissal = NO;
-	nc.modalPresentationStyle = UIModalPresentationFormSheet;
-	[viewController presentViewController:nc animated:YES completion:^{}];
-	self.presentedMessageCenterViewController = nc;
-	vc = nil;
+
+	UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MessageCenter" bundle:[ATConnect resourceBundle]];
+	UINavigationController *navigationController = [storyboard instantiateInitialViewController];
+	ATMessageCenterViewController *messageCenter = navigationController.viewControllers.firstObject;
+	
+	[viewController presentViewController:navigationController animated:YES completion:nil];
+	
+	messageCenter.dismissalDelegate = self;
+	self.presentedMessageCenterViewController = navigationController;
 }
 
 - (void)attachCustomDataToMessage:(ATAbstractMessage *)message {

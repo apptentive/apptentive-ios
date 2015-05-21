@@ -8,11 +8,13 @@
 
 #import "ATMessageCenterViewController.h"
 #import "ATMessageCenterGreetingView.h"
+#import "ATMessageCenterConfirmationView.h"
 #import "ATBackend.h"
 
 @interface ATMessageCenterViewController ()
 
 @property (weak, nonatomic) IBOutlet ATMessageCenterGreetingView *greetingView;
+@property (weak, nonatomic) IBOutlet ATMessageCenterConfirmationView *confirmationView;
 
 @end
 

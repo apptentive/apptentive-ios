@@ -10,6 +10,8 @@
 		017263731B0D545200DF85D2 /* ATMessageCenterViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 017263711B0D545200DF85D2 /* ATMessageCenterViewController.h */; };
 		017263741B0D545200DF85D2 /* ATMessageCenterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 017263721B0D545200DF85D2 /* ATMessageCenterViewController.m */; };
 		017D973F1B0D5D64004E045C /* Sumo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 017D973E1B0D5AE3004E045C /* Sumo.jpg */; };
+		017D97421B0E3770004E045C /* ATMessageCenterConfirmationView.h in Headers */ = {isa = PBXBuildFile; fileRef = 017D97401B0E3770004E045C /* ATMessageCenterConfirmationView.h */; };
+		017D97431B0E3770004E045C /* ATMessageCenterConfirmationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 017D97411B0E3770004E045C /* ATMessageCenterConfirmationView.m */; };
 		01A88FF81AFBFFAE002C49E7 /* testJsonDiffing.1.expected.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF31AFBFDB6002C49E7 /* testJsonDiffing.1.expected.json */; };
 		01A88FF91AFBFFAE002C49E7 /* testJsonDiffing.1.new.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF41AFBFDB6002C49E7 /* testJsonDiffing.1.new.json */; };
 		01A88FFA1AFBFFAE002C49E7 /* testJsonDiffing.1.old.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF51AFBFDB6002C49E7 /* testJsonDiffing.1.old.json */; };
@@ -403,6 +405,8 @@
 		017263711B0D545200DF85D2 /* ATMessageCenterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATMessageCenterViewController.h; path = "Message Center/ATMessageCenterViewController.h"; sourceTree = "<group>"; };
 		017263721B0D545200DF85D2 /* ATMessageCenterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATMessageCenterViewController.m; path = "Message Center/ATMessageCenterViewController.m"; sourceTree = "<group>"; };
 		017D973E1B0D5AE3004E045C /* Sumo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Sumo.jpg; sourceTree = "<group>"; };
+		017D97401B0E3770004E045C /* ATMessageCenterConfirmationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageCenterConfirmationView.h; sourceTree = "<group>"; };
+		017D97411B0E3770004E045C /* ATMessageCenterConfirmationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageCenterConfirmationView.m; sourceTree = "<group>"; };
 		018A343A1B0CE810001DCA2C /* MessageCenter.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MessageCenter.storyboard; path = "Message Center/MessageCenter.storyboard"; sourceTree = "<group>"; };
 		01A88FF31AFBFDB6002C49E7 /* testJsonDiffing.1.expected.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.1.expected.json; sourceTree = "<group>"; };
 		01A88FF41AFBFDB6002C49E7 /* testJsonDiffing.1.new.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.1.new.json; sourceTree = "<group>"; };
@@ -1158,6 +1162,8 @@
 				49AAC856175FFDB800F08879 /* ATCustomView.m */,
 				01C30CE91B0D09F8006BC911 /* ATMessageCenterGreetingView.h */,
 				01C30CEA1B0D09F8006BC911 /* ATMessageCenterGreetingView.m */,
+				017D97401B0E3770004E045C /* ATMessageCenterConfirmationView.h */,
+				017D97411B0E3770004E045C /* ATMessageCenterConfirmationView.m */,
 			);
 			path = "Custom Views";
 			sourceTree = "<group>";
@@ -1438,6 +1444,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				017D97421B0E3770004E045C /* ATMessageCenterConfirmationView.h in Headers */,
 				49C002A1133413BB0071F088 /* ApptentiveConnect-Prefix.pch in Headers */,
 				496ED75E1857F849001C14FC /* ATTextMessageCellV7.h in Headers */,
 				49C002A2133413BB0071F088 /* ATConnect.h in Headers */,
@@ -1835,6 +1842,7 @@
 				49F8AFFC16CC4D860070FFEA /* ATRecord.m in Sources */,
 				49F8B00016CC56580070FFEA /* ATEvent.m in Sources */,
 				492B81D616D595740031BEF6 /* ATFileMessage.m in Sources */,
+				017D97431B0E3770004E045C /* ATMessageCenterConfirmationView.m in Sources */,
 				492B81DB16D595A00031BEF6 /* ATFileAttachment.m in Sources */,
 				492B81E516D5C8AD0031BEF6 /* ATFileMessageCell.m in Sources */,
 				492F2F0F16E3F9660030E48A /* ATDefaultMessageCenterTitleView.m in Sources */,

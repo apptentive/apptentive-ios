@@ -18,16 +18,6 @@
                             <rect key="frame" x="0.0" y="64" width="320" height="280"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Sumo.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="jze-Ja-MtR">
-                                    <rect key="frame" x="108" y="50" width="104" height="104"/>
-                                    <constraints>
-                                        <constraint firstAttribute="width" constant="104" id="TOX-8x-ZD6"/>
-                                        <constraint firstAttribute="width" secondItem="jze-Ja-MtR" secondAttribute="height" multiplier="1:1" id="awK-0j-ii5"/>
-                                    </constraints>
-                                    <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
-                                    </userDefinedRuntimeAttributes>
-                                </imageView>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GdB-EU-leh">
                                     <rect key="frame" x="0.0" y="154" width="320" height="131"/>
                                     <subviews>
@@ -37,8 +27,8 @@
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Please leave us some feedback so we can make the app better for you." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="Zbc-2w-9Gi">
-                                            <rect key="frame" x="8" y="66" width="304" height="33.5"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please leave us some feedback so we can make the app better for you." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="Zbc-2w-9Gi">
+                                            <rect key="frame" x="8" y="67.5" width="304" height="33.5"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                             <color key="textColor" red="0.51764705882352935" green="0.51764705882352935" blue="0.56470588235294117" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -56,6 +46,16 @@
                                         <constraint firstAttribute="bottom" secondItem="Zbc-2w-9Gi" secondAttribute="bottom" constant="30" id="vQG-9X-nhI"/>
                                     </constraints>
                                 </view>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Sumo.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="jze-Ja-MtR">
+                                    <rect key="frame" x="108" y="50" width="104" height="104"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="104" id="TOX-8x-ZD6"/>
+                                        <constraint firstAttribute="width" secondItem="jze-Ja-MtR" secondAttribute="height" multiplier="1:1" id="awK-0j-ii5"/>
+                                    </constraints>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                    </userDefinedRuntimeAttributes>
+                                </imageView>
                             </subviews>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
                             <constraints>
@@ -75,6 +75,38 @@
                                 <outlet property="textContainerView" destination="GdB-EU-leh" id="p3j-Vt-JZU"/>
                                 <outlet property="textWidthConstraint" destination="1u8-cG-zGs" id="7k8-Lj-Jon"/>
                                 <outlet property="titleLabel" destination="kjS-eF-EIi" id="ll3-Gg-XFN"/>
+                            </connections>
+                        </view>
+                        <view key="tableFooterView" contentMode="scaleToFill" id="g94-Qt-Zp0" customClass="ATMessageCenterConfirmationView">
+                            <rect key="frame" x="0.0" y="491.5" width="320" height="66"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Thank You!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="stQ-gR-6YZ">
+                                    <rect key="frame" x="8" y="8" width="304" height="18"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                    <color key="textColor" red="0.51764705879999995" green="0.51764705879999995" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="We try and reply to people between 5am and 6pm PST." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kQ8-89-rPy">
+                                    <rect key="frame" x="8" y="34" width="304" height="29"/>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                                    <color key="textColor" red="0.51764705879999995" green="0.51764705879999995" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="kQ8-89-rPy" firstAttribute="top" secondItem="stQ-gR-6YZ" secondAttribute="bottom" constant="8" id="1FX-7J-maP"/>
+                                <constraint firstAttribute="trailing" secondItem="stQ-gR-6YZ" secondAttribute="trailing" constant="8" id="7UX-4A-xfM"/>
+                                <constraint firstAttribute="bottom" relation="lessThanOrEqual" secondItem="kQ8-89-rPy" secondAttribute="bottom" constant="8" id="KoO-Gw-gjR"/>
+                                <constraint firstItem="stQ-gR-6YZ" firstAttribute="leading" secondItem="g94-Qt-Zp0" secondAttribute="leading" constant="8" id="P60-nC-WBZ"/>
+                                <constraint firstItem="stQ-gR-6YZ" firstAttribute="top" secondItem="g94-Qt-Zp0" secondAttribute="top" constant="8" id="ZCm-QE-wZF"/>
+                                <constraint firstAttribute="trailing" secondItem="kQ8-89-rPy" secondAttribute="trailing" constant="8" id="tiZ-0g-UDz"/>
+                                <constraint firstItem="kQ8-89-rPy" firstAttribute="leading" secondItem="g94-Qt-Zp0" secondAttribute="leading" constant="8" id="z6F-sO-Sfg"/>
+                            </constraints>
+                            <connections>
+                                <outlet property="confirmationLabel" destination="stQ-gR-6YZ" id="cxB-Ae-9yj"/>
+                                <outlet property="statusLabel" destination="kQ8-89-rPy" id="5Cw-b8-eqe"/>
                             </connections>
                         </view>
                         <prototypes>
@@ -114,7 +146,7 @@
                     </tableView>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Message Center Title" id="vfC-JL-Kb9">
-                        <barButtonItem key="rightBarButtonItem" title="Close" style="done" id="Ouv-Mz-TNk">
+                        <barButtonItem key="rightBarButtonItem" title="Close" style="plain" id="Ouv-Mz-TNk">
                             <connections>
                                 <action selector="dismiss:" destination="W0l-Dy-ioE" id="ws9-cY-6qs"/>
                             </connections>
@@ -122,6 +154,7 @@
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="confirmationView" destination="g94-Qt-Zp0" id="Jbc-SH-Uwl"/>
                         <outlet property="greetingView" destination="3OP-Us-sTC" id="gir-MU-eQO"/>
                     </connections>
                 </tableViewController>

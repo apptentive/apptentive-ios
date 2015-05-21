@@ -25,10 +25,6 @@
 	
 	// DEBUG
 	self.greetingView.imageView.image = [UIImage imageNamed:@"ApptentiveResources.bundle/Sumo.jpg"];
-	self.greetingView.titleLabel.text = @"That sucks!";
-	self.greetingView.messageLabel.text = @"Please let us know how we can do better.";
-	
-	self.navigationItem.title = @"Message Centre";
 	// /DEBUG
 }
 

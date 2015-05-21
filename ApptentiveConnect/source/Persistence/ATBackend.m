@@ -30,12 +30,10 @@
 #import "ATMessageCenterMetrics.h"
 #import "ATMessageSender.h"
 #import "ATMessageTask.h"
-#import "ATMessagePanelViewController.h"
 #import "ATTextMessage.h"
 #import "ATLog.h"
 #import "ATPersonUpdater.h"
 #import "ATEngagementBackend.h"
-#import "ATMessagePanelNewUIViewController.h"
 #import "ATFileMessage.h"
 
 typedef NS_ENUM(NSInteger, ATBackendState){
@@ -80,13 +78,11 @@ static NSURLCache *imageCache = nil;
 @property (nonatomic, strong) UIViewController *presentingViewController;
 #endif
 @property (nonatomic, assign) BOOL working;
-@property (nonatomic, strong) UIAlertView *messagePanelSentMessageAlert;
 @property (nonatomic, strong) NSTimer *messageRetrievalTimer;
 @property (nonatomic, assign) BOOL apiKeySet;
 @property (nonatomic, copy) NSString *cachedDeviceUUID;
 @property (nonatomic, assign) ATBackendState state;
 @property (nonatomic, strong) UIViewController *presentedMessageCenterViewController;
-@property (nonatomic, strong) ATMessagePanelViewController *currentMessagePanelController;
 @property (nonatomic, strong) ATDataManager *dataManager;
 @property (nonatomic, strong) ATConversationUpdater *conversationUpdater;
 @property (nonatomic, strong) ATDeviceUpdater *deviceUpdater;
@@ -188,7 +184,6 @@ static NSURLCache *imageCache = nil;
 }
 
 - (void)dealloc {
-	self.messagePanelSentMessageAlert.delegate = nil;
 	[self.messageRetrievalTimer invalidate];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -592,13 +587,6 @@ static NSURLCache *imageCache = nil;
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion {
 	self.currentCustomData = nil;
 	
-	if (self.currentMessagePanelController != nil) {
-		[self.currentMessagePanelController dismissAnimated:animated completion:^{
-			completion();
-		}];
-		return;
-	}
-	
 	if (self.presentedMessageCenterViewController != nil) {
 		UIViewController *vc = [self.presentedMessageCenterViewController presentingViewController];
 		[vc dismissViewControllerAnimated:YES completion:^{
@@ -613,128 +601,11 @@ static NSURLCache *imageCache = nil;
 	}
 }
 
-- (void)presentIntroDialogFromViewController:(UIViewController *)viewController withTitle:(NSString *)title prompt:(NSString *)prompt placeholderText:(NSString *)placeholder {
-	@synchronized(self) {
-		if (self.currentMessagePanelController) {
-			ATLogInfo(@"Apptentive message panel controller already shown.");
-			return;
-		}
-		
-		ATMessagePanelViewController *vc;
-		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7.0"]) {
-			vc = [[ATMessagePanelNewUIViewController alloc] initWithDelegate:self];
-		}
-		else {
-			vc = [[ATMessagePanelViewController alloc] initWithDelegate:self];
-		}
-		
-		if (title) {
-			vc.promptTitle = title;
-		}
-		if (prompt) {
-			vc.promptText = prompt;
-		}
-		if (placeholder) {
-			vc.customPlaceholderText = placeholder;
-		}
-		[vc setShowEmailAddressField:[[ATConnect sharedConnection] showEmailField]];
-		[vc presentFromViewController:viewController animated:YES];
-		self.currentMessagePanelController = vc;
-		self.presentingViewController = viewController;
-	}
-}
-
-- (void)presentIntroDialogFromViewController:(UIViewController *)viewController {
-	[self presentIntroDialogFromViewController:viewController withTitle:nil prompt:nil placeholderText:nil];
-}
-
 #if TARGET_OS_IPHONE
-#pragma mark ATMessagePanelDelegate
-- (void)messagePanelDidCancel:(ATMessagePanelViewController *)messagePanel {
-	if (self.currentMessagePanelController == messagePanel) {
-		return;
-	}
-}
-
-- (void)messagePanel:(ATMessagePanelViewController *)messagePanel didSendMessage:(NSString *)message withEmailAddress:(NSString *)emailAddress {
-	if (self.currentMessagePanelController == messagePanel) {
-		ATPersonInfo *person = [ATPersonInfo currentPerson] ?: [[ATPersonInfo alloc] init];
-		
-		if (emailAddress && ![emailAddress isEqualToString:person.emailAddress]) {
-			// Do not save empty string as person's email address
-			if (emailAddress.length > 0) {
-				person.emailAddress = emailAddress;
-				person.needsUpdate = YES;
-			}
-			
-			// Deleted email address from form, then submitted.
-			if ([emailAddress isEqualToString:@""] && person.emailAddress) {
-				person.emailAddress = @"";
-				person.needsUpdate = YES;
-			}
-		}
-		
-		[person saveAsCurrentPerson];
-		
-		[self sendTextMessageWithBody:message completion:^(NSString *pendingMessageID) {
-			[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroDidSendNotification object:nil userInfo:@{ATMessageCenterMessageNonceKey: pendingMessageID}];
-		}];
-	}
-}
-
-- (void)messagePanel:(ATMessagePanelViewController *)messagePanel didDismissWithAction:(ATMessagePanelDismissAction)action {
-	if (self.currentMessagePanelController) {
-		self.currentMessagePanelController = nil;
-		if (action == ATMessagePanelDidSendMessage) {
-			if (!self.messagePanelSentMessageAlert) {
-				
-				NSString *alertTitle, *alertMessage, *cancelButtonTitle, *otherButtonTitle;
-				if ([[ATConnect sharedConnection] messageCenterEnabled]) {
-					alertTitle = ATLocalizedString(@"Thanks!", nil);
-					alertMessage = ATLocalizedString(@"Your response has been saved in the Message Center, where you'll be able to view replies and send us other messages.", @"Message panel sent message confirmation dialog text");
-					cancelButtonTitle = ATLocalizedString(@"Close", @"Close alert view title");
-					otherButtonTitle = ATLocalizedString(@"View Messages", @"View messages button title");
-				} else {
-					alertTitle = ATLocalizedString(@"Thank you for your feedback!", @"Message panel sent message but will not show Message Center dialog.");
-					alertMessage = nil;
-					cancelButtonTitle = ATLocalizedString(@"Close", @"Close alert view title");
-					otherButtonTitle = nil;
-				}
-				self.messagePanelSentMessageAlert = [[UIAlertView alloc] initWithTitle:alertTitle message:alertMessage delegate:self cancelButtonTitle:cancelButtonTitle otherButtonTitles:otherButtonTitle, nil];
-				[self.messagePanelSentMessageAlert show];
-				
-				[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroThankYouDidShowNotification object:self userInfo:nil];
-			}
-		}
-	}
-}
-
-- (NSString *)initialEmailAddressForMessagePanel {
-	NSString *email = [ATConnect sharedConnection].initialUserEmailAddress;
-	ATPersonInfo *person = [ATPersonInfo currentPerson];
-	
-	if (person) {
-		email = person.emailAddress;
-	}
-	
-	return email;
-}
 
 #pragma mark UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-	if (alertView == self.messagePanelSentMessageAlert) {
-		if (buttonIndex == 1) {
-			[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroThankYouHitMessagesNotification object:self userInfo:nil];
-			UIViewController *vc = [self presentingViewController];
-			self.presentingViewController = nil;
-			[self presentMessageCenterFromViewController:vc];
-			vc = nil;
-		} else {
-			[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroThankYouDidCloseNotification object:self userInfo:nil];
-		}
-		self.messagePanelSentMessageAlert.delegate = nil;
-		self.messagePanelSentMessageAlert = nil;
-	}
+	
 }
 #endif
 

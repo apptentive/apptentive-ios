@@ -8,7 +8,6 @@
 
 #import "UIViewController+ATSwizzle.h"
 #import "NSObject+ATSwizzle.h"
-#import "ATMessagePanelNewUIViewController.h"
 
 NSString *const ATMessagePanelPresentingViewControllerSwizzledDidRotateNotification = @"ATMessagePanelPresentingViewControllerSwizzledDidRotateNotification";
 

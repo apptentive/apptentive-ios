@@ -19,7 +19,6 @@
 #import "ATFileAttachment.h"
 #if TARGET_OS_IPHONE
 #import "ATMessageCenterViewController.h"
-#import "ATMessagePanelViewController.h"
 #import "ATAbstractMessage.h"
 #import "ATTextMessage.h"
 #import "ATFeedback.h"
@@ -37,7 +36,7 @@ extern NSString *const ATBackendBecameReadyNotification;
 /*! Handles all of the backend activities, such as sending feedback. */
 @interface ATBackend : NSObject <ATConversationUpdaterDelegate, ATDeviceUpdaterDelegate, ATPersonUpdaterDelegate
 #if TARGET_OS_IPHONE
-, NSFetchedResultsControllerDelegate, ATMessageCenterDismissalDelegate, ATMessagePanelDelegate, UIAlertViewDelegate
+, NSFetchedResultsControllerDelegate, ATMessageCenterDismissalDelegate, UIAlertViewDelegate
 #endif
 > 
 @property (nonatomic, copy) NSString *apiKey;
@@ -58,8 +57,6 @@ extern NSString *const ATBackendBecameReadyNotification;
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
 - (void)attachCustomDataToMessage:(ATAbstractMessage *)message;
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion;
-- (void)presentIntroDialogFromViewController:(UIViewController *)viewController;
-- (void)presentIntroDialogFromViewController:(UIViewController *)viewController withTitle:(NSString *)title prompt:(NSString *)prompt placeholderText:(NSString *)placeholder;
 #elif TARGET_OS_MAC
 + (NSImage *)imageNamed:(NSString *)name;
 #endif
@@ -100,7 +97,6 @@ extern NSString *const ATBackendBecameReadyNotification;
 - (void)messageCenterLeftForeground;
 
 - (NSString *)appName;
-- (NSString *)initialEmailAddressForMessagePanel;
 
 - (BOOL)isReady;
 

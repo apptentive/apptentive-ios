@@ -10,7 +10,6 @@
 #import "ATInteraction.h"
 #import "ATBackend.h"
 #import "ATConnect_Private.h"
-#import "ATMessagePanelNewUIViewController.h"
 #import "ATUtilities.h"
 #import "ATEngagementBackend.h"
 #import "ATMessageCenterMetrics.h"
@@ -47,27 +46,8 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 		//TODO: sending "We're Sorry!" should be its own interaction.
 		[self sendSorryMessage];
 		
-		ATMessagePanelViewController *messagePanel;
-		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7.0"]) {
-			messagePanel = [[ATMessagePanelNewUIViewController alloc] initWithDelegate:self];
-		}
-		else {
-			messagePanel = [[ATMessagePanelViewController alloc] initWithDelegate:self];
-		}
+#warning Add a replacement for the Message Center and/or remove the Feedback Dialog Interaction Controller.
 		
-		messagePanel.interaction = self.interaction;
-		
-		NSDictionary *config = self.interaction.configuration;
-		NSString *title = config[@"title"] ?: ATLocalizedString(@"We're Sorry!", @"We're sorry text");
-		messagePanel.promptTitle = title;
-		
-		NSString *body = config[@"body"] ?: ATLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
-		messagePanel.promptText = body;
-		
-		BOOL showEmailAddressField = config[@"ask_for_email"] ? [config[@"ask_for_email"] boolValue] : YES;
-		messagePanel.showEmailAddressField = showEmailAddressField;
-		
-		[messagePanel presentFromViewController:self.viewController animated:YES];
 	}
 }
 
@@ -83,66 +63,6 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 	NSString *body = config[@"body"] ?: ATLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
 	
 	[[ATBackend sharedBackend] sendAutomatedMessageWithTitle:title body:body];
-}
-
-- (void)messagePanelDidCancel:(ATMessagePanelViewController *)messagePanel {
-	[self.interaction engage:ATInteractionFeedbackDialogEventLabelCancel fromViewController:self.viewController];
-}
-
-- (void)messagePanel:(ATMessagePanelViewController *)messagePanel didSendMessage:(NSString *)message withEmailAddress:(NSString *)emailAddress {
-	[self.interaction engage:ATInteractionFeedbackDialogEventLabelSubmit fromViewController:self.viewController];
-
-	ATPersonInfo *person = [ATPersonInfo currentPerson] ?: [[ATPersonInfo alloc] init];
-
-	if (emailAddress && ![emailAddress isEqualToString:person.emailAddress]) {
-		// Do not save empty string as person's email address
-		if (emailAddress.length > 0) {
-			person.emailAddress = emailAddress;
-			person.needsUpdate = YES;
-		}
-		
-		// Deleted email address from form, then submitted.
-		if ([emailAddress isEqualToString:@""] && person.emailAddress) {
-			person.emailAddress = @"";
-			person.needsUpdate = YES;
-		}
-	}
-	
-	[person saveAsCurrentPerson];
-	
-	[[ATBackend sharedBackend] sendTextMessageWithBody:message completion:^(NSString *pendingMessageID) {
-		[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroDidSendNotification object:nil userInfo:@{ATMessageCenterMessageNonceKey: pendingMessageID}];
-	}];
-}
-
-- (void)messagePanel:(ATMessagePanelViewController *)messagePanel didDismissWithAction:(ATMessagePanelDismissAction)action {
-	[self.interaction engage:ATInteractionFeedbackDialogEventLabelDismiss fromViewController:self.viewController];
-	
-	if (action == ATMessagePanelDidSendMessage) {
-		if (!didSendFeedbackAlert) {
-			NSDictionary *config = self.interaction.configuration;
-			NSString *alertTitle, *alertMessage, *cancelButtonTitle, *otherButtonTitle;
-			
-			BOOL enableMessageCenter = config[@"enable_message_center"] ? [config[@"enable_message_center"] boolValue] : [[ATConnect sharedConnection] messageCenterEnabled];
-			if (enableMessageCenter) {
-				alertTitle = config[@"thank_you_title"] ?: ATLocalizedString(@"Thanks!", nil);
-				alertMessage = config[@"thank_you_body"] ?: ATLocalizedString(@"Your response has been saved in the Message Center, where you'll be able to view replies and send us other messages.", @"Message panel sent message confirmation dialog text");
-				cancelButtonTitle = config[@"thank_you_close_text"] ?: ATLocalizedString(@"Close", @"Close alert view title");
-				otherButtonTitle = config[@"thank_you_view_messages_text"] ?: ATLocalizedString(@"View Messages", @"View messages button title");
-			} else {
-				alertTitle = config[@"thank_you_title"] ?: ATLocalizedString(@"Thank you for your feedback!", @"Message panel sent message but will not show Message Center dialog.");
-				alertMessage = config[@"thank_you_body"] ?: nil;
-				cancelButtonTitle = config[@"thank_you_close_text"] ?: ATLocalizedString(@"Close", @"Close alert view title");
-				otherButtonTitle = nil;
-			}
-			
-			didSendFeedbackAlert = [[UIAlertView alloc] initWithTitle:alertTitle message:alertMessage delegate:self cancelButtonTitle:cancelButtonTitle otherButtonTitles:otherButtonTitle, nil];
-			[didSendFeedbackAlert show];
-			
-			//[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterIntroThankYouDidShowNotification object:self userInfo:nil];
-		}
-	} else {
-	}
 }
 
 #pragma mark UIAlertViewDelegate

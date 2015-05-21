@@ -894,7 +894,7 @@ static NSURLCache *imageCache = nil;
 }
 
 #if TARGET_OS_IPHONE
-- (void)messageCenterWillDismiss:(ATMessageCenterBaseViewController *)messageCenter {
+- (void)messageCenterWillDismiss:(ATMessageCenterViewController *)messageCenter {
 	if (self.presentedMessageCenterViewController) {
 		self.presentedMessageCenterViewController = nil;
 	}

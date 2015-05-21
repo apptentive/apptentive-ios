@@ -19,8 +19,10 @@
 #import "ATFileAttachment.h"
 #if TARGET_OS_IPHONE
 #import "ATMessageCenterViewController.h"
-#import "ATMessageCenterV7ViewController.h"
 #import "ATMessagePanelViewController.h"
+#import "ATAbstractMessage.h"
+#import "ATTextMessage.h"
+#import "ATFeedback.h"
 #endif
 
 extern NSString *const ATBackendBecameReadyNotification;

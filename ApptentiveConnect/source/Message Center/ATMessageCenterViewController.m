@@ -7,8 +7,12 @@
 //
 
 #import "ATMessageCenterViewController.h"
+#import "ATMessageCenterGreetingView.h"
+#import "ATBackend.h"
 
 @interface ATMessageCenterViewController ()
+
+@property (weak, nonatomic) IBOutlet ATMessageCenterGreetingView *greetingView;
 
 @end
 
@@ -16,7 +20,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+	
+	[self updateHeaderHeightForOrientation:self.interfaceOrientation];
+	
+	// DEBUG
+	self.greetingView.imageView.image = [UIImage imageNamed:@"ApptentiveResources.bundle/Sumo.jpg"];
+	self.greetingView.titleLabel.text = @"That sucks!";
+	self.greetingView.messageLabel.text = @"Please let us know how we can do better.";
+	
+	self.navigationItem.title = @"Message Centre";
+	// /DEBUG
 }
 
 - (void)didReceiveMemoryWarning {
@@ -24,9 +37,37 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+	[UIView animateWithDuration:duration animations:^{
+		[self updateHeaderHeightForOrientation:toInterfaceOrientation];
+	}];
+}
+
+#pragma mark - Table view data source
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    // TODO: Return the number of sections.
+    return 2;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    // TODO: Return the number of rows in the section.
+    return 1;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+	NSString *reuseIdentifier = indexPath.section % 2 ? @"Reply" : @"Message";
+ 
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier forIndexPath:indexPath];
+    
+    // TODO: Configure the cell...
+    
+    return cell;
+}
+
 #pragma mark Actions
 
-- (IBAction)dismiss:(UIBarButtonItem *)sender {
+- (IBAction)dismiss:(id)sender {
 	[self.dismissalDelegate messageCenterWillDismiss:self];
 	
 	[self dismissViewControllerAnimated:YES completion:^{
@@ -36,59 +77,14 @@
 	}];
 }
 
-#pragma mark <UICollectionViewDataSource>
+#pragma mark - Private
 
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
+- (void)updateHeaderHeightForOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
+	CGFloat headerHeight = UIInterfaceOrientationIsLandscape(toInterfaceOrientation) ? 128.0 : 280.0;
+
+	self.greetingView.bounds = CGRectMake(0, 0, self.tableView.bounds.size.height, headerHeight);
+	[self.greetingView updateConstraints];
+	self.tableView.tableHeaderView = self.greetingView;
 }
-
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-	// TODO: pull from number of messages/replies
-    return 2;
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-	NSString *reuseIdentifier = indexPath.row % 2 == 0 ? @"Message" : @"Reply";
-	
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-	
-	// TODO: configure the cell
-	
-    return cell;
-}
-
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-	NSString *reuseIdentifier = [kind isEqualToString:UICollectionElementKindSectionHeader] ? @"Greeting" : @"Thanks";
-	
-	UICollectionReusableView *view = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-	
-	// TODO: configure the view
-	
-	return view;
-}
-
-#pragma mark <UICollectionViewDelegate>
-
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    return NO;
-}
-
-/*
- 
-// TODO: allow users to copy? 
-// Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-	return NO;
-}
-
-- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	return NO;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	
-}
-*/
 
 @end

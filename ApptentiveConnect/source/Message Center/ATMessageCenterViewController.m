@@ -8,11 +8,15 @@
 
 #import "ATMessageCenterViewController.h"
 #import "ATMessageCenterGreetingView.h"
+#import "ATMessageCenterConfirmationView.h"
+#import "ATMessageCenterMessageCell.h"
+#import "ATMessageCenterReplyCell.h"
 #import "ATBackend.h"
 
 @interface ATMessageCenterViewController ()
 
 @property (weak, nonatomic) IBOutlet ATMessageCenterGreetingView *greetingView;
+@property (weak, nonatomic) IBOutlet ATMessageCenterConfirmationView *confirmationView;
 
 @end
 
@@ -23,12 +27,11 @@
 	
 	[self updateHeaderHeightForOrientation:self.interfaceOrientation];
 	
+	self.tableView.rowHeight = UITableViewAutomaticDimension;
+	self.tableView.estimatedRowHeight = 44.0;
+	
 	// DEBUG
 	self.greetingView.imageView.image = [UIImage imageNamed:@"ApptentiveResources.bundle/Sumo.jpg"];
-	self.greetingView.titleLabel.text = @"That sucks!";
-	self.greetingView.messageLabel.text = @"Please let us know how we can do better.";
-	
-	self.navigationItem.title = @"Message Centre";
 	// /DEBUG
 }
 
@@ -38,7 +41,9 @@
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+	
 	[UIView animateWithDuration:duration animations:^{
+//		[self.tableView reloadData];
 		[self updateHeaderHeightForOrientation:toInterfaceOrientation];
 	}];
 }
@@ -56,13 +61,31 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	NSString *reuseIdentifier = indexPath.section % 2 ? @"Reply" : @"Message";
- 
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier forIndexPath:indexPath];
-    
-    // TODO: Configure the cell...
-    
-    return cell;
+	if (indexPath.section % 2 == 0) {
+		ATMessageCenterMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Message" forIndexPath:indexPath];
+		return cell;
+	} else {
+		ATMessageCenterReplyCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Reply" forIndexPath:indexPath];
+
+		// DEBUG
+		cell.supportUserImageView.image = [UIImage imageNamed:@"ApptentiveResources.bundle/Sumo.jpg"];
+		cell.replyLabel.text = @"Hey Andrew. I can help you with that. We’ve had a couple reports of this happening on older versions of the app.\n\nIf you open the App Store, and click the “Updates” tab, you should see that our latest version is 4.3.5. From there, you can tap “Update All” - many customers report this helping them.\n\nIn the mean time, could you please describe what it was that caused the bug in the first place? What part of the app were you in, what did you tap, and what were you trying to accomplish?";
+		// /DEBUG
+		
+		return cell;
+	}
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+	NSLog(@"cell: %@", cell);
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+	return 4.0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+	return 4.0;
 }
 
 #pragma mark Actions

@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		017D973F1B0D5D64004E045C /* Sumo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 017D973E1B0D5AE3004E045C /* Sumo.jpg */; };
+		017D97421B0E3770004E045C /* ATMessageCenterConfirmationView.h in Headers */ = {isa = PBXBuildFile; fileRef = 017D97401B0E3770004E045C /* ATMessageCenterConfirmationView.h */; };
+		017D97431B0E3770004E045C /* ATMessageCenterConfirmationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 017D97411B0E3770004E045C /* ATMessageCenterConfirmationView.m */; };
+		017D97461B0E5795004E045C /* ATMessageCenterMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 017D97441B0E5795004E045C /* ATMessageCenterMessageCell.h */; };
+		017D97471B0E5795004E045C /* ATMessageCenterMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 017D97451B0E5795004E045C /* ATMessageCenterMessageCell.m */; };
+		017D974A1B0E57C2004E045C /* ATMessageCenterReplyCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 017D97481B0E57C2004E045C /* ATMessageCenterReplyCell.h */; };
+		017D974B1B0E57C2004E045C /* ATMessageCenterReplyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 017D97491B0E57C2004E045C /* ATMessageCenterReplyCell.m */; };
 		01A88FF81AFBFFAE002C49E7 /* testJsonDiffing.1.expected.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF31AFBFDB6002C49E7 /* testJsonDiffing.1.expected.json */; };
 		01A88FF91AFBFFAE002C49E7 /* testJsonDiffing.1.new.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF41AFBFDB6002C49E7 /* testJsonDiffing.1.new.json */; };
 		01A88FFA1AFBFFAE002C49E7 /* testJsonDiffing.1.old.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF51AFBFDB6002C49E7 /* testJsonDiffing.1.old.json */; };
@@ -346,6 +352,12 @@
 
 /* Begin PBXFileReference section */
 		017D973E1B0D5AE3004E045C /* Sumo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Sumo.jpg; sourceTree = "<group>"; };
+		017D97401B0E3770004E045C /* ATMessageCenterConfirmationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageCenterConfirmationView.h; sourceTree = "<group>"; };
+		017D97411B0E3770004E045C /* ATMessageCenterConfirmationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageCenterConfirmationView.m; sourceTree = "<group>"; };
+		017D97441B0E5795004E045C /* ATMessageCenterMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageCenterMessageCell.h; sourceTree = "<group>"; };
+		017D97451B0E5795004E045C /* ATMessageCenterMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageCenterMessageCell.m; sourceTree = "<group>"; };
+		017D97481B0E57C2004E045C /* ATMessageCenterReplyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageCenterReplyCell.h; sourceTree = "<group>"; };
+		017D97491B0E57C2004E045C /* ATMessageCenterReplyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageCenterReplyCell.m; sourceTree = "<group>"; };
 		018A343A1B0CE810001DCA2C /* MessageCenter.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MessageCenter.storyboard; path = "Message Center/MessageCenter.storyboard"; sourceTree = "<group>"; };
 		01A88FF31AFBFDB6002C49E7 /* testJsonDiffing.1.expected.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.1.expected.json; sourceTree = "<group>"; };
 		01A88FF41AFBFDB6002C49E7 /* testJsonDiffing.1.new.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.1.new.json; sourceTree = "<group>"; };
@@ -998,6 +1010,12 @@
 				49AAC856175FFDB800F08879 /* ATCustomView.m */,
 				01C30CE91B0D09F8006BC911 /* ATMessageCenterGreetingView.h */,
 				01C30CEA1B0D09F8006BC911 /* ATMessageCenterGreetingView.m */,
+				017D97401B0E3770004E045C /* ATMessageCenterConfirmationView.h */,
+				017D97411B0E3770004E045C /* ATMessageCenterConfirmationView.m */,
+				017D97441B0E5795004E045C /* ATMessageCenterMessageCell.h */,
+				017D97451B0E5795004E045C /* ATMessageCenterMessageCell.m */,
+				017D97481B0E57C2004E045C /* ATMessageCenterReplyCell.h */,
+				017D97491B0E57C2004E045C /* ATMessageCenterReplyCell.m */,
 			);
 			path = "Custom Views";
 			sourceTree = "<group>";
@@ -1277,6 +1295,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				017D97421B0E3770004E045C /* ATMessageCenterConfirmationView.h in Headers */,
 				49C002A1133413BB0071F088 /* ApptentiveConnect-Prefix.pch in Headers */,
 				49C002A2133413BB0071F088 /* ATConnect.h in Headers */,
 				49D1124F13368CC200603373 /* ATTask.h in Headers */,
@@ -1324,6 +1343,7 @@
 				499912A8161B6AF700FDA15F /* ATWebClient+MessageCenter.h in Headers */,
 				4961A402161BBD7000E30037 /* ATMessageTask.h in Headers */,
 				4961A40B161BBE0800E30037 /* ATPersonUpdater.h in Headers */,
+				017D974A1B0E57C2004E045C /* ATMessageCenterReplyCell.h in Headers */,
 				4961A40F161BBE1F00E30037 /* ATDeviceUpdater.h in Headers */,
 				58805F3718120BBF00210DA5 /* UIImage+ATImageEffects.h in Headers */,
 				49E3A26F1628F4FF000675B4 /* ATGetMessagesTask.h in Headers */,
@@ -1375,6 +1395,7 @@
 				584647C617C426E800BFD6E6 /* ATEngagementManifestParser.h in Headers */,
 				58C5922117C55ADD000FA428 /* ATEngagementBackend.h in Headers */,
 				58C5922B17C59BE3000FA428 /* ATWebClient+EngagementAdditions.h in Headers */,
+				017D97461B0E5795004E045C /* ATMessageCenterMessageCell.h in Headers */,
 				58EEBE2317C7E8150039A0F5 /* ATInteraction.h in Headers */,
 				58AB416718F608500034FAA5 /* ATInteractionSurveyController.h in Headers */,
 				49B7E916178BA8060059E776 /* ATSurveyResponse.h in Headers */,
@@ -1627,9 +1648,15 @@
 				58C97B58182752F6001EB5BD /* NSObject+ATSwizzle.m in Sources */,
 				49F8AFF716CC4A550070FFEA /* ATUpgradeRequestMessage.m in Sources */,
 				49F8AFFC16CC4D860070FFEA /* ATRecord.m in Sources */,
+				017D97471B0E5795004E045C /* ATMessageCenterMessageCell.m in Sources */,
 				49F8B00016CC56580070FFEA /* ATEvent.m in Sources */,
 				492B81D616D595740031BEF6 /* ATFileMessage.m in Sources */,
+				017D97431B0E3770004E045C /* ATMessageCenterConfirmationView.m in Sources */,
 				492B81DB16D595A00031BEF6 /* ATFileAttachment.m in Sources */,
+				017D974B1B0E57C2004E045C /* ATMessageCenterReplyCell.m in Sources */,
+				492B81E516D5C8AD0031BEF6 /* ATFileMessageCell.m in Sources */,
+				492F2F0F16E3F9660030E48A /* ATDefaultMessageCenterTitleView.m in Sources */,
+				49477B7C1835C700001D37AD /* ATExpandingTextView.m in Sources */,
 				49881DDE16E839540061D888 /* ATLogViewController.m in Sources */,
 				495E9C1D16EABD8E00AE3B03 /* ATLogger.m in Sources */,
 				58AB416818F608500034FAA5 /* ATInteractionSurveyController.m in Sources */,

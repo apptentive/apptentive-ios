@@ -7,15 +7,18 @@
 //
 
 #import "ATInteractionMessageCenterController.h"
-#import "ATInteraction.h"
+#import "ATMessageCenterInteraction.h"
 #import "ATBackend.h"
 #import "ATConnect_Private.h"
 #import "ATMessageCenterViewController.h"
 
 @implementation ATInteractionMessageCenterController
 
-- (id)initWithInteraction:(ATInteraction *)interaction {
+- (id)initWithInteraction:(ATMessageCenterInteraction *)interaction {
 	NSAssert([interaction.type isEqualToString:@"MessageCenter"], @"Attempted to load a MessageCenterController with an interaction of type: %@", interaction.type);
+	
+#warning Also check that the interaction is of type ATMessageCenterInteraction
+	
 	self = [super init];
 	if (self != nil) {
 		_interaction = [interaction copy];

@@ -10,4 +10,11 @@
 
 @implementation ATMessageCenterInteraction
 
++ (ATMessageCenterInteraction *)messageCenterInteraction {
+	ATMessageCenterInteraction *messageCenterInteraction = [[ATMessageCenterInteraction alloc] init];
+	messageCenterInteraction.type = @"MessageCenter";
+	
+	return messageCenterInteraction;
+}
+
 @end

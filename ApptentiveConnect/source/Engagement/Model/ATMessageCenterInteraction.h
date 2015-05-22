@@ -10,4 +10,6 @@
 
 @interface ATMessageCenterInteraction : ATInteraction
 
++ (ATMessageCenterInteraction *)messageCenterInteraction;
+
 @end

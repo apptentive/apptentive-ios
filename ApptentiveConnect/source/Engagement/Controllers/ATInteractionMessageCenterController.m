@@ -10,6 +10,7 @@
 #import "ATInteraction.h"
 #import "ATBackend.h"
 #import "ATConnect_Private.h"
+#import "ATMessageCenterViewController.h"
 
 @implementation ATInteractionMessageCenterController
 
@@ -29,9 +30,16 @@
 	if (!self.viewController) {
 		ATLogError(@"No view controller to present Message Center interface!!");
 	} else {
-		// Message Center interaction, Phase 1.
-		// Simply call old Message Center. Not customizable.
-		[[ATConnect sharedConnection] presentMessageCenterFromViewController:viewController];
+		UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MessageCenter" bundle:[ATConnect resourceBundle]];
+		UINavigationController *navigationController = [storyboard instantiateInitialViewController];
+		ATMessageCenterViewController *messageCenter = navigationController.viewControllers.firstObject;
+		
+		[viewController presentViewController:navigationController animated:YES completion:nil];
+		
+#warning re-add
+		//messageCenter.dismissalDelegate = self;
+		//self.presentedMessageCenterViewController = navigationController;
+
 	}
 	
 }

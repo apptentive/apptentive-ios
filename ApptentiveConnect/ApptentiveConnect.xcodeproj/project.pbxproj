@@ -296,6 +296,8 @@
 		58AB415918E3A9870034FAA5 /* ATInteractionAppStoreController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58AB415618E3A9870034FAA5 /* ATInteractionAppStoreController.m */; };
 		58AB416718F608500034FAA5 /* ATInteractionSurveyController.h in Headers */ = {isa = PBXBuildFile; fileRef = 58AB416518F608500034FAA5 /* ATInteractionSurveyController.h */; };
 		58AB416818F608500034FAA5 /* ATInteractionSurveyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58AB416618F608500034FAA5 /* ATInteractionSurveyController.m */; };
+		58B703ED1B0EB6D60024478C /* ATMessageCenterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 585A8E5E1B0D609A00BDF4CC /* ATMessageCenterViewController.m */; };
+		58B703EE1B0EB6DB0024478C /* ATMessageCenterViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 585A8E5D1B0D609A00BDF4CC /* ATMessageCenterViewController.h */; };
 		58C5922117C55ADD000FA428 /* ATEngagementBackend.h in Headers */ = {isa = PBXBuildFile; fileRef = 58C5921F17C55ADD000FA428 /* ATEngagementBackend.h */; };
 		58C5922217C55ADD000FA428 /* ATEngagementBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C5922017C55ADD000FA428 /* ATEngagementBackend.m */; };
 		58C5922317C55ADD000FA428 /* ATEngagementBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C5922017C55ADD000FA428 /* ATEngagementBackend.m */; };
@@ -1306,6 +1308,7 @@
 				49B877111464958C00594A5D /* ATWebClient_Private.h in Headers */,
 				49EA5AB014BD08AD004F8A4D /* ATLegacyRecord.h in Headers */,
 				49EA5ABD14BD0F4D004F8A4D /* ATRecordTask.h in Headers */,
+				58B703EE1B0EB6DB0024478C /* ATMessageCenterViewController.h in Headers */,
 				49CEFF5D15168B54006D8BA8 /* ATAppConfigurationUpdater.h in Headers */,
 				4987FA80157ACAB500AF2078 /* ATSurveyMetrics.h in Headers */,
 				4987FA85157ACB0B00AF2078 /* ATFeedbackMetrics.h in Headers */,
@@ -1561,6 +1564,7 @@
 				49D1125013368CC200603373 /* ATTask.m in Sources */,
 				49D1125413368CEF00603373 /* ATFeedbackTask.m in Sources */,
 				49D112741337CC9F00603373 /* ATTaskQueue.m in Sources */,
+				58B703ED1B0EB6D60024478C /* ATMessageCenterViewController.m in Sources */,
 				491748BB1341177000A7D11E /* ATConnectionChannel.m in Sources */,
 				491748BD1341177000A7D11E /* ATConnectionManager.m in Sources */,
 				58DCC0D6180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m in Sources */,

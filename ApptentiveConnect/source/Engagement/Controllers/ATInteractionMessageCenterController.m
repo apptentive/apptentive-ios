@@ -35,7 +35,9 @@
 	} else {
 		UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MessageCenter" bundle:[ATConnect resourceBundle]];
 		UINavigationController *navigationController = [storyboard instantiateInitialViewController];
-		ATMessageCenterViewController *messageCenter = navigationController.viewControllers.firstObject;
+		
+        ATMessageCenterViewController *messageCenter = navigationController.viewControllers.firstObject;
+		messageCenter.interaction = self.interaction;
 		
 		[viewController presentViewController:navigationController animated:YES completion:nil];
 		

@@ -8,11 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+@class ATMessageCenterInteraction;
+
 @protocol ATMessageCenterDismissalDelegate;
 
 @interface ATMessageCenterViewController : UITableViewController
 
 @property (nonatomic, weak) NSObject<ATMessageCenterDismissalDelegate> *dismissalDelegate;
+
+@property (nonatomic, strong) ATMessageCenterInteraction *interaction;
 
 @end
 

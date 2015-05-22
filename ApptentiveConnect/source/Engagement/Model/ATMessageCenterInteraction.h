@@ -12,4 +12,6 @@
 
 + (ATMessageCenterInteraction *)messageCenterInteraction;
 
+@property (nonatomic, readonly) NSString *title;
+
 @end

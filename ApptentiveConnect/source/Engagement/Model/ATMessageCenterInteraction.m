@@ -7,6 +7,7 @@
 //
 
 #import "ATMessageCenterInteraction.h"
+#import "ATConnect_Private.h"
 
 @implementation ATMessageCenterInteraction
 
@@ -15,6 +16,20 @@
 	messageCenterInteraction.type = @"MessageCenter";
 	
 	return messageCenterInteraction;
+}
+
+- (NSString *)title {
+	NSString *title = self.configuration[@"title"];
+	
+	if (!title) {
+		// TODO: get title from global config
+	}
+	
+	if (!title) {
+		title = ATLocalizedString(@"Message Center", @"Default Message Center Title Text");
+	}
+	
+	return title;
 }
 
 @end

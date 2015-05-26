@@ -18,6 +18,12 @@
 	return messageCenterInteraction;
 }
 
+- (id)copyWithZone:(NSZone *)zone {
+	ATMessageCenterInteraction *copy = (ATMessageCenterInteraction *)[super copyWithZone:zone];
+	
+	return copy;
+}
+
 - (NSString *)title {
 	NSString *title = self.configuration[@"title"];
 	

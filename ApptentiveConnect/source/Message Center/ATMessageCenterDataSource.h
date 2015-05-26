@@ -9,6 +9,11 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+typedef NS_ENUM(NSInteger, ATMessageCenterMessageType) {
+	ATMessageCenterMessageTypeMessage,
+	ATMessageCenterMessageTypeReply
+};
+
 @protocol ATMessageCenterDataSourceDelegate;
 
 @interface ATMessageCenterDataSource : NSObject
@@ -19,6 +24,12 @@
 - (void)start;
 - (void)stop;
 - (void)createIntroMessageIfNecessary;
+
+- (NSInteger)numberOfMessageGroups;
+- (NSInteger)numberOfMessagesInGroup:(NSInteger)groupIndex;
+- (ATMessageCenterMessageType)cellTypeAtIndexPath:(NSIndexPath *)indexPath;
+- (NSString *)textOfMessageAtIndexPath:(NSIndexPath *)indexPath;
+- (NSDate *)dateOfMessageAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
 

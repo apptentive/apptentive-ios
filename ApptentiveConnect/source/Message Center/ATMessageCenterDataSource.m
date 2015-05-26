@@ -85,6 +85,32 @@
 	}
 }
 
+#warning TODO: Actually implement these
+
+- (NSInteger)numberOfMessageGroups {
+	return 2;
+}
+
+- (NSInteger)numberOfMessagesInGroup:(NSInteger)groupIndex {
+	return 1;
+}
+
+- (ATMessageCenterMessageType)cellTypeAtIndexPath:(NSIndexPath *)indexPath {
+	return (indexPath.section % 2 == 0) ? ATMessageCenterMessageTypeMessage : ATMessageCenterMessageTypeReply;
+}
+
+- (NSString *)textOfMessageAtIndexPath:(NSIndexPath *)indexPath {
+	if (indexPath.section % 2 == 0) {
+		return @"Yeah, I like the app overall, but it just closed without saving. can you help?";
+	} else {
+		return @"Hey Andrew. I can help you with that. We’ve had a couple reports of this happening on older versions of the app.\n\nIf you open the App Store, and click the “Updates” tab, you should see that our latest version is 4.3.5. From there, you can tap “Update All” - many customers report this helping them.\n\nIn the mean time, could you please describe what it was that caused the bug in the first place? What part of the app were you in, what did you tap, and what were you trying to accomplish?";;
+	}
+}
+
+- (NSDate *)dateOfMessageAtIndexPath:(NSIndexPath *)indexPath {
+	return [NSDate date];
+}
+
 #pragma mark NSFetchedResultsControllerDelegate
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {

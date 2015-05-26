@@ -19,12 +19,19 @@
 @property (weak, nonatomic) IBOutlet ATMessageCenterGreetingView *greetingView;
 @property (weak, nonatomic) IBOutlet ATMessageCenterConfirmationView *confirmationView;
 
+@property (nonatomic, strong) ATMessageCenterDataSource *dataSource;
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
+
 @end
 
 @implementation ATMessageCenterViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+	
+	self.dataSource = [[ATMessageCenterDataSource alloc] initWithDelegate:self];
+	self.dateFormatter = [[NSDateFormatter alloc] init];
+	self.dateFormatter.dateFormat = @"MMM d, h:mm aaa";
 	
 	[self updateHeaderHeightForOrientation:self.interfaceOrientation];
 	
@@ -46,7 +53,6 @@
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 	
 	[UIView animateWithDuration:duration animations:^{
-//		[self.tableView reloadData];
 		[self updateHeaderHeightForOrientation:toInterfaceOrientation];
 	}];
 }
@@ -54,33 +60,35 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    // TODO: Return the number of sections.
-    return 2;
+    return [self.dataSource numberOfMessageGroups];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    // TODO: Return the number of rows in the section.
-    return 1;
+    return [self.dataSource numberOfMessagesInGroup:section];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	if (indexPath.section % 2 == 0) {
+	ATMessageCenterMessageType type = [self.dataSource cellTypeAtIndexPath:indexPath];
+	
+	if (type == ATMessageCenterMessageTypeMessage) {
 		ATMessageCenterMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Message" forIndexPath:indexPath];
+	
+		cell.messageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
+		cell.dateLabel.text = [self.dateFormatter stringFromDate:[self.dataSource dateOfMessageAtIndexPath:indexPath]];
+		
 		return cell;
 	} else {
 		ATMessageCenterReplyCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Reply" forIndexPath:indexPath];
 
 		// DEBUG
 		cell.supportUserImageView.image = [UIImage imageNamed:@"ApptentiveResources.bundle/Sumo.jpg"];
-		cell.replyLabel.text = @"Hey Andrew. I can help you with that. We’ve had a couple reports of this happening on older versions of the app.\n\nIf you open the App Store, and click the “Updates” tab, you should see that our latest version is 4.3.5. From there, you can tap “Update All” - many customers report this helping them.\n\nIn the mean time, could you please describe what it was that caused the bug in the first place? What part of the app were you in, what did you tap, and what were you trying to accomplish?";
 		// /DEBUG
+
+		cell.replyLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
+		cell.dateLabel.text = [self.dateFormatter stringFromDate:[self.dataSource dateOfMessageAtIndexPath:indexPath]];
 		
 		return cell;
 	}
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-	NSLog(@"cell: %@", cell);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {

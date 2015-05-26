@@ -463,7 +463,7 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 			[self presentFeedbackDialogInteraction:interaction fromViewController:viewController];
 			break;
 		case ATInteractionTypeMessageCenter:
-			[self presentMessageCenterInteraction:interaction fromViewController:viewController];
+			[self presentMessageCenterInteraction:(ATMessageCenterInteraction *)interaction fromViewController:viewController];
 			break;
 		case ATInteractionTypeAppStoreRating:
 			[self presentAppStoreRatingInteraction:interaction fromViewController:viewController];
@@ -519,12 +519,11 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	
 }
 
-- (void)presentMessageCenterInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
+- (void)presentMessageCenterInteraction:(ATMessageCenterInteraction *)interaction fromViewController:(UIViewController *)viewController {
 	NSAssert([interaction.type isEqualToString:@"MessageCenter"], @"Attempted to present a MessageCenter interaction with an interaction of type: %@", interaction.type);
 	
 	ATInteractionMessageCenterController *messageCenter = [[ATInteractionMessageCenterController alloc] initWithInteraction:interaction];
 	[messageCenter showMessageCenterFromViewController:viewController];
-	
 }
 
 - (void)presentAppStoreRatingInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {

@@ -98,7 +98,7 @@
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-    ATInteraction *copy = [[ATInteraction alloc] init];
+	ATInteraction *copy = [[[self class] allocWithZone:zone] init];
 	
     if (copy) {
 		copy.identifier = self.identifier;

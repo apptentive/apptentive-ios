@@ -7,14 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-@class ATInteraction;
+
+@class ATMessageCenterInteraction;
 
 @interface ATInteractionMessageCenterController : NSObject
 
-@property (nonatomic, strong, readonly) ATInteraction *interaction;
+@property (nonatomic, strong, readonly) ATMessageCenterInteraction *interaction;
 @property (nonatomic, strong) UIViewController *viewController;
 
-- (id)initWithInteraction:(ATInteraction *)interaction;
+- (id)initWithInteraction:(ATMessageCenterInteraction *)interaction;
 - (void)showMessageCenterFromViewController:(UIViewController *)viewController;
 
 @end

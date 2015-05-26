@@ -35,6 +35,7 @@
 #import "ATPersonUpdater.h"
 #import "ATEngagementBackend.h"
 #import "ATFileMessage.h"
+#import "ATMessageCenterInteraction.h"
 
 typedef NS_ENUM(NSInteger, ATBackendState){
 	ATBackendStateStarting,
@@ -565,15 +566,9 @@ static NSURLCache *imageCache = nil;
 		ATLogInfo(@"Apptentive message center controller already shown.");
 		return;
 	}
-
-	UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MessageCenter" bundle:[ATConnect resourceBundle]];
-	UINavigationController *navigationController = [storyboard instantiateInitialViewController];
-	ATMessageCenterViewController *messageCenter = navigationController.viewControllers.firstObject;
 	
-	[viewController presentViewController:navigationController animated:YES completion:nil];
-	
-	messageCenter.dismissalDelegate = self;
-	self.presentedMessageCenterViewController = navigationController;
+	ATMessageCenterInteraction *messageCenterInteraction = [ATMessageCenterInteraction messageCenterInteraction];
+	[[ATEngagementBackend sharedBackend] presentInteraction:messageCenterInteraction fromViewController:viewController];
 }
 
 - (void)attachCustomDataToMessage:(ATAbstractMessage *)message {

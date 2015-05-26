@@ -25,17 +25,31 @@
 }
 
 - (NSString *)title {
-	NSString *title = self.configuration[@"title"];
-	
-	if (!title) {
-		// TODO: get title from global config
+	return [self stringForKey:@"title" fallback:ATLocalizedString(@"Message Center", @"Default Message Center Title Text")];
+}
+
+- (NSString *)greetingTitle {
+	return [self stringForKey:@"greeting_title" fallback:ATLocalizedString(@"I’m sorry to hear that!", @"Default Message Center Greeting Title Text")];
+}
+
+- (NSString *)greetingMessage {
+	return [self stringForKey:@"greeting_message" fallback:ATLocalizedString(@"Please leave us some feedback so we can make the app better for you.", @"Default Message Center Greeting Message Text")];
+}
+
+#pragma mark - Private
+
+- (NSString *)stringForKey:(NSString *)key fallback:(NSString *)fallbackString {
+	NSString *result =  self.configuration[key];
+ 
+	if (!result) {
+		// TODO: get value from global config
 	}
 	
-	if (!title) {
-		title = ATLocalizedString(@"Message Center", @"Default Message Center Title Text");
+	if (!result) {
+		result = fallbackString;
 	}
 	
-	return title;
+	return result;
 }
 
 @end

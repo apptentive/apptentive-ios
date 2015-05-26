@@ -33,9 +33,8 @@
 
 	self.navigationItem.title = self.interaction.title;
 	
-	// DEBUG
-	self.greetingView.imageView.image = [UIImage imageNamed:@"ApptentiveResources.bundle/Sumo.jpg"];
-	// /DEBUG
+	self.greetingView.titleLabel.text = self.interaction.greetingTitle;
+	self.greetingView.messageLabel.text = self.interaction.greetingMessage;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -46,7 +45,6 @@
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 	
 	[UIView animateWithDuration:duration animations:^{
-//		[self.tableView reloadData];
 		[self updateHeaderHeightForOrientation:toInterfaceOrientation];
 	}];
 }

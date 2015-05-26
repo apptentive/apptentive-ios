@@ -13,5 +13,7 @@
 + (ATMessageCenterInteraction *)messageCenterInteraction;
 
 @property (nonatomic, readonly) NSString *title;
+@property (nonatomic, readonly) NSString *greetingTitle;
+@property (nonatomic, readonly) NSString *greetingMessage;
 
 @end

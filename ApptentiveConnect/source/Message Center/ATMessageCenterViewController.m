@@ -12,6 +12,7 @@
 #import "ATMessageCenterMessageCell.h"
 #import "ATMessageCenterReplyCell.h"
 #import "ATBackend.h"
+#import "ATMessageCenterInteraction.h"
 
 @interface ATMessageCenterViewController ()
 
@@ -29,6 +30,8 @@
 	
 	self.tableView.rowHeight = UITableViewAutomaticDimension;
 	self.tableView.estimatedRowHeight = 44.0;
+
+	self.navigationItem.title = self.interaction.title;
 	
 	// DEBUG
 	self.greetingView.imageView.image = [UIImage imageNamed:@"ApptentiveResources.bundle/Sumo.jpg"];

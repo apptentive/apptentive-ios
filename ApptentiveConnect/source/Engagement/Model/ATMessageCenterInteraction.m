@@ -54,7 +54,7 @@
 	}
 	
 	if (!result) {
-		result = fallbackString;
+		result = fallbackString ?: @"";
 	}
 	
 	return result;

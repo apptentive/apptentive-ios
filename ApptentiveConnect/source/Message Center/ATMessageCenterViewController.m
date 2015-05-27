@@ -18,6 +18,7 @@
 
 @property (weak, nonatomic) IBOutlet ATMessageCenterGreetingView *greetingView;
 @property (weak, nonatomic) IBOutlet ATMessageCenterConfirmationView *confirmationView;
+@property (strong, nonatomic) IBOutlet UIToolbar *textFieldToolbar;
 
 @end
 
@@ -38,6 +39,14 @@
 	// /DEBUG
 }
 
+- (UIView *)inputAccessoryView {
+	return self.textFieldToolbar;
+}
+
+- (BOOL)canBecomeFirstResponder {
+	return YES;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -49,6 +58,12 @@
 //		[self.tableView reloadData];
 		[self updateHeaderHeightForOrientation:toInterfaceOrientation];
 	}];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
+	
+//	[self becomeFirstResponder];
 }
 
 #pragma mark - Table view data source

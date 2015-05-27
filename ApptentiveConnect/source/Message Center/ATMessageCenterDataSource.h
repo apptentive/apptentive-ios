@@ -29,6 +29,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageType) {
 - (ATMessageCenterMessageType)cellTypeAtIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)textOfMessageAtIndexPath:(NSIndexPath *)indexPath;
 - (NSDate *)dateOfMessageAtIndexPath:(NSIndexPath *)indexPath;
+- (NSString *)senderOfMessageAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
 

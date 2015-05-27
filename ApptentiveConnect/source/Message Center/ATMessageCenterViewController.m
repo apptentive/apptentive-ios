@@ -13,6 +13,7 @@
 #import "ATMessageCenterReplyCell.h"
 #import "ATBackend.h"
 #import "ATMessageCenterInteraction.h"
+#import "ATConnect_Private.h"
 
 @interface ATMessageCenterViewController ()
 
@@ -87,7 +88,10 @@
 		// /DEBUG
 
 		cell.replyLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
-		cell.dateLabel.text = [self.dateFormatter stringFromDate:[self.dataSource dateOfMessageAtIndexPath:indexPath]];
+		
+		NSString *dateString = [self.dateFormatter stringFromDate:[self.dataSource dateOfMessageAtIndexPath:indexPath]];
+		NSString *userString = [self.dataSource senderOfMessageAtIndexPath:indexPath];
+		cell.dateLabel.text = [NSString stringWithFormat:ATLocalizedString(@"%@ - from %@", @"<date> - from <user>"), dateString, userString];
 		
 		return cell;
 	}

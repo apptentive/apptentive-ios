@@ -14,6 +14,7 @@
 #import "ATData.h"
 #import "ATMessageCenterMetrics.h"
 #import "ATTextMessage.h"
+#import "ATMessageSender.h"
 
 @interface ATMessageCenterDataSource () <NSFetchedResultsControllerDelegate>
 
@@ -108,8 +109,9 @@
 	return [NSDate dateWithTimeIntervalSince1970:[self messageAtIndexPath:indexPath].creationTime.doubleValue];
 }
 
-- (BOOL)shouldDisplayStatus {
-	return YES;
+- (NSString *)senderOfMessageAtIndexPath:(NSIndexPath *)indexPath {
+	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
+	return message.sender.name;
 }
 
 #pragma mark NSFetchedResultsControllerDelegate

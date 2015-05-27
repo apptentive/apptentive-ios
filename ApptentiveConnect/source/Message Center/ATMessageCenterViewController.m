@@ -18,7 +18,7 @@
 
 @property (weak, nonatomic) IBOutlet ATMessageCenterGreetingView *greetingView;
 @property (weak, nonatomic) IBOutlet ATMessageCenterConfirmationView *confirmationView;
-@property (strong, nonatomic) IBOutlet UIToolbar *textFieldToolbar;
+@property (nonatomic, readwrite, retain) IBOutlet UIView *inputAccessoryView;
 
 @end
 
@@ -37,10 +37,6 @@
 	// DEBUG
 	self.greetingView.imageView.image = [UIImage imageNamed:@"ApptentiveResources.bundle/Sumo.jpg"];
 	// /DEBUG
-}
-
-- (UIView *)inputAccessoryView {
-	return self.textFieldToolbar;
 }
 
 - (BOOL)canBecomeFirstResponder {

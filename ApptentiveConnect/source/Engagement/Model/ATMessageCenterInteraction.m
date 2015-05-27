@@ -41,7 +41,7 @@
 }
 
 - (NSString *)statusText {
-	return [self stringForKey:@"status" fallback:@""];
+	return [self stringForKey:@"status" fallback:nil];
 }
 
 #pragma mark - Private

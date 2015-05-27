@@ -30,6 +30,8 @@
     [super viewDidLoad];
 	
 	self.dataSource = [[ATMessageCenterDataSource alloc] initWithDelegate:self];
+	[self.dataSource start];
+	
 	self.dateFormatter = [[NSDateFormatter alloc] init];
 	self.dateFormatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"MMMdjm" options:0 locale:[NSLocale currentLocale]];
 	

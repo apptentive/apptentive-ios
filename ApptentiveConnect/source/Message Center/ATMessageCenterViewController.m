@@ -35,6 +35,9 @@
 	
 	self.greetingView.titleLabel.text = self.interaction.greetingTitle;
 	self.greetingView.messageLabel.text = self.interaction.greetingMessage;
+	
+	self.confirmationView.confirmationLabel.text = self.interaction.confirmationText;
+	self.confirmationView.statusLabel.text = self.interaction.statusText;
 }
 
 - (void)didReceiveMemoryWarning {

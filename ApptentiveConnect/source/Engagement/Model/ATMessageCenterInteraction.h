@@ -15,5 +15,7 @@
 @property (nonatomic, readonly) NSString *title;
 @property (nonatomic, readonly) NSString *greetingTitle;
 @property (nonatomic, readonly) NSString *greetingMessage;
+@property (nonatomic, readonly) NSString *confirmationText;
+@property (nonatomic, readonly) NSString *statusText;
 
 @end

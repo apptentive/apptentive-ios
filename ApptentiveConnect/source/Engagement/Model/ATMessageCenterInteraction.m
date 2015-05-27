@@ -36,6 +36,14 @@
 	return [self stringForKey:@"greeting_message" fallback:ATLocalizedString(@"Please leave us some feedback so we can make the app better for you.", @"Default Message Center Greeting Message Text")];
 }
 
+- (NSString *)confirmationText {
+	return [self stringForKey:@"confirmation" fallback:ATLocalizedString(@"Thank you!", @"Default Message Center Confirmation Text")];
+}
+
+- (NSString *)statusText {
+	return [self stringForKey:@"status" fallback:@""];
+}
+
 #pragma mark - Private
 
 - (NSString *)stringForKey:(NSString *)key fallback:(NSString *)fallbackString {

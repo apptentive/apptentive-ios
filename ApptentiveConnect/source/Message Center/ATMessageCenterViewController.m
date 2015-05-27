@@ -31,7 +31,7 @@
 	
 	self.dataSource = [[ATMessageCenterDataSource alloc] initWithDelegate:self];
 	self.dateFormatter = [[NSDateFormatter alloc] init];
-	self.dateFormatter.dateFormat = @"MMM d, h:mm aaa";
+	self.dateFormatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"MMMdjm" options:0 locale:[NSLocale currentLocale]];
 	
 	[self updateHeaderHeightForOrientation:self.interfaceOrientation];
 	

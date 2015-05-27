@@ -47,7 +47,10 @@
 			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"creationTime != %d AND hidden != %@", 0, @YES];
 			[request setPredicate:predicate];
 			
-			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:nil cacheName:@"at-messages-cache"];
+			// For now, group each message into its own section.
+			// In the future, we'll save an attribute that coalesces
+			// closely-grouped (in time) messages into a single section.
+			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:@"creationTime" cacheName:@"at-messages-cache"];
 			newController.delegate = self;
 			_fetchedMessagesController = newController;
 			
@@ -56,7 +59,6 @@
 	}
 	return _fetchedMessagesController;
 }
-
 
 - (void)start {
 	[[ATBackend sharedBackend] messageCenterEnteredForeground];
@@ -68,47 +70,46 @@
 		ATLogError(@"Got an error loading messages: %@", error);
 		//TODO: Handle this error.
 	}
-	
-	[self createIntroMessageIfNecessary];
 }
 
 - (void)stop {
 	
 }
 
-- (void)createIntroMessageIfNecessary {
-	NSUInteger messageCount = [ATData countEntityNamed:@"ATAbstractMessage" withPredicate:nil];
-	if (messageCount == 0) {
-		NSString *title = ATLocalizedString(@"Welcome", @"Welcome");
-		NSString *body = ATLocalizedString(@"This is our Message Center. If you have questions, suggestions, concerns or just want to get in touch, please send us a message. We love talking with our customers!", @"Placeholder welcome message.");
-		[[ATBackend sharedBackend] sendAutomatedMessageWithTitle:title body:body];
-	}
-}
-
-#warning TODO: Actually implement these
+#pragma mark - Message center view controller support
 
 - (NSInteger)numberOfMessageGroups {
-	return 2;
+	return self.fetchedMessagesController.sections.count;
 }
 
 - (NSInteger)numberOfMessagesInGroup:(NSInteger)groupIndex {
-	return 1;
+	if ([[self.fetchedMessagesController sections] count] > 0) {
+		return [[[self.fetchedMessagesController sections] objectAtIndex:groupIndex] numberOfObjects];
+	} else
+		return 0;
 }
 
 - (ATMessageCenterMessageType)cellTypeAtIndexPath:(NSIndexPath *)indexPath {
-	return (indexPath.section % 2 == 0) ? ATMessageCenterMessageTypeMessage : ATMessageCenterMessageTypeReply;
+	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
+	return message.sentByUser.boolValue ? ATMessageCenterMessageTypeMessage : ATMessageCenterMessageTypeReply;
 }
 
 - (NSString *)textOfMessageAtIndexPath:(NSIndexPath *)indexPath {
-	if (indexPath.section % 2 == 0) {
-		return @"Yeah, I like the app overall, but it just closed without saving. can you help?";
+	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
+	
+	if ([message isKindOfClass:[ATTextMessage class]]) {
+		return ((ATTextMessage *)message).body;
 	} else {
-		return @"Hey Andrew. I can help you with that. We’ve had a couple reports of this happening on older versions of the app.\n\nIf you open the App Store, and click the “Updates” tab, you should see that our latest version is 4.3.5. From there, you can tap “Update All” - many customers report this helping them.\n\nIn the mean time, could you please describe what it was that caused the bug in the first place? What part of the app were you in, what did you tap, and what were you trying to accomplish?";;
+		return nil;
 	}
 }
 
 - (NSDate *)dateOfMessageAtIndexPath:(NSIndexPath *)indexPath {
-	return [NSDate date];
+	return [NSDate dateWithTimeIntervalSince1970:[self messageAtIndexPath:indexPath].creationTime.doubleValue];
+}
+
+- (BOOL)shouldDisplayStatus {
+	return YES;
 }
 
 #pragma mark NSFetchedResultsControllerDelegate
@@ -149,4 +150,11 @@
 		return [firstLetter uppercaseStringWithLocale:[NSLocale currentLocale]];
 	}
 }
+
+#pragma mark - Private
+
+- (ATAbstractMessage *)messageAtIndexPath:(NSIndexPath *)indexPath {
+	return [self.fetchedMessagesController objectAtIndexPath:indexPath];
+}
+
 @end

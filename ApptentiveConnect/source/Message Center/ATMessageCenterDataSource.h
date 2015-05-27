@@ -23,7 +23,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageType) {
 - (id)initWithDelegate:(NSObject<ATMessageCenterDataSourceDelegate> *)delegate;
 - (void)start;
 - (void)stop;
-- (void)createIntroMessageIfNecessary;
 
 - (NSInteger)numberOfMessageGroups;
 - (NSInteger)numberOfMessagesInGroup:(NSInteger)groupIndex;

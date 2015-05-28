@@ -268,6 +268,9 @@
 		49FECBE317D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49FECBE217D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel */; };
 		49FECBE417D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49FECBE217D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel */; };
 		580B24BB17D90AF300AE2CD0 /* ATEngagementTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 580B24BA17D90AF300AE2CD0 /* ATEngagementTests.m */; };
+		581E6B2C1B176E3B0012FF36 /* ATMessageInputViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 581E6B291B176E3B0012FF36 /* ATMessageInputViewController.h */; };
+		581E6B2D1B176E3B0012FF36 /* ATMessageInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 581E6B2A1B176E3B0012FF36 /* ATMessageInputViewController.m */; };
+		581E6B2E1B1775D10012FF36 /* ATMessageInputViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 581E6B2B1B176E3B0012FF36 /* ATMessageInputViewController.xib */; };
 		583DF0671A390DDA00BF0207 /* ATInteractionInvocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 583DF0651A390DDA00BF0207 /* ATInteractionInvocation.h */; };
 		583DF0681A390DDA00BF0207 /* ATInteractionInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 583DF0661A390DDA00BF0207 /* ATInteractionInvocation.m */; };
 		583DF06E1A44CD6E00BF0207 /* ATInteractionNavigateToLink.h in Headers */ = {isa = PBXBuildFile; fileRef = 583DF06C1A44CD6E00BF0207 /* ATInteractionNavigateToLink.h */; };
@@ -572,6 +575,9 @@
 		49FECBE217D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v1 to v2.xcmappingmodel"; sourceTree = "<group>"; };
 		580B24B917D90AF300AE2CD0 /* ATEngagementTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ATEngagementTests.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		580B24BA17D90AF300AE2CD0 /* ATEngagementTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ATEngagementTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		581E6B291B176E3B0012FF36 /* ATMessageInputViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATMessageInputViewController.h; path = "Message Center/ATMessageInputViewController.h"; sourceTree = "<group>"; };
+		581E6B2A1B176E3B0012FF36 /* ATMessageInputViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATMessageInputViewController.m; path = "Message Center/ATMessageInputViewController.m"; sourceTree = "<group>"; };
+		581E6B2B1B176E3B0012FF36 /* ATMessageInputViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ATMessageInputViewController.xib; path = "Message Center/ATMessageInputViewController.xib"; sourceTree = "<group>"; };
 		583DF0651A390DDA00BF0207 /* ATInteractionInvocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATInteractionInvocation.h; path = Engagement/Model/ATInteractionInvocation.h; sourceTree = "<group>"; };
 		583DF0661A390DDA00BF0207 /* ATInteractionInvocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATInteractionInvocation.m; path = Engagement/Model/ATInteractionInvocation.m; sourceTree = "<group>"; };
 		583DF06C1A44CD6E00BF0207 /* ATInteractionNavigateToLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATInteractionNavigateToLink.h; path = Engagement/Controllers/ATInteractionNavigateToLink.h; sourceTree = "<group>"; };
@@ -956,6 +962,9 @@
 				018A343A1B0CE810001DCA2C /* MessageCenter.storyboard */,
 				49735D601832DF1F00D48DE7 /* ATMessageCenterDataSource.h */,
 				49735D611832DF1F00D48DE7 /* ATMessageCenterDataSource.m */,
+				581E6B291B176E3B0012FF36 /* ATMessageInputViewController.h */,
+				581E6B2A1B176E3B0012FF36 /* ATMessageInputViewController.m */,
+				581E6B2B1B176E3B0012FF36 /* ATMessageInputViewController.xib */,
 				4961A408161BBDBE00E30037 /* Persistence */,
 				49AC178B16C0A09200BE1615 /* Protocols */,
 				4961A3FF161BBD5200E30037 /* Tasks */,
@@ -1297,6 +1306,7 @@
 				49D112731337CC9F00603373 /* ATTaskQueue.h in Headers */,
 				491748BA1341177000A7D11E /* ATConnectionChannel.h in Headers */,
 				491748BC1341177000A7D11E /* ATConnectionManager.h in Headers */,
+				581E6B2C1B176E3B0012FF36 /* ATMessageInputViewController.h in Headers */,
 				58B703F81B0FAE6D0024478C /* ATMessageCenterInteraction.h in Headers */,
 				491748BE1341177000A7D11E /* ATURLConnection.h in Headers */,
 				491748C01341177000A7D11E /* ATWebClient.h in Headers */,
@@ -1546,6 +1556,7 @@
 				4967278416B9FE6400C679B8 /* Info.plist in Resources */,
 				4935CF59177286E500CFE3DC /* ATPersonDetailsViewController.xib in Resources */,
 				58DCC0DA180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.xib in Resources */,
+				581E6B2E1B1775D10012FF36 /* ATMessageInputViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1599,6 +1610,7 @@
 				49352AC5138C97A2000E464A /* ATAPIRequest.m in Sources */,
 				490B8159144274EF009801E9 /* ATCustomButton.m in Sources */,
 				490B815E1442751F009801E9 /* ATToolbar.m in Sources */,
+				581E6B2D1B176E3B0012FF36 /* ATMessageInputViewController.m in Sources */,
 				49BC2A5B144F75E20041E789 /* ATShadowView.m in Sources */,
 				49EA5AB114BD08AD004F8A4D /* ATLegacyRecord.m in Sources */,
 				49EF002C18DA4C7300661F7C /* ATLargeImageResizer.m in Sources */,

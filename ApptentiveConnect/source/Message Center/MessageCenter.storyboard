@@ -214,25 +214,36 @@
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uP4-vK-jPB" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <view contentMode="scaleToFill" id="WKe-eE-Ltf">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                <view contentMode="scaleToFill" placeholderIntrinsicWidth="320" placeholderIntrinsicHeight="40" id="WKe-eE-Ltf">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="do6-U4-CNu">
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="do6-U4-CNu">
                             <rect key="frame" x="40" y="220" width="240" height="128"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="200" id="6uD-Yi-cDQ"/>
+                            </constraints>
                             <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         </textView>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hkW-wu-sjM">
+                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hkW-wu-sjM">
                             <rect key="frame" x="137" y="269" width="46" height="30"/>
-                            <state key="normal" title="Button">
+                            <state key="normal" title="Send">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                         </button>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="hkW-wu-sjM" secondAttribute="trailing" constant="10" id="KVW-6Z-Oz7"/>
+                        <constraint firstAttribute="bottom" secondItem="do6-U4-CNu" secondAttribute="bottom" id="Pa4-5r-Fyx"/>
+                        <constraint firstItem="do6-U4-CNu" firstAttribute="leading" secondItem="WKe-eE-Ltf" secondAttribute="leading" id="T8H-eq-u4j"/>
+                        <constraint firstAttribute="bottom" secondItem="hkW-wu-sjM" secondAttribute="bottom" id="bx8-YL-zNp"/>
+                        <constraint firstItem="do6-U4-CNu" firstAttribute="top" secondItem="WKe-eE-Ltf" secondAttribute="top" id="u3Z-SK-tzZ"/>
+                        <constraint firstItem="hkW-wu-sjM" firstAttribute="leading" secondItem="do6-U4-CNu" secondAttribute="trailing" constant="10" id="xdV-eV-ZfU"/>
+                    </constraints>
                 </view>
             </objects>
             <point key="canvasLocation" x="350" y="604"/>

@@ -8,14 +8,26 @@
 
 #import "ATMessageCenterConfirmationView.h"
 
+@interface ATMessageCenterConfirmationView ()
+
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *confirmationStatusSpacing;
+
+@end
+
 @implementation ATMessageCenterConfirmationView
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
+- (void)setConfirmationHidden:(BOOL)confirmationHidden {
+	if (confirmationHidden) {
+		[self removeConstraint:self.confirmationStatusSpacing];
+	} else {
+		[self addConstraint:self.confirmationStatusSpacing];
+	}
+	
+	[UIView animateWithDuration:0.3 animations:^{
+		self.confirmationLabel.alpha = confirmationHidden ? 0.0 : 1.0;
+
+		[self layoutIfNeeded];
+	}];
 }
-*/
 
 @end

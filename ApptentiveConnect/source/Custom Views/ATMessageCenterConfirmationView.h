@@ -12,5 +12,6 @@
 
 @property (nonatomic, weak) IBOutlet UILabel *confirmationLabel;
 @property (nonatomic, weak) IBOutlet UILabel *statusLabel;
+@property (nonatomic, assign, getter=isConfirmationHidden) BOOL confirmationHidden;
 
 @end

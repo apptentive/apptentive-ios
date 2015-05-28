@@ -31,6 +31,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageType) {
 - (NSDate *)dateOfMessageAtIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)senderOfMessageAtIndexPath:(NSIndexPath *)indexPath;
 
+@property (nonatomic, readonly) BOOL lastMessageIsReply;
+
 @end
 
 @protocol ATMessageCenterDataSourceDelegate <NSObject, NSFetchedResultsControllerDelegate>

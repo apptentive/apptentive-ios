@@ -37,11 +37,12 @@
 	self.dateFormatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"MMMdjm" options:0 locale:[NSLocale currentLocale]];
 	
 	[self updateHeaderHeightForOrientation:self.interfaceOrientation];
+	[self updateConfirmationVisibility];
 	
 	self.tableView.rowHeight = UITableViewAutomaticDimension;
 	self.tableView.estimatedRowHeight = 44.0;
 
-	self.navigationItem.title = self.interaction.title;
+	self.navigationItem.title = self.interaction.title;	
 	
 	// DEBUG
 	self.greetingView.imageView.image = [UIImage imageNamed:@"ApptentiveResources.bundle/Sumo.jpg"];
@@ -118,6 +119,7 @@
 		ATLogError(@"caught exception: %@: %@", [exception name], [exception description]);
 	}
 	
+	[self updateConfirmationVisibility];
 	[self scrollToLastReply];
 }
 
@@ -173,6 +175,10 @@
 	self.greetingView.bounds = CGRectMake(0, 0, self.tableView.bounds.size.height, headerHeight);
 	[self.greetingView updateConstraints];
 	self.tableView.tableHeaderView = self.greetingView;
+}
+
+- (void)updateConfirmationVisibility {
+	self.confirmationView.confirmationHidden = self.dataSource.lastMessageIsReply;
 }
 
 - (void)scrollToLastReply {

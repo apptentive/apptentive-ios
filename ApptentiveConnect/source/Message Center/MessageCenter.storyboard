@@ -239,10 +239,10 @@
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
+                        <constraint firstAttribute="centerY" secondItem="hkW-wu-sjM" secondAttribute="centerY" id="3II-Nj-jMj"/>
                         <constraint firstAttribute="trailing" secondItem="hkW-wu-sjM" secondAttribute="trailing" constant="10" id="KVW-6Z-Oz7"/>
                         <constraint firstAttribute="bottom" secondItem="do6-U4-CNu" secondAttribute="bottom" id="Pa4-5r-Fyx"/>
                         <constraint firstItem="do6-U4-CNu" firstAttribute="leading" secondItem="WKe-eE-Ltf" secondAttribute="leading" id="T8H-eq-u4j"/>
-                        <constraint firstAttribute="bottom" secondItem="hkW-wu-sjM" secondAttribute="bottom" id="bx8-YL-zNp"/>
                         <constraint firstItem="do6-U4-CNu" firstAttribute="top" secondItem="WKe-eE-Ltf" secondAttribute="top" id="u3Z-SK-tzZ"/>
                         <constraint firstItem="hkW-wu-sjM" firstAttribute="leading" secondItem="do6-U4-CNu" secondAttribute="trailing" constant="10" id="xdV-eV-ZfU"/>
                     </constraints>

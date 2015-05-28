@@ -120,6 +120,16 @@
 	}];
 }
 
+- (IBAction)sendButtonPressed:(id)sender {
+	NSString *message = self.messageView.text;
+	
+	if (message && ![message isEqualToString:@""]) {
+		[[ATBackend sharedBackend] sendTextMessageWithBody:message completion:^(NSString *pendingMessageID) {}];
+		
+		self.messageView.text = @"";
+	}
+}
+
 #pragma mark - Private
 
 - (void)updateHeaderHeightForOrientation:(UIInterfaceOrientation)toInterfaceOrientation {

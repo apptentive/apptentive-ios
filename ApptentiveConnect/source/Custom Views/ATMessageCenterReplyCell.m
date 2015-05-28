@@ -7,6 +7,7 @@
 //
 
 #import "ATMessageCenterReplyCell.h"
+#import "ATNetworkImageView.h"
 
 @implementation ATMessageCenterReplyCell
 

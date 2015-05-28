@@ -14,6 +14,7 @@
 #import "ATBackend.h"
 #import "ATMessageCenterInteraction.h"
 #import "ATConnect_Private.h"
+#import "ATNetworkImageView.h"
 
 @interface ATMessageCenterViewController ()
 
@@ -83,9 +84,7 @@
 	} else {
 		ATMessageCenterReplyCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Reply" forIndexPath:indexPath];
 
-		// DEBUG
-		cell.supportUserImageView.image = [UIImage imageNamed:@"ApptentiveResources.bundle/Sumo.jpg"];
-		// /DEBUG
+		cell.supportUserImageView.imageURL = [self.dataSource imageURLOfSenderAtIndexPath:indexPath];
 
 		cell.replyLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
 		

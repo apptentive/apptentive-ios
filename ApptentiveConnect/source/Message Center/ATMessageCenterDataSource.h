@@ -30,6 +30,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageType) {
 - (NSString *)textOfMessageAtIndexPath:(NSIndexPath *)indexPath;
 - (NSDate *)dateOfMessageAtIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)senderOfMessageAtIndexPath:(NSIndexPath *)indexPath;
+- (NSURL *)imageURLOfSenderAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
 

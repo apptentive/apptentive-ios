@@ -114,6 +114,15 @@
 	return message.sender.name;
 }
 
+- (NSURL *)imageURLOfSenderAtIndexPath:(NSIndexPath *)indexPath {
+	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
+	if (message.sender.profilePhotoURL.length) {
+		return [NSURL URLWithString:message.sender.profilePhotoURL];
+	} else {
+		return nil;
+	}
+}
+
 #pragma mark NSFetchedResultsControllerDelegate
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {

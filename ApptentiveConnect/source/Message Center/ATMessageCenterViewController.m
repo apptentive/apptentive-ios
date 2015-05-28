@@ -37,6 +37,9 @@
 
 	self.navigationItem.title = self.interaction.title;
 	
+	self.inputAccessoryView.layer.borderColor = [[UIColor colorWithRed:215/255.0f green:219/255.0f blue:223/255.0f alpha:1.0f] CGColor];
+	self.inputAccessoryView.layer.borderWidth = 0.5;
+	
 	// DEBUG
 	self.greetingView.imageView.image = [UIImage imageNamed:@"ApptentiveResources.bundle/Sumo.jpg"];
 	// /DEBUG

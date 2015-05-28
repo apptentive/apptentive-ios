@@ -18,6 +18,9 @@
 
 @property (weak, nonatomic) IBOutlet ATMessageCenterGreetingView *greetingView;
 @property (weak, nonatomic) IBOutlet ATMessageCenterConfirmationView *confirmationView;
+
+@property (weak, nonatomic) IBOutlet UIButton *sendButton;
+@property (weak, nonatomic) IBOutlet UITextView *messageView;
 @property (nonatomic, readwrite, retain) IBOutlet UIView *inputAccessoryView;
 
 @end

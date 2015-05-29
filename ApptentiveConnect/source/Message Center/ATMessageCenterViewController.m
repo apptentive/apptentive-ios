@@ -40,6 +40,9 @@
 	self.inputAccessoryView.layer.borderColor = [[UIColor colorWithRed:215/255.0f green:219/255.0f blue:223/255.0f alpha:1.0f] CGColor];
 	self.inputAccessoryView.layer.borderWidth = 0.5;
 	
+	UITapGestureRecognizer *tableViewTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapTableView)];
+	[self.tableView addGestureRecognizer:tableViewTapRecognizer];
+	
 	// DEBUG
 	self.greetingView.imageView.image = [UIImage imageNamed:@"ApptentiveResources.bundle/Sumo.jpg"];
 	// /DEBUG
@@ -66,6 +69,10 @@
 	[super viewDidAppear:animated];
 	
 //	[self becomeFirstResponder];
+}
+
+- (void)didTapTableView {
+	[self.messageView resignFirstResponder];
 }
 
 #pragma mark - Table view data source

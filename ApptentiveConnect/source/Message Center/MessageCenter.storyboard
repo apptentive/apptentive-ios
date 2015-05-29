@@ -14,6 +14,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="692"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
+                        <gestureRecognizers/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="3OP-Us-sTC" customClass="ATMessageCenterGreetingView">
                             <rect key="frame" x="0.0" y="64" width="414" height="280"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -193,6 +194,7 @@
                         <connections>
                             <outlet property="dataSource" destination="W0l-Dy-ioE" id="Uzy-P9-nKJ"/>
                             <outlet property="delegate" destination="W0l-Dy-ioE" id="9El-xF-ic0"/>
+                            <outletCollection property="gestureRecognizers" destination="xf9-AX-Nll" appends="YES" id="DaJ-Zf-o98"/>
                         </connections>
                     </tableView>
                     <toolbarItems/>
@@ -247,6 +249,11 @@
                         <constraint firstItem="hkW-wu-sjM" firstAttribute="leading" secondItem="do6-U4-CNu" secondAttribute="trailing" constant="10" id="xdV-eV-ZfU"/>
                     </constraints>
                 </view>
+                <tapGestureRecognizer id="xf9-AX-Nll">
+                    <connections>
+                        <action selector="tableViewTapped:" destination="W0l-Dy-ioE" id="Ut4-IB-zw6"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="350" y="604"/>
         </scene>

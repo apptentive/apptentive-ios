@@ -14,7 +14,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="692"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
+<<<<<<< HEAD
                         <gestureRecognizers/>
+=======
+>>>>>>> 7f90d642bc31f5936d443bca5af0363bde6bf74a
                         <view key="tableHeaderView" contentMode="scaleToFill" id="3OP-Us-sTC" customClass="ATMessageCenterGreetingView">
                             <rect key="frame" x="0.0" y="64" width="414" height="280"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -28,7 +31,11 @@
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+<<<<<<< HEAD
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Please leave us some feedback so we can make the app better for you." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="Zbc-2w-9Gi">
+=======
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please leave us some feedback so we can make the app better for you." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="Zbc-2w-9Gi">
+>>>>>>> 7f90d642bc31f5936d443bca5af0363bde6bf74a
                                             <rect key="frame" x="8" y="67" width="304" height="34"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                             <color key="textColor" red="0.51764705882352935" green="0.51764705882352935" blue="0.56470588235294117" alpha="1" colorSpace="calibratedRGB"/>
@@ -47,7 +54,7 @@
                                         <constraint firstAttribute="bottom" secondItem="Zbc-2w-9Gi" secondAttribute="bottom" constant="30" id="vQG-9X-nhI"/>
                                     </constraints>
                                 </view>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Sumo.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="jze-Ja-MtR">
+                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jze-Ja-MtR" customClass="ATNetworkImageView">
                                     <rect key="frame" x="155" y="50" width="104" height="104"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="104" id="TOX-8x-ZD6"/>
@@ -82,14 +89,24 @@
                             <rect key="frame" x="0.0" y="491.5" width="414" height="66"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
+<<<<<<< HEAD
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" misplaced="YES" text="Thank You!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="stQ-gR-6YZ">
                                     <rect key="frame" x="8" y="8" width="398" height="28"/>
+=======
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Thank You!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="stQ-gR-6YZ">
+                                    <rect key="frame" x="8" y="8" width="398" height="18"/>
+>>>>>>> 7f90d642bc31f5936d443bca5af0363bde6bf74a
                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                     <color key="textColor" red="0.51764705879999995" green="0.51764705879999995" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
+<<<<<<< HEAD
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" misplaced="YES" text="We try and reply to people between 5am and 6pm PST." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kQ8-89-rPy">
                                     <rect key="frame" x="8" y="44" width="398" height="15"/>
+=======
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" misplaced="YES" text="We try and reply to people between 5am and 6pm PST." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="kQ8-89-rPy">
+                                    <rect key="frame" x="8" y="34" width="398" height="29"/>
+>>>>>>> 7f90d642bc31f5936d443bca5af0363bde6bf74a
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
                                     <color key="textColor" red="0.51764705879999995" green="0.51764705879999995" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
@@ -99,14 +116,16 @@
                             <constraints>
                                 <constraint firstItem="kQ8-89-rPy" firstAttribute="top" secondItem="stQ-gR-6YZ" secondAttribute="bottom" constant="8" id="1FX-7J-maP"/>
                                 <constraint firstAttribute="trailing" secondItem="stQ-gR-6YZ" secondAttribute="trailing" constant="8" id="7UX-4A-xfM"/>
-                                <constraint firstAttribute="bottom" relation="lessThanOrEqual" secondItem="kQ8-89-rPy" secondAttribute="bottom" constant="8" id="KoO-Gw-gjR"/>
+                                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="kQ8-89-rPy" secondAttribute="bottom" constant="8" id="KoO-Gw-gjR"/>
                                 <constraint firstItem="stQ-gR-6YZ" firstAttribute="leading" secondItem="g94-Qt-Zp0" secondAttribute="leading" constant="8" id="P60-nC-WBZ"/>
                                 <constraint firstItem="stQ-gR-6YZ" firstAttribute="top" secondItem="g94-Qt-Zp0" secondAttribute="top" constant="8" id="ZCm-QE-wZF"/>
+                                <constraint firstItem="kQ8-89-rPy" firstAttribute="top" relation="greaterThanOrEqual" secondItem="g94-Qt-Zp0" secondAttribute="top" constant="8" id="fRI-vT-Xdg"/>
                                 <constraint firstAttribute="trailing" secondItem="kQ8-89-rPy" secondAttribute="trailing" constant="8" id="tiZ-0g-UDz"/>
                                 <constraint firstItem="kQ8-89-rPy" firstAttribute="leading" secondItem="g94-Qt-Zp0" secondAttribute="leading" constant="8" id="z6F-sO-Sfg"/>
                             </constraints>
                             <connections>
                                 <outlet property="confirmationLabel" destination="stQ-gR-6YZ" id="cxB-Ae-9yj"/>
+                                <outlet property="confirmationStatusSpacing" destination="1FX-7J-maP" id="cSV-lu-N91"/>
                                 <outlet property="statusLabel" destination="kQ8-89-rPy" id="5Cw-b8-eqe"/>
                             </connections>
                         </view>
@@ -116,13 +135,22 @@
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hi8-Bq-GR3" id="H0J-6d-bTN">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
+<<<<<<< HEAD
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Yeah, I like the app overall, but it just closed without saving. can you help?" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1yl-30-ZGb">
                                             <rect key="frame" x="15" y="8" width="384" height="34"/>
+=======
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Yeah, I like the app overall, but it just closed without saving. can you help?" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="384" translatesAutoresizingMaskIntoConstraints="NO" id="1yl-30-ZGb">
+                                            <rect key="frame" x="15" y="8" width="384" height="33.5"/>
+>>>>>>> 7f90d642bc31f5936d443bca5af0363bde6bf74a
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.54117647058823526" green="0.54117647058823526" blue="0.54117647058823526" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+<<<<<<< HEAD
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" misplaced="YES" text="Oct 20, 11:34 PM" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YMH-DZ-r9N">
+=======
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Oct 20, 11:34 PM" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YMH-DZ-r9N">
+>>>>>>> 7f90d642bc31f5936d443bca5af0363bde6bf74a
                                             <rect key="frame" x="15" y="49" width="98" height="13"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
                                             <color key="textColor" red="0.54117647058823526" green="0.54117647058823526" blue="0.54117647058823526" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -134,7 +162,7 @@
                                         <constraint firstItem="1yl-30-ZGb" firstAttribute="top" secondItem="H0J-6d-bTN" secondAttribute="top" constant="8" id="0Xf-rH-hjC"/>
                                         <constraint firstItem="YMH-DZ-r9N" firstAttribute="leading" secondItem="1yl-30-ZGb" secondAttribute="leading" id="D8H-1w-aGV"/>
                                         <constraint firstItem="YMH-DZ-r9N" firstAttribute="top" secondItem="1yl-30-ZGb" secondAttribute="bottom" constant="8" id="VKM-Fw-dbc"/>
-                                        <constraint firstAttribute="bottom" secondItem="YMH-DZ-r9N" secondAttribute="bottom" constant="8" id="VU6-Ug-MKq"/>
+                                        <constraint firstAttribute="bottom" secondItem="YMH-DZ-r9N" secondAttribute="bottom" priority="750" constant="8" id="VU6-Ug-MKq"/>
                                         <constraint firstItem="1yl-30-ZGb" firstAttribute="leading" secondItem="H0J-6d-bTN" secondAttribute="leading" constant="15" id="nQP-L2-mw0"/>
                                         <constraint firstAttribute="trailing" secondItem="1yl-30-ZGb" secondAttribute="trailing" constant="15" id="viE-v4-gHW"/>
                                     </constraints>
@@ -149,19 +177,28 @@
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JK9-ui-0US" id="mF7-ws-xVD">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
+<<<<<<< HEAD
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Yeah, I like the app overall, but it just closed without saving. can you help?" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Eh-t3-ula">
                                             <rect key="frame" x="61" y="8" width="338" height="34"/>
+=======
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Yeah, I like the app overall, but it just closed without saving. can you help?" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="338" translatesAutoresizingMaskIntoConstraints="NO" id="5Eh-t3-ula">
+                                            <rect key="frame" x="61" y="8" width="338" height="33.5"/>
+>>>>>>> 7f90d642bc31f5936d443bca5af0363bde6bf74a
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.54117647059999996" green="0.54117647059999996" blue="0.54117647059999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+<<<<<<< HEAD
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Oct 20, 11:34 PM" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1KD-Fg-7xP">
+=======
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Oct 20, 11:34 PM" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1KD-Fg-7xP">
+>>>>>>> 7f90d642bc31f5936d443bca5af0363bde6bf74a
                                             <rect key="frame" x="61" y="49" width="98" height="15"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
                                             <color key="textColor" red="0.54117647059999996" green="0.54117647059999996" blue="0.54117647059999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="g0l-YC-9t6">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="g0l-YC-9t6" customClass="ATNetworkImageView">
                                             <rect key="frame" x="15" y="10" width="36" height="36"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="g0l-YC-9t6" secondAttribute="height" multiplier="1:1" id="83O-Fb-I5K"/>
@@ -199,7 +236,7 @@
                     </tableView>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Message Center Title" id="vfC-JL-Kb9">
-                        <barButtonItem key="rightBarButtonItem" title="Close" style="plain" id="Ouv-Mz-TNk">
+                        <barButtonItem key="rightBarButtonItem" title="Close" id="Ouv-Mz-TNk">
                             <connections>
                                 <action selector="dismiss:" destination="W0l-Dy-ioE" id="ws9-cY-6qs"/>
                             </connections>
@@ -274,9 +311,6 @@
             <point key="canvasLocation" x="-190" y="604"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="Sumo.jpg" width="600" height="450"/>
-    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

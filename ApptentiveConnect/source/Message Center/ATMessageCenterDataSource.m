@@ -14,6 +14,7 @@
 #import "ATData.h"
 #import "ATMessageCenterMetrics.h"
 #import "ATTextMessage.h"
+#import "ATMessageSender.h"
 
 @interface ATMessageCenterDataSource () <NSFetchedResultsControllerDelegate>
 
@@ -47,7 +48,10 @@
 			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"creationTime != %d AND hidden != %@", 0, @YES];
 			[request setPredicate:predicate];
 			
-			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:nil cacheName:@"at-messages-cache"];
+			// For now, group each message into its own section.
+			// In the future, we'll save an attribute that coalesces
+			// closely-grouped (in time) messages into a single section.
+			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:@"creationTime" cacheName:@"at-messages-cache"];
 			newController.delegate = self;
 			_fetchedMessagesController = newController;
 			
@@ -56,7 +60,6 @@
 	}
 	return _fetchedMessagesController;
 }
-
 
 - (void)start {
 	[[ATBackend sharedBackend] messageCenterEnteredForeground];
@@ -68,20 +71,56 @@
 		ATLogError(@"Got an error loading messages: %@", error);
 		//TODO: Handle this error.
 	}
-	
-	[self createIntroMessageIfNecessary];
 }
 
 - (void)stop {
 	
 }
 
-- (void)createIntroMessageIfNecessary {
-	NSUInteger messageCount = [ATData countEntityNamed:@"ATAbstractMessage" withPredicate:nil];
-	if (messageCount == 0) {
-		NSString *title = ATLocalizedString(@"Welcome", @"Welcome");
-		NSString *body = ATLocalizedString(@"This is our Message Center. If you have questions, suggestions, concerns or just want to get in touch, please send us a message. We love talking with our customers!", @"Placeholder welcome message.");
-		[[ATBackend sharedBackend] sendAutomatedMessageWithTitle:title body:body];
+#pragma mark - Message center view controller support
+
+- (NSInteger)numberOfMessageGroups {
+	return self.fetchedMessagesController.sections.count;
+}
+
+- (NSInteger)numberOfMessagesInGroup:(NSInteger)groupIndex {
+	if ([[self.fetchedMessagesController sections] count] > 0) {
+		return [[[self.fetchedMessagesController sections] objectAtIndex:groupIndex] numberOfObjects];
+	} else
+		return 0;
+}
+
+- (ATMessageCenterMessageType)cellTypeAtIndexPath:(NSIndexPath *)indexPath {
+	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
+	return message.sentByUser.boolValue ? ATMessageCenterMessageTypeMessage : ATMessageCenterMessageTypeReply;
+}
+
+- (NSString *)textOfMessageAtIndexPath:(NSIndexPath *)indexPath {
+	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
+	
+	if ([message isKindOfClass:[ATTextMessage class]]) {
+		return ((ATTextMessage *)message).body;
+	} else {
+		return nil;
+	}
+}
+
+- (NSDate *)dateOfMessageAtIndexPath:(NSIndexPath *)indexPath {
+	return [NSDate date];
+	return [NSDate dateWithTimeIntervalSince1970:[self messageAtIndexPath:indexPath].creationTime.doubleValue];
+}
+
+- (NSString *)senderOfMessageAtIndexPath:(NSIndexPath *)indexPath {
+	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
+	return message.sender.name;
+}
+
+- (NSURL *)imageURLOfSenderAtIndexPath:(NSIndexPath *)indexPath {
+	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
+	if (message.sender.profilePhotoURL.length) {
+		return [NSURL URLWithString:message.sender.profilePhotoURL];
+	} else {
+		return nil;
 	}
 }
 
@@ -123,4 +162,11 @@
 		return [firstLetter uppercaseStringWithLocale:[NSLocale currentLocale]];
 	}
 }
+
+#pragma mark - Private
+
+- (ATAbstractMessage *)messageAtIndexPath:(NSIndexPath *)indexPath {
+	return [self.fetchedMessagesController objectAtIndexPath:indexPath];
+}
+
 @end

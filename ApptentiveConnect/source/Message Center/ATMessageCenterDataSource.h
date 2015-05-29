@@ -9,6 +9,11 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+typedef NS_ENUM(NSInteger, ATMessageCenterMessageType) {
+	ATMessageCenterMessageTypeMessage,
+	ATMessageCenterMessageTypeReply
+};
+
 @protocol ATMessageCenterDataSourceDelegate;
 
 @interface ATMessageCenterDataSource : NSObject
@@ -18,7 +23,16 @@
 - (id)initWithDelegate:(NSObject<ATMessageCenterDataSourceDelegate> *)delegate;
 - (void)start;
 - (void)stop;
-- (void)createIntroMessageIfNecessary;
+
+- (NSInteger)numberOfMessageGroups;
+- (NSInteger)numberOfMessagesInGroup:(NSInteger)groupIndex;
+- (ATMessageCenterMessageType)cellTypeAtIndexPath:(NSIndexPath *)indexPath;
+- (NSString *)textOfMessageAtIndexPath:(NSIndexPath *)indexPath;
+- (NSDate *)dateOfMessageAtIndexPath:(NSIndexPath *)indexPath;
+- (NSString *)senderOfMessageAtIndexPath:(NSIndexPath *)indexPath;
+- (NSURL *)imageURLOfSenderAtIndexPath:(NSIndexPath *)indexPath;
+
+@property (nonatomic, readonly) BOOL lastMessageIsReply;
 
 @end
 

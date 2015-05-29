@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+@class ATNetworkImageView;
+
 @interface ATMessageCenterReplyCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UIImageView *supportUserImageView;
+@property (weak, nonatomic) IBOutlet ATNetworkImageView *supportUserImageView;
 @property (weak, nonatomic) IBOutlet UILabel *replyLabel;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 

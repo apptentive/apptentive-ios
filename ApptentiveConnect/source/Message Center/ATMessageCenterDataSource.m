@@ -124,6 +124,13 @@
 	}
 }
 
+- (BOOL)lastMessageIsReply {
+	id<NSFetchedResultsSectionInfo> section = self.fetchedMessagesController.sections.lastObject;
+	ATAbstractMessage *lastMessage = section.objects.lastObject;
+	
+	return lastMessage.sentByUser == NO;
+}
+
 #pragma mark NSFetchedResultsControllerDelegate
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {

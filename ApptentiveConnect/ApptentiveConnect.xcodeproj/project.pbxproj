@@ -106,9 +106,6 @@
 		493F8D901672E07D000B5151 /* ATURLConnection_Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 493F8D8F1672E07D000B5151 /* ATURLConnection_Private.m */; };
 		493F8D911672E07D000B5151 /* ATURLConnection_Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 493F8D8F1672E07D000B5151 /* ATURLConnection_Private.m */; };
 		493F8D931672E15F000B5151 /* ATWebClient_Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 493F8D921672E15F000B5151 /* ATWebClient_Private.m */; };
-		494D1B6F1708E1F900C3060C /* ATMessageInputView.h in Headers */ = {isa = PBXBuildFile; fileRef = 494D1B6D1708E1F900C3060C /* ATMessageInputView.h */; };
-		494D1B701708E1F900C3060C /* ATMessageInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 494D1B6E1708E1F900C3060C /* ATMessageInputView.m */; };
-		494D1B721708E20A00C3060C /* ATMessageInputView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 494D1B711708E20A00C3060C /* ATMessageInputView.xib */; };
 		49509A61135658E200793EEC /* ATReachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 49509A5F135658E200793EEC /* ATReachability.h */; };
 		49509A62135658E200793EEC /* ATReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 49509A60135658E200793EEC /* ATReachability.m */; };
 		49509A6C1356596F00793EEC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49509A6B1356596F00793EEC /* SystemConfiguration.framework */; };
@@ -231,7 +228,6 @@
 		49E7408B184045C900413697 /* v2WALDatabase in Resources */ = {isa = PBXBuildFile; fileRef = 49E7408A184045C900413697 /* v2WALDatabase */; };
 		49E7408F1840497600413697 /* v3WALDatabase in Resources */ = {isa = PBXBuildFile; fileRef = 49E7408E1840497600413697 /* v3WALDatabase */; };
 		49E740911840498100413697 /* ATDataModelv3.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 49E740901840498100413697 /* ATDataModelv3.sqlite */; };
-		49E847A117E921B800CFA6EC /* ATMessageInputViewV7.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49E847A017E921B800CFA6EC /* ATMessageInputViewV7.xib */; };
 		49E891D0134FE2AB00DD098A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49E891CD134FE2AB00DD098A /* Localizable.strings */; };
 		49EA5AB014BD08AD004F8A4D /* ATLegacyRecord.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EA5AAE14BD08AD004F8A4D /* ATLegacyRecord.h */; };
 		49EA5AB114BD08AD004F8A4D /* ATLegacyRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EA5AAF14BD08AD004F8A4D /* ATLegacyRecord.m */; };
@@ -428,9 +424,6 @@
 		493F8D8B1672DEFD000B5151 /* ATStaticLibraryBootstrap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATStaticLibraryBootstrap.m; sourceTree = "<group>"; };
 		493F8D8F1672E07D000B5151 /* ATURLConnection_Private.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATURLConnection_Private.m; sourceTree = "<group>"; };
 		493F8D921672E15F000B5151 /* ATWebClient_Private.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATWebClient_Private.m; sourceTree = "<group>"; };
-		494D1B6D1708E1F900C3060C /* ATMessageInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageInputView.h; sourceTree = "<group>"; };
-		494D1B6E1708E1F900C3060C /* ATMessageInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageInputView.m; sourceTree = "<group>"; };
-		494D1B711708E20A00C3060C /* ATMessageInputView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATMessageInputView.xib; sourceTree = "<group>"; };
 		49509A5F135658E200793EEC /* ATReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATReachability.h; path = Reachability/ATReachability.h; sourceTree = "<group>"; };
 		49509A60135658E200793EEC /* ATReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATReachability.m; path = Reachability/ATReachability.m; sourceTree = "<group>"; };
 		49509A6B1356596F00793EEC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -542,7 +535,6 @@
 		49E7408A184045C900413697 /* v2WALDatabase */ = {isa = PBXFileReference; lastKnownFileType = folder; path = v2WALDatabase; sourceTree = "<group>"; };
 		49E7408E1840497600413697 /* v3WALDatabase */ = {isa = PBXFileReference; lastKnownFileType = folder; path = v3WALDatabase; sourceTree = "<group>"; };
 		49E740901840498100413697 /* ATDataModelv3.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = ATDataModelv3.sqlite; sourceTree = "<group>"; };
-		49E847A017E921B800CFA6EC /* ATMessageInputViewV7.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATMessageInputViewV7.xib; sourceTree = "<group>"; };
 		49E891CF134FE2AB00DD098A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		49EA5AAE14BD08AD004F8A4D /* ATLegacyRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATLegacyRecord.h; sourceTree = "<group>"; };
 		49EA5AAF14BD08AD004F8A4D /* ATLegacyRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATLegacyRecord.m; sourceTree = "<group>"; };
@@ -1004,8 +996,6 @@
 				49BC2A59144F75E20041E789 /* ATShadowView.m */,
 				490B815B1442751F009801E9 /* ATToolbar.h */,
 				490B815C1442751F009801E9 /* ATToolbar.m */,
-				494D1B6D1708E1F900C3060C /* ATMessageInputView.h */,
-				494D1B6E1708E1F900C3060C /* ATMessageInputView.m */,
 				4960A531171F70530082669B /* ATNetworkImageView.h */,
 				4960A532171F70530082669B /* ATNetworkImageView.m */,
 				49AAC84F175FFA0D00F08879 /* ATLabel.h */,
@@ -1055,8 +1045,6 @@
 				49352A1F138C73B8000E464A /* ATAboutApptentiveView.xib */,
 				49352B3E138DB3AA000E464A /* ATTaskProgressCell.xib */,
 				496F29DE14496702005B7C01 /* ATSimpleImageViewController.xib */,
-				494D1B711708E20A00C3060C /* ATMessageInputView.xib */,
-				49E847A017E921B800CFA6EC /* ATMessageInputViewV7.xib */,
 				4935CF58177286E500CFE3DC /* ATPersonDetailsViewController.xib */,
 			);
 			path = xibs;
@@ -1385,7 +1373,6 @@
 				49881DDD16E839540061D888 /* ATLogViewController.h in Headers */,
 				495E9C1C16EABD8E00AE3B03 /* ATLogger.h in Headers */,
 				492F2F1C16ED597F0030E48A /* ATRecordRequestTask.h in Headers */,
-				494D1B6F1708E1F900C3060C /* ATMessageInputView.h in Headers */,
 				49CB6DEA1718FE4400BC9223 /* ATMessageCenterMetrics.h in Headers */,
 				4960A533171F70530082669B /* ATNetworkImageView.h in Headers */,
 				496F5781174060CE003BF516 /* ATDataManager.h in Headers */,
@@ -1557,8 +1544,6 @@
 				49352B3F138DB3AA000E464A /* ATTaskProgressCell.xib in Resources */,
 				496F29E014496711005B7C01 /* ATSimpleImageViewController.xib in Resources */,
 				4967278416B9FE6400C679B8 /* Info.plist in Resources */,
-				49E847A117E921B800CFA6EC /* ATMessageInputViewV7.xib in Resources */,
-				494D1B721708E20A00C3060C /* ATMessageInputView.xib in Resources */,
 				4935CF59177286E500CFE3DC /* ATPersonDetailsViewController.xib in Resources */,
 				58DCC0DA180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.xib in Resources */,
 			);
@@ -1667,7 +1652,6 @@
 				58AB416818F608500034FAA5 /* ATInteractionSurveyController.m in Sources */,
 				492F2F1D16ED597F0030E48A /* ATRecordRequestTask.m in Sources */,
 				493F8D901672E07D000B5151 /* ATURLConnection_Private.m in Sources */,
-				494D1B701708E1F900C3060C /* ATMessageInputView.m in Sources */,
 				49CB6DEB1718FE4400BC9223 /* ATMessageCenterMetrics.m in Sources */,
 				4960A534171F70530082669B /* ATNetworkImageView.m in Sources */,
 				583DF06F1A44CD6E00BF0207 /* ATInteractionNavigateToLink.m in Sources */,

@@ -13,11 +13,21 @@
 #import "ATMessageCenterReplyCell.h"
 #import "ATBackend.h"
 #import "ATMessageCenterInteraction.h"
+#import "ATConnect_Private.h"
+#import "ATNetworkImageView.h"
+
+NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
 
 @interface ATMessageCenterViewController ()
 
 @property (weak, nonatomic) IBOutlet ATMessageCenterGreetingView *greetingView;
 @property (weak, nonatomic) IBOutlet ATMessageCenterConfirmationView *confirmationView;
+
+@property (weak, nonatomic) IBOutlet UIButton *sendButton;
+@property (weak, nonatomic) IBOutlet UITextView *messageView;
+@property (nonatomic, readwrite, retain) IBOutlet UIView *inputAccessoryView;
+@property (nonatomic, strong) ATMessageCenterDataSource *dataSource;
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
 @end
 
@@ -26,18 +36,37 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
-	[self updateHeaderHeightForOrientation:self.interfaceOrientation];
+	self.dataSource = [[ATMessageCenterDataSource alloc] initWithDelegate:self];
+	[self.dataSource start];
 	
-	self.tableView.rowHeight = UITableViewAutomaticDimension;
-	self.tableView.estimatedRowHeight = 44.0;
-
+	self.dateFormatter = [[NSDateFormatter alloc] init];
+	self.dateFormatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"MMMdjm" options:0 locale:[NSLocale currentLocale]];
+	
+	[self updateHeaderHeightForOrientation:self.interfaceOrientation];
+	[self updateConfirmationVisibility];
+	
 	self.navigationItem.title = self.interaction.title;
 	
+<<<<<<< HEAD
 	self.greetingView.titleLabel.text = self.interaction.greetingTitle;
 	self.greetingView.messageLabel.text = self.interaction.greetingMessage;
 	
 	self.confirmationView.confirmationLabel.text = self.interaction.confirmationText;
 	self.confirmationView.statusLabel.text = self.interaction.statusText;
+=======
+	self.inputAccessoryView.layer.borderColor = [[UIColor colorWithRed:215/255.0f green:219/255.0f blue:223/255.0f alpha:1.0f] CGColor];
+	self.inputAccessoryView.layer.borderWidth = 0.5;
+	
+	self.messageView.text = self.draftMessage ?: @"";
+	
+	// DEBUG
+	self.greetingView.imageView.image = [UIImage imageNamed:@"ApptentiveResources.bundle/Sumo.jpg"];
+	// /DEBUG
+>>>>>>> mergeMessageCenter
+}
+
+- (BOOL)canBecomeFirstResponder {
+	return YES;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -52,36 +81,61 @@
 	}];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
+	
+	NSString *message = self.messageView.text;
+	if (message && ![message isEqualToString:@""]) {
+		[self.messageView becomeFirstResponder];
+	}
+	
+//	[self becomeFirstResponder];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+	[super viewWillDisappear:animated];
+	
+	NSString *message = self.messageView.text;
+	if (message) {
+		[[NSUserDefaults standardUserDefaults] setObject:message forKey:ATMessageCenterDraftMessageKey];
+	} else {
+		[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATMessageCenterDraftMessageKey];
+	}
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    // TODO: Return the number of sections.
-    return 2;
+    return [self.dataSource numberOfMessageGroups];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    // TODO: Return the number of rows in the section.
-    return 1;
+    return [self.dataSource numberOfMessagesInGroup:section];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	if (indexPath.section % 2 == 0) {
+	ATMessageCenterMessageType type = [self.dataSource cellTypeAtIndexPath:indexPath];
+	
+	if (type == ATMessageCenterMessageTypeMessage) {
 		ATMessageCenterMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Message" forIndexPath:indexPath];
+	
+		cell.messageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
+		cell.dateLabel.text = [self.dateFormatter stringFromDate:[self.dataSource dateOfMessageAtIndexPath:indexPath]];
+		
 		return cell;
 	} else {
 		ATMessageCenterReplyCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Reply" forIndexPath:indexPath];
 
-		// DEBUG
-		cell.supportUserImageView.image = [UIImage imageNamed:@"ApptentiveResources.bundle/Sumo.jpg"];
-		cell.replyLabel.text = @"Hey Andrew. I can help you with that. We’ve had a couple reports of this happening on older versions of the app.\n\nIf you open the App Store, and click the “Updates” tab, you should see that our latest version is 4.3.5. From there, you can tap “Update All” - many customers report this helping them.\n\nIn the mean time, could you please describe what it was that caused the bug in the first place? What part of the app were you in, what did you tap, and what were you trying to accomplish?";
-		// /DEBUG
+		cell.supportUserImageView.imageURL = [self.dataSource imageURLOfSenderAtIndexPath:indexPath];
+
+		cell.replyLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
+		
+		NSString *dateString = [self.dateFormatter stringFromDate:[self.dataSource dateOfMessageAtIndexPath:indexPath]];
+		NSString *userString = [self.dataSource senderOfMessageAtIndexPath:indexPath];
+		cell.dateLabel.text = [NSString stringWithFormat:ATLocalizedString(@"%@ - from %@", @"<date> - from <user>"), dateString, userString];
 		
 		return cell;
 	}
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-	NSLog(@"cell: %@", cell);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -90,6 +144,72 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
 	return 4.0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	NSString *labelText = [self.dataSource textOfMessageAtIndexPath:indexPath];
+	CGFloat marginsAndStuff = [self.dataSource cellTypeAtIndexPath:indexPath] == ATMessageCenterMessageTypeMessage ? 30.0 : 74.0;
+
+	// Support iOS 6-style table views
+	if (![self.tableView respondsToSelector:@selector(estimatedRowHeight)]) {
+		marginsAndStuff += 18.0;
+	}
+	
+	CGFloat effectiveLabelWidth = CGRectGetWidth(tableView.bounds) - marginsAndStuff;
+	CGFloat dateLabelAndStuff = 37.0;
+	
+	CGSize labelSize = [labelText sizeWithFont:[UIFont systemFontOfSize:14.0] constrainedToSize:CGSizeMake(effectiveLabelWidth, MAXFLOAT)];
+	
+	return labelSize.height + dateLabelAndStuff;
+}
+
+#pragma mark Fetch results controller delegate
+
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+	[self.tableView beginUpdates];
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+	@try {
+		[self.tableView endUpdates];
+	} @catch (NSException *exception) {
+		ATLogError(@"caught exception: %@: %@", [exception name], [exception description]);
+	}
+	
+	[self updateConfirmationVisibility];
+	[self scrollToLastReply];
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
+		   atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
+	switch(type) {
+		case NSFetchedResultsChangeInsert:
+			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+			break;
+		case NSFetchedResultsChangeDelete:
+			[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+			break;
+		default:
+			break;
+	}
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
+	switch (type) {
+		case NSFetchedResultsChangeInsert:
+			[self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+			break;
+		case NSFetchedResultsChangeDelete:
+			[self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
+			break;
+		case NSFetchedResultsChangeMove:
+			[self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+			[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:newIndexPath.section] withRowAnimation:UITableViewRowAnimationFade];
+			break;
+		case NSFetchedResultsChangeUpdate:
+			[self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+			break;
+	}
 }
 
 #pragma mark Actions
@@ -104,6 +224,20 @@
 	}];
 }
 
+- (IBAction)sendButtonPressed:(id)sender {
+	NSString *message = self.messageView.text;
+	
+	if (message && ![message isEqualToString:@""]) {
+		[[ATBackend sharedBackend] sendTextMessageWithBody:message completion:^(NSString *pendingMessageID) {}];
+		
+		self.messageView.text = @"";
+	}
+}
+
+- (IBAction)tableViewTapped:(id)sender {
+	[self.messageView resignFirstResponder];
+}
+
 #pragma mark - Private
 
 - (void)updateHeaderHeightForOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
@@ -112,6 +246,18 @@
 	self.greetingView.bounds = CGRectMake(0, 0, self.tableView.bounds.size.height, headerHeight);
 	[self.greetingView updateConstraints];
 	self.tableView.tableHeaderView = self.greetingView;
+}
+
+- (NSString *)draftMessage {
+	return [[NSUserDefaults standardUserDefaults] stringForKey:ATMessageCenterDraftMessageKey] ?: @"";
+}
+
+- (void)updateConfirmationVisibility {
+	self.confirmationView.confirmationHidden = self.dataSource.lastMessageIsReply;
+}
+
+- (void)scrollToLastReply {
+	// TODO: implement me. 
 }
 
 @end

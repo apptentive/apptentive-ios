@@ -7,12 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ATMessageCenterDataSource.h"
 
 @class ATMessageCenterInteraction;
 
 @protocol ATMessageCenterDismissalDelegate;
 
-@interface ATMessageCenterViewController : UITableViewController
+@interface ATMessageCenterViewController : UITableViewController <ATMessageCenterDataSourceDelegate>
 
 @property (nonatomic, weak) NSObject<ATMessageCenterDismissalDelegate> *dismissalDelegate;
 

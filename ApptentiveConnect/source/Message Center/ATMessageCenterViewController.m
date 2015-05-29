@@ -23,14 +23,11 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 @property (weak, nonatomic) IBOutlet ATMessageCenterGreetingView *greetingView;
 @property (weak, nonatomic) IBOutlet ATMessageCenterConfirmationView *confirmationView;
 
-<<<<<<< HEAD
 @property (weak, nonatomic) IBOutlet UIButton *sendButton;
 @property (weak, nonatomic) IBOutlet UITextView *messageView;
 @property (nonatomic, readwrite, retain) IBOutlet UIView *inputAccessoryView;
-=======
 @property (nonatomic, strong) ATMessageCenterDataSource *dataSource;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
->>>>>>> 7f90d642bc31f5936d443bca5af0363bde6bf74a
 
 @end
 
@@ -243,17 +240,16 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	self.tableView.tableHeaderView = self.greetingView;
 }
 
-<<<<<<< HEAD
 - (NSString *)draftMessage {
 	return [[NSUserDefaults standardUserDefaults] stringForKey:ATMessageCenterDraftMessageKey] ?: @"";
-=======
+}
+
 - (void)updateConfirmationVisibility {
 	self.confirmationView.confirmationHidden = self.dataSource.lastMessageIsReply;
 }
 
 - (void)scrollToLastReply {
 	// TODO: implement me. 
->>>>>>> 7f90d642bc31f5936d443bca5af0363bde6bf74a
 }
 
 @end

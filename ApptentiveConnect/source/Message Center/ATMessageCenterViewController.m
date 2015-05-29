@@ -106,6 +106,11 @@
 	NSString *labelText = [self.dataSource textOfMessageAtIndexPath:indexPath];
 	CGFloat marginsAndStuff = [self.dataSource cellTypeAtIndexPath:indexPath] == ATMessageCenterMessageTypeMessage ? 30.0 : 74.0;
 
+	// Support iOS 6-style table views
+	if (![self.tableView respondsToSelector:@selector(estimatedRowHeight)]) {
+		marginsAndStuff += 18.0;
+	}
+	
 	CGFloat effectiveLabelWidth = CGRectGetWidth(tableView.bounds) - marginsAndStuff;
 	CGFloat dateLabelAndStuff = 37.0;
 	

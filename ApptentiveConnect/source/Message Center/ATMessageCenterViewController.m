@@ -47,13 +47,12 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	
 	self.navigationItem.title = self.interaction.title;
 	
-<<<<<<< HEAD
 	self.greetingView.titleLabel.text = self.interaction.greetingTitle;
 	self.greetingView.messageLabel.text = self.interaction.greetingMessage;
 	
 	self.confirmationView.confirmationLabel.text = self.interaction.confirmationText;
 	self.confirmationView.statusLabel.text = self.interaction.statusText;
-=======
+
 	self.inputAccessoryView.layer.borderColor = [[UIColor colorWithRed:215/255.0f green:219/255.0f blue:223/255.0f alpha:1.0f] CGColor];
 	self.inputAccessoryView.layer.borderWidth = 0.5;
 	
@@ -62,7 +61,6 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	// DEBUG
 	self.greetingView.imageView.image = [UIImage imageNamed:@"ApptentiveResources.bundle/Sumo.jpg"];
 	// /DEBUG
->>>>>>> mergeMessageCenter
 }
 
 - (BOOL)canBecomeFirstResponder {

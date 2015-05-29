@@ -106,19 +106,13 @@
 }
 
 - (NSDate *)dateOfMessageAtIndexPath:(NSIndexPath *)indexPath {
+	return [NSDate date];
 	return [NSDate dateWithTimeIntervalSince1970:[self messageAtIndexPath:indexPath].creationTime.doubleValue];
 }
 
 - (NSString *)senderOfMessageAtIndexPath:(NSIndexPath *)indexPath {
 	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
 	return message.sender.name;
-}
-
-- (BOOL)lastMessageIsReply {
-	id<NSFetchedResultsSectionInfo> lastSection = self.fetchedMessagesController.sections.lastObject;
-	ATAbstractMessage *lastMessage = lastSection.objects.lastObject;
-	
-	return lastMessage.sentByUser.boolValue == NO;
 }
 
 #pragma mark NSFetchedResultsControllerDelegate

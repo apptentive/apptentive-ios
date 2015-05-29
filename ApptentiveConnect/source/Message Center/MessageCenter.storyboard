@@ -81,14 +81,14 @@
                             <rect key="frame" x="0.0" y="491.5" width="414" height="66"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Thank You!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="stQ-gR-6YZ">
-                                    <rect key="frame" x="8" y="8" width="398" height="27.5"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Thank You!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="stQ-gR-6YZ">
+                                    <rect key="frame" x="8" y="8" width="398" height="18"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                     <color key="textColor" red="0.51764705879999995" green="0.51764705879999995" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="We try and reply to people between 5am and 6pm PST." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kQ8-89-rPy">
-                                    <rect key="frame" x="8" y="43.5" width="398" height="14.5"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="We try and reply to people between 5am and 6pm PST." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="kQ8-89-rPy">
+                                    <rect key="frame" x="8" y="34" width="398" height="29"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
                                     <color key="textColor" red="0.51764705879999995" green="0.51764705879999995" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
@@ -115,7 +115,7 @@
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hi8-Bq-GR3" id="H0J-6d-bTN">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Yeah, I like the app overall, but it just closed without saving. can you help?" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1yl-30-ZGb">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Yeah, I like the app overall, but it just closed without saving. can you help?" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="384" translatesAutoresizingMaskIntoConstraints="NO" id="1yl-30-ZGb">
                                             <rect key="frame" x="15" y="8" width="384" height="33.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.54117647058823526" green="0.54117647058823526" blue="0.54117647058823526" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -133,7 +133,7 @@
                                         <constraint firstItem="1yl-30-ZGb" firstAttribute="top" secondItem="H0J-6d-bTN" secondAttribute="top" constant="8" id="0Xf-rH-hjC"/>
                                         <constraint firstItem="YMH-DZ-r9N" firstAttribute="leading" secondItem="1yl-30-ZGb" secondAttribute="leading" id="D8H-1w-aGV"/>
                                         <constraint firstItem="YMH-DZ-r9N" firstAttribute="top" secondItem="1yl-30-ZGb" secondAttribute="bottom" constant="8" id="VKM-Fw-dbc"/>
-                                        <constraint firstAttribute="bottom" secondItem="YMH-DZ-r9N" secondAttribute="bottom" constant="8" id="VU6-Ug-MKq"/>
+                                        <constraint firstAttribute="bottom" secondItem="YMH-DZ-r9N" secondAttribute="bottom" priority="750" constant="8" id="VU6-Ug-MKq"/>
                                         <constraint firstItem="1yl-30-ZGb" firstAttribute="leading" secondItem="H0J-6d-bTN" secondAttribute="leading" constant="15" id="nQP-L2-mw0"/>
                                         <constraint firstAttribute="trailing" secondItem="1yl-30-ZGb" secondAttribute="trailing" constant="15" id="viE-v4-gHW"/>
                                     </constraints>
@@ -148,7 +148,7 @@
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JK9-ui-0US" id="mF7-ws-xVD">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Yeah, I like the app overall, but it just closed without saving. can you help?" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Eh-t3-ula">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Yeah, I like the app overall, but it just closed without saving. can you help?" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="338" translatesAutoresizingMaskIntoConstraints="NO" id="5Eh-t3-ula">
                                             <rect key="frame" x="61" y="8" width="338" height="33.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.54117647059999996" green="0.54117647059999996" blue="0.54117647059999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -197,7 +197,7 @@
                     </tableView>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Message Center Title" id="vfC-JL-Kb9">
-                        <barButtonItem key="rightBarButtonItem" title="Close" style="plain" id="Ouv-Mz-TNk">
+                        <barButtonItem key="rightBarButtonItem" title="Close" id="Ouv-Mz-TNk">
                             <connections>
                                 <action selector="dismiss:" destination="W0l-Dy-ioE" id="ws9-cY-6qs"/>
                             </connections>

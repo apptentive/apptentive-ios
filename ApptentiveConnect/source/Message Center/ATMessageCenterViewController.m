@@ -38,9 +38,6 @@
 	
 	[self updateHeaderHeightForOrientation:self.interfaceOrientation];
 	
-	self.tableView.rowHeight = UITableViewAutomaticDimension;
-	self.tableView.estimatedRowHeight = 44.0;
-
 	self.navigationItem.title = self.interaction.title;
 	
 	// DEBUG
@@ -103,6 +100,18 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
 	return 4.0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	NSString *labelText = [self.dataSource textOfMessageAtIndexPath:indexPath];
+	CGFloat marginsAndStuff = [self.dataSource cellTypeAtIndexPath:indexPath] == ATMessageCenterMessageTypeMessage ? 30.0 : 74.0;
+
+	CGFloat effectiveLabelWidth = CGRectGetWidth(tableView.bounds) - marginsAndStuff;
+	CGFloat dateLabelAndStuff = 37.0;
+	
+	CGSize labelSize = [labelText sizeWithFont:[UIFont systemFontOfSize:14.0] constrainedToSize:CGSizeMake(effectiveLabelWidth, MAXFLOAT)];
+	
+	return labelSize.height + dateLabelAndStuff;
 }
 
 #pragma mark Fetch results controller delegate

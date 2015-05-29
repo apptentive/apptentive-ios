@@ -14,6 +14,8 @@
 #import "ATBackend.h"
 #import "ATMessageCenterInteraction.h"
 
+NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
+
 @interface ATMessageCenterViewController ()
 
 @property (weak, nonatomic) IBOutlet ATMessageCenterGreetingView *greetingView;
@@ -40,6 +42,8 @@
 	self.inputAccessoryView.layer.borderColor = [[UIColor colorWithRed:215/255.0f green:219/255.0f blue:223/255.0f alpha:1.0f] CGColor];
 	self.inputAccessoryView.layer.borderWidth = 0.5;
 	
+	self.messageView.text = self.draftMessage ?: @"";
+	
 	// DEBUG
 	self.greetingView.imageView.image = [UIImage imageNamed:@"ApptentiveResources.bundle/Sumo.jpg"];
 	// /DEBUG
@@ -65,7 +69,23 @@
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 	
+	NSString *message = self.messageView.text;
+	if (message && ![message isEqualToString:@""]) {
+		[self.messageView becomeFirstResponder];
+	}
+	
 //	[self becomeFirstResponder];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+	[super viewWillDisappear:animated];
+	
+	NSString *message = self.messageView.text;
+	if (message) {
+		[[NSUserDefaults standardUserDefaults] setObject:message forKey:ATMessageCenterDraftMessageKey];
+	} else {
+		[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATMessageCenterDraftMessageKey];
+	}
 }
 
 #pragma mark - Table view data source
@@ -142,6 +162,10 @@
 	self.greetingView.bounds = CGRectMake(0, 0, self.tableView.bounds.size.height, headerHeight);
 	[self.greetingView updateConstraints];
 	self.tableView.tableHeaderView = self.greetingView;
+}
+
+- (NSString *)draftMessage {
+	return [[NSUserDefaults standardUserDefaults] stringForKey:ATMessageCenterDraftMessageKey] ?: @"";
 }
 
 @end

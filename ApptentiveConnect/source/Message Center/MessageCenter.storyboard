@@ -87,7 +87,7 @@
                                     <color key="textColor" red="0.51764705879999995" green="0.51764705879999995" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="We try and reply to people between 5am and 6pm PST." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="kQ8-89-rPy">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" misplaced="YES" text="We try and reply to people between 5am and 6pm PST." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="kQ8-89-rPy">
                                     <rect key="frame" x="8" y="34" width="398" height="29"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
                                     <color key="textColor" red="0.51764705879999995" green="0.51764705879999995" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
@@ -98,14 +98,16 @@
                             <constraints>
                                 <constraint firstItem="kQ8-89-rPy" firstAttribute="top" secondItem="stQ-gR-6YZ" secondAttribute="bottom" constant="8" id="1FX-7J-maP"/>
                                 <constraint firstAttribute="trailing" secondItem="stQ-gR-6YZ" secondAttribute="trailing" constant="8" id="7UX-4A-xfM"/>
-                                <constraint firstAttribute="bottom" relation="lessThanOrEqual" secondItem="kQ8-89-rPy" secondAttribute="bottom" constant="8" id="KoO-Gw-gjR"/>
+                                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="kQ8-89-rPy" secondAttribute="bottom" constant="8" id="KoO-Gw-gjR"/>
                                 <constraint firstItem="stQ-gR-6YZ" firstAttribute="leading" secondItem="g94-Qt-Zp0" secondAttribute="leading" constant="8" id="P60-nC-WBZ"/>
                                 <constraint firstItem="stQ-gR-6YZ" firstAttribute="top" secondItem="g94-Qt-Zp0" secondAttribute="top" constant="8" id="ZCm-QE-wZF"/>
+                                <constraint firstItem="kQ8-89-rPy" firstAttribute="top" relation="greaterThanOrEqual" secondItem="g94-Qt-Zp0" secondAttribute="top" constant="8" id="fRI-vT-Xdg"/>
                                 <constraint firstAttribute="trailing" secondItem="kQ8-89-rPy" secondAttribute="trailing" constant="8" id="tiZ-0g-UDz"/>
                                 <constraint firstItem="kQ8-89-rPy" firstAttribute="leading" secondItem="g94-Qt-Zp0" secondAttribute="leading" constant="8" id="z6F-sO-Sfg"/>
                             </constraints>
                             <connections>
                                 <outlet property="confirmationLabel" destination="stQ-gR-6YZ" id="cxB-Ae-9yj"/>
+                                <outlet property="confirmationStatusSpacing" destination="1FX-7J-maP" id="cSV-lu-N91"/>
                                 <outlet property="statusLabel" destination="kQ8-89-rPy" id="5Cw-b8-eqe"/>
                             </connections>
                         </view>

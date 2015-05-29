@@ -32,6 +32,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageType) {
 - (NSString *)senderOfMessageAtIndexPath:(NSIndexPath *)indexPath;
 - (NSURL *)imageURLOfSenderAtIndexPath:(NSIndexPath *)indexPath;
 
+@property (nonatomic, readonly) BOOL lastMessageIsReply;
+
 @end
 
 @protocol ATMessageCenterDataSourceDelegate <NSObject, NSFetchedResultsControllerDelegate>

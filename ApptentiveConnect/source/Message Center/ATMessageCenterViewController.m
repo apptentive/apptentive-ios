@@ -38,6 +38,7 @@
 	self.dateFormatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"MMMdjm" options:0 locale:[NSLocale currentLocale]];
 	
 	[self updateHeaderHeightForOrientation:self.interfaceOrientation];
+	[self updateConfirmationVisibility];
 	
 	self.navigationItem.title = self.interaction.title;
 	
@@ -131,6 +132,7 @@
 		ATLogError(@"caught exception: %@: %@", [exception name], [exception description]);
 	}
 	
+	[self updateConfirmationVisibility];
 	[self scrollToLastReply];
 }
 
@@ -186,6 +188,10 @@
 	self.greetingView.bounds = CGRectMake(0, 0, self.tableView.bounds.size.height, headerHeight);
 	[self.greetingView updateConstraints];
 	self.tableView.tableHeaderView = self.greetingView;
+}
+
+- (void)updateConfirmationVisibility {
+	self.confirmationView.confirmationHidden = self.dataSource.lastMessageIsReply;
 }
 
 - (void)scrollToLastReply {

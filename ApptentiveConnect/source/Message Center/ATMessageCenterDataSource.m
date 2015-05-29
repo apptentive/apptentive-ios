@@ -106,6 +106,7 @@
 }
 
 - (NSDate *)dateOfMessageAtIndexPath:(NSIndexPath *)indexPath {
+	return [NSDate date];
 	return [NSDate dateWithTimeIntervalSince1970:[self messageAtIndexPath:indexPath].creationTime.doubleValue];
 }
 

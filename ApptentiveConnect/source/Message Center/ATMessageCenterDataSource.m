@@ -128,7 +128,7 @@
 	id<NSFetchedResultsSectionInfo> section = self.fetchedMessagesController.sections.lastObject;
 	ATAbstractMessage *lastMessage = section.objects.lastObject;
 	
-	return lastMessage.sentByUser == NO;
+	return lastMessage.sentByUser.boolValue == NO;
 }
 
 #pragma mark NSFetchedResultsControllerDelegate

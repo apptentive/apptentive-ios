@@ -83,12 +83,25 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 	
-	// Find system-provided height constraint on inputAccessoryView
+	// Find iOS 8 system-provided height constraint on inputAccessoryView
 	for (NSLayoutConstraint *constraint in self.inputAccessoryView.constraints) {
 		if (constraint.firstItem == self.inputAccessoryView && constraint.firstAttribute == NSLayoutAttributeHeight) {
 			self.inputAccessoryViewHeightConstraint = constraint;
 			break;
 		}
+	}
+	
+	// Fall back to creating one for iOS 7
+	if (self.inputAccessoryViewHeightConstraint == nil) {
+		// Remove autoresizing-mask-based constraints
+		self.inputAccessoryView.translatesAutoresizingMaskIntoConstraints = NO;
+		
+		// Replace the autoresizing width constraints with our own
+		[self.inputAccessoryView.superview addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-(0)-[view]-(0)-|" options:0 metrics:nil views:@{ @"view": self.inputAccessoryView }]];
+	
+		// Add a height constraint whose constant we can control
+		self.inputAccessoryViewHeightConstraint = [NSLayoutConstraint constraintWithItem:self.inputAccessoryView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:60.0];
+		[self.inputAccessoryView addConstraint:self.inputAccessoryViewHeightConstraint];
 	}
 
 	NSString *message = self.messageView.text;

@@ -31,6 +31,8 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 @property (nonatomic, strong) ATMessageCenterDataSource *dataSource;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
+@property (weak, nonatomic) NSLayoutConstraint *inputAccessoryViewHeightConstraint;
+
 @end
 
 @implementation ATMessageCenterViewController
@@ -73,7 +75,6 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-	
 	[UIView animateWithDuration:duration animations:^{
 		[self updateHeaderHeightForOrientation:toInterfaceOrientation];
 	}];
@@ -82,12 +83,19 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 	
+	// Find system-provided height constraint on inputAccessoryView
+	for (NSLayoutConstraint *constraint in self.inputAccessoryView.constraints) {
+		if (constraint.firstItem == self.inputAccessoryView && constraint.firstAttribute == NSLayoutAttributeHeight) {
+			self.inputAccessoryViewHeightConstraint = constraint;
+			break;
+		}
+	}
+
 	NSString *message = self.messageView.text;
 	if (message && ![message isEqualToString:@""]) {
 		[self.messageView becomeFirstResponder];
+		[self resizeTextView];
 	}
-	
-//	[self becomeFirstResponder];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -145,6 +153,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	// iOS 7 requires this and there's no good way to instantiate a cell to sample, so we're hard-coding it for now.
 	NSString *labelText = [self.dataSource textOfMessageAtIndexPath:indexPath];
 	CGFloat marginsAndStuff = [self.dataSource cellTypeAtIndexPath:indexPath] == ATMessageCenterMessageTypeMessage ? 30.0 : 74.0;
 
@@ -194,6 +203,14 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	}
 }
 
+#pragma mark Text view delegate
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+	[self resizeTextView];
+	
+	return YES;
+}
+
 #pragma mark Actions
 
 - (IBAction)dismiss:(id)sender {
@@ -236,6 +253,13 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 - (void)updateConfirmationVisibility {
 	self.confirmationView.confirmationHidden = self.dataSource.lastMessageIsReply;
+}
+
+- (void)resizeTextView {
+	CGSize size = [self.messageView.text sizeWithFont:self.messageView.font constrainedToSize:CGSizeMake(CGRectGetWidth(self.messageView.bounds), 200.0)];
+	
+	self.inputAccessoryViewHeightConstraint.constant = fmax(60.0, size.height + 16.0);
+	[self.inputAccessoryView setNeedsLayout];
 }
 
 - (void)scrollToLastReply {

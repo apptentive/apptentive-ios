@@ -114,6 +114,8 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	ATMessageCenterMessageType type = [self.dataSource cellTypeAtIndexPath:indexPath];
 	
+	[self.dataSource markAsReadMessageAtIndexPath:indexPath];
+	
 	if (type == ATMessageCenterMessageTypeMessage) {
 		ATMessageCenterMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Message" forIndexPath:indexPath];
 	

@@ -124,6 +124,12 @@
 	}
 }
 
+- (void)markAsReadMessageAtIndexPath:(NSIndexPath *)indexPath {
+	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
+	
+	[message markAsRead];
+}
+
 - (BOOL)lastMessageIsReply {
 	id<NSFetchedResultsSectionInfo> section = self.fetchedMessagesController.sections.lastObject;
 	ATAbstractMessage *lastMessage = section.objects.lastObject;

@@ -31,6 +31,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageType) {
 - (NSDate *)dateOfMessageAtIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)senderOfMessageAtIndexPath:(NSIndexPath *)indexPath;
 - (NSURL *)imageURLOfSenderAtIndexPath:(NSIndexPath *)indexPath;
+- (void)markAsReadMessageAtIndexPath:(NSIndexPath *)indexPath;
 
 @property (nonatomic, readonly) BOOL lastMessageIsReply;
 

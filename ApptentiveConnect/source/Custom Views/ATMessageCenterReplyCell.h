@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@class ATNetworkImageView;
+@class ATNetworkImageIconView;
 
 @interface ATMessageCenterReplyCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet ATNetworkImageView *supportUserImageView;
+@property (weak, nonatomic) IBOutlet ATNetworkImageIconView *supportUserImageView;
 @property (weak, nonatomic) IBOutlet UILabel *replyLabel;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
+//@property (assign, nonatomic) BOOL maskImageToRound;
 
 @end

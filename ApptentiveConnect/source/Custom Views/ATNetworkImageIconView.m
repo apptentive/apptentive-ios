@@ -7,9 +7,22 @@
 //
 
 #import "ATNetworkImageIconView.h"
+#import "ATUtilities.h"
 #import "ATBackend.h"
 
 @implementation ATNetworkImageIconView
+
+- (void)setImageURL:(NSURL *)imageURL {
+	if (imageURL == nil) {
+		self.maskType = ATImageViewMaskTypeAppIcon;
+		self.image = [ATUtilities appIcon];
+	} else {
+		self.maskType = ATImageViewMaskTypeRound;
+		self.image = nil;
+	}
+	
+	[super setImageURL:imageURL];
+}
 
 - (void)setMaskType:(ATImageViewMaskType)maskType {
 	_maskType = maskType;

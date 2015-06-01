@@ -60,13 +60,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	
 	self.messageView.text = self.draftMessage ?: @"";
 	
-	if (self.interaction.greetingImageURL) {
-		self.greetingView.imageView.imageURL = self.interaction.greetingImageURL;
-		self.greetingView.imageView.maskType = ATImageViewMaskTypeRound;
-	} else {
-		self.greetingView.imageView.image = [ATUtilities appIcon];
-		self.greetingView.imageView.maskType = ATImageViewMaskTypeAppIcon;
-	}
+	self.greetingView.imageView.imageURL = self.interaction.greetingImageURL;
 }
 
 - (BOOL)canBecomeFirstResponder {
@@ -130,14 +124,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	} else {
 		ATMessageCenterReplyCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Reply" forIndexPath:indexPath];
 
-		NSURL *replyImageURL = [self.dataSource imageURLOfSenderAtIndexPath:indexPath];
-		if (replyImageURL != nil) {
-			cell.supportUserImageView.imageURL = replyImageURL;
-			cell.supportUserImageView.maskType = ATImageViewMaskTypeRound;
-		} else {
-			cell.supportUserImageView.image = [ATUtilities appIcon];
-			cell.supportUserImageView.maskType = ATImageViewMaskTypeAppIcon;
-		}
+		cell.supportUserImageView.imageURL = [self.dataSource imageURLOfSenderAtIndexPath:indexPath];
 
 		cell.replyLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
 		

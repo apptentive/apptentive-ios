@@ -15,6 +15,5 @@
 @property (weak, nonatomic) IBOutlet ATNetworkImageIconView *supportUserImageView;
 @property (weak, nonatomic) IBOutlet UILabel *replyLabel;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
-//@property (assign, nonatomic) BOOL maskImageToRound;
 
 @end

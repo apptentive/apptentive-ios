@@ -9,7 +9,6 @@
 #import "ATMessageCenterGreetingView.h"
 #import "ATNetworkImageIconView.h"
 #import <QuartzCore/QuartzCore.h>
-#import "ATBackend.h"
 
 #define LINE_BREAK_HEIGHT 150.0
 
@@ -30,12 +29,6 @@
 
 @implementation ATMessageCenterGreetingView
 
-//- (void)setMaskImageToRound:(BOOL)maskImageToRound {
-//	_maskImageToRound = maskImageToRound;
-//	
-////	[self updateImageRadius];
-//}
-
 - (void)updateConstraints {
 	if (CGRectGetHeight(self.bounds) < LINE_BREAK_HEIGHT) {
 		// Landscape on phone: Center vertically, offset horizontally
@@ -55,27 +48,5 @@
 	
 	[super updateConstraints];
 }
-
-//- (void)layoutSubviews {
-//	[super layoutSubviews];
-//	
-////	[self updateImageRadius];
-//}
-
-#pragma mark - Private
-
-//- (void) updateImageRadius {
-//	if (self.maskImageToRound) {
-//		self.imageView.layer.mask = nil;
-//		self.imageView.layer.cornerRadius = CGRectGetHeight(self.imageView.bounds) / 2.0;
-//	} else {
-//		CALayer *maskLayer = [CALayer layer];
-//		maskLayer.contents = (id)[ATBackend imageNamed:@"at_update_icon_mask"].CGImage;
-//		maskLayer.frame = self.imageView.bounds;
-//		
-//		self.imageView.layer.mask = maskLayer;
-//		self.imageView.layer.cornerRadius = 0.0;
-//	}
-//}
 
 @end

@@ -23,6 +23,9 @@
 		01C30CEC1B0D09F8006BC911 /* ATMessageCenterGreetingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01C30CEA1B0D09F8006BC911 /* ATMessageCenterGreetingView.m */; };
 		01CC8BCA1B1D0598006C4D30 /* ATNetworkImageIconView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01CC8BC81B1D0598006C4D30 /* ATNetworkImageIconView.h */; };
 		01CC8BCB1B1D0598006C4D30 /* ATNetworkImageIconView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01CC8BC91B1D0598006C4D30 /* ATNetworkImageIconView.m */; };
+		01CC8BCF1B1E53AD006C4D30 /* branding-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 01CC8BCC1B1E53AD006C4D30 /* branding-logo.png */; };
+		01CC8BD01B1E53AD006C4D30 /* branding-logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01CC8BCD1B1E53AD006C4D30 /* branding-logo@2x.png */; };
+		01CC8BD11B1E53AD006C4D30 /* branding-logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01CC8BCE1B1E53AD006C4D30 /* branding-logo@3x.png */; };
 		490B8158144274EF009801E9 /* ATCustomButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 490B8156144274EF009801E9 /* ATCustomButton.h */; };
 		490B8159144274EF009801E9 /* ATCustomButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 490B8157144274EF009801E9 /* ATCustomButton.m */; };
 		490B815A144274EF009801E9 /* ATCustomButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 490B8157144274EF009801E9 /* ATCustomButton.m */; };
@@ -366,6 +369,9 @@
 		01C30CEA1B0D09F8006BC911 /* ATMessageCenterGreetingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageCenterGreetingView.m; sourceTree = "<group>"; };
 		01CC8BC81B1D0598006C4D30 /* ATNetworkImageIconView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATNetworkImageIconView.h; sourceTree = "<group>"; };
 		01CC8BC91B1D0598006C4D30 /* ATNetworkImageIconView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATNetworkImageIconView.m; sourceTree = "<group>"; };
+		01CC8BCC1B1E53AD006C4D30 /* branding-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "branding-logo.png"; path = "xibs/branding-logo.png"; sourceTree = "<group>"; };
+		01CC8BCD1B1E53AD006C4D30 /* branding-logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "branding-logo@2x.png"; path = "xibs/branding-logo@2x.png"; sourceTree = "<group>"; };
+		01CC8BCE1B1E53AD006C4D30 /* branding-logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "branding-logo@3x.png"; path = "xibs/branding-logo@3x.png"; sourceTree = "<group>"; };
 		490B8156144274EF009801E9 /* ATCustomButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATCustomButton.h; sourceTree = "<group>"; };
 		490B8157144274EF009801E9 /* ATCustomButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATCustomButton.m; sourceTree = "<group>"; };
 		490B815B1442751F009801E9 /* ATToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATToolbar.h; sourceTree = "<group>"; };
@@ -713,6 +719,9 @@
 		492F2F0B16E3F8060030E48A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				01CC8BCC1B1E53AD006C4D30 /* branding-logo.png */,
+				01CC8BCD1B1E53AD006C4D30 /* branding-logo@2x.png */,
+				01CC8BCE1B1E53AD006C4D30 /* branding-logo@3x.png */,
 				4967278516B9FE7000C679B8 /* ApptentiveResources */,
 				4960E153134A578F00F6311F /* generated */,
 				49E891CC134FE2AA00DD098A /* localization */,
@@ -1539,12 +1548,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				4960E154134A578F00F6311F /* generated in Resources */,
+				01CC8BD11B1E53AD006C4D30 /* branding-logo@3x.png in Resources */,
+				01CC8BD01B1E53AD006C4D30 /* branding-logo@2x.png in Resources */,
 				49E891D0134FE2AB00DD098A /* Localizable.strings in Resources */,
 				01C30CE51B0CF31E006BC911 /* MessageCenter.storyboard in Resources */,
 				493529FF138C7253000E464A /* ATInfoViewController.xib in Resources */,
 				49352A00138C7257000E464A /* ATInfoViewController_iPad.xib in Resources */,
 				49352A20138C73B8000E464A /* ATAboutApptentiveView.xib in Resources */,
 				49352B3F138DB3AA000E464A /* ATTaskProgressCell.xib in Resources */,
+				01CC8BCF1B1E53AD006C4D30 /* branding-logo.png in Resources */,
 				496F29E014496711005B7C01 /* ATSimpleImageViewController.xib in Resources */,
 				4967278416B9FE6400C679B8 /* Info.plist in Resources */,
 				4935CF59177286E500CFE3DC /* ATPersonDetailsViewController.xib in Resources */,

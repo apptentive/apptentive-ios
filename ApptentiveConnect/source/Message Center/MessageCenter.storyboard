@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="cIq-Hu-EXH">
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
@@ -87,8 +88,8 @@
                                     <color key="textColor" red="0.51764705879999995" green="0.51764705879999995" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" misplaced="YES" text="We try and reply to people between 5am and 6pm PST." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="kQ8-89-rPy">
-                                    <rect key="frame" x="8" y="34" width="398" height="29"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="We try and reply to people between 5am and 6pm PST." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="kQ8-89-rPy">
+                                    <rect key="frame" x="8" y="34" width="398" height="24"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
                                     <color key="textColor" red="0.51764705879999995" green="0.51764705879999995" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
@@ -209,6 +210,7 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                     <connections>
+                        <outlet property="backgroundView" destination="1k3-J8-dPI" id="cDw-Pz-Gig"/>
                         <outlet property="confirmationView" destination="g94-Qt-Zp0" id="Jbc-SH-Uwl"/>
                         <outlet property="greetingView" destination="3OP-Us-sTC" id="gir-MU-eQO"/>
                         <outlet property="inputAccessoryView" destination="WKe-eE-Ltf" id="pCq-qh-7kR"/>
@@ -255,6 +257,29 @@
                         <action selector="tableViewTapped:" destination="W0l-Dy-ioE" id="Ut4-IB-zw6"/>
                     </connections>
                 </tapGestureRecognizer>
+                <view contentMode="scaleToFill" id="1k3-J8-dPI">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Powered by" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lWW-C4-4hk">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                            <color key="textColor" red="0.88235294119999996" green="0.88235294119999996" blue="0.90196078430000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <imageView userInteractionEnabled="NO" contentMode="bottom" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="branding-logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="Mgg-jY-bpf">
+                            <rect key="frame" x="0.0" y="100" width="104" height="20"/>
+                        </imageView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="Mgg-jY-bpf" secondAttribute="trailing" id="1us-QT-rya"/>
+                        <constraint firstItem="Mgg-jY-bpf" firstAttribute="leading" secondItem="1k3-J8-dPI" secondAttribute="leading" id="3jc-ze-KjC"/>
+                        <constraint firstItem="Mgg-jY-bpf" firstAttribute="top" secondItem="lWW-C4-4hk" secondAttribute="bottom" constant="8" id="Kyx-0I-ER3"/>
+                        <constraint firstAttribute="trailing" secondItem="lWW-C4-4hk" secondAttribute="trailing" id="RAx-I8-98R"/>
+                        <constraint firstAttribute="bottom" secondItem="Mgg-jY-bpf" secondAttribute="bottom" constant="80" id="T2O-Bn-JCq"/>
+                        <constraint firstItem="lWW-C4-4hk" firstAttribute="leading" secondItem="1k3-J8-dPI" secondAttribute="leading" id="v1j-4M-gdz"/>
+                    </constraints>
+                </view>
             </objects>
             <point key="canvasLocation" x="350" y="604"/>
         </scene>
@@ -275,6 +300,9 @@
             <point key="canvasLocation" x="-190" y="604"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="branding-logo.png" width="104" height="20"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

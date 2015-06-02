@@ -17,5 +17,6 @@
 @property (nonatomic, readonly) NSString *greetingMessage;
 @property (nonatomic, readonly) NSString *confirmationText;
 @property (nonatomic, readonly) NSString *statusText;
+@property (nonatomic, readonly) NSURL *greetingImageURL;
 
 @end

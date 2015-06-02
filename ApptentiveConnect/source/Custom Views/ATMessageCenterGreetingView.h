@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+@class ATNetworkImageIconView;
+
 @interface ATMessageCenterGreetingView : UIView
 
-@property (retain, nonatomic) IBOutlet UIImageView *imageView;
+@property (retain, nonatomic) IBOutlet ATNetworkImageIconView *imageView;
 @property (retain, nonatomic) IBOutlet UILabel *titleLabel;
 @property (retain, nonatomic) IBOutlet UILabel *messageLabel;
 

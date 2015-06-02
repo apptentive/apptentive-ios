@@ -7,6 +7,7 @@
 //
 
 #import "ATMessageCenterGreetingView.h"
+#import "ATNetworkImageIconView.h"
 #import <QuartzCore/QuartzCore.h>
 
 #define LINE_BREAK_HEIGHT 150.0
@@ -46,12 +47,6 @@
 	}
 	
 	[super updateConstraints];
-}
-
-- (void)layoutSubviews {
-	[super layoutSubviews];
-	
-	self.imageView.layer.cornerRadius = CGRectGetHeight(self.imageView.bounds) / 2.0;
 }
 
 @end

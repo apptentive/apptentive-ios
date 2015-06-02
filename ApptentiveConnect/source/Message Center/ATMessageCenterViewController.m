@@ -15,6 +15,8 @@
 #import "ATMessageCenterInteraction.h"
 #import "ATConnect_Private.h"
 #import "ATNetworkImageView.h"
+#import "ATUtilities.h"
+#import "ATNetworkImageIconView.h"
 
 NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
 
@@ -58,9 +60,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	
 	self.messageView.text = self.draftMessage ?: @"";
 	
-	// DEBUG
-	self.greetingView.imageView.image = [UIImage imageNamed:@"ApptentiveResources.bundle/Sumo.jpg"];
-	// /DEBUG
+	self.greetingView.imageView.imageURL = self.interaction.greetingImageURL;
 }
 
 - (BOOL)canBecomeFirstResponder {

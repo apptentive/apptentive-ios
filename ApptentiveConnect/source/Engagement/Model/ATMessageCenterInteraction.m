@@ -44,6 +44,12 @@
 	return [self stringForKey:@"status" fallback:nil];
 }
 
+- (NSURL *)greetingImageURL {
+	NSString *URLString = [self stringForKey:@"image_url" fallback:nil];
+	
+	return (URLString.length > 0) ? [NSURL URLWithString:URLString] : nil;
+}
+
 #pragma mark - Private
 
 - (NSString *)stringForKey:(NSString *)key fallback:(NSString *)fallbackString {

@@ -103,11 +103,12 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 		self.inputAccessoryViewHeightConstraint = [NSLayoutConstraint constraintWithItem:self.inputAccessoryView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:60.0];
 		[self.inputAccessoryView addConstraint:self.inputAccessoryViewHeightConstraint];
 	}
+	
+	[self resizeTextView];
 
 	NSString *message = self.messageView.text;
 	if (message && ![message isEqualToString:@""]) {
 		[self.messageView becomeFirstResponder];
-		[self resizeTextView];
 	}
 }
 
@@ -218,10 +219,8 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 #pragma mark Text view delegate
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+- (void)textViewDidChange:(UITextView *)textView {
 	[self resizeTextView];
-	
-	return YES;
 }
 
 #pragma mark Actions
@@ -269,9 +268,17 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (void)resizeTextView {
-	CGSize size = [self.messageView.text sizeWithFont:self.messageView.font constrainedToSize:CGSizeMake(CGRectGetWidth(self.messageView.bounds), 200.0)];
+	CGFloat minHeight = self.messageView.font.lineHeight + self.messageView.textContainerInset.top + self.messageView.textContainerInset.bottom;
+	CGFloat maxHeight = 200;
 	
-	self.inputAccessoryViewHeightConstraint.constant = fmax(60.0, size.height + 16.0);
+	CGFloat preferedHeight = [self.messageView.text sizeWithFont:self.messageView.font constrainedToSize:CGSizeMake(CGRectGetWidth(self.messageView.frame), CGFLOAT_MAX)].height;
+	preferedHeight += self.messageView.textContainerInset.top + self.messageView.textContainerInset.bottom;
+	
+	CGFloat textViewHeight = fmax(minHeight, preferedHeight);
+	textViewHeight = fmin(textViewHeight, maxHeight);
+	
+	self.inputAccessoryViewHeightConstraint.constant = textViewHeight;
+	
 	[self.inputAccessoryView setNeedsLayout];
 }
 

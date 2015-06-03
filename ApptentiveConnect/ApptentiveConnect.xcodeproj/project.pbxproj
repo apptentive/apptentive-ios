@@ -26,6 +26,9 @@
 		01CC8BCF1B1E53AD006C4D30 /* branding-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 01CC8BCC1B1E53AD006C4D30 /* branding-logo.png */; };
 		01CC8BD01B1E53AD006C4D30 /* branding-logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01CC8BCD1B1E53AD006C4D30 /* branding-logo@2x.png */; };
 		01CC8BD11B1E53AD006C4D30 /* branding-logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01CC8BCE1B1E53AD006C4D30 /* branding-logo@3x.png */; };
+		01CC8BD51B1E66E5006C4D30 /* confirmation_gradient.png in Resources */ = {isa = PBXBuildFile; fileRef = 01CC8BD21B1E66E5006C4D30 /* confirmation_gradient.png */; };
+		01CC8BD61B1E66E5006C4D30 /* confirmation_gradient@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01CC8BD31B1E66E5006C4D30 /* confirmation_gradient@2x.png */; };
+		01CC8BD71B1E66E5006C4D30 /* confirmation_gradient@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01CC8BD41B1E66E5006C4D30 /* confirmation_gradient@3x.png */; };
 		490B8158144274EF009801E9 /* ATCustomButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 490B8156144274EF009801E9 /* ATCustomButton.h */; };
 		490B8159144274EF009801E9 /* ATCustomButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 490B8157144274EF009801E9 /* ATCustomButton.m */; };
 		490B815A144274EF009801E9 /* ATCustomButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 490B8157144274EF009801E9 /* ATCustomButton.m */; };
@@ -372,6 +375,9 @@
 		01CC8BCC1B1E53AD006C4D30 /* branding-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "branding-logo.png"; path = "xibs/branding-logo.png"; sourceTree = "<group>"; };
 		01CC8BCD1B1E53AD006C4D30 /* branding-logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "branding-logo@2x.png"; path = "xibs/branding-logo@2x.png"; sourceTree = "<group>"; };
 		01CC8BCE1B1E53AD006C4D30 /* branding-logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "branding-logo@3x.png"; path = "xibs/branding-logo@3x.png"; sourceTree = "<group>"; };
+		01CC8BD21B1E66E5006C4D30 /* confirmation_gradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = confirmation_gradient.png; sourceTree = "<group>"; };
+		01CC8BD31B1E66E5006C4D30 /* confirmation_gradient@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "confirmation_gradient@2x.png"; sourceTree = "<group>"; };
+		01CC8BD41B1E66E5006C4D30 /* confirmation_gradient@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "confirmation_gradient@3x.png"; sourceTree = "<group>"; };
 		490B8156144274EF009801E9 /* ATCustomButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATCustomButton.h; sourceTree = "<group>"; };
 		490B8157144274EF009801E9 /* ATCustomButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATCustomButton.m; sourceTree = "<group>"; };
 		490B815B1442751F009801E9 /* ATToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATToolbar.h; sourceTree = "<group>"; };
@@ -722,6 +728,9 @@
 				01CC8BCC1B1E53AD006C4D30 /* branding-logo.png */,
 				01CC8BCD1B1E53AD006C4D30 /* branding-logo@2x.png */,
 				01CC8BCE1B1E53AD006C4D30 /* branding-logo@3x.png */,
+				01CC8BD21B1E66E5006C4D30 /* confirmation_gradient.png */,
+				01CC8BD31B1E66E5006C4D30 /* confirmation_gradient@2x.png */,
+				01CC8BD41B1E66E5006C4D30 /* confirmation_gradient@3x.png */,
 				4967278516B9FE7000C679B8 /* ApptentiveResources */,
 				4960E153134A578F00F6311F /* generated */,
 				49E891CC134FE2AA00DD098A /* localization */,
@@ -1560,7 +1569,10 @@
 				496F29E014496711005B7C01 /* ATSimpleImageViewController.xib in Resources */,
 				4967278416B9FE6400C679B8 /* Info.plist in Resources */,
 				4935CF59177286E500CFE3DC /* ATPersonDetailsViewController.xib in Resources */,
+				01CC8BD71B1E66E5006C4D30 /* confirmation_gradient@3x.png in Resources */,
 				58DCC0DA180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.xib in Resources */,
+				01CC8BD51B1E66E5006C4D30 /* confirmation_gradient.png in Resources */,
+				01CC8BD61B1E66E5006C4D30 /* confirmation_gradient@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

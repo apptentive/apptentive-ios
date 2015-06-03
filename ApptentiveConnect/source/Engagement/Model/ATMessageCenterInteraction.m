@@ -50,6 +50,11 @@
 	return (URLString.length > 0) ? [NSURL URLWithString:URLString] : nil;
 }
 
+- (BOOL)brandingEnabled {
+	// TODO: get value from global config
+	return YES;
+}
+
 #pragma mark - Private
 
 - (NSString *)stringForKey:(NSString *)key fallback:(NSString *)fallbackString {

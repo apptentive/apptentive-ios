@@ -51,8 +51,9 @@
 }
 
 - (BOOL)brandingEnabled {
-	// TODO: get value from global config
-	return YES;
+	NSNumber *brandingEnabled = self.configuration[@"apptentive_branding_enabled"];
+	
+	return (brandingEnabled != nil) ? [brandingEnabled boolValue] : YES;
 }
 
 #pragma mark - Private

@@ -21,6 +21,9 @@
 @property (nonatomic, readonly) NSString *HTTPErrorTitle;
 @property (nonatomic, readonly) NSString *HTTPErrorMessage;
 
+@property (nonatomic, readonly) NSString *networkErrorTitle;
+@property (nonatomic, readonly) NSString *networkErrorMessage;
+
 @property (nonatomic, readonly) NSURL *greetingImageURL;
 @property (nonatomic, readonly) BOOL brandingEnabled;
 

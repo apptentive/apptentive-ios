@@ -17,6 +17,7 @@
 #import "ATNetworkImageView.h"
 #import "ATUtilities.h"
 #import "ATNetworkImageIconView.h"
+#import "ATReachability.h"
 
 NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
 
@@ -280,10 +281,20 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 - (void)updateConfirmationView {	
 	switch (self.dataSource.lastSentMessageState) {
 		case ATPendingMessageStateSending:
+			switch ([[ATReachability sharedReachability] currentNetworkStatus]) {
+				case ATNetworkNotReachable:
+					self.confirmationView.confirmationHidden = NO;
+					self.confirmationView.confirmationLabel.text = self.interaction.networkErrorTitle;
+					self.confirmationView.statusLabel.text = self.interaction.networkErrorMessage;
+					break;
+					
+				default:
 #warning DEBUG
-			self.confirmationView.confirmationHidden = NO;
-			self.confirmationView.confirmationLabel.text = @"Sending...";
-			self.confirmationView.statusLabel.text = @"Sending...";
+					self.confirmationView.confirmationHidden = NO;
+					self.confirmationView.confirmationLabel.text = @"Sending...";
+					self.confirmationView.statusLabel.text = @"Sending...";
+					break;
+			}
 			break;
 			
 		case ATPendingMessageStateConfirmed:

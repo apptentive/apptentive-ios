@@ -279,6 +279,13 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 - (void)updateConfirmationView {	
 	switch (self.dataSource.lastSentMessageState) {
+		case ATPendingMessageStateSending:
+#warning DEBUG
+			self.confirmationView.confirmationHidden = NO;
+			self.confirmationView.confirmationLabel.text = @"Sending...";
+			self.confirmationView.statusLabel.text = @"Sending...";
+			break;
+			
 		case ATPendingMessageStateConfirmed:
 			self.confirmationView.confirmationHidden = NO;
 			self.confirmationView.confirmationLabel.text = self.interaction.confirmationText;

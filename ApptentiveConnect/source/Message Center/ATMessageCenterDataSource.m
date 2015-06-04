@@ -141,8 +141,8 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 }
 
 - (ATPendingMessageState)lastSentMessageState {
-	for (id<NSFetchedResultsSectionInfo> section in self.fetchedMessagesController.sections) {
-		for (ATAbstractMessage *message in section.objects) {
+	for (id<NSFetchedResultsSectionInfo> section in [self.fetchedMessagesController.sections reverseObjectEnumerator]) {
+		for (ATAbstractMessage *message in [section.objects reverseObjectEnumerator]) {
 			if (!message.sentByUser) {
 				continue;
 			} else {

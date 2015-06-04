@@ -57,7 +57,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	self.greetingView.messageLabel.text = self.interaction.greetingMessage;
 	
 	if (self.interaction.brandingEnabled) {
-		self.confirmationView.backgroundImageView.image = [[ATBackend imageNamed:@"confirmation_gradient"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+		self.confirmationView.backgroundImageView.image = [[ATBackend imageNamed:@"at_confirmation_gradient"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 		self.confirmationView.backgroundImageView.tintColor = self.tableView.backgroundColor;
 		
 		self.tableView.backgroundView = self.backgroundView;

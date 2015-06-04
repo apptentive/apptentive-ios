@@ -50,6 +50,12 @@
 	return (URLString.length > 0) ? [NSURL URLWithString:URLString] : nil;
 }
 
+- (BOOL)brandingEnabled {
+	NSNumber *brandingEnabled = self.configuration[@"apptentive_branding_enabled"];
+	
+	return (brandingEnabled != nil) ? [brandingEnabled boolValue] : YES;
+}
+
 #pragma mark - Private
 
 - (NSString *)stringForKey:(NSString *)key fallback:(NSString *)fallbackString {

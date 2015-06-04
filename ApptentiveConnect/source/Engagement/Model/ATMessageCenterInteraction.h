@@ -18,5 +18,6 @@
 @property (nonatomic, readonly) NSString *confirmationText;
 @property (nonatomic, readonly) NSString *statusText;
 @property (nonatomic, readonly) NSURL *greetingImageURL;
+@property (nonatomic, readonly) BOOL brandingEnabled;
 
 @end

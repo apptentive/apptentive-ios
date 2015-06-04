@@ -24,6 +24,9 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 @property (weak, nonatomic) IBOutlet ATMessageCenterGreetingView *greetingView;
 @property (weak, nonatomic) IBOutlet ATMessageCenterConfirmationView *confirmationView;
+@property (strong, nonatomic) IBOutlet UIView *backgroundView;
+@property (weak, nonatomic) IBOutlet UILabel *poweredByLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *poweredByImageView;
 
 @property (weak, nonatomic) IBOutlet UIButton *sendButton;
 @property (weak, nonatomic) IBOutlet UITextView *messageView;
@@ -54,7 +57,16 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	
 	self.confirmationView.confirmationLabel.text = self.interaction.confirmationText;
 	self.confirmationView.statusLabel.text = self.interaction.statusText;
-
+	
+	if (self.interaction.brandingEnabled) {
+		self.confirmationView.backgroundImageView.image = [[ATBackend imageNamed:@"confirmation_gradient"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+		self.confirmationView.backgroundImageView.tintColor = self.tableView.backgroundColor;
+		
+		self.tableView.backgroundView = self.backgroundView;
+		self.poweredByLabel.text = ATLocalizedString(@"Powered by", @"Powered by followed by Apptentive logo.");
+		self.poweredByImageView.image = [ATBackend imageNamed:@"at_branding-logo"];
+	}
+		
 	self.inputAccessoryView.layer.borderColor = [[UIColor colorWithRed:215/255.0f green:219/255.0f blue:223/255.0f alpha:1.0f] CGColor];
 	self.inputAccessoryView.layer.borderWidth = 0.5;
 	

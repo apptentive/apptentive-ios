@@ -243,6 +243,8 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 		
 		self.messageView.text = @"";
 	}
+	
+	[self resizeTextView];
 }
 
 - (IBAction)tableViewTapped:(id)sender {

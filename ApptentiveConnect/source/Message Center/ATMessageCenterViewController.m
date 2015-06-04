@@ -304,9 +304,18 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 			break;
 			
 		case ATPendingMessageStateError:
-			self.confirmationView.confirmationHidden = NO;
-			self.confirmationView.confirmationLabel.text = self.interaction.HTTPErrorTitle;
-			self.confirmationView.statusLabel.text = self.interaction.HTTPErrorMessage;
+			switch ([[ATReachability sharedReachability] currentNetworkStatus]) {
+				case ATNetworkNotReachable:
+					self.confirmationView.confirmationHidden = NO;
+					self.confirmationView.confirmationLabel.text = self.interaction.networkErrorTitle;
+					self.confirmationView.statusLabel.text = self.interaction.networkErrorMessage;
+					break;
+					
+				default:
+					self.confirmationView.confirmationHidden = NO;
+					self.confirmationView.confirmationLabel.text = self.interaction.HTTPErrorTitle;
+					self.confirmationView.statusLabel.text = self.interaction.HTTPErrorMessage;
+			}
 			break;
 		
 		default:

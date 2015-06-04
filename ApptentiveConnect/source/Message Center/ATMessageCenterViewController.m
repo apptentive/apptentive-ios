@@ -34,6 +34,8 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 @property (nonatomic, strong) ATMessageCenterDataSource *dataSource;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
+@property (weak, nonatomic) NSLayoutConstraint *inputAccessoryViewHeightConstraint;
+
 @end
 
 @implementation ATMessageCenterViewController
@@ -85,7 +87,6 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-	
 	[UIView animateWithDuration:duration animations:^{
 		[self updateHeaderHeightForOrientation:toInterfaceOrientation];
 	}];
@@ -94,12 +95,33 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 	
+	// Find iOS 8 system-provided height constraint on inputAccessoryView
+	for (NSLayoutConstraint *constraint in self.inputAccessoryView.constraints) {
+		if (constraint.firstItem == self.inputAccessoryView && constraint.firstAttribute == NSLayoutAttributeHeight) {
+			self.inputAccessoryViewHeightConstraint = constraint;
+			break;
+		}
+	}
+	
+	// Fall back to creating one for iOS 7
+	if (self.inputAccessoryViewHeightConstraint == nil) {
+		// Remove autoresizing-mask-based constraints
+		self.inputAccessoryView.translatesAutoresizingMaskIntoConstraints = NO;
+		
+		// Replace the autoresizing width constraints with our own
+		[self.inputAccessoryView.superview addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-(0)-[view]-(0)-|" options:0 metrics:nil views:@{ @"view": self.inputAccessoryView }]];
+	
+		// Add a height constraint whose constant we can control
+		self.inputAccessoryViewHeightConstraint = [NSLayoutConstraint constraintWithItem:self.inputAccessoryView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:60.0];
+		[self.inputAccessoryView addConstraint:self.inputAccessoryViewHeightConstraint];
+	}
+	
+	[self resizeTextView];
+
 	NSString *message = self.messageView.text;
 	if (message && ![message isEqualToString:@""]) {
 		[self.messageView becomeFirstResponder];
 	}
-	
-//	[self becomeFirstResponder];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -159,6 +181,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	// iOS 7 requires this and there's no good way to instantiate a cell to sample, so we're hard-coding it for now.
 	NSString *labelText = [self.dataSource textOfMessageAtIndexPath:indexPath];
 	CGFloat marginsAndStuff = [self.dataSource cellTypeAtIndexPath:indexPath] == ATMessageCenterMessageTypeMessage ? 30.0 : 74.0;
 
@@ -208,6 +231,12 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	}
 }
 
+#pragma mark Text view delegate
+
+- (void)textViewDidChange:(UITextView *)textView {
+	[self resizeTextView];
+}
+
 #pragma mark Actions
 
 - (IBAction)dismiss:(id)sender {
@@ -228,6 +257,8 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 		
 		self.messageView.text = @"";
 	}
+	
+	[self resizeTextView];
 }
 
 - (IBAction)tableViewTapped:(id)sender {
@@ -250,6 +281,21 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 - (void)updateConfirmationVisibility {
 	self.confirmationView.confirmationHidden = self.dataSource.lastMessageIsReply;
+}
+
+- (void)resizeTextView {
+	CGFloat minHeight = self.messageView.font.lineHeight + self.messageView.textContainerInset.top + self.messageView.textContainerInset.bottom;
+	CGFloat maxHeight = 200;
+	
+	CGFloat preferedHeight = [self.messageView.text sizeWithFont:self.messageView.font constrainedToSize:CGSizeMake(CGRectGetWidth(self.messageView.frame), CGFLOAT_MAX)].height;
+	preferedHeight += self.messageView.textContainerInset.top + self.messageView.textContainerInset.bottom;
+	
+	CGFloat textViewHeight = fmax(minHeight, preferedHeight);
+	textViewHeight = fmin(textViewHeight, maxHeight);
+	
+	self.inputAccessoryViewHeightConstraint.constant = textViewHeight;
+	
+	[self.inputAccessoryView setNeedsLayout];
 }
 
 - (void)scrollToLastReply {

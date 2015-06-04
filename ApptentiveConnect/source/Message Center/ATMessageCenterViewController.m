@@ -50,15 +50,11 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	self.dateFormatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"MMMdjm" options:0 locale:[NSLocale currentLocale]];
 	
 	[self updateHeaderHeightForOrientation:self.interfaceOrientation];
-	[self updateConfirmationVisibility];
 	
 	self.navigationItem.title = self.interaction.title;
 	
 	self.greetingView.titleLabel.text = self.interaction.greetingTitle;
 	self.greetingView.messageLabel.text = self.interaction.greetingMessage;
-	
-	self.confirmationView.confirmationLabel.text = self.interaction.confirmationText;
-	self.confirmationView.statusLabel.text = self.interaction.statusText;
 	
 	if (self.interaction.brandingEnabled) {
 		self.confirmationView.backgroundImageView.image = [[ATBackend imageNamed:@"confirmation_gradient"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -69,6 +65,8 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 		self.poweredByImageView.image = [ATBackend imageNamed:@"at_branding-logo"];
 	}
 		
+	[self updateConfirmationView];
+
 	self.inputAccessoryView.layer.borderColor = [[UIColor colorWithRed:215/255.0f green:219/255.0f blue:223/255.0f alpha:1.0f] CGColor];
 	self.inputAccessoryView.layer.borderWidth = 0.5;
 	
@@ -211,7 +209,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 		ATLogError(@"caught exception: %@: %@", [exception name], [exception description]);
 	}
 	
-	[self updateConfirmationVisibility];
+	[self updateConfirmationView];
 	[self scrollToLastReply];
 }
 
@@ -279,8 +277,24 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	return [[NSUserDefaults standardUserDefaults] stringForKey:ATMessageCenterDraftMessageKey] ?: @"";
 }
 
-- (void)updateConfirmationVisibility {
-	self.confirmationView.confirmationHidden = self.dataSource.lastMessageIsReply;
+- (void)updateConfirmationView {	
+	switch (self.dataSource.lastSentMessageState) {
+		case ATPendingMessageStateConfirmed:
+			self.confirmationView.confirmationHidden = NO;
+			self.confirmationView.confirmationLabel.text = self.interaction.confirmationText;
+			self.confirmationView.statusLabel.text = self.interaction.statusText;
+			break;
+			
+		case ATPendingMessageStateError:
+			self.confirmationView.confirmationHidden = NO;
+			self.confirmationView.confirmationLabel.text = self.interaction.HTTPErrorTitle;
+			self.confirmationView.statusLabel.text = self.interaction.HTTPErrorMessage;
+			break;
+		
+		default:
+			self.confirmationView.confirmationHidden = YES;
+			break;
+	}
 }
 
 - (void)resizeTextView {

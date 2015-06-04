@@ -12,12 +12,13 @@
 #import "ATJSONModel.h"
 #import "ATRecord.h"
 
-typedef enum {
-	ATPendingMessageStateComposing,
+typedef NS_ENUM(NSInteger, ATPendingMessageState) {
+	ATPendingMessageStateNone = -1,
+	ATPendingMessageStateComposing = 0,
 	ATPendingMessageStateSending,
 	ATPendingMessageStateConfirmed,
 	ATPendingMessageStateError
-} ATPendingMessageState;
+};
 
 @class ATMessageDisplayType, ATMessageSender;
 

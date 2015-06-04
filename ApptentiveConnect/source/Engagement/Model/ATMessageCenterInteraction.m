@@ -44,6 +44,14 @@
 	return [self stringForKey:@"status" fallback:nil];
 }
 
+- (NSString *)HTTPErrorTitle {
+	return [self stringForKey:@"http_error_title" fallback:ATLocalizedString(@"Unable to Send Message", @"Message Center HTTP error message title")];
+}
+
+- (NSString *)HTTPErrorMessage {
+	return [self stringForKey:@"http_error_message" fallback:ATLocalizedString(@"The server returned an error.", @"Message Center HTTP error Message.")];
+}
+
 - (NSURL *)greetingImageURL {
 	NSString *URLString = [self stringForKey:@"image_url" fallback:nil];
 	

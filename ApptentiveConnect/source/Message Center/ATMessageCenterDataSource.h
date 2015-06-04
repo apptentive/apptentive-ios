@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import "ATAbstractMessage.h"
 
 typedef NS_ENUM(NSInteger, ATMessageCenterMessageType) {
 	ATMessageCenterMessageTypeMessage,
@@ -34,6 +35,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageType) {
 - (void)markAsReadMessageAtIndexPath:(NSIndexPath *)indexPath;
 
 @property (nonatomic, readonly) BOOL lastMessageIsReply;
+@property (nonatomic, readonly) ATPendingMessageState lastSentMessageState;
 
 @end
 

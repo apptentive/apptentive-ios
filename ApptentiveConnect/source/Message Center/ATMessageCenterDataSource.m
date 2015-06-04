@@ -16,6 +16,9 @@
 #import "ATTextMessage.h"
 #import "ATMessageSender.h"
 
+NSString * const ATMessageCenterServerErrorDomain = @"com.apptentive.MessageCenterServerError";
+NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenterErrorMessages";
+
 @interface ATMessageCenterDataSource () <NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, strong, readwrite) NSFetchedResultsController *fetchedMessagesController;
@@ -135,6 +138,20 @@
 	ATAbstractMessage *lastMessage = section.objects.lastObject;
 	
 	return lastMessage.sentByUser.boolValue == NO;
+}
+
+- (ATPendingMessageState)lastSentMessageState {
+	for (id<NSFetchedResultsSectionInfo> section in self.fetchedMessagesController.sections) {
+		for (ATAbstractMessage *message in section.objects) {
+			if (!message.sentByUser) {
+				continue;
+			} else {
+				return message.pendingState.integerValue;
+			}
+		}
+	}
+	
+	return ATPendingMessageStateNone;
 }
 
 #pragma mark NSFetchedResultsControllerDelegate

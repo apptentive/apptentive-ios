@@ -44,6 +44,22 @@
 	return [self stringForKey:@"status" fallback:nil];
 }
 
+- (NSString *)HTTPErrorTitle {
+	return [self stringForKey:@"http_error_title" fallback:ATLocalizedString(@"Unable to Send Message", @"Message Center HTTP error message title")];
+}
+
+- (NSString *)HTTPErrorMessage {
+	return [self stringForKey:@"http_error_message" fallback:ATLocalizedString(@"The server returned an error.", @"Message Center HTTP error Message.")];
+}
+
+- (NSString *)networkErrorTitle {
+	return [self stringForKey:@"network_error_title" fallback:ATLocalizedString(@"Something is wrong.", @"Message Center network error message title")];
+}
+
+- (NSString *)networkErrorMessage {
+	return [self stringForKey:@"network_error_message" fallback:ATLocalizedString(@"We can't receive your message right now.", @"Message Center network error Message.")];
+}
+
 - (NSURL *)greetingImageURL {
 	NSString *URLString = [self stringForKey:@"image_url" fallback:nil];
 	

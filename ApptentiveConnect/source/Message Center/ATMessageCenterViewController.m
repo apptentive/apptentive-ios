@@ -56,6 +56,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	
 	self.greetingView.titleLabel.text = self.interaction.greetingTitle;
 	self.greetingView.messageLabel.text = self.interaction.greetingMessage;
+	self.greetingView.imageView.imageURL = self.interaction.greetingImageURL;
 	
 	if (self.interaction.brandingEnabled) {
 		self.confirmationView.backgroundImageView.image = [[ATBackend imageNamed:@"at_confirmation_gradient"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -67,13 +68,20 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	}
 		
 	[self updateConfirmationView];
+	
+	self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
 
 	self.inputAccessoryView.layer.borderColor = [[UIColor colorWithRed:215/255.0f green:219/255.0f blue:223/255.0f alpha:1.0f] CGColor];
 	self.inputAccessoryView.layer.borderWidth = 0.5;
 	
 	self.messageView.text = self.draftMessage ?: @"";
 	
-	self.greetingView.imageView.imageURL = self.interaction.greetingImageURL;
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustInsets:) name:UIKeyboardDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustInsets:) name:UIKeyboardDidHideNotification object:nil];
+}
+
+- (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (BOOL)canBecomeFirstResponder {
@@ -90,6 +98,12 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 		[self updateHeaderHeightForOrientation:toInterfaceOrientation];
 		[self resizeTextViewForOrientation:toInterfaceOrientation];
 	}];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+	
+	[self scrollToLastReplyAnimated:NO];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -112,7 +126,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 		[self.inputAccessoryView.superview addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-(0)-[view]-(0)-|" options:0 metrics:nil views:@{ @"view": self.inputAccessoryView }]];
 	
 		// Add a height constraint whose constant we can control
-		self.inputAccessoryViewHeightConstraint = [NSLayoutConstraint constraintWithItem:self.inputAccessoryView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:60.0];
+		self.inputAccessoryViewHeightConstraint = [NSLayoutConstraint constraintWithItem:self.inputAccessoryView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:44.0];
 		[self.inputAccessoryView addConstraint:self.inputAccessoryViewHeightConstraint];
 	}
 	
@@ -212,7 +226,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	}
 	
 	[self updateConfirmationView];
-	[self scrollToLastReply];
+	[self scrollToLastReplyAnimated:YES];
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
@@ -261,11 +275,23 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	[self resizeTextViewForOrientation:self.interfaceOrientation];
 }
 
-- (IBAction)tableViewTapped:(id)sender {
-	[self.messageView resignFirstResponder];
+#pragma mark - Private
+
+- (NSIndexPath *)indexPathOfLastMessage {
+	NSInteger lastSectionIndex = self.tableView.numberOfSections - 1;
+	NSInteger lastRowIndex = [self.tableView numberOfRowsInSection:lastSectionIndex] - 1;
+	
+	return [NSIndexPath indexPathForRow:lastRowIndex inSection:lastSectionIndex];
 }
 
-#pragma mark - Private
+- (void)adjustInsets:(NSNotification *)notification {
+	CGRect messageRect = [self.tableView rectForRowAtIndexPath:self.indexPathOfLastMessage];
+	
+	// Adjust bottom edge inset so that the scroll view will let us scroll last message to top
+	UIEdgeInsets edgeInsets = self.tableView.contentInset;
+	edgeInsets.bottom =  self.tableView.bounds.size.height - messageRect.size.height - self.confirmationView.bounds.size.height - edgeInsets.top - 16.0;
+	self.tableView.contentInset = edgeInsets;
+}
 
 - (void)updateHeaderHeightForOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
 	CGFloat headerHeight = UIInterfaceOrientationIsLandscape(toInterfaceOrientation) ? 128.0 : 280.0;
@@ -342,8 +368,10 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	[self.inputAccessoryView setNeedsLayout];
 }
 
-- (void)scrollToLastReply {
-	// TODO: implement me. 
+- (void)scrollToLastReplyAnimated:(BOOL)animated {
+	[self adjustInsets:nil];
+	
+	[self.tableView scrollToRowAtIndexPath:self.indexPathOfLastMessage atScrollPosition:UITableViewScrollPositionTop animated:animated];
 }
 
 @end

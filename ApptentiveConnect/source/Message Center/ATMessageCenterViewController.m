@@ -36,6 +36,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
 @property (weak, nonatomic) NSLayoutConstraint *inputAccessoryViewHeightConstraint;
+@property (readonly, nonatomic) NSIndexPath *indexPathOfLastMessage;
 
 @end
 
@@ -279,7 +280,16 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 - (NSIndexPath *)indexPathOfLastMessage {
 	NSInteger lastSectionIndex = self.tableView.numberOfSections - 1;
+	
+	if (lastSectionIndex == -1) {
+		return nil;
+	}
+	
 	NSInteger lastRowIndex = [self.tableView numberOfRowsInSection:lastSectionIndex] - 1;
+	
+	if (lastRowIndex == -1) {
+		return nil;
+	}
 	
 	return [NSIndexPath indexPathForRow:lastRowIndex inSection:lastSectionIndex];
 }

@@ -82,9 +82,6 @@
                             <rect key="frame" x="0.0" y="491.5" width="414" height="66"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="owo-TD-AIK" userLabel="Alpha Gradient Image View">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="66"/>
-                                </imageView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Thank You!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="stQ-gR-6YZ">
                                     <rect key="frame" x="8" y="8" width="398" height="18"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -100,21 +97,16 @@
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
-                                <constraint firstAttribute="trailing" secondItem="owo-TD-AIK" secondAttribute="trailing" id="0Fp-Ti-VC4"/>
                                 <constraint firstItem="kQ8-89-rPy" firstAttribute="top" secondItem="stQ-gR-6YZ" secondAttribute="bottom" constant="8" id="1FX-7J-maP"/>
                                 <constraint firstAttribute="trailing" secondItem="stQ-gR-6YZ" secondAttribute="trailing" constant="8" id="7UX-4A-xfM"/>
-                                <constraint firstItem="owo-TD-AIK" firstAttribute="leading" secondItem="g94-Qt-Zp0" secondAttribute="leading" id="J5O-FJ-2Tj"/>
-                                <constraint firstItem="owo-TD-AIK" firstAttribute="top" secondItem="g94-Qt-Zp0" secondAttribute="top" id="K0n-Cw-RoZ"/>
                                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="kQ8-89-rPy" secondAttribute="bottom" constant="8" id="KoO-Gw-gjR"/>
                                 <constraint firstItem="stQ-gR-6YZ" firstAttribute="leading" secondItem="g94-Qt-Zp0" secondAttribute="leading" constant="8" id="P60-nC-WBZ"/>
                                 <constraint firstItem="stQ-gR-6YZ" firstAttribute="top" secondItem="g94-Qt-Zp0" secondAttribute="top" constant="8" id="ZCm-QE-wZF"/>
                                 <constraint firstItem="kQ8-89-rPy" firstAttribute="top" relation="greaterThanOrEqual" secondItem="g94-Qt-Zp0" secondAttribute="top" constant="8" id="fRI-vT-Xdg"/>
-                                <constraint firstAttribute="bottom" secondItem="owo-TD-AIK" secondAttribute="bottom" id="k0W-Ex-T90"/>
                                 <constraint firstAttribute="trailing" secondItem="kQ8-89-rPy" secondAttribute="trailing" constant="8" id="tiZ-0g-UDz"/>
                                 <constraint firstItem="kQ8-89-rPy" firstAttribute="leading" secondItem="g94-Qt-Zp0" secondAttribute="leading" constant="8" id="z6F-sO-Sfg"/>
                             </constraints>
                             <connections>
-                                <outlet property="backgroundImageView" destination="owo-TD-AIK" id="NGV-7T-LAo"/>
                                 <outlet property="confirmationLabel" destination="stQ-gR-6YZ" id="cxB-Ae-9yj"/>
                                 <outlet property="confirmationStatusSpacing" destination="1FX-7J-maP" id="cSV-lu-N91"/>
                                 <outlet property="statusLabel" destination="kQ8-89-rPy" id="5Cw-b8-eqe"/>

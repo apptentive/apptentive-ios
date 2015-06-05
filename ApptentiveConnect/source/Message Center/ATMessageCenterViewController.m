@@ -60,9 +60,6 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	self.greetingView.imageView.imageURL = self.interaction.greetingImageURL;
 	
 	if (self.interaction.brandingEnabled) {
-		self.confirmationView.backgroundImageView.image = [[ATBackend imageNamed:@"at_confirmation_gradient"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-		self.confirmationView.backgroundImageView.tintColor = self.tableView.backgroundColor;
-		
 		self.tableView.backgroundView = self.backgroundView;
 		self.poweredByLabel.text = ATLocalizedString(@"Powered by", @"Powered by followed by Apptentive logo.");
 		self.poweredByImageView.image = [ATBackend imageNamed:@"at_branding-logo"];
@@ -150,6 +147,10 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	}
 }
 
+- (void)viewDidLayoutSubviews {
+	[self adjustBrandingVisibility];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -211,6 +212,12 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	CGSize labelSize = [labelText sizeWithFont:[UIFont systemFontOfSize:14.0] constrainedToSize:CGSizeMake(effectiveLabelWidth, MAXFLOAT)];
 	
 	return labelSize.height + dateLabelAndStuff;
+}
+
+#pragma mark Scroll view delegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+	[self adjustBrandingVisibility];
 }
 
 #pragma mark Fetch results controller delegate
@@ -382,6 +389,27 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	[self adjustInsets:nil];
 	
 	[self.tableView scrollToRowAtIndexPath:self.indexPathOfLastMessage atScrollPosition:UITableViewScrollPositionTop animated:animated];
+}
+
+- (void)adjustBrandingVisibility {
+	// Hide branding when content gets within transtionDistance of it
+	CGFloat transitionDistance = 44;
+	
+	CGFloat confirmationViewHeight = CGRectGetHeight(self.confirmationView.bounds);
+	CGFloat poweredByTop = CGRectGetMinY(self.poweredByLabel.frame);
+	
+	CGRect lastMessageFrame = [self.tableView rectForRowAtIndexPath:self.indexPathOfLastMessage];
+	CGFloat lastMessageBottom = CGRectGetMaxY([self.backgroundView convertRect:lastMessageFrame fromView:self.tableView]);
+	
+	CGFloat distance = poweredByTop - lastMessageBottom - confirmationViewHeight;
+	
+	if (distance > transitionDistance) {
+		self.tableView.backgroundView.alpha = 1.0;
+	} else if (distance < 0) {
+		self.tableView.backgroundView.alpha = 0.0;
+	} else {
+		self.tableView.backgroundView.alpha = distance / transitionDistance;
+	}
 }
 
 @end

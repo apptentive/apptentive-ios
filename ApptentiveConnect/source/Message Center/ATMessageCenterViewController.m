@@ -88,6 +88,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 	[UIView animateWithDuration:duration animations:^{
 		[self updateHeaderHeightForOrientation:toInterfaceOrientation];
+		[self resizeTextViewForOrientation:toInterfaceOrientation];
 	}];
 }
 
@@ -115,7 +116,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 		[self.inputAccessoryView addConstraint:self.inputAccessoryViewHeightConstraint];
 	}
 	
-	[self resizeTextView];
+	[self resizeTextViewForOrientation:self.interfaceOrientation];
 
 	NSString *message = self.messageView.text;
 	if (message && ![message isEqualToString:@""]) {
@@ -233,7 +234,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 #pragma mark Text view delegate
 
 - (void)textViewDidChange:(UITextView *)textView {
-	[self resizeTextView];
+	[self resizeTextViewForOrientation:self.interfaceOrientation];
 }
 
 #pragma mark Actions
@@ -257,7 +258,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 		self.messageView.text = @"";
 	}
 	
-	[self resizeTextView];
+	[self resizeTextViewForOrientation:self.interfaceOrientation];
 }
 
 - (IBAction)tableViewTapped:(id)sender {
@@ -324,9 +325,11 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	}
 }
 
-- (void)resizeTextView {
-	CGFloat minHeight = self.messageView.font.lineHeight + self.messageView.textContainerInset.top + self.messageView.textContainerInset.bottom;
-	CGFloat maxHeight = 200;
+- (void)resizeTextViewForOrientation:(UIInterfaceOrientation)orientation {
+	BOOL isLandscapeOnPhone = UIInterfaceOrientationIsLandscape(orientation) && [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone;
+	
+	CGFloat minHeight = isLandscapeOnPhone ? 32 : 44;
+	CGFloat maxHeight = isLandscapeOnPhone ? 100 : 200;
 	
 	CGFloat preferedHeight = [self.messageView.text sizeWithFont:self.messageView.font constrainedToSize:CGSizeMake(CGRectGetWidth(self.messageView.frame), CGFLOAT_MAX)].height;
 	preferedHeight += self.messageView.textContainerInset.top + self.messageView.textContainerInset.bottom;

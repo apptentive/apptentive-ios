@@ -467,7 +467,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
     [label setText:[NSString stringWithFormat:@"%lu", (unsigned long)[[ATConnect sharedConnection] unreadMessageCount]]];
     [label setTextColor:[UIColor whiteColor]];
     [label setBackgroundColor:[UIColor clearColor]];
-    [label setFont:[UIFont fontWithName: @"Helvetica Neue" size: 14.0f]];
+    [label setFont:[UIFont systemFontOfSize:14.0f]];
     
     [label sizeToFit];
     [label setCenter:CGPointMake(badge.frame.size.width / 2, badge.frame.size.height / 2)];

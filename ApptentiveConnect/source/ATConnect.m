@@ -454,6 +454,28 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	return [[ATBackend sharedBackend] unreadMessageCount];
 }
 
+- (UIView *)unreadMessageCountAccessoryView {
+    CGFloat diameter = 30.0f;
+    
+    UIView *badge = [[UIView alloc] initWithFrame:CGRectMake(0, 0, diameter, diameter)];
+    badge.backgroundColor = [UIColor colorWithRed:239.0/255.0 green:65.0/255.0 blue:56.0/255.0 alpha:1];
+    
+    badge.layer.cornerRadius = diameter / 2;
+    badge.layer.masksToBounds = YES;
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, diameter, diameter)];
+    [label setText:[NSString stringWithFormat:@"%lu", (unsigned long)[[ATConnect sharedConnection] unreadMessageCount]]];
+    [label setTextColor:[UIColor whiteColor]];
+    [label setBackgroundColor:[UIColor clearColor]];
+    [label setFont:[UIFont fontWithName: @"Helvetica Neue" size: 14.0f]];
+    
+    [label sizeToFit];
+    [label setCenter:CGPointMake(badge.frame.size.width / 2, badge.frame.size.height / 2)];
+    [badge addSubview:label];
+    
+    return badge;
+}
+
 #elif TARGET_OS_MAC
 - (IBAction)showFeedbackWindow:(id)sender {
 	if (![[ATBackend sharedBackend] currentFeedback]) {

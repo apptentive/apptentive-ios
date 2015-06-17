@@ -180,6 +180,14 @@ extern NSString *const ATIntegrationKeyParse;
  */
 - (NSUInteger)unreadMessageCount;
 
+
+/**
+ Returns a "badge" than can be used as a UITableViewCell accessoryView to indicate the current number of unread messages.
+ 
+ You will want to keep this unread message count up to date by reloading your tableview when the unread message count changes.
+ */
+- (UIView *)unreadMessageCountAccessoryView;
+
 /**
  Forwards a push notification from your application delegate to Apptentive Connect.
  

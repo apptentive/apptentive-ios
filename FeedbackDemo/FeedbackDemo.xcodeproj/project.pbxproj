@@ -529,7 +529,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ca5eee07-d005-4501-8b7c-c46cf5710a63";
+				PROVISIONING_PROFILE = "fc190b24-9619-4619-b6a0-5fbc4478d797";
 			};
 			name = Release;
 		};

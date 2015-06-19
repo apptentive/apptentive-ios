@@ -10,4 +10,6 @@
 
 @interface ATUnreadMessagesBadgeView : UIView
 
++ (instancetype)unreadMessageCountViewBadge;
+
 @end

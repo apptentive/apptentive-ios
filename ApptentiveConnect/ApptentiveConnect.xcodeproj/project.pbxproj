@@ -269,6 +269,8 @@
 		49FECBE317D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49FECBE217D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel */; };
 		49FECBE417D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 49FECBE217D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel */; };
 		580B24BB17D90AF300AE2CD0 /* ATEngagementTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 580B24BA17D90AF300AE2CD0 /* ATEngagementTests.m */; };
+		583C270B1B34BFD800525001 /* ATUnreadMessagesBadgeView.h in Headers */ = {isa = PBXBuildFile; fileRef = 583C27091B34BFD800525001 /* ATUnreadMessagesBadgeView.h */; };
+		583C270C1B34BFD800525001 /* ATUnreadMessagesBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 583C270A1B34BFD800525001 /* ATUnreadMessagesBadgeView.m */; };
 		583DF0671A390DDA00BF0207 /* ATInteractionInvocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 583DF0651A390DDA00BF0207 /* ATInteractionInvocation.h */; };
 		583DF0681A390DDA00BF0207 /* ATInteractionInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 583DF0661A390DDA00BF0207 /* ATInteractionInvocation.m */; };
 		583DF06E1A44CD6E00BF0207 /* ATInteractionNavigateToLink.h in Headers */ = {isa = PBXBuildFile; fileRef = 583DF06C1A44CD6E00BF0207 /* ATInteractionNavigateToLink.h */; };
@@ -574,6 +576,8 @@
 		49FECBE217D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v1 to v2.xcmappingmodel"; sourceTree = "<group>"; };
 		580B24B917D90AF300AE2CD0 /* ATEngagementTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ATEngagementTests.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		580B24BA17D90AF300AE2CD0 /* ATEngagementTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ATEngagementTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		583C27091B34BFD800525001 /* ATUnreadMessagesBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATUnreadMessagesBadgeView.h; sourceTree = "<group>"; };
+		583C270A1B34BFD800525001 /* ATUnreadMessagesBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATUnreadMessagesBadgeView.m; sourceTree = "<group>"; };
 		583DF0651A390DDA00BF0207 /* ATInteractionInvocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATInteractionInvocation.h; path = Engagement/Model/ATInteractionInvocation.h; sourceTree = "<group>"; };
 		583DF0661A390DDA00BF0207 /* ATInteractionInvocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATInteractionInvocation.m; path = Engagement/Model/ATInteractionInvocation.m; sourceTree = "<group>"; };
 		583DF06C1A44CD6E00BF0207 /* ATInteractionNavigateToLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATInteractionNavigateToLink.h; path = Engagement/Controllers/ATInteractionNavigateToLink.h; sourceTree = "<group>"; };
@@ -1013,6 +1017,8 @@
 				017D97451B0E5795004E045C /* ATMessageCenterMessageCell.m */,
 				017D97481B0E57C2004E045C /* ATMessageCenterReplyCell.h */,
 				017D97491B0E57C2004E045C /* ATMessageCenterReplyCell.m */,
+				583C27091B34BFD800525001 /* ATUnreadMessagesBadgeView.h */,
+				583C270A1B34BFD800525001 /* ATUnreadMessagesBadgeView.m */,
 			);
 			path = "Custom Views";
 			sourceTree = "<group>";
@@ -1395,6 +1401,7 @@
 				58C5922B17C59BE3000FA428 /* ATWebClient+EngagementAdditions.h in Headers */,
 				017D97461B0E5795004E045C /* ATMessageCenterMessageCell.h in Headers */,
 				58EEBE2317C7E8150039A0F5 /* ATInteraction.h in Headers */,
+				583C270B1B34BFD800525001 /* ATUnreadMessagesBadgeView.h in Headers */,
 				58AB416718F608500034FAA5 /* ATInteractionSurveyController.h in Headers */,
 				49B7E916178BA8060059E776 /* ATSurveyResponse.h in Headers */,
 				49B7E91B178BAB8D0059E776 /* ATSurveyResponseTask.h in Headers */,
@@ -1652,6 +1659,7 @@
 				017D974B1B0E57C2004E045C /* ATMessageCenterReplyCell.m in Sources */,
 				49881DDE16E839540061D888 /* ATLogViewController.m in Sources */,
 				495E9C1D16EABD8E00AE3B03 /* ATLogger.m in Sources */,
+				583C270C1B34BFD800525001 /* ATUnreadMessagesBadgeView.m in Sources */,
 				58AB416818F608500034FAA5 /* ATInteractionSurveyController.m in Sources */,
 				492F2F1D16ED597F0030E48A /* ATRecordRequestTask.m in Sources */,
 				493F8D901672E07D000B5151 /* ATURLConnection_Private.m in Sources */,

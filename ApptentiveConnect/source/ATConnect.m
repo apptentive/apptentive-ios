@@ -455,8 +455,12 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	return [[ATBackend sharedBackend] unreadMessageCount];
 }
 
-- (UIView *)unreadMessageCountAccessoryView {
-	return [ATUnreadMessagesBadgeView unreadMessageCountViewBadge];
+- (UIView *)unreadMessageCountAccessoryView:(BOOL)apptentiveHeart {
+	if (apptentiveHeart) {
+		return [ATUnreadMessagesBadgeView unreadMessageCountViewBadgeWithApptentiveHeart];
+	} else {
+		return [ATUnreadMessagesBadgeView unreadMessageCountViewBadge];
+	}
 }
 
 #elif TARGET_OS_MAC

@@ -104,7 +104,7 @@ typedef NS_ENUM(NSInteger, TableViewSection) {
 	switch (indexPath.section) {
 		case kMessageCenterSection:
 			cell = [tableView dequeueReusableCellWithIdentifier:@"MessageCenter" forIndexPath:indexPath];
-            cell.accessoryView = [[ATConnect sharedConnection] unreadMessageCountAccessoryView];
+            cell.accessoryView = [[ATConnect sharedConnection] unreadMessageCountAccessoryView:YES];
 			break;
 			
 		case kEventSection:

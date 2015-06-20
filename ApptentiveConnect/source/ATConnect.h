@@ -186,7 +186,7 @@ extern NSString *const ATIntegrationKeyParse;
  
  You will want to keep this unread message count up to date by reloading your tableview when the unread message count changes.
  */
-- (UIView *)unreadMessageCountAccessoryView;
+- (UIView *)unreadMessageCountAccessoryView:(BOOL)apptentiveHeart;
 
 /**
  Forwards a push notification from your application delegate to Apptentive Connect.

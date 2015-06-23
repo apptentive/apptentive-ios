@@ -282,6 +282,97 @@
             </objects>
             <point key="canvasLocation" x="350" y="604"/>
         </scene>
+        <!--Banner View Controller-->
+        <scene sceneID="pcU-LA-MMv">
+            <objects>
+                <viewController storyboardIdentifier="Banner" id="dl0-K5-Mv3" customClass="ATBannerViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="5SP-sQ-HE0"/>
+                        <viewControllerLayoutGuide type="bottom" id="2nO-7a-cCZ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="OZg-SV-V5r">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="68"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y7l-8U-XGR" userLabel="Banner View">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="68"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notification Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cZE-zR-99d">
+                                        <rect key="frame" x="79" y="8" width="225.5" height="16"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notification Message" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f1X-dK-6cu">
+                                        <rect key="frame" x="79" y="25" width="225.5" height="16"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ubX-Rl-IsM">
+                                        <rect key="frame" x="15" y="7.5" width="53.5" height="53.5"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="ubX-Rl-IsM" secondAttribute="height" multiplier="1:1" id="XMZ-t2-8PH"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="cZE-zR-99d" secondAttribute="trailing" constant="15" id="2Nz-NX-rHA"/>
+                                    <constraint firstItem="cZE-zR-99d" firstAttribute="leading" secondItem="Y7l-8U-XGR" secondAttribute="leading" priority="500" constant="15" id="6G5-6T-pSA"/>
+                                    <constraint firstItem="ubX-Rl-IsM" firstAttribute="leading" secondItem="Y7l-8U-XGR" secondAttribute="leading" constant="15" id="AmA-mw-Gu3"/>
+                                    <constraint firstItem="cZE-zR-99d" firstAttribute="top" secondItem="Y7l-8U-XGR" secondAttribute="top" constant="8" id="ZSY-RI-N1U"/>
+                                    <constraint firstItem="ubX-Rl-IsM" firstAttribute="top" secondItem="Y7l-8U-XGR" secondAttribute="top" constant="7.5" id="aSV-WA-STi"/>
+                                    <constraint firstAttribute="trailing" secondItem="f1X-dK-6cu" secondAttribute="trailing" constant="15" id="adc-0V-w6D"/>
+                                    <constraint firstItem="f1X-dK-6cu" firstAttribute="top" secondItem="cZE-zR-99d" secondAttribute="bottom" constant="1" id="dEe-gr-P7t"/>
+                                    <constraint firstItem="cZE-zR-99d" firstAttribute="leading" secondItem="ubX-Rl-IsM" secondAttribute="trailing" constant="11" id="hd6-Fi-I4Q"/>
+                                    <constraint firstAttribute="height" constant="68" id="kDE-GB-amq"/>
+                                    <constraint firstAttribute="bottom" secondItem="ubX-Rl-IsM" secondAttribute="bottom" constant="7" id="mrY-nA-6LF"/>
+                                    <constraint firstItem="cZE-zR-99d" firstAttribute="leading" secondItem="f1X-dK-6cu" secondAttribute="leading" id="t9z-QG-VjV"/>
+                                </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="QD6-IT-82a" appends="YES" id="tHX-h2-7GE"/>
+                                    <outletCollection property="gestureRecognizers" destination="YCy-GB-qUu" appends="YES" id="5kD-gg-f3Y"/>
+                                </connections>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="Y7l-8U-XGR" firstAttribute="top" secondItem="OZg-SV-V5r" secondAttribute="top" id="IMt-IL-sk1"/>
+                            <constraint firstAttribute="trailing" secondItem="Y7l-8U-XGR" secondAttribute="trailing" id="KEh-ps-GN1"/>
+                            <constraint firstItem="Y7l-8U-XGR" firstAttribute="leading" secondItem="OZg-SV-V5r" secondAttribute="leading" id="yOz-KY-Dkh"/>
+                        </constraints>
+                    </view>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="320" height="68"/>
+                    <connections>
+                        <outlet property="bannerView" destination="Y7l-8U-XGR" id="ake-Ho-1OT"/>
+                        <outlet property="iconSpacingConstraint" destination="hd6-Fi-I4Q" id="bi3-Gh-jCE"/>
+                        <outlet property="imageView" destination="ubX-Rl-IsM" id="ge5-Wt-gzd"/>
+                        <outlet property="messageLabel" destination="f1X-dK-6cu" id="ZPI-Zq-TFh"/>
+                        <outlet property="titleLabel" destination="cZE-zR-99d" id="9tm-XA-VOV"/>
+                        <outlet property="topConstraint" destination="IMt-IL-sk1" id="u7R-My-HgP"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ujK-Zm-BON" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="up" id="YCy-GB-qUu">
+                    <connections>
+                        <action selector="hide:" destination="dl0-K5-Mv3" id="CLe-iu-Myf"/>
+                    </connections>
+                </swipeGestureRecognizer>
+                <tapGestureRecognizer id="QD6-IT-82a">
+                    <connections>
+                        <action selector="tap:" destination="dl0-K5-Mv3" id="FHc-96-9Ut"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="818" y="586"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="Xx8-Lb-CI2">
             <objects>

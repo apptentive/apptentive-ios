@@ -7,11 +7,14 @@
 //
 
 #import "ATConnect.h"
+#import "ATBannerViewController.h"
 
 extern NSString *const ATConnectCustomPersonDataChangedNotification;
 extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 
-@interface ATConnect ()
+@interface ATConnect () <ATBannerViewControllerDelegate>
+
+@property (strong, nonatomic) UIViewController *messageCenterPresentingViewController;
 
 - (NSDictionary *)customPersonData;
 - (NSDictionary *)customDeviceData;

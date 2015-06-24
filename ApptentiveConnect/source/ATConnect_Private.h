@@ -14,8 +14,6 @@ extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 
 @interface ATConnect () <ATBannerViewControllerDelegate>
 
-@property (strong, nonatomic) UIViewController *messageCenterPresentingViewController;
-
 - (NSDictionary *)customPersonData;
 - (NSDictionary *)customDeviceData;
 - (NSDictionary *)integrationConfiguration;
@@ -39,6 +37,8 @@ extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 - (NSString *)engagementInteractionNameAtIndex:(NSInteger)index;
 - (NSString *)engagementInteractionTypeAtIndex:(NSInteger)index;
 - (void)presentInteractionAtIndex:(NSInteger)index fromViewController:(UIViewController *)viewController;
+
+- (void)showNotificationBanner;
 
 @end
 

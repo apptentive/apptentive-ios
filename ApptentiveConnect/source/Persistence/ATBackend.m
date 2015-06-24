@@ -54,6 +54,7 @@ static NSURLCache *imageCache = nil;
 
 @interface ATBackend ()
 - (void)updateConfigurationIfNeeded;
+@property (readonly, nonatomic, getter=isMessageCenterInForeground) BOOL messageCenterInForeground;
 @end
 
 @interface ATBackend (Private)
@@ -709,8 +710,12 @@ static NSURLCache *imageCache = nil;
 		id<NSFetchedResultsSectionInfo> sectionInfo = [[self.unreadCountController sections] objectAtIndex:0];
 		NSUInteger unreadCount = [sectionInfo numberOfObjects];
 		if (unreadCount != self.previousUnreadCount) {
+			if (unreadCount > self.previousUnreadCount) { // TODO: check if MC in foreground
+				[[ATConnect sharedConnection] showNotificationBanner];
+			}
 			self.previousUnreadCount = unreadCount;
 			[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterUnreadCountChangedNotification object:nil userInfo:@{@"count":@(self.previousUnreadCount)}];
+			
 		}
 	}
 }
@@ -832,6 +837,8 @@ static NSURLCache *imageCache = nil;
 
 - (void)messageCenterEnteredForeground {
 	@synchronized(self) {
+		_messageCenterInForeground = YES;
+		
 		[self checkForMessages];
 		
 		[self checkForMessagesAtForegroundRefreshInterval];
@@ -840,6 +847,8 @@ static NSURLCache *imageCache = nil;
 
 - (void)messageCenterLeftForeground {
 	@synchronized(self) {
+		_messageCenterInForeground = NO;
+		
 		[self checkForMessagesAtBackgroundRefreshInterval];
 	}
 }

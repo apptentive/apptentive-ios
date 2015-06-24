@@ -129,6 +129,8 @@
 
 - (IBAction)tap:(id)sender {
 	[self.delegate userDidTapBanner:self];
+	
+	[self hide:sender];
 }
 
 @end

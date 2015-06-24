@@ -413,7 +413,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		NSString *action = [apptentivePayload objectForKey:@"action"];
 		
 		if ([action isEqualToString:@"pmc"]) {
-			[self showNotificationBannerFromViewController:viewController];
+			[self showNotificationBanner];
 		}
 	}
 }
@@ -515,14 +515,20 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 #pragma mark - Message notification banner
 
-- (void)showNotificationBannerFromViewController:(UIViewController *)viewController {
-	self.messageCenterPresentingViewController = viewController;
+- (void)showNotificationBanner {
 	[ATBannerViewController showWithImage:nil title:@"Hey" message:@"New message" delegate:self];
 }
 
 - (void)userDidTapBanner:(ATBannerViewController *)banner {
-	[self presentMessageCenterFromViewController:self.messageCenterPresentingViewController];
-	self.messageCenterPresentingViewController = nil;
+	[self presentMessageCenterFromViewController:[self viewControllerForInteractions]];
+}
+
+- (UIViewController *)viewControllerForInteractions {
+	if (self.delegate && [self.delegate respondsToSelector:@selector(viewControllerForInteractionsWithConnection:)]) {
+		return [self.delegate viewControllerForInteractionsWithConnection:self];
+	} else {
+		return [ATUtilities topViewController];
+	}
 }
 
 @end

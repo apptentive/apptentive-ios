@@ -22,6 +22,8 @@
 @class ATFeedbackWindowController;
 #endif
 
+@protocol ATConnectDelegate;
+
 /** Notification sent when Message Center unread messages count changes. */
 extern NSString *const ATMessageCenterUnreadCountChangedNotification;
 
@@ -115,6 +117,8 @@ extern NSString *const ATIntegrationKeyParse;
 /** The shared singleton of `ATConnect`. */
 + (ATConnect *)sharedConnection;
 
+/** An object conforming to the `ATConnectDelegate` protocol */
+@property (nonatomic, weak) id<ATConnectDelegate> delegate;
 
 ///---------------------------------
 /// @name Interface Customization
@@ -465,5 +469,11 @@ extern NSString *const ATIntegrationKeyParse;
  @param deviceToken The device token expected by Parse.
  */
 - (void)addParseIntegrationWithDeviceToken:(NSData *)deviceToken;
+
+@end
+
+@protocol ATConnectDelegate <NSObject>
+@optional
+- (UIViewController *)viewControllerForInteractionsWithConnection:(ATConnect *)connection;
 
 @end

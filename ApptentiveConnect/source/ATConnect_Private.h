@@ -7,7 +7,6 @@
 //
 
 #import "ATConnect.h"
-//#import "ATBannerViewController.h"
 
 extern NSString *const ATConnectCustomPersonDataChangedNotification;
 extern NSString *const ATConnectCustomDeviceDataChangedNotification;

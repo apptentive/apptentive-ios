@@ -7,12 +7,14 @@
 //
 
 #import "ATConnect.h"
-#import "ATBannerViewController.h"
+//#import "ATBannerViewController.h"
 
 extern NSString *const ATConnectCustomPersonDataChangedNotification;
 extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 
-@interface ATConnect () <ATBannerViewControllerDelegate>
+@class ATAbstractMessage;
+
+@interface ATConnect ()
 
 - (NSDictionary *)customPersonData;
 - (NSDictionary *)customDeviceData;
@@ -38,7 +40,7 @@ extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 - (NSString *)engagementInteractionTypeAtIndex:(NSInteger)index;
 - (void)presentInteractionAtIndex:(NSInteger)index fromViewController:(UIViewController *)viewController;
 
-- (void)showNotificationBanner;
+- (void)showNotificationBannerForMessage:(ATAbstractMessage *)message;
 
 @end
 

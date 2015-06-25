@@ -153,6 +153,12 @@ extern NSString *const ATIntegrationKeyParse;
  with Apptentive-specific UI.
  */
 @property (nonatomic, strong) UIColor *tintColor;
+
+/** The background color for Message Center notification banners
+
+ If not set, the color defaults to black at 90% opacity.
+ */
+@property (nonatomic, strong) UIColor *notificationBannerBackgroundColor;
 #endif
 
 

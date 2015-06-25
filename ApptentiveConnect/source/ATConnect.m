@@ -16,8 +16,10 @@
 #import "ATInteraction.h"
 #import "ATUtilities.h"
 #import "ATAppConfigurationUpdater.h"
+#import "ATMessageSender.h"
 #if TARGET_OS_IPHONE
 #import "ATMessageCenterViewController.h"
+#import "ATBannerViewController.h"
 #endif
 
 // Can't get CocoaPods to do the right thing for debug builds.
@@ -47,6 +49,9 @@ NSString *const ATIntegrationKeyParse = @"parse";
 NSString *const ATConnectCustomPersonDataChangedNotification = @"ATConnectCustomPersonDataChangedNotification";
 NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustomDeviceDataChangedNotification";
 
+@interface ATConnect () <ATBannerViewControllerDelegate>
+@end
+
 @implementation ATConnect {
 	NSMutableDictionary *_customPersonData;
 	NSMutableDictionary *_customDeviceData;
@@ -71,6 +76,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		_useMessageCenter = YES;
 		_initiallyUseMessageCenter = YES;
 		_initiallyHideBranding = NO;
+		_notificationBannerBackgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.9];
 		
 		NSDictionary *defaults = @{ATAppConfigurationMessageCenterEnabledKey: @(_initiallyUseMessageCenter),
 								   ATAppConfigurationMessageCenterEmailRequiredKey: @NO,
@@ -413,7 +419,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		NSString *action = [apptentivePayload objectForKey:@"action"];
 		
 		if ([action isEqualToString:@"pmc"]) {
-			[self showNotificationBanner];
+			[[ATBackend sharedBackend] checkForMessages];
 		}
 	}
 }
@@ -515,8 +521,13 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 #pragma mark - Message notification banner
 
-- (void)showNotificationBanner {
-	[ATBannerViewController showWithImage:nil title:@"Hey" message:@"New message" delegate:self];
+- (void)showNotificationBannerForMessage:(ATAbstractMessage *)message {
+	if ([message isKindOfClass:[ATTextMessage class]]) {
+		ATTextMessage *textMessage = (ATTextMessage *)message;
+		NSURL *profilePhotoURL = [NSURL URLWithString:textMessage.sender.profilePhotoURL];
+		[ATBannerViewController showWithImageURL:profilePhotoURL title:textMessage.sender.name message:textMessage.body backgroundColor:self.notificationBannerBackgroundColor delegate:self];
+	}
+	
 }
 
 - (void)userDidTapBanner:(ATBannerViewController *)banner {

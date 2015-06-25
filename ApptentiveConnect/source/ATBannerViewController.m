@@ -22,14 +22,14 @@
 @property (weak, nonatomic) IBOutlet UILabel *messageLabel;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topConstraint;
-@property (weak, nonatomic) IBOutlet UIImageView *imageView;
+@property (weak, nonatomic) IBOutlet ATNetworkImageView *imageView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *iconSpacingConstraint;
 
 @end
 
 @implementation ATBannerViewController
 
-+ (void)showWithImage:(UIImage *)image title:(NSString *)title message:(NSString *)message delegate:(id<ATBannerViewControllerDelegate>)delegate {
++(void)showWithImageURL:(NSURL *)imageURL title:(NSString *)title message:(NSString *)message backgroundColor:(UIColor *)backgroundColor delegate:(id<ATBannerViewControllerDelegate>)delegate {
 	static ATBannerViewController *_currentBanner;
 	
 	if (_currentBanner != nil) {
@@ -40,10 +40,10 @@
 	ATBannerViewController *banner = [storyboard instantiateViewControllerWithIdentifier:@"Banner"];
 	banner.delegate = delegate;
 	
-	[banner showWithImage:image title:title message:message];
+	[banner showWithImageURL:imageURL title:title message:message backgroundColor:backgroundColor];
 }
 
-- (void)showWithImage:(UIImage *)image title:(NSString *)title message:(NSString *)message {
+- (void)showWithImageURL:(NSURL *)imageURL title:(NSString *)title message:(NSString *)message backgroundColor:(UIColor *)backgroundColor {
 	UIWindow *mainWindow = [UIApplication sharedApplication].delegate.window;
 
 	self.window  = [[UIWindow alloc] initWithFrame:mainWindow.bounds];
@@ -64,10 +64,12 @@
 		self.window.frame = self.bannerView.frame;
 	}];
 	
-	self.hasIcon = (image != nil);
-	self.imageView.image = image;
+	self.hasIcon = imageURL != nil;
+	self.imageView.imageURL = imageURL;
+	self.imageView.delegate = self;
 	self.titleLabel.text = title;
 	self.messageLabel.text = message;
+	self.bannerView.backgroundColor = backgroundColor;
 }
 
 - (void)dealloc {
@@ -111,6 +113,16 @@
 		}
 		self.imageView.hidden = YES;
 	}
+}
+
+#pragma mark - Image view delegate
+
+- (void)networkImageViewDidLoad:(ATNetworkImageView *)imageView {
+	self.hasIcon = YES;
+}
+
+- (void)networkImageView:(ATNetworkImageView *)imageView didFailWithError:(NSError *)error {
+	self.hasIcon = NO;
 }
 
 #pragma mark - Actions

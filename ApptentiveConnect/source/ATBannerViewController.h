@@ -6,16 +6,16 @@
 //  Copyright (c) 2015 Apptentive. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "ATNetworkImageView.h"
 
 @protocol ATBannerViewControllerDelegate;
 
-@interface ATBannerViewController : UIViewController
+@interface ATBannerViewController : UIViewController <ATNetworkImageViewDelegate>
 
 @property (weak, nonatomic) id<ATBannerViewControllerDelegate> delegate;
 @property (assign, nonatomic) BOOL hasIcon;
 
-+ (void)showWithImage:(UIImage *)image title:(NSString *)title message:(NSString *)message delegate:(id<ATBannerViewControllerDelegate>)delegate;
++ (void)showWithImageURL:(NSURL *)imageURL title:(NSString *)title message:(NSString *)message backgroundColor:(UIColor *)backgroundColor delegate:(id<ATBannerViewControllerDelegate>)delegate;
 
 @end
 

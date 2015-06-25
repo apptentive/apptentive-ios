@@ -309,7 +309,7 @@
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ubX-Rl-IsM">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ubX-Rl-IsM" customClass="ATNetworkImageView">
                                         <rect key="frame" x="15" y="7.5" width="53.5" height="53.5"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="ubX-Rl-IsM" secondAttribute="height" multiplier="1:1" id="XMZ-t2-8PH"/>

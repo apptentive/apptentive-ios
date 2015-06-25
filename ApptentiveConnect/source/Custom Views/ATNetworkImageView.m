@@ -79,6 +79,10 @@
     if (aConnection == self.connection) {
         ATLogError(@"Unable to download image at %@: %@", self.imageURL, error);
         self.connection = nil;
+		
+		if ([self.delegate respondsToSelector:@selector(networkImageView:didFailWithError:)]) {
+			[self.delegate networkImageView:self didFailWithError:error];
+		}
     }
 }
 
@@ -107,6 +111,10 @@
 				NSCachedURLResponse *cachedResponse = [[NSCachedURLResponse alloc] initWithResponse:self.response data:self.imageData userInfo:nil storagePolicy:NSURLCacheStorageAllowed];
 				[cache storeCachedResponse:cachedResponse forRequest:request];
 				cachedResponse = nil;
+				
+				if ([self.delegate respondsToSelector:@selector(networkImageViewDidLoad:)]) {
+					[self.delegate networkImageViewDidLoad:self];
+				}
 			}
         }
     }

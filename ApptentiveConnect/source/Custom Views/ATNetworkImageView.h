@@ -8,7 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol ATNetworkImageViewDelegate;
+
 @interface ATNetworkImageView : UIImageView <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 @property (nonatomic, copy) NSURL *imageURL;
 @property (nonatomic, assign) BOOL useCache;
+@property (weak, nonatomic) id<ATNetworkImageViewDelegate> delegate;
+@end
+
+@protocol ATNetworkImageViewDelegate <NSObject>
+
+- (void)networkImageViewDidLoad:(ATNetworkImageView *)imageView;
+- (void)networkImageView:(ATNetworkImageView *)imageView didFailWithError:(NSError *)error;
+
 @end

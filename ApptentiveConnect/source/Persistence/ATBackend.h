@@ -100,6 +100,8 @@ extern NSString *const ATBackendBecameReadyNotification;
 
 - (BOOL)isReady;
 
+- (void)checkForMessages;
+
 /*! True if the backend is currently updating the person. */
 - (BOOL)isUpdatingPerson;
 

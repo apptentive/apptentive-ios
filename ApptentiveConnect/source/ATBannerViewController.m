@@ -29,7 +29,7 @@
 
 @implementation ATBannerViewController
 
-+(void)showWithImageURL:(NSURL *)imageURL title:(NSString *)title message:(NSString *)message backgroundColor:(UIColor *)backgroundColor delegate:(id<ATBannerViewControllerDelegate>)delegate {
++ (instancetype)bannerWithImageURL:(NSURL *)imageURL title:(NSString *)title message:(NSString *)message {
 	static ATBannerViewController *_currentBanner;
 	
 	if (_currentBanner != nil) {
@@ -38,14 +38,17 @@
 	
 	UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MessageCenter" bundle:[ATConnect resourceBundle]];
 	ATBannerViewController *banner = [storyboard instantiateViewControllerWithIdentifier:@"Banner"];
-	banner.delegate = delegate;
 	
-	[banner showWithImageURL:imageURL title:title message:message backgroundColor:backgroundColor];
+	banner.imageURL = imageURL;
+	banner.titleText = title;
+	banner.messageText = message;
+	
+	return banner;
 }
 
-- (void)showWithImageURL:(NSURL *)imageURL title:(NSString *)title message:(NSString *)message backgroundColor:(UIColor *)backgroundColor {
+- (void)show {
 	UIWindow *mainWindow = [UIApplication sharedApplication].delegate.window;
-
+	
 	self.window  = [[UIWindow alloc] initWithFrame:mainWindow.bounds];
 	self.window.rootViewController = self;
 	self.window.windowLevel = UIWindowLevelAlert;
@@ -56,20 +59,23 @@
 	
 	self.topConstraint.constant = -CGRectGetHeight(self.bannerView.bounds);
 	[self.view layoutIfNeeded];
-
+	
 	self.topConstraint.constant = 0;
 	
 	[UIView animateWithDuration:ANIMATION_DURATION animations:^{
 		[self.view layoutIfNeeded];
 		self.window.frame = self.bannerView.frame;
 	}];
+}
+
+- (void)viewDidLoad {
+	[super viewDidLoad];
 	
-	self.hasIcon = imageURL != nil;
-	self.imageView.imageURL = imageURL;
-	self.imageView.delegate = self;
-	self.titleLabel.text = title;
-	self.messageLabel.text = message;
-	self.bannerView.backgroundColor = backgroundColor;
+	self.imageURL = _imageURL;
+	self.titleText = _titleText;
+	self.messageText = _messageText;
+	self.backgroundColor = _backgroundColor;
+	self.textColor = _textColor;
 }
 
 - (void)dealloc {
@@ -113,6 +119,37 @@
 		}
 		self.imageView.hidden = YES;
 	}
+}
+
+- (void)setImageURL:(NSURL *)imageURL {
+	_imageURL = imageURL;
+	
+	self.imageView.imageURL = imageURL;
+}
+
+- (void)setTitleText:(NSString *)titleText {
+	_titleText = titleText;
+	
+	self.titleLabel.text = titleText;
+}
+
+- (void)setMessageText:(NSString *)messageText {
+	_messageText = messageText;
+	
+	self.messageLabel.text = messageText;
+}
+
+- (void)setBackgroundColor:(UIColor *)backgroundColor {
+	_backgroundColor = backgroundColor;
+	
+	self.bannerView.backgroundColor = backgroundColor;
+}
+
+- (void)setTextColor:(UIColor *)textColor {
+	_textColor = textColor;
+	
+	self.titleLabel.textColor = textColor;
+	self.messageLabel.textColor = textColor;
 }
 
 #pragma mark - Image view delegate

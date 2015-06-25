@@ -13,9 +13,14 @@
 @interface ATBannerViewController : UIViewController <ATNetworkImageViewDelegate>
 
 @property (weak, nonatomic) id<ATBannerViewControllerDelegate> delegate;
-@property (assign, nonatomic) BOOL hasIcon;
+@property (strong, nonatomic) NSURL *imageURL;
+@property (strong, nonatomic) NSString *titleText;
+@property (strong, nonatomic) NSString *messageText;
+@property (strong, nonatomic) UIColor *backgroundColor;
+@property (strong, nonatomic) UIColor *textColor;
 
-+ (void)showWithImageURL:(NSURL *)imageURL title:(NSString *)title message:(NSString *)message backgroundColor:(UIColor *)backgroundColor delegate:(id<ATBannerViewControllerDelegate>)delegate;
++ (instancetype)bannerWithImageURL:(NSURL *)imageURL title:(NSString *)title message:(NSString *)message;
+- (void)show;
 
 @end
 

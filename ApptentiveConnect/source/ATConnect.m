@@ -524,8 +524,15 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 - (void)showNotificationBannerForMessage:(ATAbstractMessage *)message {
 	if ([message isKindOfClass:[ATTextMessage class]]) {
 		ATTextMessage *textMessage = (ATTextMessage *)message;
-		NSURL *profilePhotoURL = [NSURL URLWithString:textMessage.sender.profilePhotoURL];
-		[ATBannerViewController showWithImageURL:profilePhotoURL title:textMessage.sender.name message:textMessage.body backgroundColor:self.notificationBannerBackgroundColor delegate:self];
+		NSURL *profilePhotoURL = textMessage.sender.profilePhotoURL ? [NSURL URLWithString:textMessage.sender.profilePhotoURL] : nil;
+		
+		ATBannerViewController *banner = [ATBannerViewController bannerWithImageURL:profilePhotoURL title:textMessage.sender.name message:textMessage.body];
+		
+		banner.backgroundColor = self.notificationBannerBackgroundColor;
+		banner.textColor = self.notificationBannerTextColor;
+		banner.delegate = self;
+		
+		[banner show];
 	}
 	
 }

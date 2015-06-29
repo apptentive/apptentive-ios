@@ -73,6 +73,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	self.inputAccessoryView.layer.borderWidth = 0.5;
 	
 	self.messageView.text = self.draftMessage ?: @"";
+	self.sendButton.enabled = self.messageView.text.length > 0;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustInsets:) name:UIKeyboardDidShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustInsets:) name:UIKeyboardDidHideNotification object:nil];
@@ -256,6 +257,8 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 #pragma mark Text view delegate
 
 - (void)textViewDidChange:(UITextView *)textView {
+	self.sendButton.enabled = textView.text.length > 0;
+	
 	[self resizeTextViewForOrientation:self.interfaceOrientation];
 }
 

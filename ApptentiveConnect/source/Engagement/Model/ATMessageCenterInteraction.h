@@ -24,6 +24,9 @@
 @property (nonatomic, readonly) NSString *networkErrorTitle;
 @property (nonatomic, readonly) NSString *networkErrorMessage;
 
+@property (nonatomic, readonly) NSString *missingConfigurationMessage;
+@property (nonatomic, readonly) NSString *missingConfigurationNetworkErrorMessage;
+
 @property (nonatomic, readonly) NSURL *greetingImageURL;
 @property (nonatomic, readonly) BOOL brandingEnabled;
 

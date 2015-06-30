@@ -29,11 +29,11 @@
 }
 
 - (NSString *)greetingTitle {
-	return [self stringForKey:@"greeting_title" fallback:ATLocalizedString(@"I’m sorry to hear that!", @"Default Message Center Greeting Title Text")];
+	return [self stringForKey:@"greeting_title" fallback:ATLocalizedString(@"Hello!", @"Default Message Center Greeting Title Text")];
 }
 
 - (NSString *)greetingMessage {
-	return [self stringForKey:@"greeting_message" fallback:ATLocalizedString(@"Please leave us some feedback so we can make the app better for you.", @"Default Message Center Greeting Message Text")];
+	return [self stringForKey:@"greeting_message" fallback:ATLocalizedString(@"We’d love to get feedback from you on our app. The more details you can provide, the better.", @"Default Message Center Greeting Message Text")];
 }
 
 - (NSString *)confirmationText {
@@ -45,19 +45,27 @@
 }
 
 - (NSString *)HTTPErrorTitle {
-	return [self stringForKey:@"http_error_title" fallback:ATLocalizedString(@"Unable to Send Message", @"Message Center HTTP error message title")];
+	return [self stringForKey:@"http_error_title" fallback:ATLocalizedString(@"It looks like we're having trouble sending your message.", @"Message Center HTTP error message title")];
 }
 
 - (NSString *)HTTPErrorMessage {
-	return [self stringForKey:@"http_error_message" fallback:ATLocalizedString(@"The server returned an error.", @"Message Center HTTP error Message.")];
+	return [self stringForKey:@"http_error_message" fallback:ATLocalizedString(@"We’ve saved it and will try sending it again soon.", @"Message Center HTTP error Message.")];
 }
 
 - (NSString *)networkErrorTitle {
-	return [self stringForKey:@"network_error_title" fallback:ATLocalizedString(@"Something is wrong.", @"Message Center network error message title")];
+	return [self stringForKey:@"network_error_title" fallback:ATLocalizedString(@"It looks like you aren’t connected to the internet right now.", @"Message Center network error message title")];
 }
 
 - (NSString *)networkErrorMessage {
-	return [self stringForKey:@"network_error_message" fallback:ATLocalizedString(@"We can't receive your message right now.", @"Message Center network error Message.")];
+	return [self stringForKey:@"network_error_message" fallback:ATLocalizedString(@"We’ve saved your message and will try again when we detect a connection.", @"Message Center network error Message.")];
+}
+
+- (NSString *)missingConfigurationMessage {
+	return ATLocalizedString(@"We're attempting to connect. Thanks for your patience!", @"Missing Message Center configuration message (not downloaded yet)");
+}
+
+- (NSString *)missingConfigurationNetworkErrorMessage {
+	return ATLocalizedString(@"Please connect to the internet to send feedback.", @"Missing Message Center configuration message (no internet connection)");
 }
 
 - (NSURL *)greetingImageURL {

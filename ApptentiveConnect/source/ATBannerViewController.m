@@ -85,7 +85,7 @@
 }
 
 - (BOOL)prefersStatusBarHidden {
-	return UIInterfaceOrientationIsLandscape(self.interfaceOrientation);
+	return [UIApplication sharedApplication].statusBarHidden;//UIInterfaceOrientationIsLandscape(self.interfaceOrientation);
 }
 
 - (void)viewDidLayoutSubviews {

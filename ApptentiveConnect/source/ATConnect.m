@@ -416,11 +416,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController {
 	NSDictionary *apptentivePayload = [userInfo objectForKey:@"apptentive"];
 	if (apptentivePayload) {
-		NSString *action = [apptentivePayload objectForKey:@"action"];
-		
-		if ([action isEqualToString:@"pmc"]) {
-			[[ATBackend sharedBackend] checkForMessages];
-		}
+		[[ATBackend sharedBackend] checkForMessages];
 	}
 }
 

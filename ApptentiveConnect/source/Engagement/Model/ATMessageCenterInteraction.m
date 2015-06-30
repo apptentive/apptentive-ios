@@ -53,7 +53,7 @@
 }
 
 - (NSString *)networkErrorTitle {
-	return [self stringForKey:@"network_error_title" fallback:ATLocalizedString(@"It looks like you don’t have internet right now.", @"Message Center network error message title")];
+	return [self stringForKey:@"network_error_title" fallback:ATLocalizedString(@"It looks like you aren’t connected to the internet right now.", @"Message Center network error message title")];
 }
 
 - (NSString *)networkErrorMessage {

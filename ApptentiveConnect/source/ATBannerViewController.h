@@ -16,8 +16,6 @@
 @property (strong, nonatomic) NSURL *imageURL;
 @property (strong, nonatomic) NSString *titleText;
 @property (strong, nonatomic) NSString *messageText;
-@property (strong, nonatomic) UIColor *backgroundColor;
-@property (strong, nonatomic) UIColor *textColor;
 
 + (instancetype)bannerWithImageURL:(NSURL *)imageURL title:(NSString *)title message:(NSString *)message;
 - (void)show;

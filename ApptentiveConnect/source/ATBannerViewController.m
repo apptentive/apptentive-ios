@@ -74,8 +74,6 @@
 	self.imageURL = _imageURL;
 	self.titleText = _titleText;
 	self.messageText = _messageText;
-	self.backgroundColor = _backgroundColor;
-	self.textColor = _textColor;
 }
 
 - (void)dealloc {
@@ -137,19 +135,6 @@
 	_messageText = messageText;
 	
 	self.messageLabel.text = messageText;
-}
-
-- (void)setBackgroundColor:(UIColor *)backgroundColor {
-	_backgroundColor = backgroundColor;
-	
-	self.bannerView.backgroundColor = backgroundColor;
-}
-
-- (void)setTextColor:(UIColor *)textColor {
-	_textColor = textColor;
-	
-	self.titleLabel.textColor = textColor;
-	self.messageLabel.textColor = textColor;
 }
 
 #pragma mark - Image view delegate

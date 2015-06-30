@@ -76,8 +76,6 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		_useMessageCenter = YES;
 		_initiallyUseMessageCenter = YES;
 		_initiallyHideBranding = NO;
-		_notificationBannerBackgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.9];
-		_notificationBannerTextColor = [UIColor whiteColor];
 		
 		NSDictionary *defaults = @{ATAppConfigurationMessageCenterEnabledKey: @(_initiallyUseMessageCenter),
 								   ATAppConfigurationMessageCenterEmailRequiredKey: @NO,
@@ -525,8 +523,6 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		
 		ATBannerViewController *banner = [ATBannerViewController bannerWithImageURL:profilePhotoURL title:textMessage.sender.name message:textMessage.body];
 		
-		banner.backgroundColor = self.notificationBannerBackgroundColor;
-		banner.textColor = self.notificationBannerTextColor;
 		banner.delegate = self;
 		
 		[banner show];

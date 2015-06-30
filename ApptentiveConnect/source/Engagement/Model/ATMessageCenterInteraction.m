@@ -61,7 +61,7 @@
 }
 
 - (NSString *)missingConfigurationMessage {
-	return ATLocalizedString(@"It looks like we're having trouble accessing feedback. Please wait a bit and try again.", @"Missing Message Center configuration message (not downloaded yet)");
+	return ATLocalizedString(@"We're attempting to connect. Thanks for your patience!", @"Missing Message Center configuration message (not downloaded yet)");
 }
 
 - (NSString *)missingConfigurationNetworkErrorMessage {

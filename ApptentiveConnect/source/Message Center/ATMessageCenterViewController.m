@@ -21,6 +21,17 @@
 
 NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
 
+typedef NS_ENUM(NSInteger, ATMessageCenterState) {
+	ATMessageCenterStateInvalid = 0,
+	ATMessageCenterStateEmpty,
+	ATMessageCenterStateComposing,
+	ATMessageCenterStateSending,
+	ATMessageCenterStateConfirmed,
+	ATMessageCenterStateNetworkError,
+	ATMessageCenterStateHTTPError,
+	ATMessageCenterStateReplied
+};
+
 @interface ATMessageCenterViewController ()
 
 @property (weak, nonatomic) IBOutlet ATMessageCenterGreetingView *greetingView;
@@ -37,6 +48,8 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 @property (weak, nonatomic) NSLayoutConstraint *inputAccessoryViewHeightConstraint;
 @property (readonly, nonatomic) NSIndexPath *indexPathOfLastMessage;
+
+@property (nonatomic) ATMessageCenterState state;
 
 @end
 
@@ -64,11 +77,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 		self.poweredByLabel.text = ATLocalizedString(@"Powered by", @"Powered by followed by Apptentive logo.");
 		self.poweredByImageView.image = [ATBackend imageNamed:@"at_branding-logo"];
 	}
-		
-	[self updateConfirmationView];
 	
-	self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
-
 	self.inputAccessoryView.layer.borderColor = [[UIColor colorWithRed:215/255.0f green:219/255.0f blue:223/255.0f alpha:1.0f] CGColor];
 	self.inputAccessoryView.layer.borderWidth = 0.5;
 	
@@ -77,6 +86,8 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustInsets:) name:UIKeyboardDidShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustInsets:) name:UIKeyboardDidHideNotification object:nil];
+	
+	[self updateState];
 }
 
 - (void)dealloc {
@@ -234,7 +245,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 		ATLogError(@"caught exception: %@: %@", [exception name], [exception description]);
 	}
 	
-	[self updateConfirmationView];
+	[self updateState];
 	[self scrollToLastReplyAnimated:YES];
 }
 
@@ -288,6 +299,84 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 #pragma mark - Private
 
+- (void)updateState {
+	if (self.dataSource.numberOfMessageGroups == 0) {
+		self.state = ATMessageCenterStateEmpty;
+	} else if (self.dataSource.lastMessageIsReply) {
+		self.state = ATMessageCenterStateReplied;
+	} else {
+		BOOL networkIsUnreachable = [[ATReachability sharedReachability] currentNetworkStatus] == ATNetworkNotReachable;
+		
+		switch (self.dataSource.lastSentMessageState) {
+			case ATPendingMessageStateConfirmed:
+				self.state = ATMessageCenterStateConfirmed;
+				break;
+			case ATPendingMessageStateError:
+				self.state = networkIsUnreachable ? ATMessageCenterStateNetworkError : ATMessageCenterStateHTTPError;
+				break;
+			case ATPendingMessageStateSending:
+				self.state = networkIsUnreachable ? ATMessageCenterStateNetworkError : ATMessageCenterStateSending;
+				break;
+			case ATPendingMessageStateComposing:
+				self.state = ATMessageCenterStateComposing;
+				break;
+			case ATPendingMessageStateNone:
+				self.state = ATMessageCenterStateEmpty;
+				break;
+		}
+	}
+}
+
+- (void)setState:(ATMessageCenterState)state {
+	if (_state != state) {
+		_state = state;
+		
+		switch (state) {
+			case ATMessageCenterStateEmpty:
+				self.confirmationView.confirmationHidden = YES;
+				break;
+				
+			case ATMessageCenterStateComposing:
+				self.confirmationView.confirmationHidden = YES;
+				break;
+				
+			case ATMessageCenterStateSending:
+				self.confirmationView.confirmationHidden = YES;
+#warning debug
+				self.confirmationView.confirmationHidden = NO;
+				self.confirmationView.confirmationLabel.text = @"Sending...";
+				self.confirmationView.statusLabel.text = @"Sending...";
+				break;
+				
+			case ATMessageCenterStateConfirmed:
+				self.confirmationView.confirmationHidden = NO;
+				self.confirmationView.confirmationLabel.text = self.interaction.confirmationText;
+				self.confirmationView.statusLabel.text = self.interaction.statusText;
+				break;
+				
+			case ATMessageCenterStateNetworkError:
+				self.confirmationView.confirmationHidden = NO;
+				self.confirmationView.confirmationLabel.text = self.interaction.networkErrorTitle;
+				self.confirmationView.statusLabel.text = self.interaction.networkErrorMessage;
+				break;
+				
+			case ATMessageCenterStateHTTPError:
+				self.confirmationView.confirmationHidden = NO;
+				self.confirmationView.confirmationLabel.text = self.interaction.HTTPErrorTitle;
+				self.confirmationView.statusLabel.text = self.interaction.HTTPErrorMessage;
+				break;
+				
+			case ATMessageCenterStateReplied:
+				self.confirmationView.confirmationHidden = YES;
+				break;
+				
+			default:
+				ATLogError(@"Invalid Message Center State: %d", state);
+				break;
+		}
+	}
+}
+
 - (NSIndexPath *)indexPathOfLastMessage {
 	NSInteger lastSectionIndex = self.tableView.numberOfSections - 1;
 	
@@ -323,52 +412,6 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 - (NSString *)draftMessage {
 	return [[NSUserDefaults standardUserDefaults] stringForKey:ATMessageCenterDraftMessageKey] ?: @"";
-}
-
-- (void)updateConfirmationView {	
-	switch (self.dataSource.lastSentMessageState) {
-		case ATPendingMessageStateSending:
-			switch ([[ATReachability sharedReachability] currentNetworkStatus]) {
-				case ATNetworkNotReachable:
-					self.confirmationView.confirmationHidden = NO;
-					self.confirmationView.confirmationLabel.text = self.interaction.networkErrorTitle;
-					self.confirmationView.statusLabel.text = self.interaction.networkErrorMessage;
-					break;
-					
-				default:
-#warning DEBUG
-					self.confirmationView.confirmationHidden = NO;
-					self.confirmationView.confirmationLabel.text = @"Sending...";
-					self.confirmationView.statusLabel.text = @"Sending...";
-					break;
-			}
-			break;
-			
-		case ATPendingMessageStateConfirmed:
-			self.confirmationView.confirmationHidden = NO;
-			self.confirmationView.confirmationLabel.text = self.interaction.confirmationText;
-			self.confirmationView.statusLabel.text = self.interaction.statusText;
-			break;
-			
-		case ATPendingMessageStateError:
-			switch ([[ATReachability sharedReachability] currentNetworkStatus]) {
-				case ATNetworkNotReachable:
-					self.confirmationView.confirmationHidden = NO;
-					self.confirmationView.confirmationLabel.text = self.interaction.networkErrorTitle;
-					self.confirmationView.statusLabel.text = self.interaction.networkErrorMessage;
-					break;
-					
-				default:
-					self.confirmationView.confirmationHidden = NO;
-					self.confirmationView.confirmationLabel.text = self.interaction.HTTPErrorTitle;
-					self.confirmationView.statusLabel.text = self.interaction.HTTPErrorMessage;
-			}
-			break;
-		
-		default:
-			self.confirmationView.confirmationHidden = YES;
-			break;
-	}
 }
 
 - (void)resizeTextViewForOrientation:(UIInterfaceOrientation)orientation {

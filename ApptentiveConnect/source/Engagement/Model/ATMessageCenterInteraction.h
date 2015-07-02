@@ -13,8 +13,11 @@
 + (ATMessageCenterInteraction *)messageCenterInteraction;
 
 @property (nonatomic, readonly) NSString *title;
+
 @property (nonatomic, readonly) NSString *greetingTitle;
 @property (nonatomic, readonly) NSString *greetingMessage;
+@property (nonatomic, readonly) NSURL *greetingImageURL;
+
 @property (nonatomic, readonly) NSString *confirmationText;
 @property (nonatomic, readonly) NSString *statusText;
 
@@ -27,7 +30,6 @@
 @property (nonatomic, readonly) NSString *missingConfigurationMessage;
 @property (nonatomic, readonly) NSString *missingConfigurationNetworkErrorMessage;
 
-@property (nonatomic, readonly) NSURL *greetingImageURL;
 @property (nonatomic, readonly) BOOL brandingEnabled;
 
 @end

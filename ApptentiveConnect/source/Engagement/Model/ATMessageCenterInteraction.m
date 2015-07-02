@@ -36,6 +36,12 @@
 	return [self stringForKey:@"greeting_message" fallback:ATLocalizedString(@"We’d love to get feedback from you on our app. The more details you can provide, the better.", @"Default Message Center Greeting Message Text")];
 }
 
+- (NSURL *)greetingImageURL {
+	NSString *URLString = [self stringForKey:@"greeting_image_url" fallback:nil];
+	
+	return (URLString.length > 0) ? [NSURL URLWithString:URLString] : nil;
+}
+
 - (NSString *)confirmationText {
 	return [self stringForKey:@"confirmation" fallback:ATLocalizedString(@"Thank you!", @"Default Message Center Confirmation Text")];
 }
@@ -66,12 +72,6 @@
 
 - (NSString *)missingConfigurationNetworkErrorMessage {
 	return ATLocalizedString(@"Please connect to the internet to send feedback.", @"Missing Message Center configuration message (no internet connection)");
-}
-
-- (NSURL *)greetingImageURL {
-	NSString *URLString = [self stringForKey:@"image_url" fallback:nil];
-	
-	return (URLString.length > 0) ? [NSURL URLWithString:URLString] : nil;
 }
 
 - (BOOL)brandingEnabled {

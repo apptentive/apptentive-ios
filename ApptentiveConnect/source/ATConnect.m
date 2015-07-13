@@ -16,8 +16,10 @@
 #import "ATInteraction.h"
 #import "ATUtilities.h"
 #import "ATAppConfigurationUpdater.h"
+#import "ATMessageSender.h"
 #if TARGET_OS_IPHONE
 #import "ATMessageCenterViewController.h"
+#import "ATBannerViewController.h"
 #endif
 
 // Can't get CocoaPods to do the right thing for debug builds.
@@ -46,6 +48,9 @@ NSString *const ATIntegrationKeyParse = @"parse";
 
 NSString *const ATConnectCustomPersonDataChangedNotification = @"ATConnectCustomPersonDataChangedNotification";
 NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustomDeviceDataChangedNotification";
+
+@interface ATConnect () <ATBannerViewControllerDelegate>
+@end
 
 @implementation ATConnect {
 	NSMutableDictionary *_customPersonData;
@@ -414,6 +419,8 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		
 		if ([action isEqualToString:@"pmc"]) {
 			[self presentMessageCenterFromViewController:viewController];
+		} else {
+			[[ATBackend sharedBackend] checkForMessages];
 		}
 	}
 }
@@ -511,6 +518,34 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	NSBundle *bundle = [NSBundle bundleForClass:[ATConnect class]];
 	return bundle;
 #endif
+}
+
+#pragma mark - Message notification banner
+
+- (void)showNotificationBannerForMessage:(ATAbstractMessage *)message {
+	if ([message isKindOfClass:[ATTextMessage class]]) {
+		ATTextMessage *textMessage = (ATTextMessage *)message;
+		NSURL *profilePhotoURL = textMessage.sender.profilePhotoURL ? [NSURL URLWithString:textMessage.sender.profilePhotoURL] : nil;
+		
+		ATBannerViewController *banner = [ATBannerViewController bannerWithImageURL:profilePhotoURL title:textMessage.sender.name message:textMessage.body];
+		
+		banner.delegate = self;
+		
+		[banner show];
+	}
+	
+}
+
+- (void)userDidTapBanner:(ATBannerViewController *)banner {
+	[self presentMessageCenterFromViewController:[self viewControllerForInteractions]];
+}
+
+- (UIViewController *)viewControllerForInteractions {
+	if (self.delegate && [self.delegate respondsToSelector:@selector(viewControllerForInteractionsWithConnection:)]) {
+		return [self.delegate viewControllerForInteractionsWithConnection:self];
+	} else {
+		return [ATUtilities topViewController];
+	}
 }
 
 @end

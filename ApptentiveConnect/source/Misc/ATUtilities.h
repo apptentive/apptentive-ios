@@ -71,6 +71,9 @@
 #endif
 
 + (BOOL)emailAddressIsValid:(NSString *)emailAddress;
+
++ (UIViewController *)topViewController;
+
 @end
 
 CGRect ATCGRectOfEvenSize(CGRect inRect);

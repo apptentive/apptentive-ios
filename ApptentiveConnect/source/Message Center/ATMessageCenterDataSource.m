@@ -77,7 +77,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 }
 
 - (void)stop {
-	
+	[[ATBackend sharedBackend] messageCenterLeftForeground];
 }
 
 #pragma mark - Message center view controller support

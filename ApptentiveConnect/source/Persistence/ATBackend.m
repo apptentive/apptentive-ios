@@ -54,6 +54,7 @@ static NSURLCache *imageCache = nil;
 
 @interface ATBackend ()
 - (void)updateConfigurationIfNeeded;
+@property (readonly, nonatomic, getter=isMessageCenterInForeground) BOOL messageCenterInForeground;
 @end
 
 @interface ATBackend (Private)
@@ -68,7 +69,6 @@ static NSURLCache *imageCache = nil;
 - (void)startWorking:(NSNotification *)notification;
 - (void)personDataChanged:(NSNotification *)notification;
 - (void)deviceDataChanged:(NSNotification *)notification;
-- (void)checkForMessages;
 - (void)startMonitoringUnreadMessages;
 - (void)checkForProperConfiguration;
 @end
@@ -709,8 +709,13 @@ static NSURLCache *imageCache = nil;
 		id<NSFetchedResultsSectionInfo> sectionInfo = [[self.unreadCountController sections] objectAtIndex:0];
 		NSUInteger unreadCount = [sectionInfo numberOfObjects];
 		if (unreadCount != self.previousUnreadCount) {
+			if (unreadCount > self.previousUnreadCount && !self.messageCenterInForeground) {
+				ATAbstractMessage *message = sectionInfo.objects.firstObject;
+				[[ATConnect sharedConnection] showNotificationBannerForMessage:message];
+			}
 			self.previousUnreadCount = unreadCount;
 			[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterUnreadCountChangedNotification object:nil userInfo:@{@"count":@(self.previousUnreadCount)}];
+			
 		}
 	}
 }
@@ -832,6 +837,8 @@ static NSURLCache *imageCache = nil;
 
 - (void)messageCenterEnteredForeground {
 	@synchronized(self) {
+		_messageCenterInForeground = YES;
+		
 		[self checkForMessages];
 		
 		[self checkForMessagesAtForegroundRefreshInterval];
@@ -840,9 +847,28 @@ static NSURLCache *imageCache = nil;
 
 - (void)messageCenterLeftForeground {
 	@synchronized(self) {
+		_messageCenterInForeground = NO;
+		
 		[self checkForMessagesAtBackgroundRefreshInterval];
 	}
 }
+
+- (void)checkForMessages {
+	@autoreleasepool {
+		@synchronized(self) {
+			if (![self isReady] || self.shouldStopWorking) {
+				return;
+			}
+			ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
+			if (![queue hasTaskOfClass:[ATGetMessagesTask class]]) {
+				ATGetMessagesTask *task = [[ATGetMessagesTask alloc] init];
+				[queue addTask:task];
+				task = nil;
+			}
+		}
+	}
+}
+
 @end
 
 @implementation ATBackend (Private)
@@ -957,22 +983,6 @@ static NSURLCache *imageCache = nil;
 			return;
 		}
 		[[ATEngagementBackend sharedBackend] checkForEngagementManifest];
-	}
-}
-
-- (void)checkForMessages {
-	@autoreleasepool {
-		@synchronized(self) {
-			if (![self isReady] || self.shouldStopWorking) {
-				return;
-			}
-			ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
-			if (![queue hasTaskOfClass:[ATGetMessagesTask class]]) {
-				ATGetMessagesTask *task = [[ATGetMessagesTask alloc] init];
-				[queue addTask:task];
-				task = nil;
-			}
-		}
 	}
 }
 

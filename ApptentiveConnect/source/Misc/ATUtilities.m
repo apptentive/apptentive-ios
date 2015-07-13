@@ -30,6 +30,18 @@ static NSDateFormatter *dateFormatter = nil;
 + (void)setupDateFormatters;
 @end
 
+UIViewController * topChildViewController(UIViewController *viewController) {
+	if ([viewController isKindOfClass:[UINavigationController class]]) {
+		return topChildViewController(((UINavigationController *)viewController).topViewController);
+	} else if ([viewController isKindOfClass:[UITabBarController class]]) {
+		return topChildViewController(((UITabBarController *)viewController).selectedViewController);
+	} else if (viewController.presentedViewController) {
+		return topChildViewController(viewController.presentedViewController);
+	} else {
+		return viewController;
+	}
+}
+
 @implementation ATUtilities
 
 + (UIImage *)imageByTakingScreenshot {
@@ -903,8 +915,13 @@ done:
 	
 	return isValid;
 }
-@end
 
++ (UIViewController *)topViewController	{
+	return topChildViewController([UIApplication sharedApplication].delegate.window.rootViewController);
+}
+
+
+@end
 
 @implementation ATUtilities (Private)
 + (void)setupDateFormatters {

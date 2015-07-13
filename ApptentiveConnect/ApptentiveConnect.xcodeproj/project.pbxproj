@@ -18,6 +18,8 @@
 		01A88FFA1AFBFFAE002C49E7 /* testJsonDiffing.1.old.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF51AFBFDB6002C49E7 /* testJsonDiffing.1.old.json */; };
 		01A88FFB1AFBFFAE002C49E7 /* testJsonDiffing.2.new.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF61AFBFDB6002C49E7 /* testJsonDiffing.2.new.json */; };
 		01A88FFC1AFBFFAE002C49E7 /* testJsonDiffing.2.old.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF71AFBFDB6002C49E7 /* testJsonDiffing.2.old.json */; };
+		01AE42071B38E38D006B9191 /* ATBannerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01AE42051B38E38D006B9191 /* ATBannerViewController.h */; };
+		01AE42081B38E38D006B9191 /* ATBannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01AE42061B38E38D006B9191 /* ATBannerViewController.m */; };
 		01C30CE51B0CF31E006BC911 /* MessageCenter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 018A343A1B0CE810001DCA2C /* MessageCenter.storyboard */; };
 		01C30CEB1B0D09F8006BC911 /* ATMessageCenterGreetingView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01C30CE91B0D09F8006BC911 /* ATMessageCenterGreetingView.h */; };
 		01C30CEC1B0D09F8006BC911 /* ATMessageCenterGreetingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01C30CEA1B0D09F8006BC911 /* ATMessageCenterGreetingView.m */; };
@@ -362,6 +364,8 @@
 		01A88FF51AFBFDB6002C49E7 /* testJsonDiffing.1.old.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.1.old.json; sourceTree = "<group>"; };
 		01A88FF61AFBFDB6002C49E7 /* testJsonDiffing.2.new.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.2.new.json; sourceTree = "<group>"; };
 		01A88FF71AFBFDB6002C49E7 /* testJsonDiffing.2.old.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.2.old.json; sourceTree = "<group>"; };
+		01AE42051B38E38D006B9191 /* ATBannerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATBannerViewController.h; sourceTree = "<group>"; };
+		01AE42061B38E38D006B9191 /* ATBannerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATBannerViewController.m; sourceTree = "<group>"; };
 		01C30CE91B0D09F8006BC911 /* ATMessageCenterGreetingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageCenterGreetingView.h; sourceTree = "<group>"; };
 		01C30CEA1B0D09F8006BC911 /* ATMessageCenterGreetingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageCenterGreetingView.m; sourceTree = "<group>"; };
 		01CC8BC81B1D0598006C4D30 /* ATNetworkImageIconView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATNetworkImageIconView.h; sourceTree = "<group>"; };
@@ -952,6 +956,8 @@
 		4999127B16165B7900FDA15F /* Message Center */ = {
 			isa = PBXGroup;
 			children = (
+				01AE42051B38E38D006B9191 /* ATBannerViewController.h */,
+				01AE42061B38E38D006B9191 /* ATBannerViewController.m */,
 				585A8E5D1B0D609A00BDF4CC /* ATMessageCenterViewController.h */,
 				585A8E5E1B0D609A00BDF4CC /* ATMessageCenterViewController.m */,
 				018A343A1B0CE810001DCA2C /* MessageCenter.storyboard */,
@@ -1293,6 +1299,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				017D97421B0E3770004E045C /* ATMessageCenterConfirmationView.h in Headers */,
+				01AE42071B38E38D006B9191 /* ATBannerViewController.h in Headers */,
 				49C002A1133413BB0071F088 /* ApptentiveConnect-Prefix.pch in Headers */,
 				49C002A2133413BB0071F088 /* ATConnect.h in Headers */,
 				49D1124F13368CC200603373 /* ATTask.h in Headers */,
@@ -1614,6 +1621,7 @@
 				4987FA9D157AE53700AF2078 /* ApptentiveMetrics.m in Sources */,
 				4987FAA0157AE53700AF2078 /* ATMetric.m in Sources */,
 				4987FAA3157AE53700AF2078 /* ATWebClient+Metrics.m in Sources */,
+				01AE42081B38E38D006B9191 /* ATBannerViewController.m in Sources */,
 				493AEB2E15990A4D00DFD4C7 /* ATSurvey.m in Sources */,
 				493AEB3115990A4D00DFD4C7 /* ATSurveyParser.m in Sources */,
 				493AEB3415990A4D00DFD4C7 /* ATSurveyQuestion.m in Sources */,

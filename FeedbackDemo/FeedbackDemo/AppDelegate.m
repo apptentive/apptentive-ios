@@ -17,6 +17,10 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    if ([self setupTestFlight]) {
+        return YES;
+    }
+    
 #warning Please set your API key and app ID before running.
 	// To find your API key, log into http://be.apptentive.com/,
 	// select your app, click Settings, and click API & Development.
@@ -36,6 +40,22 @@
 	} else if ([[ATConnect sharedConnection].appID isEqualToString:@"ExampleAppID"]) {
 		[[[UIAlertView alloc] initWithTitle:@"Please Set App ID" message:@"This demo app won't be able to show your app in the app store until you set your App ID in AppDelegate.m" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] show];
 	}
+}
+
+- (BOOL)setupTestFlight {
+    NSDictionary *plist = [[NSBundle mainBundle] infoDictionary];
+    
+    NSString *testFlightAPIKey = plist[@"ATTestFlightAPIKey"];
+    if (testFlightAPIKey) {
+        [ATConnect sharedConnection].apiKey = testFlightAPIKey;
+    }
+    
+    NSString *testFlightAppID = plist[@"ATTestFlightAppIDKey"];
+    if (testFlightAppID) {
+        [ATConnect sharedConnection].appID = testFlightAppID;
+    }
+    
+    return (testFlightAPIKey != nil);
 }
 
 @end

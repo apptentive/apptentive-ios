@@ -42,11 +42,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 @property (weak, nonatomic) IBOutlet UIButton *sendButton;
 @property (weak, nonatomic) IBOutlet UITextView *messageView;
-@property (nonatomic, readwrite, retain) IBOutlet UIView *inputAccessoryView;
+@property (weak, nonatomic) IBOutlet UIView *sendBar;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *sendBarTopConstraint;
+
 @property (nonatomic, strong) ATMessageCenterDataSource *dataSource;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
-@property (weak, nonatomic) NSLayoutConstraint *inputAccessoryViewHeightConstraint;
 @property (readonly, nonatomic) NSIndexPath *indexPathOfLastMessage;
 
 @property (nonatomic) ATMessageCenterState state;
@@ -119,27 +121,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
-	
-	// Find iOS 8 system-provided height constraint on inputAccessoryView
-	for (NSLayoutConstraint *constraint in self.inputAccessoryView.constraints) {
-		if (constraint.firstItem == self.inputAccessoryView && constraint.firstAttribute == NSLayoutAttributeHeight) {
-			self.inputAccessoryViewHeightConstraint = constraint;
-			break;
-		}
-	}
-	
-	// Fall back to creating one for iOS 7
-	if (self.inputAccessoryViewHeightConstraint == nil) {
-		// Remove autoresizing-mask-based constraints
-		self.inputAccessoryView.translatesAutoresizingMaskIntoConstraints = NO;
-		
-		// Replace the autoresizing width constraints with our own
-		[self.inputAccessoryView.superview addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-(0)-[view]-(0)-|" options:0 metrics:nil views:@{ @"view": self.inputAccessoryView }]];
-	
-		// Add a height constraint whose constant we can control
-		self.inputAccessoryViewHeightConstraint = [NSLayoutConstraint constraintWithItem:self.inputAccessoryView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:44.0];
-		[self.inputAccessoryView addConstraint:self.inputAccessoryViewHeightConstraint];
-	}
 	
 	[self resizeTextViewForOrientation:self.interfaceOrientation];
 
@@ -255,6 +236,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
 	[self adjustBrandingVisibility];
+	[self repositionSendBar];
 }
 
 #pragma mark Fetch results controller delegate
@@ -451,9 +433,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	CGFloat textViewHeight = fmax(minHeight, preferedHeight);
 	textViewHeight = fmin(textViewHeight, maxHeight);
-	
-	self.inputAccessoryViewHeightConstraint.constant = textViewHeight;
-	
+		
 	[self.inputAccessoryView setNeedsLayout];
 }
 
@@ -482,6 +462,29 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	} else {
 		self.tableView.backgroundView.alpha = distance / transitionDistance;
 	}
+}
+
+- (void)repositionSendBar {
+	CGFloat margin = 0.0;
+	
+	CGRect footerViewFrame = self.tableView.tableFooterView.frame;
+	CGFloat sendBarHeightWithMargins = CGRectGetHeight(self.sendBar.frame) + margin * 2.0;
+	
+	CGFloat topPosition = CGRectGetMinY(footerViewFrame) - self.tableView.contentOffset.y;
+	CGFloat bottomPosition = CGRectGetMaxY(footerViewFrame) - sendBarHeightWithMargins - self.tableView.contentOffset.y;
+	
+	CGFloat topContentInset = self.tableView.contentInset.top;
+	CGFloat offset = 0;
+	
+	if (topPosition < topContentInset) {
+		if (bottomPosition < topContentInset) { // pin it inside the bottom of the view
+			offset = CGRectGetHeight(footerViewFrame) - sendBarHeightWithMargins;
+		} else {
+			offset = topContentInset - topPosition;
+		}
+	}
+	
+	self.sendBarTopConstraint.constant = offset;
 }
 
 @end

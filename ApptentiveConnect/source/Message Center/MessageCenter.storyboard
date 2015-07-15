@@ -113,6 +113,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <constraints>
                                                 <constraint firstItem="Mka-QN-zVs" firstAttribute="baseline" secondItem="hkW-wu-sjM" secondAttribute="baseline" id="1id-lV-kzo"/>
                                                 <constraint firstAttribute="trailing" secondItem="hkW-wu-sjM" secondAttribute="trailing" constant="8" id="ASf-xB-6Rq"/>
@@ -131,11 +132,11 @@
                                     <constraints>
                                         <constraint firstItem="ng1-FC-LJj" firstAttribute="top" secondItem="cFn-Go-Vab" secondAttribute="top" id="FuA-ca-53N"/>
                                         <constraint firstItem="do6-U4-CNu" firstAttribute="leading" secondItem="cFn-Go-Vab" secondAttribute="leading" id="Gid-qF-WdB"/>
-                                        <constraint firstItem="do6-U4-CNu" firstAttribute="top" secondItem="ng1-FC-LJj" secondAttribute="bottom" id="Kct-A2-Y4r"/>
                                         <constraint firstAttribute="trailing" secondItem="do6-U4-CNu" secondAttribute="trailing" id="LIE-vR-vyP"/>
                                         <constraint firstAttribute="trailing" secondItem="ng1-FC-LJj" secondAttribute="trailing" id="SUU-BK-ueL"/>
                                         <constraint firstItem="ng1-FC-LJj" firstAttribute="leading" secondItem="cFn-Go-Vab" secondAttribute="leading" id="T1v-Pg-wKn"/>
                                         <constraint firstAttribute="bottom" secondItem="do6-U4-CNu" secondAttribute="bottom" id="lkN-Bz-MPn"/>
+                                        <constraint firstItem="do6-U4-CNu" firstAttribute="top" secondItem="cFn-Go-Vab" secondAttribute="top" constant="44" id="r56-Ca-AkY"/>
                                     </constraints>
                                     <userDefinedRuntimeAttributes>
                                         <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -429,7 +430,7 @@
         <!--Navigation Controller-->
         <scene sceneID="Xx8-Lb-CI2">
             <objects>
-                <navigationController toolbarHidden="NO" id="cIq-Hu-EXH" sceneMemberID="viewController">
+                <navigationController id="cIq-Hu-EXH" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="sCD-xi-s8C">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

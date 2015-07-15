@@ -90,6 +90,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.messageInputView.messageView.text = self.draftMessage ?: @"";
 	self.messageInputView.sendButton.enabled = self.messageInputView.messageView.text.length > 0;
 	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeInputView:) name:UIKeyboardWillChangeFrameNotification object:nil];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollInputView:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustInsets:) name:UIKeyboardDidShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustInsets:) name:UIKeyboardDidHideNotification object:nil];
@@ -349,13 +351,14 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		UIView *oldFooter = self.tableView.tableFooterView;
 		UIView *newFooter = nil;
 		
-		[self.navigationController setToolbarHidden:(state == ATMessageCenterStateComposing) animated:YES];
+		[self.navigationController setToolbarHidden:(state == ATMessageCenterStateComposing || state == ATMessageCenterStateEmpty) animated:YES];
 		
 		_state = state;
 		
 		switch (state) {
 			case ATMessageCenterStateEmpty:
-				newFooter = nil;
+				newFooter = self.messageInputView;
+				self.messageInputView.bounds = CGRectMake(0.0, 0.0, CGRectGetWidth(self.tableView.bounds), CGRectGetHeight(self.tableView.bounds) - CGRectGetHeight(self.greetingView.bounds) - 64.0);
 				self.confirmationView.confirmationHidden = YES;
 				break;
 				
@@ -448,33 +451,49 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)adjustInsets:(NSNotification *)notification {
-	CGRect messageRect = self.greetingView.frame;
-	
-	if (self.indexPathOfLastMessage) {
-		messageRect = [self.tableView rectForRowAtIndexPath:self.indexPathOfLastMessage];
-	}
-	
-	// Adjust bottom edge inset so that the scroll view will let us scroll last message to top
-	UIEdgeInsets edgeInsets = self.tableView.contentInset;
-	
-	if (self.state == ATMessageCenterStateComposing) {
-		edgeInsets.bottom = self.tableView.bounds.size.height - self.messageInputView.bounds.size.height - edgeInsets.top;
-	} else {
-		edgeInsets.bottom =  self.tableView.bounds.size.height - messageRect.size.height - self.tableView.tableFooterView.bounds.size.height - edgeInsets.top - 16.0;
-	}
-	self.tableView.contentInset = edgeInsets;
+//	CGRect messageRect = self.greetingView.frame;
+//	
+//	if (self.indexPathOfLastMessage) {
+//		messageRect = [self.tableView rectForRowAtIndexPath:self.indexPathOfLastMessage];
+//	}
+//	
+//	// Adjust bottom edge inset so that the scroll view will let us scroll last message to top
+//	UIEdgeInsets edgeInsets = self.tableView.contentInset;
+//	
+//	if (self.state == ATMessageCenterStateComposing) {
+//		edgeInsets.bottom = self.tableView.bounds.size.height - self.messageInputView.bounds.size.height - edgeInsets.top;
+//	} else {
+//		edgeInsets.bottom =  self.tableView.bounds.size.height - messageRect.size.height - self.tableView.tableFooterView.bounds.size.height - edgeInsets.top - 16.0;
+//	}
+//	self.tableView.contentInset = edgeInsets;
 }
 
 - (void)scrollInputView:(NSNotification *)notification {
-	[self adjustInsets:notification];
-	CGPoint offset = CGPointMake(0.0, CGRectGetMaxY(self.rectOfLastMessage) - self.tableView.contentInset.top);
-	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
-		[self.tableView setContentOffset:offset];
-	}];
+//	[self adjustInsets:notification];
+//	CGPoint offset = CGPointMake(0.0, CGRectGetMaxY(self.rectOfLastMessage) - self.tableView.contentInset.top);
+//	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
+//		[self.tableView setContentOffset:offset];
+//	}];
+}
+
+- (void)resizeInputView:(NSNotification *)notification {
+//	if (self.state != ATMessageCenterStateComposing) {
+//		return;
+//	}
+//	
+//	CGRect rect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+//	CGFloat height = CGRectGetHeight(self.tableView.bounds) - CGRectGetHeight(rect) - [self.topLayoutGuide length];
+//	
+//	CGRect frame = self.messageInputView.frame;
+//	frame.size.height = height;
+//	
+//	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
+//		self.messageInputView.frame = frame;
+//	}];
 }
 
 - (void)updateHeaderHeightForOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
-	CGFloat headerHeight = UIInterfaceOrientationIsLandscape(toInterfaceOrientation) ? 128.0 : 280.0;
+	CGFloat headerHeight = UIInterfaceOrientationIsLandscape(toInterfaceOrientation) ? 128.0 : 258.0;
 
 	self.greetingView.bounds = CGRectMake(0, 0, self.tableView.bounds.size.height, headerHeight);
 	[self.greetingView updateConstraints];

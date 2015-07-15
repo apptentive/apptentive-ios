@@ -10,4 +10,12 @@
 
 @interface ATMessageCenterInputView : UIView
 
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UIButton *sendButton;
+@property (weak, nonatomic) IBOutlet UITextView *messageView;
+
+@property (weak, nonatomic) IBOutlet UIView *containerView;
+@property (weak, nonatomic) IBOutlet UIView *sendBar;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *sendBarTopConstraint;
+
 @end

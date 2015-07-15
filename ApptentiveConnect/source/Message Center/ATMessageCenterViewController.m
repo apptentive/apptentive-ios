@@ -90,6 +90,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.messageInputView.messageView.text = self.draftMessage ?: @"";
 	self.messageInputView.sendButton.enabled = self.messageInputView.messageView.text.length > 0;
 	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollInputView:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustInsets:) name:UIKeyboardDidShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustInsets:) name:UIKeyboardDidHideNotification object:nil];
 	
@@ -436,6 +437,16 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	return [NSIndexPath indexPathForRow:lastRowIndex inSection:lastSectionIndex];
 }
 
+- (CGRect)rectOfLastMessage {
+	NSIndexPath *indexPath = self.indexPathOfLastMessage;
+	
+	if (indexPath) {
+		return [self.tableView rectForRowAtIndexPath:indexPath];
+	} else {
+		return self.greetingView.frame;
+	}
+}
+
 - (void)adjustInsets:(NSNotification *)notification {
 	CGRect messageRect = self.greetingView.frame;
 	
@@ -445,8 +456,21 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	// Adjust bottom edge inset so that the scroll view will let us scroll last message to top
 	UIEdgeInsets edgeInsets = self.tableView.contentInset;
-	edgeInsets.bottom =  self.tableView.bounds.size.height - messageRect.size.height - self.tableView.tableFooterView.bounds.size.height - edgeInsets.top - 16.0;
+	
+	if (self.state == ATMessageCenterStateComposing) {
+		edgeInsets.bottom = self.tableView.bounds.size.height - self.messageInputView.bounds.size.height - edgeInsets.top;
+	} else {
+		edgeInsets.bottom =  self.tableView.bounds.size.height - messageRect.size.height - self.tableView.tableFooterView.bounds.size.height - edgeInsets.top - 16.0;
+	}
 	self.tableView.contentInset = edgeInsets;
+}
+
+- (void)scrollInputView:(NSNotification *)notification {
+	[self adjustInsets:notification];
+	CGPoint offset = CGPointMake(0.0, CGRectGetMaxY(self.rectOfLastMessage) - self.tableView.contentInset.top);
+	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
+		[self.tableView setContentOffset:offset];
+	}];
 }
 
 - (void)updateHeaderHeightForOrientation:(UIInterfaceOrientation)toInterfaceOrientation {

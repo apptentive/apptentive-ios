@@ -111,7 +111,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 
 - (NSDate *)dateOfMessageGroupAtIndex:(NSInteger)index {
 	if ([self numberOfMessagesInGroup:index] > 0) {
-	return [NSDate dateWithTimeIntervalSince1970:[self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]].creationTime.doubleValue];
+		return [NSDate dateWithTimeIntervalSince1970:[self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]].creationTime.doubleValue];
 	} else {
 		return nil;
 	}

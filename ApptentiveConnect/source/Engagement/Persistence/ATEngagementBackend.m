@@ -504,7 +504,7 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	NSAssert([interaction.type isEqualToString:@"EnjoymentDialog"], @"Attempted to present an EnjoymentDialog interaction with an interaction of type: %@", interaction.type);
 
 	ATInteractionEnjoymentDialogController *enjoymentDialog = [[ATInteractionEnjoymentDialogController alloc] initWithInteraction:interaction];
-	[enjoymentDialog showEnjoymentDialogFromViewController:viewController];
+	[enjoymentDialog presentEnjoymentDialogFromViewController:viewController];
 	
 	[enjoymentDialog release];
 }

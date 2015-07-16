@@ -20,6 +20,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageType) {
 @interface ATMessageCenterDataSource : NSObject
 @property (nonatomic, strong, readonly) NSFetchedResultsController *fetchedMessagesController;
 @property (nonatomic, weak) NSObject<ATMessageCenterDataSourceDelegate> *delegate;
+@property (nonatomic, readonly) NSDateFormatter *dateFormatter;
 
 - (id)initWithDelegate:(NSObject<ATMessageCenterDataSourceDelegate> *)delegate;
 - (void)start;
@@ -29,7 +30,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageType) {
 - (NSInteger)numberOfMessagesInGroup:(NSInteger)groupIndex;
 - (ATMessageCenterMessageType)cellTypeAtIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)textOfMessageAtIndexPath:(NSIndexPath *)indexPath;
-- (NSDate *)dateOfMessageAtIndexPath:(NSIndexPath *)indexPath;
+- (NSDate *)dateOfMessageGroupAtIndex:(NSInteger)index;
+- (BOOL)shouldShowDateForMessageGroupAtIndex:(NSInteger)index;
 - (NSString *)senderOfMessageAtIndexPath:(NSIndexPath *)indexPath;
 - (NSURL *)imageURLOfSenderAtIndexPath:(NSIndexPath *)indexPath;
 - (void)markAsReadMessageAtIndexPath:(NSIndexPath *)indexPath;

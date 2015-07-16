@@ -62,7 +62,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.dataSource start];
 	
 	self.dateFormatter = [[NSDateFormatter alloc] init];
-	self.dateFormatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"MMMdjm" options:0 locale:[NSLocale currentLocale]];
+	self.dateFormatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"MMMMdYYYY" options:0 locale:[NSLocale currentLocale]];
+	self.dataSource.dateFormatter.dateFormat = self.dateFormatter.dateFormat; // Used to determine if date changed between messages
 	
 	[self updateHeaderHeightForOrientation:self.interfaceOrientation];
 	
@@ -182,7 +183,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		ATMessageCenterMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Message" forIndexPath:indexPath];
 	
 		cell.messageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
-		cell.dateLabel.text = [self.dateFormatter stringFromDate:[self.dataSource dateOfMessageAtIndexPath:indexPath]];
 		
 		return cell;
 	} else {
@@ -191,17 +191,14 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		cell.supportUserImageView.imageURL = [self.dataSource imageURLOfSenderAtIndexPath:indexPath];
 
 		cell.replyLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
-		
-		NSString *dateString = [self.dateFormatter stringFromDate:[self.dataSource dateOfMessageAtIndexPath:indexPath]];
-		NSString *userString = [self.dataSource senderOfMessageAtIndexPath:indexPath];
-		cell.dateLabel.text = [NSString stringWithFormat:ATLocalizedString(@"%@ - from %@", @"<date> - from <user>"), dateString, userString];
+		cell.senderLabel.text = [self.dataSource senderOfMessageAtIndexPath:indexPath];
 		
 		return cell;
 	}
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-	return 4.0;
+	return [self.dataSource shouldShowDateForMessageGroupAtIndex:section] ? 28.0 : 4.0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
@@ -209,9 +206,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	BOOL isMessageCell = [self.dataSource cellTypeAtIndexPath:indexPath] == ATMessageCenterMessageTypeMessage;
+	
 	// iOS 7 requires this and there's no good way to instantiate a cell to sample, so we're hard-coding it for now.
 	NSString *labelText = [self.dataSource textOfMessageAtIndexPath:indexPath];
-	CGFloat marginsAndStuff = [self.dataSource cellTypeAtIndexPath:indexPath] == ATMessageCenterMessageTypeMessage ? 30.0 : 74.0;
+	CGFloat marginsAndStuff = isMessageCell ? 30.0 : 74.0;
 
 	// Support iOS 6-style table views
 	if (![self.tableView respondsToSelector:@selector(estimatedRowHeight)]) {
@@ -219,11 +218,37 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 	
 	CGFloat effectiveLabelWidth = CGRectGetWidth(tableView.bounds) - marginsAndStuff;
-	CGFloat dateLabelAndStuff = 37.0;
 	
 	CGSize labelSize = [labelText sizeWithFont:[UIFont systemFontOfSize:14.0] constrainedToSize:CGSizeMake(effectiveLabelWidth, MAXFLOAT)];
 	
-	return labelSize.height + dateLabelAndStuff;
+	if (isMessageCell) {
+		return labelSize.height + 16.0;
+	} else {
+		return fmax(labelSize.height + 33.0, 36.0 + 20.0);
+	}
+}
+
+#pragma mark Table view delegate
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+	if (![self.dataSource shouldShowDateForMessageGroupAtIndex:section]) {
+		return nil;
+	}
+	
+	UITableViewHeaderFooterView *header = [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:@"Date"];
+	
+	if (header == nil) {
+		header = [[UITableViewHeaderFooterView alloc] initWithReuseIdentifier:@"Date"];
+	}
+	
+	header.textLabel.text = [self.dateFormatter stringFromDate:[self.dataSource dateOfMessageGroupAtIndex:section]];
+	
+	return header;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+	UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *)view;
+	headerView.textLabel.font = [UIFont boldSystemFontOfSize:14.0];
 }
 
 #pragma mark Scroll view delegate

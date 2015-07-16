@@ -30,6 +30,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 - (id)initWithDelegate:(NSObject<ATMessageCenterDataSourceDelegate> *)aDelegate {
 	if ((self = [super init])) {
 		_delegate = aDelegate;
+		_dateFormatter = [[NSDateFormatter alloc] init];
 	}
 	return self;
 }
@@ -108,9 +109,23 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 	}
 }
 
-- (NSDate *)dateOfMessageAtIndexPath:(NSIndexPath *)indexPath {
-	return [NSDate date];
-	return [NSDate dateWithTimeIntervalSince1970:[self messageAtIndexPath:indexPath].creationTime.doubleValue];
+- (NSDate *)dateOfMessageGroupAtIndex:(NSInteger)index {
+	if ([self numberOfMessagesInGroup:index] > 0) {
+		return [NSDate dateWithTimeIntervalSince1970:[self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]].creationTime.doubleValue];
+	} else {
+		return nil;
+	}
+}
+
+- (BOOL)shouldShowDateForMessageGroupAtIndex:(NSInteger)index {
+	if (index == 0) {
+		return YES;
+	} else {
+		NSDate *previousDate = [self dateOfMessageGroupAtIndex:index - 1];
+		NSDate *currentDate = [self dateOfMessageGroupAtIndex:index];
+		
+		return ![[self.dateFormatter stringFromDate:previousDate] isEqualToString:[self.dateFormatter stringFromDate:currentDate]];
+	}
 }
 
 - (NSString *)senderOfMessageAtIndexPath:(NSIndexPath *)indexPath {

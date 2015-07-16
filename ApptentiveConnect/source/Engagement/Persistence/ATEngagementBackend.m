@@ -513,7 +513,7 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	NSAssert([interaction.type isEqualToString:@"RatingDialog"], @"Attempted to present a RatingDialog interaction with an interaction of type: %@", interaction.type);
 	
 	ATInteractionRatingDialogController *ratingDialog = [[ATInteractionRatingDialogController alloc] initWithInteraction:interaction];
-	[ratingDialog showRatingDialogFromViewController:viewController];
+	[ratingDialog presentRatingDialogFromViewController:viewController];
 	
 	[ratingDialog release];
 }

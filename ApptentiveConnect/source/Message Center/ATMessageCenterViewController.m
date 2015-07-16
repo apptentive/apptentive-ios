@@ -45,9 +45,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 @property (weak, nonatomic) IBOutlet UIButton *sendButton;
 @property (weak, nonatomic) IBOutlet UITextView *messageView;
-@property (weak, nonatomic) IBOutlet UIView *sendBar;
-
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *sendBarTopConstraint;
 
 @property (nonatomic, strong) ATMessageCenterDataSource *dataSource;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
@@ -55,6 +52,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @property (readonly, nonatomic) NSIndexPath *indexPathOfLastMessage;
 
 @property (nonatomic) ATMessageCenterState state;
+@property (nonatomic) CGFloat bottomInsetAddition;
 
 @end
 
@@ -91,10 +89,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.messageInputView.sendButton.enabled = self.messageInputView.messageView.text.length > 0;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeInputView:) name:UIKeyboardWillChangeFrameNotification object:nil];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollInputView:) name:UIKeyboardWillShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustInsets:) name:UIKeyboardDidShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustInsets:) name:UIKeyboardDidHideNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToInputView:) name:UIKeyboardWillShowNotification object:nil];
+//	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustInsets:) name:UIKeyboardDidShowNotification object:nil];
+//	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustInsets:) name:UIKeyboardDidHideNotification object:nil];
 	
 	[self updateState];
 }
@@ -115,21 +112,20 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 	[UIView animateWithDuration:duration animations:^{
 		[self updateHeaderHeightForOrientation:toInterfaceOrientation];
-		[self resizeTextViewForOrientation:toInterfaceOrientation];
 	}];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	
-	[self scrollToLastReplyAnimated:NO];
+	if (self.state != ATMessageCenterStateEmpty) {
+		[self scrollToLastReplyAnimated:NO];
+	}
 }
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 	
-	[self resizeTextViewForOrientation:self.interfaceOrientation];
-
 	NSString *message = self.messageInputView.messageView.text;
 	if (message && ![message isEqualToString:@""]) {
 		[self.messageInputView.messageView becomeFirstResponder];
@@ -241,8 +237,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 #pragma mark Scroll view delegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-	[self adjustBrandingVisibility];
-	[self repositionSendBar];
+	if (scrollView == self.tableView) {
+		[self adjustBrandingVisibility];
+	}
 }
 
 #pragma mark Fetch results controller delegate
@@ -282,9 +279,18 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)textViewDidChange:(UITextView *)textView {
 	self.messageInputView.sendButton.enabled = textView.text.length > 0;
-	
-	[self resizeTextViewForOrientation:self.interfaceOrientation];
 }
+
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+	self.state = ATMessageCenterStateComposing;
+}
+
+// Fix iOS bug where scroll sometimes doesn't follow selection
+- (void)textViewDidChangeSelection:(UITextView *)textView
+{
+	[textView scrollRangeToVisible:textView.selectedRange];
+}
+
 
 #pragma mark Actions
 
@@ -307,8 +313,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		
 		self.messageInputView.messageView.text = @"";
 	}
-	
-	[self resizeTextViewForOrientation:self.interfaceOrientation];
 }
 
 - (IBAction)compose:(id)sender {
@@ -405,21 +409,25 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				break;
 		}
 		
-		void (^animateInBlock)(BOOL finished) = ^(BOOL finished) {
-			newFooter.alpha = 0;
-			self.tableView.tableFooterView = newFooter;
+		if (newFooter != oldFooter) {
+			void (^animateInBlock)(BOOL finished) = ^(BOOL finished) {
+				newFooter.alpha = 0;
+				self.tableView.tableFooterView = newFooter;
+				
+				[UIView animateWithDuration:0.25 animations:^{
+					newFooter.alpha = 1;
+				}];
+			};
 			
-			[UIView animateWithDuration:0.25 animations:^{
-				newFooter.alpha = 1;
-			}];
-		};
-		
-		if (oldFooter) {
-			[UIView animateWithDuration:0.25 animations:^{
-				oldFooter.alpha = 0;
-			} completion: animateInBlock];
+			if (oldFooter) {
+				[UIView animateWithDuration:0.25 animations:^{
+					oldFooter.alpha = 0;
+				} completion: animateInBlock];
+			} else {
+				animateInBlock(YES);
+			}
 		} else {
-			animateInBlock(YES);
+			self.tableView.tableFooterView = newFooter;
 		}
 	}
 }
@@ -450,46 +458,29 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 }
 
-- (void)adjustInsets:(NSNotification *)notification {
-//	CGRect messageRect = self.greetingView.frame;
-//	
-//	if (self.indexPathOfLastMessage) {
-//		messageRect = [self.tableView rectForRowAtIndexPath:self.indexPathOfLastMessage];
-//	}
-//	
-//	// Adjust bottom edge inset so that the scroll view will let us scroll last message to top
-//	UIEdgeInsets edgeInsets = self.tableView.contentInset;
-//	
-//	if (self.state == ATMessageCenterStateComposing) {
-//		edgeInsets.bottom = self.tableView.bounds.size.height - self.messageInputView.bounds.size.height - edgeInsets.top;
-//	} else {
-//		edgeInsets.bottom =  self.tableView.bounds.size.height - messageRect.size.height - self.tableView.tableFooterView.bounds.size.height - edgeInsets.top - 16.0;
-//	}
-//	self.tableView.contentInset = edgeInsets;
-}
-
-- (void)scrollInputView:(NSNotification *)notification {
-//	[self adjustInsets:notification];
-//	CGPoint offset = CGPointMake(0.0, CGRectGetMaxY(self.rectOfLastMessage) - self.tableView.contentInset.top);
-//	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
-//		[self.tableView setContentOffset:offset];
-//	}];
+- (void)scrollToInputView:(NSNotification *)notification {
+	CGPoint offset = CGPointMake(0.0, CGRectGetMaxY(self.rectOfLastMessage) + 8.0 - self.tableView.contentInset.top);
+	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
+		[self.tableView setContentOffset:offset];
+	}];
 }
 
 - (void)resizeInputView:(NSNotification *)notification {
-//	if (self.state != ATMessageCenterStateComposing) {
-//		return;
-//	}
-//	
-//	CGRect rect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-//	CGFloat height = CGRectGetHeight(self.tableView.bounds) - CGRectGetHeight(rect) - [self.topLayoutGuide length];
-//	
-//	CGRect frame = self.messageInputView.frame;
-//	frame.size.height = height;
-//	
-//	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
-//		self.messageInputView.frame = frame;
-//	}];
+	if (self.state != ATMessageCenterStateComposing) {
+		return;
+	}
+	
+	CGRect rect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+	CGFloat height = CGRectGetHeight(self.tableView.bounds) - CGRectGetHeight(rect) - [self.topLayoutGuide length];
+	
+	CGRect frame = self.messageInputView.frame;
+	
+	frame.size.height = height;
+	
+	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
+		self.messageInputView.frame = frame;
+		self.tableView.tableFooterView = self.messageInputView;
+	}];
 }
 
 - (void)updateHeaderHeightForOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
@@ -504,24 +495,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	return [[NSUserDefaults standardUserDefaults] stringForKey:ATMessageCenterDraftMessageKey] ?: @"";
 }
 
-- (void)resizeTextViewForOrientation:(UIInterfaceOrientation)orientation {
-	BOOL isLandscapeOnPhone = UIInterfaceOrientationIsLandscape(orientation) && [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone;
-	
-	CGFloat minHeight = isLandscapeOnPhone ? 32 : 44;
-	CGFloat maxHeight = isLandscapeOnPhone ? 100 : 200;
-	
-	CGFloat preferedHeight = [self.messageInputView.messageView.text sizeWithFont:self.messageInputView.messageView.font constrainedToSize:CGSizeMake(CGRectGetWidth(self.messageView.frame), CGFLOAT_MAX)].height;
-	preferedHeight += self.messageInputView.messageView.textContainerInset.top + self.messageInputView.messageView.textContainerInset.bottom;
-	
-	CGFloat textViewHeight = fmax(minHeight, preferedHeight);
-	textViewHeight = fmin(textViewHeight, maxHeight);
-		
-	[self.inputAccessoryView setNeedsLayout];
-}
-
 - (void)scrollToLastReplyAnimated:(BOOL)animated {
-	[self adjustInsets:nil];
-	
 	[self.tableView scrollToRowAtIndexPath:self.indexPathOfLastMessage atScrollPosition:UITableViewScrollPositionTop animated:animated];
 }
 
@@ -548,33 +522,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	} else {
 		self.tableView.backgroundView.alpha = distance / transitionDistance;
 	}
-}
-
-- (void)repositionSendBar {
-	if (self.state != ATMessageCenterStateComposing) {
-		return;
-	}
-	
-	CGFloat margin = 0.0;
-	
-	CGRect footerViewFrame = self.tableView.tableFooterView.frame;
-	CGFloat sendBarHeightWithMargins = CGRectGetHeight(self.messageInputView.sendBar.frame) + margin * 2.0;
-	
-	CGFloat topPosition = CGRectGetMinY(footerViewFrame) - self.tableView.contentOffset.y;
-	CGFloat bottomPosition = CGRectGetMaxY(footerViewFrame) - sendBarHeightWithMargins - self.tableView.contentOffset.y;
-	
-	CGFloat topContentInset = self.tableView.contentInset.top;
-	CGFloat offset = 0;
-	
-	if (topPosition < topContentInset) {
-		if (bottomPosition < topContentInset) { // pin it inside the bottom of the view
-			offset = CGRectGetHeight(footerViewFrame) - sendBarHeightWithMargins;
-		} else {
-			offset = topContentInset - topPosition;
-		}
-	}
-	
-	self.messageInputView.sendBarTopConstraint.constant = offset;
 }
 
 @end

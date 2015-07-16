@@ -83,10 +83,10 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cFn-Go-Vab">
-                                    <rect key="frame" x="8" y="0.0" width="398" height="179"/>
+                                    <rect key="frame" x="16" y="16" width="382" height="147"/>
                                     <subviews>
                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="751" verticalHuggingPriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="do6-U4-CNu">
-                                            <rect key="frame" x="0.0" y="44" width="398" height="135"/>
+                                            <rect key="frame" x="0.0" y="44" width="382" height="103"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -95,10 +95,10 @@
                                             </connections>
                                         </textView>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ng1-FC-LJj">
-                                            <rect key="frame" x="0.0" y="0.0" width="398" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="382" height="44"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="500" verticalHuggingPriority="500" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hkW-wu-sjM">
-                                                    <rect key="frame" x="354" y="7" width="36" height="30"/>
+                                                    <rect key="frame" x="338" y="7" width="36" height="30"/>
                                                     <state key="normal" title="Send">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
@@ -107,7 +107,7 @@
                                                     </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Feedback:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mka-QN-zVs">
-                                                    <rect key="frame" x="8" y="13" width="338" height="18"/>
+                                                    <rect key="frame" x="8" y="13" width="322" height="18"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                     <color key="textColor" red="0.51764705879999995" green="0.51764705879999995" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -148,16 +148,15 @@
                                 </view>
                             </subviews>
                             <constraints>
-                                <constraint firstItem="cFn-Go-Vab" firstAttribute="top" secondItem="Aj5-aD-yTM" secondAttribute="top" id="CxU-3y-aw1"/>
-                                <constraint firstItem="cFn-Go-Vab" firstAttribute="leading" secondItem="Aj5-aD-yTM" secondAttribute="leading" constant="8" id="RWE-GN-QNR"/>
-                                <constraint firstAttribute="bottom" secondItem="cFn-Go-Vab" secondAttribute="bottom" id="dCK-OT-OgO"/>
-                                <constraint firstAttribute="trailing" secondItem="cFn-Go-Vab" secondAttribute="trailing" constant="8" id="fEx-cI-GDt"/>
+                                <constraint firstItem="cFn-Go-Vab" firstAttribute="top" secondItem="Aj5-aD-yTM" secondAttribute="top" constant="16" id="CxU-3y-aw1"/>
+                                <constraint firstItem="cFn-Go-Vab" firstAttribute="leading" secondItem="Aj5-aD-yTM" secondAttribute="leading" constant="16" id="RWE-GN-QNR"/>
+                                <constraint firstAttribute="bottom" secondItem="cFn-Go-Vab" secondAttribute="bottom" constant="16" id="dCK-OT-OgO"/>
+                                <constraint firstAttribute="trailing" secondItem="cFn-Go-Vab" secondAttribute="trailing" constant="16" id="fEx-cI-GDt"/>
                             </constraints>
                             <connections>
                                 <outlet property="containerView" destination="cFn-Go-Vab" id="fIY-aE-6r2"/>
                                 <outlet property="messageView" destination="do6-U4-CNu" id="kGH-n7-akj"/>
-                                <outlet property="sendBar" destination="ng1-FC-LJj" id="DOR-b3-2jq"/>
-                                <outlet property="sendBarTopConstraint" destination="FuA-ca-53N" id="9Em-Wn-kMa"/>
+                                <outlet property="sendBar" destination="ng1-FC-LJj" id="saQ-oF-B8n"/>
                                 <outlet property="sendButton" destination="hkW-wu-sjM" id="wiA-UO-4hH"/>
                                 <outlet property="titleLabel" destination="Mka-QN-zVs" id="ViV-8s-esi"/>
                             </connections>
@@ -265,8 +264,6 @@
                         <outlet property="messageView" destination="do6-U4-CNu" id="vDm-mO-NV7"/>
                         <outlet property="poweredByImageView" destination="Mgg-jY-bpf" id="rAj-qf-rRu"/>
                         <outlet property="poweredByLabel" destination="lWW-C4-4hk" id="fk7-Jd-uDI"/>
-                        <outlet property="sendBar" destination="ng1-FC-LJj" id="jz4-6g-DPC"/>
-                        <outlet property="sendBarTopConstraint" destination="FuA-ca-53N" id="C7c-6i-9hk"/>
                         <outlet property="sendButton" destination="hkW-wu-sjM" id="BrQ-LP-9n2"/>
                     </connections>
                 </tableViewController>

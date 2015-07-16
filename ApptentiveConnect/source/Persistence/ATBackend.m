@@ -36,6 +36,7 @@
 #import "ATPersonUpdater.h"
 #import "ATEngagementBackend.h"
 #import "ATMessagePanelNewUIViewController.h"
+#import "ATFileMessage.h"
 
 typedef NS_ENUM(NSInteger, ATBackendState){
 	ATBackendStateStarting,
@@ -329,7 +330,7 @@ static NSURLCache *imageCache = nil;
 			source = ATFileAttachmentSourceScreenshot;
 			break;
 		case ATFeedbackImageSourceProgrammatic:
-			source = ATFIleAttachmentSourceProgrammatic;
+			source = ATFileAttachmentSourceProgrammatic;
 			break;
 	}
 	

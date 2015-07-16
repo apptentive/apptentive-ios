@@ -424,6 +424,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				animateInBlock(YES);
 			}
 		} else {
+			// Inform table view that footer may have resized
 			self.tableView.tableFooterView = newFooter;
 		}
 	}

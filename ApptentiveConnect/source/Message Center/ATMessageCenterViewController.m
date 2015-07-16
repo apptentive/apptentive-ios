@@ -52,7 +52,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @property (readonly, nonatomic) NSIndexPath *indexPathOfLastMessage;
 
 @property (nonatomic) ATMessageCenterState state;
-@property (nonatomic) CGFloat bottomInsetAddition;
 
 @end
 

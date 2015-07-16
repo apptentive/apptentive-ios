@@ -499,7 +499,7 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	NSAssert([interaction.type isEqualToString:@"EnjoymentDialog"], @"Attempted to present an EnjoymentDialog interaction with an interaction of type: %@", interaction.type);
 
 	ATInteractionEnjoymentDialogController *enjoymentDialog = [[ATInteractionEnjoymentDialogController alloc] initWithInteraction:interaction];
-	[enjoymentDialog showEnjoymentDialogFromViewController:viewController];
+	[enjoymentDialog presentEnjoymentDialogFromViewController:viewController];
 	
 }
 
@@ -507,7 +507,7 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	NSAssert([interaction.type isEqualToString:@"RatingDialog"], @"Attempted to present a RatingDialog interaction with an interaction of type: %@", interaction.type);
 	
 	ATInteractionRatingDialogController *ratingDialog = [[ATInteractionRatingDialogController alloc] initWithInteraction:interaction];
-	[ratingDialog showRatingDialogFromViewController:viewController];
+	[ratingDialog presentRatingDialogFromViewController:viewController];
 	
 }
 

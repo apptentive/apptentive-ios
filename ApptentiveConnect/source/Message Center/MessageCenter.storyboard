@@ -79,10 +79,10 @@
                             </connections>
                         </view>
                         <view key="tableFooterView" contentMode="scaleToFill" id="Aj5-aD-yTM" customClass="ATMessageCenterInputView">
-                            <rect key="frame" x="0.0" y="527" width="414" height="179"/>
+                            <rect key="frame" x="0.0" y="526.5" width="414" height="210"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cFn-Go-Vab">
+                                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cFn-Go-Vab">
                                     <rect key="frame" x="16" y="8" width="382" height="163"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ng1-FC-LJj">
@@ -118,7 +118,7 @@
                                                 <userDefinedRuntimeAttribute type="string" keyPath="layer.borderWidth" value="0.5"/>
                                             </userDefinedRuntimeAttributes>
                                         </view>
-                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="751" verticalHuggingPriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="do6-U4-CNu">
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="751" verticalHuggingPriority="751" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="do6-U4-CNu">
                                             <rect key="frame" x="0.0" y="44" width="382" height="119"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -431,7 +431,7 @@
         <!--Navigation Controller-->
         <scene sceneID="Xx8-Lb-CI2">
             <objects>
-                <navigationController id="cIq-Hu-EXH" sceneMemberID="viewController">
+                <navigationController modalPresentationStyle="formSheet" id="cIq-Hu-EXH" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="sCD-xi-s8C">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

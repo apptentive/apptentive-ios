@@ -8,8 +8,6 @@
 
 #import "ATMessageCenterInputView.h"
 
-#define LINE_BREAK_HEIGHT 128.0
-
 @interface ATMessageCenterInputView ()
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *sendBarLeadingToSuperview;
@@ -37,7 +35,7 @@
 }
 
 - (void)updateConstraints {
-	if (CGRectGetHeight(self.bounds) < LINE_BREAK_HEIGHT) {
+	if (CGRectGetWidth(self.bounds) > 4 * CGRectGetHeight(self.bounds)) {
 		self.titleLabel.alpha = 0;
 		
 		[self removeConstraints:self.portraitConstraints];

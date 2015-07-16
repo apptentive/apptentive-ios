@@ -8,6 +8,20 @@
 
 #import "ATMessageCenterInputView.h"
 
+#define LINE_BREAK_HEIGHT 128.0
+
+@interface ATMessageCenterInputView ()
+
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *sendBarLeadingToSuperview;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textViewTrailingToSuperview;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *sendBarBottomToTextView;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleLabelToSendButton;
+
+@property (strong, nonatomic) NSArray *landscapeConstraints;
+@property (strong, nonatomic) NSArray *portraitConstraints;
+
+@end
+
 @implementation ATMessageCenterInputView
 
 - (void)awakeFromNib {
@@ -16,6 +30,28 @@
 	
 	self.containerView.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
 	self.sendBar.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
+	
+	NSDictionary *views = @{ @"sendBar": self.sendBar, @"messageView": self.messageView };
+	self.portraitConstraints = @[ self.sendBarLeadingToSuperview, self.sendBarBottomToTextView, self.textViewTrailingToSuperview, self.titleLabelToSendButton ];
+	self.landscapeConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(0)-[messageView]-(0)-[sendBar]-(0)-|" options:NSLayoutFormatAlignAllTop | NSLayoutFormatAlignAllBottom metrics:nil views:views];
+}
+
+- (void)updateConstraints {
+	if (CGRectGetHeight(self.bounds) < LINE_BREAK_HEIGHT) {
+		self.titleLabel.alpha = 0;
+		
+		[self removeConstraints:self.portraitConstraints];
+		
+		[self addConstraints:self.landscapeConstraints];
+	} else {
+		self.titleLabel.alpha = 1;
+		
+		[self removeConstraints:self.landscapeConstraints];
+		
+		[self addConstraints:self.portraitConstraints];
+	}
+	
+	[super updateConstraints];
 }
 
 @end

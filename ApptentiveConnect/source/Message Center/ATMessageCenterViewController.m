@@ -110,6 +110,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 	[UIView animateWithDuration:duration animations:^{
 		[self updateHeaderHeightForOrientation:toInterfaceOrientation];
+		[self updateInputViewForOrientation:toInterfaceOrientation];
 	}];
 }
 
@@ -478,6 +479,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
 		self.messageInputView.frame = frame;
 		self.tableView.tableFooterView = self.messageInputView;
+		[self.messageInputView updateConstraints];
 	}];
 }
 
@@ -487,6 +489,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.greetingView.bounds = CGRectMake(0, 0, self.tableView.bounds.size.height, headerHeight);
 	[self.greetingView updateConstraints];
 	self.tableView.tableHeaderView = self.greetingView;
+}
+
+- (void)updateInputViewForOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
 }
 
 - (NSString *)draftMessage {

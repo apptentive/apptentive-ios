@@ -32,9 +32,6 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 	return self;
 }
 
-<<<<<<< HEAD
-- (void)showRatingDialogFromViewController:(UIViewController *)viewController {
-=======
 - (NSString *)title {
 	NSString *title = self.interaction.configuration[@"title"] ?: ATLocalizedString(@"Thank You", @"Rate app title.");
 	
@@ -70,9 +67,7 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 		ATLogError(@"Cannot present a Rating Dialog alert without an interaction.");
 		return;
 	}
->>>>>>> master
 	
-	[self retain];
 	self.viewController = viewController;
 	
 	if ([UIAlertController class]) {
@@ -127,7 +122,7 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 	
 	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:self.title message:self.body delegate:self cancelButtonTitle:self.declineText otherButtonTitles:self.rateText, self.remindText, nil];
 	
-	return [alertView autorelease];
+	return alertView;
 }
 
 #pragma mark UIAlertViewDelegate
@@ -152,17 +147,7 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 }
 
 - (void)dealloc {
-<<<<<<< HEAD
-	_ratingDialog.delegate = nil;
-=======
-	[_interaction release], _interaction = nil;
-	[_alertController release], _alertController = nil;
 	_alertView.delegate = nil;
-	[_alertView release], _alertView = nil;
-	[_viewController release], _viewController = nil;
-	
-	[super dealloc];
->>>>>>> master
 }
 
 @end

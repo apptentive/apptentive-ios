@@ -31,30 +31,10 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
     return self;
 }
 
-<<<<<<< HEAD
-- (void)showEnjoymentDialogFromViewController:(UIViewController *)viewController {
-
-	self.viewController = viewController;
-	
-	NSDictionary *config = self.interaction.configuration;
-	
-	NSString *title = config[@"title"] ?: [NSString stringWithFormat:ATLocalizedString(@"Do you love %@?", @"Title for enjoyment alert view. Parameter is app name."), [[ATBackend sharedBackend] appName]];
-	NSString *body = config[@"body"] ?: nil;
-	NSString *yesText = config[@"yes_text"] ?: ATLocalizedString(@"Yes", @"yes");
-	NSString *noText = config[@"no_text"] ?: ATLocalizedString(@"No", @"no");
-	
-	if (!self.enjoymentDialog) {
-		self.enjoymentDialog = [[UIAlertView alloc] initWithTitle:title message:body delegate:self cancelButtonTitle:nil otherButtonTitles:noText, yesText, nil];
-		[self.enjoymentDialog show];
-	}
-
-	[self.interaction engage:ATInteractionEnjoymentDialogEventLabelLaunch fromViewController:self.viewController];
-=======
 - (NSString *)title {
     NSString *title = self.interaction.configuration[@"title"] ?: [NSString stringWithFormat:ATLocalizedString(@"Do you love %@?", @"Title for enjoyment alert view. Parameter is app name."), [[ATBackend sharedBackend] appName]];
     
     return title;
->>>>>>> master
 }
 
 - (NSString *)body {
@@ -81,7 +61,6 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
         return;
     }
     
-    [self retain];
     self.viewController = viewController;
     
     if ([UIAlertController class]) {
@@ -119,13 +98,6 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 			}
 		}
 		
-<<<<<<< HEAD
-	}
-}
-
-- (void)dealloc {
-	_enjoymentDialog.delegate = nil;	
-=======
         [self.interaction engage:ATInteractionEnjoymentDialogEventLabelNo fromViewController:self.viewController];
     }]];
     
@@ -146,7 +118,7 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
     
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:self.title message:self.body delegate:self cancelButtonTitle:nil otherButtonTitles:self.noText, self.yesText, nil];
     
-    return [alertView autorelease];
+    return alertView;
 }
 
 #pragma mark UIAlertViewDelegate
@@ -169,20 +141,11 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
         } else if (buttonIndex == 1) { // yes
             [self.interaction engage:ATInteractionEnjoymentDialogEventLabelYes fromViewController:self.viewController];
         }
-        
-        [self release];
     }
 }
 
 - (void)dealloc {
-    [_interaction release], _interaction = nil;
-    [_alertController release], _alertController = nil;
     _alertView.delegate = nil;
-    [_alertView release], _alertView = nil;
-    [_viewController release], _viewController = nil;
-    
-    [super dealloc];
->>>>>>> master
 }
 
 @end

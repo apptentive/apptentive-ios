@@ -26,4 +26,3 @@
 @optional
 - (void)messageCenterDidDismiss:(ATMessageCenterViewController *)messageCenter;
 @end
-

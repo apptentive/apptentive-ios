@@ -9,6 +9,7 @@
 #import "ATMessageCenterViewController.h"
 #import "ATMessageCenterGreetingView.h"
 #import "ATMessageCenterConfirmationView.h"
+#import "ATMessageCenterInputView.h"
 #import "ATMessageCenterMessageCell.h"
 #import "ATMessageCenterReplyCell.h"
 #import "ATBackend.h"
@@ -35,18 +36,19 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @interface ATMessageCenterViewController ()
 
 @property (weak, nonatomic) IBOutlet ATMessageCenterGreetingView *greetingView;
-@property (weak, nonatomic) IBOutlet ATMessageCenterConfirmationView *confirmationView;
+@property (strong, nonatomic) IBOutlet ATMessageCenterConfirmationView *confirmationView;
+@property (strong, nonatomic) IBOutlet ATMessageCenterInputView *messageInputView;
+
 @property (strong, nonatomic) IBOutlet UIView *backgroundView;
 @property (weak, nonatomic) IBOutlet UILabel *poweredByLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *poweredByImageView;
 
 @property (weak, nonatomic) IBOutlet UIButton *sendButton;
 @property (weak, nonatomic) IBOutlet UITextView *messageView;
-@property (nonatomic, readwrite, retain) IBOutlet UIView *inputAccessoryView;
+
 @property (nonatomic, strong) ATMessageCenterDataSource *dataSource;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
-@property (weak, nonatomic) NSLayoutConstraint *inputAccessoryViewHeightConstraint;
 @property (readonly, nonatomic) NSIndexPath *indexPathOfLastMessage;
 
 @property (nonatomic) ATMessageCenterState state;
@@ -82,11 +84,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.inputAccessoryView.layer.borderColor = [[UIColor colorWithRed:215/255.0f green:219/255.0f blue:223/255.0f alpha:1.0f] CGColor];
 	self.inputAccessoryView.layer.borderWidth = 0.5;
 	
-	self.messageView.text = self.draftMessage ?: @"";
-	self.sendButton.enabled = self.messageView.text.length > 0;
+	self.messageInputView.messageView.text = self.draftMessage ?: @"";
+	self.messageInputView.sendButton.enabled = self.messageInputView.messageView.text.length > 0;
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustInsets:) name:UIKeyboardDidShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustInsets:) name:UIKeyboardDidHideNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeInputView:) name:UIKeyboardWillChangeFrameNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToInputView:) name:UIKeyboardWillShowNotification object:nil];
 	
 	[self updateState];
 }
@@ -107,52 +109,30 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 	[UIView animateWithDuration:duration animations:^{
 		[self updateHeaderHeightForOrientation:toInterfaceOrientation];
-		[self resizeTextViewForOrientation:toInterfaceOrientation];
 	}];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	
-	[self scrollToLastReplyAnimated:NO];
+	if (self.state != ATMessageCenterStateEmpty) {
+		[self scrollToLastReplyAnimated:NO];
+	}
 }
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 	
-	// Find iOS 8 system-provided height constraint on inputAccessoryView
-	for (NSLayoutConstraint *constraint in self.inputAccessoryView.constraints) {
-		if (constraint.firstItem == self.inputAccessoryView && constraint.firstAttribute == NSLayoutAttributeHeight) {
-			self.inputAccessoryViewHeightConstraint = constraint;
-			break;
-		}
-	}
-	
-	// Fall back to creating one for iOS 7
-	if (self.inputAccessoryViewHeightConstraint == nil) {
-		// Remove autoresizing-mask-based constraints
-		self.inputAccessoryView.translatesAutoresizingMaskIntoConstraints = NO;
-		
-		// Replace the autoresizing width constraints with our own
-		[self.inputAccessoryView.superview addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-(0)-[view]-(0)-|" options:0 metrics:nil views:@{ @"view": self.inputAccessoryView }]];
-	
-		// Add a height constraint whose constant we can control
-		self.inputAccessoryViewHeightConstraint = [NSLayoutConstraint constraintWithItem:self.inputAccessoryView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:44.0];
-		[self.inputAccessoryView addConstraint:self.inputAccessoryViewHeightConstraint];
-	}
-	
-	[self resizeTextViewForOrientation:self.interfaceOrientation];
-
-	NSString *message = self.messageView.text;
+	NSString *message = self.messageInputView.messageView.text;
 	if (message && ![message isEqualToString:@""]) {
-		[self.messageView becomeFirstResponder];
+		[self.messageInputView.messageView becomeFirstResponder];
 	}
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 	
-	NSString *message = self.messageView.text;
+	NSString *message = self.messageInputView.messageView.text;
 	if (message) {
 		[[NSUserDefaults standardUserDefaults] setObject:message forKey:ATMessageCenterDraftMessageKey];
 	} else {
@@ -254,7 +234,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 #pragma mark Scroll view delegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-	[self adjustBrandingVisibility];
+	if (scrollView == self.tableView) {
+		[self adjustBrandingVisibility];
+	}
 }
 
 #pragma mark Fetch results controller delegate
@@ -293,10 +275,19 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 #pragma mark Text view delegate
 
 - (void)textViewDidChange:(UITextView *)textView {
-	self.sendButton.enabled = textView.text.length > 0;
-	
-	[self resizeTextViewForOrientation:self.interfaceOrientation];
+	self.messageInputView.sendButton.enabled = textView.text.length > 0;
 }
+
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+	self.state = ATMessageCenterStateComposing;
+}
+
+// Fix iOS bug where scroll sometimes doesn't follow selection
+- (void)textViewDidChangeSelection:(UITextView *)textView
+{
+	[textView scrollRangeToVisible:textView.selectedRange];
+}
+
 
 #pragma mark Actions
 
@@ -312,15 +303,18 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (IBAction)sendButtonPressed:(id)sender {
-	NSString *message = self.messageView.text;
+	NSString *message = self.messageInputView.messageView.text;
 	
 	if (message && ![message isEqualToString:@""]) {
 		[[ATBackend sharedBackend] sendTextMessageWithBody:message completion:^(NSString *pendingMessageID) {}];
 		
-		self.messageView.text = @"";
+		self.messageInputView.messageView.text = @"";
 	}
-	
-	[self resizeTextViewForOrientation:self.interfaceOrientation];
+}
+
+- (IBAction)compose:(id)sender {
+	self.state = ATMessageCenterStateComposing;
+	[self.messageInputView.messageView becomeFirstResponder];
 }
 
 #pragma mark - Private
@@ -355,50 +349,83 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)setState:(ATMessageCenterState)state {
 	if (_state != state) {
+		UIView *oldFooter = self.tableView.tableFooterView;
+		UIView *newFooter = nil;
+		
+		[self.navigationController setToolbarHidden:(state == ATMessageCenterStateComposing || state == ATMessageCenterStateEmpty) animated:YES];
+		
 		_state = state;
 		
 		switch (state) {
 			case ATMessageCenterStateEmpty:
+				newFooter = self.messageInputView;
+				self.messageInputView.bounds = CGRectMake(0.0, 0.0, CGRectGetWidth(self.tableView.bounds), CGRectGetHeight(self.tableView.bounds) - CGRectGetHeight(self.greetingView.bounds) - 64.0);
 				self.confirmationView.confirmationHidden = YES;
 				break;
 				
 			case ATMessageCenterStateComposing:
+				newFooter = self.messageInputView;
 				self.confirmationView.confirmationHidden = YES;
 				break;
 				
 			case ATMessageCenterStateSending:
-				self.confirmationView.confirmationHidden = YES;
 #warning debug
+				newFooter = self.confirmationView;
 				self.confirmationView.confirmationHidden = NO;
 				self.confirmationView.confirmationLabel.text = @"Sending...";
 				self.confirmationView.statusLabel.text = @"Sending...";
 				break;
 				
 			case ATMessageCenterStateConfirmed:
+				newFooter = self.confirmationView;
 				self.confirmationView.confirmationHidden = NO;
 				self.confirmationView.confirmationLabel.text = self.interaction.confirmationText;
 				self.confirmationView.statusLabel.text = self.interaction.statusText;
 				break;
 				
 			case ATMessageCenterStateNetworkError:
+				newFooter = self.confirmationView;
 				self.confirmationView.confirmationHidden = NO;
 				self.confirmationView.confirmationLabel.text = self.interaction.networkErrorTitle;
 				self.confirmationView.statusLabel.text = self.interaction.networkErrorMessage;
 				break;
 				
 			case ATMessageCenterStateHTTPError:
+				newFooter = self.confirmationView;
 				self.confirmationView.confirmationHidden = NO;
 				self.confirmationView.confirmationLabel.text = self.interaction.HTTPErrorTitle;
 				self.confirmationView.statusLabel.text = self.interaction.HTTPErrorMessage;
 				break;
 				
 			case ATMessageCenterStateReplied:
-				self.confirmationView.confirmationHidden = YES;
+				newFooter = nil;
 				break;
 				
 			default:
 				ATLogError(@"Invalid Message Center State: %d", state);
 				break;
+		}
+		
+		if (newFooter != oldFooter) {
+			void (^animateInBlock)(BOOL finished) = ^(BOOL finished) {
+				newFooter.alpha = 0;
+				self.tableView.tableFooterView = newFooter;
+				
+				[UIView animateWithDuration:0.25 animations:^{
+					newFooter.alpha = 1;
+				}];
+			};
+			
+			if (oldFooter) {
+				[UIView animateWithDuration:0.25 animations:^{
+					oldFooter.alpha = 0;
+				} completion: animateInBlock];
+			} else {
+				animateInBlock(YES);
+			}
+		} else {
+			// Inform table view that footer may have resized
+			self.tableView.tableFooterView = newFooter;
 		}
 	}
 }
@@ -419,17 +446,43 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	return [NSIndexPath indexPathForRow:lastRowIndex inSection:lastSectionIndex];
 }
 
-- (void)adjustInsets:(NSNotification *)notification {
-	CGRect messageRect = [self.tableView rectForRowAtIndexPath:self.indexPathOfLastMessage];
+- (CGRect)rectOfLastMessage {
+	NSIndexPath *indexPath = self.indexPathOfLastMessage;
 	
-	// Adjust bottom edge inset so that the scroll view will let us scroll last message to top
-	UIEdgeInsets edgeInsets = self.tableView.contentInset;
-	edgeInsets.bottom =  self.tableView.bounds.size.height - messageRect.size.height - self.confirmationView.bounds.size.height - edgeInsets.top - 16.0;
-	self.tableView.contentInset = edgeInsets;
+	if (indexPath) {
+		return [self.tableView rectForRowAtIndexPath:indexPath];
+	} else {
+		return self.greetingView.frame;
+	}
+}
+
+- (void)scrollToInputView:(NSNotification *)notification {
+	CGPoint offset = CGPointMake(0.0, CGRectGetMaxY(self.rectOfLastMessage) + 8.0 - self.tableView.contentInset.top);
+	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
+		[self.tableView setContentOffset:offset];
+	}];
+}
+
+- (void)resizeInputView:(NSNotification *)notification {
+	if (self.state != ATMessageCenterStateComposing) {
+		return;
+	}
+	
+	CGRect rect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+	CGFloat height = CGRectGetHeight(self.tableView.bounds) - CGRectGetHeight(rect) - [self.topLayoutGuide length];
+	
+	CGRect frame = self.messageInputView.frame;
+	
+	frame.size.height = height;
+	
+	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
+		self.messageInputView.frame = frame;
+		self.tableView.tableFooterView = self.messageInputView;
+	}];
 }
 
 - (void)updateHeaderHeightForOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
-	CGFloat headerHeight = UIInterfaceOrientationIsLandscape(toInterfaceOrientation) ? 128.0 : 280.0;
+	CGFloat headerHeight = UIInterfaceOrientationIsLandscape(toInterfaceOrientation) ? 128.0 : 258.0;
 
 	self.greetingView.bounds = CGRectMake(0, 0, self.tableView.bounds.size.height, headerHeight);
 	[self.greetingView updateConstraints];
@@ -440,26 +493,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	return [[NSUserDefaults standardUserDefaults] stringForKey:ATMessageCenterDraftMessageKey] ?: @"";
 }
 
-- (void)resizeTextViewForOrientation:(UIInterfaceOrientation)orientation {
-	BOOL isLandscapeOnPhone = UIInterfaceOrientationIsLandscape(orientation) && [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone;
-	
-	CGFloat minHeight = isLandscapeOnPhone ? 32 : 44;
-	CGFloat maxHeight = isLandscapeOnPhone ? 100 : 200;
-	
-	CGFloat preferedHeight = [self.messageView.text sizeWithFont:self.messageView.font constrainedToSize:CGSizeMake(CGRectGetWidth(self.messageView.frame), CGFLOAT_MAX)].height;
-	preferedHeight += self.messageView.textContainerInset.top + self.messageView.textContainerInset.bottom;
-	
-	CGFloat textViewHeight = fmax(minHeight, preferedHeight);
-	textViewHeight = fmin(textViewHeight, maxHeight);
-	
-	self.inputAccessoryViewHeightConstraint.constant = textViewHeight;
-	
-	[self.inputAccessoryView setNeedsLayout];
-}
-
 - (void)scrollToLastReplyAnimated:(BOOL)animated {
-	[self adjustInsets:nil];
-	
 	[self.tableView scrollToRowAtIndexPath:self.indexPathOfLastMessage atScrollPosition:UITableViewScrollPositionTop animated:animated];
 }
 
@@ -470,7 +504,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	CGFloat confirmationViewHeight = CGRectGetHeight(self.confirmationView.bounds);
 	CGFloat poweredByTop = CGRectGetMinY(self.poweredByLabel.frame);
 	
-	CGRect lastMessageFrame = [self.tableView rectForRowAtIndexPath:self.indexPathOfLastMessage];
+	CGRect lastMessageFrame = self.greetingView.frame;
+	if (self.indexPathOfLastMessage) {
+		lastMessageFrame = [self.tableView rectForRowAtIndexPath:self.indexPathOfLastMessage];
+	}
+	
 	CGFloat lastMessageBottom = CGRectGetMaxY([self.backgroundView convertRect:lastMessageFrame fromView:self.tableView]);
 	
 	CGFloat distance = poweredByTop - lastMessageBottom - confirmationViewHeight;

@@ -36,7 +36,7 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 	
 	self.viewController = viewController;
 	
-	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"8.0"]) {
+	if ([UIAlertController class]) {
 		self.alertController = [self alertControllerWithInteraction:self.interaction];
 		
 		if (self.alertController) {

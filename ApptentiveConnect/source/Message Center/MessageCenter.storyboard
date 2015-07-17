@@ -89,8 +89,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="398" height="44"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="500" verticalHuggingPriority="500" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hkW-wu-sjM">
-                                                    <rect key="frame" x="342" y="5" width="40" height="33"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <rect key="frame" x="348" y="7" width="34" height="29"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <state key="normal" title="Send">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
@@ -98,9 +98,15 @@
                                                         <action selector="sendButtonPressed:" destination="W0l-Dy-ioE" eventType="touchUpInside" id="8xs-vg-CMm"/>
                                                     </connections>
                                                 </button>
+<<<<<<< HEAD
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" text="Feedback:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mka-QN-zVs">
                                                     <rect key="frame" x="16" y="11" width="318" height="21"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+=======
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" text="New Message" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mka-QN-zVs">
+                                                    <rect key="frame" x="16" y="13" width="324" height="17"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+>>>>>>> Placeholder
                                                     <color key="textColor" red="0.51764705879999995" green="0.51764705879999995" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -128,11 +134,19 @@
                                                 <outlet property="delegate" destination="W0l-Dy-ioE" id="iHO-dr-l89"/>
                                             </connections>
                                         </textView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please leave detailed feedback" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ase-Kg-1uo">
+                                            <rect key="frame" x="17" y="54" width="200" height="17"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <color key="textColor" red="0.73333333329999995" green="0.72941176470000002" blue="0.76078431369999999" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <constraints>
+                                        <constraint firstItem="ase-Kg-1uo" firstAttribute="leading" secondItem="do6-U4-CNu" secondAttribute="leading" constant="17" id="3Bh-HR-VBV"/>
                                         <constraint firstItem="ng1-FC-LJj" firstAttribute="top" secondItem="cFn-Go-Vab" secondAttribute="top" id="FuA-ca-53N"/>
                                         <constraint firstItem="do6-U4-CNu" firstAttribute="leading" secondItem="cFn-Go-Vab" secondAttribute="leading" id="Gid-qF-WdB"/>
+                                        <constraint firstItem="ase-Kg-1uo" firstAttribute="top" secondItem="do6-U4-CNu" secondAttribute="top" constant="10" id="L9V-Ls-NuJ"/>
                                         <constraint firstAttribute="trailing" secondItem="do6-U4-CNu" secondAttribute="trailing" id="LIE-vR-vyP"/>
                                         <constraint firstAttribute="trailing" secondItem="ng1-FC-LJj" secondAttribute="trailing" id="SUU-BK-ueL"/>
                                         <constraint firstItem="ng1-FC-LJj" firstAttribute="leading" secondItem="cFn-Go-Vab" secondAttribute="leading" id="T1v-Pg-wKn"/>
@@ -157,6 +171,7 @@
                             <connections>
                                 <outlet property="containerView" destination="cFn-Go-Vab" id="fIY-aE-6r2"/>
                                 <outlet property="messageView" destination="do6-U4-CNu" id="kGH-n7-akj"/>
+                                <outlet property="placeholderLabel" destination="ase-Kg-1uo" id="LgC-Xw-pQm"/>
                                 <outlet property="sendBar" destination="ng1-FC-LJj" id="saQ-oF-B8n"/>
                                 <outlet property="sendBarBottomToTextView" destination="hAH-HC-DYT" id="oUF-ok-lDb"/>
                                 <outlet property="sendBarLeadingToSuperview" destination="T1v-Pg-wKn" id="i1c-xz-gN6"/>

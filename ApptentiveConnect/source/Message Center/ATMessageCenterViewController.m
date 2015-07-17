@@ -78,11 +78,23 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		self.poweredByImageView.image = [ATBackend imageNamed:@"at_branding-logo"];
 	}
 	
+<<<<<<< HEAD
+=======
+	self.inputAccessoryView.layer.borderColor = [[UIColor colorWithRed:215/255.0f green:219/255.0f blue:223/255.0f alpha:1.0f] CGColor];
+	self.inputAccessoryView.layer.borderWidth = 0.5;
+	
+	self.messageInputView.placeholderLabel.text = self.interaction.composerPlaceholderText;
+	self.messageInputView.titleLabel.text = self.interaction.composerTitleText;
+>>>>>>> Placeholder
 	self.messageInputView.messageView.text = self.draftMessage ?: @"";
 	self.messageInputView.messageView.textContainerInset = UIEdgeInsetsMake(10.0, 12.0, 10.0, 12.0);
 	self.messageInputView.sendButton.enabled = self.messageInputView.messageView.text.length > 0;
+<<<<<<< HEAD
 
 	self.tableView.tableFooterView = nil;
+=======
+	self.messageInputView.placeholderLabel.hidden = self.messageInputView.messageView.text.length > 0;
+>>>>>>> Placeholder
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeInputView:) name:UIKeyboardWillChangeFrameNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToInputView:) name:UIKeyboardWillShowNotification object:nil];
@@ -274,6 +286,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)textViewDidChange:(UITextView *)textView {
 	self.messageInputView.sendButton.enabled = textView.text.length > 0;
+	self.messageInputView.placeholderLabel.hidden = textView.text.length > 0;
 }
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView {

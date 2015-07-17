@@ -98,15 +98,9 @@
                                                         <action selector="sendButtonPressed:" destination="W0l-Dy-ioE" eventType="touchUpInside" id="8xs-vg-CMm"/>
                                                     </connections>
                                                 </button>
-<<<<<<< HEAD
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" text="Feedback:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mka-QN-zVs">
-                                                    <rect key="frame" x="16" y="11" width="318" height="21"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-=======
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" text="New Message" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mka-QN-zVs">
                                                     <rect key="frame" x="16" y="13" width="324" height="17"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
->>>>>>> Placeholder
                                                     <color key="textColor" red="0.51764705879999995" green="0.51764705879999995" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>

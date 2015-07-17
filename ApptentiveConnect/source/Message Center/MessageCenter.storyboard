@@ -266,10 +266,8 @@
                         <outlet property="confirmationView" destination="g94-Qt-Zp0" id="Jbc-SH-Uwl"/>
                         <outlet property="greetingView" destination="3OP-Us-sTC" id="gir-MU-eQO"/>
                         <outlet property="messageInputView" destination="Aj5-aD-yTM" id="mrz-a8-xN6"/>
-                        <outlet property="messageView" destination="do6-U4-CNu" id="vDm-mO-NV7"/>
                         <outlet property="poweredByImageView" destination="Mgg-jY-bpf" id="rAj-qf-rRu"/>
                         <outlet property="poweredByLabel" destination="lWW-C4-4hk" id="fk7-Jd-uDI"/>
-                        <outlet property="sendButton" destination="hkW-wu-sjM" id="BrQ-LP-9n2"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uP4-vK-jPB" userLabel="First Responder" sceneMemberID="firstResponder"/>

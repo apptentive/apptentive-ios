@@ -17,4 +17,6 @@
 @property (weak, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) IBOutlet UIView *sendBar;
 
+@property (weak, nonatomic) IBOutlet UILabel *placeholderLabel;
+
 @end

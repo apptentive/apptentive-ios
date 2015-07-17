@@ -83,6 +83,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	self.messageInputView.messageView.text = self.draftMessage ?: @"";
 	self.messageInputView.sendButton.enabled = self.messageInputView.messageView.text.length > 0;
+	self.messageInputView.placeholderLabel.hidden = self.messageInputView.messageView.text.length > 0;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeInputView:) name:UIKeyboardWillChangeFrameNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToInputView:) name:UIKeyboardWillShowNotification object:nil];
@@ -278,6 +279,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)textViewDidChange:(UITextView *)textView {
 	self.messageInputView.sendButton.enabled = textView.text.length > 0;
+	self.messageInputView.placeholderLabel.hidden = textView.text.length > 0;
 }
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView {

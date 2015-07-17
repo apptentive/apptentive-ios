@@ -79,14 +79,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 	
 	self.messageInputView.messageView.text = self.draftMessage ?: @"";
+	self.messageInputView.messageView.textContainerInset = UIEdgeInsetsMake(10.0, 12.0, 10.0, 12.0);
 	self.messageInputView.sendButton.enabled = self.messageInputView.messageView.text.length > 0;
+
+	self.tableView.tableFooterView = nil;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeInputView:) name:UIKeyboardWillChangeFrameNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToInputView:) name:UIKeyboardWillShowNotification object:nil];
-	
-	self.messageInputView.messageView.textContainerInset = UIEdgeInsetsMake(10.0, 12.0, 10.0, 12.0);
-		
-	self.tableView.tableFooterView = nil;
 }
 
 - (void)dealloc {

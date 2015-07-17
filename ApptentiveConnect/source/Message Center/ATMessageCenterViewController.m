@@ -78,9 +78,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		self.poweredByImageView.image = [ATBackend imageNamed:@"at_branding-logo"];
 	}
 	
-	self.inputAccessoryView.layer.borderColor = [[UIColor colorWithRed:215/255.0f green:219/255.0f blue:223/255.0f alpha:1.0f] CGColor];
-	self.inputAccessoryView.layer.borderWidth = 0.5;
-	
 	self.messageInputView.messageView.text = self.draftMessage ?: @"";
 	self.messageInputView.sendButton.enabled = self.messageInputView.messageView.text.length > 0;
 	

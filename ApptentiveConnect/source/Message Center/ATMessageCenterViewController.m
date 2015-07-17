@@ -81,6 +81,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.inputAccessoryView.layer.borderColor = [[UIColor colorWithRed:215/255.0f green:219/255.0f blue:223/255.0f alpha:1.0f] CGColor];
 	self.inputAccessoryView.layer.borderWidth = 0.5;
 	
+	self.messageInputView.placeholderLabel.text = self.interaction.composerPlaceholderText;
+	self.messageInputView.titleLabel.text = self.interaction.composerTitleText;
 	self.messageInputView.messageView.text = self.draftMessage ?: @"";
 	self.messageInputView.sendButton.enabled = self.messageInputView.messageView.text.length > 0;
 	self.messageInputView.placeholderLabel.hidden = self.messageInputView.messageView.text.length > 0;

@@ -30,6 +30,9 @@
 @property (nonatomic, readonly) NSString *missingConfigurationMessage;
 @property (nonatomic, readonly) NSString *missingConfigurationNetworkErrorMessage;
 
+@property (nonatomic, readonly) NSString *composerPlaceholderText;
+@property (nonatomic, readonly) NSString *composerTitleText;
+
 @property (nonatomic, readonly) BOOL brandingEnabled;
 
 @end

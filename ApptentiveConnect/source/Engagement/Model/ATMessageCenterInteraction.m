@@ -74,6 +74,14 @@
 	return ATLocalizedString(@"Please connect to the internet to send feedback.", @"Missing Message Center configuration message (no internet connection)");
 }
 
+- (NSString *)composerPlaceholderText {
+	return [self stringForKey:@"message_hint_text" fallback:ATLocalizedString(@"Please leave detailed feedback", @"Message field placeholder text")];
+}
+
+- (NSString *)composerTitleText {
+	return [self stringForKey:@"composer_title" fallback:ATLocalizedString(@"New Message", @"Title above message field")];
+}
+
 - (BOOL)brandingEnabled {
 	NSNumber *brandingEnabled = self.configuration[@"apptentive_branding_enabled"];
 	

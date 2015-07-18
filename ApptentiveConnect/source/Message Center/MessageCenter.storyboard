@@ -20,16 +20,16 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GdB-EU-leh">
-                                    <rect key="frame" x="47" y="154" width="320" height="132"/>
+                                    <rect key="frame" x="47" y="154.5" width="320" height="131"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="I’m sorry to hear that!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="kjS-eF-EIi">
-                                            <rect key="frame" x="8" y="30" width="304" height="21"/>
+                                            <rect key="frame" x="8" y="30" width="304" height="20.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please leave us some feedback so we can make the app better for you." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="Zbc-2w-9Gi">
-                                            <rect key="frame" x="8" y="68" width="304" height="34"/>
+                                            <rect key="frame" x="8" y="67" width="304" height="33.5"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                             <color key="textColor" red="0.51764705882352935" green="0.51764705882352935" blue="0.56470588235294117" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -88,9 +88,24 @@
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ng1-FC-LJj">
                                             <rect key="frame" x="0.0" y="0.0" width="398" height="44"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="500" verticalHuggingPriority="500" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hkW-wu-sjM">
-                                                    <rect key="frame" x="348" y="7" width="34" height="29"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" text="New Message" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mka-QN-zVs">
+                                                    <rect key="frame" x="16" y="13" width="262" height="18"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                    <color key="textColor" red="0.51764705879999995" green="0.51764705879999995" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="500" verticalHuggingPriority="500" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hme-XS-svZ">
+                                                    <rect key="frame" x="293" y="7" width="37" height="30"/>
+                                                    <state key="normal" title="Clear">
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="clear:" destination="W0l-Dy-ioE" eventType="touchUpInside" id="mEj-fm-FNs"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="600" verticalHuggingPriority="600" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hkW-wu-sjM">
+                                                    <rect key="frame" x="345" y="7" width="37" height="30"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                     <state key="normal" title="Send">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
@@ -98,21 +113,18 @@
                                                         <action selector="sendButtonPressed:" destination="W0l-Dy-ioE" eventType="touchUpInside" id="8xs-vg-CMm"/>
                                                     </connections>
                                                 </button>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" text="New Message" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mka-QN-zVs">
-                                                    <rect key="frame" x="16" y="13" width="324" height="17"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
-                                                    <color key="textColor" red="0.51764705879999995" green="0.51764705879999995" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                             </subviews>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <constraints>
                                                 <constraint firstItem="Mka-QN-zVs" firstAttribute="baseline" secondItem="hkW-wu-sjM" secondAttribute="baseline" id="1id-lV-kzo"/>
                                                 <constraint firstAttribute="trailing" secondItem="hkW-wu-sjM" secondAttribute="trailing" constant="16" id="ASf-xB-6Rq"/>
-                                                <constraint firstItem="hkW-wu-sjM" firstAttribute="leading" secondItem="Mka-QN-zVs" secondAttribute="trailing" constant="8" id="E16-hC-Vyq"/>
+                                                <constraint firstItem="Hme-XS-svZ" firstAttribute="leading" secondItem="Mka-QN-zVs" secondAttribute="trailing" constant="15" id="CLA-od-WFQ"/>
                                                 <constraint firstAttribute="centerX" secondItem="hkW-wu-sjM" secondAttribute="centerX" priority="500" id="FHC-Jx-fKm"/>
+                                                <constraint firstItem="hkW-wu-sjM" firstAttribute="leading" secondItem="Hme-XS-svZ" secondAttribute="trailing" constant="15" id="I17-yd-DVz"/>
                                                 <constraint firstAttribute="centerY" secondItem="hkW-wu-sjM" secondAttribute="centerY" id="Swx-OA-xGO"/>
+                                                <constraint firstAttribute="centerX" secondItem="Hme-XS-svZ" secondAttribute="centerX" priority="500" id="j1w-eX-NGi"/>
                                                 <constraint firstAttribute="height" priority="500" constant="44" id="p7Y-6m-Wi8"/>
+                                                <constraint firstItem="hkW-wu-sjM" firstAttribute="baseline" secondItem="Hme-XS-svZ" secondAttribute="baseline" id="qN6-6P-oX0"/>
                                                 <constraint firstItem="Mka-QN-zVs" firstAttribute="leading" secondItem="ng1-FC-LJj" secondAttribute="leading" constant="16" id="qm2-ak-e3U"/>
                                             </constraints>
                                             <userDefinedRuntimeAttributes>
@@ -163,6 +175,9 @@
                                 <constraint firstAttribute="trailing" secondItem="cFn-Go-Vab" secondAttribute="trailing" constant="8" id="fEx-cI-GDt"/>
                             </constraints>
                             <connections>
+                                <outlet property="buttonBaselines" destination="qN6-6P-oX0" id="hYW-px-KP9"/>
+                                <outlet property="clearButton" destination="Hme-XS-svZ" id="jF2-pc-eAn"/>
+                                <outlet property="clearButtonToSendButton" destination="I17-yd-DVz" id="2i4-sz-mKb"/>
                                 <outlet property="containerView" destination="cFn-Go-Vab" id="fIY-aE-6r2"/>
                                 <outlet property="messageView" destination="do6-U4-CNu" id="kGH-n7-akj"/>
                                 <outlet property="placeholderLabel" destination="ase-Kg-1uo" id="LgC-Xw-pQm"/>
@@ -172,7 +187,7 @@
                                 <outlet property="sendButton" destination="hkW-wu-sjM" id="wiA-UO-4hH"/>
                                 <outlet property="textViewTrailingToSuperview" destination="LIE-vR-vyP" id="phO-Kg-fRm"/>
                                 <outlet property="titleLabel" destination="Mka-QN-zVs" id="ViV-8s-esi"/>
-                                <outlet property="titleLabelToSendButton" destination="E16-hC-Vyq" id="n4o-OA-m5n"/>
+                                <outlet property="titleLabelToClearButton" destination="CLA-od-WFQ" id="1zR-d3-27j"/>
                             </connections>
                         </view>
                         <prototypes>

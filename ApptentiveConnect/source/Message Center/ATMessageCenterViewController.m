@@ -86,6 +86,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	self.messageInputView.titleLabel.text = self.interaction.composerTitleText;
 	self.messageInputView.sendButton.enabled = self.messageInputView.messageView.text.length > 0;
+	self.messageInputView.clearButton.enabled = self.messageInputView.messageView.text.length > 0;
 
 	self.tableView.tableFooterView = nil;
 	
@@ -279,6 +280,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)textViewDidChange:(UITextView *)textView {
 	self.messageInputView.sendButton.enabled = textView.text.length > 0;
+	self.messageInputView.clearButton.enabled = textView.text.length > 0;
 	self.messageInputView.placeholderLabel.hidden = textView.text.length > 0;
 }
 
@@ -328,6 +330,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (IBAction)compose:(id)sender {
 	self.state = ATMessageCenterStateComposing;
 	[self.messageInputView.messageView becomeFirstResponder];
+}
+
+- (IBAction)clear:(id)sender {
+	self.messageInputView.messageView.text = nil;
+	[self.messageInputView.messageView resignFirstResponder];
+	
+	[self updateState];
 }
 
 #pragma mark - Private

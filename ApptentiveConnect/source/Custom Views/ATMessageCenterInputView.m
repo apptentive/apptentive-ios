@@ -13,10 +13,13 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *sendBarLeadingToSuperview;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *textViewTrailingToSuperview;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *sendBarBottomToTextView;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleLabelToSendButton;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleLabelToClearButton;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *clearButtonToSendButton;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonBaselines;
 
 @property (strong, nonatomic) NSArray *landscapeConstraints;
 @property (strong, nonatomic) NSArray *portraitConstraints;
+@property (strong, nonatomic) NSLayoutConstraint *landscapeButtonConstraint;
 
 @end
 
@@ -33,8 +36,11 @@
 	self.sendBar.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
 	
 	NSDictionary *views = @{ @"sendBar": self.sendBar, @"messageView": self.messageView };
-	self.portraitConstraints = @[ self.sendBarLeadingToSuperview, self.sendBarBottomToTextView, self.textViewTrailingToSuperview, self.titleLabelToSendButton ];
+	self.portraitConstraints = @[ self.sendBarLeadingToSuperview, self.sendBarBottomToTextView, self.textViewTrailingToSuperview, self.titleLabelToClearButton, self.clearButtonToSendButton, self.buttonBaselines ];
+	
 	self.landscapeConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(0)-[messageView]-(0)-[sendBar]-(0)-|" options:NSLayoutFormatAlignAllTop | NSLayoutFormatAlignAllBottom metrics:nil views:views];
+	
+	self.landscapeButtonConstraint = [NSLayoutConstraint constraintWithItem:self.sendButton attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.clearButton attribute:NSLayoutAttributeBottom multiplier:1.0 constant:8.0];
 }
 
 - (void)updateConstraints {
@@ -44,10 +50,12 @@
 		[self.containerView removeConstraints:self.portraitConstraints];
 		
 		[self.containerView addConstraints:self.landscapeConstraints];
+		[self.sendBar addConstraint:self.landscapeButtonConstraint];
 	} else {
 		self.titleLabel.alpha = 1;
 		
 		[self.containerView removeConstraints:self.landscapeConstraints];
+		[self.sendBar removeConstraint:self.landscapeButtonConstraint];
 		
 		[self.containerView addConstraints:self.portraitConstraints];
 	}

@@ -17,11 +17,12 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *clearButtonToSendButton;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonBaselines;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *sendButtonVerticalCenter;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *clearButtonLeadingToSuperview;
 
 @property (strong, nonatomic) NSArray *landscapeConstraints;
 @property (strong, nonatomic) NSArray *portraitConstraints;
 
-@property (strong, nonatomic) NSLayoutConstraint *landscapeSendBarConstraint;
+@property (strong, nonatomic) NSArray *landscapeSendBarConstraints;
 @property (strong, nonatomic) NSArray *portraitSendBarConstraints;
 
 @end
@@ -43,9 +44,9 @@
 	
 	self.landscapeConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(0)-[messageView]-(0)-[sendBar]-(0)-|" options:NSLayoutFormatAlignAllTop | NSLayoutFormatAlignAllBottom metrics:nil views:views];
 	
-	self.portraitSendBarConstraints = @[ self.titleLabelToClearButton, self.clearButtonToSendButton, self.buttonBaselines ];
+	self.portraitSendBarConstraints = @[ self.titleLabelToClearButton, self.clearButtonToSendButton, self.buttonBaselines, self.clearButtonLeadingToSuperview, self.sendButtonVerticalCenter ];
 	
-	self.landscapeSendBarConstraint = [NSLayoutConstraint constraintWithItem:self.sendButton attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.clearButton attribute:NSLayoutAttributeBottom multiplier:1.0 constant:8.0];
+	self.landscapeSendBarConstraints = @[ [NSLayoutConstraint constraintWithItem:self.sendBar attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.clearButton attribute:NSLayoutAttributeTop multiplier:1.0 constant:-8.0], [NSLayoutConstraint constraintWithItem:self.sendBar attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.sendButton attribute:NSLayoutAttributeBottom multiplier:1.0 constant:8.0] ];
 }
 
 - (void)updateConstraints {
@@ -56,19 +57,17 @@
 		[self.containerView addConstraints:self.landscapeConstraints];
 		
 		[self.sendBar removeConstraints:self.portraitSendBarConstraints];
-		[self.sendBar addConstraint:self.landscapeSendBarConstraint];
+		[self.sendBar addConstraints:self.landscapeSendBarConstraints];
 		
-		self.sendButtonVerticalCenter.constant = -0.5 * (CGRectGetHeight(self.clearButton.bounds) + self.landscapeSendBarConstraint.constant);
 	} else {
 		self.titleLabel.alpha = 1;
 		
 		[self.containerView removeConstraints:self.landscapeConstraints];
 		[self.containerView addConstraints:self.portraitConstraints];
 
-		[self.sendBar removeConstraint:self.landscapeSendBarConstraint];
+		[self.sendBar removeConstraints:self.landscapeSendBarConstraints];
 		[self.sendBar addConstraints:self.portraitSendBarConstraints];
 
-		self.sendButtonVerticalCenter.constant = 0;
 	}
 	
 	[super updateConstraints];

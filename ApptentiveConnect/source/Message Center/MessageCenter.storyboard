@@ -88,11 +88,16 @@
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ng1-FC-LJj">
                                             <rect key="frame" x="0.0" y="0.0" width="398" height="44"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="500" verticalHuggingPriority="500" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hme-XS-svZ">
-                                                    <rect key="frame" x="15" y="7" width="37" height="30"/>
-                                                    <state key="normal" title="Clear">
+                                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="500" verticalHuggingPriority="500" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hme-XS-svZ">
+                                                    <rect key="frame" x="15" y="14" width="16" height="16"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="16" id="2HR-n8-GVi"/>
+                                                        <constraint firstAttribute="width" secondItem="Hme-XS-svZ" secondAttribute="height" multiplier="1:1" id="3iU-ah-ldr"/>
+                                                    </constraints>
+                                                    <state key="normal" image="at_ClearButton.png">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
+                                                    <state key="selected" image="at_ClearButtonPressed.png"/>
                                                     <connections>
                                                         <action selector="clear:" destination="W0l-Dy-ioE" eventType="touchUpInside" id="mEj-fm-FNs"/>
                                                     </connections>
@@ -108,7 +113,7 @@
                                                     </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" text="New Message" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mka-QN-zVs">
-                                                    <rect key="frame" x="67" y="13" width="263" height="18"/>
+                                                    <rect key="frame" x="46" y="13" width="284" height="18"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                     <color key="textColor" red="0.51764705879999995" green="0.51764705879999995" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -122,8 +127,8 @@
                                                 <constraint firstAttribute="centerX" secondItem="hkW-wu-sjM" secondAttribute="centerX" priority="500" id="FHC-Jx-fKm"/>
                                                 <constraint firstAttribute="centerY" secondItem="hkW-wu-sjM" secondAttribute="centerY" id="Swx-OA-xGO"/>
                                                 <constraint firstAttribute="centerX" secondItem="Hme-XS-svZ" secondAttribute="centerX" priority="500" id="j1w-eX-NGi"/>
+                                                <constraint firstItem="Hme-XS-svZ" firstAttribute="centerY" secondItem="hkW-wu-sjM" secondAttribute="centerY" id="ny2-3Z-Iyt"/>
                                                 <constraint firstAttribute="height" priority="500" constant="44" id="p7Y-6m-Wi8"/>
-                                                <constraint firstItem="hkW-wu-sjM" firstAttribute="baseline" secondItem="Hme-XS-svZ" secondAttribute="baseline" id="qN6-6P-oX0"/>
                                                 <constraint firstItem="hkW-wu-sjM" firstAttribute="leading" secondItem="Mka-QN-zVs" secondAttribute="trailing" constant="15" id="vHr-GY-TLi"/>
                                                 <constraint firstItem="Hme-XS-svZ" firstAttribute="leading" secondItem="ng1-FC-LJj" secondAttribute="leading" constant="15" id="x5t-Jq-eor"/>
                                             </constraints>
@@ -175,8 +180,9 @@
                                 <constraint firstAttribute="trailing" secondItem="cFn-Go-Vab" secondAttribute="trailing" constant="8" id="fEx-cI-GDt"/>
                             </constraints>
                             <connections>
-                                <outlet property="buttonBaselines" destination="qN6-6P-oX0" id="hYW-px-KP9"/>
+                                <outlet property="buttonBaselines" destination="ny2-3Z-Iyt" id="N5f-bh-dFV"/>
                                 <outlet property="clearButton" destination="Hme-XS-svZ" id="jF2-pc-eAn"/>
+                                <outlet property="clearButtonLeadingToSuperview" destination="x5t-Jq-eor" id="Nah-Y5-fFb"/>
                                 <outlet property="clearButtonToSendButton" destination="vHr-GY-TLi" id="gn4-DU-lPu"/>
                                 <outlet property="containerView" destination="cFn-Go-Vab" id="fIY-aE-6r2"/>
                                 <outlet property="messageView" destination="do6-U4-CNu" id="kGH-n7-akj"/>
@@ -472,6 +478,10 @@
             <point key="canvasLocation" x="-190" y="604"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="at_ClearButton.png" width="19" height="19"/>
+        <image name="at_ClearButtonPressed.png" width="19" height="19"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

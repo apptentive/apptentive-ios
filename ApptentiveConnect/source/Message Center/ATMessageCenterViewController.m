@@ -80,6 +80,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	self.messageInputView.messageView.text = self.draftMessage ?: @"";
 	self.messageInputView.messageView.textContainerInset = UIEdgeInsetsMake(10.0, 12.0, 10.0, 12.0);
+	[self.messageInputView.clearButton setImage:[ATBackend imageNamed:@"at_ClearButton"] forState:UIControlStateNormal];
+	[self.messageInputView.clearButton setImage:[ATBackend imageNamed:@"at_ClearButtonPressed"] forState:UIControlStateHighlighted];
 	
 	self.messageInputView.placeholderLabel.text = self.interaction.composerPlaceholderText;
 	self.messageInputView.placeholderLabel.hidden = self.messageInputView.messageView.text.length > 0;

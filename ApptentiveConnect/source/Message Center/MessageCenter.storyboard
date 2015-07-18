@@ -88,14 +88,8 @@
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ng1-FC-LJj">
                                             <rect key="frame" x="0.0" y="0.0" width="398" height="44"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" text="New Message" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mka-QN-zVs">
-                                                    <rect key="frame" x="16" y="13" width="262" height="18"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                    <color key="textColor" red="0.51764705879999995" green="0.51764705879999995" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="500" verticalHuggingPriority="500" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hme-XS-svZ">
-                                                    <rect key="frame" x="293" y="7" width="37" height="30"/>
+                                                    <rect key="frame" x="15" y="7" width="37" height="30"/>
                                                     <state key="normal" title="Clear">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
@@ -113,19 +107,25 @@
                                                         <action selector="sendButtonPressed:" destination="W0l-Dy-ioE" eventType="touchUpInside" id="8xs-vg-CMm"/>
                                                     </connections>
                                                 </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" text="New Message" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mka-QN-zVs">
+                                                    <rect key="frame" x="67" y="13" width="263" height="18"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                    <color key="textColor" red="0.51764705879999995" green="0.51764705879999995" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <constraints>
                                                 <constraint firstItem="Mka-QN-zVs" firstAttribute="baseline" secondItem="hkW-wu-sjM" secondAttribute="baseline" id="1id-lV-kzo"/>
+                                                <constraint firstItem="Mka-QN-zVs" firstAttribute="leading" secondItem="Hme-XS-svZ" secondAttribute="trailing" constant="15" id="4kH-Os-vzx"/>
                                                 <constraint firstAttribute="trailing" secondItem="hkW-wu-sjM" secondAttribute="trailing" constant="16" id="ASf-xB-6Rq"/>
-                                                <constraint firstItem="Hme-XS-svZ" firstAttribute="leading" secondItem="Mka-QN-zVs" secondAttribute="trailing" constant="15" id="CLA-od-WFQ"/>
                                                 <constraint firstAttribute="centerX" secondItem="hkW-wu-sjM" secondAttribute="centerX" priority="500" id="FHC-Jx-fKm"/>
-                                                <constraint firstItem="hkW-wu-sjM" firstAttribute="leading" secondItem="Hme-XS-svZ" secondAttribute="trailing" constant="15" id="I17-yd-DVz"/>
                                                 <constraint firstAttribute="centerY" secondItem="hkW-wu-sjM" secondAttribute="centerY" id="Swx-OA-xGO"/>
                                                 <constraint firstAttribute="centerX" secondItem="Hme-XS-svZ" secondAttribute="centerX" priority="500" id="j1w-eX-NGi"/>
                                                 <constraint firstAttribute="height" priority="500" constant="44" id="p7Y-6m-Wi8"/>
                                                 <constraint firstItem="hkW-wu-sjM" firstAttribute="baseline" secondItem="Hme-XS-svZ" secondAttribute="baseline" id="qN6-6P-oX0"/>
-                                                <constraint firstItem="Mka-QN-zVs" firstAttribute="leading" secondItem="ng1-FC-LJj" secondAttribute="leading" constant="16" id="qm2-ak-e3U"/>
+                                                <constraint firstItem="hkW-wu-sjM" firstAttribute="leading" secondItem="Mka-QN-zVs" secondAttribute="trailing" constant="15" id="vHr-GY-TLi"/>
+                                                <constraint firstItem="Hme-XS-svZ" firstAttribute="leading" secondItem="ng1-FC-LJj" secondAttribute="leading" constant="15" id="x5t-Jq-eor"/>
                                             </constraints>
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="string" keyPath="layer.borderWidth" value="0.5"/>
@@ -177,7 +177,7 @@
                             <connections>
                                 <outlet property="buttonBaselines" destination="qN6-6P-oX0" id="hYW-px-KP9"/>
                                 <outlet property="clearButton" destination="Hme-XS-svZ" id="jF2-pc-eAn"/>
-                                <outlet property="clearButtonToSendButton" destination="I17-yd-DVz" id="2i4-sz-mKb"/>
+                                <outlet property="clearButtonToSendButton" destination="vHr-GY-TLi" id="gn4-DU-lPu"/>
                                 <outlet property="containerView" destination="cFn-Go-Vab" id="fIY-aE-6r2"/>
                                 <outlet property="messageView" destination="do6-U4-CNu" id="kGH-n7-akj"/>
                                 <outlet property="placeholderLabel" destination="ase-Kg-1uo" id="LgC-Xw-pQm"/>
@@ -188,7 +188,7 @@
                                 <outlet property="sendButtonVerticalCenter" destination="Swx-OA-xGO" id="5Sr-H6-dve"/>
                                 <outlet property="textViewTrailingToSuperview" destination="LIE-vR-vyP" id="phO-Kg-fRm"/>
                                 <outlet property="titleLabel" destination="Mka-QN-zVs" id="ViV-8s-esi"/>
-                                <outlet property="titleLabelToClearButton" destination="CLA-od-WFQ" id="1zR-d3-27j"/>
+                                <outlet property="titleLabelToClearButton" destination="4kH-Os-vzx" id="Shd-FA-4CT"/>
                             </connections>
                         </view>
                         <prototypes>

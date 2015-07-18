@@ -185,6 +185,7 @@
                                 <outlet property="sendBarBottomToTextView" destination="hAH-HC-DYT" id="oUF-ok-lDb"/>
                                 <outlet property="sendBarLeadingToSuperview" destination="T1v-Pg-wKn" id="i1c-xz-gN6"/>
                                 <outlet property="sendButton" destination="hkW-wu-sjM" id="wiA-UO-4hH"/>
+                                <outlet property="sendButtonVerticalCenter" destination="Swx-OA-xGO" id="5Sr-H6-dve"/>
                                 <outlet property="textViewTrailingToSuperview" destination="LIE-vR-vyP" id="phO-Kg-fRm"/>
                                 <outlet property="titleLabel" destination="Mka-QN-zVs" id="ViV-8s-esi"/>
                                 <outlet property="titleLabelToClearButton" destination="CLA-od-WFQ" id="1zR-d3-27j"/>

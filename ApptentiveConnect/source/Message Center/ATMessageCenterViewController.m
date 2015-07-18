@@ -336,6 +336,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.messageInputView.messageView.text = nil;
 	[self.messageInputView.messageView resignFirstResponder];
 	
+	self.messageInputView.sendButton.enabled = NO;
+	self.messageInputView.clearButton.enabled = NO;
+	
 	[self updateState];
 }
 

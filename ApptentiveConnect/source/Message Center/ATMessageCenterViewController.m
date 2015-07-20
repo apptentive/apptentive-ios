@@ -312,9 +312,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self updateState];
 }
 
-//- (void)textViewDidBeginEditing:(UITextView *)textView {
-//}
-
 // Fix iOS bug where scroll sometimes doesn't follow selection
 - (void)textViewDidChangeSelection:(UITextView *)textView
 {
@@ -360,7 +357,36 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self updateState];
 }
 
+- (IBAction)validateWho:(UITextField *)sender {
+	BOOL valid = [self isWhoViewValid];
+	
+	self.whoView.saveButton.enabled = valid;
+}
+
+- (IBAction)saveWho:(id)sender {
+}
+
+- (IBAction)skipWho:(id)sender {
+}
+
 #pragma mark - Private
+
+- (BOOL)isWhoViewValid {
+	NSArray *emailParts = [self.whoView.emailField.text componentsSeparatedByString:@"@"];
+	
+	if (emailParts.count < 2 || [emailParts.firstObject length] == 0 || emailParts.count > 2) {
+		return NO;
+	}
+	
+	NSArray *domainParts = [emailParts.lastObject componentsSeparatedByString:@"."];
+	NSArray *nonEmptyDomainParts = [domainParts filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"length > 0"]];
+	
+	if (domainParts.count < 2 || domainParts.count != nonEmptyDomainParts.count) {
+		return  NO;
+	}
+	
+	return YES;
+}
 
 - (void)updateState {
 	if (self.dataSource.numberOfMessageGroups == 0) {
@@ -534,7 +560,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)updateHeaderHeightForOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
-	CGFloat headerHeight = UIInterfaceOrientationIsLandscape(toInterfaceOrientation) ? GREETING_LANDSCAPE_HEIGHT	: GREETING_PORTRAIT_HEIGHT;
+	CGFloat headerHeight = UIInterfaceOrientationIsLandscape(toInterfaceOrientation) ? GREETING_LANDSCAPE_HEIGHT : GREETING_PORTRAIT_HEIGHT;
 
 	self.greetingView.bounds = CGRectMake(0, 0, self.tableView.bounds.size.height, headerHeight);
 	[self.greetingView updateConstraints];

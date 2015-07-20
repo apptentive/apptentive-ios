@@ -82,7 +82,7 @@
                             <rect key="frame" x="0.0" y="526.5" width="414" height="167"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PJM-ba-h4O">
+                                <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PJM-ba-h4O">
                                     <rect key="frame" x="8" y="8" width="398" height="148"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Whom are we speaking with?" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8sl-tE-JA8">
@@ -95,24 +95,28 @@
                                             <rect key="frame" x="15" y="34" width="368" height="30"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
+                                            <connections>
+                                                <outlet property="delegate" destination="W0l-Dy-ioE" id="kew-Ek-CCu"/>
+                                            </connections>
                                         </textField>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ucW-DV-V6C">
-                                            <rect key="frame" x="15" y="110" width="31" height="30"/>
+                                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ucW-DV-V6C">
+                                            <rect key="frame" x="15" y="111" width="31" height="30"/>
                                             <state key="normal" title="Skip">
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
+                                            <connections>
+                                                <action selector="skipWho:" destination="W0l-Dy-ioE" eventType="touchUpInside" id="tbj-Do-P07"/>
+                                            </connections>
                                         </button>
-                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="TsT-ug-J0g">
-                                            <rect key="frame" x="15" y="72" width="368" height="30"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="send"/>
-                                        </textField>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EJ0-DT-gxJ">
+                                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EJ0-DT-gxJ">
                                             <rect key="frame" x="310" y="110" width="73" height="30"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                             <state key="normal" title="That’s Me!">
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
+                                            <connections>
+                                                <action selector="saveWho:" destination="W0l-Dy-ioE" eventType="touchUpInside" id="4cN-ht-tou"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -123,15 +127,9 @@
                                         <constraint firstItem="WEB-50-wCX" firstAttribute="top" secondItem="8sl-tE-JA8" secondAttribute="bottom" constant="8" id="DHd-i8-oAa"/>
                                         <constraint firstItem="8sl-tE-JA8" firstAttribute="top" secondItem="PJM-ba-h4O" secondAttribute="top" constant="8" id="EFa-0N-SGh"/>
                                         <constraint firstAttribute="bottom" secondItem="ucW-DV-V6C" secondAttribute="bottom" constant="8" id="Eoc-s5-qeW"/>
-                                        <constraint firstItem="WEB-50-wCX" firstAttribute="leading" secondItem="TsT-ug-J0g" secondAttribute="leading" id="Hdk-Md-y4M"/>
-                                        <constraint firstItem="8sl-tE-JA8" firstAttribute="trailing" secondItem="TsT-ug-J0g" secondAttribute="trailing" id="Liq-y7-BCY"/>
                                         <constraint firstItem="WEB-50-wCX" firstAttribute="leading" secondItem="8sl-tE-JA8" secondAttribute="leading" id="OXd-f6-L6I"/>
                                         <constraint firstItem="EJ0-DT-gxJ" firstAttribute="baseline" secondItem="ucW-DV-V6C" secondAttribute="baseline" id="Zym-w0-vIv"/>
                                         <constraint firstAttribute="trailing" secondItem="8sl-tE-JA8" secondAttribute="trailing" constant="15" id="l0h-wW-K1k"/>
-                                        <constraint firstItem="EJ0-DT-gxJ" firstAttribute="trailing" secondItem="TsT-ug-J0g" secondAttribute="trailing" id="pHl-O4-lQl"/>
-                                        <constraint firstItem="EJ0-DT-gxJ" firstAttribute="top" secondItem="TsT-ug-J0g" secondAttribute="bottom" constant="8" id="uv3-Yb-MAe"/>
-                                        <constraint firstItem="WEB-50-wCX" firstAttribute="width" secondItem="TsT-ug-J0g" secondAttribute="width" id="w24-De-Rf8"/>
-                                        <constraint firstItem="TsT-ug-J0g" firstAttribute="top" secondItem="WEB-50-wCX" secondAttribute="bottom" constant="8" id="xCZ-s0-1oX"/>
                                     </constraints>
                                     <userDefinedRuntimeAttributes>
                                         <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -149,11 +147,8 @@
                             </constraints>
                             <connections>
                                 <outlet property="containerView" destination="PJM-ba-h4O" id="xN5-pi-Uws"/>
-                                <outlet property="emailField" destination="TsT-ug-J0g" id="TW0-uO-8bl"/>
-                                <outlet property="emailLeadingConstraint" destination="Hdk-Md-y4M" id="mrM-Wl-oj2"/>
                                 <outlet property="nameField" destination="WEB-50-wCX" id="6db-F7-3sw"/>
                                 <outlet property="nameTrailingConstraint" destination="COP-kc-keG" id="5fL-LW-0pC"/>
-                                <outlet property="nameVerticalSpaceToEmail" destination="xCZ-s0-1oX" id="UfP-z0-RbJ"/>
                                 <outlet property="saveButton" destination="EJ0-DT-gxJ" id="p4c-6n-T9l"/>
                                 <outlet property="skipButton" destination="ucW-DV-V6C" id="6It-vF-gMD"/>
                                 <outlet property="titleLabel" destination="8sl-tE-JA8" id="aeG-Ma-iLJ"/>

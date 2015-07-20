@@ -20,6 +20,25 @@
 #import "ATNetworkImageIconView.h"
 #import "ATReachability.h"
 
+#define HEADER_FOOTER_EMPTY_HEIGHT 4.0
+#define HEADER_DATE_LABEL_HEIGHT 28.0
+#define GREETING_PORTRAIT_HEIGHT 258.0
+#define GREETING_LANDSCAPE_HEIGHT 128.0
+
+#define TEXT_VIEW_HORIZONTAL_INSET 12.0
+#define TEXT_VIEW_VERTICAL_INSET 10.0
+#define DATE_FONT_SIZE 14.0
+
+#define FOOTER_ANIMATION_DURATION 0.25
+
+// The following need to match the storyboard for sizing cells on iOS 7
+#define MESSAGE_LABEL_TOTAL_HORIZONTAL_MARGIN 30.0
+#define REPLY_LABEL_TOTAL_HORIZONTAL_MARGIN 74.0
+#define MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN 17.0
+#define REPLY_LABEL_TOTAL_VERTICAL_MARGIN 34.0
+#define REPLY_CELL_MINIMUM_HEIGHT 54.0
+#define BODY_FONT_SIZE 14.0
+
 NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
 
 typedef NS_ENUM(NSInteger, ATMessageCenterState) {
@@ -79,7 +98,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 	
 	self.messageInputView.messageView.text = self.draftMessage ?: @"";
-	self.messageInputView.messageView.textContainerInset = UIEdgeInsetsMake(10.0, 12.0, 10.0, 12.0);
+	self.messageInputView.messageView.textContainerInset = UIEdgeInsetsMake(TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET);
 	[self.messageInputView.clearButton setImage:[ATBackend imageNamed:@"at_ClearButton"] forState:UIControlStateNormal];
 	[self.messageInputView.clearButton setImage:[ATBackend imageNamed:@"at_ClearButtonPressed"] forState:UIControlStateHighlighted];
 	
@@ -184,11 +203,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-	return [self.dataSource shouldShowDateForMessageGroupAtIndex:section] ? 28.0 : 4.0;
+	return [self.dataSource shouldShowDateForMessageGroupAtIndex:section] ? HEADER_DATE_LABEL_HEIGHT : HEADER_FOOTER_EMPTY_HEIGHT;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-	return 4.0;
+	return HEADER_FOOTER_EMPTY_HEIGHT;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -196,21 +215,16 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	// iOS 7 requires this and there's no good way to instantiate a cell to sample, so we're hard-coding it for now.
 	NSString *labelText = [self.dataSource textOfMessageAtIndexPath:indexPath];
-	CGFloat marginsAndStuff = isMessageCell ? 30.0 : 74.0;
+	CGFloat marginsAndStuff = isMessageCell ? MESSAGE_LABEL_TOTAL_HORIZONTAL_MARGIN : REPLY_LABEL_TOTAL_HORIZONTAL_MARGIN;
 
-	// Support iOS 6-style table views
-	if (![self.tableView respondsToSelector:@selector(estimatedRowHeight)]) {
-		marginsAndStuff += 18.0;
-	}
-	
 	CGFloat effectiveLabelWidth = CGRectGetWidth(tableView.bounds) - marginsAndStuff;
 	
-	CGSize labelSize = [labelText sizeWithFont:[UIFont systemFontOfSize:14.0] constrainedToSize:CGSizeMake(effectiveLabelWidth, MAXFLOAT)];
+	CGSize labelSize = [labelText sizeWithFont:[UIFont systemFontOfSize:BODY_FONT_SIZE] constrainedToSize:CGSizeMake(effectiveLabelWidth, MAXFLOAT)];
 	
 	if (isMessageCell) {
-		return labelSize.height + 17.0;
+		return labelSize.height + MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN;
 	} else {
-		return fmax(labelSize.height + 34.0, 36.0 + 20.0);
+		return fmax(labelSize.height + REPLY_LABEL_TOTAL_VERTICAL_MARGIN, REPLY_CELL_MINIMUM_HEIGHT);
 	}
 }
 
@@ -234,7 +248,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
 	UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *)view;
-	headerView.textLabel.font = [UIFont boldSystemFontOfSize:14.0];
+	headerView.textLabel.font = [UIFont boldSystemFontOfSize:DATE_FONT_SIZE];
 }
 
 #pragma mark Scroll view delegate
@@ -441,13 +455,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				newFooter.alpha = 0;
 				self.tableView.tableFooterView = newFooter;
 				
-				[UIView animateWithDuration:0.25 animations:^{
+				[UIView animateWithDuration:FOOTER_ANIMATION_DURATION animations:^{
 					newFooter.alpha = 1;
 				}];
 			};
 			
 			if (oldFooter) {
-				[UIView animateWithDuration:0.25 animations:^{
+				[UIView animateWithDuration:FOOTER_ANIMATION_DURATION animations:^{
 					oldFooter.alpha = 0;
 				} completion: animateInBlock];
 			} else {
@@ -518,7 +532,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)updateHeaderHeightForOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
-	CGFloat headerHeight = UIInterfaceOrientationIsLandscape(toInterfaceOrientation) ? 128.0 : 258.0;
+	CGFloat headerHeight = UIInterfaceOrientationIsLandscape(toInterfaceOrientation) ? GREETING_LANDSCAPE_HEIGHT	: GREETING_PORTRAIT_HEIGHT;
 
 	self.greetingView.bounds = CGRectMake(0, 0, self.tableView.bounds.size.height, headerHeight);
 	[self.greetingView updateConstraints];

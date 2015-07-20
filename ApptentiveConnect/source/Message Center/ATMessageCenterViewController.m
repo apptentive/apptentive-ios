@@ -10,6 +10,7 @@
 #import "ATMessageCenterGreetingView.h"
 #import "ATMessageCenterConfirmationView.h"
 #import "ATMessageCenterInputView.h"
+#import "ATMessageCenterWhoView.h"
 #import "ATMessageCenterMessageCell.h"
 #import "ATMessageCenterReplyCell.h"
 #import "ATBackend.h"
@@ -38,6 +39,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @property (weak, nonatomic) IBOutlet ATMessageCenterGreetingView *greetingView;
 @property (strong, nonatomic) IBOutlet ATMessageCenterConfirmationView *confirmationView;
 @property (strong, nonatomic) IBOutlet ATMessageCenterInputView *messageInputView;
+@property (strong, nonatomic) IBOutlet ATMessageCenterWhoView *whoView;
 
 @property (strong, nonatomic) IBOutlet UIView *backgroundView;
 @property (weak, nonatomic) IBOutlet UILabel *poweredByLabel;
@@ -112,7 +114,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 	[UIView animateWithDuration:duration animations:^{
 		[self updateHeaderHeightForOrientation:toInterfaceOrientation];
-		[self updateInputViewForOrientation:toInterfaceOrientation];
+		[self updateFooterViewForOrientation:toInterfaceOrientation];
 	}];
 }
 
@@ -433,6 +435,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				break;
 		}
 		
+#warning DEBUG
+		newFooter = self.whoView;
+		
 		if (newFooter != oldFooter) {
 			void (^animateInBlock)(BOOL finished) = ^(BOOL finished) {
 				newFooter.alpha = 0;
@@ -522,11 +527,14 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.tableView.tableHeaderView = self.greetingView;
 }
 
-- (void)updateInputViewForOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
+- (void)updateFooterViewForOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
 	if (self.tableView.tableFooterView == self.messageInputView) {
 		[self resizeInputView:nil];
 		[self.messageInputView updateConstraints];
 		self.tableView.tableFooterView = self.messageInputView;
+	} else if (self.tableView.tableFooterView == self.whoView) {
+		[self.whoView updateConstraints];
+		self.tableView.tableFooterView = self.whoView;
 	}
 }
 

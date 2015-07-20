@@ -509,7 +509,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
 		self.messageInputView.frame = frame;
-		self.tableView.tableFooterView = self.messageInputView;
+		
+		if (self.tableView.tableFooterView == self.messageInputView) {
+			self.tableView.tableFooterView = self.messageInputView;
+		}
+		
 		[self.messageInputView updateConstraints];
 	}];
 }

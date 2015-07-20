@@ -208,9 +208,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	CGSize labelSize = [labelText sizeWithFont:[UIFont systemFontOfSize:14.0] constrainedToSize:CGSizeMake(effectiveLabelWidth, MAXFLOAT)];
 	
 	if (isMessageCell) {
-		return labelSize.height + 16.0;
+		return labelSize.height + 17.0;
 	} else {
-		return fmax(labelSize.height + 33.0, 36.0 + 20.0);
+		return fmax(labelSize.height + 34.0, 36.0 + 20.0);
 	}
 }
 

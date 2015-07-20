@@ -30,9 +30,6 @@
 @implementation ATMessageCenterInputView
 
 - (void)awakeFromNib {
-	self.messageView.translatesAutoresizingMaskIntoConstraints = NO;
-	self.sendBar.translatesAutoresizingMaskIntoConstraints = NO;
-	
 	self.containerView.layer.borderColor = [UIColor colorWithRed:200.0/255.0 green:199.0/255.0 blue:204.0/255.0 alpha:1.0].CGColor;
 	self.sendBar.layer.borderColor = [UIColor colorWithRed:200.0/255.0 green:199.0/255.0 blue:204.0/255.0 alpha:1.0].CGColor;
 	
@@ -58,7 +55,6 @@
 		
 		[self.sendBar removeConstraints:self.portraitSendBarConstraints];
 		[self.sendBar addConstraints:self.landscapeSendBarConstraints];
-		
 	} else {
 		self.titleLabel.alpha = 1;
 		
@@ -67,7 +63,6 @@
 
 		[self.sendBar removeConstraints:self.landscapeSendBarConstraints];
 		[self.sendBar addConstraints:self.portraitSendBarConstraints];
-
 	}
 	
 	[super updateConstraints];

@@ -389,7 +389,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				CGFloat navigationBarHeight = CGRectGetHeight(self.navigationController.navigationBar.bounds);
 				CGFloat statusBarHeight = fmin(CGRectGetHeight([UIApplication sharedApplication].statusBarFrame), CGRectGetWidth([UIApplication sharedApplication].statusBarFrame));
 				
-				self.messageInputView.bounds = CGRectMake(0.0, 0.0, CGRectGetWidth(self.tableView.bounds), CGRectGetHeight(self.tableView.bounds) - CGRectGetHeight(self.greetingView.bounds) - navigationBarHeight - statusBarHeight);
+				self.messageInputView.frame = CGRectMake(0.0, 0.0, CGRectGetWidth(self.tableView.bounds), CGRectGetHeight(self.tableView.bounds) - CGRectGetHeight(self.greetingView.bounds) - navigationBarHeight - statusBarHeight);
 				self.confirmationView.confirmationHidden = YES;
 				break;
 				

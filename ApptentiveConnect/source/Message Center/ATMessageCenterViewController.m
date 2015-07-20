@@ -365,8 +365,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				self.state = networkIsUnreachable ? ATMessageCenterStateNetworkError : ATMessageCenterStateSending;
 				break;
 			case ATPendingMessageStateComposing:
-				self.state = ATMessageCenterStateComposing;
-				break;
 			case ATPendingMessageStateNone:
 				self.state = ATMessageCenterStateEmpty;
 				break;

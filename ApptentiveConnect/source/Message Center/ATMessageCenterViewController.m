@@ -259,7 +259,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 	
 	[self updateState];
-	[self scrollToLastReplyAnimated:YES];
+	
+	if (self.state != ATMessageCenterStateComposing) {
+		[self scrollToLastReplyAnimated:YES];
+	}
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
@@ -326,6 +329,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[[ATBackend sharedBackend] sendTextMessageWithBody:message completion:^(NSString *pendingMessageID) {}];
 		
 		self.messageInputView.messageView.text = @"";
+		
+		self.state = ATMessageCenterStateSending;
 	}
 }
 
@@ -347,6 +352,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 #pragma mark - Private
 
 - (void)updateState {
+	if (self.state == ATMessageCenterStateComposing) {
+		return;
+	}
+	
 	if (self.dataSource.numberOfMessageGroups == 0) {
 		self.state = ATMessageCenterStateEmpty;
 	} else if (self.dataSource.lastMessageIsReply) {

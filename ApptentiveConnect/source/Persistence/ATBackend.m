@@ -226,17 +226,9 @@ static NSURLCache *imageCache = nil;
 }
 
 - (ATAutomatedMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body {
-	// See if there is already a message with this type.
-	BOOL hidden = NO;
-	NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(title = %@ AND body = %@)", title, body];
-	NSArray *results = [ATData findEntityNamed:@"ATAutomatedMessage" withPredicate:fetchPredicate];
-	if (results && [results count]) {
-		hidden = YES;
-	}
-	
 	ATAutomatedMessage *message = (ATAutomatedMessage *)[ATData newEntityNamed:@"ATAutomatedMessage"];
 	[message setup];
-	message.hidden = @(hidden);
+	message.hidden = @NO;
 	message.title = title;
 	message.body = body;
 	message.pendingState = @(ATPendingMessageStateComposing);

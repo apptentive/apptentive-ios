@@ -104,7 +104,7 @@
 }
 
 - (BOOL)profileRequested {
-	return YES;//[self.configuration[@"ask_for_email"] boolValue];
+	return [self.configuration[@"ask_for_email"] boolValue];
 }
 
 - (BOOL)emailRequired {

@@ -19,6 +19,7 @@
 #import "ATUtilities.h"
 #import "ATNetworkImageIconView.h"
 #import "ATReachability.h"
+#import "ATAutomatedMessage.h"
 
 #define HEADER_FOOTER_EMPTY_HEIGHT 4.0
 #define HEADER_DATE_LABEL_HEIGHT 28.0
@@ -69,6 +70,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 @property (nonatomic) ATMessageCenterState state;
 
+@property (nonatomic, strong) ATAutomatedMessage *contextMessage;
+
 @end
 
 @implementation ATMessageCenterViewController
@@ -110,6 +113,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.messageInputView.clearButton.enabled = self.messageInputView.messageView.text.length > 0;
 
 	self.tableView.tableFooterView = nil;
+	
+	self.contextMessage = nil;
+	if (self.interaction.contextMessageTitle && self.interaction.contextMessageBody) {
+		self.contextMessage = [[ATBackend sharedBackend] automatedMessageWithTitle:self.interaction.contextMessageTitle body:self.interaction.contextMessageBody];
+	}
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeInputView:) name:UIKeyboardWillChangeFrameNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToInputView:) name:UIKeyboardWillShowNotification object:nil];
@@ -340,6 +348,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	NSString *message = self.messageInputView.messageView.text;
 	
 	if (message && ![message isEqualToString:@""]) {
+		
+		if (self.contextMessage) {
+			[[ATBackend sharedBackend] sendMessage:self.contextMessage];
+			self.contextMessage = nil;
+		}
+		
 		[[ATBackend sharedBackend] sendTextMessageWithBody:message completion:^(NSString *pendingMessageID) {}];
 		
 		self.messageInputView.messageView.text = @"";

@@ -117,8 +117,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.tableView.tableFooterView = nil;
 	
 	self.contextMessage = nil;
-	if (self.interaction.contextMessageTitle && self.interaction.contextMessageBody) {
-		self.contextMessage = [[ATBackend sharedBackend] automatedMessageWithTitle:self.interaction.contextMessageTitle body:self.interaction.contextMessageBody];
+	if (self.interaction.contextMessageBody) {
+		self.contextMessage = [[ATBackend sharedBackend] automatedMessageWithTitle:nil body:self.interaction.contextMessageBody];
 	}
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeInputView:) name:UIKeyboardWillChangeFrameNotification object:nil];

@@ -42,13 +42,6 @@
 	return (URLString.length > 0) ? [NSURL URLWithString:URLString] : nil;
 }
 
-- (NSString *)contextMessageTitle {
-#warning remove
-	return @"Context_Message_Title!";
-	
-	return [self stringForKey:@"context_message_title" fallback:nil];
-}
-
 - (NSString *)contextMessageBody {
 #warning remove
 	return @"Please let us know how to make APPNAME better for you!";

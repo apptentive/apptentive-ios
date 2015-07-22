@@ -68,6 +68,7 @@ extern NSString *const ATBackendBecameReadyNotification;
 
 /*! ATAutomatedMessage messages. */
 - (ATAutomatedMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body;
+- (BOOL)sendAutomatedMessage:(ATAutomatedMessage *)message completion:(void (^)(NSString *pendingMessageID))completion;
 
 /*! Send ATTextMessage messages. */
 - (ATTextMessage *)createTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden;
@@ -81,9 +82,6 @@ extern NSString *const ATBackendBecameReadyNotification;
 
 - (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType fromSource:(ATFileAttachmentSource)source;
 - (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType hiddenOnClient:(BOOL)hidden fromSource:(ATFileAttachmentSource)source;
-
-/*! Send a Message. */
-- (BOOL)sendMessage:(ATAbstractMessage *)message;
 
 /*! Path to directory for storing attachments. */
 - (NSString *)attachmentDirectoryPath;

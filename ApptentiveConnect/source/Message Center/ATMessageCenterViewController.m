@@ -362,7 +362,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	if (message && ![message isEqualToString:@""]) {
 		
 		if (self.contextMessage) {
-			[[ATBackend sharedBackend] sendMessage:self.contextMessage];
+			[[ATBackend sharedBackend] sendAutomatedMessage:self.contextMessage completion:^(NSString *pendingMessageID) {}];
 			self.contextMessage = nil;
 		}
 		

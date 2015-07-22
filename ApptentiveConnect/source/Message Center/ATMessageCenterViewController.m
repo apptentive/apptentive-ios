@@ -12,6 +12,7 @@
 #import "ATMessageCenterInputView.h"
 #import "ATMessageCenterMessageCell.h"
 #import "ATMessageCenterReplyCell.h"
+#import "ATMessageCenterContextMessageCell.h"
 #import "ATBackend.h"
 #import "ATMessageCenterInteraction.h"
 #import "ATConnect_Private.h"
@@ -201,7 +202,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		cell.messageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
 		
 		return cell;
-	} else {
+	} else if (type == ATMessageCenterMessageTypeReply ) {
 		ATMessageCenterReplyCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Reply" forIndexPath:indexPath];
 
 		cell.supportUserImageView.imageURL = [self.dataSource imageURLOfSenderAtIndexPath:indexPath];
@@ -210,7 +211,15 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		cell.senderLabel.text = [self.dataSource senderOfMessageAtIndexPath:indexPath];
 		
 		return cell;
+	} else if (type == ATMessageCenterMessageTypeContextMessage) {
+		ATMessageCenterContextMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ContextMessage" forIndexPath:indexPath];
+		
+		cell.contextMessageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
+		
+		return cell;
 	}
+	
+	return nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {

@@ -10,4 +10,6 @@
 
 @interface ATMessageCenterContextMessageCell : UITableViewCell
 
+@property (weak, nonatomic) IBOutlet UILabel *contextMessageLabel;
+
 @end

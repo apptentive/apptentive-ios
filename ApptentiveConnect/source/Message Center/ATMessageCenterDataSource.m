@@ -96,7 +96,14 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 
 - (ATMessageCenterMessageType)cellTypeAtIndexPath:(NSIndexPath *)indexPath {
 	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
-	return message.sentByUser.boolValue ? ATMessageCenterMessageTypeMessage : ATMessageCenterMessageTypeReply;
+	
+	if ([message isKindOfClass:[ATAutomatedMessage class]]) {
+		return ATMessageCenterMessageTypeContextMessage;
+	} else if (message.sentByUser.boolValue) {
+		return ATMessageCenterMessageTypeMessage;
+	} else {
+		return ATMessageCenterMessageTypeReply;
+	}
 }
 
 - (NSString *)textOfMessageAtIndexPath:(NSIndexPath *)indexPath {

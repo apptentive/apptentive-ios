@@ -36,8 +36,12 @@
 								   ];
 }
 
+- (BOOL)isSizeLandscape:(CGSize)size {
+	return size.width > 2.75 * size.height;
+}
+
 - (void)updateConstraints {
-	if (CGRectGetWidth(self.bounds) > 2.75 * CGRectGetHeight(self.bounds)) {
+	if ([self isSizeLandscape:self.bounds.size]) {
 		[self.containerView removeConstraints:self.portraitConstraints];
 		[self.containerView addConstraints:self.landscapeConstraints];
 	} else {

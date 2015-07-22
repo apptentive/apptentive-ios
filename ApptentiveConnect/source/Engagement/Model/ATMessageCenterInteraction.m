@@ -8,6 +8,7 @@
 
 #import "ATMessageCenterInteraction.h"
 #import "ATConnect_Private.h"
+#import "ATPersonInfo.h"
 
 @implementation ATMessageCenterInteraction
 
@@ -80,6 +81,34 @@
 
 - (NSString *)composerTitleText {
 	return [self stringForKey:@"composer_title" fallback:ATLocalizedString(@"New Message", @"Title above message field")];
+}
+
+- (NSString *)composerSaveButtonTitle {
+	if (self.emailRequired && [ATPersonInfo currentPerson].emailAddress.length == 0) {
+		return ATLocalizedString(@"Next", @"Message field save button when email required");
+	} else {
+		return ATLocalizedString(@"Send", @"Send button title");
+	}
+}
+
+- (NSString *)whoCardTitle {
+	return [self stringForKey:@"profile_title" fallback:ATLocalizedString(@"Whom are we speaking with?", @"Profile card title")];
+}
+
+- (NSString *)whoCardSaveButtonTitle {
+	if (self.emailRequired) {
+		return ATLocalizedString(@"Send", @"Send button title");
+	} else {
+		return [self stringForKey:@"profile_save_button" fallback:ATLocalizedString(@"That’s Me!", @"Title for save button on profile view")];
+	}
+}
+
+- (BOOL)profileRequested {
+	return YES;//[self.configuration[@"ask_for_email"] boolValue];
+}
+
+- (BOOL)emailRequired {
+	return [self.configuration[@"email_required"] boolValue];
 }
 
 - (BOOL)brandingEnabled {

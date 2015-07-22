@@ -32,6 +32,12 @@
 
 @property (nonatomic, readonly) NSString *composerPlaceholderText;
 @property (nonatomic, readonly) NSString *composerTitleText;
+@property (nonatomic, readonly) NSString *composerSaveButtonTitle;
+
+@property (nonatomic, readonly) NSString *whoCardTitle;
+@property (nonatomic, readonly) NSString *whoCardSaveButtonTitle;
+@property (nonatomic, readonly) BOOL profileRequested;
+@property (nonatomic, readonly) BOOL emailRequired;
 
 @property (nonatomic, readonly) BOOL brandingEnabled;
 

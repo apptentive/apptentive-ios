@@ -20,6 +20,7 @@
 #import "ATNetworkImageIconView.h"
 #import "ATReachability.h"
 #import "ATAutomatedMessage.h"
+#import "ATData.h"
 
 #define HEADER_FOOTER_EMPTY_HEIGHT 4.0
 #define HEADER_DATE_LABEL_HEIGHT 28.0
@@ -171,6 +172,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	} else {
 		[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATMessageCenterDraftMessageKey];
 	}
+	
+	[self removeUnsentContextMessages];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -599,6 +602,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		self.tableView.backgroundView.alpha = 0.0;
 	} else {
 		self.tableView.backgroundView.alpha = distance / transitionDistance;
+	}
+}
+
+- (void)removeUnsentContextMessages {
+	@synchronized(self) {
+		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingState == %d)", ATPendingMessageStateComposing];
+		[ATData removeEntitiesNamed:@"ATAutomatedMessage" withPredicate:fetchPredicate];
 	}
 }
 

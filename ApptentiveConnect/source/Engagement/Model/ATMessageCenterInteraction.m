@@ -42,6 +42,20 @@
 	return (URLString.length > 0) ? [NSURL URLWithString:URLString] : nil;
 }
 
+- (NSString *)contextMessageTitle {
+#warning remove
+	return @"Context_Message_Title!";
+	
+	return [self stringForKey:@"context_message_title" fallback:nil];
+}
+
+- (NSString *)contextMessageBody {
+#warning remove
+	return @"Context_Message_Body!";
+	
+	return [self stringForKey:@"context_message_body" fallback:nil];
+}
+
 - (NSString *)confirmationText {
 	return [self stringForKey:@"confirmation" fallback:ATLocalizedString(@"Thank you!", @"Default Message Center Confirmation Text")];
 }

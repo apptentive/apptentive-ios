@@ -21,6 +21,7 @@
 #import "ATMessageCenterViewController.h"
 #import "ATAbstractMessage.h"
 #import "ATTextMessage.h"
+#import "ATAutomatedMessage.h"
 #import "ATFeedback.h"
 #endif
 
@@ -65,8 +66,8 @@ extern NSString *const ATBackendBecameReadyNotification;
     will be sent in the background. */
 - (void)sendFeedback:(ATFeedback *)feedback;
 
-/*! Send ATAutomatedMessage messages. */
-- (void)sendAutomatedMessageWithTitle:(NSString *)title body:(NSString *)body;
+/*! ATAutomatedMessage messages. */
+- (ATAutomatedMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body;
 
 /*! Send ATTextMessage messages. */
 - (ATTextMessage *)createTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden;
@@ -80,6 +81,9 @@ extern NSString *const ATBackendBecameReadyNotification;
 
 - (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType fromSource:(ATFileAttachmentSource)source;
 - (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType hiddenOnClient:(BOOL)hidden fromSource:(ATFileAttachmentSource)source;
+
+/*! Send a Message. */
+- (BOOL)sendMessage:(ATAbstractMessage *)message;
 
 /*! Path to directory for storing attachments. */
 - (NSString *)attachmentDirectoryPath;

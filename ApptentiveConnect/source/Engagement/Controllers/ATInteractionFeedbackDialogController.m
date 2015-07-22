@@ -58,11 +58,14 @@ NSString *const ATInteractionFeedbackDialogEventLabelViewMessages = @"view_messa
 }
 
 - (void)sendSorryMessage {
+	
+	/*
 	NSDictionary *config = self.interaction.configuration;
 	NSString *title = config[@"title"] ?: ATLocalizedString(@"We're Sorry!", @"We're sorry text");
 	NSString *body = config[@"body"] ?: ATLocalizedString(@"What can we do to ensure that you love our app? We appreciate your constructive feedback.", @"Custom placeholder feedback text when user is unhappy with the application.");
 	
 	[[ATBackend sharedBackend] sendAutomatedMessageWithTitle:title body:body];
+	*/
 }
 
 #pragma mark UIAlertViewDelegate

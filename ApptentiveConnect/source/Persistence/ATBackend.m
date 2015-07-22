@@ -225,7 +225,7 @@ static NSURLCache *imageCache = nil;
 	}
 }
 
-- (void)sendAutomatedMessageWithTitle:(NSString *)title body:(NSString *)body {
+- (ATAutomatedMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body {
 	// See if there is already a message with this type.
 	BOOL hidden = NO;
 	NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(title = %@ AND body = %@)", title, body];
@@ -246,10 +246,9 @@ static NSURLCache *imageCache = nil;
 	if (![[self managedObjectContext] save:&error]) {
 		ATLogError(@"Unable to send automated message with title: %@, body: %@, error: %@", title, body, error);
 		message = nil;
-		return;
 	}
 	
-	[self sendMessage:message];
+	return message;
 }
 
 - (BOOL)sendTextMessageWithBody:(NSString *)body completion:(void (^)(NSString *pendingMessageID))completion {

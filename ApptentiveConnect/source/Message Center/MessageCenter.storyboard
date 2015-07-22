@@ -94,10 +94,9 @@
                                                         <constraint firstAttribute="width" constant="16" id="2HR-n8-GVi"/>
                                                         <constraint firstAttribute="width" secondItem="Hme-XS-svZ" secondAttribute="height" multiplier="1:1" id="3iU-ah-ldr"/>
                                                     </constraints>
-                                                    <state key="normal" image="at_ClearButton.png">
+                                                    <state key="normal">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
-                                                    <state key="selected" image="at_ClearButtonPressed.png"/>
                                                     <connections>
                                                         <action selector="clear:" destination="W0l-Dy-ioE" eventType="touchUpInside" id="mEj-fm-FNs"/>
                                                     </connections>
@@ -478,10 +477,6 @@
             <point key="canvasLocation" x="-190" y="604"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="at_ClearButton.png" width="19" height="19"/>
-        <image name="at_ClearButtonPressed.png" width="19" height="19"/>
-    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

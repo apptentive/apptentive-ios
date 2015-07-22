@@ -239,7 +239,7 @@ static NSURLCache *imageCache = nil;
 	message.hidden = @(hidden);
 	message.title = title;
 	message.body = body;
-	message.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
+	message.pendingState = @(ATPendingMessageStateComposing);
 	message.sentByUser = @YES;
 	[message updateClientCreationTime];
 	NSError *error = nil;

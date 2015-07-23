@@ -25,6 +25,7 @@
 #define HEADER_DATE_LABEL_HEIGHT 28.0
 #define GREETING_PORTRAIT_HEIGHT 258.0
 #define GREETING_LANDSCAPE_HEIGHT 128.0
+#define CONFIRMATION_VIEW_HEIGHT 88.0
 
 #define TEXT_VIEW_HORIZONTAL_INSET 12.0
 #define TEXT_VIEW_VERTICAL_INSET 10.0
@@ -168,8 +169,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	if (message && ![message isEqualToString:@""]) {
 		[self.messageInputView.messageView becomeFirstResponder];
 	}
-	
-//	[self resizeFooterView:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -606,7 +605,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)scrollToInputView:(NSNotification *)notification {
-	CGPoint offset = CGPointMake(0.0, CGRectGetMaxY(self.rectOfLastMessage) - self.tableView.contentInset.top + HEADER_FOOTER_EMPTY_HEIGHT);
+	CGFloat footerSpace = [self.dataSource numberOfMessageGroups] > 0 ? HEADER_FOOTER_EMPTY_HEIGHT : 0;
+	
+	CGPoint offset = CGPointMake(0.0, CGRectGetMaxY(self.rectOfLastMessage) - self.tableView.contentInset.top + footerSpace);
 
 	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
 		[self.tableView setContentOffset:offset];
@@ -618,7 +619,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	CGFloat height = 0;
 	
 	if (self.state != ATMessageCenterStateEmpty && self.state != ATMessageCenterStateWhoCard && self.state != ATMessageCenterStateComposing) {
-		height = 88.0;
+		height = CONFIRMATION_VIEW_HEIGHT;
 	} else {
 		CGRect keyboardRect;
 		if (notification) {
@@ -672,7 +673,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	// Hide branding when content gets within transtionDistance of it
 	CGFloat transitionDistance = 44;
 	
-	CGFloat confirmationViewHeight = 44;//CGRectGetHeight(self.confirmationView.bounds);
 	CGFloat poweredByTop = CGRectGetMinY(self.poweredByLabel.frame);
 	
 	CGRect lastMessageFrame = self.greetingView.frame;
@@ -682,7 +682,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	CGFloat lastMessageBottom = CGRectGetMaxY([self.backgroundView convertRect:lastMessageFrame fromView:self.tableView]);
 	
-	CGFloat distance = poweredByTop - lastMessageBottom - confirmationViewHeight;
+	CGFloat distance = poweredByTop - lastMessageBottom - CONFIRMATION_VIEW_HEIGHT;
 	
 	if (distance > transitionDistance) {
 		self.tableView.backgroundView.alpha = 1.0;

@@ -103,6 +103,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		self.poweredByImageView.image = [ATBackend imageNamed:@"at_branding-logo"];
 	}
 	
+	if (!self.interaction.profileRequested) {
+		self.navigationItem.leftBarButtonItem = nil;
+	}
+	
 	self.messageInputView.messageView.text = self.draftMessage ?: @"";
 	self.messageInputView.messageView.textContainerInset = UIEdgeInsetsMake(TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET);
 	[self.messageInputView.clearButton setImage:[ATBackend imageNamed:@"at_ClearButton"] forState:UIControlStateNormal];

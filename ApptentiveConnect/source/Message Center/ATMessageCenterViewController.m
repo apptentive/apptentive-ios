@@ -628,7 +628,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			height = CGRectGetHeight(self.tableView.bounds) - self.tableView.contentInset.top;
 		}
 		
-		if (self.dataSource.numberOfMessageGroups == 0 && CGRectGetMinY(keyboardRect) >= CGRectGetMaxY(self.tableView.frame)) {
+		if (self.dataSource.numberOfMessageGroups == 0 && (CGRectGetMinY(keyboardRect) >= CGRectGetMaxY(self.tableView.frame) || !notification)) {
 			height -= CGRectGetHeight(self.greetingView.bounds);
 		}
 	}

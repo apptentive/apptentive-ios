@@ -324,6 +324,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	return YES;
 }
 
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+	[self scrollToInputView:nil];
+}
+
 - (void)textViewDidEndEditing:(UITextView *)textView {
 	if (self.state != ATMessageCenterStateWhoCard)
 		[self updateState];
@@ -364,11 +368,14 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	NSString *message = self.messageInputView.messageView.text;
 	
 	if (message && ![message isEqualToString:@""]) {
+		[self.messageInputView.messageView resignFirstResponder];
+		
 		if (self.interaction.profileRequested && [ATPersonInfo currentPerson].emailAddress.length == 0) {
 			self.state = ATMessageCenterStateWhoCard;
 			self.pendingMessage = [[ATBackend sharedBackend] createTextMessageWithBody:message hiddenOnClient:NO];
 		} else {
 			[[ATBackend sharedBackend] sendTextMessageWithBody:message completion:^(NSString *pendingMessageID) {}];
+			[self updateState];
 		}
 	}
 	
@@ -606,7 +613,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)resizeFooterView:(NSNotification *)notification {
 	CGFloat height = 0;
 	
-	if (self.activeFooterView == self.confirmationView) {
+	if (self.state != ATMessageCenterStateEmpty && self.state != ATMessageCenterStateWhoCard && self.state != ATMessageCenterStateComposing) {
 		height = 88.0;
 	} else {
 		CGRect keyboardRect;
@@ -654,7 +661,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)scrollToLastReplyAnimated:(BOOL)animated {
-	[self.tableView scrollToRowAtIndexPath:self.indexPathOfLastMessage atScrollPosition:UITableViewScrollPositionBottom animated:animated];
+	[self.tableView scrollToRowAtIndexPath:self.indexPathOfLastMessage atScrollPosition:UITableViewScrollPositionTop animated:animated];
 }
 
 - (void)adjustBrandingVisibility {

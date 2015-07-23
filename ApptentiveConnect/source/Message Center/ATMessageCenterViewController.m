@@ -231,21 +231,29 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	BOOL isMessageCell = [self.dataSource cellTypeAtIndexPath:indexPath] == ATMessageCenterMessageTypeMessage;
-	
 	// iOS 7 requires this and there's no good way to instantiate a cell to sample, so we're hard-coding it for now.
-	NSString *labelText = [self.dataSource textOfMessageAtIndexPath:indexPath];
-	CGFloat marginsAndStuff = isMessageCell ? MESSAGE_LABEL_TOTAL_HORIZONTAL_MARGIN : REPLY_LABEL_TOTAL_HORIZONTAL_MARGIN;
-
-	CGFloat effectiveLabelWidth = CGRectGetWidth(tableView.bounds) - marginsAndStuff;
+	CGFloat verticalMargin, horizontalMargin, minimumCellHeight;
 	
+	switch ([self.dataSource cellTypeAtIndexPath:indexPath]) {
+		case ATMessageCenterMessageTypeContextMessage:
+		case ATMessageCenterMessageTypeMessage:
+			horizontalMargin = MESSAGE_LABEL_TOTAL_HORIZONTAL_MARGIN;
+			verticalMargin = MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN;
+			minimumCellHeight = 0;
+			break;
+			
+		case ATMessageCenterMessageTypeReply:
+			horizontalMargin = REPLY_LABEL_TOTAL_HORIZONTAL_MARGIN;
+			verticalMargin = REPLY_LABEL_TOTAL_VERTICAL_MARGIN;
+			minimumCellHeight = REPLY_CELL_MINIMUM_HEIGHT;
+			break;
+	}
+	
+	NSString *labelText = [self.dataSource textOfMessageAtIndexPath:indexPath];
+	CGFloat effectiveLabelWidth = CGRectGetWidth(tableView.bounds) - horizontalMargin;
 	CGSize labelSize = [labelText sizeWithFont:[UIFont systemFontOfSize:BODY_FONT_SIZE] constrainedToSize:CGSizeMake(effectiveLabelWidth, MAXFLOAT)];
 	
-	if (isMessageCell) {
-		return labelSize.height + MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN;
-	} else {
-		return fmax(labelSize.height + REPLY_LABEL_TOTAL_VERTICAL_MARGIN, REPLY_CELL_MINIMUM_HEIGHT);
-	}
+	return fmax(labelSize.height + verticalMargin, minimumCellHeight);
 }
 
 #pragma mark Table view delegate

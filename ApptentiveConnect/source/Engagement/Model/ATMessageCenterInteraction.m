@@ -104,10 +104,14 @@
 }
 
 - (BOOL)profileRequested {
+#warning remove before flight
+	return YES;
 	return [self.configuration[@"ask_for_email"] boolValue];
 }
 
 - (BOOL)emailRequired {
+#warning remove before flight
+	return YES;
 	return [self.configuration[@"email_required"] boolValue];
 }
 

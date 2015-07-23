@@ -442,6 +442,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	} else {
 		[self.view endEditing:YES];
 		[self updateState];
+		[self resizeFooterView:nil];
 	}
 }
 
@@ -505,30 +506,25 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		
 		switch (state) {
 			case ATMessageCenterStateEmpty:
-				NSLog(@"*** EMPTY ***");
 				newFooter = self.messageInputView;
 				break;
 				
 			case ATMessageCenterStateComposing:
-				NSLog(@"*** COMPOSING ***");
 				newFooter = self.messageInputView;
 				break;
 			
 			case ATMessageCenterStateWhoCard: {
-				NSLog(@"*** WHO CARD ***");
 				[self.whoView.nameField becomeFirstResponder];
 				newFooter = self.whoView;
 				break;
 			}
 				
 			case ATMessageCenterStateSending:
-				NSLog(@"*** SENDING ***");
 				newFooter = self.confirmationView;
 				self.confirmationView.confirmationHidden = YES;
 				break;
 				
 			case ATMessageCenterStateConfirmed:
-				NSLog(@"*** CONFIRMED ***");
 				newFooter = self.confirmationView;
 				self.confirmationView.confirmationHidden = YES;
 				self.confirmationView.confirmationLabel.text = self.interaction.confirmationText;
@@ -536,7 +532,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				break;
 				
 			case ATMessageCenterStateNetworkError:
-				NSLog(@"*** NET ERROR ***");
 				newFooter = self.confirmationView;
 				self.confirmationView.confirmationHidden = NO;
 				self.confirmationView.confirmationLabel.text = self.interaction.networkErrorTitle;
@@ -544,7 +539,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				break;
 				
 			case ATMessageCenterStateHTTPError:
-				NSLog(@"*** HTTP ERROR ***");
 				newFooter = self.confirmationView;
 				self.confirmationView.confirmationHidden = NO;
 				self.confirmationView.confirmationLabel.text = self.interaction.HTTPErrorTitle;
@@ -552,7 +546,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				break;
 				
 			case ATMessageCenterStateReplied:
-				NSLog(@"*** REPLIED ***");
 				newFooter = nil;
 				break;
 				
@@ -611,7 +604,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
 		[self.tableView setContentOffset:offset];
-		NSLog(@"Scrolling to %f", offset.y);
 	}];
 }
 
@@ -637,7 +629,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	CGRect frame = self.tableView.tableFooterView.frame;
 	
 	frame.size.height = height;
-	NSLog(@"RESIZING TO %f POINTS", height);
 	
 	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
 		self.tableView.tableFooterView.frame = frame;
@@ -671,7 +662,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)adjustBrandingVisibility {
 	// Hide branding when content gets within transtionDistance of it
-	CGFloat transitionDistance = 44;
+	CGFloat transitionDistance = CONFIRMATION_VIEW_HEIGHT / 2.0;
 	
 	CGFloat poweredByTop = CGRectGetMinY(self.poweredByLabel.frame);
 	
@@ -682,7 +673,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	CGFloat lastMessageBottom = CGRectGetMaxY([self.backgroundView convertRect:lastMessageFrame fromView:self.tableView]);
 	
-	CGFloat distance = poweredByTop - lastMessageBottom - CONFIRMATION_VIEW_HEIGHT;
+	CGFloat distance = poweredByTop - lastMessageBottom - CONFIRMATION_VIEW_HEIGHT / 2.0;
 	
 	if (distance > transitionDistance) {
 		self.tableView.backgroundView.alpha = 1.0;

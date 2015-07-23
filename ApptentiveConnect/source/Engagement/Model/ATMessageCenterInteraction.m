@@ -104,7 +104,7 @@
 }
 
 - (BOOL)profileRequested {
-#warning remove before flight
+#warning remove before flight Extra change
 	return YES;
 	return [self.configuration[@"ask_for_email"] boolValue];
 }

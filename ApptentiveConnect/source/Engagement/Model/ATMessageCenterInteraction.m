@@ -104,11 +104,11 @@
 }
 
 - (BOOL)profileRequested {
-	return [self.configuration[@"ask_for_email"] boolValue];
+	return YES;//[self.configuration[@"ask_for_email"] boolValue];
 }
 
 - (BOOL)emailRequired {
-	return [self.configuration[@"email_required"] boolValue];
+	return YES;//[self.configuration[@"email_required"] boolValue];
 }
 
 - (BOOL)brandingEnabled {

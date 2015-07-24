@@ -38,9 +38,6 @@ NSString *const ATSurveyShownNotification = @"ATSurveyShownNotification";
 NSString *const ATSurveySentNotification = @"ATSurveySentNotification";
 NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 
-NSString *const ATInitialUserNameKey = @"ATInitialUserNameKey";
-NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
-
 NSString *const ATIntegrationKeyUrbanAirship = @"urban_airship";
 NSString *const ATIntegrationKeyKahuna = @"kahuna";
 NSString *const ATIntegrationKeyAmazonSNS = @"aws_sns";
@@ -109,45 +106,20 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	_initiallyUseMessageCenter = initiallyUseMessageCenter;
 }
 
-- (void)setInitialUserName:(NSString *)initialUserName {
-	if (_initialUserName != initialUserName) {
-		_initialUserName = initialUserName;
-		
-		// Set person object's name. Only overwrites previous *initial* names.
-		NSString *previousInitialUserName = [[NSUserDefaults standardUserDefaults] objectForKey:ATInitialUserNameKey];
-		ATPersonInfo *person = [ATPersonInfo currentPerson];
-		if (person != nil) {
-			if (!person.name || [person.name isEqualToString:previousInitialUserName]) {
-				person.name = initialUserName;
-				person.needsUpdate = YES;
-				[person saveAsCurrentPerson];
-			}
-		}
-		[[NSUserDefaults standardUserDefaults] setObject:initialUserName forKey:ATInitialUserNameKey];
-	}
+- (NSString *)personName {
+	return [ATPersonInfo currentPerson].name;
 }
 
-- (void)setInitialUserEmailAddress:(NSString *)initialUserEmailAddress {
-	if (![ATUtilities emailAddressIsValid:initialUserEmailAddress]) {
-		ATLogInfo(@"Attempting to set an invalid initial user email address: %@", initialUserEmailAddress);
-		return;
-	}
-		
-	if (![_initialUserEmailAddress isEqualToString:initialUserEmailAddress]) {
-		_initialUserEmailAddress = initialUserEmailAddress;
-		
-		ATPersonInfo *person = [ATPersonInfo currentPerson];
-		if (person != nil) {
-			// Only overwrites previous *initial* emails.
-			NSString *previousInitialUserEmailAddress = [[NSUserDefaults standardUserDefaults] objectForKey:ATInitialUserEmailAddressKey];
-			if (!person.emailAddress || ([person.emailAddress caseInsensitiveCompare:previousInitialUserEmailAddress] == NSOrderedSame)) {
-				person.emailAddress = _initialUserEmailAddress;
-				person.needsUpdate = YES;
-				[person saveAsCurrentPerson];
-			}			
-		}
-		[[NSUserDefaults standardUserDefaults] setObject:initialUserEmailAddress forKey:ATInitialUserEmailAddressKey];
-	}
+- (void)setPersonName:(NSString *)personName {
+	[ATPersonInfo currentPerson].name = personName;
+}
+
+- (NSString *)personEmailAddress {
+	return [ATPersonInfo currentPerson].emailAddress;
+}
+
+- (void)setPersonEmailAddress:(NSString *)personEmailAddress {
+	[ATPersonInfo currentPerson].emailAddress = personEmailAddress;
 }
 
 - (void)sendAttachmentText:(NSString *)text {

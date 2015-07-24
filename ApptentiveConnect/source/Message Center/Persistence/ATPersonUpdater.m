@@ -14,23 +14,14 @@
 
 NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValuePreferenceKey";
 
-@interface ATPersonUpdater (Private)
-- (void)processResult:(NSDictionary *)jsonPerson;
-@end
-
 @interface ATPersonUpdater ()
+
 @property (nonatomic, strong) NSDictionary *sentPersonJSON;
 @property (strong, nonatomic) ATAPIRequest *request;
 
 @end
 
 @implementation ATPersonUpdater
-
-+ (void)registerDefaults {
-	NSDictionary *defaultPreferences = @{ATPersonLastUpdateValuePreferenceKey: @{}};
-	
-	[[NSUserDefaults standardUserDefaults] registerDefaults:defaultPreferences];
-}
 
 - (id)initWithDelegate:(NSObject<ATPersonUpdaterDelegate> *)aDelegate {
 	if ((self = [super init])) {
@@ -48,15 +39,7 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 + (BOOL)shouldUpdate {
 	[ATPersonUpdater registerDefaults];
 	
-	ATPersonInfo *person = [ATPersonInfo currentPerson];
-	
-	if (person == nil) {
-		person = [[ATPersonInfo alloc] init];
-		person.needsUpdate = YES;
-		[person saveAsCurrentPerson];
-	}
-	
-	return person.needsUpdate || [person apiJSON].count > 0;
+	return [[ATPersonInfo currentPerson] apiJSON].count > 0;
 }
 
 + (NSDictionary *)lastSavedVersion {
@@ -66,12 +49,8 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 - (void)update {
 	[self cancel];
 	ATPersonInfo *person = [ATPersonInfo currentPerson];
-	if (person) {
-		person.needsUpdate = YES;
-		[person saveAsCurrentPerson];
-	}
-	self.sentPersonJSON = [ATPersonInfo currentPerson].dictionaryRepresentation;
-	self.request = [[ATWebClient sharedClient] requestForUpdatingPerson:[ATPersonInfo currentPerson]];
+	self.sentPersonJSON = person.dictionaryRepresentation;
+	self.request = [[ATWebClient sharedClient] requestForUpdatingPerson:person];
 	self.request.delegate = self;
 	[self.request start];
 }
@@ -115,16 +94,19 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 		[self.delegate personUpdater:self didFinish:NO];
 	}
 }
-@end
 
-@implementation ATPersonUpdater (Private)
+#pragma mark - Private
+
++ (void)registerDefaults {
+	NSDictionary *defaultPreferences = @{ATPersonLastUpdateValuePreferenceKey: @{}};
+	
+	[[NSUserDefaults standardUserDefaults] registerDefaults:defaultPreferences];
+}
+
 - (void)processResult:(NSDictionary *)jsonPerson {
 	ATPersonInfo *person = [ATPersonInfo newPersonFromJSON:jsonPerson];
 	
 	if (person) {
-		person.needsUpdate = NO;
-		[person saveAsCurrentPerson];
-		
 		// Save out the value we sent to the server.
 		[[NSUserDefaults standardUserDefaults] setObject:self.sentPersonJSON forKey:ATPersonLastUpdateValuePreferenceKey];
 		

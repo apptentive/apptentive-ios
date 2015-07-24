@@ -42,6 +42,8 @@
 #define BODY_FONT_SIZE 14.0
 
 NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
+NSString *const ATMessageCenterDidPresentWhoCardKey = @"ATMessageCenterDidPresentWhoCardKey";
+
 
 typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	ATMessageCenterStateInvalid = 0,
@@ -124,6 +126,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.whoView.titleLabel.text = self.interaction.whoCardTitle;
 	[self.whoView.saveButton setTitle:self.interaction.whoCardSaveButtonTitle forState:UIControlStateNormal];
 	self.whoView.skipButton.hidden = self.interaction.emailRequired;
+	self.whoView.nameField.text = [ATConnect sharedConnection].personName;
+	self.whoView.emailField.text = [ATConnect sharedConnection].personEmailAddress;
+	[self validateWho:self];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardWillChangeFrameNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToInputView:) name:UIKeyboardWillShowNotification object:nil];
@@ -373,7 +378,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	if (message && ![message isEqualToString:@""]) {
 		[self.messageInputView.messageView resignFirstResponder];
 		
-		if (self.interaction.profileRequested && [ATPersonInfo currentPerson].emailAddress.length == 0) {
+		if (self.interaction.profileRequested && ![[NSUserDefaults standardUserDefaults] boolForKey:ATMessageCenterDidPresentWhoCardKey]) {
 			self.state = ATMessageCenterStateWhoCard;
 			self.pendingMessage = [[ATBackend sharedBackend] createTextMessageWithBody:message hiddenOnClient:NO];
 		} else {
@@ -409,61 +414,47 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self scrollToInputView:nil];
 }
 
-- (IBAction)validateWho:(UITextField *)sender {
-	BOOL valid = [self isWhoViewValid];
+- (IBAction)validateWho:(id)sender {
+	BOOL valid = [ATUtilities emailAddressIsValid:self.whoView.emailField.text];
 	
 	self.whoView.saveButton.enabled = valid;
 }
 
 - (IBAction)saveWho:(id)sender {
-	if (![self isWhoViewValid]) {
+	if (![ATUtilities emailAddressIsValid:self.whoView.emailField.text]) {
 		return;
 	}
 	
-	ATPersonInfo *person = [ATPersonInfo currentPerson];
-	[person	setEmailAddress:self.whoView.emailField.text];
-	[person setName:self.whoView.nameField.text];
-	[person saveAsCurrentPerson];
+	[ATConnect sharedConnection].personName = self.whoView.nameField.text;
+	[ATConnect sharedConnection].personEmailAddress = self.whoView.emailField.text;
+	[[ATBackend sharedBackend] updatePersonIfNeeded];
 	
 	if (self.pendingMessage) {
 		[[ATBackend sharedBackend] sendTextMessage:self.pendingMessage completion:^(NSString *pendingMessageID) {}];
 		self.pendingMessage = nil;
-	} else {
-		[self.view endEditing:YES];
 	}
-
+	
 	[self updateState];
+	[self.view endEditing:YES];
+	[self resizeFooterView:nil];
+
+	[[NSUserDefaults standardUserDefaults] setBool:YES forKey:ATMessageCenterDidPresentWhoCardKey];
 }
 
 - (IBAction)skipWho:(id)sender {
 	if (self.pendingMessage) {
 		[[ATBackend sharedBackend] sendTextMessage:self.pendingMessage completion:^(NSString *pendingMessageID) {}];
 		self.pendingMessage = nil;
-	} else {
-		[self.view endEditing:YES];
-		[self updateState];
-		[self resizeFooterView:nil];
 	}
+	
+	[self updateState];
+	[self.view endEditing:YES];
+	[self resizeFooterView:nil];
+	
+	[[NSUserDefaults standardUserDefaults] setBool:YES forKey:ATMessageCenterDidPresentWhoCardKey];
 }
 
 #pragma mark - Private
-
-- (BOOL)isWhoViewValid {
-	NSArray *emailParts = [self.whoView.emailField.text componentsSeparatedByString:@"@"];
-	
-	if (emailParts.count < 2 || [emailParts.firstObject length] == 0 || emailParts.count > 2) {
-		return NO;
-	}
-	
-	NSArray *domainParts = [emailParts.lastObject componentsSeparatedByString:@"."];
-	NSArray *nonEmptyDomainParts = [domainParts filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"length > 0"]];
-	
-	if (domainParts.count < 2 || domainParts.count != nonEmptyDomainParts.count) {
-		return  NO;
-	}
-	
-	return YES;
-}
 
 - (void)updateState {
 	if (self.pendingMessage) {
@@ -513,11 +504,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				newFooter = self.messageInputView;
 				break;
 			
-			case ATMessageCenterStateWhoCard: {
+			case ATMessageCenterStateWhoCard:
 				[self.whoView.nameField becomeFirstResponder];
 				newFooter = self.whoView;
 				break;
-			}
 				
 			case ATMessageCenterStateSending:
 				newFooter = self.confirmationView;

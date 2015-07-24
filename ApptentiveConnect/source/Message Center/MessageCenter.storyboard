@@ -82,44 +82,11 @@
                             <rect key="frame" x="0.0" y="526.5" width="414" height="300"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <view hidden="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g94-Qt-Zp0" customClass="ATMessageCenterConfirmationView">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="66"/>
+                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Aj5-aD-yTM" customClass="ATMessageCenterInputView">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="300"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Thank You!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="stQ-gR-6YZ">
-                                            <rect key="frame" x="8" y="8" width="398" height="18"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                            <color key="textColor" red="0.51764705879999995" green="0.51764705879999995" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" misplaced="YES" text="We try and reply to people between 5am and 6pm PST." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="kQ8-89-rPy">
-                                            <rect key="frame" x="8" y="34" width="398" height="24"/>
-                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
-                                            <color key="textColor" red="0.51764705879999995" green="0.51764705879999995" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                    <constraints>
-                                        <constraint firstItem="kQ8-89-rPy" firstAttribute="top" secondItem="stQ-gR-6YZ" secondAttribute="bottom" constant="8" id="1FX-7J-maP"/>
-                                        <constraint firstAttribute="trailing" secondItem="stQ-gR-6YZ" secondAttribute="trailing" constant="8" id="7UX-4A-xfM"/>
-                                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="kQ8-89-rPy" secondAttribute="bottom" constant="8" id="KoO-Gw-gjR"/>
-                                        <constraint firstItem="stQ-gR-6YZ" firstAttribute="leading" secondItem="g94-Qt-Zp0" secondAttribute="leading" constant="8" id="P60-nC-WBZ"/>
-                                        <constraint firstItem="stQ-gR-6YZ" firstAttribute="top" secondItem="g94-Qt-Zp0" secondAttribute="top" constant="8" id="ZCm-QE-wZF"/>
-                                        <constraint firstItem="kQ8-89-rPy" firstAttribute="top" relation="greaterThanOrEqual" secondItem="g94-Qt-Zp0" secondAttribute="top" constant="8" id="fRI-vT-Xdg"/>
-                                        <constraint firstAttribute="trailing" secondItem="kQ8-89-rPy" secondAttribute="trailing" constant="8" id="tiZ-0g-UDz"/>
-                                        <constraint firstItem="kQ8-89-rPy" firstAttribute="leading" secondItem="g94-Qt-Zp0" secondAttribute="leading" constant="8" id="z6F-sO-Sfg"/>
-                                    </constraints>
-                                    <connections>
-                                        <outlet property="confirmationLabel" destination="stQ-gR-6YZ" id="cxB-Ae-9yj"/>
-                                        <outlet property="confirmationStatusSpacing" destination="1FX-7J-maP" id="cSV-lu-N91"/>
-                                        <outlet property="statusLabel" destination="kQ8-89-rPy" id="5Cw-b8-eqe"/>
-                                    </connections>
-                                </view>
-                                <view hidden="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Aj5-aD-yTM" customClass="ATMessageCenterInputView">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="210"/>
-                                    <subviews>
-                                        <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cFn-Go-Vab">
-                                            <rect key="frame" x="8" y="8" width="398" height="194"/>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cFn-Go-Vab">
+                                            <rect key="frame" x="8" y="8" width="398" height="284"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ng1-FC-LJj">
                                                     <rect key="frame" x="0.0" y="0.0" width="398" height="44"/>
@@ -171,8 +138,8 @@
                                                         <userDefinedRuntimeAttribute type="string" keyPath="layer.borderWidth" value="0.5"/>
                                                     </userDefinedRuntimeAttributes>
                                                 </view>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="751" verticalHuggingPriority="751" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="do6-U4-CNu">
-                                                    <rect key="frame" x="0.0" y="44" width="398" height="150"/>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="751" verticalHuggingPriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="do6-U4-CNu">
+                                                    <rect key="frame" x="0.0" y="44" width="398" height="240"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -232,8 +199,8 @@
                                         <outlet property="titleLabelToClearButton" destination="4kH-Os-vzx" id="Shd-FA-4CT"/>
                                     </connections>
                                 </view>
-                                <view hidden="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hjb-x8-sQN" customClass="ATMessageCenterWhoView">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="164"/>
+                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hjb-x8-sQN" customClass="ATMessageCenterWhoView">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="300"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PJM-ba-h4O">
                                             <rect key="frame" x="8" y="8" width="398" height="148"/>
@@ -323,6 +290,38 @@
                                         <outlet property="saveButton" destination="EJ0-DT-gxJ" id="p4c-6n-T9l"/>
                                         <outlet property="skipButton" destination="ucW-DV-V6C" id="6It-vF-gMD"/>
                                         <outlet property="titleLabel" destination="8sl-tE-JA8" id="aeG-Ma-iLJ"/>
+                                    </connections>
+                                </view>
+                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g94-Qt-Zp0" customClass="ATMessageCenterConfirmationView">
+                                    <rect key="frame" x="0.0" y="0.5" width="414" height="300"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Thank You!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="stQ-gR-6YZ">
+                                            <rect key="frame" x="8" y="8" width="398" height="18"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <color key="textColor" red="0.51764705879999995" green="0.51764705879999995" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="We try and reply to people between 5am and 6pm PST." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="kQ8-89-rPy">
+                                            <rect key="frame" x="8" y="34" width="398" height="29"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                                            <color key="textColor" red="0.51764705879999995" green="0.51764705879999995" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <constraints>
+                                        <constraint firstItem="kQ8-89-rPy" firstAttribute="top" secondItem="stQ-gR-6YZ" secondAttribute="bottom" constant="8" id="1FX-7J-maP"/>
+                                        <constraint firstAttribute="trailing" secondItem="stQ-gR-6YZ" secondAttribute="trailing" constant="8" id="7UX-4A-xfM"/>
+                                        <constraint firstItem="stQ-gR-6YZ" firstAttribute="leading" secondItem="g94-Qt-Zp0" secondAttribute="leading" constant="8" id="P60-nC-WBZ"/>
+                                        <constraint firstItem="stQ-gR-6YZ" firstAttribute="top" secondItem="g94-Qt-Zp0" secondAttribute="top" constant="8" id="ZCm-QE-wZF"/>
+                                        <constraint firstItem="kQ8-89-rPy" firstAttribute="top" relation="greaterThanOrEqual" secondItem="g94-Qt-Zp0" secondAttribute="top" constant="8" id="fRI-vT-Xdg"/>
+                                        <constraint firstAttribute="trailing" secondItem="kQ8-89-rPy" secondAttribute="trailing" constant="8" id="tiZ-0g-UDz"/>
+                                        <constraint firstItem="kQ8-89-rPy" firstAttribute="leading" secondItem="g94-Qt-Zp0" secondAttribute="leading" constant="8" id="z6F-sO-Sfg"/>
+                                    </constraints>
+                                    <connections>
+                                        <outlet property="confirmationLabel" destination="stQ-gR-6YZ" id="cxB-Ae-9yj"/>
+                                        <outlet property="confirmationStatusSpacing" destination="1FX-7J-maP" id="cSV-lu-N91"/>
+                                        <outlet property="statusLabel" destination="kQ8-89-rPy" id="5Cw-b8-eqe"/>
                                     </connections>
                                 </view>
                             </subviews>

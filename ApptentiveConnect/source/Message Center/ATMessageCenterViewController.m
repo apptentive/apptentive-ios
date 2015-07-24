@@ -71,6 +71,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @property (weak, nonatomic) IBOutlet UILabel *poweredByLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *poweredByImageView;
 
+@property (strong, nonatomic) IBOutlet UIProgressView *progressView;
+
 @property (nonatomic, strong) ATMessageCenterDataSource *dataSource;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
@@ -141,6 +143,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	if (self.interaction.contextMessageBody) {
 		self.contextMessage = [[ATBackend sharedBackend] automatedMessageWithTitle:nil body:self.interaction.contextMessageBody];
 	}
+	
+	self.progressView.translatesAutoresizingMaskIntoConstraints = NO;
+	[self.navigationController.navigationBar addSubview:self.progressView];
+	[self.navigationController.navigationBar addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(0)-[progress]-(0)-|" options:NSLayoutFormatAlignAllBottom metrics:nil views:@{ @"progress": self.progressView }]];
+	[self.navigationController.navigationBar addConstraint:[NSLayoutConstraint constraintWithItem:self.progressView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.navigationController.navigationBar attribute:NSLayoutAttributeBottom multiplier:1 constant:-1]];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardWillChangeFrameNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToInputView:) name:UIKeyboardWillShowNotification object:nil];
@@ -393,6 +400,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (IBAction)dismiss:(id)sender {
 	[self.dismissalDelegate messageCenterWillDismiss:self];
 	[self.dataSource stop];
+	
+	[self.progressView removeFromSuperview];
 	
 	[self dismissViewControllerAnimated:YES completion:^{
 		if ([self.dismissalDelegate respondsToSelector:@selector(messageCenterDidDismiss:)]) {

@@ -225,31 +225,42 @@ static NSURLCache *imageCache = nil;
 	}
 }
 
-- (void)sendAutomatedMessageWithTitle:(NSString *)title body:(NSString *)body {
-	// See if there is already a message with this type.
-	BOOL hidden = NO;
-	NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(title = %@ AND body = %@)", title, body];
-	NSArray *results = [ATData findEntityNamed:@"ATAutomatedMessage" withPredicate:fetchPredicate];
-	if (results && [results count]) {
-		hidden = YES;
-	}
-	
+- (ATAutomatedMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body {
 	ATAutomatedMessage *message = (ATAutomatedMessage *)[ATData newEntityNamed:@"ATAutomatedMessage"];
 	[message setup];
-	message.hidden = @(hidden);
+	message.hidden = @NO;
 	message.title = title;
 	message.body = body;
-	message.pendingState = [NSNumber numberWithInt:ATPendingMessageStateSending];
+	message.pendingState = @(ATPendingMessageStateComposing);
 	message.sentByUser = @YES;
 	[message updateClientCreationTime];
 	NSError *error = nil;
 	if (![[self managedObjectContext] save:&error]) {
 		ATLogError(@"Unable to send automated message with title: %@, body: %@, error: %@", title, body, error);
 		message = nil;
-		return;
 	}
 	
-	[self sendMessage:message];
+	return message;
+}
+
+- (BOOL)sendAutomatedMessage:(ATAutomatedMessage *)message completion:(void (^)(NSString *pendingMessageID))completion {
+	message.pendingState = @(ATPendingMessageStateSending);
+	[message updateClientCreationTime];
+	
+	NSError *error = nil;
+	if (![[self managedObjectContext] save:&error]) {
+		ATLogError(@"Unable to send Automated message with title: %@, body: %@, error: %@", message.title, message.body, error);
+		message = nil;
+		return NO;
+	}
+	
+	if (completion) {
+		completion(message.pendingMessageID);
+	}
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidSendNotification object:@{ATMessageCenterMessageNonceKey:message.pendingMessageID}];
+	
+	return [self sendMessage:message];
 }
 
 - (BOOL)sendTextMessageWithBody:(NSString *)body completion:(void (^)(NSString *pendingMessageID))completion {

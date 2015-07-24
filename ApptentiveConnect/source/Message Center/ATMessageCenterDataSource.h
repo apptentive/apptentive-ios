@@ -12,7 +12,8 @@
 
 typedef NS_ENUM(NSInteger, ATMessageCenterMessageType) {
 	ATMessageCenterMessageTypeMessage,
-	ATMessageCenterMessageTypeReply
+	ATMessageCenterMessageTypeReply,
+	ATMessageCenterMessageTypeContextMessage,
 };
 
 @protocol ATMessageCenterDataSourceDelegate;

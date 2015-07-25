@@ -47,7 +47,7 @@
 }
 
 - (void)updateConstraints {
-	if (CGRectGetWidth(self.bounds) > 2.75 * CGRectGetHeight(self.bounds)) {
+	if (CGRectGetWidth(self.bounds) > 2.1 * CGRectGetHeight(self.bounds)) {
 		self.titleLabel.alpha = 0;
 		
 		[self.containerView removeConstraints:self.portraitConstraints];

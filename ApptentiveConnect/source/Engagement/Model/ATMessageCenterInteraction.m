@@ -8,6 +8,8 @@
 
 #import "ATMessageCenterInteraction.h"
 #import "ATConnect_Private.h"
+#import "ATPersonInfo.h"
+#import "ATMessageCenterViewController.h"
 
 @implementation ATMessageCenterInteraction
 
@@ -40,6 +42,13 @@
 	NSString *URLString = [self stringForKey:@"greeting_image_url" fallback:nil];
 	
 	return (URLString.length > 0) ? [NSURL URLWithString:URLString] : nil;
+}
+
+- (NSString *)contextMessageBody {
+#warning remove
+	return @"Please let us know how to make APPNAME better for you!";
+	
+	return [self stringForKey:@"context_message_body" fallback:nil];
 }
 
 - (NSString *)confirmationText {
@@ -80,6 +89,38 @@
 
 - (NSString *)composerTitleText {
 	return [self stringForKey:@"composer_title" fallback:ATLocalizedString(@"New Message", @"Title above message field")];
+}
+
+- (NSString *)composerSaveButtonTitle {
+	if (self.emailRequired && ![[NSUserDefaults standardUserDefaults] boolForKey:ATMessageCenterDidPresentWhoCardKey]) {
+		return ATLocalizedString(@"Next", @"Message field save button when email required");
+	} else {
+		return ATLocalizedString(@"Send", @"Send button title");
+	}
+}
+
+- (NSString *)whoCardTitle {
+	return [self stringForKey:@"profile_title" fallback:ATLocalizedString(@"Whom are we speaking with?", @"Profile card title")];
+}
+
+- (NSString *)whoCardSaveButtonTitle {
+	if (self.emailRequired) {
+		return ATLocalizedString(@"Send", @"Send button title");
+	} else {
+		return [self stringForKey:@"profile_save_button" fallback:ATLocalizedString(@"That’s Me!", @"Title for save button on profile view")];
+	}
+}
+
+- (BOOL)profileRequested {
+#warning remove before flight
+	return YES;
+	return [self.configuration[@"ask_for_email"] boolValue];
+}
+
+- (BOOL)emailRequired {
+#warning remove before flight
+	return YES;
+	return [self.configuration[@"email_required"] boolValue];
 }
 
 - (BOOL)brandingEnabled {

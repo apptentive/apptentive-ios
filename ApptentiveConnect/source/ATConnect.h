@@ -349,10 +349,10 @@ extern NSString *const ATIntegrationKeyParse;
 /// @name Add Custom Device or Person Data
 ///---------------------------------------
 
-/** The initial name of the app user when communicating with Apptentive. */
-@property (nonatomic, copy) NSString *initialUserName;
-/** The initial email address of the app user in form fields and communicating with Apptentive. */
-@property (nonatomic, copy) NSString *initialUserEmailAddress;
+/** The name of the app user when communicating with Apptentive. */
+@property (nonatomic, copy) NSString *personName;
+/** The email address of the app user in form fields and communicating with Apptentive. */
+@property (nonatomic, copy) NSString *personEmailAddress;
 
 /**
  Adds custom data associated with the current person.

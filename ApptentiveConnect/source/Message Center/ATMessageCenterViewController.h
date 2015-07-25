@@ -9,11 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "ATMessageCenterDataSource.h"
 
+extern NSString *const ATMessageCenterDidPresentWhoCardKey;
+
 @class ATMessageCenterInteraction;
 
 @protocol ATMessageCenterDismissalDelegate;
 
-@interface ATMessageCenterViewController : UITableViewController <ATMessageCenterDataSourceDelegate, UITextViewDelegate>
+@interface ATMessageCenterViewController : UITableViewController <ATMessageCenterDataSourceDelegate, UITextViewDelegate, UITextFieldDelegate>
 
 @property (nonatomic, weak) NSObject<ATMessageCenterDismissalDelegate> *dismissalDelegate;
 

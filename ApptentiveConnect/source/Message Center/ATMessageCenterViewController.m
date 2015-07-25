@@ -10,8 +10,10 @@
 #import "ATMessageCenterGreetingView.h"
 #import "ATMessageCenterConfirmationView.h"
 #import "ATMessageCenterInputView.h"
+#import "ATMessageCenterWhoView.h"
 #import "ATMessageCenterMessageCell.h"
 #import "ATMessageCenterReplyCell.h"
+#import "ATMessageCenterContextMessageCell.h"
 #import "ATBackend.h"
 #import "ATMessageCenterInteraction.h"
 #import "ATConnect_Private.h"
@@ -19,17 +21,20 @@
 #import "ATUtilities.h"
 #import "ATNetworkImageIconView.h"
 #import "ATReachability.h"
+#import "ATAutomatedMessage.h"
+#import "ATData.h"
 
 #define HEADER_FOOTER_EMPTY_HEIGHT 4.0
 #define HEADER_DATE_LABEL_HEIGHT 28.0
 #define GREETING_PORTRAIT_HEIGHT 258.0
 #define GREETING_LANDSCAPE_HEIGHT 128.0
+#define CONFIRMATION_VIEW_HEIGHT 88.0
 
 #define TEXT_VIEW_HORIZONTAL_INSET 12.0
 #define TEXT_VIEW_VERTICAL_INSET 10.0
 #define DATE_FONT_SIZE 14.0
 
-#define FOOTER_ANIMATION_DURATION 0.25
+#define FOOTER_ANIMATION_DURATION 0.10
 
 // The following need to match the storyboard for sizing cells on iOS 7
 #define MESSAGE_LABEL_TOTAL_HORIZONTAL_MARGIN 30.0
@@ -40,11 +45,14 @@
 #define BODY_FONT_SIZE 14.0
 
 NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
+NSString *const ATMessageCenterDidPresentWhoCardKey = @"ATMessageCenterDidPresentWhoCardKey";
+
 
 typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	ATMessageCenterStateInvalid = 0,
 	ATMessageCenterStateEmpty,
 	ATMessageCenterStateComposing,
+	ATMessageCenterStateWhoCard,
 	ATMessageCenterStateSending,
 	ATMessageCenterStateConfirmed,
 	ATMessageCenterStateNetworkError,
@@ -57,6 +65,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @property (weak, nonatomic) IBOutlet ATMessageCenterGreetingView *greetingView;
 @property (strong, nonatomic) IBOutlet ATMessageCenterConfirmationView *confirmationView;
 @property (strong, nonatomic) IBOutlet ATMessageCenterInputView *messageInputView;
+@property (strong, nonatomic) IBOutlet ATMessageCenterWhoView *whoView;
 
 @property (strong, nonatomic) IBOutlet UIView *backgroundView;
 @property (weak, nonatomic) IBOutlet UILabel *poweredByLabel;
@@ -68,6 +77,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @property (readonly, nonatomic) NSIndexPath *indexPathOfLastMessage;
 
 @property (nonatomic) ATMessageCenterState state;
+
+@property (nonatomic, strong) ATTextMessage *pendingMessage;
+@property (nonatomic, weak) UIView *activeFooterView;
+
+@property (nonatomic, strong) ATAutomatedMessage *contextMessage;
 
 @end
 
@@ -91,10 +105,16 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.greetingView.messageLabel.text = self.interaction.greetingMessage;
 	self.greetingView.imageView.imageURL = self.interaction.greetingImageURL;
 	
+	self.confirmationView.confirmationHidden = YES;
+	
 	if (self.interaction.brandingEnabled) {
 		self.tableView.backgroundView = self.backgroundView;
 		self.poweredByLabel.text = ATLocalizedString(@"Powered by", @"Powered by followed by Apptentive logo.");
 		self.poweredByImageView.image = [ATBackend imageNamed:@"at_branding-logo"];
+	}
+	
+	if (!self.interaction.profileRequested) {
+		self.navigationItem.leftBarButtonItem = nil;
 	}
 	
 	self.messageInputView.messageView.text = self.draftMessage ?: @"";
@@ -106,21 +126,34 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.messageInputView.placeholderLabel.hidden = self.messageInputView.messageView.text.length > 0;
 	
 	self.messageInputView.titleLabel.text = self.interaction.composerTitleText;
+	[self.messageInputView.sendButton setTitle:self.interaction.composerSaveButtonTitle forState:UIControlStateNormal];
 	self.messageInputView.sendButton.enabled = self.messageInputView.messageView.text.length > 0;
 	self.messageInputView.clearButton.enabled = self.messageInputView.messageView.text.length > 0;
-
-	self.tableView.tableFooterView = nil;
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeInputView:) name:UIKeyboardWillChangeFrameNotification object:nil];
+	self.whoView.titleLabel.text = self.interaction.whoCardTitle;
+	[self.whoView.saveButton setTitle:self.interaction.whoCardSaveButtonTitle forState:UIControlStateNormal];
+	self.whoView.skipButton.hidden = self.interaction.emailRequired;
+	self.whoView.nameField.text = [ATConnect sharedConnection].personName;
+	self.whoView.emailField.text = [ATConnect sharedConnection].personEmailAddress;
+	[self validateWho:self];
+	
+	self.contextMessage = nil;
+	if (self.interaction.contextMessageBody) {
+		self.contextMessage = [[ATBackend sharedBackend] automatedMessageWithTitle:nil body:self.interaction.contextMessageBody];
+	}
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardWillChangeFrameNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToInputView:) name:UIKeyboardWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardDidHideNotification object:nil];
 }
 
 - (void)dealloc {
+	self.tableView.delegate = nil;
+	self.messageInputView.messageView.delegate = nil;
+	self.whoView.nameField.delegate = nil;
+	self.whoView.emailField.delegate = nil;
+	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (BOOL)canBecomeFirstResponder {
-	return YES;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -131,7 +164,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 	[UIView animateWithDuration:duration animations:^{
 		[self updateHeaderHeightForOrientation:toInterfaceOrientation];
-		[self updateInputViewForOrientation:toInterfaceOrientation];
+		[self updateFooterViewForOrientation:toInterfaceOrientation];
 	}];
 }
 
@@ -139,6 +172,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[super viewWillAppear:animated];
 
 	[self updateState];
+	[self resizeFooterView:nil];
 
 	if (self.state != ATMessageCenterStateEmpty) {
 		[self scrollToLastReplyAnimated:NO];
@@ -157,12 +191,14 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 	
-	NSString *message = self.messageInputView.messageView.text;
+	NSString *message = self.pendingMessage ? self.pendingMessage.body : self.messageInputView.messageView.text;
 	if (message) {
 		[[NSUserDefaults standardUserDefaults] setObject:message forKey:ATMessageCenterDraftMessageKey];
 	} else {
 		[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATMessageCenterDraftMessageKey];
 	}
+	
+	[self removeUnsentContextMessages];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -190,7 +226,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		cell.messageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
 		
 		return cell;
-	} else {
+	} else if (type == ATMessageCenterMessageTypeReply ) {
 		ATMessageCenterReplyCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Reply" forIndexPath:indexPath];
 
 		cell.supportUserImageView.imageURL = [self.dataSource imageURLOfSenderAtIndexPath:indexPath];
@@ -199,7 +235,15 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		cell.senderLabel.text = [self.dataSource senderOfMessageAtIndexPath:indexPath];
 		
 		return cell;
+	} else if (type == ATMessageCenterMessageTypeContextMessage) {
+		ATMessageCenterContextMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ContextMessage" forIndexPath:indexPath];
+
+		cell.contextMessageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
+		
+		return cell;
 	}
+	
+	return nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -211,21 +255,29 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	BOOL isMessageCell = [self.dataSource cellTypeAtIndexPath:indexPath] == ATMessageCenterMessageTypeMessage;
-	
 	// iOS 7 requires this and there's no good way to instantiate a cell to sample, so we're hard-coding it for now.
-	NSString *labelText = [self.dataSource textOfMessageAtIndexPath:indexPath];
-	CGFloat marginsAndStuff = isMessageCell ? MESSAGE_LABEL_TOTAL_HORIZONTAL_MARGIN : REPLY_LABEL_TOTAL_HORIZONTAL_MARGIN;
+	CGFloat verticalMargin, horizontalMargin, minimumCellHeight;
+	
+	switch ([self.dataSource cellTypeAtIndexPath:indexPath]) {
+		case ATMessageCenterMessageTypeContextMessage:
+		case ATMessageCenterMessageTypeMessage:
+			horizontalMargin = MESSAGE_LABEL_TOTAL_HORIZONTAL_MARGIN;
+			verticalMargin = MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN;
+			minimumCellHeight = 0;
+			break;
 
-	CGFloat effectiveLabelWidth = CGRectGetWidth(tableView.bounds) - marginsAndStuff;
-	
-	CGSize labelSize = [labelText sizeWithFont:[UIFont systemFontOfSize:BODY_FONT_SIZE] constrainedToSize:CGSizeMake(effectiveLabelWidth, MAXFLOAT)];
-	
-	if (isMessageCell) {
-		return labelSize.height + MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN;
-	} else {
-		return fmax(labelSize.height + REPLY_LABEL_TOTAL_VERTICAL_MARGIN, REPLY_CELL_MINIMUM_HEIGHT);
+		case ATMessageCenterMessageTypeReply:
+			horizontalMargin = REPLY_LABEL_TOTAL_HORIZONTAL_MARGIN;
+			verticalMargin = REPLY_LABEL_TOTAL_VERTICAL_MARGIN;
+			minimumCellHeight = REPLY_CELL_MINIMUM_HEIGHT;
+			break;
 	}
+	
+	NSString *labelText = [self.dataSource textOfMessageAtIndexPath:indexPath];
+	CGFloat effectiveLabelWidth = CGRectGetWidth(tableView.bounds) - horizontalMargin;
+	CGSize labelSize = [labelText sizeWithFont:[UIFont systemFontOfSize:BODY_FONT_SIZE] constrainedToSize:CGSizeMake(effectiveLabelWidth, MAXFLOAT)];
+
+	return ceil(fmax(labelSize.height + verticalMargin, minimumCellHeight));
 }
 
 #pragma mark Table view delegate
@@ -272,9 +324,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		ATLogError(@"caught exception: %@: %@", [exception name], [exception description]);
 	}
 	
-	[self updateState];
-	
-	if (self.state != ATMessageCenterStateComposing) {
+	if (self.state != ATMessageCenterStateWhoCard && self.state != ATMessageCenterStateComposing) {
+		[self updateState];
+		
 		[self scrollToLastReplyAnimated:YES];
 	}
 }
@@ -309,19 +361,32 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	return YES;
 }
 
-- (void)textViewDidEndEditing:(UITextView *)textView {
-	[self updateState];
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+	[self scrollToInputView:nil];
 }
 
-//- (void)textViewDidBeginEditing:(UITextView *)textView {
-//}
+- (void)textViewDidEndEditing:(UITextView *)textView {
+	if (self.state != ATMessageCenterStateWhoCard)
+		[self updateState];
+}
 
 // Fix iOS bug where scroll sometimes doesn't follow selection
-- (void)textViewDidChangeSelection:(UITextView *)textView
-{
+- (void)textViewDidChangeSelection:(UITextView *)textView {
 	[textView scrollRangeToVisible:textView.selectedRange];
 }
 
+#pragma mark Text field delegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+	if (textField == self.whoView.nameField) {
+		[self.whoView.emailField becomeFirstResponder];
+	} else {
+		[self saveWho:textField];
+		[self.whoView.emailField resignFirstResponder];
+	}
+	
+	return NO;
+}
 
 #pragma mark Actions
 
@@ -340,12 +405,23 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	NSString *message = self.messageInputView.messageView.text;
 	
 	if (message && ![message isEqualToString:@""]) {
-		[[ATBackend sharedBackend] sendTextMessageWithBody:message completion:^(NSString *pendingMessageID) {}];
+		[self.messageInputView.messageView resignFirstResponder];
 		
-		self.messageInputView.messageView.text = @"";
+		if (self.contextMessage) {
+			[[ATBackend sharedBackend] sendAutomatedMessage:self.contextMessage completion:^(NSString *pendingMessageID) {}];
+			self.contextMessage = nil;
+		}
 		
-		self.state = ATMessageCenterStateSending;
+		if (self.interaction.profileRequested && ![[NSUserDefaults standardUserDefaults] boolForKey:ATMessageCenterDidPresentWhoCardKey]) {
+			self.state = ATMessageCenterStateWhoCard;
+			self.pendingMessage = [[ATBackend sharedBackend] createTextMessageWithBody:message hiddenOnClient:NO];
+		} else {
+			[[ATBackend sharedBackend] sendTextMessageWithBody:message completion:^(NSString *pendingMessageID) {}];
+			[self updateState];
+		}
 	}
+	
+	self.messageInputView.messageView.text = @"";
 }
 
 - (IBAction)compose:(id)sender {
@@ -363,14 +439,61 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self updateState];
 }
 
-#pragma mark - Private
+- (IBAction)showWho:(id)sender {
+	self.whoView.skipButton.hidden = NO;
+	[self.whoView.skipButton setTitle:ATLocalizedString(@"Cancel", @"Cancel button for profile card edit mode") forState:UIControlStateNormal];
+	[self.whoView.saveButton setTitle:ATLocalizedString(@"Save", @"Save button for profile card edit mode") forState:UIControlStateNormal];
+	
+	self.state = ATMessageCenterStateWhoCard;
+	[self scrollToInputView:nil];
+}
 
-- (void)updateState {
-	if (self.state == ATMessageCenterStateComposing) {
+- (IBAction)validateWho:(id)sender {
+	BOOL valid = [ATUtilities emailAddressIsValid:self.whoView.emailField.text];
+	
+	self.whoView.saveButton.enabled = valid;
+}
+
+- (IBAction)saveWho:(id)sender {
+	if (![ATUtilities emailAddressIsValid:self.whoView.emailField.text]) {
 		return;
 	}
 	
-	if (self.dataSource.numberOfMessageGroups == 0) {
+	[ATConnect sharedConnection].personName = self.whoView.nameField.text;
+	[ATConnect sharedConnection].personEmailAddress = self.whoView.emailField.text;
+	[[ATBackend sharedBackend] updatePersonIfNeeded];
+	
+	if (self.pendingMessage) {
+		[[ATBackend sharedBackend] sendTextMessage:self.pendingMessage completion:^(NSString *pendingMessageID) {}];
+		self.pendingMessage = nil;
+	}
+	
+	[self updateState];
+	[self.view endEditing:YES];
+	[self resizeFooterView:nil];
+
+	[[NSUserDefaults standardUserDefaults] setBool:YES forKey:ATMessageCenterDidPresentWhoCardKey];
+}
+
+- (IBAction)skipWho:(id)sender {
+	if (self.pendingMessage) {
+		[[ATBackend sharedBackend] sendTextMessage:self.pendingMessage completion:^(NSString *pendingMessageID) {}];
+		self.pendingMessage = nil;
+	}
+	
+	[self updateState];
+	[self.view endEditing:YES];
+	[self resizeFooterView:nil];
+	
+	[[NSUserDefaults standardUserDefaults] setBool:YES forKey:ATMessageCenterDidPresentWhoCardKey];
+}
+
+#pragma mark - Private
+
+- (void)updateState {
+	if (self.pendingMessage) {
+		self.state = ATMessageCenterStateWhoCard;
+	} else if (self.dataSource.numberOfMessageGroups == 0) {
 		self.state = ATMessageCenterStateEmpty;
 	} else if (self.dataSource.lastMessageIsReply) {
 		self.state = ATMessageCenterStateReplied;
@@ -388,6 +511,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				self.state = networkIsUnreachable ? ATMessageCenterStateNetworkError : ATMessageCenterStateSending;
 				break;
 			case ATPendingMessageStateComposing:
+				//self.state = ATMessageCenterStateComposing;
+				break;
 			case ATPendingMessageStateNone:
 				self.state = ATMessageCenterStateEmpty;
 				break;
@@ -397,26 +522,25 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)setState:(ATMessageCenterState)state {
 	if (_state != state) {
-		UIView *oldFooter = self.tableView.tableFooterView;
+		UIView *oldFooter = self.activeFooterView;
 		UIView *newFooter = nil;
 		
-		[self.navigationController setToolbarHidden:(state == ATMessageCenterStateComposing || state == ATMessageCenterStateEmpty) animated:YES];
+		[self.navigationController setToolbarHidden:(state == ATMessageCenterStateComposing || state == ATMessageCenterStateEmpty || state == ATMessageCenterStateWhoCard) animated:YES];
 		
 		_state = state;
 		
 		switch (state) {
 			case ATMessageCenterStateEmpty:
 				newFooter = self.messageInputView;
-				CGFloat navigationBarHeight = CGRectGetHeight(self.navigationController.navigationBar.bounds);
-				CGFloat statusBarHeight = fmin(CGRectGetHeight([UIApplication sharedApplication].statusBarFrame), CGRectGetWidth([UIApplication sharedApplication].statusBarFrame));
-				
-				self.messageInputView.frame = CGRectMake(0.0, 0.0, CGRectGetWidth(self.tableView.bounds), CGRectGetHeight(self.tableView.bounds) - CGRectGetHeight(self.greetingView.bounds) - navigationBarHeight - statusBarHeight);
-				self.confirmationView.confirmationHidden = YES;
 				break;
 				
 			case ATMessageCenterStateComposing:
 				newFooter = self.messageInputView;
-				self.confirmationView.confirmationHidden = YES;
+				break;
+			
+			case ATMessageCenterStateWhoCard:
+				[self.whoView.nameField becomeFirstResponder];
+				newFooter = self.whoView;
 				break;
 				
 			case ATMessageCenterStateSending:
@@ -426,7 +550,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				
 			case ATMessageCenterStateConfirmed:
 				newFooter = self.confirmationView;
-				self.confirmationView.confirmationHidden = NO;
+				self.confirmationView.confirmationHidden = YES;
 				self.confirmationView.confirmationLabel.text = self.interaction.confirmationText;
 				self.confirmationView.statusLabel.text = self.interaction.statusText;
 				break;
@@ -455,25 +579,18 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		}
 		
 		if (newFooter != oldFooter) {
-			void (^animateInBlock)(BOOL finished) = ^(BOOL finished) {
-				newFooter.alpha = 0;
-				self.tableView.tableFooterView = newFooter;
-				
-				[UIView animateWithDuration:FOOTER_ANIMATION_DURATION animations:^{
-					newFooter.alpha = 1;
-				}];
-			};
-			
-			if (oldFooter) {
-				[UIView animateWithDuration:FOOTER_ANIMATION_DURATION animations:^{
-					oldFooter.alpha = 0;
-				} completion: animateInBlock];
-			} else {
-				animateInBlock(YES);
-			}
-		} else {
-			// Inform table view that footer may have resized
-			self.tableView.tableFooterView = newFooter;
+			newFooter.alpha = 0;
+			newFooter.hidden = NO;
+			[newFooter updateConstraints];
+
+			self.activeFooterView = newFooter;
+
+			[UIView animateWithDuration:0.25 animations:^{
+				newFooter.alpha = 1;
+				oldFooter.alpha = 0;
+			} completion:^(BOOL finished) {
+				oldFooter.hidden = YES;
+			}];
 		}
 	}
 }
@@ -505,54 +622,58 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)scrollToInputView:(NSNotification *)notification {
-	CGPoint offset = CGPointMake(0.0, CGRectGetMaxY(self.rectOfLastMessage) - self.tableView.contentInset.top);
+	CGFloat footerSpace = [self.dataSource numberOfMessageGroups] > 0 ? HEADER_FOOTER_EMPTY_HEIGHT : 0;
+	
+	CGPoint offset = CGPointMake(0.0, CGRectGetMaxY(self.rectOfLastMessage) - self.tableView.contentInset.top + footerSpace);
+
 	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
 		[self.tableView setContentOffset:offset];
 	}];
 }
 
-- (void)resizeInputView:(NSNotification *)notification {
+- (void)resizeFooterView:(NSNotification *)notification {
 	CGFloat height = 0;
-
-	if (self.state == ATMessageCenterStateComposing) {
-		CGRect rect = [self.view.window convertRect:[notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue] toView:self.tableView];
-		
-		height = CGRectGetHeight(self.tableView.bounds) - CGRectGetHeight(rect) - [self.topLayoutGuide length];
-	} else if (self.state == ATMessageCenterStateEmpty) {
-		height = CGRectGetHeight(self.tableView.bounds) - CGRectGetHeight(self.greetingView.bounds) - [self.topLayoutGuide length];
+	
+	if (self.state != ATMessageCenterStateEmpty && self.state != ATMessageCenterStateWhoCard && self.state != ATMessageCenterStateComposing) {
+		height = CONFIRMATION_VIEW_HEIGHT;
 	} else {
-		return;
+		CGRect keyboardRect;
+		if (notification) {
+			keyboardRect = [self.view.window convertRect:[notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue] toView:self.tableView.superview];
+			height = CGRectGetMinY(keyboardRect) - self.tableView.contentInset.top;
+		} else {
+			height = CGRectGetHeight(self.tableView.bounds) - self.tableView.contentInset.top;
+		}
+		
+		if (self.dataSource.numberOfMessageGroups == 0 && (CGRectGetMinY(keyboardRect) >= CGRectGetMaxY(self.tableView.frame) || !notification)) {
+			height -= CGRectGetHeight(self.greetingView.bounds);
+		}
 	}
 	
-	CGRect frame = self.messageInputView.frame;
+	CGRect frame = self.tableView.tableFooterView.frame;
 	
 	frame.size.height = height;
 	
 	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
-		self.messageInputView.frame = frame;
-		
-		if (self.tableView.tableFooterView == self.messageInputView) {
-			self.tableView.tableFooterView = self.messageInputView;
-		}
-		
-		[self.messageInputView updateConstraints];
+		self.tableView.tableFooterView.frame = frame;
+		[self.tableView.tableFooterView layoutIfNeeded];
+		[self.activeFooterView updateConstraints];
+		self.tableView.tableFooterView = self.tableView.tableFooterView;
 	}];
 }
 
 - (void)updateHeaderHeightForOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
-	CGFloat headerHeight = UIInterfaceOrientationIsLandscape(toInterfaceOrientation) ? GREETING_LANDSCAPE_HEIGHT	: GREETING_PORTRAIT_HEIGHT;
+	CGFloat headerHeight = UIInterfaceOrientationIsLandscape(toInterfaceOrientation) ? GREETING_LANDSCAPE_HEIGHT : GREETING_PORTRAIT_HEIGHT;
 
 	self.greetingView.bounds = CGRectMake(0, 0, self.tableView.bounds.size.height, headerHeight);
 	[self.greetingView updateConstraints];
 	self.tableView.tableHeaderView = self.greetingView;
 }
 
-- (void)updateInputViewForOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
-	if (self.tableView.tableFooterView == self.messageInputView) {
-		[self resizeInputView:nil];
-		[self.messageInputView updateConstraints];
-		self.tableView.tableFooterView = self.messageInputView;
-	}
+- (void)updateFooterViewForOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
+	[self resizeFooterView:nil];
+	[self.activeFooterView updateConstraints];
+	self.tableView.tableFooterView = self.tableView.tableFooterView;
 }
 
 - (NSString *)draftMessage {
@@ -560,14 +681,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)scrollToLastReplyAnimated:(BOOL)animated {
-	[self.tableView scrollToRowAtIndexPath:self.indexPathOfLastMessage atScrollPosition:UITableViewScrollPositionBottom animated:animated];
+	[self.tableView scrollToRowAtIndexPath:self.indexPathOfLastMessage atScrollPosition:UITableViewScrollPositionTop animated:animated];
 }
 
 - (void)adjustBrandingVisibility {
 	// Hide branding when content gets within transtionDistance of it
-	CGFloat transitionDistance = 44;
+	CGFloat transitionDistance = CONFIRMATION_VIEW_HEIGHT / 2.0;
 	
-	CGFloat confirmationViewHeight = CGRectGetHeight(self.confirmationView.bounds);
 	CGFloat poweredByTop = CGRectGetMinY(self.poweredByLabel.frame);
 	
 	CGRect lastMessageFrame = self.greetingView.frame;
@@ -577,7 +697,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	CGFloat lastMessageBottom = CGRectGetMaxY([self.backgroundView convertRect:lastMessageFrame fromView:self.tableView]);
 	
-	CGFloat distance = poweredByTop - lastMessageBottom - confirmationViewHeight;
+	CGFloat distance = poweredByTop - lastMessageBottom - CONFIRMATION_VIEW_HEIGHT / 2.0;
 	
 	if (distance > transitionDistance) {
 		self.tableView.backgroundView.alpha = 1.0;
@@ -585,6 +705,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		self.tableView.backgroundView.alpha = 0.0;
 	} else {
 		self.tableView.backgroundView.alpha = distance / transitionDistance;
+	}
+}
+
+- (void)removeUnsentContextMessages {
+	@synchronized(self) {
+		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingState == %d)", ATPendingMessageStateComposing];
+		[ATData removeEntitiesNamed:@"ATAutomatedMessage" withPredicate:fetchPredicate];
 	}
 }
 

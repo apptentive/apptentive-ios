@@ -21,6 +21,7 @@
 #import "ATMessageCenterViewController.h"
 #import "ATAbstractMessage.h"
 #import "ATTextMessage.h"
+#import "ATAutomatedMessage.h"
 #import "ATFeedback.h"
 #endif
 
@@ -65,8 +66,9 @@ extern NSString *const ATBackendBecameReadyNotification;
     will be sent in the background. */
 - (void)sendFeedback:(ATFeedback *)feedback;
 
-/*! Send ATAutomatedMessage messages. */
-- (void)sendAutomatedMessageWithTitle:(NSString *)title body:(NSString *)body;
+/*! ATAutomatedMessage messages. */
+- (ATAutomatedMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body;
+- (BOOL)sendAutomatedMessage:(ATAutomatedMessage *)message completion:(void (^)(NSString *pendingMessageID))completion;
 
 /*! Send ATTextMessage messages. */
 - (ATTextMessage *)createTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden;
@@ -104,6 +106,8 @@ extern NSString *const ATBackendBecameReadyNotification;
 
 /*! True if the backend is currently updating the person. */
 - (BOOL)isUpdatingPerson;
+
+- (void)updatePersonIfNeeded;
 
 - (NSURLCache *)imageCache;
 @end

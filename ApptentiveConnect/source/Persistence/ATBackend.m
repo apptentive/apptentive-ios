@@ -36,6 +36,7 @@
 #import "ATEngagementBackend.h"
 #import "ATFileMessage.h"
 #import "ATMessageCenterInteraction.h"
+#import "ATMessageCenterViewController.h"
 
 typedef NS_ENUM(NSInteger, ATBackendState){
 	ATBackendStateStarting,
@@ -54,7 +55,10 @@ static NSURLCache *imageCache = nil;
 
 @interface ATBackend ()
 - (void)updateConfigurationIfNeeded;
+
 @property (readonly, nonatomic, getter=isMessageCenterInForeground) BOOL messageCenterInForeground;
+@property (strong, nonatomic) NSMutableSet *activeMessageTasks;
+
 @end
 
 @interface ATBackend (Private)
@@ -186,6 +190,11 @@ static NSURLCache *imageCache = nil;
 
 - (void)dealloc {
 	[self.messageRetrievalTimer invalidate];
+	
+	for (ATMessageTask *task in self.activeMessageTasks) {
+		task.progressDelegate = nil;
+	}
+	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -243,7 +252,7 @@ static NSURLCache *imageCache = nil;
 	return message;
 }
 
-- (BOOL)sendAutomatedMessage:(ATAutomatedMessage *)message completion:(void (^)(NSString *pendingMessageID))completion {
+- (BOOL)sendAutomatedMessage:(ATAutomatedMessage *)message {
 	message.pendingState = @(ATPendingMessageStateSending);
 	[message updateClientCreationTime];
 	
@@ -254,21 +263,17 @@ static NSURLCache *imageCache = nil;
 		return NO;
 	}
 	
-	if (completion) {
-		completion(message.pendingMessageID);
-	}
-	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidSendNotification object:@{ATMessageCenterMessageNonceKey:message.pendingMessageID}];
 	
 	return [self sendMessage:message];
 }
 
-- (BOOL)sendTextMessageWithBody:(NSString *)body completion:(void (^)(NSString *pendingMessageID))completion {
-	return [self sendTextMessageWithBody:body hiddenOnClient:NO completion:completion];
+- (BOOL)sendTextMessageWithBody:(NSString *)body {
+	return [self sendTextMessageWithBody:body hiddenOnClient:NO];
 }
 
-- (BOOL)sendTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden completion:(void (^)(NSString *pendingMessageID))completion {
-	return [self sendTextMessage:[self createTextMessageWithBody:body hiddenOnClient:hidden] completion:completion];
+- (BOOL)sendTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden {
+	return [self sendTextMessage:[self createTextMessageWithBody:body hiddenOnClient:hidden]];
 }
 
 - (ATTextMessage *)createTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden {
@@ -294,7 +299,7 @@ static NSURLCache *imageCache = nil;
 	return message;
 }
 
-- (BOOL)sendTextMessage:(ATTextMessage *)message completion:(void (^)(NSString *pendingMessageID))completion {
+- (BOOL)sendTextMessage:(ATTextMessage *)message {
 	message.pendingState = @(ATPendingMessageStateSending);
 
 	[self updatePersonIfNeeded];
@@ -305,10 +310,6 @@ static NSURLCache *imageCache = nil;
 		ATLogError(@"Unable to send text message with body: %@, error: %@", message.body, error);
 		message = nil;
 		return NO;
-	}
-	
-	if (completion) {
-		completion(message.pendingMessageID);
 	}
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidSendNotification object:@{ATMessageCenterMessageNonceKey:message.pendingMessageID}];
@@ -381,8 +382,13 @@ static NSURLCache *imageCache = nil;
 	NSString *pendingMessageID = [message pendingMessageID];
 	double delayInSeconds = 1.5;
 	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+	ATMessageTask *task = [[ATMessageTask alloc] init];
+	
+	[self.activeMessageTasks addObject:task];
+	[self updateMessageTaskProgress];
+	task.progressDelegate = self;
+
 	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-		ATMessageTask *task = [[ATMessageTask alloc] init];
 		task.pendingMessageID = pendingMessageID;
 		[[ATTaskQueue sharedTaskQueue] addTask:task];
 		[[ATTaskQueue sharedTaskQueue] start];
@@ -880,6 +886,36 @@ static NSURLCache *imageCache = nil;
 	}
 }
 
+#pragma mark - Message task delegate
+
+- (void)messageTaskDidBegin:(ATMessageTask *)messageTask {
+	// Added to activeMessageTasks on message creation
+	[self updateMessageTaskProgress];
+}
+
+- (void)messageTask:(ATMessageTask *)messageTask didProgress:(float)progress {
+	[self updateMessageTaskProgress];
+}
+
+- (void)messageTaskDidFinish:(ATMessageTask *)messageTask {
+	[self.activeMessageTasks removeObject:messageTask];
+	[self updateMessageTaskProgress];
+}
+
+- (void)updateMessageTaskProgress {
+	float progress = 0;
+	
+	if (self.activeMessageTasks.count > 0) {
+		progress = [[self.activeMessageTasks valueForKeyPath:@"@avg.percentComplete"] floatValue];
+		
+		if (progress < 0.05) {
+			progress = 0.05;
+		}
+	}
+
+	[self.messageDelegate backend:self messageProgressDidChange:progress];
+}
+
 @end
 
 @implementation ATBackend (Private)
@@ -901,6 +937,8 @@ static NSURLCache *imageCache = nil;
 #elif TARGET_OS_MAC
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:NSApplicationWillTerminateNotification object:nil];
 #endif
+	
+	self.activeMessageTasks = [NSMutableSet set];
 	
 	[self checkForMessagesAtBackgroundRefreshInterval];
 }

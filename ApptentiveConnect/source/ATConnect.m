@@ -123,7 +123,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (void)sendAttachmentText:(NSString *)text {
-    [[ATBackend sharedBackend] sendTextMessageWithBody:text hiddenOnClient:YES completion:nil];
+    [[ATBackend sharedBackend] sendTextMessageWithBody:text hiddenOnClient:YES];
 }
 
 - (void)sendAttachmentImage:(UIImage *)image {

@@ -14,7 +14,6 @@
 #import "ATMessageCenterMessageCell.h"
 #import "ATMessageCenterReplyCell.h"
 #import "ATMessageCenterContextMessageCell.h"
-#import "ATBackend.h"
 #import "ATMessageCenterInteraction.h"
 #import "ATConnect_Private.h"
 #import "ATNetworkImageView.h"
@@ -94,6 +93,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	self.dataSource = [[ATMessageCenterDataSource alloc] initWithDelegate:self];
 	[self.dataSource start];
+	
+	[ATBackend sharedBackend].messageDelegate = self;
 	
 	self.dateFormatter = [[NSDateFormatter alloc] init];
 	self.dateFormatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"MMMMdYYYY" options:0 locale:[NSLocale currentLocale]];
@@ -318,7 +319,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 }
 
-#pragma mark Fetch results controller delegate
+#pragma mark - Fetched results controller delegate
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
 	[self.tableView beginUpdates];
@@ -338,6 +339,38 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 }
 
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
+    atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
+	  newIndexPath:(NSIndexPath *)newIndexPath {
+ 
+	UITableView *tableView = self.tableView;
+ 
+	switch(type) {
+			
+		case NSFetchedResultsChangeInsert:
+			[tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
+							 withRowAnimation:UITableViewRowAnimationFade];
+			break;
+			
+		case NSFetchedResultsChangeDelete:
+			[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+							 withRowAnimation:UITableViewRowAnimationFade];
+			break;
+			
+		case NSFetchedResultsChangeUpdate:
+			[tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+							 withRowAnimation:UITableViewRowAnimationFade];
+			break;
+			
+		case NSFetchedResultsChangeMove:
+			[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+							 withRowAnimation:UITableViewRowAnimationFade];
+			[tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
+							 withRowAnimation:UITableViewRowAnimationFade];
+			break;
+	}
+}
+
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
 		   atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
 	switch(type) {
@@ -349,12 +382,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			break;
 		case NSFetchedResultsChangeUpdate:
 			[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-		default:
+			break;
+		case NSFetchedResultsChangeMove:
 			break;
 	}
 }
 
-#pragma mark Text view delegate
+#pragma mark - Text view delegate
 
 - (void)textViewDidChange:(UITextView *)textView {
 	self.messageInputView.sendButton.enabled = textView.text.length > 0;
@@ -395,7 +429,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	return NO;
 }
 
-#pragma mark Actions
+#pragma mark - Message backend delegate
+
+- (void)backend:(ATBackend *)backend messageProgressDidChange:(float)progress {
+	self.progressView.progress = progress;
+}
+
+#pragma mark - Actions
 
 - (IBAction)dismiss:(id)sender {
 	[self.dismissalDelegate messageCenterWillDismiss:self];
@@ -417,7 +457,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[self.messageInputView.messageView resignFirstResponder];
 		
 		if (self.contextMessage) {
-			[[ATBackend sharedBackend] sendAutomatedMessage:self.contextMessage completion:^(NSString *pendingMessageID) {}];
+			[[ATBackend sharedBackend] sendAutomatedMessage:self.contextMessage];
 			self.contextMessage = nil;
 		}
 		
@@ -425,7 +465,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			self.state = ATMessageCenterStateWhoCard;
 			self.pendingMessage = [[ATBackend sharedBackend] createTextMessageWithBody:message hiddenOnClient:NO];
 		} else {
-			[[ATBackend sharedBackend] sendTextMessageWithBody:message completion:^(NSString *pendingMessageID) {}];
+			[[ATBackend sharedBackend] sendTextMessageWithBody:message];
 			[self updateState];
 		}
 	}
@@ -473,7 +513,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[[ATBackend sharedBackend] updatePersonIfNeeded];
 	
 	if (self.pendingMessage) {
-		[[ATBackend sharedBackend] sendTextMessage:self.pendingMessage completion:^(NSString *pendingMessageID) {}];
+		[[ATBackend sharedBackend] sendTextMessage:self.pendingMessage];
 		self.pendingMessage = nil;
 	}
 	
@@ -486,7 +526,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (IBAction)skipWho:(id)sender {
 	if (self.pendingMessage) {
-		[[ATBackend sharedBackend] sendTextMessage:self.pendingMessage completion:^(NSString *pendingMessageID) {}];
+		[[ATBackend sharedBackend] sendTextMessage:self.pendingMessage];
 		self.pendingMessage = nil;
 	}
 	

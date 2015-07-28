@@ -43,4 +43,8 @@
 
 @property (nonatomic, readonly) BOOL brandingEnabled;
 
+@property (nonatomic, readonly) NSString *aboutText;
+@property (nonatomic, readonly) NSString *aboutButtonTitle;
+@property (nonatomic, readonly) NSString *privacyButtonTitle;
+
 @end

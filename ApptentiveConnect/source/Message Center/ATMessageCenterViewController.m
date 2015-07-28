@@ -23,6 +23,7 @@
 #import "ATReachability.h"
 #import "ATAutomatedMessage.h"
 #import "ATData.h"
+#import "ATAboutViewController.h"
 
 #define HEADER_FOOTER_EMPTY_HEIGHT 4.0
 #define HEADER_DATE_LABEL_HEIGHT 28.0
@@ -70,6 +71,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @property (strong, nonatomic) IBOutlet UIView *backgroundView;
 @property (weak, nonatomic) IBOutlet UILabel *poweredByLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *poweredByImageView;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *composeButtonItem;
 
 @property (nonatomic, strong) ATMessageCenterDataSource *dataSource;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
@@ -108,9 +110,18 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.confirmationView.confirmationHidden = YES;
 	
 	if (self.interaction.brandingEnabled) {
-		self.tableView.backgroundView = self.backgroundView;
 		self.poweredByLabel.text = ATLocalizedString(@"Powered by", @"Powered by followed by Apptentive logo.");
 		self.poweredByImageView.image = [ATBackend imageNamed:@"at_branding-logo"];
+		[self.backgroundView setNeedsLayout];
+		[self.backgroundView layoutIfNeeded];
+		
+		
+//		CGFloat width = CGRectGetWidth(self.poweredByLabel.bounds) + CGRectGetWidth(self.poweredByImageView.bounds) + 6.0;
+//		self.backgroundView.frame = CGRectMake(0.0, 0.0, width, 44.0);
+		UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.backgroundView];
+//		barButtonItem.width = width;
+		
+		self.toolbarItems = [@[ barButtonItem ] arrayByAddingObjectsFromArray:self.toolbarItems];
 	}
 	
 	if (!self.interaction.profileRequested) {
@@ -199,10 +210,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 	
 	[self removeUnsentContextMessages];
-}
-
-- (void)viewDidLayoutSubviews {
-	[self adjustBrandingVisibility];
 }
 
 #pragma mark - Table view data source
@@ -301,14 +308,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
 	UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *)view;
 	headerView.textLabel.font = [UIFont boldSystemFontOfSize:DATE_FONT_SIZE];
-}
-
-#pragma mark Scroll view delegate
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-	if (scrollView == self.tableView) {
-		[self adjustBrandingVisibility];
-	}
 }
 
 #pragma mark Fetch results controller delegate
@@ -488,6 +487,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[[NSUserDefaults standardUserDefaults] setBool:YES forKey:ATMessageCenterDidPresentWhoCardKey];
 }
 
+- (IBAction)showAbout:(id)sender {
+	ATAboutViewController *aboutViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"About"];
+	
+	aboutViewController.interaction = self.interaction;
+	[self.navigationController pushViewController:aboutViewController animated:YES];
+}
+
 #pragma mark - Private
 
 - (void)updateState {
@@ -524,8 +530,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	if (_state != state) {
 		UIView *oldFooter = self.activeFooterView;
 		UIView *newFooter = nil;
-		
-		[self.navigationController setToolbarHidden:(state == ATMessageCenterStateComposing || state == ATMessageCenterStateEmpty || state == ATMessageCenterStateWhoCard) animated:YES];
 		
 		_state = state;
 		
@@ -641,8 +645,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		if (notification) {
 			keyboardRect = [self.view.window convertRect:[notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue] toView:self.tableView.superview];
 			height = CGRectGetMinY(keyboardRect) - self.tableView.contentInset.top;
+			
+			if (CGRectGetHeight(CGRectIntersection(keyboardRect, self.view.frame)) == 0) {
+				height -= CGRectGetHeight(self.navigationController.toolbar.bounds);
+			}
 		} else {
-			height = CGRectGetHeight(self.tableView.bounds) - self.tableView.contentInset.top;
+			height = CGRectGetHeight(self.tableView.bounds) - self.tableView.contentInset.top - CGRectGetHeight(self.navigationController.toolbar.bounds);
 		}
 		
 		if (self.dataSource.numberOfMessageGroups == 0 && (CGRectGetMinY(keyboardRect) >= CGRectGetMaxY(self.tableView.frame) || !notification)) {
@@ -682,30 +690,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)scrollToLastReplyAnimated:(BOOL)animated {
 	[self.tableView scrollToRowAtIndexPath:self.indexPathOfLastMessage atScrollPosition:UITableViewScrollPositionTop animated:animated];
-}
-
-- (void)adjustBrandingVisibility {
-	// Hide branding when content gets within transtionDistance of it
-	CGFloat transitionDistance = CONFIRMATION_VIEW_HEIGHT / 2.0;
-	
-	CGFloat poweredByTop = CGRectGetMinY(self.poweredByLabel.frame);
-	
-	CGRect lastMessageFrame = self.greetingView.frame;
-	if (self.indexPathOfLastMessage) {
-		lastMessageFrame = [self.tableView rectForRowAtIndexPath:self.indexPathOfLastMessage];
-	}
-	
-	CGFloat lastMessageBottom = CGRectGetMaxY([self.backgroundView convertRect:lastMessageFrame fromView:self.tableView]);
-	
-	CGFloat distance = poweredByTop - lastMessageBottom - CONFIRMATION_VIEW_HEIGHT / 2.0;
-	
-	if (distance > transitionDistance) {
-		self.tableView.backgroundView.alpha = 1.0;
-	} else if (distance < 0) {
-		self.tableView.backgroundView.alpha = 0.0;
-	} else {
-		self.tableView.backgroundView.alpha = distance / transitionDistance;
-	}
 }
 
 - (void)removeUnsentContextMessages {

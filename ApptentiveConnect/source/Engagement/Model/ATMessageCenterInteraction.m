@@ -75,14 +75,6 @@
 	return self.configuration[@"network_error_message"];
 }
 
-- (NSString *)missingConfigurationMessage {
-	return ATLocalizedString(@"We're attempting to connect. Thanks for your patience!", @"Missing Message Center configuration message (not downloaded yet)");
-}
-
-- (NSString *)missingConfigurationNetworkErrorMessage {
-	return ATLocalizedString(@"Please connect to the internet to send feedback.", @"Missing Message Center configuration message (no internet connection)");
-}
-
 - (NSString *)composerPlaceholderText {
 	return self.configuration[@"message_hint_text"];
 }

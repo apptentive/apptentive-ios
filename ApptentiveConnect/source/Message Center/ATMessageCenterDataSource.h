@@ -16,6 +16,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageType) {
 	ATMessageCenterMessageTypeContextMessage,
 };
 
+typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
+	ATMessageCenterMessageStatusHidden,
+	ATMessageCenterMessageStatusSending,
+	ATMessageCenterMessageStatusSent,
+	ATMessageCenterMessageStatusFailed,
+};
+
 @protocol ATMessageCenterDataSourceDelegate;
 
 @interface ATMessageCenterDataSource : NSObject
@@ -32,13 +39,15 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageType) {
 - (ATMessageCenterMessageType)cellTypeAtIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)textOfMessageAtIndexPath:(NSIndexPath *)indexPath;
 - (NSDate *)dateOfMessageGroupAtIndex:(NSInteger)index;
+- (ATMessageCenterMessageStatus)statusOfMessageAtIndexPath:(NSIndexPath *)indexPath;
 - (BOOL)shouldShowDateForMessageGroupAtIndex:(NSInteger)index;
 - (NSString *)senderOfMessageAtIndexPath:(NSIndexPath *)indexPath;
 - (NSURL *)imageURLOfSenderAtIndexPath:(NSIndexPath *)indexPath;
 - (void)markAsReadMessageAtIndexPath:(NSIndexPath *)indexPath;
 
 @property (nonatomic, readonly) BOOL lastMessageIsReply;
-@property (nonatomic, readonly) ATPendingMessageState lastSentMessageState;
+@property (nonatomic, readonly) NSIndexPath *lastUserMessageIndexPath;
+@property (nonatomic, readonly) ATPendingMessageState lastUserMessageState;
 
 @end
 

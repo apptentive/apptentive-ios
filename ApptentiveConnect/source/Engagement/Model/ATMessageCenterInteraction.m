@@ -45,8 +45,8 @@
 }
 
 - (NSString *)contextMessageBody {
-#warning remove
-	return @"Please let us know how to make APPNAME better for you!";
+//#warning remove
+//	return @"Please let us know how to make APPNAME better for you!";
 	
 	return [self stringForKey:@"context_message_body" fallback:nil];
 }
@@ -139,7 +139,7 @@
 	}
 	
 	if (!result) {
-		result = fallbackString ?: @"";
+		result = fallbackString;
 	}
 	
 	return result;

@@ -22,6 +22,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 @interface ATMessageCenterDataSource () <NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, strong, readwrite) NSFetchedResultsController *fetchedMessagesController;
+@property (nonatomic, readonly) ATAbstractMessage *lastUserMessage;
 
 @end
 
@@ -124,6 +125,26 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 	}
 }
 
+- (ATMessageCenterMessageStatus)statusOfMessageAtIndexPath:(NSIndexPath *)indexPath {
+	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
+	
+	if (message.sentByUser.boolValue) {
+		ATPendingMessageState messageState = message.pendingState.integerValue;
+		
+		if (messageState == ATPendingMessageStateError) {
+			return ATMessageCenterMessageStatusFailed;
+		} else if (message == self.lastUserMessage) {
+			if (messageState == ATPendingMessageStateSending) {
+				return ATMessageCenterMessageStatusSending;
+			} else if (messageState == ATPendingMessageStateConfirmed) {
+				return ATMessageCenterMessageStatusSent;
+			}
+		}
+	}
+		
+	return ATMessageCenterMessageStatusHidden;
+}
+
 - (BOOL)shouldShowDateForMessageGroupAtIndex:(NSInteger)index {
 	if (index == 0) {
 		return YES;
@@ -156,24 +177,18 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 }
 
 - (BOOL)lastMessageIsReply {
-	id<NSFetchedResultsSectionInfo> section = self.fetchedMessagesController.sections.lastObject;
-	ATAbstractMessage *lastMessage = section.objects.lastObject;
+	id<NSFetchedResultsSectionInfo> lastSection = self.fetchedMessagesController.sections.lastObject;
+	ATAbstractMessage *lastMessage = lastSection.objects.lastObject;
 	
 	return lastMessage.sentByUser.boolValue == NO;
 }
 
-- (ATPendingMessageState)lastSentMessageState {
-	for (id<NSFetchedResultsSectionInfo> section in [self.fetchedMessagesController.sections reverseObjectEnumerator]) {
-		for (ATAbstractMessage *message in [section.objects reverseObjectEnumerator]) {
-			if (!message.sentByUser) {
-				continue;
-			} else {
-				return message.pendingState.integerValue;
-			}
-		}
-	}
-	
-	return ATPendingMessageStateNone;
+- (ATPendingMessageState)lastUserMessageState {
+	return self.lastUserMessage.pendingState.integerValue;
+}
+
+- (NSIndexPath *)lastUserMessageIndexPath {
+	return [self.fetchedMessagesController indexPathForObject:self.lastUserMessage];
 }
 
 #pragma mark NSFetchedResultsControllerDelegate
@@ -219,6 +234,18 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 
 - (ATAbstractMessage *)messageAtIndexPath:(NSIndexPath *)indexPath {
 	return [self.fetchedMessagesController objectAtIndexPath:indexPath];
+}
+
+- (ATAbstractMessage *)lastUserMessage {
+	for (id<NSFetchedResultsSectionInfo> section in self.fetchedMessagesController.sections.reverseObjectEnumerator) {
+		for (ATAbstractMessage *message in section.objects.reverseObjectEnumerator) {
+			if (message.sentByUser) {
+				return message;
+			}
+		}
+	}
+	
+	return nil;
 }
 
 @end

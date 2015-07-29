@@ -8,6 +8,12 @@
 
 #import "ATMessageCenterMessageCell.h"
 
+@interface ATMessageCenterMessageCell ()
+
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *messageStatusSpacingConstraint;
+
+@end
+
 @implementation ATMessageCenterMessageCell
 
 - (void)layoutSubviews {
@@ -18,5 +24,17 @@
 	
 	[super layoutSubviews];
 }
+
+//- (void)setStatusHidden:(BOOL)statusHidden {
+//	_statusHidden = statusHidden;
+//	
+//	self.statusLabel.hidden = statusHidden;
+////	
+////	if (statusHidden) {
+////		[self.contentView removeConstraint:self.messageStatusSpacingConstraint];
+////	} else {
+////		[self.contentView addConstraint:self.messageStatusSpacingConstraint];
+////	}
+//}
 
 @end

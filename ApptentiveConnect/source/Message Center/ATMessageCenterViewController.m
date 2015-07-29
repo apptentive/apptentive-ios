@@ -22,6 +22,7 @@
 #import "ATReachability.h"
 #import "ATAutomatedMessage.h"
 #import "ATData.h"
+#import "ATProgressNavigationBar.h"
 
 #define HEADER_FOOTER_EMPTY_HEIGHT 4.0
 #define HEADER_DATE_LABEL_HEIGHT 28.0
@@ -41,6 +42,8 @@
 #define MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN 17.0
 #define REPLY_LABEL_TOTAL_VERTICAL_MARGIN 34.0
 #define REPLY_CELL_MINIMUM_HEIGHT 54.0
+#define STATUS_LABEL_HEIGHT 16.0
+#define STATUS_LABEL_MARGIN 6.0
 #define BODY_FONT_SIZE 14.0
 
 NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
@@ -70,8 +73,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @property (weak, nonatomic) IBOutlet UILabel *poweredByLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *poweredByImageView;
 
-@property (strong, nonatomic) IBOutlet UIProgressView *progressView;
-
 @property (nonatomic, strong) ATMessageCenterDataSource *dataSource;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
@@ -83,6 +84,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @property (nonatomic, weak) UIView *activeFooterView;
 
 @property (nonatomic, strong) ATAutomatedMessage *contextMessage;
+
+@property (nonatomic, readonly) UIColor *sentColor;
+@property (nonatomic, readonly) UIColor *failedColor;
 
 @end
 
@@ -144,11 +148,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	if (self.interaction.contextMessageBody) {
 		self.contextMessage = [[ATBackend sharedBackend] automatedMessageWithTitle:nil body:self.interaction.contextMessageBody];
 	}
-	
-	self.progressView.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.navigationController.navigationBar addSubview:self.progressView];
-	[self.navigationController.navigationBar addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(0)-[progress]-(0)-|" options:NSLayoutFormatAlignAllBottom metrics:nil views:@{ @"progress": self.progressView }]];
-	[self.navigationController.navigationBar addConstraint:[NSLayoutConstraint constraintWithItem:self.progressView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.navigationController.navigationBar attribute:NSLayoutAttributeBottom multiplier:1 constant:-1]];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardWillChangeFrameNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToInputView:) name:UIKeyboardWillShowNotification object:nil];
@@ -232,7 +231,31 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		ATMessageCenterMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Message" forIndexPath:indexPath];
 	
 		cell.messageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
-		
+		switch ([self.dataSource statusOfMessageAtIndexPath:indexPath]) {
+			case ATMessageCenterMessageStatusHidden:
+				cell.statusLabel.hidden = YES;
+				break;
+			case ATMessageCenterMessageStatusFailed:
+				cell.statusLabel.hidden = NO;
+				cell.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
+				cell.layer.borderColor = [self failedColor].CGColor;
+				cell.statusLabel.textColor = [self failedColor];
+				cell.statusLabel.text = @"Failed";
+				break;
+			case ATMessageCenterMessageStatusSending:
+				cell.statusLabel.hidden = NO;
+				cell.layer.borderWidth = 0;
+				cell.statusLabel.textColor = self.sentColor;
+				cell.statusLabel.text = @"Sending…";
+				break;
+			case ATMessageCenterMessageStatusSent:
+				cell.statusLabel.hidden = NO;
+				cell.layer.borderWidth = 0;
+				cell.statusLabel.textColor = self.sentColor;
+				cell.statusLabel.text = @"Sent";
+				break;
+		}
+				
 		return cell;
 	} else if (type == ATMessageCenterMessageTypeReply ) {
 		ATMessageCenterReplyCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Reply" forIndexPath:indexPath];
@@ -258,10 +281,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	return [self.dataSource shouldShowDateForMessageGroupAtIndex:section] ? HEADER_DATE_LABEL_HEIGHT : HEADER_FOOTER_EMPTY_HEIGHT;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-	return HEADER_FOOTER_EMPTY_HEIGHT;
-}
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	// iOS 7 requires this and there's no good way to instantiate a cell to sample, so we're hard-coding it for now.
 	CGFloat verticalMargin, horizontalMargin, minimumCellHeight;
@@ -279,6 +298,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			verticalMargin = REPLY_LABEL_TOTAL_VERTICAL_MARGIN;
 			minimumCellHeight = REPLY_CELL_MINIMUM_HEIGHT;
 			break;
+	}
+	
+	if ([self.dataSource statusOfMessageAtIndexPath:indexPath] != ATMessageCenterMessageStatusHidden) {
+		verticalMargin += STATUS_LABEL_HEIGHT + STATUS_LABEL_MARGIN;
 	}
 	
 	NSString *labelText = [self.dataSource textOfMessageAtIndexPath:indexPath];
@@ -400,7 +423,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 #pragma mark - Message backend delegate
 
 - (void)backend:(ATBackend *)backend messageProgressDidChange:(float)progress {
-	self.progressView.progress = progress;
+	ATProgressNavigationBar *navigationBar = (ATProgressNavigationBar *) self.navigationController.navigationBar;
+	
+	navigationBar.progressView.progress = progress;
 }
 
 #pragma mark - Actions
@@ -408,9 +433,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (IBAction)dismiss:(id)sender {
 	[self.dismissalDelegate messageCenterWillDismiss:self];
 	[self.dataSource stop];
-	
-	[self.progressView removeFromSuperview];
-	
+		
 	[self dismissViewControllerAnimated:YES completion:^{
 		if ([self.dismissalDelegate respondsToSelector:@selector(messageCenterDidDismiss:)]) {
 			[self.dismissalDelegate messageCenterDidDismiss:self];
@@ -422,6 +445,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	NSString *message = self.messageInputView.messageView.text;
 	
 	if (message && ![message isEqualToString:@""]) {
+		NSIndexPath *lastUserMessageIndexPath = self.dataSource.lastUserMessageIndexPath;
+		
 		[self.messageInputView.messageView resignFirstResponder];
 		
 		if (self.contextMessage) {
@@ -436,6 +461,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			[[ATBackend sharedBackend] sendTextMessageWithBody:message];
 			[self updateState];
 		}
+
+		[self.tableView reloadRowsAtIndexPaths:@[ lastUserMessageIndexPath ] withRowAnimation:UITableViewRowAnimationFade];
 	}
 	
 	self.messageInputView.messageView.text = @"";
@@ -481,8 +508,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[[ATBackend sharedBackend] updatePersonIfNeeded];
 	
 	if (self.pendingMessage) {
+		NSIndexPath *lastUserMessageIndexPath = self.dataSource.lastUserMessageIndexPath;
+
 		[[ATBackend sharedBackend] sendTextMessage:self.pendingMessage];
 		self.pendingMessage = nil;
+		
+		[self.tableView reloadRowsAtIndexPaths:@[ lastUserMessageIndexPath ] withRowAnimation:UITableViewRowAnimationFade];
 	}
 	
 	[self updateState];
@@ -494,8 +525,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (IBAction)skipWho:(id)sender {
 	if (self.pendingMessage) {
+		NSIndexPath *lastUserMessageIndexPath = self.dataSource.lastUserMessageIndexPath;
+
 		[[ATBackend sharedBackend] sendTextMessage:self.pendingMessage];
 		self.pendingMessage = nil;
+		
+		[self.tableView reloadRowsAtIndexPaths:@[ lastUserMessageIndexPath ] withRowAnimation:UITableViewRowAnimationFade];
 	}
 	
 	[self updateState];
@@ -517,7 +552,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	} else {
 		BOOL networkIsUnreachable = [[ATReachability sharedReachability] currentNetworkStatus] == ATNetworkNotReachable;
 		
-		switch (self.dataSource.lastSentMessageState) {
+		switch (self.dataSource.lastUserMessageState) {
 			case ATPendingMessageStateConfirmed:
 				self.state = ATMessageCenterStateConfirmed;
 				break;
@@ -730,6 +765,14 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingState == %d)", ATPendingMessageStateComposing];
 		[ATData removeEntitiesNamed:@"ATAutomatedMessage" withPredicate:fetchPredicate];
 	}
+}
+
+- (UIColor *)sentColor {
+	return [UIColor colorWithRed:0.427 green:0.427 blue:0.447 alpha:1];
+}
+
+- (UIColor *)failedColor {
+	return [UIColor colorWithRed:14.0/16.0 green:5.0/16.0 blue:5.0/16.0 alpha:1];
 }
 
 @end

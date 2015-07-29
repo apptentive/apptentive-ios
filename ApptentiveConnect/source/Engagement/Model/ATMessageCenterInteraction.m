@@ -27,19 +27,19 @@
 }
 
 - (NSString *)title {
-	return [self stringForKey:@"title" fallback:ATLocalizedString(@"Message Center", @"Default Message Center Title Text")];
+	return self.configuration[@"title"];
 }
 
 - (NSString *)greetingTitle {
-	return [self stringForKey:@"greeting_title" fallback:ATLocalizedString(@"Hello!", @"Default Message Center Greeting Title Text")];
+	return self.configuration[@"greeting_title"];
 }
 
 - (NSString *)greetingMessage {
-	return [self stringForKey:@"greeting_message" fallback:ATLocalizedString(@"We’d love to get feedback from you on our app. The more details you can provide, the better.", @"Default Message Center Greeting Message Text")];
+	return self.configuration[@"greeting_message"];
 }
 
 - (NSURL *)greetingImageURL {
-	NSString *URLString = [self stringForKey:@"greeting_image_url" fallback:nil];
+	NSString *URLString = self.configuration[@"greeting_image_url"];
 	
 	return (URLString.length > 0) ? [NSURL URLWithString:URLString] : nil;
 }
@@ -48,31 +48,31 @@
 #warning remove
 	return @"Please let us know how to make APPNAME better for you!";
 	
-	return [self stringForKey:@"context_message_body" fallback:nil];
+	return self.configuration[@"context_message_body"];
 }
 
 - (NSString *)confirmationText {
-	return [self stringForKey:@"confirmation" fallback:ATLocalizedString(@"Thank you!", @"Default Message Center Confirmation Text")];
+	return self.configuration[@"confirmation"];
 }
 
 - (NSString *)statusText {
-	return [self stringForKey:@"status" fallback:nil];
+	return self.configuration[@"status"];
 }
 
 - (NSString *)HTTPErrorTitle {
-	return [self stringForKey:@"http_error_title" fallback:ATLocalizedString(@"It looks like we're having trouble sending your message.", @"Message Center HTTP error message title")];
+	return self.configuration[@"http_error_title"];
 }
 
 - (NSString *)HTTPErrorMessage {
-	return [self stringForKey:@"http_error_message" fallback:ATLocalizedString(@"We’ve saved it and will try sending it again soon.", @"Message Center HTTP error Message.")];
+	return self.configuration[@"http_error_message"];
 }
 
 - (NSString *)networkErrorTitle {
-	return [self stringForKey:@"network_error_title" fallback:ATLocalizedString(@"It looks like you aren’t connected to the internet right now.", @"Message Center network error message title")];
+	return self.configuration[@"network_error_title"];
 }
 
 - (NSString *)networkErrorMessage {
-	return [self stringForKey:@"network_error_message" fallback:ATLocalizedString(@"We’ve saved your message and will try again when we detect a connection.", @"Message Center network error Message.")];
+	return self.configuration[@"network_error_message"];
 }
 
 - (NSString *)missingConfigurationMessage {
@@ -84,14 +84,15 @@
 }
 
 - (NSString *)composerPlaceholderText {
-	return [self stringForKey:@"message_hint_text" fallback:ATLocalizedString(@"Please leave detailed feedback", @"Message field placeholder text")];
+	return self.configuration[@"message_hint_text"];
 }
 
 - (NSString *)composerTitleText {
-	return [self stringForKey:@"composer_title" fallback:ATLocalizedString(@"New Message", @"Title above message field")];
+	return self.configuration[@"composer_title"];
 }
 
 - (NSString *)composerSaveButtonTitle {
+#warning Should come from interaction
 	if (self.emailRequired && ![[NSUserDefaults standardUserDefaults] boolForKey:ATMessageCenterDidPresentWhoCardKey]) {
 		return ATLocalizedString(@"Next", @"Message field save button when email required");
 	} else {
@@ -100,14 +101,15 @@
 }
 
 - (NSString *)whoCardTitle {
-	return [self stringForKey:@"profile_title" fallback:ATLocalizedString(@"Whom are we speaking with?", @"Profile card title")];
+	return self.configuration[@"profile_title"];
 }
 
 - (NSString *)whoCardSaveButtonTitle {
+#warning Should come from interaction
 	if (self.emailRequired) {
 		return ATLocalizedString(@"Send", @"Send button title");
 	} else {
-		return [self stringForKey:@"profile_save_button" fallback:ATLocalizedString(@"That’s Me!", @"Title for save button on profile view")];
+		return self.configuration[@"profile_save_button"];
 	}
 }
 
@@ -127,22 +129,6 @@
 	NSNumber *brandingEnabled = self.configuration[@"apptentive_branding_enabled"];
 	
 	return (brandingEnabled != nil) ? [brandingEnabled boolValue] : YES;
-}
-
-#pragma mark - Private
-
-- (NSString *)stringForKey:(NSString *)key fallback:(NSString *)fallbackString {
-	NSString *result =  self.configuration[key];
- 
-	if (!result) {
-		// TODO: get value from global config
-	}
-	
-	if (!result) {
-		result = fallbackString ?: @"";
-	}
-	
-	return result;
 }
 
 @end

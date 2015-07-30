@@ -137,6 +137,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	self.whoView.titleLabel.text = self.interaction.profileInitialTitle;
 	[self.whoView.saveButton setTitle:self.interaction.profileInitialSaveButtonTitle forState:UIControlStateNormal];
+	[self.whoView.skipButton setTitle:self.interaction.profileInitialSkipButtonTitle forState:UIControlStateNormal];
 	self.whoView.skipButton.hidden = self.interaction.profileRequired;
 	self.whoView.nameField.text = [ATConnect sharedConnection].personName;
 	self.whoView.emailField.text = [ATConnect sharedConnection].personEmailAddress;
@@ -446,8 +447,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (IBAction)showWho:(id)sender {
 	self.whoView.skipButton.hidden = NO;
-	[self.whoView.skipButton setTitle:ATLocalizedString(@"Cancel", @"Cancel button for profile card edit mode") forState:UIControlStateNormal];
-	[self.whoView.saveButton setTitle:ATLocalizedString(@"Save", @"Save button for profile card edit mode") forState:UIControlStateNormal];
+	[self.whoView.saveButton setTitle:self.interaction.profileEditSaveButtonTitle forState:UIControlStateNormal];
+	[self.whoView.skipButton setTitle:self.interaction.profileEditSkipButtonTitle forState:UIControlStateNormal];
 	
 	self.state = ATMessageCenterStateWhoCard;
 	[self scrollToInputView:nil];

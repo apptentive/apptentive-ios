@@ -57,13 +57,23 @@
                                         <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                     </userDefinedRuntimeAttributes>
                                 </imageView>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sQH-Xo-hct" userLabel="Bottom Border">
+                                    <rect key="frame" x="0.0" y="279" width="414" height="1"/>
+                                    <color key="backgroundColor" red="0.81568627450980391" green="0.83137254901960778" blue="0.85490196078431369" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="1" id="xWx-Gq-u4K"/>
+                                    </constraints>
+                                </view>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="centerY" secondItem="GdB-EU-leh" secondAttribute="centerY" constant="-80" id="0f3-sk-9Ax"/>
                                 <constraint firstAttribute="centerX" secondItem="jze-Ja-MtR" secondAttribute="centerX" id="KtR-Jf-Err"/>
+                                <constraint firstItem="sQH-Xo-hct" firstAttribute="leading" secondItem="3OP-Us-sTC" secondAttribute="leading" id="NDI-fO-fOS"/>
+                                <constraint firstAttribute="trailing" secondItem="sQH-Xo-hct" secondAttribute="trailing" id="W3F-wP-TPI"/>
                                 <constraint firstAttribute="centerX" secondItem="GdB-EU-leh" secondAttribute="centerX" id="Yas-iR-bIk"/>
                                 <constraint firstAttribute="centerY" secondItem="jze-Ja-MtR" secondAttribute="centerY" constant="38" id="agk-W3-azS"/>
+                                <constraint firstAttribute="bottom" secondItem="sQH-Xo-hct" secondAttribute="bottom" id="kL9-zg-e7Q"/>
                             </constraints>
                             <connections>
                                 <outlet property="imageCenterXConstraint" destination="KtR-Jf-Err" id="kBs-1E-4UU"/>

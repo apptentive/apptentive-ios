@@ -13,6 +13,4 @@
 @property (weak, nonatomic) IBOutlet UILabel *messageLabel;
 @property (weak, nonatomic) IBOutlet UILabel *statusLabel;
 
-//@property (nonatomic, getter=isStatusHidden) BOOL statusHidden;
-
 @end

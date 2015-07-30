@@ -452,7 +452,6 @@
                         </connections>
                     </tableView>
                     <toolbarItems>
-                        <barButtonItem enabled="NO" systemItem="camera" id="1om-kf-sFI"/>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="0S6-sA-4C1"/>
                         <barButtonItem systemItem="compose" id="7K8-9v-8QL">
                             <connections>

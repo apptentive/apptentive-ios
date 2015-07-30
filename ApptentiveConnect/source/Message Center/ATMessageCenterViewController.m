@@ -234,6 +234,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		switch ([self.dataSource statusOfMessageAtIndexPath:indexPath]) {
 			case ATMessageCenterMessageStatusHidden:
 				cell.statusLabel.hidden = YES;
+				cell.layer.borderWidth = 0;
 				break;
 			case ATMessageCenterMessageStatusFailed:
 				cell.statusLabel.hidden = NO;

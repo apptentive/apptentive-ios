@@ -20,122 +20,126 @@
 }
 
 - (NSString *)title {
-	return [self stringForKey:@"title" fallback:ATLocalizedString(@"Message Center", @"Default Message Center Title Text")];
+	return self.configuration[@"title"];
 }
+
+- (NSString *)branding {
+	return self.configuration[@"branding"];
+}
+
+#pragma mark - Composer
+
+- (NSString *)composerTitle {
+	return self.configuration[@"composer"][@"title"];
+}
+
+- (NSString *)composerPlaceholderText {
+	return self.configuration[@"composer"][@"hint_text"];
+}
+
+- (NSString *)composerSaveButtonTitle {
+	return self.configuration[@"composer"][@"save_button"];
+}
+
+#pragma mark - Greeting
 
 - (NSString *)greetingTitle {
-	return [self stringForKey:@"greeting_title" fallback:ATLocalizedString(@"Hello!", @"Default Message Center Greeting Title Text")];
+	return self.configuration[@"greeting"][@"title"];
 }
 
-- (NSString *)greetingMessage {
-	return [self stringForKey:@"greeting_message" fallback:ATLocalizedString(@"We’d love to get feedback from you on our app. The more details you can provide, the better.", @"Default Message Center Greeting Message Text")];
+- (NSString *)greetingBody {
+	return self.configuration[@"greeting"][@"body"];
 }
 
 - (NSURL *)greetingImageURL {
-	NSString *URLString = [self stringForKey:@"greeting_image_url" fallback:nil];
+	NSString *URLString = self.configuration[@"greeting"][@"image_url"];
 	
 	return (URLString.length > 0) ? [NSURL URLWithString:URLString] : nil;
 }
 
+#pragma mark - Status
+
+- (NSString *)statusBody {
+	return self.configuration[@"status"][@"body"];
+}
+
+#pragma mark - Context / Automated Message
+
+
 - (NSString *)contextMessageBody {
-#warning remove
-	return @"Please let us know how to make APPNAME better for you!";
-	
-	return [self stringForKey:@"context_message_body" fallback:nil];
+	return self.configuration[@"automated_message"][@"body"];
 }
 
-- (NSString *)confirmationText {
-	return [self stringForKey:@"confirmation" fallback:ATLocalizedString(@"Thank you!", @"Default Message Center Confirmation Text")];
-}
-
-- (NSString *)statusText {
-	return [self stringForKey:@"status" fallback:nil];
-}
+#pragma mark - Error Messages
 
 - (NSString *)HTTPErrorTitle {
-	return [self stringForKey:@"http_error_title" fallback:ATLocalizedString(@"It looks like we're having trouble sending your message.", @"Message Center HTTP error message title")];
+	return self.configuration[@"error_messages"][@"http_error_title"];
 }
 
-- (NSString *)HTTPErrorMessage {
-	return [self stringForKey:@"http_error_message" fallback:ATLocalizedString(@"We’ve saved it and will try sending it again soon.", @"Message Center HTTP error Message.")];
+- (NSString *)HTTPErrorBody {
+	return self.configuration[@"error_messages"][@"http_error_body"];
 }
 
 - (NSString *)networkErrorTitle {
-	return [self stringForKey:@"network_error_title" fallback:ATLocalizedString(@"It looks like you aren’t connected to the internet right now.", @"Message Center network error message title")];
+	return self.configuration[@"error_messages"][@"network_error_title"];
 }
 
-- (NSString *)networkErrorMessage {
-	return [self stringForKey:@"network_error_message" fallback:ATLocalizedString(@"We’ve saved your message and will try again when we detect a connection.", @"Message Center network error Message.")];
+- (NSString *)networkErrorBody {
+	return self.configuration[@"error_messages"][@"network_error_body"];
 }
 
-- (NSString *)missingConfigurationMessage {
-	return ATLocalizedString(@"We're attempting to connect. Thanks for your patience!", @"Missing Message Center configuration message (not downloaded yet)");
-}
-
-- (NSString *)missingConfigurationNetworkErrorMessage {
-	return ATLocalizedString(@"Please connect to the internet to send feedback.", @"Missing Message Center configuration message (no internet connection)");
-}
-
-- (NSString *)composerPlaceholderText {
-	return [self stringForKey:@"message_hint_text" fallback:ATLocalizedString(@"Please leave detailed feedback", @"Message field placeholder text")];
-}
-
-- (NSString *)composerTitleText {
-	return [self stringForKey:@"composer_title" fallback:ATLocalizedString(@"New Message", @"Title above message field")];
-}
-
-- (NSString *)composerSaveButtonTitle {
-	if (self.emailRequired && ![[NSUserDefaults standardUserDefaults] boolForKey:ATMessageCenterDidPresentWhoCardKey]) {
-		return ATLocalizedString(@"Next", @"Message field save button when email required");
-	} else {
-		return ATLocalizedString(@"Send", @"Send button title");
-	}
-}
-
-- (NSString *)whoCardTitle {
-	return [self stringForKey:@"profile_title" fallback:ATLocalizedString(@"Whom are we speaking with?", @"Profile card title")];
-}
-
-- (NSString *)whoCardSaveButtonTitle {
-	if (self.emailRequired) {
-		return ATLocalizedString(@"Send", @"Send button title");
-	} else {
-		return [self stringForKey:@"profile_save_button" fallback:ATLocalizedString(@"That’s Me!", @"Title for save button on profile view")];
-	}
-}
+#pragma mark - Profile
 
 - (BOOL)profileRequested {
-#warning remove before flight
-	return YES;
-	return [self.configuration[@"ask_for_email"] boolValue];
+	return [self.configuration[@"profile"][@"request"] boolValue];
 }
 
-- (BOOL)emailRequired {
-#warning remove before flight
-	return YES;
-	return [self.configuration[@"email_required"] boolValue];
+- (BOOL)profileRequired {
+	return [self.configuration[@"profile"][@"require"] boolValue];
 }
 
-- (BOOL)brandingEnabled {
-	NSNumber *brandingEnabled = self.configuration[@"apptentive_branding_enabled"];
-	
-	return (brandingEnabled != nil) ? [brandingEnabled boolValue] : YES;
+#pragma mark - Profile (Initial)
+
+- (NSString *)profileInitialTitle {
+	return self.configuration[@"profile"][@"initial"][@"title"];
 }
 
-#pragma mark - Private
+- (NSString *)profileInitialNamePlaceholder {
+	return self.configuration[@"profile"][@"initial"][@"name_hint"];
+}
 
-- (NSString *)stringForKey:(NSString *)key fallback:(NSString *)fallbackString {
-	NSString *result =  self.configuration[key];
- 
-	if (!result) {
-		// TODO: get value from global config
-	}
-	
-	if (!result) {
-		result = fallbackString ?: @"";
-	}
-	
-	return result;
+- (NSString *)profileInitialEmailPlaceholder {
+	return self.configuration[@"profile"][@"initial"][@"email_hint"];
+}
+
+- (NSString *)profileInitialSkipButtonTitle {
+	return self.configuration[@"profile"][@"initial"][@"skip_button"];
+}
+
+- (NSString *)profileInitialSaveButtonTitle {
+	return self.configuration[@"profile"][@"initial"][@"save_button"];
+}
+
+#pragma mark - Profile (Edit)
+
+- (NSString *)profileEditTitle {
+	return self.configuration[@"profile"][@"edit"][@"title"];
+}
+
+- (NSString *)profileEditNamePlaceholder {
+	return self.configuration[@"profile"][@"edit"][@"name_hint"];
+}
+
+- (NSString *)profileEditEmailPlaceholder {
+	return self.configuration[@"profile"][@"edit"][@"email_hint"];
+}
+
+- (NSString *)profileEditSkipButtonTitle {
+	return self.configuration[@"profile"][@"edit"][@"skip_button"];
+}
+
+- (NSString *)profileEditSaveButtonTitle {
+	return self.configuration[@"profile"][@"edit"][@"save_button"];
 }
 
 @end

@@ -374,7 +374,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		case NSFetchedResultsChangeUpdate:
 			[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
 			break;
-		case NSFetchedResultsChangeMove:
+		default:
 			break;
 	}
 }
@@ -433,7 +433,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (IBAction)dismiss:(id)sender {
 	[self.dismissalDelegate messageCenterWillDismiss:self];
 	[self.dataSource stop];
-		
+	
 	[self dismissViewControllerAnimated:YES completion:^{
 		if ([self.dismissalDelegate respondsToSelector:@selector(messageCenterDidDismiss:)]) {
 			[self.dismissalDelegate messageCenterDidDismiss:self];

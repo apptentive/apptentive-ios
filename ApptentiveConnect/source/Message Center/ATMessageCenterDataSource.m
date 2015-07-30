@@ -177,8 +177,8 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 }
 
 - (BOOL)lastMessageIsReply {
-	id<NSFetchedResultsSectionInfo> lastSection = self.fetchedMessagesController.sections.lastObject;
-	ATAbstractMessage *lastMessage = lastSection.objects.lastObject;
+	id<NSFetchedResultsSectionInfo> section = self.fetchedMessagesController.sections.lastObject;
+	ATAbstractMessage *lastMessage = section.objects.lastObject;
 	
 	return lastMessage.sentByUser.boolValue == NO;
 }

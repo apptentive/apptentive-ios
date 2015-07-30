@@ -30,97 +30,123 @@
 	return self.configuration[@"title"];
 }
 
-- (NSString *)greetingTitle {
-	return self.configuration[@"greeting_title"];
+- (NSString *)branding {
+	return self.configuration[@"branding"];
 }
 
-- (NSString *)greetingMessage {
-	return self.configuration[@"greeting_message"];
+#pragma mark - Composer
+
+- (NSString *)composerTitle {
+	return self.configuration[@"composer"][@"title"];
+}
+
+- (NSString *)composerPlaceholderText {
+	return self.configuration[@"composer"][@"hint_text"];
+}
+
+- (NSString *)composerSaveButtonTitle {
+	return self.configuration[@"composer"][@"save_button"];
+}
+
+#pragma mark - Greeting
+
+- (NSString *)greetingTitle {
+	return self.configuration[@"greeting"][@"title"];
+}
+
+- (NSString *)greetingBody {
+	return self.configuration[@"greeting"][@"body"];
 }
 
 - (NSURL *)greetingImageURL {
-	NSString *URLString = self.configuration[@"greeting_image_url"];
+	NSString *URLString = self.configuration[@"greeting"][@"image_url"];
 	
 	return (URLString.length > 0) ? [NSURL URLWithString:URLString] : nil;
 }
 
+#pragma mark - Status
+
+- (NSString *)statusBody {
+	return self.configuration[@"status"][@"body"];
+}
+
+#pragma mark - Context / Automated Message
+
+
 - (NSString *)contextMessageBody {
-#warning remove
-	return @"Please let us know how to make APPNAME better for you!";
-	
-	return self.configuration[@"context_message_body"];
+	return self.configuration[@"automated_message"][@"body"];
 }
 
-- (NSString *)confirmationText {
-	return self.configuration[@"confirmation"];
-}
-
-- (NSString *)statusText {
-	return self.configuration[@"status"];
-}
+#pragma mark - Error Messages
 
 - (NSString *)HTTPErrorTitle {
-	return self.configuration[@"http_error_title"];
+	return self.configuration[@"error_messages"][@"http_error_title"];
 }
 
-- (NSString *)HTTPErrorMessage {
-	return self.configuration[@"http_error_message"];
+- (NSString *)HTTPErrorBody {
+	return self.configuration[@"error_messages"][@"http_error_body"];
 }
 
 - (NSString *)networkErrorTitle {
-	return self.configuration[@"network_error_title"];
+	return self.configuration[@"error_messages"][@"network_error_title"];
 }
 
-- (NSString *)networkErrorMessage {
-	return self.configuration[@"network_error_message"];
+- (NSString *)networkErrorBody {
+	return self.configuration[@"error_messages"][@"network_error_body"];
 }
 
-- (NSString *)composerPlaceholderText {
-	return self.configuration[@"message_hint_text"];
-}
-
-- (NSString *)composerTitleText {
-	return self.configuration[@"composer_title"];
-}
-
-- (NSString *)composerSaveButtonTitle {
-#warning Should come from interaction
-	if (self.emailRequired && ![[NSUserDefaults standardUserDefaults] boolForKey:ATMessageCenterDidPresentWhoCardKey]) {
-		return ATLocalizedString(@"Next", @"Message field save button when email required");
-	} else {
-		return ATLocalizedString(@"Send", @"Send button title");
-	}
-}
-
-- (NSString *)whoCardTitle {
-	return self.configuration[@"profile_title"];
-}
-
-- (NSString *)whoCardSaveButtonTitle {
-#warning Should come from interaction
-	if (self.emailRequired) {
-		return ATLocalizedString(@"Send", @"Send button title");
-	} else {
-		return self.configuration[@"profile_save_button"];
-	}
-}
+#pragma mark - Profile
 
 - (BOOL)profileRequested {
-#warning remove before flight
-	return YES;
-	return [self.configuration[@"ask_for_email"] boolValue];
+	return [self.configuration[@"profile"][@"request"] boolValue];
 }
 
-- (BOOL)emailRequired {
-#warning remove before flight
-	return YES;
-	return [self.configuration[@"email_required"] boolValue];
+- (BOOL)profileRequired {
+	return [self.configuration[@"profile"][@"require"] boolValue];
 }
 
-- (BOOL)brandingEnabled {
-	NSNumber *brandingEnabled = self.configuration[@"apptentive_branding_enabled"];
-	
-	return (brandingEnabled != nil) ? [brandingEnabled boolValue] : YES;
+#pragma mark - Profile (Initial)
+
+- (NSString *)profileInitialTitle {
+	return self.configuration[@"profile"][@"initial"][@"title"];
+}
+
+- (NSString *)profileInitialNamePlaceholder {
+	return self.configuration[@"profile"][@"initial"][@"name_hint"];
+}
+
+- (NSString *)profileInitialEmailPlaceholder {
+	return self.configuration[@"profile"][@"initial"][@"email_hint"];
+}
+
+- (NSString *)profileInitialSkipButtonTitle {
+	return self.configuration[@"profile"][@"initial"][@"skip_button"];
+}
+
+- (NSString *)profileInitialSaveButtonTitle {
+	return self.configuration[@"profile"][@"initial"][@"save_button"];
+}
+
+#pragma mark - Profile (Edit)
+
+- (NSString *)profileEditTitle {
+	return self.configuration[@"profile"][@"edit"][@"title"];
+}
+
+- (NSString *)profileEditNamePlaceholder {
+	return self.configuration[@"profile"][@"edit"][@"name_hint"];
+}
+
+- (NSString *)profileEditEmailPlaceholder {
+	return self.configuration[@"profile"][@"edit"][@"email_hint"];
+}
+
+- (NSString *)profileEditSkipButtonTitle {
+	return self.configuration[@"profile"][@"edit"][@"skip_button"];
+}
+
+- (NSString *)profileEditSaveButtonTitle {
+	return self.configuration[@"profile"][@"edit"][@"save_button"];
 }
 
 @end

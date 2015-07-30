@@ -58,7 +58,7 @@
                                     </userDefinedRuntimeAttributes>
                                 </imageView>
                             </subviews>
-                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="centerY" secondItem="GdB-EU-leh" secondAttribute="centerY" constant="-80" id="0f3-sk-9Ax"/>
                                 <constraint firstAttribute="centerX" secondItem="jze-Ja-MtR" secondAttribute="centerX" id="KtR-Jf-Err"/>

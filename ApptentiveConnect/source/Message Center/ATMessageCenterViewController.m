@@ -102,7 +102,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.navigationItem.title = self.interaction.title;
 	
 	self.greetingView.titleLabel.text = self.interaction.greetingTitle;
-	self.greetingView.messageLabel.text = self.interaction.greetingMessage;
+	self.greetingView.messageLabel.text = self.interaction.greetingBody;
 	self.greetingView.imageView.imageURL = self.interaction.greetingImageURL;
 	
 	self.confirmationView.confirmationHidden = YES;
@@ -125,14 +125,14 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.messageInputView.placeholderLabel.text = self.interaction.composerPlaceholderText;
 	self.messageInputView.placeholderLabel.hidden = self.messageInputView.messageView.text.length > 0;
 	
-	self.messageInputView.titleLabel.text = self.interaction.composerTitleText;
+	self.messageInputView.titleLabel.text = self.interaction.composerTitle;
 	[self.messageInputView.sendButton setTitle:self.interaction.composerSaveButtonTitle forState:UIControlStateNormal];
 	self.messageInputView.sendButton.enabled = self.messageInputView.messageView.text.length > 0;
 	self.messageInputView.clearButton.enabled = self.messageInputView.messageView.text.length > 0;
 	
-	self.whoView.titleLabel.text = self.interaction.whoCardTitle;
-	[self.whoView.saveButton setTitle:self.interaction.whoCardSaveButtonTitle forState:UIControlStateNormal];
-	self.whoView.skipButton.hidden = self.interaction.emailRequired;
+	self.whoView.titleLabel.text = self.interaction.profileInitialTitle;
+	[self.whoView.saveButton setTitle:self.interaction.profileInitialSaveButtonTitle forState:UIControlStateNormal];
+	self.whoView.skipButton.hidden = self.interaction.profileRequired;
 	self.whoView.nameField.text = [ATConnect sharedConnection].personName;
 	self.whoView.emailField.text = [ATConnect sharedConnection].personEmailAddress;
 	[self validateWho:self];
@@ -552,21 +552,21 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				newFooter = self.confirmationView;
 				self.confirmationView.confirmationHidden = YES;
 				self.confirmationView.confirmationLabel.text = self.interaction.confirmationText;
-				self.confirmationView.statusLabel.text = self.interaction.statusText;
+				self.confirmationView.statusLabel.text = self.interaction.statusBody;
 				break;
 				
 			case ATMessageCenterStateNetworkError:
 				newFooter = self.confirmationView;
 				self.confirmationView.confirmationHidden = NO;
 				self.confirmationView.confirmationLabel.text = self.interaction.networkErrorTitle;
-				self.confirmationView.statusLabel.text = self.interaction.networkErrorMessage;
+				self.confirmationView.statusLabel.text = self.interaction.networkErrorBody;
 				break;
 				
 			case ATMessageCenterStateHTTPError:
 				newFooter = self.confirmationView;
 				self.confirmationView.confirmationHidden = NO;
 				self.confirmationView.confirmationLabel.text = self.interaction.HTTPErrorTitle;
-				self.confirmationView.statusLabel.text = self.interaction.HTTPErrorMessage;
+				self.confirmationView.statusLabel.text = self.interaction.networkErrorBody;
 				break;
 				
 			case ATMessageCenterStateReplied:

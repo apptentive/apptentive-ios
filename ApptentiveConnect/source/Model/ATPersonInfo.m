@@ -19,21 +19,54 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 
 @implementation ATPersonInfo
 
-- (id)init {
-	if (self = [super init]) {
-		_name = [ATConnect sharedConnection].initialUserName;
-		_emailAddress = [ATConnect sharedConnection].initialUserEmailAddress;
++ (ATPersonInfo *)currentPerson {
+	static ATPersonInfo *_currentPerson;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		NSData *personData = [[NSUserDefaults standardUserDefaults] dataForKey:ATCurrentPersonPreferenceKey];
+		
+		if (personData) {
+			@try {
+				_currentPerson = [NSKeyedUnarchiver unarchiveObjectWithData:personData];
+			} @catch (NSException *exception) {
+				ATLogError(@"Unable to unarchive person: %@", personData);
+			}
+		} else {
+			_currentPerson = [[ATPersonInfo alloc] init];
+		}
+	});
+	
+	return _currentPerson;
+}
+
++ (ATPersonInfo *)newPersonFromJSON:(NSDictionary *)json {
+	if (json == nil) {
+		return nil;
+	} else {
+		return [[ATPersonInfo alloc] initWithJSONDictionary:json];
+	}
+}
+
+- (instancetype)init
+{
+	self = [super init];
+	if (self) {
+		[self commonInit];
 	}
 	return self;
 }
 
 - (id)initWithCoder:(NSCoder *)coder {
-	if ((self = [super init])) {
-		self.apptentiveID = (NSString *)[coder decodeObjectForKey:@"apptentiveID"];
-		self.name = (NSString *)[coder decodeObjectForKey:@"name"];
-		self.emailAddress = (NSString *)[coder decodeObjectForKey:@"emailAddress"];
-		self.needsUpdate = [coder decodeBoolForKey:@"needsUpdate"];
+	self = [super init];
+	
+	if (self) {
+		_apptentiveID = (NSString *)[coder decodeObjectForKey:@"apptentiveID"];
+		_name = (NSString *)[coder decodeObjectForKey:@"name"];
+		_emailAddress = (NSString *)[coder decodeObjectForKey:@"emailAddress"];
+		
+		[self commonInit];
 	}
+	
 	return self;
 }
 
@@ -43,38 +76,27 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 	[coder encodeObject:self.apptentiveID forKey:@"apptentiveID"];
 	[coder encodeObject:self.name forKey:@"name"];
 	[coder encodeObject:self.emailAddress forKey:@"emailAddress"];
-	[coder encodeBool:self.needsUpdate forKey:@"needsUpdate"];
 }
 
-+ (ATPersonInfo *)currentPerson {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSData *personData = [defaults dataForKey:ATCurrentPersonPreferenceKey];
-	if (!personData) {
-		return nil;
-	}
-	ATPersonInfo *person = nil;
+- (instancetype) initWithJSONDictionary:(NSDictionary *)json {
+	self = [super init];
 	
-	@try {
-		person = [NSKeyedUnarchiver unarchiveObjectWithData:personData];
-	} @catch (NSException *exception) {
-		ATLogError(@"Unable to unarchive person: %@", person);
+	if (self) {
+		_apptentiveID = [json at_safeObjectForKey:@"id"];
+		_name = [json at_safeObjectForKey:@"name"];
+		_emailAddress = [json at_safeObjectForKey:@"email"];
+		
+		[self commonInit];
 	}
 	
-	return person;
+	return self;
 }
 
-+ (ATPersonInfo *)newPersonFromJSON:(NSDictionary *)json {
-	if (json == nil) {
-		return nil;
-	}
-	
-	ATPersonInfo *result = [[ATPersonInfo alloc] init];
-	result.apptentiveID = [json at_safeObjectForKey:@"id"];
-	result.name = [json at_safeObjectForKey:@"name"];
-	result.emailAddress = [json at_safeObjectForKey:@"email"];
-	
-	return result;
+- (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
+
+#pragma mark - Persistence
 
 - (NSDictionary *)dictionaryRepresentation {
 	NSMutableDictionary *person = [NSMutableDictionary dictionary];
@@ -130,17 +152,19 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 	return equal;
 }
 
-- (void)saveAsCurrentPerson {
-	ATPersonInfo *currentPerson = [ATPersonInfo currentPerson];
-	BOOL isDirty = ![self isEqual:currentPerson];
-	if (isDirty || self.needsUpdate != currentPerson.needsUpdate) {
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		NSData *personData = [NSKeyedArchiver archivedDataWithRootObject:self];
-		[defaults setObject:personData forKey:ATCurrentPersonPreferenceKey];
-		if (!currentPerson || !currentPerson.apptentiveID) {
-			[defaults synchronize];
-		}
-	}
+#pragma mark - Private
+
+- (void)commonInit {
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(save:) name:UIApplicationWillTerminateNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(save:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+}
+
+- (void)save:(NSNotification *)notification {
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSData *personData = [NSKeyedArchiver archivedDataWithRootObject:self];
+	
+	[defaults setObject:personData forKey:ATCurrentPersonPreferenceKey];
+	[defaults synchronize];
 }
 
 @end

@@ -6,7 +6,7 @@
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
-        <!--Message Center Title-->
+        <!--Message Center-->
         <scene sceneID="Gzy-cr-Fse">
             <objects>
                 <tableViewController storyboardIdentifier="MessageCenter" id="W0l-Dy-ioE" customClass="ATMessageCenterViewController" sceneMemberID="viewController">
@@ -20,17 +20,17 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GdB-EU-leh">
-                                    <rect key="frame" x="47" y="154" width="320" height="132"/>
+                                    <rect key="frame" x="47" y="151" width="320" height="138"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="I’m sorry to hear that!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="kjS-eF-EIi">
-                                            <rect key="frame" x="8" y="30" width="304" height="21"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hello!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="kjS-eF-EIi">
+                                            <rect key="frame" x="8" y="30" width="304" height="27"/>
+                                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="22"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please leave us some feedback so we can make the app better for you." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="Zbc-2w-9Gi">
-                                            <rect key="frame" x="8" y="68" width="304" height="34"/>
-                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We'd love to get feedback from you on your app." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="Zbc-2w-9Gi">
+                                            <rect key="frame" x="8" y="74" width="304" height="36"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <color key="textColor" red="0.51764705882352935" green="0.51764705882352935" blue="0.56470588235294117" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -44,7 +44,7 @@
                                         <constraint firstItem="Zbc-2w-9Gi" firstAttribute="top" secondItem="kjS-eF-EIi" secondAttribute="bottom" constant="17" id="O8I-FT-7Gd"/>
                                         <constraint firstAttribute="trailing" secondItem="Zbc-2w-9Gi" secondAttribute="trailing" constant="8" id="WQt-GY-TkX"/>
                                         <constraint firstItem="kjS-eF-EIi" firstAttribute="top" secondItem="GdB-EU-leh" secondAttribute="top" constant="30" id="mpg-0T-x7O"/>
-                                        <constraint firstAttribute="bottom" secondItem="Zbc-2w-9Gi" secondAttribute="bottom" constant="30" id="vQG-9X-nhI"/>
+                                        <constraint firstAttribute="bottom" secondItem="Zbc-2w-9Gi" secondAttribute="bottom" constant="28" id="vQG-9X-nhI"/>
                                     </constraints>
                                 </view>
                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jze-Ja-MtR" customClass="ATNetworkImageIconView">
@@ -460,7 +460,7 @@
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" title="Message Center Title" id="vfC-JL-Kb9">
+                    <navigationItem key="navigationItem" title="Message Center" id="vfC-JL-Kb9">
                         <barButtonItem key="leftBarButtonItem" title="Who" id="pDt-Bl-iZQ">
                             <connections>
                                 <action selector="showWho:" destination="W0l-Dy-ioE" id="dgY-B3-15c"/>

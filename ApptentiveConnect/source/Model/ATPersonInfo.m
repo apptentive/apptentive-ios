@@ -31,9 +31,7 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 	if ((self = [super init])) {
 		self.apptentiveID = (NSString *)[coder decodeObjectForKey:@"apptentiveID"];
 		self.name = (NSString *)[coder decodeObjectForKey:@"name"];
-		self.facebookID = (NSString *)[coder decodeObjectForKey:@"facebookID"];
 		self.emailAddress = (NSString *)[coder decodeObjectForKey:@"emailAddress"];
-		self.secret = (NSString *)[coder decodeObjectForKey:@"secret"];
 		self.needsUpdate = [coder decodeBoolForKey:@"needsUpdate"];
 	}
 	return self;
@@ -44,9 +42,7 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 	
 	[coder encodeObject:self.apptentiveID forKey:@"apptentiveID"];
 	[coder encodeObject:self.name forKey:@"name"];
-	[coder encodeObject:self.facebookID forKey:@"facebookID"];
 	[coder encodeObject:self.emailAddress forKey:@"emailAddress"];
-	[coder encodeObject:self.secret forKey:@"secret"];
 	[coder encodeBool:self.needsUpdate forKey:@"needsUpdate"];
 }
 
@@ -75,9 +71,7 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 	ATPersonInfo *result = [[ATPersonInfo alloc] init];
 	result.apptentiveID = [json at_safeObjectForKey:@"id"];
 	result.name = [json at_safeObjectForKey:@"name"];
-	result.facebookID = [json at_safeObjectForKey:@"facebook_id"];
 	result.emailAddress = [json at_safeObjectForKey:@"email"];
-	result.secret = [json at_safeObjectForKey:@"secret"];
 	
 	return result;
 }
@@ -88,19 +82,12 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 	if (self.name) {
 		[person setObject:self.name forKey:@"name"];
 	}
-	if (self.facebookID) {
-		[person setObject:self.facebookID forKey:@"facebook_id"];
-	}
 	
 	if (self.emailAddress && [self.emailAddress length] > 0 && [ATUtilities emailAddressIsValid:self.emailAddress]) {
 		[person setObject:self.emailAddress forKey:@"email"];
 	} else if ([[self.emailAddress stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]) {
 		// Delete a previously entered email
 		[person setObject:[NSNull null] forKey:@"email"];
-	}
-
-	if (self.secret) {
-		[person setObject:self.secret forKey:@"secret"];
 	}
 	
 	NSDictionary *customPersonData = [[ATConnect sharedConnection] customPersonData] ?: @{};
@@ -122,14 +109,8 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 	if (self.name) {
 		[result setObject:self.name forKey:@"name"];
 	}
-	if (self.facebookID) {
-		[result setObject:self.facebookID forKey:@"facebook_id"];
-	}
 	if (self.emailAddress) {
 		[result setObject:self.emailAddress forKey:@"email"];
-	}
-	if (self.secret) {
-		[result setObject:self.secret forKey:@"secret"];
 	}
 	
 	return result;
@@ -162,11 +143,6 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 	}
 }
 
-- (BOOL)hasEmailAddress {
-	if (self.emailAddress && [self.emailAddress length] > 0) {
-		return YES;
-	}
-	return NO;
 }
 
 @end

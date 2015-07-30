@@ -12,11 +12,8 @@ extern NSString *const ATCurrentPersonPreferenceKey;
 
 @interface ATPersonInfo : NSObject <NSCoding>@property (nonatomic, copy) NSString *apptentiveID;
 @property (nonatomic, copy) NSString *name;
-@property (nonatomic, copy) NSString *facebookID;
 @property (nonatomic, copy) NSString *emailAddress;
-@property (nonatomic, copy) NSString *secret;
 @property (nonatomic, assign) BOOL needsUpdate;
-@property (nonatomic, readonly) BOOL hasEmailAddress;
 @property (nonatomic, readonly) NSDictionary *dictionaryRepresentation;
 
 + (ATPersonInfo *)currentPerson;

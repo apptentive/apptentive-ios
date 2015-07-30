@@ -107,8 +107,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	self.confirmationView.confirmationHidden = YES;
 	
-	if (self.interaction.brandingEnabled) {
+	NSString *branding = self.interaction.branding;
+	if (branding) {
 		self.tableView.backgroundView = self.backgroundView;
+		
+#warning The "Powered By" string needs to come from `self.interaction.branding`.
+#warning Need to replace string `Apptentive` with the Apptentive logo image.
+		
 		self.poweredByLabel.text = ATLocalizedString(@"Powered by", @"Powered by followed by Apptentive logo.");
 		self.poweredByImageView.image = [ATBackend imageNamed:@"at_branding-logo"];
 	}

@@ -117,7 +117,7 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 }
 
 - (NSUInteger)hash {
-	NSString *hashString = [NSString stringWithFormat:@"%@,%@,%@,%@,%@", self.apptentiveID, self.name, self.facebookID, self.emailAddress, self.secret];
+	NSString *hashString = [NSString stringWithFormat:@"%@,%@,%@", self.apptentiveID, self.name, self.emailAddress];
 	return [hashString hash];
 }
 
@@ -141,8 +141,6 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 			[defaults synchronize];
 		}
 	}
-}
-
 }
 
 @end

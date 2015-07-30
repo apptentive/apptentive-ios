@@ -25,16 +25,4 @@
 	[super layoutSubviews];
 }
 
-//- (void)setStatusHidden:(BOOL)statusHidden {
-//	_statusHidden = statusHidden;
-//	
-//	self.statusLabel.hidden = statusHidden;
-////	
-////	if (statusHidden) {
-////		[self.contentView removeConstraint:self.messageStatusSpacingConstraint];
-////	} else {
-////		[self.contentView addConstraint:self.messageStatusSpacingConstraint];
-////	}
-//}
-
 @end

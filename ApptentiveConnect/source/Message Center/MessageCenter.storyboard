@@ -460,7 +460,7 @@
                         </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Message Center" id="vfC-JL-Kb9">
-                        <barButtonItem key="leftBarButtonItem" title="Who" id="pDt-Bl-iZQ">
+                        <barButtonItem key="leftBarButtonItem" title="Profile" id="pDt-Bl-iZQ">
                             <connections>
                                 <action selector="showWho:" destination="W0l-Dy-ioE" id="dgY-B3-15c"/>
                             </connections>

@@ -10,8 +10,6 @@
 
 @interface ATMessageCenterInteraction : ATInteraction
 
-+ (ATMessageCenterInteraction *)messageCenterInteraction;
-
 @property (nonatomic, readonly) NSString *title;
 
 @property (nonatomic, readonly) NSString *greetingTitle;

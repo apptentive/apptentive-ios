@@ -35,7 +35,6 @@
 #import "ATPersonUpdater.h"
 #import "ATEngagementBackend.h"
 #import "ATFileMessage.h"
-#import "ATMessageCenterInteraction.h"
 
 typedef NS_ENUM(NSInteger, ATBackendState){
 	ATBackendStateStarting,
@@ -578,8 +577,13 @@ static NSURLCache *imageCache = nil;
 		return;
 	}
 	
-	ATMessageCenterInteraction *messageCenterInteraction = [ATMessageCenterInteraction messageCenterInteraction];
-	[[ATEngagementBackend sharedBackend] presentInteraction:messageCenterInteraction fromViewController:viewController];
+	BOOL didShowMessageCenter = [[ATInteraction apptentiveAppInteraction] engage:@"show_message_center" fromViewController:viewController];
+	
+	if (!didShowMessageCenter) {
+		
+		// TODO: Interaction Manifest has not yet been retrieved.
+		
+	}
 }
 
 - (void)attachCustomDataToMessage:(ATAbstractMessage *)message {

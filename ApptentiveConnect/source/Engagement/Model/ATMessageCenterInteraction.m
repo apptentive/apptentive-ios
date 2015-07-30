@@ -13,13 +13,6 @@
 
 @implementation ATMessageCenterInteraction
 
-+ (ATMessageCenterInteraction *)messageCenterInteraction {
-	ATMessageCenterInteraction *messageCenterInteraction = [[ATMessageCenterInteraction alloc] init];
-	messageCenterInteraction.type = @"MessageCenter";
-	
-	return messageCenterInteraction;
-}
-
 - (id)copyWithZone:(NSZone *)zone {
 	ATMessageCenterInteraction *copy = (ATMessageCenterInteraction *)[super copyWithZone:zone];
 	

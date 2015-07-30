@@ -772,7 +772,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (UIColor *)failedColor {
-	return [UIColor colorWithRed:14.0/16.0 green:5.0/16.0 blue:5.0/16.0 alpha:1];
+	return [UIColor colorWithRed:0.8 green:0.375 blue:0.412 alpha:1];
 }
 
 @end

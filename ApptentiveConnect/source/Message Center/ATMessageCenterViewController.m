@@ -90,6 +90,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
+	self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
+	
 	self.dataSource = [[ATMessageCenterDataSource alloc] initWithDelegate:self];
 	[self.dataSource start];
 	

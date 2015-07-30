@@ -486,7 +486,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			[self updateState];
 		}
 
-		[self.tableView reloadRowsAtIndexPaths:@[ lastUserMessageIndexPath ] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView reloadRowsAtIndexPaths:@[lastUserMessageIndexPath] withRowAnimation:UITableViewRowAnimationFade];
 	}
 	
 	self.messageInputView.messageView.text = @"";
@@ -537,7 +537,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[[ATBackend sharedBackend] sendTextMessage:self.pendingMessage];
 		self.pendingMessage = nil;
 		
-		[self.tableView reloadRowsAtIndexPaths:@[ lastUserMessageIndexPath ] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView reloadRowsAtIndexPaths:@[lastUserMessageIndexPath] withRowAnimation:UITableViewRowAnimationFade];
 	}
 	
 	[self updateState];
@@ -554,7 +554,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[[ATBackend sharedBackend] sendTextMessage:self.pendingMessage];
 		self.pendingMessage = nil;
 		
-		[self.tableView reloadRowsAtIndexPaths:@[ lastUserMessageIndexPath ] withRowAnimation:UITableViewRowAnimationFade];
+		[self.tableView reloadRowsAtIndexPaths:@[lastUserMessageIndexPath] withRowAnimation:UITableViewRowAnimationFade];
 	}
 	
 	[self updateState];

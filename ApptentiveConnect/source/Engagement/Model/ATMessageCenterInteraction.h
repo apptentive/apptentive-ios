@@ -15,7 +15,7 @@
 
 @property (nonatomic, readonly) NSString *composerTitle;
 @property (nonatomic, readonly) NSString *composerPlaceholderText;
-@property (nonatomic, readonly) NSString *composerSaveButtonTitle;
+@property (nonatomic, readonly) NSString *composerSendButtonTitle;
 
 @property (nonatomic, readonly) NSString *greetingTitle;
 @property (nonatomic, readonly) NSString *greetingBody;

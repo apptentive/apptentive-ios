@@ -37,8 +37,8 @@
 	return self.configuration[@"composer"][@"hint_text"];
 }
 
-- (NSString *)composerSaveButtonTitle {
-	return self.configuration[@"composer"][@"save_button"];
+- (NSString *)composerSendButtonTitle {
+	return self.configuration[@"composer"][@"send_button"];
 }
 
 #pragma mark - Greeting

@@ -445,9 +445,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[self updateState];
 		[self resizeFooterView:nil];
 	}
-}
-
-	}
 	
 	
 }

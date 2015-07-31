@@ -124,6 +124,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.whoView.titleLabel.text = self.interaction.whoCardTitle;
 	[self.whoView.saveButton setTitle:self.interaction.whoCardSaveButtonTitle forState:UIControlStateNormal];
 	self.whoView.skipButton.hidden = self.interaction.emailRequired;
+	self.whoView.nameField.text = [ATConnect sharedConnection].personName;
+	self.whoView.emailField.text = [ATConnect sharedConnection].personEmailAddress;
+	[self validateWho:self];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardWillChangeFrameNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToInputView:) name:UIKeyboardWillShowNotification object:nil];
@@ -409,21 +412,19 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self scrollToInputView:nil];
 }
 
-- (IBAction)validateWho:(UITextField *)sender {
-	BOOL valid = [self isWhoViewValid];
+- (IBAction)validateWho:(id)sender {
+	BOOL valid = [ATUtilities emailAddressIsValid:self.whoView.emailField.text];
 	
 	self.whoView.saveButton.enabled = valid;
 }
 
 - (IBAction)saveWho:(id)sender {
-	if (![self isWhoViewValid]) {
+	if (![ATUtilities emailAddressIsValid:self.whoView.emailField.text]) {
 		return;
 	}
 	
-	ATPersonInfo *person = [ATPersonInfo currentPerson];
-	[person	setEmailAddress:self.whoView.emailField.text];
-	[person setName:self.whoView.nameField.text];
-	[person saveAsCurrentPerson];
+	[ATConnect sharedConnection].personName = self.whoView.nameField.text;
+	[ATConnect sharedConnection].personEmailAddress = self.whoView.emailField.text;
 	
 	if (self.pendingMessage) {
 		[[ATBackend sharedBackend] sendTextMessage:self.pendingMessage completion:^(NSString *pendingMessageID) {}];
@@ -446,23 +447,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 }
 
-#pragma mark - Private
-
-- (BOOL)isWhoViewValid {
-	NSArray *emailParts = [self.whoView.emailField.text componentsSeparatedByString:@"@"];
-	
-	if (emailParts.count < 2 || [emailParts.firstObject length] == 0 || emailParts.count > 2) {
-		return NO;
 	}
 	
-	NSArray *domainParts = [emailParts.lastObject componentsSeparatedByString:@"."];
-	NSArray *nonEmptyDomainParts = [domainParts filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"length > 0"]];
 	
-	if (domainParts.count < 2 || domainParts.count != nonEmptyDomainParts.count) {
-		return  NO;
-	}
-	
-	return YES;
 }
 
 - (void)updateState {

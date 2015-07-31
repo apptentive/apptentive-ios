@@ -432,26 +432,29 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	if (self.pendingMessage) {
 		[[ATBackend sharedBackend] sendTextMessage:self.pendingMessage completion:^(NSString *pendingMessageID) {}];
 		self.pendingMessage = nil;
-	} else {
-		[self.view endEditing:YES];
 	}
-
+	
 	[self updateState];
+	[self.view endEditing:YES];
+	[self resizeFooterView:nil];
+
+	[[NSUserDefaults standardUserDefaults] setBool:YES forKey:ATMessageCenterDidPresentWhoCardKey];
 }
 
 - (IBAction)skipWho:(id)sender {
 	if (self.pendingMessage) {
 		[[ATBackend sharedBackend] sendTextMessage:self.pendingMessage completion:^(NSString *pendingMessageID) {}];
 		self.pendingMessage = nil;
-	} else {
-		[self.view endEditing:YES];
-		[self updateState];
-		[self resizeFooterView:nil];
 	}
 	
+	[self updateState];
+	[self.view endEditing:YES];
+	[self resizeFooterView:nil];
 	
 	[[NSUserDefaults standardUserDefaults] setBool:YES forKey:ATMessageCenterDidPresentWhoCardKey];
 }
+
+#pragma mark - Private
 
 - (void)updateState {
 	if (self.pendingMessage) {
@@ -501,11 +504,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				newFooter = self.messageInputView;
 				break;
 			
-			case ATMessageCenterStateWhoCard: {
+			case ATMessageCenterStateWhoCard:
 				[self.whoView.nameField becomeFirstResponder];
 				newFooter = self.whoView;
 				break;
-			}
 				
 			case ATMessageCenterStateSending:
 				newFooter = self.confirmationView;

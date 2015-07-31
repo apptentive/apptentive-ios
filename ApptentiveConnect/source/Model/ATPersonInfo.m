@@ -122,36 +122,6 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 	return [ATUtilities diffDictionary:self.dictionaryRepresentation againstDictionary:[ATPersonUpdater lastSavedVersion]];
 }
 
-- (NSDictionary *)comparisonDictionary {
-	NSMutableDictionary *result = [NSMutableDictionary dictionary];
-	
-	if (self.apptentiveID) {
-		[result setObject:self.apptentiveID forKey:@"apptentive_id"];
-	}
-	if (self.name) {
-		[result setObject:self.name forKey:@"name"];
-	}
-	if (self.emailAddress) {
-		[result setObject:self.emailAddress forKey:@"email"];
-	}
-	
-	return result;
-}
-
-- (NSUInteger)hash {
-	NSString *hashString = [NSString stringWithFormat:@"%@,%@,%@", self.apptentiveID, self.name, self.emailAddress];
-	return [hashString hash];
-}
-
-- (BOOL)isEqual:(id)object {
-	if (![object isKindOfClass:[ATPersonInfo class]]) {
-		return NO;
-	}
-	ATPersonInfo *other = (ATPersonInfo *)object;
-	BOOL equal = [ATUtilities dictionary:[self comparisonDictionary] isEqualToDictionary:[other comparisonDictionary]];
-	return equal;
-}
-
 #pragma mark - Private
 
 - (void)commonInit {

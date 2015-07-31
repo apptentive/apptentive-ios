@@ -425,6 +425,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	[ATConnect sharedConnection].personName = self.whoView.nameField.text;
 	[ATConnect sharedConnection].personEmailAddress = self.whoView.emailField.text;
+	[[ATBackend sharedBackend] updatePersonIfNeeded];
 	
 	if (self.pendingMessage) {
 		[[ATBackend sharedBackend] sendTextMessage:self.pendingMessage completion:^(NSString *pendingMessageID) {}];

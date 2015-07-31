@@ -105,5 +105,7 @@ extern NSString *const ATBackendBecameReadyNotification;
 /*! True if the backend is currently updating the person. */
 - (BOOL)isUpdatingPerson;
 
+- (void)updatePersonIfNeeded;
+
 - (NSURLCache *)imageCache;
 @end

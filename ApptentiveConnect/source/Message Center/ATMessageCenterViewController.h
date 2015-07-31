@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "ATMessageCenterDataSource.h"
 
+extern NSString *const ATMessageCenterDidPresentWhoCardKey;
+
 @class ATMessageCenterInteraction;
 
 @protocol ATMessageCenterDismissalDelegate;

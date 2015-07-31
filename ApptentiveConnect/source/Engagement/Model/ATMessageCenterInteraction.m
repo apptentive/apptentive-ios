@@ -9,6 +9,7 @@
 #import "ATMessageCenterInteraction.h"
 #import "ATConnect_Private.h"
 #import "ATPersonInfo.h"
+#import "ATMessageCenterViewController.h"
 
 @implementation ATMessageCenterInteraction
 
@@ -84,7 +85,7 @@
 }
 
 - (NSString *)composerSaveButtonTitle {
-	if (self.emailRequired && [ATPersonInfo currentPerson].emailAddress.length == 0) {
+	if (self.emailRequired && ![[NSUserDefaults standardUserDefaults] boolForKey:ATMessageCenterDidPresentWhoCardKey]) {
 		return ATLocalizedString(@"Next", @"Message field save button when email required");
 	} else {
 		return ATLocalizedString(@"Send", @"Send button title");

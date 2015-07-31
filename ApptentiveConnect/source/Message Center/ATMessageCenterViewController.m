@@ -42,6 +42,8 @@
 #define BODY_FONT_SIZE 14.0
 
 NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
+NSString *const ATMessageCenterDidPresentWhoCardKey = @"ATMessageCenterDidPresentWhoCardKey";
+
 
 typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	ATMessageCenterStateInvalid = 0,
@@ -376,7 +378,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	if (message && ![message isEqualToString:@""]) {
 		[self.messageInputView.messageView resignFirstResponder];
 		
-		if (self.interaction.profileRequested && [ATPersonInfo currentPerson].emailAddress.length == 0) {
+		if (self.interaction.profileRequested && ![[NSUserDefaults standardUserDefaults] boolForKey:ATMessageCenterDidPresentWhoCardKey]) {
 			self.state = ATMessageCenterStateWhoCard;
 			self.pendingMessage = [[ATBackend sharedBackend] createTextMessageWithBody:message hiddenOnClient:NO];
 		} else {
@@ -448,6 +450,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 	
 	
+	[[NSUserDefaults standardUserDefaults] setBool:YES forKey:ATMessageCenterDidPresentWhoCardKey];
 }
 
 - (void)updateState {

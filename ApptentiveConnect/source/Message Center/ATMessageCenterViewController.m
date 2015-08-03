@@ -111,7 +111,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	if (self.interaction.brandingEnabled) {
 		self.poweredByLabel.text = ATLocalizedString(@"Powered by", @"Powered by followed by Apptentive logo.");
-		self.poweredByImageView.image = [ATBackend imageNamed:@"at_branding-logo"];
+		self.poweredByImageView.image = [ATBackend imageNamed:@"at_branding_logo"];
 		[self.brandingView setNeedsLayout];
 		[self.brandingView layoutIfNeeded];
 		

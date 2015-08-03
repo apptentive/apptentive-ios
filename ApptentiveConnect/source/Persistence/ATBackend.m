@@ -384,10 +384,12 @@ static NSURLCache *imageCache = nil;
 	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
 	ATMessageTask *task = [[ATMessageTask alloc] init];
 	
-	[self.activeMessageTasks addObject:task];
-	[self updateMessageTaskProgress];
-	task.progressDelegate = self;
-
+	if ([message isMemberOfClass:[ATTextMessage class]]) {
+		[self.activeMessageTasks addObject:task];
+		[self updateMessageTaskProgress];
+		task.progressDelegate = self;
+	}
+	
 	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
 		task.pendingMessageID = pendingMessageID;
 		[[ATTaskQueue sharedTaskQueue] addTask:task];
@@ -898,8 +900,13 @@ static NSURLCache *imageCache = nil;
 }
 
 - (void)messageTaskDidFinish:(ATMessageTask *)messageTask {
-	[self.activeMessageTasks removeObject:messageTask];
 	[self updateMessageTaskProgress];
+	
+	// Give the progress bar time to fill
+	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+		[self.activeMessageTasks removeObject:messageTask];
+		[self updateMessageTaskProgress];
+	});
 }
 
 - (void)updateMessageTaskProgress {
@@ -912,7 +919,7 @@ static NSURLCache *imageCache = nil;
 			progress = 0.05;
 		}
 	}
-
+	
 	[self.messageDelegate backend:self messageProgressDidChange:progress];
 }
 

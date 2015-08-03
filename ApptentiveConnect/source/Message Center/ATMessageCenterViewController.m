@@ -448,8 +448,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)backend:(ATBackend *)backend messageProgressDidChange:(float)progress {
 	ATProgressNavigationBar *navigationBar = (ATProgressNavigationBar *) self.navigationController.navigationBar;
-	
-	navigationBar.progressView.progress = progress;
+		
+	BOOL animated = navigationBar.progressView.progress < progress;
+	[navigationBar.progressView setProgress:progress animated:animated];
 }
 
 #pragma mark - Actions

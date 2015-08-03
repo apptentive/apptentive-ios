@@ -38,7 +38,7 @@
 	[self.aboutButton setTitle:self.interaction.aboutButtonTitle forState:UIControlStateNormal];
 	[self.privacyButton setTitle:self.interaction.privacyButtonTitle forState:UIControlStateNormal];
 	
-	self.portraitConstraints = @[ self.aboutButtonTrailingConstraint, self.privacyButtonLeadingConstraint, self.aboutButtonPrivacyButtonVeritcalConstraint ];
+	self.portraitConstraints = @[self.aboutButtonTrailingConstraint, self.privacyButtonLeadingConstraint, self.aboutButtonPrivacyButtonVeritcalConstraint];
 	
 	self.landscapeConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[about]-(16)-[privacy]" options:NSLayoutFormatAlignAllBaseline metrics:nil views:@{ @"about": self.aboutButton, @"privacy": self.privacyButton }];
 }

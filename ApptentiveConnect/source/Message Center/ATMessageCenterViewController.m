@@ -115,13 +115,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[self.brandingView setNeedsLayout];
 		[self.brandingView layoutIfNeeded];
 		
-		
-//		CGFloat width = CGRectGetWidth(self.poweredByLabel.bounds) + CGRectGetWidth(self.poweredByImageView.bounds) + 6.0;
-//		self.backgroundView.frame = CGRectMake(0.0, 0.0, width, 44.0);
 		UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.brandingView];
-//		barButtonItem.width = width;
-		
-		self.toolbarItems = [@[ barButtonItem ] arrayByAddingObjectsFromArray:self.toolbarItems];
+		self.toolbarItems = [@[barButtonItem] arrayByAddingObjectsFromArray:self.toolbarItems];
 	}
 	
 	if (!self.interaction.profileRequested) {

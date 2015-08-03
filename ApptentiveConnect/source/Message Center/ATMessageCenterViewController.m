@@ -68,7 +68,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @property (strong, nonatomic) IBOutlet ATMessageCenterInputView *messageInputView;
 @property (strong, nonatomic) IBOutlet ATMessageCenterWhoView *whoView;
 
-@property (strong, nonatomic) IBOutlet UIView *backgroundView;
+@property (strong, nonatomic) IBOutlet UIView *brandingView;
 @property (weak, nonatomic) IBOutlet UILabel *poweredByLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *poweredByImageView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *composeButtonItem;
@@ -112,13 +112,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	if (self.interaction.brandingEnabled) {
 		self.poweredByLabel.text = ATLocalizedString(@"Powered by", @"Powered by followed by Apptentive logo.");
 		self.poweredByImageView.image = [ATBackend imageNamed:@"at_branding-logo"];
-		[self.backgroundView setNeedsLayout];
-		[self.backgroundView layoutIfNeeded];
+		[self.brandingView setNeedsLayout];
+		[self.brandingView layoutIfNeeded];
 		
 		
 //		CGFloat width = CGRectGetWidth(self.poweredByLabel.bounds) + CGRectGetWidth(self.poweredByImageView.bounds) + 6.0;
 //		self.backgroundView.frame = CGRectMake(0.0, 0.0, width, 44.0);
-		UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.backgroundView];
+		UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.brandingView];
 //		barButtonItem.width = width;
 		
 		self.toolbarItems = [@[ barButtonItem ] arrayByAddingObjectsFromArray:self.toolbarItems];

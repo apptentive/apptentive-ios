@@ -22,11 +22,8 @@
 #import "ATReachability.h"
 #import "ATAutomatedMessage.h"
 #import "ATData.h"
-<<<<<<< HEAD
 #import "ATProgressNavigationBar.h"
-=======
 #import "ATAboutViewController.h"
->>>>>>> 20fe095ca772946dfb760836da0c8bad93484673
 
 #define HEADER_FOOTER_EMPTY_HEIGHT 4.0
 #define HEADER_DATE_LABEL_HEIGHT 60.0
@@ -121,17 +118,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	self.confirmationView.confirmationHidden = YES;
 	
-<<<<<<< HEAD
 	NSString *branding = self.interaction.branding;
 	if (branding) {
-		self.tableView.backgroundView = self.backgroundView;
 		
 #warning The "Powered By" string needs to come from `self.interaction.branding`.
 #warning Need to replace string `Apptentive` with the Apptentive logo image.
 		
-=======
-	if (self.interaction.brandingEnabled) {
->>>>>>> 20fe095ca772946dfb760836da0c8bad93484673
 		self.poweredByLabel.text = ATLocalizedString(@"Powered by", @"Powered by followed by Apptentive logo.");
 		self.poweredByImageView.image = [ATBackend imageNamed:@"at_branding_logo"];
 		[self.brandingView setNeedsLayout];
@@ -353,19 +345,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	headerView.textLabel.font = [UIFont boldSystemFontOfSize:DATE_FONT_SIZE];
 }
 
-<<<<<<< HEAD
-#pragma mark Scroll view delegate
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-	if (scrollView == self.tableView) {
-		[self adjustBrandingVisibility];
-	}
-}
-
-#pragma mark - Fetched results controller delegate
-=======
 #pragma mark Fetch results controller delegate
->>>>>>> 20fe095ca772946dfb760836da0c8bad93484673
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
 	[self.tableView beginUpdates];

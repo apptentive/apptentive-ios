@@ -29,13 +29,10 @@
 		01C30CEC1B0D09F8006BC911 /* ATMessageCenterGreetingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01C30CEA1B0D09F8006BC911 /* ATMessageCenterGreetingView.m */; };
 		01CC8BCA1B1D0598006C4D30 /* ATNetworkImageIconView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01CC8BC81B1D0598006C4D30 /* ATNetworkImageIconView.h */; };
 		01CC8BCB1B1D0598006C4D30 /* ATNetworkImageIconView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01CC8BC91B1D0598006C4D30 /* ATNetworkImageIconView.m */; };
-<<<<<<< HEAD
 		01D3128E1B69349900B369E1 /* ATProgressNavigationBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 01D3128C1B69349900B369E1 /* ATProgressNavigationBar.h */; };
 		01D3128F1B69349900B369E1 /* ATProgressNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D3128D1B69349900B369E1 /* ATProgressNavigationBar.m */; };
-=======
 		01F1A9601B6823CD0088DBF0 /* ATAboutViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01F1A95E1B6823CD0088DBF0 /* ATAboutViewController.h */; };
 		01F1A9611B6823CD0088DBF0 /* ATAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F1A95F1B6823CD0088DBF0 /* ATAboutViewController.m */; };
->>>>>>> 20fe095ca772946dfb760836da0c8bad93484673
 		490B8158144274EF009801E9 /* ATCustomButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 490B8156144274EF009801E9 /* ATCustomButton.h */; };
 		490B8159144274EF009801E9 /* ATCustomButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 490B8157144274EF009801E9 /* ATCustomButton.m */; };
 		490B815A144274EF009801E9 /* ATCustomButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 490B8157144274EF009801E9 /* ATCustomButton.m */; };
@@ -387,13 +384,10 @@
 		01C30CEA1B0D09F8006BC911 /* ATMessageCenterGreetingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageCenterGreetingView.m; sourceTree = "<group>"; };
 		01CC8BC81B1D0598006C4D30 /* ATNetworkImageIconView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATNetworkImageIconView.h; sourceTree = "<group>"; };
 		01CC8BC91B1D0598006C4D30 /* ATNetworkImageIconView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATNetworkImageIconView.m; sourceTree = "<group>"; };
-<<<<<<< HEAD
 		01D3128C1B69349900B369E1 /* ATProgressNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATProgressNavigationBar.h; sourceTree = "<group>"; };
 		01D3128D1B69349900B369E1 /* ATProgressNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATProgressNavigationBar.m; sourceTree = "<group>"; };
-=======
 		01F1A95E1B6823CD0088DBF0 /* ATAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAboutViewController.h; sourceTree = "<group>"; };
 		01F1A95F1B6823CD0088DBF0 /* ATAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAboutViewController.m; sourceTree = "<group>"; };
->>>>>>> 20fe095ca772946dfb760836da0c8bad93484673
 		490B8156144274EF009801E9 /* ATCustomButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATCustomButton.h; sourceTree = "<group>"; };
 		490B8157144274EF009801E9 /* ATCustomButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATCustomButton.m; sourceTree = "<group>"; };
 		490B815B1442751F009801E9 /* ATToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATToolbar.h; sourceTree = "<group>"; };

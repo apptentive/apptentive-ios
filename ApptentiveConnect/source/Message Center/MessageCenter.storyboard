@@ -474,14 +474,9 @@
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
-<<<<<<< HEAD
-                    <navigationItem key="navigationItem" title="Message Center" id="vfC-JL-Kb9">
-                        <barButtonItem key="leftBarButtonItem" title="Profile" id="pDt-Bl-iZQ">
-=======
                     <navigationItem key="navigationItem" title="Message Center Title" id="vfC-JL-Kb9">
                         <barButtonItem key="backBarButtonItem" title="Back" id="91h-ja-bMn"/>
-                        <barButtonItem key="leftBarButtonItem" title="Who" id="pDt-Bl-iZQ">
->>>>>>> 20fe095ca772946dfb760836da0c8bad93484673
+                        <barButtonItem key="leftBarButtonItem" title="Profile" id="pDt-Bl-iZQ">
                             <connections>
                                 <action selector="showWho:" destination="W0l-Dy-ioE" id="dgY-B3-15c"/>
                             </connections>

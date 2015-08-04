@@ -38,11 +38,11 @@
 
 - (void)addProgressView {
 	_progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
-	
-	self.progressView.translatesAutoresizingMaskIntoConstraints = NO;
 	[self addSubview:self.progressView];
-	[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(0)-[progress]-(0)-|" options:NSLayoutFormatAlignAllBottom metrics:nil views:@{ @"progress": self.progressView }]];
-	[self addConstraint:[NSLayoutConstraint constraintWithItem:self.progressView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1 constant:-1]];
+	CGFloat height = CGRectGetHeight(self.bounds);
+
+	self.progressView.frame = CGRectMake(0.0, height - CGRectGetHeight(self.progressView.bounds), CGRectGetWidth(self.bounds), CGRectGetHeight(self.progressView.bounds));
+	self.progressView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
 }
 
 @end

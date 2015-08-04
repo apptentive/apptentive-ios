@@ -531,6 +531,76 @@
             </objects>
             <point key="canvasLocation" x="350" y="604"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="B96-Wi-z9y">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iHE-Jk-VUn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <navigationController storyboardIdentifier="NoPayload" id="q5f-li-WRq" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="VR9-9D-etX">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="98M-gg-3nj" kind="relationship" relationship="rootViewController" id="NND-IU-sF6"/>
+                    </connections>
+                </navigationController>
+            </objects>
+            <point key="canvasLocation" x="-190" y="1342"/>
+        </scene>
+        <!--Message Center-->
+        <scene sceneID="G8v-Qy-vVc">
+            <objects>
+                <viewController id="98M-gg-3nj" customClass="ATMessageCenterErrorViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="YsJ-93-sdE"/>
+                        <viewControllerLayoutGuide type="bottom" id="PBq-M4-PKi"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="center" id="yHY-Np-JOn">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="GVd-IK-yfR">
+                                <rect key="frame" x="145" y="269" width="30" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="Oqe-OD-ws3"/>
+                                    <constraint firstAttribute="width" constant="30" id="Wi9-Je-aVz"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We’re attempting to connect. Thanks for your patience!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="288" translatesAutoresizingMaskIntoConstraints="NO" id="MWx-dJ-sZ0">
+                                <rect key="frame" x="16" y="315" width="288" height="41"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="288" id="GU6-pk-lSr"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <color key="textColor" red="0.71764705882352942" green="0.71764705882352942" blue="0.73333333333333328" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="centerX" secondItem="GVd-IK-yfR" secondAttribute="centerX" id="36k-QD-PQI"/>
+                            <constraint firstAttribute="centerY" secondItem="GVd-IK-yfR" secondAttribute="centerY" id="8QX-wA-uqg"/>
+                            <constraint firstAttribute="centerX" secondItem="MWx-dJ-sZ0" secondAttribute="centerX" id="BO5-wU-k2W"/>
+                            <constraint firstItem="MWx-dJ-sZ0" firstAttribute="top" secondItem="GVd-IK-yfR" secondAttribute="bottom" constant="16" id="JNK-Th-fzD"/>
+                            <constraint firstAttribute="centerY" secondItem="GVd-IK-yfR" secondAttribute="centerY" id="cFk-Xy-VPj"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Message Center" id="SBs-rU-p7L">
+                        <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="ebc-H0-O6o">
+                            <connections>
+                                <action selector="dismiss:" destination="98M-gg-3nj" id="YeV-jc-Fa6"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="imageView" destination="GVd-IK-yfR" id="WtF-5o-Ikr"/>
+                        <outlet property="textLabel" destination="MWx-dJ-sZ0" id="pk1-WM-qIk"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oFN-UH-K4t" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="303" y="1342"/>
+        </scene>
         <!--Banner View Controller-->
         <scene sceneID="pcU-LA-MMv">
             <objects>

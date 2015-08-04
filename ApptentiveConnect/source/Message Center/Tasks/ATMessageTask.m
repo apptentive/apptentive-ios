@@ -72,6 +72,8 @@
 		}
 		request = [[ATWebClient sharedClient] requestForPostingMessage:message];
 		if (request != nil) {
+			[self.progressDelegate messageTaskDidBegin:self];
+			
 			request.delegate = self;
 			[request start];
 			self.inProgress = YES;
@@ -106,6 +108,7 @@
 #pragma mark ATAPIRequestDelegate
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(NSObject *)result {
 	@synchronized(self) {
+		[self.progressDelegate messageTaskDidFinish:self];
 		
 		if ([result isKindOfClass:[NSDictionary class]] && [self processResult:(NSDictionary *)result]) {
 			self.finished = YES;
@@ -118,11 +121,12 @@
 }
 
 - (void)at_APIRequestDidProgress:(ATAPIRequest *)sender {
-	// pass
+	[self.progressDelegate messageTask:self didProgress:self.percentComplete];
 }
 
 - (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
 	@synchronized(self) {
+		[self.progressDelegate messageTaskDidFinish:self];
 		self.lastErrorTitle = sender.errorTitle;
 		self.lastErrorMessage = sender.errorMessage;
 		

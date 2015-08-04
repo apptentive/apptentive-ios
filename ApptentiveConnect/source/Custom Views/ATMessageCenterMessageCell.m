@@ -8,6 +8,12 @@
 
 #import "ATMessageCenterMessageCell.h"
 
+@interface ATMessageCenterMessageCell ()
+
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *messageStatusSpacingConstraint;
+
+@end
+
 @implementation ATMessageCenterMessageCell
 
 - (void)layoutSubviews {

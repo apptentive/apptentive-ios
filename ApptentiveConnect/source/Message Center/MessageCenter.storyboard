@@ -379,6 +379,7 @@
                                     <outlet property="contextMessageLabel" destination="H0j-G5-55X" id="9bK-XY-Y7x"/>
                                 </connections>
                             </tableViewCell>
+<<<<<<< HEAD
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="Message" rowHeight="51" id="hi8-Bq-GR3" customClass="ATMessageCenterMessageCell">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hi8-Bq-GR3" id="H0J-6d-bTN">
@@ -403,6 +404,8 @@
                                     <outlet property="messageLabel" destination="1yl-30-ZGb" id="Ew0-Ln-oSz"/>
                                 </connections>
                             </tableViewCell>
+=======
+>>>>>>> IOSOSX-211
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="Reply" rowHeight="72" id="JK9-ui-0US" customClass="ATMessageCenterReplyCell">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JK9-ui-0US" id="mF7-ws-xVD">
@@ -447,6 +450,41 @@
                                     <outlet property="replyLabel" destination="5Eh-t3-ula" id="enJ-Jc-Meb"/>
                                     <outlet property="senderLabel" destination="hqj-Rz-wbV" id="Hb8-Bp-DZr"/>
                                     <outlet property="supportUserImageView" destination="g0l-YC-9t6" id="IAN-sK-oUE"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="Message" rowHeight="75" id="hi8-Bq-GR3" customClass="ATMessageCenterMessageCell">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hi8-Bq-GR3" id="H0J-6d-bTN">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Yeah, I like the app overall, but it just closed without saving. can you help?" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="384" translatesAutoresizingMaskIntoConstraints="NO" id="1yl-30-ZGb">
+                                            <rect key="frame" x="15" y="8" width="384" height="33.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <color key="textColor" red="0.54117647058823526" green="0.54117647058823526" blue="0.54117647058823526" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sent" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qyc-gl-oxc">
+                                            <rect key="frame" x="15" y="47.5" width="384" height="16"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                            <color key="textColor" red="0.54117647059999996" green="0.54117647059999996" blue="0.54117647059999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstItem="1yl-30-ZGb" firstAttribute="top" secondItem="H0J-6d-bTN" secondAttribute="top" constant="8" id="0Xf-rH-hjC"/>
+                                        <constraint firstItem="qyc-gl-oxc" firstAttribute="top" secondItem="1yl-30-ZGb" secondAttribute="bottom" constant="6" id="Ytg-xz-U5z"/>
+                                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="1yl-30-ZGb" secondAttribute="bottom" constant="8" id="adM-NY-T1X"/>
+                                        <constraint firstItem="qyc-gl-oxc" firstAttribute="leading" secondItem="H0J-6d-bTN" secondAttribute="leading" constant="15" id="h3Z-FQ-SxP"/>
+                                        <constraint firstItem="1yl-30-ZGb" firstAttribute="leading" secondItem="H0J-6d-bTN" secondAttribute="leading" constant="15" id="nQP-L2-mw0"/>
+                                        <constraint firstAttribute="trailing" secondItem="qyc-gl-oxc" secondAttribute="trailing" constant="15" id="oxx-cV-R3q"/>
+                                        <constraint firstAttribute="trailing" secondItem="1yl-30-ZGb" secondAttribute="trailing" constant="15" id="viE-v4-gHW"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="messageLabel" destination="1yl-30-ZGb" id="Ew0-Ln-oSz"/>
+                                    <outlet property="messageStatusSpacingConstraint" destination="Ytg-xz-U5z" id="eF2-Km-txc"/>
+                                    <outlet property="statusLabel" destination="qyc-gl-oxc" id="49R-Xd-kog"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -535,13 +573,13 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y7l-8U-XGR" userLabel="Banner View">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="68"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notification Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cZE-zR-99d">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notification Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="20148" translatesAutoresizingMaskIntoConstraints="NO" id="cZE-zR-99d">
                                         <rect key="frame" x="79" y="8" width="226" height="16"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notification Message" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f1X-dK-6cu">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notification Message" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="2048" translatesAutoresizingMaskIntoConstraints="NO" id="f1X-dK-6cu">
                                         <rect key="frame" x="79" y="25" width="226" height="16"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
@@ -615,7 +653,7 @@
         <scene sceneID="Xx8-Lb-CI2">
             <objects>
                 <navigationController modalPresentationStyle="formSheet" toolbarHidden="NO" id="cIq-Hu-EXH" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="sCD-xi-s8C">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="sCD-xi-s8C" customClass="ATProgressNavigationBar">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>

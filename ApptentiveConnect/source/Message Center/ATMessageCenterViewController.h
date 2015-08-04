@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ATMessageCenterDataSource.h"
+#import "ATBackend.h"
 
 extern NSString *const ATMessageCenterDidPresentWhoCardKey;
 
@@ -15,7 +16,7 @@ extern NSString *const ATMessageCenterDidPresentWhoCardKey;
 
 @protocol ATMessageCenterDismissalDelegate;
 
-@interface ATMessageCenterViewController : UITableViewController <ATMessageCenterDataSourceDelegate, UITextViewDelegate, UITextFieldDelegate>
+@interface ATMessageCenterViewController : UITableViewController <ATMessageCenterDataSourceDelegate, UITextViewDelegate, UITextFieldDelegate, ATBackendMessageDelegate>
 
 @property (nonatomic, weak) NSObject<ATMessageCenterDismissalDelegate> *dismissalDelegate;
 

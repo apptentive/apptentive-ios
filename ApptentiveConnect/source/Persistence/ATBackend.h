@@ -18,11 +18,11 @@
 #import "ATPersonUpdater.h"
 #import "ATFileAttachment.h"
 #if TARGET_OS_IPHONE
-#import "ATMessageCenterViewController.h"
 #import "ATAbstractMessage.h"
 #import "ATTextMessage.h"
 #import "ATAutomatedMessage.h"
 #import "ATFeedback.h"
+#import "ATMessageTask.h"
 #endif
 
 extern NSString *const ATBackendBecameReadyNotification;
@@ -34,10 +34,12 @@ extern NSString *const ATBackendBecameReadyNotification;
 @class ATFeedback;
 @class ATAPIRequest;
 
+@protocol  ATBackendMessageDelegate;
+
 /*! Handles all of the backend activities, such as sending feedback. */
 @interface ATBackend : NSObject <ATConversationUpdaterDelegate, ATDeviceUpdaterDelegate, ATPersonUpdaterDelegate
 #if TARGET_OS_IPHONE
-, NSFetchedResultsControllerDelegate, ATMessageCenterDismissalDelegate, UIAlertViewDelegate
+, NSFetchedResultsControllerDelegate, UIAlertViewDelegate, ATMessageTaskProgressDelegate
 #endif
 > 
 @property (nonatomic, copy) NSString *apiKey;
@@ -50,6 +52,8 @@ extern NSString *const ATBackendBecameReadyNotification;
 @property (nonatomic, strong, readonly) NSString *supportDirectoryPath;
 
 @property (nonatomic, assign, readonly) BOOL hideBranding;
+
+@property (weak, nonatomic) id<ATBackendMessageDelegate> messageDelegate;
 
 + (ATBackend *)sharedBackend;
 #if TARGET_OS_IPHONE
@@ -68,14 +72,13 @@ extern NSString *const ATBackendBecameReadyNotification;
 
 /*! ATAutomatedMessage messages. */
 - (ATAutomatedMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body;
-- (BOOL)sendAutomatedMessage:(ATAutomatedMessage *)message completion:(void (^)(NSString *pendingMessageID))completion;
+- (BOOL)sendAutomatedMessage:(ATAutomatedMessage *)message;
 
 /*! Send ATTextMessage messages. */
 - (ATTextMessage *)createTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden;
-- (BOOL)sendTextMessageWithBody:(NSString *)body completion:(void (^)(NSString *pendingMessageID))completion;
-- (BOOL)sendTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden completion:(void (^)(NSString *pendingMessageID))completion;
-- (BOOL)sendTextMessage:(ATTextMessage *)message completion:(void (^)(NSString *pendingMessageID))completion;
-
+- (BOOL)sendTextMessageWithBody:(NSString *)body;
+- (BOOL)sendTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden;
+- (BOOL)sendTextMessage:(ATTextMessage *)message;
 /*! Send ATFileMessage messages. */
 - (BOOL)sendImageMessageWithImage:(UIImage *)image fromSource:(ATFeedbackImageSource)imageSource;
 - (BOOL)sendImageMessageWithImage:(UIImage *)image hiddenOnClient:(BOOL)hidden fromSource:(ATFeedbackImageSource)imageSource;
@@ -110,4 +113,11 @@ extern NSString *const ATBackendBecameReadyNotification;
 - (void)updatePersonIfNeeded;
 
 - (NSURLCache *)imageCache;
+
+@end
+
+@protocol ATBackendMessageDelegate <NSObject>
+
+- (void)backend:(ATBackend *)backend messageProgressDidChange:(float)progress;
+
 @end

@@ -29,6 +29,8 @@
 		01C30CEC1B0D09F8006BC911 /* ATMessageCenterGreetingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01C30CEA1B0D09F8006BC911 /* ATMessageCenterGreetingView.m */; };
 		01CC8BCA1B1D0598006C4D30 /* ATNetworkImageIconView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01CC8BC81B1D0598006C4D30 /* ATNetworkImageIconView.h */; };
 		01CC8BCB1B1D0598006C4D30 /* ATNetworkImageIconView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01CC8BC91B1D0598006C4D30 /* ATNetworkImageIconView.m */; };
+		01D3128E1B69349900B369E1 /* ATProgressNavigationBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 01D3128C1B69349900B369E1 /* ATProgressNavigationBar.h */; };
+		01D3128F1B69349900B369E1 /* ATProgressNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D3128D1B69349900B369E1 /* ATProgressNavigationBar.m */; };
 		490B8158144274EF009801E9 /* ATCustomButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 490B8156144274EF009801E9 /* ATCustomButton.h */; };
 		490B8159144274EF009801E9 /* ATCustomButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 490B8157144274EF009801E9 /* ATCustomButton.m */; };
 		490B815A144274EF009801E9 /* ATCustomButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 490B8157144274EF009801E9 /* ATCustomButton.m */; };
@@ -380,6 +382,8 @@
 		01C30CEA1B0D09F8006BC911 /* ATMessageCenterGreetingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageCenterGreetingView.m; sourceTree = "<group>"; };
 		01CC8BC81B1D0598006C4D30 /* ATNetworkImageIconView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATNetworkImageIconView.h; sourceTree = "<group>"; };
 		01CC8BC91B1D0598006C4D30 /* ATNetworkImageIconView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATNetworkImageIconView.m; sourceTree = "<group>"; };
+		01D3128C1B69349900B369E1 /* ATProgressNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATProgressNavigationBar.h; sourceTree = "<group>"; };
+		01D3128D1B69349900B369E1 /* ATProgressNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATProgressNavigationBar.m; sourceTree = "<group>"; };
 		490B8156144274EF009801E9 /* ATCustomButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATCustomButton.h; sourceTree = "<group>"; };
 		490B8157144274EF009801E9 /* ATCustomButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATCustomButton.m; sourceTree = "<group>"; };
 		490B815B1442751F009801E9 /* ATToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATToolbar.h; sourceTree = "<group>"; };
@@ -1037,6 +1041,8 @@
 				01BD9E031B55E465004F12AB /* ATMessageCenterInputView.m */,
 				01B147B11B5D8D3A0000D041 /* ATMessageCenterWhoView.h */,
 				01B147B21B5D8D3A0000D041 /* ATMessageCenterWhoView.m */,
+				01D3128C1B69349900B369E1 /* ATProgressNavigationBar.h */,
+				01D3128D1B69349900B369E1 /* ATProgressNavigationBar.m */,
 			);
 			path = "Custom Views";
 			sourceTree = "<group>";
@@ -1347,6 +1353,7 @@
 				49352ADD138CA1DC000E464A /* ATURLConnection_Private.h in Headers */,
 				490B8158144274EF009801E9 /* ATCustomButton.h in Headers */,
 				490B815D1442751F009801E9 /* ATToolbar.h in Headers */,
+				01D3128E1B69349900B369E1 /* ATProgressNavigationBar.h in Headers */,
 				58D17D4B18C5675E00D123BC /* ATInteractionFeedbackDialogController.h in Headers */,
 				49BC2A5A144F75E20041E789 /* ATShadowView.h in Headers */,
 				49B877111464958C00594A5D /* ATWebClient_Private.h in Headers */,
@@ -1604,6 +1611,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01D3128F1B69349900B369E1 /* ATProgressNavigationBar.m in Sources */,
 				49C002A3133413BB0071F088 /* ATConnect.m in Sources */,
 				49D1125013368CC200603373 /* ATTask.m in Sources */,
 				49D1125413368CEF00603373 /* ATFeedbackTask.m in Sources */,

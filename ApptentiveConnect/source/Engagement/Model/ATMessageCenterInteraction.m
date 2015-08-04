@@ -150,23 +150,8 @@
 	return self.configuration[@"profile"][@"edit"][@"skip_button"];
 }
 
-<<<<<<< HEAD
 - (NSString *)profileEditSaveButtonTitle {
 	return self.configuration[@"profile"][@"edit"][@"save_button"];
-=======
-- (NSString *)stringForKey:(NSString *)key fallback:(NSString *)fallbackString {
-	NSString *result =  self.configuration[key];
- 
-	if (!result) {
-		// TODO: get value from global config
-	}
-	
-	if (!result) {
-		result = fallbackString;
-	}
-	
-	return result;
->>>>>>> IOSOSX-211
 }
 
 @end

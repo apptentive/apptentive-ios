@@ -35,11 +35,7 @@
 #import "ATPersonUpdater.h"
 #import "ATEngagementBackend.h"
 #import "ATFileMessage.h"
-<<<<<<< HEAD
-=======
-#import "ATMessageCenterInteraction.h"
 #import "ATMessageCenterViewController.h"
->>>>>>> IOSOSX-211
 
 typedef NS_ENUM(NSInteger, ATBackendState){
 	ATBackendStateStarting,

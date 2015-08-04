@@ -10,6 +10,8 @@
 
 @interface ATMessageCenterInteraction : ATInteraction
 
++ (id)messageCenterInteractionFromInteraction:(ATInteraction *)interaction;
+
 @property (nonatomic, readonly) NSString *title;
 @property (nonatomic, readonly) NSString *branding;
 

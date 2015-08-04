@@ -12,16 +12,22 @@
 #import "ATConnect_Private.h"
 #import "ATMessageCenterViewController.h"
 
+@interface ATInteractionMessageCenterController ()
+
+@property (nonatomic, strong, readonly) ATMessageCenterInteraction *interaction;
+@property (nonatomic, strong) UIViewController *viewController;
+
+@end
+
 @implementation ATInteractionMessageCenterController
 
-- (id)initWithInteraction:(ATMessageCenterInteraction *)interaction {
+- (id)initWithInteraction:(ATInteraction *)interaction {
 	NSAssert([interaction.type isEqualToString:@"MessageCenter"], @"Attempted to load a MessageCenterController with an interaction of type: %@", interaction.type);
-	
-#warning Also check that the interaction is of type ATMessageCenterInteraction
 	
 	self = [super init];
 	if (self != nil) {
-		_interaction = [interaction copy];
+		ATMessageCenterInteraction *messageCenterInteraction = [ATMessageCenterInteraction messageCenterInteractionFromInteraction:interaction];
+		_interaction = [messageCenterInteraction copy];
 	}
 	return self;
 }

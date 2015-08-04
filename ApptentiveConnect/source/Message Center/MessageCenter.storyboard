@@ -7,7 +7,7 @@
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
-        <!--Message Center-->
+        <!--Message Center Title-->
         <scene sceneID="Gzy-cr-Fse">
             <objects>
                 <tableViewController storyboardIdentifier="MessageCenter" id="W0l-Dy-ioE" customClass="ATMessageCenterViewController" sceneMemberID="viewController">
@@ -431,13 +431,13 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Yeah, I like the app overall, but it just closed without saving. can you help?" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="384" translatesAutoresizingMaskIntoConstraints="NO" id="1yl-30-ZGb">
-                                            <rect key="frame" x="15" y="8" width="384" height="33.5"/>
+                                            <rect key="frame" x="15" y="8" width="384" height="34"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.54117647058823526" green="0.54117647058823526" blue="0.54117647058823526" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sent" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qyc-gl-oxc">
-                                            <rect key="frame" x="15" y="47.5" width="384" height="16"/>
+                                            <rect key="frame" x="15" y="48" width="384" height="16"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
                                             <color key="textColor" red="0.54117647059999996" green="0.54117647059999996" blue="0.54117647059999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
@@ -543,7 +543,6 @@
         <!--Navigation Controller-->
         <scene sceneID="B96-Wi-z9y">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="iHE-Jk-VUn" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController storyboardIdentifier="NoPayload" id="q5f-li-WRq" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="VR9-9D-etX">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -553,6 +552,7 @@
                         <segue destination="98M-gg-3nj" kind="relationship" relationship="rootViewController" id="NND-IU-sF6"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iHE-Jk-VUn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-190" y="1342"/>
         </scene>

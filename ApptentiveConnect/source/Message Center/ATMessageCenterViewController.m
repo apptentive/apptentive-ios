@@ -25,7 +25,7 @@
 #import "ATData.h"
 
 #define HEADER_FOOTER_EMPTY_HEIGHT 4.0
-#define HEADER_DATE_LABEL_HEIGHT 28.0
+#define HEADER_DATE_LABEL_HEIGHT 60.0
 #define GREETING_PORTRAIT_HEIGHT 258.0
 #define GREETING_LANDSCAPE_HEIGHT 128.0
 #define CONFIRMATION_VIEW_HEIGHT 88.0
@@ -89,6 +89,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+	
+	self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
 	
 	self.dataSource = [[ATMessageCenterDataSource alloc] initWithDelegate:self];
 	[self.dataSource start];

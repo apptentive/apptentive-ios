@@ -23,11 +23,17 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *textWidthConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *textHeightConstraint;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomBorderHeightConstraint;
+
 @property (weak, nonatomic) IBOutlet UIView *textContainerView;
 
 @end
 
 @implementation ATMessageCenterGreetingView
+
+- (void)awakeFromNib {
+	self.bottomBorderHeightConstraint.constant = 1.0 / [UIScreen mainScreen].scale;
+}
 
 - (void)updateConstraints {
 	if (CGRectGetHeight(self.bounds) < LINE_BREAK_HEIGHT) {
@@ -42,8 +48,8 @@
 		self.imageCenterXConstraint.constant = 0.0;
 		self.textCenterXConstraint.constant = 0.0;
 		
-		self.imageCenterYConstraint.constant = self.textContainerView.bounds.size.height / 2.0;
-		self.textCenterYConstraint.constant = -self.imageWidthConstraint.constant / 2.0;
+		self.imageCenterYConstraint.constant = self.textContainerView.bounds.size.height / 2.0 + 5.0;
+		self.textCenterYConstraint.constant = -self.imageWidthConstraint.constant / 2.0 - 7.0;
 	}
 	
 	[super updateConstraints];

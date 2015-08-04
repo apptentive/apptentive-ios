@@ -588,9 +588,10 @@ static NSURLCache *imageCache = nil;
 	BOOL didShowMessageCenter = [[ATInteraction apptentiveAppInteraction] engage:@"show_message_center" fromViewController:viewController];
 	
 	if (!didShowMessageCenter) {
+		UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MessageCenter" bundle:[ATConnect resourceBundle]];
+		UINavigationController *navigationController = [storyboard instantiateViewControllerWithIdentifier:@"NoPayload"];
 		
-		// TODO: Interaction Manifest has not yet been retrieved.
-		
+		[viewController presentViewController:navigationController animated:YES completion:nil];
 	}
 }
 

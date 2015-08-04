@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		013C1A7B1B713D5C002434B8 /* ATMessageCenterErrorViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 013C1A791B713D5C002434B8 /* ATMessageCenterErrorViewController.h */; };
+		013C1A7C1B713D5C002434B8 /* ATMessageCenterErrorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 013C1A7A1B713D5C002434B8 /* ATMessageCenterErrorViewController.m */; };
 		017D97421B0E3770004E045C /* ATMessageCenterConfirmationView.h in Headers */ = {isa = PBXBuildFile; fileRef = 017D97401B0E3770004E045C /* ATMessageCenterConfirmationView.h */; };
 		017D97431B0E3770004E045C /* ATMessageCenterConfirmationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 017D97411B0E3770004E045C /* ATMessageCenterConfirmationView.m */; };
 		017D97461B0E5795004E045C /* ATMessageCenterMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 017D97441B0E5795004E045C /* ATMessageCenterMessageCell.h */; };
@@ -362,6 +364,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		013C1A791B713D5C002434B8 /* ATMessageCenterErrorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageCenterErrorViewController.h; sourceTree = "<group>"; };
+		013C1A7A1B713D5C002434B8 /* ATMessageCenterErrorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageCenterErrorViewController.m; sourceTree = "<group>"; };
 		017D97401B0E3770004E045C /* ATMessageCenterConfirmationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageCenterConfirmationView.h; sourceTree = "<group>"; };
 		017D97411B0E3770004E045C /* ATMessageCenterConfirmationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageCenterConfirmationView.m; sourceTree = "<group>"; };
 		017D97441B0E5795004E045C /* ATMessageCenterMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageCenterMessageCell.h; sourceTree = "<group>"; };
@@ -989,6 +993,8 @@
 				49AC178B16C0A09200BE1615 /* Protocols */,
 				4961A3FF161BBD5200E30037 /* Tasks */,
 				499912A5161B6AC800FDA15F /* URL Loading */,
+				013C1A791B713D5C002434B8 /* ATMessageCenterErrorViewController.h */,
+				013C1A7A1B713D5C002434B8 /* ATMessageCenterErrorViewController.m */,
 			);
 			name = "Message Center";
 			sourceTree = "<group>";
@@ -1394,6 +1400,7 @@
 				49AC178D16C0A0BC00BE1615 /* ATJSONModel.h in Headers */,
 				586C47A918B424E900725C22 /* ATInteractionEnjoymentDialogController.h in Headers */,
 				49E6208716C5E8C2000C9F5A /* NSDictionary+ATAdditions.h in Headers */,
+				013C1A7B1B713D5C002434B8 /* ATMessageCenterErrorViewController.h in Headers */,
 				01CC8BCA1B1D0598006C4D30 /* ATNetworkImageIconView.h in Headers */,
 				49F8AFE316CC4A550070FFEA /* ATConversation.h in Headers */,
 				49F8AFE516CC4A550070FFEA /* ATData.h in Headers */,
@@ -1645,6 +1652,7 @@
 				4936AE861379DECE00A4B17F /* ATContactStorage.m in Sources */,
 				4936AE8A1379DECE00A4B17F /* ATFeedback.m in Sources */,
 				49AA1020138B44C00082887A /* ATInfoViewController.m in Sources */,
+				013C1A7C1B713D5C002434B8 /* ATMessageCenterErrorViewController.m in Sources */,
 				49352AC5138C97A2000E464A /* ATAPIRequest.m in Sources */,
 				490B8159144274EF009801E9 /* ATCustomButton.m in Sources */,
 				490B815E1442751F009801E9 /* ATToolbar.m in Sources */,

@@ -790,7 +790,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
-                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="sht-Is-nTf">
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" id="sht-Is-nTf">
                         <autoresizingMask key="autoresizingMask"/>
                     </toolbar>
                     <connections>

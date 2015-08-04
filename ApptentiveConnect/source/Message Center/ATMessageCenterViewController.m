@@ -494,8 +494,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			[[ATBackend sharedBackend] sendTextMessageWithBody:message];
 			[self updateState];
 		}
-
-		[self.tableView reloadRowsAtIndexPaths:@[lastUserMessageIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+		
+		if (lastUserMessageIndexPath) {
+			[self.tableView reloadRowsAtIndexPaths:@[lastUserMessageIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+		}
 	}
 	
 	self.messageInputView.messageView.text = @"";

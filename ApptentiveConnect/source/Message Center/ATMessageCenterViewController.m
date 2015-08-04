@@ -45,7 +45,7 @@
 #define REPLY_CELL_MINIMUM_HEIGHT 54.0
 #define STATUS_LABEL_HEIGHT 16.0
 #define STATUS_LABEL_MARGIN 6.0
-#define BODY_FONT_SIZE 14.0
+#define BODY_FONT_SIZE 17.0
 
 NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
 NSString *const ATMessageCenterDidPresentWhoCardKey = @"ATMessageCenterDidPresentWhoCardKey";

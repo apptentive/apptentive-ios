@@ -632,6 +632,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			case ATMessageCenterStateSending:
 				newFooter = self.confirmationView;
 				self.confirmationView.confirmationHidden = YES;
+				self.confirmationView.statusLabel.text = nil;
 				break;
 				
 			case ATMessageCenterStateConfirmed:

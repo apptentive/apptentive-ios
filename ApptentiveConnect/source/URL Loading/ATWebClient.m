@@ -363,7 +363,7 @@ fail:
 	[conn setValue: @"utf-8" forHTTPHeaderField: @"Accept-Charset"];
 
 	// Apptentive API Version
-    [conn setValue:@"2" forHTTPHeaderField:@"X-API-Version"];
+    [conn setValue:@"3" forHTTPHeaderField:@"X-API-Version"];
 
 	NSString *apiKey = [[ATBackend sharedBackend] apiKey];
 	if (apiKey) {

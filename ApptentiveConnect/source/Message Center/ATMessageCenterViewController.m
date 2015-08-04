@@ -22,7 +22,11 @@
 #import "ATReachability.h"
 #import "ATAutomatedMessage.h"
 #import "ATData.h"
+<<<<<<< HEAD
 #import "ATProgressNavigationBar.h"
+=======
+#import "ATAboutViewController.h"
+>>>>>>> 20fe095ca772946dfb760836da0c8bad93484673
 
 #define HEADER_FOOTER_EMPTY_HEIGHT 4.0
 #define HEADER_DATE_LABEL_HEIGHT 60.0
@@ -69,9 +73,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @property (strong, nonatomic) IBOutlet ATMessageCenterInputView *messageInputView;
 @property (strong, nonatomic) IBOutlet ATMessageCenterWhoView *whoView;
 
-@property (strong, nonatomic) IBOutlet UIView *backgroundView;
+@property (strong, nonatomic) IBOutlet UIView *brandingView;
 @property (weak, nonatomic) IBOutlet UILabel *poweredByLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *poweredByImageView;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *composeButtonItem;
 
 @property (nonatomic, strong) ATMessageCenterDataSource *dataSource;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
@@ -116,6 +121,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	self.confirmationView.confirmationHidden = YES;
 	
+<<<<<<< HEAD
 	NSString *branding = self.interaction.branding;
 	if (branding) {
 		self.tableView.backgroundView = self.backgroundView;
@@ -123,8 +129,16 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 #warning The "Powered By" string needs to come from `self.interaction.branding`.
 #warning Need to replace string `Apptentive` with the Apptentive logo image.
 		
+=======
+	if (self.interaction.brandingEnabled) {
+>>>>>>> 20fe095ca772946dfb760836da0c8bad93484673
 		self.poweredByLabel.text = ATLocalizedString(@"Powered by", @"Powered by followed by Apptentive logo.");
-		self.poweredByImageView.image = [ATBackend imageNamed:@"at_branding-logo"];
+		self.poweredByImageView.image = [ATBackend imageNamed:@"at_branding_logo"];
+		[self.brandingView setNeedsLayout];
+		[self.brandingView layoutIfNeeded];
+		
+		UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.brandingView];
+		self.toolbarItems = [@[barButtonItem] arrayByAddingObjectsFromArray:self.toolbarItems];
 	}
 	
 	if (!self.interaction.profileRequested) {
@@ -214,10 +228,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 	
 	[self removeUnsentContextMessages];
-}
-
-- (void)viewDidLayoutSubviews {
-	[self adjustBrandingVisibility];
 }
 
 #pragma mark - Table view data source
@@ -343,6 +353,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	headerView.textLabel.font = [UIFont boldSystemFontOfSize:DATE_FONT_SIZE];
 }
 
+<<<<<<< HEAD
 #pragma mark Scroll view delegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -352,6 +363,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 #pragma mark - Fetched results controller delegate
+=======
+#pragma mark Fetch results controller delegate
+>>>>>>> 20fe095ca772946dfb760836da0c8bad93484673
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
 	[self.tableView beginUpdates];
@@ -573,6 +587,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[[NSUserDefaults standardUserDefaults] setBool:YES forKey:ATMessageCenterDidPresentWhoCardKey];
 }
 
+- (IBAction)showAbout:(id)sender {
+	ATAboutViewController *aboutViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"About"];
+	
+	aboutViewController.interaction = self.interaction;
+	[self.navigationController pushViewController:aboutViewController animated:YES];
+}
+
 #pragma mark - Private
 
 - (void)updateState {
@@ -609,8 +630,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	if (_state != state) {
 		UIView *oldFooter = self.activeFooterView;
 		UIView *newFooter = nil;
-		
-		[self.navigationController setToolbarHidden:(state == ATMessageCenterStateComposing || state == ATMessageCenterStateEmpty || state == ATMessageCenterStateWhoCard) animated:YES];
 		
 		_state = state;
 		
@@ -725,8 +744,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		if (notification) {
 			keyboardRect = [self.view.window convertRect:[notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue] toView:self.tableView.superview];
 			height = CGRectGetMinY(keyboardRect) - self.tableView.contentInset.top;
+			
+			if (CGRectGetHeight(CGRectIntersection(keyboardRect, self.view.frame)) == 0) {
+				height -= CGRectGetHeight(self.navigationController.toolbar.bounds);
+			}
 		} else {
-			height = CGRectGetHeight(self.tableView.bounds) - self.tableView.contentInset.top;
+			height = CGRectGetHeight(self.tableView.bounds) - self.tableView.contentInset.top - CGRectGetHeight(self.navigationController.toolbar.bounds);
 		}
 		
 		if (self.dataSource.numberOfMessageGroups == 0 && (CGRectGetMinY(keyboardRect) >= CGRectGetMaxY(self.tableView.frame) || !notification)) {
@@ -766,30 +789,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)scrollToLastReplyAnimated:(BOOL)animated {
 	[self.tableView scrollToRowAtIndexPath:self.indexPathOfLastMessage atScrollPosition:UITableViewScrollPositionTop animated:animated];
-}
-
-- (void)adjustBrandingVisibility {
-	// Hide branding when content gets within transtionDistance of it
-	CGFloat transitionDistance = CONFIRMATION_VIEW_HEIGHT / 2.0;
-	
-	CGFloat poweredByTop = CGRectGetMinY(self.poweredByLabel.frame);
-	
-	CGRect lastMessageFrame = self.greetingView.frame;
-	if (self.indexPathOfLastMessage) {
-		lastMessageFrame = [self.tableView rectForRowAtIndexPath:self.indexPathOfLastMessage];
-	}
-	
-	CGFloat lastMessageBottom = CGRectGetMaxY([self.backgroundView convertRect:lastMessageFrame fromView:self.tableView]);
-	
-	CGFloat distance = poweredByTop - lastMessageBottom - CONFIRMATION_VIEW_HEIGHT / 2.0;
-	
-	if (distance > transitionDistance) {
-		self.tableView.backgroundView.alpha = 1.0;
-	} else if (distance < 0) {
-		self.tableView.backgroundView.alpha = 0.0;
-	} else {
-		self.tableView.backgroundView.alpha = distance / transitionDistance;
-	}
 }
 
 - (void)removeUnsentContextMessages {

@@ -366,6 +366,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
+	[self.tableView beginUpdates];
+	
 	switch(type) {
 		case NSFetchedResultsChangeInsert:
 			[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -386,9 +388,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		default:
 			break;
 	}
+	
+	[self.tableView endUpdates];
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {	
+	[self.tableView beginUpdates];
+	
 	switch(type) {
 		case NSFetchedResultsChangeInsert:
 			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
@@ -402,6 +408,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		default:
 			break;
 	}
+	
+	[self.tableView endUpdates];
 }
 
 #pragma mark - Text view delegate

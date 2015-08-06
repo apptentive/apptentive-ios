@@ -233,59 +233,60 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	ATMessageCenterMessageType type = [self.dataSource cellTypeAtIndexPath:indexPath];
-	
 	[self.dataSource markAsReadMessageAtIndexPath:indexPath];
 	
-	if (type == ATMessageCenterMessageTypeMessage) {
-		ATMessageCenterMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Message" forIndexPath:indexPath];
+	UITableViewCell *cell;
+	ATMessageCenterMessageType type = [self.dataSource cellTypeAtIndexPath:indexPath];
 	
-		cell.messageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
+	if (type == ATMessageCenterMessageTypeMessage) {
+		ATMessageCenterMessageCell *messageCell = [tableView dequeueReusableCellWithIdentifier:@"Message" forIndexPath:indexPath];
+	
+		messageCell.messageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
 		switch ([self.dataSource statusOfMessageAtIndexPath:indexPath]) {
 			case ATMessageCenterMessageStatusHidden:
-				cell.statusLabel.hidden = YES;
-				cell.layer.borderWidth = 0;
+				messageCell.statusLabel.hidden = YES;
+				messageCell.layer.borderWidth = 0;
 				break;
 			case ATMessageCenterMessageStatusFailed:
-				cell.statusLabel.hidden = NO;
-				cell.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
+				messageCell.statusLabel.hidden = NO;
+				messageCell.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
 				cell.layer.borderColor = [self failedColor].CGColor;
-				cell.statusLabel.textColor = [self failedColor];
-				cell.statusLabel.text = @"Failed";
+				messageCell.statusLabel.textColor = [self failedColor];
+				messageCell.statusLabel.text = @"Failed";
 				break;
 			case ATMessageCenterMessageStatusSending:
-				cell.statusLabel.hidden = NO;
-				cell.layer.borderWidth = 0;
-				cell.statusLabel.textColor = self.sentColor;
-				cell.statusLabel.text = @"Sending…";
+				messageCell.statusLabel.hidden = NO;
+				messageCell.layer.borderWidth = 0;
+				messageCell.statusLabel.textColor = self.sentColor;
+				messageCell.statusLabel.text = @"Sending…";
 				break;
 			case ATMessageCenterMessageStatusSent:
-				cell.statusLabel.hidden = NO;
-				cell.layer.borderWidth = 0;
-				cell.statusLabel.textColor = self.sentColor;
-				cell.statusLabel.text = @"Sent";
+				messageCell.statusLabel.hidden = NO;
+				messageCell.layer.borderWidth = 0;
+				messageCell.statusLabel.textColor = self.sentColor;
+				messageCell.statusLabel.text = @"Sent";
 				break;
 		}
 				
-		return cell;
+		cell = messageCell;
 	} else if (type == ATMessageCenterMessageTypeReply ) {
-		ATMessageCenterReplyCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Reply" forIndexPath:indexPath];
+		ATMessageCenterReplyCell *replyCell = [tableView dequeueReusableCellWithIdentifier:@"Reply" forIndexPath:indexPath];
 
-		cell.supportUserImageView.imageURL = [self.dataSource imageURLOfSenderAtIndexPath:indexPath];
+		replyCell.supportUserImageView.imageURL = [self.dataSource imageURLOfSenderAtIndexPath:indexPath];
 
-		cell.replyLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
-		cell.senderLabel.text = [self.dataSource senderOfMessageAtIndexPath:indexPath];
+		replyCell.replyLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
+		replyCell.senderLabel.text = [self.dataSource senderOfMessageAtIndexPath:indexPath];
 		
-		return cell;
+		cell = replyCell;
 	} else if (type == ATMessageCenterMessageTypeContextMessage) {
-		ATMessageCenterContextMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ContextMessage" forIndexPath:indexPath];
+		ATMessageCenterContextMessageCell *contextMessageCell = [tableView dequeueReusableCellWithIdentifier:@"ContextMessage" forIndexPath:indexPath];
 
-		cell.contextMessageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
-		
-		return cell;
+		contextMessageCell.contextMessageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
+
+		cell = contextMessageCell;
 	}
 	
-	return nil;
+	return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {

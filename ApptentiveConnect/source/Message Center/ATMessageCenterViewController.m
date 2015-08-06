@@ -395,6 +395,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		default:
 			break;
 	}
+	
+	[self.tableView reloadData];
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {	
@@ -417,6 +419,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		default:
 			break;
 	}
+	
+	[self.tableView reloadData];
 }
 
 #pragma mark - Text view delegate

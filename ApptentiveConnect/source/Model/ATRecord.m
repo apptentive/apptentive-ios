@@ -75,12 +75,15 @@
 
 - (void)updateClientCreationTime {
 	NSDate *d = [NSDate date];
-	self.clientCreationTime = [NSNumber numberWithDouble:(double)[d timeIntervalSince1970]];
-	self.clientCreationUTCOffset = [NSNumber numberWithInteger:[[NSTimeZone systemTimeZone] secondsFromGMTForDate:d]];
+	NSNumber *newCreationTime = @([d timeIntervalSince1970]);
 	
-	if ([self isCreationTimeEmpty]) {
-		self.creationTime = self.clientCreationTime;
+	// Also set `creationTime` to the new value, if it was previously set to same value as `clientCreationTime`.
+	if ([self isCreationTimeEmpty] || [self.creationTime integerValue] == [self.clientCreationTime integerValue]) {
+		self.creationTime = newCreationTime;
 	}
+	
+	self.clientCreationTime = newCreationTime;
+	self.clientCreationUTCOffset = @([[NSTimeZone systemTimeZone] secondsFromGMTForDate:d]);
 }
 
 - (BOOL)isClientCreationTimeEmpty {

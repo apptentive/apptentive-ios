@@ -19,10 +19,9 @@
 @property (nonatomic, strong) NSString *clientCreationTimezone;
 @property (nonatomic, strong) NSNumber *clientCreationUTCOffset;
 
-+ (NSTimeInterval)timeIntervalForServerTime:(NSNumber *)timestamp;
-
 - (void)setup;
 - (void)updateClientCreationTime;
 - (BOOL)isClientCreationTimeEmpty;
 - (BOOL)isCreationTimeEmpty;
+
 @end

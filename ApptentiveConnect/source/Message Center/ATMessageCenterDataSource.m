@@ -58,7 +58,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 			// For now, group each message into its own section.
 			// In the future, we'll save an attribute that coalesces
 			// closely-grouped (in time) messages into a single section.
-			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:@"creationTime" cacheName:@"at-messages-cache"];
+			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:@"clientCreationTime" cacheName:@"at-messages-cache"];
 			newController.delegate = self;
 			_fetchedMessagesController = newController;
 			

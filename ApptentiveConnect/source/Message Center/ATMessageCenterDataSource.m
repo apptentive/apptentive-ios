@@ -121,7 +121,13 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 
 - (NSDate *)dateOfMessageGroupAtIndex:(NSInteger)index {
 	if ([self numberOfMessagesInGroup:index] > 0) {
-		return [NSDate dateWithTimeIntervalSince1970:[self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]].creationTime.doubleValue];
+		ATAbstractMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]];
+		double creationTime = message.creationTime.doubleValue;
+		double clientCreationTime = message.clientCreationTime.doubleValue;
+		
+		BOOL distantFutureCreationTime = (creationTime > clientCreationTime + 365 * 24 * 60 * 60);
+		
+		return [NSDate dateWithTimeIntervalSince1970:distantFutureCreationTime ? clientCreationTime : creationTime];
 	} else {
 		return nil;
 	}

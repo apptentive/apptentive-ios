@@ -47,9 +47,11 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 			NSFetchRequest *request = [[NSFetchRequest alloc] init];
 			[request setEntity:[NSEntityDescription entityForName:@"ATAbstractMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
 			[request setFetchBatchSize:20];
+			
 			NSSortDescriptor *creationTimeSort = [[NSSortDescriptor alloc] initWithKey:@"creationTime" ascending:YES];
 			NSSortDescriptor *clientCreationTimeSort = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
 			[request setSortDescriptors:@[creationTimeSort, clientCreationTimeSort]];
+			
 			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"creationTime != %d AND clientCreationTime != %d AND hidden != %@", 0, 0, @YES];
 			[request setPredicate:predicate];
 			

@@ -70,9 +70,8 @@
 	NSDate *d = [NSDate date];
 	NSNumber *newCreationTime = @([d timeIntervalSince1970]);
 	
-	// Also set `creationTime` to the new value, if it was previously set to same value as `clientCreationTime`.
-	if ([self isCreationTimeEmpty] || [self.creationTime integerValue] == [self.clientCreationTime integerValue]) {
-		self.creationTime = newCreationTime;
+	if ([self isCreationTimeEmpty]) {		
+		self.creationTime = @([[NSDate distantFuture] timeIntervalSince1970]);
 	}
 	
 	self.clientCreationTime = newCreationTime;

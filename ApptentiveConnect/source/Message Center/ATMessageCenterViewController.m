@@ -667,7 +667,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		if (newFooter != oldFooter) {
 			newFooter.alpha = 0;
 			newFooter.hidden = NO;
-			[newFooter updateConstraints];
 
 			self.activeFooterView = newFooter;
 

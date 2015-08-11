@@ -25,8 +25,7 @@
 #import "ATProgressNavigationBar.h"
 #import "ATAboutViewController.h"
 
-#define HEADER_FOOTER_EMPTY_HEIGHT 4.0
-#define HEADER_DATE_LABEL_HEIGHT 60.0
+#define HEADER_LABEL_HEIGHT 26.0
 #define GREETING_PORTRAIT_HEIGHT 258.0
 #define GREETING_LANDSCAPE_HEIGHT 128.0
 #define CONFIRMATION_VIEW_HEIGHT 88.0
@@ -40,10 +39,10 @@
 // The following need to match the storyboard for sizing cells on iOS 7
 #define MESSAGE_LABEL_TOTAL_HORIZONTAL_MARGIN 30.0
 #define REPLY_LABEL_TOTAL_HORIZONTAL_MARGIN 74.0
-#define MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN 17.0
-#define REPLY_LABEL_TOTAL_VERTICAL_MARGIN 34.0
-#define REPLY_CELL_MINIMUM_HEIGHT 54.0
-#define STATUS_LABEL_HEIGHT 16.0
+#define MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN 29.0
+#define REPLY_LABEL_TOTAL_VERTICAL_MARGIN 46.0
+#define REPLY_CELL_MINIMUM_HEIGHT 66.0
+#define STATUS_LABEL_HEIGHT 14.0
 #define STATUS_LABEL_MARGIN 6.0
 #define BODY_FONT_SIZE 17.0
 
@@ -289,7 +288,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-	return [self.dataSource shouldShowDateForMessageGroupAtIndex:section] ? HEADER_DATE_LABEL_HEIGHT : HEADER_FOOTER_EMPTY_HEIGHT;
+	CGFloat height = self.tableView.sectionHeaderHeight;
+	
+	if ([self.dataSource shouldShowDateForMessageGroupAtIndex:section]) {
+		height += HEADER_LABEL_HEIGHT;
+	}
+	
+	return height;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -707,7 +712,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)scrollToInputView:(NSNotification *)notification {
-	CGFloat footerSpace = [self.dataSource numberOfMessageGroups] > 0 ? HEADER_FOOTER_EMPTY_HEIGHT : 0;
+	CGFloat footerSpace = [self.dataSource numberOfMessageGroups] > 0 ? self.tableView.sectionFooterHeight : 0;
 	
 	CGPoint offset = CGPointMake(0.0, CGRectGetMaxY(self.rectOfLastMessage) - self.tableView.contentInset.top + footerSpace);
 

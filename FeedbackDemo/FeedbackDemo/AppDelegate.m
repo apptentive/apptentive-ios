@@ -35,6 +35,9 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     [self showAPIKeyWarning];
+    
+    // Uncomment the following line to register for Push Notifications in the Feedback Demo app
+    //[self registerForRemoteNotifications];
 }
 
 - (BOOL)setupTestFlight {
@@ -71,4 +74,45 @@
     }
 }
 
+- (void)registerForRemoteNotifications {
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+        UIUserNotificationSettings *notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert categories:nil];
+        
+        [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
+    } else {
+        UIRemoteNotificationType notificationTypes = UIRemoteNotificationTypeAlert;
+        
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:notificationTypes];
+    }
+}
+
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
+    [application registerForRemoteNotifications];
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    // Enable Push Notifications for New Messages via the respective service by sending Device Token to Apptentive.
+    [[ATConnect sharedConnection] addUrbanAirshipIntegrationWithDeviceToken:deviceToken];
+    [[ATConnect sharedConnection] addAmazonSNSIntegrationWithDeviceToken:deviceToken];
+    [[ATConnect sharedConnection] addParseIntegrationWithDeviceToken:deviceToken];
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"Failed to Register for Remote Notifications with Error: %@", error);
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    UIViewController *viewController = self.window.rootViewController;
+    
+    [[ATConnect sharedConnection] didReceiveRemoteNotification:userInfo fromViewController:viewController];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
+    UIViewController *viewController = self.window.rootViewController;
+    
+    [[ATConnect sharedConnection] didReceiveRemoteNotification:userInfo fromViewController:viewController];
+    
+    completionHandler(UIBackgroundFetchResultNoData);
+}
+ 
 @end

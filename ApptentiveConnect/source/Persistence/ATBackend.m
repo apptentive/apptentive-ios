@@ -18,7 +18,6 @@
 #import "ATAutomatedMessage.h"
 #import "ATFeedback.h"
 #import "ATFeedbackTask.h"
-#import "ATNavigationController.h"
 #import "ApptentiveMetrics.h"
 #import "ATReachability.h"
 #import "ATStaticLibraryBootstrap.h"

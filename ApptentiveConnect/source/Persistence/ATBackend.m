@@ -20,7 +20,6 @@
 #import "ATFeedbackTask.h"
 #import "ApptentiveMetrics.h"
 #import "ATReachability.h"
-#import "ATStaticLibraryBootstrap.h"
 #import "ATTaskQueue.h"
 #import "ATUtilities.h"
 #import "ATWebClient.h"
@@ -936,7 +935,6 @@ static NSURLCache *imageCache = nil;
 		[self performSelectorOnMainThread:@selector(setup) withObject:nil waitUntilDone:YES];
 		return;
 	}
-	[ATStaticLibraryBootstrap forceStaticLibrarySymbolUsage];
 #if TARGET_OS_IPHONE
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWorking:) name:UIApplicationDidBecomeActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWorking:) name:UIApplicationWillEnterForegroundNotification object:nil];

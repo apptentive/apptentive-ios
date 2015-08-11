@@ -96,12 +96,6 @@
 		493AEB4015990A4D00DFD4C7 /* ATSurveyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB2915990A4D00DFD4C7 /* ATSurveyViewController.m */; };
 		493AEB4115990A4D00DFD4C7 /* ATSurveyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB2915990A4D00DFD4C7 /* ATSurveyViewController.m */; };
 		493AEB4515990A6B00DFD4C7 /* ApptentiveSurveysTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB4415990A6B00DFD4C7 /* ApptentiveSurveysTests.m */; };
-		493F8D8C1672DEFD000B5151 /* ATStaticLibraryBootstrap.h in Headers */ = {isa = PBXBuildFile; fileRef = 493F8D8A1672DEFD000B5151 /* ATStaticLibraryBootstrap.h */; };
-		493F8D8D1672DEFD000B5151 /* ATStaticLibraryBootstrap.m in Sources */ = {isa = PBXBuildFile; fileRef = 493F8D8B1672DEFD000B5151 /* ATStaticLibraryBootstrap.m */; };
-		493F8D8E1672DEFD000B5151 /* ATStaticLibraryBootstrap.m in Sources */ = {isa = PBXBuildFile; fileRef = 493F8D8B1672DEFD000B5151 /* ATStaticLibraryBootstrap.m */; };
-		493F8D901672E07D000B5151 /* ATURLConnection_Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 493F8D8F1672E07D000B5151 /* ATURLConnection_Private.m */; };
-		493F8D911672E07D000B5151 /* ATURLConnection_Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 493F8D8F1672E07D000B5151 /* ATURLConnection_Private.m */; };
-		493F8D931672E15F000B5151 /* ATWebClient_Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 493F8D921672E15F000B5151 /* ATWebClient_Private.m */; };
 		49509A61135658E200793EEC /* ATReachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 49509A5F135658E200793EEC /* ATReachability.h */; };
 		49509A62135658E200793EEC /* ATReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 49509A60135658E200793EEC /* ATReachability.m */; };
 		49509A6C1356596F00793EEC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49509A6B1356596F00793EEC /* SystemConfiguration.framework */; };
@@ -393,10 +387,6 @@
 		493AEB2915990A4D00DFD4C7 /* ATSurveyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveyViewController.m; sourceTree = "<group>"; };
 		493AEB4315990A6B00DFD4C7 /* ApptentiveSurveysTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ApptentiveSurveysTests.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		493AEB4415990A6B00DFD4C7 /* ApptentiveSurveysTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ApptentiveSurveysTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		493F8D8A1672DEFD000B5151 /* ATStaticLibraryBootstrap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATStaticLibraryBootstrap.h; sourceTree = "<group>"; };
-		493F8D8B1672DEFD000B5151 /* ATStaticLibraryBootstrap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATStaticLibraryBootstrap.m; sourceTree = "<group>"; };
-		493F8D8F1672E07D000B5151 /* ATURLConnection_Private.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATURLConnection_Private.m; sourceTree = "<group>"; };
-		493F8D921672E15F000B5151 /* ATWebClient_Private.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATWebClient_Private.m; sourceTree = "<group>"; };
 		49509A5F135658E200793EEC /* ATReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATReachability.h; path = Reachability/ATReachability.h; sourceTree = "<group>"; };
 		49509A60135658E200793EEC /* ATReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATReachability.m; path = Reachability/ATReachability.m; sourceTree = "<group>"; };
 		49509A6B1356596F00793EEC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -684,13 +674,11 @@
 				491748B41341177000A7D11E /* ATConnectionManager.h */,
 				491748B51341177000A7D11E /* ATConnectionManager.m */,
 				49352ADC138CA1DC000E464A /* ATURLConnection_Private.h */,
-				493F8D8F1672E07D000B5151 /* ATURLConnection_Private.m */,
 				491748B61341177000A7D11E /* ATURLConnection.h */,
 				491748B71341177000A7D11E /* ATURLConnection.m */,
 				491748B81341177000A7D11E /* ATWebClient.h */,
 				491748B91341177000A7D11E /* ATWebClient.m */,
 				49B877101464958C00594A5D /* ATWebClient_Private.h */,
-				493F8D921672E15F000B5151 /* ATWebClient_Private.m */,
 				49352AC1138C97A2000E464A /* ATAPIRequest.h */,
 				49352AC2138C97A2000E464A /* ATAPIRequest.m */,
 			);
@@ -714,13 +702,11 @@
 				4936AE751379DEBB00A4B17F /* ATUtilities.h */,
 				4936AE761379DEBB00A4B17F /* ATUtilities.m */,
 				491E03CC163F261C00DC3E18 /* ATLog.h */,
-				493F8D8A1672DEFD000B5151 /* ATStaticLibraryBootstrap.h */,
 				495E9C1A16EABD8E00AE3B03 /* ATLogger.h */,
 				495E9C1B16EABD8E00AE3B03 /* ATLogger.m */,
 				49E6208516C5E8C2000C9F5A /* NSDictionary+ATAdditions.h */,
 				49E6208616C5E8C2000C9F5A /* NSDictionary+ATAdditions.m */,
 				49AAC853175FFA4800F08879 /* ATTypes.h */,
-				493F8D8B1672DEFD000B5151 /* ATStaticLibraryBootstrap.m */,
 				497A9A0217762512002B6F96 /* ATJSONSerialization.h */,
 				497A9A0317762512002B6F96 /* ATJSONSerialization.m */,
 			);
@@ -1300,7 +1286,6 @@
 				496F5781174060CE003BF516 /* ATDataManager.h in Headers */,
 				49AAC854175FFA4800F08879 /* ATTypes.h in Headers */,
 				58DCC0D5180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.h in Headers */,
-				493F8D8C1672DEFD000B5151 /* ATStaticLibraryBootstrap.h in Headers */,
 				497A9A0417762512002B6F96 /* ATJSONSerialization.h in Headers */,
 				589274A6180CC33A0029E5CE /* ATInteractionUsageData.h in Headers */,
 				5898DF8C17C2E0CE0048F11F /* ATEngagementGetManifestTask.h in Headers */,
@@ -1526,7 +1511,6 @@
 				58AB415818E3A9870034FAA5 /* ATInteractionAppStoreController.m in Sources */,
 				584EAC6F1A786E4500AC7F05 /* ATInteractionTextModalController.m in Sources */,
 				58E9580B190740BC005063DC /* ATSurveyQuestionResponse.m in Sources */,
-				493F8D8D1672DEFD000B5151 /* ATStaticLibraryBootstrap.m in Sources */,
 				499912A9161B6AF700FDA15F /* ATWebClient+MessageCenter.m in Sources */,
 				4961A403161BBD7000E30037 /* ATMessageTask.m in Sources */,
 				01C30CEC1B0D09F8006BC911 /* ATMessageCenterGreetingView.m in Sources */,
@@ -1612,7 +1596,6 @@
 				498EFB7215BA48B300A1043B /* ATAppConfigurationUpdateTask.m in Sources */,
 				49AC178416C0987400BE1615 /* ATConversationUpdater.m in Sources */,
 				49E6208916C5E8C2000C9F5A /* NSDictionary+ATAdditions.m in Sources */,
-				493F8D8E1672DEFD000B5151 /* ATStaticLibraryBootstrap.m in Sources */,
 				492B81D716D595740031BEF6 /* ATFileMessage.m in Sources */,
 				492B81DC16D595A00031BEF6 /* ATFileAttachment.m in Sources */,
 				495E9C1E16EABD8E00AE3B03 /* ATLogger.m in Sources */,

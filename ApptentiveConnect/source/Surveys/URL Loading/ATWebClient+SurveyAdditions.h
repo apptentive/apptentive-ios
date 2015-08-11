@@ -15,5 +15,3 @@
 @interface ATWebClient (SurveyAdditions)
 - (ATAPIRequest *)requestForPostingSurveyResponse:(ATSurveyResponse *)surveyResponse;
 @end
-
-void ATWebClient_SurveyAdditions_Bootstrap();

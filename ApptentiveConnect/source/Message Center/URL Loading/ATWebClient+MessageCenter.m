@@ -191,7 +191,3 @@
 	return request;
 }
 @end
-
-void ATWebClient_MessageCenter_Bootstrap() {
-	NSLog(@"Loading ATWebClient_MessageCenter_Bootstrap");
-}

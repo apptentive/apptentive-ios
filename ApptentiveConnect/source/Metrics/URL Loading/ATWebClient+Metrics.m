@@ -53,7 +53,3 @@
 	return request;
 }
 @end
-
-void ATWebClient_Metrics_Bootstrap() {
-	NSLog(@"Loading ATWebClient_Metrics_Bootstrap");
-}

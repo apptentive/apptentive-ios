@@ -16,6 +16,3 @@
 - (ATAPIRequest *)requestForSendingMetric:(ATMetric *)metric;
 - (ATAPIRequest *)requestForSendingEvent:(ATEvent *)event;
 @end
-
-
-void ATWebClient_Metrics_Bootstrap();

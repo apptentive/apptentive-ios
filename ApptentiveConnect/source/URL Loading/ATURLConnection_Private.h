@@ -15,5 +15,3 @@
     selector. */
 - (void)cancel;
 @end
-
-void ATURLConnection_Private_Bootstrap();

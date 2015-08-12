@@ -226,10 +226,6 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	[self addIntegration:ATIntegrationKeyParse withDeviceToken:deviceToken];
 }
 
-- (BOOL)emailRequired {
-	return [[[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterEmailRequiredKey] boolValue];
-}
-
 #if TARGET_OS_IPHONE
 
 - (BOOL)willShowInteractionForEvent:(NSString *)event {

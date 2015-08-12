@@ -18,7 +18,6 @@ extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 - (NSDictionary *)customPersonData;
 - (NSDictionary *)customDeviceData;
 - (NSDictionary *)integrationConfiguration;
-- (BOOL)emailRequired;
 
 #if TARGET_OS_IPHONE
 

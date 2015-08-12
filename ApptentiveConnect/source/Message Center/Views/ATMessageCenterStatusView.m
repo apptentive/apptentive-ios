@@ -6,15 +6,15 @@
 //  Copyright (c) 2015 Apptentive, Inc. All rights reserved.
 //
 
-#import "ATMessageCenterConfirmationView.h"
+#import "ATMessageCenterStatusView.h"
 
-@interface ATMessageCenterConfirmationView ()
+@interface ATMessageCenterStatusView ()
 
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *confirmationStatusSpacing;
 
 @end
 
-@implementation ATMessageCenterConfirmationView
+@implementation ATMessageCenterStatusView
 
 - (void)setConfirmationHidden:(BOOL)confirmationHidden {
 	if (confirmationHidden) {

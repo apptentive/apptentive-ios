@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ATMessageCenterConfirmationView : UIView
+@interface ATMessageCenterStatusView : UIView
 
 @property (nonatomic, weak) IBOutlet UILabel *confirmationLabel;
 @property (nonatomic, weak) IBOutlet UILabel *statusLabel;

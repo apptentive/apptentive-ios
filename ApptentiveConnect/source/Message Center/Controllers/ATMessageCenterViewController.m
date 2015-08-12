@@ -8,7 +8,7 @@
 
 #import "ATMessageCenterViewController.h"
 #import "ATMessageCenterGreetingView.h"
-#import "ATMessageCenterConfirmationView.h"
+#import "ATMessageCenterStatusView.h"
 #import "ATMessageCenterInputView.h"
 #import "ATMessageCenterWhoView.h"
 #import "ATMessageCenterMessageCell.h"
@@ -65,7 +65,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @interface ATMessageCenterViewController ()
 
 @property (weak, nonatomic) IBOutlet ATMessageCenterGreetingView *greetingView;
-@property (strong, nonatomic) IBOutlet ATMessageCenterConfirmationView *confirmationView;
+@property (strong, nonatomic) IBOutlet ATMessageCenterStatusView *statusView;
 @property (strong, nonatomic) IBOutlet ATMessageCenterInputView *messageInputView;
 @property (strong, nonatomic) IBOutlet ATMessageCenterWhoView *whoView;
 
@@ -115,7 +115,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.greetingView.messageLabel.text = self.interaction.greetingBody;
 	self.greetingView.imageView.imageURL = self.interaction.greetingImageURL;
 	
-	self.confirmationView.confirmationHidden = YES;
+	self.statusView.confirmationHidden = YES;
 	
 	NSString *branding = self.interaction.branding;
 	if (branding) {
@@ -639,29 +639,29 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				break;
 				
 			case ATMessageCenterStateSending:
-				newFooter = self.confirmationView;
-				self.confirmationView.confirmationHidden = YES;
-				self.confirmationView.statusLabel.text = nil;
+				newFooter = self.statusView;
+				self.statusView.confirmationHidden = YES;
+				self.statusView.statusLabel.text = nil;
 				break;
 				
 			case ATMessageCenterStateConfirmed:
-				newFooter = self.confirmationView;
-				self.confirmationView.confirmationHidden = YES;
-				self.confirmationView.statusLabel.text = self.interaction.statusBody;
+				newFooter = self.statusView;
+				self.statusView.confirmationHidden = YES;
+				self.statusView.statusLabel.text = self.interaction.statusBody;
 				break;
 				
 			case ATMessageCenterStateNetworkError:
-				newFooter = self.confirmationView;
-				self.confirmationView.confirmationHidden = NO;
-				self.confirmationView.confirmationLabel.text = self.interaction.networkErrorTitle;
-				self.confirmationView.statusLabel.text = self.interaction.networkErrorBody;
+				newFooter = self.statusView;
+				self.statusView.confirmationHidden = NO;
+				self.statusView.confirmationLabel.text = self.interaction.networkErrorTitle;
+				self.statusView.statusLabel.text = self.interaction.networkErrorBody;
 				break;
 				
 			case ATMessageCenterStateHTTPError:
-				newFooter = self.confirmationView;
-				self.confirmationView.confirmationHidden = NO;
-				self.confirmationView.confirmationLabel.text = self.interaction.HTTPErrorTitle;
-				self.confirmationView.statusLabel.text = self.interaction.networkErrorBody;
+				newFooter = self.statusView;
+				self.statusView.confirmationHidden = NO;
+				self.statusView.confirmationLabel.text = self.interaction.HTTPErrorTitle;
+				self.statusView.statusLabel.text = self.interaction.networkErrorBody;
 				break;
 				
 			case ATMessageCenterStateReplied:

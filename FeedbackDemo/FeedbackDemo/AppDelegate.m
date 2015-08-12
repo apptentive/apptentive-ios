@@ -46,6 +46,8 @@
     NSString *testFlightAPIKey = plist[@"ATTestFlightAPIKey"];
     if (testFlightAPIKey) {
         [ATConnect sharedConnection].apiKey = testFlightAPIKey;
+        
+        [self registerForRemoteNotifications];
     }
     
     NSString *testFlightAppID = plist[@"ATTestFlightAppIDKey"];

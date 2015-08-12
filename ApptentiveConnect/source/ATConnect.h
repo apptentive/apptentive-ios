@@ -129,24 +129,6 @@ extern NSString *const ATIntegrationKeyParse;
 @property (nonatomic, assign) BOOL showEmailField;
 /** Set this if you want some custom text to appear as a placeholder in the feedback text box. */
 @property (nonatomic, copy) NSString *customPlaceholderText;
-/** 
- Set this to NO if you don't want to use Message Center, and instead just want unidirectional in-app feedback.
- 
- Deprecated in 1.1.1 in favor of server-based configuration of Message Center.
- */
-@property (nonatomic, assign) BOOL useMessageCenter DEPRECATED_ATTRIBUTE;
-/** 
- Set this to NO to disable Message Center locally on the first launch of your app.
- 
- @note This setting will be overridden by server-based configuration when it is downloaded.
- */
-@property (nonatomic, assign) BOOL initiallyUseMessageCenter;
-/**
- Set this to NO to hide Apptentive branding locally on the first launch of your app.
- 
- @note This setting will be overridden by server-based configuration when it is downloaded.
- */
-@property (nonatomic, assign) BOOL initiallyHideBranding;
 #if TARGET_OS_IPHONE
 /**
  A tint color to use in Apptentive-specific UI.
@@ -156,7 +138,6 @@ extern NSString *const ATIntegrationKeyParse;
  */
 @property (nonatomic, strong) UIColor *tintColor;
 #endif
-
 
 #if TARGET_OS_IPHONE
 

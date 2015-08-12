@@ -15,7 +15,6 @@ NSString *const ATConfigurationPreferencesChangedNotification = @"ATConfiguratio
 NSString *const ATAppConfigurationLastUpdatePreferenceKey = @"ATAppConfigurationLastUpdatePreferenceKey";
 NSString *const ATAppConfigurationExpirationPreferenceKey = @"ATAppConfigurationExpirationPreferenceKey";
 NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigurationMetricsEnabledPreferenceKey";
-NSString *const ATAppConfigurationMessageCenterEnabledKey = @"ATAppConfigurationMessageCenterEnabledKey";
 NSString *const ATAppConfigurationHideBrandingKey = @"ATAppConfigurationHideBrandingKey";
 
 NSString *const ATAppConfigurationMessageCenterTitleKey = @"ATAppConfigurationMessageCenterTitleKey";

@@ -70,15 +70,6 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		_customPersonData = [[NSMutableDictionary alloc] init];
 		_customDeviceData = [[NSMutableDictionary alloc] init];
 		_integrationConfiguration = [[NSMutableDictionary alloc] init];
-		_useMessageCenter = YES;
-		_initiallyUseMessageCenter = YES;
-		_initiallyHideBranding = NO;
-		
-		NSDictionary *defaults = @{ATAppConfigurationMessageCenterEnabledKey: @(_initiallyUseMessageCenter),
-								   ATAppConfigurationMessageCenterEmailRequiredKey: @NO,
-								   ATAppConfigurationHideBrandingKey: @(_initiallyHideBranding)
-								   };
-		[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 		
 		ATLogInfo(@"Apptentive SDK Version %@", kATConnectVersionString);
 		
@@ -94,16 +85,6 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		_apiKey = APIKey;
 		[[ATBackend sharedBackend] setApiKey:self.apiKey];
 	}
-}
-
-- (void)setInitiallyHideBranding:(BOOL)initiallyHideBranding {
-	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ATAppConfigurationHideBrandingKey: @(initiallyHideBranding)}];
-	_initiallyHideBranding = initiallyHideBranding;
-}
-
-- (void)setInitiallyUseMessageCenter:(BOOL)initiallyUseMessageCenter {
-	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ATAppConfigurationMessageCenterEnabledKey: @(initiallyUseMessageCenter)}];
-	_initiallyUseMessageCenter = initiallyUseMessageCenter;
 }
 
 - (NSString *)personName {
@@ -243,10 +224,6 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (void)addParseIntegrationWithDeviceToken:(NSData *)deviceToken {
 	[self addIntegration:ATIntegrationKeyParse withDeviceToken:deviceToken];
-}
-
-- (BOOL)messageCenterEnabled {
-	return [[[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterEnabledKey] boolValue];
 }
 
 - (BOOL)emailRequired {

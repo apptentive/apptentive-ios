@@ -8,10 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSInteger, ATMessageCenterStatusMode) {
+	ATMessageCenterStatusModeNotSet = 0,
+	ATMessageCenterStatusModeEmpty,
+	ATMessageCenterStatusModeStatus,
+	ATMessageCenterStatusModeNetworkError,
+	ATMessageCenterStatusModeHTTPError
+};
+
 @interface ATMessageCenterStatusView : UIView
 
-@property (nonatomic, weak) IBOutlet UILabel *confirmationLabel;
+@property (nonatomic, assign) ATMessageCenterStatusMode mode;
 @property (nonatomic, weak) IBOutlet UILabel *statusLabel;
-@property (nonatomic, assign, getter=isConfirmationHidden) BOOL confirmationHidden;
 
 @end

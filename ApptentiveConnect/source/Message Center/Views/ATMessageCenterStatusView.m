@@ -7,27 +7,51 @@
 //
 
 #import "ATMessageCenterStatusView.h"
+#import "ATBackend.h"
 
 @interface ATMessageCenterStatusView ()
 
-@property (nonatomic, strong) IBOutlet NSLayoutConstraint *confirmationStatusSpacing;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *imageStatusSpacing;
+@property (nonatomic, weak) IBOutlet UIImageView *imageView;
 
 @end
 
 @implementation ATMessageCenterStatusView
 
-- (void)setConfirmationHidden:(BOOL)confirmationHidden {
-	if (confirmationHidden) {
-		[self removeConstraint:self.confirmationStatusSpacing];
-	} else {
-		[self addConstraint:self.confirmationStatusSpacing];
+- (void)setMode:(ATMessageCenterStatusMode)mode {
+	if (_mode != mode) {
+		_mode = mode;
+		
+		UIImage *statusImage;
+		
+		switch (mode) {
+			case ATMessageCenterStatusModeNetworkError:
+				statusImage = [ATBackend imageNamed:@"at_network_error"];
+				break;
+			
+			case ATMessageCenterStatusModeHTTPError:
+				statusImage = [ATBackend imageNamed:@"at_error_wait"];
+				break;
+			
+			default:
+				statusImage = nil;
+				break;
+		}
+		
+		self.imageView.image = statusImage;
+		
+		if ([self.constraints containsObject:self.imageStatusSpacing] && statusImage == nil) {
+			[self removeConstraint:self.imageStatusSpacing];
+		} else if (statusImage != nil) {
+			[self addConstraint:self.imageStatusSpacing];
+		}
+		
+		[UIView animateWithDuration:0.25 animations:^{
+			self.imageView.alpha = statusImage ? 1.0 : 0.0;
+			
+			[self layoutIfNeeded];
+		}];
 	}
-	
-	[UIView animateWithDuration:0.3 animations:^{
-		self.confirmationLabel.alpha = confirmationHidden ? 0.0 : 1.0;
-
-		[self layoutIfNeeded];
-	}];
 }
 
 @end

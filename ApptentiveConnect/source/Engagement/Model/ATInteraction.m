@@ -49,8 +49,6 @@
 		interactionType = ATInteractionTypeEnjoymentDialog;
 	} else if ([self.type isEqualToString:@"RatingDialog"]) {
 		interactionType = ATInteractionTypeRatingDialog;
-	} else if ([self.type isEqualToString:@"FeedbackDialog"]) {
-		interactionType = ATInteractionTypeFeedbackDialog;
 	} else if ([self.type isEqualToString:@"MessageCenter"]) {
 		interactionType = ATInteractionTypeMessageCenter;
 	} else if ([self.type isEqualToString:@"AppStoreRating"]) {

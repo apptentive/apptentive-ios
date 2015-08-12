@@ -10,7 +10,6 @@
 
 #import "ATAppConfigurationUpdater.h"
 #import "ATBackend.h"
-#import "ATFeedbackMetrics.h"
 #import "ATData.h"
 #import "ATEvent.h"
 #import "ATMessageCenterMetrics.h"
@@ -27,10 +26,6 @@ static NSString *ATInteractionAppEventLabelLaunch = @"launch";
 static NSString *ATInteractionAppEventLabelExit = @"exit";
 
 // Legacy metric event labels
-
-static NSString *ATMetricNameFeedbackDialogLaunch = @"feedback_dialog.launch";
-static NSString *ATMetricNameFeedbackDialogCancel = @"feedback_dialog.cancel";
-static NSString *ATMetricNameFeedbackDialogSubmit = @"feedback_dialog.submit";
 
 static NSString *ATMetricNameSurveyCancel = @"survey.cancel";
 static NSString *ATMetricNameSurveySubmit = @"survey.submit";
@@ -51,9 +46,6 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 
 @interface ApptentiveMetrics (Private)
 - (void)addLaunchMetric;
-- (ATFeedbackWindowType)windowTypeFromNotification:(NSNotification *)notification;
-- (void)feedbackDidShowWindow:(NSNotification *)notification;
-- (void)feedbackDidHideWindow:(NSNotification *)notification;
 
 - (ATSurveyEvent)surveyEventTypeFromNotification:(NSNotification *)notification;
 - (void)surveyDidHide:(NSNotification *)notification;
@@ -192,9 +184,6 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 		[ApptentiveMetrics registerDefaults];
 		[self updateWithCurrentPreferences];
 		
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackDidShowWindow:) name:ATFeedbackDidShowWindowNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackDidHideWindow:) name:ATFeedbackDidHideWindowNotification object:nil];
-		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyDidHide:) name:ATSurveyDidHideWindowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyDidAnswerQuestion:) name:ATSurveyDidAnswerQuestionNotification object:nil];
 		
@@ -270,50 +259,6 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 - (void)addLaunchMetric {
 	@autoreleasepool {
 		[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch];
-	}
-}
-
-- (ATFeedbackWindowType)windowTypeFromNotification:(NSNotification *)notification {
-	ATFeedbackWindowType windowType = ATFeedbackWindowTypeFeedback;
-	if ([[notification userInfo] objectForKey:ATFeedbackWindowTypeKey]) {
-		windowType = [(NSNumber *)[[notification userInfo] objectForKey:ATFeedbackWindowTypeKey] intValue];
-	}
-	if (windowType != ATFeedbackWindowTypeFeedback && windowType != ATFeedbackWindowTypeInfo) {
-		ATLogError(@"Unknown window type: %d", windowType);
-	}
-	return windowType;
-}
-
-- (void)feedbackDidShowWindow:(NSNotification *)notification {
-	NSString *name = nil;
-	ATFeedbackWindowType windowType = [self windowTypeFromNotification:notification];
-	
-	if (windowType == ATFeedbackWindowTypeFeedback) {
-		name = ATMetricNameFeedbackDialogLaunch;
-	} else if (windowType == ATFeedbackWindowTypeInfo) {
-		name = nil;
-	}
-	
-	if (name != nil) {
-		[self addMetricWithName:name info:nil];
-	}
-}
-
-- (void)feedbackDidHideWindow:(NSNotification *)notification {
-	ATFeedbackWindowType windowType = [self windowTypeFromNotification:notification];
-	ATFeedbackEvent event = ATFeedbackEventTappedCancel;
-	if ([[notification userInfo] objectForKey:ATFeedbackWindowHideEventKey]) {
-		event = [(NSNumber *)[[notification userInfo] objectForKey:ATFeedbackWindowHideEventKey] intValue];
-	}
-	
-	if (windowType == ATFeedbackWindowTypeFeedback) {
-		if (event == ATFeedbackEventTappedCancel) {
-			[self addMetricWithName:ATMetricNameFeedbackDialogCancel info:nil];
-		} else if (event == ATFeedbackEventTappedSend) {
-			[self addMetricWithName:ATMetricNameFeedbackDialogSubmit info:nil];
-		}
-	} else if (windowType == ATFeedbackWindowTypeInfo) {
-		// pass, for now
 	}
 }
 

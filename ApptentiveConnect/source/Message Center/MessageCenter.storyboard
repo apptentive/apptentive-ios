@@ -493,7 +493,6 @@
                     <connections>
                         <outlet property="brandingView" destination="1k3-J8-dPI" id="U0l-5j-4sM"/>
                         <outlet property="composeButtonItem" destination="7K8-9v-8QL" id="hvW-wV-G14"/>
-                        <outlet property="confirmationView" destination="g94-Qt-Zp0" id="Jbc-SH-Uwl"/>
                         <outlet property="greetingView" destination="3OP-Us-sTC" id="gir-MU-eQO"/>
                         <outlet property="messageInputView" destination="Aj5-aD-yTM" id="mrz-a8-xN6"/>
                         <outlet property="poweredByImageView" destination="Mgg-jY-bpf" id="rAj-qf-rRu"/>

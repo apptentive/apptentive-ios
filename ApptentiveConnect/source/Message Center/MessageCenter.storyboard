@@ -498,6 +498,7 @@
                         <outlet property="messageInputView" destination="Aj5-aD-yTM" id="mrz-a8-xN6"/>
                         <outlet property="poweredByImageView" destination="Mgg-jY-bpf" id="rAj-qf-rRu"/>
                         <outlet property="poweredByLabel" destination="lWW-C4-4hk" id="fk7-Jd-uDI"/>
+                        <outlet property="statusView" destination="g94-Qt-Zp0" id="Xps-10-9WO"/>
                         <outlet property="whoView" destination="hjb-x8-sQN" id="tDh-5W-R0e"/>
                     </connections>
                 </tableViewController>

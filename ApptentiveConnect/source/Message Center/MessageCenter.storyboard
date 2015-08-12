@@ -556,10 +556,10 @@
             </objects>
             <point key="canvasLocation" x="-190" y="1342"/>
         </scene>
-        <!--Message Center-->
+        <!--Message Center Error View-->
         <scene sceneID="G8v-Qy-vVc">
             <objects>
-                <viewController id="98M-gg-3nj" customClass="ATMessageCenterErrorViewController" sceneMemberID="viewController">
+                <viewController id="98M-gg-3nj" userLabel="Message Center Error View" customClass="ATMessageCenterErrorViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="YsJ-93-sdE"/>
                         <viewControllerLayoutGuide type="bottom" id="PBq-M4-PKi"/>

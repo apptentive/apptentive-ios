@@ -654,12 +654,12 @@
 		0159B64B1B7A73E600CC45E6 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				585A8E5D1B0D609A00BDF4CC /* ATMessageCenterViewController.h */,
+				585A8E5E1B0D609A00BDF4CC /* ATMessageCenterViewController.m */,
 				013C1A791B713D5C002434B8 /* ATMessageCenterErrorViewController.h */,
 				013C1A7A1B713D5C002434B8 /* ATMessageCenterErrorViewController.m */,
 				01AE42051B38E38D006B9191 /* ATBannerViewController.h */,
 				01AE42061B38E38D006B9191 /* ATBannerViewController.m */,
-				585A8E5D1B0D609A00BDF4CC /* ATMessageCenterViewController.h */,
-				585A8E5E1B0D609A00BDF4CC /* ATMessageCenterViewController.m */,
 				01F1A95E1B6823CD0088DBF0 /* ATAboutViewController.h */,
 				01F1A95F1B6823CD0088DBF0 /* ATAboutViewController.m */,
 			);
@@ -899,10 +899,10 @@
 		4999127B16165B7900FDA15F /* Message Center */ = {
 			isa = PBXGroup;
 			children = (
+				018A343A1B0CE810001DCA2C /* MessageCenter.storyboard */,
 				0159B64B1B7A73E600CC45E6 /* Controllers */,
 				0159B64A1B7A73D100CC45E6 /* Views */,
 				491E03D81640D01F00DC3E18 /* ATFeedbackTypes.h */,
-				018A343A1B0CE810001DCA2C /* MessageCenter.storyboard */,
 				49735D601832DF1F00D48DE7 /* ATMessageCenterDataSource.h */,
 				49735D611832DF1F00D48DE7 /* ATMessageCenterDataSource.m */,
 				4961A408161BBDBE00E30037 /* Persistence */,

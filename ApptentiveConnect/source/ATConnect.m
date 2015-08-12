@@ -38,6 +38,7 @@ NSString *const ATSurveyShownNotification = @"ATSurveyShownNotification";
 NSString *const ATSurveySentNotification = @"ATSurveySentNotification";
 NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 
+NSString *const ATIntegrationKeyApptentive = @"apptentive";
 NSString *const ATIntegrationKeyUrbanAirship = @"urban_airship";
 NSString *const ATIntegrationKeyKahuna = @"kahuna";
 NSString *const ATIntegrationKeyAmazonSNS = @"aws_sns";
@@ -231,6 +232,10 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	[_integrationConfiguration removeObjectForKey:integration];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:self.customDeviceData];
+}
+
+- (void)addApptentiveIntegrationWithDeviceToken:(NSData *)deviceToken {
+	[self addIntegration:ATIntegrationKeyApptentive withDeviceToken:deviceToken];
 }
 
 - (void)addUrbanAirshipIntegrationWithDeviceToken:(NSData *)deviceToken {

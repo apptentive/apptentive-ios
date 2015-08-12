@@ -91,10 +91,8 @@
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    // Enable Push Notifications for New Messages via the respective service by sending Device Token to Apptentive.
-    [[ATConnect sharedConnection] addUrbanAirshipIntegrationWithDeviceToken:deviceToken];
-    [[ATConnect sharedConnection] addAmazonSNSIntegrationWithDeviceToken:deviceToken];
-    [[ATConnect sharedConnection] addParseIntegrationWithDeviceToken:deviceToken];
+    // Enable Push Notifications for New Messages
+    [[ATConnect sharedConnection] addApptentiveIntegrationWithDeviceToken:deviceToken];
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {

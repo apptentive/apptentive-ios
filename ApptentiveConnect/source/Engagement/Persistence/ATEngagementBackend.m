@@ -18,7 +18,6 @@
 #import "ATInteractionUpgradeMessageViewController.h"
 #import "ATInteractionEnjoymentDialogController.h"
 #import "ATInteractionRatingDialogController.h"
-#import "ATInteractionFeedbackDialogController.h"
 #import "ATInteractionMessageCenterController.h"
 #import "ATInteractionAppStoreController.h"
 #import "ATInteractionSurveyController.h"
@@ -459,9 +458,6 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 		case ATInteractionTypeRatingDialog:
 			[self presentRatingDialogInteraction:interaction fromViewController:viewController];
 			break;
-		case ATInteractionTypeFeedbackDialog:
-			[self presentFeedbackDialogInteraction:interaction fromViewController:viewController];
-			break;
 		case ATInteractionTypeMessageCenter:
 			[self presentMessageCenterInteraction:interaction fromViewController:viewController];
 			break;
@@ -508,14 +504,6 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	
 	ATInteractionRatingDialogController *ratingDialog = [[ATInteractionRatingDialogController alloc] initWithInteraction:interaction];
 	[ratingDialog presentRatingDialogFromViewController:viewController];
-	
-}
-
-- (void)presentFeedbackDialogInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
-	NSAssert([interaction.type isEqualToString:@"FeedbackDialog"], @"Attempted to present a FeedbackDialog interaction with an interaction of type: %@", interaction.type);
-	
-	ATInteractionFeedbackDialogController *feedbackDialog = [[ATInteractionFeedbackDialogController alloc] initWithInteraction:interaction];
-	[feedbackDialog showFeedbackDialogFromViewController:viewController];
 	
 }
 

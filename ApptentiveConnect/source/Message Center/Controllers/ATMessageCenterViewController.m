@@ -73,6 +73,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @property (weak, nonatomic) IBOutlet UILabel *poweredByLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *poweredByImageView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *composeButtonItem;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *profileButtonItem;
 
 @property (nonatomic, strong) ATMessageCenterDataSource *dataSource;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;

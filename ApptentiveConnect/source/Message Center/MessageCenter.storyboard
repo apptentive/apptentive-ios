@@ -306,35 +306,35 @@
                                         <outlet property="titleLabel" destination="8sl-tE-JA8" id="aeG-Ma-iLJ"/>
                                     </connections>
                                 </view>
-                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g94-Qt-Zp0" customClass="ATMessageCenterConfirmationView">
+                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g94-Qt-Zp0" customClass="ATMessageCenterStatusView">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="300"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Thank You!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="stQ-gR-6YZ">
-                                            <rect key="frame" x="8" y="8" width="398" height="18"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                            <color key="textColor" red="0.51764705879999995" green="0.51764705879999995" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="We try and reply to people between 5am and 6pm PST." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="kQ8-89-rPy">
-                                            <rect key="frame" x="8" y="34" width="398" height="29"/>
+                                            <rect key="frame" x="8" y="46" width="398" height="29"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
                                             <color key="textColor" red="0.51764705879999995" green="0.51764705879999995" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Sii-bm-iOd">
+                                            <rect key="frame" x="192" y="8" width="30" height="30"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="30" id="566-bS-LNO"/>
+                                                <constraint firstAttribute="height" constant="30" id="O5R-aD-JSr"/>
+                                            </constraints>
+                                        </imageView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <constraints>
-                                        <constraint firstItem="kQ8-89-rPy" firstAttribute="top" secondItem="stQ-gR-6YZ" secondAttribute="bottom" constant="8" id="1FX-7J-maP"/>
-                                        <constraint firstAttribute="trailing" secondItem="stQ-gR-6YZ" secondAttribute="trailing" constant="8" id="7UX-4A-xfM"/>
-                                        <constraint firstItem="stQ-gR-6YZ" firstAttribute="leading" secondItem="g94-Qt-Zp0" secondAttribute="leading" constant="8" id="P60-nC-WBZ"/>
-                                        <constraint firstItem="stQ-gR-6YZ" firstAttribute="top" secondItem="g94-Qt-Zp0" secondAttribute="top" constant="8" id="ZCm-QE-wZF"/>
-                                        <constraint firstItem="kQ8-89-rPy" firstAttribute="top" relation="greaterThanOrEqual" secondItem="g94-Qt-Zp0" secondAttribute="top" constant="8" id="fRI-vT-Xdg"/>
+                                        <constraint firstAttribute="centerX" secondItem="Sii-bm-iOd" secondAttribute="centerX" id="Gk0-NR-ECN"/>
+                                        <constraint firstItem="Sii-bm-iOd" firstAttribute="top" secondItem="g94-Qt-Zp0" secondAttribute="top" constant="8" id="c3V-aL-ciY"/>
+                                        <constraint firstItem="kQ8-89-rPy" firstAttribute="top" secondItem="g94-Qt-Zp0" secondAttribute="top" priority="100" constant="8" id="fRI-vT-Xdg"/>
+                                        <constraint firstItem="kQ8-89-rPy" firstAttribute="top" secondItem="Sii-bm-iOd" secondAttribute="bottom" constant="8" id="hHj-zB-PZg"/>
                                         <constraint firstAttribute="trailing" secondItem="kQ8-89-rPy" secondAttribute="trailing" constant="8" id="tiZ-0g-UDz"/>
                                         <constraint firstItem="kQ8-89-rPy" firstAttribute="leading" secondItem="g94-Qt-Zp0" secondAttribute="leading" constant="8" id="z6F-sO-Sfg"/>
                                     </constraints>
                                     <connections>
-                                        <outlet property="confirmationLabel" destination="stQ-gR-6YZ" id="cxB-Ae-9yj"/>
-                                        <outlet property="confirmationStatusSpacing" destination="1FX-7J-maP" id="cSV-lu-N91"/>
+                                        <outlet property="imageStatusSpacing" destination="hHj-zB-PZg" id="Ov1-ob-HK3"/>
+                                        <outlet property="imageView" destination="Sii-bm-iOd" id="so7-Z8-UyE"/>
                                         <outlet property="statusLabel" destination="kQ8-89-rPy" id="5Cw-b8-eqe"/>
                                     </connections>
                                 </view>
@@ -492,11 +492,11 @@
                     <connections>
                         <outlet property="brandingView" destination="1k3-J8-dPI" id="U0l-5j-4sM"/>
                         <outlet property="composeButtonItem" destination="7K8-9v-8QL" id="hvW-wV-G14"/>
-                        <outlet property="confirmationView" destination="g94-Qt-Zp0" id="Jbc-SH-Uwl"/>
                         <outlet property="greetingView" destination="3OP-Us-sTC" id="gir-MU-eQO"/>
                         <outlet property="messageInputView" destination="Aj5-aD-yTM" id="mrz-a8-xN6"/>
                         <outlet property="poweredByImageView" destination="Mgg-jY-bpf" id="rAj-qf-rRu"/>
                         <outlet property="poweredByLabel" destination="lWW-C4-4hk" id="fk7-Jd-uDI"/>
+                        <outlet property="statusView" destination="g94-Qt-Zp0" id="Xps-10-9WO"/>
                         <outlet property="whoView" destination="hjb-x8-sQN" id="tDh-5W-R0e"/>
                     </connections>
                 </tableViewController>
@@ -556,10 +556,10 @@
             </objects>
             <point key="canvasLocation" x="-190" y="1342"/>
         </scene>
-        <!--Message Center-->
+        <!--Message Center Error View-->
         <scene sceneID="G8v-Qy-vVc">
             <objects>
-                <viewController id="98M-gg-3nj" customClass="ATMessageCenterErrorViewController" sceneMemberID="viewController">
+                <viewController id="98M-gg-3nj" userLabel="Message Center Error View" customClass="ATMessageCenterErrorViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="YsJ-93-sdE"/>
                         <viewControllerLayoutGuide type="bottom" id="PBq-M4-PKi"/>

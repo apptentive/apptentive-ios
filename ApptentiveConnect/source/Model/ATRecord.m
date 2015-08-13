@@ -18,12 +18,6 @@
 @dynamic clientCreationTimezone;
 @dynamic clientCreationUTCOffset;
 
-+ (NSTimeInterval)timeIntervalForServerTime:(NSNumber *)timestamp {
-	long long serverTimestamp = [timestamp longLongValue];
-	NSTimeInterval clientTimestamp = ((double)serverTimestamp);
-	return clientTimestamp;
-}
-
 + (NSObject *)newInstanceWithJSON:(NSDictionary *)json {
 	NSAssert(NO, @"Abstract method called.");
 	return nil;
@@ -37,8 +31,7 @@
 	
 	NSObject *createdAt = [json at_safeObjectForKey:@"created_at"];
 	if ([createdAt isKindOfClass:[NSNumber class]]) {
-		NSTimeInterval creationTimestamp = [ATRecord timeIntervalForServerTime:(NSNumber *)createdAt];
-		self.creationTime = @(creationTimestamp);
+		self.creationTime = (NSNumber *)createdAt;
 	} else if ([createdAt isKindOfClass:[NSDate class]]) {
 		NSDate *creationDate = (NSDate *)createdAt;
 		NSTimeInterval t = [creationDate timeIntervalSince1970];
@@ -75,12 +68,14 @@
 
 - (void)updateClientCreationTime {
 	NSDate *d = [NSDate date];
-	self.clientCreationTime = [NSNumber numberWithDouble:(double)[d timeIntervalSince1970]];
-	self.clientCreationUTCOffset = [NSNumber numberWithInteger:[[NSTimeZone systemTimeZone] secondsFromGMTForDate:d]];
+	NSNumber *newCreationTime = @([d timeIntervalSince1970]);
 	
-	if ([self isCreationTimeEmpty]) {
-		self.creationTime = self.clientCreationTime;
+	if ([self isCreationTimeEmpty]) {		
+		self.creationTime = @([[NSDate distantFuture] timeIntervalSince1970]);
 	}
+	
+	self.clientCreationTime = newCreationTime;
+	self.clientCreationUTCOffset = @([[NSTimeZone systemTimeZone] secondsFromGMTForDate:d]);
 }
 
 - (BOOL)isClientCreationTimeEmpty {

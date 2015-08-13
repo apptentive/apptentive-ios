@@ -15,13 +15,10 @@ NSString *const ATConfigurationPreferencesChangedNotification = @"ATConfiguratio
 NSString *const ATAppConfigurationLastUpdatePreferenceKey = @"ATAppConfigurationLastUpdatePreferenceKey";
 NSString *const ATAppConfigurationExpirationPreferenceKey = @"ATAppConfigurationExpirationPreferenceKey";
 NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigurationMetricsEnabledPreferenceKey";
-NSString *const ATAppConfigurationMessageCenterEnabledKey = @"ATAppConfigurationMessageCenterEnabledKey";
 NSString *const ATAppConfigurationHideBrandingKey = @"ATAppConfigurationHideBrandingKey";
 
-NSString *const ATAppConfigurationMessageCenterTitleKey = @"ATAppConfigurationMessageCenterTitleKey";
 NSString *const ATAppConfigurationMessageCenterForegroundRefreshIntervalKey = @"ATAppConfigurationMessageCenterForegroundRefreshIntervalKey";
 NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey = @"ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey";
-NSString *const ATAppConfigurationMessageCenterEmailRequiredKey = @"ATAppConfigurationMessageCenterEmailRequiredKey";
 
 NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDisplayNameKey";
 
@@ -50,7 +47,6 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	 [NSNumber numberWithBool:YES], ATAppConfigurationMetricsEnabledPreferenceKey,
 	 [NSNumber numberWithInt:20], ATAppConfigurationMessageCenterForegroundRefreshIntervalKey,
 	 [NSNumber numberWithInt:60], ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey,
-	 [NSNumber numberWithBool:NO], ATAppConfigurationMessageCenterEmailRequiredKey,
 	 nil];
 	[defaults registerDefaults:defaultPreferences];
 }
@@ -156,7 +152,6 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	NSDictionary *numberObjects = 
 		[NSDictionary dictionaryWithObjectsAndKeys:
 		 @"metrics_enabled", ATAppConfigurationMetricsEnabledPreferenceKey,
-		 @"message_center_enabled", ATAppConfigurationMessageCenterEnabledKey,
 		 @"hide_branding", ATAppConfigurationHideBrandingKey,
 		 nil];
 	
@@ -198,12 +193,6 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 		NSObject *messageCenterConfiguration = [jsonConfiguration objectForKey:@"message_center"];
 		if ([messageCenterConfiguration isKindOfClass:[NSDictionary class]]) {
 			NSDictionary *mc = (NSDictionary *)messageCenterConfiguration;
-			NSString *title = [mc objectForKey:@"title"];
-			NSString *oldTitle = [defaults objectForKey:ATAppConfigurationMessageCenterTitleKey];
-			if (!oldTitle || ![oldTitle isEqualToString:title]) {
-				[defaults setObject:title forKey:ATAppConfigurationMessageCenterTitleKey];
-				hasConfigurationChanges = YES;
-			}
 			
 			NSNumber *fgRefresh = [mc objectForKey:@"fg_poll"];
 			NSNumber *oldFGRefresh = [defaults objectForKey:ATAppConfigurationMessageCenterForegroundRefreshIntervalKey];
@@ -217,15 +206,6 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 			if (!oldBGRefresh || [oldBGRefresh intValue] != [bgRefresh intValue]) {
 				[defaults setObject:bgRefresh forKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey];
 				hasConfigurationChanges = YES;
-			}
-			
-			NSNumber *emailRequired = [mc objectForKey:@"email_required"];
-			if (emailRequired) {
-				NSNumber *oldEmailRequired = [defaults objectForKey:ATAppConfigurationMessageCenterEmailRequiredKey];
-				if (!oldEmailRequired || [emailRequired boolValue] != [oldEmailRequired boolValue]) {
-					[defaults setObject:emailRequired forKey:ATAppConfigurationMessageCenterEmailRequiredKey];
-					hasConfigurationChanges = YES;
-				}
 			}
 		}
 	}

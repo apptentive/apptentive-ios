@@ -18,10 +18,8 @@
 #import "ATAutomatedMessage.h"
 #import "ATFeedback.h"
 #import "ATFeedbackTask.h"
-#import "ATNavigationController.h"
 #import "ApptentiveMetrics.h"
 #import "ATReachability.h"
-#import "ATStaticLibraryBootstrap.h"
 #import "ATTaskQueue.h"
 #import "ATUtilities.h"
 #import "ATWebClient.h"
@@ -241,7 +239,6 @@ static NSURLCache *imageCache = nil;
 	message.body = body;
 	message.pendingState = @(ATPendingMessageStateComposing);
 	message.sentByUser = @YES;
-	[message updateClientCreationTime];
 	NSError *error = nil;
 	if (![[self managedObjectContext] save:&error]) {
 		ATLogError(@"Unable to send automated message with title: %@, body: %@, error: %@", title, body, error);
@@ -937,7 +934,6 @@ static NSURLCache *imageCache = nil;
 		[self performSelectorOnMainThread:@selector(setup) withObject:nil waitUntilDone:YES];
 		return;
 	}
-	[ATStaticLibraryBootstrap forceStaticLibrarySymbolUsage];
 #if TARGET_OS_IPHONE
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWorking:) name:UIApplicationDidBecomeActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWorking:) name:UIApplicationWillEnterForegroundNotification object:nil];

@@ -43,6 +43,7 @@ extern NSString *const ATSurveySentNotification;
 extern NSString *const ATSurveyIDKey;
 
 /** Keys for supported 3rd-party integrations. */
+extern NSString *const ATIntegrationKeyApptentive;
 extern NSString *const ATIntegrationKeyUrbanAirship;
 extern NSString *const ATIntegrationKeyKahuna;
 extern NSString *const ATIntegrationKeyAmazonSNS;
@@ -86,10 +87,11 @@ extern NSString *const ATIntegrationKeyParse;
  Sent when a survey is submitted by the user. The userInfo dictionary will have a key named `ATSurveyIDKey`, 
  with a value of the id of the survey that was sent.
  
- ## 3rd Party Integration
+ ## Integrations
  
- There are two constant keys for currently supported third party integrations:
+ Keys for currently supported integrations:
  
+ * `ATIntegrationKeyApptentive` - For Apptentive Push
  * `ATIntegrationKeyUrbanAirship` - For Urban Airship
  * `ATIntegrationKeyAmazonSNS` - For Amazon SNS
  * `ATIntegrationKeyKahuna` - For Kahuna
@@ -127,24 +129,6 @@ extern NSString *const ATIntegrationKeyParse;
 @property (nonatomic, assign) BOOL showEmailField;
 /** Set this if you want some custom text to appear as a placeholder in the feedback text box. */
 @property (nonatomic, copy) NSString *customPlaceholderText;
-/** 
- Set this to NO if you don't want to use Message Center, and instead just want unidirectional in-app feedback.
- 
- Deprecated in 1.1.1 in favor of server-based configuration of Message Center.
- */
-@property (nonatomic, assign) BOOL useMessageCenter DEPRECATED_ATTRIBUTE;
-/** 
- Set this to NO to disable Message Center locally on the first launch of your app.
- 
- @note This setting will be overridden by server-based configuration when it is downloaded.
- */
-@property (nonatomic, assign) BOOL initiallyUseMessageCenter;
-/**
- Set this to NO to hide Apptentive branding locally on the first launch of your app.
- 
- @note This setting will be overridden by server-based configuration when it is downloaded.
- */
-@property (nonatomic, assign) BOOL initiallyHideBranding;
 #if TARGET_OS_IPHONE
 /**
  A tint color to use in Apptentive-specific UI.
@@ -154,7 +138,6 @@ extern NSString *const ATIntegrationKeyParse;
  */
 @property (nonatomic, strong) UIColor *tintColor;
 #endif
-
 
 #if TARGET_OS_IPHONE
 
@@ -448,6 +431,13 @@ extern NSString *const ATIntegrationKeyParse;
  @param integration The name of the integration.
  */
 - (void)removeIntegration:(NSString *)integration;
+
+/**
+ Adds Apptentive Push integration with the given device token.
+ 
+ @param deviceToken The device token expected by APNs.
+ */
+- (void)addApptentiveIntegrationWithDeviceToken:(NSData *)deviceToken;
 
 /**
  Adds Urban Airship integration with the given device token.

@@ -47,16 +47,18 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 			NSFetchRequest *request = [[NSFetchRequest alloc] init];
 			[request setEntity:[NSEntityDescription entityForName:@"ATAbstractMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
 			[request setFetchBatchSize:20];
-			NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"creationTime" ascending:YES];
-			[request setSortDescriptors:@[sortDescriptor]];
-			sortDescriptor = nil;
-			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"creationTime != %d AND hidden != %@", 0, @YES];
+			
+			NSSortDescriptor *creationTimeSort = [[NSSortDescriptor alloc] initWithKey:@"creationTime" ascending:YES];
+			NSSortDescriptor *clientCreationTimeSort = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
+			[request setSortDescriptors:@[creationTimeSort, clientCreationTimeSort]];
+			
+			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"creationTime != %d AND clientCreationTime != %d AND hidden != %@", 0, 0, @YES];
 			[request setPredicate:predicate];
 			
 			// For now, group each message into its own section.
 			// In the future, we'll save an attribute that coalesces
 			// closely-grouped (in time) messages into a single section.
-			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:@"creationTime" cacheName:@"at-messages-cache"];
+			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:@"clientCreationTime" cacheName:@"at-messages-cache"];
 			newController.delegate = self;
 			_fetchedMessagesController = newController;
 			
@@ -119,7 +121,13 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 
 - (NSDate *)dateOfMessageGroupAtIndex:(NSInteger)index {
 	if ([self numberOfMessagesInGroup:index] > 0) {
-		return [NSDate dateWithTimeIntervalSince1970:[self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]].creationTime.doubleValue];
+		ATAbstractMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]];
+		double creationTime = message.creationTime.doubleValue;
+		double clientCreationTime = message.clientCreationTime.doubleValue;
+		
+		BOOL distantFutureCreationTime = (creationTime > clientCreationTime + 365 * 24 * 60 * 60);
+		
+		return [NSDate dateWithTimeIntervalSince1970:distantFutureCreationTime ? clientCreationTime : creationTime];
 	} else {
 		return nil;
 	}

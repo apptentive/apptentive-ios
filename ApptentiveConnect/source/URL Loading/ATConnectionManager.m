@@ -1,5 +1,5 @@
 //
-//  PSURLManager.m
+//  ATConnectionManager.m
 //
 //  Created by Andrew Wooster on 12/14/08.
 //  Copyright 2008 Apptentive, Inc.. All rights reserved.

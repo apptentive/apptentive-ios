@@ -476,11 +476,6 @@
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Message Center Title" id="vfC-JL-Kb9">
                         <barButtonItem key="backBarButtonItem" title="Back" id="91h-ja-bMn"/>
-                        <barButtonItem key="leftBarButtonItem" title="Profile" id="pDt-Bl-iZQ">
-                            <connections>
-                                <action selector="showWho:" destination="W0l-Dy-ioE" id="dgY-B3-15c"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Close" id="Ouv-Mz-TNk">
                             <connections>
                                 <action selector="dismiss:" destination="W0l-Dy-ioE" id="ws9-cY-6qs"/>

@@ -134,6 +134,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	if (!self.interaction.profileRequested) {
 		self.navigationItem.leftBarButtonItem = nil;
+	} else {
+		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[ATBackend imageNamed:@"at_account"] landscapeImagePhone:[ATBackend imageNamed:@"at_account"] style:UIBarButtonItemStyleBordered target:self action:@selector(showWho:)];
 	}
 	
 	self.messageInputView.messageView.text = self.draftMessage ?: @"";

@@ -86,6 +86,16 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 
 #pragma mark - Message center view controller support
 
+- (BOOL)hasNonContextMessages {
+	if (self.numberOfMessageGroups == 0 || [self numberOfMessagesInGroup:0] == 0) {
+		return NO;
+	} else if (self.numberOfMessageGroups == 1) {
+		return (![[self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] isKindOfClass:[ATAutomatedMessage class]]);
+	} else {
+		return YES;
+	}
+}
+
 - (NSInteger)numberOfMessageGroups {
 	return self.fetchedMessagesController.sections.count;
 }

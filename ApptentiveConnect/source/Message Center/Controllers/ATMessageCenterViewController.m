@@ -171,7 +171,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardWillChangeFrameNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToInputView:) name:UIKeyboardWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToFooterView:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardDidHideNotification object:nil];
 }
 
@@ -439,7 +439,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
-	[self scrollToInputView:nil];
+	[self scrollToFooterView:nil];
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
@@ -539,9 +539,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.profileView.skipButton setTitle:self.interaction.profileEditSkipButtonTitle forState:UIControlStateNormal];
 	
 	self.state = ATMessageCenterStateWhoCard;
-	[self scrollToInputView:nil];
 	
 	[self resizeFooterView:nil];
+	[self scrollToFooterView:nil];
 }
 
 - (IBAction)validateWho:(id)sender {
@@ -718,7 +718,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 }
 
-- (void)scrollToInputView:(NSNotification *)notification {
+- (void)scrollToFooterView:(NSNotification *)notification {
 	CGFloat footerSpace = [self.dataSource numberOfMessageGroups] > 0 ? self.tableView.sectionFooterHeight : 0;
 	
 	CGPoint offset = CGPointMake(0.0, CGRectGetMaxY(self.rectOfLastMessage) - self.tableView.contentInset.top + footerSpace);

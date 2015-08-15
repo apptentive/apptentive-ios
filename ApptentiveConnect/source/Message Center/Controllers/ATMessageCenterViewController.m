@@ -446,11 +446,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[self updateState];
 }
 
-// Fix iOS bug where scroll sometimes doesn't follow selection
-- (void)textViewDidChangeSelection:(UITextView *)textView {
-	[textView scrollRangeToVisible:textView.selectedRange];
-}
-
 #pragma mark Text field delegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {

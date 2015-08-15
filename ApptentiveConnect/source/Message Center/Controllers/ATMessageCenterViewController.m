@@ -203,7 +203,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self resizeFooterView:nil];
 
 	if (self.state != ATMessageCenterStateEmpty && self.state != ATMessageCenterStateWhoCard) {
-		[self scrollToLastReplyAnimated:NO];
+		[self scrollToLastMessageAnimated:NO];
 	}
 }
 
@@ -376,7 +376,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[self updateState];
 		
 		if (self.state != ATMessageCenterStateWhoCard) {
-			[self scrollToLastReplyAnimated:YES];
+			[self scrollToLastMessageAnimated:YES];
 		}
 	}
 }
@@ -637,6 +637,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				if (self.profileView.mode == ATMessageCenterProfileModeFull) {
 					[self.profileView.nameField becomeFirstResponder];
 				}
+				
+				if (self.dataSource.hasNonContextMessages) {
+					[self scrollToLastMessageAnimated:YES];
+				}
+				
 				self.navigationItem.leftBarButtonItem.enabled = NO;
 				newFooter = self.profileView;
 				break;
@@ -781,7 +786,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	return [[NSUserDefaults standardUserDefaults] stringForKey:ATMessageCenterDraftMessageKey] ?: @"";
 }
 
-- (void)scrollToLastReplyAnimated:(BOOL)animated {
+- (void)scrollToLastMessageAnimated:(BOOL)animated {
 	[self.tableView scrollToRowAtIndexPath:self.indexPathOfLastMessage atScrollPosition:UITableViewScrollPositionTop animated:animated];
 }
 

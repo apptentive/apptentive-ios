@@ -198,20 +198,17 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 
-	[self updateState];
+	NSString *message = self.messageInputView.messageView.text;
+	if (message && ![message isEqualToString:@""]) {
+		self.state = ATMessageCenterStateComposing;
+		[self.messageInputView.messageView becomeFirstResponder];
+	} else {
+		[self updateState];
+	}
 	[self resizeFooterView:nil];
 
 	if (self.state != ATMessageCenterStateEmpty && self.state != ATMessageCenterStateWhoCard) {
 		[self scrollToLastMessageAnimated:NO];
-	}
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-	[super viewDidAppear:animated];
-	
-	NSString *message = self.messageInputView.messageView.text;
-	if (message && ![message isEqualToString:@""]) {
-		[self.messageInputView.messageView becomeFirstResponder];
 	}
 }
 
@@ -784,7 +781,17 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)scrollToLastMessageAnimated:(BOOL)animated {
-	[self.tableView scrollToRowAtIndexPath:self.indexPathOfLastMessage atScrollPosition:UITableViewScrollPositionTop animated:animated];
+	[self resizeFooterView:nil];
+	
+	CGRect rectToScrollTo = [self rectOfLastMessage];
+	CGFloat footerHeight = CGRectGetHeight(self.activeFooterView.bounds);
+	CGFloat tableViewHeight = CGRectGetHeight(self.tableView.bounds) - self.tableView.contentInset.top - self.tableView.contentInset.bottom - footerHeight;
+	
+	if (CGRectGetHeight(rectToScrollTo) > tableViewHeight) {
+		rectToScrollTo = CGRectMake(rectToScrollTo.origin.x, CGRectGetMaxY(rectToScrollTo) - tableViewHeight, rectToScrollTo.size.width, tableViewHeight + footerHeight);
+	}
+	
+	[self.tableView scrollRectToVisible:rectToScrollTo animated:animated];
 }
 
 - (void)removeUnsentContextMessages {

@@ -40,6 +40,7 @@
 @property (nonatomic, readonly) NSString *profileInitialEmailPlaceholder;
 @property (nonatomic, readonly) NSString *profileInitialSkipButtonTitle;
 @property (nonatomic, readonly) NSString *profileInitialSaveButtonTitle;
+@property (nonatomic, readonly) NSString *profileInitialEmailExplanation;
 
 @property (nonatomic, readonly) NSString *profileEditTitle;
 @property (nonatomic, readonly) NSString *profileEditNamePlaceholder;

@@ -77,7 +77,6 @@
 
 #pragma mark - Context / Automated Message
 
-
 - (NSString *)contextMessageBody {
 	return self.configuration[@"automated_message"][@"body"];
 }
@@ -130,6 +129,10 @@
 
 - (NSString *)profileInitialSaveButtonTitle {
 	return self.configuration[@"profile"][@"initial"][@"save_button"];
+}
+
+- (NSString *)profileInitialEmailExplanation {
+	return self.configuration[@"profile"][@"initial"][@"email_explanation"];
 }
 
 #pragma mark - Profile (Edit)

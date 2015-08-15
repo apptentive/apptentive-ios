@@ -18,8 +18,13 @@
 
 @property (strong, nonatomic) NSLayoutConstraint *nameHorizontalSpaceToEmail;
 
-@property (strong, nonatomic) NSMutableArray *portraitConstraints;
-@property (strong, nonatomic) NSMutableArray *landscapeConstraints;
+@property (strong, nonatomic) NSArray *portraitFullConstraints;
+@property (strong, nonatomic) NSArray *landscapeFullConstraints;
+
+@property (strong, nonatomic) NSArray *portraitCompactConstraints;
+@property (strong, nonatomic) NSArray *landscapeCompactConstraints;
+
+@property (strong, nonatomic) NSArray *baseConstraints;
 
 @end
 
@@ -30,13 +35,20 @@
 	
 	self.containerView.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
 	
-	self.portraitConstraints = [@[self.nameTrailingConstraint, self.emailLeadingConstraint, self.nameVerticalSpaceToEmail] mutableCopy];
+	self.portraitFullConstraints = @[self.nameTrailingConstraint, self.emailLeadingConstraint, self.nameVerticalSpaceToEmail];
+	self.portraitCompactConstraints = @[self.nameTrailingConstraint, self.emailLeadingConstraint];
 	
 	self.nameHorizontalSpaceToEmail = [NSLayoutConstraint constraintWithItem:self.nameField attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self.emailField attribute:NSLayoutAttributeLeading multiplier:1.0 constant:-8.0];
 	NSLayoutConstraint *nameEmailTopAlignment = [NSLayoutConstraint constraintWithItem:self.nameField attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.emailField attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
 	NSLayoutConstraint *nameEmailBottomAlignment = [NSLayoutConstraint constraintWithItem:self.nameField attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.emailField attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.0];
 	
-	self.landscapeConstraints = [@[self.nameHorizontalSpaceToEmail, nameEmailTopAlignment, nameEmailBottomAlignment] mutableCopy];
+	self.landscapeFullConstraints = @[self.nameHorizontalSpaceToEmail, nameEmailTopAlignment, nameEmailBottomAlignment];
+	self.landscapeCompactConstraints = @[self.emailLeadingConstraint, nameEmailTopAlignment, nameEmailBottomAlignment];
+	
+	// Find constraints common to both modes/orientations
+	NSMutableSet *baseConstraintSet = [NSMutableSet setWithArray:self.containerView.constraints];
+	[baseConstraintSet	minusSet:[NSSet setWithArray:self.portraitFullConstraints]];
+	self.baseConstraints = [baseConstraintSet allObjects];
 }
 
 - (BOOL)isSizeLandscape:(CGSize)size {
@@ -44,12 +56,21 @@
 }
 
 - (void)updateConstraints {
+	[self.containerView removeConstraints:self.containerView.constraints];
+	[self.containerView addConstraints:self.baseConstraints];
+	
 	if ([self isSizeLandscape:self.bounds.size]) {
-		[self.containerView removeConstraints:self.portraitConstraints];
-		[self.containerView addConstraints:self.landscapeConstraints];
+		if (self.mode == ATMessageCenterProfileModeFull) {
+			[self.containerView addConstraints:self.landscapeFullConstraints];
+		} else {
+			[self.containerView addConstraints:self.landscapeCompactConstraints];
+		}
 	} else {
-		[self.containerView removeConstraints:self.landscapeConstraints];
-		[self.containerView addConstraints:self.portraitConstraints];
+		if (self.mode == ATMessageCenterProfileModeFull) {
+			[self.containerView addConstraints:self.portraitFullConstraints];
+		} else {
+			[self.containerView addConstraints:self.portraitCompactConstraints];
+		}
 	}
 	
 	[super updateConstraints];
@@ -62,43 +83,25 @@
 		CGFloat nameFieldAlpha;
 		
 		if (mode == ATMessageCenterProfileModeCompact) {
+			self.requiredLabel.hidden = NO;
 			nameFieldAlpha = 0;
-			
-			[self.portraitConstraints removeObject:self.nameVerticalSpaceToEmail];
-			
-			[self.landscapeConstraints removeObject:self.nameHorizontalSpaceToEmail];
-			[self.landscapeConstraints addObject:self.emailLeadingConstraint];
-			
-			if (![self isSizeLandscape:self.bounds.size]) {
-				[self.containerView removeConstraint:self.nameVerticalSpaceToEmail];
-			} else {
-				[self.containerView removeConstraint:self.nameHorizontalSpaceToEmail];
-				[self.containerView addConstraint:self.emailLeadingConstraint];
-			}
 		} else {
 			self.nameField.hidden = NO;
 			nameFieldAlpha = 1;
-			
-			[self.portraitConstraints addObject:self.nameVerticalSpaceToEmail];
-			
-			[self.landscapeConstraints addObject:self.nameHorizontalSpaceToEmail];
-			[self.landscapeConstraints removeObject:self.emailLeadingConstraint];
-			
-			if (![self isSizeLandscape:self.bounds.size]) {
-				[self.containerView addConstraint:self.nameVerticalSpaceToEmail];
-			} else {
-				[self.containerView addConstraint:self.nameHorizontalSpaceToEmail];
-				[self.containerView removeConstraint:self.emailLeadingConstraint];
-			}
 		}
+		
+		[self updateConstraints];
 		
 		[UIView animateWithDuration:0.25 animations:^{
 			self.nameField.alpha = nameFieldAlpha;
+			self.requiredLabel.alpha = 1.0 - nameFieldAlpha;
 			
 			[self layoutIfNeeded];
 		} completion:^(BOOL finished) {
 			if (nameFieldAlpha == 0) {
 				self.nameField.hidden = YES;
+			} else {
+				self.requiredLabel.hidden = YES;
 			}
 		}];
 	}

@@ -9,6 +9,7 @@
 #import "ATAboutViewController.h"
 #import "ATMessageCenterInteraction.h"
 #import "ATBackend.h"
+#import "ATConnect_Private.h"
 
 @interface ATAboutViewController ()
 
@@ -34,9 +35,10 @@
     [super viewDidLoad];
 	
 	self.imageView.image = [ATBackend imageNamed:@"at_apptentive_logo"];
-	self.aboutLabel.text = self.interaction.aboutText;
-	[self.aboutButton setTitle:self.interaction.aboutButtonTitle forState:UIControlStateNormal];
-	[self.privacyButton setTitle:self.interaction.privacyButtonTitle forState:UIControlStateNormal];
+	// TODO: Look into localizing the storyboard instead
+	self.aboutLabel.text = ATLocalizedString(@"Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.\n\nYour feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer.", @"About apptentive introductory message");
+	[self.aboutButton setTitle:ATLocalizedString(@"Learn about Apptentive", @"About apptentive link button label") forState:UIControlStateNormal];
+	[self.privacyButton setTitle:ATLocalizedString(@"Apptentive’s Privacy Policy", @"About apptentive privacy button label") forState:UIControlStateNormal];
 	
 	self.portraitConstraints = @[self.aboutButtonTrailingConstraint, self.privacyButtonLeadingConstraint, self.aboutButtonPrivacyButtonVeritcalConstraint];
 	

@@ -8,7 +8,7 @@
 
 #import "ATMessageCenterViewController.h"
 #import "ATMessageCenterGreetingView.h"
-#import "ATMessageCenterConfirmationView.h"
+#import "ATMessageCenterStatusView.h"
 #import "ATMessageCenterInputView.h"
 #import "ATMessageCenterProfileView.h"
 #import "ATMessageCenterMessageCell.h"
@@ -63,7 +63,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @interface ATMessageCenterViewController ()
 
 @property (weak, nonatomic) IBOutlet ATMessageCenterGreetingView *greetingView;
-@property (strong, nonatomic) IBOutlet ATMessageCenterConfirmationView *confirmationView;
+@property (strong, nonatomic) IBOutlet ATMessageCenterStatusView *statusView;
 @property (strong, nonatomic) IBOutlet ATMessageCenterInputView *messageInputView;
 @property (strong, nonatomic) IBOutlet ATMessageCenterProfileView *profileView;
 
@@ -112,7 +112,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.greetingView.messageLabel.text = self.interaction.greetingBody;
 	self.greetingView.imageView.imageURL = self.interaction.greetingImageURL;
 	
-	self.confirmationView.confirmationHidden = YES;
+	self.statusView.mode = ATMessageCenterStatusModeEmpty;
 	
 	NSString *branding = self.interaction.branding;
 	if (branding) {
@@ -647,29 +647,27 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				break;
 				
 			case ATMessageCenterStateSending:
-				newFooter = self.confirmationView;
-				self.confirmationView.confirmationHidden = YES;
-				self.confirmationView.statusLabel.text = nil;
+				newFooter = self.statusView;
+				self.statusView.mode = ATMessageCenterStatusModeEmpty;
+				self.statusView.statusLabel.text = nil;
 				break;
 				
 			case ATMessageCenterStateConfirmed:
-				newFooter = self.confirmationView;
-				self.confirmationView.confirmationHidden = YES;
-				self.confirmationView.statusLabel.text = self.interaction.statusBody;
+				newFooter = self.statusView;
+				self.statusView.mode = ATMessageCenterStatusModeEmpty;
+				self.statusView.statusLabel.text = self.interaction.statusBody;
 				break;
 				
 			case ATMessageCenterStateNetworkError:
-				newFooter = self.confirmationView;
-				self.confirmationView.confirmationHidden = NO;
-				self.confirmationView.confirmationLabel.text = self.interaction.networkErrorTitle;
-				self.confirmationView.statusLabel.text = self.interaction.networkErrorBody;
+				newFooter = self.statusView;
+				self.statusView.mode = ATMessageCenterStatusModeNetworkError;
+				self.statusView.statusLabel.text =[@[self.interaction.networkErrorTitle, self.interaction.networkErrorBody] componentsJoinedByString:@"\n"];
 				break;
 				
 			case ATMessageCenterStateHTTPError:
-				newFooter = self.confirmationView;
-				self.confirmationView.confirmationHidden = NO;
-				self.confirmationView.confirmationLabel.text = self.interaction.HTTPErrorTitle;
-				self.confirmationView.statusLabel.text = self.interaction.networkErrorBody;
+				newFooter = self.statusView;
+				self.statusView.mode = ATMessageCenterStatusModeHTTPError;
+				self.statusView.statusLabel.text = [@[self.interaction.HTTPErrorTitle, self.interaction.networkErrorBody] componentsJoinedByString:@"\n"];
 				break;
 				
 			case ATMessageCenterStateReplied:
@@ -737,7 +735,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	CGFloat height = 0;
 	
 	if (self.state != ATMessageCenterStateEmpty && self.state != ATMessageCenterStateWhoCard && self.state != ATMessageCenterStateComposing) {
-		height = CONFIRMATION_VIEW_HEIGHT;
+		height = CGRectGetHeight(self.tableView.bounds) - self.tableView.contentInset.top - self.tableView.contentInset.bottom - CGRectGetHeight([self rectOfLastMessage]) - self.tableView.sectionFooterHeight;
 	} else {
 		CGRect keyboardRect;
 		if (notification) {

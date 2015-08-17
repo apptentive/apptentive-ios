@@ -38,7 +38,7 @@ NSString *const ATSurveyShownNotification = @"ATSurveyShownNotification";
 NSString *const ATSurveySentNotification = @"ATSurveySentNotification";
 NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 
-NSString *const ATIntegrationKeyApptentive = @"apptentive";
+NSString *const ATIntegrationKeyApptentive = @"apptentive_push";
 NSString *const ATIntegrationKeyUrbanAirship = @"urban_airship";
 NSString *const ATIntegrationKeyKahuna = @"kahuna";
 NSString *const ATIntegrationKeyAmazonSNS = @"aws_sns";

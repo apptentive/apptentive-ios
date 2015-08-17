@@ -1,5 +1,5 @@
 //
-//  BannerViewController.h
+//  ATBannerViewController.h
 //  TestBanner
 //
 //  Created by Frank Schmitt on 6/17/15.

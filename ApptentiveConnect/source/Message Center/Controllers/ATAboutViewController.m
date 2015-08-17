@@ -7,7 +7,6 @@
 //
 
 #import "ATAboutViewController.h"
-#import "ATMessageCenterInteraction.h"
 #import "ATBackend.h"
 #import "ATConnect_Private.h"
 

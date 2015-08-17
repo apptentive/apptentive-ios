@@ -57,11 +57,17 @@
 }
 
 - (IBAction)learnMore:(id)sender {
-	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.apptentive.com/"]];
+	NSURLComponents *components = [NSURLComponents componentsWithString:@"http://www.apptentive.com/"];
+	components.queryItems = @[[[NSURLQueryItem alloc] initWithName:@"app" value:[NSBundle mainBundle].bundleIdentifier]];
+	
+	[[UIApplication sharedApplication] openURL:components.URL];
 }
 
 - (IBAction)showPrivacy:(id)sender {
-	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.apptentive.com/privacy"]];
+	NSURLComponents *components = [NSURLComponents componentsWithString:@"http://www.apptentive.com/privacy"];
+	components.queryItems = @[[[NSURLQueryItem alloc] initWithName:@"app" value:[NSBundle mainBundle].bundleIdentifier]];
+	
+	[[UIApplication sharedApplication] openURL:components.URL];
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {

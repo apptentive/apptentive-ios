@@ -155,7 +155,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[self validateWho:self];
 
 		if (self.interaction.profileRequired) {
-			[self.profileView.saveButton setTitle:ATLocalizedString(@"Next", @"Save profile button when presented before composing message.") forState:UIControlStateNormal];
 			self.profileView.skipButton.hidden = YES;
 			self.profileView.mode = ATMessageCenterProfileModeCompact;
 			

@@ -48,8 +48,4 @@
 @property (nonatomic, readonly) NSString *profileEditSkipButtonTitle;
 @property (nonatomic, readonly) NSString *profileEditSaveButtonTitle;
 
-@property (nonatomic, readonly) NSString *aboutText;
-@property (nonatomic, readonly) NSString *aboutButtonTitle;
-@property (nonatomic, readonly) NSString *privacyButtonTitle;
-
 @end

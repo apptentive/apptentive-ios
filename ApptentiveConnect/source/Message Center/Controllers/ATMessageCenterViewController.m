@@ -500,7 +500,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		}
 		
 		[[ATBackend sharedBackend] sendTextMessageWithBody:message];
-		[self updateState];
+		
+		if (self.interaction.profileRequested && ![ATUtilities emailAddressIsValid:[ATPersonInfo currentPerson].emailAddress]) {
+			self.state = ATMessageCenterStateWhoCard;
+		} else {
+			[self updateState];
+		}
 	
 		if (lastUserMessageIndexPath) {
 			[self.tableView reloadRowsAtIndexPaths:@[lastUserMessageIndexPath] withRowAnimation:UITableViewRowAnimationFade];

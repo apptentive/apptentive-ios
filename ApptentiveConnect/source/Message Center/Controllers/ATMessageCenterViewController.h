@@ -10,8 +10,6 @@
 #import "ATMessageCenterDataSource.h"
 #import "ATBackend.h"
 
-extern NSString *const ATMessageCenterDidPresentWhoCardKey;
-
 @class ATMessageCenterInteraction;
 
 @protocol ATMessageCenterDismissalDelegate;

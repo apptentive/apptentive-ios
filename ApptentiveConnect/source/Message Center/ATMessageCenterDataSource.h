@@ -34,6 +34,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 - (void)start;
 - (void)stop;
 
+- (BOOL)hasNonContextMessages;
+
 - (NSInteger)numberOfMessageGroups;
 - (NSInteger)numberOfMessagesInGroup:(NSInteger)groupIndex;
 - (ATMessageCenterMessageType)cellTypeAtIndexPath:(NSIndexPath *)indexPath;

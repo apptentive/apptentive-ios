@@ -23,8 +23,8 @@
 		01A88FFC1AFBFFAE002C49E7 /* testJsonDiffing.2.old.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF71AFBFDB6002C49E7 /* testJsonDiffing.2.old.json */; };
 		01AE42071B38E38D006B9191 /* ATBannerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01AE42051B38E38D006B9191 /* ATBannerViewController.h */; };
 		01AE42081B38E38D006B9191 /* ATBannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01AE42061B38E38D006B9191 /* ATBannerViewController.m */; };
-		01B147B31B5D8D3A0000D041 /* ATMessageCenterWhoView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01B147B11B5D8D3A0000D041 /* ATMessageCenterWhoView.h */; };
-		01B147B41B5D8D3A0000D041 /* ATMessageCenterWhoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01B147B21B5D8D3A0000D041 /* ATMessageCenterWhoView.m */; };
+		01B147B31B5D8D3A0000D041 /* ATMessageCenterProfileView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01B147B11B5D8D3A0000D041 /* ATMessageCenterProfileView.h */; };
+		01B147B41B5D8D3A0000D041 /* ATMessageCenterProfileView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01B147B21B5D8D3A0000D041 /* ATMessageCenterProfileView.m */; };
 		01BD9E041B55E465004F12AB /* ATMessageCenterInputView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01BD9E021B55E465004F12AB /* ATMessageCenterInputView.h */; };
 		01BD9E051B55E465004F12AB /* ATMessageCenterInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01BD9E031B55E465004F12AB /* ATMessageCenterInputView.m */; };
 		01C30CE51B0CF31E006BC911 /* MessageCenter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 018A343A1B0CE810001DCA2C /* MessageCenter.storyboard */; };
@@ -325,8 +325,8 @@
 		01A88FF71AFBFDB6002C49E7 /* testJsonDiffing.2.old.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.2.old.json; sourceTree = "<group>"; };
 		01AE42051B38E38D006B9191 /* ATBannerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATBannerViewController.h; sourceTree = "<group>"; };
 		01AE42061B38E38D006B9191 /* ATBannerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATBannerViewController.m; sourceTree = "<group>"; };
-		01B147B11B5D8D3A0000D041 /* ATMessageCenterWhoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageCenterWhoView.h; sourceTree = "<group>"; };
-		01B147B21B5D8D3A0000D041 /* ATMessageCenterWhoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageCenterWhoView.m; sourceTree = "<group>"; };
+		01B147B11B5D8D3A0000D041 /* ATMessageCenterProfileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageCenterProfileView.h; sourceTree = "<group>"; };
+		01B147B21B5D8D3A0000D041 /* ATMessageCenterProfileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageCenterProfileView.m; sourceTree = "<group>"; };
 		01BD9E021B55E465004F12AB /* ATMessageCenterInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageCenterInputView.h; sourceTree = "<group>"; };
 		01BD9E031B55E465004F12AB /* ATMessageCenterInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageCenterInputView.m; sourceTree = "<group>"; };
 		01C30CE91B0D09F8006BC911 /* ATMessageCenterGreetingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageCenterGreetingView.h; sourceTree = "<group>"; };
@@ -634,8 +634,8 @@
 				588F66491B601F0B00F388E3 /* ATMessageCenterContextMessageCell.m */,
 				01BD9E021B55E465004F12AB /* ATMessageCenterInputView.h */,
 				01BD9E031B55E465004F12AB /* ATMessageCenterInputView.m */,
-				01B147B11B5D8D3A0000D041 /* ATMessageCenterWhoView.h */,
-				01B147B21B5D8D3A0000D041 /* ATMessageCenterWhoView.m */,
+				01B147B11B5D8D3A0000D041 /* ATMessageCenterProfileView.h */,
+				01B147B21B5D8D3A0000D041 /* ATMessageCenterProfileView.m */,
 				01D3128C1B69349900B369E1 /* ATProgressNavigationBar.h */,
 				01D3128D1B69349900B369E1 /* ATProgressNavigationBar.m */,
 			);
@@ -1197,7 +1197,7 @@
 				491748C01341177000A7D11E /* ATWebClient.h in Headers */,
 				01F1A9601B6823CD0088DBF0 /* ATAboutViewController.h in Headers */,
 				49509A61135658E200793EEC /* ATReachability.h in Headers */,
-				01B147B31B5D8D3A0000D041 /* ATMessageCenterWhoView.h in Headers */,
+				01B147B31B5D8D3A0000D041 /* ATMessageCenterProfileView.h in Headers */,
 				588F664A1B601F0B00F388E3 /* ATMessageCenterContextMessageCell.h in Headers */,
 				4936AE531379DE3100A4B17F /* ATDefaultTextView.h in Headers */,
 				01C30CEB1B0D09F8006BC911 /* ATMessageCenterGreetingView.h in Headers */,
@@ -1456,7 +1456,7 @@
 				58B703ED1B0EB6D60024478C /* ATMessageCenterViewController.m in Sources */,
 				491748BB1341177000A7D11E /* ATConnectionChannel.m in Sources */,
 				491748BD1341177000A7D11E /* ATConnectionManager.m in Sources */,
-				01B147B41B5D8D3A0000D041 /* ATMessageCenterWhoView.m in Sources */,
+				01B147B41B5D8D3A0000D041 /* ATMessageCenterProfileView.m in Sources */,
 				58DCC0D6180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m in Sources */,
 				58D17D5018C5676F00D123BC /* ATInteractionMessageCenterController.m in Sources */,
 				58B703F91B0FAE6D0024478C /* ATMessageCenterInteraction.m in Sources */,

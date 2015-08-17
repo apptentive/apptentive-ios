@@ -1,5 +1,5 @@
 //
-//  ATMessageCenterWhoView.h
+//  ATMessageCenterProfileView.h
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 7/20/15.
@@ -8,12 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ATMessageCenterWhoView : UIView
+typedef NS_ENUM(NSInteger, ATMessageCenterProfileMode) {
+	ATMessageCenterProfileModeCompact = 1,
+	ATMessageCenterProfileModeFull
+};
 
+@interface ATMessageCenterProfileView : UIView
+
+@property (assign, nonatomic) ATMessageCenterProfileMode mode;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UITextField *nameField;
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
 @property (weak, nonatomic) IBOutlet UIButton *skipButton;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
+@property (weak, nonatomic) IBOutlet UILabel *requiredLabel;
 
 @end

@@ -58,14 +58,14 @@
 
 - (IBAction)learnMore:(id)sender {
 	NSURLComponents *components = [NSURLComponents componentsWithString:@"http://www.apptentive.com/"];
-	components.queryItems = @[[[NSURLQueryItem alloc] initWithName:@"app" value:[NSBundle mainBundle].bundleIdentifier]];
+	components.queryItems = @[[[NSURLQueryItem alloc] initWithName:@"source" value:[NSBundle mainBundle].bundleIdentifier]];
 	
 	[[UIApplication sharedApplication] openURL:components.URL];
 }
 
 - (IBAction)showPrivacy:(id)sender {
-	NSURLComponents *components = [NSURLComponents componentsWithString:@"http://www.apptentive.com/privacy"];
-	components.queryItems = @[[[NSURLQueryItem alloc] initWithName:@"app" value:[NSBundle mainBundle].bundleIdentifier]];
+	NSURLComponents *components = [NSURLComponents componentsWithString:@"http://www.apptentive.com/privacy/"];
+	components.queryItems = @[[[NSURLQueryItem alloc] initWithName:@"source" value:[NSBundle mainBundle].bundleIdentifier]];
 	
 	[[UIApplication sharedApplication] openURL:components.URL];
 }

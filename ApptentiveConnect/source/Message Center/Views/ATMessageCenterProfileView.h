@@ -8,8 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSInteger, ATMessageCenterProfileMode) {
+	ATMessageCenterProfileModeCompact = 1,
+	ATMessageCenterProfileModeFull
+};
+
 @interface ATMessageCenterProfileView : UIView
 
+@property (assign, nonatomic) ATMessageCenterProfileMode mode;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UITextField *nameField;
 @property (weak, nonatomic) IBOutlet UITextField *emailField;

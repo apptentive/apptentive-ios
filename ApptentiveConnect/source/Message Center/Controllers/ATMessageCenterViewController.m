@@ -158,6 +158,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.profileView.skipButton.hidden = self.interaction.profileRequired;
 	self.profileView.nameField.text = [ATConnect sharedConnection].personName;
 	self.profileView.emailField.text = [ATConnect sharedConnection].personEmailAddress;
+	self.profileView.mode = ATMessageCenterProfileModeCompact;
 	[self validateWho:self];
 	
 	self.contextMessage = nil;

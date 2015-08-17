@@ -213,7 +213,7 @@
                                         <outlet property="titleLabelToClearButton" destination="4kH-Os-vzx" id="Shd-FA-4CT"/>
                                     </connections>
                                 </view>
-                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hjb-x8-sQN" customClass="ATMessageCenterWhoView">
+                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hjb-x8-sQN" customClass="ATMessageCenterProfileView">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="300"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PJM-ba-h4O">
@@ -273,6 +273,7 @@
                                                 <constraint firstItem="WEB-50-wCX" firstAttribute="leading" secondItem="TsT-ug-J0g" secondAttribute="leading" id="Hdk-Md-y4M"/>
                                                 <constraint firstItem="8sl-tE-JA8" firstAttribute="trailing" secondItem="TsT-ug-J0g" secondAttribute="trailing" id="Liq-y7-BCY"/>
                                                 <constraint firstItem="WEB-50-wCX" firstAttribute="leading" secondItem="8sl-tE-JA8" secondAttribute="leading" id="OXd-f6-L6I"/>
+                                                <constraint firstItem="TsT-ug-J0g" firstAttribute="top" secondItem="8sl-tE-JA8" secondAttribute="bottom" priority="100" constant="8" id="RPZ-GJ-Ysz"/>
                                                 <constraint firstItem="EJ0-DT-gxJ" firstAttribute="baseline" secondItem="ucW-DV-V6C" secondAttribute="baseline" id="Zym-w0-vIv"/>
                                                 <constraint firstAttribute="trailing" secondItem="8sl-tE-JA8" secondAttribute="trailing" constant="15" id="l0h-wW-K1k"/>
                                                 <constraint firstItem="EJ0-DT-gxJ" firstAttribute="trailing" secondItem="TsT-ug-J0g" secondAttribute="trailing" id="pHl-O4-lQl"/>
@@ -306,7 +307,7 @@
                                         <outlet property="titleLabel" destination="8sl-tE-JA8" id="aeG-Ma-iLJ"/>
                                     </connections>
                                 </view>
-                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g94-Qt-Zp0" customClass="ATMessageCenterConfirmationView">
+                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g94-Qt-Zp0" userLabel="Message Center Status View" customClass="ATMessageCenterConfirmationView">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="300"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Thank You!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="stQ-gR-6YZ">
@@ -492,15 +493,10 @@
                         <outlet property="messageInputView" destination="Aj5-aD-yTM" id="mrz-a8-xN6"/>
                         <outlet property="poweredByImageView" destination="Mgg-jY-bpf" id="rAj-qf-rRu"/>
                         <outlet property="poweredByLabel" destination="lWW-C4-4hk" id="fk7-Jd-uDI"/>
-                        <outlet property="whoView" destination="hjb-x8-sQN" id="tDh-5W-R0e"/>
+                        <outlet property="profileView" destination="hjb-x8-sQN" id="KW8-c6-ALR"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uP4-vK-jPB" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <view contentMode="scaleToFill" placeholderIntrinsicWidth="320" placeholderIntrinsicHeight="40" id="WKe-eE-Ltf">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="32.701999999999998"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                </view>
                 <view contentMode="scaleToFill" id="1k3-J8-dPI" userLabel="Branding View">
                     <rect key="frame" x="0.0" y="0.0" width="240" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -694,7 +690,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="350" y="1086"/>
+            <point key="canvasLocation" x="800" y="938"/>
         </scene>
         <!--About-->
         <scene sceneID="zxj-fk-0sF">

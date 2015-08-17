@@ -1,14 +1,14 @@
 //
-//  ATMessageCenterWhoView.m
+//  ATMessageCenterProfileView.m
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 7/20/15.
 //  Copyright (c) 2015 Apptentive, Inc. All rights reserved.
 //
 
-#import "ATMessageCenterWhoView.h"
+#import "ATMessageCenterProfileView.h"
 
-@interface ATMessageCenterWhoView ()
+@interface ATMessageCenterProfileView ()
 
 @property (weak, nonatomic) IBOutlet UIView *containerView;
 
@@ -21,7 +21,7 @@
 
 @end
 
-@implementation ATMessageCenterWhoView
+@implementation ATMessageCenterProfileView
 
 - (void)awakeFromNib {
 	self.containerView.layer.borderColor = [UIColor colorWithRed:200.0/255.0 green:199.0/255.0 blue:204.0/255.0 alpha:1.0].CGColor;

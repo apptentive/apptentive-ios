@@ -1,5 +1,5 @@
 //
-//  ATMessageCenterWhoView.h
+//  ATMessageCenterProfileView.h
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 7/20/15.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ATMessageCenterWhoView : UIView
+@interface ATMessageCenterProfileView : UIView
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UITextField *nameField;

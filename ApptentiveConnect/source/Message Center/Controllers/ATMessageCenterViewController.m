@@ -10,7 +10,7 @@
 #import "ATMessageCenterGreetingView.h"
 #import "ATMessageCenterConfirmationView.h"
 #import "ATMessageCenterInputView.h"
-#import "ATMessageCenterWhoView.h"
+#import "ATMessageCenterProfileView.h"
 #import "ATMessageCenterMessageCell.h"
 #import "ATMessageCenterReplyCell.h"
 #import "ATMessageCenterContextMessageCell.h"
@@ -67,7 +67,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @property (weak, nonatomic) IBOutlet ATMessageCenterGreetingView *greetingView;
 @property (strong, nonatomic) IBOutlet ATMessageCenterConfirmationView *confirmationView;
 @property (strong, nonatomic) IBOutlet ATMessageCenterInputView *messageInputView;
-@property (strong, nonatomic) IBOutlet ATMessageCenterWhoView *whoView;
+@property (strong, nonatomic) IBOutlet ATMessageCenterProfileView *profileView;
 
 @property (strong, nonatomic) IBOutlet UIView *brandingView;
 @property (weak, nonatomic) IBOutlet UILabel *poweredByLabel;
@@ -152,12 +152,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.messageInputView.sendButton.enabled = self.messageInputView.messageView.text.length > 0;
 	self.messageInputView.clearButton.enabled = self.messageInputView.messageView.text.length > 0;
 	
-	self.whoView.titleLabel.text = self.interaction.profileInitialTitle;
-	[self.whoView.saveButton setTitle:self.interaction.profileInitialSaveButtonTitle forState:UIControlStateNormal];
-	[self.whoView.skipButton setTitle:self.interaction.profileInitialSkipButtonTitle forState:UIControlStateNormal];
-	self.whoView.skipButton.hidden = self.interaction.profileRequired;
-	self.whoView.nameField.text = [ATConnect sharedConnection].personName;
-	self.whoView.emailField.text = [ATConnect sharedConnection].personEmailAddress;
+	self.profileView.titleLabel.text = self.interaction.profileInitialTitle;
+	[self.profileView.saveButton setTitle:self.interaction.profileInitialSaveButtonTitle forState:UIControlStateNormal];
+	[self.profileView.skipButton setTitle:self.interaction.profileInitialSkipButtonTitle forState:UIControlStateNormal];
+	self.profileView.skipButton.hidden = self.interaction.profileRequired;
+	self.profileView.nameField.text = [ATConnect sharedConnection].personName;
+	self.profileView.emailField.text = [ATConnect sharedConnection].personEmailAddress;
 	[self validateWho:self];
 	
 	self.contextMessage = nil;
@@ -173,8 +173,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)dealloc {
 	self.tableView.delegate = nil;
 	self.messageInputView.messageView.delegate = nil;
-	self.whoView.nameField.delegate = nil;
-	self.whoView.emailField.delegate = nil;
+	self.profileView.nameField.delegate = nil;
+	self.profileView.emailField.delegate = nil;
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -448,11 +448,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 #pragma mark Text field delegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-	if (textField == self.whoView.nameField) {
-		[self.whoView.emailField becomeFirstResponder];
+	if (textField == self.profileView.nameField) {
+		[self.profileView.emailField becomeFirstResponder];
 	} else {
 		[self saveWho:textField];
-		[self.whoView.emailField resignFirstResponder];
+		[self.profileView.emailField resignFirstResponder];
 	}
 	
 	return NO;
@@ -525,27 +525,27 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (IBAction)showWho:(id)sender {
-	self.whoView.skipButton.hidden = NO;
-	[self.whoView.saveButton setTitle:self.interaction.profileEditSaveButtonTitle forState:UIControlStateNormal];
-	[self.whoView.skipButton setTitle:self.interaction.profileEditSkipButtonTitle forState:UIControlStateNormal];
+	self.profileView.skipButton.hidden = NO;
+	[self.profileView.saveButton setTitle:self.interaction.profileEditSaveButtonTitle forState:UIControlStateNormal];
+	[self.profileView.skipButton setTitle:self.interaction.profileEditSkipButtonTitle forState:UIControlStateNormal];
 	
 	self.state = ATMessageCenterStateWhoCard;
 	[self scrollToInputView:nil];
 }
 
 - (IBAction)validateWho:(id)sender {
-	BOOL valid = [ATUtilities emailAddressIsValid:self.whoView.emailField.text];
+	BOOL valid = [ATUtilities emailAddressIsValid:self.profileView.emailField.text];
 	
-	self.whoView.saveButton.enabled = valid;
+	self.profileView.saveButton.enabled = valid;
 }
 
 - (IBAction)saveWho:(id)sender {
-	if (![ATUtilities emailAddressIsValid:self.whoView.emailField.text]) {
+	if (![ATUtilities emailAddressIsValid:self.profileView.emailField.text]) {
 		return;
 	}
 	
-	[ATConnect sharedConnection].personName = self.whoView.nameField.text;
-	[ATConnect sharedConnection].personEmailAddress = self.whoView.emailField.text;
+	[ATConnect sharedConnection].personName = self.profileView.nameField.text;
+	[ATConnect sharedConnection].personEmailAddress = self.profileView.emailField.text;
 	[[ATBackend sharedBackend] updatePersonIfNeeded];
 	
 	if (self.pendingMessage) {
@@ -637,8 +637,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				break;
 			
 			case ATMessageCenterStateWhoCard:
-				[self.whoView.nameField becomeFirstResponder];
-				newFooter = self.whoView;
+				[self.profileView.nameField becomeFirstResponder];
+				newFooter = self.profileView;
 				break;
 				
 			case ATMessageCenterStateSending:

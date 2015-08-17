@@ -60,16 +60,24 @@
 	[self.containerView addConstraints:self.baseConstraints];
 	
 	if ([self isSizeLandscape:self.bounds.size]) {
-		if (self.mode == ATMessageCenterProfileModeFull) {
-			[self.containerView addConstraints:self.landscapeFullConstraints];
-		} else {
-			[self.containerView addConstraints:self.landscapeCompactConstraints];
+		switch (self.mode) {
+			case ATMessageCenterProfileModeFull:
+				[self.containerView addConstraints:self.landscapeFullConstraints];
+				break;
+				
+			case ATMessageCenterProfileModeCompact:
+				[self.containerView addConstraints:self.landscapeCompactConstraints];
+				break;
 		}
 	} else {
-		if (self.mode == ATMessageCenterProfileModeFull) {
-			[self.containerView addConstraints:self.portraitFullConstraints];
-		} else {
-			[self.containerView addConstraints:self.portraitCompactConstraints];
+		switch (self.mode) {
+			case ATMessageCenterProfileModeFull:
+				[self.containerView addConstraints:self.portraitFullConstraints];
+				break;
+				
+			case ATMessageCenterProfileModeCompact:
+				[self.containerView addConstraints:self.portraitCompactConstraints];
+				break;
 		}
 	}
 	

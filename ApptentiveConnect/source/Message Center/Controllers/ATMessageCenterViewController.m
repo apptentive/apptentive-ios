@@ -67,10 +67,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @property (strong, nonatomic) IBOutlet ATMessageCenterInputView *messageInputView;
 @property (strong, nonatomic) IBOutlet ATMessageCenterProfileView *profileView;
 
-@property (strong, nonatomic) IBOutlet UIView *brandingView;
-@property (weak, nonatomic) IBOutlet UILabel *poweredByLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *poweredByImageView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *composeButtonItem;
+@property (weak, nonatomic) IBOutlet UIButton *aboutButton;
 
 @property (nonatomic, strong) ATMessageCenterDataSource *dataSource;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
@@ -115,19 +113,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.statusView.mode = ATMessageCenterStatusModeEmpty;
 	
 	NSString *branding = self.interaction.branding;
-	if (branding) {
-		
-#warning The "Powered By" string needs to come from `self.interaction.branding`.
-#warning Need to replace string `Apptentive` with the Apptentive logo image.
-		
-		self.poweredByLabel.text = ATLocalizedString(@"Powered by", @"Powered by followed by Apptentive logo.");
-		self.poweredByImageView.image = [ATBackend imageNamed:@"at_branding_logo"];
-		[self.brandingView setNeedsLayout];
-		[self.brandingView layoutIfNeeded];
-		
-		UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.brandingView];
-		self.toolbarItems = [@[barButtonItem] arrayByAddingObjectsFromArray:self.toolbarItems];
-	}
+	self.aboutButton.hidden = !branding;
 	
 	self.messageInputView.messageView.text = self.draftMessage ?: @"";
 	self.messageInputView.messageView.textContainerInset = UIEdgeInsetsMake(TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET);

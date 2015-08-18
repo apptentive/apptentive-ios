@@ -453,11 +453,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self scrollToFooterView:nil];
 }
 
-- (void)textViewDidEndEditing:(UITextView *)textView {
-	if (self.state != ATMessageCenterStateWhoCard)
-		[self updateState];
-}
-
 #pragma mark Text field delegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {

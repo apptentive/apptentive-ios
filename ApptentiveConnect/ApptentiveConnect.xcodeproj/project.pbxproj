@@ -175,8 +175,6 @@
 		49C002A3133413BB0071F088 /* ATConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C00298133413BB0071F088 /* ATConnect.m */; };
 		49C54BD51790A95E009CCD5D /* ApptentiveResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 49D1118C13341A7C00603373 /* ApptentiveResources.bundle */; };
 		49C54BD81790B783009CCD5D /* ATDataModelv1.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 49C54BD71790B783009CCD5D /* ATDataModelv1.sqlite */; };
-		49CB6DEA1718FE4400BC9223 /* ATMessageCenterMetrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 49CB6DE81718FE4400BC9223 /* ATMessageCenterMetrics.h */; };
-		49CB6DEB1718FE4400BC9223 /* ATMessageCenterMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 49CB6DE91718FE4400BC9223 /* ATMessageCenterMetrics.m */; };
 		49CEFF5D15168B54006D8BA8 /* ATAppConfigurationUpdater.h in Headers */ = {isa = PBXBuildFile; fileRef = 49CEFF5B15168B53006D8BA8 /* ATAppConfigurationUpdater.h */; };
 		49CEFF5E15168B54006D8BA8 /* ATAppConfigurationUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 49CEFF5C15168B53006D8BA8 /* ATAppConfigurationUpdater.m */; };
 		49CEFF5F15168B54006D8BA8 /* ATAppConfigurationUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 49CEFF5C15168B53006D8BA8 /* ATAppConfigurationUpdater.m */; };
@@ -454,8 +452,6 @@
 		49C00297133413BB0071F088 /* ATConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATConnect.h; sourceTree = "<group>"; };
 		49C00298133413BB0071F088 /* ATConnect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATConnect.m; sourceTree = "<group>"; };
 		49C54BD71790B783009CCD5D /* ATDataModelv1.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = ATDataModelv1.sqlite; sourceTree = "<group>"; };
-		49CB6DE81718FE4400BC9223 /* ATMessageCenterMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageCenterMetrics.h; sourceTree = "<group>"; };
-		49CB6DE91718FE4400BC9223 /* ATMessageCenterMetrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageCenterMetrics.m; sourceTree = "<group>"; };
 		49CEFF5B15168B53006D8BA8 /* ATAppConfigurationUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAppConfigurationUpdater.h; sourceTree = "<group>"; };
 		49CEFF5C15168B53006D8BA8 /* ATAppConfigurationUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAppConfigurationUpdater.m; sourceTree = "<group>"; };
 		49D1118C13341A7C00603373 /* ApptentiveResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApptentiveResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -858,8 +854,6 @@
 				4987FA96157AE53500AF2078 /* ApptentiveMetrics.m */,
 				4987FA97157AE53500AF2078 /* ATMetric.h */,
 				4987FA98157AE53600AF2078 /* ATMetric.m */,
-				49CB6DE81718FE4400BC9223 /* ATMessageCenterMetrics.h */,
-				49CB6DE91718FE4400BC9223 /* ATMessageCenterMetrics.m */,
 				4987FA7E157ACAB500AF2078 /* ATSurveyMetrics.h */,
 				4987FA7F157ACAB500AF2078 /* ATSurveyMetrics.m */,
 				4987FA99157AE53600AF2078 /* URL Loading */,
@@ -1262,7 +1256,6 @@
 				584EAC6E1A786E4500AC7F05 /* ATInteractionTextModalController.h in Headers */,
 				495E9C1C16EABD8E00AE3B03 /* ATLogger.h in Headers */,
 				492F2F1C16ED597F0030E48A /* ATRecordRequestTask.h in Headers */,
-				49CB6DEA1718FE4400BC9223 /* ATMessageCenterMetrics.h in Headers */,
 				4960A533171F70530082669B /* ATNetworkImageView.h in Headers */,
 				01BD9E041B55E465004F12AB /* ATMessageCenterInputView.h in Headers */,
 				496F5781174060CE003BF516 /* ATDataManager.h in Headers */,
@@ -1520,7 +1513,6 @@
 				495E9C1D16EABD8E00AE3B03 /* ATLogger.m in Sources */,
 				58AB416818F608500034FAA5 /* ATInteractionSurveyController.m in Sources */,
 				492F2F1D16ED597F0030E48A /* ATRecordRequestTask.m in Sources */,
-				49CB6DEB1718FE4400BC9223 /* ATMessageCenterMetrics.m in Sources */,
 				4960A534171F70530082669B /* ATNetworkImageView.m in Sources */,
 				583DF06F1A44CD6E00BF0207 /* ATInteractionNavigateToLink.m in Sources */,
 				589274A7180CC33A0029E5CE /* ATInteractionUsageData.m in Sources */,

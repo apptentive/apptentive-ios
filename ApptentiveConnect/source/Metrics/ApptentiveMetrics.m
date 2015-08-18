@@ -30,9 +30,6 @@ static NSString *ATMetricNameSurveyCancel = @"survey.cancel";
 static NSString *ATMetricNameSurveySubmit = @"survey.submit";
 static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 
-static NSString *ATMetricNameMessageCenterLaunch = @"message_center.launch";
-static NSString *ATMetricNameMessageCenterClose = @"message_center.close";
-static NSString *ATMetricNameMessageCenterAttach = @"message_center.attach";
 static NSString *ATMetricNameMessageCenterRead = @"message_center.read";
 static NSString *ATMetricNameMessageCenterSend = @"message_center.send";
 
@@ -50,9 +47,6 @@ NSString *const ATMessageCenterMessageNonceKey = @"ATMessageCenterMessageNonceKe
 - (void)appDidEnterBackground:(NSNotification *)notification;
 - (void)appWillEnterForeground:(NSNotification *)notification;
 
-- (void)messageCenterDidLaunch:(NSNotification *)notification;
-- (void)messageCenterDidClose:(NSNotification *)notification;
-- (void)messageCenterDidAttach:(NSNotification *)notification;
 - (void)messageCenterDidRead:(NSNotification *)notification;
 - (void)messageCenterDidSend:(NSNotification *)notification;
 
@@ -306,18 +300,6 @@ NSString *const ATMessageCenterMessageNonceKey = @"ATMessageCenterMessageNonceKe
 
 - (void)appWillEnterForeground:(NSNotification *)notification {
 	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch];
-}
-
-- (void)messageCenterDidLaunch:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameMessageCenterLaunch info:nil];
-}
-
-- (void)messageCenterDidClose:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameMessageCenterClose info:nil];
-}
-
-- (void)messageCenterDidAttach:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameMessageCenterAttach info:nil];
 }
 
 - (void)messageCenterDidRead:(NSNotification *)notification {

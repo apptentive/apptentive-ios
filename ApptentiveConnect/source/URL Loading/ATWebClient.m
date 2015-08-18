@@ -14,7 +14,6 @@
 #import "ATBackend.h"
 #import "ATConnect.h"
 #import "ATConversationUpdater.h"
-#import "ATFeedback.h"
 #import "ATURLConnection.h"
 #import "ATUtilities.h"
 #import "ATWebClient_Private.h"
@@ -45,23 +44,6 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 
 - (NSString *)commonChannelName {
 	return ATWebClientDefaultChannelName;
-}
-
-- (ATAPIRequest *)requestForPostingFeedback:(ATFeedback *)feedback {
-	NSDictionary *postData = [feedback apiDictionary];
-	NSString *url = [self apiURLStringWithPath:@"records"];
-	ATURLConnection *conn = nil;
-	
-	if ([feedback hasScreenshot]) {
-		NSData *fileData = [feedback dataForScreenshot];
-		conn = [self connectionToPost:[NSURL URLWithString:url] withFileData:fileData ofMimeType:@"image/png" fileDataKey:@"record[file][screenshot]" parameters:postData];
-	} else {
-		conn = [self connectionToPost:[NSURL URLWithString:url] parameters:postData];
-	}
-	conn.timeoutInterval = 240.0;
-	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:[self commonChannelName]];
-	request.returnType = ATAPIRequestReturnTypeData;
-	return request;
 }
 
 - (ATAPIRequest *)requestForGettingAppConfiguration {

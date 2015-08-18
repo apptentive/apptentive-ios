@@ -9,7 +9,6 @@
 #import "ATRecordTask.h"
 #import "ApptentiveMetrics.h"
 #import "ATBackend.h"
-#import "ATFeedback.h"
 #import "ATMetric.h"
 #import "ATWebClient.h"
 

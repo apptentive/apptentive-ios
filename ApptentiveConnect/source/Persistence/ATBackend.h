@@ -21,7 +21,7 @@
 #import "ATAbstractMessage.h"
 #import "ATTextMessage.h"
 #import "ATAutomatedMessage.h"
-#import "ATFeedback.h"
+#import "ATFeedbackTypes.h"
 #import "ATMessageTask.h"
 #endif
 
@@ -65,10 +65,6 @@ extern NSString *const ATBackendBecameReadyNotification;
 #elif TARGET_OS_MAC
 + (NSImage *)imageNamed:(NSString *)name;
 #endif
-
-/*! Use this to add the feedback to a queue of feedback tasks which
-    will be sent in the background. */
-- (void)sendFeedback:(ATFeedback *)feedback;
 
 /*! ATAutomatedMessage messages. */
 - (ATAutomatedMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body;

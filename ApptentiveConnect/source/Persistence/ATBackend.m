@@ -11,13 +11,10 @@
 #import "ATAutomatedMessage.h"
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
-#import "ATContactStorage.h"
 #import "ATData.h"
 #import "ATDataManager.h"
 #import "ATDeviceUpdater.h"
 #import "ATAutomatedMessage.h"
-#import "ATFeedback.h"
-#import "ATFeedbackTask.h"
 #import "ApptentiveMetrics.h"
 #import "ATReachability.h"
 #import "ATTaskQueue.h"
@@ -204,30 +201,6 @@ static NSURLCache *imageCache = nil;
 			self.apiKeySet = YES;
 		}
 		[self updateWorking];
-	}
-}
-
-- (void)sendFeedback:(ATFeedback *)feedback {
-	@autoreleasepool {
-		if ([[NSThread currentThread] isMainThread]) {
-			[self performSelectorInBackground:@selector(sendFeedback:) withObject:feedback];
-			return;
-		}
-		if (feedback == self.currentFeedback) {
-			self.currentFeedback = nil;
-		}
-		ATContactStorage *contact = [ATContactStorage sharedContactStorage];
-		contact.name = feedback.name;
-		contact.email = feedback.email;
-		contact.phone = feedback.phone;
-		[ATContactStorage releaseSharedContactStorage];
-		contact = nil;
-		
-		ATFeedbackTask *task = [[ATFeedbackTask alloc] init];
-		task.feedback = feedback;
-		[[ATTaskQueue sharedTaskQueue] addTask:task];
-		task = nil;
-		
 	}
 }
 

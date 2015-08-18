@@ -46,6 +46,9 @@
 #define STATUS_LABEL_MARGIN 6.0
 #define BODY_FONT_SIZE 17.0
 
+NSString *const ATInteractionMessageCenterEventLabelLaunch = @"launch";
+NSString *const ATInteractionMessageCenterEventLabelClose = @"close";
+
 NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
 
 typedef NS_ENUM(NSInteger, ATMessageCenterState) {
@@ -92,6 +95,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+	
+	[self.interaction engage:ATInteractionMessageCenterEventLabelLaunch fromViewController:self];
 	
 	self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
 	
@@ -476,6 +481,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 #pragma mark - Actions
 
 - (IBAction)dismiss:(id)sender {
+	[self.interaction engage:ATInteractionMessageCenterEventLabelClose fromViewController:self];
+	
 	[self.dismissalDelegate messageCenterWillDismiss:self];
 	[self.dataSource stop];
 	

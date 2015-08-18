@@ -14,7 +14,6 @@
 #import "ATMessageDisplayType.h"
 #import "ATMessageSender.h"
 #import "NSDictionary+ATAdditions.h"
-#import "ATMessageCenterMetrics.h"
 
 @implementation ATAbstractMessage
 
@@ -209,7 +208,8 @@
 	if (![self.seenByUser boolValue]) {
 		self.seenByUser = @YES;
 		if (self.apptentiveID && ![self.sentByUser boolValue]) {
-			[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidReadNotification object:self userInfo:@{ATMessageCenterMessageIDKey:self.apptentiveID}];
+#warning Invoke Event
+			//[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidReadNotification object:self userInfo:@{ATMessageCenterMessageIDKey:self.apptentiveID}];
 		}
 		
 		[ATData save];

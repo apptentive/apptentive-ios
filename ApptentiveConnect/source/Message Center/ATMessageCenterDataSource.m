@@ -12,7 +12,6 @@
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
 #import "ATData.h"
-#import "ATMessageCenterMetrics.h"
 #import "ATTextMessage.h"
 #import "ATMessageSender.h"
 

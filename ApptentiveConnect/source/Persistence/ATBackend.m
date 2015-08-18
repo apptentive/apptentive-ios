@@ -25,7 +25,6 @@
 #import "ATWebClient.h"
 #import "ATMessageDisplayType.h"
 #import "ATGetMessagesTask.h"
-#import "ATMessageCenterMetrics.h"
 #import "ATMessageSender.h"
 #import "ATMessageTask.h"
 #import "ATTextMessage.h"
@@ -259,7 +258,8 @@ static NSURLCache *imageCache = nil;
 		return NO;
 	}
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidSendNotification object:@{ATMessageCenterMessageNonceKey:message.pendingMessageID}];
+#warning Invoke Event
+	//[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidSendNotification object:@{ATMessageCenterMessageNonceKey:message.pendingMessageID}];
 	
 	return [self sendMessage:message];
 }
@@ -308,7 +308,8 @@ static NSURLCache *imageCache = nil;
 		return NO;
 	}
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidSendNotification object:@{ATMessageCenterMessageNonceKey:message.pendingMessageID}];
+#warning Invoke Event
+	//[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidSendNotification object:@{ATMessageCenterMessageNonceKey:message.pendingMessageID}];
 	
 	return [self sendMessage:message];
 }

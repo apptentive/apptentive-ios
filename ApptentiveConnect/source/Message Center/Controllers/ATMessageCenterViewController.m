@@ -668,12 +668,14 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				newFooter = self.statusView;
 				self.statusView.mode = ATMessageCenterStatusModeNetworkError;
 				self.statusView.statusLabel.text =[@[self.interaction.networkErrorTitle, self.interaction.networkErrorBody] componentsJoinedByString:@"\n"];
+				[self scrollToFooterView:nil];
 				break;
 				
 			case ATMessageCenterStateHTTPError:
 				newFooter = self.statusView;
 				self.statusView.mode = ATMessageCenterStatusModeHTTPError;
 				self.statusView.statusLabel.text = [@[self.interaction.HTTPErrorTitle, self.interaction.networkErrorBody] componentsJoinedByString:@"\n"];
+				[self scrollToFooterView:nil];
 				break;
 				
 			case ATMessageCenterStateReplied:

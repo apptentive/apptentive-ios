@@ -472,6 +472,14 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[navigationBar.progressView setProgress:progress animated:animated];
 }
 
+#pragma mark - Action sheet delegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
+	if (buttonIndex == actionSheet.destructiveButtonIndex) {
+		[self discardDraft];
+	}
+}
+
 #pragma mark - Actions
 
 - (IBAction)dismiss:(id)sender {
@@ -519,14 +527,21 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.messageInputView.messageView becomeFirstResponder];
 }
 
-- (IBAction)clear:(id)sender {
-	self.messageInputView.messageView.text = nil;
-	[self.messageInputView.messageView resignFirstResponder];
-	
-	self.messageInputView.sendButton.enabled = NO;
-	self.messageInputView.clearButton.enabled = NO;
-	
-	[self updateState];
+- (IBAction)clear:(UIButton *)sender {
+	if (self.messageInputView.messageView.text.length > 0) {
+		NSString *title = ATLocalizedString(@"Are you sure you want to discard this message?", @"Confirm that user wants to discard draft message");
+		NSString *cancelButtonTitle = ATLocalizedString(@"Cancel", @"Cancel discarding draft");
+		NSString *discardButtonTitle = ATLocalizedString(@"Discard", @"Discard draft");
+		UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:cancelButtonTitle destructiveButtonTitle:discardButtonTitle otherButtonTitles:nil];
+		
+		if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+			[actionSheet showFromRect:sender.frame inView:sender.superview animated:YES];
+		} else {
+			[actionSheet showFromToolbar:self.navigationController.toolbar];
+		}
+	} else {
+		[self discardDraft];
+	}
 }
 
 - (IBAction)showWho:(id)sender {
@@ -802,6 +817,18 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (UIColor *)failedColor {
 	return [UIColor colorWithRed:0.8 green:0.375 blue:0.412 alpha:1];
+}
+
+- (void)discardDraft {
+	self.messageInputView.messageView.text = nil;
+	[self.messageInputView.messageView resignFirstResponder];
+	
+	self.messageInputView.sendButton.enabled = NO;
+	self.messageInputView.clearButton.enabled = NO;
+	
+	[self updateState];
+	
+	[self scrollToLastMessageAnimated:YES];
 }
 
 @end

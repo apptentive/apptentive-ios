@@ -8,6 +8,7 @@
 
 #import "ATBackend.h"
 #import "ATAppConfigurationUpdateTask.h"
+#import "ATEngagementGetManifestTask.h"
 #import "ATAutomatedMessage.h"
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
@@ -635,13 +636,13 @@ static NSURLCache *imageCache = nil;
 			
 			[self updateConversationIfNeeded];
 			[self updateConfigurationIfNeeded];
+			[self updateEngagementManifestIfNeeded];
 		} else {
 			[[ATTaskQueue sharedTaskQueue] stop];
 			[ATTaskQueue releaseSharedTaskQueue];
 		}
 	}
 }
-
 
 - (NSURL *)apptentiveHomepageURL {
 	return [NSURL URLWithString:@"http://www.apptentive.com/"];
@@ -723,6 +724,19 @@ static NSURLCache *imageCache = nil;
 	}
 }
 
+- (void)updateEngagementManifestIfNeeded {
+	if (![ATConversationUpdater conversationExists]) {
+		return;
+	}
+	
+	ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
+	if (![queue hasTaskOfClass:[ATEngagementGetManifestTask class]]) {
+		ATEngagementGetManifestTask *task = [[ATEngagementGetManifestTask alloc] init];
+		[queue addTask:task];
+		task = nil;
+	}
+}
+
 #if TARGET_OS_IPHONE
 #pragma mark NSFetchedResultsControllerDelegate
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
@@ -756,6 +770,7 @@ static NSURLCache *imageCache = nil;
 			[self updateConfigurationIfNeeded];
 			[self updateDeviceIfNeeded];
 			[self updatePersonIfNeeded];
+			[self updateEngagementManifestIfNeeded];
 		}
 	}
 }

@@ -52,7 +52,6 @@
 }
 
 - (void)start {
-	self.failureOkay = YES;
 	if (checkManifestRequest == nil) {
 		ATWebClient *client = [ATWebClient sharedClient];
 		checkManifestRequest = [client requestForGettingEngagementManifest];

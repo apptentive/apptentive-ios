@@ -16,6 +16,7 @@ NSString *const ATAppConfigurationLastUpdatePreferenceKey = @"ATAppConfiguration
 NSString *const ATAppConfigurationExpirationPreferenceKey = @"ATAppConfigurationExpirationPreferenceKey";
 NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigurationMetricsEnabledPreferenceKey";
 NSString *const ATAppConfigurationHideBrandingKey = @"ATAppConfigurationHideBrandingKey";
+NSString *const ATAppConfigurationNotificationPopupsEnabledKey = @"ATAppConfigurationNotificationPopupsEnabledKey";
 
 NSString *const ATAppConfigurationMessageCenterForegroundRefreshIntervalKey = @"ATAppConfigurationMessageCenterForegroundRefreshIntervalKey";
 NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey = @"ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey";
@@ -153,6 +154,7 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 		[NSDictionary dictionaryWithObjectsAndKeys:
 		 @"metrics_enabled", ATAppConfigurationMetricsEnabledPreferenceKey,
 		 @"hide_branding", ATAppConfigurationHideBrandingKey,
+		 @"notification_popup_enabled", ATAppConfigurationNotificationPopupsEnabledKey,
 		 nil];
 	
 	NSArray *boolPreferences = [NSArray arrayWithObjects:@"ratings_clear_on_upgrade", @"ratings_enabled", @"metrics_enabled", @"message_center_enabled", @"hide_branding", nil];

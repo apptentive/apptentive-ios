@@ -14,6 +14,7 @@ extern NSString *const ATAppConfigurationLastUpdatePreferenceKey;
 extern NSString *const ATAppConfigurationExpirationPreferenceKey;
 extern NSString *const ATAppConfigurationMetricsEnabledPreferenceKey;
 extern NSString *const ATAppConfigurationHideBrandingKey;
+extern NSString *const ATAppConfigurationNotificationPopupsEnabledKey;
 
 extern NSString *const ATAppConfigurationMessageCenterForegroundRefreshIntervalKey;
 extern NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey;

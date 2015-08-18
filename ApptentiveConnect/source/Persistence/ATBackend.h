@@ -52,6 +52,7 @@ extern NSString *const ATBackendBecameReadyNotification;
 @property (nonatomic, strong, readonly) NSString *supportDirectoryPath;
 
 @property (nonatomic, assign, readonly) BOOL hideBranding;
+@property (nonatomic, assign, readonly) BOOL notificationPopupsEnabled;
 
 @property (weak, nonatomic) id<ATBackendMessageDelegate> messageDelegate;
 

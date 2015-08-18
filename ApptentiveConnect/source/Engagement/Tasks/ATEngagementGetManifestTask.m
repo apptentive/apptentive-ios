@@ -24,7 +24,7 @@
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
-	
+	[super encodeWithCoder:coder];
 }
 
 - (void)dealloc {
@@ -48,7 +48,7 @@
 }
 
 - (BOOL)shouldArchive {
-	return NO;
+	return YES;
 }
 
 - (void)start {

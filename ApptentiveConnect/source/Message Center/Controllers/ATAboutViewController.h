@@ -11,7 +11,4 @@
 @class ATMessageCenterInteraction;
 
 @interface ATAboutViewController : UIViewController
-
-@property (strong, nonatomic) ATMessageCenterInteraction *interaction;
-
 @end

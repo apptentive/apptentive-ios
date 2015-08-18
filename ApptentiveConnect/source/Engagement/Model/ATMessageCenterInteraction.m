@@ -157,21 +157,4 @@
     return self.configuration[@"profile"][@"edit"][@"save_button"];
 }
 
-#pragma mark - About Page
-
-- (NSString *)aboutText {
-#warning Get from server?
-	return @"Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.\n\nYour feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer.";
-}
-
-- (NSString *)aboutButtonTitle {
-#warning Get from server?
-	return @"Learn about Apptentive";
-}
-
-- (NSString *)privacyButtonTitle {
-#warning Get from server?
-	return @"Apptentive’s Privacy Policy";
-}
-
 @end

@@ -20,7 +20,7 @@
 	messageCenterInteraction.type = interaction.type;
 	messageCenterInteraction.configuration = interaction.configuration;
 	messageCenterInteraction.version = interaction.version;
-	messageCenterInteraction.version = interaction.vendor;
+	messageCenterInteraction.vendor = interaction.vendor;
 	
 	return messageCenterInteraction;
 }

@@ -14,6 +14,9 @@
 #import "ATMessageDisplayType.h"
 #import "ATMessageSender.h"
 #import "NSDictionary+ATAdditions.h"
+#import "ATMessageCenterInteraction.h"
+
+NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
 @implementation ATAbstractMessage
 
@@ -208,8 +211,26 @@
 	if (![self.seenByUser boolValue]) {
 		self.seenByUser = @YES;
 		if (self.apptentiveID && ![self.sentByUser boolValue]) {
-#warning Invoke Event
-			//[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidReadNotification object:self userInfo:@{ATMessageCenterMessageIDKey:self.apptentiveID}];
+			NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+			
+			if (self.apptentiveID) {
+				[userInfo setObject:self.apptentiveID forKey:@"message_id"];
+			}
+			
+			NSString *messageType = nil;
+			if ([self isKindOfClass:[ATTextMessage class]]) {
+				messageType = @"TextMessage";
+			} else if ([self isKindOfClass:[ATAutomatedMessage class]]) {
+				messageType = @"AutomatedMessage";
+			} else if ([self isKindOfClass:[ATFileMessage class]]) {
+				messageType = @"FileMessage";
+			}
+			
+			if (messageType) {
+				[userInfo setObject:messageType forKey:@"message_type"];
+			}
+			
+			[[ATMessageCenterInteraction interactionForInvokingMessageEvents] engage:ATInteractionMessageCenterEventLabelRead fromViewController:nil userInfo:userInfo];
 		}
 		
 		[ATData save];

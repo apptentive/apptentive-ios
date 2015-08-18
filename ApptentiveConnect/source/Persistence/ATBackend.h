@@ -21,6 +21,7 @@
 #import "ATAbstractMessage.h"
 #import "ATTextMessage.h"
 #import "ATAutomatedMessage.h"
+#import "ATFileMessage.h"
 #import "ATFeedback.h"
 #import "ATMessageTask.h"
 #endif

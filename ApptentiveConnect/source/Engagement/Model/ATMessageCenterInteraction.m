@@ -7,11 +7,20 @@
 //
 
 #import "ATMessageCenterInteraction.h"
+#import "ATEngagementBackend.h"
 #import "ATConnect_Private.h"
 #import "ATPersonInfo.h"
 #import "ATMessageCenterViewController.h"
 
 @implementation ATMessageCenterInteraction
+
++ (id)interactionForInvokingMessageEvents {
+	ATMessageCenterInteraction *messageCenterInteraction = [[ATMessageCenterInteraction alloc] init];
+	messageCenterInteraction.type = @"MessageCenter";
+	messageCenterInteraction.vendor = ATEngagementCodePointApptentiveVendorKey;
+	
+	return messageCenterInteraction;
+}
 
 + (id)messageCenterInteractionFromInteraction:(ATInteraction *)interaction {
 	ATMessageCenterInteraction *messageCenterInteraction = [[ATMessageCenterInteraction alloc] init];

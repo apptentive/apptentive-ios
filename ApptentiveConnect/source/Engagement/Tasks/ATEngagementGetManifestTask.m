@@ -48,7 +48,7 @@
 }
 
 - (BOOL)shouldArchive {
-	return YES;
+	return NO;
 }
 
 - (void)start {

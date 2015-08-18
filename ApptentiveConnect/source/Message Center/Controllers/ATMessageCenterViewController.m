@@ -528,10 +528,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (IBAction)clear:(UIButton *)sender {
-	NSString *title = ATLocalizedString(@"Are you sure you want to discard this message?", @"Confirm that user wants to discard draft message");
-	NSString *cancelButtonTitle = ATLocalizedString(@"Cancel", @"Cancel discarding draft");
-	NSString *discardButtonTitle = ATLocalizedString(@"Discard", @"Discard draft");
-	UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:cancelButtonTitle destructiveButtonTitle:discardButtonTitle otherButtonTitles:nil];
+	UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:self.interaction.composerCloseConfirmBody delegate:self cancelButtonTitle:self.interaction.composerCloseCancelButtonTitle destructiveButtonTitle:self.interaction.composerCloseDiscardButtonTitle otherButtonTitles:nil];
 	
 	if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
 		[actionSheet showFromRect:sender.frame inView:sender.superview animated:YES];

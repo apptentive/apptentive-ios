@@ -30,13 +30,8 @@ static NSString *ATMetricNameSurveyCancel = @"survey.cancel";
 static NSString *ATMetricNameSurveySubmit = @"survey.submit";
 static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 
-static NSString *ATMetricNameMessageCenterRead = @"message_center.read";
-static NSString *ATMetricNameMessageCenterSend = @"message_center.send";
-
-NSString *const ATMessageCenterMessageIDKey = @"ATMessageCenterMessageIDKey";
-NSString *const ATMessageCenterMessageNonceKey = @"ATMessageCenterMessageNonceKey";
-
 @interface ApptentiveMetrics (Private)
+
 - (void)addLaunchMetric;
 
 - (ATSurveyEvent)surveyEventTypeFromNotification:(NSNotification *)notification;
@@ -47,12 +42,9 @@ NSString *const ATMessageCenterMessageNonceKey = @"ATMessageCenterMessageNonceKe
 - (void)appDidEnterBackground:(NSNotification *)notification;
 - (void)appWillEnterForeground:(NSNotification *)notification;
 
-- (void)messageCenterDidRead:(NSNotification *)notification;
-- (void)messageCenterDidSend:(NSNotification *)notification;
-
 - (void)preferencesChanged:(NSNotification *)notification;
-
 - (void)updateWithCurrentPreferences;
+
 @end
 
 @implementation ApptentiveMetrics {
@@ -300,26 +292,6 @@ NSString *const ATMessageCenterMessageNonceKey = @"ATMessageCenterMessageNonceKe
 
 - (void)appWillEnterForeground:(NSNotification *)notification {
 	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch];
-}
-
-- (void)messageCenterDidRead:(NSNotification *)notification {
-	NSMutableDictionary *info = [[NSMutableDictionary alloc] init];
-	NSString *messageID = [[notification userInfo] objectForKey:ATMessageCenterMessageIDKey];
-	if (messageID != nil) {
-		info[@"message_id"] = messageID;
-	}
-	[self addMetricWithName:ATMetricNameMessageCenterRead info:info];
-	info = nil;
-}
-
-- (void)messageCenterDidSend:(NSNotification *)notification {
-	NSMutableDictionary *info = [[NSMutableDictionary alloc] init];
-	NSString *nonce = [[notification userInfo] objectForKey:ATMessageCenterMessageNonceKey];
-	if (nonce != nil) {
-		info[@"nonce"] = nonce;
-	}
-	[self addMetricWithName:ATMetricNameMessageCenterSend info:info];
-	info = nil;
 }
 
 - (void)preferencesChanged:(NSNotification *)notification {

@@ -426,6 +426,21 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.messageInputView.sendButton.enabled = textView.text.length > 0;
 	self.messageInputView.clearButton.enabled = textView.text.length > 0;
 	self.messageInputView.placeholderLabel.hidden = textView.text.length > 0;
+	
+	// Fix bug where text view doesn't scroll far enough down
+	// Adapted from http://stackoverflow.com/a/19277383/27951
+	CGRect line = [textView caretRectForPosition:textView.selectedTextRange.start];
+	CGFloat overflow = line.origin.y + line.size.height - ( textView.contentOffset.y + textView.bounds.size.height - textView.contentInset.bottom - textView.contentInset.top );
+	if ( overflow > 0 ) {
+		// Scroll caret to visible area
+		CGPoint offset = textView.contentOffset;
+		offset.y += overflow + textView.textContainerInset.bottom;
+		
+		// Cannot animate with setContentOffset:animated: or caret will not appear
+		[UIView animateWithDuration:.2 animations:^{
+			[textView setContentOffset:offset];
+		}];
+	}
 }
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView {

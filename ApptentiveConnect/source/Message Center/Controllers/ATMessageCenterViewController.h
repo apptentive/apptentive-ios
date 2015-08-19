@@ -14,7 +14,7 @@
 
 @protocol ATMessageCenterDismissalDelegate;
 
-@interface ATMessageCenterViewController : UITableViewController <ATMessageCenterDataSourceDelegate, UITextViewDelegate, UITextFieldDelegate, ATBackendMessageDelegate>
+@interface ATMessageCenterViewController : UITableViewController <ATMessageCenterDataSourceDelegate, UITextViewDelegate, UITextFieldDelegate, ATBackendMessageDelegate, UIActionSheetDelegate>
 
 @property (nonatomic, weak) NSObject<ATMessageCenterDismissalDelegate> *dismissalDelegate;
 

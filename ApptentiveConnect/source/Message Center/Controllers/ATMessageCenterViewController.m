@@ -117,8 +117,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	self.messageInputView.messageView.text = self.draftMessage ?: @"";
 	self.messageInputView.messageView.textContainerInset = UIEdgeInsetsMake(TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET);
-	[self.messageInputView.clearButton setImage:[ATBackend imageNamed:@"at_ClearButton"] forState:UIControlStateNormal];
-	[self.messageInputView.clearButton setImage:[ATBackend imageNamed:@"at_ClearButtonPressed"] forState:UIControlStateHighlighted];
+	[self.messageInputView.clearButton setImage:[[ATBackend imageNamed:@"at_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
 	
 	self.messageInputView.placeholderLabel.text = self.interaction.composerPlaceholderText;
 	self.messageInputView.placeholderLabel.hidden = self.messageInputView.messageView.text.length > 0;
@@ -459,6 +458,14 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[navigationBar.progressView setProgress:progress animated:animated];
 }
 
+#pragma mark - Action sheet delegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
+	if (buttonIndex == actionSheet.destructiveButtonIndex) {
+		[self discardDraft];
+	}
+}
+
 #pragma mark - Actions
 
 - (IBAction)dismiss:(id)sender {
@@ -506,14 +513,14 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.messageInputView.messageView becomeFirstResponder];
 }
 
-- (IBAction)clear:(id)sender {
-	self.messageInputView.messageView.text = nil;
-	[self.messageInputView.messageView resignFirstResponder];
+- (IBAction)clear:(UIButton *)sender {
+	UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:self.interaction.composerCloseConfirmBody delegate:self cancelButtonTitle:self.interaction.composerCloseCancelButtonTitle destructiveButtonTitle:self.interaction.composerCloseDiscardButtonTitle otherButtonTitles:nil];
 	
-	self.messageInputView.sendButton.enabled = NO;
-	self.messageInputView.clearButton.enabled = NO;
-	
-	[self updateState];
+	if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+		[actionSheet showFromRect:sender.frame inView:sender.superview animated:YES];
+	} else {
+		[actionSheet showFromToolbar:self.navigationController.toolbar];
+	}
 }
 
 - (IBAction)showWho:(id)sender {
@@ -789,6 +796,18 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (UIColor *)failedColor {
 	return [UIColor colorWithRed:0.8 green:0.375 blue:0.412 alpha:1];
+}
+
+- (void)discardDraft {
+	self.messageInputView.messageView.text = nil;
+	[self.messageInputView.messageView resignFirstResponder];
+	
+	self.messageInputView.sendButton.enabled = NO;
+	self.messageInputView.clearButton.enabled = NO;
+	
+	[self updateState];
+	
+	[self scrollToLastMessageAnimated:YES];
 }
 
 @end

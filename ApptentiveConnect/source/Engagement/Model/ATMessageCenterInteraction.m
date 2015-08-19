@@ -53,6 +53,18 @@
 	return self.configuration[@"composer"][@"send_button"];
 }
 
+- (NSString *)composerCloseConfirmBody {
+	return self.configuration[@"composer"][@"close_confirm_body"];
+}
+
+- (NSString *)composerCloseDiscardButtonTitle {
+	return self.configuration[@"composer"][@"close_discard_button"];
+}
+
+- (NSString *)composerCloseCancelButtonTitle {
+	return self.configuration[@"composer"][@"close_cancel_button"];
+}
+
 #pragma mark - Greeting
 
 - (NSString *)greetingTitle {

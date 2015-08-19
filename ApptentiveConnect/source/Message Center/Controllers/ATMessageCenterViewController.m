@@ -183,20 +183,17 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 
-	[self updateState];
+	NSString *message = self.messageInputView.messageView.text;
+	if (message && ![message isEqualToString:@""]) {
+		self.state = ATMessageCenterStateComposing;
+		[self.messageInputView.messageView becomeFirstResponder];
+	} else {
+		[self updateState];
+	}
 	[self resizeFooterView:nil];
 
 	if (self.state != ATMessageCenterStateEmpty && self.state != ATMessageCenterStateWhoCard) {
 		[self scrollToLastMessageAnimated:NO];
-	}
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-	[super viewDidAppear:animated];
-	
-	NSString *message = self.messageInputView.messageView.text;
-	if (message && ![message isEqualToString:@""]) {
-		[self.messageInputView.messageView becomeFirstResponder];
 	}
 }
 
@@ -241,7 +238,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			case ATMessageCenterMessageStatusFailed:
 				messageCell.statusLabel.hidden = NO;
 				messageCell.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
-				cell.layer.borderColor = [self failedColor].CGColor;
+				messageCell.layer.borderColor = [self failedColor].CGColor;
 				messageCell.statusLabel.textColor = [self failedColor];
 				messageCell.statusLabel.text = @"Failed";
 				break;
@@ -414,6 +411,21 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.messageInputView.sendButton.enabled = textView.text.length > 0;
 	self.messageInputView.clearButton.enabled = textView.text.length > 0;
 	self.messageInputView.placeholderLabel.hidden = textView.text.length > 0;
+	
+	// Fix bug where text view doesn't scroll far enough down
+	// Adapted from http://stackoverflow.com/a/19277383/27951
+	CGRect line = [textView caretRectForPosition:textView.selectedTextRange.start];
+	CGFloat overflow = line.origin.y + line.size.height - ( textView.contentOffset.y + textView.bounds.size.height - textView.contentInset.bottom - textView.contentInset.top );
+	if ( overflow > 0 ) {
+		// Scroll caret to visible area
+		CGPoint offset = textView.contentOffset;
+		offset.y += overflow + textView.textContainerInset.bottom;
+		
+		// Cannot animate with setContentOffset:animated: or caret will not appear
+		[UIView animateWithDuration:.2 animations:^{
+			[textView setContentOffset:offset];
+		}];
+	}
 }
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
@@ -424,16 +436,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
 	[self scrollToFooterView:nil];
-}
-
-- (void)textViewDidEndEditing:(UITextView *)textView {
-	if (self.state != ATMessageCenterStateWhoCard)
-		[self updateState];
-}
-
-// Fix iOS bug where scroll sometimes doesn't follow selection
-- (void)textViewDidChangeSelection:(UITextView *)textView {
-	[textView scrollRangeToVisible:textView.selectedRange];
 }
 
 #pragma mark Text field delegate
@@ -657,12 +659,14 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				newFooter = self.statusView;
 				self.statusView.mode = ATMessageCenterStatusModeNetworkError;
 				self.statusView.statusLabel.text =[@[self.interaction.networkErrorTitle, self.interaction.networkErrorBody] componentsJoinedByString:@"\n"];
+				[self scrollToFooterView:nil];
 				break;
 				
 			case ATMessageCenterStateHTTPError:
 				newFooter = self.statusView;
 				self.statusView.mode = ATMessageCenterStatusModeHTTPError;
 				self.statusView.statusLabel.text = [@[self.interaction.HTTPErrorTitle, self.interaction.networkErrorBody] componentsJoinedByString:@"\n"];
+				[self scrollToFooterView:nil];
 				break;
 				
 			case ATMessageCenterStateReplied:
@@ -780,7 +784,17 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)scrollToLastMessageAnimated:(BOOL)animated {
-	[self.tableView scrollToRowAtIndexPath:self.indexPathOfLastMessage atScrollPosition:UITableViewScrollPositionTop animated:animated];
+	[self resizeFooterView:nil];
+	
+	CGRect rectToScrollTo = [self rectOfLastMessage];
+	CGFloat footerHeight = CGRectGetHeight(self.activeFooterView.bounds);
+	CGFloat tableViewHeight = CGRectGetHeight(self.tableView.bounds) - self.tableView.contentInset.top - self.tableView.contentInset.bottom - footerHeight;
+	
+	if (CGRectGetHeight(rectToScrollTo) > tableViewHeight) {
+		rectToScrollTo = CGRectMake(rectToScrollTo.origin.x, CGRectGetMaxY(rectToScrollTo) - tableViewHeight, rectToScrollTo.size.width, tableViewHeight + footerHeight);
+	}
+	
+	[self.tableView scrollRectToVisible:rectToScrollTo animated:animated];
 }
 
 - (void)removeUnsentContextMessages {

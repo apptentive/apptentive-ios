@@ -56,6 +56,7 @@ NSString *const ATInteractionMessageCenterEventLabelKeyboardOpen = @"keyboard_op
 NSString *const ATInteractionMessageCenterEventLabelKeyboardClose = @"keyboard_close";
 
 NSString *const ATInteractionMessageCenterEventLabelProfileOpen = @"profile_open";
+NSString *const ATInteractionMessageCenterEventLabelProfileSubmit = @"profile_submit";
 
 NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
 
@@ -580,6 +581,21 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	if (![ATUtilities emailAddressIsValid:self.profileView.emailField.text]) {
 		return;
 	}
+	
+	NSString *buttonLabel = nil;
+	if ([sender isKindOfClass:[UIButton class]]) {
+		buttonLabel = ((UIButton *)sender).titleLabel.text;
+	} else if ([sender isKindOfClass:[UITextField class]]) {
+		buttonLabel = @"return_key";
+	}
+	
+	NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+	[userInfo setObject:@(self.interaction.profileRequired) forKey:@"required"];
+	if (buttonLabel) {
+		[userInfo setObject:buttonLabel forKey:@"button_label"];
+	}
+	
+	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileSubmit fromViewController:self userInfo:userInfo];
 	
 	[ATConnect sharedConnection].personName = self.profileView.nameField.text;
 	[ATConnect sharedConnection].personEmailAddress = self.profileView.emailField.text;

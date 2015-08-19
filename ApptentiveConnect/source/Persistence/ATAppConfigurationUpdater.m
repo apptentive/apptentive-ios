@@ -18,6 +18,7 @@ NSString *const ATAppConfigurationLastUpdatePreferenceKey = @"ATAppConfiguration
 NSString *const ATAppConfigurationExpirationPreferenceKey = @"ATAppConfigurationExpirationPreferenceKey";
 NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigurationMetricsEnabledPreferenceKey";
 NSString *const ATAppConfigurationHideBrandingKey = @"ATAppConfigurationHideBrandingKey";
+NSString *const ATAppConfigurationNotificationPopupsEnabledKey = @"ATAppConfigurationNotificationPopupsEnabledKey";
 
 NSString *const ATAppConfigurationMessageCenterForegroundRefreshIntervalKey = @"ATAppConfigurationMessageCenterForegroundRefreshIntervalKey";
 NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey = @"ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey";
@@ -212,6 +213,20 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 			NSNumber *oldBGRefresh = [defaults objectForKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey];
 			if (!oldBGRefresh || [oldBGRefresh intValue] != [bgRefresh intValue]) {
 				[defaults setObject:bgRefresh forKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey];
+				hasConfigurationChanges = YES;
+			}
+		}
+	}
+	
+	if ([jsonConfiguration objectForKey:@"notification_popup"]) {
+		NSObject *notificationPopupConfiguration = [jsonConfiguration objectForKey:@"notification_popup"];
+		if ([notificationPopupConfiguration isKindOfClass:[NSDictionary class]]) {
+			NSDictionary *np = (NSDictionary *)notificationPopupConfiguration;
+			
+			NSNumber *npEnabled = [np objectForKey:@"enabled"];
+			NSNumber *oldNPEnabled = [defaults objectForKey:ATAppConfigurationNotificationPopupsEnabledKey];
+			if (!oldNPEnabled || oldNPEnabled.boolValue != npEnabled.boolValue) {
+				[defaults setObject:npEnabled forKey:ATAppConfigurationNotificationPopupsEnabledKey];
 				hasConfigurationChanges = YES;
 			}
 		}

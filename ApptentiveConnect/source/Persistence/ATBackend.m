@@ -668,6 +668,10 @@ static NSURLCache *imageCache = nil;
 	return [[NSUserDefaults standardUserDefaults] boolForKey:ATAppConfigurationHideBrandingKey];
 }
 
+- (BOOL)notificationPopupsEnabled {
+	return [[NSUserDefaults standardUserDefaults] boolForKey:ATAppConfigurationNotificationPopupsEnabledKey];
+}
+
 - (void)updateConversationIfNeeded {
 	if (![[NSThread currentThread] isMainThread]) {
 		[self performSelectorOnMainThread:@selector(updateConversationIfNeeded) withObject:nil waitUntilDone:NO];

@@ -473,7 +473,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 #pragma mark - Message notification banner
 
 - (void)showNotificationBannerForMessage:(ATAbstractMessage *)message {
-	if ([message isKindOfClass:[ATTextMessage class]]) {
+	if ([ATBackend sharedBackend].notificationPopupsEnabled && [message isKindOfClass:[ATTextMessage class]]) {
 		ATTextMessage *textMessage = (ATTextMessage *)message;
 		NSURL *profilePhotoURL = textMessage.sender.profilePhotoURL ? [NSURL URLWithString:textMessage.sender.profilePhotoURL] : nil;
 		
@@ -483,7 +483,6 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		
 		[banner show];
 	}
-	
 }
 
 - (void)userDidTapBanner:(ATBannerViewController *)banner {

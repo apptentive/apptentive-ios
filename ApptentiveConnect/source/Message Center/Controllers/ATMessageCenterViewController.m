@@ -56,6 +56,7 @@ NSString *const ATInteractionMessageCenterEventLabelKeyboardOpen = @"keyboard_op
 NSString *const ATInteractionMessageCenterEventLabelKeyboardClose = @"keyboard_close";
 
 NSString *const ATInteractionMessageCenterEventLabelProfileOpen = @"profile_open";
+NSString *const ATInteractionMessageCenterEventLabelProfileClose = @"profile_close";
 NSString *const ATInteractionMessageCenterEventLabelProfileSubmit = @"profile_submit";
 
 NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
@@ -613,6 +614,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (IBAction)skipWho:(id)sender {
+	NSDictionary *userInfo = @{@"required": @(self.interaction.profileRequired)};
+	if ([sender isKindOfClass:[UIButton class]]) {
+		userInfo = @{@"required": @(self.interaction.profileRequired), @"method": @"button", @"button_label": ((UIButton *)sender).titleLabel.text};
+
+	}
+	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileClose fromViewController:sender userInfo:userInfo];
+	
 	[self updateState];
 	[self.view endEditing:YES];
 	[self resizeFooterView:nil];

@@ -8,15 +8,12 @@
 
 #import "ATAboutViewController.h"
 #import "ATBackend.h"
-<<<<<<< HEAD
 #import "ATConnect_Private.h"
-=======
 #import "ATEngagementBackend.h"
 
 NSString *const ATInteractionAboutViewInteractionKey = @"About";
 NSString *const ATInteractionAboutViewEventLabelLaunch = @"launch";
 NSString *const ATInteractionAboutViewEventLabelClose = @"close";
->>>>>>> eventsBI
 
 @interface ATAboutViewController ()
 

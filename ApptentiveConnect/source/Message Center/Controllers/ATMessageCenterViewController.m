@@ -470,20 +470,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self scrollToFooterView:nil];
 }
 
-<<<<<<< HEAD
-=======
-- (void)textViewDidEndEditing:(UITextView *)textView {
-	if (self.state != ATMessageCenterStateWhoCard) {
-		[self updateState];
-	}
-}
-
-// Fix iOS bug where scroll sometimes doesn't follow selection
-- (void)textViewDidChangeSelection:(UITextView *)textView {
-	[textView scrollRangeToVisible:textView.selectedRange];
-}
-
->>>>>>> eventsBI
 #pragma mark Text field delegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -741,24 +727,20 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				newFooter = self.statusView;
 				self.statusView.mode = ATMessageCenterStatusModeNetworkError;
 				self.statusView.statusLabel.text =[@[self.interaction.networkErrorTitle, self.interaction.networkErrorBody] componentsJoinedByString:@"\n"];
-<<<<<<< HEAD
-				[self scrollToFooterView:nil];
-=======
 				
 				[self.interaction engage:ATInteractionMessageCenterEventLabelNetworkError fromViewController:self];
->>>>>>> eventsBI
+				
+				[self scrollToFooterView:nil];
 				break;
 				
 			case ATMessageCenterStateHTTPError:
 				newFooter = self.statusView;
 				self.statusView.mode = ATMessageCenterStatusModeHTTPError;
 				self.statusView.statusLabel.text = [@[self.interaction.HTTPErrorTitle, self.interaction.networkErrorBody] componentsJoinedByString:@"\n"];
-<<<<<<< HEAD
-				[self scrollToFooterView:nil];
-=======
 				
 				[self.interaction engage:ATInteractionMessageCenterEventLabelHTTPError fromViewController:self];
->>>>>>> eventsBI
+
+				[self scrollToFooterView:nil];
 				break;
 				
 			case ATMessageCenterStateReplied:

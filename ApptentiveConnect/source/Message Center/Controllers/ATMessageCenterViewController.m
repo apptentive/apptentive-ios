@@ -68,7 +68,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @property (strong, nonatomic) IBOutlet ATMessageCenterProfileView *profileView;
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *composeButtonItem;
-@property (weak, nonatomic) IBOutlet UIButton *aboutButton;
 
 @property (nonatomic, strong) ATMessageCenterDataSource *dataSource;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
@@ -109,11 +108,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.greetingView.titleLabel.text = self.interaction.greetingTitle;
 	self.greetingView.messageLabel.text = self.interaction.greetingBody;
 	self.greetingView.imageView.imageURL = self.interaction.greetingImageURL;
+	self.greetingView.aboutButton.hidden = !self.interaction.branding;
 	
 	self.statusView.mode = ATMessageCenterStatusModeEmpty;
-	
-	NSString *branding = self.interaction.branding;
-	self.aboutButton.hidden = !branding;
 	
 	self.messageInputView.messageView.text = self.draftMessage ?: @"";
 	self.messageInputView.messageView.textContainerInset = UIEdgeInsetsMake(TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET);

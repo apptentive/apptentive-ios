@@ -90,6 +90,7 @@
                                 <constraint firstAttribute="bottom" secondItem="sQH-Xo-hct" secondAttribute="bottom" id="kL9-zg-e7Q"/>
                             </constraints>
                             <connections>
+                                <outlet property="aboutButton" destination="bNv-Jb-zyu" id="rId-iw-XKV"/>
                                 <outlet property="bottomBorderHeightConstraint" destination="xWx-Gq-u4K" id="CTY-ud-t8E"/>
                                 <outlet property="imageCenterXConstraint" destination="KtR-Jf-Err" id="kBs-1E-4UU"/>
                                 <outlet property="imageCenterYConstraint" destination="agk-W3-azS" id="IMI-MO-RVe"/>
@@ -506,7 +507,6 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                     <connections>
-                        <outlet property="aboutButton" destination="bNv-Jb-zyu" id="vd6-7Y-wAy"/>
                         <outlet property="composeButtonItem" destination="7K8-9v-8QL" id="hvW-wV-G14"/>
                         <outlet property="greetingView" destination="3OP-Us-sTC" id="gir-MU-eQO"/>
                         <outlet property="messageInputView" destination="Aj5-aD-yTM" id="mrz-a8-xN6"/>

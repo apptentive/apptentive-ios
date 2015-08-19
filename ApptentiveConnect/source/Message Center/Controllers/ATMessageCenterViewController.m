@@ -55,6 +55,8 @@ NSString *const ATInteractionMessageCenterEventLabelComposeClosed = @"compose_cl
 NSString *const ATInteractionMessageCenterEventLabelKeyboardOpen = @"keyboard_open";
 NSString *const ATInteractionMessageCenterEventLabelKeyboardClose = @"keyboard_close";
 
+NSString *const ATInteractionMessageCenterEventLabelProfileOpen = @"profile_open";
+
 NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
 
 typedef NS_ENUM(NSInteger, ATMessageCenterState) {
@@ -455,8 +457,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
-	if (self.state != ATMessageCenterStateWhoCard)
+	if (self.state != ATMessageCenterStateWhoCard) {
 		[self updateState];
+	}
 }
 
 // Fix iOS bug where scroll sometimes doesn't follow selection
@@ -517,6 +520,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[[ATBackend sharedBackend] sendTextMessageWithBody:message];
 		
 		if (self.interaction.profileRequested && ![ATUtilities emailAddressIsValid:[ATPersonInfo currentPerson].emailAddress]) {
+			[self.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{@"required": @(self.interaction.profileRequired), @"trigger": @"automatic"}];
+			
 			self.state = ATMessageCenterStateWhoCard;
 		} else {
 			[self updateState];
@@ -556,6 +561,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	[self.profileView.saveButton setTitle:self.interaction.profileEditSaveButtonTitle forState:UIControlStateNormal];
 	[self.profileView.skipButton setTitle:self.interaction.profileEditSkipButtonTitle forState:UIControlStateNormal];
+	
+	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{@"required": @(self.interaction.profileRequired), @"trigger": @"button"}];
 	
 	self.state = ATMessageCenterStateWhoCard;
 	
@@ -606,6 +613,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)updateState {
 	if (self.interaction.profileRequired && ![ATUtilities emailAddressIsValid:[ATConnect sharedConnection].personEmailAddress]) {
+		[self.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{@"required": @(self.interaction.profileRequired), @"trigger": @"automatic"}];
+		
 		self.state = ATMessageCenterStateWhoCard;
 	} else if (!self.dataSource.hasNonContextMessages) {
 		self.state = ATMessageCenterStateEmpty;

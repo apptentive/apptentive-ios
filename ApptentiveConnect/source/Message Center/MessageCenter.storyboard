@@ -69,6 +69,7 @@
                                 </view>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="detailDisclosure" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bNv-Jb-zyu">
                                     <rect key="frame" x="384" y="8" width="22" height="22"/>
+                                    <color key="tintColor" red="0.68627450980392157" green="0.71372549019607845" blue="0.75686274509803919" alpha="1" colorSpace="calibratedRGB"/>
                                     <state key="normal">
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
@@ -123,6 +124,7 @@
                                                                 <constraint firstAttribute="width" constant="16" id="2HR-n8-GVi"/>
                                                                 <constraint firstAttribute="width" secondItem="Hme-XS-svZ" secondAttribute="height" multiplier="1:1" id="3iU-ah-ldr"/>
                                                             </constraints>
+                                                            <color key="tintColor" red="0.68627450980392157" green="0.71372549019607845" blue="0.75686274509803919" alpha="1" colorSpace="calibratedRGB"/>
                                                             <state key="normal">
                                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                             </state>

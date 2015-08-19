@@ -37,6 +37,7 @@ NSString *const ATEngagementInteractionsInvokesTotalKey = @"ATEngagementInteract
 NSString *const ATEngagementInteractionsInvokesVersionKey = @"ATEngagementInteractionsInvokesVersionKey";
 NSString *const ATEngagementInteractionsInvokesLastDateKey = @"ATEngagementInteractionsInvokesLastDateKey";
 NSString *const ATEngagementInteractionsInvokesBuildKey = @"ATEngagementInteractionsInvokesBuildKey";
+NSString *const ATEngagementInteractionsSDKVersionKey = @"ATEngagementInteractionsSDKVersionKey";
 
 NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEngagementCachedInteractionsExpirationPreferenceKey";
 
@@ -114,6 +115,11 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	alwaysRetrieveManifest = YES;
 #endif
 	if (alwaysRetrieveManifest) {
+		return YES;
+	}
+	
+	NSString *previousVersion = [[NSUserDefaults standardUserDefaults] stringForKey:ATEngagementInteractionsSDKVersionKey];
+	if (![previousVersion isEqualToString:kATConnectVersionString]) {
 		return YES;
 	}
 	
@@ -198,6 +204,8 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 		[defaults setObject:@{} forKey:ATEngagementInteractionsInvokesVersionKey];
 		[defaults setObject:@{} forKey:ATEngagementInteractionsInvokesBuildKey];
 	}
+	
+	[defaults setObject:kATConnectVersionString forKey:ATEngagementInteractionsSDKVersionKey];
 }
 
 + (NSString *)cachedTargetsStoragePath {

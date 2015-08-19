@@ -8,7 +8,15 @@
 
 #import "ATAboutViewController.h"
 #import "ATBackend.h"
+<<<<<<< HEAD
 #import "ATConnect_Private.h"
+=======
+#import "ATEngagementBackend.h"
+
+NSString *const ATInteractionAboutViewInteractionKey = @"About";
+NSString *const ATInteractionAboutViewEventLabelLaunch = @"launch";
+NSString *const ATInteractionAboutViewEventLabelClose = @"close";
+>>>>>>> eventsBI
 
 @interface ATAboutViewController ()
 
@@ -30,8 +38,14 @@
 
 @implementation ATAboutViewController
 
+- (NSString *)codePointForEvent:(NSString *)event {
+	return [ATEngagementBackend codePointForVendor:ATEngagementCodePointApptentiveVendorKey interactionType:ATInteractionAboutViewInteractionKey event:event];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+	
+	[[ATEngagementBackend sharedBackend] engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelLaunch] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
 	
 	self.imageView.image = [ATBackend imageNamed:@"at_apptentive_logo"];
 	// TODO: Look into localizing the storyboard instead
@@ -53,6 +67,8 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
+	
+	[[ATEngagementBackend sharedBackend] engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelClose] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
 	
 	[self.navigationController setToolbarHidden:NO animated:animated];
 }

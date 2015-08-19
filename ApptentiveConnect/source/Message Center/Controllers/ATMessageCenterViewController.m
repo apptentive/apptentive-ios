@@ -46,6 +46,26 @@
 #define STATUS_LABEL_MARGIN 6.0
 #define BODY_FONT_SIZE 17.0
 
+NSString *const ATInteractionMessageCenterEventLabelLaunch = @"launch";
+NSString *const ATInteractionMessageCenterEventLabelClose = @"close";
+NSString *const ATInteractionMessageCenterEventLabelAttach = @"attach";
+
+NSString *const ATInteractionMessageCenterEventLabelComposeOpen = @"compose_open";
+NSString *const ATInteractionMessageCenterEventLabelComposeClosed = @"compose_closed";
+NSString *const ATInteractionMessageCenterEventLabelKeyboardOpen = @"keyboard_open";
+NSString *const ATInteractionMessageCenterEventLabelKeyboardClose = @"keyboard_close";
+
+NSString *const ATInteractionMessageCenterEventLabelGreetingMessage = @"greeting_message";
+NSString *const ATInteractionMessageCenterEventLabelStatus = @"status";
+NSString *const ATInteractionMessageCenterEventLabelHTTPError = @"message_http_error";
+NSString *const ATInteractionMessageCenterEventLabelNetworkError = @"message_network_error";
+
+NSString *const ATInteractionMessageCenterEventLabelProfileOpen = @"profile_open";
+NSString *const ATInteractionMessageCenterEventLabelProfileClose = @"profile_close";
+NSString *const ATInteractionMessageCenterEventLabelProfileName = @"profile_name";
+NSString *const ATInteractionMessageCenterEventLabelProfileEmail = @"profile_email";
+NSString *const ATInteractionMessageCenterEventLabelProfileSubmit = @"profile_submit";
+
 NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
 
 typedef NS_ENUM(NSInteger, ATMessageCenterState) {
@@ -91,6 +111,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
+	[self.interaction engage:ATInteractionMessageCenterEventLabelLaunch fromViewController:self];
+	
 	self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
 	
 	self.dataSource = [[ATMessageCenterDataSource alloc] initWithDelegate:self];
@@ -109,6 +131,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.greetingView.titleLabel.text = self.interaction.greetingTitle;
 	self.greetingView.messageLabel.text = self.interaction.greetingBody;
 	self.greetingView.imageView.imageURL = self.interaction.greetingImageURL;
+	self.greetingView.isOnScreen = NO;
 	
 	self.statusView.mode = ATMessageCenterStatusModeEmpty;
 	
@@ -157,6 +180,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardWillChangeFrameNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToFooterView:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardDidHideNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
 }
 
 - (void)dealloc {
@@ -191,6 +216,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[self updateState];
 	}
 	[self resizeFooterView:nil];
+	[self engageGreetingViewEventIfNecessary];
 
 	if (self.state != ATMessageCenterStateEmpty && self.state != ATMessageCenterStateWhoCard) {
 		[self scrollToLastMessageAnimated:NO];
@@ -340,6 +366,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	headerView.textLabel.font = [UIFont boldSystemFontOfSize:DATE_FONT_SIZE];
 }
 
+#pragma mark Scroll view delegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+	[self engageGreetingViewEventIfNecessary];
+}
+
 #pragma mark Fetch results controller delegate
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
@@ -438,6 +470,20 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self scrollToFooterView:nil];
 }
 
+<<<<<<< HEAD
+=======
+- (void)textViewDidEndEditing:(UITextView *)textView {
+	if (self.state != ATMessageCenterStateWhoCard) {
+		[self updateState];
+	}
+}
+
+// Fix iOS bug where scroll sometimes doesn't follow selection
+- (void)textViewDidChangeSelection:(UITextView *)textView {
+	[textView scrollRangeToVisible:textView.selectedRange];
+}
+
+>>>>>>> eventsBI
 #pragma mark Text field delegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -471,6 +517,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 #pragma mark - Actions
 
 - (IBAction)dismiss:(id)sender {
+	[self.interaction engage:ATInteractionMessageCenterEventLabelClose fromViewController:self];
+	
 	[self.dismissalDelegate messageCenterWillDismiss:self];
 	[self.dataSource stop];
 	
@@ -497,6 +545,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[[ATBackend sharedBackend] sendTextMessageWithBody:message];
 		
 		if (self.interaction.profileRequested && ![ATUtilities emailAddressIsValid:[ATPersonInfo currentPerson].emailAddress]) {
+			[self.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{@"required": @(self.interaction.profileRequired), @"trigger": @"automatic"}];
+			
 			self.state = ATMessageCenterStateWhoCard;
 		} else {
 			[self updateState];
@@ -537,6 +587,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.profileView.saveButton setTitle:self.interaction.profileEditSaveButtonTitle forState:UIControlStateNormal];
 	[self.profileView.skipButton setTitle:self.interaction.profileEditSkipButtonTitle forState:UIControlStateNormal];
 	
+	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{@"required": @(self.interaction.profileRequired), @"trigger": @"button"}];
+	
 	self.state = ATMessageCenterStateWhoCard;
 	
 	[self resizeFooterView:nil];
@@ -554,8 +606,27 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		return;
 	}
 	
+	NSString *buttonLabel = nil;
+	if ([sender isKindOfClass:[UIButton class]]) {
+		buttonLabel = ((UIButton *)sender).titleLabel.text;
+	} else if ([sender isKindOfClass:[UITextField class]]) {
+		buttonLabel = @"return_key";
+	}
+	
+	NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+	[userInfo setObject:@(self.interaction.profileRequired) forKey:@"required"];
+	if (buttonLabel) {
+		[userInfo setObject:buttonLabel forKey:@"button_label"];
+	}
+	
+	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileSubmit fromViewController:self userInfo:userInfo];
+	
 	[ATConnect sharedConnection].personName = self.profileView.nameField.text;
+	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileName fromViewController:self userInfo:@{@"length": @(self.profileView.nameField.text.length)}];
+
 	[ATConnect sharedConnection].personEmailAddress = self.profileView.emailField.text;
+	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileEmail fromViewController:self userInfo:@{@"length": @(self.profileView.emailField.text.length), @"valid": @([ATUtilities emailAddressIsValid:self.profileView.emailField.text])}];
+	
 	[[ATBackend sharedBackend] updatePersonIfNeeded];
 	
 	self.composeButtonItem.enabled = YES;
@@ -570,6 +641,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (IBAction)skipWho:(id)sender {
+	NSDictionary *userInfo = @{@"required": @(self.interaction.profileRequired)};
+	if ([sender isKindOfClass:[UIButton class]]) {
+		userInfo = @{@"required": @(self.interaction.profileRequired), @"method": @"button", @"button_label": ((UIButton *)sender).titleLabel.text};
+
+	}
+	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileClose fromViewController:sender userInfo:userInfo];
+	
 	[self updateState];
 	[self.view endEditing:YES];
 	[self resizeFooterView:nil];
@@ -584,6 +662,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)updateState {
 	if (self.interaction.profileRequired && ![ATUtilities emailAddressIsValid:[ATConnect sharedConnection].personEmailAddress]) {
+		[self.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{@"required": @(self.interaction.profileRequired), @"trigger": @"automatic"}];
+		
 		self.state = ATMessageCenterStateWhoCard;
 	} else if (!self.dataSource.hasNonContextMessages) {
 		self.state = ATMessageCenterStateEmpty;
@@ -653,20 +733,32 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				newFooter = self.statusView;
 				self.statusView.mode = ATMessageCenterStatusModeEmpty;
 				self.statusView.statusLabel.text = self.interaction.statusBody;
+				
+				[self.interaction engage:ATInteractionMessageCenterEventLabelStatus fromViewController:self];
 				break;
 				
 			case ATMessageCenterStateNetworkError:
 				newFooter = self.statusView;
 				self.statusView.mode = ATMessageCenterStatusModeNetworkError;
 				self.statusView.statusLabel.text =[@[self.interaction.networkErrorTitle, self.interaction.networkErrorBody] componentsJoinedByString:@"\n"];
+<<<<<<< HEAD
 				[self scrollToFooterView:nil];
+=======
+				
+				[self.interaction engage:ATInteractionMessageCenterEventLabelNetworkError fromViewController:self];
+>>>>>>> eventsBI
 				break;
 				
 			case ATMessageCenterStateHTTPError:
 				newFooter = self.statusView;
 				self.statusView.mode = ATMessageCenterStatusModeHTTPError;
 				self.statusView.statusLabel.text = [@[self.interaction.HTTPErrorTitle, self.interaction.networkErrorBody] componentsJoinedByString:@"\n"];
+<<<<<<< HEAD
 				[self scrollToFooterView:nil];
+=======
+				
+				[self.interaction engage:ATInteractionMessageCenterEventLabelHTTPError fromViewController:self];
+>>>>>>> eventsBI
 				break;
 				
 			case ATMessageCenterStateReplied:
@@ -681,6 +773,15 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		if (newFooter != oldFooter) {
 			newFooter.alpha = 0;
 			newFooter.hidden = NO;
+			
+			if (oldFooter == self.messageInputView) {
+				NSNumber *bodyLength = @(self.messageInputView.messageView.text.length);
+				[self.interaction engage:ATInteractionMessageCenterEventLabelComposeClosed fromViewController:self userInfo:@{@"body_length": bodyLength}];
+			}
+			
+			if (newFooter == self.messageInputView) {
+				[self.interaction engage:ATInteractionMessageCenterEventLabelComposeOpen fromViewController:self];
+			}
 
 			self.activeFooterView = newFooter;
 
@@ -779,6 +880,16 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.tableView.tableFooterView = self.tableView.tableFooterView;
 }
 
+- (void)keyboardDidShow:(NSNotification *)notification {
+	NSNumber *bodyLength = @(self.messageInputView.messageView.text.length);
+	[self.interaction engage:ATInteractionMessageCenterEventLabelKeyboardOpen fromViewController:self userInfo:@{@"body_length": bodyLength}];
+}
+
+- (void)keyboardDidHide:(NSNotification *)notification {
+	NSNumber *bodyLength = @(self.messageInputView.messageView.text.length);
+	[self.interaction engage:ATInteractionMessageCenterEventLabelKeyboardClose fromViewController:self userInfo:@{@"body_length": bodyLength}];
+}
+
 - (NSString *)draftMessage {
 	return [[NSUserDefaults standardUserDefaults] stringForKey:ATMessageCenterDraftMessageKey] ?: @"";
 }
@@ -801,6 +912,16 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingState == %d)", ATPendingMessageStateComposing];
 		[ATData removeEntitiesNamed:@"ATAutomatedMessage" withPredicate:fetchPredicate];
+	}
+}
+
+- (void)engageGreetingViewEventIfNecessary {
+	BOOL greetingOnScreen = self.tableView.contentOffset.y < self.greetingView.bounds.size.height;
+	if (self.greetingView.isOnScreen != greetingOnScreen) {
+		if (greetingOnScreen) {
+			[self.interaction engage:ATInteractionMessageCenterEventLabelGreetingMessage fromViewController:self];
+		}
+		self.greetingView.isOnScreen = greetingOnScreen;
 	}
 }
 

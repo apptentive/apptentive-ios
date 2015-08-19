@@ -12,7 +12,6 @@
 #import "ATBackend.h"
 #import "ATData.h"
 #import "ATEvent.h"
-#import "ATMessageCenterMetrics.h"
 #import "ATMetric.h"
 #import "ATRecordTask.h"
 #import "ATRecordRequestTask.h"
@@ -31,20 +30,8 @@ static NSString *ATMetricNameSurveyCancel = @"survey.cancel";
 static NSString *ATMetricNameSurveySubmit = @"survey.submit";
 static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 
-static NSString *ATMetricNameMessageCenterLaunch = @"message_center.launch";
-static NSString *ATMetricNameMessageCenterClose = @"message_center.close";
-static NSString *ATMetricNameMessageCenterAttach = @"message_center.attach";
-static NSString *ATMetricNameMessageCenterRead = @"message_center.read";
-static NSString *ATMetricNameMessageCenterSend = @"message_center.send";
-
-static NSString *ATMetricNameMessageCenterIntroLaunch = @"message_center.intro.launch";
-static NSString *ATMetricNameMessageCenterIntroSend = @"message_center.intro.send";
-static NSString *ATMetricNameMessageCenterIntroCancel = @"message_center.intro.cancel";
-static NSString *ATMetricNameMessageCenterThankYouLaunch = @"message_center.thank_you.launch";
-static NSString *ATMetricNameMessageCenterThankYouMessages = @"message_center.thank_you.messages";
-static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank_you.close";
-
 @interface ApptentiveMetrics (Private)
+
 - (void)addLaunchMetric;
 
 - (ATSurveyEvent)surveyEventTypeFromNotification:(NSNotification *)notification;
@@ -55,22 +42,9 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 - (void)appDidEnterBackground:(NSNotification *)notification;
 - (void)appWillEnterForeground:(NSNotification *)notification;
 
-- (void)messageCenterDidLaunch:(NSNotification *)notification;
-- (void)messageCenterDidClose:(NSNotification *)notification;
-- (void)messageCenterDidAttach:(NSNotification *)notification;
-- (void)messageCenterDidRead:(NSNotification *)notification;
-- (void)messageCenterDidSend:(NSNotification *)notification;
-
-- (void)messageCenterIntroDidLaunch:(NSNotification *)notification;
-- (void)messageCenterIntroDidSend:(NSNotification *)notification;
-- (void)messageCenterIntroDidCancel:(NSNotification *)notification;
-- (void)messageCenterIntroThankYouDidLaunch:(NSNotification *)notification;
-- (void)messageCenterIntroThankYouHitMessages:(NSNotification *)notification;
-- (void)messageCenterIntroThankYouDidClose:(NSNotification *)notification;
-
 - (void)preferencesChanged:(NSNotification *)notification;
-
 - (void)updateWithCurrentPreferences;
+
 @end
 
 @implementation ApptentiveMetrics {
@@ -187,7 +161,6 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyDidHide:) name:ATSurveyDidHideWindowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyDidAnswerQuestion:) name:ATSurveyDidAnswerQuestionNotification object:nil];
 		
-		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(preferencesChanged:) name:ATConfigurationPreferencesChangedNotification object:nil];
 		
 #if TARGET_OS_IPHONE
@@ -197,22 +170,7 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 #elif TARGET_OS_MAC
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
 #endif
-		
-		
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterDidLaunch:) name:ATMessageCenterDidShowNotification object:nil];
 		[self performSelector:@selector(addLaunchMetric) withObject:nil afterDelay:0.1];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterDidClose:) name:ATMessageCenterDidHideNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterDidAttach:) name:ATMessageCenterDidAttachNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterDidRead:) name:ATMessageCenterDidReadNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterDidSend:) name:ATMessageCenterDidSendNotification object:nil];
-		
-		
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroDidLaunch:) name:ATMessageCenterIntroDidShowNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroDidSend:) name:ATMessageCenterIntroDidSendNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroDidCancel:) name:ATMessageCenterIntroDidCancelNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroThankYouDidLaunch:) name:ATMessageCenterIntroThankYouDidShowNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroThankYouHitMessages:) name:ATMessageCenterIntroThankYouHitMessagesNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageCenterIntroThankYouDidClose:) name:ATMessageCenterIntroThankYouDidCloseNotification object:nil];
 	}
 }
 
@@ -334,68 +292,6 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 
 - (void)appWillEnterForeground:(NSNotification *)notification {
 	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch];
-}
-
-- (void)messageCenterDidLaunch:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameMessageCenterLaunch info:nil];
-}
-
-- (void)messageCenterDidClose:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameMessageCenterClose info:nil];
-}
-
-- (void)messageCenterDidAttach:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameMessageCenterAttach info:nil];
-}
-
-- (void)messageCenterDidRead:(NSNotification *)notification {
-	NSMutableDictionary *info = [[NSMutableDictionary alloc] init];
-	NSString *messageID = [[notification userInfo] objectForKey:ATMessageCenterMessageIDKey];
-	if (messageID != nil) {
-		info[@"message_id"] = messageID;
-	}
-	[self addMetricWithName:ATMetricNameMessageCenterRead info:info];
-	info = nil;
-}
-
-- (void)messageCenterDidSend:(NSNotification *)notification {
-	NSMutableDictionary *info = [[NSMutableDictionary alloc] init];
-	NSString *nonce = [[notification userInfo] objectForKey:ATMessageCenterMessageNonceKey];
-	if (nonce != nil) {
-		info[@"nonce"] = nonce;
-	}
-	[self addMetricWithName:ATMetricNameMessageCenterSend info:info];
-	info = nil;
-}
-
-- (void)messageCenterIntroDidLaunch:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameMessageCenterIntroLaunch info:nil];
-}
-
-- (void)messageCenterIntroDidSend:(NSNotification *)notification {
-	NSMutableDictionary *info = [[NSMutableDictionary alloc] init];
-	NSString *nonce = [[notification userInfo] objectForKey:ATMessageCenterMessageNonceKey];
-	if (nonce != nil) {
-		info[@"nonce"] = nonce;
-	}
-	[self addMetricWithName:ATMetricNameMessageCenterIntroSend info:info];
-	info = nil;
-}
-
-- (void)messageCenterIntroDidCancel:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameMessageCenterIntroCancel info:nil];
-}
-
-- (void)messageCenterIntroThankYouDidLaunch:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameMessageCenterThankYouLaunch info:nil];
-}
-
-- (void)messageCenterIntroThankYouHitMessages:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameMessageCenterThankYouMessages info:nil];
-}
-
-- (void)messageCenterIntroThankYouDidClose:(NSNotification *)notification {
-	[self addMetricWithName:ATMetricNameMessageCenterThankYouClose info:nil];
 }
 
 - (void)preferencesChanged:(NSNotification *)notification {

@@ -10,6 +10,8 @@
 
 @interface ATMessageCenterInteraction : ATInteraction
 
++ (id)interactionForInvokingMessageEvents;
+
 + (id)messageCenterInteractionFromInteraction:(ATInteraction *)interaction;
 
 @property (nonatomic, readonly) NSString *title;

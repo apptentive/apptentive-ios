@@ -497,6 +497,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[[ATBackend sharedBackend] sendTextMessageWithBody:message];
 		
 		if (self.interaction.profileRequested && ![ATUtilities emailAddressIsValid:[ATPersonInfo currentPerson].emailAddress]) {
+			self.profileView.mode = ATMessageCenterProfileModeFull;
 			self.state = ATMessageCenterStateWhoCard;
 		} else {
 			[self updateState];

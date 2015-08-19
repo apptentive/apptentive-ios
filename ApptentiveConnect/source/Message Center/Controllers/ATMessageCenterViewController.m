@@ -51,6 +51,7 @@ NSString *const ATInteractionMessageCenterEventLabelClose = @"close";
 NSString *const ATInteractionMessageCenterEventLabelAttach = @"attach";
 
 NSString *const ATInteractionMessageCenterEventLabelComposeOpen = @"compose_open";
+NSString *const ATInteractionMessageCenterEventLabelComposeClosed = @"compose_closed";
 
 NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
 
@@ -696,6 +697,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		if (newFooter != oldFooter) {
 			newFooter.alpha = 0;
 			newFooter.hidden = NO;
+			
+			if (oldFooter == self.messageInputView) {
+				NSNumber *bodyLength = @(self.messageInputView.messageView.text.length);
+				[self.interaction engage:ATInteractionMessageCenterEventLabelComposeClosed fromViewController:self userInfo:@{@"body_length": bodyLength}];
+			}
 			
 			if (newFooter == self.messageInputView) {
 				[self.interaction engage:ATInteractionMessageCenterEventLabelComposeOpen fromViewController:self];

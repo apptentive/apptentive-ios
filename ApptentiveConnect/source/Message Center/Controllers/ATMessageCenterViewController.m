@@ -55,6 +55,7 @@ NSString *const ATInteractionMessageCenterEventLabelComposeClosed = @"compose_cl
 NSString *const ATInteractionMessageCenterEventLabelKeyboardOpen = @"keyboard_open";
 NSString *const ATInteractionMessageCenterEventLabelKeyboardClose = @"keyboard_close";
 
+NSString *const ATInteractionMessageCenterEventLabelGreetingMessage = @"greeting_message";
 NSString *const ATInteractionMessageCenterEventLabelStatus = @"status";
 NSString *const ATInteractionMessageCenterEventLabelHTTPError = @"message_http_error";
 NSString *const ATInteractionMessageCenterEventLabelNetworkError = @"message_network_error";
@@ -132,6 +133,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.greetingView.titleLabel.text = self.interaction.greetingTitle;
 	self.greetingView.messageLabel.text = self.interaction.greetingBody;
 	self.greetingView.imageView.imageURL = self.interaction.greetingImageURL;
+	self.greetingView.isOnScreen = NO;
 	
 	self.statusView.mode = ATMessageCenterStatusModeEmpty;
 	
@@ -223,6 +225,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	[self updateState];
 	[self resizeFooterView:nil];
+	[self engageGreetingViewEventIfNecessary];
 
 	if (self.state != ATMessageCenterStateEmpty && self.state != ATMessageCenterStateWhoCard) {
 		[self scrollToLastMessageAnimated:NO];
@@ -379,6 +382,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
 	UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *)view;
 	headerView.textLabel.font = [UIFont boldSystemFontOfSize:DATE_FONT_SIZE];
+}
+
+#pragma mark Scroll view delegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+	[self engageGreetingViewEventIfNecessary];
 }
 
 #pragma mark Fetch results controller delegate
@@ -879,6 +888,16 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingState == %d)", ATPendingMessageStateComposing];
 		[ATData removeEntitiesNamed:@"ATAutomatedMessage" withPredicate:fetchPredicate];
+	}
+}
+
+- (void)engageGreetingViewEventIfNecessary {
+	BOOL greetingOnScreen = self.tableView.contentOffset.y < self.greetingView.bounds.size.height;
+	if (self.greetingView.isOnScreen != greetingOnScreen) {
+		if (greetingOnScreen) {
+			[self.interaction engage:ATInteractionMessageCenterEventLabelGreetingMessage fromViewController:self];
+		}
+		self.greetingView.isOnScreen = greetingOnScreen;
 	}
 }
 

@@ -15,5 +15,6 @@
 @property (retain, nonatomic) IBOutlet ATNetworkImageIconView *imageView;
 @property (retain, nonatomic) IBOutlet UILabel *titleLabel;
 @property (retain, nonatomic) IBOutlet UILabel *messageLabel;
+@property (assign, nonatomic) BOOL isOnScreen;
 
 @end

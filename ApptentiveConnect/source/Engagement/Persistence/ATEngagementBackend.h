@@ -21,6 +21,7 @@ extern NSString *const ATEngagementInteractionsInvokesTotalKey;
 extern NSString *const ATEngagementInteractionsInvokesVersionKey;
 extern NSString *const ATEngagementInteractionsInvokesBuildKey;
 extern NSString *const ATEngagementInteractionsInvokesLastDateKey;
+extern NSString *const ATEngagementInteractionsSDKVersionKey;
 
 extern NSString *const ATEngagementCodePointHostAppVendorKey;
 extern NSString *const ATEngagementCodePointHostAppInteractionKey;

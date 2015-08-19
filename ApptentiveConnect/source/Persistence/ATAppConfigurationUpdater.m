@@ -10,7 +10,9 @@
 #import "ATContactStorage.h"
 #import "ATUtilities.h"
 #import "ATWebClient.h"
+#import "ATConnect.h"
 
+NSString *const ATConfigurationSDKVersionKey = @"ATConfigurationSDKVersionKey";
 NSString *const ATConfigurationPreferencesChangedNotification = @"ATConfigurationPreferencesChangedNotification";
 NSString *const ATAppConfigurationLastUpdatePreferenceKey = @"ATAppConfigurationLastUpdatePreferenceKey";
 NSString *const ATAppConfigurationExpirationPreferenceKey = @"ATAppConfigurationExpirationPreferenceKey";
@@ -56,6 +58,11 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSDate *lastCheck = [defaults objectForKey:ATAppConfigurationLastUpdatePreferenceKey];
 	
+	NSString *previousVersion = [defaults stringForKey:ATConfigurationSDKVersionKey];
+	if (![previousVersion isEqualToString:kATConnectVersionString]) {
+		return YES;
+	}
+		
 #ifndef APPTENTIVE_DEBUG
 	NSDate *expiration = [defaults objectForKey:ATAppConfigurationExpirationPreferenceKey];
 	if (expiration) {
@@ -221,6 +228,8 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	if (!setAppName) {
 		[defaults removeObjectForKey:ATAppConfigurationAppDisplayNameKey];
 	}
+	
+	[defaults setObject:kATConnectVersionString forKey:ATConfigurationSDKVersionKey];
 	
 	if (hasConfigurationChanges) {
 		[[NSNotificationCenter defaultCenter] postNotificationName:ATConfigurationPreferencesChangedNotification object:nil];

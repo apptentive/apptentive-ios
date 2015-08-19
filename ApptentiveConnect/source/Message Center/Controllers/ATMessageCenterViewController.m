@@ -52,6 +52,8 @@ NSString *const ATInteractionMessageCenterEventLabelAttach = @"attach";
 
 NSString *const ATInteractionMessageCenterEventLabelComposeOpen = @"compose_open";
 NSString *const ATInteractionMessageCenterEventLabelComposeClosed = @"compose_closed";
+NSString *const ATInteractionMessageCenterEventLabelKeyboardOpen = @"keyboard_open";
+NSString *const ATInteractionMessageCenterEventLabelKeyboardClose = @"keyboard_close";
 
 NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
 
@@ -181,6 +183,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardWillChangeFrameNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToFooterView:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardDidHideNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
 }
 
 - (void)dealloc {
@@ -802,6 +806,16 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self resizeFooterView:nil];
 	[self.activeFooterView updateConstraints];
 	self.tableView.tableFooterView = self.tableView.tableFooterView;
+}
+
+- (void)keyboardDidShow:(NSNotification *)notification {
+	NSNumber *bodyLength = @(self.messageInputView.messageView.text.length);
+	[self.interaction engage:ATInteractionMessageCenterEventLabelKeyboardOpen fromViewController:self userInfo:@{@"body_length": bodyLength}];
+}
+
+- (void)keyboardDidHide:(NSNotification *)notification {
+	NSNumber *bodyLength = @(self.messageInputView.messageView.text.length);
+	[self.interaction engage:ATInteractionMessageCenterEventLabelKeyboardClose fromViewController:self userInfo:@{@"body_length": bodyLength}];
 }
 
 - (NSString *)draftMessage {

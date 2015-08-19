@@ -57,6 +57,8 @@ NSString *const ATInteractionMessageCenterEventLabelKeyboardClose = @"keyboard_c
 
 NSString *const ATInteractionMessageCenterEventLabelProfileOpen = @"profile_open";
 NSString *const ATInteractionMessageCenterEventLabelProfileClose = @"profile_close";
+NSString *const ATInteractionMessageCenterEventLabelProfileName = @"profile_name";
+NSString *const ATInteractionMessageCenterEventLabelProfileEmail = @"profile_email";
 NSString *const ATInteractionMessageCenterEventLabelProfileSubmit = @"profile_submit";
 
 NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
@@ -599,7 +601,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileSubmit fromViewController:self userInfo:userInfo];
 	
 	[ATConnect sharedConnection].personName = self.profileView.nameField.text;
+	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileName fromViewController:self userInfo:@{@"length": @(self.profileView.nameField.text.length)}];
+
 	[ATConnect sharedConnection].personEmailAddress = self.profileView.emailField.text;
+	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileEmail fromViewController:self userInfo:@{@"length": @(self.profileView.emailField.text.length), @"valid": @([ATUtilities emailAddressIsValid:self.profileView.emailField.text])}];
+	
 	[[ATBackend sharedBackend] updatePersonIfNeeded];
 	
 	self.composeButtonItem.enabled = YES;

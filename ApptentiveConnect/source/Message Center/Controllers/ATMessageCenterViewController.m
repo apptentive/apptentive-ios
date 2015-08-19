@@ -55,6 +55,10 @@ NSString *const ATInteractionMessageCenterEventLabelComposeClosed = @"compose_cl
 NSString *const ATInteractionMessageCenterEventLabelKeyboardOpen = @"keyboard_open";
 NSString *const ATInteractionMessageCenterEventLabelKeyboardClose = @"keyboard_close";
 
+NSString *const ATInteractionMessageCenterEventLabelStatus = @"status";
+NSString *const ATInteractionMessageCenterEventLabelHTTPError = @"message_http_error";
+NSString *const ATInteractionMessageCenterEventLabelNetworkError = @"message_network_error";
+
 NSString *const ATInteractionMessageCenterEventLabelProfileOpen = @"profile_open";
 NSString *const ATInteractionMessageCenterEventLabelProfileClose = @"profile_close";
 NSString *const ATInteractionMessageCenterEventLabelProfileName = @"profile_name";
@@ -714,18 +718,24 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				newFooter = self.statusView;
 				self.statusView.mode = ATMessageCenterStatusModeEmpty;
 				self.statusView.statusLabel.text = self.interaction.statusBody;
+				
+				[self.interaction engage:ATInteractionMessageCenterEventLabelStatus fromViewController:self];
 				break;
 				
 			case ATMessageCenterStateNetworkError:
 				newFooter = self.statusView;
 				self.statusView.mode = ATMessageCenterStatusModeNetworkError;
 				self.statusView.statusLabel.text =[@[self.interaction.networkErrorTitle, self.interaction.networkErrorBody] componentsJoinedByString:@"\n"];
+				
+				[self.interaction engage:ATInteractionMessageCenterEventLabelNetworkError fromViewController:self];
 				break;
 				
 			case ATMessageCenterStateHTTPError:
 				newFooter = self.statusView;
 				self.statusView.mode = ATMessageCenterStatusModeHTTPError;
 				self.statusView.statusLabel.text = [@[self.interaction.HTTPErrorTitle, self.interaction.networkErrorBody] componentsJoinedByString:@"\n"];
+				
+				[self.interaction engage:ATInteractionMessageCenterEventLabelHTTPError fromViewController:self];
 				break;
 				
 			case ATMessageCenterStateReplied:

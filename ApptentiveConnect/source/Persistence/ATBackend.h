@@ -21,12 +21,8 @@
 #import "ATAbstractMessage.h"
 #import "ATTextMessage.h"
 #import "ATAutomatedMessage.h"
-<<<<<<< HEAD
 #import "ATFileMessage.h"
-#import "ATFeedback.h"
-=======
 #import "ATFeedbackTypes.h"
->>>>>>> 2685df6417af2ed04786b8bf44d54a448da89091
 #import "ATMessageTask.h"
 #endif
 

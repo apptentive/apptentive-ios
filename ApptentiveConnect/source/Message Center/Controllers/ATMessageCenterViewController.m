@@ -25,7 +25,7 @@
 #import "ATProgressNavigationBar.h"
 #import "ATAboutViewController.h"
 
-#define HEADER_LABEL_HEIGHT 26.0
+#define HEADER_LABEL_HEIGHT 64.0
 #define GREETING_PORTRAIT_HEIGHT 258.0
 #define GREETING_LANDSCAPE_HEIGHT 128.0
 #define CONFIRMATION_VIEW_HEIGHT 88.0

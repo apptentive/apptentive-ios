@@ -58,7 +58,6 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	
-	[self.navigationController setToolbarHidden:YES animated:animated];
 	[self resizeForOrientation:self.interfaceOrientation duration:0];
 }
 
@@ -66,8 +65,6 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 	[super viewWillDisappear:animated];
 	
 	[[ATEngagementBackend sharedBackend] engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelClose] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
-	
-	[self.navigationController setToolbarHidden:NO animated:animated];
 }
 
 - (IBAction)learnMore:(id)sender {

@@ -147,7 +147,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.messageInputView.titleLabel.text = self.interaction.composerTitle;
 	[self.messageInputView.sendButton setTitle:self.interaction.composerSendButtonTitle forState:UIControlStateNormal];
 	self.messageInputView.sendButton.enabled = self.messageInputView.messageView.text.length > 0;
-	self.messageInputView.clearButton.enabled = self.messageInputView.messageView.text.length > 0;
 	
 	if (self.interaction.profileRequested) {
 		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[ATBackend imageNamed:@"at_account"] landscapeImagePhone:[ATBackend imageNamed:@"at_account"] style:UIBarButtonItemStyleBordered target:self action:@selector(showWho:)];
@@ -441,7 +440,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)textViewDidChange:(UITextView *)textView {
 	self.messageInputView.sendButton.enabled = textView.text.length > 0;
-	self.messageInputView.clearButton.enabled = textView.text.length > 0;
 	self.messageInputView.placeholderLabel.hidden = textView.text.length > 0;
 	
 	// Fix bug where text view doesn't scroll far enough down
@@ -553,6 +551,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (IBAction)clear:(UIButton *)sender {
+	if (self.messageInputView.messageView.text.length == 0) {
+		[self discardDraft];
+		return;
+	}
+	
 	UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:self.interaction.composerCloseConfirmBody delegate:self cancelButtonTitle:self.interaction.composerCloseCancelButtonTitle destructiveButtonTitle:self.interaction.composerCloseDiscardButtonTitle otherButtonTitles:nil];
 	
 	if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
@@ -684,6 +687,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	if (_state != state) {
 		UIView *oldFooter = self.activeFooterView;
 		UIView *newFooter = nil;
+		BOOL toolbarHidden = NO;
 		
 		_state = state;
 		
@@ -692,10 +696,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		switch (state) {
 			case ATMessageCenterStateEmpty:
 				newFooter = self.messageInputView;
+				toolbarHidden = YES;
 				break;
 				
 			case ATMessageCenterStateComposing:
 				newFooter = self.messageInputView;
+				toolbarHidden = YES;
 				break;
 			
 			case ATMessageCenterStateWhoCard:
@@ -708,6 +714,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				}
 				
 				self.navigationItem.leftBarButtonItem.enabled = NO;
+				toolbarHidden = YES;
 				newFooter = self.profileView;
 				break;
 				
@@ -753,6 +760,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				ATLogError(@"Invalid Message Center State: %d", state);
 				break;
 		}
+		
+		[self.navigationController setToolbarHidden:toolbarHidden animated:YES];
 		
 		if (newFooter != oldFooter) {
 			newFooter.alpha = 0;
@@ -822,18 +831,25 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		height = CGRectGetHeight(self.tableView.bounds) - self.tableView.contentInset.top - self.tableView.contentInset.bottom - CGRectGetHeight([self rectOfLastMessage]) - self.tableView.sectionFooterHeight;
 	} else {
 		CGRect keyboardRect;
+		
 		if (notification) {
 			keyboardRect = [self.view.window convertRect:[notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue] toView:self.tableView.superview];
+			
+			// Available space is between the top of the keyboard and the bottom of the navigation bar
 			height = CGRectGetMinY(keyboardRect) - self.tableView.contentInset.top;
 			
-			if (CGRectGetHeight(CGRectIntersection(keyboardRect, self.view.frame)) == 0) {
-				height -= CGRectGetHeight(self.navigationController.toolbar.bounds);
+			// Unless the top of the keyboard is below the (visible) toolbar, then subtract the toolbar height
+			if (CGRectGetHeight(CGRectIntersection(keyboardRect, self.view.frame)) == 0 && !self.navigationController.toolbarHidden) {
+					height -= CGRectGetHeight(self.navigationController.toolbar.bounds);
 			}
 		} else {
-			height = CGRectGetHeight(self.tableView.bounds) - self.tableView.contentInset.top;
+			// Workaround for weird race conditions on top layout guide and table view content inset
+			CGFloat topBarHeight = fmax([self.topLayoutGuide length], self.tableView.contentInset.top);
+			height = CGRectGetHeight(self.tableView.bounds) - topBarHeight;
 		}
 		
-		if (!self.dataSource.hasNonContextMessages && (CGRectGetMinY(keyboardRect) >= CGRectGetMaxY(self.tableView.frame) || !notification)) {
+		// If there are no sent messages and the keyboard is off screen, fill the available space.
+		if (!self.dataSource.hasNonContextMessages && (!notification || CGRectGetMinY(keyboardRect) >= CGRectGetMaxY(self.tableView.frame))) {
 			height -= CGRectGetHeight(self.greetingView.bounds);
 		}
 	}
@@ -922,7 +938,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.messageInputView.messageView resignFirstResponder];
 	
 	self.messageInputView.sendButton.enabled = NO;
-	self.messageInputView.clearButton.enabled = NO;
 	
 	[self updateState];
 	

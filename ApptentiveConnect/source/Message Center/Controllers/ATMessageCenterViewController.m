@@ -553,12 +553,23 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		return;
 	}
 	
-	UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:self.interaction.composerCloseConfirmBody delegate:self cancelButtonTitle:self.interaction.composerCloseCancelButtonTitle destructiveButtonTitle:self.interaction.composerCloseDiscardButtonTitle otherButtonTitles:nil];
-	
-	if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-		[actionSheet showFromRect:sender.frame inView:sender.superview animated:YES];
+	if (NSClassFromString(@"UIAlertController")) {
+		UIAlertController *alertController = [UIAlertController alertControllerWithTitle:self.interaction.composerCloseConfirmBody message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+		
+		[alertController addAction:[UIAlertAction actionWithTitle:self.interaction.composerCloseCancelButtonTitle style:UIAlertActionStyleCancel handler:nil]];
+		[alertController addAction:[UIAlertAction actionWithTitle:self.interaction.composerCloseDiscardButtonTitle style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
+			[self discardDraft];
+		}]];
+		
+		[self presentViewController:alertController animated:YES completion:nil];
 	} else {
-		[actionSheet showInView:self.view];
+		UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:self.interaction.composerCloseConfirmBody delegate:self cancelButtonTitle:self.interaction.composerCloseCancelButtonTitle destructiveButtonTitle:self.interaction.composerCloseDiscardButtonTitle otherButtonTitles:nil];
+		
+		if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+			[actionSheet showFromRect:sender.frame inView:sender.superview animated:YES];
+		} else {
+			[actionSheet showFromToolbar:self.navigationController.toolbar];
+		}
 	}
 }
 

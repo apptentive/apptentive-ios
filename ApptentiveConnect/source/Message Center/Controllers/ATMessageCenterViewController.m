@@ -220,10 +220,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 	[self resizeFooterView:nil];
 	[self engageGreetingViewEventIfNecessary];
-
-	if (self.state != ATMessageCenterStateEmpty && self.state != ATMessageCenterStateWhoCard) {
-		[self scrollToLastMessageAnimated:NO];
-	}
+	[self scrollToLastMessageAnimated:NO];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -389,9 +386,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	if (self.state != ATMessageCenterStateWhoCard && self.state != ATMessageCenterStateComposing) {
 		[self updateState];
 		
-		if (self.state != ATMessageCenterStateWhoCard) {
-			[self scrollToLastMessageAnimated:YES];
-		}
+		[self resizeFooterView:nil];
+		[self scrollToLastMessageAnimated:YES];
 	}
 }
 
@@ -521,8 +517,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	if (message && ![message isEqualToString:@""]) {
 		NSIndexPath *lastUserMessageIndexPath = self.dataSource.lastUserMessageIndexPath;
 		
-		[self.messageInputView.messageView resignFirstResponder];
-		
 		if (self.contextMessage) {
 			[[ATBackend sharedBackend] sendAutomatedMessage:self.contextMessage];
 			self.contextMessage = nil;
@@ -535,6 +529,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			
 			self.state = ATMessageCenterStateWhoCard;
 		} else {
+			[self.messageInputView.messageView resignFirstResponder];
 			[self updateState];
 		}
 	
@@ -703,13 +698,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			case ATMessageCenterStateComposing:
 				newFooter = self.messageInputView;
 				toolbarHidden = YES;
+				[self resizeFooterView:nil];
 				break;
 			
 			case ATMessageCenterStateWhoCard:
-				if (self.profileView.mode == ATMessageCenterProfileModeFull) {
-					[self.profileView.nameField becomeFirstResponder];
-				}
-				
+				[self.profileView becomeFirstResponder];
+
 				if (self.dataSource.hasNonContextMessages) {
 					[self scrollToLastMessageAnimated:YES];
 				}
@@ -896,8 +890,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)scrollToLastMessageAnimated:(BOOL)animated {
-	[self resizeFooterView:nil];
-	
 	CGRect rectToScrollTo = [self rectOfLastMessage];
 	CGFloat footerHeight = CGRectGetHeight(self.activeFooterView.bounds);
 	CGFloat tableViewHeight = CGRectGetHeight(self.tableView.bounds) - self.tableView.contentInset.top - self.tableView.contentInset.bottom - footerHeight;
@@ -942,6 +934,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	[self updateState];
 	
+	[self resizeFooterView:nil];
 	[self scrollToLastMessageAnimated:YES];
 }
 

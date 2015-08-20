@@ -51,6 +51,14 @@
 	self.baseConstraints = [baseConstraintSet allObjects];
 }
 
+- (BOOL)becomeFirstResponder {
+	if (self.mode == ATMessageCenterProfileModeFull) {
+		return [self.nameField becomeFirstResponder];
+	} else {
+		return [self.emailField becomeFirstResponder];
+	}
+}
+
 - (BOOL)isSizeLandscape:(CGSize)size {
 	return size.width > 2.75 * size.height;
 }

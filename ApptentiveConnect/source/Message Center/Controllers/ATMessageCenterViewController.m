@@ -26,10 +26,6 @@
 #import "ATAboutViewController.h"
 
 #define HEADER_LABEL_HEIGHT 64.0
-#define GREETING_PORTRAIT_HEIGHT 258.0
-#define GREETING_LANDSCAPE_HEIGHT 128.0
-#define CONFIRMATION_VIEW_HEIGHT 88.0
-
 #define TEXT_VIEW_HORIZONTAL_INSET 12.0
 #define TEXT_VIEW_VERTICAL_INSET 10.0
 #define DATE_FONT_SIZE 14.0
@@ -125,8 +121,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.dateFormatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"MMMMdYYYY" options:0 locale:[NSLocale currentLocale]];
 	self.dataSource.dateFormatter.dateFormat = self.dateFormatter.dateFormat; // Used to determine if date changed between messages
 	
-	[self updateHeaderHeightForOrientation:self.interfaceOrientation];
-	
+	self.greetingView.orientation = self.interfaceOrientation;
+	self.profileView.orientation = self.interfaceOrientation;
+	self.messageInputView.orientation = self.interfaceOrientation;
+
 	self.navigationItem.title = self.interaction.title;
 	
 	self.greetingView.titleLabel.text = self.interaction.greetingTitle;
@@ -203,8 +201,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 	[UIView animateWithDuration:duration animations:^{
-		[self updateHeaderHeightForOrientation:toInterfaceOrientation];
-		[self updateFooterViewForOrientation:toInterfaceOrientation];
+		self.greetingView.orientation = toInterfaceOrientation;
+		self.profileView.orientation = toInterfaceOrientation;
+		self.messageInputView.orientation = toInterfaceOrientation;
+		
+		self.tableView.tableHeaderView = self.greetingView;
 	}];
 }
 
@@ -698,7 +699,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			case ATMessageCenterStateComposing:
 				newFooter = self.messageInputView;
 				toolbarHidden = YES;
-				[self resizeFooterView:nil];
 				break;
 			
 			case ATMessageCenterStateWhoCard:
@@ -707,7 +707,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				if (self.dataSource.hasNonContextMessages) {
 					[self scrollToLastMessageAnimated:YES];
 				}
-				
+
 				self.navigationItem.leftBarButtonItem.enabled = NO;
 				toolbarHidden = YES;
 				newFooter = self.profileView;
@@ -772,6 +772,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			}
 
 			self.activeFooterView = newFooter;
+			[self resizeFooterView:nil];
 
 			[UIView animateWithDuration:0.25 animations:^{
 				newFooter.alpha = 1;
@@ -811,20 +812,19 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)scrollToFooterView:(NSNotification *)notification {
 	CGFloat footerSpace = [self.dataSource numberOfMessageGroups] > 0 ? self.tableView.sectionFooterHeight : 0;
+	CGFloat verticalOffset = CGRectGetMaxY(self.rectOfLastMessage) - self.tableView.contentInset.top + footerSpace;
+	CGFloat verticalOffsetLimit = self.tableView.contentSize.height + self.tableView.contentInset.top + self.tableView.contentInset.bottom - CGRectGetHeight(self.tableView.bounds);
+	verticalOffset = fmin(verticalOffset, verticalOffsetLimit);
 	
-	CGPoint offset = CGPointMake(0.0, CGRectGetMaxY(self.rectOfLastMessage) - self.tableView.contentInset.top + footerSpace);
-
 	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
-		[self.tableView setContentOffset:offset];
+		[self.tableView setContentOffset:CGPointMake(0.0, verticalOffset)];
 	}];
 }
 
 - (void)resizeFooterView:(NSNotification *)notification {
 	CGFloat height = 0;
 	
-	if (self.state != ATMessageCenterStateEmpty && self.state != ATMessageCenterStateWhoCard && self.state != ATMessageCenterStateComposing) {
-		height = CGRectGetHeight(self.tableView.bounds) - self.tableView.contentInset.top - self.tableView.contentInset.bottom - CGRectGetHeight([self rectOfLastMessage]) - self.tableView.sectionFooterHeight;
-	} else {
+	if (self.state == ATMessageCenterStateComposing) {
 		CGRect keyboardRect;
 		
 		if (notification) {
@@ -847,6 +847,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		if (!self.dataSource.hasNonContextMessages && (!notification || CGRectGetMinY(keyboardRect) >= CGRectGetMaxY(self.tableView.frame))) {
 			height -= CGRectGetHeight(self.greetingView.bounds);
 		}
+	} else {
+		height = CGRectGetHeight(self.activeFooterView.bounds);
+
+		if (!self.navigationController.toolbarHidden) {
+			height += CGRectGetHeight(self.navigationController.toolbar.bounds);
+		}
 	}
 	
 	CGRect frame = self.tableView.tableFooterView.frame;
@@ -859,20 +865,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[self.activeFooterView updateConstraints];
 		self.tableView.tableFooterView = self.tableView.tableFooterView;
 	}];
-}
-
-- (void)updateHeaderHeightForOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
-	CGFloat headerHeight = UIInterfaceOrientationIsLandscape(toInterfaceOrientation) ? GREETING_LANDSCAPE_HEIGHT : GREETING_PORTRAIT_HEIGHT;
-
-	self.greetingView.bounds = CGRectMake(0, 0, self.tableView.bounds.size.height, headerHeight);
-	[self.greetingView updateConstraints];
-	self.tableView.tableHeaderView = self.greetingView;
-}
-
-- (void)updateFooterViewForOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
-	[self resizeFooterView:nil];
-	[self.activeFooterView updateConstraints];
-	self.tableView.tableFooterView = self.tableView.tableFooterView;
 }
 
 - (void)keyboardDidShow:(NSNotification *)notification {
@@ -890,8 +882,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)scrollToLastMessageAnimated:(BOOL)animated {
-	CGRect rectToScrollTo = [self rectOfLastMessage];
 	CGFloat footerHeight = CGRectGetHeight(self.activeFooterView.bounds);
+	
+	CGRect rectToScrollTo = [self rectOfLastMessage];
+	rectToScrollTo.size.height += footerHeight + self.tableView.contentInset.bottom + self.tableView.sectionFooterHeight;
+	
 	CGFloat tableViewHeight = CGRectGetHeight(self.tableView.bounds) - self.tableView.contentInset.top - self.tableView.contentInset.bottom - footerHeight;
 	
 	if (CGRectGetHeight(rectToScrollTo) > tableViewHeight) {

@@ -59,15 +59,17 @@
 	}
 }
 
-- (BOOL)isSizeLandscape:(CGSize)size {
-	return size.width > 2.75 * size.height;
+- (void)setOrientation:(UIInterfaceOrientation)orientation {
+	_orientation = orientation;
+	[self updateConstraints];
+	[self sizeToFit];
 }
 
 - (void)updateConstraints {
 	[self.containerView removeConstraints:self.containerView.constraints];
 	[self.containerView addConstraints:self.baseConstraints];
 	
-	if ([self isSizeLandscape:self.bounds.size]) {
+	if (UIInterfaceOrientationIsLandscape(self.orientation)) {
 		switch (self.mode) {
 			case ATMessageCenterProfileModeFull:
 				[self.containerView addConstraints:self.landscapeFullConstraints];

@@ -17,5 +17,6 @@
 @property (retain, nonatomic) IBOutlet UILabel *messageLabel;
 @property (weak, nonatomic) IBOutlet UIButton *aboutButton;
 @property (assign, nonatomic) BOOL isOnScreen;
+@property (assign, nonatomic) UIInterfaceOrientation orientation;
 
 @end

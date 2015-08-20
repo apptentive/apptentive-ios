@@ -10,7 +10,8 @@
 #import "ATNetworkImageIconView.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define LINE_BREAK_HEIGHT 150.0
+#define GREETING_PORTRAIT_HEIGHT 258.0
+#define GREETING_LANDSCAPE_HEIGHT 128.0
 
 @interface ATMessageCenterGreetingView ()
 
@@ -35,8 +36,22 @@
 	self.bottomBorderHeightConstraint.constant = 1.0 / [UIScreen mainScreen].scale;
 }
 
+- (void)setOrientation:(UIInterfaceOrientation)orientation {
+	_orientation = orientation;
+	[self updateConstraints];
+	[self sizeToFit];
+}
+
+- (CGSize)sizeThatFits:(CGSize)size {
+	if (UIInterfaceOrientationIsLandscape(self.orientation)) {
+		return CGSizeMake(size.width, GREETING_LANDSCAPE_HEIGHT);
+	} else {
+		return CGSizeMake(size.width, GREETING_PORTRAIT_HEIGHT);
+	}
+}
+
 - (void)updateConstraints {
-	if (CGRectGetHeight(self.bounds) < LINE_BREAK_HEIGHT) {
+	if (UIInterfaceOrientationIsLandscape(self.orientation)) {
 		// Landscape on phone: Center vertically, offset horizontally
 		self.imageCenterYConstraint.constant = 0.0;
 		self.textCenterYConstraint.constant = 0.0;

@@ -228,7 +228,7 @@
                                     </connections>
                                 </view>
                                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hjb-x8-sQN" customClass="ATMessageCenterProfileView">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="300"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="164"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PJM-ba-h4O">
                                             <rect key="frame" x="8" y="8" width="398" height="148"/>
@@ -276,7 +276,7 @@
                                                     </connections>
                                                 </button>
                                                 <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Required so we can get back to you." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hhv-V6-6VP">
-                                                    <rect key="frame" x="15" y="110" width="221" height="16"/>
+                                                    <rect key="frame" x="15" y="110" width="220.5" height="16"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -314,6 +314,7 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="PJM-ba-h4O" firstAttribute="top" secondItem="hjb-x8-sQN" secondAttribute="top" constant="8" id="Fmv-e7-KWF"/>
+                                        <constraint firstAttribute="bottom" secondItem="PJM-ba-h4O" secondAttribute="bottom" constant="8" id="LOl-UG-WjO"/>
                                         <constraint firstAttribute="trailing" secondItem="PJM-ba-h4O" secondAttribute="trailing" constant="8" id="fm1-Nv-MsG"/>
                                         <constraint firstItem="PJM-ba-h4O" firstAttribute="leading" secondItem="hjb-x8-sQN" secondAttribute="leading" constant="8" id="wvd-ZI-Qfi"/>
                                     </constraints>
@@ -331,7 +332,7 @@
                                     </connections>
                                 </view>
                                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g94-Qt-Zp0" customClass="ATMessageCenterStatusView">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="300"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="83"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="We try and reply to people between 5am and 6pm PST." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="kQ8-89-rPy">
                                             <rect key="frame" x="8" y="46" width="398" height="29"/>
@@ -347,9 +348,9 @@
                                             </constraints>
                                         </imageView>
                                     </subviews>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <constraints>
                                         <constraint firstAttribute="centerX" secondItem="Sii-bm-iOd" secondAttribute="centerX" id="Gk0-NR-ECN"/>
+                                        <constraint firstAttribute="bottom" secondItem="kQ8-89-rPy" secondAttribute="bottom" constant="8" id="bkE-UY-FOS"/>
                                         <constraint firstItem="Sii-bm-iOd" firstAttribute="top" secondItem="g94-Qt-Zp0" secondAttribute="top" constant="8" id="c3V-aL-ciY"/>
                                         <constraint firstItem="kQ8-89-rPy" firstAttribute="top" secondItem="g94-Qt-Zp0" secondAttribute="top" priority="100" constant="8" id="fRI-vT-Xdg"/>
                                         <constraint firstItem="kQ8-89-rPy" firstAttribute="top" secondItem="Sii-bm-iOd" secondAttribute="bottom" constant="8" id="hHj-zB-PZg"/>
@@ -365,14 +366,12 @@
                             </subviews>
                             <constraints>
                                 <constraint firstItem="g94-Qt-Zp0" firstAttribute="leading" secondItem="6et-WJ-u3H" secondAttribute="leading" id="6hJ-Vq-am0"/>
-                                <constraint firstAttribute="bottom" secondItem="hjb-x8-sQN" secondAttribute="bottom" id="8M2-iu-4VL"/>
                                 <constraint firstItem="g94-Qt-Zp0" firstAttribute="top" secondItem="6et-WJ-u3H" secondAttribute="top" id="94M-5W-pvh"/>
                                 <constraint firstItem="hjb-x8-sQN" firstAttribute="top" secondItem="6et-WJ-u3H" secondAttribute="top" id="ApE-nf-c4x"/>
                                 <constraint firstItem="hjb-x8-sQN" firstAttribute="leading" secondItem="6et-WJ-u3H" secondAttribute="leading" id="FX6-fq-Fqy"/>
                                 <constraint firstAttribute="trailing" secondItem="g94-Qt-Zp0" secondAttribute="trailing" id="KWl-Kj-Lkl"/>
                                 <constraint firstAttribute="trailing" secondItem="Aj5-aD-yTM" secondAttribute="trailing" id="YSd-5K-xgS"/>
                                 <constraint firstItem="Aj5-aD-yTM" firstAttribute="top" secondItem="6et-WJ-u3H" secondAttribute="top" id="YyJ-Ow-Xn0"/>
-                                <constraint firstAttribute="bottom" secondItem="g94-Qt-Zp0" secondAttribute="bottom" id="a2I-ge-aa8"/>
                                 <constraint firstAttribute="trailing" secondItem="hjb-x8-sQN" secondAttribute="trailing" id="byM-0V-wuh"/>
                                 <constraint firstItem="Aj5-aD-yTM" firstAttribute="leading" secondItem="6et-WJ-u3H" secondAttribute="leading" id="dME-sT-4Uv"/>
                                 <constraint firstAttribute="bottom" secondItem="Aj5-aD-yTM" secondAttribute="bottom" id="uOp-La-VoR"/>

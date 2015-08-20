@@ -20,4 +20,6 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *placeholderLabel;
 
+@property (assign, nonatomic) UIInterfaceOrientation orientation;
+
 @end

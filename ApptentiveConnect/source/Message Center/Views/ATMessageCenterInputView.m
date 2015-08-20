@@ -46,8 +46,13 @@
 	self.landscapeSendBarConstraints = @[ [NSLayoutConstraint constraintWithItem:self.sendBar attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.clearButton attribute:NSLayoutAttributeTop multiplier:1.0 constant:-8.0], [NSLayoutConstraint constraintWithItem:self.sendBar attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.sendButton attribute:NSLayoutAttributeBottom multiplier:1.0 constant:8.0] ];
 }
 
+- (void)setOrientation:(UIInterfaceOrientation)orientation {
+	_orientation = orientation;
+	[self updateConstraints];
+}
+
 - (void)updateConstraints {
-	if (CGRectGetWidth(self.bounds) > 2.1 * CGRectGetHeight(self.bounds)) {
+	if (UIInterfaceOrientationIsLandscape(self.orientation)) {
 		self.titleLabel.alpha = 0;
 		
 		[self.containerView removeConstraints:self.portraitConstraints];

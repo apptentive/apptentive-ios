@@ -824,7 +824,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)resizeFooterView:(NSNotification *)notification {
 	CGFloat height = 0;
 	
-	if (self.state == ATMessageCenterStateComposing) {
+	if (self.state == ATMessageCenterStateComposing || self.state == ATMessageCenterStateEmpty) {
 		CGRect keyboardRect;
 		
 		if (notification) {

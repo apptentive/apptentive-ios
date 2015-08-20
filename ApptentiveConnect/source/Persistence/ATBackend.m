@@ -279,9 +279,6 @@ static NSURLCache *imageCache = nil;
 		return NO;
 	}
 	
-#warning Invoke Event
-	//[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidSendNotification object:@{ATMessageCenterMessageNonceKey:message.pendingMessageID}];
-	
 	return [self sendMessage:message];
 }
 

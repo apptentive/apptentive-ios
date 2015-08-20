@@ -25,7 +25,7 @@
 #import "ATProgressNavigationBar.h"
 #import "ATAboutViewController.h"
 
-#define HEADER_LABEL_HEIGHT 26.0
+#define HEADER_LABEL_HEIGHT 64.0
 #define GREETING_PORTRAIT_HEIGHT 258.0
 #define GREETING_LANDSCAPE_HEIGHT 128.0
 #define CONFIRMATION_VIEW_HEIGHT 88.0
@@ -88,7 +88,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @property (strong, nonatomic) IBOutlet ATMessageCenterProfileView *profileView;
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *composeButtonItem;
-@property (weak, nonatomic) IBOutlet UIButton *aboutButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *neuMessageButtonItem;
 
 @property (nonatomic, strong) ATMessageCenterDataSource *dataSource;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
@@ -114,6 +114,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.interaction engage:ATInteractionMessageCenterEventLabelLaunch fromViewController:self];
 	
 	self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
+	[self.navigationController.toolbar addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(compose:)]];
 	
 	self.dataSource = [[ATMessageCenterDataSource alloc] initWithDelegate:self];
 	[self.dataSource start];
@@ -131,12 +132,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.greetingView.titleLabel.text = self.interaction.greetingTitle;
 	self.greetingView.messageLabel.text = self.interaction.greetingBody;
 	self.greetingView.imageView.imageURL = self.interaction.greetingImageURL;
+<<<<<<< HEAD
 	self.greetingView.isOnScreen = NO;
+=======
+	self.greetingView.aboutButton.hidden = !self.interaction.branding;
+>>>>>>> 305478a265adce42e0f0a1af08d0b45dbfe82161
 	
 	self.statusView.mode = ATMessageCenterStatusModeEmpty;
-	
-	NSString *branding = self.interaction.branding;
-	self.aboutButton.hidden = !branding;
 	
 	self.messageInputView.messageView.text = self.draftMessage ?: @"";
 	self.messageInputView.messageView.textContainerInset = UIEdgeInsetsMake(TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET);
@@ -167,6 +169,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			self.profileView.mode = ATMessageCenterProfileModeCompact;
 			
 			self.composeButtonItem.enabled = NO;
+			self.neuMessageButtonItem.enabled = NO;
 		}
 	} else {
 		self.navigationItem.leftBarButtonItem = nil;
@@ -185,6 +188,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)dealloc {
+	[self removeUnsentContextMessages];
+
 	self.tableView.delegate = nil;
 	self.messageInputView.messageView.delegate = nil;
 	self.profileView.nameField.delegate = nil;
@@ -232,8 +237,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	} else {
 		[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATMessageCenterDraftMessageKey];
 	}
-	
-	[self removeUnsentContextMessages];
 }
 
 #pragma mark - Table view data source
@@ -531,8 +534,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[[ATBackend sharedBackend] sendTextMessageWithBody:message];
 		
 		if (self.interaction.profileRequested && ![ATUtilities emailAddressIsValid:[ATPersonInfo currentPerson].emailAddress]) {
+<<<<<<< HEAD
 			[self.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{@"required": @(self.interaction.profileRequired), @"trigger": @"automatic"}];
 			
+=======
+			self.profileView.mode = ATMessageCenterProfileModeFull;
+>>>>>>> 305478a265adce42e0f0a1af08d0b45dbfe82161
 			self.state = ATMessageCenterStateWhoCard;
 		} else {
 			[self updateState];
@@ -616,6 +623,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[[ATBackend sharedBackend] updatePersonIfNeeded];
 	
 	self.composeButtonItem.enabled = YES;
+	self.neuMessageButtonItem.enabled = YES;
 	[self updateState];
 	
 	if (self.state == ATMessageCenterStateEmpty) {

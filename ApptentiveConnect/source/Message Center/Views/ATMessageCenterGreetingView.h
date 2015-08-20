@@ -15,10 +15,7 @@
 @property (retain, nonatomic) IBOutlet ATNetworkImageIconView *imageView;
 @property (retain, nonatomic) IBOutlet UILabel *titleLabel;
 @property (retain, nonatomic) IBOutlet UILabel *messageLabel;
-<<<<<<< HEAD
-@property (assign, nonatomic) BOOL isOnScreen;
-=======
 @property (weak, nonatomic) IBOutlet UIButton *aboutButton;
->>>>>>> 305478a265adce42e0f0a1af08d0b45dbfe82161
+@property (assign, nonatomic) BOOL isOnScreen;
 
 @end

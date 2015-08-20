@@ -132,11 +132,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.greetingView.titleLabel.text = self.interaction.greetingTitle;
 	self.greetingView.messageLabel.text = self.interaction.greetingBody;
 	self.greetingView.imageView.imageURL = self.interaction.greetingImageURL;
-<<<<<<< HEAD
-	self.greetingView.isOnScreen = NO;
-=======
 	self.greetingView.aboutButton.hidden = !self.interaction.branding;
->>>>>>> 305478a265adce42e0f0a1af08d0b45dbfe82161
+	self.greetingView.isOnScreen = NO;
 	
 	self.statusView.mode = ATMessageCenterStatusModeEmpty;
 	
@@ -534,12 +531,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[[ATBackend sharedBackend] sendTextMessageWithBody:message];
 		
 		if (self.interaction.profileRequested && ![ATUtilities emailAddressIsValid:[ATPersonInfo currentPerson].emailAddress]) {
-<<<<<<< HEAD
 			[self.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{@"required": @(self.interaction.profileRequired), @"trigger": @"automatic"}];
 			
-=======
 			self.profileView.mode = ATMessageCenterProfileModeFull;
->>>>>>> 305478a265adce42e0f0a1af08d0b45dbfe82161
 			self.state = ATMessageCenterStateWhoCard;
 		} else {
 			[self updateState];

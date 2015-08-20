@@ -84,7 +84,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @property (strong, nonatomic) IBOutlet ATMessageCenterProfileView *profileView;
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *composeButtonItem;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *neuMessageButtonItem;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *neuMessageButtonItem; // newMessageButtonItem
 
 @property (nonatomic, strong) ATMessageCenterDataSource *dataSource;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;

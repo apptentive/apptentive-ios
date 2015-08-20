@@ -558,7 +558,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
 		[actionSheet showFromRect:sender.frame inView:sender.superview animated:YES];
 	} else {
-		[actionSheet showFromToolbar:self.navigationController.toolbar];
+		[actionSheet showInView:self.view];
 	}
 }
 
@@ -703,11 +703,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			
 			case ATMessageCenterStateWhoCard:
 				[self.profileView becomeFirstResponder];
-
-				if (self.dataSource.hasNonContextMessages) {
-					[self scrollToLastMessageAnimated:YES];
-				}
-
 				self.navigationItem.leftBarButtonItem.enabled = NO;
 				toolbarHidden = YES;
 				newFooter = self.profileView;
@@ -812,13 +807,29 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)scrollToFooterView:(NSNotification *)notification {
 	CGFloat footerSpace = [self.dataSource numberOfMessageGroups] > 0 ? self.tableView.sectionFooterHeight : 0;
-	CGFloat verticalOffset = CGRectGetMaxY(self.rectOfLastMessage) - self.tableView.contentInset.top + footerSpace;
-	CGFloat verticalOffsetLimit = self.tableView.contentSize.height + self.tableView.contentInset.top + self.tableView.contentInset.bottom - CGRectGetHeight(self.tableView.bounds);
-	verticalOffset = fmin(verticalOffset, verticalOffsetLimit);
+	CGFloat verticalOffset = CGRectGetMaxY(self.rectOfLastMessage) + footerSpace;
+	CGFloat verticalOffsetLimit;
+
+	// A notification means a keyboard is involved, which uses different math
+	if (notification) {
+		CGRect keyboardRect = [self.view.window convertRect:[notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue] toView:self.tableView.superview];
+
+		verticalOffsetLimit = self.tableView.contentSize.height - CGRectGetMinY(keyboardRect);
+	} else {
+		verticalOffsetLimit = self.tableView.contentSize.height - (CGRectGetHeight(self.tableView.bounds) - self.tableView.contentInset.bottom);
+	}
 	
-	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
-		[self.tableView setContentOffset:CGPointMake(0.0, verticalOffset)];
-	}];
+	verticalOffsetLimit = fmax(0, verticalOffsetLimit);
+	verticalOffset = fmin(verticalOffset, verticalOffsetLimit);
+	CGPoint contentOffset = CGPointMake(0,  verticalOffset);
+	
+	if (notification) {
+		[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
+			self.tableView.contentOffset = contentOffset;
+		}];
+	} else {
+		[self.tableView setContentOffset:contentOffset animated:YES];
+	}
 }
 
 - (void)resizeFooterView:(NSNotification *)notification {
@@ -882,18 +893,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)scrollToLastMessageAnimated:(BOOL)animated {
-	CGFloat footerHeight = CGRectGetHeight(self.activeFooterView.bounds);
-	
-	CGRect rectToScrollTo = [self rectOfLastMessage];
-	rectToScrollTo.size.height += footerHeight + self.tableView.contentInset.bottom + self.tableView.sectionFooterHeight;
-	
-	CGFloat tableViewHeight = CGRectGetHeight(self.tableView.bounds) - self.tableView.contentInset.top - self.tableView.contentInset.bottom - footerHeight;
-	
-	if (CGRectGetHeight(rectToScrollTo) > tableViewHeight) {
-		rectToScrollTo = CGRectMake(rectToScrollTo.origin.x, CGRectGetMaxY(rectToScrollTo) - tableViewHeight, rectToScrollTo.size.width, tableViewHeight + footerHeight);
+	if (self.state != ATMessageCenterStateEmpty) {
+		[self scrollToFooterView:nil];
 	}
-	
-	[self.tableView scrollRectToVisible:rectToScrollTo animated:animated];
 }
 
 - (void)removeUnsentContextMessages {
@@ -930,7 +932,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self updateState];
 	
 	[self resizeFooterView:nil];
-	[self scrollToLastMessageAnimated:YES];
+	
+	// iOS 7 needs a (nano)sec to allow the keyboard to disappear before scrolling
+	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1)), dispatch_get_main_queue(), ^{
+		[self scrollToLastMessageAnimated:YES];
+	});
 }
 
 @end

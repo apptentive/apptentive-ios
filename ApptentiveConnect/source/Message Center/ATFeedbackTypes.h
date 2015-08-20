@@ -7,6 +7,8 @@
 //
 
 typedef enum {
-	ATFeedbackAllowPhotoAttachment = 1 << 0,
-	ATFeedbackAllowTakePhotoAttachment = 1 << 1,
-} ATFeedbackAttachmentOptions;
+	ATFeedbackImageSourceScreenshot,
+	ATFeedbackImageSourceCamera,
+	ATFeedbackImageSourcePhotoLibrary,
+	ATFeedbackImageSourceProgrammatic,
+} ATFeedbackImageSource;

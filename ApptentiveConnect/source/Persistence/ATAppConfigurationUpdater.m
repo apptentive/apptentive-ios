@@ -7,7 +7,6 @@
 //
 
 #import "ATAppConfigurationUpdater.h"
-#import "ATContactStorage.h"
 #import "ATUtilities.h"
 #import "ATWebClient.h"
 #import "ATConnect.h"

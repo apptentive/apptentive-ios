@@ -68,6 +68,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @property (strong, nonatomic) IBOutlet ATMessageCenterProfileView *profileView;
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *composeButtonItem;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *neuMessageButtonItem;
 
 @property (nonatomic, strong) ATMessageCenterDataSource *dataSource;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
@@ -91,6 +92,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
     [super viewDidLoad];
 	
 	self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
+	[self.navigationController.toolbar addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(compose:)]];
 	
 	self.dataSource = [[ATMessageCenterDataSource alloc] initWithDelegate:self];
 	[self.dataSource start];
@@ -141,6 +143,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			self.profileView.mode = ATMessageCenterProfileModeCompact;
 			
 			self.composeButtonItem.enabled = NO;
+			self.neuMessageButtonItem.enabled = NO;
 		}
 	} else {
 		self.navigationItem.leftBarButtonItem = nil;
@@ -557,6 +560,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[[ATBackend sharedBackend] updatePersonIfNeeded];
 	
 	self.composeButtonItem.enabled = YES;
+	self.neuMessageButtonItem.enabled = YES;
 	[self updateState];
 	
 	if (self.state == ATMessageCenterStateEmpty) {

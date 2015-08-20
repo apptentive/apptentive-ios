@@ -49,7 +49,7 @@ typedef NS_ENUM(NSInteger, TableViewSection) {
 #pragma mark - Notifications
 
 - (void)unreadMessageCountChanged:(NSNotification *)notification {
-	[self.tableView reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:0 inSection:kMessageCenterSection] ] withRowAnimation:UITableViewRowAnimationFade];
+	[self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:kMessageCenterSection]] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 #pragma mark - Actions
@@ -104,8 +104,7 @@ typedef NS_ENUM(NSInteger, TableViewSection) {
 	switch (indexPath.section) {
 		case kMessageCenterSection:
 			cell = [tableView dequeueReusableCellWithIdentifier:@"MessageCenter" forIndexPath:indexPath];
-			
-			cell.detailTextLabel.text = [NSString stringWithFormat:@"%ld", (long)[ATConnect sharedConnection].unreadMessageCount];
+            cell.accessoryView = [[ATConnect sharedConnection] unreadMessageCountAccessoryView:YES];
 			break;
 			
 		case kEventSection:

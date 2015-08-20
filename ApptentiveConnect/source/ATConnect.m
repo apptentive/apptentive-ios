@@ -17,7 +17,11 @@
 #import "ATMessageSender.h"
 #if TARGET_OS_IPHONE
 #import "ATMessageCenterViewController.h"
+<<<<<<< HEAD
 #import "ATBannerViewController.h"
+=======
+#import "ATUnreadMessagesBadgeView.h"
+>>>>>>> d6a0e817d4de1b237ca62111ef04099b09a9a67a
 #endif
 
 // Can't get CocoaPods to do the right thing for debug builds.
@@ -407,6 +411,14 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (NSUInteger)unreadMessageCount {
 	return [[ATBackend sharedBackend] unreadMessageCount];
+}
+
+- (UIView *)unreadMessageCountAccessoryView:(BOOL)apptentiveHeart {
+	if (apptentiveHeart) {
+		return [ATUnreadMessagesBadgeView unreadMessageCountViewBadgeWithApptentiveHeart];
+	} else {
+		return [ATUnreadMessagesBadgeView unreadMessageCountViewBadge];
+	}
 }
 
 #elif TARGET_OS_MAC

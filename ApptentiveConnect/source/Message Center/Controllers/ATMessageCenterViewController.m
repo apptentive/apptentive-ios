@@ -166,6 +166,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			
 			self.composeButtonItem.enabled = NO;
 			self.neuMessageButtonItem.enabled = NO;
+		} else {
+			self.profileView.mode = ATMessageCenterProfileModeFull;
 		}
 	} else {
 		self.navigationItem.leftBarButtonItem = nil;
@@ -531,7 +533,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		if (self.interaction.profileRequested && ![ATUtilities emailAddressIsValid:[ATPersonInfo currentPerson].emailAddress]) {
 			[self.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{@"required": @(self.interaction.profileRequired), @"trigger": @"automatic"}];
 			
-			self.profileView.mode = ATMessageCenterProfileModeFull;
 			self.state = ATMessageCenterStateWhoCard;
 		} else {
 			[self updateState];

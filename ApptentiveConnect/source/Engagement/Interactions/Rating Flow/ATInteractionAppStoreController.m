@@ -132,15 +132,22 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 - (void)openAppStoreViaURL {
 	if ([self appID]) {
 		NSURL *url = [self URLForRatingApp];
-		if (![[UIApplication sharedApplication] canOpenURL:url]) {
-			ATLogError(@"No application can open the URL: %@", url);
-			[self showUnableToOpenAppStoreDialog];
-		}
-		else {
+		
+		BOOL attemptToOpenURL = [[UIApplication sharedApplication] canOpenURL:url];
+		
+		// In iOS 9, `canOpenURL:` returns NO unless that URL scheme has been added to LSApplicationQueriesSchemes.
+		attemptToOpenURL = YES;
+		
+		if (attemptToOpenURL) {
 			[self.interaction engage:ATInteractionAppStoreRatingEventLabelOpenAppStoreURL fromViewController:self.viewController];
 			
-			[[UIApplication sharedApplication] openURL:url];
-			
+			BOOL openedURL = [[UIApplication sharedApplication] openURL:url];
+			if (!openedURL) {
+				ATLogError(@"Could not open App Store URL: %@", url);
+			}
+		} else {
+			ATLogError(@"No application can open the URL: %@", url);
+			[self showUnableToOpenAppStoreDialog];
 		}
 	}
 	else {

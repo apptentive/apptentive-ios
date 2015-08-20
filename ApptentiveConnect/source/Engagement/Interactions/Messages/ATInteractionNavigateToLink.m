@@ -19,8 +19,16 @@ NSString *const ATInteractionNavigateToLinkEventLabelNavigate = @"navigate";
 	NSString *urlString = interaction.configuration[@"url"];
 	NSURL *url = [NSURL URLWithString:urlString];
 	if (url) {
-		if ([[UIApplication sharedApplication] canOpenURL:url]) {
+		BOOL attemptToOpenURL = [[UIApplication sharedApplication] canOpenURL:url];
+		
+		// In iOS 9, `canOpenURL:` returns NO unless that URL scheme has been added to LSApplicationQueriesSchemes.
+		attemptToOpenURL = YES;
+		
+		if (attemptToOpenURL) {
 			openedURL = [[UIApplication sharedApplication] openURL:url];
+			if (!openedURL) {
+				ATLogError(@"Could not open URL: %@", url);
+			}
 		} else {
 			ATLogError(@"No application can open the Interaction's URL: %@", url);
 		}

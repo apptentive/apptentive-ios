@@ -157,6 +157,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)dealloc {
+	[self removeUnsentContextMessages];
+
 	self.tableView.delegate = nil;
 	self.messageInputView.messageView.delegate = nil;
 	self.profileView.nameField.delegate = nil;
@@ -203,8 +205,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	} else {
 		[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATMessageCenterDraftMessageKey];
 	}
-	
-	[self removeUnsentContextMessages];
 }
 
 #pragma mark - Table view data source

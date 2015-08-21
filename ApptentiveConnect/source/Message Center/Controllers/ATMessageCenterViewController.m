@@ -209,6 +209,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		self.messageInputView.orientation = toInterfaceOrientation;
 		
 		self.tableView.tableHeaderView = self.greetingView;
+		[self resizeFooterView:nil];
 	}];
 }
 

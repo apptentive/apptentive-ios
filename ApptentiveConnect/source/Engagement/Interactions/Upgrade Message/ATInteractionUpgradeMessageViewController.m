@@ -101,12 +101,20 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 	[self updateIconContainerHeightForOrientation:[UIApplication sharedApplication].statusBarOrientation];
 }
 
+- (IBAction)showAbout:(id)sender {
+	UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MessageCenter" bundle:[ATConnect resourceBundle]];
+	UIViewController *aboutViewController = [storyboard instantiateViewControllerWithIdentifier:@"About"];
+	
+	[self.navigationController pushViewController:aboutViewController animated:YES];
+	[self.navigationController setNavigationBarHidden:NO animated:YES];
+}
+
 - (IBAction)okButtonPressed:(id)sender {
 	[self dismissAnimated:YES completion:NULL withAction:ATInteractionUpgradeMessageOkPressed];
 }
 
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion withAction:(ATInteractionUpgradeMessageAction)action {
-	[self dismissViewControllerAnimated:animated completion:completion];
+	[self.navigationController dismissViewControllerAnimated:animated completion:completion];
 	
 	[self.upgradeMessageInteraction engage:ATInteractionUpgradeMessageEventLabelClose fromViewController:self.presentingViewController];
 	
@@ -115,7 +123,10 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 - (void)presentFromViewController:(UIViewController *)newPresentingViewController animated:(BOOL)animated {
 	
 	self.modalPresentationStyle = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad ? UIModalPresentationFormSheet : UIModalPresentationFullScreen;
-	[newPresentingViewController presentViewController:self animated:animated completion:nil];
+	UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self];
+	navigationController.navigationBarHidden = YES;
+	
+	[newPresentingViewController presentViewController:navigationController animated:animated completion:nil];
 	
 	[self.upgradeMessageInteraction engage:ATInteractionUpgradeMessageEventLabelLaunch fromViewController:self.presentingViewController];
 }

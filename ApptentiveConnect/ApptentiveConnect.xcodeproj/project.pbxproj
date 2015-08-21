@@ -492,12 +492,12 @@
 		49FECBE217D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v1 to v2.xcmappingmodel"; sourceTree = "<group>"; };
 		580B24B917D90AF300AE2CD0 /* ATEngagementTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ATEngagementTests.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		580B24BA17D90AF300AE2CD0 /* ATEngagementTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ATEngagementTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		583C27091B34BFD800525001 /* ATUnreadMessagesBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATUnreadMessagesBadgeView.h; sourceTree = "<group>"; };
+		583C270A1B34BFD800525001 /* ATUnreadMessagesBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATUnreadMessagesBadgeView.m; sourceTree = "<group>"; };
 		583DF0651A390DDA00BF0207 /* ATInteractionInvocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATInteractionInvocation.h; sourceTree = "<group>"; };
 		583DF0661A390DDA00BF0207 /* ATInteractionInvocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATInteractionInvocation.m; sourceTree = "<group>"; };
 		583DF06C1A44CD6E00BF0207 /* ATInteractionNavigateToLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATInteractionNavigateToLink.h; sourceTree = "<group>"; };
 		583DF06D1A44CD6E00BF0207 /* ATInteractionNavigateToLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATInteractionNavigateToLink.m; sourceTree = "<group>"; };
-		583C27091B34BFD800525001 /* ATUnreadMessagesBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATUnreadMessagesBadgeView.h; sourceTree = "<group>"; };
-		583C270A1B34BFD800525001 /* ATUnreadMessagesBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATUnreadMessagesBadgeView.m; sourceTree = "<group>"; };
 		583E3969188E08DD0030B51E /* ATDataModel v3 to v4.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v3 to v4.xcmappingmodel"; sourceTree = "<group>"; };
 		5843F8181887675F00C9D096 /* ATDataModel 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ATDataModel 4.xcdatamodel"; sourceTree = "<group>"; };
 		5843F81D188778B000C9D096 /* ATDataModelv4.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = ATDataModelv4.sqlite; sourceTree = "<group>"; };
@@ -554,6 +554,8 @@
 		58EA5B4F17B47E0C00ECEB4B /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		58EEBE2117C7E8150039A0F5 /* ATInteraction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATInteraction.h; sourceTree = "<group>"; };
 		58EEBE2217C7E8150039A0F5 /* ATInteraction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATInteraction.m; sourceTree = "<group>"; };
+		58EF81BE1B87CC7A003C760A /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		58EF81BF1B87CC7A003C760A /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -910,18 +912,6 @@
 				4936AE4A1379DE3100A4B17F /* ATHUDView.m */,
 				4960A531171F70530082669B /* ATNetworkImageView.h */,
 				4960A532171F70530082669B /* ATNetworkImageView.m */,
-				49AAC84F175FFA0D00F08879 /* ATLabel.h */,
-				49AAC850175FFA0D00F08879 /* ATLabel.m */,
-				49AAC855175FFDB800F08879 /* ATCustomView.h */,
-				49AAC856175FFDB800F08879 /* ATCustomView.m */,
-				01C30CE91B0D09F8006BC911 /* ATMessageCenterGreetingView.h */,
-				01C30CEA1B0D09F8006BC911 /* ATMessageCenterGreetingView.m */,
-				017D97401B0E3770004E045C /* ATMessageCenterConfirmationView.h */,
-				017D97411B0E3770004E045C /* ATMessageCenterConfirmationView.m */,
-				017D97441B0E5795004E045C /* ATMessageCenterMessageCell.h */,
-				017D97451B0E5795004E045C /* ATMessageCenterMessageCell.m */,
-				017D97481B0E57C2004E045C /* ATMessageCenterReplyCell.h */,
-				017D97491B0E57C2004E045C /* ATMessageCenterReplyCell.m */,
 				583C27091B34BFD800525001 /* ATUnreadMessagesBadgeView.h */,
 				583C270A1B34BFD800525001 /* ATUnreadMessagesBadgeView.m */,
 			);
@@ -1365,6 +1355,7 @@
 				tr,
 				"pt-BR",
 				"es-ES",
+				pl,
 			);
 			mainGroup = 496DC3741333D35600743F65;
 			productRefGroup = 496DC3801333D35600743F65 /* Products */;
@@ -1609,6 +1600,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				58EA5B4F17B47E0C00ECEB4B /* zh */,
+				58EF81BF1B87CC7A003C760A /* pl */,
 			);
 			name = InfoPlist.strings;
 			path = .;
@@ -1637,6 +1629,7 @@
 				5871B27B1AC38B34005C010A /* ko */,
 				5871B27C1AC38B35005C010A /* fr-CA */,
 				5871B27D1AC38B36005C010A /* el */,
+				58EF81BE1B87CC7A003C760A /* pl */,
 			);
 			name = Localizable.strings;
 			path = .;

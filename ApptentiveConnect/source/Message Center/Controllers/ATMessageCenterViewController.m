@@ -113,6 +113,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
 	[self.navigationController.toolbar addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(compose:)]];
 	
+	self.navigationItem.rightBarButtonItem.title = ATLocalizedString(@"Close", @"Button that closes Message Center.");
+	self.navigationItem.rightBarButtonItem.accessibilityHint = ATLocalizedString(@"Closes Message Center.", @"Accessibility hint for 'close' button");
+	
 	self.dataSource = [[ATMessageCenterDataSource alloc] initWithDelegate:self];
 	[self.dataSource start];
 	
@@ -135,6 +138,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.greetingView.isOnScreen = NO;
 	
 	[self.greetingView.aboutButton setImage:[[ATBackend imageNamed:@"at_info"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+	self.greetingView.aboutButton.accessibilityLabel = ATLocalizedString(@"About Apptentive", @"Accessibility label for 'show about' button");
+	self.greetingView.aboutButton.accessibilityHint = ATLocalizedString(@"Displays information about this feature.", @"Accessibilty hint for 'show about' button");
 	
 	self.statusView.mode = ATMessageCenterStatusModeEmpty;
 	
@@ -148,9 +153,16 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.messageInputView.titleLabel.text = self.interaction.composerTitle;
 	[self.messageInputView.sendButton setTitle:self.interaction.composerSendButtonTitle forState:UIControlStateNormal];
 	self.messageInputView.sendButton.enabled = self.messageInputView.messageView.text.length > 0;
+	self.messageInputView.sendButton.accessibilityHint = ATLocalizedString(@"Sends the message.", @"Accessibility hint for 'send' button");
+	
+	self.messageInputView.clearButton.accessibilityLabel = ATLocalizedString(@"Discard", @"Accessibility label for 'discard' button");
+	self.messageInputView.clearButton.accessibilityHint = ATLocalizedString(@"Discards the message", @"Accessibility hint for 'discard' button");
 	
 	if (self.interaction.profileRequested) {
-		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[ATBackend imageNamed:@"at_account"] landscapeImagePhone:[ATBackend imageNamed:@"at_account"] style:UIBarButtonItemStyleBordered target:self action:@selector(showWho:)];
+		UIBarButtonItem *profileButtonItem = [[UIBarButtonItem alloc] initWithImage:[ATBackend imageNamed:@"at_account"] landscapeImagePhone:[ATBackend imageNamed:@"at_account"] style:UIBarButtonItemStyleBordered target:self action:@selector(showWho:)];
+		profileButtonItem.accessibilityLabel = ATLocalizedString(@"Profile", @"Accessibility label for 'edit profile' button");
+		profileButtonItem.accessibilityHint = ATLocalizedString(@"Displays name and email editor", @"Accessibility hint for 'edit profile' button");
+		self.navigationItem.leftBarButtonItem = profileButtonItem;
 		
 		self.profileView.titleLabel.text = self.interaction.profileInitialTitle;
 		self.profileView.requiredLabel.text = self.interaction.profileInitialEmailExplanation;

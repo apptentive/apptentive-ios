@@ -110,7 +110,7 @@
 		if (mode == ATMessageCenterProfileModeCompact) {
 			self.requiredLabel.hidden = NO;
 			nameFieldAlpha = 0;
-			self.emailVerticalSpaceToButtonBar.constant = 32.0;
+			self.emailVerticalSpaceToButtonBar.constant = 37.0;
 		} else {
 			self.nameField.hidden = NO;
 			nameFieldAlpha = 1;

@@ -181,6 +181,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardDidHideNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
+
+	// Fix iOS 7 bug where contentSize gets set to zero
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fixContentSize:) name:UIKeyboardDidShowNotification object:nil];
 }
 
 - (void)dealloc {
@@ -937,6 +940,14 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1)), dispatch_get_main_queue(), ^{
 		[self scrollToLastMessageAnimated:YES];
 	});
+}
+
+// Fix a bug where iOS7 resets the contentSize to zero sometimes
+- (void)fixContentSize:(NSNotification *)notification {
+	if (self.tableView.contentSize.height == 0) {
+		self.tableView.tableFooterView = self.tableView.tableFooterView;
+		[self scrollToFooterView:nil];
+	}
 }
 
 @end

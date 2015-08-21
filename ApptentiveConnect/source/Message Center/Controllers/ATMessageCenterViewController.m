@@ -667,6 +667,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (IBAction)skipWho:(id)sender {
+	self.profileView.nameField.text = @"";
+	self.profileView.emailField.text = @"";
+	
 	NSDictionary *userInfo = @{@"required": @(self.interaction.profileRequired)};
 	if ([sender isKindOfClass:[UIButton class]]) {
 		userInfo = @{@"required": @(self.interaction.profileRequired), @"method": @"button", @"button_label": ((UIButton *)sender).titleLabel.text};

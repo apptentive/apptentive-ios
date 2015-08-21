@@ -21,16 +21,16 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GdB-EU-leh">
-                                    <rect key="frame" x="47" y="136" width="320" height="104"/>
+                                    <rect key="frame" x="57" y="136" width="300" height="104"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We'd love to get feedback from you on your app." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="Zbc-2w-9Gi">
-                                            <rect key="frame" x="8" y="40" width="304" height="64"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We'd love to get feedback from you on your app." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="Zbc-2w-9Gi">
+                                            <rect key="frame" x="8" y="40" width="284" height="64"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <color key="textColor" red="0.51764705882352935" green="0.51764705882352935" blue="0.56470588235294117" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hello!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="kjS-eF-EIi">
-                                            <rect key="frame" x="8" y="0.0" width="304" height="32"/>
+                                            <rect key="frame" x="8" y="0.0" width="284" height="32"/>
                                             <fontDescription key="fontDescription" type="system" weight="light" pointSize="22"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -39,7 +39,7 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="kjS-eF-EIi" secondAttribute="trailing" constant="8" id="1LZ-Pj-5Uq"/>
-                                        <constraint firstAttribute="width" constant="320" id="1u8-cG-zGs"/>
+                                        <constraint firstAttribute="width" constant="300" id="1u8-cG-zGs"/>
                                         <constraint firstItem="kjS-eF-EIi" firstAttribute="leading" secondItem="GdB-EU-leh" secondAttribute="leading" constant="8" id="2e9-My-zeW"/>
                                         <constraint firstAttribute="bottom" secondItem="Zbc-2w-9Gi" secondAttribute="bottom" id="8Lh-J4-j3D"/>
                                         <constraint firstItem="Zbc-2w-9Gi" firstAttribute="leading" secondItem="GdB-EU-leh" secondAttribute="leading" constant="8" id="DrF-oG-0Sm"/>

@@ -11,10 +11,12 @@
 @interface ATMessageCenterProfileView ()
 
 @property (weak, nonatomic) IBOutlet UIView *containerView;
+@property (weak, nonatomic) IBOutlet UIView *buttonBar;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *nameTrailingConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *emailLeadingConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *nameVerticalSpaceToEmail;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *emailVerticalSpaceToButtonBar;
 
 @property (strong, nonatomic) NSLayoutConstraint *nameHorizontalSpaceToEmail;
 
@@ -31,9 +33,14 @@
 @implementation ATMessageCenterProfileView
 
 - (void)awakeFromNib {
-	self.containerView.layer.borderColor = [UIColor colorWithRed:200.0/255.0 green:199.0/255.0 blue:204.0/255.0 alpha:1.0].CGColor;
+	UIColor *borderColor = [UIColor colorWithRed:200.0/255.0 green:199.0/255.0 blue:204.0/255.0 alpha:1.0];
+	CGFloat borderWidth = 1.0 / [UIScreen mainScreen].scale;
 	
-	self.containerView.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
+	self.containerView.layer.borderColor = borderColor.CGColor;
+	self.buttonBar.layer.borderColor = borderColor.CGColor;
+	
+	self.containerView.layer.borderWidth = borderWidth;
+	self.buttonBar.layer.borderWidth = borderWidth;
 	
 	self.portraitFullConstraints = @[self.nameTrailingConstraint, self.emailLeadingConstraint, self.nameVerticalSpaceToEmail];
 	self.portraitCompactConstraints = @[self.nameTrailingConstraint, self.emailLeadingConstraint];
@@ -103,9 +110,11 @@
 		if (mode == ATMessageCenterProfileModeCompact) {
 			self.requiredLabel.hidden = NO;
 			nameFieldAlpha = 0;
+			self.emailVerticalSpaceToButtonBar.constant = 32.0;
 		} else {
 			self.nameField.hidden = NO;
 			nameFieldAlpha = 1;
+			self.emailVerticalSpaceToButtonBar.constant = 16.0;
 		}
 		
 		[self updateConstraints];

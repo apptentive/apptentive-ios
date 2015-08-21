@@ -613,21 +613,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (IBAction)validateWho:(id)sender {
-	BOOL validEmail = [ATUtilities emailAddressIsValid:self.profileView.emailField.text];
-	BOOL blankEmail = self.profileView.emailField.text.length == 0;
-	
-	BOOL validProfile;
-	if (self.interaction.profileRequired) {
-		validProfile = validEmail;
-	} else {
-		validProfile = validEmail || blankEmail;
-	}
-
-	self.profileView.saveButton.enabled = validProfile;
+	self.profileView.saveButton.enabled = [self isWhoValid];
 }
 
 - (IBAction)saveWho:(id)sender {
-	if (![ATUtilities emailAddressIsValid:self.profileView.emailField.text]) {
+	if (![self isWhoValid]) {
 		return;
 	}
 	
@@ -646,11 +636,15 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileSubmit fromViewController:self userInfo:userInfo];
 	
-	[ATConnect sharedConnection].personName = self.profileView.nameField.text;
-	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileName fromViewController:self userInfo:@{@"length": @(self.profileView.nameField.text.length)}];
+	if (self.profileView.nameField.text.length) {
+		[ATConnect sharedConnection].personName = self.profileView.nameField.text;
+		[self.interaction engage:ATInteractionMessageCenterEventLabelProfileName fromViewController:self userInfo:@{@"length": @(self.profileView.nameField.text.length)}];
+	}
 
-	[ATConnect sharedConnection].personEmailAddress = self.profileView.emailField.text;
-	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileEmail fromViewController:self userInfo:@{@"length": @(self.profileView.emailField.text.length), @"valid": @([ATUtilities emailAddressIsValid:self.profileView.emailField.text])}];
+	if (self.profileView.emailField.text.length) {
+		[ATConnect sharedConnection].personEmailAddress = self.profileView.emailField.text;
+		[self.interaction engage:ATInteractionMessageCenterEventLabelProfileEmail fromViewController:self userInfo:@{@"length": @(self.profileView.emailField.text.length), @"valid": @([ATUtilities emailAddressIsValid:self.profileView.emailField.text])}];
+	}
 	
 	[[ATBackend sharedBackend] updatePersonIfNeeded];
 	
@@ -688,6 +682,17 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 #pragma mark - Private
+
+- (BOOL)isWhoValid {
+	BOOL emailIsValid = [ATUtilities emailAddressIsValid:self.profileView.emailField.text];
+	BOOL emailIsBlank = self.profileView.emailField.text.length == 0;
+	
+	if (self.interaction.profileRequired) {
+		return emailIsValid;
+	} else {
+		return emailIsValid || emailIsBlank;
+	}
+}
 
 - (void)updateState {
 	if ([self shouldShowProfileViewBeforeComposing:YES]) {

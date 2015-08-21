@@ -46,13 +46,7 @@
 		messageCenter.interaction = self.interaction;
 		
 		[viewController presentViewController:navigationController animated:YES completion:nil];
-		
-#warning re-add
-		//messageCenter.dismissalDelegate = self;
-		//self.presentedMessageCenterViewController = navigationController;
-
 	}
-	
 }
 
 

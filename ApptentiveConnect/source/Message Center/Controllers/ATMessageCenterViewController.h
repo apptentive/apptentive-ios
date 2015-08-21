@@ -12,18 +12,8 @@
 
 @class ATMessageCenterInteraction;
 
-@protocol ATMessageCenterDismissalDelegate;
-
 @interface ATMessageCenterViewController : UITableViewController <ATMessageCenterDataSourceDelegate, UITextViewDelegate, UITextFieldDelegate, ATBackendMessageDelegate, UIActionSheetDelegate>
-
-@property (nonatomic, weak) NSObject<ATMessageCenterDismissalDelegate> *dismissalDelegate;
 
 @property (nonatomic, strong) ATMessageCenterInteraction *interaction;
 
-@end
-
-@protocol ATMessageCenterDismissalDelegate <NSObject>
-- (void)messageCenterWillDismiss:(ATMessageCenterViewController *)messageCenter;
-@optional
-- (void)messageCenterDidDismiss:(ATMessageCenterViewController *)messageCenter;
 @end

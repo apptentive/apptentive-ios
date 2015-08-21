@@ -521,14 +521,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (IBAction)dismiss:(id)sender {
 	[self.interaction engage:ATInteractionMessageCenterEventLabelClose fromViewController:self];
 	
-	[self.dismissalDelegate messageCenterWillDismiss:self];
 	[self.dataSource stop];
 	
-	[self dismissViewControllerAnimated:YES completion:^{
-		if ([self.dismissalDelegate respondsToSelector:@selector(messageCenterDidDismiss:)]) {
-			[self.dismissalDelegate messageCenterDidDismiss:self];
-		}
-	}];
+	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)sendButtonPressed:(id)sender {

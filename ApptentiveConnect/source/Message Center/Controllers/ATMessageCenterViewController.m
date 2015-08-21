@@ -613,9 +613,17 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (IBAction)validateWho:(id)sender {
-	BOOL valid = [ATUtilities emailAddressIsValid:self.profileView.emailField.text];
+	BOOL validEmail = [ATUtilities emailAddressIsValid:self.profileView.emailField.text];
+	BOOL blankEmail = self.profileView.emailField.text.length == 0;
 	
-	self.profileView.saveButton.enabled = valid;
+	BOOL validProfile;
+	if (self.interaction.profileRequired) {
+		validProfile = validEmail;
+	} else {
+		validProfile = validEmail || blankEmail;
+	}
+
+	self.profileView.saveButton.enabled = validProfile;
 }
 
 - (IBAction)saveWho:(id)sender {

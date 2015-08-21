@@ -613,13 +613,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (IBAction)validateWho:(id)sender {
-	BOOL valid = [ATUtilities emailAddressIsValid:self.profileView.emailField.text];
-	
-	self.profileView.saveButton.enabled = valid;
+	self.profileView.saveButton.enabled = [self isWhoValid];
 }
 
 - (IBAction)saveWho:(id)sender {
-	if (![ATUtilities emailAddressIsValid:self.profileView.emailField.text]) {
+	if (![self isWhoValid]) {
 		return;
 	}
 	
@@ -638,11 +636,15 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileSubmit fromViewController:self userInfo:userInfo];
 	
-	[ATConnect sharedConnection].personName = self.profileView.nameField.text;
-	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileName fromViewController:self userInfo:@{@"length": @(self.profileView.nameField.text.length)}];
+	if (self.profileView.nameField.text.length) {
+		[ATConnect sharedConnection].personName = self.profileView.nameField.text;
+		[self.interaction engage:ATInteractionMessageCenterEventLabelProfileName fromViewController:self userInfo:@{@"length": @(self.profileView.nameField.text.length)}];
+	}
 
-	[ATConnect sharedConnection].personEmailAddress = self.profileView.emailField.text;
-	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileEmail fromViewController:self userInfo:@{@"length": @(self.profileView.emailField.text.length), @"valid": @([ATUtilities emailAddressIsValid:self.profileView.emailField.text])}];
+	if (self.profileView.emailField.text.length) {
+		[ATConnect sharedConnection].personEmailAddress = self.profileView.emailField.text;
+		[self.interaction engage:ATInteractionMessageCenterEventLabelProfileEmail fromViewController:self userInfo:@{@"length": @(self.profileView.emailField.text.length), @"valid": @([ATUtilities emailAddressIsValid:self.profileView.emailField.text])}];
+	}
 	
 	[[ATBackend sharedBackend] updatePersonIfNeeded];
 	
@@ -659,6 +661,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (IBAction)skipWho:(id)sender {
+	self.profileView.nameField.text = @"";
+	self.profileView.emailField.text = @"";
+	
 	NSDictionary *userInfo = @{@"required": @(self.interaction.profileRequired)};
 	if ([sender isKindOfClass:[UIButton class]]) {
 		userInfo = @{@"required": @(self.interaction.profileRequired), @"method": @"button", @"button_label": ((UIButton *)sender).titleLabel.text};
@@ -677,6 +682,17 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 #pragma mark - Private
+
+- (BOOL)isWhoValid {
+	BOOL emailIsValid = [ATUtilities emailAddressIsValid:self.profileView.emailField.text];
+	BOOL emailIsBlank = self.profileView.emailField.text.length == 0;
+	
+	if (self.interaction.profileRequired) {
+		return emailIsValid;
+	} else {
+		return emailIsValid || emailIsBlank;
+	}
+}
 
 - (void)updateState {
 	if ([self shouldShowProfileViewBeforeComposing:YES]) {
@@ -732,7 +748,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				break;
 			
 			case ATMessageCenterStateWhoCard:
-				[self.profileView becomeFirstResponder];
+				// Only focus profile view if appearing post-send.
+				if (!self.interaction.profileRequired) {
+					[self.profileView becomeFirstResponder];
+				}
 				self.navigationItem.leftBarButtonItem.enabled = NO;
 				toolbarHidden = YES;
 				newFooter = self.profileView;
@@ -923,7 +942,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)scrollToLastMessageAnimated:(BOOL)animated {
-	if (self.state != ATMessageCenterStateEmpty) {
+	if (self.state != ATMessageCenterStateEmpty && (self.state != ATMessageCenterStateWhoCard && self.interaction.profileRequired)) {
 		[self scrollToFooterView:nil];
 	}
 }

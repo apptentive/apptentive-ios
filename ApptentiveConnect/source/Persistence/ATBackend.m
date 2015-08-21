@@ -879,6 +879,12 @@ static NSURLCache *imageCache = nil;
 
 #pragma mark - Message task delegate
 
+- (void)setMessageDelegate:(id<ATBackendMessageDelegate>)messageDelegate {
+	_messageDelegate = messageDelegate;
+	
+	[self updateMessageTaskProgress];
+}
+
 - (void)messageTaskDidBegin:(ATMessageTask *)messageTask {
 	// Added to activeMessageTasks on message creation
 	[self updateMessageTaskProgress];

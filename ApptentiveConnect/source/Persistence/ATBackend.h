@@ -42,7 +42,7 @@ extern NSString *const ATBackendBecameReadyNotification;
 #if TARGET_OS_IPHONE
 , NSFetchedResultsControllerDelegate, UIAlertViewDelegate, ATMessageTaskProgressDelegate
 #endif
-> 
+>
 @property (nonatomic, copy) NSString *apiKey;
 /*! The feedback currently being worked on by the user. */
 @property (nonatomic, strong) ATFeedback *currentFeedback;

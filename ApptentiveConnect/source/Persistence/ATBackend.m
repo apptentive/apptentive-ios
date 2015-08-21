@@ -125,7 +125,7 @@ static NSURLCache *imageCache = nil;
 			imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"png" inDirectory:@"generated"];
 		}
 	}
-
+	
 	if (imagePath) {
 		result = [UIImage imageWithContentsOfFile:imagePath];
 	} else {
@@ -262,13 +262,13 @@ static NSURLCache *imageCache = nil;
 			message.sender = sender;
 		}
 	}
-
+	
 	return message;
 }
 
 - (BOOL)sendTextMessage:(ATTextMessage *)message {
 	message.pendingState = @(ATPendingMessageStateSending);
-
+	
 	[self updatePersonIfNeeded];
 	[message updateClientCreationTime];
 	
@@ -381,7 +381,7 @@ static NSURLCache *imageCache = nil;
 			ATLogError(@"Failed to set file protection level: %@", apptentiveDirectoryPath);
 			ATLogError(@"Error was: %@", error);
 		}
-	
+		
 		_supportDirectoryPath = apptentiveDirectoryPath;
 	}
 	
@@ -923,10 +923,10 @@ static NSURLCache *imageCache = nil;
 	}
 #if TARGET_OS_IPHONE
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWorking:) name:UIApplicationDidBecomeActiveNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWorking:) name:UIApplicationWillEnterForegroundNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWorking:) name:UIApplicationWillEnterForegroundNotification object:nil];
 	
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:UIApplicationWillTerminateNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:UIApplicationWillTerminateNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkForMessages) name:UIApplicationWillEnterForegroundNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRemoteNotificationInUIApplicationStateActive) name:UIApplicationDidBecomeActiveNotification object:nil];

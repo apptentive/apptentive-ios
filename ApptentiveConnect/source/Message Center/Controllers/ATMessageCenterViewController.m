@@ -272,19 +272,19 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				messageCell.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
 				messageCell.layer.borderColor = [self failedColor].CGColor;
 				messageCell.statusLabel.textColor = [self failedColor];
-				messageCell.statusLabel.text = @"Failed";
+				messageCell.statusLabel.text = ATLocalizedString(@"Failed", @"Message failed to send.");
 				break;
 			case ATMessageCenterMessageStatusSending:
 				messageCell.statusLabel.hidden = NO;
 				messageCell.layer.borderWidth = 0;
 				messageCell.statusLabel.textColor = self.sentColor;
-				messageCell.statusLabel.text = @"Sending…";
+				messageCell.statusLabel.text = ATLocalizedString(@"Sending…", @"Message is sending.");
 				break;
 			case ATMessageCenterMessageStatusSent:
 				messageCell.statusLabel.hidden = NO;
 				messageCell.layer.borderWidth = 0;
 				messageCell.statusLabel.textColor = self.sentColor;
-				messageCell.statusLabel.text = @"Sent";
+				messageCell.statusLabel.text = ATLocalizedString(@"Sent", @"Message sent successfully");
 				break;
 		}
 				

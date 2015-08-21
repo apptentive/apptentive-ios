@@ -63,6 +63,7 @@ NSString *const ATInteractionMessageCenterEventLabelProfileEmail = @"profile_ema
 NSString *const ATInteractionMessageCenterEventLabelProfileSubmit = @"profile_submit";
 
 NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
+NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSkipProfileKey";
 
 typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	ATMessageCenterStateInvalid = 0,
@@ -529,7 +530,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		
 		[[ATBackend sharedBackend] sendTextMessageWithBody:message];
 		
-		if (self.interaction.profileRequested && ![ATUtilities emailAddressIsValid:[ATPersonInfo currentPerson].emailAddress]) {
+		if ([self shouldShowProfileViewBeforeComposing:NO]) {
 			[self.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{@"required": @(self.interaction.profileRequired), @"trigger": @"automatic"}];
 			
 			self.state = ATMessageCenterStateWhoCard;
@@ -647,10 +648,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	NSDictionary *userInfo = @{@"required": @(self.interaction.profileRequired)};
 	if ([sender isKindOfClass:[UIButton class]]) {
 		userInfo = @{@"required": @(self.interaction.profileRequired), @"method": @"button", @"button_label": ((UIButton *)sender).titleLabel.text};
-
 	}
 	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileClose fromViewController:sender userInfo:userInfo];
 	
+	[[NSUserDefaults standardUserDefaults] setBool:YES forKey:ATMessageCenterDidSkipProfileKey];
 	[self updateState];
 	[self.view endEditing:YES];
 	[self resizeFooterView:nil];
@@ -664,7 +665,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 #pragma mark - Private
 
 - (void)updateState {
-	if (self.interaction.profileRequired && ![ATUtilities emailAddressIsValid:[ATConnect sharedConnection].personEmailAddress]) {
+	if ([self shouldShowProfileViewBeforeComposing:YES]) {
 		[self.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{@"required": @(self.interaction.profileRequired), @"trigger": @"automatic"}];
 		
 		self.state = ATMessageCenterStateWhoCard;
@@ -936,6 +937,18 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (UIColor *)failedColor {
 	return [UIColor colorWithRed:0.8 green:0.375 blue:0.412 alpha:1];
+}
+
+- (BOOL)shouldShowProfileViewBeforeComposing:(BOOL)beforeComposing {
+	if ([ATUtilities emailAddressIsValid:[ATConnect sharedConnection].personEmailAddress]) {
+		return NO;
+	} else if (self.interaction.profileRequired) {
+		return YES;
+	} else if (self.interaction.profileRequested && !beforeComposing) {
+		return ![[NSUserDefaults standardUserDefaults] boolForKey:ATMessageCenterDidSkipProfileKey];
+	} else {
+		return NO;
+	}
 }
 
 - (void)discardDraft {

@@ -104,7 +104,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (void)sendAttachmentText:(NSString *)text {
-    [[ATBackend sharedBackend] sendTextMessageWithBody:text hiddenOnClient:YES];
+	[[ATBackend sharedBackend] sendTextMessageWithBody:text hiddenOnClient:YES];
 }
 
 - (void)sendAttachmentImage:(UIImage *)image {
@@ -142,7 +142,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	BOOL allowedData = ([object isKindOfClass:[NSString class]] ||
 						[object isKindOfClass:[NSNumber class]] ||
 						[object isKindOfClass:[NSNull class]]);
-		
+	
 	if (allowedData) {
 		[customData setObject:object forKey:key];
 	} else {
@@ -199,11 +199,11 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (void)addIntegration:(NSString *)integration withDeviceToken:(NSData *)deviceToken {
-    const unsigned *tokenBytes = [deviceToken bytes];
-    NSString *token = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
-                       ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
-                       ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
-                       ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
+	const unsigned *tokenBytes = [deviceToken bytes];
+	NSString *token = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
+					   ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
+					   ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
+					   ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
 	
 	[[ATConnect sharedConnection] addIntegration:integration withConfiguration:@{@"token": token}];
 }
@@ -319,7 +319,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 {
 	NSMutableDictionary *commerceItem = [NSMutableDictionary dictionary];
 	commerceItem[@"version"] = @1;
-
+	
 	if (itemID) {
 		commerceItem[@"id"] = itemID;
 	}
@@ -396,13 +396,13 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (NSString *)engagementInteractionNameAtIndex:(NSInteger)index {
 	ATInteraction *interaction = [[self engagementInteractions] objectAtIndex:index];
-
+	
 	return [interaction.configuration objectForKey:@"name"] ?: [interaction.configuration objectForKey:@"title"] ?: @"Untitled Interaction";
 }
 
 - (NSString *)engagementInteractionTypeAtIndex:(NSInteger)index {
 	ATInteraction *interaction = [[self engagementInteractions] objectAtIndex:index];
-
+	
 	return interaction.type;
 }
 

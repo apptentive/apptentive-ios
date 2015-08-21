@@ -75,7 +75,7 @@ extern NSString *const ATIntegrationKeyParse;
  `ATMessageCenterUnreadCountChangedNotification`
  
  Sent when the number of unread messages changes.
- The notification object is undefined. The `userInfo` dictionary contains a `count` key, the value of which 
+ The notification object is undefined. The `userInfo` dictionary contains a `count` key, the value of which
  is the number of unread messages.
  
  `ATAppRatingFlowUserAgreedToRateAppNotification`
@@ -84,7 +84,7 @@ extern NSString *const ATIntegrationKeyParse;
  
  `ATSurveySentNotification`
  
- Sent when a survey is submitted by the user. The userInfo dictionary will have a key named `ATSurveyIDKey`, 
+ Sent when a survey is submitted by the user. The userInfo dictionary will have a key named `ATSurveyIDKey`,
  with a value of the id of the survey that was sent.
  
  ## Integrations
@@ -195,7 +195,7 @@ extern NSString *const ATIntegrationKeyParse;
  */
 - (BOOL)willShowInteractionForEvent:(NSString *)event;
 
-/** 
+/**
  Shows interaction UI, if applicable, related to a given event.
  
  For example, if you have an upgrade message to display on app launch, you might call with event label set to
@@ -367,7 +367,7 @@ extern NSString *const ATIntegrationKeyParse;
  */
 - (void)addCustomDeviceData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
 
-/** 
+/**
  Removes custom data associated with the current person.
  
  Will remove data, if any, associated with the current person with the key `key`.
@@ -385,8 +385,8 @@ extern NSString *const ATIntegrationKeyParse;
  */
 - (void)removeCustomDeviceDataWithKey:(NSString *)key;
 
-/** 
- Deprecated. Use `-addCustomDeviceData:withKey:` instead. 
+/**
+ Deprecated. Use `-addCustomDeviceData:withKey:` instead.
  
  @warning Deprecated!
  @param object The custom data.
@@ -394,7 +394,7 @@ extern NSString *const ATIntegrationKeyParse;
  */
 - (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key DEPRECATED_ATTRIBUTE;
 
-/** Deprecated. Use `-removeCustomDeviceDataWithKey:` instead. 
+/** Deprecated. Use `-removeCustomDeviceDataWithKey:` instead.
  
  @warning Deprecated!
  @param key The key of the data.
@@ -417,7 +417,7 @@ extern NSString *const ATIntegrationKeyParse;
 /// @name Integrate With Other Services
 ///------------------------------------
 
-/** 
+/**
  Adds a custom configuration for a 3rd-party integration service.
  
  @param integration The name of the integration.

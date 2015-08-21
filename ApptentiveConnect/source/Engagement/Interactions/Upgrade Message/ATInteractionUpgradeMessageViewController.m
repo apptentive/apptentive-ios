@@ -101,6 +101,12 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 	[self updateIconContainerHeightForOrientation:[UIApplication sharedApplication].statusBarOrientation];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+	
+	[self.navigationController setNavigationBarHidden:YES animated:animated];
+}
+
 - (IBAction)showAbout:(id)sender {
 	UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MessageCenter" bundle:[ATConnect resourceBundle]];
 	UIViewController *aboutViewController = [storyboard instantiateViewControllerWithIdentifier:@"About"];

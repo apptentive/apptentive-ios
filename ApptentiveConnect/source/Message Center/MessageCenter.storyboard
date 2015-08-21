@@ -67,8 +67,12 @@
                                         <constraint firstAttribute="height" constant="1" id="xWx-Gq-u4K"/>
                                     </constraints>
                                 </view>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="detailDisclosure" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bNv-Jb-zyu">
-                                    <rect key="frame" x="384" y="8" width="22" height="22"/>
+                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bNv-Jb-zyu">
+                                    <rect key="frame" x="390" y="8" width="16" height="22"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="24" id="Xwx-Am-SFS"/>
+                                        <constraint firstAttribute="height" constant="24" id="nEz-Ba-c32"/>
+                                    </constraints>
                                     <color key="tintColor" red="0.68627450980392157" green="0.71372549019607845" blue="0.75686274509803919" alpha="1" colorSpace="calibratedRGB"/>
                                     <state key="normal">
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>

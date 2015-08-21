@@ -134,6 +134,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.greetingView.aboutButton.hidden = !self.interaction.branding;
 	self.greetingView.isOnScreen = NO;
 	
+	[self.greetingView.aboutButton setImage:[[ATBackend imageNamed:@"at_info"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+	
 	self.statusView.mode = ATMessageCenterStatusModeEmpty;
 	
 	self.messageInputView.messageView.text = self.draftMessage ?: @"";

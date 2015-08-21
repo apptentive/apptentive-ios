@@ -364,12 +364,20 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController {
 	NSDictionary *apptentivePayload = [userInfo objectForKey:@"apptentive"];
 	if (apptentivePayload) {
-		NSString *action = [apptentivePayload objectForKey:@"action"];
-		
-		if ([action isEqualToString:@"pmc"]) {
-			[self presentMessageCenterFromViewController:viewController];
+		if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive) {
+			// Present Apptentive Push Notifications later, when Application State is Active
+			self.pushUserInfo = userInfo;
+			self.pushViewController = viewController;
 		} else {
-			[[ATBackend sharedBackend] checkForMessages];
+			self.pushUserInfo = nil;
+			self.pushViewController = nil;
+			
+			NSString *action = [apptentivePayload objectForKey:@"action"];
+			if ([action isEqualToString:@"pmc"]) {
+				[self presentMessageCenterFromViewController:viewController];
+			} else {
+				[[ATBackend sharedBackend] checkForMessages];
+			}
 		}
 	}
 }

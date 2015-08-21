@@ -11,6 +11,7 @@
 #import "ATInteraction.h"
 #import "ATBackend.h"
 #import "ATUtilities.h"
+#import "ATAboutViewController.h"
 
 typedef enum {
 	ATInteractionUpgradeMessageOkPressed,
@@ -108,10 +109,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 }
 
 - (IBAction)showAbout:(id)sender {
-	UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MessageCenter" bundle:[ATConnect resourceBundle]];
-	UIViewController *aboutViewController = [storyboard instantiateViewControllerWithIdentifier:@"About"];
-	
-	[self.navigationController pushViewController:aboutViewController animated:YES];
+	[self.navigationController pushViewController:[ATAboutViewController aboutViewControllerFromStoryboard] animated:YES];
 	[self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 

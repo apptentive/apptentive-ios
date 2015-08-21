@@ -156,12 +156,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.messageInputView.sendButton.accessibilityHint = ATLocalizedString(@"Sends the message.", @"Accessibility hint for 'send' button");
 	
 	self.messageInputView.clearButton.accessibilityLabel = ATLocalizedString(@"Discard", @"Accessibility label for 'discard' button");
-	self.messageInputView.clearButton.accessibilityHint = ATLocalizedString(@"Discards the message", @"Accessibility hint for 'discard' button");
+	self.messageInputView.clearButton.accessibilityHint = ATLocalizedString(@"Discards the message.", @"Accessibility hint for 'discard' button");
 	
 	if (self.interaction.profileRequested) {
 		UIBarButtonItem *profileButtonItem = [[UIBarButtonItem alloc] initWithImage:[ATBackend imageNamed:@"at_account"] landscapeImagePhone:[ATBackend imageNamed:@"at_account"] style:UIBarButtonItemStyleBordered target:self action:@selector(showWho:)];
 		profileButtonItem.accessibilityLabel = ATLocalizedString(@"Profile", @"Accessibility label for 'edit profile' button");
-		profileButtonItem.accessibilityHint = ATLocalizedString(@"Displays name and email editor", @"Accessibility hint for 'edit profile' button");
+		profileButtonItem.accessibilityHint = ATLocalizedString(@"Displays name and email editor.", @"Accessibility hint for 'edit profile' button");
 		self.navigationItem.leftBarButtonItem = profileButtonItem;
 		
 		self.profileView.titleLabel.text = self.interaction.profileInitialTitle;

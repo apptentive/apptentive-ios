@@ -927,8 +927,10 @@ static NSURLCache *imageCache = nil;
 	
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:UIApplicationWillTerminateNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:UIApplicationDidEnterBackgroundNotification object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkForMessages) name:UIApplicationWillEnterForegroundNotification object:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkForMessages) name:UIApplicationWillEnterForegroundNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRemoteNotificationInUIApplicationStateActive) name:UIApplicationDidBecomeActiveNotification object:nil];
+	
 #elif TARGET_OS_MAC
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:NSApplicationWillTerminateNotification object:nil];
 #endif
@@ -1011,6 +1013,12 @@ static NSURLCache *imageCache = nil;
 - (void)startWorking:(NSNotification *)notification {
 	self.shouldStopWorking = NO;
 	[self updateWorking];
+}
+
+- (void)handleRemoteNotificationInUIApplicationStateActive {
+	if ([ATConnect sharedConnection].pushUserInfo) {
+		[[ATConnect sharedConnection] didReceiveRemoteNotification:[ATConnect sharedConnection].pushUserInfo fromViewController:[ATConnect sharedConnection].pushViewController];
+	}
 }
 
 - (void)personDataChanged:(NSNotification *)notification {

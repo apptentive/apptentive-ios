@@ -743,7 +743,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				break;
 			
 			case ATMessageCenterStateWhoCard:
-				[self.profileView becomeFirstResponder];
+				// Only focus profile view if appearing post-send.
+				if (!self.interaction.profileRequired) {
+					[self.profileView becomeFirstResponder];
+				}
 				self.navigationItem.leftBarButtonItem.enabled = NO;
 				toolbarHidden = YES;
 				newFooter = self.profileView;
@@ -934,7 +937,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)scrollToLastMessageAnimated:(BOOL)animated {
-	if (self.state != ATMessageCenterStateEmpty) {
+	if (self.state != ATMessageCenterStateEmpty && (self.state != ATMessageCenterStateWhoCard && self.interaction.profileRequired)) {
 		[self scrollToFooterView:nil];
 	}
 }

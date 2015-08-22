@@ -942,7 +942,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)scrollToLastMessageAnimated:(BOOL)animated {
-	if (self.state != ATMessageCenterStateEmpty && (self.state != ATMessageCenterStateWhoCard && self.interaction.profileRequired)) {
+	if (self.state != ATMessageCenterStateEmpty && !(self.state == ATMessageCenterStateWhoCard && self.interaction.profileRequired)) {
 		[self scrollToFooterView:nil];
 	}
 }

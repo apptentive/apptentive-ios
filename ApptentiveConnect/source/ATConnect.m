@@ -347,6 +347,13 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	return commerceItem;
 }
 
+- (BOOL)messageCenterIsReady {
+	NSString *messageCenterCodePoint = [[ATInteraction apptentiveAppInteraction] codePointForEvent:ATEngagementMessageCenterEvent];
+	BOOL isReady = [[ATEngagementBackend sharedBackend] willShowInteractionForCodePoint:messageCenterCodePoint];
+	
+	return isReady;
+}
+
 - (void)presentMessageCenterFromViewController:(UIViewController *)viewController {
 	[[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController];
 }

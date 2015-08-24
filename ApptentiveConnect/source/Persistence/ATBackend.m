@@ -551,7 +551,7 @@ static NSURLCache *imageCache = nil;
 		return;
 	}
 	
-	BOOL didShowMessageCenter = [[ATInteraction apptentiveAppInteraction] engage:@"show_message_center" fromViewController:viewController];
+	BOOL didShowMessageCenter = [[ATInteraction apptentiveAppInteraction] engage:ATEngagementMessageCenterEvent fromViewController:viewController];
 	
 	if (!didShowMessageCenter) {
 		UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MessageCenter" bundle:[ATConnect resourceBundle]];

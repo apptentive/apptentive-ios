@@ -28,6 +28,8 @@ extern NSString *const ATEngagementCodePointHostAppInteractionKey;
 extern NSString *const ATEngagementCodePointApptentiveVendorKey;
 extern NSString *const ATEngagementCodePointApptentiveAppInteractionKey;
 
+extern NSString *const ATEngagementMessageCenterEvent;
+
 @class ATInteraction;
 
 @interface ATEngagementBackend : NSObject

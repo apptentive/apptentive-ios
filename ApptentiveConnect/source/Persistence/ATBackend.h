@@ -23,7 +23,6 @@
 #import "ATAutomatedMessage.h"
 #import "ATFileMessage.h"
 #import "ATFeedbackTypes.h"
-#import "ATMessageTask.h"
 #endif
 
 extern NSString *const ATBackendBecameReadyNotification;
@@ -34,13 +33,14 @@ extern NSString *const ATBackendBecameReadyNotification;
 @class ATDataManager;
 @class ATFeedback;
 @class ATAPIRequest;
+@class ATMessageTask;
 
 @protocol  ATBackendMessageDelegate;
 
 /*! Handles all of the backend activities, such as sending feedback. */
 @interface ATBackend : NSObject <ATConversationUpdaterDelegate, ATDeviceUpdaterDelegate, ATPersonUpdaterDelegate
 #if TARGET_OS_IPHONE
-, NSFetchedResultsControllerDelegate, UIAlertViewDelegate, ATMessageTaskProgressDelegate
+, NSFetchedResultsControllerDelegate, UIAlertViewDelegate
 #endif
 >
 @property (nonatomic, copy) NSString *apiKey;
@@ -55,7 +55,12 @@ extern NSString *const ATBackendBecameReadyNotification;
 @property (nonatomic, assign, readonly) BOOL hideBranding;
 @property (nonatomic, assign, readonly) BOOL notificationPopupsEnabled;
 
+/*! Message send progress. */
 @property (weak, nonatomic) id<ATBackendMessageDelegate> messageDelegate;
+- (void)messageTaskDidBegin:(ATMessageTask *)messageTask;
+- (void)messageTask:(ATMessageTask *)messageTask didProgress:(float)progress;
+- (void)messageTaskDidFinish:(ATMessageTask *)messageTask;
+- (void)messageTaskDidFail:(ATMessageTask *)messageTask;
 
 + (ATBackend *)sharedBackend;
 #if TARGET_OS_IPHONE

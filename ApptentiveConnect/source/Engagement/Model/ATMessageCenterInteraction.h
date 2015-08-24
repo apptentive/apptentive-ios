@@ -32,9 +32,7 @@
 
 @property (nonatomic, readonly) NSString *contextMessageBody;
 
-@property (nonatomic, readonly) NSString *HTTPErrorTitle;
 @property (nonatomic, readonly) NSString *HTTPErrorBody;
-@property (nonatomic, readonly) NSString *networkErrorTitle;
 @property (nonatomic, readonly) NSString *networkErrorBody;
 
 @property (nonatomic, readonly) BOOL profileRequested;

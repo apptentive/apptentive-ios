@@ -104,16 +104,8 @@
 
 #pragma mark - Error Messages
 
-- (NSString *)HTTPErrorTitle {
-	return self.configuration[@"error_messages"][@"http_error_title"];
-}
-
 - (NSString *)HTTPErrorBody {
 	return self.configuration[@"error_messages"][@"http_error_body"];
-}
-
-- (NSString *)networkErrorTitle {
-	return self.configuration[@"error_messages"][@"network_error_title"];
 }
 
 - (NSString *)networkErrorBody {

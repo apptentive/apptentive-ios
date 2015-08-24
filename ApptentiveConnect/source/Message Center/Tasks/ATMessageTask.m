@@ -105,6 +105,18 @@
 	return @"message";
 }
 
+- (NSUInteger)hash {
+	return self.pendingMessageID.hash;
+}
+
+- (BOOL)isEqual:(id)object {
+	if (![object isKindOfClass:[self class]]) {
+		return NO;
+	} else {
+		return [self.pendingMessageID isEqualToString:((ATMessageTask *)object).pendingMessageID];
+	}
+}
+
 #pragma mark ATAPIRequestDelegate
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(NSObject *)result {
 	@synchronized(self) {

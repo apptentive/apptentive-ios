@@ -60,8 +60,8 @@ extern NSString *const ATBackendBecameReadyNotification;
 + (ATBackend *)sharedBackend;
 #if TARGET_OS_IPHONE
 + (UIImage *)imageNamed:(NSString *)name;
-- (void)presentMessageCenterFromViewController:(UIViewController *)viewController;
-- (void)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
+- (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController;
+- (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
 - (void)attachCustomDataToMessage:(ATAbstractMessage *)message;
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion;
 #elif TARGET_OS_MAC

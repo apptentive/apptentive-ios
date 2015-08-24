@@ -158,17 +158,23 @@ extern NSString *const ATIntegrationKeyParse;
 /**
  Presents Message Center from a given view controller.
  
+ Return value indicates if Message Center was displayed. If SDK has yet to sync with Apptentive
+ server, returns NO and displays a "We're attempting to connect" view rather than Message Center.
+ 
  @param viewController The view controller to present the Message Center from.
  */
-- (void)presentMessageCenterFromViewController:(UIViewController *)viewController;
+- (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController;
 
 /**
  Presents Message Center from a given view controller with custom data.
  
+ Return value indicates if Message Center was displayed. If SDK has yet to sync with Apptentive
+ server, returns NO and displays a "We're attempting to connect" view rather than Message Center.
+ 
  @param viewController The view controller to present the Message Center from.
  @param customData A dictionary of key/value pairs to be associated with any messages sent via Message Center.
  */
-- (void)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
+- (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
 
 /**
  Returns the current number of unread messages in Message Center.

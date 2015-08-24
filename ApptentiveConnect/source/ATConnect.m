@@ -354,18 +354,18 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	return isReady;
 }
 
-- (void)presentMessageCenterFromViewController:(UIViewController *)viewController {
-	[[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController];
+- (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController {
+	return [[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController];
 }
 
-- (void)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData {
+- (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData {
 	NSMutableDictionary *allowedCustomMessageData = [NSMutableDictionary dictionary];
 	
 	for (NSString *key in [customData allKeys]) {
 		[self addCustomData:[customData objectForKey:key] withKey:key toCustomDataDictionary:allowedCustomMessageData];
 	}
 	
-	[[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController withCustomData:allowedCustomMessageData];
+	return [[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController withCustomData:allowedCustomMessageData];
 }
 
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController {

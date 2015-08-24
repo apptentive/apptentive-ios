@@ -530,14 +530,14 @@ static NSURLCache *imageCache = nil;
 }
 
 #pragma mark Message Center
-- (void)presentMessageCenterFromViewController:(UIViewController *)viewController {
-	[self presentMessageCenterFromViewController:viewController withCustomData:nil];
+- (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController {
+	return [self presentMessageCenterFromViewController:viewController withCustomData:nil];
 }
 
-- (void)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData {
+- (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData {
 	if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive) {
 		// Only present Message Center UI in Active state.
-		return;
+		return NO;
 	}
 	
 	self.currentCustomData = customData;
@@ -548,7 +548,7 @@ static NSURLCache *imageCache = nil;
 	
 	if (self.presentedMessageCenterViewController != nil) {
 		ATLogInfo(@"Apptentive message center controller already shown.");
-		return;
+		return NO;
 	}
 	
 	BOOL didShowMessageCenter = [[ATInteraction apptentiveAppInteraction] engage:ATEngagementMessageCenterEvent fromViewController:viewController];
@@ -559,6 +559,8 @@ static NSURLCache *imageCache = nil;
 		
 		[viewController presentViewController:navigationController animated:YES completion:nil];
 	}
+	
+	return didShowMessageCenter;
 }
 
 - (void)attachCustomDataToMessage:(ATAbstractMessage *)message {

@@ -148,12 +148,12 @@ extern NSString *const ATIntegrationKeyParse;
 /**
  Determines if Message Center will be displayed when `presentMessageCenterFromViewController:` is called.
  
- If app has not yet synced with Apptentive, you will be unable to display Message Center. Use `messageCenterIsReady`
+ If app has not yet synced with Apptentive, you will be unable to display Message Center. Use `canShowMessageCenter`
  to determine if Message Center is ready to be displayed. If Message Center is not ready you could, for example,
  hide the "Message Center" button in your interface.
  **/
 
-- (BOOL)messageCenterIsReady;
+- (BOOL)canShowMessageCenter;
 
 /**
  Presents Message Center from a given view controller.

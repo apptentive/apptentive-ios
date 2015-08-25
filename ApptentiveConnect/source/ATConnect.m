@@ -233,7 +233,11 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 #if TARGET_OS_IPHONE
 
 - (BOOL)willShowInteractionForEvent:(NSString *)event {
-	return [[ATEngagementBackend sharedBackend] willShowInteractionForLocalEvent:event];
+	return [self canShowInteractionForEvent:event];
+}
+
+- (BOOL)canShowInteractionForEvent:(NSString *)event {
+	return [[ATEngagementBackend sharedBackend] canShowInteractionForLocalEvent:event];
 }
 
 - (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController {
@@ -349,7 +353,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (BOOL)canShowMessageCenter {
 	NSString *messageCenterCodePoint = [[ATInteraction apptentiveAppInteraction] codePointForEvent:ATEngagementMessageCenterEvent];
-	return [[ATEngagementBackend sharedBackend] willShowInteractionForCodePoint:messageCenterCodePoint];
+	return [[ATEngagementBackend sharedBackend] canShowInteractionForCodePoint:messageCenterCodePoint];
 }
 
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController {

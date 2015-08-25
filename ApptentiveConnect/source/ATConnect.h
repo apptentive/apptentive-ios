@@ -213,16 +213,20 @@ Before calling any other methods on the shared `ATConnect` instance, set the API
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController;
 
 /**
- Returns a Boolean value indicating whether the given event will cause an Interaction to be shown.
+ Deprecated in 2.0.0 in favor of the better-named `canShowInteractionForEvent:`
+ */
+- (BOOL)willShowInteractionForEvent:(NSString *)event DEPRECATED_ATTRIBUTE;
+
+/**
+Returns a Boolean value indicating whether the given event will cause an Interaction to be shown.
  
- For example, returns YES if a survey is ready to be shown the next time you engage your survey-targeted event.
- You can use this method to hide a "Show Survey" button in your app if there is no survey to take.
+ For example, returns YES if a survey is ready to be shown the next time you engage your survey-targeted event. You can use this method to hide a "Show Survey" button in your app if there is no survey to take.
  
  @param event A string representing the name of the event.
  
  @return `YES` if the event will show an interaction, `NO` otherwise.
  */
-- (BOOL)willShowInteractionForEvent:(NSString *)event;
+- (BOOL)canShowInteractionForEvent:(NSString *)event;
 
 /**
  Shows interaction UI, if applicable, related to a given event.

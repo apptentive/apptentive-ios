@@ -217,13 +217,13 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 	return [[[ATBackend sharedBackend] supportDirectoryPath] stringByAppendingPathComponent:@"cachedinteractionsV2.objects"];
 }
 
-- (BOOL)willShowInteractionForLocalEvent:(NSString *)event {
+- (BOOL)canShowInteractionForLocalEvent:(NSString *)event {
 	NSString *codePoint = [[ATInteraction localAppInteraction] codePointForEvent:event];
 	
-	return [self willShowInteractionForCodePoint:codePoint];
+	return [self canShowInteractionForCodePoint:codePoint];
 }
 
-- (BOOL)willShowInteractionForCodePoint:(NSString *)codePoint {
+- (BOOL)canShowInteractionForCodePoint:(NSString *)codePoint {
 	ATInteraction *interaction = [[ATEngagementBackend sharedBackend] interactionForEvent:codePoint];
 	
 	return (interaction != nil);

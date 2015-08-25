@@ -3,22 +3,21 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "info-ios.png"
+      "filename" : "at_info.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "info-ios@2x.png"
+      "filename" : "at_info@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "info-ios@3x.png"
+      "filename" : "at_info@3x.png"
     }
   ],
   "info" : {
     "version" : 1,
-    "author" : "xcode",
-    "template-rendering-intent" : "template"
+    "author" : "xcode"
   }
 }

@@ -33,8 +33,8 @@ NSString *const ATInteractionMessageCenterEventLabelNoInteractionClose = @"no_in
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
-	if ([[ATConnect sharedConnection] tintColor]) {
-		[self.view setTintColor:[[ATConnect sharedConnection] tintColor]];
+	if ([ATConnect sharedConnection].tintColor) {
+		self.view.tintColor = [ATConnect sharedConnection].tintColor;
 		self.navigationController.view.tintColor = [ATConnect sharedConnection].tintColor;
 	}
 	

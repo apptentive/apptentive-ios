@@ -59,6 +59,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 	
 	if ([[ATConnect sharedConnection] tintColor]) {
 		[self.view setTintColor:[[ATConnect sharedConnection] tintColor]];
+		self.navigationController.view.tintColor = [ATConnect sharedConnection].tintColor;
 	}
 	
 	// Borders

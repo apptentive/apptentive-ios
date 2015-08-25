@@ -108,6 +108,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
+	if ([[ATConnect sharedConnection] tintColor]) {
+		[self.view setTintColor:[[ATConnect sharedConnection] tintColor]];
+		self.navigationController.view.tintColor = [ATConnect sharedConnection].tintColor;
+	}
+	
 	[self.interaction engage:ATInteractionMessageCenterEventLabelLaunch fromViewController:self];
 	
 	self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];

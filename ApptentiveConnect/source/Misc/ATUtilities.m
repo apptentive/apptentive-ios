@@ -851,22 +851,23 @@ done:
 		if (comp == NSOrderedSame) {
 			// Same key, value may have changed
 			NSString *key = newKey;
-			
-			id newValue = new[key];
-			id oldValue = old[key];
-			
-			if ([newValue isEqual:@""] && ![oldValue isEqual:@""]) {
-				// Treat new empty strings as null
-				result[key] = [NSNull null];
-			} else if ([newValue isKindOfClass:[NSArray class]] && [oldValue isKindOfClass:[NSArray class]]) {
-				if (![[newValue sortedArrayUsingSelector:@selector(compare:)] isEqualToArray:[oldValue sortedArrayUsingSelector:@selector(compare:)]]) {
+			if (key) {
+				id newValue = new[key];
+				id oldValue = old[key];
+				
+				if ([newValue isEqual:@""] && ![oldValue isEqual:@""]) {
+					// Treat new empty strings as null
+					result[key] = [NSNull null];
+				} else if ([newValue isKindOfClass:[NSArray class]] && [oldValue isKindOfClass:[NSArray class]]) {
+					if (![[newValue sortedArrayUsingSelector:@selector(compare:)] isEqualToArray:[oldValue sortedArrayUsingSelector:@selector(compare:)]]) {
+						result[key] = newValue;
+					}
+				} else if (![newValue isEqual:oldValue]) {
 					result[key] = newValue;
 				}
-			} else if (![newValue isEqual:oldValue]) {
-				result[key] = newValue;
+				
+				i++, j++;
 			}
-			
-			i++, j++;
 		} else if (comp == NSOrderedAscending) {
 			// New key appeared
 			result[newKey] = new[newKey];

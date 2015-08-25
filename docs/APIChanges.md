@@ -2,7 +2,7 @@ This document tracks changes to the API between versions.
 
 # 2.0.0
 
- * Message Center UI has been redesigned and improved. All Message Center strings and settings are now delivered from the server, allowing you to make remote changes at any time from the Apptentive dashboard.
+ * Message Center UI has been redesigned and improved. Message Center strings and settings are now delivered from the server, allowing you to make remote changes at any time from the Apptentive dashboard.
  * The one-way Feedback Dialog has been removed in favor of Message Center and two-way conversations.
  * Added `messageCenterIsReady` method. If SDK has not yet synced with Apptentive, you will be unable to display Message Center. Use `messageCenterIsReady to determine if Message Center is ready to be displayed. If Message Center is not ready you could, for example, hide the "Message Center" button in your interface.
  * Added `BOOL` return value to the `presentMessageCenterFromViewController:` methods. Indicates if Message Center was displayed. If `NO`, a "We're attempting to connect" view is displayed instead.
@@ -12,7 +12,7 @@ This document tracks changes to the API between versions.
  * Removed `useMessageCenter`, `initiallyUseMessageCenter`, and `initiallyHideBranding` properties.
  * Added `-unreadMessageCountAccessoryView:(BOOL)apptentiveHeart`, a method that returns a UIView that can be used to display the current number of unread messages in Message Center (with an optional Apptentive heart logo). This is designed to be set as the `accessoryView` in a `UITableViewCell` that launches Message Center.
  * Message Center is still presented via the `presentMessageCenterFromViewController:` API. However, if the device has not yet synced with Apptentive, Message Center will be unavailable and a "We're attempting to connect" screen will be displayed instead. This should occur rarely in production apps, but you may see it during development.
- * Added an in-app banner that can be displayed when new Message Center messages arrive. This banner is toggled via the Apptentive dashboard, not via an API method. Implement the `viewControllerForInteractionsWithConnection:` delegate method to pass a View Controller from which to display this banner. If no View Controller is provided, the SDK will attempt to find and use the top-most View Controller.
+ * Added an in-app banner that can be displayed when new Message Center messages arrive. This banner is toggled via the Apptentive dashboard, not via an API method. Implement the `viewControllerForInteractionsWithConnection:` delegate method to pass a View Controller from which to display Message Center after this banner is tapped. If no View Controller is provided, the SDK will attempt to find and use the top-most View Controller.
 
 # 1.6.0
 

@@ -22,7 +22,7 @@ Rather than using one-way messages via the Feedback Dialog, you should use a cus
 
 Message Center text is now sent to devices from the Apptentive backend. Much of this text is editable on a per-app basis via your Apptentive dashboard. These remote strings allow you to customize Message Center at any point without issuing an app update.
 
-We thus are unable to show Message Center until that device syncs at least one time with the Apptentive servers. This sync should normally happen very quickly after the very first launch of the app.
+As a consequence, we are unable to show Message Center until that device syncs at least one time with the Apptentive servers. This sync should normally happen very quickly after the very first launch of the app.
 
 If the first sync has not yet occurred, Apptentive displays a "We're attempting to connect" message rather than the (unavailable) Message Center. This view will be seen only rarely in the actual usage of your app, but do be aware that you may see it in development if you try to launch Message Center immediately after a fresh install.
 

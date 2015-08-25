@@ -6,6 +6,7 @@ This document tracks changes to the API between versions.
  * The one-way Feedback Dialog has been removed in favor of Message Center and two-way conversations.
  * Added `canShowMessageCenter` method. If SDK has not yet synced with Apptentive, you will be unable to display Message Center. Use `canShowMessageCenter to determine if Message Center is ready to be displayed. If Message Center is not ready you could, for example, hide the "Message Center" button in your interface.
  * Added `BOOL` return value to the `presentMessageCenterFromViewController:` methods. Indicates if Message Center was displayed. If `NO`, a "We're attempting to connect" view is displayed instead.
+ * Added `canShowInteractionForEvent:` and deprecated `willShowInteractionForEvent:` to better match the `canShowMessageCenter` naming convention.
  * Added `personName` and `personEmailAddress` properties to `ATConnect`. Set these to pre-populate the respective field in Message Center.
  * Removed `initialUserName` and `initialUserEmailAddress` properties in favor of the above `personName` and `personEmailAddress`.
  * Added Apptentive Push Notifications via `addApptentiveIntegrationWithDeviceToken:`. Activate Push Notifications via your Apptentive dashboard. You can now implement Push Notifications for new Message Center messages without needing your own Urban Airship, Parse, or Amazon SNS account.

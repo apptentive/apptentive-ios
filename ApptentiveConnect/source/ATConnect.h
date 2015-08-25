@@ -202,6 +202,11 @@ extern NSString *const ATIntegrationKeyParse;
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController;
 
 /**
+ Deprecated in 2.0.0 in favor of the better-named `canShowInteractionForEvent:`
+ */
+- (BOOL)willShowInteractionForEvent:(NSString *)event DEPRECATED_ATTRIBUTE;
+
+/**
  Returns YES if engaging the given event will cause an Interaction to be shown, otherwise returns NO.
  
  For example, returns YES if a survey is ready to be shown the next time you engage your survey-targeted event.
@@ -209,7 +214,7 @@ extern NSString *const ATIntegrationKeyParse;
  
  @param event A string representing the name of the event.
  */
-- (BOOL)willShowInteractionForEvent:(NSString *)event;
+- (BOOL)canShowInteractionForEvent:(NSString *)event;
 
 /**
  Shows interaction UI, if applicable, related to a given event.

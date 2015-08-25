@@ -48,8 +48,8 @@ extern NSString *const ATEngagementMessageCenterEvent;
 
 - (ATInteraction *)interactionForInvocations:(NSArray *)invocations;
 
-- (BOOL)willShowInteractionForLocalEvent:(NSString *)event;
-- (BOOL)willShowInteractionForCodePoint:(NSString *)codePoint;
+- (BOOL)canShowInteractionForLocalEvent:(NSString *)event;
+- (BOOL)canShowInteractionForCodePoint:(NSString *)codePoint;
 
 + (NSString *)stringByEscapingCodePointSeparatorCharactersInString:(NSString *)string;
 + (NSString *)codePointForVendor:(NSString *)vendor interactionType:(NSString *)interactionType event:(NSString *)event;

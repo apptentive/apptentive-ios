@@ -150,12 +150,10 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 		
 		if (messageState == ATPendingMessageStateError) {
 			return ATMessageCenterMessageStatusFailed;
-		} else if (message == self.lastUserMessage) {
-			if (messageState == ATPendingMessageStateSending) {
-				return ATMessageCenterMessageStatusSending;
-			} else if (messageState == ATPendingMessageStateConfirmed) {
-				return ATMessageCenterMessageStatusSent;
-			}
+		} else if (messageState == ATPendingMessageStateSending) {
+			return ATMessageCenterMessageStatusSending;
+		} else if (message == self.lastUserMessage && messageState == ATPendingMessageStateConfirmed) {
+			return ATMessageCenterMessageStatusSent;
 		}
 	}
 		

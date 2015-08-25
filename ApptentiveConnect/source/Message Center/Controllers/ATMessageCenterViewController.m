@@ -521,14 +521,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (IBAction)dismiss:(id)sender {
 	[self.interaction engage:ATInteractionMessageCenterEventLabelClose fromViewController:self];
 	
-	[self.dismissalDelegate messageCenterWillDismiss:self];
 	[self.dataSource stop];
 	
-	[self dismissViewControllerAnimated:YES completion:^{
-		if ([self.dismissalDelegate respondsToSelector:@selector(messageCenterDidDismiss:)]) {
-			[self.dismissalDelegate messageCenterDidDismiss:self];
-		}
-	}];
+	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)sendButtonPressed:(id)sender {
@@ -773,7 +768,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			case ATMessageCenterStateNetworkError:
 				newFooter = self.statusView;
 				self.statusView.mode = ATMessageCenterStatusModeNetworkError;
-				self.statusView.statusLabel.text =[@[self.interaction.networkErrorTitle, self.interaction.networkErrorBody] componentsJoinedByString:@"\n"];
+				self.statusView.statusLabel.text = self.interaction.networkErrorBody;
 				
 				[self.interaction engage:ATInteractionMessageCenterEventLabelNetworkError fromViewController:self];
 				
@@ -783,7 +778,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			case ATMessageCenterStateHTTPError:
 				newFooter = self.statusView;
 				self.statusView.mode = ATMessageCenterStatusModeHTTPError;
-				self.statusView.statusLabel.text = [@[self.interaction.HTTPErrorTitle, self.interaction.networkErrorBody] componentsJoinedByString:@"\n"];
+				self.statusView.statusLabel.text = self.interaction.HTTPErrorBody;
 				
 				[self.interaction engage:ATInteractionMessageCenterEventLabelHTTPError fromViewController:self];
 
@@ -941,7 +936,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)scrollToLastMessageAnimated:(BOOL)animated {
-	if (self.state != ATMessageCenterStateEmpty && (self.state != ATMessageCenterStateWhoCard && self.interaction.profileRequired)) {
+	if (self.state != ATMessageCenterStateEmpty && !(self.state == ATMessageCenterStateWhoCard && self.interaction.profileRequired)) {
 		[self scrollToFooterView:nil];
 	}
 }

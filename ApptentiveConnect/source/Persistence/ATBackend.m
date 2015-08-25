@@ -185,10 +185,6 @@ static NSURLCache *imageCache = nil;
 - (void)dealloc {
 	[self.messageRetrievalTimer invalidate];
 	
-	for (ATMessageTask *task in self.activeMessageTasks) {
-		task.progressDelegate = nil;
-	}
-	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -352,7 +348,6 @@ static NSURLCache *imageCache = nil;
 	if ([message isMemberOfClass:[ATTextMessage class]]) {
 		[self.activeMessageTasks addObject:task];
 		[self updateMessageTaskProgress];
-		task.progressDelegate = self;
 	}
 	
 	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
@@ -893,6 +888,11 @@ static NSURLCache *imageCache = nil;
 }
 
 - (void)messageTask:(ATMessageTask *)messageTask didProgress:(float)progress {
+	[self updateMessageTaskProgress];
+}
+
+- (void)messageTaskDidFail:(ATMessageTask *)messageTask {
+	[self.activeMessageTasks removeObject:messageTask];
 	[self updateMessageTaskProgress];
 }
 

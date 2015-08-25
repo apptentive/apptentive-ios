@@ -72,7 +72,7 @@
 		}
 		request = [[ATWebClient sharedClient] requestForPostingMessage:message];
 		if (request != nil) {
-			[self.progressDelegate messageTaskDidBegin:self];
+			[[ATBackend sharedBackend] messageTaskDidBegin:self];
 			
 			request.delegate = self;
 			[request start];
@@ -105,10 +105,22 @@
 	return @"message";
 }
 
+- (NSUInteger)hash {
+	return self.pendingMessageID.hash;
+}
+
+- (BOOL)isEqual:(id)object {
+	if (![object isKindOfClass:[self class]]) {
+		return NO;
+	} else {
+		return [self.pendingMessageID isEqualToString:((ATMessageTask *)object).pendingMessageID];
+	}
+}
+
 #pragma mark ATAPIRequestDelegate
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(NSObject *)result {
 	@synchronized(self) {
-		[self.progressDelegate messageTaskDidFinish:self];
+		[[ATBackend sharedBackend] messageTaskDidFinish:self];
 		
 		if ([result isKindOfClass:[NSDictionary class]] && [self processResult:(NSDictionary *)result]) {
 			self.finished = YES;
@@ -121,12 +133,12 @@
 }
 
 - (void)at_APIRequestDidProgress:(ATAPIRequest *)sender {
-	[self.progressDelegate messageTask:self didProgress:self.percentComplete];
+	[[ATBackend sharedBackend] messageTask:self didProgress:self.percentComplete];
 }
 
 - (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
 	@synchronized(self) {
-		[self.progressDelegate messageTaskDidFinish:self];
+		[[ATBackend sharedBackend] messageTaskDidFail:self];
 		self.lastErrorTitle = sender.errorTitle;
 		self.lastErrorMessage = sender.errorMessage;
 		

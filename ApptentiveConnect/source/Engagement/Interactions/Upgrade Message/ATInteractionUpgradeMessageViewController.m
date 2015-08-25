@@ -11,6 +11,7 @@
 #import "ATInteraction.h"
 #import "ATBackend.h"
 #import "ATUtilities.h"
+#import "ATAboutViewController.h"
 
 typedef enum {
 	ATInteractionUpgradeMessageOkPressed,
@@ -101,12 +102,23 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 	[self updateIconContainerHeightForOrientation:[UIApplication sharedApplication].statusBarOrientation];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+	
+	[self.navigationController setNavigationBarHidden:YES animated:animated];
+}
+
+- (IBAction)showAbout:(id)sender {
+	[self.navigationController pushViewController:[ATAboutViewController aboutViewControllerFromStoryboard] animated:YES];
+	[self.navigationController setNavigationBarHidden:NO animated:YES];
+}
+
 - (IBAction)okButtonPressed:(id)sender {
 	[self dismissAnimated:YES completion:NULL withAction:ATInteractionUpgradeMessageOkPressed];
 }
 
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion withAction:(ATInteractionUpgradeMessageAction)action {
-	[self dismissViewControllerAnimated:animated completion:completion];
+	[self.navigationController dismissViewControllerAnimated:animated completion:completion];
 	
 	[self.upgradeMessageInteraction engage:ATInteractionUpgradeMessageEventLabelClose fromViewController:self.presentingViewController];
 	
@@ -115,7 +127,10 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 - (void)presentFromViewController:(UIViewController *)newPresentingViewController animated:(BOOL)animated {
 	
 	self.modalPresentationStyle = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad ? UIModalPresentationFormSheet : UIModalPresentationFullScreen;
-	[newPresentingViewController presentViewController:self animated:animated completion:nil];
+	UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self];
+	navigationController.navigationBarHidden = YES;
+	
+	[newPresentingViewController presentViewController:navigationController animated:animated completion:nil];
 	
 	[self.upgradeMessageInteraction engage:ATInteractionUpgradeMessageEventLabelLaunch fromViewController:self.presentingViewController];
 }

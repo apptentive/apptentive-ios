@@ -677,8 +677,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (IBAction)showAbout:(id)sender {
-	ATAboutViewController *aboutViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"About"];
-	[self.navigationController pushViewController:aboutViewController animated:YES];
+	[self.navigationController pushViewController:[ATAboutViewController aboutViewControllerFromStoryboard] animated:YES];
 }
 
 #pragma mark - Private

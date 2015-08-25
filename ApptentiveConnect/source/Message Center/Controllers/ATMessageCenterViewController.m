@@ -361,9 +361,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	NSString *labelText = [self.dataSource textOfMessageAtIndexPath:indexPath];
 	CGFloat effectiveLabelWidth = CGRectGetWidth(tableView.bounds) - horizontalMargin;
-	CGSize labelSize = [labelText sizeWithFont:[UIFont systemFontOfSize:BODY_FONT_SIZE] constrainedToSize:CGSizeMake(effectiveLabelWidth, MAXFLOAT)];
-
-	return ceil(fmax(labelSize.height + verticalMargin, minimumCellHeight));
+	UIFont *messageFont = [UIFont systemFontOfSize:BODY_FONT_SIZE];
+	NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:labelText attributes:@{NSFontAttributeName: messageFont}];
+	
+	CGRect labelRect = [attributedText boundingRectWithSize:CGSizeMake(effectiveLabelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
+	
+	return ceil(fmax(labelRect.size.height + verticalMargin, minimumCellHeight));
 }
 
 #pragma mark Table view delegate

@@ -54,15 +54,15 @@ extern NSString *const ATIntegrationKeyParse;
  
  ## Configuration
  
- On first use, you'll want to set the API key, you'd do that like so:
+Before calling any other methods on the shared `ATConnect` instance, set the API key:
  
      [[ATConnect sharedConnection].apiKey = @"your API key here";
  
  ## Engagement Events
  
  The Ratings Prompt and other Apptentive interactions are targeted to certain Apptentive events. For example,
- you could decide to show the Ratings Prompt at the event user_completed_level. You can then, later,
- reconfigure the Ratings Prompt interaction to show at user_logged_in.
+ you could decide to show the Ratings Prompt after an event named "user_completed_level" has been engaged.
+ You can later reconfigure the Ratings Prompt interaction to instead show after engaging "user_logged_in".
  
  You would add calls at these points to optionally engage with the user:
  
@@ -156,23 +156,27 @@ extern NSString *const ATIntegrationKeyParse;
 - (BOOL)canShowMessageCenter;
 
 /**
- Presents Message Center from a given view controller.
+ Presents Message Center modally from the specified view controller.
  
- Return value indicates if Message Center was displayed. If SDK has yet to sync with Apptentive
- server, returns NO and displays a "We're attempting to connect" view rather than Message Center.
+ If the SDK has yet to sync with the Apptentive server, this method returns NO and displays a
+ "We're attempting to connect" view in place of Message Center.
  
- @param viewController The view controller to present the Message Center from.
+ @param viewController The view controller from which to present Message Center.
+ 
+ @return `YES` if Message Center was presented, `NO` otherwise.
  */
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController;
 
 /**
  Presents Message Center from a given view controller with custom data.
  
- Return value indicates if Message Center was displayed. If SDK has yet to sync with Apptentive
- server, returns NO and displays a "We're attempting to connect" view rather than Message Center.
+ If the SDK has yet to sync with the Apptentive server, this method returns NO and displays a
+ "We're attempting to connect" view in place of Message Center.
  
- @param viewController The view controller to present the Message Center from.
+ @param viewController The view controller from which to present Message Center.
  @param customData A dictionary of key/value pairs to be associated with any messages sent via Message Center.
+ 
+ @return `YES` if Message Center was presented, `NO` otherwise.
  */
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
 
@@ -180,6 +184,8 @@ extern NSString *const ATIntegrationKeyParse;
  Returns the current number of unread messages in Message Center.
  
  These are the messages sent via the Apptentive website to this user.
+ 
+ @return The number of unread messages.
  */
 - (NSUInteger)unreadMessageCount;
 
@@ -187,7 +193,12 @@ extern NSString *const ATIntegrationKeyParse;
 /**
  Returns a "badge" than can be used as a UITableViewCell accessoryView to indicate the current number of unread messages.
  
- You will want to keep this unread message count up to date by reloading your tableview when the unread message count changes.
+ To keep this value updated, your view controller will must register for `ATMessageCenterUnreadCountChangedNotification`
+ and reload the table view cell when a notification is received.
+ 
+ @param apptentiveHeart A Boolean value indicating whether to include a heart logo adjacent to the number.
+ 
+ @return A badge view suitable for use as a table view cell accessory view.
  */
 - (UIView *)unreadMessageCountAccessoryView:(BOOL)apptentiveHeart;
 
@@ -207,12 +218,13 @@ extern NSString *const ATIntegrationKeyParse;
 - (BOOL)willShowInteractionForEvent:(NSString *)event DEPRECATED_ATTRIBUTE;
 
 /**
- Returns YES if engaging the given event will cause an Interaction to be shown, otherwise returns NO.
+Returns a Boolean value indicating whether the given event will cause an Interaction to be shown.
  
- For example, returns YES if a survey is ready to be shown the next time you engage your survey-targeted event.
- You can use this method to hide a "Show Survey" button in your app if there is no survey to take.
+ For example, returns YES if a survey is ready to be shown the next time you engage your survey-targeted event. You can use this method to hide a "Show Survey" button in your app if there is no survey to take.
  
  @param event A string representing the name of the event.
+ 
+ @return `YES` if the event will show an interaction, `NO` otherwise.
  */
 - (BOOL)canShowInteractionForEvent:(NSString *)event;
 
@@ -222,37 +234,43 @@ extern NSString *const ATIntegrationKeyParse;
  For example, if you have an upgrade message to display on app launch, you might call with event label set to
  `@"app.launch"` here, along with the view controller an upgrade message might be displayed from.
  
- Returns whether or not an interaction was successfully found and run.
- 
  @param event A string representing the name of the event.
  @param viewController A view controller Apptentive UI may be presented from.
+ 
+ @return `YES` if an interaction was triggered by the event, `NO` otherwise.
  */
 - (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController;
 
 /**
- Engages an event along with custom data about that event. Interaction UI may be shown, if applicable, for the event.
+ Shows interaction UI, if applicable, related to a given event, and attaches the specified custom data to the event.
  
  @param event A string representing the name of the event.
  @param customData A dictionary of key/value pairs to be associated with the event. Keys and values should conform to standards of NSJSONSerialization's `isValidJSONObject:`.
  @param viewController A view controller Apptentive UI may be presented from.
- */
+
+ @return `YES` if an interaction was triggered by the event, `NO` otherwise.
+*/
 - (BOOL)engage:(NSString *)event withCustomData:(NSDictionary *)customData fromViewController:(UIViewController *)viewController;
 
 /**
- Engages an event along with custom data and extended data about that event. Interaction UI may be shown, if applicable, for the event.
+ Shows interaction UI, if applicable, related to a given event. Attaches the specified custom data to the event along with the specified extended data.
  
  @param event A string representing the name of the event.
  @param customData A dictionary of key/value pairs to be associated with the event. Keys and values should conform to standards of NSJSONSerialization's `isValidJSONObject:`.
  @param extendedData An array of dictionaries with specific Apptentive formatting. For example, [ATConnect extendedDataDate:[NSDate date]].
  @param viewController A view controller Apptentive UI may be presented from.
+ 
+ @return `YES` if an interaction was triggered by the event, `NO` otherwise.
  */
 - (BOOL)engage:(NSString *)event withCustomData:(NSDictionary *)customData withExtendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController;
 
 /**
- Dismisses the message center. You normally won't need to call this.
+ Dismisses Message Center.
  
  @param animated `YES` to animate the dismissal, otherwise `NO`.
  @param completion A block called at the conclusion of the message center being dismissed.
+ 
+ @discussion Under normal circumstances, Message Center will be dismissed by the user tapping the Close button, so it is not necessary to call this method.
  */
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion;
 
@@ -274,22 +292,26 @@ extern NSString *const ATIntegrationKeyParse;
 ///--------------------
 
 /**
- Extended data dictionary representing a point in time, to be included in an event's extended data.
+ Used to specify a point in time in an event's extended data.
  
  @param date A date and time to be included in an event's extended data.
+ 
+ @return An extended data dictionary representing a point in time, to be included in an event's extended data.
  */
 + (NSDictionary *)extendedDataDate:(NSDate *)date;
 
 /**
- Extended data dictionary representing a location, to be included in an event's extended data.
+ Used to specify a geographic coordinate in an event's extended data.
  
  @param latitude A location's latitude coordinate.
  @param longitude A location's longitude coordinate.
+ 
+ @return An extended data dictionary representing a geographic coordinate, to be included in an event's extended data.
  */
 + (NSDictionary *)extendedDataLocationForLatitude:(double)latitude longitude:(double)longitude;
 
 /**
- Extended data dictionary representing a commerce transaction, to be included in an event's extended data.
+ Used to specify a commercial transaction (incorporating multiple items) in an event's extended data.
  
  @param transactionID The transaction's ID.
  @param affiliation The store or affiliation from which this transaction occurred.
@@ -298,7 +320,9 @@ extern NSString *const ATIntegrationKeyParse;
  @param tax Tax on the transaction.
  @param currency Currency for revenue/shipping/tax values.
  @param commerceItems An array of commerce items contained in the transaction. Create commerce items with [ATConnect extendedDataCommerceItem...].
- */
+ 
+ @return An extended data dictionary representing a commerce transaction, to be included in an event's extended data.
+  */
 + (NSDictionary *)extendedDataCommerceWithTransactionID:(NSString *)transactionID
 											affiliation:(NSString *)affiliation
 												revenue:(NSNumber *)revenue
@@ -308,7 +332,7 @@ extern NSString *const ATIntegrationKeyParse;
 										  commerceItems:(NSArray *)commerceItems;
 
 /**
- Extended data dictionary representing a single item in a commerce transaction, to be included in an event's extended data.
+ Used to specify a commercial transaction (consisting of a single item) in an event's extended data.
  
  @param itemID The transaction item's ID.
  @param name The transaction item's name.
@@ -316,6 +340,8 @@ extern NSString *const ATIntegrationKeyParse;
  @param price The individual item price.
  @param quantity The number of units purchased.
  @param currency Currency for price.
+ 
+ @return An extended data dictionary representing a single item in a commerce transaction, to be included in an event's extended data.
  */
 + (NSDictionary *)extendedDataCommerceItemWithItemID:(NSString *)itemID
 												name:(NSString *)name

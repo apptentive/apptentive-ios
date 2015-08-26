@@ -2,6 +2,10 @@
 
 If you have integrated a previous version of the Apptentive SDK, you will need to keep in mind the following changes in our version 2.0.0 release.
 
+## iOS Version Support
+
+Apptentive SDK version 2.0.0 has a deployment target of iOS 7.0, which will support iOS 7, 8, and 9. In the 2.0.0 release we have dropped support for iOS 5 and 6. 
+
 ## Message Center
 
 Version 2.0.0 introduces a new version of Message Center. Please ensure that the new Message Center UI displays properly in your app.

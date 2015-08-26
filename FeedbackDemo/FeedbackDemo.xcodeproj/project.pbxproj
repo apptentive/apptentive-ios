@@ -160,6 +160,8 @@
 		5856C4CB1B8E632600818594 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5856C4CC1B8E633600818594 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5856C4CD1B8E633600818594 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		5856C4CE1B8E634700818594 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		5856C4CF1B8E634800818594 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -542,6 +544,7 @@
 				5856C4C81B8E631300818594 /* it */,
 				5856C4CA1B8E632500818594 /* ja */,
 				5856C4CC1B8E633600818594 /* ko */,
+				5856C4CE1B8E634700818594 /* nl */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -559,6 +562,7 @@
 				5856C4C91B8E631300818594 /* it */,
 				5856C4CB1B8E632600818594 /* ja */,
 				5856C4CD1B8E633600818594 /* ko */,
+				5856C4CF1B8E634800818594 /* nl */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";

@@ -178,6 +178,10 @@
 		5856C4DD1B8E640A00818594 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "zh-Hant"; path = "zh-Hant.lproj/Main.storyboard"; sourceTree = "<group>"; };
 		5856C4DE1B8E640A00818594 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		5856C4E01B8E640E00818594 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		5856C4E11B8E64C900818594 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		5856C4E21B8E64C900818594 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "pt-BR"; path = "pt-BR.lproj/Main.storyboard"; sourceTree = "<group>"; };
+		5856C4E31B8E64C900818594 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		5856C4E41B8E64C900818594 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -392,6 +396,7 @@
 				tr,
 				"zh-Hans",
 				"zh-Hant",
+				"pt-BR",
 			);
 			mainGroup = 01A16C831AF2A66B00D691FC;
 			productRefGroup = 01A16C8D1AF2A66B00D691FC /* Products */;
@@ -520,6 +525,7 @@
 				5856C49F1B8E5EF200818594 /* tr */,
 				5856C4A11B8E5EF900818594 /* zh-Hans */,
 				5856C4DD1B8E640A00818594 /* zh-Hant */,
+				5856C4E21B8E64C900818594 /* pt-BR */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -546,6 +552,7 @@
 				5856C49E1B8E5EF200818594 /* tr */,
 				5856C4A01B8E5EF900818594 /* zh-Hans */,
 				5856C4DC1B8E640A00818594 /* zh-Hant */,
+				5856C4E11B8E64C900818594 /* pt-BR */,
 			);
 			name = LaunchScreen.xib;
 			sourceTree = "<group>";
@@ -571,6 +578,7 @@
 				5856C4D81B8E63B800818594 /* tr */,
 				5856C4DA1B8E63D200818594 /* zh-Hans */,
 				5856C4DE1B8E640A00818594 /* zh-Hant */,
+				5856C4E31B8E64C900818594 /* pt-BR */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -596,6 +604,7 @@
 				5856C4D91B8E63B800818594 /* tr */,
 				5856C4DB1B8E63D200818594 /* zh-Hans */,
 				5856C4E01B8E640E00818594 /* zh-Hant */,
+				5856C4E41B8E64C900818594 /* pt-BR */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";

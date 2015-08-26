@@ -507,6 +507,8 @@
 		584EAC6D1A786E4500AC7F05 /* ATInteractionTextModalController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATInteractionTextModalController.m; sourceTree = "<group>"; };
 		5856C4631B8E3A6A00818594 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5856C4641B8E3A7200818594 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		5856C4651B8E3DFF00818594 /* sv-SE */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sv-SE"; path = "sv-SE.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		5856C4661B8E3DFF00818594 /* sv-SE */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sv-SE"; path = "sv-SE.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		585A8E5D1B0D609A00BDF4CC /* ATMessageCenterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageCenterViewController.h; sourceTree = "<group>"; };
 		585A8E5E1B0D609A00BDF4CC /* ATMessageCenterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageCenterViewController.m; sourceTree = "<group>"; };
 		585F40101B8E389F00732E0F /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1637,6 +1639,7 @@
 				585F401F1B8E3A1200732E0F /* sv */,
 				5856C4631B8E3A6A00818594 /* tr */,
 				5856C4641B8E3A7200818594 /* zh-Hans */,
+				5856C4661B8E3DFF00818594 /* sv-SE */,
 			);
 			name = InfoPlist.strings;
 			path = .;
@@ -1666,6 +1669,7 @@
 				5871B27C1AC38B35005C010A /* fr-CA */,
 				5871B27D1AC38B36005C010A /* el */,
 				58EF81BE1B87CC7A003C760A /* pl */,
+				5856C4651B8E3DFF00818594 /* sv-SE */,
 			);
 			name = Localizable.strings;
 			path = .;

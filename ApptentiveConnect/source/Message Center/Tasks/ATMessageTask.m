@@ -112,6 +112,8 @@
 - (BOOL)isEqual:(id)object {
 	if (![object isKindOfClass:[self class]]) {
 		return NO;
+	} else if (self == object) {
+		return YES;
 	} else {
 		return [self.pendingMessageID isEqualToString:((ATMessageTask *)object).pendingMessageID];
 	}

@@ -892,7 +892,6 @@ static NSURLCache *imageCache = nil;
 }
 
 - (void)messageTaskDidFail:(ATMessageTask *)messageTask {
-	NSLog(@"pending message ID is %@", messageTask.pendingMessageID);
 	[self.activeMessageTasks removeObject:messageTask];
 	[self updateMessageTaskProgress];
 }
@@ -902,7 +901,6 @@ static NSURLCache *imageCache = nil;
 	
 	// Give the progress bar time to fill
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-		NSLog(@"pending message ID is %@", messageTask.pendingMessageID);
 		[self.activeMessageTasks removeObject:messageTask];
 		[self updateMessageTaskProgress];
 	});

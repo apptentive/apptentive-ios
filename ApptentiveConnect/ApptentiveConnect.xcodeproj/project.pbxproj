@@ -413,7 +413,6 @@
 		498EFB6F15BA48B300A1043B /* ATAppConfigurationUpdateTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAppConfigurationUpdateTask.m; sourceTree = "<group>"; };
 		4995EDC3175959EC00AF7268 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4995EDC417595A0500AF7268 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
-		4995EDC517595A0E00AF7268 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4995EDC617595A1800AF7268 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		499912A6161B6AF700FDA15F /* ATWebClient+MessageCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ATWebClient+MessageCenter.h"; sourceTree = "<group>"; };
 		499912A7161B6AF700FDA15F /* ATWebClient+MessageCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ATWebClient+MessageCenter.m"; sourceTree = "<group>"; };
@@ -519,7 +518,6 @@
 		585F401A1B8E39C800732E0F /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		585F401B1B8E39D700732E0F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		585F401C1B8E39EB00732E0F /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
-		585F401D1B8E39F600732E0F /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		585F401E1B8E3A0800732E0F /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		585F401F1B8E3A1200732E0F /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		586C47A718B424E900725C22 /* ATInteractionEnjoymentDialogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATInteractionEnjoymentDialogController.h; sourceTree = "<group>"; };
@@ -1350,7 +1348,6 @@
 				Spanish,
 				de,
 				ja,
-				pt,
 				ru,
 				"zh-Hans",
 				nl,
@@ -1622,7 +1619,6 @@
 				585F401A1B8E39C800732E0F /* ko */,
 				585F401B1B8E39D700732E0F /* nl */,
 				585F401C1B8E39EB00732E0F /* pt-BR */,
-				585F401D1B8E39F600732E0F /* pt */,
 				585F401E1B8E3A0800732E0F /* ru */,
 				585F401F1B8E3A1200732E0F /* sv */,
 				5856C4631B8E3A6A00818594 /* tr */,
@@ -1637,7 +1633,6 @@
 			children = (
 				4995EDC3175959EC00AF7268 /* de */,
 				4995EDC417595A0500AF7268 /* ja */,
-				4995EDC517595A0E00AF7268 /* pt */,
 				4995EDC617595A1800AF7268 /* ru */,
 				58EA5B3617B4781600ECEB4B /* nl */,
 				58EA5B3B17B479A500ECEB4B /* it */,

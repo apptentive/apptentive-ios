@@ -5,16 +5,47 @@
 "Answer" = "Antwoord";
 
 /* (No Commment) */
+"Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.
+
+Your feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer." = "Apptentive is een service waarmee u in contact kunt komen met de makers van deze app. Met uw reacties en feedback kunt u zorgen voor een betere ervaring.
+
+Uw feedback wordt gehost door Apptentive en is onderworpen aan het privacybeleid van zowel Apptentive als aan dat van de maker van deze app.";
+
+/* (No Commment) */
+"Apptentive’s Privacy Policy" = "Privacybeleid van Apptentive";
+
+/* (No Commment) */
 "Authentication Failed" = "Verificatie mislukt";
 
 /* (No Commment) */
 "Close" = "Sluit";
 
 /* (No Commment) */
+"Closes Message Center." = "Sluit Berichten.";
+
+/* (No Commment) */
+"Discard" = "Verwijderen";
+
+/* (No Commment) */
+"Discards the message." = "Verwijdert het bericht.";
+
+/* (No Commment) */
+"Displays information about this feature." = "Geeft informatie weer over deze functie.";
+
+/* (No Commment) */
+"Displays name and email editor." = "Geeft functie voor bewerken naam en e-mailadres weer.";
+
+/* (No Commment) */
 "Do you love %@?" = "Bent u gek op %@?";
 
 /* (No Commment) */
+"Failed" = "Mislukt";
+
+/* (No Commment) */
 "Invalid response from server." = "Ongeldige reactie van de server.";
+
+/* (No Commment) */
+"Learn about Apptentive" = "Meer informatie over Apptentive";
 
 /* (No Commment) */
 "Missing %d required answers." = "%d verplichte antwoorden ontbreken.";
@@ -41,6 +72,9 @@
 "Powered by" = "Mogelijk gemaakt door";
 
 /* (No Commment) */
+"Profile" = "Profiel";
+
+/* (No Commment) */
 "Rate %@" = "Beoordeel %@";
 
 /* (No Commment) */
@@ -48,6 +82,15 @@
 
 /* (No Commment) */
 "Send Response" = "Verstuur antwoord";
+
+/* (No Commment) */
+"Sending…" = "Verzenden…";
+
+/* (No Commment) */
+"Sends the message." = "Verstuurt het bericht.";
+
+/* (No Commment) */
+"Sent" = "Verzonden";
 
 /* (No Commment) */
 "Server did not return properly formatted JSON." = "Server heeft geen correct geformatteerde JSON teruggestuurd.";
@@ -65,6 +108,9 @@
 "Thanks!" = "Bedankt!";
 
 /* (No Commment) */
+"The request was well-formed but was unable to be followed due to semantic errors." = "De opmaak van het verzoek was in orde, maar het kan wegens semantische fouten niet worden opgevolgd.";
+
+/* (No Commment) */
 "Too few selections made for %d questions above." = "Te weinig selecties gemaakt voor %d vragen hierboven.";
 
 /* (No Commment) */
@@ -80,13 +126,22 @@
 "Unable to load the App Store" = "Laden van de App Store mislukt";
 
 /* (No Commment) */
+"Unprocessable Entity" = "Item kan niet worden verwerkt";
+
+/* (No Commment) */
 "We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us." = "Wat geweldig om te horen dat u zo gek bent op %@! Het zou ontzettend behulpzaam zijn als u ons beoordeelde. Bedankt voor het gebruiken van deze app.";
+
+/* (No Commment) */
+"We’re attempting to connect. Thanks for your patience!" = "We proberen verbinding te maken. Bedankt voor uw geduld!";
 
 /* (No Commment) */
 "Wrong username and/or password." = "Verkeerde gebruikersnaam en/of verkeerd wachtwoord.";
 
 /* (No Commment) */
 "Yes" = "Ja";
+
+/* (No Commment) */
+"You must connect to the internet before you can send feedback." = "U moet verbinding maken met internet voordat u feedback kunt verzenden.";
 
 /* (No Commment) */
 "required" = "verplicht";

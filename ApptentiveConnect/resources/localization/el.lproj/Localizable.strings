@@ -5,16 +5,47 @@
 "Answer" = "Απάντηση";
 
 /* (No Commment) */
+"Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.
+
+Your feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer." = "Η Apptentive είναι μια υπηρεσία που σας επιτρέπει να συνομιλήσετε με τους κατασκευαστές αυτού του app. Η γνώμη και τα σχόλιά σας μπορούν να μας βοηθήσουν να σας προσφέρουμε μια καλύτερη εμπειρία στο σύνολό σας.
+
+Τα σχόλιά σας φιλοξενούνται από την Apptentive και υπόκεινται τόσο στην πολιτική περί ιδιωτικού απορρήτου της Apptentive όσο και στην πολιτική περί ιδιωτικού απορρήτου του προγραμματιστή του app.";
+
+/* (No Commment) */
+"Apptentive’s Privacy Policy" = "Πολιτική Ιδιωτικού Απορρήτου της Apptentive";
+
+/* (No Commment) */
 "Authentication Failed" = "Ο έλεγχος ταυτότητας απέτυχε";
 
 /* (No Commment) */
 "Close" = "Κλείσιμο";
 
 /* (No Commment) */
+"Closes Message Center." = "Κλείνει το Κέντρο Μηνυμάτων.";
+
+/* (No Commment) */
+"Discard" = "Απόρριψη";
+
+/* (No Commment) */
+"Discards the message." = "Απορρίπτει το μήνυμα.";
+
+/* (No Commment) */
+"Displays information about this feature." = "Προβάλλει πληροφορίες για αυτό το χαρακτηριστικό.";
+
+/* (No Commment) */
+"Displays name and email editor." = "Προβάλλει το όνομα και το πρόγραμμα επεξεργασίας e-mail.";
+
+/* (No Commment) */
 "Do you love %@?" = "Απολαμβάνετε την εφαρμογή %@;";
 
 /* (No Commment) */
+"Failed" = "Απέτυχε";
+
+/* (No Commment) */
 "Invalid response from server." = "Μη έγκυρη απόκριση από τον διακομιστή.";
+
+/* (No Commment) */
+"Learn about Apptentive" = "Μάθετε για την Apptentive";
 
 /* (No Commment) */
 "Missing %d required answers." = "Λείπουν %d υποχρεωτικές απαντήσεις.";
@@ -41,6 +72,9 @@
 "Powered by" = "Με την υποστήριξη της";
 
 /* (No Commment) */
+"Profile" = "Προφίλ";
+
+/* (No Commment) */
 "Rate %@" = "Βαθμολογήστε την %@";
 
 /* (No Commment) */
@@ -48,6 +82,15 @@
 
 /* (No Commment) */
 "Send Response" = "Αποστολή απάντησης";
+
+/* (No Commment) */
+"Sending…" = "Αποστολή…";
+
+/* (No Commment) */
+"Sends the message." = "Στέλνει το μήνυμα.";
+
+/* (No Commment) */
+"Sent" = "Στάλθηκε";
 
 /* (No Commment) */
 "Server did not return properly formatted JSON." = "Ο διακομιστής δεν επέστρεψε κατάλληλα μορφοποιημένο JSON.";
@@ -65,6 +108,9 @@
 "Thanks!" = "Ευχαριστούμε!";
 
 /* (No Commment) */
+"The request was well-formed but was unable to be followed due to semantic errors." = "Το αίτημα ήταν καλά διατυπωμένο, ωστόσο δεν ήταν δυνατή η διεκπεραίωσή του λόγω σφαλμάτων στην σημασιολογία.";
+
+/* (No Commment) */
 "Too few selections made for %d questions above." = "Πολύ λίγες επιλογές για τις παραπάνω %d ερωτήσεις.";
 
 /* (No Commment) */
@@ -80,13 +126,22 @@
 "Unable to load the App Store" = "Δεν είναι δυνατή η φόρτωση του App Store";
 
 /* (No Commment) */
+"Unprocessable Entity" = "Οντότητα χωρίς δυνατότητα επεξεργασίας";
+
+/* (No Commment) */
 "We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us." = "Είμαστε πολύ χαρούμενοι που διαβάζουμε ότι σας αρέσει η εφαρμογή %@! Θα μας βοηθούσατε πραγματικά εάν βαθμολογούσατε την εφαρμογή μας. Σας ευχαριστούμε θερμά για τον χρόνο σας.";
+
+/* (No Commment) */
+"We’re attempting to connect. Thanks for your patience!" = "Προσπαθούμε να συνδεθούμε. Ευχαριστούμε για την υπομονή σας!";
 
 /* (No Commment) */
 "Wrong username and/or password." = "Λάθος όνομα χρήστη και/ή κωδικός πρόσβασης.";
 
 /* (No Commment) */
 "Yes" = "Ναι";
+
+/* (No Commment) */
+"You must connect to the internet before you can send feedback." = "Πρέπει να συνδεθείτε στο Διαδίκτυο για να μπορέσετε να στείλετε τα σχόλιά σας.";
 
 /* (No Commment) */
 "required" = "υποχρεωτικό";

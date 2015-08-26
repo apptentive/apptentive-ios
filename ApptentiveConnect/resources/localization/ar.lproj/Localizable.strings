@@ -5,16 +5,48 @@
 "Answer" = "الجواب";
 
 /* (No Commment) */
+"Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.
+
+Your feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer." = "Apptentive هي خدمة تتيح لك إجراء المحادثة مع صناع هذا التطبيق. من شأن إدخالك وتعليقاتك أن تساعد في تقديم خدمة أفضل بشكل كلي.
+
+
+تتم استضافة تعليقاتك بواسطة Apptentive وهي تخضع لسياسة خصوصية Apptentive وسياسة خصوصية مطور التطبيق هذا.";
+
+/* (No Commment) */
+"Apptentive’s Privacy Policy" = "السياسة الخصوصية لـApptentive";
+
+/* (No Commment) */
 "Authentication Failed" = "فشلت المصادقة";
 
 /* (No Commment) */
 "Close" = "إغلاق";
 
 /* (No Commment) */
+"Closes Message Center." = "إغلاق مركز الرسائل.";
+
+/* (No Commment) */
+"Discard" = "تجاهل";
+
+/* (No Commment) */
+"Discards the message." = "تجاهل الرسالة.";
+
+/* (No Commment) */
+"Displays information about this feature." = "عرض المعلومات حول هذه الميزة.";
+
+/* (No Commment) */
+"Displays name and email editor." = "عرض محرر  الاسم والبريد الإلكتروني.";
+
+/* (No Commment) */
 "Do you love %@?" = "هل يعجبك %@؟";
 
 /* (No Commment) */
+"Failed" = "فشل";
+
+/* (No Commment) */
 "Invalid response from server." = "استجابة غير صالحة من الخادم.";
+
+/* (No Commment) */
+"Learn about Apptentive" = "اعرف عن Apptentive";
 
 /* (No Commment) */
 "Missing %d required answers." = "%d إجابات مفقودة.";
@@ -41,6 +73,9 @@
 "Powered by" = "بواسطة";
 
 /* (No Commment) */
+"Profile" = "الملف التعريفي";
+
+/* (No Commment) */
 "Rate %@" = "تقييم %@";
 
 /* (No Commment) */
@@ -48,6 +83,15 @@
 
 /* (No Commment) */
 "Send Response" = "إرسال الرد";
+
+/* (No Commment) */
+"Sending…" = "جاري الإرسال...";
+
+/* (No Commment) */
+"Sends the message." = "إرسال رسالة.";
+
+/* (No Commment) */
+"Sent" = "تم الإرسال";
 
 /* (No Commment) */
 "Server did not return properly formatted JSON." = "لم يرجع الخادم JSON منسق بشكل صحيح.";
@@ -65,6 +109,9 @@
 "Thanks!" = "شكرا!";
 
 /* (No Commment) */
+"The request was well-formed but was unable to be followed due to semantic errors." = "هذا الطلب منسق بشكل جيد لكن تعذر أن يتم اتباعه بسبب أخطاء دلالية.";
+
+/* (No Commment) */
 "Too few selections made for %d questions above." = "اختيارات قليلة جداً للأسئلة البالغ عددها %d أسئلة أعلاه.";
 
 /* (No Commment) */
@@ -80,13 +127,22 @@
 "Unable to load the App Store" = "تعذر تحميل متجر التطبيقات";
 
 /* (No Commment) */
+"Unprocessable Entity" = "وحدة غير قابلة للمعالجة";
+
+/* (No Commment) */
 "We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us." = "يسعدنا أن %@ قد أعجبك! سيكون من المفيد حقاً إذا قمت بتقييمنا. شكراً جزيلاً لقضاء بعض الوقت معنا.";
+
+/* (No Commment) */
+"We’re attempting to connect. Thanks for your patience!" = "نحن نحاول الاتصال بك. شكراً لصبرك!";
 
 /* (No Commment) */
 "Wrong username and/or password." = "خطأ في اسم المستخدم و/أو كلمة المرور.";
 
 /* (No Commment) */
 "Yes" = "نعم";
+
+/* (No Commment) */
+"You must connect to the internet before you can send feedback." = "يجب عليك الاتصال بالإنترنت قبل أن تتمكن من إرسال التعليقات.";
 
 /* (No Commment) */
 "required" = "مطلوب";

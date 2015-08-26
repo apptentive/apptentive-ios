@@ -5,16 +5,47 @@
 "Answer" = "Risposta";
 
 /* (No Commment) */
+"Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.
+
+Your feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer." = "Apptentive è un servizio che ti consente di contattare gli autori di questa app. I tuoi commenti e suggerimenti possono aiutare ad offrire una migliore esperienza complessiva.
+
+I tuoi commenti vengono raccolti da Apptentive e sono soggetti sia all'Informativa sulla privacy di Apptentive che a quella dello sviluppatore di questa app.";
+
+/* (No Commment) */
+"Apptentive’s Privacy Policy" = "Informativa sulla privacy di Apptentive";
+
+/* (No Commment) */
 "Authentication Failed" = "Autenticazione non riuscita";
 
 /* (No Commment) */
 "Close" = "Chiudi";
 
 /* (No Commment) */
+"Closes Message Center." = "Chiude il Centro messaggi.";
+
+/* (No Commment) */
+"Discard" = "Ignora";
+
+/* (No Commment) */
+"Discards the message." = "Ignora il messaggio.";
+
+/* (No Commment) */
+"Displays information about this feature." = "Mostra informazioni su questa funzionalità.";
+
+/* (No Commment) */
+"Displays name and email editor." = "Mostra i campi in cui inserire nome e indirizzo email.";
+
+/* (No Commment) */
 "Do you love %@?" = "Adori %@?";
 
 /* (No Commment) */
+"Failed" = "Non riuscito";
+
+/* (No Commment) */
 "Invalid response from server." = "Risposta non valida dal server.";
+
+/* (No Commment) */
+"Learn about Apptentive" = "Informazioni su Apptentive";
 
 /* (No Commment) */
 "Missing %d required answers." = "%d risposte obbligatorie mancanti.";
@@ -41,6 +72,9 @@
 "Powered by" = "Con tecnologia";
 
 /* (No Commment) */
+"Profile" = "Profilo";
+
+/* (No Commment) */
 "Rate %@" = "Classifica %@";
 
 /* (No Commment) */
@@ -48,6 +82,15 @@
 
 /* (No Commment) */
 "Send Response" = "Invia risposta";
+
+/* (No Commment) */
+"Sending…" = "Invio…";
+
+/* (No Commment) */
+"Sends the message." = "Invia il messaggio.";
+
+/* (No Commment) */
+"Sent" = "Inviato";
 
 /* (No Commment) */
 "Server did not return properly formatted JSON." = "Il server non ha restituito JSON con formattazione valida.";
@@ -65,6 +108,9 @@
 "Thanks!" = "Grazie!";
 
 /* (No Commment) */
+"The request was well-formed but was unable to be followed due to semantic errors." = "La richiesta è stata compilata correttamente ma non può essere elaborata a causa di errori semantici.";
+
+/* (No Commment) */
 "Too few selections made for %d questions above." = "Numero troppo esiguo di selezioni eseguite per %d domande sopra.";
 
 /* (No Commment) */
@@ -80,13 +126,22 @@
 "Unable to load the App Store" = "Impossibile caricare l'App Store";
 
 /* (No Commment) */
+"Unprocessable Entity" = "Entità non elaborabile";
+
+/* (No Commment) */
 "We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us." = "Siamo veramente contenti di sapere che adori %@! Ti saremmo infinitamente grati se volessi classificarci. Ti ringraziamo per il tempo che ci hai dedicato.";
+
+/* (No Commment) */
+"We’re attempting to connect. Thanks for your patience!" = "Tentativo di connessione. Grazie per l'attesa!";
 
 /* (No Commment) */
 "Wrong username and/or password." = "Nome utente e/o password errati.";
 
 /* (No Commment) */
 "Yes" = "Sì";
+
+/* (No Commment) */
+"You must connect to the internet before you can send feedback." = "Per inviare i commenti, devi collegarti a Internet.";
 
 /* (No Commment) */
 "required" = "obbligatorio";

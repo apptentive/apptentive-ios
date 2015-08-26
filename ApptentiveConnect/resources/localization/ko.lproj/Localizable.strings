@@ -5,16 +5,47 @@
 "Answer" = "답변";
 
 /* (No Commment) */
+"Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.
+
+Your feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer." = "Apptentive는 이 앱의 개발자와 대화를 할 수 있게 하는 서비스입니다. 귀하의 의견 및 피드백은 전반적으로 개선된 경험을 제공하는데 도움이 됩니다.
+
+귀하의 피드백은 Apptentive가 관리하며 Apptentive 및 이 앱의 개발자의 개인정보 취급방침 모두의 적용을 받습니다.";
+
+/* (No Commment) */
+"Apptentive’s Privacy Policy" = "Apptentive 개인정보 취급방침";
+
+/* (No Commment) */
 "Authentication Failed" = "인증 실패";
 
 /* (No Commment) */
 "Close" = "닫기";
 
 /* (No Commment) */
+"Closes Message Center." = "메시지 센터를 닫습니다.";
+
+/* (No Commment) */
+"Discard" = "취소";
+
+/* (No Commment) */
+"Discards the message." = "메시지를 취소합니다.";
+
+/* (No Commment) */
+"Displays information about this feature." = "이 기능에 대한 정보를 표시합니다.";
+
+/* (No Commment) */
+"Displays name and email editor." = "이름 및 이메일 편집기를 표시합니다.";
+
+/* (No Commment) */
 "Do you love %@?" = "%@ 앱이 마음에 드세요?";
 
 /* (No Commment) */
+"Failed" = "실패";
+
+/* (No Commment) */
 "Invalid response from server." = "서버로부터의 응답이 잘못되었습니다.";
+
+/* (No Commment) */
+"Learn about Apptentive" = "Apptentive에 대해 자세히 보기";
 
 /* (No Commment) */
 "Missing %d required answers." = "%d개의 필수 답변 항목이 누락되었습니다.";
@@ -41,6 +72,9 @@
 "Powered by" = "기술 제공:";
 
 /* (No Commment) */
+"Profile" = "프로필";
+
+/* (No Commment) */
 "Rate %@" = "%@ 평가";
 
 /* (No Commment) */
@@ -48,6 +82,15 @@
 
 /* (No Commment) */
 "Send Response" = "답변 보내기";
+
+/* (No Commment) */
+"Sending…" = "보내는 중...";
+
+/* (No Commment) */
+"Sends the message." = "메시지를 보냅니다.";
+
+/* (No Commment) */
+"Sent" = "전송 완료";
 
 /* (No Commment) */
 "Server did not return properly formatted JSON." = "서버가 올바른 형식의 JSON을 반환하지 않았습니다.";
@@ -65,6 +108,9 @@
 "Thanks!" = "감사합니다!";
 
 /* (No Commment) */
+"The request was well-formed but was unable to be followed due to semantic errors." = "요청의 형식은 올바르지만 의미 오류로 인하여 처리되지 못했습니다.";
+
+/* (No Commment) */
 "Too few selections made for %d questions above." = "위 %d개의 질문에서 선택된 항목이 너무 적습니다.";
 
 /* (No Commment) */
@@ -80,13 +126,22 @@
 "Unable to load the App Store" = "App Store를 불러올 수 없습니다";
 
 /* (No Commment) */
+"Unprocessable Entity" = "처리할 수 없는 항목";
+
+/* (No Commment) */
 "We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us." = "%@ 앱이 마음에 드신다니 기쁩니다! 이 앱을 평가해주시면 큰 도움이 됩니다. 시간을 내어주셔서 정말로 감사합니다.";
+
+/* (No Commment) */
+"We’re attempting to connect. Thanks for your patience!" = "현재 연결을 시도하는 중입니다. 잠시 기다려주십시오!";
 
 /* (No Commment) */
 "Wrong username and/or password." = "사용자 이름 또는 비밀번호가 잘못되었습니다.";
 
 /* (No Commment) */
 "Yes" = "예";
+
+/* (No Commment) */
+"You must connect to the internet before you can send feedback." = "피드백을 보내려면 인터넷에 연결해야 합니다.";
 
 /* (No Commment) */
 "required" = "필수";

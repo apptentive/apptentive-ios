@@ -572,7 +572,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		}
 	
 		if (lastUserMessageIndexPath) {
-			[self.tableView reloadRowsAtIndexPaths:@[lastUserMessageIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+			@try {
+				[self.tableView reloadRowsAtIndexPaths:@[lastUserMessageIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+			} @catch (NSException *exception) {
+				ATLogError(@"caught exception: %@: %@", [exception name], [exception description]);
+			}
 		}
 	}
 	

@@ -136,7 +136,9 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 		BOOL attemptToOpenURL = [[UIApplication sharedApplication] canOpenURL:url];
 		
 		// In iOS 9, `canOpenURL:` returns NO unless that URL scheme has been added to LSApplicationQueriesSchemes.
-		attemptToOpenURL = YES;
+		if (!attemptToOpenURL) {
+			attemptToOpenURL = YES;
+		}
 		
 		if (attemptToOpenURL) {
 			[self.interaction engage:ATInteractionAppStoreRatingEventLabelOpenAppStoreURL fromViewController:self.viewController];

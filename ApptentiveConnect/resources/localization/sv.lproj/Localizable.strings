@@ -5,16 +5,47 @@
 "Answer" = "Svar";
 
 /* (No Commment) */
+"Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.
+
+Your feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer." = "Apptentive är en tjänst som låter dig ha en konversation med skaparna av denna app. Din input och feedback kan hjälpa till att ge dig en bättre helhetsupplevelse.
+
+Apptentive är värdtjänst för din feedback och din feedback är föremål för både Apptentives integritetspolicy och denna app-utvecklares integritetspolicy.";
+
+/* (No Commment) */
+"Apptentive’s Privacy Policy" = "Apptentives integritetspolicy";
+
+/* (No Commment) */
 "Authentication Failed" = "Autentisering misslyckades";
 
 /* (No Commment) */
 "Close" = "Stäng";
 
 /* (No Commment) */
+"Closes Message Center." = "Stänger meddelande-center.";
+
+/* (No Commment) */
+"Discard" = "Ta bort";
+
+/* (No Commment) */
+"Discards the message." = "Tar bort meddelande.";
+
+/* (No Commment) */
+"Displays information about this feature." = "Visar information om denna funktion.";
+
+/* (No Commment) */
+"Displays name and email editor." = "Redigera namn och e-post.";
+
+/* (No Commment) */
 "Do you love %@?" = "Älskar du %@?";
 
 /* (No Commment) */
+"Failed" = "Misslyckades";
+
+/* (No Commment) */
 "Invalid response from server." = "Inkorrekt svar från server.";
+
+/* (No Commment) */
+"Learn about Apptentive" = "Läs mer om Apptentive";
 
 /* (No Commment) */
 "Missing %d required answers." = "Saknar %d obligatoriska svar.";
@@ -41,6 +72,9 @@
 "Powered by" = "Utvecklad av";
 
 /* (No Commment) */
+"Profile" = "Profil";
+
+/* (No Commment) */
 "Rate %@" = "Betygsätt %@";
 
 /* (No Commment) */
@@ -48,6 +82,15 @@
 
 /* (No Commment) */
 "Send Response" = "Skicka svar";
+
+/* (No Commment) */
+"Sending…" = "Sänder…";
+
+/* (No Commment) */
+"Sends the message." = "Skickar meddelandet.";
+
+/* (No Commment) */
+"Sent" = "Skickat";
 
 /* (No Commment) */
 "Server did not return properly formatted JSON." = "Servern returnerade inte korrekt formaterad JSON.";
@@ -65,6 +108,9 @@
 "Thanks!" = "Tack!";
 
 /* (No Commment) */
+"The request was well-formed but was unable to be followed due to semantic errors." = "Begäran var väl utformad men kunde inte fullföljas på grund av semantiska fel.";
+
+/* (No Commment) */
 "Too few selections made for %d questions above." = "För få val gjorda på %d frågor ovan.";
 
 /* (No Commment) */
@@ -80,13 +126,22 @@
 "Unable to load the App Store" = "Kunde inte ladda App Store";
 
 /* (No Commment) */
+"Unprocessable Entity" = "Entitet som inte kan behandlas";
+
+/* (No Commment) */
 "We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us." = "Vi är väldigt glada att höra att du gillar %@! Det skulle vara riktigt användbart om du betygsatt oss. Tack på förhand.";
+
+/* (No Commment) */
+"We’re attempting to connect. Thanks for your patience!" = "Vi försöker ansluta. Tack för ditt tålamod!";
 
 /* (No Commment) */
 "Wrong username and/or password." = "Fel användarnamn och/eller lösenord.";
 
 /* (No Commment) */
 "Yes" = "Ja";
+
+/* (No Commment) */
+"You must connect to the internet before you can send feedback." = "Du måste ansluta till internet innan du kan skicka feedback.";
 
 /* (No Commment) */
 "required" = "obligatorisk";

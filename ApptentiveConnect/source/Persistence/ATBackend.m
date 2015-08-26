@@ -344,6 +344,7 @@ static NSURLCache *imageCache = nil;
 	double delayInSeconds = 1.5;
 	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
 	ATMessageTask *task = [[ATMessageTask alloc] init];
+	task.pendingMessageID = pendingMessageID;
 	
 	if ([message isMemberOfClass:[ATTextMessage class]]) {
 		[self.activeMessageTasks addObject:task];
@@ -351,7 +352,6 @@ static NSURLCache *imageCache = nil;
 	}
 	
 	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-		task.pendingMessageID = pendingMessageID;
 		[[ATTaskQueue sharedTaskQueue] addTask:task];
 		[[ATTaskQueue sharedTaskQueue] start];
 	});

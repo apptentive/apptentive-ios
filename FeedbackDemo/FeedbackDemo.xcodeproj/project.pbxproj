@@ -142,6 +142,8 @@
 		5856C4A11B8E5EF900818594 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "zh-Hans"; path = "zh-Hans.lproj/Main.storyboard"; sourceTree = "<group>"; };
 		5856C4B51B8E61BA00818594 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5856C4BA1B8E61BB00818594 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		5856C4BC1B8E621C00818594 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		5856C4BD1B8E621C00818594 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -515,6 +517,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				5856C4B51B8E61BA00818594 /* ar */,
+				5856C4BC1B8E621C00818594 /* da */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -523,6 +526,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				5856C4BA1B8E61BB00818594 /* ar */,
+				5856C4BD1B8E621C00818594 /* da */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";

@@ -28,6 +28,8 @@
 		01A16CDE1AF2A71500D691FC /* ApptentiveResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 01A16CC01AF2A67600D691FC /* ApptentiveResources.bundle */; };
 		01A16CE81AF2ED5700D691FC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A16CE71AF2ED5700D691FC /* Default-568h@2x.png */; };
 		01A16CE91AF2EFF000D691FC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01A16C991AF2A66B00D691FC /* Main.storyboard */; };
+		5856C4B41B8E61BA00818594 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5856C4B61B8E61BA00818594 /* InfoPlist.strings */; };
+		5856C4B91B8E61BB00818594 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5856C4BB1B8E61BB00818594 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -138,6 +140,8 @@
 		5856C49F1B8E5EF200818594 /* tr */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = tr; path = tr.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5856C4A01B8E5EF900818594 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		5856C4A11B8E5EF900818594 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "zh-Hans"; path = "zh-Hans.lproj/Main.storyboard"; sourceTree = "<group>"; };
+		5856C4B51B8E61BA00818594 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		5856C4BA1B8E61BB00818594 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -211,6 +215,7 @@
 		01A16C8F1AF2A66B00D691FC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				5856C4B61B8E61BA00818594 /* InfoPlist.strings */,
 				01A16C901AF2A66B00D691FC /* Info.plist */,
 				01A16C911AF2A66B00D691FC /* main.m */,
 			);
@@ -229,6 +234,7 @@
 		01A16CA91AF2A66C00D691FC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				5856C4BB1B8E61BB00818594 /* InfoPlist.strings */,
 				01A16CAA1AF2A66C00D691FC /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -397,6 +403,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				01A16CE91AF2EFF000D691FC /* Main.storyboard in Resources */,
+				5856C4B41B8E61BA00818594 /* InfoPlist.strings in Resources */,
 				01A16CDE1AF2A71500D691FC /* ApptentiveResources.bundle in Resources */,
 				01A16CA01AF2A66C00D691FC /* LaunchScreen.xib in Resources */,
 				01A16CE81AF2ED5700D691FC /* Default-568h@2x.png in Resources */,
@@ -408,6 +415,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5856C4B91B8E61BB00818594 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -501,6 +509,22 @@
 				5856C4A01B8E5EF900818594 /* zh-Hans */,
 			);
 			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+		5856C4B61B8E61BA00818594 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5856C4B51B8E61BA00818594 /* ar */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		5856C4BB1B8E61BB00818594 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5856C4BA1B8E61BB00818594 /* ar */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

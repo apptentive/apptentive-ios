@@ -5,16 +5,47 @@
 "Answer" = "Ответ";
 
 /* (No Commment) */
+"Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.
+
+Your feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer." = "Apptentive — это служба, которая позволяет вам общаться с создателями этого приложения. Ваш отзыв помогает нам улучшать опыт пользования службой.
+
+Ваш отзыв размещается на Apptentive и подлежит политике конфиденциальности Apptentive и разработчика этого приложения.";
+
+/* (No Commment) */
+"Apptentive’s Privacy Policy" = "Политика конфиденциальности Apptentive";
+
+/* (No Commment) */
 "Authentication Failed" = "Ошибка аутентификации";
 
 /* (No Commment) */
 "Close" = "Закрыть";
 
 /* (No Commment) */
+"Closes Message Center." = "Закрывает центр сообщений.";
+
+/* (No Commment) */
+"Discard" = "Удалить";
+
+/* (No Commment) */
+"Discards the message." = "Удаляет сообщение.";
+
+/* (No Commment) */
+"Displays information about this feature." = "Отображает информацию об этой функции.";
+
+/* (No Commment) */
+"Displays name and email editor." = "Отображает имя и электронную почту.";
+
+/* (No Commment) */
 "Do you love %@?" = "Вы любите %@?";
 
 /* (No Commment) */
+"Failed" = "Ошибка";
+
+/* (No Commment) */
 "Invalid response from server." = "Недопустимый ответ сервера.";
+
+/* (No Commment) */
+"Learn about Apptentive" = "Подробнее об Apptentive";
 
 /* (No Commment) */
 "Missing %d required answers." = "Отсутствуют обязательные ответы: %d";
@@ -41,6 +72,9 @@
 "Powered by" = "Разработано";
 
 /* (No Commment) */
+"Profile" = "Профиль";
+
+/* (No Commment) */
 "Rate %@" = "Оценить %@";
 
 /* (No Commment) */
@@ -48,6 +82,15 @@
 
 /* (No Commment) */
 "Send Response" = "Отравить отзыв";
+
+/* (No Commment) */
+"Sending…" = "Отправка...";
+
+/* (No Commment) */
+"Sends the message." = "Отправляет сообщение.";
+
+/* (No Commment) */
+"Sent" = "Отправлено";
 
 /* (No Commment) */
 "Server did not return properly formatted JSON." = "Сервер вернул JSON в неправильном формате.";
@@ -65,6 +108,9 @@
 "Thanks!" = "Спасибо!";
 
 /* (No Commment) */
+"The request was well-formed but was unable to be followed due to semantic errors." = "Запрос сформирован, но из-за семантических ошибок невозможно выполнить дальнейшие действия.";
+
+/* (No Commment) */
 "Too few selections made for %d questions above." = "Слишком мало вариантов для %d вопросов выше.";
 
 /* (No Commment) */
@@ -80,13 +126,22 @@
 "Unable to load the App Store" = "Не удается загрузить App Store";
 
 /* (No Commment) */
+"Unprocessable Entity" = "Необрабатываемый объект";
+
+/* (No Commment) */
 "We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us." = "Так приятно знать, что вы любите %@! Если вы оцените нас, нам это очень поможет! Спасибо за то, что уделили нам свое время.";
+
+/* (No Commment) */
+"We’re attempting to connect. Thanks for your patience!" = "Мы пытаетесь подключиться. Спасибо за терпение!";
 
 /* (No Commment) */
 "Wrong username and/or password." = "Неверное имя пользователя и/или пароль.";
 
 /* (No Commment) */
 "Yes" = "Да";
+
+/* (No Commment) */
+"You must connect to the internet before you can send feedback." = "Прежде чем отправлять отзыв, нужно подключиться к Интернету.";
 
 /* (No Commment) */
 "required" = "обязательно";

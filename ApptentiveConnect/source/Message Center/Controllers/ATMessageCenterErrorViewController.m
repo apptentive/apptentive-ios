@@ -38,6 +38,8 @@ NSString *const ATInteractionMessageCenterEventLabelNoInteractionClose = @"no_in
 		self.navigationController.view.tintColor = [ATConnect sharedConnection].tintColor;
 	}
 	
+	self.navigationItem.title = ATLocalizedString(@"Message Center", @"Message Center default title");
+	
 	if ([ATReachability sharedReachability].currentNetworkStatus == ATNetworkNotReachable) {
 		self.imageView.image = [ATBackend imageNamed:@"at_network_error"];
 		self.textLabel.text = ATLocalizedString(@"You must connect to the internet before you can send feedback.", @"Message Center configuration hasn't downloaded due to connection problem.");

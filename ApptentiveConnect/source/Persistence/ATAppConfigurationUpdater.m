@@ -49,6 +49,7 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	 [NSNumber numberWithBool:YES], ATAppConfigurationMetricsEnabledPreferenceKey,
 	 [NSNumber numberWithInt:20], ATAppConfigurationMessageCenterForegroundRefreshIntervalKey,
 	 [NSNumber numberWithInt:60], ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey,
+	 [NSNumber numberWithBool:NO], ATAppConfigurationNotificationPopupsEnabledKey,
 	 nil];
 	[defaults registerDefaults:defaultPreferences];
 }

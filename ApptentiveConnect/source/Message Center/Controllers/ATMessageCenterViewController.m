@@ -174,8 +174,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[self.profileView.saveButton setTitle:self.interaction.profileInitialSaveButtonTitle forState:UIControlStateNormal];
 		[self.profileView.skipButton setTitle:self.interaction.profileInitialSkipButtonTitle forState:UIControlStateNormal];
 		self.profileView.skipButton.hidden = self.interaction.profileRequired;
-		self.profileView.nameField.text = [ATConnect sharedConnection].personName;
-		self.profileView.emailField.text = [ATConnect sharedConnection].personEmailAddress;
 		[self validateWho:self];
 
 		if (self.interaction.profileRequired) {
@@ -664,9 +662,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (IBAction)skipWho:(id)sender {
-	self.profileView.nameField.text = @"";
-	self.profileView.emailField.text = @"";
-	
 	NSDictionary *userInfo = @{@"required": @(self.interaction.profileRequired)};
 	if ([sender isKindOfClass:[UIButton class]]) {
 		userInfo = @{@"required": @(self.interaction.profileRequired), @"method": @"button", @"button_label": ((UIButton *)sender).titleLabel.text};
@@ -719,7 +714,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				self.state = networkIsUnreachable ? ATMessageCenterStateNetworkError : ATMessageCenterStateSending;
 				break;
 			case ATPendingMessageStateComposing:
-				//self.state = ATMessageCenterStateComposing;
+				// This indicates that the last message is a context message.
+				self.state = ATMessageCenterStateReplied;
 				break;
 			case ATPendingMessageStateNone:
 				self.state = ATMessageCenterStateEmpty;
@@ -755,6 +751,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 					[self.profileView becomeFirstResponder];
 				}
 				self.navigationItem.leftBarButtonItem.enabled = NO;
+				self.profileView.nameField.text = [ATConnect sharedConnection].personName;
+				self.profileView.emailField.text = [ATConnect sharedConnection].personEmailAddress;
 				toolbarHidden = YES;
 				newFooter = self.profileView;
 				break;

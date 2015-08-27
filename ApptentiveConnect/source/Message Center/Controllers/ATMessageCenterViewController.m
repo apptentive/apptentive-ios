@@ -637,12 +637,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileSubmit fromViewController:self userInfo:userInfo];
 	
-	if (self.profileView.nameField.text.length) {
+	if (self.profileView.nameField.text != [ATConnect sharedConnection].personName) {
 		[ATConnect sharedConnection].personName = self.profileView.nameField.text;
 		[self.interaction engage:ATInteractionMessageCenterEventLabelProfileName fromViewController:self userInfo:@{@"length": @(self.profileView.nameField.text.length)}];
 	}
 
-	if (self.profileView.emailField.text.length) {
+	if (self.profileView.emailField.text != [ATConnect sharedConnection].personEmailAddress) {
 		[ATConnect sharedConnection].personEmailAddress = self.profileView.emailField.text;
 		[self.interaction engage:ATInteractionMessageCenterEventLabelProfileEmail fromViewController:self userInfo:@{@"length": @(self.profileView.emailField.text.length), @"valid": @([ATUtilities emailAddressIsValid:self.profileView.emailField.text])}];
 	}

@@ -714,7 +714,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				self.state = networkIsUnreachable ? ATMessageCenterStateNetworkError : ATMessageCenterStateSending;
 				break;
 			case ATPendingMessageStateComposing:
-				//self.state = ATMessageCenterStateComposing;
+				// This indicates that the last message is a context message.
+				self.state = ATMessageCenterStateReplied;
 				break;
 			case ATPendingMessageStateNone:
 				self.state = ATMessageCenterStateEmpty;

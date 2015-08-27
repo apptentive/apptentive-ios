@@ -43,7 +43,14 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 }
 
 + (NSDictionary *)lastSavedVersion {
-	return [[NSUserDefaults standardUserDefaults] dictionaryForKey:ATPersonLastUpdateValuePreferenceKey];
+	NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:ATPersonLastUpdateValuePreferenceKey];
+	return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+}
+
+- (void)saveVersion {
+	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.sentPersonJSON];
+	[[NSUserDefaults standardUserDefaults] setObject:data forKey:ATPersonLastUpdateValuePreferenceKey];
+	self.sentPersonJSON = nil;
 }
 
 - (void)update {
@@ -108,7 +115,7 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 	
 	if (person) {
 		// Save out the value we sent to the server.
-		[[NSUserDefaults standardUserDefaults] setObject:self.sentPersonJSON forKey:ATPersonLastUpdateValuePreferenceKey];
+		[self saveVersion];
 		
 		[self.delegate personUpdater:self didFinish:YES];
 	} else {

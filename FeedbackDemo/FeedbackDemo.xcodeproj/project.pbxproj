@@ -186,6 +186,8 @@
 		5856C4E61B8E653800818594 /* es-ES */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "es-ES"; path = "es-ES.lproj/Main.storyboard"; sourceTree = "<group>"; };
 		5856C4E71B8E653800818594 /* es-ES */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-ES"; path = "es-ES.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		5856C4E81B8E653800818594 /* es-ES */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-ES"; path = "es-ES.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		58DD74F91B8FA64C00F2804A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		58DD74FE1B8FA6C500F2804A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -560,6 +562,7 @@
 				5856C4DC1B8E640A00818594 /* zh-Hant */,
 				5856C4E11B8E64C900818594 /* pt-BR */,
 				5856C4E51B8E653800818594 /* es-ES */,
+				58DD74F91B8FA64C00F2804A /* en */,
 			);
 			name = LaunchScreen.xib;
 			sourceTree = "<group>";
@@ -614,6 +617,7 @@
 				5856C4E01B8E640E00818594 /* zh-Hant */,
 				5856C4E41B8E64C900818594 /* pt-BR */,
 				5856C4E81B8E653800818594 /* es-ES */,
+				58DD74FE1B8FA6C500F2804A /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";

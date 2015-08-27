@@ -157,7 +157,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	self.messageInputView.titleLabel.text = self.interaction.composerTitle;
 	[self.messageInputView.sendButton setTitle:self.interaction.composerSendButtonTitle forState:UIControlStateNormal];
-	self.messageInputView.sendButton.enabled = self.messageInputView.messageView.text.length > 0;
+	self.messageInputView.sendButton.enabled = [self sendButtonShouldBeEnabled];
+	
 	self.messageInputView.sendButton.accessibilityHint = ATLocalizedString(@"Sends the message.", @"Accessibility hint for 'send' button");
 	
 	self.messageInputView.clearButton.accessibilityLabel = ATLocalizedString(@"Discard", @"Accessibility label for 'discard' button");
@@ -463,7 +464,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 #pragma mark - Text view delegate
 
 - (void)textViewDidChange:(UITextView *)textView {
-	self.messageInputView.sendButton.enabled = textView.text.length > 0;
+	self.messageInputView.sendButton.enabled = [self sendButtonShouldBeEnabled];
 	self.messageInputView.placeholderLabel.hidden = textView.text.length > 0;
 	
 	// Fix bug where text view doesn't scroll far enough down
@@ -530,6 +531,20 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.dataSource stop];
 	
 	[self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (BOOL)sendButtonShouldBeEnabled {
+	NSString *inputText = self.messageInputView.messageView.text;
+
+	if (!inputText || inputText.length == 0) {
+		return NO;
+	}
+	
+	if ([inputText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length == 0) {
+		return NO;
+	}
+	
+	return YES;
 }
 
 - (IBAction)sendButtonPressed:(id)sender {
@@ -988,7 +1003,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.messageInputView.messageView.text = nil;
 	[self.messageInputView.messageView resignFirstResponder];
 	
-	self.messageInputView.sendButton.enabled = NO;
+	self.messageInputView.sendButton.enabled = [self sendButtonShouldBeEnabled];
 	
 	[self updateState];
 	

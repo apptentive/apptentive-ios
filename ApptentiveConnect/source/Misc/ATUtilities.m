@@ -718,6 +718,10 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 	}
 }
 
++ (BOOL)appStoreReceiptExists {
+	return ([NSData dataWithContentsOfURL:[NSBundle mainBundle].appStoreReceiptURL] != nil);
+}
+
 + (NSString *)appStoreReceiptFileName {
 	return [[NSBundle mainBundle].appStoreReceiptURL lastPathComponent];
 }

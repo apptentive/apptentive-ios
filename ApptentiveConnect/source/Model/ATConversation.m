@@ -94,7 +94,11 @@
 	
 	NSString *appStoreReceiptFileName = [ATUtilities appStoreReceiptFileName];
 	if (appStoreReceiptFileName) {
-		result[@"app_store_receipt_file_name"] = appStoreReceiptFileName;
+		NSDictionary *receiptInfo = @{@"file_name": appStoreReceiptFileName,
+									  @"has_receipt": @([ATUtilities appStoreReceiptExists]),
+									  };
+		
+		result[@"app_store_receipt"] = receiptInfo;
 	}
 
 	return result;

@@ -58,6 +58,8 @@
 + (BOOL)bundleVersionIsMainVersion;
 + (NSString *)appVersionString;
 + (NSString *)buildNumberString;
+
++ (BOOL)appStoreReceiptExists;
 + (NSString *)appStoreReceiptFileName;
 
 + (BOOL)dictionary:(NSDictionary *)a isEqualToDictionary:(NSDictionary *)b;

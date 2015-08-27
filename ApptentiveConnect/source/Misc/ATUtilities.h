@@ -58,6 +58,7 @@
 + (BOOL)bundleVersionIsMainVersion;
 + (NSString *)appVersionString;
 + (NSString *)buildNumberString;
++ (NSString *)appStoreReceiptFileName;
 
 + (BOOL)dictionary:(NSDictionary *)a isEqualToDictionary:(NSDictionary *)b;
 + (NSTimeInterval)maxAgeFromCacheControlHeader:(NSString *)cacheControl;

@@ -718,6 +718,10 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 	}
 }
 
++ (NSString *)appStoreReceiptFileName {
+	return [[NSBundle mainBundle].appStoreReceiptURL lastPathComponent];
+}
+
 + (NSTimeInterval)maxAgeFromCacheControlHeader:(NSString *)cacheControl {
 	if (cacheControl == nil || [cacheControl rangeOfString:@"max-age"].location == NSNotFound) {
 		return 0;

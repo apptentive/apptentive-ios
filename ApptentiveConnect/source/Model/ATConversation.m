@@ -81,14 +81,22 @@
 
 - (NSDictionary *)appReleaseJSON {
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
+	
 	NSString *appVersion = [ATUtilities appVersionString];
 	if (appVersion) {
 		result[@"version"] = appVersion;
 	}
+	
 	NSString *buildNumber = [ATUtilities buildNumberString];
 	if (buildNumber) {
 		result[@"build_number"] = buildNumber;
 	}
+	
+	NSString *appStoreReceiptFileName = [ATUtilities appStoreReceiptFileName];
+	if (appStoreReceiptFileName) {
+		result[@"app_store_receipt_file_name"] = appStoreReceiptFileName;
+	}
+
 	return result;
 }
 

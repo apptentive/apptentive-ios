@@ -44,7 +44,9 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 
 + (NSDictionary *)lastSavedVersion {
 	NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:ATPersonLastUpdateValuePreferenceKey];
-	return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+	NSDictionary *dictionary = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+	
+	return [dictionary isKindOfClass:[NSDictionary class]] ? dictionary : nil;
 }
 
 - (void)saveVersion {

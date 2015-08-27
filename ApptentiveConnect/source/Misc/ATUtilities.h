@@ -59,6 +59,9 @@
 + (NSString *)appVersionString;
 + (NSString *)buildNumberString;
 
++ (BOOL)appStoreReceiptExists;
++ (NSString *)appStoreReceiptFileName;
+
 + (BOOL)dictionary:(NSDictionary *)a isEqualToDictionary:(NSDictionary *)b;
 + (NSTimeInterval)maxAgeFromCacheControlHeader:(NSString *)cacheControl;
 + (BOOL)array:(NSArray *)a isEqualToArray:(NSArray *)b;

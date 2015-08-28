@@ -366,7 +366,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	CGRect labelRect = [attributedText boundingRectWithSize:CGSizeMake(effectiveLabelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
 	
-	return ceil(fmax(labelRect.size.height + verticalMargin, minimumCellHeight));
+	double height = ceil(fmax(labelRect.size.height + verticalMargin, minimumCellHeight));
+	
+	// "Due to an underlying implementation detail, you should not return values greater than 2009."
+	return fmin(height, 2009.0);
 }
 
 #pragma mark Table view delegate

@@ -54,6 +54,8 @@ typedef NS_ENUM(NSInteger, ATPendingMessageState) {
 - (NSDictionary *)dictionaryForCustomData;
 - (NSData *)dataForDictionary:(NSDictionary *)dictionary;
 
+- (NSNumber *)creationTimeForSections;
+
 - (void)markAsRead;
 
 @end

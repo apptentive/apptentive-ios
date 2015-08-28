@@ -207,6 +207,12 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 	}
 }
 
+- (NSNumber *)creationTimeForSections {
+	BOOL distantFutureCreationTime = (self.creationTime.doubleValue > self.clientCreationTime.doubleValue + 365 * 24 * 60 * 60);
+	
+	return distantFutureCreationTime ? self.clientCreationTime : self.creationTime;
+}
+
 - (void)markAsRead {
 	if (![self.seenByUser boolValue]) {
 		self.seenByUser = @YES;

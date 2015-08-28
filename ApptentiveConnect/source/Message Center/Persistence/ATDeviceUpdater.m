@@ -39,8 +39,9 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 	[ATDeviceUpdater registerDefaults];
 	
 	ATDeviceInfo *deviceInfo = [[ATDeviceInfo alloc] init];
+	NSDictionary *deviceDictionary = [deviceInfo.apiJSON valueForKey:@"device"];
 	
-	return [deviceInfo apiJSON].count > 0;
+	return deviceDictionary.count > 0;
 }
 
 + (NSDictionary *)lastSavedVersion {

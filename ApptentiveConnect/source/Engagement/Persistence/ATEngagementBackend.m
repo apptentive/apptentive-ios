@@ -174,6 +174,8 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 			[_engagementInteractions removeAllObjects];
 			[_engagementInteractions addEntriesFromDictionary:interactions];
 		
+			[[NSUserDefaults standardUserDefaults] setObject:kATConnectVersionString forKey:ATEngagementInteractionsSDKVersionKey];
+
 			[self updateVersionInfo];
 		}
 	}
@@ -205,8 +207,6 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 		[defaults setObject:@{} forKey:ATEngagementInteractionsInvokesVersionKey];
 		[defaults setObject:@{} forKey:ATEngagementInteractionsInvokesBuildKey];
 	}
-	
-	[defaults setObject:kATConnectVersionString forKey:ATEngagementInteractionsSDKVersionKey];
 }
 
 + (NSString *)cachedTargetsStoragePath {

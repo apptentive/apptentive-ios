@@ -30,8 +30,6 @@
 	// click My Apps, select an app, and look for its Apple ID.
 	[ATConnect sharedConnection].appID = @"ExampleAppID";
 	
-	[[ATConnect sharedConnection] addIntegration:@"feedback_demo_integration_configuration" withConfiguration:@{@"fake_apiKey": @"ABC-123-XYZ"}];
-	
 	return YES;
 }
 

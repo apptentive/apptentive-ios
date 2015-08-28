@@ -57,7 +57,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 			// For now, group each message into its own section.
 			// In the future, we'll save an attribute that coalesces
 			// closely-grouped (in time) messages into a single section.
-			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:@"creationTime" cacheName:@"at-messages-cache"];
+			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:@"creationTimeForSections" cacheName:@"at-messages-cache"];
 			newController.delegate = self;
 			_fetchedMessagesController = newController;
 			
@@ -131,12 +131,9 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 - (NSDate *)dateOfMessageGroupAtIndex:(NSInteger)index {
 	if ([self numberOfMessagesInGroup:index] > 0) {
 		ATAbstractMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]];
-		double creationTime = message.creationTime.doubleValue;
-		double clientCreationTime = message.clientCreationTime.doubleValue;
 		
-		BOOL distantFutureCreationTime = (creationTime > clientCreationTime + 365 * 24 * 60 * 60);
 		
-		return [NSDate dateWithTimeIntervalSince1970:distantFutureCreationTime ? clientCreationTime : creationTime];
+		return [NSDate dateWithTimeIntervalSince1970:[message.creationTimeForSections doubleValue]];
 	} else {
 		return nil;
 	}

@@ -100,7 +100,7 @@
 	}
 	
 	NSDictionary *integrationConfiguration = [[ATConnect sharedConnection] integrationConfiguration];
-	if (integrationConfiguration && [integrationConfiguration count]) {
+	if (integrationConfiguration && [integrationConfiguration isKindOfClass:[NSDictionary class]]) {
 		device[@"integration_config"] = integrationConfiguration;
 	}
 	
@@ -108,6 +108,6 @@
 }
 
 - (NSDictionary *)apiJSON {
-	return [ATUtilities diffDictionary:self.dictionaryRepresentation[@"device"] againstDictionary:[ATDeviceUpdater lastSavedVersion][@"device"]];
+	return @{@"device":[ATUtilities diffDictionary:self.dictionaryRepresentation[@"device"] againstDictionary:[ATDeviceUpdater lastSavedVersion][@"device"]]};
 }
 @end

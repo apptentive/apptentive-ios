@@ -24,6 +24,7 @@
 #import "ATData.h"
 #import "ATProgressNavigationBar.h"
 #import "ATAboutViewController.h"
+#import <MobileCoreServices/UTCoreTypes.h>
 
 #define HEADER_LABEL_HEIGHT 64.0
 #define TEXT_VIEW_HORIZONTAL_INSET 12.0
@@ -391,6 +392,20 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	headerView.textLabel.font = [UIFont boldSystemFontOfSize:DATE_FONT_SIZE];
 }
 
+- (BOOL)tableView:(UITableView *)tableView shouldShowMenuForRowAtIndexPath:(NSIndexPath *)indexPath {
+	return YES;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canPerformAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
+	return action == @selector(copy:);
+}
+
+- (void)tableView:(UITableView *)tableView performAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
+	if (indexPath) {
+		[[UIPasteboard generalPasteboard] setValue:[self.dataSource textOfMessageAtIndexPath:indexPath] forPasteboardType:(__bridge NSString *)kUTTypeUTF8PlainText];
+	}
+}
+
 #pragma mark Scroll view delegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -570,7 +585,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		}
 	
 		if (lastUserMessageIndexPath) {
-			[self.tableView reloadRowsAtIndexPaths:@[lastUserMessageIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+			@try {
+				[self.tableView reloadRowsAtIndexPaths:@[lastUserMessageIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+			} @catch (NSException *exception) {
+				ATLogError(@"caught exception: %@: %@", [exception name], [exception description]);
+			}
 		}
 	}
 	

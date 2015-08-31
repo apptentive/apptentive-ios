@@ -37,8 +37,9 @@ NSString *const ATEngagementInteractionsInvokesTotalKey = @"ATEngagementInteract
 NSString *const ATEngagementInteractionsInvokesVersionKey = @"ATEngagementInteractionsInvokesVersionKey";
 NSString *const ATEngagementInteractionsInvokesLastDateKey = @"ATEngagementInteractionsInvokesLastDateKey";
 NSString *const ATEngagementInteractionsInvokesBuildKey = @"ATEngagementInteractionsInvokesBuildKey";
-NSString *const ATEngagementInteractionsSDKVersionKey = @"ATEngagementInteractionsSDKVersionKey";
 
+NSString *const ATEngagementInteractionsSDKVersionKey = @"ATEngagementInteractionsSDKVersionKey";
+NSString *const ATEngagementInteractionsAppBuildNumberKey = @"ATEngagementInteractionsAppBuildNumberKey";
 NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEngagementCachedInteractionsExpirationPreferenceKey";
 
 NSString *const ATEngagementCodePointHostAppVendorKey = @"local";
@@ -119,8 +120,13 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 		return YES;
 	}
 	
-	NSString *previousVersion = [[NSUserDefaults standardUserDefaults] stringForKey:ATEngagementInteractionsSDKVersionKey];
-	if (![previousVersion isEqualToString:kATConnectVersionString]) {
+	NSString *previousBuild = [[NSUserDefaults standardUserDefaults] stringForKey:ATEngagementInteractionsAppBuildNumberKey];
+	if (![previousBuild isEqualToString:[ATUtilities buildNumberString]]) {
+		return YES;
+	}
+	
+	NSString *previousSDKVersion = [[NSUserDefaults standardUserDefaults] stringForKey:ATEngagementInteractionsSDKVersionKey];
+	if (![previousSDKVersion isEqualToString:kATConnectVersionString]) {
 		return YES;
 	}
 	
@@ -174,6 +180,13 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 			[_engagementInteractions removeAllObjects];
 			[_engagementInteractions addEntriesFromDictionary:interactions];
 		
+			NSString *buildNumber = [ATUtilities buildNumberString];
+			if ([ATUtilities buildNumberString]) {
+				[[NSUserDefaults standardUserDefaults] setObject:buildNumber forKey:ATEngagementInteractionsAppBuildNumberKey];
+			} else {
+				[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInteractionsAppBuildNumberKey];
+			}
+			
 			[[NSUserDefaults standardUserDefaults] setObject:kATConnectVersionString forKey:ATEngagementInteractionsSDKVersionKey];
 
 			[self updateVersionInfo];

@@ -698,11 +698,8 @@ static NSURLCache *imageCache = nil;
 		return;
 	}
 	
-	ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
-	if (![queue hasTaskOfClass:[ATEngagementGetManifestTask class]]) {
-		ATEngagementGetManifestTask *task = [[ATEngagementGetManifestTask alloc] init];
-		[queue addTask:task];
-		task = nil;
+	if (![[ATTaskQueue sharedTaskQueue] hasTaskOfClass:[ATEngagementGetManifestTask class]]) {
+		[[ATEngagementBackend sharedBackend] checkForEngagementManifest];
 	}
 }
 

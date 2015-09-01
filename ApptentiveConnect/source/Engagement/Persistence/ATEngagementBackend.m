@@ -96,10 +96,36 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 			}
 		}
 		
+		[self invalidateInteractionCacheIfNeeded];
+		
 		[self updateVersionInfo];
 	}
 	
 	return self;
+}
+
+- (BOOL)invalidateInteractionCacheIfNeeded {
+	BOOL invalidateCache = NO;
+	
+	NSString *previousBuild = [[NSUserDefaults standardUserDefaults] stringForKey:ATEngagementInteractionsAppBuildNumberKey];
+	if (![previousBuild isEqualToString:[ATUtilities buildNumberString]]) {
+		invalidateCache = YES;
+	}
+	
+	NSString *previousSDKVersion = [[NSUserDefaults standardUserDefaults] stringForKey:ATEngagementInteractionsSDKVersionKey];
+	if (![previousSDKVersion isEqualToString:kATConnectVersionString]) {
+		invalidateCache = YES;
+	}
+	
+	if (invalidateCache) {
+		[self invalidateInteractionCache];
+	}
+	
+	return invalidateCache;
+}
+
+- (void)invalidateInteractionCache {
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
 }
 
 - (void)checkForEngagementManifest {
@@ -120,19 +146,7 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 		return YES;
 	}
 	
-	NSString *previousBuild = [[NSUserDefaults standardUserDefaults] stringForKey:ATEngagementInteractionsAppBuildNumberKey];
-	if (![previousBuild isEqualToString:[ATUtilities buildNumberString]]) {
-		return YES;
-	}
-	
-	NSString *previousSDKVersion = [[NSUserDefaults standardUserDefaults] stringForKey:ATEngagementInteractionsSDKVersionKey];
-	if (![previousSDKVersion isEqualToString:kATConnectVersionString]) {
-		return YES;
-	}
-	
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	
-	NSDate *expiration = [defaults objectForKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
+	NSDate *expiration = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
 	if (expiration) {
 		NSDate *now = [NSDate date];
 		NSComparisonResult comparison = [expiration compare:now];

@@ -29,7 +29,7 @@
 #define HEADER_LABEL_HEIGHT 64.0
 #define TEXT_VIEW_HORIZONTAL_INSET 12.0
 #define TEXT_VIEW_VERTICAL_INSET 10.0
-#define DATE_FONT_SIZE 14.0
+#define DATE_FONT [UIFont boldSystemFontOfSize:14.0]
 
 #define FOOTER_ANIMATION_DURATION 0.10
 
@@ -41,7 +41,7 @@
 #define REPLY_CELL_MINIMUM_HEIGHT 66.0
 #define STATUS_LABEL_HEIGHT 14.0
 #define STATUS_LABEL_MARGIN 6.0
-#define BODY_FONT_SIZE 17.0
+#define BODY_FONT [UIFont systemFontOfSize:17.0]
 
 NSString *const ATInteractionMessageCenterEventLabelLaunch = @"launch";
 NSString *const ATInteractionMessageCenterEventLabelClose = @"close";
@@ -361,8 +361,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	NSString *labelText = [self.dataSource textOfMessageAtIndexPath:indexPath];
 	CGFloat effectiveLabelWidth = CGRectGetWidth(tableView.bounds) - horizontalMargin;
-	UIFont *messageFont = [UIFont systemFontOfSize:BODY_FONT_SIZE];
-	NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:labelText attributes:@{NSFontAttributeName: messageFont}];
+	NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:labelText attributes:@{NSFontAttributeName: BODY_FONT}];
 	
 	CGRect labelRect = [attributedText boundingRectWithSize:CGSizeMake(effectiveLabelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
 	
@@ -392,7 +391,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
 	UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *)view;
-	headerView.textLabel.font = [UIFont boldSystemFontOfSize:DATE_FONT_SIZE];
+	headerView.textLabel.font = DATE_FONT;
 }
 
 - (BOOL)tableView:(UITableView *)tableView shouldShowMenuForRowAtIndexPath:(NSIndexPath *)indexPath {

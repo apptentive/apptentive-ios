@@ -107,6 +107,10 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 - (BOOL)invalidateInteractionCacheIfNeeded {
 	BOOL invalidateCache = NO;
 	
+#if APPTENTIVE_DEBUG
+	invalidateCache = YES;
+#endif
+	
 	NSString *previousBuild = [[NSUserDefaults standardUserDefaults] stringForKey:ATEngagementInteractionsAppBuildNumberKey];
 	if (![previousBuild isEqualToString:[ATUtilities buildNumberString]]) {
 		invalidateCache = YES;
@@ -137,15 +141,6 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (BOOL)shouldRetrieveNewEngagementManifest {
-	
-	BOOL alwaysRetrieveManifest = NO;
-#if APPTENTIVE_DEBUG
-	alwaysRetrieveManifest = YES;
-#endif
-	if (alwaysRetrieveManifest) {
-		return YES;
-	}
-	
 	NSDate *expiration = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
 	if (expiration) {
 		NSDate *now = [NSDate date];

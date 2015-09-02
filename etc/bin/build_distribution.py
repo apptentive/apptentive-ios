@@ -182,11 +182,11 @@ class Builder(object):
 		if is_64bit and is_simulator:
 			command += " ARCHS='x86_64' IPHONEOS_DEPLOYMENT_TARGET='7.0' VALID_ARCHS='x86_64'"
 		elif is_simulator and not is_64bit:
-			command += " ARCHS='i386' IPHONEOS_DEPLOYMENT_TARGET='5.0' VALID_ARCHS='i386'"
+			command += " ARCHS='i386' IPHONEOS_DEPLOYMENT_TARGET='7.0' VALID_ARCHS='i386'"
 		elif is_64bit:
 			command += " ARCHS='arm64' IPHONEOS_DEPLOYMENT_TARGET='7.0' VALID_ARCHS='arm64'"
 		elif not is_simulator and not is_64bit:
-			command += " ARCHS='armv7 armv7s' IPHONEOS_DEPLOYMENT_TARGET='5.0' VALID_ARCHS='armv7 armv7s'"
+			command += " ARCHS='armv7 armv7s' IPHONEOS_DEPLOYMENT_TARGET='7.0' VALID_ARCHS='armv7 armv7s'"
 		return command
 	
 	def _project_path(self, filename):

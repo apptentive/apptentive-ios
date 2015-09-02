@@ -180,13 +180,13 @@ class Builder(object):
 			sdk = 'iphonesimulator'
 		command = """xcrun xcodebuild -target ApptentiveConnect -configuration Release -sdk %s %s""" % (sdk, self._xcode_options(is_simulator=is_simulator, is_64bit=is_64bit))
 		if is_64bit and is_simulator:
-			command += " ARCHS='x86_64' IPHONEOS_DEPLOYMENT_TARGET='7.0' VALID_ARCHS='x86_64'"
+			command += " ARCHS='x86_64' VALID_ARCHS='x86_64'"
 		elif is_simulator and not is_64bit:
-			command += " ARCHS='i386' IPHONEOS_DEPLOYMENT_TARGET='7.0' VALID_ARCHS='i386'"
+			command += " ARCHS='i386' VALID_ARCHS='i386'"
 		elif is_64bit:
-			command += " ARCHS='arm64' IPHONEOS_DEPLOYMENT_TARGET='7.0' VALID_ARCHS='arm64'"
+			command += " ARCHS='arm64' VALID_ARCHS='arm64'"
 		elif not is_simulator and not is_64bit:
-			command += " ARCHS='armv7 armv7s' IPHONEOS_DEPLOYMENT_TARGET='7.0' VALID_ARCHS='armv7 armv7s'"
+			command += " ARCHS='armv7 armv7s' VALID_ARCHS='armv7 armv7s'"
 		return command
 	
 	def _project_path(self, filename):

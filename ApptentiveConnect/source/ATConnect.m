@@ -185,6 +185,36 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	return _integrationConfiguration;
 }
 
+- (void)setPushNotificationIntegration:(ATPushProvider)pushProvider withDeviceToken:(NSData *)deviceToken {
+	[self removeAllPushIntegrations];
+	
+	NSString *integrationKey = [self integrationKeyForPushProvider:pushProvider];
+	
+	[self addIntegration:integrationKey withDeviceToken:deviceToken];
+}
+
+- (void)removeAllPushIntegrations {
+	[self removeIntegration:[self integrationKeyForPushProvider:ATPushProviderApptentive]];
+	[self removeIntegration:[self integrationKeyForPushProvider:ATPushProviderUrbanAirship]];
+	[self removeIntegration:[self integrationKeyForPushProvider:ATPushProviderAmazonSNS]];
+	[self removeIntegration:[self integrationKeyForPushProvider:ATPushProviderParse]];
+}
+
+- (NSString *)integrationKeyForPushProvider:(ATPushProvider)pushProvider {
+	switch (pushProvider) {
+		case ATPushProviderApptentive:
+			return @"apptentive_push";
+		case ATPushProviderUrbanAirship:
+			return @"urban_airship";
+		case ATPushProviderAmazonSNS:
+			return @"aws_sns";
+		case ATPushProviderParse:
+			return @"parse";
+		default:
+			return @"UNKNOWN_PUSH_PROVIDER";
+	}
+}
+
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration {
 	[_integrationConfiguration setObject:configuration forKey:integration];
 	

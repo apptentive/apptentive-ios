@@ -42,6 +42,13 @@ extern NSString *const ATSurveySentNotification;
  */
 extern NSString *const ATSurveyIDKey;
 
+/** Supported Push Providers for use in `setPushNotificationIntegration:withDeviceToken:` */
+typedef NS_ENUM(NSInteger, ATPushProvider){
+	ATPushProviderApptentive,
+	ATPushProviderUrbanAirship,
+	ATPushProviderAmazonSNS,
+	ATPushProviderParse,
+};
 
 /**
  `ATConnect` is a singleton which is used as the main point of entry for the Apptentive service.
@@ -455,9 +462,22 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 - (void)openAppStore;
 
 ///------------------------------------
-/// @name Integrate With Other Services
+/// @name Add Push Notifications
 ///------------------------------------
 
+/**
+ Register for Push Notifications with the given service provider.
+ 
+ Uses the `deviceToken` from `application:didRegisterForRemoteNotificationsWithDeviceToken:`
+ 
+ Only one Push Notification Integration can be added at a time. Setting a Push Notification
+ Integration removes all previously set Push Notification Integrations.
+ 
+ @param pushProvider The Push Notification provider with which to register.
+ @param deviceToken The device token used to send Remote Notifications.
+ **/
+
+- (void)setPushNotificationIntegration:(ATPushProvider)pushProvider withDeviceToken:(NSData *)deviceToken;
 
 @end
 

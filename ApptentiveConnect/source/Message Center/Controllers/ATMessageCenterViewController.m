@@ -107,6 +107,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @implementation ATMessageCenterViewController
 
 - (void)viewDidLoad {
+	// TODO: Figure out a way to avoid tightly coupling this
+	[ATBackend sharedBackend].presentedMessageCenterViewController = self;
+	
     [super viewDidLoad];
 	
 	if ([ATConnect sharedConnection].tintColor) {

@@ -81,7 +81,6 @@ static NSURLCache *imageCache = nil;
 @property (nonatomic, assign) BOOL apiKeySet;
 @property (nonatomic, copy) NSString *cachedDeviceUUID;
 @property (nonatomic, assign) ATBackendState state;
-@property (nonatomic, strong) UIViewController *presentedMessageCenterViewController;
 @property (nonatomic, strong) ATDataManager *dataManager;
 @property (nonatomic, strong) ATConversationUpdater *conversationUpdater;
 @property (nonatomic, strong) ATDeviceUpdater *deviceUpdater;

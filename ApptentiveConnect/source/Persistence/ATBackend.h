@@ -51,6 +51,7 @@ extern NSString *const ATBackendBecameReadyNotification;
 @property (nonatomic, strong, readonly) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong, readonly) NSManagedObjectModel *managedObjectModel;
 @property (nonatomic, strong, readonly) NSString *supportDirectoryPath;
+@property (nonatomic, strong) UIViewController *presentedMessageCenterViewController;
 
 @property (nonatomic, assign, readonly) BOOL hideBranding;
 @property (nonatomic, assign, readonly) BOOL notificationPopupsEnabled;

@@ -44,6 +44,12 @@ The person using your app will be given the opportunity to change those details.
 
 We have also removed the `initialUserName` and `initialUserEmailAddress` properties in favor of the above `personName` and `personEmailAddress`.
 
+## Push Notifications
+
+The new method `setPushNotificationIntegration:withDeviceToken:` has been added to add a single Push Notification provider. To register for push notifications, call this method with one of the enumerated `ATPushProvider`s plus the device token from `application:didRegisterForRemoteNotificationsWithDeviceToken`.
+
+In light of this new method, we have removed the legacy integration API methods: `addIntegration:withConfiguration:`, `addIntegration:withDeviceToken:`, `removeIntegration:`, `addApptentiveIntegrationWithDeviceToken:`, `addUrbanAirshipIntegrationWithDeviceToken:`, `addAmazonSNSIntegrationWithDeviceToken:`, and `addParseIntegrationWithDeviceToken:`.
+
 ## Removed Legacy Properties
 
 We have removed the `useMessageCenter`, `initiallyUseMessageCenter`, and `initiallyHideBranding` properties from the API. Please make sure to update your code if you are setting any of these properties.

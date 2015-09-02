@@ -42,12 +42,6 @@ extern NSString *const ATSurveySentNotification;
  */
 extern NSString *const ATSurveyIDKey;
 
-/** Keys for supported 3rd-party integrations. */
-extern NSString *const ATIntegrationKeyApptentive;
-extern NSString *const ATIntegrationKeyUrbanAirship;
-extern NSString *const ATIntegrationKeyKahuna;
-extern NSString *const ATIntegrationKeyAmazonSNS;
-extern NSString *const ATIntegrationKeyParse;
 
 /**
  `ATConnect` is a singleton which is used as the main point of entry for the Apptentive service.
@@ -464,56 +458,6 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 /// @name Integrate With Other Services
 ///------------------------------------
 
-/**
- Adds a custom configuration for a 3rd-party integration service.
- 
- @param integration The name of the integration.
- @param configuration The service-specific configuration keys and values.
- */
-- (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration;
-
-/**
- Adds a device token for a 3rd-party integration service.
- 
- @param integration The name of the integration.
- @param deviceToken The device token expected by the integration.
- */
-- (void)addIntegration:(NSString *)integration withDeviceToken:(NSData *)deviceToken;
-
-/**
- Removes a 3rd-party integration with the given name.
- 
- @param integration The name of the integration.
- */
-- (void)removeIntegration:(NSString *)integration;
-
-/**
- Adds Apptentive Push integration with the given device token.
- 
- @param deviceToken The device token expected by APNs.
- */
-- (void)addApptentiveIntegrationWithDeviceToken:(NSData *)deviceToken;
-
-/**
- Adds Urban Airship integration with the given device token.
- 
- @param deviceToken The device token expected by Urban Airship.
- */
-- (void)addUrbanAirshipIntegrationWithDeviceToken:(NSData *)deviceToken;
-
-/**
- Adds Amazon Web Services (AWS) Simple Notification Service (SNS) integration with the given device token.
- 
- @param deviceToken The device token expected by AWS SNS.
- */
-- (void)addAmazonSNSIntegrationWithDeviceToken:(NSData *)deviceToken;
-
-/**
- Adds Parse integration with the given device token.
- 
- @param deviceToken The device token expected by Parse.
- */
-- (void)addParseIntegrationWithDeviceToken:(NSData *)deviceToken;
 
 @end
 

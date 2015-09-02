@@ -37,12 +37,6 @@ NSString *const ATSurveyShownNotification = @"ATSurveyShownNotification";
 NSString *const ATSurveySentNotification = @"ATSurveySentNotification";
 NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 
-NSString *const ATIntegrationKeyApptentive = @"apptentive_push";
-NSString *const ATIntegrationKeyUrbanAirship = @"urban_airship";
-NSString *const ATIntegrationKeyKahuna = @"kahuna";
-NSString *const ATIntegrationKeyAmazonSNS = @"aws_sns";
-NSString *const ATIntegrationKeyParse = @"parse";
-
 NSString *const ATConnectCustomPersonDataChangedNotification = @"ATConnectCustomPersonDataChangedNotification";
 NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustomDeviceDataChangedNotification";
 
@@ -168,7 +162,6 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	[self removeCustomDeviceDataWithKey:key];
 }
 
-
 - (void)openAppStore {
 	if (!self.appID) {
 		ATLogError(@"Cannot open App Store because `[ATConnect sharedConnection].appID` is not set to your app's iTunes App ID.");
@@ -212,22 +205,6 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	[_integrationConfiguration removeObjectForKey:integration];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:self.customDeviceData];
-}
-
-- (void)addApptentiveIntegrationWithDeviceToken:(NSData *)deviceToken {
-	[self addIntegration:ATIntegrationKeyApptentive withDeviceToken:deviceToken];
-}
-
-- (void)addUrbanAirshipIntegrationWithDeviceToken:(NSData *)deviceToken {
-	[self addIntegration:ATIntegrationKeyUrbanAirship withDeviceToken:deviceToken];
-}
-
-- (void)addAmazonSNSIntegrationWithDeviceToken:(NSData *)deviceToken {
-	[self addIntegration:ATIntegrationKeyAmazonSNS withDeviceToken:deviceToken];
-}
-
-- (void)addParseIntegrationWithDeviceToken:(NSData *)deviceToken {
-	[self addIntegration:ATIntegrationKeyParse withDeviceToken:deviceToken];
 }
 
 #if TARGET_OS_IPHONE

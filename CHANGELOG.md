@@ -13,7 +13,7 @@ Push Notifications can now be added directly through Apptentive, with no need to
 
 Localization has been added for Polish.
 
-Many older API methods have been update or removed. Please see the "Migrating to 2.0.0" document in this repository for details.
+Many older API methods have been updated or removed. Please see the "Migrating to 2.0.0" document in this repository for details.
 
 2015-04-23 pkamb, frankus v1.7.3
 --------------------------------

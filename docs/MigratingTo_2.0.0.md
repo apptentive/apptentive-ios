@@ -48,7 +48,14 @@ We have also removed the `initialUserName` and `initialUserEmailAddress` propert
 
 The new method `setPushNotificationIntegration:withDeviceToken:` has been added to add a single Push Notification provider. To register for push notifications, call this method with one of the enumerated `ATPushProvider`s plus the device token from `application:didRegisterForRemoteNotificationsWithDeviceToken`.
 
-In light of this new method, we have removed the legacy integration API methods: `addIntegration:withConfiguration:`, `addIntegration:withDeviceToken:`, `removeIntegration:`, `addApptentiveIntegrationWithDeviceToken:`, `addUrbanAirshipIntegrationWithDeviceToken:`, `addAmazonSNSIntegrationWithDeviceToken:`, and `addParseIntegrationWithDeviceToken:`.
+In light of this new method, we have removed the legacy integration API methods:  
+ - `addIntegration:withConfiguration:`
+ - `addIntegration:withDeviceToken:`
+ - `removeIntegration:`
+ - `addApptentiveIntegrationWithDeviceToken:`
+ - `addUrbanAirshipIntegrationWithDeviceToken:`
+ - `addAmazonSNSIntegrationWithDeviceToken:`
+ - `addParseIntegrationWithDeviceToken:`.
 
 ## Removed Legacy Properties
 

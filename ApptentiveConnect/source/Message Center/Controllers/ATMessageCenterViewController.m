@@ -260,6 +260,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	} else {
 		[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATMessageCenterDraftMessageKey];
 	}
+	
+	[[ATBackend sharedBackend] messageCenterWillDismiss:self];
 }
 
 #pragma mark - Table view data source

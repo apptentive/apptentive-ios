@@ -25,6 +25,8 @@
 #import "ATFeedbackTypes.h"
 #endif
 
+@class ATMessageCenterViewController;
+
 extern NSString *const ATBackendBecameReadyNotification;
 
 #define USE_STAGING 0
@@ -68,6 +70,8 @@ extern NSString *const ATBackendBecameReadyNotification;
 + (UIImage *)imageNamed:(NSString *)name;
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController;
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
+- (void)messageCenterWillDismiss:(ATMessageCenterViewController *)messageCenter;
+
 - (void)attachCustomDataToMessage:(ATAbstractMessage *)message;
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion;
 #elif TARGET_OS_MAC

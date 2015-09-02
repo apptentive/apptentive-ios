@@ -42,12 +42,13 @@ extern NSString *const ATSurveySentNotification;
  */
 extern NSString *const ATSurveyIDKey;
 
-/** Keys for supported 3rd-party integrations. */
-extern NSString *const ATIntegrationKeyApptentive;
-extern NSString *const ATIntegrationKeyUrbanAirship;
-extern NSString *const ATIntegrationKeyKahuna;
-extern NSString *const ATIntegrationKeyAmazonSNS;
-extern NSString *const ATIntegrationKeyParse;
+/** Supported Push Providers for use in `setPushNotificationIntegration:withDeviceToken:` */
+typedef NS_ENUM(NSInteger, ATPushProvider){
+	ATPushProviderApptentive,
+	ATPushProviderUrbanAirship,
+	ATPushProviderAmazonSNS,
+	ATPushProviderParse,
+};
 
 /**
  `ATConnect` is a singleton which is used as the main point of entry for the Apptentive service.
@@ -461,59 +462,22 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 - (void)openAppStore;
 
 ///------------------------------------
-/// @name Integrate With Other Services
+/// @name Add Push Notifications
 ///------------------------------------
 
 /**
- Adds a custom configuration for a 3rd-party integration service.
+ Register for Push Notifications with the given service provider.
  
- @param integration The name of the integration.
- @param configuration The service-specific configuration keys and values.
- */
-- (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration;
+ Uses the `deviceToken` from `application:didRegisterForRemoteNotificationsWithDeviceToken:`
+ 
+ Only one Push Notification Integration can be added at a time. Setting a Push Notification
+ Integration removes all previously set Push Notification Integrations.
+ 
+ @param pushProvider The Push Notification provider with which to register.
+ @param deviceToken The device token used to send Remote Notifications.
+ **/
 
-/**
- Adds a device token for a 3rd-party integration service.
- 
- @param integration The name of the integration.
- @param deviceToken The device token expected by the integration.
- */
-- (void)addIntegration:(NSString *)integration withDeviceToken:(NSData *)deviceToken;
-
-/**
- Removes a 3rd-party integration with the given name.
- 
- @param integration The name of the integration.
- */
-- (void)removeIntegration:(NSString *)integration;
-
-/**
- Adds Apptentive Push integration with the given device token.
- 
- @param deviceToken The device token expected by APNs.
- */
-- (void)addApptentiveIntegrationWithDeviceToken:(NSData *)deviceToken;
-
-/**
- Adds Urban Airship integration with the given device token.
- 
- @param deviceToken The device token expected by Urban Airship.
- */
-- (void)addUrbanAirshipIntegrationWithDeviceToken:(NSData *)deviceToken;
-
-/**
- Adds Amazon Web Services (AWS) Simple Notification Service (SNS) integration with the given device token.
- 
- @param deviceToken The device token expected by AWS SNS.
- */
-- (void)addAmazonSNSIntegrationWithDeviceToken:(NSData *)deviceToken;
-
-/**
- Adds Parse integration with the given device token.
- 
- @param deviceToken The device token expected by Parse.
- */
-- (void)addParseIntegrationWithDeviceToken:(NSData *)deviceToken;
+- (void)setPushNotificationIntegration:(ATPushProvider)pushProvider withDeviceToken:(NSData *)deviceToken;
 
 @end
 

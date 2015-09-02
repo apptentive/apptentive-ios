@@ -37,12 +37,6 @@ NSString *const ATSurveyShownNotification = @"ATSurveyShownNotification";
 NSString *const ATSurveySentNotification = @"ATSurveySentNotification";
 NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 
-NSString *const ATIntegrationKeyApptentive = @"apptentive_push";
-NSString *const ATIntegrationKeyUrbanAirship = @"urban_airship";
-NSString *const ATIntegrationKeyKahuna = @"kahuna";
-NSString *const ATIntegrationKeyAmazonSNS = @"aws_sns";
-NSString *const ATIntegrationKeyParse = @"parse";
-
 NSString *const ATConnectCustomPersonDataChangedNotification = @"ATConnectCustomPersonDataChangedNotification";
 NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustomDeviceDataChangedNotification";
 
@@ -168,7 +162,6 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	[self removeCustomDeviceDataWithKey:key];
 }
 
-
 - (void)openAppStore {
 	if (!self.appID) {
 		ATLogError(@"Cannot open App Store because `[ATConnect sharedConnection].appID` is not set to your app's iTunes App ID.");
@@ -192,6 +185,36 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	return _integrationConfiguration;
 }
 
+- (void)setPushNotificationIntegration:(ATPushProvider)pushProvider withDeviceToken:(NSData *)deviceToken {
+	[self removeAllPushIntegrations];
+	
+	NSString *integrationKey = [self integrationKeyForPushProvider:pushProvider];
+	
+	[self addIntegration:integrationKey withDeviceToken:deviceToken];
+}
+
+- (void)removeAllPushIntegrations {
+	[self removeIntegration:[self integrationKeyForPushProvider:ATPushProviderApptentive]];
+	[self removeIntegration:[self integrationKeyForPushProvider:ATPushProviderUrbanAirship]];
+	[self removeIntegration:[self integrationKeyForPushProvider:ATPushProviderAmazonSNS]];
+	[self removeIntegration:[self integrationKeyForPushProvider:ATPushProviderParse]];
+}
+
+- (NSString *)integrationKeyForPushProvider:(ATPushProvider)pushProvider {
+	switch (pushProvider) {
+		case ATPushProviderApptentive:
+			return @"apptentive_push";
+		case ATPushProviderUrbanAirship:
+			return @"urban_airship";
+		case ATPushProviderAmazonSNS:
+			return @"aws_sns";
+		case ATPushProviderParse:
+			return @"parse";
+		default:
+			return @"UNKNOWN_PUSH_PROVIDER";
+	}
+}
+
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration {
 	[_integrationConfiguration setObject:configuration forKey:integration];
 	
@@ -212,22 +235,6 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	[_integrationConfiguration removeObjectForKey:integration];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:self.customDeviceData];
-}
-
-- (void)addApptentiveIntegrationWithDeviceToken:(NSData *)deviceToken {
-	[self addIntegration:ATIntegrationKeyApptentive withDeviceToken:deviceToken];
-}
-
-- (void)addUrbanAirshipIntegrationWithDeviceToken:(NSData *)deviceToken {
-	[self addIntegration:ATIntegrationKeyUrbanAirship withDeviceToken:deviceToken];
-}
-
-- (void)addAmazonSNSIntegrationWithDeviceToken:(NSData *)deviceToken {
-	[self addIntegration:ATIntegrationKeyAmazonSNS withDeviceToken:deviceToken];
-}
-
-- (void)addParseIntegrationWithDeviceToken:(NSData *)deviceToken {
-	[self addIntegration:ATIntegrationKeyParse withDeviceToken:deviceToken];
 }
 
 #if TARGET_OS_IPHONE

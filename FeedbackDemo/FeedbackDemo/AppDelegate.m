@@ -94,7 +94,7 @@
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     // Enable Push Notifications for New Messages
-    [[ATConnect sharedConnection] addApptentiveIntegrationWithDeviceToken:deviceToken];
+    [[ATConnect sharedConnection] setPushNotificationIntegration:ATPushProviderApptentive withDeviceToken:deviceToken];
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {

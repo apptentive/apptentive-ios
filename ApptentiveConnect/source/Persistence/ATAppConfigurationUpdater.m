@@ -12,8 +12,9 @@
 #import "ATConnect.h"
 
 NSString *const ATConfigurationSDKVersionKey = @"ATConfigurationSDKVersionKey";
+NSString *const ATConfigurationAppBuildNumberKey = @"ATConfigurationAppBuildNumberKey";
+
 NSString *const ATConfigurationPreferencesChangedNotification = @"ATConfigurationPreferencesChangedNotification";
-NSString *const ATAppConfigurationLastUpdatePreferenceKey = @"ATAppConfigurationLastUpdatePreferenceKey";
 NSString *const ATAppConfigurationExpirationPreferenceKey = @"ATAppConfigurationExpirationPreferenceKey";
 NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigurationMetricsEnabledPreferenceKey";
 NSString *const ATAppConfigurationHideBrandingKey = @"ATAppConfigurationHideBrandingKey";
@@ -23,14 +24,6 @@ NSString *const ATAppConfigurationMessageCenterForegroundRefreshIntervalKey = @"
 NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey = @"ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey";
 
 NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDisplayNameKey";
-
-// Interval, in seconds, after which we'll update the configuration.
-#if APPTENTIVE_DEBUG
-#define kATAppConfigurationUpdateInterval (3)
-#else
-#define kATAppConfigurationUpdateInterval (60*60*24)
-#endif
-
 
 @interface ATAppConfigurationUpdater (Private)
 - (void)processResult:(NSDictionary *)jsonRatingConfiguration maxAge:(NSTimeInterval)expiresMaxAge;
@@ -45,7 +38,6 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSDictionary *defaultPreferences = 
 	[NSDictionary dictionaryWithObjectsAndKeys:
-	 [NSDate distantPast], ATAppConfigurationLastUpdatePreferenceKey,
 	 [NSNumber numberWithBool:YES], ATAppConfigurationMetricsEnabledPreferenceKey,
 	 [NSNumber numberWithInt:20], ATAppConfigurationMessageCenterForegroundRefreshIntervalKey,
 	 [NSNumber numberWithInt:60], ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey,
@@ -54,39 +46,47 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	[defaults registerDefaults:defaultPreferences];
 }
 
-+ (BOOL)shouldCheckForUpdate {
-	[ATAppConfigurationUpdater registerDefaults];	
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSDate *lastCheck = [defaults objectForKey:ATAppConfigurationLastUpdatePreferenceKey];
++ (BOOL)invalidateAppConfigurationIfNeeded {
+	BOOL invalidateCache = NO;
 	
-	NSString *previousVersion = [defaults stringForKey:ATConfigurationSDKVersionKey];
-	if (![previousVersion isEqualToString:kATConnectVersionString]) {
-		return YES;
+	NSString *previousBuild = [[NSUserDefaults standardUserDefaults] stringForKey:ATConfigurationAppBuildNumberKey];
+	if (![previousBuild isEqualToString:[ATUtilities buildNumberString]]) {
+		invalidateCache = YES;
 	}
+	
+	NSString *previousSDKVersion = [[NSUserDefaults standardUserDefaults] stringForKey:ATConfigurationSDKVersionKey];
+	if (![previousSDKVersion isEqualToString:kATConnectVersionString]) {
+		invalidateCache = YES;
+	}
+	
+	if (invalidateCache) {
+		[self invalidateAppConfiguration];
+	}
+	
+	return invalidateCache;
+}
+
++ (void)invalidateAppConfiguration {
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationExpirationPreferenceKey];
+}
+
++ (BOOL)shouldCheckForUpdate {
+	[ATAppConfigurationUpdater registerDefaults];
+	
+	[ATAppConfigurationUpdater invalidateAppConfigurationIfNeeded];
 		
-#ifndef APPTENTIVE_DEBUG
-	NSDate *expiration = [defaults objectForKey:ATAppConfigurationExpirationPreferenceKey];
+	NSDate *expiration = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationExpirationPreferenceKey];
 	if (expiration) {
-		NSDate *now = [NSDate date];
-		NSComparisonResult comparison = [expiration compare:now];
+		NSComparisonResult comparison = [expiration compare:[NSDate date]];
 		if (comparison == NSOrderedSame || comparison == NSOrderedAscending) {
 			return YES;
 		} else {
 			return NO;
 		}
-	}
-#endif
-	
-	// Fall back to the defaults.
-	NSTimeInterval interval = [lastCheck timeIntervalSinceNow];
-	
-	if (interval <= -kATAppConfigurationUpdateInterval) {
-		return YES;
 	} else {
-		return NO;
+		return YES;
 	}
 }
-
 
 - (id)initWithDelegate:(NSObject<ATAppConfigurationUpdaterDelegate> *)aDelegate {
 	if ((self = [super init])) {
@@ -155,7 +155,6 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	[ATAppConfigurationUpdater registerDefaults];
-	[defaults setObject:[NSDate date] forKey:ATAppConfigurationLastUpdatePreferenceKey];
 	
 	NSDictionary *numberObjects = 
 		[NSDictionary dictionaryWithObjectsAndKeys:
@@ -245,6 +244,7 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	}
 	
 	[defaults setObject:kATConnectVersionString forKey:ATConfigurationSDKVersionKey];
+	[defaults setObject:[ATUtilities buildNumberString] forKey:ATConfigurationAppBuildNumberKey];
 	
 	if (hasConfigurationChanges) {
 		[[NSNotificationCenter defaultCenter] postNotificationName:ATConfigurationPreferencesChangedNotification object:nil];

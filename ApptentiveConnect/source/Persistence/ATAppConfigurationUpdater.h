@@ -10,7 +10,6 @@
 #import "ATAPIRequest.h"
 
 extern NSString *const ATConfigurationPreferencesChangedNotification;
-extern NSString *const ATAppConfigurationLastUpdatePreferenceKey;
 extern NSString *const ATAppConfigurationExpirationPreferenceKey;
 extern NSString *const ATAppConfigurationMetricsEnabledPreferenceKey;
 extern NSString *const ATAppConfigurationHideBrandingKey;

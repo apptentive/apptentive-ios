@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
 extern NSString *const ATEngagementInstallDateKey;
@@ -22,20 +21,18 @@ extern NSString *const ATEngagementInteractionsInvokesTotalKey;
 extern NSString *const ATEngagementInteractionsInvokesVersionKey;
 extern NSString *const ATEngagementInteractionsInvokesBuildKey;
 extern NSString *const ATEngagementInteractionsInvokesLastDateKey;
+extern NSString *const ATEngagementInteractionsSDKVersionKey;
 
 extern NSString *const ATEngagementCodePointHostAppVendorKey;
 extern NSString *const ATEngagementCodePointHostAppInteractionKey;
 extern NSString *const ATEngagementCodePointApptentiveVendorKey;
 extern NSString *const ATEngagementCodePointApptentiveAppInteractionKey;
 
+extern NSString *const ATEngagementMessageCenterEvent;
+
 @class ATInteraction;
 
-@interface ATEngagementBackend : NSObject {
-@private
-	NSMutableDictionary *_engagementTargets;
-	NSMutableDictionary *_engagementInteractions;
-}
-
+@interface ATEngagementBackend : NSObject
 + (ATEngagementBackend *)sharedBackend;
 
 - (void)checkForEngagementManifest;
@@ -51,8 +48,8 @@ extern NSString *const ATEngagementCodePointApptentiveAppInteractionKey;
 
 - (ATInteraction *)interactionForInvocations:(NSArray *)invocations;
 
-- (BOOL)willShowInteractionForLocalEvent:(NSString *)event;
-- (BOOL)willShowInteractionForCodePoint:(NSString *)codePoint;
+- (BOOL)canShowInteractionForLocalEvent:(NSString *)event;
+- (BOOL)canShowInteractionForCodePoint:(NSString *)codePoint;
 
 + (NSString *)stringByEscapingCodePointSeparatorCharactersInString:(NSString *)string;
 + (NSString *)codePointForVendor:(NSString *)vendor interactionType:(NSString *)interactionType event:(NSString *)event;

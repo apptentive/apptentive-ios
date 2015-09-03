@@ -19,8 +19,8 @@ typedef enum {
 
 @interface ATMessageDisplayType : NSManagedObject
 
-@property (nonatomic, retain) NSNumber *displayType;
-@property (nonatomic, retain) NSSet *messages;
+@property (nonatomic, strong) NSNumber *displayType;
+@property (nonatomic, strong) NSSet *messages;
 
 + (void)setupSingletons;
 + (ATMessageDisplayType *)messageCenterType;

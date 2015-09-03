@@ -1,5 +1,5 @@
 //
-//  ATMessage.m
+//  ATAbstractMessage.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 10/6/12.
@@ -14,6 +14,9 @@
 #import "ATMessageDisplayType.h"
 #import "ATMessageSender.h"
 #import "NSDictionary+ATAdditions.h"
+#import "ATMessageCenterInteraction.h"
+
+NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
 @implementation ATAbstractMessage
 
@@ -66,7 +69,7 @@
 		CFUUIDRef uuidRef = CFUUIDCreate(NULL);
 		CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
 		
-		self.pendingMessageID = [NSString stringWithFormat:@"pending-message:%@", (NSString *)uuidStringRef];
+		self.pendingMessageID = [NSString stringWithFormat:@"pending-message:%@", (__bridge NSString *)uuidStringRef];
 		
 		CFRelease(uuidRef), uuidRef = NULL;
 		CFRelease(uuidStringRef), uuidStringRef = NULL;
@@ -94,7 +97,7 @@
 		NSDictionary *errorDictionary = (NSDictionary *)errorObject;
 		NSObject *errors = [errorDictionary objectForKey:@"errors"];
 		if (errors != nil && [errors isKindOfClass:[NSArray class]]) {
-			return [[(NSArray *)errors copy] autorelease];
+			return [(NSArray *)errors copy];
 		}
 	}
 	return nil;
@@ -107,7 +110,7 @@
 	if (senderDict != nil) {
 		ATMessageSender *sender = [ATMessageSender newOrExistingMessageSenderFromJSON:senderDict];
 		[self setValue:sender forKey:@"sender"];
-		[sender release], sender = nil;
+		sender = nil;
 	}
 	
 	ATMessageDisplayType *messageCenterType = [ATMessageDisplayType messageCenterType];
@@ -162,7 +165,7 @@
 	if (customData == nil) {
 		mutableCustomData = [NSMutableDictionary dictionary];
 	} else {
-		mutableCustomData = [[customData mutableCopy] autorelease];
+		mutableCustomData = [customData mutableCopy];
 	}
 	[mutableCustomData setValue:value forKey:key];
 	self.customData = [self dataForDictionary:mutableCustomData];
@@ -174,7 +177,7 @@
 	if (customData == nil) {
 		mutableCustomData = [NSMutableDictionary dictionary];
 	} else {
-		mutableCustomData = [[customData mutableCopy] autorelease];
+		mutableCustomData = [customData mutableCopy];
 	}
 	if (dictionary != nil) {
 		[mutableCustomData addEntriesFromDictionary:dictionary];
@@ -201,6 +204,42 @@
 		return nil;
 	} else {
 		return [NSKeyedArchiver archivedDataWithRootObject:dictionary];
+	}
+}
+
+- (NSNumber *)creationTimeForSections {
+	BOOL distantFutureCreationTime = (self.creationTime.doubleValue > self.clientCreationTime.doubleValue + 365 * 24 * 60 * 60);
+	
+	return distantFutureCreationTime ? self.clientCreationTime : self.creationTime;
+}
+
+- (void)markAsRead {
+	if (![self.seenByUser boolValue]) {
+		self.seenByUser = @YES;
+		if (self.apptentiveID && ![self.sentByUser boolValue]) {
+			NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+			
+			if (self.apptentiveID) {
+				[userInfo setObject:self.apptentiveID forKey:@"message_id"];
+			}
+			
+			NSString *messageType = nil;
+			if ([self isKindOfClass:[ATTextMessage class]]) {
+				messageType = @"TextMessage";
+			} else if ([self isKindOfClass:[ATAutomatedMessage class]]) {
+				messageType = @"AutomatedMessage";
+			} else if ([self isKindOfClass:[ATFileMessage class]]) {
+				messageType = @"FileMessage";
+			}
+			
+			if (messageType) {
+				[userInfo setObject:messageType forKey:@"message_type"];
+			}
+			
+			[[ATMessageCenterInteraction interactionForInvokingMessageEvents] engage:ATInteractionMessageCenterEventLabelRead fromViewController:nil userInfo:userInfo];
+		}
+		
+		[ATData save];
 	}
 }
 

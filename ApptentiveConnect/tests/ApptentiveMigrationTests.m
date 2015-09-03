@@ -26,7 +26,6 @@
 	[fileManager removeItemAtURL:[dataManager persistentStoreURL] error:nil];
 	if (![fileManager copyItemAtURL:storeURL toURL:[dataManager persistentStoreURL] error:&error]) {
 		XCTFail(@"Unable to copy item: %@", error);
-		[dataManager release];
 		return nil;
 	}
 	return dataManager;
@@ -59,9 +58,8 @@
 		XCTFail(@"Unable to perform query: %@", exception);
 	}
 	@finally {
-		[request release], request = nil;
+		request = nil;
 	}
-	[dataManager release];
 }
 
 - (void)testV1Upgrade {
@@ -73,7 +71,6 @@
 	XCTAssertTrue([dataManager didMigrateStore], @"Should have had to migrate the datastore.");
 	XCTAssertFalse([dataManager didFailToMigrateStore], @"Failed to migrate the datastore.");
 	XCTAssertFalse([dataManager didRemovePersistentStore], @"Shouldn't have had to delete datastore.");
-	[dataManager release];
 }
 
 - (void)testV2Upgrade {
@@ -84,7 +81,6 @@
 	XCTAssertTrue([dataManager didMigrateStore], @"Should have had to migrate the datastore.");
 	XCTAssertFalse([dataManager didFailToMigrateStore], @"Failed to migrate the datastore.");
 	XCTAssertFalse([dataManager didRemovePersistentStore], @"Shouldn't have had to delete datastore.");
-	[dataManager release];
 }
 
 - (void)testV3Upgrade {
@@ -95,7 +91,6 @@
 	XCTAssertTrue([dataManager didMigrateStore], @"Should have had to migrate the datastore.");
 	XCTAssertFalse([dataManager didFailToMigrateStore], @"Failed to migrate the datastore.");
 	XCTAssertFalse([dataManager didRemovePersistentStore], @"Shouldn't have had to delete datastore.");
-	[dataManager release];
 }
 
 - (ATDataManager *)dataManagerByCopyingSQLFilesInDirectory:(NSString *)directoryName {
@@ -137,7 +132,6 @@
 	XCTAssertTrue([dataManager didMigrateStore], @"Should have had to migrate the datastore.");
 	XCTAssertFalse([dataManager didFailToMigrateStore], @"Should not have failed to migrate the persistent store.");
 	XCTAssertFalse([dataManager didRemovePersistentStore], @"Should not have had to delete the persistent store.");
-	[dataManager release];
 }
 
 - (void)testV3WALDatabase {
@@ -149,7 +143,6 @@
 	XCTAssertTrue([dataManager didMigrateStore], @"Should have had to migrate the datastore (from v3 to a later version).");
 	XCTAssertFalse([dataManager didFailToMigrateStore], @"Should not have failed to migrate the persistent store.");
 	XCTAssertFalse([dataManager didRemovePersistentStore], @"Should not have had to delete the persistent store.");
-	[dataManager release];
 }
 
 - (void)testCorruptV2DatabaseRecovery {
@@ -159,6 +152,5 @@
 	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
 	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil after fixing it.");
 	XCTAssertFalse([dataManager didRemovePersistentStore], @"Should not have had to delete the persistent store, now that we have v4.");
-	[dataManager release];
 }
 @end

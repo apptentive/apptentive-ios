@@ -1,0 +1,16 @@
+{
+    "key1": null,
+    "key2": "",
+    "key3": "value",
+    "key5": 1,
+    "key6": 1.0,
+    "key7": true,
+    "key8": {
+        "key1": null,
+        "key2": "",
+        "key3": "value",
+        "key5": 1,
+        "key6": 1.0,
+        "key7": true
+    }
+}

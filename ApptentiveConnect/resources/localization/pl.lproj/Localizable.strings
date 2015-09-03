@@ -1,0 +1,150 @@
+/* (No Commment) */
+"About Apptentive" = "O programie Apptentive";
+
+/* (No Commment) */
+"Answer" = "Odpowiedź";
+
+/* (No Commment) */
+"Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.
+
+Your feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer." = "Apptentive to usługa pozwalająca na komunikację z twórcami tej aplikacji. Twoje uwagi i opinia mogą przyczynić się do ulepszenia doświadczenia korzystania z aplikacji.
+
+Twoja opinia będzie przechowywana przez Apptentive i podlega polityce prywatności Apptentive jak również polityce prywatności autora tej aplikacji.";
+
+/* (No Commment) */
+"Apptentive’s Privacy Policy" = "Polityka prywatności Apptentive";
+
+/* (No Commment) */
+"Authentication Failed" = "Uwierzytelnienie nie powiodło się";
+
+/* (No Commment) */
+"Close" = "Zamknij";
+
+/* (No Commment) */
+"Closes Message Center." = "Zamyka Centrum wiadomości.";
+
+/* (No Commment) */
+"Discard" = "Odrzuć";
+
+/* (No Commment) */
+"Discards the message." = "Odrzuca tę wiadomość.";
+
+/* (No Commment) */
+"Displays information about this feature." = "Wyświetla informacje o tej funkcji.";
+
+/* (No Commment) */
+"Displays name and email editor." = "Wyświetla edytor nazwy i adresu e-mailowego.";
+
+/* (No Commment) */
+"Do you love %@?" = "Czy podoba Ci się %@?";
+
+/* (No Commment) */
+"Failed" = "Nie powiodło się";
+
+/* (No Commment) */
+"Invalid response from server." = "Nieprawidłowa odpowiedź z serwera.";
+
+/* (No Commment) */
+"Learn about Apptentive" = "Dowiedz się więcej o Apptentive";
+
+/* (No Commment) */
+"Missing %d required answers." = "Brakuje %d wymaganych odpowiedzi.";
+
+/* (No Commment) */
+"Missing a required answer." = "Brakuje wymaganej odpowiedzi.";
+
+/* (No Commment) */
+"Network Connection Error" = "Błąd połączenia sieciowego";
+
+/* (No Commment) */
+"No" = "Nie";
+
+/* (No Commment) */
+"No Thanks" = "Nie, dziękuję";
+
+/* (No Commment) */
+"OK" = "OK";
+
+/* (No Commment) */
+"Oops!" = "Ups!";
+
+/* (No Commment) */
+"Powered by" = "Oparte na technologii";
+
+/* (No Commment) */
+"Profile" = "Profil";
+
+/* (No Commment) */
+"Rate %@" = "Oceń %@";
+
+/* (No Commment) */
+"Remind Me Later" = "Przypomnij mi później";
+
+/* (No Commment) */
+"Send Response" = "Wyślij odpowiedź";
+
+/* (No Commment) */
+"Sending…" = "Wysyłanie…";
+
+/* (No Commment) */
+"Sends the message." = "Wysyła tę wiadomość.";
+
+/* (No Commment) */
+"Sent" = "Wysłano";
+
+/* (No Commment) */
+"Server did not return properly formatted JSON." = "Serwer nie zwrócił poprawnie sformatowanego JSON.";
+
+/* (No Commment) */
+"Server error." = "Błąd serwera.";
+
+/* (No Commment) */
+"Survey" = "Ankieta";
+
+/* (No Commment) */
+"Thank You" = "Dziękujemy";
+
+/* (No Commment) */
+"Thanks!" = "Dzięki!";
+
+/* (No Commment) */
+"The request was well-formed but was unable to be followed due to semantic errors." = "Żądanie było dobrze sformatowane, lecz nie udało się go wykonać z powodu błędów semantycznych.";
+
+/* (No Commment) */
+"Too few selections made for %d questions above." = "W %d powyższych pytaniach wprowadzono zbyt mało zaznaczeń.";
+
+/* (No Commment) */
+"Too few selections made for a question above." = "W powyższym pytaniu wprowadzono zbyt mało zaznaczeń.";
+
+/* (No Commment) */
+"Too many selections made for %d questions above." = "W %d powyższych pytaniach wprowadzono zbyt wiele zaznaczeń.";
+
+/* (No Commment) */
+"Too many selections made for a question above." = "W powyższym pytaniu wprowadzono zbyt wiele zaznaczeń.";
+
+/* (No Commment) */
+"Unable to load the App Store" = "Nie można załadować aplikacji App Store";
+
+/* (No Commment) */
+"Unprocessable Entity" = "Jednostka, której nie da się przetworzyć";
+
+/* (No Commment) */
+"We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us." = "Bardzo cieszymy się, że podoba Ci się %@! Bylibyśmy bardzo wdzięczni za wystawienie oceny. Dziękujemy za spędzanie z nami czasu.";
+
+/* (No Commment) */
+"We’re attempting to connect. Thanks for your patience!" = "Staramy się połączyć. Dziękujemy za cierpliwość!";
+
+/* (No Commment) */
+"Wrong username and/or password." = "Nieprawidłowa nazwa użytkownika i/lub hasło.";
+
+/* (No Commment) */
+"Yes" = "Tak";
+
+/* (No Commment) */
+"You must connect to the internet before you can send feedback." = "Aby wysłać swoją opinię, musisz się połączyć z internetem.";
+
+/* (No Commment) */
+"required" = "wymagane";
+
+/* (No Comment) */
+"Message Center" = "Centrum wiadomości";

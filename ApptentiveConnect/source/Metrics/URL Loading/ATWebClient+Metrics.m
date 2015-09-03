@@ -26,7 +26,7 @@
 	conn.timeoutInterval = 240.0;
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:ATWebClientDefaultChannelName];
 	request.returnType = ATAPIRequestReturnTypeJSON;
-	return [request autorelease];
+	return request;
 }
 
 - (ATAPIRequest *)requestForSendingEvent:(ATEvent *)event {
@@ -50,10 +50,6 @@
 	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:ATWebClientDefaultChannelName];
 	request.returnType = ATAPIRequestReturnTypeJSON;
-	return [request autorelease];
+	return request;
 }
 @end
-
-void ATWebClient_Metrics_Bootstrap() {
-	NSLog(@"Loading ATWebClient_Metrics_Bootstrap");
-}

@@ -13,6 +13,6 @@
 
 @interface ATAutomatedMessage : ATTextMessage
 
-@property (nonatomic, retain) NSString *title;
+@property (nonatomic, strong) NSString *title;
 
 @end

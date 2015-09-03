@@ -19,7 +19,12 @@
 - (void)queueLogWithLevel:(NSString *)level file:(const char *)file function:(const char *)function line:(int)line message:(NSString *)message;
 @end
 
-@implementation ATLogger
+@implementation ATLogger {
+	// Tracks whether or not we can actually log to the log file.
+	BOOL creatingLogPathFailed;
+	
+	NSFileHandle *logHandle;
+}
 
 static dispatch_queue_t loggingQueue;
 
@@ -43,9 +48,7 @@ static dispatch_queue_t loggingQueue;
 	if (logHandle != nil) {
 		[logHandle synchronizeFile];
 		[logHandle closeFile];
-		[logHandle release], logHandle = nil;
 	}
-	[super dealloc];
 }
 
 + (void)logWithLevel:(NSString *)level file:(const char *)file function:(const char *)function line:(int)line format:(NSString *)format, ... {
@@ -55,7 +58,7 @@ static dispatch_queue_t loggingQueue;
 		
 		NSString *message = [[NSString alloc] initWithFormat:format arguments:args];
 		[[ATLogger sharedLogger] queueLogWithLevel:level file:file function:function line:line message:message];
-		[message release], message = nil;
+		message = nil;
 		va_end(args);
 	}
 }
@@ -64,7 +67,7 @@ static dispatch_queue_t loggingQueue;
 	if (format != nil) {
 		NSString *message = [[NSString alloc] initWithFormat:format arguments:args];
 		[[ATLogger sharedLogger] queueLogWithLevel:level file:file function:function line:line message:message];
-		[message release], message = nil;
+		message = nil;
 	}
 }
 
@@ -136,7 +139,6 @@ static dispatch_queue_t loggingQueue;
 		if (logHandle) {
 			[logHandle synchronizeFile];
 			[logHandle closeFile];
-			[logHandle release], logHandle = nil;
 		}
 		
 		NSFileManager *fm = [NSFileManager defaultManager];
@@ -174,7 +176,7 @@ static dispatch_queue_t loggingQueue;
 		NSLog(@"Creating log path failed. Not starting new log.");
 		return NO;
 	}
-	logHandle = [[NSFileHandle fileHandleForWritingAtPath:logPath] retain];
+	logHandle = [NSFileHandle fileHandleForWritingAtPath:logPath];
 	if (logHandle == nil) {
 		NSLog(@"Unable to create log handle.");
 		return NO;
@@ -205,7 +207,6 @@ static dispatch_queue_t loggingQueue;
 					// Probably out of space on the device.
 				}
 			}
-			[fullMessage release], fullMessage = nil;
 		}
 	});
 }

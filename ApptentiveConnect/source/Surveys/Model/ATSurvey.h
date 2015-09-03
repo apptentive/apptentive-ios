@@ -9,11 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "ATSurveyQuestion.h"
 
-@interface ATSurvey : NSObject <NSCoding> {
-@private
-	NSMutableArray *questions;
-}
-
+@interface ATSurvey : NSObject <NSCoding> 
 @property (nonatomic, copy) NSString *identifier;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *surveyDescription;

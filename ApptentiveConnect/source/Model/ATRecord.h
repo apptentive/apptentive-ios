@@ -13,16 +13,15 @@
 
 @interface ATRecord : NSManagedObject <ATJSONModel>
 
-@property (nonatomic, retain) NSString *apptentiveID;
-@property (nonatomic, retain) NSNumber *creationTime;
-@property (nonatomic, retain) NSNumber *clientCreationTime;
-@property (nonatomic, retain) NSString *clientCreationTimezone;
-@property (nonatomic, retain) NSNumber *clientCreationUTCOffset;
-
-+ (NSTimeInterval)timeIntervalForServerTime:(NSNumber *)timestamp;
+@property (nonatomic, strong) NSString *apptentiveID;
+@property (nonatomic, strong) NSNumber *creationTime;
+@property (nonatomic, strong) NSNumber *clientCreationTime;
+@property (nonatomic, strong) NSString *clientCreationTimezone;
+@property (nonatomic, strong) NSNumber *clientCreationUTCOffset;
 
 - (void)setup;
 - (void)updateClientCreationTime;
 - (BOOL)isClientCreationTimeEmpty;
 - (BOOL)isCreationTimeEmpty;
+
 @end

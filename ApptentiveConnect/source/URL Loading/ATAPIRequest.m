@@ -22,14 +22,19 @@
 
 NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 
-@implementation ATAPIRequest
-@synthesize returnType, failed, errorTitle, errorMessage, errorResponse, timeoutInterval, delegate;
+@implementation ATAPIRequest {
+	ATURLConnection *connection;
+	NSString *channelName;
+	BOOL cancelled;
+	float percentageComplete;
+	NSTimeInterval expiresMaxAge;
+}
 
 - (id)initWithConnection:(ATURLConnection *)aConnection channelName:(NSString *)aChannelName {
 	if ((self = [super init])) {
-		connection = [aConnection retain];
+		connection = aConnection;
 		connection.delegate = self;
-		channelName = [aChannelName retain];
+		channelName = aChannelName;
 	}
 	return self;
 }
@@ -39,14 +44,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	if (connection) {
 		connection.delegate = nil;
 		[[ATConnectionManager sharedSingleton] cancelConnection:connection inChannel:channelName];
-		[connection release], connection = nil;
 	}
-	[errorTitle release], errorTitle = nil;
-	[errorMessage release], errorMessage = nil;
-	[errorResponse release], errorResponse = nil;
-	[channelName release], channelName = nil;
-	
-	[super dealloc];
 }
 
 - (void)start {
@@ -72,7 +70,6 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 #if TARGET_OS_IPHONE
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:self.errorTitle message:self.errorMessage delegate:nil cancelButtonTitle:ATLocalizedString(@"Close", nil) otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 #endif
 	}
 }
@@ -126,7 +123,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 			NSString *responseString = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
 			if (responseString != nil) {
 				self.errorResponse = responseString;
-				[responseString release], responseString = nil;
+				responseString = nil;
 			}
 			ATLogError(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
 			ATLogInfo(@"Status was: %d", sender.statusCode);
@@ -154,7 +151,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 			break;
 		}
 		
-		NSString *s = [[[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding] autorelease];
+		NSString *s = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
 		if (!s) break;
 		if (self.returnType == ATAPIRequestReturnTypeString) {
 			result = s;
@@ -175,11 +172,11 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 		}
 	} while (NO);
 	
-	if (delegate) {
+	if (self.delegate) {
 		if (self.failed) {
-			[delegate at_APIRequestDidFail:self];
+			[self.delegate at_APIRequestDidFail:self];
 		} else {
-			[delegate at_APIRequestDidFinish:self result:result];
+			[self.delegate at_APIRequestDidFinish:self result:result];
 		}
 	}
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATAPIRequestStatusChanged object:self];
@@ -201,7 +198,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	NSString *responseString = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
 	if (responseString != nil) {
 		self.errorResponse = responseString;
-		[responseString release], responseString = nil;
+		responseString = nil;
 	}
 	
 	if ([ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogHTTPFailures ||
@@ -211,16 +208,16 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 		ATLogDebug(@"Request was:\n%@", [connection requestAsString]);
 		ATLogDebug(@"Response was:\n%@", [connection responseAsString]);
 	}
-	if (delegate) {
-		[delegate at_APIRequestDidFail:self];
+	if (self.delegate) {
+		[self.delegate at_APIRequestDidFail:self];
 	}
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATAPIRequestStatusChanged object:self];
 }
 
 - (void)connectionDidProgress:(ATURLConnection *)sender {
 	percentageComplete = sender.percentComplete;
-	if (delegate && [delegate respondsToSelector:@selector(at_APIRequestDidProgress:)]) {
-		[delegate at_APIRequestDidProgress:self];
+	if (self.delegate && [self.delegate respondsToSelector:@selector(at_APIRequestDidProgress:)]) {
+		[self.delegate at_APIRequestDidProgress:self];
 	}
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATAPIRequestStatusChanged object:self];
 }

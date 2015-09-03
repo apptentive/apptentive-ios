@@ -11,16 +11,18 @@
 extern NSString *const ATConnectCustomPersonDataChangedNotification;
 extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 
+@class ATAbstractMessage;
+
 @interface ATConnect ()
 
 - (NSDictionary *)customPersonData;
 - (NSDictionary *)customDeviceData;
 - (NSDictionary *)integrationConfiguration;
-- (BOOL)messageCenterEnabled;
-- (BOOL)emailRequired;
+
+@property (nonatomic, strong) NSDictionary *pushUserInfo;
+@property (nonatomic, strong) UIViewController *pushViewController;
 
 #if TARGET_OS_IPHONE
-- (void)presentFeedbackDialogFromViewController:(UIViewController *)viewController;
 
 // For debugging only.
 - (void)resetUpgradeData;
@@ -37,6 +39,8 @@ extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 - (NSString *)engagementInteractionNameAtIndex:(NSInteger)index;
 - (NSString *)engagementInteractionTypeAtIndex:(NSInteger)index;
 - (void)presentInteractionAtIndex:(NSInteger)index fromViewController:(UIViewController *)viewController;
+
+- (void)showNotificationBannerForMessage:(ATAbstractMessage *)message;
 
 @end
 

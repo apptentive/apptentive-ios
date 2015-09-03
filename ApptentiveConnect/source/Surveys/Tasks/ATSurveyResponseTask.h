@@ -10,12 +10,6 @@
 #import "ATAPIRequest.h"
 #import "ATSurveyResponse.h"
 
-@interface ATSurveyResponseTask : ATTask <ATAPIRequestDelegate> {
-@private
-	ATAPIRequest *request;
-	NSString *pendingSurveyResponseID;
-}
-@property (nonatomic, retain) NSString *pendingSurveyResponseID;
-
-
+@interface ATSurveyResponseTask : ATTask <ATAPIRequestDelegate>
+@property (nonatomic, strong) NSString *pendingSurveyResponseID;
 @end

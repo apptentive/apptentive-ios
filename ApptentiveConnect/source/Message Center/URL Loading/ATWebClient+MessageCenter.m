@@ -40,7 +40,7 @@
 	conn.timeoutInterval = 60.0;
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
 	request.returnType = ATAPIRequestReturnTypeJSON;
-	return [request autorelease];
+	return request;
 }
 
 - (ATAPIRequest *)requestForUpdatingConversation:(ATConversation *)conversation {
@@ -64,7 +64,7 @@
 	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
 	request.returnType = ATAPIRequestReturnTypeJSON;
-	return [request autorelease];
+	return request;
 }
 
 - (ATAPIRequest *)requestForUpdatingDevice:(ATDeviceInfo *)deviceInfo {
@@ -90,7 +90,7 @@
 	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
 	request.returnType = ATAPIRequestReturnTypeJSON;
-	return [request autorelease];
+	return request;
 }
 
 - (ATAPIRequest *)requestForUpdatingPerson:(ATPersonInfo *)personInfo {
@@ -116,7 +116,7 @@
 	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
 	request.returnType = ATAPIRequestReturnTypeJSON;
-	return [request autorelease];
+	return request;
 }
 
 - (ATAPIRequest *)requestForPostingMessage:(ATAbstractMessage *)message {
@@ -161,7 +161,7 @@
 	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
 	request.returnType = ATAPIRequestReturnTypeJSON;
-	return [request autorelease];
+	return request;
 }
 
 - (ATAPIRequest *)requestForRetrievingMessagesSinceMessage:(ATAbstractMessage *)message {
@@ -188,10 +188,6 @@
 	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
 	request.returnType = ATAPIRequestReturnTypeJSON;
-	return [request autorelease];
+	return request;
 }
 @end
-
-void ATWebClient_MessageCenter_Bootstrap() {
-	NSLog(@"Loading ATWebClient_MessageCenter_Bootstrap");
-}

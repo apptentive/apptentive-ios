@@ -8,13 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ATLogger : NSObject {
-@private
-	// Tracks whether or not we can actually log to the log file.
-	BOOL creatingLogPathFailed;
-	
-	NSFileHandle *logHandle;
-}
+@interface ATLogger : NSObject
 + (ATLogger *)sharedLogger;
 + (void)logWithLevel:(NSString *)level file:(const char *)file function:(const char *)function line:(int)line format:(NSString *)format, ...;
 + (void)logWithLevel:(NSString *)level file:(const char *)file function:(const char *)function line:(int)line format:(NSString *)format args:(va_list)args;

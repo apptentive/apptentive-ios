@@ -9,9 +9,5 @@
 #import <XCTest/XCTest.h>
 
 
-@interface ApptentiveConnectTests : XCTestCase {
-@private
-	
-}
-
+@interface ApptentiveConnectTests : XCTestCase
 @end

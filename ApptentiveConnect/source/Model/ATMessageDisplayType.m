@@ -36,11 +36,11 @@ static ATMessageDisplayType *modalTypeSingleton = nil;
 				ATMessageDisplayType *dt = (ATMessageDisplayType *)fetchedObject;
 				ATMessageDisplayTypeType displayType = (ATMessageDisplayTypeType)[[dt displayType] intValue];
 				if (displayType == ATMessageDisplayTypeTypeModal) {
-					[modalTypeSingleton release], modalTypeSingleton = nil;
-					modalTypeSingleton = [dt retain];
+					modalTypeSingleton = nil;
+					modalTypeSingleton = dt;
 				} else if (displayType == ATMessageDisplayTypeTypeMessageCenter) {
-					[messageCenterTypeSingleton release], messageCenterTypeSingleton = nil;
-					messageCenterTypeSingleton = [dt retain];
+					messageCenterTypeSingleton = nil;
+					messageCenterTypeSingleton = dt;
 				}
 			}
 		}

@@ -22,28 +22,27 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 
 
 @interface ATGetMessagesTask (Private)
-- (void)setup;
-- (void)teardown;
 - (BOOL)processResult:(NSDictionary *)jsonMessage;
 @end
 
-@implementation ATGetMessagesTask
+@implementation ATGetMessagesTask {
+	ATAPIRequest *request;
+	ATAbstractMessage *lastMessage;
+}
 
 - (id)init {
 	if ((self = [super init])) {
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		NSString *messageID = [defaults objectForKey:ATMessagesLastRetrievedMessageIDPreferenceKey];
 		if (messageID) {
-			lastMessage = [[ATAbstractMessage findMessageWithID:messageID] retain];
+			lastMessage = [ATAbstractMessage findMessageWithID:messageID];
 		}
 	}
 	return self;
 }
 
 - (void)dealloc {
-	[self teardown];
-	[lastMessage release], lastMessage = nil;
-	[super dealloc];
+	[self stop];
 }
 
 - (BOOL)shouldArchive {
@@ -62,7 +61,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 
 - (void)start {
 	if (!request) {
-		request = [[[ATWebClient sharedClient] requestForRetrievingMessagesSinceMessage:lastMessage] retain];
+		request = [[ATWebClient sharedClient] requestForRetrievingMessagesSinceMessage:lastMessage];
 		if (request != nil) {
 			request.delegate = self;
 			[request start];
@@ -77,7 +76,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 	if (request) {
 		request.delegate = nil;
 		[request cancel];
-		[request release], request = nil;
+		request = nil;
 		self.inProgress = NO;
 	}
 }
@@ -97,7 +96,6 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 #pragma mark ATAPIRequestDelegate
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(NSObject *)result {
 	@synchronized(self) {
-		[self retain];
 		
 		if ([result isKindOfClass:[NSDictionary class]] && [self processResult:(NSDictionary *)result]) {
 			self.finished = YES;
@@ -106,7 +104,6 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 			self.failed = YES;
 		}
 		[self stop];
-		[self release];
 	}
 }
 
@@ -116,25 +113,16 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 
 - (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
 	@synchronized(self) {
-		[self retain];
 		self.failed = YES;
 		self.lastErrorTitle = sender.errorTitle;
 		self.lastErrorMessage = sender.errorMessage;
 		ATLogInfo(@"ATAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
 		[self stop];
-		[self release];
 	}
 }
 @end
 
 @implementation ATGetMessagesTask (Private)
-- (void)setup {
-	
-}
-
-- (void)teardown {
-	[self stop];
-}
 
 - (BOOL)processResult:(NSDictionary *)jsonMessages {
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
@@ -164,11 +152,11 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 			if (!message) {
 				NSString *type = [messageJSON at_safeObjectForKey:@"type"];
 				if ([type isEqualToString:@"TextMessage"]) {
-					message = [(ATTextMessage *)[ATTextMessage newInstanceWithJSON:messageJSON] autorelease];
+					message = (ATTextMessage *)[ATTextMessage newInstanceWithJSON:messageJSON];
 				} else if ([type isEqualToString:@"FileMessage"]) {
 					//TODO: Add file message type here. Currently server won't return file messages.
 				} else if ([type isEqualToString:@"AutomatedMessage"]) {
-					message = [(ATAutomatedMessage *)[ATAutomatedMessage newInstanceWithJSON:messageJSON] autorelease];
+					message = (ATAutomatedMessage *)[ATAutomatedMessage newInstanceWithJSON:messageJSON];
 				}
 				if (conversation && [conversation.personID isEqualToString:message.sender.apptentiveID]) {
 					message.sentByUser = @(YES);

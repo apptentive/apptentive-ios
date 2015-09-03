@@ -10,18 +10,21 @@
 
 #import "ATBackend.h"
 
-@implementation ATNetworkImageView {
-	NSURLConnection *connection;
-	NSURLResponse *response;
-	NSMutableData *imageData;
-}
-@synthesize imageURL;
+@interface ATNetworkImageView ()
+
+@property (strong, nonatomic) NSURLConnection *connection;
+@property (strong, nonatomic) NSURLResponse *response;
+@property (strong, nonatomic) NSMutableData *imageData;
+
+@end
+
+@implementation ATNetworkImageView
 
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-		self.useCache = YES;
+		_useCache = YES;
     }
     return self;
 }
@@ -32,18 +35,13 @@
 }
 
 - (void)dealloc {
-    [connection cancel];
-    [connection release], connection = nil;
-	[imageURL release], imageURL = nil;
-    [imageData release], imageData = nil;
-	[response release], response = nil;
-	[super dealloc];
+    [_connection cancel];
 }
 
 - (void)restartDownload {
-	if (connection) {
-		[connection cancel];
-		[connection release], connection = nil;
+	if (self.connection) {
+		[self.connection cancel];
+		self.connection = nil;
 	}
 	if (self.imageURL) {
 		NSURLRequest *request = [NSURLRequest requestWithURL:self.imageURL];
@@ -62,62 +60,64 @@
 		}
 		
 		if (!cacheHit) {
-			connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
-			[connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
-			[connection start];
+			self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
+			[self.connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+			[self.connection start];
 		}
 	}
 }
 
 - (void)setImageURL:(NSURL *)anImageURL {
-	if (imageURL != anImageURL) {
-		[imageURL release], imageURL = nil;
-		imageURL = [anImageURL copy];
+	if (_imageURL != anImageURL) {
+		_imageURL = [anImageURL copy];
 		[self restartDownload];
 	}
 }
 
 #pragma mark NSURLConnectionDelegate
 - (void)connection:(NSURLConnection *)aConnection didFailWithError:(NSError *)error {
-    if (aConnection == connection) {
+    if (aConnection == self.connection) {
         ATLogError(@"Unable to download image at %@: %@", self.imageURL, error);
-        [connection release], connection = nil;
+        self.connection = nil;
+		
+		if ([self.delegate respondsToSelector:@selector(networkImageView:didFailWithError:)]) {
+			[self.delegate networkImageView:self didFailWithError:error];
+		}
     }
 }
 
 #pragma mark NSURLConnectionDataDelegate
 - (void)connection:(NSURLConnection *)aConnection didReceiveResponse:(NSURLResponse *)aResponse {
-    if (aConnection == connection) {
-        if (imageData) {
-            [imageData release], imageData = nil;
-        }
-        imageData = [[NSMutableData alloc] init];
-		if (response) {
-			[response release], response = nil;
-		}
-		response = [aResponse copy];
+    if (aConnection == self.connection) {
+        self.imageData = [[NSMutableData alloc] init];
+		self.response = [aResponse copy];
     }
 }
 
 - (void)connection:(NSURLConnection *)aConnection didReceiveData:(NSData *)data {
-    if (aConnection == connection) {
-        [imageData appendData:data];
+    if (aConnection == self.connection) {
+        [self.imageData appendData:data];
     }
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)aConnection {
-    if (connection == aConnection) {
-        UIImage *newImage = [UIImage imageWithData:imageData];
+    if (self.connection == aConnection) {
+        UIImage *newImage = [UIImage imageWithData:self.imageData];
         if (newImage) {
             self.image = newImage;
 			if (self.useCache) {
 				NSURLRequest *request = [NSURLRequest requestWithURL:self.imageURL];
 				NSURLCache *cache = [[ATBackend sharedBackend] imageCache];
-				NSCachedURLResponse *cachedResponse = [[NSCachedURLResponse alloc] initWithResponse:response data:imageData userInfo:nil storagePolicy:NSURLCacheStorageAllowed];
+				NSCachedURLResponse *cachedResponse = [[NSCachedURLResponse alloc] initWithResponse:self.response data:self.imageData userInfo:nil storagePolicy:NSURLCacheStorageAllowed];
 				[cache storeCachedResponse:cachedResponse forRequest:request];
-				[cachedResponse release], cachedResponse = nil;
+				cachedResponse = nil;
+				
+				if ([self.delegate respondsToSelector:@selector(networkImageViewDidLoad:)]) {
+					[self.delegate networkImageViewDidLoad:self];
+				}
 			}
         }
     }
 }
+
 @end

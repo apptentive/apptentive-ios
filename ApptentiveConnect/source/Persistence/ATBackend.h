@@ -16,11 +16,16 @@
 #import "ATConversationUpdater.h"
 #import "ATDeviceUpdater.h"
 #import "ATPersonUpdater.h"
+#import "ATFileAttachment.h"
 #if TARGET_OS_IPHONE
-#import "ATMessageCenterViewController.h"
-#import "ATMessageCenterV7ViewController.h"
-#import "ATMessagePanelViewController.h"
+#import "ATAbstractMessage.h"
+#import "ATTextMessage.h"
+#import "ATAutomatedMessage.h"
+#import "ATFileMessage.h"
+#import "ATFeedbackTypes.h"
 #endif
+
+@class ATMessageCenterViewController;
 
 extern NSString *const ATBackendBecameReadyNotification;
 
@@ -30,74 +35,64 @@ extern NSString *const ATBackendBecameReadyNotification;
 @class ATDataManager;
 @class ATFeedback;
 @class ATAPIRequest;
+@class ATMessageTask;
+
+@protocol  ATBackendMessageDelegate;
 
 /*! Handles all of the backend activities, such as sending feedback. */
 @interface ATBackend : NSObject <ATConversationUpdaterDelegate, ATDeviceUpdaterDelegate, ATPersonUpdaterDelegate
 #if TARGET_OS_IPHONE
-, NSFetchedResultsControllerDelegate, ATMessageCenterDismissalDelegate, ATMessagePanelDelegate, UIAlertViewDelegate
+, NSFetchedResultsControllerDelegate, UIAlertViewDelegate
 #endif
-> {
-@private
-	NSString *apiKey;
-	ATFeedback *currentFeedback;
-	BOOL networkAvailable;
-	BOOL apiKeySet;
-	BOOL shouldStopWorking;
-	BOOL working;
-	
-	ATConversationUpdater *conversationUpdater;
-	ATDeviceUpdater *deviceUpdater;
-	ATPersonUpdater *personUpdater;
-	
-	NSTimer *messageRetrievalTimer;
-	ATDataManager *dataManager;
-#if TARGET_OS_IPHONE
-	NSFetchedResultsController *unreadCountController;
-	NSInteger previousUnreadCount;
-#endif
-}
+>
 @property (nonatomic, copy) NSString *apiKey;
 /*! The feedback currently being worked on by the user. */
-@property (nonatomic, retain) ATFeedback *currentFeedback;
-@property (nonatomic, retain) NSDictionary *currentCustomData;
-@property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-@property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
-@property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
+@property (nonatomic, strong) ATFeedback *currentFeedback;
+@property (nonatomic, strong) NSDictionary *currentCustomData;
+@property (nonatomic, strong, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (nonatomic, strong, readonly) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, strong, readonly) NSManagedObjectModel *managedObjectModel;
+@property (nonatomic, strong, readonly) NSString *supportDirectoryPath;
+@property (nonatomic, strong) UIViewController *presentedMessageCenterViewController;
 
 @property (nonatomic, assign, readonly) BOOL hideBranding;
+@property (nonatomic, assign, readonly) BOOL notificationPopupsEnabled;
+
+/*! Message send progress. */
+@property (weak, nonatomic) id<ATBackendMessageDelegate> messageDelegate;
+- (void)messageTaskDidBegin:(ATMessageTask *)messageTask;
+- (void)messageTask:(ATMessageTask *)messageTask didProgress:(float)progress;
+- (void)messageTaskDidFinish:(ATMessageTask *)messageTask;
+- (void)messageTaskDidFail:(ATMessageTask *)messageTask;
 
 + (ATBackend *)sharedBackend;
 #if TARGET_OS_IPHONE
 + (UIImage *)imageNamed:(NSString *)name;
-- (void)presentMessageCenterFromViewController:(UIViewController *)viewController;
-- (void)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
+- (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController;
+- (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
+- (void)messageCenterWillDismiss:(ATMessageCenterViewController *)messageCenter;
+
 - (void)attachCustomDataToMessage:(ATAbstractMessage *)message;
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion;
-- (void)presentIntroDialogFromViewController:(UIViewController *)viewController;
-- (void)presentIntroDialogFromViewController:(UIViewController *)viewController withTitle:(NSString *)title prompt:(NSString *)prompt placeholderText:(NSString *)placeholder;
 #elif TARGET_OS_MAC
 + (NSImage *)imageNamed:(NSString *)name;
 #endif
 
-/*! Use this to add the feedback to a queue of feedback tasks which
-    will be sent in the background. */
-- (void)sendFeedback:(ATFeedback *)feedback;
-
-/*! Send ATAutomatedMessage messages. */
-- (void)sendAutomatedMessageWithTitle:(NSString *)title body:(NSString *)body;
+/*! ATAutomatedMessage messages. */
+- (ATAutomatedMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body;
+- (BOOL)sendAutomatedMessage:(ATAutomatedMessage *)message;
 
 /*! Send ATTextMessage messages. */
-- (BOOL)sendTextMessageWithBody:(NSString *)body completion:(void (^)(NSString *pendingMessageID))completion;
-- (BOOL)sendTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden completion:(void (^)(NSString *pendingMessageID))completion;
-
+- (ATTextMessage *)createTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden;
+- (BOOL)sendTextMessageWithBody:(NSString *)body;
+- (BOOL)sendTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden;
+- (BOOL)sendTextMessage:(ATTextMessage *)message;
 /*! Send ATFileMessage messages. */
 - (BOOL)sendImageMessageWithImage:(UIImage *)image fromSource:(ATFeedbackImageSource)imageSource;
 - (BOOL)sendImageMessageWithImage:(UIImage *)image hiddenOnClient:(BOOL)hidden fromSource:(ATFeedbackImageSource)imageSource;
 
-- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType fromSource:(ATFIleAttachmentSource)source;
-- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType hiddenOnClient:(BOOL)hidden fromSource:(ATFIleAttachmentSource)source;
-
-- (NSString *)supportDirectoryPath;
+- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType fromSource:(ATFileAttachmentSource)source;
+- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType hiddenOnClient:(BOOL)hidden fromSource:(ATFileAttachmentSource)source;
 
 /*! Path to directory for storing attachments. */
 - (NSString *)attachmentDirectoryPath;
@@ -115,12 +110,22 @@ extern NSString *const ATBackendBecameReadyNotification;
 - (void)messageCenterLeftForeground;
 
 - (NSString *)appName;
-- (NSString *)initialEmailAddressForMessagePanel;
 
 - (BOOL)isReady;
+
+- (void)checkForMessages;
 
 /*! True if the backend is currently updating the person. */
 - (BOOL)isUpdatingPerson;
 
+- (void)updatePersonIfNeeded;
+
 - (NSURLCache *)imageCache;
+
+@end
+
+@protocol ATBackendMessageDelegate <NSObject>
+
+- (void)backend:(ATBackend *)backend messageProgressDidChange:(float)progress;
+
 @end

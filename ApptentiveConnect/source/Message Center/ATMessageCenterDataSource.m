@@ -12,60 +12,64 @@
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
 #import "ATData.h"
-#import "ATMessageCenterMetrics.h"
 #import "ATTextMessage.h"
+#import "ATMessageSender.h"
+
+NSString * const ATMessageCenterServerErrorDomain = @"com.apptentive.MessageCenterServerError";
+NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenterErrorMessages";
 
 @interface ATMessageCenterDataSource () <NSFetchedResultsControllerDelegate>
 
+@property (nonatomic, strong, readwrite) NSFetchedResultsController *fetchedMessagesController;
+@property (nonatomic, readonly) ATAbstractMessage *lastUserMessage;
+
 @end
 
-@implementation ATMessageCenterDataSource {
-	NSFetchedResultsController *fetchedMessagesController;
-}
-@synthesize delegate;
+@implementation ATMessageCenterDataSource
 
 - (id)initWithDelegate:(NSObject<ATMessageCenterDataSourceDelegate> *)aDelegate {
 	if ((self = [super init])) {
-		delegate = aDelegate;
+		_delegate = aDelegate;
+		_dateFormatter = [[NSDateFormatter alloc] init];
 	}
 	return self;
 }
 
 - (void)dealloc {
-	fetchedMessagesController.delegate = nil;
-	[fetchedMessagesController release], fetchedMessagesController = nil;
-	delegate = nil;
-	[super dealloc];
+	self.fetchedMessagesController.delegate = nil;
 }
 
 - (NSFetchedResultsController *)fetchedMessagesController {
 	@synchronized(self) {
-		if (!fetchedMessagesController) {
+		if (!_fetchedMessagesController) {
 			[NSFetchedResultsController deleteCacheWithName:@"at-messages-cache"];
 			NSFetchRequest *request = [[NSFetchRequest alloc] init];
 			[request setEntity:[NSEntityDescription entityForName:@"ATAbstractMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
 			[request setFetchBatchSize:20];
-			NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"creationTime" ascending:YES];
-			[request setSortDescriptors:@[sortDescriptor]];
-			[sortDescriptor release], sortDescriptor = nil;
-			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"creationTime != %d AND hidden != %@", 0, @YES];
+			
+			NSSortDescriptor *creationTimeSort = [[NSSortDescriptor alloc] initWithKey:@"creationTime" ascending:YES];
+			NSSortDescriptor *clientCreationTimeSort = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
+			[request setSortDescriptors:@[creationTimeSort, clientCreationTimeSort]];
+			
+			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"creationTime != %d AND clientCreationTime != %d AND hidden != %@", 0, 0, @YES];
 			[request setPredicate:predicate];
 			
-			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:nil cacheName:@"at-messages-cache"];
+			// For now, group each message into its own section.
+			// In the future, we'll save an attribute that coalesces
+			// closely-grouped (in time) messages into a single section.
+			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:@"creationTimeForSections" cacheName:@"at-messages-cache"];
 			newController.delegate = self;
-			fetchedMessagesController = newController;
+			_fetchedMessagesController = newController;
 			
-			[request release], request = nil;
+			request = nil;
 		}
 	}
-	return fetchedMessagesController;
+	return _fetchedMessagesController;
 }
-
 
 - (void)start {
 	[[ATBackend sharedBackend] messageCenterEnteredForeground];
 	
-	[self markAllMessagesAsRead];
 	[ATTextMessage clearComposingMessages];
 	
 	NSError *error = nil;
@@ -73,48 +77,130 @@
 		ATLogError(@"Got an error loading messages: %@", error);
 		//TODO: Handle this error.
 	}
-	
-	[self createIntroMessageIfNecessary];
 }
 
 - (void)stop {
-	
+	[[ATBackend sharedBackend] messageCenterLeftForeground];
 }
 
-- (void)markAllMessagesAsRead {
-	NSFetchRequest *request = [[NSFetchRequest alloc] init];
-	[request setEntity:[NSEntityDescription entityForName:@"ATAbstractMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
-	[request setFetchBatchSize:20];
-	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
-	[request setSortDescriptors:@[sortDescriptor]];
-	[sortDescriptor release], sortDescriptor = nil;
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"seenByUser == %d", 0];
-	[request setPredicate:predicate];
-	
-	NSManagedObjectContext *moc = [ATData moc];
-	NSError *error = nil;
-	NSArray *results = [moc executeFetchRequest:request error:&error];
-	if (!results) {
-		ATLogError(@"Error executing fetch request: %@", error);
+#pragma mark - Message center view controller support
+
+- (BOOL)hasNonContextMessages {
+	if (self.numberOfMessageGroups == 0 || [self numberOfMessagesInGroup:0] == 0) {
+		return NO;
+	} else if (self.numberOfMessageGroups == 1) {
+		return (![[self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] isKindOfClass:[ATAutomatedMessage class]]);
 	} else {
-		for (ATAbstractMessage *message in results) {
-			[message setSeenByUser:@(YES)];
-			if (message.apptentiveID != nil && [message.sentByUser boolValue] != YES) {
-				[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterDidReadNotification object:self userInfo:@{ATMessageCenterMessageIDKey:message.apptentiveID}];
-			}
-		}
-		[ATData save];
+		return YES;
 	}
-	[request release], request = nil;
 }
 
-- (void)createIntroMessageIfNecessary {
-	NSUInteger messageCount = [ATData countEntityNamed:@"ATAbstractMessage" withPredicate:nil];
-	if (messageCount == 0) {
-		NSString *title = ATLocalizedString(@"Welcome", @"Welcome");
-		NSString *body = ATLocalizedString(@"This is our Message Center. If you have questions, suggestions, concerns or just want to get in touch, please send us a message. We love talking with our customers!", @"Placeholder welcome message.");
-		[[ATBackend sharedBackend] sendAutomatedMessageWithTitle:title body:body];
+- (NSInteger)numberOfMessageGroups {
+	return self.fetchedMessagesController.sections.count;
+}
+
+- (NSInteger)numberOfMessagesInGroup:(NSInteger)groupIndex {
+	if ([[self.fetchedMessagesController sections] count] > 0) {
+		return [[[self.fetchedMessagesController sections] objectAtIndex:groupIndex] numberOfObjects];
+	} else
+		return 0;
+}
+
+- (ATMessageCenterMessageType)cellTypeAtIndexPath:(NSIndexPath *)indexPath {
+	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
+	
+	if ([message isKindOfClass:[ATAutomatedMessage class]]) {
+		return ATMessageCenterMessageTypeContextMessage;
+	} else if (message.sentByUser.boolValue) {
+		return ATMessageCenterMessageTypeMessage;
+	} else {
+		return ATMessageCenterMessageTypeReply;
 	}
+}
+
+- (NSString *)textOfMessageAtIndexPath:(NSIndexPath *)indexPath {
+	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
+	
+	if ([message isKindOfClass:[ATTextMessage class]]) {
+		return ((ATTextMessage *)message).body;
+	} else {
+		return nil;
+	}
+}
+
+- (NSDate *)dateOfMessageGroupAtIndex:(NSInteger)index {
+	if ([self numberOfMessagesInGroup:index] > 0) {
+		ATAbstractMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]];
+		
+		
+		return [NSDate dateWithTimeIntervalSince1970:[message.creationTimeForSections doubleValue]];
+	} else {
+		return nil;
+	}
+}
+
+- (ATMessageCenterMessageStatus)statusOfMessageAtIndexPath:(NSIndexPath *)indexPath {
+	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
+	
+	if (message.sentByUser.boolValue) {
+		ATPendingMessageState messageState = message.pendingState.integerValue;
+		
+		if (messageState == ATPendingMessageStateError) {
+			return ATMessageCenterMessageStatusFailed;
+		} else if (messageState == ATPendingMessageStateSending) {
+			return ATMessageCenterMessageStatusSending;
+		} else if (message == self.lastUserMessage && messageState == ATPendingMessageStateConfirmed) {
+			return ATMessageCenterMessageStatusSent;
+		}
+	}
+		
+	return ATMessageCenterMessageStatusHidden;
+}
+
+- (BOOL)shouldShowDateForMessageGroupAtIndex:(NSInteger)index {
+	if (index == 0) {
+		return YES;
+	} else {
+		NSDate *previousDate = [self dateOfMessageGroupAtIndex:index - 1];
+		NSDate *currentDate = [self dateOfMessageGroupAtIndex:index];
+		
+		return ![[self.dateFormatter stringFromDate:previousDate] isEqualToString:[self.dateFormatter stringFromDate:currentDate]];
+	}
+}
+
+- (NSString *)senderOfMessageAtIndexPath:(NSIndexPath *)indexPath {
+	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
+	return message.sender.name;
+}
+
+- (NSURL *)imageURLOfSenderAtIndexPath:(NSIndexPath *)indexPath {
+	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
+	if (message.sender.profilePhotoURL.length) {
+		return [NSURL URLWithString:message.sender.profilePhotoURL];
+	} else {
+		return nil;
+	}
+}
+
+- (void)markAsReadMessageAtIndexPath:(NSIndexPath *)indexPath {
+	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
+	
+	[message markAsRead];
+}
+
+- (BOOL)lastMessageIsReply {
+	id<NSFetchedResultsSectionInfo> section = self.fetchedMessagesController.sections.lastObject;
+	ATAbstractMessage *lastMessage = section.objects.lastObject;
+	
+	return lastMessage.sentByUser.boolValue == NO;
+}
+
+- (ATPendingMessageState)lastUserMessageState {
+	return self.lastUserMessage.pendingState.integerValue;
+}
+
+- (NSIndexPath *)lastUserMessageIndexPath {
+	return [self.fetchedMessagesController indexPathForObject:self.lastUserMessage];
 }
 
 #pragma mark NSFetchedResultsControllerDelegate
@@ -155,4 +241,23 @@
 		return [firstLetter uppercaseStringWithLocale:[NSLocale currentLocale]];
 	}
 }
+
+#pragma mark - Private
+
+- (ATAbstractMessage *)messageAtIndexPath:(NSIndexPath *)indexPath {
+	return [self.fetchedMessagesController objectAtIndexPath:indexPath];
+}
+
+- (ATAbstractMessage *)lastUserMessage {
+	for (id<NSFetchedResultsSectionInfo> section in self.fetchedMessagesController.sections.reverseObjectEnumerator) {
+		for (ATAbstractMessage *message in section.objects.reverseObjectEnumerator) {
+			if (message.sentByUser) {
+				return message;
+			}
+		}
+	}
+	
+	return nil;
+}
+
 @end

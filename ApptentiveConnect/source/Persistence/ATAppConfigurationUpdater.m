@@ -7,78 +7,86 @@
 //
 
 #import "ATAppConfigurationUpdater.h"
-#import "ATContactStorage.h"
 #import "ATUtilities.h"
 #import "ATWebClient.h"
+#import "ATConnect.h"
+
+NSString *const ATConfigurationSDKVersionKey = @"ATConfigurationSDKVersionKey";
+NSString *const ATConfigurationAppBuildNumberKey = @"ATConfigurationAppBuildNumberKey";
 
 NSString *const ATConfigurationPreferencesChangedNotification = @"ATConfigurationPreferencesChangedNotification";
-NSString *const ATAppConfigurationLastUpdatePreferenceKey = @"ATAppConfigurationLastUpdatePreferenceKey";
 NSString *const ATAppConfigurationExpirationPreferenceKey = @"ATAppConfigurationExpirationPreferenceKey";
 NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigurationMetricsEnabledPreferenceKey";
-NSString *const ATAppConfigurationMessageCenterEnabledKey = @"ATAppConfigurationMessageCenterEnabledKey";
 NSString *const ATAppConfigurationHideBrandingKey = @"ATAppConfigurationHideBrandingKey";
+NSString *const ATAppConfigurationNotificationPopupsEnabledKey = @"ATAppConfigurationNotificationPopupsEnabledKey";
 
-NSString *const ATAppConfigurationMessageCenterTitleKey = @"ATAppConfigurationMessageCenterTitleKey";
 NSString *const ATAppConfigurationMessageCenterForegroundRefreshIntervalKey = @"ATAppConfigurationMessageCenterForegroundRefreshIntervalKey";
 NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey = @"ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey";
-NSString *const ATAppConfigurationMessageCenterEmailRequiredKey = @"ATAppConfigurationMessageCenterEmailRequiredKey";
 
 NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDisplayNameKey";
-
-// Interval, in seconds, after which we'll update the configuration.
-#if APPTENTIVE_DEBUG
-#define kATAppConfigurationUpdateInterval (3)
-#else
-#define kATAppConfigurationUpdateInterval (60*60*24)
-#endif
-
 
 @interface ATAppConfigurationUpdater (Private)
 - (void)processResult:(NSDictionary *)jsonRatingConfiguration maxAge:(NSTimeInterval)expiresMaxAge;
 @end
 
-@implementation ATAppConfigurationUpdater
+@implementation ATAppConfigurationUpdater {
+	ATAPIRequest *request;
+	NSObject<ATAppConfigurationUpdaterDelegate> *delegate;
+}
+
 + (void)registerDefaults {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSDictionary *defaultPreferences = 
 	[NSDictionary dictionaryWithObjectsAndKeys:
-	 [NSDate distantPast], ATAppConfigurationLastUpdatePreferenceKey,
 	 [NSNumber numberWithBool:YES], ATAppConfigurationMetricsEnabledPreferenceKey,
 	 [NSNumber numberWithInt:20], ATAppConfigurationMessageCenterForegroundRefreshIntervalKey,
 	 [NSNumber numberWithInt:60], ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey,
-	 [NSNumber numberWithBool:NO], ATAppConfigurationMessageCenterEmailRequiredKey,
+	 [NSNumber numberWithBool:NO], ATAppConfigurationNotificationPopupsEnabledKey,
 	 nil];
 	[defaults registerDefaults:defaultPreferences];
 }
 
-+ (BOOL)shouldCheckForUpdate {
-	[ATAppConfigurationUpdater registerDefaults];	
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSDate *lastCheck = [defaults objectForKey:ATAppConfigurationLastUpdatePreferenceKey];
++ (BOOL)invalidateAppConfigurationIfNeeded {
+	BOOL invalidateCache = NO;
 	
-#ifndef APPTENTIVE_DEBUG
-	NSDate *expiration = [defaults objectForKey:ATAppConfigurationExpirationPreferenceKey];
+	NSString *previousBuild = [[NSUserDefaults standardUserDefaults] stringForKey:ATConfigurationAppBuildNumberKey];
+	if (![previousBuild isEqualToString:[ATUtilities buildNumberString]]) {
+		invalidateCache = YES;
+	}
+	
+	NSString *previousSDKVersion = [[NSUserDefaults standardUserDefaults] stringForKey:ATConfigurationSDKVersionKey];
+	if (![previousSDKVersion isEqualToString:kATConnectVersionString]) {
+		invalidateCache = YES;
+	}
+	
+	if (invalidateCache) {
+		[self invalidateAppConfiguration];
+	}
+	
+	return invalidateCache;
+}
+
++ (void)invalidateAppConfiguration {
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationExpirationPreferenceKey];
+}
+
++ (BOOL)shouldCheckForUpdate {
+	[ATAppConfigurationUpdater registerDefaults];
+	
+	[ATAppConfigurationUpdater invalidateAppConfigurationIfNeeded];
+		
+	NSDate *expiration = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationExpirationPreferenceKey];
 	if (expiration) {
-		NSDate *now = [NSDate date];
-		NSComparisonResult comparison = [expiration compare:now];
+		NSComparisonResult comparison = [expiration compare:[NSDate date]];
 		if (comparison == NSOrderedSame || comparison == NSOrderedAscending) {
 			return YES;
 		} else {
 			return NO;
 		}
-	}
-#endif
-	
-	// Fall back to the defaults.
-	NSTimeInterval interval = [lastCheck timeIntervalSinceNow];
-	
-	if (interval <= -kATAppConfigurationUpdateInterval) {
-		return YES;
 	} else {
-		return NO;
+		return YES;
 	}
 }
-
 
 - (id)initWithDelegate:(NSObject<ATAppConfigurationUpdaterDelegate> *)aDelegate {
 	if ((self = [super init])) {
@@ -90,12 +98,11 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 - (void)dealloc {
 	delegate = nil;
 	[self cancel];
-	[super dealloc];
 }
 
 - (void)update {
 	[self cancel];
-	request = [[[ATWebClient sharedClient] requestForGettingAppConfiguration] retain];
+	request = [[ATWebClient sharedClient] requestForGettingAppConfiguration];
 	request.delegate = self;
 	[request start];
 }
@@ -104,7 +111,7 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	if (request) {
 		request.delegate = nil;
 		[request cancel];
-		[request release], request = nil;
+		request = nil;
 	}
 }
 
@@ -148,12 +155,10 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	[ATAppConfigurationUpdater registerDefaults];
-	[defaults setObject:[NSDate date] forKey:ATAppConfigurationLastUpdatePreferenceKey];
 	
 	NSDictionary *numberObjects = 
 		[NSDictionary dictionaryWithObjectsAndKeys:
 		 @"metrics_enabled", ATAppConfigurationMetricsEnabledPreferenceKey,
-		 @"message_center_enabled", ATAppConfigurationMessageCenterEnabledKey,
 		 @"hide_branding", ATAppConfigurationHideBrandingKey,
 		 nil];
 	
@@ -195,12 +200,6 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 		NSObject *messageCenterConfiguration = [jsonConfiguration objectForKey:@"message_center"];
 		if ([messageCenterConfiguration isKindOfClass:[NSDictionary class]]) {
 			NSDictionary *mc = (NSDictionary *)messageCenterConfiguration;
-			NSString *title = [mc objectForKey:@"title"];
-			NSString *oldTitle = [defaults objectForKey:ATAppConfigurationMessageCenterTitleKey];
-			if (!oldTitle || ![oldTitle isEqualToString:title]) {
-				[defaults setObject:title forKey:ATAppConfigurationMessageCenterTitleKey];
-				hasConfigurationChanges = YES;
-			}
 			
 			NSNumber *fgRefresh = [mc objectForKey:@"fg_poll"];
 			NSNumber *oldFGRefresh = [defaults objectForKey:ATAppConfigurationMessageCenterForegroundRefreshIntervalKey];
@@ -215,14 +214,19 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 				[defaults setObject:bgRefresh forKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey];
 				hasConfigurationChanges = YES;
 			}
+		}
+	}
+	
+	if ([jsonConfiguration objectForKey:@"notification_popup"]) {
+		NSObject *notificationPopupConfiguration = [jsonConfiguration objectForKey:@"notification_popup"];
+		if ([notificationPopupConfiguration isKindOfClass:[NSDictionary class]]) {
+			NSDictionary *np = (NSDictionary *)notificationPopupConfiguration;
 			
-			NSNumber *emailRequired = [mc objectForKey:@"email_required"];
-			if (emailRequired) {
-				NSNumber *oldEmailRequired = [defaults objectForKey:ATAppConfigurationMessageCenterEmailRequiredKey];
-				if (!oldEmailRequired || [emailRequired boolValue] != [oldEmailRequired boolValue]) {
-					[defaults setObject:emailRequired forKey:ATAppConfigurationMessageCenterEmailRequiredKey];
-					hasConfigurationChanges = YES;
-				}
+			NSNumber *npEnabled = [np objectForKey:@"enabled"];
+			NSNumber *oldNPEnabled = [defaults objectForKey:ATAppConfigurationNotificationPopupsEnabledKey];
+			if (!oldNPEnabled || oldNPEnabled.boolValue != npEnabled.boolValue) {
+				[defaults setObject:npEnabled forKey:ATAppConfigurationNotificationPopupsEnabledKey];
+				hasConfigurationChanges = YES;
 			}
 		}
 	}
@@ -238,6 +242,9 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	if (!setAppName) {
 		[defaults removeObjectForKey:ATAppConfigurationAppDisplayNameKey];
 	}
+	
+	[defaults setObject:kATConnectVersionString forKey:ATConfigurationSDKVersionKey];
+	[defaults setObject:[ATUtilities buildNumberString] forKey:ATConfigurationAppBuildNumberKey];
 	
 	if (hasConfigurationChanges) {
 		[[NSNotificationCenter defaultCenter] postNotificationName:ATConfigurationPreferencesChangedNotification object:nil];

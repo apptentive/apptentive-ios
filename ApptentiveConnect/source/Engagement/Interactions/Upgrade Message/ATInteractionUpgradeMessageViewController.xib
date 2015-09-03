@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8173.3" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment version="1792" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8142"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ATInteractionUpgradeMessageViewController">
+            <connections>
+                <outlet property="OKButton" destination="9kO-hO-1kr" id="AnK-eU-UBL"/>
+                <outlet property="OKButtonBottomSpace" destination="MF2-ah-7bi" id="q6l-AP-7Nf"/>
+                <outlet property="OKButtonHeight" destination="rEP-53-KEu" id="Ys6-i6-EEx"/>
+                <outlet property="appIconContainer" destination="rQz-Tc-GZb" id="Nef-AA-Cps"/>
+                <outlet property="appIconContainerHeight" destination="hqC-f9-ncj" id="8lK-oW-gY7"/>
+                <outlet property="appIconView" destination="cdb-y8-Jty" id="Org-KM-KXe"/>
+                <outlet property="poweredByApptentiveIconView" destination="0ci-Np-jvr" id="lu4-qY-JTg"/>
+                <outlet property="poweredByApptentiveLogo" destination="U9Q-HH-Gvj" id="TWF-MJ-s30"/>
+                <outlet property="poweredByBackground" destination="Xb1-0d-gEd" id="Z3J-uu-QRM"/>
+                <outlet property="poweredByBottomSpace" destination="3Cm-8h-xbm" id="UqI-Ku-TUx"/>
+                <outlet property="poweredByHeight" destination="JIM-Tw-u2w" id="Oul-rU-u7f"/>
+                <outlet property="view" destination="q9d-TL-xVc" id="U9N-Ol-aRb"/>
+                <outlet property="webView" destination="5AC-Tj-OQC" id="L22-Uo-BQV"/>
+            </connections>
+        </placeholder>
+        <view opaque="NO" contentMode="scaleToFill" id="q9d-TL-xVc">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5AC-Tj-OQC" userLabel="WebView">
+                    <rect key="frame" x="44" y="124" width="232" height="367"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </webView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9kO-hO-1kr">
+                    <rect key="frame" x="0.0" y="491" width="320" height="44"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="rEP-53-KEu"/>
+                    </constraints>
+                    <state key="normal" title="OK">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="color" keyPath="layer.borderColor">
+                            <color key="value" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="calibratedRGB"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                            <integer key="value" value="1"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="okButtonPressed:" destination="-1" eventType="touchUpInside" id="sgF-aO-dxT"/>
+                    </connections>
+                </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xb1-0d-gEd" userLabel="poweredByBackground">
+                    <rect key="frame" x="0.0" y="535" width="320" height="33"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="at_update_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="0ci-Np-jvr" userLabel="poweredByImage">
+                            <rect key="frame" x="162" y="10" width="85" height="16"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        </imageView>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" text="Powered by" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="U9Q-HH-Gvj">
+                            <rect key="frame" x="83" y="8" width="75.5" height="17"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <color key="textColor" red="0.59999999999999998" green="0.59999999999999998" blue="0.60784313729999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                            <size key="shadowOffset" width="0.0" height="1"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="0.94117647059999998" green="0.93725490199999995" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <gestureRecognizers/>
+                    <constraints>
+                        <constraint firstAttribute="centerX" secondItem="U9Q-HH-Gvj" secondAttribute="centerX" constant="40" id="4fJ-AB-sii"/>
+                        <constraint firstItem="0ci-Np-jvr" firstAttribute="centerY" secondItem="U9Q-HH-Gvj" secondAttribute="centerY" constant="2" id="68j-lx-2y1"/>
+                        <constraint firstAttribute="height" constant="33" id="JIM-Tw-u2w"/>
+                        <constraint firstAttribute="centerY" secondItem="0ci-Np-jvr" secondAttribute="centerY" constant="-1" id="REA-nf-V9j"/>
+                        <constraint firstItem="0ci-Np-jvr" firstAttribute="leading" secondItem="U9Q-HH-Gvj" secondAttribute="trailing" constant="4" id="Sxz-tx-bbR"/>
+                        <constraint firstItem="U9Q-HH-Gvj" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Xb1-0d-gEd" secondAttribute="leading" constant="1" id="TdZ-2e-bjQ"/>
+                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="0ci-Np-jvr" secondAttribute="trailing" constant="1" id="XB2-el-rAx"/>
+                    </constraints>
+                    <connections>
+                        <outletCollection property="gestureRecognizers" destination="lIZ-xy-M8J" appends="YES" id="FxI-88-kE6"/>
+                    </connections>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rQz-Tc-GZb">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="124"/>
+                    <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="0.48999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="124" id="hqC-f9-ncj"/>
+                    </constraints>
+                </view>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cdb-y8-Jty" userLabel="AppIcon">
+                    <rect key="frame" x="120" y="84" width="80" height="80"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="80" id="F6u-1d-lcA"/>
+                        <constraint firstAttribute="width" secondItem="cdb-y8-Jty" secondAttribute="height" multiplier="1:1" id="ksH-hG-fT5"/>
+                    </constraints>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="9kO-hO-1kr" firstAttribute="top" secondItem="5AC-Tj-OQC" secondAttribute="bottom" id="2lQ-IK-Het"/>
+                <constraint firstAttribute="bottom" secondItem="Xb1-0d-gEd" secondAttribute="bottom" id="3Cm-8h-xbm"/>
+                <constraint firstItem="rQz-Tc-GZb" firstAttribute="leading" secondItem="q9d-TL-xVc" secondAttribute="leading" id="3To-9I-Kuh"/>
+                <constraint firstItem="Xb1-0d-gEd" firstAttribute="leading" secondItem="q9d-TL-xVc" secondAttribute="leading" id="ASy-8x-f20"/>
+                <constraint firstAttribute="trailing" secondItem="5AC-Tj-OQC" secondAttribute="trailing" constant="44" id="FJ3-vl-N6h"/>
+                <constraint firstAttribute="bottom" secondItem="9kO-hO-1kr" secondAttribute="bottom" constant="33" id="MF2-ah-7bi"/>
+                <constraint firstItem="9kO-hO-1kr" firstAttribute="leading" secondItem="q9d-TL-xVc" secondAttribute="leading" id="MWb-iS-yjV"/>
+                <constraint firstItem="cdb-y8-Jty" firstAttribute="top" secondItem="rQz-Tc-GZb" secondAttribute="bottom" constant="-40" id="Wno-Ic-AEc"/>
+                <constraint firstAttribute="trailing" secondItem="9kO-hO-1kr" secondAttribute="trailing" id="YH3-y9-hkX"/>
+                <constraint firstAttribute="trailing" secondItem="rQz-Tc-GZb" secondAttribute="trailing" id="caq-iF-Qhb"/>
+                <constraint firstAttribute="trailing" secondItem="Xb1-0d-gEd" secondAttribute="trailing" id="dWh-Ch-0gg"/>
+                <constraint firstItem="5AC-Tj-OQC" firstAttribute="leading" secondItem="q9d-TL-xVc" secondAttribute="leading" constant="44" id="dmO-Gx-VGu"/>
+                <constraint firstAttribute="centerX" secondItem="cdb-y8-Jty" secondAttribute="centerX" id="jsb-1Z-9mf"/>
+                <constraint firstItem="5AC-Tj-OQC" firstAttribute="top" secondItem="rQz-Tc-GZb" secondAttribute="bottom" id="wxP-RL-E4h"/>
+                <constraint firstItem="rQz-Tc-GZb" firstAttribute="top" secondItem="q9d-TL-xVc" secondAttribute="top" id="zCa-MD-DHF"/>
+            </constraints>
+        </view>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tapGestureRecognizer id="lIZ-xy-M8J">
+            <connections>
+                <action selector="showAbout:" destination="-1" id="IH8-JA-Yhn"/>
+            </connections>
+        </tapGestureRecognizer>
+    </objects>
+    <resources>
+        <image name="at_update_logo.png" width="85" height="16"/>
+    </resources>
+</document>

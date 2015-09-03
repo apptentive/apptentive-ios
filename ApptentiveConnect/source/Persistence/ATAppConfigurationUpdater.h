@@ -10,16 +10,13 @@
 #import "ATAPIRequest.h"
 
 extern NSString *const ATConfigurationPreferencesChangedNotification;
-extern NSString *const ATAppConfigurationLastUpdatePreferenceKey;
 extern NSString *const ATAppConfigurationExpirationPreferenceKey;
 extern NSString *const ATAppConfigurationMetricsEnabledPreferenceKey;
-extern NSString *const ATAppConfigurationMessageCenterEnabledKey;
 extern NSString *const ATAppConfigurationHideBrandingKey;
+extern NSString *const ATAppConfigurationNotificationPopupsEnabledKey;
 
-extern NSString *const ATAppConfigurationMessageCenterTitleKey;
 extern NSString *const ATAppConfigurationMessageCenterForegroundRefreshIntervalKey;
 extern NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey;
-extern NSString *const ATAppConfigurationMessageCenterEmailRequiredKey;
 
 extern NSString *const ATAppConfigurationAppDisplayNameKey;
 
@@ -27,11 +24,7 @@ extern NSString *const ATAppConfigurationAppDisplayNameKey;
 - (void)configurationUpdaterDidFinish:(BOOL)success;
 @end
 
-@interface ATAppConfigurationUpdater : NSObject <ATAPIRequestDelegate> {
-@private
-	ATAPIRequest *request;
-	NSObject<ATAppConfigurationUpdaterDelegate> *delegate;
-}
+@interface ATAppConfigurationUpdater : NSObject <ATAPIRequestDelegate>
 + (BOOL)shouldCheckForUpdate;
 - (id)initWithDelegate:(NSObject<ATAppConfigurationUpdaterDelegate> *)delegate;
 - (void)update;

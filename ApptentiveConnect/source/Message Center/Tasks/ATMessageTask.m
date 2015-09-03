@@ -19,13 +19,12 @@
 #define kATMessageTaskCodingVersion 2
 
 @interface ATMessageTask (Private)
-- (void)setup;
-- (void)teardown;
 - (BOOL)processResult:(NSDictionary *)jsonMessage;
 @end
 
-@implementation ATMessageTask
-@synthesize pendingMessageID;
+@implementation ATMessageTask {
+	ATAPIRequest *request;
+}
 
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
@@ -33,7 +32,6 @@
 		if (version == kATMessageTaskCodingVersion) {
 			self.pendingMessageID = [coder decodeObjectForKey:@"pendingMessageID"];
 		} else {
-			[self release];
 			return nil;
 		}
 	}
@@ -46,9 +44,7 @@
 }
 
 - (void)dealloc {
-	[self teardown];
-	[pendingMessageID release], pendingMessageID = nil;
-	[super dealloc];
+	[self stop];
 }
 
 - (BOOL)canStart {
@@ -68,21 +64,23 @@
 
 - (void)start {
 	if (!request) {
-		ATAbstractMessage *message = [[ATAbstractMessage findMessageWithPendingID:self.pendingMessageID] retain];
+		ATAbstractMessage *message = [ATAbstractMessage findMessageWithPendingID:self.pendingMessageID];
 		if (message == nil) {
 			ATLogError(@"Warning: Message was nil in message task.");
 			self.finished = YES;
 			return;
 		}
-		request = [[[ATWebClient sharedClient] requestForPostingMessage:message] retain];
+		request = [[ATWebClient sharedClient] requestForPostingMessage:message];
 		if (request != nil) {
+			[[ATBackend sharedBackend] messageTaskDidBegin:self];
+			
 			request.delegate = self;
 			[request start];
 			self.inProgress = YES;
 		} else {
 			self.finished = YES;
 		}
-		[message release], message = nil;
+		message = nil;
 	}
 }
 
@@ -90,7 +88,7 @@
 	if (request) {
 		request.delegate = nil;
 		[request cancel];
-		[request release], request = nil;
+		request = nil;
 		self.inProgress = NO;
 	}
 }
@@ -107,10 +105,24 @@
 	return @"message";
 }
 
+- (NSUInteger)hash {
+	return self.pendingMessageID.hash;
+}
+
+- (BOOL)isEqual:(id)object {
+	if (![object isKindOfClass:[self class]]) {
+		return NO;
+	} else if (self == object) {
+		return YES;
+	} else {
+		return [self.pendingMessageID isEqualToString:((ATMessageTask *)object).pendingMessageID];
+	}
+}
+
 #pragma mark ATAPIRequestDelegate
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(NSObject *)result {
 	@synchronized(self) {
-		[self retain];
+		[[ATBackend sharedBackend] messageTaskDidFinish:self];
 		
 		if ([result isKindOfClass:[NSDictionary class]] && [self processResult:(NSDictionary *)result]) {
 			self.finished = YES;
@@ -119,21 +131,20 @@
 			self.failed = YES;
 		}
 		[self stop];
-		[self release];
 	}
 }
 
 - (void)at_APIRequestDidProgress:(ATAPIRequest *)sender {
-	// pass
+	[[ATBackend sharedBackend] messageTask:self didProgress:self.percentComplete];
 }
 
 - (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
 	@synchronized(self) {
-		[self retain];
+		[[ATBackend sharedBackend] messageTaskDidFail:self];
 		self.lastErrorTitle = sender.errorTitle;
 		self.lastErrorMessage = sender.errorMessage;
 		
-		ATAbstractMessage *message = [[ATAbstractMessage findMessageWithPendingID:self.pendingMessageID] retain];
+		ATAbstractMessage *message = [ATAbstractMessage findMessageWithPendingID:self.pendingMessageID];
 		if (message == nil) {
 			ATLogError(@"Warning: Message went away during task.");
 			self.finished = YES;
@@ -166,26 +177,18 @@
 			self.failed = YES;
 		}
 		[self stop];
-		[message release], message = nil;
-		[self release];
+		message = nil;
 	}
 }
 @end
 
 @implementation ATMessageTask (Private)
-- (void)setup {
-	
-}
-
-- (void)teardown {
-	[self stop];
-}
 
 - (BOOL)processResult:(NSDictionary *)jsonMessage {
 	ATLogDebug(@"getting json result: %@", jsonMessage);
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
 	
-	ATAbstractMessage *message = [[ATAbstractMessage findMessageWithPendingID:self.pendingMessageID] retain];
+	ATAbstractMessage *message = [ATAbstractMessage findMessageWithPendingID:self.pendingMessageID];
 	if (message == nil) {
 		ATLogError(@"Warning: Message went away during task.");
 		return YES;
@@ -196,10 +199,10 @@
 	NSError *error = nil;
 	if (![context save:&error]) {
 		ATLogError(@"Failed to save new message: %@", error);
-		[message release], message = nil;
+		message = nil;
 		return NO;
 	}
-	[message release], message = nil;
+	message = nil;
 	return YES;
 }
 @end

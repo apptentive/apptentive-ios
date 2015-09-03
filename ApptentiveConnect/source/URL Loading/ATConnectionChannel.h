@@ -1,5 +1,5 @@
 //
-//  PSURLChannel.h
+//  ATConnectionChannel.h
 //
 //  Created by Andrew Wooster on 12/14/08.
 //  Copyright 2008 Apptentive, Inc.. All rights reserved.
@@ -9,11 +9,7 @@
 
 @class ATURLConnection;
 
-@interface ATConnectionChannel : NSObject {
-	NSInteger maximumConnections;
-	NSMutableSet *active;
-	NSMutableArray *waiting;
-}
+@interface ATConnectionChannel : NSObject
 @property (nonatomic, assign) NSInteger maximumConnections;
 
 - (void)update;

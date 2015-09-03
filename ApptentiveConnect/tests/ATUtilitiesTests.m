@@ -261,4 +261,47 @@
 	NSString *result = [ATUtilities stringByEscapingForURLArguments:aString];
 	XCTAssertEqualObjects(@"foo%25%20bar%2F%23haha", result, @"Unexpected result: %@", result);
 }
+
+// The JSON blobs loaded here should be identical to those for the Android SDK.
+- (NSDictionary *)loadJSONBlobsWithNames:(NSArray *)names {
+	NSMutableDictionary *result = [NSMutableDictionary dictionary];
+	
+	for (NSString *name in names) {
+		NSString *fullName = [NSString stringWithFormat:@"testJsonDiffing.%@", name];
+		NSURL *JSONURL = [[NSBundle bundleForClass:[self class]] URLForResource:fullName withExtension:@"json"];
+		NSData *JSONData = [NSData dataWithContentsOfURL:JSONURL];
+		NSError *error = nil;
+		NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:JSONData options:0 error:&error];
+		XCTAssertNotNil(dictionary, @"Error parsing JSON: %@", error);
+		result[name] = dictionary;
+	}
+	
+	return result;
+}
+
+- (void)testDictionaryDiff1 {
+	NSDictionary *JSONBlobs = [self loadJSONBlobsWithNames:@[ @"1.new", @"1.old", @"1.expected" ]];
+	
+	NSDictionary *result = [ATUtilities diffDictionary:JSONBlobs[@"1.new"] againstDictionary:JSONBlobs[@"1.old"]];
+	
+	XCTAssertEqualObjects(result, JSONBlobs[@"1.expected"]);
+}
+
+- (void)testDictionaryDiff2 {
+	NSDictionary *JSONBlobs = [self loadJSONBlobsWithNames:@[ @"2.new", @"2.old" ]];
+
+	NSDictionary *result = [ATUtilities diffDictionary:JSONBlobs[@"2.new"] againstDictionary:JSONBlobs[@"2.old"]];
+	
+	XCTAssertEqualObjects(result, @{});
+}
+
+- (void)testDictionaryDiff4 {
+	NSDictionary *oldPerson = nil;
+	NSDictionary *newPerson = @{ @"custom_data": @{ @"pet_name": @"Sumo" } };;
+	
+	NSDictionary *result = [ATUtilities diffDictionary:newPerson againstDictionary:oldPerson];
+	
+	XCTAssertEqualObjects(result, newPerson);
+}
+
 @end

@@ -16,6 +16,7 @@
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
 #import "ATUtilities.h"
+#import "ATDeviceUpdater.h"
 
 @implementation ATDeviceInfo
 - (id)init {
@@ -24,9 +25,6 @@
 	return self;
 }
 
-- (void)dealloc {
-	[super dealloc];
-}
 
 + (NSString *)carrier {
 #if TARGET_OS_IPHONE
@@ -37,7 +35,7 @@
 		if (c.carrierName) {
 			result = c.carrierName;
 		}
-		[netInfo release], netInfo = nil;
+		netInfo = nil;
 	}
 	return result;
 #elif TARGET_OS_MAC
@@ -45,7 +43,7 @@
 #endif
 }
 
-- (NSDictionary *)apiJSON {
+- (NSDictionary *)dictionaryRepresentation {
 	NSMutableDictionary *device = [NSMutableDictionary dictionary];
 	
 	NSString *uuid = [[ATBackend sharedBackend] deviceUUID];
@@ -102,10 +100,14 @@
 	}
 	
 	NSDictionary *integrationConfiguration = [[ATConnect sharedConnection] integrationConfiguration];
-	if (integrationConfiguration && [integrationConfiguration count]) {
+	if (integrationConfiguration && [integrationConfiguration isKindOfClass:[NSDictionary class]]) {
 		device[@"integration_config"] = integrationConfiguration;
 	}
 	
 	return @{@"device":device};
+}
+
+- (NSDictionary *)apiJSON {
+	return @{@"device":[ATUtilities diffDictionary:self.dictionaryRepresentation[@"device"] againstDictionary:[ATDeviceUpdater lastSavedVersion][@"device"]]};
 }
 @end

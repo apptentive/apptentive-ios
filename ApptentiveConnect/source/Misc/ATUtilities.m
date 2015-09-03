@@ -30,6 +30,18 @@ static NSDateFormatter *dateFormatter = nil;
 + (void)setupDateFormatters;
 @end
 
+UIViewController * topChildViewController(UIViewController *viewController) {
+	if ([viewController isKindOfClass:[UINavigationController class]]) {
+		return topChildViewController(((UINavigationController *)viewController).topViewController);
+	} else if ([viewController isKindOfClass:[UITabBarController class]]) {
+		return topChildViewController(((UITabBarController *)viewController).selectedViewController);
+	} else if (viewController.presentedViewController) {
+		return topChildViewController(viewController.presentedViewController);
+	} else {
+		return viewController;
+	}
+}
+
 @implementation ATUtilities
 
 + (UIImage *)imageByTakingScreenshot {
@@ -143,7 +155,7 @@ static NSDateFormatter *dateFormatter = nil;
 		default:
 			break;
 	}
-	UIImage *rotated = [[[UIImage alloc] initWithCGImage:[image CGImage] scale:1 orientation:imageOrientation] autorelease];
+	UIImage *rotated = [[UIImage alloc] initWithCGImage:[image CGImage] scale:1 orientation:imageOrientation];
 	
 	return rotated;
 }
@@ -432,7 +444,8 @@ static NSDateFormatter *dateFormatter = nil;
 
 + (NSString *)stringByEscapingForURLArguments:(NSString *)string {
 	CFStringRef result = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)string, NULL, (CFStringRef)@"%:/?#[]@!$&'()*+,;=", kCFStringEncodingUTF8);
-	return [NSMakeCollectable(result) autorelease];
+	
+	return CFBridgingRelease(result);
 }
 
 + (NSString *)randomStringOfLength:(NSUInteger)length {
@@ -491,7 +504,7 @@ static NSDateFormatter *dateFormatter = nil;
 				// For some reason, we couldn't find the decimal place.
 				result = [NSString stringWithFormat:@"%@.%ld %@", dateString, (long)(fractionalSeconds * 1000), timeZoneString];
 			}
-			[f release], f= nil;
+			f= nil;
 		}
 	}
 	return result;
@@ -532,7 +545,7 @@ static NSDateFormatter *dateFormatter = nil;
 			if (![ymdScanner scanInteger:&day]) break;
 			components.day = day;
 		} while (NO);
-		[ymdScanner release], ymdScanner = nil;
+		ymdScanner = nil;
 	} else {
 		[components setYear:[nowComponents year]];
 		[components setMonth:[nowComponents month]];
@@ -588,12 +601,12 @@ static NSDateFormatter *dateFormatter = nil;
 		} while (NO);
 	}
 	
-	[calendar release], calendar = nil;
-	[scanner release], scanner = nil;
+	calendar = nil;
+	scanner = nil;
 	if (validDate) {
 		result = [components date];
 	}
-	[components release], components = nil;
+	components = nil;
 	return result;
 }
 
@@ -654,9 +667,9 @@ static NSDateFormatter *dateFormatter = nil;
 				maxImage = image;
 			}
 		}
-		iconFile = [maxImage retain];
+		iconFile = maxImage;
 	});
-	return [[iconFile retain] autorelease];
+	return iconFile;
 }
 
 + (BOOL)bundleVersionIsMainVersion {
@@ -705,6 +718,14 @@ static NSDateFormatter *dateFormatter = nil;
 	}
 }
 
++ (BOOL)appStoreReceiptExists {
+	return ([NSData dataWithContentsOfURL:[NSBundle mainBundle].appStoreReceiptURL] != nil);
+}
+
++ (NSString *)appStoreReceiptFileName {
+	return [[NSBundle mainBundle].appStoreReceiptURL lastPathComponent];
+}
+
 + (NSTimeInterval)maxAgeFromCacheControlHeader:(NSString *)cacheControl {
 	if (cacheControl == nil || [cacheControl rangeOfString:@"max-age"].location == NSNotFound) {
 		return 0;
@@ -717,7 +738,7 @@ static NSDateFormatter *dateFormatter = nil;
 			maxAge = 0;
 		}
 	}
-	[scanner release], scanner = nil;
+	scanner = nil;
 	return maxAge;
 }
 
@@ -801,6 +822,73 @@ done:
 	return isEqual;
 }
 
+// Returns a dictionary consisting of:
+//
+// 1. Any key-value pairs that appear in new but not old
+// 2. The keys that appear in old but not new with the values set to [NSNull null]
+// 3. Any keys whose values have changed (with the new value)
+//
+// Nested dictionaries (e.g. custom_data) are sent in their entirety
+// if they have changed (in order to match what the server is expecting).
++ (NSDictionary *)diffDictionary:(NSDictionary *)new againstDictionary:(NSDictionary *)old {
+	NSMutableDictionary *result = [NSMutableDictionary dictionary];
+	
+	NSArray *newKeys = [new.allKeys sortedArrayUsingSelector:@selector(compare:)];
+	NSArray *oldKeys = [old.allKeys sortedArrayUsingSelector:@selector(compare:)];
+	NSInteger i = 0, j = 0;
+	
+	while (i < [newKeys count] || j < [oldKeys count]) {
+		NSComparisonResult comp = NSOrderedSame;
+		NSString *newKey;
+		NSString *oldKey;
+		
+		if (i < [newKeys count] && j < [oldKeys count]) {
+			newKey = newKeys[i];
+			oldKey = oldKeys[j];
+			comp = [newKey compare:oldKey];
+		} if (i >= [newKeys count]) {
+			oldKey = oldKeys[j];
+			newKey = nil;
+			comp = NSOrderedDescending;
+		} else if (j >= [oldKeys count]) {
+			newKey = newKeys[i];
+			oldKey = nil;
+			comp = NSOrderedAscending;
+		}
+		
+		if (comp == NSOrderedSame) {
+			// Same key, value may have changed
+			NSString *key = newKey;
+			if (key) {
+				id newValue = new[key];
+				id oldValue = old[key];
+				
+				if ([newValue isEqual:@""] && ![oldValue isEqual:@""]) {
+					// Treat new empty strings as null
+					result[key] = [NSNull null];
+				} else if ([newValue isKindOfClass:[NSArray class]] && [oldValue isKindOfClass:[NSArray class]]) {
+					if (![[newValue sortedArrayUsingSelector:@selector(compare:)] isEqualToArray:[oldValue sortedArrayUsingSelector:@selector(compare:)]]) {
+						result[key] = newValue;
+					}
+				} else if (![newValue isEqual:oldValue]) {
+					result[key] = newValue;
+				}
+				
+				i++, j++;
+			}
+		} else if (comp == NSOrderedAscending) {
+			// New key appeared
+			result[newKey] = new[newKey];
+			i++;
+		} else if (comp == NSOrderedDescending) {
+			// Old key disappeared
+			result[oldKey] = [NSNull null];
+			j++;
+		}
+	}
+	
+	return result;
+}
 
 #if TARGET_OS_IPHONE
 + (UIEdgeInsets)edgeInsetsOfView:(UIView *)view {
@@ -836,16 +924,21 @@ done:
 	
 	return isValid;
 }
-@end
 
++ (UIViewController *)topViewController	{
+	return topChildViewController([UIApplication sharedApplication].delegate.window.rootViewController);
+}
+
+
+@end
 
 @implementation ATUtilities (Private)
 + (void)setupDateFormatters {
 	@synchronized(self) {
 		if (dateFormatter == nil) {
 			dateFormatter = [[NSDateFormatter alloc] init];
-			NSLocale *enUSLocale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] autorelease];
-			NSCalendar *calendar = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] autorelease];
+			NSLocale *enUSLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+			NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
 			[dateFormatter setLocale:enUSLocale];
 			[dateFormatter setCalendar:calendar];
 			[dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];

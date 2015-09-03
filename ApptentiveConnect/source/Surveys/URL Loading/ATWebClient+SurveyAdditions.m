@@ -38,10 +38,6 @@
 	
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:[self commonChannelName]];
 	request.returnType = ATAPIRequestReturnTypeJSON;
-	return [request autorelease];
+	return request;
 }
 @end
-
-void ATWebClient_SurveyAdditions_Bootstrap() {
-	NSLog(@"Loading ATWebClient_SurveyAdditions_Bootstrap");
-}

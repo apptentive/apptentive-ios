@@ -16,9 +16,9 @@
 
 @interface ATEvent : ATRecord <ATJSONModel, ATRequestTaskProvider>
 
-@property (nonatomic, retain) NSString *pendingEventID;
-@property (nonatomic, retain) NSData *dictionaryData;
-@property (nonatomic, retain) NSString *label;
+@property (nonatomic, strong) NSString *pendingEventID;
+@property (nonatomic, strong) NSData *dictionaryData;
+@property (nonatomic, strong) NSString *label;
 
 - (void)addEntriesFromDictionary:(NSDictionary *)dictionary;
 @end

@@ -10,11 +10,7 @@
 
 @class ATTask;
 
-@interface ATTaskQueue : NSObject <NSCoding> {
-@private
-	ATTask *activeTask;
-	NSMutableArray *tasks;
-}
+@interface ATTaskQueue : NSObject <NSCoding>
 + (NSString *)taskQueuePath;
 + (BOOL)serializedQueueExists;
 + (ATTaskQueue *)sharedTaskQueue;

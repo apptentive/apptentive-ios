@@ -1,3 +1,20 @@
+2015-09-02 pkamb, frankus v2.0.0
+--------------------------------
+
+The 2.0.0 release includes major improvements to the Apptentive Message Center, fixes for iOS 9, conversion of the project to ARC, and many other changes.
+
+The Message Center UI has been completely redesigned. All Message Center text now comes from your web dashboard, which allows for greater customization.
+
+Many fixes have been made in preparation for iOS 9.
+
+The Apptentive SDK has been converted to Automatic Reference Counting (ARC).
+
+Push Notifications can now be added directly through Apptentive, with no need to integrate with a 3rd-party service. The API for adding Push Notifications has also been updated.
+
+Localization has been added for Polish.
+
+Many older API methods have been updated or removed. Please see the "Migrating to 2.0.0" document in this repository for details.
+
 2015-04-23 pkamb, frankus v1.7.3
 --------------------------------
 
@@ -7,7 +24,7 @@ The Feedback Dialog has received a number of UI improvements. Upgrade Messages a
 
 Localization files have been added for Arabic, Brazilian Portuguese, French Canadian, Korean, Spanish (Spain), and Turkish.
 
-Finally, the Feedback Demo example applicaton now allows you to easily select and display any interaction created on your Apptentive account. This allows for easy testing of any given interaction, such as a Survey or Upgrade Message, without needing to first engage the required events or satisfy any time limits.
+Finally, the Feedback Demo example application now allows you to easily select and display any interaction created on your Apptentive account. This allows for easy testing of any given interaction, such as a Survey or Upgrade Message, without needing to first engage the required events or satisfy any time limits.
 
 2015-03-23 pkamb, wooster v1.7.2
 --------------------------------

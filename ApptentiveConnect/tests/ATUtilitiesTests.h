@@ -11,9 +11,7 @@
 #import <UIKit/UIKit.h>
 #import "ATUtilities.h"
 
-@interface ATUtilitiesTests : XCTestCase {
-
-}
+@interface ATUtilitiesTests : XCTestCase
 - (void)testEvenRect;
 - (void)testDateFormatting;
 @end

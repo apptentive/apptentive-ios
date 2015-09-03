@@ -18,10 +18,10 @@ typedef enum {
 } ATPendingSurveyResponseState;
 
 @interface ATSurveyResponse : ATRecord <ATJSONModel>
-@property (nonatomic, retain) NSString *pendingSurveyResponseID;
-@property (nonatomic, retain) NSData *answersData;
-@property (nonatomic, retain) NSString *surveyID;
-@property (nonatomic, retain) NSNumber *pendingState;
+@property (nonatomic, strong) NSString *pendingSurveyResponseID;
+@property (nonatomic, strong) NSData *answersData;
+@property (nonatomic, strong) NSString *surveyID;
+@property (nonatomic, strong) NSNumber *pendingState;
 
 - (void)setAnswers:(NSDictionary *)answers;
 + (ATSurveyResponse *)findSurveyResponseWithPendingID:(NSString *)pendingID;

@@ -59,9 +59,13 @@
 + (NSString *)appVersionString;
 + (NSString *)buildNumberString;
 
++ (BOOL)appStoreReceiptExists;
++ (NSString *)appStoreReceiptFileName;
+
 + (BOOL)dictionary:(NSDictionary *)a isEqualToDictionary:(NSDictionary *)b;
 + (NSTimeInterval)maxAgeFromCacheControlHeader:(NSString *)cacheControl;
 + (BOOL)array:(NSArray *)a isEqualToArray:(NSArray *)b;
++ (NSDictionary *)diffDictionary:(NSDictionary *)new againstDictionary:(NSDictionary *)old;
 
 #if TARGET_OS_IPHONE
 + (UIEdgeInsets)edgeInsetsOfView:(UIView *)view;
@@ -70,6 +74,9 @@
 #endif
 
 + (BOOL)emailAddressIsValid:(NSString *)emailAddress;
+
++ (UIViewController *)topViewController;
+
 @end
 
 CGRect ATCGRectOfEvenSize(CGRect inRect);

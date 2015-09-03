@@ -40,7 +40,7 @@
 		CFUUIDRef uuidRef = CFUUIDCreate(NULL);
 		CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
 		
-		self.pendingSurveyResponseID = [NSString stringWithFormat:@"pending-survey-response:%@", (NSString *)uuidStringRef];
+		self.pendingSurveyResponseID = [NSString stringWithFormat:@"pending-survey-response:%@", (__bridge NSString *)uuidStringRef];
 		
 		CFRelease(uuidRef), uuidRef = NULL;
 		CFRelease(uuidStringRef), uuidStringRef = NULL;

@@ -10,16 +10,15 @@
 #import "ATConnect_Private.h"
 #import "ATConnect_Debugging.h"
 #import "ATBackend.h"
-#import "ATContactStorage.h"
 #import "ATEngagementBackend.h"
-#import "ATFeedback.h"
 #import "ATInteraction.h"
 #import "ATUtilities.h"
 #import "ATAppConfigurationUpdater.h"
+#import "ATMessageSender.h"
 #if TARGET_OS_IPHONE
 #import "ATMessageCenterViewController.h"
-#elif TARGET_OS_MAC
-#import "ATFeedbackWindowController.h"
+#import "ATBannerViewController.h"
+#import "ATUnreadMessagesBadgeView.h"
 #endif
 
 // Can't get CocoaPods to do the right thing for debug builds.
@@ -38,22 +37,17 @@ NSString *const ATSurveyShownNotification = @"ATSurveyShownNotification";
 NSString *const ATSurveySentNotification = @"ATSurveySentNotification";
 NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 
-NSString *const ATInitialUserNameKey = @"ATInitialUserNameKey";
-NSString *const ATInitialUserEmailAddressKey = @"ATInitialUserEmailAddressKey";
-
-NSString *const ATIntegrationKeyUrbanAirship = @"urban_airship";
-NSString *const ATIntegrationKeyKahuna = @"kahuna";
-NSString *const ATIntegrationKeyAmazonSNS = @"aws_sns";
-NSString *const ATIntegrationKeyParse = @"parse";
-
 NSString *const ATConnectCustomPersonDataChangedNotification = @"ATConnectCustomPersonDataChangedNotification";
 NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustomDeviceDataChangedNotification";
 
-@implementation ATConnect
-@synthesize apiKey, appID, debuggingOptions, showEmailField, initialUserName, initialUserEmailAddress, customPlaceholderText, useMessageCenter;
-#if TARGET_OS_IPHONE
-@synthesize tintColor;
-#endif
+@interface ATConnect () <ATBannerViewControllerDelegate>
+@end
+
+@implementation ATConnect {
+	NSMutableDictionary *_customPersonData;
+	NSMutableDictionary *_customDeviceData;
+	NSMutableDictionary *_integrationConfiguration;
+}
 
 + (ATConnect *)sharedConnection {
 	static ATConnect *sharedConnection = nil;
@@ -67,18 +61,9 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 - (id)init {
 	if ((self = [super init])) {
 		self.showEmailField = YES;
-		customPersonData = [[NSMutableDictionary alloc] init];
-		customDeviceData = [[NSMutableDictionary alloc] init];
-		integrationConfiguration = [[NSMutableDictionary alloc] init];
-		useMessageCenter = YES;
-		_initiallyUseMessageCenter = YES;
-		_initiallyHideBranding = NO;
-		
-		NSDictionary *defaults = @{ATAppConfigurationMessageCenterEnabledKey: @(_initiallyUseMessageCenter),
-								   ATAppConfigurationMessageCenterEmailRequiredKey: @NO,
-								   ATAppConfigurationHideBrandingKey: @(_initiallyHideBranding)
-								   };
-		[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
+		_customPersonData = [[NSMutableDictionary alloc] init];
+		_customDeviceData = [[NSMutableDictionary alloc] init];
+		_integrationConfiguration = [[NSMutableDictionary alloc] init];
 		
 		ATLogInfo(@"Apptentive SDK Version %@", kATConnectVersionString);
 		
@@ -89,93 +74,31 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	return self;
 }
 
-- (void)dealloc {
-#if TARGET_OS_IPHONE
-	[tintColor release], tintColor = nil;
-#elif IF_TARGET_OS_MAC
-	if (feedbackWindowController) {
-		[feedbackWindowController release];
-		feedbackWindowController = nil;
-	}
-#endif
-	[customPersonData release], customPersonData = nil;
-	[customDeviceData release], customDeviceData = nil;
-	[integrationConfiguration release], integrationConfiguration = nil;
-	[customPlaceholderText release], customPlaceholderText = nil;
-	[apiKey release], apiKey = nil;
-	[appID release], appID = nil;
-	[initialUserName release], initialUserName = nil;
-	[initialUserEmailAddress release], initialUserEmailAddress = nil;
-	[super dealloc];
-}
-
-- (void)setApiKey:(NSString *)anAPIKey {
-	if (apiKey != anAPIKey) {
-		[apiKey release];
-		apiKey = nil;
-		apiKey = [anAPIKey retain];
+- (void)setApiKey:(NSString *)APIKey {
+	if (_apiKey != APIKey) {
+		_apiKey = APIKey;
 		[[ATBackend sharedBackend] setApiKey:self.apiKey];
 	}
 }
 
-- (void)setInitiallyHideBranding:(BOOL)initiallyHideBranding {
-	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ATAppConfigurationHideBrandingKey: @(initiallyHideBranding)}];
-	_initiallyHideBranding = initiallyHideBranding;
+- (NSString *)personName {
+	return [ATPersonInfo currentPerson].name;
 }
 
-- (void)setInitiallyUseMessageCenter:(BOOL)initiallyUseMessageCenter {
-	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ATAppConfigurationMessageCenterEnabledKey: @(initiallyUseMessageCenter)}];
-	_initiallyUseMessageCenter = initiallyUseMessageCenter;
+- (void)setPersonName:(NSString *)personName {
+	[ATPersonInfo currentPerson].name = personName;
 }
 
-- (void)setInitialUserName:(NSString *)anInitialUserName {
-	if (initialUserName != anInitialUserName) {
-		[initialUserName release];
-		initialUserName = nil;
-		initialUserName = [anInitialUserName retain];
-		
-		// Set person object's name. Only overwrites previous *initial* names.
-		NSString *previousInitialUserName = [[NSUserDefaults standardUserDefaults] objectForKey:ATInitialUserNameKey];
-		if ([ATPersonInfo personExists]) {
-			ATPersonInfo *person = [ATPersonInfo currentPerson];
-			if (!person.name || [person.name isEqualToString:previousInitialUserName]) {
-				person.name = initialUserName;
-				person.needsUpdate = YES;
-				[person saveAsCurrentPerson];
-			}
-		}
-		[[NSUserDefaults standardUserDefaults] setObject:initialUserName forKey:ATInitialUserNameKey];
-	}
+- (NSString *)personEmailAddress {
+	return [ATPersonInfo currentPerson].emailAddress;
 }
 
-- (void)setInitialUserEmailAddress:(NSString *)anInitialUserEmailAddress {
-	if (![ATUtilities emailAddressIsValid:anInitialUserEmailAddress]) {
-		ATLogInfo(@"Attempting to set an invalid initial user email address: %@", anInitialUserEmailAddress);
-		return;
-	}
-		
-	if (![initialUserEmailAddress isEqualToString:anInitialUserEmailAddress]) {
-		[initialUserEmailAddress release];
-		initialUserEmailAddress = nil;
-		initialUserEmailAddress = [anInitialUserEmailAddress retain];
-		
-		if ([ATPersonInfo personExists]) {
-			ATPersonInfo *person = [ATPersonInfo currentPerson];
-			
-			// Only overwrites previous *initial* emails.
-			NSString *previousInitialUserEmailAddress = [[NSUserDefaults standardUserDefaults] objectForKey:ATInitialUserEmailAddressKey];
-			if (!person.emailAddress || ([person.emailAddress caseInsensitiveCompare:previousInitialUserEmailAddress] == NSOrderedSame)) {
-				person.emailAddress = initialUserEmailAddress;
-				person.needsUpdate = YES;
-				[person saveAsCurrentPerson];
-			}			
-		}
-		[[NSUserDefaults standardUserDefaults] setObject:initialUserEmailAddress forKey:ATInitialUserEmailAddressKey];
-	}
+- (void)setPersonEmailAddress:(NSString *)personEmailAddress {
+	[ATPersonInfo currentPerson].emailAddress = personEmailAddress;
 }
 
 - (void)sendAttachmentText:(NSString *)text {
-    [[ATBackend sharedBackend] sendTextMessageWithBody:text hiddenOnClient:YES completion:nil];
+	[[ATBackend sharedBackend] sendTextMessageWithBody:text hiddenOnClient:YES];
 }
 
 - (void)sendAttachmentImage:(UIImage *)image {
@@ -183,25 +106,25 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType {
-	[[ATBackend sharedBackend] sendFileMessageWithFileData:fileData andMimeType:mimeType hiddenOnClient:YES fromSource:ATFIleAttachmentSourceProgrammatic];
+	[[ATBackend sharedBackend] sendFileMessageWithFileData:fileData andMimeType:mimeType hiddenOnClient:YES fromSource:ATFileAttachmentSourceProgrammatic];
 }
 
 - (NSDictionary *)customPersonData {
-	return customPersonData;
+	return _customPersonData;
 }
 
 - (NSDictionary *)customDeviceData {
-	return customDeviceData;
+	return _customDeviceData;
 }
 
 - (void)addCustomPersonData:(NSObject *)object withKey:(NSString *)key {
-	[self addCustomData:object withKey:key toCustomDataDictionary:customPersonData];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomPersonDataChangedNotification object:customPersonData];
+	[self addCustomData:object withKey:key toCustomDataDictionary:_customPersonData];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomPersonDataChangedNotification object:self.customPersonData];
 }
 
 - (void)addCustomDeviceData:(NSObject *)object withKey:(NSString *)key {
-	[self addCustomData:object withKey:key toCustomDataDictionary:customDeviceData];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:customDeviceData];
+	[self addCustomData:object withKey:key toCustomDataDictionary:_customDeviceData];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:self.customDeviceData];
 }
 
 - (void)addCustomData:(NSObject *)object withKey:(NSString *)key toCustomDataDictionary:(NSMutableDictionary *)customData {
@@ -213,7 +136,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	BOOL allowedData = ([object isKindOfClass:[NSString class]] ||
 						[object isKindOfClass:[NSNumber class]] ||
 						[object isKindOfClass:[NSNull class]]);
-		
+	
 	if (allowedData) {
 		[customData setObject:object forKey:key];
 	} else {
@@ -222,13 +145,13 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (void)removeCustomPersonDataWithKey:(NSString *)key {
-	[customPersonData removeObjectForKey:key];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomPersonDataChangedNotification object:customPersonData];
+	[_customPersonData removeObjectForKey:key];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomPersonDataChangedNotification object:self.customPersonData];
 }
 
 - (void)removeCustomDeviceDataWithKey:(NSString *)key {
-	[customDeviceData removeObjectForKey:key];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:customDeviceData];
+	[_customDeviceData removeObjectForKey:key];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:self.customDeviceData];
 }
 
 - (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key {
@@ -239,7 +162,6 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	[self removeCustomDeviceDataWithKey:key];
 }
 
-
 - (void)openAppStore {
 	if (!self.appID) {
 		ATLogError(@"Cannot open App Store because `[ATConnect sharedConnection].appID` is not set to your app's iTunes App ID.");
@@ -248,7 +170,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	
 	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:@"open_app_store_manually"];
 	
-	ATInteraction *appStoreInteraction = [[[ATInteraction alloc] init] autorelease];
+	ATInteraction *appStoreInteraction = [[ATInteraction alloc] init];
 	appStoreInteraction.type = @"AppStoreRating";
 	appStoreInteraction.priority = 1;
 	appStoreInteraction.version = @"1.0.0";
@@ -260,55 +182,69 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (NSDictionary *)integrationConfiguration {
-	return integrationConfiguration;
+	return _integrationConfiguration;
+}
+
+- (void)setPushNotificationIntegration:(ATPushProvider)pushProvider withDeviceToken:(NSData *)deviceToken {
+	[self removeAllPushIntegrations];
+	
+	NSString *integrationKey = [self integrationKeyForPushProvider:pushProvider];
+	
+	[self addIntegration:integrationKey withDeviceToken:deviceToken];
+}
+
+- (void)removeAllPushIntegrations {
+	[self removeIntegration:[self integrationKeyForPushProvider:ATPushProviderApptentive]];
+	[self removeIntegration:[self integrationKeyForPushProvider:ATPushProviderUrbanAirship]];
+	[self removeIntegration:[self integrationKeyForPushProvider:ATPushProviderAmazonSNS]];
+	[self removeIntegration:[self integrationKeyForPushProvider:ATPushProviderParse]];
+}
+
+- (NSString *)integrationKeyForPushProvider:(ATPushProvider)pushProvider {
+	switch (pushProvider) {
+		case ATPushProviderApptentive:
+			return @"apptentive_push";
+		case ATPushProviderUrbanAirship:
+			return @"urban_airship";
+		case ATPushProviderAmazonSNS:
+			return @"aws_sns";
+		case ATPushProviderParse:
+			return @"parse";
+		default:
+			return @"UNKNOWN_PUSH_PROVIDER";
+	}
 }
 
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration {
-	[integrationConfiguration setObject:configuration forKey:integration];
+	[_integrationConfiguration setObject:configuration forKey:integration];
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:customDeviceData];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:self.customDeviceData];
 }
 
 - (void)addIntegration:(NSString *)integration withDeviceToken:(NSData *)deviceToken {
-    const unsigned *tokenBytes = [deviceToken bytes];
-    NSString *token = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
-                       ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
-                       ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
-                       ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
+	const unsigned *tokenBytes = [deviceToken bytes];
+	NSString *token = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
+					   ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
+					   ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
+					   ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
 	
 	[[ATConnect sharedConnection] addIntegration:integration withConfiguration:@{@"token": token}];
 }
 
 - (void)removeIntegration:(NSString *)integration {
-	[integrationConfiguration removeObjectForKey:integration];
+	[_integrationConfiguration removeObjectForKey:integration];
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:customDeviceData];
-}
-
-- (void)addUrbanAirshipIntegrationWithDeviceToken:(NSData *)deviceToken {
-	[self addIntegration:ATIntegrationKeyUrbanAirship withDeviceToken:deviceToken];
-}
-
-- (void)addAmazonSNSIntegrationWithDeviceToken:(NSData *)deviceToken {
-	[self addIntegration:ATIntegrationKeyAmazonSNS withDeviceToken:deviceToken];
-}
-
-- (void)addParseIntegrationWithDeviceToken:(NSData *)deviceToken {
-	[self addIntegration:ATIntegrationKeyParse withDeviceToken:deviceToken];
-}
-
-- (BOOL)messageCenterEnabled {
-	return [[[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterEnabledKey] boolValue];
-}
-
-- (BOOL)emailRequired {
-	return [[[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterEmailRequiredKey] boolValue];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:self.customDeviceData];
 }
 
 #if TARGET_OS_IPHONE
 
 - (BOOL)willShowInteractionForEvent:(NSString *)event {
-	return [[ATEngagementBackend sharedBackend] willShowInteractionForLocalEvent:event];
+	return [self canShowInteractionForEvent:event];
+}
+
+- (BOOL)canShowInteractionForEvent:(NSString *)event {
+	return [[ATEngagementBackend sharedBackend] canShowInteractionForLocalEvent:event];
 }
 
 - (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController {
@@ -394,7 +330,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 {
 	NSMutableDictionary *commerceItem = [NSMutableDictionary dictionary];
 	commerceItem[@"version"] = @1;
-
+	
 	if (itemID) {
 		commerceItem[@"id"] = itemID;
 	}
@@ -422,36 +358,44 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	return commerceItem;
 }
 
-- (void)presentMessageCenterFromViewController:(UIViewController *)viewController {
-	[[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController];
+- (BOOL)canShowMessageCenter {
+	NSString *messageCenterCodePoint = [[ATInteraction apptentiveAppInteraction] codePointForEvent:ATEngagementMessageCenterEvent];
+	return [[ATEngagementBackend sharedBackend] canShowInteractionForCodePoint:messageCenterCodePoint];
 }
 
-- (void)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData {
+- (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController {
+	return [[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController];
+}
+
+- (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData {
 	NSMutableDictionary *allowedCustomMessageData = [NSMutableDictionary dictionary];
 	
 	for (NSString *key in [customData allKeys]) {
 		[self addCustomData:[customData objectForKey:key] withKey:key toCustomDataDictionary:allowedCustomMessageData];
 	}
 	
-	[[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController withCustomData:allowedCustomMessageData];
+	return [[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController withCustomData:allowedCustomMessageData];
 }
 
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController {
 	NSDictionary *apptentivePayload = [userInfo objectForKey:@"apptentive"];
 	if (apptentivePayload) {
-		NSString *action = [apptentivePayload objectForKey:@"action"];
-		
-		if ([action isEqualToString:@"pmc"]) {
-			[self presentMessageCenterFromViewController:viewController];
+		if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive) {
+			// Present Apptentive Push Notifications later, when Application State is Active
+			self.pushUserInfo = userInfo;
+			self.pushViewController = viewController;
+		} else {
+			self.pushUserInfo = nil;
+			self.pushViewController = nil;
+			
+			NSString *action = [apptentivePayload objectForKey:@"action"];
+			if ([action isEqualToString:@"pmc"]) {
+				[self presentMessageCenterFromViewController:viewController];
+			} else {
+				[[ATBackend sharedBackend] checkForMessages];
+			}
 		}
 	}
-}
-
-- (void)presentFeedbackDialogFromViewController:(UIViewController *)viewController {
-	NSString *title = ATLocalizedString(@"Give Feedback", @"Title of feedback screen.");
-	NSString *body = [NSString stringWithFormat:ATLocalizedString(@"Please let us know how to make %@ better for you!", @"Feedback screen body. Parameter is the app name."), [[ATBackend sharedBackend] appName]];
-	NSString *placeholder = ATLocalizedString(@"How can we help? (required)", @"First feedback placeholder text.");
-	[[ATBackend sharedBackend] presentIntroDialogFromViewController:viewController withTitle:title prompt:body placeholderText:placeholder];
 }
 
 - (void)resetUpgradeData {
@@ -468,13 +412,13 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (NSString *)engagementInteractionNameAtIndex:(NSInteger)index {
 	ATInteraction *interaction = [[self engagementInteractions] objectAtIndex:index];
-
+	
 	return [interaction.configuration objectForKey:@"name"] ?: [interaction.configuration objectForKey:@"title"] ?: @"Untitled Interaction";
 }
 
 - (NSString *)engagementInteractionTypeAtIndex:(NSInteger)index {
 	ATInteraction *interaction = [[self engagementInteractions] objectAtIndex:index];
-
+	
 	return interaction.type;
 }
 
@@ -488,6 +432,14 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (NSUInteger)unreadMessageCount {
 	return [[ATBackend sharedBackend] unreadMessageCount];
+}
+
+- (UIView *)unreadMessageCountAccessoryView:(BOOL)apptentiveHeart {
+	if (apptentiveHeart) {
+		return [ATUnreadMessagesBadgeView unreadMessageCountViewBadgeWithApptentiveHeart];
+	} else {
+		return [ATUnreadMessagesBadgeView unreadMessageCountViewBadge];
+	}
 }
 
 #elif TARGET_OS_MAC
@@ -522,14 +474,14 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	NSFileManager *fm = [NSFileManager defaultManager];
 	if ([fm fileExistsAtPath:bundlePath]) {
 		NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
-		return [bundle autorelease];
+		return bundle;
 	} else {
 		// Try trigger.io path.
 		bundlePath = [path stringByAppendingPathComponent:@"apptentive.bundle"];
 		bundlePath = [bundlePath stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
 		if ([fm fileExistsAtPath:bundlePath]) {
 			NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
-			return [bundle autorelease];
+			return bundle;
 		} else {
 			// Try Titanium path.
 			bundlePath = [path stringByAppendingPathComponent:@"modules"];
@@ -537,7 +489,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 			bundlePath = [bundlePath stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
 			if ([fm fileExistsAtPath:bundlePath]) {
 				NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
-				return [bundle autorelease];
+				return bundle;
 			} else {
 				return nil;
 			}
@@ -549,12 +501,39 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 #endif
 }
 
+#pragma mark - Message notification banner
+
+- (void)showNotificationBannerForMessage:(ATAbstractMessage *)message {
+	if ([ATBackend sharedBackend].notificationPopupsEnabled && [message isKindOfClass:[ATTextMessage class]]) {
+		ATTextMessage *textMessage = (ATTextMessage *)message;
+		NSURL *profilePhotoURL = textMessage.sender.profilePhotoURL ? [NSURL URLWithString:textMessage.sender.profilePhotoURL] : nil;
+		
+		ATBannerViewController *banner = [ATBannerViewController bannerWithImageURL:profilePhotoURL title:textMessage.sender.name message:textMessage.body];
+		
+		banner.delegate = self;
+		
+		[banner show];
+	}
+}
+
+- (void)userDidTapBanner:(ATBannerViewController *)banner {
+	[self presentMessageCenterFromViewController:[self viewControllerForInteractions]];
+}
+
+- (UIViewController *)viewControllerForInteractions {
+	if (self.delegate && [self.delegate respondsToSelector:@selector(viewControllerForInteractionsWithConnection:)]) {
+		return [self.delegate viewControllerForInteractionsWithConnection:self];
+	} else {
+		return [ATUtilities topViewController];
+	}
+}
+
 @end
 
 NSString *ATLocalizedString(NSString *key, NSString *comment) {
 	static NSBundle *bundle = nil;
 	if (!bundle) {
-		bundle = [[ATConnect resourceBundle] retain];
+		bundle = [ATConnect resourceBundle];
 	}
 	NSString *result = [bundle localizedStringForKey:key value:key table:nil];
 	return result;

@@ -10,10 +10,7 @@
 #import "ATSurvey.h"
 #import "ATInteraction.h"
 
-@interface ATSurveyParser : NSObject {
-@private
-	NSError *parserError;
-}
+@interface ATSurveyParser : NSObject
 - (NSError *)parserError;
 
 - (ATSurvey *)surveyWithInteraction:(ATInteraction *)interaction;

@@ -28,11 +28,7 @@
 
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:[self commonChannelName]];
 	request.returnType = ATAPIRequestReturnTypeData;
-	return [request autorelease];
+	return request;
 }
 
 @end
-
-void ATWebClient_EngagementAdditions_Bootstrap() {
-	NSLog(@"Loading ATWebClient_EngagementAdditions_Bootstrap");
-}

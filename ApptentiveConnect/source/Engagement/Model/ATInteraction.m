@@ -22,11 +22,11 @@
 	interaction.version = [jsonDictionary objectForKey:@"version"];
 	//NOTE: `vendor` is not currently sent in JSON dictionary.
 	
-	return [interaction autorelease];
+	return interaction;
 }
 
 + (ATInteraction *)localAppInteraction {
-	ATInteraction *interaction = [[[ATInteraction alloc] init] autorelease];
+	ATInteraction *interaction = [[ATInteraction alloc] init];
 	interaction.type = ATEngagementCodePointHostAppInteractionKey;
 	interaction.vendor = ATEngagementCodePointHostAppVendorKey;
 	
@@ -34,7 +34,7 @@
 }
 
 + (ATInteraction *)apptentiveAppInteraction {
-	ATInteraction *interaction = [[[ATInteraction alloc] init] autorelease];
+	ATInteraction *interaction = [[ATInteraction alloc] init];
 	interaction.type = ATEngagementCodePointApptentiveAppInteractionKey;
 	interaction.vendor = ATEngagementCodePointApptentiveVendorKey;
 	
@@ -49,8 +49,6 @@
 		interactionType = ATInteractionTypeEnjoymentDialog;
 	} else if ([self.type isEqualToString:@"RatingDialog"]) {
 		interactionType = ATInteractionTypeRatingDialog;
-	} else if ([self.type isEqualToString:@"FeedbackDialog"]) {
-		interactionType = ATInteractionTypeFeedbackDialog;
 	} else if ([self.type isEqualToString:@"MessageCenter"]) {
 		interactionType = ATInteractionTypeMessageCenter;
 	} else if ([self.type isEqualToString:@"AppStoreRating"]) {
@@ -98,7 +96,7 @@
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-    ATInteraction *copy = [[ATInteraction alloc] init];
+	ATInteraction *copy = [[[self class] allocWithZone:zone] init];
 	
     if (copy) {
 		copy.identifier = self.identifier;
@@ -134,14 +132,5 @@
 	return [[ATEngagementBackend sharedBackend] engageCodePoint:codePoint fromInteraction:self userInfo:userInfo customData:customData extendedData:extendedData fromViewController:viewController];
 }
 
-- (void)dealloc {
-	[_identifier release], _identifier = nil;
-	[_type release], _type = nil;
-	[_configuration release], _configuration = nil;
-	[_version release], _version = nil;
-	[_vendor release], _vendor = nil;
-	
-	[super dealloc];
-}
 
 @end

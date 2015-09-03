@@ -18,6 +18,5 @@ extern NSString *const ATWebClientDefaultChannelName;
 + (ATWebClient *)sharedClient;
 - (NSString *)baseURLString;
 - (NSString *)commonChannelName;
-- (ATAPIRequest *)requestForPostingFeedback:(ATFeedback *)feedback;
 - (ATAPIRequest *)requestForGettingAppConfiguration;
 @end

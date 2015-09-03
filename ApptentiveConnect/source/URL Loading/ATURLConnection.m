@@ -10,25 +10,21 @@
 #import "ATUtilities.h"
 
 @interface ATURLConnection ()
-- (void)cacheDataIfNeeded;
+
+@property (strong, nonatomic) NSMutableData *data;
+@property (strong, nonatomic) NSMutableDictionary *headers;
+@property (strong, nonatomic) NSInputStream *HTTPBodyStream;
+@property (strong, nonatomic) NSMutableURLRequest *request;
+@property (strong, nonatomic) NSString *statusLine;
+@property (strong, nonatomic) NSDictionary *responseHeaders;
+@property (readwrite, assign, nonatomic) NSInteger statusCode;
+@property (readwrite, assign, nonatomic) NSTimeInterval expiresMaxAge;
+@property (readwrite, assign, nonatomic) BOOL failedAuthentication;
+@property (readwrite, assign, nonatomic) BOOL cancelled;
+
 @end
 
-
 @implementation ATURLConnection
-@synthesize targetURL;
-@synthesize delegate;
-@synthesize connection;
-@synthesize executing;
-@synthesize finished;
-@synthesize cancelled;
-@synthesize failed;
-@synthesize timeoutInterval;
-@synthesize credential;
-@synthesize statusCode;
-@synthesize failedAuthentication;
-@synthesize connectionError;
-@synthesize percentComplete;
-@synthesize expiresMaxAge;
 
 - (id)initWithURL:(NSURL *)url {
 	return [self initWithURL:url delegate:nil];
@@ -36,20 +32,20 @@
 
 - (id)initWithURL:(NSURL *)url delegate:(id)aDelegate {
 	if ((self = [super init])) {
-		targetURL = [url copy];
-		delegate = aDelegate;
-		data = [[NSMutableData alloc] init];
-		finished = NO;
-		executing = NO;
-		failed = NO;
-		failedAuthentication = NO;
-		timeoutInterval = 10.0;
+		_targetURL = [url copy];
+		_delegate = aDelegate;
+		_data = [[NSMutableData alloc] init];
+		_finished = NO;
+		_executing = NO;
+		_failed = NO;
+		_failedAuthentication = NO;
+		_timeoutInterval = 10.0;
 		
-		headers = [[NSMutableDictionary alloc] init];
-		HTTPMethod = nil;
+		_headers = [[NSMutableDictionary alloc] init];
+		_HTTPMethod = nil;
 		
-		statusCode = 0;
-		percentComplete = 0.0f;
+		_statusCode = 0;
+		_percentComplete = 0.0f;
 		return self;
 	}
 	return nil;
@@ -68,37 +64,16 @@
 }
 
 - (NSDictionary *)headers {
-	return headers;
+	return _headers;
 }
 
 - (void)setValue:(NSString *)value forHTTPHeaderField:(NSString *)field {
-	[headers setValue:value forKey:field];
+	[_headers setValue:value forKey:field];
 }
 
 - (void)removeHTTPHeaderField:(NSString *)field {
-	if ([headers objectForKey:field]) {
-		[headers removeObjectForKey:field];
-	}
-}
-
-- (void)setHTTPMethod:(NSString *)method {
-	if (HTTPMethod != method) {
-		[HTTPMethod release];
-		HTTPMethod = [method retain];
-	}
-}
-
-- (void)setHTTPBody:(NSData *)body {
-	if (HTTPBody != body) {
-		[HTTPBody release];
-		HTTPBody = [body retain];
-	}
-}
-
-- (void)setHTTPBodyStream:(NSInputStream *)stream {
-	if (HTTPBodyStream != stream) {
-		[HTTPBodyStream release];
-		HTTPBodyStream = [stream retain];
+	if ([_headers objectForKey:field]) {
+		[_headers removeObjectForKey:field];
 	}
 }
 
@@ -113,22 +88,19 @@
 				if ([self isFinished]) {
 					break;
 				}
-				if (request) {
-					[request release], request = nil;
+				self.request = [[NSMutableURLRequest alloc] initWithURL:self.targetURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:self.timeoutInterval];
+				for (NSString *key in self.headers) {
+					[self.request setValue:[self.headers objectForKey:key] forHTTPHeaderField:key];
 				}
-				request = [[NSMutableURLRequest alloc] initWithURL:self.targetURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:timeoutInterval];
-				for (NSString *key in headers) {
-					[request setValue:[headers objectForKey:key] forHTTPHeaderField:key];
+				if (self.HTTPMethod) {
+					[self.request setHTTPMethod:self.HTTPMethod];
 				}
-				if (HTTPMethod) {
-					[request setHTTPMethod:HTTPMethod];
+				if (self.HTTPBody) {
+					[self.request setHTTPBody:self.HTTPBody];
+				} else if (self.HTTPBodyStream) {
+					[self.request setHTTPBodyStream:self.HTTPBodyStream];
 				}
-				if (HTTPBody) {
-					[request setHTTPBody:HTTPBody];
-				} else if (HTTPBodyStream) {
-					[request setHTTPBodyStream:HTTPBodyStream];
-				}
-				self.connection = [[[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO] autorelease];
+				self.connection = [[NSURLConnection alloc] initWithRequest:self.request delegate:self startImmediately:NO];
 				[self.connection scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
 				[self.connection start];
 				self.executing = YES;
@@ -137,43 +109,29 @@
 	}
 }
 
-- (NSString *)statusLine {
-	return [[statusLine retain] autorelease];
-}
-
-- (NSDictionary *)responseHeaders {
-	return [[responseHeaders retain] autorelease];
-}
 
 - (NSData *)responseData {
-	return [[data retain] autorelease];
+	return self.data;
 }
 
 #pragma mark Delegate Methods
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSHTTPURLResponse *)response {
 	@synchronized (self) {
-		[data setLength:0];
+		[self.data setLength:0];
 		if (response ) {
 			if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-				if (statusLine) {
-					[statusLine release], statusLine = nil;
-				}
-				// Not linking CF networking, so we'll use the localized version of the status line.
-				statusLine = [[NSHTTPURLResponse localizedStringForStatusCode:response.statusCode] retain];
-				statusCode = response.statusCode;
+				self.statusLine = [NSHTTPURLResponse localizedStringForStatusCode:response.statusCode];
+				self.statusCode = response.statusCode;
 			} else {
-				statusCode = 200;
+				self.statusCode = 200;
 			}
 			
-			if (responseHeaders) {
-				[responseHeaders release], responseHeaders = nil;
-			}
-			responseHeaders = [[response allHeaderFields] copy];
-			NSString *cacheControlHeader = [responseHeaders valueForKey:@"Cache-Control"];
+			self.responseHeaders = [[response allHeaderFields] copy];
+			NSString *cacheControlHeader = [self.responseHeaders valueForKey:@"Cache-Control"];
 			if (cacheControlHeader) {
-				expiresMaxAge = [ATUtilities maxAgeFromCacheControlHeader:cacheControlHeader];
+				self.expiresMaxAge = [ATUtilities maxAgeFromCacheControlHeader:cacheControlHeader];
 			} else {
-				expiresMaxAge = 0;
+				self.expiresMaxAge = 0;
 			}
 		}
 	}
@@ -186,8 +144,8 @@
 		if (error) {
 			self.connectionError = error;
 		}
-		if (delegate && [delegate respondsToSelector:@selector(connectionFailed:)]){
-			[delegate performSelectorOnMainThread:@selector(connectionFailed:) withObject:self waitUntilDone:YES];
+		if (self.delegate && [self.delegate respondsToSelector:@selector(connectionFailed:)]){
+			[self.delegate performSelectorOnMainThread:@selector(connectionFailed:) withObject:self waitUntilDone:YES];
 		} else {
 			ATLogError(@"Orphaned connection. No delegate or nonresponsive delegate.");
 		}
@@ -196,27 +154,26 @@
 
 - (void)connection:(NSURLConnection *)aConnection didReceiveData:(NSData *)someData {
 	@synchronized (self) {
-		[data appendData:someData];
+		[self.data appendData:someData];
 	}
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)aConnection {
 	@synchronized (self) {
-		if (data && !failed) {
-			if (delegate != nil && ![self isCancelled]) {
+		if (self.data && !self.failed) {
+			if (self.delegate != nil && ![self isCancelled]) {
 				self.percentComplete = 1.0f;
 				[self cacheDataIfNeeded];
-				if (delegate && [delegate respondsToSelector:@selector(connectionFinishedSuccessfully:)]){
-					[delegate performSelectorOnMainThread:@selector(connectionFinishedSuccessfully:) withObject:self waitUntilDone:YES];
+				if (self.delegate && [self.delegate respondsToSelector:@selector(connectionFinishedSuccessfully:)]){
+					[self.delegate performSelectorOnMainThread:@selector(connectionFinishedSuccessfully:) withObject:self waitUntilDone:YES];
 				} else {
 					ATLogError(@"Orphaned connection. No delegate or nonresponsive delegate.");
 				}
 			}
-			[data release];
-			data = nil;
-		} else if (delegate && ![self isCancelled]) {
-			if (delegate && [delegate respondsToSelector:@selector(connectionFailed:)]){
-				[delegate performSelectorOnMainThread:@selector(connectionFailed:) withObject:self waitUntilDone:YES];
+			self.data = nil;
+		} else if (self.delegate && ![self isCancelled]) {
+			if (self.delegate && [self.delegate respondsToSelector:@selector(connectionFailed:)]){
+				[self.delegate performSelectorOnMainThread:@selector(connectionFailed:) withObject:self waitUntilDone:YES];
 			} else {
 				ATLogError(@"Orphaned connection. No delegate or nonresponsive delegate.");
 			}
@@ -228,10 +185,10 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
 	@synchronized (self) {
-		if (credential && [challenge previousFailureCount] == 0) {
-			[[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
+		if (self.credential && [challenge previousFailureCount] == 0) {
+			[[challenge sender] useCredential:self.credential forAuthenticationChallenge:challenge];
 		} else {
-			failedAuthentication = YES;
+			self.failedAuthentication = YES;
 			[[challenge sender] cancelAuthenticationChallenge:challenge];
 		}
 	}
@@ -242,9 +199,9 @@
 		self.failed = YES;
 		self.finished = YES;
 		self.executing = NO;
-		failedAuthentication = YES;
-		if (delegate && [delegate respondsToSelector:@selector(connectionFailed:)]){
-			[delegate performSelectorOnMainThread:@selector(connectionFailed:) withObject:self waitUntilDone:YES];
+		self.failedAuthentication = YES;
+		if (self.delegate && [self.delegate respondsToSelector:@selector(connectionFailed:)]){
+			[self.delegate performSelectorOnMainThread:@selector(connectionFailed:) withObject:self waitUntilDone:YES];
 		} else {
 			ATLogError(@"Orphaned connection. No delegate or nonresponsive delegate.");
 		}
@@ -252,9 +209,9 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite {
-	if (delegate && [delegate respondsToSelector:@selector(connectionDidProgress:)]) {
+	if (self.delegate && [self.delegate respondsToSelector:@selector(connectionDidProgress:)]) {
 		self.percentComplete = ((float)totalBytesWritten)/((float) totalBytesExpectedToWrite);
-		[delegate performSelectorOnMainThread:@selector(connectionDidProgress:) withObject:self waitUntilDone:YES];
+		[self.delegate performSelectorOnMainThread:@selector(connectionDidProgress:) withObject:self waitUntilDone:YES];
 	} else {
 		ATLogError(@"Orphaned connection. No delegate or nonresponsive delegate.");
 	}
@@ -270,17 +227,14 @@
 	}
 #endif
 #if TARGET_OS_MAC
-	if (request) {
-		r = request;
+	if (self.request) {
+		r = self.request;
 	}
 #endif
 	if (r != nil && [r cachePolicy] == NSURLRequestUseProtocolCachePolicy) {
-		if (responseHeaders) {
-			[responseHeaders release], responseHeaders = nil;
-		}
-		responseHeaders = [[httpResponse allHeaderFields] retain];
-		NSString *cacheControlHeader = [responseHeaders valueForKey:@"Cache-Control"];
-		NSString *expiresHeader = [responseHeaders valueForKey:@"Expires"];
+		self.responseHeaders = [httpResponse allHeaderFields];
+		NSString *cacheControlHeader = [self.responseHeaders valueForKey:@"Cache-Control"];
+		NSString *expiresHeader = [self.responseHeaders valueForKey:@"Expires"];
 		if ((cacheControlHeader == nil) && (expiresHeader == nil)) {
 			return nil;
 		}
@@ -290,7 +244,7 @@
 
 - (NSURLRequest *)connection:(NSURLConnection *)inConnection willSendRequest:(NSURLRequest *)inRequest redirectResponse: (NSURLResponse *)inRedirectResponse {
 	if (inRedirectResponse) {
-		NSMutableURLRequest *r = [[request mutableCopy] autorelease];
+		NSMutableURLRequest *r = [self.request mutableCopy];
 		[r setURL:[inRequest URL]];
 		return r;
 	} else {
@@ -300,13 +254,13 @@
 
 - (void)setExecuting:(BOOL)isExecuting {
 	[self willChangeValueForKey:@"isExecuting"];
-	executing = isExecuting;
+	_executing = isExecuting;
 	[self didChangeValueForKey:@"isExecuting"];
 }
 
 - (void)setFinished:(BOOL)isFinished {
 	[self willChangeValueForKey:@"isFinished"];
-	finished = isFinished;
+	_finished = isFinished;
 	[self didChangeValueForKey:@"isFinished"];
 }
 
@@ -314,49 +268,22 @@
 	
 }
 
-- (void)dealloc {
-	@synchronized (self) {
-		delegate = nil;
-		[request release], request = nil;
-		[targetURL release];
-		if (connection) {
-			[connection release];
-		}
-		[statusLine release], statusLine = nil;
-		[responseHeaders release], responseHeaders = nil;
-		[data release], data = nil;
-		
-		if (credential) {
-			[credential release];
-		}
-		if (connectionError) {
-			[connectionError release];
-		}
-		
-		[headers release];
-		[HTTPMethod release];
-		[HTTPBody release], HTTPBody = nil;
-		[HTTPBodyStream release], HTTPBodyStream = nil;
-	}
-	[super dealloc];
-}
-
 - (NSString *)requestAsString {
 	NSMutableString *result = [NSMutableString string];
-	[result appendFormat:@"%@ %@\n", HTTPMethod ? HTTPMethod : @"GET", [targetURL absoluteURL]];
-	for (NSString *key in headers) {
-		NSString *value = [headers valueForKey:key];
+	[result appendFormat:@"%@ %@\n", self.HTTPMethod ? self.HTTPMethod : @"GET", [self.targetURL absoluteURL]];
+	for (NSString *key in self.headers) {
+		NSString *value = [self.headers valueForKey:key];
 		[result appendFormat:@"%@: %@\n", key, value];
 	}
 	[result appendString:@"\n\n"];
-	if (HTTPBody) {
-		NSString *a = [[[NSString alloc] initWithData:HTTPBody encoding:NSUTF8StringEncoding] autorelease];
+	if (self.HTTPBody) {
+		NSString *a = [[NSString alloc] initWithData:self.HTTPBody encoding:NSUTF8StringEncoding];
 		if (a) {
 			[result appendString:a];
 		} else {
-			[result appendFormat:@"<Data of length:%ld>", (long)[HTTPBody length]];
+			[result appendFormat:@"<Data of length:%ld>", (long)[self.HTTPBody length]];
 		}
-	} else if (HTTPBodyStream) {
+	} else if (self.HTTPBodyStream) {
 		[result appendString:@"<NSInputStream>"];
 	}
 	return result;
@@ -376,7 +303,7 @@
 	} else {
 		[result appendString:@"<NO RESPONSE BODY>"];
 	}
-	[responseString release], responseString = nil;
+	responseString = nil;
 	return result;
 }
 @end
@@ -387,12 +314,12 @@
 		if (self.finished) {
 			return;
 		}
-		delegate = nil;
-		if (connection) {
-			[connection cancel];
+		self.delegate = nil;
+		if (self.connection) {
+			[self.connection cancel];
 		}
 		self.executing = NO;
-		cancelled = YES;
+		self.cancelled = YES;
 	}
 }
 @end

@@ -13,7 +13,7 @@
 @implementation ATInteractionInvocation
 
 + (ATInteractionInvocation *)invocationWithJSONDictionary:(NSDictionary *)jsonDictionary {
-	ATInteractionInvocation *invocation = [[[ATInteractionInvocation alloc] init] autorelease];
+	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
 	invocation.interactionID = jsonDictionary[@"interaction_id"];
 	invocation.priority = [jsonDictionary[@"priority"] integerValue];
 	invocation.criteria = jsonDictionary[@"criteria"];
@@ -160,7 +160,7 @@
 			}
 			NSCompoundPredicate *predicate = [[NSCompoundPredicate alloc] initWithType:NSNotPredicateType subpredicates:@[subPredicate]];
 			[predicates addObject:predicate];
-			[predicate release], predicate = nil;
+			predicate = nil;
 		} else {
 			NSString *equalitySymbol = nil;
 			BOOL isExists = NO;
@@ -238,7 +238,7 @@
 		if (!result) {
 			*hasError = YES;
 		}
-		return [result autorelease];
+		return result;
 	}
 }
 
@@ -264,7 +264,7 @@
 				[criteria addObject:criterion];
 			}
 			
-			NSPredicate *compoundPredicate = [[[NSCompoundPredicate alloc] initWithType:predicateType subpredicates:criteria] autorelease];
+			NSPredicate *compoundPredicate = [[NSCompoundPredicate alloc] initWithType:predicateType subpredicates:criteria];
 			[subPredicates addObject:compoundPredicate];
 		} else {
 			// Implicit "==" if object is a string/number
@@ -276,7 +276,7 @@
 		}
 	}
 	
-	NSPredicate *result = [[[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:subPredicates] autorelease];
+	NSPredicate *result = [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:subPredicates];
 	return result;
 }
 

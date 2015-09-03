@@ -14,13 +14,13 @@
 
 #define kATRecordRequestTaskCodingVersion 1
 
-@interface ATRecordRequestTask (Private)
-- (void)setup;
-- (void)teardown;
+@interface ATRecordRequestTask ()
+
+@property (strong, nonatomic) ATAPIRequest *request;
+
 @end
 
 @implementation ATRecordRequestTask
-@synthesize taskProvider;
 
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
@@ -32,7 +32,7 @@
 				ATLogError(@"Unarchived task can't be found in CoreData");
 				self.finished = YES;
 			} else if ([obj conformsToProtocol:@protocol(ATRequestTaskProvider)]) {
-				taskProvider = (NSObject<ATRequestTaskProvider> *)[obj retain];
+				_taskProvider = (NSObject<ATRequestTaskProvider> *)obj;
 			} else {
 				ATLogError(@"Unarchived task doesn't conform to ATRequestTaskProvider protocol.");
 				goto fail;
@@ -43,20 +43,18 @@
 	}
 	return self;
 fail:
-	[self release];
+	;
 	return nil;
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeInt:kATRecordRequestTaskCodingVersion forKey:@"version"];
-	NSURL *URL = [taskProvider managedObjectURIRepresentationForTask:self];
+	NSURL *URL = [self.taskProvider managedObjectURIRepresentationForTask:self];
 	[coder encodeObject:URL forKey:@"managedObjectURIRepresentation"];
 }
 
 - (void)dealloc {
-	[self teardown];
-	[taskProvider release], taskProvider = nil;
-	[super dealloc];
+	[self stop];
 }
 
 - (BOOL)canStart {
@@ -70,11 +68,11 @@ fail:
 }
 
 - (void)start {
-	if (!request) {
-		request = [[self.taskProvider requestForTask:self] retain];
-		if (request != nil) {
-			request.delegate = self;
-			[request start];
+	if (!self.request) {
+		self.request = [self.taskProvider requestForTask:self];
+		if (self.request != nil) {
+			self.request.delegate = self;
+			[self.request start];
 			self.inProgress = YES;
 		} else {
 			self.finished = YES;
@@ -83,17 +81,17 @@ fail:
 }
 
 - (void)stop {
-	if (request) {
-		request.delegate = nil;
-		[request cancel];
-		[request release], request = nil;
+	if (self.request) {
+		self.request.delegate = nil;
+		[self.request cancel];
+		self.request = nil;
 		self.inProgress = NO;
 	}
 }
 
 - (float)percentComplete {
-	if (request) {
-		return [request percentageComplete];
+	if (self.request) {
+		return [self.request percentageComplete];
 	} else {
 		return 0.0f;
 	}
@@ -104,13 +102,12 @@ fail:
 }
 
 - (void)cleanup {
-	[taskProvider cleanupAfterTask:self];
+	[self.taskProvider cleanupAfterTask:self];
 }
 
 #pragma mark ATAPIRequestDelegate
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(id)result {
 	@synchronized(self) {
-		[self retain];
 		
 		ATRecordRequestTaskResult taskResult = [self.taskProvider taskResultForTask:self withRequest:sender withResult:result];
 		switch (taskResult) {
@@ -122,7 +119,6 @@ fail:
 				break;
 		}
 		[self stop];
-		[self release];
 	}
 }
 
@@ -132,23 +128,11 @@ fail:
 
 - (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
 	@synchronized(self) {
-		[self retain];
 		self.failed = YES;
 		self.lastErrorTitle = sender.errorTitle;
 		self.lastErrorMessage = sender.errorMessage;
 		ATLogInfo(@"ATAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
 		[self stop];
-		[self release];
 	}
-}
-@end
-
-@implementation ATRecordRequestTask (Private)
-- (void)setup {
-	
-}
-
-- (void)teardown {
-	[self stop];
 }
 @end

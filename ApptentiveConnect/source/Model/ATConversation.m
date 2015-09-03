@@ -16,9 +16,6 @@
 #define kATConversationCodingVersion 1
 
 @implementation ATConversation
-@synthesize token;
-@synthesize personID;
-@synthesize deviceID;
 
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
@@ -30,12 +27,6 @@
 	return self;
 }
 
-- (void)dealloc {
-	[token release], token = nil;
-	[personID release], personID = nil;
-	[deviceID release], deviceID = nil;
-	[super dealloc];
-}
 
 - (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeInt:kATConversationCodingVersion forKey:@"version"];
@@ -90,14 +81,26 @@
 
 - (NSDictionary *)appReleaseJSON {
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
+	
 	NSString *appVersion = [ATUtilities appVersionString];
 	if (appVersion) {
 		result[@"version"] = appVersion;
 	}
+	
 	NSString *buildNumber = [ATUtilities buildNumberString];
 	if (buildNumber) {
 		result[@"build_number"] = buildNumber;
 	}
+	
+	NSString *appStoreReceiptFileName = [ATUtilities appStoreReceiptFileName];
+	if (appStoreReceiptFileName) {
+		NSDictionary *receiptInfo = @{@"file_name": appStoreReceiptFileName,
+									  @"has_receipt": @([ATUtilities appStoreReceiptExists]),
+									  };
+		
+		result[@"app_store_receipt"] = receiptInfo;
+	}
+
 	return result;
 }
 

@@ -18,7 +18,6 @@
 #import "ATInteractionUpgradeMessageViewController.h"
 #import "ATInteractionEnjoymentDialogController.h"
 #import "ATInteractionRatingDialogController.h"
-#import "ATInteractionFeedbackDialogController.h"
 #import "ATInteractionMessageCenterController.h"
 #import "ATInteractionAppStoreController.h"
 #import "ATInteractionSurveyController.h"
@@ -39,6 +38,8 @@ NSString *const ATEngagementInteractionsInvokesVersionKey = @"ATEngagementIntera
 NSString *const ATEngagementInteractionsInvokesLastDateKey = @"ATEngagementInteractionsInvokesLastDateKey";
 NSString *const ATEngagementInteractionsInvokesBuildKey = @"ATEngagementInteractionsInvokesBuildKey";
 
+NSString *const ATEngagementInteractionsSDKVersionKey = @"ATEngagementInteractionsSDKVersionKey";
+NSString *const ATEngagementInteractionsAppBuildNumberKey = @"ATEngagementInteractionsAppBuildNumberKey";
 NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEngagementCachedInteractionsExpirationPreferenceKey";
 
 NSString *const ATEngagementCodePointHostAppVendorKey = @"local";
@@ -46,7 +47,12 @@ NSString *const ATEngagementCodePointHostAppInteractionKey = @"app";
 NSString *const ATEngagementCodePointApptentiveVendorKey = @"com.apptentive";
 NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 
-@implementation ATEngagementBackend
+NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
+
+@implementation ATEngagementBackend {
+	NSMutableDictionary *_engagementTargets;
+	NSMutableDictionary *_engagementInteractions;
+}
 
 + (ATEngagementBackend *)sharedBackend {
 	static ATEngagementBackend *sharedBackend = nil;
@@ -90,40 +96,52 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 			}
 		}
 		
+		[self invalidateInteractionCacheIfNeeded];
+		
 		[self updateVersionInfo];
 	}
 	
 	return self;
 }
 
-- (void)dealloc {
-	[_engagementTargets release], _engagementTargets = nil;
-	[_engagementInteractions release], _engagementInteractions = nil;
+- (BOOL)invalidateInteractionCacheIfNeeded {
+	BOOL invalidateCache = NO;
 	
-	[super dealloc];
+#if APPTENTIVE_DEBUG
+	invalidateCache = YES;
+#endif
+	
+	NSString *previousBuild = [[NSUserDefaults standardUserDefaults] stringForKey:ATEngagementInteractionsAppBuildNumberKey];
+	if (![previousBuild isEqualToString:[ATUtilities buildNumberString]]) {
+		invalidateCache = YES;
+	}
+	
+	NSString *previousSDKVersion = [[NSUserDefaults standardUserDefaults] stringForKey:ATEngagementInteractionsSDKVersionKey];
+	if (![previousSDKVersion isEqualToString:kATConnectVersionString]) {
+		invalidateCache = YES;
+	}
+	
+	if (invalidateCache) {
+		[self invalidateInteractionCache];
+	}
+	
+	return invalidateCache;
+}
+
+- (void)invalidateInteractionCache {
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
 }
 
 - (void)checkForEngagementManifest {
 	if ([self shouldRetrieveNewEngagementManifest]) {
 		ATEngagementGetManifestTask *task = [[ATEngagementGetManifestTask alloc] init];
 		[[ATTaskQueue sharedTaskQueue] addTask:task];
-		[task release], task = nil;
+		task = nil;
 	}
 }
 
 - (BOOL)shouldRetrieveNewEngagementManifest {
-	
-	BOOL alwaysRetrieveManifest = NO;
-#if APPTENTIVE_DEBUG
-	alwaysRetrieveManifest = YES;
-#endif
-	if (alwaysRetrieveManifest) {
-		return YES;
-	}
-	
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	
-	NSDate *expiration = [defaults objectForKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
+	NSDate *expiration = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
 	if (expiration) {
 		NSDate *now = [NSDate date];
 		NSComparisonResult comparison = [expiration compare:now];
@@ -155,22 +173,33 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	ATLogInfo(@"Received remote Interactions from Apptentive.");
 	
 	@synchronized(self) {
-		[NSKeyedArchiver archiveRootObject:targets toFile:[ATEngagementBackend cachedTargetsStoragePath]];
-		[NSKeyedArchiver archiveRootObject:interactions toFile:[ATEngagementBackend cachedInteractionsStoragePath]];
+		if ([[ATBackend sharedBackend] supportDirectoryPath]) {
+			[NSKeyedArchiver archiveRootObject:targets toFile:[ATEngagementBackend cachedTargetsStoragePath]];
+			[NSKeyedArchiver archiveRootObject:interactions toFile:[ATEngagementBackend cachedInteractionsStoragePath]];
 		
-		if (expiresMaxAge > 0) {
-			NSDate *date = [NSDate dateWithTimeInterval:expiresMaxAge sinceDate:[NSDate date]];
-			NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-			[defaults setObject:date forKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
+			if (expiresMaxAge > 0) {
+				NSDate *date = [NSDate dateWithTimeInterval:expiresMaxAge sinceDate:[NSDate date]];
+				NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+				[defaults setObject:date forKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
+			}
+		
+			[_engagementTargets removeAllObjects];
+			[_engagementTargets addEntriesFromDictionary:targets];
+		
+			[_engagementInteractions removeAllObjects];
+			[_engagementInteractions addEntriesFromDictionary:interactions];
+		
+			NSString *buildNumber = [ATUtilities buildNumberString];
+			if ([ATUtilities buildNumberString]) {
+				[[NSUserDefaults standardUserDefaults] setObject:buildNumber forKey:ATEngagementInteractionsAppBuildNumberKey];
+			} else {
+				[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInteractionsAppBuildNumberKey];
+			}
+			
+			[[NSUserDefaults standardUserDefaults] setObject:kATConnectVersionString forKey:ATEngagementInteractionsSDKVersionKey];
+
+			[self updateVersionInfo];
 		}
-		
-		[_engagementTargets removeAllObjects];
-		[_engagementTargets addEntriesFromDictionary:targets];
-		
-		[_engagementInteractions removeAllObjects];
-		[_engagementInteractions addEntriesFromDictionary:interactions];
-		
-		[self updateVersionInfo];
 	}
 }
 
@@ -210,13 +239,13 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	return [[[ATBackend sharedBackend] supportDirectoryPath] stringByAppendingPathComponent:@"cachedinteractionsV2.objects"];
 }
 
-- (BOOL)willShowInteractionForLocalEvent:(NSString *)event {
+- (BOOL)canShowInteractionForLocalEvent:(NSString *)event {
 	NSString *codePoint = [[ATInteraction localAppInteraction] codePointForEvent:event];
 	
-	return [self willShowInteractionForCodePoint:codePoint];
+	return [self canShowInteractionForCodePoint:codePoint];
 }
 
-- (BOOL)willShowInteractionForCodePoint:(NSString *)codePoint {
+- (BOOL)canShowInteractionForCodePoint:(NSString *)codePoint {
 	ATInteraction *interaction = [[ATEngagementBackend sharedBackend] interactionForEvent:codePoint];
 	
 	return (interaction != nil);
@@ -268,7 +297,7 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	[escape replaceOccurrencesOfString:@"/" withString:@"%2F" options:NSLiteralSearch range:NSMakeRange(0, escape.length)];
 	[escape replaceOccurrencesOfString:@"#" withString:@"%23" options:NSLiteralSearch range:NSMakeRange(0, escape.length)];
 	
-	return [escape autorelease];
+	return escape;
 }
 
 + (NSString *)codePointForVendor:(NSString *)vendor interactionType:(NSString *)interactionType event:(NSString *)event {
@@ -356,26 +385,22 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	codePointInvokesTotal = @(codePointInvokesTotal.intValue + 1);
 	[codePointsInvokesTotal setObject:codePointInvokesTotal forKey:codePoint];
 	[defaults setObject:codePointsInvokesTotal forKey:ATEngagementCodePointsInvokesTotalKey];
-	[codePointsInvokesTotal release];
 	
 	NSMutableDictionary *codePointsInvokesVersion = [[defaults objectForKey:ATEngagementCodePointsInvokesVersionKey] mutableCopy];
 	NSNumber *codePointInvokesVersion = [codePointsInvokesVersion objectForKey:codePoint] ?: @0;
 	codePointInvokesVersion = @(codePointInvokesVersion.intValue + 1);
 	[codePointsInvokesVersion setObject:codePointInvokesVersion forKey:codePoint];
 	[defaults setObject:codePointsInvokesVersion forKey:ATEngagementCodePointsInvokesVersionKey];
-	[codePointsInvokesVersion release];
 	
 	NSMutableDictionary *codePointsInvokesBuild = [[defaults objectForKey:ATEngagementCodePointsInvokesBuildKey] mutableCopy];
 	NSNumber *codePointInvokesBuild = [codePointsInvokesBuild objectForKey:codePoint] ?: @0;
 	codePointInvokesBuild = @(codePointInvokesBuild.intValue + 1);
 	[codePointsInvokesBuild setObject:codePointInvokesBuild forKey:codePoint];
 	[defaults setObject:codePointsInvokesBuild forKey:ATEngagementCodePointsInvokesBuildKey];
-	[codePointsInvokesBuild release];
 	
 	NSMutableDictionary *codePointsInvokesTimeAgo = [[defaults objectForKey:ATEngagementCodePointsInvokesLastDateKey] mutableCopy];
 	[codePointsInvokesTimeAgo setObject:[NSDate date] forKey:codePoint];
 	[defaults setObject:codePointsInvokesTimeAgo forKey:ATEngagementCodePointsInvokesLastDateKey];
-	[codePointsInvokesTimeAgo release];
 }
 
 - (void)interactionWasSeen:(NSString *)interactionID {
@@ -418,26 +443,22 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	interactionInvokesTotal = @(interactionInvokesTotal.intValue + 1);
 	[interactionsInvokesTotal setObject:interactionInvokesTotal forKey:interaction.identifier];
 	[defaults setObject:interactionsInvokesTotal forKey:ATEngagementInteractionsInvokesTotalKey];
-	[interactionsInvokesTotal release];
 	
 	NSMutableDictionary *interactionsInvokesVersion = [[defaults objectForKey:ATEngagementInteractionsInvokesVersionKey] mutableCopy];
 	NSNumber *interactionInvokesVersion = [interactionsInvokesVersion objectForKey:interaction.identifier] ?: @0;
 	interactionInvokesVersion = @(interactionInvokesVersion.intValue +1);
 	[interactionsInvokesVersion setObject:interactionInvokesVersion forKey:interaction.identifier];
 	[defaults setObject:interactionsInvokesVersion forKey:ATEngagementInteractionsInvokesVersionKey];
-	[interactionsInvokesVersion release];
 	
 	NSMutableDictionary *interactionsInvokesBuild = [[defaults objectForKey:ATEngagementInteractionsInvokesBuildKey] mutableCopy];
 	NSNumber *interactionInvokesBuild = [interactionsInvokesBuild objectForKey:interaction.identifier] ?: @0;
 	interactionInvokesBuild = @(interactionInvokesBuild.intValue +1);
 	[interactionsInvokesBuild setObject:interactionInvokesBuild forKey:interaction.identifier];
 	[defaults setObject:interactionsInvokesBuild forKey:ATEngagementInteractionsInvokesBuildKey];
-	[interactionsInvokesBuild release];
 	
 	NSMutableDictionary *interactionsInvokesLastDate = [[defaults objectForKey:ATEngagementInteractionsInvokesLastDateKey] mutableCopy];
 	[interactionsInvokesLastDate setObject:[NSDate date] forKey:interaction.identifier];
 	[defaults setObject:interactionsInvokesLastDate forKey:ATEngagementInteractionsInvokesLastDateKey];
-	[interactionsInvokesLastDate release];
 }
 
 - (void)presentInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
@@ -453,6 +474,11 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 		return;
 	}
 	
+	if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive) {
+		// Only present interaction UI in Active state.
+		return;
+	}
+	
 	switch (interaction.interactionType) {
 		case ATInteractionTypeUpgradeMessage:
 			[self presentUpgradeMessageInteraction:interaction fromViewController:viewController];
@@ -462,9 +488,6 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 			break;
 		case ATInteractionTypeRatingDialog:
 			[self presentRatingDialogInteraction:interaction fromViewController:viewController];
-			break;
-		case ATInteractionTypeFeedbackDialog:
-			[self presentFeedbackDialogInteraction:interaction fromViewController:viewController];
 			break;
 		case ATInteractionTypeMessageCenter:
 			[self presentMessageCenterInteraction:interaction fromViewController:viewController];
@@ -497,34 +520,22 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	
 	ATInteractionUpgradeMessageViewController *upgradeMessage = [[ATInteractionUpgradeMessageViewController alloc] initWithInteraction:interaction];
 	[upgradeMessage presentFromViewController:viewController animated:YES];
-	[upgradeMessage release];
 }
 
 - (void)presentEnjoymentDialogInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
 	NSAssert([interaction.type isEqualToString:@"EnjoymentDialog"], @"Attempted to present an EnjoymentDialog interaction with an interaction of type: %@", interaction.type);
 
 	ATInteractionEnjoymentDialogController *enjoymentDialog = [[ATInteractionEnjoymentDialogController alloc] initWithInteraction:interaction];
-	[enjoymentDialog showEnjoymentDialogFromViewController:viewController];
+	[enjoymentDialog presentEnjoymentDialogFromViewController:viewController];
 	
-	[enjoymentDialog release];
 }
 
 - (void)presentRatingDialogInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
 	NSAssert([interaction.type isEqualToString:@"RatingDialog"], @"Attempted to present a RatingDialog interaction with an interaction of type: %@", interaction.type);
 	
 	ATInteractionRatingDialogController *ratingDialog = [[ATInteractionRatingDialogController alloc] initWithInteraction:interaction];
-	[ratingDialog showRatingDialogFromViewController:viewController];
+	[ratingDialog presentRatingDialogFromViewController:viewController];
 	
-	[ratingDialog release];
-}
-
-- (void)presentFeedbackDialogInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
-	NSAssert([interaction.type isEqualToString:@"FeedbackDialog"], @"Attempted to present a FeedbackDialog interaction with an interaction of type: %@", interaction.type);
-	
-	ATInteractionFeedbackDialogController *feedbackDialog = [[ATInteractionFeedbackDialogController alloc] initWithInteraction:interaction];
-	[feedbackDialog showFeedbackDialogFromViewController:viewController];
-	
-	[feedbackDialog release];
 }
 
 - (void)presentMessageCenterInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
@@ -532,8 +543,6 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	
 	ATInteractionMessageCenterController *messageCenter = [[ATInteractionMessageCenterController alloc] initWithInteraction:interaction];
 	[messageCenter showMessageCenterFromViewController:viewController];
-	
-	[messageCenter release];
 }
 
 - (void)presentAppStoreRatingInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
@@ -542,7 +551,6 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	ATInteractionAppStoreController *appStore = [[ATInteractionAppStoreController alloc] initWithInteraction:interaction];
 	[appStore openAppStoreFromViewController:viewController];
 	
-	[appStore release];
 }
 
 - (void)presentSurveyInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
@@ -551,7 +559,6 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	ATInteractionSurveyController *survey = [[ATInteractionSurveyController alloc] initWithInteraction:interaction];
 	[survey showSurveyFromViewController:viewController];
 	
-	[survey release];
 }
 
 - (void)presentTextModalInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
@@ -560,7 +567,6 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 	ATInteractionTextModalController *textModal = [[ATInteractionTextModalController alloc] initWithInteraction:interaction];
 	[textModal presentTextModalAlertFromViewController:viewController];
 
-	[textModal release];
 }
 
 

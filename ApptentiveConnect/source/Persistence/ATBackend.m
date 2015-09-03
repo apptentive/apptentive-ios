@@ -538,6 +538,10 @@ static NSURLCache *imageCache = nil;
 	
 	if (!viewController) {
 		ATLogError(@"Attempting to present Apptentive Message Center from a nil View Controller.");
+		return NO;
+	} else if (viewController.presentedViewController) {
+		ATLogError(@"Attempting to present Apptentive Message Center from View Controller that is already presenting a modal view controller");
+		return NO;
 	}
 	
 	if (self.presentedMessageCenterViewController != nil) {

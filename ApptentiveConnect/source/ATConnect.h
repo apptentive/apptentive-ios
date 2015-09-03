@@ -13,7 +13,7 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
-#define kATConnectVersionString @"1.7.3"
+#define kATConnectVersionString @"2.0.0"
 
 #if TARGET_OS_IPHONE
 #	define kATConnectPlatformString @"iOS"
@@ -21,6 +21,8 @@
 #	define kATConnectPlatformString @"Mac OS X"
 @class ATFeedbackWindowController;
 #endif
+
+@protocol ATConnectDelegate;
 
 /** Notification sent when Message Center unread messages count changes. */
 extern NSString *const ATMessageCenterUnreadCountChangedNotification;
@@ -40,30 +42,32 @@ extern NSString *const ATSurveySentNotification;
  */
 extern NSString *const ATSurveyIDKey;
 
-/** Keys for supported 3rd-party integrations. */
-extern NSString *const ATIntegrationKeyUrbanAirship;
-extern NSString *const ATIntegrationKeyKahuna;
-extern NSString *const ATIntegrationKeyAmazonSNS;
-extern NSString *const ATIntegrationKeyParse;
+/** Supported Push Providers for use in `setPushNotificationIntegration:withDeviceToken:` */
+typedef NS_ENUM(NSInteger, ATPushProvider){
+	ATPushProviderApptentive,
+	ATPushProviderUrbanAirship,
+	ATPushProviderAmazonSNS,
+	ATPushProviderParse,
+};
 
 /**
  `ATConnect` is a singleton which is used as the main point of entry for the Apptentive service.
  
  ## Configuration
  
- On first use, you'll want to set the API key, you'd do that like so:
+Before calling any other methods on the shared `ATConnect` instance, set the API key:
  
- [[ATConnect sharedConnection].apiKey = @"your API key here";
+     [[ATConnect sharedConnection].apiKey = @"your API key here";
  
  ## Engagement Events
  
  The Ratings Prompt and other Apptentive interactions are targeted to certain Apptentive events. For example,
- you could decide to show the Ratings Prompt at the event user_completed_level. You can then, later,
- reconfigure the Ratings Prompt interaction to show at user_logged_in.
+ you could decide to show the Ratings Prompt after an event named "user_completed_level" has been engaged.
+ You can later reconfigure the Ratings Prompt interaction to instead show after engaging "user_logged_in".
  
  You would add calls at these points to optionally engage with the user:
  
- [[ATConnect sharedConnection] engage:@"completed_level" fromViewController:viewController];
+     [[ATConnect sharedConnection] engage:@"completed_level" fromViewController:viewController];
  
  See the readme for more information.
  
@@ -84,32 +88,17 @@ extern NSString *const ATIntegrationKeyParse;
  Sent when a survey is submitted by the user. The userInfo dictionary will have a key named `ATSurveyIDKey`,
  with a value of the id of the survey that was sent.
  
- ## 3rd Party Integration
+ ## Integrations
  
- There are two constant keys for currently supported third party integrations:
+ Keys for currently supported integrations:
  
+ * `ATIntegrationKeyApptentive` - For Apptentive Push
  * `ATIntegrationKeyUrbanAirship` - For Urban Airship
  * `ATIntegrationKeyAmazonSNS` - For Amazon SNS
  * `ATIntegrationKeyKahuna` - For Kahuna
  * `ATIntegrationKeyParse` - For Parse
  */
-@interface ATConnect : NSObject {
-@private
-#if TARGET_OS_IPHONE
-    UIColor *tintColor;
-#elif TARGET_OS_MAC
-    ATFeedbackWindowController *feedbackWindowController;
-#endif
-    NSMutableDictionary *customPersonData;
-    NSMutableDictionary *customDeviceData;
-    NSMutableDictionary *integrationConfiguration;
-    NSString *apiKey;
-    BOOL showEmailField;
-    NSString *initialUserName;
-    NSString *initialUserEmailAddress;
-    NSString *customPlaceholderText;
-    BOOL useMessageCenter;
-}
+@interface ATConnect : NSObject
 
 ///---------------------------------
 /// @name Basic Usage
@@ -131,6 +120,8 @@ extern NSString *const ATIntegrationKeyParse;
 /** The shared singleton of `ATConnect`. */
 + (ATConnect *)sharedConnection;
 
+/** An object conforming to the `ATConnectDelegate` protocol */
+@property (nonatomic, weak) id<ATConnectDelegate> delegate;
 
 ///---------------------------------
 /// @name Interface Customization
@@ -139,24 +130,6 @@ extern NSString *const ATIntegrationKeyParse;
 @property (nonatomic, assign) BOOL showEmailField;
 /** Set this if you want some custom text to appear as a placeholder in the feedback text box. */
 @property (nonatomic, copy) NSString *customPlaceholderText;
-/**
- Set this to NO if you don't want to use Message Center, and instead just want unidirectional in-app feedback.
- 
- Deprecated in 1.1.1 in favor of server-based configuration of Message Center.
- */
-@property (nonatomic, assign) BOOL useMessageCenter DEPRECATED_ATTRIBUTE;
-/**
- Set this to NO to disable Message Center locally on the first launch of your app.
- 
- @note This setting will be overridden by server-based configuration when it is downloaded.
- */
-@property (nonatomic, assign) BOOL initiallyUseMessageCenter;
-/**
- Set this to NO to hide Apptentive branding locally on the first launch of your app.
- 
- @note This setting will be overridden by server-based configuration when it is downloaded.
- */
-@property (nonatomic, assign) BOOL initiallyHideBranding;
 #if TARGET_OS_IPHONE
 /**
  A tint color to use in Apptentive-specific UI.
@@ -164,9 +137,8 @@ extern NSString *const ATIntegrationKeyParse;
  Overrides the default tintColor acquired from your app, in case you're using one that doesn't look great
  with Apptentive-specific UI.
  */
-@property (nonatomic, retain) UIColor *tintColor;
+@property (nonatomic, strong) UIColor *tintColor;
 #endif
-
 
 #if TARGET_OS_IPHONE
 
@@ -175,26 +147,61 @@ extern NSString *const ATIntegrationKeyParse;
 ///--------------------
 
 /**
- Presents Message Center from a given view controller.
+ Determines if Message Center will be displayed when `presentMessageCenterFromViewController:` is called.
  
- @param viewController The view controller to present the Message Center from.
+ If app has not yet synced with Apptentive, you will be unable to display Message Center. Use `canShowMessageCenter`
+ to determine if Message Center is ready to be displayed. If Message Center is not ready you could, for example,
+ hide the "Message Center" button in your interface.
+ **/
+
+- (BOOL)canShowMessageCenter;
+
+/**
+ Presents Message Center modally from the specified view controller.
+ 
+ If the SDK has yet to sync with the Apptentive server, this method returns NO and displays a
+ "We're attempting to connect" view in place of Message Center.
+ 
+ @param viewController The view controller from which to present Message Center.
+ 
+ @return `YES` if Message Center was presented, `NO` otherwise.
  */
-- (void)presentMessageCenterFromViewController:(UIViewController *)viewController;
+- (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController;
 
 /**
  Presents Message Center from a given view controller with custom data.
  
- @param viewController The view controller to present the Message Center from.
+ If the SDK has yet to sync with the Apptentive server, this method returns NO and displays a
+ "We're attempting to connect" view in place of Message Center.
+ 
+ @param viewController The view controller from which to present Message Center.
  @param customData A dictionary of key/value pairs to be associated with any messages sent via Message Center.
+ 
+ @return `YES` if Message Center was presented, `NO` otherwise.
  */
-- (void)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
+- (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
 
 /**
  Returns the current number of unread messages in Message Center.
  
  These are the messages sent via the Apptentive website to this user.
+ 
+ @return The number of unread messages.
  */
 - (NSUInteger)unreadMessageCount;
+
+
+/**
+ Returns a "badge" than can be used as a UITableViewCell accessoryView to indicate the current number of unread messages.
+ 
+ To keep this value updated, your view controller will must register for `ATMessageCenterUnreadCountChangedNotification`
+ and reload the table view cell when a notification is received.
+ 
+ @param apptentiveHeart A Boolean value indicating whether to include a heart logo adjacent to the number.
+ 
+ @return A badge view suitable for use as a table view cell accessory view.
+ */
+- (UIView *)unreadMessageCountAccessoryView:(BOOL)apptentiveHeart;
 
 /**
  Forwards a push notification from your application delegate to Apptentive Connect.
@@ -207,14 +214,20 @@ extern NSString *const ATIntegrationKeyParse;
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController;
 
 /**
- Returns YES if engaging the given event will cause an Interaction to be shown, otherwise returns NO.
+ Deprecated in 2.0.0 in favor of the better-named `canShowInteractionForEvent:`
+ */
+- (BOOL)willShowInteractionForEvent:(NSString *)event DEPRECATED_ATTRIBUTE;
+
+/**
+Returns a Boolean value indicating whether the given event will cause an Interaction to be shown.
  
- For example, returns YES if a survey is ready to be shown the next time you engage your survey-targeted event.
- You can use this method to hide a "Show Survey" button in your app if there is no survey to take.
+ For example, returns YES if a survey is ready to be shown the next time you engage your survey-targeted event. You can use this method to hide a "Show Survey" button in your app if there is no survey to take.
  
  @param event A string representing the name of the event.
+ 
+ @return `YES` if the event will show an interaction, `NO` otherwise.
  */
-- (BOOL)willShowInteractionForEvent:(NSString *)event;
+- (BOOL)canShowInteractionForEvent:(NSString *)event;
 
 /**
  Shows interaction UI, if applicable, related to a given event.
@@ -222,37 +235,43 @@ extern NSString *const ATIntegrationKeyParse;
  For example, if you have an upgrade message to display on app launch, you might call with event label set to
  `@"app.launch"` here, along with the view controller an upgrade message might be displayed from.
  
- Returns whether or not an interaction was successfully found and run.
- 
  @param event A string representing the name of the event.
  @param viewController A view controller Apptentive UI may be presented from.
+ 
+ @return `YES` if an interaction was triggered by the event, `NO` otherwise.
  */
 - (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController;
 
 /**
- Engages an event along with custom data about that event. Interaction UI may be shown, if applicable, for the event.
+ Shows interaction UI, if applicable, related to a given event, and attaches the specified custom data to the event.
  
  @param event A string representing the name of the event.
  @param customData A dictionary of key/value pairs to be associated with the event. Keys and values should conform to standards of NSJSONSerialization's `isValidJSONObject:`.
  @param viewController A view controller Apptentive UI may be presented from.
- */
+
+ @return `YES` if an interaction was triggered by the event, `NO` otherwise.
+*/
 - (BOOL)engage:(NSString *)event withCustomData:(NSDictionary *)customData fromViewController:(UIViewController *)viewController;
 
 /**
- Engages an event along with custom data and extended data about that event. Interaction UI may be shown, if applicable, for the event.
+ Shows interaction UI, if applicable, related to a given event. Attaches the specified custom data to the event along with the specified extended data.
  
  @param event A string representing the name of the event.
  @param customData A dictionary of key/value pairs to be associated with the event. Keys and values should conform to standards of NSJSONSerialization's `isValidJSONObject:`.
  @param extendedData An array of dictionaries with specific Apptentive formatting. For example, [ATConnect extendedDataDate:[NSDate date]].
  @param viewController A view controller Apptentive UI may be presented from.
+ 
+ @return `YES` if an interaction was triggered by the event, `NO` otherwise.
  */
 - (BOOL)engage:(NSString *)event withCustomData:(NSDictionary *)customData withExtendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController;
 
 /**
- Dismisses the message center. You normally won't need to call this.
+ Dismisses Message Center.
  
  @param animated `YES` to animate the dismissal, otherwise `NO`.
  @param completion A block called at the conclusion of the message center being dismissed.
+ 
+ @discussion Under normal circumstances, Message Center will be dismissed by the user tapping the Close button, so it is not necessary to call this method.
  */
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion;
 
@@ -274,22 +293,26 @@ extern NSString *const ATIntegrationKeyParse;
 ///--------------------
 
 /**
- Extended data dictionary representing a point in time, to be included in an event's extended data.
+ Used to specify a point in time in an event's extended data.
  
  @param date A date and time to be included in an event's extended data.
+ 
+ @return An extended data dictionary representing a point in time, to be included in an event's extended data.
  */
 + (NSDictionary *)extendedDataDate:(NSDate *)date;
 
 /**
- Extended data dictionary representing a location, to be included in an event's extended data.
+ Used to specify a geographic coordinate in an event's extended data.
  
  @param latitude A location's latitude coordinate.
  @param longitude A location's longitude coordinate.
+ 
+ @return An extended data dictionary representing a geographic coordinate, to be included in an event's extended data.
  */
 + (NSDictionary *)extendedDataLocationForLatitude:(double)latitude longitude:(double)longitude;
 
 /**
- Extended data dictionary representing a commerce transaction, to be included in an event's extended data.
+ Used to specify a commercial transaction (incorporating multiple items) in an event's extended data.
  
  @param transactionID The transaction's ID.
  @param affiliation The store or affiliation from which this transaction occurred.
@@ -298,17 +321,19 @@ extern NSString *const ATIntegrationKeyParse;
  @param tax Tax on the transaction.
  @param currency Currency for revenue/shipping/tax values.
  @param commerceItems An array of commerce items contained in the transaction. Create commerce items with [ATConnect extendedDataCommerceItem...].
- */
+ 
+ @return An extended data dictionary representing a commerce transaction, to be included in an event's extended data.
+  */
 + (NSDictionary *)extendedDataCommerceWithTransactionID:(NSString *)transactionID
-                                            affiliation:(NSString *)affiliation
-                                                revenue:(NSNumber *)revenue
-                                               shipping:(NSNumber *)shipping
-                                                    tax:(NSNumber *)tax
-                                               currency:(NSString *)currency
-                                          commerceItems:(NSArray *)commerceItems;
+											affiliation:(NSString *)affiliation
+												revenue:(NSNumber *)revenue
+											   shipping:(NSNumber *)shipping
+													tax:(NSNumber *)tax
+											   currency:(NSString *)currency
+										  commerceItems:(NSArray *)commerceItems;
 
 /**
- Extended data dictionary representing a single item in a commerce transaction, to be included in an event's extended data.
+ Used to specify a commercial transaction (consisting of a single item) in an event's extended data.
  
  @param itemID The transaction item's ID.
  @param name The transaction item's name.
@@ -316,13 +341,15 @@ extern NSString *const ATIntegrationKeyParse;
  @param price The individual item price.
  @param quantity The number of units purchased.
  @param currency Currency for price.
+ 
+ @return An extended data dictionary representing a single item in a commerce transaction, to be included in an event's extended data.
  */
 + (NSDictionary *)extendedDataCommerceItemWithItemID:(NSString *)itemID
-                                                name:(NSString *)name
-                                            category:(NSString *)category
-                                               price:(NSNumber *)price
-                                            quantity:(NSNumber *)quantity
-                                            currency:(NSString *)currency;
+												name:(NSString *)name
+											category:(NSString *)category
+											   price:(NSNumber *)price
+											quantity:(NSNumber *)quantity
+											currency:(NSString *)currency;
 
 
 ///-------------------------------------
@@ -361,10 +388,10 @@ extern NSString *const ATIntegrationKeyParse;
 /// @name Add Custom Device or Person Data
 ///---------------------------------------
 
-/** The initial name of the app user when communicating with Apptentive. */
-@property (nonatomic, copy) NSString *initialUserName;
-/** The initial email address of the app user in form fields and communicating with Apptentive. */
-@property (nonatomic, copy) NSString *initialUserEmailAddress;
+/** The name of the app user when communicating with Apptentive. */
+@property (nonatomic, copy) NSString *personName;
+/** The email address of the app user in form fields and communicating with Apptentive. */
+@property (nonatomic, copy) NSString *personEmailAddress;
 
 /**
  Adds custom data associated with the current person.
@@ -435,51 +462,27 @@ extern NSString *const ATIntegrationKeyParse;
 - (void)openAppStore;
 
 ///------------------------------------
-/// @name Integrate With Other Services
+/// @name Add Push Notifications
 ///------------------------------------
 
 /**
- Adds a custom configuration for a 3rd-party integration service.
+ Register for Push Notifications with the given service provider.
  
- @param integration The name of the integration.
- @param configuration The service-specific configuration keys and values.
- */
-- (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration;
+ Uses the `deviceToken` from `application:didRegisterForRemoteNotificationsWithDeviceToken:`
+ 
+ Only one Push Notification Integration can be added at a time. Setting a Push Notification
+ Integration removes all previously set Push Notification Integrations.
+ 
+ @param pushProvider The Push Notification provider with which to register.
+ @param deviceToken The device token used to send Remote Notifications.
+ **/
 
-/**
- Adds a device token for a 3rd-party integration service.
- 
- @param integration The name of the integration.
- @param deviceToken The device token expected by the integration.
- */
-- (void)addIntegration:(NSString *)integration withDeviceToken:(NSData *)deviceToken;
+- (void)setPushNotificationIntegration:(ATPushProvider)pushProvider withDeviceToken:(NSData *)deviceToken;
 
-/**
- Removes a 3rd-party integration with the given name.
- 
- @param integration The name of the integration.
- */
-- (void)removeIntegration:(NSString *)integration;
+@end
 
-/**
- Adds Urban Airship integration with the given device token.
- 
- @param deviceToken The device token expected by Urban Airship.
- */
-- (void)addUrbanAirshipIntegrationWithDeviceToken:(NSData *)deviceToken;
-
-/**
- Adds Amazon Web Services (AWS) Simple Notification Service (SNS) integration with the given device token.
- 
- @param deviceToken The device token expected by AWS SNS.
- */
-- (void)addAmazonSNSIntegrationWithDeviceToken:(NSData *)deviceToken;
-
-/**
- Adds Parse integration with the given device token.
- 
- @param deviceToken The device token expected by Parse.
- */
-- (void)addParseIntegrationWithDeviceToken:(NSData *)deviceToken;
+@protocol ATConnectDelegate <NSObject>
+@optional
+- (UIViewController *)viewControllerForInteractionsWithConnection:(ATConnect *)connection;
 
 @end

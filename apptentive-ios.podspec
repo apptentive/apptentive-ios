@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.source_files   = 'ApptentiveConnect/source/**/*.{h,m}','ApptentiveConnect/ext/**/*.{h,m}'
   s.requires_arc = true
   s.frameworks     = 'Accelerate', 'AssetsLibrary', 'CoreGraphics', 'Foundation', 'QuartzCore', 'SystemConfiguration', 'UIKit', 'CoreData', 'CoreText'
-  s.resource_bundle = { 'ApptentiveResources' => ['ApptentiveConnect/source/Model/*.xcdatamodeld', 'ApptentiveConnect/source/**/*.storyboard', 'ApptentiveConnect/resources/localization/*.lproj','ApptentiveConnect/art/generated/**/*.*', 'ApptentiveConnect/resources/CocoaPodsResources/Info.plist'] }
+  s.resource_bundle = { 'ApptentiveResources' => ['ApptentiveConnect/source/Model/*.xcdatamodeld', 'ApptentiveConnect/source/**/*.storyboard', 'ApptentiveConnect/resources/localization/*.lproj', 'ApptentiveConnect/resources/Images.xcassets', 'ApptentiveConnect/resources/CocoaPodsResources/Info.plist'] }
   s.weak_frameworks = 'StoreKit', 'CoreTelephony'
   s.prefix_header_contents = '#import "ATLog.h"'
   s.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "AT_LOGGING_LEVEL_ERROR=1" }

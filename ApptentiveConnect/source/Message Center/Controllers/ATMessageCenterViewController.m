@@ -617,6 +617,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	if (NSClassFromString(@"UIAlertController")) {
 		UIAlertController *alertController = [UIAlertController alertControllerWithTitle:self.interaction.composerCloseConfirmBody message:nil preferredStyle:UIAlertControllerStyleActionSheet];
 		
+		if ([ATConnect sharedConnection].tintColor) {
+			alertController.view.tintColor = [ATConnect sharedConnection].tintColor;
+		}
+		
 		[alertController addAction:[UIAlertAction actionWithTitle:self.interaction.composerCloseCancelButtonTitle style:UIAlertActionStyleCancel handler:nil]];
 		[alertController addAction:[UIAlertAction actionWithTitle:self.interaction.composerCloseDiscardButtonTitle style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
 			[self discardDraft];

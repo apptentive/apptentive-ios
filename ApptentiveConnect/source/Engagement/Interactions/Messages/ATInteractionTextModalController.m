@@ -10,6 +10,7 @@
 #import "ATUtilities.h"
 #import "ATInteractionInvocation.h"
 #import "ATEngagementBackend.h"
+#import "ATConnect.h"
 
 NSString *const ATInteractionTextModalEventLabelLaunch = @"launch";
 NSString *const ATInteractionTextModalEventLabelCancel = @"cancel";
@@ -40,6 +41,10 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 		self.alertController = [self alertControllerWithInteraction:self.interaction];
 		
 		if (self.alertController) {
+			if ([ATConnect sharedConnection].tintColor) {
+				self.alertController.view.tintColor = [ATConnect sharedConnection].tintColor;
+			}
+			
 			[viewController presentViewController:self.alertController animated:YES completion:^{
 				[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:self.viewController];
 			}];

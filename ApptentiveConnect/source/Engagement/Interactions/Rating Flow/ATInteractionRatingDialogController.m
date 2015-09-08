@@ -74,6 +74,10 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 		self.alertController = [self alertControllerWithInteraction:self.interaction];
 		
 		if (self.alertController) {
+			if ([ATConnect sharedConnection].tintColor) {
+				self.alertController.view.tintColor = [ATConnect sharedConnection].tintColor;
+			}
+			
 			[viewController presentViewController:self.alertController animated:YES completion:^{
 				[self.interaction engage:ATInteractionRatingDialogEventLabelLaunch fromViewController:self.viewController];
 			}];

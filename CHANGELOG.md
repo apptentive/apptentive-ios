@@ -1,3 +1,10 @@
+2015-09-08 pkamb, frankus v2.0.1
+--------------------------------
+
+Version 2.0.1 contains fixes for our CocoaPods release, which was not working correctly with 2.0.0.
+
+Please use 2.0.1 with CocoaPods for the new Message Center and ARC changes. Non-CocoaPods builds can continue to use 2.0.0, or upgrade to 2.0.1.
+
 2015-09-02 pkamb, frankus v2.0.0
 --------------------------------
 

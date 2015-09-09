@@ -181,7 +181,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		self.profileView.skipButton.hidden = self.interaction.profileRequired;
 		[self validateWho:self];
 
-		if (self.interaction.profileRequired) {
+		if (self.interaction.profileRequired && [self shouldShowProfileViewBeforeComposing:YES]) {
 			self.profileView.skipButton.hidden = YES;
 			self.profileView.mode = ATMessageCenterProfileModeCompact;
 			

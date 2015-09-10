@@ -47,15 +47,6 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 	}
 }
 
-- (instancetype)init
-{
-	self = [super init];
-	if (self) {
-		[self commonInit];
-	}
-	return self;
-}
-
 - (id)initWithCoder:(NSCoder *)coder {
 	self = [super init];
 	
@@ -63,8 +54,6 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 		_apptentiveID = (NSString *)[coder decodeObjectForKey:@"apptentiveID"];
 		_name = (NSString *)[coder decodeObjectForKey:@"name"];
 		_emailAddress = (NSString *)[coder decodeObjectForKey:@"emailAddress"];
-		
-		[self commonInit];
 	}
 	
 	return self;
@@ -85,15 +74,19 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 		_apptentiveID = [json at_safeObjectForKey:@"id"];
 		_name = [json at_safeObjectForKey:@"name"];
 		_emailAddress = [json at_safeObjectForKey:@"email"];
-		
-		[self commonInit];
 	}
 	
 	return self;
 }
 
-- (void)dealloc {
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
+- (void)setName:(NSString *)name {
+	_name  = name;
+	[self save];
+}
+
+- (void)setEmailAddress:(NSString *)emailAddress {
+	_emailAddress = emailAddress;
+	[self save];
 }
 
 #pragma mark - Persistence
@@ -124,12 +117,7 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 
 #pragma mark - Private
 
-- (void)commonInit {
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(save:) name:UIApplicationWillTerminateNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(save:) name:UIApplicationDidEnterBackgroundNotification object:nil];
-}
-
-- (void)save:(NSNotification *)notification {
+- (void)save {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSData *personData = [NSKeyedArchiver archivedDataWithRootObject:self];
 	

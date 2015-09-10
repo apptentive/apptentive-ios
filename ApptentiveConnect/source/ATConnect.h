@@ -214,7 +214,11 @@ Before calling any other methods on the shared `ATConnect` instance, set the API
 
 /**
  Deprecated in 2.0.0 in favor of the better-named `canShowInteractionForEvent:`
- */
+
+ @param event A string representing the name of the event.
+
+ @return `YES` if the event will show an interaction, `NO` otherwise.
+*/
 - (BOOL)willShowInteractionForEvent:(NSString *)event DEPRECATED_ATTRIBUTE;
 
 /**
@@ -319,7 +323,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  @param shipping The transaction's shipping cost.
  @param tax Tax on the transaction.
  @param currency Currency for revenue/shipping/tax values.
- @param commerceItems An array of commerce items contained in the transaction. Create commerce items with [ATConnect extendedDataCommerceItem...].
+ @param commerceItems An array of commerce items contained in the transaction. Create commerce items with [ATConnect extendedDataCommerceItemWithItemID:name:category:price:quantity:currency:].
  
  @return An extended data dictionary representing a commerce transaction, to be included in an event's extended data.
   */

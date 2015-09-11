@@ -49,6 +49,10 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	NSMutableDictionary *_integrationConfiguration;
 }
 
++ (void)load {
+	[UINavigationBar appearanceWhenContainedIn:[ATNavigationController class], nil].barTintColor = [UIColor whiteColor];
+}
+
 + (ATConnect *)sharedConnection {
 	static ATConnect *sharedConnection = nil;
 	static dispatch_once_t onceToken;
@@ -95,6 +99,14 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (void)setPersonEmailAddress:(NSString *)personEmailAddress {
 	[ATPersonInfo currentPerson].emailAddress = personEmailAddress;
+}
+
+- (UIColor *)tintColor {
+	return [UIView appearanceWhenContainedIn:[ATNavigationController class], nil].tintColor;
+}
+
+- (void)setTintColor:(UIColor *)tintColor {
+	[UIView appearanceWhenContainedIn:[ATNavigationController class], nil].tintColor = tintColor;
 }
 
 - (void)sendAttachmentText:(NSString *)text {
@@ -528,6 +540,10 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	}
 }
 
+@end
+
+@implementation ATNavigationController
+// Container to allow customization of Apptentive UI using UIAppearance
 @end
 
 NSString *ATLocalizedString(NSString *key, NSString *comment) {

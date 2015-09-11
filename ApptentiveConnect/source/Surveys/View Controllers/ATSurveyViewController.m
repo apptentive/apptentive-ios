@@ -201,11 +201,6 @@ enum {
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
-	if ([ATConnect sharedConnection].tintColor) {
-		self.navigationController.view.tintColor = [ATConnect sharedConnection].tintColor;
-		self.view.tintColor = [ATConnect sharedConnection].tintColor;
-	}
-	
 	if (![self.survey responseIsRequired]) {
 		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
 	}

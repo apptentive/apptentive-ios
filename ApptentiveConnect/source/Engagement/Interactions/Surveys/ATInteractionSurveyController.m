@@ -36,7 +36,7 @@ NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 	
 	ATSurveyViewController *vc = [[ATSurveyViewController alloc] initWithSurvey:survey];
 	vc.interaction = self.interaction;
-	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
+	ATNavigationController *nc = [[ATNavigationController alloc] initWithRootViewController:vc];
 	
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
 		nc.modalPresentationStyle = UIModalPresentationFormSheet;

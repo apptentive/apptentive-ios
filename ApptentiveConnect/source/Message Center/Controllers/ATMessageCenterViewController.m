@@ -112,14 +112,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
     [super viewDidLoad];
 	
-	if ([ATConnect sharedConnection].tintColor) {
-		self.view.tintColor = [ATConnect sharedConnection].tintColor;
-		self.navigationController.view.tintColor = [ATConnect sharedConnection].tintColor;
-	}
-	
 	[self.interaction engage:ATInteractionMessageCenterEventLabelLaunch fromViewController:self];
 	
-	self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
 	[self.navigationController.toolbar addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(compose:)]];
 	
 	self.navigationItem.rightBarButtonItem.title = ATLocalizedString(@"Close", @"Button that closes Message Center.");
@@ -616,10 +610,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	if (NSClassFromString(@"UIAlertController")) {
 		UIAlertController *alertController = [UIAlertController alertControllerWithTitle:self.interaction.composerCloseConfirmBody message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-		
-		if ([ATConnect sharedConnection].tintColor) {
-			alertController.view.tintColor = [ATConnect sharedConnection].tintColor;
-		}
 		
 		[alertController addAction:[UIAlertAction actionWithTitle:self.interaction.composerCloseCancelButtonTitle style:UIAlertActionStyleCancel handler:nil]];
 		[alertController addAction:[UIAlertAction actionWithTitle:self.interaction.composerCloseDiscardButtonTitle style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {

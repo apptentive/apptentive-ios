@@ -521,8 +521,25 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
 @end
 
+/**
+ The `ATConnectDelegate` protocol allows your app to override the default behavior when
+ the Message Center is launched from an incoming push notification. In most cases the 
+ default behavior (which walks the view controller stack from the main window's root view
+ controller) will work, but if your app features custom container view controllers, it may
+ behave unexpectedly. In that case an object in your app should implement the 
+ `ATConnectDelegate` protocol's `-viewControllerForInteractionsWithConnection:` method
+ and return the view controller from which to present the Message Center interaction. 
+ */
 @protocol ATConnectDelegate <NSObject>
 @optional
+
+/**
+ Returns a view controller from which to present the MessageCenter interaction. 
+ 
+ @param connection The `ATConnect` object that is requesting a view controller to present from.
+ 
+ @return The view controller your app would like the interaction to be presented from.
+ */
 - (UIViewController *)viewControllerForInteractionsWithConnection:(ATConnect *)connection;
 
 @end

@@ -215,7 +215,11 @@ Before calling any other methods on the shared `ATConnect` instance, set the API
 
 /**
  Deprecated in 2.0.0 in favor of the better-named `canShowInteractionForEvent:`
- */
+
+ @param event A string representing the name of the event.
+
+ @return `YES` if the event will show an interaction, `NO` otherwise.
+*/
 - (BOOL)willShowInteractionForEvent:(NSString *)event DEPRECATED_ATTRIBUTE;
 
 /**
@@ -320,7 +324,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  @param shipping The transaction's shipping cost.
  @param tax Tax on the transaction.
  @param currency Currency for revenue/shipping/tax values.
- @param commerceItems An array of commerce items contained in the transaction. Create commerce items with [ATConnect extendedDataCommerceItem...].
+ @param commerceItems An array of commerce items contained in the transaction. Create commerce items with [ATConnect extendedDataCommerceItemWithItemID:name:category:price:quantity:currency:].
  
  @return An extended data dictionary representing a commerce transaction, to be included in an event's extended data.
   */
@@ -481,8 +485,25 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
 @end
 
+/**
+ The `ATConnectDelegate` protocol allows your app to override the default behavior when
+ the Message Center is launched from an incoming push notification. In most cases the 
+ default behavior (which walks the view controller stack from the main window's root view
+ controller) will work, but if your app features custom container view controllers, it may
+ behave unexpectedly. In that case an object in your app should implement the 
+ `ATConnectDelegate` protocol's `-viewControllerForInteractionsWithConnection:` method
+ and return the view controller from which to present the Message Center interaction. 
+ */
 @protocol ATConnectDelegate <NSObject>
 @optional
+
+/**
+ Returns a view controller from which to present the MessageCenter interaction. 
+ 
+ @param connection The `ATConnect` object that is requesting a view controller to present from.
+ 
+ @return The view controller your app would like the interaction to be presented from.
+ */
 - (UIViewController *)viewControllerForInteractionsWithConnection:(ATConnect *)connection;
 
 @end

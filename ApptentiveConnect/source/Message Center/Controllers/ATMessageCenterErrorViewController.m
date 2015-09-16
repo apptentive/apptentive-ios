@@ -33,11 +33,6 @@ NSString *const ATInteractionMessageCenterEventLabelNoInteractionClose = @"no_in
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
-	if ([ATConnect sharedConnection].tintColor) {
-		self.view.tintColor = [ATConnect sharedConnection].tintColor;
-		self.navigationController.view.tintColor = [ATConnect sharedConnection].tintColor;
-	}
-	
 	self.navigationItem.title = ATLocalizedString(@"Message Center", @"Message Center default title");
 	
 	if ([ATReachability sharedReachability].currentNetworkStatus == ATNetworkNotReachable) {

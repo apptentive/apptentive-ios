@@ -56,12 +56,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	
-	if ([ATConnect sharedConnection].tintColor) {
-		self.view.tintColor = [ATConnect sharedConnection].tintColor;
-		self.navigationController.view.tintColor = [ATConnect sharedConnection].tintColor;
-	}
-	
+		
 	// Borders
 	self.appIconContainer.layer.borderColor = [UIColor colorWithWhite:0.87 alpha:1.0].CGColor;
 	self.appIconContainer.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
@@ -128,7 +123,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 - (void)presentFromViewController:(UIViewController *)newPresentingViewController animated:(BOOL)animated {
 	
 	self.modalPresentationStyle = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad ? UIModalPresentationFormSheet : UIModalPresentationFullScreen;
-	UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self];
+	ATNavigationController *navigationController = [[ATNavigationController alloc] initWithRootViewController:self];
 	navigationController.navigationBarHidden = YES;
 	
 	[newPresentingViewController presentViewController:navigationController animated:animated completion:nil];

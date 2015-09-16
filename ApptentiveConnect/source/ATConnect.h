@@ -135,9 +135,11 @@ Before calling any other methods on the shared `ATConnect` instance, set the API
  A tint color to use in Apptentive-specific UI.
  
  Overrides the default tintColor acquired from your app, in case you're using one that doesn't look great
- with Apptentive-specific UI.
+ with Apptentive-specific UI. 
+ 
+ @deprecated Use `[UIAppearance appearanceWhenContainedIn:[ATNavigationController class], nil].tintColor`
  */
-@property (nonatomic, strong) UIColor *tintColor;
+@property (nonatomic, strong) UIColor *tintColor DEPRECATED_ATTRIBUTE;
 #endif
 
 #if TARGET_OS_IPHONE
@@ -506,4 +508,17 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  */
 - (UIViewController *)viewControllerForInteractionsWithConnection:(ATConnect *)connection;
 
+@end
+
+/**
+ The `ATNavigationController class is an empty subclass of UINavigationController that
+ can be used to target UIAppearance settings specifically to Apptentive UI.
+ 
+ For instance, to override the default `barTintColor` (white) for navigation controllers
+ in the Apptentive UI, you would call:
+
+	[[UINavigationBar appearanceWhenContainedIn:[ATNavigationController class], nil].barTintColor = [UIColor magentaColor];
+
+ */
+@interface ATNavigationController : UINavigationController
 @end

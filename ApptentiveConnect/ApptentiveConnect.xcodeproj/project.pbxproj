@@ -1792,7 +1792,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
@@ -1807,7 +1806,7 @@
 				INFOPLIST_FILE = "tests/ApptentiveConnectTests-Info.plist";
 				OTHER_LDFLAGS = (
 					"-framework",
-					SenTestingKit,
+					XCTest,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.apptentive.ios.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1820,7 +1819,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
@@ -1829,7 +1827,7 @@
 				INFOPLIST_FILE = "tests/ApptentiveConnectTests-Info.plist";
 				OTHER_LDFLAGS = (
 					"-framework",
-					SenTestingKit,
+					XCTest,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.apptentive.ios.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

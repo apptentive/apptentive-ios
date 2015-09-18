@@ -1,3 +1,12 @@
+2015-09-08 pkamb, frankus v2.0.2
+--------------------------------
+
+Version 2.0.2 fixes several bugs a bug where the bar tint color of Message Center was not overridable using UIAppearance. As a side effect, the default barTintColor of the survey UI now adopts the Apptentive Default white. In addition, the tintColor property has been deprecated in favor of using UIAppearance. See the iOS Customization Guide for more information.
+
+This version fixes a bug that was not allowing in-app notification banners to be enabled for new messages in Message Center.
+
+The Message Center UI also contains a number of small usability improvements. 
+
 2015-09-08 pkamb, frankus v2.0.1
 --------------------------------
 
@@ -57,7 +66,7 @@ We have also fixed an issue where some messages were not sorted correctly in Mes
 
 2014-10-20 pkamb v1.6.0
 --------------------------------
-The 1.6.0 release adds the method `willShowInteractionForEvent:`, which returns YES if engaging the given event will cause an Interaction to be shown. 
+The 1.6.0 release adds the method `willShowInteractionForEvent:`, which returns YES if engaging the given event will cause an Interaction to be shown.
 
 For example, `willShowInteractionForEvent:` returns YES if a survey is ready to be shown the next time you engage your survey-targeted event. You can thus use this method to hide a "Show Survey" button in your app if there is no survey to take.
 
@@ -115,9 +124,9 @@ French Canadian localization strings have been added to the SDK. iOS 8 is requir
 
 Finally, we have added new API methods for attaching `customData` and `extendedData` to events:  
 
-  - `engage:withCustomData:fromViewController:` 
+  - `engage:withCustomData:fromViewController:`
   - `engage:withCustomData:withExtendedData:fromViewController:`
-  
+
 We have also added methods to easily construct these `extendedData` dictionaries in the specific Apptentive format:  
 
   - `extendedDataDate:`
@@ -158,7 +167,7 @@ Finally, we have changed the language code used for delivering localizations to 
 
 This release moves Surveys to the engagement framework. You will now be able to target surveys to events that you `engage:` in your app. This change enables surveys to be chained with other interactions, such as the Ratings Prompt. From your Apptentive dashboard, you can now present a Survey if someone answers "No" to your "Do you Love App_Name?" prompt.
 
-This release also fully removes the `ATAppRatingFlow.h` and `ATSurveys.h` header files. You can now simply import `ATConnect.h` when using Apptentive. 
+This release also fully removes the `ATAppRatingFlow.h` and `ATSurveys.h` header files. You can now simply import `ATConnect.h` when using Apptentive.
 
 If you were using a version prior to 1.5.0, please read [MigratingTo_1.5.0.md](docs/MigratingTo_1.5.0.md) for information on how to migrate your API calls to this release. We are sorry for the inconvenience, but we hope the new features will more than make up for it!
 
@@ -186,7 +195,7 @@ Fixes:
 2014-04-18 wooster, pkamb v1.4.2
 --------------------------------
 
-This release adds push notification integration with Amazon Web Services (AWS) Simple Notification Service (SNS). 
+This release adds push notification integration with Amazon Web Services (AWS) Simple Notification Service (SNS).
 
 Use `addAmazonSNSIntegrationWithDeviceToken:` to enable SNS push notifications.
 
@@ -223,7 +232,7 @@ Fixes:
 2014-03-29 wooster, pkamb v1.3.0
 --------------------------------
 
-Important: 
+Important:
 
 * We've (provisionally) dropped iOS 4.x support. If you really need iOS 4.x support, please contact us.
 * We added `AssetsLibrary` to the list of required frameworks in this version (part of the fix for IOS-409).
@@ -254,7 +263,7 @@ Fixes:
 * IOS-415 Allow `initialUserEmailAddress` to be updated after sending feedback with no email
 * IOS-418 Ability to delete a previously entered email
 * Compressed images with ImageOptim
-* IOS-394 Log warning if passed view controller is nil 
+* IOS-394 Log warning if passed view controller is nil
 * IOS-364 Don't fetch surveys until at least one DeviceInfo has been sent
 * IOS-380 Re-add "sending..." label to pending messages
 
@@ -277,7 +286,7 @@ Fixes:
 
 This release adds a `BOOL` return type to the `engage:` method, allowing the developer to take action if an interaction is or isn't shown. The `initiallyUseMessageCenter` property has been added to set the initial Message Center state; this will be overridden when the Apptentive configuration file is first downloaded.
 
-This release also makes some behind-the-scenes tweaks to the Engagement Framework. 
+This release also makes some behind-the-scenes tweaks to the Engagement Framework.
 
 Fixes:
 
@@ -582,10 +591,10 @@ Other changes:
   See the `ATSurveys.h` header for details.
 * Added `showTagline` property on `ATConnect`. This allows you to hide the "Powered by Apptentive" logo text.
 * Fixes IOS-78 Always send dates in english
-  
+
   This bug was causing some dates to be sent localized to the server. Oops.
 * Fixes IOS-79 Allow dev to prompt user to re-rate after new version installed
-  
+
   When the "Reset rating prompt counters when app version changes" settings is enabled, if a user has already rated the app, that will be reset when they upgrade the app. The upshot of this is, users will be prompted to rate the app again after upgrade. You may want to do this if you want users to re-rate the app on a version change, as the iOS App Store is heavily geared towards ratings and reviews for the current version. This change makes our behavior match what developers expect when checking that box on the Apptentive site.
 * URL Loading changes:
   * Better cache policy handling, per http://blackpixel.com/blog/1659/caching-and-nsurlconnection/
@@ -640,7 +649,7 @@ Minor changes:
 
 2012-07-24 wooster v0.4.3
 -------------------------
-* Fix for IOS-41, wherein the metrics were being sent incorrectly and metric for 
+* Fix for IOS-41, wherein the metrics were being sent incorrectly and metric for
   text responses was being sent after the metric for survey submission.
 
 2012-07-23 wooster v0.4.2

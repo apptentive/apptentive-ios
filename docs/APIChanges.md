@@ -1,8 +1,12 @@
 This document tracks changes to the API between versions.
 
+# 2.0.2
+
+ * ATConnect's tintColor property is now deprecated in favor of using UIAppearance properties. See the iOS Customization Guide for details. 
+
 # 2.0.0
 
- * ApptentiveConnect now has a deployment target of iOS 7.0, which will support iOS 7, 8, and 9. In the 2.0.0 release we have dropped support for iOS 5 and 6. 
+ * ApptentiveConnect now has a deployment target of iOS 7.0, which will support iOS 7, 8, and 9. In the 2.0.0 release we have dropped support for iOS 5 and 6.
  * The ApptentiveConnect project has been converted to use Automatic Reference Counting (ARC).
  * Message Center UI has been redesigned and improved. Message Center strings and settings are now delivered from the server, allowing you to make remote changes at any time from the Apptentive dashboard.
  * The one-way Feedback Dialog has been removed in favor of Message Center and two-way conversations.
@@ -34,19 +38,19 @@ This document tracks changes to the API between versions.
 
 # 1.5.4
  * Changed the App Store rating URL to open the "Reviews" tab directly in iOS 7.1+.
- 
+
  * Added API methods for attaching `customData` and `extendedData` to events:  
-  - `engage:withCustomData:fromViewController:` 
+  - `engage:withCustomData:fromViewController:`
   - `engage:withCustomData:withExtendedData:fromViewController:`
-  
+
  * Added methods to easily construct `extendedData` dictionaries in the specific Apptentive format:  
   - `extendedDataDate:`
   - `extendedDataLocationForLatitude:longitude:`
   - `extendedDataCommerceWithTransactionID:affiliation:revenue:shipping:tax:currency:commerceItems:`
   - `extendedDataCommerceItemWithItemID:name:category:price:quantity:currency:`
-  
+
 # 1.5.3
- 
+
  * Added ability to remotely hide Apptentive branding in your app via the Apptentive dashboard, contingent upon your account plan.
  * Added `initiallyHideBranding` property, which hides Apptentive branding in the time prior to the app's initial configuration being retrieved.
  * Removed `showTagLine` property, which has been replaced by `initiallyHideBranding` and the remote configuration.
@@ -93,7 +97,7 @@ The `initialUserEmailAddress` can now be updated after a user sends feedback wit
 
 Added a `BOOL` return type to the `engage:` method.
 
-Added the property `initiallyUseMessageCenter` to set the local, initial Message Center setting. This will be overridden by the server-based Message Center configuration when it is downloaded. 
+Added the property `initiallyUseMessageCenter` to set the local, initial Message Center setting. This will be overridden by the server-based Message Center configuration when it is downloaded.
 
 ## ATConnect
 

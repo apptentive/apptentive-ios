@@ -31,7 +31,6 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 
 @implementation ATAppConfigurationUpdater {
 	ATAPIRequest *request;
-	NSObject<ATAppConfigurationUpdaterDelegate> *delegate;
 }
 
 + (void)registerDefaults {
@@ -90,13 +89,13 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 
 - (id)initWithDelegate:(NSObject<ATAppConfigurationUpdaterDelegate> *)aDelegate {
 	if ((self = [super init])) {
-		delegate = aDelegate;
+		_delegate = aDelegate;
 	}
 	return self;
 }
 
 - (void)dealloc {
-	delegate = nil;
+	self.delegate = nil;
 	[self cancel];
 }
 
@@ -128,10 +127,10 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	@synchronized (self) {
 		if ([result isKindOfClass:[NSDictionary class]]) {
 			[self processResult:(NSDictionary *)result maxAge:[sender expiresMaxAge]];
-			[delegate configurationUpdaterDidFinish:YES];
+			[self.delegate configurationUpdaterDidFinish:YES];
 		} else {
 			ATLogError(@"App configuration result is not NSDictionary!");
-			[delegate configurationUpdaterDidFinish:NO];
+			[self.delegate configurationUpdaterDidFinish:NO];
 		}
 	}
 }
@@ -144,7 +143,7 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	@synchronized(self) {
 		ATLogInfo(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
 		
-		[delegate configurationUpdaterDidFinish:NO];
+		[self.delegate configurationUpdaterDidFinish:NO];
 	}
 }
 @end

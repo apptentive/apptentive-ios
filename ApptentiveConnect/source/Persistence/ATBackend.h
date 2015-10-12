@@ -115,6 +115,9 @@ extern NSString *const ATBackendBecameReadyNotification;
 
 - (void)checkForMessages;
 
+- (void)fetchMessagesInBackground:(void (^)(UIBackgroundFetchResult))completionHandler;
+- (void)completeMessageFetchWithResult:(UIBackgroundFetchResult)fetchResult;
+
 /*! True if the backend is currently updating the person. */
 - (BOOL)isUpdatingPerson;
 

@@ -110,9 +110,7 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
     UIViewController *viewController = self.window.rootViewController;
     
-    [[ATConnect sharedConnection] didReceiveRemoteNotification:userInfo fromViewController:viewController];
-    
-    completionHandler(UIBackgroundFetchResultNoData);
+    [[ATConnect sharedConnection] didReceiveRemoteNotification:userInfo fromViewController:viewController fetchCompletionHandler:completionHandler];
 }
  
 @end

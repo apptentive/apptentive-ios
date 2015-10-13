@@ -214,7 +214,7 @@ Before calling any other methods on the shared `ATConnect` instance, set the API
  @param userInfo The `userInfo` dictionary of the notification.
  @param viewController The view controller Message Center may be presented from.
  */
-- (void)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController;
+- (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController;
 
 /**
  Forwards a push notification from your application delegate to Apptentive Connect.
@@ -235,7 +235,7 @@ Before calling any other methods on the shared `ATConnect` instance, set the API
  @param completionHandler The block to execute when the message fetch operation is complete.
  */
 
-- (void)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
+- (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
 
 /**
  Deprecated in 2.0.0 in favor of the better-named `canShowInteractionForEvent:`

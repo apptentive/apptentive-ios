@@ -389,15 +389,15 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	return [[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController withCustomData:allowedCustomMessageData];
 }
 
-- (void)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController {
-	[self didReceiveRemoteNotification:userInfo fromViewController:viewController fetchCompletionHandler:nil];
+- (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController {
+	return [self didReceiveRemoteNotification:userInfo fromViewController:viewController fetchCompletionHandler:nil];
 }
 
-- (void)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-	BOOL shouldCallCompletionHandler = YES;
-	
+- (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
 	NSDictionary *apptentivePayload = [userInfo objectForKey:@"apptentive"];
 	if (apptentivePayload) {
+		BOOL shouldCallCompletionHandler = YES;
+
 		switch ([UIApplication sharedApplication].applicationState) {
 			case UIApplicationStateBackground: {
 				NSNumber *contentAvailable = userInfo[@"aps"][@"content-available"];
@@ -424,13 +424,13 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 				}
 				break;
 		}
-	} else {
-		shouldCallCompletionHandler = NO;
+		
+		if (shouldCallCompletionHandler && completionHandler) {
+			completionHandler(UIBackgroundFetchResultNoData);
+		}
 	}
 	
-	if (shouldCallCompletionHandler && completionHandler) {
-		completionHandler(UIBackgroundFetchResultNoData);
-	}
+	return (apptentivePayload != nil);
 }
 
 - (void)resetUpgradeData {

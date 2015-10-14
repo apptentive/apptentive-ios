@@ -1,3 +1,8 @@
+2015-10-14 pkamb, frankus v2.0.3
+--------------------------------
+
+Version 2.0.3 is a small bugfix update, including fixes for a memory leak and an issue displaying image messages in the 2.0 Message Center.
+
 2015-09-08 pkamb, frankus v2.0.2
 --------------------------------
 

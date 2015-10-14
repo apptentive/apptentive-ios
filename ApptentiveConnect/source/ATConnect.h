@@ -213,6 +213,8 @@ Before calling any other methods on the shared `ATConnect` instance, set the API
  
  @param userInfo The `userInfo` dictionary of the notification.
  @param viewController The view controller Message Center may be presented from.
+ 
+ @return `YES` if the notification was sent by Apptentive, `NO` otherwise.
  */
 - (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController;
 
@@ -230,9 +232,13 @@ Before calling any other methods on the shared `ATConnect` instance, set the API
  The `completionHandler` block will be called when the message fetch is completed. To ensure that messages can be
  retrieved, please do not call the `completionHandler` block yourself if the notification was sent by Apptentive.
  
+ If the notification was not sent by Apptentive, the parent app is responsible for calling the `completionHandler` block.
+ 
  @param userInfo The `userInfo` dictionary of the notification.
  @param viewController The view controller Message Center may be presented from.
  @param completionHandler The block to execute when the message fetch operation is complete.
+ 
+ @return `YES` if the notification was sent by Apptentive, `NO` otherwise.
  */
 
 - (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;

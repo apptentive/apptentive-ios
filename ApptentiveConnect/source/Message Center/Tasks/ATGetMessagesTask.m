@@ -97,13 +97,19 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(NSObject *)result {
 	@synchronized(self) {
 		
+		UIBackgroundFetchResult fetchResult;
+		
 		if ([result isKindOfClass:[NSDictionary class]] && [self processResult:(NSDictionary *)result]) {
 			self.finished = YES;
+			fetchResult = UIBackgroundFetchResultNewData;
 		} else {
 			ATLogError(@"Could not process the Get Message Task result!");
 			self.failed = YES;
+			fetchResult = UIBackgroundFetchResultFailed;
 		}
 		[self stop];
+		
+		[[ATBackend sharedBackend] completeMessageFetchWithResult:fetchResult];
 	}
 }
 

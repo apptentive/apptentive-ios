@@ -53,6 +53,8 @@ static NSURLCache *imageCache = nil;
 @property (readonly, nonatomic, getter=isMessageCenterInForeground) BOOL messageCenterInForeground;
 @property (strong, nonatomic) NSMutableSet *activeMessageTasks;
 
+@property (nonatomic, copy) void (^backgroundFetchBlock)(UIBackgroundFetchResult);
+
 @end
 
 @interface ATBackend (Private)
@@ -871,6 +873,29 @@ static NSURLCache *imageCache = nil;
 				task = nil;
 			}
 		}
+	}
+}
+
+- (void)fetchMessagesInBackground:(void (^)(UIBackgroundFetchResult))completionHandler {
+	self.backgroundFetchBlock = completionHandler;
+	
+	@autoreleasepool {
+		@synchronized(self) {
+			ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
+			if (![queue hasTaskOfClass:[ATGetMessagesTask class]]) {
+				ATGetMessagesTask *task = [[ATGetMessagesTask alloc] init];
+				[queue addTask:task];
+				task = nil;
+			}
+		}
+	}
+}
+
+- (void)completeMessageFetchWithResult:(UIBackgroundFetchResult)fetchResult {
+	if (self.backgroundFetchBlock) {
+		self.backgroundFetchBlock(fetchResult);
+		
+		self.backgroundFetchBlock = nil;
 	}
 }
 

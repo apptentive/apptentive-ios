@@ -208,12 +208,40 @@ Before calling any other methods on the shared `ATConnect` instance, set the API
 /**
  Forwards a push notification from your application delegate to Apptentive Connect.
  
- If the push notification originated from Apptentive, Message Center will be presented from the view controller.
+ If the push notification originated from Apptentive, Message Center will be presented from the view controller
+ when the notification is tapped.
  
  @param userInfo The `userInfo` dictionary of the notification.
  @param viewController The view controller Message Center may be presented from.
+ 
+ @return `YES` if the notification was sent by Apptentive, `NO` otherwise.
  */
-- (void)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController;
+- (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController;
+
+/**
+ Forwards a push notification from your application delegate to Apptentive Connect.
+ 
+ If the push notification originated from Apptentive, Message Center will be presented from the view controller
+ when the notification is tapped.
+ 
+ Apptentive will attempt to fetch Messages Center messages in the background when the notification is received.
+ 
+ To enable background fetching of Message Center messages upon receiving a remote notification,
+ add `remote-notification` as a `UIBackgroundModes` value in your app's Info.plist.
+ 
+ The `completionHandler` block will be called when the message fetch is completed. To ensure that messages can be
+ retrieved, please do not call the `completionHandler` block yourself if the notification was sent by Apptentive.
+ 
+ If the notification was not sent by Apptentive, the parent app is responsible for calling the `completionHandler` block.
+ 
+ @param userInfo The `userInfo` dictionary of the notification.
+ @param viewController The view controller Message Center may be presented from.
+ @param completionHandler The block to execute when the message fetch operation is complete.
+ 
+ @return `YES` if the notification was sent by Apptentive, `NO` otherwise.
+ */
+
+- (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
 
 /**
  Deprecated in 2.0.0 in favor of the better-named `canShowInteractionForEvent:`
@@ -478,6 +506,9 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  
  Only one Push Notification Integration can be added at a time. Setting a Push Notification
  Integration removes all previously set Push Notification Integrations.
+ 
+ To enable background fetching of Message Center messages upon receiving a remote notification,
+ add `remote-notification` as a `UIBackgroundModes` value in your app's Info.plist.
  
  @param pushProvider The Push Notification provider with which to register.
  @param deviceToken The device token used to send Remote Notifications.

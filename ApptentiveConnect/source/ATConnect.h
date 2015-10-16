@@ -485,6 +485,9 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 - (void)addCustomPersonDataVersion:(NSDictionary *)versionObject withKey:(NSString *)key;
 - (void)addCustomPersonDataTimestamp:(NSDictionary *)timestampObject withKey:(NSString *)key;
 
+- (NSDictionary *)versionObjectWithVersion:(NSString *)version;
+- (NSDictionary *)timestampObjectWithDate:(NSDate *)date;
+
 
 
 

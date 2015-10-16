@@ -169,6 +169,18 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	[self addCustomPersonData:timestampObject withKey:key];
 }
 
+- (NSDictionary *)versionObjectWithVersion:(NSString *)version {
+	return @{@"_type": @"version",
+			 @"code": version ?: [NSNull null],
+			 };
+}
+
+- (NSDictionary *)timestampObjectWithDate:(NSDate *)date {
+	return @{@"_type": @"timestamp",
+			 @"sec": @([date timeIntervalSince1970]),
+			 };
+}
+
 - (void)addCustomPersonData:(NSObject *)object withKey:(NSString *)key {
 	[self addCustomData:object withKey:key toCustomDataDictionary:_customPersonData];
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomPersonDataChangedNotification object:self.customPersonData];

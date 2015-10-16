@@ -467,6 +467,27 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  */
 - (void)removeCustomDeviceDataWithKey:(NSString *)key;
 
+
+
+
+
+#warning Write API method docs
+
+- (void)addCustomDeviceDataString:(NSString *)string withKey:(NSString *)key;
+- (void)addCustomDeviceDataNumber:(NSNumber *)number withKey:(NSString *)key;
+- (void)addCustomDeviceDataBOOL:(BOOL)boolValue withKey:(NSString *)key;
+- (void)addCustomDeviceDataVersion:(NSDictionary *)versionObject withKey:(NSString *)key;
+- (void)addCustomDeviceDataTimestamp:(NSDictionary *)timestampObject withKey:(NSString *)key;
+
+- (void)addCustomPersonDataString:(NSString *)string withKey:(NSString *)key;
+- (void)addCustomPersonDataNumber:(NSNumber *)number withKey:(NSString *)key;
+- (void)addCustomPersonDataBOOL:(BOOL)boolValue withKey:(NSString *)key;
+- (void)addCustomPersonDataVersion:(NSDictionary *)versionObject withKey:(NSString *)key;
+- (void)addCustomPersonDataTimestamp:(NSDictionary *)timestampObject withKey:(NSString *)key;
+
+
+
+
 /**
  Deprecated. Use `-addCustomDeviceData:withKey:` instead.
  

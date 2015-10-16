@@ -129,6 +129,46 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	return _customDeviceData;
 }
 
+- (void)addCustomDeviceDataString:(NSString *)string withKey:(NSString *)key {
+	[self addCustomDeviceData:string withKey:key];
+}
+
+- (void)addCustomDeviceDataNumber:(NSNumber *)number withKey:(NSString *)key {
+	[self addCustomDeviceData:number withKey:key];
+}
+
+- (void)addCustomDeviceDataBOOL:(BOOL)boolValue withKey:(NSString *)key {
+	[self addCustomDeviceData:@(boolValue) withKey:key];
+}
+
+- (void)addCustomDeviceDataVersion:(NSDictionary *)versionObject withKey:(NSString *)key {
+	[self addCustomDeviceData:versionObject withKey:key];
+}
+
+- (void)addCustomDeviceDataTimestamp:(NSDictionary *)timestampObject withKey:(NSString *)key {
+	[self addCustomDeviceData:timestampObject withKey:key];
+}
+
+- (void)addCustomPersonDataString:(NSString *)string withKey:(NSString *)key {
+	[self addCustomPersonData:string withKey:key];
+}
+
+- (void)addCustomPersonDataNumber:(NSNumber *)number withKey:(NSString *)key {
+	[self addCustomPersonData:number withKey:key];
+}
+
+- (void)addCustomPersonDataBOOL:(BOOL)boolValue withKey:(NSString *)key {
+	[self addCustomPersonData:@(boolValue) withKey:key];
+}
+
+- (void)addCustomPersonDataVersion:(NSDictionary *)versionObject withKey:(NSString *)key {
+	[self addCustomPersonData:versionObject withKey:key];
+}
+
+- (void)addCustomPersonDataTimestamp:(NSDictionary *)timestampObject withKey:(NSString *)key {
+	[self addCustomPersonData:timestampObject withKey:key];
+}
+
 - (void)addCustomPersonData:(NSObject *)object withKey:(NSString *)key {
 	[self addCustomData:object withKey:key toCustomDataDictionary:_customPersonData];
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomPersonDataChangedNotification object:self.customPersonData];
@@ -140,19 +180,22 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (void)addCustomData:(NSObject *)object withKey:(NSString *)key toCustomDataDictionary:(NSMutableDictionary *)customData {
-	// Special cases
-	if ([object isKindOfClass:[NSDate class]]) {
-		object = [ATUtilities stringRepresentationOfDate:(NSDate *)object];
+	BOOL simpleType = ([object isKindOfClass:[NSString class]] ||
+					   [object isKindOfClass:[NSNumber class]] ||
+					   [object isKindOfClass:[NSNull class]]);
+	
+	BOOL complexType = NO;
+	if ([object isKindOfClass:[NSDictionary class]]) {
+		NSString *type = ((NSDictionary *)object)[@"_type"];
+		if (type) {
+			complexType = (type != nil);
+		}
 	}
-	
-	BOOL allowedData = ([object isKindOfClass:[NSString class]] ||
-						[object isKindOfClass:[NSNumber class]] ||
-						[object isKindOfClass:[NSNull class]]);
-	
-	if (allowedData) {
+
+	if (simpleType || complexType) {
 		[customData setObject:object forKey:key];
 	} else {
-		ATLogError(@"Apptentive custom data must be of type NSString, NSNumber, NSDate, or NSNull. Attempted to add custom data of type %@", NSStringFromClass([object class]));
+		ATLogError(@"Apptentive custom data must be of type NSString, NSNumber, or NSNull, or a 'complex type' NSDictionary created by one of the constructors in ATConnect.h");
 	}
 }
 

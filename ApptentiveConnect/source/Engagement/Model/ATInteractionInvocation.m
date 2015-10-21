@@ -144,6 +144,30 @@
 
 + (NSPredicate *)predicateForKeyPath:(NSString *)keyPath operatorsAndValues:(NSDictionary *)operatorsAndValues hasError:(BOOL *)hasError {
 	
++ (NSPredicate *)predicateForKeyPath:(NSString *)keyPath predicateOperator:(NSString *)predicateOperator value:(NSObject *)value {
+	NSPredicate *predicate = nil;
+	
+	if ([predicateOperator isEqualToString:@"$exists"]) {
+		if ([value isKindOfClass:[NSNumber class]]) {
+			NSString *predicateFormatString = [[@"(%K " stringByAppendingString:([(NSNumber *)value boolValue] ? @"!=" : @"==")] stringByAppendingString:@" nil)"];
+			predicate = [NSPredicate predicateWithFormat:predicateFormatString, keyPath];
+		} else {
+			ATLogError(@"$exists operator with a non-bool value");
+		}
+	} else if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
+		NSString *predicateFormatString = [[@"(%K " stringByAppendingString:predicateOperator] stringByAppendingString:@" %@)"];
+		predicate = [NSCompoundPredicate predicateWithFormat:predicateFormatString argumentArray:@[keyPath, value]];
+	} else if ([value isKindOfClass:[NSDictionary class]]) {
+		predicate = [NSCompoundPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+			
+			//TODO: Complex Types
+			
+			return NO;
+		}];
+	}
+	
+	return predicate;
+}
 }
 //+ (NSPredicate *)predicateForCriteria:(NSString *)criteria operatorExpression:(NSDictionary *)operatorExpression hasError:(BOOL *)hasError {
 //	NSMutableArray *predicates = [NSMutableArray array];

@@ -190,6 +190,41 @@
 	return predicate;
 }
 
++ (NSComparisonPredicate *)predicateWithLeftKeyPath:(NSString *)leftKeyPath rightValue:(nullable id)rightValue operatorType:(NSPredicateOperatorType)operatorType {
+	NSExpression *leftExpression = [NSExpression expressionForKeyPath:leftKeyPath];
+	NSExpression *rightExpression = [NSExpression expressionForConstantValue:rightValue];
+	
+	return [self predicateWithLeftExpression:leftExpression rightExpression:rightExpression operatorType:operatorType];
+}
+
++ (NSComparisonPredicate *)predicateWithLeftValue:(nullable id)leftValue rightValue:(nullable id)rightValue operatorType:(NSPredicateOperatorType)operatorType {
+	NSExpression *leftExpression = [NSExpression expressionForConstantValue:leftValue];
+	NSExpression *rightExpression = [NSExpression expressionForConstantValue:rightValue];
+	
+	return [self predicateWithLeftExpression:leftExpression rightExpression:rightExpression operatorType:operatorType];
+}
+
++ (NSComparisonPredicate *)predicateWithLeftExpression:(NSExpression *)leftExpression rightExpression:(NSExpression *)rightExpression operatorType:(NSPredicateOperatorType)operatorType {
+	NSComparisonPredicateOptions options;
+	switch (operatorType) {
+		case NSContainsPredicateOperatorType:
+		case NSBeginsWithPredicateOperatorType:
+		case NSEndsWithPredicateOperatorType:
+			options = NSCaseInsensitivePredicateOption;
+			break;
+		default:
+			options = NSNormalizedPredicateOption;
+			break;
+	}
+	
+	NSComparisonPredicate *predicate = [NSComparisonPredicate predicateWithLeftExpression:leftExpression
+																		  rightExpression:rightExpression
+																				 modifier:NSDirectPredicateModifier
+																					 type:operatorType
+																				  options:NSCaseInsensitivePredicateOption];
+	return predicate;
+}
+
 + (BOOL)compareComplexObject:(NSDictionary *)leftComplexObject predicateOperator:(NSString *)predicateOperator withComplexObject:(NSDictionary *)rightComplexObject {
 	
 	NSString *type = leftComplexObject[@"_type"];

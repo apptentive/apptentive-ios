@@ -142,6 +142,9 @@
 	return criteriaPredicate;
 }
 
++ (NSPredicate *)predicateForKeyPath:(NSString *)keyPath operatorsAndValues:(NSDictionary *)operatorsAndValues hasError:(BOOL *)hasError {
+	
+}
 //+ (NSPredicate *)predicateForCriteria:(NSString *)criteria operatorExpression:(NSDictionary *)operatorExpression hasError:(BOOL *)hasError {
 //	NSMutableArray *predicates = [NSMutableArray array];
 //	
@@ -269,7 +272,7 @@
 		} else {
 			// Implicit "==" if object is a string/number
 			NSDictionary *equalityDictionary = ([object isKindOfClass:[NSDictionary class]]) ? (NSDictionary *)object : @{@"==" : object};
-			NSPredicate *subPredicate = [ATInteractionInvocation predicateForCriteria:key operatorExpression:equalityDictionary hasError:hasError];
+			NSPredicate *subPredicate = [ATInteractionInvocation predicateForKeyPath:key operatorsAndValues:equalityDictionary hasError:hasError];
 			if (subPredicate) {
 				[subPredicates addObject:subPredicate];
 			}

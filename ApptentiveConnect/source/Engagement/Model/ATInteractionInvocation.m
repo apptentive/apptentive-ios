@@ -183,16 +183,60 @@
 		predicate = [NSCompoundPredicate predicateWithFormat:predicateFormatString argumentArray:@[keyPath, value]];
 	} else if ([value isKindOfClass:[NSDictionary class]]) {
 		predicate = [NSCompoundPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
-			
-			//TODO: Complex Types
-			
-			return NO;
+			return [self compareComplexObject:evaluatedObject predicateOperator:predicateOperator withComplexObject:value];
 		}];
 	}
 	
 	return predicate;
 }
+
++ (BOOL)compareComplexObject:(NSDictionary *)leftComplexObject predicateOperator:(NSString *)predicateOperator withComplexObject:(NSDictionary *)rightComplexObject {
+	
+	NSString *type = leftComplexObject[@"_type"];
+	NSString *rightType = rightComplexObject[@"_type"];
+	if (![type isEqualToString:rightType]) {
+#warning TODO
+		ATLogError(@"Criteria Comlex Types must have the same type!");
+	}
+	
+	NSObject *leftValue;
+	NSObject *rightValue;
+	
+	if ([type isEqualToString:@"version"]) {
+		NSString *leftVersion = leftComplexObject[@"version"];
+		NSString *rightVersion = rightComplexObject[@"version"];
+		
+		NSComparisonResult result = [self compareVersion:leftVersion withVersion:rightVersion];
+		
+		switch (result) {
+			case NSOrderedAscending:
+				leftValue = @0;
+				rightValue = @1;
+				break;
+			case NSOrderedDescending:
+				leftValue = @1;
+				rightValue = @0;
+				break;
+			case NSOrderedSame:
+				leftValue = @1;
+				rightValue = @1;
+				break;
+		}
+	} else if ([type isEqualToString:@"datetime"]) {
+		leftValue = leftComplexObject[@"sec"];
+		rightValue = rightComplexObject[@"sec"];
+	}
+	else if ([type isEqualToString:@"duration"]) {
+		leftValue = leftComplexObject[@"sec"];
+		rightValue = rightComplexObject[@"sec"];
+	}
+	
+	NSString *predicateFormatString = [[@"(%@ " stringByAppendingString:predicateOperator] stringByAppendingString:@" %@)"];
+	NSPredicate *predicate = [NSCompoundPredicate predicateWithFormat:predicateFormatString argumentArray:@[leftValue, rightValue]];
+	
+	return [predicate evaluateWithObject:nil];
 }
+
 //+ (NSPredicate *)predicateForCriteria:(NSString *)criteria operatorExpression:(NSDictionary *)operatorExpression hasError:(BOOL *)hasError {
 //	NSMutableArray *predicates = [NSMutableArray array];
 //	

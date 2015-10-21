@@ -307,4 +307,34 @@
 	}
 }
 
++ (NSComparisonResult)compareVersion:(NSString *)leftVersion withVersion:(NSString *)rightVersion {
+	NSArray *leftComponents = [leftVersion componentsSeparatedByString:@"."];
+	NSArray *rightComponents = [rightVersion componentsSeparatedByString:@"."];
+	
+	NSUInteger minIndex = MIN(leftComponents.count, rightComponents.count);
+	
+	for (int i = 0; i < minIndex; i++) {
+		NSInteger leftInteger = [leftComponents[i] integerValue];
+		NSInteger rightInteger = [rightComponents[i] integerValue];
+		
+		if (leftInteger < rightInteger) {
+			return NSOrderedAscending;
+		}
+		
+		if (leftInteger > rightInteger) {
+			return NSOrderedDescending;
+		}
+	}
+	
+	if (leftComponents.count < rightComponents.count) {
+		return NSOrderedAscending;
+	}
+	
+	if (leftComponents.count > rightComponents.count) {
+		return NSOrderedDescending;
+	}
+	
+	return NSOrderedSame;
+}
+
 @end

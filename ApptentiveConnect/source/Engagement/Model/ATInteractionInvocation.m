@@ -275,30 +275,28 @@
 	return result;
 }
 
-+ (NSString *)predicateOperatorFromComparisonOperator:(NSString *)comparisonOperator {
-	if ([comparisonOperator isEqualToString:@"=="]) {
-		return @"==";
-	} else if ([comparisonOperator isEqualToString:@"$gt"] || [comparisonOperator isEqualToString:@">"]) {
-		return @">";
-	} else if ([comparisonOperator isEqualToString:@"$gte"] || [comparisonOperator isEqualToString:@">="]) {
-		return @">=";
-	} else if ([comparisonOperator isEqualToString:@"$lt"] || [comparisonOperator isEqualToString:@"<"]) {
-		return @"<";
-	} else if ([comparisonOperator isEqualToString:@"$lte"] || [comparisonOperator isEqualToString:@"<="]) {
-		return @"<=";
-	} else if ([comparisonOperator isEqualToString:@"$ne"] || [comparisonOperator isEqualToString:@"!="]) {
-		return @"!=";
-	} else if ([comparisonOperator isEqualToString:@"$contains"] || [comparisonOperator isEqualToString:@"CONTAINS[c]"]) {
-		return @"CONTAINS[c]";
-	} else if ([comparisonOperator isEqualToString:@"$starts_with"] || [comparisonOperator isEqualToString:@"BEGINSWITH[c]"]) {
-		return @"BEGINSWITH[c]";
-	} else if ([comparisonOperator isEqualToString:@"$ends_with"] || [comparisonOperator isEqualToString:@"ENDSWITH[c]"]) {
-		return @"ENDSWITH[c]";
-	} else if ([comparisonOperator isEqualToString:@"$exists"]) {
-		return @"$exists";
++ (NSPredicateOperatorType)predicateOperatorTypeFromString:(NSString *)operatorString {
+	if ([operatorString isEqualToString:@"=="]) {
+		return NSEqualToPredicateOperatorType;
+	} else if ([operatorString isEqualToString:@"$gt"] || [operatorString isEqualToString:@">"]) {
+		return NSGreaterThanPredicateOperatorType;
+	} else if ([operatorString isEqualToString:@"$gte"] || [operatorString isEqualToString:@">="]) {
+		return NSGreaterThanOrEqualToPredicateOperatorType;
+	} else if ([operatorString isEqualToString:@"$lt"] || [operatorString isEqualToString:@"<"]) {
+		return NSLessThanPredicateOperatorType;
+	} else if ([operatorString isEqualToString:@"$lte"] || [operatorString isEqualToString:@"<="]) {
+		return NSLessThanOrEqualToPredicateOperatorType;
+	} else if ([operatorString isEqualToString:@"$ne"] || [operatorString isEqualToString:@"!="]) {
+		return NSNotEqualToPredicateOperatorType;
+	} else if ([operatorString isEqualToString:@"$contains"] || [operatorString isEqualToString:@"CONTAINS[c]"]) {
+		return NSContainsPredicateOperatorType;
+	} else if ([operatorString isEqualToString:@"$starts_with"] || [operatorString isEqualToString:@"BEGINSWITH[c]"]) {
+		return NSBeginsWithPredicateOperatorType;
+	} else if ([operatorString isEqualToString:@"$ends_with"] || [operatorString isEqualToString:@"ENDSWITH[c]"]) {
+		return NSEndsWithPredicateOperatorType;
 	} else {
-		ATLogError(@"Unrecognized comparison operator symbol: %@", comparisonOperator);
-		return nil;
+		ATLogError(@"Unrecognized comparison operator symbol: %@", operatorString);
+		return NSCustomSelectorPredicateOperatorType;
 	}
 }
 

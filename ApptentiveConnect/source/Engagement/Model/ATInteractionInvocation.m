@@ -143,7 +143,31 @@
 }
 
 + (NSPredicate *)predicateForKeyPath:(NSString *)keyPath operatorsAndValues:(NSDictionary *)operatorsAndValues hasError:(BOOL *)hasError {
+	NSMutableArray *predicates = [NSMutableArray array];
 	
+	for (NSString *operator in operatorsAndValues) {
+		NSString *predicateOperator = [self predicateOperatorFromComparisonOperator:operator];
+		
+		NSPredicate *predicate = [self predicateForKeyPath:keyPath predicateOperator:predicateOperator value:operatorsAndValues[operator]];
+		if (predicate) {
+			[predicates addObject:predicate];
+		} else {
+			*hasError = YES;
+			break;
+		}
+	}
+	
+	if (*hasError) {
+		return nil;
+	} else {
+		NSCompoundPredicate *result = [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:predicates];
+		if (!result) {
+			*hasError = YES;
+		}
+		return result;
+	}
+}
+
 + (NSPredicate *)predicateForKeyPath:(NSString *)keyPath predicateOperator:(NSString *)predicateOperator value:(NSObject *)value {
 	NSPredicate *predicate = nil;
 	

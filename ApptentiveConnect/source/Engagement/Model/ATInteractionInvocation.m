@@ -280,4 +280,31 @@
 	return result;
 }
 
++ (NSString *)predicateOperatorFromComparisonOperator:(NSString *)comparisonOperator {
+	if ([comparisonOperator isEqualToString:@"=="]) {
+		return @"==";
+	} else if ([comparisonOperator isEqualToString:@"$gt"] || [comparisonOperator isEqualToString:@">"]) {
+		return @">";
+	} else if ([comparisonOperator isEqualToString:@"$gte"] || [comparisonOperator isEqualToString:@">="]) {
+		return @">=";
+	} else if ([comparisonOperator isEqualToString:@"$lt"] || [comparisonOperator isEqualToString:@"<"]) {
+		return @"<";
+	} else if ([comparisonOperator isEqualToString:@"$lte"] || [comparisonOperator isEqualToString:@"<="]) {
+		return @"<=";
+	} else if ([comparisonOperator isEqualToString:@"$ne"] || [comparisonOperator isEqualToString:@"!="]) {
+		return @"!=";
+	} else if ([comparisonOperator isEqualToString:@"$contains"] || [comparisonOperator isEqualToString:@"CONTAINS[c]"]) {
+		return @"CONTAINS[c]";
+	} else if ([comparisonOperator isEqualToString:@"$starts_with"] || [comparisonOperator isEqualToString:@"BEGINSWITH[c]"]) {
+		return @"BEGINSWITH[c]";
+	} else if ([comparisonOperator isEqualToString:@"$ends_with"] || [comparisonOperator isEqualToString:@"ENDSWITH[c]"]) {
+		return @"ENDSWITH[c]";
+	} else if ([comparisonOperator isEqualToString:@"$exists"]) {
+		return @"$exists";
+	} else {
+		ATLogError(@"Unrecognized comparison operator symbol: %@", comparisonOperator);
+		return nil;
+	}
+}
+
 @end

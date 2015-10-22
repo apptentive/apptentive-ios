@@ -133,55 +133,60 @@
 }
 
 - (NSPredicate *)criteriaPredicate {
-	BOOL error = NO;
-	NSPredicate *criteriaPredicate = [ATInteractionInvocation predicateForInteractionCriteria:self.criteria hasError:&error];
-	if (!criteriaPredicate || error) {
-		return nil;
-	}
+	NSPredicate *criteriaPredicate = [ATInteractionInvocation compoundPredicateWithCriteria:self.criteria];
 	
 	return criteriaPredicate;
 }
 
-+ (NSPredicate *)predicateForInteractionCriteria:(NSDictionary *)interactionCriteria hasError:(BOOL *)hasError {
++ (NSCompoundPredicate *)compoundPredicateWithCriteria:(NSDictionary *)criteria {
 	NSMutableArray *subPredicates = [NSMutableArray array];
 	
-	for (NSString *key in interactionCriteria) {
-		NSObject *object = [interactionCriteria objectForKey:key];
+	for (NSString *key in criteria) {
+		NSObject *value = [criteria objectForKey:key];
+
+		NSPredicate *predicate = nil;
 		
-		if ([object isKindOfClass:[NSArray class]]) {
-			NSCompoundPredicateType predicateType = NSAndPredicateType;
-			if ([key isEqualToString:@"$and"]) {
-				predicateType = NSAndPredicateType;
-			} else if ([key isEqualToString:@"$or"]) {
-				predicateType = NSOrPredicateType;
-			} else {
-				*hasError = YES;
-			}
-			
-			NSMutableArray *criteria = [NSMutableArray array];
-			for (NSDictionary *dictionary in (NSArray *)object) {
-				NSPredicate *criterion = [ATInteractionInvocation predicateForInteractionCriteria:dictionary hasError:hasError];
-				[criteria addObject:criterion];
-			}
-			
-			NSPredicate *compoundPredicate = [[NSCompoundPredicate alloc] initWithType:predicateType subpredicates:criteria];
-			[subPredicates addObject:compoundPredicate];
+		if ([value isKindOfClass:[NSArray class]]) {
+			NSCompoundPredicateType predicateType = [self predicateCompoundTypeFromString:key];
+			predicate = [self compoundPredicateWithType:predicateType criteriaArray:(NSArray *)value];
+		} else if ([value isKindOfClass:[NSDictionary class]]) {
+			predicate = [self compoundPredicateForKeyPath:key operatorsAndValues:(NSDictionary *)value];
+		} else if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
+			NSDictionary *implicitEquality = @{@"==": value};
+			predicate = [self compoundPredicateForKeyPath:key operatorsAndValues:implicitEquality];
+		}
+		
+		if (predicate) {
+			[subPredicates addObject:predicate];
 		} else {
-			// Implicit "==" if object is a string/number
-			NSDictionary *equalityDictionary = ([object isKindOfClass:[NSDictionary class]]) ? (NSDictionary *)object : @{@"==" : object};
-			NSPredicate *subPredicate = [ATInteractionInvocation predicateForKeyPath:key operatorsAndValues:equalityDictionary hasError:hasError];
-			if (subPredicate) {
-				[subPredicates addObject:subPredicate];
-			}
+			return nil;
 		}
 	}
 	
-	NSPredicate *result = [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:subPredicates];
-	return result;
+	NSCompoundPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:subPredicates];
+	
+	return compoundPredicate;
+}
+
++ (NSCompoundPredicate *)compoundPredicateWithType:(NSCompoundPredicateType)type criteriaArray:(NSArray *)criteriaArray{
+	NSMutableArray *subPredicates = [NSMutableArray array];
+	
+	for (NSDictionary *criteria in criteriaArray) {
+		NSPredicate *predicate = [self compoundPredicateWithCriteria:criteria];
+		if (predicate) {
+			[subPredicates addObject:predicate];
+		} else {
+			return nil;
+		}
+	}
+	
+	NSCompoundPredicate *compoundPredicate = [[NSCompoundPredicate alloc] initWithType:type subpredicates:subPredicates];
+	
+	return compoundPredicate;
 }
 
 + (NSCompoundPredicate *)compoundPredicateForKeyPath:(NSString *)keyPath operatorsAndValues:(NSDictionary *)operatorsAndValues {
-	NSMutableArray *predicates = [NSMutableArray array];
+	NSMutableArray *subPredicates = [NSMutableArray array];
 	
 	for (NSString *operatorString in operatorsAndValues) {
 		NSObject *value = operatorsAndValues[operatorString];
@@ -208,13 +213,13 @@
 		}
 		
 		if (predicate) {
-			[predicates addObject:predicate];
+			[subPredicates addObject:predicate];
 		} else {
 			return nil;
 		}
 	}
 	
-	NSCompoundPredicate *compountPredicate = [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:predicates];
+	NSCompoundPredicate *compountPredicate = [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:subPredicates];
 
 	return compountPredicate;
 }
@@ -299,6 +304,20 @@
 	return predicate;
 }
 
++ (NSCompoundPredicateType)predicateCompoundTypeFromString:(NSString *)predicateTypeString {
+	if ([predicateTypeString isEqualToString:@"$and"]) {
+		return NSAndPredicateType;
+	} else if ([predicateTypeString isEqualToString:@"$or"]) {
+		return NSOrPredicateType;
+	} else {
+		ATLogError(@"Expected `$and` or `$or` key; instead saw key: %@", predicateTypeString);
+		
+#warning TODO return value in this case?
+
+		return NSAndPredicateType;
+	}
+}
+
 + (NSPredicateOperatorType)predicateOperatorTypeFromString:(NSString *)operatorString {
 	if ([operatorString isEqualToString:@"=="]) {
 		return NSEqualToPredicateOperatorType;
@@ -320,6 +339,9 @@
 		return NSEndsWithPredicateOperatorType;
 	} else {
 		ATLogError(@"Unrecognized comparison operator symbol: %@", operatorString);
+		
+#warning TODO return value in this case?
+		
 		return NSCustomSelectorPredicateOperatorType;
 	}
 }

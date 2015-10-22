@@ -711,6 +711,15 @@
 }
 
 - (void)testNotInCriteria {
+
+
+
+#warning This test is failing. 
+// The `$not` operators below are in the wrong location.
+
+
+
+
 	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
 	invocation.criteria = @{@"$and": @[@{@"code_point/local#app#init/invokes/version": @{@"$not": @{@"$gte": @10}}},
 									   @{@"time_since_install/total": @{@"$not": @{@"$gt": @864000}}},

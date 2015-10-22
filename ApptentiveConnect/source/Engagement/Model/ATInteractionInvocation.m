@@ -312,8 +312,10 @@
 		return NSAndPredicateType;
 	} else if ([predicateTypeString isEqualToString:@"$or"]) {
 		return NSOrPredicateType;
+	} else if ([predicateTypeString isEqualToString:@"$not"]) {
+		return NSNotPredicateType;
 	} else {
-		ATLogError(@"Expected `$and` or `$or` key; instead saw key: %@", predicateTypeString);
+		ATLogError(@"Expected `$and`, `$or`, or `$not` skey; instead saw key: %@", predicateTypeString);
 		
 #warning TODO return value in this case?
 

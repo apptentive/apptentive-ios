@@ -48,6 +48,27 @@
 	return [description description];
 }
 
++ (void)keyPathWasSeen:(NSString *)keyPath {
+	
+	/*
+	Record the keyPath if needed, to later be used in predicate evaluation.
+	*/
+	
+	if ([keyPath hasPrefix:@"code_point/"]) {
+		 NSArray *components = [keyPath componentsSeparatedByString:@"/"];
+		 if (components.count > 1) {
+			NSString *codePoint = [components objectAtIndex:1];
+			 [[ATEngagementBackend sharedBackend] codePointWasSeen:codePoint];
+		 }
+	} else if ([keyPath hasPrefix:@"interactions/"]) {
+		NSArray *components = [keyPath componentsSeparatedByString:@"/"];
+		if (components.count > 1) {
+			NSString *interactionID = [components objectAtIndex:1];
+			[[ATEngagementBackend sharedBackend] interactionWasSeen:interactionID];
+		}
+	}
+}
+
 - (NSDictionary *)predicateEvaluationDictionary {
 	 NSMutableDictionary *predicateEvaluationDictionary = [NSMutableDictionary dictionaryWithDictionary:@{@"time_since_install/total": self.timeSinceInstallTotal,
 																										  @"time_since_install/version" : self.timeSinceInstallVersion,

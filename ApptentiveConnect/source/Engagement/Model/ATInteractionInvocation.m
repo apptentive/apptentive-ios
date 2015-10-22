@@ -225,6 +225,9 @@
 }
 
 + (NSComparisonPredicate *)predicateWithLeftKeyPath:(NSString *)leftKeyPath rightValue:(nullable id)rightValue operatorType:(NSPredicateOperatorType)operatorType {
+	
+	[ATInteractionUsageData keyPathWasSeen:leftKeyPath];
+	
 	NSExpression *leftExpression = [NSExpression expressionForKeyPath:leftKeyPath];
 	NSExpression *rightExpression = [NSExpression expressionForConstantValue:rightValue];
 	

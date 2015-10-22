@@ -35,4 +35,6 @@
 
 - (NSDictionary *)predicateEvaluationDictionary;
 
++ (void)keyPathWasSeen:(NSString *)keyPath;
+
 @end

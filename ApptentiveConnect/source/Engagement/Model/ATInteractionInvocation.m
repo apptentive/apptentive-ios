@@ -161,10 +161,11 @@
 			predicate = [self predicateWithLeftKeyPath:keyPath rightValue:value operatorType:operatorType];
 		} else if ([value isKindOfClass:[NSDictionary class]]) {
 			predicate = [NSCompoundPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+				NSPredicateOperatorType operatorType = [self predicateOperatorTypeFromString:operatorString];
 				
-				//TODO
+				NSComparisonPredicate *predicate = [self predicateWithLeftComplexObject:evaluatedObject rightComplexObject:(NSDictionary *)value operatorType:operatorType];
 				
-				return NO;
+				return [predicate evaluateWithObject:nil];
 			}];
 		}
 		
@@ -215,13 +216,12 @@
 	return predicate;
 }
 
-+ (BOOL)compareComplexObject:(NSDictionary *)leftComplexObject predicateOperator:(NSString *)predicateOperator withComplexObject:(NSDictionary *)rightComplexObject {
-	
++ (NSComparisonPredicate *)predicateWithLeftComplexObject:(NSDictionary *)leftComplexObject rightComplexObject:(NSDictionary *)rightComplexObject operatorType:(NSPredicateOperatorType)operatorType {
 	NSString *type = leftComplexObject[@"_type"];
 	NSString *rightType = rightComplexObject[@"_type"];
 	if (![type isEqualToString:rightType]) {
-#warning TODO
-		ATLogError(@"Criteria Comlex Types must have the same type!");
+		ATLogError(@"Criteria Complex Type objects must be of the same type!");
+		return nil;
 	}
 	
 	NSObject *leftValue;
@@ -256,10 +256,9 @@
 		rightValue = rightComplexObject[@"sec"];
 	}
 	
-	NSString *predicateFormatString = [[@"(%@ " stringByAppendingString:predicateOperator] stringByAppendingString:@" %@)"];
-	NSPredicate *predicate = [NSCompoundPredicate predicateWithFormat:predicateFormatString argumentArray:@[leftValue, rightValue]];
+	NSComparisonPredicate *predicate = [self predicateWithLeftValue:leftValue rightValue:rightValue operatorType:operatorType];
 	
-	return [predicate evaluateWithObject:nil];
+	return predicate;
 }
 
 + (NSPredicate *)predicateForInteractionCriteria:(NSDictionary *)interactionCriteria hasError:(BOOL *)hasError {

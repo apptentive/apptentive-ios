@@ -292,7 +292,7 @@
 			options = NSCaseInsensitivePredicateOption;
 			break;
 		default:
-			options = NSNormalizedPredicateOption;
+			options = 0;
 			break;
 	}
 	
@@ -300,7 +300,7 @@
 																		  rightExpression:rightExpression
 																				 modifier:NSDirectPredicateModifier
 																					 type:operatorType
-																				  options:NSCaseInsensitivePredicateOption];
+																				  options:options];
 	return predicate;
 }
 

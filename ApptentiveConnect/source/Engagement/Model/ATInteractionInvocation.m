@@ -188,34 +188,6 @@
 	return [self predicateWithLeftExpression:leftExpression rightExpression:rightExpression operatorType:operatorType];
 }
 
-+ (NSComparisonPredicate *)predicateWithLeftValue:(nullable id)leftValue rightValue:(nullable id)rightValue operatorType:(NSPredicateOperatorType)operatorType {
-	NSExpression *leftExpression = [NSExpression expressionForConstantValue:leftValue];
-	NSExpression *rightExpression = [NSExpression expressionForConstantValue:rightValue];
-	
-	return [self predicateWithLeftExpression:leftExpression rightExpression:rightExpression operatorType:operatorType];
-}
-
-+ (NSComparisonPredicate *)predicateWithLeftExpression:(NSExpression *)leftExpression rightExpression:(NSExpression *)rightExpression operatorType:(NSPredicateOperatorType)operatorType {
-	NSComparisonPredicateOptions options;
-	switch (operatorType) {
-		case NSContainsPredicateOperatorType:
-		case NSBeginsWithPredicateOperatorType:
-		case NSEndsWithPredicateOperatorType:
-			options = NSCaseInsensitivePredicateOption;
-			break;
-		default:
-			options = NSNormalizedPredicateOption;
-			break;
-	}
-	
-	NSComparisonPredicate *predicate = [NSComparisonPredicate predicateWithLeftExpression:leftExpression
-																		  rightExpression:rightExpression
-																				 modifier:NSDirectPredicateModifier
-																					 type:operatorType
-																				  options:NSCaseInsensitivePredicateOption];
-	return predicate;
-}
-
 + (NSComparisonPredicate *)predicateWithLeftComplexObject:(NSDictionary *)leftComplexObject rightComplexObject:(NSDictionary *)rightComplexObject operatorType:(NSPredicateOperatorType)operatorType {
 	NSString *type = leftComplexObject[@"_type"];
 	NSString *rightType = rightComplexObject[@"_type"];
@@ -258,6 +230,34 @@
 	
 	NSComparisonPredicate *predicate = [self predicateWithLeftValue:leftValue rightValue:rightValue operatorType:operatorType];
 	
+	return predicate;
+}
+
++ (NSComparisonPredicate *)predicateWithLeftValue:(nullable id)leftValue rightValue:(nullable id)rightValue operatorType:(NSPredicateOperatorType)operatorType {
+	NSExpression *leftExpression = [NSExpression expressionForConstantValue:leftValue];
+	NSExpression *rightExpression = [NSExpression expressionForConstantValue:rightValue];
+	
+	return [self predicateWithLeftExpression:leftExpression rightExpression:rightExpression operatorType:operatorType];
+}
+
++ (NSComparisonPredicate *)predicateWithLeftExpression:(NSExpression *)leftExpression rightExpression:(NSExpression *)rightExpression operatorType:(NSPredicateOperatorType)operatorType {
+	NSComparisonPredicateOptions options;
+	switch (operatorType) {
+		case NSContainsPredicateOperatorType:
+		case NSBeginsWithPredicateOperatorType:
+		case NSEndsWithPredicateOperatorType:
+			options = NSCaseInsensitivePredicateOption;
+			break;
+		default:
+			options = NSNormalizedPredicateOption;
+			break;
+	}
+	
+	NSComparisonPredicate *predicate = [NSComparisonPredicate predicateWithLeftExpression:leftExpression
+																		  rightExpression:rightExpression
+																				 modifier:NSDirectPredicateModifier
+																					 type:operatorType
+																				  options:NSCaseInsensitivePredicateOption];
 	return predicate;
 }
 

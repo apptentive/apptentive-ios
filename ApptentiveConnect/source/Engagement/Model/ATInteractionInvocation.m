@@ -142,6 +142,44 @@
 	return criteriaPredicate;
 }
 
++ (NSPredicate *)predicateForInteractionCriteria:(NSDictionary *)interactionCriteria hasError:(BOOL *)hasError {
+	NSMutableArray *subPredicates = [NSMutableArray array];
+	
+	for (NSString *key in interactionCriteria) {
+		NSObject *object = [interactionCriteria objectForKey:key];
+		
+		if ([object isKindOfClass:[NSArray class]]) {
+			NSCompoundPredicateType predicateType = NSAndPredicateType;
+			if ([key isEqualToString:@"$and"]) {
+				predicateType = NSAndPredicateType;
+			} else if ([key isEqualToString:@"$or"]) {
+				predicateType = NSOrPredicateType;
+			} else {
+				*hasError = YES;
+			}
+			
+			NSMutableArray *criteria = [NSMutableArray array];
+			for (NSDictionary *dictionary in (NSArray *)object) {
+				NSPredicate *criterion = [ATInteractionInvocation predicateForInteractionCriteria:dictionary hasError:hasError];
+				[criteria addObject:criterion];
+			}
+			
+			NSPredicate *compoundPredicate = [[NSCompoundPredicate alloc] initWithType:predicateType subpredicates:criteria];
+			[subPredicates addObject:compoundPredicate];
+		} else {
+			// Implicit "==" if object is a string/number
+			NSDictionary *equalityDictionary = ([object isKindOfClass:[NSDictionary class]]) ? (NSDictionary *)object : @{@"==" : object};
+			NSPredicate *subPredicate = [ATInteractionInvocation predicateForKeyPath:key operatorsAndValues:equalityDictionary hasError:hasError];
+			if (subPredicate) {
+				[subPredicates addObject:subPredicate];
+			}
+		}
+	}
+	
+	NSPredicate *result = [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:subPredicates];
+	return result;
+}
+
 + (NSCompoundPredicate *)compoundPredicateForKeyPath:(NSString *)keyPath operatorsAndValues:(NSDictionary *)operatorsAndValues {
 	NSMutableArray *predicates = [NSMutableArray array];
 	
@@ -259,44 +297,6 @@
 																					 type:operatorType
 																				  options:NSCaseInsensitivePredicateOption];
 	return predicate;
-}
-
-+ (NSPredicate *)predicateForInteractionCriteria:(NSDictionary *)interactionCriteria hasError:(BOOL *)hasError {
-	NSMutableArray *subPredicates = [NSMutableArray array];
-	
-	for (NSString *key in interactionCriteria) {
-		NSObject *object = [interactionCriteria objectForKey:key];
-		
-		if ([object isKindOfClass:[NSArray class]]) {
-			NSCompoundPredicateType predicateType = NSAndPredicateType;
-			if ([key isEqualToString:@"$and"]) {
-				predicateType = NSAndPredicateType;
-			} else if ([key isEqualToString:@"$or"]) {
-				predicateType = NSOrPredicateType;
-			} else {
-				*hasError = YES;
-			}
-			
-			NSMutableArray *criteria = [NSMutableArray array];
-			for (NSDictionary *dictionary in (NSArray *)object) {
-				NSPredicate *criterion = [ATInteractionInvocation predicateForInteractionCriteria:dictionary hasError:hasError];
-				[criteria addObject:criterion];
-			}
-			
-			NSPredicate *compoundPredicate = [[NSCompoundPredicate alloc] initWithType:predicateType subpredicates:criteria];
-			[subPredicates addObject:compoundPredicate];
-		} else {
-			// Implicit "==" if object is a string/number
-			NSDictionary *equalityDictionary = ([object isKindOfClass:[NSDictionary class]]) ? (NSDictionary *)object : @{@"==" : object};
-			NSPredicate *subPredicate = [ATInteractionInvocation predicateForKeyPath:key operatorsAndValues:equalityDictionary hasError:hasError];
-			if (subPredicate) {
-				[subPredicates addObject:subPredicate];
-			}
-		}
-	}
-	
-	NSPredicate *result = [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:subPredicates];
-	return result;
 }
 
 + (NSPredicateOperatorType)predicateOperatorTypeFromString:(NSString *)operatorString {

@@ -44,9 +44,13 @@ extern NSString *const ATSurveyIDKey;
 
 /** Supported Push Providers for use in `setPushNotificationIntegration:withDeviceToken:` */
 typedef NS_ENUM(NSInteger, ATPushProvider){
+	/** Specifies the Apptentive push provider. */
 	ATPushProviderApptentive,
+	/** Specifies the Urban Airship push provider. */
 	ATPushProviderUrbanAirship,
+	/** Specifies the Amazon Simple Notification Service push provider. */
 	ATPushProviderAmazonSNS,
+	/** Specifies the Parse push provider. */
 	ATPushProviderParse,
 };
 

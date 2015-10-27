@@ -6,5 +6,11 @@
 	<string></string>
 	<key>ATInfoDistributionKey</key>
 	<string>CocoaPods-Source</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.apptentive.resources-ios</string>
+	<key>CFBundleVersion</key>
+	<string>2.0</string>
+	<key>CFBundleShortVersionString</key>
+	<string>2.0</string>
 </dict>
 </plist>

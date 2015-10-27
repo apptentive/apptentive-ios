@@ -1,3 +1,8 @@
+2015-10-26 frankus v2.0.4
+--------------------------------
+
+Version 2.0.4 is a small bugfix update, including missing keys in ApptentiveResource.bundle's Info.plist file and localization fixes for Chinese and Portuguese. 
+
 2015-10-14 pkamb, frankus v2.0.3
 --------------------------------
 
@@ -10,7 +15,7 @@ Version 2.0.2 fixes several bugs a bug where the bar tint color of Message Cente
 
 This version fixes a bug that was not allowing in-app notification banners to be enabled for new messages in Message Center.
 
-The Message Center UI also contains a number of small usability improvements. 
+The Message Center UI also contains a number of small usability improvements.
 
 2015-09-08 pkamb, frankus v2.0.1
 --------------------------------

@@ -389,25 +389,48 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	return [[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController withCustomData:allowedCustomMessageData];
 }
 
-- (void)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController {
+- (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController {
+	return [self didReceiveRemoteNotification:userInfo fromViewController:viewController fetchCompletionHandler:nil];
+}
+
+- (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
 	NSDictionary *apptentivePayload = [userInfo objectForKey:@"apptentive"];
 	if (apptentivePayload) {
-		if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive) {
-			// Present Apptentive Push Notifications later, when Application State is Active
-			self.pushUserInfo = userInfo;
-			self.pushViewController = viewController;
-		} else {
-			self.pushUserInfo = nil;
-			self.pushViewController = nil;
-			
-			NSString *action = [apptentivePayload objectForKey:@"action"];
-			if ([action isEqualToString:@"pmc"]) {
-				[self presentMessageCenterFromViewController:viewController];
-			} else {
-				[[ATBackend sharedBackend] checkForMessages];
+		BOOL shouldCallCompletionHandler = YES;
+
+		switch ([UIApplication sharedApplication].applicationState) {
+			case UIApplicationStateBackground: {
+				NSNumber *contentAvailable = userInfo[@"aps"][@"content-available"];
+				if (contentAvailable.boolValue) {
+					shouldCallCompletionHandler = NO;
+					[[ATBackend sharedBackend] fetchMessagesInBackground:completionHandler];
+				}
+				break;
 			}
+			case UIApplicationStateInactive:
+				// Present Apptentive UI later, when Application State is Active
+				self.pushUserInfo = userInfo;
+				self.pushViewController = viewController;
+				break;
+			case UIApplicationStateActive:
+				self.pushUserInfo = nil;
+				self.pushViewController = nil;
+				
+				NSString *action = [apptentivePayload objectForKey:@"action"];
+				if ([action isEqualToString:@"pmc"]) {
+					[self presentMessageCenterFromViewController:viewController];
+				} else {
+					[[ATBackend sharedBackend] checkForMessages];
+				}
+				break;
+		}
+		
+		if (shouldCallCompletionHandler && completionHandler) {
+			completionHandler(UIBackgroundFetchResultNoData);
 		}
 	}
+	
+	return (apptentivePayload != nil);
 }
 
 - (void)resetUpgradeData {

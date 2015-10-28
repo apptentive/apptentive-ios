@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'apptentive-ios'
-  s.version  = '2.0.3'
+  s.version  = '2.0.5'
   s.license  = 'BSD'
   s.summary  = 'Apptentive Customer Communications SDK.'
   s.homepage = 'https://www.apptentive.com/'

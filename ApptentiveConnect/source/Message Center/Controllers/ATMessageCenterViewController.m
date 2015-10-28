@@ -125,7 +125,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[ATBackend sharedBackend].messageDelegate = self;
 	
 	self.dateFormatter = [[NSDateFormatter alloc] init];
-	self.dateFormatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"MMMMdYYYY" options:0 locale:[NSLocale currentLocale]];
+	self.dateFormatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"MMMMdyyyy" options:0 locale:[NSLocale currentLocale]];
 	self.dataSource.dateFormatter.dateFormat = self.dateFormatter.dateFormat; // Used to determine if date changed between messages
 	
 	self.greetingView.orientation = self.interfaceOrientation;

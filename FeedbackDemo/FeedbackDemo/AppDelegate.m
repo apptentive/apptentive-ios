@@ -104,15 +104,24 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     UIViewController *viewController = self.window.rootViewController;
     
-    [[ATConnect sharedConnection] didReceiveRemoteNotification:userInfo fromViewController:viewController];
+    BOOL apptentiveNotification = [[ATConnect sharedConnection] didReceiveRemoteNotification:userInfo fromViewController:viewController];
+    
+    if (!apptentiveNotification) {
+        // If the notification did not come from Apptentive, you should handle it yourself.
+    }
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
     UIViewController *viewController = self.window.rootViewController;
     
-    [[ATConnect sharedConnection] didReceiveRemoteNotification:userInfo fromViewController:viewController];
+    BOOL apptentiveNotification = [[ATConnect sharedConnection] didReceiveRemoteNotification:userInfo fromViewController:viewController fetchCompletionHandler:completionHandler];
     
-    completionHandler(UIBackgroundFetchResultNoData);
+    if (apptentiveNotification) {
+        // If the notification came from Apptentive, the `completionHandler` block will be called automatically.
+    } else {
+        // If the notification did not come from Apptentive, you are responsible for calling the `completionHandler` block.
+        completionHandler(UIBackgroundFetchResultNoData);
+    }
 }
  
 @end

@@ -1,7 +1,12 @@
+2015-10-27 frankus v2.0.5
+--------------------------------
+
+Version 2.0.5 adds missing keys in ApptentiveResource.bundle's Info.plist file for CocoaPods.
+
 2015-10-26 frankus v2.0.4
 --------------------------------
 
-Version 2.0.4 is a small bugfix update, including missing keys in ApptentiveResource.bundle's Info.plist file and localization fixes for Chinese and Portuguese. 
+Version 2.0.4 is a small bugfix update, including missing keys in ApptentiveResource.bundle's Info.plist file and localization fixes for Chinese and Portuguese.
 
 2015-10-14 pkamb, frankus v2.0.3
 --------------------------------

@@ -150,7 +150,14 @@
 			NSCompoundPredicateType predicateType = [self predicateCompoundTypeFromString:key];
 			predicate = [self compoundPredicateWithType:predicateType criteriaArray:(NSArray *)value];
 		} else if ([value isKindOfClass:[NSDictionary class]]) {
-			predicate = [self compoundPredicateForKeyPath:key operatorsAndValues:(NSDictionary *)value];
+			NSDictionary *dictionaryValue = (NSDictionary *)value;
+			if ([dictionaryValue.allKeys.firstObject isEqualToString:@"$not"]) {
+				NSString *notKey = dictionaryValue.allKeys.firstObject;
+				NSCompoundPredicateType predicateType = [self predicateCompoundTypeFromString:notKey];
+				predicate = [self compoundPredicateWithType:predicateType criteriaArray:@[@{key: dictionaryValue[notKey]}]];
+			} else {
+				predicate = [self compoundPredicateForKeyPath:key operatorsAndValues:(NSDictionary *)value];
+			}
 		} else if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
 			NSDictionary *implicitEquality = @{@"==": value};
 			predicate = [self compoundPredicateForKeyPath:key operatorsAndValues:implicitEquality];
@@ -316,9 +323,8 @@
 		return NSNotPredicateType;
 	} else {
 		ATLogError(@"Expected `$and`, `$or`, or `$not` skey; instead saw key: %@", predicateTypeString);
-		
-#warning TODO return value in this case?
 
+		// TODO return value in this case?
 		return NSAndPredicateType;
 	}
 }
@@ -344,9 +350,8 @@
 		return NSEndsWithPredicateOperatorType;
 	} else {
 		ATLogError(@"Unrecognized comparison operator symbol: %@", operatorString);
-		
-#warning TODO return value in this case?
-		
+
+		// TODO return value in this case?
 		return NSCustomSelectorPredicateOperatorType;
 	}
 }

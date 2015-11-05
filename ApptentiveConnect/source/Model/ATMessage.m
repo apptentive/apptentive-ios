@@ -29,8 +29,8 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 @dynamic customData;
 @dynamic hidden;
 @dynamic automated;
-@dynamic body;
 @dynamic title;
+@dynamic body;
 @dynamic attachments;
 
 + (void)clearComposingMessages {
@@ -153,6 +153,12 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
 	if (parentJSON) {
 		[result addEntriesFromDictionary:parentJSON];
+	}
+	if (self.body) {
+		result[@"body"] = self.body;
+	}
+	if (self.automated.boolValue) {
+		result[@"automated"] = @YES;
 	}
 	if (self.pendingMessageID != nil) {
 		result[@"nonce"] = self.pendingMessageID;

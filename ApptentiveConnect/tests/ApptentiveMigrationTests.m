@@ -8,7 +8,7 @@
 
 #import "ApptentiveMigrationTests.h"
 #import "ATDataManager.h"
-#import "ATAbstractMessage.h"
+#import "ATMessage.h"
 #import "ATTextMessage.h"
 
 @implementation ApptentiveMigrationTests

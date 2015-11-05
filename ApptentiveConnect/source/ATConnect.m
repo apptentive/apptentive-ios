@@ -538,9 +538,10 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 #pragma mark - Message notification banner
 
-- (void)showNotificationBannerForMessage:(ATAbstractMessage *)message {
-	if ([ATBackend sharedBackend].notificationPopupsEnabled && [message isKindOfClass:[ATTextMessage class]]) {
-		ATTextMessage *textMessage = (ATTextMessage *)message;
+- (void)showNotificationBannerForMessage:(ATMessage *)message {
+	if ([ATBackend sharedBackend].notificationPopupsEnabled && [message isKindOfClass:[ATMessage class]]) {
+		// TODO: Display something if body is empty
+		ATMessage *textMessage = (ATMessage *)message;
 		NSURL *profilePhotoURL = textMessage.sender.profilePhotoURL ? [NSURL URLWithString:textMessage.sender.profilePhotoURL] : nil;
 		
 		ATBannerViewController *banner = [ATBannerViewController bannerWithImageURL:profilePhotoURL title:textMessage.sender.name message:textMessage.body];

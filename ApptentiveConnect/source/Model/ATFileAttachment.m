@@ -8,7 +8,7 @@
 
 #import "ATFileAttachment.h"
 #import "ATBackend.h"
-#import "ATFileMessage.h"
+#import "ATMessage.h"
 #import "ATUtilities.h"
 
 @interface ATFileAttachment ()
@@ -24,7 +24,7 @@
 @dynamic source;
 @dynamic transient;
 @dynamic userVisible;
-@dynamic fileMessage;
+@dynamic message;
 
 - (void)prepareForDeletion {
 	[self setFileData:nil];

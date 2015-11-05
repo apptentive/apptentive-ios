@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 
-@class ATFileMessage;
+@class ATMessage;
 
 typedef enum {
 	ATFileAttachmentSourceUnknown,
@@ -27,7 +27,7 @@ typedef enum {
 @property (nonatomic, strong) NSNumber *source;
 @property (nonatomic, strong) NSNumber *transient;
 @property (nonatomic, strong) NSNumber *userVisible;
-@property (nonatomic, strong) ATFileMessage *fileMessage;
+@property (nonatomic, strong) ATMessage *message;
 
 - (void)setFileData:(NSData *)data;
 - (void)setFileFromSourcePath:(NSString *)sourceFilename;

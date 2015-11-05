@@ -10,7 +10,7 @@
 
 #import "ATAPIRequest.h"
 #import "ATBackend.h"
-#import "ATFileMessage.h"
+#import "ATMessage.h"
 #import "ATFileAttachment.h"
 #import "ATJSONSerialization.h"
 #import "ATURLConnection.h"
@@ -119,11 +119,12 @@
 	return request;
 }
 
-- (ATAPIRequest *)requestForPostingMessage:(ATAbstractMessage *)message {
+- (ATAPIRequest *)requestForPostingMessage:(ATMessage *)message {
 	NSError *error = nil;
 	NSDictionary *messageJSON = [message apiJSON];
 	NSDictionary *postJSON = nil;
-	if ([message isKindOfClass:[ATFileMessage class]]) {
+#warning figure out what this is doing
+	if ([message isKindOfClass:[ATMessage class]]) {
 		postJSON = messageJSON;
 	} else {
 		postJSON = @{@"message":messageJSON};
@@ -145,18 +146,19 @@
 	
 	ATURLConnection *conn = nil;
 	NSURL *url = [NSURL URLWithString:urlString];
-	
-	if ([message isKindOfClass:[ATFileMessage class]]) {
-		ATFileMessage *fileMessage = (ATFileMessage *)message;
-		ATFileAttachment *fileAttachment = fileMessage.fileAttachment;
-		if (!fileAttachment) {
-			ATLogError(@"Expected file attachment on message");
-			return nil;
-		}
-		conn = [self connectionToPost:url JSON:postString withFile:[fileAttachment fullLocalPath] ofMimeType:fileAttachment.mimeType];
-	} else {
+
+#warning figure out what this is doing
+//	if ([message isKindOfClass:[ATMessage class]]) {
+//		ATMessage *fileMessage = (ATMessage *)message;
+//		ATFileAttachment *fileAttachment = fileMessage.attachments.;
+//		if (!fileAttachment) {
+//			ATLogError(@"Expected file attachment on message");
+//			return nil;
+//		}
+//		conn = [self connectionToPost:url JSON:postString withFile:[fileAttachment fullLocalPath] ofMimeType:fileAttachment.mimeType];
+//	} else {
 		conn = [self connectionToPost:url JSON:postString];
-	}
+//	}
 	conn.timeoutInterval = 60.0;
 	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
@@ -164,7 +166,7 @@
 	return request;
 }
 
-- (ATAPIRequest *)requestForRetrievingMessagesSinceMessage:(ATAbstractMessage *)message {
+- (ATAPIRequest *)requestForRetrievingMessagesSinceMessage:(ATMessage *)message {
 	NSDictionary *parameters = nil;
 	if (message && message.apptentiveID) {
 		parameters = @{@"after_id":message.apptentiveID};

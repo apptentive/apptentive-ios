@@ -20,7 +20,6 @@
 #import "ATUtilities.h"
 #import "ATNetworkImageIconView.h"
 #import "ATReachability.h"
-#import "ATAutomatedMessage.h"
 #import "ATData.h"
 #import "ATProgressNavigationBar.h"
 #import "ATAboutViewController.h"
@@ -97,7 +96,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 @property (nonatomic, weak) UIView *activeFooterView;
 
-@property (nonatomic, strong) ATAutomatedMessage *contextMessage;
+@property (nonatomic, strong) ATMessage *contextMessage;
 
 @property (nonatomic, readonly) UIColor *sentColor;
 @property (nonatomic, readonly) UIColor *failedColor;
@@ -358,7 +357,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		verticalMargin += STATUS_LABEL_HEIGHT + STATUS_LABEL_MARGIN;
 	}
 	
-	NSString *labelText = [self.dataSource textOfMessageAtIndexPath:indexPath];
+	NSString *labelText = [self.dataSource textOfMessageAtIndexPath:indexPath] ?: @"";
 	CGFloat effectiveLabelWidth = CGRectGetWidth(tableView.bounds) - horizontalMargin;
 	NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:labelText attributes:@{NSFontAttributeName: BODY_FONT}];
 	
@@ -985,7 +984,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)removeUnsentContextMessages {
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingState == %d)", ATPendingMessageStateComposing];
-		[ATData removeEntitiesNamed:@"ATAutomatedMessage" withPredicate:fetchPredicate];
+		[ATData removeEntitiesNamed:@"ATMessage" withPredicate:fetchPredicate];
 	}
 }
 

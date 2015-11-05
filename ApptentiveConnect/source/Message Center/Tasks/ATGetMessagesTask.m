@@ -8,12 +8,10 @@
 
 #import "ATGetMessagesTask.h"
 
-#import "ATAutomatedMessage.h"
 #import "ATBackend.h"
-#import "ATAbstractMessage.h"
+#import "ATMessage.h"
 #import "ATConversationUpdater.h"
 #import "ATMessageSender.h"
-#import "ATTextMessage.h"
 #import "ATWebClient.h"
 #import "ATWebClient+MessageCenter.h"
 #import "NSDictionary+ATAdditions.h"
@@ -27,7 +25,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 
 @implementation ATGetMessagesTask {
 	ATAPIRequest *request;
-	ATAbstractMessage *lastMessage;
+	ATMessage *lastMessage;
 }
 
 - (id)init {
@@ -35,7 +33,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		NSString *messageID = [defaults objectForKey:ATMessagesLastRetrievedMessageIDPreferenceKey];
 		if (messageID) {
-			lastMessage = [ATAbstractMessage findMessageWithID:messageID];
+			lastMessage = [ATMessage findMessageWithID:messageID];
 		}
 	}
 	return self;
@@ -150,20 +148,13 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 		for (NSDictionary *messageJSON in messages) {
 			NSString *pendingMessageID = [messageJSON at_safeObjectForKey:@"nonce"];
 			NSString *messageID = [messageJSON at_safeObjectForKey:@"id"];
-			ATAbstractMessage *message = nil;
-			message = [ATAbstractMessage findMessageWithPendingID:pendingMessageID];
+			ATMessage *message = nil;
+			message = [ATMessage findMessageWithPendingID:pendingMessageID];
 			if (!message) {
-				message = [ATAbstractMessage findMessageWithID:messageID];
+				message = [ATMessage findMessageWithID:messageID];
 			}
 			if (!message) {
-				NSString *type = [messageJSON at_safeObjectForKey:@"type"];
-				if ([type isEqualToString:@"TextMessage"]) {
-					message = (ATTextMessage *)[ATTextMessage newInstanceWithJSON:messageJSON];
-				} else if ([type isEqualToString:@"FileMessage"]) {
-					//TODO: Add file message type here. Currently server won't return file messages.
-				} else if ([type isEqualToString:@"AutomatedMessage"]) {
-					message = (ATAutomatedMessage *)[ATAutomatedMessage newInstanceWithJSON:messageJSON];
-				}
+				message = (ATMessage *)[ATMessage newInstanceWithJSON:messageJSON];
 				if (conversation && [conversation.personID isEqualToString:message.sender.apptentiveID]) {
 					message.sentByUser = @(YES);
 					message.seenByUser = @(YES);

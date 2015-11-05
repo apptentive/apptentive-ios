@@ -18,10 +18,7 @@
 #import "ATPersonUpdater.h"
 #import "ATFileAttachment.h"
 #if TARGET_OS_IPHONE
-#import "ATAbstractMessage.h"
-#import "ATTextMessage.h"
-#import "ATAutomatedMessage.h"
-#import "ATFileMessage.h"
+#import "ATMessage.h"
 #import "ATFeedbackTypes.h"
 #endif
 
@@ -72,21 +69,21 @@ extern NSString *const ATBackendBecameReadyNotification;
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
 - (void)messageCenterWillDismiss:(ATMessageCenterViewController *)messageCenter;
 
-- (void)attachCustomDataToMessage:(ATAbstractMessage *)message;
+- (void)attachCustomDataToMessage:(ATMessage *)message;
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion;
 #elif TARGET_OS_MAC
 + (NSImage *)imageNamed:(NSString *)name;
 #endif
 
 /*! ATAutomatedMessage messages. */
-- (ATAutomatedMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body;
-- (BOOL)sendAutomatedMessage:(ATAutomatedMessage *)message;
+- (ATMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body;
+- (BOOL)sendAutomatedMessage:(ATMessage *)message;
 
 /*! Send ATTextMessage messages. */
-- (ATTextMessage *)createTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden;
+- (ATMessage *)createTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden;
 - (BOOL)sendTextMessageWithBody:(NSString *)body;
 - (BOOL)sendTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden;
-- (BOOL)sendTextMessage:(ATTextMessage *)message;
+- (BOOL)sendTextMessage:(ATMessage *)message;
 /*! Send ATFileMessage messages. */
 - (BOOL)sendImageMessageWithImage:(UIImage *)image fromSource:(ATFeedbackImageSource)imageSource;
 - (BOOL)sendImageMessageWithImage:(UIImage *)image hiddenOnClient:(BOOL)hidden fromSource:(ATFeedbackImageSource)imageSource;

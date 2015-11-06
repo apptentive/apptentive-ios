@@ -21,7 +21,7 @@
 @dynamic dictionaryData;
 @dynamic label;
 
-+ (NSObject *)newInstanceWithJSON:(NSDictionary *)json {
++ (instancetype)newInstanceWithJSON:(NSDictionary *)json {
 	NSAssert(NO, @"Abstract method called.");
 	return nil;
 }

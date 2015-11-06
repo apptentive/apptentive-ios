@@ -40,8 +40,8 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 	}
 }
 
-+ (NSObject *)newInstanceWithJSON:(NSDictionary *)json {
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
++ (instancetype)newInstanceWithJSON:(NSDictionary *)json {
 	ATMessage *message = nil;
 	NSString *apptentiveID = [json at_safeObjectForKey:@"id"];
 

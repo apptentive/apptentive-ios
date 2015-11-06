@@ -20,6 +20,12 @@
 @dynamic sentMessages;
 @dynamic receivedMessages;
 
++ (instancetype)newInstanceWithID:(NSString *)apptentiveID {
+	ATMessageSender *result = (ATMessageSender *)[ATData newEntityNamed:@"ATMessageSender"];
+	result.apptentiveID = apptentiveID;
+
+	return result;
+}
 
 + (ATMessageSender *)findSenderWithID:(NSString *)apptentiveID {
 	ATMessageSender *result = nil;
@@ -42,22 +48,24 @@
 	
 	ATMessageSender *sender = [ATMessageSender findSenderWithID:apptentiveID];
 	if (!sender) {
-		sender = (ATMessageSender *)[ATData newEntityNamed:@"ATMessageSender"];
-		sender.apptentiveID = apptentiveID;
-	} else {
+		sender = [ATMessageSender newInstanceWithID:apptentiveID];
 	}
+
 	NSString *senderEmail = [json at_safeObjectForKey:@"email"];
-	NSString *senderName = [json at_safeObjectForKey:@"name"];
-	NSString *profilePhoto = [json at_safeObjectForKey:@"profile_photo"];
 	if (senderEmail) {
 		sender.emailAddress = senderEmail;
 	}
+
+	NSString *senderName = [json at_safeObjectForKey:@"name"];
 	if (senderName) {
 		sender.name = senderName;
 	}
+
+	NSString *profilePhoto = [json at_safeObjectForKey:@"profile_photo"];
 	if (profilePhoto) {
 		sender.profilePhotoURL = profilePhoto;
 	}
+	
 	return sender;
 }
 

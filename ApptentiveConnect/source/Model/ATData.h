@@ -17,5 +17,4 @@
 + (void)removeEntitiesNamed:(NSString *)entityName withPredicate:(NSPredicate *)predicate;
 + (void)deleteManagedObject:(NSManagedObject *)object;
 + (BOOL)save;
-+ (NSManagedObjectContext *)moc;
 @end

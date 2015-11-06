@@ -11,7 +11,6 @@
 #import "ATEngagementGetManifestTask.h"
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
-#import "ATData.h"
 #import "ATDataManager.h"
 #import "ATDeviceUpdater.h"
 #import "ApptentiveMetrics.h"
@@ -197,11 +196,9 @@ static NSURLCache *imageCache = nil;
 }
 
 - (ATMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body {
-	ATMessage *message = (ATMessage *)[ATData newEntityNamed:@"ATMessage"];
-	[message setup];
+	ATMessage *message = [ATMessage newInstanceWithBody:body attachments:nil];
 	message.hidden = @NO;
 	message.title = title;
-	message.body = body;
 	message.pendingState = @(ATPendingMessageStateComposing);
 	message.sentByUser = @YES;
 	NSError *error = nil;
@@ -228,9 +225,7 @@ static NSURLCache *imageCache = nil;
 }
 
 - (ATMessage *)createTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden {
-	ATMessage *message = (ATMessage *)[ATData newEntityNamed:@"ATMessage"];
-	[message setup];
-	message.body = body;
+	ATMessage *message = [ATMessage newInstanceWithBody:body attachments:nil];
 	message.sentByUser = @YES;
 	message.seenByUser = @YES;
 	message.hidden = @(hidden);
@@ -295,12 +290,10 @@ static NSURLCache *imageCache = nil;
 }
 
 - (BOOL)sendCompoundMessageWithText:(NSString *)text attachments:(NSArray *)attachments hiddenOnClient:(BOOL)hidden {
-	ATMessage *compoundMessage = (ATMessage *)[ATData newEntityNamed:@"ATMessage"];
-	compoundMessage.body = text;
+	ATMessage *compoundMessage = [ATMessage newInstanceWithBody:text attachments:attachments];
 	compoundMessage.pendingState = @(ATPendingMessageStateSending);
 	compoundMessage.sentByUser = @YES;
 	compoundMessage.hidden = @(hidden);
-	compoundMessage.attachments = [NSOrderedSet orderedSetWithArray:attachments];
 
 	return [self sendMessage:compoundMessage];
 }

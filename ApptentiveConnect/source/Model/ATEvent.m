@@ -26,6 +26,13 @@
 	return nil;
 }
 
++ (instancetype)newInstanceWithLabel:(NSString *)label {
+	ATEvent *result = (ATEvent *)[ATData newEntityNamed:@"ATEvent"];
+	result.label = label;
+	[result setup];
+	return result;
+}
+
 - (void)updateWithJSON:(NSDictionary *)json {
 	[super updateWithJSON:json];
 }

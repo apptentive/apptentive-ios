@@ -40,7 +40,6 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 	}
 }
 
-	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
 + (instancetype)newInstanceWithJSON:(NSDictionary *)json {
 	ATMessage *message = nil;
 	NSString *apptentiveID = [json at_safeObjectForKey:@"id"];
@@ -49,7 +48,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 		message = [self findMessageWithID:apptentiveID];
 	}
 	if (message == nil) {
-		message = [[ATMessage alloc] initWithEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
+		message = (ATMessage *)[ATData newEntityNamed:@"ATMessage"];
 	}
 	[message updateWithJSON:json];
 
@@ -59,6 +58,19 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 	}
 
 	return message;
+}
+
++ (instancetype)newInstanceWithBody:(NSString *)body attachments:(NSArray *)attachments {
+	ATMessage *result = (ATMessage *)[ATData newEntityNamed:@"ATMessage"];
+
+	result.body = body;
+	if (attachments) {
+		result.attachments = [NSMutableOrderedSet orderedSetWithArray:attachments];
+	}
+
+	[result setup];
+
+	return result;
 }
 
 + (ATMessage *)findMessageWithID:(NSString *)apptentiveID {

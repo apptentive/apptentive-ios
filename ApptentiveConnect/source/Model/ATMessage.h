@@ -39,6 +39,7 @@ typedef NS_ENUM(NSInteger, ATPendingMessageState) {
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSOrderedSet *attachments;
 
++ (instancetype)newInstanceWithBody:(NSString *)body attachments:(NSArray *)attachments;
 + (void)clearComposingMessages;
 + (ATMessage *)findMessageWithID:(NSString *)apptentiveID;
 + (ATMessage *)findMessageWithPendingID:(NSString *)pendingID;

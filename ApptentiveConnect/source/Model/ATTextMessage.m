@@ -31,9 +31,9 @@
 	[message updateWithJSON:json];
 	
 	// If server creation time is set, overwrite client creation time.
-//	if (![message isCreationTimeEmpty]) {
-//		message.clientCreationTime = message.creationTime;
-//	}
+	if (![message isCreationTimeEmpty]) {
+		message.clientCreationTime = message.creationTime;
+	}
 
 	return message;
 }

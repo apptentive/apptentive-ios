@@ -218,7 +218,7 @@ static NSURLCache *imageCache = nil;
 
 - (BOOL)sendAutomatedMessage:(ATAutomatedMessage *)message {
 	message.pendingState = @(ATPendingMessageStateSending);
-	[message updateClientCreationTime];
+//	[message updateClientCreationTime];
 	
 	NSError *error = nil;
 	if (![[self managedObjectContext] save:&error]) {
@@ -265,7 +265,7 @@ static NSURLCache *imageCache = nil;
 	message.pendingState = @(ATPendingMessageStateSending);
 	
 	[self updatePersonIfNeeded];
-	[message updateClientCreationTime];
+//	[message updateClientCreationTime];
 	
 	NSError *error = nil;
 	if (![[self managedObjectContext] save:&error]) {

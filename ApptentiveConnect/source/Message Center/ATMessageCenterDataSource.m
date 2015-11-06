@@ -47,9 +47,9 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 			[request setEntity:[NSEntityDescription entityForName:@"ATTextMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
 			[request setFetchBatchSize:20];
 			
-			NSSortDescriptor *creationTimeSort = [[NSSortDescriptor alloc] initWithKey:@"creationTime" ascending:YES];
+			//NSSortDescriptor *creationTimeSort = [[NSSortDescriptor alloc] initWithKey:@"creationTime" ascending:YES];
 			NSSortDescriptor *clientCreationTimeSort = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
-			[request setSortDescriptors:@[creationTimeSort, clientCreationTimeSort]];
+			[request setSortDescriptors:@[clientCreationTimeSort]];
 			
 			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"creationTime != %d AND clientCreationTime != %d AND hidden != %@", 0, 0, @YES];
 			[request setPredicate:predicate];
@@ -57,7 +57,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 			// For now, group each message into its own section.
 			// In the future, we'll save an attribute that coalesces
 			// closely-grouped (in time) messages into a single section.
-			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:@"creationTimeForSections" cacheName:@"at-messages-cache"];
+			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:@"clientCreationTime" cacheName:@"at-messages-cache"];
 			newController.delegate = self;
 			_fetchedMessagesController = newController;
 			

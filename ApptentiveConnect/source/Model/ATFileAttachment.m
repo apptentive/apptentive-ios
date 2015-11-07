@@ -93,6 +93,7 @@
 		}
 	}
 
+	ATLogError(@"Missing sidecar file for %@", self);
 	return nil;
 }
 

@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import "ATMessage.h"
 
@@ -49,6 +49,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 
 - (void)removeUnsentContextMessages;
 
+- (NSInteger)numberOfAttachmentsForMessageAtIndex:(NSInteger)index;
+- (NSString *)extensionForAttachmentAtIndexPath:(NSIndexPath *)indexPath; // Returns nil if thumbnail is present, file extension if not
+- (UIImage *)imageForAttachmentAtIndexPath:(NSIndexPath *)indexPath; // Returns thumbnail if present, generic file icon if not
+
 @property (nonatomic, readonly) BOOL lastMessageIsReply;
 @property (nonatomic, readonly) NSIndexPath *lastUserMessageIndexPath;
 @property (nonatomic, readonly) ATPendingMessageState lastUserMessageState;
@@ -56,5 +60,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 @end
 
 @protocol ATMessageCenterDataSourceDelegate <NSObject, NSFetchedResultsControllerDelegate>
+
+- (void)messageCenterDataSource:(ATMessageCenterDataSource *)dataSource didLoadAttachmentThumbnailAtIndexPath:(NSIndexPath *)indexPath;
 
 @end

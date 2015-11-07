@@ -11,6 +11,7 @@
 #import "ATMessage.h"
 #import "ATUtilities.h"
 #import "ATData.h"
+#import "NSDictionary+ATAdditions.h"
 
 @interface ATFileAttachment ()
 - (NSString *)fullLocalPathForFilename:(NSString *)filename;
@@ -23,12 +24,42 @@
 @dynamic mimeType;
 @dynamic name;
 @dynamic message;
+@dynamic remoteURL;
+@dynamic remoteThumbnailURL;
 
 + (instancetype)newInstanceWithFileData:(NSData *)fileData MIMEType:(NSString *)MIMEType {
 	ATFileAttachment *attachment = (ATFileAttachment *)[ATData newEntityNamed:NSStringFromClass(self)];
 	attachment.mimeType = MIMEType;
 	[attachment setFileData:fileData];
 	return attachment;
+}
+
++ (instancetype)newInstanceWithJSON:(NSDictionary *)JSON {
+	ATFileAttachment *attachment = (ATFileAttachment *)[ATData newEntityNamed:NSStringFromClass(self)];
+	[attachment updateWithJSON:JSON];
+
+	return attachment;
+}
+
+- (void)updateWithJSON:(NSDictionary *)JSON {
+	NSString *remoteURLString = [JSON at_safeObjectForKey:@"url"];
+	if (remoteURLString && [remoteURLString isKindOfClass:[NSString class]] && [NSURL URLWithString:remoteURLString]) {
+		[self willChangeValueForKey:@"remoteURL"];
+		[self setPrimitiveValue:remoteURLString forKey:@"remoteURL"];
+		[self didChangeValueForKey:@"remoteURL"];
+	}
+
+	NSString *remoteThumbnailURL = [JSON at_safeObjectForKey:@"thumbnail_url"];
+	if (remoteThumbnailURL && [remoteThumbnailURL isKindOfClass:[NSString class]] && [NSURL URLWithString:remoteThumbnailURL]) {
+		[self willChangeValueForKey:@"remoteThumbnailURL"];
+		[self setPrimitiveValue:remoteThumbnailURL forKey:@"remoteThumbnailURL"];
+		[self didChangeValueForKey:@"remoteThumbnailURL"];
+	}
+
+	NSString *MIMEType = [JSON at_safeObjectForKey:@"mime_type"];
+	if (MIMEType && [MIMEType isKindOfClass:[NSString class]]) {
+		[self setValue:MIMEType forKey:@"mimeType"];
+	}
 }
 
 - (void)prepareForDeletion {
@@ -47,6 +78,22 @@
 		self.mimeType = @"application/octet-stream";
 		self.name = [NSString stringWithString:self.localPath];
 	}
+}
+
+- (NSData *)fileData {
+	NSString *path = [self fullLocalPath];
+	NSData *fileData = nil;
+	if (path && [[NSFileManager defaultManager] fileExistsAtPath:path]) {
+		NSError *error = nil;
+		fileData = [NSData dataWithContentsOfFile:path options:NSDataReadingMappedIfSafe error:&error];
+		if (!fileData) {
+			ATLogError(@"Unable to get contents of file path for uploading: %@", error);
+		} else {
+			return fileData;
+		}
+	}
+
+	return nil;
 }
 
 - (void)setFileFromSourcePath:(NSString *)sourceFilename {

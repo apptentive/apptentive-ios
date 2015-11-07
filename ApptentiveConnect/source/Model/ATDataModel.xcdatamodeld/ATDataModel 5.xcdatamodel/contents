@@ -9,9 +9,8 @@
         <attribute name="localPath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="mimeType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="source" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="transient" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
-        <attribute name="userVisible" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
+        <attribute name="remoteThumbnailURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="remoteURL" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="message" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ATMessage" inverseName="attachments" inverseEntity="ATMessage" syncable="YES"/>
     </entity>
     <entity name="ATMessage" representedClassName="ATMessage" parentEntity="ATRecord" syncable="YES">
@@ -52,7 +51,7 @@
     </entity>
     <elements>
         <element name="ATEvent" positionX="0" positionY="0" width="128" height="90"/>
-        <element name="ATFileAttachment" positionX="9" positionY="45" width="128" height="150"/>
+        <element name="ATFileAttachment" positionX="0" positionY="0" width="128" height="135"/>
         <element name="ATMessage" positionX="0" positionY="0" width="128" height="255"/>
         <element name="ATMessageSender" positionX="0" positionY="0" width="128" height="120"/>
         <element name="ATRecord" positionX="0" positionY="0" width="128" height="120"/>

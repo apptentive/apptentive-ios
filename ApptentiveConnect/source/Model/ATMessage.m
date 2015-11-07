@@ -141,7 +141,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
 - (void)updateWithJSON:(NSDictionary *)json {
 	[super updateWithJSON:json];
-	
+
 	NSDictionary *senderDict = [json at_safeObjectForKey:@"sender"];
 	if (senderDict != nil) {
 		ATMessageSender *sender = [ATMessageSender newOrExistingMessageSenderFromJSON:senderDict];
@@ -158,6 +158,27 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 	if (tmpBody) {
 		self.body = tmpBody;
 	}
+
+	NSString *tmpTitle = [json at_safeObjectForKey:@"title"];
+	if (tmpTitle) {
+		self.title = tmpTitle;
+	}
+
+	NSArray *attachmentsJSON = [json at_safeObjectForKey:@"attachments"];
+	NSMutableOrderedSet *attachments = [NSMutableOrderedSet orderedSetWithCapacity:attachmentsJSON.count];
+
+	for (id tmpAttachment in attachmentsJSON) {
+		if ([tmpAttachment isKindOfClass:[NSDictionary class]]) {
+			NSDictionary *attachmentJSON = (NSDictionary *)tmpAttachment;
+			ATFileAttachment *attachment = [ATFileAttachment newInstanceWithJSON:attachmentJSON];
+
+			if (attachment) {
+				[attachments addObject:attachment];
+			}
+		}
+	}
+
+	self.attachments = attachments;
 }
 
 - (NSDictionary *)apiJSON {

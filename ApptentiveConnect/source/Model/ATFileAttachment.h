@@ -13,12 +13,16 @@
 
 @interface ATFileAttachment : NSManagedObject
 @property (nonatomic, strong) NSString *localPath;
-@property (nonatomic, strong) NSString *mimeType;
+@property (nonatomic, strong) NSString *mimeType; // starts w/ lowercase b/c Core Data is stupid
 @property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSURL *remoteURL;
+@property (nonatomic, strong) NSURL *remoteThumbnailURL;
 @property (nonatomic, strong) ATMessage *message;
 
 + (instancetype)newInstanceWithFileData:(NSData *)fileData MIMEType:(NSString *)MIMEType;
++ (instancetype)newInstanceWithJSON:(NSDictionary *)JSON;
 
+- (NSData *)fileData;
 - (void)setFileData:(NSData *)data;
 - (void)setFileFromSourcePath:(NSString *)sourceFilename;
 
@@ -26,4 +30,5 @@
 
 - (UIImage *)thumbnailOfSize:(CGSize)size;
 - (void)createThumbnailOfSize:(CGSize)size completion:(void (^)(void))completion;
+
 @end

@@ -217,28 +217,15 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 		[multipartEncodedData appendData:[boundaryString dataUsingEncoding:NSUTF8StringEncoding]];
 		[debugString appendString:boundaryString];
 
-		NSString *path = [attachment fullLocalPath];
-		NSData *fileData = nil;
-		if (path && [[NSFileManager defaultManager] fileExistsAtPath:path]) {
-			NSError *error = nil;
-			fileData = [NSData dataWithContentsOfFile:path options:NSDataReadingMappedIfSafe error:&error];
-			NSString *mimeType = attachment.mimeType;
-			if (!fileData) {
-				ATLogError(@"Unable to get contents of file path for uploading: %@", error);
-				return nil;
-			}
+		NSMutableString *multipartHeader = [NSMutableString string];
+		[multipartHeader appendString:[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", @"file", attachment.name]];
+		[multipartHeader appendString:[NSString stringWithFormat:@"Content-Type: %@\r\n", attachment.mimeType]];
+		[multipartHeader appendString:@"Content-Transfer-Encoding: binary\r\n\r\n"];
+		[debugString appendString:multipartHeader];
 
-			NSString *filename = attachment.name ?: path.lastPathComponent;
-			NSMutableString *multipartHeader = [NSMutableString string];
-			[multipartHeader appendString:[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", @"file", filename]];
-			[multipartHeader appendString:[NSString stringWithFormat:@"Content-Type: %@\r\n", mimeType]];
-			[multipartHeader appendString:@"Content-Transfer-Encoding: binary\r\n\r\n"];
-			[debugString appendString:multipartHeader];
-
-			[multipartEncodedData appendData:[multipartHeader dataUsingEncoding:NSUTF8StringEncoding]];
-			[multipartEncodedData appendData:fileData];
-			[debugString appendFormat:@"<NSData of length: %lu>", (unsigned long)[fileData length]];
-		}
+		[multipartEncodedData appendData:[multipartHeader dataUsingEncoding:NSUTF8StringEncoding]];
+		[multipartEncodedData appendData:attachment.fileData];
+		[debugString appendFormat:@"<NSData of length: %lu>", (unsigned long)[attachment.fileData length]];
 	}
 
 	NSString *finalBoundary = [NSString stringWithFormat:@"\r\n--%@--\r\n", boundary];

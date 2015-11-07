@@ -11,23 +11,13 @@
 
 @class ATMessage;
 
-typedef enum {
-	ATFileAttachmentSourceUnknown,
-	ATFileAttachmentSourceScreenshot,
-	ATFileAttachmentSourceCamera,
-	ATFileAttachmentSourcePhotoLibrary,
-	ATFileAttachmentSourceProgrammatic,
-} ATFileAttachmentSource;
-
-//TODO: Add CGSize for images?
 @interface ATFileAttachment : NSManagedObject
 @property (nonatomic, strong) NSString *localPath;
 @property (nonatomic, strong) NSString *mimeType;
 @property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) NSNumber *source;
-@property (nonatomic, strong) NSNumber *transient;
-@property (nonatomic, strong) NSNumber *userVisible;
 @property (nonatomic, strong) ATMessage *message;
+
++ (instancetype)newInstanceWithFileData:(NSData *)fileData MIMEType:(NSString *)MIMEType;
 
 - (void)setFileData:(NSData *)data;
 - (void)setFileFromSourcePath:(NSString *)sourceFilename;

@@ -245,47 +245,25 @@ static NSURLCache *imageCache = nil;
 	return [self sendMessage:message];
 }
 
-- (BOOL)sendImageMessageWithImage:(UIImage *)image fromSource:(ATFeedbackImageSource)imageSource {
-	return [self sendImageMessageWithImage:image hiddenOnClient:NO fromSource:imageSource];
+- (BOOL)sendImageMessageWithImage:(UIImage *)image {
+	return [self sendImageMessageWithImage:image hiddenOnClient:NO];
 }
 
-- (BOOL)sendImageMessageWithImage:(UIImage *)image hiddenOnClient:(BOOL)hidden fromSource:(ATFeedbackImageSource)imageSource {
+- (BOOL)sendImageMessageWithImage:(UIImage *)image hiddenOnClient:(BOOL)hidden {
 	NSData *imageData = UIImageJPEGRepresentation(image, 0.95);
 	NSString *mimeType = @"image/jpeg";
-	ATFileAttachmentSource source = ATFileAttachmentSourceUnknown;
-	switch (imageSource) {
-		case ATFeedbackImageSourceCamera:
-		case ATFeedbackImageSourcePhotoLibrary:
-			source = ATFileAttachmentSourceCamera;
-			break;
-			/* for now we're going to assume camera…
-			 source = ATFileAttachmentSourcePhotoLibrary;
-			 break;
-			 */
-		case ATFeedbackImageSourceScreenshot:
-			source = ATFileAttachmentSourceScreenshot;
-			break;
-		case ATFeedbackImageSourceProgrammatic:
-			source = ATFileAttachmentSourceProgrammatic;
-			break;
-	}
-	
-	return [self sendFileMessageWithFileData:imageData andMimeType:mimeType hiddenOnClient:hidden fromSource:source];
+	return [self sendFileMessageWithFileData:imageData andMimeType:mimeType hiddenOnClient:hidden];
 }
 
 
-- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType fromSource:(ATFileAttachmentSource)source {
-	return [self sendFileMessageWithFileData:fileData andMimeType:mimeType hiddenOnClient:NO fromSource:source];
+- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType {
+	return [self sendFileMessageWithFileData:fileData andMimeType:mimeType hiddenOnClient:NO];
 }
 
-- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType hiddenOnClient:(BOOL)hidden fromSource:(ATFileAttachmentSource)source {
+- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType hiddenOnClient:(BOOL)hidden {
 	[self updatePersonIfNeeded];
 
-	ATFileAttachment *fileAttachment = (ATFileAttachment *)[ATData newEntityNamed:@"ATFileAttachment"];
-	[fileAttachment setFileData:fileData];
-	[fileAttachment setMimeType:mimeType];
-	[fileAttachment setSource:@(source)];
-
+	ATFileAttachment *fileAttachment = [ATFileAttachment newInstanceWithFileData:fileData MIMEType:mimeType];
 	return [self sendCompoundMessageWithText:nil attachments:@[fileAttachment] hiddenOnClient:hidden];
 }
 

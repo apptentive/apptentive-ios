@@ -10,6 +10,7 @@
 #import "ATBackend.h"
 #import "ATMessage.h"
 #import "ATUtilities.h"
+#import "ATData.h"
 
 @interface ATFileAttachment ()
 - (NSString *)fullLocalPathForFilename:(NSString *)filename;
@@ -21,10 +22,14 @@
 @dynamic localPath;
 @dynamic mimeType;
 @dynamic name;
-@dynamic source;
-@dynamic transient;
-@dynamic userVisible;
 @dynamic message;
+
++ (instancetype)newInstanceWithFileData:(NSData *)fileData MIMEType:(NSString *)MIMEType {
+	ATFileAttachment *attachment = (ATFileAttachment *)[ATData newEntityNamed:NSStringFromClass(self)];
+	attachment.mimeType = MIMEType;
+	[attachment setFileData:fileData];
+	return attachment;
+}
 
 - (void)prepareForDeletion {
 	[self setFileData:nil];
@@ -136,10 +141,9 @@
 	NSString *fullLocalPath = [self fullLocalPath];
 	NSString *filename = [self filenameForThumbnailOfSize:size];
 	NSString *fullThumbnailPath = [self fullLocalPathForFilename:filename];
-    BOOL isFromITouchCamera = ([self.source intValue] == ATFileAttachmentSourceCamera);
-	
+
 	UIImage *image = [UIImage imageWithContentsOfFile:fullLocalPath];
-	UIImage *thumb = [ATUtilities imageByScalingImage:image toSize:size scale:scale fromITouchCamera:isFromITouchCamera];
+	UIImage *thumb = [ATUtilities imageByScalingImage:image toSize:size scale:scale fromITouchCamera:NO];
 	[UIImagePNGRepresentation(thumb) writeToFile:fullThumbnailPath atomically:YES];
 	return thumb;
 }
@@ -150,11 +154,10 @@
 	NSString *fullLocalPath = [self fullLocalPath];
 	NSString *filename = [self filenameForThumbnailOfSize:size];
 	NSString *fullThumbnailPath = [self fullLocalPathForFilename:filename];
-    BOOL isFromITouchCamera = ([self.source intValue] == ATFileAttachmentSourceCamera);
-	
+
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
 		UIImage *image = [UIImage imageWithContentsOfFile:fullLocalPath];
-		UIImage *thumb = [ATUtilities imageByScalingImage:image toSize:size scale:scale fromITouchCamera:isFromITouchCamera];
+		UIImage *thumb = [ATUtilities imageByScalingImage:image toSize:size scale:scale fromITouchCamera:NO];
 		[UIImagePNGRepresentation(thumb) writeToFile:fullThumbnailPath atomically:YES];
 		dispatch_sync(dispatch_get_main_queue(), ^{
 			if (completion) {

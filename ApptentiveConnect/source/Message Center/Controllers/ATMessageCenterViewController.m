@@ -20,7 +20,6 @@
 #import "ATUtilities.h"
 #import "ATNetworkImageIconView.h"
 #import "ATReachability.h"
-#import "ATData.h"
 #import "ATProgressNavigationBar.h"
 #import "ATAboutViewController.h"
 #import <MobileCoreServices/UTCoreTypes.h>
@@ -203,7 +202,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)dealloc {
-	[self removeUnsentContextMessages];
+	[self.dataSource removeUnsentContextMessages];
 
 	self.tableView.delegate = nil;
 	self.messageInputView.messageView.delegate = nil;
@@ -978,13 +977,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)scrollToLastMessageAnimated:(BOOL)animated {
 	if (self.state != ATMessageCenterStateEmpty && !(self.state == ATMessageCenterStateWhoCard && self.interaction.profileRequired && !self.dataSource.hasNonContextMessages)) {
 		[self scrollToFooterView:nil];
-	}
-}
-
-- (void)removeUnsentContextMessages {
-	@synchronized(self) {
-		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingState == %d)", ATPendingMessageStateComposing];
-		[ATData removeEntitiesNamed:@"ATMessage" withPredicate:fetchPredicate];
 	}
 }
 

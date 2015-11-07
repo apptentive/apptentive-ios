@@ -233,6 +233,13 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 	}
 }
 
+- (void)removeUnsentContextMessages {
+	@synchronized(self) {
+		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingState == %d)", ATPendingMessageStateComposing];
+		[ATData removeEntitiesNamed:@"ATMessage" withPredicate:fetchPredicate];
+	}
+}
+
 #pragma mark - Private
 
 - (ATMessage *)messageAtIndexPath:(NSIndexPath *)indexPath {

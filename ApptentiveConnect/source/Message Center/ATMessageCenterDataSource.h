@@ -47,6 +47,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 - (NSURL *)imageURLOfSenderAtIndexPath:(NSIndexPath *)indexPath;
 - (void)markAsReadMessageAtIndexPath:(NSIndexPath *)indexPath;
 
+- (void)removeUnsentContextMessages;
+
 @property (nonatomic, readonly) BOOL lastMessageIsReply;
 @property (nonatomic, readonly) NSIndexPath *lastUserMessageIndexPath;
 @property (nonatomic, readonly) ATPendingMessageState lastUserMessageState;

@@ -7,6 +7,7 @@
 //
 
 #import "ATMessageCenterDataSource.h"
+#import <MobileCoreServices/MobileCoreServices.h>
 
 #import "ATBackend.h"
 #import "ATConnect.h"
@@ -110,8 +111,13 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 	if (message.automated.boolValue) {
 		return ATMessageCenterMessageTypeContextMessage;
 	} else if (message.sentByUser.boolValue) {
-		return ATMessageCenterMessageTypeMessage;
+		if (message.attachments.count) {
+			return ATMessageCenterMessageTypeCompoundMessage;
+		} else {
+			return ATMessageCenterMessageTypeMessage;
+		}
 	} else {
+		// TODO: handle compound reply
 		return ATMessageCenterMessageTypeReply;
 	}
 }
@@ -240,7 +246,38 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 	}
 }
 
+- (NSInteger)numberOfAttachmentsForMessageAtIndex:(NSInteger)index {
+	return [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]].attachments.count;
+}
+
+- (UIImage *)imageForAttachmentAtIndexPath:(NSIndexPath *)indexPath {
+//	ATMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
+//	ATFileAttachment *attachment = [message.attachments objectAtIndex:indexPath.row];
+
+	// If attachment has local path, return cached image
+
+	// else if attachment has thumbnail URL, kick off download
+
+	// return generic image attachment icon
+	return [[ATBackend imageNamed:@"at_document"] resizableImageWithCapInsets:UIEdgeInsetsMake(9.0, 2.0, 2.0, 9.0)];
+}
+
+- (NSString *)extensionForAttachmentAtIndexPath:(NSIndexPath *)indexPath {
+	ATFileAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
+
+	CFStringRef uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (__bridge CFStringRef _Nonnull)(attachment.mimeType), NULL);
+	NSString *extension = (__bridge NSString *)UTTypeCopyPreferredTagWithClass(uti, kUTTagClassFilenameExtension);
+
+	return extension;
+}
+
 #pragma mark - Private
+
+// indexPath.section refers to the message index (table view section), indexPath.row refers to the attachment index.
+- (ATFileAttachment *)fileAttachmentAtIndexPath:(NSIndexPath *)indexPath {
+	ATMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
+	return [message.attachments objectAtIndex:indexPath.row];
+}
 
 - (ATMessage *)messageAtIndexPath:(NSIndexPath *)indexPath {
 	return [self.fetchedMessagesController objectAtIndexPath:indexPath];

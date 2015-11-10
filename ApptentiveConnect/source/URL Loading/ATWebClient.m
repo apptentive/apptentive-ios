@@ -25,7 +25,7 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 #if USE_STAGING
 #define kApptentiveBaseURL (@"https://api.apptentive-beta.com")
 #else
-#define kApptentiveBaseURL (@"https://2e49da50.ngrok.io")
+#define kApptentiveBaseURL (@"https://api.apptentive.com")
 #endif
 
 @implementation ATWebClient

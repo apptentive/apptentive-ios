@@ -14,6 +14,7 @@
 #import "ATMessageCenterMessageCell.h"
 #import "ATMessageCenterReplyCell.h"
 #import "ATMessageCenterContextMessageCell.h"
+#import "ATCompoundMessageCell.h"
 #import "ATMessageCenterInteraction.h"
 #import "ATConnect_Private.h"
 #import "ATNetworkImageView.h"
@@ -22,12 +23,15 @@
 #import "ATReachability.h"
 #import "ATProgressNavigationBar.h"
 #import "ATAboutViewController.h"
+#import "ATIndexedCollectionView.h"
+#import "ATAttachmentCell.h"
 #import <MobileCoreServices/UTCoreTypes.h>
 
 #define HEADER_LABEL_HEIGHT 64.0
 #define TEXT_VIEW_HORIZONTAL_INSET 12.0
 #define TEXT_VIEW_VERTICAL_INSET 10.0
 #define DATE_FONT [UIFont boldSystemFontOfSize:14.0]
+#define ATTACHMENT_MARGIN CGSizeMake(16.0, 15.0)
 
 #define FOOTER_ANIMATION_DURATION 0.10
 
@@ -272,34 +276,50 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	UITableViewCell *cell;
 	ATMessageCenterMessageType type = [self.dataSource cellTypeAtIndexPath:indexPath];
 	
-	if (type == ATMessageCenterMessageTypeMessage) {
-		ATMessageCenterMessageCell *messageCell = [tableView dequeueReusableCellWithIdentifier:@"Message" forIndexPath:indexPath];
+	if (type == ATMessageCenterMessageTypeMessage || type == ATMessageCenterMessageTypeCompoundMessage) {
+		NSString *cellIdentifier = type == ATMessageCenterMessageTypeCompoundMessage ? @"CompoundMessage" : @"Message";
+		ATMessageCenterMessageCell *messageCell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
 	
 		messageCell.messageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
 		switch ([self.dataSource statusOfMessageAtIndexPath:indexPath]) {
 			case ATMessageCenterMessageStatusHidden:
-				messageCell.statusLabel.hidden = YES;
+				messageCell.statusLabelHidden = YES;
 				messageCell.layer.borderWidth = 0;
 				break;
 			case ATMessageCenterMessageStatusFailed:
-				messageCell.statusLabel.hidden = NO;
+				messageCell.statusLabelHidden = NO;
 				messageCell.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
 				messageCell.layer.borderColor = [self failedColor].CGColor;
 				messageCell.statusLabel.textColor = [self failedColor];
 				messageCell.statusLabel.text = ATLocalizedString(@"Failed", @"Message failed to send.");
 				break;
 			case ATMessageCenterMessageStatusSending:
-				messageCell.statusLabel.hidden = NO;
+				messageCell.statusLabelHidden = NO;
 				messageCell.layer.borderWidth = 0;
 				messageCell.statusLabel.textColor = self.sentColor;
 				messageCell.statusLabel.text = ATLocalizedString(@"Sending…", @"Message is sending.");
 				break;
 			case ATMessageCenterMessageStatusSent:
-				messageCell.statusLabel.hidden = NO;
+				messageCell.statusLabelHidden = NO;
 				messageCell.layer.borderWidth = 0;
 				messageCell.statusLabel.textColor = self.sentColor;
 				messageCell.statusLabel.text = ATLocalizedString(@"Sent", @"Message sent successfully");
 				break;
+		}
+
+		if (type == ATMessageCenterMessageTypeCompoundMessage) {
+			ATCompoundMessageCell *compoundCell = (ATCompoundMessageCell *)messageCell;
+
+			compoundCell.collectionView.index = indexPath.section;
+			compoundCell.collectionView.dataSource = self;
+			compoundCell.collectionView.delegate = self;
+
+			UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)compoundCell.collectionView.collectionViewLayout;
+			layout.sectionInset = UIEdgeInsetsMake(ATTACHMENT_MARGIN.height, ATTACHMENT_MARGIN.width, ATTACHMENT_MARGIN.height, ATTACHMENT_MARGIN.width);
+			layout.minimumInteritemSpacing = ATTACHMENT_MARGIN.width;
+			layout.itemSize = [ATAttachmentCell sizeForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN];
+
+			compoundCell.messageLabelHidden = compoundCell.messageLabel.text == nil;
 		}
 				
 		cell = messageCell;
@@ -336,12 +356,21 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	// iOS 7 requires this and there's no good way to instantiate a cell to sample, so we're hard-coding it for now.
 	CGFloat verticalMargin, horizontalMargin, minimumCellHeight;
+	BOOL statusLabelVisible = [self.dataSource statusOfMessageAtIndexPath:indexPath] != ATMessageCenterMessageStatusHidden;
+	CGFloat verticalFudgeFactor = 0.0;
 	
 	switch ([self.dataSource cellTypeAtIndexPath:indexPath]) {
 		case ATMessageCenterMessageTypeContextMessage:
 		case ATMessageCenterMessageTypeMessage:
 			horizontalMargin = MESSAGE_LABEL_TOTAL_HORIZONTAL_MARGIN;
 			verticalMargin = MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN;
+			minimumCellHeight = 0;
+			break;
+
+		case ATMessageCenterMessageTypeCompoundMessage:
+			horizontalMargin = MESSAGE_LABEL_TOTAL_HORIZONTAL_MARGIN;
+			verticalMargin = MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN] - ATTACHMENT_MARGIN.height;
+			verticalFudgeFactor = 10.0;
 			minimumCellHeight = 0;
 			break;
 
@@ -352,15 +381,22 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			break;
 	}
 	
-	if ([self.dataSource statusOfMessageAtIndexPath:indexPath] != ATMessageCenterMessageStatusHidden) {
-		verticalMargin += STATUS_LABEL_HEIGHT + STATUS_LABEL_MARGIN;
+	if (statusLabelVisible) {
+		verticalMargin += STATUS_LABEL_HEIGHT + STATUS_LABEL_MARGIN + verticalFudgeFactor;
 	}
 	
-	NSString *labelText = [self.dataSource textOfMessageAtIndexPath:indexPath] ?: @"";
+	NSString *labelText = [self.dataSource textOfMessageAtIndexPath:indexPath];
 	CGFloat effectiveLabelWidth = CGRectGetWidth(tableView.bounds) - horizontalMargin;
-	NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:labelText attributes:@{NSFontAttributeName: BODY_FONT}];
-	
-	CGRect labelRect = [attributedText boundingRectWithSize:CGSizeMake(effectiveLabelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
+	CGRect labelRect = CGRectZero;
+	if (labelText) {
+		NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:labelText attributes:@{NSFontAttributeName: BODY_FONT}];
+		labelRect = [attributedText boundingRectWithSize:CGSizeMake(effectiveLabelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
+	} else {
+		verticalMargin -= MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN;
+		if (statusLabelVisible) {
+			verticalMargin += 9.0;
+		}
+	}
 	
 	double height = ceil(fmax(labelRect.size.height + verticalMargin, minimumCellHeight));
 	
@@ -473,6 +509,36 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 	
 	[self.tableView reloadData];
+}
+
+#pragma mark Message center data source delegate
+
+- (void)messageCenterDataSource:(ATMessageCenterDataSource *)dataSource didLoadAttachmentThumbnailAtIndexPath:(NSIndexPath *)indexPath {
+	ATCompoundMessageCell *cell = (ATCompoundMessageCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
+	ATIndexedCollectionView *collectionView = cell.collectionView;
+
+	[collectionView reloadItemsAtIndexPaths:@[ [NSIndexPath indexPathForItem:indexPath.row inSection:0] ]];
+}
+
+#pragma mark Collection view delegate
+
+#pragma mark Collection view data source
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+	return 1;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+	return [self.dataSource numberOfAttachmentsForMessageAtIndex:((ATIndexedCollectionView *)collectionView).index];
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+	ATAttachmentCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Attachment" forIndexPath:indexPath];
+
+	cell.imageView.image = [self.dataSource imageForAttachmentAtIndexPath:[NSIndexPath indexPathForItem:indexPath.item inSection:((ATIndexedCollectionView *)collectionView).index]];
+	cell.extensionLabel.text = [self.dataSource extensionForAttachmentAtIndexPath:[NSIndexPath indexPathForItem:indexPath.row inSection:((ATIndexedCollectionView *)collectionView).index]];
+
+	return cell;
 }
 
 #pragma mark - Text view delegate

@@ -14,6 +14,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageType) {
 	ATMessageCenterMessageTypeMessage,
 	ATMessageCenterMessageTypeReply,
 	ATMessageCenterMessageTypeContextMessage,
+	ATMessageCenterMessageTypeCompoundMessage
 };
 
 typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {

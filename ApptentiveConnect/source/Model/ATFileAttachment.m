@@ -56,7 +56,7 @@
 		[self didChangeValueForKey:@"remoteThumbnailURL"];
 	}
 
-	NSString *MIMEType = [JSON at_safeObjectForKey:@"mime_type"];
+	NSString *MIMEType = [JSON at_safeObjectForKey:@"content_type"];
 	if (MIMEType && [MIMEType isKindOfClass:[NSString class]]) {
 		[self setValue:MIMEType forKey:@"mimeType"];
 	}

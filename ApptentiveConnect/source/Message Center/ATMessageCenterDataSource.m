@@ -42,6 +42,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 }
 
 - (void)dealloc {
+	// TODO: get resume data from cancelled downloads and use it
 	[self.attachmentDownloadSession invalidateAndCancel];
 
 	self.fetchedMessagesController.delegate = nil;
@@ -125,8 +126,11 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 			return ATMessageCenterMessageTypeMessage;
 		}
 	} else {
-		// TODO: handle compound reply
-		return ATMessageCenterMessageTypeReply;
+		if (message.attachments.count) {
+			return ATMessageCenterMessageTypeCompoundMessage;
+		} else {
+			return ATMessageCenterMessageTypeReply;
+		}
 	}
 }
 
@@ -311,9 +315,13 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 }
 
 - (void)downloadAttachmentAtIndexPath:(NSIndexPath *)indexPath {
+	if ([self.taskIndexPaths.allValues containsObject:indexPath]) {
+		return;
+	}
+
 	ATFileAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
 	if (attachment.localPath != nil || !attachment.remoteURL) {
-		ATLogError(@"Attempting to download attachment with no remote URL");
+		ATLogError(@"Attempting to download attachment with missing or invalid remote URL");
 		return;
 	}
 

@@ -44,7 +44,7 @@
 	CGFloat imageWidth = (size.width - totalMargin) / count;
 	CGFloat imageHeight = imageWidth / aspectRatio;
 
-	return CGSizeMake(round(imageWidth * 2.0) / 2.0, round(imageHeight * 2.0) / 2.0);
+	return CGSizeMake(floor(imageWidth * 2.0) / 2.0, floor(imageHeight * 2.0) / 2.0);
 }
 
 + (CGFloat)heightForScreen:(UIScreen *)screen withMargin:(CGSize)margin {

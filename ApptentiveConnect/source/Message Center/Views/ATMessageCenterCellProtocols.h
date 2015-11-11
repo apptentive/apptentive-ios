@@ -6,8 +6,17 @@
 //  Copyright © 2015 Apptentive, Inc. All rights reserved.
 //
 
-#ifndef ATMessageCenterCellProtocols_h
-#define ATMessageCenterCellProtocols_h
+@class ATIndexedCollectionView;
 
+@protocol ATMessageCenterCell <NSObject>
 
-#endif /* ATMessageCenterCellProtocols_h */
+@property (weak, nonatomic) UILabel *messageLabel;
+
+@end
+
+@protocol ATMessageCenterCompoundCell <ATMessageCenterCell>
+
+@property (weak, nonatomic) ATIndexedCollectionView *collectionView;
+@property (assign, nonatomic) BOOL messageLabelHidden;
+
+@end

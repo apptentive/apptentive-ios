@@ -273,14 +273,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	[self.dataSource markAsReadMessageAtIndexPath:indexPath];
 	
-	UITableViewCell *cell;
+	UITableViewCell<ATMessageCenterCell> *cell;
 	ATMessageCenterMessageType type = [self.dataSource cellTypeAtIndexPath:indexPath];
 	
 	if (type == ATMessageCenterMessageTypeMessage || type == ATMessageCenterMessageTypeCompoundMessage) {
 		NSString *cellIdentifier = type == ATMessageCenterMessageTypeCompoundMessage ? @"CompoundMessage" : @"Message";
 		ATMessageCenterMessageCell *messageCell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
 	
-		messageCell.messageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
 		switch ([self.dataSource statusOfMessageAtIndexPath:indexPath]) {
 			case ATMessageCenterMessageStatusHidden:
 				messageCell.statusLabelHidden = YES;
@@ -307,39 +306,41 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				break;
 		}
 
-		if (type == ATMessageCenterMessageTypeCompoundMessage) {
-			ATCompoundMessageCell *compoundCell = (ATCompoundMessageCell *)messageCell;
-
-			compoundCell.collectionView.index = indexPath.section;
-			compoundCell.collectionView.dataSource = self;
-			compoundCell.collectionView.delegate = self;
-
-			UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)compoundCell.collectionView.collectionViewLayout;
-			layout.sectionInset = UIEdgeInsetsMake(ATTACHMENT_MARGIN.height, ATTACHMENT_MARGIN.width, ATTACHMENT_MARGIN.height, ATTACHMENT_MARGIN.width);
-			layout.minimumInteritemSpacing = ATTACHMENT_MARGIN.width;
-			layout.itemSize = [ATAttachmentCell sizeForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN];
-
-			compoundCell.messageLabelHidden = compoundCell.messageLabel.text == nil;
-		}
-				
 		cell = messageCell;
-	} else if (type == ATMessageCenterMessageTypeReply ) {
-		ATMessageCenterReplyCell *replyCell = [tableView dequeueReusableCellWithIdentifier:@"Reply" forIndexPath:indexPath];
+	} else if (type == ATMessageCenterMessageTypeReply || type == ATMessageCenterMessageTypeCompoundReply) {
+		NSString *cellIdentifier = type == ATMessageCenterMessageTypeCompoundReply ? @"CompoundReply" : @"Reply";
+		ATMessageCenterReplyCell *replyCell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
 
 		replyCell.supportUserImageView.imageURL = [self.dataSource imageURLOfSenderAtIndexPath:indexPath];
 
-		replyCell.replyLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
+		replyCell.messageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
 		replyCell.senderLabel.text = [self.dataSource senderOfMessageAtIndexPath:indexPath];
 		
 		cell = replyCell;
 	} else if (type == ATMessageCenterMessageTypeContextMessage) {
+		// TODO: handle title
 		ATMessageCenterContextMessageCell *contextMessageCell = [tableView dequeueReusableCellWithIdentifier:@"ContextMessage" forIndexPath:indexPath];
-
-		contextMessageCell.contextMessageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
 
 		cell = contextMessageCell;
 	}
-	
+
+	if (type == ATMessageCenterMessageTypeCompoundMessage || type == ATMessageCenterMessageTypeCompoundReply) {
+		UITableViewCell<ATMessageCenterCompoundCell> *compoundCell = (ATCompoundMessageCell *)cell;
+
+		compoundCell.collectionView.index = indexPath.section;
+		compoundCell.collectionView.dataSource = self;
+		compoundCell.collectionView.delegate = self;
+
+		UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)compoundCell.collectionView.collectionViewLayout;
+		layout.sectionInset = UIEdgeInsetsMake(ATTACHMENT_MARGIN.height, ATTACHMENT_MARGIN.width, ATTACHMENT_MARGIN.height, ATTACHMENT_MARGIN.width);
+		layout.minimumInteritemSpacing = ATTACHMENT_MARGIN.width;
+		layout.itemSize = [ATAttachmentCell sizeForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN];
+
+		compoundCell.messageLabelHidden = compoundCell.messageLabel.text == nil;
+	}
+
+	cell.messageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
+
 	return cell;
 }
 
@@ -378,6 +379,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			horizontalMargin = REPLY_LABEL_TOTAL_HORIZONTAL_MARGIN;
 			verticalMargin = REPLY_LABEL_TOTAL_VERTICAL_MARGIN;
 			minimumCellHeight = REPLY_CELL_MINIMUM_HEIGHT;
+			break;
+
+		case ATMessageCenterMessageTypeCompoundReply:
+			horizontalMargin = REPLY_LABEL_TOTAL_HORIZONTAL_MARGIN;
+			verticalMargin = REPLY_LABEL_TOTAL_VERTICAL_MARGIN + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN] - ATTACHMENT_MARGIN.height;
+			minimumCellHeight = REPLY_CELL_MINIMUM_HEIGHT + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN] - ATTACHMENT_MARGIN.height;
 			break;
 	}
 	

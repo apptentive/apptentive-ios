@@ -6,8 +6,14 @@
 //  Copyright © 2015 Apptentive, Inc. All rights reserved.
 //
 
-#import "ATCompoundMessageCell.h"
+#import "ATMessageCenterReplyCell.h"
+#import "ATMessageCenterCellProtocols.h"
 
-@interface ATCompoundReplyCell : ATCompoundMessageCell
+@class ATIndexedCollectionView;
+
+@interface ATCompoundReplyCell : ATMessageCenterReplyCell <ATMessageCenterCompoundCell>
+
+@property (weak, nonatomic) IBOutlet ATIndexedCollectionView *collectionView;
+@property (assign, nonatomic) BOOL messageLabelHidden;
 
 @end

@@ -127,7 +127,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 		}
 	} else {
 		if (message.attachments.count) {
-			return ATMessageCenterMessageTypeCompoundMessage;
+			return ATMessageCenterMessageTypeCompoundReply;
 		} else {
 			return ATMessageCenterMessageTypeReply;
 		}

@@ -45,6 +45,8 @@
 		016085651BA77B1D00050FDB /* at_update_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0160854A1BA77B0500050FDB /* at_update_logo.png */; };
 		016085661BA77B1D00050FDB /* at_update_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0160854B1BA77B0500050FDB /* at_update_logo@2x.png */; };
 		016085671BA77B1D00050FDB /* at_update_logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0160854C1BA77B0500050FDB /* at_update_logo@3x.png */; };
+		0171DFED1BF2D019006F8BEA /* ATCompoundReplyCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 0171DFEB1BF2D019006F8BEA /* ATCompoundReplyCell.h */; };
+		0171DFEE1BF2D019006F8BEA /* ATCompoundReplyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0171DFEC1BF2D019006F8BEA /* ATCompoundReplyCell.m */; };
 		017D97421B0E3770004E045C /* ATMessageCenterStatusView.h in Headers */ = {isa = PBXBuildFile; fileRef = 017D97401B0E3770004E045C /* ATMessageCenterStatusView.h */; };
 		017D97431B0E3770004E045C /* ATMessageCenterStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 017D97411B0E3770004E045C /* ATMessageCenterStatusView.m */; };
 		017D97461B0E5795004E045C /* ATMessageCenterMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 017D97441B0E5795004E045C /* ATMessageCenterMessageCell.h */; };
@@ -365,6 +367,9 @@
 		0160854A1BA77B0500050FDB /* at_update_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_update_logo.png; sourceTree = "<group>"; };
 		0160854B1BA77B0500050FDB /* at_update_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_update_logo@2x.png"; sourceTree = "<group>"; };
 		0160854C1BA77B0500050FDB /* at_update_logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_update_logo@3x.png"; sourceTree = "<group>"; };
+		0171DFEB1BF2D019006F8BEA /* ATCompoundReplyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATCompoundReplyCell.h; sourceTree = "<group>"; };
+		0171DFEC1BF2D019006F8BEA /* ATCompoundReplyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATCompoundReplyCell.m; sourceTree = "<group>"; };
+		0171DFEF1BF2D1F1006F8BEA /* ATMessageCenterCellProtocols.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ATMessageCenterCellProtocols.h; sourceTree = "<group>"; };
 		017D97401B0E3770004E045C /* ATMessageCenterStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageCenterStatusView.h; sourceTree = "<group>"; };
 		017D97411B0E3770004E045C /* ATMessageCenterStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageCenterStatusView.m; sourceTree = "<group>"; };
 		017D97441B0E5795004E045C /* ATMessageCenterMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageCenterMessageCell.h; sourceTree = "<group>"; };
@@ -700,6 +705,8 @@
 				017D97491B0E57C2004E045C /* ATMessageCenterReplyCell.m */,
 				0127EA0A1BF1271C0005481A /* ATCompoundMessageCell.h */,
 				0127EA0B1BF1271C0005481A /* ATCompoundMessageCell.m */,
+				0171DFEB1BF2D019006F8BEA /* ATCompoundReplyCell.h */,
+				0171DFEC1BF2D019006F8BEA /* ATCompoundReplyCell.m */,
 				588F66481B601F0B00F388E3 /* ATMessageCenterContextMessageCell.h */,
 				588F66491B601F0B00F388E3 /* ATMessageCenterContextMessageCell.m */,
 				01BD9E021B55E465004F12AB /* ATMessageCenterInputView.h */,
@@ -712,6 +719,7 @@
 				0127EA0D1BF1271C0005481A /* ATIndexedCollectionView.m */,
 				0127EA081BF1271C0005481A /* ATAttachmentCell.h */,
 				0127EA091BF1271C0005481A /* ATAttachmentCell.m */,
+				0171DFEF1BF2D1F1006F8BEA /* ATMessageCenterCellProtocols.h */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1414,6 +1422,7 @@
 				58D17D4F18C5676F00D123BC /* ATInteractionMessageCenterController.h in Headers */,
 				583DF0671A390DDA00BF0207 /* ATInteractionInvocation.h in Headers */,
 				58E9580A190740BC005063DC /* ATSurveyQuestionResponse.h in Headers */,
+				0171DFED1BF2D019006F8BEA /* ATCompoundReplyCell.h in Headers */,
 				0127EA121BF1271C0005481A /* ATIndexedCollectionView.h in Headers */,
 				49F8AFF016CC4A550070FFEA /* ATMessageSender.h in Headers */,
 				49F8AFF216CC4A550070FFEA /* ATPersonInfo.h in Headers */,
@@ -1651,6 +1660,7 @@
 				491748BF1341177000A7D11E /* ATURLConnection.m in Sources */,
 				491748C11341177000A7D11E /* ATWebClient.m in Sources */,
 				49509A62135658E200793EEC /* ATReachability.m in Sources */,
+				0171DFEE1BF2D019006F8BEA /* ATCompoundReplyCell.m in Sources */,
 				4936AE541379DE3100A4B17F /* ATDefaultTextView.m in Sources */,
 				4936AE561379DE3100A4B17F /* ATHUDView.m in Sources */,
 				01BD9E051B55E465004F12AB /* ATMessageCenterInputView.m in Sources */,

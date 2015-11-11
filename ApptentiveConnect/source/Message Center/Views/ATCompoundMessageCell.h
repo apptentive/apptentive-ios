@@ -7,10 +7,11 @@
 //
 
 #import "ATMessageCenterMessageCell.h"
+#import "ATMessageCenterCellProtocols.h"
 
 @class ATIndexedCollectionView;
 
-@interface ATCompoundMessageCell : ATMessageCenterMessageCell
+@interface ATCompoundMessageCell : ATMessageCenterMessageCell <ATMessageCenterCompoundCell>
 
 @property (weak, nonatomic) IBOutlet ATIndexedCollectionView *collectionView;
 @property (assign, nonatomic) BOOL messageLabelHidden;

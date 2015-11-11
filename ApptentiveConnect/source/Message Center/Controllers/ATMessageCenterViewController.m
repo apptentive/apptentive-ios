@@ -370,7 +370,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		case ATMessageCenterMessageTypeCompoundMessage:
 			horizontalMargin = MESSAGE_LABEL_TOTAL_HORIZONTAL_MARGIN;
 			verticalMargin = MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN] - ATTACHMENT_MARGIN.height;
-			verticalFudgeFactor = 10.0;
+			verticalFudgeFactor = 19.0;
 			minimumCellHeight = 0;
 			break;
 
@@ -516,11 +516,35 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)messageCenterDataSource:(ATMessageCenterDataSource *)dataSource didLoadAttachmentThumbnailAtIndexPath:(NSIndexPath *)indexPath {
 	ATCompoundMessageCell *cell = (ATCompoundMessageCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
 	ATIndexedCollectionView *collectionView = cell.collectionView;
+	NSIndexPath *collectionViewIndexPath = [NSIndexPath indexPathForItem:indexPath.row inSection:0];
+	ATAttachmentCell *attachmentCell = (ATAttachmentCell *)[collectionView cellForItemAtIndexPath:collectionViewIndexPath];
+	attachmentCell.progressView.hidden = YES;
 
-	[collectionView reloadItemsAtIndexPaths:@[ [NSIndexPath indexPathForItem:indexPath.row inSection:0] ]];
+	[collectionView reloadItemsAtIndexPaths:@[ collectionViewIndexPath ]];
+}
+
+- (void)messageCenterDataSource:(ATMessageCenterDataSource *)dataSource attachmentDownloadAtIndexPath:(NSIndexPath *)indexPath didProgress:(float)progress {
+	ATCompoundMessageCell *cell = (ATCompoundMessageCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
+	ATIndexedCollectionView *collectionView = cell.collectionView;
+	NSLog(@"progress is %f", progress);
+	NSIndexPath *collectionViewIndexPath = [NSIndexPath indexPathForItem:indexPath.row inSection:0];
+	ATAttachmentCell *attachmentCell = (ATAttachmentCell *)[collectionView cellForItemAtIndexPath:collectionViewIndexPath];
+
+	attachmentCell.progressView.hidden = NO;
+	[attachmentCell.progressView setProgress:progress animated:YES];
 }
 
 #pragma mark Collection view delegate
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+	NSIndexPath *attachmentIndexPath = [NSIndexPath indexPathForItem:indexPath.item inSection:((ATIndexedCollectionView *)collectionView).index];
+
+	if ([self.dataSource shouldUsePlaceholderForAttachmentAtIndexPath:attachmentIndexPath]) {
+		[self.dataSource downloadAttachmentAtIndexPath:attachmentIndexPath];
+	} else {
+		// TODO: display preview of attachment
+	}
+}
 
 #pragma mark Collection view data source
 
@@ -534,9 +558,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 	ATAttachmentCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Attachment" forIndexPath:indexPath];
+	NSIndexPath *attachmentIndexPath = [NSIndexPath indexPathForItem:indexPath.item inSection:((ATIndexedCollectionView *)collectionView).index];
 
-	cell.imageView.image = [self.dataSource imageForAttachmentAtIndexPath:[NSIndexPath indexPathForItem:indexPath.item inSection:((ATIndexedCollectionView *)collectionView).index]];
-	cell.extensionLabel.text = [self.dataSource extensionForAttachmentAtIndexPath:[NSIndexPath indexPathForItem:indexPath.row inSection:((ATIndexedCollectionView *)collectionView).index]];
+	cell.usePlaceholder = [self.dataSource shouldUsePlaceholderForAttachmentAtIndexPath:attachmentIndexPath];
+	cell.imageView.image = [self.dataSource imageForAttachmentAtIndexPath:attachmentIndexPath size:[ATAttachmentCell sizeForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN]];
+	cell.extensionLabel.text = [self.dataSource extensionForAttachmentAtIndexPath:attachmentIndexPath];
 
 	return cell;
 }

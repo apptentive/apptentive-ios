@@ -25,6 +25,7 @@
 - (NSData *)fileData;
 - (void)setFileData:(NSData *)data;
 - (void)setFileFromSourcePath:(NSString *)sourceFilename;
+- (void)moveFileFromURL:(NSURL *)location;
 
 - (NSString *)fullLocalPath;
 

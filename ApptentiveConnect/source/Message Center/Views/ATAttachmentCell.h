@@ -12,6 +12,9 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UILabel *extensionLabel;
+@property (weak, nonatomic) IBOutlet UIProgressView *progressView;
+
+@property (assign, nonatomic) BOOL usePlaceholder;
 
 + (CGSize)sizeForScreen:(UIScreen *)screen withMargin:(CGSize)margin;
 + (CGFloat)heightForScreen:(UIScreen *)screen withMargin:(CGSize)margin;

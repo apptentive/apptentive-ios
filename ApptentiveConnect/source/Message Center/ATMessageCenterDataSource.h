@@ -26,7 +26,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 
 @protocol ATMessageCenterDataSourceDelegate;
 
-@interface ATMessageCenterDataSource : NSObject
+@interface ATMessageCenterDataSource : NSObject <NSURLSessionDownloadDelegate>
 @property (nonatomic, strong, readonly) NSFetchedResultsController *fetchedMessagesController;
 @property (nonatomic, weak) NSObject<ATMessageCenterDataSourceDelegate> *delegate;
 @property (nonatomic, readonly) NSDateFormatter *dateFormatter;
@@ -51,8 +51,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 - (void)removeUnsentContextMessages;
 
 - (NSInteger)numberOfAttachmentsForMessageAtIndex:(NSInteger)index;
+- (BOOL)shouldUsePlaceholderForAttachmentAtIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)extensionForAttachmentAtIndexPath:(NSIndexPath *)indexPath; // Returns nil if thumbnail is present, file extension if not
-- (UIImage *)imageForAttachmentAtIndexPath:(NSIndexPath *)indexPath; // Returns thumbnail if present, generic file icon if not
+- (UIImage *)imageForAttachmentAtIndexPath:(NSIndexPath *)indexPath size:(CGSize)size; // Returns thumbnail if present, generic file icon if not
+- (void)downloadAttachmentAtIndexPath:(NSIndexPath *)indexPath;
 
 @property (nonatomic, readonly) BOOL lastMessageIsReply;
 @property (nonatomic, readonly) NSIndexPath *lastUserMessageIndexPath;
@@ -62,6 +64,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 
 @protocol ATMessageCenterDataSourceDelegate <NSObject, NSFetchedResultsControllerDelegate>
 
+- (void)messageCenterDataSource:(ATMessageCenterDataSource *)dataSource attachmentDownloadAtIndexPath:(NSIndexPath *)indexPath didProgress:(float)progress;
 - (void)messageCenterDataSource:(ATMessageCenterDataSource *)dataSource didLoadAttachmentThumbnailAtIndexPath:(NSIndexPath *)indexPath;
 
 @end

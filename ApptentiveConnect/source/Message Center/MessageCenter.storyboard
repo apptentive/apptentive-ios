@@ -582,8 +582,12 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="60" height="80"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
+                                                            <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" semanticContentAttribute="spatial" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gHj-Li-NiQ">
+                                                                <rect key="frame" x="16" y="62" width="28" height="2"/>
+                                                                <animations/>
+                                                            </progressView>
                                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="AV2-0V-nbE">
-                                                                <rect key="frame" x="11.5" y="16" width="37" height="48"/>
+                                                                <rect key="frame" x="11" y="16" width="37" height="48"/>
                                                                 <animations/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="37" id="CFm-kh-Mto"/>
@@ -603,18 +607,20 @@
                                                     </view>
                                                     <animations/>
                                                     <constraints>
-                                                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="AV2-0V-nbE" secondAttribute="trailing" id="BAz-qr-SVt"/>
+                                                        <constraint firstAttribute="bottom" secondItem="gHj-Li-NiQ" secondAttribute="bottom" constant="16" id="BjG-Gx-JYL"/>
                                                         <constraint firstItem="HEe-qh-sa6" firstAttribute="centerX" secondItem="v10-VO-wjT" secondAttribute="centerX" id="Cay-fx-LtF"/>
                                                         <constraint firstItem="AV2-0V-nbE" firstAttribute="centerX" secondItem="v10-VO-wjT" secondAttribute="centerX" id="JGw-4B-pEm"/>
+                                                        <constraint firstAttribute="trailing" secondItem="gHj-Li-NiQ" secondAttribute="trailing" constant="16" id="JQi-zc-OOF"/>
                                                         <constraint firstItem="AV2-0V-nbE" firstAttribute="centerY" secondItem="v10-VO-wjT" secondAttribute="centerY" id="VqN-lC-d2P"/>
                                                         <constraint firstItem="HEe-qh-sa6" firstAttribute="centerY" secondItem="v10-VO-wjT" secondAttribute="centerY" id="XNh-MZ-oMV"/>
-                                                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="AV2-0V-nbE" secondAttribute="bottom" id="bEk-2F-MXs"/>
-                                                        <constraint firstItem="AV2-0V-nbE" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="v10-VO-wjT" secondAttribute="leading" id="v9E-B2-7DW"/>
-                                                        <constraint firstItem="AV2-0V-nbE" firstAttribute="top" relation="greaterThanOrEqual" secondItem="v10-VO-wjT" secondAttribute="top" id="x34-2d-79A"/>
+                                                        <constraint firstItem="gHj-Li-NiQ" firstAttribute="leading" secondItem="v10-VO-wjT" secondAttribute="leading" constant="16" id="ncy-4M-Oal"/>
                                                     </constraints>
                                                     <connections>
                                                         <outlet property="extensionLabel" destination="HEe-qh-sa6" id="O8S-m2-gMk"/>
+                                                        <outlet property="imageHeight" destination="KRu-NG-GgW" id="f3c-yc-kYb"/>
                                                         <outlet property="imageView" destination="AV2-0V-nbE" id="5iL-l6-MxB"/>
+                                                        <outlet property="imageWidth" destination="CFm-kh-Mto" id="wYV-pr-yPm"/>
+                                                        <outlet property="progressView" destination="gHj-Li-NiQ" id="9bM-wk-RTt"/>
                                                     </connections>
                                                 </collectionViewCell>
                                             </cells>

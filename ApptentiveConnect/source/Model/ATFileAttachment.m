@@ -97,6 +97,46 @@
 	return nil;
 }
 
+- (NSURL *)remoteURL {
+	NSString *remoteURLString = [self primitiveValueForKey:@"remoteURL"];
+
+	if (remoteURLString) {
+		return [NSURL URLWithString:remoteURLString];
+	} else {
+		return nil;
+	}
+}
+
+- (NSURL *)remoteThumbnailURL {
+	NSString *remoteThumbnailURLString = [self primitiveValueForKey:@"remoteThumbnailURL"];
+
+	if (remoteThumbnailURLString) {
+		return [NSURL URLWithString:remoteThumbnailURLString];
+	} else {
+		return nil;
+	}
+}
+
+- (void)moveFileFromURL:(NSURL *)location {
+	[self deleteSidecarIfNecessary];
+	self.localPath = nil;
+	if (location && location.isFileURL) {
+		BOOL isDir = NO;
+		NSFileManager *fm = [NSFileManager defaultManager];
+		if (![fm fileExistsAtPath:location.path isDirectory:&isDir] || isDir) {
+			ATLogError(@"Either source attachment file doesn't exist or is directory: %@, %d", location, isDir);
+			return;
+		}
+		self.localPath = [ATUtilities randomStringOfLength:20];
+		NSError *error = nil;
+		if (![fm moveItemAtPath:location.path toPath:[self fullLocalPath] error:&error]) {
+			self.localPath = nil;
+			ATLogError(@"Unable to write attachment to path: %@, %@", [self fullLocalPath], error);
+			return;
+		}
+	}
+}
+
 - (void)setFileFromSourcePath:(NSString *)sourceFilename {
 	[self deleteSidecarIfNecessary];
 	self.localPath = nil;
@@ -134,7 +174,7 @@
 	if (self.localPath == nil) {
 		return nil;
 	}
-	return [NSString stringWithFormat:@"%@_%dx%d.thumbnail", self.localPath, (int)floor(size.width), (int)floor(size.height)];
+	return [NSString stringWithFormat:@"%@_%dx%d_fit.thumbnail", self.localPath, (int)floor(size.width), (int)floor(size.height)];
 }
 
 - (void)deleteSidecarIfNecessary {
@@ -191,7 +231,7 @@
 	NSString *fullThumbnailPath = [self fullLocalPathForFilename:filename];
 
 	UIImage *image = [UIImage imageWithContentsOfFile:fullLocalPath];
-	UIImage *thumb = [ATUtilities imageByScalingImage:image toSize:size scale:scale fromITouchCamera:NO];
+	UIImage *thumb = [ATUtilities imageByScalingImage:image toFitSize:size scale:scale];
 	[UIImagePNGRepresentation(thumb) writeToFile:fullThumbnailPath atomically:YES];
 	return thumb;
 }

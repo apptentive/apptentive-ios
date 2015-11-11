@@ -14,6 +14,7 @@
 #import "ATConnect_Private.h"
 #import "ATData.h"
 #import "ATMessageSender.h"
+#import "ATAttachmentCell.h"
 
 NSString * const ATMessageCenterServerErrorDomain = @"com.apptentive.MessageCenterServerError";
 NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenterErrorMessages";
@@ -22,6 +23,8 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 
 @property (nonatomic, strong, readwrite) NSFetchedResultsController *fetchedMessagesController;
 @property (nonatomic, readonly) ATMessage *lastUserMessage;
+@property (nonatomic, readonly) NSURLSession *attachmentDownloadSession;
+@property (nonatomic, readonly) NSMutableDictionary *taskIndexPaths;
 
 @end
 
@@ -31,11 +34,16 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 	if ((self = [super init])) {
 		_delegate = aDelegate;
 		_dateFormatter = [[NSDateFormatter alloc] init];
+
+		_attachmentDownloadSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:nil];
+		_taskIndexPaths = [NSMutableDictionary dictionary];
 	}
 	return self;
 }
 
 - (void)dealloc {
+	[self.attachmentDownloadSession invalidateAndCancel];
+
 	self.fetchedMessagesController.delegate = nil;
 }
 
@@ -239,6 +247,30 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 	}
 }
 
+#pragma mark - URL session delegate
+
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location {
+	NSIndexPath *attachmentIndexPath = [self indexPathForTask:downloadTask];
+	[self removeTask:downloadTask];
+
+	ATFileAttachment *attachment = [self fileAttachmentAtIndexPath:attachmentIndexPath];
+	[attachment moveFileFromURL:location]; // TODO: is this thread-safe?
+
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[self.delegate messageCenterDataSource:self didLoadAttachmentThumbnailAtIndexPath:attachmentIndexPath];
+	});
+}
+
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
+	NSIndexPath *attachmentIndexPath = [self indexPathForTask:downloadTask];
+
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[self.delegate messageCenterDataSource:self attachmentDownloadAtIndexPath:attachmentIndexPath didProgress:(double)totalBytesWritten / (double)totalBytesExpectedToWrite];
+	});
+}
+
+# pragma mark - Misc
+
 - (void)removeUnsentContextMessages {
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingState == %d)", ATPendingMessageStateComposing];
@@ -250,13 +282,20 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 	return [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]].attachments.count;
 }
 
-- (UIImage *)imageForAttachmentAtIndexPath:(NSIndexPath *)indexPath {
-//	ATMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
-//	ATFileAttachment *attachment = [message.attachments objectAtIndex:indexPath.row];
+- (BOOL)shouldUsePlaceholderForAttachmentAtIndexPath:(NSIndexPath *)indexPath {
+	ATFileAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
 
-	// If attachment has local path, return cached image
+	return attachment.localPath == nil;
+}
 
-	// else if attachment has thumbnail URL, kick off download
+- (UIImage *)imageForAttachmentAtIndexPath:(NSIndexPath *)indexPath size:(CGSize)size {
+	ATFileAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
+
+	if (attachment.localPath) {
+		return [attachment thumbnailOfSize:size];
+	} else if (attachment.remoteThumbnailURL) {
+		// kick off download of thumbnail
+	}
 
 	// return generic image attachment icon
 	return [[ATBackend imageNamed:@"at_document"] resizableImageWithCapInsets:UIEdgeInsetsMake(9.0, 2.0, 2.0, 9.0)];
@@ -271,7 +310,35 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 	return extension;
 }
 
+- (void)downloadAttachmentAtIndexPath:(NSIndexPath *)indexPath {
+	ATFileAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
+	if (attachment.localPath != nil || !attachment.remoteURL) {
+		ATLogError(@"Attempting to download attachment with no remote URL");
+		return;
+	}
+
+	NSURLRequest *request = [NSURLRequest requestWithURL:attachment.remoteURL];
+	NSURLSessionDownloadTask *task = [self.attachmentDownloadSession downloadTaskWithRequest:request];
+
+	[self.delegate messageCenterDataSource:self attachmentDownloadAtIndexPath:indexPath didProgress:0];
+
+	[self setIndexPath:indexPath forTask:task];
+	[task resume];
+}
+
 #pragma mark - Private
+
+- (NSIndexPath *)indexPathForTask:(NSURLSessionDownloadTask *)task {
+	return [self.taskIndexPaths objectForKey:[NSValue valueWithNonretainedObject:task]];
+}
+
+- (void)setIndexPath:(NSIndexPath *)indexPath forTask:(NSURLSessionDownloadTask *)task {
+	[self.taskIndexPaths setObject:indexPath forKey:[NSValue valueWithNonretainedObject:task]];
+}
+
+- (void)removeTask:(NSURLSessionDownloadTask *)task {
+	[self.taskIndexPaths removeObjectForKey:[NSValue valueWithNonretainedObject:task]];
+}
 
 // indexPath.section refers to the message index (table view section), indexPath.row refers to the attachment index.
 - (ATFileAttachment *)fileAttachmentAtIndexPath:(NSIndexPath *)indexPath {

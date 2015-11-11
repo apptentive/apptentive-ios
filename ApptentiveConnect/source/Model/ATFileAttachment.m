@@ -117,46 +117,25 @@
 	}
 }
 
-- (void)moveFileFromURL:(NSURL *)location {
-	[self deleteSidecarIfNecessary];
-	self.localPath = nil;
-	if (location && location.isFileURL) {
-		BOOL isDir = NO;
-		NSFileManager *fm = [NSFileManager defaultManager];
-		if (![fm fileExistsAtPath:location.path isDirectory:&isDir] || isDir) {
-			ATLogError(@"Either source attachment file doesn't exist or is directory: %@, %d", location, isDir);
-			return;
-		}
-		self.localPath = [ATUtilities randomStringOfLength:20];
+- (NSURL *)beginMoveToStorageFrom:(NSURL *)temporaryLocation {
+	if (temporaryLocation && temporaryLocation.isFileURL) {
+		NSURL *newLocation = [NSURL fileURLWithPath:[self fullLocalPathForFilename:[ATUtilities randomStringOfLength:20]]];
 		NSError *error = nil;
-		if (![fm moveItemAtPath:location.path toPath:[self fullLocalPath] error:&error]) {
-			self.localPath = nil;
-			ATLogError(@"Unable to write attachment to path: %@, %@", [self fullLocalPath], error);
-			return;
+		if ([[NSFileManager defaultManager] moveItemAtURL:temporaryLocation toURL:newLocation error:&error]) {
+			return newLocation;
+		} else {
+			ATLogError(@"Unable to write attachment to URL: %@, %@", newLocation, error);
+			return nil;
 		}
+	} else {
+		ATLogError(@"Temporary file location (%@) is nil or not file URL", temporaryLocation);
+		return nil;
 	}
 }
 
-- (void)setFileFromSourcePath:(NSString *)sourceFilename {
+- (void)completeMoveToStorageFor:(NSURL *)storageLocation {
 	[self deleteSidecarIfNecessary];
-	self.localPath = nil;
-	if (sourceFilename) {
-		BOOL isDir = NO;
-		NSFileManager *fm = [NSFileManager defaultManager];
-		if (![fm fileExistsAtPath:sourceFilename isDirectory:&isDir] || isDir) {
-			ATLogError(@"Either source attachment file doesn't exist or is directory: %@, %d", sourceFilename, isDir);
-			return;
-		}
-		self.localPath = [ATUtilities randomStringOfLength:20];
-		NSError *error = nil;
-		if (![fm copyItemAtPath:sourceFilename toPath:[self fullLocalPath] error:&error]) {
-			self.localPath = nil;
-			ATLogError(@"Unable to write attachment to path: %@, %@", [self fullLocalPath], error);
-			return;
-		}
-		self.mimeType = @"application/octet-stream";
-		self.name = [sourceFilename lastPathComponent];
-	}
+	self.localPath = storageLocation.lastPathComponent;
 }
 
 - (NSString *)fullLocalPath {

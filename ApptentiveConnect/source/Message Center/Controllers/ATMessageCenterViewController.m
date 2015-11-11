@@ -540,6 +540,18 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[attachmentCell.progressView setProgress:progress animated:YES];
 }
 
+- (void)messageCenterDataSource:(ATMessageCenterDataSource *)dataSource didFailToLoadAttachmentThumbnailAtIndexPath:(NSIndexPath *)indexPath error:(NSError *)error {
+	ATCompoundMessageCell *cell = (ATCompoundMessageCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
+	ATIndexedCollectionView *collectionView = cell.collectionView;
+	NSIndexPath *collectionViewIndexPath = [NSIndexPath indexPathForItem:indexPath.row inSection:0];
+	ATAttachmentCell *attachmentCell = (ATAttachmentCell *)[collectionView cellForItemAtIndexPath:collectionViewIndexPath];
+
+	attachmentCell.progressView.hidden = YES;
+	attachmentCell.progressView.progress = 0;
+
+	[[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Unable to Download Attachment", @"Attachment download failed alert title") message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+}
+
 #pragma mark Collection view delegate
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {

@@ -24,7 +24,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 @property (nonatomic, strong, readwrite) NSFetchedResultsController *fetchedMessagesController;
 @property (nonatomic, readonly) ATMessage *lastUserMessage;
 @property (nonatomic, readonly) NSURLSession *attachmentDownloadSession;
-@property (nonatomic, readonly) NSMutableDictionary *taskIndexPaths;
+@property (nonatomic, readonly) NSMutableDictionary<NSValue *, NSIndexPath *> *taskIndexPaths;
 
 @end
 
@@ -212,75 +212,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 	return [self.fetchedMessagesController indexPathForObject:self.lastUserMessage];
 }
 
-#pragma mark NSFetchedResultsControllerDelegate
-
-- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
-	if ([self.delegate respondsToSelector:@selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)]) {
-		[self.delegate controller:controller didChangeObject:anObject atIndexPath:indexPath forChangeType:type newIndexPath:newIndexPath];
-	}
-}
-
-- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
-	if ([self.delegate respondsToSelector:@selector(controller:didChangeSection:atIndex:forChangeType:)]) {
-		[self.delegate controller:controller didChangeSection:sectionInfo atIndex:sectionIndex forChangeType:type];
-	}
-}
-
-- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
-	if ([self.delegate respondsToSelector:@selector(controllerWillChangeContent:)]) {
-		[self.delegate controllerWillChangeContent:controller];
-	}
-}
-
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-	if ([self.delegate respondsToSelector:@selector(controllerDidChangeContent:)]) {
-		[self.delegate controllerDidChangeContent:controller];
-	}
-}
-
-- (NSString *)controller:(NSFetchedResultsController *)controller sectionIndexTitleForSectionName:(NSString *)sectionName {
-	if ([self.delegate respondsToSelector:@selector(controller:sectionIndexTitleForSectionName:)]) {
-		return [self.delegate controller:controller sectionIndexTitleForSectionName:sectionName];
-	} else {
-		// Default implementation.
-		if (!sectionName || [sectionName length] == 0) {
-			return @"";
-		}
-		NSString *firstLetter = [sectionName substringWithRange:NSMakeRange(0, 1)];
-		return [firstLetter uppercaseStringWithLocale:[NSLocale currentLocale]];
-	}
-}
-
-#pragma mark - URL session delegate
-
-- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location {
-	NSIndexPath *attachmentIndexPath = [self indexPathForTask:downloadTask];
-	[self removeTask:downloadTask];
-
-	ATFileAttachment *attachment = [self fileAttachmentAtIndexPath:attachmentIndexPath];
-	[attachment moveFileFromURL:location]; // TODO: is this thread-safe?
-
-	dispatch_async(dispatch_get_main_queue(), ^{
-		[self.delegate messageCenterDataSource:self didLoadAttachmentThumbnailAtIndexPath:attachmentIndexPath];
-	});
-}
-
-- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
-	NSIndexPath *attachmentIndexPath = [self indexPathForTask:downloadTask];
-
-	dispatch_async(dispatch_get_main_queue(), ^{
-		[self.delegate messageCenterDataSource:self attachmentDownloadAtIndexPath:attachmentIndexPath didProgress:(double)totalBytesWritten / (double)totalBytesExpectedToWrite];
-	});
-}
-
-# pragma mark - Misc
-
-- (void)removeUnsentContextMessages {
-	@synchronized(self) {
-		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingState == %d)", ATPendingMessageStateComposing];
-		[ATData removeEntitiesNamed:@"ATMessage" withPredicate:fetchPredicate];
-	}
-}
+#pragma mark Attachments
 
 - (NSInteger)numberOfAttachmentsForMessageAtIndex:(NSInteger)index {
 	return [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]].attachments.count;
@@ -334,17 +266,99 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 	[task resume];
 }
 
+#pragma mark NSFetchedResultsControllerDelegate
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
+	if ([self.delegate respondsToSelector:@selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)]) {
+		[self.delegate controller:controller didChangeObject:anObject atIndexPath:indexPath forChangeType:type newIndexPath:newIndexPath];
+	}
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
+	if ([self.delegate respondsToSelector:@selector(controller:didChangeSection:atIndex:forChangeType:)]) {
+		[self.delegate controller:controller didChangeSection:sectionInfo atIndex:sectionIndex forChangeType:type];
+	}
+}
+
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+	if ([self.delegate respondsToSelector:@selector(controllerWillChangeContent:)]) {
+		[self.delegate controllerWillChangeContent:controller];
+	}
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+	if ([self.delegate respondsToSelector:@selector(controllerDidChangeContent:)]) {
+		[self.delegate controllerDidChangeContent:controller];
+	}
+}
+
+- (NSString *)controller:(NSFetchedResultsController *)controller sectionIndexTitleForSectionName:(NSString *)sectionName {
+	if ([self.delegate respondsToSelector:@selector(controller:sectionIndexTitleForSectionName:)]) {
+		return [self.delegate controller:controller sectionIndexTitleForSectionName:sectionName];
+	} else {
+		// Default implementation.
+		if (!sectionName || [sectionName length] == 0) {
+			return @"";
+		}
+		NSString *firstLetter = [sectionName substringWithRange:NSMakeRange(0, 1)];
+		return [firstLetter uppercaseStringWithLocale:[NSLocale currentLocale]];
+	}
+}
+
+#pragma mark - URL session delegate
+
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location {
+	NSIndexPath *attachmentIndexPath = [self indexPathForTask:downloadTask];
+	[self removeTask:downloadTask];
+
+	ATFileAttachment *attachment = [self fileAttachmentAtIndexPath:attachmentIndexPath];
+	// -beginMoveToStorageFrom: must be called on this (background) thread.
+	NSURL *finalLocation = [attachment beginMoveToStorageFrom:location];
+
+	dispatch_async(dispatch_get_main_queue(), ^{
+		// -completeMoveToStorageFor: must be called on main thread.
+		[attachment completeMoveToStorageFor:finalLocation];
+		[self.delegate messageCenterDataSource:self didLoadAttachmentThumbnailAtIndexPath:attachmentIndexPath];
+	});
+}
+
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
+	NSIndexPath *attachmentIndexPath = [self indexPathForTask:downloadTask];
+
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[self.delegate messageCenterDataSource:self attachmentDownloadAtIndexPath:attachmentIndexPath didProgress:(double)totalBytesWritten / (double)totalBytesExpectedToWrite];
+	});
+}
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
+	NSIndexPath *attachmentIndexPath = [self indexPathForTask:task];
+	[self removeTask:task];
+
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[self.delegate messageCenterDataSource:self didFailToLoadAttachmentThumbnailAtIndexPath:attachmentIndexPath error:error];
+	});
+}
+
+# pragma mark - Misc
+
+- (void)removeUnsentContextMessages {
+	@synchronized(self) {
+		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingState == %d)", ATPendingMessageStateComposing];
+		[ATData removeEntitiesNamed:@"ATMessage" withPredicate:fetchPredicate];
+	}
+}
+
 #pragma mark - Private
 
-- (NSIndexPath *)indexPathForTask:(NSURLSessionDownloadTask *)task {
+- (NSIndexPath *)indexPathForTask:(NSURLSessionTask *)task {
 	return [self.taskIndexPaths objectForKey:[NSValue valueWithNonretainedObject:task]];
 }
 
-- (void)setIndexPath:(NSIndexPath *)indexPath forTask:(NSURLSessionDownloadTask *)task {
+- (void)setIndexPath:(NSIndexPath *)indexPath forTask:(NSURLSessionTask *)task {
 	[self.taskIndexPaths setObject:indexPath forKey:[NSValue valueWithNonretainedObject:task]];
 }
 
-- (void)removeTask:(NSURLSessionDownloadTask *)task {
+- (void)removeTask:(NSURLSessionTask *)task {
 	[self.taskIndexPaths removeObjectForKey:[NSValue valueWithNonretainedObject:task]];
 }
 

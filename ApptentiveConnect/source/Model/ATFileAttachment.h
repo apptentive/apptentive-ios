@@ -19,15 +19,19 @@
 @property (nonatomic, strong) NSURL *remoteThumbnailURL;
 @property (nonatomic, strong) ATMessage *message;
 
+@property (nonatomic, readonly) NSString *fullLocalPath;
+
 + (instancetype)newInstanceWithFileData:(NSData *)fileData MIMEType:(NSString *)MIMEType;
 + (instancetype)newInstanceWithJSON:(NSDictionary *)JSON;
 
 - (NSData *)fileData;
 - (void)setFileData:(NSData *)data;
-- (void)setFileFromSourcePath:(NSString *)sourceFilename;
-- (void)moveFileFromURL:(NSURL *)location;
 
-- (NSString *)fullLocalPath;
+/** Can be called from background thread. */
+- (NSURL *)beginMoveToStorageFrom:(NSURL *)temporaryLocation;
+
+/** Must be called from main thread. */
+- (void)completeMoveToStorageFor:(NSURL *)storageLocation;
 
 - (UIImage *)thumbnailOfSize:(CGSize)size;
 - (void)createThumbnailOfSize:(CGSize)size completion:(void (^)(void))completion;

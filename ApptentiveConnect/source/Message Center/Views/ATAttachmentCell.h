@@ -13,6 +13,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UILabel *extensionLabel;
 @property (weak, nonatomic) IBOutlet UIProgressView *progressView;
+@property (strong, nonatomic) IBOutlet UIButton *deleteButton;
 
 @property (assign, nonatomic) BOOL usePlaceholder;
 

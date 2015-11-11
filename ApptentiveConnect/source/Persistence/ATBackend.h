@@ -91,6 +91,8 @@ extern NSString *const ATBackendBecameReadyNotification;
 - (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType;
 - (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType hiddenOnClient:(BOOL)hidden;
 
+- (BOOL)sendCompoundMessageWithText:(NSString *)text attachments:(NSArray *)attachments hiddenOnClient:(BOOL)hidden;
+
 /*! Path to directory for storing attachments. */
 - (NSString *)attachmentDirectoryPath;
 - (NSString *)deviceUUID;

@@ -75,6 +75,13 @@
 		01C7C4E41BEAD105005D6EC1 /* ATMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 01C7C4E21BEAD105005D6EC1 /* ATMessage.m */; };
 		01CC8BCA1B1D0598006C4D30 /* ATNetworkImageIconView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01CC8BC81B1D0598006C4D30 /* ATNetworkImageIconView.h */; };
 		01CC8BCB1B1D0598006C4D30 /* ATNetworkImageIconView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01CC8BC91B1D0598006C4D30 /* ATNetworkImageIconView.m */; };
+		01D0C38C1BF3DC330024BA1A /* ATAttachmentController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01D0C38A1BF3DC330024BA1A /* ATAttachmentController.h */; };
+		01D0C38D1BF3DC330024BA1A /* ATAttachmentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D0C38B1BF3DC330024BA1A /* ATAttachmentController.m */; };
+		01D0C3901BF3DED50024BA1A /* ATAttachButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 01D0C38E1BF3DED50024BA1A /* ATAttachButton.h */; };
+		01D0C3911BF3DED50024BA1A /* ATAttachButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D0C38F1BF3DED50024BA1A /* ATAttachButton.m */; };
+		01D0C39E1BF3EEA10024BA1A /* at_attach.png in Resources */ = {isa = PBXBuildFile; fileRef = 01D0C39B1BF3EE9B0024BA1A /* at_attach.png */; };
+		01D0C39F1BF3EEA10024BA1A /* at_attach@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01D0C39C1BF3EE9B0024BA1A /* at_attach@2x.png */; };
+		01D0C3A01BF3EEA10024BA1A /* at_attach@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01D0C39D1BF3EE9B0024BA1A /* at_attach@3x.png */; };
 		01D3128E1B69349900B369E1 /* ATProgressNavigationBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 01D3128C1B69349900B369E1 /* ATProgressNavigationBar.h */; };
 		01D3128F1B69349900B369E1 /* ATProgressNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D3128D1B69349900B369E1 /* ATProgressNavigationBar.m */; };
 		01F1A9601B6823CD0088DBF0 /* ATAboutViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01F1A95E1B6823CD0088DBF0 /* ATAboutViewController.h */; };
@@ -406,6 +413,13 @@
 		01C7C4E21BEAD105005D6EC1 /* ATMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessage.m; sourceTree = "<group>"; };
 		01CC8BC81B1D0598006C4D30 /* ATNetworkImageIconView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATNetworkImageIconView.h; sourceTree = "<group>"; };
 		01CC8BC91B1D0598006C4D30 /* ATNetworkImageIconView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATNetworkImageIconView.m; sourceTree = "<group>"; };
+		01D0C38A1BF3DC330024BA1A /* ATAttachmentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAttachmentController.h; sourceTree = "<group>"; };
+		01D0C38B1BF3DC330024BA1A /* ATAttachmentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAttachmentController.m; sourceTree = "<group>"; };
+		01D0C38E1BF3DED50024BA1A /* ATAttachButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAttachButton.h; sourceTree = "<group>"; };
+		01D0C38F1BF3DED50024BA1A /* ATAttachButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAttachButton.m; sourceTree = "<group>"; };
+		01D0C39B1BF3EE9B0024BA1A /* at_attach.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_attach.png; sourceTree = "<group>"; };
+		01D0C39C1BF3EE9B0024BA1A /* at_attach@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_attach@2x.png"; sourceTree = "<group>"; };
+		01D0C39D1BF3EE9B0024BA1A /* at_attach@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_attach@3x.png"; sourceTree = "<group>"; };
 		01D3128C1B69349900B369E1 /* ATProgressNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATProgressNavigationBar.h; sourceTree = "<group>"; };
 		01D3128D1B69349900B369E1 /* ATProgressNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATProgressNavigationBar.m; sourceTree = "<group>"; };
 		01F1A95E1B6823CD0088DBF0 /* ATAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAboutViewController.h; sourceTree = "<group>"; };
@@ -695,6 +709,8 @@
 		0159B64A1B7A73D100CC45E6 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				01D0C38E1BF3DED50024BA1A /* ATAttachButton.h */,
+				01D0C38F1BF3DED50024BA1A /* ATAttachButton.m */,
 				01C30CE91B0D09F8006BC911 /* ATMessageCenterGreetingView.h */,
 				01C30CEA1B0D09F8006BC911 /* ATMessageCenterGreetingView.m */,
 				017D97401B0E3770004E045C /* ATMessageCenterStatusView.h */,
@@ -735,6 +751,8 @@
 				01AE42061B38E38D006B9191 /* ATBannerViewController.m */,
 				01F1A95E1B6823CD0088DBF0 /* ATAboutViewController.h */,
 				01F1A95F1B6823CD0088DBF0 /* ATAboutViewController.m */,
+				01D0C38A1BF3DC330024BA1A /* ATAttachmentController.h */,
+				01D0C38B1BF3DC330024BA1A /* ATAttachmentController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -742,6 +760,7 @@
 		016085281BA77B0500050FDB /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				01D0C39A1BF3EE9B0024BA1A /* at_attach */,
 				0127EA141BF136020005481A /* at_document */,
 				016085291BA77B0500050FDB /* at_account */,
 				0160852D1BA77B0500050FDB /* at_apptentive_logo */,
@@ -845,6 +864,16 @@
 				0160854C1BA77B0500050FDB /* at_update_logo@3x.png */,
 			);
 			path = at_update_logo;
+			sourceTree = "<group>";
+		};
+		01D0C39A1BF3EE9B0024BA1A /* at_attach */ = {
+			isa = PBXGroup;
+			children = (
+				01D0C39B1BF3EE9B0024BA1A /* at_attach.png */,
+				01D0C39C1BF3EE9B0024BA1A /* at_attach@2x.png */,
+				01D0C39D1BF3EE9B0024BA1A /* at_attach@3x.png */,
+			);
+			path = at_attach;
 			sourceTree = "<group>";
 		};
 		491748B11341176E00A7D11E /* URL Loading */ = {
@@ -1368,6 +1397,7 @@
 				491748BA1341177000A7D11E /* ATConnectionChannel.h in Headers */,
 				491748BC1341177000A7D11E /* ATConnectionManager.h in Headers */,
 				58B703F81B0FAE6D0024478C /* ATMessageCenterInteraction.h in Headers */,
+				01D0C3901BF3DED50024BA1A /* ATAttachButton.h in Headers */,
 				491748BE1341177000A7D11E /* ATURLConnection.h in Headers */,
 				491748C01341177000A7D11E /* ATWebClient.h in Headers */,
 				01F1A9601B6823CD0088DBF0 /* ATAboutViewController.h in Headers */,
@@ -1440,6 +1470,7 @@
 				58DCC0D5180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.h in Headers */,
 				497A9A0417762512002B6F96 /* ATJSONSerialization.h in Headers */,
 				589274A6180CC33A0029E5CE /* ATInteractionUsageData.h in Headers */,
+				01D0C38C1BF3DC330024BA1A /* ATAttachmentController.h in Headers */,
 				5898DF8C17C2E0CE0048F11F /* ATEngagementGetManifestTask.h in Headers */,
 				584647C617C426E800BFD6E6 /* ATEngagementManifestParser.h in Headers */,
 				58C5922117C55ADD000FA428 /* ATEngagementBackend.h in Headers */,
@@ -1594,14 +1625,17 @@
 				016085631BA77B1D00050FDB /* at_update_icon_mask@2x.png in Resources */,
 				4967278416B9FE6400C679B8 /* Info.plist in Resources */,
 				0160855F1BA77B1D00050FDB /* at_network_error.png in Resources */,
+				01D0C3A01BF3EEA10024BA1A /* at_attach@3x.png in Resources */,
 				0127EA1A1BF136090005481A /* at_document@3x.png in Resources */,
 				016085561BA77B1D00050FDB /* at_close.png in Resources */,
 				016085671BA77B1D00050FDB /* at_update_logo@3x.png in Resources */,
 				0160854E1BA77B1D00050FDB /* at_account@2x.png in Resources */,
 				016085531BA77B1D00050FDB /* at_checkmark.png in Resources */,
+				01D0C39F1BF3EEA10024BA1A /* at_attach@2x.png in Resources */,
 				0160855A1BA77B1D00050FDB /* at_error_wait@2x.png in Resources */,
 				016085651BA77B1D00050FDB /* at_update_logo.png in Resources */,
 				016085601BA77B1D00050FDB /* at_network_error@2x.png in Resources */,
+				01D0C39E1BF3EEA10024BA1A /* at_attach.png in Resources */,
 				016085611BA77B1D00050FDB /* at_network_error@3x.png in Resources */,
 				016085541BA77B1D00050FDB /* at_checkmark@2x.png in Resources */,
 				0160855D1BA77B1D00050FDB /* at_info@2x.png in Resources */,
@@ -1657,6 +1691,7 @@
 				58DCC0D6180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m in Sources */,
 				58D17D5018C5676F00D123BC /* ATInteractionMessageCenterController.m in Sources */,
 				58B703F91B0FAE6D0024478C /* ATMessageCenterInteraction.m in Sources */,
+				01D0C3911BF3DED50024BA1A /* ATAttachButton.m in Sources */,
 				491748BF1341177000A7D11E /* ATURLConnection.m in Sources */,
 				491748C11341177000A7D11E /* ATWebClient.m in Sources */,
 				49509A62135658E200793EEC /* ATReachability.m in Sources */,
@@ -1695,6 +1730,7 @@
 				4961A403161BBD7000E30037 /* ATMessageTask.m in Sources */,
 				01C30CEC1B0D09F8006BC911 /* ATMessageCenterGreetingView.m in Sources */,
 				4961A40C161BBE0800E30037 /* ATPersonUpdater.m in Sources */,
+				01D0C38D1BF3DC330024BA1A /* ATAttachmentController.m in Sources */,
 				4961A410161BBE1F00E30037 /* ATDeviceUpdater.m in Sources */,
 				49E3A2701628F4FF000675B4 /* ATGetMessagesTask.m in Sources */,
 				49AC178316C0987400BE1615 /* ATConversationUpdater.m in Sources */,

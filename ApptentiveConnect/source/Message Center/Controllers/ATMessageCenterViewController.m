@@ -23,6 +23,8 @@
 #import "ATReachability.h"
 #import "ATProgressNavigationBar.h"
 #import "ATAboutViewController.h"
+#import "ATAttachButton.h"
+#import "ATAttachmentController.h"
 #import "ATIndexedCollectionView.h"
 #import "ATAttachmentCell.h"
 #import <MobileCoreServices/UTCoreTypes.h>
@@ -89,6 +91,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *composeButtonItem;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *neuMessageButtonItem; // newMessageButtonItem
+
+@property (nonatomic, strong) IBOutlet ATAttachmentController *attachmentController;
 
 @property (nonatomic, strong) ATMessageCenterDataSource *dataSource;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
@@ -163,7 +167,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	self.messageInputView.clearButton.accessibilityLabel = ATLocalizedString(@"Discard", @"Accessibility label for 'discard' button");
 	self.messageInputView.clearButton.accessibilityHint = ATLocalizedString(@"Discards the message.", @"Accessibility hint for 'discard' button");
-	
+
+	[self.messageInputView.attachButton setImage:[ATBackend imageNamed:@"at_attach"] forState:UIControlStateNormal];
+	self.messageInputView.attachButton.accessibilityLabel = ATLocalizedString(@"Attach", @"Accessibility label for 'attach' button");
+	self.messageInputView.attachButton.accessibilityHint = ATLocalizedString(@"Attaches a photo or screenshot", @"Accessibility hint for 'attach'");
+
 	if (self.interaction.profileRequested) {
 		UIBarButtonItem *profileButtonItem = [[UIBarButtonItem alloc] initWithImage:[ATBackend imageNamed:@"at_account"] landscapeImagePhone:[ATBackend imageNamed:@"at_account"] style:UIBarButtonItemStyleBordered target:self action:@selector(showWho:)];
 		profileButtonItem.accessibilityLabel = ATLocalizedString(@"Profile", @"Accessibility label for 'edit profile' button");
@@ -203,6 +211,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	// Fix iOS 7 bug where contentSize gets set to zero
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fixContentSize:) name:UIKeyboardDidShowNotification object:nil];
+
+	[self.attachmentController viewDidLoad];
 }
 
 - (void)dealloc {
@@ -236,7 +246,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[super viewWillAppear:animated];
 
 	NSString *message = self.messageInputView.messageView.text;
-	if (message && ![message isEqualToString:@""]) {
+	
+	if (self.attachmentController.active) {
+		self.state = ATMessageCenterStateComposing;
+		[self.attachmentController becomeFirstResponder];
+	} else if (message && ![message isEqualToString:@""]) {
 		self.state = ATMessageCenterStateComposing;
 		[self.messageInputView.messageView becomeFirstResponder];
 	} else {
@@ -249,14 +263,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
-	
-	NSString *message = self.messageInputView.messageView.text;
-	if (message) {
-		[[NSUserDefaults standardUserDefaults] setObject:message forKey:ATMessageCenterDraftMessageKey];
-	} else {
-		[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATMessageCenterDraftMessageKey];
-	}
-	
+
+	[self saveDraft];
+
 	[[ATBackend sharedBackend] messageCenterWillDismiss:self];
 }
 
@@ -614,6 +623,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
+	self.attachmentController.active = NO;
+
 	[self scrollToFooterView:nil];
 }
 
@@ -650,6 +661,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 #pragma mark - Actions
 
 - (IBAction)dismiss:(id)sender {
+	[self.attachmentController resignFirstResponder];
+
 	[self.interaction engage:ATInteractionMessageCenterEventLabelClose fromViewController:self];
 	
 	[self.dataSource stop];
@@ -681,9 +694,14 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			[[ATBackend sharedBackend] sendAutomatedMessage:self.contextMessage];
 			self.contextMessage = nil;
 		}
-		
-		[[ATBackend sharedBackend] sendTextMessageWithBody:message];
-		
+
+		NSArray *attachments = self.attachmentController.attachments;
+		if (attachments.count) {
+			[[ATBackend sharedBackend] sendCompoundMessageWithText:message attachments:attachments hiddenOnClient:NO];
+		} else {
+			[[ATBackend sharedBackend] sendTextMessageWithBody:message];
+		}
+
 		if ([self shouldShowProfileViewBeforeComposing:NO]) {
 			[self.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{@"required": @(self.interaction.profileRequired), @"trigger": @"automatic"}];
 			
@@ -822,6 +840,17 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 #pragma mark - Private
+
+- (void)saveDraft {
+	NSString *message = self.messageInputView.messageView.text;
+	if (message) {
+		[[NSUserDefaults standardUserDefaults] setObject:message forKey:ATMessageCenterDraftMessageKey];
+	} else {
+		[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATMessageCenterDraftMessageKey];
+	}
+
+	[self.attachmentController saveDraft];
+}
 
 - (BOOL)isWhoValid {
 	BOOL emailIsValid = [ATUtilities emailAddressIsValid:self.profileView.emailField.text];

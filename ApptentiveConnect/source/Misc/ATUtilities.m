@@ -611,7 +611,31 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 }
 
 + (NSComparisonResult)compareVersionString:(NSString *)a toVersionString:(NSString *)b {
-	return [a compare:b options:NSNumericSearch];
+	NSArray *leftComponents = [a componentsSeparatedByString:@"."];
+	NSArray *rightComponents = [b componentsSeparatedByString:@"."];
+	NSUInteger maxComponents = MAX(leftComponents.count, rightComponents.count);
+	
+	NSComparisonResult comparisonResult = NSOrderedSame;
+	for (int i = 0; i < maxComponents; i++) {
+		NSInteger leftComponent = 0;
+		if (i < leftComponents.count) {
+			leftComponent = [leftComponents[i] integerValue];
+		}
+		NSInteger rightComponent = 0;
+		if (i < rightComponents.count) {
+			rightComponent = [rightComponents[i] integerValue];
+		}
+		if (leftComponent == rightComponent) {
+			continue;
+		} else if (leftComponent > rightComponent) {
+			comparisonResult = NSOrderedDescending;
+			break;
+		} else if (leftComponent < rightComponent) {
+			comparisonResult = NSOrderedAscending;
+			break;
+		}
+	}
+	return comparisonResult;
 }
 
 + (BOOL)versionString:(NSString *)a isGreaterThanVersionString:(NSString *)b {

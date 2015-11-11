@@ -58,7 +58,7 @@
 
 	NSString *MIMEType = [JSON at_safeObjectForKey:@"content_type"];
 	if (MIMEType && [MIMEType isKindOfClass:[NSString class]]) {
-		[self setValue:MIMEType forKey:@"mimeType"];
+		self.mimeType = MIMEType;
 	}
 }
 
@@ -75,7 +75,6 @@
 			ATLogError(@"Unable to save file data to path: %@", [self fullLocalPath]);
 			self.localPath = nil;
 		}
-		self.mimeType = @"application/octet-stream";
 		self.name = [NSString stringWithString:self.localPath];
 	}
 }

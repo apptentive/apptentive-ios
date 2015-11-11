@@ -23,6 +23,7 @@
 
 + (instancetype)newInstanceWithFileData:(NSData *)fileData MIMEType:(NSString *)MIMEType;
 + (instancetype)newInstanceWithJSON:(NSDictionary *)JSON;
+- (void)updateWithJSON:(NSDictionary *)JSON;
 
 - (NSData *)fileData;
 - (void)setFileData:(NSData *)data;

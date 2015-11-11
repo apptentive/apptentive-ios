@@ -165,20 +165,32 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 	}
 
 	NSArray *attachmentsJSON = [json at_safeObjectForKey:@"attachments"];
-	NSMutableOrderedSet *attachments = [NSMutableOrderedSet orderedSetWithCapacity:attachmentsJSON.count];
+	if ([attachmentsJSON isKindOfClass:[NSArray class]]) {
+		if (self.attachments.count == 0) {
+			NSMutableOrderedSet *attachments = [NSMutableOrderedSet orderedSetWithCapacity:attachmentsJSON.count];
 
-	for (id tmpAttachment in attachmentsJSON) {
-		if ([tmpAttachment isKindOfClass:[NSDictionary class]]) {
-			NSDictionary *attachmentJSON = (NSDictionary *)tmpAttachment;
-			ATFileAttachment *attachment = [ATFileAttachment newInstanceWithJSON:attachmentJSON];
+			for (id tmpAttachment in attachmentsJSON) {
+				if ([tmpAttachment isKindOfClass:[NSDictionary class]]) {
+					NSDictionary *attachmentJSON = (NSDictionary *)tmpAttachment;
+					ATFileAttachment *attachment = [ATFileAttachment newInstanceWithJSON:attachmentJSON];
 
-			if (attachment) {
-				[attachments addObject:attachment];
+					if (attachment) {
+						[attachments addObject:attachment];
+					}
+				}
 			}
+
+			self.attachments = attachments;
+		} else if (self.attachments.count == attachmentsJSON.count) {
+			for (NSInteger i = 0; i < self.attachments.count; i ++) {
+				ATFileAttachment *originalAttachment = [self.attachments objectAtIndex:i];
+				NSDictionary *newJSON = [attachmentsJSON objectAtIndex:i];
+				[originalAttachment updateWithJSON:newJSON];
+			}
+		} else {
+			ATLogError(@"Mismatch in number of attachments in message (%d) versus API (%d).", self.attachments.count, attachmentsJSON.count);
 		}
 	}
-
-	self.attachments = attachments;
 }
 
 - (NSDictionary *)apiJSON {

@@ -149,14 +149,20 @@
 		NSPredicate *predicate = nil;
 		
 		if ([value isKindOfClass:[NSArray class]]) {
-			NSCompoundPredicateType predicateType = [self predicateCompoundTypeFromString:key];
-			predicate = [self compoundPredicateWithType:predicateType criteriaArray:(NSArray *)value];
+			BOOL hasError;
+			NSCompoundPredicateType predicateType = [self compoundPredicateTypeFromString:key hasError:&hasError];
+			if (!hasError) {
+				predicate = [self compoundPredicateWithType:predicateType criteriaArray:(NSArray *)value];
+			}
 		} else if ([value isKindOfClass:[NSDictionary class]]) {
 			NSDictionary *dictionaryValue = (NSDictionary *)value;
 			if ([dictionaryValue.allKeys.firstObject isEqualToString:@"$not"]) {
 				NSString *notKey = dictionaryValue.allKeys.firstObject;
-				NSCompoundPredicateType predicateType = [self predicateCompoundTypeFromString:notKey];
-				predicate = [self compoundPredicateWithType:predicateType criteriaArray:@[@{key: dictionaryValue[notKey]}]];
+				BOOL hasError;
+				NSCompoundPredicateType predicateType = [self compoundPredicateTypeFromString:notKey hasError:&hasError];
+				if (!hasError) {
+					predicate = [self compoundPredicateWithType:predicateType criteriaArray:@[@{key: dictionaryValue[notKey]}]];
+				}
 			} else {
 				predicate = [self compoundPredicateForKeyPath:key operatorsAndValues:(NSDictionary *)value];
 			}
@@ -208,16 +214,23 @@
 				predicate = [NSPredicate predicateWithFormat:predicateFormatString, keyPath];
 			}
 		} else if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
-			NSPredicateOperatorType operatorType = [self predicateOperatorTypeFromString:operatorString];
-						
-			predicate = [self predicateWithLeftKeyPath:keyPath rightValue:value operatorType:operatorType];
+			BOOL hasError;
+			
+			NSPredicateOperatorType operatorType = [self predicateOperatorTypeFromString:operatorString hasError:&hasError];
+			if (!hasError) {
+				predicate = [self predicateWithLeftKeyPath:keyPath rightValue:value operatorType:operatorType];
+			}
 		} else if ([value isKindOfClass:[NSDictionary class]]) {
 			predicate = [NSCompoundPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
-				NSPredicateOperatorType operatorType = [self predicateOperatorTypeFromString:operatorString];
-				
-				NSComparisonPredicate *predicate = [self predicateWithLeftComplexObject:evaluatedObject rightComplexObject:(NSDictionary *)value operatorType:operatorType];
-				
-				return [predicate evaluateWithObject:nil];
+				BOOL hasError;
+				NSPredicateOperatorType operatorType = [self predicateOperatorTypeFromString:operatorString hasError:&hasError];
+				if (!hasError) {
+					NSComparisonPredicate *predicate = [self predicateWithLeftComplexObject:evaluatedObject rightComplexObject:(NSDictionary *)value operatorType:operatorType];
+					
+					return [predicate evaluateWithObject:nil];
+				} else {
+					return NO;
+				}
 			}];
 		}
 		
@@ -316,7 +329,8 @@
 	return predicate;
 }
 
-+ (NSCompoundPredicateType)predicateCompoundTypeFromString:(NSString *)predicateTypeString {
++ (NSCompoundPredicateType)compoundPredicateTypeFromString:(NSString *)predicateTypeString hasError:(nonnull BOOL *)hasError {
+	*hasError = NO;
 	if ([predicateTypeString isEqualToString:@"$and"]) {
 		return NSAndPredicateType;
 	} else if ([predicateTypeString isEqualToString:@"$or"]) {
@@ -325,14 +339,14 @@
 		return NSNotPredicateType;
 	} else {
 		ATLogError(@"Expected `$and`, `$or`, or `$not` skey; instead saw key: %@", predicateTypeString);
-
-		// TODO return value in this case?
+		*hasError = YES;
 		return NSAndPredicateType;
 	}
 }
 
-+ (NSPredicateOperatorType)predicateOperatorTypeFromString:(NSString *)operatorString {
-	if ([operatorString isEqualToString:@"=="]) {
++ (NSPredicateOperatorType)predicateOperatorTypeFromString:(NSString *)operatorString hasError:(nonnull BOOL *)hasError {
+	*hasError = NO;
+	if ([operatorString isEqualToString:@"$eq"] || [operatorString isEqualToString:@"=="]) {
 		return NSEqualToPredicateOperatorType;
 	} else if ([operatorString isEqualToString:@"$gt"] || [operatorString isEqualToString:@">"]) {
 		return NSGreaterThanPredicateOperatorType;
@@ -352,8 +366,7 @@
 		return NSEndsWithPredicateOperatorType;
 	} else {
 		ATLogError(@"Unrecognized comparison operator symbol: %@", operatorString);
-
-		// TODO return value in this case?
+		*hasError = YES;
 		return NSCustomSelectorPredicateOperatorType;
 	}
 }

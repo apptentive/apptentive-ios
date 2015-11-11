@@ -14,6 +14,7 @@
 #import "ATDeviceInfo.h"
 #import "ATPersonInfo.h"
 
+#warning These need to be upgraded to the complex types.
 @implementation ATInteractionUsageData
 
 + (ATInteractionUsageData *)usageData {

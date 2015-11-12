@@ -233,3 +233,15 @@
 	});
 }
 @end
+
+@implementation ATFileAttachment (QuickLook)
+
+- (NSString *)previewItemTitle {
+	return self.name;
+}
+
+- (NSURL *)previewItemURL {
+	return [NSURL fileURLWithPath:self.fullLocalPath];
+}
+
+@end

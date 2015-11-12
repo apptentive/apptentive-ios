@@ -56,6 +56,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 - (NSString *)extensionForAttachmentAtIndexPath:(NSIndexPath *)indexPath; // Returns nil if thumbnail is present, file extension if not
 - (UIImage *)imageForAttachmentAtIndexPath:(NSIndexPath *)indexPath size:(CGSize)size; // Returns thumbnail if present, generic file icon if not
 - (void)downloadAttachmentAtIndexPath:(NSIndexPath *)indexPath;
+- (id<QLPreviewControllerDataSource>)previewDataSourceAtIndex:(NSInteger)index;
 
 @property (nonatomic, readonly) BOOL lastMessageIsReply;
 @property (nonatomic, readonly) NSIndexPath *lastUserMessageIndexPath;

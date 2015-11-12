@@ -99,7 +99,6 @@
 #pragma mark - Context / Automated Message
 
 - (NSString *)contextMessageBody {
-	return @"Yo!";
 	return self.configuration[@"automated_message"][@"body"];
 }
 

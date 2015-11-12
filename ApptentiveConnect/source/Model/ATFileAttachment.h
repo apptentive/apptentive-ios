@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import <QuickLook/QuickLook.h>
 
 @class ATMessage;
 
@@ -37,4 +38,7 @@
 - (UIImage *)thumbnailOfSize:(CGSize)size;
 - (void)createThumbnailOfSize:(CGSize)size completion:(void (^)(void))completion;
 
+@end
+
+@interface ATFileAttachment (QuickLook) <QLPreviewItem>
 @end

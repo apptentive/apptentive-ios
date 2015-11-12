@@ -266,6 +266,10 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 	[task resume];
 }
 
+- (id<QLPreviewControllerDataSource>)previewDataSourceAtIndex:(NSInteger)index {
+	return [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]];
+}
+
 #pragma mark NSFetchedResultsControllerDelegate
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {

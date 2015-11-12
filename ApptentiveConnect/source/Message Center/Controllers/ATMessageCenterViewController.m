@@ -572,7 +572,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	if ([self.dataSource shouldUsePlaceholderForAttachmentAtIndexPath:attachmentIndexPath]) {
 		[self.dataSource downloadAttachmentAtIndexPath:attachmentIndexPath];
 	} else {
-		// TODO: display preview of attachment
+		QLPreviewController *previewController = [[QLPreviewController alloc] init];
+
+		previewController.dataSource = [self.dataSource previewDataSourceAtIndex:((ATIndexedCollectionView *)collectionView).index];
+		previewController.currentPreviewItemIndex = indexPath.row;
+
+		[self.navigationController pushViewController:previewController animated:YES];
 	}
 }
 

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import <QuickLook/QuickLook.h>
 
 #import "ATJSONModel.h"
 #import "ATRecord.h"
@@ -59,4 +60,7 @@ typedef NS_ENUM(NSInteger, ATPendingMessageState) {
 
 - (void)markAsRead;
 
+@end
+
+@interface ATMessage (QuickLook) <QLPreviewControllerDataSource>
 @end

@@ -701,9 +701,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		NSArray *attachments = self.attachmentController.attachments;
 		if (attachments.count) {
 			[[ATBackend sharedBackend] sendCompoundMessageWithText:message attachments:attachments hiddenOnClient:NO];
+			[self.attachmentController clear];
 		} else {
 			[[ATBackend sharedBackend] sendTextMessageWithBody:message];
 		}
+
+		[self.attachmentController resignFirstResponder];
 
 		if ([self shouldShowProfileViewBeforeComposing:NO]) {
 			[self.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{@"required": @(self.interaction.profileRequired), @"trigger": @"automatic"}];
@@ -732,7 +735,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (IBAction)clear:(UIButton *)sender {
-	if (self.messageInputView.messageView.text.length == 0) {
+	if (self.messageInputView.messageView.text.length == 0 && self.attachmentController.attachments.count == 0) {
 		[self discardDraft];
 		return;
 	}
@@ -1155,6 +1158,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)discardDraft {
 	self.messageInputView.messageView.text = nil;
 	[self.messageInputView.messageView resignFirstResponder];
+
+	[self.attachmentController clear];
+	[self.attachmentController resignFirstResponder];
 	
 	self.messageInputView.sendButton.enabled = [self sendButtonShouldBeEnabled];
 	

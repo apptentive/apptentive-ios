@@ -10,7 +10,7 @@
 
 @class ATAttachButton, ATMessageCenterViewController;
 
-@interface ATAttachmentController : UIResponder <UICollectionViewDelegate, UICollectionViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverControllerDelegate>
+@interface ATAttachmentController : UIResponder <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (strong, nonatomic) IBOutlet ATAttachButton *attachButton;
@@ -21,5 +21,6 @@
 
 - (void)viewDidLoad;
 - (void)saveDraft;
+- (void)clear;
 
 @end

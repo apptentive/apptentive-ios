@@ -12,13 +12,17 @@
 #import "ATMessageCenterViewController.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 
+#define MAX_NUMBER_OF_ATTACHMENTS 4
+#define ATTACHMENT_MARGIN CGSizeMake(16.0, 15.0)
+#define ATTACHMENT_INSET UIEdgeInsetsMake(8, 8, 8, 8)
+
 NSString *const ATMessageCenterAttachmentsArchiveFilename = @"DraftAttachments";
 
 @interface ATAttachmentController ()
 
 @property (nonatomic, strong) UIPopoverController *imagePickerPopoverController;
-
 @property (strong, nonatomic) NSMutableArray *mutableAttachments;
+@property (assign, nonatomic) CGSize collectionViewFooterSize;
 
 @end
 
@@ -34,9 +38,21 @@ NSString *const ATMessageCenterAttachmentsArchiveFilename = @"DraftAttachments";
 
 	self.mutableAttachments = [NSKeyedUnarchiver unarchiveObjectWithFile:self.archivePath];
 
+	CGSize marginWithInsets = CGSizeMake(ATTACHMENT_MARGIN.width - (ATTACHMENT_INSET.left), ATTACHMENT_MARGIN.height - (ATTACHMENT_INSET.top));
+	CGFloat height = [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:marginWithInsets];
+	CGFloat bottomY = CGRectGetMaxY(self.collectionView.frame);
+	self.collectionView.frame = CGRectMake(self.collectionView.frame.origin.x, bottomY - height, self.collectionView.frame.size.width, height);
+
+	UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
+	layout.sectionInset = UIEdgeInsetsMake(ATTACHMENT_MARGIN.height - ATTACHMENT_INSET.top, ATTACHMENT_MARGIN.width - ATTACHMENT_INSET.left, ATTACHMENT_MARGIN.height - ATTACHMENT_INSET.bottom, ATTACHMENT_MARGIN.width - ATTACHMENT_INSET.right);
+	layout.minimumInteritemSpacing = ATTACHMENT_MARGIN.width;
+	layout.itemSize = [ATAttachmentCell sizeForScreen:[UIScreen mainScreen] withMargin:marginWithInsets];
+
 	if (![self.mutableAttachments isKindOfClass:[NSMutableArray class]]) {
 		self.mutableAttachments = [NSMutableArray array];
 	}
+
+	self.collectionViewFooterSize = ((UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout).footerReferenceSize;
 
 	[self updateBadge];
 }
@@ -69,13 +85,20 @@ NSString *const ATMessageCenterAttachmentsArchiveFilename = @"DraftAttachments";
 	return self.collectionView;
 }
 
+- (void)clear {
+	[self.mutableAttachments removeAllObjects];
+	[self updateBadge];
+	[self saveDraft];
+}
+
 #pragma mark - Actions
 
 - (IBAction)showAttachments:(UIButton *)sender {
-	[self becomeFirstResponder];
-
-	if (self.active || self.mutableAttachments.count == 0) {
+	if ((self.active || self.mutableAttachments.count == 0) && self.mutableAttachments.count < MAX_NUMBER_OF_ATTACHMENTS) {
 		[self chooseImage:sender];
+	} else {
+		[self becomeFirstResponder];
+		[self updateBadge];
 	}
 
 	self.active = YES;
@@ -154,6 +177,8 @@ NSString *const ATMessageCenterAttachmentsArchiveFilename = @"DraftAttachments";
 
 - (void)updateBadge {
 	self.attachButton.badgeValue = self.mutableAttachments.count;
+
+	((UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout).footerReferenceSize = self.mutableAttachments.count < MAX_NUMBER_OF_ATTACHMENTS ? self.collectionViewFooterSize : CGSizeZero;
 }
 
 - (NSString *)archivePath {

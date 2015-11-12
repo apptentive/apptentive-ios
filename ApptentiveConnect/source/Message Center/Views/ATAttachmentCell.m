@@ -63,7 +63,7 @@
 
 	self.imageView.contentMode = usePlaceholder ? UIViewContentModeScaleToFill : UIViewContentModeScaleAspectFit;
 	self.extensionLabel.hidden = !usePlaceholder;
-	self.backgroundColor = usePlaceholder ? [UIColor clearColor] : [UIColor lightGrayColor];
+	self.imageView.backgroundColor = usePlaceholder ? [UIColor clearColor] : [UIColor lightGrayColor];
 
 	if (usePlaceholder) {
 		self.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;

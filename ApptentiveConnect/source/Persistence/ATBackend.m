@@ -229,7 +229,7 @@ static NSURLCache *imageCache = nil;
 	message.sentByUser = @YES;
 	message.seenByUser = @YES;
 	message.hidden = @(hidden);
-	
+
 	if (!hidden) {
 		[self attachCustomDataToMessage:message];
 	}
@@ -241,7 +241,7 @@ static NSURLCache *imageCache = nil;
 	message.pendingState = @(ATPendingMessageStateSending);
 	
 	[self updatePersonIfNeeded];
-	
+
 	return [self sendMessage:message];
 }
 
@@ -284,8 +284,6 @@ static NSURLCache *imageCache = nil;
 			message.sender = sender;
 		}
 	}
-
-	[message updateClientCreationTime];
 
 	NSError *error;
 	if (![[[ATBackend sharedBackend] managedObjectContext] save:&error]) {

@@ -21,13 +21,15 @@
 @property (nonatomic, strong) ATMessage *message;
 
 @property (nonatomic, readonly) NSString *fullLocalPath;
+@property (nonatomic, readonly) NSString *extension;
+@property (nonatomic, readonly) NSData *fileData;
+@property (nonatomic, readonly) BOOL canCreateThumbnail;
 
 + (instancetype)newInstanceWithFileData:(NSData *)fileData MIMEType:(NSString *)MIMEType;
 + (instancetype)newInstanceWithJSON:(NSDictionary *)JSON;
 - (void)updateWithJSON:(NSDictionary *)JSON;
 
-- (NSData *)fileData;
-- (void)setFileData:(NSData *)data;
+- (void)setFileData:(NSData *)data MIMEType:(NSString *)MIMEType;
 
 /** Can be called from background thread. */
 - (NSURL *)beginMoveToStorageFrom:(NSURL *)temporaryLocation;
@@ -36,7 +38,6 @@
 - (void)completeMoveToStorageFor:(NSURL *)storageLocation;
 
 - (UIImage *)thumbnailOfSize:(CGSize)size;
-- (void)createThumbnailOfSize:(CGSize)size completion:(void (^)(void))completion;
 
 @end
 

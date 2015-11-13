@@ -569,15 +569,15 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 	NSIndexPath *attachmentIndexPath = [NSIndexPath indexPathForItem:indexPath.item inSection:((ATIndexedCollectionView *)collectionView).index];
 
-	if ([self.dataSource shouldUsePlaceholderForAttachmentAtIndexPath:attachmentIndexPath]) {
-		[self.dataSource downloadAttachmentAtIndexPath:attachmentIndexPath];
-	} else {
+	if ([self.dataSource canPreviewAttachmentAtIndexPath:attachmentIndexPath]) {
 		QLPreviewController *previewController = [[QLPreviewController alloc] init];
 
 		previewController.dataSource = [self.dataSource previewDataSourceAtIndex:((ATIndexedCollectionView *)collectionView).index];
 		previewController.currentPreviewItemIndex = indexPath.row;
 
 		[self.navigationController pushViewController:previewController animated:YES];
+	} else {
+		[self.dataSource downloadAttachmentAtIndexPath:attachmentIndexPath];
 	}
 }
 

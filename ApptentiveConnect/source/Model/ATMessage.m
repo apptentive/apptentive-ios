@@ -299,7 +299,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 @implementation ATMessage (QuickLook)
 
 - (NSInteger)numberOfPreviewItemsInPreviewController:(QLPreviewController *)controller {
-	return self.attachments.count; // TODO: return only downloaded attachments
+	return self.attachments.count;
 }
 
 - (id<QLPreviewItem>)previewController:(QLPreviewController *)controller previewItemAtIndex:(NSInteger)index {

@@ -12,10 +12,12 @@
 #import "ATUtilities.h"
 #import "ATData.h"
 #import "NSDictionary+ATAdditions.h"
+#import "ATConnect_Private.h"
+#import <MobileCoreServices/MobileCoreServices.h>
 #import <ImageIO/ImageIO.h>
 
 @interface ATFileAttachment ()
-- (NSString *)fullLocalPathForFilename:(NSString *)filename;
++ (NSString *)fullLocalPathForFilename:(NSString *)filename;
 - (NSString *)filenameForThumbnailOfSize:(CGSize)size;
 - (void)deleteSidecarIfNecessary;
 @end
@@ -28,10 +30,28 @@
 @dynamic remoteURL;
 @dynamic remoteThumbnailURL;
 
++ (BOOL)canCreateThumbnailForMIMEType:(NSString *)MIMEType {
+	static NSMutableSet *thumbnailableMIMETypes;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		CFArrayRef thumbnailableUTIs = CGImageSourceCopyTypeIdentifiers();
+		thumbnailableMIMETypes = [NSMutableSet set];
+
+		for (CFIndex i = 0; i < CFArrayGetCount(thumbnailableUTIs); i ++) {
+			CFStringRef UTI = CFArrayGetValueAtIndex(thumbnailableUTIs, i);
+			CFStringRef MIMEType = UTTypeCopyPreferredTagWithClass(UTI, kUTTagClassMIMEType);
+			if (MIMEType) {
+				[thumbnailableMIMETypes addObject:(__bridge id _Nonnull)(MIMEType)];
+			}
+		}
+	});
+
+	return [thumbnailableMIMETypes containsObject:MIMEType];
+}
+
 + (instancetype)newInstanceWithFileData:(NSData *)fileData MIMEType:(NSString *)MIMEType {
 	ATFileAttachment *attachment = (ATFileAttachment *)[ATData newEntityNamed:NSStringFromClass(self)];
-	attachment.mimeType = MIMEType;
-	[attachment setFileData:fileData];
+	[attachment setFileData:fileData MIMEType:MIMEType];
 	return attachment;
 }
 
@@ -61,17 +81,23 @@
 	if (MIMEType && [MIMEType isKindOfClass:[NSString class]]) {
 		self.mimeType = MIMEType;
 	}
+
+	NSString *name = [JSON at_safeObjectForKey:@"original_name"];
+	if (name && [name isKindOfClass:[NSString class]]) {
+		self.name = name;
+	}
 }
 
 - (void)prepareForDeletion {
-	[self setFileData:nil];
+	[self setFileData:nil MIMEType:nil];
 }
 
-- (void)setFileData:(NSData *)data {
+- (void)setFileData:(NSData *)data MIMEType:(NSString *)MIMEType {
 	[self deleteSidecarIfNecessary];
 	self.localPath = nil;
+	self.mimeType = MIMEType;
 	if (data) {
-		self.localPath = [ATUtilities randomStringOfLength:20];
+		self.localPath = [[ATUtilities randomStringOfLength:20] stringByAppendingPathExtension:self.extension];
 		if (![data writeToFile:[self fullLocalPath] atomically:YES]) {
 			ATLogError(@"Unable to save file data to path: %@", [self fullLocalPath]);
 			self.localPath = nil;
@@ -119,7 +145,8 @@
 
 - (NSURL *)beginMoveToStorageFrom:(NSURL *)temporaryLocation {
 	if (temporaryLocation && temporaryLocation.isFileURL) {
-		NSURL *newLocation = [NSURL fileURLWithPath:[self fullLocalPathForFilename:[ATUtilities randomStringOfLength:20]]];
+		NSString *name = [[ATUtilities randomStringOfLength:20] stringByAppendingPathExtension:self.extension];
+		NSURL *newLocation = [NSURL fileURLWithPath:[[self class] fullLocalPathForFilename:name]];
 		NSError *error = nil;
 		if ([[NSFileManager defaultManager] moveItemAtURL:temporaryLocation toURL:newLocation error:&error]) {
 			return newLocation;
@@ -139,10 +166,23 @@
 }
 
 - (NSString *)fullLocalPath {
-	return [self fullLocalPathForFilename:self.localPath];
+	return [[self class] fullLocalPathForFilename:self.localPath];
 }
 
-- (NSString *)fullLocalPathForFilename:(NSString *)filename {
+- (NSString *)extension {
+	if (self.mimeType) {
+		CFStringRef uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (__bridge CFStringRef _Nonnull)(self.mimeType), NULL);
+		return (__bridge NSString *)UTTypeCopyPreferredTagWithClass(uti, kUTTagClassFilenameExtension);
+	} else {
+		return @"attachment";
+	}
+}
+
+- (BOOL)canCreateThumbnail {
+	return [[self class] canCreateThumbnailForMIMEType:self.mimeType];
+}
+
++ (NSString *)fullLocalPathForFilename:(NSString *)filename {
 	if (!filename) {
 		return nil;
 	}
@@ -153,7 +193,7 @@
 	if (self.localPath == nil) {
 		return nil;
 	}
-	return [NSString stringWithFormat:@"%@_%dx%d_fit.thumbnail", self.localPath, (int)floor(size.width), (int)floor(size.height)];
+	return [NSString stringWithFormat:@"%@_%dx%d_fit.jpeg", self.localPath, (int)floor(size.width), (int)floor(size.height)];
 }
 
 - (void)deleteSidecarIfNecessary {
@@ -177,7 +217,7 @@
 		} else {
 			for (NSString *filename in filenames) {
 				if ([filename rangeOfString:self.localPath].location == 0) {
-					NSString *thumbnailPath = [self fullLocalPathForFilename:filename];
+					NSString *thumbnailPath = [[self class] fullLocalPathForFilename:filename];
 					
 					if (![fm removeItemAtPath:thumbnailPath error:&error]) {
 						ATLogError(@"Error removing attachment thumbnail at path: %@. %@", thumbnailPath, error);
@@ -195,7 +235,7 @@
 	if (!filename) {
 		return nil;
 	}
-	NSString *path = [self fullLocalPathForFilename:filename];
+	NSString *path = [[self class] fullLocalPathForFilename:filename];
 	UIImage *image = [UIImage imageWithContentsOfFile:path];
 	if (image == nil) {
 		image = [self createThumbnailOfSize:size];
@@ -236,7 +276,13 @@
 }
 
 - (NSURL *)previewItemURL {
-	return [NSURL fileURLWithPath:self.fullLocalPath];
+	if (self.localPath) {
+		return [NSURL fileURLWithPath:self.fullLocalPath];
+	} else {
+		// Use fake path
+		NSString *name = self.name ?: [[ATUtilities randomStringOfLength:20] stringByAppendingPathExtension:self.extension];
+		return [NSURL fileURLWithPath:[[self class] fullLocalPathForFilename:name]];
+	}
 }
 
 @end

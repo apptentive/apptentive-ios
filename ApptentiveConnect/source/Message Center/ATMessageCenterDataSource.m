@@ -7,7 +7,6 @@
 //
 
 #import "ATMessageCenterDataSource.h"
-#import <MobileCoreServices/MobileCoreServices.h>
 
 #import "ATBackend.h"
 #import "ATConnect.h"
@@ -221,14 +220,23 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 - (BOOL)shouldUsePlaceholderForAttachmentAtIndexPath:(NSIndexPath *)indexPath {
 	ATFileAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
 
-	return attachment.localPath == nil;
+	return attachment.localPath == nil || !attachment.canCreateThumbnail;
+}
+
+- (BOOL)canPreviewAttachmentAtIndexPath:(NSIndexPath *)indexPath {
+	ATFileAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
+
+	return attachment.localPath != nil;
 }
 
 - (UIImage *)imageForAttachmentAtIndexPath:(NSIndexPath *)indexPath size:(CGSize)size {
 	ATFileAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
 
 	if (attachment.localPath) {
-		return [attachment thumbnailOfSize:size];
+		UIImage *thumbnail = [attachment thumbnailOfSize:size];
+		if (thumbnail) {
+			return thumbnail;
+		}
 	} else if (attachment.remoteThumbnailURL) {
 		// kick off download of thumbnail
 	}
@@ -240,10 +248,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 - (NSString *)extensionForAttachmentAtIndexPath:(NSIndexPath *)indexPath {
 	ATFileAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
 
-	CFStringRef uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (__bridge CFStringRef _Nonnull)(attachment.mimeType), NULL);
-	NSString *extension = (__bridge NSString *)UTTypeCopyPreferredTagWithClass(uti, kUTTagClassFilenameExtension);
-
-	return extension;
+	return attachment.extension;
 }
 
 - (void)downloadAttachmentAtIndexPath:(NSIndexPath *)indexPath {
@@ -335,6 +340,8 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 }
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
+	if (error == nil) return;
+	
 	NSIndexPath *attachmentIndexPath = [self indexPathForTask:task];
 	[self removeTask:task];
 

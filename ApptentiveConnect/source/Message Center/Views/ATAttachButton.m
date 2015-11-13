@@ -11,7 +11,7 @@
 @implementation ATAttachButton
 
 - (void)awakeFromNib {
-	self.titleLabel.backgroundColor = [UIColor colorWithWhite:0.6 alpha:1.0];
+	self.titleLabel.backgroundColor = self.tintColor;
 	self.titleLabel.font = [UIFont boldSystemFontOfSize:14.0];
 	self.titleLabel.textAlignment = NSTextAlignmentCenter;
 	self.titleEdgeInsets = UIEdgeInsetsMake(-8.0, 0.0, 0.0, 0.0);

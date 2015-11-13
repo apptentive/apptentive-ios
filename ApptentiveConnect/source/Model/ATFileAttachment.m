@@ -49,9 +49,9 @@
 	return [thumbnailableMIMETypes containsObject:MIMEType];
 }
 
-+ (instancetype)newInstanceWithFileData:(NSData *)fileData MIMEType:(NSString *)MIMEType {
++ (instancetype)newInstanceWithFileData:(NSData *)fileData MIMEType:(NSString *)MIMEType name:(NSString *)name {
 	ATFileAttachment *attachment = (ATFileAttachment *)[ATData newEntityNamed:NSStringFromClass(self)];
-	[attachment setFileData:fileData MIMEType:MIMEType];
+	[attachment setFileData:fileData MIMEType:MIMEType name:name];
 	return attachment;
 }
 
@@ -89,10 +89,10 @@
 }
 
 - (void)prepareForDeletion {
-	[self setFileData:nil MIMEType:nil];
+	[self setFileData:nil MIMEType:nil name:nil];
 }
 
-- (void)setFileData:(NSData *)data MIMEType:(NSString *)MIMEType {
+- (void)setFileData:(NSData *)data MIMEType:(NSString *)MIMEType name:(NSString *)name {
 	[self deleteSidecarIfNecessary];
 	self.localPath = nil;
 	self.mimeType = MIMEType;
@@ -102,7 +102,7 @@
 			ATLogError(@"Unable to save file data to path: %@", [self fullLocalPath]);
 			self.localPath = nil;
 		}
-		self.name = [NSString stringWithString:self.localPath];
+		self.name = name ?: [NSString stringWithString:self.localPath];
 	}
 }
 

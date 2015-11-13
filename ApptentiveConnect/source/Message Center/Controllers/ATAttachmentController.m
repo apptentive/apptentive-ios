@@ -11,6 +11,7 @@
 #import "ATAttachButton.h"
 #import "ATMessageCenterViewController.h"
 #import <AssetsLibrary/AssetsLibrary.h>
+#import "ATConnect_Private.h"
 
 #define MAX_NUMBER_OF_ATTACHMENTS 4
 #define ATTACHMENT_MARGIN CGSizeMake(16.0, 15.0)
@@ -29,6 +30,7 @@ NSString *const ATMessageCenterAttachmentsArchiveFilename = @"DraftAttachments";
 @implementation ATAttachmentController
 
 @synthesize active = _active;
+@synthesize attachments = _attachments;
 
 - (void)viewDidLoad {
 	self.collectionView.layer.shadowOpacity = 0.5;
@@ -66,15 +68,21 @@ NSString *const ATMessageCenterAttachmentsArchiveFilename = @"DraftAttachments";
 }
 
 - (NSArray<ATFileAttachment *> *)attachments {
-	NSMutableArray *attachments = [NSMutableArray array];
+	if (_attachments == nil) {
+		NSMutableArray *attachments = [NSMutableArray array];
+		NSInteger index = 1;
 
-	for (UIImage *image in self.mutableAttachments) {
-		ATFileAttachment *attachment = [ATFileAttachment newInstanceWithFileData:UIImageJPEGRepresentation(image, 0.6) MIMEType:@"image/jpeg"];
+		for (UIImage *image in self.mutableAttachments) {
+			NSString *name = [NSString stringWithFormat:ATLocalizedString(@"Attachment %ld", @"Placeholder name for attachment"), (long)index];
+			ATFileAttachment *attachment = [ATFileAttachment newInstanceWithFileData:UIImageJPEGRepresentation(image, 0.6) MIMEType:@"image/jpeg"name:name];
 
-		[attachments addObject:attachment];
+			index ++;
+			[attachments addObject:attachment];
+		}
+		_attachments = attachments;
 	}
 
-	return attachments;
+	return _attachments;
 }
 
 - (BOOL)canBecomeFirstResponder {
@@ -87,6 +95,8 @@ NSString *const ATMessageCenterAttachmentsArchiveFilename = @"DraftAttachments";
 
 - (void)clear {
 	[self.mutableAttachments removeAllObjects];
+	_attachments = nil;
+
 	[self updateBadge];
 	[self saveDraft];
 }
@@ -114,6 +124,7 @@ NSString *const ATMessageCenterAttachmentsArchiveFilename = @"DraftAttachments";
 
 	[self.mutableAttachments removeObjectAtIndex:indexPath.item];
 	[self.collectionView deleteItemsAtIndexPaths:@[indexPath]];
+	_attachments = nil;
 
 	[self updateBadge];
 }
@@ -143,6 +154,16 @@ NSString *const ATMessageCenterAttachmentsArchiveFilename = @"DraftAttachments";
 	}
 
 	return nil;
+}
+
+#pragma mark Collection view delegate
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+	QLPreviewController *previewController = [[QLPreviewController alloc] init];
+	previewController.dataSource = self;
+	previewController.currentPreviewItemIndex = indexPath.item;
+
+	[self.viewController.navigationController pushViewController:previewController animated:YES];
 }
 
 #pragma mark - Image picker controller delegate
@@ -187,6 +208,7 @@ NSString *const ATMessageCenterAttachmentsArchiveFilename = @"DraftAttachments";
 
 - (void)insertImage:(UIImage *)image {
 	[self.mutableAttachments addObject:image];
+	_attachments = nil;
 
 	[self.collectionView reloadData];
 
@@ -219,6 +241,18 @@ NSString *const ATMessageCenterAttachmentsArchiveFilename = @"DraftAttachments";
 
 		[self.viewController.navigationController presentViewController:imagePicker animated:YES completion:nil];
 	}
+}
+
+@end
+
+@implementation ATAttachmentController (QuickLook)
+
+- (NSInteger)numberOfPreviewItemsInPreviewController:(QLPreviewController *)controller {
+	return self.attachments.count;
+}
+
+- (id<QLPreviewItem>)previewController:(QLPreviewController *)controller previewItemAtIndex:(NSInteger)index {
+	return [self.attachments objectAtIndex:index];
 }
 
 @end

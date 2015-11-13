@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <QuickLook/QuickLook.h>
 
 @class ATAttachButton, ATMessageCenterViewController;
 
@@ -23,4 +24,7 @@
 - (void)saveDraft;
 - (void)clear;
 
+@end
+
+@interface ATAttachmentController (QuickLook) <QLPreviewControllerDataSource>
 @end

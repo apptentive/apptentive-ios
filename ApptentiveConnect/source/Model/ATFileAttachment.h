@@ -25,11 +25,11 @@
 @property (nonatomic, readonly) NSData *fileData;
 @property (nonatomic, readonly) BOOL canCreateThumbnail;
 
-+ (instancetype)newInstanceWithFileData:(NSData *)fileData MIMEType:(NSString *)MIMEType;
++ (instancetype)newInstanceWithFileData:(NSData *)fileData MIMEType:(NSString *)MIMEType name:(NSString *)name;
 + (instancetype)newInstanceWithJSON:(NSDictionary *)JSON;
 - (void)updateWithJSON:(NSDictionary *)JSON;
 
-- (void)setFileData:(NSData *)data MIMEType:(NSString *)MIMEType;
+- (void)setFileData:(NSData *)data MIMEType:(NSString *)MIMEType name:(NSString *)name;
 
 /** Can be called from background thread. */
 - (NSURL *)beginMoveToStorageFrom:(NSURL *)temporaryLocation;

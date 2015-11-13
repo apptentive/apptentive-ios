@@ -83,7 +83,7 @@
 	self.usePlaceholder = YES;
 
 	self.deleteButton.imageEdgeInsets = UIEdgeInsetsMake(0, 22.0, 22.0, 0);
-	[self.deleteButton setImage:[[ATBackend imageNamed:@"at_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+	[self.deleteButton setImage:[ATBackend imageNamed:@"at_remove"] forState:UIControlStateNormal];
 	self.deleteButton.imageView.backgroundColor = [UIColor redColor];
 	self.deleteButton.imageView.tintColor = [UIColor whiteColor];
 	self.deleteButton.imageView.layer.cornerRadius = CGRectGetWidth(self.deleteButton.imageView.bounds) / 2.0;

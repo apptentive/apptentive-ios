@@ -16,6 +16,9 @@
 		0127EA181BF136090005481A /* at_document.png in Resources */ = {isa = PBXBuildFile; fileRef = 0127EA151BF136020005481A /* at_document.png */; };
 		0127EA191BF136090005481A /* at_document@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0127EA161BF136020005481A /* at_document@2x.png */; };
 		0127EA1A1BF136090005481A /* at_document@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0127EA171BF136020005481A /* at_document@3x.png */; };
+		013BB6061BF6A65C00BB6C27 /* at_remove.png in Resources */ = {isa = PBXBuildFile; fileRef = 013BB6031BF6A63300BB6C27 /* at_remove.png */; };
+		013BB6071BF6A65C00BB6C27 /* at_remove@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 013BB6041BF6A63300BB6C27 /* at_remove@2x.png */; };
+		013BB6081BF6A65C00BB6C27 /* at_remove@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 013BB6051BF6A63300BB6C27 /* at_remove@3x.png */; };
 		013C1A7B1B713D5C002434B8 /* ATMessageCenterErrorViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 013C1A791B713D5C002434B8 /* ATMessageCenterErrorViewController.h */; };
 		013C1A7C1B713D5C002434B8 /* ATMessageCenterErrorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 013C1A7A1B713D5C002434B8 /* ATMessageCenterErrorViewController.m */; };
 		0160854D1BA77B1D00050FDB /* at_account.png in Resources */ = {isa = PBXBuildFile; fileRef = 0160852A1BA77B0500050FDB /* at_account.png */; };
@@ -344,6 +347,9 @@
 		0127EA151BF136020005481A /* at_document.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_document.png; sourceTree = "<group>"; };
 		0127EA161BF136020005481A /* at_document@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_document@2x.png"; sourceTree = "<group>"; };
 		0127EA171BF136020005481A /* at_document@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_document@3x.png"; sourceTree = "<group>"; };
+		013BB6031BF6A63300BB6C27 /* at_remove.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_remove.png; sourceTree = "<group>"; };
+		013BB6041BF6A63300BB6C27 /* at_remove@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_remove@2x.png"; sourceTree = "<group>"; };
+		013BB6051BF6A63300BB6C27 /* at_remove@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_remove@3x.png"; sourceTree = "<group>"; };
 		013C1A791B713D5C002434B8 /* ATMessageCenterErrorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageCenterErrorViewController.h; sourceTree = "<group>"; };
 		013C1A7A1B713D5C002434B8 /* ATMessageCenterErrorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageCenterErrorViewController.m; sourceTree = "<group>"; };
 		01438FBA1B8E65000016B079 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -706,6 +712,16 @@
 			path = at_document;
 			sourceTree = "<group>";
 		};
+		013BB6021BF6A63300BB6C27 /* at_remove */ = {
+			isa = PBXGroup;
+			children = (
+				013BB6031BF6A63300BB6C27 /* at_remove.png */,
+				013BB6041BF6A63300BB6C27 /* at_remove@2x.png */,
+				013BB6051BF6A63300BB6C27 /* at_remove@3x.png */,
+			);
+			path = at_remove;
+			sourceTree = "<group>";
+		};
 		0159B64A1B7A73D100CC45E6 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -760,6 +776,7 @@
 		016085281BA77B0500050FDB /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				013BB6021BF6A63300BB6C27 /* at_remove */,
 				01D0C39A1BF3EE9B0024BA1A /* at_attach */,
 				0127EA141BF136020005481A /* at_document */,
 				016085291BA77B0500050FDB /* at_account */,
@@ -1624,8 +1641,10 @@
 				0160855E1BA77B1D00050FDB /* at_info@3x.png in Resources */,
 				016085631BA77B1D00050FDB /* at_update_icon_mask@2x.png in Resources */,
 				4967278416B9FE6400C679B8 /* Info.plist in Resources */,
+				013BB6081BF6A65C00BB6C27 /* at_remove@3x.png in Resources */,
 				0160855F1BA77B1D00050FDB /* at_network_error.png in Resources */,
 				01D0C3A01BF3EEA10024BA1A /* at_attach@3x.png in Resources */,
+				013BB6071BF6A65C00BB6C27 /* at_remove@2x.png in Resources */,
 				0127EA1A1BF136090005481A /* at_document@3x.png in Resources */,
 				016085561BA77B1D00050FDB /* at_close.png in Resources */,
 				016085671BA77B1D00050FDB /* at_update_logo@3x.png in Resources */,
@@ -1648,6 +1667,7 @@
 				016085511BA77B1D00050FDB /* at_apptentive_logo@2x.png in Resources */,
 				0127EA191BF136090005481A /* at_document@2x.png in Resources */,
 				016085501BA77B1D00050FDB /* at_apptentive_logo.png in Resources */,
+				013BB6061BF6A65C00BB6C27 /* at_remove.png in Resources */,
 				58DCC0DA180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.xib in Resources */,
 				016085551BA77B1D00050FDB /* at_checkmark@3x.png in Resources */,
 				0160855C1BA77B1D00050FDB /* at_info.png in Resources */,

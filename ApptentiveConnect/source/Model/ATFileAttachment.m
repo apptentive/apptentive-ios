@@ -12,6 +12,7 @@
 #import "ATUtilities.h"
 #import "ATData.h"
 #import "NSDictionary+ATAdditions.h"
+#import <ImageIO/ImageIO.h>
 
 @interface ATFileAttachment ()
 - (NSString *)fullLocalPathForFilename:(NSString *)filename;
@@ -203,35 +204,29 @@
 }
 
 - (UIImage *)createThumbnailOfSize:(CGSize)size {
-	CGFloat scale = [[UIScreen mainScreen] scale];
-	NSString *fullLocalPath = [self fullLocalPath];
-	NSString *filename = [self filenameForThumbnailOfSize:size];
-	NSString *fullThumbnailPath = [self fullLocalPathForFilename:filename];
+	CGImageSourceRef src = CGImageSourceCreateWithURL((__bridge CFURLRef) [NSURL fileURLWithPath:self.fullLocalPath], NULL);
+	CFDictionaryRef options = (__bridge CFDictionaryRef) @{
+															   (id) kCGImageSourceCreateThumbnailWithTransform : @YES,
+															   (id) kCGImageSourceCreateThumbnailFromImageAlways : @YES,
+															   (id) kCGImageSourceThumbnailMaxPixelSize : @(fmax(size.width, size.height))
+															   };
+	CGImageRef thumbnail = CGImageSourceCreateThumbnailAtIndex(src, 0, options);
+	CFRelease(src);
 
-	UIImage *image = [UIImage imageWithContentsOfFile:fullLocalPath];
-	UIImage *thumb = [ATUtilities imageByScalingImage:image toFitSize:size scale:scale];
-	[UIImagePNGRepresentation(thumb) writeToFile:fullThumbnailPath atomically:YES];
-	return thumb;
+	UIImage *thumbnailImage = nil;
+
+	if (thumbnail) {
+		thumbnailImage = [UIImage imageWithCGImage:thumbnail];
+		CGImageRelease(thumbnail);
+
+		NSString *filename = [self filenameForThumbnailOfSize:size];
+		NSString *fullThumbnailPath = [[self class] fullLocalPathForFilename:filename];
+		[UIImagePNGRepresentation(thumbnailImage) writeToFile:fullThumbnailPath atomically:YES];
+	}
+
+	return thumbnailImage;
 }
 
-//TODO: Should this be removed?
-- (void)createThumbnailOfSize:(CGSize)size completion:(void (^)(void))completion {
-	CGFloat scale = [[UIScreen mainScreen] scale];
-	NSString *fullLocalPath = [self fullLocalPath];
-	NSString *filename = [self filenameForThumbnailOfSize:size];
-	NSString *fullThumbnailPath = [self fullLocalPathForFilename:filename];
-
-	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-		UIImage *image = [UIImage imageWithContentsOfFile:fullLocalPath];
-		UIImage *thumb = [ATUtilities imageByScalingImage:image toSize:size scale:scale fromITouchCamera:NO];
-		[UIImagePNGRepresentation(thumb) writeToFile:fullThumbnailPath atomically:YES];
-		dispatch_sync(dispatch_get_main_queue(), ^{
-			if (completion) {
-				completion();
-			}
-		});
-	});
-}
 @end
 
 @implementation ATFileAttachment (QuickLook)

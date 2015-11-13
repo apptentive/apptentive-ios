@@ -930,6 +930,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			
 			case ATMessageCenterStateWhoCard:
 				// Only focus profile view if appearing post-send.
+				if ([self.attachmentController isFirstResponder]) {
+					[self.attachmentController resignFirstResponder];
+					[self.profileView becomeFirstResponder];
+				}
 				if (!self.interaction.profileRequired) {
 					[self.profileView becomeFirstResponder];
 				}

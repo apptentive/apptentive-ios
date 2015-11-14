@@ -1,24 +1,22 @@
 //
-//  ATAbstractMessage.m
+//  ATMessage.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 10/6/12.
 //  Copyright (c) 2012 Apptentive, Inc. All rights reserved.
 //
 
-#import "ATAbstractMessage.h"
-
+#import "ATMessage.h"
 #import "ATBackend.h"
 #import "ATData.h"
 #import "ATJSONSerialization.h"
-#import "ATMessageDisplayType.h"
 #import "ATMessageSender.h"
 #import "NSDictionary+ATAdditions.h"
 #import "ATMessageCenterInteraction.h"
 
 NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
-@implementation ATAbstractMessage
+@implementation ATMessage
 
 @dynamic pendingMessageID;
 @dynamic pendingState;
@@ -28,21 +26,59 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 @dynamic errorOccurred;
 @dynamic errorMessageJSON;
 @dynamic sender;
-@dynamic displayTypes;
 @dynamic customData;
 @dynamic hidden;
+@dynamic automated;
+@dynamic title;
+@dynamic body;
+@dynamic attachments;
 
-+ (NSObject *)newInstanceWithJSON:(NSDictionary *)json {
-	NSAssert(NO, @"Abstract method called.");
-	return nil;
++ (void)clearComposingMessages {
+	@synchronized(self) {
+		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingState == %d)", ATPendingMessageStateComposing];
+		[ATData removeEntitiesNamed:@"ATMessage" withPredicate:fetchPredicate];
+	}
 }
 
-+ (ATAbstractMessage *)findMessageWithID:(NSString *)apptentiveID {
-	ATAbstractMessage *result = nil;
++ (instancetype)newInstanceWithJSON:(NSDictionary *)json {
+	ATMessage *message = nil;
+	NSString *apptentiveID = [json at_safeObjectForKey:@"id"];
+
+	if (apptentiveID) {
+		message = [self findMessageWithID:apptentiveID];
+	}
+	if (message == nil) {
+		message = (ATMessage *)[ATData newEntityNamed:@"ATMessage"];
+	}
+	[message updateWithJSON:json];
+
+	// If server creation time is set, overwrite client creation time.
+	if (![message isCreationTimeEmpty]) {
+		message.clientCreationTime = message.creationTime;
+	}
+
+	return message;
+}
+
++ (instancetype)newInstanceWithBody:(NSString *)body attachments:(NSArray *)attachments {
+	ATMessage *result = (ATMessage *)[ATData newEntityNamed:@"ATMessage"];
+
+	result.body = body;
+	if (attachments) {
+		result.attachments = [NSMutableOrderedSet orderedSetWithArray:attachments];
+	}
+
+	[result setup];
+
+	return result;
+}
+
++ (ATMessage *)findMessageWithID:(NSString *)apptentiveID {
+	ATMessage *result = nil;
 	
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(apptentiveID == %@)", apptentiveID];
-		NSArray *results = [ATData findEntityNamed:@"ATAbstractMessage" withPredicate:fetchPredicate];
+		NSArray *results = [ATData findEntityNamed:@"ATMessage" withPredicate:fetchPredicate];
 		if (results && [results count]) {
 			result = [results objectAtIndex:0];
 		}
@@ -50,12 +86,12 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 	return result;
 }
 
-+ (ATAbstractMessage *)findMessageWithPendingID:(NSString *)pendingID {
-	ATAbstractMessage *result = nil;
++ (ATMessage *)findMessageWithPendingID:(NSString *)pendingID {
+	ATMessage *result = nil;
 	
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingMessageID == %@)", pendingID];
-		NSArray *results = [ATData findEntityNamed:@"ATAbstractMessage" withPredicate:fetchPredicate];
+		NSArray *results = [ATData findEntityNamed:@"ATMessage" withPredicate:fetchPredicate];
 		if (results && [results count] != 0) {
 			result = [results objectAtIndex:0];
 		}
@@ -105,36 +141,44 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
 - (void)updateWithJSON:(NSDictionary *)json {
 	[super updateWithJSON:json];
-	
+
 	NSDictionary *senderDict = [json at_safeObjectForKey:@"sender"];
 	if (senderDict != nil) {
 		ATMessageSender *sender = [ATMessageSender newOrExistingMessageSenderFromJSON:senderDict];
 		[self setValue:sender forKey:@"sender"];
 		sender = nil;
 	}
-	
-	ATMessageDisplayType *messageCenterType = [ATMessageDisplayType messageCenterType];
-	ATMessageDisplayType *modalType = [ATMessageDisplayType modalType];
-	
+
 	NSNumber *priorityNumber = [json at_safeObjectForKey:@"priority"];
 	if (priorityNumber != nil) {
 		self.priority = priorityNumber;
 	}
-	
-	NSArray *displayTypes = [json at_safeObjectForKey:@"display"];
-	BOOL inserted = NO;
-	for (NSString *displayType in displayTypes) {
-		if ([displayType isEqualToString:@"modal"]) {
-			[self addDisplayTypesObject:modalType];
-			inserted = YES;
-		} else if ([displayType isEqualToString:@"message center"]) {
-			[self addDisplayTypesObject:messageCenterType];
-			inserted = YES;
+
+	NSString *tmpBody = [json at_safeObjectForKey:@"body"];
+	if (tmpBody) {
+		self.body = tmpBody;
+	}
+
+	NSString *tmpTitle = [json at_safeObjectForKey:@"title"];
+	if (tmpTitle) {
+		self.title = tmpTitle;
+	}
+
+	NSArray *attachmentsJSON = [json at_safeObjectForKey:@"attachments"];
+	NSMutableOrderedSet *attachments = [NSMutableOrderedSet orderedSetWithCapacity:attachmentsJSON.count];
+
+	for (id tmpAttachment in attachmentsJSON) {
+		if ([tmpAttachment isKindOfClass:[NSDictionary class]]) {
+			NSDictionary *attachmentJSON = (NSDictionary *)tmpAttachment;
+			ATFileAttachment *attachment = [ATFileAttachment newInstanceWithJSON:attachmentJSON];
+
+			if (attachment) {
+				[attachments addObject:attachment];
+			}
 		}
 	}
-	if (!inserted) {
-		[self addDisplayTypesObject:messageCenterType];
-	}
+
+	self.attachments = attachments;
 }
 
 - (NSDictionary *)apiJSON {
@@ -142,6 +186,12 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
 	if (parentJSON) {
 		[result addEntriesFromDictionary:parentJSON];
+	}
+	if (self.body) {
+		result[@"body"] = self.body;
+	}
+	if (self.automated.boolValue) {
+		result[@"automated"] = @YES;
 	}
 	if (self.pendingMessageID != nil) {
 		result[@"nonce"] = self.pendingMessageID;
@@ -222,20 +272,9 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 			if (self.apptentiveID) {
 				[userInfo setObject:self.apptentiveID forKey:@"message_id"];
 			}
-			
-			NSString *messageType = nil;
-			if ([self isKindOfClass:[ATTextMessage class]]) {
-				messageType = @"TextMessage";
-			} else if ([self isKindOfClass:[ATAutomatedMessage class]]) {
-				messageType = @"AutomatedMessage";
-			} else if ([self isKindOfClass:[ATFileMessage class]]) {
-				messageType = @"FileMessage";
-			}
-			
-			if (messageType) {
-				[userInfo setObject:messageType forKey:@"message_type"];
-			}
-			
+
+			[userInfo setObject:@"CompoundMessage" forKey:@"message_type"];
+
 			[[ATMessageCenterInteraction interactionForInvokingMessageEvents] engage:ATInteractionMessageCenterEventLabelRead fromViewController:nil userInfo:userInfo];
 		}
 		

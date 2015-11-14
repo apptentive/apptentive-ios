@@ -12,7 +12,6 @@
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
 #import "ATData.h"
-#import "ATTextMessage.h"
 #import "ATMessageSender.h"
 
 NSString * const ATMessageCenterServerErrorDomain = @"com.apptentive.MessageCenterServerError";
@@ -21,7 +20,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 @interface ATMessageCenterDataSource () <NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, strong, readwrite) NSFetchedResultsController *fetchedMessagesController;
-@property (nonatomic, readonly) ATAbstractMessage *lastUserMessage;
+@property (nonatomic, readonly) ATMessage *lastUserMessage;
 
 @end
 
@@ -44,7 +43,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 		if (!_fetchedMessagesController) {
 			[NSFetchedResultsController deleteCacheWithName:@"at-messages-cache"];
 			NSFetchRequest *request = [[NSFetchRequest alloc] init];
-			[request setEntity:[NSEntityDescription entityForName:@"ATTextMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
+			[request setEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
 			[request setFetchBatchSize:20];
 			
 			NSSortDescriptor *creationTimeSort = [[NSSortDescriptor alloc] initWithKey:@"creationTime" ascending:YES];
@@ -69,8 +68,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 
 - (void)start {
 	[[ATBackend sharedBackend] messageCenterEnteredForeground];
-	
-	[ATTextMessage clearComposingMessages];
+	[ATMessage clearComposingMessages];
 	
 	NSError *error = nil;
 	if (![self.fetchedMessagesController performFetch:&error]) {
@@ -89,7 +87,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 	if (self.numberOfMessageGroups == 0 || [self numberOfMessagesInGroup:0] == 0) {
 		return NO;
 	} else if (self.numberOfMessageGroups == 1) {
-		return (![[self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] isKindOfClass:[ATAutomatedMessage class]]);
+		return (![self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]].automated.boolValue);
 	} else {
 		return YES;
 	}
@@ -107,9 +105,9 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 }
 
 - (ATMessageCenterMessageType)cellTypeAtIndexPath:(NSIndexPath *)indexPath {
-	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
+	ATMessage *message = [self messageAtIndexPath:indexPath];
 	
-	if ([message isKindOfClass:[ATAutomatedMessage class]]) {
+	if (message.automated.boolValue) {
 		return ATMessageCenterMessageTypeContextMessage;
 	} else if (message.sentByUser.boolValue) {
 		return ATMessageCenterMessageTypeMessage;
@@ -119,19 +117,12 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 }
 
 - (NSString *)textOfMessageAtIndexPath:(NSIndexPath *)indexPath {
-	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
-	
-	if ([message isKindOfClass:[ATTextMessage class]]) {
-		return ((ATTextMessage *)message).body;
-	} else {
-		return nil;
-	}
+	return [self messageAtIndexPath:indexPath].body;
 }
 
 - (NSDate *)dateOfMessageGroupAtIndex:(NSInteger)index {
 	if ([self numberOfMessagesInGroup:index] > 0) {
-		ATAbstractMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]];
-		
+		ATMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]];
 		
 		return [NSDate dateWithTimeIntervalSince1970:[message.creationTimeForSections doubleValue]];
 	} else {
@@ -140,7 +131,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 }
 
 - (ATMessageCenterMessageStatus)statusOfMessageAtIndexPath:(NSIndexPath *)indexPath {
-	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
+	ATMessage *message = [self messageAtIndexPath:indexPath];
 	
 	if (message.sentByUser.boolValue) {
 		ATPendingMessageState messageState = message.pendingState.integerValue;
@@ -153,7 +144,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 			return ATMessageCenterMessageStatusSent;
 		}
 	}
-		
+
 	return ATMessageCenterMessageStatusHidden;
 }
 
@@ -169,12 +160,12 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 }
 
 - (NSString *)senderOfMessageAtIndexPath:(NSIndexPath *)indexPath {
-	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
+	ATMessage *message = [self messageAtIndexPath:indexPath];
 	return message.sender.name;
 }
 
 - (NSURL *)imageURLOfSenderAtIndexPath:(NSIndexPath *)indexPath {
-	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
+	ATMessage *message = [self messageAtIndexPath:indexPath];
 	if (message.sender.profilePhotoURL.length) {
 		return [NSURL URLWithString:message.sender.profilePhotoURL];
 	} else {
@@ -183,14 +174,14 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 }
 
 - (void)markAsReadMessageAtIndexPath:(NSIndexPath *)indexPath {
-	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
+	ATMessage *message = [self messageAtIndexPath:indexPath];
 	
 	[message markAsRead];
 }
 
 - (BOOL)lastMessageIsReply {
 	id<NSFetchedResultsSectionInfo> section = self.fetchedMessagesController.sections.lastObject;
-	ATAbstractMessage *lastMessage = section.objects.lastObject;
+	ATMessage *lastMessage = section.objects.lastObject;
 	
 	return lastMessage.sentByUser.boolValue == NO;
 }
@@ -242,15 +233,22 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 	}
 }
 
+- (void)removeUnsentContextMessages {
+	@synchronized(self) {
+		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingState == %d)", ATPendingMessageStateComposing];
+		[ATData removeEntitiesNamed:@"ATMessage" withPredicate:fetchPredicate];
+	}
+}
+
 #pragma mark - Private
 
-- (ATAbstractMessage *)messageAtIndexPath:(NSIndexPath *)indexPath {
+- (ATMessage *)messageAtIndexPath:(NSIndexPath *)indexPath {
 	return [self.fetchedMessagesController objectAtIndexPath:indexPath];
 }
 
-- (ATAbstractMessage *)lastUserMessage {
+- (ATMessage *)lastUserMessage {
 	for (id<NSFetchedResultsSectionInfo> section in self.fetchedMessagesController.sections.reverseObjectEnumerator) {
-		for (ATAbstractMessage *message in section.objects.reverseObjectEnumerator) {
+		for (ATMessage *message in section.objects.reverseObjectEnumerator) {
 			if (message.sentByUser) {
 				return message;
 			}

@@ -36,7 +36,7 @@
 	[coder encodeObject:self.deviceID forKey:@"deviceID"];
 }
 
-+ (NSObject *)newInstanceWithJSON:(NSDictionary *)json {
++ (instancetype)newInstanceWithJSON:(NSDictionary *)json {
 	ATConversation *result = nil;
 	
 	if (json != nil) {

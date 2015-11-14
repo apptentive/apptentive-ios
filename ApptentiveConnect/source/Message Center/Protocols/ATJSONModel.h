@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @protocol ATJSONModel <NSObject>
-+ (NSObject *)newInstanceWithJSON:(NSDictionary *)json;
++ (instancetype)newInstanceWithJSON:(NSDictionary *)json;
 - (void)updateWithJSON:(NSDictionary *)json;
 - (NSDictionary *)apiJSON;
 @end

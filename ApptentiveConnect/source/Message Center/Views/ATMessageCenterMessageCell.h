@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ATMessageCenterCellProtocols.h"
 
-@interface ATMessageCenterMessageCell : UITableViewCell
+@interface ATMessageCenterMessageCell : UITableViewCell <ATMessageCenterCell>
 
 @property (weak, nonatomic) IBOutlet UILabel *messageLabel;
 @property (weak, nonatomic) IBOutlet UILabel *statusLabel;
+@property (assign, nonatomic) BOOL statusLabelHidden;
 
 @end

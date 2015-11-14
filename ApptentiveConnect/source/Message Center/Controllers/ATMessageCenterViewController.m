@@ -14,6 +14,7 @@
 #import "ATMessageCenterMessageCell.h"
 #import "ATMessageCenterReplyCell.h"
 #import "ATMessageCenterContextMessageCell.h"
+#import "ATCompoundMessageCell.h"
 #import "ATMessageCenterInteraction.h"
 #import "ATConnect_Private.h"
 #import "ATNetworkImageView.h"
@@ -22,12 +23,17 @@
 #import "ATReachability.h"
 #import "ATProgressNavigationBar.h"
 #import "ATAboutViewController.h"
+#import "ATAttachButton.h"
+#import "ATAttachmentController.h"
+#import "ATIndexedCollectionView.h"
+#import "ATAttachmentCell.h"
 #import <MobileCoreServices/UTCoreTypes.h>
 
 #define HEADER_LABEL_HEIGHT 64.0
 #define TEXT_VIEW_HORIZONTAL_INSET 12.0
 #define TEXT_VIEW_VERTICAL_INSET 10.0
 #define DATE_FONT [UIFont boldSystemFontOfSize:14.0]
+#define ATTACHMENT_MARGIN CGSizeMake(16.0, 15.0)
 
 #define FOOTER_ANIMATION_DURATION 0.10
 
@@ -85,6 +91,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *composeButtonItem;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *neuMessageButtonItem; // newMessageButtonItem
+
+@property (nonatomic, strong) IBOutlet ATAttachmentController *attachmentController;
 
 @property (nonatomic, strong) ATMessageCenterDataSource *dataSource;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
@@ -159,7 +167,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	self.messageInputView.clearButton.accessibilityLabel = ATLocalizedString(@"Discard", @"Accessibility label for 'discard' button");
 	self.messageInputView.clearButton.accessibilityHint = ATLocalizedString(@"Discards the message.", @"Accessibility hint for 'discard' button");
-	
+
+	[self.messageInputView.attachButton setImage:[ATBackend imageNamed:@"at_attach"] forState:UIControlStateNormal];
+	self.messageInputView.attachButton.accessibilityLabel = ATLocalizedString(@"Attach", @"Accessibility label for 'attach' button");
+	self.messageInputView.attachButton.accessibilityHint = ATLocalizedString(@"Attaches a photo or screenshot", @"Accessibility hint for 'attach'");
+
 	if (self.interaction.profileRequested) {
 		UIBarButtonItem *profileButtonItem = [[UIBarButtonItem alloc] initWithImage:[ATBackend imageNamed:@"at_account"] landscapeImagePhone:[ATBackend imageNamed:@"at_account"] style:UIBarButtonItemStyleBordered target:self action:@selector(showWho:)];
 		profileButtonItem.accessibilityLabel = ATLocalizedString(@"Profile", @"Accessibility label for 'edit profile' button");
@@ -199,6 +211,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	// Fix iOS 7 bug where contentSize gets set to zero
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fixContentSize:) name:UIKeyboardDidShowNotification object:nil];
+
+	[self.attachmentController viewDidLoad];
 }
 
 - (void)dealloc {
@@ -232,7 +246,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[super viewWillAppear:animated];
 
 	NSString *message = self.messageInputView.messageView.text;
-	if (message && ![message isEqualToString:@""]) {
+	
+	if (self.attachmentController.active) {
+		self.state = ATMessageCenterStateComposing;
+		[self.attachmentController becomeFirstResponder];
+	} else if (message && ![message isEqualToString:@""]) {
 		self.state = ATMessageCenterStateComposing;
 		[self.messageInputView.messageView becomeFirstResponder];
 	} else {
@@ -245,14 +263,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
-	
-	NSString *message = self.messageInputView.messageView.text;
-	if (message) {
-		[[NSUserDefaults standardUserDefaults] setObject:message forKey:ATMessageCenterDraftMessageKey];
-	} else {
-		[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATMessageCenterDraftMessageKey];
-	}
-	
+
+	[self saveDraft];
+
 	[[ATBackend sharedBackend] messageCenterWillDismiss:self];
 }
 
@@ -269,57 +282,74 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	[self.dataSource markAsReadMessageAtIndexPath:indexPath];
 	
-	UITableViewCell *cell;
+	UITableViewCell<ATMessageCenterCell> *cell;
 	ATMessageCenterMessageType type = [self.dataSource cellTypeAtIndexPath:indexPath];
 	
-	if (type == ATMessageCenterMessageTypeMessage) {
-		ATMessageCenterMessageCell *messageCell = [tableView dequeueReusableCellWithIdentifier:@"Message" forIndexPath:indexPath];
+	if (type == ATMessageCenterMessageTypeMessage || type == ATMessageCenterMessageTypeCompoundMessage) {
+		NSString *cellIdentifier = type == ATMessageCenterMessageTypeCompoundMessage ? @"CompoundMessage" : @"Message";
+		ATMessageCenterMessageCell *messageCell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
 	
-		messageCell.messageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
 		switch ([self.dataSource statusOfMessageAtIndexPath:indexPath]) {
 			case ATMessageCenterMessageStatusHidden:
-				messageCell.statusLabel.hidden = YES;
+				messageCell.statusLabelHidden = YES;
 				messageCell.layer.borderWidth = 0;
 				break;
 			case ATMessageCenterMessageStatusFailed:
-				messageCell.statusLabel.hidden = NO;
+				messageCell.statusLabelHidden = NO;
 				messageCell.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
 				messageCell.layer.borderColor = [self failedColor].CGColor;
 				messageCell.statusLabel.textColor = [self failedColor];
 				messageCell.statusLabel.text = ATLocalizedString(@"Failed", @"Message failed to send.");
 				break;
 			case ATMessageCenterMessageStatusSending:
-				messageCell.statusLabel.hidden = NO;
+				messageCell.statusLabelHidden = NO;
 				messageCell.layer.borderWidth = 0;
 				messageCell.statusLabel.textColor = self.sentColor;
 				messageCell.statusLabel.text = ATLocalizedString(@"Sending…", @"Message is sending.");
 				break;
 			case ATMessageCenterMessageStatusSent:
-				messageCell.statusLabel.hidden = NO;
+				messageCell.statusLabelHidden = NO;
 				messageCell.layer.borderWidth = 0;
 				messageCell.statusLabel.textColor = self.sentColor;
 				messageCell.statusLabel.text = ATLocalizedString(@"Sent", @"Message sent successfully");
 				break;
 		}
-				
+
 		cell = messageCell;
-	} else if (type == ATMessageCenterMessageTypeReply ) {
-		ATMessageCenterReplyCell *replyCell = [tableView dequeueReusableCellWithIdentifier:@"Reply" forIndexPath:indexPath];
+	} else if (type == ATMessageCenterMessageTypeReply || type == ATMessageCenterMessageTypeCompoundReply) {
+		NSString *cellIdentifier = type == ATMessageCenterMessageTypeCompoundReply ? @"CompoundReply" : @"Reply";
+		ATMessageCenterReplyCell *replyCell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
 
 		replyCell.supportUserImageView.imageURL = [self.dataSource imageURLOfSenderAtIndexPath:indexPath];
 
-		replyCell.replyLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
+		replyCell.messageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
 		replyCell.senderLabel.text = [self.dataSource senderOfMessageAtIndexPath:indexPath];
 		
 		cell = replyCell;
 	} else if (type == ATMessageCenterMessageTypeContextMessage) {
+		// TODO: handle title
 		ATMessageCenterContextMessageCell *contextMessageCell = [tableView dequeueReusableCellWithIdentifier:@"ContextMessage" forIndexPath:indexPath];
-
-		contextMessageCell.contextMessageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
 
 		cell = contextMessageCell;
 	}
-	
+
+	if (type == ATMessageCenterMessageTypeCompoundMessage || type == ATMessageCenterMessageTypeCompoundReply) {
+		UITableViewCell<ATMessageCenterCompoundCell> *compoundCell = (ATCompoundMessageCell *)cell;
+
+		compoundCell.collectionView.index = indexPath.section;
+		compoundCell.collectionView.dataSource = self;
+		compoundCell.collectionView.delegate = self;
+
+		UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)compoundCell.collectionView.collectionViewLayout;
+		layout.sectionInset = UIEdgeInsetsMake(ATTACHMENT_MARGIN.height, ATTACHMENT_MARGIN.width, ATTACHMENT_MARGIN.height, ATTACHMENT_MARGIN.width);
+		layout.minimumInteritemSpacing = ATTACHMENT_MARGIN.width;
+		layout.itemSize = [ATAttachmentCell sizeForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN];
+
+		compoundCell.messageLabelHidden = compoundCell.messageLabel.text == nil;
+	}
+
+	cell.messageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
+
 	return cell;
 }
 
@@ -336,6 +366,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	// iOS 7 requires this and there's no good way to instantiate a cell to sample, so we're hard-coding it for now.
 	CGFloat verticalMargin, horizontalMargin, minimumCellHeight;
+	BOOL statusLabelVisible = [self.dataSource statusOfMessageAtIndexPath:indexPath] != ATMessageCenterMessageStatusHidden;
+	CGFloat verticalFudgeFactor = 0.0;
 	
 	switch ([self.dataSource cellTypeAtIndexPath:indexPath]) {
 		case ATMessageCenterMessageTypeContextMessage:
@@ -345,22 +377,42 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			minimumCellHeight = 0;
 			break;
 
+		case ATMessageCenterMessageTypeCompoundMessage:
+			horizontalMargin = MESSAGE_LABEL_TOTAL_HORIZONTAL_MARGIN;
+			verticalMargin = MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN] - ATTACHMENT_MARGIN.height;
+			verticalFudgeFactor = 19.0;
+			minimumCellHeight = 0;
+			break;
+
 		case ATMessageCenterMessageTypeReply:
 			horizontalMargin = REPLY_LABEL_TOTAL_HORIZONTAL_MARGIN;
 			verticalMargin = REPLY_LABEL_TOTAL_VERTICAL_MARGIN;
 			minimumCellHeight = REPLY_CELL_MINIMUM_HEIGHT;
 			break;
+
+		case ATMessageCenterMessageTypeCompoundReply:
+			horizontalMargin = REPLY_LABEL_TOTAL_HORIZONTAL_MARGIN;
+			verticalMargin = REPLY_LABEL_TOTAL_VERTICAL_MARGIN + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN] - ATTACHMENT_MARGIN.height;
+			minimumCellHeight = REPLY_CELL_MINIMUM_HEIGHT + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN] - ATTACHMENT_MARGIN.height;
+			break;
 	}
 	
-	if ([self.dataSource statusOfMessageAtIndexPath:indexPath] != ATMessageCenterMessageStatusHidden) {
-		verticalMargin += STATUS_LABEL_HEIGHT + STATUS_LABEL_MARGIN;
+	if (statusLabelVisible) {
+		verticalMargin += STATUS_LABEL_HEIGHT + STATUS_LABEL_MARGIN + verticalFudgeFactor;
 	}
 	
-	NSString *labelText = [self.dataSource textOfMessageAtIndexPath:indexPath] ?: @"";
+	NSString *labelText = [self.dataSource textOfMessageAtIndexPath:indexPath];
 	CGFloat effectiveLabelWidth = CGRectGetWidth(tableView.bounds) - horizontalMargin;
-	NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:labelText attributes:@{NSFontAttributeName: BODY_FONT}];
-	
-	CGRect labelRect = [attributedText boundingRectWithSize:CGSizeMake(effectiveLabelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
+	CGRect labelRect = CGRectZero;
+	if (labelText) {
+		NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:labelText attributes:@{NSFontAttributeName: BODY_FONT}];
+		labelRect = [attributedText boundingRectWithSize:CGSizeMake(effectiveLabelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
+	} else {
+		verticalMargin -= MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN;
+		if (statusLabelVisible) {
+			verticalMargin += 9.0;
+		}
+	}
 	
 	double height = ceil(fmax(labelRect.size.height + verticalMargin, minimumCellHeight));
 	
@@ -434,22 +486,25 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
 	switch(type) {
+		case NSFetchedResultsChangeUpdate:
+			[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+			break;
+
 		case NSFetchedResultsChangeInsert:
-			[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+			[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 			break;
 			
 		case NSFetchedResultsChangeDelete:
-			[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-			break;
-			
-		case NSFetchedResultsChangeUpdate:
-			[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+			[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 			break;
 			
 		case NSFetchedResultsChangeMove:
-			[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-			[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+			if (![indexPath isEqual:newIndexPath]) {
+				[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+				[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+			}
 			break;
+			
 		default:
 			break;
 	}
@@ -460,19 +515,91 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {	
 	switch(type) {
 		case NSFetchedResultsChangeInsert:
-			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
 			break;
 		case NSFetchedResultsChangeDelete:
-			[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+			[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
 			break;
 		case NSFetchedResultsChangeUpdate:
-			[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+			[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
 			break;
 		default:
 			break;
 	}
 	
 	[self.tableView reloadData];
+}
+
+#pragma mark Message center data source delegate
+
+- (void)messageCenterDataSource:(ATMessageCenterDataSource *)dataSource didLoadAttachmentThumbnailAtIndexPath:(NSIndexPath *)indexPath {
+	ATCompoundMessageCell *cell = (ATCompoundMessageCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
+	ATIndexedCollectionView *collectionView = cell.collectionView;
+	NSIndexPath *collectionViewIndexPath = [NSIndexPath indexPathForItem:indexPath.row inSection:0];
+	ATAttachmentCell *attachmentCell = (ATAttachmentCell *)[collectionView cellForItemAtIndexPath:collectionViewIndexPath];
+	attachmentCell.progressView.hidden = YES;
+
+	[collectionView reloadItemsAtIndexPaths:@[ collectionViewIndexPath ]];
+}
+
+- (void)messageCenterDataSource:(ATMessageCenterDataSource *)dataSource attachmentDownloadAtIndexPath:(NSIndexPath *)indexPath didProgress:(float)progress {
+	ATCompoundMessageCell *cell = (ATCompoundMessageCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
+	ATIndexedCollectionView *collectionView = cell.collectionView;
+	NSIndexPath *collectionViewIndexPath = [NSIndexPath indexPathForItem:indexPath.row inSection:0];
+	ATAttachmentCell *attachmentCell = (ATAttachmentCell *)[collectionView cellForItemAtIndexPath:collectionViewIndexPath];
+
+	attachmentCell.progressView.hidden = NO;
+	[attachmentCell.progressView setProgress:progress animated:YES];
+}
+
+- (void)messageCenterDataSource:(ATMessageCenterDataSource *)dataSource didFailToLoadAttachmentThumbnailAtIndexPath:(NSIndexPath *)indexPath error:(NSError *)error {
+	ATCompoundMessageCell *cell = (ATCompoundMessageCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
+	ATIndexedCollectionView *collectionView = cell.collectionView;
+	NSIndexPath *collectionViewIndexPath = [NSIndexPath indexPathForItem:indexPath.row inSection:0];
+	ATAttachmentCell *attachmentCell = (ATAttachmentCell *)[collectionView cellForItemAtIndexPath:collectionViewIndexPath];
+
+	attachmentCell.progressView.hidden = YES;
+	attachmentCell.progressView.progress = 0;
+
+	[[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Unable to Download Attachment", @"Attachment download failed alert title") message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+}
+
+#pragma mark Collection view delegate
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+	NSIndexPath *attachmentIndexPath = [NSIndexPath indexPathForItem:indexPath.item inSection:((ATIndexedCollectionView *)collectionView).index];
+
+	if ([self.dataSource canPreviewAttachmentAtIndexPath:attachmentIndexPath]) {
+		QLPreviewController *previewController = [[QLPreviewController alloc] init];
+
+		previewController.dataSource = [self.dataSource previewDataSourceAtIndex:((ATIndexedCollectionView *)collectionView).index];
+		previewController.currentPreviewItemIndex = indexPath.row;
+
+		[self.navigationController pushViewController:previewController animated:YES];
+	} else {
+		[self.dataSource downloadAttachmentAtIndexPath:attachmentIndexPath];
+	}
+}
+
+#pragma mark Collection view data source
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+	return 1;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+	return [self.dataSource numberOfAttachmentsForMessageAtIndex:((ATIndexedCollectionView *)collectionView).index];
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+	ATAttachmentCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Attachment" forIndexPath:indexPath];
+	NSIndexPath *attachmentIndexPath = [NSIndexPath indexPathForItem:indexPath.item inSection:((ATIndexedCollectionView *)collectionView).index];
+
+	cell.usePlaceholder = [self.dataSource shouldUsePlaceholderForAttachmentAtIndexPath:attachmentIndexPath];
+	cell.imageView.image = [self.dataSource imageForAttachmentAtIndexPath:attachmentIndexPath size:[ATAttachmentCell sizeForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN]];
+	cell.extensionLabel.text = [self.dataSource extensionForAttachmentAtIndexPath:attachmentIndexPath];
+
+	return cell;
 }
 
 #pragma mark - Text view delegate
@@ -504,6 +631,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
+	self.attachmentController.active = NO;
+
 	[self scrollToFooterView:nil];
 }
 
@@ -540,6 +669,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 #pragma mark - Actions
 
 - (IBAction)dismiss:(id)sender {
+	[self.attachmentController resignFirstResponder];
+
 	[self.interaction engage:ATInteractionMessageCenterEventLabelClose fromViewController:self];
 	
 	[self.dataSource stop];
@@ -571,9 +702,17 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			[[ATBackend sharedBackend] sendAutomatedMessage:self.contextMessage];
 			self.contextMessage = nil;
 		}
-		
-		[[ATBackend sharedBackend] sendTextMessageWithBody:message];
-		
+
+		NSArray *attachments = self.attachmentController.attachments;
+		if (attachments.count) {
+			[[ATBackend sharedBackend] sendCompoundMessageWithText:message attachments:attachments hiddenOnClient:NO];
+			[self.attachmentController clear];
+		} else {
+			[[ATBackend sharedBackend] sendTextMessageWithBody:message];
+		}
+
+		[self.attachmentController resignFirstResponder];
+
 		if ([self shouldShowProfileViewBeforeComposing:NO]) {
 			[self.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{@"required": @(self.interaction.profileRequired), @"trigger": @"automatic"}];
 			
@@ -585,7 +724,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 		if (lastUserMessageIndexPath) {
 			@try {
-				[self.tableView reloadRowsAtIndexPaths:@[lastUserMessageIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+				//[self.tableView reloadRowsAtIndexPaths:@[lastUserMessageIndexPath] withRowAnimation:UITableViewRowAnimationFade];
 			} @catch (NSException *exception) {
 				ATLogError(@"caught exception: %@: %@", [exception name], [exception description]);
 			}
@@ -601,7 +740,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (IBAction)clear:(UIButton *)sender {
-	if (self.messageInputView.messageView.text.length == 0) {
+	if (self.messageInputView.messageView.text.length == 0 && self.attachmentController.attachments.count == 0) {
 		[self discardDraft];
 		return;
 	}
@@ -713,6 +852,17 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 #pragma mark - Private
 
+- (void)saveDraft {
+	NSString *message = self.messageInputView.messageView.text;
+	if (message) {
+		[[NSUserDefaults standardUserDefaults] setObject:message forKey:ATMessageCenterDraftMessageKey];
+	} else {
+		[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATMessageCenterDraftMessageKey];
+	}
+
+	[self.attachmentController saveDraft];
+}
+
 - (BOOL)isWhoValid {
 	BOOL emailIsValid = [ATUtilities emailAddressIsValid:self.profileView.emailField.text];
 	BOOL emailIsBlank = self.profileView.emailField.text.length == 0;
@@ -780,6 +930,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			
 			case ATMessageCenterStateWhoCard:
 				// Only focus profile view if appearing post-send.
+				if ([self.attachmentController isFirstResponder]) {
+					[self.attachmentController resignFirstResponder];
+					[self.profileView becomeFirstResponder];
+				}
 				if (!self.interaction.profileRequired) {
 					[self.profileView becomeFirstResponder];
 				}
@@ -1013,6 +1167,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)discardDraft {
 	self.messageInputView.messageView.text = nil;
 	[self.messageInputView.messageView resignFirstResponder];
+
+	[self.attachmentController clear];
+	[self.attachmentController resignFirstResponder];
 	
 	self.messageInputView.sendButton.enabled = [self sendButtonShouldBeEnabled];
 	

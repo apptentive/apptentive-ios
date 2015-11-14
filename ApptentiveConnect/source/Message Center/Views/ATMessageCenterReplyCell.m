@@ -15,7 +15,7 @@
 	[super layoutSubviews];
 	
 	// iOS 7 doesn't support automatic max layout width, so we have to set this explicitly.
-	self.replyLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.contentView.bounds) - 8.0 - 36.0 - 30.0;
+	self.messageLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.contentView.bounds) - 8.0 - 36.0 - 30.0;
 	
 	[super layoutSubviews];
 }

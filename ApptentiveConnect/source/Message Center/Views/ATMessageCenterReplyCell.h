@@ -7,13 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ATMessageCenterCellProtocols.h"
 
 @class ATNetworkImageIconView;
 
-@interface ATMessageCenterReplyCell : UITableViewCell
+@interface ATMessageCenterReplyCell : UITableViewCell <ATMessageCenterCell>
 
 @property (weak, nonatomic) IBOutlet ATNetworkImageIconView *supportUserImageView;
-@property (weak, nonatomic) IBOutlet UILabel *replyLabel;
+@property (weak, nonatomic) IBOutlet UILabel *messageLabel;
 @property (weak, nonatomic) IBOutlet UILabel *senderLabel;
 
 @end

@@ -229,7 +229,7 @@ static NSURLCache *imageCache = nil;
 	message.sentByUser = @YES;
 	message.seenByUser = @YES;
 	message.hidden = @(hidden);
-	
+
 	if (!hidden) {
 		[self attachCustomDataToMessage:message];
 	}
@@ -241,7 +241,7 @@ static NSURLCache *imageCache = nil;
 	message.pendingState = @(ATPendingMessageStateSending);
 	
 	[self updatePersonIfNeeded];
-	
+
 	return [self sendMessage:message];
 }
 
@@ -263,7 +263,7 @@ static NSURLCache *imageCache = nil;
 - (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType hiddenOnClient:(BOOL)hidden {
 	[self updatePersonIfNeeded];
 
-	ATFileAttachment *fileAttachment = [ATFileAttachment newInstanceWithFileData:fileData MIMEType:mimeType];
+	ATFileAttachment *fileAttachment = [ATFileAttachment newInstanceWithFileData:fileData MIMEType:mimeType name:nil];
 	return [self sendCompoundMessageWithText:nil attachments:@[fileAttachment] hiddenOnClient:hidden];
 }
 
@@ -284,8 +284,6 @@ static NSURLCache *imageCache = nil;
 			message.sender = sender;
 		}
 	}
-
-	[message updateClientCreationTime];
 
 	NSError *error;
 	if (![[[ATBackend sharedBackend] managedObjectContext] save:&error]) {
@@ -955,6 +953,9 @@ static NSURLCache *imageCache = nil;
 	// Monitor changes to custom data.
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(personDataChanged:) name:ATConnectCustomPersonDataChangedNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDataChanged:) name:ATConnectCustomDeviceDataChangedNotification object:nil];
+
+	// Append extensions to attachments that are missing them
+	[ATFileAttachment addMissingExtensions];
 }
 
 - (void)continueStartupWithDataManagerFailure {

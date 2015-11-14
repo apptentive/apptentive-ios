@@ -12,9 +12,12 @@
 #import "ATUtilities.h"
 #import "ATData.h"
 #import "NSDictionary+ATAdditions.h"
+#import "ATConnect_Private.h"
+#import <MobileCoreServices/MobileCoreServices.h>
+#import <ImageIO/ImageIO.h>
 
 @interface ATFileAttachment ()
-- (NSString *)fullLocalPathForFilename:(NSString *)filename;
++ (NSString *)fullLocalPathForFilename:(NSString *)filename;
 - (NSString *)filenameForThumbnailOfSize:(CGSize)size;
 - (void)deleteSidecarIfNecessary;
 @end
@@ -27,10 +30,28 @@
 @dynamic remoteURL;
 @dynamic remoteThumbnailURL;
 
-+ (instancetype)newInstanceWithFileData:(NSData *)fileData MIMEType:(NSString *)MIMEType {
++ (BOOL)canCreateThumbnailForMIMEType:(NSString *)MIMEType {
+	static NSMutableSet *thumbnailableMIMETypes;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		CFArrayRef thumbnailableUTIs = CGImageSourceCopyTypeIdentifiers();
+		thumbnailableMIMETypes = [NSMutableSet set];
+
+		for (CFIndex i = 0; i < CFArrayGetCount(thumbnailableUTIs); i ++) {
+			CFStringRef UTI = CFArrayGetValueAtIndex(thumbnailableUTIs, i);
+			CFStringRef MIMEType = UTTypeCopyPreferredTagWithClass(UTI, kUTTagClassMIMEType);
+			if (MIMEType) {
+				[thumbnailableMIMETypes addObject:(__bridge id _Nonnull)(MIMEType)];
+			}
+		}
+	});
+
+	return [thumbnailableMIMETypes containsObject:MIMEType];
+}
+
++ (instancetype)newInstanceWithFileData:(NSData *)fileData MIMEType:(NSString *)MIMEType name:(NSString *)name {
 	ATFileAttachment *attachment = (ATFileAttachment *)[ATData newEntityNamed:NSStringFromClass(self)];
-	attachment.mimeType = MIMEType;
-	[attachment setFileData:fileData];
+	[attachment setFileData:fileData MIMEType:MIMEType name:name];
 	return attachment;
 }
 
@@ -39,6 +60,22 @@
 	[attachment updateWithJSON:JSON];
 
 	return attachment;
+}
+
++ (void)addMissingExtensions	 {
+	NSArray *allAttachments = [ATData findEntityNamed:NSStringFromClass(self) withPredicate:[NSPredicate predicateWithValue:YES]];
+
+	for (ATFileAttachment *attachment in allAttachments) {
+		if (attachment.localPath.pathExtension.length == 0 && attachment.mimeType.length > 0) {
+			NSString *newPath = [attachment.localPath stringByAppendingPathExtension:attachment.extension];
+			NSError *error;
+			if ([[NSFileManager defaultManager] moveItemAtPath:[self fullLocalPathForFilename:attachment.localPath] toPath:[self fullLocalPathForFilename:newPath] error:&error]) {
+				attachment.localPath = newPath;
+			} else {
+				ATLogError(@"Unable to append extension to file %@ (error: %@)", newPath, error);
+			}
+		}
+	}
 }
 
 - (void)updateWithJSON:(NSDictionary *)JSON {
@@ -56,27 +93,32 @@
 		[self didChangeValueForKey:@"remoteThumbnailURL"];
 	}
 
-	NSString *MIMEType = [JSON at_safeObjectForKey:@"mime_type"];
+	NSString *MIMEType = [JSON at_safeObjectForKey:@"content_type"];
 	if (MIMEType && [MIMEType isKindOfClass:[NSString class]]) {
-		[self setValue:MIMEType forKey:@"mimeType"];
+		self.mimeType = MIMEType;
+	}
+
+	NSString *name = [JSON at_safeObjectForKey:@"original_name"];
+	if (name && [name isKindOfClass:[NSString class]]) {
+		self.name = name;
 	}
 }
 
 - (void)prepareForDeletion {
-	[self setFileData:nil];
+	[self setFileData:nil MIMEType:nil name:nil];
 }
 
-- (void)setFileData:(NSData *)data {
+- (void)setFileData:(NSData *)data MIMEType:(NSString *)MIMEType name:(NSString *)name {
 	[self deleteSidecarIfNecessary];
 	self.localPath = nil;
+	self.mimeType = MIMEType;
 	if (data) {
-		self.localPath = [ATUtilities randomStringOfLength:20];
+		self.localPath = [[ATUtilities randomStringOfLength:20] stringByAppendingPathExtension:self.extension];
 		if (![data writeToFile:[self fullLocalPath] atomically:YES]) {
 			ATLogError(@"Unable to save file data to path: %@", [self fullLocalPath]);
 			self.localPath = nil;
 		}
-		self.mimeType = @"application/octet-stream";
-		self.name = [NSString stringWithString:self.localPath];
+		self.name = name ?: [NSString stringWithString:self.localPath];
 	}
 }
 
@@ -97,33 +139,66 @@
 	return nil;
 }
 
-- (void)setFileFromSourcePath:(NSString *)sourceFilename {
-	[self deleteSidecarIfNecessary];
-	self.localPath = nil;
-	if (sourceFilename) {
-		BOOL isDir = NO;
-		NSFileManager *fm = [NSFileManager defaultManager];
-		if (![fm fileExistsAtPath:sourceFilename isDirectory:&isDir] || isDir) {
-			ATLogError(@"Either source attachment file doesn't exist or is directory: %@, %d", sourceFilename, isDir);
-			return;
-		}
-		self.localPath = [ATUtilities randomStringOfLength:20];
-		NSError *error = nil;
-		if (![fm copyItemAtPath:sourceFilename toPath:[self fullLocalPath] error:&error]) {
-			self.localPath = nil;
-			ATLogError(@"Unable to write attachment to path: %@, %@", [self fullLocalPath], error);
-			return;
-		}
-		self.mimeType = @"application/octet-stream";
-		self.name = [sourceFilename lastPathComponent];
+- (NSURL *)remoteURL {
+	NSString *remoteURLString = [self primitiveValueForKey:@"remoteURL"];
+
+	if (remoteURLString) {
+		return [NSURL URLWithString:remoteURLString];
+	} else {
+		return nil;
 	}
 }
 
-- (NSString *)fullLocalPath {
-	return [self fullLocalPathForFilename:self.localPath];
+- (NSURL *)remoteThumbnailURL {
+	NSString *remoteThumbnailURLString = [self primitiveValueForKey:@"remoteThumbnailURL"];
+
+	if (remoteThumbnailURLString) {
+		return [NSURL URLWithString:remoteThumbnailURLString];
+	} else {
+		return nil;
+	}
 }
 
-- (NSString *)fullLocalPathForFilename:(NSString *)filename {
+- (NSURL *)beginMoveToStorageFrom:(NSURL *)temporaryLocation {
+	if (temporaryLocation && temporaryLocation.isFileURL) {
+		NSString *name = [[ATUtilities randomStringOfLength:20] stringByAppendingPathExtension:self.extension];
+		NSURL *newLocation = [NSURL fileURLWithPath:[[self class] fullLocalPathForFilename:name]];
+		NSError *error = nil;
+		if ([[NSFileManager defaultManager] moveItemAtURL:temporaryLocation toURL:newLocation error:&error]) {
+			return newLocation;
+		} else {
+			ATLogError(@"Unable to write attachment to URL: %@, %@", newLocation, error);
+			return nil;
+		}
+	} else {
+		ATLogError(@"Temporary file location (%@) is nil or not file URL", temporaryLocation);
+		return nil;
+	}
+}
+
+- (void)completeMoveToStorageFor:(NSURL *)storageLocation {
+	[self deleteSidecarIfNecessary];
+	self.localPath = storageLocation.lastPathComponent;
+}
+
+- (NSString *)fullLocalPath {
+	return [[self class] fullLocalPathForFilename:self.localPath];
+}
+
+- (NSString *)extension {
+	if (self.mimeType) {
+		CFStringRef uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (__bridge CFStringRef _Nonnull)(self.mimeType), NULL);
+		return (__bridge NSString *)UTTypeCopyPreferredTagWithClass(uti, kUTTagClassFilenameExtension);
+	} else {
+		return @"attachment";
+	}
+}
+
+- (BOOL)canCreateThumbnail {
+	return [[self class] canCreateThumbnailForMIMEType:self.mimeType];
+}
+
++ (NSString *)fullLocalPathForFilename:(NSString *)filename {
 	if (!filename) {
 		return nil;
 	}
@@ -134,7 +209,7 @@
 	if (self.localPath == nil) {
 		return nil;
 	}
-	return [NSString stringWithFormat:@"%@_%dx%d.thumbnail", self.localPath, (int)floor(size.width), (int)floor(size.height)];
+	return [NSString stringWithFormat:@"%@_%dx%d_fit.jpeg", self.localPath, (int)floor(size.width), (int)floor(size.height)];
 }
 
 - (void)deleteSidecarIfNecessary {
@@ -158,7 +233,7 @@
 		} else {
 			for (NSString *filename in filenames) {
 				if ([filename rangeOfString:self.localPath].location == 0) {
-					NSString *thumbnailPath = [self fullLocalPathForFilename:filename];
+					NSString *thumbnailPath = [[self class] fullLocalPathForFilename:filename];
 					
 					if (![fm removeItemAtPath:thumbnailPath error:&error]) {
 						ATLogError(@"Error removing attachment thumbnail at path: %@. %@", thumbnailPath, error);
@@ -176,7 +251,7 @@
 	if (!filename) {
 		return nil;
 	}
-	NSString *path = [self fullLocalPathForFilename:filename];
+	NSString *path = [[self class] fullLocalPathForFilename:filename];
 	UIImage *image = [UIImage imageWithContentsOfFile:path];
 	if (image == nil) {
 		image = [self createThumbnailOfSize:size];
@@ -185,33 +260,45 @@
 }
 
 - (UIImage *)createThumbnailOfSize:(CGSize)size {
-	CGFloat scale = [[UIScreen mainScreen] scale];
-	NSString *fullLocalPath = [self fullLocalPath];
-	NSString *filename = [self filenameForThumbnailOfSize:size];
-	NSString *fullThumbnailPath = [self fullLocalPathForFilename:filename];
+	CGImageSourceRef src = CGImageSourceCreateWithURL((__bridge CFURLRef) [NSURL fileURLWithPath:self.fullLocalPath], NULL);
+	CFDictionaryRef options = (__bridge CFDictionaryRef) @{
+															   (id) kCGImageSourceCreateThumbnailWithTransform : @YES,
+															   (id) kCGImageSourceCreateThumbnailFromImageAlways : @YES,
+															   (id) kCGImageSourceThumbnailMaxPixelSize : @(fmax(size.width, size.height))
+															   };
+	CGImageRef thumbnail = CGImageSourceCreateThumbnailAtIndex(src, 0, options);
+	CFRelease(src);
 
-	UIImage *image = [UIImage imageWithContentsOfFile:fullLocalPath];
-	UIImage *thumb = [ATUtilities imageByScalingImage:image toSize:size scale:scale fromITouchCamera:NO];
-	[UIImagePNGRepresentation(thumb) writeToFile:fullThumbnailPath atomically:YES];
-	return thumb;
+	UIImage *thumbnailImage = nil;
+
+	if (thumbnail) {
+		thumbnailImage = [UIImage imageWithCGImage:thumbnail];
+		CGImageRelease(thumbnail);
+
+		NSString *filename = [self filenameForThumbnailOfSize:size];
+		NSString *fullThumbnailPath = [[self class] fullLocalPathForFilename:filename];
+		[UIImagePNGRepresentation(thumbnailImage) writeToFile:fullThumbnailPath atomically:YES];
+	}
+
+	return thumbnailImage;
 }
 
-//TODO: Should this be removed?
-- (void)createThumbnailOfSize:(CGSize)size completion:(void (^)(void))completion {
-	CGFloat scale = [[UIScreen mainScreen] scale];
-	NSString *fullLocalPath = [self fullLocalPath];
-	NSString *filename = [self filenameForThumbnailOfSize:size];
-	NSString *fullThumbnailPath = [self fullLocalPathForFilename:filename];
+@end
 
-	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-		UIImage *image = [UIImage imageWithContentsOfFile:fullLocalPath];
-		UIImage *thumb = [ATUtilities imageByScalingImage:image toSize:size scale:scale fromITouchCamera:NO];
-		[UIImagePNGRepresentation(thumb) writeToFile:fullThumbnailPath atomically:YES];
-		dispatch_sync(dispatch_get_main_queue(), ^{
-			if (completion) {
-				completion();
-			}
-		});
-	});
+@implementation ATFileAttachment (QuickLook)
+
+- (NSString *)previewItemTitle {
+	return self.name;
 }
+
+- (NSURL *)previewItemURL {
+	if (self.localPath) {
+		return [NSURL fileURLWithPath:self.fullLocalPath];
+	} else {
+		// Use fake path
+		NSString *name = self.name ?: [[ATUtilities randomStringOfLength:20] stringByAppendingPathExtension:self.extension];
+		return [NSURL fileURLWithPath:[[self class] fullLocalPathForFilename:name]];
+	}
+}
+
 @end

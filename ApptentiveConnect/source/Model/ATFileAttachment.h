@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import <QuickLook/QuickLook.h>
 
 @class ATMessage;
 
@@ -19,16 +20,27 @@
 @property (nonatomic, strong) NSURL *remoteThumbnailURL;
 @property (nonatomic, strong) ATMessage *message;
 
-+ (instancetype)newInstanceWithFileData:(NSData *)fileData MIMEType:(NSString *)MIMEType;
+@property (nonatomic, readonly) NSString *fullLocalPath;
+@property (nonatomic, readonly) NSString *extension;
+@property (nonatomic, readonly) NSData *fileData;
+@property (nonatomic, readonly) BOOL canCreateThumbnail;
+
++ (instancetype)newInstanceWithFileData:(NSData *)fileData MIMEType:(NSString *)MIMEType name:(NSString *)name;
 + (instancetype)newInstanceWithJSON:(NSDictionary *)JSON;
++ (void)addMissingExtensions;
+- (void)updateWithJSON:(NSDictionary *)JSON;
 
-- (NSData *)fileData;
-- (void)setFileData:(NSData *)data;
-- (void)setFileFromSourcePath:(NSString *)sourceFilename;
+- (void)setFileData:(NSData *)data MIMEType:(NSString *)MIMEType name:(NSString *)name;
 
-- (NSString *)fullLocalPath;
+/** Can be called from background thread. */
+- (NSURL *)beginMoveToStorageFrom:(NSURL *)temporaryLocation;
+
+/** Must be called from main thread. */
+- (void)completeMoveToStorageFor:(NSURL *)storageLocation;
 
 - (UIImage *)thumbnailOfSize:(CGSize)size;
-- (void)createThumbnailOfSize:(CGSize)size completion:(void (^)(void))completion;
 
+@end
+
+@interface ATFileAttachment (QuickLook) <QLPreviewItem>
 @end

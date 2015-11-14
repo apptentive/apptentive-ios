@@ -25,4 +25,16 @@
 	[super layoutSubviews];
 }
 
+- (void)setStatusLabelHidden:(BOOL)statusLabelHidden {
+	_statusLabelHidden = statusLabelHidden;
+
+	self.statusLabel.hidden = statusLabelHidden;
+
+	if (statusLabelHidden) {
+		[self.contentView removeConstraint:self.messageStatusSpacingConstraint];
+	} else {
+		[self.contentView addConstraint:self.messageStatusSpacingConstraint];
+	}
+}
+
 @end

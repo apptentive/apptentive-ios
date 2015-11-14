@@ -218,7 +218,7 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 		[debugString appendString:boundaryString];
 
 		NSMutableString *multipartHeader = [NSMutableString string];
-		[multipartHeader appendString:[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", @"file", attachment.name]];
+		[multipartHeader appendString:[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", @"file[]", attachment.name]];
 		[multipartHeader appendString:[NSString stringWithFormat:@"Content-Type: %@\r\n", attachment.mimeType]];
 		[multipartHeader appendString:@"Content-Transfer-Encoding: binary\r\n\r\n"];
 		[debugString appendString:multipartHeader];

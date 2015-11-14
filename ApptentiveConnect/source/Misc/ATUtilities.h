@@ -22,6 +22,7 @@
 
 + (UIImage *)imageByRotatingImage:(UIImage *)image toInterfaceOrientation:(UIInterfaceOrientation)orientation;
 + (UIImage *)imageByRotatingImage:(UIImage *)image byRadians:(CGFloat)radians;
++ (UIImage *)imageByScalingImage:(UIImage *)image toFitSize:(CGSize)size scale:(CGFloat)contentScale;
 + (UIImage *)imageByScalingImage:(UIImage *)image toSize:(CGSize)size scale:(CGFloat)contentScale fromITouchCamera:(BOOL)isFromITouchCamera;
 + (CGFloat)rotationOfViewHierarchyInRadians:(UIView *)leafView;
 + (CGAffineTransform)viewTransformInWindow:(UIWindow *)window;

@@ -953,6 +953,9 @@ static NSURLCache *imageCache = nil;
 	// Monitor changes to custom data.
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(personDataChanged:) name:ATConnectCustomPersonDataChangedNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDataChanged:) name:ATConnectCustomDeviceDataChangedNotification object:nil];
+
+	// Append extensions to attachments that are missing them
+	[ATFileAttachment addMissingExtensions];
 }
 
 - (void)continueStartupWithDataManagerFailure {

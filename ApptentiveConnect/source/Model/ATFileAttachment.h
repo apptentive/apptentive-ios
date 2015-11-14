@@ -27,6 +27,7 @@
 
 + (instancetype)newInstanceWithFileData:(NSData *)fileData MIMEType:(NSString *)MIMEType name:(NSString *)name;
 + (instancetype)newInstanceWithJSON:(NSDictionary *)JSON;
++ (void)addMissingExtensions;
 - (void)updateWithJSON:(NSDictionary *)JSON;
 
 - (void)setFileData:(NSData *)data MIMEType:(NSString *)MIMEType name:(NSString *)name;

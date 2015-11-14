@@ -62,6 +62,22 @@
 	return attachment;
 }
 
++ (void)addMissingExtensions	 {
+	NSArray *allAttachments = [ATData findEntityNamed:NSStringFromClass(self) withPredicate:[NSPredicate predicateWithValue:YES]];
+
+	for (ATFileAttachment *attachment in allAttachments) {
+		if (attachment.localPath.pathExtension.length == 0 && attachment.mimeType.length > 0) {
+			NSString *newPath = [attachment.localPath stringByAppendingPathExtension:attachment.extension];
+			NSError *error;
+			if ([[NSFileManager defaultManager] moveItemAtPath:[self fullLocalPathForFilename:attachment.localPath] toPath:[self fullLocalPathForFilename:newPath] error:&error]) {
+				attachment.localPath = newPath;
+			} else {
+				ATLogError(@"Unable to append extension to file %@ (error: %@)", newPath, error);
+			}
+		}
+	}
+}
+
 - (void)updateWithJSON:(NSDictionary *)JSON {
 	NSString *remoteURLString = [JSON at_safeObjectForKey:@"url"];
 	if (remoteURLString && [remoteURLString isKindOfClass:[NSString class]] && [NSURL URLWithString:remoteURLString]) {

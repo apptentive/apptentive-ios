@@ -10,6 +10,7 @@
 #import <XCTest/XCTest.h>
 
 #import "ATInteractionInvocation.h"
+#import "ATInteractionUsageData.h"
 
 @interface ATInteractionInvocationTests : XCTestCase
 
@@ -93,7 +94,6 @@
 	
 	[ATInteractionInvocation predicateOperatorTypeFromString:@"" hasError:&hasError];
 	XCTAssertTrue(hasError);
-	
 }
 
 @end

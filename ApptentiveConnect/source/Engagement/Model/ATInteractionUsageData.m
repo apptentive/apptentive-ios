@@ -9,12 +9,12 @@
 #import "ATInteractionUsageData.h"
 #import "ATBackend.h"
 #import "ATConnect.h"
+#import "ATConnect_Private.h"
 #import "ATEngagementBackend.h"
 #import "ATUtilities.h"
 #import "ATDeviceInfo.h"
 #import "ATPersonInfo.h"
 
-#warning These need to be upgraded to the complex types.
 @implementation ATInteractionUsageData
 
 + (ATInteractionUsageData *)usageData {
@@ -76,24 +76,42 @@
 																										  @"time_since_install/build" : self.timeSinceInstallBuild,
 																										  @"is_update/version" : self.isUpdateVersion,
 																										  @"is_update/build" : self.isUpdateBuild}];
+	if (self.timeAtInstallTotal) {
+		predicateEvaluationDictionary[@"time_at_install/total"] = [ATConnect timestampObjectWithDate:self.timeAtInstallTotal];
+	}
+	if (self.timeAtInstallVersion) {
+		predicateEvaluationDictionary[@"time_at_install/version"] = [ATConnect timestampObjectWithDate:self.timeAtInstallVersion];
+	}
+	
 	if (self.applicationVersion) {
 		predicateEvaluationDictionary[@"application_version"] = self.applicationVersion;
 		predicateEvaluationDictionary[@"app_release/version"] = self.applicationVersion;
+		predicateEvaluationDictionary[@"application/version"] = [ATConnect versionObjectWithVersion:self.applicationVersion];
+	} else {
+		ATLogWarning(@"Unable to get application version. Using default value of 0.0.0");
+		predicateEvaluationDictionary[@"application/version"] = [ATConnect versionObjectWithVersion:@"0.0.0"];
 	}
+	
 	if (self.applicationBuild) {
 		predicateEvaluationDictionary[@"application_build"] = self.applicationBuild;
 		predicateEvaluationDictionary[@"app_release/build"] = self.applicationBuild;
 	}
+	
 	if (self.sdkVersion) {
-		predicateEvaluationDictionary[@"sdk/version"] = self.sdkVersion;
+		predicateEvaluationDictionary[@"sdk/version"] = [ATConnect versionObjectWithVersion:self.sdkVersion];
+	} else {
+		ATLogError(@"Unable to find SDK version. Interaction critera don't make sense without one.");
+		return nil;
 	}
+	
 	if (self.sdkDistribution) {
 		predicateEvaluationDictionary[@"sdk/distribution"] = self.sdkDistribution;
 	}
 	if (self.sdkDistributionVersion) {
 		predicateEvaluationDictionary[@"sdk/distribution_version"] = self.sdkDistributionVersion;
 	}
-	predicateEvaluationDictionary[@"current_time"] = self.currentTime;
+	
+	predicateEvaluationDictionary[@"current_time"] = [ATConnect timestampObjectWithNumber:self.currentTime];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesTotal];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesVersion];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesBuild];
@@ -202,6 +220,20 @@
 	return _timeSinceInstallBuild;
 }
 
+- (NSDate *)timeAtInstallTotal {
+	if (!_timeAtInstallTotal) {
+		_timeAtInstallTotal = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInstallDateKey] ?: [NSDate date];
+	}
+	return _timeAtInstallTotal;
+}
+
+- (NSDate *)timeAtInstallVersion {
+	if (!_timeAtInstallVersion) {
+		_timeAtInstallVersion = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementUpgradeDateKey] ?: [NSDate date];
+	}
+	return _timeAtInstallVersion;
+}
+
 - (NSString *)applicationVersion {
 	if (!_applicationVersion) {
 		_applicationVersion = [[ATUtilities appVersionString] copy];
@@ -307,6 +339,11 @@
 			NSDate *lastDate = [codePointsInvokesLastDate objectForKey:codePoint] ?: [NSDate distantPast];
 			NSTimeInterval timeAgo = [[NSDate date] timeIntervalSinceDate:lastDate];
 			[predicateSyntax setObject:@(timeAgo) forKey:[NSString stringWithFormat:@"code_point/%@/invokes/time_ago", codePoint]];
+			
+			if (codePointsInvokesLastDate[codePoint]) {
+				NSString *key = [NSString stringWithFormat:@"code_point/%@/last_invoked_at/total", codePoint];
+				predicateSyntax[key] = [ATConnect timestampObjectWithDate:lastDate];
+			}
 		}
 		_codePointInvokesTimeAgo = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
@@ -360,6 +397,11 @@
 			NSDate *lastDate = [interactionInvokesLastDate objectForKey:interactionID] ?: [NSDate distantPast];
 			NSTimeInterval timeAgo = [[NSDate date] timeIntervalSinceDate:lastDate];
 			[predicateSyntax setObject:@(timeAgo) forKey:[NSString stringWithFormat:@"interactions/%@/invokes/time_ago", interactionID]];
+			
+			if (interactionInvokesLastDate[interactionID]) {
+				NSString *key = [NSString stringWithFormat:@"interactions/%@/last_invoked_at/total", interactionID];
+				predicateSyntax[key] = [ATConnect timestampObjectWithDate:lastDate];
+			}
 		}
 		_interactionInvokesTimeAgo = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}

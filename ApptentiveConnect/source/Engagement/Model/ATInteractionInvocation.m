@@ -112,13 +112,19 @@
 		@try {
 			NSPredicate *predicate = [self criteriaPredicate];
 			if (predicate) {
-				criteriaAreMet = [predicate evaluateWithObject:[usageData predicateEvaluationDictionary]];
-				if (!criteriaAreMet) {
-					//TODO: Log this information in a more user friendly and useful way.
-					
-					//ATLogInfo(@"Interaction predicate failed evaluation.");
-					//ATLogInfo(@"Predicate: %@", predicate);
-					//ATLogInfo(@"Interaction usage data: %@", [usageData predicateEvaluationDictionary]);
+				NSDictionary *predicateEvaluationDictionary = [usageData predicateEvaluationDictionary];
+				if (predicateEvaluationDictionary) {
+					criteriaAreMet = [predicate evaluateWithObject:predicateEvaluationDictionary];
+					if (!criteriaAreMet) {
+						//TODO: Log this information in a more user friendly and useful way.
+						
+						//ATLogInfo(@"Interaction predicate failed evaluation.");
+						//ATLogInfo(@"Predicate: %@", predicate);
+						//ATLogInfo(@"Interaction usage data: %@", [usageData predicateEvaluationDictionary]);
+					}
+				} else {
+					ATLogError(@"Could not create predicate evaluation data.");
+					criteriaAreMet = NO;
 				}
 			} else {
 				ATLogError(@"Could not create a valid criteria predicate for the Interaction criteria: %@", self.criteria);

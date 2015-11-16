@@ -14,6 +14,7 @@
 #import "ATEngagementBackend.h"
 #import "ATInteractionInvocation.h"
 #import "ATInteractionUsageData.h"
+#import "ATPersonInfo.h"
 
 @interface ATInteractionUsageDataTests : XCTestCase
 
@@ -112,4 +113,22 @@
 
 //TODO: Test for code point last_invoked_at/total
 //TODO: Test for interaction last_invoked_at/total
+
+- (void)testPerson {
+	ATPersonInfo *person = [ATPersonInfo currentPerson];
+	person.name = nil;
+	person.emailAddress = nil;
+	
+	ATInteractionUsageData *usage = [[ATInteractionUsageData alloc] init];
+	
+	NSDictionary *evaluationDictionary = [usage predicateEvaluationDictionary];
+	XCTAssertNil(evaluationDictionary[@"person/name"]);
+	XCTAssertNil(evaluationDictionary[@"person/email"]);
+	
+	person.name = @"Andrew";
+	person.emailAddress = @"example@example.com";
+	NSDictionary *validEvaluationDictionary = [usage predicateEvaluationDictionary];
+	XCTAssertEqualObjects(validEvaluationDictionary[@"person/name"], @"Andrew");
+	XCTAssertEqualObjects(validEvaluationDictionary[@"person/email"], @"example@example.com");
+}
 @end

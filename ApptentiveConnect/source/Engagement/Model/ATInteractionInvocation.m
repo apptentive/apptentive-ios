@@ -172,7 +172,7 @@
 			} else {
 				predicate = [self compoundPredicateForKeyPath:key operatorsAndValues:(NSDictionary *)value];
 			}
-		} else if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
+		} else if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]] || [value isKindOfClass:[NSNull class]]) {
 			NSDictionary *implicitEquality = @{@"==": value};
 			predicate = [self compoundPredicateForKeyPath:key operatorsAndValues:implicitEquality];
 		}
@@ -219,7 +219,7 @@
 				NSString *predicateFormatString = [[@"(%K " stringByAppendingString:([(NSNumber *)value boolValue] ? @"!=" : @"==")] stringByAppendingString:@" nil)"];
 				predicate = [NSPredicate predicateWithFormat:predicateFormatString, keyPath];
 			}
-		} else if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
+		} else if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]] || [value isKindOfClass:[NSNull class]]) {
 			BOOL hasError;
 			
 			NSPredicateOperatorType operatorType = [self predicateOperatorTypeFromString:operatorString hasError:&hasError];

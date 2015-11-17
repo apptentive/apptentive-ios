@@ -15,7 +15,7 @@
 
 @implementation DefaultValues
 
-- (void)DefaultValues {
+- (void)testDefaultValues {
 	XCTAssertTrue([self.interaction criteriaAreMet]);
 }
 

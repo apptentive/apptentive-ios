@@ -15,7 +15,7 @@
 
 @implementation CornerCasesThatShouldBeTrue
 
-- (void)CornerCasesThatShouldBeTrue {
+- (void)testCornerCasesThatShouldBeTrue {
 	XCTAssertTrue([self.interaction criteriaAreMet]);
 }
 

@@ -252,9 +252,9 @@
 		}
 	}
 	
-	NSCompoundPredicate *compountPredicate = [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:subPredicates];
+	NSCompoundPredicate *compoundPredicate = [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:subPredicates];
 
-	return compountPredicate;
+	return compoundPredicate;
 }
 
 + (NSComparisonPredicate *)predicateWithLeftKeyPath:(NSString *)leftKeyPath rightValue:(nullable id)rightValue operatorType:(NSPredicateOperatorType)operatorType {

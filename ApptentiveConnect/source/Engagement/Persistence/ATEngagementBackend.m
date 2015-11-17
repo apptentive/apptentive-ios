@@ -368,13 +368,6 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 		[addedCodePoint setObject:@0 forKey:codePoint];
 		[defaults setObject:addedCodePoint forKey:ATEngagementCodePointsInvokesBuildKey];
 	}
-	
-	NSDictionary *invokesTimeAgo = [defaults objectForKey:ATEngagementCodePointsInvokesLastDateKey];
-	if (![invokesTimeAgo objectForKey:codePoint]) {
-		NSMutableDictionary *addedCodePoint = [NSMutableDictionary dictionaryWithDictionary:invokesTimeAgo];
-		[addedCodePoint setObject:[NSDate distantPast] forKey:codePoint];
-		[defaults setObject:addedCodePoint forKey:ATEngagementCodePointsInvokesLastDateKey];
-	}
 }
 
 - (void)codePointWasEngaged:(NSString *)codePoint {
@@ -425,13 +418,6 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 		NSMutableDictionary *addedInteraction = [NSMutableDictionary dictionaryWithDictionary:invokesBuild];
 		[addedInteraction setObject:@0 forKey:interactionID];
 		[defaults setObject:addedInteraction forKey:ATEngagementInteractionsInvokesBuildKey];
-	}
-	
-	NSDictionary *invokesLastDate = [defaults objectForKey:ATEngagementInteractionsInvokesLastDateKey];
-	if (![invokesLastDate objectForKey:interactionID]) {
-		NSMutableDictionary *addedInteraction = [NSMutableDictionary dictionaryWithDictionary:invokesLastDate];
-		[addedInteraction setObject:[NSDate distantPast] forKey:interactionID];
-		[defaults setObject:addedInteraction forKey:ATEngagementInteractionsInvokesLastDateKey];
 	}
 }
 

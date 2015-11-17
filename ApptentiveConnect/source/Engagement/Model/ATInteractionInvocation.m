@@ -224,6 +224,23 @@
 				NSString *predicateFormatString = [[@"(%K " stringByAppendingString:([(NSNumber *)value boolValue] ? @"!=" : @"==")] stringByAppendingString:@" nil)"];
 				predicate = [NSPredicate predicateWithFormat:predicateFormatString, keyPath];
 			}
+		} else if ([operatorString isEqualToString:@"$before"] || [operatorString isEqualToString:@"$after"]) {
+			predicate = [NSPredicate predicateWithBlock:^BOOL(id  _Nonnull evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+				NSNumber *fieldValue = (NSNumber *)[[evaluatedObject valueForKey:keyPath] valueForKey:@"sec"];
+				NSNumber *parameter = (NSNumber *)value;
+
+				if (fieldValue && parameter) {
+					NSTimeInterval fieldSeconds = fieldValue.doubleValue;
+					NSTimeInterval parameterSeconds = parameter.doubleValue + [[NSDate date] timeIntervalSince1970];
+					if ([operatorString isEqualToString:@"$before"]) {
+						return fieldSeconds < parameterSeconds;
+					} else {
+						return fieldSeconds > parameterSeconds;
+					}
+				}
+
+				return NO;
+			}];
 		} else if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]] || [value isKindOfClass:[NSNull class]]) {
 			BOOL hasError;
 			

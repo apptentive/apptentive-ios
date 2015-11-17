@@ -62,42 +62,22 @@
 		01D3128F1B69349900B369E1 /* ATProgressNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D3128D1B69349900B369E1 /* ATProgressNavigationBar.m */; };
 		01F1A9601B6823CD0088DBF0 /* ATAboutViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01F1A95E1B6823CD0088DBF0 /* ATAboutViewController.h */; };
 		01F1A9611B6823CD0088DBF0 /* ATAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F1A95F1B6823CD0088DBF0 /* ATAboutViewController.m */; };
-		01F6FCF91BFA88BA004513C2 /* testActualUpgradeMessage.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FCE01BFA88AE004513C2 /* testActualUpgradeMessage.json */; };
-		01F6FCFA1BFA88BA004513C2 /* testBadCriteria.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FCE11BFA88AE004513C2 /* testBadCriteria.json */; };
-		01F6FCFB1BFA88BA004513C2 /* testCanShowInteraction.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FCE21BFA88AE004513C2 /* testCanShowInteraction.json */; };
-		01F6FCFC1BFA88BA004513C2 /* testCorruptedJson.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FCE31BFA88AE004513C2 /* testCorruptedJson.json */; };
-		01F6FCFD1BFA88BA004513C2 /* testCriteriaApplicationVersionAndBuild.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FCE41BFA88AE004513C2 /* testCriteriaApplicationVersionAndBuild.json */; };
-		01F6FCFE1BFA88BA004513C2 /* testCriteriaCodePointInvokesBuild.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FCE51BFA88AE004513C2 /* testCriteriaCodePointInvokesBuild.json */; };
-		01F6FCFF1BFA88BA004513C2 /* testCriteriaCodePointInvokesTimeAgo.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FCE61BFA88AE004513C2 /* testCriteriaCodePointInvokesTimeAgo.json */; };
-		01F6FD001BFA88BA004513C2 /* testCriteriaCodePointInvokesTotal.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FCE71BFA88AE004513C2 /* testCriteriaCodePointInvokesTotal.json */; };
-		01F6FD011BFA88BA004513C2 /* testCriteriaCodePointInvokesVersion.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FCE81BFA88AE004513C2 /* testCriteriaCodePointInvokesVersion.json */; };
-		01F6FD021BFA88BA004513C2 /* testCriteriaInteractionInvokesTotal.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FCE91BFA88AE004513C2 /* testCriteriaInteractionInvokesTotal.json */; };
-		01F6FD031BFA88BA004513C2 /* testCriteriaTimeSinceInstall.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FCEA1BFA88AE004513C2 /* testCriteriaTimeSinceInstall.json */; };
-		01F6FD041BFA88BA004513C2 /* testInteractionPriority.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FCEB1BFA88AE004513C2 /* testInteractionPriority.json */; };
-		01F6FD051BFA88BA004513C2 /* testListOfVariousInteractions.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FCEC1BFA88AE004513C2 /* testListOfVariousInteractions.json */; };
-		01F6FD061BFA88BA004513C2 /* testMissingNullEmptyCriteria.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FCED1BFA88AE004513C2 /* testMissingNullEmptyCriteria.json */; };
-		01F6FD071BFA88BA004513C2 /* testOperatorContains.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FCEE1BFA88AE004513C2 /* testOperatorContains.json */; };
-		01F6FD081BFA88BA004513C2 /* testOperatorEndsWith.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FCEF1BFA88AE004513C2 /* testOperatorEndsWith.json */; };
-		01F6FD091BFA88BA004513C2 /* testOperatorExists.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FCF01BFA88AE004513C2 /* testOperatorExists.json */; };
-		01F6FD0A1BFA88BA004513C2 /* testOperatorNot.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FCF11BFA88AE004513C2 /* testOperatorNot.json */; };
-		01F6FD0B1BFA88BA004513C2 /* testOperatorStartsWith.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FCF21BFA88AE004513C2 /* testOperatorStartsWith.json */; };
-		01F6FD0C1BFA88BA004513C2 /* testQueriesAgainstAppRelease.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FCF31BFA88AE004513C2 /* testQueriesAgainstAppRelease.json */; };
-		01F6FD0D1BFA88BA004513C2 /* testQueriesAgainstDevice.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FCF41BFA88AE004513C2 /* testQueriesAgainstDevice.json */; };
-		01F6FD0E1BFA88BA004513C2 /* testQueriesAgainstPerson.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FCF51BFA88AE004513C2 /* testQueriesAgainstPerson.json */; };
-		01F6FD0F1BFA88BA004513C2 /* testQueriesAgainstSdk.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FCF61BFA88AE004513C2 /* testQueriesAgainstSdk.json */; };
-		01F6FD101BFA88BA004513C2 /* testRealRatingInteractions.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FCF71BFA88AE004513C2 /* testRealRatingInteractions.json */; };
-		01F6FD111BFA88BA004513C2 /* testSelectionWithInteractionIdUsedInCriteria.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FCF81BFA88AE004513C2 /* testSelectionWithInteractionIdUsedInCriteria.json */; };
 		01F6FD641BFAA291004513C2 /* testCornerCasesThatShouldBeFalse.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FD601BFAA28B004513C2 /* testCornerCasesThatShouldBeFalse.json */; };
 		01F6FD651BFAA291004513C2 /* testCornerCasesThatShouldBeTrue.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FD611BFAA28B004513C2 /* testCornerCasesThatShouldBeTrue.json */; };
 		01F6FD661BFAA291004513C2 /* testDefaultValues.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FD621BFAA28B004513C2 /* testDefaultValues.json */; };
 		01F6FD671BFAA291004513C2 /* testPredicateParsing.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FD631BFAA28B004513C2 /* testPredicateParsing.json */; };
 		01F6FD8D1BFAA4B2004513C2 /* PayloadTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F6FD121BFA89E6004513C2 /* PayloadTest.m */; };
 		01F6FD901BFAA512004513C2 /* CriteriaTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F6FD8F1BFAA512004513C2 /* CriteriaTest.m */; };
-		01F6FD921BFAAAFB004513C2 /* CornerCasesThatShouldBeFalse.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F6FD681BFAA2BB004513C2 /* CornerCasesThatShouldBeFalse.m */; };
-		01F6FD931BFAAC87004513C2 /* CornerCasesThatShouldBeTrue.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F6FD691BFAA2BB004513C2 /* CornerCasesThatShouldBeTrue.m */; };
-		01F6FD941BFAAC87004513C2 /* DefaultValues.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F6FD6A1BFAA2BB004513C2 /* DefaultValues.m */; };
-		01F6FD951BFAAC87004513C2 /* PredicateParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F6FD6B1BFAA2BB004513C2 /* PredicateParsing.m */; };
 		01F6FD971BFBCDC3004513C2 /* ApptentiveMetricsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4987FAA6157AE59D00AF2078 /* ApptentiveMetricsTests.m */; };
+		01F6FDA11BFBF3E2004513C2 /* testCodePointInvokesTotal.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FD981BFBF0D9004513C2 /* testCodePointInvokesTotal.json */; };
+		01F6FDA21BFBF3E2004513C2 /* testCodePointInvokesVersion.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FD991BFBF0D9004513C2 /* testCodePointInvokesVersion.json */; };
+		01F6FDA31BFBF3E2004513C2 /* testCodePointLastInvokedAt.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FD9A1BFBF0D9004513C2 /* testCodePointLastInvokedAt.json */; };
+		01F6FDA41BFBF3E2004513C2 /* testInteractionInvokesTotal.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FD9B1BFBF0D9004513C2 /* testInteractionInvokesTotal.json */; };
+		01F6FDA51BFBF3E2004513C2 /* testOperatorContains.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FD9C1BFBF0D9004513C2 /* testOperatorContains.json */; };
+		01F6FDA61BFBF3E2004513C2 /* testOperatorEndsWith.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FD9D1BFBF0D9004513C2 /* testOperatorEndsWith.json */; };
+		01F6FDA71BFBF3E2004513C2 /* testOperatorExists.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FD9E1BFBF0D9004513C2 /* testOperatorExists.json */; };
+		01F6FDA81BFBF3E2004513C2 /* testOperatorNot.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FD9F1BFBF0D9004513C2 /* testOperatorNot.json */; };
+		01F6FDA91BFBF3E2004513C2 /* testOperatorStartsWith.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FDA01BFBF0D9004513C2 /* testOperatorStartsWith.json */; };
 		49129ED4174068730026C2E1 /* ApptentiveMigrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49129ED3174068730026C2E1 /* ApptentiveMigrationTests.m */; };
 		491748BA1341177000A7D11E /* ATConnectionChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = 491748B21341177000A7D11E /* ATConnectionChannel.h */; };
 		491748BB1341177000A7D11E /* ATConnectionChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 491748B31341177000A7D11E /* ATConnectionChannel.m */; };
@@ -383,68 +363,23 @@
 		01D3128D1B69349900B369E1 /* ATProgressNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATProgressNavigationBar.m; sourceTree = "<group>"; };
 		01F1A95E1B6823CD0088DBF0 /* ATAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAboutViewController.h; sourceTree = "<group>"; };
 		01F1A95F1B6823CD0088DBF0 /* ATAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAboutViewController.m; sourceTree = "<group>"; };
-		01F6FCE01BFA88AE004513C2 /* testActualUpgradeMessage.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testActualUpgradeMessage.json; sourceTree = "<group>"; };
-		01F6FCE11BFA88AE004513C2 /* testBadCriteria.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testBadCriteria.json; sourceTree = "<group>"; };
-		01F6FCE21BFA88AE004513C2 /* testCanShowInteraction.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCanShowInteraction.json; sourceTree = "<group>"; };
-		01F6FCE31BFA88AE004513C2 /* testCorruptedJson.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCorruptedJson.json; sourceTree = "<group>"; };
-		01F6FCE41BFA88AE004513C2 /* testCriteriaApplicationVersionAndBuild.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCriteriaApplicationVersionAndBuild.json; sourceTree = "<group>"; };
-		01F6FCE51BFA88AE004513C2 /* testCriteriaCodePointInvokesBuild.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCriteriaCodePointInvokesBuild.json; sourceTree = "<group>"; };
-		01F6FCE61BFA88AE004513C2 /* testCriteriaCodePointInvokesTimeAgo.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCriteriaCodePointInvokesTimeAgo.json; sourceTree = "<group>"; };
-		01F6FCE71BFA88AE004513C2 /* testCriteriaCodePointInvokesTotal.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCriteriaCodePointInvokesTotal.json; sourceTree = "<group>"; };
-		01F6FCE81BFA88AE004513C2 /* testCriteriaCodePointInvokesVersion.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCriteriaCodePointInvokesVersion.json; sourceTree = "<group>"; };
-		01F6FCE91BFA88AE004513C2 /* testCriteriaInteractionInvokesTotal.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCriteriaInteractionInvokesTotal.json; sourceTree = "<group>"; };
-		01F6FCEA1BFA88AE004513C2 /* testCriteriaTimeSinceInstall.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCriteriaTimeSinceInstall.json; sourceTree = "<group>"; };
-		01F6FCEB1BFA88AE004513C2 /* testInteractionPriority.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testInteractionPriority.json; sourceTree = "<group>"; };
-		01F6FCEC1BFA88AE004513C2 /* testListOfVariousInteractions.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testListOfVariousInteractions.json; sourceTree = "<group>"; };
-		01F6FCED1BFA88AE004513C2 /* testMissingNullEmptyCriteria.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testMissingNullEmptyCriteria.json; sourceTree = "<group>"; };
-		01F6FCEE1BFA88AE004513C2 /* testOperatorContains.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorContains.json; sourceTree = "<group>"; };
-		01F6FCEF1BFA88AE004513C2 /* testOperatorEndsWith.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorEndsWith.json; sourceTree = "<group>"; };
-		01F6FCF01BFA88AE004513C2 /* testOperatorExists.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorExists.json; sourceTree = "<group>"; };
-		01F6FCF11BFA88AE004513C2 /* testOperatorNot.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorNot.json; sourceTree = "<group>"; };
-		01F6FCF21BFA88AE004513C2 /* testOperatorStartsWith.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorStartsWith.json; sourceTree = "<group>"; };
-		01F6FCF31BFA88AE004513C2 /* testQueriesAgainstAppRelease.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testQueriesAgainstAppRelease.json; sourceTree = "<group>"; };
-		01F6FCF41BFA88AE004513C2 /* testQueriesAgainstDevice.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testQueriesAgainstDevice.json; sourceTree = "<group>"; };
-		01F6FCF51BFA88AE004513C2 /* testQueriesAgainstPerson.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testQueriesAgainstPerson.json; sourceTree = "<group>"; };
-		01F6FCF61BFA88AE004513C2 /* testQueriesAgainstSdk.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testQueriesAgainstSdk.json; sourceTree = "<group>"; };
-		01F6FCF71BFA88AE004513C2 /* testRealRatingInteractions.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testRealRatingInteractions.json; sourceTree = "<group>"; };
-		01F6FCF81BFA88AE004513C2 /* testSelectionWithInteractionIdUsedInCriteria.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testSelectionWithInteractionIdUsedInCriteria.json; sourceTree = "<group>"; };
 		01F6FD121BFA89E6004513C2 /* PayloadTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PayloadTest.m; sourceTree = "<group>"; };
 		01F6FD141BFA8A4A004513C2 /* PayloadTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PayloadTest.h; sourceTree = "<group>"; };
-		01F6FD151BFA90EB004513C2 /* ActualUpgradeMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActualUpgradeMessage.m; sourceTree = "<group>"; };
-		01F6FD171BFA93F3004513C2 /* CanShowInteraction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanShowInteraction.m; sourceTree = "<group>"; };
-		01F6FD181BFA93F3004513C2 /* CorruptedJson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CorruptedJson.m; sourceTree = "<group>"; };
-		01F6FD191BFA93F3004513C2 /* CriteriaApplicationVersionAndBuild.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CriteriaApplicationVersionAndBuild.m; sourceTree = "<group>"; };
-		01F6FD1A1BFA93F3004513C2 /* CriteriaCodePointInvokesBuild.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CriteriaCodePointInvokesBuild.m; sourceTree = "<group>"; };
-		01F6FD1B1BFA93F3004513C2 /* CriteriaCodePointInvokesTimeAgo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CriteriaCodePointInvokesTimeAgo.m; sourceTree = "<group>"; };
-		01F6FD1C1BFA93F3004513C2 /* CriteriaCodePointInvokesTotal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CriteriaCodePointInvokesTotal.m; sourceTree = "<group>"; };
-		01F6FD1D1BFA93F3004513C2 /* CriteriaCodePointInvokesVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CriteriaCodePointInvokesVersion.m; sourceTree = "<group>"; };
-		01F6FD1E1BFA93F3004513C2 /* CriteriaInteractionInvokesTotal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CriteriaInteractionInvokesTotal.m; sourceTree = "<group>"; };
-		01F6FD1F1BFA93F3004513C2 /* CriteriaTimeSinceInstall.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CriteriaTimeSinceInstall.m; sourceTree = "<group>"; };
-		01F6FD201BFA93F3004513C2 /* InteractionPriority.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InteractionPriority.m; sourceTree = "<group>"; };
-		01F6FD211BFA93F3004513C2 /* ListOfVariousInteractions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListOfVariousInteractions.m; sourceTree = "<group>"; };
-		01F6FD221BFA93F3004513C2 /* MissingNullEmptyCriteria.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MissingNullEmptyCriteria.m; sourceTree = "<group>"; };
-		01F6FD231BFA93F3004513C2 /* OperatorContains.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OperatorContains.m; sourceTree = "<group>"; };
-		01F6FD241BFA93F3004513C2 /* OperatorEndsWith.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OperatorEndsWith.m; sourceTree = "<group>"; };
-		01F6FD251BFA93F3004513C2 /* OperatorExists.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OperatorExists.m; sourceTree = "<group>"; };
-		01F6FD261BFA93F3004513C2 /* OperatorNot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OperatorNot.m; sourceTree = "<group>"; };
-		01F6FD271BFA93F3004513C2 /* OperatorStartsWith.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OperatorStartsWith.m; sourceTree = "<group>"; };
-		01F6FD281BFA93F3004513C2 /* QueriesAgainstAppRelease.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QueriesAgainstAppRelease.m; sourceTree = "<group>"; };
-		01F6FD291BFA93F3004513C2 /* QueriesAgainstDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QueriesAgainstDevice.m; sourceTree = "<group>"; };
-		01F6FD2A1BFA93F3004513C2 /* QueriesAgainstPerson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QueriesAgainstPerson.m; sourceTree = "<group>"; };
-		01F6FD2B1BFA93F3004513C2 /* QueriesAgainstSdk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QueriesAgainstSdk.m; sourceTree = "<group>"; };
-		01F6FD2C1BFA93F3004513C2 /* RealRatingInteractions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RealRatingInteractions.m; sourceTree = "<group>"; };
-		01F6FD2D1BFA93F3004513C2 /* SelectionWithInteractionIdUsedInCriteria.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectionWithInteractionIdUsedInCriteria.m; sourceTree = "<group>"; };
-		01F6FD5C1BFA9574004513C2 /* BadCriteria.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BadCriteria.m; sourceTree = "<group>"; };
 		01F6FD601BFAA28B004513C2 /* testCornerCasesThatShouldBeFalse.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCornerCasesThatShouldBeFalse.json; sourceTree = "<group>"; };
 		01F6FD611BFAA28B004513C2 /* testCornerCasesThatShouldBeTrue.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCornerCasesThatShouldBeTrue.json; sourceTree = "<group>"; };
 		01F6FD621BFAA28B004513C2 /* testDefaultValues.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testDefaultValues.json; sourceTree = "<group>"; };
 		01F6FD631BFAA28B004513C2 /* testPredicateParsing.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testPredicateParsing.json; sourceTree = "<group>"; };
-		01F6FD681BFAA2BB004513C2 /* CornerCasesThatShouldBeFalse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CornerCasesThatShouldBeFalse.m; sourceTree = "<group>"; };
-		01F6FD691BFAA2BB004513C2 /* CornerCasesThatShouldBeTrue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CornerCasesThatShouldBeTrue.m; sourceTree = "<group>"; };
-		01F6FD6A1BFAA2BB004513C2 /* DefaultValues.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DefaultValues.m; sourceTree = "<group>"; };
-		01F6FD6B1BFAA2BB004513C2 /* PredicateParsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PredicateParsing.m; sourceTree = "<group>"; };
 		01F6FD8F1BFAA512004513C2 /* CriteriaTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CriteriaTest.m; path = tests/CriteriaTest.m; sourceTree = SOURCE_ROOT; };
 		01F6FD911BFAA52A004513C2 /* CriteriaTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CriteriaTest.h; sourceTree = "<group>"; };
+		01F6FD981BFBF0D9004513C2 /* testCodePointInvokesTotal.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCodePointInvokesTotal.json; sourceTree = "<group>"; };
+		01F6FD991BFBF0D9004513C2 /* testCodePointInvokesVersion.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCodePointInvokesVersion.json; sourceTree = "<group>"; };
+		01F6FD9A1BFBF0D9004513C2 /* testCodePointLastInvokedAt.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCodePointLastInvokedAt.json; sourceTree = "<group>"; };
+		01F6FD9B1BFBF0D9004513C2 /* testInteractionInvokesTotal.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testInteractionInvokesTotal.json; sourceTree = "<group>"; };
+		01F6FD9C1BFBF0D9004513C2 /* testOperatorContains.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorContains.json; sourceTree = "<group>"; };
+		01F6FD9D1BFBF0D9004513C2 /* testOperatorEndsWith.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorEndsWith.json; sourceTree = "<group>"; };
+		01F6FD9E1BFBF0D9004513C2 /* testOperatorExists.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorExists.json; sourceTree = "<group>"; };
+		01F6FD9F1BFBF0D9004513C2 /* testOperatorNot.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorNot.json; sourceTree = "<group>"; };
+		01F6FDA01BFBF0D9004513C2 /* testOperatorStartsWith.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorStartsWith.json; sourceTree = "<group>"; };
 		49129ED2174068720026C2E1 /* ApptentiveMigrationTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ApptentiveMigrationTests.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		49129ED3174068730026C2E1 /* ApptentiveMigrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ApptentiveMigrationTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		491748B21341177000A7D11E /* ATConnectionChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATConnectionChannel.h; sourceTree = "<group>"; };
@@ -896,74 +831,22 @@
 			path = at_update_logo;
 			sourceTree = "<group>";
 		};
-		01F6FCDF1BFA88AE004513C2 /* payloads */ = {
-			isa = PBXGroup;
-			children = (
-				01F6FCE01BFA88AE004513C2 /* testActualUpgradeMessage.json */,
-				01F6FD151BFA90EB004513C2 /* ActualUpgradeMessage.m */,
-				01F6FCE11BFA88AE004513C2 /* testBadCriteria.json */,
-				01F6FD5C1BFA9574004513C2 /* BadCriteria.m */,
-				01F6FCE21BFA88AE004513C2 /* testCanShowInteraction.json */,
-				01F6FD171BFA93F3004513C2 /* CanShowInteraction.m */,
-				01F6FCE31BFA88AE004513C2 /* testCorruptedJson.json */,
-				01F6FD181BFA93F3004513C2 /* CorruptedJson.m */,
-				01F6FCE41BFA88AE004513C2 /* testCriteriaApplicationVersionAndBuild.json */,
-				01F6FD191BFA93F3004513C2 /* CriteriaApplicationVersionAndBuild.m */,
-				01F6FCE51BFA88AE004513C2 /* testCriteriaCodePointInvokesBuild.json */,
-				01F6FD1A1BFA93F3004513C2 /* CriteriaCodePointInvokesBuild.m */,
-				01F6FCE61BFA88AE004513C2 /* testCriteriaCodePointInvokesTimeAgo.json */,
-				01F6FD1B1BFA93F3004513C2 /* CriteriaCodePointInvokesTimeAgo.m */,
-				01F6FCE71BFA88AE004513C2 /* testCriteriaCodePointInvokesTotal.json */,
-				01F6FD1C1BFA93F3004513C2 /* CriteriaCodePointInvokesTotal.m */,
-				01F6FCE81BFA88AE004513C2 /* testCriteriaCodePointInvokesVersion.json */,
-				01F6FD1D1BFA93F3004513C2 /* CriteriaCodePointInvokesVersion.m */,
-				01F6FCE91BFA88AE004513C2 /* testCriteriaInteractionInvokesTotal.json */,
-				01F6FD1E1BFA93F3004513C2 /* CriteriaInteractionInvokesTotal.m */,
-				01F6FCEA1BFA88AE004513C2 /* testCriteriaTimeSinceInstall.json */,
-				01F6FD1F1BFA93F3004513C2 /* CriteriaTimeSinceInstall.m */,
-				01F6FCEB1BFA88AE004513C2 /* testInteractionPriority.json */,
-				01F6FD201BFA93F3004513C2 /* InteractionPriority.m */,
-				01F6FCEC1BFA88AE004513C2 /* testListOfVariousInteractions.json */,
-				01F6FD211BFA93F3004513C2 /* ListOfVariousInteractions.m */,
-				01F6FCED1BFA88AE004513C2 /* testMissingNullEmptyCriteria.json */,
-				01F6FD221BFA93F3004513C2 /* MissingNullEmptyCriteria.m */,
-				01F6FCEE1BFA88AE004513C2 /* testOperatorContains.json */,
-				01F6FD231BFA93F3004513C2 /* OperatorContains.m */,
-				01F6FCEF1BFA88AE004513C2 /* testOperatorEndsWith.json */,
-				01F6FD241BFA93F3004513C2 /* OperatorEndsWith.m */,
-				01F6FCF01BFA88AE004513C2 /* testOperatorExists.json */,
-				01F6FD251BFA93F3004513C2 /* OperatorExists.m */,
-				01F6FCF11BFA88AE004513C2 /* testOperatorNot.json */,
-				01F6FD261BFA93F3004513C2 /* OperatorNot.m */,
-				01F6FCF21BFA88AE004513C2 /* testOperatorStartsWith.json */,
-				01F6FD271BFA93F3004513C2 /* OperatorStartsWith.m */,
-				01F6FCF31BFA88AE004513C2 /* testQueriesAgainstAppRelease.json */,
-				01F6FD281BFA93F3004513C2 /* QueriesAgainstAppRelease.m */,
-				01F6FCF41BFA88AE004513C2 /* testQueriesAgainstDevice.json */,
-				01F6FD291BFA93F3004513C2 /* QueriesAgainstDevice.m */,
-				01F6FCF51BFA88AE004513C2 /* testQueriesAgainstPerson.json */,
-				01F6FD2A1BFA93F3004513C2 /* QueriesAgainstPerson.m */,
-				01F6FCF61BFA88AE004513C2 /* testQueriesAgainstSdk.json */,
-				01F6FD2B1BFA93F3004513C2 /* QueriesAgainstSdk.m */,
-				01F6FCF71BFA88AE004513C2 /* testRealRatingInteractions.json */,
-				01F6FD2C1BFA93F3004513C2 /* RealRatingInteractions.m */,
-				01F6FCF81BFA88AE004513C2 /* testSelectionWithInteractionIdUsedInCriteria.json */,
-				01F6FD2D1BFA93F3004513C2 /* SelectionWithInteractionIdUsedInCriteria.m */,
-			);
-			path = payloads;
-			sourceTree = "<group>";
-		};
 		01F6FD5F1BFAA28B004513C2 /* criteria */ = {
 			isa = PBXGroup;
 			children = (
+				01F6FD981BFBF0D9004513C2 /* testCodePointInvokesTotal.json */,
+				01F6FD991BFBF0D9004513C2 /* testCodePointInvokesVersion.json */,
+				01F6FD9A1BFBF0D9004513C2 /* testCodePointLastInvokedAt.json */,
+				01F6FD9B1BFBF0D9004513C2 /* testInteractionInvokesTotal.json */,
+				01F6FD9C1BFBF0D9004513C2 /* testOperatorContains.json */,
+				01F6FD9D1BFBF0D9004513C2 /* testOperatorEndsWith.json */,
+				01F6FD9E1BFBF0D9004513C2 /* testOperatorExists.json */,
+				01F6FD9F1BFBF0D9004513C2 /* testOperatorNot.json */,
+				01F6FDA01BFBF0D9004513C2 /* testOperatorStartsWith.json */,
 				01F6FD601BFAA28B004513C2 /* testCornerCasesThatShouldBeFalse.json */,
-				01F6FD681BFAA2BB004513C2 /* CornerCasesThatShouldBeFalse.m */,
 				01F6FD611BFAA28B004513C2 /* testCornerCasesThatShouldBeTrue.json */,
-				01F6FD691BFAA2BB004513C2 /* CornerCasesThatShouldBeTrue.m */,
 				01F6FD621BFAA28B004513C2 /* testDefaultValues.json */,
-				01F6FD6A1BFAA2BB004513C2 /* DefaultValues.m */,
 				01F6FD631BFAA28B004513C2 /* testPredicateParsing.json */,
-				01F6FD6B1BFAA2BB004513C2 /* PredicateParsing.m */,
 			);
 			path = criteria;
 			sourceTree = "<group>";
@@ -1297,7 +1180,6 @@
 			isa = PBXGroup;
 			children = (
 				01F6FD5F1BFAA28B004513C2 /* criteria */,
-				01F6FCDF1BFA88AE004513C2 /* payloads */,
 				01A88FF31AFBFDB6002C49E7 /* testJsonDiffing.1.expected.json */,
 				01A88FF41AFBFDB6002C49E7 /* testJsonDiffing.1.new.json */,
 				01A88FF51AFBFDB6002C49E7 /* testJsonDiffing.1.old.json */,
@@ -1730,49 +1612,33 @@
 			buildActionMask = 2147483647;
 			files = (
 				5843F81E188778B000C9D096 /* ATDataModelv4.sqlite in Resources */,
+				01F6FDA71BFBF3E2004513C2 /* testOperatorExists.json in Resources */,
 				49C0028F1334137E0071F088 /* InfoPlist.strings in Resources */,
-				01F6FD071BFA88BA004513C2 /* testOperatorContains.json in Resources */,
-				01F6FD061BFA88BA004513C2 /* testMissingNullEmptyCriteria.json in Resources */,
+				01F6FDA81BFBF3E2004513C2 /* testOperatorNot.json in Resources */,
 				58AA40A01821C162000799D8 /* ATDataModelv2.sqlite in Resources */,
-				01F6FCFD1BFA88BA004513C2 /* testCriteriaApplicationVersionAndBuild.json in Resources */,
 				01F6FD671BFAA291004513C2 /* testPredicateParsing.json in Resources */,
-				01F6FD0D1BFA88BA004513C2 /* testQueriesAgainstDevice.json in Resources */,
-				01F6FD0C1BFA88BA004513C2 /* testQueriesAgainstAppRelease.json in Resources */,
 				01A88FF81AFBFFAE002C49E7 /* testJsonDiffing.1.expected.json in Resources */,
-				01F6FD081BFA88BA004513C2 /* testOperatorEndsWith.json in Resources */,
-				01F6FD0B1BFA88BA004513C2 /* testOperatorStartsWith.json in Resources */,
-				01F6FCFA1BFA88BA004513C2 /* testBadCriteria.json in Resources */,
-				01F6FD0A1BFA88BA004513C2 /* testOperatorNot.json in Resources */,
 				01F6FD641BFAA291004513C2 /* testCornerCasesThatShouldBeFalse.json in Resources */,
-				01F6FD031BFA88BA004513C2 /* testCriteriaTimeSinceInstall.json in Resources */,
+				01F6FDA11BFBF3E2004513C2 /* testCodePointInvokesTotal.json in Resources */,
 				01A88FFC1AFBFFAE002C49E7 /* testJsonDiffing.2.old.json in Resources */,
-				01F6FD091BFA88BA004513C2 /* testOperatorExists.json in Resources */,
 				49E7408B184045C900413697 /* v2WALDatabase in Resources */,
 				49E7408818403E6200413697 /* v2CorruptDatabase in Resources */,
 				01A88FFB1AFBFFAE002C49E7 /* testJsonDiffing.2.new.json in Resources */,
+				01F6FDA31BFBF3E2004513C2 /* testCodePointLastInvokedAt.json in Resources */,
+				01F6FDA41BFBF3E2004513C2 /* testInteractionInvokesTotal.json in Resources */,
+				01F6FDA21BFBF3E2004513C2 /* testCodePointInvokesVersion.json in Resources */,
 				01A88FF91AFBFFAE002C49E7 /* testJsonDiffing.1.new.json in Resources */,
 				58DCC0D9180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.xib in Resources */,
-				01F6FD001BFA88BA004513C2 /* testCriteriaCodePointInvokesTotal.json in Resources */,
 				49E7408F1840497600413697 /* v3WALDatabase in Resources */,
-				01F6FCFB1BFA88BA004513C2 /* testCanShowInteraction.json in Resources */,
 				01F6FD651BFAA291004513C2 /* testCornerCasesThatShouldBeTrue.json in Resources */,
+				01F6FDA91BFBF3E2004513C2 /* testOperatorStartsWith.json in Resources */,
 				49E740911840498100413697 /* ATDataModelv3.sqlite in Resources */,
-				01F6FCFF1BFA88BA004513C2 /* testCriteriaCodePointInvokesTimeAgo.json in Resources */,
+				01F6FDA61BFBF3E2004513C2 /* testOperatorEndsWith.json in Resources */,
 				01F6FD661BFAA291004513C2 /* testDefaultValues.json in Resources */,
-				01F6FCF91BFA88BA004513C2 /* testActualUpgradeMessage.json in Resources */,
+				01F6FDA51BFBF3E2004513C2 /* testOperatorContains.json in Resources */,
 				49C54BD51790A95E009CCD5D /* ApptentiveResources.bundle in Resources */,
 				49C54BD81790B783009CCD5D /* ATDataModelv1.sqlite in Resources */,
-				01F6FD0F1BFA88BA004513C2 /* testQueriesAgainstSdk.json in Resources */,
-				01F6FD041BFA88BA004513C2 /* testInteractionPriority.json in Resources */,
-				01F6FD0E1BFA88BA004513C2 /* testQueriesAgainstPerson.json in Resources */,
-				01F6FCFC1BFA88BA004513C2 /* testCorruptedJson.json in Resources */,
-				01F6FD011BFA88BA004513C2 /* testCriteriaCodePointInvokesVersion.json in Resources */,
-				01F6FCFE1BFA88BA004513C2 /* testCriteriaCodePointInvokesBuild.json in Resources */,
-				01F6FD111BFA88BA004513C2 /* testSelectionWithInteractionIdUsedInCriteria.json in Resources */,
 				01A88FFA1AFBFFAE002C49E7 /* testJsonDiffing.1.old.json in Resources */,
-				01F6FD021BFA88BA004513C2 /* testCriteriaInteractionInvokesTotal.json in Resources */,
-				01F6FD101BFA88BA004513C2 /* testRealRatingInteractions.json in Resources */,
-				01F6FD051BFA88BA004513C2 /* testListOfVariousInteractions.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1934,18 +1800,14 @@
 				01F6FD8D1BFAA4B2004513C2 /* PayloadTest.m in Sources */,
 				49C0028E1334137E0071F088 /* ApptentiveConnectTests.m in Sources */,
 				58CD20151821B7A70071CC72 /* ATDataModel v2 to v3.xcmappingmodel in Sources */,
-				01F6FD941BFAAC87004513C2 /* DefaultValues.m in Sources */,
 				583E396A188E08EB0030B51E /* ATDataModel v3 to v4.xcmappingmodel in Sources */,
 				01F6FD901BFAA512004513C2 /* CriteriaTest.m in Sources */,
-				01F6FD921BFAAAFB004513C2 /* CornerCasesThatShouldBeFalse.m in Sources */,
-				01F6FD951BFAAC87004513C2 /* PredicateParsing.m in Sources */,
 				01F6FD971BFBCDC3004513C2 /* ApptentiveMetricsTests.m in Sources */,
 				583E396A188E08EB0030B51E /* ATDataModel v3 to v4.xcmappingmodel in Sources */,
 				493AEB4515990A6B00DFD4C7 /* ApptentiveSurveysTests.m in Sources */,
 				49ED18051BF97B4500C6D343 /* ATInteractionUsageDataTests.m in Sources */,
 				49129ED4174068730026C2E1 /* ApptentiveMigrationTests.m in Sources */,
 				49AB227F1746EE9500175F4D /* ATDataModel.xcdatamodeld in Sources */,
-				01F6FD931BFAAC87004513C2 /* CornerCasesThatShouldBeTrue.m in Sources */,
 				580B24BB17D90AF300AE2CD0 /* ATEngagementTests.m in Sources */,
 				49FECBE317D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel in Sources */,
 			);

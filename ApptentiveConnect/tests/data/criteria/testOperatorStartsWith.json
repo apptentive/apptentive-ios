@@ -1,0 +1,62 @@
+{
+  "$and": [
+    {
+      "person/email": {
+        "$starts_with": "test"
+      }
+    },
+    {
+      "person/email": {
+        "$starts_with": "TEST"
+      }
+    },
+    {
+      "person/email": {
+        "$starts_with": "test@example.com"
+      }
+    },
+    {
+      "person/email": {
+        "$starts_with": "TEST@EXAMPLE.COM"
+      }
+    },
+    {
+      "$not": {
+        "person/email": {
+          "$starts_with": "example.com"
+        }
+      }
+    },
+    {
+      "$not": {
+        "person/email": {
+          "$starts_with": "foo"
+        }
+      }
+    },
+    {
+      "$not": {
+        "person/email": {
+          "$starts_with": null
+        }
+      }
+    },
+    {
+      "$not": {
+        "person/email": {
+          "$starts_with": 5
+        }
+      }
+    },
+    {
+      "$not": {
+        "person/email": {
+          "$starts_with": {
+            "_type": "version",
+            "version": "1.0.0"
+          }
+        }
+      }
+    }
+  ]
+}

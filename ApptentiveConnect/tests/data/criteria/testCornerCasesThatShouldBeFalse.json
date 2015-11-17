@@ -1,11 +1,11 @@
 {
-  "$and": [
-    {
-      "$not": {
+  "$not": {
+    "$or": [
+      {
         "person/custom_data/foo": {
           "$exists": null
         }
       }
-    }
-  ]
+    ]
+  }
 }

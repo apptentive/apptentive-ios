@@ -1,0 +1,62 @@
+{
+  "$and": [
+    {
+      "person/email": {
+        "$ends_with": "com"
+      }
+    },
+    {
+      "person/email": {
+        "$ends_with": "COM"
+      }
+    },
+    {
+      "person/email": {
+        "$ends_with": "test@example.com"
+      }
+    },
+    {
+      "person/email": {
+        "$ends_with": "TEST@EXAMPLE.COM"
+      }
+    },
+    {
+      "$not": {
+        "person/email": {
+          "$ends_with": "test@"
+        }
+      }
+    },
+    {
+      "$not": {
+        "person/email": {
+          "$ends_with": "foo"
+        }
+      }
+    },
+    {
+      "$not": {
+        "person/email": {
+          "$ends_with": null
+        }
+      }
+    },
+    {
+      "$not": {
+        "person/email": {
+          "$ends_with": 5
+        }
+      }
+    },
+    {
+      "$not": {
+        "person/email": {
+          "$ends_with": {
+            "_type": "version",
+            "version": "1.0.0"
+          }
+        }
+      }
+    }
+  ]
+}

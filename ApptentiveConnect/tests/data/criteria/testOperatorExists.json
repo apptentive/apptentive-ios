@@ -1,0 +1,42 @@
+{
+  "$and": [
+    {
+      "application/version": {
+        "$exists": true
+      }
+    },
+    {
+      "$not": {
+        "application/version": {
+          "$exists": false
+        }
+      }
+    },
+    {
+      "$not": {
+        "application/version": {
+          "$exists": 5
+        }
+      }
+    },
+    {
+      "$not": {
+        "application/version": {
+          "$exists": null
+        }
+      }
+    },
+    {
+      "$not": {
+        "bad_field_name": {
+          "$exists": true
+        }
+      }
+    },
+    {
+      "bad_field_name": {
+        "$exists": false
+      }
+    }
+  ]
+}

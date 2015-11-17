@@ -1,0 +1,41 @@
+{
+  "$or": [
+    {
+      "code_point/switch.code.point/invokes/total": 0,
+      "code_point/test.code.point/last_invoked_at/total": {
+        "$after": -0.5
+      }
+    },
+    {
+      "code_point/switch.code.point/invokes/total": 1,
+      "code_point/test.code.point/last_invoked_at/total": {
+        "$ne": {
+          "_type": "datetime",
+          "sec": -0.5
+        }
+      }
+    },
+    {
+      "code_point/switch.code.point/invokes/total": 2,
+      "code_point/test.code.point/last_invoked_at/total": {
+        "$eq": {
+          "_type": "datetime",
+          "sec": -0.5
+        }
+      }
+    },
+    {
+      "code_point/switch.code.point/invokes/total": 3,
+      "code_point/test.code.point/last_invoked_at/total": {
+        "_type": "datetime",
+        "sec": -0.5
+      }
+    },
+    {
+      "code_point/switch.code.point/invokes/total": 4,
+      "code_point/test.code.point/last_invoked_at/total": {
+        "$before": -0.5
+      }
+    }
+  ]
+}

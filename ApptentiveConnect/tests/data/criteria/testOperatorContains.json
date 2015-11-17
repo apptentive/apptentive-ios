@@ -1,0 +1,70 @@
+{
+  "$and": [
+    {
+      "person/email": {
+        "$contains": "example"
+      }
+    },
+    {
+      "person/email": {
+        "$contains": "EXAMPLE"
+      }
+    },
+    {
+      "person/email": {
+        "$contains": "test"
+      }
+    },
+    {
+      "person/email": {
+        "$contains": "TEST"
+      }
+    },
+    {
+      "person/email": {
+        "$contains": "@"
+      }
+    },
+    {
+      "person/email": {
+        "$contains": "test@example.com"
+      }
+    },
+    {
+      "person/email": {
+        "$contains": "TEST@EXAMPLE.COM"
+      }
+    },
+    {
+      "$not": {
+        "person/email": {
+          "$contains": "foo"
+        }
+      }
+    },
+    {
+      "$not": {
+        "person/email": {
+          "$contains": null
+        }
+      }
+    },
+    {
+      "$not": {
+        "person/email": {
+          "$contains": 5
+        }
+      }
+    },
+    {
+      "$not": {
+        "person/email": {
+          "$contains": {
+            "_type": "version",
+            "version": "1.0.0"
+          }
+        }
+      }
+    }
+  ]
+}

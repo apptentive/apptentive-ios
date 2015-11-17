@@ -1,0 +1,62 @@
+{
+  "interactions": [
+    {
+      "id": "53348cd049f63b5bdd000006",
+      "type": "EnjoymentDialog",
+      "configuration": {}
+    }
+  ],
+  "targets": {
+    "local#app#init": [
+      {
+        "interaction_id": "53348cd049f63b5bdd000006",
+        "criteria": {
+          "$or": [
+            {
+              "code_point/switch.code.point/invokes/total": 0,
+              "application_version": {
+                "$contains": "1.0"
+              }
+            },
+            {
+              "code_point/switch.code.point/invokes/total": 1,
+              "application_version": {
+                "$contains": "2.0"
+              }
+            },
+            {
+              "code_point/switch.code.point/invokes/total": 2,
+              "application_version": {
+                "$contains": "2."
+              }
+            },
+            {
+              "code_point/switch.code.point/invokes/total": 3,
+              "application_version": {
+                "$contains": ".0"
+              }
+            },
+            {
+              "code_point/switch.code.point/invokes/total": 4,
+              "application_version": {
+                "$contains": "2.0.0"
+              }
+            },
+            {
+              "code_point/switch.code.point/invokes/total": 5,
+              "person/email": {
+                "$contains": "example"
+              }
+            },
+            {
+              "code_point/switch.code.point/invokes/total": 6,
+              "person/email": {
+                "$contains": "Example"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

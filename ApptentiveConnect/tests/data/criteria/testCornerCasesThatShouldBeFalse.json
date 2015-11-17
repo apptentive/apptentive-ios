@@ -1,0 +1,11 @@
+{
+  "$and": [
+    {
+      "$not": {
+        "person/custom_data/foo": {
+          "$exists": null
+        }
+      }
+    }
+  ]
+}

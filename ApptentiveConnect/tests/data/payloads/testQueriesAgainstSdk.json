@@ -1,0 +1,37 @@
+{
+  "interactions": [
+    {
+      "id": "53348cd049f63b5bdd000006",
+      "type": "EnjoymentDialog",
+      "configuration": {
+      }
+    }
+  ],
+  "targets": {
+    "local#app#init": [
+      {
+        "interaction_id": "53348cd049f63b5bdd000006",
+        "criteria": {
+          "$or": [
+            {
+              "code_point/switch.code.point/invokes/total": 0,
+              "sdk/version": {
+                "$contains": "2.1."
+              }
+            },
+            {
+              "code_point/switch.code.point/invokes/total": 1,
+              "sdk/platform": "Android"
+            },
+            {
+              "code_point/switch.code.point/invokes/total": 2,
+              "sdk/distribution": {
+                "$exists": false
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

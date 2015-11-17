@@ -1,0 +1,57 @@
+{
+  "$and": [
+    {
+      "current_time": {
+        "$before": 1
+      }
+    },
+    {
+      "local_time": {
+        "$after": -100000
+      }
+    },
+    {
+      "is_update/version": false
+    },
+    {
+      "time_at_install/total": {
+        "$before": 1
+      }
+    },
+    {
+      "time_at_install/version": {
+        "$before": 1
+      }
+    },
+    {
+      "code_point/invalid_code_point/invokes/total": 0
+    },
+    {
+      "code_point/invalid_code_point/invokes/version": 0
+    },
+    {
+      "code_point/invalid_code_point/last_invoked_at/total": null
+    },
+    {
+      "interactions/invalid_interaction/invokes/total": 0
+    },
+    {
+      "interactions/invalid_interaction/invokes/version": 0
+    },
+    {
+      "interactions/invalid_interaction/last_invoked_at/total": null
+    },
+    {
+      "person/name": null
+    },
+    {
+      "person/email": null
+    },
+    {
+      "device/custom_data/invalid_key": null
+    },
+    {
+      "person/custom_data/invalid_key": null
+    }
+  ]
+}

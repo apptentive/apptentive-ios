@@ -948,10 +948,10 @@
 	
 	[[ATEngagementBackend sharedBackend] didReceiveNewTargets:targets andInteractions:interactions maxAge:60];
 	
-	XCTAssertTrue([canShow isValid], @"Invocation should be valid.");
+	XCTAssertTrue([canShow criteriaAreMet], @"Invocation should be valid.");
 	XCTAssertTrue([[ATConnect sharedConnection] canShowInteractionForEvent:@"canShow"], @"If invocation is valid, it will be shown for the next targeted event.");
 	
-	XCTAssertFalse([willNotShow isValid], @"Invocation should not be valid.");
+	XCTAssertFalse([willNotShow criteriaAreMet], @"Invocation should not be valid.");
 	XCTAssertFalse([[ATConnect sharedConnection] canShowInteractionForEvent:@"cannotShow"], @"If invocation is not valid, it will not be shown for the next targeted event.");
 }
 

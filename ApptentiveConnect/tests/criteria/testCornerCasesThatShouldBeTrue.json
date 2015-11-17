@@ -1,0 +1,8 @@
+{
+  "$and": [
+    {
+      "application/version": {
+      }
+    }
+  ]
+}

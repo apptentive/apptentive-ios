@@ -48,7 +48,6 @@
 	
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usage], @"4.0.0 is not 2");
 	usage.applicationVersion = @"4.0";
-	//FIXME: Seems to break somewhere in constructing the predicate.
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usage], @"4.0 is like 4.0.0");
 }
 

@@ -163,13 +163,18 @@
 		} else if ([value isKindOfClass:[NSDictionary class]]) {
 			NSDictionary *dictionaryValue = (NSDictionary *)value;
 			if ([dictionaryValue.allKeys.firstObject isEqualToString:@"$not"]) {
+				// Work around "Common Law Feature" where $not expressions are incorrect
 				NSString *notKey = dictionaryValue.allKeys.firstObject;
 				BOOL hasError;
 				NSCompoundPredicateType predicateType = [self compoundPredicateTypeFromString:notKey hasError:&hasError];
 				if (!hasError) {
 					predicate = [self compoundPredicateWithType:predicateType criteriaArray:@[@{key: dictionaryValue[notKey]}]];
 				}
-			} else {
+			} else if ([dictionaryValue.allKeys containsObject:@"_type"]) {
+				// This is a bare complex type
+				NSDictionary *implicitEquality = @{@"==": value};
+				predicate = [self compoundPredicateForKeyPath:key operatorsAndValues:implicitEquality];
+			}	else {
 				predicate = [self compoundPredicateForKeyPath:key operatorsAndValues:(NSDictionary *)value];
 			}
 		} else if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]] || [value isKindOfClass:[NSNull class]]) {
@@ -231,7 +236,7 @@
 				BOOL hasError;
 				NSPredicateOperatorType operatorType = [self predicateOperatorTypeFromString:operatorString hasError:&hasError];
 				if (!hasError) {
-					NSComparisonPredicate *predicate = [self predicateWithLeftComplexObject:evaluatedObject rightComplexObject:(NSDictionary *)value operatorType:operatorType];
+					NSComparisonPredicate *predicate = [self predicateWithLeftKeyPath:keyPath forObject:evaluatedObject rightComplexObject:(NSDictionary *)value operatorType:operatorType];
 					
 					return [predicate evaluateWithObject:nil];
 				} else {
@@ -262,7 +267,8 @@
 	return [self predicateWithLeftExpression:leftExpression rightExpression:rightExpression operatorType:operatorType];
 }
 
-+ (NSComparisonPredicate *)predicateWithLeftComplexObject:(NSDictionary *)leftComplexObject rightComplexObject:(NSDictionary *)rightComplexObject operatorType:(NSPredicateOperatorType)operatorType {
++ (NSComparisonPredicate *)predicateWithLeftKeyPath:(NSString *)keyPath forObject:(NSDictionary *)context rightComplexObject:(NSDictionary *)rightComplexObject operatorType:(NSPredicateOperatorType)operatorType {
+	NSDictionary *leftComplexObject = [context valueForKeyPath:keyPath];
 	NSString *type = leftComplexObject[@"_type"];
 	NSString *rightType = rightComplexObject[@"_type"];
 	if (![type isEqualToString:rightType]) {

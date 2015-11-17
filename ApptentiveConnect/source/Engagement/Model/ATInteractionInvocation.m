@@ -150,18 +150,18 @@
 	NSMutableArray *subPredicates = [NSMutableArray array];
 	
 	for (NSString *key in criteria) {
-		NSObject *value = [criteria objectForKey:key];
+		NSObject *parameter = [criteria objectForKey:key];
 
 		NSPredicate *predicate = nil;
 		
-		if ([value isKindOfClass:[NSArray class]]) {
+		if ([parameter isKindOfClass:[NSArray class]]) {
 			BOOL hasError;
 			NSCompoundPredicateType predicateType = [self compoundPredicateTypeFromString:key hasError:&hasError];
 			if (!hasError) {
-				predicate = [self compoundPredicateWithType:predicateType criteriaArray:(NSArray *)value];
+				predicate = [self compoundPredicateWithType:predicateType criteriaArray:(NSArray *)parameter];
 			}
-		} else if ([value isKindOfClass:[NSDictionary class]]) {
-			NSDictionary *dictionaryValue = (NSDictionary *)value;
+		} else if ([parameter isKindOfClass:[NSDictionary class]]) {
+			NSDictionary *dictionaryValue = (NSDictionary *)parameter;
 			if ([dictionaryValue.allKeys.firstObject isEqualToString:@"$not"]) {
 				// Work around "Common Law Feature" where $not expressions are incorrect
 				NSString *notKey = dictionaryValue.allKeys.firstObject;
@@ -172,13 +172,13 @@
 				}
 			} else if ([dictionaryValue.allKeys containsObject:@"_type"]) {
 				// This is a bare complex type
-				NSDictionary *implicitEquality = @{@"==": value};
+				NSDictionary *implicitEquality = @{@"==": parameter};
 				predicate = [self compoundPredicateForKeyPath:key operatorsAndValues:implicitEquality];
 			}	else {
-				predicate = [self compoundPredicateForKeyPath:key operatorsAndValues:(NSDictionary *)value];
+				predicate = [self compoundPredicateForKeyPath:key operatorsAndValues:(NSDictionary *)parameter];
 			}
-		} else if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]] || [value isKindOfClass:[NSNull class]]) {
-			NSDictionary *implicitEquality = @{@"==": value};
+		} else if ([parameter isKindOfClass:[NSString class]] || [parameter isKindOfClass:[NSNumber class]] || [parameter isKindOfClass:[NSNull class]]) {
+			NSDictionary *implicitEquality = @{@"==": parameter};
 			predicate = [self compoundPredicateForKeyPath:key operatorsAndValues:implicitEquality];
 		}
 		
@@ -215,23 +215,23 @@
 	NSMutableArray *subPredicates = [NSMutableArray array];
 	
 	for (NSString *operatorString in operatorsAndValues) {
-		NSObject *value = operatorsAndValues[operatorString];
+		NSObject *parameter = operatorsAndValues[operatorString];
 		
 		NSPredicate *predicate = nil;
-		
+
 		if ([operatorString isEqualToString:@"$exists"]) {
-			if ([value isKindOfClass:[NSNumber class]]) {
-				NSString *predicateFormatString = [[@"(%K " stringByAppendingString:([(NSNumber *)value boolValue] ? @"!=" : @"==")] stringByAppendingString:@" nil)"];
+			if ([parameter isKindOfClass:[NSNumber class]]) {
+				NSString *predicateFormatString = [[@"(%K " stringByAppendingString:([(NSNumber *)parameter boolValue] ? @"!=" : @"==")] stringByAppendingString:@" nil)"];
 				predicate = [NSPredicate predicateWithFormat:predicateFormatString, keyPath];
 			}
 		} else if ([operatorString isEqualToString:@"$before"] || [operatorString isEqualToString:@"$after"]) {
 			predicate = [NSPredicate predicateWithBlock:^BOOL(id  _Nonnull evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
 				NSNumber *fieldValue = (NSNumber *)[[evaluatedObject valueForKey:keyPath] valueForKey:@"sec"];
-				NSNumber *parameter = (NSNumber *)value;
+				NSNumber *parameterNumber = (NSNumber *)parameter;
 
-				if (fieldValue && parameter) {
+				if (fieldValue && parameterNumber) {
 					NSTimeInterval fieldSeconds = fieldValue.doubleValue;
-					NSTimeInterval parameterSeconds = parameter.doubleValue + [[NSDate date] timeIntervalSince1970];
+					NSTimeInterval parameterSeconds = parameterNumber.doubleValue + [[NSDate date] timeIntervalSince1970];
 					if ([operatorString isEqualToString:@"$before"]) {
 						return fieldSeconds < parameterSeconds;
 					} else {
@@ -241,19 +241,19 @@
 
 				return NO;
 			}];
-		} else if ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]] || [value isKindOfClass:[NSNull class]]) {
+		} else if ([parameter isKindOfClass:[NSString class]] || [parameter isKindOfClass:[NSNumber class]] || [parameter isKindOfClass:[NSNull class]]) {
 			BOOL hasError;
 			
 			NSPredicateOperatorType operatorType = [self predicateOperatorTypeFromString:operatorString hasError:&hasError];
 			if (!hasError) {
-				predicate = [self predicateWithLeftKeyPath:keyPath rightValue:value operatorType:operatorType];
+				predicate = [self predicateWithLeftKeyPath:keyPath rightValue:parameter operatorType:operatorType];
 			}
-		} else if ([value isKindOfClass:[NSDictionary class]]) {
+		} else if ([parameter isKindOfClass:[NSDictionary class]]) {
 			predicate = [NSCompoundPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
 				BOOL hasError;
 				NSPredicateOperatorType operatorType = [self predicateOperatorTypeFromString:operatorString hasError:&hasError];
 				if (!hasError) {
-					NSComparisonPredicate *predicate = [self predicateWithLeftKeyPath:keyPath forObject:evaluatedObject rightComplexObject:(NSDictionary *)value operatorType:operatorType];
+					NSComparisonPredicate *predicate = [self predicateWithLeftKeyPath:keyPath forObject:evaluatedObject rightComplexObject:(NSDictionary *)parameter operatorType:operatorType];
 					
 					return [predicate evaluateWithObject:nil];
 				} else {

@@ -6,11 +6,6 @@
       }
     },
     {
-      "local_time": {
-        "$after": -100000
-      }
-    },
-    {
       "is_update/version": false
     },
     {

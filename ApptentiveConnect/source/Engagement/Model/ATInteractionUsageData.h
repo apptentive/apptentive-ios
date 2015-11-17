@@ -14,6 +14,8 @@
 @property (nonatomic, strong) NSNumber *timeSinceInstallTotal;
 @property (nonatomic, strong) NSNumber *timeSinceInstallVersion;
 @property (nonatomic, strong) NSNumber *timeSinceInstallBuild;
+@property (nonatomic, strong) NSDate *timeAtInstallTotal;
+@property (nonatomic, strong) NSDate *timeAtInstallVersion;
 @property (nonatomic, copy) NSString *applicationVersion;
 @property (nonatomic, copy) NSString *applicationBuild;
 @property (nonatomic, copy) NSString *sdkVersion;

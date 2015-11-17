@@ -506,7 +506,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  Adds an additional data field to any feedback sent. This will show up in the device data in the
  conversation on your Apptentive dashboard.
 
- @param versionObject An `NSDictionary` object created with `-versionObjectWithVersion:`.
+ @param versionObject An `NSDictionary` object created with `+versionObjectWithVersion:`.
  @param key A key to associate the data with.
  */
 - (void)addCustomDeviceDataVersion:(NSDictionary *)versionObject withKey:(NSString *)key;
@@ -517,7 +517,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  Adds an additional data field to any feedback sent. This will show up in the device data in the
  conversation on your Apptentive dashboard.
 
- @param timestampObject An `NSDictionary` object created with `-timestampObjectWithDate:`.
+ @param timestampObject An `NSDictionary` object created with `+timestampObjectWithDate:`.
  @param key A key to associate the data with.
  */
 - (void)addCustomDeviceDataTimestamp:(NSDictionary *)timestampObject withKey:(NSString *)key;
@@ -561,7 +561,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  Adds an additional data field to any feedback sent. This will show up in the person data in the
  conversation on your Apptentive dashboard.
 
- @param versionObject An `NSDictionary` object created with `-versionObjectWithVersion:`.
+ @param versionObject An `NSDictionary` object created with `+versionObjectWithVersion:`.
  @param key A key to associate the data with.
  */
 - (void)addCustomPersonDataVersion:(NSDictionary *)versionObject withKey:(NSString *)key;
@@ -572,7 +572,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  Adds an additional data field to any feedback sent. This will show up in the person data in the
  conversation on your Apptentive dashboard.
 
- @param timestampObject An `NSDictionary` object created with `-timestampObjectWithDate:`.
+ @param timestampObject An `NSDictionary` object created with `+timestampObjectWithDate:`.
  @param key A key to associate the data with.
  */
 - (void)addCustomPersonDataTimestamp:(NSDictionary *)timestampObject withKey:(NSString *)key;
@@ -585,7 +585,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  
  @return an `NSDictionary` object suitable for use with `-addCustomDeviceDataVersion:withKey:` or `-addCustomPersonDataVersion:withKey:`. 
  */
-- (NSDictionary *)versionObjectWithVersion:(NSString *)version;
++ (NSDictionary *)versionObjectWithVersion:(NSString *)version;
 
 /**
  Creates a dictionary representation of the specified timestamp suitable for use with `-addCustomDeviceDataTimestamp:withKey:` or `-addCustomPersonDataTimestamp:withKey:`
@@ -594,7 +594,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
  @return an `NSDictionary` object suitable for use with `-addCustomDeviceDataTimestamp:withKey:` or `-addCustomPersonDataTimestamp:withKey:`
  */
-- (NSDictionary *)timestampObjectWithDate:(NSDate *)date;
++ (NSDictionary *)timestampObjectWithDate:(NSDate *)date;
 
 /**
  Adds the specified custom data value associated with the specified key.

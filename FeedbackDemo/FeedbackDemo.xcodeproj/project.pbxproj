@@ -14,16 +14,7 @@
 		01A16CA01AF2A66C00D691FC /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01A16C9E1AF2A66C00D691FC /* LaunchScreen.xib */; };
 		01A16CAC1AF2A66C00D691FC /* FeedbackDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A16CAB1AF2A66C00D691FC /* FeedbackDemoTests.m */; };
 		01A16CC61AF2A6D100D691FC /* libApptentiveConnect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A16CBC1AF2A67600D691FC /* libApptentiveConnect.a */; };
-		01A16CD21AF2A6D200D691FC /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A16CC71AF2A6D200D691FC /* Accelerate.framework */; };
-		01A16CD31AF2A6D200D691FC /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A16CC81AF2A6D200D691FC /* AssetsLibrary.framework */; };
-		01A16CD41AF2A6D200D691FC /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A16CC91AF2A6D200D691FC /* CoreData.framework */; };
-		01A16CD51AF2A6D200D691FC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A16CCA1AF2A6D200D691FC /* CoreGraphics.framework */; };
-		01A16CD61AF2A6D200D691FC /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A16CCB1AF2A6D200D691FC /* CoreTelephony.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		01A16CD71AF2A6D200D691FC /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A16CCC1AF2A6D200D691FC /* CoreText.framework */; };
 		01A16CD81AF2A6D200D691FC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A16CCD1AF2A6D200D691FC /* Foundation.framework */; };
-		01A16CD91AF2A6D200D691FC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A16CCE1AF2A6D200D691FC /* QuartzCore.framework */; };
-		01A16CDA1AF2A6D200D691FC /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A16CCF1AF2A6D200D691FC /* StoreKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		01A16CDB1AF2A6D200D691FC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A16CD01AF2A6D200D691FC /* SystemConfiguration.framework */; };
 		01A16CDC1AF2A6D200D691FC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A16CD11AF2A6D200D691FC /* UIKit.framework */; };
 		01A16CDE1AF2A71500D691FC /* ApptentiveResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 01A16CC01AF2A67600D691FC /* ApptentiveResources.bundle */; };
 		01A16CE81AF2ED5700D691FC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A16CE71AF2ED5700D691FC /* Default-568h@2x.png */; };
@@ -191,16 +182,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				01A16CD21AF2A6D200D691FC /* Accelerate.framework in Frameworks */,
-				01A16CD31AF2A6D200D691FC /* AssetsLibrary.framework in Frameworks */,
-				01A16CD41AF2A6D200D691FC /* CoreData.framework in Frameworks */,
-				01A16CD51AF2A6D200D691FC /* CoreGraphics.framework in Frameworks */,
-				01A16CD61AF2A6D200D691FC /* CoreTelephony.framework in Frameworks */,
-				01A16CD71AF2A6D200D691FC /* CoreText.framework in Frameworks */,
 				01A16CD81AF2A6D200D691FC /* Foundation.framework in Frameworks */,
-				01A16CD91AF2A6D200D691FC /* QuartzCore.framework in Frameworks */,
-				01A16CDA1AF2A6D200D691FC /* StoreKit.framework in Frameworks */,
-				01A16CDB1AF2A6D200D691FC /* SystemConfiguration.framework in Frameworks */,
 				01A16CDC1AF2A6D200D691FC /* UIKit.framework in Frameworks */,
 				01A16CC61AF2A6D100D691FC /* libApptentiveConnect.a in Frameworks */,
 			);

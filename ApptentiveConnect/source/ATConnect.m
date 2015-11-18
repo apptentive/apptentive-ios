@@ -564,6 +564,10 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	}
 }
 
++ (UIStoryboard *)storyboard {
+	return [UIStoryboard storyboardWithName:@"Apptentive" bundle:[ATConnect resourceBundle]];
+}
+
 @end
 
 @implementation ATNavigationController

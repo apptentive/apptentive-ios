@@ -69,7 +69,6 @@
 		01B147B41B5D8D3A0000D041 /* ATMessageCenterProfileView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01B147B21B5D8D3A0000D041 /* ATMessageCenterProfileView.m */; };
 		01BD9E041B55E465004F12AB /* ATMessageCenterInputView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01BD9E021B55E465004F12AB /* ATMessageCenterInputView.h */; };
 		01BD9E051B55E465004F12AB /* ATMessageCenterInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01BD9E031B55E465004F12AB /* ATMessageCenterInputView.m */; };
-		01C30CE51B0CF31E006BC911 /* MessageCenter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 018A343A1B0CE810001DCA2C /* MessageCenter.storyboard */; };
 		01C30CEB1B0D09F8006BC911 /* ATMessageCenterGreetingView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01C30CE91B0D09F8006BC911 /* ATMessageCenterGreetingView.h */; };
 		01C30CEC1B0D09F8006BC911 /* ATMessageCenterGreetingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01C30CEA1B0D09F8006BC911 /* ATMessageCenterGreetingView.m */; };
 		01C7C4DD1BEAD0BC005D6EC1 /* ATDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 01C7C4D51BEAD0A4005D6EC1 /* ATDataModel.xcdatamodeld */; };
@@ -92,6 +91,7 @@
 		01F6FDBC1BFD3C0D004513C2 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01F6FDBB1BFD3C0D004513C2 /* ImageIO.framework */; };
 		01F6FDBE1BFD3C14004513C2 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01F6FDBD1BFD3C14004513C2 /* AVFoundation.framework */; };
 		01F6FDC01BFD3C1D004513C2 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01F6FDBF1BFD3C1D004513C2 /* MobileCoreServices.framework */; };
+		01F6FDC71BFD41F9004513C2 /* Apptentive.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FDC51BFD41F1004513C2 /* Apptentive.storyboard */; };
 		49129ED4174068730026C2E1 /* ApptentiveMigrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49129ED3174068730026C2E1 /* ApptentiveMigrationTests.m */; };
 		49129ED51740687A0026C2E1 /* ATDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 496F5780174060CE003BF516 /* ATDataManager.m */; };
 		491748BA1341177000A7D11E /* ATConnectionChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = 491748B21341177000A7D11E /* ATConnectionChannel.h */; };
@@ -392,7 +392,6 @@
 		017D97451B0E5795004E045C /* ATMessageCenterMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageCenterMessageCell.m; sourceTree = "<group>"; };
 		017D97481B0E57C2004E045C /* ATMessageCenterReplyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageCenterReplyCell.h; sourceTree = "<group>"; };
 		017D97491B0E57C2004E045C /* ATMessageCenterReplyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageCenterReplyCell.m; sourceTree = "<group>"; };
-		018A343A1B0CE810001DCA2C /* MessageCenter.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MessageCenter.storyboard; sourceTree = "<group>"; };
 		019CEBE91BDEDDE100CCEC97 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		019CEBEA1BDEDDE100CCEC97 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		019CEBF01BDEDE9400CCEC97 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -435,6 +434,7 @@
 		01F6FDBB1BFD3C0D004513C2 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		01F6FDBD1BFD3C14004513C2 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		01F6FDBF1BFD3C1D004513C2 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		01F6FDC51BFD41F1004513C2 /* Apptentive.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Apptentive.storyboard; sourceTree = "<group>"; };
 		49129ED2174068720026C2E1 /* ApptentiveMigrationTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ApptentiveMigrationTests.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		49129ED3174068730026C2E1 /* ApptentiveMigrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ApptentiveMigrationTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		491748B21341177000A7D11E /* ATConnectionChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATConnectionChannel.h; sourceTree = "<group>"; };
@@ -1044,6 +1044,7 @@
 		4967278516B9FE7000C679B8 /* ApptentiveResources */ = {
 			isa = PBXGroup;
 			children = (
+				01F6FDC51BFD41F1004513C2 /* Apptentive.storyboard */,
 				4967278316B9FE6400C679B8 /* Info.plist */,
 			);
 			path = ApptentiveResources;
@@ -1128,7 +1129,6 @@
 		4999127B16165B7900FDA15F /* Message Center */ = {
 			isa = PBXGroup;
 			children = (
-				018A343A1B0CE810001DCA2C /* MessageCenter.storyboard */,
 				0159B64B1B7A73E600CC45E6 /* Controllers */,
 				0159B64A1B7A73D100CC45E6 /* Views */,
 				491E03D81640D01F00DC3E18 /* ATFeedbackTypes.h */,
@@ -1646,8 +1646,8 @@
 				016085591BA77B1D00050FDB /* at_error_wait.png in Resources */,
 				49E891D0134FE2AB00DD098A /* Localizable.strings in Resources */,
 				016085641BA77B1D00050FDB /* at_update_icon_mask@3x.png in Resources */,
-				01C30CE51B0CF31E006BC911 /* MessageCenter.storyboard in Resources */,
 				0160855B1BA77B1D00050FDB /* at_error_wait@3x.png in Resources */,
+				01F6FDC71BFD41F9004513C2 /* Apptentive.storyboard in Resources */,
 				0160855E1BA77B1D00050FDB /* at_info@3x.png in Resources */,
 				016085631BA77B1D00050FDB /* at_update_icon_mask@2x.png in Resources */,
 				4967278416B9FE6400C679B8 /* Info.plist in Resources */,

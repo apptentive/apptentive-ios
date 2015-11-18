@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="cIq-Hu-EXH">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
@@ -1196,7 +1196,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
         <!--Navigation Controller-->
         <scene sceneID="Xx8-Lb-CI2">
             <objects>
-                <navigationController modalPresentationStyle="formSheet" toolbarHidden="NO" id="cIq-Hu-EXH" customClass="ATNavigationController" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="MessageCenterNavigation" modalPresentationStyle="formSheet" toolbarHidden="NO" id="cIq-Hu-EXH" customClass="ATNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="sCD-xi-s8C" customClass="ATProgressNavigationBar">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

@@ -36,8 +36,7 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 @implementation ATAboutViewController
 
 + (instancetype)aboutViewControllerFromStoryboard {
-	UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MessageCenter" bundle:[ATConnect resourceBundle]];
-	return [storyboard instantiateViewControllerWithIdentifier:@"About"];
+	return [[ATConnect storyboard] instantiateViewControllerWithIdentifier:@"About"];
 }
 
 - (NSString *)codePointForEvent:(NSString *)event {

@@ -834,19 +834,19 @@
 		01F6FD5F1BFAA28B004513C2 /* criteria */ = {
 			isa = PBXGroup;
 			children = (
-				01F6FD981BFBF0D9004513C2 /* testCodePointInvokesTotal.json */,
-				01F6FD991BFBF0D9004513C2 /* testCodePointInvokesVersion.json */,
-				01F6FD9A1BFBF0D9004513C2 /* testCodePointLastInvokedAt.json */,
-				01F6FD9B1BFBF0D9004513C2 /* testInteractionInvokesTotal.json */,
-				01F6FD9C1BFBF0D9004513C2 /* testOperatorContains.json */,
-				01F6FD9D1BFBF0D9004513C2 /* testOperatorEndsWith.json */,
-				01F6FD9E1BFBF0D9004513C2 /* testOperatorExists.json */,
-				01F6FD9F1BFBF0D9004513C2 /* testOperatorNot.json */,
-				01F6FDA01BFBF0D9004513C2 /* testOperatorStartsWith.json */,
 				01F6FD601BFAA28B004513C2 /* testCornerCasesThatShouldBeFalse.json */,
 				01F6FD611BFAA28B004513C2 /* testCornerCasesThatShouldBeTrue.json */,
 				01F6FD621BFAA28B004513C2 /* testDefaultValues.json */,
 				01F6FD631BFAA28B004513C2 /* testPredicateParsing.json */,
+				01F6FD9C1BFBF0D9004513C2 /* testOperatorContains.json */,
+				01F6FDA01BFBF0D9004513C2 /* testOperatorStartsWith.json */,
+				01F6FD9D1BFBF0D9004513C2 /* testOperatorEndsWith.json */,
+				01F6FD9F1BFBF0D9004513C2 /* testOperatorNot.json */,
+				01F6FD9E1BFBF0D9004513C2 /* testOperatorExists.json */,
+				01F6FD981BFBF0D9004513C2 /* testCodePointInvokesTotal.json */,
+				01F6FD991BFBF0D9004513C2 /* testCodePointInvokesVersion.json */,
+				01F6FD9A1BFBF0D9004513C2 /* testCodePointLastInvokedAt.json */,
+				01F6FD9B1BFBF0D9004513C2 /* testInteractionInvokesTotal.json */,
 			);
 			path = criteria;
 			sourceTree = "<group>";

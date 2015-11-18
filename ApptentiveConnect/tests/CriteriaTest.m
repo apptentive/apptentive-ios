@@ -99,3 +99,98 @@
 }
 
 @end
+
+@interface OperatorStartsWith : CriteriaTest
+@end
+
+@implementation OperatorStartsWith
+
+- (void)testOperatorStartsWith {
+	XCTAssertTrue([self.interaction criteriaAreMet]);
+}
+
+@end
+
+
+@interface OperatorEndsWith : CriteriaTest
+@end
+
+@implementation OperatorEndsWith
+
+- (void)testOperatorEndsWith {
+	XCTAssertTrue([self.interaction criteriaAreMet]);
+}
+
+@end
+
+
+@interface OperatorNot : CriteriaTest
+@end
+
+@implementation OperatorNot
+
+- (void)testOperatorNot {
+	XCTAssertTrue([self.interaction criteriaAreMet]);
+}
+
+@end
+
+
+@interface OperatorExists : CriteriaTest
+@end
+
+@implementation OperatorExists
+
+- (void)testOperatorExists {
+	XCTAssertTrue([self.interaction criteriaAreMet]);
+}
+
+@end
+
+
+@interface CodePointInvokesTotal : CriteriaTest
+@end
+
+@implementation CodePointInvokesTotal
+
+- (void)testCodePointInvokesTotal {
+	XCTAssertTrue([self.interaction criteriaAreMet]);
+}
+
+@end
+
+
+@interface CodePointInvokesVersion : CriteriaTest
+@end
+
+@implementation CodePointInvokesVersion
+
+- (void)testCodePointInvokesVersion {
+	XCTAssertTrue([self.interaction criteriaAreMet]);
+}
+
+@end
+
+
+@interface CodePointLastInvokedAt : CriteriaTest
+@end
+
+@implementation CodePointLastInvokedAt
+
+- (void)testCodePointLastInvokedAt {
+	XCTAssertTrue([self.interaction criteriaAreMet]);
+}
+
+@end
+
+
+@interface InteractionInvokesTotal : CriteriaTest
+@end
+
+@implementation InteractionInvokesTotal
+
+- (void)testInteractionInvokesTotal {
+	XCTAssertTrue([self.interaction criteriaAreMet]);
+}
+
+@end

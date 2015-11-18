@@ -68,6 +68,9 @@
 @implementation DefaultValues
 
 - (void)testDefaultValues {
+	[ATConnect sharedConnection].personName = nil;
+	[ATConnect sharedConnection].personEmailAddress = nil;
+
 	XCTAssertTrue([self.interaction criteriaAreMet]);
 }
 

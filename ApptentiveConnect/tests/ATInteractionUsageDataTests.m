@@ -129,5 +129,8 @@
 	NSDictionary *validEvaluationDictionary = [usage predicateEvaluationDictionary];
 	XCTAssertEqualObjects(validEvaluationDictionary[@"person/name"], @"Andrew");
 	XCTAssertEqualObjects(validEvaluationDictionary[@"person/email"], @"example@example.com");
+
+	person.name = nil;
+	person.emailAddress = nil;
 }
 @end

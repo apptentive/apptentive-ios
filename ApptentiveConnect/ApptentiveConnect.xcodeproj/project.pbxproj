@@ -89,6 +89,9 @@
 		01D3128F1B69349900B369E1 /* ATProgressNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D3128D1B69349900B369E1 /* ATProgressNavigationBar.m */; };
 		01F1A9601B6823CD0088DBF0 /* ATAboutViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01F1A95E1B6823CD0088DBF0 /* ATAboutViewController.h */; };
 		01F1A9611B6823CD0088DBF0 /* ATAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F1A95F1B6823CD0088DBF0 /* ATAboutViewController.m */; };
+		01F6FDBC1BFD3C0D004513C2 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01F6FDBB1BFD3C0D004513C2 /* ImageIO.framework */; };
+		01F6FDBE1BFD3C14004513C2 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01F6FDBD1BFD3C14004513C2 /* AVFoundation.framework */; };
+		01F6FDC01BFD3C1D004513C2 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01F6FDBF1BFD3C1D004513C2 /* MobileCoreServices.framework */; };
 		49129ED4174068730026C2E1 /* ApptentiveMigrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49129ED3174068730026C2E1 /* ApptentiveMigrationTests.m */; };
 		49129ED51740687A0026C2E1 /* ATDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 496F5780174060CE003BF516 /* ATDataManager.m */; };
 		491748BA1341177000A7D11E /* ATConnectionChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = 491748B21341177000A7D11E /* ATConnectionChannel.h */; };
@@ -104,7 +107,6 @@
 		492B81DA16D595A00031BEF6 /* ATFileAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = 492B81D816D595A00031BEF6 /* ATFileAttachment.h */; };
 		492B81DB16D595A00031BEF6 /* ATFileAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 492B81D916D595A00031BEF6 /* ATFileAttachment.m */; };
 		492B81DC16D595A00031BEF6 /* ATFileAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 492B81D916D595A00031BEF6 /* ATFileAttachment.m */; };
-		492F2F0716E320010030E48A /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49ADE8DB1626167F00DD8634 /* CoreText.framework */; };
 		492F2F0816E320040030E48A /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4988FB5316212BD4000A7CB7 /* CoreData.framework */; };
 		492F2F1C16ED597F0030E48A /* ATRecordRequestTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 492F2F1A16ED597F0030E48A /* ATRecordRequestTask.h */; };
 		492F2F1D16ED597F0030E48A /* ATRecordRequestTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 492F2F1B16ED597F0030E48A /* ATRecordRequestTask.m */; };
@@ -430,6 +432,9 @@
 		01D3128D1B69349900B369E1 /* ATProgressNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATProgressNavigationBar.m; sourceTree = "<group>"; };
 		01F1A95E1B6823CD0088DBF0 /* ATAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAboutViewController.h; sourceTree = "<group>"; };
 		01F1A95F1B6823CD0088DBF0 /* ATAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAboutViewController.m; sourceTree = "<group>"; };
+		01F6FDBB1BFD3C0D004513C2 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		01F6FDBD1BFD3C14004513C2 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		01F6FDBF1BFD3C1D004513C2 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		49129ED2174068720026C2E1 /* ApptentiveMigrationTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ApptentiveMigrationTests.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		49129ED3174068730026C2E1 /* ApptentiveMigrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ApptentiveMigrationTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		491748B21341177000A7D11E /* ATConnectionChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATConnectionChannel.h; sourceTree = "<group>"; };
@@ -676,6 +681,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01F6FDC01BFD3C1D004513C2 /* MobileCoreServices.framework in Frameworks */,
+				01F6FDBE1BFD3C14004513C2 /* AVFoundation.framework in Frameworks */,
+				01F6FDBC1BFD3C0D004513C2 /* ImageIO.framework in Frameworks */,
 				49EF003318DB8F6E00661F7C /* AssetsLibrary.framework in Frameworks */,
 				497FDD9E187DEC5B00DE8F89 /* XCTest.framework in Frameworks */,
 				586FE260187C8DAE00067116 /* Accelerate.framework in Frameworks */,
@@ -687,7 +695,6 @@
 				49509E081358409800793EEC /* QuartzCore.framework in Frameworks */,
 				49509E1B1358409C00793EEC /* SystemConfiguration.framework in Frameworks */,
 				49509E1C135840A000793EEC /* UIKit.framework in Frameworks */,
-				492F2F0716E320010030E48A /* CoreText.framework in Frameworks */,
 				492F2F0816E320040030E48A /* CoreData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1067,6 +1074,9 @@
 		496DC3811333D35600743F65 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				01F6FDBF1BFD3C1D004513C2 /* MobileCoreServices.framework */,
+				01F6FDBD1BFD3C14004513C2 /* AVFoundation.framework */,
+				01F6FDBB1BFD3C0D004513C2 /* ImageIO.framework */,
 				49EF003118DB8F6700661F7C /* AssetsLibrary.framework */,
 				497FDD9D187DEC5B00DE8F89 /* XCTest.framework */,
 				58805F3818120DE100210DA5 /* Accelerate.framework */,

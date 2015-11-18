@@ -9,7 +9,7 @@
 #import "ApptentiveMigrationTests.h"
 #import "ATDataManager.h"
 #import "ATMessage.h"
-#import "ATTextMessage.h"
+#import "ATMessage.h"
 
 @implementation ApptentiveMigrationTests
 - (ATDataManager *)dataManagerWithStoreName:(NSString *)name {

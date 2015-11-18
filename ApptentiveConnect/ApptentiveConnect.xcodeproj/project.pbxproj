@@ -313,8 +313,6 @@
 		58DCC0D5180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 58DCC0D2180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.h */; };
 		58DCC0D6180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DCC0D3180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m */; };
 		58DCC0D7180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DCC0D3180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m */; };
-		58DCC0D9180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 58DCC0D4180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.xib */; };
-		58DCC0DA180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 58DCC0D4180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.xib */; };
 		58E9580A190740BC005063DC /* ATSurveyQuestionResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 58E95808190740BC005063DC /* ATSurveyQuestionResponse.h */; };
 		58E9580B190740BC005063DC /* ATSurveyQuestionResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 58E95809190740BC005063DC /* ATSurveyQuestionResponse.m */; };
 		58EEBE2317C7E8150039A0F5 /* ATInteraction.h in Headers */ = {isa = PBXBuildFile; fileRef = 58EEBE2117C7E8150039A0F5 /* ATInteraction.h */; };
@@ -641,7 +639,6 @@
 		58D17D4E18C5676F00D123BC /* ATInteractionMessageCenterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATInteractionMessageCenterController.m; sourceTree = "<group>"; };
 		58DCC0D2180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATInteractionUpgradeMessageViewController.h; sourceTree = "<group>"; };
 		58DCC0D3180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATInteractionUpgradeMessageViewController.m; sourceTree = "<group>"; };
-		58DCC0D4180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ATInteractionUpgradeMessageViewController.xib; sourceTree = "<group>"; };
 		58DD74FA1B8FA6A300F2804A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		58DD74FB1B8FA6A500F2804A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		58DD74FC1B8FA6B200F2804A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1376,7 +1373,6 @@
 			children = (
 				58DCC0D2180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.h */,
 				58DCC0D3180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m */,
-				58DCC0D4180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.xib */,
 			);
 			path = "Upgrade Message";
 			sourceTree = "<group>";
@@ -1630,7 +1626,6 @@
 				49E7408818403E6200413697 /* v2CorruptDatabase in Resources */,
 				01A88FFB1AFBFFAE002C49E7 /* testJsonDiffing.2.new.json in Resources */,
 				01A88FF91AFBFFAE002C49E7 /* testJsonDiffing.1.new.json in Resources */,
-				58DCC0D9180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.xib in Resources */,
 				49E7408F1840497600413697 /* v3WALDatabase in Resources */,
 				49E740911840498100413697 /* ATDataModelv3.sqlite in Resources */,
 				49C54BD51790A95E009CCD5D /* ApptentiveResources.bundle in Resources */,
@@ -1678,7 +1673,6 @@
 				0127EA191BF136090005481A /* at_document@2x.png in Resources */,
 				016085501BA77B1D00050FDB /* at_apptentive_logo.png in Resources */,
 				013BB6061BF6A65C00BB6C27 /* at_remove.png in Resources */,
-				58DCC0DA180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.xib in Resources */,
 				016085551BA77B1D00050FDB /* at_checkmark@3x.png in Resources */,
 				0160855C1BA77B1D00050FDB /* at_info.png in Resources */,
 				0160854D1BA77B1D00050FDB /* at_account.png in Resources */,

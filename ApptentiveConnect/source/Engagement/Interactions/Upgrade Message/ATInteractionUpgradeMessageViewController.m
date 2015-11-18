@@ -22,7 +22,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 
 @interface ATInteractionUpgradeMessageViewController ()
 
-@property (nonatomic, strong, readonly) ATInteraction *upgradeMessageInteraction;
+@property (nonatomic, strong) ATInteraction *upgradeMessageInteraction;
 
 @property (nonatomic, strong) IBOutlet UIView *appIconContainer;
 @property (nonatomic, strong) IBOutlet UIButton *OKButton;
@@ -38,20 +38,19 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *OKButtonHeight;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *poweredByBottomSpace;
 
-- (IBAction)okButtonPressed:(id)sender;
-
 @end
 
 @implementation ATInteractionUpgradeMessageViewController
 
-- (id)initWithInteraction:(ATInteraction *)interaction {
++ (instancetype)interactionUpgradeMessageViewControllerWithInteraction:(ATInteraction *)interaction {
 	NSAssert([interaction.type isEqualToString:@"UpgradeMessage"], @"Attempted to load an UpgradeMessageViewController with an interaction of type: %@", interaction.type);
-	
-	self = [super initWithNibName:@"ATInteractionUpgradeMessageViewController" bundle:[ATConnect resourceBundle]];
-	if (self != nil) {
-		_upgradeMessageInteraction = [interaction copy];
-	}
-	return self;
+
+	UINavigationController *navigationController = [[ATConnect storyboard] instantiateViewControllerWithIdentifier:@"UpgradeMessageNavigation"];
+	ATInteractionUpgradeMessageViewController *result = (ATInteractionUpgradeMessageViewController *)navigationController.viewControllers.firstObject;
+
+	result.upgradeMessageInteraction = interaction;
+
+	return result;
 }
 
 - (void)viewDidLoad {

@@ -224,16 +224,16 @@
 		
 		NSPredicate *predicate = nil;
 
-//		BOOL parameterIsDictionary = [parameter isKindOfClass:[NSDictionary class]];
-//		BOOL parameterIsComplexType = parameterIsDictionary && [((NSDictionary *)parameter).allKeys containsObject:@"_type"];
+		BOOL parameterIsDictionary = [parameter isKindOfClass:[NSDictionary class]];
 		BOOL parameterIsPrimitiveType = [parameter isKindOfClass:[NSString class]] || [parameter isKindOfClass:[NSNumber class]] || [parameter isKindOfClass:[NSNull class]];
 
 		if ([operatorString isEqualToString:@"$exists"]) {
-			// $exists works with all types
-			if ([parameter isKindOfClass:[NSNumber class]]) {
+			if ([parameter isEqual:@YES] || [parameter isEqual:@NO]) {
 				NSString *predicateFormatString = [[@"(%K " stringByAppendingString:([(NSNumber *)parameter boolValue] ? @"!=" : @"==")] stringByAppendingString:@" nil)"];
 				predicate = [NSPredicate predicateWithFormat:predicateFormatString, keyPath];
-			} // TODO: handle non-numeric cases
+			} else {
+				predicate = [NSPredicate predicateWithValue:NO];
+			}
 		} else if ([operatorString isEqualToString:@"$before"] || [operatorString isEqualToString:@"$after"]) {
 			predicate = [NSPredicate predicateWithBlock:^BOOL(id  _Nonnull evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
 				NSDictionary *complexValue = [evaluatedObject valueForKeyPath:keyPath];
@@ -264,7 +264,7 @@
 			} else {
 				predicate = [NSPredicate predicateWithValue:NO];
 			}
-		} else if ([parameter isKindOfClass:[NSDictionary class]]) {
+		} else if (parameterIsDictionary) {
 			predicate = [NSCompoundPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
 				BOOL hasError;
 				NSPredicateOperatorType operatorType = [self predicateOperatorTypeFromString:operatorString hasError:&hasError];

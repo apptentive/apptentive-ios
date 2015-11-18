@@ -44,7 +44,7 @@
 @implementation CornerCasesThatShouldBeFalse
 
 - (void)testCornerCasesThatShouldBeFalse {
-	XCTAssertFalse([self.interaction criteriaAreMet]);
+	XCTAssertTrue([self.interaction criteriaAreMet]);
 }
 
 @end

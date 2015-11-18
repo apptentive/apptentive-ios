@@ -66,7 +66,6 @@
 		01F6FD651BFAA291004513C2 /* testCornerCasesThatShouldBeTrue.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FD611BFAA28B004513C2 /* testCornerCasesThatShouldBeTrue.json */; };
 		01F6FD661BFAA291004513C2 /* testDefaultValues.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FD621BFAA28B004513C2 /* testDefaultValues.json */; };
 		01F6FD671BFAA291004513C2 /* testPredicateParsing.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FD631BFAA28B004513C2 /* testPredicateParsing.json */; };
-		01F6FD8D1BFAA4B2004513C2 /* PayloadTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F6FD121BFA89E6004513C2 /* PayloadTest.m */; };
 		01F6FD901BFAA512004513C2 /* CriteriaTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F6FD8F1BFAA512004513C2 /* CriteriaTest.m */; };
 		01F6FD971BFBCDC3004513C2 /* ApptentiveMetricsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4987FAA6157AE59D00AF2078 /* ApptentiveMetricsTests.m */; };
 		01F6FDA11BFBF3E2004513C2 /* testCodePointInvokesTotal.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FD981BFBF0D9004513C2 /* testCodePointInvokesTotal.json */; };
@@ -363,8 +362,6 @@
 		01D3128D1B69349900B369E1 /* ATProgressNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATProgressNavigationBar.m; sourceTree = "<group>"; };
 		01F1A95E1B6823CD0088DBF0 /* ATAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAboutViewController.h; sourceTree = "<group>"; };
 		01F1A95F1B6823CD0088DBF0 /* ATAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAboutViewController.m; sourceTree = "<group>"; };
-		01F6FD121BFA89E6004513C2 /* PayloadTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PayloadTest.m; sourceTree = "<group>"; };
-		01F6FD141BFA8A4A004513C2 /* PayloadTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PayloadTest.h; sourceTree = "<group>"; };
 		01F6FD601BFAA28B004513C2 /* testCornerCasesThatShouldBeFalse.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCornerCasesThatShouldBeFalse.json; sourceTree = "<group>"; };
 		01F6FD611BFAA28B004513C2 /* testCornerCasesThatShouldBeTrue.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCornerCasesThatShouldBeTrue.json; sourceTree = "<group>"; };
 		01F6FD621BFAA28B004513C2 /* testDefaultValues.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testDefaultValues.json; sourceTree = "<group>"; };
@@ -1133,8 +1130,6 @@
 				01F6FD8F1BFAA512004513C2 /* CriteriaTest.m */,
 				01F6FD911BFAA52A004513C2 /* CriteriaTest.h */,
 				49C002881334137E0071F088 /* ApptentiveConnectTests-Prefix.pch */,
-				01F6FD121BFA89E6004513C2 /* PayloadTest.m */,
-				01F6FD141BFA8A4A004513C2 /* PayloadTest.h */,
 				49C002891334137E0071F088 /* ApptentiveConnectTests.h */,
 				49C0028A1334137E0071F088 /* ApptentiveConnectTests.m */,
 				49C0028B1334137E0071F088 /* InfoPlist.strings */,
@@ -1797,7 +1792,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				01F6FD8D1BFAA4B2004513C2 /* PayloadTest.m in Sources */,
 				49C0028E1334137E0071F088 /* ApptentiveConnectTests.m in Sources */,
 				58CD20151821B7A70071CC72 /* ATDataModel v2 to v3.xcmappingmodel in Sources */,
 				583E396A188E08EB0030B51E /* ATDataModel v3 to v4.xcmappingmodel in Sources */,

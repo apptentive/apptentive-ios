@@ -120,12 +120,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 }
 
 - (void)presentFromViewController:(UIViewController *)newPresentingViewController animated:(BOOL)animated {
-	
-	self.modalPresentationStyle = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad ? UIModalPresentationFormSheet : UIModalPresentationFullScreen;
-	ATNavigationController *navigationController = [[ATNavigationController alloc] initWithRootViewController:self];
-	navigationController.navigationBarHidden = YES;
-	
-	[newPresentingViewController presentViewController:navigationController animated:animated completion:nil];
+	[newPresentingViewController presentViewController:self.navigationController animated:animated completion:nil];
 	
 	[self.upgradeMessageInteraction engage:ATInteractionUpgradeMessageEventLabelLaunch fromViewController:self.presentingViewController];
 }

@@ -1218,7 +1218,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
         <!--Navigation Controller-->
         <scene sceneID="L0d-DX-A0W">
             <objects>
-                <navigationController storyboardIdentifier="UpgradeMessageNavigation" id="Kxb-PG-NGL" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="UpgradeMessageNavigation" modalPresentationStyle="formSheet" navigationBarHidden="YES" id="Kxb-PG-NGL" customClass="ATNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ybC-Ct-amT">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

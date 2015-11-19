@@ -133,10 +133,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.dateFormatter = [[NSDateFormatter alloc] init];
 	self.dateFormatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"MMMMdyyyy" options:0 locale:[NSLocale currentLocale]];
 	self.dataSource.dateFormatter.dateFormat = self.dateFormatter.dateFormat; // Used to determine if date changed between messages
-	
-	self.greetingView.orientation = self.interfaceOrientation;
-	self.profileView.orientation = self.interfaceOrientation;
-	self.messageInputView.orientation = self.interfaceOrientation;
+
+	UIInterfaceOrientation interfaceOrientation = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad ? UIInterfaceOrientationPortrait : self.interfaceOrientation;
+	self.greetingView.orientation = interfaceOrientation;
+	self.profileView.orientation = interfaceOrientation;
+	self.messageInputView.orientation = interfaceOrientation;
 
 	self.navigationItem.title = self.interaction.title;
 	
@@ -233,9 +234,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 	[UIView animateWithDuration:duration animations:^{
-		self.greetingView.orientation = toInterfaceOrientation;
-		self.profileView.orientation = toInterfaceOrientation;
-		self.messageInputView.orientation = toInterfaceOrientation;
+		UIInterfaceOrientation interfaceOrientation = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad ? UIInterfaceOrientationPortrait : toInterfaceOrientation;
+
+		self.greetingView.orientation = interfaceOrientation;
+		self.profileView.orientation = interfaceOrientation;
+		self.messageInputView.orientation = interfaceOrientation;
 		
 		self.tableView.tableHeaderView = self.greetingView;
 		[self resizeFooterView:nil];

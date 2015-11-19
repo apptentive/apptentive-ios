@@ -264,7 +264,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[self updateState];
 	}
 
-	if (self.isSubsequentDisplay == NO) {
+	if (self.isSubsequentDisplay == NO || self.attachmentController.active) {
 		[self resizeFooterView:nil];
 		[self engageGreetingViewEventIfNecessary];
 		[self scrollToLastMessageAnimated:NO];
@@ -303,24 +303,24 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 		switch ([self.dataSource statusOfMessageAtIndexPath:indexPath]) {
 			case ATMessageCenterMessageStatusHidden:
-				messageCell.statusLabelHidden = YES;
+				messageCell.statusLabel.hidden = YES;
 				messageCell.layer.borderWidth = 0;
 				break;
 			case ATMessageCenterMessageStatusFailed:
-				messageCell.statusLabelHidden = NO;
+				messageCell.statusLabel.hidden = NO;
 				messageCell.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
 				messageCell.layer.borderColor = [self failedColor].CGColor;
 				messageCell.statusLabel.textColor = [self failedColor];
 				messageCell.statusLabel.text = ATLocalizedString(@"Failed", @"Message failed to send.");
 				break;
 			case ATMessageCenterMessageStatusSending:
-				messageCell.statusLabelHidden = NO;
+				messageCell.statusLabel.hidden = NO;
 				messageCell.layer.borderWidth = 0;
 				messageCell.statusLabel.textColor = self.sentColor;
 				messageCell.statusLabel.text = ATLocalizedString(@"Sending…", @"Message is sending.");
 				break;
 			case ATMessageCenterMessageStatusSent:
-				messageCell.statusLabelHidden = NO;
+				messageCell.statusLabel.hidden = NO;
 				messageCell.layer.borderWidth = 0;
 				messageCell.statusLabel.textColor = self.sentColor;
 				messageCell.statusLabel.text = ATLocalizedString(@"Sent", @"Message sent successfully");
@@ -379,7 +379,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	// iOS 7 requires this and there's no good way to instantiate a cell to sample, so we're hard-coding it for now.
 	CGFloat verticalMargin, horizontalMargin, minimumCellHeight;
 	BOOL statusLabelVisible = [self.dataSource statusOfMessageAtIndexPath:indexPath] != ATMessageCenterMessageStatusHidden;
-	CGFloat verticalFudgeFactor = 0.0;
 	
 	switch ([self.dataSource cellTypeAtIndexPath:indexPath]) {
 		case ATMessageCenterMessageTypeContextMessage:

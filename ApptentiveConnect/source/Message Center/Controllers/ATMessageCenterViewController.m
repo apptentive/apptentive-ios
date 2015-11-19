@@ -258,12 +258,15 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	} else if (message && ![message isEqualToString:@""]) {
 		self.state = ATMessageCenterStateComposing;
 		[self.messageInputView.messageView becomeFirstResponder];
-	} else {
+	} else if (self.isMovingToParentViewController == NO) {
 		[self updateState];
 	}
-	[self resizeFooterView:nil];
-	[self engageGreetingViewEventIfNecessary];
-	[self scrollToLastMessageAnimated:NO];
+
+	if (self.isMovingToParentViewController == NO) {
+		[self resizeFooterView:nil];
+		[self engageGreetingViewEventIfNecessary];
+		[self scrollToLastMessageAnimated:NO];
+	}
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -1060,7 +1063,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		verticalOffsetLimit = self.tableView.contentSize.height - (CGRectGetHeight(self.tableView.bounds) - self.tableView.contentInset.bottom);
 	}
 	
-	verticalOffsetLimit = fmax(0, verticalOffsetLimit);
+	verticalOffsetLimit = fmax(-self.tableView.contentInset.top, verticalOffsetLimit);
 	verticalOffset = fmin(verticalOffset, verticalOffsetLimit);
 	CGPoint contentOffset = CGPointMake(0,  verticalOffset);
 	

@@ -687,44 +687,41 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (IBAction)sendButtonPressed:(id)sender {
-	NSString *message = self.messageInputView.messageView.text;
+	NSString *message = self.messageInputView.messageView.text;	
+	NSIndexPath *lastUserMessageIndexPath = self.dataSource.lastUserMessageIndexPath;
 	
-	if (message && ![message isEqualToString:@""]) {
-		NSIndexPath *lastUserMessageIndexPath = self.dataSource.lastUserMessageIndexPath;
+	if (self.contextMessage) {
+		[[ATBackend sharedBackend] sendAutomatedMessage:self.contextMessage];
+		self.contextMessage = nil;
+	}
+
+	NSArray *attachments = self.attachmentController.attachments;
+	if (attachments.count) {
+		[[ATBackend sharedBackend] sendCompoundMessageWithText:message attachments:attachments hiddenOnClient:NO];
+		[self.attachmentController clear];
+	} else {
+		[[ATBackend sharedBackend] sendTextMessageWithBody:message];
+	}
+
+	[self.attachmentController resignFirstResponder];
+
+	if ([self shouldShowProfileViewBeforeComposing:NO]) {
+		[self.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{@"required": @(self.interaction.profileRequired), @"trigger": @"automatic"}];
 		
-		if (self.contextMessage) {
-			[[ATBackend sharedBackend] sendAutomatedMessage:self.contextMessage];
-			self.contextMessage = nil;
-		}
+		self.state = ATMessageCenterStateWhoCard;
+	} else {
+		[self.messageInputView.messageView resignFirstResponder];
+		[self updateState];
+	}
 
-		NSArray *attachments = self.attachmentController.attachments;
-		if (attachments.count) {
-			[[ATBackend sharedBackend] sendCompoundMessageWithText:message attachments:attachments hiddenOnClient:NO];
-			[self.attachmentController clear];
-		} else {
-			[[ATBackend sharedBackend] sendTextMessageWithBody:message];
-		}
-
-		[self.attachmentController resignFirstResponder];
-
-		if ([self shouldShowProfileViewBeforeComposing:NO]) {
-			[self.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{@"required": @(self.interaction.profileRequired), @"trigger": @"automatic"}];
-			
-			self.state = ATMessageCenterStateWhoCard;
-		} else {
-			[self.messageInputView.messageView resignFirstResponder];
-			[self updateState];
-		}
-	
-		if (lastUserMessageIndexPath) {
-			@try {
-				//[self.tableView reloadRowsAtIndexPaths:@[lastUserMessageIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-			} @catch (NSException *exception) {
-				ATLogError(@"caught exception: %@: %@", [exception name], [exception description]);
-			}
+	if (lastUserMessageIndexPath) {
+		@try {
+			//[self.tableView reloadRowsAtIndexPaths:@[lastUserMessageIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+		} @catch (NSException *exception) {
+			ATLogError(@"caught exception: %@: %@", [exception name], [exception description]);
 		}
 	}
-	
+
 	self.messageInputView.messageView.text = @"";
 }
 

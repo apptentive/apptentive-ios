@@ -66,7 +66,7 @@
 	NSArray *allAttachments = [ATData findEntityNamed:NSStringFromClass(self) withPredicate:[NSPredicate predicateWithValue:YES]];
 
 	for (ATFileAttachment *attachment in allAttachments) {
-		if (attachment.localPath.pathExtension.length == 0 && attachment.mimeType.length > 0) {
+		if (attachment.localPath.length && attachment.localPath.pathExtension.length == 0 && attachment.mimeType.length > 0) {
 			NSString *newPath = [attachment.localPath stringByAppendingPathExtension:attachment.extension];
 			NSError *error;
 			if ([[NSFileManager defaultManager] moveItemAtPath:[self fullLocalPathForFilename:attachment.localPath] toPath:[self fullLocalPathForFilename:newPath] error:&error]) {

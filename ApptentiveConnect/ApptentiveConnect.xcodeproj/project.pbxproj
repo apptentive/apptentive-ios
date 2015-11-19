@@ -920,6 +920,7 @@
 			isa = PBXGroup;
 			children = (
 				016085281BA77B0500050FDB /* Images */,
+				01F6FDC51BFD41F1004513C2 /* Apptentive.storyboard */,
 				4967278516B9FE7000C679B8 /* ApptentiveResources */,
 				49E891CC134FE2AA00DD098A /* localization */,
 			);
@@ -1041,7 +1042,6 @@
 		4967278516B9FE7000C679B8 /* ApptentiveResources */ = {
 			isa = PBXGroup;
 			children = (
-				01F6FDC51BFD41F1004513C2 /* Apptentive.storyboard */,
 				4967278316B9FE6400C679B8 /* Info.plist */,
 			);
 			path = ApptentiveResources;

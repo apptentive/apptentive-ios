@@ -164,7 +164,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	self.messageInputView.titleLabel.text = self.interaction.composerTitle;
 	[self.messageInputView.sendButton setTitle:self.interaction.composerSendButtonTitle forState:UIControlStateNormal];
-	[self updateSendButtonEnabledStatus];
 
 	self.messageInputView.sendButton.accessibilityHint = ATLocalizedString(@"Sends the message.", @"Accessibility hint for 'send' button");
 	
@@ -217,6 +216,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	[self.attachmentController addObserver:self forKeyPath:@"attachments" options:0 context:NULL];
 	[self.attachmentController viewDidLoad];
+
+	[self updateSendButtonEnabledStatus];
 }
 
 - (void)dealloc {
@@ -257,7 +258,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	if (self.attachmentController.active) {
 		self.state = ATMessageCenterStateComposing;
 		[self.attachmentController becomeFirstResponder];
-	} else if (message && ![message isEqualToString:@""]) {
+	} else if ((message && ![message isEqualToString:@""]) || self.attachmentController.attachments.count) {
 		self.state = ATMessageCenterStateComposing;
 		[self.messageInputView.messageView becomeFirstResponder];
 	} else if (self.isSubsequentDisplay == NO) {

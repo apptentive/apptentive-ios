@@ -14,7 +14,7 @@
 @interface ATMessageCenterReplyCell : UITableViewCell <ATMessageCenterCell>
 
 @property (weak, nonatomic) IBOutlet ATNetworkImageIconView *supportUserImageView;
-@property (weak, nonatomic) IBOutlet UILabel *messageLabel;
+@property (weak, nonatomic) IBOutlet UITextView *messageLabel;
 @property (weak, nonatomic) IBOutlet UILabel *senderLabel;
 
 @end

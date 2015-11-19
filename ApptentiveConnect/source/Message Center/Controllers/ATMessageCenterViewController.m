@@ -162,8 +162,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	self.messageInputView.titleLabel.text = self.interaction.composerTitle;
 	[self.messageInputView.sendButton setTitle:self.interaction.composerSendButtonTitle forState:UIControlStateNormal];
-	self.messageInputView.sendButton.enabled = [self sendButtonShouldBeEnabled];
-	
+	[self updateSendButtonEnabledStatus];
+
 	self.messageInputView.sendButton.accessibilityHint = ATLocalizedString(@"Sends the message.", @"Accessibility hint for 'send' button");
 	
 	self.messageInputView.clearButton.accessibilityLabel = ATLocalizedString(@"Discard", @"Accessibility label for 'discard' button");
@@ -213,6 +213,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	// Fix iOS 7 bug where contentSize gets set to zero
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fixContentSize:) name:UIKeyboardDidShowNotification object:nil];
 
+	[self.attachmentController addObserver:self forKeyPath:@"attachments" options:0 context:NULL];
 	[self.attachmentController viewDidLoad];
 }
 
@@ -225,6 +226,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.profileView.emailField.delegate = nil;
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[self.attachmentController removeObserver:self forKeyPath:@"attachments"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -608,7 +610,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 #pragma mark - Text view delegate
 
 - (void)textViewDidChange:(UITextView *)textView {
-	self.messageInputView.sendButton.enabled = [self sendButtonShouldBeEnabled];
+	[self updateSendButtonEnabledStatus];
 	self.messageInputView.placeholderLabel.hidden = textView.text.length > 0;
 	
 	// Fix bug where text view doesn't scroll far enough down
@@ -679,20 +681,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.dataSource stop];
 	
 	[self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (BOOL)sendButtonShouldBeEnabled {
-	NSString *inputText = self.messageInputView.messageView.text;
-
-	if (!inputText || inputText.length == 0) {
-		return NO;
-	}
-	
-	if ([inputText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length == 0) {
-		return NO;
-	}
-	
-	return YES;
 }
 
 - (IBAction)sendButtonPressed:(id)sender {
@@ -853,7 +841,21 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.navigationController pushViewController:[ATAboutViewController aboutViewControllerFromStoryboard] animated:YES];
 }
 
+#pragma mark - Key-value observing
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
+	[self updateSendButtonEnabledStatus];
+}
+
 #pragma mark - Private
+
+- (void)updateSendButtonEnabledStatus {
+	NSString *inputText = self.messageInputView.messageView.text;
+	BOOL hasText = inputText && inputText.length > 0 && [inputText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length > 0;
+	BOOL hasAttachments = self.attachmentController.attachments.count > 0;
+
+	self.messageInputView.sendButton.enabled = hasText || hasAttachments;
+}
 
 - (void)saveDraft {
 	NSString *message = self.messageInputView.messageView.text;
@@ -1174,8 +1176,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.attachmentController clear];
 	[self.attachmentController resignFirstResponder];
 	
-	self.messageInputView.sendButton.enabled = [self sendButtonShouldBeEnabled];
-	
+	[self updateSendButtonEnabledStatus];
 	[self updateState];
 	
 	[self resizeFooterView:nil];

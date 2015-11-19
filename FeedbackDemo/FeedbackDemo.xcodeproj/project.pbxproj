@@ -101,6 +101,8 @@
 		01A16CDF1AF2AA7C00D691FC /* ATConnect_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATConnect_Private.h; path = ../ApptentiveConnect/source/ATConnect_Private.h; sourceTree = "<group>"; };
 		01A16CE71AF2ED5700D691FC /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		01A16CEC1AF2F07200D691FC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
+		01F6FDC81BFE4B27004513C2 /* FeedbackDemo.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = FeedbackDemo.entitlements; sourceTree = "<group>"; };
+		01F6FDC91BFE4B27004513C2 /* FeedbackDemoTestFlight.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = FeedbackDemoTestFlight.entitlements; sourceTree = "<group>"; };
 		5856C4771B8E5E5800818594 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		5856C4781B8E5E5800818594 /* ar */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = ar; path = ar.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5856C47A1B8E5E6100818594 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
@@ -239,6 +241,8 @@
 		01A16C8F1AF2A66B00D691FC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				01F6FDC81BFE4B27004513C2 /* FeedbackDemo.entitlements */,
+				01F6FDC91BFE4B27004513C2 /* FeedbackDemoTestFlight.entitlements */,
 				5856C4B61B8E61BA00818594 /* InfoPlist.strings */,
 				01A16C901AF2A66B00D691FC /* Info.plist */,
 				01A16C911AF2A66B00D691FC /* main.m */,
@@ -712,7 +716,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.apptentive.feedback-demo-testflight";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "fc190b24-9619-4619-b6a0-5fbc4478d797";
+				PROVISIONING_PROFILE = "638c4ec0-7f27-422f-bf2a-5b40dc38c630";
 			};
 			name = Release;
 		};

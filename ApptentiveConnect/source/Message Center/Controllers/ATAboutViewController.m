@@ -59,9 +59,7 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 	self.landscapeConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[about]-(16)-[privacy]" options:NSLayoutFormatAlignAllBaseline metrics:nil views:@{ @"about": self.aboutButton, @"privacy": self.privacyButton }];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
-	
+- (void)viewDidLayoutSubviews	{
 	[self resizeForOrientation:self.interfaceOrientation duration:0];
 }
 

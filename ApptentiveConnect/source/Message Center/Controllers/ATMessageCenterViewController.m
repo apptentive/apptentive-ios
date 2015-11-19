@@ -108,6 +108,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @property (nonatomic, readonly) UIColor *sentColor;
 @property (nonatomic, readonly) UIColor *failedColor;
 
+@property (nonatomic, assign) BOOL isSubsequentDisplay;
+
 @end
 
 @implementation ATMessageCenterViewController
@@ -258,14 +260,16 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	} else if (message && ![message isEqualToString:@""]) {
 		self.state = ATMessageCenterStateComposing;
 		[self.messageInputView.messageView becomeFirstResponder];
-	} else if (self.isMovingToParentViewController == NO) {
+	} else if (self.isSubsequentDisplay == NO) {
 		[self updateState];
 	}
 
-	if (self.isMovingToParentViewController == NO) {
+	if (self.isSubsequentDisplay == NO) {
 		[self resizeFooterView:nil];
 		[self engageGreetingViewEventIfNecessary];
 		[self scrollToLastMessageAnimated:NO];
+
+		self.isSubsequentDisplay = YES;
 	}
 }
 

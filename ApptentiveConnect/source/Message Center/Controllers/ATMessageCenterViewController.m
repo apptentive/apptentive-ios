@@ -391,7 +391,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 		case ATMessageCenterMessageTypeCompoundMessage:
 			horizontalMargin = MESSAGE_LABEL_TOTAL_HORIZONTAL_MARGIN;
-			verticalMargin = MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN] + 0.5;
+			verticalMargin = MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0 + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN];
+			if (statusLabelVisible) {
+				verticalMargin += MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0 - STATUS_LABEL_MARGIN;
+			}
 			minimumCellHeight = 0;
 			break;
 
@@ -404,7 +407,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		case ATMessageCenterMessageTypeCompoundReply:
 			horizontalMargin = REPLY_LABEL_TOTAL_HORIZONTAL_MARGIN;
 			verticalMargin = 33.5 + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN];
-			minimumCellHeight = 36.0 + 15.5 + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN];
+			minimumCellHeight = REPLY_CELL_MINIMUM_HEIGHT + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN] - MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0;
 			break;
 	}
 	
@@ -419,13 +422,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:labelText attributes:@{NSFontAttributeName: BODY_FONT}];
 		labelRect = [attributedText boundingRectWithSize:CGSizeMake(effectiveLabelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
 	} else {
-		verticalMargin -= MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN;
-		if (statusLabelVisible) {
-			verticalMargin += 9.0;
-		}
+		verticalMargin -= MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0;
 	}
 	
-	double height = ceil(fmax(labelRect.size.height + verticalMargin, minimumCellHeight));
+	double height = ceil(fmax(labelRect.size.height + verticalMargin, minimumCellHeight) + 0.5);
 	
 	// "Due to an underlying implementation detail, you should not return values greater than 2009."
 	return fmin(height, 2009.0);

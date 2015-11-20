@@ -39,7 +39,7 @@
 
 + (CGSize)sizeForScreen:(UIScreen *)screen withMargin:(CGSize)margin {
 	CGSize size = [self portraitSizeOfScreen:screen];
-	CGFloat aspectRatio = size.width / CGRectGetHeight(screen.bounds);
+	CGFloat aspectRatio = size.width / size.height;
 	NSInteger count = [self countForScreen:screen];
 	CGFloat totalMargin = margin.width * (count + 1);
 	CGFloat imageWidth = (size.width - totalMargin) / count;

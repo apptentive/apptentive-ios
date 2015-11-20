@@ -15,4 +15,10 @@
 	self.messageLabel.textContainer.lineFragmentPadding = 0;
 }
 
+- (void)setStatusLabelHidden:(BOOL)statusLabelHidden {
+	_statusLabelHidden = statusLabelHidden;
+
+	self.statusLabel.hidden = statusLabelHidden;
+}
+
 @end

@@ -582,7 +582,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="k3E-kW-rhx" customClass="ATIndexedCollectionView">
-                                            <rect key="frame" x="0.0" y="71" width="414" height="109.5"/>
+                                            <rect key="frame" x="0.0" y="71" width="414" height="80"/>
                                             <animations/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="16" minimumInteritemSpacing="16" id="yBy-UF-MKC">
@@ -593,7 +593,7 @@
                                             </collectionViewFlowLayout>
                                             <cells>
                                                 <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Attachment" id="DDu-nA-yL9" customClass="ATAttachmentCell">
-                                                    <rect key="frame" x="16" y="15" width="60" height="80"/>
+                                                    <rect key="frame" x="16" y="0.0" width="60" height="80"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                         <rect key="frame" x="0.0" y="0.0" width="60" height="80"/>
@@ -660,6 +660,7 @@
                                     <animations/>
                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
+                                        <constraint firstItem="NEI-ES-PdT" firstAttribute="top" secondItem="k3E-kW-rhx" secondAttribute="bottom" id="6tO-Fw-2Vd"/>
                                         <constraint firstItem="PvY-mz-4Y9" firstAttribute="leading" secondItem="cxM-mJ-g02" secondAttribute="leading" constant="15" id="B0s-Gt-ruD"/>
                                         <constraint firstAttribute="bottom" secondItem="k3E-kW-rhx" secondAttribute="bottom" priority="100" id="D1j-DW-lil"/>
                                         <constraint firstItem="PvY-mz-4Y9" firstAttribute="top" secondItem="cxM-mJ-g02" secondAttribute="top" constant="14" id="DB3-b2-myi"/>
@@ -678,6 +679,7 @@
                                     <outlet property="collectionView" destination="k3E-kW-rhx" id="7wF-xi-EHz"/>
                                     <outlet property="messageLabel" destination="PvY-mz-4Y9" id="psy-16-umt"/>
                                     <outlet property="messageLabelCollectionViewSpacing" destination="WDZ-hc-yzf" id="UG4-hT-xBu"/>
+                                    <outlet property="messageStatusSpacingConstraint" destination="6tO-Fw-2Vd" id="ZQV-7s-gOx"/>
                                     <outlet property="statusLabel" destination="NEI-ES-PdT" id="V5k-gB-1qa"/>
                                 </connections>
                             </tableViewCell>

@@ -304,24 +304,24 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 		switch ([self.dataSource statusOfMessageAtIndexPath:indexPath]) {
 			case ATMessageCenterMessageStatusHidden:
-				messageCell.statusLabel.hidden = YES;
+				messageCell.statusLabelHidden = YES;
 				messageCell.layer.borderWidth = 0;
 				break;
 			case ATMessageCenterMessageStatusFailed:
-				messageCell.statusLabel.hidden = NO;
+				messageCell.statusLabelHidden = NO;
 				messageCell.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
 				messageCell.layer.borderColor = [self failedColor].CGColor;
 				messageCell.statusLabel.textColor = [self failedColor];
 				messageCell.statusLabel.text = ATLocalizedString(@"Failed", @"Message failed to send.");
 				break;
 			case ATMessageCenterMessageStatusSending:
-				messageCell.statusLabel.hidden = NO;
+				messageCell.statusLabelHidden = NO;
 				messageCell.layer.borderWidth = 0;
 				messageCell.statusLabel.textColor = self.sentColor;
 				messageCell.statusLabel.text = ATLocalizedString(@"Sending…", @"Message is sending.");
 				break;
 			case ATMessageCenterMessageStatusSent:
-				messageCell.statusLabel.hidden = NO;
+				messageCell.statusLabelHidden = NO;
 				messageCell.layer.borderWidth = 0;
 				messageCell.statusLabel.textColor = self.sentColor;
 				messageCell.statusLabel.text = ATLocalizedString(@"Sent", @"Message sent successfully");
@@ -391,7 +391,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 		case ATMessageCenterMessageTypeCompoundMessage:
 			horizontalMargin = MESSAGE_LABEL_TOTAL_HORIZONTAL_MARGIN;
-			verticalMargin = MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN];
+			verticalMargin = MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN] + 0.5;
 			minimumCellHeight = 0;
 			break;
 
@@ -403,13 +403,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 		case ATMessageCenterMessageTypeCompoundReply:
 			horizontalMargin = REPLY_LABEL_TOTAL_HORIZONTAL_MARGIN;
-			verticalMargin = REPLY_CELL_MINIMUM_HEIGHT + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN];
-			minimumCellHeight = REPLY_CELL_MINIMUM_HEIGHT + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN] - MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0;
+			verticalMargin = 33.5 + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN];
+			minimumCellHeight = 36.0 + 15.5 + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN];
 			break;
 	}
 	
 	if (statusLabelVisible) {
-		verticalMargin += STATUS_LABEL_HEIGHT + STATUS_LABEL_MARGIN + 0.5;
+		verticalMargin += STATUS_LABEL_HEIGHT + STATUS_LABEL_MARGIN;
 	}
 
 	NSString *labelText = [self.dataSource textOfMessageAtIndexPath:indexPath];

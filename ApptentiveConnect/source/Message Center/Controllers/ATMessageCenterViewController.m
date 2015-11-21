@@ -354,6 +354,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		compoundCell.collectionView.index = indexPath.section;
 		compoundCell.collectionView.dataSource = self;
 		compoundCell.collectionView.delegate = self;
+		[compoundCell.collectionView reloadData];
 
 		UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)compoundCell.collectionView.collectionViewLayout;
 		layout.sectionInset = UIEdgeInsetsMake(ATTACHMENT_MARGIN.height, ATTACHMENT_MARGIN.width, ATTACHMENT_MARGIN.height, ATTACHMENT_MARGIN.width);
@@ -707,6 +708,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 
 	[self.attachmentController resignFirstResponder];
+	self.attachmentController.active = NO;
 
 	if ([self shouldShowProfileViewBeforeComposing:NO]) {
 		[self.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{@"required": @(self.interaction.profileRequired), @"trigger": @"automatic"}];

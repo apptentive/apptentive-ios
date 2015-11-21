@@ -1,0 +1,75 @@
+{
+  "$and": [
+    {
+      "time_at_install/total": {
+        "$after": -1
+      }
+    },
+    {
+      "$not": {
+        "time_at_install/total": {
+          "$after": 1
+        }
+      }
+    },
+    {
+      "$not": {
+        "time_at_install/total": {
+          "$after": null
+        }
+      }
+    },
+    {
+      "$not": {
+        "time_at_install/total": {
+          "$after": ""
+        }
+      }
+    },
+    {
+      "$not": {
+        "time_at_install/total": {
+          "$after": {
+            "_type": "version",
+            "version": "5.0.0"
+          }
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/key_with_null_value": {
+          "$after": null
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/key_with_null_value": {
+          "$after": ""
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/key_with_null_value": {
+          "$after": 5
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/non_existent_key": {
+          "$after": 5
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/non_existent_key": {
+          "$after": ""
+        }
+      }
+    }
+  ]
+}

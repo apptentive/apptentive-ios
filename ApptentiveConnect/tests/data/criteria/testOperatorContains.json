@@ -1,68 +1,122 @@
 {
   "$and": [
     {
-      "person/email": {
-        "$contains": "example"
+      "device/custom_data/string_qwerty": {
+        "$contains": "qwert"
       }
     },
     {
-      "person/email": {
-        "$contains": "EXAMPLE"
+      "device/custom_data/string_qwerty": {
+        "$contains": "QWERT"
       }
     },
     {
-      "person/email": {
-        "$contains": "test"
+      "device/custom_data/string_qwerty": {
+        "$contains": "wert"
       }
     },
     {
-      "person/email": {
-        "$contains": "TEST"
+      "device/custom_data/string_qwerty": {
+        "$contains": "WERT"
       }
     },
     {
-      "person/email": {
-        "$contains": "@"
+      "device/custom_data/string_qwerty": {
+        "$contains": "werty"
       }
     },
     {
-      "person/email": {
-        "$contains": "test@example.com"
+      "device/custom_data/string_qwerty": {
+        "$contains": "WERTY"
       }
     },
     {
-      "person/email": {
-        "$contains": "TEST@EXAMPLE.COM"
+      "device/custom_data/string_qwerty": {
+        "$contains": "qwerty"
+      }
+    },
+    {
+      "device/custom_data/string_qwerty": {
+        "$contains": "QWERTY"
       }
     },
     {
       "$not": {
-        "person/email": {
+        "device/custom_data/string_qwerty": {
           "$contains": "foo"
         }
       }
     },
     {
       "$not": {
-        "person/email": {
+        "device/custom_data/string_qwerty": {
           "$contains": null
         }
       }
     },
     {
       "$not": {
-        "person/email": {
+        "device/custom_data/string_qwerty": {
           "$contains": 5
         }
       }
     },
     {
       "$not": {
-        "person/email": {
+        "device/custom_data/string_qwerty": {
           "$contains": {
             "_type": "version",
             "version": "1.0.0"
           }
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/number_5": {
+          "$contains": "five"
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/number_5": {
+          "$contains": 5
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/key_with_null_value": {
+          "$contains": null
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/key_with_null_value": {
+          "$contains": ""
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/key_with_null_value": {
+          "$contains": 5
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/non_existent_key": {
+          "$contains": 5
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/non_existent_key": {
+          "$contains": ""
         }
       }
     }

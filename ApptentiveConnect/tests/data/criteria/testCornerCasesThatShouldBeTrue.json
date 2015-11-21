@@ -3,6 +3,11 @@
     {
       "application/version": {
       }
+    },
+    {
+      "person/custom_data/key_with_null_value": {
+        "$exists": false
+      }
     }
   ]
 }

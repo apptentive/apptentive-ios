@@ -1,41 +1,43 @@
 {
   "$and": [
     {
-      "application/version": {
+      "device/custom_data/number_5": {
         "$exists": true
       }
     },
     {
       "$not": {
-        "application/version": {
+        "device/custom_data/number_5": {
           "$exists": false
         }
       }
     },
     {
       "$not": {
-        "application/version": {
+        "device/custom_data/number_5": {
           "$exists": 5
         }
       }
     },
     {
       "$not": {
-        "application/version": {
+        "device/custom_data/number_5": {
           "$exists": null
         }
       }
     },
     {
       "$not": {
-        "bad_field_name": {
+        "device/custom_data/key_with_null_value": {
           "$exists": true
         }
       }
     },
     {
-      "bad_field_name": {
-        "$exists": false
+      "$not": {
+        "device/custom_data/non_existent_key": {
+          "$exists": true
+        }
       }
     }
   ]

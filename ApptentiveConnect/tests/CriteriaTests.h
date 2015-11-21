@@ -1,5 +1,5 @@
 //
-//  CriteriaTest.h
+//  CriteriaTests.h
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 11/16/15.

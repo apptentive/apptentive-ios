@@ -269,7 +269,7 @@
 				BOOL hasError;
 				NSPredicateOperatorType operatorType = [self predicateOperatorTypeFromString:operatorString hasError:&hasError];
 				if (!hasError && [self operator:operatorType isValidForParameter:parameter]) {
-					NSComparisonPredicate *predicate = [self predicateWithLeftKeyPath:keyPath forObject:evaluatedObject rightComplexObject:(NSDictionary *)parameter operatorType:operatorType];
+					NSPredicate *predicate = [self predicateWithLeftKeyPath:keyPath forObject:evaluatedObject rightComplexObject:(NSDictionary *)parameter operatorType:operatorType];
 					
 					return [predicate evaluateWithObject:nil];
 				} else {
@@ -290,7 +290,7 @@
 	return compoundPredicate;
 }
 
-+ (NSComparisonPredicate *)predicateWithLeftKeyPath:(NSString *)leftKeyPath rightValue:(nullable id)rightValue operatorType:(NSPredicateOperatorType)operatorType {
++ (NSPredicate *)predicateWithLeftKeyPath:(NSString *)leftKeyPath rightValue:(nullable id)rightValue operatorType:(NSPredicateOperatorType)operatorType {
 	
 	[ATInteractionUsageData keyPathWasSeen:leftKeyPath];
 	
@@ -300,7 +300,7 @@
 	return [self predicateWithLeftExpression:leftExpression rightExpression:rightExpression operatorType:operatorType];
 }
 
-+ (NSComparisonPredicate *)predicateWithLeftKeyPath:(NSString *)keyPath forObject:(NSDictionary *)context rightComplexObject:(NSDictionary *)rightComplexObject operatorType:(NSPredicateOperatorType)operatorType {
++ (NSPredicate *)predicateWithLeftKeyPath:(NSString *)keyPath forObject:(NSDictionary *)context rightComplexObject:(NSDictionary *)rightComplexObject operatorType:(NSPredicateOperatorType)operatorType {
 	NSDictionary *leftComplexObject = [context valueForKeyPath:keyPath];
 	NSString *type = leftComplexObject[@"_type"];
 	NSString *rightType = rightComplexObject[@"_type"];
@@ -341,26 +341,34 @@
 		rightValue = rightComplexObject[@"sec"];
 	}
 	
-	NSComparisonPredicate *predicate = [self predicateWithLeftValue:leftValue rightValue:rightValue operatorType:operatorType];
+	NSPredicate *predicate = [self predicateWithLeftValue:leftValue rightValue:rightValue operatorType:operatorType];
 	
 	return predicate;
 }
 
-+ (NSComparisonPredicate *)predicateWithLeftValue:(nullable id)leftValue rightValue:(nullable id)rightValue operatorType:(NSPredicateOperatorType)operatorType {
++ (NSPredicate *)predicateWithLeftValue:(nullable id)leftValue rightValue:(nullable id)rightValue operatorType:(NSPredicateOperatorType)operatorType {
 	NSExpression *leftExpression = [NSExpression expressionForConstantValue:leftValue];
 	NSExpression *rightExpression = [NSExpression expressionForConstantValue:rightValue];
 	
 	return [self predicateWithLeftExpression:leftExpression rightExpression:rightExpression operatorType:operatorType];
 }
 
-+ (NSComparisonPredicate *)predicateWithLeftExpression:(NSExpression *)leftExpression rightExpression:(NSExpression *)rightExpression operatorType:(NSPredicateOperatorType)operatorType {
++ (NSPredicate *)predicateWithLeftExpression:(NSExpression *)leftExpression rightExpression:(NSExpression *)rightExpression operatorType:(NSPredicateOperatorType)operatorType {
 	NSComparisonPredicateOptions options;
+	Class comparisonClass;
 	switch (operatorType) {
 		case NSContainsPredicateOperatorType:
 		case NSBeginsWithPredicateOperatorType:
 		case NSEndsWithPredicateOperatorType:
 			options = NSCaseInsensitivePredicateOption;
+			comparisonClass = [NSString class];
 			break;
+		case NSGreaterThanOrEqualToPredicateOperatorType:
+		case NSGreaterThanPredicateOperatorType:
+		case NSLessThanPredicateOperatorType:
+		case NSLessThanOrEqualToPredicateOperatorType:
+			options = 0;
+			comparisonClass = [NSNumber class];
 		default:
 			options = 0;
 			break;
@@ -371,7 +379,15 @@
 																				 modifier:NSDirectPredicateModifier
 																					 type:operatorType
 																				  options:options];
-	return predicate;
+	if (comparisonClass) {
+		NSExpression *nilExpression = [NSExpression expressionForConstantValue:nil];
+		NSPredicate *notNilPredicate = [NSComparisonPredicate predicateWithLeftExpression:leftExpression rightExpression:nilExpression modifier:NSDirectPredicateModifier type:NSNotEqualToPredicateOperatorType options:0];
+		NSExpression *classExpression = [NSExpression expressionForConstantValue:comparisonClass];
+		NSComparisonPredicate *typePredicate = [NSComparisonPredicate predicateWithLeftExpression:leftExpression rightExpression:classExpression customSelector:@selector(isKindOfClass:)];
+		return [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:@[ notNilPredicate, typePredicate, predicate ]];
+	} else {
+		return predicate;
+	}
 }
 
 + (NSCompoundPredicateType)compoundPredicateTypeFromString:(NSString *)predicateTypeString hasError:(nonnull BOOL *)hasError {
@@ -418,21 +434,15 @@
 
 + (BOOL)operator:(NSPredicateOperatorType)operator isValidForParameter:(NSObject *)parameter {
 	BOOL isString = [parameter isKindOfClass:[NSString class]];
-	BOOL isBoolean = (parameter == (void*)kCFBooleanFalse || parameter == (void*)kCFBooleanTrue);
-	BOOL isDatetime = [parameter isKindOfClass:[NSDictionary class]] && [[parameter valueForKey:@"_type"] isEqualToString:@"datetime"];
-	BOOL isEquatable = !isDatetime;
-	BOOL isComparable = !isString && !isBoolean;
 
 	switch (operator) {
 		case NSEqualToPredicateOperatorType:
 		case NSNotEqualToPredicateOperatorType:
-			return isEquatable;
 		case NSLessThanOrEqualToPredicateOperatorType:
 		case NSGreaterThanOrEqualToPredicateOperatorType:
-			return isComparable;
 		case NSGreaterThanPredicateOperatorType:
 		case NSLessThanPredicateOperatorType:
-			return isComparable || isDatetime;
+			return YES;
 		case NSBeginsWithPredicateOperatorType:
 		case NSEndsWithPredicateOperatorType:
 		case NSContainsPredicateOperatorType:
@@ -440,10 +450,7 @@
 		default:
 			ATLogError(@"Unrecognized predicate operator type: %uld", (unsigned long)operator);
 			return NO;
-			break;
 	}
-
-	return YES;
 }
 
 @end

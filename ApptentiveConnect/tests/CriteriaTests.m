@@ -1,12 +1,12 @@
 //
-//  CriteriaTest.m
+//  CriteriaTests.m
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 11/16/15.
 //  Copyright © 2015 Apptentive, Inc. All rights reserved.
 //
 
-#import "CriteriaTest.h"
+#import "CriteriaTests.h"
 #import "ATInteractionInvocation.h"
 #import "ATConnect.h"
 
@@ -33,6 +33,10 @@
 
 		self.interaction = [ATInteractionInvocation invocationWithJSONDictionary:invocationDictionary];
 	}
+
+	[[ATConnect sharedConnection] addCustomDeviceDataNumber:@5 withKey:@"number_5"];
+	[[ATConnect sharedConnection] addCustomDeviceDataString:@"qwerty" withKey:@"string_qwerty"];
+	[[ATConnect sharedConnection] removeCustomDeviceDataWithKey:@"key_with_null_value"];
 }
 
 @end
@@ -142,54 +146,6 @@
 @implementation OperatorExists
 
 - (void)testOperatorExists {
-	XCTAssertTrue([self.interaction criteriaAreMet]);
-}
-
-@end
-
-
-@interface CodePointInvokesTotal : CriteriaTest
-@end
-
-@implementation CodePointInvokesTotal
-
-- (void)testCodePointInvokesTotal {
-	XCTAssertTrue([self.interaction criteriaAreMet]);
-}
-
-@end
-
-
-@interface CodePointInvokesVersion : CriteriaTest
-@end
-
-@implementation CodePointInvokesVersion
-
-- (void)testCodePointInvokesVersion {
-	XCTAssertTrue([self.interaction criteriaAreMet]);
-}
-
-@end
-
-
-@interface CodePointLastInvokedAt : CriteriaTest
-@end
-
-@implementation CodePointLastInvokedAt
-
-- (void)testCodePointLastInvokedAt {
-	XCTAssertTrue([self.interaction criteriaAreMet]);
-}
-
-@end
-
-
-@interface InteractionInvokesTotal : CriteriaTest
-@end
-
-@implementation InteractionInvokesTotal
-
-- (void)testInteractionInvokesTotal {
 	XCTAssertTrue([self.interaction criteriaAreMet]);
 }
 

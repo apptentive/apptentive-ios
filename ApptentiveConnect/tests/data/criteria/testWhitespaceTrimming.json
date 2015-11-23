@@ -1,0 +1,94 @@
+{
+  "$and": [
+    {
+      "device/custom_data/string_qwerty": {
+        "$exists": true
+      }
+    },
+    {
+      " device/custom_data/string_qwerty": {
+        "$exists": true
+      }
+    },
+    {
+      "device/custom_data/string_qwerty ": {
+        "$exists": true
+      }
+    },
+    {
+      "device /custom_data/string_qwerty": {
+        "$exists": true
+      }
+    },
+    {
+      "device/ custom_data/string_qwerty": {
+        "$exists": true
+      }
+    },
+    {
+      "device/custom_data /string_qwerty": {
+        "$exists": true
+      }
+    },
+    {
+      "device/custom_data/ string_qwerty": {
+        "$exists": true
+      }
+    },
+    {
+      "device/custom_data/string_qwerty ": {
+        "$exists": true
+      }
+    },
+    {
+      "device/custom_data/string%20with%20spaces": {
+        "$exists": true
+      }
+    },
+    {
+      "device/custom_data/ string%20with%20spaces": {
+        "$exists": true
+      }
+    },
+    {
+      "device/custom_data/string%20with%20spaces ": {
+        "$exists": true
+      }
+    },
+    {
+      "device/custom_data/string%20with%20spaces": {
+        "$eq": "string with spaces"
+      }
+    },
+    {
+      "device/custom_data/string%20with%20spaces": {
+        "$eq": " string with spaces "
+      }
+    },
+    {
+      "device/custom_data/string%20with%20spaces": {
+        "$contains": " with "
+      }
+    },
+    {
+      "device/custom_data/string%20with%20spaces": {
+        "$starts_with": " string"
+      }
+    },
+    {
+      "device/custom_data/string%20with%20spaces": {
+        "$starts_with": "string "
+      }
+    },
+    {
+      "device/custom_data/string%20with%20spaces": {
+        "$ends_with": " spaces"
+      }
+    },
+    {
+      "device/custom_data/string%20with%20spaces": {
+        "$ends_with": "spaces "
+      }
+    }
+  ]
+}

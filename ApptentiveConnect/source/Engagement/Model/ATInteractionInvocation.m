@@ -151,6 +151,15 @@
 	
 	for (NSString *key in criteria) {
 		NSObject *parameter = [criteria objectForKey:key];
+		if ([parameter isKindOfClass:[NSString class]]) {
+			parameter = [(NSString *)parameter stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+		}
+
+		NSMutableArray *trimmedKeyParts = [NSMutableArray array];
+		for (NSString *part in [key componentsSeparatedByString:@"/"]) {
+			[trimmedKeyParts addObject:[part stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+		}
+		NSString *trimmedKey = [trimmedKeyParts componentsJoinedByString:@"/"];
 
 		NSPredicate *predicate = nil;
 
@@ -161,9 +170,9 @@
 		BOOL hasError = NO;
 
 		if (parameterIsPrimitiveType || parameterIsComplexType) {
-			predicate = [self compoundPredicateForKeyPath:key operatorsAndValues:@{ @"==": parameter }];
+			predicate = [self compoundPredicateForKeyPath:trimmedKey operatorsAndValues:@{ @"==": parameter }];
 		} else if (parameterIsArray) {
-			NSCompoundPredicateType predicateType = [self compoundPredicateTypeFromString:key hasError:&hasError];
+			NSCompoundPredicateType predicateType = [self compoundPredicateTypeFromString:trimmedKey hasError:&hasError];
 			if (!hasError) {
 				predicate = [self compoundPredicateWithType:predicateType criteriaArray:(NSArray *)parameter];
 			}
@@ -174,16 +183,16 @@
 				BOOL hasError;
 				NSCompoundPredicateType predicateType = [self compoundPredicateTypeFromString:notKey hasError:&hasError];
 				if (!hasError) {
-					predicate = [self compoundPredicateWithType:predicateType criteriaArray:@[@{key: dictionaryValue[notKey]}]];
+					predicate = [self compoundPredicateWithType:predicateType criteriaArray:@[@{trimmedKey: dictionaryValue[notKey]}]];
 				}
-			} else if ([key isEqualToString:@"$not"]) {
+			} else if ([trimmedKey isEqualToString:@"$not"]) {
 				// Work around "Common Law Feature" where $not expressions are incorrect
-				NSCompoundPredicateType predicateType = [self compoundPredicateTypeFromString:key hasError:&hasError];
+				NSCompoundPredicateType predicateType = [self compoundPredicateTypeFromString:trimmedKey hasError:&hasError];
 				if (!hasError) {
 					predicate = [self compoundPredicateWithType:predicateType criteriaArray:@[parameter]];
 				}
 			} else {
-				predicate = [self compoundPredicateForKeyPath:key operatorsAndValues:(NSDictionary *)parameter];
+				predicate = [self compoundPredicateForKeyPath:trimmedKey operatorsAndValues:(NSDictionary *)parameter];
 			}
 		}
 
@@ -221,6 +230,9 @@
 	
 	for (NSString *operatorString in operatorsAndValues) {
 		NSObject *parameter = operatorsAndValues[operatorString];
+		if ([parameter isKindOfClass:[NSString class]]) {
+			parameter = [(NSString *)parameter stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+		}
 		
 		NSPredicate *predicate = nil;
 

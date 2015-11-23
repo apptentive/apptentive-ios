@@ -36,6 +36,7 @@
 
 	[[ATConnect sharedConnection] addCustomDeviceDataNumber:@5 withKey:@"number_5"];
 	[[ATConnect sharedConnection] addCustomDeviceDataString:@"qwerty" withKey:@"string_qwerty"];
+	[[ATConnect sharedConnection] addCustomDeviceDataString:@"string with spaces" withKey:@"string with spaces"];
 	[[ATConnect sharedConnection] removeCustomDeviceDataWithKey:@"key_with_null_value"];
 }
 
@@ -146,6 +147,17 @@
 @implementation OperatorExists
 
 - (void)testOperatorExists {
+	XCTAssertTrue([self.interaction criteriaAreMet]);
+}
+
+@end
+
+@interface WhitespaceTrimming : CriteriaTest
+@end
+
+@implementation WhitespaceTrimming
+
+- (void)testWhitespaceTrimming {
 	XCTAssertTrue([self.interaction criteriaAreMet]);
 }
 

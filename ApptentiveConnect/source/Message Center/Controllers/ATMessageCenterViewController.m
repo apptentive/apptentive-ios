@@ -691,7 +691,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (IBAction)sendButtonPressed:(id)sender {
-	NSString *message = self.messageInputView.messageView.text;	
+	NSString *message = [self.messageInputView.messageView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	NSIndexPath *lastUserMessageIndexPath = self.dataSource.lastUserMessageIndexPath;
 	
 	if (self.contextMessage) {

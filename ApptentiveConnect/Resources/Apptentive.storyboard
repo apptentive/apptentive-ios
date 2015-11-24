@@ -4,7 +4,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
@@ -773,7 +772,7 @@
                                             </cells>
                                         </collectionView>
                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="749" scrollEnabled="NO" editable="NO" text="Yeah, I like the app overall, but it just closed without saving. Can you help?" translatesAutoresizingMaskIntoConstraints="NO" id="OL7-yh-Ixu">
-                                            <rect key="frame" x="61" y="33" width="330" height="57"/>
+                                            <rect key="frame" x="61" y="33" width="338" height="57"/>
                                             <animations/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -790,11 +789,11 @@
                                         <constraint firstItem="OL7-yh-Ixu" firstAttribute="leading" secondItem="Jsr-98-e62" secondAttribute="trailing" constant="10" id="CaU-5A-Rgc"/>
                                         <constraint firstItem="OL7-yh-Ixu" firstAttribute="top" secondItem="gmM-NC-xG3" secondAttribute="bottom" id="Nvo-CI-Yn3"/>
                                         <constraint firstAttribute="trailing" secondItem="8yd-Pf-GMV" secondAttribute="trailing" id="XH6-Ls-7xY"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="OL7-yh-Ixu" secondAttribute="trailing" constant="15" id="eer-bj-ac5"/>
                                         <constraint firstItem="OL7-yh-Ixu" firstAttribute="leading" secondItem="gmM-NC-xG3" secondAttribute="leading" id="gJK-sQ-axX"/>
                                         <constraint firstItem="8yd-Pf-GMV" firstAttribute="top" secondItem="OL7-yh-Ixu" secondAttribute="bottom" id="jek-09-79E"/>
                                         <constraint firstItem="Jsr-98-e62" firstAttribute="top" secondItem="n4I-KM-rdG" secondAttribute="top" constant="16" id="l4F-qR-wBV"/>
                                         <constraint firstItem="gmM-NC-xG3" firstAttribute="top" secondItem="n4I-KM-rdG" secondAttribute="top" constant="16" id="mTi-JW-T0n"/>
+                                        <constraint firstAttribute="trailing" secondItem="OL7-yh-Ixu" secondAttribute="trailing" constant="15" id="pIk-IG-uYu"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <animations/>

@@ -66,8 +66,8 @@
 	self.imageView.backgroundColor = usePlaceholder ? [UIColor clearColor] : [UIColor lightGrayColor];
 
 	if (usePlaceholder) {
-		self.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
-		self.layer.cornerRadius = 16.0;
+		self.layer.borderWidth = 1.0;
+		self.layer.cornerRadius = 5.0;
 	} else {
 		self.layer.borderWidth = 0;
 		self.layer.cornerRadius = 0;
@@ -75,7 +75,7 @@
 }
 
 - (void)awakeFromNib {
-	self.layer.borderColor = [UIColor lightGrayColor].CGColor;
+	self.layer.borderColor = [UIColor colorWithWhite:0.7 alpha:1.0].CGColor;
 	self.translatesAutoresizingMaskIntoConstraints = NO;
 	self.imageView.translatesAutoresizingMaskIntoConstraints = NO;
 

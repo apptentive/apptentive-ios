@@ -234,6 +234,12 @@ static ATTaskQueue *sharedTaskQueue = nil;
 	@synchronized(self) {
 		if (object != activeTask) return;
 		ATTask *task = (ATTask *)object;
+
+		if (![task isKindOfClass:[ATTask class]]) {
+			ATLogError(@"Object was not subclass of ATTask");
+			return;
+		}
+
 		if ([keyPath isEqualToString:@"finished"] && [task finished]) {
 			[self unsetActiveTask];
 			[task cleanup];

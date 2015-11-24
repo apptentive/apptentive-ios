@@ -77,6 +77,7 @@
 }
 
 - (void)dealloc {
+	self.window.rootViewController = nil;
 	[self.hideTimer invalidate];
 }
 

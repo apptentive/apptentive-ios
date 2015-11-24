@@ -34,7 +34,7 @@
 	[super updateWithJSON:json];
 	
 	NSNumber *tmpForced = [json at_safeObjectForKey:@"forced"];
-	if (tmpForced) {
+	if (tmpForced != nil) {
 		self.forced = tmpForced;
 	}
 }

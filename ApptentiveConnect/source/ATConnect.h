@@ -22,6 +22,8 @@
 @class ATFeedbackWindowController;
 #endif
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol ATConnectDelegate;
 
 /** Notification sent when Message Center unread messages count changes. */
@@ -185,7 +187,7 @@ Before calling any other methods on the shared `ATConnect` instance, set the API
 
  @return `YES` if Message Center was presented, `NO` otherwise.
  */
-- (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
+- (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData;
 
 /**
  Returns the current number of unread messages in Message Center.
@@ -261,7 +263,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
  @return `YES` if an interaction was triggered by the event, `NO` otherwise.
 */
-- (BOOL)engage:(NSString *)event withCustomData:(NSDictionary *)customData fromViewController:(UIViewController *)viewController;
+- (BOOL)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData fromViewController:(UIViewController *)viewController;
 
 /**
  Shows interaction UI, if applicable, related to a given event. Attaches the specified custom data to the event along with the specified extended data.
@@ -273,7 +275,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
  @return `YES` if an interaction was triggered by the event, `NO` otherwise.
  */
-- (BOOL)engage:(NSString *)event withCustomData:(NSDictionary *)customData withExtendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController;
+- (BOOL)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData withExtendedData:(nullable NSArray<NSDictionary *> *)extendedData fromViewController:(UIViewController *)viewController;
 
 /**
  Dismisses Message Center.
@@ -283,7 +285,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
  @discussion Under normal circumstances, Message Center will be dismissed by the user tapping the Close button, so it is not necessary to call this method.
  */
-- (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion;
+- (void)dismissMessageCenterAnimated:(BOOL)animated completion:(nullable void (^)(void))completion;
 
 #elif TARGET_OS_MAC
 
@@ -334,13 +336,13 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
  @return An extended data dictionary representing a commerce transaction, to be included in an event's extended data.
   */
-+ (NSDictionary *)extendedDataCommerceWithTransactionID:(NSString *)transactionID
-											affiliation:(NSString *)affiliation
-												revenue:(NSNumber *)revenue
-											   shipping:(NSNumber *)shipping
-													tax:(NSNumber *)tax
-											   currency:(NSString *)currency
-										  commerceItems:(NSArray *)commerceItems;
++ (NSDictionary *)extendedDataCommerceWithTransactionID:(nullable NSString *)transactionID
+											affiliation:(nullable NSString *)affiliation
+												revenue:(nullable NSNumber *)revenue
+											   shipping:(nullable NSNumber *)shipping
+													tax:(nullable NSNumber *)tax
+											   currency:(nullable NSString *)currency
+										  commerceItems:(nullable NSArray<NSDictionary *> *)commerceItems;
 
 /**
  Used to specify a commercial transaction (consisting of a single item) in an event's extended data.
@@ -354,12 +356,12 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
  @return An extended data dictionary representing a single item in a commerce transaction, to be included in an event's extended data.
  */
-+ (NSDictionary *)extendedDataCommerceItemWithItemID:(NSString *)itemID
-												name:(NSString *)name
-											category:(NSString *)category
-											   price:(NSNumber *)price
-											quantity:(NSNumber *)quantity
-											currency:(NSString *)currency;
++ (NSDictionary *)extendedDataCommerceItemWithItemID:(nullable NSString *)itemID
+												name:(nullable NSString *)name
+											category:(nullable NSString *)category
+											   price:(nullable NSNumber *)price
+											quantity:(nullable NSNumber *)quantity
+											currency:(nullable NSString *)currency;
 
 
 ///-------------------------------------
@@ -526,3 +528,5 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  */
 @interface ATNavigationController : UINavigationController
 @end
+
+NS_ASSUME_NONNULL_END

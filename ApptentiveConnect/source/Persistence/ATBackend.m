@@ -287,7 +287,7 @@ static NSURLCache *imageCache = nil;
 
 	NSError *error;
 	if (![[[ATBackend sharedBackend] managedObjectContext] save:&error]) {
-		NSLog(@"Error (%@) saving message: %@", error, message);
+		ATLogError(@"Error (%@) saving message: %@", error, message);
 	}
 
 	// Give it a wee bit o' delay.

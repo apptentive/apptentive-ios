@@ -191,7 +191,7 @@ NSString *const ATMessageCenterAttachmentsArchiveFilename = @"DraftAttachments";
 				ATLogError(@"Unable to get suitable image from asset representation: %@", representation);
 			}
 		} failureBlock:^(NSError *error) {
-			NSLog(@"Unable to copy asset");
+			ATLogError(@"Unable to copy asset");
 		}];
 	} else { // Save newly-taken photo
 		UIImage *photo = info[UIImagePickerControllerOriginalImage];

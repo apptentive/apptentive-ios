@@ -11,7 +11,7 @@
 
 @interface ATMessageCenterMessageCell : UITableViewCell <ATMessageCenterCell>
 
-@property (weak, nonatomic) IBOutlet UILabel *messageLabel;
+@property (weak, nonatomic) IBOutlet UITextView *messageLabel;
 @property (weak, nonatomic) IBOutlet UILabel *statusLabel;
 @property (assign, nonatomic) BOOL statusLabelHidden;
 

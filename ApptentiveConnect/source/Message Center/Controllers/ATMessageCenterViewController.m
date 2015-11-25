@@ -164,7 +164,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	self.messageInputView.titleLabel.text = self.interaction.composerTitle;
 	[self.messageInputView.sendButton setTitle:self.interaction.composerSendButtonTitle forState:UIControlStateNormal];
-	[self updateSendButtonEnabledStatus];
 
 	self.messageInputView.sendButton.accessibilityHint = ATLocalizedString(@"Sends the message.", @"Accessibility hint for 'send' button");
 	
@@ -217,6 +216,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	[self.attachmentController addObserver:self forKeyPath:@"attachments" options:0 context:NULL];
 	[self.attachmentController viewDidLoad];
+
+	[self updateSendButtonEnabledStatus];
 }
 
 - (void)dealloc {
@@ -257,7 +258,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	if (self.attachmentController.active) {
 		self.state = ATMessageCenterStateComposing;
 		[self.attachmentController becomeFirstResponder];
-	} else if (message && ![message isEqualToString:@""]) {
+	} else if ((message && ![message isEqualToString:@""]) || self.attachmentController.attachments.count) {
 		self.state = ATMessageCenterStateComposing;
 		[self.messageInputView.messageView becomeFirstResponder];
 	} else if (self.isSubsequentDisplay == NO) {
@@ -303,24 +304,24 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 		switch ([self.dataSource statusOfMessageAtIndexPath:indexPath]) {
 			case ATMessageCenterMessageStatusHidden:
-				messageCell.statusLabel.hidden = YES;
+				messageCell.statusLabelHidden = YES;
 				messageCell.layer.borderWidth = 0;
 				break;
 			case ATMessageCenterMessageStatusFailed:
-				messageCell.statusLabel.hidden = NO;
+				messageCell.statusLabelHidden = NO;
 				messageCell.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
 				messageCell.layer.borderColor = [self failedColor].CGColor;
 				messageCell.statusLabel.textColor = [self failedColor];
 				messageCell.statusLabel.text = ATLocalizedString(@"Failed", @"Message failed to send.");
 				break;
 			case ATMessageCenterMessageStatusSending:
-				messageCell.statusLabel.hidden = NO;
+				messageCell.statusLabelHidden = NO;
 				messageCell.layer.borderWidth = 0;
 				messageCell.statusLabel.textColor = self.sentColor;
 				messageCell.statusLabel.text = ATLocalizedString(@"Sending…", @"Message is sending.");
 				break;
 			case ATMessageCenterMessageStatusSent:
-				messageCell.statusLabel.hidden = NO;
+				messageCell.statusLabelHidden = NO;
 				messageCell.layer.borderWidth = 0;
 				messageCell.statusLabel.textColor = self.sentColor;
 				messageCell.statusLabel.text = ATLocalizedString(@"Sent", @"Message sent successfully");
@@ -353,6 +354,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		compoundCell.collectionView.index = indexPath.section;
 		compoundCell.collectionView.dataSource = self;
 		compoundCell.collectionView.delegate = self;
+		[compoundCell.collectionView reloadData];
 
 		UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)compoundCell.collectionView.collectionViewLayout;
 		layout.sectionInset = UIEdgeInsetsMake(ATTACHMENT_MARGIN.height, ATTACHMENT_MARGIN.width, ATTACHMENT_MARGIN.height, ATTACHMENT_MARGIN.width);
@@ -390,7 +392,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 		case ATMessageCenterMessageTypeCompoundMessage:
 			horizontalMargin = MESSAGE_LABEL_TOTAL_HORIZONTAL_MARGIN;
-			verticalMargin = MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN];
+			verticalMargin = MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0 + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN];
+			if (statusLabelVisible) {
+				verticalMargin += MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0 - STATUS_LABEL_MARGIN;
+			}
 			minimumCellHeight = 0;
 			break;
 
@@ -402,13 +407,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 		case ATMessageCenterMessageTypeCompoundReply:
 			horizontalMargin = REPLY_LABEL_TOTAL_HORIZONTAL_MARGIN;
-			verticalMargin = REPLY_CELL_MINIMUM_HEIGHT + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN];
+			verticalMargin = 33.5 + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN];
 			minimumCellHeight = REPLY_CELL_MINIMUM_HEIGHT + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN] - MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0;
 			break;
 	}
 	
 	if (statusLabelVisible) {
-		verticalMargin += STATUS_LABEL_HEIGHT + STATUS_LABEL_MARGIN + 0.5;
+		verticalMargin += STATUS_LABEL_HEIGHT + STATUS_LABEL_MARGIN;
 	}
 
 	NSString *labelText = [self.dataSource textOfMessageAtIndexPath:indexPath];
@@ -418,13 +423,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:labelText attributes:@{NSFontAttributeName: BODY_FONT}];
 		labelRect = [attributedText boundingRectWithSize:CGSizeMake(effectiveLabelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
 	} else {
-		verticalMargin -= MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN;
-		if (statusLabelVisible) {
-			verticalMargin += 9.0;
-		}
+		verticalMargin -= MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0;
 	}
 	
-	double height = ceil(fmax(labelRect.size.height + verticalMargin, minimumCellHeight));
+	double height = ceil(fmax(labelRect.size.height + verticalMargin, minimumCellHeight) + 0.5);
 	
 	// "Due to an underlying implementation detail, you should not return values greater than 2009."
 	return fmin(height, 2009.0);
@@ -689,7 +691,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (IBAction)sendButtonPressed:(id)sender {
-	NSString *message = self.messageInputView.messageView.text;	
+	NSString *message = [self.messageInputView.messageView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	NSIndexPath *lastUserMessageIndexPath = self.dataSource.lastUserMessageIndexPath;
 	
 	if (self.contextMessage) {
@@ -706,6 +708,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 
 	[self.attachmentController resignFirstResponder];
+	self.attachmentController.active = NO;
 
 	if ([self shouldShowProfileViewBeforeComposing:NO]) {
 		[self.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{@"required": @(self.interaction.profileRequired), @"trigger": @"automatic"}];

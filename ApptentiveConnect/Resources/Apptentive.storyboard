@@ -460,26 +460,27 @@
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="50.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Context Message" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="384" translatesAutoresizingMaskIntoConstraints="NO" id="H0j-G5-55X">
-                                            <rect key="frame" x="15" y="8" width="384" height="34"/>
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="749" scrollEnabled="NO" editable="NO" text="This is a context message." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="51V-f8-IsS">
+                                            <rect key="frame" x="15" y="8" width="384" height="34.5"/>
                                             <animations/>
+                                            <color key="textColor" red="0.066666666666666666" green="0.066666666666666666" blue="0.090196078431372548" alpha="1" colorSpace="calibratedRGB"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" red="0.42745098039215684" green="0.42745098039215684" blue="0.4392156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
+                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES"/>
+                                        </textView>
                                     </subviews>
                                     <animations/>
                                     <color key="backgroundColor" red="0.96862745098039216" green="0.96862745098039216" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
-                                        <constraint firstItem="H0j-G5-55X" firstAttribute="top" secondItem="jRh-G0-si1" secondAttribute="top" constant="8" id="PpF-o0-5pl"/>
-                                        <constraint firstAttribute="trailing" secondItem="H0j-G5-55X" secondAttribute="trailing" constant="15" id="Yxr-FA-Q8x"/>
-                                        <constraint firstItem="H0j-G5-55X" firstAttribute="leading" secondItem="jRh-G0-si1" secondAttribute="leading" constant="15" id="igV-dn-rMZ"/>
-                                        <constraint firstAttribute="bottom" secondItem="H0j-G5-55X" secondAttribute="bottom" constant="8" id="mit-8o-4ed"/>
+                                        <constraint firstAttribute="trailing" secondItem="51V-f8-IsS" secondAttribute="trailing" constant="15" id="Hfi-CO-c7B"/>
+                                        <constraint firstAttribute="bottom" secondItem="51V-f8-IsS" secondAttribute="bottom" constant="8" id="X47-Cz-LLK"/>
+                                        <constraint firstItem="51V-f8-IsS" firstAttribute="leading" secondItem="jRh-G0-si1" secondAttribute="leading" constant="15" id="blU-qF-sDv"/>
+                                        <constraint firstItem="51V-f8-IsS" firstAttribute="top" secondItem="jRh-G0-si1" secondAttribute="top" constant="8" id="dQ5-9Y-EBs"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <animations/>
                                 <connections>
-                                    <outlet property="contextMessageLabel" destination="H0j-G5-55X" id="9bK-XY-Y7x"/>
+                                    <outlet property="messageLabel" destination="51V-f8-IsS" id="bAK-oV-hJH"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="Reply" rowHeight="87" id="JK9-ui-0US" customClass="ATMessageCenterReplyCell">
@@ -490,17 +491,10 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sender" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hqj-Rz-wbV">
-                                            <rect key="frame" x="61" y="16" width="49.5" height="15"/>
+                                            <rect key="frame" x="61" y="16" width="49.5" height="17"/>
                                             <animations/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                             <color key="textColor" red="0.45490196078431372" green="0.45490196078431372" blue="0.46274509803921571" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Yeah, I like the app overall, but it just closed without saving. can you help?" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="338" translatesAutoresizingMaskIntoConstraints="NO" id="5Eh-t3-ula">
-                                            <rect key="frame" x="61" y="31" width="338" height="41"/>
-                                            <animations/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" red="0.090196078431372548" green="0.090196078431372548" blue="0.14509803921568626" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="g0l-YC-9t6" customClass="ATNetworkImageIconView">
@@ -514,23 +508,30 @@
                                                 <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                             </userDefinedRuntimeAttributes>
                                         </imageView>
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="749" scrollEnabled="NO" editable="NO" text="Yeah, I like the app overall, but it just closed without saving. Can you help?" translatesAutoresizingMaskIntoConstraints="NO" id="4jZ-c4-yjV">
+                                            <rect key="frame" x="61" y="33" width="339" height="43.5"/>
+                                            <animations/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES"/>
+                                        </textView>
                                     </subviews>
                                     <animations/>
                                     <color key="backgroundColor" red="0.96862745098039216" green="0.96862745098039216" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
-                                        <constraint firstItem="5Eh-t3-ula" firstAttribute="top" secondItem="hqj-Rz-wbV" secondAttribute="bottom" id="4b3-yN-CNm"/>
-                                        <constraint firstAttribute="trailing" secondItem="5Eh-t3-ula" secondAttribute="trailing" constant="15" id="6Lm-DK-eIx"/>
+                                        <constraint firstItem="4jZ-c4-yjV" firstAttribute="leading" secondItem="g0l-YC-9t6" secondAttribute="trailing" constant="10" id="323-4O-wsz"/>
+                                        <constraint firstAttribute="trailing" secondItem="4jZ-c4-yjV" secondAttribute="trailing" constant="14" id="8wT-7O-1Q6"/>
                                         <constraint firstItem="g0l-YC-9t6" firstAttribute="leading" secondItem="mF7-ws-xVD" secondAttribute="leading" constant="15" id="Bif-O4-s6P"/>
+                                        <constraint firstItem="4jZ-c4-yjV" firstAttribute="top" secondItem="hqj-Rz-wbV" secondAttribute="bottom" id="Gdz-qM-qXk"/>
                                         <constraint firstItem="hqj-Rz-wbV" firstAttribute="top" secondItem="mF7-ws-xVD" secondAttribute="top" constant="16" id="HZl-Y8-hNK"/>
-                                        <constraint firstItem="5Eh-t3-ula" firstAttribute="leading" secondItem="g0l-YC-9t6" secondAttribute="trailing" constant="10" id="Mar-hJ-GzJ"/>
-                                        <constraint firstItem="hqj-Rz-wbV" firstAttribute="leading" secondItem="5Eh-t3-ula" secondAttribute="leading" id="b2H-7t-dMg"/>
-                                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="5Eh-t3-ula" secondAttribute="bottom" constant="14" id="jFw-vh-uuy"/>
+                                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="4jZ-c4-yjV" secondAttribute="bottom" constant="10" id="NGW-TN-yfY"/>
                                         <constraint firstItem="g0l-YC-9t6" firstAttribute="top" secondItem="mF7-ws-xVD" secondAttribute="top" constant="16" id="sAc-H6-Xmx"/>
+                                        <constraint firstItem="4jZ-c4-yjV" firstAttribute="leading" secondItem="hqj-Rz-wbV" secondAttribute="leading" id="xpy-hL-PY5"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <animations/>
                                 <connections>
-                                    <outlet property="messageLabel" destination="5Eh-t3-ula" id="hyH-JZ-Nag"/>
+                                    <outlet property="messageLabel" destination="4jZ-c4-yjV" id="fFB-pc-X7S"/>
                                     <outlet property="senderLabel" destination="hqj-Rz-wbV" id="Hb8-Bp-DZr"/>
                                     <outlet property="supportUserImageView" destination="g0l-YC-9t6" id="IAN-sK-oUE"/>
                                 </connections>
@@ -542,37 +543,36 @@
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="92.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Yeah, I like the app overall, but it just closed without saving. can you help?" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="384" translatesAutoresizingMaskIntoConstraints="NO" id="1yl-30-ZGb">
-                                            <rect key="frame" x="15" y="14" width="384" height="41"/>
-                                            <animations/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" red="0.090196078431372548" green="0.090196078431372548" blue="0.14509803921568626" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sent" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qyc-gl-oxc">
-                                            <rect key="frame" x="15" y="61" width="384" height="15"/>
+                                            <rect key="frame" x="15" y="63" width="384" height="14.5"/>
                                             <animations/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
                                             <color key="textColor" red="0.54117647059999996" green="0.54117647059999996" blue="0.54117647059999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="749" scrollEnabled="NO" editable="NO" text="Yeah, I like the app overall, but it just closed without saving. Can you help?" translatesAutoresizingMaskIntoConstraints="NO" id="l1M-wM-7fc">
+                                            <rect key="frame" x="15" y="14" width="384" height="64.5"/>
+                                            <animations/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <textInputTraits key="textInputTraits"/>
+                                            <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES"/>
+                                        </textView>
                                     </subviews>
                                     <animations/>
                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
-                                        <constraint firstItem="1yl-30-ZGb" firstAttribute="top" secondItem="H0J-6d-bTN" secondAttribute="top" constant="14" id="0Xf-rH-hjC"/>
-                                        <constraint firstItem="qyc-gl-oxc" firstAttribute="top" secondItem="1yl-30-ZGb" secondAttribute="bottom" constant="6" id="Ytg-xz-U5z"/>
-                                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="1yl-30-ZGb" secondAttribute="bottom" constant="14" id="adM-NY-T1X"/>
+                                        <constraint firstItem="l1M-wM-7fc" firstAttribute="top" secondItem="H0J-6d-bTN" secondAttribute="top" constant="14" id="3U6-GG-mmk"/>
+                                        <constraint firstAttribute="trailing" secondItem="l1M-wM-7fc" secondAttribute="trailing" constant="15" id="Kub-8Q-9yD"/>
+                                        <constraint firstItem="l1M-wM-7fc" firstAttribute="leading" secondItem="H0J-6d-bTN" secondAttribute="leading" constant="15" id="Utz-12-Xk4"/>
                                         <constraint firstItem="qyc-gl-oxc" firstAttribute="leading" secondItem="H0J-6d-bTN" secondAttribute="leading" constant="15" id="h3Z-FQ-SxP"/>
-                                        <constraint firstItem="1yl-30-ZGb" firstAttribute="leading" secondItem="H0J-6d-bTN" secondAttribute="leading" constant="15" id="nQP-L2-mw0"/>
+                                        <constraint firstAttribute="bottom" secondItem="l1M-wM-7fc" secondAttribute="bottom" constant="14" id="iwl-Oh-jSP"/>
                                         <constraint firstAttribute="trailing" secondItem="qyc-gl-oxc" secondAttribute="trailing" constant="15" id="oxx-cV-R3q"/>
-                                        <constraint firstAttribute="trailing" secondItem="1yl-30-ZGb" secondAttribute="trailing" constant="15" id="viE-v4-gHW"/>
+                                        <constraint firstAttribute="bottom" secondItem="qyc-gl-oxc" secondAttribute="bottom" constant="15" id="z8c-5f-ggb"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <animations/>
                                 <connections>
-                                    <outlet property="messageLabel" destination="1yl-30-ZGb" id="Ew0-Ln-oSz"/>
-                                    <outlet property="messageStatusSpacingConstraint" destination="Ytg-xz-U5z" id="eF2-Km-txc"/>
+                                    <outlet property="messageLabel" destination="l1M-wM-7fc" id="vKo-Rn-U2U"/>
                                     <outlet property="statusLabel" destination="qyc-gl-oxc" id="49R-Xd-kog"/>
                                 </connections>
                             </tableViewCell>
@@ -583,15 +583,8 @@
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="180.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Yeah, I like the app overall, but it just closed without saving. can you help?" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="384" translatesAutoresizingMaskIntoConstraints="NO" id="Fpx-xw-jcn">
-                                            <rect key="frame" x="15" y="14" width="384" height="41"/>
-                                            <animations/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" red="0.090196078430000007" green="0.090196078430000007" blue="0.1450980392" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
                                         <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="k3E-kW-rhx" customClass="ATIndexedCollectionView">
-                                            <rect key="frame" x="0.0" y="55" width="414" height="96"/>
+                                            <rect key="frame" x="0.0" y="71" width="414" height="80"/>
                                             <animations/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="16" minimumInteritemSpacing="16" id="yBy-UF-MKC">
@@ -602,7 +595,7 @@
                                             </collectionViewFlowLayout>
                                             <cells>
                                                 <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Attachment" id="DDu-nA-yL9" customClass="ATAttachmentCell">
-                                                    <rect key="frame" x="16" y="8" width="60" height="80"/>
+                                                    <rect key="frame" x="16" y="0.0" width="60" height="80"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                         <rect key="frame" x="0.0" y="0.0" width="60" height="80"/>
@@ -658,20 +651,27 @@
                                             <color key="textColor" red="0.54117647059999996" green="0.54117647059999996" blue="0.54117647059999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="749" scrollEnabled="NO" editable="NO" text="Yeah, I like the app overall, but it just closed without saving. Can you help?" translatesAutoresizingMaskIntoConstraints="NO" id="PvY-mz-4Y9">
+                                            <rect key="frame" x="15" y="14" width="384" height="57"/>
+                                            <animations/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES"/>
+                                        </textView>
                                     </subviews>
                                     <animations/>
                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
-                                        <constraint firstItem="Fpx-xw-jcn" firstAttribute="leading" secondItem="cxM-mJ-g02" secondAttribute="leading" constant="15" id="5sL-bB-jyy"/>
-                                        <constraint firstItem="k3E-kW-rhx" firstAttribute="top" secondItem="Fpx-xw-jcn" secondAttribute="bottom" id="6yE-4v-Eg1"/>
+                                        <constraint firstItem="NEI-ES-PdT" firstAttribute="top" secondItem="k3E-kW-rhx" secondAttribute="bottom" id="6tO-Fw-2Vd"/>
+                                        <constraint firstItem="PvY-mz-4Y9" firstAttribute="leading" secondItem="cxM-mJ-g02" secondAttribute="leading" constant="15" id="B0s-Gt-ruD"/>
                                         <constraint firstAttribute="bottom" secondItem="k3E-kW-rhx" secondAttribute="bottom" priority="100" id="D1j-DW-lil"/>
+                                        <constraint firstItem="PvY-mz-4Y9" firstAttribute="top" secondItem="cxM-mJ-g02" secondAttribute="top" constant="14" id="DB3-b2-myi"/>
+                                        <constraint firstAttribute="trailing" secondItem="PvY-mz-4Y9" secondAttribute="trailing" constant="15" id="MQx-Ed-A67"/>
                                         <constraint firstItem="k3E-kW-rhx" firstAttribute="top" secondItem="cxM-mJ-g02" secondAttribute="top" priority="100" id="Pub-O8-oE2"/>
-                                        <constraint firstItem="NEI-ES-PdT" firstAttribute="top" secondItem="k3E-kW-rhx" secondAttribute="bottom" id="Rvg-xv-Qxc"/>
                                         <constraint firstAttribute="trailing" secondItem="NEI-ES-PdT" secondAttribute="trailing" constant="15" id="SHh-cI-eWS"/>
                                         <constraint firstAttribute="bottom" secondItem="NEI-ES-PdT" secondAttribute="bottom" constant="15" id="T2y-li-RMg"/>
-                                        <constraint firstAttribute="trailing" secondItem="Fpx-xw-jcn" secondAttribute="trailing" constant="15" id="TQC-Tb-q4V"/>
-                                        <constraint firstAttribute="trailing" secondItem="k3E-kW-rhx" secondAttribute="trailing" priority="100" id="aAH-oR-IZb"/>
-                                        <constraint firstItem="Fpx-xw-jcn" firstAttribute="top" secondItem="cxM-mJ-g02" secondAttribute="top" constant="14" id="bZd-eT-YXP"/>
+                                        <constraint firstItem="k3E-kW-rhx" firstAttribute="top" secondItem="PvY-mz-4Y9" secondAttribute="bottom" id="WDZ-hc-yzf"/>
+                                        <constraint firstAttribute="trailing" secondItem="k3E-kW-rhx" secondAttribute="trailing" id="aAH-oR-IZb"/>
                                         <constraint firstItem="NEI-ES-PdT" firstAttribute="leading" secondItem="cxM-mJ-g02" secondAttribute="leading" constant="15" id="pTi-sf-le2"/>
                                         <constraint firstItem="k3E-kW-rhx" firstAttribute="leading" secondItem="cxM-mJ-g02" secondAttribute="leading" id="q3f-P8-FAj"/>
                                     </constraints>
@@ -679,9 +679,9 @@
                                 <animations/>
                                 <connections>
                                     <outlet property="collectionView" destination="k3E-kW-rhx" id="7wF-xi-EHz"/>
-                                    <outlet property="messageLabel" destination="Fpx-xw-jcn" id="Pr3-Ob-SSw"/>
-                                    <outlet property="messageLabelCollectionViewSpacing" destination="6yE-4v-Eg1" id="3Tw-DW-iaa"/>
-                                    <outlet property="messageStatusSpacingConstraint" destination="Rvg-xv-Qxc" id="xwh-Qk-YCT"/>
+                                    <outlet property="messageLabel" destination="PvY-mz-4Y9" id="psy-16-umt"/>
+                                    <outlet property="messageLabelCollectionViewSpacing" destination="WDZ-hc-yzf" id="UG4-hT-xBu"/>
+                                    <outlet property="messageStatusSpacingConstraint" destination="6tO-Fw-2Vd" id="ZQV-7s-gOx"/>
                                     <outlet property="statusLabel" destination="NEI-ES-PdT" id="V5k-gB-1qa"/>
                                 </connections>
                             </tableViewCell>
@@ -699,13 +699,6 @@
                                             <color key="textColor" red="0.4549019608" green="0.4549019608" blue="0.46274509800000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Yeah, I like the app overall, but it just closed without saving. can you help?" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="338" translatesAutoresizingMaskIntoConstraints="NO" id="FWL-2Q-6ir">
-                                            <rect key="frame" x="61" y="33" width="338" height="41"/>
-                                            <animations/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" red="0.090196078430000007" green="0.090196078430000007" blue="0.1450980392" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Jsr-98-e62" customClass="ATNetworkImageIconView">
                                             <rect key="frame" x="15" y="16" width="36" height="36"/>
                                             <animations/>
@@ -718,7 +711,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </imageView>
                                         <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="8yd-Pf-GMV" customClass="ATIndexedCollectionView">
-                                            <rect key="frame" x="0.0" y="74" width="414" height="94"/>
+                                            <rect key="frame" x="0.0" y="90" width="414" height="78"/>
                                             <animations/>
                                             <color key="backgroundColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.97647058819999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="16" minimumInteritemSpacing="16" id="OPP-bf-7zg">
@@ -729,7 +722,7 @@
                                             </collectionViewFlowLayout>
                                             <cells>
                                                 <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Attachment" id="scV-jZ-PIi" customClass="ATAttachmentCell">
-                                                    <rect key="frame" x="16" y="7" width="60" height="80"/>
+                                                    <rect key="frame" x="16" y="-1" width="60" height="80"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                         <rect key="frame" x="0.0" y="0.0" width="60" height="80"/>
@@ -778,29 +771,35 @@
                                                 </collectionViewCell>
                                             </cells>
                                         </collectionView>
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="749" scrollEnabled="NO" editable="NO" text="Yeah, I like the app overall, but it just closed without saving. Can you help?" translatesAutoresizingMaskIntoConstraints="NO" id="OL7-yh-Ixu">
+                                            <rect key="frame" x="61" y="33" width="338" height="57"/>
+                                            <animations/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES"/>
+                                        </textView>
                                     </subviews>
                                     <animations/>
                                     <color key="backgroundColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.97647058819999999" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
-                                        <constraint firstItem="FWL-2Q-6ir" firstAttribute="top" secondItem="gmM-NC-xG3" secondAttribute="bottom" id="5QW-fB-5CO"/>
                                         <constraint firstItem="Jsr-98-e62" firstAttribute="leading" secondItem="n4I-KM-rdG" secondAttribute="leading" constant="15" id="6Wg-fs-O8K"/>
                                         <constraint firstItem="8yd-Pf-GMV" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Jsr-98-e62" secondAttribute="bottom" id="8r7-cq-tJo"/>
                                         <constraint firstItem="8yd-Pf-GMV" firstAttribute="leading" secondItem="n4I-KM-rdG" secondAttribute="leading" id="9Qd-sI-T0C"/>
                                         <constraint firstAttribute="bottom" secondItem="8yd-Pf-GMV" secondAttribute="bottom" id="BQ7-Q8-EWi"/>
+                                        <constraint firstItem="OL7-yh-Ixu" firstAttribute="leading" secondItem="Jsr-98-e62" secondAttribute="trailing" constant="10" id="CaU-5A-Rgc"/>
+                                        <constraint firstItem="OL7-yh-Ixu" firstAttribute="top" secondItem="gmM-NC-xG3" secondAttribute="bottom" id="Nvo-CI-Yn3"/>
                                         <constraint firstAttribute="trailing" secondItem="8yd-Pf-GMV" secondAttribute="trailing" id="XH6-Ls-7xY"/>
-                                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="FWL-2Q-6ir" secondAttribute="bottom" constant="14" id="cCH-aA-UKk"/>
+                                        <constraint firstItem="OL7-yh-Ixu" firstAttribute="leading" secondItem="gmM-NC-xG3" secondAttribute="leading" id="gJK-sQ-axX"/>
+                                        <constraint firstItem="8yd-Pf-GMV" firstAttribute="top" secondItem="OL7-yh-Ixu" secondAttribute="bottom" id="jek-09-79E"/>
                                         <constraint firstItem="Jsr-98-e62" firstAttribute="top" secondItem="n4I-KM-rdG" secondAttribute="top" constant="16" id="l4F-qR-wBV"/>
                                         <constraint firstItem="gmM-NC-xG3" firstAttribute="top" secondItem="n4I-KM-rdG" secondAttribute="top" constant="16" id="mTi-JW-T0n"/>
-                                        <constraint firstItem="FWL-2Q-6ir" firstAttribute="leading" secondItem="Jsr-98-e62" secondAttribute="trailing" constant="10" id="omZ-xg-XG0"/>
-                                        <constraint firstItem="8yd-Pf-GMV" firstAttribute="top" secondItem="FWL-2Q-6ir" secondAttribute="bottom" id="sdC-I9-IMR"/>
-                                        <constraint firstItem="gmM-NC-xG3" firstAttribute="leading" secondItem="FWL-2Q-6ir" secondAttribute="leading" id="tvj-om-TVt"/>
-                                        <constraint firstAttribute="trailing" secondItem="FWL-2Q-6ir" secondAttribute="trailing" constant="15" id="zBm-y8-0oP"/>
+                                        <constraint firstAttribute="trailing" secondItem="OL7-yh-Ixu" secondAttribute="trailing" constant="15" id="pIk-IG-uYu"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <animations/>
                                 <connections>
                                     <outlet property="collectionView" destination="8yd-Pf-GMV" id="Ovs-6I-POk"/>
-                                    <outlet property="messageLabel" destination="FWL-2Q-6ir" id="ZTA-2U-a8e"/>
+                                    <outlet property="messageLabel" destination="OL7-yh-Ixu" id="FDe-bv-UKX"/>
                                     <outlet property="senderLabel" destination="gmM-NC-xG3" id="H8U-h3-JsX"/>
                                     <outlet property="supportUserImageView" destination="Jsr-98-e62" id="kjT-hK-ySn"/>
                                 </connections>

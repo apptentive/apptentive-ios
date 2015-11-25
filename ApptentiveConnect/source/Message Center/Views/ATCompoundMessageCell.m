@@ -11,6 +11,7 @@
 @interface ATCompoundMessageCell ()
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *messageLabelCollectionViewSpacing;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *messageStatusSpacingConstraint;
 
 @end
 
@@ -23,6 +24,16 @@
 		[self.contentView removeConstraint:self.messageLabelCollectionViewSpacing];
 	} else {
 		[self.contentView addConstraint:self.messageLabelCollectionViewSpacing];
+	}
+}
+
+- (void)setStatusLabelHidden:(BOOL)statusLabelHidden {
+	[super setStatusLabelHidden:statusLabelHidden];
+	
+	if (statusLabelHidden) {
+		[self.contentView removeConstraint:self.messageStatusSpacingConstraint];
+	} else {
+		[self.contentView addConstraint:self.messageStatusSpacingConstraint];
 	}
 }
 

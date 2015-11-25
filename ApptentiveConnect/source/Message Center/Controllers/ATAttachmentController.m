@@ -182,9 +182,14 @@ NSString *const ATMessageCenterAttachmentsArchiveFilename = @"DraftAttachments";
 
 		[assetLibrary assetForURL:referenceURL resultBlock:^(ALAsset *asset) {
 			ALAssetRepresentation *representation = asset.defaultRepresentation;
-			UIImage *image = [UIImage imageWithCGImage:representation.fullScreenImage];
+			CGImageRef CGImage = representation.fullScreenImage ?: representation.fullResolutionImage;
+			UIImage *image = [UIImage imageWithCGImage:CGImage];
 
-			[self insertImage:image];
+			if (image) {
+				[self insertImage:image];
+			} else {
+				ATLogError(@"Unable to get suitable image from asset representation: %@", representation);
+			}
 		} failureBlock:^(NSError *error) {
 			NSLog(@"Unable to copy asset");
 		}];

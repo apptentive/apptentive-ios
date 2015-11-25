@@ -1,0 +1,81 @@
+{
+  "$and": [
+    {
+      "application/version": {
+        "$exists": true
+      }
+    },
+    {
+      "$not": {
+        "application/version": {
+          "$exists": false
+        }
+      }
+    },
+    {
+      "$not": {
+        "$not": {
+          "application/version": {
+            "$exists": true
+          }
+        }
+      }
+    },
+    {
+      "$not": {
+        "$not": {
+          "$not": {
+            "application/version": {
+              "$exists": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "$not": {
+        "$not": {
+          "$not": {
+            "$not": {
+              "application/version": {
+                "$exists": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$not": {
+        "$not": {
+          "$not": {
+            "$not": {
+              "$not": {
+                "application/version": {
+                  "$exists": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$not": {
+        "$not": {
+          "$not": {
+            "$not": {
+              "$not": {
+                "$not": {
+                  "application/version": {
+                    "$exists": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

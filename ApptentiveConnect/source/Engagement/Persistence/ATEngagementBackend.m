@@ -49,10 +49,15 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 
 NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 
-@implementation ATEngagementBackend {
-	NSMutableDictionary *_engagementTargets;
-	NSMutableDictionary *_engagementInteractions;
-}
+
+@interface ATEngagementBackend ()
+
+@property (strong, nonatomic) NSMutableDictionary *engagementTargets;
+@property (strong, nonatomic) NSMutableDictionary *engagementInteractions;
+
+@end
+
+@implementation ATEngagementBackend
 
 + (ATEngagementBackend *)sharedBackend {
 	static ATEngagementBackend *sharedBackend = nil;
@@ -183,11 +188,11 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 				[defaults setObject:date forKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
 			}
 		
-			[_engagementTargets removeAllObjects];
-			[_engagementTargets addEntriesFromDictionary:targets];
+			[self.engagementTargets removeAllObjects];
+			[self.engagementTargets addEntriesFromDictionary:targets];
 		
-			[_engagementInteractions removeAllObjects];
-			[_engagementInteractions addEntriesFromDictionary:interactions];
+			[self.engagementInteractions removeAllObjects];
+			[self.engagementInteractions addEntriesFromDictionary:interactions];
 		
 			NSString *buildNumber = [ATUtilities buildNumberString];
 			if ([ATUtilities buildNumberString]) {
@@ -276,14 +281,14 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 	
 	ATInteraction *interaction = nil;
 	if (interactionID) {
-		interaction = _engagementInteractions[interactionID];
+		interaction = self.engagementInteractions[interactionID];
 	}
 	
 	return interaction;
 }
 
 - (ATInteraction *)interactionForEvent:(NSString *)event {
-	NSArray *invocations = _engagementTargets[event];
+	NSArray *invocations = self.engagementTargets[event];
 	ATInteraction *interaction = [self interactionForInvocations:invocations];
 	
 	return interaction;
@@ -572,7 +577,7 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (NSArray *)allEngagementInteractions {
-	return [_engagementInteractions allValues];
+	return [self.engagementInteractions allValues];
 }
 
 @end

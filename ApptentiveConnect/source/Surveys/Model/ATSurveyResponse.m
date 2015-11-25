@@ -16,7 +16,7 @@
 @dynamic surveyID;
 @dynamic pendingState;
 
-+ (NSObject *)newInstanceWithJSON:(NSDictionary *)json {
++ (instancetype)newInstanceWithJSON:(NSDictionary *)json {
 	NSAssert(NO, @"Abstract method called.");
 	return nil;
 }

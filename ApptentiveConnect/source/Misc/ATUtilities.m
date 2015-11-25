@@ -8,6 +8,7 @@
 
 #import "ATUtilities.h"
 #import <QuartzCore/QuartzCore.h>
+#import <AVFoundation/AVFoundation.h>
 #if !TARGET_OS_IPHONE
 #import <Carbon/Carbon.h>
 #import <SystemConfiguration/SystemConfiguration.h>
@@ -209,6 +210,12 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 	UIGraphicsEndImageContext();
 	
 	return result;
+}
+
++ (UIImage *)imageByScalingImage:(UIImage *)image toFitSize:(CGSize)size scale:(CGFloat)contentScale {
+	CGRect destinationRect = {.origin = CGPointZero, .size = size};
+	CGSize destinationSize = AVMakeRectWithAspectRatioInsideRect(image.size, destinationRect).size;
+	return [self imageByScalingImage:image toSize:destinationSize scale:contentScale fromITouchCamera:NO];
 }
 
 + (UIImage *)imageByScalingImage:(UIImage *)image toSize:(CGSize)size scale:(CGFloat)contentScale fromITouchCamera:(BOOL)isFromITouchCamera {

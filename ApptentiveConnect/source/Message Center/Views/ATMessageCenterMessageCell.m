@@ -8,21 +8,17 @@
 
 #import "ATMessageCenterMessageCell.h"
 
-@interface ATMessageCenterMessageCell ()
-
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *messageStatusSpacingConstraint;
-
-@end
-
 @implementation ATMessageCenterMessageCell
 
-- (void)layoutSubviews {
-	[super layoutSubviews];
-	
-	// iOS 7 doesn't support automatic max layout width, so we have to set this explicitly.
-	self.messageLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.contentView.bounds) - 30.0;
-	
-	[super layoutSubviews];
+- (void)awakeFromNib {
+	self.messageLabel.textContainerInset = UIEdgeInsetsZero;
+	self.messageLabel.textContainer.lineFragmentPadding = 0;
+}
+
+- (void)setStatusLabelHidden:(BOOL)statusLabelHidden {
+	_statusLabelHidden = statusLabelHidden;
+
+	self.statusLabel.hidden = statusLabelHidden;
 }
 
 @end

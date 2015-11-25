@@ -8,8 +8,8 @@
 
 #import "ApptentiveMigrationTests.h"
 #import "ATDataManager.h"
-#import "ATAbstractMessage.h"
-#import "ATTextMessage.h"
+#import "ATMessage.h"
+#import "ATMessage.h"
 
 @implementation ApptentiveMigrationTests
 - (ATDataManager *)dataManagerWithStoreName:(NSString *)name {
@@ -44,12 +44,12 @@
 	NSManagedObjectContext *moc = [dataManager managedObjectContext];
 	NSFetchRequest *request = [[NSFetchRequest alloc] init];
 	@try {
-		[request setEntity:[NSEntityDescription entityForName:@"ATAbstractMessage" inManagedObjectContext:moc]];
+		[request setEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:moc]];
 		[request setFetchBatchSize:20];
 		NSArray *results = [moc executeFetchRequest:request error:nil];
 		XCTAssertTrue([results count] > 0, @"No messages found after database migration.");
 		for (NSManagedObject *c in results) {
-			ATAbstractMessage *message = (ATAbstractMessage *)c;
+			ATMessage *message = (ATMessage *)c;
 			XCTAssertNotNil(message.hidden, @"Messages should be visible by default after migration.");
 			XCTAssertFalse([(NSNumber *)message.hidden boolValue], @"Messages should be visible by default after migration.");
 		}

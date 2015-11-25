@@ -11,7 +11,7 @@
 
 @interface ATInteractionUpgradeMessageViewController : UIViewController
 
-- (id)initWithInteraction:(ATInteraction *)interaction;
++ (instancetype)interactionUpgradeMessageViewControllerWithInteraction:(ATInteraction *)interaction;
 - (void)presentFromViewController:(UIViewController *)newPresentingViewController animated:(BOOL)animated;
 
 @end

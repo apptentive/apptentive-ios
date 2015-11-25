@@ -21,9 +21,16 @@
 @dynamic dictionaryData;
 @dynamic label;
 
-+ (NSObject *)newInstanceWithJSON:(NSDictionary *)json {
++ (instancetype)newInstanceWithJSON:(NSDictionary *)json {
 	NSAssert(NO, @"Abstract method called.");
 	return nil;
+}
+
++ (instancetype)newInstanceWithLabel:(NSString *)label {
+	ATEvent *result = (ATEvent *)[ATData newEntityNamed:@"ATEvent"];
+	result.label = label;
+	[result setup];
+	return result;
 }
 
 - (void)updateWithJSON:(NSDictionary *)json {

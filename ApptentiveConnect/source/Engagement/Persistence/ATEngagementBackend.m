@@ -509,7 +509,7 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 		return;
 	}
 	
-	ATInteractionUpgradeMessageViewController *upgradeMessage = [[ATInteractionUpgradeMessageViewController alloc] initWithInteraction:interaction];
+	ATInteractionUpgradeMessageViewController *upgradeMessage = [ATInteractionUpgradeMessageViewController interactionUpgradeMessageViewControllerWithInteraction:interaction];
 	[upgradeMessage presentFromViewController:viewController animated:YES];
 }
 

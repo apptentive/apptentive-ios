@@ -8,32 +8,39 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import <QuickLook/QuickLook.h>
 
-@class ATFileMessage;
+@class ATMessage;
 
-typedef enum {
-	ATFileAttachmentSourceUnknown,
-	ATFileAttachmentSourceScreenshot,
-	ATFileAttachmentSourceCamera,
-	ATFileAttachmentSourcePhotoLibrary,
-	ATFileAttachmentSourceProgrammatic,
-} ATFileAttachmentSource;
-
-//TODO: Add CGSize for images?
 @interface ATFileAttachment : NSManagedObject
 @property (nonatomic, strong) NSString *localPath;
-@property (nonatomic, strong) NSString *mimeType;
+@property (nonatomic, strong) NSString *mimeType; // starts w/ lowercase b/c Core Data is stupid
 @property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) NSNumber *source;
-@property (nonatomic, strong) NSNumber *transient;
-@property (nonatomic, strong) NSNumber *userVisible;
-@property (nonatomic, strong) ATFileMessage *fileMessage;
+@property (nonatomic, strong) NSURL *remoteURL;
+@property (nonatomic, strong) NSURL *remoteThumbnailURL;
+@property (nonatomic, strong) ATMessage *message;
 
-- (void)setFileData:(NSData *)data;
-- (void)setFileFromSourcePath:(NSString *)sourceFilename;
+@property (nonatomic, readonly) NSString *fullLocalPath;
+@property (nonatomic, readonly) NSString *extension;
+@property (nonatomic, readonly) NSData *fileData;
+@property (nonatomic, readonly) BOOL canCreateThumbnail;
 
-- (NSString *)fullLocalPath;
++ (instancetype)newInstanceWithFileData:(NSData *)fileData MIMEType:(NSString *)MIMEType name:(NSString *)name;
++ (instancetype)newInstanceWithJSON:(NSDictionary *)JSON;
++ (void)addMissingExtensions;
+- (void)updateWithJSON:(NSDictionary *)JSON;
+
+- (void)setFileData:(NSData *)data MIMEType:(NSString *)MIMEType name:(NSString *)name;
+
+/** Can be called from background thread. */
+- (NSURL *)beginMoveToStorageFrom:(NSURL *)temporaryLocation;
+
+/** Must be called from main thread. */
+- (void)completeMoveToStorageFor:(NSURL *)storageLocation;
 
 - (UIImage *)thumbnailOfSize:(CGSize)size;
-- (void)createThumbnailOfSize:(CGSize)size completion:(void (^)(void))completion;
+
+@end
+
+@interface ATFileAttachment (QuickLook) <QLPreviewItem>
 @end

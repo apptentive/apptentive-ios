@@ -114,11 +114,11 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (void)sendAttachmentImage:(UIImage *)image {
-	[[ATBackend sharedBackend] sendImageMessageWithImage:image hiddenOnClient:YES fromSource:ATFeedbackImageSourceProgrammatic];
+	[[ATBackend sharedBackend] sendImageMessageWithImage:image hiddenOnClient:YES];
 }
 
 - (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType {
-	[[ATBackend sharedBackend] sendFileMessageWithFileData:fileData andMimeType:mimeType hiddenOnClient:YES fromSource:ATFileAttachmentSourceProgrammatic];
+	[[ATBackend sharedBackend] sendFileMessageWithFileData:fileData andMimeType:mimeType hiddenOnClient:YES];
 }
 
 - (NSDictionary *)customPersonData {
@@ -597,9 +597,10 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 #pragma mark - Message notification banner
 
-- (void)showNotificationBannerForMessage:(ATAbstractMessage *)message {
-	if ([ATBackend sharedBackend].notificationPopupsEnabled && [message isKindOfClass:[ATTextMessage class]]) {
-		ATTextMessage *textMessage = (ATTextMessage *)message;
+- (void)showNotificationBannerForMessage:(ATMessage *)message {
+	if ([ATBackend sharedBackend].notificationPopupsEnabled && [message isKindOfClass:[ATMessage class]]) {
+		// TODO: Display something if body is empty
+		ATMessage *textMessage = (ATMessage *)message;
 		NSURL *profilePhotoURL = textMessage.sender.profilePhotoURL ? [NSURL URLWithString:textMessage.sender.profilePhotoURL] : nil;
 		
 		ATBannerViewController *banner = [ATBannerViewController bannerWithImageURL:profilePhotoURL title:textMessage.sender.name message:textMessage.body];
@@ -620,6 +621,10 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	} else {
 		return [ATUtilities topViewController];
 	}
+}
+
++ (UIStoryboard *)storyboard {
+	return [UIStoryboard storyboardWithName:@"Apptentive" bundle:[ATConnect resourceBundle]];
 }
 
 @end

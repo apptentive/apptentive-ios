@@ -153,185 +153,6 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 	return conn;
 }
 
-- (ATURLConnection *)connectionToPost:(NSURL *)theURL withFileData:(NSData *)data ofMimeType:(NSString *)mimeType fileDataKey:(NSString *)fileDataKey parameters:(NSDictionary *)parameters {
-	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL];
-	[self addAPIHeaders:conn];
-	[conn setHTTPMethod:@"POST"];
-	
-	NSDictionary *postParameters = [NSMutableDictionary dictionaryWithDictionary:parameters];
-	
-	// Figure out boundary string.
-	NSString *boundary = nil;
-	while (YES) {
-		boundary = [ATUtilities randomStringOfLength:20];
-		NSData *boundaryData = [boundary dataUsingEncoding:NSUTF8StringEncoding];
-		BOOL found = NO;
-		for (NSString *key in [postParameters allKeys]) {
-			id value = [postParameters objectForKey:key];
-			if ([value isKindOfClass:[NSString class]]) {
-				NSRange range = [(NSString *)value rangeOfString:boundary];
-				if (range.location != NSNotFound) {
-					found = YES;
-					break;
-				}
-			} else if ([value isKindOfClass:[NSData class]]) {
-				NSRange range = [(NSData *)value rangeOfData:boundaryData options:0 range:NSMakeRange(0, [(NSData *)value length])];
-				if (range.location != NSNotFound) {
-					found = YES;
-					break;
-				}
-			} else {
-				NSString *className = @"id";
-				if ([value isKindOfClass:[NSObject class]]) {
-					className = [NSString stringWithCString:object_getClassName((NSObject *)value) encoding:NSUTF8StringEncoding];
-				}
-				conn = nil;
-				@throw [NSException exceptionWithName:@"ATWebClientException" reason:[NSString stringWithFormat:@"Can't encode form data of class: %@", className] userInfo:nil];
-			}
-		}
-		if (!found) {
-			break;
-		}
-	}
-	
-	NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; charset=utf-8; boundary=%@", boundary];
-	[conn setValue:contentType forHTTPHeaderField:@"Content-Type"];
-	
-	
-	NSMutableData *multipartEncodedData = [NSMutableData data];
-	if (data) {
-		[postParameters setValue:data forKey:fileDataKey];
-	}
-	
-	[multipartEncodedData appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-	for (NSString *key in [postParameters allKeys]) {
-		id value = [postParameters objectForKey:key];
-		[multipartEncodedData appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-		if ([value isKindOfClass:[NSString class]]) {
-			[multipartEncodedData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", key] dataUsingEncoding:NSUTF8StringEncoding]];
-			[multipartEncodedData appendData:[(NSString *)value dataUsingEncoding:NSUTF8StringEncoding]];
-		} else if ([value isKindOfClass:[NSData class]]) {
-			[multipartEncodedData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", key, [ATUtilities randomStringOfLength:10]] dataUsingEncoding:NSUTF8StringEncoding]];
-			[multipartEncodedData appendData:[[NSString stringWithFormat:@"Content-Type: %@\r\n", mimeType] dataUsingEncoding:NSUTF8StringEncoding]];
-			[multipartEncodedData appendData:[@"Content-Transfer-Encoding: binary\r\n\r\n" dataUsingEncoding:NSASCIIStringEncoding]];
-			[multipartEncodedData appendData:(NSData *)value];
-		} // else Should be handled above.
-	}
-	[multipartEncodedData appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-	[conn setHTTPBody:multipartEncodedData];
-	
-	// Debugging helpers:
-	/*
-	 NSLog(@"wtf parameters: %@", parameters);
-	 NSLog(@"-length: %d", [multipartEncodedData length]);
-	 NSLog(@"-data: %@", [NSString stringWithUTF8String:[multipartEncodedData bytes]]);
-	 */
-	return conn;
-}
-
-- (ATURLConnection *)connectionToPost:(NSURL *)theURL JSON:(NSString *)body withFile:(NSString *)path ofMimeType:(NSString *)mimeType {
-{
-	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL];
-	[self addAPIHeaders:conn];
-	[conn setHTTPMethod:@"POST"];
-	
-	NSFileManager *fm = [NSFileManager defaultManager];
-
-	NSData *fileData = nil;
-	if (path && [fm fileExistsAtPath:path]) {
-		NSError *error = nil;
-		fileData = [NSData dataWithContentsOfFile:path options:NSDataReadingMappedIfSafe error:&error];
-		if (!fileData) {
-			ATLogError(@"Unable to get contents of file path for uploading: %@", error);
-			// This is probably unrecoverable.
-			goto fail;
-		}
-	}
-
-	
-	// Figure out boundary string.
-	NSString *boundary = nil;
-	while (YES) {
-		boundary = [ATUtilities randomStringOfLength:20];
-		NSData *boundaryData = [boundary dataUsingEncoding:NSUTF8StringEncoding];
-		
-		if (body) {
-			NSRange range = [body rangeOfString:boundary];
-			if (range.location != NSNotFound) {
-				continue;
-			}
-		}
-		if (fileData != nil) {
-			NSRange range = [fileData rangeOfData:boundaryData options:0 range:NSMakeRange(0, [fileData length])];
-			if (range.location != NSNotFound) {
-				continue;
-			}
-		}
-		break;
-	}
-	
-	NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
-	[conn setValue:contentType forHTTPHeaderField:@"Content-Type"];
-	
-	
-	NSMutableData *multipartEncodedData = [NSMutableData data];
-	//[multipartEncodedData appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-	NSMutableString *debugString = [NSMutableString string];
-	
-	for (NSString *key in [conn headers]) {
-		[debugString appendFormat:@"%@: %@\n", key, [[conn headers] objectForKey:key]];
-	}
-	[debugString appendString:@"\n"];
-	
-	
-	if (body) {
-		NSMutableString *bodyHeader = [NSMutableString string];
-		[bodyHeader appendString:[NSString stringWithFormat:@"--%@\r\n", boundary]];
-		[bodyHeader appendString:[NSString stringWithFormat:@"Content-Type: %@\r\n", @"text/plain"]];
-		[bodyHeader appendString:[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", @"message"]];
-		[debugString appendString:bodyHeader];
-		
-		[multipartEncodedData appendData:[bodyHeader dataUsingEncoding:NSUTF8StringEncoding]];
-		[multipartEncodedData appendData:[(NSString *)body dataUsingEncoding:NSUTF8StringEncoding]];
-		[debugString appendString:body];
-	}
-	NSString *boundaryString = [NSString stringWithFormat:@"\r\n--%@\r\n", boundary];
-	[multipartEncodedData appendData:[boundaryString dataUsingEncoding:NSUTF8StringEncoding]];
-	
-	[debugString appendString:boundaryString];
-	
-	if (fileData != nil) {
-		NSString *filename = [path lastPathComponent];
-		NSMutableString *multipartHeader = [NSMutableString string];
-		[multipartHeader appendString:[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", @"file", filename]];
-		[multipartHeader appendString:[NSString stringWithFormat:@"Content-Type: %@\r\n", mimeType]];
-		[multipartHeader appendString:@"Content-Transfer-Encoding: binary\r\n\r\n"];
-		[debugString appendString:multipartHeader];
-		
-		[multipartEncodedData appendData:[multipartHeader dataUsingEncoding:NSUTF8StringEncoding]];
-		[multipartEncodedData appendData:fileData];
-		[debugString appendFormat:@"<NSData of length: %lu>", (unsigned long)[fileData length]];
-	}
-	NSString *finalBoundary = [NSString stringWithFormat:@"\r\n--%@--\r\n", boundary];
-	[multipartEncodedData appendData:[finalBoundary dataUsingEncoding:NSUTF8StringEncoding]];
-	[debugString appendString:finalBoundary];
-	
-	//NSLog(@"\n%@", debugString);
-	
-	[conn setHTTPBody:multipartEncodedData];
-	
-	// Debugging helpers:
-	/*
-	 NSLog(@"wtf parameters: %@", parameters);
-	 NSLog(@"-length: %d", [multipartEncodedData length]);
-	 NSLog(@"-data: %@", [NSString stringWithUTF8String:[multipartEncodedData bytes]]);
-	 */
-	return conn;
-}
-fail:
-	return nil;
-}
-
 - (ATURLConnection *)connectionToPut:(NSURL *)theURL JSON:(NSString *)body {
 	ATURLConnection *conn = [self connectionToPost:theURL JSON:body];
 	[conn setHTTPMethod:@"PUT"];
@@ -345,7 +166,7 @@ fail:
 	[conn setValue: @"utf-8" forHTTPHeaderField: @"Accept-Charset"];
 
 	// Apptentive API Version
-    [conn setValue:@"3" forHTTPHeaderField:@"X-API-Version"];
+    [conn setValue:@"4" forHTTPHeaderField:@"X-API-Version"];
 
 	NSString *apiKey = [[ATBackend sharedBackend] apiKey];
 	if (apiKey) {
@@ -361,4 +182,67 @@ fail:
 		[conn removeHTTPHeaderField:@"Authorization"];
 	}
 }
+
+- (ATURLConnection *)connectionToPost:(NSURL *)theURL JSON:(NSString *)body withAttachments:(NSArray *)attachments {
+	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL];
+	[self addAPIHeaders:conn];
+	[conn setHTTPMethod:@"POST"];
+	NSString *boundary = [ATUtilities randomStringOfLength:20];
+	NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
+	[conn setValue:contentType forHTTPHeaderField:@"Content-Type"];
+
+	NSMutableData *multipartEncodedData = [NSMutableData data];
+	//[multipartEncodedData appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+	NSMutableString *debugString = [NSMutableString string];
+
+	for (NSString *key in [conn headers]) {
+		[debugString appendFormat:@"%@: %@\n", key, [[conn headers] objectForKey:key]];
+	}
+	[debugString appendString:@"\n"];
+
+	if (body) {
+		NSMutableString *bodyHeader = [NSMutableString string];
+		[bodyHeader appendString:[NSString stringWithFormat:@"--%@\r\n", boundary]];
+		[bodyHeader appendString:[NSString stringWithFormat:@"Content-Type: %@\r\n", @"text/plain"]];
+		[bodyHeader appendString:[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", @"message"]];
+		[debugString appendString:bodyHeader];
+
+		[multipartEncodedData appendData:[bodyHeader dataUsingEncoding:NSUTF8StringEncoding]];
+		[multipartEncodedData appendData:[(NSString *)body dataUsingEncoding:NSUTF8StringEncoding]];
+		[debugString appendString:body];
+	}
+
+	for (ATFileAttachment *attachment in attachments) {
+		NSString *boundaryString = [NSString stringWithFormat:@"\r\n--%@\r\n", boundary];
+		[multipartEncodedData appendData:[boundaryString dataUsingEncoding:NSUTF8StringEncoding]];
+		[debugString appendString:boundaryString];
+
+		NSMutableString *multipartHeader = [NSMutableString string];
+		[multipartHeader appendString:[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", @"file[]", attachment.name]];
+		[multipartHeader appendString:[NSString stringWithFormat:@"Content-Type: %@\r\n", attachment.mimeType]];
+		[multipartHeader appendString:@"Content-Transfer-Encoding: binary\r\n\r\n"];
+		[debugString appendString:multipartHeader];
+
+		[multipartEncodedData appendData:[multipartHeader dataUsingEncoding:NSUTF8StringEncoding]];
+		[multipartEncodedData appendData:attachment.fileData];
+		[debugString appendFormat:@"<NSData of length: %lu>", (unsigned long)[attachment.fileData length]];
+	}
+
+	NSString *finalBoundary = [NSString stringWithFormat:@"\r\n--%@--\r\n", boundary];
+	[multipartEncodedData appendData:[finalBoundary dataUsingEncoding:NSUTF8StringEncoding]];
+	[debugString appendString:finalBoundary];
+
+	//NSLog(@"\n%@", debugString);
+
+	[conn setHTTPBody:multipartEncodedData];
+
+	// Debugging helpers:
+	/*
+	 NSLog(@"wtf parameters: %@", parameters);
+	 NSLog(@"-length: %d", [multipartEncodedData length]);
+	 NSLog(@"-data: %@", [NSString stringWithUTF8String:[multipartEncodedData bytes]]);
+	 */
+	return conn;
+}
+
 @end

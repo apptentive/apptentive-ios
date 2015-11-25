@@ -12,8 +12,8 @@
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
 #import "ATData.h"
-#import "ATTextMessage.h"
 #import "ATMessageSender.h"
+#import "ATAttachmentCell.h"
 
 NSString * const ATMessageCenterServerErrorDomain = @"com.apptentive.MessageCenterServerError";
 NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenterErrorMessages";
@@ -21,7 +21,9 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 @interface ATMessageCenterDataSource () <NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, strong, readwrite) NSFetchedResultsController *fetchedMessagesController;
-@property (nonatomic, readonly) ATAbstractMessage *lastUserMessage;
+@property (nonatomic, readonly) ATMessage *lastUserMessage;
+@property (nonatomic, readonly) NSURLSession *attachmentDownloadSession;
+@property (nonatomic, readonly) NSMutableDictionary<NSValue *, NSIndexPath *> *taskIndexPaths;
 
 @end
 
@@ -31,11 +33,17 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 	if ((self = [super init])) {
 		_delegate = aDelegate;
 		_dateFormatter = [[NSDateFormatter alloc] init];
+
+		_attachmentDownloadSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:nil];
+		_taskIndexPaths = [NSMutableDictionary dictionary];
 	}
 	return self;
 }
 
 - (void)dealloc {
+	// TODO: get resume data from cancelled downloads and use it
+	[self.attachmentDownloadSession invalidateAndCancel];
+
 	self.fetchedMessagesController.delegate = nil;
 }
 
@@ -44,12 +52,12 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 		if (!_fetchedMessagesController) {
 			[NSFetchedResultsController deleteCacheWithName:@"at-messages-cache"];
 			NSFetchRequest *request = [[NSFetchRequest alloc] init];
-			[request setEntity:[NSEntityDescription entityForName:@"ATTextMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
+			[request setEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
 			[request setFetchBatchSize:20];
 			
-			NSSortDescriptor *creationTimeSort = [[NSSortDescriptor alloc] initWithKey:@"creationTime" ascending:YES];
+			//NSSortDescriptor *creationTimeSort = [[NSSortDescriptor alloc] initWithKey:@"creationTime" ascending:YES];
 			NSSortDescriptor *clientCreationTimeSort = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
-			[request setSortDescriptors:@[creationTimeSort, clientCreationTimeSort]];
+			[request setSortDescriptors:@[clientCreationTimeSort]];
 			
 			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"creationTime != %d AND clientCreationTime != %d AND hidden != %@", 0, 0, @YES];
 			[request setPredicate:predicate];
@@ -57,7 +65,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 			// For now, group each message into its own section.
 			// In the future, we'll save an attribute that coalesces
 			// closely-grouped (in time) messages into a single section.
-			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:@"creationTimeForSections" cacheName:@"at-messages-cache"];
+			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:@"clientCreationTime" cacheName:@"at-messages-cache"];
 			newController.delegate = self;
 			_fetchedMessagesController = newController;
 			
@@ -69,8 +77,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 
 - (void)start {
 	[[ATBackend sharedBackend] messageCenterEnteredForeground];
-	
-	[ATTextMessage clearComposingMessages];
+	[ATMessage clearComposingMessages];
 	
 	NSError *error = nil;
 	if (![self.fetchedMessagesController performFetch:&error]) {
@@ -89,7 +96,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 	if (self.numberOfMessageGroups == 0 || [self numberOfMessagesInGroup:0] == 0) {
 		return NO;
 	} else if (self.numberOfMessageGroups == 1) {
-		return (![[self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] isKindOfClass:[ATAutomatedMessage class]]);
+		return (![self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]].automated.boolValue);
 	} else {
 		return YES;
 	}
@@ -107,31 +114,32 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 }
 
 - (ATMessageCenterMessageType)cellTypeAtIndexPath:(NSIndexPath *)indexPath {
-	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
+	ATMessage *message = [self messageAtIndexPath:indexPath];
 	
-	if ([message isKindOfClass:[ATAutomatedMessage class]]) {
+	if (message.automated.boolValue) {
 		return ATMessageCenterMessageTypeContextMessage;
 	} else if (message.sentByUser.boolValue) {
-		return ATMessageCenterMessageTypeMessage;
+		if (message.attachments.count) {
+			return ATMessageCenterMessageTypeCompoundMessage;
+		} else {
+			return ATMessageCenterMessageTypeMessage;
+		}
 	} else {
-		return ATMessageCenterMessageTypeReply;
+		if (message.attachments.count) {
+			return ATMessageCenterMessageTypeCompoundReply;
+		} else {
+			return ATMessageCenterMessageTypeReply;
+		}
 	}
 }
 
 - (NSString *)textOfMessageAtIndexPath:(NSIndexPath *)indexPath {
-	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
-	
-	if ([message isKindOfClass:[ATTextMessage class]]) {
-		return ((ATTextMessage *)message).body;
-	} else {
-		return nil;
-	}
+	return [self messageAtIndexPath:indexPath].body;
 }
 
 - (NSDate *)dateOfMessageGroupAtIndex:(NSInteger)index {
 	if ([self numberOfMessagesInGroup:index] > 0) {
-		ATAbstractMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]];
-		
+		ATMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]];
 		
 		return [NSDate dateWithTimeIntervalSince1970:[message.creationTimeForSections doubleValue]];
 	} else {
@@ -140,7 +148,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 }
 
 - (ATMessageCenterMessageStatus)statusOfMessageAtIndexPath:(NSIndexPath *)indexPath {
-	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
+	ATMessage *message = [self messageAtIndexPath:indexPath];
 	
 	if (message.sentByUser.boolValue) {
 		ATPendingMessageState messageState = message.pendingState.integerValue;
@@ -153,7 +161,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 			return ATMessageCenterMessageStatusSent;
 		}
 	}
-		
+
 	return ATMessageCenterMessageStatusHidden;
 }
 
@@ -169,12 +177,12 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 }
 
 - (NSString *)senderOfMessageAtIndexPath:(NSIndexPath *)indexPath {
-	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
+	ATMessage *message = [self messageAtIndexPath:indexPath];
 	return message.sender.name;
 }
 
 - (NSURL *)imageURLOfSenderAtIndexPath:(NSIndexPath *)indexPath {
-	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
+	ATMessage *message = [self messageAtIndexPath:indexPath];
 	if (message.sender.profilePhotoURL.length) {
 		return [NSURL URLWithString:message.sender.profilePhotoURL];
 	} else {
@@ -183,14 +191,14 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 }
 
 - (void)markAsReadMessageAtIndexPath:(NSIndexPath *)indexPath {
-	ATAbstractMessage *message = [self messageAtIndexPath:indexPath];
+	ATMessage *message = [self messageAtIndexPath:indexPath];
 	
 	[message markAsRead];
 }
 
 - (BOOL)lastMessageIsReply {
 	id<NSFetchedResultsSectionInfo> section = self.fetchedMessagesController.sections.lastObject;
-	ATAbstractMessage *lastMessage = section.objects.lastObject;
+	ATMessage *lastMessage = section.objects.lastObject;
 	
 	return lastMessage.sentByUser.boolValue == NO;
 }
@@ -201,6 +209,70 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 
 - (NSIndexPath *)lastUserMessageIndexPath {
 	return [self.fetchedMessagesController indexPathForObject:self.lastUserMessage];
+}
+
+#pragma mark Attachments
+
+- (NSInteger)numberOfAttachmentsForMessageAtIndex:(NSInteger)index {
+	return [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]].attachments.count;
+}
+
+- (BOOL)shouldUsePlaceholderForAttachmentAtIndexPath:(NSIndexPath *)indexPath {
+	ATFileAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
+
+	return attachment.localPath == nil || !attachment.canCreateThumbnail;
+}
+
+- (BOOL)canPreviewAttachmentAtIndexPath:(NSIndexPath *)indexPath {
+	ATFileAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
+
+	return attachment.localPath != nil;
+}
+
+- (UIImage *)imageForAttachmentAtIndexPath:(NSIndexPath *)indexPath size:(CGSize)size {
+	ATFileAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
+
+	if (attachment.localPath) {
+		UIImage *thumbnail = [attachment thumbnailOfSize:size];
+		if (thumbnail) {
+			return thumbnail;
+		}
+	} else if (attachment.remoteThumbnailURL) {
+		// kick off download of thumbnail
+	}
+
+	// return generic image attachment icon
+	return [[ATBackend imageNamed:@"at_document"] resizableImageWithCapInsets:UIEdgeInsetsMake(9.0, 2.0, 2.0, 9.0)];
+}
+
+- (NSString *)extensionForAttachmentAtIndexPath:(NSIndexPath *)indexPath {
+	ATFileAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
+
+	return attachment.extension;
+}
+
+- (void)downloadAttachmentAtIndexPath:(NSIndexPath *)indexPath {
+	if ([self.taskIndexPaths.allValues containsObject:indexPath]) {
+		return;
+	}
+
+	ATFileAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
+	if (attachment.localPath != nil || !attachment.remoteURL) {
+		ATLogError(@"Attempting to download attachment with missing or invalid remote URL");
+		return;
+	}
+
+	NSURLRequest *request = [NSURLRequest requestWithURL:attachment.remoteURL];
+	NSURLSessionDownloadTask *task = [self.attachmentDownloadSession downloadTaskWithRequest:request];
+
+	[self.delegate messageCenterDataSource:self attachmentDownloadAtIndexPath:indexPath didProgress:0];
+
+	[self setIndexPath:indexPath forTask:task];
+	[task resume];
+}
+
+- (id<QLPreviewControllerDataSource>)previewDataSourceAtIndex:(NSInteger)index {
+	return [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]];
 }
 
 #pragma mark NSFetchedResultsControllerDelegate
@@ -242,15 +314,78 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 	}
 }
 
+#pragma mark - URL session delegate
+
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location {
+	NSIndexPath *attachmentIndexPath = [self indexPathForTask:downloadTask];
+	[self removeTask:downloadTask];
+
+	ATFileAttachment *attachment = [self fileAttachmentAtIndexPath:attachmentIndexPath];
+	// -beginMoveToStorageFrom: must be called on this (background) thread.
+	NSURL *finalLocation = [attachment beginMoveToStorageFrom:location];
+
+	dispatch_async(dispatch_get_main_queue(), ^{
+		// -completeMoveToStorageFor: must be called on main thread.
+		[attachment completeMoveToStorageFor:finalLocation];
+		[self.delegate messageCenterDataSource:self didLoadAttachmentThumbnailAtIndexPath:attachmentIndexPath];
+	});
+}
+
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
+	NSIndexPath *attachmentIndexPath = [self indexPathForTask:downloadTask];
+
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[self.delegate messageCenterDataSource:self attachmentDownloadAtIndexPath:attachmentIndexPath didProgress:(double)totalBytesWritten / (double)totalBytesExpectedToWrite];
+	});
+}
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
+	if (error == nil) return;
+	
+	NSIndexPath *attachmentIndexPath = [self indexPathForTask:task];
+	[self removeTask:task];
+
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[self.delegate messageCenterDataSource:self didFailToLoadAttachmentThumbnailAtIndexPath:attachmentIndexPath error:error];
+	});
+}
+
+# pragma mark - Misc
+
+- (void)removeUnsentContextMessages {
+	@synchronized(self) {
+		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingState == %d)", ATPendingMessageStateComposing];
+		[ATData removeEntitiesNamed:@"ATMessage" withPredicate:fetchPredicate];
+	}
+}
+
 #pragma mark - Private
 
-- (ATAbstractMessage *)messageAtIndexPath:(NSIndexPath *)indexPath {
+- (NSIndexPath *)indexPathForTask:(NSURLSessionTask *)task {
+	return [self.taskIndexPaths objectForKey:[NSValue valueWithNonretainedObject:task]];
+}
+
+- (void)setIndexPath:(NSIndexPath *)indexPath forTask:(NSURLSessionTask *)task {
+	[self.taskIndexPaths setObject:indexPath forKey:[NSValue valueWithNonretainedObject:task]];
+}
+
+- (void)removeTask:(NSURLSessionTask *)task {
+	[self.taskIndexPaths removeObjectForKey:[NSValue valueWithNonretainedObject:task]];
+}
+
+// indexPath.section refers to the message index (table view section), indexPath.row refers to the attachment index.
+- (ATFileAttachment *)fileAttachmentAtIndexPath:(NSIndexPath *)indexPath {
+	ATMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
+	return [message.attachments objectAtIndex:indexPath.row];
+}
+
+- (ATMessage *)messageAtIndexPath:(NSIndexPath *)indexPath {
 	return [self.fetchedMessagesController objectAtIndexPath:indexPath];
 }
 
-- (ATAbstractMessage *)lastUserMessage {
+- (ATMessage *)lastUserMessage {
 	for (id<NSFetchedResultsSectionInfo> section in self.fetchedMessagesController.sections.reverseObjectEnumerator) {
-		for (ATAbstractMessage *message in section.objects.reverseObjectEnumerator) {
+		for (ATMessage *message in section.objects.reverseObjectEnumerator) {
 			if (message.sentByUser) {
 				return message;
 			}

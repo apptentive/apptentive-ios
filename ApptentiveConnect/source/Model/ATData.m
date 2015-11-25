@@ -98,7 +98,4 @@
 	return YES;
 }
 
-+ (NSManagedObjectContext *)moc {
-	return [[ATBackend sharedBackend] managedObjectContext];
-}
 @end

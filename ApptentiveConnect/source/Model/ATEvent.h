@@ -20,5 +20,6 @@
 @property (nonatomic, strong) NSData *dictionaryData;
 @property (nonatomic, strong) NSString *label;
 
++ (instancetype)newInstanceWithLabel:(NSString *)label;
 - (void)addEntriesFromDictionary:(NSDictionary *)dictionary;
 @end

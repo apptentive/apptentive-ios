@@ -89,9 +89,7 @@ static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 		return;
 	}
 	
-	ATEvent *event = (ATEvent *)[ATData newEntityNamed:@"ATEvent"];
-	[event setup];
-	event.label = name;
+	ATEvent *event = [ATEvent newInstanceWithLabel:name];
 	
 	if (fromInteraction) {
 		NSString *interactionID = fromInteraction.identifier;
@@ -193,9 +191,7 @@ static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 		return NO;
 	}
 	
-	ATEvent *event = (ATEvent *)[ATData newEntityNamed:@"ATEvent"];
-	[event setup];
-	event.label = metric.name;
+	ATEvent *event = [ATEvent newInstanceWithLabel:metric.name];
 	[event addEntriesFromDictionary:[metric info]];
 	if (![ATData save]) {
 		event = nil;

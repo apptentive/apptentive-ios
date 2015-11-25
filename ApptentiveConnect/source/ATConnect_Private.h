@@ -11,7 +11,7 @@
 extern NSString *const ATConnectCustomPersonDataChangedNotification;
 extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 
-@class ATAbstractMessage;
+@class ATMessage;
 
 @interface ATConnect ()
 
@@ -33,6 +33,7 @@ extern NSString *const ATConnectCustomDeviceDataChangedNotification;
  * images, xibs, strings files, etc.
  */
 + (NSBundle *)resourceBundle;
++ (UIStoryboard *)storyboard;
 
 // Debug/test interactions by invoking them directly
 - (NSArray *)engagementInteractions;
@@ -40,7 +41,7 @@ extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 - (NSString *)engagementInteractionTypeAtIndex:(NSInteger)index;
 - (void)presentInteractionAtIndex:(NSInteger)index fromViewController:(UIViewController *)viewController;
 
-- (void)showNotificationBannerForMessage:(ATAbstractMessage *)message;
+- (void)showNotificationBannerForMessage:(ATMessage *)message;
 
 + (NSDictionary *)timestampObjectWithNumber:(NSNumber *)seconds;
 @end

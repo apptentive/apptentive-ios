@@ -8,7 +8,7 @@
 
 #import "ATTask.h"
 #import "ATAPIRequest.h"
-#import "ATAbstractMessage.h"
+#import "ATMessage.h"
 
 static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey;
 

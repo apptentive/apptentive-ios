@@ -9,27 +9,21 @@
 #import "ATBackend.h"
 #import "ATAppConfigurationUpdateTask.h"
 #import "ATEngagementGetManifestTask.h"
-#import "ATAutomatedMessage.h"
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
-#import "ATData.h"
 #import "ATDataManager.h"
 #import "ATDeviceUpdater.h"
-#import "ATAutomatedMessage.h"
 #import "ApptentiveMetrics.h"
 #import "ATReachability.h"
 #import "ATTaskQueue.h"
 #import "ATUtilities.h"
 #import "ATWebClient.h"
-#import "ATMessageDisplayType.h"
 #import "ATGetMessagesTask.h"
 #import "ATMessageSender.h"
 #import "ATMessageTask.h"
-#import "ATTextMessage.h"
 #import "ATLog.h"
 #import "ATPersonUpdater.h"
 #import "ATEngagementBackend.h"
-#import "ATFileMessage.h"
 #import "ATMessageCenterViewController.h"
 
 typedef NS_ENUM(NSInteger, ATBackendState){
@@ -201,12 +195,10 @@ static NSURLCache *imageCache = nil;
 	}
 }
 
-- (ATAutomatedMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body {
-	ATAutomatedMessage *message = (ATAutomatedMessage *)[ATData newEntityNamed:@"ATAutomatedMessage"];
-	[message setup];
+- (ATMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body {
+	ATMessage *message = [ATMessage newInstanceWithBody:body attachments:nil];
 	message.hidden = @NO;
 	message.title = title;
-	message.body = body;
 	message.pendingState = @(ATPendingMessageStateComposing);
 	message.sentByUser = @YES;
 	NSError *error = nil;
@@ -218,17 +210,9 @@ static NSURLCache *imageCache = nil;
 	return message;
 }
 
-- (BOOL)sendAutomatedMessage:(ATAutomatedMessage *)message {
+- (BOOL)sendAutomatedMessage:(ATMessage *)message {
 	message.pendingState = @(ATPendingMessageStateSending);
-	[message updateClientCreationTime];
-	
-	NSError *error = nil;
-	if (![[self managedObjectContext] save:&error]) {
-		ATLogError(@"Unable to send Automated message with title: %@, body: %@, error: %@", message.title, message.body, error);
-		message = nil;
-		return NO;
-	}
-	
+
 	return [self sendMessage:message];
 }
 
@@ -240,18 +224,59 @@ static NSURLCache *imageCache = nil;
 	return [self sendTextMessage:[self createTextMessageWithBody:body hiddenOnClient:hidden]];
 }
 
-- (ATTextMessage *)createTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden {
-	ATTextMessage *message = (ATTextMessage *)[ATData newEntityNamed:@"ATTextMessage"];
-	[message setup];
-	message.body = body;
+- (ATMessage *)createTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden {
+	ATMessage *message = [ATMessage newInstanceWithBody:body attachments:nil];
 	message.sentByUser = @YES;
 	message.seenByUser = @YES;
 	message.hidden = @(hidden);
-	
+
 	if (!hidden) {
 		[self attachCustomDataToMessage:message];
 	}
+
+	return message;
+}
+
+- (BOOL)sendTextMessage:(ATMessage *)message {
+	message.pendingState = @(ATPendingMessageStateSending);
 	
+	[self updatePersonIfNeeded];
+
+	return [self sendMessage:message];
+}
+
+- (BOOL)sendImageMessageWithImage:(UIImage *)image {
+	return [self sendImageMessageWithImage:image hiddenOnClient:NO];
+}
+
+- (BOOL)sendImageMessageWithImage:(UIImage *)image hiddenOnClient:(BOOL)hidden {
+	NSData *imageData = UIImageJPEGRepresentation(image, 0.95);
+	NSString *mimeType = @"image/jpeg";
+	return [self sendFileMessageWithFileData:imageData andMimeType:mimeType hiddenOnClient:hidden];
+}
+
+
+- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType {
+	return [self sendFileMessageWithFileData:fileData andMimeType:mimeType hiddenOnClient:NO];
+}
+
+- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType hiddenOnClient:(BOOL)hidden {
+	[self updatePersonIfNeeded];
+
+	ATFileAttachment *fileAttachment = [ATFileAttachment newInstanceWithFileData:fileData MIMEType:mimeType name:nil];
+	return [self sendCompoundMessageWithText:nil attachments:@[fileAttachment] hiddenOnClient:hidden];
+}
+
+- (BOOL)sendCompoundMessageWithText:(NSString *)text attachments:(NSArray *)attachments hiddenOnClient:(BOOL)hidden {
+	ATMessage *compoundMessage = [ATMessage newInstanceWithBody:text attachments:attachments];
+	compoundMessage.pendingState = @(ATPendingMessageStateSending);
+	compoundMessage.sentByUser = @YES;
+	compoundMessage.hidden = @(hidden);
+
+	return [self sendMessage:compoundMessage];
+}
+
+- (BOOL)sendMessage:(ATMessage *)message {
 	ATConversation *conversation = [ATConversationUpdater currentConversation];
 	if (conversation) {
 		ATMessageSender *sender = [ATMessageSender findSenderWithID:conversation.personID];
@@ -259,87 +284,12 @@ static NSURLCache *imageCache = nil;
 			message.sender = sender;
 		}
 	}
-	
-	return message;
-}
 
-- (BOOL)sendTextMessage:(ATTextMessage *)message {
-	message.pendingState = @(ATPendingMessageStateSending);
-	
-	[self updatePersonIfNeeded];
-	[message updateClientCreationTime];
-	
-	NSError *error = nil;
-	if (![[self managedObjectContext] save:&error]) {
-		ATLogError(@"Unable to send text message with body: %@, error: %@", message.body, error);
-		message = nil;
-		return NO;
+	NSError *error;
+	if (![[[ATBackend sharedBackend] managedObjectContext] save:&error]) {
+		NSLog(@"Error (%@) saving message: %@", error, message);
 	}
-	
-	return [self sendMessage:message];
-}
 
-- (BOOL)sendImageMessageWithImage:(UIImage *)image fromSource:(ATFeedbackImageSource)imageSource {
-	return [self sendImageMessageWithImage:image hiddenOnClient:NO fromSource:imageSource];
-}
-
-- (BOOL)sendImageMessageWithImage:(UIImage *)image hiddenOnClient:(BOOL)hidden fromSource:(ATFeedbackImageSource)imageSource {
-	NSData *imageData = UIImageJPEGRepresentation(image, 0.95);
-	NSString *mimeType = @"image/jpeg";
-	ATFileAttachmentSource source = ATFileAttachmentSourceUnknown;
-	switch (imageSource) {
-		case ATFeedbackImageSourceCamera:
-		case ATFeedbackImageSourcePhotoLibrary:
-			source = ATFileAttachmentSourceCamera;
-			break;
-			/* for now we're going to assume camera…
-			 source = ATFileAttachmentSourcePhotoLibrary;
-			 break;
-			 */
-		case ATFeedbackImageSourceScreenshot:
-			source = ATFileAttachmentSourceScreenshot;
-			break;
-		case ATFeedbackImageSourceProgrammatic:
-			source = ATFileAttachmentSourceProgrammatic;
-			break;
-	}
-	
-	return [self sendFileMessageWithFileData:imageData andMimeType:mimeType hiddenOnClient:hidden fromSource:source];
-}
-
-
-- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType fromSource:(ATFileAttachmentSource)source {
-	return [self sendFileMessageWithFileData:fileData andMimeType:mimeType hiddenOnClient:NO fromSource:source];
-}
-
-- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType hiddenOnClient:(BOOL)hidden fromSource:(ATFileAttachmentSource)source {
-	[self updatePersonIfNeeded];
-	ATFileMessage *fileMessage = (ATFileMessage *)[ATData newEntityNamed:@"ATFileMessage"];
-	fileMessage.pendingState = @(ATPendingMessageStateSending);
-	fileMessage.sentByUser = @YES;
-	fileMessage.hidden = @(hidden);
-	
-	ATConversation *conversation = [ATConversationUpdater currentConversation];
-	if (conversation) {
-		ATMessageSender *sender = [ATMessageSender findSenderWithID:conversation.personID];
-		if (sender) {
-			fileMessage.sender = sender;
-		}
-	}
-	[fileMessage updateClientCreationTime];
-	
-	ATFileAttachment *fileAttachment = (ATFileAttachment *)[ATData newEntityNamed:@"ATFileAttachment"];
-	[fileAttachment setFileData:fileData];
-	[fileAttachment setMimeType:mimeType];
-	[fileAttachment setSource:@(source)];
-	fileMessage.fileAttachment = fileAttachment;
-	
-	[[[ATBackend sharedBackend] managedObjectContext] save:nil];
-	
-	return [self sendMessage:fileMessage];
-}
-
-- (BOOL)sendMessage:(ATAbstractMessage *)message {
 	// Give it a wee bit o' delay.
 	NSString *pendingMessageID = [message pendingMessageID];
 	double delayInSeconds = 1.5;
@@ -347,7 +297,7 @@ static NSURLCache *imageCache = nil;
 	ATMessageTask *task = [[ATMessageTask alloc] init];
 	task.pendingMessageID = pendingMessageID;
 	
-	if ([message isMemberOfClass:[ATTextMessage class]]) {
+	if (!message.automated.boolValue) {
 		[self.activeMessageTasks addObject:task];
 		[self updateMessageTaskProgress];
 	}
@@ -554,8 +504,7 @@ static NSURLCache *imageCache = nil;
 	BOOL didShowMessageCenter = [[ATInteraction apptentiveAppInteraction] engage:ATEngagementMessageCenterEvent fromViewController:viewController];
 	
 	if (!didShowMessageCenter) {
-		UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MessageCenter" bundle:[ATConnect resourceBundle]];
-		UINavigationController *navigationController = [storyboard instantiateViewControllerWithIdentifier:@"NoPayload"];
+		UINavigationController *navigationController = [[ATConnect storyboard] instantiateViewControllerWithIdentifier:@"NoPayloadNavigation"];
 		
 		[viewController presentViewController:navigationController animated:YES completion:nil];
 	}
@@ -563,7 +512,7 @@ static NSURLCache *imageCache = nil;
 	return didShowMessageCenter;
 }
 
-- (void)attachCustomDataToMessage:(ATAbstractMessage *)message {
+- (void)attachCustomDataToMessage:(ATMessage *)message {
 	if (self.currentCustomData) {
 		[message addCustomDataFromDictionary:self.currentCustomData];
 		// Only attach custom data to the first message.
@@ -716,7 +665,7 @@ static NSURLCache *imageCache = nil;
 		NSUInteger unreadCount = [sectionInfo numberOfObjects];
 		if (unreadCount != self.previousUnreadCount) {
 			if (unreadCount > self.previousUnreadCount && !self.messageCenterInForeground) {
-				ATAbstractMessage *message = sectionInfo.objects.firstObject;
+				ATMessage *message = sectionInfo.objects.firstObject;
 				[[ATConnect sharedConnection] showNotificationBannerForMessage:message];
 			}
 			self.previousUnreadCount = unreadCount;
@@ -985,9 +934,7 @@ static NSURLCache *imageCache = nil;
 - (void)continueStartupWithDataManagerSuccess {
 	self.state = ATBackendStateReady;
 	[ApptentiveMetrics sharedMetrics];
-	
-	[ATMessageDisplayType setupSingletons];
-	
+
 	// One-shot actions at startup.
 	[self performSelector:@selector(checkForProperConfiguration) withObject:nil afterDelay:1];
 	[self performSelector:@selector(checkForEngagementManifest) withObject:nil afterDelay:3];
@@ -1005,6 +952,9 @@ static NSURLCache *imageCache = nil;
 	// Monitor changes to custom data.
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(personDataChanged:) name:ATConnectCustomPersonDataChangedNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDataChanged:) name:ATConnectCustomDeviceDataChangedNotification object:nil];
+
+	// Append extensions to attachments that are missing them
+	[ATFileAttachment addMissingExtensions];
 }
 
 - (void)continueStartupWithDataManagerFailure {
@@ -1077,7 +1027,7 @@ static NSURLCache *imageCache = nil;
 		return;
 	}
 	ATLogInfo(@"Setting up data manager");
-	
+
 	if (![[UIApplication sharedApplication] isProtectedDataAvailable]) {
 		self.state = ATBackendStateWaitingForDataProtectionUnlock;
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupDataManager) name:UIApplicationProtectedDataDidBecomeAvailable object:nil];
@@ -1107,7 +1057,7 @@ static NSURLCache *imageCache = nil;
 			return;
 		}
 		NSFetchRequest *request = [[NSFetchRequest alloc] init];
-		[request setEntity:[NSEntityDescription entityForName:@"ATAbstractMessage" inManagedObjectContext:[self managedObjectContext]]];
+		[request setEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:[self managedObjectContext]]];
 		[request setFetchBatchSize:20];
 		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
 		[request setSortDescriptors:@[sortDescriptor]];

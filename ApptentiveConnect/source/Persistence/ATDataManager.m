@@ -29,13 +29,13 @@ typedef enum {
 @interface ATDataManager ()
 
 
-@property (strong, readwrite, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-@property (strong, readwrite, nonatomic) NSManagedObjectContext *managedObjectContext;
-@property (strong, readwrite, nonatomic) NSManagedObjectModel *managedObjectModel;
+@property (readwrite, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (readwrite, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (readwrite, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 
-@property (nonatomic, readwrite) BOOL didRemovePersistentStore;
-@property (nonatomic, readwrite) BOOL didFailToMigrateStore;
-@property (nonatomic, readwrite) BOOL didMigrateStore;
+@property (readwrite, nonatomic) BOOL didRemovePersistentStore;
+@property (readwrite, nonatomic) BOOL didFailToMigrateStore;
+@property (readwrite, nonatomic) BOOL didMigrateStore;
 
 @property (strong, nonatomic) NSString *modelName;
 @property (strong, nonatomic) NSBundle *bundle;

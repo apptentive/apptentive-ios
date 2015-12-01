@@ -114,28 +114,28 @@ Before calling any other methods on the shared `ATConnect` instance, set the API
 
  This key is found on the Apptentive website under Settings, API & Development.
  */
-@property (nonatomic, copy) NSString *apiKey;
+@property (copy, nonatomic) NSString *apiKey;
 
 /**
  The app's iTunes App ID.
 
  You can find this in iTunes Connect, and is the numeric "Apple ID" shown on your app details page.
  */
-@property (nonatomic, copy) NSString *appID;
+@property (copy, nonatomic) NSString *appID;
 
 /** The shared singleton of `ATConnect`. */
 + (ATConnect *)sharedConnection;
 
 /** An object conforming to the `ATConnectDelegate` protocol */
-@property (nonatomic, weak) id<ATConnectDelegate> delegate;
+@property (weak, nonatomic) id<ATConnectDelegate> delegate;
 
 ///---------------------------------
 /// @name Interface Customization
 ///---------------------------------
 /** Toggles the display of an email field in the message panel. `YES` by default. */
-@property (nonatomic, assign) BOOL showEmailField;
+@property (assign, nonatomic) BOOL showEmailField;
 /** Set this if you want some custom text to appear as a placeholder in the feedback text box. */
-@property (nonatomic, copy) NSString *customPlaceholderText;
+@property (copy, nonatomic) NSString *customPlaceholderText;
 #if TARGET_OS_IPHONE
 /**
  A tint color to use in Apptentive-specific UI.
@@ -145,7 +145,7 @@ Before calling any other methods on the shared `ATConnect` instance, set the API
 
  @deprecated Use `[UIAppearance appearanceWhenContainedIn:[ATNavigationController class], nil].tintColor`
  */
-@property (nonatomic, strong) UIColor *tintColor DEPRECATED_ATTRIBUTE;
+@property (strong, nonatomic) UIColor *tintColor DEPRECATED_ATTRIBUTE;
 #endif
 
 #if TARGET_OS_IPHONE
@@ -429,9 +429,9 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 ///---------------------------------------
 
 /** The name of the app user when communicating with Apptentive. */
-@property (nonatomic, copy) NSString *personName;
+@property (copy, nonatomic) NSString *personName;
 /** The email address of the app user in form fields and communicating with Apptentive. */
-@property (nonatomic, copy) NSString *personEmailAddress;
+@property (copy, nonatomic) NSString *personEmailAddress;
 
 /**
  Adds custom data associated with the current person.

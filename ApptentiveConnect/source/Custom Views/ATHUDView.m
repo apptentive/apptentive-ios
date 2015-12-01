@@ -23,7 +23,7 @@
 
 @property (strong, nonatomic) UIWindow *parentWindow;
 @property (strong, nonatomic) UIImageView *icon;
-@property (nonatomic, strong, readwrite) UILabel *label;
+@property (readwrite, strong, nonatomic) UILabel *label;
 
 @end
 

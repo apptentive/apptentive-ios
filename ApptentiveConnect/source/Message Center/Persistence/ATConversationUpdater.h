@@ -17,7 +17,7 @@ extern NSString *const ATCurrentConversationPreferenceKey;
 
 
 @interface ATConversationUpdater : NSObject <ATAPIRequestDelegate>
-@property (nonatomic, weak) NSObject<ATConversationUpdaterDelegate> *delegate;
+@property (weak, nonatomic) NSObject<ATConversationUpdaterDelegate> *delegate;
 + (BOOL)conversationExists;
 + (ATConversation *)currentConversation;
 + (BOOL)shouldUpdate;

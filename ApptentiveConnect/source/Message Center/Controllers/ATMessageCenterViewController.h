@@ -15,6 +15,6 @@
 
 @interface ATMessageCenterViewController : UITableViewController <ATMessageCenterDataSourceDelegate, UITextViewDelegate, UITextFieldDelegate, ATBackendMessageDelegate, UIActionSheetDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
 
-@property (nonatomic, strong) ATMessageCenterInteraction *interaction;
+@property (strong, nonatomic) ATMessageCenterInteraction *interaction;
 
 @end

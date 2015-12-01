@@ -12,11 +12,11 @@
 
 
 @interface ATLegacyRecord : NSObject <NSCoding>
-@property (nonatomic, copy) NSString *uuid;
-@property (nonatomic, copy) NSString *model;
-@property (nonatomic, copy) NSString *os_version;
-@property (nonatomic, copy) NSString *carrier;
-@property (nonatomic, strong) NSDate *date;
+@property (copy, nonatomic) NSString *uuid;
+@property (copy, nonatomic) NSString *model;
+@property (copy, nonatomic) NSString *os_version;
+@property (copy, nonatomic) NSString *carrier;
+@property (strong, nonatomic) NSDate *date;
 
 - (NSString *)formattedDate:(NSDate *)aDate;
 

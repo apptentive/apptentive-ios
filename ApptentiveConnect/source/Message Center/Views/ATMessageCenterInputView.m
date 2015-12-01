@@ -24,7 +24,7 @@
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *outerTopSpace;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *outerBottomSpace;
-@property (nonatomic) CGFloat regularOuterVerticalSpace;
+@property (assign, nonatomic) CGFloat regularOuterVerticalSpace;
 
 @property (strong, nonatomic) NSArray *landscapeConstraints;
 @property (strong, nonatomic) NSArray *portraitConstraints;

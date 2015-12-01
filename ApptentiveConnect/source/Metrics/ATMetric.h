@@ -11,8 +11,8 @@
 
 
 @interface ATMetric : ATLegacyRecord <NSCoding>
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, readonly) NSDictionary *info;
+@property (copy, nonatomic) NSString *name;
+@property (readonly, nonatomic) NSDictionary *info;
 
 - (void)setValue:(id)value forKey:(NSString *)key;
 - (void)addEntriesFromDictionary:(NSDictionary *)dictionary;

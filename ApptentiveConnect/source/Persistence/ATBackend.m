@@ -48,7 +48,7 @@ static NSURLCache *imageCache = nil;
 @property (readonly, nonatomic, getter=isMessageCenterInForeground) BOOL messageCenterInForeground;
 @property (strong, nonatomic) NSMutableSet *activeMessageTasks;
 
-@property (nonatomic, copy) void (^backgroundFetchBlock)(UIBackgroundFetchResult);
+@property (copy, nonatomic) void (^backgroundFetchBlock)(UIBackgroundFetchResult);
 
 @end
 
@@ -73,21 +73,21 @@ static NSURLCache *imageCache = nil;
 @interface ATBackend ()
 
 #if TARGET_OS_IPHONE
-@property (nonatomic, strong) UIViewController *presentingViewController;
+@property (strong, nonatomic) UIViewController *presentingViewController;
 #endif
-@property (nonatomic, assign) BOOL working;
-@property (nonatomic, strong) NSTimer *messageRetrievalTimer;
-@property (nonatomic, assign) BOOL apiKeySet;
-@property (nonatomic, copy) NSString *cachedDeviceUUID;
-@property (nonatomic, assign) ATBackendState state;
-@property (nonatomic, strong) ATDataManager *dataManager;
-@property (nonatomic, strong) ATConversationUpdater *conversationUpdater;
-@property (nonatomic, strong) ATDeviceUpdater *deviceUpdater;
-@property (nonatomic, strong) ATPersonUpdater *personUpdater;
-@property (nonatomic, strong) NSFetchedResultsController *unreadCountController;
-@property (nonatomic, assign) NSInteger previousUnreadCount;
-@property (nonatomic, assign) BOOL shouldStopWorking;
-@property (nonatomic, assign) BOOL networkAvailable;
+@property (assign, nonatomic) BOOL working;
+@property (strong, nonatomic) NSTimer *messageRetrievalTimer;
+@property (assign, nonatomic) BOOL apiKeySet;
+@property (copy, nonatomic) NSString *cachedDeviceUUID;
+@property (assign, nonatomic) ATBackendState state;
+@property (strong, nonatomic) ATDataManager *dataManager;
+@property (strong, nonatomic) ATConversationUpdater *conversationUpdater;
+@property (strong, nonatomic) ATDeviceUpdater *deviceUpdater;
+@property (strong, nonatomic) ATPersonUpdater *personUpdater;
+@property (strong, nonatomic) NSFetchedResultsController *unreadCountController;
+@property (assign, nonatomic) NSInteger previousUnreadCount;
+@property (assign, nonatomic) BOOL shouldStopWorking;
+@property (assign, nonatomic) BOOL networkAvailable;
 
 @end
 

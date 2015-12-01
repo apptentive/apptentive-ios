@@ -24,12 +24,12 @@ typedef NS_ENUM(NSInteger, ATInteractionType) {
 
 
 @interface ATInteraction : NSObject <NSCoding, NSCopying>
-@property (nonatomic, copy) NSString *identifier;
-@property (nonatomic, assign) NSInteger priority;
-@property (nonatomic, copy) NSString *type;
-@property (nonatomic, strong) NSDictionary *configuration;
-@property (nonatomic, copy) NSString *version;
-@property (nonatomic, copy) NSString *vendor;
+@property (copy, nonatomic) NSString *identifier;
+@property (assign, nonatomic) NSInteger priority;
+@property (copy, nonatomic) NSString *type;
+@property (strong, nonatomic) NSDictionary *configuration;
+@property (copy, nonatomic) NSString *version;
+@property (copy, nonatomic) NSString *vendor;
 
 + (ATInteraction *)interactionWithJSONDictionary:(NSDictionary *)jsonDictionary;
 

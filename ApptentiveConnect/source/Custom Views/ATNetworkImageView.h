@@ -12,8 +12,8 @@
 
 
 @interface ATNetworkImageView : UIImageView <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
-@property (nonatomic, copy) NSURL *imageURL;
-@property (nonatomic, assign) BOOL useCache;
+@property (copy, nonatomic) NSURL *imageURL;
+@property (assign, nonatomic) BOOL useCache;
 @property (weak, nonatomic) id<ATNetworkImageViewDelegate> delegate;
 @end
 

@@ -12,8 +12,8 @@
 
 @interface ATMessageCenterStatusView ()
 
-@property (nonatomic, strong) IBOutlet NSLayoutConstraint *imageStatusSpacing;
-@property (nonatomic, weak) IBOutlet UIImageView *imageView;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *imageStatusSpacing;
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 
 @end
 

@@ -12,8 +12,8 @@
 
 @interface ATConnectionChannel ()
 
-@property (nonatomic, strong) NSMutableSet *active;
-@property (nonatomic, strong) NSMutableArray *waiting;
+@property (strong, nonatomic) NSMutableSet *active;
+@property (strong, nonatomic) NSMutableArray *waiting;
 
 @end
 

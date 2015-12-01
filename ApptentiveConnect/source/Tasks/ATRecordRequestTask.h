@@ -18,7 +18,7 @@ typedef enum {
 
 
 @interface ATRecordRequestTask : ATTask <ATAPIRequestDelegate>
-@property (nonatomic, strong) NSObject<ATRequestTaskProvider> *taskProvider;
+@property (strong, nonatomic) NSObject<ATRequestTaskProvider> *taskProvider;
 @end
 
 

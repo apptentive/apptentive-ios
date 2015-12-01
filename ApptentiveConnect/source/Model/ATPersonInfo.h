@@ -12,11 +12,11 @@ extern NSString *const ATCurrentPersonPreferenceKey;
 
 
 @interface ATPersonInfo : NSObject <NSCoding>
-@property (nonatomic, readonly) NSString *apptentiveID;
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, copy) NSString *emailAddress;
+@property (readonly, nonatomic) NSString *apptentiveID;
+@property (copy, nonatomic) NSString *name;
+@property (copy, nonatomic) NSString *emailAddress;
 
-@property (nonatomic, readonly) NSDictionary *dictionaryRepresentation;
+@property (readonly, nonatomic) NSDictionary *dictionaryRepresentation;
 
 + (ATPersonInfo *)currentPerson;
 

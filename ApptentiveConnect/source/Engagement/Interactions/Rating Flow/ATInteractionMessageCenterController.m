@@ -15,8 +15,8 @@
 
 @interface ATInteractionMessageCenterController ()
 
-@property (nonatomic, strong, readonly) ATMessageCenterInteraction *interaction;
-@property (nonatomic, strong) UIViewController *viewController;
+@property (readonly, strong, nonatomic) ATMessageCenterInteraction *interaction;
+@property (strong, nonatomic) UIViewController *viewController;
 
 @end
 

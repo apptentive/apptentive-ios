@@ -15,41 +15,41 @@
 
 + (id)messageCenterInteractionFromInteraction:(ATInteraction *)interaction;
 
-@property (nonatomic, readonly) NSString *title;
-@property (nonatomic, readonly) NSString *branding;
+@property (readonly, nonatomic) NSString *title;
+@property (readonly, nonatomic) NSString *branding;
 
-@property (nonatomic, readonly) NSString *composerTitle;
-@property (nonatomic, readonly) NSString *composerPlaceholderText;
-@property (nonatomic, readonly) NSString *composerSendButtonTitle;
-@property (nonatomic, readonly) NSString *composerCloseConfirmBody;
-@property (nonatomic, readonly) NSString *composerCloseDiscardButtonTitle;
-@property (nonatomic, readonly) NSString *composerCloseCancelButtonTitle;
+@property (readonly, nonatomic) NSString *composerTitle;
+@property (readonly, nonatomic) NSString *composerPlaceholderText;
+@property (readonly, nonatomic) NSString *composerSendButtonTitle;
+@property (readonly, nonatomic) NSString *composerCloseConfirmBody;
+@property (readonly, nonatomic) NSString *composerCloseDiscardButtonTitle;
+@property (readonly, nonatomic) NSString *composerCloseCancelButtonTitle;
 
-@property (nonatomic, readonly) NSString *greetingTitle;
-@property (nonatomic, readonly) NSString *greetingBody;
-@property (nonatomic, readonly) NSURL *greetingImageURL;
+@property (readonly, nonatomic) NSString *greetingTitle;
+@property (readonly, nonatomic) NSString *greetingBody;
+@property (readonly, nonatomic) NSURL *greetingImageURL;
 
-@property (nonatomic, readonly) NSString *statusBody;
+@property (readonly, nonatomic) NSString *statusBody;
 
-@property (nonatomic, readonly) NSString *contextMessageBody;
+@property (readonly, nonatomic) NSString *contextMessageBody;
 
-@property (nonatomic, readonly) NSString *HTTPErrorBody;
-@property (nonatomic, readonly) NSString *networkErrorBody;
+@property (readonly, nonatomic) NSString *HTTPErrorBody;
+@property (readonly, nonatomic) NSString *networkErrorBody;
 
-@property (nonatomic, readonly) BOOL profileRequested;
-@property (nonatomic, readonly) BOOL profileRequired;
+@property (readonly, nonatomic) BOOL profileRequested;
+@property (readonly, nonatomic) BOOL profileRequired;
 
-@property (nonatomic, readonly) NSString *profileInitialTitle;
-@property (nonatomic, readonly) NSString *profileInitialNamePlaceholder;
-@property (nonatomic, readonly) NSString *profileInitialEmailPlaceholder;
-@property (nonatomic, readonly) NSString *profileInitialSkipButtonTitle;
-@property (nonatomic, readonly) NSString *profileInitialSaveButtonTitle;
-@property (nonatomic, readonly) NSString *profileInitialEmailExplanation;
+@property (readonly, nonatomic) NSString *profileInitialTitle;
+@property (readonly, nonatomic) NSString *profileInitialNamePlaceholder;
+@property (readonly, nonatomic) NSString *profileInitialEmailPlaceholder;
+@property (readonly, nonatomic) NSString *profileInitialSkipButtonTitle;
+@property (readonly, nonatomic) NSString *profileInitialSaveButtonTitle;
+@property (readonly, nonatomic) NSString *profileInitialEmailExplanation;
 
-@property (nonatomic, readonly) NSString *profileEditTitle;
-@property (nonatomic, readonly) NSString *profileEditNamePlaceholder;
-@property (nonatomic, readonly) NSString *profileEditEmailPlaceholder;
-@property (nonatomic, readonly) NSString *profileEditSkipButtonTitle;
-@property (nonatomic, readonly) NSString *profileEditSaveButtonTitle;
+@property (readonly, nonatomic) NSString *profileEditTitle;
+@property (readonly, nonatomic) NSString *profileEditNamePlaceholder;
+@property (readonly, nonatomic) NSString *profileEditEmailPlaceholder;
+@property (readonly, nonatomic) NSString *profileEditSkipButtonTitle;
+@property (readonly, nonatomic) NSString *profileEditSaveButtonTitle;
 
 @end

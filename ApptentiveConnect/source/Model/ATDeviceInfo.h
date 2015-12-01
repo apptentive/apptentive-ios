@@ -10,7 +10,7 @@
 
 
 @interface ATDeviceInfo : NSObject
-@property (nonatomic, readonly) NSDictionary *dictionaryRepresentation;
+@property (readonly, nonatomic) NSDictionary *dictionaryRepresentation;
 
 + (NSString *)carrier;
 

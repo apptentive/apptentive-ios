@@ -10,15 +10,15 @@
 
 
 @interface ATTask : NSObject <NSCoding>
-@property (nonatomic, assign) BOOL inProgress;
-@property (nonatomic, assign) BOOL finished;
-@property (nonatomic, assign) BOOL failed;
-@property (nonatomic, assign) NSUInteger failureCount;
+@property (assign, nonatomic) BOOL inProgress;
+@property (assign, nonatomic) BOOL finished;
+@property (assign, nonatomic) BOOL failed;
+@property (assign, nonatomic) NSUInteger failureCount;
 
-@property (nonatomic, copy) NSString *lastErrorTitle;
-@property (nonatomic, copy) NSString *lastErrorMessage;
+@property (copy, nonatomic) NSString *lastErrorTitle;
+@property (copy, nonatomic) NSString *lastErrorMessage;
 /*! Should we stop the task queue if this task fails, or just throw it away? Defaults to stopping task queue (failureOkay == NO). */
-@property (nonatomic, assign, getter=isFailureOkay) BOOL failureOkay;
+@property (assign, nonatomic, getter=isFailureOkay) BOOL failureOkay;
 
 
 - (BOOL)canStart;

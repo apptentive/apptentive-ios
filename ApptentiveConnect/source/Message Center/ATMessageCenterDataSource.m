@@ -21,10 +21,10 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 
 @interface ATMessageCenterDataSource () <NSFetchedResultsControllerDelegate>
 
-@property (nonatomic, strong, readwrite) NSFetchedResultsController *fetchedMessagesController;
-@property (nonatomic, readonly) ATMessage *lastUserMessage;
-@property (nonatomic, readonly) NSURLSession *attachmentDownloadSession;
-@property (nonatomic, readonly) NSMutableDictionary<NSValue *, NSIndexPath *> *taskIndexPaths;
+@property (readwrite, strong, nonatomic) NSFetchedResultsController *fetchedMessagesController;
+@property (readonly, nonatomic) ATMessage *lastUserMessage;
+@property (readonly, nonatomic) NSURLSession *attachmentDownloadSession;
+@property (readonly, nonatomic) NSMutableDictionary<NSValue *, NSIndexPath *> *taskIndexPaths;
 
 @end
 

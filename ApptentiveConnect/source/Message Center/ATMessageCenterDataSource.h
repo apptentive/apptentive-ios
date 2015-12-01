@@ -29,9 +29,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 
 
 @interface ATMessageCenterDataSource : NSObject <NSURLSessionDownloadDelegate>
-@property (nonatomic, strong, readonly) NSFetchedResultsController *fetchedMessagesController;
-@property (nonatomic, weak) NSObject<ATMessageCenterDataSourceDelegate> *delegate;
-@property (nonatomic, readonly) NSDateFormatter *dateFormatter;
+@property (readonly, strong, nonatomic) NSFetchedResultsController *fetchedMessagesController;
+@property (weak, nonatomic) NSObject<ATMessageCenterDataSourceDelegate> *delegate;
+@property (readonly, nonatomic) NSDateFormatter *dateFormatter;
 
 - (id)initWithDelegate:(NSObject<ATMessageCenterDataSourceDelegate> *)delegate;
 - (void)start;
@@ -60,9 +60,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 - (void)downloadAttachmentAtIndexPath:(NSIndexPath *)indexPath;
 - (id<QLPreviewControllerDataSource>)previewDataSourceAtIndex:(NSInteger)index;
 
-@property (nonatomic, readonly) BOOL lastMessageIsReply;
-@property (nonatomic, readonly) NSIndexPath *lastUserMessageIndexPath;
-@property (nonatomic, readonly) ATPendingMessageState lastUserMessageState;
+@property (readonly, nonatomic) BOOL lastMessageIsReply;
+@property (readonly, nonatomic) NSIndexPath *lastUserMessageIndexPath;
+@property (readonly, nonatomic) ATPendingMessageState lastUserMessageState;
 
 @end
 

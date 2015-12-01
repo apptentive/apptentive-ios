@@ -11,7 +11,7 @@
 
 
 @interface ATConnectionChannel : NSObject
-@property (nonatomic, assign) NSInteger maximumConnections;
+@property (assign, nonatomic) NSInteger maximumConnections;
 
 - (void)update;
 - (void)addConnection:(ATURLConnection *)connection;

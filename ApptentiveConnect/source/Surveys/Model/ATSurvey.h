@@ -11,13 +11,13 @@
 
 
 @interface ATSurvey : NSObject <NSCoding>
-@property (nonatomic, copy) NSString *identifier;
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, copy) NSString *surveyDescription;
-@property (nonatomic, readonly) NSArray *questions;
-@property (nonatomic, getter=responseIsRequired) BOOL responseRequired;
-@property (nonatomic, assign) BOOL showSuccessMessage;
-@property (nonatomic, copy) NSString *successMessage;
+@property (copy, nonatomic) NSString *identifier;
+@property (copy, nonatomic) NSString *name;
+@property (copy, nonatomic) NSString *surveyDescription;
+@property (readonly, nonatomic) NSArray *questions;
+@property (assign, nonatomic, getter=responseIsRequired) BOOL responseRequired;
+@property (assign, nonatomic) BOOL showSuccessMessage;
+@property (copy, nonatomic) NSString *successMessage;
 
 - (void)addQuestion:(ATSurveyQuestion *)question;
 

@@ -20,8 +20,8 @@ extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 - (NSDictionary *)customDeviceData;
 - (NSDictionary *)integrationConfiguration;
 
-@property (nonatomic, strong) NSDictionary *pushUserInfo;
-@property (nonatomic, strong) UIViewController *pushViewController;
+@property (strong, nonatomic) NSDictionary *pushUserInfo;
+@property (strong, nonatomic) UIViewController *pushViewController;
 
 #if TARGET_OS_IPHONE
 

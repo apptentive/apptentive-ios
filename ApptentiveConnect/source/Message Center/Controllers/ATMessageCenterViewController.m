@@ -93,23 +93,23 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *composeButtonItem;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *neuMessageButtonItem; // newMessageButtonItem
 
-@property (nonatomic, strong) IBOutlet ATAttachmentController *attachmentController;
+@property (strong, nonatomic) IBOutlet ATAttachmentController *attachmentController;
 
-@property (nonatomic, strong) ATMessageCenterDataSource *dataSource;
-@property (nonatomic, strong) NSDateFormatter *dateFormatter;
+@property (strong, nonatomic) ATMessageCenterDataSource *dataSource;
+@property (strong, nonatomic) NSDateFormatter *dateFormatter;
 
 @property (readonly, nonatomic) NSIndexPath *indexPathOfLastMessage;
 
-@property (nonatomic) ATMessageCenterState state;
+@property (assign, nonatomic) ATMessageCenterState state;
 
-@property (nonatomic, weak) UIView *activeFooterView;
+@property (weak, nonatomic) UIView *activeFooterView;
 
-@property (nonatomic, strong) ATMessage *contextMessage;
+@property (strong, nonatomic) ATMessage *contextMessage;
 
-@property (nonatomic, readonly) UIColor *sentColor;
-@property (nonatomic, readonly) UIColor *failedColor;
+@property (readonly, nonatomic) UIColor *sentColor;
+@property (readonly, nonatomic) UIColor *failedColor;
 
-@property (nonatomic, assign) BOOL isSubsequentDisplay;
+@property (assign, nonatomic) BOOL isSubsequentDisplay;
 
 @property (readonly, nonatomic) NSString *trimmedMessage;
 @property (readonly, nonatomic) BOOL messageComposerHasText;

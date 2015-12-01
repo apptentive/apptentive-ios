@@ -19,5 +19,5 @@ typedef NS_OPTIONS(NSInteger, ATConnectDebuggingOptions) {
 
 
 @interface ATConnect ()
-@property (nonatomic, assign) ATConnectDebuggingOptions debuggingOptions;
+@property (assign, nonatomic) ATConnectDebuggingOptions debuggingOptions;
 @end

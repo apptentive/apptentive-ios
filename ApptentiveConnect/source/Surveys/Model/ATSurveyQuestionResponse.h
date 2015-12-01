@@ -10,7 +10,7 @@
 
 
 @interface ATSurveyQuestionResponse : NSObject <NSCoding>
-@property (nonatomic, copy) NSString *identifier;
-@property (nonatomic, strong) NSObject<NSCoding> *response;
+@property (copy, nonatomic) NSString *identifier;
+@property (strong, nonatomic) NSObject<NSCoding> *response;
 
 @end

@@ -23,16 +23,16 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 
 @interface ATInteractionUpgradeMessageViewController ()
 
-@property (nonatomic, strong) ATInteraction *upgradeMessageInteraction;
+@property (strong, nonatomic) ATInteraction *upgradeMessageInteraction;
 
-@property (nonatomic, strong) IBOutlet UIView *appIconContainer;
-@property (nonatomic, strong) IBOutlet UIButton *OKButton;
-@property (nonatomic, strong) IBOutlet UIImageView *appIconView;
-@property (nonatomic, strong) IBOutlet UIImageView *poweredByApptentiveIconView;
-@property (nonatomic, strong) IBOutlet UILabel *poweredByApptentiveLogo;
-@property (nonatomic, strong) IBOutlet UIView *poweredByBackground;
+@property (strong, nonatomic) IBOutlet UIView *appIconContainer;
+@property (strong, nonatomic) IBOutlet UIButton *OKButton;
+@property (strong, nonatomic) IBOutlet UIImageView *appIconView;
+@property (strong, nonatomic) IBOutlet UIImageView *poweredByApptentiveIconView;
+@property (strong, nonatomic) IBOutlet UILabel *poweredByApptentiveLogo;
+@property (strong, nonatomic) IBOutlet UIView *poweredByBackground;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *poweredByHeight;
-@property (nonatomic, strong) IBOutlet UIWebView *webView;
+@property (strong, nonatomic) IBOutlet UIWebView *webView;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *appIconContainerHeight;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *OKButtonBottomSpace;

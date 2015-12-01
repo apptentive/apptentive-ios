@@ -14,14 +14,14 @@
 
 typedef void (^alertActionHandler)(UIAlertAction *);
 
-@property (nonatomic, strong) ATInteraction *interaction;
-@property (nonatomic, strong) UIViewController *viewController;
+@property (strong, nonatomic) ATInteraction *interaction;
+@property (strong, nonatomic) UIViewController *viewController;
 
 // Used in iOS 8 and later
-@property (nonatomic, strong) UIAlertController *alertController;
+@property (strong, nonatomic) UIAlertController *alertController;
 
 // Used in iOS 7 and previous
-@property (nonatomic, strong) UIAlertView *alertView;
+@property (strong, nonatomic) UIAlertView *alertView;
 
 - (instancetype)initWithInteraction:(ATInteraction *)interaction;
 - (void)presentTextModalAlertFromViewController:(UIViewController *)viewController;

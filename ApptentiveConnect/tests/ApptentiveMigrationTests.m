@@ -32,7 +32,7 @@
 }
 
 - (void)testCurrentDatabaseVersion {
-	ATDataManager *dataManager = [self dataManagerWithStoreName:@"ATDataModelv4"];
+	ATDataManager *dataManager = [self dataManagerWithStoreName:@"ATDataModelv5"];
 	
 	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
 	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil");
@@ -86,6 +86,16 @@
 - (void)testV3Upgrade {
 	ATDataManager *dataManager = [self dataManagerWithStoreName:@"ATDataModelv3"];
 	
+	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
+	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil");
+	XCTAssertTrue([dataManager didMigrateStore], @"Should have had to migrate the datastore.");
+	XCTAssertFalse([dataManager didFailToMigrateStore], @"Failed to migrate the datastore.");
+	XCTAssertFalse([dataManager didRemovePersistentStore], @"Shouldn't have had to delete datastore.");
+}
+
+- (void)testV4Upgrade {
+	ATDataManager *dataManager = [self dataManagerWithStoreName:@"ATDataModelv4"];
+
 	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
 	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil");
 	XCTAssertTrue([dataManager didMigrateStore], @"Should have had to migrate the datastore.");

@@ -184,22 +184,11 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 #pragma mark - Image picker controller delegate
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-	NSURL *referenceURL = [info objectForKey:UIImagePickerControllerReferenceURL];
-
-	if (referenceURL) { // Copy existing photo from asset library
-		ALAssetsLibrary *assetLibrary = [[ALAssetsLibrary alloc] init];
-
-		[assetLibrary assetForURL:referenceURL resultBlock:^(ALAsset *asset) {
-			ALAssetRepresentation *representation = asset.defaultRepresentation;
-			UIImage *image = [UIImage imageWithCGImage:representation.fullScreenImage];
-
-			[self insertImage:image];
-		} failureBlock:^(NSError *error) {
-			NSLog(@"Unable to copy asset");
-		}];
-	} else { // Save newly-taken photo
 		UIImage *photo = info[UIImagePickerControllerOriginalImage];
+	if (photo) {
 		[self insertImage:photo];
+	} else {
+		ATLogError(@"Unable to get photo");
 	}
 
 	[self dismissImagePicker:picker];

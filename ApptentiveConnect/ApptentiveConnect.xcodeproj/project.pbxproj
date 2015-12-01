@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		011B08CE1C0D0CCC004F4F5D /* ATUtilitiesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49509DFA13583FB800793EEC /* ATUtilitiesTests.m */; };
+		011B08CF1C0D0CCC004F4F5D /* ApptentiveMigrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49129ED3174068730026C2E1 /* ApptentiveMigrationTests.m */; };
+		011B08D01C0D0CCC004F4F5D /* ATInteractionInvocationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49358DBB1BF3336700516F1E /* ATInteractionInvocationTests.m */; };
+		011B08D21C0D0E0C004F4F5D /* ATDataModelv5.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 011B08D11C0D0E09004F4F5D /* ATDataModelv5.sqlite */; };
+		011B08D41C0D163B004F4F5D /* ATDataModel v3 to v4.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 583E3969188E08DD0030B51E /* ATDataModel v3 to v4.xcmappingmodel */; };
+		011B08D71C0D19B6004F4F5D /* CodePointAndInteractionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 011B08D51C0D19AF004F4F5D /* CodePointAndInteractionTests.m */; };
 		0127EA0E1BF1271C0005481A /* ATAttachmentCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 0127EA081BF1271C0005481A /* ATAttachmentCell.h */; };
 		0127EA0F1BF1271C0005481A /* ATAttachmentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0127EA091BF1271C0005481A /* ATAttachmentCell.m */; };
 		0127EA101BF1271C0005481A /* ATCompoundMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 0127EA0A1BF1271C0005481A /* ATCompoundMessageCell.h */; };
@@ -257,7 +263,6 @@
 		583DF0681A390DDA00BF0207 /* ATInteractionInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 583DF0661A390DDA00BF0207 /* ATInteractionInvocation.m */; };
 		583DF06E1A44CD6E00BF0207 /* ATInteractionNavigateToLink.h in Headers */ = {isa = PBXBuildFile; fileRef = 583DF06C1A44CD6E00BF0207 /* ATInteractionNavigateToLink.h */; };
 		583DF06F1A44CD6E00BF0207 /* ATInteractionNavigateToLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 583DF06D1A44CD6E00BF0207 /* ATInteractionNavigateToLink.m */; };
-		583E396A188E08EB0030B51E /* ATDataModel v3 to v4.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 583E3969188E08DD0030B51E /* ATDataModel v3 to v4.xcmappingmodel */; };
 		583E396B188E08EB0030B51E /* ATDataModel v3 to v4.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 583E3969188E08DD0030B51E /* ATDataModel v3 to v4.xcmappingmodel */; };
 		5843F81E188778B000C9D096 /* ATDataModelv4.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 5843F81D188778B000C9D096 /* ATDataModelv4.sqlite */; };
 		584647C617C426E800BFD6E6 /* ATEngagementManifestParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 584647C417C426E800BFD6E6 /* ATEngagementManifestParser.h */; };
@@ -319,6 +324,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		011B08D11C0D0E09004F4F5D /* ATDataModelv5.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = ATDataModelv5.sqlite; sourceTree = "<group>"; };
+		011B08D51C0D19AF004F4F5D /* CodePointAndInteractionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CodePointAndInteractionTests.m; sourceTree = "<group>"; };
 		0127EA081BF1271C0005481A /* ATAttachmentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAttachmentCell.h; sourceTree = "<group>"; };
 		0127EA091BF1271C0005481A /* ATAttachmentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAttachmentCell.m; sourceTree = "<group>"; };
 		0127EA0A1BF1271C0005481A /* ATCompoundMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATCompoundMessageCell.h; sourceTree = "<group>"; };
@@ -1213,6 +1220,7 @@
 				49C002871334137E0071F088 /* ApptentiveConnectTests-Info.plist */,
 				01F6FD8F1BFAA512004513C2 /* CriteriaTests.m */,
 				01F6FD911BFAA52A004513C2 /* CriteriaTests.h */,
+				011B08D51C0D19AF004F4F5D /* CodePointAndInteractionTests.m */,
 				49C002881334137E0071F088 /* ApptentiveConnectTests-Prefix.pch */,
 				49C002891334137E0071F088 /* ApptentiveConnectTests.h */,
 				49C0028A1334137E0071F088 /* ApptentiveConnectTests.m */,
@@ -1271,6 +1279,7 @@
 				58AA409F1821C162000799D8 /* ATDataModelv2.sqlite */,
 				49E740901840498100413697 /* ATDataModelv3.sqlite */,
 				5843F81D188778B000C9D096 /* ATDataModelv4.sqlite */,
+				011B08D11C0D0E09004F4F5D /* ATDataModelv5.sqlite */,
 			);
 			path = data;
 			sourceTree = "<group>";
@@ -1636,7 +1645,7 @@
 		496DC3761333D35600743F65 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Apptentive, Inc.";
 			};
 			buildConfigurationList = 496DC3791333D35600743F65 /* Build configuration list for PBXProject "ApptentiveConnect" */;
@@ -1700,6 +1709,7 @@
 				01F6FDA41BFBF3E2004513C2 /* testInteractionInvokesTotal.json in Resources */,
 				01F6FDA21BFBF3E2004513C2 /* testCodePointInvokesVersion.json in Resources */,
 				01A88FF91AFBFFAE002C49E7 /* testJsonDiffing.1.new.json in Resources */,
+				011B08D21C0D0E0C004F4F5D /* ATDataModelv5.sqlite in Resources */,
 				49E7408F1840497600413697 /* v3WALDatabase in Resources */,
 				01F6FD651BFAA291004513C2 /* testCornerCasesThatShouldBeTrue.json in Resources */,
 				01F6FDA91BFBF3E2004513C2 /* testOperatorStartsWith.json in Resources */,
@@ -1882,8 +1892,11 @@
 				01C7C4DE1BEAD0BE005D6EC1 /* ATDataModel.xcdatamodeld in Sources */,
 				013BB6181BF6ABB600BB6C27 /* ATDataModel v4 to v5.xcmappingmodel in Sources */,
 				583E396A188E08EB0030B51E /* ATDataModel v3 to v4.xcmappingmodel in Sources */,
+				011B08CE1C0D0CCC004F4F5D /* ATUtilitiesTests.m in Sources */,
+				011B08D01C0D0CCC004F4F5D /* ATInteractionInvocationTests.m in Sources */,
+				011B08CF1C0D0CCC004F4F5D /* ApptentiveMigrationTests.m in Sources */,
+				011B08D71C0D19B6004F4F5D /* CodePointAndInteractionTests.m in Sources */,
 				01F6FD971BFBCDC3004513C2 /* ApptentiveMetricsTests.m in Sources */,
-				583E396A188E08EB0030B51E /* ATDataModel v3 to v4.xcmappingmodel in Sources */,
 				493AEB4515990A6B00DFD4C7 /* ApptentiveSurveysTests.m in Sources */,
 				49ED18051BF97B4500C6D343 /* ATInteractionUsageDataTests.m in Sources */,
 				01F6FE2C1C0119D2004513C2 /* CriteriaTests.m in Sources */,
@@ -2111,7 +2124,7 @@
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "tests/ApptentiveConnectTests-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"APPTENTIVE_DEBUG=1",
@@ -2145,7 +2158,7 @@
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "tests/ApptentiveConnectTests-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/ext/OCMock";
 				INFOPLIST_FILE = "tests/ApptentiveConnectTests-Info.plist";

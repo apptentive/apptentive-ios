@@ -348,11 +348,7 @@
 		leftValue = leftComplexObject[@"sec"];
 		rightValue = rightComplexObject[@"sec"];
 	}
-	else if ([type isEqualToString:@"duration"]) {
-		leftValue = leftComplexObject[@"sec"];
-		rightValue = rightComplexObject[@"sec"];
-	}
-	
+
 	NSPredicate *predicate = [self predicateWithLeftValue:leftValue rightValue:rightValue operatorType:operatorType];
 	
 	return predicate;

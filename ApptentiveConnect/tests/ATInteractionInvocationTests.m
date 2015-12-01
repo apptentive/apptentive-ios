@@ -19,8 +19,23 @@
 @interface ATInteractionInvocation ()
 + (NSCompoundPredicateType)compoundPredicateTypeFromString:(NSString *)predicateTypeString hasError:(nonnull BOOL *)hasError;
 + (NSPredicateOperatorType)predicateOperatorTypeFromString:(NSString *)operatorString hasError:(nonnull BOOL *)hasError;
++ (BOOL)operator:(NSPredicateOperatorType)operator isValidForParameter:(NSObject *)parameter;
++ (NSPredicate *)predicateWithLeftKeyPath:(NSString *)keyPath forObject:(NSDictionary *)context rightComplexObject:(NSDictionary *)rightComplexObject operatorType:(NSPredicateOperatorType)operatorType;
++ (NSCompoundPredicate *)compoundPredicateWithType:(NSCompoundPredicateType)type criteriaArray:(NSArray *)criteriaArray;
++ (NSCompoundPredicate *)compoundPredicateForKeyPath:(NSString *)keyPath operatorsAndValues:(NSDictionary *)operatorsAndValues;
+
 @end
 
+@interface ATFailingUsageData: ATInteractionUsageData
+@end
+
+@implementation ATFailingUsageData
+
+- (NSDictionary *)predicateEvaluationDictionary {
+	return nil;
+}
+
+@end
 
 @implementation ATInteractionInvocationTests
 
@@ -95,5 +110,30 @@
 	[ATInteractionInvocation predicateOperatorTypeFromString:@"" hasError:&hasError];
 	XCTAssertTrue(hasError);
 }
+
+- (void)testOperatorIsValidForParameterFail {
+	XCTAssertFalse([ATInteractionInvocation operator:-999 isValidForParameter:@"Hey"]);
+}
+
+- (void)testPredicateWithLeftKeyPathForObjectRightComplexObjectOperatorTypeFail {
+	XCTAssertNil([ATInteractionInvocation predicateWithLeftKeyPath:@"datetime" forObject:@{ @"datetime": @{ @"_type": @"datetime"} } rightComplexObject:@{ @"_type": @"foo" } operatorType:NSEqualToPredicateOperatorType]);
+}
+
+- (void)testCompoundPredicateWithTypeCriteriaArray {
+	XCTAssertNil([ATInteractionInvocation compoundPredicateWithType:NSAndPredicateType criteriaArray:@[ @{ @"foo": [NSDate date] } ]]);
+}
+
+- (void)testFailingInteractionUsageData {
+	ATInteractionInvocation *invocation = [ATInteractionInvocation invocationWithJSONDictionary:@{ @"criteria": @{ @"foo": @"bar" }}];
+
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:[[ATFailingUsageData alloc] init]]);
+}
+
+- (void)testFailingCompoundPredicateForKeyPath {
+	ATInteractionInvocation *invocation = [ATInteractionInvocation invocationWithJSONDictionary:@{ @"criteria": @{ @"$and": @{ @"foo": [NSDate date] }}}];
+
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:[[ATFailingUsageData alloc] init]]);
+}
+
 
 @end

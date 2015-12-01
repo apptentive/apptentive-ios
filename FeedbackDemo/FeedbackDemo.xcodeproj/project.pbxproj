@@ -347,6 +347,7 @@
 				TargetAttributes = {
 					01A16C8B1AF2A66B00D691FC = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = 86WML2UN43;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -691,6 +692,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = FeedbackDemo/FeedbackDemo.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = FeedbackDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -699,6 +702,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.apptentive.feedback-demo-testflight";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "cb10ced5-8069-4f04-8b69-c82e53cc301d";
 			};
 			name = Debug;
 		};
@@ -708,6 +712,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = FeedbackDemo/FeedbackDemoTestFlight.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = FeedbackDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -716,7 +722,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.apptentive.feedback-demo-testflight";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "638c4ec0-7f27-422f-bf2a-5b40dc38c630";
+				PROVISIONING_PROFILE = "895351e4-abee-45ec-9008-09253441567a";
 			};
 			name = Release;
 		};

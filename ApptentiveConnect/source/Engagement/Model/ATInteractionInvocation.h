@@ -10,6 +10,7 @@
 
 @class ATInteractionUsageData;
 
+
 @interface ATInteractionInvocation : NSObject <NSCoding, NSCopying>
 
 @property (nonatomic, copy) NSString *interactionID;

@@ -14,6 +14,7 @@
 #import "ATSurveyResponse.h"
 #import "ATURLConnection.h"
 
+
 @implementation ATWebClient (SurveyAdditions)
 
 - (ATAPIRequest *)requestForPostingSurveyResponse:(ATSurveyResponse *)surveyResponse {
@@ -22,7 +23,7 @@
 		ATLogError(@"No current conversation.");
 		return nil;
 	}
-	
+
 	NSError *error = nil;
 	NSString *postString = [ATJSONSerialization stringWithJSONObject:[surveyResponse apiJSON] options:ATJSONWritingPrettyPrinted error:&error];
 	if (!postString && error != nil) {
@@ -31,11 +32,11 @@
 	}
 	NSString *path = [NSString stringWithFormat:@"surveys/%@/respond", surveyResponse.surveyID];
 	NSString *url = [self apiURLStringWithPath:path];
-	
+
 	ATURLConnection *conn = [self connectionToPost:[NSURL URLWithString:url] JSON:postString];
 	conn.timeoutInterval = 240.0;
 	[self updateConnection:conn withOAuthToken:conversation.token];
-	
+
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:[self commonChannelName]];
 	request.returnType = ATAPIRequestReturnTypeJSON;
 	return request;

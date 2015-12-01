@@ -10,6 +10,7 @@
 
 extern NSString *const ATCurrentPersonPreferenceKey;
 
+
 @interface ATPersonInfo : NSObject <NSCoding>
 @property (nonatomic, readonly) NSString *apptentiveID;
 @property (nonatomic, copy) NSString *name;

@@ -23,6 +23,7 @@ typedef NS_ENUM(NSInteger, ATPendingMessageState) {
 
 @class ATMessageDisplayType, ATMessageSender;
 
+
 @interface ATMessage : ATRecord <ATJSONModel>
 
 @property (nonatomic, strong) NSString *pendingMessageID;
@@ -48,6 +49,7 @@ typedef NS_ENUM(NSInteger, ATPendingMessageState) {
 
 @end
 
+
 @interface ATMessage (CoreDataGeneratedAccessors)
 
 - (void)setCustomDataValue:(id)value forKey:(NSString *)key;
@@ -61,6 +63,7 @@ typedef NS_ENUM(NSInteger, ATPendingMessageState) {
 - (void)markAsRead;
 
 @end
+
 
 @interface ATMessage (QuickLook) <QLPreviewControllerDataSource>
 @end

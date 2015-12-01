@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ATInteraction.h"
 
+
 @interface ATInteractionRatingDialogController : NSObject <UIAlertViewDelegate>
 
 @property (nonatomic, retain) ATInteraction *interaction;

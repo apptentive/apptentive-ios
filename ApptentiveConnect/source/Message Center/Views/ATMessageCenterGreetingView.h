@@ -10,6 +10,7 @@
 
 @class ATNetworkImageIconView;
 
+
 @interface ATMessageCenterGreetingView : UIView
 
 @property (retain, nonatomic) IBOutlet ATNetworkImageIconView *imageView;

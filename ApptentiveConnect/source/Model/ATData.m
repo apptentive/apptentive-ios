@@ -11,6 +11,7 @@
 #import "ATBackend.h"
 #import "ATLog.h"
 
+
 @implementation ATData
 + (NSManagedObject *)newEntityNamed:(NSString *)entityName {
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
@@ -29,7 +30,7 @@
 		fetchArray = nil;
 	}
 	fetchType = nil;
-	
+
 	return fetchArray;
 }
 
@@ -60,7 +61,7 @@
 		count = 0;
 	}
 	fetchType = nil;
-	
+
 	return count;
 }
 
@@ -70,7 +71,7 @@
 	fetchTypes.predicate = predicate;
 	NSError *fetchError = nil;
 	NSArray *fetchArray = [context executeFetchRequest:fetchTypes error:&fetchError];
-	
+
 	if (!fetchArray) {
 		ATLogError(@"Error finding entities to remove: %@", fetchError);
 	} else {
@@ -79,7 +80,7 @@
 		}
 		[context save:nil];
 	}
-	
+
 	fetchTypes = nil;
 }
 

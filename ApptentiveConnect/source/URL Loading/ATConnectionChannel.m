@@ -9,12 +9,14 @@
 #import "ATURLConnection.h"
 #import "ATURLConnection_Private.h"
 
+
 @interface ATConnectionChannel ()
 
 @property (nonatomic, strong) NSMutableSet *active;
 @property (nonatomic, strong) NSMutableArray *waiting;
 
 @end
+
 
 @implementation ATConnectionChannel
 
@@ -33,10 +35,10 @@
 		[self performSelectorOnMainThread:@selector(update) withObject:nil waitUntilDone:NO];
 		return;
 	}
-	
+
 	@synchronized(self) {
 		@autoreleasepool {
-			while ([self.active count] < self.maximumConnections && [self.waiting count] > 0) {
+			while ([self.active count]<self.maximumConnections && [self.waiting count]> 0) {
 				ATURLConnection *loader = [self.waiting objectAtIndex:0];
 				[self.active addObject:loader];
 				[loader addObserver:self forKeyPath:@"isFinished" options:NSKeyValueObservingOptionNew context:NULL];
@@ -55,7 +57,7 @@
 }
 
 - (void)cancelAllConnections {
-	@synchronized (self) {
+	@synchronized(self) {
 		for (ATURLConnection *loader in self.active) {
 			[loader removeObserver:self forKeyPath:@"isFinished"];
 			[loader cancel];
@@ -75,7 +77,7 @@
 			[connection cancel];
 			[self.active removeObject:connection];
 		}
-		
+
 		if ([self.waiting containsObject:connection]) {
 			[connection cancel];
 			[self.waiting removeObject:connection];

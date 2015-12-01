@@ -14,6 +14,7 @@
 #import "ATJSONModel.h"
 #import "ATRecordRequestTask.h"
 
+
 @interface ATEvent : ATRecord <ATJSONModel, ATRequestTaskProvider>
 
 @property (nonatomic, strong) NSString *pendingEventID;

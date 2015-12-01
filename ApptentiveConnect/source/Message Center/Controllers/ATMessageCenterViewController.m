@@ -82,6 +82,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	ATMessageCenterStateReplied
 };
 
+
 @interface ATMessageCenterViewController ()
 
 @property (weak, nonatomic) IBOutlet ATMessageCenterGreetingView *greetingView;
@@ -117,26 +118,27 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 @end
 
+
 @implementation ATMessageCenterViewController
 
 - (void)viewDidLoad {
 	// TODO: Figure out a way to avoid tightly coupling this
 	[ATBackend sharedBackend].presentedMessageCenterViewController = self;
-	
-    [super viewDidLoad];
-	
+
+	[super viewDidLoad];
+
 	[self.interaction engage:ATInteractionMessageCenterEventLabelLaunch fromViewController:self];
-	
+
 	[self.navigationController.toolbar addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(compose:)]];
-	
+
 	self.navigationItem.rightBarButtonItem.title = ATLocalizedString(@"Close", @"Button that closes Message Center.");
 	self.navigationItem.rightBarButtonItem.accessibilityHint = ATLocalizedString(@"Closes Message Center.", @"Accessibility hint for 'close' button");
-	
+
 	self.dataSource = [[ATMessageCenterDataSource alloc] initWithDelegate:self];
 	[self.dataSource start];
-	
+
 	[ATBackend sharedBackend].messageDelegate = self;
-	
+
 	self.dateFormatter = [[NSDateFormatter alloc] init];
 	self.dateFormatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"MMMMdyyyy" options:0 locale:[NSLocale currentLocale]];
 	self.dataSource.dateFormatter.dateFormat = self.dateFormatter.dateFormat; // Used to determine if date changed between messages
@@ -147,31 +149,31 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.messageInputView.orientation = interfaceOrientation;
 
 	self.navigationItem.title = self.interaction.title;
-	
+
 	self.greetingView.titleLabel.text = self.interaction.greetingTitle;
 	self.greetingView.messageLabel.text = self.interaction.greetingBody;
 	self.greetingView.imageView.imageURL = self.interaction.greetingImageURL;
 	self.greetingView.aboutButton.hidden = !self.interaction.branding;
 	self.greetingView.isOnScreen = NO;
-	
+
 	[self.greetingView.aboutButton setImage:[[ATBackend imageNamed:@"at_info"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
 	self.greetingView.aboutButton.accessibilityLabel = ATLocalizedString(@"About Apptentive", @"Accessibility label for 'show about' button");
 	self.greetingView.aboutButton.accessibilityHint = ATLocalizedString(@"Displays information about this feature.", @"Accessibilty hint for 'show about' button");
-	
+
 	self.statusView.mode = ATMessageCenterStatusModeEmpty;
-	
+
 	self.messageInputView.messageView.text = self.draftMessage ?: @"";
 	self.messageInputView.messageView.textContainerInset = UIEdgeInsetsMake(TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET);
 	[self.messageInputView.clearButton setImage:[[ATBackend imageNamed:@"at_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-	
+
 	self.messageInputView.placeholderLabel.text = self.interaction.composerPlaceholderText;
 	self.messageInputView.placeholderLabel.hidden = self.messageInputView.messageView.text.length > 0;
-	
+
 	self.messageInputView.titleLabel.text = self.interaction.composerTitle;
 	[self.messageInputView.sendButton setTitle:self.interaction.composerSendButtonTitle forState:UIControlStateNormal];
 
 	self.messageInputView.sendButton.accessibilityHint = ATLocalizedString(@"Sends the message.", @"Accessibility hint for 'send' button");
-	
+
 	self.messageInputView.clearButton.accessibilityLabel = ATLocalizedString(@"Discard", @"Accessibility label for 'discard' button");
 	self.messageInputView.clearButton.accessibilityHint = ATLocalizedString(@"Discards the message.", @"Accessibility hint for 'discard' button");
 
@@ -184,7 +186,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		profileButtonItem.accessibilityLabel = ATLocalizedString(@"Profile", @"Accessibility label for 'edit profile' button");
 		profileButtonItem.accessibilityHint = ATLocalizedString(@"Displays name and email editor.", @"Accessibility hint for 'edit profile' button");
 		self.navigationItem.leftBarButtonItem = profileButtonItem;
-		
+
 		self.profileView.titleLabel.text = self.interaction.profileInitialTitle;
 		self.profileView.requiredLabel.text = self.interaction.profileInitialEmailExplanation;
 		[self.profileView.saveButton setTitle:self.interaction.profileInitialSaveButtonTitle forState:UIControlStateNormal];
@@ -195,7 +197,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		if (self.interaction.profileRequired && [self shouldShowProfileViewBeforeComposing:YES]) {
 			self.profileView.skipButton.hidden = YES;
 			self.profileView.mode = ATMessageCenterProfileModeCompact;
-			
+
 			self.composeButtonItem.enabled = NO;
 			self.neuMessageButtonItem.enabled = NO;
 		} else {
@@ -204,12 +206,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	} else {
 		self.navigationItem.leftBarButtonItem = nil;
 	}
-	
+
 	self.contextMessage = nil;
 	if (self.interaction.contextMessageBody) {
 		self.contextMessage = [[ATBackend sharedBackend] automatedMessageWithTitle:nil body:self.interaction.contextMessageBody];
 	}
-	
+
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardWillChangeFrameNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToFooterView:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardDidHideNotification object:nil];
@@ -232,14 +234,14 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.messageInputView.messageView.delegate = nil;
 	self.profileView.nameField.delegate = nil;
 	self.profileView.emailField.delegate = nil;
-	
+
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[self.attachmentController removeObserver:self forKeyPath:@"attachments"];
 }
 
 - (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+	[super didReceiveMemoryWarning];
+	// Dispose of any resources that can be recreated.
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
@@ -288,23 +290,23 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return [self.dataSource numberOfMessageGroups];
+	return [self.dataSource numberOfMessageGroups];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.dataSource numberOfMessagesInGroup:section];
+	return [self.dataSource numberOfMessagesInGroup:section];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	[self.dataSource markAsReadMessageAtIndexPath:indexPath];
-	
+
 	UITableViewCell<ATMessageCenterCell> *cell;
 	ATMessageCenterMessageType type = [self.dataSource cellTypeAtIndexPath:indexPath];
-	
+
 	if (type == ATMessageCenterMessageTypeMessage || type == ATMessageCenterMessageTypeCompoundMessage) {
 		NSString *cellIdentifier = type == ATMessageCenterMessageTypeCompoundMessage ? @"CompoundMessage" : @"Message";
 		ATMessageCenterMessageCell *messageCell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
-	
+
 		switch ([self.dataSource statusOfMessageAtIndexPath:indexPath]) {
 			case ATMessageCenterMessageStatusHidden:
 				messageCell.statusLabelHidden = YES;
@@ -340,7 +342,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 		replyCell.messageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
 		replyCell.senderLabel.text = [self.dataSource senderOfMessageAtIndexPath:indexPath];
-		
+
 		cell = replyCell;
 	} else if (type == ATMessageCenterMessageTypeContextMessage) {
 		// TODO: handle title
@@ -372,11 +374,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
 	CGFloat height = self.tableView.sectionHeaderHeight;
-	
+
 	if ([self.dataSource shouldShowDateForMessageGroupAtIndex:section]) {
 		height += HEADER_LABEL_HEIGHT;
 	}
-	
+
 	return height;
 }
 
@@ -384,7 +386,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	// iOS 7 requires this and there's no good way to instantiate a cell to sample, so we're hard-coding it for now.
 	CGFloat verticalMargin, horizontalMargin, minimumCellHeight;
 	BOOL statusLabelVisible = [self.dataSource statusOfMessageAtIndexPath:indexPath] != ATMessageCenterMessageStatusHidden;
-	
+
 	switch ([self.dataSource cellTypeAtIndexPath:indexPath]) {
 		case ATMessageCenterMessageTypeContextMessage:
 		case ATMessageCenterMessageTypeMessage:
@@ -414,7 +416,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			minimumCellHeight = REPLY_CELL_MINIMUM_HEIGHT + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN] - MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0;
 			break;
 	}
-	
+
 	if (statusLabelVisible) {
 		verticalMargin += STATUS_LABEL_HEIGHT + STATUS_LABEL_MARGIN;
 	}
@@ -428,9 +430,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	} else {
 		verticalMargin -= MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0;
 	}
-	
+
 	double height = ceil(fmax(labelRect.size.height + verticalMargin, minimumCellHeight) + 0.5);
-	
+
 	// "Due to an underlying implementation detail, you should not return values greater than 2009."
 	return fmin(height, 2009.0);
 }
@@ -441,15 +443,15 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	if (![self.dataSource shouldShowDateForMessageGroupAtIndex:section]) {
 		return nil;
 	}
-	
+
 	UITableViewHeaderFooterView *header = [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:@"Date"];
-	
+
 	if (header == nil) {
 		header = [[UITableViewHeaderFooterView alloc] initWithReuseIdentifier:@"Date"];
 	}
-	
+
 	header.textLabel.text = [self.dateFormatter stringFromDate:[self.dataSource dateOfMessageGroupAtIndex:section]];
-	
+
 	return header;
 }
 
@@ -490,17 +492,17 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	} @catch (NSException *exception) {
 		ATLogError(@"caught exception: %@: %@", [exception name], [exception description]);
 	}
-	
+
 	if (self.state != ATMessageCenterStateWhoCard && self.state != ATMessageCenterStateComposing) {
 		[self updateState];
-		
+
 		[self resizeFooterView:nil];
 		[self scrollToLastMessageAnimated:YES];
 	}
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
-	switch(type) {
+	switch (type) {
 		case NSFetchedResultsChangeUpdate:
 			[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 			break;
@@ -508,27 +510,27 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		case NSFetchedResultsChangeInsert:
 			[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 			break;
-			
+
 		case NSFetchedResultsChangeDelete:
 			[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 			break;
-			
+
 		case NSFetchedResultsChangeMove:
 			if (![indexPath isEqual:newIndexPath]) {
 				[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 				[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 			}
 			break;
-			
+
 		default:
 			break;
 	}
-	
+
 	[self.tableView reloadData];
 }
 
-- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {	
-	switch(type) {
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id<NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
+	switch (type) {
 		case NSFetchedResultsChangeInsert:
 			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
 			break;
@@ -541,7 +543,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		default:
 			break;
 	}
-	
+
 	[self.tableView reloadData];
 }
 
@@ -554,7 +556,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	ATAttachmentCell *attachmentCell = (ATAttachmentCell *)[collectionView cellForItemAtIndexPath:collectionViewIndexPath];
 	attachmentCell.progressView.hidden = YES;
 
-	[collectionView reloadItemsAtIndexPaths:@[ collectionViewIndexPath ]];
+	[collectionView reloadItemsAtIndexPaths:@[collectionViewIndexPath]];
 }
 
 - (void)messageCenterDataSource:(ATMessageCenterDataSource *)dataSource attachmentDownloadAtIndexPath:(NSIndexPath *)indexPath didProgress:(float)progress {
@@ -622,16 +624,16 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)textViewDidChange:(UITextView *)textView {
 	[self updateSendButtonEnabledStatus];
 	self.messageInputView.placeholderLabel.hidden = textView.text.length > 0;
-	
+
 	// Fix bug where text view doesn't scroll far enough down
 	// Adapted from http://stackoverflow.com/a/19277383/27951
 	CGRect line = [textView caretRectForPosition:textView.selectedTextRange.start];
-	CGFloat overflow = line.origin.y + line.size.height - ( textView.contentOffset.y + textView.bounds.size.height - textView.contentInset.bottom - textView.contentInset.top );
-	if ( overflow > 0 ) {
+	CGFloat overflow = line.origin.y + line.size.height - (textView.contentOffset.y + textView.bounds.size.height - textView.contentInset.bottom - textView.contentInset.top);
+	if (overflow > 0) {
 		// Scroll caret to visible area
 		CGPoint offset = textView.contentOffset;
 		offset.y += overflow + textView.textContainerInset.bottom;
-		
+
 		// Cannot animate with setContentOffset:animated: or caret will not appear
 		[UIView animateWithDuration:.2 animations:^{
 			[textView setContentOffset:offset];
@@ -660,15 +662,15 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[self saveWho:textField];
 		[self.profileView.emailField resignFirstResponder];
 	}
-	
+
 	return NO;
 }
 
 #pragma mark - Message backend delegate
 
 - (void)backend:(ATBackend *)backend messageProgressDidChange:(float)progress {
-	ATProgressNavigationBar *navigationBar = (ATProgressNavigationBar *) self.navigationController.navigationBar;
-		
+	ATProgressNavigationBar *navigationBar = (ATProgressNavigationBar *)self.navigationController.navigationBar;
+
 	BOOL animated = navigationBar.progressView.progress < progress;
 	[navigationBar.progressView setProgress:progress animated:animated];
 }
@@ -687,16 +689,16 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.attachmentController resignFirstResponder];
 
 	[self.interaction engage:ATInteractionMessageCenterEventLabelClose fromViewController:self];
-	
+
 	[self.dataSource stop];
-	
+
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)sendButtonPressed:(id)sender {
 	NSString *message = self.trimmedMessage;
 	NSIndexPath *lastUserMessageIndexPath = self.dataSource.lastUserMessageIndexPath;
-	
+
 	if (self.contextMessage) {
 		[[ATBackend sharedBackend] sendAutomatedMessage:self.contextMessage];
 		self.contextMessage = nil;
@@ -713,8 +715,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.attachmentController.active = NO;
 
 	if ([self shouldShowProfileViewBeforeComposing:NO]) {
-		[self.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{@"required": @(self.interaction.profileRequired), @"trigger": @"automatic"}];
-		
+		[self.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{ @"required": @(self.interaction.profileRequired),
+			@"trigger": @"automatic" }];
+
 		self.state = ATMessageCenterStateWhoCard;
 	} else {
 		[self.messageInputView.messageView resignFirstResponder];
@@ -742,19 +745,19 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[self discardDraft];
 		return;
 	}
-	
+
 	if (NSClassFromString(@"UIAlertController")) {
 		UIAlertController *alertController = [UIAlertController alertControllerWithTitle:self.interaction.composerCloseConfirmBody message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-		
+
 		[alertController addAction:[UIAlertAction actionWithTitle:self.interaction.composerCloseCancelButtonTitle style:UIAlertActionStyleCancel handler:nil]];
-		[alertController addAction:[UIAlertAction actionWithTitle:self.interaction.composerCloseDiscardButtonTitle style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
+		[alertController addAction:[UIAlertAction actionWithTitle:self.interaction.composerCloseDiscardButtonTitle style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
 			[self discardDraft];
 		}]];
-		
+
 		[self presentViewController:alertController animated:YES completion:nil];
 	} else {
 		UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:self.interaction.composerCloseConfirmBody delegate:self cancelButtonTitle:self.interaction.composerCloseCancelButtonTitle destructiveButtonTitle:self.interaction.composerCloseDiscardButtonTitle otherButtonTitles:nil];
-		
+
 		if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
 			[actionSheet showFromRect:sender.frame inView:sender.superview animated:YES];
 		} else {
@@ -765,20 +768,21 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (IBAction)showWho:(id)sender {
 	self.profileView.mode = ATMessageCenterProfileModeFull;
-	
+
 	self.profileView.skipButton.hidden = NO;
 	self.profileView.titleLabel.text = self.interaction.profileEditTitle;
-	
+
 	self.profileView.nameField.placeholder = self.interaction.profileEditNamePlaceholder;
 	self.profileView.emailField.placeholder = self.interaction.profileEditEmailPlaceholder;
-	
+
 	[self.profileView.saveButton setTitle:self.interaction.profileEditSaveButtonTitle forState:UIControlStateNormal];
 	[self.profileView.skipButton setTitle:self.interaction.profileEditSkipButtonTitle forState:UIControlStateNormal];
-	
-	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{@"required": @(self.interaction.profileRequired), @"trigger": @"button"}];
-	
+
+	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{ @"required": @(self.interaction.profileRequired),
+		@"trigger": @"button" }];
+
 	self.state = ATMessageCenterStateWhoCard;
-	
+
 	[self resizeFooterView:nil];
 	[self scrollToFooterView:nil];
 }
@@ -791,38 +795,39 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	if (![self isWhoValid]) {
 		return;
 	}
-	
+
 	NSString *buttonLabel = nil;
 	if ([sender isKindOfClass:[UIButton class]]) {
 		buttonLabel = ((UIButton *)sender).titleLabel.text;
 	} else if ([sender isKindOfClass:[UITextField class]]) {
 		buttonLabel = @"return_key";
 	}
-	
+
 	NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
 	[userInfo setObject:@(self.interaction.profileRequired) forKey:@"required"];
 	if (buttonLabel) {
 		[userInfo setObject:buttonLabel forKey:@"button_label"];
 	}
-	
+
 	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileSubmit fromViewController:self userInfo:userInfo];
-	
+
 	if (self.profileView.nameField.text != [ATConnect sharedConnection].personName) {
 		[ATConnect sharedConnection].personName = self.profileView.nameField.text;
-		[self.interaction engage:ATInteractionMessageCenterEventLabelProfileName fromViewController:self userInfo:@{@"length": @(self.profileView.nameField.text.length)}];
+		[self.interaction engage:ATInteractionMessageCenterEventLabelProfileName fromViewController:self userInfo:@{ @"length": @(self.profileView.nameField.text.length) }];
 	}
 
 	if (self.profileView.emailField.text != [ATConnect sharedConnection].personEmailAddress) {
 		[ATConnect sharedConnection].personEmailAddress = self.profileView.emailField.text;
-		[self.interaction engage:ATInteractionMessageCenterEventLabelProfileEmail fromViewController:self userInfo:@{@"length": @(self.profileView.emailField.text.length), @"valid": @([ATUtilities emailAddressIsValid:self.profileView.emailField.text])}];
+		[self.interaction engage:ATInteractionMessageCenterEventLabelProfileEmail fromViewController:self userInfo:@{ @"length": @(self.profileView.emailField.text.length),
+			@"valid": @([ATUtilities emailAddressIsValid:self.profileView.emailField.text]) }];
 	}
-	
+
 	[[ATBackend sharedBackend] updatePersonIfNeeded];
-	
+
 	self.composeButtonItem.enabled = YES;
 	self.neuMessageButtonItem.enabled = YES;
 	[self updateState];
-	
+
 	if (self.state == ATMessageCenterStateEmpty) {
 		[self.messageInputView.messageView becomeFirstResponder];
 	} else {
@@ -832,12 +837,14 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (IBAction)skipWho:(id)sender {
-	NSDictionary *userInfo = @{@"required": @(self.interaction.profileRequired)};
+	NSDictionary *userInfo = @{ @"required": @(self.interaction.profileRequired) };
 	if ([sender isKindOfClass:[UIButton class]]) {
-		userInfo = @{@"required": @(self.interaction.profileRequired), @"method": @"button", @"button_label": ((UIButton *)sender).titleLabel.text};
+		userInfo = @{ @"required": @(self.interaction.profileRequired),
+			@"method": @"button",
+			@"button_label": ((UIButton *)sender).titleLabel.text };
 	}
 	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileClose fromViewController:sender userInfo:userInfo];
-	
+
 	[[NSUserDefaults standardUserDefaults] setBool:YES forKey:ATMessageCenterDidSkipProfileKey];
 	[self updateState];
 	[self.view endEditing:YES];
@@ -850,7 +857,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 #pragma mark - Key-value observing
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *, id> *)change context:(void *)context {
 	[self updateSendButtonEnabledStatus];
 }
 
@@ -869,7 +876,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (BOOL)messageComposerHasAttachments {
-	return  self.attachmentController.attachments.count > 0;
+	return self.attachmentController.attachments.count > 0;
 }
 
 - (void)updateSendButtonEnabledStatus {
@@ -889,7 +896,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (BOOL)isWhoValid {
 	BOOL emailIsValid = [ATUtilities emailAddressIsValid:self.profileView.emailField.text];
 	BOOL emailIsBlank = self.profileView.emailField.text.length == 0;
-	
+
 	if (self.interaction.profileRequired) {
 		return emailIsValid;
 	} else {
@@ -899,8 +906,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)updateState {
 	if ([self shouldShowProfileViewBeforeComposing:YES]) {
-		[self.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{@"required": @(self.interaction.profileRequired), @"trigger": @"automatic"}];
-		
+		[self.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{ @"required": @(self.interaction.profileRequired),
+			@"trigger": @"automatic" }];
+
 		self.state = ATMessageCenterStateWhoCard;
 	} else if (!self.dataSource.hasNonContextMessages) {
 		self.state = ATMessageCenterStateEmpty;
@@ -908,7 +916,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		self.state = ATMessageCenterStateReplied;
 	} else {
 		BOOL networkIsUnreachable = [[ATReachability sharedReachability] currentNetworkStatus] == ATNetworkNotReachable;
-		
+
 		switch (self.dataSource.lastUserMessageState) {
 			case ATPendingMessageStateConfirmed:
 				self.state = ATMessageCenterStateConfirmed;
@@ -935,22 +943,22 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		UIView *oldFooter = self.activeFooterView;
 		UIView *newFooter = nil;
 		BOOL toolbarHidden = NO;
-		
+
 		_state = state;
-		
+
 		self.navigationItem.leftBarButtonItem.enabled = YES;
-		
+
 		switch (state) {
 			case ATMessageCenterStateEmpty:
 				newFooter = self.messageInputView;
 				toolbarHidden = YES;
 				break;
-				
+
 			case ATMessageCenterStateComposing:
 				newFooter = self.messageInputView;
 				toolbarHidden = YES;
 				break;
-			
+
 			case ATMessageCenterStateWhoCard:
 				// Only focus profile view if appearing post-send.
 				if ([self.attachmentController isFirstResponder]) {
@@ -966,60 +974,60 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				toolbarHidden = YES;
 				newFooter = self.profileView;
 				break;
-				
+
 			case ATMessageCenterStateSending:
 				newFooter = self.statusView;
 				self.statusView.mode = ATMessageCenterStatusModeEmpty;
 				self.statusView.statusLabel.text = nil;
 				break;
-				
+
 			case ATMessageCenterStateConfirmed:
 				newFooter = self.statusView;
 				self.statusView.mode = ATMessageCenterStatusModeEmpty;
 				self.statusView.statusLabel.text = self.interaction.statusBody;
-				
+
 				[self.interaction engage:ATInteractionMessageCenterEventLabelStatus fromViewController:self];
 				break;
-				
+
 			case ATMessageCenterStateNetworkError:
 				newFooter = self.statusView;
 				self.statusView.mode = ATMessageCenterStatusModeNetworkError;
 				self.statusView.statusLabel.text = self.interaction.networkErrorBody;
-				
+
 				[self.interaction engage:ATInteractionMessageCenterEventLabelNetworkError fromViewController:self];
-				
+
 				[self scrollToFooterView:nil];
 				break;
-				
+
 			case ATMessageCenterStateHTTPError:
 				newFooter = self.statusView;
 				self.statusView.mode = ATMessageCenterStatusModeHTTPError;
 				self.statusView.statusLabel.text = self.interaction.HTTPErrorBody;
-				
+
 				[self.interaction engage:ATInteractionMessageCenterEventLabelHTTPError fromViewController:self];
 
 				[self scrollToFooterView:nil];
 				break;
-				
+
 			case ATMessageCenterStateReplied:
 				newFooter = nil;
 				break;
-				
+
 			default:
 				ATLogError(@"Invalid Message Center State: %d", state);
 				break;
 		}
-		
+
 		[self.navigationController setToolbarHidden:toolbarHidden animated:YES];
-		
+
 		if (newFooter != oldFooter) {
 			newFooter.alpha = 0;
 			newFooter.hidden = NO;
-			
+
 			if (oldFooter == self.messageInputView) {
 				[self.interaction engage:ATInteractionMessageCenterEventLabelComposeClose fromViewController:self userInfo:self.bodyLengthDictionary];
 			}
-			
+
 			if (newFooter == self.messageInputView) {
 				[self.interaction engage:ATInteractionMessageCenterEventLabelComposeOpen fromViewController:self];
 			}
@@ -1039,23 +1047,23 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (NSIndexPath *)indexPathOfLastMessage {
 	NSInteger lastSectionIndex = self.tableView.numberOfSections - 1;
-	
+
 	if (lastSectionIndex == -1) {
 		return nil;
 	}
-	
+
 	NSInteger lastRowIndex = [self.tableView numberOfRowsInSection:lastSectionIndex] - 1;
-	
+
 	if (lastRowIndex == -1) {
 		return nil;
 	}
-	
+
 	return [NSIndexPath indexPathForRow:lastRowIndex inSection:lastSectionIndex];
 }
 
 - (CGRect)rectOfLastMessage {
 	NSIndexPath *indexPath = self.indexPathOfLastMessage;
-	
+
 	if (indexPath) {
 		return [self.tableView rectForRowAtIndexPath:indexPath];
 	} else {
@@ -1076,11 +1084,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	} else {
 		verticalOffsetLimit = self.tableView.contentSize.height - (CGRectGetHeight(self.tableView.bounds) - self.tableView.contentInset.bottom);
 	}
-	
+
 	verticalOffsetLimit = fmax(-self.tableView.contentInset.top, verticalOffsetLimit);
 	verticalOffset = fmin(verticalOffset, verticalOffsetLimit);
-	CGPoint contentOffset = CGPointMake(0,  verticalOffset);
-	
+	CGPoint contentOffset = CGPointMake(0, verticalOffset);
+
 	if (notification) {
 		[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
 			self.tableView.contentOffset = contentOffset;
@@ -1092,26 +1100,26 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)resizeFooterView:(NSNotification *)notification {
 	CGFloat height = 0;
-	
+
 	if (self.state == ATMessageCenterStateComposing || self.state == ATMessageCenterStateEmpty) {
 		CGRect keyboardRect;
-		
+
 		if (notification) {
 			keyboardRect = [self.view.window convertRect:[notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue] toView:self.tableView.superview];
-			
+
 			// Available space is between the top of the keyboard and the bottom of the navigation bar
 			height = CGRectGetMinY(keyboardRect) - self.tableView.contentInset.top;
-			
+
 			// Unless the top of the keyboard is below the (visible) toolbar, then subtract the toolbar height
 			if (CGRectGetHeight(CGRectIntersection(keyboardRect, self.view.frame)) == 0 && !self.navigationController.toolbarHidden) {
-					height -= CGRectGetHeight(self.navigationController.toolbar.bounds);
+				height -= CGRectGetHeight(self.navigationController.toolbar.bounds);
 			}
 		} else {
 			// Workaround for weird race conditions on top layout guide and table view content inset
 			CGFloat topBarHeight = fmax([self.topLayoutGuide length], self.tableView.contentInset.top);
 			height = CGRectGetHeight(self.tableView.bounds) - topBarHeight;
 		}
-		
+
 		// If there are no sent messages and the keyboard is off screen, fill the available space.
 		if (!self.dataSource.hasNonContextMessages && (!notification || CGRectGetMinY(keyboardRect) >= CGRectGetMaxY(self.tableView.frame))) {
 			height -= CGRectGetHeight(self.greetingView.bounds);
@@ -1123,11 +1131,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			height += CGRectGetHeight(self.navigationController.toolbar.bounds);
 		}
 	}
-	
+
 	CGRect frame = self.tableView.tableFooterView.frame;
-	
+
 	frame.size.height = height;
-	
+
 	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
 		self.tableView.tableFooterView.frame = frame;
 		[self.tableView.tableFooterView layoutIfNeeded];
@@ -1190,12 +1198,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	[self.attachmentController clear];
 	[self.attachmentController resignFirstResponder];
-	
+
 	[self updateSendButtonEnabledStatus];
 	[self updateState];
-	
+
 	[self resizeFooterView:nil];
-	
+
 	// iOS 7 needs a (nano)sec to allow the keyboard to disappear before scrolling
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1)), dispatch_get_main_queue(), ^{
 		[self scrollToLastMessageAnimated:YES];

@@ -11,6 +11,7 @@
 
 @class ATMessage;
 
+
 @interface ATMessageSender : NSManagedObject
 
 @property (nonatomic, strong) NSString *apptentiveID;
@@ -24,6 +25,7 @@
 + (ATMessageSender *)newOrExistingMessageSenderFromJSON:(NSDictionary *)json;
 - (NSDictionary *)apiJSON;
 @end
+
 
 @interface ATMessageSender (CoreDataGeneratedAccessors)
 

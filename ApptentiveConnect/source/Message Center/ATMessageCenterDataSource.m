@@ -15,8 +15,9 @@
 #import "ATMessageSender.h"
 #import "ATAttachmentCell.h"
 
-NSString * const ATMessageCenterServerErrorDomain = @"com.apptentive.MessageCenterServerError";
-NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenterErrorMessages";
+NSString *const ATMessageCenterServerErrorDomain = @"com.apptentive.MessageCenterServerError";
+NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenterErrorMessages";
+
 
 @interface ATMessageCenterDataSource () <NSFetchedResultsControllerDelegate>
 
@@ -26,6 +27,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 @property (nonatomic, readonly) NSMutableDictionary<NSValue *, NSIndexPath *> *taskIndexPaths;
 
 @end
+
 
 @implementation ATMessageCenterDataSource
 
@@ -54,21 +56,21 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 			NSFetchRequest *request = [[NSFetchRequest alloc] init];
 			[request setEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:[[ATBackend sharedBackend] managedObjectContext]]];
 			[request setFetchBatchSize:20];
-			
+
 			//NSSortDescriptor *creationTimeSort = [[NSSortDescriptor alloc] initWithKey:@"creationTime" ascending:YES];
 			NSSortDescriptor *clientCreationTimeSort = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
 			[request setSortDescriptors:@[clientCreationTimeSort]];
-			
+
 			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"creationTime != %d AND clientCreationTime != %d AND hidden != %@", 0, 0, @YES];
 			[request setPredicate:predicate];
-			
+
 			// For now, group each message into its own section.
 			// In the future, we'll save an attribute that coalesces
 			// closely-grouped (in time) messages into a single section.
 			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:@"clientCreationTime" cacheName:@"at-messages-cache"];
 			newController.delegate = self;
 			_fetchedMessagesController = newController;
-			
+
 			request = nil;
 		}
 	}
@@ -78,7 +80,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 - (void)start {
 	[[ATBackend sharedBackend] messageCenterEnteredForeground];
 	[ATMessage clearComposingMessages];
-	
+
 	NSError *error = nil;
 	if (![self.fetchedMessagesController performFetch:&error]) {
 		ATLogError(@"Got an error loading messages: %@", error);
@@ -115,7 +117,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 
 - (ATMessageCenterMessageType)cellTypeAtIndexPath:(NSIndexPath *)indexPath {
 	ATMessage *message = [self messageAtIndexPath:indexPath];
-	
+
 	if (message.automated.boolValue) {
 		return ATMessageCenterMessageTypeContextMessage;
 	} else if (message.sentByUser.boolValue) {
@@ -140,7 +142,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 - (NSDate *)dateOfMessageGroupAtIndex:(NSInteger)index {
 	if ([self numberOfMessagesInGroup:index] > 0) {
 		ATMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]];
-		
+
 		return [NSDate dateWithTimeIntervalSince1970:[message.creationTimeForSections doubleValue]];
 	} else {
 		return nil;
@@ -149,10 +151,10 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 
 - (ATMessageCenterMessageStatus)statusOfMessageAtIndexPath:(NSIndexPath *)indexPath {
 	ATMessage *message = [self messageAtIndexPath:indexPath];
-	
+
 	if (message.sentByUser.boolValue) {
 		ATPendingMessageState messageState = message.pendingState.integerValue;
-		
+
 		if (messageState == ATPendingMessageStateError) {
 			return ATMessageCenterMessageStatusFailed;
 		} else if (messageState == ATPendingMessageStateSending) {
@@ -171,7 +173,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 	} else {
 		NSDate *previousDate = [self dateOfMessageGroupAtIndex:index - 1];
 		NSDate *currentDate = [self dateOfMessageGroupAtIndex:index];
-		
+
 		return ![[self.dateFormatter stringFromDate:previousDate] isEqualToString:[self.dateFormatter stringFromDate:currentDate]];
 	}
 }
@@ -192,14 +194,14 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 
 - (void)markAsReadMessageAtIndexPath:(NSIndexPath *)indexPath {
 	ATMessage *message = [self messageAtIndexPath:indexPath];
-	
+
 	[message markAsRead];
 }
 
 - (BOOL)lastMessageIsReply {
 	id<NSFetchedResultsSectionInfo> section = self.fetchedMessagesController.sections.lastObject;
 	ATMessage *lastMessage = section.objects.lastObject;
-	
+
 	return lastMessage.sentByUser.boolValue == NO;
 }
 
@@ -283,7 +285,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 	}
 }
 
-- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id<NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
 	if ([self.delegate respondsToSelector:@selector(controller:didChangeSection:atIndex:forChangeType:)]) {
 		[self.delegate controller:controller didChangeSection:sectionInfo atIndex:sectionIndex forChangeType:type];
 	}
@@ -341,7 +343,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
 	if (error == nil) return;
-	
+
 	NSIndexPath *attachmentIndexPath = [self indexPathForTask:task];
 	[self removeTask:task];
 
@@ -350,7 +352,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 	});
 }
 
-# pragma mark - Misc
+#pragma mark - Misc
 
 - (void)removeUnsentContextMessages {
 	@synchronized(self) {
@@ -391,7 +393,7 @@ NSString * const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCente
 			}
 		}
 	}
-	
+
 	return nil;
 }
 

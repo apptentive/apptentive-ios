@@ -10,6 +10,7 @@
 
 #import "ATInteraction.h"
 
+
 @interface ATEngagementManifestParser : NSObject
 - (NSDictionary *)targetsAndInteractionsForEngagementManifest:(NSData *)jsonManifest;
 - (NSError *)parserError;

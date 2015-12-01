@@ -9,6 +9,7 @@
 
 @class ATURLConnection;
 
+
 @interface ATConnectionChannel : NSObject
 @property (nonatomic, assign) NSInteger maximumConnections;
 

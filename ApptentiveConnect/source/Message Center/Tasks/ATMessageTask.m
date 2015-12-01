@@ -17,9 +17,11 @@
 
 #define kATMessageTaskCodingVersion 2
 
+
 @interface ATMessageTask (Private)
 - (BOOL)processResult:(NSDictionary *)jsonMessage;
 @end
+
 
 @implementation ATMessageTask {
 	ATAPIRequest *request;
@@ -72,7 +74,7 @@
 		request = [[ATWebClient sharedClient] requestForPostingMessage:message];
 		if (request != nil) {
 			[[ATBackend sharedBackend] messageTaskDidBegin:self];
-			
+
 			request.delegate = self;
 			[request start];
 			self.inProgress = YES;
@@ -122,7 +124,7 @@
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(NSObject *)result {
 	@synchronized(self) {
 		[[ATBackend sharedBackend] messageTaskDidFinish:self];
-		
+
 		if ([result isKindOfClass:[NSDictionary class]] && [self processResult:(NSDictionary *)result]) {
 			self.finished = YES;
 		} else {
@@ -142,7 +144,7 @@
 		[[ATBackend sharedBackend] messageTaskDidFail:self];
 		self.lastErrorTitle = sender.errorTitle;
 		self.lastErrorMessage = sender.errorMessage;
-		
+
 		ATMessage *message = [ATMessage findMessageWithPendingID:self.pendingMessageID];
 		if (message == nil) {
 			ATLogError(@"Warning: Message went away during task.");
@@ -181,12 +183,13 @@
 }
 @end
 
+
 @implementation ATMessageTask (Private)
 
 - (BOOL)processResult:(NSDictionary *)jsonMessage {
 	ATLogDebug(@"getting json result: %@", jsonMessage);
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
-	
+
 	ATMessage *message = [ATMessage findMessageWithPendingID:self.pendingMessageID];
 	if (message == nil) {
 		ATLogError(@"Warning: Message went away during task.");
@@ -194,7 +197,7 @@
 	}
 	[message updateWithJSON:jsonMessage];
 	message.pendingState = [NSNumber numberWithInt:ATPendingMessageStateConfirmed];
-	
+
 	NSError *error = nil;
 	if (![context save:&error]) {
 		ATLogError(@"Failed to save new message: %@", error);

@@ -24,6 +24,7 @@ typedef enum {
 
 @class ATSurveyQuestionAnswer;
 
+
 @interface ATSurveyQuestion : NSObject <NSCoding>
 @property (nonatomic, assign) ATSurveyQuestionType type;
 @property (nonatomic, copy) NSString *identifier;
@@ -47,6 +48,7 @@ typedef enum {
 
 - (void)reset;
 @end
+
 
 @interface ATSurveyQuestionAnswer : NSObject <NSCoding>
 @property (nonatomic, copy) NSString *identifier;

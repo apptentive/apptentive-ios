@@ -16,6 +16,7 @@
 
 NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 
+
 @implementation ATInteractionSurveyController
 
 - (id)initWithInteraction:(ATInteraction *)interaction {
@@ -28,26 +29,26 @@ NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 }
 
 - (void)showSurveyFromViewController:(UIViewController *)viewController {
-	
 	self.viewController = viewController;
-	
+
 	ATSurveyParser *parser = [[ATSurveyParser alloc] init];
 	ATSurvey *survey = [parser surveyWithInteraction:self.interaction];
-	
+
 	ATSurveyViewController *vc = [[ATSurveyViewController alloc] initWithSurvey:survey];
 	vc.interaction = self.interaction;
 	ATNavigationController *nc = [[ATNavigationController alloc] initWithRootViewController:vc];
-	
+
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
 		nc.modalPresentationStyle = UIModalPresentationFormSheet;
 	}
-	
+
 	NSDictionary *notificationInfo = @{ATSurveyIDKey: (survey.identifier ?: [NSNull null])};
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyShownNotification object:nil userInfo:notificationInfo];
-	
+
 	[self.interaction engage:ATInteractionSurveyEventLabelLaunch fromViewController:self.viewController];
-	
-	[viewController presentViewController:nc animated:YES completion:^{}];
+
+	[viewController presentViewController:nc animated:YES completion:^{
+	}];
 }
 
 

@@ -12,6 +12,7 @@
 @class ATLegacySurveyResponse;
 @class ATSurveyResponse;
 
+
 @interface ATWebClient (SurveyAdditions)
 - (ATAPIRequest *)requestForPostingSurveyResponse:(ATSurveyResponse *)surveyResponse;
 @end

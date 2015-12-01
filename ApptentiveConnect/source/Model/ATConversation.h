@@ -10,7 +10,9 @@
 
 #import "ATJSONModel.h"
 
-@interface ATConversation : NSObject <NSCoding, ATJSONModel>@property (nonatomic, strong) NSString *token;
+
+@interface ATConversation : NSObject <NSCoding, ATJSONModel>
+@property (nonatomic, strong) NSString *token;
 @property (nonatomic, strong) NSString *personID;
 @property (nonatomic, strong) NSString *deviceID;
 

@@ -14,15 +14,18 @@
 
 #define kATRecordTaskCodingVersion 1
 
+
 @interface ATRecordTask (Private)
 - (BOOL)handleLegacyRecord;
 @end
+
 
 @interface ATRecordTask ()
 
 @property (strong, nonatomic) ATAPIRequest *request;
 
 @end
+
 
 @implementation ATRecordTask
 
@@ -118,6 +121,7 @@
 	}
 }
 @end
+
 
 @implementation ATRecordTask (Private)
 - (BOOL)handleLegacyRecord {

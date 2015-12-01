@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "ATInteraction.h"
 
+
 @interface ATInteractionUsageData : NSObject
 
 @property (nonatomic, strong) NSNumber *timeSinceInstallTotal;

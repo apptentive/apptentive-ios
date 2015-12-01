@@ -23,15 +23,16 @@
 
 #define KINDA_EQUALS(a, b) (fabs(a - b) < 0.1)
 #define DEG_TO_RAD(angle) ((M_PI * angle) / 180.0)
-#define RAD_TO_DEG(radians) (radians * (180.0/M_PI))
+#define RAD_TO_DEG(radians) (radians * (180.0 / M_PI))
 
 static NSDateFormatter *dateFormatter = nil;
+
 
 @interface ATUtilities (Private)
 + (void)setupDateFormatters;
 @end
 
-UIViewController * topChildViewController(UIViewController *viewController) {
+UIViewController *topChildViewController(UIViewController *viewController) {
 	if ([viewController isKindOfClass:[UINavigationController class]]) {
 		return topChildViewController(((UINavigationController *)viewController).topViewController);
 	} else if ([viewController isKindOfClass:[UITabBarController class]]) {
@@ -42,6 +43,7 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 		return viewController;
 	}
 }
+
 
 @implementation ATUtilities
 
@@ -61,15 +63,15 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 	CGRect applicationFrame = [[UIScreen mainScreen] applicationFrame];
 	CGSize imageSize = applicationFrame.size;
 	UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
-	
+
 	CGContextRef context = UIGraphicsGetCurrentContext();
-	
+
 	// Iterate over every window from back to front
-	for (UIWindow *window in [[UIApplication sharedApplication] windows])  {
+	for (UIWindow *window in [[UIApplication sharedApplication] windows]) {
 		if (window == excludedWindow) {
 			continue;
 		}
-		
+
 		if (![window respondsToSelector:@selector(screen)] || [window screen] == [UIScreen mainScreen]) {
 			// -renderInContext: renders in the coordinate space of the layer,
 			// so we must first apply the layer's geometry to the graphics context
@@ -82,20 +84,20 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 			CGContextConcatCTM(context, [window transform]);
 			// Offset by the portion of the bounds left of and above the anchor point
 			CGContextTranslateCTM(context,
-								  -[window bounds].size.width * [[window layer] anchorPoint].x,
-								  -[window bounds].size.height * [[window layer] anchorPoint].y);
-			
+				-[window bounds].size.width * [[window layer] anchorPoint].x,
+				-[window bounds].size.height * [[window layer] anchorPoint].y);
+
 			// Render the layer hierarchy to the current context
 			[[window layer] renderInContext:context];
-			
+
 			// Restore the context
 			CGContextRestoreGState(context);
 		}
 	}
-	
+
 	// Retrieve the screenshot image
 	UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-	
+
 	UIGraphicsEndImageContext();
 	return image;
 }
@@ -106,10 +108,10 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 	if (includeStatusBar) {
 		CGSize screenSize = [[UIScreen mainScreen] bounds].size;
 		UIGraphicsBeginImageContextWithOptions(screenSize, NO, 0);
-		
+
 		CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
 		CGFloat statusBarHeight = MIN(statusBarSize.width, statusBarSize.height);
-		
+
 		CGPoint origin = CGPointZero;
 		UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
 		switch (orientation) {
@@ -131,10 +133,10 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 		[screenshot drawAtPoint:origin];
 		UIImage *screenshotPlusStatusBar = UIGraphicsGetImageFromCurrentImageContext();
 		UIGraphicsEndImageContext();
-		
+
 		screenshot = screenshotPlusStatusBar;
 	}
-	
+
 	return screenshot;
 }
 
@@ -157,21 +159,21 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 			break;
 	}
 	UIImage *rotated = [[UIImage alloc] initWithCGImage:[image CGImage] scale:1 orientation:imageOrientation];
-	
+
 	return rotated;
 }
 
 + (UIImage *)imageByRotatingImage:(UIImage *)image byRadians:(CGFloat)radians {
 	UIImage *result = nil;
-	
+
 	if (KINDA_EQUALS(radians, 0.0) || KINDA_EQUALS(radians, M_PI * 2.0)) {
 		return image;
 	}
-	
+
 	CGAffineTransform t = CGAffineTransformIdentity;
 	CGSize size = image.size;
 	BOOL onSide = NO;
-	
+
 	if (KINDA_EQUALS(fabs(radians), M_PI)) {
 		// Upside down, weeeee.
 		t = CGAffineTransformTranslate(t, size.width, size.height);
@@ -181,20 +183,20 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 		onSide = YES;
 		size = CGSizeMake(size.height, size.width);
 		t = CGAffineTransformRotate(t, M_PI * 0.5);
-		t = CGAffineTransformScale(t, size.height/size.width, size.width/size.height);
+		t = CGAffineTransformScale(t, size.height / size.width, size.width / size.height);
 		t = CGAffineTransformTranslate(t, 0.0, -size.height);
 	} else if (KINDA_EQUALS(radians, -1.0 * M_PI * 0.5)) {
 		// Home button on left. Image is rotated left 90 degrees.
 		onSide = YES;
-		size = CGSizeMake(size.height, size.width);\
+		size = CGSizeMake(size.height, size.width);
 		t = CGAffineTransformRotate(t, -1.0 * M_PI * 0.5);
-		t = CGAffineTransformScale(t, size.height/size.width, size.width/size.height);
+		t = CGAffineTransformScale(t, size.height / size.width, size.width / size.height);
 		t = CGAffineTransformTranslate(t, -size.width, 0.0);
 	}
-	
+
 	UIGraphicsBeginImageContext(size);
 	CGRect r = CGRectMake(0.0, 0.0, size.width, size.height);
-	
+
 	CGContextRef context = UIGraphicsGetCurrentContext();
 	if (onSide) {
 		CGContextScaleCTM(context, 1.0, -1.0);
@@ -205,10 +207,10 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 	}
 	CGContextConcatCTM(context, t);
 	CGContextDrawImage(context, r, image.CGImage);
-	
+
 	result = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
-	
+
 	return result;
 }
 
@@ -229,15 +231,15 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 	CGAffineTransform transform = CGAffineTransformIdentity;
 	CGImageAlphaInfo newAlphaInfo;
 	CGColorSpaceRef colorSpaceRef;
-	
+
 	imageRef = [image CGImage];
-	
+
 	samplesPerPixel = 4;
-	
+
 	size = CGSizeMake(floor(size.width), floor(size.height));
 	newWidth = size.width;
 	newHeight = size.height;
-	
+
 	// Rotate and scale based on orientation.
 	if (image.imageOrientation == UIImageOrientationUpMirrored) { // EXIF 2
 		// Image is mirrored horizontally.
@@ -254,36 +256,36 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 	} else if (image.imageOrientation == UIImageOrientationLeftMirrored) { // EXIF 5
 		// Image is mirrored horizontally then rotated 270 degrees clockwise.
 		transform = CGAffineTransformRotate(transform, DEG_TO_RAD(90));
-		transform = CGAffineTransformScale(transform, -newHeight/newWidth,  newWidth/newHeight);
+		transform = CGAffineTransformScale(transform, -newHeight / newWidth, newWidth / newHeight);
 		transform = CGAffineTransformTranslate(transform, -newWidth, -newHeight);
 	} else if (image.imageOrientation == UIImageOrientationLeft) { // EXIF 6
 		// Image is rotated 270 degrees clockwise.
 		transform = CGAffineTransformRotate(transform, DEG_TO_RAD(-90));
-		transform = CGAffineTransformScale(transform, newHeight/newWidth,  newWidth/newHeight);
+		transform = CGAffineTransformScale(transform, newHeight / newWidth, newWidth / newHeight);
 		transform = CGAffineTransformTranslate(transform, -newWidth, 0);
 	} else if (image.imageOrientation == UIImageOrientationRightMirrored) { // EXIF 7
 		// Image is mirrored horizontally then rotated 90 degrees clockwise.
 		transform = CGAffineTransformRotate(transform, DEG_TO_RAD(-90));
-		transform = CGAffineTransformScale(transform, -newHeight/newWidth,  newWidth/newHeight);
+		transform = CGAffineTransformScale(transform, -newHeight / newWidth, newWidth / newHeight);
 	} else if (image.imageOrientation == UIImageOrientationRight) { // EXIF 8
 		// Image is rotated 90 degrees clockwise.
 		transform = CGAffineTransformRotate(transform, DEG_TO_RAD(90));
-		transform = CGAffineTransformScale(transform, newHeight/newWidth,  newWidth/newHeight);
+		transform = CGAffineTransformScale(transform, newHeight / newWidth, newWidth / newHeight);
 		transform = CGAffineTransformTranslate(transform, 0.0, -newHeight);
 	}
 	newRect = CGRectIntegral(CGRectMake(0.0, 0.0, newWidth, newHeight));
-	
+
 	bytesPerRow = samplesPerPixel * newWidth;
 	newAlphaInfo = kCGImageAlphaPremultipliedFirst;
 	bitsPerComponent = 8;
 	colorSpaceRef = CGColorSpaceCreateDeviceRGB();
-	
+
 	bitmapContext = CGBitmapContextCreate(NULL, newWidth, newHeight, bitsPerComponent, bytesPerRow, colorSpaceRef, (CGBitmapInfo)newAlphaInfo);
 	CGColorSpaceRelease(colorSpaceRef), colorSpaceRef = NULL;
 	CGContextSetInterpolationQuality(bitmapContext, kCGInterpolationHigh);
-	
+
 	// The iPhone tries to be "smart" about image orientation, and messes it
-	// up in the process. Here, UIImageOrientationLeft happens when the 
+	// up in the process. Here, UIImageOrientationLeft happens when the
 	// device is held upside down (camera on the end towards the ground).
 	// UIImageOrientationRight happens when the camera is in a normal, upright
 	// position. In both cases, the image is rotated 180 degrees from what
@@ -292,15 +294,15 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 		CGContextScaleCTM(bitmapContext, -1.0, -1);
 		CGContextTranslateCTM(bitmapContext, -newWidth, -newHeight);
 	}
-	
+
 	CGContextConcatCTM(bitmapContext, transform);
 	CGContextDrawImage(bitmapContext, newRect, imageRef);
-	
+
 	newRef = CGBitmapContextCreateImage(bitmapContext);
 	result = [UIImage imageWithCGImage:newRef scale:contentScale orientation:UIImageOrientationUp];
 	CGContextRelease(bitmapContext);
 	CGImageRelease(newRef);
-	
+
 	return result;
 }
 
@@ -318,13 +320,13 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 	CGAffineTransform result = CGAffineTransformIdentity;
 	do { // once
 		if (!window) break;
-		
+
 		if ([[window rootViewController] view]) {
 			CGFloat rotation = [ATUtilities rotationOfViewHierarchyInRadians:[[window rootViewController] view]];
 			result = CGAffineTransformMakeRotation(rotation);
 			break;
 		}
-		
+
 		if ([[window subviews] count]) {
 			for (UIView *v in [window subviews]) {
 				if (!CGAffineTransformIsIdentity(v.transform)) {
@@ -351,12 +353,12 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 		if ([vc respondsToSelector:@selector(presentedViewController)] && [vc presentedViewController]) {
 			return [vc presentedViewController];
 		}
-#		pragma clang diagnostic push
-#		pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 		if ([vc respondsToSelector:@selector(modalViewController)] && [vc modalViewController]) {
 			return [vc modalViewController];
 		}
-#		pragma clang diagnostic pop
+#pragma clang diagnostic pop
 		return vc;
 	} else {
 		return nil;
@@ -365,17 +367,17 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 
 + (UIColor *)contrastingTextColorForBackgroundColor:(UIColor *)backgroundColor {
 	const CGFloat *componentColors = CGColorGetComponents(backgroundColor.CGColor);
-	
-    CGFloat colorBrightness = ((componentColors[0] * 299) + (componentColors[1] * 587) + (componentColors[2] * 114)) / 1000;
-    
+
+	CGFloat colorBrightness = ((componentColors[0] * 299) + (componentColors[1] * 587) + (componentColors[2] * 114)) / 1000;
+
 	UIColor *textColor;
-	
+
 	if (colorBrightness < 0.5) {
 		textColor = [UIColor whiteColor];
-    } else {
+	} else {
 		textColor = [UIColor blackColor];
-    }
-	
+	}
+
 	return textColor;
 }
 
@@ -413,11 +415,11 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 #elif TARGET_OS_MAC
 	NSProcessInfo *info = [NSProcessInfo processInfo];
 	NSString *osName = [info operatingSystemName];
-	
+
 	if ([osName isEqualToString:@"NSMACHOperatingSystem"]) {
 		osName = @"Mac OS X";
 	}
-	
+
 	return osName;
 #endif
 }
@@ -434,9 +436,9 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 + (NSString *)currentSystemBuild {
 	int mib[2] = {CTL_KERN, KERN_OSVERSION};
 	size_t size = 0;
-	
+
 	sysctl(mib, 2, NULL, &size, NULL, 0);
-	
+
 	char *answer = malloc(size);
 	int result = sysctl(mib, 2, answer, &size, NULL, 0);
 
@@ -445,13 +447,13 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 		results = [NSString stringWithCString:answer encoding:NSUTF8StringEncoding];
 	}
 	free(answer);
-	
+
 	return results;
 }
 
 + (NSString *)stringByEscapingForURLArguments:(NSString *)string {
-	CFStringRef result = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)string, NULL, (CFStringRef)@"%:/?#[]@!$&'()*+,;=", kCFStringEncodingUTF8);
-	
+	CFStringRef result = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)string, NULL, (CFStringRef) @"%:/?#[]@!$&'()*+,;=", kCFStringEncodingUTF8);
+
 	return CFBridgingRelease(result);
 }
 
@@ -459,7 +461,7 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 	static NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 	NSMutableString *result = [NSMutableString stringWithString:@""];
 	for (NSUInteger i = 0; i < length; i++) {
-		[result appendFormat:@"%c", [letters characterAtIndex:arc4random()%[letters length]]];
+		[result appendFormat:@"%c", [letters characterAtIndex:arc4random() % [letters length]]];
 	}
 	return result;
 }
@@ -486,16 +488,16 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 		[ATUtilities setupDateFormatters];
 		dateFormatter.timeZone = timeZone;
 		NSString *dateString = [dateFormatter stringFromDate:aDate];
-		
+
 		NSInteger timeZoneOffset = [timeZone secondsFromGMT];
 		NSString *sign = (timeZoneOffset >= 0) ? @"+" : @"-";
-		NSInteger hoursOffset = fabs(floor(timeZoneOffset/60/60));
-		NSInteger minutesOffset = abs((int)floor(timeZoneOffset/60) % 60);
+		NSInteger hoursOffset = fabs(floor(timeZoneOffset / 60 / 60));
+		NSInteger minutesOffset = abs((int)floor(timeZoneOffset / 60) % 60);
 		NSString *timeZoneString = [NSString stringWithFormat:@"%@%.2d%.2d", sign, (int)hoursOffset, (int)minutesOffset];
-		
+
 		NSTimeInterval interval = [aDate timeIntervalSince1970];
 		double fractionalSeconds = interval - (long)interval;
-		
+
 		// This is all necessary because of rdar://10500679 in which NSDateFormatter won't
 		// format fractional seconds past two decimal places. Also, strftime() doesn't seem
 		// to have fractional seconds on iOS.
@@ -511,7 +513,7 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 				// For some reason, we couldn't find the decimal place.
 				result = [NSString stringWithFormat:@"%@.%ld %@", dateString, (long)(fractionalSeconds * 1000), timeZoneString];
 			}
-			f= nil;
+			f = nil;
 		}
 	}
 	return result;
@@ -520,20 +522,20 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 + (NSDate *)dateFromISO8601String:(NSString *)string {
 	BOOL validDate = YES;
 	NSDate *result = nil;
-	
+
 	NSDate *now = [NSDate date];
 	NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
 	calendar.firstWeekday = 2;
 	calendar.timeZone = [NSTimeZone defaultTimeZone];
-	
+
 	NSDateComponents *components = [[NSDateComponents alloc] init];
-	NSDateComponents *nowComponents = [calendar components:NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit fromDate:now];
+	NSDateComponents *nowComponents = [calendar components:NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit fromDate:now];
 	components.calendar = calendar;
-	
+
 	NSScanner *scanner = [[NSScanner alloc] initWithString:string];
 	NSString *ymdString = nil;
 	[scanner scanUpToString:@"T" intoString:&ymdString];
-	
+
 	if (ymdString && [ymdString length]) {
 		NSScanner *ymdScanner = [[NSScanner alloc] initWithString:ymdString];
 		do { // once
@@ -558,7 +560,7 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 		[components setMonth:[nowComponents month]];
 		[components setDay:[nowComponents day]];
 	}
-	
+
 	if ([scanner scanString:@"T" intoString:NULL]) {
 		do { // once
 			NSInteger hour = 0;
@@ -577,7 +579,7 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 			components.second = (NSInteger)round(secondFraction);
 		} while (NO);
 	}
-	
+
 	if ([scanner scanString:@"Z" intoString:NULL]) {
 		// Use UTC.
 		components.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
@@ -600,14 +602,14 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 				validDate = NO;
 				break;
 			}
-			NSInteger secondsFromGMT = hours*3600 + minutes*60;
+			NSInteger secondsFromGMT = hours * 3600 + minutes * 60;
 			if (!isPositiveOffset) {
 				secondsFromGMT = secondsFromGMT * -1;
 			}
 			components.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:secondsFromGMT];
 		} while (NO);
 	}
-	
+
 	calendar = nil;
 	scanner = nil;
 	if (validDate) {
@@ -621,7 +623,7 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 	NSArray *leftComponents = [a componentsSeparatedByString:@"."];
 	NSArray *rightComponents = [b componentsSeparatedByString:@"."];
 	NSUInteger maxComponents = MAX(leftComponents.count, rightComponents.count);
-	
+
 	NSComparisonResult comparisonResult = NSOrderedSame;
 	for (int i = 0; i < maxComponents; i++) {
 		NSInteger leftComponent = 0;
@@ -666,7 +668,7 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 		if (localAppLocalizations == nil) {
 			NSArray *rawLocalizations = [[NSBundle mainBundle] localizations];
 			localAppLocalizations = [[NSMutableArray alloc] init];
-			for (NSString *loc in rawLocalizations)  {
+			for (NSString *loc in rawLocalizations) {
 				NSString *s = [NSLocale canonicalLocaleIdentifierFromString:loc];
 				if (![localAppLocalizations containsObject:s]) {
 					[localAppLocalizations addObject:s];
@@ -708,7 +710,7 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 	NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
 	NSString *bundleVersion = [infoDictionary objectForKey:(NSString *)kCFBundleVersionKey];
 	NSString *shortVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
-	
+
 	if (!shortVersion) {
 		result = YES;
 	} else if ([shortVersion isEqualToString:bundleVersion]) {
@@ -775,7 +777,7 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 
 + (BOOL)dictionary:(NSDictionary *)a isEqualToDictionary:(NSDictionary *)b {
 	BOOL isEqual = NO;
-	
+
 	do { // once
 		if (a == b) {
 			isEqual = YES;
@@ -798,7 +800,7 @@ UIViewController * topChildViewController(UIViewController *viewController) {
 				if (!deepEquals) {
 					goto done;
 				}
-			} else if ([valueA isKindOfClass:[NSArray class]] && [valueB isKindOfClass:[NSArray class]])  {
+			} else if ([valueA isKindOfClass:[NSArray class]] && [valueB isKindOfClass:[NSArray class]]) {
 				BOOL deepEquals = [ATUtilities array:(NSArray *)valueA isEqualToArray:(NSArray *)valueB];
 				if (!deepEquals) {
 					goto done;
@@ -816,7 +818,7 @@ done:
 
 + (BOOL)array:(NSArray *)a isEqualToArray:(NSArray *)b {
 	BOOL isEqual = NO;
-	
+
 	do { // once
 		if (a == b) {
 			isEqual = YES;
@@ -836,7 +838,7 @@ done:
 				if (!deepEquals) {
 					goto done;
 				}
-			} else if ([valueA isKindOfClass:[NSArray class]] && [valueB isKindOfClass:[NSArray class]])  {
+			} else if ([valueA isKindOfClass:[NSArray class]] && [valueB isKindOfClass:[NSArray class]]) {
 				BOOL deepEquals = [ATUtilities array:(NSArray *)valueA isEqualToArray:(NSArray *)valueB];
 				if (!deepEquals) {
 					goto done;
@@ -848,7 +850,7 @@ done:
 		}
 		isEqual = YES;
 	} while (NO);
-	
+
 done:
 	return isEqual;
 }
@@ -861,23 +863,24 @@ done:
 //
 // Nested dictionaries (e.g. custom_data) are sent in their entirety
 // if they have changed (in order to match what the server is expecting).
-+ (NSDictionary *)diffDictionary:(NSDictionary *)new againstDictionary:(NSDictionary *)old {
++ (NSDictionary *)diffDictionary:(NSDictionary *) new againstDictionary:(NSDictionary *)old {
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
-	
+
 	NSArray *newKeys = [new.allKeys sortedArrayUsingSelector:@selector(compare:)];
 	NSArray *oldKeys = [old.allKeys sortedArrayUsingSelector:@selector(compare:)];
 	NSInteger i = 0, j = 0;
-	
+
 	while (i < [newKeys count] || j < [oldKeys count]) {
 		NSComparisonResult comp = NSOrderedSame;
 		NSString *newKey;
 		NSString *oldKey;
-		
+
 		if (i < [newKeys count] && j < [oldKeys count]) {
 			newKey = newKeys[i];
 			oldKey = oldKeys[j];
 			comp = [newKey compare:oldKey];
-		} if (i >= [newKeys count]) {
+		}
+		if (i >= [newKeys count]) {
 			oldKey = oldKeys[j];
 			newKey = nil;
 			comp = NSOrderedDescending;
@@ -886,14 +889,14 @@ done:
 			oldKey = nil;
 			comp = NSOrderedAscending;
 		}
-		
+
 		if (comp == NSOrderedSame) {
 			// Same key, value may have changed
 			NSString *key = newKey;
 			if (key) {
 				id newValue = new[key];
 				id oldValue = old[key];
-				
+
 				if ([newValue isEqual:@""] && ![oldValue isEqual:@""]) {
 					// Treat new empty strings as null
 					result[key] = [NSNull null];
@@ -904,7 +907,7 @@ done:
 				} else if (![newValue isEqual:oldValue]) {
 					result[key] = newValue;
 				}
-				
+
 				i++, j++;
 			}
 		} else if (comp == NSOrderedAscending) {
@@ -917,7 +920,7 @@ done:
 			j++;
 		}
 	}
-	
+
 	return result;
 }
 
@@ -943,7 +946,7 @@ done:
 	if (!emailAddress) {
 		return NO;
 	}
-	
+
 	NSError *error = nil;
 	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^\\s*[^\\s@]+@[^\\s@]+\\s*$" options:NSRegularExpressionCaseInsensitive error:&error];
 	if (!regex) {
@@ -952,16 +955,17 @@ done:
 	}
 	NSUInteger count = [regex numberOfMatchesInString:emailAddress options:NSMatchingAnchored range:NSMakeRange(0, [emailAddress length])];
 	BOOL isValid = (count > 0);
-	
+
 	return isValid;
 }
 
-+ (UIViewController *)topViewController	{
++ (UIViewController *)topViewController {
 	return topChildViewController([UIApplication sharedApplication].delegate.window.rootViewController);
 }
 
 
 @end
+
 
 @implementation ATUtilities (Private)
 + (void)setupDateFormatters {
@@ -981,19 +985,19 @@ done:
 
 extern CGRect ATCGRectOfEvenSize(CGRect inRect) {
 	CGRect result = CGRectMake(floor(inRect.origin.x), floor(inRect.origin.y), ceil(inRect.size.width), ceil(inRect.size.height));
-	
+
 	if (fmod(result.size.width, 2.0) != 0.0) {
 		result.size.width += 1.0;
 	}
 	if (fmod(result.size.height, 2.0) != 0.0) {
 		result.size.height += 1.0;
 	}
-	
+
 	return result;
 }
 
 CGSize ATThumbnailSizeOfMaxSize(CGSize imageSize, CGSize maxSize) {
-	CGFloat ratio = MIN(maxSize.width/imageSize.width, maxSize.height/imageSize.height);
+	CGFloat ratio = MIN(maxSize.width / imageSize.width, maxSize.height / imageSize.height);
 	if (ratio < 1.0) {
 		return CGSizeMake(floor(ratio * imageSize.width), floor(ratio * imageSize.height));
 	} else {
@@ -1002,20 +1006,20 @@ CGSize ATThumbnailSizeOfMaxSize(CGSize imageSize, CGSize maxSize) {
 }
 
 CGRect ATThumbnailCropRectForThumbnailSize(CGSize imageSize, CGSize thumbnailSize) {
-	CGFloat cropRatio = thumbnailSize.width/thumbnailSize.height;
-	CGFloat sizeRatio = imageSize.width/imageSize.height;
-	
+	CGFloat cropRatio = thumbnailSize.width / thumbnailSize.height;
+	CGFloat sizeRatio = imageSize.width / imageSize.height;
+
 	if (cropRatio < sizeRatio) {
 		// Shrink width. eg. 100:100 < 1600:1200
-		CGFloat croppedWidth = imageSize.width * (1.0/sizeRatio);
-		CGFloat originX = floor((imageSize.width - croppedWidth)/2.0);
-		
+		CGFloat croppedWidth = imageSize.width * (1.0 / sizeRatio);
+		CGFloat originX = floor((imageSize.width - croppedWidth) / 2.0);
+
 		return CGRectMake(originX, 0, croppedWidth, imageSize.height);
 	} else if (cropRatio > sizeRatio) {
 		// Shrink height. eg. 100:100 > 1200:1600
 		CGFloat croppedHeight = floor(imageSize.height * sizeRatio);
-		CGFloat originY = floor((imageSize.height - croppedHeight)/2.0);
-		
+		CGFloat originY = floor((imageSize.height - croppedHeight) / 2.0);
+
 		return CGRectMake(0, originY, imageSize.width, croppedHeight);
 	} else {
 		return CGRectMake(0, 0, imageSize.width, imageSize.height);

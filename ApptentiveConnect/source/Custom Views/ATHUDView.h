@@ -12,6 +12,7 @@ typedef enum {
 	ATHUDCheckmark
 } ATHUDMarkType;
 
+
 @interface ATHUDView : UIWindow
 @property (nonatomic, strong, readonly) UILabel *label;
 @property (nonatomic, assign) ATHUDMarkType markType;

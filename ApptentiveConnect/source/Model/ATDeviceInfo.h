@@ -16,6 +16,3 @@
 
 - (NSDictionary *)apiJSON;
 @end
-
-
-

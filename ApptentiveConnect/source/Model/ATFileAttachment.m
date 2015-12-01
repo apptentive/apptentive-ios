@@ -16,11 +16,13 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 #import <ImageIO/ImageIO.h>
 
+
 @interface ATFileAttachment ()
 + (NSString *)fullLocalPathForFilename:(NSString *)filename;
 - (NSString *)filenameForThumbnailOfSize:(CGSize)size;
 - (void)deleteSidecarIfNecessary;
 @end
+
 
 @implementation ATFileAttachment
 @dynamic localPath;
@@ -62,7 +64,7 @@
 	return attachment;
 }
 
-+ (void)addMissingExtensions	 {
++ (void)addMissingExtensions {
 	NSArray *allAttachments = [ATData findEntityNamed:NSStringFromClass(self) withPredicate:[NSPredicate predicateWithValue:YES]];
 
 	for (ATFileAttachment *attachment in allAttachments) {
@@ -234,7 +236,7 @@
 			for (NSString *filename in filenames) {
 				if ([filename rangeOfString:self.localPath].location == 0) {
 					NSString *thumbnailPath = [[self class] fullLocalPathForFilename:filename];
-					
+
 					if (![fm removeItemAtPath:thumbnailPath error:&error]) {
 						ATLogError(@"Error removing attachment thumbnail at path: %@. %@", thumbnailPath, error);
 						continue;
@@ -260,12 +262,14 @@
 }
 
 - (UIImage *)createThumbnailOfSize:(CGSize)size {
-	CGImageSourceRef src = CGImageSourceCreateWithURL((__bridge CFURLRef) [NSURL fileURLWithPath:self.fullLocalPath], NULL);
+	CGImageSourceRef src = CGImageSourceCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:self.fullLocalPath], NULL);
 	CFDictionaryRef options = (__bridge CFDictionaryRef) @{
-															   (id) kCGImageSourceCreateThumbnailWithTransform : @YES,
-															   (id) kCGImageSourceCreateThumbnailFromImageAlways : @YES,
-															   (id) kCGImageSourceThumbnailMaxPixelSize : @(fmax(size.width, size.height))
-															   };
+		(id)kCGImageSourceCreateThumbnailWithTransform: @YES,
+		(id)
+		kCGImageSourceCreateThumbnailFromImageAlways: @YES,
+		(id)
+		kCGImageSourceThumbnailMaxPixelSize: @(fmax(size.width, size.height))
+	};
 	CGImageRef thumbnail = CGImageSourceCreateThumbnailAtIndex(src, 0, options);
 	CFRelease(src);
 
@@ -284,6 +288,7 @@
 }
 
 @end
+
 
 @implementation ATFileAttachment (QuickLook)
 

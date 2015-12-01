@@ -23,7 +23,7 @@
 
 + (ATSurveyResponse *)findSurveyResponseWithPendingID:(NSString *)pendingID {
 	ATSurveyResponse *result = nil;
-	
+
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingSurveyResponseID == %@)", pendingID];
 		NSArray *results = [ATData findEntityNamed:@"ATSurveyResponse" withPredicate:fetchPredicate];
@@ -39,9 +39,9 @@
 	if (self.pendingSurveyResponseID == nil) {
 		CFUUIDRef uuidRef = CFUUIDCreate(NULL);
 		CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
-		
+
 		self.pendingSurveyResponseID = [NSString stringWithFormat:@"pending-survey-response:%@", (__bridge NSString *)uuidStringRef];
-		
+
 		CFRelease(uuidRef), uuidRef = NULL;
 		CFRelease(uuidStringRef), uuidStringRef = NULL;
 	}
@@ -72,8 +72,8 @@
 	if ([superJSON objectForKey:@"client_created_at_utc_offset"]) {
 		survey[@"client_created_at_utc_offset"] = superJSON[@"client_created_at_utc_offset"];
 	}
-	
-	NSDictionary *result = @{@"survey":survey};
+
+	NSDictionary *result = @{ @"survey": survey };
 	return result;
 }
 

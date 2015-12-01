@@ -10,10 +10,12 @@
 #import "ATInteractionInvocation.h"
 #import "ATInteractionUsageData.h"
 
+
 @interface CodePointTest : CriteriaTest
 
 @property (strong, nonatomic) ATInteractionUsageData *usageData;
 @end
+
 
 @implementation CodePointTest
 
@@ -46,15 +48,18 @@
 
 @end
 
+
 @interface CodePointInvokesTotal : CodePointTest
 @end
+
 
 @implementation CodePointInvokesTotal
 
 - (void)setUp {
 	[super setUp];
 
-	self.usageData.codePointInvokesTotal = @{ @"code_point/test.code.point/invokes/total": @0, @"code_point/switch.code.point/invokes/total": @0 };
+	self.usageData.codePointInvokesTotal = @{ @"code_point/test.code.point/invokes/total": @0,
+		@"code_point/switch.code.point/invokes/total": @0 };
 }
 
 - (void)testGt {
@@ -154,6 +159,7 @@
 @interface CodePointInvokesVersion : CodePointTest
 @end
 
+
 @implementation CodePointInvokesVersion
 
 - (void)setUp {
@@ -214,17 +220,17 @@
 }
 
 - (void)testColon {
-[self incrementTotalCodePoint:@"switch.code.point"];
-[self incrementTotalCodePoint:@"switch.code.point"];
-[self incrementTotalCodePoint:@"switch.code.point"];
-[self incrementTotalCodePoint:@"switch.code.point"];
-XCTAssertFalse([self.interaction criteriaAreMetForUsageData:self.usageData]);
-[self incrementVersionCodePoint:@"test.code.point"];
-XCTAssertFalse([self.interaction criteriaAreMetForUsageData:self.usageData]);
-[self incrementVersionCodePoint:@"test.code.point"];
-XCTAssertTrue([self.interaction criteriaAreMetForUsageData:self.usageData]);
-[self incrementVersionCodePoint:@"test.code.point"];
-XCTAssertFalse([self.interaction criteriaAreMetForUsageData:self.usageData]);
+	[self incrementTotalCodePoint:@"switch.code.point"];
+	[self incrementTotalCodePoint:@"switch.code.point"];
+	[self incrementTotalCodePoint:@"switch.code.point"];
+	[self incrementTotalCodePoint:@"switch.code.point"];
+	XCTAssertFalse([self.interaction criteriaAreMetForUsageData:self.usageData]);
+	[self incrementVersionCodePoint:@"test.code.point"];
+	XCTAssertFalse([self.interaction criteriaAreMetForUsageData:self.usageData]);
+	[self incrementVersionCodePoint:@"test.code.point"];
+	XCTAssertTrue([self.interaction criteriaAreMetForUsageData:self.usageData]);
+	[self incrementVersionCodePoint:@"test.code.point"];
+	XCTAssertFalse([self.interaction criteriaAreMetForUsageData:self.usageData]);
 }
 
 - (void)testLte {
@@ -260,10 +266,12 @@ XCTAssertFalse([self.interaction criteriaAreMetForUsageData:self.usageData]);
 
 @end
 
-@interface CodePointLastInvokedAt: CodePointTest
+
+@interface CodePointLastInvokedAt : CodePointTest
 @end
 
 #import "ATConnect.h"
+
 
 @implementation CodePointLastInvokedAt
 
@@ -281,7 +289,7 @@ XCTAssertFalse([self.interaction criteriaAreMetForUsageData:self.usageData]);
 	self.usageData.interactionInvokesTimeAgo = [NSDictionary dictionaryWithDictionary:mutableCodePoints];
 }
 
-- (void) testAfter {
+- (void)testAfter {
 	self.usageData.codePointInvokesTimeAgo = @{ @"code_point/test.code.point/last_invoked_at/total": [ATConnect timestampObjectWithDate:[NSDate distantPast]] };
 
 	XCTAssertFalse([self.interaction criteriaAreMetForUsageData:self.usageData]);
@@ -323,7 +331,7 @@ XCTAssertFalse([self.interaction criteriaAreMetForUsageData:self.usageData]);
 	XCTAssertFalse([self.interaction criteriaAreMetForUsageData:self.usageData]);
 }
 
-- (void) testColon {
+- (void)testColon {
 	// 3 - : // Ditto
 	[self incrementTotalCodePoint:@"switch.code.point"];
 	[self incrementTotalCodePoint:@"switch.code.point"];
@@ -351,8 +359,10 @@ XCTAssertFalse([self.interaction criteriaAreMetForUsageData:self.usageData]);
 
 @end
 
+
 @interface InteractionInvokesTotal : CodePointTest
 @end
+
 
 @implementation InteractionInvokesTotal
 

@@ -17,6 +17,7 @@ typedef enum {
 	ATPendingSurveyResponseError
 } ATPendingSurveyResponseState;
 
+
 @interface ATSurveyResponse : ATRecord <ATJSONModel>
 @property (nonatomic, strong) NSString *pendingSurveyResponseID;
 @property (nonatomic, strong) NSData *answersData;

@@ -16,9 +16,9 @@
 #define kATConnectVersionString @"2.1"
 
 #if TARGET_OS_IPHONE
-#	define kATConnectPlatformString @"iOS"
+#define kATConnectPlatformString @"iOS"
 #elif TARGET_OS_MAC
-#	define kATConnectPlatformString @"Mac OS X"
+#define kATConnectPlatformString @"Mac OS X"
 @class ATFeedbackWindowController;
 #endif
 
@@ -45,7 +45,7 @@ extern NSString *const ATSurveySentNotification;
 extern NSString *const ATSurveyIDKey;
 
 /** Supported Push Providers for use in `setPushNotificationIntegration:withDeviceToken:` */
-typedef NS_ENUM(NSInteger, ATPushProvider){
+typedef NS_ENUM(NSInteger, ATPushProvider) {
 	/** Specifies the Apptentive push provider. */
 	ATPushProviderApptentive,
 	/** Specifies the Urban Airship push provider. */

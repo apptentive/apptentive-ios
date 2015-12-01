@@ -16,6 +16,7 @@
 
 @class ATMetric;
 
+
 @interface ApptentiveMetrics : NSObject
 + (ApptentiveMetrics *)sharedMetrics;
 
@@ -26,4 +27,3 @@
 - (BOOL)upgradeLegacyMetric:(ATMetric *)metric;
 
 @end
-

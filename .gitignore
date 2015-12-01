@@ -12,10 +12,6 @@ xcuserdata/
 
 # OSX noise
 .DS_Store
-profile
 
-# Emacs noise
-*~
 
-# other noise
-.svn
+

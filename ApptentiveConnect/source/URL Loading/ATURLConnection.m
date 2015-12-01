@@ -9,6 +9,7 @@
 #import "ATURLConnection_Private.h"
 #import "ATUtilities.h"
 
+
 @interface ATURLConnection ()
 
 @property (strong, nonatomic) NSMutableData *data;
@@ -23,6 +24,7 @@
 @property (readwrite, assign, nonatomic) BOOL cancelled;
 
 @end
+
 
 @implementation ATURLConnection
 
@@ -40,10 +42,10 @@
 		_failed = NO;
 		_failedAuthentication = NO;
 		_timeoutInterval = 10.0;
-		
+
 		_headers = [[NSMutableDictionary alloc] init];
 		_HTTPMethod = nil;
-		
+
 		_statusCode = 0;
 		_percentComplete = 0.0f;
 		return self;
@@ -78,7 +80,7 @@
 }
 
 - (void)start {
-	@synchronized (self) {
+	@synchronized(self) {
 		@autoreleasepool {
 			do { // once
 				if ([self isCancelled]) {
@@ -116,16 +118,16 @@
 
 #pragma mark Delegate Methods
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSHTTPURLResponse *)response {
-	@synchronized (self) {
+	@synchronized(self) {
 		[self.data setLength:0];
-		if (response ) {
+		if (response) {
 			if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
 				self.statusLine = [NSHTTPURLResponse localizedStringForStatusCode:response.statusCode];
 				self.statusCode = response.statusCode;
 			} else {
 				self.statusCode = 200;
 			}
-			
+
 			self.responseHeaders = [[response allHeaderFields] copy];
 			NSString *cacheControlHeader = [self.responseHeaders valueForKey:@"Cache-Control"];
 			if (cacheControlHeader) {
@@ -137,14 +139,14 @@
 	}
 }
 - (void)connection:(NSURLConnection *)aConnection didFailWithError:(NSError *)error {
-	@synchronized (self) {
+	@synchronized(self) {
 		self.failed = YES;
 		self.finished = YES;
 		self.executing = NO;
 		if (error) {
 			self.connectionError = error;
 		}
-		if (self.delegate && [self.delegate respondsToSelector:@selector(connectionFailed:)]){
+		if (self.delegate && [self.delegate respondsToSelector:@selector(connectionFailed:)]) {
 			[self.delegate performSelectorOnMainThread:@selector(connectionFailed:) withObject:self waitUntilDone:YES];
 		} else {
 			ATLogError(@"Orphaned connection. No delegate or nonresponsive delegate.");
@@ -153,18 +155,18 @@
 }
 
 - (void)connection:(NSURLConnection *)aConnection didReceiveData:(NSData *)someData {
-	@synchronized (self) {
+	@synchronized(self) {
 		[self.data appendData:someData];
 	}
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)aConnection {
-	@synchronized (self) {
+	@synchronized(self) {
 		if (self.data && !self.failed) {
 			if (self.delegate != nil && ![self isCancelled]) {
 				self.percentComplete = 1.0f;
 				[self cacheDataIfNeeded];
-				if (self.delegate && [self.delegate respondsToSelector:@selector(connectionFinishedSuccessfully:)]){
+				if (self.delegate && [self.delegate respondsToSelector:@selector(connectionFinishedSuccessfully:)]) {
 					[self.delegate performSelectorOnMainThread:@selector(connectionFinishedSuccessfully:) withObject:self waitUntilDone:YES];
 				} else {
 					ATLogError(@"Orphaned connection. No delegate or nonresponsive delegate.");
@@ -172,7 +174,7 @@
 			}
 			self.data = nil;
 		} else if (self.delegate && ![self isCancelled]) {
-			if (self.delegate && [self.delegate respondsToSelector:@selector(connectionFailed:)]){
+			if (self.delegate && [self.delegate respondsToSelector:@selector(connectionFailed:)]) {
 				[self.delegate performSelectorOnMainThread:@selector(connectionFailed:) withObject:self waitUntilDone:YES];
 			} else {
 				ATLogError(@"Orphaned connection. No delegate or nonresponsive delegate.");
@@ -184,7 +186,7 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-	@synchronized (self) {
+	@synchronized(self) {
 		if (self.credential && [challenge previousFailureCount] == 0) {
 			[[challenge sender] useCredential:self.credential forAuthenticationChallenge:challenge];
 		} else {
@@ -195,12 +197,12 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didCancelAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-	@synchronized (self) {
+	@synchronized(self) {
 		self.failed = YES;
 		self.finished = YES;
 		self.executing = NO;
 		self.failedAuthentication = YES;
-		if (self.delegate && [self.delegate respondsToSelector:@selector(connectionFailed:)]){
+		if (self.delegate && [self.delegate respondsToSelector:@selector(connectionFailed:)]) {
 			[self.delegate performSelectorOnMainThread:@selector(connectionFailed:) withObject:self waitUntilDone:YES];
 		} else {
 			ATLogError(@"Orphaned connection. No delegate or nonresponsive delegate.");
@@ -210,7 +212,7 @@
 
 - (void)connection:(NSURLConnection *)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite {
 	if (self.delegate && [self.delegate respondsToSelector:@selector(connectionDidProgress:)]) {
-		self.percentComplete = ((float)totalBytesWritten)/((float) totalBytesExpectedToWrite);
+		self.percentComplete = ((float)totalBytesWritten) / ((float)totalBytesExpectedToWrite);
 		[self.delegate performSelectorOnMainThread:@selector(connectionDidProgress:) withObject:self waitUntilDone:YES];
 	} else {
 		ATLogError(@"Orphaned connection. No delegate or nonresponsive delegate.");
@@ -219,7 +221,7 @@
 
 - (NSCachedURLResponse *)connection:(NSURLConnection *)aConnection willCacheResponse:(NSCachedURLResponse *)cachedResponse {
 	// See: http://blackpixel.com/blog/1659/caching-and-nsurlconnection/
-	NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)[cachedResponse response];
+	NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)[cachedResponse response];
 	NSURLRequest *r = nil;
 #if TARGET_OS_IPHONE
 	if ([aConnection respondsToSelector:@selector(currentRequest)]) {
@@ -242,7 +244,7 @@
 	return cachedResponse;
 }
 
-- (NSURLRequest *)connection:(NSURLConnection *)inConnection willSendRequest:(NSURLRequest *)inRequest redirectResponse: (NSURLResponse *)inRedirectResponse {
+- (NSURLRequest *)connection:(NSURLConnection *)inConnection willSendRequest:(NSURLRequest *)inRequest redirectResponse:(NSURLResponse *)inRedirectResponse {
 	if (inRedirectResponse) {
 		NSMutableURLRequest *r = [self.request mutableCopy];
 		[r setURL:[inRequest URL]];
@@ -265,7 +267,6 @@
 }
 
 - (void)cacheDataIfNeeded {
-	
 }
 
 - (NSString *)requestAsString {
@@ -308,9 +309,10 @@
 }
 @end
 
+
 @implementation ATURLConnection (Private)
 - (void)cancel {
-	@synchronized (self) {
+	@synchronized(self) {
 		if (self.finished) {
 			return;
 		}

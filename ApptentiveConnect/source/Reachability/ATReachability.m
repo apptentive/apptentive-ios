@@ -12,6 +12,7 @@
 
 NSString *const ATReachabilityStatusChanged = @"ATReachabilityStatusChanged";
 
+
 @interface ATReachability (Private)
 - (BOOL)start;
 - (void)stop;
@@ -46,11 +47,11 @@ static void ATReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 	@autoreleasepool {
 		if (info == NULL) return;
 		if (![(__bridge NSObject *)info isKindOfClass:[ATReachability class]]) return;
-		
+
 		ATReachability *reachability = (__bridge ATReachability *)info;
-		
+
 		[[ATReachability sharedReachability] updateDeviceInfoWithCurrentNetworkType:reachability];
-		
+
 		[[NSNotificationCenter defaultCenter] postNotificationName:ATReachabilityStatusChanged object:reachability];
 	}
 }
@@ -58,7 +59,7 @@ static void ATReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 - (void)updateDeviceInfoWithCurrentNetworkType:(ATReachability *)reachability {
 	//TODO: ATDeviceInfo is not currently being updated with the new network type.
 	ATNetworkStatus status = [reachability currentNetworkStatus];
-	
+
 	NSString *statusString = @"network not reachable";
 	if (status == ATNetworkWifiReachable) {
 		statusString = @"WiFi";
@@ -78,30 +79,30 @@ static void ATReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 
 - (ATNetworkStatus)currentNetworkStatus {
 	ATNetworkStatus status = ATNetworkNotReachable;
-	
+
 	do { // once
 		if (reachabilityRef == NULL) {
 			break;
 		}
-		
+
 		SCNetworkReachabilityFlags flags;
-		
+
 		if (!SCNetworkReachabilityGetFlags(reachabilityRef, &flags)) {
 			break;
 		}
-		
+
 		if ((flags & kSCNetworkReachabilityFlagsReachable) == 0) {
 			break;
 		}
-		
+
 		if ((flags & kSCNetworkReachabilityFlagsConnectionRequired) == 0) {
 			status = ATNetworkWifiReachable;
 		}
-		
+
 		BOOL onDemand = ((flags & kSCNetworkReachabilityFlagsConnectionOnDemand) != 0);
 		BOOL onTraffic = ((flags & kSCNetworkReachabilityFlagsConnectionOnTraffic) != 0);
 		BOOL interventionRequired = ((flags & kSCNetworkReachabilityFlagsInterventionRequired) != 0);
-		
+
 		if ((onDemand || onTraffic) && !interventionRequired) {
 			status = ATNetworkWifiReachable;
 		}
@@ -112,7 +113,7 @@ static void ATReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 		}
 #endif
 	} while (NO);
-	
+
 	return status;
 }
 @end
@@ -126,14 +127,14 @@ static void ATReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 		if (!SCNetworkReachabilitySetCallback(reachabilityRef, ATReachabilityCallback, &context)) {
 			break;
 		}
-		
+
 		if (!SCNetworkReachabilityScheduleWithRunLoop(reachabilityRef, CFRunLoopGetMain(), kCFRunLoopDefaultMode)) {
 			break;
 		}
-		
+
 		result = YES;
 	} while (NO);
-	
+
 	return result;
 }
 

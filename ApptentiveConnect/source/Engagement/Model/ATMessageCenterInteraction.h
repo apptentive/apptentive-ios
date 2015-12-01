@@ -8,6 +8,7 @@
 
 #import "ATInteraction.h"
 
+
 @interface ATMessageCenterInteraction : ATInteraction
 
 + (id)interactionForInvokingMessageEvents;

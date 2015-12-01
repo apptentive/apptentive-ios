@@ -45,4 +45,3 @@ typedef enum {
 - (float)percentageComplete;
 - (NSTimeInterval)expiresMaxAge;
 @end
-

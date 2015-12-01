@@ -4,7 +4,7 @@ Language:        Cpp
 AccessModifierOffset: -1
 ConstructorInitializerIndentWidth: 4
 
-AlignAfterOpenBracket: true
+AlignAfterOpenBracket: false
 AlignEscapedNewlinesLeft: true
 AlignOperands: false
 AlignTrailingComments: true
@@ -41,9 +41,9 @@ ObjCSpaceAfterProperty: true
 ObjCSpaceBeforeProtocolList: true
 PenaltyBreakBeforeFirstCallParameter: 10000
 PenaltyBreakComment: 300
-PenaltyBreakString: 1000
+PenaltyBreakString: 10000
 PenaltyBreakFirstLessLess: 120
-PenaltyExcessCharacter: 1000000
+PenaltyExcessCharacter: 1
 PenaltyReturnTypeOnItsOwnLine: 200
 PointerAlignment: Right
 SpacesBeforeTrailingComments: 1
@@ -60,7 +60,7 @@ SpacesInAngles:  false
 SpaceInEmptyParentheses: false
 SpacesInCStyleCastParentheses: false
 SpaceAfterCStyleCast: false
-SpacesInContainerLiterals: true
+SpacesInContainerLiterals: false
 SpaceBeforeAssignmentOperators: true
 
 ContinuationIndentWidth: 4

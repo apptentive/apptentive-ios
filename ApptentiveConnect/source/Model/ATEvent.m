@@ -10,10 +10,12 @@
 #import "ATData.h"
 #import "ATWebClient+Metrics.h"
 
+
 @interface ATEvent ()
 - (NSDictionary *)dictionaryForCurrentData;
 - (NSData *)dataForDictionary:(NSDictionary *)dictionary;
 @end
+
 
 @implementation ATEvent
 
@@ -51,11 +53,11 @@
 		NSDictionary *dictionary = [self dictionaryForCurrentData];
 		[result addEntriesFromDictionary:dictionary];
 	}
-	
+
 	if (self.pendingEventID != nil) {
 		result[@"nonce"] = self.pendingEventID;
 	}
-	
+
 	// Monitor that the Event payload has not been dropped on retry
 	if (!result) {
 		ATLogError(@"Event json should not be nil.");
@@ -72,9 +74,9 @@
 	if (!result) {
 		result = [NSMutableDictionary dictionary];
 	}
-	
-	NSDictionary *apiJSON = @{@"event": result};
-		
+
+	NSDictionary *apiJSON = @{ @"event": result };
+
 	return apiJSON;
 }
 
@@ -85,9 +87,9 @@
 	if (self.pendingEventID == nil) {
 		CFUUIDRef uuidRef = CFUUIDCreate(NULL);
 		CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
-		
+
 		self.pendingEventID = [NSString stringWithFormat:@"event:%@", (__bridge NSString *)uuidStringRef];
-		
+
 		CFRelease(uuidRef), uuidRef = NULL;
 		CFRelease(uuidStringRef), uuidStringRef = NULL;
 	}

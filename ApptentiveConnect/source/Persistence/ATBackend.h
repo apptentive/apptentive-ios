@@ -34,14 +34,15 @@ extern NSString *const ATBackendBecameReadyNotification;
 @class ATAPIRequest;
 @class ATMessageTask;
 
-@protocol  ATBackendMessageDelegate;
+@protocol ATBackendMessageDelegate;
 
 /*! Handles all of the backend activities, such as sending feedback. */
 @interface ATBackend : NSObject <ATConversationUpdaterDelegate, ATDeviceUpdaterDelegate, ATPersonUpdaterDelegate
 #if TARGET_OS_IPHONE
-, NSFetchedResultsControllerDelegate, UIAlertViewDelegate
+						   ,
+						   NSFetchedResultsControllerDelegate, UIAlertViewDelegate
 #endif
->
+						   >
 @property (nonatomic, copy) NSString *apiKey;
 /*! The feedback currently being worked on by the user. */
 @property (nonatomic, strong) ATFeedback *currentFeedback;

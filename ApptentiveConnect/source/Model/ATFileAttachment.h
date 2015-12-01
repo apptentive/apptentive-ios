@@ -12,6 +12,7 @@
 
 @class ATMessage;
 
+
 @interface ATFileAttachment : NSManagedObject
 @property (nonatomic, strong) NSString *localPath;
 @property (nonatomic, strong) NSString *mimeType; // starts w/ lowercase b/c Core Data is stupid
@@ -41,6 +42,7 @@
 - (UIImage *)thumbnailOfSize:(CGSize)size;
 
 @end
+
 
 @interface ATFileAttachment (QuickLook) <QLPreviewItem>
 @end

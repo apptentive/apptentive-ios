@@ -27,6 +27,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 
 @protocol ATMessageCenterDataSourceDelegate;
 
+
 @interface ATMessageCenterDataSource : NSObject <NSURLSessionDownloadDelegate>
 @property (nonatomic, strong, readonly) NSFetchedResultsController *fetchedMessagesController;
 @property (nonatomic, weak) NSObject<ATMessageCenterDataSourceDelegate> *delegate;
@@ -54,7 +55,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 - (NSInteger)numberOfAttachmentsForMessageAtIndex:(NSInteger)index;
 - (BOOL)shouldUsePlaceholderForAttachmentAtIndexPath:(NSIndexPath *)indexPath;
 - (BOOL)canPreviewAttachmentAtIndexPath:(NSIndexPath *)indexPath;
-- (NSString *)extensionForAttachmentAtIndexPath:(NSIndexPath *)indexPath; // Returns nil if thumbnail is present, file extension if not
+- (NSString *)extensionForAttachmentAtIndexPath:(NSIndexPath *)indexPath;			   // Returns nil if thumbnail is present, file extension if not
 - (UIImage *)imageForAttachmentAtIndexPath:(NSIndexPath *)indexPath size:(CGSize)size; // Returns thumbnail if present, generic file icon if not
 - (void)downloadAttachmentAtIndexPath:(NSIndexPath *)indexPath;
 - (id<QLPreviewControllerDataSource>)previewDataSourceAtIndex:(NSInteger)index;

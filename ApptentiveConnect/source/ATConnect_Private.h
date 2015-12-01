@@ -13,6 +13,7 @@ extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 
 @class ATMessage;
 
+
 @interface ATConnect ()
 
 - (NSDictionary *)customPersonData;

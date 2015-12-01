@@ -23,6 +23,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 - (BOOL)processResult:(NSDictionary *)jsonMessage;
 @end
 
+
 @implementation ATGetMessagesTask {
 	ATAPIRequest *request;
 	ATMessage *lastMessage;
@@ -94,9 +95,8 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 #pragma mark ATAPIRequestDelegate
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(NSObject *)result {
 	@synchronized(self) {
-		
 		UIBackgroundFetchResult fetchResult;
-		
+
 		if ([result isKindOfClass:[NSDictionary class]] && [self processResult:(NSDictionary *)result]) {
 			self.finished = YES;
 			fetchResult = UIBackgroundFetchResultNewData;
@@ -106,7 +106,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 			fetchResult = UIBackgroundFetchResultFailed;
 		}
 		[self stop];
-		
+
 		[[ATBackend sharedBackend] completeMessageFetchWithResult:fetchResult];
 	}
 }
@@ -126,24 +126,25 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 }
 @end
 
+
 @implementation ATGetMessagesTask (Private)
 
 - (BOOL)processResult:(NSDictionary *)jsonMessages {
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
 	NSString *lastMessageID = nil;
-	
+
 	ATConversation *conversation = [ATConversationUpdater currentConversation];
-	
+
 	do { // once
 		if (!jsonMessages) break;
 		if (![jsonMessages at_safeObjectForKey:@"items"]) break;
-		
+
 		NSArray *messages = [jsonMessages at_safeObjectForKey:@"items"];
 		if (![messages isKindOfClass:[NSArray class]]) break;
 		if (messages.count > 0) {
 			ATLogDebug(@"Apptentive messages: %@", jsonMessages);
 		}
-		
+
 		BOOL success = YES;
 		for (NSDictionary *messageJSON in messages) {
 			NSString *pendingMessageID = [messageJSON at_safeObjectForKey:@"nonce"];

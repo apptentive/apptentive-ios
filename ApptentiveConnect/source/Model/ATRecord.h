@@ -11,6 +11,7 @@
 
 #import "ATJSONModel.h"
 
+
 @interface ATRecord : NSManagedObject <ATJSONModel>
 
 @property (nonatomic, strong) NSString *apptentiveID;

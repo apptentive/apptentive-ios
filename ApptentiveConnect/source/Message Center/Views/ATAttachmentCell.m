@@ -11,12 +11,14 @@
 
 #define PLACEHOLDER_SIZE CGSizeMake(37, 48)
 
+
 @interface ATAttachmentCell ()
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *imageWidth;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *imageHeight;
 
 @end
+
 
 @implementation ATAttachmentCell
 
@@ -90,4 +92,3 @@
 }
 
 @end
-

@@ -11,6 +11,7 @@
 
 @class ATIndexedCollectionView;
 
+
 @interface ATCompoundReplyCell : ATMessageCenterReplyCell <ATMessageCenterCompoundCell>
 
 @property (weak, nonatomic) IBOutlet ATIndexedCollectionView *collectionView;

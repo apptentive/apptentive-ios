@@ -9,11 +9,13 @@
 #import "ATDefaultTextView.h"
 #import "ATUtilities.h"
 
+
 @interface ATDefaultTextView ()
 
 @property (strong, nonatomic) UILabel *placeholderLabel;
 
 @end
+
 
 @implementation ATDefaultTextView
 
@@ -85,10 +87,10 @@
 		self.placeholderLabel.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 		[self.placeholderLabel sizeToFit];
 		[self addSubview:self.placeholderLabel];
-		
+
 		CGFloat paddingX = 0;
 		CGPoint origin = CGPointZero;
-		
+
 		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
 			paddingX = 4;
 			origin = CGPointMake(4, 8);
@@ -96,9 +98,9 @@
 			paddingX = 8;
 			origin = CGPointMake(8, 8);
 		}
-		
+
 		CGRect b = self.placeholderLabel.bounds;
-		b.size.width = self.bounds.size.width - paddingX*2.0;
+		b.size.width = self.bounds.size.width - paddingX * 2.0;
 		self.placeholderLabel.bounds = b;
 		CGRect f = self.placeholderLabel.frame;
 		f.origin = origin;

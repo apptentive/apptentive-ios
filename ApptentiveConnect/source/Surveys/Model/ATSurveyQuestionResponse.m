@@ -10,6 +10,7 @@
 
 #define kATSurveyQuestionResponseStorageVersion 1
 
+
 @implementation ATSurveyQuestionResponse
 
 - (id)initWithCoder:(NSCoder *)coder {

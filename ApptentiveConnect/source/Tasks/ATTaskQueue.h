@@ -10,6 +10,7 @@
 
 @class ATTask;
 
+
 @interface ATTaskQueue : NSObject <NSCoding>
 + (NSString *)taskQueuePath;
 + (BOOL)serializedQueueExists;

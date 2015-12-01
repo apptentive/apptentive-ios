@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+
 @interface ATProgressNavigationBar : UINavigationBar
 
 @property (readonly, nonatomic) UIProgressView *progressView;

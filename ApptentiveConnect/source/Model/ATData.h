@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+
 @interface ATData : NSObject
 + (NSManagedObject *)newEntityNamed:(NSString *)entityName;
 + (NSArray *)findEntityNamed:(NSString *)entityName withPredicate:(NSPredicate *)predicate;

@@ -15,52 +15,58 @@
 #import "ATDeviceInfo.h"
 #import "ATPersonInfo.h"
 
+
 @implementation ATInteractionUsageData
 
 + (ATInteractionUsageData *)usageData {
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
-	
+
 	return usageData;
 }
 
 - (NSString *)description {
 	NSString *title = [NSString stringWithFormat:@"Engamement Framework Usage Data:"];
-	
-	NSDictionary *data = @{@"timeSinceInstallTotal" : self.timeSinceInstallTotal ?: [NSNull null],
-						   @"timeSinceInstallVersion" : self.timeSinceInstallVersion ?: [NSNull null],
-						   @"timeSinceInstallBuild" : self.timeSinceInstallBuild ?: [NSNull null],
-						   @"applicationVersion" : self.applicationVersion ?: [NSNull null],
-						   @"applicationBuild" : self.applicationBuild ?: [NSNull null],
-						   @"sdkVersion" : self.sdkVersion ? [NSNull null],
-						   @"sdkDistribution" : self.sdkDistribution ? [NSNull null],
-						   @"sdkDistributionVersion" : self.sdkDistributionVersion ? [NSNull null],
-						   @"isUpdateVersion" : self.isUpdateVersion ?: [NSNull null],
-						   @"isUpdateBuild" : self.isUpdateBuild ?: [NSNull null],
-						   @"codePointInvokesTotal" : self.codePointInvokesTotal ?: [NSNull null],
-						   @"codePointInvokesVersion" : self.codePointInvokesVersion ?: [NSNull null],
-						   @"codePointInvokesBuild" : self.codePointInvokesBuild ?: [NSNull null],
-						   @"codePointInvokesTimeAgo" : self.codePointInvokesTimeAgo ?: [NSNull null],
-						   @"interactionInvokesTotal" : self.interactionInvokesTotal ?: [NSNull null],
-						   @"interactionInvokesVersion" : self.interactionInvokesVersion ?: [NSNull null],
-						   @"interactionInovkesBuild" : self.interactionInvokesBuild ?: [NSNull null],
-						   @"interactionInvokesTimeAgo" : self.interactionInvokesTimeAgo ?: [NSNull null]};
-	NSDictionary *description = @{title : data};
+
+	NSDictionary *data = @{ @"timeSinceInstallTotal": self.timeSinceInstallTotal ?: [NSNull null],
+		@"timeSinceInstallVersion": self.timeSinceInstallVersion ?: [NSNull null],
+		@"timeSinceInstallBuild": self.timeSinceInstallBuild ?: [NSNull null],
+		@"applicationVersion": self.applicationVersion ?: [NSNull null],
+		@"applicationBuild": self.applicationBuild ?: [NSNull null],
+		@"sdkVersion": self.sdkVersion ?
+		[NSNull null],
+		@"sdkDistribution" :
+		self.sdkDistribution ?
+		[NSNull null],
+		@"sdkDistributionVersion" :
+		self.sdkDistributionVersion ?
+		[NSNull null],
+		@"isUpdateVersion" :
+		self.isUpdateVersion ?: [NSNull null],
+		@"isUpdateBuild": self.isUpdateBuild ?: [NSNull null],
+		@"codePointInvokesTotal": self.codePointInvokesTotal ?: [NSNull null],
+		@"codePointInvokesVersion": self.codePointInvokesVersion ?: [NSNull null],
+		@"codePointInvokesBuild": self.codePointInvokesBuild ?: [NSNull null],
+		@"codePointInvokesTimeAgo": self.codePointInvokesTimeAgo ?: [NSNull null],
+		@"interactionInvokesTotal": self.interactionInvokesTotal ?: [NSNull null],
+		@"interactionInvokesVersion": self.interactionInvokesVersion ?: [NSNull null],
+		@"interactionInovkesBuild": self.interactionInvokesBuild ?: [NSNull null],
+		@"interactionInvokesTimeAgo": self.interactionInvokesTimeAgo ?: [NSNull null] };
+	NSDictionary *description = @{title: data};
 
 	return [description description];
 }
 
 + (void)keyPathWasSeen:(NSString *)keyPath {
-	
 	/*
 	Record the keyPath if needed, to later be used in predicate evaluation.
 	*/
-	
+
 	if ([keyPath hasPrefix:@"code_point/"]) {
-		 NSArray *components = [keyPath componentsSeparatedByString:@"/"];
-		 if (components.count > 1) {
+		NSArray *components = [keyPath componentsSeparatedByString:@"/"];
+		if (components.count > 1) {
 			NSString *codePoint = [components objectAtIndex:1];
-			 [[ATEngagementBackend sharedBackend] codePointWasSeen:codePoint];
-		 }
+			[[ATEngagementBackend sharedBackend] codePointWasSeen:codePoint];
+		}
 	} else if ([keyPath hasPrefix:@"interactions/"]) {
 		NSArray *components = [keyPath componentsSeparatedByString:@"/"];
 		if (components.count > 1) {
@@ -71,18 +77,18 @@
 }
 
 - (NSDictionary *)predicateEvaluationDictionary {
-	 NSMutableDictionary *predicateEvaluationDictionary = [NSMutableDictionary dictionaryWithDictionary:@{@"time_since_install/total": self.timeSinceInstallTotal,
-																										  @"time_since_install/version" : self.timeSinceInstallVersion,
-																										  @"time_since_install/build" : self.timeSinceInstallBuild,
-																										  @"is_update/version" : self.isUpdateVersion,
-																										  @"is_update/build" : self.isUpdateBuild}];
+	NSMutableDictionary *predicateEvaluationDictionary = [NSMutableDictionary dictionaryWithDictionary:@{ @"time_since_install/total": self.timeSinceInstallTotal,
+		@"time_since_install/version": self.timeSinceInstallVersion,
+		@"time_since_install/build": self.timeSinceInstallBuild,
+		@"is_update/version": self.isUpdateVersion,
+		@"is_update/build": self.isUpdateBuild }];
 	if (self.timeAtInstallTotal) {
 		predicateEvaluationDictionary[@"time_at_install/total"] = [ATConnect timestampObjectWithDate:self.timeAtInstallTotal];
 	}
 	if (self.timeAtInstallVersion) {
 		predicateEvaluationDictionary[@"time_at_install/version"] = [ATConnect timestampObjectWithDate:self.timeAtInstallVersion];
 	}
-	
+
 	if (self.applicationVersion) {
 		predicateEvaluationDictionary[@"application_version"] = self.applicationVersion;
 		predicateEvaluationDictionary[@"app_release/version"] = self.applicationVersion;
@@ -91,26 +97,26 @@
 		ATLogWarning(@"Unable to get application version. Using default value of 0.0.0");
 		predicateEvaluationDictionary[@"application/version"] = [ATConnect versionObjectWithVersion:@"0.0.0"];
 	}
-	
+
 	if (self.applicationBuild) {
 		predicateEvaluationDictionary[@"application_build"] = self.applicationBuild;
 		predicateEvaluationDictionary[@"app_release/build"] = self.applicationBuild;
 	}
-	
+
 	if (self.sdkVersion) {
 		predicateEvaluationDictionary[@"sdk/version"] = [ATConnect versionObjectWithVersion:self.sdkVersion];
 	} else {
 		ATLogError(@"Unable to find SDK version. Interaction critera don't make sense without one.");
 		return nil;
 	}
-	
+
 	if (self.sdkDistribution) {
 		predicateEvaluationDictionary[@"sdk/distribution"] = self.sdkDistribution;
 	}
 	if (self.sdkDistributionVersion) {
 		predicateEvaluationDictionary[@"sdk/distribution_version"] = self.sdkDistributionVersion;
 	}
-	
+
 	predicateEvaluationDictionary[@"current_time"] = [ATConnect timestampObjectWithNumber:self.currentTime];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesTotal];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesVersion];
@@ -120,7 +126,7 @@
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesVersion];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesBuild];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesTimeAgo];
-	
+
 	// Device
 	ATDeviceInfo *deviceInfo = [[ATDeviceInfo alloc] init];
 	if (deviceInfo) {
@@ -132,19 +138,19 @@
 				// Custom data is added below.
 				continue;
 			}
-			
+
 			if ([key isEqualToString:@"integration_config"]) {
 				// Skip "integration_config"; not used for targeting.
 				continue;
 			}
-			
+
 			NSObject *value = deviceData[key];
 			if (value) {
 				NSString *criteriaKey = [NSString stringWithFormat:@"device/%@", [ATUtilities stringByEscapingForURLArguments:key]];
 				predicateEvaluationDictionary[criteriaKey] = value;
 			}
 		}
-		
+
 		// Device custom data
 		NSDictionary *customData = deviceData[@"custom_data"];
 		if (customData) {
@@ -157,26 +163,26 @@
 			}
 		}
 	}
-	
+
 	// Person
 	ATPersonInfo *personInfo = [ATPersonInfo currentPerson];
 	if (personInfo) {
 		NSDictionary *personData = personInfo.dictionaryRepresentation[@"person"];
-		
+
 		// Person information
 		for (NSString *key in [personData allKeys]) {
 			if ([key isEqualToString:@"custom_data"]) {
 				// Custom data is added below.
 				continue;
 			}
-			
+
 			NSObject *value = personData[key];
 			if (value) {
 				NSString *criteriaKey = [NSString stringWithFormat:@"person/%@", [ATUtilities stringByEscapingForURLArguments:key]];
 				predicateEvaluationDictionary[criteriaKey] = value;
 			}
 		}
-		
+
 		// Person custom data
 		NSDictionary *customData = personData[@"custom_data"];
 		if (customData) {
@@ -189,7 +195,7 @@
 			}
 		}
 	}
-	
+
 	return predicateEvaluationDictionary;
 }
 
@@ -198,7 +204,7 @@
 		NSDate *installDate = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInstallDateKey] ?: [NSDate date];
 		_timeSinceInstallTotal = @(fabs([installDate timeIntervalSinceNow]));
 	}
-	
+
 	return _timeSinceInstallTotal;
 }
 
@@ -207,7 +213,7 @@
 		NSDate *versionInstallDate = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementUpgradeDateKey] ?: [NSDate date];
 		_timeSinceInstallVersion = @(fabs([versionInstallDate timeIntervalSinceNow]));
 	}
-	
+
 	return _timeSinceInstallVersion;
 }
 
@@ -216,7 +222,7 @@
 		NSDate *buildInstallDate = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementUpgradeDateKey] ?: [NSDate date];
 		_timeSinceInstallBuild = @(fabs([buildInstallDate timeIntervalSinceNow]));
 	}
-	
+
 	return _timeSinceInstallBuild;
 }
 
@@ -238,7 +244,7 @@
 	if (!_applicationVersion) {
 		_applicationVersion = [[ATUtilities appVersionString] copy];
 	}
-	
+
 	return _applicationVersion;
 }
 
@@ -246,7 +252,7 @@
 	if (!_applicationBuild) {
 		_applicationBuild = [[ATUtilities buildNumberString] copy];
 	}
-	
+
 	return _applicationBuild;
 }
 
@@ -282,7 +288,7 @@
 	if (!_isUpdateVersion) {
 		_isUpdateVersion = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementIsUpdateVersionKey] ?: @(NO);
 	}
-	
+
 	return _isUpdateVersion;
 }
 
@@ -290,7 +296,7 @@
 	if (!_isUpdateBuild) {
 		_isUpdateBuild = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementIsUpdateBuildKey] ?: @(NO);
 	}
-	
+
 	return _isUpdateBuild;
 }
 
@@ -303,7 +309,7 @@
 		}
 		_codePointInvokesTotal = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
-	
+
 	return _codePointInvokesTotal;
 }
 
@@ -365,7 +371,7 @@
 		}
 		_interactionInvokesTotal = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
-	
+
 	return _interactionInvokesTotal;
 }
 
@@ -391,7 +397,7 @@
 		}
 		_interactionInvokesBuild = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
-	
+
 	return _interactionInvokesBuild;
 }
 

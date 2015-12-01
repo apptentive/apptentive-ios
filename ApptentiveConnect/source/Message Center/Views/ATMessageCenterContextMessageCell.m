@@ -8,6 +8,7 @@
 
 #import "ATMessageCenterContextMessageCell.h"
 
+
 @implementation ATMessageCenterContextMessageCell
 
 - (void)awakeFromNib {

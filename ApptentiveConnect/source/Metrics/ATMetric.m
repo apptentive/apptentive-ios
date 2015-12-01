@@ -14,6 +14,7 @@
 
 #define kATMetricStorageVersion 1
 
+
 @implementation ATMetric {
 	NSMutableDictionary *_info;
 }
@@ -66,9 +67,9 @@
 
 - (NSDictionary *)apiDictionary {
 	NSMutableDictionary *d = [NSMutableDictionary dictionaryWithDictionary:[super apiDictionary]];
-	
+
 	if (self.name) [d setObject:self.name forKey:@"record[metric][event]"];
-	
+
 	if (self.info) {
 		for (NSString *key in self.info) {
 			NSString *recordKey = [NSString stringWithFormat:@"record[metric][data][%@]", key];

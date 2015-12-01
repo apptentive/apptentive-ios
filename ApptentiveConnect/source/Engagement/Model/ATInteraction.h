@@ -10,7 +10,7 @@
 
 @class ATInteractionUsageData;
 
-typedef NS_ENUM(NSInteger, ATInteractionType){
+typedef NS_ENUM(NSInteger, ATInteractionType) {
 	ATInteractionTypeUnknown,
 	ATInteractionTypeUpgradeMessage,
 	ATInteractionTypeEnjoymentDialog,
@@ -21,6 +21,7 @@ typedef NS_ENUM(NSInteger, ATInteractionType){
 	ATInteractionTypeTextModal,
 	ATInteractionTypeNavigateToLink,
 };
+
 
 @interface ATInteraction : NSObject <NSCoding, NSCopying>
 @property (nonatomic, copy) NSString *identifier;

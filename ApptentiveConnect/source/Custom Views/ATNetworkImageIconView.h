@@ -14,6 +14,7 @@ typedef NS_ENUM(NSInteger, ATImageViewMaskType) {
 	ATImageViewMaskTypeAppIcon
 };
 
+
 @interface ATNetworkImageIconView : ATNetworkImageView
 
 @property (assign, nonatomic) ATImageViewMaskType maskType;

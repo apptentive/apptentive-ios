@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 @class ATInteraction;
 
+
 @interface ATInteractionUpgradeMessageViewController : UIViewController
 
 + (instancetype)interactionUpgradeMessageViewControllerWithInteraction:(ATInteraction *)interaction;

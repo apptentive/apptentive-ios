@@ -8,6 +8,7 @@
 
 #import "ATJSONSerialization.h"
 
+
 @implementation ATJSONSerialization
 + (NSData *)dataWithJSONObject:(id)obj options:(ATJSONWritingOptions)opt error:(NSError **)error {
 	if ([NSJSONSerialization isValidJSONObject:obj]) {

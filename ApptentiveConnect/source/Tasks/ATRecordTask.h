@@ -11,7 +11,8 @@
 
 @class ATLegacyRecord;
 
-@interface ATRecordTask : ATTask<ATAPIRequestDelegate>
+
+@interface ATRecordTask : ATTask <ATAPIRequestDelegate>
 @property (nonatomic, strong) ATLegacyRecord *record;
 
 @end

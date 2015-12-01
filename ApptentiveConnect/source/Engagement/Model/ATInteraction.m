@@ -11,6 +11,7 @@
 #import "ATInteractionUsageData.h"
 #import "ATUtilities.h"
 
+
 @implementation ATInteraction
 
 + (ATInteraction *)interactionWithJSONDictionary:(NSDictionary *)jsonDictionary {
@@ -21,7 +22,7 @@
 	interaction.configuration = [jsonDictionary objectForKey:@"configuration"];
 	interaction.version = [jsonDictionary objectForKey:@"version"];
 	//NOTE: `vendor` is not currently sent in JSON dictionary.
-	
+
 	return interaction;
 }
 
@@ -29,7 +30,7 @@
 	ATInteraction *interaction = [[ATInteraction alloc] init];
 	interaction.type = ATEngagementCodePointHostAppInteractionKey;
 	interaction.vendor = ATEngagementCodePointHostAppVendorKey;
-	
+
 	return interaction;
 }
 
@@ -37,7 +38,7 @@
 	ATInteraction *interaction = [[ATInteraction alloc] init];
 	interaction.type = ATEngagementCodePointApptentiveAppInteractionKey;
 	interaction.vendor = ATEngagementCodePointApptentiveVendorKey;
-	
+
 	return interaction;
 }
 
@@ -62,17 +63,17 @@
 	} else {
 		interactionType = ATInteractionTypeUnknown;
 	}
-	
+
 	return interactionType;
 }
 
-- (NSString *)description {	
-	NSDictionary *description = @{@"identifier" : self.identifier ?: [NSNull null],
-								  @"priority" : [NSNumber numberWithInteger:self.priority] ?: [NSNull null],
-								  @"type" : self.type ?: [NSNull null],
-								  @"configuration" : self.configuration ?: [NSNull null],
-								  @"version" : self.version ?: [NSNull null]};
-	
+- (NSString *)description {
+	NSDictionary *description = @{ @"identifier": self.identifier ?: [NSNull null],
+		@"priority": [NSNumber numberWithInteger:self.priority] ?: [NSNull null],
+		@"type": self.type ?: [NSNull null],
+		@"configuration": self.configuration ?: [NSNull null],
+		@"version": self.version ?: [NSNull null] };
+
 	return [description description];
 }
 
@@ -97,16 +98,16 @@
 
 - (id)copyWithZone:(NSZone *)zone {
 	ATInteraction *copy = [[[self class] allocWithZone:zone] init];
-	
-    if (copy) {
+
+	if (copy) {
 		copy.identifier = self.identifier;
 		copy.priority = self.priority;
 		copy.type = self.type;
 		copy.configuration = self.configuration;
 		copy.version = self.version;
-    }
-	
-    return copy;
+	}
+
+	return copy;
 }
 
 - (NSString *)vendor {
@@ -128,7 +129,7 @@
 
 - (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData {
 	NSString *codePoint = [self codePointForEvent:event];
-	
+
 	return [[ATEngagementBackend sharedBackend] engageCodePoint:codePoint fromInteraction:self userInfo:userInfo customData:customData extendedData:extendedData fromViewController:viewController];
 }
 

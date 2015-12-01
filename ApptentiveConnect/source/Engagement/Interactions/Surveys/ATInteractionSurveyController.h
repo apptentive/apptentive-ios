@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 @class ATInteraction;
 
+
 @interface ATInteractionSurveyController : NSObject
 
 @property (nonatomic, strong, readonly) ATInteraction *interaction;

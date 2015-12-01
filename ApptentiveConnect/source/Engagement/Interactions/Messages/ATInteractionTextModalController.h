@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ATInteraction.h"
 
+
 @interface ATInteractionTextModalController : NSObject <UIAlertViewDelegate>
 
 typedef void (^alertActionHandler)(UIAlertAction *);

@@ -24,6 +24,7 @@ extern NSString *const ATAppConfigurationAppDisplayNameKey;
 - (void)configurationUpdaterDidFinish:(BOOL)success;
 @end
 
+
 @interface ATAppConfigurationUpdater : NSObject <ATAPIRequestDelegate>
 
 @property (nonatomic, weak) NSObject<ATAppConfigurationUpdaterDelegate> *delegate;

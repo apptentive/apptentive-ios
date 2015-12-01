@@ -16,6 +16,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterStatusMode) {
 	ATMessageCenterStatusModeHTTPError
 };
 
+
 @interface ATMessageCenterStatusView : UIView
 
 @property (nonatomic, assign) ATMessageCenterStatusMode mode;

@@ -20,6 +20,7 @@ typedef enum {
 NSString *const ATInteractionUpgradeMessageEventLabelLaunch = @"launch";
 NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 
+
 @interface ATInteractionUpgradeMessageViewController ()
 
 @property (nonatomic, strong) ATInteraction *upgradeMessageInteraction;
@@ -40,6 +41,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 
 @end
 
+
 @implementation ATInteractionUpgradeMessageViewController
 
 + (instancetype)interactionUpgradeMessageViewControllerWithInteraction:(ATInteraction *)interaction {
@@ -55,14 +57,14 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-		
+
 	// Borders
 	self.appIconContainer.layer.borderColor = [UIColor colorWithWhite:0.87 alpha:1.0].CGColor;
 	self.appIconContainer.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
-	
+
 	self.OKButton.layer.borderColor = [UIColor colorWithWhite:0.87 alpha:1.0].CGColor;
 	self.OKButton.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
-	
+
 	// App icon
 	if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_app_icon"] boolValue]) {
 		[self.appIconView setImage:[ATUtilities appIcon]];
@@ -77,7 +79,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 	} else {
 		self.appIconView.hidden = YES;
 	}
-	
+
 	// Powered by Apptentive logo
 	if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_powered_by"] boolValue] && ![ATBackend sharedBackend].hideBranding) {
 		self.poweredByApptentiveLogo.text = ATLocalizedString(@"Powered by", @"Powered by followed by Apptentive logo.");
@@ -87,19 +89,19 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 		self.OKButtonBottomSpace.constant = 0.0;
 		self.poweredByBackground.hidden = YES;
 	}
-	
+
 	// Web view
 	NSString *html = [self.upgradeMessageInteraction.configuration objectForKey:@"body"];
 	[self.webView loadHTMLString:html baseURL:nil];
 	self.webView.scrollView.showsHorizontalScrollIndicator = NO;
 	self.webView.scrollView.showsVerticalScrollIndicator = NO;
-	
+
 	[self updateIconContainerHeightForOrientation:[UIApplication sharedApplication].statusBarOrientation];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	
+
 	[self.navigationController setNavigationBarHidden:YES animated:animated];
 }
 
@@ -114,20 +116,19 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion withAction:(ATInteractionUpgradeMessageAction)action {
 	[self.navigationController dismissViewControllerAnimated:animated completion:completion];
-	
+
 	[self.upgradeMessageInteraction engage:ATInteractionUpgradeMessageEventLabelClose fromViewController:self.presentingViewController];
-	
 }
 
 - (void)presentFromViewController:(UIViewController *)newPresentingViewController animated:(BOOL)animated {
 	[newPresentingViewController presentViewController:self.navigationController animated:animated completion:nil];
-	
+
 	[self.upgradeMessageInteraction engage:ATInteractionUpgradeMessageEventLabelLaunch fromViewController:self.presentingViewController];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 	[self updateIconContainerHeightForOrientation:toInterfaceOrientation];
-	
+
 	[UIView animateWithDuration:duration animations:^{
 		[self.view layoutIfNeeded];
 	}];
@@ -137,13 +138,13 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 	BOOL isPortrait = UIInterfaceOrientationIsPortrait(orientation);
 	BOOL isIPad = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad;
 	CGFloat topInset = 0.0;
-	
+
 	if (isIPad || isPortrait) {
 		topInset = self.appIconView.hidden ? 50.0 : 90.0;
-		
+
 		self.appIconContainerHeight.constant = 124.0;
 		self.OKButtonHeight.constant = 44.0;
-		
+
 		if (isIPad) {
 			self.OKButtonBottomSpace.constant = 0.0;
 			self.poweredByBottomSpace.constant = 44.0;
@@ -167,7 +168,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 	[self setPoweredByBackground:nil];
 	[self setPoweredByHeight:nil];
 	[self setWebView:nil];
-	
+
 	[self setAppIconContainerHeight:nil];
 	[self setOKButtonBottomSpace:nil];
 	[self setOKButtonHeight:nil];

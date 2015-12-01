@@ -18,10 +18,12 @@
 
 #define kRecordCodingVersion 1
 
+
 @interface ATLegacyRecord (Private)
 - (NSString *)primaryLocale;
 - (NSArray *)availableLocales;
 @end
+
 
 @implementation ATLegacyRecord
 
@@ -91,11 +93,11 @@
 	if (self.model) [device setObject:self.model forKey:@"model"];
 	if (self.os_version) [device setObject:self.os_version forKey:@"os_version"];
 	if (self.carrier) [device setObject:self.carrier forKey:@"carrier"];
-	
+
 	[record setObject:device forKey:@"device"];
-	
+
 	[record setObject:[self formattedDate:self.date] forKey:@"date"];
-	
+
 	// Add some client information.
 	NSMutableDictionary *client = [NSMutableDictionary dictionary];
 	[client setObject:kATConnectVersionString forKey:@"version"];
@@ -111,7 +113,7 @@
 	}
 	[record setObject:client forKey:@"client"];
 	[d setObject:record forKey:@"record"];
-	
+
 	// Add some app information.
 	NSMutableDictionary *appVersion = [NSMutableDictionary dictionary];
 	[appVersion setObject:[ATUtilities appVersionString] forKey:@"version"];
@@ -122,7 +124,7 @@
 	[appVersion setObject:[self primaryLocale] forKey:@"primary_locale"];
 	[appVersion setObject:[self availableLocales] forKey:@"supported_locales"];
 	[d setObject:appVersion forKey:@"app_version"];
-	return d;	
+	return d;
 }
 
 - (NSDictionary *)apiDictionary {
@@ -131,9 +133,9 @@
 	if (self.model) [d setObject:self.model forKey:@"record[device][model]"];
 	if (self.os_version) [d setObject:self.os_version forKey:@"record[device][os_version]"];
 	if (self.carrier) [d setObject:self.carrier forKey:@"record[device][carrier]"];
-	
+
 	[d setObject:[self formattedDate:self.date] forKey:@"record[date]"];
-	
+
 	// Add some client information.
 	[d setObject:kATConnectVersionString forKey:@"record[client][version]"];
 	[d setObject:kATConnectPlatformString forKey:@"record[client][os]"];
@@ -146,7 +148,7 @@
 	if (distributionVersion) {
 		[d setObject:distributionVersion forKey:@"record[client][distribution_version]"];
 	}
-	
+
 	// Add some app information.
 	[d setObject:[ATUtilities appVersionString] forKey:@"record[app_version][version]"];
 	NSString *buildNumber = [ATUtilities buildNumberString];
@@ -157,7 +159,7 @@
 	for (NSString *locale in [self availableLocales]) {
 		[d setObject:locale forKey:@"record[app_version][supported_locales][]"];
 	}
-	
+
 	return d;
 }
 

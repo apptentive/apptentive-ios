@@ -9,6 +9,7 @@
 
 @protocol ATURLConnectionDelegate;
 
+
 @interface ATURLConnection : NSObject
 @property (nonatomic, readonly, copy) NSURL *targetURL;
 @property (nonatomic, weak) NSObject<ATURLConnectionDelegate> *delegate;

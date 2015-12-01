@@ -9,6 +9,7 @@
 #import "ATAppConfigurationUpdateTask.h"
 #import "ATBackend.h"
 
+
 @implementation ATAppConfigurationUpdateTask {
 	ATAppConfigurationUpdater *configurationUpdater;
 }

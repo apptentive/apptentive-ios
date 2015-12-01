@@ -15,6 +15,7 @@
 @class ATSurvey;
 @class ATSurveyQuestion;
 
+
 @interface ATSurveyViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate>
 @property (nonatomic, copy) ATInteraction *interaction;
 @property (nonatomic, copy) NSString *errorText;
@@ -30,10 +31,12 @@
 - (BOOL)becomeFirstResponder;
 @end
 
+
 @interface ATCellTextView : ATDefaultTextView <ATCellTextEntry>
 @property (nonatomic, strong) NSIndexPath *cellPath;
 @property (nonatomic, strong) ATSurveyQuestion *question;
 @end
+
 
 @interface ATCellTextField : UITextField <ATCellTextEntry>
 @property (nonatomic, strong) NSIndexPath *cellPath;

@@ -110,6 +110,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 @property (nonatomic, assign) BOOL isSubsequentDisplay;
 
+@property (readonly, nonatomic) NSString *trimmedMessage;
+@property (readonly, nonatomic) BOOL messageComposerHasText;
+@property (readonly, nonatomic) BOOL messageComposerHasAttachments;
+@property (readonly, nonatomic) NSDictionary *bodyLengthDictionary;
+
 @end
 
 @implementation ATMessageCenterViewController
@@ -253,12 +258,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 
-	NSString *message = self.messageInputView.messageView.text;
-	
 	if (self.attachmentController.active) {
 		self.state = ATMessageCenterStateComposing;
 		[self.attachmentController becomeFirstResponder];
-	} else if ((message && ![message isEqualToString:@""]) || self.attachmentController.attachments.count) {
+	} else if (self.messageComposerHasText || self.messageComposerHasAttachments) {
 		self.state = ATMessageCenterStateComposing;
 		[self.messageInputView.messageView becomeFirstResponder];
 	} else if (self.isSubsequentDisplay == NO) {
@@ -691,7 +694,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (IBAction)sendButtonPressed:(id)sender {
-	NSString *message = [self.messageInputView.messageView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	NSString *message = self.trimmedMessage;
 	NSIndexPath *lastUserMessageIndexPath = self.dataSource.lastUserMessageIndexPath;
 	
 	if (self.contextMessage) {
@@ -699,9 +702,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		self.contextMessage = nil;
 	}
 
-	NSArray *attachments = self.attachmentController.attachments;
-	if (attachments.count) {
-		[[ATBackend sharedBackend] sendCompoundMessageWithText:message attachments:attachments hiddenOnClient:NO];
+	if (self.messageComposerHasAttachments) {
+		[[ATBackend sharedBackend] sendCompoundMessageWithText:message attachments:self.attachmentController.attachments hiddenOnClient:NO];
 		[self.attachmentController clear];
 	} else {
 		[[ATBackend sharedBackend] sendTextMessageWithBody:message];
@@ -736,7 +738,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (IBAction)clear:(UIButton *)sender {
-	if (self.messageInputView.messageView.text.length == 0 && self.attachmentController.attachments.count == 0) {
+	if (!self.messageComposerHasText && !self.messageComposerHasAttachments) {
 		[self discardDraft];
 		return;
 	}
@@ -854,18 +856,29 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 #pragma mark - Private
 
-- (void)updateSendButtonEnabledStatus {
-	NSString *inputText = self.messageInputView.messageView.text;
-	BOOL hasText = inputText && inputText.length > 0 && [inputText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length > 0;
-	BOOL hasAttachments = self.attachmentController.attachments.count > 0;
+- (NSDictionary *)bodyLengthDictionary {
+	return @{ @"body_length": @(self.messageInputView.messageView.text.length) };
+}
 
-	self.messageInputView.sendButton.enabled = hasText || hasAttachments;
+- (NSString *)trimmedMessage {
+	return [self.messageInputView.messageView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+
+- (BOOL)messageComposerHasText {
+	return self.trimmedMessage.length > 0;
+}
+
+- (BOOL)messageComposerHasAttachments {
+	return  self.attachmentController.attachments.count > 0;
+}
+
+- (void)updateSendButtonEnabledStatus {
+	self.messageInputView.sendButton.enabled = self.messageComposerHasText || self.messageComposerHasAttachments;
 }
 
 - (void)saveDraft {
-	NSString *message = self.messageInputView.messageView.text;
-	if (message) {
-		[[NSUserDefaults standardUserDefaults] setObject:message forKey:ATMessageCenterDraftMessageKey];
+	if (self.messageComposerHasText) {
+		[[NSUserDefaults standardUserDefaults] setObject:self.trimmedMessage forKey:ATMessageCenterDraftMessageKey];
 	} else {
 		[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATMessageCenterDraftMessageKey];
 	}
@@ -1004,8 +1017,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			newFooter.hidden = NO;
 			
 			if (oldFooter == self.messageInputView) {
-				NSNumber *bodyLength = @(self.messageInputView.messageView.text.length);
-				[self.interaction engage:ATInteractionMessageCenterEventLabelComposeClose fromViewController:self userInfo:@{@"body_length": bodyLength}];
+				[self.interaction engage:ATInteractionMessageCenterEventLabelComposeClose fromViewController:self userInfo:self.bodyLengthDictionary];
 			}
 			
 			if (newFooter == self.messageInputView) {
@@ -1125,13 +1137,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)keyboardDidShow:(NSNotification *)notification {
-	NSNumber *bodyLength = @(self.messageInputView.messageView.text.length);
-	[self.interaction engage:ATInteractionMessageCenterEventLabelKeyboardOpen fromViewController:self userInfo:@{@"body_length": bodyLength}];
+	[self.interaction engage:ATInteractionMessageCenterEventLabelKeyboardOpen fromViewController:self userInfo:self.bodyLengthDictionary];
 }
 
 - (void)keyboardDidHide:(NSNotification *)notification {
-	NSNumber *bodyLength = @(self.messageInputView.messageView.text.length);
-	[self.interaction engage:ATInteractionMessageCenterEventLabelKeyboardClose fromViewController:self userInfo:@{@"body_length": bodyLength}];
+	[self.interaction engage:ATInteractionMessageCenterEventLabelKeyboardClose fromViewController:self userInfo:self.bodyLengthDictionary];
 }
 
 - (NSString *)draftMessage {

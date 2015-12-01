@@ -33,6 +33,7 @@ extern NSString *const ATConnectCustomDeviceDataChangedNotification;
  * images, xibs, strings files, etc.
  */
 + (NSBundle *)resourceBundle;
++ (UIStoryboard *)storyboard;
 
 // Debug/test interactions by invoking them directly
 - (NSArray *)engagementInteractions;

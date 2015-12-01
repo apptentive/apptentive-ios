@@ -88,7 +88,7 @@
 				if ([self isFinished]) {
 					break;
 				}
-				self.request = [[NSMutableURLRequest alloc] initWithURL:self.targetURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:self.timeoutInterval];
+				self.request = [[NSMutableURLRequest alloc] initWithURL:self.targetURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:self.timeoutInterval];
 				for (NSString *key in self.headers) {
 					[self.request setValue:[self.headers objectForKey:key] forHTTPHeaderField:key];
 				}

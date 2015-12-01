@@ -504,8 +504,7 @@ static NSURLCache *imageCache = nil;
 	BOOL didShowMessageCenter = [[ATInteraction apptentiveAppInteraction] engage:ATEngagementMessageCenterEvent fromViewController:viewController];
 	
 	if (!didShowMessageCenter) {
-		UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MessageCenter" bundle:[ATConnect resourceBundle]];
-		UINavigationController *navigationController = [storyboard instantiateViewControllerWithIdentifier:@"NoPayload"];
+		UINavigationController *navigationController = [[ATConnect storyboard] instantiateViewControllerWithIdentifier:@"NoPayloadNavigation"];
 		
 		[viewController presentViewController:navigationController animated:YES completion:nil];
 	}

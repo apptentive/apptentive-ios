@@ -108,6 +108,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @property (nonatomic, readonly) UIColor *sentColor;
 @property (nonatomic, readonly) UIColor *failedColor;
 
+@property (nonatomic, assign) BOOL isSubsequentDisplay;
+
+@property (readonly, nonatomic) NSString *trimmedMessage;
+@property (readonly, nonatomic) BOOL messageComposerHasText;
+@property (readonly, nonatomic) BOOL messageComposerHasAttachments;
+@property (readonly, nonatomic) NSDictionary *bodyLengthDictionary;
+
 @end
 
 @implementation ATMessageCenterViewController
@@ -133,10 +140,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.dateFormatter = [[NSDateFormatter alloc] init];
 	self.dateFormatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"MMMMdyyyy" options:0 locale:[NSLocale currentLocale]];
 	self.dataSource.dateFormatter.dateFormat = self.dateFormatter.dateFormat; // Used to determine if date changed between messages
-	
-	self.greetingView.orientation = self.interfaceOrientation;
-	self.profileView.orientation = self.interfaceOrientation;
-	self.messageInputView.orientation = self.interfaceOrientation;
+
+	UIInterfaceOrientation interfaceOrientation = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad ? UIInterfaceOrientationPortrait : self.interfaceOrientation;
+	self.greetingView.orientation = interfaceOrientation;
+	self.profileView.orientation = interfaceOrientation;
+	self.messageInputView.orientation = interfaceOrientation;
 
 	self.navigationItem.title = self.interaction.title;
 	
@@ -161,8 +169,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	
 	self.messageInputView.titleLabel.text = self.interaction.composerTitle;
 	[self.messageInputView.sendButton setTitle:self.interaction.composerSendButtonTitle forState:UIControlStateNormal];
-	self.messageInputView.sendButton.enabled = [self sendButtonShouldBeEnabled];
-	
+
 	self.messageInputView.sendButton.accessibilityHint = ATLocalizedString(@"Sends the message.", @"Accessibility hint for 'send' button");
 	
 	self.messageInputView.clearButton.accessibilityLabel = ATLocalizedString(@"Discard", @"Accessibility label for 'discard' button");
@@ -212,7 +219,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	// Fix iOS 7 bug where contentSize gets set to zero
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fixContentSize:) name:UIKeyboardDidShowNotification object:nil];
 
+	[self.attachmentController addObserver:self forKeyPath:@"attachments" options:0 context:NULL];
 	[self.attachmentController viewDidLoad];
+
+	[self updateSendButtonEnabledStatus];
 }
 
 - (void)dealloc {
@@ -224,6 +234,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.profileView.emailField.delegate = nil;
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[self.attachmentController removeObserver:self forKeyPath:@"attachments"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -233,9 +244,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 	[UIView animateWithDuration:duration animations:^{
-		self.greetingView.orientation = toInterfaceOrientation;
-		self.profileView.orientation = toInterfaceOrientation;
-		self.messageInputView.orientation = toInterfaceOrientation;
+		UIInterfaceOrientation interfaceOrientation = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad ? UIInterfaceOrientationPortrait : toInterfaceOrientation;
+
+		self.greetingView.orientation = interfaceOrientation;
+		self.profileView.orientation = interfaceOrientation;
+		self.messageInputView.orientation = interfaceOrientation;
 		
 		self.tableView.tableHeaderView = self.greetingView;
 		[self resizeFooterView:nil];
@@ -245,20 +258,23 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 
-	NSString *message = self.messageInputView.messageView.text;
-	
 	if (self.attachmentController.active) {
 		self.state = ATMessageCenterStateComposing;
 		[self.attachmentController becomeFirstResponder];
-	} else if (message && ![message isEqualToString:@""]) {
+	} else if (self.messageComposerHasText || self.messageComposerHasAttachments) {
 		self.state = ATMessageCenterStateComposing;
 		[self.messageInputView.messageView becomeFirstResponder];
-	} else {
+	} else if (self.isSubsequentDisplay == NO) {
 		[self updateState];
 	}
-	[self resizeFooterView:nil];
-	[self engageGreetingViewEventIfNecessary];
-	[self scrollToLastMessageAnimated:NO];
+
+	if (self.isSubsequentDisplay == NO || self.attachmentController.active) {
+		[self resizeFooterView:nil];
+		[self engageGreetingViewEventIfNecessary];
+		[self scrollToLastMessageAnimated:NO];
+
+		self.isSubsequentDisplay = YES;
+	}
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -333,22 +349,23 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		cell = contextMessageCell;
 	}
 
+	cell.messageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
+
 	if (type == ATMessageCenterMessageTypeCompoundMessage || type == ATMessageCenterMessageTypeCompoundReply) {
 		UITableViewCell<ATMessageCenterCompoundCell> *compoundCell = (ATCompoundMessageCell *)cell;
 
 		compoundCell.collectionView.index = indexPath.section;
 		compoundCell.collectionView.dataSource = self;
 		compoundCell.collectionView.delegate = self;
+		[compoundCell.collectionView reloadData];
 
 		UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)compoundCell.collectionView.collectionViewLayout;
 		layout.sectionInset = UIEdgeInsetsMake(ATTACHMENT_MARGIN.height, ATTACHMENT_MARGIN.width, ATTACHMENT_MARGIN.height, ATTACHMENT_MARGIN.width);
 		layout.minimumInteritemSpacing = ATTACHMENT_MARGIN.width;
 		layout.itemSize = [ATAttachmentCell sizeForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN];
 
-		compoundCell.messageLabelHidden = compoundCell.messageLabel.text == nil;
+		compoundCell.messageLabelHidden = compoundCell.messageLabel.text.length == 0;
 	}
-
-	cell.messageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
 
 	return cell;
 }
@@ -367,7 +384,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	// iOS 7 requires this and there's no good way to instantiate a cell to sample, so we're hard-coding it for now.
 	CGFloat verticalMargin, horizontalMargin, minimumCellHeight;
 	BOOL statusLabelVisible = [self.dataSource statusOfMessageAtIndexPath:indexPath] != ATMessageCenterMessageStatusHidden;
-	CGFloat verticalFudgeFactor = 0.0;
 	
 	switch ([self.dataSource cellTypeAtIndexPath:indexPath]) {
 		case ATMessageCenterMessageTypeContextMessage:
@@ -379,8 +395,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 		case ATMessageCenterMessageTypeCompoundMessage:
 			horizontalMargin = MESSAGE_LABEL_TOTAL_HORIZONTAL_MARGIN;
-			verticalMargin = MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN] - ATTACHMENT_MARGIN.height;
-			verticalFudgeFactor = 19.0;
+			verticalMargin = MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0 + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN];
+			if (statusLabelVisible) {
+				verticalMargin += MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0 - STATUS_LABEL_MARGIN;
+			}
 			minimumCellHeight = 0;
 			break;
 
@@ -392,29 +410,26 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 		case ATMessageCenterMessageTypeCompoundReply:
 			horizontalMargin = REPLY_LABEL_TOTAL_HORIZONTAL_MARGIN;
-			verticalMargin = REPLY_LABEL_TOTAL_VERTICAL_MARGIN + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN] - ATTACHMENT_MARGIN.height;
-			minimumCellHeight = REPLY_CELL_MINIMUM_HEIGHT + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN] - ATTACHMENT_MARGIN.height;
+			verticalMargin = 33.5 + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN];
+			minimumCellHeight = REPLY_CELL_MINIMUM_HEIGHT + [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN] - MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0;
 			break;
 	}
 	
 	if (statusLabelVisible) {
-		verticalMargin += STATUS_LABEL_HEIGHT + STATUS_LABEL_MARGIN + verticalFudgeFactor;
+		verticalMargin += STATUS_LABEL_HEIGHT + STATUS_LABEL_MARGIN;
 	}
-	
+
 	NSString *labelText = [self.dataSource textOfMessageAtIndexPath:indexPath];
 	CGFloat effectiveLabelWidth = CGRectGetWidth(tableView.bounds) - horizontalMargin;
 	CGRect labelRect = CGRectZero;
-	if (labelText) {
+	if (labelText.length) {
 		NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:labelText attributes:@{NSFontAttributeName: BODY_FONT}];
 		labelRect = [attributedText boundingRectWithSize:CGSizeMake(effectiveLabelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
 	} else {
-		verticalMargin -= MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN;
-		if (statusLabelVisible) {
-			verticalMargin += 9.0;
-		}
+		verticalMargin -= MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0;
 	}
 	
-	double height = ceil(fmax(labelRect.size.height + verticalMargin, minimumCellHeight));
+	double height = ceil(fmax(labelRect.size.height + verticalMargin, minimumCellHeight) + 0.5);
 	
 	// "Due to an underlying implementation detail, you should not return values greater than 2009."
 	return fmin(height, 2009.0);
@@ -605,7 +620,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 #pragma mark - Text view delegate
 
 - (void)textViewDidChange:(UITextView *)textView {
-	self.messageInputView.sendButton.enabled = [self sendButtonShouldBeEnabled];
+	[self updateSendButtonEnabledStatus];
 	self.messageInputView.placeholderLabel.hidden = textView.text.length > 0;
 	
 	// Fix bug where text view doesn't scroll far enough down
@@ -678,59 +693,42 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (BOOL)sendButtonShouldBeEnabled {
-	NSString *inputText = self.messageInputView.messageView.text;
-
-	if (!inputText || inputText.length == 0) {
-		return NO;
-	}
-	
-	if ([inputText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length == 0) {
-		return NO;
-	}
-	
-	return YES;
-}
-
 - (IBAction)sendButtonPressed:(id)sender {
-	NSString *message = self.messageInputView.messageView.text;
+	NSString *message = self.trimmedMessage;
+	NSIndexPath *lastUserMessageIndexPath = self.dataSource.lastUserMessageIndexPath;
 	
-	if (message && ![message isEqualToString:@""]) {
-		NSIndexPath *lastUserMessageIndexPath = self.dataSource.lastUserMessageIndexPath;
+	if (self.contextMessage) {
+		[[ATBackend sharedBackend] sendAutomatedMessage:self.contextMessage];
+		self.contextMessage = nil;
+	}
+
+	if (self.messageComposerHasAttachments) {
+		[[ATBackend sharedBackend] sendCompoundMessageWithText:message attachments:self.attachmentController.attachments hiddenOnClient:NO];
+		[self.attachmentController clear];
+	} else {
+		[[ATBackend sharedBackend] sendTextMessageWithBody:message];
+	}
+
+	[self.attachmentController resignFirstResponder];
+	self.attachmentController.active = NO;
+
+	if ([self shouldShowProfileViewBeforeComposing:NO]) {
+		[self.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{@"required": @(self.interaction.profileRequired), @"trigger": @"automatic"}];
 		
-		if (self.contextMessage) {
-			[[ATBackend sharedBackend] sendAutomatedMessage:self.contextMessage];
-			self.contextMessage = nil;
-		}
+		self.state = ATMessageCenterStateWhoCard;
+	} else {
+		[self.messageInputView.messageView resignFirstResponder];
+		[self updateState];
+	}
 
-		NSArray *attachments = self.attachmentController.attachments;
-		if (attachments.count) {
-			[[ATBackend sharedBackend] sendCompoundMessageWithText:message attachments:attachments hiddenOnClient:NO];
-			[self.attachmentController clear];
-		} else {
-			[[ATBackend sharedBackend] sendTextMessageWithBody:message];
-		}
-
-		[self.attachmentController resignFirstResponder];
-
-		if ([self shouldShowProfileViewBeforeComposing:NO]) {
-			[self.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{@"required": @(self.interaction.profileRequired), @"trigger": @"automatic"}];
-			
-			self.state = ATMessageCenterStateWhoCard;
-		} else {
-			[self.messageInputView.messageView resignFirstResponder];
-			[self updateState];
-		}
-	
-		if (lastUserMessageIndexPath) {
-			@try {
-				//[self.tableView reloadRowsAtIndexPaths:@[lastUserMessageIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-			} @catch (NSException *exception) {
-				ATLogError(@"caught exception: %@: %@", [exception name], [exception description]);
-			}
+	if (lastUserMessageIndexPath) {
+		@try {
+			//[self.tableView reloadRowsAtIndexPaths:@[lastUserMessageIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+		} @catch (NSException *exception) {
+			ATLogError(@"caught exception: %@: %@", [exception name], [exception description]);
 		}
 	}
-	
+
 	self.messageInputView.messageView.text = @"";
 }
 
@@ -740,7 +738,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (IBAction)clear:(UIButton *)sender {
-	if (self.messageInputView.messageView.text.length == 0 && self.attachmentController.attachments.count == 0) {
+	if (!self.messageComposerHasText && !self.messageComposerHasAttachments) {
 		[self discardDraft];
 		return;
 	}
@@ -850,12 +848,37 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.navigationController pushViewController:[ATAboutViewController aboutViewControllerFromStoryboard] animated:YES];
 }
 
+#pragma mark - Key-value observing
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
+	[self updateSendButtonEnabledStatus];
+}
+
 #pragma mark - Private
 
+- (NSDictionary *)bodyLengthDictionary {
+	return @{ @"body_length": @(self.messageInputView.messageView.text.length) };
+}
+
+- (NSString *)trimmedMessage {
+	return [self.messageInputView.messageView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+
+- (BOOL)messageComposerHasText {
+	return self.trimmedMessage.length > 0;
+}
+
+- (BOOL)messageComposerHasAttachments {
+	return  self.attachmentController.attachments.count > 0;
+}
+
+- (void)updateSendButtonEnabledStatus {
+	self.messageInputView.sendButton.enabled = self.messageComposerHasText || self.messageComposerHasAttachments;
+}
+
 - (void)saveDraft {
-	NSString *message = self.messageInputView.messageView.text;
-	if (message) {
-		[[NSUserDefaults standardUserDefaults] setObject:message forKey:ATMessageCenterDraftMessageKey];
+	if (self.messageComposerHasText) {
+		[[NSUserDefaults standardUserDefaults] setObject:self.trimmedMessage forKey:ATMessageCenterDraftMessageKey];
 	} else {
 		[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATMessageCenterDraftMessageKey];
 	}
@@ -994,8 +1017,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			newFooter.hidden = NO;
 			
 			if (oldFooter == self.messageInputView) {
-				NSNumber *bodyLength = @(self.messageInputView.messageView.text.length);
-				[self.interaction engage:ATInteractionMessageCenterEventLabelComposeClose fromViewController:self userInfo:@{@"body_length": bodyLength}];
+				[self.interaction engage:ATInteractionMessageCenterEventLabelComposeClose fromViewController:self userInfo:self.bodyLengthDictionary];
 			}
 			
 			if (newFooter == self.messageInputView) {
@@ -1055,7 +1077,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		verticalOffsetLimit = self.tableView.contentSize.height - (CGRectGetHeight(self.tableView.bounds) - self.tableView.contentInset.bottom);
 	}
 	
-	verticalOffsetLimit = fmax(0, verticalOffsetLimit);
+	verticalOffsetLimit = fmax(-self.tableView.contentInset.top, verticalOffsetLimit);
 	verticalOffset = fmin(verticalOffset, verticalOffsetLimit);
 	CGPoint contentOffset = CGPointMake(0,  verticalOffset);
 	
@@ -1115,13 +1137,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)keyboardDidShow:(NSNotification *)notification {
-	NSNumber *bodyLength = @(self.messageInputView.messageView.text.length);
-	[self.interaction engage:ATInteractionMessageCenterEventLabelKeyboardOpen fromViewController:self userInfo:@{@"body_length": bodyLength}];
+	[self.interaction engage:ATInteractionMessageCenterEventLabelKeyboardOpen fromViewController:self userInfo:self.bodyLengthDictionary];
 }
 
 - (void)keyboardDidHide:(NSNotification *)notification {
-	NSNumber *bodyLength = @(self.messageInputView.messageView.text.length);
-	[self.interaction engage:ATInteractionMessageCenterEventLabelKeyboardClose fromViewController:self userInfo:@{@"body_length": bodyLength}];
+	[self.interaction engage:ATInteractionMessageCenterEventLabelKeyboardClose fromViewController:self userInfo:self.bodyLengthDictionary];
 }
 
 - (NSString *)draftMessage {
@@ -1171,8 +1191,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.attachmentController clear];
 	[self.attachmentController resignFirstResponder];
 	
-	self.messageInputView.sendButton.enabled = [self sendButtonShouldBeEnabled];
-	
+	[self updateSendButtonEnabledStatus];
 	[self updateState];
 	
 	[self resizeFooterView:nil];

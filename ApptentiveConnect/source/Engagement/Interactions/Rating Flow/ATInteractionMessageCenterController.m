@@ -39,8 +39,7 @@
 	if (!self.viewController) {
 		ATLogError(@"No view controller to present Message Center interface!!");
 	} else {
-		UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MessageCenter" bundle:[ATConnect resourceBundle]];
-		UINavigationController *navigationController = [storyboard instantiateInitialViewController];
+		UINavigationController *navigationController = [[ATConnect storyboard] instantiateViewControllerWithIdentifier:@"MessageCenterNavigation"];
 		
         ATMessageCenterViewController *messageCenter = navigationController.viewControllers.firstObject;
 		messageCenter.interaction = self.interaction;

@@ -10,4 +10,9 @@
 
 @implementation ATMessageCenterContextMessageCell
 
+- (void)awakeFromNib {
+	self.messageLabel.textContainerInset = UIEdgeInsetsZero;
+	self.messageLabel.textContainer.lineFragmentPadding = 0;
+}
+
 @end

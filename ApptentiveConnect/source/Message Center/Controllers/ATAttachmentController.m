@@ -38,8 +38,6 @@ NSString *const ATMessageCenterAttachmentsArchiveFilename = @"DraftAttachments";
 	self.collectionView.layer.masksToBounds = NO;
 	self.collectionView.layer.shadowColor = [UIColor grayColor].CGColor;
 
-	self.mutableAttachments = [NSKeyedUnarchiver unarchiveObjectWithFile:self.archivePath];
-
 	CGSize marginWithInsets = CGSizeMake(ATTACHMENT_MARGIN.width - (ATTACHMENT_INSET.left), ATTACHMENT_MARGIN.height - (ATTACHMENT_INSET.top));
 	CGFloat height = [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:marginWithInsets];
 	CGFloat bottomY = CGRectGetMaxY(self.collectionView.frame);
@@ -50,9 +48,13 @@ NSString *const ATMessageCenterAttachmentsArchiveFilename = @"DraftAttachments";
 	layout.minimumInteritemSpacing = ATTACHMENT_MARGIN.width;
 	layout.itemSize = [ATAttachmentCell sizeForScreen:[UIScreen mainScreen] withMargin:marginWithInsets];
 
+	[self willChangeValueForKey:@"attachments"];
+	self.mutableAttachments = [NSKeyedUnarchiver unarchiveObjectWithFile:self.archivePath];
+
 	if (![self.mutableAttachments isKindOfClass:[NSMutableArray class]]) {
 		self.mutableAttachments = [NSMutableArray array];
 	}
+	[self didChangeValueForKey:@"attachments"];
 
 	self.collectionViewFooterSize = ((UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout).footerReferenceSize;
 
@@ -94,8 +96,10 @@ NSString *const ATMessageCenterAttachmentsArchiveFilename = @"DraftAttachments";
 }
 
 - (void)clear {
+	[self willChangeValueForKey:@"attachments"];
 	[self.mutableAttachments removeAllObjects];
 	_attachments = nil;
+	[self didChangeValueForKey:@"attachments"];
 
 	[self updateBadge];
 	[self saveDraft];
@@ -122,10 +126,12 @@ NSString *const ATMessageCenterAttachmentsArchiveFilename = @"DraftAttachments";
 	UICollectionViewCell *cell = (UICollectionViewCell *)sender.superview.superview;
 	NSIndexPath *indexPath = [self.collectionView indexPathForCell:cell];
 
+	[self willChangeValueForKey:@"attachments"];
 	[self.mutableAttachments removeObjectAtIndex:indexPath.item];
-	[self.collectionView deleteItemsAtIndexPaths:@[indexPath]];
 	_attachments = nil;
+	[self didChangeValueForKey:@"attachments"];
 
+	[self.collectionView deleteItemsAtIndexPaths:@[indexPath]];
 	[self updateBadge];
 }
 
@@ -207,8 +213,10 @@ NSString *const ATMessageCenterAttachmentsArchiveFilename = @"DraftAttachments";
 }
 
 - (void)insertImage:(UIImage *)image {
+	[self willChangeValueForKey:@"attachments"];
 	[self.mutableAttachments addObject:image];
 	_attachments = nil;
+	[self didChangeValueForKey:@"attachments"];
 
 	[self.collectionView reloadData];
 

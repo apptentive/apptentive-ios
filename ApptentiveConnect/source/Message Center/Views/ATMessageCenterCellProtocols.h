@@ -10,7 +10,7 @@
 
 @protocol ATMessageCenterCell <NSObject>
 
-@property (weak, nonatomic) UILabel *messageLabel;
+@property (weak, nonatomic) UITextView *messageLabel;
 
 @end
 

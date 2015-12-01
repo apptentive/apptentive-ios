@@ -36,8 +36,7 @@
 		[_currentBanner hide:self];
 	}
 	
-	UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MessageCenter" bundle:[ATConnect resourceBundle]];
-	ATBannerViewController *banner = [storyboard instantiateViewControllerWithIdentifier:@"Banner"];
+	ATBannerViewController *banner = [[ATConnect storyboard] instantiateViewControllerWithIdentifier:@"Banner"];
 	
 	banner.imageURL = imageURL;
 	banner.titleText = title;

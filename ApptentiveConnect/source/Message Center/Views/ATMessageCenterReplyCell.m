@@ -11,13 +11,9 @@
 
 @implementation ATMessageCenterReplyCell
 
-- (void)layoutSubviews {
-	[super layoutSubviews];
-	
-	// iOS 7 doesn't support automatic max layout width, so we have to set this explicitly.
-	self.messageLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.contentView.bounds) - 8.0 - 36.0 - 30.0;
-	
-	[super layoutSubviews];
+- (void)awakeFromNib {
+	self.messageLabel.textContainerInset = UIEdgeInsetsMake(-1, 0, 0, 0);
+	self.messageLabel.textContainer.lineFragmentPadding = 0;
 }
 
 @end

@@ -298,7 +298,7 @@ static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	
 	NSNumber *enabled = [defaults objectForKey:ATAppConfigurationMetricsEnabledPreferenceKey];
-	if (enabled) {
+	if (enabled != nil) {
 		metricsEnabled = [enabled boolValue];
 	}
 }

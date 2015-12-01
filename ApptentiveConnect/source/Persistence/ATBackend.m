@@ -759,7 +759,7 @@ static NSURLCache *imageCache = nil;
 - (void)checkForMessagesAtForegroundRefreshInterval {
 	NSNumber *refreshIntervalNumber = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterForegroundRefreshIntervalKey];
 	int refreshInterval = 8;
-	if (refreshIntervalNumber) {
+	if (refreshIntervalNumber != nil) {
 		refreshInterval = [refreshIntervalNumber intValue];
 		refreshInterval = MAX(4, refreshInterval);
 	}
@@ -770,7 +770,7 @@ static NSURLCache *imageCache = nil;
 - (void)checkForMessagesAtBackgroundRefreshInterval {
 	NSNumber *refreshIntervalNumber = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey];
 	int refreshInterval = 60;
-	if (refreshIntervalNumber) {
+	if (refreshIntervalNumber != nil) {
 		refreshInterval = [refreshIntervalNumber intValue];
 		refreshInterval = MAX(30, refreshInterval);
 	}

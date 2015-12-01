@@ -369,15 +369,15 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		commerce[@"affiliation"] = affiliation;
 	}
 	
-	if (revenue) {
+	if (revenue != nil) {
 		commerce[@"revenue"] = revenue;
 	}
 	
-	if (shipping) {
+	if (shipping != nil) {
 		commerce[@"shipping"] = shipping;
 	}
 	
-	if (tax) {
+	if (tax != nil) {
 		commerce[@"tax"] = tax;
 	}
 	
@@ -414,11 +414,11 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		commerceItem[@"category"] = category;
 	}
 	
-	if (price) {
+	if (price != nil) {
 		commerceItem[@"price"] = price;
 	}
 	
-	if (quantity) {
+	if (quantity != nil) {
 		commerceItem[@"quantity"] = quantity;
 	}
 	

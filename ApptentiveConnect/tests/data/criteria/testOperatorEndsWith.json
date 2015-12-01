@@ -1,0 +1,118 @@
+{
+  "$and": [
+    {
+      "device/custom_data/string_qwerty": {
+        "$ends_with": "werty"
+      }
+    },
+    {
+      "device/custom_data/string_qwerty": {
+        "$ends_with": "WERTY"
+      }
+    },
+    {
+      "device/custom_data/string_qwerty": {
+        "$ends_with": "qwerty"
+      }
+    },
+    {
+      "device/custom_data/string_qwerty": {
+        "$ends_with": "QWERTY"
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/string_qwerty": {
+          "$ends_with": "qwert"
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/string_qwerty": {
+          "$ends_with": "QWERT"
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/string_qwerty": {
+          "$ends_with": "foo"
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/string_qwerty": {
+          "$ends_with": null
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/string_qwerty": {
+          "$ends_with": 5
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/string_qwerty": {
+          "$ends_with": {
+            "_type": "version",
+            "version": "1.0.0"
+          }
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/number_5": {
+          "$ends_with": "five"
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/number_5": {
+          "$ends_with": 5
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/key_with_null_value": {
+          "$ends_with": null
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/key_with_null_value": {
+          "$ends_with": ""
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/key_with_null_value": {
+          "$ends_with": 5
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/non_existent_key": {
+          "$ends_with": 5
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/non_existent_key": {
+          "$ends_with": ""
+        }
+      }
+    }
+  ]
+}

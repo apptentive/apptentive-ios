@@ -1,0 +1,44 @@
+{
+  "$and": [
+    {
+      "device/custom_data/number_5": {
+        "$exists": true
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/number_5": {
+          "$exists": false
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/number_5": {
+          "$exists": 5
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/number_5": {
+          "$exists": null
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/key_with_null_value": {
+          "$exists": true
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/non_existent_key": {
+          "$exists": true
+        }
+      }
+    }
+  ]
+}

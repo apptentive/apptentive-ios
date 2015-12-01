@@ -1,0 +1,78 @@
+{
+  "$and": [
+    {
+      "device/custom_data/number_5": {
+        "$gte": -5
+      }
+    },
+    {
+      "device/custom_data/number_5": {
+        "$gte": 0
+      }
+    },
+    {
+      "device/custom_data/number_5": {
+        "$gte": 5
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/number_5": {
+          "$gte": 6
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/number_5": {
+          "$gte": 10
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/number_5": {
+          "$gte": null
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/number_5": {
+          "$gte": "string"
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/number_5": {
+          "$gte": true
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/number_5": {
+          "$gte": {
+            "_type": "datetime",
+            "sec": 100000
+          }
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/key_with_null_value": {
+          "$gte": 0
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/non_existent_key": {
+          "$gte": 0
+        }
+      }
+    }
+  ]
+}

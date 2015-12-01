@@ -1,0 +1,44 @@
+{
+  "$or": [
+    {
+      "code_point/switch.code.point/invokes/total": 0,
+      "code_point/test.code.point/invokes/total": {
+        "$gt": 2
+      }
+    },
+    {
+      "code_point/switch.code.point/invokes/total": 1,
+      "code_point/test.code.point/invokes/total": {
+        "$gte": 2
+      }
+    },
+    {
+      "code_point/switch.code.point/invokes/total": 2,
+      "code_point/test.code.point/invokes/total": {
+        "$ne": 2
+      }
+    },
+    {
+      "code_point/switch.code.point/invokes/total": 3,
+      "code_point/test.code.point/invokes/total": {
+        "$eq": 2
+      }
+    },
+    {
+      "code_point/switch.code.point/invokes/total": 4,
+      "code_point/test.code.point/invokes/total": 2
+    },
+    {
+      "code_point/switch.code.point/invokes/total": 5,
+      "code_point/test.code.point/invokes/total": {
+        "$lte": 2
+      }
+    },
+    {
+      "code_point/switch.code.point/invokes/total": 6,
+      "code_point/test.code.point/invokes/total": {
+        "$lt": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "$not": {
+    "$or": [
+      {
+        "person/custom_data/foo": {
+          "$exists": null
+        }
+      },
+      {
+        "person/custom_data/key_with_null_value": {
+          "$exists": true
+        }
+      }
+    ]
+  }
+}

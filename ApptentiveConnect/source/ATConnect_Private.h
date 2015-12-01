@@ -43,6 +43,7 @@ extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 
 - (void)showNotificationBannerForMessage:(ATMessage *)message;
 
++ (NSDictionary *)timestampObjectWithNumber:(NSNumber *)seconds;
 @end
 
 /*! Replacement for NSLocalizedString within ApptentiveConnect. Pulls

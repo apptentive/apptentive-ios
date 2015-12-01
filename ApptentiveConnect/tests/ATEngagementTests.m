@@ -257,10 +257,10 @@
 	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
 	
-	invocation.criteria = @{@"sdk/version": kATConnectVersionString};
+	invocation.criteria = @{@"sdk/version": [ATConnect versionObjectWithVersion:kATConnectVersionString]};
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Default value should be current version.");
 	
-	invocation.criteria = @{@"sdk/version": @"1.4.2"};
+	invocation.criteria = @{@"sdk/version": [ATConnect versionObjectWithVersion:@"1.4.2"]};
 	usageData.sdkVersion = @"1.4.2";
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"SDK Version should be 1.4.2");
 	
@@ -297,11 +297,11 @@
 	NSTimeInterval timestamp = [usageData.currentTime doubleValue];
 	XCTAssertTrue(timestamp < currentTimestamp && timestamp > (currentTimestamp - 5), @"Current time not a believable value.");
 	
-	invocation.criteria = @{@"current_time":@{@"$gt": @1397598108.63843}};
+	invocation.criteria = @{@"current_time":@{@"$gt": [ATConnect timestampObjectWithDate:[NSDate dateWithTimeIntervalSince1970:1397598108.63843]]}};
 	usageData.currentTime = @1397598109;
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Current time criteria not met.");
 	
-	invocation.criteria = @{@"current_time":@{@"$lt": @1183135260, @"$gt": @465498000}};
+	invocation.criteria = @{@"current_time":@{@"$lt": [ATConnect timestampObjectWithDate:[NSDate dateWithTimeIntervalSince1970:1183135260]], @"$gt": [ATConnect timestampObjectWithDate:[NSDate dateWithTimeIntervalSince1970:465498000]]}};
 	usageData.currentTime = @1183135259.5;
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Current time criteria not met.");
 	
@@ -948,10 +948,10 @@
 	
 	[[ATEngagementBackend sharedBackend] didReceiveNewTargets:targets andInteractions:interactions maxAge:60];
 	
-	XCTAssertTrue([canShow isValid], @"Invocation should be valid.");
+	XCTAssertTrue([canShow criteriaAreMet], @"Invocation should be valid.");
 	XCTAssertTrue([[ATConnect sharedConnection] canShowInteractionForEvent:@"canShow"], @"If invocation is valid, it will be shown for the next targeted event.");
 	
-	XCTAssertFalse([willNotShow isValid], @"Invocation should not be valid.");
+	XCTAssertFalse([willNotShow criteriaAreMet], @"Invocation should not be valid.");
 	XCTAssertFalse([[ATConnect sharedConnection] canShowInteractionForEvent:@"cannotShow"], @"If invocation is not valid, it will not be shown for the next targeted event.");
 }
 

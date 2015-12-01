@@ -90,6 +90,57 @@
 	XCTAssertTrue([ATUtilities versionString:@"5.0" isLessThanVersionString:@"6.0.1"], @"Should be less");
 }
 
+- (void)testComplexVersionComparisons {
+	NSArray *versions = @[
+						  @[@"", @"=", @""],
+						  @[@" ", @"=", @" "],
+						  @[@"1.0.0.0", @"=", @"1"],
+						  @[@"1.0.0.0", @"=", @"1.0"],
+						  @[@"1.0.0.0", @"=", @"1.0.0"],
+						  @[@"1.0.0.0", @"=", @"1.0.0.0"],
+						  @[@"1.0.0", @"=", @"1.0.0.0"],
+						  @[@"1.0.", @"=", @"1.0.0.0"],
+						  @[@"1", @"=", @"1.0.0.0"],
+						  @[@"1.00", @"=", @"1.00.00.00"],
+						  @[@"1.01", @"=", @"1.1"],
+						  @[@"1.11.111.1111", @"=", @"1.11.111.1111"],
+						  @[@"1.2.3.4", @"=", @"1.2.3.4"],
+						  @[@"1.2.3.4", @"<", @"1.2.3.5"],
+						  @[@"1.2.3", @"<", @"1.2.4"],
+						  @[@"1.2", @"<", @"1.3"],
+						  @[@"1", @"<", @"2"],
+						  @[@"1.2.3.5", @">", @"1.2.3.4"],
+						  @[@"1.2.4", @">", @"1.2.3"],
+						  @[@"1.3", @">", @"1.2"],
+						  @[@"2", @">", @"1"],
+						  @[@"0", @"=", @"0"],
+						  @[@"0", @"=", @"0.0"],
+						  @[@"0", @"=", @"0.0.0"],
+						  @[@"0", @"=", @"0.0.0.0"],
+						  @[@"1", @"=", @"01.0.0.0"],
+						  @[@"0", @"<", @"0.0.0.1"],
+						  @[@"0", @"<", @"0.0.0.1"],
+						  @[@"0", @"<", @"1"],
+						  @[@"0", @"<", @"1"],
+						  @[@"0", @"=", @"0"],
+						  @[@"1", @"=", @"1"],
+						  @[@"1", @">", @"0"],
+						  @[@"0.0.0.1", @">", @"0"]
+						];
+	for (NSArray *versionCheck in versions) {
+		NSString *left = versionCheck[0];
+		NSString *compare = versionCheck[1];
+		NSString *right = versionCheck[2];
+		if ([compare isEqualToString:@"="]) {
+			XCTAssertTrue([ATUtilities versionString:left isEqualToVersionString:right], @"%@ not equal to %@", left, right);
+		} else if ([compare isEqualToString:@">"]) {
+			XCTAssertTrue([ATUtilities versionString:left isGreaterThanVersionString:right], @"%@ not greater than %@", left, right);
+		} else if ([compare isEqualToString:@"<"]) {
+			XCTAssertTrue([ATUtilities versionString:left isLessThanVersionString:right], @"%@ not less than %@", left, right);
+		}
+	}
+}
+
 - (void)testCacheControlParsing {
 	XCTAssertEqual(0., [ATUtilities maxAgeFromCacheControlHeader:nil], @"Should be same");
 	XCTAssertEqual(0., [ATUtilities maxAgeFromCacheControlHeader:@""], @"Should be same");

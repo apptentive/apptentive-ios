@@ -7,8 +7,10 @@
 //
 
 #import "ATInteractionInvocation.h"
+
 #import "ATEngagementBackend.h"
 #import "ATInteractionUsageData.h"
+#import "ATUtilities.h"
 
 @implementation ATInteractionInvocation
 
@@ -110,13 +112,19 @@
 		@try {
 			NSPredicate *predicate = [self criteriaPredicate];
 			if (predicate) {
-				criteriaAreMet = [predicate evaluateWithObject:[usageData predicateEvaluationDictionary]];
-				if (!criteriaAreMet) {
-					//TODO: Log this information in a more user friendly and useful way.
-					
-					//ATLogInfo(@"Interaction predicate failed evaluation.");
-					//ATLogInfo(@"Predicate: %@", predicate);
-					//ATLogInfo(@"Interaction usage data: %@", [usageData predicateEvaluationDictionary]);
+				NSDictionary *predicateEvaluationDictionary = [usageData predicateEvaluationDictionary];
+				if (predicateEvaluationDictionary) {
+					criteriaAreMet = [predicate evaluateWithObject:predicateEvaluationDictionary];
+					if (!criteriaAreMet) {
+						//TODO: Log this information in a more user friendly and useful way.
+						
+						//ATLogInfo(@"Interaction predicate failed evaluation.");
+						//ATLogInfo(@"Predicate: %@", predicate);
+						//ATLogInfo(@"Interaction usage data: %@", [usageData predicateEvaluationDictionary]);
+					}
+				} else {
+					ATLogError(@"Could not create predicate evaluation data.");
+					criteriaAreMet = NO;
 				}
 			} else {
 				ATLogError(@"Could not create a valid criteria predicate for the Interaction criteria: %@", self.criteria);
@@ -133,151 +141,328 @@
 }
 
 - (NSPredicate *)criteriaPredicate {
-	BOOL error = NO;
-	NSPredicate *criteriaPredicate = [ATInteractionInvocation predicateForInteractionCriteria:self.criteria hasError:&error];
-	if (!criteriaPredicate || error) {
-		return nil;
-	}
+	NSPredicate *criteriaPredicate = [ATInteractionInvocation compoundPredicateWithCriteria:self.criteria];
 	
 	return criteriaPredicate;
 }
 
-+ (NSPredicate *)predicateForCriteria:(NSString *)criteria operatorExpression:(NSDictionary *)operatorExpression hasError:(BOOL *)hasError {
-	NSMutableArray *predicates = [NSMutableArray array];
++ (NSCompoundPredicate *)compoundPredicateWithCriteria:(NSDictionary *)criteria {
+	NSMutableArray *subPredicates = [NSMutableArray array];
 	
-	for (NSString *operator in operatorExpression) {
-		NSObject *value = operatorExpression[operator];
-		if ([operator isEqualToString:@"$not"]) {
-			if (![value isKindOfClass:[NSDictionary class]]) {
-				ATLogError(@"Expected operator of $not expression to be dictionary.");
-				*hasError = YES;
-				break;
+	for (NSString *key in criteria) {
+		NSObject *parameter = [criteria objectForKey:key];
+		if ([parameter isKindOfClass:[NSString class]]) {
+			parameter = [(NSString *)parameter stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+		}
+
+		NSMutableArray *trimmedKeyParts = [NSMutableArray array];
+		for (NSString *part in [key componentsSeparatedByString:@"/"]) {
+			[trimmedKeyParts addObject:[part stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+		}
+		NSString *trimmedKey = [trimmedKeyParts componentsJoinedByString:@"/"];
+
+		NSPredicate *predicate = nil;
+
+		BOOL parameterIsArray = [parameter isKindOfClass:[NSArray class]];
+		BOOL parameterIsDictionary = [parameter isKindOfClass:[NSDictionary class]];
+		BOOL parameterIsComplexType = parameterIsDictionary && [((NSDictionary *)parameter).allKeys containsObject:@"_type"];
+		BOOL parameterIsPrimitiveType = [parameter isKindOfClass:[NSString class]] || [parameter isKindOfClass:[NSNumber class]] || [parameter isKindOfClass:[NSNull class]];
+		BOOL hasError = NO;
+
+		if (parameterIsPrimitiveType || parameterIsComplexType) {
+			predicate = [self compoundPredicateForKeyPath:trimmedKey operatorsAndValues:@{ @"==": parameter }];
+		} else if (parameterIsArray) {
+			NSCompoundPredicateType predicateType = [self compoundPredicateTypeFromString:trimmedKey hasError:&hasError];
+			if (!hasError) {
+				predicate = [self compoundPredicateWithType:predicateType criteriaArray:(NSArray *)parameter];
 			}
-			NSDictionary *subExpression = (NSDictionary *)value;
-			NSPredicate *subPredicate = [ATInteractionInvocation predicateForCriteria:criteria operatorExpression:subExpression hasError:hasError];
-			if (!subPredicate || *hasError) {
-				break;
+		} else if (parameterIsDictionary) {
+			NSDictionary *dictionaryValue = (NSDictionary *)parameter;
+			if ([dictionaryValue.allKeys.firstObject isEqualToString:@"$not"]) {
+				NSString *notKey = dictionaryValue.allKeys.firstObject;
+				BOOL hasError;
+				NSCompoundPredicateType predicateType = [self compoundPredicateTypeFromString:notKey hasError:&hasError];
+				if (!hasError) {
+					predicate = [self compoundPredicateWithType:predicateType criteriaArray:@[@{trimmedKey: dictionaryValue[notKey]}]];
+				}
+			} else if ([trimmedKey isEqualToString:@"$not"]) {
+				// Work around "Common Law Feature" where $not expressions are incorrect
+				NSCompoundPredicateType predicateType = [self compoundPredicateTypeFromString:trimmedKey hasError:&hasError];
+				if (!hasError) {
+					predicate = [self compoundPredicateWithType:predicateType criteriaArray:@[parameter]];
+				}
+			} else {
+				predicate = [self compoundPredicateForKeyPath:trimmedKey operatorsAndValues:(NSDictionary *)parameter];
 			}
-			NSCompoundPredicate *predicate = [[NSCompoundPredicate alloc] initWithType:NSNotPredicateType subpredicates:@[subPredicate]];
-			[predicates addObject:predicate];
-			predicate = nil;
+		}
+
+		if (predicate) {
+			[subPredicates addObject:predicate];
 		} else {
-			NSString *equalitySymbol = nil;
-			BOOL isExists = NO;
-			if ([operator isEqualToString:@"=="]) {
-				equalitySymbol = @"==";
-			} else if ([operator isEqualToString:@"$gt"]) {
-				equalitySymbol = @">";
-			} else if ([operator isEqualToString:@"$gte"]) {
-				equalitySymbol = @">=";
-			} else if ([operator isEqualToString:@"$lt"]) {
-				equalitySymbol = @"<";
-			} else if ([operator isEqualToString:@"$lte"]) {
-				equalitySymbol = @"<=";
-			} else if ([operator isEqualToString:@"$ne"]) {
-				equalitySymbol = @"!=";
-			} else if ([operator isEqualToString:@"$contains"]) {
-				equalitySymbol = @"CONTAINS[c]";
-			} else if ([operator isEqualToString:@"$starts_with"]) {
-				equalitySymbol = @"BEGINSWITH[c]";
-			} else if ([operator isEqualToString:@"$ends_with"]) {
-				equalitySymbol = @"ENDSWITH[c]";
-			} else if ([operator isEqualToString:@"$exists"]) {
-				isExists = YES;
-			} else {
-				ATLogError(@"Unrecognized operator symbol: %@", operator);
-				*hasError = YES;
-				break;
-			}
-			
-			if (isExists) {
-				if (![value isKindOfClass:[NSNumber class]]) {
-					ATLogError(@"Given non-bool argument to $exists.");
-					*hasError = YES;
-					break;
-				}
-				BOOL operandValue = [(NSNumber *)value boolValue];
-				if (operandValue) {
-					equalitySymbol = @"!=";
-				} else {
-					equalitySymbol = @"==";
-				}
-				NSString *placeholder = [[@"(%K " stringByAppendingString:equalitySymbol] stringByAppendingString:@" nil)"];
-				NSPredicate *predicate = [NSPredicate predicateWithFormat:placeholder, criteria];
-				[predicates addObject:predicate];
-			} else {
-				NSString *placeholder = [[@"(%K " stringByAppendingString:equalitySymbol] stringByAppendingString:@" %@)"];
-				NSPredicate *predicate = [NSCompoundPredicate predicateWithFormat:placeholder argumentArray:@[criteria, value]];
-				[predicates addObject:predicate];
-			}
-			
-			// Save the codepoint/interaction, to later be used in predicate evaluation object.
-			if ([criteria hasPrefix:@"code_point/"]) {
-				NSArray *components = [criteria componentsSeparatedByString:@"/"];
-				if (components.count > 1) {
-					NSString *codePoint = [components objectAtIndex:1];
-					[[ATEngagementBackend sharedBackend] codePointWasSeen:codePoint];
-				}
-			}
-			else if ([criteria hasPrefix:@"interactions/"]) {
-				NSArray *components = [criteria componentsSeparatedByString:@"/"];
-				if (components.count > 1) {
-					NSString *interactionID = [components objectAtIndex:1];
-					[[ATEngagementBackend sharedBackend] interactionWasSeen:interactionID];
-				}
-				
-			}
+			return nil;
 		}
 	}
 	
+	NSCompoundPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:subPredicates];
 	
-	if (*hasError) {
-		return nil;
-	} else {
-		NSCompoundPredicate *result = [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:predicates];
-		if (!result) {
-			*hasError = YES;
+	return compoundPredicate;
+}
+
++ (NSCompoundPredicate *)compoundPredicateWithType:(NSCompoundPredicateType)type criteriaArray:(NSArray *)criteriaArray{
+	NSMutableArray *subPredicates = [NSMutableArray array];
+	
+	for (NSDictionary *criteria in criteriaArray) {
+		NSPredicate *predicate = [self compoundPredicateWithCriteria:criteria];
+		if (predicate) {
+			[subPredicates addObject:predicate];
+		} else {
+			return nil;
 		}
-		return result;
+	}
+	
+	NSCompoundPredicate *compoundPredicate = [[NSCompoundPredicate alloc] initWithType:type subpredicates:subPredicates];
+	
+	return compoundPredicate;
+}
+
++ (NSCompoundPredicate *)compoundPredicateForKeyPath:(NSString *)keyPath operatorsAndValues:(NSDictionary *)operatorsAndValues {
+	NSMutableArray *subPredicates = [NSMutableArray array];
+	
+	for (NSString *operatorString in operatorsAndValues) {
+		NSObject *parameter = operatorsAndValues[operatorString];
+		if ([parameter isKindOfClass:[NSString class]]) {
+			parameter = [(NSString *)parameter stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+		}
+		
+		NSPredicate *predicate = nil;
+
+		BOOL parameterIsDictionary = [parameter isKindOfClass:[NSDictionary class]];
+		BOOL parameterIsPrimitiveType = [parameter isKindOfClass:[NSString class]] || [parameter isKindOfClass:[NSNumber class]] || [parameter isKindOfClass:[NSNull class]];
+
+		if ([operatorString isEqualToString:@"$exists"]) {
+			if ([parameter isEqual:@YES] || [parameter isEqual:@NO]) {
+				NSString *predicateFormatString = [[@"(%K " stringByAppendingString:([(NSNumber *)parameter boolValue] ? @"!=" : @"==")] stringByAppendingString:@" nil)"];
+				predicate = [NSPredicate predicateWithFormat:predicateFormatString, keyPath];
+			} else {
+				predicate = [NSPredicate predicateWithValue:NO];
+			}
+		} else if ([operatorString isEqualToString:@"$before"] || [operatorString isEqualToString:@"$after"]) {
+			predicate = [NSPredicate predicateWithBlock:^BOOL(id  _Nonnull evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+				NSDictionary *complexValue = [evaluatedObject valueForKeyPath:keyPath];
+
+				// $before and $after work with datetimes only.
+				if ([complexValue[@"_type"] isEqualToString:@"datetime"]) {
+					NSNumber *fieldValue = (NSNumber *)[complexValue valueForKey:@"sec"];
+					NSNumber *parameterNumber = (NSNumber *)parameter;
+
+					if (fieldValue && parameterNumber) {
+						NSTimeInterval fieldSeconds = fieldValue.doubleValue;
+						NSTimeInterval parameterSeconds = parameterNumber.doubleValue + [[NSDate date] timeIntervalSince1970];
+						if ([operatorString isEqualToString:@"$before"]) {
+							return fieldSeconds < parameterSeconds;
+						} else {
+							return fieldSeconds > parameterSeconds;
+						}
+					}
+				}
+
+				return NO;
+			}];
+		} else if (parameterIsPrimitiveType) {
+			BOOL hasError;
+			NSPredicateOperatorType operatorType = [self predicateOperatorTypeFromString:operatorString hasError:&hasError];
+			if (!hasError && [self operator:operatorType isValidForParameter:parameter]) {
+				predicate = [self predicateWithLeftKeyPath:keyPath rightValue:parameter operatorType:operatorType];
+			} else {
+				predicate = [NSPredicate predicateWithValue:NO];
+			}
+		} else if (parameterIsDictionary) {
+			predicate = [NSCompoundPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+				BOOL hasError;
+				NSPredicateOperatorType operatorType = [self predicateOperatorTypeFromString:operatorString hasError:&hasError];
+				if (!hasError && [self operator:operatorType isValidForParameter:parameter]) {
+					NSPredicate *predicate = [self predicateWithLeftKeyPath:keyPath forObject:evaluatedObject rightComplexObject:(NSDictionary *)parameter operatorType:operatorType];
+					
+					return [predicate evaluateWithObject:nil];
+				} else {
+					return NO;
+				}
+			}];
+		}
+		
+		if (predicate) {
+			[subPredicates addObject:predicate];
+		} else {
+			return nil;
+		}
+	}
+	
+	NSCompoundPredicate *compoundPredicate = [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:subPredicates];
+
+	return compoundPredicate;
+}
+
++ (NSPredicate *)predicateWithLeftKeyPath:(NSString *)leftKeyPath rightValue:(nullable id)rightValue operatorType:(NSPredicateOperatorType)operatorType {
+	
+	[ATInteractionUsageData keyPathWasSeen:leftKeyPath];
+	
+	NSExpression *leftExpression = [NSExpression expressionForKeyPath:leftKeyPath];
+	NSExpression *rightExpression = [NSExpression expressionForConstantValue:rightValue];
+	
+	return [self predicateWithLeftExpression:leftExpression rightExpression:rightExpression operatorType:operatorType];
+}
+
++ (NSPredicate *)predicateWithLeftKeyPath:(NSString *)keyPath forObject:(NSDictionary *)context rightComplexObject:(NSDictionary *)rightComplexObject operatorType:(NSPredicateOperatorType)operatorType {
+	NSDictionary *leftComplexObject = [context valueForKeyPath:keyPath];
+	NSString *type = leftComplexObject[@"_type"];
+	NSString *rightType = rightComplexObject[@"_type"];
+	if (![type isEqualToString:rightType]) {
+		ATLogError(@"Criteria Complex Type objects must be of the same type!");
+		return nil;
+	}
+	
+	NSObject *leftValue;
+	NSObject *rightValue;
+	
+	if ([type isEqualToString:@"version"]) {
+		NSString *leftVersion = leftComplexObject[@"version"];
+		NSString *rightVersion = rightComplexObject[@"version"];
+		
+		NSComparisonResult result = [ATUtilities compareVersionString:leftVersion toVersionString:rightVersion];
+		
+		switch (result) {
+			case NSOrderedAscending:
+				leftValue = @0;
+				rightValue = @1;
+				break;
+			case NSOrderedDescending:
+				leftValue = @1;
+				rightValue = @0;
+				break;
+			case NSOrderedSame:
+				leftValue = @1;
+				rightValue = @1;
+				break;
+		}
+	} else if ([type isEqualToString:@"datetime"]) {
+		leftValue = leftComplexObject[@"sec"];
+		rightValue = rightComplexObject[@"sec"];
+	}
+	else if ([type isEqualToString:@"duration"]) {
+		leftValue = leftComplexObject[@"sec"];
+		rightValue = rightComplexObject[@"sec"];
+	}
+	
+	NSPredicate *predicate = [self predicateWithLeftValue:leftValue rightValue:rightValue operatorType:operatorType];
+	
+	return predicate;
+}
+
++ (NSPredicate *)predicateWithLeftValue:(nullable id)leftValue rightValue:(nullable id)rightValue operatorType:(NSPredicateOperatorType)operatorType {
+	NSExpression *leftExpression = [NSExpression expressionForConstantValue:leftValue];
+	NSExpression *rightExpression = [NSExpression expressionForConstantValue:rightValue];
+	
+	return [self predicateWithLeftExpression:leftExpression rightExpression:rightExpression operatorType:operatorType];
+}
+
++ (NSPredicate *)predicateWithLeftExpression:(NSExpression *)leftExpression rightExpression:(NSExpression *)rightExpression operatorType:(NSPredicateOperatorType)operatorType {
+	NSComparisonPredicateOptions options;
+	Class comparisonClass;
+	switch (operatorType) {
+		case NSContainsPredicateOperatorType:
+		case NSBeginsWithPredicateOperatorType:
+		case NSEndsWithPredicateOperatorType:
+			options = NSCaseInsensitivePredicateOption;
+			comparisonClass = [NSString class];
+			break;
+		case NSGreaterThanOrEqualToPredicateOperatorType:
+		case NSGreaterThanPredicateOperatorType:
+		case NSLessThanPredicateOperatorType:
+		case NSLessThanOrEqualToPredicateOperatorType:
+			options = 0;
+			comparisonClass = [NSNumber class];
+		default:
+			options = 0;
+			break;
+	}
+	
+	NSComparisonPredicate *predicate = [NSComparisonPredicate predicateWithLeftExpression:leftExpression
+																		  rightExpression:rightExpression
+																				 modifier:NSDirectPredicateModifier
+																					 type:operatorType
+																				  options:options];
+	if (comparisonClass) {
+		NSExpression *nilExpression = [NSExpression expressionForConstantValue:nil];
+		NSPredicate *notNilPredicate = [NSComparisonPredicate predicateWithLeftExpression:leftExpression rightExpression:nilExpression modifier:NSDirectPredicateModifier type:NSNotEqualToPredicateOperatorType options:0];
+		NSExpression *classExpression = [NSExpression expressionForConstantValue:comparisonClass];
+		NSComparisonPredicate *typePredicate = [NSComparisonPredicate predicateWithLeftExpression:leftExpression rightExpression:classExpression customSelector:@selector(isKindOfClass:)];
+		return [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:@[ notNilPredicate, typePredicate, predicate ]];
+	} else {
+		return predicate;
 	}
 }
 
-+ (NSPredicate *)predicateForInteractionCriteria:(NSDictionary *)interactionCriteria hasError:(BOOL *)hasError {
-	NSMutableArray *subPredicates = [NSMutableArray array];
-	
-	for (NSString *key in interactionCriteria) {
-		NSObject *object = [interactionCriteria objectForKey:key];
-		
-		if ([object isKindOfClass:[NSArray class]]) {
-			NSCompoundPredicateType predicateType = NSAndPredicateType;
-			if ([key isEqualToString:@"$and"]) {
-				predicateType = NSAndPredicateType;
-			} else if ([key isEqualToString:@"$or"]) {
-				predicateType = NSOrPredicateType;
-			} else {
-				*hasError = YES;
-			}
-			
-			NSMutableArray *criteria = [NSMutableArray array];
-			for (NSDictionary *dictionary in (NSArray *)object) {
-				NSPredicate *criterion = [ATInteractionInvocation predicateForInteractionCriteria:dictionary hasError:hasError];
-				[criteria addObject:criterion];
-			}
-			
-			NSPredicate *compoundPredicate = [[NSCompoundPredicate alloc] initWithType:predicateType subpredicates:criteria];
-			[subPredicates addObject:compoundPredicate];
-		} else {
-			// Implicit "==" if object is a string/number
-			NSDictionary *equalityDictionary = ([object isKindOfClass:[NSDictionary class]]) ? (NSDictionary *)object : @{@"==" : object};
-			NSPredicate *subPredicate = [ATInteractionInvocation predicateForCriteria:key operatorExpression:equalityDictionary hasError:hasError];
-			if (subPredicate) {
-				[subPredicates addObject:subPredicate];
-			}
-		}
++ (NSCompoundPredicateType)compoundPredicateTypeFromString:(NSString *)predicateTypeString hasError:(nonnull BOOL *)hasError {
+	*hasError = NO;
+	if ([predicateTypeString isEqualToString:@"$and"]) {
+		return NSAndPredicateType;
+	} else if ([predicateTypeString isEqualToString:@"$or"]) {
+		return NSOrPredicateType;
+	} else if ([predicateTypeString isEqualToString:@"$not"]) {
+		return NSNotPredicateType;
+	} else {
+		ATLogError(@"Expected `$and`, `$or`, or `$not` skey; instead saw key: %@", predicateTypeString);
+		*hasError = YES;
+		return NSAndPredicateType;
 	}
-	
-	NSPredicate *result = [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:subPredicates];
-	return result;
+}
+
++ (NSPredicateOperatorType)predicateOperatorTypeFromString:(NSString *)operatorString hasError:(nonnull BOOL *)hasError {
+	*hasError = NO;
+	if ([operatorString isEqualToString:@"$eq"] || [operatorString isEqualToString:@"=="]) {
+		return NSEqualToPredicateOperatorType;
+	} else if ([operatorString isEqualToString:@"$gt"] || [operatorString isEqualToString:@">"]) {
+		return NSGreaterThanPredicateOperatorType;
+	} else if ([operatorString isEqualToString:@"$gte"] || [operatorString isEqualToString:@">="]) {
+		return NSGreaterThanOrEqualToPredicateOperatorType;
+	} else if ([operatorString isEqualToString:@"$lt"] || [operatorString isEqualToString:@"<"]) {
+		return NSLessThanPredicateOperatorType;
+	} else if ([operatorString isEqualToString:@"$lte"] || [operatorString isEqualToString:@"<="]) {
+		return NSLessThanOrEqualToPredicateOperatorType;
+	} else if ([operatorString isEqualToString:@"$ne"] || [operatorString isEqualToString:@"!="]) {
+		return NSNotEqualToPredicateOperatorType;
+	} else if ([operatorString isEqualToString:@"$contains"] || [operatorString isEqualToString:@"CONTAINS[c]"]) {
+		return NSContainsPredicateOperatorType;
+	} else if ([operatorString isEqualToString:@"$starts_with"] || [operatorString isEqualToString:@"BEGINSWITH[c]"]) {
+		return NSBeginsWithPredicateOperatorType;
+	} else if ([operatorString isEqualToString:@"$ends_with"] || [operatorString isEqualToString:@"ENDSWITH[c]"]) {
+		return NSEndsWithPredicateOperatorType;
+	} else {
+		ATLogError(@"Unrecognized comparison operator symbol: %@", operatorString);
+		*hasError = YES;
+		return NSCustomSelectorPredicateOperatorType;
+	}
+}
+
++ (BOOL)operator:(NSPredicateOperatorType)operator isValidForParameter:(NSObject *)parameter {
+	BOOL isString = [parameter isKindOfClass:[NSString class]];
+
+	switch (operator) {
+		case NSEqualToPredicateOperatorType:
+		case NSNotEqualToPredicateOperatorType:
+		case NSLessThanOrEqualToPredicateOperatorType:
+		case NSGreaterThanOrEqualToPredicateOperatorType:
+		case NSGreaterThanPredicateOperatorType:
+		case NSLessThanPredicateOperatorType:
+			return YES;
+		case NSBeginsWithPredicateOperatorType:
+		case NSEndsWithPredicateOperatorType:
+		case NSContainsPredicateOperatorType:
+			return isString;
+		default:
+			ATLogError(@"Unrecognized predicate operator type: %uld", (unsigned long)operator);
+			return NO;
+	}
 }
 
 @end

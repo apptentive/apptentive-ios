@@ -22,6 +22,7 @@
 	XCTAssertTrue([[[person apiJSON] objectForKey:@"person"] objectForKey:@"name"] == nil, @"Name should not be set.");
 	person.name = @"Peter";
 	XCTAssertTrue([[[[person apiJSON] objectForKey:@"person"] objectForKey:@"name"] isEqualToString:@"Peter"], @"Name should be set to 'Peter'");
+	person.name = nil;
 
 	// Add custom person data
 	[[ATConnect sharedConnection] addCustomPersonData:@"brown" withKey:@"hair_color"];

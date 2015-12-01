@@ -472,18 +472,149 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 - (void)removeCustomDeviceDataWithKey:(NSString *)key;
 
 /**
- Deprecated. Use `-addCustomDeviceData:withKey:` instead.
+ Adds custom text data associated with the current device.
 
- @warning Deprecated!
+ Adds an additional data field to any feedback sent. This will show up in the device data in the
+ conversation on your Apptentive dashboard.
+
+ @param string Custom data of type `NSString`.
+ @param key A key to associate the data with.
+ */
+- (void)addCustomDeviceDataString:(NSString *)string withKey:(NSString *)key;
+
+/**
+ Adds custom numeric data associated with the current device.
+
+ Adds an additional data field to any feedback sent. This will show up in the device data in the
+ conversation on your Apptentive dashboard.
+
+ @param number Custom data of type `NSNumber`.
+ @param key A key to associate the data with.
+ */
+- (void)addCustomDeviceDataNumber:(NSNumber *)number withKey:(NSString *)key;
+
+/**
+ Adds custom Boolean data associated with the current device.
+
+ Adds an additional data field to any feedback sent. This will show up in the device data in the
+ conversation on your Apptentive dashboard.
+
+ @param boolValue Custom data of type `BOOL`.
+ @param key A key to associate the data with.
+ */
+- (void)addCustomDeviceDataBOOL:(BOOL)boolValue withKey:(NSString *)key;
+
+/**
+ Adds custom version information associated with the current device.
+
+ Adds an additional data field to any feedback sent. This will show up in the device data in the
+ conversation on your Apptentive dashboard.
+
+ @param versionObject An `NSDictionary` object created with `+versionObjectWithVersion:`.
+ @param key A key to associate the data with.
+ */
+- (void)addCustomDeviceDataVersion:(NSDictionary *)versionObject withKey:(NSString *)key;
+
+/**
+ Adds custom timestamp data associated with the current device.
+
+ Adds an additional data field to any feedback sent. This will show up in the device data in the
+ conversation on your Apptentive dashboard.
+
+ @param timestampObject An `NSDictionary` object created with `+timestampObjectWithDate:`.
+ @param key A key to associate the data with.
+ */
+- (void)addCustomDeviceDataTimestamp:(NSDictionary *)timestampObject withKey:(NSString *)key;
+
+/**
+ Adds custom text data associated with the current person.
+
+ Adds an additional data field to any feedback sent. This will show up in the person data in the
+ conversation on your Apptentive dashboard.
+
+ @param string Custom data of type `NSString`.
+ @param key A key to associate the data with.
+ */
+- (void)addCustomPersonDataString:(NSString *)string withKey:(NSString *)key;
+
+/**
+ Adds custom numeric data associated with the current person.
+
+ Adds an additional data field to any feedback sent. This will show up in the person data in the
+ conversation on your Apptentive dashboard.
+
+ @param number Custom data of type `NSNumber`.
+ @param key A key to associate the data with.
+ */
+- (void)addCustomPersonDataNumber:(NSNumber *)number withKey:(NSString *)key;
+
+/**
+ Adds custom Boolean data associated with the current person.
+
+ Adds an additional data field to any feedback sent. This will show up in the person data in the
+ conversation on your Apptentive dashboard.
+
+ @param boolValue Custom data of type `BOOL`.
+ @param key A key to associate the data with.
+ */
+- (void)addCustomPersonDataBOOL:(BOOL)boolValue withKey:(NSString *)key;
+
+/**
+ Adds custom version data associated with the current person.
+
+ Adds an additional data field to any feedback sent. This will show up in the person data in the
+ conversation on your Apptentive dashboard.
+
+ @param versionObject An `NSDictionary` object created with `+versionObjectWithVersion:`.
+ @param key A key to associate the data with.
+ */
+- (void)addCustomPersonDataVersion:(NSDictionary *)versionObject withKey:(NSString *)key;
+
+/**
+ Adds custom timestamp data associated with the current person.
+
+ Adds an additional data field to any feedback sent. This will show up in the person data in the
+ conversation on your Apptentive dashboard.
+
+ @param timestampObject An `NSDictionary` object created with `+timestampObjectWithDate:`.
+ @param key A key to associate the data with.
+ */
+- (void)addCustomPersonDataTimestamp:(NSDictionary *)timestampObject withKey:(NSString *)key;
+
+/**
+ Creates a dictionary representation of the specified version string suitable for use with
+ `-addCustomDeviceDataVersion:withKey:` or `-addCustomPersonDataVersion:withKey:`
+
+ @param version A string specifying a version (up to three non-negative integers separated by periods).
+
+ @return an `NSDictionary` object suitable for use with `-addCustomDeviceDataVersion:withKey:` or `-addCustomPersonDataVersion:withKey:`.
+ */
++ (NSDictionary *)versionObjectWithVersion:(NSString *)version;
+
+/**
+ Creates a dictionary representation of the specified timestamp suitable for use with `-addCustomDeviceDataTimestamp:withKey:` or `-addCustomPersonDataTimestamp:withKey:`
+
+ @param date An `NSDate` object specifying point in time.
+
+ @return an `NSDictionary` object suitable for use with `-addCustomDeviceDataTimestamp:withKey:` or `-addCustomPersonDataTimestamp:withKey:`
+ */
++ (NSDictionary *)timestampObjectWithDate:(NSDate *)date;
+
+/**
+ Adds the specified custom data value associated with the specified key.
+
  @param object The custom data.
  @param key The key of the data.
+
+ @deprecated Use `-addCustomDeviceData:withKey:` instead.
  */
 - (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key DEPRECATED_ATTRIBUTE;
 
-/** Deprecated. Use `-removeCustomDeviceDataWithKey:` instead.
+/** Removes custom data associated with the specified key.
 
- @warning Deprecated!
  @param key The key of the data.
+
+ @deprecated Use `-removeCustomDeviceDataWithKey:` instead.
  */
 - (void)removeCustomDataWithKey:(NSString *)key DEPRECATED_ATTRIBUTE;
 

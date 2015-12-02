@@ -11,7 +11,6 @@
 #import "ATAttachButton.h"
 #import "ATMessageCenterViewController.h"
 #import "ATMessageCenterInteraction.h"
-#import <AssetsLibrary/AssetsLibrary.h>
 #import "ATConnect_Private.h"
 
 #define MAX_NUMBER_OF_ATTACHMENTS 4

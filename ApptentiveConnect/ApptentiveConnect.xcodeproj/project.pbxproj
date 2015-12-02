@@ -11,7 +11,6 @@
 		011B08CF1C0D0CCC004F4F5D /* ApptentiveMigrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49129ED3174068730026C2E1 /* ApptentiveMigrationTests.m */; };
 		011B08D01C0D0CCC004F4F5D /* ATInteractionInvocationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49358DBB1BF3336700516F1E /* ATInteractionInvocationTests.m */; };
 		011B08D21C0D0E0C004F4F5D /* ATDataModelv5.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 011B08D11C0D0E09004F4F5D /* ATDataModelv5.sqlite */; };
-		011B08D41C0D163B004F4F5D /* ATDataModel v3 to v4.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 583E3969188E08DD0030B51E /* ATDataModel v3 to v4.xcmappingmodel */; };
 		011B08D71C0D19B6004F4F5D /* CodePointAndInteractionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 011B08D51C0D19AF004F4F5D /* CodePointAndInteractionTests.m */; };
 		0127EA0E1BF1271C0005481A /* ATAttachmentCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 0127EA081BF1271C0005481A /* ATAttachmentCell.h */; };
 		0127EA0F1BF1271C0005481A /* ATAttachmentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0127EA091BF1271C0005481A /* ATAttachmentCell.m */; };
@@ -72,6 +71,7 @@
 		01A88FFC1AFBFFAE002C49E7 /* testJsonDiffing.2.old.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF71AFBFDB6002C49E7 /* testJsonDiffing.2.old.json */; };
 		01AE42071B38E38D006B9191 /* ATBannerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01AE42051B38E38D006B9191 /* ATBannerViewController.h */; };
 		01AE42081B38E38D006B9191 /* ATBannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01AE42061B38E38D006B9191 /* ATBannerViewController.m */; };
+		01AF1BF61C0F9C0D00CB4821 /* ATDataModel v3 to v4.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 583E3969188E08DD0030B51E /* ATDataModel v3 to v4.xcmappingmodel */; };
 		01B147B31B5D8D3A0000D041 /* ATMessageCenterProfileView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01B147B11B5D8D3A0000D041 /* ATMessageCenterProfileView.h */; };
 		01B147B41B5D8D3A0000D041 /* ATMessageCenterProfileView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01B147B21B5D8D3A0000D041 /* ATMessageCenterProfileView.m */; };
 		01BD9E041B55E465004F12AB /* ATMessageCenterInputView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01BD9E021B55E465004F12AB /* ATMessageCenterInputView.h */; };
@@ -237,7 +237,6 @@
 		49ED18051BF97B4500C6D343 /* ATInteractionUsageDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49ED18041BF97B4500C6D343 /* ATInteractionUsageDataTests.m */; };
 		49ED18211BF988C300C6D343 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49ED18151BF988C300C6D343 /* libOCMock.a */; };
 		49ED184A1BF98B2300C6D343 /* libApptentiveConnect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC37F1333D35600743F65 /* libApptentiveConnect.a */; };
-		49EF003218DB8F6700661F7C /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49EF003118DB8F6700661F7C /* AssetsLibrary.framework */; };
 		49EF003318DB8F6E00661F7C /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49EF003118DB8F6700661F7C /* AssetsLibrary.framework */; };
 		49F3404E16BC8B1A008AA02B /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49AAA17A1633716F00B26851 /* StoreKit.framework */; };
 		49F8AFE316CC4A550070FFEA /* ATConversation.h in Headers */ = {isa = PBXBuildFile; fileRef = 49F8AFCD16CC4A550070FFEA /* ATConversation.h */; };
@@ -677,7 +676,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49EF003218DB8F6700661F7C /* AssetsLibrary.framework in Frameworks */,
 				58805F3918120DE100210DA5 /* Accelerate.framework in Frameworks */,
 				49ADE8DC1626167F00DD8634 /* CoreText.framework in Frameworks */,
 				4988FB5416212BD4000A7CB7 /* CoreData.framework in Frameworks */,
@@ -1887,11 +1885,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01AF1BF61C0F9C0D00CB4821 /* ATDataModel v3 to v4.xcmappingmodel in Sources */,
 				49C0028E1334137E0071F088 /* ApptentiveConnectTests.m in Sources */,
 				58CD20151821B7A70071CC72 /* ATDataModel v2 to v3.xcmappingmodel in Sources */,
 				01C7C4DE1BEAD0BE005D6EC1 /* ATDataModel.xcdatamodeld in Sources */,
 				013BB6181BF6ABB600BB6C27 /* ATDataModel v4 to v5.xcmappingmodel in Sources */,
-				583E396A188E08EB0030B51E /* ATDataModel v3 to v4.xcmappingmodel in Sources */,
 				011B08CE1C0D0CCC004F4F5D /* ATUtilitiesTests.m in Sources */,
 				011B08D01C0D0CCC004F4F5D /* ATInteractionInvocationTests.m in Sources */,
 				011B08CF1C0D0CCC004F4F5D /* ApptentiveMigrationTests.m in Sources */,

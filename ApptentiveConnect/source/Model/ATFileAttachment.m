@@ -186,12 +186,25 @@
 }
 
 - (NSString *)extension {
+	NSString *_extension = nil;
 	if (self.mimeType) {
 		CFStringRef uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (__bridge CFStringRef _Nonnull)(self.mimeType), NULL);
-		return (__bridge NSString *)UTTypeCopyPreferredTagWithClass(uti, kUTTagClassFilenameExtension);
-	} else {
-		return @"attachment";
+		_extension = (__bridge NSString *)UTTypeCopyPreferredTagWithClass(uti, kUTTagClassFilenameExtension);
 	}
+
+	if (_extension.length == 0 && self.name) {
+		_extension = self.name.pathExtension;
+	}
+
+	if (_extension.length == 0 && self.remoteURL) {
+		_extension = self.remoteURL.pathExtension;
+	}
+
+	if (_extension.length == 0) {
+		_extension = @"file";
+	}
+
+	return _extension;
 }
 
 - (BOOL)canCreateThumbnail {

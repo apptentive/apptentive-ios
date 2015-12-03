@@ -457,8 +457,8 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	return CFBridgingRelease(result);
 }
 
-+ (NSString*)stringByEscapingForPredicate:(NSString *)string {
-	CFStringRef result = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)string, (CFStringRef) @"$#", (CFStringRef) NULL, kCFStringEncodingUTF8);
++ (NSString *)stringByEscapingForPredicate:(NSString *)string {
+	CFStringRef result = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)string, (CFStringRef) @"$#", (CFStringRef)NULL, kCFStringEncodingUTF8);
 
 	return CFBridgingRelease(result);
 }

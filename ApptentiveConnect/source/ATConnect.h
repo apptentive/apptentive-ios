@@ -429,9 +429,9 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 ///---------------------------------------
 
 /** The name of the app user when communicating with Apptentive. */
-@property (nonatomic, copy) NSString *personName;
+@property (copy, nonatomic) NSString *_Nullable personName;
 /** The email address of the app user in form fields and communicating with Apptentive. */
-@property (nonatomic, copy) NSString *personEmailAddress;
+@property (copy, nonatomic) NSString *_Nullable personEmailAddress;
 
 /**
  Adds custom data associated with the current person.

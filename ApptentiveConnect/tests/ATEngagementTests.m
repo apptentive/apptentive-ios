@@ -887,8 +887,10 @@
 }
 
 - (void)testCustomDataAndExtendedData {
-	XCTAssertNoThrow([[ATConnect sharedConnection] engage:@"test_event" withCustomData:nil fromViewController:nil], @"nil custom data should not throw exception!");
-	XCTAssertNoThrow([[ATConnect sharedConnection] engage:@"test_event" withCustomData:nil withExtendedData:nil fromViewController:nil], @"nil custom data or extended data should not throw exception!");
+	UIViewController *dummyViewController = [[UIViewController alloc] init];
+
+	XCTAssertNoThrow([[ATConnect sharedConnection] engage:@"test_event" withCustomData:nil fromViewController:dummyViewController], @"nil custom data should not throw exception!");
+	XCTAssertNoThrow([[ATConnect sharedConnection] engage:@"test_event" withCustomData:nil withExtendedData:nil fromViewController:dummyViewController], @"nil custom data or extended data should not throw exception!");
 }
 
 - (void)testCustomDeviceDataCriteria {

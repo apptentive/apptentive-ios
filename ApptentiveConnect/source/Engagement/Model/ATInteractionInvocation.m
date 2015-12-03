@@ -157,7 +157,8 @@
 
 		NSMutableArray *trimmedKeyParts = [NSMutableArray array];
 		for (NSString *part in [key componentsSeparatedByString:@"/"]) {
-			[trimmedKeyParts addObject:[part stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+			NSString *trimmedPart = [part stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+			[trimmedKeyParts addObject:[ATUtilities stringByEscapingForPredicate:trimmedPart]];
 		}
 		NSString *trimmedKey = [trimmedKeyParts componentsJoinedByString:@"/"];
 

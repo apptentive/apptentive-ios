@@ -457,6 +457,12 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	return CFBridgingRelease(result);
 }
 
++ (NSString*)stringByEscapingForPredicate:(NSString *)string {
+	CFStringRef result = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)string, (CFStringRef) @"$#", (CFStringRef) NULL, kCFStringEncodingUTF8);
+
+	return CFBridgingRelease(result);
+}
+
 + (NSString *)randomStringOfLength:(NSUInteger)length {
 	static NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 	NSMutableString *result = [NSMutableString stringWithString:@""];

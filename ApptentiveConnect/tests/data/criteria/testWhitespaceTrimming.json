@@ -41,52 +41,52 @@
       }
     },
     {
-      "device/custom_data/string%20with%20spaces": {
+      "device/custom_data/string with spaces": {
         "$exists": true
       }
     },
     {
-      "device/custom_data/ string%20with%20spaces": {
+      "device/custom_data/ string with spaces": {
         "$exists": true
       }
     },
     {
-      "device/custom_data/string%20with%20spaces ": {
+      "device/custom_data/string with spaces ": {
         "$exists": true
       }
     },
     {
-      "device/custom_data/string%20with%20spaces": {
+      "device/custom_data/string with spaces": {
         "$eq": "string with spaces"
       }
     },
     {
-      "device/custom_data/string%20with%20spaces": {
+      "device/custom_data/string with spaces": {
         "$eq": " string with spaces "
       }
     },
     {
-      "device/custom_data/string%20with%20spaces": {
+      "device/custom_data/string with spaces": {
         "$contains": " with "
       }
     },
     {
-      "device/custom_data/string%20with%20spaces": {
+      "device/custom_data/string with spaces": {
         "$starts_with": " string"
       }
     },
     {
-      "device/custom_data/string%20with%20spaces": {
+      "device/custom_data/string with spaces": {
         "$starts_with": "string "
       }
     },
     {
-      "device/custom_data/string%20with%20spaces": {
+      "device/custom_data/string with spaces": {
         "$ends_with": " spaces"
       }
     },
     {
-      "device/custom_data/string%20with%20spaces": {
+      "device/custom_data/string with spaces": {
         "$ends_with": "spaces "
       }
     }

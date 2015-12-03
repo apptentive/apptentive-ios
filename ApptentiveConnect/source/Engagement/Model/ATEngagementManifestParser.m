@@ -10,7 +10,6 @@
 #import "ATJSONSerialization.h"
 #import "ATEngagementBackend.h"
 #import "ATInteraction.h"
-#import <UIKit/UIKit.h>
 #import "ATConnect_Debugging.h"
 #import "ATInteractionInvocation.h"
 

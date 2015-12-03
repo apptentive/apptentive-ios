@@ -16,10 +16,6 @@
 #import "ATWebClient.h"
 #import "ATWebClient_Private.h"
 
-#if TARGET_OS_IPHONE
-#import <UIKit/UIKit.h>
-#endif
-
 NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 
 

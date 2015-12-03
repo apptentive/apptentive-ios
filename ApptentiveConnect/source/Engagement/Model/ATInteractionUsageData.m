@@ -140,7 +140,7 @@
 			
 			NSObject *value = deviceData[key];
 			if (value) {
-				NSString *criteriaKey = [NSString stringWithFormat:@"device/%@", [ATUtilities stringByEscapingForURLArguments:key]];
+				NSString *criteriaKey = [NSString stringWithFormat:@"device/%@", [ATUtilities stringByEscapingForPredicate:key]];
 				predicateEvaluationDictionary[criteriaKey] = value;
 			}
 		}
@@ -151,7 +151,7 @@
 			for (NSString *key in customData) {
 				NSObject *value = customData[key];
 				if (value) {
-					NSString *criteriaKey = [NSString stringWithFormat:@"device/custom_data/%@", [ATUtilities stringByEscapingForURLArguments:key]];
+					NSString *criteriaKey = [NSString stringWithFormat:@"device/custom_data/%@", [ATUtilities stringByEscapingForPredicate:key]];
 					predicateEvaluationDictionary[criteriaKey] = value;
 				}
 			}
@@ -172,7 +172,7 @@
 			
 			NSObject *value = personData[key];
 			if (value) {
-				NSString *criteriaKey = [NSString stringWithFormat:@"person/%@", [ATUtilities stringByEscapingForURLArguments:key]];
+				NSString *criteriaKey = [NSString stringWithFormat:@"person/%@", [ATUtilities stringByEscapingForPredicate:key]];
 				predicateEvaluationDictionary[criteriaKey] = value;
 			}
 		}
@@ -183,7 +183,7 @@
 			for (NSString *key in customData) {
 				NSObject *value = customData[key];
 				if (value) {
-					NSString *criteriaKey = [NSString stringWithFormat:@"person/custom_data/%@", [ATUtilities stringByEscapingForURLArguments:key]];
+					NSString *criteriaKey = [NSString stringWithFormat:@"person/custom_data/%@", [ATUtilities stringByEscapingForPredicate:key]];
 					predicateEvaluationDictionary[criteriaKey] = value;
 				}
 			}

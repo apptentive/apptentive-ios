@@ -40,6 +40,7 @@
 + (NSString *)currentSystemBuild;
 
 + (NSString *)stringByEscapingForURLArguments:(NSString *)string;
++ (NSString *)stringByEscapingForPredicate:(NSString *)string;
 + (NSString *)randomStringOfLength:(NSUInteger)length;
 
 + (void)uniquifyArray:(NSMutableArray *)array;

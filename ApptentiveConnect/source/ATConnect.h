@@ -114,14 +114,14 @@ Before calling any other methods on the shared `ATConnect` instance, set the API
 
  This key is found on the Apptentive website under Settings, API & Development.
  */
-@property (nonatomic, copy) NSString *apiKey;
+@property (nonatomic, copy) NSString *_Nullable apiKey;
 
 /**
  The app's iTunes App ID.
 
  You can find this in iTunes Connect, and is the numeric "Apple ID" shown on your app details page.
  */
-@property (nonatomic, copy) NSString *appID;
+@property (nonatomic, copy) NSString *_Nullable appID;
 
 /** The shared singleton of `ATConnect`. */
 + (ATConnect *)sharedConnection;

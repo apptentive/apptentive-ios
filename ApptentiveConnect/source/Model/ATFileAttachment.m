@@ -42,8 +42,11 @@
 			CFStringRef MIMEType = UTTypeCopyPreferredTagWithClass(UTI, kUTTagClassMIMEType);
 			if (MIMEType) {
 				[thumbnailableMIMETypes addObject:(__bridge id _Nonnull)(MIMEType)];
+				CFRelease(MIMEType);
 			}
 		}
+
+		CFRelease(thumbnailableUTIs);
 	});
 
 	return [thumbnailableMIMETypes containsObject:MIMEType];
@@ -187,9 +190,13 @@
 
 - (NSString *)extension {
 	NSString *_extension = nil;
+
 	if (self.mimeType) {
 		CFStringRef uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (__bridge CFStringRef _Nonnull)(self.mimeType), NULL);
-		_extension = (__bridge NSString *)UTTypeCopyPreferredTagWithClass(uti, kUTTagClassFilenameExtension);
+		CFStringRef cf_extension = UTTypeCopyPreferredTagWithClass(uti, kUTTagClassFilenameExtension);
+		CFRelease(uti);
+		_extension = [(__bridge NSString *)cf_extension copy];
+		CFRelease(cf_extension);
 	}
 
 	if (_extension.length == 0 && self.name) {

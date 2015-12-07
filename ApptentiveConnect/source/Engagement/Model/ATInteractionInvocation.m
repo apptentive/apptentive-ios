@@ -376,8 +376,8 @@
 		case NSGreaterThanPredicateOperatorType:
 		case NSLessThanPredicateOperatorType:
 		case NSLessThanOrEqualToPredicateOperatorType:
-			options = 0;
 			comparisonClass = [NSNumber class];
+			// fall through
 		default:
 			options = 0;
 			break;

@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
                  "Frank Schmitt" => "frank@apptentive.com" }
   s.source   = { :git => 'https://github.com/apptentive/apptentive-ios.git', :tag => "v#{s.version}" }
   s.platform = :ios, '7.0'
-  s.source_files   = 'ApptentiveConnect/source/**/*.{h,m}','ApptentiveConnect/ext/**/*.{h,m}'
+  s.source_files   = 'ApptentiveConnect/source/**/*.{h,m}'
   s.requires_arc = true
   s.frameworks     = 'AVFoundation', 'CoreGraphics', 'Foundation', 'ImageIO', 'MobileCoreServices', 'QuartzCore', 'SystemConfiguration', 'UIKit', 'CoreData'
   s.resource_bundle = { 'ApptentiveResources' => [

@@ -65,12 +65,11 @@
 	}
 	if (!result[@"label"]) {
 		ATLogError(@"Event json should include a `label`.");
+		return nil;
 	}
 	if (!result[@"nonce"]) {
 		ATLogError(@"Event json should include a `nonce`.");
-	}
-	if (!result) {
-		result = [NSMutableDictionary dictionary];
+		return nil;
 	}
 	
 	NSDictionary *apiJSON = @{@"event": result};

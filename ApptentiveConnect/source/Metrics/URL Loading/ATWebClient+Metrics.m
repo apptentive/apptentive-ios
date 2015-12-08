@@ -31,6 +31,10 @@
 
 - (ATAPIRequest *)requestForSendingEvent:(ATEvent *)event {
 	NSDictionary *postJSON = [event apiJSON];
+	if (postJSON == nil) {
+		return nil;
+	}
+
 	NSError *error = nil;
 	NSString *postString = [ATJSONSerialization stringWithJSONObject:postJSON options:ATJSONWritingPrettyPrinted error:&error];
 	if (!postString && error != nil) {

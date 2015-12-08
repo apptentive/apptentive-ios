@@ -168,11 +168,11 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n0S-Y2-z5K" customClass="ATAttachButton">
-                                                            <rect key="frame" x="293" y="10" width="25" height="24"/>
+                                                            <rect key="frame" x="274" y="0.0" width="44" height="44"/>
                                                             <animations/>
                                                             <constraints>
-                                                                <constraint firstAttribute="width" constant="25" id="Ag3-q5-a4T"/>
-                                                                <constraint firstAttribute="height" constant="24" id="i9b-ff-2um"/>
+                                                                <constraint firstAttribute="width" constant="44" id="Ag3-q5-a4T"/>
+                                                                <constraint firstAttribute="height" constant="44" id="i9b-ff-2um"/>
                                                             </constraints>
                                                             <state key="normal">
                                                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>

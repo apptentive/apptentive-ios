@@ -191,12 +191,14 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 	}
 
 	[self dismissImagePicker:picker];
-	[self.viewController.interaction engage:ATInteractionMessageCenterEventLabelAttachmentAdd fromViewController:self.viewController];
-
+	
 	if (!self.active) {
 		[self becomeFirstResponder];
 		self.active = YES;
+		[self.viewController.interaction engage:ATInteractionMessageCenterEventLabelAttachmentListOpen fromViewController:self.viewController];
 	}
+
+	[self.viewController.interaction engage:ATInteractionMessageCenterEventLabelAttachmentAdd fromViewController:self.viewController];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {

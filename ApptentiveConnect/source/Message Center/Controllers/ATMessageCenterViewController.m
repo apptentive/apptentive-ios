@@ -1138,11 +1138,15 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)keyboardDidShow:(NSNotification *)notification {
-	[self.interaction engage:ATInteractionMessageCenterEventLabelKeyboardOpen fromViewController:self userInfo:self.bodyLengthDictionary];
+	if (!self.attachmentController.active) {
+		[self.interaction engage:ATInteractionMessageCenterEventLabelKeyboardOpen fromViewController:self userInfo:self.bodyLengthDictionary];
+	}
 }
 
 - (void)keyboardDidHide:(NSNotification *)notification {
-	[self.interaction engage:ATInteractionMessageCenterEventLabelKeyboardClose fromViewController:self userInfo:self.bodyLengthDictionary];
+	if (!self.attachmentController.active) {
+		[self.interaction engage:ATInteractionMessageCenterEventLabelKeyboardClose fromViewController:self userInfo:self.bodyLengthDictionary];
+	}
 }
 
 - (NSString *)draftMessage {

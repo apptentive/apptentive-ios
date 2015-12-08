@@ -195,8 +195,10 @@
 		CFStringRef uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (__bridge CFStringRef _Nonnull)(self.mimeType), NULL);
 		CFStringRef cf_extension = UTTypeCopyPreferredTagWithClass(uti, kUTTagClassFilenameExtension);
 		CFRelease(uti);
-		_extension = [(__bridge NSString *)cf_extension copy];
-		CFRelease(cf_extension);
+		if (cf_extension) {
+			_extension = [(__bridge NSString *)cf_extension copy];
+			CFRelease(cf_extension);
+		}
 	}
 
 	if (_extension.length == 0 && self.name) {

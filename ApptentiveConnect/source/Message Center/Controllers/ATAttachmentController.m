@@ -119,9 +119,9 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 		[self.viewController.interaction engage:ATInteractionMessageCenterEventLabelAttachmentListOpen fromViewController:self.viewController];
 		[self becomeFirstResponder];
 		[self updateBadge];
-	}
 
-	self.active = YES;
+		self.active = YES;
+	}
 }
 
 - (IBAction)chooseImage:(UIButton *)sender {
@@ -192,6 +192,11 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 
 	[self dismissImagePicker:picker];
 	[self.viewController.interaction engage:ATInteractionMessageCenterEventLabelAttachmentAdd fromViewController:self.viewController];
+
+	if (!self.active) {
+		[self becomeFirstResponder];
+		self.active = YES;
+	}
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
@@ -242,7 +247,9 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 		self.imagePickerPopoverController = [[UIPopoverController alloc] initWithContentViewController:imagePicker];
 		self.imagePickerPopoverController.delegate = self;
 
-		[self.imagePickerPopoverController presentPopoverFromRect:sender.superview.frame inView:self.collectionView permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+		CGRect fromRect = (sender == self.attachButton) ? self.attachButton.frame : sender.superview.frame;
+		UIView *inView = (sender == self.attachButton) ? self.attachButton.superview : self.collectionView;
+		[self.imagePickerPopoverController presentPopoverFromRect:fromRect inView:inView permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
 	} else {
 		imagePicker.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
 

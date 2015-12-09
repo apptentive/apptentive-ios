@@ -504,7 +504,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  @param boolValue Custom data of type `BOOL`.
  @param key A key to associate the data with.
  */
-- (void)addCustomDeviceDataBOOL:(BOOL)boolValue withKey:(NSString *)key;
+- (void)addCustomDeviceDataBool:(BOOL)boolValue withKey:(NSString *)key;
 
 /**
  Adds custom version information associated with the current device.
@@ -559,7 +559,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  @param boolValue Custom data of type `BOOL`.
  @param key A key to associate the data with.
  */
-- (void)addCustomPersonDataBOOL:(BOOL)boolValue withKey:(NSString *)key;
+- (void)addCustomPersonDataBool:(BOOL)boolValue withKey:(NSString *)key;
 
 /**
  Adds custom version data associated with the current person.

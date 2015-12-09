@@ -137,7 +137,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	[self addCustomDeviceData:number withKey:key];
 }
 
-- (void)addCustomDeviceDataBOOL:(BOOL)boolValue withKey:(NSString *)key {
+- (void)addCustomDeviceDataBool:(BOOL)boolValue withKey:(NSString *)key {
 	[self addCustomDeviceData:@(boolValue) withKey:key];
 }
 
@@ -157,7 +157,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	[self addCustomPersonData:number withKey:key];
 }
 
-- (void)addCustomPersonDataBOOL:(BOOL)boolValue withKey:(NSString *)key {
+- (void)addCustomPersonDataBool:(BOOL)boolValue withKey:(NSString *)key {
 	[self addCustomPersonData:@(boolValue) withKey:key];
 }
 

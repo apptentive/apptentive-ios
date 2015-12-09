@@ -6,13 +6,15 @@ This document tracks changes to the API between versions.
  * Added `didReceiveRemoteNotification:fromViewController:fetchCompletionHandler:` API method for passing App Delegate remote notifications to Apptentive.
  * To enable Message Center background fetch, you should use the `...fetchCompletionHandler:` versions of `...didReceiveRemoteNotification:...` on the App Delegate and on ATConnect.
  * To enable Message Center background fetch, your app must set Remote Notifications as a valid Background Mode. This mode can be enabled in Xcode via your Target's Capabilities tab, or by adding the value `remote-notification` as a `UIBackgroundMode` in your app's Info.plist.
- * A `BOOL` return type has been added to the ATConnect `didReceiveRemoteNotification:...` methods. The return value indicates if the Push Notification was sent by Apptentive. 
+ * A `BOOL` return type has been added to the ATConnect `didReceiveRemoteNotification:...` methods. The return value indicates if the Push Notification was sent by Apptentive.
  * The `completionHandler` block will be called by Apptentive when the message fetch is completed. To ensure that messages can be retrieved, please do not call the `completionHandler` block yourself if the notification was sent by Apptentive.
  * If the Push Notification was *not* sent by Apptentive, the parent app is responsible for calling the `completionHandler` block.
+ * ATConnect has new strongly-typed setters for Boolean, string, number, timestamp and version types for custom person and device data.
+ * ATConnect is now annotated with nullability and collection types, where applicable.
 
 # 2.0.2
 
- * ATConnect's tintColor property is now deprecated in favor of using UIAppearance properties. See the iOS Customization Guide for details. 
+ * ATConnect's tintColor property is now deprecated in favor of using UIAppearance properties. See the iOS Customization Guide for details.
 
 # 2.0.0
 

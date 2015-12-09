@@ -4,7 +4,7 @@ If you have integrated a previous version of the Apptentive SDK, you will need t
 
 ## iOS Version Support
 
-Apptentive SDK version 2.0.0 has a deployment target of iOS 7.0, which will support iOS 7, 8, and 9. In the 2.0.0 release we have dropped support for iOS 5 and 6. 
+Apptentive SDK version 2.0.0 has a deployment target of iOS 7.0, which will support iOS 7, 8, and 9. In the 2.0.0 release we have dropped support for iOS 5 and 6.
 
 ## Message Center
 
@@ -14,7 +14,7 @@ Message Center is still presented via the `presentMessageCenterFromViewControlle
 
 ### Feedback Dialog has been Removed
 
-The Feedback Dialog one-way message tool has been removed from version 2.0.0 in favor of simply displaying Message Center. 
+The Feedback Dialog one-way message tool has been removed from version 2.0.0 in favor of simply displaying Message Center.
 
 In previous versions, people used the Feedback Dialog to submit their first message. Thereafter, they were sent to Message Center to read replies or send additional feedback.
 
@@ -40,7 +40,7 @@ Programmatically setting the new `personName` or `personEmailAddress` properties
 
 Please be aware that setting `personName` or `personEmailAddress` will **immediately overwrite** anything the person had previously typed in those fields.
 
-The person using your app will be given the opportunity to change those details. However, setting the properties programmatically again will overwrite the user-inputted values. 
+The person using your app will be given the opportunity to change those details. However, setting the properties programmatically again will overwrite the user-inputted values.
 
 We have also removed the `initialUserName` and `initialUserEmailAddress` properties in favor of the above `personName` and `personEmailAddress`.
 
@@ -56,6 +56,14 @@ In light of this new method, we have removed the legacy integration API methods:
  - `addUrbanAirshipIntegrationWithDeviceToken:`
  - `addAmazonSNSIntegrationWithDeviceToken:`
  - `addParseIntegrationWithDeviceToken:`.
+
+ Apptentive Push Notifications will, if possible, now trigger a message fetch in the background. To enable background fetch, several API and project changes are needed:
+- To enable Message Center background fetch, you should use the `...fetchCompletionHandler:` versions of `...didReceiveRemoteNotification:...` on the App Delegate and on ATConnect.
+ - To enable Message Center background fetch, your app must set Remote Notifications as a valid Background Mode. This mode can be enabled in Xcode via your Target's Capabilities tab, or by adding the value `remote-notification` as a `UIBackgroundMode` in your app's Info.plist.
+ - A `BOOL` return type has been added to the ATConnect `didReceiveRemoteNotification:...` methods. The return value indicates if the Push Notification was sent by Apptentive.
+ - The `completionHandler` block will be called by Apptentive when the message fetch is completed. To ensure that messages can be retrieved, please do not call the `completionHandler` block yourself if the notification was sent by Apptentive.
+ - If the Push Notification was *not* sent by Apptentive, the parent app is responsible for calling the `completionHandler` block.
+
 
 ## Removed Legacy Properties
 

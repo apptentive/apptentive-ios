@@ -82,17 +82,7 @@
 }
 
 - (BOOL)isValid {
-	BOOL isValid = NO;
-	
-	do { // once
-		if (![self criteriaAreMet]) {
-			break;
-		}
-		
-		isValid = YES;
-	} while (NO);
-	
-	return isValid;
+	return [self criteriaAreMet];
 }
 
 - (BOOL)criteriaAreMet {

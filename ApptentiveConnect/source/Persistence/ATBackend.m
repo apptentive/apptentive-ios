@@ -305,8 +305,13 @@ static NSURLCache *imageCache = nil;
 	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
 		[[ATTaskQueue sharedTaskQueue] addTask:task];
 		[[ATTaskQueue sharedTaskQueue] start];
+
+		if ([ATReachability sharedReachability].currentNetworkStatus == ATNetworkNotReachable) {
+			message.pendingState = @(ATPendingMessageStateError);
+			[self messageTaskDidFinish:task];
+		}
 	});
-	message = nil;
+
 	return YES;
 }
 

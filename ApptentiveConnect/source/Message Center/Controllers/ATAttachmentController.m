@@ -43,6 +43,12 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 	self.collectionView.layer.masksToBounds = NO;
 	self.collectionView.layer.shadowColor = [UIColor grayColor].CGColor;
 
+	// Hide the attach button if tapping it will cause a crash (due to unsupported portrait orientation).
+	BOOL isPhone = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone;
+	BOOL supportsPortraitOrientation = ([[UIApplication sharedApplication] supportedInterfaceOrientationsForWindow:self.attachButton.window] & UIInterfaceOrientationMaskPortrait) != 0;
+
+	self.attachButton.hidden = isPhone && !supportsPortraitOrientation;
+
 	CGSize marginWithInsets = CGSizeMake(ATTACHMENT_MARGIN.width - (ATTACHMENT_INSET.left), ATTACHMENT_MARGIN.height - (ATTACHMENT_INSET.top));
 	CGFloat height = [ATAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:marginWithInsets];
 	CGFloat bottomY = CGRectGetMaxY(self.collectionView.frame);

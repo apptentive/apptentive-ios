@@ -11,6 +11,7 @@ This document tracks changes to the API between versions.
  * If the Push Notification was *not* sent by Apptentive, the parent app is responsible for calling the `completionHandler` block.
  * ATConnect has new strongly-typed setters for Boolean, string, number, timestamp and version types for custom person and device data.
  * ATConnect is now annotated with nullability and collection types, where applicable.
+ * The image picker used for attachments in Message Center requires the application window to support portrait orientation (normally configured in Info.plist) for phone-idiom devices. If portrait orientation is not available, the attach button will be hidden and users will be unable to attach files. 
 
 # 2.0.2
 

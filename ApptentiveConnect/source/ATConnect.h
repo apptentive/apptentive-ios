@@ -507,28 +507,6 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 - (void)addCustomDeviceDataBool:(BOOL)boolValue withKey:(NSString *)key;
 
 /**
- Adds custom version information associated with the current device.
-
- Adds an additional data field to any feedback sent. This will show up in the device data in the
- conversation on your Apptentive dashboard.
-
- @param versionObject An `NSDictionary` object created with `+versionObjectWithVersion:`.
- @param key A key to associate the data with.
- */
-- (void)addCustomDeviceDataVersion:(NSDictionary *)versionObject withKey:(NSString *)key;
-
-/**
- Adds custom timestamp data associated with the current device.
-
- Adds an additional data field to any feedback sent. This will show up in the device data in the
- conversation on your Apptentive dashboard.
-
- @param timestampObject An `NSDictionary` object created with `+timestampObjectWithDate:`.
- @param key A key to associate the data with.
- */
-- (void)addCustomDeviceDataTimestamp:(NSDictionary *)timestampObject withKey:(NSString *)key;
-
-/**
  Adds custom text data associated with the current person.
 
  Adds an additional data field to any feedback sent. This will show up in the person data in the
@@ -560,47 +538,6 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  @param key A key to associate the data with.
  */
 - (void)addCustomPersonDataBool:(BOOL)boolValue withKey:(NSString *)key;
-
-/**
- Adds custom version data associated with the current person.
-
- Adds an additional data field to any feedback sent. This will show up in the person data in the
- conversation on your Apptentive dashboard.
-
- @param versionObject An `NSDictionary` object created with `+versionObjectWithVersion:`.
- @param key A key to associate the data with.
- */
-- (void)addCustomPersonDataVersion:(NSDictionary *)versionObject withKey:(NSString *)key;
-
-/**
- Adds custom timestamp data associated with the current person.
-
- Adds an additional data field to any feedback sent. This will show up in the person data in the
- conversation on your Apptentive dashboard.
-
- @param timestampObject An `NSDictionary` object created with `+timestampObjectWithDate:`.
- @param key A key to associate the data with.
- */
-- (void)addCustomPersonDataTimestamp:(NSDictionary *)timestampObject withKey:(NSString *)key;
-
-/**
- Creates a dictionary representation of the specified version string suitable for use with
- `-addCustomDeviceDataVersion:withKey:` or `-addCustomPersonDataVersion:withKey:`
-
- @param version A string specifying a version (up to three non-negative integers separated by periods).
-
- @return an `NSDictionary` object suitable for use with `-addCustomDeviceDataVersion:withKey:` or `-addCustomPersonDataVersion:withKey:`.
- */
-+ (NSDictionary *)versionObjectWithVersion:(NSString *)version;
-
-/**
- Creates a dictionary representation of the specified timestamp suitable for use with `-addCustomDeviceDataTimestamp:withKey:` or `-addCustomPersonDataTimestamp:withKey:`
-
- @param date An `NSDate` object specifying point in time.
-
- @return an `NSDictionary` object suitable for use with `-addCustomDeviceDataTimestamp:withKey:` or `-addCustomPersonDataTimestamp:withKey:`
- */
-+ (NSDictionary *)timestampObjectWithDate:(NSDate *)date;
 
 /**
  Adds the specified custom data value associated with the specified key.

@@ -141,14 +141,6 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	[self addCustomDeviceData:@(boolValue) withKey:key];
 }
 
-- (void)addCustomDeviceDataVersion:(NSDictionary *)versionObject withKey:(NSString *)key {
-	[self addCustomDeviceData:versionObject withKey:key];
-}
-
-- (void)addCustomDeviceDataTimestamp:(NSDictionary *)timestampObject withKey:(NSString *)key {
-	[self addCustomDeviceData:timestampObject withKey:key];
-}
-
 - (void)addCustomPersonDataString:(NSString *)string withKey:(NSString *)key {
 	[self addCustomPersonData:string withKey:key];
 }
@@ -159,26 +151,6 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (void)addCustomPersonDataBool:(BOOL)boolValue withKey:(NSString *)key {
 	[self addCustomPersonData:@(boolValue) withKey:key];
-}
-
-- (void)addCustomPersonDataVersion:(NSDictionary *)versionObject withKey:(NSString *)key {
-	[self addCustomPersonData:versionObject withKey:key];
-}
-
-- (void)addCustomPersonDataTimestamp:(NSDictionary *)timestampObject withKey:(NSString *)key {
-	[self addCustomPersonData:timestampObject withKey:key];
-}
-
-+ (NSDictionary *)versionObjectWithVersion:(NSString *)version {
-	return @{@"_type": @"version",
-			 @"version": version ?: [NSNull null],
-			 };
-}
-
-+ (NSDictionary *)timestampObjectWithNumber:(NSNumber *)seconds {
-	return @{@"_type": @"datetime",
-			 @"sec": seconds,
-			 };
 }
 
 + (NSDictionary *)timestampObjectWithDate:(NSDate *)date {

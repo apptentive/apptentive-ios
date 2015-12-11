@@ -751,7 +751,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[alertController addAction:[UIAlertAction actionWithTitle:self.interaction.composerCloseDiscardButtonTitle style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
 			[self discardDraft];
 		}]];
-		
+
+		alertController.popoverPresentationController.sourceView = sender.superview;
+		alertController.popoverPresentationController.sourceRect = sender.frame;
 		[self presentViewController:alertController animated:YES completion:nil];
 	} else {
 		UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:self.interaction.composerCloseConfirmBody delegate:self cancelButtonTitle:self.interaction.composerCloseCancelButtonTitle destructiveButtonTitle:self.interaction.composerCloseDiscardButtonTitle otherButtonTitles:nil];

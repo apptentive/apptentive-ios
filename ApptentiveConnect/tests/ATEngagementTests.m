@@ -13,6 +13,7 @@
 #import "ATInteractionUsageData.h"
 #import "ATEngagementBackend.h"
 #import "ATEngagementManifestParser.h"
+#import "ATConnect_Private.h"
 
 @implementation ATEngagementTests
 

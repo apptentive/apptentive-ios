@@ -9,6 +9,7 @@
 #import "CriteriaTests.h"
 #import "ATInteractionInvocation.h"
 #import "ATInteractionUsageData.h"
+#import "ATConnect_Private.h"
 
 @interface CodePointTest : CriteriaTest
 

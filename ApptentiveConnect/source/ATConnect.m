@@ -153,6 +153,18 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	[self addCustomPersonData:@(boolValue) withKey:key];
 }
 
++ (NSDictionary *)versionObjectWithVersion:(NSString *)version {
+	return @{@"_type": @"version",
+			 @"version": version ?: [NSNull null],
+			 };
+}
+
++ (NSDictionary *)timestampObjectWithNumber:(NSNumber *)seconds {
+	return @{@"_type": @"datetime",
+			 @"sec": seconds,
+			 };
+}
+
 + (NSDictionary *)timestampObjectWithDate:(NSDate *)date {
 	return [self timestampObjectWithNumber:@([date timeIntervalSince1970])];
 }

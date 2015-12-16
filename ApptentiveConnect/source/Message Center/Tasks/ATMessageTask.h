@@ -10,8 +10,9 @@
 #import "ATTask.h"
 #import "ATMessage.h"
 
+
 @interface ATMessageTask : ATTask <ATAPIRequestDelegate>
 
-@property (nonatomic, strong) NSString *pendingMessageID;
+@property (strong, nonatomic) NSString *pendingMessageID;
 
 @end

@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import "ATMessage.h"
 
@@ -27,10 +27,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 
 @protocol ATMessageCenterDataSourceDelegate;
 
+
 @interface ATMessageCenterDataSource : NSObject <NSURLSessionDownloadDelegate>
-@property (nonatomic, strong, readonly) NSFetchedResultsController *fetchedMessagesController;
-@property (nonatomic, weak) NSObject<ATMessageCenterDataSourceDelegate> *delegate;
-@property (nonatomic, readonly) NSDateFormatter *dateFormatter;
+@property (readonly, strong, nonatomic) NSFetchedResultsController *fetchedMessagesController;
+@property (weak, nonatomic) NSObject<ATMessageCenterDataSourceDelegate> *delegate;
+@property (readonly, nonatomic) NSDateFormatter *dateFormatter;
 
 - (id)initWithDelegate:(NSObject<ATMessageCenterDataSourceDelegate> *)delegate;
 - (void)start;
@@ -54,14 +55,14 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 - (NSInteger)numberOfAttachmentsForMessageAtIndex:(NSInteger)index;
 - (BOOL)shouldUsePlaceholderForAttachmentAtIndexPath:(NSIndexPath *)indexPath;
 - (BOOL)canPreviewAttachmentAtIndexPath:(NSIndexPath *)indexPath;
-- (NSString *)extensionForAttachmentAtIndexPath:(NSIndexPath *)indexPath; // Returns nil if thumbnail is present, file extension if not
+- (NSString *)extensionForAttachmentAtIndexPath:(NSIndexPath *)indexPath;			   // Returns nil if thumbnail is present, file extension if not
 - (UIImage *)imageForAttachmentAtIndexPath:(NSIndexPath *)indexPath size:(CGSize)size; // Returns thumbnail if present, generic file icon if not
 - (void)downloadAttachmentAtIndexPath:(NSIndexPath *)indexPath;
 - (id<QLPreviewControllerDataSource>)previewDataSourceAtIndex:(NSInteger)index;
 
-@property (nonatomic, readonly) BOOL lastMessageIsReply;
-@property (nonatomic, readonly) NSIndexPath *lastUserMessageIndexPath;
-@property (nonatomic, readonly) ATPendingMessageState lastUserMessageState;
+@property (readonly, nonatomic) BOOL lastMessageIsReply;
+@property (readonly, nonatomic) NSIndexPath *lastUserMessageIndexPath;
+@property (readonly, nonatomic) ATPendingMessageState lastUserMessageState;
 
 @end
 

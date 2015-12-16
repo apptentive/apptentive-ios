@@ -12,6 +12,7 @@
 #define DISPLAY_DURATION 3.0
 #define ANIMATION_DURATION 0.33
 
+
 @interface ATBannerViewController ()
 
 @property (strong, nonatomic) ATBannerViewController *cyclicReference;
@@ -27,40 +28,41 @@
 
 @end
 
+
 @implementation ATBannerViewController
 
 + (instancetype)bannerWithImageURL:(NSURL *)imageURL title:(NSString *)title message:(NSString *)message {
 	static ATBannerViewController *_currentBanner;
-	
+
 	if (_currentBanner != nil) {
 		[_currentBanner hide:self];
 	}
-	
+
 	ATBannerViewController *banner = [[ATConnect storyboard] instantiateViewControllerWithIdentifier:@"Banner"];
-	
+
 	banner.imageURL = imageURL;
 	banner.titleText = title;
 	banner.messageText = message;
-	
+
 	return banner;
 }
 
 - (void)show {
 	UIWindow *mainWindow = [UIApplication sharedApplication].delegate.window;
-	
-	self.window  = [[UIWindow alloc] initWithFrame:mainWindow.bounds];
+
+	self.window = [[UIWindow alloc] initWithFrame:mainWindow.bounds];
 	self.window.rootViewController = self;
 	self.window.windowLevel = UIWindowLevelAlert;
-	
+
 	[self.window makeKeyAndVisible];
-	
+
 	self.hideTimer = [NSTimer scheduledTimerWithTimeInterval:DISPLAY_DURATION target:self selector:@selector(hide:) userInfo:nil repeats:NO];
-	
+
 	self.topConstraint.constant = -CGRectGetHeight(self.bannerView.bounds);
 	[self.view layoutIfNeeded];
-	
+
 	self.topConstraint.constant = 0;
-	
+
 	[UIView animateWithDuration:ANIMATION_DURATION animations:^{
 		[self.view layoutIfNeeded];
 		self.window.frame = self.bannerView.frame;
@@ -69,7 +71,7 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	
+
 	self.imageURL = _imageURL;
 	self.titleText = _titleText;
 	self.messageText = _messageText;
@@ -83,7 +85,7 @@
 #if __IPHONE_OS_VERSION_MAX_ALLOWED < 90000
 - (NSUInteger)supportedInterfaceOrientations {
 #else
-	- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
 #endif
 	return UIInterfaceOrientationMaskAll;
 }
@@ -109,7 +111,7 @@
 
 - (void)setHasIcon:(BOOL)hasIcon {
 	self.imageView.hidden = !hasIcon;
-	
+
 	if (hasIcon) {
 		if (![self.bannerView.constraints containsObject:self.iconSpacingConstraint]) {
 			[self.bannerView addConstraint:self.iconSpacingConstraint];
@@ -125,19 +127,19 @@
 
 - (void)setImageURL:(NSURL *)imageURL {
 	_imageURL = imageURL;
-	
+
 	self.imageView.imageURL = imageURL;
 }
 
 - (void)setTitleText:(NSString *)titleText {
 	_titleText = titleText;
-	
+
 	self.titleLabel.text = titleText;
 }
 
 - (void)setMessageText:(NSString *)messageText {
 	_messageText = messageText;
-	
+
 	self.messageLabel.text = messageText;
 }
 
@@ -167,7 +169,7 @@
 
 - (IBAction)tap:(id)sender {
 	[self.delegate userDidTapBanner:self];
-	
+
 	[self hide:sender];
 }
 

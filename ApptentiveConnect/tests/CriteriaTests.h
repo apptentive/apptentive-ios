@@ -10,6 +10,7 @@
 
 @class ATInteractionInvocation;
 
+
 @interface CriteriaTest : XCTestCase
 
 @property (strong, nonatomic) ATInteractionInvocation *interaction;

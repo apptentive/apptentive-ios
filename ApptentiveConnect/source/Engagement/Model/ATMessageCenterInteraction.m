@@ -12,13 +12,14 @@
 #import "ATPersonInfo.h"
 #import "ATMessageCenterViewController.h"
 
+
 @implementation ATMessageCenterInteraction
 
 + (id)interactionForInvokingMessageEvents {
 	ATMessageCenterInteraction *messageCenterInteraction = [[ATMessageCenterInteraction alloc] init];
 	messageCenterInteraction.type = @"MessageCenter";
 	messageCenterInteraction.vendor = ATEngagementCodePointApptentiveVendorKey;
-	
+
 	return messageCenterInteraction;
 }
 
@@ -30,13 +31,13 @@
 	messageCenterInteraction.configuration = interaction.configuration;
 	messageCenterInteraction.version = interaction.version;
 	messageCenterInteraction.vendor = interaction.vendor;
-	
+
 	return messageCenterInteraction;
 }
 
 - (id)copyWithZone:(NSZone *)zone {
 	ATMessageCenterInteraction *copy = (ATMessageCenterInteraction *)[super copyWithZone:zone];
-	
+
 	return copy;
 }
 
@@ -86,7 +87,7 @@
 
 - (NSURL *)greetingImageURL {
 	NSString *URLString = self.configuration[@"greeting"][@"image_url"];
-	
+
 	return (URLString.length > 0) ? [NSURL URLWithString:URLString] : nil;
 }
 
@@ -167,7 +168,7 @@
 }
 
 - (NSString *)profileEditSaveButtonTitle {
-    return self.configuration[@"profile"][@"edit"][@"save_button"];
+	return self.configuration[@"profile"][@"edit"][@"save_button"];
 }
 
 @end

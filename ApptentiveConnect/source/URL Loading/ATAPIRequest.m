@@ -16,11 +16,8 @@
 #import "ATWebClient.h"
 #import "ATWebClient_Private.h"
 
-#if TARGET_OS_IPHONE
-#import <UIKit/UIKit.h>
-#endif
-
 NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
+
 
 @implementation ATAPIRequest {
 	ATURLConnection *connection;
@@ -114,11 +111,11 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 			self.errorMessage = [NSHTTPURLResponse localizedStringForStatusCode:statusCode];
 			break;
 	}
-	
+
 	NSObject *result = nil;
 	do { // once
 		NSData *d = [sender responseData];
-		
+
 		if (self.failed) {
 			NSString *responseString = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
 			if (responseString != nil) {
@@ -144,20 +141,20 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 			ATLogDebug(@"Request was:\n%@", [connection requestAsString]);
 			ATLogDebug(@"Response was:\n%@", [connection responseAsString]);
 		}
-		
+
 		if (!d) break;
 		if (self.returnType == ATAPIRequestReturnTypeData) {
 			result = d;
 			break;
 		}
-		
+
 		NSString *s = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
 		if (!s) break;
 		if (self.returnType == ATAPIRequestReturnTypeString) {
 			result = s;
 			break;
 		}
-		
+
 		if (self.returnType == ATAPIRequestReturnTypeJSON && statusCode != 204) {
 			NSError *error = nil;
 			id json = [ATJSONSerialization JSONObjectWithString:s error:&error];
@@ -171,7 +168,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 			break;
 		}
 	} while (NO);
-	
+
 	if (self.delegate) {
 		if (self.failed) {
 			[self.delegate at_APIRequestDidFail:self];
@@ -200,7 +197,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 		self.errorResponse = responseString;
 		responseString = nil;
 	}
-	
+
 	if ([ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogHTTPFailures ||
 		[ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogAllHTTPRequests) {
 		ATLogError(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);

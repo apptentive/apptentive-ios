@@ -24,20 +24,21 @@ typedef enum {
 
 @class ATSurveyQuestionAnswer;
 
+
 @interface ATSurveyQuestion : NSObject <NSCoding>
-@property (nonatomic, assign) ATSurveyQuestionType type;
-@property (nonatomic, copy) NSString *identifier;
-@property (nonatomic, getter=responseIsRequired) BOOL responseRequired;
-@property (nonatomic, copy) NSString *questionText;
-@property (nonatomic, copy) NSString *instructionsText;
-@property (nonatomic, copy) NSString *value;
-@property (nonatomic, readonly) NSMutableArray *answerChoices;
-@property (nonatomic, copy) NSString *answerText;
+@property (assign, nonatomic) ATSurveyQuestionType type;
+@property (copy, nonatomic) NSString *identifier;
+@property (assign, nonatomic, getter=responseIsRequired) BOOL responseRequired;
+@property (copy, nonatomic) NSString *questionText;
+@property (copy, nonatomic) NSString *instructionsText;
+@property (copy, nonatomic) NSString *value;
+@property (readonly, nonatomic) NSMutableArray *answerChoices;
+@property (copy, nonatomic) NSString *answerText;
 // If this is a multiple choice or multiple select question:
-@property (nonatomic, strong) NSMutableArray *selectedAnswerChoices;
-@property (nonatomic, assign) NSUInteger minSelectionCount;
-@property (nonatomic, assign) NSUInteger maxSelectionCount;
-@property (nonatomic, assign) BOOL multiline;
+@property (strong, nonatomic) NSMutableArray *selectedAnswerChoices;
+@property (assign, nonatomic) NSUInteger minSelectionCount;
+@property (assign, nonatomic) NSUInteger maxSelectionCount;
+@property (assign, nonatomic) BOOL multiline;
 
 - (void)addAnswerChoice:(ATSurveyQuestionAnswer *)answer;
 
@@ -48,7 +49,8 @@ typedef enum {
 - (void)reset;
 @end
 
+
 @interface ATSurveyQuestionAnswer : NSObject <NSCoding>
-@property (nonatomic, copy) NSString *identifier;
-@property (nonatomic, copy) NSString *value;
+@property (copy, nonatomic) NSString *identifier;
+@property (copy, nonatomic) NSString *value;
 @end

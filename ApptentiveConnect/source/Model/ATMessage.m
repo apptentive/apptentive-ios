@@ -16,6 +16,7 @@
 
 NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
+
 @implementation ATMessage
 
 @dynamic pendingMessageID;
@@ -75,7 +76,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
 + (ATMessage *)findMessageWithID:(NSString *)apptentiveID {
 	ATMessage *result = nil;
-	
+
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(apptentiveID == %@)", apptentiveID];
 		NSArray *results = [ATData findEntityNamed:@"ATMessage" withPredicate:fetchPredicate];
@@ -88,7 +89,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
 + (ATMessage *)findMessageWithPendingID:(NSString *)pendingID {
 	ATMessage *result = nil;
-	
+
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingMessageID == %@)", pendingID];
 		NSArray *results = [ATData findEntityNamed:@"ATMessage" withPredicate:fetchPredicate];
@@ -104,9 +105,9 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 	if (self.pendingMessageID == nil) {
 		CFUUIDRef uuidRef = CFUUIDCreate(NULL);
 		CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
-		
+
 		self.pendingMessageID = [NSString stringWithFormat:@"pending-message:%@", (__bridge NSString *)uuidStringRef];
-		
+
 		CFRelease(uuidRef), uuidRef = NULL;
 		CFRelease(uuidStringRef), uuidStringRef = NULL;
 	}
@@ -121,10 +122,10 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 	if (self.errorMessageJSON == nil) {
 		return nil;
 	}
-	
+
 	NSError *error = nil;
 	NSObject *errorObject = (NSObject *)[ATJSONSerialization JSONObjectWithString:self.errorMessageJSON error:&error];
-	
+
 	if (errorObject == nil) {
 		ATLogError(@"Error parsing errors: %@", error);
 		return nil;
@@ -182,7 +183,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
 			self.attachments = attachments;
 		} else if (self.attachments.count == attachmentsJSON.count) {
-			for (NSInteger i = 0; i < self.attachments.count; i ++) {
+			for (NSInteger i = 0; i < self.attachments.count; i++) {
 				ATFileAttachment *originalAttachment = [self.attachments objectAtIndex:i];
 				NSDictionary *newJSON = [attachmentsJSON objectAtIndex:i];
 				[originalAttachment updateWithJSON:newJSON];
@@ -217,7 +218,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 	if (self.hidden != nil) {
 		result[@"hidden"] = self.hidden;
 	}
-	
+
 	return result;
 }
 
@@ -271,7 +272,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
 - (NSNumber *)creationTimeForSections {
 	BOOL distantFutureCreationTime = (self.creationTime.doubleValue > self.clientCreationTime.doubleValue + 365 * 24 * 60 * 60);
-	
+
 	return distantFutureCreationTime ? self.clientCreationTime : self.creationTime;
 }
 
@@ -280,7 +281,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 		self.seenByUser = @YES;
 		if (self.apptentiveID && ![self.sentByUser boolValue]) {
 			NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-			
+
 			if (self.apptentiveID) {
 				[userInfo setObject:self.apptentiveID forKey:@"message_id"];
 			}
@@ -289,12 +290,13 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
 			[[ATMessageCenterInteraction interactionForInvokingMessageEvents] engage:ATInteractionMessageCenterEventLabelRead fromViewController:nil userInfo:userInfo];
 		}
-		
+
 		[ATData save];
 	}
 }
 
 @end
+
 
 @implementation ATMessage (QuickLook)
 

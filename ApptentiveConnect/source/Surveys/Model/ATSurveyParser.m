@@ -11,10 +11,12 @@
 #import "ATSurveyQuestion.h"
 #import "ATUtilities.h"
 
+
 @interface ATSurveyParser ()
 - (ATSurveyQuestionAnswer *)answerWithJSONDictionary:(NSDictionary *)jsonDictionary;
 - (ATSurveyQuestion *)questionWithJSONDictionary:(NSDictionary *)jsonDictionary;
 @end
+
 
 @implementation ATSurveyParser {
 	NSError *parserError;
@@ -23,9 +25,9 @@
 - (ATSurveyQuestionAnswer *)answerWithJSONDictionary:(NSDictionary *)jsonDictionary {
 	ATSurveyQuestionAnswer *answer = [[ATSurveyQuestionAnswer alloc] init];
 	BOOL failed = NO;
-	
+
 	NSDictionary *keyMapping = [NSDictionary dictionaryWithObjectsAndKeys:@"identifier", @"id", @"value", @"value", nil];
-	
+
 	for (NSString *key in keyMapping) {
 		NSString *ivarName = [keyMapping objectForKey:key];
 		NSObject *value = [jsonDictionary objectForKey:key];
@@ -35,7 +37,7 @@
 			failed = YES;
 		}
 	}
-	
+
 	if (failed) {
 		answer = nil;
 	}
@@ -45,9 +47,9 @@
 - (ATSurveyQuestion *)questionWithJSONDictionary:(NSDictionary *)jsonDictionary {
 	ATSurveyQuestion *question = [[ATSurveyQuestion alloc] init];
 	BOOL failed = YES;
-	
+
 	NSDictionary *keyMapping = [NSDictionary dictionaryWithObjectsAndKeys:@"identifier", @"id", @"questionText", @"value", @"instructionsText", @"instructions", nil];
-	
+
 	for (NSString *key in keyMapping) {
 		NSString *ivarName = [keyMapping objectForKey:key];
 		NSObject *value = [jsonDictionary objectForKey:key];
@@ -55,20 +57,20 @@
 			[question setValue:value forKey:ivarName];
 		}
 	}
-	
+
 	do { // once
 		NSObject *typeString = [jsonDictionary objectForKey:@"type"];
 		if (typeString == nil || ![typeString isKindOfClass:[NSString class]]) {
 			break;
 		}
-		
+
 		if ([(NSString *)typeString isEqualToString:@"multichoice"]) {
 			question.type = ATSurveyQuestionTypeMultipleChoice;
 		} else if ([(NSString *)typeString isEqualToString:@"multiselect"]) {
 			question.type = ATSurveyQuestionTypeMultipleSelect;
 		} else if ([(NSString *)typeString isEqualToString:@"singleline"]) {
 			question.type = ATSurveyQuestionTypeSingeLine;
-			
+
 			if ([jsonDictionary objectForKey:@"multiline"]) {
 				question.multiline = [(NSNumber *)[jsonDictionary objectForKey:@"multiline"] boolValue];
 			} else {
@@ -77,13 +79,13 @@
 		} else {
 			break;
 		}
-		
+
 		if ([jsonDictionary objectForKey:@"required"] != nil) {
 			question.responseRequired = [(NSNumber *)[jsonDictionary objectForKey:@"required"] boolValue];
 		}
-		
+
 		NSUInteger answerChoicesCount = [(NSArray *)[jsonDictionary objectForKey:@"answer_choices"] count];
-		
+
 		if ([jsonDictionary objectForKey:@"max_selections"] != nil) {
 			question.maxSelectionCount = [(NSNumber *)[jsonDictionary objectForKey:@"max_selections"] unsignedIntegerValue];
 		} else {
@@ -93,7 +95,7 @@
 				question.maxSelectionCount = answerChoicesCount;
 			}
 		}
-		
+
 		if ([jsonDictionary objectForKey:@"min_selections"] != nil) {
 			question.minSelectionCount = [(NSNumber *)[jsonDictionary objectForKey:@"min_selections"] unsignedIntegerValue];
 		} else {
@@ -104,14 +106,14 @@
 				question.minSelectionCount = 0;
 			}
 		}
-		
+
 		if (question.type == ATSurveyQuestionTypeMultipleChoice || question.type == ATSurveyQuestionTypeMultipleSelect) {
 			NSObject *answerChoices = [jsonDictionary objectForKey:@"answer_choices"];
 			if (answerChoices == nil || ![answerChoices isKindOfClass:[NSArray class]]) {
 				break;
 			}
-			
-			for (NSObject *answerDict in (NSDictionary *)answerChoices) {
+
+			for (NSObject *answerDict in(NSDictionary *)answerChoices) {
 				if (![answerDict isKindOfClass:[NSDictionary class]]) {
 					continue;
 				}
@@ -121,44 +123,44 @@
 				}
 			}
 		}
-		
+
 		failed = NO;
 	} while (NO);
-	
+
 	if (failed) {
 		question = nil;
 	}
-	
+
 	return question;
 }
 
 - (ATSurvey *)surveyWithInteraction:(ATInteraction *)interaction {
 	ATSurvey *survey = [[ATSurvey alloc] init];
-	
+
 	if (interaction.identifier) {
 		survey.identifier = interaction.identifier;
 	}
-	
+
 	if (interaction.configuration[@"name"]) {
 		survey.name = interaction.configuration[@"name"];
 	}
-	
+
 	if (interaction.configuration[@"description"]) {
 		survey.surveyDescription = interaction.configuration[@"description"];
 	}
-	
+
 	if (interaction.configuration[@"required"]) {
 		survey.responseRequired = [interaction.configuration[@"required"] boolValue];
 	}
-	
+
 	if (interaction.configuration[@"show_success_message"]) {
 		survey.showSuccessMessage = [interaction.configuration[@"show_success_message"] boolValue];
 	}
-	
+
 	if (interaction.configuration[@"success_message"]) {
 		survey.successMessage = interaction.configuration[@"success_message"];
 	}
-	
+
 	NSArray *questions = interaction.configuration[@"questions"];
 	if ([questions isKindOfClass:[NSArray class]]) {
 		for (NSObject *question in questions) {
@@ -170,7 +172,7 @@
 			}
 		}
 	}
-	
+
 	return survey;
 }
 

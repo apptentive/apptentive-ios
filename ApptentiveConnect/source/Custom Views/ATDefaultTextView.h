@@ -10,9 +10,10 @@
 
 #import "ATTypes.h"
 
+
 @interface ATDefaultTextView : UITextView
-@property (nonatomic, copy) NSString *placeholder;
-@property (nonatomic, copy) UIColor *placeholderColor;
-@property (nonatomic, readwrite, copy) ATDrawRectBlock at_drawRectBlock;
+@property (copy, nonatomic) NSString *placeholder;
+@property (copy, nonatomic) UIColor *placeholderColor;
+@property (copy, readwrite, nonatomic) ATDrawRectBlock at_drawRectBlock;
 - (BOOL)isDefault;
 @end

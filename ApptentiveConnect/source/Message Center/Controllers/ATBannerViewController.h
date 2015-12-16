@@ -10,6 +10,7 @@
 
 @protocol ATBannerViewControllerDelegate;
 
+
 @interface ATBannerViewController : UIViewController <ATNetworkImageViewDelegate>
 
 @property (weak, nonatomic) id<ATBannerViewControllerDelegate> delegate;

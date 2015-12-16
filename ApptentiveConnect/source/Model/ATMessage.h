@@ -23,22 +23,23 @@ typedef NS_ENUM(NSInteger, ATPendingMessageState) {
 
 @class ATMessageDisplayType, ATMessageSender;
 
+
 @interface ATMessage : ATRecord <ATJSONModel>
 
-@property (nonatomic, strong) NSString *pendingMessageID;
-@property (nonatomic, strong) NSNumber *pendingState;
-@property (nonatomic, strong) NSNumber *priority;
-@property (nonatomic, strong) NSNumber *seenByUser;
-@property (nonatomic, strong) NSNumber *sentByUser;
-@property (nonatomic, strong) NSNumber *errorOccurred;
-@property (nonatomic, strong) NSString *errorMessageJSON;
-@property (nonatomic, strong) ATMessageSender *sender;
-@property (nonatomic, strong) NSData *customData;
-@property (nonatomic, strong) NSNumber *hidden;
-@property (nonatomic, strong) NSNumber *automated;
-@property (nonatomic, strong) NSString *body;
-@property (nonatomic, strong) NSString *title;
-@property (nonatomic, strong) NSOrderedSet *attachments;
+@property (strong, nonatomic) NSString *pendingMessageID;
+@property (strong, nonatomic) NSNumber *pendingState;
+@property (strong, nonatomic) NSNumber *priority;
+@property (strong, nonatomic) NSNumber *seenByUser;
+@property (strong, nonatomic) NSNumber *sentByUser;
+@property (strong, nonatomic) NSNumber *errorOccurred;
+@property (strong, nonatomic) NSString *errorMessageJSON;
+@property (strong, nonatomic) ATMessageSender *sender;
+@property (strong, nonatomic) NSData *customData;
+@property (strong, nonatomic) NSNumber *hidden;
+@property (strong, nonatomic) NSNumber *automated;
+@property (strong, nonatomic) NSString *body;
+@property (strong, nonatomic) NSString *title;
+@property (strong, nonatomic) NSOrderedSet *attachments;
 
 + (instancetype)newInstanceWithBody:(NSString *)body attachments:(NSArray *)attachments;
 + (void)clearComposingMessages;
@@ -47,6 +48,7 @@ typedef NS_ENUM(NSInteger, ATPendingMessageState) {
 - (NSArray *)errorsFromErrorMessage;
 
 @end
+
 
 @interface ATMessage (CoreDataGeneratedAccessors)
 
@@ -61,6 +63,7 @@ typedef NS_ENUM(NSInteger, ATPendingMessageState) {
 - (void)markAsRead;
 
 @end
+
 
 @interface ATMessage (QuickLook) <QLPreviewControllerDataSource>
 @end

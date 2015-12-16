@@ -17,6 +17,7 @@ NSString *const ATInteractionTextModalEventLabelCancel = @"cancel";
 NSString *const ATInteractionTextModalEventLabelDismiss = @"dismiss";
 NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 
+
 @implementation ATInteractionTextModalController
 
 - (instancetype)initWithInteraction:(ATInteraction *)interaction {
@@ -25,7 +26,7 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 	if (self != nil) {
 		_interaction = [interaction copy];
 	}
-	
+
 	return self;
 }
 
@@ -34,21 +35,20 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 		ATLogError(@"Cannot present a TextModal alert without an interaction.");
 		return;
 	}
-	
+
 	self.viewController = viewController;
-	
+
 	if ([UIAlertController class]) {
 		self.alertController = [self alertControllerWithInteraction:self.interaction];
-		
-		if (self.alertController) {			
+
+		if (self.alertController) {
 			[viewController presentViewController:self.alertController animated:YES completion:^{
 				[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:self.viewController];
 			}];
 		}
-	}
-	else {
+	} else {
 		self.alertView = [self alertViewWithInteraction:self.interaction];
-		
+
 		if (self.alertView) {
 			[self.alertView show];
 		}
@@ -61,28 +61,28 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 	NSDictionary *config = interaction.configuration;
 	NSString *title = config[@"title"];
 	NSString *message = config[@"body"];
-	
+
 	if (!title && !message) {
 		ATLogError(@"Skipping display of Apptentive Note that does not have a title and body.");
 		return nil;
 	}
-	
+
 	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
-	
+
 	NSArray *actions = config[@"actions"];
 	for (NSDictionary *action in actions) {
 		NSString *title = action[@"label"];
-		
+
 		// Better to use default button text than to potentially create an un-cancelable alert with no buttons.
 		// 'UIAlertView: Buttons added must have a title.'
-		if(!title) {
+		if (!title) {
 			ATLogError(@"Apptentive Note button action does not have a title!");
 			title = @"button";
 		}
-	
+
 		[alertView addButtonWithTitle:title];
 	}
-	
+
 	return alertView;
 }
 
@@ -92,12 +92,12 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 	NSDictionary *config = interaction.configuration;
 	NSString *title = config[@"title"];
 	NSString *message = config[@"body"];
-	
+
 	if (!title && !message) {
 		ATLogError(@"Skipping display of Apptentive Note that does not have a title and body.");
 		return nil;
 	}
-	
+
 	NSString *layout = config[@"layout"];
 	UIAlertControllerStyle preferredStyle;
 	if ([layout isEqualToString:@"center"]) {
@@ -107,22 +107,22 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 	} else {
 		preferredStyle = UIAlertControllerStyleAlert;
 	}
-	
+
 	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:preferredStyle];
-	
+
 	BOOL cancelActionAdded = NO;
 	NSArray *actions = config[@"actions"];
-	
+
 	for (int i = 0; i < actions.count; i++) {
 		NSDictionary *actionForButton = actions[i];
-		
+
 		// Action position saved here and sent when button is tapped.
 		NSMutableDictionary *actionConfig = [NSMutableDictionary dictionary];
 		actionConfig[@"position"] = @(i);
 		[actionConfig addEntriesFromDictionary:actionForButton];
-		
+
 		UIAlertAction *alertAction = [self alertActionWithConfiguration:actionConfig];
-		
+
 		// Adding more than one cancel action to the alert causes crash.
 		// 'NSInternalInconsistencyException', reason: 'UIAlertController can only have one action with a style of UIAlertActionStyleCancel'
 		if (alertAction.style == UIAlertActionStyleCancel) {
@@ -134,12 +134,12 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 				continue;
 			}
 		}
-		
+
 		if (alertAction) {
 			[alertController addAction:alertAction];
 		}
 	}
-	
+
 	return alertController;
 }
 
@@ -147,14 +147,14 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 
 - (UIAlertAction *)alertActionWithConfiguration:(NSDictionary *)actionConfig {
 	NSString *title = actionConfig[@"label"];
-	
+
 	// Better to use default button text than to potentially create an un-cancelable alert with no buttons.
 	// Exception: 'Actions added to UIAlertController must have a title'
 	if (!title) {
 		ATLogError(@"Apptentive Note button action does not have a title!");
 		title = @"button";
 	}
-	
+
 	UIAlertActionStyle style = UIAlertActionStyleDefault;
 	// Future support for configuration of different UIAlertActionStyles
 	/*
@@ -170,7 +170,7 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 		style = UIAlertActionStyleDefault;
 	}
 	*/
-	
+
 	NSString *actionType = actionConfig[@"action"];
 	alertActionHandler actionHandler = nil;
 	if ([actionType isEqualToString:@"dismiss"]) {
@@ -180,24 +180,24 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 	} else {
 		ATLogError(@"Apptentive note contains an unknown action.");
 	}
-	
+
 	UIAlertAction *alertAction = [UIAlertAction actionWithTitle:title style:style handler:actionHandler];
-	
+
 	// Future support for configuration of enabled/disabled actions
 	/*
 	BOOL enabled = actionConfig[@"enabled"] ? [actionConfig[@"enabled"] boolValue] : YES;
 	alertAction.enabled = enabled;
 	*/
-	
+
 	return alertAction;
 }
 
 - (void)dismissAction:(NSDictionary *)actionConfig {
-	NSDictionary *userInfo = @{@"label": (actionConfig[@"label"] ?: [NSNull null]),
-							   @"position": (actionConfig[@"position"] ?: [NSNull null]),
-							   @"action_id": (actionConfig[@"id"] ?: [NSNull null]),
-							   };
-	
+	NSDictionary *userInfo = @{ @"label": (actionConfig[@"label"] ?: [NSNull null]),
+		@"position": (actionConfig[@"position"] ?: [NSNull null]),
+		@"action_id": (actionConfig[@"id"] ?: [NSNull null]),
+	};
+
 	[self.interaction engage:ATInteractionTextModalEventLabelDismiss fromViewController:self.viewController userInfo:userInfo];
 }
 
@@ -213,15 +213,15 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 	if (invocations) {
 		interaction = [[ATEngagementBackend sharedBackend] interactionForInvocations:invocations];
 	}
-	
-	NSDictionary *userInfo = @{@"label": (actionConfig[@"label"] ?: [NSNull null]),
-							   @"position": (actionConfig[@"position"] ?: [NSNull null]),
-							   @"invoked_interaction_id": (interaction.identifier ?: [NSNull null]),
-							   @"action_id": (actionConfig[@"id"] ?: [NSNull null]),
-							   };
-	
+
+	NSDictionary *userInfo = @{ @"label": (actionConfig[@"label"] ?: [NSNull null]),
+		@"position": (actionConfig[@"position"] ?: [NSNull null]),
+		@"invoked_interaction_id": (interaction.identifier ?: [NSNull null]),
+		@"action_id": (actionConfig[@"id"] ?: [NSNull null]),
+	};
+
 	[self.interaction engage:ATInteractionTextModalEventLabelInteraction fromViewController:self.viewController userInfo:userInfo];
-	
+
 	if (interaction) {
 		[[ATEngagementBackend sharedBackend] presentInteraction:interaction fromViewController:self.viewController];
 	}
@@ -242,15 +242,15 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	NSArray *actions = self.interaction.configuration[@"actions"];
 	NSDictionary *actionForButton = [actions objectAtIndex:buttonIndex];
-	
+
 	if (actionForButton) {
 		NSMutableDictionary *actionConfig = [NSMutableDictionary dictionary];
 		actionConfig[@"position"] = @(buttonIndex);
 		[actionConfig addEntriesFromDictionary:actionForButton];
-		
+
 		NSString *actionTitle = actionConfig[@"label"];
 		NSString *buttonTitle = [alertView buttonTitleAtIndex:buttonIndex];
-		
+
 		if (![actionTitle isEqualToString:buttonTitle]) {
 			ATLogError(@"Cannot find an action for the tapped UIAlertView button.");
 		} else {
@@ -264,11 +264,10 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 			}
 		}
 	}
-	
 }
 
 - (void)dealloc {
-	_alertView.delegate = nil;	
+	_alertView.delegate = nil;
 }
 
 @end

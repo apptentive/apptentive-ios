@@ -11,7 +11,8 @@
 #define kATSurveyQuestionStorageVersion 1
 #define kATSurveyQuestionAnswerStorageVersion 1
 
-@implementation ATSurveyQuestion 
+
+@implementation ATSurveyQuestion
 
 - (id)init {
 	if ((self = [super init])) {
@@ -34,12 +35,12 @@
 			self.questionText = [coder decodeObjectForKey:@"questionText"];
 			self.instructionsText = [coder decodeObjectForKey:@"instructionsText"];
 			self.value = [coder decodeObjectForKey:@"value"];
-			
+
 			NSArray *decodedAnswerChoices = [coder decodeObjectForKey:@"answerChoices"];
 			if (decodedAnswerChoices) {
 				[_answerChoices addObjectsFromArray:decodedAnswerChoices];
 			}
-			
+
 			self.answerText = [coder decodeObjectForKey:@"answerText"];
 			self.minSelectionCount = [(NSNumber *)[coder decodeObjectForKey:@"minSelectionCount"] unsignedIntegerValue];
 			self.maxSelectionCount = [(NSNumber *)[coder decodeObjectForKey:@"maxSelectionCount"] unsignedIntegerValue];
@@ -90,7 +91,7 @@
 
 - (ATSurveyQuestionValidationErrorType)validateAnswer {
 	ATSurveyQuestionValidationErrorType error = ATSurveyQuestionValidationErrorNone;
-	
+
 	if (self.type == ATSurveyQuestionTypeSingeLine) {
 		NSString *trimmedText = self.answerText;
 		if (trimmedText) {
@@ -105,7 +106,7 @@
 		}
 	} else if (self.type == ATSurveyQuestionTypeMultipleSelect) {
 		NSUInteger answerCount = [self.selectedAnswerChoices count];
-		
+
 		if (self.responseIsRequired || answerCount > 0) {
 			if (self.minSelectionCount != 0 && answerCount < self.minSelectionCount) {
 				error = ATSurveyQuestionValidationErrorTooFewAnswers;
@@ -122,6 +123,7 @@
 	self.answerText = nil;
 }
 @end
+
 
 @implementation ATSurveyQuestionAnswer
 

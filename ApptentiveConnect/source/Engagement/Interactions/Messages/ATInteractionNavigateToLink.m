@@ -10,6 +10,7 @@
 
 NSString *const ATInteractionNavigateToLinkEventLabelNavigate = @"navigate";
 
+
 @implementation ATInteractionNavigateToLink
 
 + (void)navigateToLinkWithInteraction:(ATInteraction *)interaction {
@@ -20,12 +21,12 @@ NSString *const ATInteractionNavigateToLinkEventLabelNavigate = @"navigate";
 	NSURL *url = [NSURL URLWithString:urlString];
 	if (url) {
 		BOOL attemptToOpenURL = [[UIApplication sharedApplication] canOpenURL:url];
-		
+
 		// In iOS 9, `canOpenURL:` returns NO unless that URL scheme has been added to LSApplicationQueriesSchemes.
 		if (!attemptToOpenURL) {
 			attemptToOpenURL = YES;
 		}
-		
+
 		if (attemptToOpenURL) {
 			openedURL = [[UIApplication sharedApplication] openURL:url];
 			if (!openedURL) {
@@ -37,11 +38,11 @@ NSString *const ATInteractionNavigateToLinkEventLabelNavigate = @"navigate";
 	} else {
 		ATLogError(@"No URL was included in the NavigateToLink Interaction's configuration.");
 	}
-	
-	NSDictionary *userInfo = @{@"url": (urlString ?: [NSNull null]),
-							   @"success": @(openedURL),
-							   };
-	
+
+	NSDictionary *userInfo = @{ @"url": (urlString ?: [NSNull null]),
+		@"success": @(openedURL),
+	};
+
 	[interaction engage:ATInteractionNavigateToLinkEventLabelNavigate fromViewController:nil userInfo:userInfo];
 }
 

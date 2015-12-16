@@ -10,6 +10,7 @@
 
 #import "ATBackend.h"
 
+
 @interface ATNetworkImageView ()
 
 @property (strong, nonatomic) NSURLConnection *connection;
@@ -18,15 +19,16 @@
 
 @end
 
+
 @implementation ATNetworkImageView
 
 - (id)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
+	self = [super initWithFrame:frame];
+	if (self) {
+		// Initialization code
 		_useCache = YES;
-    }
-    return self;
+	}
+	return self;
 }
 
 - (void)awakeFromNib {
@@ -35,7 +37,7 @@
 }
 
 - (void)dealloc {
-    [_connection cancel];
+	[_connection cancel];
 }
 
 - (void)restartDownload {
@@ -45,7 +47,7 @@
 	}
 	if (self.imageURL) {
 		NSURLRequest *request = [NSURLRequest requestWithURL:self.imageURL];
-		
+
 		NSURLCache *cache = [[ATBackend sharedBackend] imageCache];
 		BOOL cacheHit = NO;
 		if (cache) {
@@ -58,7 +60,7 @@
 				}
 			}
 		}
-		
+
 		if (!cacheHit) {
 			self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
 			[self.connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
@@ -76,48 +78,48 @@
 
 #pragma mark NSURLConnectionDelegate
 - (void)connection:(NSURLConnection *)aConnection didFailWithError:(NSError *)error {
-    if (aConnection == self.connection) {
-        ATLogError(@"Unable to download image at %@: %@", self.imageURL, error);
-        self.connection = nil;
-		
+	if (aConnection == self.connection) {
+		ATLogError(@"Unable to download image at %@: %@", self.imageURL, error);
+		self.connection = nil;
+
 		if ([self.delegate respondsToSelector:@selector(networkImageView:didFailWithError:)]) {
 			[self.delegate networkImageView:self didFailWithError:error];
 		}
-    }
+	}
 }
 
 #pragma mark NSURLConnectionDataDelegate
 - (void)connection:(NSURLConnection *)aConnection didReceiveResponse:(NSURLResponse *)aResponse {
-    if (aConnection == self.connection) {
-        self.imageData = [[NSMutableData alloc] init];
+	if (aConnection == self.connection) {
+		self.imageData = [[NSMutableData alloc] init];
 		self.response = [aResponse copy];
-    }
+	}
 }
 
 - (void)connection:(NSURLConnection *)aConnection didReceiveData:(NSData *)data {
-    if (aConnection == self.connection) {
-        [self.imageData appendData:data];
-    }
+	if (aConnection == self.connection) {
+		[self.imageData appendData:data];
+	}
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)aConnection {
-    if (self.connection == aConnection) {
-        UIImage *newImage = [UIImage imageWithData:self.imageData];
-        if (newImage) {
-            self.image = newImage;
+	if (self.connection == aConnection) {
+		UIImage *newImage = [UIImage imageWithData:self.imageData];
+		if (newImage) {
+			self.image = newImage;
 			if (self.useCache) {
 				NSURLRequest *request = [NSURLRequest requestWithURL:self.imageURL];
 				NSURLCache *cache = [[ATBackend sharedBackend] imageCache];
 				NSCachedURLResponse *cachedResponse = [[NSCachedURLResponse alloc] initWithResponse:self.response data:self.imageData userInfo:nil storagePolicy:NSURLCacheStorageAllowed];
 				[cache storeCachedResponse:cachedResponse forRequest:request];
 				cachedResponse = nil;
-				
+
 				if ([self.delegate respondsToSelector:@selector(networkImageViewDidLoad:)]) {
 					[self.delegate networkImageViewDidLoad:self];
 				}
 			}
-        }
-    }
+		}
+	}
 }
 
 @end

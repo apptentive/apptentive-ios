@@ -18,6 +18,7 @@
 #import <OCMock/OCMFunctions.h>
 #import <objc/runtime.h>
 
+
 @interface OCMStubRecorder : OCMRecorder
 
 - (id)andReturn:(id)anObject;
@@ -39,26 +40,23 @@
   if (OCMIsObjectType(@encode(__typeof(_val)))) {                                   \
       objc_setAssociatedObject(_nsval, "OCMAssociatedBoxedValue", *(__unsafe_unretained id *) (void *) &_val, OBJC_ASSOCIATION_RETAIN); \
   }                                                                                 \
-  _nsval;                                                                           \
+  _nsval; \
 }))
-@property (nonatomic, readonly) OCMStubRecorder *(^ _andReturn)(NSValue *);
+@property (readonly, nonatomic) OCMStubRecorder * (^_andReturn)(NSValue *);
 
 #define andThrow(anException) _andThrow(anException)
-@property (nonatomic, readonly) OCMStubRecorder *(^ _andThrow)(NSException *);
+@property (readonly, nonatomic) OCMStubRecorder * (^_andThrow)(NSException *);
 
 #define andPost(aNotification) _andPost(aNotification)
-@property (nonatomic, readonly) OCMStubRecorder *(^ _andPost)(NSNotification *);
+@property (readonly, nonatomic) OCMStubRecorder * (^_andPost)(NSNotification *);
 
 #define andCall(anObject, aSelector) _andCall(anObject, aSelector)
-@property (nonatomic, readonly) OCMStubRecorder *(^ _andCall)(id, SEL);
+@property (readonly, nonatomic) OCMStubRecorder * (^_andCall)(id, SEL);
 
 #define andDo(aBlock) _andDo(aBlock)
-@property (nonatomic, readonly) OCMStubRecorder *(^ _andDo)(void (^)(NSInvocation *));
+@property (readonly, nonatomic) OCMStubRecorder * (^_andDo)(void (^)(NSInvocation *));
 
 #define andForwardToRealObject() _andForwardToRealObject()
-@property (nonatomic, readonly) OCMStubRecorder *(^ _andForwardToRealObject)(void);
+@property (readonly, nonatomic) OCMStubRecorder * (^_andForwardToRealObject)(void);
 
 @end
-
-
-

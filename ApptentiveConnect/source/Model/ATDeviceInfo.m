@@ -18,6 +18,7 @@
 #import "ATUtilities.h"
 #import "ATDeviceUpdater.h"
 
+
 @implementation ATDeviceInfo
 - (id)init {
 	if ((self = [super init])) {
@@ -45,37 +46,37 @@
 
 - (NSDictionary *)dictionaryRepresentation {
 	NSMutableDictionary *device = [NSMutableDictionary dictionary];
-	
+
 	NSString *uuid = [[ATBackend sharedBackend] deviceUUID];
 	if (uuid) {
 		device[@"uuid"] = uuid;
 	}
-	
+
 	NSString *osName = [ATUtilities currentSystemName];
 	if (osName) {
 		device[@"os_name"] = osName;
 	}
-	
+
 	NSString *osVersion = [ATUtilities currentSystemVersion];
 	if (osVersion) {
 		device[@"os_version"] = osVersion;
 	}
-	
+
 	NSString *systemBuild = [ATUtilities currentSystemBuild];
 	if (systemBuild) {
 		device[@"os_build"] = systemBuild;
 	}
-	
+
 	NSString *machineName = [ATUtilities currentMachineName];
 	if (machineName) {
 		device[@"hardware"] = machineName;
 	}
-	
+
 	NSString *carrier = [ATDeviceInfo carrier];
 	if (carrier != nil) {
 		device[@"carrier"] = carrier;
 	}
-	
+
 	NSLocale *locale = [NSLocale currentLocale];
 	NSString *localeIdentifier = [locale localeIdentifier];
 	NSDictionary *localeComponents = [NSLocale componentsFromLocaleIdentifier:localeIdentifier];
@@ -86,28 +87,28 @@
 	if (countryCode) {
 		device[@"locale_country_code"] = countryCode;
 	}
-	
+
 	NSString *preferredLanguage = [[NSLocale preferredLanguages] firstObject];
 	if (preferredLanguage) {
 		device[@"locale_language_code"] = preferredLanguage;
 	}
-	
+
 	device[@"utc_offset"] = @([[NSTimeZone systemTimeZone] secondsFromGMT]);
-	
+
 	NSDictionary *extraInfo = [[ATConnect sharedConnection] customDeviceData];
 	if (extraInfo && [extraInfo count]) {
 		device[@"custom_data"] = extraInfo;
 	}
-	
+
 	NSDictionary *integrationConfiguration = [[ATConnect sharedConnection] integrationConfiguration];
 	if (integrationConfiguration && [integrationConfiguration isKindOfClass:[NSDictionary class]]) {
 		device[@"integration_config"] = integrationConfiguration;
 	}
-	
-	return @{@"device":device};
+
+	return @{ @"device": device };
 }
 
 - (NSDictionary *)apiJSON {
-	return @{@"device":[ATUtilities diffDictionary:self.dictionaryRepresentation[@"device"] againstDictionary:[ATDeviceUpdater lastSavedVersion][@"device"]]};
+	return @{ @"device": [ATUtilities diffDictionary:self.dictionaryRepresentation[@"device"] againstDictionary:[ATDeviceUpdater lastSavedVersion][@"device"]] };
 }
 @end

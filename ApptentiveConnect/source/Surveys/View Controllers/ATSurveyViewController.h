@@ -15,27 +15,30 @@
 @class ATSurvey;
 @class ATSurveyQuestion;
 
+
 @interface ATSurveyViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate>
-@property (nonatomic, copy) ATInteraction *interaction;
-@property (nonatomic, copy) NSString *errorText;
+@property (copy, nonatomic) ATInteraction *interaction;
+@property (copy, nonatomic) NSString *errorText;
 - (id)initWithSurvey:(ATSurvey *)survey;
 - (IBAction)sendSurvey;
 @end
 
 @protocol ATCellTextEntry <NSObject>
-@property (nonatomic, retain) NSIndexPath *cellPath;
-@property (nonatomic, retain) ATSurveyQuestion *question;
-@property (nonatomic, copy) NSString *text;
+@property (strong, nonatomic) NSIndexPath *cellPath;
+@property (strong, nonatomic) ATSurveyQuestion *question;
+@property (copy, nonatomic) NSString *text;
 - (CGRect)frame;
 - (BOOL)becomeFirstResponder;
 @end
 
+
 @interface ATCellTextView : ATDefaultTextView <ATCellTextEntry>
-@property (nonatomic, strong) NSIndexPath *cellPath;
-@property (nonatomic, strong) ATSurveyQuestion *question;
+@property (strong, nonatomic) NSIndexPath *cellPath;
+@property (strong, nonatomic) ATSurveyQuestion *question;
 @end
 
+
 @interface ATCellTextField : UITextField <ATCellTextEntry>
-@property (nonatomic, strong) NSIndexPath *cellPath;
-@property (nonatomic, strong) ATSurveyQuestion *question;
+@property (strong, nonatomic) NSIndexPath *cellPath;
+@property (strong, nonatomic) ATSurveyQuestion *question;
 @end

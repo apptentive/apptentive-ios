@@ -8,6 +8,7 @@
 
 #import "ATMessageCenterProfileView.h"
 
+
 @interface ATMessageCenterProfileView ()
 
 @property (weak, nonatomic) IBOutlet UIView *containerView;
@@ -30,31 +31,32 @@
 
 @end
 
+
 @implementation ATMessageCenterProfileView
 
 - (void)awakeFromNib {
-	UIColor *borderColor = [UIColor colorWithRed:200.0/255.0 green:199.0/255.0 blue:204.0/255.0 alpha:1.0];
+	UIColor *borderColor = [UIColor colorWithRed:200.0 / 255.0 green:199.0 / 255.0 blue:204.0 / 255.0 alpha:1.0];
 	CGFloat borderWidth = 1.0 / [UIScreen mainScreen].scale;
-	
+
 	self.containerView.layer.borderColor = borderColor.CGColor;
 	self.buttonBar.layer.borderColor = borderColor.CGColor;
-	
+
 	self.containerView.layer.borderWidth = borderWidth;
 	self.buttonBar.layer.borderWidth = borderWidth;
-	
+
 	self.portraitFullConstraints = @[self.nameTrailingConstraint, self.emailLeadingConstraint, self.nameVerticalSpaceToEmail];
 	self.portraitCompactConstraints = @[self.nameTrailingConstraint, self.emailLeadingConstraint];
-	
+
 	self.nameHorizontalSpaceToEmail = [NSLayoutConstraint constraintWithItem:self.nameField attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self.emailField attribute:NSLayoutAttributeLeading multiplier:1.0 constant:-8.0];
 	NSLayoutConstraint *nameEmailTopAlignment = [NSLayoutConstraint constraintWithItem:self.nameField attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.emailField attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
 	NSLayoutConstraint *nameEmailBottomAlignment = [NSLayoutConstraint constraintWithItem:self.nameField attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.emailField attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.0];
-	
+
 	self.landscapeFullConstraints = @[self.nameHorizontalSpaceToEmail, nameEmailTopAlignment, nameEmailBottomAlignment];
 	self.landscapeCompactConstraints = @[self.emailLeadingConstraint, nameEmailTopAlignment, nameEmailBottomAlignment];
-	
+
 	// Find constraints common to both modes/orientations
 	NSMutableSet *baseConstraintSet = [NSMutableSet setWithArray:self.containerView.constraints];
-	[baseConstraintSet	minusSet:[NSSet setWithArray:self.portraitFullConstraints]];
+	[baseConstraintSet minusSet:[NSSet setWithArray:self.portraitFullConstraints]];
 	self.baseConstraints = [baseConstraintSet allObjects];
 }
 
@@ -75,13 +77,13 @@
 - (void)updateConstraints {
 	[self.containerView removeConstraints:self.containerView.constraints];
 	[self.containerView addConstraints:self.baseConstraints];
-	
+
 	if (UIInterfaceOrientationIsLandscape(self.orientation)) {
 		switch (self.mode) {
 			case ATMessageCenterProfileModeFull:
 				[self.containerView addConstraints:self.landscapeFullConstraints];
 				break;
-				
+
 			case ATMessageCenterProfileModeCompact:
 				[self.containerView addConstraints:self.landscapeCompactConstraints];
 				break;
@@ -91,22 +93,22 @@
 			case ATMessageCenterProfileModeFull:
 				[self.containerView addConstraints:self.portraitFullConstraints];
 				break;
-				
+
 			case ATMessageCenterProfileModeCompact:
 				[self.containerView addConstraints:self.portraitCompactConstraints];
 				break;
 		}
 	}
-	
+
 	[super updateConstraints];
 }
 
 - (void)setMode:(ATMessageCenterProfileMode)mode {
 	if (_mode != mode) {
 		_mode = mode;
-		
+
 		CGFloat nameFieldAlpha;
-		
+
 		if (mode == ATMessageCenterProfileModeCompact) {
 			self.requiredLabel.hidden = NO;
 			nameFieldAlpha = 0;
@@ -116,9 +118,9 @@
 			nameFieldAlpha = 1;
 			self.emailVerticalSpaceToButtonBar.constant = 16.0;
 		}
-		
+
 		[self updateConstraints];
-		
+
 		[UIView animateWithDuration:0.25 animations:^{
 			self.nameField.alpha = nameFieldAlpha;
 			self.requiredLabel.alpha = 1.0 - nameFieldAlpha;

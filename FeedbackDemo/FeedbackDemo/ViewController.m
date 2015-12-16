@@ -20,6 +20,7 @@ typedef NS_ENUM(NSInteger, TableViewSection) {
 	kSectionCount
 };
 
+
 @interface ViewController ()
 
 @property (strong, nonatomic) NSArray *events;
@@ -27,19 +28,20 @@ typedef NS_ENUM(NSInteger, TableViewSection) {
 
 @end
 
+
 @implementation ViewController
 
 #pragma mark Lifecycle
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	
+
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unreadMessageCountChanged:) name:ATMessageCenterUnreadCountChangedNotification object:nil];
-	
+
 	self.interactions = [ATConnect sharedConnection].engagementInteractions;
 
 #warning Add your own events below to trigger them from this app.
-	self.events = @[ @"event_1", @"event_2", @"event_3", @"event_4", @"event_5" ];
+	self.events = @[@"event_1", @"event_2", @"event_3", @"event_4", @"event_5"];
 }
 
 - (void)dealloc {
@@ -56,7 +58,7 @@ typedef NS_ENUM(NSInteger, TableViewSection) {
 
 - (IBAction)refreshInteractions:(id)sender {
 	self.interactions = [ATConnect sharedConnection].engagementInteractions;
-	
+
 	[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kInteractionSection] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
@@ -72,7 +74,7 @@ typedef NS_ENUM(NSInteger, TableViewSection) {
 		NSDictionary *commerceItem = [ATConnect extendedDataCommerceItemWithItemID:@"SKU_123" name:@"unlock_everything" category:@"in_app_purchase" price:@(4.99) quantity:@(1) currency:@"USD"];
 		NSDictionary *commerce = [ATConnect extendedDataCommerceWithTransactionID:@"123" affiliation:@"app_store" revenue:@(4.99) shipping:@(0) tax:@(1) currency:@"USD" commerceItems:@[commerceItem]];
 		NSArray *extendedData = @[[ATConnect extendedDataDate:[NSDate date]], [ATConnect extendedDataLocationForLatitude:14 longitude:10], commerce];
-		[[ATConnect sharedConnection] engage:@"event_with_data" withCustomData:@{@"customDataKey":@"customDataValue"} withExtendedData:extendedData fromViewController:self];
+		[[ATConnect sharedConnection] engage:@"event_with_data" withCustomData:@{ @"customDataKey": @"customDataValue" } withExtendedData:extendedData fromViewController:self];
 	}
 }
 
@@ -86,13 +88,13 @@ typedef NS_ENUM(NSInteger, TableViewSection) {
 	switch (section) {
 		case kMessageCenterSection:
 			return 1;
-			
+
 		case kEventSection:
 			return self.events.count;
-			
+
 		case kInteractionSection:
 			return MAX(self.interactions.count, 1);
-			
+
 		default:
 			return 0;
 	}
@@ -100,22 +102,22 @@ typedef NS_ENUM(NSInteger, TableViewSection) {
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCell *cell;
-	
+
 	switch (indexPath.section) {
 		case kMessageCenterSection:
 			cell = [tableView dequeueReusableCellWithIdentifier:@"MessageCenter" forIndexPath:indexPath];
-            cell.accessoryView = [[ATConnect sharedConnection] unreadMessageCountAccessoryView:YES];
+			cell.accessoryView = [[ATConnect sharedConnection] unreadMessageCountAccessoryView:YES];
 			break;
-			
+
 		case kEventSection:
 			cell = [tableView dequeueReusableCellWithIdentifier:@"Event" forIndexPath:indexPath];
 
 			cell.textLabel.text = [NSString stringWithFormat:@"Engage “%@” event", self.events[indexPath.row]];
 			break;
-			
+
 		case kInteractionSection:
 			cell = [tableView dequeueReusableCellWithIdentifier:@"Interaction" forIndexPath:indexPath];
-			
+
 			if (self.interactions.count > 0) {
 				cell.textLabel.text = [[ATConnect sharedConnection] engagementInteractionNameAtIndex:indexPath.row];
 				cell.detailTextLabel.text = [[ATConnect sharedConnection] engagementInteractionTypeAtIndex:indexPath.row];
@@ -123,10 +125,10 @@ typedef NS_ENUM(NSInteger, TableViewSection) {
 				cell.textLabel.text = @"Refresh Interactions…";
 				cell.detailTextLabel.text = nil;
 			}
-			
+
 			break;
 	}
-	
+
 	return cell;
 }
 
@@ -134,13 +136,13 @@ typedef NS_ENUM(NSInteger, TableViewSection) {
 	switch (section) {
 		case kMessageCenterSection:
 			return @"Message Center";
-			
+
 		case kEventSection:
 			return @"Events";
-			
+
 		case kInteractionSection:
 			return @"Test Interactions";
-			
+
 		default:
 			return nil;
 	}
@@ -162,11 +164,11 @@ typedef NS_ENUM(NSInteger, TableViewSection) {
 		case kMessageCenterSection:
 			[[ATConnect sharedConnection] presentMessageCenterFromViewController:self];
 			break;
-		
+
 		case kEventSection:
 			[[ATConnect sharedConnection] engage:self.events[indexPath.row] fromViewController:self];
 			break;
-		
+
 		case kInteractionSection:
 			if (self.interactions.count > 0) {
 				[[ATConnect sharedConnection] presentInteractionAtIndex:indexPath.row fromViewController:self];
@@ -175,7 +177,7 @@ typedef NS_ENUM(NSInteger, TableViewSection) {
 			}
 			break;
 	}
-	
+
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

@@ -24,13 +24,15 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentAdd = @"attachment
 NSString *const ATInteractionMessageCenterEventLabelAttachmentCancel = @"attachment_cancel";
 NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachment_delete";
 
+
 @interface ATAttachmentController ()
 
-@property (nonatomic, strong) UIPopoverController *imagePickerPopoverController;
+@property (strong, nonatomic) UIPopoverController *imagePickerPopoverController;
 @property (strong, nonatomic) NSMutableArray *mutableAttachments;
 @property (assign, nonatomic) CGSize collectionViewFooterSize;
 
 @end
+
 
 @implementation ATAttachmentController
 
@@ -87,9 +89,9 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 
 		for (UIImage *image in self.mutableAttachments) {
 			NSString *name = [NSString stringWithFormat:ATLocalizedString(@"Attachment %ld", @"Placeholder name for attachment"), (long)index];
-			ATFileAttachment *attachment = [ATFileAttachment newInstanceWithFileData:UIImageJPEGRepresentation(image, 0.6) MIMEType:@"image/jpeg"name:name];
+			ATFileAttachment *attachment = [ATFileAttachment newInstanceWithFileData:UIImageJPEGRepresentation(image, 0.6) MIMEType:@"image/jpeg" name:name];
 
-			index ++;
+			index++;
 			[attachments addObject:attachment];
 		}
 		_attachments = attachments;
@@ -189,7 +191,7 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 #pragma mark - Image picker controller delegate
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-		UIImage *photo = info[UIImagePickerControllerOriginalImage];
+	UIImage *photo = info[UIImagePickerControllerOriginalImage];
 	if (photo) {
 		[self insertImage:photo];
 	} else {
@@ -197,7 +199,7 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 	}
 
 	[self dismissImagePicker:picker];
-	
+
 	if (!self.active) {
 		[self becomeFirstResponder];
 		self.active = YES;
@@ -266,6 +268,7 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 }
 
 @end
+
 
 @implementation ATAttachmentController (QuickLook)
 

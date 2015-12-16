@@ -10,6 +10,7 @@
 
 #define kATTaskCodingVersion 2
 
+
 @implementation ATTask
 
 - (id)initWithCoder:(NSCoder *)coder {
@@ -40,11 +41,9 @@
 }
 
 - (void)start {
-	
 }
 
 - (void)stop {
-	
 }
 
 - (float)percentComplete {
@@ -73,7 +72,7 @@
 	[parts addObject:[NSString stringWithFormat:@"failureCount: %lu", (unsigned long)self.failureCount]];
 	[parts addObject:[NSString stringWithFormat:@"percentComplete: %f", [self percentComplete]]];
 	[parts addObject:[NSString stringWithFormat:@"taskName: %@", [self taskName]]];
-	
+
 	NSString *d = [parts componentsJoinedByString:@", "];
 	parts = nil;
 	return [NSString stringWithFormat:@"<%@ %p: %@>", NSStringFromClass([self class]), self, d];

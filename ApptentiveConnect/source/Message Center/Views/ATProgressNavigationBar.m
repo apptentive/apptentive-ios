@@ -8,10 +8,10 @@
 
 #import "ATProgressNavigationBar.h"
 
+
 @implementation ATProgressNavigationBar
 
-- (instancetype)initWithCoder:(NSCoder *)coder
-{
+- (instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super initWithCoder:coder];
 	if (self) {
 		[self addProgressView];
@@ -19,8 +19,7 @@
 	return self;
 }
 
-- (instancetype)init
-{
+- (instancetype)init {
 	self = [super init];
 	if (self) {
 		[self addProgressView];

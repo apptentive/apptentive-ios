@@ -16,12 +16,13 @@
 #import "ATJSONSerialization.h"
 #import "ATURLConnection.h"
 
+
 @implementation ATWebClient (Metrics)
 - (ATAPIRequest *)requestForSendingMetric:(ATMetric *)metric {
 	NSDictionary *postData = [metric apiDictionary];
 	NSString *url = [self apiURLStringWithPath:@"records"];
 	ATURLConnection *conn = nil;
-	
+
 	conn = [self connectionToPost:[NSURL URLWithString:url] parameters:postData];
 	conn.timeoutInterval = 240.0;
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:ATWebClientDefaultChannelName];
@@ -48,7 +49,7 @@
 	}
 	NSString *url = [self apiURLStringWithPath:@"events"];
 	ATURLConnection *conn = nil;
-	
+
 	conn = [self connectionToPost:[NSURL URLWithString:url] JSON:postString];
 	conn.timeoutInterval = 240.0;
 	[self updateConnection:conn withOAuthToken:conversation.token];

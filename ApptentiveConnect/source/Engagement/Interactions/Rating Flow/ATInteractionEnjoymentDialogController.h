@@ -9,13 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "ATInteraction.h"
 
+
 @interface ATInteractionEnjoymentDialogController : NSObject <UIAlertViewDelegate>
 
-@property (nonatomic, retain) ATInteraction *interaction;
-@property (nonatomic, retain) UIViewController *viewController;
+@property (strong, nonatomic) ATInteraction *interaction;
+@property (strong, nonatomic) UIViewController *viewController;
 
-@property (nonatomic, retain) UIAlertController *alertController;
-@property (nonatomic, retain) UIAlertView *alertView;
+@property (strong, nonatomic) UIAlertController *alertController;
+@property (strong, nonatomic) UIAlertView *alertView;
 
 - (instancetype)initWithInteraction:(ATInteraction *)interaction;
 - (void)presentEnjoymentDialogFromViewController:(UIViewController *)viewController;

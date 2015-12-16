@@ -14,11 +14,13 @@
 
 #define kATRecordRequestTaskCodingVersion 1
 
+
 @interface ATRecordRequestTask ()
 
 @property (strong, nonatomic) ATAPIRequest *request;
 
 @end
+
 
 @implementation ATRecordRequestTask
 
@@ -108,7 +110,6 @@ fail:
 #pragma mark ATAPIRequestDelegate
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(id)result {
 	@synchronized(self) {
-		
 		ATRecordRequestTaskResult taskResult = [self.taskProvider taskResultForTask:self withRequest:sender withResult:result];
 		switch (taskResult) {
 			case ATRecordRequestTaskFailedResult:

@@ -16,9 +16,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterStatusMode) {
 	ATMessageCenterStatusModeHTTPError
 };
 
+
 @interface ATMessageCenterStatusView : UIView
 
-@property (nonatomic, assign) ATMessageCenterStatusMode mode;
-@property (nonatomic, weak) IBOutlet UILabel *statusLabel;
+@property (assign, nonatomic) ATMessageCenterStatusMode mode;
+@property (weak, nonatomic) IBOutlet UILabel *statusLabel;
 
 @end

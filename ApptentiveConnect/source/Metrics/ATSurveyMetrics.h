@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-extern NSString *const ATSurveyDidHideWindowNotification; // survey.cancel or survey.submit
+extern NSString *const ATSurveyDidHideWindowNotification;	 // survey.cancel or survey.submit
 extern NSString *const ATSurveyDidAnswerQuestionNotification; // survey.question_response
 
 extern NSString *const ATSurveyWindowTypeKey;

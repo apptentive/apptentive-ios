@@ -15,6 +15,7 @@ NSString *const ATInteractionAboutViewInteractionKey = @"About";
 NSString *const ATInteractionAboutViewEventLabelLaunch = @"launch";
 NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 
+
 @interface ATAboutViewController ()
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
@@ -33,6 +34,7 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 
 @end
 
+
 @implementation ATAboutViewController
 
 + (instancetype)aboutViewControllerFromStoryboard {
@@ -44,42 +46,43 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 }
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-	
+	[super viewDidLoad];
+
 	[[ATEngagementBackend sharedBackend] engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelLaunch] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
-	
+
 	self.imageView.image = [ATBackend imageNamed:@"at_apptentive_logo"];
 	// TODO: Look into localizing the storyboard instead
 	self.aboutLabel.text = ATLocalizedString(@"Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.\n\nYour feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer.", @"About apptentive introductory message");
 	[self.aboutButton setTitle:ATLocalizedString(@"Learn about Apptentive", @"About apptentive link button label") forState:UIControlStateNormal];
 	[self.privacyButton setTitle:ATLocalizedString(@"Apptentive’s Privacy Policy", @"About apptentive privacy button label") forState:UIControlStateNormal];
-	
+
 	self.portraitConstraints = @[self.aboutButtonTrailingConstraint, self.privacyButtonLeadingConstraint, self.aboutButtonPrivacyButtonVeritcalConstraint];
-	
-	self.landscapeConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[about]-(16)-[privacy]" options:NSLayoutFormatAlignAllBaseline metrics:nil views:@{ @"about": self.aboutButton, @"privacy": self.privacyButton }];
+
+	self.landscapeConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[about]-(16)-[privacy]" options:NSLayoutFormatAlignAllBaseline metrics:nil views:@{ @"about": self.aboutButton,
+		@"privacy": self.privacyButton }];
 }
 
-- (void)viewDidLayoutSubviews	{
+- (void)viewDidLayoutSubviews {
 	[self resizeForOrientation:self.interfaceOrientation duration:0];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
-	
+
 	[[ATEngagementBackend sharedBackend] engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelClose] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
 }
 
 - (IBAction)learnMore:(id)sender {
 	NSURLComponents *components = [NSURLComponents componentsWithString:@"http://www.apptentive.com/"];
 	components.queryItems = @[[[NSURLQueryItem alloc] initWithName:@"source" value:[NSBundle mainBundle].bundleIdentifier]];
-	
+
 	[[UIApplication sharedApplication] openURL:components.URL];
 }
 
 - (IBAction)showPrivacy:(id)sender {
 	NSURLComponents *components = [NSURLComponents componentsWithString:@"http://www.apptentive.com/privacy/"];
 	components.queryItems = @[[[NSURLQueryItem alloc] initWithName:@"source" value:[NSBundle mainBundle].bundleIdentifier]];
-	
+
 	[[UIApplication sharedApplication] openURL:components.URL];
 }
 
@@ -90,14 +93,14 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 - (void)resizeForOrientation:(UIInterfaceOrientation)orientation duration:(NSTimeInterval)duration {
 	BOOL isCompactHeight = CGRectGetHeight(self.view.bounds) < 400.0;
 	BOOL isCompactWidth = CGRectGetWidth(self.view.bounds) < 480.0;
-	
+
 	self.imageViewHeightConstraint.constant = isCompactHeight ? 44.0 : 100.0;
 	self.aboutLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.view.bounds) - 40.0;
-	
+
 	if (isCompactHeight && !isCompactWidth) {
 		[self.view removeConstraints:self.portraitConstraints];
 		[self.view addConstraints:self.landscapeConstraints];
-		
+
 		self.privacyButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
 	} else {
 		[self.view removeConstraints:self.landscapeConstraints];

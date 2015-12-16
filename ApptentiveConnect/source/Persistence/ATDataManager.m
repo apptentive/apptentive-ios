@@ -17,6 +17,7 @@ typedef enum {
 	ATMigrationNoMatchingModelFoundErrorCode = -102,
 } ATMigrationErrorCode;
 
+
 @interface ATDataManager (Migration)
 - (BOOL)isMigrationNecessary:(NSPersistentStoreCoordinator *)psc;
 - (BOOL)migrateStoreError:(NSError **)error;
@@ -24,22 +25,24 @@ typedef enum {
 - (BOOL)removeSQLiteSidecarsForPath:(NSString *)sourcePath;
 @end
 
+
 @interface ATDataManager ()
 
 
-@property (strong, readwrite, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-@property (strong, readwrite, nonatomic) NSManagedObjectContext *managedObjectContext;
-@property (strong, readwrite, nonatomic) NSManagedObjectModel *managedObjectModel;
+@property (readwrite, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (readwrite, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (readwrite, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 
-@property (nonatomic, readwrite) BOOL didRemovePersistentStore;
-@property (nonatomic, readwrite) BOOL didFailToMigrateStore;
-@property (nonatomic, readwrite) BOOL didMigrateStore;
+@property (readwrite, nonatomic) BOOL didRemovePersistentStore;
+@property (readwrite, nonatomic) BOOL didFailToMigrateStore;
+@property (readwrite, nonatomic) BOOL didMigrateStore;
 
 @property (strong, nonatomic) NSString *modelName;
 @property (strong, nonatomic) NSBundle *bundle;
 @property (strong, nonatomic) NSString *supportDirectoryPath;
 
 @end
+
 
 @implementation ATDataManager
 
@@ -48,7 +51,7 @@ typedef enum {
 		_modelName = aModelName;
 		_bundle = aBundle;
 		_supportDirectoryPath = path;
-		
+
 		// Check the canary.
 		if ([self canaryFileExists]) {
 			[self removePersistentStore];
@@ -64,23 +67,23 @@ typedef enum {
 		if (_managedObjectContext != nil) {
 			return _managedObjectContext;
 		}
-		
+
 		NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
 		if (coordinator != nil) {
 			_managedObjectContext = [[NSManagedObjectContext alloc] init];
 			[_managedObjectContext setPersistentStoreCoordinator:coordinator];
 		}
 	}
-    return _managedObjectContext;
+	return _managedObjectContext;
 }
 
 - (NSManagedObjectModel *)managedObjectModel {
-    if (_managedObjectModel != nil) {
-        return _managedObjectModel;
-    }
-    NSURL *modelURL = [self.bundle URLForResource:self.modelName withExtension:@"momd"];
-    _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-    return _managedObjectModel;
+	if (_managedObjectModel != nil) {
+		return _managedObjectModel;
+	}
+	NSURL *modelURL = [self.bundle URLForResource:self.modelName withExtension:@"momd"];
+	_managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+	return _managedObjectModel;
 }
 
 - (BOOL)setupAndVerify {
@@ -88,12 +91,12 @@ typedef enum {
 	if (![self createCanaryFile]) {
 		return NO;
 	}
-	
+
 	if (![self persistentStoreCoordinator]) {
 		// This is almost certainly something bad.
 		return NO;
 	}
-	
+
 	NSManagedObjectContext *moc = [self managedObjectContext];
 	NSFetchRequest *request = [[NSFetchRequest alloc] init];
 	@try {
@@ -116,7 +119,7 @@ typedef enum {
 	@finally {
 		request = nil;
 	}
-	
+
 	if (![self persistentStoreCoordinator]) {
 		return NO;
 	}
@@ -132,9 +135,9 @@ typedef enum {
 		if (_persistentStoreCoordinator != nil) {
 			return _persistentStoreCoordinator;
 		}
-		
+
 		NSURL *storeURL = [self persistentStoreURL];
-		
+
 		NSError *error = nil;
 		@try {
 			_persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
@@ -144,7 +147,7 @@ typedef enum {
 			return nil;
 		}
 		BOOL storeExists = [[NSFileManager defaultManager] fileExistsAtPath:[storeURL path]];
-		
+
 		if (storeExists && [self isMigrationNecessary:_persistentStoreCoordinator]) {
 			if (![self migrateStoreError:&error]) {
 				ATLogError(@"Failed to migrate store. Need to start over from scratch: %@", error);
@@ -154,12 +157,12 @@ typedef enum {
 				self.didMigrateStore = YES;
 			}
 		}
-		
+
 		// By default, the value of NSPersistentStoreFileProtectionKey is:
 		// iOS 4 and earlier: NSFileProtectionNone
 		// iOS 5 and later: NSFileProtectionCompleteUntilFirstUserAuthentication
 		// So, there's no need to set these explicitly for our purposes.
-		NSDictionary *options = @{NSSQLitePragmasOption: @{@"journal_mode": @"DELETE"}};
+		NSDictionary *options = @{ NSSQLitePragmasOption: @{@"journal_mode": @"DELETE"} };
 		if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
 			ATLogError(@"Unable to create new persistent store: %@", error);
 			_persistentStoreCoordinator = nil;
@@ -179,7 +182,7 @@ typedef enum {
 	NSURL *storeURL = [self persistentStoreURL];
 	NSString *sourcePath = [storeURL path];
 	NSFileManager *fileManager = [NSFileManager defaultManager];
-	
+
 	if ([fileManager fileExistsAtPath:sourcePath]) {
 		NSError *error = nil;
 		if (![[NSFileManager defaultManager] removeItemAtURL:storeURL error:&error]) {
@@ -191,7 +194,7 @@ typedef enum {
 }
 
 #pragma mark - Upgrade Canary
-- (NSString  *)canaryFilePath {
+- (NSString *)canaryFilePath {
 	return [self.supportDirectoryPath stringByAppendingPathComponent:ATDataManagerUpgradeCanaryFilename];
 }
 
@@ -204,7 +207,7 @@ typedef enum {
 }
 
 - (BOOL)createCanaryFile {
-	NSDictionary *data = @{@"upgrading":@YES};
+	NSDictionary *data = @{ @"upgrading": @YES };
 	return [data writeToFile:[self canaryFilePath] atomically:YES];
 }
 
@@ -224,9 +227,9 @@ typedef enum {
 - (BOOL)isMigrationNecessary:(NSPersistentStoreCoordinator *)psc {
 	NSString *sourceStoreType = NSSQLiteStoreType;
 	NSURL *sourceStoreURL = [self persistentStoreURL];
-	
+
 	NSError *error = nil;
-	
+
 	NSDictionary *sourceMetadata = [NSPersistentStoreCoordinator metadataForPersistentStoreOfType:sourceStoreType URL:sourceStoreURL error:&error];
 	if (sourceMetadata == nil) {
 		return YES;
@@ -253,42 +256,42 @@ typedef enum {
 		}
 		return YES;
 	}
-	
+
 	// Find source model.
-	NSArray *bundlesForSourceModel = @[ self.bundle ];
+	NSArray *bundlesForSourceModel = @[self.bundle];
 	NSManagedObjectModel *sourceModel = [NSManagedObjectModel mergedModelFromBundles:bundlesForSourceModel forStoreMetadata:sourceMetadata];
 	if (sourceModel == nil) {
 		ATLogError(@"Failed to find source model.");
 		if (error) {
-			*error = [NSError errorWithDomain:@"ATErrorDomain" code:ATMigrationMergedModelErrorCode userInfo:@{NSLocalizedDescriptionKey: @"Failed to find source model for migration"}];
+			*error = [NSError errorWithDomain:@"ATErrorDomain" code:ATMigrationMergedModelErrorCode userInfo:@{ NSLocalizedDescriptionKey: @"Failed to find source model for migration" }];
 		}
 		return NO;
 	}
-	
+
 	NSMutableArray *modelPaths = [NSMutableArray array];
 	NSArray *momdPaths = [self.bundle pathsForResourcesOfType:@"momd" inDirectory:nil];
-	
+
 	for (NSString *momdPath in momdPaths) {
 		NSString *resourceSubpath = [momdPath lastPathComponent];
 		NSArray *array = [self.bundle pathsForResourcesOfType:@"mom" inDirectory:resourceSubpath];
 		[modelPaths addObjectsFromArray:array];
 	}
-	
+
 	NSArray *otherModels = [self.bundle pathsForResourcesOfType:@"mom" inDirectory:nil];
 	[modelPaths addObjectsFromArray:otherModels];
-	
+
 	if (!modelPaths || ![modelPaths count]) {
 		if (error) {
-			*error = [NSError errorWithDomain:@"ATErrorDomain" code:ATMigrationNoModelsFoundErrorCode userInfo:@{NSLocalizedDescriptionKey: @"No models found in bundle"}];
+			*error = [NSError errorWithDomain:@"ATErrorDomain" code:ATMigrationNoModelsFoundErrorCode userInfo:@{ NSLocalizedDescriptionKey: @"No models found in bundle" }];
 		}
 		return NO;
 	}
-	
+
 	// Find matching destination model.
 	NSMappingModel *mappingModel = nil;
 	NSManagedObjectModel *targetModel = nil;
 	NSString *modelPath = nil;
-	NSArray *bundlesForTargetModel = @[ self.bundle ];
+	NSArray *bundlesForTargetModel = @[self.bundle];
 	for (modelPath in modelPaths) {
 		targetModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:[NSURL fileURLWithPath:modelPath]];
 		mappingModel = [NSMappingModel mappingModelFromBundles:bundlesForTargetModel forSourceModel:sourceModel destinationModel:targetModel];
@@ -297,14 +300,14 @@ typedef enum {
 		}
 		targetModel = nil;
 	}
-	
+
 	if (!mappingModel) {
 		if (error) {
-			*error = [NSError errorWithDomain:@"ATErrorDomain" code:ATMigrationNoMatchingModelFoundErrorCode userInfo:@{NSLocalizedDescriptionKey: @"No matching migration found in bundle"}];
+			*error = [NSError errorWithDomain:@"ATErrorDomain" code:ATMigrationNoMatchingModelFoundErrorCode userInfo:@{ NSLocalizedDescriptionKey: @"No matching migration found in bundle" }];
 		}
 		return NO;
 	}
-	
+
 	// Mapping model and destination model found. Migrate them.
 	NSMigrationManager *manager = [[NSMigrationManager alloc] initWithSourceModel:sourceModel destinationModel:targetModel];
 	NSString *localModelName = [[modelPath lastPathComponent] stringByDeletingPathExtension];
@@ -312,27 +315,27 @@ typedef enum {
 	NSString *storePath = [[sourceStoreURL path] stringByDeletingPathExtension];
 	storePath = [NSString stringWithFormat:@"%@.%@.%@", storePath, localModelName, storeExtension];
 	NSURL *destinationStoreURL = [NSURL fileURLWithPath:storePath];
-	
-	NSDictionary *options = @{NSSQLitePragmasOption: @{@"journal_mode": @"DELETE"}};
+
+	NSDictionary *options = @{ NSSQLitePragmasOption: @{@"journal_mode": @"DELETE"} };
 	if (![manager migrateStoreFromURL:sourceStoreURL type:type options:nil withMappingModel:mappingModel toDestinationURL:destinationStoreURL destinationType:type destinationOptions:options error:error]) {
 		manager = nil;
 		return NO;
 	}
 	manager = nil;
-	
+
 	// Move files around.
 	NSString *guid = [[NSProcessInfo processInfo] globallyUniqueString];
 	guid = [guid stringByAppendingPathExtension:localModelName];
 	guid = [guid stringByAppendingPathExtension:storeExtension];
 	NSString *appSupportPath = [storePath stringByDeletingLastPathComponent];
 	NSString *backupPath = [appSupportPath stringByAppendingPathComponent:guid];
-	
+
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	if (![fileManager moveItemAtPath:[sourceStoreURL path] toPath:backupPath error:error]) {
 		ATLogError(@"Unable to backup source store path.");
 		return NO;
 	}
-	
+
 	if (![fileManager moveItemAtPath:storePath toPath:[sourceStoreURL path] error:error]) {
 		[fileManager moveItemAtPath:backupPath toPath:[sourceStoreURL path] error:nil];
 		ATLogError(@"Unable to move new store into place.");
@@ -344,7 +347,7 @@ typedef enum {
 		NSString *sourcePath = [sourceStoreURL path];
 		[self removeSQLiteSidecarsForPath:sourcePath];
 	}
-	
+
 	return [self progressivelyMigrateURL:sourceStoreURL ofType:type toModel:finalModel error:error];
 }
 

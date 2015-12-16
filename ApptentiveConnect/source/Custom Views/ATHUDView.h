@@ -12,12 +12,13 @@ typedef enum {
 	ATHUDCheckmark
 } ATHUDMarkType;
 
+
 @interface ATHUDView : UIWindow
-@property (nonatomic, strong, readonly) UILabel *label;
-@property (nonatomic, assign) ATHUDMarkType markType;
-@property (nonatomic, assign) CGSize size;
-@property (nonatomic, assign) CGFloat cornerRadius;
-@property (nonatomic, assign) CGFloat fadeOutDuration;
+@property (readonly, strong, nonatomic) UILabel *label;
+@property (assign, nonatomic) ATHUDMarkType markType;
+@property (assign, nonatomic) CGSize size;
+@property (assign, nonatomic) CGFloat cornerRadius;
+@property (assign, nonatomic) CGFloat fadeOutDuration;
 
 - (id)initWithWindow:(UIWindow *)window;
 - (void)show;

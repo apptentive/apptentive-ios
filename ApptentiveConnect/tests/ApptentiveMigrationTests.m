@@ -11,6 +11,7 @@
 #import "ATMessage.h"
 #import "ATMessage.h"
 
+
 @implementation ApptentiveMigrationTests
 - (ATDataManager *)dataManagerWithStoreName:(NSString *)name {
 	NSBundle *bundle = [NSBundle bundleForClass:[self class]];
@@ -19,7 +20,7 @@
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
 	NSString *path = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-	
+
 	ATDataManager *dataManager = [[ATDataManager alloc] initWithModelName:@"ATDataModel" inBundle:bundle storagePath:path];
 
 	NSError *error = nil;
@@ -33,13 +34,13 @@
 
 - (void)testCurrentDatabaseVersion {
 	ATDataManager *dataManager = [self dataManagerWithStoreName:@"ATDataModelv5"];
-	
+
 	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
 	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil");
 	XCTAssertFalse([dataManager didMigrateStore], @"Should not have had to migrate the datastore.");
 	XCTAssertFalse([dataManager didFailToMigrateStore], @"Failed to migrate the datastore.");
 	XCTAssertFalse([dataManager didRemovePersistentStore], @"Shouldn't have had to delete datastore.");
-	
+
 	// Test that default value of hidden is NO for existing objects.
 	NSManagedObjectContext *moc = [dataManager managedObjectContext];
 	NSFetchRequest *request = [[NSFetchRequest alloc] init];
@@ -65,7 +66,7 @@
 - (void)testV1Upgrade {
 	// For example, we will do the following with a copy of an old data model.
 	ATDataManager *dataManager = [self dataManagerWithStoreName:@"ATDataModelv1"];
-	
+
 	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
 	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil");
 	XCTAssertTrue([dataManager didMigrateStore], @"Should have had to migrate the datastore.");
@@ -75,7 +76,7 @@
 
 - (void)testV2Upgrade {
 	ATDataManager *dataManager = [self dataManagerWithStoreName:@"ATDataModelv2"];
-	
+
 	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
 	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil");
 	XCTAssertTrue([dataManager didMigrateStore], @"Should have had to migrate the datastore.");
@@ -85,7 +86,7 @@
 
 - (void)testV3Upgrade {
 	ATDataManager *dataManager = [self dataManagerWithStoreName:@"ATDataModelv3"];
-	
+
 	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
 	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil");
 	XCTAssertTrue([dataManager didMigrateStore], @"Should have had to migrate the datastore.");
@@ -106,19 +107,19 @@
 - (ATDataManager *)dataManagerByCopyingSQLFilesInDirectory:(NSString *)directoryName {
 	NSBundle *bundle = [NSBundle bundleForClass:[self class]];
 	NSArray *files = @[@"ATDataModel.sqlite", @"ATDataModel.sqlite-shm", @"ATDataModel.sqlite-wal"];
-	
+
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
 	NSString *path = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-	
+
 	for (NSString *filename in files) {
 		NSString *name = [filename stringByDeletingPathExtension];
 		NSString *extension = [filename pathExtension];
-		
+
 		NSString *source = [bundle pathForResource:name ofType:extension inDirectory:directoryName];
 		NSString *destination = [path stringByAppendingPathComponent:filename];
 		NSError *error = nil;
-		
+
 		[fileManager removeItemAtPath:destination error:nil];
 		if (![fileManager fileExistsAtPath:source isDirectory:NULL]) {
 			XCTFail(@"Unable to find file: %@", source);
@@ -128,7 +129,7 @@
 			return nil;
 		}
 	}
-	
+
 	ATDataManager *dataManager = [[ATDataManager alloc] initWithModelName:@"ATDataModel" inBundle:bundle storagePath:path];
 	return dataManager;
 }
@@ -136,7 +137,7 @@
 - (void)testV2WALDatabase {
 	// A valid v2 database, albeit in WAL format.
 	ATDataManager *dataManager = [self dataManagerByCopyingSQLFilesInDirectory:@"v2WALDatabase"];
-	
+
 	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
 	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Should be able to use existing WAL database.");
 	XCTAssertTrue([dataManager didMigrateStore], @"Should have had to migrate the datastore.");
@@ -147,7 +148,7 @@
 - (void)testV3WALDatabase {
 	// A valid v3 database, albeit in WAL format.
 	ATDataManager *dataManager = [self dataManagerByCopyingSQLFilesInDirectory:@"v3WALDatabase"];
-	
+
 	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
 	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Should be able to use existing WAL database.");
 	XCTAssertTrue([dataManager didMigrateStore], @"Should have had to migrate the datastore (from v3 to a later version).");
@@ -158,7 +159,7 @@
 - (void)testCorruptV2DatabaseRecovery {
 	// A corrupt v3 database in WAL format.
 	ATDataManager *dataManager = [self dataManagerByCopyingSQLFilesInDirectory:@"v2CorruptDatabase"];
-	
+
 	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
 	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil after fixing it.");
 	XCTAssertFalse([dataManager didRemovePersistentStore], @"Should not have had to delete the persistent store, now that we have v4.");

@@ -97,6 +97,9 @@
 
 			if (targets && interactions) {
 				[[ATEngagementBackend sharedBackend] didReceiveNewTargets:targets andInteractions:interactions maxAge:[request expiresMaxAge]];
+#if APPTENTIVE_DEBUG
+				[ATEngagementBackend sharedBackend].engagementManifestJSON = targetsAndInteractions[@"raw"];
+#endif
 			} else {
 				ATLogError(@"An error occurred parsing the engagement manifest: %@", [parser parserError]);
 			}

@@ -482,4 +482,8 @@ extern NSString *const ATIntegrationKeyParse;
  */
 - (void)addParseIntegrationWithDeviceToken:(NSData *)deviceToken;
 
+// Missing method used to allow running with ApptentiveDev app
+
+- (UIView *)unreadMessageCountAccessoryView:(BOOL)foo;
+
 @end

@@ -549,6 +549,10 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 #endif
 }
 
+- (UIView *)unreadMessageCountAccessoryView:(BOOL)foo {
+	return nil;
+}
+
 @end
 
 NSString *ATLocalizedString(NSString *key, NSString *comment) {

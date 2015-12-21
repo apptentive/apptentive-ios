@@ -31,7 +31,7 @@ static NSString *ATMetricNameSurveySubmit = @"survey.submit";
 static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 
 
-@interface ApptentiveMetrics (Private)
+@interface ApptentiveMetrics ()
 
 - (void)addLaunchMetric;
 
@@ -207,10 +207,9 @@ static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 	task = nil;
 	return YES;
 }
-@end
 
+#pragma mark - Private methods
 
-@implementation ApptentiveMetrics (Private)
 - (void)addLaunchMetric {
 	@autoreleasepool {
 		[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch];

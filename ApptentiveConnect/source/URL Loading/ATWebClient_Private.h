@@ -12,7 +12,7 @@
 @class ATWebClient;
 
 
-@interface ATWebClient (Private)
+@interface ATWebClient ()
 - (NSString *)userAgentString;
 
 #pragma mark API URL String

@@ -60,10 +60,6 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 	request.returnType = ATAPIRequestReturnTypeJSON;
 	return request;
 }
-@end
-
-
-@implementation ATWebClient (Private)
 
 - (NSString *)stringForParameters:(NSDictionary *)parameters {
 	NSMutableString *result = [[NSMutableString alloc] init];

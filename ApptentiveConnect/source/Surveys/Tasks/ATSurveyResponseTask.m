@@ -14,12 +14,8 @@
 #define kATPendingMessageTaskCodingVersion 1
 
 
-@interface ATSurveyResponseTask (Private)
-- (BOOL)processResult:(NSDictionary *)jsonMessage;
-@end
-
-
 @interface ATSurveyResponseTask ()
+- (BOOL)processResult:(NSDictionary *)jsonMessage;
 
 @property (strong, nonatomic) ATAPIRequest *request;
 
@@ -157,10 +153,8 @@
 		response = nil;
 	}
 }
-@end
 
-
-@implementation ATSurveyResponseTask (Private)
+#pragma mark - Private methods
 
 - (BOOL)processResult:(NSDictionary *)jsonResponse {
 	ATLogDebug(@"Getting json result: %@", jsonResponse);

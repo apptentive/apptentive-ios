@@ -26,7 +26,7 @@ NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey = @"
 NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDisplayNameKey";
 
 
-@interface ATAppConfigurationUpdater (Private)
+@interface ATAppConfigurationUpdater ()
 - (void)processResult:(NSDictionary *)jsonRatingConfiguration maxAge:(NSTimeInterval)expiresMaxAge;
 @end
 
@@ -148,10 +148,9 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 		[self.delegate configurationUpdaterDidFinish:NO];
 	}
 }
-@end
 
+#pragma mark - Private methods
 
-@implementation ATAppConfigurationUpdater (Private)
 - (void)processResult:(NSDictionary *)jsonConfiguration maxAge:(NSTimeInterval)expiresMaxAge {
 	BOOL hasConfigurationChanges = NO;
 

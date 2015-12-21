@@ -18,7 +18,7 @@ NSString *const ATConversationLastUpdatePreferenceKey = @"ATConversationLastUpda
 NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLastUpdateValuePreferenceKey";
 
 
-@interface ATConversationUpdater (Private)
+@interface ATConversationUpdater ()
 - (void)processResult:(NSDictionary *)jsonActivityFeed;
 @end
 
@@ -168,10 +168,8 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 	}
 }
 
-@end
+#pragma mark - Private methods
 
-
-@implementation ATConversationUpdater (Private)
 - (void)processResult:(NSDictionary *)jsonActivityFeed {
 	if (creatingConversation) {
 		ATConversation *conversation = (ATConversation *)[ATConversation newInstanceWithJSON:jsonActivityFeed];

@@ -18,7 +18,7 @@
 #define kATMessageTaskCodingVersion 2
 
 
-@interface ATMessageTask (Private)
+@interface ATMessageTask ()
 - (BOOL)processResult:(NSDictionary *)jsonMessage;
 @end
 
@@ -181,10 +181,8 @@
 		message = nil;
 	}
 }
-@end
 
-
-@implementation ATMessageTask (Private)
+#pragma mark - Private methods
 
 - (BOOL)processResult:(NSDictionary *)jsonMessage {
 	ATLogDebug(@"getting json result: %@", jsonMessage);

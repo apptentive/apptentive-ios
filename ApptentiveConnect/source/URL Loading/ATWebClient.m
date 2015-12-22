@@ -28,22 +28,26 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 #define kApptentiveBaseURL (@"https://api.apptentive.com")
 #endif
 
+#define kApptentiveAPIVersion @"4"
+
 
 @implementation ATWebClient
 + (ATWebClient *)sharedClient {
 	static ATWebClient *sharedSingleton = nil;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		sharedSingleton = [[ATWebClient alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.apptentive.com"]];
+		sharedSingleton = [[ATWebClient alloc] initWithBaseURL:[NSURL URLWithString:kApptentiveBaseURL] APIKey:[ATBackend sharedBackend].apiKey version:kApptentiveAPIVersion];
 	});
 	return sharedSingleton;
 }
 
-- (instancetype)initWithBaseURL:(NSURL *)baseURL {
+- (instancetype)initWithBaseURL:(NSURL *)baseURL APIKey:(NSString *)APIKey version:(NSString *)APIVersion {
 	self = [super init];
 
 	if (self) {
 		_baseURL = baseURL;
+		_APIKey = APIKey;
+		_APIVersion = APIVersion;
 	}
 
 	return self;
@@ -58,7 +62,7 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 	if (!conversation) {
 		return nil;
 	}
-	ATURLConnection *conn = [self connectionToGet:[self APIURLWithPath:@"/conversation/configuration"]];
+	ATURLConnection *conn = [self connectionToGet:@"/conversation/configuration"];
 	conn.timeoutInterval = 20.0;
 	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:[self commonChannelName]];
@@ -109,21 +113,21 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 	return [NSString stringWithFormat:@"ApptentiveConnect/%@ (%@)", kATConnectVersionString, kATConnectPlatformString];
 }
 
-- (ATURLConnection *)connectionToGet:(NSURL *)theURL {
-	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL];
+- (ATURLConnection *)connectionToGet:(NSString *)path {
+	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:[self APIURLWithPath:path]];
 	[self addAPIHeaders:conn];
 	return conn;
 }
 
-- (ATURLConnection *)connectionToPost:(NSURL *)theURL {
-	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL];
+- (ATURLConnection *)connectionToPost:(NSString *)path {
+	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:[self APIURLWithPath:path]];
 	[self addAPIHeaders:conn];
 	[conn setHTTPMethod:@"POST"];
 	return conn;
 }
 
-- (ATURLConnection *)connectionToPost:(NSURL *)theURL JSON:(NSString *)body {
-	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL];
+- (ATURLConnection *)connectionToPost:(NSString *)path JSON:(NSString *)body {
+	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:[self APIURLWithPath:path]];
 	[self addAPIHeaders:conn];
 	[conn setHTTPMethod:@"POST"];
 	[conn setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
@@ -133,14 +137,14 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 	return conn;
 }
 
-- (ATURLConnection *)connectionToPost:(NSURL *)theURL parameters:(NSDictionary *)parameters {
+- (ATURLConnection *)connectionToPost:(NSString *)path parameters:(NSDictionary *)parameters {
 	NSDictionary *postParameters = [NSMutableDictionary dictionaryWithDictionary:parameters];
 	NSString *bodyString = [self stringForParameters:postParameters];
-	return [self connectionToPost:theURL body:bodyString];
+	return [self connectionToPost:path body:bodyString];
 }
 
-- (ATURLConnection *)connectionToPost:(NSURL *)theURL body:(NSString *)body {
-	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL];
+- (ATURLConnection *)connectionToPost:(NSString *)path body:(NSString *)body {
+	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:[self APIURLWithPath:path]];
 	[self addAPIHeaders:conn];
 	[conn setHTTPMethod:@"POST"];
 	[conn setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
@@ -150,8 +154,8 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 	return conn;
 }
 
-- (ATURLConnection *)connectionToPut:(NSURL *)theURL JSON:(NSString *)body {
-	ATURLConnection *conn = [self connectionToPost:theURL JSON:body];
+- (ATURLConnection *)connectionToPut:(NSString *)path JSON:(NSString *)body {
+	ATURLConnection *conn = [self connectionToPost:path JSON:body];
 	[conn setHTTPMethod:@"PUT"];
 	return conn;
 }
@@ -159,16 +163,13 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 - (void)addAPIHeaders:(ATURLConnection *)conn {
 	[conn setValue:[self userAgentString] forHTTPHeaderField:@"User-Agent"];
 	[conn setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
-	//!!	[conn setValue: @"text/xml" forHTTPHeaderField: @"Accept"];
 	[conn setValue:@"utf-8" forHTTPHeaderField:@"Accept-Charset"];
 
 	// Apptentive API Version
-	[conn setValue:@"4" forHTTPHeaderField:@"X-API-Version"];
+	[conn setValue:self.APIVersion forHTTPHeaderField:@"X-API-Version"];
 
-	NSString *apiKey = [[ATBackend sharedBackend] apiKey];
-	if (apiKey) {
-		[self updateConnection:conn withOAuthToken:apiKey];
-	}
+	// Apptentive API Key
+	[self updateConnection:conn withOAuthToken:self.APIKey];
 }
 
 - (void)updateConnection:(ATURLConnection *)conn withOAuthToken:(NSString *)token {
@@ -180,8 +181,8 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 	}
 }
 
-- (ATURLConnection *)connectionToPost:(NSURL *)theURL JSON:(NSString *)body withAttachments:(NSArray *)attachments {
-	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:theURL];
+- (ATURLConnection *)connectionToPost:(NSString *)path JSON:(NSString *)body withAttachments:(NSArray *)attachments {
+	ATURLConnection *conn = [[ATURLConnection alloc] initWithURL:[self APIURLWithPath:path]];
 	[self addAPIHeaders:conn];
 	[conn setHTTPMethod:@"POST"];
 	NSString *boundary = [ATUtilities randomStringOfLength:20];

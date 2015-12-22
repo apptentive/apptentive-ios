@@ -19,8 +19,10 @@ extern NSString *const ATWebClientDefaultChannelName;
 + (ATWebClient *)sharedClient;
 
 @property (readonly, nonatomic) NSURL *baseURL;
+@property (readonly, nonatomic) NSString *APIKey;
+@property (readonly, nonatomic) NSString *APIVersion;
 
-- (instancetype)initWithBaseURL:(NSURL *)baseURL;
+- (instancetype)initWithBaseURL:(NSURL *)baseURL APIKey:(NSString *)APIKey version:(NSString *)APIVersion;
 
 - (NSString *)commonChannelName;
 - (ATAPIRequest *)requestForGettingAppConfiguration;

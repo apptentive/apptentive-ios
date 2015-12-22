@@ -32,7 +32,7 @@
 	}
 	NSString *path = [NSString stringWithFormat:@"/surveys/%@/respond", surveyResponse.surveyID];
 
-	ATURLConnection *conn = [self connectionToPost:[self APIURLWithPath:path] JSON:postString];
+	ATURLConnection *conn = [self connectionToPost:path JSON:postString];
 	conn.timeoutInterval = 240.0;
 	[self updateConnection:conn withOAuthToken:conversation.token];
 

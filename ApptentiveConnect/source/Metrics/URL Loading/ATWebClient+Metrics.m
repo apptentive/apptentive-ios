@@ -21,7 +21,7 @@
 - (ATAPIRequest *)requestForSendingMetric:(ATMetric *)metric {
 	NSDictionary *postData = [metric apiDictionary];
 
-	ATURLConnection *conn = [self connectionToPost:[self APIURLWithPath:@"/records"] parameters:postData];
+	ATURLConnection *conn = [self connectionToPost:@"/records" parameters:postData];
 	conn.timeoutInterval = 240.0;
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:ATWebClientDefaultChannelName];
 	request.returnType = ATAPIRequestReturnTypeJSON;
@@ -46,7 +46,7 @@
 		return nil;
 	}
 
-	ATURLConnection *conn = [self connectionToPost:[self APIURLWithPath:@"/events"] JSON:postString];
+	ATURLConnection *conn = [self connectionToPost:@"/events" JSON:postString];
 	conn.timeoutInterval = 240.0;
 	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:ATWebClientDefaultChannelName];

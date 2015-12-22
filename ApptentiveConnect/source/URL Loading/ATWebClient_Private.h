@@ -23,13 +23,13 @@
 - (NSString *)stringForParameter:(id)value;
 
 #pragma mark Internal Methods
-- (ATURLConnection *)connectionToGet:(NSURL *)theURL;
-- (ATURLConnection *)connectionToPost:(NSURL *)theURL;
-- (ATURLConnection *)connectionToPost:(NSURL *)theURL JSON:(NSString *)body;
-- (ATURLConnection *)connectionToPost:(NSURL *)theURL parameters:(NSDictionary *)parameters;
-- (ATURLConnection *)connectionToPost:(NSURL *)theURL body:(NSString *)body;
-- (ATURLConnection *)connectionToPost:(NSURL *)URL JSON:(NSString *)body withAttachments:(NSArray *)attachments;
-- (ATURLConnection *)connectionToPut:(NSURL *)theURL JSON:(NSString *)body;
+- (ATURLConnection *)connectionToGet:(NSString *)path;
+- (ATURLConnection *)connectionToPost:(NSString *)path;
+- (ATURLConnection *)connectionToPost:(NSString *)path JSON:(NSString *)body;
+- (ATURLConnection *)connectionToPost:(NSString *)path parameters:(NSDictionary *)parameters;
+- (ATURLConnection *)connectionToPost:(NSString *)path body:(NSString *)body;
+- (ATURLConnection *)connectionToPost:(NSString *)path JSON:(NSString *)body withAttachments:(NSArray *)attachments;
+- (ATURLConnection *)connectionToPut:(NSString *)path JSON:(NSString *)body;
 - (void)addAPIHeaders:(ATURLConnection *)conn;
 - (void)updateConnection:(ATURLConnection *)conn withOAuthToken:(NSString *)token;
 @end

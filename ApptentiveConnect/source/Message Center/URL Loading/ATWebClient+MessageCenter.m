@@ -34,7 +34,7 @@
 		return nil;
 	}
 
-	ATURLConnection *conn = [self connectionToPost:[self APIURLWithPath:@"/conversation"] JSON:postString];
+	ATURLConnection *conn = [self connectionToPost:@"/conversation" JSON:postString];
 	conn.timeoutInterval = 60.0;
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
 	request.returnType = ATAPIRequestReturnTypeJSON;
@@ -54,7 +54,7 @@
 		return nil;
 	}
 
-	ATURLConnection *conn = [self connectionToPut:[self APIURLWithPath:@"/conversation"] JSON:putString];
+	ATURLConnection *conn = [self connectionToPut:@"/conversation" JSON:putString];
 	conn.timeoutInterval = 60.0;
 	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
@@ -78,7 +78,7 @@
 		return nil;
 	}
 
-	ATURLConnection *conn = [self connectionToPut:[self APIURLWithPath:@"/devices"] JSON:postString];
+	ATURLConnection *conn = [self connectionToPut:@"/devices" JSON:postString];
 	conn.timeoutInterval = 60.0;
 	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
@@ -102,7 +102,7 @@
 		return nil;
 	}
 
-	ATURLConnection *conn = [self connectionToPut:[self APIURLWithPath:@"/people"] JSON:postString];
+	ATURLConnection *conn = [self connectionToPut:@"/people" JSON:postString];
 	conn.timeoutInterval = 60.0;
 	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
@@ -126,7 +126,7 @@
 		return nil;
 	}
 
-	ATURLConnection *conn = [self connectionToPost:[self APIURLWithPath:@"/messages"] JSON:postString withAttachments:message.attachments.array];
+	ATURLConnection *conn = [self connectionToPost:@"/messages" JSON:postString withAttachments:message.attachments.array];
 	conn.timeoutInterval = 60.0;
 	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
@@ -152,7 +152,7 @@
 		path = [NSString stringWithFormat:@"%@?%@", path, paramString];
 	}
 
-	ATURLConnection *conn = [self connectionToGet:[self APIURLWithPath:path]];
+	ATURLConnection *conn = [self connectionToGet:path];
 	conn.timeoutInterval = 60.0;
 	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];

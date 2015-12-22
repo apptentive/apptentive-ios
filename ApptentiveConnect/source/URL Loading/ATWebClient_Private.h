@@ -16,8 +16,7 @@
 - (NSString *)userAgentString;
 
 #pragma mark API URL String
-- (NSString *)apiBaseURLString;
-- (NSString *)apiURLStringWithPath:(NSString *)path;
+- (NSURL *)APIURLWithPath:(NSString *)path;
 
 #pragma mark Query Parameter Encoding
 - (NSString *)stringForParameters:(NSDictionary *)parameters;

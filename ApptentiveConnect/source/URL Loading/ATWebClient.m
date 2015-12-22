@@ -34,13 +34,19 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 	static ATWebClient *sharedSingleton = nil;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		sharedSingleton = [[ATWebClient alloc] init];
+		sharedSingleton = [[ATWebClient alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.apptentive.com"]];
 	});
 	return sharedSingleton;
 }
 
-- (NSString *)baseURLString {
-	return kApptentiveBaseURL;
+- (instancetype)initWithBaseURL:(NSURL *)baseURL {
+	self = [super init];
+
+	if (self) {
+		_baseURL = baseURL;
+	}
+
+	return self;
 }
 
 - (NSString *)commonChannelName {
@@ -52,8 +58,7 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 	if (!conversation) {
 		return nil;
 	}
-	NSString *urlString = [self apiURLStringWithPath:@"conversation/configuration"];
-	ATURLConnection *conn = [self connectionToGet:[NSURL URLWithString:urlString]];
+	ATURLConnection *conn = [self connectionToGet:[self APIURLWithPath:@"/conversation/configuration"]];
 	conn.timeoutInterval = 20.0;
 	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:[self commonChannelName]];
@@ -96,17 +101,12 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 	return result;
 }
 
-
-- (NSString *)apiBaseURLString {
-	return kApptentiveBaseURL;
-}
-
-- (NSString *)apiURLStringWithPath:(NSString *)path {
-	return [NSString stringWithFormat:@"%@/%@", kApptentiveBaseURL, path];
+- (NSURL *)APIURLWithPath:(NSString *)path {
+	return [NSURL URLWithString:path relativeToURL:self.baseURL];
 }
 
 - (NSString *)userAgentString {
-	return [NSString stringWithFormat:kUserAgentFormat, kATConnectVersionString, kATConnectPlatformString];
+	return [NSString stringWithFormat:@"ApptentiveConnect/%@ (%@)", kATConnectVersionString, kATConnectPlatformString];
 }
 
 - (ATURLConnection *)connectionToGet:(NSURL *)theURL {

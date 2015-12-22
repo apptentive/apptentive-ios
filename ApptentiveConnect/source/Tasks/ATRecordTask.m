@@ -15,12 +15,8 @@
 #define kATRecordTaskCodingVersion 1
 
 
-@interface ATRecordTask (Private)
-- (BOOL)handleLegacyRecord;
-@end
-
-
 @interface ATRecordTask ()
+- (BOOL)handleLegacyRecord;
 
 @property (strong, nonatomic) ATAPIRequest *request;
 
@@ -120,10 +116,9 @@
 		[self stop];
 	}
 }
-@end
 
+#pragma mark - Private methods
 
-@implementation ATRecordTask (Private)
 - (BOOL)handleLegacyRecord {
 	if ([self.record isKindOfClass:[ATMetric class]]) {
 		if ([[ApptentiveMetrics sharedMetrics] upgradeLegacyMetric:(ATMetric *)self.record]) {

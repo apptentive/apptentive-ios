@@ -44,10 +44,6 @@ enum {
 @property (strong, nonatomic) NSDate *startedSurveyDate;
 
 - (void)textFieldChangedNotification:(NSNotification *)notification;
-@end
-
-
-@interface ATSurveyViewController (Private)
 - (void)sendNotificationAboutTextQuestion:(ATSurveyQuestion *)question;
 - (ATSurveyQuestion *)questionAtIndexPath:(NSIndexPath *)path;
 - (BOOL)questionHasExtraInfo:(ATSurveyQuestion *)question;
@@ -687,10 +683,9 @@ enum {
 	[textView resignFirstResponder];
 	return YES;
 }
-@end
 
+#pragma mark - Private methods
 
-@implementation ATSurveyViewController (Private)
 - (void)sendNotificationAboutTextQuestion:(ATSurveyQuestion *)question {
 	if (!question.type == ATSurveyQuestionTypeSingeLine) {
 		return;

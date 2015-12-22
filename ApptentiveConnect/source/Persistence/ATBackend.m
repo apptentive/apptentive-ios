@@ -53,7 +53,7 @@ static NSURLCache *imageCache = nil;
 @end
 
 
-@interface ATBackend (Private)
+@interface ATBackend ()
 - (void)setupDataManager;
 - (void)setup;
 - (void)startup;
@@ -67,10 +67,6 @@ static NSURLCache *imageCache = nil;
 - (void)deviceDataChanged:(NSNotification *)notification;
 - (void)startMonitoringUnreadMessages;
 - (void)checkForProperConfiguration;
-@end
-
-
-@interface ATBackend ()
 
 #if TARGET_OS_IPHONE
 @property (strong, nonatomic) UIViewController *presentingViewController;
@@ -901,10 +897,8 @@ static NSURLCache *imageCache = nil;
 	[self.messageDelegate backend:self messageProgressDidChange:progress];
 }
 
-@end
+#pragma mark - Private methods
 
-
-@implementation ATBackend (Private)
 /* Methods which are safe to run when sharedBackend is still nil. */
 - (void)setup {
 	if (![[NSThread currentThread] isMainThread]) {

@@ -20,7 +20,7 @@
 static ATTaskQueue *sharedTaskQueue = nil;
 
 
-@interface ATTaskQueue (Private)
+@interface ATTaskQueue ()
 - (void)setup;
 - (void)teardown;
 - (void)archive;
@@ -275,10 +275,9 @@ static ATTaskQueue *sharedTaskQueue = nil;
 		}
 	}
 }
-@end
 
+#pragma mark - Private methods
 
-@implementation ATTaskQueue (Private)
 - (void)setup {
 	@synchronized(self) {
 		tasks = [[NSMutableArray alloc] init];

@@ -19,7 +19,7 @@
 static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessagesLastRetrievedMessagIDPreferenceKey";
 
 
-@interface ATGetMessagesTask (Private)
+@interface ATGetMessagesTask ()
 - (BOOL)processResult:(NSDictionary *)jsonMessage;
 @end
 
@@ -124,10 +124,8 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 		[self stop];
 	}
 }
-@end
 
-
-@implementation ATGetMessagesTask (Private)
+#pragma mark - Private methods
 
 - (BOOL)processResult:(NSDictionary *)jsonMessages {
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];

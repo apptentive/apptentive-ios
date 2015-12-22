@@ -28,7 +28,7 @@
 static NSDateFormatter *dateFormatter = nil;
 
 
-@interface ATUtilities (Private)
+@interface ATUtilities ()
 + (void)setupDateFormatters;
 @end
 
@@ -969,11 +969,8 @@ done:
 	return topChildViewController([UIApplication sharedApplication].delegate.window.rootViewController);
 }
 
+#pragma mark - Private methods
 
-@end
-
-
-@implementation ATUtilities (Private)
 + (void)setupDateFormatters {
 	@synchronized(self) {
 		if (dateFormatter == nil) {

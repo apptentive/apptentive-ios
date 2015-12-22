@@ -11,7 +11,7 @@
 #import "ATURLConnection.h"
 
 
-@interface ATURLConnection (Private)
+@interface ATURLConnection ()
 /*! It's important nobody but ATURLConnection and ATConnectionChannel call this
     selector. */
 - (void)cancel;

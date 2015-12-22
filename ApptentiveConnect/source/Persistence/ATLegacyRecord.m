@@ -19,7 +19,7 @@
 #define kRecordCodingVersion 1
 
 
-@interface ATLegacyRecord (Private)
+@interface ATLegacyRecord ()
 - (NSString *)primaryLocale;
 - (NSArray *)availableLocales;
 @end
@@ -174,10 +174,9 @@
 - (void)cleanup {
 	// Do nothing by default.
 }
-@end
 
+#pragma mark - Private methods
 
-@implementation ATLegacyRecord (Private)
 - (NSString *)primaryLocale {
 	return [[NSLocale currentLocale] localeIdentifier];
 }

@@ -30,24 +30,22 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 
 #define kApptentiveAPIVersion @"4"
 
-
 @implementation ATWebClient
 + (ATWebClient *)sharedClient {
 	static ATWebClient *sharedSingleton = nil;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		sharedSingleton = [[ATWebClient alloc] initWithBaseURL:[NSURL URLWithString:kApptentiveBaseURL] APIKey:[ATBackend sharedBackend].apiKey version:kApptentiveAPIVersion];
+		sharedSingleton = [[ATWebClient alloc] initWithBaseURL:[NSURL URLWithString:kApptentiveBaseURL] APIKey:[ATBackend sharedBackend].apiKey];
 	});
 	return sharedSingleton;
 }
 
-- (instancetype)initWithBaseURL:(NSURL *)baseURL APIKey:(NSString *)APIKey version:(NSString *)APIVersion {
+- (instancetype)initWithBaseURL:(NSURL *)baseURL APIKey:(NSString *)APIKey {
 	self = [super init];
 
 	if (self) {
 		_baseURL = baseURL;
 		_APIKey = APIKey;
-		_APIVersion = APIVersion;
 	}
 
 	return self;
@@ -55,6 +53,10 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 
 - (NSString *)commonChannelName {
 	return ATWebClientDefaultChannelName;
+}
+
+- (NSString *)APIVersion {
+	return kApptentiveAPIVersion;
 }
 
 - (ATAPIRequest *)requestForGettingAppConfiguration {

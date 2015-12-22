@@ -146,7 +146,7 @@
 		return nil;
 	}
 
-	NSString *path = @"conversation";
+	NSString *path = @"/conversation";
 	if (parameters) {
 		NSString *paramString = [self stringForParameters:parameters];
 		path = [NSString stringWithFormat:@"%@?%@", path, paramString];

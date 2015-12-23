@@ -8,9 +8,9 @@
 
 #import "ATRecordTask.h"
 #import "ApptentiveMetrics.h"
-#import "ATBackend.h"
 #import "ATMetric.h"
 #import "ATWebClient.h"
+#import "ATConnect_Private.h"
 
 #define kATRecordTaskCodingVersion 1
 
@@ -47,7 +47,7 @@
 }
 
 - (BOOL)canStart {
-	if ([[ATBackend sharedBackend] apiKey] == nil) {
+	if ([ATConnect sharedConnection].webClient == nil) {
 		return NO;
 	}
 	return YES;

@@ -43,8 +43,9 @@ extern NSString *const ATBackendBecameReadyNotification;
 						   NSFetchedResultsControllerDelegate, UIAlertViewDelegate
 #endif
 						   >
-@property (copy, nonatomic) NSString *apiKey;
 /*! The feedback currently being worked on by the user. */
+@property (assign, nonatomic, getter=isAPIKeySet) BOOL APIKeySet;
+
 @property (strong, nonatomic) ATFeedback *currentFeedback;
 @property (strong, nonatomic) NSDictionary *currentCustomData;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;

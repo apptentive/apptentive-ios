@@ -7,8 +7,8 @@
 //
 
 #import "ATAppConfigurationUpdateTask.h"
-#import "ATBackend.h"
-
+#import "ATConnect_Private.h"
+#import "ATConversationUpdater.h"
 
 @implementation ATAppConfigurationUpdateTask {
 	ATAppConfigurationUpdater *configurationUpdater;
@@ -28,7 +28,7 @@
 }
 
 - (BOOL)canStart {
-	if ([[ATBackend sharedBackend] apiKey] == nil) {
+	if ([ATConnect sharedConnection].webClient == nil) {
 		return NO;
 	}
 	if (![ATConversationUpdater conversationExists]) {

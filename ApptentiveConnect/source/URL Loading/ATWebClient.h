@@ -13,10 +13,7 @@
 
 extern NSString *const ATWebClientDefaultChannelName;
 
-/*! Singleton for generating API requests. */
 @interface ATWebClient : NSObject
-
-+ (ATWebClient *)sharedClient;
 
 @property (readonly, nonatomic) NSURL *baseURL;
 @property (readonly, nonatomic) NSString *APIKey;

@@ -12,6 +12,7 @@
 #import "ATLog.h"
 #import "ATMessage.h"
 #import "ATConversationUpdater.h"
+#import "ATConnect_Private.h"
 #import "ATWebClient.h"
 #import "ATWebClient+MessageCenter.h"
 
@@ -49,7 +50,7 @@
 }
 
 - (BOOL)canStart {
-	if ([[ATBackend sharedBackend] apiKey] == nil) {
+	if ([ATConnect sharedConnection].webClient == nil) {
 		ATLogDebug(@"Failed to send message because Apptentive API key is not set!");
 		return NO;
 	}
@@ -71,7 +72,7 @@
 			self.finished = YES;
 			return;
 		}
-		request = [[ATWebClient sharedClient] requestForPostingMessage:message];
+		request = [[ATConnect sharedConnection].webClient requestForPostingMessage:message];
 		if (request != nil) {
 			[[ATBackend sharedBackend] messageTaskDidBegin:self];
 

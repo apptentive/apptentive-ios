@@ -15,6 +15,7 @@
 #import "ATWebClient.h"
 #import "ATWebClient+MessageCenter.h"
 #import "NSDictionary+ATAdditions.h"
+#import "ATConnect_Private.h"
 
 static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessagesLastRetrievedMessagIDPreferenceKey";
 
@@ -49,7 +50,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 }
 
 - (BOOL)canStart {
-	if ([[ATBackend sharedBackend] apiKey] == nil) {
+	if ([ATConnect sharedConnection].webClient == nil) {
 		return NO;
 	}
 	if (![ATConversationUpdater conversationExists]) {
@@ -60,7 +61,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 
 - (void)start {
 	if (!request) {
-		request = [[ATWebClient sharedClient] requestForRetrievingMessagesSinceMessage:lastMessage];
+		request = [[ATConnect sharedConnection].webClient requestForRetrievingMessagesSinceMessage:lastMessage];
 		if (request != nil) {
 			request.delegate = self;
 			[request start];

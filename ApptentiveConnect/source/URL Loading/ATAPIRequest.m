@@ -128,7 +128,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 				ATLogError(@"Your Apptentive API key may not be set correctly!");
 			}
 			if (sender.statusCode == 422) {
-				if ([connection.targetURL isEqual:[[ATWebClient sharedClient] APIURLWithPath:@"/events"]]) {
+				if ([connection.targetURL isEqual:[[ATConnect sharedConnection].webClient APIURLWithPath:@"/events"]]) {
 					ATLogWarning(@"Event was invalid; sent with malformed customData or extendedData.");
 				}
 			}

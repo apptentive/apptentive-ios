@@ -12,6 +12,7 @@
 #import "ATWebClient+EngagementAdditions.h"
 #import "ATEngagementManifestParser.h"
 #import "ATEngagementBackend.h"
+#import "ATConnect_Private.h"
 
 
 @implementation ATEngagementGetManifestTask {
@@ -33,7 +34,7 @@
 }
 
 - (BOOL)canStart {
-	if ([[ATBackend sharedBackend] apiKey] == nil) {
+	if ([ATConnect sharedConnection].webClient == nil) {
 		ATLogDebug(@"Failed to download Apptentive configuration because API key is not set!");
 		return NO;
 	}
@@ -54,7 +55,7 @@
 
 - (void)start {
 	if (checkManifestRequest == nil) {
-		ATWebClient *client = [ATWebClient sharedClient];
+		ATWebClient *client = [ATConnect sharedConnection].webClient;
 		checkManifestRequest = [client requestForGettingEngagementManifest];
 		checkManifestRequest.delegate = self;
 		self.inProgress = YES;

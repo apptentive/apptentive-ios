@@ -15,6 +15,7 @@
 #import "ATUtilities.h"
 #import "ATAppConfigurationUpdater.h"
 #import "ATMessageSender.h"
+#import "ATWebClient.h"
 #if TARGET_OS_IPHONE
 #import "ATMessageCenterViewController.h"
 #import "ATBannerViewController.h"
@@ -81,10 +82,15 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (void)setApiKey:(NSString *)APIKey {
-	if (_apiKey != APIKey) {
-		_apiKey = APIKey;
-		[[ATBackend sharedBackend] setApiKey:self.apiKey];
+	if (![self.webClient.APIKey isEqualToString:APIKey]) {
+		_webClient = [[ATWebClient alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.apptentive.com"] APIKey:APIKey];
+
+		[ATBackend sharedBackend].APIKeySet = (APIKey != nil);
 	}
+}
+
+- (NSString *)apiKey {
+	return self.webClient.APIKey;
 }
 
 - (NSString *)personName {

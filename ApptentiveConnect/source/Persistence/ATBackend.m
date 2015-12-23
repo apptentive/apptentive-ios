@@ -172,6 +172,7 @@ static NSURLCache *imageCache = nil;
 
 - (id)init {
 	if ((self = [super init])) {
+		_APIKeySet = NO;
 		[self setup];
 	}
 	return self;
@@ -183,16 +184,10 @@ static NSURLCache *imageCache = nil;
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)setApiKey:(NSString *)APIKey {
-	if (_apiKey != APIKey) {
-		_apiKey = APIKey;
-		if (_apiKey == nil) {
-			self.apiKeySet = NO;
-		} else {
-			self.apiKeySet = YES;
-		}
-		[self updateWorking];
-	}
+- (void)setAPIKeySet:(BOOL)APIKeySet {
+	_APIKeySet = APIKeySet;
+	
+	[self updateWorking];
 }
 
 - (ATMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body {

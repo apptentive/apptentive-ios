@@ -19,7 +19,12 @@ typedef NS_OPTIONS(NSInteger, ATConnectDebuggingOptions) {
 
 
 @interface ATConnect ()
+
 @property (assign, nonatomic) ATConnectDebuggingOptions debuggingOptions;
+@property (readonly, nonatomic) NSURL *baseURL;
+
+// Set base URL
+- (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL;
 
 // Debug/test interactions by invoking them directly
 - (NSArray *)engagementInteractions;

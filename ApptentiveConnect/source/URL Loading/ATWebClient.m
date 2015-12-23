@@ -20,25 +20,9 @@
 
 NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 
-#define kUserAgentFormat (@"ApptentiveConnect/%@ (%@)")
-
-#if USE_STAGING
-#define kApptentiveBaseURL (@"https://api.apptentive-beta.com")
-#else
-#define kApptentiveBaseURL (@"https://api.apptentive.com")
-#endif
-
 #define kApptentiveAPIVersion @"4"
 
 @implementation ATWebClient
-+ (ATWebClient *)sharedClient {
-	static ATWebClient *sharedSingleton = nil;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		sharedSingleton = [[ATWebClient alloc] initWithBaseURL:[NSURL URLWithString:kApptentiveBaseURL] APIKey:[ATBackend sharedBackend].apiKey];
-	});
-	return sharedSingleton;
-}
 
 - (instancetype)initWithBaseURL:(NSURL *)baseURL APIKey:(NSString *)APIKey {
 	self = [super init];

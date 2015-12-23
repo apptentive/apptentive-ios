@@ -60,15 +60,6 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 
 @implementation ATEngagementBackend
 
-+ (ATEngagementBackend *)sharedBackend {
-	static ATEngagementBackend *sharedBackend = nil;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		sharedBackend = [[ATEngagementBackend alloc] init];
-	});
-	return sharedBackend;
-}
-
 - (id)init {
 	if ((self = [super init])) {
 		NSDictionary *defaults = @{ ATEngagementIsUpdateVersionKey: @NO,
@@ -252,7 +243,7 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (BOOL)canShowInteractionForCodePoint:(NSString *)codePoint {
-	ATInteraction *interaction = [[ATEngagementBackend sharedBackend] interactionForEvent:codePoint];
+	ATInteraction *interaction = [[ATConnect sharedConnection].engagementBackend interactionForEvent:codePoint];
 
 	return (interaction != nil);
 }

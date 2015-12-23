@@ -234,7 +234,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		return;
 	}
 
-	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:@"open_app_store_manually"];
+	[self.engagementBackend engageApptentiveAppEvent:@"open_app_store_manually"];
 
 	ATInteraction *appStoreInteraction = [[ATInteraction alloc] init];
 	appStoreInteraction.type = @"AppStoreRating";
@@ -244,7 +244,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	appStoreInteraction.configuration = @{ @"store_id": self.appID,
 		@"method": @"app_store" };
 
-	[[ATEngagementBackend sharedBackend] presentInteraction:appStoreInteraction fromViewController:nil];
+	[self.engagementBackend presentInteraction:appStoreInteraction fromViewController:nil];
 }
 
 - (NSDictionary *)integrationConfiguration {
@@ -310,7 +310,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (BOOL)canShowInteractionForEvent:(NSString *)event {
-	return [[ATEngagementBackend sharedBackend] canShowInteractionForLocalEvent:event];
+	return [self.engagementBackend canShowInteractionForLocalEvent:event];
 }
 
 - (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController {
@@ -322,7 +322,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (BOOL)engage:(NSString *)event withCustomData:(NSDictionary *)customData withExtendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {
-	return [[ATEngagementBackend sharedBackend] engageLocalEvent:event userInfo:nil customData:customData extendedData:extendedData fromViewController:viewController];
+	return [self.engagementBackend engageLocalEvent:event userInfo:nil customData:customData extendedData:extendedData fromViewController:viewController];
 }
 
 + (NSDictionary *)extendedDataDate:(NSDate *)date {
@@ -421,7 +421,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (BOOL)canShowMessageCenter {
 	NSString *messageCenterCodePoint = [[ATInteraction apptentiveAppInteraction] codePointForEvent:ATEngagementMessageCenterEvent];
-	return [[ATEngagementBackend sharedBackend] canShowInteractionForCodePoint:messageCenterCodePoint];
+	return [self.engagementBackend canShowInteractionForCodePoint:messageCenterCodePoint];
 }
 
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController {
@@ -484,7 +484,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (void)resetUpgradeData {
-	[[ATEngagementBackend sharedBackend] resetUpgradeVersionInfo];
+	[self.engagementBackend resetUpgradeVersionInfo];
 }
 
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion {
@@ -636,7 +636,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (NSArray *)engagementInteractions {
-	return [[ATEngagementBackend sharedBackend] allEngagementInteractions];
+	return [self.engagementBackend allEngagementInteractions];
 }
 
 - (NSInteger)numberOfEngagementInteractions {
@@ -656,7 +656,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (void)presentInteractionAtIndex:(NSInteger)index fromViewController:(UIViewController *)viewController {
-	[[ATEngagementBackend sharedBackend] presentInteraction:[self.engagementInteractions objectAtIndex:index] fromViewController:viewController];
+	[self.engagementBackend presentInteraction:[self.engagementInteractions objectAtIndex:index] fromViewController:viewController];
 }
 
 @end

@@ -34,7 +34,6 @@ extern NSString *const ATEngagementMessageCenterEvent;
 
 
 @interface ATEngagementBackend : NSObject
-+ (ATEngagementBackend *)sharedBackend;
 
 - (void)checkForEngagementManifest;
 - (BOOL)shouldRetrieveNewEngagementManifest;

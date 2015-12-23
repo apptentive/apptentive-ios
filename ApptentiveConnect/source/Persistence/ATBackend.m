@@ -632,7 +632,7 @@ static NSURLCache *imageCache = nil;
 	}
 
 	if (![[ATTaskQueue sharedTaskQueue] hasTaskOfClass:[ATEngagementGetManifestTask class]]) {
-		[[ATEngagementBackend sharedBackend] checkForEngagementManifest];
+		[[ATConnect sharedConnection].engagementBackend checkForEngagementManifest];
 	}
 }
 
@@ -994,7 +994,7 @@ static NSURLCache *imageCache = nil;
 		if (![self isReady]) {
 			return;
 		}
-		[[ATEngagementBackend sharedBackend] checkForEngagementManifest];
+		[[ATConnect sharedConnection].engagementBackend checkForEngagementManifest];
 	}
 }
 

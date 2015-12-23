@@ -97,9 +97,9 @@
 			NSDictionary *interactions = targetsAndInteractions[@"interactions"];
 
 			if (targets && interactions) {
-				[[ATEngagementBackend sharedBackend] didReceiveNewTargets:targets andInteractions:interactions maxAge:[request expiresMaxAge]];
+				[[ATConnect sharedConnection].engagementBackend didReceiveNewTargets:targets andInteractions:interactions maxAge:[request expiresMaxAge]];
 #if APPTENTIVE_DEBUG
-				[ATEngagementBackend sharedBackend].engagementManifestJSON = targetsAndInteractions[@"raw"];
+				[ATConnect sharedConnection].engagementBackend.engagementManifestJSON = targetsAndInteractions[@"raw"];
 #endif
 			} else {
 				ATLogError(@"An error occurred parsing the engagement manifest: %@", [parser parserError]);

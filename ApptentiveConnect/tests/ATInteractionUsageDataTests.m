@@ -27,7 +27,7 @@
 - (void)setUp {
 	[super setUp];
 
-	[ATEngagementBackend sharedBackend];
+	[ATConnect sharedConnection].engagementBackend;
 }
 
 - (void)tearDown {

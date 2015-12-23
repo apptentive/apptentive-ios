@@ -10,6 +10,7 @@
 #import "ATEngagementBackend.h"
 #import "ATInteractionUsageData.h"
 #import "ATUtilities.h"
+#import "ATConnect_Private.h"
 
 
 @implementation ATInteraction
@@ -130,8 +131,7 @@
 - (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData {
 	NSString *codePoint = [self codePointForEvent:event];
 
-	return [[ATEngagementBackend sharedBackend] engageCodePoint:codePoint fromInteraction:self userInfo:userInfo customData:customData extendedData:extendedData fromViewController:viewController];
+	return [[ATConnect sharedConnection].engagementBackend engageCodePoint:codePoint fromInteraction:self userInfo:userInfo customData:customData extendedData:extendedData fromViewController:viewController];
 }
-
 
 @end

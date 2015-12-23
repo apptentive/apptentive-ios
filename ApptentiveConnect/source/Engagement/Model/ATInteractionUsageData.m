@@ -65,13 +65,13 @@
 		NSArray *components = [keyPath componentsSeparatedByString:@"/"];
 		if (components.count > 1) {
 			NSString *codePoint = [components objectAtIndex:1];
-			[[ATEngagementBackend sharedBackend] codePointWasSeen:codePoint];
+			[[ATConnect sharedConnection].engagementBackend codePointWasSeen:codePoint];
 		}
 	} else if ([keyPath hasPrefix:@"interactions/"]) {
 		NSArray *components = [keyPath componentsSeparatedByString:@"/"];
 		if (components.count > 1) {
 			NSString *interactionID = [components objectAtIndex:1];
-			[[ATEngagementBackend sharedBackend] interactionWasSeen:interactionID];
+			[[ATConnect sharedConnection].engagementBackend interactionWasSeen:interactionID];
 		}
 	}
 }

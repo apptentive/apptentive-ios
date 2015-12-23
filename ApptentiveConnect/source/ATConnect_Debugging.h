@@ -20,4 +20,11 @@ typedef NS_OPTIONS(NSInteger, ATConnectDebuggingOptions) {
 
 @interface ATConnect ()
 @property (assign, nonatomic) ATConnectDebuggingOptions debuggingOptions;
+
+// Debug/test interactions by invoking them directly
+- (NSArray *)engagementInteractions;
+- (NSString *)engagementInteractionNameAtIndex:(NSInteger)index;
+- (NSString *)engagementInteractionTypeAtIndex:(NSInteger)index;
+- (void)presentInteractionAtIndex:(NSInteger)index fromViewController:(UIViewController *)viewController;
+
 @end

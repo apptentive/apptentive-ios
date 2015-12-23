@@ -478,30 +478,6 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	[[ATEngagementBackend sharedBackend] resetUpgradeVersionInfo];
 }
 
-- (NSArray *)engagementInteractions {
-	return [[ATEngagementBackend sharedBackend] allEngagementInteractions];
-}
-
-- (NSInteger)numberOfEngagementInteractions {
-	return [[self engagementInteractions] count];
-}
-
-- (NSString *)engagementInteractionNameAtIndex:(NSInteger)index {
-	ATInteraction *interaction = [[self engagementInteractions] objectAtIndex:index];
-
-	return [interaction.configuration objectForKey:@"name"] ?: [interaction.configuration objectForKey:@"title"] ?: @"Untitled Interaction";
-}
-
-- (NSString *)engagementInteractionTypeAtIndex:(NSInteger)index {
-	ATInteraction *interaction = [[self engagementInteractions] objectAtIndex:index];
-
-	return interaction.type;
-}
-
-- (void)presentInteractionAtIndex:(NSInteger)index fromViewController:(UIViewController *)viewController {
-	[[ATEngagementBackend sharedBackend] presentInteraction:[self.engagementInteractions objectAtIndex:index] fromViewController:viewController];
-}
-
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion {
 	[[ATBackend sharedBackend] dismissMessageCenterAnimated:animated completion:completion];
 }
@@ -607,6 +583,40 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 + (UIStoryboard *)storyboard {
 	return [UIStoryboard storyboardWithName:@"Apptentive" bundle:[ATConnect resourceBundle]];
+}
+
+#pragma mark - Debugging and diagnostics
+
+- (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL {
+	if (![APIKey isEqualToString:self.webClient.APIKey] || ![baseURL isEqual:self.webClient.baseURL]) {
+		self.webClient = [[ATWebClient alloc] initWithBaseURL:baseURL APIKey:APIKey];
+
+		[ATBackend sharedBackend].APIKeySet = (APIKey != nil);
+	}
+}
+
+- (NSArray *)engagementInteractions {
+	return [[ATEngagementBackend sharedBackend] allEngagementInteractions];
+}
+
+- (NSInteger)numberOfEngagementInteractions {
+	return [[self engagementInteractions] count];
+}
+
+- (NSString *)engagementInteractionNameAtIndex:(NSInteger)index {
+	ATInteraction *interaction = [[self engagementInteractions] objectAtIndex:index];
+
+	return [interaction.configuration objectForKey:@"name"] ?: [interaction.configuration objectForKey:@"title"] ?: @"Untitled Interaction";
+}
+
+- (NSString *)engagementInteractionTypeAtIndex:(NSInteger)index {
+	ATInteraction *interaction = [[self engagementInteractions] objectAtIndex:index];
+
+	return interaction.type;
+}
+
+- (void)presentInteractionAtIndex:(NSInteger)index fromViewController:(UIViewController *)viewController {
+	[[ATEngagementBackend sharedBackend] presentInteraction:[self.engagementInteractions objectAtIndex:index] fromViewController:viewController];
 }
 
 @end

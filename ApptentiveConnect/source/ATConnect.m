@@ -85,7 +85,10 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	if (![self.webClient.APIKey isEqualToString:APIKey]) {
 		_webClient = [[ATWebClient alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.apptentive.com"] APIKey:APIKey];
 
-		[ATBackend sharedBackend].APIKeySet = (APIKey != nil);
+		_backend = [[ATBackend alloc] init];
+		_engagementBackend = [[ATEngagementBackend alloc] init];
+
+		[self.backend startup];
 	}
 }
 
@@ -118,15 +121,15 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (void)sendAttachmentText:(NSString *)text {
-	[[ATBackend sharedBackend] sendTextMessageWithBody:text hiddenOnClient:YES];
+	[self.backend sendTextMessageWithBody:text hiddenOnClient:YES];
 }
 
 - (void)sendAttachmentImage:(UIImage *)image {
-	[[ATBackend sharedBackend] sendImageMessageWithImage:image hiddenOnClient:YES];
+	[self.backend sendImageMessageWithImage:image hiddenOnClient:YES];
 }
 
 - (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType {
-	[[ATBackend sharedBackend] sendFileMessageWithFileData:fileData andMimeType:mimeType hiddenOnClient:YES];
+	[self.backend sendFileMessageWithFileData:fileData andMimeType:mimeType hiddenOnClient:YES];
 }
 
 - (NSDictionary *)customPersonData {
@@ -227,7 +230,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (void)openAppStore {
 	if (!self.appID) {
-		ATLogError(@"Cannot open App Store because `[ATConnect sharedConnection].appID` is not set to your app's iTunes App ID.");
+		ATLogError(@"Cannot open App Store because `self.appID` is not set to your app's iTunes App ID.");
 		return;
 	}
 
@@ -291,7 +294,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 								ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
 								ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
 
-	[[ATConnect sharedConnection] addIntegration:integration withConfiguration:@{ @"token": token }];
+	[self addIntegration:integration withConfiguration:@{ @"token": token }];
 }
 
 - (void)removeIntegration:(NSString *)integration {
@@ -422,7 +425,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController {
-	return [[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController];
+	return [self.backend presentMessageCenterFromViewController:viewController];
 }
 
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData {
@@ -432,7 +435,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		[self addCustomData:[customData objectForKey:key] withKey:key toCustomDataDictionary:allowedCustomMessageData];
 	}
 
-	return [[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController withCustomData:allowedCustomMessageData];
+	return [self.backend presentMessageCenterFromViewController:viewController withCustomData:allowedCustomMessageData];
 }
 
 - (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController {
@@ -450,7 +453,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 				NSNumber *contentAvailable = userInfo[@"aps"][@"content-available"];
 				if (contentAvailable.boolValue) {
 					shouldCallCompletionHandler = NO;
-					[[ATBackend sharedBackend] fetchMessagesInBackground:completionHandler];
+					[self.backend fetchMessagesInBackground:completionHandler];
 				}
 				break;
 			}
@@ -467,7 +470,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 				if ([action isEqualToString:@"pmc"]) {
 					[self presentMessageCenterFromViewController:viewController];
 				} else {
-					[[ATBackend sharedBackend] checkForMessages];
+					[self.backend checkForMessages];
 				}
 				break;
 		}
@@ -485,11 +488,11 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion {
-	[[ATBackend sharedBackend] dismissMessageCenterAnimated:animated completion:completion];
+	[self.backend dismissMessageCenterAnimated:animated completion:completion];
 }
 
 - (NSUInteger)unreadMessageCount {
-	return [[ATBackend sharedBackend] unreadMessageCount];
+	return [self.backend unreadMessageCount];
 }
 
 - (UIView *)unreadMessageCountAccessoryView:(BOOL)apptentiveHeart {
@@ -502,7 +505,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 #elif TARGET_OS_MAC
 - (IBAction)showFeedbackWindow:(id)sender {
-	if (![[ATBackend sharedBackend] currentFeedback]) {
+	if (![self.backend currentFeedback]) {
 		ATFeedback *feedback = [[ATFeedback alloc] init];
 		if (additionalFeedbackData && [additionalFeedbackData count]) {
 			[feedback addExtraDataFromDictionary:additionalFeedbackData];
@@ -513,13 +516,13 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		if (self.initialEmailAddress && [self.initialEmailAddress length] > 0) {
 			feedback.email = self.initialEmailAddress;
 		}
-		[[ATBackend sharedBackend] setCurrentFeedback:feedback];
+		[self.backend setCurrentFeedback:feedback];
 		[feedback release];
 		feedback = nil;
 	}
 
 	if (!feedbackWindowController) {
-		feedbackWindowController = [[ATFeedbackWindowController alloc] initWithFeedback:[[ATBackend sharedBackend] currentFeedback]];
+		feedbackWindowController = [[ATFeedbackWindowController alloc] initWithFeedback:[self.backend currentFeedback]];
 	}
 	[feedbackWindowController showWindow:self];
 }
@@ -562,7 +565,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 #pragma mark - Message notification banner
 
 - (void)showNotificationBannerForMessage:(ATMessage *)message {
-	if ([ATBackend sharedBackend].notificationPopupsEnabled && [message isKindOfClass:[ATMessage class]]) {
+	if (self.backend.notificationPopupsEnabled && [message isKindOfClass:[ATMessage class]]) {
 		// TODO: Display something if body is empty
 		ATMessage *textMessage = (ATMessage *)message;
 		NSURL *profilePhotoURL = textMessage.sender.profilePhotoURL ? [NSURL URLWithString:textMessage.sender.profilePhotoURL] : nil;
@@ -593,11 +596,42 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 #pragma mark - Debugging and diagnostics
 
+@synthesize webClient = _webClient;
+@synthesize backend = _backend;
+@synthesize engagementBackend = _engagementBackend;
+
+- (ATWebClient *)webClient {
+	if (_webClient == nil) {
+		ATLogError(@"Attempting to access non-existent web client");
+	}
+
+	return _webClient;
+}
+
+- (ATBackend *)backend {
+	if (_backend == nil) {
+		ATLogError(@"Attempting to access non-existent backend");
+	}
+
+	return _backend;
+}
+
+- (ATEngagementBackend *)engagementBackend {
+	if (_engagementBackend == nil) {
+		ATLogError(@"Attemptint to access non-existent engagement backend.");
+	}
+
+	return _engagementBackend;
+}
+
 - (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL {
 	if (![APIKey isEqualToString:self.webClient.APIKey] || ![baseURL isEqual:self.webClient.baseURL]) {
-		self.webClient = [[ATWebClient alloc] initWithBaseURL:baseURL APIKey:APIKey];
+		_webClient = [[ATWebClient alloc] initWithBaseURL:baseURL APIKey:APIKey];
 
-		[ATBackend sharedBackend].APIKeySet = (APIKey != nil);
+		_backend = [[ATBackend alloc] init];
+		_engagementBackend = [[ATEngagementBackend alloc] init];
+
+		[self.backend startup];
 	}
 }
 

@@ -59,7 +59,7 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 		ATLogInfo(@"Creating conversation");
 		creatingConversation = YES;
 		ATConversation *conversation = [[ATConversation alloc] init];
-		conversation.deviceID = [[ATBackend sharedBackend] deviceUUID];
+		conversation.deviceID = [[ATConnect sharedConnection].backend deviceUUID];
 		request = [[ATConnect sharedConnection].webClient requestForCreatingConversation:conversation];
 		request.delegate = self;
 		[request start];

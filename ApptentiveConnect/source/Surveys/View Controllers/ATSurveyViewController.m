@@ -147,7 +147,7 @@ enum {
 	[response setAnswers:answers];
 
 	NSError *error = nil;
-	if (![[[ATBackend sharedBackend] managedObjectContext] save:&error]) {
+	if (![[[ATConnect sharedConnection].backend managedObjectContext] save:&error]) {
 		ATLogError(@"Unable to send survey response: %@, error: %@", response, error);
 		response = nil;
 		return;

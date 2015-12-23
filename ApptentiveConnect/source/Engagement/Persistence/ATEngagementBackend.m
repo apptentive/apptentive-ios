@@ -179,7 +179,7 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 	ATLogInfo(@"Received remote Interactions from Apptentive.");
 
 	@synchronized(self) {
-		if ([[ATBackend sharedBackend] supportDirectoryPath]) {
+		if ([[ATConnect sharedConnection].backend supportDirectoryPath]) {
 			[NSKeyedArchiver archiveRootObject:targets toFile:[ATEngagementBackend cachedTargetsStoragePath]];
 			[NSKeyedArchiver archiveRootObject:interactions toFile:[ATEngagementBackend cachedInteractionsStoragePath]];
 
@@ -238,11 +238,11 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 }
 
 + (NSString *)cachedTargetsStoragePath {
-	return [[[ATBackend sharedBackend] supportDirectoryPath] stringByAppendingPathComponent:@"cachedtargets.objects"];
+	return [[[ATConnect sharedConnection].backend supportDirectoryPath] stringByAppendingPathComponent:@"cachedtargets.objects"];
 }
 
 + (NSString *)cachedInteractionsStoragePath {
-	return [[[ATBackend sharedBackend] supportDirectoryPath] stringByAppendingPathComponent:@"cachedinteractionsV2.objects"];
+	return [[[ATConnect sharedConnection].backend supportDirectoryPath] stringByAppendingPathComponent:@"cachedinteractionsV2.objects"];
 }
 
 - (BOOL)canShowInteractionForLocalEvent:(NSString *)event {
@@ -326,7 +326,7 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 
 - (BOOL)engageCodePoint:(NSString *)codePoint fromInteraction:(ATInteraction *)fromInteraction userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {
 	ATLogInfo(@"Engage Apptentive event: %@", codePoint);
-	if (![[ATBackend sharedBackend] isReady]) {
+	if (![[ATConnect sharedConnection].backend isReady]) {
 		return NO;
 	}
 

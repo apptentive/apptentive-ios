@@ -265,14 +265,14 @@
 
 - (NSString *)sdkDistribution {
 	if (!_sdkDistribution) {
-		_sdkDistribution = [[[ATBackend sharedBackend] distributionName] copy];
+		_sdkDistribution = [[[ATConnect sharedConnection].backend distributionName] copy];
 	}
 	return _sdkDistribution;
 }
 
 - (NSString *)sdkDistributionVersion {
 	if (!_sdkDistributionVersion) {
-		_sdkDistributionVersion = [[[ATBackend sharedBackend] distributionVersion] copy];
+		_sdkDistributionVersion = [[[ATConnect sharedConnection].backend distributionVersion] copy];
 	}
 	return _sdkDistributionVersion;
 }

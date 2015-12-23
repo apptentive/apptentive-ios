@@ -140,7 +140,7 @@
 			[response setPendingState:@(ATPendingSurveyResponseError)];
 		}
 		NSError *error = nil;
-		NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
+		NSManagedObjectContext *context = [[ATConnect sharedConnection].backend managedObjectContext];
 		if (![context save:&error]) {
 			ATLogError(@"Failed to save survey response after API failure: %@", error);
 		}
@@ -159,7 +159,7 @@
 
 - (BOOL)processResult:(NSDictionary *)jsonResponse {
 	ATLogDebug(@"Getting json result: %@", jsonResponse);
-	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
+	NSManagedObjectContext *context = [[ATConnect sharedConnection].backend managedObjectContext];
 
 	ATSurveyResponse *response = [ATSurveyResponse findSurveyResponseWithPendingID:self.pendingSurveyResponseID];
 	if (response == nil) {

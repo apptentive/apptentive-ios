@@ -108,7 +108,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 		}
 		[self stop];
 
-		[[ATBackend sharedBackend] completeMessageFetchWithResult:fetchResult];
+		[[ATConnect sharedConnection].backend completeMessageFetchWithResult:fetchResult];
 	}
 }
 
@@ -129,7 +129,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 #pragma mark - Private methods
 
 - (BOOL)processResult:(NSDictionary *)jsonMessages {
-	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
+	NSManagedObjectContext *context = [[ATConnect sharedConnection].backend managedObjectContext];
 	NSString *lastMessageID = nil;
 
 	ATConversation *conversation = [ATConversationUpdater currentConversation];

@@ -596,34 +596,6 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 #pragma mark - Debugging and diagnostics
 
-@synthesize webClient = _webClient;
-@synthesize backend = _backend;
-@synthesize engagementBackend = _engagementBackend;
-
-- (ATWebClient *)webClient {
-	if (_webClient == nil) {
-		ATLogError(@"Attempting to access non-existent web client");
-	}
-
-	return _webClient;
-}
-
-- (ATBackend *)backend {
-	if (_backend == nil) {
-		ATLogError(@"Attempting to access non-existent backend");
-	}
-
-	return _backend;
-}
-
-- (ATEngagementBackend *)engagementBackend {
-	if (_engagementBackend == nil) {
-		ATLogError(@"Attemptint to access non-existent engagement backend.");
-	}
-
-	return _engagementBackend;
-}
-
 - (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL {
 	if (![APIKey isEqualToString:self.webClient.APIKey] || ![baseURL isEqual:self.webClient.baseURL]) {
 		_webClient = [[ATWebClient alloc] initWithBaseURL:baseURL APIKey:APIKey];

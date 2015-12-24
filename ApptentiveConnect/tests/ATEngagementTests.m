@@ -933,6 +933,8 @@
 }
 
 - (void)testCanShowInteractionForEvent {
+	[ATConnect sharedConnection].apiKey = @"bogus_api_key"; // trigger creation of engagement backend
+
 	ATInteractionInvocation *canShow = [[ATInteractionInvocation alloc] init];
 	canShow.criteria = @{};
 	canShow.interactionID = @"example_interaction_ID";

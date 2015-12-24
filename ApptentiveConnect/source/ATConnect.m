@@ -230,7 +230,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (void)openAppStore {
 	if (!self.appID) {
-		ATLogError(@"Cannot open App Store because `self.appID` is not set to your app's iTunes App ID.");
+		ATLogError(@"Cannot open App Store because `[ATConnect sharedConnection].appID` is not set to your app's iTunes App ID.");
 		return;
 	}
 

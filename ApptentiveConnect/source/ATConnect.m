@@ -8,7 +8,7 @@
 
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
-#import "ATConnect_Debugging.h"
+#import "ATConnect+Debugging.h"
 #import "ATBackend.h"
 #import "ATContactStorage.h"
 #import "ATEngagementBackend.h"

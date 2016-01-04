@@ -21,6 +21,7 @@
 		0127EA181BF136090005481A /* at_document.png in Resources */ = {isa = PBXBuildFile; fileRef = 0127EA151BF136020005481A /* at_document.png */; };
 		0127EA191BF136090005481A /* at_document@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0127EA161BF136020005481A /* at_document@2x.png */; };
 		0127EA1A1BF136090005481A /* at_document@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0127EA171BF136020005481A /* at_document@3x.png */; };
+		01379BBF1C3AF3B00025D2F6 /* ATConnect+Debugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 01379BBE1C3AF3B00025D2F6 /* ATConnect+Debugging.m */; };
 		013BB6061BF6A65C00BB6C27 /* at_remove.png in Resources */ = {isa = PBXBuildFile; fileRef = 013BB6031BF6A63300BB6C27 /* at_remove.png */; };
 		013BB6071BF6A65C00BB6C27 /* at_remove@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 013BB6041BF6A63300BB6C27 /* at_remove@2x.png */; };
 		013BB6081BF6A65C00BB6C27 /* at_remove@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 013BB6051BF6A63300BB6C27 /* at_remove@3x.png */; };
@@ -334,6 +335,7 @@
 		0127EA151BF136020005481A /* at_document.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_document.png; sourceTree = "<group>"; };
 		0127EA161BF136020005481A /* at_document@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_document@2x.png"; sourceTree = "<group>"; };
 		0127EA171BF136020005481A /* at_document@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_document@3x.png"; sourceTree = "<group>"; };
+		01379BBE1C3AF3B00025D2F6 /* ATConnect+Debugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ATConnect+Debugging.m"; sourceTree = "<group>"; };
 		013BB6031BF6A63300BB6C27 /* at_remove.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_remove.png; sourceTree = "<group>"; };
 		013BB6041BF6A63300BB6C27 /* at_remove@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_remove@2x.png"; sourceTree = "<group>"; };
 		013BB6051BF6A63300BB6C27 /* at_remove@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_remove@3x.png"; sourceTree = "<group>"; };
@@ -591,7 +593,7 @@
 		49F8AFFA16CC4D860070FFEA /* ATRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATRecord.m; sourceTree = "<group>"; };
 		49F8AFFD16CC56570070FFEA /* ATEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATEvent.h; sourceTree = "<group>"; };
 		49F8AFFE16CC56570070FFEA /* ATEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATEvent.m; sourceTree = "<group>"; };
-		49FD7AF219089F1500A707C2 /* ATConnect_Debugging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ATConnect_Debugging.h; sourceTree = "<group>"; };
+		49FD7AF219089F1500A707C2 /* ATConnect+Debugging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ATConnect+Debugging.h"; sourceTree = "<group>"; };
 		49FECBE217D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v1 to v2.xcmappingmodel"; sourceTree = "<group>"; };
 		580B24B917D90AF300AE2CD0 /* ATEngagementTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ATEngagementTests.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		580B24BA17D90AF300AE2CD0 /* ATEngagementTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ATEngagementTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -1245,7 +1247,8 @@
 				49C00297133413BB0071F088 /* ATConnect.h */,
 				49C00298133413BB0071F088 /* ATConnect.m */,
 				4967278116B9D9CB00C679B8 /* ATConnect_Private.h */,
-				49FD7AF219089F1500A707C2 /* ATConnect_Debugging.h */,
+				49FD7AF219089F1500A707C2 /* ATConnect+Debugging.h */,
+				01379BBE1C3AF3B00025D2F6 /* ATConnect+Debugging.m */,
 				49B3D964133D843D00B5A5CD /* Custom Views */,
 				4999127B16165B7900FDA15F /* Message Center */,
 				5898DF8817C2D8E60048F11F /* Engagement */,
@@ -1801,6 +1804,7 @@
 				01B147B41B5D8D3A0000D041 /* ATMessageCenterProfileView.m in Sources */,
 				58DCC0D6180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m in Sources */,
 				58D17D5018C5676F00D123BC /* ATInteractionMessageCenterController.m in Sources */,
+				01379BBF1C3AF3B00025D2F6 /* ATConnect+Debugging.m in Sources */,
 				58B703F91B0FAE6D0024478C /* ATMessageCenterInteraction.m in Sources */,
 				01D0C3911BF3DED50024BA1A /* ATAttachButton.m in Sources */,
 				491748BF1341177000A7D11E /* ATURLConnection.m in Sources */,

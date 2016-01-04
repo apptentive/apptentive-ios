@@ -8,7 +8,7 @@
 
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
-#import "ATConnect_Debugging.h"
+#import "ATConnect+Debugging.h"
 #import "ATBackend.h"
 #import "ATEngagementBackend.h"
 #import "ATInteraction.h"
@@ -73,10 +73,6 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		_integrationConfiguration = [[NSMutableDictionary alloc] init];
 
 		ATLogInfo(@"Apptentive SDK Version %@", kATConnectVersionString);
-
-#if APPTENTIVE_DEBUG_LOG_VIEWER
-		self.debuggingOptions = ATConnectDebuggingOptionsShowDebugPanel;
-#endif
 	}
 	return self;
 }
@@ -605,30 +601,6 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 		[self.backend startup];
 	}
-}
-
-- (NSArray *)engagementInteractions {
-	return [self.engagementBackend allEngagementInteractions];
-}
-
-- (NSInteger)numberOfEngagementInteractions {
-	return [[self engagementInteractions] count];
-}
-
-- (NSString *)engagementInteractionNameAtIndex:(NSInteger)index {
-	ATInteraction *interaction = [[self engagementInteractions] objectAtIndex:index];
-
-	return [interaction.configuration objectForKey:@"name"] ?: [interaction.configuration objectForKey:@"title"] ?: @"Untitled Interaction";
-}
-
-- (NSString *)engagementInteractionTypeAtIndex:(NSInteger)index {
-	ATInteraction *interaction = [[self engagementInteractions] objectAtIndex:index];
-
-	return interaction.type;
-}
-
-- (void)presentInteractionAtIndex:(NSInteger)index fromViewController:(UIViewController *)viewController {
-	[self.engagementBackend presentInteraction:[self.engagementInteractions objectAtIndex:index] fromViewController:viewController];
 }
 
 @end

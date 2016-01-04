@@ -1,5 +1,5 @@
 //
-//  ATConnect_Debugging.h
+//  ATConnect+Debugging.h
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 4/23/14.
@@ -7,8 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
-#import "ATConnect.h"
+#import "ATConnect_Private.h"
 
 typedef NS_OPTIONS(NSInteger, ATConnectDebuggingOptions) {
 	ATConnectDebuggingOptionsNone = 0,
@@ -17,14 +16,24 @@ typedef NS_OPTIONS(NSInteger, ATConnectDebuggingOptions) {
 	ATConnectDebuggingOptionsLogAllHTTPRequests = 1 << 2,
 };
 
+NS_ASSUME_NONNULL_BEGIN
 
 @interface ATConnect ()
 
 @property (assign, nonatomic) ATConnectDebuggingOptions debuggingOptions;
-@property (readonly, nonatomic) NSURL *baseURL;
+@property (readonly, nonatomic) NSURL * _Nullable baseURL;
 
-// Set base URL
 - (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL;
+
+@end
+
+@interface ATConnect (Debugging)
+
+@property (readonly, nonatomic) NSString *SDKVersion;
+@property (readonly, nonatomic) NSString * _Nullable APIKey;
+@property (readonly, nonatomic) UIView * _Nullable unreadAccessoryView;
+@property (readonly, nonatomic) NSString * _Nullable manifestJSON;
+@property (readonly, nonatomic) NSDictionary<NSString *, NSObject *> *deviceInfo;
 
 // Debug/test interactions by invoking them directly
 - (NSArray *)engagementInteractions;
@@ -33,3 +42,5 @@ typedef NS_OPTIONS(NSInteger, ATConnectDebuggingOptions) {
 - (void)presentInteractionAtIndex:(NSInteger)index fromViewController:(UIViewController *)viewController;
 
 @end
+
+NS_ASSUME_NONNULL_END

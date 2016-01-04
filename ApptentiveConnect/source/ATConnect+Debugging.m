@@ -28,8 +28,9 @@
 }
 
 - (NSString *)manifestJSON {
-	if ([self.engagementBackend respondsToSelector:@selector(engagementManifestJSON)]) {
-		NSData *rawJSONData = [self.engagementBackend valueForKey:@"engagementManfiestJSON"];
+	NSData *rawJSONData = self.engagementBackend.engagementManifestJSON;
+
+	if (rawJSONData != nil) {
 		NSData *outputJSONData = nil;
 
 		// try to pretty-print by round-tripping through NSJSONSerialization

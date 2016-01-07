@@ -19,12 +19,20 @@
 	return kATConnectVersionString;
 }
 
-- (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL {
-	if ([baseURL isEqual:self.baseURL]) {
+- (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL storagePath:(nonnull NSString *)storagePath {
+	if (![baseURL isEqual:self.baseURL]) {
 		ATLogInfo(@"Base URL of %@ will not be used due to SDK version. Using %@ instead.", baseURL, self.baseURL);
+	}
+
+	if (![storagePath isEqualToString:self.storagePath]) {
+		ATLogInfo(@"Storage path of %@ will not be used due to SDK version. Using %@ instead.", storagePath, self.storagePath);
 	}
 	
 	self.apiKey = APIKey;
+}
+
+- (NSString *)storagePath {
+	return [ATBackend sharedBackend].supportDirectoryPath;
 }
 
 - (NSURL *)baseURL {

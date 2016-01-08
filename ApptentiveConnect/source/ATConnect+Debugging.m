@@ -15,6 +15,10 @@
 
 @implementation ATConnect (Debugging)
 
++ (NSString *)supportDirectoryPath {
+	return [ATBackend sharedBackend].supportDirectoryPath;
+}
+
 - (NSString *)SDKVersion {
 	return kATConnectVersionString;
 }

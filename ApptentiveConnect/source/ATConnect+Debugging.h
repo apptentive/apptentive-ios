@@ -26,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ATConnect (Debugging)
 
++ (NSString *)supportDirectoryPath;
 - (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath;
 
 @property (readonly, nonatomic) NSURL * _Nullable baseURL;

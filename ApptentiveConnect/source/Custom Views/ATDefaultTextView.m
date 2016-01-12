@@ -88,16 +88,8 @@
 		[self.placeholderLabel sizeToFit];
 		[self addSubview:self.placeholderLabel];
 
-		CGFloat paddingX = 0;
-		CGPoint origin = CGPointZero;
-
-		if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7"]) {
-			paddingX = 4;
-			origin = CGPointMake(4, 8);
-		} else {
-			paddingX = 8;
-			origin = CGPointMake(8, 8);
-		}
+		CGFloat paddingX = 4;
+		CGPoint origin = CGPointMake(4, 8);
 
 		CGRect b = self.placeholderLabel.bounds;
 		b.size.width = self.bounds.size.width - paddingX * 2.0;

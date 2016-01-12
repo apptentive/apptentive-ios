@@ -281,21 +281,11 @@ enum {
 		}
 
 		CGSize cellSize = CGSizeMake(cell.textLabel.bounds.size.width, 1024);
-		NSLineBreakMode lbm = cell.textLabel.lineBreakMode;
-		CGSize s = CGSizeZero;
-		if ([cell.textLabel.text respondsToSelector:@selector(sizeWithAttributes:)]) {
-			NSDictionary *attrs = @{NSFontAttributeName: font};
-			NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:cell.textLabel.text attributes:attrs];
-			CGRect textSize = [attributedText boundingRectWithSize:cellSize options:NSStringDrawingUsesLineFragmentOrigin context:nil];
-			s = textSize.size;
-		} else {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-			s = [cell.textLabel.text sizeWithFont:font constrainedToSize:cellSize lineBreakMode:lbm];
-#pragma clang diagnostic pop
-		}
+		NSDictionary *attrs = @{NSFontAttributeName: font};
+		NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:cell.textLabel.text attributes:attrs];
+		CGRect textSize = [attributedText boundingRectWithSize:cellSize options:NSStringDrawingUsesLineFragmentOrigin context:nil];
 		CGRect f = cell.textLabel.frame;
-		f.size = s;
+		f.size = textSize.size;
 #if DEBUG_CELL_HEIGHT_PROBLEM
 		if (s.height >= 50) {
 			ATLogDebug(@"cell width is: %f", cell.frame.size.width);
@@ -308,11 +298,11 @@ enum {
 		if (question != nil && indexPath.row == 1 && [self questionHasExtraInfo:question]) {
 			f.origin.y = 4;
 			cell.textLabel.frame = f;
-			cellHeight = MAX(32, s.height + 8);
+			cellHeight = MAX(32, textSize.size.height + 8);
 		} else {
 			f.origin.y = 10;
 			cell.textLabel.frame = f;
-			cellHeight = MAX(44, s.height + 20);
+			cellHeight = MAX(44, textSize.size.height + 20);
 		}
 	} else {
 		cellHeight = 44;
@@ -335,9 +325,7 @@ enum {
 			buttonCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ATSurveySendCellIdentifier];
 			buttonCell.textLabel.text = ATLocalizedString(@"Send Response", @"Survey send response button title");
 			buttonCell.textLabel.textAlignment = NSTextAlignmentCenter;
-			if ([self.view respondsToSelector:@selector(tintColor)]) {
-				buttonCell.textLabel.textColor = self.view.tintColor;
-			}
+			buttonCell.textLabel.textColor = self.view.tintColor;
 			buttonCell.selectionStyle = UITableViewCellSelectionStyleBlue;
 		}
 		return buttonCell;

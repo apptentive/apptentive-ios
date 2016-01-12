@@ -99,7 +99,7 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 #endif
 
 - (BOOL)shouldOpenAppStoreViaStoreKit {
-	return ([SKStoreProductViewController class] != NULL && [self appID] && ![ATUtilities osVersionGreaterThanOrEqualTo:@"7"]);
+	return ([SKStoreProductViewController class] != NULL && [self appID]);
 }
 
 - (NSURL *)URLForRatingApp {
@@ -114,12 +114,10 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 	NSString *URLString = nil;
 
 #if TARGET_OS_IPHONE
-	if ([ATUtilities osVersionGreaterThanOrEqualTo:@"7.1"]) {
+	if ([[[UIDevice currentDevice] systemVersion] compare:@"7.1" options:NSNumericSearch] != NSOrderedAscending) {
 		URLString = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", [self appID]];
-	} else if ([ATUtilities osVersionGreaterThanOrEqualTo:@"6.0"]) {
-		URLString = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/%@/app/id%@", [[NSLocale currentLocale] objectForKey:NSLocaleCountryCode], [self appID]];
 	} else {
-		URLString = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", [self appID]];
+		URLString = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/%@/app/id%@", [[NSLocale currentLocale] objectForKey:NSLocaleCountryCode], [self appID]];
 	}
 #elif TARGET_OS_MAC
 	URLString = [NSString stringWithFormat:@"macappstore://itunes.apple.com/app/id%@?mt=12", [self appID]];
@@ -172,14 +170,8 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 
 				if (!presentingVC) {
 					ATLogError(@"Attempting to open the App Store via StoreKit from a nil View Controller!");
-				}
-				else if ([presentingVC respondsToSelector:@selector(presentViewController:animated:completion:)]) {
-					[presentingVC presentViewController:vc animated:YES completion:^{}];
 				} else {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-					[presentingVC presentModalViewController:vc animated:YES];
-#pragma clang diagnostic pop
+					[presentingVC presentViewController:vc animated:YES completion:^{}];
 				}
 			}
 		}];
@@ -190,14 +182,7 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 
 #pragma mark SKStoreProductViewControllerDelegate
 - (void)productViewControllerDidFinish:(SKStoreProductViewController *)productViewController {
-	if ([productViewController respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
-		[productViewController dismissViewControllerAnimated:YES completion:NULL];
-	} else {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		[productViewController dismissModalViewControllerAnimated:YES];
-#pragma clang diagnostic pop
-	}
+	[productViewController dismissViewControllerAnimated:YES completion:NULL];
 }
 
 #pragma mark UIAlertViewDelegate

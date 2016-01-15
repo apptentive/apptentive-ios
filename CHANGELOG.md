@@ -1,3 +1,8 @@
+2016-01-14 frankus v2.1.1
+-------------------------
+Version 2.1.1 contains bug fixes and fixes several deprecation warnings for 
+iOS 8 deployment targets. The code formatting has been made more consistent.
+
 2015-12-09 frankus v2.1.0
 --------------------------------
 Version 2.1 contains several major features:

@@ -530,12 +530,12 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	NSDate *result = nil;
 
 	NSDate *now = [NSDate date];
-	NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+	NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
 	calendar.firstWeekday = 2;
 	calendar.timeZone = [NSTimeZone defaultTimeZone];
 
 	NSDateComponents *components = [[NSDateComponents alloc] init];
-	NSDateComponents *nowComponents = [calendar components:NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit fromDate:now];
+	NSDateComponents *nowComponents = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:now];
 	components.calendar = calendar;
 
 	NSScanner *scanner = [[NSScanner alloc] initWithString:string];
@@ -976,7 +976,7 @@ done:
 		if (dateFormatter == nil) {
 			dateFormatter = [[NSDateFormatter alloc] init];
 			NSLocale *enUSLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-			NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+			NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
 			[dateFormatter setLocale:enUSLocale];
 			[dateFormatter setCalendar:calendar];
 			[dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];

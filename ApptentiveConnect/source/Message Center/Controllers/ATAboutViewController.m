@@ -63,7 +63,10 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 }
 
 - (void)viewDidLayoutSubviews {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
 	[self resizeForOrientation:self.interfaceOrientation duration:0];
+#pragma clang diagnostic pop
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

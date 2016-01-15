@@ -143,7 +143,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.dateFormatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"MMMMdyyyy" options:0 locale:[NSLocale currentLocale]];
 	self.dataSource.dateFormatter.dateFormat = self.dateFormatter.dateFormat; // Used to determine if date changed between messages
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
 	UIInterfaceOrientation interfaceOrientation = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad ? UIInterfaceOrientationPortrait : self.interfaceOrientation;
+#pragma clang diagnostic pop
 	self.greetingView.orientation = interfaceOrientation;
 	self.profileView.orientation = interfaceOrientation;
 	self.messageInputView.orientation = interfaceOrientation;
@@ -182,7 +185,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.messageInputView.attachButton.accessibilityHint = ATLocalizedString(@"Attaches a photo or screenshot", @"Accessibility hint for 'attach'");
 
 	if (self.interaction.profileRequested) {
-		UIBarButtonItem *profileButtonItem = [[UIBarButtonItem alloc] initWithImage:[ATBackend imageNamed:@"at_account"] landscapeImagePhone:[ATBackend imageNamed:@"at_account"] style:UIBarButtonItemStyleBordered target:self action:@selector(showWho:)];
+		UIBarButtonItem *profileButtonItem = [[UIBarButtonItem alloc] initWithImage:[ATBackend imageNamed:@"at_account"] landscapeImagePhone:[ATBackend imageNamed:@"at_account"] style:UIBarButtonItemStylePlain target:self action:@selector(showWho:)];
 		profileButtonItem.accessibilityLabel = ATLocalizedString(@"Profile", @"Accessibility label for 'edit profile' button");
 		profileButtonItem.accessibilityHint = ATLocalizedString(@"Displays name and email editor.", @"Accessibility hint for 'edit profile' button");
 		self.navigationItem.leftBarButtonItem = profileButtonItem;

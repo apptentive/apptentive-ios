@@ -15,7 +15,9 @@ extern NSString *const ATDeviceLastUpdateValuePreferenceKey;
 
 @protocol ATDeviceUpdaterDelegate;
 
-@interface ATDeviceUpdater : NSObject <ATAPIRequestDelegate>@property (nonatomic, weak) NSObject<ATDeviceUpdaterDelegate> *delegate;
+
+@interface ATDeviceUpdater : NSObject <ATAPIRequestDelegate>
+@property (weak, nonatomic) NSObject<ATDeviceUpdaterDelegate> *delegate;
 + (BOOL)shouldUpdate;
 + (NSDictionary *)lastSavedVersion;
 

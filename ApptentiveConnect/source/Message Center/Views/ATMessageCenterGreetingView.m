@@ -13,6 +13,7 @@
 #define GREETING_PORTRAIT_HEIGHT 258.0
 #define GREETING_LANDSCAPE_HEIGHT 128.0
 
+
 @interface ATMessageCenterGreetingView ()
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *imageCenterXConstraint;
@@ -29,6 +30,7 @@
 @property (weak, nonatomic) IBOutlet UIView *textContainerView;
 
 @end
+
 
 @implementation ATMessageCenterGreetingView
 
@@ -55,18 +57,18 @@
 		// Landscape on phone: Center vertically, offset horizontally
 		self.imageCenterYConstraint.constant = 0.0;
 		self.textCenterYConstraint.constant = 0.0;
-		
+
 		self.imageCenterXConstraint.constant = self.textWidthConstraint.constant / 2.0;
 		self.textCenterXConstraint.constant = -self.imageWidthConstraint.constant / 2.0;
 	} else {
 		// Portrait/iPad: Center horizontally, offset vertically
 		self.imageCenterXConstraint.constant = 0.0;
 		self.textCenterXConstraint.constant = 0.0;
-		
+
 		self.imageCenterYConstraint.constant = self.textContainerView.bounds.size.height / 2.0 + 5.0;
 		self.textCenterYConstraint.constant = -self.imageWidthConstraint.constant / 2.0 - 7.0;
 	}
-	
+
 	[super updateConstraints];
 }
 

@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ATMessageCenterCellProtocols.h"
 
+
 @interface ATMessageCenterContextMessageCell : UITableViewCell <ATMessageCenterCell>
 
 @property (weak, nonatomic) IBOutlet UITextView *messageLabel;

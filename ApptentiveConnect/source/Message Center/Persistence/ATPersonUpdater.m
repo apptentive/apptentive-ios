@@ -14,12 +14,14 @@
 
 NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValuePreferenceKey";
 
+
 @interface ATPersonUpdater ()
 
-@property (nonatomic, strong) NSDictionary *sentPersonJSON;
+@property (strong, nonatomic) NSDictionary *sentPersonJSON;
 @property (strong, nonatomic) ATAPIRequest *request;
 
 @end
+
 
 @implementation ATPersonUpdater
 
@@ -38,20 +40,20 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 
 + (BOOL)shouldUpdate {
 	[ATPersonUpdater registerDefaults];
-	
+
 	return [[ATPersonInfo currentPerson] apiJSON].count > 0;
 }
 
 + (NSDictionary *)lastSavedVersion {
 	NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:ATPersonLastUpdateValuePreferenceKey];
-	
+
 	if (data) {
 		NSDictionary *dictionary = [NSKeyedUnarchiver unarchiveObjectWithData:data];
 		if ([dictionary isKindOfClass:[NSDictionary class]]) {
 			return dictionary;
 		}
 	}
-	
+
 	return nil;
 }
 
@@ -88,7 +90,7 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 
 #pragma mark ATATIRequestDelegate
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(NSObject *)result {
-	@synchronized (self) {
+	@synchronized(self) {
 		if ([result isKindOfClass:[NSDictionary class]]) {
 			[self processResult:(NSDictionary *)result];
 		} else {
@@ -105,7 +107,7 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 - (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
 	@synchronized(self) {
 		ATLogInfo(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
-		
+
 		[self.delegate personUpdater:self didFinish:NO];
 	}
 }
@@ -113,18 +115,18 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 #pragma mark - Private
 
 + (void)registerDefaults {
-	NSDictionary *defaultPreferences = @{ATPersonLastUpdateValuePreferenceKey: @{}};
-	
+	NSDictionary *defaultPreferences = @{ ATPersonLastUpdateValuePreferenceKey: @{} };
+
 	[[NSUserDefaults standardUserDefaults] registerDefaults:defaultPreferences];
 }
 
 - (void)processResult:(NSDictionary *)jsonPerson {
 	ATPersonInfo *person = [ATPersonInfo newPersonFromJSON:jsonPerson];
-	
+
 	if (person) {
 		// Save out the value we sent to the server.
 		[self saveVersion];
-		
+
 		[self.delegate personUpdater:self didFinish:YES];
 	} else {
 		[self.delegate personUpdater:self didFinish:NO];

@@ -28,6 +28,7 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 #define kApptentiveBaseURL (@"https://api.apptentive.com")
 #endif
 
+
 @implementation ATWebClient
 + (ATWebClient *)sharedClient {
 	static ATWebClient *sharedSingleton = nil;
@@ -71,12 +72,12 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 			[result appendString:@""];
 			break;
 		}
-		
+
 		BOOL appendAmpersand = NO;
 		for (NSString *key in [parameters keyEnumerator]) {
 			NSString *val = [self stringForParameter:[parameters objectForKey:key]];
 			if (!val) continue;
-			
+
 			if (appendAmpersand) {
 				[result appendString:@"&"];
 			}
@@ -161,12 +162,12 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 
 - (void)addAPIHeaders:(ATURLConnection *)conn {
 	[conn setValue:[self userAgentString] forHTTPHeaderField:@"User-Agent"];
-	[conn setValue: @"gzip" forHTTPHeaderField: @"Accept-Encoding"];
-//!!	[conn setValue: @"text/xml" forHTTPHeaderField: @"Accept"];
-	[conn setValue: @"utf-8" forHTTPHeaderField: @"Accept-Charset"];
+	[conn setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+	//!!	[conn setValue: @"text/xml" forHTTPHeaderField: @"Accept"];
+	[conn setValue:@"utf-8" forHTTPHeaderField:@"Accept-Charset"];
 
 	// Apptentive API Version
-    [conn setValue:@"4" forHTTPHeaderField:@"X-API-Version"];
+	[conn setValue:@"4" forHTTPHeaderField:@"X-API-Version"];
 
 	NSString *apiKey = [[ATBackend sharedBackend] apiKey];
 	if (apiKey) {

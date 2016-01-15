@@ -17,6 +17,7 @@ typedef NS_OPTIONS(NSInteger, ATConnectDebuggingOptions) {
 	ATConnectDebuggingOptionsLogAllHTTPRequests = 1 << 2,
 };
 
+
 @interface ATConnect ()
-@property (nonatomic, assign) ATConnectDebuggingOptions debuggingOptions;
+@property (assign, nonatomic) ATConnectDebuggingOptions debuggingOptions;
 @end

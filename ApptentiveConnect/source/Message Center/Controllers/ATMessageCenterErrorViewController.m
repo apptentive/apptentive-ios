@@ -17,12 +17,14 @@ NSString *const ATInteractionMessageCenterEventLabelNoInteractionNoInternet = @"
 NSString *const ATInteractionMessageCenterEventLabelNoInteractionAttempting = @"no_interaction_attempting";
 NSString *const ATInteractionMessageCenterEventLabelNoInteractionClose = @"no_interaction_close";
 
+
 @interface ATMessageCenterErrorViewController ()
 
 @property (strong, nonatomic) IBOutlet UIImageView *imageView;
 @property (strong, nonatomic) IBOutlet UILabel *textLabel;
 
 @end
+
 
 @implementation ATMessageCenterErrorViewController
 
@@ -32,25 +34,25 @@ NSString *const ATInteractionMessageCenterEventLabelNoInteractionClose = @"no_in
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	
+
 	self.navigationItem.title = ATLocalizedString(@"Message Center", @"Message Center default title");
-	
+
 	if ([ATReachability sharedReachability].currentNetworkStatus == ATNetworkNotReachable) {
 		self.imageView.image = [ATBackend imageNamed:@"at_network_error"];
 		self.textLabel.text = ATLocalizedString(@"You must connect to the internet before you can send feedback.", @"Message Center configuration hasn't downloaded due to connection problem.");
-		
+
 		[[ATEngagementBackend sharedBackend] engageCodePoint:[self codePointForEvent:ATInteractionMessageCenterEventLabelNoInteractionNoInternet] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
 	} else {
 		self.imageView.image = [ATBackend imageNamed:@"at_error_wait"];
 		self.textLabel.text = ATLocalizedString(@"We’re attempting to connect. Thanks for your patience!", @"Message Center configuration is waiting to be downloaded or encountered a server error.");
-		
+
 		[[ATEngagementBackend sharedBackend] engageCodePoint:[self codePointForEvent:ATInteractionMessageCenterEventLabelNoInteractionAttempting] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
 	}
 }
 
 - (IBAction)dismiss:(id)sender {
 	[[ATEngagementBackend sharedBackend] engageCodePoint:[self codePointForEvent:ATInteractionMessageCenterEventLabelNoInteractionClose] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
-	
+
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
 

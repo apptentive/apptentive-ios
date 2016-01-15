@@ -10,6 +10,7 @@
 
 #import "ATUtilities.h"
 
+
 @interface ATLogger ()
 - (NSString *)logDirectoryPath;
 - (NSString *)logFilePath;
@@ -19,10 +20,11 @@
 - (void)queueLogWithLevel:(NSString *)level file:(const char *)file function:(const char *)function line:(int)line message:(NSString *)message;
 @end
 
+
 @implementation ATLogger {
 	// Tracks whether or not we can actually log to the log file.
 	BOOL creatingLogPathFailed;
-	
+
 	NSFileHandle *logHandle;
 }
 
@@ -36,7 +38,7 @@ static dispatch_queue_t loggingQueue;
 + (ATLogger *)sharedLogger {
 	static ATLogger *sharedLogger;
 	static dispatch_once_t onceToken;
-	
+
 	dispatch_once(&onceToken, ^{
 		loggingQueue = dispatch_queue_create("com.apptentive.logging-queue", NULL);
 		sharedLogger = [[self alloc] init];
@@ -55,7 +57,7 @@ static dispatch_queue_t loggingQueue;
 	va_list args;
 	if (format != nil) {
 		va_start(args, format);
-		
+
 		NSString *message = [[NSString alloc] initWithFormat:format arguments:args];
 		[[ATLogger sharedLogger] queueLogWithLevel:level file:file function:function line:line message:message];
 		message = nil;
@@ -113,7 +115,6 @@ static dispatch_queue_t loggingQueue;
 		return nil;
 	}
 	return newPath;
-
 }
 
 - (NSString *)logFilePath {
@@ -134,7 +135,7 @@ static dispatch_queue_t loggingQueue;
 
 - (BOOL)rotateLog {
 	__block BOOL result = YES;
-	
+
 	dispatch_sync(loggingQueue, ^{
 		if (logHandle) {
 			[logHandle synchronizeFile];
@@ -186,7 +187,7 @@ static dispatch_queue_t loggingQueue;
 
 - (void)queueLogWithLevel:(NSString *)level file:(const char *)file function:(const char *)function line:(int)line message:(NSString *)message {
 	NSDate *date = [NSDate date];
-	
+
 	dispatch_async(loggingQueue, ^{
 		@autoreleasepool {
 			NSString *fullFilename = [NSString stringWithUTF8String:file];

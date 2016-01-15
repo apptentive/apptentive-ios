@@ -12,9 +12,11 @@ static ATConnectionManager *sharedSingleton = nil;
 
 #define PLACEHOLDER_CHANNEL_NAME @"ATDefaultChannel"
 
+
 @interface ATConnectionManager ()
 - (ATConnectionChannel *)channelForName:(NSString *)channelName;
 @end
+
 
 @implementation ATConnectionManager {
 	NSMutableDictionary *channels;

@@ -10,6 +10,7 @@
 #import "ATUtilities.h"
 #import "ATBackend.h"
 
+
 @implementation ATNetworkImageIconView
 
 - (void)setImageURL:(NSURL *)imageURL {
@@ -20,13 +21,13 @@
 		self.maskType = ATImageViewMaskTypeRound;
 		self.image = nil;
 	}
-	
+
 	[super setImageURL:imageURL];
 }
 
 - (void)setMaskType:(ATImageViewMaskType)maskType {
 	_maskType = maskType;
-	
+
 	[self updateImageMask];
 }
 
@@ -36,17 +37,17 @@
 			self.layer.cornerRadius = 0.0;
 			self.layer.mask = nil;
 			break;
-			
+
 		case ATImageViewMaskTypeRound:
 			self.layer.cornerRadius = CGRectGetWidth(self.bounds) / 2.0;
 			self.layer.mask = nil;
 			break;
-			
+
 		case ATImageViewMaskTypeAppIcon: {
 			CALayer *maskLayer = [CALayer layer];
 			maskLayer.contents = (id)[ATBackend imageNamed:@"at_update_icon_mask"].CGImage;
 			maskLayer.frame = self.bounds;
-			
+
 			self.layer.cornerRadius = 0.0;
 			self.layer.mask = maskLayer;
 			break;
@@ -56,7 +57,7 @@
 
 - (void)layoutSubviews {
 	[super layoutSubviews];
-	
+
 	[self updateImageMask];
 }
 

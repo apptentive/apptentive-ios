@@ -11,6 +11,7 @@
 #import "ATData.h"
 #import "NSDictionary+ATAdditions.h"
 
+
 @implementation ATMessageSender
 
 @dynamic apptentiveID;
@@ -29,7 +30,7 @@
 
 + (ATMessageSender *)findSenderWithID:(NSString *)apptentiveID {
 	ATMessageSender *result = nil;
-	
+
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(apptentiveID == %@)", apptentiveID];
 		NSArray *results = [ATData findEntityNamed:@"ATMessageSender" withPredicate:fetchPredicate];
@@ -42,10 +43,10 @@
 
 + (ATMessageSender *)newOrExistingMessageSenderFromJSON:(NSDictionary *)json {
 	if (!json) return nil;
-	
+
 	NSString *apptentiveID = [json at_safeObjectForKey:@"id"];
 	if (!apptentiveID) return nil;
-	
+
 	ATMessageSender *sender = [ATMessageSender findSenderWithID:apptentiveID];
 	if (!sender) {
 		sender = [ATMessageSender newInstanceWithID:apptentiveID];
@@ -65,11 +66,13 @@
 	if (profilePhoto) {
 		sender.profilePhotoURL = profilePhoto;
 	}
-	
+
 	return sender;
 }
 
 - (NSDictionary *)apiJSON {
-	return @{@"email":self.emailAddress, @"id":self.apptentiveID, @"name":self.name};
+	return @{ @"email": self.emailAddress,
+		@"id": self.apptentiveID,
+		@"name": self.name };
 }
 @end

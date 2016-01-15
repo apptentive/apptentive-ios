@@ -9,14 +9,15 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+
 @interface ATDataManager : NSObject
 
-@property (nonatomic, strong, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-@property (nonatomic, strong, readonly) NSManagedObjectContext *managedObjectContext;
-@property (nonatomic, strong, readonly) NSManagedObjectModel *managedObjectModel;
-@property (nonatomic, readonly) BOOL didRemovePersistentStore;
-@property (nonatomic, readonly) BOOL didFailToMigrateStore;
-@property (nonatomic, readonly) BOOL didMigrateStore;
+@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
+@property (readonly, nonatomic) BOOL didRemovePersistentStore;
+@property (readonly, nonatomic) BOOL didFailToMigrateStore;
+@property (readonly, nonatomic) BOOL didMigrateStore;
 
 - (id)initWithModelName:(NSString *)modelName inBundle:(NSBundle *)bundle storagePath:(NSString *)path;
 

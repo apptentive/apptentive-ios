@@ -19,6 +19,7 @@
 
 static ATTaskQueue *sharedTaskQueue = nil;
 
+
 @interface ATTaskQueue (Private)
 - (void)setup;
 - (void)teardown;
@@ -26,7 +27,8 @@ static ATTaskQueue *sharedTaskQueue = nil;
 - (void)unsetActiveTask;
 @end
 
-@implementation ATTaskQueue  {
+
+@implementation ATTaskQueue {
 	ATTask *activeTask;
 	NSMutableArray *tasks;
 }
@@ -188,7 +190,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 			if (activeTask) {
 				return;
 			}
-			
+
 			if ([tasks count]) {
 				for (ATTask *task in tasks) {
 					if ([task canStart]) {
@@ -266,7 +268,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 					[tasks removeObject:task];
 					[tasks addObject:task];
 					[self archive];
-					
+
 					[self performSelector:@selector(start) withObject:nil afterDelay:kATTaskQueueRetryPeriod];
 				}
 			}
@@ -281,6 +283,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 }
 
 @end
+
 
 @implementation ATTaskQueue (Private)
 - (void)setup {

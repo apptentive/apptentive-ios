@@ -6,24 +6,25 @@
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import <QuickLook/QuickLook.h>
 
 @class ATMessage;
 
-@interface ATFileAttachment : NSManagedObject
-@property (nonatomic, strong) NSString *localPath;
-@property (nonatomic, strong) NSString *mimeType; // starts w/ lowercase b/c Core Data is stupid
-@property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) NSURL *remoteURL;
-@property (nonatomic, strong) NSURL *remoteThumbnailURL;
-@property (nonatomic, strong) ATMessage *message;
 
-@property (nonatomic, readonly) NSString *fullLocalPath;
-@property (nonatomic, readonly) NSString *extension;
-@property (nonatomic, readonly) NSData *fileData;
-@property (nonatomic, readonly) BOOL canCreateThumbnail;
+@interface ATFileAttachment : NSManagedObject
+@property (strong, nonatomic) NSString *localPath;
+@property (strong, nonatomic) NSString *mimeType; // starts w/ lowercase b/c Core Data is stupid
+@property (strong, nonatomic) NSString *name;
+@property (strong, nonatomic) NSURL *remoteURL;
+@property (strong, nonatomic) NSURL *remoteThumbnailURL;
+@property (strong, nonatomic) ATMessage *message;
+
+@property (readonly, nonatomic) NSString *fullLocalPath;
+@property (readonly, nonatomic) NSString *extension;
+@property (readonly, nonatomic) NSData *fileData;
+@property (readonly, nonatomic) BOOL canCreateThumbnail;
 
 + (instancetype)newInstanceWithFileData:(NSData *)fileData MIMEType:(NSString *)MIMEType name:(NSString *)name;
 + (instancetype)newInstanceWithJSON:(NSDictionary *)JSON;
@@ -41,6 +42,7 @@
 - (UIImage *)thumbnailOfSize:(CGSize)size;
 
 @end
+
 
 @interface ATFileAttachment (QuickLook) <QLPreviewItem>
 @end

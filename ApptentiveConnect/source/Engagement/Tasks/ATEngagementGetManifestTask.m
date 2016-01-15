@@ -13,6 +13,7 @@
 #import "ATEngagementManifestParser.h"
 #import "ATEngagementBackend.h"
 
+
 @implementation ATEngagementGetManifestTask {
 	ATAPIRequest *checkManifestRequest;
 }
@@ -43,7 +44,7 @@
 		// Interactions may depend on device attributes.
 		return NO;
 	}
-	
+
 	return YES;
 }
 
@@ -89,11 +90,11 @@
 	@synchronized(self) {
 		if (request == checkManifestRequest) {
 			ATEngagementManifestParser *parser = [[ATEngagementManifestParser alloc] init];
-			
+
 			NSDictionary *targetsAndInteractions = [parser targetsAndInteractionsForEngagementManifest:(NSData *)result];
 			NSDictionary *targets = targetsAndInteractions[@"targets"];
 			NSDictionary *interactions = targetsAndInteractions[@"interactions"];
-			
+
 			if (targets && interactions) {
 				[[ATEngagementBackend sharedBackend] didReceiveNewTargets:targets andInteractions:interactions maxAge:[request expiresMaxAge]];
 			} else {
@@ -109,7 +110,7 @@
 }
 
 - (void)at_APIRequestDidFail:(ATAPIRequest *)request {
-    @synchronized(self) {
+	@synchronized(self) {
 		if (request == checkManifestRequest) {
 			ATLogError(@"Engagement manifest request failed: %@: %@", request.errorTitle, request.errorMessage);
 			self.lastErrorTitle = request.errorTitle;
@@ -120,4 +121,3 @@
 	}
 }
 @end
-

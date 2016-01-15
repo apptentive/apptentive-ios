@@ -10,6 +10,7 @@
 
 @class ATAttachButton;
 
+
 @interface ATMessageCenterInputView : UIView
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;

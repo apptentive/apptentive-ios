@@ -24,9 +24,9 @@
 // Can't get CocoaPods to do the right thing for debug builds.
 // So, do it explicitly.
 #if COCOAPODS
-#    if DEBUG
-#	     define APPTENTIVE_DEBUG_LOG_VIEWER 1
-#    endif
+#if DEBUG
+#define APPTENTIVE_DEBUG_LOG_VIEWER 1
+#endif
 #endif
 
 NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCenterUnreadCountChangedNotification";
@@ -40,8 +40,10 @@ NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 NSString *const ATConnectCustomPersonDataChangedNotification = @"ATConnectCustomPersonDataChangedNotification";
 NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustomDeviceDataChangedNotification";
 
+
 @interface ATConnect () <ATBannerViewControllerDelegate>
 @end
+
 
 @implementation ATConnect {
 	NSMutableDictionary *_customPersonData;
@@ -68,9 +70,9 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		_customPersonData = [[NSMutableDictionary alloc] init];
 		_customDeviceData = [[NSMutableDictionary alloc] init];
 		_integrationConfiguration = [[NSMutableDictionary alloc] init];
-		
+
 		ATLogInfo(@"Apptentive SDK Version %@", kATConnectVersionString);
-		
+
 #if APPTENTIVE_DEBUG_LOG_VIEWER
 		self.debuggingOptions = ATConnectDebuggingOptionsShowDebugPanel;
 #endif
@@ -154,15 +156,15 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 + (NSDictionary *)versionObjectWithVersion:(NSString *)version {
-	return @{@"_type": @"version",
-			 @"version": version ?: [NSNull null],
-			 };
+	return @{ @"_type": @"version",
+		@"version": version ?: [NSNull null],
+	};
 }
 
 + (NSDictionary *)timestampObjectWithNumber:(NSNumber *)seconds {
-	return @{@"_type": @"datetime",
-			 @"sec": seconds,
-			 };
+	return @{ @"_type": @"datetime",
+		@"sec": seconds,
+	};
 }
 
 + (NSDictionary *)timestampObjectWithDate:(NSDate *)date {
@@ -181,9 +183,9 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (void)addCustomData:(NSObject *)object withKey:(NSString *)key toCustomDataDictionary:(NSMutableDictionary *)customData {
 	BOOL simpleType = ([object isKindOfClass:[NSString class]] ||
-					   [object isKindOfClass:[NSNumber class]] ||
-					   [object isKindOfClass:[NSNull class]]);
-	
+		[object isKindOfClass:[NSNumber class]] ||
+		[object isKindOfClass:[NSNull class]]);
+
 	BOOL complexType = NO;
 	if ([object isKindOfClass:[NSDictionary class]]) {
 		NSString *type = ((NSDictionary *)object)[@"_type"];
@@ -222,17 +224,17 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		ATLogError(@"Cannot open App Store because `[ATConnect sharedConnection].appID` is not set to your app's iTunes App ID.");
 		return;
 	}
-	
+
 	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:@"open_app_store_manually"];
-	
+
 	ATInteraction *appStoreInteraction = [[ATInteraction alloc] init];
 	appStoreInteraction.type = @"AppStoreRating";
 	appStoreInteraction.priority = 1;
 	appStoreInteraction.version = @"1.0.0";
 	appStoreInteraction.identifier = @"OpenAppStore";
-	appStoreInteraction.configuration = @{@"store_id": self.appID,
-										  @"method": @"app_store"};
-	
+	appStoreInteraction.configuration = @{ @"store_id": self.appID,
+		@"method": @"app_store" };
+
 	[[ATEngagementBackend sharedBackend] presentInteraction:appStoreInteraction fromViewController:nil];
 }
 
@@ -242,9 +244,9 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (void)setPushNotificationIntegration:(ATPushProvider)pushProvider withDeviceToken:(NSData *)deviceToken {
 	[self removeAllPushIntegrations];
-	
+
 	NSString *integrationKey = [self integrationKeyForPushProvider:pushProvider];
-	
+
 	[self addIntegration:integrationKey withDeviceToken:deviceToken];
 }
 
@@ -272,23 +274,23 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration {
 	[_integrationConfiguration setObject:configuration forKey:integration];
-	
+
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:self.customDeviceData];
 }
 
 - (void)addIntegration:(NSString *)integration withDeviceToken:(NSData *)deviceToken {
 	const unsigned *tokenBytes = [deviceToken bytes];
 	NSString *token = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
-					   ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
-					   ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
-					   ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
-	
-	[[ATConnect sharedConnection] addIntegration:integration withConfiguration:@{@"token": token}];
+								ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
+								ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
+								ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
+
+	[[ATConnect sharedConnection] addIntegration:integration withConfiguration:@{ @"token": token }];
 }
 
 - (void)removeIntegration:(NSString *)integration {
 	[_integrationConfiguration removeObjectForKey:integration];
-	
+
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:self.customDeviceData];
 }
 
@@ -315,20 +317,18 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 + (NSDictionary *)extendedDataDate:(NSDate *)date {
-	NSDictionary *time = @{@"time": @{@"version": @1,
-									  @"timestamp": @([date timeIntervalSince1970])
-									  }
-						   };
+	NSDictionary *time = @{ @"time": @{@"version": @1,
+		@"timestamp": @([date timeIntervalSince1970])}
+	};
 	return time;
 }
 
 + (NSDictionary *)extendedDataLocationForLatitude:(double)latitude longitude:(double)longitude {
 	// Coordinates sent to server in order (longitude, latitude)
-	NSDictionary *location = @{@"location": @{@"version": @1,
-											  @"coordinates": @[@(longitude), @(latitude)]
-											  }
-							   };
-	
+	NSDictionary *location = @{ @"location": @{@"version": @1,
+		@"coordinates": @[@(longitude), @(latitude)]}
+	};
+
 	return location;
 }
 
@@ -339,41 +339,39 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 											   shipping:(NSNumber *)shipping
 													tax:(NSNumber *)tax
 											   currency:(NSString *)currency
-										  commerceItems:(NSArray *)commerceItems
-{
-	
+										  commerceItems:(NSArray *)commerceItems {
 	NSMutableDictionary *commerce = [NSMutableDictionary dictionary];
 	commerce[@"version"] = @1;
-	
+
 	if (transactionID) {
 		commerce[@"id"] = transactionID;
 	}
-	
+
 	if (affiliation) {
 		commerce[@"affiliation"] = affiliation;
 	}
-	
+
 	if (revenue != nil) {
 		commerce[@"revenue"] = revenue;
 	}
-	
+
 	if (shipping != nil) {
 		commerce[@"shipping"] = shipping;
 	}
-	
+
 	if (tax != nil) {
 		commerce[@"tax"] = tax;
 	}
-	
+
 	if (currency) {
 		commerce[@"currency"] = currency;
 	}
-	
+
 	if (commerceItems) {
 		commerce[@"items"] = commerceItems;
 	}
-	
-	return @{@"commerce": commerce};
+
+	return @{ @"commerce": commerce };
 }
 
 + (NSDictionary *)extendedDataCommerceItemWithItemID:(NSString *)itemID
@@ -381,35 +379,34 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 											category:(NSString *)category
 											   price:(NSNumber *)price
 											quantity:(NSNumber *)quantity
-											currency:(NSString *)currency
-{
+											currency:(NSString *)currency {
 	NSMutableDictionary *commerceItem = [NSMutableDictionary dictionary];
 	commerceItem[@"version"] = @1;
-	
+
 	if (itemID) {
 		commerceItem[@"id"] = itemID;
 	}
-	
+
 	if (name) {
 		commerceItem[@"name"] = name;
 	}
-	
+
 	if (category) {
 		commerceItem[@"category"] = category;
 	}
-	
+
 	if (price != nil) {
 		commerceItem[@"price"] = price;
 	}
-	
+
 	if (quantity != nil) {
 		commerceItem[@"quantity"] = quantity;
 	}
-	
+
 	if (currency) {
 		commerceItem[@"currency"] = currency;
 	}
-	
+
 	return commerceItem;
 }
 
@@ -424,11 +421,11 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData {
 	NSMutableDictionary *allowedCustomMessageData = [NSMutableDictionary dictionary];
-	
+
 	for (NSString *key in [customData allKeys]) {
 		[self addCustomData:[customData objectForKey:key] withKey:key toCustomDataDictionary:allowedCustomMessageData];
 	}
-	
+
 	return [[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController withCustomData:allowedCustomMessageData];
 }
 
@@ -459,7 +456,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 			case UIApplicationStateActive:
 				self.pushUserInfo = nil;
 				self.pushViewController = nil;
-				
+
 				NSString *action = [apptentivePayload objectForKey:@"action"];
 				if ([action isEqualToString:@"pmc"]) {
 					[self presentMessageCenterFromViewController:viewController];
@@ -468,12 +465,12 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 				}
 				break;
 		}
-		
+
 		if (shouldCallCompletionHandler && completionHandler) {
 			completionHandler(UIBackgroundFetchResultNoData);
 		}
 	}
-	
+
 	return (apptentivePayload != nil);
 }
 
@@ -491,13 +488,13 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (NSString *)engagementInteractionNameAtIndex:(NSInteger)index {
 	ATInteraction *interaction = [[self engagementInteractions] objectAtIndex:index];
-	
+
 	return [interaction.configuration objectForKey:@"name"] ?: [interaction.configuration objectForKey:@"title"] ?: @"Untitled Interaction";
 }
 
 - (NSString *)engagementInteractionTypeAtIndex:(NSInteger)index {
 	ATInteraction *interaction = [[self engagementInteractions] objectAtIndex:index];
-	
+
 	return interaction.type;
 }
 
@@ -538,7 +535,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		[feedback release];
 		feedback = nil;
 	}
-	
+
 	if (!feedbackWindowController) {
 		feedbackWindowController = [[ATFeedbackWindowController alloc] initWithFeedback:[[ATBackend sharedBackend] currentFeedback]];
 	}
@@ -587,11 +584,11 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		// TODO: Display something if body is empty
 		ATMessage *textMessage = (ATMessage *)message;
 		NSURL *profilePhotoURL = textMessage.sender.profilePhotoURL ? [NSURL URLWithString:textMessage.sender.profilePhotoURL] : nil;
-		
+
 		ATBannerViewController *banner = [ATBannerViewController bannerWithImageURL:profilePhotoURL title:textMessage.sender.name message:textMessage.body];
-		
+
 		banner.delegate = self;
-		
+
 		[banner show];
 	}
 }
@@ -613,6 +610,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 @end
+
 
 @implementation ATNavigationController
 // Container to allow customization of Apptentive UI using UIAppearance

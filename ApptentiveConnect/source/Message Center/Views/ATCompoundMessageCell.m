@@ -8,12 +8,14 @@
 
 #import "ATCompoundMessageCell.h"
 
+
 @interface ATCompoundMessageCell ()
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *messageLabelCollectionViewSpacing;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *messageStatusSpacingConstraint;
 
 @end
+
 
 @implementation ATCompoundMessageCell
 
@@ -29,7 +31,7 @@
 
 - (void)setStatusLabelHidden:(BOOL)statusLabelHidden {
 	[super setStatusLabelHidden:statusLabelHidden];
-	
+
 	if (statusLabelHidden) {
 		[self.contentView removeConstraint:self.messageStatusSpacingConstraint];
 	} else {

@@ -9,5 +9,6 @@
 #import "ATTask.h"
 #import "ATAppConfigurationUpdater.h"
 
+
 @interface ATAppConfigurationUpdateTask : ATTask <ATAppConfigurationUpdaterDelegate>
 @end

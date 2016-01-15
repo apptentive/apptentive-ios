@@ -12,13 +12,14 @@
 #import "ATAPIRequest.h"
 #import "ATConversationUpdater.h"
 
+
 @implementation ATWebClient (EngagementAdditions)
 
 - (ATAPIRequest *)requestForGettingEngagementManifest {
 	NSString *urlString = [NSString stringWithFormat:@"%@/interactions", [self baseURLString]];
 	ATURLConnection *conn = [self connectionToGet:[NSURL URLWithString:urlString]];
 	conn.timeoutInterval = 20.0;
-	
+
 	ATConversation *conversation = [ATConversationUpdater currentConversation];
 	if (!conversation) {
 		ATLogError(@"No current conversation.");

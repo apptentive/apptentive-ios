@@ -10,11 +10,12 @@
 
 @class ATInteractionUsageData;
 
+
 @interface ATInteractionInvocation : NSObject <NSCoding, NSCopying>
 
-@property (nonatomic, copy) NSString *interactionID;
-@property (nonatomic, assign) NSInteger priority;
-@property (nonatomic, strong) NSDictionary *criteria;
+@property (copy, nonatomic) NSString *interactionID;
+@property (assign, nonatomic) NSInteger priority;
+@property (strong, nonatomic) NSDictionary *criteria;
 
 + (ATInteractionInvocation *)invocationWithJSONDictionary:(NSDictionary *)jsonDictionary;
 + (NSArray *)invocationsWithJSONArray:(NSArray *)jsonArray;

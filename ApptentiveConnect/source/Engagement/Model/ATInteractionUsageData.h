@@ -9,29 +9,30 @@
 #import <Foundation/Foundation.h>
 #import "ATInteraction.h"
 
+
 @interface ATInteractionUsageData : NSObject
 
-@property (nonatomic, strong) NSNumber *timeSinceInstallTotal;
-@property (nonatomic, strong) NSNumber *timeSinceInstallVersion;
-@property (nonatomic, strong) NSNumber *timeSinceInstallBuild;
-@property (nonatomic, strong) NSDate *timeAtInstallTotal;
-@property (nonatomic, strong) NSDate *timeAtInstallVersion;
-@property (nonatomic, copy) NSString *applicationVersion;
-@property (nonatomic, copy) NSString *applicationBuild;
-@property (nonatomic, copy) NSString *sdkVersion;
-@property (nonatomic, copy) NSString *sdkDistribution;
-@property (nonatomic, copy) NSString *sdkDistributionVersion;
-@property (nonatomic, strong) NSNumber *currentTime;
-@property (nonatomic, strong) NSNumber *isUpdateVersion;
-@property (nonatomic, strong) NSNumber *isUpdateBuild;
-@property (nonatomic, strong) NSDictionary *codePointInvokesTotal;
-@property (nonatomic, strong) NSDictionary *codePointInvokesVersion;
-@property (nonatomic, strong) NSDictionary *codePointInvokesBuild;
-@property (nonatomic, strong) NSDictionary *codePointInvokesTimeAgo;
-@property (nonatomic, strong) NSDictionary *interactionInvokesTotal;
-@property (nonatomic, strong) NSDictionary *interactionInvokesVersion;
-@property (nonatomic, strong) NSDictionary *interactionInvokesBuild;
-@property (nonatomic, strong) NSDictionary *interactionInvokesTimeAgo;
+@property (strong, nonatomic) NSNumber *timeSinceInstallTotal;
+@property (strong, nonatomic) NSNumber *timeSinceInstallVersion;
+@property (strong, nonatomic) NSNumber *timeSinceInstallBuild;
+@property (strong, nonatomic) NSDate *timeAtInstallTotal;
+@property (strong, nonatomic) NSDate *timeAtInstallVersion;
+@property (copy, nonatomic) NSString *applicationVersion;
+@property (copy, nonatomic) NSString *applicationBuild;
+@property (copy, nonatomic) NSString *sdkVersion;
+@property (copy, nonatomic) NSString *sdkDistribution;
+@property (copy, nonatomic) NSString *sdkDistributionVersion;
+@property (strong, nonatomic) NSNumber *currentTime;
+@property (strong, nonatomic) NSNumber *isUpdateVersion;
+@property (strong, nonatomic) NSNumber *isUpdateBuild;
+@property (strong, nonatomic) NSDictionary *codePointInvokesTotal;
+@property (strong, nonatomic) NSDictionary *codePointInvokesVersion;
+@property (strong, nonatomic) NSDictionary *codePointInvokesBuild;
+@property (strong, nonatomic) NSDictionary *codePointInvokesTimeAgo;
+@property (strong, nonatomic) NSDictionary *interactionInvokesTotal;
+@property (strong, nonatomic) NSDictionary *interactionInvokesVersion;
+@property (strong, nonatomic) NSDictionary *interactionInvokesBuild;
+@property (strong, nonatomic) NSDictionary *interactionInvokesTimeAgo;
 
 + (ATInteractionUsageData *)usageData;
 

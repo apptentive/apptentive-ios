@@ -10,6 +10,7 @@
 
 #import "NSDictionary+ATAdditions.h"
 
+
 @implementation ATRecord
 
 @dynamic apptentiveID;
@@ -28,7 +29,7 @@
 	if (tmpID != nil) {
 		self.apptentiveID = tmpID;
 	}
-	
+
 	NSObject *createdAt = [json at_safeObjectForKey:@"created_at"];
 	if ([createdAt isKindOfClass:[NSNumber class]]) {
 		self.creationTime = (NSNumber *)createdAt;
@@ -69,11 +70,11 @@
 - (void)updateClientCreationTime {
 	NSDate *d = [NSDate date];
 	NSNumber *newCreationTime = @([d timeIntervalSince1970]);
-	
-	if ([self isCreationTimeEmpty]) {		
+
+	if ([self isCreationTimeEmpty]) {
 		self.creationTime = @([[NSDate distantFuture] timeIntervalSince1970]);
 	}
-	
+
 	self.clientCreationTime = newCreationTime;
 	self.clientCreationUTCOffset = @([[NSTimeZone systemTimeZone] secondsFromGMTForDate:d]);
 }

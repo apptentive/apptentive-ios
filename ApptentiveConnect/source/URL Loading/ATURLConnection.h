@@ -9,21 +9,22 @@
 
 @protocol ATURLConnectionDelegate;
 
+
 @interface ATURLConnection : NSObject
-@property (nonatomic, readonly, copy) NSURL *targetURL;
-@property (nonatomic, weak) NSObject<ATURLConnectionDelegate> *delegate;
-@property (nonatomic, strong) NSURLConnection *connection;
-@property (nonatomic, assign) BOOL executing;
-@property (nonatomic, assign) BOOL finished;
-@property (nonatomic, assign) BOOL failed;
-@property (nonatomic, readonly) BOOL cancelled;
-@property (nonatomic, assign) NSTimeInterval timeoutInterval;
-@property (nonatomic, strong) NSURLCredential *credential;
-@property (nonatomic, readonly) NSInteger statusCode;
-@property (nonatomic, readonly) BOOL failedAuthentication;
-@property (nonatomic, copy) NSError *connectionError;
-@property (nonatomic, assign) float percentComplete;
-@property (nonatomic, readonly) NSTimeInterval expiresMaxAge;
+@property (readonly, copy, nonatomic) NSURL *targetURL;
+@property (weak, nonatomic) NSObject<ATURLConnectionDelegate> *delegate;
+@property (strong, nonatomic) NSURLConnection *connection;
+@property (assign, nonatomic) BOOL executing;
+@property (assign, nonatomic) BOOL finished;
+@property (assign, nonatomic) BOOL failed;
+@property (readonly, nonatomic) BOOL cancelled;
+@property (assign, nonatomic) NSTimeInterval timeoutInterval;
+@property (strong, nonatomic) NSURLCredential *credential;
+@property (readonly, nonatomic) NSInteger statusCode;
+@property (readonly, nonatomic) BOOL failedAuthentication;
+@property (copy, nonatomic) NSError *connectionError;
+@property (assign, nonatomic) float percentComplete;
+@property (readonly, nonatomic) NSTimeInterval expiresMaxAge;
 
 @property (strong, nonatomic) NSData *HTTPBody;
 @property (strong, nonatomic) NSString *HTTPMethod;

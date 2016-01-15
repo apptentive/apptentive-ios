@@ -16,6 +16,7 @@
 NSString *const ATDeviceLastUpdatePreferenceKey = @"ATDeviceLastUpdatePreferenceKey";
 NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValuePreferenceKey";
 
+
 @interface ATDeviceUpdater ()
 
 @property (strong, nonatomic) NSDictionary *sentDeviceJSON;
@@ -23,24 +24,25 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 
 @end
 
+
 @implementation ATDeviceUpdater
 
 + (void)registerDefaults {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSDictionary *defaultPreferences =
-	[NSDictionary dictionaryWithObjectsAndKeys:
-	 [NSDate distantPast], ATDeviceLastUpdatePreferenceKey,
-	 [NSDictionary dictionary], ATDeviceLastUpdateValuePreferenceKey,
-	 nil];
+		[NSDictionary dictionaryWithObjectsAndKeys:
+						  [NSDate distantPast], ATDeviceLastUpdatePreferenceKey,
+					  [NSDictionary dictionary], ATDeviceLastUpdateValuePreferenceKey,
+					  nil];
 	[defaults registerDefaults:defaultPreferences];
 }
 
 + (BOOL)shouldUpdate {
 	[ATDeviceUpdater registerDefaults];
-	
+
 	ATDeviceInfo *deviceInfo = [[ATDeviceInfo alloc] init];
 	NSDictionary *deviceDictionary = [deviceInfo.apiJSON valueForKey:@"device"];
-	
+
 	return deviceDictionary.count > 0;
 }
 
@@ -88,9 +90,9 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 
 #pragma mark ATATIRequestDelegate
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(NSObject *)result {
-	@synchronized (self) {
+	@synchronized(self) {
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		
+
 		[defaults setObject:[NSDate date] forKey:ATDeviceLastUpdatePreferenceKey];
 		[defaults setObject:self.sentDeviceJSON forKey:ATDeviceLastUpdateValuePreferenceKey];
 		[self.delegate deviceUpdater:self didFinish:YES];
@@ -104,7 +106,7 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 - (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
 	@synchronized(self) {
 		ATLogInfo(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
-		
+
 		[self.delegate deviceUpdater:self didFinish:NO];
 	}
 }

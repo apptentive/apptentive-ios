@@ -9,8 +9,9 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_OPTIONS(NSUInteger, ATJSONWritingOptions) {
-    ATJSONWritingPrettyPrinted = (1UL << 0)
+	ATJSONWritingPrettyPrinted = (1UL << 0)
 };
+
 
 @interface ATJSONSerialization : NSObject
 + (NSData *)dataWithJSONObject:(id)obj options:(ATJSONWritingOptions)opt error:(NSError **)error;

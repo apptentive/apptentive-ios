@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+
 @interface ATIndexedCollectionView : UICollectionView
 
 @property (assign, nonatomic) NSInteger index;

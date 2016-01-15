@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ATInteraction.h"
 
+
 @interface ATInteractionNavigateToLink : NSObject
 
 + (void)navigateToLinkWithInteraction:(ATInteraction *)interaction;

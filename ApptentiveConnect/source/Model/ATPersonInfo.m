@@ -17,6 +17,7 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 
 #define kATPersonCodingVersion 1
 
+
 @implementation ATPersonInfo
 
 + (ATPersonInfo *)currentPerson {
@@ -35,7 +36,7 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 			_currentPerson = [[ATPersonInfo alloc] init];
 		}
 	});
-	
+
 	return _currentPerson;
 }
 
@@ -49,38 +50,38 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 
 - (id)initWithCoder:(NSCoder *)coder {
 	self = [super init];
-	
+
 	if (self) {
 		_apptentiveID = (NSString *)[coder decodeObjectForKey:@"apptentiveID"];
 		_name = (NSString *)[coder decodeObjectForKey:@"name"];
 		_emailAddress = (NSString *)[coder decodeObjectForKey:@"emailAddress"];
 	}
-	
+
 	return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeInt:kATPersonCodingVersion forKey:@"version"];
-	
+
 	[coder encodeObject:self.apptentiveID forKey:@"apptentiveID"];
 	[coder encodeObject:self.name forKey:@"name"];
 	[coder encodeObject:self.emailAddress forKey:@"emailAddress"];
 }
 
-- (instancetype) initWithJSONDictionary:(NSDictionary *)json {
+- (instancetype)initWithJSONDictionary:(NSDictionary *)json {
 	self = [super init];
-	
+
 	if (self) {
 		_apptentiveID = [json at_safeObjectForKey:@"id"];
 		_name = [json at_safeObjectForKey:@"name"];
 		_emailAddress = [json at_safeObjectForKey:@"email"];
 	}
-	
+
 	return self;
 }
 
 - (void)setName:(NSString *)name {
-	_name  = name;
+	_name = name;
 	[self save];
 }
 
@@ -93,21 +94,21 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 
 - (NSDictionary *)dictionaryRepresentation {
 	NSMutableDictionary *person = [NSMutableDictionary dictionary];
-	
+
 	if (self.name) {
 		[person setObject:self.name forKey:@"name"];
 	}
-	
+
 	if (self.emailAddress && [self.emailAddress length] > 0 && [ATUtilities emailAddressIsValid:self.emailAddress]) {
 		[person setObject:self.emailAddress forKey:@"email"];
 	} else if ([[self.emailAddress stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]) {
 		// Delete a previously entered email
 		[person setObject:[NSNull null] forKey:@"email"];
 	}
-	
+
 	NSDictionary *customPersonData = [[ATConnect sharedConnection] customPersonData] ?: @{};
 	[person setObject:customPersonData forKey:@"custom_data"];
-	
+
 	return [NSDictionary dictionaryWithObject:person forKey:@"person"];
 }
 
@@ -120,7 +121,7 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 - (void)save {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSData *personData = [NSKeyedArchiver archivedDataWithRootObject:self];
-	
+
 	[defaults setObject:personData forKey:ATCurrentPersonPreferenceKey];
 	[defaults synchronize];
 }

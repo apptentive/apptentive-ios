@@ -11,6 +11,7 @@
 
 @class ATAttachButton, ATMessageCenterViewController;
 
+
 @interface ATAttachmentController : UIResponder <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet UICollectionView *collectionView;
@@ -25,6 +26,7 @@
 - (void)clear;
 
 @end
+
 
 @interface ATAttachmentController (QuickLook) <QLPreviewControllerDataSource>
 @end

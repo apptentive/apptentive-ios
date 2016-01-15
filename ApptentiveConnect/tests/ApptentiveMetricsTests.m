@@ -9,23 +9,24 @@
 #import "ApptentiveMetricsTests.h"
 #import "ATConnect.h"
 
+
 @implementation ApptentiveMetricsTests
 
 - (void)setUp {
 	[super setUp];
-	
+
 	// Set-up code here.
 }
 
 - (void)tearDown {
 	// Tear-down code here.
-	
+
 	[super tearDown];
 }
 
 - (void)testExtendedDataDate {
 	NSDate *date = [NSDate dateWithTimeIntervalSince1970:1000];
-	
+
 	NSDictionary *extendedData = [ATConnect extendedDataDate:date];
 	XCTAssertNotNil(extendedData[@"time"], @"Topmost key should be time.");
 	NSDictionary *data = extendedData[@"time"];
@@ -69,10 +70,10 @@
 - (void)testExtendedDataCommerceTransaction {
 	NSDictionary *commerceItemOne = [ATConnect extendedDataCommerceItemWithItemID:@"ID" name:@"NAME" category:@"CATEGORY" price:@(1) quantity:@(2) currency:@"CURRENCY"];
 	NSDictionary *commerceItemTwo = [ATConnect extendedDataCommerceItemWithItemID:nil name:nil category:nil price:nil quantity:nil currency:nil];
-	
+
 	NSDictionary *commerceTransaction = [ATConnect extendedDataCommerceWithTransactionID:@"ID" affiliation:@"AFFILIATION" revenue:@(1) shipping:@(2) tax:@(3) currency:@"CURRENCY" commerceItems:@[commerceItemOne, commerceItemTwo]];
 	NSDictionary *commerce = commerceTransaction[@"commerce"];
-	
+
 	XCTAssertTrue([commerce[@"version"] isEqualToNumber:@(1)], @"Should have version key set to 1.");
 	XCTAssertTrue([commerce[@"id"] isEqualToString:@"ID"], @"ID set");
 	XCTAssertTrue([commerce[@"affiliation"] isEqualToString:@"AFFILIATION"], @"Affiliation set");

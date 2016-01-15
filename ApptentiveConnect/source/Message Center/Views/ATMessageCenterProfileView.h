@@ -13,6 +13,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterProfileMode) {
 	ATMessageCenterProfileModeFull
 };
 
+
 @interface ATMessageCenterProfileView : UIView
 
 @property (assign, nonatomic) ATMessageCenterProfileMode mode;

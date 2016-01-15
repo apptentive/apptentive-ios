@@ -13,15 +13,18 @@
 
 #define kATPendingMessageTaskCodingVersion 1
 
+
 @interface ATSurveyResponseTask (Private)
 - (BOOL)processResult:(NSDictionary *)jsonMessage;
 @end
+
 
 @interface ATSurveyResponseTask ()
 
 @property (strong, nonatomic) ATAPIRequest *request;
 
 @end
+
 
 @implementation ATSurveyResponseTask
 
@@ -100,7 +103,6 @@
 #pragma mark ATAPIRequestDelegate
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(NSObject *)result {
 	@synchronized(self) {
-		
 		if ([result isKindOfClass:[NSDictionary class]] && [self processResult:(NSDictionary *)result]) {
 			self.finished = YES;
 		} else {
@@ -119,14 +121,14 @@
 	@synchronized(self) {
 		self.lastErrorTitle = sender.errorTitle;
 		self.lastErrorMessage = sender.errorMessage;
-		
+
 		ATSurveyResponse *response = [ATSurveyResponse findSurveyResponseWithPendingID:self.pendingSurveyResponseID];
 		if (response == nil) {
 			ATLogError(@"Warning: Survey response went away during task.");
 			self.finished = YES;
 			return;
 		}
-		
+
 		if (sender.errorResponse != nil) {
 			NSError *parseError = nil;
 			NSObject *errorObject = [ATJSONSerialization JSONObjectWithString:sender.errorResponse error:&parseError];
@@ -157,12 +159,13 @@
 }
 @end
 
+
 @implementation ATSurveyResponseTask (Private)
 
 - (BOOL)processResult:(NSDictionary *)jsonResponse {
 	ATLogDebug(@"Getting json result: %@", jsonResponse);
 	NSManagedObjectContext *context = [[ATBackend sharedBackend] managedObjectContext];
-	
+
 	ATSurveyResponse *response = [ATSurveyResponse findSurveyResponseWithPendingID:self.pendingSurveyResponseID];
 	if (response == nil) {
 		ATLogError(@"Warning: Response went away during task.");
@@ -170,7 +173,7 @@
 	}
 	[response updateWithJSON:jsonResponse];
 	response.pendingState = [NSNumber numberWithInt:ATPendingSurveyResponseConfirmed];
-	
+
 	NSError *error = nil;
 	if (![context save:&error]) {
 		ATLogError(@"Failed to save new response: %@", error);

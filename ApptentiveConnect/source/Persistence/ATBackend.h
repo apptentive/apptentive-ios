@@ -34,26 +34,27 @@ extern NSString *const ATBackendBecameReadyNotification;
 @class ATAPIRequest;
 @class ATMessageTask;
 
-@protocol  ATBackendMessageDelegate;
+@protocol ATBackendMessageDelegate;
 
 /*! Handles all of the backend activities, such as sending feedback. */
 @interface ATBackend : NSObject <ATConversationUpdaterDelegate, ATDeviceUpdaterDelegate, ATPersonUpdaterDelegate
 #if TARGET_OS_IPHONE
-, NSFetchedResultsControllerDelegate, UIAlertViewDelegate
+						   ,
+						   NSFetchedResultsControllerDelegate, UIAlertViewDelegate
 #endif
->
-@property (nonatomic, copy) NSString *apiKey;
+						   >
+@property (copy, nonatomic) NSString *apiKey;
 /*! The feedback currently being worked on by the user. */
-@property (nonatomic, strong) ATFeedback *currentFeedback;
-@property (nonatomic, strong) NSDictionary *currentCustomData;
-@property (nonatomic, strong, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-@property (nonatomic, strong, readonly) NSManagedObjectContext *managedObjectContext;
-@property (nonatomic, strong, readonly) NSManagedObjectModel *managedObjectModel;
-@property (nonatomic, strong, readonly) NSString *supportDirectoryPath;
-@property (nonatomic, strong) UIViewController *presentedMessageCenterViewController;
+@property (strong, nonatomic) ATFeedback *currentFeedback;
+@property (strong, nonatomic) NSDictionary *currentCustomData;
+@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
+@property (readonly, strong, nonatomic) NSString *supportDirectoryPath;
+@property (strong, nonatomic) UIViewController *presentedMessageCenterViewController;
 
-@property (nonatomic, assign, readonly) BOOL hideBranding;
-@property (nonatomic, assign, readonly) BOOL notificationPopupsEnabled;
+@property (readonly, assign, nonatomic) BOOL hideBranding;
+@property (readonly, assign, nonatomic) BOOL notificationPopupsEnabled;
 
 /*! Message send progress. */
 @property (weak, nonatomic) id<ATBackendMessageDelegate> messageDelegate;

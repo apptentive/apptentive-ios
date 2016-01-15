@@ -10,13 +10,14 @@
 #import <StoreKit/StoreKit.h>
 @class ATInteraction;
 
+
 @interface ATInteractionAppStoreController : NSObject
 #if TARGET_OS_IPHONE
-<SKStoreProductViewControllerDelegate, UIAlertViewDelegate>
+											 <SKStoreProductViewControllerDelegate, UIAlertViewDelegate>
 #endif
 
-@property (nonatomic, strong, readonly) ATInteraction *interaction;
-@property (nonatomic, strong) UIViewController *viewController;
+@property (readonly, strong, nonatomic) ATInteraction *interaction;
+@property (strong, nonatomic) UIViewController *viewController;
 
 - (id)initWithInteraction:(ATInteraction *)interaction;
 - (void)openAppStoreFromViewController:(UIViewController *)viewController;

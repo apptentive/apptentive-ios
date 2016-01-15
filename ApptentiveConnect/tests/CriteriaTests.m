@@ -10,6 +10,7 @@
 #import "ATInteractionInvocation.h"
 #import "ATConnect.h"
 
+
 @implementation CriteriaTest
 
 - (NSString *)JSONFilename {
@@ -21,7 +22,7 @@
 - (void)setUp {
 	[super setUp];
 
-	NSURL *JSONURL= [[NSBundle bundleForClass:[self class]] URLForResource:self.JSONFilename withExtension:@"json"];
+	NSURL *JSONURL = [[NSBundle bundleForClass:[self class]] URLForResource:self.JSONFilename withExtension:@"json"];
 	NSData *JSONData = [NSData dataWithContentsOfURL:JSONURL];
 	NSError *error;
 	NSDictionary *JSONDictionary = [NSJSONSerialization JSONObjectWithData:JSONData options:0 error:&error];
@@ -46,6 +47,7 @@
 @interface CornerCasesThatShouldBeFalse : CriteriaTest
 @end
 
+
 @implementation CornerCasesThatShouldBeFalse
 
 - (void)testCornerCasesThatShouldBeFalse {
@@ -58,6 +60,7 @@
 @interface CornerCasesThatShouldBeTrue : CriteriaTest
 @end
 
+
 @implementation CornerCasesThatShouldBeTrue
 
 - (void)testCornerCasesThatShouldBeTrue {
@@ -69,6 +72,7 @@
 
 @interface DefaultValues : CriteriaTest
 @end
+
 
 @implementation DefaultValues
 
@@ -85,6 +89,7 @@
 @interface PredicateParsing : CriteriaTest
 @end
 
+
 @implementation PredicateParsing
 
 - (void)testPredicateParsing {
@@ -93,8 +98,10 @@
 
 @end
 
+
 @interface OperatorContains : CriteriaTest
 @end
+
 
 @implementation OperatorContains
 
@@ -105,8 +112,10 @@
 
 @end
 
+
 @interface OperatorStartsWith : CriteriaTest
 @end
+
 
 @implementation OperatorStartsWith
 
@@ -120,6 +129,7 @@
 @interface OperatorEndsWith : CriteriaTest
 @end
 
+
 @implementation OperatorEndsWith
 
 - (void)testOperatorEndsWith {
@@ -131,6 +141,7 @@
 
 @interface OperatorNot : CriteriaTest
 @end
+
 
 @implementation OperatorNot
 
@@ -144,6 +155,7 @@
 @interface OperatorExists : CriteriaTest
 @end
 
+
 @implementation OperatorExists
 
 - (void)testOperatorExists {
@@ -152,8 +164,10 @@
 
 @end
 
+
 @interface WhitespaceTrimming : CriteriaTest
 @end
+
 
 @implementation WhitespaceTrimming
 

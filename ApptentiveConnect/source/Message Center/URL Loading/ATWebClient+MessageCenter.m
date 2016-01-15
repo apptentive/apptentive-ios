@@ -18,6 +18,7 @@
 
 #define kMessageCenterChannelName (@"Message Center")
 
+
 @implementation ATWebClient (MessageCenter)
 - (ATAPIRequest *)requestForCreatingConversation:(ATConversation *)conversation {
 	NSError *error = nil;
@@ -34,9 +35,9 @@
 	}
 	NSString *url = [self apiURLStringWithPath:@"conversation"];
 	ATURLConnection *conn = nil;
-	
+
 	conn = [self connectionToPost:[NSURL URLWithString:url] JSON:postString];
-	
+
 	conn.timeoutInterval = 60.0;
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
 	request.returnType = ATAPIRequestReturnTypeJSON;
@@ -57,9 +58,9 @@
 	}
 	NSString *url = [self apiURLStringWithPath:@"conversation"];
 	ATURLConnection *conn = nil;
-	
+
 	conn = [self connectionToPut:[NSURL URLWithString:url] JSON:putString];
-	
+
 	conn.timeoutInterval = 60.0;
 	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
@@ -70,21 +71,21 @@
 - (ATAPIRequest *)requestForUpdatingDevice:(ATDeviceInfo *)deviceInfo {
 	NSError *error = nil;
 	NSDictionary *postJSON = [deviceInfo apiJSON];
-	
+
 	NSString *postString = [ATJSONSerialization stringWithJSONObject:postJSON options:ATJSONWritingPrettyPrinted error:&error];
 	if (!postString && error != nil) {
 		ATLogError(@"Error while encoding JSON: %@", error);
 		return nil;
 	}
-	
+
 	ATConversation *conversation = [ATConversationUpdater currentConversation];
 	if (!conversation) {
 		ATLogError(@"No current conversation.");
 		return nil;
 	}
-	
+
 	NSString *url = [self apiURLStringWithPath:@"devices"];
-	
+
 	ATURLConnection *conn = [self connectionToPut:[NSURL URLWithString:url] JSON:postString];
 	conn.timeoutInterval = 60.0;
 	[self updateConnection:conn withOAuthToken:conversation.token];
@@ -96,21 +97,21 @@
 - (ATAPIRequest *)requestForUpdatingPerson:(ATPersonInfo *)personInfo {
 	NSError *error = nil;
 	NSDictionary *postJSON = [personInfo apiJSON];
-	
+
 	NSString *postString = [ATJSONSerialization stringWithJSONObject:postJSON options:ATJSONWritingPrettyPrinted error:&error];
 	if (!postString && error != nil) {
 		ATLogError(@"Error while encoding JSON: %@", error);
 		return nil;
 	}
-	
+
 	ATConversation *conversation = [ATConversationUpdater currentConversation];
 	if (!conversation) {
 		ATLogError(@"No current conversation.");
 		return nil;
 	}
-	
+
 	NSString *url = [self apiURLStringWithPath:@"people"];
-	
+
 	ATURLConnection *conn = [self connectionToPut:[NSURL URLWithString:url] JSON:postString];
 	conn.timeoutInterval = 60.0;
 	[self updateConnection:conn withOAuthToken:conversation.token];
@@ -128,7 +129,7 @@
 		ATLogError(@"Error while encoding JSON: %@", error);
 		return nil;
 	}
-	
+
 	ATConversation *conversation = [ATConversationUpdater currentConversation];
 	if (!conversation) {
 		ATLogError(@"No current conversation");
@@ -149,22 +150,22 @@
 - (ATAPIRequest *)requestForRetrievingMessagesSinceMessage:(ATMessage *)message {
 	NSDictionary *parameters = nil;
 	if (message && message.apptentiveID) {
-		parameters = @{@"after_id":message.apptentiveID};
+		parameters = @{ @"after_id": message.apptentiveID };
 	}
-	
+
 	ATConversation *conversation = [ATConversationUpdater currentConversation];
 	if (!conversation) {
 		ATLogError(@"No current conversation.");
 		return nil;
 	}
-	
+
 	NSString *path = @"conversation";
 	if (parameters) {
 		NSString *paramString = [self stringForParameters:parameters];
 		path = [NSString stringWithFormat:@"%@?%@", path, paramString];
 	}
 	NSString *url = [self apiURLStringWithPath:path];
-	
+
 	ATURLConnection *conn = [self connectionToGet:[NSURL URLWithString:url]];
 	conn.timeoutInterval = 60.0;
 	[self updateConnection:conn withOAuthToken:conversation.token];

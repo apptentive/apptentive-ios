@@ -16,9 +16,9 @@
 #define kATConnectVersionString @"2.1.0"
 
 #if TARGET_OS_IPHONE
-#	define kATConnectPlatformString @"iOS"
+#define kATConnectPlatformString @"iOS"
 #elif TARGET_OS_MAC
-#	define kATConnectPlatformString @"Mac OS X"
+#define kATConnectPlatformString @"Mac OS X"
 @class ATFeedbackWindowController;
 #endif
 
@@ -45,7 +45,7 @@ extern NSString *const ATSurveySentNotification;
 extern NSString *const ATSurveyIDKey;
 
 /** Supported Push Providers for use in `setPushNotificationIntegration:withDeviceToken:` */
-typedef NS_ENUM(NSInteger, ATPushProvider){
+typedef NS_ENUM(NSInteger, ATPushProvider) {
 	/** Specifies the Apptentive push provider. */
 	ATPushProviderApptentive,
 	/** Specifies the Urban Airship push provider. */
@@ -114,28 +114,28 @@ Before calling any other methods on the shared `ATConnect` instance, set the API
 
  This key is found on the Apptentive website under Settings, API & Development.
  */
-@property (nonatomic, copy) NSString *_Nullable apiKey;
+@property (copy, nonatomic) NSString *_Nullable apiKey;
 
 /**
  The app's iTunes App ID.
 
  You can find this in iTunes Connect, and is the numeric "Apple ID" shown on your app details page.
  */
-@property (nonatomic, copy) NSString *_Nullable appID;
+@property (copy, nonatomic) NSString *_Nullable appID;
 
 /** The shared singleton of `ATConnect`. */
 + (ATConnect *)sharedConnection;
 
 /** An object conforming to the `ATConnectDelegate` protocol */
-@property (nonatomic, weak) id<ATConnectDelegate> delegate;
+@property (weak, nonatomic) id<ATConnectDelegate> delegate;
 
 ///---------------------------------
 /// @name Interface Customization
 ///---------------------------------
 /** Toggles the display of an email field in the message panel. `YES` by default. */
-@property (nonatomic, assign) BOOL showEmailField;
+@property (assign, nonatomic) BOOL showEmailField;
 /** Set this if you want some custom text to appear as a placeholder in the feedback text box. */
-@property (nonatomic, copy) NSString *customPlaceholderText;
+@property (copy, nonatomic) NSString *customPlaceholderText;
 #if TARGET_OS_IPHONE
 /**
  A tint color to use in Apptentive-specific UI.
@@ -145,7 +145,7 @@ Before calling any other methods on the shared `ATConnect` instance, set the API
 
  @deprecated Use `[UIAppearance appearanceWhenContainedIn:[ATNavigationController class], nil].tintColor`
  */
-@property (nonatomic, strong) UIColor *tintColor DEPRECATED_ATTRIBUTE;
+@property (strong, nonatomic) UIColor *tintColor DEPRECATED_ATTRIBUTE;
 #endif
 
 #if TARGET_OS_IPHONE

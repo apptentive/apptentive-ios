@@ -19,6 +19,18 @@
 	return kATConnectVersionString;
 }
 
+- (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL {
+	if ([baseURL isEqual:self.baseURL]) {
+		ATLogInfo(@"Base URL of %@ will not be used due to SDK version. Using %@ instead.", baseURL, self.baseURL);
+	}
+
+	self.apiKey = APIKey;
+}
+
+- (NSURL *)baseURL {
+	return [NSURL URLWithString:[ATWebClient sharedClient].baseURLString];
+}
+
 - (NSString *)APIKey {
 	return self.apiKey;
 }

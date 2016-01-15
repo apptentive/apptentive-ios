@@ -21,14 +21,14 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ATConnect ()
 
 @property (assign, nonatomic) ATConnectDebuggingOptions debuggingOptions;
-@property (readonly, nonatomic) NSURL * _Nullable baseURL;
-
-- (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL;
 
 @end
 
 @interface ATConnect (Debugging)
 
+- (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL;
+
+@property (readonly, nonatomic) NSURL * _Nullable baseURL;
 @property (readonly, nonatomic) NSString *SDKVersion;
 @property (readonly, nonatomic) NSString * _Nullable APIKey;
 @property (readonly, nonatomic) UIView * _Nullable unreadAccessoryView;

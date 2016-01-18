@@ -84,16 +84,23 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 		case 200:
 		case 201:
 		case 204:
+			break;
 		case 400: // rate limit reached
 		case 403: // whatevs, probably private feed
+			_failed = YES;
+			_shouldRetry = NO;
+			_errorTitle = ATLocalizedString(@"Bad Request", @"");
+			_errorMessage = ATLocalizedString(@"The server could not process the request.", @"");
 			break;
 		case 401:
 			_failed = YES;
+			_shouldRetry = NO;
 			_errorTitle = ATLocalizedString(@"Authentication Failed", @"");
 			_errorMessage = ATLocalizedString(@"Wrong username and/or password.", @"");
 			break;
 		case 422:
 			_failed = YES;
+			_shouldRetry = NO;
 			_errorTitle = ATLocalizedString(@"Unprocessable Entity", @"");
 			_errorMessage = ATLocalizedString(@"The request was well-formed but was unable to be followed due to semantic errors.", @"");
 			break;
@@ -101,6 +108,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 			break;
 		default:
 			_failed = YES;
+			_shouldRetry = YES;
 			_errorTitle = ATLocalizedString(@"Server error.", @"");
 			_errorMessage = [NSHTTPURLResponse localizedStringForStatusCode:statusCode];
 			break;

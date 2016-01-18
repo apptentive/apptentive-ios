@@ -249,12 +249,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 			[self archive];
 			[self start];
 		} else if ([keyPath isEqualToString:@"failed"] && [task failed]) {
-			if (task.isFailureOkay) {
-				task.failureCount = task.failureCount + 1;
-				[self unsetActiveTask];
-				[tasks removeObject:task];
-				[self start];
-			} else {
+			 if (task.shouldRetry) {
 				[self stop];
 				task.failureCount = task.failureCount + 1;
 				if (task.failureCount > kMaxFailureCount) {
@@ -271,6 +266,11 @@ static ATTaskQueue *sharedTaskQueue = nil;
 
 					[self performSelector:@selector(start) withObject:nil afterDelay:kATTaskQueueRetryPeriod];
 				}
+			} else {
+					task.failureCount = task.failureCount + 1;
+					[self unsetActiveTask];
+					[tasks removeObject:task];
+					[self start];
 			}
 		}
 	}

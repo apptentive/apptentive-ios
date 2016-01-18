@@ -16,8 +16,8 @@ extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 
 @interface ATConnect ()
 
-- (NSDictionary *)customPersonData;
-- (NSDictionary *)customDeviceData;
+@property (readonly, nonatomic) NSDictionary *customPersonData;
+@property (readonly, nonatomic) NSDictionary *customDeviceData;
 - (NSDictionary *)integrationConfiguration;
 
 @property (strong, nonatomic) NSDictionary *pushUserInfo;

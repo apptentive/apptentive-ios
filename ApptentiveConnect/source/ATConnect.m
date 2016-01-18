@@ -8,7 +8,6 @@
 
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
-#import "ATConnect+Debugging.h"
 #import "ATBackend.h"
 #import "ATEngagementBackend.h"
 #import "ATInteraction.h"
@@ -72,10 +71,6 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		_integrationConfiguration = [[NSMutableDictionary alloc] init];
 
 		ATLogInfo(@"Apptentive SDK Version %@", kATConnectVersionString);
-
-#if APPTENTIVE_DEBUG_LOG_VIEWER
-		self.debuggingOptions = ATConnectDebuggingOptionsShowDebugPanel;
-#endif
 	}
 	return self;
 }

@@ -247,13 +247,13 @@ static ATTaskQueue *sharedTaskQueue = nil;
 			[task cleanup];
 			[tasks removeObject:object];
 			[self archive];
-			[self start];
+			[self startOnNextRunLoopIteration];
 		} else if ([keyPath isEqualToString:@"failed"] && [task failed]) {
 			if (task.isFailureOkay) {
 				task.failureCount = task.failureCount + 1;
 				[self unsetActiveTask];
 				[tasks removeObject:task];
-				[self start];
+				[self startOnNextRunLoopIteration];
 			} else {
 				[self stop];
 				task.failureCount = task.failureCount + 1;
@@ -262,7 +262,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 					[self unsetActiveTask];
 					[task cleanup];
 					[tasks removeObject:task];
-					[self start];
+					[self startOnNextRunLoopIteration];
 				} else {
 					// Put task on back of queue.
 					[tasks removeObject:task];
@@ -274,6 +274,12 @@ static ATTaskQueue *sharedTaskQueue = nil;
 			}
 		}
 	}
+}
+
+- (void)startOnNextRunLoopIteration {
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[self start];
+	});
 }
 
 #pragma mark - Private methods

@@ -37,6 +37,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) NSString * _Nullable manifestJSON;
 @property (readonly, nonatomic) NSDictionary<NSString *, NSObject *> *deviceInfo;
 
+- (NSArray *)engagementInteractions;
+- (NSString *)engagementInteractionNameAtIndex:(NSInteger)index;
+- (NSString *)engagementInteractionTypeAtIndex:(NSInteger)index;
+- (void)presentInteractionAtIndex:(NSInteger)index fromViewController:(UIViewController *)viewController;
+
 @end
 
 NS_ASSUME_NONNULL_END

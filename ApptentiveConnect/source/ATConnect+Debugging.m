@@ -16,7 +16,29 @@
 @implementation ATConnect (Debugging)
 
 + (NSString *)supportDirectoryPath {
-	return [ATBackend sharedBackend].supportDirectoryPath;
+	static NSString *_supportDirectoryPath;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		NSString *appSupportDirectoryPath = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES).firstObject;
+		NSString *apptentiveDirectoryPath = [appSupportDirectoryPath stringByAppendingPathComponent:@"com.apptentive.feedback"];
+		NSFileManager *fm = [NSFileManager defaultManager];
+		NSError *error = nil;
+
+		if (![fm createDirectoryAtPath:apptentiveDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
+			ATLogError(@"Failed to create support directory: %@", apptentiveDirectoryPath);
+			ATLogError(@"Error was: %@", error);
+			return;
+		}
+
+		if (![fm setAttributes:@{ NSFileProtectionKey: NSFileProtectionCompleteUntilFirstUserAuthentication } ofItemAtPath:apptentiveDirectoryPath error:&error]) {
+			ATLogError(@"Failed to set file protection level: %@", apptentiveDirectoryPath);
+			ATLogError(@"Error was: %@", error);
+		}
+
+		_supportDirectoryPath = apptentiveDirectoryPath;
+	});
+
+	return _supportDirectoryPath;
 }
 
 - (NSString *)SDKVersion {
@@ -36,11 +58,11 @@
 }
 
 - (NSString *)storagePath {
-	return [ATBackend sharedBackend].supportDirectoryPath;
+	return [self class].supportDirectoryPath;
 }
 
 - (NSURL *)baseURL {
-	return [NSURL URLWithString:[ATWebClient sharedClient].baseURLString];
+	return self.webClient.baseURL;
 }
 
 - (NSString *)APIKey {

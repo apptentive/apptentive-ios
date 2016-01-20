@@ -65,13 +65,13 @@
 		NSArray *components = [keyPath componentsSeparatedByString:@"/"];
 		if (components.count > 1) {
 			NSString *codePoint = [components objectAtIndex:1];
-			[[ATEngagementBackend sharedBackend] codePointWasSeen:codePoint];
+			[[ATConnect sharedConnection].engagementBackend codePointWasSeen:codePoint];
 		}
 	} else if ([keyPath hasPrefix:@"interactions/"]) {
 		NSArray *components = [keyPath componentsSeparatedByString:@"/"];
 		if (components.count > 1) {
 			NSString *interactionID = [components objectAtIndex:1];
-			[[ATEngagementBackend sharedBackend] interactionWasSeen:interactionID];
+			[[ATConnect sharedConnection].engagementBackend interactionWasSeen:interactionID];
 		}
 	}
 }
@@ -265,14 +265,14 @@
 
 - (NSString *)sdkDistribution {
 	if (!_sdkDistribution) {
-		_sdkDistribution = [[[ATBackend sharedBackend] distributionName] copy];
+		_sdkDistribution = [[[ATConnect sharedConnection].backend distributionName] copy];
 	}
 	return _sdkDistribution;
 }
 
 - (NSString *)sdkDistributionVersion {
 	if (!_sdkDistributionVersion) {
-		_sdkDistributionVersion = [[[ATBackend sharedBackend] distributionVersion] copy];
+		_sdkDistributionVersion = [[[ATConnect sharedConnection].backend distributionVersion] copy];
 	}
 	return _sdkDistributionVersion;
 }

@@ -33,11 +33,8 @@
 		ATLogError(@"Error while encoding JSON: %@", error);
 		return nil;
 	}
-	NSString *url = [self apiURLStringWithPath:@"conversation"];
-	ATURLConnection *conn = nil;
 
-	conn = [self connectionToPost:[NSURL URLWithString:url] JSON:postString];
-
+	ATURLConnection *conn = [self connectionToPost:@"/conversation" JSON:postString];
 	conn.timeoutInterval = 60.0;
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
 	request.returnType = ATAPIRequestReturnTypeJSON;
@@ -56,11 +53,8 @@
 		ATLogError(@"Error while encoding JSON: %@", error);
 		return nil;
 	}
-	NSString *url = [self apiURLStringWithPath:@"conversation"];
-	ATURLConnection *conn = nil;
 
-	conn = [self connectionToPut:[NSURL URLWithString:url] JSON:putString];
-
+	ATURLConnection *conn = [self connectionToPut:@"/conversation" JSON:putString];
 	conn.timeoutInterval = 60.0;
 	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
@@ -84,9 +78,7 @@
 		return nil;
 	}
 
-	NSString *url = [self apiURLStringWithPath:@"devices"];
-
-	ATURLConnection *conn = [self connectionToPut:[NSURL URLWithString:url] JSON:postString];
+	ATURLConnection *conn = [self connectionToPut:@"/devices" JSON:postString];
 	conn.timeoutInterval = 60.0;
 	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
@@ -110,9 +102,7 @@
 		return nil;
 	}
 
-	NSString *url = [self apiURLStringWithPath:@"people"];
-
-	ATURLConnection *conn = [self connectionToPut:[NSURL URLWithString:url] JSON:postString];
+	ATURLConnection *conn = [self connectionToPut:@"/people" JSON:postString];
 	conn.timeoutInterval = 60.0;
 	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
@@ -135,11 +125,8 @@
 		ATLogError(@"No current conversation");
 		return nil;
 	}
-	NSString *path = @"messages";
-	NSString *urlString = [self apiURLStringWithPath:path];
-	NSURL *url = [NSURL URLWithString:urlString];
 
-	ATURLConnection *conn = [self connectionToPost:url JSON:postString withAttachments:message.attachments.array];
+	ATURLConnection *conn = [self connectionToPost:@"/messages" JSON:postString withAttachments:message.attachments.array];
 	conn.timeoutInterval = 60.0;
 	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];
@@ -159,14 +146,13 @@
 		return nil;
 	}
 
-	NSString *path = @"conversation";
+	NSString *path = @"/conversation";
 	if (parameters) {
 		NSString *paramString = [self stringForParameters:parameters];
 		path = [NSString stringWithFormat:@"%@?%@", path, paramString];
 	}
-	NSString *url = [self apiURLStringWithPath:path];
 
-	ATURLConnection *conn = [self connectionToGet:[NSURL URLWithString:url]];
+	ATURLConnection *conn = [self connectionToGet:path];
 	conn.timeoutInterval = 60.0;
 	[self updateConnection:conn withOAuthToken:conversation.token];
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:kMessageCenterChannelName];

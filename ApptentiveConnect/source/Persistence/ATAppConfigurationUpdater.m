@@ -9,7 +9,7 @@
 #import "ATAppConfigurationUpdater.h"
 #import "ATUtilities.h"
 #import "ATWebClient.h"
-#import "ATConnect.h"
+#import "ATConnect_Private.h"
 
 NSString *const ATConfigurationSDKVersionKey = @"ATConfigurationSDKVersionKey";
 NSString *const ATConfigurationAppBuildNumberKey = @"ATConfigurationAppBuildNumberKey";
@@ -103,7 +103,7 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 
 - (void)update {
 	[self cancel];
-	request = [[ATWebClient sharedClient] requestForGettingAppConfiguration];
+	request = [[ATConnect sharedConnection].webClient requestForGettingAppConfiguration];
 	request.delegate = self;
 	[request start];
 }

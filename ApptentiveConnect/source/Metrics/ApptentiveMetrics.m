@@ -10,6 +10,7 @@
 
 #import "ATAppConfigurationUpdater.h"
 #import "ATBackend.h"
+#import "ATConnect_Private.h"
 #import "ATData.h"
 #import "ATEvent.h"
 #import "ATMetric.h"
@@ -212,7 +213,7 @@ static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 
 - (void)addLaunchMetric {
 	@autoreleasepool {
-		[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch];
+		[[ATConnect sharedConnection].engagementBackend engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch];
 	}
 }
 
@@ -279,15 +280,15 @@ static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 }
 
 - (void)appWillTerminate:(NSNotification *)notification {
-	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:ATInteractionAppEventLabelExit];
+	[[ATConnect sharedConnection].engagementBackend engageApptentiveAppEvent:ATInteractionAppEventLabelExit];
 }
 
 - (void)appDidEnterBackground:(NSNotification *)notification {
-	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:ATInteractionAppEventLabelExit];
+	[[ATConnect sharedConnection].engagementBackend engageApptentiveAppEvent:ATInteractionAppEventLabelExit];
 }
 
 - (void)appWillEnterForeground:(NSNotification *)notification {
-	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch];
+	[[ATConnect sharedConnection].engagementBackend engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch];
 }
 
 - (void)preferencesChanged:(NSNotification *)notification {

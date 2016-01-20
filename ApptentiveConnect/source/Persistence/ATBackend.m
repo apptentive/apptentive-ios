@@ -56,7 +56,6 @@ static NSURLCache *imageCache = nil;
 @interface ATBackend ()
 - (void)setupDataManager;
 - (void)setup;
-- (void)startup;
 - (void)continueStartupWithDataManagerSuccess;
 - (void)continueStartupWithDataManagerFailure;
 - (void)updateWorking;
@@ -73,7 +72,6 @@ static NSURLCache *imageCache = nil;
 #endif
 @property (assign, nonatomic) BOOL working;
 @property (strong, nonatomic) NSTimer *messageRetrievalTimer;
-@property (assign, nonatomic) BOOL apiKeySet;
 @property (copy, nonatomic) NSString *cachedDeviceUUID;
 @property (assign, nonatomic) ATBackendState state;
 @property (strong, nonatomic) ATDataManager *dataManager;
@@ -90,17 +88,6 @@ static NSURLCache *imageCache = nil;
 
 @implementation ATBackend
 @synthesize supportDirectoryPath = _supportDirectoryPath;
-
-+ (ATBackend *)sharedBackend {
-	static ATBackend *sharedBackend = nil;
-	@synchronized(self) {
-		if (sharedBackend == nil) {
-			sharedBackend = [[self alloc] init];
-			[sharedBackend startup];
-		}
-	}
-	return sharedBackend;
-}
 
 #if TARGET_OS_IPHONE
 + (UIImage *)imageNamed:(NSString *)name {
@@ -181,18 +168,6 @@ static NSURLCache *imageCache = nil;
 	[self.messageRetrievalTimer invalidate];
 
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void)setApiKey:(NSString *)APIKey {
-	if (_apiKey != APIKey) {
-		_apiKey = APIKey;
-		if (_apiKey == nil) {
-			self.apiKeySet = NO;
-		} else {
-			self.apiKeySet = YES;
-		}
-		[self updateWorking];
-	}
 }
 
 - (ATMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body {
@@ -286,7 +261,7 @@ static NSURLCache *imageCache = nil;
 	}
 
 	NSError *error;
-	if (![[[ATBackend sharedBackend] managedObjectContext] save:&error]) {
+	if (![[self managedObjectContext] save:&error]) {
 		ATLogError(@"Error (%@) saving message: %@", error, message);
 	}
 
@@ -657,7 +632,7 @@ static NSURLCache *imageCache = nil;
 	}
 
 	if (![[ATTaskQueue sharedTaskQueue] hasTaskOfClass:[ATEngagementGetManifestTask class]]) {
-		[[ATEngagementBackend sharedBackend] checkForEngagementManifest];
+		[[ATConnect sharedConnection].engagementBackend checkForEngagementManifest];
 	}
 }
 
@@ -970,7 +945,7 @@ static NSURLCache *imageCache = nil;
 	} else if (self.state != ATBackendStateReady) {
 		// Backend isn't ready yet.
 		self.working = NO;
-	} else if (self.apiKeySet && self.networkAvailable && self.dataManager != nil && [self.dataManager persistentStoreCoordinator] != nil) {
+	} else if (self.networkAvailable && self.dataManager != nil && [self.dataManager persistentStoreCoordinator] != nil) {
 		// API Key is set and the network and Core Data stack is up. Start working.
 		self.working = YES;
 	} else {
@@ -1019,7 +994,7 @@ static NSURLCache *imageCache = nil;
 		if (![self isReady]) {
 			return;
 		}
-		[[ATEngagementBackend sharedBackend] checkForEngagementManifest];
+		[[ATConnect sharedConnection].engagementBackend checkForEngagementManifest];
 	}
 }
 
@@ -1068,7 +1043,7 @@ static NSURLCache *imageCache = nil;
 		NSPredicate *unreadPredicate = [NSPredicate predicateWithFormat:@"seenByUser == %@ AND sentByUser == %@", @(NO), @(NO)];
 		request.predicate = unreadPredicate;
 
-		NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATBackend sharedBackend] managedObjectContext] sectionNameKeyPath:nil cacheName:@"at-unread-messages-cache"];
+		NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[self managedObjectContext] sectionNameKeyPath:nil cacheName:@"at-unread-messages-cache"];
 		newController.delegate = self;
 		self.unreadCountController = newController;
 

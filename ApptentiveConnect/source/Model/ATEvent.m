@@ -9,6 +9,7 @@
 #import "ATEvent.h"
 #import "ATData.h"
 #import "ATWebClient+Metrics.h"
+#import "ATConnect_Private.h"
 
 
 @interface ATEvent ()
@@ -141,7 +142,7 @@
 }
 
 - (ATAPIRequest *)requestForTask:(ATRecordRequestTask *)task {
-	return [[ATWebClient sharedClient] requestForSendingEvent:self];
+	return [[ATConnect sharedConnection].webClient requestForSendingEvent:self];
 }
 
 - (ATRecordRequestTaskResult)taskResultForTask:(ATRecordRequestTask *)task withRequest:(ATAPIRequest *)request withResult:(id)result {

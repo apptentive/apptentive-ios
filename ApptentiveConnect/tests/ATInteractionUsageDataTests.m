@@ -10,7 +10,7 @@
 
 #import <OCMock/OCMock.h>
 
-#import "ATConnect.h"
+#import "ATConnect_Private.h"
 #import "ATEngagementBackend.h"
 #import "ATInteractionInvocation.h"
 #import "ATInteractionUsageData.h"
@@ -23,17 +23,6 @@
 
 
 @implementation ATInteractionUsageDataTests
-
-- (void)setUp {
-	[super setUp];
-
-	[ATEngagementBackend sharedBackend];
-}
-
-- (void)tearDown {
-	// Put teardown code here. This method is called after the invocation of each test method in the class.
-	[super tearDown];
-}
 
 - (void)testApplicationVersion {
 	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];

@@ -933,6 +933,8 @@
 }
 
 - (void)testCanShowInteractionForEvent {
+	[ATConnect sharedConnection].apiKey = @"bogus_api_key"; // trigger creation of engagement backend
+
 	ATInteractionInvocation *canShow = [[ATInteractionInvocation alloc] init];
 	canShow.criteria = @{};
 	canShow.interactionID = @"example_interaction_ID";
@@ -947,7 +949,7 @@
 
 	NSDictionary *interactions = @{ @"example_interaction_ID": [[ATInteraction alloc] init] };
 
-	[[ATEngagementBackend sharedBackend] didReceiveNewTargets:targets andInteractions:interactions maxAge:60];
+	[[ATConnect sharedConnection].engagementBackend didReceiveNewTargets:targets andInteractions:interactions maxAge:60];
 
 	XCTAssertTrue([canShow criteriaAreMet], @"Invocation should be valid.");
 	XCTAssertTrue([[ATConnect sharedConnection] canShowInteractionForEvent:@"canShow"], @"If invocation is valid, it will be shown for the next targeted event.");

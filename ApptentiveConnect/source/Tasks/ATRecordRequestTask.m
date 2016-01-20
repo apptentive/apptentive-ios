@@ -7,20 +7,18 @@
 //
 
 #import "ATRecordRequestTask.h"
-
-#import "ATBackend.h"
 #import "ATData.h"
 #import "ATWebClient.h"
+#import "ATConnect_Private.h"
+#import "ATConversationUpdater.h"
 
 #define kATRecordRequestTaskCodingVersion 1
-
 
 @interface ATRecordRequestTask ()
 
 @property (strong, nonatomic) ATAPIRequest *request;
 
 @end
-
 
 @implementation ATRecordRequestTask
 
@@ -60,7 +58,7 @@ fail:
 }
 
 - (BOOL)canStart {
-	if ([[ATBackend sharedBackend] apiKey] == nil) {
+	if ([ATConnect sharedConnection].webClient == nil) {
 		return NO;
 	}
 	if (![ATConversationUpdater conversationExists]) {

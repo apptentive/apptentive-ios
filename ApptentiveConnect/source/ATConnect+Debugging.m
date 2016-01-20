@@ -31,7 +31,7 @@
 	if (![storagePath isEqualToString:self.storagePath]) {
 		ATLogInfo(@"Storage path of %@ will not be used due to SDK version. Using %@ instead.", storagePath, self.storagePath);
 	}
-	
+
 	self.apiKey = APIKey;
 }
 
@@ -52,7 +52,7 @@
 }
 
 - (NSString *)manifestJSON {
-	NSData *rawJSONData = [ATEngagementBackend sharedBackend].engagementManifestJSON;
+	NSData *rawJSONData = self.engagementBackend.engagementManifestJSON;
 
 	if (rawJSONData != nil) {
 		NSData *outputJSONData = nil;
@@ -79,7 +79,7 @@
 }
 
 - (NSArray *)engagementInteractions {
-	return [[ATEngagementBackend sharedBackend] allEngagementInteractions];
+	return [self.engagementBackend allEngagementInteractions];
 }
 
 - (NSInteger)numberOfEngagementInteractions {
@@ -99,7 +99,7 @@
 }
 
 - (void)presentInteractionAtIndex:(NSInteger)index fromViewController:(UIViewController *)viewController {
-	[[ATEngagementBackend sharedBackend] presentInteraction:[self.engagementInteractions objectAtIndex:index] fromViewController:viewController];
+	[self.engagementBackend presentInteraction:[self.engagementInteractions objectAtIndex:index] fromViewController:viewController];
 }
 
 @end

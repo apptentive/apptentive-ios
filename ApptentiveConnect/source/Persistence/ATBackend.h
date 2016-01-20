@@ -43,7 +43,6 @@ extern NSString *const ATBackendBecameReadyNotification;
 						   NSFetchedResultsControllerDelegate, UIAlertViewDelegate
 #endif
 						   >
-@property (copy, nonatomic) NSString *apiKey;
 /*! The feedback currently being worked on by the user. */
 @property (strong, nonatomic) ATFeedback *currentFeedback;
 @property (strong, nonatomic) NSDictionary *currentCustomData;
@@ -56,6 +55,8 @@ extern NSString *const ATBackendBecameReadyNotification;
 @property (readonly, assign, nonatomic) BOOL hideBranding;
 @property (readonly, assign, nonatomic) BOOL notificationPopupsEnabled;
 
+- (void)startup;
+
 /*! Message send progress. */
 @property (weak, nonatomic) id<ATBackendMessageDelegate> messageDelegate;
 - (void)messageTaskDidBegin:(ATMessageTask *)messageTask;
@@ -63,7 +64,6 @@ extern NSString *const ATBackendBecameReadyNotification;
 - (void)messageTaskDidFinish:(ATMessageTask *)messageTask;
 - (void)messageTaskDidFail:(ATMessageTask *)messageTask;
 
-+ (ATBackend *)sharedBackend;
 #if TARGET_OS_IPHONE
 + (UIImage *)imageNamed:(NSString *)name;
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController;

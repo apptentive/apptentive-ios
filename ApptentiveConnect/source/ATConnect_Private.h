@@ -11,7 +11,7 @@
 extern NSString *const ATConnectCustomPersonDataChangedNotification;
 extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 
-@class ATMessage;
+@class ATMessage, ATWebClient, ATBackend, ATEngagementBackend;
 
 
 @interface ATConnect ()
@@ -19,6 +19,10 @@ extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 @property (readonly, nonatomic) NSDictionary *customPersonData;
 @property (readonly, nonatomic) NSDictionary *customDeviceData;
 - (NSDictionary *)integrationConfiguration;
+
+@property (readonly, nonatomic) ATWebClient *webClient;
+@property (readonly, nonatomic) ATBackend *backend;
+@property (readonly, nonatomic) ATEngagementBackend *engagementBackend;
 
 @property (strong, nonatomic) NSDictionary *pushUserInfo;
 @property (strong, nonatomic) UIViewController *pushViewController;

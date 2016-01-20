@@ -123,7 +123,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)viewDidLoad {
 	// TODO: Figure out a way to avoid tightly coupling this
-	[ATBackend sharedBackend].presentedMessageCenterViewController = self;
+	[ATConnect sharedConnection].backend.presentedMessageCenterViewController = self;
 
 	[super viewDidLoad];
 
@@ -137,7 +137,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.dataSource = [[ATMessageCenterDataSource alloc] initWithDelegate:self];
 	[self.dataSource start];
 
-	[ATBackend sharedBackend].messageDelegate = self;
+	[ATConnect sharedConnection].backend.messageDelegate = self;
 
 	self.dateFormatter = [[NSDateFormatter alloc] init];
 	self.dateFormatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"MMMMdyyyy" options:0 locale:[NSLocale currentLocale]];
@@ -212,7 +212,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	self.contextMessage = nil;
 	if (self.interaction.contextMessageBody) {
-		self.contextMessage = [[ATBackend sharedBackend] automatedMessageWithTitle:nil body:self.interaction.contextMessageBody];
+		self.contextMessage = [[ATConnect sharedConnection].backend automatedMessageWithTitle:nil body:self.interaction.contextMessageBody];
 	}
 
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardWillChangeFrameNotification object:nil];
@@ -288,7 +288,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	[self saveDraft];
 
-	[[ATBackend sharedBackend] messageCenterWillDismiss:self];
+	[[ATConnect sharedConnection].backend messageCenterWillDismiss:self];
 }
 
 #pragma mark - Table view data source
@@ -700,15 +700,15 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	NSIndexPath *lastUserMessageIndexPath = self.dataSource.lastUserMessageIndexPath;
 
 	if (self.contextMessage) {
-		[[ATBackend sharedBackend] sendAutomatedMessage:self.contextMessage];
+		[[ATConnect sharedConnection].backend sendAutomatedMessage:self.contextMessage];
 		self.contextMessage = nil;
 	}
 
 	if (self.messageComposerHasAttachments) {
-		[[ATBackend sharedBackend] sendCompoundMessageWithText:message attachments:self.attachmentController.attachments hiddenOnClient:NO];
+		[[ATConnect sharedConnection].backend sendCompoundMessageWithText:message attachments:self.attachmentController.attachments hiddenOnClient:NO];
 		[self.attachmentController clear];
 	} else {
-		[[ATBackend sharedBackend] sendTextMessageWithBody:message];
+		[[ATConnect sharedConnection].backend sendTextMessageWithBody:message];
 	}
 
 	[self.attachmentController resignFirstResponder];
@@ -824,7 +824,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			@"valid": @([ATUtilities emailAddressIsValid:self.profileView.emailField.text]) }];
 	}
 
-	[[ATBackend sharedBackend] updatePersonIfNeeded];
+	[[ATConnect sharedConnection].backend updatePersonIfNeeded];
 
 	self.composeButtonItem.enabled = YES;
 	self.neuMessageButtonItem.enabled = YES;

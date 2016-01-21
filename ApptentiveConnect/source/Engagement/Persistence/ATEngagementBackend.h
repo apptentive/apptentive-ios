@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+@class ATInteractionUsageData;
+
 extern NSString *const ATEngagementInstallDateKey;
 extern NSString *const ATEngagementUpgradeDateKey;
 extern NSString *const ATEngagementLastUsedVersionKey;
@@ -30,10 +32,29 @@ extern NSString *const ATEngagementCodePointApptentiveAppInteractionKey;
 
 extern NSString *const ATEngagementMessageCenterEvent;
 
+extern NSString *const ATEngagementApplicationVersionKey;
+extern NSString *const ATEngagementApplicationBuildKey;
+
+extern NSString *const ATEngagementSDKVersionKey;
+extern NSString *const ATEngagementSDKDistributionNameKey;
+extern NSString *const ATEngagementSDKDistributionVersionKey;
+
+
 @class ATInteraction;
 
 
 @interface ATEngagementBackend : NSObject
+
+- (instancetype)initWithStoragePath:(NSString *)storagePath;
+
+@property (readonly, nonatomic) NSString *storagePath;
+@property (readonly, nonatomic) NSString *cachedTargetsStoragePath;
+@property (readonly, nonatomic) NSString *cachedInteractionsStoragePath;
+@property (readonly, nonatomic) NSString *engagementDataStoragePath;
+@property (readonly, strong, nonatomic) NSMutableDictionary *engagementData;
+@property (readonly, nonatomic) ATInteractionUsageData *usageData;
+
+- (void)resetEngagementData;
 
 - (void)checkForEngagementManifest;
 - (BOOL)shouldRetrieveNewEngagementManifest;
@@ -41,8 +62,6 @@ extern NSString *const ATEngagementMessageCenterEvent;
 - (void)didReceiveNewTargets:(NSDictionary *)targets andInteractions:(NSDictionary *)interactions maxAge:(NSTimeInterval)expiresMaxAge;
 
 - (void)updateVersionInfo;
-+ (NSString *)cachedTargetsStoragePath;
-+ (NSString *)cachedInteractionsStoragePath;
 
 - (ATInteraction *)interactionForEvent:(NSString *)event;
 
@@ -58,6 +77,8 @@ extern NSString *const ATEngagementMessageCenterEvent;
 - (BOOL)engageLocalEvent:(NSString *)event userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController;
 
 - (BOOL)engageCodePoint:(NSString *)codePoint fromInteraction:(ATInteraction *)fromInteraction userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController;
+
+- (void)keyPathWasSeen:(NSString *)keyPath;
 
 - (void)codePointWasSeen:(NSString *)codePoint;
 - (void)codePointWasEngaged:(NSString *)codePoint;

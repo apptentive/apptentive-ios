@@ -425,7 +425,7 @@ static NSURLCache *imageCache = nil;
 }
 
 - (BOOL)isReady {
-	return (self.state == ATBackendStateReady);
+	return [UIApplication sharedApplication] == nil || (self.state == ATBackendStateReady);
 }
 
 - (NSString *)cacheDirectoryPath {
@@ -1015,7 +1015,7 @@ static NSURLCache *imageCache = nil;
 	}
 	ATLogInfo(@"Setting up data manager");
 
-	if (![[UIApplication sharedApplication] isProtectedDataAvailable]) {
+	if ([UIApplication sharedApplication] && ![[UIApplication sharedApplication] isProtectedDataAvailable]) {
 		self.state = ATBackendStateWaitingForDataProtectionUnlock;
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupDataManager) name:UIApplicationProtectedDataDidBecomeAvailable object:nil];
 		return;

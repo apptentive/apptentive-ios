@@ -11,6 +11,7 @@
 #import "ATEngagementBackend.h"
 #import "ATInteractionUsageData.h"
 #import "ATUtilities.h"
+#import "ATConnect_Private.h"
 
 
 @implementation ATInteractionInvocation
@@ -86,7 +87,7 @@
 }
 
 - (BOOL)criteriaAreMet {
-	return [self criteriaAreMetForUsageData:[ATInteractionUsageData usageData]];
+	return [self criteriaAreMetForUsageData:[ATConnect sharedConnection].engagementBackend.usageData];
 }
 
 - (BOOL)criteriaAreMetForUsageData:(ATInteractionUsageData *)usageData {
@@ -294,7 +295,7 @@
 }
 
 + (NSPredicate *)predicateWithLeftKeyPath:(NSString *)leftKeyPath rightValue:(nullable id)rightValue operatorType:(NSPredicateOperatorType)operatorType {
-	[ATInteractionUsageData keyPathWasSeen:leftKeyPath];
+	[[ATConnect sharedConnection].engagementBackend keyPathWasSeen:leftKeyPath];
 
 	NSExpression *leftExpression = [NSExpression expressionForKeyPath:leftKeyPath];
 	NSExpression *rightExpression = [NSExpression expressionForConstantValue:rightValue];

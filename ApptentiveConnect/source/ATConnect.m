@@ -586,7 +586,7 @@ NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 		_webClient = [[ATWebClient alloc] initWithBaseURL:baseURL APIKey:APIKey];
 
 		_backend = [[ATBackend alloc] initWithStoragePath:storagePath];
-		_engagementBackend = [[ATEngagementBackend alloc] init];
+		_engagementBackend = [[ATEngagementBackend alloc] initWithStoragePath:storagePath];
 
 		[self.backend startup];
 	}

@@ -41,6 +41,10 @@
 	return _supportDirectoryPath;
 }
 
+- (ATConnectDebuggingOptions)debuggingOptions {
+	return 0;
+}
+
 - (NSString *)SDKVersion {
 	return kATConnectVersionString;
 }

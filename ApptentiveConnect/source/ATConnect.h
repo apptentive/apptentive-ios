@@ -511,7 +511,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
  Adds an additional data field to any feedback sent. This will show up in the person data in the
  conversation on your Apptentive dashboard.
-f
+
  @param string Custom data of type `NSString`.
  @param key A key to associate the data with.
  */

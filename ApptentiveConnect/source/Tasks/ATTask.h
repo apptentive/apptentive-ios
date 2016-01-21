@@ -17,8 +17,7 @@
 
 @property (copy, nonatomic) NSString *lastErrorTitle;
 @property (copy, nonatomic) NSString *lastErrorMessage;
-/*! Should we stop the task queue if this task fails, or just throw it away? Defaults to stopping task queue (failureOkay == NO). */
-@property (assign, nonatomic, getter=isFailureOkay) BOOL failureOkay;
+@property (assign, nonatomic) BOOL shouldRetry;
 
 
 - (BOOL)canStart;

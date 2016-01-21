@@ -98,7 +98,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	} else {
 		_failed = YES;
 		_shouldRetry = YES;
-		ATLogError(@"Unexpected HTTP status for request: %@", self);
+		ATLogError(@"Unexpected HTTP status: %d", statusCode);
 	}
 
 	_errorMessage = [NSHTTPURLResponse localizedStringForStatusCode:statusCode];

@@ -66,6 +66,7 @@
 		017D974B1B0E57C2004E045C /* ATMessageCenterReplyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 017D97491B0E57C2004E045C /* ATMessageCenterReplyCell.m */; };
 		019A63CB1C4DA5BE00DD5EBF /* ATConnect+Debugging.h in Headers */ = {isa = PBXBuildFile; fileRef = 019A63C91C4DA5BE00DD5EBF /* ATConnect+Debugging.h */; };
 		019A63CC1C4DA5BE00DD5EBF /* ATConnect+Debugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 019A63CA1C4DA5BE00DD5EBF /* ATConnect+Debugging.m */; };
+		019BA84D1C51695E00F74F61 /* ATAPIRequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 019BA84C1C51695E00F74F61 /* ATAPIRequestTests.m */; };
 		01A88FF81AFBFFAE002C49E7 /* testJsonDiffing.1.expected.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF31AFBFDB6002C49E7 /* testJsonDiffing.1.expected.json */; };
 		01A88FF91AFBFFAE002C49E7 /* testJsonDiffing.1.new.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF41AFBFDB6002C49E7 /* testJsonDiffing.1.new.json */; };
 		01A88FFA1AFBFFAE002C49E7 /* testJsonDiffing.1.old.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF51AFBFDB6002C49E7 /* testJsonDiffing.1.old.json */; };
@@ -381,6 +382,7 @@
 		017D97491B0E57C2004E045C /* ATMessageCenterReplyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageCenterReplyCell.m; sourceTree = "<group>"; };
 		019A63C91C4DA5BE00DD5EBF /* ATConnect+Debugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ATConnect+Debugging.h"; sourceTree = "<group>"; };
 		019A63CA1C4DA5BE00DD5EBF /* ATConnect+Debugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ATConnect+Debugging.m"; sourceTree = "<group>"; };
+		019BA84C1C51695E00F74F61 /* ATAPIRequestTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAPIRequestTests.m; sourceTree = "<group>"; };
 		019CEBE91BDEDDE100CCEC97 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		019CEBEA1BDEDDE100CCEC97 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		019CEBF01BDEDE9400CCEC97 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -1238,6 +1240,7 @@
 				580B24BA17D90AF300AE2CD0 /* ATEngagementTests.m */,
 				49358DBB1BF3336700516F1E /* ATInteractionInvocationTests.m */,
 				49ED18041BF97B4500C6D343 /* ATInteractionUsageDataTests.m */,
+				019BA84C1C51695E00F74F61 /* ATAPIRequestTests.m */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -1900,6 +1903,7 @@
 				011B08D01C0D0CCC004F4F5D /* ATInteractionInvocationTests.m in Sources */,
 				011B08CF1C0D0CCC004F4F5D /* ApptentiveMigrationTests.m in Sources */,
 				011B08D71C0D19B6004F4F5D /* CodePointAndInteractionTests.m in Sources */,
+				019BA84D1C51695E00F74F61 /* ATAPIRequestTests.m in Sources */,
 				01F6FD971BFBCDC3004513C2 /* ApptentiveMetricsTests.m in Sources */,
 				493AEB4515990A6B00DFD4C7 /* ApptentiveSurveysTests.m in Sources */,
 				49ED18051BF97B4500C6D343 /* ATInteractionUsageDataTests.m in Sources */,

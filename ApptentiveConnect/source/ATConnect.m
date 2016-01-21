@@ -8,6 +8,7 @@
 
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
+#import "ATConnect+Debugging.h"
 #import "ATBackend.h"
 #import "ATEngagementBackend.h"
 #import "ATInteraction.h"
@@ -15,6 +16,8 @@
 #import "ATAppConfigurationUpdater.h"
 #import "ATMessageSender.h"
 #import "ATWebClient.h"
+#import "ATPersonInfo.h"
+#import "ATDeviceInfo.h"
 #if TARGET_OS_IPHONE
 #import "ATMessageCenterViewController.h"
 #import "ATBannerViewController.h"
@@ -37,38 +40,48 @@ NSString *const ATSurveyShownNotification = @"ATSurveyShownNotification";
 NSString *const ATSurveySentNotification = @"ATSurveySentNotification";
 NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 
-NSString *const ATConnectCustomPersonDataChangedNotification = @"ATConnectCustomPersonDataChangedNotification";
-NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustomDeviceDataChangedNotification";
-
-
 @interface ATConnect () <ATBannerViewControllerDelegate>
 @end
 
 
-@implementation ATConnect {
-	NSMutableDictionary *_customPersonData;
-	NSMutableDictionary *_customDeviceData;
-	NSMutableDictionary *_integrationConfiguration;
-}
+@implementation ATConnect
 
 + (void)load {
 	[UINavigationBar appearanceWhenContainedIn:[ATNavigationController class], nil].barTintColor = [UIColor whiteColor];
 }
 
-+ (ATConnect *)sharedConnection {
-	static ATConnect *sharedConnection = nil;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		sharedConnection = [[ATConnect alloc] init];
-	});
-	return sharedConnection;
++ (NSString *)supportDirectoryPath {
+	NSString *appSupportDirectoryPath = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES).firstObject;
+	NSString *apptentiveDirectoryPath = [appSupportDirectoryPath stringByAppendingPathComponent:@"com.apptentive.feedback"];
+	NSFileManager *fm = [NSFileManager defaultManager];
+	NSError *error = nil;
+
+	if (![fm createDirectoryAtPath:apptentiveDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
+		ATLogError(@"Failed to create support directory: %@", apptentiveDirectoryPath);
+		ATLogError(@"Error was: %@", error);
+		return nil;
+	}
+
+	if (![fm setAttributes:@{ NSFileProtectionKey: NSFileProtectionCompleteUntilFirstUserAuthentication } ofItemAtPath:apptentiveDirectoryPath error:&error]) {
+		ATLogError(@"Failed to set file protection level: %@", apptentiveDirectoryPath);
+		ATLogError(@"Error was: %@", error);
+	}
+
+	return apptentiveDirectoryPath;
 }
 
-- (id)init {
++ (ATConnect *)sharedConnection {
+	static ATConnect *_sharedConnection = nil;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		_sharedConnection = [[ATConnect alloc] init];
+	});
+	return _sharedConnection;
+}
+
+- (instancetype)init {
 	if ((self = [super init])) {
 		self.showEmailField = YES;
-		_customPersonData = [[NSMutableDictionary alloc] init];
-		_customDeviceData = [[NSMutableDictionary alloc] init];
 		_integrationConfiguration = [[NSMutableDictionary alloc] init];
 
 		ATLogInfo(@"Apptentive SDK Version %@", kATConnectVersionString);
@@ -77,14 +90,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (void)setApiKey:(NSString *)APIKey {
-	if (![self.webClient.APIKey isEqualToString:APIKey]) {
-		_webClient = [[ATWebClient alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.apptentive.com"] APIKey:APIKey];
-
-		_backend = [[ATBackend alloc] init];
-		_engagementBackend = [[ATEngagementBackend alloc] init];
-
-		[self.backend startup];
-	}
+	[self setAPIKey:APIKey baseURL:[NSURL URLWithString:@"https://api.apptentive.com"] storagePath:[[self class] supportDirectoryPath]];
 }
 
 - (NSString *)apiKey {
@@ -92,19 +98,19 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (NSString *)personName {
-	return [ATPersonInfo currentPerson].name;
+	return self.backend.currentPerson.name;
 }
 
 - (void)setPersonName:(NSString *)personName {
-	[ATPersonInfo currentPerson].name = personName;
+	self.backend.currentPerson.name = personName;
 }
 
 - (NSString *)personEmailAddress {
-	return [ATPersonInfo currentPerson].emailAddress;
+	return self.backend.currentPerson.emailAddress;
 }
 
 - (void)setPersonEmailAddress:(NSString *)personEmailAddress {
-	[ATPersonInfo currentPerson].emailAddress = personEmailAddress;
+	self.backend.currentPerson.emailAddress = personEmailAddress;
 }
 
 - (UIColor *)tintColor {
@@ -127,36 +133,28 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	[self.backend sendFileMessageWithFileData:fileData andMimeType:mimeType hiddenOnClient:YES];
 }
 
-- (NSDictionary *)customPersonData {
-	return _customPersonData;
-}
-
-- (NSDictionary *)customDeviceData {
-	return _customDeviceData;
-}
-
 - (void)addCustomDeviceDataString:(NSString *)string withKey:(NSString *)key {
-	[self addCustomDeviceData:string withKey:key];
+	[self.backend.currentDevice setCustomDataString:string forKey:key];
 }
 
 - (void)addCustomDeviceDataNumber:(NSNumber *)number withKey:(NSString *)key {
-	[self addCustomDeviceData:number withKey:key];
+	[self.backend.currentDevice setCustomDataNumber:number forKey:key];
 }
 
 - (void)addCustomDeviceDataBool:(BOOL)boolValue withKey:(NSString *)key {
-	[self addCustomDeviceData:@(boolValue) withKey:key];
+	[self.backend.currentDevice setCustomDataBool:boolValue forKey:key];
 }
 
 - (void)addCustomPersonDataString:(NSString *)string withKey:(NSString *)key {
-	[self addCustomPersonData:string withKey:key];
+	[self.backend.currentPerson setCustomDataString:string forKey:key];
 }
 
 - (void)addCustomPersonDataNumber:(NSNumber *)number withKey:(NSString *)key {
-	[self addCustomPersonData:number withKey:key];
+	[self.backend.currentPerson setCustomDataNumber:number forKey:key];
 }
 
 - (void)addCustomPersonDataBool:(BOOL)boolValue withKey:(NSString *)key {
-	[self addCustomPersonData:@(boolValue) withKey:key];
+	[self.backend.currentPerson setCustomDataBool:boolValue forKey:key];
 }
 
 + (NSDictionary *)versionObjectWithVersion:(NSString *)version {
@@ -173,16 +171,6 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 + (NSDictionary *)timestampObjectWithDate:(NSDate *)date {
 	return [self timestampObjectWithNumber:@([date timeIntervalSince1970])];
-}
-
-- (void)addCustomPersonData:(NSObject *)object withKey:(NSString *)key {
-	[self addCustomData:object withKey:key toCustomDataDictionary:_customPersonData];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomPersonDataChangedNotification object:self.customPersonData];
-}
-
-- (void)addCustomDeviceData:(NSObject *)object withKey:(NSString *)key {
-	[self addCustomData:object withKey:key toCustomDataDictionary:_customDeviceData];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:self.customDeviceData];
 }
 
 - (void)addCustomData:(NSObject *)object withKey:(NSString *)key toCustomDataDictionary:(NSMutableDictionary *)customData {
@@ -206,21 +194,11 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (void)removeCustomPersonDataWithKey:(NSString *)key {
-	[_customPersonData removeObjectForKey:key];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomPersonDataChangedNotification object:self.customPersonData];
+	[self.backend.currentPerson removeCustomDataForKey:key];
 }
 
 - (void)removeCustomDeviceDataWithKey:(NSString *)key {
-	[_customDeviceData removeObjectForKey:key];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:self.customDeviceData];
-}
-
-- (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key {
-	[self addCustomDeviceData:object withKey:key];
-}
-
-- (void)removeCustomDataWithKey:(NSString *)key {
-	[self removeCustomDeviceDataWithKey:key];
+	[self.backend.currentDevice removeCustomDataForKey:key];
 }
 
 - (void)openAppStore {
@@ -240,10 +218,6 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		@"method": @"app_store" };
 
 	[self.engagementBackend presentInteraction:appStoreInteraction fromViewController:nil];
-}
-
-- (NSDictionary *)integrationConfiguration {
-	return _integrationConfiguration;
 }
 
 - (void)setPushNotificationIntegration:(ATPushProvider)pushProvider withDeviceToken:(NSData *)deviceToken {
@@ -279,7 +253,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration {
 	[_integrationConfiguration setObject:configuration forKey:integration];
 
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:self.customDeviceData];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATDataNeedsSaveNotification object:_integrationConfiguration];
 }
 
 - (void)addIntegration:(NSString *)integration withDeviceToken:(NSData *)deviceToken {
@@ -295,7 +269,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 - (void)removeIntegration:(NSString *)integration {
 	[_integrationConfiguration removeObjectForKey:integration];
 
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:self.customDeviceData];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATDataNeedsSaveNotification object:_integrationConfiguration];
 }
 
 #if TARGET_OS_IPHONE
@@ -591,15 +565,19 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 #pragma mark - Debugging and diagnostics
 
-- (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL {
+- (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath {
 	if (![APIKey isEqualToString:self.webClient.APIKey] || ![baseURL isEqual:self.webClient.baseURL]) {
 		_webClient = [[ATWebClient alloc] initWithBaseURL:baseURL APIKey:APIKey];
 
-		_backend = [[ATBackend alloc] init];
-		_engagementBackend = [[ATEngagementBackend alloc] init];
+		_backend = [[ATBackend alloc] initWithStoragePath:storagePath];
+		_engagementBackend = [[ATEngagementBackend alloc] initWithStoragePath:storagePath];
 
 		[self.backend startup];
 	}
+}
+
+- (NSString *)storagePath {
+	return self.backend.storagePath;
 }
 
 @end

@@ -8,24 +8,20 @@
 
 #import "ATConnect.h"
 
-extern NSString *const ATConnectCustomPersonDataChangedNotification;
-extern NSString *const ATConnectCustomDeviceDataChangedNotification;
+NS_ASSUME_NONNULL_BEGIN
 
 @class ATMessage, ATWebClient, ATBackend, ATEngagementBackend;
 
-
 @interface ATConnect ()
 
-@property (readonly, nonatomic) NSDictionary *customPersonData;
-@property (readonly, nonatomic) NSDictionary *customDeviceData;
-- (NSDictionary *)integrationConfiguration;
+@property (readonly, nonatomic) NSMutableDictionary *integrationConfiguration;
 
 @property (readonly, nonatomic) ATWebClient *webClient;
 @property (readonly, nonatomic) ATBackend *backend;
 @property (readonly, nonatomic) ATEngagementBackend *engagementBackend;
 
-@property (strong, nonatomic) NSDictionary *pushUserInfo;
-@property (strong, nonatomic) UIViewController *pushViewController;
+@property (strong, nonatomic) NSDictionary * __nullable pushUserInfo;
+@property (strong, nonatomic) UIViewController * __nullable pushViewController;
 
 #if TARGET_OS_IPHONE
 
@@ -50,4 +46,6 @@ extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 
 /*! Replacement for NSLocalizedString within ApptentiveConnect. Pulls
  localized strings out of the resource bundle. */
-extern NSString *ATLocalizedString(NSString *key, NSString *comment);
+extern NSString *ATLocalizedString(NSString *key, NSString * __nullable comment);
+
+NS_ASSUME_NONNULL_END

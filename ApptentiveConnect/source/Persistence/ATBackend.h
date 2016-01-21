@@ -28,11 +28,7 @@ extern NSString *const ATBackendBecameReadyNotification;
 
 #define USE_STAGING 0
 
-@class ATAppConfigurationUpdater;
-@class ATDataManager;
-@class ATFeedback;
-@class ATAPIRequest;
-@class ATMessageTask;
+@class ATAppConfigurationUpdater, ATDataManager, ATFeedback, ATAPIRequest, ATMessageTask, ATDeviceInfo;
 
 @protocol ATBackendMessageDelegate;
 
@@ -49,12 +45,20 @@ extern NSString *const ATBackendBecameReadyNotification;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
-@property (readonly, strong, nonatomic) NSString *supportDirectoryPath;
+
+@property (readonly, strong, nonatomic) NSString *storagePath;
+@property (readonly, nonatomic) NSString *currentPersonStoragePath;
+@property (readonly, nonatomic) NSString *currentDeviceStoragePath;
+
 @property (strong, nonatomic) UIViewController *presentedMessageCenterViewController;
+@property (readonly, nonatomic) ATPersonInfo *currentPerson;
+@property (readonly, nonatomic) ATDeviceInfo *currentDevice;
+
 
 @property (readonly, assign, nonatomic) BOOL hideBranding;
 @property (readonly, assign, nonatomic) BOOL notificationPopupsEnabled;
 
+- (instancetype)initWithStoragePath:(NSString *)storagePath;
 - (void)startup;
 
 /*! Message send progress. */

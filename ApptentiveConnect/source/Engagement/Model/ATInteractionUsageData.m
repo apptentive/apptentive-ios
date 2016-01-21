@@ -128,7 +128,7 @@
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesTimeAgo];
 
 	// Device
-	ATDeviceInfo *deviceInfo = [[ATDeviceInfo alloc] init];
+	ATDeviceInfo *deviceInfo = [ATConnect sharedConnection].backend.currentDevice;
 	if (deviceInfo) {
 		NSDictionary *deviceData = deviceInfo.dictionaryRepresentation[@"device"];
 
@@ -165,7 +165,7 @@
 	}
 
 	// Person
-	ATPersonInfo *personInfo = [ATPersonInfo currentPerson];
+	ATPersonInfo *personInfo = [ATConnect sharedConnection].backend.currentPerson;
 	if (personInfo) {
 		NSDictionary *personData = personInfo.dictionaryRepresentation[@"person"];
 

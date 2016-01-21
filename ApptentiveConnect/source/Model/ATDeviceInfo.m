@@ -11,21 +11,13 @@
 #endif
 
 #import "ATDeviceInfo.h"
-
 #import "ATBackend.h"
-#import "ATConnect.h"
 #import "ATConnect_Private.h"
 #import "ATUtilities.h"
 #import "ATDeviceUpdater.h"
 
 
 @implementation ATDeviceInfo
-- (id)init {
-	if ((self = [super init])) {
-	}
-	return self;
-}
-
 
 + (NSString *)carrier {
 #if TARGET_OS_IPHONE
@@ -45,7 +37,7 @@
 }
 
 - (NSDictionary *)dictionaryRepresentation {
-	NSMutableDictionary *device = [NSMutableDictionary dictionary];
+	NSMutableDictionary *device = [super.dictionaryRepresentation mutableCopy];
 
 	NSString *uuid = [[ATConnect sharedConnection].backend deviceUUID];
 	if (uuid) {
@@ -94,11 +86,6 @@
 	}
 
 	device[@"utc_offset"] = @([[NSTimeZone systemTimeZone] secondsFromGMT]);
-
-	NSDictionary *extraInfo = [[ATConnect sharedConnection] customDeviceData];
-	if (extraInfo && [extraInfo count]) {
-		device[@"custom_data"] = extraInfo;
-	}
 
 	NSDictionary *integrationConfiguration = [[ATConnect sharedConnection] integrationConfiguration];
 	if (integrationConfiguration && [integrationConfiguration isKindOfClass:[NSDictionary class]]) {

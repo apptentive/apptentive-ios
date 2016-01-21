@@ -25,6 +25,7 @@
 #import "ATPersonUpdater.h"
 #import "ATEngagementBackend.h"
 #import "ATMessageCenterViewController.h"
+#import "ATDeviceInfo.h"
 
 typedef NS_ENUM(NSInteger, ATBackendState) {
 	ATBackendStateStarting,
@@ -62,8 +63,6 @@ static NSURLCache *imageCache = nil;
 - (void)networkStatusChanged:(NSNotification *)notification;
 - (void)stopWorking:(NSNotification *)notification;
 - (void)startWorking:(NSNotification *)notification;
-- (void)personDataChanged:(NSNotification *)notification;
-- (void)deviceDataChanged:(NSNotification *)notification;
 - (void)startMonitoringUnreadMessages;
 - (void)checkForProperConfiguration;
 
@@ -87,7 +86,6 @@ static NSURLCache *imageCache = nil;
 
 
 @implementation ATBackend
-@synthesize supportDirectoryPath = _supportDirectoryPath;
 
 #if TARGET_OS_IPHONE
 + (UIImage *)imageNamed:(NSString *)name {
@@ -157,10 +155,45 @@ static NSURLCache *imageCache = nil;
 }
 #endif
 
-- (id)init {
-	if ((self = [super init])) {
+- (NSString *)currentPersonStoragePath {
+	return [self.storagePath stringByAppendingPathComponent:@"person"];
+}
+
+- (NSString *)currentDeviceStoragePath {
+	return [self.storagePath stringByAppendingPathComponent:@"device"];
+}
+
+- (instancetype) initWithStoragePath:(NSString *)storagePath {
+	self = [super init];
+
+	if (self) {
+		_storagePath = storagePath;
+
+		NSString *legacyCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
+		NSData *legacyPersonData = [[NSUserDefaults standardUserDefaults] dataForKey:legacyCurrentPersonPreferenceKey];
+
+		if ([[NSFileManager defaultManager] fileExistsAtPath:self.currentPersonStoragePath]) {
+			_currentPerson = [NSKeyedUnarchiver unarchiveObjectWithFile:self.currentPersonStoragePath];
+			_currentDevice = [NSKeyedUnarchiver unarchiveObjectWithFile:self.currentDeviceStoragePath];
+		} else if (legacyPersonData) {
+			[[NSUserDefaults standardUserDefaults] removeObjectForKey:legacyCurrentPersonPreferenceKey];
+
+			@try {
+				_currentPerson = [NSKeyedUnarchiver unarchiveObjectWithData:legacyPersonData];
+			} @catch(NSException *exception) {
+				ATLogError(@"Unable to unarchive person object from NSUserDefaults: @%", exception);
+				_currentPerson = [[ATPersonInfo alloc] init];
+			}
+
+			_currentDevice = [[ATDeviceInfo alloc] init];
+		} else {
+			_currentPerson = [[ATPersonInfo alloc] init];
+			_currentDevice = [[ATDeviceInfo alloc] init];
+		}
+
 		[self setup];
 	}
+
 	return self;
 }
 
@@ -290,32 +323,8 @@ static NSURLCache *imageCache = nil;
 	return YES;
 }
 
-- (NSString *)supportDirectoryPath {
-	if (!_supportDirectoryPath) {
-		NSString *appSupportDirectoryPath = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES).firstObject;
-		NSString *apptentiveDirectoryPath = [appSupportDirectoryPath stringByAppendingPathComponent:@"com.apptentive.feedback"];
-		NSFileManager *fm = [NSFileManager defaultManager];
-		NSError *error = nil;
-
-		if (![fm createDirectoryAtPath:apptentiveDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
-			ATLogError(@"Failed to create support directory: %@", apptentiveDirectoryPath);
-			ATLogError(@"Error was: %@", error);
-			return nil;
-		}
-
-		if (![fm setAttributes:@{ NSFileProtectionKey: NSFileProtectionCompleteUntilFirstUserAuthentication } ofItemAtPath:apptentiveDirectoryPath error:&error]) {
-			ATLogError(@"Failed to set file protection level: %@", apptentiveDirectoryPath);
-			ATLogError(@"Error was: %@", error);
-		}
-
-		_supportDirectoryPath = apptentiveDirectoryPath;
-	}
-
-	return _supportDirectoryPath;
-}
-
 - (NSString *)attachmentDirectoryPath {
-	NSString *supportPath = [self supportDirectoryPath];
+	NSString *supportPath = [self storagePath];
 	if (!supportPath) {
 		return nil;
 	}
@@ -925,10 +934,7 @@ static NSURLCache *imageCache = nil;
 	[self performSelector:@selector(startMonitoringUnreadMessages) withObject:nil afterDelay:0.2];
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATBackendBecameReadyNotification object:nil];
-
-	// Monitor changes to custom data.
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(personDataChanged:) name:ATConnectCustomPersonDataChangedNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDataChanged:) name:ATConnectCustomDeviceDataChangedNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(saveData:) name:ATDataNeedsSaveNotification object:nil];
 
 	// Append extensions to attachments that are missing them
 	[ATFileAttachment addMissingExtensions];
@@ -981,12 +987,16 @@ static NSURLCache *imageCache = nil;
 	}
 }
 
-- (void)personDataChanged:(NSNotification *)notification {
-	[self performSelector:@selector(updatePersonIfNeeded) withObject:nil afterDelay:1];
-}
-
-- (void)deviceDataChanged:(NSNotification *)notification {
-	[self performSelector:@selector(updateDeviceIfNeeded) withObject:nil afterDelay:1];
+- (void)saveData:(NSNotification *)notification {
+	if (notification.object == self.currentPerson) {
+		[NSKeyedArchiver archiveRootObject:self.currentPerson toFile:self.currentPersonStoragePath];
+		[self performSelector:@selector(updatePersonIfNeeded) withObject:nil afterDelay:1];
+	} else if (notification.object == self.currentDevice) {
+		[NSKeyedArchiver archiveRootObject:self.currentDevice toFile:self.currentDeviceStoragePath];
+		[self performSelector:@selector(updateDeviceIfNeeded) withObject:nil afterDelay:1];
+	} else if (notification.object == [ATConnect sharedConnection].integrationConfiguration) {
+		[self performSelector:@selector(updateDeviceIfNeeded) withObject:nil afterDelay:1];
+	}
 }
 
 - (void)checkForEngagementManifest {
@@ -1014,7 +1024,7 @@ static NSURLCache *imageCache = nil;
 		self.state = ATBackendStateStarting;
 	}
 
-	self.dataManager = [[ATDataManager alloc] initWithModelName:@"ATDataModel" inBundle:[ATConnect resourceBundle] storagePath:[self supportDirectoryPath]];
+	self.dataManager = [[ATDataManager alloc] initWithModelName:@"ATDataModel" inBundle:[ATConnect resourceBundle] storagePath:[self storagePath]];
 	if (![self.dataManager setupAndVerify]) {
 		ATLogError(@"Unable to setup and verify data manager.");
 		[self continueStartupWithDataManagerFailure];

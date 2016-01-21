@@ -79,6 +79,8 @@
 		01B147B41B5D8D3A0000D041 /* ATMessageCenterProfileView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01B147B21B5D8D3A0000D041 /* ATMessageCenterProfileView.m */; };
 		01BD9E041B55E465004F12AB /* ATMessageCenterInputView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01BD9E021B55E465004F12AB /* ATMessageCenterInputView.h */; };
 		01BD9E051B55E465004F12AB /* ATMessageCenterInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01BD9E031B55E465004F12AB /* ATMessageCenterInputView.m */; };
+		01BF866C1C3CA2F700D713E5 /* ATCustomDataContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 01BF866A1C3CA2F700D713E5 /* ATCustomDataContainer.h */; };
+		01BF866D1C3CA2F700D713E5 /* ATCustomDataContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 01BF866B1C3CA2F700D713E5 /* ATCustomDataContainer.m */; };
 		01C30CEB1B0D09F8006BC911 /* ATMessageCenterGreetingView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01C30CE91B0D09F8006BC911 /* ATMessageCenterGreetingView.h */; };
 		01C30CEC1B0D09F8006BC911 /* ATMessageCenterGreetingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01C30CEA1B0D09F8006BC911 /* ATMessageCenterGreetingView.m */; };
 		01C7C4DD1BEAD0BC005D6EC1 /* ATDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 01C7C4D51BEAD0A4005D6EC1 /* ATDataModel.xcdatamodeld */; };
@@ -400,6 +402,8 @@
 		01B147B21B5D8D3A0000D041 /* ATMessageCenterProfileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageCenterProfileView.m; sourceTree = "<group>"; };
 		01BD9E021B55E465004F12AB /* ATMessageCenterInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageCenterInputView.h; sourceTree = "<group>"; };
 		01BD9E031B55E465004F12AB /* ATMessageCenterInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageCenterInputView.m; sourceTree = "<group>"; };
+		01BF866A1C3CA2F700D713E5 /* ATCustomDataContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATCustomDataContainer.h; sourceTree = "<group>"; };
+		01BF866B1C3CA2F700D713E5 /* ATCustomDataContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATCustomDataContainer.m; sourceTree = "<group>"; };
 		01C30CE91B0D09F8006BC911 /* ATMessageCenterGreetingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageCenterGreetingView.h; sourceTree = "<group>"; };
 		01C30CEA1B0D09F8006BC911 /* ATMessageCenterGreetingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageCenterGreetingView.m; sourceTree = "<group>"; };
 		01C7C4D61BEAD0A4005D6EC1 /* ATDataModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ATDataModel 2.xcdatamodel"; sourceTree = "<group>"; };
@@ -998,6 +1002,8 @@
 				49CEFF5C15168B53006D8BA8 /* ATAppConfigurationUpdater.m */,
 				496F577F174060CE003BF516 /* ATDataManager.h */,
 				496F5780174060CE003BF516 /* ATDataManager.m */,
+				01BF866A1C3CA2F700D713E5 /* ATCustomDataContainer.h */,
+				01BF866B1C3CA2F700D713E5 /* ATCustomDataContainer.m */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -1515,6 +1521,7 @@
 				49352AC4138C97A2000E464A /* ATAPIRequest.h in Headers */,
 				49352ADD138CA1DC000E464A /* ATURLConnection_Private.h in Headers */,
 				01D3128E1B69349900B369E1 /* ATProgressNavigationBar.h in Headers */,
+				01BF866C1C3CA2F700D713E5 /* ATCustomDataContainer.h in Headers */,
 				49B877111464958C00594A5D /* ATWebClient_Private.h in Headers */,
 				49EA5AB014BD08AD004F8A4D /* ATLegacyRecord.h in Headers */,
 				49EA5ABD14BD0F4D004F8A4D /* ATRecordTask.h in Headers */,
@@ -1884,6 +1891,7 @@
 				58C5922217C55ADD000FA428 /* ATEngagementBackend.m in Sources */,
 				58C5922C17C59BE3000FA428 /* ATWebClient+EngagementAdditions.m in Sources */,
 				58EEBE2417C7E8150039A0F5 /* ATInteraction.m in Sources */,
+				01BF866D1C3CA2F700D713E5 /* ATCustomDataContainer.m in Sources */,
 				49B7E917178BA8060059E776 /* ATSurveyResponse.m in Sources */,
 				58D17D4818C5674000D123BC /* ATInteractionRatingDialogController.m in Sources */,
 				49B7E91C178BAB8D0059E776 /* ATSurveyResponseTask.m in Sources */,

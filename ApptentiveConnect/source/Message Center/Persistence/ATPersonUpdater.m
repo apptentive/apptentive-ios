@@ -12,6 +12,7 @@
 #import "ATUtilities.h"
 #import "ATWebClient+MessageCenter.h"
 #import "ATConnect_Private.h"
+#import "ATBackend.h"
 
 NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValuePreferenceKey";
 
@@ -42,7 +43,7 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 + (BOOL)shouldUpdate {
 	[ATPersonUpdater registerDefaults];
 
-	return [[ATPersonInfo currentPerson] apiJSON].count > 0;
+	return [ATConnect sharedConnection].backend.currentPerson.apiJSON.count > 0;
 }
 
 + (NSDictionary *)lastSavedVersion {
@@ -66,7 +67,7 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 
 - (void)update {
 	[self cancel];
-	ATPersonInfo *person = [ATPersonInfo currentPerson];
+	ATPersonInfo *person = [ATConnect sharedConnection].backend.currentPerson;
 	self.sentPersonJSON = person.dictionaryRepresentation;
 	self.request = [[ATConnect sharedConnection].webClient requestForUpdatingPerson:person];
 	self.request.delegate = self;

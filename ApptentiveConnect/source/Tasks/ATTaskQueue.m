@@ -35,7 +35,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 }
 
 + (NSString *)taskQueuePath {
-	return [[[ATConnect sharedConnection].backend supportDirectoryPath] stringByAppendingPathComponent:@"tasks.objects"];
+	return [[ATConnect sharedConnection].backend.storagePath stringByAppendingPathComponent:@"tasks.objects"];
 }
 
 + (BOOL)serializedQueueExists {

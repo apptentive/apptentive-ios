@@ -145,6 +145,18 @@ NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 	[self.backend.currentDevice setCustomDataBool:boolValue forKey:key];
 }
 
+- (void)addCustomDeviceData:(NSObject<NSCoding> *)data withKey:(NSString *)key {
+	[self.backend.currentDevice setCustomData:data forKey:key];
+}
+
+- (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key {
+	[self addCustomDeviceData:object withKey:key];
+}
+
+- (void)removeCustomDataWithKey:(NSString *)key {
+	[self removeCustomDeviceDataWithKey:key];
+}
+
 - (void)addCustomPersonDataString:(NSString *)string withKey:(NSString *)key {
 	[self.backend.currentPerson setCustomDataString:string forKey:key];
 }
@@ -155,6 +167,10 @@ NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 
 - (void)addCustomPersonDataBool:(BOOL)boolValue withKey:(NSString *)key {
 	[self.backend.currentPerson setCustomDataBool:boolValue forKey:key];
+}
+
+- (void)addCustomPersonData:(NSObject<NSCoding> *)data withKey:(NSString *)key {
+	[self.backend.currentPerson setCustomData:data forKey:key];
 }
 
 + (NSDictionary *)versionObjectWithVersion:(NSString *)version {
@@ -570,7 +586,7 @@ NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 		_webClient = [[ATWebClient alloc] initWithBaseURL:baseURL APIKey:APIKey];
 
 		_backend = [[ATBackend alloc] initWithStoragePath:storagePath];
-		_engagementBackend = [[ATEngagementBackend alloc] initWithStoragePath:storagePath];
+		_engagementBackend = [[ATEngagementBackend alloc] init];
 
 		[self.backend startup];
 	}

@@ -80,39 +80,28 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	}
 	NSInteger statusCode = sender.statusCode;
 	_expiresMaxAge = [sender expiresMaxAge];
-	switch (statusCode) {
-		case 200:
-		case 201:
-		case 204:
-			break;
-		case 400: // rate limit reached
-		case 403: // whatevs, probably private feed
-			_failed = YES;
-			_shouldRetry = NO;
-			_errorTitle = ATLocalizedString(@"Bad Request", @"");
-			_errorMessage = ATLocalizedString(@"The server could not process the request.", @"");
-			break;
-		case 401:
-			_failed = YES;
-			_shouldRetry = NO;
-			_errorTitle = ATLocalizedString(@"Authentication Failed", @"");
-			_errorMessage = ATLocalizedString(@"Wrong username and/or password.", @"");
-			break;
-		case 422:
-			_failed = YES;
-			_shouldRetry = NO;
-			_errorTitle = ATLocalizedString(@"Unprocessable Entity", @"");
-			_errorMessage = ATLocalizedString(@"The request was well-formed but was unable to be followed due to semantic errors.", @"");
-			break;
-		case 304:
-			break;
-		default:
-			_failed = YES;
-			_shouldRetry = YES;
-			_errorTitle = ATLocalizedString(@"Server error.", @"");
-			_errorMessage = [NSHTTPURLResponse localizedStringForStatusCode:statusCode];
-			break;
+
+	NSIndexSet *okStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(100, 300)]; // 1xx, 2xx, and 3xx status codes
+	NSIndexSet *clientErrorStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(400, 100)]; // 4xx status codes
+	NSIndexSet *serverErrorStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(500, 100)]; // 5xx status codes
+
+	if ([okStatusCodes containsIndex:statusCode]) {
+		_failed = NO;
+	} else if ([clientErrorStatusCodes containsIndex:statusCode]) {
+		_failed = YES;
+		_shouldRetry = NO;
+		_errorTitle = ATLocalizedString(@"Bad Request", @"");
+	} else if ([serverErrorStatusCodes containsIndex:statusCode]) {
+		_failed = YES;
+		_shouldRetry = YES;
+		_errorTitle = ATLocalizedString(@"Server error.", @"");
+	} else {
+		_failed = YES;
+		_shouldRetry = YES;
+		ATLogError(@"Unexpected HTTP status for request: %@", self);
 	}
+
+	_errorMessage = [NSHTTPURLResponse localizedStringForStatusCode:statusCode];
 
 	NSObject *result = nil;
 	do { // once

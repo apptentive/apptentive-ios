@@ -149,6 +149,24 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	return self;
 }
 
++ (void)removeFromUserDefaults:(NSUserDefaults *)userDefaults {
+	NSArray *keys = @[
+					  ATConfigurationSDKVersionKey,
+					  ATConfigurationAppBuildNumberKey,
+					  ATAppConfigurationExpirationPreferenceKey,
+					  ATAppConfigurationMetricsEnabledPreferenceKey,
+					  ATAppConfigurationHideBrandingKey,
+					  ATAppConfigurationNotificationPopupsEnabledKey,
+					  ATAppConfigurationMessageCenterForegroundRefreshIntervalKey,
+					  ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey,
+					  ATAppConfigurationAppDisplayNameKey
+					  ];
+
+	for (NSString *key in keys) {
+		[userDefaults removeObjectForKey:key];
+	}
+}
+
 - (void)encodeWithCoder:(NSCoder *)coder
 {
 	[coder encodeObject:self.expirationDate forKey:expirationDateKey];

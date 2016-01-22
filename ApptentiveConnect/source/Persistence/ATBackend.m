@@ -197,6 +197,8 @@ static NSURLCache *imageCache = nil;
 
 			_currentDevice = [[ATDeviceInfo alloc] init];
 			_appConfiguration = [[ATAppConfiguration alloc] initWithUserDefaults:[NSUserDefaults standardUserDefaults]];
+
+			[ATAppConfiguration removeFromUserDefaults:[NSUserDefaults standardUserDefaults]];
 		} else {
 			_currentPerson = [[ATPersonInfo alloc] init];
 			_currentDevice = [[ATDeviceInfo alloc] init];

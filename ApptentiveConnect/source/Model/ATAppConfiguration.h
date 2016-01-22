@@ -22,6 +22,7 @@
 
 - (instancetype)initWithJSONDictionary:(NSDictionary *)JSONDictionary validForInterval:(NSTimeInterval)validInterval;
 - (instancetype)initWithUserDefaults:(NSUserDefaults *)userDefaults;
++ (void)removeFromUserDefaults:(NSUserDefaults *)userDefaults;
 
 @property (readonly, nonatomic, getter=isValid) BOOL valid;
 

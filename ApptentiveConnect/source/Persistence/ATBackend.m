@@ -26,6 +26,7 @@
 #import "ATEngagementBackend.h"
 #import "ATMessageCenterViewController.h"
 #import "ATDeviceInfo.h"
+#import "ATAppConfiguration.h"
 
 typedef NS_ENUM(NSInteger, ATBackendState) {
 	ATBackendStateStarting,
@@ -45,6 +46,10 @@ static NSURLCache *imageCache = nil;
 
 @interface ATBackend ()
 - (void)updateConfigurationIfNeeded;
+
+@property (readonly, nonatomic) NSString *currentPersonStoragePath;
+@property (readonly, nonatomic) NSString *currentDeviceStoragePath;
+@property (readonly, nonatomic) NSString *appConfigurationStoragePath;
 
 @property (readonly, nonatomic, getter=isMessageCenterInForeground) BOOL messageCenterInForeground;
 @property (strong, nonatomic) NSMutableSet *activeMessageTasks;
@@ -163,6 +168,10 @@ static NSURLCache *imageCache = nil;
 	return [self.storagePath stringByAppendingPathComponent:@"device"];
 }
 
+- (NSString *)appConfigurationStoragePath {
+	return [self.storagePath stringByAppendingString:@"appConfiguration"];
+}
+
 - (instancetype) initWithStoragePath:(NSString *)storagePath {
 	self = [super init];
 
@@ -175,6 +184,7 @@ static NSURLCache *imageCache = nil;
 		if ([[NSFileManager defaultManager] fileExistsAtPath:self.currentPersonStoragePath]) {
 			_currentPerson = [NSKeyedUnarchiver unarchiveObjectWithFile:self.currentPersonStoragePath];
 			_currentDevice = [NSKeyedUnarchiver unarchiveObjectWithFile:self.currentDeviceStoragePath];
+			_appConfiguration = [NSKeyedUnarchiver unarchiveObjectWithFile:self.appConfigurationStoragePath];
 		} else if (legacyPersonData) {
 			[[NSUserDefaults standardUserDefaults] removeObjectForKey:legacyCurrentPersonPreferenceKey];
 
@@ -186,9 +196,11 @@ static NSURLCache *imageCache = nil;
 			}
 
 			_currentDevice = [[ATDeviceInfo alloc] init];
+			_appConfiguration = [[ATAppConfiguration alloc] initWithUserDefaults:[NSUserDefaults standardUserDefaults]];
 		} else {
 			_currentPerson = [[ATPersonInfo alloc] init];
 			_currentDevice = [[ATDeviceInfo alloc] init];
+			_appConfiguration = [[ATAppConfiguration alloc] init];
 		}
 
 		[self setup];
@@ -397,7 +409,7 @@ static NSURLCache *imageCache = nil;
 }
 
 - (NSString *)appName {
-	NSString *displayName = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationAppDisplayNameKey];
+	NSString *displayName = self.appConfiguration.applicationDisplayName;
 	if (displayName) {
 		return displayName;
 	}
@@ -535,6 +547,12 @@ static NSURLCache *imageCache = nil;
 
 #pragma mark Accessors
 
+- (void)setAppConfiguration:(ATAppConfiguration *)appConfiguration {
+	_appConfiguration = appConfiguration;
+
+	[NSKeyedArchiver archiveRootObject:self.appConfiguration toFile:self.appConfigurationStoragePath];
+}
+
 - (void)setWorking:(BOOL)working {
 	if (_working != working) {
 		_working = working;
@@ -572,11 +590,11 @@ static NSURLCache *imageCache = nil;
 #pragma mark -
 
 - (BOOL)hideBranding {
-	return [[NSUserDefaults standardUserDefaults] boolForKey:ATAppConfigurationHideBrandingKey];
+	return self.appConfiguration.hideBranding;
 }
 
 - (BOOL)notificationPopupsEnabled {
-	return [[NSUserDefaults standardUserDefaults] boolForKey:ATAppConfigurationNotificationPopupsEnabledKey];
+	return self.appConfiguration.notificationPopupsEnabled;
 }
 
 - (void)updateConversationIfNeeded {
@@ -744,23 +762,13 @@ static NSURLCache *imageCache = nil;
 }
 
 - (void)checkForMessagesAtForegroundRefreshInterval {
-	NSNumber *refreshIntervalNumber = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterForegroundRefreshIntervalKey];
-	int refreshInterval = 8;
-	if (refreshIntervalNumber != nil) {
-		refreshInterval = [refreshIntervalNumber intValue];
-		refreshInterval = MAX(4, refreshInterval);
-	}
+	NSTimeInterval refreshInterval = fmax(4.0, self.appConfiguration.messageCenterForegroundPollingInterval);
 
 	[self checkForMessagesAtRefreshInterval:refreshInterval];
 }
 
 - (void)checkForMessagesAtBackgroundRefreshInterval {
-	NSNumber *refreshIntervalNumber = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey];
-	int refreshInterval = 60;
-	if (refreshIntervalNumber != nil) {
-		refreshInterval = [refreshIntervalNumber intValue];
-		refreshInterval = MAX(30, refreshInterval);
-	}
+	NSTimeInterval refreshInterval = fmax(4.0, self.appConfiguration.messageCenterBackgroundPollingInterval);
 
 	[self checkForMessagesAtRefreshInterval:refreshInterval];
 }

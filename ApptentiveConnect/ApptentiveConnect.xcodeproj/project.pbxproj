@@ -67,6 +67,8 @@
 		019A63CB1C4DA5BE00DD5EBF /* ATConnect+Debugging.h in Headers */ = {isa = PBXBuildFile; fileRef = 019A63C91C4DA5BE00DD5EBF /* ATConnect+Debugging.h */; };
 		019BA84D1C51695E00F74F61 /* ATAPIRequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 019BA84C1C51695E00F74F61 /* ATAPIRequestTests.m */; };
 		019BA84F1C518C0900F74F61 /* ATConnect+Debugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 019A63CA1C4DA5BE00DD5EBF /* ATConnect+Debugging.m */; };
+		019BA8521C51A28300F74F61 /* ATAppConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 019BA8501C51A28300F74F61 /* ATAppConfiguration.h */; };
+		019BA8541C51B2C100F74F61 /* ATAppConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 019BA8511C51A28300F74F61 /* ATAppConfiguration.m */; };
 		01A88FF81AFBFFAE002C49E7 /* testJsonDiffing.1.expected.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF31AFBFDB6002C49E7 /* testJsonDiffing.1.expected.json */; };
 		01A88FF91AFBFFAE002C49E7 /* testJsonDiffing.1.new.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF41AFBFDB6002C49E7 /* testJsonDiffing.1.new.json */; };
 		01A88FFA1AFBFFAE002C49E7 /* testJsonDiffing.1.old.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF51AFBFDB6002C49E7 /* testJsonDiffing.1.old.json */; };
@@ -385,6 +387,8 @@
 		019A63C91C4DA5BE00DD5EBF /* ATConnect+Debugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ATConnect+Debugging.h"; sourceTree = "<group>"; };
 		019A63CA1C4DA5BE00DD5EBF /* ATConnect+Debugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ATConnect+Debugging.m"; sourceTree = "<group>"; };
 		019BA84C1C51695E00F74F61 /* ATAPIRequestTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAPIRequestTests.m; sourceTree = "<group>"; };
+		019BA8501C51A28300F74F61 /* ATAppConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAppConfiguration.h; sourceTree = "<group>"; };
+		019BA8511C51A28300F74F61 /* ATAppConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAppConfiguration.m; sourceTree = "<group>"; };
 		019CEBE91BDEDDE100CCEC97 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		019CEBEA1BDEDDE100CCEC97 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		019CEBF01BDEDE9400CCEC97 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -1373,6 +1377,8 @@
 				49F8AFDE16CC4A550070FFEA /* ATPersonInfo.m */,
 				49F8AFF916CC4D860070FFEA /* ATRecord.h */,
 				49F8AFFA16CC4D860070FFEA /* ATRecord.m */,
+				019BA8501C51A28300F74F61 /* ATAppConfiguration.h */,
+				019BA8511C51A28300F74F61 /* ATAppConfiguration.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1585,6 +1591,7 @@
 				584647C617C426E800BFD6E6 /* ATEngagementManifestParser.h in Headers */,
 				58C5922117C55ADD000FA428 /* ATEngagementBackend.h in Headers */,
 				58C5922B17C59BE3000FA428 /* ATWebClient+EngagementAdditions.h in Headers */,
+				019BA8521C51A28300F74F61 /* ATAppConfiguration.h in Headers */,
 				017D97461B0E5795004E045C /* ATMessageCenterMessageCell.h in Headers */,
 				58EEBE2317C7E8150039A0F5 /* ATInteraction.h in Headers */,
 				583C270B1B34BFD800525001 /* ATUnreadMessagesBadgeView.h in Headers */,
@@ -1817,6 +1824,7 @@
 				58DCC0D6180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m in Sources */,
 				58D17D5018C5676F00D123BC /* ATInteractionMessageCenterController.m in Sources */,
 				58B703F91B0FAE6D0024478C /* ATMessageCenterInteraction.m in Sources */,
+				019BA8541C51B2C100F74F61 /* ATAppConfiguration.m in Sources */,
 				01D0C3911BF3DED50024BA1A /* ATAttachButton.m in Sources */,
 				491748BF1341177000A7D11E /* ATURLConnection.m in Sources */,
 				491748C11341177000A7D11E /* ATWebClient.m in Sources */,

@@ -28,7 +28,7 @@ extern NSString *const ATBackendBecameReadyNotification;
 
 #define USE_STAGING 0
 
-@class ATAppConfigurationUpdater, ATDataManager, ATFeedback, ATAPIRequest, ATMessageTask, ATDeviceInfo;
+@class ATAppConfigurationUpdater, ATDataManager, ATFeedback, ATAPIRequest, ATMessageTask, ATDeviceInfo, ATAppConfiguration;
 
 @protocol ATBackendMessageDelegate;
 
@@ -47,13 +47,11 @@ extern NSString *const ATBackendBecameReadyNotification;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 
 @property (readonly, strong, nonatomic) NSString *storagePath;
-@property (readonly, nonatomic) NSString *currentPersonStoragePath;
-@property (readonly, nonatomic) NSString *currentDeviceStoragePath;
 
 @property (strong, nonatomic) UIViewController *presentedMessageCenterViewController;
 @property (readonly, nonatomic) ATPersonInfo *currentPerson;
 @property (readonly, nonatomic) ATDeviceInfo *currentDevice;
-
+@property (strong, nonatomic) ATAppConfiguration *appConfiguration;
 
 @property (readonly, assign, nonatomic) BOOL hideBranding;
 @property (readonly, assign, nonatomic) BOOL notificationPopupsEnabled;

@@ -19,6 +19,7 @@
 #import "ATSurveyMetrics.h"
 #import "ATTaskQueue.h"
 #import "ATEngagementBackend.h"
+#import "ATAppConfiguration.h"
 
 // Engagement event labels
 
@@ -61,15 +62,6 @@ static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 		sharedSingleton = [[ApptentiveMetrics alloc] init];
 	});
 	return sharedSingleton;
-}
-
-+ (void)registerDefaults {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSDictionary *defaultPreferences =
-		[NSDictionary dictionaryWithObjectsAndKeys:
-						  [NSNumber numberWithBool:YES], ATAppConfigurationMetricsEnabledPreferenceKey,
-					  nil];
-	[defaults registerDefaults:defaultPreferences];
 }
 
 - (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo {
@@ -156,7 +148,6 @@ static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 	@autoreleasepool {
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:ATBackendBecameReadyNotification object:nil];
 
-		[ApptentiveMetrics registerDefaults];
 		[self updateWithCurrentPreferences];
 
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyDidHide:) name:ATSurveyDidHideWindowNotification object:nil];
@@ -296,11 +287,6 @@ static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 }
 
 - (void)updateWithCurrentPreferences {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-
-	NSNumber *enabled = [defaults objectForKey:ATAppConfigurationMetricsEnabledPreferenceKey];
-	if (enabled != nil) {
-		metricsEnabled = [enabled boolValue];
-	}
+	metricsEnabled = [ATConnect sharedConnection].backend.appConfiguration.metricsEnabled;
 }
 @end

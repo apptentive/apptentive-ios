@@ -39,7 +39,7 @@
 - (NSDictionary *)dictionaryRepresentation {
 	NSMutableDictionary *device = [super.dictionaryRepresentation mutableCopy];
 
-	NSString *uuid = [[ATConnect sharedConnection].backend deviceUUID];
+	NSString *uuid = [ATUtilities currentDeviceID].UUIDString;
 	if (uuid) {
 		device[@"uuid"] = uuid;
 	}

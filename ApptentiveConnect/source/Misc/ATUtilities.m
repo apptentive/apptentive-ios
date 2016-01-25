@@ -210,6 +210,10 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	return results;
 }
 
++ (NSUUID *)currentDeviceID {
+	return [UIDevice currentDevice].identifierForVendor;
+}
+
 + (NSString *)stringByEscapingForURLArguments:(NSString *)string {
 	CFStringRef result = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)string, NULL, (CFStringRef) @"%:/?#[]@!$&'()*+,;=", kCFStringEncodingUTF8);
 

@@ -98,7 +98,6 @@ extern NSString *const ATBackendBecameReadyNotification;
 
 /*! Path to directory for storing attachments. */
 - (NSString *)attachmentDirectoryPath;
-- (NSString *)deviceUUID;
 
 - (NSURL *)apptentiveHomepageURL;
 - (NSURL *)apptentivePrivacyPolicyURL;

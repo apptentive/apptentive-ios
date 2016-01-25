@@ -76,7 +76,6 @@ static NSURLCache *imageCache = nil;
 #endif
 @property (assign, nonatomic) BOOL working;
 @property (strong, nonatomic) NSTimer *messageRetrievalTimer;
-@property (copy, nonatomic) NSString *cachedDeviceUUID;
 @property (assign, nonatomic) ATBackendState state;
 @property (strong, nonatomic) ATDataManager *dataManager;
 @property (strong, nonatomic) ATConversationUpdater *conversationUpdater;
@@ -352,62 +351,6 @@ static NSURLCache *imageCache = nil;
 		return nil;
 	}
 	return newPath;
-}
-
-- (NSString *)deviceUUID {
-#if TARGET_OS_IPHONE
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		NSString *uuid = [defaults objectForKey:ATUUIDPreferenceKey];
-		
-		if (uuid && [uuid hasPrefix:@"ios:"]) {
-			// Existing UUID is a legacy value. Back it up.
-			[defaults setObject:uuid forKey:ATLegacyUUIDPreferenceKey];
-		}
-		
-		UIDevice *device = [UIDevice currentDevice];
-		if ([NSUUID class] && [device respondsToSelector:@selector(identifierForVendor)]) {
-			NSString *vendorID = [[device identifierForVendor] UUIDString];
-			if (vendorID && ![vendorID isEqualToString:uuid]) {
-				uuid = vendorID;
-				[defaults setObject:uuid forKey:ATUUIDPreferenceKey];
-			}
-		}
-		if (!uuid) {
-			// Fall back.
-			CFUUIDRef uuidRef = CFUUIDCreate(NULL);
-			CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
-			
-			uuid = [NSString stringWithFormat:@"ios:%@", (__bridge NSString *)uuidStringRef];
-			
-			CFRelease(uuidRef), uuidRef = NULL;
-			CFRelease(uuidStringRef), uuidStringRef = NULL;
-			[defaults setObject:uuid forKey:ATUUIDPreferenceKey];
-			[defaults synchronize];
-		}
-		self.cachedDeviceUUID = uuid;
-	});
-	return self.cachedDeviceUUID;
-#elif TARGET_OS_MAC
-	static CFStringRef keyRef = CFSTR("apptentiveUUID");
-	static CFStringRef appIDRef = CFSTR("com.apptentive.feedback");
-	NSString *uuid = nil;
-	uuid = (NSString *)CFPreferencesCopyAppValue(keyRef, appIDRef);
-	if (!uuid) {
-		CFUUIDRef uuidRef = CFUUIDCreate(NULL);
-		CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
-
-		uuid = [[NSString alloc] initWithFormat:@"osx:%@", (NSString *)uuidStringRef];
-
-		CFRelease(uuidRef), uuidRef = NULL;
-		CFRelease(uuidStringRef), uuidStringRef = NULL;
-
-		CFPreferencesSetValue(keyRef, (CFStringRef)uuid, appIDRef, kCFPreferencesCurrentUser, kCFPreferencesCurrentHost);
-		CFPreferencesSynchronize(appIDRef, kCFPreferencesCurrentUser, kCFPreferencesCurrentHost);
-	}
-	return [uuid autorelease];
-#endif
 }
 
 - (NSString *)appName {

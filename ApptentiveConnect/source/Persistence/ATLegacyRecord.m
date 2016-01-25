@@ -29,7 +29,7 @@
 
 - (id)init {
 	if ((self = [super init])) {
-		self.uuid = [[ATConnect sharedConnection].backend deviceUUID];
+		self.uuid = [ATUtilities currentDeviceID].UUIDString;
 #if TARGET_OS_IPHONE
 		self.model = [[UIDevice currentDevice] model];
 		self.os_version = [NSString stringWithFormat:@"%@ %@", [[UIDevice currentDevice] systemName], [[UIDevice currentDevice] systemVersion]];

@@ -20,17 +20,3 @@
 - (ATExpiry *)emptyExpiry;
 
 @end
-
-// TODO: Abstract into a protocol?
-@interface ATExpiry : NSObject
-
-- (instancetype)initWithExpirationDate:(NSDate *)expirationDate appBuild:(NSString *)appBuild SDKVersion:(NSString *)SDKVersion;
-
-@property (readonly, nonatomic) NSDate *expirationDate;
-@property (strong, nonatomic) NSString *SDKVersion;
-@property (strong, nonatomic) NSString *appBuild;
-
-@property (assign, nonatomic) NSTimeInterval maxAge;
-@property (readonly, nonatomic, getter=isExpired) BOOL expired;
-
-@end

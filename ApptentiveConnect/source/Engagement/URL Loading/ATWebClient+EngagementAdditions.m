@@ -23,14 +23,14 @@
 	conn.timeoutInterval = 20.0;
 
 	ATConversation *conversation = [ATConnect sharedConnection].backend.currentConversation;
-	if (!conversation) {
+	if (!conversation.token) {
 		ATLogError(@"No current conversation.");
 		return nil;
 	}
 	[self updateConnection:conn withOAuthToken:conversation.token];
 
 	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:[self commonChannelName]];
-	request.returnType = ATAPIRequestReturnTypeData;
+	request.returnType = ATAPIRequestReturnTypeJSON;
 	return request;
 }
 

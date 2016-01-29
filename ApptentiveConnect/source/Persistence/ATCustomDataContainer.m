@@ -32,7 +32,7 @@ NSString *const ATDataNeedsSaveNotification = @"ATDataNeedsSaveNotification";
 	self = [super init];
 
 	if (self) {
-		_customData = [[JSON objectForKey:@"custom_data"] mutableCopy];
+		_customData = [[JSON objectForKey:@"custom_data"] mutableCopy] ?: [[NSMutableDictionary alloc] init];
 	}
 
 	return self;

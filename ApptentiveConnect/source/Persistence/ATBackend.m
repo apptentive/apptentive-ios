@@ -414,12 +414,6 @@ static NSURLCache *imageCache = nil;
 
 #pragma mark Accessors
 
-- (void)setAppConfiguration:(ATAppConfiguration *)appConfiguration {
-	_appConfiguration = appConfiguration;
-
-	[NSKeyedArchiver archiveRootObject:self.appConfiguration toFile:self.appConfigurationStoragePath];
-}
-
 - (void)setWorking:(BOOL)working {
 	if (_working != working) {
 		_working = working;
@@ -461,15 +455,19 @@ static NSURLCache *imageCache = nil;
 }
 
 - (ATPersonInfo *)currentPerson {
-	return (ATPersonInfo *)self.personUpdater.currentVersion;
+	return self.personUpdater.currentPerson;
 }
 
 - (ATDeviceInfo *)currentDevice {
-	return (ATDeviceInfo *)self.deviceUpdater.currentVersion;
+	return self.deviceUpdater.currentDevice;
 }
 
 - (ATConversation *)currentConversation {
-	return (ATConversation *)self.conversationUpdater.currentVersion;
+	return self.conversationUpdater.currentConversation;
+}
+
+- (ATAppConfiguration *)appConfiguration {
+	return self.appConfigurationUpdater.appConfiguration;
 }
 
 - (BOOL)notificationPopupsEnabled {
@@ -481,7 +479,10 @@ static NSURLCache *imageCache = nil;
 		[self performSelectorOnMainThread:@selector(updateConversationIfNeeded) withObject:nil waitUntilDone:NO];
 		return;
 	}
-	if (self.conversationUpdater.needsUpdate) {
+	if (self.conversationUpdater.needsCreation) {
+		ATLogInfo(@"Creating conversation");
+		[self.conversationUpdater create];
+	} else 	if (self.conversationUpdater.needsUpdate) {
 		[self.conversationUpdater update];
 	}
 }
@@ -491,7 +492,7 @@ static NSURLCache *imageCache = nil;
 		[self performSelectorOnMainThread:@selector(updateDeviceIfNeeded) withObject:nil waitUntilDone:NO];
 		return;
 	}
-	if (self.currentConversation == nil) {
+	if (self.currentConversation.token == nil) {
 		return;
 	}
 
@@ -505,7 +506,7 @@ static NSURLCache *imageCache = nil;
 		[self performSelectorOnMainThread:@selector(updatePersonIfNeeded) withObject:nil waitUntilDone:NO];
 		return;
 	}
-	if (self.currentConversation == nil) {
+	if (self.currentConversation.token == nil) {
 		return;
 	}
 
@@ -519,7 +520,7 @@ static NSURLCache *imageCache = nil;
 }
 
 - (void)updateConfigurationIfNeeded {
-	if (self.currentConversation == nil) {
+	if (self.currentConversation.token == nil) {
 		return;
 	}
 
@@ -529,7 +530,7 @@ static NSURLCache *imageCache = nil;
 }
 
 - (void)updateEngagementManifestIfNeeded {
-	if (self.currentConversation == nil) {
+	if (self.currentConversation.token == nil) {
 		return;
 	}
 
@@ -566,12 +567,13 @@ static NSURLCache *imageCache = nil;
 	} else if (updater == self.deviceUpdater) {
 		// No action
 	} else if (updater == self.conversationUpdater) {
-		if ([(ATConversationUpdater *)updater isCreating]) {
+		if (self.conversationUpdater.creating) {
 			if (!success) {
 				// Retry after delay.
 				[self performSelector:@selector(updateConversationIfNeeded) withObject:nil afterDelay:20];
 			} else {
 				// Queued tasks can probably start now.
+				ATLogInfo(@"Conversation created successfully.");
 				ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
 				[queue start];
 				[self updateConfigurationIfNeeded];
@@ -582,6 +584,12 @@ static NSURLCache *imageCache = nil;
 		}
 	} else if (updater == self.appConfigurationUpdater) {
 		[[ApptentiveMetrics sharedMetrics] preferencesChanged];
+//
+//		if (self.messageCenterInForeground) {
+//			[self checkForMessagesAtForegroundRefreshInterval];
+//		} else {
+//			[self checkForMessagesAtBackgroundRefreshInterval];
+//		}
 	}
 }
 
@@ -867,12 +875,10 @@ static NSURLCache *imageCache = nil;
 }
 
 - (void)checkForEngagementManifest {
-	@autoreleasepool {
-		if (![self isReady]) {
-			return;
-		}
-		[[ATConnect sharedConnection].engagementBackend checkForEngagementManifest];
+	if (![self isReady]) {
+		return;
 	}
+	[[ATConnect sharedConnection].engagementBackend checkForEngagementManifest];
 }
 
 - (void)setupDataManager {

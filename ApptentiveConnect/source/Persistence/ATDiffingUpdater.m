@@ -17,7 +17,6 @@
 
 @implementation ATDiffingUpdater
 
-@synthesize currentVersion = _currentVersion;
 @synthesize previousVersion = _previousVersion;
 
 #pragma  mark - Methods to override
@@ -35,22 +34,14 @@
 	// Subclasses should clear out user defaults keys after migration
 }
 
-- (id<ATUpdatable>)emptyCurrentVersion	{
-	return nil;
-}
-
 - (ATAPIRequest *)requestForUpdating {
 	return nil;
 }
 
 #pragma mark -
 
-- (NSString *)currentVersionPath {
-	return [self.storagePath stringByAppendingPathExtension:@".current"];
-}
-
 - (NSString *)previousVersionPath {
-	return [self.storagePath stringByAppendingPathExtension:@".previous"];
+	return [self.storagePath stringByAppendingPathExtension:@"previous"];
 }
 
 - (BOOL)needsUpdate {
@@ -83,7 +74,7 @@
 		}
 	}
 
-	return _currentVersion;
+	return _previousVersion;
 }
 
 - (void)update {

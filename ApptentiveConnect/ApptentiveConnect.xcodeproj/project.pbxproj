@@ -85,6 +85,8 @@
 		019BA8A11C59A98E00F74F61 /* ATDiffingUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 019BA89F1C59A98E00F74F61 /* ATDiffingUpdater.m */; };
 		019BA8A41C59AC5000F74F61 /* ATExpiringUpdater.h in Headers */ = {isa = PBXBuildFile; fileRef = 019BA8A21C59AC5000F74F61 /* ATExpiringUpdater.h */; };
 		019BA8A51C59AC5000F74F61 /* ATExpiringUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 019BA8A31C59AC5000F74F61 /* ATExpiringUpdater.m */; };
+		01A789641C5C17260066A173 /* ATExpiry.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A789621C5C17260066A173 /* ATExpiry.h */; };
+		01A789651C5C17260066A173 /* ATExpiry.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A789631C5C17260066A173 /* ATExpiry.m */; };
 		01A88FF81AFBFFAE002C49E7 /* testJsonDiffing.1.expected.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF31AFBFDB6002C49E7 /* testJsonDiffing.1.expected.json */; };
 		01A88FF91AFBFFAE002C49E7 /* testJsonDiffing.1.new.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF41AFBFDB6002C49E7 /* testJsonDiffing.1.new.json */; };
 		01A88FFA1AFBFFAE002C49E7 /* testJsonDiffing.1.old.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF51AFBFDB6002C49E7 /* testJsonDiffing.1.old.json */; };
@@ -188,8 +190,6 @@
 		4960A534171F70530082669B /* ATNetworkImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4960A532171F70530082669B /* ATNetworkImageView.m */; };
 		4961A402161BBD7000E30037 /* ATMessageTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 4961A400161BBD7000E30037 /* ATMessageTask.h */; };
 		4961A403161BBD7000E30037 /* ATMessageTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 4961A401161BBD7000E30037 /* ATMessageTask.m */; };
-		4961A40B161BBE0800E30037 /* ATOldPersonUpdater.h in Headers */ = {isa = PBXBuildFile; fileRef = 4961A409161BBE0800E30037 /* ATOldPersonUpdater.h */; };
-		4961A40F161BBE1F00E30037 /* ATOldDeviceUpdater.h in Headers */ = {isa = PBXBuildFile; fileRef = 4961A40D161BBE1F00E30037 /* ATOldDeviceUpdater.h */; };
 		4967278216B9D9CB00C679B8 /* ATConnect_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4967278116B9D9CB00C679B8 /* ATConnect_Private.h */; };
 		4967278416B9FE6400C679B8 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4967278316B9FE6400C679B8 /* Info.plist */; };
 		496DC3831333D35600743F65 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC3821333D35600743F65 /* Foundation.framework */; };
@@ -214,7 +214,6 @@
 		499912A9161B6AF700FDA15F /* ATWebClient+MessageCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 499912A7161B6AF700FDA15F /* ATWebClient+MessageCenter.m */; };
 		49AAA17B1633716F00B26851 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49AAA17A1633716F00B26851 /* StoreKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		49AAC854175FFA4800F08879 /* ATTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AAC853175FFA4800F08879 /* ATTypes.h */; };
-		49AC178216C0987400BE1615 /* ATOldConversationUpdater.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AC178016C0987400BE1615 /* ATOldConversationUpdater.h */; };
 		49AC178D16C0A0BC00BE1615 /* ATJSONModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AC178C16C0A0BC00BE1615 /* ATJSONModel.h */; };
 		49ADE8DC1626167F00DD8634 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49ADE8DB1626167F00DD8634 /* CoreText.framework */; };
 		49B3D96B133E6D6400B5A5CD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B3D968133E6D6400B5A5CD /* CoreGraphics.framework */; };
@@ -418,6 +417,8 @@
 		019CEBF11BDEDE9400CCEC97 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		019CEBF21BDEDECE00CCEC97 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		019CEBF31BDEDECE00CCEC97 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
+		01A789621C5C17260066A173 /* ATExpiry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATExpiry.h; sourceTree = "<group>"; };
+		01A789631C5C17260066A173 /* ATExpiry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATExpiry.m; sourceTree = "<group>"; };
 		01A88FF31AFBFDB6002C49E7 /* testJsonDiffing.1.expected.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.1.expected.json; sourceTree = "<group>"; };
 		01A88FF41AFBFDB6002C49E7 /* testJsonDiffing.1.new.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.1.new.json; sourceTree = "<group>"; };
 		01A88FF51AFBFDB6002C49E7 /* testJsonDiffing.1.old.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.1.old.json; sourceTree = "<group>"; };
@@ -524,10 +525,6 @@
 		4960A532171F70530082669B /* ATNetworkImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATNetworkImageView.m; sourceTree = "<group>"; };
 		4961A400161BBD7000E30037 /* ATMessageTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageTask.h; sourceTree = "<group>"; };
 		4961A401161BBD7000E30037 /* ATMessageTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageTask.m; sourceTree = "<group>"; };
-		4961A409161BBE0800E30037 /* ATOldPersonUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATOldPersonUpdater.h; sourceTree = "<group>"; };
-		4961A40A161BBE0800E30037 /* ATOldPersonUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATOldPersonUpdater.m; sourceTree = "<group>"; };
-		4961A40D161BBE1F00E30037 /* ATOldDeviceUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATOldDeviceUpdater.h; sourceTree = "<group>"; };
-		4961A40E161BBE1F00E30037 /* ATOldDeviceUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATOldDeviceUpdater.m; sourceTree = "<group>"; };
 		4967278116B9D9CB00C679B8 /* ATConnect_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATConnect_Private.h; sourceTree = "<group>"; };
 		4967278316B9FE6400C679B8 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		496DC37F1333D35600743F65 /* libApptentiveConnect.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libApptentiveConnect.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -558,8 +555,6 @@
 		499912A7161B6AF700FDA15F /* ATWebClient+MessageCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ATWebClient+MessageCenter.m"; sourceTree = "<group>"; };
 		49AAA17A1633716F00B26851 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		49AAC853175FFA4800F08879 /* ATTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATTypes.h; sourceTree = "<group>"; };
-		49AC178016C0987400BE1615 /* ATOldConversationUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATOldConversationUpdater.h; sourceTree = "<group>"; };
-		49AC178116C0987400BE1615 /* ATOldConversationUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATOldConversationUpdater.m; sourceTree = "<group>"; };
 		49AC178C16C0A0BC00BE1615 /* ATJSONModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATJSONModel.h; sourceTree = "<group>"; };
 		49ADE8DB1626167F00DD8634 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		49B3D968133E6D6400B5A5CD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -1037,6 +1032,8 @@
 				019BA89F1C59A98E00F74F61 /* ATDiffingUpdater.m */,
 				019BA8A21C59AC5000F74F61 /* ATExpiringUpdater.h */,
 				019BA8A31C59AC5000F74F61 /* ATExpiringUpdater.m */,
+				01A789621C5C17260066A173 /* ATExpiry.h */,
+				01A789631C5C17260066A173 /* ATExpiry.m */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -1105,19 +1102,6 @@
 				49E3A26E1628F4FF000675B4 /* ATGetMessagesTask.m */,
 			);
 			path = Tasks;
-			sourceTree = "<group>";
-		};
-		4961A408161BBDBE00E30037 /* Persistence */ = {
-			isa = PBXGroup;
-			children = (
-				4961A409161BBE0800E30037 /* ATOldPersonUpdater.h */,
-				4961A40A161BBE0800E30037 /* ATOldPersonUpdater.m */,
-				4961A40D161BBE1F00E30037 /* ATOldDeviceUpdater.h */,
-				4961A40E161BBE1F00E30037 /* ATOldDeviceUpdater.m */,
-				49AC178016C0987400BE1615 /* ATOldConversationUpdater.h */,
-				49AC178116C0987400BE1615 /* ATOldConversationUpdater.m */,
-			);
-			path = Persistence;
 			sourceTree = "<group>";
 		};
 		4967278516B9FE7000C679B8 /* ApptentiveResources */ = {
@@ -1212,7 +1196,6 @@
 				491E03D81640D01F00DC3E18 /* ATFeedbackTypes.h */,
 				49735D601832DF1F00D48DE7 /* ATMessageCenterDataSource.h */,
 				49735D611832DF1F00D48DE7 /* ATMessageCenterDataSource.m */,
-				4961A408161BBDBE00E30037 /* Persistence */,
 				49AC178B16C0A09200BE1615 /* Protocols */,
 				4961A3FF161BBD5200E30037 /* Tasks */,
 				499912A5161B6AC800FDA15F /* URL Loading */,
@@ -1550,6 +1533,7 @@
 				01BF866C1C3CA2F700D713E5 /* ATCustomDataContainer.h in Headers */,
 				49B877111464958C00594A5D /* ATWebClient_Private.h in Headers */,
 				49EA5AB014BD08AD004F8A4D /* ATLegacyRecord.h in Headers */,
+				01A789641C5C17260066A173 /* ATExpiry.h in Headers */,
 				49EA5ABD14BD0F4D004F8A4D /* ATRecordTask.h in Headers */,
 				58B703EE1B0EB6DB0024478C /* ATMessageCenterViewController.h in Headers */,
 				49CEFF5D15168B54006D8BA8 /* ATAppConfigurationUpdater.h in Headers */,
@@ -1565,10 +1549,8 @@
 				493AEB3F15990A4D00DFD4C7 /* ATSurveyViewController.h in Headers */,
 				499912A8161B6AF700FDA15F /* ATWebClient+MessageCenter.h in Headers */,
 				4961A402161BBD7000E30037 /* ATMessageTask.h in Headers */,
-				4961A40B161BBE0800E30037 /* ATOldPersonUpdater.h in Headers */,
 				017D974A1B0E57C2004E045C /* ATMessageCenterReplyCell.h in Headers */,
 				019BA86A1C5983CF00F74F61 /* ATEngagementManifestUpdater.h in Headers */,
-				4961A40F161BBE1F00E30037 /* ATOldDeviceUpdater.h in Headers */,
 				019BA8611C5818FA00F74F61 /* ATDeviceUpdater.h in Headers */,
 				49E3A26F1628F4FF000675B4 /* ATGetMessagesTask.h in Headers */,
 				491E03CE163F261C00DC3E18 /* ATLog.h in Headers */,
@@ -1577,7 +1559,6 @@
 				4967278216B9D9CB00C679B8 /* ATConnect_Private.h in Headers */,
 				019BA85D1C57F06E00F74F61 /* ATPersonUpdater.h in Headers */,
 				583DF06E1A44CD6E00BF0207 /* ATInteractionNavigateToLink.h in Headers */,
-				49AC178216C0987400BE1615 /* ATOldConversationUpdater.h in Headers */,
 				49AC178D16C0A0BC00BE1615 /* ATJSONModel.h in Headers */,
 				0127EA101BF1271C0005481A /* ATCompoundMessageCell.h in Headers */,
 				586C47A918B424E900725C22 /* ATInteractionEnjoymentDialogController.h in Headers */,
@@ -1851,6 +1832,7 @@
 				58B703F91B0FAE6D0024478C /* ATMessageCenterInteraction.m in Sources */,
 				019BA8541C51B2C100F74F61 /* ATAppConfiguration.m in Sources */,
 				01D0C3911BF3DED50024BA1A /* ATAttachButton.m in Sources */,
+				01A789651C5C17260066A173 /* ATExpiry.m in Sources */,
 				491748BF1341177000A7D11E /* ATURLConnection.m in Sources */,
 				491748C11341177000A7D11E /* ATWebClient.m in Sources */,
 				49509A62135658E200793EEC /* ATReachability.m in Sources */,

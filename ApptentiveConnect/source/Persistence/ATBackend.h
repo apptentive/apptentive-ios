@@ -55,7 +55,7 @@ extern NSString *const ATBackendBecameReadyNotification;
 @property (readonly, nonatomic) ATPersonInfo *currentPerson;
 @property (readonly, nonatomic) ATDeviceInfo *currentDevice;
 @property (readonly, nonatomic) ATConversation *currentConversation;
-@property (strong, nonatomic) ATAppConfiguration *appConfiguration;
+@property (readonly, nonatomic) ATAppConfiguration *appConfiguration;
 
 @property (readonly, assign, nonatomic) BOOL hideBranding;
 @property (readonly, assign, nonatomic) BOOL notificationPopupsEnabled;

@@ -45,7 +45,7 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 
 - (ATAPIRequest *)requestForGettingAppConfiguration {
 	ATConversation *conversation = [ATConnect sharedConnection].backend.currentConversation;
-	if (!conversation) {
+	if (!conversation.token) {
 		return nil;
 	}
 	ATURLConnection *conn = [self connectionToGet:@"/conversation/configuration"];

@@ -53,7 +53,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 	if ([ATConnect sharedConnection].webClient == nil) {
 		return NO;
 	}
-	if ([ATConnect sharedConnection].backend.currentConversation == nil) {
+	if ([ATConnect sharedConnection].backend.currentConversation.token == nil) {
 		return NO;
 	}
 	return YES;

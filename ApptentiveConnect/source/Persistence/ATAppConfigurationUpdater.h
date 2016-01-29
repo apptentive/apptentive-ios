@@ -8,9 +8,14 @@
 
 #import "ATExpiringUpdater.h"
 
+@class ATAppConfiguration;
+
 extern NSString *const ATConfigurationSDKVersionKey;
 extern NSString *const ATConfigurationAppBuildNumberKey;
 extern NSString *const ATAppConfigurationExpirationPreferenceKey;
 
 @interface ATAppConfigurationUpdater : ATExpiringUpdater
+
+@property (readonly, nonatomic) ATAppConfiguration *appConfiguration;
+
 @end

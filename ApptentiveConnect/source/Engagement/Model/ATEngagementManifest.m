@@ -11,6 +11,9 @@
 #import "ATInteraction.h"
 #import "ATInteractionInvocation.h"
 
+NSString *const TargetsKey = @"targets";
+NSString *const InteractionsKey = @"interactions";
+
 @implementation ATEngagementManifest
 
 - (instancetype)init
@@ -69,6 +72,24 @@
 	}
 	
 	return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+	self = [super init];
+
+	if (self) {
+		_targets = [coder decodeObjectForKey:TargetsKey];
+		_interactions = [coder decodeObjectForKey:InteractionsKey];
+	}
+
+	return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+	[coder encodeObject:self.targets forKey:TargetsKey];
+	[coder encodeObject:self.interactions forKey:InteractionsKey];
 }
 
 // Included for completeness of the ATUpdatable protocol

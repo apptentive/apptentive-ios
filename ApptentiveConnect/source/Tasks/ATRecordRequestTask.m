@@ -11,6 +11,7 @@
 #import "ATWebClient.h"
 #import "ATConnect_Private.h"
 #import "ATBackend.h"
+#import "ATConversation.h"
 
 #define kATRecordRequestTaskCodingVersion 1
 
@@ -61,7 +62,7 @@ fail:
 	if ([ATConnect sharedConnection].webClient == nil) {
 		return NO;
 	}
-	if ([ATConnect sharedConnection].backend.currentConversation == nil) {
+	if ([ATConnect sharedConnection].backend.currentConversation.token == nil) {
 		return NO;
 	}
 	return YES;

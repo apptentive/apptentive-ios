@@ -38,7 +38,6 @@ NSString *const ATEngagementInteractionsInvokesTotalKey = @"ATEngagementInteract
 NSString *const ATEngagementInteractionsInvokesVersionKey = @"ATEngagementInteractionsInvokesVersionKey";
 NSString *const ATEngagementInteractionsInvokesLastDateKey = @"ATEngagementInteractionsInvokesLastDateKey";
 NSString *const ATEngagementInteractionsInvokesBuildKey = @"ATEngagementInteractionsInvokesBuildKey";
-NSString *const ATEngagementInteractionsSDKVersionKey = @"ATEngagementInteractionsSDKVersionKey";
 
 NSString *const ATEngagementCodePointHostAppVendorKey = @"local";
 NSString *const ATEngagementCodePointHostAppInteractionKey = @"app";
@@ -68,7 +67,7 @@ NSString *const ATEngagementSDKDistributionVersionKey = @"ATEngagementSDKDistrib
 
 	if (self) {
 		_storagePath = storagePath;
-		self.manifestUpdater = [[ATEngagementManifestUpdater alloc] init];
+		self.manifestUpdater = [[ATEngagementManifestUpdater alloc] initWithStoragePath:storagePath];
 		self.manifestUpdater.delegate = self;
 
 		_engagementData = [self emptyEngagementData];
@@ -94,7 +93,6 @@ NSString *const ATEngagementSDKDistributionVersionKey = @"ATEngagementSDKDistrib
 							  ATEngagementInteractionsInvokesVersionKey,
 							  ATEngagementInteractionsInvokesBuildKey,
 							  ATEngagementInteractionsInvokesLastDateKey,
-							  ATEngagementInteractionsSDKVersionKey
 							  ];
 
 			for (NSString *key in keys) {
@@ -153,6 +151,7 @@ NSString *const ATEngagementSDKDistributionVersionKey = @"ATEngagementSDKDistrib
 
 - (void)updater:(ATUpdater *)updater didFinish:(BOOL)success {
 	if (success) {
+		ATLogInfo(@"Received remote Interactions from Apptentive.");
 		[self updateVersionInfo];
 	}
 }

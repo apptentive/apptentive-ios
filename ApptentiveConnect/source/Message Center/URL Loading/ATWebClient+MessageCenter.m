@@ -74,7 +74,7 @@
 	}
 
 	ATConversation *conversation = [ATConnect sharedConnection].backend.currentConversation;
-	if (!conversation) {
+	if (!conversation.token) {
 		ATLogError(@"No current conversation.");
 		return nil;
 	}
@@ -98,7 +98,7 @@
 	}
 
 	ATConversation *conversation = [ATConnect sharedConnection].backend.currentConversation;
-	if (!conversation) {
+	if (!conversation.token) {
 		ATLogError(@"No current conversation.");
 		return nil;
 	}
@@ -122,7 +122,7 @@
 	}
 
 	ATConversation *conversation = [ATConnect sharedConnection].backend.currentConversation;
-	if (!conversation) {
+	if (!conversation.token) {
 		ATLogError(@"No current conversation");
 		return nil;
 	}
@@ -142,7 +142,7 @@
 	}
 
 	ATConversation *conversation = [ATConnect sharedConnection].backend.currentConversation;
-	if (!conversation) {
+	if (!conversation.token) {
 		ATLogError(@"No current conversation.");
 		return nil;
 	}

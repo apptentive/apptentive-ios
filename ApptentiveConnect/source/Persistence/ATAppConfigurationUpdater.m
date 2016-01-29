@@ -10,6 +10,7 @@
 #import "ATAppConfiguration.h"
 #import "ATWebClient.h"
 #import "ATConnect_Private.h"
+#import "ATExpiry.h"
 
 NSString *const ATAppConfigurationExpirationPreferenceKey = @"ATAppConfigurationExpirationPreferenceKey";
 NSString *const ATConfigurationSDKVersionKey = @"ATConfigurationSDKVersionKey";
@@ -39,6 +40,10 @@ NSString *const ATConfigurationAppBuildNumberKey = @"ATConfigurationAppBuildNumb
 
 - (ATAPIRequest *)requestForUpdating {
 	return [[ATConnect sharedConnection].webClient requestForGettingAppConfiguration];
+}
+
+- (ATAppConfiguration *)appConfiguration {
+	return (ATAppConfiguration *)self.currentVersion;
 }
 
 @end

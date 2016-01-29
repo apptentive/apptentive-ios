@@ -14,7 +14,6 @@
 
 @property (readonly, nonatomic) id<ATUpdatable> previousVersion;
 @property (strong, nonatomic) id<ATUpdatable> updateVersion;
-@property (readonly, nonatomic) id<ATUpdatable> currentVersion;
 
 - (id<ATUpdatable>)previousVersionFromUserDefaults:(NSUserDefaults *)userDefaults;
 - (void)removePreviousVersionFromUserDefaults:(NSUserDefaults *)userDefaults;

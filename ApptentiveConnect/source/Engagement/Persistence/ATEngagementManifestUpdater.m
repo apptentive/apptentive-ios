@@ -8,6 +8,9 @@
 
 #import "ATEngagementManifestUpdater.h"
 #import "ATEngagementManifest.h"
+#import "ATExpiry.h"
+#import "ATConnect_Private.h"
+#import "ATWebClient+EngagementAdditions.h"
 
 @interface ATEngagementManifestUpdater ()
 
@@ -18,6 +21,8 @@
 
 @end
 
+NSString *const ATEngagementInteractionsSDKVersionKey = @"ATEngagementInteractionsSDKVersionKey";
+NSString *const ATEngagementInteractionsAppBuildNumberKey = @"ATEngagementInteractionsAppBuildNumberKey";
 NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEngagementCachedInteractionsExpirationPreferenceKey";
 
 @implementation ATEngagementManifestUpdater
@@ -26,12 +31,18 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 	return [ATEngagementManifest class];
 }
 
-- (NSDate *)expiryFromUserDefaults:(NSUserDefaults *)userDefaults {
-	return [userDefaults objectForKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
+- (ATExpiry *)expiryFromUserDefaults:(NSUserDefaults *)userDefaults {
+	NSDate *expirationDate =  [userDefaults objectForKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
+	NSString *appBuild = [userDefaults objectForKey:ATEngagementInteractionsSDKVersionKey];
+	NSString *SDKVersion = [userDefaults objectForKey:ATEngagementInteractionsAppBuildNumberKey];
+
+	return [[ATExpiry alloc] initWithExpirationDate:expirationDate appBuild:appBuild SDKVersion:SDKVersion];
 }
 
 - (void)removeExpiryFromUserDefaults:(NSUserDefaults *)userDefaults {
 	[userDefaults removeObjectForKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
+	[userDefaults removeObjectForKey:ATEngagementInteractionsSDKVersionKey];
+	[userDefaults removeObjectForKey:ATEngagementInteractionsAppBuildNumberKey];
 }
 
 - (NSString *)cachedTargetsStoragePath {
@@ -73,6 +84,14 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 - (void)removeCurrentVersionFromUserDefaults:(NSUserDefaults *)userDefaults {
 	[[NSFileManager defaultManager] removeItemAtPath:self.cachedInteractionsStoragePath error:NULL];
 	[[NSFileManager defaultManager] removeItemAtPath:self.cachedTargetsStoragePath error:NULL];
+}
+
+- (id<ATUpdatable>)emptyCurrentVersion {
+	return [[ATEngagementManifest alloc] init];
+}
+
+- (ATAPIRequest *)requestForUpdating {
+	return [[ATConnect sharedConnection].webClient requestForGettingEngagementManifest];
 }
 
 - (ATEngagementManifest *)manifest {

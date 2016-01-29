@@ -40,7 +40,7 @@
 #pragma mark -
 
 - (NSString *)currentVersionPath {
-	return [self.storagePath stringByAppendingPathExtension:@".current"];
+	return [self.storagePath stringByAppendingPathExtension:@"current"];
 }
 
 - (instancetype)initWithStoragePath:(NSString *)storagePath {
@@ -104,8 +104,8 @@
 		id<ATUpdatable> updatable = [[[self class] updatableClass] newInstanceFromDictionary:(NSDictionary *)result];
 		if (updatable) {
 			_currentVersion = updatable;
-			[self didUpdateWithRequest:request];
 			[self.delegate updater:self didFinish:YES];
+			[self didUpdateWithRequest:request];
 			self.request = nil;
 		}
 	} else {

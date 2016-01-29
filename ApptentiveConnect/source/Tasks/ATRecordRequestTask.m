@@ -10,7 +10,7 @@
 #import "ATData.h"
 #import "ATWebClient.h"
 #import "ATConnect_Private.h"
-#import "ATConversationUpdater.h"
+#import "ATBackend.h"
 
 #define kATRecordRequestTaskCodingVersion 1
 
@@ -61,7 +61,7 @@ fail:
 	if ([ATConnect sharedConnection].webClient == nil) {
 		return NO;
 	}
-	if (![ATConversationUpdater conversationExists]) {
+	if ([ATConnect sharedConnection].backend.currentConversation == nil) {
 		return NO;
 	}
 	return YES;

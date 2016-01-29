@@ -53,7 +53,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 	if ([ATConnect sharedConnection].webClient == nil) {
 		return NO;
 	}
-	if (![ATConversationUpdater conversationExists]) {
+	if ([ATConnect sharedConnection].backend.currentConversation == nil) {
 		return NO;
 	}
 	return YES;
@@ -132,7 +132,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 	NSManagedObjectContext *context = [[ATConnect sharedConnection].backend managedObjectContext];
 	NSString *lastMessageID = nil;
 
-	ATConversation *conversation = [ATConversationUpdater currentConversation];
+	ATConversation *conversation = [ATConnect sharedConnection].backend.currentConversation;
 
 	do { // once
 		if (!jsonMessages) break;

@@ -10,7 +10,7 @@
 #import "ATConnect.h"
 #import "ATUtilities.h"
 #import "NSDictionary+ATAdditions.h"
-//#import "ATAppConfigurationUpdater.h"
+#import "ATAppConfigurationUpdater.h"
 
 // JSON + NSCoding keys
 NSString *const applicationDisplayNameKey = @"app_display_name";
@@ -23,7 +23,6 @@ NSString *const notificationPopupKey = @"notification_popup";
 NSString *const enabledKey = @"enabled";
 
 // NSCoding keys
-NSString *const expirationDateKey = @"expiration_date";
 NSString *const creationSDKVersionKey = @"created_sdk_version";
 NSString *const creationApplicationBuildNumberKey = @"created_app_build_number";
 NSString *const messageCenterForegroundPollingIntervalKey = @"message_center_fg_poll";
@@ -31,9 +30,6 @@ NSString *const messageCenterBackgroundPollingIntervalKey = @"message_center_bg_
 NSString *const notificationPopupsEnabledKey = @"notification_popups_enabled";
 
 // Legacy NSUserDefaults keys
-NSString *const ATConfigurationSDKVersionKey = @"ATConfigurationSDKVersionKey";
-NSString *const ATConfigurationAppBuildNumberKey = @"ATConfigurationAppBuildNumberKey";
-NSString *const ATAppConfigurationExpirationPreferenceKey = @"ATAppConfigurationExpirationPreferenceKey";
 NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigurationMetricsEnabledPreferenceKey";
 NSString *const ATAppConfigurationHideBrandingKey = @"ATAppConfigurationHideBrandingKey";
 NSString *const ATAppConfigurationNotificationPopupsEnabledKey = @"ATAppConfigurationNotificationPopupsEnabledKey";
@@ -43,12 +39,13 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 
 @implementation ATAppConfiguration
 
-- (instancetype)initWithJSONDictionary:(NSDictionary *)JSONDictionary validForInterval:(NSTimeInterval)validInterval
-{
++ (instancetype)newInstanceFromDictionary:(NSDictionary *)dictionary {
+	return [[self alloc] initWithJSONDictionary:dictionary];
+}
+
+- (instancetype)initWithJSONDictionary:(NSDictionary *)JSONDictionary {
 	self = [self init];
 	if (self) {
-		_expirationDate = [NSDate dateWithTimeIntervalSinceNow:validInterval];
-
 		if ([[JSONDictionary objectForKey:applicationDisplayNameKey] isKindOfClass:[NSString class]]) {
 			_applicationDisplayName = [JSONDictionary objectForKey:applicationDisplayNameKey];
 		}
@@ -88,7 +85,6 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 {
 	self = [super init];
 	if (self) {
-		_expirationDate = [NSDate date];
 		_creationSDKVersion = kATConnectVersionString;
 		_creationApplicationBuildNumber = [ATUtilities buildNumberString];
 
@@ -99,14 +95,13 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 		_messageCenterBackgroundPollingInterval = 60.0;
 
 		_notificationPopupsEnabled = NO;
-}
+	}
 	return self;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
 	self = [super init];
 
-	_expirationDate = [aDecoder decodeObjectForKey:expirationDateKey];
 	_creationSDKVersion = [aDecoder decodeObjectForKey:creationSDKVersionKey];
 	_creationApplicationBuildNumber = [aDecoder decodeObjectForKey:creationApplicationBuildNumberKey];
 
@@ -126,7 +121,6 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	self = [super init];
 
 	if (self) {
-		_expirationDate = [userDefaults objectForKey:ATAppConfigurationExpirationPreferenceKey];
 		_creationSDKVersion = [userDefaults objectForKey:ATConfigurationSDKVersionKey];
 		_creationApplicationBuildNumber = [userDefaults objectForKey:ATConfigurationAppBuildNumberKey];
 
@@ -169,7 +163,6 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
-	[coder encodeObject:self.expirationDate forKey:expirationDateKey];
 	[coder encodeObject:self.creationSDKVersion forKey:creationSDKVersionKey];
 	[coder encodeObject:self.creationApplicationBuildNumber forKey:creationApplicationBuildNumberKey];
 
@@ -197,8 +190,20 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	return YES;
 }
 
-- (BOOL)isValid {
-	return [self.expirationDate timeIntervalSinceNow] > 0 && [self.creationSDKVersion isEqualToString:kATConnectVersionString] && [self.creationApplicationBuildNumber isEqualToString:[ATUtilities buildNumberString]];
+// This is not really used, but included for completeness with the ATUpdatable protocol
+- (NSDictionary *)dictionaryRepresentation {
+	return @{
+		@"app_display_name": self.applicationDisplayName,
+		@"metrics_enabled": @(self.metricsEnabled),
+		@"hide_branding": @(self.hideBranding),
+		@"message_center": @{
+			 @"fg_poll": @(self.messageCenterForegroundPollingInterval),
+			 @"bg_poll": @(self.messageCenterBackgroundPollingInterval),
+			 @"notification_popup": @{
+						@"enabled": @(self.notificationPopupsEnabled)
+					 },
+			 },
+		};
 }
 
 @end

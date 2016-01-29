@@ -50,7 +50,7 @@
 	if ([ATConnect sharedConnection].webClient == nil) {
 		return NO;
 	}
-	if (![ATConversationUpdater conversationExists]) {
+	if ([ATConnect sharedConnection].backend.currentConversation == nil) {
 		return NO;
 	}
 	return YES;

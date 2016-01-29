@@ -18,8 +18,8 @@
 - (ATAPIRequest *)requestForCreatingConversation:(ATConversation *)conversation;
 - (ATAPIRequest *)requestForUpdatingConversation:(ATConversation *)conversation;
 
-- (ATAPIRequest *)requestForUpdatingDevice:(ATDeviceInfo *)deviceInfo;
-- (ATAPIRequest *)requestForUpdatingPerson:(ATPersonInfo *)personInfo;
+- (ATAPIRequest *)requestForUpdatingDevice:(ATDeviceInfo *)deviceInfo fromPreviousDevice:(ATDeviceInfo *)previousDevice;
+- (ATAPIRequest *)requestForUpdatingPerson:(ATPersonInfo *)personInfo fromPreviousPerson:(ATPersonInfo *)previousPerson;
 - (ATAPIRequest *)requestForPostingMessage:(ATMessage *)message;
 - (ATAPIRequest *)requestForRetrievingMessagesSinceMessage:(ATMessage *)message;
 @end

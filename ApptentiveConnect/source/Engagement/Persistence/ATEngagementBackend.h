@@ -6,9 +6,10 @@
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "ATEngagementManifestUpdater.h"
 
 @class ATInteractionUsageData;
+@class UIViewController;
 
 extern NSString *const ATEngagementInstallDateKey;
 extern NSString *const ATEngagementUpgradeDateKey;
@@ -43,7 +44,7 @@ extern NSString *const ATEngagementSDKDistributionVersionKey;
 @class ATInteraction;
 
 
-@interface ATEngagementBackend : NSObject
+@interface ATEngagementBackend : NSObject <ATUpdaterDelegate>
 
 - (instancetype)initWithStoragePath:(NSString *)storagePath;
 
@@ -55,12 +56,7 @@ extern NSString *const ATEngagementSDKDistributionVersionKey;
 @property (readonly, nonatomic) ATInteractionUsageData *usageData;
 
 - (void)resetEngagementData;
-
 - (void)checkForEngagementManifest;
-- (BOOL)shouldRetrieveNewEngagementManifest;
-
-- (void)didReceiveNewTargets:(NSDictionary *)targets andInteractions:(NSDictionary *)interactions maxAge:(NSTimeInterval)expiresMaxAge;
-
 - (void)updateVersionInfo;
 
 - (ATInteraction *)interactionForEvent:(NSString *)event;

@@ -8,17 +8,20 @@
 
 #import "ATWebClient+SurveyAdditions.h"
 #import "ATWebClient_Private.h"
+#import "ATConnect_Private.h"
+#import "ATBackend.h"
 #import "ATAPIRequest.h"
 #import "ATConversationUpdater.h"
 #import "ATJSONSerialization.h"
 #import "ATSurveyResponse.h"
 #import "ATURLConnection.h"
+#import "ATConversation.h"
 
 
 @implementation ATWebClient (SurveyAdditions)
 
 - (ATAPIRequest *)requestForPostingSurveyResponse:(ATSurveyResponse *)surveyResponse {
-	ATConversation *conversation = [ATConversationUpdater currentConversation];
+	ATConversation *conversation = [ATConnect sharedConnection].backend.currentConversation;
 	if (!conversation) {
 		ATLogError(@"No current conversation.");
 		return nil;

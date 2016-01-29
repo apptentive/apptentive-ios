@@ -10,11 +10,12 @@
 #import "ATWebClient_Private.h"
 #import "ATAPIRequest.h"
 #import "ATBackend.h"
-#import "ATConnect.h"
+#import "ATConnect_Private.h"
 #import "ATEvent.h"
 #import "ATMetric.h"
 #import "ATJSONSerialization.h"
 #import "ATURLConnection.h"
+#import "ATConversation.h"
 
 
 @implementation ATWebClient (Metrics)
@@ -40,7 +41,7 @@
 		ATLogError(@"Error while encoding JSON: %@", error);
 		return nil;
 	}
-	ATConversation *conversation = [ATConversationUpdater currentConversation];
+	ATConversation *conversation = [ATConnect sharedConnection].backend.currentConversation;
 	if (!conversation) {
 		ATLogError(@"No current conversation.");
 		return nil;

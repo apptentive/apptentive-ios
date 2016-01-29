@@ -8,9 +8,12 @@
 
 #import "ATWebClient+EngagementAdditions.h"
 #import "ATWebClient_Private.h"
+#import "ATConnect_Private.h"
+#import "ATBackend.h"
 #import "ATURLConnection.h"
 #import "ATAPIRequest.h"
 #import "ATConversationUpdater.h"
+#import "ATConversation.h"
 
 
 @implementation ATWebClient (EngagementAdditions)
@@ -19,7 +22,7 @@
 	ATURLConnection *conn = [self connectionToGet:@"/interactions"];
 	conn.timeoutInterval = 20.0;
 
-	ATConversation *conversation = [ATConversationUpdater currentConversation];
+	ATConversation *conversation = [ATConnect sharedConnection].backend.currentConversation;
 	if (!conversation) {
 		ATLogError(@"No current conversation.");
 		return nil;

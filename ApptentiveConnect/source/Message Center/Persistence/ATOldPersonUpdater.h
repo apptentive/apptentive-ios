@@ -17,15 +17,21 @@ extern NSString *const ATPersonLastUpdateValuePreferenceKey;
 
 
 @interface ATPersonUpdater : NSObject <ATAPIRequestDelegate>
+
+@property (readonly, nonatomic) NSString *storagePath;
 @property (weak, nonatomic) NSObject<ATPersonUpdaterDelegate> *delegate;
 
-+ (BOOL)shouldUpdate;
+//+ (BOOL)shouldUpdate;
+
+@property (copy, nonatomic) ATPersonInfo *lastSavedPerson;
+
 + (NSDictionary *)lastSavedVersion;
 
-- (id)initWithDelegate:(NSObject<ATPersonUpdaterDelegate> *)delegate;
+- (instancetype)initWithStoragePath:(NSString *)storagePath;
+
 - (void)update;
 - (void)cancel;
-- (float)percentageComplete;
+
 @end
 
 @protocol ATPersonUpdaterDelegate <NSObject>

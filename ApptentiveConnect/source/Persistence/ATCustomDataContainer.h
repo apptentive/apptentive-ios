@@ -7,10 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ATUpdater.h"
 
 extern NSString * const ATDataNeedsSaveNotification;
 
-@interface ATCustomDataContainer : NSObject <NSCoding>
+@interface ATCustomDataContainer : NSObject <NSCoding, ATUpdatable>
 
 @property (nonatomic, readonly) NSMutableDictionary *customData;
 

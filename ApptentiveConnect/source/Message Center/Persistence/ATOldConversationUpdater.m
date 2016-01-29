@@ -29,15 +29,15 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 	BOOL creatingConversation;
 }
 
-+ (void)registerDefaults {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSDictionary *defaultPreferences =
-		[NSDictionary dictionaryWithObjectsAndKeys:
-						  [NSDate distantPast], ATConversationLastUpdatePreferenceKey,
-					  [NSDictionary dictionary], ATConversationLastUpdateValuePreferenceKey,
-					  nil];
-	[defaults registerDefaults:defaultPreferences];
-}
+//+ (void)registerDefaults {
+//	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//	NSDictionary *defaultPreferences =
+//		[NSDictionary dictionaryWithObjectsAndKeys:
+//						  [NSDate distantPast], ATConversationLastUpdatePreferenceKey,
+//					  [NSDictionary dictionary], ATConversationLastUpdateValuePreferenceKey,
+//					  nil];
+//	[defaults registerDefaults:defaultPreferences];
+//}
 
 - (id)initWithDelegate:(NSObject<ATConversationUpdaterDelegate> *)delegate {
 	if ((self = [super init])) {
@@ -51,25 +51,21 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 	[self cancel];
 }
 
-- (void)createOrUpdateConversation {
+- (void)update {
 	[self cancel];
+	ATConversation *currentConversation = [ATConnect sharedConnection].backend.currentConversation;
+	creatingConversation = NO;
+	request = [[ATConnect sharedConnection].webClient requestForUpdatingConversation:currentConversation];
+	request.delegate = self;
+	[request start];
+}
 
-	ATConversation *currentConversation = [ATConversationUpdater currentConversation];
-	if (currentConversation == nil) {
-		ATLogInfo(@"Creating conversation");
-		creatingConversation = YES;
-		ATConversation *conversation = [[ATConversation alloc] init];
-		conversation.deviceID = [[ATConnect sharedConnection].backend deviceUUID];
-		request = [[ATConnect sharedConnection].webClient requestForCreatingConversation:conversation];
-		request.delegate = self;
-		[request start];
-		conversation = nil;
-	} else {
-		creatingConversation = NO;
-		request = [[ATConnect sharedConnection].webClient requestForUpdatingConversation:currentConversation];
-		request.delegate = self;
-		[request start];
-	}
+- (void)create {
+	creatingConversation = YES;
+	ATConversation *conversation = [[ATConversation alloc] init];
+	request = [[ATConnect sharedConnection].webClient requestForCreatingConversation:conversation];
+	request.delegate = self;
+	[request start];
 }
 
 - (void)cancel {
@@ -88,32 +84,8 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 	}
 }
 
-+ (BOOL)conversationExists {
-	ATConversation *currentFeed = [ATConversationUpdater currentConversation];
-	if (currentFeed == nil) {
-		return NO;
-	} else {
-		return YES;
-	}
-}
-
-+ (ATConversation *)currentConversation {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSData *conversationData = [defaults dataForKey:ATCurrentConversationPreferenceKey];
-	if (!conversationData) {
-		return nil;
-	}
-	ATConversation *conversation = nil;
-	@try {
-		conversation = [NSKeyedUnarchiver unarchiveObjectWithData:conversationData];
-	} @catch (NSException *exception) {
-		ATLogError(@"Unable to unarchive conversation: %@", exception);
-	}
-	return conversation;
-}
-
 + (BOOL)shouldUpdate {
-	[ATConversationUpdater registerDefaults];
+//	[ATConversationUpdater registerDefaults];
 
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSObject *lastValue = [defaults objectForKey:ATConversationLastUpdateValuePreferenceKey];
@@ -124,7 +96,7 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 			break;
 		}
 		NSDictionary *lastValueDictionary = (NSDictionary *)lastValue;
-		ATConversation *conversation = [self currentConversation];
+		ATConversation *conversation = [ATConnect sharedConnection].backend.currentConversation;
 		if (!conversation) {
 			break;
 		}
@@ -194,7 +166,7 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 		conversation = nil;
 	} else {
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		ATConversation *conversation = [ATConversationUpdater currentConversation];
+		ATConversation *conversation = [ATConnect sharedConnection].backend.currentConversation;
 		[defaults setObject:[conversation apiUpdateJSON] forKey:ATConversationLastUpdateValuePreferenceKey];
 		[defaults setObject:[NSDate date] forKey:ATConversationLastUpdatePreferenceKey];
 		[self.delegate conversationUpdater:self updatedConversationSuccessfully:YES];

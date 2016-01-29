@@ -54,7 +54,7 @@
 		ATLogDebug(@"Failed to send message because Apptentive API key is not set!");
 		return NO;
 	}
-	if (![ATConversationUpdater conversationExists]) {
+	if ([ATConnect sharedConnection].backend.currentConversation == nil) {
 		return NO;
 	}
 	if ([[ATConnect sharedConnection].backend isUpdatingPerson]) {

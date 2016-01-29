@@ -27,10 +27,10 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 
 @implementation ATPersonUpdater
 
-- (id)initWithDelegate:(NSObject<ATPersonUpdaterDelegate> *)aDelegate {
-	if ((self = [super init])) {
-		[ATPersonUpdater registerDefaults];
-		_delegate = aDelegate;
+- (instancetype)initWithStoragePath:(NSString *)storagePath {
+	self = [super init];
+	if (self) {
+		_storagePath = storagePath;
 	}
 	return self;
 }
@@ -40,23 +40,12 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 	[self cancel];
 }
 
-+ (BOOL)shouldUpdate {
-	[ATPersonUpdater registerDefaults];
-
-	return [ATConnect sharedConnection].backend.currentPerson.apiJSON.count > 0;
+- (ATPersonInfo *)lastSavedPerson {
+	return [NSKeyedUnarchiver unarchiveObjectWithFile:self.storagePath];
 }
 
-+ (NSDictionary *)lastSavedVersion {
-	NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:ATPersonLastUpdateValuePreferenceKey];
-
-	if (data) {
-		NSDictionary *dictionary = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-		if ([dictionary isKindOfClass:[NSDictionary class]]) {
-			return dictionary;
-		}
-	}
-
-	return nil;
+- (void)setLastSavedPerson:(ATPersonInfo *)lastSavedPerson {
+	[NSKeyedArchiver archiveRootObject:lastSavedPerson toFile:self.storagePath];
 }
 
 - (void)saveVersion {

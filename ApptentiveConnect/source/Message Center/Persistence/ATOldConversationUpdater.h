@@ -17,15 +17,14 @@ extern NSString *const ATCurrentConversationPreferenceKey;
 
 
 @interface ATConversationUpdater : NSObject <ATAPIRequestDelegate>
-@property (weak, nonatomic) NSObject<ATConversationUpdaterDelegate> *delegate;
-+ (BOOL)conversationExists;
-+ (ATConversation *)currentConversation;
+@property (weak, nonatomic) id<ATConversationUpdaterDelegate> delegate;
 + (BOOL)shouldUpdate;
 
-- (id)initWithDelegate:(NSObject<ATConversationUpdaterDelegate> *)delegate;
-- (void)createOrUpdateConversation;
+- (id)initWithDelegate:(id<ATConversationUpdaterDelegate>)delegate;
+//- (void)createOrUpdateConversation;
+- (void)update;
 - (void)cancel;
-- (float)percentageComplete;
+//- (float)percentageComplete;
 @end
 
 @protocol ATConversationUpdaterDelegate <NSObject>

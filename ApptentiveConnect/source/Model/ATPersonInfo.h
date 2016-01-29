@@ -17,6 +17,6 @@
 /** If json is nil will not create a new person and will return nil. */
 + (ATPersonInfo *)newPersonFromJSON:(NSDictionary *)json;
 
-- (NSDictionary *)apiJSON;
+//- (NSDictionary *)apiJSON;
 
 @end

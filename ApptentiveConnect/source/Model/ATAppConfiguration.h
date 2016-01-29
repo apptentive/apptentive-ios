@@ -6,13 +6,14 @@
 //  Copyright © 2016 Apptentive, Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "ATUpdater.h"
 
-@interface ATAppConfiguration : NSObject <NSCoding>
+extern NSString *const ATAppConfigurationAppDisplayNameKey;
+
+@interface ATAppConfiguration : NSObject <ATUpdatable>
 
 @property (readonly, nonatomic) NSString *creationSDKVersion;
 @property (readonly, nonatomic) NSString *creationApplicationBuildNumber;
-@property (readonly, nonatomic) NSDate *expirationDate;
 @property (readonly, nonatomic) BOOL metricsEnabled;
 @property (readonly, nonatomic) BOOL hideBranding;
 @property (readonly, nonatomic) BOOL notificationPopupsEnabled;
@@ -20,10 +21,8 @@
 @property (readonly, nonatomic) NSTimeInterval messageCenterForegroundPollingInterval;
 @property (readonly, nonatomic) NSString *applicationDisplayName;
 
-- (instancetype)initWithJSONDictionary:(NSDictionary *)JSONDictionary validForInterval:(NSTimeInterval)validInterval;
+- (instancetype)initWithJSONDictionary:(NSDictionary *)JSONDictionary;
 - (instancetype)initWithUserDefaults:(NSUserDefaults *)userDefaults;
 + (void)removeFromUserDefaults:(NSUserDefaults *)userDefaults;
-
-@property (readonly, nonatomic, getter=isValid) BOOL valid;
 
 @end

@@ -16,6 +16,8 @@
 #import "ATConversationUpdater.h"
 #import "ATDeviceUpdater.h"
 #import "ATPersonUpdater.h"
+#import "ATAppConfigurationUpdater.h"
+#import "ATEngagementManifestUpdater.h"
 #import "ATFileAttachment.h"
 #if TARGET_OS_IPHONE
 #import "ATMessage.h"
@@ -28,19 +30,20 @@ extern NSString *const ATBackendBecameReadyNotification;
 
 #define USE_STAGING 0
 
-@class ATAppConfigurationUpdater, ATDataManager, ATFeedback, ATAPIRequest, ATMessageTask, ATDeviceInfo, ATAppConfiguration;
+@class  ATAppConfiguration, ATPersonInfo, ATDeviceInfo, ATConversation;
+@class ATDataManager, ATAPIRequest, ATMessageTask;
 
 @protocol ATBackendMessageDelegate;
 
 /*! Handles all of the backend activities, such as sending feedback. */
-@interface ATBackend : NSObject <ATConversationUpdaterDelegate, ATDeviceUpdaterDelegate, ATPersonUpdaterDelegate
+@interface ATBackend : NSObject <ATUpdaterDelegate
 #if TARGET_OS_IPHONE
 						   ,
 						   NSFetchedResultsControllerDelegate, UIAlertViewDelegate
 #endif
 						   >
-/*! The feedback currently being worked on by the user. */
-@property (strong, nonatomic) ATFeedback *currentFeedback;
+
+@property (strong, nonatomic) ATDeviceUpdater *deviceUpdater;
 @property (strong, nonatomic) NSDictionary *currentCustomData;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
@@ -51,6 +54,7 @@ extern NSString *const ATBackendBecameReadyNotification;
 @property (strong, nonatomic) UIViewController *presentedMessageCenterViewController;
 @property (readonly, nonatomic) ATPersonInfo *currentPerson;
 @property (readonly, nonatomic) ATDeviceInfo *currentDevice;
+@property (readonly, nonatomic) ATConversation *currentConversation;
 @property (strong, nonatomic) ATAppConfiguration *appConfiguration;
 
 @property (readonly, assign, nonatomic) BOOL hideBranding;
@@ -118,10 +122,7 @@ extern NSString *const ATBackendBecameReadyNotification;
 
 - (void)fetchMessagesInBackground:(void (^)(UIBackgroundFetchResult))completionHandler;
 - (void)completeMessageFetchWithResult:(UIBackgroundFetchResult)fetchResult;
-
-/*! True if the backend is currently updating the person. */
 - (BOOL)isUpdatingPerson;
-
 - (void)updatePersonIfNeeded;
 
 - (NSURLCache *)imageCache;

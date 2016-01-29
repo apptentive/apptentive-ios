@@ -6,23 +6,11 @@
 //  Copyright (c) 2012 Apptentive, Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "ATAPIRequest.h"
+#import "ATExpiringUpdater.h"
 
-extern NSString *const ATConfigurationPreferencesChangedNotification;
+extern NSString *const ATConfigurationSDKVersionKey;
+extern NSString *const ATConfigurationAppBuildNumberKey;
+extern NSString *const ATAppConfigurationExpirationPreferenceKey;
 
-@protocol ATAppConfigurationUpdaterDelegate <NSObject>
-- (void)configurationUpdaterDidFinish:(BOOL)success;
-@end
-
-
-@interface ATAppConfigurationUpdater : NSObject <ATAPIRequestDelegate>
-
-@property (weak, nonatomic) NSObject<ATAppConfigurationUpdaterDelegate> *delegate;
-
-+ (BOOL)shouldCheckForUpdate;
-- (id)initWithDelegate:(NSObject<ATAppConfigurationUpdaterDelegate> *)delegate;
-- (void)update;
-- (void)cancel;
-- (float)percentageComplete;
+@interface ATAppConfigurationUpdater : ATExpiringUpdater
 @end

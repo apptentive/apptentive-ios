@@ -12,8 +12,8 @@
 #import "ATURLConnection.h"
 
 #import "ATBackend.h"
-#import "ATConnect.h"
-#import "ATConversationUpdater.h"
+#import "ATConnect_Private.h"
+#import "ATConversation.h"
 #import "ATURLConnection.h"
 #import "ATUtilities.h"
 #import "ATWebClient_Private.h"
@@ -44,7 +44,7 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 }
 
 - (ATAPIRequest *)requestForGettingAppConfiguration {
-	ATConversation *conversation = [ATConversationUpdater currentConversation];
+	ATConversation *conversation = [ATConnect sharedConnection].backend.currentConversation;
 	if (!conversation) {
 		return nil;
 	}

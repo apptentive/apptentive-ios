@@ -13,6 +13,10 @@ NSString *const ATDataNeedsSaveNotification = @"ATDataNeedsSaveNotification";
 
 @implementation ATCustomDataContainer
 
++ (instancetype)newInstanceFromDictionary:(NSDictionary *)dictionary {
+	return [[self alloc] initWithJSONDictionary:dictionary];
+}
+
 - (instancetype)init
 {
 	self = [super init];

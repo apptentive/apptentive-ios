@@ -8,98 +8,37 @@
 
 #import "ATAppConfigurationUpdater.h"
 #import "ATAppConfiguration.h"
-#import "ATUtilities.h"
 #import "ATWebClient.h"
 #import "ATConnect_Private.h"
-#import "ATBackend.h"
 
-NSString *const ATConfigurationPreferencesChangedNotification = @"ATConfigurationPreferencesChangedNotification";
+NSString *const ATAppConfigurationExpirationPreferenceKey = @"ATAppConfigurationExpirationPreferenceKey";
+NSString *const ATConfigurationSDKVersionKey = @"ATConfigurationSDKVersionKey";
+NSString *const ATConfigurationAppBuildNumberKey = @"ATConfigurationAppBuildNumberKey";
 
-@interface ATAppConfigurationUpdater ()
-- (void)processResult:(NSDictionary *)jsonRatingConfiguration maxAge:(NSTimeInterval)expiresMaxAge;
-@end
+@implementation ATAppConfigurationUpdater
 
-
-@implementation ATAppConfigurationUpdater {
-	ATAPIRequest *request;
++ (Class<ATUpdatable>)updatableClass {
+	return [ATAppConfiguration class];
 }
 
-+ (BOOL)shouldCheckForUpdate {
-	return ![ATConnect sharedConnection].backend.appConfiguration.valid;
+- (ATExpiry *)expiryFromUserDefaults:(NSUserDefaults *)userDefaults {
+	return [[ATExpiry alloc] initWithExpirationDate:[userDefaults objectForKey:ATAppConfigurationExpirationPreferenceKey] appBuild:[userDefaults objectForKey:ATConfigurationAppBuildNumberKey] SDKVersion:[userDefaults objectForKey:ATConfigurationSDKVersionKey]];
 }
 
-- (id)initWithDelegate:(NSObject<ATAppConfigurationUpdaterDelegate> *)aDelegate {
-	if ((self = [super init])) {
-		_delegate = aDelegate;
-	}
-	return self;
+- (id<ATUpdatable>)currentVersionFromUserDefaults:(NSUserDefaults *)userDefaults {
+	return [[ATAppConfiguration alloc] initWithUserDefaults:userDefaults];
 }
 
-- (void)dealloc {
-	self.delegate = nil;
-	[self cancel];
+- (void)removeCurrentVersionFromUserDefaults:(NSUserDefaults *)userDefaults {
+	[ATAppConfiguration removeFromUserDefaults:userDefaults];
 }
 
-- (void)update {
-	[self cancel];
-	request = [[ATConnect sharedConnection].webClient requestForGettingAppConfiguration];
-	request.delegate = self;
-	[request start];
+- (id<ATUpdatable>)emptyCurrentVersion {
+	return [[ATAppConfiguration alloc] init];
 }
 
-- (void)cancel {
-	if (request) {
-		request.delegate = nil;
-		[request cancel];
-		request = nil;
-	}
-}
-
-- (float)percentageComplete {
-	if (request) {
-		return [request percentageComplete];
-	} else {
-		return 0.0f;
-	}
-}
-
-#pragma mark ATATIRequestDelegate
-- (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(NSObject *)result {
-	@synchronized(self) {
-		if ([result isKindOfClass:[NSDictionary class]]) {
-			[self processResult:(NSDictionary *)result maxAge:[sender expiresMaxAge]];
-			[self.delegate configurationUpdaterDidFinish:YES];
-		} else {
-			ATLogError(@"App configuration result is not NSDictionary!");
-			[self.delegate configurationUpdaterDidFinish:NO];
-		}
-	}
-}
-
-- (void)at_APIRequestDidProgress:(ATAPIRequest *)sender {
-	// pass
-}
-
-- (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
-	@synchronized(self) {
-		ATLogInfo(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
-
-		[self.delegate configurationUpdaterDidFinish:NO];
-	}
-}
-
-#pragma mark - Private methods
-
-- (void)processResult:(NSDictionary *)jsonConfiguration maxAge:(NSTimeInterval)expiresMaxAge {
-	ATAppConfiguration *previousAppConfiguration = [ATConnect sharedConnection].backend.appConfiguration;
-	ATAppConfiguration *currentAppConfiguration = [[ATAppConfiguration alloc] initWithJSONDictionary:jsonConfiguration validForInterval:expiresMaxAge];
-
-	[ATConnect sharedConnection].backend.appConfiguration = currentAppConfiguration;
-
-	if (![currentAppConfiguration isEqual:previousAppConfiguration]) {
-
-		[[NSNotificationCenter defaultCenter] postNotificationName:ATConfigurationPreferencesChangedNotification object:nil];
-	}
+- (ATAPIRequest *)requestForUpdating {
+	return [[ATConnect sharedConnection].webClient requestForGettingAppConfiguration];
 }
 
 @end

@@ -12,6 +12,7 @@
 #import "ATEngagementBackend.h"
 #import "ATInteraction.h"
 #import "ATDeviceInfo.h"
+#import "ATPersonInfo.h"
 
 @implementation ATConnect (Debugging)
 

@@ -8,7 +8,7 @@
 
 #import "ApptentiveMetrics.h"
 
-#import "ATAppConfigurationUpdater.h"
+//#import "ATAppConfigurationUpdater.h"
 #import "ATBackend.h"
 #import "ATConnect_Private.h"
 #import "ATData.h"
@@ -45,7 +45,6 @@ static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 - (void)appDidEnterBackground:(NSNotification *)notification;
 - (void)appWillEnterForeground:(NSNotification *)notification;
 
-- (void)preferencesChanged:(NSNotification *)notification;
 - (void)updateWithCurrentPreferences;
 
 @end
@@ -152,8 +151,6 @@ static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyDidHide:) name:ATSurveyDidHideWindowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyDidAnswerQuestion:) name:ATSurveyDidAnswerQuestionNotification object:nil];
-
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(preferencesChanged:) name:ATConfigurationPreferencesChangedNotification object:nil];
 
 #if TARGET_OS_IPHONE
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
@@ -282,7 +279,7 @@ static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 	[[ATConnect sharedConnection].engagementBackend engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch];
 }
 
-- (void)preferencesChanged:(NSNotification *)notification {
+- (void)preferencesChanged {
 	[self updateWithCurrentPreferences];
 }
 

@@ -13,5 +13,5 @@
 
 + (NSString *)carrier;
 
-- (NSDictionary *)apiJSON;
+//- (NSDictionary *)apiJSON;
 @end

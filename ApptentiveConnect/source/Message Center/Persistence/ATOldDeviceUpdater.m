@@ -7,8 +7,6 @@
 //
 
 #import "ATDeviceUpdater.h"
-
-#import "ATConversationUpdater.h"
 #import "ATUtilities.h"
 #import "ATWebClient+MessageCenter.h"
 #import "ATConnect_Private.h"

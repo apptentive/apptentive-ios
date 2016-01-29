@@ -8,7 +8,6 @@
 
 #import "ATEngagementBackend.h"
 #import "ATBackend.h"
-#import "ATEngagementGetManifestTask.h"
 #import "ATTaskQueue.h"
 #import "ATInteraction.h"
 #import "ATInteractionInvocation.h"
@@ -24,6 +23,7 @@
 #import "ATInteractionTextModalController.h"
 #import "ATInteractionNavigateToLink.h"
 #import "ATInteractionUsageData.h"
+#import "ATEngagementManifest.h"
 
 NSString *const ATEngagementInstallDateKey = @"ATEngagementInstallDateKey";
 NSString *const ATEngagementUpgradeDateKey = @"ATEngagementUpgradeDateKey";
@@ -38,10 +38,7 @@ NSString *const ATEngagementInteractionsInvokesTotalKey = @"ATEngagementInteract
 NSString *const ATEngagementInteractionsInvokesVersionKey = @"ATEngagementInteractionsInvokesVersionKey";
 NSString *const ATEngagementInteractionsInvokesLastDateKey = @"ATEngagementInteractionsInvokesLastDateKey";
 NSString *const ATEngagementInteractionsInvokesBuildKey = @"ATEngagementInteractionsInvokesBuildKey";
-
 NSString *const ATEngagementInteractionsSDKVersionKey = @"ATEngagementInteractionsSDKVersionKey";
-NSString *const ATEngagementInteractionsAppBuildNumberKey = @"ATEngagementInteractionsAppBuildNumberKey";
-NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEngagementCachedInteractionsExpirationPreferenceKey";
 
 NSString *const ATEngagementCodePointHostAppVendorKey = @"local";
 NSString *const ATEngagementCodePointHostAppInteractionKey = @"app";
@@ -60,8 +57,7 @@ NSString *const ATEngagementSDKDistributionVersionKey = @"ATEngagementSDKDistrib
 
 @interface ATEngagementBackend ()
 
-@property (strong, nonatomic) NSMutableDictionary *engagementTargets;
-@property (strong, nonatomic) NSMutableDictionary *engagementInteractions;
+@property (strong, nonatomic) ATEngagementManifestUpdater *manifestUpdater;
 
 @end
 
@@ -72,30 +68,11 @@ NSString *const ATEngagementSDKDistributionVersionKey = @"ATEngagementSDKDistrib
 
 	if (self) {
 		_storagePath = storagePath;
-
-		_engagementTargets = [[NSMutableDictionary alloc] init];
-		NSFileManager *fm = [NSFileManager defaultManager];
-		if ([fm fileExistsAtPath:self.cachedTargetsStoragePath]) {
-			@try {
-				NSDictionary *archivedTargets = [NSKeyedUnarchiver unarchiveObjectWithFile:self.cachedTargetsStoragePath];
-				[_engagementTargets addEntriesFromDictionary:archivedTargets];
-			} @catch (NSException *exception) {
-				ATLogError(@"Unable to unarchive engagement targets: %@", exception);
-			}
-		}
-
-		_engagementInteractions = [[NSMutableDictionary alloc] init];
-		if ([fm fileExistsAtPath:self.cachedInteractionsStoragePath]) {
-			@try {
-				NSDictionary *archivedInteractions = [NSKeyedUnarchiver unarchiveObjectWithFile:self.cachedInteractionsStoragePath];
-				[_engagementInteractions addEntriesFromDictionary:archivedInteractions];
-			} @catch (NSException *exception) {
-				ATLogError(@"Unable to unarchive engagement interactions: %@", exception);
-			}
-		}
+		self.manifestUpdater = [[ATEngagementManifestUpdater alloc] init];
+		self.manifestUpdater.delegate = self;
 
 		_engagementData = [self emptyEngagementData];
-		if ([fm fileExistsAtPath:self.engagementDataStoragePath]) {
+		if ([[NSFileManager defaultManager] fileExistsAtPath:self.engagementDataStoragePath]) {
 			@try {
 				NSDictionary *archivedData = [NSKeyedUnarchiver unarchiveObjectWithFile:self.engagementDataStoragePath];
 				[_engagementData addEntriesFromDictionary:archivedData];
@@ -135,8 +112,6 @@ NSString *const ATEngagementSDKDistributionVersionKey = @"ATEngagementSDKDistrib
 			}
 		}
 
-		[self invalidateInteractionCacheIfNeeded];
-
 		[self updateVersionInfo];
 
 		_usageData = [[ATInteractionUsageData alloc] initWithEngagementData:self.engagementData];
@@ -170,101 +145,16 @@ NSString *const ATEngagementSDKDistributionVersionKey = @"ATEngagementSDKDistrib
 	_usageData = [[ATInteractionUsageData alloc] initWithEngagementData:self.engagementData];
 }
 
-- (BOOL)invalidateInteractionCacheIfNeeded {
-	BOOL invalidateCache = NO;
-
-#if APPTENTIVE_DEBUG
-	invalidateCache = YES;
-#endif
-
-	NSString *previousBuild = self.engagementData[ATEngagementInteractionsAppBuildNumberKey];
-	if (![previousBuild isEqualToString:[ATUtilities buildNumberString]]) {
-		invalidateCache = YES;
-	}
-
-	NSString *previousSDKVersion = self.engagementData[ATEngagementInteractionsSDKVersionKey];
-	if (![previousSDKVersion isEqualToString:kATConnectVersionString]) {
-		invalidateCache = YES;
-	}
-
-	if (invalidateCache) {
-		[self invalidateInteractionCache];
-	}
-
-	return invalidateCache;
-}
-
-- (void)invalidateInteractionCache {
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
-}
-
 - (void)checkForEngagementManifest {
-	if ([self shouldRetrieveNewEngagementManifest]) {
-		ATEngagementGetManifestTask *task = [[ATEngagementGetManifestTask alloc] init];
-		[[ATTaskQueue sharedTaskQueue] addTask:task];
-		task = nil;
+	if (self.manifestUpdater.needsUpdate) {
+		[self.manifestUpdater update];
 	}
 }
 
-- (BOOL)shouldRetrieveNewEngagementManifest {
-	NSDate *expiration = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
-	if (expiration) {
-		NSDate *now = [NSDate date];
-		NSComparisonResult comparison = [expiration compare:now];
-		if (comparison == NSOrderedSame || comparison == NSOrderedAscending) {
-			return YES;
-		} else {
-			NSFileManager *fm = [NSFileManager defaultManager];
-			if (![fm fileExistsAtPath:self.cachedTargetsStoragePath]) {
-				return YES;
-			}
-
-			if (![fm fileExistsAtPath:self.cachedInteractionsStoragePath]) {
-				return YES;
-			}
-
-			return NO;
-		}
-	} else {
-		return YES;
-	}
-}
-
-- (void)didReceiveNewTargets:(NSDictionary *)targets andInteractions:(NSDictionary *)interactions maxAge:(NSTimeInterval)expiresMaxAge {
-	if (!targets || !interactions) {
-		ATLogError(@"Error receiving new Engagement Framework targets and interactions.");
-		return;
-	}
-
-	ATLogInfo(@"Received remote Interactions from Apptentive.");
-
-	@synchronized(self) {
-		[NSKeyedArchiver archiveRootObject:targets toFile:self.cachedTargetsStoragePath];
-		[NSKeyedArchiver archiveRootObject:interactions toFile:self.cachedInteractionsStoragePath];
-
-		if (expiresMaxAge > 0) {
-			NSDate *date = [NSDate dateWithTimeInterval:expiresMaxAge sinceDate:[NSDate date]];
-			NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-			[defaults setObject:date forKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
-		}
-
-		[self.engagementTargets removeAllObjects];
-		[self.engagementTargets addEntriesFromDictionary:targets];
-
-		[self.engagementInteractions removeAllObjects];
-		[self.engagementInteractions addEntriesFromDictionary:interactions];
-
-		NSString *buildNumber = [ATUtilities buildNumberString];
-		if ([ATUtilities buildNumberString]) {
-			[self.engagementData setObject:buildNumber forKey:ATEngagementInteractionsAppBuildNumberKey];
-		} else {
-			[self.engagementData removeObjectForKey:ATEngagementInteractionsAppBuildNumberKey];
-		}
-
-		[self.engagementData setObject:kATConnectVersionString forKey:ATEngagementInteractionsSDKVersionKey];
-
+- (void)updater:(ATUpdater *)updater didFinish:(BOOL)success {
+	if (success) {
 		[self updateVersionInfo];
-		}
+	}
 }
 
 - (void)updateVersionInfo {
@@ -308,14 +198,6 @@ NSString *const ATEngagementSDKDistributionVersionKey = @"ATEngagementSDKDistrib
 	[self.engagementData setObject:SDKDistributionVersion forKey:ATEngagementSDKDistributionVersionKey];
 }
 
-- (NSString *)cachedTargetsStoragePath {
-	return [self.storagePath stringByAppendingPathComponent:@"cachedtargets.objects"];
-}
-
-- (NSString *)cachedInteractionsStoragePath {
-	return [self.storagePath stringByAppendingPathComponent:@"cachedinteractionsV2.objects"];
-}
-
 - (NSString *)engagementDataStoragePath {
 	return [self.storagePath stringByAppendingPathComponent:@"engagementData.objects"];
 }
@@ -357,14 +239,14 @@ NSString *const ATEngagementSDKDistributionVersionKey = @"ATEngagementSDKDistrib
 
 	ATInteraction *interaction = nil;
 	if (interactionID) {
-		interaction = self.engagementInteractions[interactionID];
+		interaction = self.manifestUpdater.interactions[interactionID];
 	}
 
 	return interaction;
 }
 
 - (ATInteraction *)interactionForEvent:(NSString *)event {
-	NSArray *invocations = self.engagementTargets[event];
+	NSArray *invocations = self.manifestUpdater.targets[event];
 	ATInteraction *interaction = [self interactionForInvocations:invocations];
 
 	return interaction;
@@ -663,11 +545,10 @@ NSString *const ATEngagementSDKDistributionVersionKey = @"ATEngagementSDKDistrib
 }
 
 - (NSArray *)allEngagementInteractions {
-	return [self.engagementInteractions allValues];
+	return [self.manifestUpdater.interactions allValues];
 }
 
 - (void)save {
-#warning see if doing this on every change is a drag on performance
 	[NSKeyedArchiver archiveRootObject:self.engagementData toFile:self.engagementDataStoragePath];
 }
 

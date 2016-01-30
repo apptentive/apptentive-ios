@@ -67,7 +67,7 @@ NSString *const ATEngagementSDKDistributionVersionKey = @"ATEngagementSDKDistrib
 
 	if (self) {
 		_storagePath = storagePath;
-		self.manifestUpdater = [[ATEngagementManifestUpdater alloc] initWithStoragePath:storagePath];
+		self.manifestUpdater = [[ATEngagementManifestUpdater alloc] initWithStoragePath:[storagePath stringByAppendingPathComponent:@"manifest"]];
 		self.manifestUpdater.delegate = self;
 
 		_engagementData = [self emptyEngagementData];

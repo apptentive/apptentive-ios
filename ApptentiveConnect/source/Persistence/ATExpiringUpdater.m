@@ -22,13 +22,14 @@
 @synthesize expiry = _expiry;
 
 - (BOOL)needsUpdate {
-	return self.expiry.expired;
+	return self.expiry == nil || self.expiry.expired;
 }
 
 - (void)didUpdateWithRequest:(ATAPIRequest *)request {
 	[super didUpdateWithRequest:request];
 
-	self.expiry.maxAge = request.expiresMaxAge;
+	self.expiry = [[ATExpiry alloc] initWithExpirationDate:[NSDate dateWithTimeIntervalSinceNow:request.expiresMaxAge] appBuild:[ATUtilities buildNumberString] SDKVersion:kATConnectVersionString];
+	[self archiveExpiry];
 }
 
 #pragma mark - Expiry
@@ -45,19 +46,14 @@
 	// Clean up legacy user defaults after migrating
 }
 
-- (void)setExpiry:(ATExpiry *)expiry {
-	_expiry = expiry;
-
-	[NSKeyedArchiver archiveRootObject:_expiry toFile:self.expiryStoragePath];
-}
-
 - (ATExpiry *)expiry {
 	if (_expiry == nil) {
 		if ([[NSFileManager defaultManager] fileExistsAtPath:self.expiryStoragePath]) {
 			_expiry = [NSKeyedUnarchiver unarchiveObjectWithFile:self.expiryStoragePath];
 		} else if ([self expiryFromUserDefaults:[NSUserDefaults standardUserDefaults]]) {
-			self.expiry = [self expiryFromUserDefaults:[NSUserDefaults standardUserDefaults]];
+			_expiry = [self expiryFromUserDefaults:[NSUserDefaults standardUserDefaults]];
 			[self removeExpiryFromUserDefaults:[NSUserDefaults standardUserDefaults]];
+			[self archiveExpiry];
 		} else {
 			_expiry = [self emptyExpiry];
 		}
@@ -67,7 +63,11 @@
 }
 
 - (ATExpiry *)emptyExpiry {
-	return nil;
+	return [[ATExpiry alloc] initWithExpirationDate:[NSDate distantPast] appBuild:[ATUtilities buildNumberString] SDKVersion:kATConnectVersionString];
+}
+
+- (void)archiveExpiry {
+	[NSKeyedArchiver archiveRootObject:_expiry toFile:self.expiryStoragePath];
 }
 
 @end

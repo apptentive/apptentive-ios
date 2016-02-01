@@ -17,8 +17,7 @@ NSString *const ATDataNeedsSaveNotification = @"ATDataNeedsSaveNotification";
 	return [[self alloc] initWithJSONDictionary:dictionary];
 }
 
-- (instancetype)init
-{
+- (instancetype)init {
 	self = [super init];
 
 	if (self) {

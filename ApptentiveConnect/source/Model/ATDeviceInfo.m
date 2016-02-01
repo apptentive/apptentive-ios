@@ -95,7 +95,4 @@
 	return @{ @"device": device };
 }
 
-//- (NSDictionary *)apiJSON {
-//	return @{ @"device": [ATUtilities diffDictionary:self.dictionaryRepresentation[@"device"] againstDictionary:[ATDeviceUpdater lastSavedVersion][@"device"]] };
-//}
 @end

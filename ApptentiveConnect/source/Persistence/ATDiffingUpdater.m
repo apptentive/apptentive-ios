@@ -83,6 +83,8 @@
 }
 
 - (void)didUpdateWithRequest:(ATAPIRequest *)request {
+	[super didUpdateWithRequest:request];
+	
 	_previousVersion = self.updateVersion;
 	self.updateVersion = nil;
 

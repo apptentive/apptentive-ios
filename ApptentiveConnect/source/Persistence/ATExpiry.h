@@ -16,7 +16,6 @@
 @property (strong, nonatomic) NSString *SDKVersion;
 @property (strong, nonatomic) NSString *appBuild;
 
-@property (assign, nonatomic) NSTimeInterval maxAge;
 @property (readonly, nonatomic, getter=isExpired) BOOL expired;
 
 @end

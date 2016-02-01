@@ -34,10 +34,14 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 
 - (ATExpiry *)expiryFromUserDefaults:(NSUserDefaults *)userDefaults {
 	NSDate *expirationDate =  [userDefaults objectForKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
-	NSString *appBuild = [userDefaults objectForKey:ATEngagementInteractionsSDKVersionKey];
-	NSString *SDKVersion = [userDefaults objectForKey:ATEngagementInteractionsAppBuildNumberKey];
+	NSString *appBuild = [userDefaults objectForKey:ATEngagementInteractionsAppBuildNumberKey];
+	NSString *SDKVersion = [userDefaults objectForKey:ATEngagementInteractionsSDKVersionKey];
 
-	return [[ATExpiry alloc] initWithExpirationDate:expirationDate appBuild:appBuild SDKVersion:SDKVersion];
+	if (expirationDate || appBuild || SDKVersion) {
+		return [[ATExpiry alloc] initWithExpirationDate:expirationDate ?: [NSDate distantPast] appBuild:appBuild SDKVersion:SDKVersion];
+	} else {
+		return nil;
+	}
 }
 
 - (void)removeExpiryFromUserDefaults:(NSUserDefaults *)userDefaults {

@@ -89,8 +89,4 @@
 	return @{ @"person": person };
 }
 
-//- (NSDictionary *)apiJSON {
-//	return [ATUtilities diffDictionary:self.dictionaryRepresentation againstDictionary:[ATPersonUpdater lastSavedVersion]];
-//}
-
 @end

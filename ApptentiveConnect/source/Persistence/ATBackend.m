@@ -537,6 +537,10 @@ static NSURLCache *imageCache = nil;
 	[[ATConnect sharedConnection].engagementBackend checkForEngagementManifest];
 }
 
+- (void)saveConversation {
+	[self.conversationUpdater archiveCurrentVersion];
+}
+
 #if TARGET_OS_IPHONE
 #pragma mark NSFetchedResultsControllerDelegate
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {

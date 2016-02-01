@@ -15,6 +15,11 @@
 
 #define kATConversationCodingVersion 1
 
+NSString *const VersionKey = @"version";
+NSString *const TokenKey = @"token";
+NSString *const PersonIDKey = @"personID";
+NSString *const DeviceIDKey = @"deviceID";
+NSString *const LastRetrievedMessageIDKey = @"lastRetrievedMessageID";
 
 @implementation ATConversation
 
@@ -28,19 +33,21 @@
 
 - (instancetype)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
-		_token = (NSString *)[coder decodeObjectForKey:@"token"];
-		_personID = (NSString *)[coder decodeObjectForKey:@"personID"];
-		_deviceID = (NSString *)[coder decodeObjectForKey:@"deviceID"];
+		_token = (NSString *)[coder decodeObjectForKey:TokenKey];
+		_personID = (NSString *)[coder decodeObjectForKey:PersonIDKey];
+		_deviceID = (NSString *)[coder decodeObjectForKey:DeviceIDKey];
+		_lastRetrievedMessageID = (NSString *)[coder decodeObjectForKey:LastRetrievedMessageIDKey];
 	}
 	return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
-	[coder encodeInt:kATConversationCodingVersion forKey:@"version"];
+	[coder encodeInt:kATConversationCodingVersion forKey:VersionKey];
 
-	[coder encodeObject:self.token forKey:@"token"];
-	[coder encodeObject:self.personID forKey:@"personID"];
-	[coder encodeObject:self.deviceID forKey:@"deviceID"];
+	[coder encodeObject:self.token forKey:TokenKey];
+	[coder encodeObject:self.personID forKey:PersonIDKey];
+	[coder encodeObject:self.deviceID forKey:DeviceIDKey];
+	[coder encodeObject:self.lastRetrievedMessageID forKey:LastRetrievedMessageIDKey];
 }
 
 + (instancetype)newInstanceFromDictionary:(NSDictionary *)dictionary {

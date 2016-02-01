@@ -124,6 +124,7 @@ extern NSString *const ATBackendBecameReadyNotification;
 - (void)completeMessageFetchWithResult:(UIBackgroundFetchResult)fetchResult;
 - (BOOL)isUpdatingPerson;
 - (void)updatePersonIfNeeded;
+- (void)saveConversation;
 
 - (NSURLCache *)imageCache;
 

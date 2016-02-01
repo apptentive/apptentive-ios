@@ -13,6 +13,7 @@
 
 NSString *const ATCurrentConversationPreferenceKey = @"ATCurrentConversationPreferenceKey";
 NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLastUpdateValuePreferenceKey";
+static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessagesLastRetrievedMessagIDPreferenceKey";
 
 @interface ATConversationUpdater()
 
@@ -31,7 +32,9 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 	NSData *archiveData = [userDefaults objectForKey:ATCurrentConversationPreferenceKey];
 
 	if (archiveData) {
-		return [NSKeyedUnarchiver unarchiveObjectWithData:archiveData];
+		ATConversation *result = [NSKeyedUnarchiver unarchiveObjectWithData:archiveData];
+		result.lastRetrievedMessageID = [userDefaults stringForKey:ATMessagesLastRetrievedMessageIDPreferenceKey];
+		return result;
 	} else {
 		return nil;
 	}
@@ -39,6 +42,7 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 
 - (void)removeCurrentVersionFromUserDefaults:(NSUserDefaults *)userDefaults {
 	[userDefaults removeObjectForKey:ATCurrentConversationPreferenceKey];
+	[userDefaults removeObjectForKey:ATMessagesLastRetrievedMessageIDPreferenceKey];
 }
 
 - (id<ATUpdatable>)previousVersionFromUserDefaults:(NSUserDefaults *)userDefaults {

@@ -18,6 +18,7 @@
 @property (readonly, nonatomic) NSString *token;
 @property (readonly, nonatomic) NSString *personID;
 @property (readonly, nonatomic) NSString *deviceID;
+@property (strong, nonatomic) NSString *lastRetrievedMessageID;
 
 - (NSDictionary *)initialDictionaryRepresentation;
 

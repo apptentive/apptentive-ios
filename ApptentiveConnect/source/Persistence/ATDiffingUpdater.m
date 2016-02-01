@@ -10,7 +10,6 @@
 
 @interface ATDiffingUpdater ()
 
-@property (strong, nonatomic) NSString *currentVersionPath;
 @property (strong, nonatomic) NSString *previousVersionPath;
 
 @end

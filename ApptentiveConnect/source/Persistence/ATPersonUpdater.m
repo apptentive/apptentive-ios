@@ -21,15 +21,32 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 }
 
 - (id<ATUpdatable>)currentVersionFromUserDefaults:(NSUserDefaults *)userDefaults {
-	NSDictionary *dictionary = [userDefaults objectForKey:ATCurrentPersonPreferenceKey];
+	NSData *personInfoData = [userDefaults objectForKey:ATCurrentPersonPreferenceKey];
 
-	return [[[self class] updatableClass] newInstanceFromDictionary:dictionary];
+	if (personInfoData) {
+		return [NSKeyedUnarchiver unarchiveObjectWithData:personInfoData];
+	} else {
+		return nil;
+	}
+}
+
+- (void)removeCurrentVersionFromUserDefaults:(NSUserDefaults *)userDefaults {
+	[userDefaults removeObjectForKey:ATCurrentPersonPreferenceKey];
 }
 
 - (id<ATUpdatable>)previousVersionFromUserDefaults:(NSUserDefaults *)userDefaults {
-	NSDictionary *dictionary = [userDefaults objectForKey:ATPersonLastUpdateValuePreferenceKey];
+	NSData *dictionaryData = [userDefaults objectForKey:ATPersonLastUpdateValuePreferenceKey];
 
-	return [[[self class] updatableClass] newInstanceFromDictionary:dictionary];
+	if (dictionaryData) {
+		NSDictionary *dictionary = [NSKeyedUnarchiver unarchiveObjectWithData:dictionaryData];
+		return [[[self class] updatableClass] newInstanceFromDictionary:dictionary];
+	} else {
+		return nil;
+	}
+}
+
+- (void)removePreviousVersionFromUserDefaults:(NSUserDefaults *)userDefaults {
+	[userDefaults removeObjectForKey:ATPersonLastUpdateValuePreferenceKey];
 }
 
 - (id<ATUpdatable>)emptyCurrentVersion {

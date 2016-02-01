@@ -11,6 +11,7 @@
 #import "ATExpiry.h"
 #import "ATConnect_Private.h"
 #import "ATWebClient+EngagementAdditions.h"
+#import "ATBackend.h"
 
 @interface ATEngagementManifestUpdater ()
 
@@ -46,11 +47,11 @@ NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEnga
 }
 
 - (NSString *)cachedTargetsStoragePath {
-	return [self.storagePath stringByAppendingPathComponent:@"cachedtargets.objects"];
+	return [[ATConnect sharedConnection].backend.storagePath stringByAppendingPathComponent:@"cachedtargets.objects"];
 }
 
 - (NSString *)cachedInteractionsStoragePath {
-	return [self.storagePath stringByAppendingPathComponent:@"cachedinteractionsV2.objects"];
+	return [[ATConnect sharedConnection].backend.storagePath stringByAppendingPathComponent:@"cachedinteractionsV2.objects"];
 }
 
 - (id<ATUpdatable>)currentVersionFromUserDefaults:(NSUserDefaults *)userDefaults {

@@ -28,13 +28,17 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 }
 
 - (id<ATUpdatable>)currentVersionFromUserDefaults:(NSUserDefaults *)userDefaults {
-	NSDictionary *dictionary = [userDefaults objectForKey:ATCurrentConversationPreferenceKey];
+	NSData *archiveData = [userDefaults objectForKey:ATCurrentConversationPreferenceKey];
 
-	if (dictionary) {
-		return [[[self class] updatableClass] newInstanceFromDictionary:dictionary];
+	if (archiveData) {
+		return [NSKeyedUnarchiver unarchiveObjectWithData:archiveData];
 	} else {
 		return nil;
 	}
+}
+
+- (void)removeCurrentVersionFromUserDefaults:(NSUserDefaults *)userDefaults {
+	[userDefaults removeObjectForKey:ATCurrentConversationPreferenceKey];
 }
 
 - (id<ATUpdatable>)previousVersionFromUserDefaults:(NSUserDefaults *)userDefaults {
@@ -45,6 +49,10 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 	} else {
 		return nil;
 	}
+}
+
+- (void)removePreviousVersionFromUserDefaults:(NSUserDefaults *)userDefaults {
+	[userDefaults removeObjectForKey:ATConversationLastUpdateValuePreferenceKey];
 }
 
 - (id<ATUpdatable>)emptyCurrentVersion {

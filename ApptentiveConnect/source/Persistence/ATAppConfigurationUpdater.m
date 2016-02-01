@@ -23,7 +23,21 @@ NSString *const ATConfigurationAppBuildNumberKey = @"ATConfigurationAppBuildNumb
 }
 
 - (ATExpiry *)expiryFromUserDefaults:(NSUserDefaults *)userDefaults {
-	return [[ATExpiry alloc] initWithExpirationDate:[userDefaults objectForKey:ATAppConfigurationExpirationPreferenceKey] appBuild:[userDefaults objectForKey:ATConfigurationAppBuildNumberKey] SDKVersion:[userDefaults objectForKey:ATConfigurationSDKVersionKey]];
+	NSDate *expirationDate = [userDefaults objectForKey:ATAppConfigurationExpirationPreferenceKey];
+	NSString *appBuild = [userDefaults objectForKey:ATConfigurationAppBuildNumberKey];
+	NSString *SDKVersion = [userDefaults objectForKey:ATConfigurationSDKVersionKey];
+
+	if (expirationDate || appBuild || SDKVersion) {
+		return [[ATExpiry alloc] initWithExpirationDate:expirationDate ?: [NSDate distantPast] appBuild:appBuild SDKVersion:SDKVersion];
+	} else {
+		return nil;
+	}
+}
+
+- (void)removeExpiryFromUserDefaults:(NSUserDefaults *)userDefaults {
+	[userDefaults removeObjectForKey:ATAppConfigurationExpirationPreferenceKey];
+	[userDefaults removeObjectForKey:ATConfigurationAppBuildNumberKey];
+	[userDefaults removeObjectForKey:ATConfigurationSDKVersionKey];
 }
 
 - (id<ATUpdatable>)currentVersionFromUserDefaults:(NSUserDefaults *)userDefaults {

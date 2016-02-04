@@ -240,7 +240,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.profileView.emailField.delegate = nil;
 
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[self.attachmentController removeObserver:self forKeyPath:@"attachments"];
+
+	@try {
+		// May get here before -viewDidLoad completes, in which case we aren't an observer.
+		[self.attachmentController removeObserver:self forKeyPath:@"attachments"];
+	} @catch (NSException  * __unused exception) {}
 }
 
 - (void)didReceiveMemoryWarning {

@@ -5,9 +5,7 @@ Pod::Spec.new do |s|
   s.license  = 'BSD'
   s.summary  = 'Apptentive Customer Communications SDK.'
   s.homepage = 'https://www.apptentive.com/'
-  s.authors  = { "Apptentive SDK Team" => "sdks@apptentive.com",
-  	       	 "Frank Schmitt" => "frank@apptentive.com",
-                 "Andrew Wooster" => "andrew@apptentive.com" }
+  s.authors  = { 'Apptentive SDK Team' => 'sdks@apptentive.com' }
   s.source   = { :git => 'https://github.com/apptentive/apptentive-ios.git', :tag => "v#{s.version}" }
   s.platform = :ios, '7.0'
   s.source_files   = 'ApptentiveConnect/source/**/*.{h,m}'

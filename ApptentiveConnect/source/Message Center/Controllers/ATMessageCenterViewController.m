@@ -225,7 +225,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	// Fix iOS 7 bug where contentSize gets set to zero
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fixContentSize:) name:UIKeyboardDidShowNotification object:nil];
 
-	[self.attachmentController addObserver:self forKeyPath:@"attachments" options:0 context:NULL];
+	//[self.attachmentController addObserver:self forKeyPath:@"attachments" options:0 context:NULL];
 	[self.attachmentController viewDidLoad];
 
 	[self updateSendButtonEnabledStatus];
@@ -240,7 +240,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.profileView.emailField.delegate = nil;
 
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[self.attachmentController removeObserver:self forKeyPath:@"attachments"];
+
+	@try {
+		// May get here before -viewDidLoad completes, in which case we aren't an observer.
+		[self.attachmentController removeObserver:self forKeyPath:@"attachments"];
+	} @catch (NSException *exception) {}
 }
 
 - (void)didReceiveMemoryWarning {

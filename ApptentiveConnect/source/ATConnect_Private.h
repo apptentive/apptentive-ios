@@ -11,7 +11,7 @@
 extern NSString *const ATConnectCustomPersonDataChangedNotification;
 extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 
-@class ATMessage;
+@class ATCompoundMessage;
 
 
 @interface ATConnect ()
@@ -42,7 +42,7 @@ extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 - (NSString *)engagementInteractionTypeAtIndex:(NSInteger)index;
 - (void)presentInteractionAtIndex:(NSInteger)index fromViewController:(UIViewController *)viewController;
 
-- (void)showNotificationBannerForMessage:(ATMessage *)message;
+- (void)showNotificationBannerForMessage:(ATCompoundMessage *)message;
 
 + (NSDictionary *)timestampObjectWithNumber:(NSNumber *)seconds;
 + (NSDictionary *)versionObjectWithVersion:(NSString *)version;

@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class ATMessage;
+@class ATCompoundMessage;
 
 
 @interface ATMessageSender : NSManagedObject
@@ -29,13 +29,13 @@
 
 @interface ATMessageSender (CoreDataGeneratedAccessors)
 
-- (void)addSentMessagesObject:(ATMessage *)value;
-- (void)removeSentMessagesObject:(ATMessage *)value;
+- (void)addSentMessagesObject:(ATCompoundMessage *)value;
+- (void)removeSentMessagesObject:(ATCompoundMessage *)value;
 - (void)addSentMessages:(NSSet *)values;
 - (void)removeSentMessages:(NSSet *)values;
 
-- (void)addReceivedMessagesObject:(ATMessage *)value;
-- (void)removeReceivedMessagesObject:(ATMessage *)value;
+- (void)addReceivedMessagesObject:(ATCompoundMessage *)value;
+- (void)removeReceivedMessagesObject:(ATCompoundMessage *)value;
 - (void)addReceivedMessages:(NSSet *)values;
 - (void)removeReceivedMessages:(NSSet *)values;
 

@@ -80,8 +80,8 @@
 		01C30CEC1B0D09F8006BC911 /* ATMessageCenterGreetingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01C30CEA1B0D09F8006BC911 /* ATMessageCenterGreetingView.m */; };
 		01C7C4DD1BEAD0BC005D6EC1 /* ATDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 01C7C4D51BEAD0A4005D6EC1 /* ATDataModel.xcdatamodeld */; };
 		01C7C4DE1BEAD0BE005D6EC1 /* ATDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 01C7C4D51BEAD0A4005D6EC1 /* ATDataModel.xcdatamodeld */; };
-		01C7C4E31BEAD105005D6EC1 /* ATMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 01C7C4E11BEAD105005D6EC1 /* ATMessage.h */; };
-		01C7C4E41BEAD105005D6EC1 /* ATMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 01C7C4E21BEAD105005D6EC1 /* ATMessage.m */; };
+		01C7C4E31BEAD105005D6EC1 /* ATCompoundMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 01C7C4E11BEAD105005D6EC1 /* ATCompoundMessage.h */; };
+		01C7C4E41BEAD105005D6EC1 /* ATCompoundMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 01C7C4E21BEAD105005D6EC1 /* ATCompoundMessage.m */; };
 		01CC8BCA1B1D0598006C4D30 /* ATNetworkImageIconView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01CC8BC81B1D0598006C4D30 /* ATNetworkImageIconView.h */; };
 		01CC8BCB1B1D0598006C4D30 /* ATNetworkImageIconView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01CC8BC91B1D0598006C4D30 /* ATNetworkImageIconView.m */; };
 		01D0C38C1BF3DC330024BA1A /* ATAttachmentController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01D0C38A1BF3DC330024BA1A /* ATAttachmentController.h */; };
@@ -401,8 +401,8 @@
 		01C7C4D81BEAD0A4005D6EC1 /* ATDataModel 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ATDataModel 4.xcdatamodel"; sourceTree = "<group>"; };
 		01C7C4D91BEAD0A4005D6EC1 /* ATDataModel 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ATDataModel 5.xcdatamodel"; sourceTree = "<group>"; };
 		01C7C4DA1BEAD0A4005D6EC1 /* ATDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ATDataModel.xcdatamodel; sourceTree = "<group>"; };
-		01C7C4E11BEAD105005D6EC1 /* ATMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessage.h; sourceTree = "<group>"; };
-		01C7C4E21BEAD105005D6EC1 /* ATMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessage.m; sourceTree = "<group>"; };
+		01C7C4E11BEAD105005D6EC1 /* ATCompoundMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATCompoundMessage.h; sourceTree = "<group>"; };
+		01C7C4E21BEAD105005D6EC1 /* ATCompoundMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATCompoundMessage.m; sourceTree = "<group>"; };
 		01CC8BC81B1D0598006C4D30 /* ATNetworkImageIconView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATNetworkImageIconView.h; sourceTree = "<group>"; };
 		01CC8BC91B1D0598006C4D30 /* ATNetworkImageIconView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATNetworkImageIconView.m; sourceTree = "<group>"; };
 		01D0C38A1BF3DC330024BA1A /* ATAttachmentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAttachmentController.h; sourceTree = "<group>"; };
@@ -1354,8 +1354,8 @@
 				492B81D916D595A00031BEF6 /* ATFileAttachment.m */,
 				49F8AFDB16CC4A550070FFEA /* ATMessageSender.h */,
 				49F8AFDC16CC4A550070FFEA /* ATMessageSender.m */,
-				01C7C4E11BEAD105005D6EC1 /* ATMessage.h */,
-				01C7C4E21BEAD105005D6EC1 /* ATMessage.m */,
+				01C7C4E11BEAD105005D6EC1 /* ATCompoundMessage.h */,
+				01C7C4E21BEAD105005D6EC1 /* ATCompoundMessage.m */,
 				49F8AFDD16CC4A550070FFEA /* ATPersonInfo.h */,
 				49F8AFDE16CC4A550070FFEA /* ATPersonInfo.m */,
 				49F8AFF916CC4D860070FFEA /* ATRecord.h */,
@@ -1486,7 +1486,7 @@
 				01AE42071B38E38D006B9191 /* ATBannerViewController.h in Headers */,
 				49C002A1133413BB0071F088 /* ApptentiveConnect-Prefix.pch in Headers */,
 				49C002A2133413BB0071F088 /* ATConnect.h in Headers */,
-				01C7C4E31BEAD105005D6EC1 /* ATMessage.h in Headers */,
+				01C7C4E31BEAD105005D6EC1 /* ATCompoundMessage.h in Headers */,
 				49D1124F13368CC200603373 /* ATTask.h in Headers */,
 				49D112731337CC9F00603373 /* ATTaskQueue.h in Headers */,
 				491748BA1341177000A7D11E /* ATConnectionChannel.h in Headers */,
@@ -1859,7 +1859,7 @@
 				017D974B1B0E57C2004E045C /* ATMessageCenterReplyCell.m in Sources */,
 				495E9C1D16EABD8E00AE3B03 /* ATLogger.m in Sources */,
 				583C270C1B34BFD800525001 /* ATUnreadMessagesBadgeView.m in Sources */,
-				01C7C4E41BEAD105005D6EC1 /* ATMessage.m in Sources */,
+				01C7C4E41BEAD105005D6EC1 /* ATCompoundMessage.m in Sources */,
 				58AB416818F608500034FAA5 /* ATInteractionSurveyController.m in Sources */,
 				492F2F1D16ED597F0030E48A /* ATRecordRequestTask.m in Sources */,
 				4960A534171F70530082669B /* ATNetworkImageView.m in Sources */,

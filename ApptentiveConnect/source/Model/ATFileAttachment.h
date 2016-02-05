@@ -10,7 +10,7 @@
 #import <CoreData/CoreData.h>
 #import <QuickLook/QuickLook.h>
 
-@class ATMessage;
+@class ATCompoundMessage;
 
 
 @interface ATFileAttachment : NSManagedObject
@@ -19,7 +19,7 @@
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSURL *remoteURL;
 @property (strong, nonatomic) NSURL *remoteThumbnailURL;
-@property (strong, nonatomic) ATMessage *message;
+@property (strong, nonatomic) ATCompoundMessage *message;
 
 @property (readonly, nonatomic) NSString *fullLocalPath;
 @property (readonly, nonatomic) NSString *extension;

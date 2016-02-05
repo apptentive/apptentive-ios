@@ -101,7 +101,7 @@ typedef enum {
 	NSFetchRequest *request = [[NSFetchRequest alloc] init];
 	@try {
 		// Due to a migration error from v2 to v3, these items may not have customData fields.
-		[request setEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:moc]];
+		[request setEntity:[NSEntityDescription entityForName:@"ATCompoundMessage" inManagedObjectContext:moc]];
 		[request setFetchBatchSize:20];
 		NSArray *results = [moc executeFetchRequest:request error:nil];
 		for (NSManagedObject *c in results) {

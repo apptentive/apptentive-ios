@@ -56,9 +56,9 @@
 	}
 }
 
-- (NSDictionary *)lastSentVersion {
-	return [NSDictionary dictionaryWithContentsOfFile:self.storagePath];
-}
+//- (NSDictionary *)lastSentVersion {
+//	return [NSDictionary dictionaryWithContentsOfFile:self.storagePath];
+//}
 
 - (id<ATUpdatable>)previousVersion {
 	if (_previousVersion == nil) {

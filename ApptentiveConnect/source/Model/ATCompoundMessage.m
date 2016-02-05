@@ -37,7 +37,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 + (void)clearComposingMessages {
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingState == %d)", ATPendingMessageStateComposing];
-		[ATData removeEntitiesNamed:@"ATCompoundMessage" withPredicate:fetchPredicate];
+		[ATData removeEntitiesNamed:@"ATMessage" withPredicate:fetchPredicate];
 	}
 }
 
@@ -49,7 +49,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 		message = [self findMessageWithID:apptentiveID];
 	}
 	if (message == nil) {
-		message = (ATCompoundMessage *)[ATData newEntityNamed:@"ATCompoundMessage"];
+		message = (ATCompoundMessage *)[ATData newEntityNamed:@"ATMessage"];
 	}
 	[message updateWithJSON:json];
 
@@ -62,7 +62,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 }
 
 + (instancetype)newInstanceWithBody:(NSString *)body attachments:(NSArray *)attachments {
-	ATCompoundMessage *result = (ATCompoundMessage *)[ATData newEntityNamed:@"ATCompoundMessage"];
+	ATCompoundMessage *result = (ATCompoundMessage *)[ATData newEntityNamed:@"ATMessage"];
 
 	result.body = body;
 	if (attachments) {
@@ -79,7 +79,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(apptentiveID == %@)", apptentiveID];
-		NSArray *results = [ATData findEntityNamed:@"ATCompoundMessage" withPredicate:fetchPredicate];
+		NSArray *results = [ATData findEntityNamed:@"ATMessage" withPredicate:fetchPredicate];
 		if (results && [results count]) {
 			result = [results objectAtIndex:0];
 		}
@@ -92,7 +92,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingMessageID == %@)", pendingID];
-		NSArray *results = [ATData findEntityNamed:@"ATCompoundMessage" withPredicate:fetchPredicate];
+		NSArray *results = [ATData findEntityNamed:@"ATMessage" withPredicate:fetchPredicate];
 		if (results && [results count] != 0) {
 			result = [results objectAtIndex:0];
 		}

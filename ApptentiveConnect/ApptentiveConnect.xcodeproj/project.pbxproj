@@ -65,7 +65,6 @@
 		017D974A1B0E57C2004E045C /* ATMessageCenterReplyCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 017D97481B0E57C2004E045C /* ATMessageCenterReplyCell.h */; };
 		017D974B1B0E57C2004E045C /* ATMessageCenterReplyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 017D97491B0E57C2004E045C /* ATMessageCenterReplyCell.m */; };
 		019A63CB1C4DA5BE00DD5EBF /* ATConnect+Debugging.h in Headers */ = {isa = PBXBuildFile; fileRef = 019A63C91C4DA5BE00DD5EBF /* ATConnect+Debugging.h */; };
-		019A63CC1C4DA5BE00DD5EBF /* ATConnect+Debugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 019A63CA1C4DA5BE00DD5EBF /* ATConnect+Debugging.m */; };
 		019BA84D1C51695E00F74F61 /* ATAPIRequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 019BA84C1C51695E00F74F61 /* ATAPIRequestTests.m */; };
 		01A88FF81AFBFFAE002C49E7 /* testJsonDiffing.1.expected.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF31AFBFDB6002C49E7 /* testJsonDiffing.1.expected.json */; };
 		01A88FF91AFBFFAE002C49E7 /* testJsonDiffing.1.new.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF41AFBFDB6002C49E7 /* testJsonDiffing.1.new.json */; };
@@ -96,6 +95,8 @@
 		01D0C3A01BF3EEA10024BA1A /* at_attach@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01D0C39D1BF3EE9B0024BA1A /* at_attach@3x.png */; };
 		01D3128E1B69349900B369E1 /* ATProgressNavigationBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 01D3128C1B69349900B369E1 /* ATProgressNavigationBar.h */; };
 		01D3128F1B69349900B369E1 /* ATProgressNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D3128D1B69349900B369E1 /* ATProgressNavigationBar.m */; };
+		01DD9E081C6534CD003C4B1D /* ATConnect+Debugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 019A63CA1C4DA5BE00DD5EBF /* ATConnect+Debugging.m */; };
+		01DD9E091C6534CE003C4B1D /* ATConnect+Debugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 019A63CA1C4DA5BE00DD5EBF /* ATConnect+Debugging.m */; };
 		01F1A9601B6823CD0088DBF0 /* ATAboutViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01F1A95E1B6823CD0088DBF0 /* ATAboutViewController.h */; };
 		01F1A9611B6823CD0088DBF0 /* ATAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F1A95F1B6823CD0088DBF0 /* ATAboutViewController.m */; };
 		01F6FD641BFAA291004513C2 /* testCornerCasesThatShouldBeFalse.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FD601BFAA28B004513C2 /* testCornerCasesThatShouldBeFalse.json */; };
@@ -1869,7 +1870,7 @@
 				583C270C1B34BFD800525001 /* ATUnreadMessagesBadgeView.m in Sources */,
 				01C7C4E41BEAD105005D6EC1 /* ATMessage.m in Sources */,
 				58AB416818F608500034FAA5 /* ATInteractionSurveyController.m in Sources */,
-				019BA8471C5050CD00F74F61 /* ATConnect+Debugging.m in Sources */,
+				01DD9E081C6534CD003C4B1D /* ATConnect+Debugging.m in Sources */,
 				492F2F1D16ED597F0030E48A /* ATRecordRequestTask.m in Sources */,
 				4960A534171F70530082669B /* ATNetworkImageView.m in Sources */,
 				583DF06F1A44CD6E00BF0207 /* ATInteractionNavigateToLink.m in Sources */,
@@ -1897,6 +1898,7 @@
 				01AF1BF61C0F9C0D00CB4821 /* ATDataModel v3 to v4.xcmappingmodel in Sources */,
 				49C0028E1334137E0071F088 /* ApptentiveConnectTests.m in Sources */,
 				58CD20151821B7A70071CC72 /* ATDataModel v2 to v3.xcmappingmodel in Sources */,
+				01DD9E091C6534CE003C4B1D /* ATConnect+Debugging.m in Sources */,
 				01C7C4DE1BEAD0BE005D6EC1 /* ATDataModel.xcdatamodeld in Sources */,
 				013BB6181BF6ABB600BB6C27 /* ATDataModel v4 to v5.xcmappingmodel in Sources */,
 				011B08CE1C0D0CCC004F4F5D /* ATUtilitiesTests.m in Sources */,

@@ -13,7 +13,7 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
-#define kATConnectVersionString @"2.1.1"
+#define kATConnectVersionString @"2.1.2"
 
 #if TARGET_OS_IPHONE
 #define kATConnectPlatformString @"iOS"
@@ -132,10 +132,17 @@ Before calling any other methods on the shared `ATConnect` instance, set the API
 ///---------------------------------
 /// @name Interface Customization
 ///---------------------------------
-/** Toggles the display of an email field in the message panel. `YES` by default. */
-@property (assign, nonatomic) BOOL showEmailField;
-/** Set this if you want some custom text to appear as a placeholder in the feedback text box. */
-@property (copy, nonatomic) NSString *customPlaceholderText;
+/** Toggles the display of an email field in the message panel. `YES` by default.
+ 
+	@deprecated This property no longer has any effect. It is included for compatibility but will be removed in the next major version release.
+ */
+@property (assign, nonatomic) BOOL showEmailField DEPRECATED_ATTRIBUTE;
+
+/** Set this if you want some custom text to appear as a placeholder in the feedback text box.
+ 
+ @deprecated This property no longer has any effect. It is included for compatibility but will be removed in the next major version release.
+*/
+@property (copy, nonatomic) NSString *customPlaceholderText DEPRECATED_ATTRIBUTE;
 #if TARGET_OS_IPHONE
 /**
  A tint color to use in Apptentive-specific UI.
@@ -197,7 +204,6 @@ Before calling any other methods on the shared `ATConnect` instance, set the API
  @return The number of unread messages.
  */
 - (NSUInteger)unreadMessageCount;
-
 
 /**
  Returns a "badge" than can be used as a UITableViewCell accessoryView to indicate the current number of unread messages.

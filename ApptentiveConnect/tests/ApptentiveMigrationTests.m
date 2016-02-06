@@ -8,8 +8,7 @@
 
 #import "ApptentiveMigrationTests.h"
 #import "ATDataManager.h"
-#import "ATMessage.h"
-#import "ATMessage.h"
+#import "ATCompoundMessage.h"
 
 
 @implementation ApptentiveMigrationTests
@@ -50,7 +49,7 @@
 		NSArray *results = [moc executeFetchRequest:request error:nil];
 		XCTAssertTrue([results count] > 0, @"No messages found after database migration.");
 		for (NSManagedObject *c in results) {
-			ATMessage *message = (ATMessage *)c;
+			ATCompoundMessage *message = (ATCompoundMessage *)c;
 			XCTAssertNotNil(message.hidden, @"Messages should be visible by default after migration.");
 			XCTAssertFalse([(NSNumber *)message.hidden boolValue], @"Messages should be visible by default after migration.");
 		}

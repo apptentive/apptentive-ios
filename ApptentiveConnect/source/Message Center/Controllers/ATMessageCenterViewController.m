@@ -104,7 +104,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 @property (weak, nonatomic) UIView *activeFooterView;
 
-@property (strong, nonatomic) ATMessage *contextMessage;
+@property (strong, nonatomic) ATCompoundMessage *contextMessage;
 
 @property (readonly, nonatomic) UIColor *sentColor;
 @property (readonly, nonatomic) UIColor *failedColor;

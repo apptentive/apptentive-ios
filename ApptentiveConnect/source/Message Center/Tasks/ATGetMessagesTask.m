@@ -9,7 +9,7 @@
 #import "ATGetMessagesTask.h"
 
 #import "ATBackend.h"
-#import "ATMessage.h"
+#import "ATCompoundMessage.h"
 #import "ATConversationUpdater.h"
 #import "ATMessageSender.h"
 #import "ATWebClient.h"
@@ -26,7 +26,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 
 @implementation ATGetMessagesTask {
 	ATAPIRequest *request;
-	ATMessage *lastMessage;
+	ATCompoundMessage *lastMessage;
 }
 
 - (id)init {
@@ -34,7 +34,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		NSString *messageID = [defaults objectForKey:ATMessagesLastRetrievedMessageIDPreferenceKey];
 		if (messageID) {
-			lastMessage = [ATMessage findMessageWithID:messageID];
+			lastMessage = [ATCompoundMessage findMessageWithID:messageID];
 		}
 	}
 	return self;
@@ -149,13 +149,13 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 		for (NSDictionary *messageJSON in messages) {
 			NSString *pendingMessageID = [messageJSON at_safeObjectForKey:@"nonce"];
 			NSString *messageID = [messageJSON at_safeObjectForKey:@"id"];
-			ATMessage *message = nil;
-			message = [ATMessage findMessageWithPendingID:pendingMessageID];
+			ATCompoundMessage *message = nil;
+			message = [ATCompoundMessage findMessageWithPendingID:pendingMessageID];
 			if (!message) {
-				message = [ATMessage findMessageWithID:messageID];
+				message = [ATCompoundMessage findMessageWithID:messageID];
 			}
 			if (!message) {
-				message = (ATMessage *)[ATMessage newInstanceWithJSON:messageJSON];
+				message = (ATCompoundMessage *)[ATCompoundMessage newInstanceWithJSON:messageJSON];
 				if (conversation && [conversation.personID isEqualToString:message.sender.apptentiveID]) {
 					message.sentByUser = @(YES);
 					message.seenByUser = @(YES);

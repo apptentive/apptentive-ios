@@ -199,8 +199,8 @@ static NSURLCache *imageCache = nil;
 	}
 }
 
-- (ATMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body {
-	ATMessage *message = [ATMessage newInstanceWithBody:body attachments:nil];
+- (ATCompoundMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body {
+	ATCompoundMessage *message = [ATCompoundMessage newInstanceWithBody:body attachments:nil];
 	message.hidden = @NO;
 	message.title = title;
 	message.pendingState = @(ATPendingMessageStateComposing);
@@ -214,7 +214,7 @@ static NSURLCache *imageCache = nil;
 	return message;
 }
 
-- (BOOL)sendAutomatedMessage:(ATMessage *)message {
+- (BOOL)sendAutomatedMessage:(ATCompoundMessage *)message {
 	message.pendingState = @(ATPendingMessageStateSending);
 
 	return [self sendMessage:message];
@@ -228,8 +228,8 @@ static NSURLCache *imageCache = nil;
 	return [self sendTextMessage:[self createTextMessageWithBody:body hiddenOnClient:hidden]];
 }
 
-- (ATMessage *)createTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden {
-	ATMessage *message = [ATMessage newInstanceWithBody:body attachments:nil];
+- (ATCompoundMessage *)createTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden {
+	ATCompoundMessage *message = [ATCompoundMessage newInstanceWithBody:body attachments:nil];
 	message.sentByUser = @YES;
 	message.seenByUser = @YES;
 	message.hidden = @(hidden);
@@ -241,7 +241,7 @@ static NSURLCache *imageCache = nil;
 	return message;
 }
 
-- (BOOL)sendTextMessage:(ATMessage *)message {
+- (BOOL)sendTextMessage:(ATCompoundMessage *)message {
 	message.pendingState = @(ATPendingMessageStateSending);
 
 	[self updatePersonIfNeeded];
@@ -272,7 +272,7 @@ static NSURLCache *imageCache = nil;
 }
 
 - (BOOL)sendCompoundMessageWithText:(NSString *)text attachments:(NSArray *)attachments hiddenOnClient:(BOOL)hidden {
-	ATMessage *compoundMessage = [ATMessage newInstanceWithBody:text attachments:attachments];
+	ATCompoundMessage *compoundMessage = [ATCompoundMessage newInstanceWithBody:text attachments:attachments];
 	compoundMessage.pendingState = @(ATPendingMessageStateSending);
 	compoundMessage.sentByUser = @YES;
 	compoundMessage.hidden = @(hidden);
@@ -280,7 +280,7 @@ static NSURLCache *imageCache = nil;
 	return [self sendMessage:compoundMessage];
 }
 
-- (BOOL)sendMessage:(ATMessage *)message {
+- (BOOL)sendMessage:(ATCompoundMessage *)message {
 	ATConversation *conversation = [ATConversationUpdater currentConversation];
 	if (conversation) {
 		ATMessageSender *sender = [ATMessageSender findSenderWithID:conversation.personID];
@@ -521,7 +521,7 @@ static NSURLCache *imageCache = nil;
 	return didShowMessageCenter;
 }
 
-- (void)attachCustomDataToMessage:(ATMessage *)message {
+- (void)attachCustomDataToMessage:(ATCompoundMessage *)message {
 	if (self.currentCustomData) {
 		[message addCustomDataFromDictionary:self.currentCustomData];
 		// Only attach custom data to the first message.
@@ -673,7 +673,7 @@ static NSURLCache *imageCache = nil;
 		NSUInteger unreadCount = [sectionInfo numberOfObjects];
 		if (unreadCount != self.previousUnreadCount) {
 			if (unreadCount > self.previousUnreadCount && !self.messageCenterInForeground) {
-				ATMessage *message = sectionInfo.objects.firstObject;
+				ATCompoundMessage *message = sectionInfo.objects.firstObject;
 				[[ATConnect sharedConnection] showNotificationBannerForMessage:message];
 			}
 			self.previousUnreadCount = unreadCount;

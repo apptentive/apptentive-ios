@@ -1,12 +1,12 @@
 //
-//  ATMessage.m
+//  ATCompoundMessage.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 10/6/12.
 //  Copyright (c) 2012 Apptentive, Inc. All rights reserved.
 //
 
-#import "ATMessage.h"
+#import "ATCompoundMessage.h"
 #import "ATBackend.h"
 #import "ATData.h"
 #import "ATJSONSerialization.h"
@@ -17,7 +17,7 @@
 NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
 
-@implementation ATMessage
+@implementation ATCompoundMessage
 
 @dynamic pendingMessageID;
 @dynamic pendingState;
@@ -42,14 +42,14 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 }
 
 + (instancetype)newInstanceWithJSON:(NSDictionary *)json {
-	ATMessage *message = nil;
+	ATCompoundMessage *message = nil;
 	NSString *apptentiveID = [json at_safeObjectForKey:@"id"];
 
 	if (apptentiveID) {
 		message = [self findMessageWithID:apptentiveID];
 	}
 	if (message == nil) {
-		message = (ATMessage *)[ATData newEntityNamed:@"ATMessage"];
+		message = (ATCompoundMessage *)[ATData newEntityNamed:@"ATMessage"];
 	}
 	[message updateWithJSON:json];
 
@@ -62,7 +62,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 }
 
 + (instancetype)newInstanceWithBody:(NSString *)body attachments:(NSArray *)attachments {
-	ATMessage *result = (ATMessage *)[ATData newEntityNamed:@"ATMessage"];
+	ATCompoundMessage *result = (ATCompoundMessage *)[ATData newEntityNamed:@"ATMessage"];
 
 	result.body = body;
 	if (attachments) {
@@ -74,8 +74,8 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 	return result;
 }
 
-+ (ATMessage *)findMessageWithID:(NSString *)apptentiveID {
-	ATMessage *result = nil;
++ (ATCompoundMessage *)findMessageWithID:(NSString *)apptentiveID {
+	ATCompoundMessage *result = nil;
 
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(apptentiveID == %@)", apptentiveID];
@@ -87,8 +87,8 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 	return result;
 }
 
-+ (ATMessage *)findMessageWithPendingID:(NSString *)pendingID {
-	ATMessage *result = nil;
++ (ATCompoundMessage *)findMessageWithPendingID:(NSString *)pendingID {
+	ATCompoundMessage *result = nil;
 
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingMessageID == %@)", pendingID];
@@ -298,7 +298,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 @end
 
 
-@implementation ATMessage (QuickLook)
+@implementation ATCompoundMessage (QuickLook)
 
 - (NSInteger)numberOfPreviewItemsInPreviewController:(QLPreviewController *)controller {
 	return self.attachments.count;

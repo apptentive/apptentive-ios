@@ -1,5 +1,5 @@
 //
-//  ATMessage.h
+//  ATCompoundMessage.h
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 10/6/12.
@@ -24,7 +24,7 @@ typedef NS_ENUM(NSInteger, ATPendingMessageState) {
 @class ATMessageDisplayType, ATMessageSender;
 
 
-@interface ATMessage : ATRecord <ATJSONModel>
+@interface ATCompoundMessage : ATRecord <ATJSONModel>
 
 @property (strong, nonatomic) NSString *pendingMessageID;
 @property (strong, nonatomic) NSNumber *pendingState;
@@ -43,14 +43,14 @@ typedef NS_ENUM(NSInteger, ATPendingMessageState) {
 
 + (instancetype)newInstanceWithBody:(NSString *)body attachments:(NSArray *)attachments;
 + (void)clearComposingMessages;
-+ (ATMessage *)findMessageWithID:(NSString *)apptentiveID;
-+ (ATMessage *)findMessageWithPendingID:(NSString *)pendingID;
++ (ATCompoundMessage *)findMessageWithID:(NSString *)apptentiveID;
++ (ATCompoundMessage *)findMessageWithPendingID:(NSString *)pendingID;
 - (NSArray *)errorsFromErrorMessage;
 
 @end
 
 
-@interface ATMessage (CoreDataGeneratedAccessors)
+@interface ATCompoundMessage (CoreDataGeneratedAccessors)
 
 - (void)setCustomDataValue:(id)value forKey:(NSString *)key;
 - (void)addCustomDataFromDictionary:(NSDictionary *)dictionary;
@@ -65,5 +65,5 @@ typedef NS_ENUM(NSInteger, ATPendingMessageState) {
 @end
 
 
-@interface ATMessage (QuickLook) <QLPreviewControllerDataSource>
+@interface ATCompoundMessage (QuickLook) <QLPreviewControllerDataSource>
 @end

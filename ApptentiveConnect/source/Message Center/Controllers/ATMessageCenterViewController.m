@@ -244,7 +244,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	@try {
 		// May get here before -viewDidLoad completes, in which case we aren't an observer.
 		[self.attachmentController removeObserver:self forKeyPath:@"attachments"];
-	} @catch (NSException  * __unused exception) {}
+	} @catch (NSException *__unused exception) {
+	}
 }
 
 - (void)didReceiveMemoryWarning {

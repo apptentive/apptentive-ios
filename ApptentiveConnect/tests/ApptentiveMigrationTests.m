@@ -9,7 +9,6 @@
 #import "ApptentiveMigrationTests.h"
 #import "ATDataManager.h"
 #import "ATCompoundMessage.h"
-#import "ATCompoundMessage.h"
 
 
 @implementation ApptentiveMigrationTests

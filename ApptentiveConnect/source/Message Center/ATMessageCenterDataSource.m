@@ -78,7 +78,7 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 }
 
 - (void)start {
-	[[ATBackend sharedBackend] messageCenterEnteredForeground];
+	[[ATConnect sharedConnection].backend messageCenterEnteredForeground];
 	[ATCompoundMessage clearComposingMessages];
 
 	NSError *error = nil;

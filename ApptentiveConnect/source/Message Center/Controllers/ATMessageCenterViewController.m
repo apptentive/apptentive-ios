@@ -104,7 +104,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 @property (weak, nonatomic) UIView *activeFooterView;
 
-@property (strong, nonatomic) ATMessage *contextMessage;
+@property (strong, nonatomic) ATCompoundMessage *contextMessage;
 
 @property (readonly, nonatomic) UIColor *sentColor;
 @property (readonly, nonatomic) UIColor *failedColor;
@@ -244,7 +244,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	@try {
 		// May get here before -viewDidLoad completes, in which case we aren't an observer.
 		[self.attachmentController removeObserver:self forKeyPath:@"attachments"];
-	} @catch (NSException  * __unused exception) {}
+	} @catch (NSException *__unused exception) {
+	}
 }
 
 - (void)didReceiveMemoryWarning {

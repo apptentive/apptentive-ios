@@ -10,7 +10,7 @@
 
 #import "ATAPIRequest.h"
 #import "ATBackend.h"
-#import "ATMessage.h"
+#import "ATCompoundMessage.h"
 #import "ATFileAttachment.h"
 #import "ATJSONSerialization.h"
 #import "ATURLConnection.h"
@@ -110,7 +110,7 @@
 	return request;
 }
 
-- (ATAPIRequest *)requestForPostingMessage:(ATMessage *)message {
+- (ATAPIRequest *)requestForPostingMessage:(ATCompoundMessage *)message {
 	NSError *error = nil;
 	NSDictionary *postJSON = [message apiJSON];
 
@@ -134,7 +134,7 @@
 	return request;
 }
 
-- (ATAPIRequest *)requestForRetrievingMessagesSinceMessage:(ATMessage *)message {
+- (ATAPIRequest *)requestForRetrievingMessagesSinceMessage:(ATCompoundMessage *)message {
 	NSDictionary *parameters = nil;
 	if (message && message.apptentiveID) {
 		parameters = @{ @"after_id": message.apptentiveID };

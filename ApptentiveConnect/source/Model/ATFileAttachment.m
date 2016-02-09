@@ -8,7 +8,7 @@
 
 #import "ATFileAttachment.h"
 #import "ATBackend.h"
-#import "ATMessage.h"
+#import "ATCompoundMessage.h"
 #import "ATUtilities.h"
 #import "ATData.h"
 #import "NSDictionary+ATAdditions.h"

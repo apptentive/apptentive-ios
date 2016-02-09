@@ -66,7 +66,6 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (id)init {
 	if ((self = [super init])) {
-		self.showEmailField = YES;
 		_customPersonData = [[NSMutableDictionary alloc] init];
 		_customDeviceData = [[NSMutableDictionary alloc] init];
 		_integrationConfiguration = [[NSMutableDictionary alloc] init];
@@ -560,9 +559,9 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 #pragma mark - Message notification banner
 
 - (void)showNotificationBannerForMessage:(ATMessage *)message {
-	if (self.backend.notificationPopupsEnabled && [message isKindOfClass:[ATMessage class]]) {
+	if (self.backend.notificationPopupsEnabled && [message isKindOfClass:[ATCompoundMessage class]]) {
 		// TODO: Display something if body is empty
-		ATMessage *textMessage = (ATMessage *)message;
+		ATCompoundMessage *textMessage = (ATCompoundMessage *)message;
 		NSURL *profilePhotoURL = textMessage.sender.profilePhotoURL ? [NSURL URLWithString:textMessage.sender.profilePhotoURL] : nil;
 
 		ATBannerViewController *banner = [ATBannerViewController bannerWithImageURL:profilePhotoURL title:textMessage.sender.name message:textMessage.body];

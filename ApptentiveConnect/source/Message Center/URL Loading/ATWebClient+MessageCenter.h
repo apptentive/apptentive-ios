@@ -10,7 +10,7 @@
 
 #import "ATConversation.h"
 #import "ATDeviceInfo.h"
-#import "ATMessage.h"
+#import "ATCompoundMessage.h"
 #import "ATPersonInfo.h"
 
 
@@ -20,6 +20,6 @@
 
 - (ATAPIRequest *)requestForUpdatingDevice:(ATDeviceInfo *)deviceInfo;
 - (ATAPIRequest *)requestForUpdatingPerson:(ATPersonInfo *)personInfo;
-- (ATAPIRequest *)requestForPostingMessage:(ATMessage *)message;
-- (ATAPIRequest *)requestForRetrievingMessagesSinceMessage:(ATMessage *)message;
+- (ATAPIRequest *)requestForPostingMessage:(ATCompoundMessage *)message;
+- (ATAPIRequest *)requestForRetrievingMessagesSinceMessage:(ATCompoundMessage *)message;
 @end

@@ -22,7 +22,7 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 @interface ATMessageCenterDataSource () <NSFetchedResultsControllerDelegate>
 
 @property (readwrite, strong, nonatomic) NSFetchedResultsController *fetchedMessagesController;
-@property (readonly, nonatomic) ATMessage *lastUserMessage;
+@property (readonly, nonatomic) ATCompoundMessage *lastUserMessage;
 @property (readonly, nonatomic) NSURLSession *attachmentDownloadSession;
 @property (readonly, nonatomic) NSMutableDictionary<NSValue *, NSIndexPath *> *taskIndexPaths;
 
@@ -78,8 +78,8 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 }
 
 - (void)start {
-	[[ATConnect sharedConnection].backend messageCenterEnteredForeground];
-	[ATMessage clearComposingMessages];
+	[[ATBackend sharedBackend] messageCenterEnteredForeground];
+	[ATCompoundMessage clearComposingMessages];
 
 	NSError *error = nil;
 	if (![self.fetchedMessagesController performFetch:&error]) {
@@ -116,7 +116,7 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 }
 
 - (ATMessageCenterMessageType)cellTypeAtIndexPath:(NSIndexPath *)indexPath {
-	ATMessage *message = [self messageAtIndexPath:indexPath];
+	ATCompoundMessage *message = [self messageAtIndexPath:indexPath];
 
 	if (message.automated.boolValue) {
 		return ATMessageCenterMessageTypeContextMessage;
@@ -141,7 +141,7 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 
 - (NSDate *)dateOfMessageGroupAtIndex:(NSInteger)index {
 	if ([self numberOfMessagesInGroup:index] > 0) {
-		ATMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]];
+		ATCompoundMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]];
 
 		return [NSDate dateWithTimeIntervalSince1970:[message.creationTimeForSections doubleValue]];
 	} else {
@@ -150,7 +150,7 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 }
 
 - (ATMessageCenterMessageStatus)statusOfMessageAtIndexPath:(NSIndexPath *)indexPath {
-	ATMessage *message = [self messageAtIndexPath:indexPath];
+	ATCompoundMessage *message = [self messageAtIndexPath:indexPath];
 
 	if (message.sentByUser.boolValue) {
 		ATPendingMessageState messageState = message.pendingState.integerValue;
@@ -179,12 +179,12 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 }
 
 - (NSString *)senderOfMessageAtIndexPath:(NSIndexPath *)indexPath {
-	ATMessage *message = [self messageAtIndexPath:indexPath];
+	ATCompoundMessage *message = [self messageAtIndexPath:indexPath];
 	return message.sender.name;
 }
 
 - (NSURL *)imageURLOfSenderAtIndexPath:(NSIndexPath *)indexPath {
-	ATMessage *message = [self messageAtIndexPath:indexPath];
+	ATCompoundMessage *message = [self messageAtIndexPath:indexPath];
 	if (message.sender.profilePhotoURL.length) {
 		return [NSURL URLWithString:message.sender.profilePhotoURL];
 	} else {
@@ -193,14 +193,14 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 }
 
 - (void)markAsReadMessageAtIndexPath:(NSIndexPath *)indexPath {
-	ATMessage *message = [self messageAtIndexPath:indexPath];
+	ATCompoundMessage *message = [self messageAtIndexPath:indexPath];
 
 	[message markAsRead];
 }
 
 - (BOOL)lastMessageIsReply {
 	id<NSFetchedResultsSectionInfo> section = self.fetchedMessagesController.sections.lastObject;
-	ATMessage *lastMessage = section.objects.lastObject;
+	ATCompoundMessage *lastMessage = section.objects.lastObject;
 
 	return lastMessage.sentByUser.boolValue == NO;
 }
@@ -377,17 +377,17 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 
 // indexPath.section refers to the message index (table view section), indexPath.row refers to the attachment index.
 - (ATFileAttachment *)fileAttachmentAtIndexPath:(NSIndexPath *)indexPath {
-	ATMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
+	ATCompoundMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
 	return [message.attachments objectAtIndex:indexPath.row];
 }
 
-- (ATMessage *)messageAtIndexPath:(NSIndexPath *)indexPath {
+- (ATCompoundMessage *)messageAtIndexPath:(NSIndexPath *)indexPath {
 	return [self.fetchedMessagesController objectAtIndexPath:indexPath];
 }
 
-- (ATMessage *)lastUserMessage {
+- (ATCompoundMessage *)lastUserMessage {
 	for (id<NSFetchedResultsSectionInfo> section in self.fetchedMessagesController.sections.reverseObjectEnumerator) {
-		for (ATMessage *message in section.objects.reverseObjectEnumerator) {
+		for (ATCompoundMessage *message in section.objects.reverseObjectEnumerator) {
 			if (message.sentByUser) {
 				return message;
 			}

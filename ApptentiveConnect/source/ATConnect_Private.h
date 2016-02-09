@@ -39,17 +39,7 @@ extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 + (NSBundle *)resourceBundle;
 + (UIStoryboard *)storyboard;
 
-<<<<<<< HEAD
-- (void)showNotificationBannerForMessage:(ATMessage *)message;
-=======
-// Debug/test interactions by invoking them directly
-- (NSArray *)engagementInteractions;
-- (NSString *)engagementInteractionNameAtIndex:(NSInteger)index;
-- (NSString *)engagementInteractionTypeAtIndex:(NSInteger)index;
-- (void)presentInteractionAtIndex:(NSInteger)index fromViewController:(UIViewController *)viewController;
-
 - (void)showNotificationBannerForMessage:(ATCompoundMessage *)message;
->>>>>>> master
 
 + (NSDictionary *)timestampObjectWithNumber:(NSNumber *)seconds;
 + (NSDictionary *)versionObjectWithVersion:(NSString *)version;

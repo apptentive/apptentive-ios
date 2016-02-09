@@ -558,7 +558,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 #pragma mark - Message notification banner
 
-- (void)showNotificationBannerForMessage:(ATMessage *)message {
+- (void)showNotificationBannerForMessage:(ATCompoundMessage *)message {
 	if (self.backend.notificationPopupsEnabled && [message isKindOfClass:[ATCompoundMessage class]]) {
 		// TODO: Display something if body is empty
 		ATCompoundMessage *textMessage = (ATCompoundMessage *)message;

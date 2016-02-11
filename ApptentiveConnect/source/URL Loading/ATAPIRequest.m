@@ -8,7 +8,7 @@
 
 #import "ATAPIRequest.h"
 #import "ATConnect.h"
-#import "ATConnect_Debugging.h"
+#import "ATConnect+Debugging.h"
 #import "ATConnect_Private.h"
 #import "ATConnectionManager.h"
 #import "ATJSONSerialization.h"

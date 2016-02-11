@@ -279,7 +279,7 @@
 
 - (NSNumber *)currentTime {
 	if (!_currentTime) {
-		_currentTime = @([[NSDate date] timeIntervalSince1970]);
+		_currentTime = @([[NSDate dateWithTimeIntervalSinceNow:31 * 86400] timeIntervalSince1970]);
 	}
 	return _currentTime;
 }

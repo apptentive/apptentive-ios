@@ -16,12 +16,22 @@
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
 		int version = [coder decodeIntForKey:@"version"];
-		self.failureCount = 0;
+		_failureCount = 0;
+		_shouldRetry = YES;
 		if (version >= 2) {
 			self.failureCount = [(NSNumber *)[coder decodeObjectForKey:@"failureCount"] unsignedIntegerValue];
 		} else {
 			return nil;
 		}
+	}
+	return self;
+}
+
+- (instancetype)init
+{
+	self = [super init];
+	if (self) {
+		_shouldRetry = YES;
 	}
 	return self;
 }

@@ -20,6 +20,7 @@
 #import "ATSurveyGreetingView.h"
 
 #import "ATBackend.h"
+#import "ATHUDView.h"
 
 // These need to match the values from the storyboard
 #define QUESTION_HORIZONTAL_MARGIN 38.0
@@ -85,9 +86,10 @@
 	if ([self.viewModel submit]) {
 		[self dismissViewControllerAnimated:YES completion:nil];
 
-		// TODO: thank-you
-		//debug
-		NSLog(@"Answers are %@", self.viewModel.answers);
+		ATHUDView *HUDView = [[ATHUDView alloc] initWithWindow:self.view.window];
+		HUDView.label.text = self.viewModel.thankYouText;
+		HUDView.fadeOutDuration = 5.0;
+		[HUDView show];
 	}
 }
 

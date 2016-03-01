@@ -46,6 +46,11 @@
 	return @"Submit";
 }
 
+- (NSString *)thankYouText {
+	// TODO: Localize me
+	return @"Thanks!";
+}
+
 - (NSInteger)numberOfQuestionsInSurvey {
 	return self.survey.questions.count;
 }

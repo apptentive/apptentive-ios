@@ -154,7 +154,7 @@
 	self.label.numberOfLines = 0;
 	[self addSubview:self.label];
 
-	UIImage *iconImage = [ATBackend imageNamed:@"at_checkmark"];
+	UIImage *iconImage = [ATBackend imageNamed:@"at_thanks"];
 	self.icon = [[UIImageView alloc] initWithImage:iconImage];
 	self.icon.backgroundColor = [UIColor clearColor];
 	self.icon.opaque = NO;

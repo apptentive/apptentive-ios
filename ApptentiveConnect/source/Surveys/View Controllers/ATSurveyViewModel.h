@@ -25,6 +25,7 @@
 @property (readonly, nonatomic) NSString *title;
 @property (readonly, nonatomic) NSString *greeting;
 @property (readonly, nonatomic) NSString *submitButtonText;
+@property (readonly, nonatomic) NSString *thankYouText;
 
 - (NSInteger)numberOfQuestionsInSurvey;
 - (NSInteger)numberOfAnswersForQuestionAtIndex:(NSInteger)index;

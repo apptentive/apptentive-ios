@@ -1435,6 +1435,9 @@ Lines</string>
                                             <rect key="frame" x="19" y="7" width="268" height="30"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                            <connections>
+                                                <action selector="textFieldChanged:" destination="0Su-Sq-q29" eventType="editingChanged" id="Tsy-me-Xsd"/>
+                                            </connections>
                                         </textField>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>

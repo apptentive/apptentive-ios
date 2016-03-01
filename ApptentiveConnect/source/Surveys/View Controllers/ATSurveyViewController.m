@@ -42,6 +42,8 @@
 
 @property (strong, nonatomic) IBOutlet ATSurveySubmitButton *submitButton;
 
+@property (strong, nonatomic) NSIndexPath *editingIndexPath;
+
 @end
 
 @implementation ATSurveyViewController
@@ -58,6 +60,16 @@
 	[self.headerView.infoButton setImage:[ATBackend imageNamed:@"at_info"] forState:UIControlStateNormal];
 	((ATCollectionView *)self.collectionView).collectionHeaderView = self.headerView;
 	((ATCollectionView *)self.collectionView).collectionFooterView = self.footerView;
+
+	// iOS 7 and 8 don't seem to adjust the contentInset for the keyboard
+	if (![[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){9, 0, 0}]) {
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustForKeyboard:) name:UIKeyboardWillShowNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustForKeyboard:) name:UIKeyboardWillHideNotification object:nil];
+	}
+}
+
+- (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
@@ -257,6 +269,22 @@
 
 #pragma mark - Text view delegate
 
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
+	self.editingIndexPath = [NSIndexPath indexPathForItem:0 inSection:textView.tag];
+
+	return YES;
+}
+
+- (void)textViewDidBeginEditing:(UITextField *)textView {
+	[self.collectionView scrollToItemAtIndexPath:self.editingIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
+}
+
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView {
+	self.editingIndexPath = nil;
+
+	return YES;
+}
+
 - (void)textViewDidChange:(UITextView *)textView {
 	NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:textView.tag];
 	ATSurveyMultilineCell *cell = (ATSurveyMultilineCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
@@ -270,14 +298,25 @@
 
 #pragma mark - Text field delegate
 
-// TODO: conider using editingChanged action instead
-- (void)textFieldDidEndEditing:(UITextField *)textField {
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+	self.editingIndexPath = [NSIndexPath indexPathForItem:0 inSection:textField.tag];
+
+	return YES;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+	[self.collectionView scrollToItemAtIndexPath:self.editingIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
+}
+
+- (IBAction)textFieldChanged:(UITextField *)textField {
 	NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:textField.tag];
 
 	[self.viewModel setText:textField.text forAnswerAtIndexPath:indexPath];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
+	self.editingIndexPath = nil;
+
 	[textField resignFirstResponder];
 
 	return NO;
@@ -287,6 +326,14 @@
 
 - (void)viewModelValidationChanged:(ATSurveyViewModel *)viewModel {
 	[self.collectionViewLayout invalidateLayout];
+}
+
+#pragma mark - Keyboard adjustment for iOS 7 & 8
+
+- (void)adjustForKeyboard:(NSNotification *)notification {
+	CGRect keyboardRect = [self.view.window convertRect:[notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue] toView:self.collectionView.superview];
+
+	self.collectionView.contentInset = UIEdgeInsetsMake(self.collectionView.contentInset.top, self.collectionView.contentInset.left,  CGRectGetHeight(self.collectionView.bounds) - keyboardRect.origin.y, self.collectionView.contentInset.right);
 }
 
 @end

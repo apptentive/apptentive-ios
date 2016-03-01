@@ -1275,7 +1275,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
         <!--Navigation Controller-->
         <scene sceneID="4Ue-53-Dzz">
             <objects>
-                <navigationController storyboardIdentifier="SurveyNavigation" id="hse-6D-XJq" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="SurveyNavigation" id="hse-6D-XJq" customClass="ATNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="55b-97-XRn">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1526,6 +1526,9 @@ Lines</string>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eQS-jv-07Q">
                             <rect key="frame" x="288" y="8" width="24" height="24"/>
+                            <connections>
+                                <action selector="showAbout:" destination="0Su-Sq-q29" eventType="touchUpInside" id="oe5-zj-xZf"/>
+                            </connections>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Would you like to take a survey?!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="220" translatesAutoresizingMaskIntoConstraints="NO" id="QJU-jb-fK0">
                             <rect key="frame" x="50" y="8" width="220" height="69"/>

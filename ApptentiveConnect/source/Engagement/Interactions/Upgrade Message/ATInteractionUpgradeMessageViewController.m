@@ -106,7 +106,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 }
 
 - (IBAction)showAbout:(id)sender {
-	[self.navigationController pushViewController:[ATAboutViewController aboutViewControllerFromStoryboard] animated:YES];
+	[(ATNavigationController *)self.navigationController pushAboutApptentiveViewController];
 	[self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 

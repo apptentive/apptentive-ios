@@ -21,6 +21,7 @@
 
 #import "ATBackend.h"
 #import "ATHUDView.h"
+#import "ATConnect_Private.h"
 
 // These need to match the values from the storyboard
 #define QUESTION_HORIZONTAL_MARGIN 38.0
@@ -95,6 +96,10 @@
 
 - (IBAction)close:(id)sender {
 	[self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)showAbout:(id)sender {
+	[(ATNavigationController *)self.navigationController pushAboutApptentiveViewController];
 }
 
 - (void)setViewModel:(ATSurveyViewModel *)viewModel {

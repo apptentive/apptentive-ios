@@ -11,10 +11,11 @@
 
 @implementation ATSurvey
 
-- (instancetype)initWithJSON:(NSDictionary *)JSON {
+- (instancetype)initWithJSON:(NSDictionary *)JSON identifier:(NSString *)identifier {
 	self = [super init];
 
 	if (self) {
+		_identifier = identifier;
 		_title = JSON[@"title"];
 		_name = JSON[@"name"];
 		_surveyDescription = JSON[@"description"];

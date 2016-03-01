@@ -12,6 +12,10 @@
 #import "ATSurveyAnswer.h"
 
 #import "ATConnect_Private.h"
+#import "ATSurveyResponse.h"
+#import "ATSurveyResponseTask.h"
+#import "ATTaskQueue.h"
+#import "ATData.h"
 
 @interface ATSurveyViewModel ()
 
@@ -48,7 +52,7 @@
 }
 
 - (NSString *)thankYouText {
-	return ATLocalizedString(@"Thank you for your response!", @"Survey thanks message");
+	return self.survey.successMessage;
 }
 
 - (NSInteger)numberOfQuestionsInSurvey {
@@ -136,7 +140,28 @@
 - (BOOL)submit {
 	[self validate];
 
-	return self.invalidQuestionIndexes.count == 0;
+	BOOL result = self.invalidQuestionIndexes.count == 0;
+
+	if (result) {
+		ATSurveyResponse *response = (ATSurveyResponse *)[ATData newEntityNamed:@"ATSurveyResponse"];
+		[response setup];
+		response.pendingState = [NSNumber numberWithInt:ATPendingSurveyResponseStateSending];
+		response.surveyID = self.survey.identifier;
+		[response updateClientCreationTime];
+
+		[response setAnswers:self.answers];
+
+		NSString *pendingSurveyResponseID = [response pendingSurveyResponseID];
+		double delayInSeconds = 1.5;
+		dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+		dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+			ATSurveyResponseTask *task = [[ATSurveyResponseTask alloc] init];
+			task.pendingSurveyResponseID = pendingSurveyResponseID;
+			[[ATTaskQueue sharedTaskQueue] addTask:task];
+		});
+	}
+
+	return result;
 }
 
 #pragma mark - Validation & Output

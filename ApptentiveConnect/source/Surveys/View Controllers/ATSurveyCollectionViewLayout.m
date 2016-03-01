@@ -18,6 +18,8 @@
 	if ([self.collectionView isKindOfClass:[ATCollectionView class]]) {
 		ATCollectionView *myCollectionView = (ATCollectionView *)self.collectionView;
 		superSize.height += CGRectGetHeight(myCollectionView.collectionHeaderView.bounds) + CGRectGetHeight(myCollectionView.collectionFooterView.bounds) + self.sectionInset.top + self.sectionInset.bottom;
+
+		superSize.height = fmax(superSize.height, CGRectGetHeight(self.collectionView.bounds) - self.collectionView.contentInset.top - self.collectionView.contentInset.bottom);
 	}
 
 	return superSize;

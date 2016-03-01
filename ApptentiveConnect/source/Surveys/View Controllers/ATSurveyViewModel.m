@@ -11,6 +11,8 @@
 #import "ATSurveyQuestion.h"
 #import "ATSurveyAnswer.h"
 
+#import "ATConnect_Private.h"
+
 @interface ATSurveyViewModel ()
 
 @property (strong, nonatomic) NSString *currentMultilineText;
@@ -42,13 +44,11 @@
 }
 
 - (NSString *)submitButtonText {
-	// TODO: Localize me
-	return @"Submit";
+	return ATLocalizedString(@"Submit", @"Survey submit button text");
 }
 
 - (NSString *)thankYouText {
-	// TODO: Localize me
-	return @"Thanks!";
+	return ATLocalizedString(@"Thank you for your response!", @"Survey thanks message");
 }
 
 - (NSInteger)numberOfQuestionsInSurvey {
@@ -71,15 +71,14 @@
 	NSMutableArray *parts = [NSMutableArray array];
 
 	if ([self questionAtIndex:index].required) {
-		// TODO: localize me
-		[parts addObject:@"Required"];
+		[parts addObject:ATLocalizedString(@"required", @"Survey answer requires response")];
 	}
 
 	if ([self questionAtIndex:index].instructions) {
 		[parts addObject:[self questionAtIndex:index].instructions];
 	}
 
-	return [parts componentsJoinedByString:@" — "];
+	return [parts componentsJoinedByString:@"—"];
 }
 
 - (NSString *)placeholderTextOfQuestionAtIndex:(NSInteger)index {

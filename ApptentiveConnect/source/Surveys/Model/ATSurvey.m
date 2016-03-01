@@ -1,73 +1,39 @@
 //
 //  ATSurvey.m
-//  ApptentiveSurveys
+//  CVSurvey
 //
-//  Created by Andrew Wooster on 11/5/11.
-//  Copyright (c) 2011 Apptentive. All rights reserved.
+//  Created by Frank Schmitt on 2/26/16.
+//  Copyright © 2016 Apptentive, Inc. All rights reserved.
 //
 
 #import "ATSurvey.h"
+#import "ATSurveyQuestion.h"
 
-#define kATSurveyStorageVersion 1
+@implementation ATSurvey
 
+- (instancetype)initWithJSON:(NSDictionary *)JSON {
+	self = [super init];
 
-@implementation ATSurvey {
-	NSMutableArray *_questions;
-}
+	if (self) {
+		_title = JSON[@"title"];
+		_name = JSON[@"name"];
+		_surveyDescription = JSON[@"description"];
+		_required = [JSON[@"required"] boolValue];
+		_multipleResponses = [JSON[@"multiple_responses"] boolValue];
+		_showSuccessMessage = [JSON[@"show_success_message"] boolValue];
+		_successMessage = JSON[@"success_message"];
+		_viewPeriod = [JSON[@"view_period"] doubleValue];
 
-- (id)init {
-	if ((self = [super init])) {
-		_questions = [[NSMutableArray alloc] init];
-	}
-	return self;
-}
+		NSMutableArray *mutableQuestions = [NSMutableArray array];
 
-- (id)initWithCoder:(NSCoder *)coder {
-	if ((self = [super init])) {
-		int version = [coder decodeIntForKey:@"version"];
-		_questions = [[NSMutableArray alloc] init];
-		if (version == kATSurveyStorageVersion) {
-			self.responseRequired = [coder decodeBoolForKey:@"responseRequired"];
-			self.identifier = [coder decodeObjectForKey:@"identifier"];
-			self.name = [coder decodeObjectForKey:@"name"];
-			self.surveyDescription = [coder decodeObjectForKey:@"surveyDescription"];
-			NSArray *decodedQuestions = [coder decodeObjectForKey:@"questions"];
-			if (decodedQuestions) {
-				[_questions addObjectsFromArray:decodedQuestions];
-			}
-			self.showSuccessMessage = [[coder decodeObjectForKey:@"showSuccessMessage"] boolValue];
-			self.successMessage = [coder decodeObjectForKey:@"successMessage"];
-		} else {
-			return nil;
+		for (NSDictionary * questionJSON in JSON[@"questions"]) {
+			[mutableQuestions addObject:[[ATSurveyQuestion alloc] initWithJSON:questionJSON]];
 		}
+
+		_questions = [mutableQuestions copy];
 	}
+
 	return self;
-}
-
-- (void)encodeWithCoder:(NSCoder *)coder {
-	[coder encodeInt:kATSurveyStorageVersion forKey:@"version"];
-	[coder encodeObject:self.identifier forKey:@"identifier"];
-	[coder encodeBool:self.responseIsRequired forKey:@"responseRequired"];
-	[coder encodeObject:self.name forKey:@"name"];
-	[coder encodeObject:self.surveyDescription forKey:@"surveyDescription"];
-	[coder encodeObject:self.questions forKey:@"questions"];
-	[coder encodeObject:@(self.showSuccessMessage) forKey:@"showSuccessMessage"];
-	[coder encodeObject:self.successMessage forKey:@"successMessage"];
-}
-
-
-- (NSString *)description {
-	return [NSString stringWithFormat:@"<ATSurvey: %p {name:%@, identifier:%@}>", self, self.name, self.identifier];
-}
-
-- (void)addQuestion:(ATSurveyQuestion *)question {
-	[_questions addObject:question];
-}
-
-- (void)reset {
-	for (ATSurveyQuestion *question in self.questions) {
-		[question reset];
-	}
 }
 
 @end

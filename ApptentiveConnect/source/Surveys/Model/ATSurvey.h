@@ -1,26 +1,27 @@
 //
 //  ATSurvey.h
-//  ApptentiveSurveys
+//  CVSurvey
 //
-//  Created by Andrew Wooster on 11/5/11.
-//  Copyright (c) 2011 Apptentive. All rights reserved.
+//  Created by Frank Schmitt on 2/26/16.
+//  Copyright © 2016 Apptentive, Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import "ATSurveyQuestion.h"
 
+@class ATSurveyQuestion;
 
-@interface ATSurvey : NSObject <NSCoding>
-@property (copy, nonatomic) NSString *identifier;
-@property (copy, nonatomic) NSString *name;
-@property (copy, nonatomic) NSString *surveyDescription;
-@property (readonly, nonatomic) NSArray *questions;
-@property (assign, nonatomic, getter=responseIsRequired) BOOL responseRequired;
-@property (assign, nonatomic) BOOL showSuccessMessage;
-@property (copy, nonatomic) NSString *successMessage;
+@interface ATSurvey : NSObject
 
-- (void)addQuestion:(ATSurveyQuestion *)question;
+- (instancetype)initWithJSON:(NSDictionary *)JSON;
 
-- (void)reset;
+@property (readonly, nonatomic) NSString *title;
+@property (readonly, nonatomic) NSString *name;
+@property (readonly, nonatomic) NSString *surveyDescription;
+@property (readonly, nonatomic) BOOL required;
+@property (readonly, nonatomic) BOOL multipleResponses;
+@property (readonly, nonatomic) BOOL showSuccessMessage;
+@property (readonly, nonatomic) NSString *successMessage;
+@property (readonly, nonatomic) NSTimeInterval viewPeriod;
+@property (readonly, nonatomic) NSArray<ATSurveyQuestion *> *questions;
 
 @end

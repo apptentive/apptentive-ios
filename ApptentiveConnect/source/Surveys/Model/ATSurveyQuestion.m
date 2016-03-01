@@ -1,149 +1,78 @@
 //
 //  ATSurveyQuestion.m
-//  ApptentiveSurveys
+//  CVSurvey
 //
-//  Created by Andrew Wooster on 11/4/11.
-//  Copyright (c) 2011 Apptentive. All rights reserved.
+//  Created by Frank Schmitt on 2/29/16.
+//  Copyright © 2016 Apptentive, Inc. All rights reserved.
 //
 
 #import "ATSurveyQuestion.h"
+#import "ATSurveyAnswer.h"
 
-#define kATSurveyQuestionStorageVersion 1
-#define kATSurveyQuestionAnswerStorageVersion 1
+@interface NSArray (Shuffle)
 
+- (NSArray *)apptentive_shuffledCopy;
+
+@end
 
 @implementation ATSurveyQuestion
 
-- (id)init {
-	if ((self = [super init])) {
-		_answerChoices = [[NSMutableArray alloc] init];
-		_selectedAnswerChoices = [[NSMutableArray alloc] init];
-		self.multiline = YES;
-	}
-	return self;
-}
+- (instancetype)initWithJSON:(NSDictionary *)JSON {
+	self = [super init];
 
-- (id)initWithCoder:(NSCoder *)coder {
-	if ((self = [super init])) {
-		int version = [coder decodeIntForKey:@"version"];
-		_answerChoices = [[NSMutableArray alloc] init];
-		_selectedAnswerChoices = [[NSMutableArray alloc] init];
-		if (version == kATSurveyQuestionStorageVersion) {
-			self.type = [coder decodeIntForKey:@"type"];
-			self.identifier = [coder decodeObjectForKey:@"identifier"];
-			self.responseRequired = [coder decodeBoolForKey:@"responseRequired"];
-			self.questionText = [coder decodeObjectForKey:@"questionText"];
-			self.instructionsText = [coder decodeObjectForKey:@"instructionsText"];
-			self.value = [coder decodeObjectForKey:@"value"];
+	if (self) {
+		NSString *type = JSON[@"type"];
 
-			NSArray *decodedAnswerChoices = [coder decodeObjectForKey:@"answerChoices"];
-			if (decodedAnswerChoices) {
-				[_answerChoices addObjectsFromArray:decodedAnswerChoices];
-			}
-
-			self.answerText = [coder decodeObjectForKey:@"answerText"];
-			self.minSelectionCount = [(NSNumber *)[coder decodeObjectForKey:@"minSelectionCount"] unsignedIntegerValue];
-			self.maxSelectionCount = [(NSNumber *)[coder decodeObjectForKey:@"maxSelectionCount"] unsignedIntegerValue];
-			if ([coder decodeObjectForKey:@"multiline"]) {
-				self.multiline = [(NSNumber *)[coder decodeObjectForKey:@"multiline"] boolValue];
-			} else {
-				self.multiline = YES;
-			}
+		if ([type isEqualToString:@"multiselect"]) {
+			_type = ATSurveyQuestionTypeMultipleSelect;
+		} else if ([type isEqualToString:@"multichoice"]) {
+			_type = ATSurveyQuestionTypeSingleSelect;
 		} else {
-			return nil;
+			_type = [JSON[@"multiline"] boolValue] ? ATSurveyQuestionTypeMultipleLine : ATSurveyQuestionTypeSingleLine;
+		}
+
+		_identifier = JSON[@"id"];
+		_instructions = JSON[@"instructions"];
+		_value = JSON[@"value"];
+		_placeholder = JSON[@"placeholder"];
+		_required = [JSON[@"required"] boolValue];
+
+		if (_type == ATSurveyQuestionTypeMultipleSelect) {
+			_maximumSelectedCount = [JSON[@"max_selections"] integerValue];
+			_minimumSelectedCount = [JSON[@"min_selections"] integerValue];
+		} else {
+			_maximumSelectedCount = 1;
+			_minimumSelectedCount = _required ? 1 : 0;
+		}
+
+		NSMutableArray *mutableAnswers = [NSMutableArray array];
+
+		for (NSDictionary *answerJSON in JSON[@"answer_choices"]) {
+			[mutableAnswers addObject:[[ATSurveyAnswer alloc] initWithJSON:answerJSON]];
+		}
+
+		if ([JSON[@"randomize"] boolValue]) {
+			_answers = [mutableAnswers apptentive_shuffledCopy];
+		} else {
+			_answers = [mutableAnswers copy];
 		}
 	}
+
 	return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)coder {
-	[coder encodeInt:kATSurveyQuestionStorageVersion forKey:@"version"];
-	[coder encodeInt:self.type forKey:@"type"];
-	[coder encodeObject:self.identifier forKey:@"identifier"];
-	[coder encodeBool:self.responseRequired forKey:@"responseRequired"];
-	[coder encodeObject:self.questionText forKey:@"questionText"];
-	[coder encodeObject:self.instructionsText forKey:@"instructionsText"];
-	[coder encodeObject:self.value forKey:@"value"];
-	[coder encodeObject:self.answerChoices forKey:@"answerChoices"];
-	[coder encodeObject:self.answerText forKey:@"answerText"];
-	[coder encodeObject:[NSNumber numberWithUnsignedInteger:self.minSelectionCount] forKey:@"minSelectionCount"];
-	[coder encodeObject:[NSNumber numberWithUnsignedInteger:self.maxSelectionCount] forKey:@"maxSelectionCount"];
-	[coder encodeObject:[NSNumber numberWithBool:self.multiline] forKey:@"multiline"];
-}
-
-
-- (void)addAnswerChoice:(ATSurveyQuestionAnswer *)answer {
-	[self.answerChoices addObject:answer];
-}
-
-- (void)addSelectedAnswerChoice:(ATSurveyQuestionAnswer *)answer {
-	if (self.type == ATSurveyQuestionTypeMultipleChoice) {
-		[self.selectedAnswerChoices removeAllObjects];
-	}
-	if (![self.selectedAnswerChoices containsObject:answer]) {
-		[self.selectedAnswerChoices addObject:answer];
-	}
-}
-
-- (void)removeSelectedAnswerChoice:(ATSurveyQuestionAnswer *)answer {
-	[self.selectedAnswerChoices removeObject:answer];
-}
-
-- (ATSurveyQuestionValidationErrorType)validateAnswer {
-	ATSurveyQuestionValidationErrorType error = ATSurveyQuestionValidationErrorNone;
-
-	if (self.type == ATSurveyQuestionTypeSingeLine) {
-		NSString *trimmedText = self.answerText;
-		if (trimmedText) {
-			trimmedText = [trimmedText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-		}
-		if (self.responseIsRequired && (trimmedText == nil || [trimmedText length] == 0)) {
-			error = ATSurveyQuestionValidationErrorMissingRequiredAnswer;
-		}
-	} else if (self.type == ATSurveyQuestionTypeMultipleChoice) {
-		if (self.responseIsRequired && [self.selectedAnswerChoices count] == 0) {
-			error = ATSurveyQuestionValidationErrorMissingRequiredAnswer;
-		}
-	} else if (self.type == ATSurveyQuestionTypeMultipleSelect) {
-		NSUInteger answerCount = [self.selectedAnswerChoices count];
-
-		if (self.responseIsRequired || answerCount > 0) {
-			if (self.minSelectionCount != 0 && answerCount < self.minSelectionCount) {
-				error = ATSurveyQuestionValidationErrorTooFewAnswers;
-			} else if (self.maxSelectionCount != 0 && answerCount > self.maxSelectionCount) {
-				error = ATSurveyQuestionValidationErrorTooManyAnswers;
-			}
-		}
-	}
-	return error;
-}
-
-- (void)reset {
-	[self.selectedAnswerChoices removeAllObjects];
-	self.answerText = nil;
-}
 @end
 
+@implementation NSArray (Shuffle)
 
-@implementation ATSurveyQuestionAnswer
+- (NSArray *)apptentive_shuffledCopy {
+	NSMutableArray *shuffled = [self mutableCopy];
 
-- (id)initWithCoder:(NSCoder *)coder {
-	if ((self = [super init])) {
-		int version = [coder decodeIntForKey:@"version"];
-		if (version == kATSurveyQuestionAnswerStorageVersion) {
-			self.identifier = [coder decodeObjectForKey:@"identifier"];
-			self.value = [coder decodeObjectForKey:@"value"];
-		} else {
-			return nil;
-		}
+	for (NSInteger i = self.count; i > 1; i--) {
+		[shuffled exchangeObjectAtIndex:i - 1 withObjectAtIndex:arc4random_uniform((u_int32_t)i)];
 	}
-	return self;
-}
 
-- (void)encodeWithCoder:(NSCoder *)coder {
-	[coder encodeInt:kATSurveyQuestionAnswerStorageVersion forKey:@"version"];
-	[coder encodeObject:self.identifier forKey:@"identifier"];
-	[coder encodeObject:self.value forKey:@"value"];
+	return [NSArray arrayWithArray:shuffled];
 }
 
 @end

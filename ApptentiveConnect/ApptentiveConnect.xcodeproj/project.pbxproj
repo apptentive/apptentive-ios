@@ -21,6 +21,38 @@
 		0127EA181BF136090005481A /* at_document.png in Resources */ = {isa = PBXBuildFile; fileRef = 0127EA151BF136020005481A /* at_document.png */; };
 		0127EA191BF136090005481A /* at_document@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0127EA161BF136020005481A /* at_document@2x.png */; };
 		0127EA1A1BF136090005481A /* at_document@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0127EA171BF136020005481A /* at_document@3x.png */; };
+		0132F8AA1C851BFA00A452E3 /* ATSurveyCollectionViewLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 0132F8A41C851BFA00A452E3 /* ATSurveyCollectionViewLayout.h */; };
+		0132F8AB1C851BFA00A452E3 /* ATSurveyCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 0132F8A51C851BFA00A452E3 /* ATSurveyCollectionViewLayout.m */; };
+		0132F8AC1C851BFA00A452E3 /* ATSurveyLayoutAttributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 0132F8A61C851BFA00A452E3 /* ATSurveyLayoutAttributes.h */; };
+		0132F8AD1C851BFA00A452E3 /* ATSurveyLayoutAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 0132F8A71C851BFA00A452E3 /* ATSurveyLayoutAttributes.m */; };
+		0132F8AE1C851BFA00A452E3 /* ATSurveyViewModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 0132F8A81C851BFA00A452E3 /* ATSurveyViewModel.h */; };
+		0132F8AF1C851BFA00A452E3 /* ATSurveyViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0132F8A91C851BFA00A452E3 /* ATSurveyViewModel.m */; };
+		0132F8C31C851C0800A452E3 /* ATCollectionView.h in Headers */ = {isa = PBXBuildFile; fileRef = 0132F8B11C851C0800A452E3 /* ATCollectionView.h */; };
+		0132F8C41C851C0800A452E3 /* ATCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0132F8B21C851C0800A452E3 /* ATCollectionView.m */; };
+		0132F8C51C851C0800A452E3 /* ATSurveyAnswerCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 0132F8B31C851C0800A452E3 /* ATSurveyAnswerCell.h */; };
+		0132F8C61C851C0800A452E3 /* ATSurveyAnswerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0132F8B41C851C0800A452E3 /* ATSurveyAnswerCell.m */; };
+		0132F8C71C851C0800A452E3 /* ATSurveyChoiceCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 0132F8B51C851C0800A452E3 /* ATSurveyChoiceCell.h */; };
+		0132F8C81C851C0800A452E3 /* ATSurveyChoiceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0132F8B61C851C0800A452E3 /* ATSurveyChoiceCell.m */; };
+		0132F8C91C851C0800A452E3 /* ATSurveyMultilineCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 0132F8B71C851C0800A452E3 /* ATSurveyMultilineCell.h */; };
+		0132F8CA1C851C0800A452E3 /* ATSurveyMultilineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0132F8B81C851C0800A452E3 /* ATSurveyMultilineCell.m */; };
+		0132F8CB1C851C0800A452E3 /* ATSurveyOptionButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 0132F8B91C851C0800A452E3 /* ATSurveyOptionButton.h */; };
+		0132F8CC1C851C0800A452E3 /* ATSurveyOptionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 0132F8BA1C851C0800A452E3 /* ATSurveyOptionButton.m */; };
+		0132F8CD1C851C0800A452E3 /* ATSurveyQuestionBackgroundView.h in Headers */ = {isa = PBXBuildFile; fileRef = 0132F8BB1C851C0800A452E3 /* ATSurveyQuestionBackgroundView.h */; };
+		0132F8CE1C851C0800A452E3 /* ATSurveyQuestionBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0132F8BC1C851C0800A452E3 /* ATSurveyQuestionBackgroundView.m */; };
+		0132F8CF1C851C0800A452E3 /* ATSurveyQuestionView.h in Headers */ = {isa = PBXBuildFile; fileRef = 0132F8BD1C851C0800A452E3 /* ATSurveyQuestionView.h */; };
+		0132F8D01C851C0800A452E3 /* ATSurveyQuestionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0132F8BE1C851C0800A452E3 /* ATSurveyQuestionView.m */; };
+		0132F8D11C851C0800A452E3 /* ATSurveySingleLineCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 0132F8BF1C851C0800A452E3 /* ATSurveySingleLineCell.h */; };
+		0132F8D21C851C0800A452E3 /* ATSurveySingleLineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0132F8C01C851C0800A452E3 /* ATSurveySingleLineCell.m */; };
+		0132F8D31C851C0800A452E3 /* ATSurveySubmitButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 0132F8C11C851C0800A452E3 /* ATSurveySubmitButton.h */; };
+		0132F8D41C851C0800A452E3 /* ATSurveySubmitButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 0132F8C21C851C0800A452E3 /* ATSurveySubmitButton.m */; };
+		0132F8D71C851C2300A452E3 /* ATSurveyAnswer.h in Headers */ = {isa = PBXBuildFile; fileRef = 0132F8D51C851C2300A452E3 /* ATSurveyAnswer.h */; };
+		0132F8D81C851C2300A452E3 /* ATSurveyAnswer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0132F8D61C851C2300A452E3 /* ATSurveyAnswer.m */; };
+		0132F8F01C851F5400A452E3 /* at_checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 0132F8E91C851F5400A452E3 /* at_checkmark.png */; };
+		0132F8F11C851F5400A452E3 /* at_checkmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0132F8EA1C851F5400A452E3 /* at_checkmark@2x.png */; };
+		0132F8F21C851F5400A452E3 /* at_checkmark@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0132F8EB1C851F5400A452E3 /* at_checkmark@3x.png */; };
+		0132F8F31C851F5400A452E3 /* at_circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 0132F8ED1C851F5400A452E3 /* at_circle.png */; };
+		0132F8F41C851F5400A452E3 /* at_circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0132F8EE1C851F5400A452E3 /* at_circle@2x.png */; };
+		0132F8F51C851F5400A452E3 /* at_circle@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0132F8EF1C851F5400A452E3 /* at_circle@3x.png */; };
 		013BB6061BF6A65C00BB6C27 /* at_remove.png in Resources */ = {isa = PBXBuildFile; fileRef = 013BB6031BF6A63300BB6C27 /* at_remove.png */; };
 		013BB6071BF6A65C00BB6C27 /* at_remove@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 013BB6041BF6A63300BB6C27 /* at_remove@2x.png */; };
 		013BB6081BF6A65C00BB6C27 /* at_remove@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 013BB6051BF6A63300BB6C27 /* at_remove@3x.png */; };
@@ -28,15 +60,14 @@
 		013BB6181BF6ABB600BB6C27 /* ATDataModel v4 to v5.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 013BB6121BF6A82300BB6C27 /* ATDataModel v4 to v5.xcmappingmodel */; };
 		013C1A7B1B713D5C002434B8 /* ATMessageCenterErrorViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 013C1A791B713D5C002434B8 /* ATMessageCenterErrorViewController.h */; };
 		013C1A7C1B713D5C002434B8 /* ATMessageCenterErrorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 013C1A7A1B713D5C002434B8 /* ATMessageCenterErrorViewController.m */; };
+		014745BD1C863A0700542951 /* ATSurveyGreetingView.h in Headers */ = {isa = PBXBuildFile; fileRef = 014745BB1C863A0700542951 /* ATSurveyGreetingView.h */; };
+		014745BE1C863A0700542951 /* ATSurveyGreetingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 014745BC1C863A0700542951 /* ATSurveyGreetingView.m */; };
 		0160854D1BA77B1D00050FDB /* at_account.png in Resources */ = {isa = PBXBuildFile; fileRef = 0160852A1BA77B0500050FDB /* at_account.png */; };
 		0160854E1BA77B1D00050FDB /* at_account@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0160852B1BA77B0500050FDB /* at_account@2x.png */; };
 		0160854F1BA77B1D00050FDB /* at_account@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0160852C1BA77B0500050FDB /* at_account@3x.png */; };
 		016085501BA77B1D00050FDB /* at_apptentive_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0160852E1BA77B0500050FDB /* at_apptentive_logo.png */; };
 		016085511BA77B1D00050FDB /* at_apptentive_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0160852F1BA77B0500050FDB /* at_apptentive_logo@2x.png */; };
 		016085521BA77B1D00050FDB /* at_apptentive_logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 016085301BA77B0500050FDB /* at_apptentive_logo@3x.png */; };
-		016085531BA77B1D00050FDB /* at_checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 016085321BA77B0500050FDB /* at_checkmark.png */; };
-		016085541BA77B1D00050FDB /* at_checkmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 016085331BA77B0500050FDB /* at_checkmark@2x.png */; };
-		016085551BA77B1D00050FDB /* at_checkmark@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 016085341BA77B0500050FDB /* at_checkmark@3x.png */; };
 		016085561BA77B1D00050FDB /* at_close.png in Resources */ = {isa = PBXBuildFile; fileRef = 016085361BA77B0500050FDB /* at_close.png */; };
 		016085571BA77B1D00050FDB /* at_close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 016085371BA77B0500050FDB /* at_close@2x.png */; };
 		016085581BA77B1D00050FDB /* at_close@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 016085381BA77B0500050FDB /* at_close@3x.png */; };
@@ -146,8 +177,6 @@
 		4936AE841379DECE00A4B17F /* ATBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE7C1379DECE00A4B17F /* ATBackend.m */; };
 		493AEB2D15990A4D00DFD4C7 /* ATSurvey.h in Headers */ = {isa = PBXBuildFile; fileRef = 493AEB1915990A4D00DFD4C7 /* ATSurvey.h */; };
 		493AEB2E15990A4D00DFD4C7 /* ATSurvey.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB1A15990A4D00DFD4C7 /* ATSurvey.m */; };
-		493AEB3015990A4D00DFD4C7 /* ATSurveyParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 493AEB1B15990A4D00DFD4C7 /* ATSurveyParser.h */; };
-		493AEB3115990A4D00DFD4C7 /* ATSurveyParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB1C15990A4D00DFD4C7 /* ATSurveyParser.m */; };
 		493AEB3315990A4D00DFD4C7 /* ATSurveyQuestion.h in Headers */ = {isa = PBXBuildFile; fileRef = 493AEB1D15990A4D00DFD4C7 /* ATSurveyQuestion.h */; };
 		493AEB3415990A4D00DFD4C7 /* ATSurveyQuestion.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB1E15990A4D00DFD4C7 /* ATSurveyQuestion.m */; };
 		493AEB3C15990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 493AEB2515990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.h */; };
@@ -338,6 +367,38 @@
 		0127EA151BF136020005481A /* at_document.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_document.png; sourceTree = "<group>"; };
 		0127EA161BF136020005481A /* at_document@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_document@2x.png"; sourceTree = "<group>"; };
 		0127EA171BF136020005481A /* at_document@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_document@3x.png"; sourceTree = "<group>"; };
+		0132F8A41C851BFA00A452E3 /* ATSurveyCollectionViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveyCollectionViewLayout.h; sourceTree = "<group>"; };
+		0132F8A51C851BFA00A452E3 /* ATSurveyCollectionViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveyCollectionViewLayout.m; sourceTree = "<group>"; };
+		0132F8A61C851BFA00A452E3 /* ATSurveyLayoutAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveyLayoutAttributes.h; sourceTree = "<group>"; };
+		0132F8A71C851BFA00A452E3 /* ATSurveyLayoutAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveyLayoutAttributes.m; sourceTree = "<group>"; };
+		0132F8A81C851BFA00A452E3 /* ATSurveyViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveyViewModel.h; sourceTree = "<group>"; };
+		0132F8A91C851BFA00A452E3 /* ATSurveyViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveyViewModel.m; sourceTree = "<group>"; };
+		0132F8B11C851C0800A452E3 /* ATCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATCollectionView.h; sourceTree = "<group>"; };
+		0132F8B21C851C0800A452E3 /* ATCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATCollectionView.m; sourceTree = "<group>"; };
+		0132F8B31C851C0800A452E3 /* ATSurveyAnswerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveyAnswerCell.h; sourceTree = "<group>"; };
+		0132F8B41C851C0800A452E3 /* ATSurveyAnswerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveyAnswerCell.m; sourceTree = "<group>"; };
+		0132F8B51C851C0800A452E3 /* ATSurveyChoiceCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveyChoiceCell.h; sourceTree = "<group>"; };
+		0132F8B61C851C0800A452E3 /* ATSurveyChoiceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveyChoiceCell.m; sourceTree = "<group>"; };
+		0132F8B71C851C0800A452E3 /* ATSurveyMultilineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveyMultilineCell.h; sourceTree = "<group>"; };
+		0132F8B81C851C0800A452E3 /* ATSurveyMultilineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveyMultilineCell.m; sourceTree = "<group>"; };
+		0132F8B91C851C0800A452E3 /* ATSurveyOptionButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveyOptionButton.h; sourceTree = "<group>"; };
+		0132F8BA1C851C0800A452E3 /* ATSurveyOptionButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveyOptionButton.m; sourceTree = "<group>"; };
+		0132F8BB1C851C0800A452E3 /* ATSurveyQuestionBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveyQuestionBackgroundView.h; sourceTree = "<group>"; };
+		0132F8BC1C851C0800A452E3 /* ATSurveyQuestionBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveyQuestionBackgroundView.m; sourceTree = "<group>"; };
+		0132F8BD1C851C0800A452E3 /* ATSurveyQuestionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveyQuestionView.h; sourceTree = "<group>"; };
+		0132F8BE1C851C0800A452E3 /* ATSurveyQuestionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveyQuestionView.m; sourceTree = "<group>"; };
+		0132F8BF1C851C0800A452E3 /* ATSurveySingleLineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveySingleLineCell.h; sourceTree = "<group>"; };
+		0132F8C01C851C0800A452E3 /* ATSurveySingleLineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveySingleLineCell.m; sourceTree = "<group>"; };
+		0132F8C11C851C0800A452E3 /* ATSurveySubmitButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveySubmitButton.h; sourceTree = "<group>"; };
+		0132F8C21C851C0800A452E3 /* ATSurveySubmitButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveySubmitButton.m; sourceTree = "<group>"; };
+		0132F8D51C851C2300A452E3 /* ATSurveyAnswer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveyAnswer.h; sourceTree = "<group>"; };
+		0132F8D61C851C2300A452E3 /* ATSurveyAnswer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveyAnswer.m; sourceTree = "<group>"; };
+		0132F8E91C851F5400A452E3 /* at_checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_checkmark.png; sourceTree = "<group>"; };
+		0132F8EA1C851F5400A452E3 /* at_checkmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_checkmark@2x.png"; sourceTree = "<group>"; };
+		0132F8EB1C851F5400A452E3 /* at_checkmark@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_checkmark@3x.png"; sourceTree = "<group>"; };
+		0132F8ED1C851F5400A452E3 /* at_circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_circle.png; sourceTree = "<group>"; };
+		0132F8EE1C851F5400A452E3 /* at_circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_circle@2x.png"; sourceTree = "<group>"; };
+		0132F8EF1C851F5400A452E3 /* at_circle@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_circle@3x.png"; sourceTree = "<group>"; };
 		013BB6031BF6A63300BB6C27 /* at_remove.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_remove.png; sourceTree = "<group>"; };
 		013BB6041BF6A63300BB6C27 /* at_remove@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_remove@2x.png"; sourceTree = "<group>"; };
 		013BB6051BF6A63300BB6C27 /* at_remove@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_remove@3x.png"; sourceTree = "<group>"; };
@@ -345,15 +406,14 @@
 		013C1A791B713D5C002434B8 /* ATMessageCenterErrorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageCenterErrorViewController.h; sourceTree = "<group>"; };
 		013C1A7A1B713D5C002434B8 /* ATMessageCenterErrorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageCenterErrorViewController.m; sourceTree = "<group>"; };
 		01438FBA1B8E65000016B079 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		014745BB1C863A0700542951 /* ATSurveyGreetingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveyGreetingView.h; sourceTree = "<group>"; };
+		014745BC1C863A0700542951 /* ATSurveyGreetingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveyGreetingView.m; sourceTree = "<group>"; };
 		0160852A1BA77B0500050FDB /* at_account.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_account.png; sourceTree = "<group>"; };
 		0160852B1BA77B0500050FDB /* at_account@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_account@2x.png"; sourceTree = "<group>"; };
 		0160852C1BA77B0500050FDB /* at_account@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_account@3x.png"; sourceTree = "<group>"; };
 		0160852E1BA77B0500050FDB /* at_apptentive_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_apptentive_logo.png; sourceTree = "<group>"; };
 		0160852F1BA77B0500050FDB /* at_apptentive_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_apptentive_logo@2x.png"; sourceTree = "<group>"; };
 		016085301BA77B0500050FDB /* at_apptentive_logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_apptentive_logo@3x.png"; sourceTree = "<group>"; };
-		016085321BA77B0500050FDB /* at_checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_checkmark.png; sourceTree = "<group>"; };
-		016085331BA77B0500050FDB /* at_checkmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_checkmark@2x.png"; sourceTree = "<group>"; };
-		016085341BA77B0500050FDB /* at_checkmark@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_checkmark@3x.png"; sourceTree = "<group>"; };
 		016085361BA77B0500050FDB /* at_close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_close.png; sourceTree = "<group>"; };
 		016085371BA77B0500050FDB /* at_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_close@2x.png"; sourceTree = "<group>"; };
 		016085381BA77B0500050FDB /* at_close@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_close@3x.png"; sourceTree = "<group>"; };
@@ -473,8 +533,6 @@
 		4936AE7C1379DECE00A4B17F /* ATBackend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATBackend.m; sourceTree = "<group>"; };
 		493AEB1915990A4D00DFD4C7 /* ATSurvey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurvey.h; sourceTree = "<group>"; };
 		493AEB1A15990A4D00DFD4C7 /* ATSurvey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurvey.m; sourceTree = "<group>"; };
-		493AEB1B15990A4D00DFD4C7 /* ATSurveyParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveyParser.h; sourceTree = "<group>"; };
-		493AEB1C15990A4D00DFD4C7 /* ATSurveyParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveyParser.m; sourceTree = "<group>"; };
 		493AEB1D15990A4D00DFD4C7 /* ATSurveyQuestion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveyQuestion.h; sourceTree = "<group>"; };
 		493AEB1E15990A4D00DFD4C7 /* ATSurveyQuestion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveyQuestion.m; sourceTree = "<group>"; };
 		493AEB2515990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ATWebClient+SurveyAdditions.h"; sourceTree = "<group>"; };
@@ -738,6 +796,53 @@
 			path = at_document;
 			sourceTree = "<group>";
 		};
+		0132F8B01C851C0800A452E3 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				0132F8B11C851C0800A452E3 /* ATCollectionView.h */,
+				0132F8B21C851C0800A452E3 /* ATCollectionView.m */,
+				0132F8B31C851C0800A452E3 /* ATSurveyAnswerCell.h */,
+				0132F8B41C851C0800A452E3 /* ATSurveyAnswerCell.m */,
+				0132F8B51C851C0800A452E3 /* ATSurveyChoiceCell.h */,
+				0132F8B61C851C0800A452E3 /* ATSurveyChoiceCell.m */,
+				0132F8B71C851C0800A452E3 /* ATSurveyMultilineCell.h */,
+				0132F8B81C851C0800A452E3 /* ATSurveyMultilineCell.m */,
+				0132F8B91C851C0800A452E3 /* ATSurveyOptionButton.h */,
+				0132F8BA1C851C0800A452E3 /* ATSurveyOptionButton.m */,
+				0132F8BB1C851C0800A452E3 /* ATSurveyQuestionBackgroundView.h */,
+				0132F8BC1C851C0800A452E3 /* ATSurveyQuestionBackgroundView.m */,
+				0132F8BD1C851C0800A452E3 /* ATSurveyQuestionView.h */,
+				0132F8BE1C851C0800A452E3 /* ATSurveyQuestionView.m */,
+				0132F8BF1C851C0800A452E3 /* ATSurveySingleLineCell.h */,
+				0132F8C01C851C0800A452E3 /* ATSurveySingleLineCell.m */,
+				0132F8C11C851C0800A452E3 /* ATSurveySubmitButton.h */,
+				0132F8C21C851C0800A452E3 /* ATSurveySubmitButton.m */,
+				014745BB1C863A0700542951 /* ATSurveyGreetingView.h */,
+				014745BC1C863A0700542951 /* ATSurveyGreetingView.m */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		0132F8E81C851F5400A452E3 /* at_checkmark */ = {
+			isa = PBXGroup;
+			children = (
+				0132F8E91C851F5400A452E3 /* at_checkmark.png */,
+				0132F8EA1C851F5400A452E3 /* at_checkmark@2x.png */,
+				0132F8EB1C851F5400A452E3 /* at_checkmark@3x.png */,
+			);
+			path = at_checkmark;
+			sourceTree = "<group>";
+		};
+		0132F8EC1C851F5400A452E3 /* at_circle */ = {
+			isa = PBXGroup;
+			children = (
+				0132F8ED1C851F5400A452E3 /* at_circle.png */,
+				0132F8EE1C851F5400A452E3 /* at_circle@2x.png */,
+				0132F8EF1C851F5400A452E3 /* at_circle@3x.png */,
+			);
+			path = at_circle;
+			sourceTree = "<group>";
+		};
 		013BB6021BF6A63300BB6C27 /* at_remove */ = {
 			isa = PBXGroup;
 			children = (
@@ -802,12 +907,13 @@
 		016085281BA77B0500050FDB /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				0132F8E81C851F5400A452E3 /* at_checkmark */,
+				0132F8EC1C851F5400A452E3 /* at_circle */,
 				013BB6021BF6A63300BB6C27 /* at_remove */,
 				01D0C39A1BF3EE9B0024BA1A /* at_attach */,
 				0127EA141BF136020005481A /* at_document */,
 				016085291BA77B0500050FDB /* at_account */,
 				0160852D1BA77B0500050FDB /* at_apptentive_logo */,
-				016085311BA77B0500050FDB /* at_checkmark */,
 				016085351BA77B0500050FDB /* at_close */,
 				016085391BA77B0500050FDB /* at_error_wait */,
 				0160853D1BA77B0500050FDB /* at_info */,
@@ -837,16 +943,6 @@
 				016085301BA77B0500050FDB /* at_apptentive_logo@3x.png */,
 			);
 			path = at_apptentive_logo;
-			sourceTree = "<group>";
-		};
-		016085311BA77B0500050FDB /* at_checkmark */ = {
-			isa = PBXGroup;
-			children = (
-				016085321BA77B0500050FDB /* at_checkmark.png */,
-				016085331BA77B0500050FDB /* at_checkmark@2x.png */,
-				016085341BA77B0500050FDB /* at_checkmark@3x.png */,
-			);
-			path = at_checkmark;
 			sourceTree = "<group>";
 		};
 		016085351BA77B0500050FDB /* at_close */ = {
@@ -1006,6 +1102,7 @@
 		493AEB1515990A4D00DFD4C7 /* Surveys */ = {
 			isa = PBXGroup;
 			children = (
+				0132F8B01C851C0800A452E3 /* Views */,
 				493AEB1815990A4D00DFD4C7 /* Model */,
 				493AEB2415990A4D00DFD4C7 /* URL Loading */,
 				493AEB2715990A4D00DFD4C7 /* View Controllers */,
@@ -1017,10 +1114,10 @@
 		493AEB1815990A4D00DFD4C7 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				0132F8D51C851C2300A452E3 /* ATSurveyAnswer.h */,
+				0132F8D61C851C2300A452E3 /* ATSurveyAnswer.m */,
 				493AEB1915990A4D00DFD4C7 /* ATSurvey.h */,
 				493AEB1A15990A4D00DFD4C7 /* ATSurvey.m */,
-				493AEB1B15990A4D00DFD4C7 /* ATSurveyParser.h */,
-				493AEB1C15990A4D00DFD4C7 /* ATSurveyParser.m */,
 				493AEB1D15990A4D00DFD4C7 /* ATSurveyQuestion.h */,
 				493AEB1E15990A4D00DFD4C7 /* ATSurveyQuestion.m */,
 				49B7E914178BA8060059E776 /* ATSurveyResponse.h */,
@@ -1043,6 +1140,12 @@
 		493AEB2715990A4D00DFD4C7 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				0132F8A41C851BFA00A452E3 /* ATSurveyCollectionViewLayout.h */,
+				0132F8A51C851BFA00A452E3 /* ATSurveyCollectionViewLayout.m */,
+				0132F8A61C851BFA00A452E3 /* ATSurveyLayoutAttributes.h */,
+				0132F8A71C851BFA00A452E3 /* ATSurveyLayoutAttributes.m */,
+				0132F8A81C851BFA00A452E3 /* ATSurveyViewModel.h */,
+				0132F8A91C851BFA00A452E3 /* ATSurveyViewModel.m */,
 				493AEB2815990A4D00DFD4C7 /* ATSurveyViewController.h */,
 				493AEB2915990A4D00DFD4C7 /* ATSurveyViewController.m */,
 			);
@@ -1494,17 +1597,22 @@
 				01AE42071B38E38D006B9191 /* ATBannerViewController.h in Headers */,
 				49C002A1133413BB0071F088 /* ApptentiveConnect-Prefix.pch in Headers */,
 				49C002A2133413BB0071F088 /* ATConnect.h in Headers */,
+				0132F8AC1C851BFA00A452E3 /* ATSurveyLayoutAttributes.h in Headers */,
 				01C7C4E31BEAD105005D6EC1 /* ATCompoundMessage.h in Headers */,
 				49D1124F13368CC200603373 /* ATTask.h in Headers */,
 				49D112731337CC9F00603373 /* ATTaskQueue.h in Headers */,
+				0132F8CD1C851C0800A452E3 /* ATSurveyQuestionBackgroundView.h in Headers */,
+				0132F8D71C851C2300A452E3 /* ATSurveyAnswer.h in Headers */,
 				491748BA1341177000A7D11E /* ATConnectionChannel.h in Headers */,
 				491748BC1341177000A7D11E /* ATConnectionManager.h in Headers */,
 				58B703F81B0FAE6D0024478C /* ATMessageCenterInteraction.h in Headers */,
 				01D0C3901BF3DED50024BA1A /* ATAttachButton.h in Headers */,
+				0132F8AE1C851BFA00A452E3 /* ATSurveyViewModel.h in Headers */,
 				491748BE1341177000A7D11E /* ATURLConnection.h in Headers */,
 				491748C01341177000A7D11E /* ATWebClient.h in Headers */,
 				01F1A9601B6823CD0088DBF0 /* ATAboutViewController.h in Headers */,
 				49509A61135658E200793EEC /* ATReachability.h in Headers */,
+				0132F8C51C851C0800A452E3 /* ATSurveyAnswerCell.h in Headers */,
 				01B147B31B5D8D3A0000D041 /* ATMessageCenterProfileView.h in Headers */,
 				588F664A1B601F0B00F388E3 /* ATMessageCenterContextMessageCell.h in Headers */,
 				4936AE531379DE3100A4B17F /* ATDefaultTextView.h in Headers */,
@@ -1513,12 +1621,15 @@
 				49735D621832DF1F00D48DE7 /* ATMessageCenterDataSource.h in Headers */,
 				4936AE771379DEBB00A4B17F /* ATUtilities.h in Headers */,
 				4936AE831379DECE00A4B17F /* ATBackend.h in Headers */,
+				0132F8D31C851C0800A452E3 /* ATSurveySubmitButton.h in Headers */,
 				49352AC4138C97A2000E464A /* ATAPIRequest.h in Headers */,
 				49352ADD138CA1DC000E464A /* ATURLConnection_Private.h in Headers */,
 				01D3128E1B69349900B369E1 /* ATProgressNavigationBar.h in Headers */,
 				49B877111464958C00594A5D /* ATWebClient_Private.h in Headers */,
 				49EA5AB014BD08AD004F8A4D /* ATLegacyRecord.h in Headers */,
+				0132F8C71C851C0800A452E3 /* ATSurveyChoiceCell.h in Headers */,
 				49EA5ABD14BD0F4D004F8A4D /* ATRecordTask.h in Headers */,
+				0132F8C91C851C0800A452E3 /* ATSurveyMultilineCell.h in Headers */,
 				58B703EE1B0EB6DB0024478C /* ATMessageCenterViewController.h in Headers */,
 				49CEFF5D15168B54006D8BA8 /* ATAppConfigurationUpdater.h in Headers */,
 				4987FA80157ACAB500AF2078 /* ATSurveyMetrics.h in Headers */,
@@ -1527,13 +1638,14 @@
 				4987FAA2157AE53700AF2078 /* ATWebClient+Metrics.h in Headers */,
 				0127EA0E1BF1271C0005481A /* ATAttachmentCell.h in Headers */,
 				493AEB2D15990A4D00DFD4C7 /* ATSurvey.h in Headers */,
-				493AEB3015990A4D00DFD4C7 /* ATSurveyParser.h in Headers */,
 				493AEB3315990A4D00DFD4C7 /* ATSurveyQuestion.h in Headers */,
 				493AEB3C15990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.h in Headers */,
 				493AEB3F15990A4D00DFD4C7 /* ATSurveyViewController.h in Headers */,
 				498EFB7015BA48B300A1043B /* ATAppConfigurationUpdateTask.h in Headers */,
 				499912A8161B6AF700FDA15F /* ATWebClient+MessageCenter.h in Headers */,
 				4961A402161BBD7000E30037 /* ATMessageTask.h in Headers */,
+				0132F8D11C851C0800A452E3 /* ATSurveySingleLineCell.h in Headers */,
+				014745BD1C863A0700542951 /* ATSurveyGreetingView.h in Headers */,
 				4961A40B161BBE0800E30037 /* ATPersonUpdater.h in Headers */,
 				017D974A1B0E57C2004E045C /* ATMessageCenterReplyCell.h in Headers */,
 				4961A40F161BBE1F00E30037 /* ATDeviceUpdater.h in Headers */,
@@ -1548,14 +1660,17 @@
 				586C47A918B424E900725C22 /* ATInteractionEnjoymentDialogController.h in Headers */,
 				49E6208716C5E8C2000C9F5A /* NSDictionary+ATAdditions.h in Headers */,
 				013C1A7B1B713D5C002434B8 /* ATMessageCenterErrorViewController.h in Headers */,
+				0132F8C31C851C0800A452E3 /* ATCollectionView.h in Headers */,
 				01CC8BCA1B1D0598006C4D30 /* ATNetworkImageIconView.h in Headers */,
 				49F8AFE316CC4A550070FFEA /* ATConversation.h in Headers */,
 				49F8AFE516CC4A550070FFEA /* ATData.h in Headers */,
+				0132F8AA1C851BFA00A452E3 /* ATSurveyCollectionViewLayout.h in Headers */,
 				49F8AFE816CC4A550070FFEA /* ATDeviceInfo.h in Headers */,
 				58D17D4F18C5676F00D123BC /* ATInteractionMessageCenterController.h in Headers */,
 				583DF0671A390DDA00BF0207 /* ATInteractionInvocation.h in Headers */,
 				58E9580A190740BC005063DC /* ATSurveyQuestionResponse.h in Headers */,
 				019A63CB1C4DA5BE00DD5EBF /* ATConnect+Debugging.h in Headers */,
+				0132F8CB1C851C0800A452E3 /* ATSurveyOptionButton.h in Headers */,
 				0171DFED1BF2D019006F8BEA /* ATCompoundReplyCell.h in Headers */,
 				0127EA121BF1271C0005481A /* ATIndexedCollectionView.h in Headers */,
 				49F8AFF016CC4A550070FFEA /* ATMessageSender.h in Headers */,
@@ -1585,6 +1700,7 @@
 				58AB416718F608500034FAA5 /* ATInteractionSurveyController.h in Headers */,
 				49B7E916178BA8060059E776 /* ATSurveyResponse.h in Headers */,
 				49B7E91B178BAB8D0059E776 /* ATSurveyResponseTask.h in Headers */,
+				0132F8CF1C851C0800A452E3 /* ATSurveyQuestionView.h in Headers */,
 				58D17D4718C5674000D123BC /* ATInteractionRatingDialogController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1745,19 +1861,22 @@
 				013BB6081BF6A65C00BB6C27 /* at_remove@3x.png in Resources */,
 				0160855F1BA77B1D00050FDB /* at_network_error.png in Resources */,
 				01D0C3A01BF3EEA10024BA1A /* at_attach@3x.png in Resources */,
+				0132F8F21C851F5400A452E3 /* at_checkmark@3x.png in Resources */,
 				013BB6071BF6A65C00BB6C27 /* at_remove@2x.png in Resources */,
 				0127EA1A1BF136090005481A /* at_document@3x.png in Resources */,
 				016085561BA77B1D00050FDB /* at_close.png in Resources */,
 				016085671BA77B1D00050FDB /* at_update_logo@3x.png in Resources */,
 				0160854E1BA77B1D00050FDB /* at_account@2x.png in Resources */,
-				016085531BA77B1D00050FDB /* at_checkmark.png in Resources */,
 				01D0C39F1BF3EEA10024BA1A /* at_attach@2x.png in Resources */,
+				0132F8F11C851F5400A452E3 /* at_checkmark@2x.png in Resources */,
 				0160855A1BA77B1D00050FDB /* at_error_wait@2x.png in Resources */,
+				0132F8F51C851F5400A452E3 /* at_circle@3x.png in Resources */,
+				0132F8F01C851F5400A452E3 /* at_checkmark.png in Resources */,
 				016085651BA77B1D00050FDB /* at_update_logo.png in Resources */,
+				0132F8F41C851F5400A452E3 /* at_circle@2x.png in Resources */,
 				016085601BA77B1D00050FDB /* at_network_error@2x.png in Resources */,
 				01D0C39E1BF3EEA10024BA1A /* at_attach.png in Resources */,
 				016085611BA77B1D00050FDB /* at_network_error@3x.png in Resources */,
-				016085541BA77B1D00050FDB /* at_checkmark@2x.png in Resources */,
 				0160855D1BA77B1D00050FDB /* at_info@2x.png in Resources */,
 				016085581BA77B1D00050FDB /* at_close@3x.png in Resources */,
 				016085621BA77B1D00050FDB /* at_update_icon_mask.png in Resources */,
@@ -1769,9 +1888,9 @@
 				0127EA191BF136090005481A /* at_document@2x.png in Resources */,
 				016085501BA77B1D00050FDB /* at_apptentive_logo.png in Resources */,
 				013BB6061BF6A65C00BB6C27 /* at_remove.png in Resources */,
-				016085551BA77B1D00050FDB /* at_checkmark@3x.png in Resources */,
 				0160855C1BA77B1D00050FDB /* at_info.png in Resources */,
 				0160854D1BA77B1D00050FDB /* at_account.png in Resources */,
+				0132F8F31C851F5400A452E3 /* at_circle.png in Resources */,
 				016085661BA77B1D00050FDB /* at_update_logo@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1804,10 +1923,12 @@
 				49C002A3133413BB0071F088 /* ATConnect.m in Sources */,
 				49D1125013368CC200603373 /* ATTask.m in Sources */,
 				49D112741337CC9F00603373 /* ATTaskQueue.m in Sources */,
+				0132F8CA1C851C0800A452E3 /* ATSurveyMultilineCell.m in Sources */,
 				58B703ED1B0EB6D60024478C /* ATMessageCenterViewController.m in Sources */,
 				491748BB1341177000A7D11E /* ATConnectionChannel.m in Sources */,
 				491748BD1341177000A7D11E /* ATConnectionManager.m in Sources */,
 				01B147B41B5D8D3A0000D041 /* ATMessageCenterProfileView.m in Sources */,
+				0132F8D01C851C0800A452E3 /* ATSurveyQuestionView.m in Sources */,
 				58DCC0D6180F445700A3A7AE /* ATInteractionUpgradeMessageViewController.m in Sources */,
 				58D17D5018C5676F00D123BC /* ATInteractionMessageCenterController.m in Sources */,
 				58B703F91B0FAE6D0024478C /* ATMessageCenterInteraction.m in Sources */,
@@ -1826,24 +1947,30 @@
 				0127EA131BF1271C0005481A /* ATIndexedCollectionView.m in Sources */,
 				586C47AA18B424E900725C22 /* ATInteractionEnjoymentDialogController.m in Sources */,
 				013C1A7C1B713D5C002434B8 /* ATMessageCenterErrorViewController.m in Sources */,
+				0132F8D21C851C0800A452E3 /* ATSurveySingleLineCell.m in Sources */,
 				49352AC5138C97A2000E464A /* ATAPIRequest.m in Sources */,
 				49EA5AB114BD08AD004F8A4D /* ATLegacyRecord.m in Sources */,
+				0132F8AD1C851BFA00A452E3 /* ATSurveyLayoutAttributes.m in Sources */,
 				49EA5ABE14BD0F4D004F8A4D /* ATRecordTask.m in Sources */,
+				0132F8C61C851C0800A452E3 /* ATSurveyAnswerCell.m in Sources */,
 				49CEFF5E15168B54006D8BA8 /* ATAppConfigurationUpdater.m in Sources */,
 				49735D631832DF1F00D48DE7 /* ATMessageCenterDataSource.m in Sources */,
+				0132F8CE1C851C0800A452E3 /* ATSurveyQuestionBackgroundView.m in Sources */,
 				4987FA81157ACAB500AF2078 /* ATSurveyMetrics.m in Sources */,
 				4987FA9D157AE53700AF2078 /* ApptentiveMetrics.m in Sources */,
+				0132F8C41C851C0800A452E3 /* ATCollectionView.m in Sources */,
 				4987FAA0157AE53700AF2078 /* ATMetric.m in Sources */,
 				4987FAA3157AE53700AF2078 /* ATWebClient+Metrics.m in Sources */,
 				01AE42081B38E38D006B9191 /* ATBannerViewController.m in Sources */,
 				493AEB2E15990A4D00DFD4C7 /* ATSurvey.m in Sources */,
 				0127EA0F1BF1271C0005481A /* ATAttachmentCell.m in Sources */,
-				493AEB3115990A4D00DFD4C7 /* ATSurveyParser.m in Sources */,
 				493AEB3415990A4D00DFD4C7 /* ATSurveyQuestion.m in Sources */,
 				493AEB3D15990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.m in Sources */,
+				0132F8CC1C851C0800A452E3 /* ATSurveyOptionButton.m in Sources */,
 				493AEB4015990A4D00DFD4C7 /* ATSurveyViewController.m in Sources */,
 				498EFB7115BA48B300A1043B /* ATAppConfigurationUpdateTask.m in Sources */,
 				58AB415818E3A9870034FAA5 /* ATInteractionAppStoreController.m in Sources */,
+				0132F8C81C851C0800A452E3 /* ATSurveyChoiceCell.m in Sources */,
 				584EAC6F1A786E4500AC7F05 /* ATInteractionTextModalController.m in Sources */,
 				58E9580B190740BC005063DC /* ATSurveyQuestionResponse.m in Sources */,
 				499912A9161B6AF700FDA15F /* ATWebClient+MessageCenter.m in Sources */,
@@ -1857,6 +1984,8 @@
 				49E6208816C5E8C2000C9F5A /* NSDictionary+ATAdditions.m in Sources */,
 				49F8AFE416CC4A550070FFEA /* ATConversation.m in Sources */,
 				49F8AFE616CC4A550070FFEA /* ATData.m in Sources */,
+				0132F8D41C851C0800A452E3 /* ATSurveySubmitButton.m in Sources */,
+				0132F8D81C851C2300A452E3 /* ATSurveyAnswer.m in Sources */,
 				49F8AFE916CC4A550070FFEA /* ATDeviceInfo.m in Sources */,
 				49F8AFF116CC4A550070FFEA /* ATMessageSender.m in Sources */,
 				49F8AFF316CC4A550070FFEA /* ATPersonInfo.m in Sources */,
@@ -1882,12 +2011,15 @@
 				01CC8BCB1B1D0598006C4D30 /* ATNetworkImageIconView.m in Sources */,
 				5898DF8D17C2E0CE0048F11F /* ATEngagementGetManifestTask.m in Sources */,
 				584647C717C426E800BFD6E6 /* ATEngagementManifestParser.m in Sources */,
+				0132F8AB1C851BFA00A452E3 /* ATSurveyCollectionViewLayout.m in Sources */,
 				58C5922217C55ADD000FA428 /* ATEngagementBackend.m in Sources */,
 				58C5922C17C59BE3000FA428 /* ATWebClient+EngagementAdditions.m in Sources */,
 				58EEBE2417C7E8150039A0F5 /* ATInteraction.m in Sources */,
 				49B7E917178BA8060059E776 /* ATSurveyResponse.m in Sources */,
 				58D17D4818C5674000D123BC /* ATInteractionRatingDialogController.m in Sources */,
 				49B7E91C178BAB8D0059E776 /* ATSurveyResponseTask.m in Sources */,
+				014745BE1C863A0700542951 /* ATSurveyGreetingView.m in Sources */,
+				0132F8AF1C851BFA00A452E3 /* ATSurveyViewModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

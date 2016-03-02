@@ -170,8 +170,6 @@
 		49352AC4138C97A2000E464A /* ATAPIRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 49352AC1138C97A2000E464A /* ATAPIRequest.h */; };
 		49352AC5138C97A2000E464A /* ATAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 49352AC2138C97A2000E464A /* ATAPIRequest.m */; };
 		49352ADD138CA1DC000E464A /* ATURLConnection_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 49352ADC138CA1DC000E464A /* ATURLConnection_Private.h */; };
-		4936AE531379DE3100A4B17F /* ATDefaultTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4936AE471379DE3100A4B17F /* ATDefaultTextView.h */; };
-		4936AE541379DE3100A4B17F /* ATDefaultTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE481379DE3100A4B17F /* ATDefaultTextView.m */; };
 		4936AE551379DE3100A4B17F /* ATHUDView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4936AE491379DE3100A4B17F /* ATHUDView.h */; };
 		4936AE561379DE3100A4B17F /* ATHUDView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE4A1379DE3100A4B17F /* ATHUDView.m */; };
 		4936AE771379DEBB00A4B17F /* ATUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 4936AE751379DEBB00A4B17F /* ATUtilities.h */; };
@@ -529,8 +527,6 @@
 		49352AC2138C97A2000E464A /* ATAPIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAPIRequest.m; sourceTree = "<group>"; };
 		49352ADC138CA1DC000E464A /* ATURLConnection_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATURLConnection_Private.h; sourceTree = "<group>"; };
 		49358DBB1BF3336700516F1E /* ATInteractionInvocationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATInteractionInvocationTests.m; sourceTree = "<group>"; };
-		4936AE471379DE3100A4B17F /* ATDefaultTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATDefaultTextView.h; sourceTree = "<group>"; };
-		4936AE481379DE3100A4B17F /* ATDefaultTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATDefaultTextView.m; sourceTree = "<group>"; };
 		4936AE491379DE3100A4B17F /* ATHUDView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATHUDView.h; sourceTree = "<group>"; };
 		4936AE4A1379DE3100A4B17F /* ATHUDView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATHUDView.m; sourceTree = "<group>"; };
 		4936AE751379DEBB00A4B17F /* ATUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATUtilities.h; sourceTree = "<group>"; };
@@ -1324,8 +1320,6 @@
 			children = (
 				01CC8BC81B1D0598006C4D30 /* ATNetworkImageIconView.h */,
 				01CC8BC91B1D0598006C4D30 /* ATNetworkImageIconView.m */,
-				4936AE471379DE3100A4B17F /* ATDefaultTextView.h */,
-				4936AE481379DE3100A4B17F /* ATDefaultTextView.m */,
 				4936AE491379DE3100A4B17F /* ATHUDView.h */,
 				4936AE4A1379DE3100A4B17F /* ATHUDView.m */,
 				4960A531171F70530082669B /* ATNetworkImageView.h */,
@@ -1632,7 +1626,6 @@
 				0132F8C51C851C0800A452E3 /* ATSurveyAnswerCell.h in Headers */,
 				01B147B31B5D8D3A0000D041 /* ATMessageCenterProfileView.h in Headers */,
 				588F664A1B601F0B00F388E3 /* ATMessageCenterContextMessageCell.h in Headers */,
-				4936AE531379DE3100A4B17F /* ATDefaultTextView.h in Headers */,
 				01C30CEB1B0D09F8006BC911 /* ATMessageCenterGreetingView.h in Headers */,
 				4936AE551379DE3100A4B17F /* ATHUDView.h in Headers */,
 				49735D621832DF1F00D48DE7 /* ATMessageCenterDataSource.h in Headers */,
@@ -1957,7 +1950,6 @@
 				491748C11341177000A7D11E /* ATWebClient.m in Sources */,
 				49509A62135658E200793EEC /* ATReachability.m in Sources */,
 				0171DFEE1BF2D019006F8BEA /* ATCompoundReplyCell.m in Sources */,
-				4936AE541379DE3100A4B17F /* ATDefaultTextView.m in Sources */,
 				4936AE561379DE3100A4B17F /* ATHUDView.m in Sources */,
 				01BD9E051B55E465004F12AB /* ATMessageCenterInputView.m in Sources */,
 				0127EA111BF1271C0005481A /* ATCompoundMessageCell.m in Sources */,

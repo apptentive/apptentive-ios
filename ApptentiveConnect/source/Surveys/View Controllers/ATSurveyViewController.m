@@ -63,7 +63,7 @@
 	((ATCollectionView *)self.collectionView).collectionFooterView = self.footerView;
 
 	// iOS 7 and 8 don't seem to adjust the contentInset for the keyboard
-	if (![[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){9, 0, 0}]) {
+	if (![NSProcessInfo instancesRespondToSelector:@selector(isOperatingSystemAtLeastVersion:)] || ![[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){9, 0, 0}]) {
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustForKeyboard:) name:UIKeyboardWillShowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustForKeyboard:) name:UIKeyboardWillHideNotification object:nil];
 	}
@@ -291,13 +291,15 @@
 #pragma mark - Text view delegate
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
-	self.editingIndexPath = [NSIndexPath indexPathForItem:0 inSection:textView.tag];
+	((ATCollectionView *)self.collectionView).scrollingPaused = YES;
 
 	return YES;
 }
 
 - (void)textViewDidBeginEditing:(UITextField *)textView {
+	self.editingIndexPath = [NSIndexPath indexPathForItem:0 inSection:textView.tag];
 	[self.collectionView scrollToItemAtIndexPath:self.editingIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
+	((ATCollectionView *)self.collectionView).scrollingPaused = NO;
 }
 
 - (BOOL)textViewShouldEndEditing:(UITextView *)textView {
@@ -324,13 +326,15 @@
 #pragma mark - Text field delegate
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
-	self.editingIndexPath = [NSIndexPath indexPathForItem:0 inSection:textField.tag];
+	((ATCollectionView *)self.collectionView).scrollingPaused = YES;
 
 	return YES;
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
+	self.editingIndexPath = [NSIndexPath indexPathForItem:0 inSection:textField.tag];
 	[self.collectionView scrollToItemAtIndexPath:self.editingIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
+	((ATCollectionView *)self.collectionView).scrollingPaused = NO;
 }
 
 - (IBAction)textFieldChanged:(UITextField *)textField {
@@ -362,11 +366,14 @@
 - (void)adjustForKeyboard:(NSNotification *)notification {
 	CGRect keyboardRect = [self.view.window convertRect:[notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue] toView:self.collectionView.superview];
 
+	((ATCollectionView *)self.collectionView).scrollingPaused = YES;
 	self.collectionView.contentInset = UIEdgeInsetsMake(self.collectionView.contentInset.top, self.collectionView.contentInset.left,  CGRectGetHeight(self.collectionView.bounds) - keyboardRect.origin.y, self.collectionView.contentInset.right);
 
 	[self.collectionViewLayout invalidateLayout];
 	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
 		[self.collectionView layoutIfNeeded];
+	} completion:^(BOOL finished) {
+		((ATCollectionView *)self.collectionView).scrollingPaused = NO;
 	}];
 }
 

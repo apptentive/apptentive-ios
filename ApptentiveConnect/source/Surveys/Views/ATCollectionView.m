@@ -62,6 +62,12 @@
 	[self.collectionViewLayout invalidateLayout];
 }
 
+- (void)setContentOffset:(CGPoint)contentOffset {
+	if (!self.scrollingPaused) {
+		[super setContentOffset:contentOffset];
+	}
+}
+
 - (void)layoutSubviews {
 	[super layoutSubviews];
 
@@ -69,6 +75,8 @@
 	top = fmax(top, CGRectGetHeight(self.bounds) - CGRectGetHeight(self.collectionFooterView.bounds) - self.contentInset.top - self.contentInset.bottom);
 	
 	self.footerConstraint.constant = top;
+
+	[super layoutSubviews];
 }
 
 @end

@@ -12,6 +12,7 @@
 
 @property (strong, nonatomic) UIView *collectionHeaderView;
 @property (strong, nonatomic) UIView *collectionFooterView;
+@property (assign, nonatomic) BOOL scrollingPaused;
 
 @end
 

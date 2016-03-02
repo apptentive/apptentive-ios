@@ -254,7 +254,7 @@
 	for (NSIndexPath *indexPath in self.selectedIndexPaths) {
 		if (indexPath.section != index) {
 			continue;
-		} else {
+		} else if ([self answerAtIndexPath:indexPath].identifier != nil) {
 			[result addObject:[self answerAtIndexPath:indexPath].identifier];
 		}
 	}

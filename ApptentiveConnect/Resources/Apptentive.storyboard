@@ -1185,7 +1185,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C1y-qz-EY6" userLabel="poweredByBackground">
                                 <rect key="frame" x="0.0" y="535" width="320" height="33"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="at_update_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="II0-bw-JAC" userLabel="poweredByImage">
+                                    <imageView userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="at_update_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="II0-bw-JAC" userLabel="poweredByImage">
                                         <rect key="frame" x="162" y="10" width="85" height="16"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </imageView>
@@ -1524,8 +1524,8 @@ Lines</string>
                             <rect key="frame" x="0.0" y="-1000" width="320" height="1085"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </view>
-                        <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eQS-jv-07Q">
-                            <rect key="frame" x="288" y="8" width="24" height="24"/>
+                        <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eQS-jv-07Q">
+                            <rect key="frame" x="282" y="8" width="30" height="34"/>
                             <connections>
                                 <action selector="showAbout:" destination="0Su-Sq-q29" eventType="touchUpInside" id="oe5-zj-xZf"/>
                             </connections>

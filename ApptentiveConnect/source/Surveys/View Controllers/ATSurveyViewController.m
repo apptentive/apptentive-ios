@@ -41,7 +41,6 @@
 
 @property (strong, nonatomic) IBOutlet ATSurveyGreetingView *headerView;
 @property (strong, nonatomic) IBOutlet UIView *footerView;
-
 @property (strong, nonatomic) IBOutlet ATSurveySubmitButton *submitButton;
 
 @property (strong, nonatomic) NSIndexPath *editingIndexPath;
@@ -84,18 +83,31 @@
 }
 
 - (IBAction)submit:(id)sender {
-	if ([self.viewModel submit]) {
+	if ([self.viewModel validate]) {
+		// Consider any pending edits complete
+		if (self.editingIndexPath) {
+			[self.viewModel answerChangedAtIndexPath:self.editingIndexPath];
+		}
+
+		[self.viewModel submit];
+
 		[self dismissViewControllerAnimated:YES completion:nil];
 
-		ATHUDView *HUDView = [[ATHUDView alloc] initWithWindow:self.view.window];
-		HUDView.label.text = self.viewModel.thankYouText;
-		HUDView.fadeOutDuration = 5.0;
-		[HUDView show];
+		[self.viewModel didSubmit];
+
+		if (self.viewModel.showThankYou) {
+			ATHUDView *HUDView = [[ATHUDView alloc] initWithWindow:self.view.window];
+			HUDView.label.text = self.viewModel.thankYouText;
+			HUDView.fadeOutDuration = 5.0;
+			[HUDView show];
+		}
 	}
 }
 
 - (IBAction)close:(id)sender {
 	[self dismissViewControllerAnimated:YES completion:nil];
+
+	[self.viewModel didCancel];
 }
 
 - (IBAction)showAbout:(id)sender {
@@ -192,10 +204,12 @@
 	}
 
 	[self.viewModel selectAnswerAtIndexPath:indexPath];
+	[self.viewModel answerChangedAtIndexPath:indexPath];
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
 	[self.viewModel deselectAnswerAtIndexPath:indexPath];
+	[self.viewModel answerChangedAtIndexPath:indexPath];
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -303,6 +317,10 @@
 	} completion:nil];
 }
 
+- (void)textViewDidEndEditing:(UITextView *)textView {
+	[self.viewModel answerChangedAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:textView.tag]];
+}
+
 #pragma mark - Text field delegate
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
@@ -327,6 +345,10 @@
 	[textField resignFirstResponder];
 
 	return NO;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+	[self.viewModel answerChangedAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:textField.tag]];
 }
 
 #pragma mark - View model delegate

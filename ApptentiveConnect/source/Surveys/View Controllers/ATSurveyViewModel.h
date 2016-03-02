@@ -26,6 +26,8 @@
 @property (readonly, nonatomic) NSString *title;
 @property (readonly, nonatomic) NSString *greeting;
 @property (readonly, nonatomic) NSString *submitButtonText;
+
+@property (readonly, nonatomic) BOOL showThankYou;
 @property (readonly, nonatomic) NSString *thankYouText;
 
 - (NSInteger)numberOfQuestionsInSurvey;
@@ -44,7 +46,12 @@
 - (void)selectAnswerAtIndexPath:(NSIndexPath *)indexPath;
 - (void)deselectAnswerAtIndexPath:(NSIndexPath *)indexPath;
 
-- (BOOL)submit;
+- (BOOL)validate;
+- (void)submit;
+
+- (void)didCancel;
+- (void)didSubmit;
+- (void)answerChangedAtIndexPath:(NSIndexPath *)indexPath;
 
 @property (readonly, nonatomic) NSDictionary *answers;
 

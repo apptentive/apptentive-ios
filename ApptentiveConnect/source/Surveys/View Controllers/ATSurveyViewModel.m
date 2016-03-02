@@ -54,6 +54,10 @@
 	return ATLocalizedString(@"Submit", @"Survey submit button text");
 }
 
+- (BOOL)showThankYou {
+	return self.survey.showSuccessMessage;
+}
+
 - (NSString *)thankYouText {
 	return self.survey.successMessage;
 }
@@ -140,36 +144,32 @@
 	}
 }
 
-- (BOOL)submit {
-	[self validate];
+- (void)submit {
+	ATSurveyResponse *response = (ATSurveyResponse *)[ATData newEntityNamed:@"ATSurveyResponse"];
+	
+	[response setup];
+	response.pendingState = [NSNumber numberWithInt:ATPendingSurveyResponseStateSending];
+	response.surveyID = self.interaction.identifier;
+	[response updateClientCreationTime];
+	[response setAnswers:self.answers];
+	[ATData save];
 
-	BOOL result = self.invalidQuestionIndexes.count == 0;
+	NSString *pendingSurveyResponseID = [response pendingSurveyResponseID];
+	double delayInSeconds = 1.5;
+	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+		ATSurveyResponseTask *task = [[ATSurveyResponseTask alloc] init];
+		task.pendingSurveyResponseID = pendingSurveyResponseID;
+		[[ATTaskQueue sharedTaskQueue] addTask:task];
+	});
 
-	if (result) {
-		ATSurveyResponse *response = (ATSurveyResponse *)[ATData newEntityNamed:@"ATSurveyResponse"];
-		[response setup];
-		response.pendingState = [NSNumber numberWithInt:ATPendingSurveyResponseStateSending];
-		response.surveyID = self.survey.identifier;
-		[response updateClientCreationTime];
-
-		[response setAnswers:self.answers];
-
-		NSString *pendingSurveyResponseID = [response pendingSurveyResponseID];
-		double delayInSeconds = 1.5;
-		dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-		dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-			ATSurveyResponseTask *task = [[ATSurveyResponseTask alloc] init];
-			task.pendingSurveyResponseID = pendingSurveyResponseID;
-			[[ATTaskQueue sharedTaskQueue] addTask:task];
-		});
-	}
-
-	return result;
+	NSDictionary *notificationInfo = @{ATSurveyIDKey: (self.interaction.identifier ?: [NSNull null])};
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveySentNotification object:nil userInfo:notificationInfo];
 }
 
 #pragma mark - Validation & Output
 
-- (void)validate {
+- (BOOL)validate {
 	NSIndexSet *previousInvalidQuestionIndexes = self.invalidQuestionIndexes;
 
 	self.invalidQuestionIndexes = [NSMutableIndexSet indexSet];
@@ -200,6 +200,8 @@
 	if (![self.invalidQuestionIndexes isEqualToIndexSet:previousInvalidQuestionIndexes]) {
 		[self.delegate viewModelValidationChanged:self];
 	}
+
+	return self.invalidQuestionIndexes.count == 0;
 }
 
 - (NSDictionary *)answers {
@@ -237,6 +239,38 @@
 	}];
 
 	return result;
+}
+
+#pragma mark - Metrics
+
+- (void)answerChangedAtIndexPath:(NSIndexPath *)indexPath {
+	ATSurveyQuestion *question = [self questionAtIndex:indexPath.section];
+
+	NSDictionary *metricsInfo = @{ ATSurveyMetricsSurveyIDKey: self.interaction.identifier ?: [NSNull null],
+								   ATSurveyMetricsSurveyQuestionIDKey: question.identifier ?: [NSNull null],
+								   ATSurveyMetricsEventKey: @(ATSurveyEventAnsweredQuestion),
+								   @"interaction_id": self.interaction.identifier ?: [NSNull null],
+								   };
+
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidAnswerQuestionNotification object:nil userInfo:metricsInfo];
+}
+
+- (void)didCancel {
+	[self didCloseWindowWithEvent:ATSurveyEventTappedCancel];
+}
+
+- (void)didSubmit {
+	[self didCloseWindowWithEvent:ATSurveyEventTappedSend];
+}
+
+- (void)didCloseWindowWithEvent:(ATSurveyEvent)event {
+	NSDictionary *metricsInfo = @{ ATSurveyMetricsSurveyIDKey: self.interaction.identifier ?: [NSNull null],
+								   ATSurveyWindowTypeKey: @(ATSurveyWindowTypeSurvey),
+								   ATSurveyMetricsEventKey: @(event),
+								   @"interaction_id": self.interaction.identifier ?: [NSNull null],
+								   };
+
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidHideWindowNotification object:nil userInfo:metricsInfo];
 }
 
 #pragma mark - Private

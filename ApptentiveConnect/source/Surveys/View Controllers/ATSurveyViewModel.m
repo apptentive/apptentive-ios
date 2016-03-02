@@ -12,8 +12,10 @@
 #import "ATSurveyAnswer.h"
 
 #import "ATConnect_Private.h"
+#import "ATInteraction.h"
 #import "ATSurveyResponse.h"
 #import "ATSurveyResponseTask.h"
+#import "ATSurveyMetrics.h"
 #import "ATTaskQueue.h"
 #import "ATData.h"
 
@@ -28,10 +30,11 @@
 
 @implementation ATSurveyViewModel
 
-- (instancetype)initWithSurvey:(ATSurvey *)survey {
+- (instancetype)initWithInteraction:(ATInteraction *)interaction {
 	self = [super init];
 	if (self) {
-		_survey = survey;
+		_interaction = interaction;
+		_survey = [[ATSurvey alloc] initWithJSON:interaction.configuration];
 
 		self.selectedIndexPaths = [NSMutableSet set];
 		self.textAtIndexPath = [NSMutableDictionary dictionary];

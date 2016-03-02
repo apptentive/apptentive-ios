@@ -9,16 +9,17 @@
 #import <UIKit/UIKit.h>
 #import "ATSurveyQuestion.h"
 
-@class ATSurvey;
+@class ATSurvey, ATInteraction;
 
 @protocol  ATSurveyViewModelDelegate;
 
 @interface ATSurveyViewModel : NSObject
 
-- (instancetype)initWithSurvey:(ATSurvey *)survey NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithInteraction:(ATInteraction *)interaction NS_DESIGNATED_INITIALIZER;
 - (instancetype)init NS_UNAVAILABLE;
 
 // Consider making this private
+@property (readonly, nonatomic) ATInteraction *interaction;
 @property (readonly, nonatomic) ATSurvey *survey;
 @property (weak, nonatomic) id<ATSurveyViewModelDelegate> delegate;
 

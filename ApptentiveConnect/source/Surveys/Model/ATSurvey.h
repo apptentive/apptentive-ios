@@ -12,9 +12,8 @@
 
 @interface ATSurvey : NSObject
 
-- (instancetype)initWithJSON:(NSDictionary *)JSON identifier:(NSString *)identifier;
+- (instancetype)initWithJSON:(NSDictionary *)JSON;
 
-@property (readonly, nonatomic) NSString *identifier;
 @property (readonly, nonatomic) NSString *title;
 @property (readonly, nonatomic) NSString *name;
 @property (readonly, nonatomic) NSString *surveyDescription;

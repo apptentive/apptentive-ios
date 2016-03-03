@@ -86,7 +86,7 @@
 	if ([self.viewModel validate]) {
 		// Consider any pending edits complete
 		if (self.editingIndexPath) {
-			[self.viewModel answerChangedAtIndexPath:self.editingIndexPath];
+			[self.viewModel commitChangeAtIndexPath:self.editingIndexPath];
 		}
 
 		[self.viewModel submit];
@@ -193,23 +193,11 @@
 #pragma mark Collection View Delegate
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-	if ([self.viewModel typeOfQuestionAtIndex:indexPath.section] == ATSurveyQuestionTypeSingleSelect) {
-		for (NSInteger answerIndex = 0; answerIndex < [self.viewModel numberOfAnswersForQuestionAtIndex:indexPath.section]; answerIndex++) {
-			if (answerIndex != indexPath.item) {
-				NSIndexPath *deselectIndexPath = [NSIndexPath indexPathForItem:answerIndex inSection:indexPath.section];
-				[self.collectionView deselectItemAtIndexPath:deselectIndexPath animated:YES];
-				[self.viewModel deselectAnswerAtIndexPath:deselectIndexPath];
-			}
-		}
-	}
-
 	[self.viewModel selectAnswerAtIndexPath:indexPath];
-	[self.viewModel answerChangedAtIndexPath:indexPath];
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
 	[self.viewModel deselectAnswerAtIndexPath:indexPath];
-	[self.viewModel answerChangedAtIndexPath:indexPath];
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -320,7 +308,7 @@
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
-	[self.viewModel answerChangedAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:textView.tag]];
+	[self.viewModel commitChangeAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:textView.tag]];
 }
 
 #pragma mark - Text field delegate
@@ -352,13 +340,17 @@
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
-	[self.viewModel answerChangedAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:textField.tag]];
+	[self.viewModel commitChangeAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:textField.tag]];
 }
 
 #pragma mark - View model delegate
 
 - (void)viewModelValidationChanged:(ATSurveyViewModel *)viewModel {
 	[self.collectionViewLayout invalidateLayout];
+}
+
+- (void)viewModel:(ATSurveyViewModel *)viewModel didDeselectAnswerAtIndexPath:(NSIndexPath *)indexPath {
+	[self.collectionView deselectItemAtIndexPath:indexPath animated:NO];
 }
 
 #pragma mark - Keyboard adjustment for iOS 7 & 8

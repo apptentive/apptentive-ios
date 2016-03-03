@@ -135,6 +135,8 @@
 		01E25CE01C87C82B005BF2D2 /* ATHUDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01E25CDC1C87C82B005BF2D2 /* ATHUDViewController.m */; };
 		01E25CE11C87C82B005BF2D2 /* ATPassThroughWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 01E25CDD1C87C82B005BF2D2 /* ATPassThroughWindow.h */; };
 		01E25CE21C87C82B005BF2D2 /* ATPassThroughWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 01E25CDE1C87C82B005BF2D2 /* ATPassThroughWindow.m */; };
+		01E25CE51C88B1EE005BF2D2 /* ATSurveyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 01E25CE41C88B1EE005BF2D2 /* ATSurveyTests.m */; };
+		01E25CE71C88B38E005BF2D2 /* Survey.json in Resources */ = {isa = PBXBuildFile; fileRef = 01E25CE61C88B21B005BF2D2 /* Survey.json */; };
 		01F1A9601B6823CD0088DBF0 /* ATAboutViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01F1A95E1B6823CD0088DBF0 /* ATAboutViewController.h */; };
 		01F1A9611B6823CD0088DBF0 /* ATAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F1A95F1B6823CD0088DBF0 /* ATAboutViewController.m */; };
 		01F6FD641BFAA291004513C2 /* testCornerCasesThatShouldBeFalse.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FD601BFAA28B004513C2 /* testCornerCasesThatShouldBeFalse.json */; };
@@ -186,7 +188,6 @@
 		493AEB3D15990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB2615990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.m */; };
 		493AEB3F15990A4D00DFD4C7 /* ATSurveyViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 493AEB2815990A4D00DFD4C7 /* ATSurveyViewController.h */; };
 		493AEB4015990A4D00DFD4C7 /* ATSurveyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB2915990A4D00DFD4C7 /* ATSurveyViewController.m */; };
-		493AEB4515990A6B00DFD4C7 /* ApptentiveSurveysTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB4415990A6B00DFD4C7 /* ApptentiveSurveysTests.m */; };
 		49509A61135658E200793EEC /* ATReachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 49509A5F135658E200793EEC /* ATReachability.h */; };
 		49509A62135658E200793EEC /* ATReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 49509A60135658E200793EEC /* ATReachability.m */; };
 		49509A6C1356596F00793EEC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49509A6B1356596F00793EEC /* SystemConfiguration.framework */; };
@@ -491,6 +492,8 @@
 		01E25CDC1C87C82B005BF2D2 /* ATHUDViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATHUDViewController.m; path = ../../../../ATHUD/ATHUD/ATHUDViewController.m; sourceTree = "<group>"; };
 		01E25CDD1C87C82B005BF2D2 /* ATPassThroughWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATPassThroughWindow.h; path = ../../../../ATHUD/ATHUD/ATPassThroughWindow.h; sourceTree = "<group>"; };
 		01E25CDE1C87C82B005BF2D2 /* ATPassThroughWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATPassThroughWindow.m; path = ../../../../ATHUD/ATHUD/ATPassThroughWindow.m; sourceTree = "<group>"; };
+		01E25CE41C88B1EE005BF2D2 /* ATSurveyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveyTests.m; sourceTree = "<group>"; };
+		01E25CE61C88B21B005BF2D2 /* Survey.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Survey.json; path = ../../../../CVSurvey/Survey.json; sourceTree = "<group>"; };
 		01F1A95E1B6823CD0088DBF0 /* ATAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAboutViewController.h; sourceTree = "<group>"; };
 		01F1A95F1B6823CD0088DBF0 /* ATAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAboutViewController.m; sourceTree = "<group>"; };
 		01F6FD601BFAA28B004513C2 /* testCornerCasesThatShouldBeFalse.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCornerCasesThatShouldBeFalse.json; sourceTree = "<group>"; };
@@ -545,8 +548,6 @@
 		493AEB2615990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ATWebClient+SurveyAdditions.m"; sourceTree = "<group>"; };
 		493AEB2815990A4D00DFD4C7 /* ATSurveyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSurveyViewController.h; sourceTree = "<group>"; };
 		493AEB2915990A4D00DFD4C7 /* ATSurveyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSurveyViewController.m; sourceTree = "<group>"; };
-		493AEB4315990A6B00DFD4C7 /* ApptentiveSurveysTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ApptentiveSurveysTests.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		493AEB4415990A6B00DFD4C7 /* ApptentiveSurveysTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ApptentiveSurveysTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		49509A5F135658E200793EEC /* ATReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATReachability.h; sourceTree = "<group>"; };
 		49509A60135658E200793EEC /* ATReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATReachability.m; sourceTree = "<group>"; };
 		49509A6B1356596F00793EEC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -1353,8 +1354,6 @@
 				49509DFA13583FB800793EEC /* ATUtilitiesTests.m */,
 				4987FAA5157AE59D00AF2078 /* ApptentiveMetricsTests.h */,
 				4987FAA6157AE59D00AF2078 /* ApptentiveMetricsTests.m */,
-				493AEB4315990A6B00DFD4C7 /* ApptentiveSurveysTests.h */,
-				493AEB4415990A6B00DFD4C7 /* ApptentiveSurveysTests.m */,
 				49129ED2174068720026C2E1 /* ApptentiveMigrationTests.h */,
 				49129ED3174068730026C2E1 /* ApptentiveMigrationTests.m */,
 				580B24B917D90AF300AE2CD0 /* ATEngagementTests.h */,
@@ -1362,6 +1361,7 @@
 				49358DBB1BF3336700516F1E /* ATInteractionInvocationTests.m */,
 				49ED18041BF97B4500C6D343 /* ATInteractionUsageDataTests.m */,
 				019BA84C1C51695E00F74F61 /* ATAPIRequestTests.m */,
+				01E25CE41C88B1EE005BF2D2 /* ATSurveyTests.m */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -1392,6 +1392,7 @@
 		49C54BD61790B783009CCD5D /* data */ = {
 			isa = PBXGroup;
 			children = (
+				01E25CE61C88B21B005BF2D2 /* Survey.json */,
 				01F6FD5F1BFAA28B004513C2 /* criteria */,
 				01A88FF31AFBFDB6002C49E7 /* testJsonDiffing.1.expected.json */,
 				01A88FF41AFBFDB6002C49E7 /* testJsonDiffing.1.new.json */,
@@ -1852,6 +1853,7 @@
 				011B08D21C0D0E0C004F4F5D /* ATDataModelv5.sqlite in Resources */,
 				49E7408F1840497600413697 /* v3WALDatabase in Resources */,
 				01F6FD651BFAA291004513C2 /* testCornerCasesThatShouldBeTrue.json in Resources */,
+				01E25CE71C88B38E005BF2D2 /* Survey.json in Resources */,
 				01F6FDA91BFBF3E2004513C2 /* testOperatorStartsWith.json in Resources */,
 				49E740911840498100413697 /* ATDataModelv3.sqlite in Resources */,
 				01F6FDA61BFBF3E2004513C2 /* testOperatorEndsWith.json in Resources */,
@@ -2053,13 +2055,13 @@
 				01DD9E091C6534CE003C4B1D /* ATConnect+Debugging.m in Sources */,
 				01C7C4DE1BEAD0BE005D6EC1 /* ATDataModel.xcdatamodeld in Sources */,
 				013BB6181BF6ABB600BB6C27 /* ATDataModel v4 to v5.xcmappingmodel in Sources */,
+				01E25CE51C88B1EE005BF2D2 /* ATSurveyTests.m in Sources */,
 				011B08CE1C0D0CCC004F4F5D /* ATUtilitiesTests.m in Sources */,
 				011B08D01C0D0CCC004F4F5D /* ATInteractionInvocationTests.m in Sources */,
 				011B08CF1C0D0CCC004F4F5D /* ApptentiveMigrationTests.m in Sources */,
 				011B08D71C0D19B6004F4F5D /* CodePointAndInteractionTests.m in Sources */,
 				019BA84D1C51695E00F74F61 /* ATAPIRequestTests.m in Sources */,
 				01F6FD971BFBCDC3004513C2 /* ApptentiveMetricsTests.m in Sources */,
-				493AEB4515990A6B00DFD4C7 /* ApptentiveSurveysTests.m in Sources */,
 				49ED18051BF97B4500C6D343 /* ATInteractionUsageDataTests.m in Sources */,
 				01F6FE2C1C0119D2004513C2 /* CriteriaTests.m in Sources */,
 				580B24BB17D90AF300AE2CD0 /* ATEngagementTests.m in Sources */,

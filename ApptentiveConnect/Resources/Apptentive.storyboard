@@ -1185,7 +1185,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C1y-qz-EY6" userLabel="poweredByBackground">
                                 <rect key="frame" x="0.0" y="535" width="320" height="33"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="at_update_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="II0-bw-JAC" userLabel="poweredByImage">
+                                    <imageView userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="at_update_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="II0-bw-JAC" userLabel="poweredByImage">
                                         <rect key="frame" x="162" y="10" width="85" height="16"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </imageView>
@@ -1275,7 +1275,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
         <!--Navigation Controller-->
         <scene sceneID="4Ue-53-Dzz">
             <objects>
-                <navigationController storyboardIdentifier="SurveyNavigation" id="hse-6D-XJq" customClass="ATNavigationController" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="SurveyNavigation" modalPresentationStyle="formSheet" id="hse-6D-XJq" customClass="ATNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="55b-97-XRn">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1296,7 +1296,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="interactive" dataMode="prototypes" id="f2T-ot-d9N" customClass="ATCollectionView">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="Nth-y4-abX" customClass="ATSurveyCollectionViewLayout">
                             <size key="itemSize" width="306" height="44"/>
                             <size key="headerReferenceSize" width="306" height="77"/>
@@ -1326,7 +1326,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Radio" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="229" translatesAutoresizingMaskIntoConstraints="NO" id="XeR-GW-QUi">
                                             <rect key="frame" x="58" y="11" width="229" height="22"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -1355,7 +1355,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Checkmark" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="229" translatesAutoresizingMaskIntoConstraints="NO" id="jfd-bx-kqH">
                                             <rect key="frame" x="58" y="11" width="229" height="22"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zb3-bq-5N3" customClass="ATSurveyOptionButton">
@@ -1460,7 +1460,7 @@ Lines</string>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Do You Eat Beans?" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="282" translatesAutoresizingMaskIntoConstraints="NO" id="TTZ-vQ-g60">
                                     <rect key="frame" x="19" y="13" width="282" height="20.5"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KBj-ej-Jg5">

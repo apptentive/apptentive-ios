@@ -20,7 +20,7 @@
 #import "ATSurveyGreetingView.h"
 
 #import "ATBackend.h"
-#import "ATHUDView.h"
+#import "ATHUDViewController.h"
 #import "ATConnect_Private.h"
 
 // These need to match the values from the storyboard
@@ -96,10 +96,10 @@
 		[self.viewModel didSubmit];
 
 		if (self.viewModel.showThankYou) {
-			ATHUDView *HUDView = [[ATHUDView alloc] initWithWindow:self.view.window];
-			HUDView.label.text = self.viewModel.thankYouText;
-			HUDView.fadeOutDuration = 5.0;
-			[HUDView show];
+			ATHUDViewController *HUD = [[ATHUDViewController alloc] init];
+			[HUD showInAlertWindow];
+			HUD.textLabel.text = self.viewModel.thankYouText;
+			HUD.imageView.image = [ATBackend imageNamed:@"at_thanks"];
 		}
 	}
 }

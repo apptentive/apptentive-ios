@@ -131,6 +131,10 @@
 		01D3128F1B69349900B369E1 /* ATProgressNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D3128D1B69349900B369E1 /* ATProgressNavigationBar.m */; };
 		01DD9E081C6534CD003C4B1D /* ATConnect+Debugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 019A63CA1C4DA5BE00DD5EBF /* ATConnect+Debugging.m */; };
 		01DD9E091C6534CE003C4B1D /* ATConnect+Debugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 019A63CA1C4DA5BE00DD5EBF /* ATConnect+Debugging.m */; };
+		01E25CDF1C87C82B005BF2D2 /* ATHUDViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01E25CDB1C87C82B005BF2D2 /* ATHUDViewController.h */; };
+		01E25CE01C87C82B005BF2D2 /* ATHUDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01E25CDC1C87C82B005BF2D2 /* ATHUDViewController.m */; };
+		01E25CE11C87C82B005BF2D2 /* ATPassThroughWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 01E25CDD1C87C82B005BF2D2 /* ATPassThroughWindow.h */; };
+		01E25CE21C87C82B005BF2D2 /* ATPassThroughWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 01E25CDE1C87C82B005BF2D2 /* ATPassThroughWindow.m */; };
 		01F1A9601B6823CD0088DBF0 /* ATAboutViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01F1A95E1B6823CD0088DBF0 /* ATAboutViewController.h */; };
 		01F1A9611B6823CD0088DBF0 /* ATAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F1A95F1B6823CD0088DBF0 /* ATAboutViewController.m */; };
 		01F6FD641BFAA291004513C2 /* testCornerCasesThatShouldBeFalse.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F6FD601BFAA28B004513C2 /* testCornerCasesThatShouldBeFalse.json */; };
@@ -170,8 +174,6 @@
 		49352AC4138C97A2000E464A /* ATAPIRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 49352AC1138C97A2000E464A /* ATAPIRequest.h */; };
 		49352AC5138C97A2000E464A /* ATAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 49352AC2138C97A2000E464A /* ATAPIRequest.m */; };
 		49352ADD138CA1DC000E464A /* ATURLConnection_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 49352ADC138CA1DC000E464A /* ATURLConnection_Private.h */; };
-		4936AE551379DE3100A4B17F /* ATHUDView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4936AE491379DE3100A4B17F /* ATHUDView.h */; };
-		4936AE561379DE3100A4B17F /* ATHUDView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE4A1379DE3100A4B17F /* ATHUDView.m */; };
 		4936AE771379DEBB00A4B17F /* ATUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 4936AE751379DEBB00A4B17F /* ATUtilities.h */; };
 		4936AE781379DEBB00A4B17F /* ATUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE761379DEBB00A4B17F /* ATUtilities.m */; };
 		4936AE831379DECE00A4B17F /* ATBackend.h in Headers */ = {isa = PBXBuildFile; fileRef = 4936AE7B1379DECE00A4B17F /* ATBackend.h */; };
@@ -485,6 +487,10 @@
 		01D0C39D1BF3EE9B0024BA1A /* at_attach@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_attach@3x.png"; sourceTree = "<group>"; };
 		01D3128C1B69349900B369E1 /* ATProgressNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATProgressNavigationBar.h; sourceTree = "<group>"; };
 		01D3128D1B69349900B369E1 /* ATProgressNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATProgressNavigationBar.m; sourceTree = "<group>"; };
+		01E25CDB1C87C82B005BF2D2 /* ATHUDViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATHUDViewController.h; path = ../../../../ATHUD/ATHUD/ATHUDViewController.h; sourceTree = "<group>"; };
+		01E25CDC1C87C82B005BF2D2 /* ATHUDViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATHUDViewController.m; path = ../../../../ATHUD/ATHUD/ATHUDViewController.m; sourceTree = "<group>"; };
+		01E25CDD1C87C82B005BF2D2 /* ATPassThroughWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATPassThroughWindow.h; path = ../../../../ATHUD/ATHUD/ATPassThroughWindow.h; sourceTree = "<group>"; };
+		01E25CDE1C87C82B005BF2D2 /* ATPassThroughWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ATPassThroughWindow.m; path = ../../../../ATHUD/ATHUD/ATPassThroughWindow.m; sourceTree = "<group>"; };
 		01F1A95E1B6823CD0088DBF0 /* ATAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAboutViewController.h; sourceTree = "<group>"; };
 		01F1A95F1B6823CD0088DBF0 /* ATAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAboutViewController.m; sourceTree = "<group>"; };
 		01F6FD601BFAA28B004513C2 /* testCornerCasesThatShouldBeFalse.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCornerCasesThatShouldBeFalse.json; sourceTree = "<group>"; };
@@ -527,8 +533,6 @@
 		49352AC2138C97A2000E464A /* ATAPIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAPIRequest.m; sourceTree = "<group>"; };
 		49352ADC138CA1DC000E464A /* ATURLConnection_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATURLConnection_Private.h; sourceTree = "<group>"; };
 		49358DBB1BF3336700516F1E /* ATInteractionInvocationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATInteractionInvocationTests.m; sourceTree = "<group>"; };
-		4936AE491379DE3100A4B17F /* ATHUDView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATHUDView.h; sourceTree = "<group>"; };
-		4936AE4A1379DE3100A4B17F /* ATHUDView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATHUDView.m; sourceTree = "<group>"; };
 		4936AE751379DEBB00A4B17F /* ATUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATUtilities.h; sourceTree = "<group>"; };
 		4936AE761379DEBB00A4B17F /* ATUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATUtilities.m; sourceTree = "<group>"; };
 		4936AE7B1379DECE00A4B17F /* ATBackend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATBackend.h; sourceTree = "<group>"; };
@@ -1318,10 +1322,12 @@
 		49B3D964133D843D00B5A5CD /* Custom Views */ = {
 			isa = PBXGroup;
 			children = (
+				01E25CDB1C87C82B005BF2D2 /* ATHUDViewController.h */,
+				01E25CDC1C87C82B005BF2D2 /* ATHUDViewController.m */,
+				01E25CDD1C87C82B005BF2D2 /* ATPassThroughWindow.h */,
+				01E25CDE1C87C82B005BF2D2 /* ATPassThroughWindow.m */,
 				01CC8BC81B1D0598006C4D30 /* ATNetworkImageIconView.h */,
 				01CC8BC91B1D0598006C4D30 /* ATNetworkImageIconView.m */,
-				4936AE491379DE3100A4B17F /* ATHUDView.h */,
-				4936AE4A1379DE3100A4B17F /* ATHUDView.m */,
 				4960A531171F70530082669B /* ATNetworkImageView.h */,
 				4960A532171F70530082669B /* ATNetworkImageView.m */,
 				583C27091B34BFD800525001 /* ATUnreadMessagesBadgeView.h */,
@@ -1627,7 +1633,6 @@
 				01B147B31B5D8D3A0000D041 /* ATMessageCenterProfileView.h in Headers */,
 				588F664A1B601F0B00F388E3 /* ATMessageCenterContextMessageCell.h in Headers */,
 				01C30CEB1B0D09F8006BC911 /* ATMessageCenterGreetingView.h in Headers */,
-				4936AE551379DE3100A4B17F /* ATHUDView.h in Headers */,
 				49735D621832DF1F00D48DE7 /* ATMessageCenterDataSource.h in Headers */,
 				4936AE771379DEBB00A4B17F /* ATUtilities.h in Headers */,
 				4936AE831379DECE00A4B17F /* ATBackend.h in Headers */,
@@ -1663,6 +1668,7 @@
 				491E03CE163F261C00DC3E18 /* ATLog.h in Headers */,
 				491E03D91640D01F00DC3E18 /* ATFeedbackTypes.h in Headers */,
 				4967278216B9D9CB00C679B8 /* ATConnect_Private.h in Headers */,
+				01E25CDF1C87C82B005BF2D2 /* ATHUDViewController.h in Headers */,
 				583DF06E1A44CD6E00BF0207 /* ATInteractionNavigateToLink.h in Headers */,
 				49AC178216C0987400BE1615 /* ATConversationUpdater.h in Headers */,
 				49AC178D16C0A0BC00BE1615 /* ATJSONModel.h in Headers */,
@@ -1701,6 +1707,7 @@
 				589274A6180CC33A0029E5CE /* ATInteractionUsageData.h in Headers */,
 				01D0C38C1BF3DC330024BA1A /* ATAttachmentController.h in Headers */,
 				5898DF8C17C2E0CE0048F11F /* ATEngagementGetManifestTask.h in Headers */,
+				01E25CE11C87C82B005BF2D2 /* ATPassThroughWindow.h in Headers */,
 				584647C617C426E800BFD6E6 /* ATEngagementManifestParser.h in Headers */,
 				58C5922117C55ADD000FA428 /* ATEngagementBackend.h in Headers */,
 				58C5922B17C59BE3000FA428 /* ATWebClient+EngagementAdditions.h in Headers */,
@@ -1939,6 +1946,7 @@
 				0132F8CA1C851C0800A452E3 /* ATSurveyMultilineCell.m in Sources */,
 				58B703ED1B0EB6D60024478C /* ATMessageCenterViewController.m in Sources */,
 				491748BB1341177000A7D11E /* ATConnectionChannel.m in Sources */,
+				01E25CE21C87C82B005BF2D2 /* ATPassThroughWindow.m in Sources */,
 				491748BD1341177000A7D11E /* ATConnectionManager.m in Sources */,
 				01B147B41B5D8D3A0000D041 /* ATMessageCenterProfileView.m in Sources */,
 				0132F8D01C851C0800A452E3 /* ATSurveyQuestionView.m in Sources */,
@@ -1950,7 +1958,6 @@
 				491748C11341177000A7D11E /* ATWebClient.m in Sources */,
 				49509A62135658E200793EEC /* ATReachability.m in Sources */,
 				0171DFEE1BF2D019006F8BEA /* ATCompoundReplyCell.m in Sources */,
-				4936AE561379DE3100A4B17F /* ATHUDView.m in Sources */,
 				01BD9E051B55E465004F12AB /* ATMessageCenterInputView.m in Sources */,
 				0127EA111BF1271C0005481A /* ATCompoundMessageCell.m in Sources */,
 				4936AE781379DEBB00A4B17F /* ATUtilities.m in Sources */,
@@ -2007,6 +2014,7 @@
 				017D97431B0E3770004E045C /* ATMessageCenterStatusView.m in Sources */,
 				492B81DB16D595A00031BEF6 /* ATFileAttachment.m in Sources */,
 				017D974B1B0E57C2004E045C /* ATMessageCenterReplyCell.m in Sources */,
+				01E25CE01C87C82B005BF2D2 /* ATHUDViewController.m in Sources */,
 				495E9C1D16EABD8E00AE3B03 /* ATLogger.m in Sources */,
 				583C270C1B34BFD800525001 /* ATUnreadMessagesBadgeView.m in Sources */,
 				01C7C4E41BEAD105005D6EC1 /* ATCompoundMessage.m in Sources */,

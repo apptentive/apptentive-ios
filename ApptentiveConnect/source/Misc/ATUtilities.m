@@ -43,39 +43,6 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 
 #if TARGET_OS_IPHONE
 
-+ (CGFloat)rotationOfViewHierarchyInRadians:(UIView *)leafView {
-	CGAffineTransform t = leafView.transform;
-	UIView *s = leafView.superview;
-	while (s && s != leafView.window) {
-		t = CGAffineTransformConcat(t, s.transform);
-		s = s.superview;
-	}
-	return atan2(t.b, t.a);
-}
-
-+ (CGAffineTransform)viewTransformInWindow:(UIWindow *)window {
-	CGAffineTransform result = CGAffineTransformIdentity;
-	do { // once
-		if (!window) break;
-
-		if ([[window rootViewController] view]) {
-			CGFloat rotation = [ATUtilities rotationOfViewHierarchyInRadians:[[window rootViewController] view]];
-			result = CGAffineTransformMakeRotation(rotation);
-			break;
-		}
-
-		if ([[window subviews] count]) {
-			for (UIView *v in [window subviews]) {
-				if (!CGAffineTransformIsIdentity(v.transform)) {
-					result = v.transform;
-					break;
-				}
-			}
-		}
-	} while (NO);
-	return result;
-}
-
 + (UIViewController *)rootViewControllerForCurrentWindow {
 	UIWindow *window = nil;
 	for (UIWindow *tmpWindow in [[UIApplication sharedApplication] windows]) {
@@ -92,22 +59,6 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	} else {
 		return nil;
 	}
-}
-
-+ (UIColor *)contrastingTextColorForBackgroundColor:(UIColor *)backgroundColor {
-	const CGFloat *componentColors = CGColorGetComponents(backgroundColor.CGColor);
-
-	CGFloat colorBrightness = ((componentColors[0] * 299) + (componentColors[1] * 587) + (componentColors[2] * 114)) / 1000;
-
-	UIColor *textColor;
-
-	if (colorBrightness < 0.5) {
-		textColor = [UIColor whiteColor];
-	} else {
-		textColor = [UIColor blackColor];
-	}
-
-	return textColor;
 }
 
 + (UIViewController *)topViewController {

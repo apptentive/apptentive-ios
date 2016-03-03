@@ -133,6 +133,9 @@
 }
 
 - (void)selectAnswerAtIndexPath:(NSIndexPath *)indexPath {
+	 if ([self.selectedIndexPaths containsObject:indexPath])
+		 return;
+
 	[self.selectedIndexPaths addObject:indexPath];
 
 	if ([self typeOfQuestionAtIndex:indexPath.section] == ATSurveyQuestionTypeSingleSelect) {

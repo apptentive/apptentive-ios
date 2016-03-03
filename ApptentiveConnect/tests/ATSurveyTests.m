@@ -74,6 +74,13 @@
 	XCTAssertNotNil(self.viewModel);
 	XCTAssertNotNil(self.viewModel.interaction);
 	XCTAssertNotNil(self.viewModel.survey);
+
+	XCTAssertEqualObjects([self.viewModel textOfQuestionAtIndex:4], @"Multiselect Optional With Limits");
+	XCTAssertEqualObjects([self.viewModel textOfAnswerAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:4]], @"C");
+	XCTAssertEqual([self.viewModel typeOfQuestionAtIndex:3], ATSurveyQuestionTypeMultipleSelect);
+	XCTAssertEqualObjects(self.viewModel.greeting, @"Please help us see how each question is formatted when returning a survey response to the server.");
+	XCTAssertEqualObjects(self.viewModel.submitButtonText, @"Submit");
+	XCTAssertEqualObjects([self.viewModel instructionTextOfQuestionAtIndex:1], @"required—select one");
 }
 
 - (void)testRadioButtons {

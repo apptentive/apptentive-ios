@@ -51,7 +51,7 @@
 
 - (void)didCancel;
 - (void)didSubmit;
-- (void)answerChangedAtIndexPath:(NSIndexPath *)indexPath;
+- (void)commitChangeAtIndexPath:(NSIndexPath *)indexPath;
 
 @property (readonly, nonatomic) NSDictionary *answers;
 
@@ -59,6 +59,7 @@
 
 @protocol  ATSurveyViewModelDelegate <NSObject>
 
+- (void)viewModel:(ATSurveyViewModel *)viewModel didDeselectAnswerAtIndexPath:(NSIndexPath *)indexPath;
 - (void)viewModelValidationChanged:(ATSurveyViewModel *)viewModel;
 
 @end

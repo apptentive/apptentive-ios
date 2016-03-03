@@ -128,8 +128,24 @@
 	}
 }
 
+- (void)commitChangeAtIndexPath:(NSIndexPath *)indexPath {
+	[self answerChangedAtIndexPath:indexPath];
+}
+
 - (void)selectAnswerAtIndexPath:(NSIndexPath *)indexPath {
 	[self.selectedIndexPaths addObject:indexPath];
+
+	if ([self typeOfQuestionAtIndex:indexPath.section] == ATSurveyQuestionTypeSingleSelect) {
+		for (NSInteger answerIndex = 0; answerIndex < [self numberOfAnswersForQuestionAtIndex:indexPath.section]; answerIndex++) {
+			if (answerIndex != indexPath.item) {
+				NSIndexPath *deselectIndexPath = [NSIndexPath indexPathForItem:answerIndex inSection:indexPath.section];
+				[self.delegate viewModel:self didDeselectAnswerAtIndexPath:deselectIndexPath];
+				[self.selectedIndexPaths removeObject:deselectIndexPath];
+			}
+		}
+	}
+
+	[self answerChangedAtIndexPath:indexPath];
 
 	if (self.invalidQuestionIndexes) {
 		[self validate];
@@ -138,6 +154,8 @@
 
 - (void)deselectAnswerAtIndexPath:(NSIndexPath *)indexPath {
 	[self.selectedIndexPaths removeObject:indexPath];
+
+	[self answerChangedAtIndexPath:indexPath];
 
 	if (self.invalidQuestionIndexes) {
 		[self validate];

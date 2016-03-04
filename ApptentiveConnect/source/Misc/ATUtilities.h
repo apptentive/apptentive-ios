@@ -17,17 +17,6 @@
 
 @interface ATUtilities : NSObject
 #if TARGET_OS_IPHONE
-+ (UIImage *)imageByTakingScreenshot;
-+ (UIImage *)imageByTakingScreenshotExcludingWindow:(UIWindow *)excludedWindow;
-+ (UIImage *)imageByTakingScreenshotIncludingBlankStatusBarArea:(BOOL)includeStatusBar excludingWindow:(UIWindow *)window;
-
-+ (UIImage *)imageByRotatingImage:(UIImage *)image toInterfaceOrientation:(UIInterfaceOrientation)orientation;
-+ (UIImage *)imageByRotatingImage:(UIImage *)image byRadians:(CGFloat)radians;
-+ (UIImage *)imageByScalingImage:(UIImage *)image toFitSize:(CGSize)size scale:(CGFloat)contentScale;
-+ (UIImage *)imageByScalingImage:(UIImage *)image toSize:(CGSize)size scale:(CGFloat)contentScale fromITouchCamera:(BOOL)isFromITouchCamera;
-+ (CGFloat)rotationOfViewHierarchyInRadians:(UIView *)leafView;
-+ (CGAffineTransform)viewTransformInWindow:(UIWindow *)window;
-
 + (UIViewController *)rootViewControllerForCurrentWindow;
 
 + (UIColor *)contrastingTextColorForBackgroundColor:(UIColor *)backgroundColor;

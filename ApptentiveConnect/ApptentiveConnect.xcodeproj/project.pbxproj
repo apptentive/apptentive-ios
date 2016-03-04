@@ -28,6 +28,7 @@
 		013BB6181BF6ABB600BB6C27 /* ATDataModel v4 to v5.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 013BB6121BF6A82300BB6C27 /* ATDataModel v4 to v5.xcmappingmodel */; };
 		013C1A7B1B713D5C002434B8 /* ATMessageCenterErrorViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 013C1A791B713D5C002434B8 /* ATMessageCenterErrorViewController.h */; };
 		013C1A7C1B713D5C002434B8 /* ATMessageCenterErrorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 013C1A7A1B713D5C002434B8 /* ATMessageCenterErrorViewController.m */; };
+		01413E721C8A52E1008D34B5 /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01413E711C8A52E1008D34B5 /* QuickLook.framework */; };
 		0160854D1BA77B1D00050FDB /* at_account.png in Resources */ = {isa = PBXBuildFile; fileRef = 0160852A1BA77B0500050FDB /* at_account.png */; };
 		0160854E1BA77B1D00050FDB /* at_account@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0160852B1BA77B0500050FDB /* at_account@2x.png */; };
 		0160854F1BA77B1D00050FDB /* at_account@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0160852C1BA77B0500050FDB /* at_account@3x.png */; };
@@ -340,6 +341,7 @@
 		013BB6121BF6A82300BB6C27 /* ATDataModel v4 to v5.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v4 to v5.xcmappingmodel"; sourceTree = "<group>"; };
 		013C1A791B713D5C002434B8 /* ATMessageCenterErrorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageCenterErrorViewController.h; sourceTree = "<group>"; };
 		013C1A7A1B713D5C002434B8 /* ATMessageCenterErrorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageCenterErrorViewController.m; sourceTree = "<group>"; };
+		01413E711C8A52E1008D34B5 /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
 		01438FBA1B8E65000016B079 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		0160852A1BA77B0500050FDB /* at_account.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_account.png; sourceTree = "<group>"; };
 		0160852B1BA77B0500050FDB /* at_account@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_account@2x.png"; sourceTree = "<group>"; };
@@ -693,6 +695,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01413E721C8A52E1008D34B5 /* QuickLook.framework in Frameworks */,
 				01F6FDC01BFD3C1D004513C2 /* MobileCoreServices.framework in Frameworks */,
 				01F6FDBE1BFD3C14004513C2 /* AVFoundation.framework in Frameworks */,
 				01F6FDBC1BFD3C0D004513C2 /* ImageIO.framework in Frameworks */,
@@ -1109,6 +1112,7 @@
 		496DC3811333D35600743F65 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				01413E711C8A52E1008D34B5 /* QuickLook.framework */,
 				01F6FDBF1BFD3C1D004513C2 /* MobileCoreServices.framework */,
 				01F6FDBD1BFD3C14004513C2 /* AVFoundation.framework */,
 				01F6FDBB1BFD3C0D004513C2 /* ImageIO.framework */,

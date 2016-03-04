@@ -11,7 +11,7 @@
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
 #import "ATData.h"
-#import "ATHUDView.h"
+#import "ATHUDViewController.h"
 #import "ATRecordTask.h"
 #import "ATSurvey.h"
 #import "ATSurveyMetrics.h"
@@ -167,10 +167,10 @@ enum {
 		UIAlertView *successAlert = [[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Thanks!", @"Text in thank you display upon submitting survey.") message:self.survey.successMessage delegate:nil cancelButtonTitle:ATLocalizedString(@"OK", @"OK button title") otherButtonTitles:nil];
 		[successAlert show];
 	} else {
-		ATHUDView *hud = [[ATHUDView alloc] initWithWindow:self.view.window];
-		hud.label.text = ATLocalizedString(@"Thanks!", @"Text in thank you display upon submitting survey.");
-		hud.fadeOutDuration = 5.0;
-		[hud show];
+		ATHUDViewController *HUD = [[ATHUDViewController alloc] init];
+		[HUD showInAlertWindow];
+		HUD.textLabel.text = ATLocalizedString(@"Thanks!", @"Text in thank you display upon submitting survey.");
+		HUD.imageView.image = [ATBackend imageNamed:@"at_thanks"];
 	}
 
 	NSDictionary *metricsInfo = @{ ATSurveyMetricsSurveyIDKey: self.survey.identifier ?: [NSNull null],

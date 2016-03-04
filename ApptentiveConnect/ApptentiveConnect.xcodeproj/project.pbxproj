@@ -28,6 +28,13 @@
 		013BB6181BF6ABB600BB6C27 /* ATDataModel v4 to v5.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 013BB6121BF6A82300BB6C27 /* ATDataModel v4 to v5.xcmappingmodel */; };
 		013C1A7B1B713D5C002434B8 /* ATMessageCenterErrorViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 013C1A791B713D5C002434B8 /* ATMessageCenterErrorViewController.h */; };
 		013C1A7C1B713D5C002434B8 /* ATMessageCenterErrorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 013C1A7A1B713D5C002434B8 /* ATMessageCenterErrorViewController.m */; };
+		01413E661C8A4539008D34B5 /* ATHUDViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01413E621C8A4539008D34B5 /* ATHUDViewController.h */; };
+		01413E671C8A4539008D34B5 /* ATHUDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01413E631C8A4539008D34B5 /* ATHUDViewController.m */; };
+		01413E681C8A4539008D34B5 /* ATPassThroughWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 01413E641C8A4539008D34B5 /* ATPassThroughWindow.h */; };
+		01413E691C8A4539008D34B5 /* ATPassThroughWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 01413E651C8A4539008D34B5 /* ATPassThroughWindow.m */; };
+		01413E6E1C8A45B3008D34B5 /* at_thanks.png in Resources */ = {isa = PBXBuildFile; fileRef = 01413E6B1C8A45B3008D34B5 /* at_thanks.png */; };
+		01413E6F1C8A45B3008D34B5 /* at_thanks@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01413E6C1C8A45B3008D34B5 /* at_thanks@2x.png */; };
+		01413E701C8A45B3008D34B5 /* at_thanks@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01413E6D1C8A45B3008D34B5 /* at_thanks@3x.png */; };
 		0160854D1BA77B1D00050FDB /* at_account.png in Resources */ = {isa = PBXBuildFile; fileRef = 0160852A1BA77B0500050FDB /* at_account.png */; };
 		0160854E1BA77B1D00050FDB /* at_account@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0160852B1BA77B0500050FDB /* at_account@2x.png */; };
 		0160854F1BA77B1D00050FDB /* at_account@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0160852C1BA77B0500050FDB /* at_account@3x.png */; };
@@ -138,8 +145,6 @@
 		49352ADD138CA1DC000E464A /* ATURLConnection_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 49352ADC138CA1DC000E464A /* ATURLConnection_Private.h */; };
 		4936AE531379DE3100A4B17F /* ATDefaultTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4936AE471379DE3100A4B17F /* ATDefaultTextView.h */; };
 		4936AE541379DE3100A4B17F /* ATDefaultTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE481379DE3100A4B17F /* ATDefaultTextView.m */; };
-		4936AE551379DE3100A4B17F /* ATHUDView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4936AE491379DE3100A4B17F /* ATHUDView.h */; };
-		4936AE561379DE3100A4B17F /* ATHUDView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE4A1379DE3100A4B17F /* ATHUDView.m */; };
 		4936AE771379DEBB00A4B17F /* ATUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 4936AE751379DEBB00A4B17F /* ATUtilities.h */; };
 		4936AE781379DEBB00A4B17F /* ATUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE761379DEBB00A4B17F /* ATUtilities.m */; };
 		4936AE831379DECE00A4B17F /* ATBackend.h in Headers */ = {isa = PBXBuildFile; fileRef = 4936AE7B1379DECE00A4B17F /* ATBackend.h */; };
@@ -344,6 +349,13 @@
 		013BB6121BF6A82300BB6C27 /* ATDataModel v4 to v5.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v4 to v5.xcmappingmodel"; sourceTree = "<group>"; };
 		013C1A791B713D5C002434B8 /* ATMessageCenterErrorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATMessageCenterErrorViewController.h; sourceTree = "<group>"; };
 		013C1A7A1B713D5C002434B8 /* ATMessageCenterErrorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATMessageCenterErrorViewController.m; sourceTree = "<group>"; };
+		01413E621C8A4539008D34B5 /* ATHUDViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATHUDViewController.h; sourceTree = "<group>"; };
+		01413E631C8A4539008D34B5 /* ATHUDViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATHUDViewController.m; sourceTree = "<group>"; };
+		01413E641C8A4539008D34B5 /* ATPassThroughWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATPassThroughWindow.h; sourceTree = "<group>"; };
+		01413E651C8A4539008D34B5 /* ATPassThroughWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATPassThroughWindow.m; sourceTree = "<group>"; };
+		01413E6B1C8A45B3008D34B5 /* at_thanks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_thanks.png; sourceTree = "<group>"; };
+		01413E6C1C8A45B3008D34B5 /* at_thanks@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_thanks@2x.png"; sourceTree = "<group>"; };
+		01413E6D1C8A45B3008D34B5 /* at_thanks@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_thanks@3x.png"; sourceTree = "<group>"; };
 		01438FBA1B8E65000016B079 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		0160852A1BA77B0500050FDB /* at_account.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_account.png; sourceTree = "<group>"; };
 		0160852B1BA77B0500050FDB /* at_account@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_account@2x.png"; sourceTree = "<group>"; };
@@ -465,8 +477,6 @@
 		49358DBB1BF3336700516F1E /* ATInteractionInvocationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATInteractionInvocationTests.m; sourceTree = "<group>"; };
 		4936AE471379DE3100A4B17F /* ATDefaultTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATDefaultTextView.h; sourceTree = "<group>"; };
 		4936AE481379DE3100A4B17F /* ATDefaultTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATDefaultTextView.m; sourceTree = "<group>"; };
-		4936AE491379DE3100A4B17F /* ATHUDView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATHUDView.h; sourceTree = "<group>"; };
-		4936AE4A1379DE3100A4B17F /* ATHUDView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATHUDView.m; sourceTree = "<group>"; };
 		4936AE751379DEBB00A4B17F /* ATUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATUtilities.h; sourceTree = "<group>"; };
 		4936AE761379DEBB00A4B17F /* ATUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATUtilities.m; sourceTree = "<group>"; };
 		4936AE7B1379DECE00A4B17F /* ATBackend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATBackend.h; sourceTree = "<group>"; };
@@ -748,6 +758,16 @@
 			path = at_remove;
 			sourceTree = "<group>";
 		};
+		01413E6A1C8A45B3008D34B5 /* at_thanks */ = {
+			isa = PBXGroup;
+			children = (
+				01413E6B1C8A45B3008D34B5 /* at_thanks.png */,
+				01413E6C1C8A45B3008D34B5 /* at_thanks@2x.png */,
+				01413E6D1C8A45B3008D34B5 /* at_thanks@3x.png */,
+			);
+			path = at_thanks;
+			sourceTree = "<group>";
+		};
 		0159B64A1B7A73D100CC45E6 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -802,6 +822,7 @@
 		016085281BA77B0500050FDB /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				01413E6A1C8A45B3008D34B5 /* at_thanks */,
 				013BB6021BF6A63300BB6C27 /* at_remove */,
 				01D0C39A1BF3EE9B0024BA1A /* at_attach */,
 				0127EA141BF136020005481A /* at_document */,
@@ -1202,12 +1223,14 @@
 		49B3D964133D843D00B5A5CD /* Custom Views */ = {
 			isa = PBXGroup;
 			children = (
+				01413E621C8A4539008D34B5 /* ATHUDViewController.h */,
+				01413E631C8A4539008D34B5 /* ATHUDViewController.m */,
+				01413E641C8A4539008D34B5 /* ATPassThroughWindow.h */,
+				01413E651C8A4539008D34B5 /* ATPassThroughWindow.m */,
 				01CC8BC81B1D0598006C4D30 /* ATNetworkImageIconView.h */,
 				01CC8BC91B1D0598006C4D30 /* ATNetworkImageIconView.m */,
 				4936AE471379DE3100A4B17F /* ATDefaultTextView.h */,
 				4936AE481379DE3100A4B17F /* ATDefaultTextView.m */,
-				4936AE491379DE3100A4B17F /* ATHUDView.h */,
-				4936AE4A1379DE3100A4B17F /* ATHUDView.m */,
 				4960A531171F70530082669B /* ATNetworkImageView.h */,
 				4960A532171F70530082669B /* ATNetworkImageView.m */,
 				583C27091B34BFD800525001 /* ATUnreadMessagesBadgeView.h */,
@@ -1509,7 +1532,6 @@
 				588F664A1B601F0B00F388E3 /* ATMessageCenterContextMessageCell.h in Headers */,
 				4936AE531379DE3100A4B17F /* ATDefaultTextView.h in Headers */,
 				01C30CEB1B0D09F8006BC911 /* ATMessageCenterGreetingView.h in Headers */,
-				4936AE551379DE3100A4B17F /* ATHUDView.h in Headers */,
 				49735D621832DF1F00D48DE7 /* ATMessageCenterDataSource.h in Headers */,
 				4936AE771379DEBB00A4B17F /* ATUtilities.h in Headers */,
 				4936AE831379DECE00A4B17F /* ATBackend.h in Headers */,
@@ -1555,8 +1577,10 @@
 				58D17D4F18C5676F00D123BC /* ATInteractionMessageCenterController.h in Headers */,
 				583DF0671A390DDA00BF0207 /* ATInteractionInvocation.h in Headers */,
 				58E9580A190740BC005063DC /* ATSurveyQuestionResponse.h in Headers */,
+				01413E661C8A4539008D34B5 /* ATHUDViewController.h in Headers */,
 				019A63CB1C4DA5BE00DD5EBF /* ATConnect+Debugging.h in Headers */,
 				0171DFED1BF2D019006F8BEA /* ATCompoundReplyCell.h in Headers */,
+				01413E681C8A4539008D34B5 /* ATPassThroughWindow.h in Headers */,
 				0127EA121BF1271C0005481A /* ATIndexedCollectionView.h in Headers */,
 				49F8AFF016CC4A550070FFEA /* ATMessageSender.h in Headers */,
 				49F8AFF216CC4A550070FFEA /* ATPersonInfo.h in Headers */,
@@ -1759,6 +1783,7 @@
 				016085611BA77B1D00050FDB /* at_network_error@3x.png in Resources */,
 				016085541BA77B1D00050FDB /* at_checkmark@2x.png in Resources */,
 				0160855D1BA77B1D00050FDB /* at_info@2x.png in Resources */,
+				01413E6F1C8A45B3008D34B5 /* at_thanks@2x.png in Resources */,
 				016085581BA77B1D00050FDB /* at_close@3x.png in Resources */,
 				016085621BA77B1D00050FDB /* at_update_icon_mask.png in Resources */,
 				0127EA181BF136090005481A /* at_document.png in Resources */,
@@ -1771,8 +1796,10 @@
 				013BB6061BF6A65C00BB6C27 /* at_remove.png in Resources */,
 				016085551BA77B1D00050FDB /* at_checkmark@3x.png in Resources */,
 				0160855C1BA77B1D00050FDB /* at_info.png in Resources */,
+				01413E6E1C8A45B3008D34B5 /* at_thanks.png in Resources */,
 				0160854D1BA77B1D00050FDB /* at_account.png in Resources */,
 				016085661BA77B1D00050FDB /* at_update_logo@2x.png in Resources */,
+				01413E701C8A45B3008D34B5 /* at_thanks@3x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1800,6 +1827,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01413E691C8A4539008D34B5 /* ATPassThroughWindow.m in Sources */,
 				01D3128F1B69349900B369E1 /* ATProgressNavigationBar.m in Sources */,
 				49C002A3133413BB0071F088 /* ATConnect.m in Sources */,
 				49D1125013368CC200603373 /* ATTask.m in Sources */,
@@ -1817,7 +1845,6 @@
 				49509A62135658E200793EEC /* ATReachability.m in Sources */,
 				0171DFEE1BF2D019006F8BEA /* ATCompoundReplyCell.m in Sources */,
 				4936AE541379DE3100A4B17F /* ATDefaultTextView.m in Sources */,
-				4936AE561379DE3100A4B17F /* ATHUDView.m in Sources */,
 				01BD9E051B55E465004F12AB /* ATMessageCenterInputView.m in Sources */,
 				0127EA111BF1271C0005481A /* ATCompoundMessageCell.m in Sources */,
 				4936AE781379DEBB00A4B17F /* ATUtilities.m in Sources */,
@@ -1838,6 +1865,7 @@
 				01AE42081B38E38D006B9191 /* ATBannerViewController.m in Sources */,
 				493AEB2E15990A4D00DFD4C7 /* ATSurvey.m in Sources */,
 				0127EA0F1BF1271C0005481A /* ATAttachmentCell.m in Sources */,
+				01413E671C8A4539008D34B5 /* ATHUDViewController.m in Sources */,
 				493AEB3115990A4D00DFD4C7 /* ATSurveyParser.m in Sources */,
 				493AEB3415990A4D00DFD4C7 /* ATSurveyQuestion.m in Sources */,
 				493AEB3D15990A4D00DFD4C7 /* ATWebClient+SurveyAdditions.m in Sources */,

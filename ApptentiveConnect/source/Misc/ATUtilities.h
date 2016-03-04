@@ -17,7 +17,6 @@
 
 @interface ATUtilities : NSObject
 #if TARGET_OS_IPHONE
-+ (CGAffineTransform)viewTransformInWindow:(UIWindow *)window;
 + (UIViewController *)rootViewControllerForCurrentWindow;
 + (UIViewController *)topViewController;
 + (UIImage *)appIcon;

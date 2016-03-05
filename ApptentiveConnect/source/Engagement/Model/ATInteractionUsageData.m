@@ -65,7 +65,7 @@
 		NSArray *components = [keyPath componentsSeparatedByString:@"/"];
 		if (components.count > 1) {
 			NSString *codePoint = [components objectAtIndex:1];
-			[[ATConnect sharedConnection].engagementBackend codePointWasSeen:codePoint];
+			[[ATConnect sharedConnection].engagementBackend codePointWasSeen:[codePoint stringByRemovingPercentEncoding]];
 		}
 	} else if ([keyPath hasPrefix:@"interactions/"]) {
 		NSArray *components = [keyPath componentsSeparatedByString:@"/"];
@@ -305,7 +305,7 @@
 		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
 		NSDictionary *codePointsInvokesTotal = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesTotalKey];
 		for (NSString *codePoint in codePointsInvokesTotal) {
-			[predicateSyntax setObject:[codePointsInvokesTotal objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/total", codePoint]];
+			[predicateSyntax setObject:[codePointsInvokesTotal objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/total", [ATUtilities stringByEscapingForPredicate:codePoint]]];
 		}
 		_codePointInvokesTotal = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
@@ -318,7 +318,7 @@
 		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
 		NSDictionary *codePointsInvokesVersion = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesVersionKey];
 		for (NSString *codePoint in codePointsInvokesVersion) {
-			[predicateSyntax setObject:[codePointsInvokesVersion objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/version", codePoint]];
+			[predicateSyntax setObject:[codePointsInvokesVersion objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/version", [ATUtilities stringByEscapingForPredicate:codePoint]]];
 		}
 		_codePointInvokesVersion = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
@@ -330,7 +330,7 @@
 		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
 		NSDictionary *codePointsInvokesBuild = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesBuildKey];
 		for (NSString *codePoint in codePointsInvokesBuild) {
-			[predicateSyntax setObject:[codePointsInvokesBuild objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/build", codePoint]];
+			[predicateSyntax setObject:[codePointsInvokesBuild objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/build", [ATUtilities stringByEscapingForPredicate:codePoint]]];
 		}
 		_codePointInvokesBuild = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
@@ -342,17 +342,11 @@
 		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
 		NSDictionary *codePointsInvokesLastDate = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesLastDateKey];
 		for (NSString *codePoint in codePointsInvokesLastDate) {
-			NSString *key = [NSString stringWithFormat:@"code_point/%@/last_invoked_at/total", codePoint];
+			NSString *key =  [NSString stringWithFormat:@"code_point/%@/last_invoked_at/total", [ATUtilities stringByEscapingForPredicate:codePoint]];
 			NSDate *lastDate = [codePointsInvokesLastDate objectForKey:codePoint];
 
 			if (lastDate) {
-				// TODO: rip out timeAgo when adding $before and $after
-				NSTimeInterval timeAgo = [[NSDate date] timeIntervalSinceDate:lastDate];
-				[predicateSyntax setObject:@(timeAgo) forKey:[NSString stringWithFormat:@"code_point/%@/invokes/time_ago", codePoint]];
-
-				if (codePointsInvokesLastDate[codePoint]) {
 					predicateSyntax[key] = [ATConnect timestampObjectWithDate:lastDate];
-				}
 			} else {
 				predicateSyntax[key] = [NSNull null];
 			}
@@ -410,13 +404,7 @@
 			NSDate *lastDate = [interactionInvokesLastDate objectForKey:interactionID];
 
 			if (lastDate) {
-				// TODO: rip out timeAgo when adding $before and $after
-				NSTimeInterval timeAgo = [[NSDate date] timeIntervalSinceDate:lastDate];
-				[predicateSyntax setObject:@(timeAgo) forKey:[NSString stringWithFormat:@"interactions/%@/invokes/time_ago", interactionID]];
-
-				if (interactionInvokesLastDate[interactionID]) {
-					predicateSyntax[key] = [ATConnect timestampObjectWithDate:lastDate];
-				}
+				predicateSyntax[key] = [ATConnect timestampObjectWithDate:lastDate];
 			} else {
 				predicateSyntax[key] = [NSNull null];
 			}

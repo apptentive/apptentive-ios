@@ -102,17 +102,19 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
 	self = [super init];
 
-	_creationSDKVersion = [aDecoder decodeObjectForKey:creationSDKVersionKey];
-	_creationApplicationBuildNumber = [aDecoder decodeObjectForKey:creationApplicationBuildNumberKey];
+	if (self) {
+		_creationSDKVersion = [aDecoder decodeObjectForKey:creationSDKVersionKey];
+		_creationApplicationBuildNumber = [aDecoder decodeObjectForKey:creationApplicationBuildNumberKey];
 
-	_applicationDisplayName = [aDecoder decodeObjectForKey:applicationDisplayNameKey];
-	_metricsEnabled = [aDecoder decodeBoolForKey:metricsEnabledKey];
-	_hideBranding = [aDecoder decodeBoolForKey:hideBrandingKey];
+		_applicationDisplayName = [aDecoder decodeObjectForKey:applicationDisplayNameKey];
+		_metricsEnabled = [aDecoder decodeBoolForKey:metricsEnabledKey];
+		_hideBranding = [aDecoder decodeBoolForKey:hideBrandingKey];
 
-	_messageCenterForegroundPollingInterval = [aDecoder decodeDoubleForKey:messageCenterForegroundPollingIntervalKey];
-	_messageCenterBackgroundPollingInterval = [aDecoder decodeDoubleForKey:messageCenterBackgroundPollingIntervalKey];
+		_messageCenterForegroundPollingInterval = [aDecoder decodeDoubleForKey:messageCenterForegroundPollingIntervalKey];
+		_messageCenterBackgroundPollingInterval = [aDecoder decodeDoubleForKey:messageCenterBackgroundPollingIntervalKey];
 
-	_notificationPopupsEnabled = [aDecoder decodeBoolForKey:notificationPopupsEnabledKey];
+		_notificationPopupsEnabled = [aDecoder decodeBoolForKey:notificationPopupsEnabledKey];
+	}
 
 	return self;
 }

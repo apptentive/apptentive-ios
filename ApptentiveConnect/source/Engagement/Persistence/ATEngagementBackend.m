@@ -8,7 +8,6 @@
 
 #import "ATEngagementBackend.h"
 #import "ATBackend.h"
-#import "ATEngagementGetManifestTask.h"
 #import "ATTaskQueue.h"
 #import "ATInteraction.h"
 #import "ATInteractionInvocation.h"
@@ -23,6 +22,8 @@
 #import "ATInteractionSurveyController.h"
 #import "ATInteractionTextModalController.h"
 #import "ATInteractionNavigateToLink.h"
+#import "ATInteractionUsageData.h"
+#import "ATEngagementManifest.h"
 
 NSString *const ATEngagementInstallDateKey = @"ATEngagementInstallDateKey";
 NSString *const ATEngagementUpgradeDateKey = @"ATEngagementUpgradeDateKey";
@@ -38,10 +39,6 @@ NSString *const ATEngagementInteractionsInvokesVersionKey = @"ATEngagementIntera
 NSString *const ATEngagementInteractionsInvokesLastDateKey = @"ATEngagementInteractionsInvokesLastDateKey";
 NSString *const ATEngagementInteractionsInvokesBuildKey = @"ATEngagementInteractionsInvokesBuildKey";
 
-NSString *const ATEngagementInteractionsSDKVersionKey = @"ATEngagementInteractionsSDKVersionKey";
-NSString *const ATEngagementInteractionsAppBuildNumberKey = @"ATEngagementInteractionsAppBuildNumberKey";
-NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEngagementCachedInteractionsExpirationPreferenceKey";
-
 NSString *const ATEngagementCodePointHostAppVendorKey = @"local";
 NSString *const ATEngagementCodePointHostAppInteractionKey = @"app";
 NSString *const ATEngagementCodePointApptentiveVendorKey = @"com.apptentive";
@@ -49,191 +46,159 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 
 NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 
+NSString *const ATEngagementApplicationVersionKey = @"ATEngagementApplicationVersionKey";
+NSString *const ATEngagementApplicationBuildKey = @"ATEngagementApplicationBuildKey";
+
+NSString *const ATEngagementSDKVersionKey = @"ATEngagementSDKVersionKey";
+NSString *const ATEngagementSDKDistributionNameKey = @"ATEngagementSDKDistributionNameKey";
+NSString *const ATEngagementSDKDistributionVersionKey = @"ATEngagementSDKDistributionVersionKey";
+
 
 @interface ATEngagementBackend ()
 
-@property (strong, nonatomic) NSMutableDictionary *engagementTargets;
-@property (strong, nonatomic) NSMutableDictionary *engagementInteractions;
+@property (strong, nonatomic) ATEngagementManifestUpdater *manifestUpdater;
 
 @end
 
-
 @implementation ATEngagementBackend
 
-- (id)init {
-	if ((self = [super init])) {
-		NSDictionary *defaults = @{ ATEngagementIsUpdateVersionKey: @NO,
-			ATEngagementIsUpdateBuildKey: @NO,
-			ATEngagementCodePointsInvokesTotalKey: @{},
-			ATEngagementCodePointsInvokesVersionKey: @{},
-			ATEngagementCodePointsInvokesLastDateKey: @{},
-			ATEngagementInteractionsInvokesTotalKey: @{},
-			ATEngagementInteractionsInvokesVersionKey: @{},
-			ATEngagementInteractionsInvokesLastDateKey: @{} };
-		[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
+- (id)initWithStoragePath:(NSString *)storagePath {
+	self = [super init];
 
-		_engagementTargets = [[NSMutableDictionary alloc] init];
-		NSFileManager *fm = [NSFileManager defaultManager];
-		if ([fm fileExistsAtPath:[ATEngagementBackend cachedTargetsStoragePath]]) {
+	if (self) {
+		_storagePath = storagePath;
+		self.manifestUpdater = [[ATEngagementManifestUpdater alloc] initWithStoragePath:[storagePath stringByAppendingPathComponent:@"manifest"]];
+		self.manifestUpdater.delegate = self;
+
+		_engagementData = [self emptyEngagementData];
+		if ([[NSFileManager defaultManager] fileExistsAtPath:self.engagementDataStoragePath]) {
 			@try {
-				NSDictionary *archivedTargets = [NSKeyedUnarchiver unarchiveObjectWithFile:[ATEngagementBackend cachedTargetsStoragePath]];
-				[_engagementTargets addEntriesFromDictionary:archivedTargets];
+				NSDictionary *archivedData = [NSKeyedUnarchiver unarchiveObjectWithFile:self.engagementDataStoragePath];
+				[_engagementData addEntriesFromDictionary:archivedData];
 			} @catch (NSException *exception) {
-				ATLogError(@"Unable to unarchive engagement targets: %@", exception);
+				ATLogError(@"Unable to unarchive engagement data: %@", exception);
+			}
+		} else if ([[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInstallDateKey]) {
+			NSArray *keys = @[
+							  ATEngagementInstallDateKey,
+							  ATEngagementUpgradeDateKey,
+							  ATEngagementLastUsedVersionKey,
+							  ATEngagementIsUpdateVersionKey,
+							  ATEngagementIsUpdateBuildKey,
+							  ATEngagementCodePointsInvokesTotalKey,
+							  ATEngagementCodePointsInvokesVersionKey,
+							  ATEngagementCodePointsInvokesBuildKey,
+							  ATEngagementCodePointsInvokesLastDateKey,
+							  ATEngagementInteractionsInvokesTotalKey,
+							  ATEngagementInteractionsInvokesVersionKey,
+							  ATEngagementInteractionsInvokesBuildKey,
+							  ATEngagementInteractionsInvokesLastDateKey,
+							  ];
+
+			for (NSString *key in keys) {
+				NSObject *value = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+				_engagementData[key] = value;
+			}
+
+			@try {
+				[NSKeyedArchiver archiveRootObject:_engagementData toFile:self.engagementDataStoragePath];
+				for (NSString *key in keys) {
+					[[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
+				}
+			} @catch (NSException *exception) {
+				ATLogError(@"Unable to save migrated engagement data: %@", exception);
 			}
 		}
-
-		_engagementInteractions = [[NSMutableDictionary alloc] init];
-		if ([fm fileExistsAtPath:[ATEngagementBackend cachedInteractionsStoragePath]]) {
-			@try {
-				NSDictionary *archivedInteractions = [NSKeyedUnarchiver unarchiveObjectWithFile:[ATEngagementBackend cachedInteractionsStoragePath]];
-				[_engagementInteractions addEntriesFromDictionary:archivedInteractions];
-			} @catch (NSException *exception) {
-				ATLogError(@"Unable to unarchive engagement interactions: %@", exception);
-			}
-		}
-
-		[self invalidateInteractionCacheIfNeeded];
 
 		[self updateVersionInfo];
+
+		_usageData = [[ATInteractionUsageData alloc] initWithEngagementData:self.engagementData];
 	}
 
 	return self;
 }
 
-- (BOOL)invalidateInteractionCacheIfNeeded {
-	BOOL invalidateCache = NO;
-
-#if APPTENTIVE_DEBUG
-	invalidateCache = YES;
-#endif
-
-	NSString *previousBuild = [[NSUserDefaults standardUserDefaults] stringForKey:ATEngagementInteractionsAppBuildNumberKey];
-	if (![previousBuild isEqualToString:[ATUtilities buildNumberString]]) {
-		invalidateCache = YES;
-	}
-
-	NSString *previousSDKVersion = [[NSUserDefaults standardUserDefaults] stringForKey:ATEngagementInteractionsSDKVersionKey];
-	if (![previousSDKVersion isEqualToString:kATConnectVersionString]) {
-		invalidateCache = YES;
-	}
-
-	if (invalidateCache) {
-		[self invalidateInteractionCache];
-	}
-
-	return invalidateCache;
+- (NSMutableDictionary *)emptyEngagementData {
+	return [@{
+			 ATEngagementIsUpdateVersionKey: @NO,
+			 ATEngagementIsUpdateBuildKey: @NO,
+			 ATEngagementCodePointsInvokesTotalKey: @{},
+			 ATEngagementCodePointsInvokesVersionKey: @{},
+			 ATEngagementCodePointsInvokesBuildKey: @{},
+			 ATEngagementCodePointsInvokesLastDateKey: @{},
+			 ATEngagementInteractionsInvokesTotalKey: @{},
+			 ATEngagementInteractionsInvokesVersionKey: @{},
+			 ATEngagementInteractionsInvokesBuildKey: @{},
+			 ATEngagementInteractionsInvokesLastDateKey: @{}
+			 } mutableCopy];
 }
 
-- (void)invalidateInteractionCache {
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
+- (void)resetEngagementData {
+	_engagementData = [self emptyEngagementData];
+	[self.engagementData removeObjectForKey:ATEngagementInstallDateKey];
+	[self.engagementData removeObjectForKey:ATEngagementLastUsedVersionKey];
+
+	[self updateVersionInfo];
+
+	_usageData = [[ATInteractionUsageData alloc] initWithEngagementData:self.engagementData];
 }
 
 - (void)checkForEngagementManifest {
-	if ([self shouldRetrieveNewEngagementManifest]) {
-		ATEngagementGetManifestTask *task = [[ATEngagementGetManifestTask alloc] init];
-		[[ATTaskQueue sharedTaskQueue] addTask:task];
-		task = nil;
+	if (self.manifestUpdater.needsUpdate) {
+		[self.manifestUpdater update];
 	}
 }
 
-- (BOOL)shouldRetrieveNewEngagementManifest {
-	NSDate *expiration = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
-	if (expiration) {
-		NSDate *now = [NSDate date];
-		NSComparisonResult comparison = [expiration compare:now];
-		if (comparison == NSOrderedSame || comparison == NSOrderedAscending) {
-			return YES;
-		} else {
-			NSFileManager *fm = [NSFileManager defaultManager];
-			if (![fm fileExistsAtPath:[ATEngagementBackend cachedTargetsStoragePath]]) {
-				return YES;
-			}
-
-			if (![fm fileExistsAtPath:[ATEngagementBackend cachedInteractionsStoragePath]]) {
-				return YES;
-			}
-
-			return NO;
-		}
-	} else {
-		return YES;
-	}
-}
-
-- (void)didReceiveNewTargets:(NSDictionary *)targets andInteractions:(NSDictionary *)interactions maxAge:(NSTimeInterval)expiresMaxAge {
-	if (!targets || !interactions) {
-		ATLogError(@"Error receiving new Engagement Framework targets and interactions.");
-		return;
-	}
-
-	ATLogInfo(@"Received remote Interactions from Apptentive.");
-
-	@synchronized(self) {
-		if ([[ATConnect sharedConnection].backend supportDirectoryPath]) {
-			[NSKeyedArchiver archiveRootObject:targets toFile:[ATEngagementBackend cachedTargetsStoragePath]];
-			[NSKeyedArchiver archiveRootObject:interactions toFile:[ATEngagementBackend cachedInteractionsStoragePath]];
-
-			if (expiresMaxAge > 0) {
-				NSDate *date = [NSDate dateWithTimeInterval:expiresMaxAge sinceDate:[NSDate date]];
-				NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-				[defaults setObject:date forKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
-			}
-
-			[self.engagementTargets removeAllObjects];
-			[self.engagementTargets addEntriesFromDictionary:targets];
-
-			[self.engagementInteractions removeAllObjects];
-			[self.engagementInteractions addEntriesFromDictionary:interactions];
-
-			NSString *buildNumber = [ATUtilities buildNumberString];
-			if ([ATUtilities buildNumberString]) {
-				[[NSUserDefaults standardUserDefaults] setObject:buildNumber forKey:ATEngagementInteractionsAppBuildNumberKey];
-			} else {
-				[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInteractionsAppBuildNumberKey];
-			}
-
-			[[NSUserDefaults standardUserDefaults] setObject:kATConnectVersionString forKey:ATEngagementInteractionsSDKVersionKey];
-
-			[self updateVersionInfo];
-		}
+- (void)updater:(ATUpdater *)updater didFinish:(BOOL)success {
+	if (success) {
+		ATLogInfo(@"Received remote Interactions from Apptentive.");
+		[self updateVersionInfo];
 	}
 }
 
 - (void)updateVersionInfo {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-
-	NSDate *installDate = [defaults objectForKey:ATEngagementInstallDateKey];
+	NSDate *installDate = [self.engagementData objectForKey:ATEngagementInstallDateKey];
 	if (!installDate) {
-		[defaults setObject:[NSDate date] forKey:ATEngagementInstallDateKey];
+		[self.engagementData setObject:[NSDate date] forKey:ATEngagementInstallDateKey];
 	}
 
-	NSString *currentBundleVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
-	NSString *lastBundleVersion = [defaults objectForKey:ATEngagementLastUsedVersionKey];
+	NSString *currentBundleVersion = [ATUtilities appBundleVersionString];
+	NSString *lastBundleVersion = [self.engagementData objectForKey:ATEngagementLastUsedVersionKey];
 
 	// Both version and build are required (by iTunes Connect) to be updated upon App Store release.
 	// If the bundle version has changed, we can mark both version and build as updated.
 	if (lastBundleVersion && ![lastBundleVersion isEqualToString:currentBundleVersion]) {
-		[defaults setObject:@YES forKey:ATEngagementIsUpdateVersionKey];
-		[defaults setObject:@YES forKey:ATEngagementIsUpdateBuildKey];
+		[self.engagementData setObject:@YES forKey:ATEngagementIsUpdateVersionKey];
+		[self.engagementData setObject:@YES forKey:ATEngagementIsUpdateBuildKey];
 	}
 
-	if (lastBundleVersion == nil || ![lastBundleVersion isEqualToString:currentBundleVersion]) {
-		[defaults setObject:currentBundleVersion forKey:ATEngagementLastUsedVersionKey];
-		[defaults setObject:[NSDate date] forKey:ATEngagementUpgradeDateKey];
-		[defaults setObject:@{} forKey:ATEngagementCodePointsInvokesVersionKey];
-		[defaults setObject:@{} forKey:ATEngagementCodePointsInvokesBuildKey];
-		[defaults setObject:@{} forKey:ATEngagementInteractionsInvokesVersionKey];
-		[defaults setObject:@{} forKey:ATEngagementInteractionsInvokesBuildKey];
+	if (currentBundleVersion && (lastBundleVersion == nil || ![lastBundleVersion isEqualToString:currentBundleVersion])) {
+		[self.engagementData setObject:currentBundleVersion forKey:ATEngagementLastUsedVersionKey];
+		[self.engagementData setObject:[NSDate date] forKey:ATEngagementUpgradeDateKey];
+		[self.engagementData setObject:@{} forKey:ATEngagementCodePointsInvokesVersionKey];
+		[self.engagementData setObject:@{} forKey:ATEngagementCodePointsInvokesBuildKey];
+		[self.engagementData setObject:@{} forKey:ATEngagementInteractionsInvokesVersionKey];
+		[self.engagementData setObject:@{} forKey:ATEngagementInteractionsInvokesBuildKey];
 	}
+
+	NSString *buildNumberString = [ATUtilities buildNumberString] ?: @"";
+	[self.engagementData setObject:buildNumberString forKey:ATEngagementApplicationBuildKey];
+
+	NSString *versionString = [ATUtilities appVersionString] ?: @"";
+	[self.engagementData setObject:versionString forKey:ATEngagementApplicationVersionKey];
+
+	NSString *SDKVersion = kATConnectVersionString;
+	[self.engagementData setObject:SDKVersion forKey:ATEngagementSDKVersionKey];
+
+	NSString *SDKDistribution = [ATConnect sharedConnection].backend.distributionName ?: @"";
+	[self.engagementData setObject:SDKDistribution forKey:ATEngagementSDKDistributionNameKey];
+
+	NSString *SDKDistributionVersion = [ATConnect sharedConnection].backend.distributionVersion ?: @"";
+	[self.engagementData setObject:SDKDistributionVersion forKey:ATEngagementSDKDistributionVersionKey];
 }
 
-+ (NSString *)cachedTargetsStoragePath {
-	return [[[ATConnect sharedConnection].backend supportDirectoryPath] stringByAppendingPathComponent:@"cachedtargets.objects"];
-}
-
-+ (NSString *)cachedInteractionsStoragePath {
-	return [[[ATConnect sharedConnection].backend supportDirectoryPath] stringByAppendingPathComponent:@"cachedinteractionsV2.objects"];
+- (NSString *)engagementDataStoragePath {
+	return [self.storagePath stringByAppendingPathComponent:@"engagementData.objects"];
 }
 
 - (BOOL)canShowInteractionForLocalEvent:(NSString *)event {
@@ -273,14 +238,14 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 
 	ATInteraction *interaction = nil;
 	if (interactionID) {
-		interaction = self.engagementInteractions[interactionID];
+		interaction = self.manifestUpdater.interactions[interactionID];
 	}
 
 	return interaction;
 }
 
 - (ATInteraction *)interactionForEvent:(NSString *)event {
-	NSArray *invocations = self.engagementTargets[event];
+	NSArray *invocations = self.manifestUpdater.targets[event];
 	ATInteraction *interaction = [self interactionForInvocations:invocations];
 
 	return interaction;
@@ -335,113 +300,132 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 		[self interactionWasEngaged:interaction];
 		didEngageInteraction = YES;
 
-		// Sync defaults so user doesn't see interaction more than once.
-		[[NSUserDefaults standardUserDefaults] synchronize];
+		[self save];
 	}
 
 	return didEngageInteraction;
 }
 
-- (void)codePointWasSeen:(NSString *)codePoint {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+- (void)keyPathWasSeen:(NSString *)keyPath {
+	/*
+	 Record the keyPath if needed, to later be used in predicate evaluation.
+	 */
 
-	NSDictionary *invokesTotal = [defaults objectForKey:ATEngagementCodePointsInvokesTotalKey];
+	if ([keyPath hasPrefix:@"code_point/"]) {
+		NSArray *components = [keyPath componentsSeparatedByString:@"/"];
+		if (components.count > 1) {
+			NSString *codePoint = [components objectAtIndex:1];
+			[[ATConnect sharedConnection].engagementBackend codePointWasSeen:codePoint];
+		}
+	} else if ([keyPath hasPrefix:@"interactions/"]) {
+		NSArray *components = [keyPath componentsSeparatedByString:@"/"];
+		if (components.count > 1) {
+			NSString *interactionID = [components objectAtIndex:1];
+			[[ATConnect sharedConnection].engagementBackend interactionWasSeen:interactionID];
+		}
+	}
+}
+
+- (void)codePointWasSeen:(NSString *)codePoint {
+	NSDictionary *invokesTotal = [self.engagementData objectForKey:ATEngagementCodePointsInvokesTotalKey];
 	if (![invokesTotal objectForKey:codePoint]) {
 		NSMutableDictionary *addedCodePoint = [NSMutableDictionary dictionaryWithDictionary:invokesTotal];
 		[addedCodePoint setObject:@0 forKey:codePoint];
-		[defaults setObject:addedCodePoint forKey:ATEngagementCodePointsInvokesTotalKey];
+		[self.engagementData setObject:addedCodePoint forKey:ATEngagementCodePointsInvokesTotalKey];
 	}
 
-	NSDictionary *invokesVersion = [defaults objectForKey:ATEngagementCodePointsInvokesVersionKey];
+	NSDictionary *invokesVersion = [self.engagementData objectForKey:ATEngagementCodePointsInvokesVersionKey];
 	if (![invokesVersion objectForKey:codePoint]) {
 		NSMutableDictionary *addedCodePoint = [NSMutableDictionary dictionaryWithDictionary:invokesVersion];
 		[addedCodePoint setObject:@0 forKey:codePoint];
-		[defaults setObject:addedCodePoint forKey:ATEngagementCodePointsInvokesVersionKey];
+		[self.engagementData setObject:addedCodePoint forKey:ATEngagementCodePointsInvokesVersionKey];
 	}
 
-	NSDictionary *invokesBuild = [defaults objectForKey:ATEngagementCodePointsInvokesBuildKey];
+	NSDictionary *invokesBuild = [self.engagementData objectForKey:ATEngagementCodePointsInvokesBuildKey];
 	if (![invokesBuild objectForKey:codePoint]) {
 		NSMutableDictionary *addedCodePoint = [NSMutableDictionary dictionaryWithDictionary:invokesBuild];
 		[addedCodePoint setObject:@0 forKey:codePoint];
-		[defaults setObject:addedCodePoint forKey:ATEngagementCodePointsInvokesBuildKey];
+		[self.engagementData setObject:addedCodePoint forKey:ATEngagementCodePointsInvokesBuildKey];
 	}
+
+	[self save];
 }
 
 - (void)codePointWasEngaged:(NSString *)codePoint {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-
-	NSMutableDictionary *codePointsInvokesTotal = [[defaults objectForKey:ATEngagementCodePointsInvokesTotalKey] mutableCopy];
+	NSMutableDictionary *codePointsInvokesTotal = [[self.engagementData objectForKey:ATEngagementCodePointsInvokesTotalKey] mutableCopy];
 	NSNumber *codePointInvokesTotal = [codePointsInvokesTotal objectForKey:codePoint] ?: @0;
 	codePointInvokesTotal = @(codePointInvokesTotal.intValue + 1);
 	[codePointsInvokesTotal setObject:codePointInvokesTotal forKey:codePoint];
-	[defaults setObject:codePointsInvokesTotal forKey:ATEngagementCodePointsInvokesTotalKey];
+	[self.engagementData setObject:codePointsInvokesTotal forKey:ATEngagementCodePointsInvokesTotalKey];
 
-	NSMutableDictionary *codePointsInvokesVersion = [[defaults objectForKey:ATEngagementCodePointsInvokesVersionKey] mutableCopy];
+	NSMutableDictionary *codePointsInvokesVersion = [[self.engagementData objectForKey:ATEngagementCodePointsInvokesVersionKey] mutableCopy];
 	NSNumber *codePointInvokesVersion = [codePointsInvokesVersion objectForKey:codePoint] ?: @0;
 	codePointInvokesVersion = @(codePointInvokesVersion.intValue + 1);
 	[codePointsInvokesVersion setObject:codePointInvokesVersion forKey:codePoint];
-	[defaults setObject:codePointsInvokesVersion forKey:ATEngagementCodePointsInvokesVersionKey];
+	[self.engagementData setObject:codePointsInvokesVersion forKey:ATEngagementCodePointsInvokesVersionKey];
 
-	NSMutableDictionary *codePointsInvokesBuild = [[defaults objectForKey:ATEngagementCodePointsInvokesBuildKey] mutableCopy];
+	NSMutableDictionary *codePointsInvokesBuild = [[self.engagementData objectForKey:ATEngagementCodePointsInvokesBuildKey] mutableCopy];
 	NSNumber *codePointInvokesBuild = [codePointsInvokesBuild objectForKey:codePoint] ?: @0;
 	codePointInvokesBuild = @(codePointInvokesBuild.intValue + 1);
 	[codePointsInvokesBuild setObject:codePointInvokesBuild forKey:codePoint];
-	[defaults setObject:codePointsInvokesBuild forKey:ATEngagementCodePointsInvokesBuildKey];
+	[self.engagementData setObject:codePointsInvokesBuild forKey:ATEngagementCodePointsInvokesBuildKey];
 
-	NSMutableDictionary *codePointsInvokesTimeAgo = [[defaults objectForKey:ATEngagementCodePointsInvokesLastDateKey] mutableCopy];
+	NSMutableDictionary *codePointsInvokesTimeAgo = [[self.engagementData objectForKey:ATEngagementCodePointsInvokesLastDateKey] mutableCopy];
 	[codePointsInvokesTimeAgo setObject:[NSDate date] forKey:codePoint];
-	[defaults setObject:codePointsInvokesTimeAgo forKey:ATEngagementCodePointsInvokesLastDateKey];
+	[self.engagementData setObject:codePointsInvokesTimeAgo forKey:ATEngagementCodePointsInvokesLastDateKey];
+
+	[self save];
 }
 
 - (void)interactionWasSeen:(NSString *)interactionID {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-
-	NSDictionary *invokesTotal = [defaults objectForKey:ATEngagementInteractionsInvokesTotalKey];
+	NSDictionary *invokesTotal = [self.engagementData objectForKey:ATEngagementInteractionsInvokesTotalKey];
 	if (![invokesTotal objectForKey:interactionID]) {
 		NSMutableDictionary *addedInteraction = [NSMutableDictionary dictionaryWithDictionary:invokesTotal];
 		[addedInteraction setObject:@0 forKey:interactionID];
-		[defaults setObject:addedInteraction forKey:ATEngagementInteractionsInvokesTotalKey];
+		[self.engagementData setObject:addedInteraction forKey:ATEngagementInteractionsInvokesTotalKey];
 	}
 
-	NSDictionary *invokesVersion = [defaults objectForKey:ATEngagementInteractionsInvokesVersionKey];
+	NSDictionary *invokesVersion = [self.engagementData objectForKey:ATEngagementInteractionsInvokesVersionKey];
 	if (![invokesVersion objectForKey:interactionID]) {
 		NSMutableDictionary *addedInteraction = [NSMutableDictionary dictionaryWithDictionary:invokesVersion];
 		[addedInteraction setObject:@0 forKey:interactionID];
-		[defaults setObject:addedInteraction forKey:ATEngagementInteractionsInvokesVersionKey];
+		[self.engagementData setObject:addedInteraction forKey:ATEngagementInteractionsInvokesVersionKey];
 	}
 
-	NSDictionary *invokesBuild = [defaults objectForKey:ATEngagementInteractionsInvokesBuildKey];
+	NSDictionary *invokesBuild = [self.engagementData objectForKey:ATEngagementInteractionsInvokesBuildKey];
 	if (![invokesBuild objectForKey:interactionID]) {
 		NSMutableDictionary *addedInteraction = [NSMutableDictionary dictionaryWithDictionary:invokesBuild];
 		[addedInteraction setObject:@0 forKey:interactionID];
-		[defaults setObject:addedInteraction forKey:ATEngagementInteractionsInvokesBuildKey];
+		[self.engagementData setObject:addedInteraction forKey:ATEngagementInteractionsInvokesBuildKey];
 	}
+
+	[self save];
 }
 
 - (void)interactionWasEngaged:(ATInteraction *)interaction {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-
-	NSMutableDictionary *interactionsInvokesTotal = [[defaults objectForKey:ATEngagementInteractionsInvokesTotalKey] mutableCopy];
+	NSMutableDictionary *interactionsInvokesTotal = [[self.engagementData objectForKey:ATEngagementInteractionsInvokesTotalKey] mutableCopy];
 	NSNumber *interactionInvokesTotal = [interactionsInvokesTotal objectForKey:interaction.identifier] ?: @0;
 	interactionInvokesTotal = @(interactionInvokesTotal.intValue + 1);
 	[interactionsInvokesTotal setObject:interactionInvokesTotal forKey:interaction.identifier];
-	[defaults setObject:interactionsInvokesTotal forKey:ATEngagementInteractionsInvokesTotalKey];
+	[self.engagementData setObject:interactionsInvokesTotal forKey:ATEngagementInteractionsInvokesTotalKey];
 
-	NSMutableDictionary *interactionsInvokesVersion = [[defaults objectForKey:ATEngagementInteractionsInvokesVersionKey] mutableCopy];
+	NSMutableDictionary *interactionsInvokesVersion = [[self.engagementData objectForKey:ATEngagementInteractionsInvokesVersionKey] mutableCopy];
 	NSNumber *interactionInvokesVersion = [interactionsInvokesVersion objectForKey:interaction.identifier] ?: @0;
 	interactionInvokesVersion = @(interactionInvokesVersion.intValue + 1);
 	[interactionsInvokesVersion setObject:interactionInvokesVersion forKey:interaction.identifier];
-	[defaults setObject:interactionsInvokesVersion forKey:ATEngagementInteractionsInvokesVersionKey];
+	[self.engagementData setObject:interactionsInvokesVersion forKey:ATEngagementInteractionsInvokesVersionKey];
 
-	NSMutableDictionary *interactionsInvokesBuild = [[defaults objectForKey:ATEngagementInteractionsInvokesBuildKey] mutableCopy];
+	NSMutableDictionary *interactionsInvokesBuild = [[self.engagementData objectForKey:ATEngagementInteractionsInvokesBuildKey] mutableCopy];
 	NSNumber *interactionInvokesBuild = [interactionsInvokesBuild objectForKey:interaction.identifier] ?: @0;
 	interactionInvokesBuild = @(interactionInvokesBuild.intValue + 1);
 	[interactionsInvokesBuild setObject:interactionInvokesBuild forKey:interaction.identifier];
-	[defaults setObject:interactionsInvokesBuild forKey:ATEngagementInteractionsInvokesBuildKey];
+	[self.engagementData setObject:interactionsInvokesBuild forKey:ATEngagementInteractionsInvokesBuildKey];
 
-	NSMutableDictionary *interactionsInvokesLastDate = [[defaults objectForKey:ATEngagementInteractionsInvokesLastDateKey] mutableCopy];
+	NSMutableDictionary *interactionsInvokesLastDate = [[self.engagementData objectForKey:ATEngagementInteractionsInvokesLastDateKey] mutableCopy];
 	[interactionsInvokesLastDate setObject:[NSDate date] forKey:interaction.identifier];
-	[defaults setObject:interactionsInvokesLastDate forKey:ATEngagementInteractionsInvokesLastDateKey];
+	[self.engagementData setObject:interactionsInvokesLastDate forKey:ATEngagementInteractionsInvokesLastDateKey];
+
+	[self save];
 }
 
 - (void)presentInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
@@ -496,7 +480,7 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 
 - (void)presentUpgradeMessageInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
 	NSAssert([interaction.type isEqualToString:@"UpgradeMessage"], @"Attempted to present an UpgradeMessage interaction with an interaction of type: %@", interaction.type);
-	
+
 	ATInteractionUpgradeMessageViewController *upgradeMessage = [ATInteractionUpgradeMessageViewController interactionUpgradeMessageViewControllerWithInteraction:interaction];
 	[upgradeMessage presentFromViewController:viewController animated:YES];
 }
@@ -551,16 +535,20 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (void)resetUpgradeVersionInfo {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[defaults removeObjectForKey:ATEngagementLastUsedVersionKey];
-	[defaults removeObjectForKey:ATEngagementUpgradeDateKey];
-	[defaults setObject:@{} forKey:ATEngagementCodePointsInvokesVersionKey];
-	[defaults setObject:@{} forKey:ATEngagementInteractionsInvokesVersionKey];
-	[defaults synchronize];
+	[self.engagementData removeObjectForKey:ATEngagementLastUsedVersionKey];
+	[self.engagementData removeObjectForKey:ATEngagementUpgradeDateKey];
+	[self.engagementData setObject:@{} forKey:ATEngagementCodePointsInvokesVersionKey];
+	[self.engagementData setObject:@{} forKey:ATEngagementInteractionsInvokesVersionKey];
+
+	[self save];
 }
 
 - (NSArray *)allEngagementInteractions {
-	return [self.engagementInteractions allValues];
+	return [self.manifestUpdater.interactions allValues];
+}
+
+- (void)save {
+	[NSKeyedArchiver archiveRootObject:self.engagementData toFile:self.engagementDataStoragePath];
 }
 
 @end

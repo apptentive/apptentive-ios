@@ -7,14 +7,15 @@
 //
 
 #import "ATWebClient+MessageCenter.h"
-
 #import "ATAPIRequest.h"
+#import "ATConnect_Private.h"
 #import "ATBackend.h"
 #import "ATCompoundMessage.h"
 #import "ATFileAttachment.h"
 #import "ATJSONSerialization.h"
 #import "ATURLConnection.h"
 #import "ATWebClient_Private.h"
+#import "ATUtilities.h"
 
 #define kMessageCenterChannelName (@"Message Center")
 
@@ -26,7 +27,7 @@
 	if (conversation == nil) {
 		postJSON = [NSDictionary dictionary];
 	} else {
-		postJSON = [conversation apiJSON];
+		postJSON = conversation.initialDictionaryRepresentation;
 	}
 	NSString *postString = [ATJSONSerialization stringWithJSONObject:postJSON options:ATJSONWritingPrettyPrinted error:&error];
 	if (!postString && error != nil) {
@@ -47,7 +48,7 @@
 	if (conversation == nil) {
 		return nil;
 	}
-	putJSON = [conversation apiUpdateJSON];
+	putJSON = conversation.dictionaryRepresentation;
 	NSString *putString = [ATJSONSerialization stringWithJSONObject:putJSON options:ATJSONWritingPrettyPrinted error:&error];
 	if (!putString && error != nil) {
 		ATLogError(@"Error while encoding JSON: %@", error);
@@ -62,9 +63,9 @@
 	return request;
 }
 
-- (ATAPIRequest *)requestForUpdatingDevice:(ATDeviceInfo *)deviceInfo {
+- (ATAPIRequest *)requestForUpdatingDevice:(ATDeviceInfo *)deviceInfo fromPreviousDevice:(ATDeviceInfo *)previousDevice {
 	NSError *error = nil;
-	NSDictionary *postJSON = [deviceInfo apiJSON];
+	NSDictionary *postJSON = [ATUtilities diffDictionary:deviceInfo.dictionaryRepresentation againstDictionary:previousDevice.dictionaryRepresentation];
 
 	NSString *postString = [ATJSONSerialization stringWithJSONObject:postJSON options:ATJSONWritingPrettyPrinted error:&error];
 	if (!postString && error != nil) {
@@ -72,8 +73,8 @@
 		return nil;
 	}
 
-	ATConversation *conversation = [ATConversationUpdater currentConversation];
-	if (!conversation) {
+	ATConversation *conversation = [ATConnect sharedConnection].backend.currentConversation;
+	if (!conversation.token) {
 		ATLogError(@"No current conversation.");
 		return nil;
 	}
@@ -86,9 +87,9 @@
 	return request;
 }
 
-- (ATAPIRequest *)requestForUpdatingPerson:(ATPersonInfo *)personInfo {
+- (ATAPIRequest *)requestForUpdatingPerson:(ATPersonInfo *)personInfo fromPreviousPerson:(ATPersonInfo *)previousPerson {
 	NSError *error = nil;
-	NSDictionary *postJSON = [personInfo apiJSON];
+	NSDictionary *postJSON = [ATUtilities diffDictionary:personInfo.dictionaryRepresentation againstDictionary:previousPerson.dictionaryRepresentation];
 
 	NSString *postString = [ATJSONSerialization stringWithJSONObject:postJSON options:ATJSONWritingPrettyPrinted error:&error];
 	if (!postString && error != nil) {
@@ -96,8 +97,8 @@
 		return nil;
 	}
 
-	ATConversation *conversation = [ATConversationUpdater currentConversation];
-	if (!conversation) {
+	ATConversation *conversation = [ATConnect sharedConnection].backend.currentConversation;
+	if (!conversation.token) {
 		ATLogError(@"No current conversation.");
 		return nil;
 	}
@@ -120,8 +121,8 @@
 		return nil;
 	}
 
-	ATConversation *conversation = [ATConversationUpdater currentConversation];
-	if (!conversation) {
+	ATConversation *conversation = [ATConnect sharedConnection].backend.currentConversation;
+	if (!conversation.token) {
 		ATLogError(@"No current conversation");
 		return nil;
 	}
@@ -140,8 +141,8 @@
 		parameters = @{ @"after_id": message.apptentiveID };
 	}
 
-	ATConversation *conversation = [ATConversationUpdater currentConversation];
-	if (!conversation) {
+	ATConversation *conversation = [ATConnect sharedConnection].backend.currentConversation;
+	if (!conversation.token) {
 		ATLogError(@"No current conversation.");
 		return nil;
 	}

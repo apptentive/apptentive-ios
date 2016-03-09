@@ -20,26 +20,27 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ATConnect ()
 
++ (NSString *)supportDirectoryPath;
+
 @property (assign, nonatomic) ATConnectDebuggingOptions debuggingOptions;
 @property (readonly, nonatomic) NSURL * _Nullable baseURL;
+@property (readonly, nonatomic) NSString *storagePath;
 
-- (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL;
+- (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath;
 
 @end
 
 @interface ATConnect (Debugging)
 
-+ (NSString *)supportDirectoryPath;
-- (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath;
-
-@property (readonly, nonatomic) NSURL * _Nullable baseURL;
-@property (readonly, nonatomic) NSString *storagePath;
 @property (readonly, nonatomic) NSString *SDKVersion;
 @property (readonly, nonatomic) NSString * _Nullable APIKey;
 @property (readonly, nonatomic) UIView * _Nullable unreadAccessoryView;
 @property (readonly, nonatomic) NSString * _Nullable manifestJSON;
 @property (readonly, nonatomic) NSDictionary<NSString *, NSObject *> *deviceInfo;
+@property (readonly, nonatomic) NSMutableDictionary *customPersonData;
+@property (readonly, nonatomic) NSMutableDictionary *customDeviceData;
 
+// Debug/test interactions by invoking them directly
 - (NSArray *)engagementInteractions;
 - (NSString *)engagementInteractionNameAtIndex:(NSInteger)index;
 - (NSString *)engagementInteractionTypeAtIndex:(NSInteger)index;

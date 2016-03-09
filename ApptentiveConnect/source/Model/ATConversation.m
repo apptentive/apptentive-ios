@@ -15,34 +15,47 @@
 
 #define kATConversationCodingVersion 1
 
+NSString *const VersionKey = @"version";
+NSString *const TokenKey = @"token";
+NSString *const PersonIDKey = @"personID";
+NSString *const DeviceIDKey = @"deviceID";
+NSString *const LastRetrievedMessageIDKey = @"lastRetrievedMessageID";
 
 @implementation ATConversation
 
-- (id)initWithCoder:(NSCoder *)coder {
-	if ((self = [super init])) {
-		// Apptentive Conversation Token
-		self.token = (NSString *)[coder decodeObjectForKey:@"token"];
-		self.personID = (NSString *)[coder decodeObjectForKey:@"personID"];
-		self.deviceID = (NSString *)[coder decodeObjectForKey:@"deviceID"];
+- (instancetype)init {
+	self = [super init];
+	if (self) {
+		_deviceUUID = [ATUtilities currentDeviceID];
 	}
 	return self;
 }
 
-
-- (void)encodeWithCoder:(NSCoder *)coder {
-	[coder encodeInt:kATConversationCodingVersion forKey:@"version"];
-
-	[coder encodeObject:self.token forKey:@"token"];
-	[coder encodeObject:self.personID forKey:@"personID"];
-	[coder encodeObject:self.deviceID forKey:@"deviceID"];
+- (instancetype)initWithCoder:(NSCoder *)coder {
+	if ((self = [super init])) {
+		_token = (NSString *)[coder decodeObjectForKey:TokenKey];
+		_personID = (NSString *)[coder decodeObjectForKey:PersonIDKey];
+		_deviceID = (NSString *)[coder decodeObjectForKey:DeviceIDKey];
+		_lastRetrievedMessageID = (NSString *)[coder decodeObjectForKey:LastRetrievedMessageIDKey];
+	}
+	return self;
 }
 
-+ (instancetype)newInstanceWithJSON:(NSDictionary *)json {
+- (void)encodeWithCoder:(NSCoder *)coder {
+	[coder encodeInt:kATConversationCodingVersion forKey:VersionKey];
+
+	[coder encodeObject:self.token forKey:TokenKey];
+	[coder encodeObject:self.personID forKey:PersonIDKey];
+	[coder encodeObject:self.deviceID forKey:DeviceIDKey];
+	[coder encodeObject:self.lastRetrievedMessageID forKey:LastRetrievedMessageIDKey];
+}
+
++ (instancetype)newInstanceFromDictionary:(NSDictionary *)dictionary {
 	ATConversation *result = nil;
 
-	if (json != nil) {
+	if (dictionary != nil) {
 		result = [[ATConversation alloc] init];
-		[result updateWithJSON:json];
+		[result updateWithJSON:dictionary];
 	} else {
 		ATLogError(@"Conversation JSON was nil");
 	}
@@ -53,29 +66,24 @@
 - (void)updateWithJSON:(NSDictionary *)json {
 	NSString *tokenObject = [json at_safeObjectForKey:@"token"];
 	if (tokenObject != nil) {
-		self.token = tokenObject;
+		_token = tokenObject;
 	}
 	NSString *deviceIDObject = [json at_safeObjectForKey:@"device_id"];
 	if (deviceIDObject != nil) {
-		self.deviceID = deviceIDObject;
+		_deviceID = deviceIDObject;
 	}
 	NSString *personIDObject = [json at_safeObjectForKey:@"person_id"];
 	if (personIDObject != nil) {
-		self.personID = personIDObject;
+		_personID = personIDObject;
 	}
 }
 
-//TODO: Add support for sending person.
-- (NSDictionary *)apiJSON {
-	NSMutableDictionary *result = [NSMutableDictionary dictionary];
+- (NSDictionary *)initialDictionaryRepresentation {
+	NSMutableDictionary *result = [self.dictionaryRepresentation mutableCopy];
 
-	NSString *deviceUUID = [[ATConnect sharedConnection].backend deviceUUID];
-	if (deviceUUID) {
-		NSDictionary *deviceInfo = @{ @"uuid": deviceUUID };
-		result[@"device"] = deviceInfo;
+	if (self.deviceUUID) {
+		result[@"device"] = @{ @"uuid":  self.deviceUUID.UUIDString };
 	}
-	result[@"app_release"] = [self appReleaseJSON];
-	result[@"sdk"] = [self sdkJSON];
 
 	return result;
 }
@@ -123,7 +131,7 @@
 	return result;
 }
 
-- (NSDictionary *)apiUpdateJSON {
+- (NSDictionary *)dictionaryRepresentation {
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
 	result[@"app_release"] = [self appReleaseJSON];
 	result[@"sdk"] = [self sdkJSON];

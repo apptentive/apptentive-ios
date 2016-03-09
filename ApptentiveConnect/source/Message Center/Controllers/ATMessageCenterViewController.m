@@ -67,7 +67,6 @@ NSString *const ATInteractionMessageCenterEventLabelProfileName = @"profile_name
 NSString *const ATInteractionMessageCenterEventLabelProfileEmail = @"profile_email";
 NSString *const ATInteractionMessageCenterEventLabelProfileSubmit = @"profile_submit";
 
-NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
 NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSkipProfileKey";
 
 typedef NS_ENUM(NSInteger, ATMessageCenterState) {
@@ -115,6 +114,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @property (readonly, nonatomic) BOOL messageComposerHasText;
 @property (readonly, nonatomic) BOOL messageComposerHasAttachments;
 @property (readonly, nonatomic) NSDictionary *bodyLengthDictionary;
+
+@property (readonly, nonatomic) NSString *draftMessage;
+@property (readonly, nonatomic) NSString *draftMessagePath;
 
 @end
 
@@ -891,10 +893,15 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)saveDraft {
+	NSError *error;
 	if (self.messageComposerHasText) {
-		[[NSUserDefaults standardUserDefaults] setObject:self.trimmedMessage forKey:ATMessageCenterDraftMessageKey];
+		if (![self.trimmedMessage writeToFile:self.draftMessagePath atomically:YES encoding:NSUTF8StringEncoding error:&error]) {
+			ATLogError(@"Unable to save draft message: %@ (path: %@)", error, self.draftMessagePath);
+		}
 	} else {
-		[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATMessageCenterDraftMessageKey];
+		if (![[NSFileManager defaultManager] removeItemAtPath:self.draftMessagePath error:NULL]) {
+			ATLogError(@"Unable to delete draft message: %@ (path: %@)", error, self.draftMessagePath);
+		}
 	}
 
 	[self.attachmentController saveDraft];
@@ -1163,8 +1170,20 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 }
 
+- (NSString *)draftMessagePath {
+	return [[ATConnect sharedConnection].backend.storagePath stringByAppendingPathComponent:@"DraftMessage"];
+}
+
 - (NSString *)draftMessage {
-	return [[NSUserDefaults standardUserDefaults] stringForKey:ATMessageCenterDraftMessageKey] ?: @"";
+	NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
+
+	if ([[NSFileManager defaultManager] fileExistsAtPath:self.draftMessagePath]) {
+		return [NSString stringWithContentsOfFile:self.draftMessagePath encoding:NSUTF8StringEncoding error:NULL];
+	} else if ([[NSUserDefaults standardUserDefaults] stringForKey:ATMessageCenterDraftMessageKey]) {
+		return [[NSUserDefaults standardUserDefaults] stringForKey:ATMessageCenterDraftMessageKey];
+	} else {
+		return @"";
+	}
 }
 
 - (void)scrollToLastMessageAnimated:(BOOL)animated {

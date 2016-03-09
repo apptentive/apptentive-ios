@@ -7,9 +7,6 @@
 //
 
 #import "ATBackend.h"
-#import "ATAppConfigurationUpdateTask.h"
-#import "ATEngagementGetManifestTask.h"
-#import "ATConnect.h"
 #import "ATConnect_Private.h"
 #import "ATDataManager.h"
 #import "ATDeviceUpdater.h"
@@ -25,6 +22,10 @@
 #import "ATPersonUpdater.h"
 #import "ATEngagementBackend.h"
 #import "ATMessageCenterViewController.h"
+#import "ATPersonInfo.h"
+#import "ATDeviceInfo.h"
+#import "ATAppConfiguration.h"
+#import "ATConversation.h"
 
 typedef NS_ENUM(NSInteger, ATBackendState) {
 	ATBackendStateStarting,
@@ -45,6 +46,11 @@ static NSURLCache *imageCache = nil;
 @interface ATBackend ()
 - (void)updateConfigurationIfNeeded;
 
+@property (readonly, nonatomic) NSString *currentPersonStoragePath;
+@property (readonly, nonatomic) NSString *currentDeviceStoragePath;
+@property (readonly, nonatomic) NSString *appConfigurationStoragePath;
+@property (readonly, nonatomic) NSString *currentConversationStoragePath;
+
 @property (readonly, nonatomic, getter=isMessageCenterInForeground) BOOL messageCenterInForeground;
 @property (strong, nonatomic) NSMutableSet *activeMessageTasks;
 
@@ -62,8 +68,6 @@ static NSURLCache *imageCache = nil;
 - (void)networkStatusChanged:(NSNotification *)notification;
 - (void)stopWorking:(NSNotification *)notification;
 - (void)startWorking:(NSNotification *)notification;
-- (void)personDataChanged:(NSNotification *)notification;
-- (void)deviceDataChanged:(NSNotification *)notification;
 - (void)startMonitoringUnreadMessages;
 - (void)checkForProperConfiguration;
 
@@ -72,12 +76,13 @@ static NSURLCache *imageCache = nil;
 #endif
 @property (assign, nonatomic) BOOL working;
 @property (strong, nonatomic) NSTimer *messageRetrievalTimer;
-@property (copy, nonatomic) NSString *cachedDeviceUUID;
 @property (assign, nonatomic) ATBackendState state;
 @property (strong, nonatomic) ATDataManager *dataManager;
+
 @property (strong, nonatomic) ATConversationUpdater *conversationUpdater;
-@property (strong, nonatomic) ATDeviceUpdater *deviceUpdater;
 @property (strong, nonatomic) ATPersonUpdater *personUpdater;
+@property (strong, nonatomic) ATAppConfigurationUpdater *appConfigurationUpdater;
+
 @property (strong, nonatomic) NSFetchedResultsController *unreadCountController;
 @property (assign, nonatomic) NSInteger previousUnreadCount;
 @property (assign, nonatomic) BOOL shouldStopWorking;
@@ -87,80 +92,44 @@ static NSURLCache *imageCache = nil;
 
 
 @implementation ATBackend
-@synthesize supportDirectoryPath = _supportDirectoryPath;
 
-#if TARGET_OS_IPHONE
-+ (UIImage *)imageNamed:(NSString *)name {
-	NSString *imagePath = nil;
-	UIImage *result = nil;
-	CGFloat scale = [[UIScreen mainScreen] scale];
-	if (scale > 1.0) {
-		imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@@2x", name] ofType:@"png"];
-	} else {
-		imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"png"];
-	}
-
-	if (!imagePath) {
-		if (scale > 1.0) {
-			imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@@2x", name] ofType:@"png" inDirectory:@"generated"];
-		} else {
-			imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"png" inDirectory:@"generated"];
-		}
-	}
-
-	if (imagePath) {
-		result = [UIImage imageWithContentsOfFile:imagePath];
-	} else {
-		result = [UIImage imageNamed:name];
-	}
-	if (!result) {
-		ATLogError(@"Unable to find image named: %@", name);
-		ATLogError(@"sought at: %@", imagePath);
-		ATLogError(@"bundle is: %@", [ATConnect resourceBundle]);
-	}
-	return result;
+- (NSString *)currentPersonStoragePath {
+	return [self.storagePath stringByAppendingPathComponent:@"person"];
 }
-#elif TARGET_OS_MAC
-+ (NSImage *)imageNamed:(NSString *)name {
-	NSString *imagePath = nil;
-	NSImage *result = nil;
-	CGFloat scale = 1.0;
 
-	if ([[NSScreen mainScreen] respondsToSelector:@selector(backingScaleFactor)]) {
-		scale = (CGFloat)[[NSScreen mainScreen] backingScaleFactor];
-	}
-	if (scale > 1.0) {
-		imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@@2x", name] ofType:@"png"];
-	} else {
-		imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"png"];
-	}
-
-	if (!imagePath) {
-		if (scale > 1.0) {
-			imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@@2x", name] ofType:@"png" inDirectory:@"generated"];
-		} else {
-			imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"png" inDirectory:@"generated"];
-		}
-	}
-
-	if (imagePath) {
-		result = [[[NSImage alloc] initWithContentsOfFile:imagePath] autorelease];
-	} else {
-		result = [NSImage imageNamed:name];
-	}
-	if (!result) {
-		ATLogError(@"Unable to find image named: %@", name);
-		ATLogError(@"sought at: %@", imagePath);
-		ATLogError(@"bundle is: %@", [ATConnect resourceBundle]);
-	}
-	return result;
+- (NSString *)currentDeviceStoragePath {
+	return [self.storagePath stringByAppendingPathComponent:@"device"];
 }
-#endif
 
-- (id)init {
-	if ((self = [super init])) {
+- (NSString *)appConfigurationStoragePath {
+	return [self.storagePath stringByAppendingPathComponent:@"appConfiguration"];
+}
+
+- (NSString *)currentConversationStoragePath {
+	return [self.storagePath stringByAppendingPathComponent:@"conversation"];
+}
+
+- (instancetype) initWithStoragePath:(NSString *)storagePath {
+	self = [super init];
+
+	if (self) {
+		_storagePath = storagePath;
+
+		self.conversationUpdater = [[ATConversationUpdater alloc] initWithStoragePath:[self.storagePath stringByAppendingPathComponent:@"conversation"]];
+		self.conversationUpdater.delegate = self;
+
+		self.appConfigurationUpdater = [[ATAppConfigurationUpdater alloc] initWithStoragePath:[self.storagePath stringByAppendingPathComponent:@"appConfiguration"]];
+		self.appConfigurationUpdater.delegate = self;
+
+		self.personUpdater = [[ATPersonUpdater alloc] initWithStoragePath:[self.storagePath stringByAppendingPathComponent:@"person"]];
+		self.personUpdater.delegate = self;
+
+		self.deviceUpdater = [[ATDeviceUpdater alloc] initWithStoragePath:[self.storagePath stringByAppendingPathComponent:@"device"]];
+		self.deviceUpdater.delegate = self;
+
 		[self setup];
 	}
+
 	return self;
 }
 
@@ -252,9 +221,8 @@ static NSURLCache *imageCache = nil;
 }
 
 - (BOOL)sendMessage:(ATCompoundMessage *)message {
-	ATConversation *conversation = [ATConversationUpdater currentConversation];
-	if (conversation) {
-		ATMessageSender *sender = [ATMessageSender findSenderWithID:conversation.personID];
+	if (self.currentConversation) {
+		ATMessageSender *sender = [ATMessageSender findSenderWithID:self.currentConversation.personID];
 		if (sender) {
 			message.sender = sender;
 		}
@@ -290,32 +258,8 @@ static NSURLCache *imageCache = nil;
 	return YES;
 }
 
-- (NSString *)supportDirectoryPath {
-	if (!_supportDirectoryPath) {
-		NSString *appSupportDirectoryPath = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES).firstObject;
-		NSString *apptentiveDirectoryPath = [appSupportDirectoryPath stringByAppendingPathComponent:@"com.apptentive.feedback"];
-		NSFileManager *fm = [NSFileManager defaultManager];
-		NSError *error = nil;
-
-		if (![fm createDirectoryAtPath:apptentiveDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
-			ATLogError(@"Failed to create support directory: %@", apptentiveDirectoryPath);
-			ATLogError(@"Error was: %@", error);
-			return nil;
-		}
-
-		if (![fm setAttributes:@{ NSFileProtectionKey: NSFileProtectionCompleteUntilFirstUserAuthentication } ofItemAtPath:apptentiveDirectoryPath error:&error]) {
-			ATLogError(@"Failed to set file protection level: %@", apptentiveDirectoryPath);
-			ATLogError(@"Error was: %@", error);
-		}
-
-		_supportDirectoryPath = apptentiveDirectoryPath;
-	}
-
-	return _supportDirectoryPath;
-}
-
 - (NSString *)attachmentDirectoryPath {
-	NSString *supportPath = [self supportDirectoryPath];
+	NSString *supportPath = [self storagePath];
 	if (!supportPath) {
 		return nil;
 	}
@@ -331,64 +275,8 @@ static NSURLCache *imageCache = nil;
 	return newPath;
 }
 
-- (NSString *)deviceUUID {
-#if TARGET_OS_IPHONE
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		NSString *uuid = [defaults objectForKey:ATUUIDPreferenceKey];
-
-		if (uuid && [uuid hasPrefix:@"ios:"]) {
-			// Existing UUID is a legacy value. Back it up.
-			[defaults setObject:uuid forKey:ATLegacyUUIDPreferenceKey];
-		}
-
-		UIDevice *device = [UIDevice currentDevice];
-		if ([NSUUID class] && [device respondsToSelector:@selector(identifierForVendor)]) {
-			NSString *vendorID = [[device identifierForVendor] UUIDString];
-			if (vendorID && ![vendorID isEqualToString:uuid]) {
-				uuid = vendorID;
-				[defaults setObject:uuid forKey:ATUUIDPreferenceKey];
-			}
-		}
-		if (!uuid) {
-			// Fall back.
-			CFUUIDRef uuidRef = CFUUIDCreate(NULL);
-			CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
-
-			uuid = [NSString stringWithFormat:@"ios:%@", (__bridge NSString *)uuidStringRef];
-
-			CFRelease(uuidRef), uuidRef = NULL;
-			CFRelease(uuidStringRef), uuidStringRef = NULL;
-			[defaults setObject:uuid forKey:ATUUIDPreferenceKey];
-			[defaults synchronize];
-		}
-		self.cachedDeviceUUID = uuid;
-	});
-	return self.cachedDeviceUUID;
-#elif TARGET_OS_MAC
-	static CFStringRef keyRef = CFSTR("apptentiveUUID");
-	static CFStringRef appIDRef = CFSTR("com.apptentive.feedback");
-	NSString *uuid = nil;
-	uuid = (NSString *)CFPreferencesCopyAppValue(keyRef, appIDRef);
-	if (!uuid) {
-		CFUUIDRef uuidRef = CFUUIDCreate(NULL);
-		CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
-
-		uuid = [[NSString alloc] initWithFormat:@"osx:%@", (NSString *)uuidStringRef];
-
-		CFRelease(uuidRef), uuidRef = NULL;
-		CFRelease(uuidStringRef), uuidStringRef = NULL;
-
-		CFPreferencesSetValue(keyRef, (CFStringRef)uuid, appIDRef, kCFPreferencesCurrentUser, kCFPreferencesCurrentHost);
-		CFPreferencesSynchronize(appIDRef, kCFPreferencesCurrentUser, kCFPreferencesCurrentHost);
-	}
-	return [uuid autorelease];
-#endif
-}
-
 - (NSString *)appName {
-	NSString *displayName = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationAppDisplayNameKey];
+	NSString *displayName = self.appConfiguration.applicationDisplayName;
 	if (displayName) {
 		return displayName;
 	}
@@ -416,7 +304,7 @@ static NSURLCache *imageCache = nil;
 }
 
 - (BOOL)isReady {
-	return (self.state == ATBackendStateReady);
+	return [UIApplication sharedApplication] == nil || (self.state == ATBackendStateReady);
 }
 
 - (NSString *)cacheDirectoryPath {
@@ -563,11 +451,27 @@ static NSURLCache *imageCache = nil;
 #pragma mark -
 
 - (BOOL)hideBranding {
-	return [[NSUserDefaults standardUserDefaults] boolForKey:ATAppConfigurationHideBrandingKey];
+	return self.appConfiguration.hideBranding;
+}
+
+- (ATPersonInfo *)currentPerson {
+	return self.personUpdater.currentPerson;
+}
+
+- (ATDeviceInfo *)currentDevice {
+	return self.deviceUpdater.currentDevice;
+}
+
+- (ATConversation *)currentConversation {
+	return self.conversationUpdater.currentConversation;
+}
+
+- (ATAppConfiguration *)appConfiguration {
+	return self.appConfigurationUpdater.appConfiguration;
 }
 
 - (BOOL)notificationPopupsEnabled {
-	return [[NSUserDefaults standardUserDefaults] boolForKey:ATAppConfigurationNotificationPopupsEnabledKey];
+	return self.appConfiguration.notificationPopupsEnabled;
 }
 
 - (void)updateConversationIfNeeded {
@@ -575,9 +479,11 @@ static NSURLCache *imageCache = nil;
 		[self performSelectorOnMainThread:@selector(updateConversationIfNeeded) withObject:nil waitUntilDone:NO];
 		return;
 	}
-	if (!self.conversationUpdater && [ATConversationUpdater shouldUpdate]) {
-		self.conversationUpdater = [[ATConversationUpdater alloc] initWithDelegate:self];
-		[self.conversationUpdater createOrUpdateConversation];
+	if (self.conversationUpdater.needsCreation) {
+		ATLogInfo(@"Creating conversation");
+		[self.conversationUpdater create];
+	} else 	if (self.conversationUpdater.needsUpdate) {
+		[self.conversationUpdater update];
 	}
 }
 
@@ -586,11 +492,11 @@ static NSURLCache *imageCache = nil;
 		[self performSelectorOnMainThread:@selector(updateDeviceIfNeeded) withObject:nil waitUntilDone:NO];
 		return;
 	}
-	if (![ATConversationUpdater conversationExists]) {
+	if (self.currentConversation.token == nil) {
 		return;
 	}
-	if (!self.deviceUpdater && [ATDeviceUpdater shouldUpdate]) {
-		self.deviceUpdater = [[ATDeviceUpdater alloc] initWithDelegate:self];
+
+	if (self.deviceUpdater.needsUpdate) {
 		[self.deviceUpdater update];
 	}
 }
@@ -600,40 +506,39 @@ static NSURLCache *imageCache = nil;
 		[self performSelectorOnMainThread:@selector(updatePersonIfNeeded) withObject:nil waitUntilDone:NO];
 		return;
 	}
-	if (![ATConversationUpdater conversationExists]) {
+	if (self.currentConversation.token == nil) {
 		return;
 	}
-	if (!self.personUpdater && [ATPersonUpdater shouldUpdate]) {
-		self.personUpdater = [[ATPersonUpdater alloc] initWithDelegate:self];
+
+	if (self.personUpdater.needsUpdate) {
 		[self.personUpdater update];
 	}
 }
 
 - (BOOL)isUpdatingPerson {
-	return self.personUpdater != nil;
+	return self.personUpdater.isUpdating;
 }
 
 - (void)updateConfigurationIfNeeded {
-	if (![ATConversationUpdater conversationExists]) {
+	if (self.currentConversation.token == nil) {
 		return;
 	}
 
-	ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
-	if (![queue hasTaskOfClass:[ATAppConfigurationUpdateTask class]]) {
-		ATAppConfigurationUpdateTask *task = [[ATAppConfigurationUpdateTask alloc] init];
-		[queue addTask:task];
-		task = nil;
+	if (self.appConfigurationUpdater.needsUpdate) {
+		[self.appConfigurationUpdater update];
 	}
 }
 
 - (void)updateEngagementManifestIfNeeded {
-	if (![ATConversationUpdater conversationExists]) {
+	if (self.currentConversation.token == nil) {
 		return;
 	}
 
-	if (![[ATTaskQueue sharedTaskQueue] hasTaskOfClass:[ATEngagementGetManifestTask class]]) {
-		[[ATConnect sharedConnection].engagementBackend checkForEngagementManifest];
-	}
+	[[ATConnect sharedConnection].engagementBackend checkForEngagementManifest];
+}
+
+- (void)saveConversation {
+	[self.conversationUpdater archiveCurrentVersion];
 }
 
 #if TARGET_OS_IPHONE
@@ -654,47 +559,41 @@ static NSURLCache *imageCache = nil;
 }
 #endif
 
-#pragma mark ATActivityFeedUpdaterDelegate
-- (void)conversationUpdater:(ATConversationUpdater *)updater createdConversationSuccessfully:(BOOL)success {
-	if (self.conversationUpdater == updater) {
-		self.conversationUpdater = nil;
-		if (!success) {
-			// Retry after delay.
-			[self performSelector:@selector(updateConversationIfNeeded) withObject:nil afterDelay:20];
-		} else {
-			// Queued tasks can probably start now.
-			ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
-			[queue start];
-			[self updateConfigurationIfNeeded];
-			[self updateDeviceIfNeeded];
-			[self updatePersonIfNeeded];
-			[self updateEngagementManifestIfNeeded];
-		}
-	}
-}
+#pragma mark - Updater delegate
 
-- (void)conversationUpdater:(ATConversationUpdater *)updater updatedConversationSuccessfully:(BOOL)success {
-	if (self.conversationUpdater == updater) {
-		self.conversationUpdater = nil;
-	}
-}
-
-#pragma mark ATDeviceUpdaterDelegate
-- (void)deviceUpdater:(ATDeviceUpdater *)aDeviceUpdater didFinish:(BOOL)success {
-	if (self.deviceUpdater == aDeviceUpdater) {
-		self.deviceUpdater = nil;
-	}
-}
-
-#pragma mark ATPersonUpdaterDelegate
-- (void)personUpdater:(ATPersonUpdater *)aPersonUpdater didFinish:(BOOL)success {
-	if (self.personUpdater == aPersonUpdater) {
-		self.personUpdater = nil;
+- (void)updater:(ATUpdater *)updater didFinish:(BOOL)success {
+	if (updater == self.personUpdater) {
 		// Give task queue a bump if necessary.
 		if (success && [self isReady] && !self.shouldStopWorking) {
 			ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
 			[queue start];
 		}
+	} else if (updater == self.deviceUpdater) {
+		// No action
+	} else if (updater == self.conversationUpdater) {
+		if (self.conversationUpdater.creating) {
+			if (!success) {
+				// Retry after delay.
+				[self performSelector:@selector(updateConversationIfNeeded) withObject:nil afterDelay:20];
+			} else {
+				// Queued tasks can probably start now.
+				ATLogInfo(@"Conversation created successfully.");
+				ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
+				[queue start];
+				[self updateConfigurationIfNeeded];
+				[self updateDeviceIfNeeded];
+				[self updatePersonIfNeeded];
+				[self updateEngagementManifestIfNeeded];
+			}
+		}
+	} else if (updater == self.appConfigurationUpdater) {
+		[[ApptentiveMetrics sharedMetrics] preferencesChanged];
+//
+//		if (self.messageCenterInForeground) {
+//			[self checkForMessagesAtForegroundRefreshInterval];
+//		} else {
+//			[self checkForMessagesAtBackgroundRefreshInterval];
+//		}
 	}
 }
 
@@ -735,23 +634,13 @@ static NSURLCache *imageCache = nil;
 }
 
 - (void)checkForMessagesAtForegroundRefreshInterval {
-	NSNumber *refreshIntervalNumber = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterForegroundRefreshIntervalKey];
-	int refreshInterval = 8;
-	if (refreshIntervalNumber != nil) {
-		refreshInterval = [refreshIntervalNumber intValue];
-		refreshInterval = MAX(4, refreshInterval);
-	}
+	NSTimeInterval refreshInterval = fmax(4.0, self.appConfiguration.messageCenterForegroundPollingInterval);
 
 	[self checkForMessagesAtRefreshInterval:refreshInterval];
 }
 
 - (void)checkForMessagesAtBackgroundRefreshInterval {
-	NSNumber *refreshIntervalNumber = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey];
-	int refreshInterval = 60;
-	if (refreshIntervalNumber != nil) {
-		refreshInterval = [refreshIntervalNumber intValue];
-		refreshInterval = MAX(30, refreshInterval);
-	}
+	NSTimeInterval refreshInterval = fmax(4.0, self.appConfiguration.messageCenterBackgroundPollingInterval);
 
 	[self checkForMessagesAtRefreshInterval:refreshInterval];
 }
@@ -874,7 +763,6 @@ static NSURLCache *imageCache = nil;
 
 #pragma mark - Private methods
 
-/* Methods which are safe to run when sharedBackend is still nil. */
 - (void)setup {
 	if (![[NSThread currentThread] isMainThread]) {
 		[self performSelectorOnMainThread:@selector(setup) withObject:nil waitUntilDone:YES];
@@ -925,10 +813,7 @@ static NSURLCache *imageCache = nil;
 	[self performSelector:@selector(startMonitoringUnreadMessages) withObject:nil afterDelay:0.2];
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATBackendBecameReadyNotification object:nil];
-
-	// Monitor changes to custom data.
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(personDataChanged:) name:ATConnectCustomPersonDataChangedNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDataChanged:) name:ATConnectCustomDeviceDataChangedNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(saveData:) name:ATDataNeedsSaveNotification object:nil];
 
 	// Append extensions to attachments that are missing them
 	[ATFileAttachment addMissingExtensions];
@@ -981,21 +866,23 @@ static NSURLCache *imageCache = nil;
 	}
 }
 
-- (void)personDataChanged:(NSNotification *)notification {
-	[self performSelector:@selector(updatePersonIfNeeded) withObject:nil afterDelay:1];
-}
-
-- (void)deviceDataChanged:(NSNotification *)notification {
-	[self performSelector:@selector(updateDeviceIfNeeded) withObject:nil afterDelay:1];
+- (void)saveData:(NSNotification *)notification {
+	if (notification.object == self.currentPerson) {
+		[NSKeyedArchiver archiveRootObject:self.currentPerson toFile:self.currentPersonStoragePath];
+		[self performSelector:@selector(updatePersonIfNeeded) withObject:nil afterDelay:1];
+	} else if (notification.object == self.currentDevice) {
+		[NSKeyedArchiver archiveRootObject:self.currentDevice toFile:self.currentDeviceStoragePath];
+		[self performSelector:@selector(updateDeviceIfNeeded) withObject:nil afterDelay:1];
+	} else if (notification.object == [ATConnect sharedConnection].integrationConfiguration) {
+		[self performSelector:@selector(updateDeviceIfNeeded) withObject:nil afterDelay:1];
+	}
 }
 
 - (void)checkForEngagementManifest {
-	@autoreleasepool {
-		if (![self isReady]) {
-			return;
-		}
-		[[ATConnect sharedConnection].engagementBackend checkForEngagementManifest];
+	if (![self isReady]) {
+		return;
 	}
+	[[ATConnect sharedConnection].engagementBackend checkForEngagementManifest];
 }
 
 - (void)setupDataManager {
@@ -1005,7 +892,7 @@ static NSURLCache *imageCache = nil;
 	}
 	ATLogInfo(@"Setting up data manager");
 
-	if (![[UIApplication sharedApplication] isProtectedDataAvailable]) {
+	if ([UIApplication sharedApplication] && ![[UIApplication sharedApplication] isProtectedDataAvailable]) {
 		self.state = ATBackendStateWaitingForDataProtectionUnlock;
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupDataManager) name:UIApplicationProtectedDataDidBecomeAvailable object:nil];
 		return;
@@ -1014,7 +901,7 @@ static NSURLCache *imageCache = nil;
 		self.state = ATBackendStateStarting;
 	}
 
-	self.dataManager = [[ATDataManager alloc] initWithModelName:@"ATDataModel" inBundle:[ATConnect resourceBundle] storagePath:[self supportDirectoryPath]];
+	self.dataManager = [[ATDataManager alloc] initWithModelName:@"ATDataModel" inBundle:[ATConnect resourceBundle] storagePath:[self storagePath]];
 	if (![self.dataManager setupAndVerify]) {
 		ATLogError(@"Unable to setup and verify data manager.");
 		[self continueStartupWithDataManagerFailure];
@@ -1077,4 +964,73 @@ static NSURLCache *imageCache = nil;
 	}
 #endif
 }
+
+#if TARGET_OS_IPHONE
++ (UIImage *)imageNamed:(NSString *)name {
+	NSString *imagePath = nil;
+	UIImage *result = nil;
+	CGFloat scale = [[UIScreen mainScreen] scale];
+	if (scale > 1.0) {
+		imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@@2x", name] ofType:@"png"];
+	} else {
+		imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"png"];
+	}
+
+	if (!imagePath) {
+		if (scale > 1.0) {
+			imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@@2x", name] ofType:@"png" inDirectory:@"generated"];
+		} else {
+			imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"png" inDirectory:@"generated"];
+		}
+	}
+
+	if (imagePath) {
+		result = [UIImage imageWithContentsOfFile:imagePath];
+	} else {
+		result = [UIImage imageNamed:name];
+	}
+	if (!result) {
+		ATLogError(@"Unable to find image named: %@", name);
+		ATLogError(@"sought at: %@", imagePath);
+		ATLogError(@"bundle is: %@", [ATConnect resourceBundle]);
+	}
+	return result;
+}
+#elif TARGET_OS_MAC
++ (NSImage *)imageNamed:(NSString *)name {
+	NSString *imagePath = nil;
+	NSImage *result = nil;
+	CGFloat scale = 1.0;
+
+	if ([[NSScreen mainScreen] respondsToSelector:@selector(backingScaleFactor)]) {
+		scale = (CGFloat)[[NSScreen mainScreen] backingScaleFactor];
+	}
+	if (scale > 1.0) {
+		imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@@2x", name] ofType:@"png"];
+	} else {
+		imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"png"];
+	}
+
+	if (!imagePath) {
+		if (scale > 1.0) {
+			imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@@2x", name] ofType:@"png" inDirectory:@"generated"];
+		} else {
+			imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"png" inDirectory:@"generated"];
+		}
+	}
+
+	if (imagePath) {
+		result = [[[NSImage alloc] initWithContentsOfFile:imagePath] autorelease];
+	} else {
+		result = [NSImage imageNamed:name];
+	}
+	if (!result) {
+		ATLogError(@"Unable to find image named: %@", name);
+		ATLogError(@"sought at: %@", imagePath);
+		ATLogError(@"bundle is: %@", [ATConnect resourceBundle]);
+	}
+	return result;
+}
+#endif
+
 @end

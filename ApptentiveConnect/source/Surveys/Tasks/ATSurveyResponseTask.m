@@ -11,6 +11,7 @@
 #import "ATJSONSerialization.h"
 #import "ATWebClient+SurveyAdditions.h"
 #import "ATConnect_Private.h"
+#import "ATConversation.h"
 
 #define kATPendingMessageTaskCodingVersion 1
 
@@ -50,7 +51,7 @@
 	if ([ATConnect sharedConnection].webClient == nil) {
 		return NO;
 	}
-	if (![ATConversationUpdater conversationExists]) {
+	if ([ATConnect sharedConnection].backend.currentConversation.token == nil) {
 		return NO;
 	}
 	return YES;

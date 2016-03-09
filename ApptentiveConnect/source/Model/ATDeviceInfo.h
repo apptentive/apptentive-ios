@@ -6,13 +6,12 @@
 //  Copyright (c) 2012 Apptentive, Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "ATCustomDataContainer.h"
 
 
-@interface ATDeviceInfo : NSObject
-@property (readonly, nonatomic) NSDictionary *dictionaryRepresentation;
+@interface ATDeviceInfo : ATCustomDataContainer
 
 + (NSString *)carrier;
 
-- (NSDictionary *)apiJSON;
+//- (NSDictionary *)apiJSON;
 @end

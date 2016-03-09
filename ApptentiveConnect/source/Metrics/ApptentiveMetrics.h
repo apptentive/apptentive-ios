@@ -25,5 +25,6 @@
 - (void)addMetricWithName:(NSString *)name fromInteraction:(ATInteraction *)fromInteraction info:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData;
 
 - (BOOL)upgradeLegacyMetric:(ATMetric *)metric;
+- (void)preferencesChanged;
 
 @end

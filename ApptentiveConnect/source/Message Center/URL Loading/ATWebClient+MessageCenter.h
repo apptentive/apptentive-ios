@@ -15,11 +15,12 @@
 
 
 @interface ATWebClient (MessageCenter)
+
 - (ATAPIRequest *)requestForCreatingConversation:(ATConversation *)conversation;
 - (ATAPIRequest *)requestForUpdatingConversation:(ATConversation *)conversation;
-
-- (ATAPIRequest *)requestForUpdatingDevice:(ATDeviceInfo *)deviceInfo;
-- (ATAPIRequest *)requestForUpdatingPerson:(ATPersonInfo *)personInfo;
+- (ATAPIRequest *)requestForUpdatingDevice:(ATDeviceInfo *)deviceInfo fromPreviousDevice:(ATDeviceInfo *)previousDevice;
+- (ATAPIRequest *)requestForUpdatingPerson:(ATPersonInfo *)personInfo fromPreviousPerson:(ATPersonInfo *)previousPerson;
 - (ATAPIRequest *)requestForPostingMessage:(ATCompoundMessage *)message;
 - (ATAPIRequest *)requestForRetrievingMessagesSinceMessage:(ATCompoundMessage *)message;
+
 @end

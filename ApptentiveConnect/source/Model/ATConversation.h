@@ -8,13 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
-#import "ATJSONModel.h"
+#import "ATUpdater.h"
 
 
-@interface ATConversation : NSObject <NSCoding, ATJSONModel>
-@property (strong, nonatomic) NSString *token;
-@property (strong, nonatomic) NSString *personID;
-@property (strong, nonatomic) NSString *deviceID;
+@interface ATConversation : NSObject <NSCoding, ATUpdatable>
 
-- (NSDictionary *)apiUpdateJSON;
+// deviceUUID is used for initial (create) request only. 
+@property (readonly, nonatomic) NSUUID *deviceUUID;
+@property (readonly, nonatomic) NSString *token;
+@property (readonly, nonatomic) NSString *personID;
+@property (readonly, nonatomic) NSString *deviceID;
+@property (strong, nonatomic) NSString *lastRetrievedMessageID;
+
+- (NSDictionary *)initialDictionaryRepresentation;
+
 @end

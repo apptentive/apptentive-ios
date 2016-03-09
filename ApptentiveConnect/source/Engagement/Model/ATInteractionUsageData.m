@@ -15,13 +15,51 @@
 #import "ATDeviceInfo.h"
 #import "ATPersonInfo.h"
 
-
 @implementation ATInteractionUsageData
 
-+ (ATInteractionUsageData *)usageData {
-	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+@synthesize timeSinceInstallTotal = _timeSinceInstallTotal;
+@synthesize timeSinceInstallBuild = _timeSinceInstallBuild;
+@synthesize timeSinceInstallVersion = _timeSinceInstallVersion;
 
-	return usageData;
+@synthesize timeAtInstallTotal = _timeAtInstallTotal;
+@synthesize timeAtInstallVersion = _timeAtInstallVersion;
+
+@synthesize applicationBuild = _applicationBuild;
+@synthesize applicationVersion = _applicationVersion;
+
+@synthesize sdkVersion = _sdkVersion;
+@synthesize sdkDistribution = _sdkDistribution;
+@synthesize sdkDistributionVersion = _sdkDistributionVersion;
+
+@synthesize currentTime = _currentTime;
+@synthesize isUpdateBuild = _isUpdateBuild;
+@synthesize isUpdateVersion = _isUpdateVersion;
+
+@synthesize codePointInvokesBuild = _codePointInvokesBuild;
+@synthesize codePointInvokesTotal = _codePointInvokesTotal;
+@synthesize codePointInvokesTimeAgo = _codePointInvokesTimeAgo;
+@synthesize codePointInvokesVersion = _codePointInvokesVersion;
+
+@synthesize interactionInvokesBuild = _interactionInvokesBuild;
+@synthesize interactionInvokesTotal = _interactionInvokesTotal;
+@synthesize interactionInvokesTimeAgo = _interactionInvokesTimeAgo;
+@synthesize interactionInvokesVersion = _interactionInvokesVersion;
+
+//+ (ATInteractionUsageData *)usageData {
+//	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] initWithEngagementData:[ATConnect sharedConnection].engagementBackend.engagementData];
+//
+//	return usageData;
+//}
+
+- (instancetype)initWithEngagementData:(NSDictionary *)engagementData {
+	self = [super init];
+
+	if (self) {
+		_engagementData = engagementData;
+		_currentTimeOffset = 0;
+	}
+
+	return self;
 }
 
 - (NSString *)description {
@@ -56,26 +94,6 @@
 	return [description description];
 }
 
-+ (void)keyPathWasSeen:(NSString *)keyPath {
-	/*
-	Record the keyPath if needed, to later be used in predicate evaluation.
-	*/
-
-	if ([keyPath hasPrefix:@"code_point/"]) {
-		NSArray *components = [keyPath componentsSeparatedByString:@"/"];
-		if (components.count > 1) {
-			NSString *codePoint = [components objectAtIndex:1];
-			[[ATConnect sharedConnection].engagementBackend codePointWasSeen:[codePoint stringByRemovingPercentEncoding]];
-		}
-	} else if ([keyPath hasPrefix:@"interactions/"]) {
-		NSArray *components = [keyPath componentsSeparatedByString:@"/"];
-		if (components.count > 1) {
-			NSString *interactionID = [components objectAtIndex:1];
-			[[ATConnect sharedConnection].engagementBackend interactionWasSeen:interactionID];
-		}
-	}
-}
-
 - (NSDictionary *)predicateEvaluationDictionary {
 	NSMutableDictionary *predicateEvaluationDictionary = [NSMutableDictionary dictionaryWithDictionary:@{ @"time_since_install/total": self.timeSinceInstallTotal,
 		@"time_since_install/version": self.timeSinceInstallVersion,
@@ -107,7 +125,7 @@
 		predicateEvaluationDictionary[@"sdk/version"] = [ATConnect versionObjectWithVersion:self.sdkVersion];
 	} else {
 		ATLogError(@"Unable to find SDK version. Interaction critera don't make sense without one.");
-		return nil;
+		predicateEvaluationDictionary[@"sdk/version"] = [ATConnect versionObjectWithVersion:kATConnectVersionString];
 	}
 
 	if (self.sdkDistribution) {
@@ -128,7 +146,7 @@
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesTimeAgo];
 
 	// Device
-	ATDeviceInfo *deviceInfo = [[ATDeviceInfo alloc] init];
+	ATDeviceInfo *deviceInfo = [ATConnect sharedConnection].backend.currentDevice;
 	if (deviceInfo) {
 		NSDictionary *deviceData = deviceInfo.dictionaryRepresentation[@"device"];
 
@@ -165,7 +183,7 @@
 	}
 
 	// Person
-	ATPersonInfo *personInfo = [ATPersonInfo currentPerson];
+	ATPersonInfo *personInfo = [ATConnect sharedConnection].backend.currentPerson;
 	if (personInfo) {
 		NSDictionary *personData = personInfo.dictionaryRepresentation[@"person"];
 
@@ -200,218 +218,136 @@
 }
 
 - (NSNumber *)timeSinceInstallTotal {
-	if (!_timeSinceInstallTotal) {
-		NSDate *installDate = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInstallDateKey] ?: [NSDate date];
-		_timeSinceInstallTotal = @(fabs([installDate timeIntervalSinceNow]));
-	}
-
-	return _timeSinceInstallTotal;
+	NSDate *installDate = [self.engagementData objectForKey:ATEngagementInstallDateKey] ?: [NSDate date];
+	return @(fabs([installDate timeIntervalSinceNow]));
 }
 
 - (NSNumber *)timeSinceInstallVersion {
-	if (!_timeSinceInstallVersion) {
-		NSDate *versionInstallDate = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementUpgradeDateKey] ?: [NSDate date];
-		_timeSinceInstallVersion = @(fabs([versionInstallDate timeIntervalSinceNow]));
-	}
-
-	return _timeSinceInstallVersion;
+	NSDate *versionInstallDate = [self.engagementData objectForKey:ATEngagementUpgradeDateKey] ?: [NSDate date];
+	return @(fabs([versionInstallDate timeIntervalSinceNow]));
 }
 
 - (NSNumber *)timeSinceInstallBuild {
-	if (!_timeSinceInstallBuild) {
-		NSDate *buildInstallDate = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementUpgradeDateKey] ?: [NSDate date];
-		_timeSinceInstallBuild = @(fabs([buildInstallDate timeIntervalSinceNow]));
-	}
-
-	return _timeSinceInstallBuild;
+	NSDate *buildInstallDate = [self.engagementData objectForKey:ATEngagementUpgradeDateKey] ?: [NSDate date];
+	return @(fabs([buildInstallDate timeIntervalSinceNow]));
 }
 
 - (NSDate *)timeAtInstallTotal {
-	if (!_timeAtInstallTotal) {
-		_timeAtInstallTotal = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInstallDateKey] ?: [NSDate date];
-	}
-	return _timeAtInstallTotal;
+	return [self.engagementData objectForKey:ATEngagementInstallDateKey] ?: [NSDate date];
 }
 
 - (NSDate *)timeAtInstallVersion {
-	if (!_timeAtInstallVersion) {
-		_timeAtInstallVersion = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementUpgradeDateKey] ?: [NSDate date];
-	}
-	return _timeAtInstallVersion;
+	return [self.engagementData objectForKey:ATEngagementUpgradeDateKey] ?: [NSDate date];
 }
 
 - (NSString *)applicationVersion {
-	if (!_applicationVersion) {
-		_applicationVersion = [[ATUtilities appVersionString] copy];
-	}
-
-	return _applicationVersion;
+	return [self.engagementData objectForKey:ATEngagementApplicationVersionKey];
 }
 
 - (NSString *)applicationBuild {
-	if (!_applicationBuild) {
-		_applicationBuild = [[ATUtilities buildNumberString] copy];
-	}
-
-	return _applicationBuild;
+	return [self.engagementData objectForKey:ATEngagementApplicationBuildKey];
 }
 
 - (NSString *)sdkVersion {
-	if (!_sdkVersion) {
-		_sdkVersion = [kATConnectVersionString copy];
-	}
-	return _sdkVersion;
+	return [self.engagementData objectForKey:ATEngagementSDKVersionKey];
 }
 
 - (NSString *)sdkDistribution {
-	if (!_sdkDistribution) {
-		_sdkDistribution = [[[ATConnect sharedConnection].backend distributionName] copy];
-	}
-	return _sdkDistribution;
+	return [self.engagementData objectForKey:ATEngagementSDKDistributionNameKey];
 }
 
 - (NSString *)sdkDistributionVersion {
-	if (!_sdkDistributionVersion) {
-		_sdkDistributionVersion = [[[ATConnect sharedConnection].backend distributionVersion] copy];
-	}
-	return _sdkDistributionVersion;
+	return [self.engagementData objectForKey:ATEngagementSDKDistributionVersionKey];
 }
 
 - (NSNumber *)currentTime {
-	if (!_currentTime) {
-		_currentTime = @([[NSDate date] timeIntervalSince1970]);
-	}
-	return _currentTime;
+	return @([[NSDate date] timeIntervalSince1970] + self.currentTimeOffset);
 }
 
 - (NSNumber *)isUpdateVersion {
-	if (!_isUpdateVersion) {
-		_isUpdateVersion = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementIsUpdateVersionKey] ?: @(NO);
-	}
-
-	return _isUpdateVersion;
+	return [self.engagementData objectForKey:ATEngagementIsUpdateVersionKey] ?: @(NO);
 }
 
 - (NSNumber *)isUpdateBuild {
-	if (!_isUpdateBuild) {
-		_isUpdateBuild = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementIsUpdateBuildKey] ?: @(NO);
-	}
-
-	return _isUpdateBuild;
+	return [self.engagementData objectForKey:ATEngagementIsUpdateBuildKey] ?: @(NO);
 }
 
 - (NSDictionary *)codePointInvokesTotal {
-	if (!_codePointInvokesTotal) {
-		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
-		NSDictionary *codePointsInvokesTotal = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesTotalKey];
-		for (NSString *codePoint in codePointsInvokesTotal) {
-			[predicateSyntax setObject:[codePointsInvokesTotal objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/total", [ATUtilities stringByEscapingForPredicate:codePoint]]];
-		}
-		_codePointInvokesTotal = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
+	NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
+	NSDictionary *codePointsInvokesTotal = [self.engagementData objectForKey:ATEngagementCodePointsInvokesTotalKey];
+	for (NSString *codePoint in codePointsInvokesTotal) {
+		[predicateSyntax setObject:[codePointsInvokesTotal objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/total", [ATUtilities stringByEscapingForPredicate:codePoint]]];
 	}
-
-	return _codePointInvokesTotal;
+	return [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 }
 
 - (NSDictionary *)codePointInvokesVersion {
-	if (!_codePointInvokesVersion) {
-		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
-		NSDictionary *codePointsInvokesVersion = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesVersionKey];
-		for (NSString *codePoint in codePointsInvokesVersion) {
-			[predicateSyntax setObject:[codePointsInvokesVersion objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/version", [ATUtilities stringByEscapingForPredicate:codePoint]]];
-		}
-		_codePointInvokesVersion = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
+	NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
+	NSDictionary *codePointsInvokesVersion = [self.engagementData objectForKey:ATEngagementCodePointsInvokesVersionKey];
+	for (NSString *codePoint in codePointsInvokesVersion) {
+		[predicateSyntax setObject:[codePointsInvokesVersion objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/version", [ATUtilities stringByEscapingForPredicate:codePoint]]];
 	}
-	return _codePointInvokesVersion;
+	return [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 }
 
 - (NSDictionary *)codePointInvokesBuild {
-	if (!_codePointInvokesBuild) {
-		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
-		NSDictionary *codePointsInvokesBuild = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesBuildKey];
-		for (NSString *codePoint in codePointsInvokesBuild) {
-			[predicateSyntax setObject:[codePointsInvokesBuild objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/build", [ATUtilities stringByEscapingForPredicate:codePoint]]];
-		}
-		_codePointInvokesBuild = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
+	NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
+	NSDictionary *codePointsInvokesBuild = [self.engagementData objectForKey:ATEngagementCodePointsInvokesBuildKey];
+	for (NSString *codePoint in codePointsInvokesBuild) {
+		[predicateSyntax setObject:[codePointsInvokesBuild objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/build", [ATUtilities stringByEscapingForPredicate:codePoint]]];
 	}
-	return _codePointInvokesBuild;
+	return [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 }
 
 - (NSDictionary *)codePointInvokesTimeAgo {
-	if (!_codePointInvokesTimeAgo) {
-		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
-		NSDictionary *codePointsInvokesLastDate = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesLastDateKey];
-		for (NSString *codePoint in codePointsInvokesLastDate) {
-			NSString *key =  [NSString stringWithFormat:@"code_point/%@/last_invoked_at/total", [ATUtilities stringByEscapingForPredicate:codePoint]];
-			NSDate *lastDate = [codePointsInvokesLastDate objectForKey:codePoint];
+	NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
+	NSDictionary *codePointsInvokesLastDate = [self.engagementData objectForKey:ATEngagementCodePointsInvokesLastDateKey];
+	for (NSString *codePoint in codePointsInvokesLastDate) {
+		NSString *key = [NSString stringWithFormat:@"code_point/%@/last_invoked_at/total", [ATUtilities stringByEscapingForPredicate:codePoint]];
+		NSDate *lastDate = [codePointsInvokesLastDate objectForKey:codePoint];
 
-			if (lastDate) {
-					predicateSyntax[key] = [ATConnect timestampObjectWithDate:lastDate];
-			} else {
-				predicateSyntax[key] = [NSNull null];
-			}
-		}
-		_codePointInvokesTimeAgo = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
+		predicateSyntax[key] = lastDate ? [ATConnect timestampObjectWithDate:lastDate] : [NSNull null];
 	}
-	return _codePointInvokesTimeAgo;
+	return [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 }
 
 - (NSDictionary *)interactionInvokesTotal {
-	if (!_interactionInvokesTotal) {
-		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
-		NSDictionary *interactionsInvokesTotal = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesTotalKey];
-		for (NSString *interactionID in interactionsInvokesTotal) {
-			[predicateSyntax setObject:[interactionsInvokesTotal objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/total", interactionID]];
-		}
-		_interactionInvokesTotal = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
+	NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
+	NSDictionary *interactionsInvokesTotal = [self.engagementData objectForKey:ATEngagementInteractionsInvokesTotalKey];
+	for (NSString *interactionID in interactionsInvokesTotal) {
+		[predicateSyntax setObject:[interactionsInvokesTotal objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/total", interactionID]];
 	}
-
-	return _interactionInvokesTotal;
+	return [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 }
 
 - (NSDictionary *)interactionInvokesVersion {
-	if (!_interactionInvokesVersion) {
-		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
-		NSDictionary *interactionsInvokesVersion = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesVersionKey];
-		for (NSString *interactionID in interactionsInvokesVersion) {
-			[predicateSyntax setObject:[interactionsInvokesVersion objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/version", interactionID]];
-		}
-		_interactionInvokesVersion = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
+	NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
+	NSDictionary *interactionsInvokesVersion = [self.engagementData objectForKey:ATEngagementInteractionsInvokesVersionKey];
+	for (NSString *interactionID in interactionsInvokesVersion) {
+		[predicateSyntax setObject:[interactionsInvokesVersion objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/version", interactionID]];
 	}
-
-	return _interactionInvokesVersion;
+	return [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 }
 
 - (NSDictionary *)interactionInvokesBuild {
-	if (!_interactionInvokesBuild) {
-		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
-		NSDictionary *interactionsInvokesBuild = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesBuildKey];
-		for (NSString *interactionID in interactionsInvokesBuild) {
-			[predicateSyntax setObject:[interactionsInvokesBuild objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/build", interactionID]];
-		}
-		_interactionInvokesBuild = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
+	NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
+	NSDictionary *interactionsInvokesBuild = [self.engagementData objectForKey:ATEngagementInteractionsInvokesBuildKey];
+	for (NSString *interactionID in interactionsInvokesBuild) {
+		[predicateSyntax setObject:[interactionsInvokesBuild objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/build", interactionID]];
 	}
-
-	return _interactionInvokesBuild;
+	return [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 }
 
 - (NSDictionary *)interactionInvokesTimeAgo {
-	if (!_interactionInvokesTimeAgo) {
-		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
-		NSDictionary *interactionInvokesLastDate = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesLastDateKey];
-		for (NSString *interactionID in interactionInvokesLastDate) {
-			NSString *key = [NSString stringWithFormat:@"interactions/%@/last_invoked_at/total", interactionID];
-			NSDate *lastDate = [interactionInvokesLastDate objectForKey:interactionID];
+	NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
+	NSDictionary *interactionInvokesLastDate = [self.engagementData objectForKey:ATEngagementInteractionsInvokesLastDateKey];
+	for (NSString *interactionID in interactionInvokesLastDate) {
+		NSString *key = [NSString stringWithFormat:@"interactions/%@/last_invoked_at/total", interactionID];
+		NSDate *lastDate = [interactionInvokesLastDate objectForKey:interactionID];
 
-			if (lastDate) {
-				predicateSyntax[key] = [ATConnect timestampObjectWithDate:lastDate];
-			} else {
-				predicateSyntax[key] = [NSNull null];
-			}
-		}
-		_interactionInvokesTimeAgo = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
+		predicateSyntax[key] = lastDate ? [ATConnect timestampObjectWithDate:lastDate] : [NSNull null];
 	}
-	return _interactionInvokesTimeAgo;
+	return [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 }
 
 @end

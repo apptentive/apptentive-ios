@@ -17,9 +17,6 @@
 #import "NSDictionary+ATAdditions.h"
 #import "ATConnect_Private.h"
 
-static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessagesLastRetrievedMessagIDPreferenceKey";
-
-
 @interface ATGetMessagesTask ()
 - (BOOL)processResult:(NSDictionary *)jsonMessage;
 @end
@@ -32,8 +29,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 
 - (id)init {
 	if ((self = [super init])) {
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		NSString *messageID = [defaults objectForKey:ATMessagesLastRetrievedMessageIDPreferenceKey];
+		NSString *messageID = [ATConnect sharedConnection].backend.currentConversation.lastRetrievedMessageID;
 		if (messageID) {
 			lastMessage = [ATCompoundMessage findMessageWithID:messageID];
 		}
@@ -53,7 +49,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 	if ([ATConnect sharedConnection].webClient == nil) {
 		return NO;
 	}
-	if (![ATConversationUpdater conversationExists]) {
+	if ([ATConnect sharedConnection].backend.currentConversation.token == nil) {
 		return NO;
 	}
 	return YES;
@@ -132,7 +128,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 	NSManagedObjectContext *context = [[ATConnect sharedConnection].backend managedObjectContext];
 	NSString *lastMessageID = nil;
 
-	ATConversation *conversation = [ATConversationUpdater currentConversation];
+	ATConversation *conversation = [ATConnect sharedConnection].backend.currentConversation;
 
 	do { // once
 		if (!jsonMessages) break;
@@ -178,9 +174,8 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 			success = NO;
 		}
 		if (success && lastMessageID) {
-			NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-			[defaults setObject:lastMessageID forKey:ATMessagesLastRetrievedMessageIDPreferenceKey];
-			[defaults synchronize];
+			conversation.lastRetrievedMessageID = lastMessageID;
+			[[ATConnect sharedConnection].backend saveConversation];
 		}
 		return YES;
 	} while (NO);

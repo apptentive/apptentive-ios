@@ -15,7 +15,7 @@
 #import "ATInteractionInvocation.h"
 #import "ATInteractionUsageData.h"
 #import "ATPersonInfo.h"
-
+#import "ATBackend.h"
 
 @interface ATInteractionUsageDataTests : XCTestCase
 
@@ -28,17 +28,16 @@
 	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
 	invocation.criteria = @{ @"application/version": @{@"$eq": @{@"_type": @"version", @"version": @"4.0.0"}} };
 
-	ATInteractionUsageData *usage = [[ATInteractionUsageData alloc] init];
-	usage.applicationVersion = @"2";
+	ATInteractionUsageData *usage = [[ATInteractionUsageData alloc] initWithEngagementData:@{ ATEngagementApplicationVersionKey: @"2" }];
 
 	NSDictionary *evaluationDictionary = [usage predicateEvaluationDictionary];
 	NSDictionary *versionValue = evaluationDictionary[@"application/version"];
 	XCTAssertNotNil(versionValue, @"No application/version key found.");
 	XCTAssertEqualObjects(versionValue[@"_type"], @"version");
 	XCTAssertEqualObjects(versionValue[@"version"], @"2");
-
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usage], @"4.0.0 is not 2");
-	usage.applicationVersion = @"4.0";
+
+	usage = [[ATInteractionUsageData alloc] initWithEngagementData:@{ ATEngagementApplicationVersionKey: @"4.0" }];
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usage], @"4.0 is like 4.0.0");
 }
 
@@ -65,17 +64,6 @@
 	XCTAssertEqualObjects(versionValue[@"version"], kATConnectVersionString);
 }
 
-- (void)testDefaultSDKVersion {
-	ATInteractionUsageData *usage = [[ATInteractionUsageData alloc] init];
-
-	id mockedUsage = OCMPartialMock(usage);
-	OCMStub([mockedUsage sdkVersion]).andReturn(nil);
-
-	// Should fail to build the evaluation dictionary if there's no sdk version.
-	NSDictionary *evaluationDictionary = [usage predicateEvaluationDictionary];
-	XCTAssertNil(evaluationDictionary);
-}
-
 - (void)testCurrentTime {
 	ATInteractionUsageData *usage = [[ATInteractionUsageData alloc] init];
 
@@ -83,29 +71,31 @@
 	NSDictionary *currentTimeValue = evaluationDictionary[@"current_time"];
 	XCTAssertNotNil(currentTimeValue, @"No current_time key found.");
 	XCTAssertEqualObjects(currentTimeValue[@"_type"], @"datetime");
-	XCTAssertEqualObjects(currentTimeValue[@"sec"], usage.currentTime);
+	XCTAssertEqualWithAccuracy([currentTimeValue[@"sec"] floatValue], usage.currentTime.floatValue, 0.001);
 }
 
 - (void)testTimeAtInstall {
-	ATInteractionUsageData *usage = [[ATInteractionUsageData alloc] init];
+	ATInteractionUsageData *usage = [[ATInteractionUsageData alloc] initWithEngagementData:@{ ATEngagementInstallDateKey: [NSDate date] }];
 
 	NSDictionary *evaluationDictionary = [usage predicateEvaluationDictionary];
 	NSDictionary *timeAtInstallValue = evaluationDictionary[@"time_at_install/total"];
 	XCTAssertNotNil(timeAtInstallValue, @"No time_at_install/total key found.");
 	XCTAssertEqualObjects(timeAtInstallValue[@"_type"], @"datetime");
-	XCTAssertEqualObjects(timeAtInstallValue[@"sec"], @([usage.timeAtInstallTotal timeIntervalSince1970]));
+	XCTAssertEqualWithAccuracy([timeAtInstallValue[@"sec"] doubleValue], usage.timeAtInstallTotal.timeIntervalSince1970, 0.1);
 
 	NSDictionary *timeAtInstallVersionValue = evaluationDictionary[@"time_at_install/version"];
 	XCTAssertNotNil(timeAtInstallVersionValue, @"No time_at_install/version key found.");
 	XCTAssertEqualObjects(timeAtInstallVersionValue[@"_type"], @"datetime");
-	XCTAssertEqualObjects(timeAtInstallVersionValue[@"sec"], @([usage.timeAtInstallVersion timeIntervalSince1970]));
+	XCTAssertEqualWithAccuracy([timeAtInstallVersionValue[@"sec"] doubleValue], usage.timeAtInstallVersion.timeIntervalSince1970, 0.1);
 }
 
 //TODO: Test for code point last_invoked_at/total
 //TODO: Test for interaction last_invoked_at/total
 
 - (void)testPerson {
-	ATPersonInfo *person = [ATPersonInfo currentPerson];
+	[ATConnect sharedConnection].apiKey = @"123"; // Set up backend
+
+	ATPersonInfo *person = [ATConnect sharedConnection].backend.currentPerson;
 	person.name = nil;
 	person.emailAddress = nil;
 
@@ -117,6 +107,7 @@
 
 	person.name = @"Andrew";
 	person.emailAddress = @"example@example.com";
+
 	NSDictionary *validEvaluationDictionary = [usage predicateEvaluationDictionary];
 	XCTAssertEqualObjects(validEvaluationDictionary[@"person/name"], @"Andrew");
 	XCTAssertEqualObjects(validEvaluationDictionary[@"person/email"], @"example@example.com");

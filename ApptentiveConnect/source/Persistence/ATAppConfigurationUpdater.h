@@ -6,32 +6,16 @@
 //  Copyright (c) 2012 Apptentive, Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "ATAPIRequest.h"
+#import "ATExpiringUpdater.h"
 
-extern NSString *const ATConfigurationPreferencesChangedNotification;
+@class ATAppConfiguration;
+
+extern NSString *const ATConfigurationSDKVersionKey;
+extern NSString *const ATConfigurationAppBuildNumberKey;
 extern NSString *const ATAppConfigurationExpirationPreferenceKey;
-extern NSString *const ATAppConfigurationMetricsEnabledPreferenceKey;
-extern NSString *const ATAppConfigurationHideBrandingKey;
-extern NSString *const ATAppConfigurationNotificationPopupsEnabledKey;
 
-extern NSString *const ATAppConfigurationMessageCenterForegroundRefreshIntervalKey;
-extern NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey;
+@interface ATAppConfigurationUpdater : ATExpiringUpdater
 
-extern NSString *const ATAppConfigurationAppDisplayNameKey;
+@property (readonly, nonatomic) ATAppConfiguration *appConfiguration;
 
-@protocol ATAppConfigurationUpdaterDelegate <NSObject>
-- (void)configurationUpdaterDidFinish:(BOOL)success;
-@end
-
-
-@interface ATAppConfigurationUpdater : NSObject <ATAPIRequestDelegate>
-
-@property (weak, nonatomic) NSObject<ATAppConfigurationUpdaterDelegate> *delegate;
-
-+ (BOOL)shouldCheckForUpdate;
-- (id)initWithDelegate:(NSObject<ATAppConfigurationUpdaterDelegate> *)delegate;
-- (void)update;
-- (void)cancel;
-- (float)percentageComplete;
 @end

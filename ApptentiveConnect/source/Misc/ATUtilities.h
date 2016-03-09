@@ -28,6 +28,7 @@
 + (NSString *)currentSystemName;
 + (NSString *)currentSystemVersion;
 + (NSString *)currentSystemBuild;
++ (NSUUID *)currentDeviceID;
 
 + (NSString *)stringByEscapingForURLArguments:(NSString *)string;
 + (NSString *)stringByEscapingForPredicate:(NSString *)string;

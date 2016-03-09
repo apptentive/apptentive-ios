@@ -223,7 +223,7 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 }
 
 - (NSString *)archivePath {
-	return [[ATConnect sharedConnection].backend.supportDirectoryPath stringByAppendingPathComponent:ATMessageCenterAttachmentsArchiveFilename];
+	return [[ATConnect sharedConnection].backend.storagePath stringByAppendingPathComponent:ATMessageCenterAttachmentsArchiveFilename];
 }
 
 - (void)insertImage:(UIImage *)image {

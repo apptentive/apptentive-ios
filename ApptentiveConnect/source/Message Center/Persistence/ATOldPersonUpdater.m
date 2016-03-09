@@ -12,6 +12,7 @@
 #import "ATUtilities.h"
 #import "ATWebClient+MessageCenter.h"
 #import "ATConnect_Private.h"
+#import "ATBackend.h"
 
 NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValuePreferenceKey";
 
@@ -26,10 +27,10 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 
 @implementation ATPersonUpdater
 
-- (id)initWithDelegate:(NSObject<ATPersonUpdaterDelegate> *)aDelegate {
-	if ((self = [super init])) {
-		[ATPersonUpdater registerDefaults];
-		_delegate = aDelegate;
+- (instancetype)initWithStoragePath:(NSString *)storagePath {
+	self = [super init];
+	if (self) {
+		_storagePath = storagePath;
 	}
 	return self;
 }
@@ -39,23 +40,12 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 	[self cancel];
 }
 
-+ (BOOL)shouldUpdate {
-	[ATPersonUpdater registerDefaults];
-
-	return [[ATPersonInfo currentPerson] apiJSON].count > 0;
+- (ATPersonInfo *)lastSavedPerson {
+	return [NSKeyedUnarchiver unarchiveObjectWithFile:self.storagePath];
 }
 
-+ (NSDictionary *)lastSavedVersion {
-	NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:ATPersonLastUpdateValuePreferenceKey];
-
-	if (data) {
-		NSDictionary *dictionary = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-		if ([dictionary isKindOfClass:[NSDictionary class]]) {
-			return dictionary;
-		}
-	}
-
-	return nil;
+- (void)setLastSavedPerson:(ATPersonInfo *)lastSavedPerson {
+	[NSKeyedArchiver archiveRootObject:lastSavedPerson toFile:self.storagePath];
 }
 
 - (void)saveVersion {
@@ -66,7 +56,7 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 
 - (void)update {
 	[self cancel];
-	ATPersonInfo *person = [ATPersonInfo currentPerson];
+	ATPersonInfo *person = [ATConnect sharedConnection].backend.currentPerson;
 	self.sentPersonJSON = person.dictionaryRepresentation;
 	self.request = [[ATConnect sharedConnection].webClient requestForUpdatingPerson:person];
 	self.request.delegate = self;

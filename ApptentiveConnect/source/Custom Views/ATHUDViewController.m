@@ -32,7 +32,7 @@ static ATHUDViewController *currentHUD;
 	self.HUDView = [[UIView alloc] initWithFrame:CGRectZero];
 	self.HUDView.translatesAutoresizingMaskIntoConstraints = NO;
 
-	self.HUDView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.5];
+	self.HUDView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.75];
 	self.HUDView.layer.cornerRadius = 12.0;
 
 	[self.view addSubview:self.HUDView];

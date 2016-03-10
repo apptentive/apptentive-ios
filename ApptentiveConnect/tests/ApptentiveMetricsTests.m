@@ -6,8 +6,12 @@
 //  Copyright (c) 2011 Apptentive. All rights reserved.
 //
 
-#import "ApptentiveMetricsTests.h"
+#import <XCTest/XCTest.h>
 #import "ATConnect.h"
+
+
+@interface ApptentiveMetricsTests : XCTestCase
+@end
 
 
 @implementation ApptentiveMetricsTests

@@ -6,11 +6,15 @@
 //  Copyright (c) 2011 Apptentive. All rights reserved.
 //
 
-#import "ApptentiveSurveysTests.h"
+#import <XCTest/XCTest.h>
 #import "ATSurvey.h"
 #import "ATSurveyParser.h"
 #import "ATSurveyQuestion.h"
 #import "ATJSONSerialization.h"
+
+
+@interface ApptentiveSurveysTests : XCTestCase
+@end
 
 
 @implementation ApptentiveSurveysTests

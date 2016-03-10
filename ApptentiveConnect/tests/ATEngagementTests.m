@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
 
-#import "ATEngagementTests.h"
+#import <XCTest/XCTest.h>
 #import "ATConnect.h"
 #import "ATInteraction.h"
 #import "ATInteractionInvocation.h"
@@ -14,6 +14,10 @@
 #import "ATEngagementBackend.h"
 #import "ATEngagementManifestParser.h"
 #import "ATConnect_Private.h"
+
+
+@interface ATEngagementTests : XCTestCase
+@end
 
 
 @implementation ATEngagementTests

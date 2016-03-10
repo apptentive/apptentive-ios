@@ -100,14 +100,10 @@
 		01A16CAB1AF2A66C00D691FC /* FeedbackDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeedbackDemoTests.m; sourceTree = "<group>"; };
 		01A16CB51AF2A67600D691FC /* ApptentiveConnect.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ApptentiveConnect.xcodeproj; path = ../ApptentiveConnect/ApptentiveConnect.xcodeproj; sourceTree = "<group>"; };
 		01A16CC11AF2A68A00D691FC /* ATConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATConnect.h; path = ../ApptentiveConnect/source/ATConnect.h; sourceTree = "<group>"; };
-		01A16CC71AF2A6D200D691FC /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
-		01A16CC81AF2A6D200D691FC /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		01A16CC91AF2A6D200D691FC /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		01A16CCA1AF2A6D200D691FC /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		01A16CCB1AF2A6D200D691FC /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
-		01A16CCC1AF2A6D200D691FC /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		01A16CCD1AF2A6D200D691FC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		01A16CCE1AF2A6D200D691FC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		01A16CCF1AF2A6D200D691FC /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		01A16CD01AF2A6D200D691FC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		01A16CD11AF2A6D200D691FC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -303,18 +299,14 @@
 		01A16CDD1AF2A6D900D691FC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				015539371C90FB760066A79D /* MobileCoreServices.framework */,
-				015539341C90FB640066A79D /* QuickLook.framework */,
-				0155392F1C90FB390066A79D /* ImageIO.framework */,
 				0155392B1C90FB230066A79D /* AVFoundation.framework */,
-				01A16CC71AF2A6D200D691FC /* Accelerate.framework */,
-				01A16CC81AF2A6D200D691FC /* AssetsLibrary.framework */,
 				01A16CC91AF2A6D200D691FC /* CoreData.framework */,
 				01A16CCA1AF2A6D200D691FC /* CoreGraphics.framework */,
 				01A16CCB1AF2A6D200D691FC /* CoreTelephony.framework */,
-				01A16CCC1AF2A6D200D691FC /* CoreText.framework */,
 				01A16CCD1AF2A6D200D691FC /* Foundation.framework */,
-				01A16CCE1AF2A6D200D691FC /* QuartzCore.framework */,
+				0155392F1C90FB390066A79D /* ImageIO.framework */,
+				015539371C90FB760066A79D /* MobileCoreServices.framework */,
+				015539341C90FB640066A79D /* QuickLook.framework */,
 				01A16CCF1AF2A6D200D691FC /* StoreKit.framework */,
 				01A16CD01AF2A6D200D691FC /* SystemConfiguration.framework */,
 				01A16CD11AF2A6D200D691FC /* UIKit.framework */,

@@ -342,11 +342,11 @@
 		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
 		NSDictionary *codePointsInvokesLastDate = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesLastDateKey];
 		for (NSString *codePoint in codePointsInvokesLastDate) {
-			NSString *key =  [NSString stringWithFormat:@"code_point/%@/last_invoked_at/total", [ATUtilities stringByEscapingForPredicate:codePoint]];
+			NSString *key = [NSString stringWithFormat:@"code_point/%@/last_invoked_at/total", [ATUtilities stringByEscapingForPredicate:codePoint]];
 			NSDate *lastDate = [codePointsInvokesLastDate objectForKey:codePoint];
 
 			if (lastDate) {
-					predicateSyntax[key] = [ATConnect timestampObjectWithDate:lastDate];
+				predicateSyntax[key] = [ATConnect timestampObjectWithDate:lastDate];
 			} else {
 				predicateSyntax[key] = [NSNull null];
 			}

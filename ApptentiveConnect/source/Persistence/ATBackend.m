@@ -205,6 +205,7 @@ static NSURLCache *imageCache = nil;
 	message.title = title;
 	message.pendingState = @(ATPendingMessageStateComposing);
 	message.sentByUser = @YES;
+	message.automated = @YES;
 	NSError *error = nil;
 	if (![[self managedObjectContext] save:&error]) {
 		ATLogError(@"Unable to send automated message with title: %@, body: %@, error: %@", title, body, error);

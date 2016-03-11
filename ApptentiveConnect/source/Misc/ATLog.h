@@ -14,6 +14,7 @@
 // So, do it explicitly.
 #if COCOAPODS
 #if DEBUG
+#undef AT_LOGGING_LEVEL_INFO
 #define AT_LOGGING_LEVEL_INFO 1
 #endif
 #endif

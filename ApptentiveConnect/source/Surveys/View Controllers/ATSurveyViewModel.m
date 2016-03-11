@@ -124,7 +124,7 @@
 	[self.textAtIndexPath setObject:text forKey:indexPath];
 
 	if (self.invalidQuestionIndexes) {
-		[self validate];
+		[self validate:NO];
 	}
 }
 
@@ -151,7 +151,7 @@
 	[self answerChangedAtIndexPath:indexPath];
 
 	if (self.invalidQuestionIndexes) {
-		[self validate];
+		[self validate:NO];
 	}
 }
 
@@ -161,7 +161,7 @@
 	[self answerChangedAtIndexPath:indexPath];
 
 	if (self.invalidQuestionIndexes) {
-		[self validate];
+		[self validate:NO];
 	}
 }
 
@@ -190,7 +190,7 @@
 
 #pragma mark - Validation & Output
 
-- (BOOL)validate {
+- (BOOL)validate:(BOOL)isSubmit {
 	NSIndexSet *previousInvalidQuestionIndexes = self.invalidQuestionIndexes;
 
 	self.invalidQuestionIndexes = [NSMutableIndexSet indexSet];
@@ -217,6 +217,18 @@
 			}
 		}
 	}];
+
+	// Unless the submit button was tapped, only allow answers to go from red to green
+	if (!isSubmit) {
+		NSMutableIndexSet *redToGreenQuestionIndexes = [self.invalidQuestionIndexes mutableCopy];
+		[self.invalidQuestionIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+			if (![previousInvalidQuestionIndexes containsIndex:idx]) {
+				[redToGreenQuestionIndexes removeIndex:idx];
+			}
+		}];
+
+		self.invalidQuestionIndexes = redToGreenQuestionIndexes;
+	}
 
 	if (![self.invalidQuestionIndexes isEqualToIndexSet:previousInvalidQuestionIndexes]) {
 		[self.delegate viewModelValidationChanged:self];

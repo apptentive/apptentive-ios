@@ -46,7 +46,7 @@
 - (void)selectAnswerAtIndexPath:(NSIndexPath *)indexPath;
 - (void)deselectAnswerAtIndexPath:(NSIndexPath *)indexPath;
 
-- (BOOL)validate;
+- (BOOL)validate:(BOOL)isSubmit;
 - (void)submit;
 
 - (void)didCancel;

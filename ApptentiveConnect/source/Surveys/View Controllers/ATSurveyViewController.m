@@ -83,7 +83,7 @@
 }
 
 - (IBAction)submit:(id)sender {
-	if ([self.viewModel validate]) {
+	if ([self.viewModel validate:YES]) {
 		// Consider any pending edits complete
 		if (self.editingIndexPath) {
 			[self.viewModel commitChangeAtIndexPath:self.editingIndexPath];

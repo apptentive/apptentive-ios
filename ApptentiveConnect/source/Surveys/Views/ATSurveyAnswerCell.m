@@ -8,6 +8,7 @@
 
 #import "ATSurveyAnswerCell.h"
 
+
 @implementation ATSurveyAnswerCell
 
 @end

@@ -13,6 +13,7 @@ typedef NS_ENUM(NSInteger, ATSurveyOptionButtonStyle) {
 	ATSurveyOptionButtonStyleRadio
 };
 
+
 @interface ATSurveyOptionButton : UIButton
 
 @property (assign, nonatomic) ATSurveyOptionButtonStyle style;

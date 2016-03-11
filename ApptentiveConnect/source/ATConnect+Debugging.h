@@ -18,26 +18,28 @@ typedef NS_OPTIONS(NSInteger, ATConnectDebuggingOptions) {
 
 NS_ASSUME_NONNULL_BEGIN
 
+
 @interface ATConnect ()
 
 @property (assign, nonatomic) ATConnectDebuggingOptions debuggingOptions;
-@property (readonly, nonatomic) NSURL * _Nullable baseURL;
+@property (readonly, nonatomic) NSURL *_Nullable baseURL;
 
 - (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL;
 
 @end
+
 
 @interface ATConnect (Debugging)
 
 + (NSString *)supportDirectoryPath;
 - (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath;
 
-@property (readonly, nonatomic) NSURL * _Nullable baseURL;
+@property (readonly, nonatomic) NSURL *_Nullable baseURL;
 @property (readonly, nonatomic) NSString *storagePath;
 @property (readonly, nonatomic) NSString *SDKVersion;
-@property (readonly, nonatomic) NSString * _Nullable APIKey;
-@property (readonly, nonatomic) UIView * _Nullable unreadAccessoryView;
-@property (readonly, nonatomic) NSString * _Nullable manifestJSON;
+@property (readonly, nonatomic) NSString *_Nullable APIKey;
+@property (readonly, nonatomic) UIView *_Nullable unreadAccessoryView;
+@property (readonly, nonatomic) NSString *_Nullable manifestJSON;
 @property (readonly, nonatomic) NSDictionary<NSString *, NSObject *> *deviceInfo;
 
 - (NSArray *)engagementInteractions;

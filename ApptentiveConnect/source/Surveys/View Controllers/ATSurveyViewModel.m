@@ -19,6 +19,7 @@
 #import "ATTaskQueue.h"
 #import "ATData.h"
 
+
 @interface ATSurveyViewModel ()
 
 @property (strong, nonatomic) NSString *currentMultilineText;
@@ -27,6 +28,7 @@
 @property (strong, nonatomic) NSMutableIndexSet *invalidQuestionIndexes;
 
 @end
+
 
 @implementation ATSurveyViewModel
 
@@ -133,8 +135,8 @@
 }
 
 - (void)selectAnswerAtIndexPath:(NSIndexPath *)indexPath {
-	 if ([self.selectedIndexPaths containsObject:indexPath])
-		 return;
+	if ([self.selectedIndexPaths containsObject:indexPath])
+		return;
 
 	[self.selectedIndexPaths addObject:indexPath];
 
@@ -167,7 +169,7 @@
 
 - (void)submit {
 	ATSurveyResponse *response = (ATSurveyResponse *)[ATData newEntityNamed:@"ATSurveyResponse"];
-	
+
 	[response setup];
 	response.pendingState = [NSNumber numberWithInt:ATPendingSurveyResponseStateSending];
 	response.surveyID = self.interaction.identifier;
@@ -178,7 +180,7 @@
 	NSString *pendingSurveyResponseID = [response pendingSurveyResponseID];
 	double delayInSeconds = 1.5;
 	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+	dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
 		ATSurveyResponseTask *task = [[ATSurveyResponseTask alloc] init];
 		task.pendingSurveyResponseID = pendingSurveyResponseID;
 		[[ATTaskQueue sharedTaskQueue] addTask:task];
@@ -195,7 +197,7 @@
 
 	self.invalidQuestionIndexes = [NSMutableIndexSet indexSet];
 
-	[self.survey.questions enumerateObjectsUsingBlock:^(ATSurveyQuestion * _Nonnull question, NSUInteger index, BOOL * _Nonnull stop) {
+	[self.survey.questions enumerateObjectsUsingBlock:^(ATSurveyQuestion *_Nonnull question, NSUInteger index, BOOL *_Nonnull stop) {
 		switch (question.type) {
 			case ATSurveyQuestionTypeSingleLine:
 			case ATSurveyQuestionTypeMultipleLine: {
@@ -221,7 +223,7 @@
 	// Unless the submit button was tapped, only allow answers to go from red to green
 	if (!isSubmit) {
 		NSMutableIndexSet *redToGreenQuestionIndexes = [self.invalidQuestionIndexes mutableCopy];
-		[self.invalidQuestionIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+		[self.invalidQuestionIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *_Nonnull stop) {
 			if (![previousInvalidQuestionIndexes containsIndex:idx]) {
 				[redToGreenQuestionIndexes removeIndex:idx];
 			}
@@ -240,7 +242,7 @@
 - (NSDictionary *)answers {
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
 
-	[self.survey.questions enumerateObjectsUsingBlock:^(ATSurveyQuestion * _Nonnull question, NSUInteger index, BOOL * _Nonnull stop) {
+	[self.survey.questions enumerateObjectsUsingBlock:^(ATSurveyQuestion *_Nonnull question, NSUInteger index, BOOL *_Nonnull stop) {
 		switch (question.type) {
 			case ATSurveyQuestionTypeSingleLine:
 			case ATSurveyQuestionTypeMultipleLine: {
@@ -280,10 +282,10 @@
 	ATSurveyQuestion *question = [self questionAtIndex:indexPath.section];
 
 	NSDictionary *metricsInfo = @{ ATSurveyMetricsSurveyIDKey: self.interaction.identifier ?: [NSNull null],
-								   ATSurveyMetricsSurveyQuestionIDKey: question.identifier ?: [NSNull null],
-								   ATSurveyMetricsEventKey: @(ATSurveyEventAnsweredQuestion),
-								   @"interaction_id": self.interaction.identifier ?: [NSNull null],
-								   };
+		ATSurveyMetricsSurveyQuestionIDKey: question.identifier ?: [NSNull null],
+		ATSurveyMetricsEventKey: @(ATSurveyEventAnsweredQuestion),
+		@"interaction_id": self.interaction.identifier ?: [NSNull null],
+	};
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidAnswerQuestionNotification object:nil userInfo:metricsInfo];
 }
@@ -298,10 +300,10 @@
 
 - (void)didCloseWindowWithEvent:(ATSurveyEvent)event {
 	NSDictionary *metricsInfo = @{ ATSurveyMetricsSurveyIDKey: self.interaction.identifier ?: [NSNull null],
-								   ATSurveyWindowTypeKey: @(ATSurveyWindowTypeSurvey),
-								   ATSurveyMetricsEventKey: @(event),
-								   @"interaction_id": self.interaction.identifier ?: [NSNull null],
-								   };
+		ATSurveyWindowTypeKey: @(ATSurveyWindowTypeSurvey),
+		ATSurveyMetricsEventKey: @(event),
+		@"interaction_id": self.interaction.identifier ?: [NSNull null],
+	};
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidHideWindowNotification object:nil userInfo:metricsInfo];
 }

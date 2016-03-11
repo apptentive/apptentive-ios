@@ -10,11 +10,13 @@
 #import "ATAPIRequest.h"
 #import "ATURLConnection.h"
 
+
 @interface ATAPIRequest ()
 
 - (void)connectionFinishedSuccessfully:(ATURLConnection *)sender;
 
 @end
+
 
 @interface ATAPIRequestTests : XCTestCase
 
@@ -23,10 +25,11 @@
 
 @end
 
+
 @implementation ATAPIRequestTests
 
 - (void)setUp {
-    [super setUp];
+	[super setUp];
 
 	self.self.request = [[ATAPIRequest alloc] init];
 	self.connection = [[ATURLConnection alloc] init];

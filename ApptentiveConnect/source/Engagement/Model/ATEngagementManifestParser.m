@@ -62,9 +62,12 @@
 	NSDictionary *targetsAndInteractions = nil;
 	if (success) {
 #if APPTENTIVE_DEBUG
-		targetsAndInteractions = @{@"targets": targets, @"interactions": interactions, @"raw": jsonManifest};
+		targetsAndInteractions = @{ @"targets": targets,
+			@"interactions": interactions,
+			@"raw": jsonManifest };
 #else
-		targetsAndInteractions = @{@"targets": targets, @"interactions": interactions};
+		targetsAndInteractions = @{ @"targets": targets,
+			@"interactions": interactions };
 #endif
 	}
 

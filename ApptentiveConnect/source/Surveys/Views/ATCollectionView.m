@@ -8,17 +8,18 @@
 
 #import "ATCollectionView.h"
 
+
 @interface ATCollectionView ()
 
 @property (strong, nonatomic) NSLayoutConstraint *footerConstraint;
 
 @end
 
+
 @implementation ATCollectionView
 
 - (void)setCollectionHeaderView:(UIView *)collectionHeaderView {
 	if (_collectionHeaderView != collectionHeaderView) {
-
 		if (_collectionHeaderView) {
 			[_collectionHeaderView removeFromSuperview];
 		}
@@ -29,10 +30,10 @@
 		[self addSubview:collectionHeaderView];
 
 		[self addConstraints:@[
-							   [NSLayoutConstraint constraintWithItem:collectionHeaderView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0.0],
-							   [NSLayoutConstraint constraintWithItem:collectionHeaderView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0],
-							   [NSLayoutConstraint constraintWithItem:collectionHeaderView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0]
-							   ]];
+			[NSLayoutConstraint constraintWithItem:collectionHeaderView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0.0],
+			[NSLayoutConstraint constraintWithItem:collectionHeaderView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0],
+			[NSLayoutConstraint constraintWithItem:collectionHeaderView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0]
+		]];
 	}
 
 	[self.collectionViewLayout invalidateLayout];
@@ -40,7 +41,6 @@
 
 - (void)setCollectionFooterView:(UIView *)collectionFooterView {
 	if (_collectionFooterView != collectionFooterView) {
-
 		if (_collectionFooterView) {
 			[_collectionFooterView removeFromSuperview];
 		}
@@ -53,10 +53,10 @@
 		self.footerConstraint = [NSLayoutConstraint constraintWithItem:collectionFooterView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
 
 		[self addConstraints:@[
-							   [NSLayoutConstraint constraintWithItem:collectionFooterView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0.0],
-							   [NSLayoutConstraint constraintWithItem:collectionFooterView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0],
-							   self.footerConstraint
-							   ]];
+			[NSLayoutConstraint constraintWithItem:collectionFooterView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0.0],
+			[NSLayoutConstraint constraintWithItem:collectionFooterView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0],
+			self.footerConstraint
+		]];
 	}
 
 	[self.collectionViewLayout invalidateLayout];
@@ -73,7 +73,7 @@
 
 	CGFloat top = [self.collectionViewLayout collectionViewContentSize].height - CGRectGetHeight(self.collectionFooterView.bounds);
 	top = fmax(top, CGRectGetHeight(self.bounds) - CGRectGetHeight(self.collectionFooterView.bounds) - self.contentInset.top - self.contentInset.bottom);
-	
+
 	self.footerConstraint.constant = top;
 
 	[super layoutSubviews];

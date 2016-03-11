@@ -8,15 +8,17 @@
 
 #import "ATSurveyOptionButton.h"
 
+
 @interface ATSurveyOptionButton ()
 
 @property (assign, nonatomic) BOOL reallySetBackgroundColor;
 
 @end
 
+
 @implementation ATSurveyOptionButton
 
-- (void)awakeFromNib	 {
+- (void)awakeFromNib {
 	self.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
 
 	[self updateColors];
@@ -60,7 +62,7 @@
 	}
 }
 
-- (CGSize) intrinsicContentSize {
+- (CGSize)intrinsicContentSize {
 	switch (self.style) {
 		case ATSurveyOptionButtonStyleCheckbox:
 			return CGSizeMake(20.0, 20.0);

@@ -13,6 +13,7 @@ extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 
 @class ATCompoundMessage, ATWebClient, ATBackend, ATEngagementBackend;
 
+
 @interface ATConnect ()
 
 @property (readonly, nonatomic) NSDictionary *customPersonData;
@@ -50,6 +51,7 @@ extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 /*! Replacement for NSLocalizedString within ApptentiveConnect. Pulls
  localized strings out of the resource bundle. */
 extern NSString *ATLocalizedString(NSString *key, NSString *comment);
+
 
 @interface ATNavigationController (AboutView)
 

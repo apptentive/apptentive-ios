@@ -8,11 +8,13 @@
 
 #import "ATSurveyGreetingView.h"
 
+
 @interface ATSurveyGreetingView ()
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *borderViewHeight;
 
 @end
+
 
 @implementation ATSurveyGreetingView
 

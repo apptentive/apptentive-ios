@@ -496,7 +496,7 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 
 - (void)presentUpgradeMessageInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
 	NSAssert([interaction.type isEqualToString:@"UpgradeMessage"], @"Attempted to present an UpgradeMessage interaction with an interaction of type: %@", interaction.type);
-	
+
 	ATInteractionUpgradeMessageViewController *upgradeMessage = [ATInteractionUpgradeMessageViewController interactionUpgradeMessageViewControllerWithInteraction:interaction];
 	[upgradeMessage presentFromViewController:viewController animated:YES];
 }

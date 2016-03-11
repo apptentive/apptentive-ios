@@ -11,6 +11,7 @@
 #import "ATInteraction.h"
 #import "ATSurveyMetrics.h"
 
+
 @interface ATSurveyTests : XCTestCase <ATSurveyViewModelDelegate>
 
 @property (strong, nonatomic) ATSurveyViewModel *viewModel;
@@ -21,10 +22,11 @@
 
 @end
 
+
 @implementation ATSurveyTests
 
 - (void)setUp {
-    [super setUp];
+	[super setUp];
 
 	NSURL *JSONURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"Survey" withExtension:@"json"];
 	NSData *JSONData = [NSData dataWithContentsOfURL:JSONURL];
@@ -50,12 +52,11 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	self.viewModel.delegate = nil;
 
-    [super tearDown];
+	[super tearDown];
 }
 
 - (void)answeredQuestion:(NSNotification *)notification {
 	[self.answeredQuestions addObject:notification.userInfo[ATSurveyMetricsSurveyQuestionIDKey]];
-
 }
 
 - (void)didHide:(NSNotification *)notification {
@@ -156,8 +157,8 @@
 	NSLog(@"answers are: %@", self.viewModel.answers);
 
 	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f3300000b"], @"56d49499c719925f3300000c");
-	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000011"], @[ @"56d49499c719925f33000012" ]);
-	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000019"], @[ @"56d49499c719925f3300001a" ]);
+	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000011"], @[@"56d49499c719925f33000012"]);
+	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000019"], @[@"56d49499c719925f3300001a"]);
 	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f3300001f"], @"Foo");
 	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000021"], @"Bar");
 }

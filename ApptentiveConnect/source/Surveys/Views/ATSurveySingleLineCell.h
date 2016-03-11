@@ -8,6 +8,7 @@
 
 #import "ATSurveyAnswerCell.h"
 
+
 @interface ATSurveySingleLineCell : ATSurveyAnswerCell
 
 @property (strong, nonatomic) IBOutlet UITextField *textField;

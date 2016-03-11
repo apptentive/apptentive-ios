@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+
 @interface ATSurveyAnswer : NSObject
 
 - (instancetype)initWithJSON:(NSDictionary *)JSON;

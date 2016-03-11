@@ -10,6 +10,7 @@
 #import "ATConnect_Private.h"
 #import "ATConversationUpdater.h"
 
+
 @implementation ATAppConfigurationUpdateTask {
 	ATAppConfigurationUpdater *configurationUpdater;
 }

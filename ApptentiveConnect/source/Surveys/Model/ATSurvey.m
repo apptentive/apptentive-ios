@@ -9,6 +9,7 @@
 #import "ATSurvey.h"
 #import "ATSurveyQuestion.h"
 
+
 @implementation ATSurvey
 
 - (instancetype)initWithJSON:(NSDictionary *)JSON {
@@ -24,7 +25,7 @@
 
 		NSMutableArray *mutableQuestions = [NSMutableArray array];
 
-		for (NSDictionary * questionJSON in JSON[@"questions"]) {
+		for (NSDictionary *questionJSON in JSON[@"questions"]) {
 			[mutableQuestions addObject:[[ATSurveyQuestion alloc] initWithJSON:questionJSON]];
 		}
 

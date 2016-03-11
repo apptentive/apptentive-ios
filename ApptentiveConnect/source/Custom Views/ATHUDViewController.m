@@ -9,6 +9,7 @@
 #import "ATHUDViewController.h"
 #import "ATPassThroughWindow.h"
 
+
 @interface ATHUDViewController ()
 
 @property (strong, nonatomic) IBOutlet UIView *HUDView;
@@ -20,6 +21,7 @@
 @end
 
 static ATHUDViewController *currentHUD;
+
 
 @implementation ATHUDViewController
 
@@ -45,9 +47,9 @@ static ATHUDViewController *currentHUD;
 	[self.view addSubview:self.HUDView];
 
 	[self.view addConstraints:@[
-								[NSLayoutConstraint constraintWithItem:self.HUDView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0],
-								[NSLayoutConstraint constraintWithItem:self.HUDView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0]
-								]];
+		[NSLayoutConstraint constraintWithItem:self.HUDView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0],
+		[NSLayoutConstraint constraintWithItem:self.HUDView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0]
+	]];
 
 	self.textLabel = [[UILabel alloc] initWithFrame:CGRectZero];
 	self.textLabel.textColor = [UIColor whiteColor];
@@ -61,7 +63,8 @@ static ATHUDViewController *currentHUD;
 	[contentView addSubview:self.textLabel];
 	[contentView addSubview:self.imageView];
 
-	NSDictionary *views = @{ @"image": self.imageView, @"label": self.textLabel };
+	NSDictionary *views = @{ @"image": self.imageView,
+		@"label": self.textLabel };
 
 	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(44)-[image]-(36)-[label]-(44)-|" options:NSLayoutFormatAlignAllCenterX metrics:nil views:views]];
 	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(>=44)-[image]-(>=44)-|" options:0 metrics:nil views:views]];
@@ -74,7 +77,7 @@ static ATHUDViewController *currentHUD;
 	self.interval = self.interval ?: 2.0;
 	self.animationDuration = fmin(self.animationDuration ?: 0.25, self.interval / 2.0);
 
-	self.hostWindow =  [[ATPassThroughWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+	self.hostWindow = [[ATPassThroughWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
 	self.hostWindow.hidden = NO;
 
 	self.hostWindow.rootViewController = self;

@@ -37,6 +37,7 @@
 #define MULTILINE_VERTICAL_MARGIN 14
 #define MULTILINE_FONT [UIFont systemFontOfSize:14.0]
 
+
 @interface ATSurveyViewController ()
 
 @property (strong, nonatomic) IBOutlet ATSurveyGreetingView *headerView;
@@ -47,13 +48,14 @@
 
 @end
 
+
 @implementation ATSurveyViewController
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
+	[super viewDidLoad];
 
 	self.collectionView.allowsMultipleSelection = YES;
-	[self.collectionViewLayout registerClass:[ATSurveyQuestionBackgroundView class]  forDecorationViewOfKind:@"QuestionBackground"];
+	[self.collectionViewLayout registerClass:[ATSurveyQuestionBackgroundView class] forDecorationViewOfKind:@"QuestionBackground"];
 
 	self.title = self.viewModel.title;
 
@@ -125,15 +127,15 @@
 #pragma mark Collection View Data Source
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return [self.viewModel numberOfQuestionsInSurvey];
+	return [self.viewModel numberOfQuestionsInSurvey];
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [self.viewModel numberOfAnswersForQuestionAtIndex:section];
+	return [self.viewModel numberOfAnswersForQuestionAtIndex:section];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:
-(NSIndexPath *)indexPath {
+	(NSIndexPath *)indexPath {
 	switch ([self.viewModel typeOfQuestionAtIndex:indexPath.section]) {
 		case ATSurveyQuestionTypeMultipleLine: {
 			ATSurveyMultilineCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"MultilineText" forIndexPath:indexPath];
@@ -165,13 +167,13 @@
 
 			cell.textLabel.text = [self.viewModel textOfAnswerAtIndexPath:indexPath];
 			cell.accessibilityLabel = [self.viewModel textOfAnswerAtIndexPath:indexPath];
-			[cell.button setImage:buttonImage  forState:UIControlStateNormal];
+			[cell.button setImage:buttonImage forState:UIControlStateNormal];
 
 			return cell;
 		}
 	}
 
-    return nil;
+	return nil;
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
@@ -237,7 +239,7 @@
 		case ATSurveyQuestionTypeMultipleSelect: {
 			CGFloat labelWidth = itemSize.width - CHOICE_HORIZONTAL_MARGIN;
 
-			CGSize labelSize = CGRectIntegral([[self.viewModel textOfAnswerAtIndexPath:indexPath] boundingRectWithSize:CGSizeMake(labelWidth, MAXFLOAT)  options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName : CHOICE_FONT } context:nil]).size;
+			CGSize labelSize = CGRectIntegral([[self.viewModel textOfAnswerAtIndexPath:indexPath] boundingRectWithSize:CGSizeMake(labelWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: CHOICE_FONT } context:nil]).size;
 
 			itemSize.height = labelSize.height + CHOICE_VERTICAL_MARGIN;
 			break;
@@ -249,7 +251,7 @@
 			CGFloat textViewWidth = itemSize.width - MULTILINE_HORIZONTAL_MARGIN;
 
 			NSString *text = [[self.viewModel textOfAnswerAtIndexPath:indexPath] ?: @" " stringByAppendingString:@"\n"];
-			CGSize textSize = CGRectIntegral([text boundingRectWithSize:CGSizeMake(textViewWidth, MAXFLOAT)  options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName : MULTILINE_FONT } context:nil]).size;
+			CGSize textSize = CGRectIntegral([text boundingRectWithSize:CGSizeMake(textViewWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: MULTILINE_FONT } context:nil]).size;
 
 			itemSize.height = fmax(textSize.height, 17.0) + MULTILINE_VERTICAL_MARGIN + 13;
 			break;
@@ -264,7 +266,7 @@
 	CGSize headerSize = CGSizeMake(collectionView.bounds.size.width - sectionInset.left - sectionInset.right, 44.0);
 	CGFloat labelWidth = headerSize.width - QUESTION_HORIZONTAL_MARGIN;
 
-	CGSize labelSize = CGRectIntegral([[self.viewModel textOfQuestionAtIndex:section] boundingRectWithSize:CGSizeMake(labelWidth, MAXFLOAT)  options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName : QUESTION_FONT } context:nil]).size;
+	CGSize labelSize = CGRectIntegral([[self.viewModel textOfQuestionAtIndex:section] boundingRectWithSize:CGSizeMake(labelWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: QUESTION_FONT } context:nil]).size;
 
 	CGFloat instructionsHeight = [self.viewModel instructionTextOfQuestionAtIndex:section] ? 15 : 0;
 
@@ -359,7 +361,7 @@
 	CGRect keyboardRect = [self.view.window convertRect:[notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue] toView:self.collectionView.superview];
 
 	((ATCollectionView *)self.collectionView).scrollingPaused = YES;
-	self.collectionView.contentInset = UIEdgeInsetsMake(self.collectionView.contentInset.top, self.collectionView.contentInset.left,  CGRectGetHeight(self.collectionView.bounds) - keyboardRect.origin.y, self.collectionView.contentInset.right);
+	self.collectionView.contentInset = UIEdgeInsetsMake(self.collectionView.contentInset.top, self.collectionView.contentInset.left, CGRectGetHeight(self.collectionView.bounds) - keyboardRect.origin.y, self.collectionView.contentInset.right);
 
 	[self.collectionViewLayout invalidateLayout];
 	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{

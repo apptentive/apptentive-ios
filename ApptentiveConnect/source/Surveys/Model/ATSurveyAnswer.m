@@ -8,6 +8,7 @@
 
 #import "ATSurveyAnswer.h"
 
+
 @implementation ATSurveyAnswer
 
 - (instancetype)initWithJSON:(NSDictionary *)JSON {

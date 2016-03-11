@@ -13,6 +13,7 @@
 #import "ATInteraction.h"
 #import "ATDeviceInfo.h"
 
+
 @implementation ATConnect (Debugging)
 
 + (NSString *)supportDirectoryPath {
@@ -84,7 +85,7 @@
 		NSData *outputJSONData = nil;
 
 		// try to pretty-print by round-tripping through NSJSONSerialization
-		id JSONObject = [NSJSONSerialization	 JSONObjectWithData:rawJSONData options:0 error:NULL];
+		id JSONObject = [NSJSONSerialization JSONObjectWithData:rawJSONData options:0 error:NULL];
 		if (JSONObject) {
 			outputJSONData = [NSJSONSerialization dataWithJSONObject:JSONObject options:NSJSONWritingPrettyPrinted error:NULL];
 		}

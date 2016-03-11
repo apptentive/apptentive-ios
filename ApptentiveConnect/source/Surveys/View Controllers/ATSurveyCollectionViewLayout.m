@@ -10,9 +10,10 @@
 #import "ATCollectionView.h"
 #import "ATSurveyLayoutAttributes.h"
 
+
 @implementation ATSurveyCollectionViewLayout
 
--(CGSize)collectionViewContentSize {
+- (CGSize)collectionViewContentSize {
 	CGSize superSize = [super collectionViewContentSize];
 
 	if ([self.collectionView isKindOfClass:[ATCollectionView class]]) {
@@ -64,7 +65,7 @@
 	CGPoint origin = topLayoutAttributes.frame.origin;
 	CGSize size = CGSizeMake(CGRectGetMaxX(bottomLayoutAttributes.frame) - origin.x, CGRectGetMaxY(bottomLayoutAttributes.frame) - origin.y);
 	ATSurveyLayoutAttributes *layoutAttributes = [ATSurveyLayoutAttributes layoutAttributesForDecorationViewOfKind:decorationViewKind withIndexPath:indexPath];
-	
+
 	if ([self.collectionView.dataSource conformsToProtocol:@protocol(ATCollectionViewDataSource)]) {
 		layoutAttributes.valid = [(id<ATCollectionViewDataSource>)self.collectionView.dataSource sectionAtIndexIsValid:indexPath.section];
 	}
@@ -78,7 +79,7 @@
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
 	CGFloat headerHeight = 0;
 	if ([self.collectionView isKindOfClass:[ATCollectionView class]]) {
-		headerHeight =CGRectGetHeight(((ATCollectionView *)self.collectionView).collectionHeaderView.bounds) + self.sectionInset.bottom;
+		headerHeight = CGRectGetHeight(((ATCollectionView *)self.collectionView).collectionHeaderView.bounds) + self.sectionInset.bottom;
 	}
 
 	rect = CGRectOffset(rect, 0, -headerHeight);
@@ -90,8 +91,8 @@
 	NSInteger i = 0;
 	for (UICollectionViewLayoutAttributes *attributes in superAttributes) {
 		if (attributes.representedElementCategory == UICollectionElementCategorySupplementaryView) {
-				[newAttributes replaceObjectAtIndex:i withObject:[self layoutAttributesForSupplementaryViewOfKind:attributes.representedElementKind atIndexPath:attributes.indexPath]];
-				[decorationViewAttributes addObject:[self layoutAttributesForDecorationViewOfKind:@"QuestionBackground" atIndexPath:attributes.indexPath]];
+			[newAttributes replaceObjectAtIndex:i withObject:[self layoutAttributesForSupplementaryViewOfKind:attributes.representedElementKind atIndexPath:attributes.indexPath]];
+			[decorationViewAttributes addObject:[self layoutAttributesForDecorationViewOfKind:@"QuestionBackground" atIndexPath:attributes.indexPath]];
 		}
 
 		i++;

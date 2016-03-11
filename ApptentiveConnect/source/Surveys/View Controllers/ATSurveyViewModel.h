@@ -11,7 +11,8 @@
 
 @class ATSurvey, ATInteraction;
 
-@protocol  ATSurveyViewModelDelegate;
+@protocol ATSurveyViewModelDelegate;
+
 
 @interface ATSurveyViewModel : NSObject
 
@@ -57,7 +58,7 @@
 
 @end
 
-@protocol  ATSurveyViewModelDelegate <NSObject>
+@protocol ATSurveyViewModelDelegate <NSObject>
 
 - (void)viewModel:(ATSurveyViewModel *)viewModel didDeselectAnswerAtIndexPath:(NSIndexPath *)indexPath;
 - (void)viewModelValidationChanged:(ATSurveyViewModel *)viewModel;

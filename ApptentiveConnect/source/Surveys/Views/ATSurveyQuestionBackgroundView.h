@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+
 @interface ATSurveyQuestionBackgroundView : UICollectionReusableView
 
 @property (assign, nonatomic, getter=isValid) BOOL valid;

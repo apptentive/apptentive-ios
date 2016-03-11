@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+
 @interface ATSurveyLayoutAttributes : UICollectionViewLayoutAttributes
 
 @property (assign, nonatomic, getter=isValid) BOOL valid;

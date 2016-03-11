@@ -17,6 +17,7 @@ typedef NS_ENUM(NSInteger, ATSurveyQuestionType) {
 
 @class ATSurveyAnswer;
 
+
 @interface ATSurveyQuestion : NSObject
 
 - (instancetype)initWithJSON:(NSDictionary *)JSON;

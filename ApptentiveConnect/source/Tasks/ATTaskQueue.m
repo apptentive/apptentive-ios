@@ -268,10 +268,10 @@ static ATTaskQueue *sharedTaskQueue = nil;
 					[self performSelector:@selector(start) withObject:nil afterDelay:kATTaskQueueRetryPeriod];
 				}
 			} else {
-					task.failureCount = task.failureCount + 1;
-					[self unsetActiveTask];
-					[tasks removeObject:task];
-					[self startOnNextRunLoopIteration];
+				task.failureCount = task.failureCount + 1;
+				[self unsetActiveTask];
+				[tasks removeObject:task];
+				[self startOnNextRunLoopIteration];
 			}
 		}
 	}

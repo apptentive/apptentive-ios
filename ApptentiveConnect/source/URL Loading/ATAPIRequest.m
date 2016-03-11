@@ -18,6 +18,7 @@
 
 NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 
+
 @interface ATAPIRequest ()
 
 @property (strong, nonatomic) ATURLConnection *connection;
@@ -81,7 +82,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	NSInteger statusCode = sender.statusCode;
 	_expiresMaxAge = [sender expiresMaxAge];
 
-	NSIndexSet *okStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(100, 300)]; // 1xx, 2xx, and 3xx status codes
+	NSIndexSet *okStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(100, 300)];			// 1xx, 2xx, and 3xx status codes
 	NSIndexSet *clientErrorStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(400, 100)]; // 4xx status codes
 	NSIndexSet *serverErrorStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(500, 100)]; // 5xx status codes
 

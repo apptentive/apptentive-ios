@@ -9,12 +9,6 @@
 #import "ATSurveyQuestion.h"
 #import "ATSurveyAnswer.h"
 
-@interface NSArray (Shuffle)
-
-- (NSArray *)apptentive_shuffledCopy;
-
-@end
-
 @implementation ATSurveyQuestion
 
 - (instancetype)initWithJSON:(NSDictionary *)JSON {
@@ -51,28 +45,10 @@
 			[mutableAnswers addObject:[[ATSurveyAnswer alloc] initWithJSON:answerJSON]];
 		}
 
-		if ([JSON[@"randomize"] boolValue]) {
-			_answers = [mutableAnswers apptentive_shuffledCopy];
-		} else {
-			_answers = [mutableAnswers copy];
-		}
+		_answers = [mutableAnswers copy];
 	}
 
 	return self;
-}
-
-@end
-
-@implementation NSArray (Shuffle)
-
-- (NSArray *)apptentive_shuffledCopy {
-	NSMutableArray *shuffled = [self mutableCopy];
-
-	for (NSInteger i = self.count; i > 1; i--) {
-		[shuffled exchangeObjectAtIndex:i - 1 withObjectAtIndex:arc4random_uniform((u_int32_t)i)];
-	}
-
-	return [NSArray arrayWithArray:shuffled];
 }
 
 @end

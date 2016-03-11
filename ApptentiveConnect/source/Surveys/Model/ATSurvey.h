@@ -17,8 +17,6 @@
 @property (readonly, nonatomic) NSString *title;
 @property (readonly, nonatomic) NSString *name;
 @property (readonly, nonatomic) NSString *surveyDescription;
-@property (readonly, nonatomic) BOOL required;
-@property (readonly, nonatomic) BOOL multipleResponses;
 @property (readonly, nonatomic) BOOL showSuccessMessage;
 @property (readonly, nonatomic) NSString *successMessage;
 @property (readonly, nonatomic) NSTimeInterval viewPeriod;

@@ -18,8 +18,6 @@
 		_title = JSON[@"title"];
 		_name = JSON[@"name"];
 		_surveyDescription = JSON[@"description"];
-		_required = [JSON[@"required"] boolValue];
-		_multipleResponses = [JSON[@"multiple_responses"] boolValue];
 		_showSuccessMessage = [JSON[@"show_success_message"] boolValue];
 		_successMessage = JSON[@"success_message"];
 		_viewPeriod = [JSON[@"view_period"] doubleValue];

@@ -89,7 +89,7 @@
 		[parts addObject:[self questionAtIndex:index].instructions];
 	}
 
-	return [parts componentsJoinedByString:@"—"];
+	return parts.count > 0 ? [parts componentsJoinedByString:@"—"] : nil;
 }
 
 - (NSString *)placeholderTextOfQuestionAtIndex:(NSInteger)index {

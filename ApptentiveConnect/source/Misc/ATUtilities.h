@@ -60,7 +60,3 @@
 @end
 
 CGRect ATCGRectOfEvenSize(CGRect inRect);
-
-//CGSize ATThumbnailSizeOfMaxSize(CGSize imageSize, CGSize maxSize);
-//
-//CGRect ATThumbnailCropRectForThumbnailSize(CGSize imageSize, CGSize thumbnailSize);

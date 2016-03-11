@@ -42,7 +42,6 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 @implementation ATUtilities
 
 #if TARGET_OS_IPHONE
-
 + (UIViewController *)rootViewControllerForCurrentWindow {
 	UIWindow *window = nil;
 	for (UIWindow *tmpWindow in [[UIApplication sharedApplication] windows]) {

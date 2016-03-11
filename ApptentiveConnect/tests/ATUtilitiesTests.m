@@ -6,10 +6,17 @@
 //  Copyright 2011 Apptentive, Inc.. All rights reserved.
 //
 
-#import "ATUtilitiesTests.h"
+#import <XCTest/XCTest.h>
+#import <UIKit/UIKit.h>
+#import "ATUtilities.h"
+
+
+@interface ATUtilitiesTests : XCTestCase
+@end
 
 
 @implementation ATUtilitiesTests
+
 - (void)testEvenRect {
 	CGRect testRect1 = CGRectMake(0.0, 0.0, 17.0, 21.0);
 	CGRect result1 = ATCGRectOfEvenSize(testRect1);

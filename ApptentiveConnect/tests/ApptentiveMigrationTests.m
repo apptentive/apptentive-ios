@@ -6,9 +6,13 @@
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
 
-#import "ApptentiveMigrationTests.h"
+#import <XCTest/XCTest.h>
 #import "ATDataManager.h"
 #import "ATCompoundMessage.h"
+
+
+@interface ApptentiveMigrationTests : XCTestCase
+@end
 
 
 @implementation ApptentiveMigrationTests

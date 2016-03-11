@@ -8,6 +8,7 @@
 
 #import "ATPassThroughWindow.h"
 
+
 @implementation ATPassThroughWindow
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {

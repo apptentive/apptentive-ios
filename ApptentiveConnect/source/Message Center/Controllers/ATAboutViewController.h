@@ -13,6 +13,4 @@
 
 @interface ATAboutViewController : UIViewController
 
-+ (instancetype)aboutViewControllerFromStoryboard;
-
 @end

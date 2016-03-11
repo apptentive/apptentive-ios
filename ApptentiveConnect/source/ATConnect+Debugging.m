@@ -14,6 +14,7 @@
 #import "ATDeviceInfo.h"
 #import "ATPersonInfo.h"
 
+
 @implementation ATConnect (Debugging)
 
 - (NSString *)SDKVersion {
@@ -35,7 +36,7 @@
 		NSData *outputJSONData = nil;
 
 		// try to pretty-print by round-tripping through NSJSONSerialization
-		id JSONObject = [NSJSONSerialization	 JSONObjectWithData:rawJSONData options:0 error:NULL];
+		id JSONObject = [NSJSONSerialization JSONObjectWithData:rawJSONData options:0 error:NULL];
 		if (JSONObject) {
 			outputJSONData = [NSJSONSerialization dataWithJSONObject:JSONObject options:NSJSONWritingPrettyPrinted error:NULL];
 		}

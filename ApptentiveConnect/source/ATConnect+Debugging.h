@@ -18,6 +18,7 @@ typedef NS_OPTIONS(NSInteger, ATConnectDebuggingOptions) {
 
 NS_ASSUME_NONNULL_BEGIN
 
+
 @interface ATConnect ()
 
 + (NSString *)supportDirectoryPath;
@@ -30,12 +31,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+
 @interface ATConnect (Debugging)
 
 @property (readonly, nonatomic) NSString *SDKVersion;
-@property (readonly, nonatomic) NSString * _Nullable APIKey;
-@property (readonly, nonatomic) UIView * _Nullable unreadAccessoryView;
-@property (readonly, nonatomic) NSString * _Nullable manifestJSON;
+@property (readonly, nonatomic) NSString *_Nullable APIKey;
+@property (readonly, nonatomic) UIView *_Nullable unreadAccessoryView;
+@property (readonly, nonatomic) NSString *_Nullable manifestJSON;
 @property (readonly, nonatomic) NSDictionary<NSString *, NSObject *> *deviceInfo;
 @property (readonly, nonatomic) NSMutableDictionary *customPersonData;
 @property (readonly, nonatomic) NSMutableDictionary *customDeviceData;

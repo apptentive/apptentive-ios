@@ -861,7 +861,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (IBAction)showAbout:(id)sender {
-	[self.navigationController pushViewController:[ATAboutViewController aboutViewControllerFromStoryboard] animated:YES];
+	[(ATNavigationController *)self.navigationController pushAboutApptentiveViewController];
 }
 
 #pragma mark - Key-value observing

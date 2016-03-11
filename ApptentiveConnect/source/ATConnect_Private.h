@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class ATCompoundMessage, ATWebClient, ATBackend, ATEngagementBackend;
 
+
 @interface ATConnect ()
 
 @property (readonly, nonatomic) NSMutableDictionary *integrationConfiguration;
@@ -47,5 +48,12 @@ NS_ASSUME_NONNULL_BEGIN
 /*! Replacement for NSLocalizedString within ApptentiveConnect. Pulls
  localized strings out of the resource bundle. */
 extern NSString *ATLocalizedString(NSString *key, NSString * __nullable comment);
+
+
+@interface ATNavigationController (AboutView)
+
+- (void)pushAboutApptentiveViewController;
+
+@end
 
 NS_ASSUME_NONNULL_END

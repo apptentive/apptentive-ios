@@ -22,6 +22,7 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 
 #define kApptentiveAPIVersion @"4"
 
+
 @implementation ATWebClient
 
 - (instancetype)initWithBaseURL:(NSURL *)baseURL APIKey:(NSString *)APIKey {

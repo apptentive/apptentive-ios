@@ -22,6 +22,7 @@
 #import "ATMessageCenterViewController.h"
 #import "ATBannerViewController.h"
 #import "ATUnreadMessagesBadgeView.h"
+#import "ATAboutViewController.h"
 #endif
 
 // Can't get CocoaPods to do the right thing for debug builds.
@@ -600,6 +601,12 @@ NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 
 @implementation ATNavigationController
 // Container to allow customization of Apptentive UI using UIAppearance
+
+- (void)pushAboutApptentiveViewController {
+	UIViewController *aboutViewController = [[ATConnect storyboard] instantiateViewControllerWithIdentifier:@"About"];
+	[self pushViewController:aboutViewController animated:YES];
+}
+
 @end
 
 NSString *ATLocalizedString(NSString *key, NSString *comment) {

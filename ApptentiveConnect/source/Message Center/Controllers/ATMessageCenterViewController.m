@@ -27,12 +27,12 @@
 #import "ATAttachmentController.h"
 #import "ATIndexedCollectionView.h"
 #import "ATAttachmentCell.h"
+#import "ATStyleSheet.h"
 #import <MobileCoreServices/UTCoreTypes.h>
 
 #define HEADER_LABEL_HEIGHT 64.0
 #define TEXT_VIEW_HORIZONTAL_INSET 12.0
 #define TEXT_VIEW_VERTICAL_INSET 10.0
-#define DATE_FONT [UIFont boldSystemFontOfSize:14.0]
 #define ATTACHMENT_MARGIN CGSizeMake(16.0, 15.0)
 
 #define FOOTER_ANIMATION_DURATION 0.10
@@ -45,7 +45,6 @@
 #define REPLY_CELL_MINIMUM_HEIGHT 66.0
 #define STATUS_LABEL_HEIGHT 14.0
 #define STATUS_LABEL_MARGIN 6.0
-#define BODY_FONT [UIFont systemFontOfSize:17.0]
 
 NSString *const ATInteractionMessageCenterEventLabelLaunch = @"launch";
 NSString *const ATInteractionMessageCenterEventLabelClose = @"close";
@@ -80,7 +79,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	ATMessageCenterStateHTTPError,
 	ATMessageCenterStateReplied
 };
-
 
 @interface ATMessageCenterViewController ()
 
@@ -362,6 +360,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		cell = contextMessageCell;
 	}
 
+	UIFontDescriptor *fontDescriptor = [[ATStyleSheet styleSheet] preferredFontDescriptorWithTextStyle:UIFontTextStyleBody];
+	cell.messageLabel.font = [UIFont fontWithDescriptor:fontDescriptor size:0.0];
 	cell.messageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
 
 	if (type == ATMessageCenterMessageTypeCompoundMessage || type == ATMessageCenterMessageTypeCompoundReply) {
@@ -436,7 +436,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	CGFloat effectiveLabelWidth = CGRectGetWidth(tableView.bounds) - horizontalMargin;
 	CGRect labelRect = CGRectZero;
 	if (labelText.length) {
-		NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:labelText attributes:@{NSFontAttributeName: BODY_FONT}];
+		UIFontDescriptor *fontDescriptor = [[ATStyleSheet styleSheet] preferredFontDescriptorWithTextStyle:UIFontTextStyleBody];
+		NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:labelText attributes:@{NSFontAttributeName: [UIFont fontWithDescriptor:fontDescriptor size:0.0], NSForegroundColorAttributeName: [fontDescriptor objectForKey:ApptentiveColorKey] }];
 		labelRect = [attributedText boundingRectWithSize:CGSizeMake(effectiveLabelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
 	} else {
 		verticalMargin -= MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0;
@@ -468,7 +469,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
 	UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *)view;
-	headerView.textLabel.font = DATE_FONT;
+	UIFontDescriptor *fontDescriptor = [[ATStyleSheet styleSheet] preferredFontDescriptorWithTextStyle:UIFontTextStyleCaption2];
+	headerView.textLabel.font = [UIFont fontWithDescriptor:fontDescriptor size:0.0];
+	headerView.textLabel.textColor = [fontDescriptor objectForKey:ApptentiveColorKey];
 }
 
 - (BOOL)tableView:(UITableView *)tableView shouldShowMenuForRowAtIndexPath:(NSIndexPath *)indexPath {

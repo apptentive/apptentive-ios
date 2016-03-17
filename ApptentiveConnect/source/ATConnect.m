@@ -83,6 +83,7 @@ NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 - (instancetype)init {
 	if ((self = [super init])) {
 		_integrationConfiguration = [[NSMutableDictionary alloc] init];
+		_styleSheet = [[ATStyleSheet alloc] init];
 
 		ATLogInfo(@"Apptentive SDK Version %@", kATConnectVersionString);
 	}

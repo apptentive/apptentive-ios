@@ -10,17 +10,268 @@
 
 NSString * const ApptentiveStyleSheetDidUpdateNotification = @"com.apptentive.stylesheetDidUpdate";
 
-NSString * const ApptentiveColorKey = @"com.apptentive.textColor";
+NSString * const ApptentiveTextStyleHeaderTitle = @"com.apptentive.headerTitle";
+NSString * const ApptentiveTextStyleHeaderMessage = @"com.apptentive.headerMessage";
+NSString * const ApptentiveTextStyleMessageDate = @"com.apptentive.messageDate";
+NSString * const ApptentiveTextStyleMessageSender = @"com.apptentive.messageSender";
+NSString * const ApptentiveTextStyleMessageStatus = @"com.apptentive.messageStatus";
+NSString * const ApptentiveTextStyleMessageCenterStatus = @"com.apptentive.messageCenterStatus";
+NSString * const ApptentiveTextStyleSurveyInstructions = @"com.apptentive.surveyInstructions";
+NSString * const ApptentiveTextStyleDoneButton = @"com.apptentive.doneButton";
+NSString * const ApptentiveTextStyleButton = @"com.apptentive.button";
+NSString * const ApptentiveTextStyleSubmitButton = @"com.apptentive.submitButton";
 
-NSString *const ApptentiveTextStyleMessageDate = @"com.apptentive.messageDate";
+NSString * const ApptentiveColorHeaderBackground = @"com.apptentive.headerBackgroundColor";
+NSString * const ApptentiveColorFooterBackground = @"com.apptentive.footerBackgroundColor";
+NSString * const ApptentiveColorFailure = @"com.apptentive.failureColor";
 
 @interface ATStyleSheet ()
 
+@property (strong, nonatomic) NSMutableDictionary *fontDescriptorOverrides;
+@property (strong, nonatomic) NSMutableDictionary *colorOverrides;
+
 @property (strong, nonatomic) NSMutableDictionary *fontTable;
+
++ (NSArray *)UIKitTextStyles;
++ (NSArray *)apptentiveTextStyles;
++ (NSArray *)apptentiveColorStyles;
+
++ (NSNumber *)sizeForTextStyle:(NSString *)textStyle;
++ (NSInteger)weightForTextStyle:(NSString *)textStyle;
+
++ (NSString *)defaultFontFamilyName;
+- (UIFontDescriptor *)fontDescriptorForStyle:(NSString *)textStyle;
+- (NSString *)faceAttributeForWeight:(NSInteger)weight;
 
 @end
 
 @implementation ATStyleSheet
+
+// TODO: Adjust for content size category?
++ (NSInteger)weightForTextStyle:(NSString *)textStyle {
+	static NSDictionary<NSString *, NSNumber *> *faceForStyle;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		faceForStyle = @{
+						 ApptentiveTextStyleHeaderTitle: @300,
+						 ApptentiveTextStyleHeaderMessage: @400,
+						 ApptentiveTextStyleMessageDate: @700,
+						 ApptentiveTextStyleMessageSender: @700,
+						 ApptentiveTextStyleMessageStatus: @700,
+						 ApptentiveTextStyleMessageCenterStatus: @700,
+						 ApptentiveTextStyleSurveyInstructions: @400,
+						 ApptentiveTextStyleButton: @400,
+						 ApptentiveTextStyleDoneButton: @700,
+						 ApptentiveTextStyleSubmitButton: @500
+						 };
+	});
+	return faceForStyle[textStyle].integerValue;
+}
+
++ (NSNumber *)sizeForTextStyle:(NSString *)textStyle {
+	static NSDictionary <NSString *, NSDictionary <NSString *, NSNumber *> *> *sizeForCategoryForStyle;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		sizeForCategoryForStyle = @{
+									ApptentiveTextStyleHeaderTitle: @{
+											UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @28,
+											UIContentSizeCategoryAccessibilityExtraExtraLarge: @28,
+											UIContentSizeCategoryAccessibilityExtraLarge: @27,
+											UIContentSizeCategoryAccessibilityLarge: @27,
+											UIContentSizeCategoryAccessibilityMedium: @26,
+											UIContentSizeCategoryExtraExtraExtraLarge: @26,
+											UIContentSizeCategoryExtraExtraLarge: @25,
+											UIContentSizeCategoryExtraLarge: @24,
+											UIContentSizeCategoryLarge: @23,
+											UIContentSizeCategoryMedium: @22,
+											UIContentSizeCategorySmall: @21,
+											UIContentSizeCategoryExtraSmall: @20
+											},
+									ApptentiveTextStyleHeaderMessage:  @{
+											UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @22,
+											UIContentSizeCategoryAccessibilityExtraExtraLarge: @21,
+											UIContentSizeCategoryAccessibilityExtraLarge: @20,
+											UIContentSizeCategoryAccessibilityLarge: @20,
+											UIContentSizeCategoryAccessibilityMedium: @19,
+											UIContentSizeCategoryExtraExtraExtraLarge: @19,
+											UIContentSizeCategoryExtraExtraLarge: @18,
+											UIContentSizeCategoryExtraLarge: @17,
+											UIContentSizeCategoryLarge: @16,
+											UIContentSizeCategoryMedium: @15,
+											UIContentSizeCategorySmall: @14,
+											UIContentSizeCategoryExtraSmall: @13
+											},
+									ApptentiveTextStyleMessageDate: @{
+											UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @21,
+											UIContentSizeCategoryAccessibilityExtraExtraLarge: @20,
+											UIContentSizeCategoryAccessibilityExtraLarge: @19,
+											UIContentSizeCategoryAccessibilityLarge: @19,
+											UIContentSizeCategoryAccessibilityMedium: @18,
+											UIContentSizeCategoryExtraExtraExtraLarge: @18,
+											UIContentSizeCategoryExtraExtraLarge: @17,
+											UIContentSizeCategoryExtraLarge: @16,
+											UIContentSizeCategoryLarge: @15,
+											UIContentSizeCategoryMedium: @14,
+											UIContentSizeCategorySmall: @13,
+											UIContentSizeCategoryExtraSmall: @12
+											},
+									ApptentiveTextStyleMessageSender: @{
+											UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @21,
+											UIContentSizeCategoryAccessibilityExtraExtraLarge: @20,
+											UIContentSizeCategoryAccessibilityExtraLarge: @19,
+											UIContentSizeCategoryAccessibilityLarge: @19,
+											UIContentSizeCategoryAccessibilityMedium: @18,
+											UIContentSizeCategoryExtraExtraExtraLarge: @18,
+											UIContentSizeCategoryExtraExtraLarge: @17,
+											UIContentSizeCategoryExtraLarge: @16,
+											UIContentSizeCategoryLarge: @15,
+											UIContentSizeCategoryMedium: @14,
+											UIContentSizeCategorySmall: @13,
+											UIContentSizeCategoryExtraSmall: @12
+											},
+									ApptentiveTextStyleMessageStatus: @{
+											UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @18,
+											UIContentSizeCategoryAccessibilityExtraExtraLarge: @17,
+											UIContentSizeCategoryAccessibilityExtraLarge: @16,
+											UIContentSizeCategoryAccessibilityLarge: @16,
+											UIContentSizeCategoryAccessibilityMedium: @15,
+											UIContentSizeCategoryExtraExtraExtraLarge: @15,
+											UIContentSizeCategoryExtraExtraLarge: @14,
+											UIContentSizeCategoryExtraLarge: @14,
+											UIContentSizeCategoryLarge: @13,
+											UIContentSizeCategoryMedium: @12,
+											UIContentSizeCategorySmall: @12,
+											UIContentSizeCategoryExtraSmall: @11
+											},
+									ApptentiveTextStyleMessageCenterStatus: @{
+											UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @18,
+											UIContentSizeCategoryAccessibilityExtraExtraLarge: @17,
+											UIContentSizeCategoryAccessibilityExtraLarge: @16,
+											UIContentSizeCategoryAccessibilityLarge: @16,
+											UIContentSizeCategoryAccessibilityMedium: @15,
+											UIContentSizeCategoryExtraExtraExtraLarge: @15,
+											UIContentSizeCategoryExtraExtraLarge: @14,
+											UIContentSizeCategoryExtraLarge: @14,
+											UIContentSizeCategoryLarge: @13,
+											UIContentSizeCategoryMedium: @12,
+											UIContentSizeCategorySmall: @12,
+											UIContentSizeCategoryExtraSmall: @11
+											},
+									ApptentiveTextStyleSurveyInstructions: @{
+											UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @18,
+											UIContentSizeCategoryAccessibilityExtraExtraLarge: @17,
+											UIContentSizeCategoryAccessibilityExtraLarge: @16,
+											UIContentSizeCategoryAccessibilityLarge: @16,
+											UIContentSizeCategoryAccessibilityMedium: @15,
+											UIContentSizeCategoryExtraExtraExtraLarge: @15,
+											UIContentSizeCategoryExtraExtraLarge: @14,
+											UIContentSizeCategoryExtraLarge: @14,
+											UIContentSizeCategoryLarge: @13,
+											UIContentSizeCategoryMedium: @12,
+											UIContentSizeCategorySmall: @12,
+											UIContentSizeCategoryExtraSmall: @11
+											},
+									ApptentiveTextStyleButton: @{
+											UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @22,
+											UIContentSizeCategoryAccessibilityExtraExtraLarge: @21,
+											UIContentSizeCategoryAccessibilityExtraLarge: @20,
+											UIContentSizeCategoryAccessibilityLarge: @20,
+											UIContentSizeCategoryAccessibilityMedium: @19,
+											UIContentSizeCategoryExtraExtraExtraLarge: @19,
+											UIContentSizeCategoryExtraExtraLarge: @18,
+											UIContentSizeCategoryExtraLarge: @17,
+											UIContentSizeCategoryLarge: @16,
+											UIContentSizeCategoryMedium: @15,
+											UIContentSizeCategorySmall: @14,
+											UIContentSizeCategoryExtraSmall: @13
+											},
+									ApptentiveTextStyleDoneButton: @{
+											UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @22,
+											UIContentSizeCategoryAccessibilityExtraExtraLarge: @21,
+											UIContentSizeCategoryAccessibilityExtraLarge: @20,
+											UIContentSizeCategoryAccessibilityLarge: @20,
+											UIContentSizeCategoryAccessibilityMedium: @19,
+											UIContentSizeCategoryExtraExtraExtraLarge: @19,
+											UIContentSizeCategoryExtraExtraLarge: @18,
+											UIContentSizeCategoryExtraLarge: @17,
+											UIContentSizeCategoryLarge: @16,
+											UIContentSizeCategoryMedium: @15,
+											UIContentSizeCategorySmall: @14,
+											UIContentSizeCategoryExtraSmall: @13
+											},
+									ApptentiveTextStyleSubmitButton: @{
+											UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @26,
+											UIContentSizeCategoryAccessibilityExtraExtraLarge: @26,
+											UIContentSizeCategoryAccessibilityExtraLarge: @25,
+											UIContentSizeCategoryAccessibilityLarge: @25,
+											UIContentSizeCategoryAccessibilityMedium: @24,
+											UIContentSizeCategoryExtraExtraExtraLarge: @24,
+											UIContentSizeCategoryExtraExtraLarge: @23,
+											UIContentSizeCategoryExtraLarge: @22,
+											UIContentSizeCategoryLarge: @22,
+											UIContentSizeCategoryMedium: @20,
+											UIContentSizeCategorySmall: @19,
+											UIContentSizeCategoryExtraSmall: @18
+											}
+									};
+	});
+	return sizeForCategoryForStyle[textStyle][[UIApplication sharedApplication].preferredContentSizeCategory];
+}
+
++ (NSArray *)UIKitTextStyles {
+	static NSArray *_UIKitTextStyles;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		_UIKitTextStyles = @[
+							 UIFontTextStyleBody,
+							 UIFontTextStyleCallout,
+							 UIFontTextStyleCaption1,
+							 UIFontTextStyleCaption2,
+							 UIFontTextStyleFootnote,
+							 UIFontTextStyleHeadline,
+							 UIFontTextStyleSubheadline,
+							 UIFontTextStyleTitle1,
+							 UIFontTextStyleTitle2,
+							 UIFontTextStyleTitle3,
+							 ];
+	});
+	return _UIKitTextStyles;
+}
+
++ (NSArray *)apptentiveTextStyles {
+	static NSArray *_apptentiveStyleNames;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		_apptentiveStyleNames = @[
+								  ApptentiveTextStyleHeaderTitle,
+								  ApptentiveTextStyleHeaderMessage,
+								  ApptentiveTextStyleMessageDate,
+								  ApptentiveTextStyleMessageSender,
+								  ApptentiveTextStyleMessageStatus,
+								  ApptentiveTextStyleDoneButton,
+								  ApptentiveTextStyleButton,
+								  ApptentiveTextStyleSubmitButton
+								  ];
+	});
+	return _apptentiveStyleNames;
+}
+
++ (NSArray *)apptentiveColorStyles {
+	static NSArray *_apptentiveColorStyles;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		_apptentiveColorStyles = @[
+								   ApptentiveColorHeaderBackground,
+								   ApptentiveColorFooterBackground,
+								   ApptentiveColorFailure
+								   ];
+	});
+	return _apptentiveColorStyles;
+}
+
++ (NSString *)defaultFontFamilyName {
+	return [UIFont systemFontOfSize:[UIFont systemFontSize]].familyName;
+}
 
 + (instancetype)styleSheet {
 	static ATStyleSheet *_styleSheet;
@@ -31,90 +282,115 @@ NSString *const ApptentiveTextStyleMessageDate = @"com.apptentive.messageDate";
 	return _styleSheet;
 }
 
-+ (NSString *)defaultFontFamilyName {
-	return [UIFont systemFontOfSize:[UIFont systemFontSize]].familyName;
-}
-
-+ (NSDictionary <NSString *, UIFont *> *)defaultFonts {
-	return @{
-			 UIFontTextStyleBody: [UIFont systemFontOfSize:17.0],
-			 UIFontTextStyleCallout: [UIFont systemFontOfSize:16.0],
-			 UIFontTextStyleCaption1: [UIFont systemFontOfSize:12.0],
-			 UIFontTextStyleCaption2: [UIFont systemFontOfSize:11.0],
-			 UIFontTextStyleFootnote: [UIFont systemFontOfSize:13.0],
-			 UIFontTextStyleHeadline: [UIFont boldSystemFontOfSize:17.0], // TODO: semibold where available
-			 UIFontTextStyleSubheadline: [UIFont systemFontOfSize:15.0],
-			 UIFontTextStyleTitle1: [UIFont systemFontOfSize:28.0], // TODO: light where available
-			 UIFontTextStyleTitle2: [UIFont systemFontOfSize:22.0],
-			 UIFontTextStyleTitle3: [UIFont systemFontOfSize:16.0]
-			 };
-}
-
 - (instancetype)init {
 	self = [super init];
 	if (self) {
 		_fontFamily = [[self class] defaultFontFamilyName];
-		_useDynamicType = YES;
+		_primaryColor = [UIColor blackColor];
+		_secondaryColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:147.0/255.0 alpha:1.0];
+		_failureColor = [UIColor colorWithRed:218.0/255.0 green:53.0/255.0 blue:71.0/255.0 alpha:1.0];
+		_backgroundColor = [UIColor whiteColor];
+
+		_lightFaceAttribute = @"Light";
+		_regularFaceAttribute = @"Regular";
+		_mediumFaceAttribute = @"Medium";
+		_boldFaceAttribute = @"Bold";
+
 		_sizeAdjustment = 1.0;
 
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recomputeStyles) name:UIContentSizeCategoryDidChangeNotification object:nil];
-
-		[self recomputeStyles];
+		_fontDescriptorOverrides = [NSMutableDictionary dictionary];
+		_colorOverrides = [NSMutableDictionary dictionary];
 	}
 	return self;
 }
 
-- (void)setFontFamily:(NSString *)fontFamily {
-	_fontFamily = fontFamily;
-
-	[self recomputeStyles];
+- (void)setFontDescriptor:(UIFontDescriptor *)fontDescriptor forStyle:(NSString *)textStyle {
+	[self.fontDescriptorOverrides setObject:fontDescriptor forKey:textStyle];
 }
 
-- (void)setUseDynamicType:(BOOL)useDynamicType {
-	_useDynamicType = useDynamicType;
-
-	if (useDynamicType) {
-		_fontTable = [[NSMutableDictionary alloc] init];
-	} else {
-		_fontTable = [[[self class] defaultFonts] mutableCopy];
+- (UIFontDescriptor *)fontDescriptorForStyle:(NSString *)textStyle {
+	if (self.fontDescriptorOverrides[textStyle]) {
+		return self.fontDescriptorOverrides[textStyle];
 	}
 
-	[self recomputeStyles];
-}
+	NSString *face = self.regularFaceAttribute;
+	NSNumber *size = @(17.0);
 
-- (void)dealloc {
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void)recomputeStyles {
-	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveStyleSheetDidUpdateNotification object:self];
-}
-
-- (UIFontDescriptor *)preferredFontDescriptorWithTextStyle:(NSString *)textStyle {
-	UIFontDescriptor *result;
-
-	if (self.useDynamicType) {
-		if ([self.fontFamily isEqualToString:[[self class] defaultFontFamilyName]]) {
-			result = [UIFontDescriptor preferredFontDescriptorWithTextStyle:textStyle];
-		} else {
-			UIFont *font = [UIFont preferredFontForTextStyle:textStyle];
-			result = [UIFontDescriptor fontDescriptorWithName:self.fontFamily size:font.pointSize * self.sizeAdjustment];
-		}
+	if ([[[self class] UIKitTextStyles] containsObject:textStyle]) {
+		// fontDescriptorWithFamily doesn't properly override the font family for the system font :(
+		UIFontDescriptor *modelFontDescriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle:textStyle];
+		face = [self faceAttributeForFontDescriptor:modelFontDescriptor];
+		size = [modelFontDescriptor objectForKey:UIFontDescriptorSizeAttribute];
 	} else {
-		UIFont *defaultFont = [[[self class] defaultFonts] objectForKey:textStyle];
-		if ([self.fontFamily isEqualToString:[[self class] defaultFontFamilyName]]) {
-			result = [UIFontDescriptor fontDescriptorWithName:defaultFont.fontName size:defaultFont.pointSize * self.sizeAdjustment];
-		} else {
-			result = [UIFontDescriptor fontDescriptorWithName:self.fontFamily size:defaultFont.pointSize * self.sizeAdjustment];
-			result = [result fontDescriptorByAddingAttributes: @{ UIFontDescriptorFaceAttribute: [defaultFont.fontDescriptor objectForKey:UIFontDescriptorFaceAttribute] }];
-		}
+		face = [self faceAttributeForWeight:[[self class] weightForTextStyle:textStyle]];
+		size = [[self class] sizeForTextStyle:textStyle];
 	}
 
-	NSDictionary *attributes = @{
-								 ApptentiveColorKey: [UIColor blackColor],
-								  };
+	NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
+	attributes[UIFontDescriptorFamilyAttribute] = self.fontFamily;
+	attributes[UIFontDescriptorSizeAttribute] = @(size.doubleValue * self.sizeAdjustment);
 
-	result = [result fontDescriptorByAddingAttributes:attributes];
+	if (face) {
+		attributes[UIFontDescriptorFaceAttribute] = face;
+	}
+
+	return  [UIFontDescriptor fontDescriptorWithFontAttributes:attributes];;
+}
+
+- (NSString * _Nullable)faceAttributeForFontDescriptor:(UIFontDescriptor *)fontDescriptor {
+	NSString *faceAttribute = [fontDescriptor objectForKey:UIFontDescriptorFaceAttribute];
+
+	if ([faceAttribute isEqualToString:@"Light"]) {
+		return self.lightFaceAttribute;
+	} else if ([faceAttribute isEqualToString:@"Medium"]) {
+		return self.mediumFaceAttribute;
+	} else if ([faceAttribute isEqualToString:@"Bold"]) {
+		return self.boldFaceAttribute;
+	} else {
+		return self.regularFaceAttribute;
+	}
+}
+
+- (NSString *)faceAttributeForWeight:(NSInteger)weight {
+	switch (weight) {
+		case 300:
+			return self.lightFaceAttribute;
+		case 400:
+		default:
+			return self.regularFaceAttribute;
+		case 500:
+			return self.mediumFaceAttribute;
+		case 700:
+			return self.boldFaceAttribute;
+	}
+}
+
+- (UIFont *)fontForStyle:(NSString *)textStyle {
+	return [UIFont fontWithDescriptor:[self fontDescriptorForStyle:textStyle] size:0.0];
+}
+
+- (void)setColor:(UIColor *)color forStyle:(NSString *)style {
+	[self.colorOverrides setObject:color forKey:style];
+}
+
+- (UIColor *)colorForStyle:(NSString *)style {
+	UIColor *result = self.colorOverrides[style];
+
+	if (result) {
+		return result;
+	}
+
+	if ([style isEqualToString:ApptentiveColorFailure]) {
+		return self.failureColor;
+	} else if ([style isEqualToString:ApptentiveColorHeaderBackground]) {
+		return self.backgroundColor;
+	} else if ([style isEqualToString:ApptentiveColorFooterBackground]) {
+		return [self.backgroundColor colorWithAlphaComponent:0.85];
+	} else if ([@[ApptentiveTextStyleHeaderMessage, ApptentiveTextStyleMessageDate, ApptentiveTextStyleMessageStatus, ApptentiveTextStyleMessageCenterStatus, ApptentiveTextStyleSurveyInstructions] containsObject:style]) {
+		return self.secondaryColor;
+	} else {
+		return self.primaryColor;
+	}
 
 	return result;
 }

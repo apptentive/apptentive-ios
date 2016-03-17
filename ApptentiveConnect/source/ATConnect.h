@@ -9,6 +9,7 @@
 
 #if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
+#import "ATStyleSheet.h"
 #elif TARGET_OS_MAC
 #import <Cocoa/Cocoa.h>
 #endif
@@ -132,6 +133,10 @@ Before calling any other methods on the shared `ATConnect` instance, set the API
 ///---------------------------------
 /// @name Interface Customization
 ///---------------------------------
+
+/** The style sheet used for styling Apptentive UI */
+@property (readonly, nonatomic) ATStyleSheet *styleSheet;
+
 /** Toggles the display of an email field in the message panel. `YES` by default.
  
 	@deprecated This property no longer has any effect. It is included for compatibility but will be removed in the next major version release.

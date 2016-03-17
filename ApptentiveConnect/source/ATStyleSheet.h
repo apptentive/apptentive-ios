@@ -11,21 +11,44 @@
 NS_ASSUME_NONNULL_BEGIN
 
 extern NSString * const ApptentiveStyleSheetDidUpdateNotification;
-extern NSString * const ApptentiveColorKey;
 
+extern NSString * const ApptentiveTextStyleHeaderTitle;
+extern NSString * const ApptentiveTextStyleHeaderMessage;
 extern NSString * const ApptentiveTextStyleMessageDate;
+extern NSString * const ApptentiveTextStyleMessageSender;
+extern NSString * const ApptentiveTextStyleMessageStatus;
+extern NSString * const ApptentiveTextStyleMessageCenterStatus;
+extern NSString * const ApptentiveTextStyleSurveyInstructions;
+extern NSString * const ApptentiveTextStyleDoneButton;
+extern NSString * const ApptentiveTextStyleButton;
+extern NSString * const ApptentiveTextStyleSubmitButton;
+
+extern NSString * const ApptentiveColorHeaderBackground;
+extern NSString * const ApptentiveColorFooterBackground;
+extern NSString * const ApptentiveColorFailure;
 
 @interface ATStyleSheet : NSObject
 
 + (instancetype)styleSheet;
-+ (NSString *)defaultFontFamilyName;
-+ (NSDictionary <NSString *, UIFont *>*)defaultFonts;
 
 @property (strong, nonatomic) NSString *fontFamily;
-@property (assign, nonatomic) CGFloat sizeAdjustment;
-@property (assign, nonatomic) BOOL useDynamicType;
+@property (strong, nonatomic) NSString * _Nullable lightFaceAttribute;
+@property (strong, nonatomic) NSString * _Nullable regularFaceAttribute;
+@property (strong, nonatomic) NSString * _Nullable mediumFaceAttribute;
+@property (strong, nonatomic) NSString * _Nullable boldFaceAttribute;
 
-- (UIFontDescriptor *)preferredFontDescriptorWithTextStyle:(NSString *)textStyle;
+@property (strong, nonatomic) UIColor *primaryColor;
+@property (strong, nonatomic) UIColor *secondaryColor;
+@property (strong, nonatomic) UIColor *failureColor;
+@property (strong, nonatomic) UIColor *backgroundColor;
+
+@property (assign, nonatomic) CGFloat sizeAdjustment;
+
+- (void)setFontDescriptor:(UIFontDescriptor *)fontDescriptor forStyle:(NSString *)style;
+- (void)setColor:(UIColor *)color forStyle:(NSString *)style;
+
+- (UIFont *)fontForStyle:(NSString *)textStyle;
+- (UIColor *)colorForStyle:(NSString *)style;
 
 @end
 

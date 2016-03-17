@@ -68,6 +68,9 @@
 
 	if ([self.collectionView.dataSource conformsToProtocol:@protocol(ATCollectionViewDataSource)]) {
 		layoutAttributes.valid = [(id<ATCollectionViewDataSource>)self.collectionView.dataSource sectionAtIndexIsValid:indexPath.section];
+		layoutAttributes.validColor = [(id<ATCollectionViewDataSource>)self.collectionView.dataSource validColor];
+		layoutAttributes.invalidColor = [(id<ATCollectionViewDataSource>)self.collectionView.dataSource invalidColor];
+		layoutAttributes.backgroundColor = [(id<ATCollectionViewDataSource>)self.collectionView.dataSource backgroundColor];
 	}
 
 	layoutAttributes.frame = CGRectMake(origin.x, origin.y, size.width, size.height);

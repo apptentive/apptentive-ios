@@ -1489,6 +1489,7 @@ Lines</string>
                             </constraints>
                             <connections>
                                 <outlet property="instructionsTextLabel" destination="mTb-NZ-av4" id="jup-Q6-uSN"/>
+                                <outlet property="separatorView" destination="KBj-ej-Jg5" id="Swn-8d-K3T"/>
                                 <outlet property="separatorViewHeight" destination="B7O-ax-v5C" id="YcX-ON-LbQ"/>
                                 <outlet property="textLabel" destination="TTZ-vQ-g60" id="6L4-Zq-2W3"/>
                             </connections>
@@ -1512,6 +1513,7 @@ Lines</string>
                     <connections>
                         <outlet property="footerBackgroundView" destination="j6Y-7N-uj9" id="Pzp-uN-bkE"/>
                         <outlet property="footerView" destination="bBK-pb-4Z7" id="fuG-Zm-GSj"/>
+                        <outlet property="headerBackgroundView" destination="hym-vX-x0x" id="J6F-sy-hZo"/>
                         <outlet property="headerView" destination="5MM-w9-NsG" id="8C8-T1-htU"/>
                         <outlet property="submitButton" destination="W2C-ze-Odt" id="tRG-fw-1rW"/>
                     </connections>
@@ -1563,6 +1565,7 @@ Lines</string>
                         <constraint firstAttribute="bottom" secondItem="hym-vX-x0x" secondAttribute="bottom" id="o7f-uU-vfB"/>
                     </constraints>
                     <connections>
+                        <outlet property="borderView" destination="kjO-RC-C9t" id="gjK-IH-cQv"/>
                         <outlet property="borderViewHeight" destination="BYb-xi-ZnV" id="RTk-wS-BmV"/>
                         <outlet property="greetingLabel" destination="QJU-jb-fK0" id="xYM-nv-FYb"/>
                         <outlet property="infoButton" destination="eQS-jv-07Q" id="Wss-bq-skU"/>

@@ -12,5 +12,7 @@
 @interface ATSurveyQuestionBackgroundView : UICollectionReusableView
 
 @property (assign, nonatomic, getter=isValid) BOOL valid;
+@property (strong, nonatomic) UIColor *validColor;
+@property (strong, nonatomic) UIColor *invalidColor;
 
 @end

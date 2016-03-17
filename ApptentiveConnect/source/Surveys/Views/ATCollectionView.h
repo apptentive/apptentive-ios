@@ -20,5 +20,8 @@
 @protocol ATCollectionViewDataSource <UICollectionViewDataSource>
 
 - (BOOL)sectionAtIndexIsValid:(NSInteger)index;
+@property (readonly, nonatomic) UIColor *validColor;
+@property (readonly, nonatomic) UIColor *invalidColor;
+@property (readonly, nonatomic) UIColor *backgroundColor;
 
 @end

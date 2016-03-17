@@ -42,6 +42,7 @@
 @interface ATSurveyViewController ()
 
 @property (strong, nonatomic) IBOutlet ATSurveyGreetingView *headerView;
+@property (strong, nonatomic) IBOutlet UIView *headerBackgroundView;
 @property (strong, nonatomic) IBOutlet UIView *footerView;
 @property (strong, nonatomic) IBOutlet UIView *footerBackgroundView;
 @property (strong, nonatomic) IBOutlet ATSurveySubmitButton *submitButton;
@@ -72,12 +73,15 @@
 	}
 
 	ATStyleSheet *style = [ATConnect sharedConnection].styleSheet;
-	self.headerView.backgroundColor = [style colorForStyle:ApptentiveColorHeaderBackground];
+	self.headerBackgroundView.backgroundColor = [style colorForStyle:ApptentiveColorHeaderBackground];
 	self.headerView.greetingLabel.font = [style fontForStyle:ApptentiveTextStyleHeaderMessage];
 	self.headerView.greetingLabel.textColor = [style colorForStyle:ApptentiveTextStyleHeaderMessage];
+	self.headerView.infoButton.tintColor = [style colorForStyle:ApptentiveTextStyleSurveyInstructions];
+	self.headerView.borderView.backgroundColor = [style colorForStyle:ApptentiveColorSeparator];
 
 	self.footerBackgroundView.backgroundColor = [style colorForStyle:ApptentiveColorFooterBackground];
 	self.submitButton.titleLabel.font = [style fontForStyle:ApptentiveTextStyleSubmitButton];
+	self.submitButton.backgroundColor = [style colorForStyle:ApptentiveColorBackground];
 }
 
 - (void)dealloc {
@@ -170,7 +174,7 @@
 		case ATSurveyQuestionTypeSingleSelect:
 		case ATSurveyQuestionTypeMultipleSelect: {
 			NSString *reuseIdentifier = [self.viewModel typeOfQuestionAtIndex:indexPath.section] == ATSurveyQuestionTypeSingleSelect ? @"Radio" : @"Checkbox";
-			UIImage *buttonImage = [ATBackend imageNamed:[self.viewModel typeOfQuestionAtIndex:indexPath.section] == ATSurveyQuestionTypeSingleSelect ? @"at_circle" : @"at_checkmark"];
+			UIImage *buttonImage = [[ATBackend imageNamed:[self.viewModel typeOfQuestionAtIndex:indexPath.section] == ATSurveyQuestionTypeSingleSelect ? @"at_circle" : @"at_checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 
 			ATSurveyChoiceCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
 
@@ -178,8 +182,10 @@
 			cell.textLabel.font = [[ATConnect sharedConnection].styleSheet fontForStyle:UIFontTextStyleBody];
 			cell.textLabel.textColor = [[ATConnect sharedConnection].styleSheet colorForStyle:UIFontTextStyleBody];
 
+			cell.button.borderColor = [ATConnect sharedConnection].styleSheet.separatorColor;
 			cell.accessibilityLabel = [self.viewModel textOfAnswerAtIndexPath:indexPath];
 			[cell.button setImage:buttonImage forState:UIControlStateNormal];
+			cell.button.imageView.tintColor = [ATConnect sharedConnection].styleSheet.backgroundColor;
 
 			return cell;
 		}
@@ -202,6 +208,8 @@
 		view.instructionsTextLabel.font = [style fontForStyle:ApptentiveTextStyleSurveyInstructions];
 		view.instructionsTextLabel.textColor = [style colorForStyle:ApptentiveTextStyleSurveyInstructions];
 
+		view.separatorView.backgroundColor = [style colorForStyle:ApptentiveColorSeparator];
+
 		return view;
 	} else {
 		return [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"Footer" forIndexPath:indexPath];
@@ -210,6 +218,18 @@
 
 - (BOOL)sectionAtIndexIsValid:(NSInteger)index {
 	return [self.viewModel answerIsValidForQuestionAtIndex:index];
+}
+
+- (UIColor *)validColor {
+	return [ATConnect sharedConnection].styleSheet.separatorColor;
+}
+
+- (UIColor *)invalidColor {
+	return [ATConnect sharedConnection].styleSheet.failureColor;
+}
+
+- (UIColor *)backgroundColor {
+	return [ATConnect sharedConnection].styleSheet.backgroundColor;
 }
 
 #pragma mark Collection View Delegate

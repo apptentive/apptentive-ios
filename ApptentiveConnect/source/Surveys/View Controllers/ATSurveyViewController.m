@@ -187,6 +187,10 @@
 			[cell.button setImage:buttonImage forState:UIControlStateNormal];
 			cell.button.imageView.tintColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveColorBackground];
 
+			CGFloat lineHeight = CGRectGetHeight(CGRectIntegral([@"A" boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: cell.textLabel.font } context:nil])) + CHOICE_VERTICAL_MARGIN;
+
+			cell.buttonTopConstraint.constant = (lineHeight - CGRectGetHeight(cell.button.bounds)) / 2.0;
+
 			return cell;
 		}
 	}
@@ -310,9 +314,14 @@
 	UIFont *questionFont = [[ATConnect sharedConnection].styleSheet fontForStyle:UIFontTextStyleBody];
 	CGSize labelSize = CGRectIntegral([[self.viewModel textOfQuestionAtIndex:section] boundingRectWithSize:CGSizeMake(labelWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: questionFont } context:nil]).size;
 
-	CGFloat instructionsHeight = [self.viewModel instructionTextOfQuestionAtIndex:section] ? 15 : 0;
+	NSString *instructionsText = [self.viewModel instructionTextOfQuestionAtIndex:section];
+	CGSize instructionsSize = CGSizeZero;
+	if (instructionsText) {
+		UIFont *instructionsFont = [[ATConnect sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleSurveyInstructions];
+		instructionsSize = CGRectIntegral([instructionsText boundingRectWithSize:CGSizeMake(labelWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: instructionsFont } context:nil]).size;
+	}
 
-	return CGSizeMake(headerSize.width, labelSize.height + QUESTION_VERTICAL_MARGIN + instructionsHeight);
+	return CGSizeMake(headerSize.width, labelSize.height + QUESTION_VERTICAL_MARGIN + instructionsSize.height);
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {

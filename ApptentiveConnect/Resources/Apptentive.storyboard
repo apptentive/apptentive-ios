@@ -1342,6 +1342,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                 </constraints>
                                 <connections>
                                     <outlet property="button" destination="f7n-H0-eAD" id="q1b-wm-dZZ"/>
+                                    <outlet property="buttonTopConstraint" destination="q0p-Hv-yqZ" id="XJN-Dj-VVb"/>
                                     <outlet property="textLabel" destination="XeR-GW-QUi" id="uot-NF-XjQ"/>
                                 </connections>
                             </collectionViewCell>
@@ -1383,6 +1384,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                 </constraints>
                                 <connections>
                                     <outlet property="button" destination="zb3-bq-5N3" id="xkf-xo-yVy"/>
+                                    <outlet property="buttonTopConstraint" destination="wqo-F3-1FI" id="oq3-FM-ld4"/>
                                     <outlet property="textLabel" destination="jfd-bx-kqH" id="89W-Fg-LYo"/>
                                 </connections>
                             </collectionViewCell>
@@ -1470,8 +1472,8 @@ Lines</string>
                                         <constraint firstAttribute="height" constant="1" id="B7O-ax-v5C"/>
                                     </constraints>
                                 </view>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select between 1 and 3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mTb-NZ-av4">
-                                    <rect key="frame" x="19" y="35.5" width="132" height="14.5"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select between 1 and 3" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mTb-NZ-av4">
+                                    <rect key="frame" x="19" y="35" width="132" height="14.5"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                     <color key="textColor" red="0.68627450980392157" green="0.68627450980392157" blue="0.68627450980392157" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
@@ -1481,6 +1483,7 @@ Lines</string>
                                 <constraint firstAttribute="trailing" secondItem="KBj-ej-Jg5" secondAttribute="trailing" id="4m0-P5-Du9"/>
                                 <constraint firstItem="TTZ-vQ-g60" firstAttribute="top" secondItem="Bcl-nV-AHj" secondAttribute="top" constant="13" id="634-lY-n3c"/>
                                 <constraint firstItem="mTb-NZ-av4" firstAttribute="top" secondItem="TTZ-vQ-g60" secondAttribute="bottom" constant="2" id="88M-VC-6gy"/>
+                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="mTb-NZ-av4" secondAttribute="trailing" constant="19" id="K3M-ut-7N6"/>
                                 <constraint firstItem="mTb-NZ-av4" firstAttribute="leading" secondItem="TTZ-vQ-g60" secondAttribute="leading" id="T99-Uh-WUD"/>
                                 <constraint firstItem="TTZ-vQ-g60" firstAttribute="leading" secondItem="Bcl-nV-AHj" secondAttribute="leading" constant="19" id="TLz-R0-7so"/>
                                 <constraint firstItem="KBj-ej-Jg5" firstAttribute="leading" secondItem="Bcl-nV-AHj" secondAttribute="leading" id="Uoh-gv-78y"/>

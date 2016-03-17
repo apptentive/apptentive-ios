@@ -110,12 +110,6 @@ NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 	self.backend.currentPerson.emailAddress = personEmailAddress;
 }
 
-- (void)setStyleSheet:(ATStyleSheet *)styleSheet {
-	_styleSheet = styleSheet;
-
-	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveStyleSheetDidUpdateNotification object:self.styleSheet];
-}
-
 - (UIColor *)tintColor {
 	return [UIView appearanceWhenContainedIn:[ATNavigationController class], nil].tintColor;
 }

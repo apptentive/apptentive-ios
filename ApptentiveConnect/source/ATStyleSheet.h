@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-extern NSString * const ApptentiveStyleSheetDidUpdateNotification;
+//extern NSString * const ApptentiveStyleSheetDidUpdateNotification;
 
 extern NSString * const ApptentiveTextStyleHeaderTitle;
 extern NSString * const ApptentiveTextStyleHeaderMessage;

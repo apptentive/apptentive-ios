@@ -44,6 +44,10 @@
 	return self;
 }
 
+- (ATStyleSheet *)styleSheet {
+	return [ATConnect sharedConnection].styleSheet;
+}
+
 - (NSString *)title {
 	return self.survey.title;
 }

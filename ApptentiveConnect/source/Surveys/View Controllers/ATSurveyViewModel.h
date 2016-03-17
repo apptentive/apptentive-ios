@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ATSurveyQuestion.h"
 
-@class ATSurvey, ATInteraction;
+@class ATSurvey, ATInteraction, ATStyleSheet;
 
 @protocol ATSurveyViewModelDelegate;
 
@@ -22,6 +22,7 @@
 // Consider making this private
 @property (readonly, nonatomic) ATInteraction *interaction;
 @property (readonly, nonatomic) ATSurvey *survey;
+@property (readonly, nonatomic) ATStyleSheet *styleSheet;
 @property (weak, nonatomic) id<ATSurveyViewModelDelegate> delegate;
 
 @property (readonly, nonatomic) NSString *title;

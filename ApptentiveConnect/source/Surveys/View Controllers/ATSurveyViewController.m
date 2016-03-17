@@ -182,10 +182,10 @@
 			cell.textLabel.font = [[ATConnect sharedConnection].styleSheet fontForStyle:UIFontTextStyleBody];
 			cell.textLabel.textColor = [[ATConnect sharedConnection].styleSheet colorForStyle:UIFontTextStyleBody];
 
-			cell.button.borderColor = [ATConnect sharedConnection].styleSheet.separatorColor;
+			cell.button.borderColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveColorSeparator];
 			cell.accessibilityLabel = [self.viewModel textOfAnswerAtIndexPath:indexPath];
 			[cell.button setImage:buttonImage forState:UIControlStateNormal];
-			cell.button.imageView.tintColor = [ATConnect sharedConnection].styleSheet.backgroundColor;
+			cell.button.imageView.tintColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveColorBackground];
 
 			return cell;
 		}
@@ -221,15 +221,15 @@
 }
 
 - (UIColor *)validColor {
-	return [ATConnect sharedConnection].styleSheet.separatorColor;
+	return [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveColorSeparator];
 }
 
 - (UIColor *)invalidColor {
-	return [ATConnect sharedConnection].styleSheet.failureColor;
+	return [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveColorFailure];
 }
 
 - (UIColor *)backgroundColor {
-	return [ATConnect sharedConnection].styleSheet.backgroundColor;
+	return [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveColorBackground];
 }
 
 #pragma mark Collection View Delegate

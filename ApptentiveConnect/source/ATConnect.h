@@ -134,8 +134,11 @@ Before calling any other methods on the shared `ATConnect` instance, set the API
 /// @name Interface Customization
 ///---------------------------------
 
-/** The style sheet used for styling Apptentive UI */
-@property (readonly, nonatomic) ATStyleSheet *styleSheet;
+/** The style sheet used for styling Apptentive UI.
+
+@discussion See the [Apptentive Styling Guide for iOS](https://docs.apptentive.com/ios/customization/) for information on configuring this property.
+ */
+@property (strong, nonatomic) id<ApptentiveStyle> styleSheet;
 
 /** Toggles the display of an email field in the message panel. `YES` by default.
  

@@ -10,6 +10,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol ApptentiveStyle <NSObject>
+
+- (UIFont *)fontForStyle:(NSString *)textStyle;
+- (UIColor *)colorForStyle:(NSString *)style;
+
+@end
+
 extern NSString * const ApptentiveStyleSheetDidUpdateNotification;
 
 extern NSString * const ApptentiveTextStyleHeaderTitle;
@@ -29,9 +36,7 @@ extern NSString * const ApptentiveColorFailure;
 extern NSString * const ApptentiveColorSeparator;
 extern NSString * const ApptentiveColorBackground;
 
-@interface ATStyleSheet : NSObject
-
-+ (instancetype)styleSheet;
+@interface ATStyleSheet : NSObject <ApptentiveStyle>
 
 @property (strong, nonatomic) NSString *fontFamily;
 @property (strong, nonatomic) NSString * _Nullable lightFaceAttribute;
@@ -49,9 +54,6 @@ extern NSString * const ApptentiveColorBackground;
 
 - (void)setFontDescriptor:(UIFontDescriptor *)fontDescriptor forStyle:(NSString *)style;
 - (void)setColor:(UIColor *)color forStyle:(NSString *)style;
-
-- (UIFont *)fontForStyle:(NSString *)textStyle;
-- (UIColor *)colorForStyle:(NSString *)style;
 
 @end
 

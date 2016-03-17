@@ -58,10 +58,19 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 		@"privacy": self.privacyButton }];
 }
 
-- (void)viewDidLayoutSubviews {
+- (void)viewWillAppear:(BOOL)animated {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated"
 	[self resizeForOrientation:self.interfaceOrientation duration:0];
+#pragma clang diagnostic pop
+}
+
+- (void)viewDidLayoutSubviews {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
+	if ([[NSProcessInfo processInfo] respondsToSelector:@selector(isOperatingSystemAtLeastVersion:)] && [[NSProcessInfo processInfo]  isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){8, 0, 0}]) {
+	[self resizeForOrientation:self.interfaceOrientation duration:0];
+	}
 #pragma clang diagnostic pop
 }
 

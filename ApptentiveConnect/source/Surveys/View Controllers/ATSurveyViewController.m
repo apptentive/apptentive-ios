@@ -43,12 +43,12 @@
 
 @property (strong, nonatomic) IBOutlet ATSurveyGreetingView *headerView;
 @property (strong, nonatomic) IBOutlet UIView *footerView;
+@property (strong, nonatomic) IBOutlet UIView *footerBackgroundView;
 @property (strong, nonatomic) IBOutlet ATSurveySubmitButton *submitButton;
 
 @property (strong, nonatomic) NSIndexPath *editingIndexPath;
 
 @end
-
 
 @implementation ATSurveyViewController
 
@@ -76,7 +76,7 @@
 	self.headerView.greetingLabel.font = [style fontForStyle:ApptentiveTextStyleHeaderMessage];
 	self.headerView.greetingLabel.textColor = [style colorForStyle:ApptentiveTextStyleHeaderMessage];
 
-	self.footerView.backgroundColor = [style colorForStyle:ApptentiveColorFooterBackground];
+	self.footerBackgroundView.backgroundColor = [style colorForStyle:ApptentiveColorFooterBackground];
 	self.submitButton.titleLabel.font = [style fontForStyle:ApptentiveTextStyleSubmitButton];
 }
 

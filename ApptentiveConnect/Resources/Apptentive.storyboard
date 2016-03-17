@@ -1510,6 +1510,7 @@ Lines</string>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="footerBackgroundView" destination="j6Y-7N-uj9" id="Pzp-uN-bkE"/>
                         <outlet property="footerView" destination="bBK-pb-4Z7" id="fuG-Zm-GSj"/>
                         <outlet property="headerView" destination="5MM-w9-NsG" id="8C8-T1-htU"/>
                         <outlet property="submitButton" destination="W2C-ze-Odt" id="tRG-fw-1rW"/>
@@ -1585,7 +1586,6 @@ Lines</string>
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" white="0.96999999999999997" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="W2C-ze-Odt" secondAttribute="bottom" constant="24" id="0YT-BH-6dL"/>
                         <constraint firstAttribute="trailing" secondItem="j6Y-7N-uj9" secondAttribute="trailing" id="5cq-NM-1l8"/>

@@ -385,7 +385,7 @@ NSString * const ApptentiveColorFailure = @"com.apptentive.failureColor";
 	} else if ([style isEqualToString:ApptentiveColorHeaderBackground]) {
 		return self.backgroundColor;
 	} else if ([style isEqualToString:ApptentiveColorFooterBackground]) {
-		return [self.backgroundColor colorWithAlphaComponent:0.85];
+		return [self.backgroundColor colorWithAlphaComponent:0.5];
 	} else if ([@[ApptentiveTextStyleHeaderMessage, ApptentiveTextStyleMessageDate, ApptentiveTextStyleMessageStatus, ApptentiveTextStyleMessageCenterStatus, ApptentiveTextStyleSurveyInstructions] containsObject:style]) {
 		return self.secondaryColor;
 	} else {

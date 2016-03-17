@@ -26,6 +26,8 @@ extern NSString * const ApptentiveTextStyleSubmitButton;
 extern NSString * const ApptentiveColorHeaderBackground;
 extern NSString * const ApptentiveColorFooterBackground;
 extern NSString * const ApptentiveColorFailure;
+extern NSString * const ApptentiveColorSeparator;
+extern NSString * const ApptentiveColorBackground;
 
 @interface ATStyleSheet : NSObject
 
@@ -41,6 +43,7 @@ extern NSString * const ApptentiveColorFailure;
 @property (strong, nonatomic) UIColor *secondaryColor;
 @property (strong, nonatomic) UIColor *failureColor;
 @property (strong, nonatomic) UIColor *backgroundColor;
+@property (strong, nonatomic) UIColor *separatorColor;
 
 @property (assign, nonatomic) CGFloat sizeAdjustment;
 

@@ -7,6 +7,7 @@
 //
 
 #import "ATStyleSheet.h"
+#import "ATConnect.h"
 
 NSString * const ApptentiveStyleSheetDidUpdateNotification = @"com.apptentive.stylesheetDidUpdate";
 
@@ -24,6 +25,8 @@ NSString * const ApptentiveTextStyleSubmitButton = @"com.apptentive.submitButton
 NSString * const ApptentiveColorHeaderBackground = @"com.apptentive.headerBackgroundColor";
 NSString * const ApptentiveColorFooterBackground = @"com.apptentive.footerBackgroundColor";
 NSString * const ApptentiveColorFailure = @"com.apptentive.failureColor";
+NSString * const ApptentiveColorSeparator = @"com.apptentive.separatorColor";
+NSString * const ApptentiveColorBackground = @"com.apptentive.backgroundColor";
 
 @interface ATStyleSheet ()
 
@@ -290,6 +293,7 @@ NSString * const ApptentiveColorFailure = @"com.apptentive.failureColor";
 		_secondaryColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:147.0/255.0 alpha:1.0];
 		_failureColor = [UIColor colorWithRed:218.0/255.0 green:53.0/255.0 blue:71.0/255.0 alpha:1.0];
 		_backgroundColor = [UIColor whiteColor];
+		_separatorColor = [UIColor colorWithRed:199.0/255.0 green:200.0/255.0 blue:204.0/255.0 alpha:1.0];
 
 		_lightFaceAttribute = @"Light";
 		_regularFaceAttribute = @"Regular";
@@ -382,7 +386,9 @@ NSString * const ApptentiveColorFailure = @"com.apptentive.failureColor";
 
 	if ([style isEqualToString:ApptentiveColorFailure]) {
 		return self.failureColor;
-	} else if ([style isEqualToString:ApptentiveColorHeaderBackground]) {
+	} else if ([style isEqualToString:ApptentiveColorSeparator]) {
+		return self.separatorColor;
+	} else if ([style isEqualToString:ApptentiveColorHeaderBackground] || [style isEqualToString:ApptentiveColorBackground]) {
 		return self.backgroundColor;
 	} else if ([style isEqualToString:ApptentiveColorFooterBackground]) {
 		return [self.backgroundColor colorWithAlphaComponent:0.5];

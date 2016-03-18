@@ -9,8 +9,6 @@
 #import "ATStyleSheet.h"
 #import "ATConnect.h"
 
-//NSString * const ApptentiveStyleSheetDidUpdateNotification = @"com.apptentive.stylesheetDidUpdate";
-
 NSString * const ApptentiveTextStyleHeaderTitle = @"com.apptentive.headerTitle";
 NSString * const ApptentiveTextStyleHeaderMessage = @"com.apptentive.headerMessage";
 NSString * const ApptentiveTextStyleMessageDate = @"com.apptentive.messageDate";

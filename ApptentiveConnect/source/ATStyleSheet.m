@@ -21,12 +21,18 @@ NSString * const ApptentiveTextStyleSurveyInstructions = @"com.apptentive.survey
 NSString * const ApptentiveTextStyleDoneButton = @"com.apptentive.doneButton";
 NSString * const ApptentiveTextStyleButton = @"com.apptentive.button";
 NSString * const ApptentiveTextStyleSubmitButton = @"com.apptentive.submitButton";
+NSString * const ApptentiveTextStyleTextInput = @"com.apptentive.textInput";
 
 NSString * const ApptentiveColorHeaderBackground = @"com.apptentive.headerBackgroundColor";
 NSString * const ApptentiveColorFooterBackground = @"com.apptentive.footerBackgroundColor";
 NSString * const ApptentiveColorFailure = @"com.apptentive.failureColor";
 NSString * const ApptentiveColorSeparator = @"com.apptentive.separatorColor";
 NSString * const ApptentiveColorBackground = @"com.apptentive.backgroundColor";
+NSString * const ApptentiveColorCollectionBackground = @"com.apptentive.collectionBackgroundColor";
+NSString * const ApptentiveColorTextInputBackground = @"com.apptentive.textInputBackgroundColor";
+NSString * const ApptentiveColorMessageBackground = @"com.apptentive.messageBackgroundColor";
+NSString * const ApptentiveColorReplyBackground = @"com.apptentive.replyBackgroundColor";
+NSString * const ApptentiveColorContextBackground = @"com.apptentive.contextBackgroundColor";
 
 @interface ATStyleSheet ()
 
@@ -65,7 +71,8 @@ NSString * const ApptentiveColorBackground = @"com.apptentive.backgroundColor";
 						 ApptentiveTextStyleSurveyInstructions: @400,
 						 ApptentiveTextStyleButton: @400,
 						 ApptentiveTextStyleDoneButton: @700,
-						 ApptentiveTextStyleSubmitButton: @500
+						 ApptentiveTextStyleSubmitButton: @500,
+						 ApptentiveTextStyleTextInput: @400
 						 };
 	});
 	return faceForStyle[textStyle].integerValue;
@@ -215,7 +222,21 @@ NSString * const ApptentiveColorBackground = @"com.apptentive.backgroundColor";
 											UIContentSizeCategoryMedium: @20,
 											UIContentSizeCategorySmall: @19,
 											UIContentSizeCategoryExtraSmall: @18
-											}
+											},
+									ApptentiveTextStyleTextInput: @{
+											UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @21,
+											UIContentSizeCategoryAccessibilityExtraExtraLarge: @20,
+											UIContentSizeCategoryAccessibilityExtraLarge: @19,
+											UIContentSizeCategoryAccessibilityLarge: @19,
+											UIContentSizeCategoryAccessibilityMedium: @18,
+											UIContentSizeCategoryExtraExtraExtraLarge: @18,
+											UIContentSizeCategoryExtraExtraLarge: @17,
+											UIContentSizeCategoryExtraLarge: @16,
+											UIContentSizeCategoryLarge: @15,
+											UIContentSizeCategoryMedium: @14,
+											UIContentSizeCategorySmall: @13,
+											UIContentSizeCategoryExtraSmall: @12
+											},
 									};
 	});
 	return sizeForCategoryForStyle[textStyle][[UIApplication sharedApplication].preferredContentSizeCategory];
@@ -300,12 +321,6 @@ NSString * const ApptentiveColorBackground = @"com.apptentive.backgroundColor";
 	self = [super init];
 	if (self) {
 		_fontFamily = [[self class] defaultFontFamilyName];
-		_primaryColor = [UIColor blackColor];
-		_secondaryColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:147.0/255.0 alpha:1.0];
-		_failureColor = [UIColor colorWithRed:218.0/255.0 green:53.0/255.0 blue:71.0/255.0 alpha:1.0];
-		_backgroundColor = [UIColor whiteColor];
-		_separatorColor = [UIColor colorWithRed:199.0/255.0 green:200.0/255.0 blue:204.0/255.0 alpha:1.0];
-
 		_lightFaceAttribute = @"Light";
 		_regularFaceAttribute = @"Regular";
 		_mediumFaceAttribute = @"Medium";
@@ -313,10 +328,38 @@ NSString * const ApptentiveColorBackground = @"com.apptentive.backgroundColor";
 
 		_sizeAdjustment = 1.0;
 
+		_secondaryColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:147.0/255.0 alpha:1.0];
+		_failureColor = [UIColor colorWithRed:218.0/255.0 green:53.0/255.0 blue:71.0/255.0 alpha:1.0];
+
 		_fontDescriptorOverrides = [NSMutableDictionary dictionary];
 		_colorOverrides = [NSMutableDictionary dictionary];
+
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 	}
 	return self;
+}
+
+-(void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (UIColor *)appearanceColorForClass:(Class)klass property:(SEL)propertySelector default:(UIColor *)defaultColor {
+	UIColor *whenContainedInColor = [[klass appearanceWhenContainedIn:[ATNavigationController class], nil] performSelector:propertySelector];
+	if (whenContainedInColor)
+		return whenContainedInColor;
+
+	whenContainedInColor = [[klass appearance] performSelector:propertySelector];
+	if (whenContainedInColor)
+		return whenContainedInColor;
+
+	return defaultColor;
+}
+
+- (void)didBecomeActive:(NSNotification *)notification {
+	_primaryColor = self.primaryColor ?: [self appearanceColorForClass:[UILabel class] property:@selector(textColor) default:[UIColor blackColor]];
+	_separatorColor = self.separatorColor ?: [self appearanceColorForClass:[UITableView class] property:@selector(separatorColor) default:[UIColor colorWithRed:199.0/255.0 green:200.0/255.0 blue:204.0/255.0 alpha:1.0]];
+	_backgroundColor = self.backgroundColor ?: [self appearanceColorForClass:[UITableViewCell class] property:@selector(backgroundColor) default:[UIColor whiteColor]];
+	_collectionBackgroundColor = self.collectionBackgroundColor ?: [self appearanceColorForClass:[UITableView class] property:@selector(backgroundColor) default:[UIColor groupTableViewBackgroundColor]];
 }
 
 - (void)setFontDescriptor:(UIFontDescriptor *)fontDescriptor forStyle:(NSString *)textStyle {
@@ -388,6 +431,18 @@ NSString * const ApptentiveColorBackground = @"com.apptentive.backgroundColor";
 	[self.colorOverrides setObject:color forKey:style];
 }
 
+- (UIColor *)interpolateAtPoint:(CGFloat)interpolation between:(UIColor *)color1 and:(UIColor *)color2 {
+	CGFloat red1, green1, blue1, alpha1;
+	[color1 getRed:&red1 green:&green1 blue:&blue1 alpha:&alpha1];
+
+	CGFloat red2, green2, blue2, alpha2;
+	[color2 getRed:&red2 green:&green2 blue:&blue2 alpha:&alpha2];
+
+	CGFloat inverse = 1.0 - interpolation;
+
+	return [UIColor colorWithRed:red1 * interpolation + red2 * inverse green:green1  * interpolation + green2 * inverse blue:blue1 * interpolation + blue2 * inverse alpha:alpha1 * interpolation + alpha2 * inverse];
+}
+
 - (UIColor *)colorForStyle:(NSString *)style {
 	UIColor *result = self.colorOverrides[style];
 
@@ -399,10 +454,14 @@ NSString * const ApptentiveColorBackground = @"com.apptentive.backgroundColor";
 		return self.failureColor;
 	} else if ([style isEqualToString:ApptentiveColorSeparator]) {
 		return self.separatorColor;
-	} else if ([style isEqualToString:ApptentiveColorHeaderBackground] || [style isEqualToString:ApptentiveColorBackground]) {
+	} else if ([style isEqualToString:ApptentiveColorCollectionBackground]) {
+		return self.collectionBackgroundColor;
+	} else if ([@[ApptentiveColorHeaderBackground, ApptentiveColorBackground, ApptentiveColorTextInputBackground, ApptentiveColorMessageBackground] containsObject:style]) {
 		return self.backgroundColor;
 	} else if ([style isEqualToString:ApptentiveColorFooterBackground]) {
 		return [self.backgroundColor colorWithAlphaComponent:0.5];
+	} else if ([style isEqualToString:ApptentiveColorReplyBackground] || [style isEqualToString:ApptentiveColorContextBackground]) {
+		return [self interpolateAtPoint:0.968 between:self.backgroundColor and:self.primaryColor];
 	} else if ([@[ApptentiveTextStyleHeaderMessage, ApptentiveTextStyleMessageDate, ApptentiveTextStyleMessageStatus, ApptentiveTextStyleMessageCenterStatus, ApptentiveTextStyleSurveyInstructions] containsObject:style]) {
 		return self.secondaryColor;
 	} else {

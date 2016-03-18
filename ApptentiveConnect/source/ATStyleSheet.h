@@ -29,12 +29,18 @@ extern NSString * const ApptentiveTextStyleSurveyInstructions;
 extern NSString * const ApptentiveTextStyleDoneButton;
 extern NSString * const ApptentiveTextStyleButton;
 extern NSString * const ApptentiveTextStyleSubmitButton;
+extern NSString * const ApptentiveTextStyleTextInput;
 
 extern NSString * const ApptentiveColorHeaderBackground;
 extern NSString * const ApptentiveColorFooterBackground;
 extern NSString * const ApptentiveColorFailure;
 extern NSString * const ApptentiveColorSeparator;
 extern NSString * const ApptentiveColorBackground;
+extern NSString * const ApptentiveColorCollectionBackground;
+extern NSString * const ApptentiveColorTextInputBackground;
+extern NSString * const ApptentiveColorMessageBackground;
+extern NSString * const ApptentiveColorReplyBackground;
+extern NSString * const ApptentiveColorContextBackground;
 
 @interface ATStyleSheet : NSObject <ApptentiveStyle>
 
@@ -49,6 +55,7 @@ extern NSString * const ApptentiveColorBackground;
 @property (strong, nonatomic) UIColor *failureColor;
 @property (strong, nonatomic) UIColor *backgroundColor;
 @property (strong, nonatomic) UIColor *separatorColor;
+@property (strong, nonatomic) UIColor *collectionBackgroundColor;
 
 @property (assign, nonatomic) CGFloat sizeAdjustment;
 

@@ -27,17 +27,12 @@
 // These need to match the values from the storyboard
 #define QUESTION_HORIZONTAL_MARGIN 38.0
 #define QUESTION_VERTICAL_MARGIN 36.0
-//#define QUESTION_FONT [UIFont systemFontOfSize:17.0]
-//#define INSTRUCTIONS_FONT [UIFont systemFontOfSize:12.0]
 
 #define CHOICE_HORIZONTAL_MARGIN 77.0
 #define CHOICE_VERTICAL_MARGIN 23.5
-//#define CHOICE_FONT [UIFont systemFontOfSize:17.0]
 
 #define MULTILINE_HORIZONTAL_MARGIN 44
 #define MULTILINE_VERTICAL_MARGIN 14
-#define MULTILINE_FONT [UIFont systemFontOfSize:14.0]
-
 
 @interface ATSurveyViewController ()
 
@@ -77,6 +72,8 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sizeDidUpdate:) name:UIContentSizeCategoryDidChangeNotification object:nil];
 
 	ATStyleSheet *style = self.viewModel.styleSheet;
+
+	self.collectionView.backgroundColor = [style colorForStyle:ApptentiveColorCollectionBackground];
 	self.headerBackgroundView.backgroundColor = [style colorForStyle:ApptentiveColorHeaderBackground];
 	self.headerView.greetingLabel.font = [style fontForStyle:ApptentiveTextStyleHeaderMessage];
 	self.headerView.greetingLabel.textColor = [style colorForStyle:ApptentiveTextStyleHeaderMessage];
@@ -183,6 +180,8 @@
 			cell.textView.delegate = self;
 			cell.textView.tag = indexPath.section;
 			cell.textView.accessibilityLabel = [self.viewModel placeholderTextOfQuestionAtIndex:indexPath.section];
+			cell.textView.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleTextInput];
+			cell.textView.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleTextInput];
 
 			return cell;
 		}
@@ -193,6 +192,8 @@
 			cell.textField.placeholder = [self.viewModel placeholderTextOfQuestionAtIndex:indexPath.section];
 			cell.textField.delegate = self;
 			cell.textField.tag = indexPath.section;
+			cell.textField.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleTextInput];
+			cell.textField.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleTextInput];
 
 			return cell;
 		}
@@ -317,7 +318,8 @@
 			CGFloat textViewWidth = itemSize.width - MULTILINE_HORIZONTAL_MARGIN;
 
 			NSString *text = [[self.viewModel textOfAnswerAtIndexPath:indexPath] ?: @" " stringByAppendingString:@"\n"];
-			CGSize textSize = CGRectIntegral([text boundingRectWithSize:CGSizeMake(textViewWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: MULTILINE_FONT } context:nil]).size;
+			UIFont *font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleTextInput];
+			CGSize textSize = CGRectIntegral([text boundingRectWithSize:CGSizeMake(textViewWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: font } context:nil]).size;
 
 			itemSize.height = fmax(textSize.height, 17.0) + MULTILINE_VERTICAL_MARGIN + 13;
 			break;

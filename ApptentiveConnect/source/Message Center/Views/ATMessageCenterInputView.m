@@ -38,9 +38,6 @@
 @implementation ATMessageCenterInputView
 
 - (void)awakeFromNib {
-	self.containerView.layer.borderColor = [UIColor colorWithRed:200.0 / 255.0 green:199.0 / 255.0 blue:204.0 / 255.0 alpha:1.0].CGColor;
-	self.sendBar.layer.borderColor = [UIColor colorWithRed:200.0 / 255.0 green:199.0 / 255.0 blue:204.0 / 255.0 alpha:1.0].CGColor;
-
 	self.containerView.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
 	self.sendBar.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
 
@@ -60,6 +57,13 @@
 - (void)setOrientation:(UIInterfaceOrientation)orientation {
 	_orientation = orientation;
 	[self updateConstraints];
+}
+
+- (void)setBorderColor:(UIColor *)borderColor {
+	_borderColor = borderColor;
+
+	self.containerView.layer.borderColor =self.borderColor.CGColor;
+	self.sendBar.layer.borderColor = self.borderColor.CGColor;
 }
 
 - (void)updateConstraints {

@@ -69,6 +69,7 @@
 		014745C31C8652D900542951 /* at_thanks.png in Resources */ = {isa = PBXBuildFile; fileRef = 014745C01C8652CF00542951 /* at_thanks.png */; };
 		014745C41C8652D900542951 /* at_thanks@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 014745C11C8652CF00542951 /* at_thanks@2x.png */; };
 		014745C51C8652D900542951 /* at_thanks@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 014745C21C8652CF00542951 /* at_thanks@3x.png */; };
+		014A16DD1C9C75DE00B0B199 /* ATStyleSheetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 014A16DC1C9C75DE00B0B199 /* ATStyleSheetTests.m */; };
 		0160854D1BA77B1D00050FDB /* at_account.png in Resources */ = {isa = PBXBuildFile; fileRef = 0160852A1BA77B0500050FDB /* at_account.png */; };
 		0160854E1BA77B1D00050FDB /* at_account@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0160852B1BA77B0500050FDB /* at_account@2x.png */; };
 		0160854F1BA77B1D00050FDB /* at_account@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0160852C1BA77B0500050FDB /* at_account@3x.png */; };
@@ -433,6 +434,7 @@
 		014745C01C8652CF00542951 /* at_thanks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_thanks.png; sourceTree = "<group>"; };
 		014745C11C8652CF00542951 /* at_thanks@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_thanks@2x.png"; sourceTree = "<group>"; };
 		014745C21C8652CF00542951 /* at_thanks@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_thanks@3x.png"; sourceTree = "<group>"; };
+		014A16DC1C9C75DE00B0B199 /* ATStyleSheetTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATStyleSheetTests.m; sourceTree = "<group>"; };
 		0160852A1BA77B0500050FDB /* at_account.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_account.png; sourceTree = "<group>"; };
 		0160852B1BA77B0500050FDB /* at_account@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_account@2x.png"; sourceTree = "<group>"; };
 		0160852C1BA77B0500050FDB /* at_account@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_account@3x.png"; sourceTree = "<group>"; };
@@ -1384,6 +1386,7 @@
 				01F6FD8F1BFAA512004513C2 /* CriteriaTests.m */,
 				01F6FD911BFAA52A004513C2 /* CriteriaTests.h */,
 				01E25CE41C88B1EE005BF2D2 /* ATSurveyTests.m */,
+				014A16DC1C9C75DE00B0B199 /* ATStyleSheetTests.m */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -2082,6 +2085,7 @@
 				49C0028E1334137E0071F088 /* ApptentiveConnectTests.m in Sources */,
 				58CD20151821B7A70071CC72 /* ATDataModel v2 to v3.xcmappingmodel in Sources */,
 				01DD9E091C6534CE003C4B1D /* ATConnect+Debugging.m in Sources */,
+				014A16DD1C9C75DE00B0B199 /* ATStyleSheetTests.m in Sources */,
 				01C7C4DE1BEAD0BE005D6EC1 /* ATDataModel.xcdatamodeld in Sources */,
 				013BB6181BF6ABB600BB6C27 /* ATDataModel v4 to v5.xcmappingmodel in Sources */,
 				01E25CE51C88B1EE005BF2D2 /* ATSurveyTests.m in Sources */,

@@ -96,6 +96,7 @@
                             </constraints>
                             <connections>
                                 <outlet property="aboutButton" destination="bNv-Jb-zyu" id="rId-iw-XKV"/>
+                                <outlet property="borderView" destination="sQH-Xo-hct" id="bY5-Db-0kt"/>
                                 <outlet property="bottomBorderHeightConstraint" destination="xWx-Gq-u4K" id="CTY-ud-t8E"/>
                                 <outlet property="imageCenterXConstraint" destination="KtR-Jf-Err" id="kBs-1E-4UU"/>
                                 <outlet property="imageCenterYConstraint" destination="agk-W3-azS" id="IMI-MO-RVe"/>

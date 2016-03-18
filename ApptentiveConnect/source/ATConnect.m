@@ -47,10 +47,6 @@ NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 
 @implementation ATConnect
 
-+ (void)load {
-	[UINavigationBar appearanceWhenContainedIn:[ATNavigationController class], nil].barTintColor = [UIColor whiteColor];
-}
-
 + (NSString *)supportDirectoryPath {
 	NSString *appSupportDirectoryPath = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES).firstObject;
 	NSString *apptentiveDirectoryPath = [appSupportDirectoryPath stringByAppendingPathComponent:@"com.apptentive.feedback"];
@@ -83,6 +79,7 @@ NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 - (instancetype)init {
 	if ((self = [super init])) {
 		_integrationConfiguration = [[NSMutableDictionary alloc] init];
+		_styleSheet = [[ATStyleSheet alloc] init];
 
 		ATLogInfo(@"Apptentive SDK Version %@", kATConnectVersionString);
 	}
@@ -601,6 +598,16 @@ NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 
 @implementation ATNavigationController
 // Container to allow customization of Apptentive UI using UIAppearance
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+	self = [super initWithCoder:aDecoder];
+	if (self) {
+		if (!([UINavigationBar appearance].barTintColor || [UINavigationBar appearanceWhenContainedIn:[ATNavigationController class], nil].barTintColor)) {
+			[UINavigationBar appearanceWhenContainedIn:[ATNavigationController class], nil].barTintColor = [UIColor whiteColor];
+		}
+	}
+	return self;
+}
 
 - (void)pushAboutApptentiveViewController {
 	UIViewController *aboutViewController = [[ATConnect storyboard] instantiateViewControllerWithIdentifier:@"About"];

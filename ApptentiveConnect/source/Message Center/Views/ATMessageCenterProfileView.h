@@ -17,6 +17,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterProfileMode) {
 @interface ATMessageCenterProfileView : UIView
 
 @property (assign, nonatomic) ATMessageCenterProfileMode mode;
+@property (weak, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UITextField *nameField;
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
@@ -24,5 +25,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterProfileMode) {
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
 @property (weak, nonatomic) IBOutlet UILabel *requiredLabel;
 @property (assign, nonatomic) UIInterfaceOrientation orientation;
+@property (strong, nonatomic) UIColor *borderColor;
 
 @end

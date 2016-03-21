@@ -9,28 +9,28 @@
 #import "ATStyleSheet.h"
 #import "ATConnect.h"
 
-NSString * const ApptentiveTextStyleHeaderTitle = @"com.apptentive.headerTitle";
-NSString * const ApptentiveTextStyleHeaderMessage = @"com.apptentive.headerMessage";
-NSString * const ApptentiveTextStyleMessageDate = @"com.apptentive.messageDate";
-NSString * const ApptentiveTextStyleMessageSender = @"com.apptentive.messageSender";
-NSString * const ApptentiveTextStyleMessageStatus = @"com.apptentive.messageStatus";
-NSString * const ApptentiveTextStyleMessageCenterStatus = @"com.apptentive.messageCenterStatus";
-NSString * const ApptentiveTextStyleSurveyInstructions = @"com.apptentive.surveyInstructions";
+NSString * const ApptentiveTextStyleHeaderTitle = @"com.apptentive.header.title";
+NSString * const ApptentiveTextStyleHeaderMessage = @"com.apptentive.header.message";
+NSString * const ApptentiveTextStyleMessageDate = @"com.apptentive.message.date";
+NSString * const ApptentiveTextStyleMessageSender = @"com.apptentive.message.sender";
+NSString * const ApptentiveTextStyleMessageStatus = @"com.apptentive.message.status";
+NSString * const ApptentiveTextStyleMessageCenterStatus = @"com.apptentive.messageCenter.status";
+NSString * const ApptentiveTextStyleSurveyInstructions = @"com.apptentive.survey.question.instructions";
 NSString * const ApptentiveTextStyleDoneButton = @"com.apptentive.doneButton";
 NSString * const ApptentiveTextStyleButton = @"com.apptentive.button";
 NSString * const ApptentiveTextStyleSubmitButton = @"com.apptentive.submitButton";
 NSString * const ApptentiveTextStyleTextInput = @"com.apptentive.textInput";
 
-NSString * const ApptentiveColorHeaderBackground = @"com.apptentive.headerBackgroundColor";
-NSString * const ApptentiveColorFooterBackground = @"com.apptentive.footerBackgroundColor";
-NSString * const ApptentiveColorFailure = @"com.apptentive.failureColor";
-NSString * const ApptentiveColorSeparator = @"com.apptentive.separatorColor";
-NSString * const ApptentiveColorBackground = @"com.apptentive.backgroundColor";
-NSString * const ApptentiveColorCollectionBackground = @"com.apptentive.collectionBackgroundColor";
-NSString * const ApptentiveColorTextInputBackground = @"com.apptentive.textInputBackgroundColor";
-NSString * const ApptentiveColorMessageBackground = @"com.apptentive.messageBackgroundColor";
-NSString * const ApptentiveColorReplyBackground = @"com.apptentive.replyBackgroundColor";
-NSString * const ApptentiveColorContextBackground = @"com.apptentive.contextBackgroundColor";
+NSString * const ApptentiveColorHeaderBackground = @"com.apptentive.color.header.background";
+NSString * const ApptentiveColorFooterBackground = @"com.apptentive.color.footer.background";
+NSString * const ApptentiveColorFailure = @"com.apptentive.color.failure";
+NSString * const ApptentiveColorSeparator = @"com.apptentive.color.separator";
+NSString * const ApptentiveColorBackground = @"com.apptentive.color.cellBackground";
+NSString * const ApptentiveColorCollectionBackground = @"com.apptentive.color.collectionBackground";
+NSString * const ApptentiveColorTextInputBackground = @"com.apptentive.color.textInputBackground";
+NSString * const ApptentiveColorMessageBackground = @"com.apptentive.color.messageBackground";
+NSString * const ApptentiveColorReplyBackground = @"com.apptentive.color.replyBackground";
+NSString * const ApptentiveColorContextBackground = @"com.apptentive.color.contextBackground";
 
 @interface ATStyleSheet ()
 
@@ -345,12 +345,14 @@ NSString * const ApptentiveColorContextBackground = @"com.apptentive.contextBack
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
 	UIColor * whenContainedInColor = [[klass appearanceWhenContainedIn:[ATNavigationController class], nil] performSelector:propertySelector];
-	if (whenContainedInColor)
+	if (whenContainedInColor) {
 		return whenContainedInColor;
+	}
 
 	whenContainedInColor = [[klass appearance] performSelector:propertySelector];
-	if (whenContainedInColor)
+	if (whenContainedInColor) {
 		return whenContainedInColor;
+	}
 #pragma clang diagnostic pop
 
 	return defaultColor;

@@ -83,6 +83,7 @@
 		015539341C90FB640066A79D /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
 		015539371C90FB760066A79D /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		01794B231CA0A96C00697DB1 /* ATConnect+Debugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ATConnect+Debugging.h"; path = "../ApptentiveConnect/source/ATConnect+Debugging.h"; sourceTree = "<group>"; };
+		019658EF1CA0BAF300663714 /* ATStyleSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ATStyleSheet.h; path = ../ApptentiveConnect/source/ATStyleSheet.h; sourceTree = "<group>"; };
 		019CEBEC1BDEDE9400CCEC97 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		019CEBED1BDEDE9400CCEC97 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "pt-BR"; path = "pt-BR.lproj/Main.storyboard"; sourceTree = "<group>"; };
 		019CEBEE1BDEDE9400CCEC97 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -227,6 +228,7 @@
 				01A16C8D1AF2A66B00D691FC /* Products */,
 				01A16CC11AF2A68A00D691FC /* ATConnect.h */,
 				01794B231CA0A96C00697DB1 /* ATConnect+Debugging.h */,
+				019658EF1CA0BAF300663714 /* ATStyleSheet.h */,
 				01A16CB51AF2A67600D691FC /* ApptentiveConnect.xcodeproj */,
 			);
 			sourceTree = "<group>";

@@ -11,7 +11,6 @@
 
 @interface ATMessageCenterProfileView ()
 
-@property (weak, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) IBOutlet UIView *buttonBar;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *nameTrailingConstraint;
@@ -35,11 +34,7 @@
 @implementation ATMessageCenterProfileView
 
 - (void)awakeFromNib {
-	UIColor *borderColor = [UIColor colorWithRed:200.0 / 255.0 green:199.0 / 255.0 blue:204.0 / 255.0 alpha:1.0];
 	CGFloat borderWidth = 1.0 / [UIScreen mainScreen].scale;
-
-	self.containerView.layer.borderColor = borderColor.CGColor;
-	self.buttonBar.layer.borderColor = borderColor.CGColor;
 
 	self.containerView.layer.borderWidth = borderWidth;
 	self.buttonBar.layer.borderWidth = borderWidth;
@@ -72,6 +67,13 @@
 	_orientation = orientation;
 	[self updateConstraints];
 	[self sizeToFit];
+}
+
+- (void)setBorderColor:(UIColor *)borderColor {
+	_borderColor = borderColor;
+	
+	self.containerView.layer.borderColor = self.borderColor.CGColor;
+	self.buttonBar.layer.borderColor = self.borderColor.CGColor;
 }
 
 - (void)updateConstraints {

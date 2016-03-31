@@ -21,6 +21,8 @@
 - (void)awakeFromNib {
 	self.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
 
+	_borderColor = [UIColor colorWithWhite:0.78 alpha:1.0];
+
 	[self updateColors];
 	[self updateBorders];
 }
@@ -34,6 +36,12 @@
 
 - (void)setSelected:(BOOL)selected {
 	[super setSelected:selected];
+
+	[self updateColors];
+}
+
+- (void)setBorderColor:(UIColor *)borderColor {
+	_borderColor = borderColor;
 
 	[self updateColors];
 }
@@ -56,7 +64,7 @@
 		self.backgroundColor = self.tintColor;
 		self.imageView.hidden = NO;
 	} else {
-		self.layer.borderColor = [UIColor colorWithWhite:0.78 alpha:1.0].CGColor;
+		self.layer.borderColor = self.borderColor.CGColor;
 		self.backgroundColor = [UIColor clearColor];
 		self.imageView.hidden = YES;
 	}

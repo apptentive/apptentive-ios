@@ -12,5 +12,8 @@
 @interface ATSurveyLayoutAttributes : UICollectionViewLayoutAttributes
 
 @property (assign, nonatomic, getter=isValid) BOOL valid;
+@property (strong, nonatomic) UIColor *validColor;
+@property (strong, nonatomic) UIColor *invalidColor;
+@property (strong, nonatomic) UIColor *backgroundColor;
 
 @end

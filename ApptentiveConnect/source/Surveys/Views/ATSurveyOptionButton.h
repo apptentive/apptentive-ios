@@ -17,5 +17,6 @@ typedef NS_ENUM(NSInteger, ATSurveyOptionButtonStyle) {
 @interface ATSurveyOptionButton : UIButton
 
 @property (assign, nonatomic) ATSurveyOptionButtonStyle style;
+@property (strong, nonatomic) UIColor *borderColor;
 
 @end

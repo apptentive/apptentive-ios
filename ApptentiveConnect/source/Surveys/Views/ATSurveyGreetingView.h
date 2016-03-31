@@ -13,5 +13,6 @@
 
 @property (strong, nonatomic) IBOutlet UILabel *greetingLabel;
 @property (strong, nonatomic) IBOutlet UIButton *infoButton;
+@property (strong, nonatomic) IBOutlet UIView *borderView;
 
 @end

@@ -9,7 +9,6 @@
 #import "ATSurveyQuestionBackgroundView.h"
 #import "ATSurveyLayoutAttributes.h"
 
-
 @implementation ATSurveyQuestionBackgroundView
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -27,7 +26,7 @@
 - (void)setValid:(BOOL)valid {
 	_valid = valid;
 
-	self.layer.borderColor = (valid ? [UIColor colorWithWhite:0.8 alpha:1.0] : [UIColor colorWithRed:0.85 green:0.22 blue:0.29 alpha:1.0]).CGColor;
+	self.layer.borderColor = (valid ? self.validColor : self.invalidColor).CGColor;
 	self.layer.borderWidth = valid ? 1.0 / [UIScreen mainScreen].scale : 1.0;
 }
 
@@ -35,7 +34,11 @@
 	[super applyLayoutAttributes:layoutAttributes];
 
 	if ([layoutAttributes isKindOfClass:[ATSurveyLayoutAttributes class]]) {
-		self.valid = ((ATSurveyLayoutAttributes *)layoutAttributes).valid;
+		ATSurveyLayoutAttributes *surveyLayoutAttributes = (ATSurveyLayoutAttributes *)layoutAttributes;
+		self.validColor = surveyLayoutAttributes.validColor;
+		self.invalidColor = surveyLayoutAttributes.invalidColor;
+		self.backgroundColor = surveyLayoutAttributes.backgroundColor;
+		self.valid = surveyLayoutAttributes.valid;
 	}
 }
 

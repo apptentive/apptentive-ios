@@ -52,8 +52,24 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	NSMutableDictionary *_integrationConfiguration;
 }
 
-+ (void)load {
-	[UINavigationBar appearanceWhenContainedIn:[ATNavigationController class], nil].barTintColor = [UIColor whiteColor];
++ (NSString *)supportDirectoryPath {
+	NSString *appSupportDirectoryPath = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES).firstObject;
+	NSString *apptentiveDirectoryPath = [appSupportDirectoryPath stringByAppendingPathComponent:@"com.apptentive.feedback"];
+	NSFileManager *fm = [NSFileManager defaultManager];
+	NSError *error = nil;
+
+	if (![fm createDirectoryAtPath:apptentiveDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
+		ATLogError(@"Failed to create support directory: %@", apptentiveDirectoryPath);
+		ATLogError(@"Error was: %@", error);
+		return nil;
+	}
+
+	if (![fm setAttributes:@{ NSFileProtectionKey: NSFileProtectionCompleteUntilFirstUserAuthentication } ofItemAtPath:apptentiveDirectoryPath error:&error]) {
+		ATLogError(@"Failed to set file protection level: %@", apptentiveDirectoryPath);
+		ATLogError(@"Error was: %@", error);
+	}
+
+	return apptentiveDirectoryPath;
 }
 
 + (ATConnect *)sharedConnection {
@@ -70,6 +86,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		_customPersonData = [[NSMutableDictionary alloc] init];
 		_customDeviceData = [[NSMutableDictionary alloc] init];
 		_integrationConfiguration = [[NSMutableDictionary alloc] init];
+		_styleSheet = [[ATStyleSheet alloc] init];
 
 		ATLogInfo(@"Apptentive SDK Version %@", kATConnectVersionString);
 	}
@@ -607,6 +624,16 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 @implementation ATNavigationController
 // Container to allow customization of Apptentive UI using UIAppearance
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+	self = [super initWithCoder:aDecoder];
+	if (self) {
+		if (!([UINavigationBar appearance].barTintColor || [UINavigationBar appearanceWhenContainedIn:[ATNavigationController class], nil].barTintColor)) {
+			[UINavigationBar appearanceWhenContainedIn:[ATNavigationController class], nil].barTintColor = [UIColor whiteColor];
+		}
+	}
+	return self;
+}
 
 - (void)pushAboutApptentiveViewController {
 	UIViewController *aboutViewController = [[ATConnect storyboard] instantiateViewControllerWithIdentifier:@"About"];

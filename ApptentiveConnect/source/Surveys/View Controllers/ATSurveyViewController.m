@@ -22,32 +22,31 @@
 #import "ATBackend.h"
 #import "ATHUDViewController.h"
 #import "ATConnect_Private.h"
+#import "ATStyleSheet.h"
 
 // These need to match the values from the storyboard
 #define QUESTION_HORIZONTAL_MARGIN 38.0
 #define QUESTION_VERTICAL_MARGIN 36.0
-#define QUESTION_FONT [UIFont systemFontOfSize:17.0]
-#define INSTRUCTIONS_FONT [UIFont systemFontOfSize:12.0]
 
 #define CHOICE_HORIZONTAL_MARGIN 77.0
 #define CHOICE_VERTICAL_MARGIN 23.5
-#define CHOICE_FONT [UIFont systemFontOfSize:17.0]
 
 #define MULTILINE_HORIZONTAL_MARGIN 44
 #define MULTILINE_VERTICAL_MARGIN 14
-#define MULTILINE_FONT [UIFont systemFontOfSize:14.0]
-
 
 @interface ATSurveyViewController ()
 
 @property (strong, nonatomic) IBOutlet ATSurveyGreetingView *headerView;
+@property (strong, nonatomic) IBOutlet UIView *headerBackgroundView;
 @property (strong, nonatomic) IBOutlet UIView *footerView;
+@property (strong, nonatomic) IBOutlet UIView *footerBackgroundView;
 @property (strong, nonatomic) IBOutlet ATSurveySubmitButton *submitButton;
 
 @property (strong, nonatomic) NSIndexPath *editingIndexPath;
 
-@end
+@property (readonly, nonatomic) CGFloat lineHeightOfQuestionFont;
 
+@end
 
 @implementation ATSurveyViewController
 
@@ -69,6 +68,21 @@
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustForKeyboard:) name:UIKeyboardWillShowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustForKeyboard:) name:UIKeyboardWillHideNotification object:nil];
 	}
+
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sizeDidUpdate:) name:UIContentSizeCategoryDidChangeNotification object:nil];
+
+	ATStyleSheet *style = self.viewModel.styleSheet;
+
+	self.collectionView.backgroundColor = [style colorForStyle:ApptentiveColorCollectionBackground];
+	self.headerBackgroundView.backgroundColor = [style colorForStyle:ApptentiveColorHeaderBackground];
+	self.headerView.greetingLabel.font = [style fontForStyle:ApptentiveTextStyleHeaderMessage];
+	self.headerView.greetingLabel.textColor = [style colorForStyle:ApptentiveTextStyleHeaderMessage];
+	self.headerView.infoButton.tintColor = [style colorForStyle:ApptentiveTextStyleSurveyInstructions];
+	self.headerView.borderView.backgroundColor = [style colorForStyle:ApptentiveColorSeparator];
+
+	self.footerBackgroundView.backgroundColor = [style colorForStyle:ApptentiveColorFooterBackground];
+	self.submitButton.titleLabel.font = [style fontForStyle:ApptentiveTextStyleSubmitButton];
+	self.submitButton.backgroundColor = [style colorForStyle:ApptentiveColorBackground];
 }
 
 - (void)dealloc {
@@ -81,6 +95,16 @@
 }
 
 - (void)viewWillLayoutSubviews {
+	[self.collectionViewLayout invalidateLayout];
+}
+
+- (void)sizeDidUpdate:(NSNotification *)notification {
+	_lineHeightOfQuestionFont = 0;
+
+	self.headerView.greetingLabel.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleHeaderMessage];
+	self.submitButton.titleLabel.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleSubmitButton];
+
+	[self.collectionView reloadData];
 	[self.collectionViewLayout invalidateLayout];
 }
 
@@ -124,6 +148,17 @@
 	viewModel.delegate = self;
 }
 
+@synthesize lineHeightOfQuestionFont = _lineHeightOfQuestionFont;
+
+- (CGFloat)lineHeightOfQuestionFont {
+	if (_lineHeightOfQuestionFont == 0) {
+		UIFont *questionFont = [self.viewModel.styleSheet fontForStyle:UIFontTextStyleBody];
+		_lineHeightOfQuestionFont = CGRectGetHeight(CGRectIntegral([@"A" boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: questionFont } context:nil])) + CHOICE_VERTICAL_MARGIN;
+	}
+
+	return _lineHeightOfQuestionFont;
+}
+
 #pragma mark Collection View Data Source
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
@@ -145,6 +180,8 @@
 			cell.textView.delegate = self;
 			cell.textView.tag = indexPath.section;
 			cell.textView.accessibilityLabel = [self.viewModel placeholderTextOfQuestionAtIndex:indexPath.section];
+			cell.textView.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleTextInput];
+			cell.textView.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleTextInput];
 
 			return cell;
 		}
@@ -155,19 +192,28 @@
 			cell.textField.placeholder = [self.viewModel placeholderTextOfQuestionAtIndex:indexPath.section];
 			cell.textField.delegate = self;
 			cell.textField.tag = indexPath.section;
+			cell.textField.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleTextInput];
+			cell.textField.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleTextInput];
 
 			return cell;
 		}
 		case ATSurveyQuestionTypeSingleSelect:
 		case ATSurveyQuestionTypeMultipleSelect: {
 			NSString *reuseIdentifier = [self.viewModel typeOfQuestionAtIndex:indexPath.section] == ATSurveyQuestionTypeSingleSelect ? @"Radio" : @"Checkbox";
-			UIImage *buttonImage = [ATBackend imageNamed:[self.viewModel typeOfQuestionAtIndex:indexPath.section] == ATSurveyQuestionTypeSingleSelect ? @"at_circle" : @"at_checkmark"];
+			UIImage *buttonImage = [[ATBackend imageNamed:[self.viewModel typeOfQuestionAtIndex:indexPath.section] == ATSurveyQuestionTypeSingleSelect ? @"at_circle" : @"at_checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 
 			ATSurveyChoiceCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
 
 			cell.textLabel.text = [self.viewModel textOfAnswerAtIndexPath:indexPath];
+			cell.textLabel.font = [self.viewModel.styleSheet fontForStyle:UIFontTextStyleBody];
+			cell.textLabel.textColor = [self.viewModel.styleSheet colorForStyle:UIFontTextStyleBody];
+
+			cell.button.borderColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorSeparator];
 			cell.accessibilityLabel = [self.viewModel textOfAnswerAtIndexPath:indexPath];
 			[cell.button setImage:buttonImage forState:UIControlStateNormal];
+			cell.button.imageView.tintColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorBackground];
+
+			cell.buttonTopConstraint.constant = (self.lineHeightOfQuestionFont - CGRectGetHeight(cell.button.bounds)) / 2.0;
 
 			return cell;
 		}
@@ -179,8 +225,16 @@
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
 	if (kind == UICollectionElementKindSectionHeader) {
 		ATSurveyQuestionView *view = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"Question" forIndexPath:indexPath];
+
 		view.textLabel.text = [self.viewModel textOfQuestionAtIndex:indexPath.section];
+		view.textLabel.font = [ self.viewModel.styleSheet fontForStyle:UIFontTextStyleBody];
+		view.textLabel.textColor = [ self.viewModel.styleSheet colorForStyle:UIFontTextStyleBody];
+
 		view.instructionsTextLabel.text = [self.viewModel instructionTextOfQuestionAtIndex:indexPath.section];
+		view.instructionsTextLabel.font = [ self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleSurveyInstructions];
+		view.instructionsTextLabel.textColor = [ self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleSurveyInstructions];
+
+		view.separatorView.backgroundColor = [ self.viewModel.styleSheet colorForStyle:ApptentiveColorSeparator];
 
 		return view;
 	} else {
@@ -190,6 +244,18 @@
 
 - (BOOL)sectionAtIndexIsValid:(NSInteger)index {
 	return [self.viewModel answerIsValidForQuestionAtIndex:index];
+}
+
+- (UIColor *)validColor {
+	return [self.viewModel.styleSheet colorForStyle:ApptentiveColorSeparator];
+}
+
+- (UIColor *)invalidColor {
+	return [self.viewModel.styleSheet colorForStyle:ApptentiveColorFailure];
+}
+
+- (UIColor *)backgroundColor {
+	return [self.viewModel.styleSheet colorForStyle:ApptentiveColorBackground];
 }
 
 #pragma mark Collection View Delegate
@@ -239,7 +305,8 @@
 		case ATSurveyQuestionTypeMultipleSelect: {
 			CGFloat labelWidth = itemSize.width - CHOICE_HORIZONTAL_MARGIN;
 
-			CGSize labelSize = CGRectIntegral([[self.viewModel textOfAnswerAtIndexPath:indexPath] boundingRectWithSize:CGSizeMake(labelWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: CHOICE_FONT } context:nil]).size;
+			UIFont *choiceFont = [self.viewModel.styleSheet fontForStyle:UIFontTextStyleBody];
+			CGSize labelSize = CGRectIntegral([[self.viewModel textOfAnswerAtIndexPath:indexPath] boundingRectWithSize:CGSizeMake(labelWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: choiceFont } context:nil]).size;
 
 			itemSize.height = labelSize.height + CHOICE_VERTICAL_MARGIN;
 			break;
@@ -251,7 +318,8 @@
 			CGFloat textViewWidth = itemSize.width - MULTILINE_HORIZONTAL_MARGIN;
 
 			NSString *text = [[self.viewModel textOfAnswerAtIndexPath:indexPath] ?: @" " stringByAppendingString:@"\n"];
-			CGSize textSize = CGRectIntegral([text boundingRectWithSize:CGSizeMake(textViewWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: MULTILINE_FONT } context:nil]).size;
+			UIFont *font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleTextInput];
+			CGSize textSize = CGRectIntegral([text boundingRectWithSize:CGSizeMake(textViewWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: font } context:nil]).size;
 
 			itemSize.height = fmax(textSize.height, 17.0) + MULTILINE_VERTICAL_MARGIN + 13;
 			break;
@@ -266,11 +334,17 @@
 	CGSize headerSize = CGSizeMake(collectionView.bounds.size.width - sectionInset.left - sectionInset.right, 44.0);
 	CGFloat labelWidth = headerSize.width - QUESTION_HORIZONTAL_MARGIN;
 
-	CGSize labelSize = CGRectIntegral([[self.viewModel textOfQuestionAtIndex:section] boundingRectWithSize:CGSizeMake(labelWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: QUESTION_FONT } context:nil]).size;
+	UIFont *questionFont = [self.viewModel.styleSheet fontForStyle:UIFontTextStyleBody];
+	CGSize labelSize = CGRectIntegral([[self.viewModel textOfQuestionAtIndex:section] boundingRectWithSize:CGSizeMake(labelWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: questionFont } context:nil]).size;
 
-	CGFloat instructionsHeight = [self.viewModel instructionTextOfQuestionAtIndex:section] ? 15 : 0;
+	NSString *instructionsText = [self.viewModel instructionTextOfQuestionAtIndex:section];
+	CGSize instructionsSize = CGSizeZero;
+	if (instructionsText) {
+		UIFont *instructionsFont = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleSurveyInstructions];
+		instructionsSize = CGRectIntegral([instructionsText boundingRectWithSize:CGSizeMake(labelWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: instructionsFont } context:nil]).size;
+	}
 
-	return CGSizeMake(headerSize.width, labelSize.height + QUESTION_VERTICAL_MARGIN + instructionsHeight);
+	return CGSizeMake(headerSize.width, labelSize.height + QUESTION_VERTICAL_MARGIN + instructionsSize.height);
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {

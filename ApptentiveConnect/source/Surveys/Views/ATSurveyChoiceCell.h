@@ -15,5 +15,6 @@
 
 @property (strong, nonatomic) IBOutlet UILabel *textLabel;
 @property (strong, nonatomic) IBOutlet ATSurveyOptionButton *button;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonTopConstraint;
 
 @end

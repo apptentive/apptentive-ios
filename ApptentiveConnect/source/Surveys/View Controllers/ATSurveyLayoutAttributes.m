@@ -15,12 +15,20 @@
 	ATSurveyLayoutAttributes *result = [super copyWithZone:zone];
 
 	result.valid = self.valid;
+	result.validColor = [self.validColor copy];
+	result.invalidColor = [self.invalidColor copy];
+	result.backgroundColor = [self.backgroundColor copy];
 
 	return result;
 }
 
 - (BOOL)isEqual:(id)object {
-	return [super isEqual:object] && self.valid == ((ATSurveyLayoutAttributes *)object).valid;
+	if ([super isEqual:object]) {
+		ATSurveyLayoutAttributes *other = (ATSurveyLayoutAttributes *)object;
+		return self.valid == other.valid && [self.validColor isEqual:other.validColor] && [self.invalidColor isEqual:other.invalidColor] && [self.backgroundColor isEqual:other.backgroundColor];
+	} else {
+		return NO;
+	}
 }
 
 @end

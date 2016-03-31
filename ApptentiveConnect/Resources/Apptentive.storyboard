@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
@@ -96,6 +96,7 @@
                             </constraints>
                             <connections>
                                 <outlet property="aboutButton" destination="bNv-Jb-zyu" id="rId-iw-XKV"/>
+                                <outlet property="borderView" destination="sQH-Xo-hct" id="bY5-Db-0kt"/>
                                 <outlet property="bottomBorderHeightConstraint" destination="xWx-Gq-u4K" id="CTY-ud-t8E"/>
                                 <outlet property="imageCenterXConstraint" destination="KtR-Jf-Err" id="kBs-1E-4UU"/>
                                 <outlet property="imageCenterYConstraint" destination="agk-W3-azS" id="IMI-MO-RVe"/>
@@ -170,7 +171,6 @@
                                                             </connections>
                                                         </button>
                                                     </subviews>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstItem="Mka-QN-zVs" firstAttribute="baseline" secondItem="hkW-wu-sjM" secondAttribute="baseline" id="1id-lV-kzo"/>
                                                         <constraint firstItem="Mka-QN-zVs" firstAttribute="leading" secondItem="Hme-XS-svZ" secondAttribute="trailing" id="4kH-Os-vzx"/>
@@ -192,7 +192,6 @@
                                                 </view>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="751" verticalHuggingPriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="do6-U4-CNu">
                                                     <rect key="frame" x="0.0" y="44" width="398" height="240"/>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                     <connections>
@@ -1323,7 +1322,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                                 </userDefinedRuntimeAttribute>
                                             </userDefinedRuntimeAttributes>
                                         </button>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Radio" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="229" translatesAutoresizingMaskIntoConstraints="NO" id="XeR-GW-QUi">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Radio" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="8192" translatesAutoresizingMaskIntoConstraints="NO" id="XeR-GW-QUi">
                                             <rect key="frame" x="58" y="11" width="229" height="22"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -1342,6 +1341,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                 </constraints>
                                 <connections>
                                     <outlet property="button" destination="f7n-H0-eAD" id="q1b-wm-dZZ"/>
+                                    <outlet property="buttonTopConstraint" destination="q0p-Hv-yqZ" id="XJN-Dj-VVb"/>
                                     <outlet property="textLabel" destination="XeR-GW-QUi" id="uot-NF-XjQ"/>
                                 </connections>
                             </collectionViewCell>
@@ -1352,7 +1352,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                     <rect key="frame" x="0.0" y="0.0" width="306" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Checkmark" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="229" translatesAutoresizingMaskIntoConstraints="NO" id="jfd-bx-kqH">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Checkmark" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="8192" translatesAutoresizingMaskIntoConstraints="NO" id="jfd-bx-kqH">
                                             <rect key="frame" x="58" y="11" width="229" height="22"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -1383,6 +1383,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                 </constraints>
                                 <connections>
                                     <outlet property="button" destination="zb3-bq-5N3" id="xkf-xo-yVy"/>
+                                    <outlet property="buttonTopConstraint" destination="wqo-F3-1FI" id="oq3-FM-ld4"/>
                                     <outlet property="textLabel" destination="jfd-bx-kqH" id="89W-Fg-LYo"/>
                                 </connections>
                             </collectionViewCell>
@@ -1457,7 +1458,7 @@ Lines</string>
                             <rect key="frame" x="0.0" y="64" width="320" height="77"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Do You Eat Beans?" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="282" translatesAutoresizingMaskIntoConstraints="NO" id="TTZ-vQ-g60">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Do You Eat Beans?" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="8192" translatesAutoresizingMaskIntoConstraints="NO" id="TTZ-vQ-g60">
                                     <rect key="frame" x="19" y="13" width="282" height="20.5"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -1470,8 +1471,8 @@ Lines</string>
                                         <constraint firstAttribute="height" constant="1" id="B7O-ax-v5C"/>
                                     </constraints>
                                 </view>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select between 1 and 3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mTb-NZ-av4">
-                                    <rect key="frame" x="19" y="35.5" width="132" height="14.5"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select between 1 and 3" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="8192" translatesAutoresizingMaskIntoConstraints="NO" id="mTb-NZ-av4">
+                                    <rect key="frame" x="19" y="35" width="132" height="14.5"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                     <color key="textColor" red="0.68627450980392157" green="0.68627450980392157" blue="0.68627450980392157" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
@@ -1481,6 +1482,7 @@ Lines</string>
                                 <constraint firstAttribute="trailing" secondItem="KBj-ej-Jg5" secondAttribute="trailing" id="4m0-P5-Du9"/>
                                 <constraint firstItem="TTZ-vQ-g60" firstAttribute="top" secondItem="Bcl-nV-AHj" secondAttribute="top" constant="13" id="634-lY-n3c"/>
                                 <constraint firstItem="mTb-NZ-av4" firstAttribute="top" secondItem="TTZ-vQ-g60" secondAttribute="bottom" constant="2" id="88M-VC-6gy"/>
+                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="mTb-NZ-av4" secondAttribute="trailing" constant="19" id="K3M-ut-7N6"/>
                                 <constraint firstItem="mTb-NZ-av4" firstAttribute="leading" secondItem="TTZ-vQ-g60" secondAttribute="leading" id="T99-Uh-WUD"/>
                                 <constraint firstItem="TTZ-vQ-g60" firstAttribute="leading" secondItem="Bcl-nV-AHj" secondAttribute="leading" constant="19" id="TLz-R0-7so"/>
                                 <constraint firstItem="KBj-ej-Jg5" firstAttribute="leading" secondItem="Bcl-nV-AHj" secondAttribute="leading" id="Uoh-gv-78y"/>
@@ -1489,6 +1491,7 @@ Lines</string>
                             </constraints>
                             <connections>
                                 <outlet property="instructionsTextLabel" destination="mTb-NZ-av4" id="jup-Q6-uSN"/>
+                                <outlet property="separatorView" destination="KBj-ej-Jg5" id="Swn-8d-K3T"/>
                                 <outlet property="separatorViewHeight" destination="B7O-ax-v5C" id="YcX-ON-LbQ"/>
                                 <outlet property="textLabel" destination="TTZ-vQ-g60" id="6L4-Zq-2W3"/>
                             </connections>
@@ -1510,7 +1513,9 @@ Lines</string>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="footerBackgroundView" destination="j6Y-7N-uj9" id="Pzp-uN-bkE"/>
                         <outlet property="footerView" destination="bBK-pb-4Z7" id="fuG-Zm-GSj"/>
+                        <outlet property="headerBackgroundView" destination="hym-vX-x0x" id="J6F-sy-hZo"/>
                         <outlet property="headerView" destination="5MM-w9-NsG" id="8C8-T1-htU"/>
                         <outlet property="submitButton" destination="W2C-ze-Odt" id="tRG-fw-1rW"/>
                     </connections>
@@ -1562,6 +1567,7 @@ Lines</string>
                         <constraint firstAttribute="bottom" secondItem="hym-vX-x0x" secondAttribute="bottom" id="o7f-uU-vfB"/>
                     </constraints>
                     <connections>
+                        <outlet property="borderView" destination="kjO-RC-C9t" id="gjK-IH-cQv"/>
                         <outlet property="borderViewHeight" destination="BYb-xi-ZnV" id="RTk-wS-BmV"/>
                         <outlet property="greetingLabel" destination="QJU-jb-fK0" id="xYM-nv-FYb"/>
                         <outlet property="infoButton" destination="eQS-jv-07Q" id="Wss-bq-skU"/>
@@ -1585,7 +1591,6 @@ Lines</string>
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" white="0.96999999999999997" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="W2C-ze-Odt" secondAttribute="bottom" constant="24" id="0YT-BH-6dL"/>
                         <constraint firstAttribute="trailing" secondItem="j6Y-7N-uj9" secondAttribute="trailing" id="5cq-NM-1l8"/>

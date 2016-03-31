@@ -179,6 +179,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.messageInputView.clearButton setImage:[[ATBackend imageNamed:@"at_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
 
 	self.messageInputView.placeholderLabel.text = self.interaction.composerPlaceholderText;
+	self.messageInputView.placeholderLabel.font = [[ATConnect sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleTextInput];
+
 	self.messageInputView.placeholderLabel.hidden = self.messageInputView.messageView.text.length > 0;
 
 	self.messageInputView.titleLabel.text = self.interaction.composerTitle;
@@ -404,6 +406,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		compoundCell.collectionView.dataSource = self;
 		compoundCell.collectionView.delegate = self;
 		[compoundCell.collectionView reloadData];
+		compoundCell.collectionView.backgroundColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveColorBackground];
 
 		UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)compoundCell.collectionView.collectionViewLayout;
 		layout.sectionInset = UIEdgeInsetsMake(ATTACHMENT_MARGIN.height, ATTACHMENT_MARGIN.width, ATTACHMENT_MARGIN.height, ATTACHMENT_MARGIN.width);

@@ -65,7 +65,7 @@
 		NSArray *components = [keyPath componentsSeparatedByString:@"/"];
 		if (components.count > 1) {
 			NSString *codePoint = [components objectAtIndex:1];
-			[[ATEngagementBackend sharedBackend] codePointWasSeen:[codePoint stringByRemovingPercentEncoding]];
+			[[ATConnect sharedConnection].engagementBackend codePointWasSeen:[codePoint stringByRemovingPercentEncoding]];
 		}
 	} else if ([keyPath hasPrefix:@"interactions/"]) {
 		NSArray *components = [keyPath componentsSeparatedByString:@"/"];

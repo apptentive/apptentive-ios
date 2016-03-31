@@ -11,14 +11,18 @@
 extern NSString *const ATConnectCustomPersonDataChangedNotification;
 extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 
-@class ATCompoundMessage;
+@class ATCompoundMessage, ATWebClient, ATBackend, ATEngagementBackend;
 
 
 @interface ATConnect ()
 
-- (NSDictionary *)customPersonData;
-- (NSDictionary *)customDeviceData;
+@property (readonly, nonatomic) NSDictionary *customPersonData;
+@property (readonly, nonatomic) NSDictionary *customDeviceData;
 - (NSDictionary *)integrationConfiguration;
+
+@property (readonly, nonatomic) ATWebClient *webClient;
+@property (readonly, nonatomic) ATBackend *backend;
+@property (readonly, nonatomic) ATEngagementBackend *engagementBackend;
 
 @property (strong, nonatomic) NSDictionary *pushUserInfo;
 @property (strong, nonatomic) UIViewController *pushViewController;
@@ -36,12 +40,6 @@ extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 + (NSBundle *)resourceBundle;
 + (UIStoryboard *)storyboard;
 
-// Debug/test interactions by invoking them directly
-- (NSArray *)engagementInteractions;
-- (NSString *)engagementInteractionNameAtIndex:(NSInteger)index;
-- (NSString *)engagementInteractionTypeAtIndex:(NSInteger)index;
-- (void)presentInteractionAtIndex:(NSInteger)index fromViewController:(UIViewController *)viewController;
-
 - (void)showNotificationBannerForMessage:(ATCompoundMessage *)message;
 
 + (NSDictionary *)timestampObjectWithNumber:(NSNumber *)seconds;
@@ -53,3 +51,10 @@ extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 /*! Replacement for NSLocalizedString within ApptentiveConnect. Pulls
  localized strings out of the resource bundle. */
 extern NSString *ATLocalizedString(NSString *key, NSString *comment);
+
+
+@interface ATNavigationController (AboutView)
+
+- (void)pushAboutApptentiveViewController;
+
+@end

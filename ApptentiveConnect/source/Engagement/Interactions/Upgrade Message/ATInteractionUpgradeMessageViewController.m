@@ -81,7 +81,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 	}
 
 	// Powered by Apptentive logo
-	if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_powered_by"] boolValue] && ![ATBackend sharedBackend].hideBranding) {
+	if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_powered_by"] boolValue] && ![ATConnect sharedConnection].backend.hideBranding) {
 		self.poweredByApptentiveLogo.text = ATLocalizedString(@"Powered by", @"Powered by followed by Apptentive logo.");
 		UIImage *poweredByApptentiveIcon = [ATBackend imageNamed:@"at_update_logo"];
 		[self.poweredByApptentiveIconView setImage:poweredByApptentiveIcon];
@@ -106,7 +106,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 }
 
 - (IBAction)showAbout:(id)sender {
-	[self.navigationController pushViewController:[ATAboutViewController aboutViewControllerFromStoryboard] animated:YES];
+	[(ATNavigationController *)self.navigationController pushAboutApptentiveViewController];
 	[self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 

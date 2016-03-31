@@ -13,7 +13,7 @@
 NSString *const ATReachabilityStatusChanged = @"ATReachabilityStatusChanged";
 
 
-@interface ATReachability (Private)
+@interface ATReachability ()
 - (BOOL)start;
 - (void)stop;
 @end
@@ -116,10 +116,9 @@ static void ATReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 
 	return status;
 }
-@end
 
+#pragma mark - Private methods
 
-@implementation ATReachability (Private)
 - (BOOL)start {
 	BOOL result = NO;
 	SCNetworkReachabilityContext context = {0, (__bridge void *)(self), NULL, NULL, NULL};

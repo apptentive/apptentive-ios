@@ -7,12 +7,14 @@
 //
 
 #import "ATInteractionSurveyController.h"
-#import "ATConnect.h"
+#import "ATConnect_Private.h"
 #import "ATInteraction.h"
 #import "ATBackend.h"
-#import "ATSurveyParser.h"
 #import "ATSurveyViewController.h"
 #import "ATEngagementBackend.h"
+
+#import "ATSurvey.h"
+#import "ATSurveyViewModel.h"
 
 NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 
@@ -31,24 +33,16 @@ NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 - (void)showSurveyFromViewController:(UIViewController *)viewController {
 	self.viewController = viewController;
 
-	ATSurveyParser *parser = [[ATSurveyParser alloc] init];
-	ATSurvey *survey = [parser surveyWithInteraction:self.interaction];
+	UINavigationController *navigationController = [[ATConnect storyboard] instantiateViewControllerWithIdentifier:@"SurveyNavigation"];
+	ATSurveyViewController *surveyViewController = navigationController.viewControllers.firstObject;
+	surveyViewController.viewModel = [[ATSurveyViewModel alloc] initWithInteraction:self.interaction];
 
-	ATSurveyViewController *vc = [[ATSurveyViewController alloc] initWithSurvey:survey];
-	vc.interaction = self.interaction;
-	ATNavigationController *nc = [[ATNavigationController alloc] initWithRootViewController:vc];
-
-	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-		nc.modalPresentationStyle = UIModalPresentationFormSheet;
-	}
-
-	NSDictionary *notificationInfo = @{ATSurveyIDKey: (survey.identifier ?: [NSNull null])};
+	NSDictionary *notificationInfo = @{ATSurveyIDKey: (self.interaction.identifier ?: [NSNull null])};
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyShownNotification object:nil userInfo:notificationInfo];
 
 	[self.interaction engage:ATInteractionSurveyEventLabelLaunch fromViewController:self.viewController];
 
-	[viewController presentViewController:nc animated:YES completion:^{
-	}];
+	[viewController presentViewController:navigationController animated:YES completion:nil];
 }
 
 

@@ -9,7 +9,7 @@
 #import "ATAppConfigurationUpdater.h"
 #import "ATUtilities.h"
 #import "ATWebClient.h"
-#import "ATConnect.h"
+#import "ATConnect_Private.h"
 
 NSString *const ATConfigurationSDKVersionKey = @"ATConfigurationSDKVersionKey";
 NSString *const ATConfigurationAppBuildNumberKey = @"ATConfigurationAppBuildNumberKey";
@@ -26,7 +26,7 @@ NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey = @"
 NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDisplayNameKey";
 
 
-@interface ATAppConfigurationUpdater (Private)
+@interface ATAppConfigurationUpdater ()
 - (void)processResult:(NSDictionary *)jsonRatingConfiguration maxAge:(NSTimeInterval)expiresMaxAge;
 @end
 
@@ -103,7 +103,7 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 
 - (void)update {
 	[self cancel];
-	request = [[ATWebClient sharedClient] requestForGettingAppConfiguration];
+	request = [[ATConnect sharedConnection].webClient requestForGettingAppConfiguration];
 	request.delegate = self;
 	[request start];
 }
@@ -148,10 +148,9 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 		[self.delegate configurationUpdaterDidFinish:NO];
 	}
 }
-@end
 
+#pragma mark - Private methods
 
-@implementation ATAppConfigurationUpdater (Private)
 - (void)processResult:(NSDictionary *)jsonConfiguration maxAge:(NSTimeInterval)expiresMaxAge {
 	BOOL hasConfigurationChanges = NO;
 

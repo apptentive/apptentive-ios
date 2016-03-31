@@ -226,7 +226,7 @@
 	if (!filename) {
 		return nil;
 	}
-	return [[[ATBackend sharedBackend] attachmentDirectoryPath] stringByAppendingPathComponent:filename];
+	return [[[ATConnect sharedConnection].backend attachmentDirectoryPath] stringByAppendingPathComponent:filename];
 }
 
 - (NSString *)filenameForThumbnailOfSize:(CGSize)size {
@@ -251,7 +251,7 @@
 			return;
 		}
 		// Delete any thumbnails.
-		NSArray *filenames = [fm contentsOfDirectoryAtPath:[[ATBackend sharedBackend] attachmentDirectoryPath] error:&error];
+		NSArray *filenames = [fm contentsOfDirectoryAtPath:[[ATConnect sharedConnection].backend attachmentDirectoryPath] error:&error];
 		if (!filenames) {
 			ATLogError(@"Error listing attachments directory: %@", error);
 		} else {

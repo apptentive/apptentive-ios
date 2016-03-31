@@ -1,56 +1,36 @@
 //
 //  ATSurveyQuestion.h
-//  ApptentiveSurveys
+//  CVSurvey
 //
-//  Created by Andrew Wooster on 11/4/11.
-//  Copyright (c) 2011 Apptentive. All rights reserved.
+//  Created by Frank Schmitt on 2/29/16.
+//  Copyright © 2016 Apptentive, Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
-typedef enum {
-	ATSurveyQuestionTypeUnknown,
-	ATSurveyQuestionTypeSingeLine,
-	ATSurveyQuestionTypeMultipleChoice,
+typedef NS_ENUM(NSInteger, ATSurveyQuestionType) {
+	ATSurveyQuestionTypeSingleSelect,
 	ATSurveyQuestionTypeMultipleSelect,
-} ATSurveyQuestionType;
+	ATSurveyQuestionTypeSingleLine,
+	ATSurveyQuestionTypeMultipleLine
+};
 
-typedef enum {
-	ATSurveyQuestionValidationErrorNone,
-	ATSurveyQuestionValidationErrorMissingRequiredAnswer,
-	ATSurveyQuestionValidationErrorTooFewAnswers,
-	ATSurveyQuestionValidationErrorTooManyAnswers,
-} ATSurveyQuestionValidationErrorType;
-
-@class ATSurveyQuestionAnswer;
+@class ATSurveyAnswer;
 
 
-@interface ATSurveyQuestion : NSObject <NSCoding>
-@property (assign, nonatomic) ATSurveyQuestionType type;
-@property (copy, nonatomic) NSString *identifier;
-@property (assign, nonatomic, getter=responseIsRequired) BOOL responseRequired;
-@property (copy, nonatomic) NSString *questionText;
-@property (copy, nonatomic) NSString *instructionsText;
-@property (copy, nonatomic) NSString *value;
-@property (readonly, nonatomic) NSMutableArray *answerChoices;
-@property (copy, nonatomic) NSString *answerText;
-// If this is a multiple choice or multiple select question:
-@property (strong, nonatomic) NSMutableArray *selectedAnswerChoices;
-@property (assign, nonatomic) NSUInteger minSelectionCount;
-@property (assign, nonatomic) NSUInteger maxSelectionCount;
-@property (assign, nonatomic) BOOL multiline;
+@interface ATSurveyQuestion : NSObject
 
-- (void)addAnswerChoice:(ATSurveyQuestionAnswer *)answer;
+- (instancetype)initWithJSON:(NSDictionary *)JSON;
 
-- (void)addSelectedAnswerChoice:(ATSurveyQuestionAnswer *)answer;
-- (void)removeSelectedAnswerChoice:(ATSurveyQuestionAnswer *)answer;
-- (ATSurveyQuestionValidationErrorType)validateAnswer;
+@property (readonly, nonatomic) ATSurveyQuestionType type;
+@property (readonly, nonatomic) NSString *identifier;
+@property (readonly, nonatomic) NSString *instructions;
+@property (readonly, nonatomic) NSString *value;
+@property (readonly, nonatomic) NSString *placeholder;
+@property (readonly, nonatomic) BOOL required;
+@property (readonly, nonatomic) NSInteger minimumSelectedCount;
+@property (readonly, nonatomic) NSInteger maximumSelectedCount;
 
-- (void)reset;
-@end
+@property (readonly, nonatomic) NSArray<ATSurveyAnswer *> *answers;
 
-
-@interface ATSurveyQuestionAnswer : NSObject <NSCoding>
-@property (copy, nonatomic) NSString *identifier;
-@property (copy, nonatomic) NSString *value;
 @end

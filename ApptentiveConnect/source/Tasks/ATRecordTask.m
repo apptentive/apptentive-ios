@@ -8,19 +8,15 @@
 
 #import "ATRecordTask.h"
 #import "ApptentiveMetrics.h"
-#import "ATBackend.h"
 #import "ATMetric.h"
 #import "ATWebClient.h"
+#import "ATConnect_Private.h"
 
 #define kATRecordTaskCodingVersion 1
 
 
-@interface ATRecordTask (Private)
-- (BOOL)handleLegacyRecord;
-@end
-
-
 @interface ATRecordTask ()
+- (BOOL)handleLegacyRecord;
 
 @property (strong, nonatomic) ATAPIRequest *request;
 
@@ -51,7 +47,7 @@
 }
 
 - (BOOL)canStart {
-	if ([[ATBackend sharedBackend] apiKey] == nil) {
+	if ([ATConnect sharedConnection].webClient == nil) {
 		return NO;
 	}
 	return YES;
@@ -116,14 +112,14 @@
 		self.failed = YES;
 		self.lastErrorTitle = sender.errorTitle;
 		self.lastErrorMessage = sender.errorMessage;
+		self.shouldRetry = sender.shouldRetry;
 		ATLogInfo(@"ATAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
 		[self stop];
 	}
 }
-@end
 
+#pragma mark - Private methods
 
-@implementation ATRecordTask (Private)
 - (BOOL)handleLegacyRecord {
 	if ([self.record isKindOfClass:[ATMetric class]]) {
 		if ([[ApptentiveMetrics sharedMetrics] upgradeLegacyMetric:(ATMetric *)self.record]) {

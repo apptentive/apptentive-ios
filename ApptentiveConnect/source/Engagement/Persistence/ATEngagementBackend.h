@@ -34,7 +34,6 @@ extern NSString *const ATEngagementMessageCenterEvent;
 
 
 @interface ATEngagementBackend : NSObject
-+ (ATEngagementBackend *)sharedBackend;
 
 - (void)checkForEngagementManifest;
 - (BOOL)shouldRetrieveNewEngagementManifest;
@@ -74,5 +73,6 @@ extern NSString *const ATEngagementMessageCenterEvent;
 // Used for debugging only.
 - (void)resetUpgradeVersionInfo;
 - (NSArray *)allEngagementInteractions;
+@property (strong, nonatomic) NSData *engagementManifestJSON;
 
 @end

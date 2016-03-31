@@ -307,10 +307,9 @@
 	responseString = nil;
 	return result;
 }
-@end
 
+#pragma mark - Private methods
 
-@implementation ATURLConnection (Private)
 - (void)cancel {
 	@synchronized(self) {
 		if (self.finished) {

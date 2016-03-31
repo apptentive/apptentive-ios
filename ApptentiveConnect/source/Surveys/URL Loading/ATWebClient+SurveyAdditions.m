@@ -30,10 +30,9 @@
 		ATLogError(@"ATWebClient+SurveyAdditions: Error while encoding JSON: %@", error);
 		return nil;
 	}
-	NSString *path = [NSString stringWithFormat:@"surveys/%@/respond", surveyResponse.surveyID];
-	NSString *url = [self apiURLStringWithPath:path];
+	NSString *path = [NSString stringWithFormat:@"/surveys/%@/respond", surveyResponse.surveyID];
 
-	ATURLConnection *conn = [self connectionToPost:[NSURL URLWithString:url] JSON:postString];
+	ATURLConnection *conn = [self connectionToPost:path JSON:postString];
 	conn.timeoutInterval = 240.0;
 	[self updateConnection:conn withOAuthToken:conversation.token];
 

@@ -10,6 +10,7 @@
 #import "ATBackend.h"
 #import "ATTask.h"
 #import "ATLegacyRecord.h"
+#import "ATConnect_Private.h"
 
 #define kATTaskQueueCodingVersion 1
 // Retry period in seconds.
@@ -20,7 +21,7 @@
 static ATTaskQueue *sharedTaskQueue = nil;
 
 
-@interface ATTaskQueue (Private)
+@interface ATTaskQueue ()
 - (void)setup;
 - (void)teardown;
 - (void)archive;
@@ -34,7 +35,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 }
 
 + (NSString *)taskQueuePath {
-	return [[[ATBackend sharedBackend] supportDirectoryPath] stringByAppendingPathComponent:@"tasks.objects"];
+	return [[[ATConnect sharedConnection].backend supportDirectoryPath] stringByAppendingPathComponent:@"tasks.objects"];
 }
 
 + (BOOL)serializedQueueExists {
@@ -249,12 +250,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 			[self archive];
 			[self startOnNextRunLoopIteration];
 		} else if ([keyPath isEqualToString:@"failed"] && [task failed]) {
-			if (task.isFailureOkay) {
-				task.failureCount = task.failureCount + 1;
-				[self unsetActiveTask];
-				[tasks removeObject:task];
-				[self startOnNextRunLoopIteration];
-			} else {
+			if (task.shouldRetry) {
 				[self stop];
 				task.failureCount = task.failureCount + 1;
 				if (task.failureCount > kMaxFailureCount) {
@@ -271,6 +267,11 @@ static ATTaskQueue *sharedTaskQueue = nil;
 
 					[self performSelector:@selector(start) withObject:nil afterDelay:kATTaskQueueRetryPeriod];
 				}
+			} else {
+				task.failureCount = task.failureCount + 1;
+				[self unsetActiveTask];
+				[tasks removeObject:task];
+				[self startOnNextRunLoopIteration];
 			}
 		}
 	}
@@ -282,10 +283,8 @@ static ATTaskQueue *sharedTaskQueue = nil;
 	});
 }
 
-@end
+#pragma mark - Private methods
 
-
-@implementation ATTaskQueue (Private)
 - (void)setup {
 	@synchronized(self) {
 		tasks = [[NSMutableArray alloc] init];

@@ -11,6 +11,7 @@
 #import "ATConversationUpdater.h"
 #import "ATUtilities.h"
 #import "ATWebClient+MessageCenter.h"
+#import "ATConnect_Private.h"
 
 
 NSString *const ATDeviceLastUpdatePreferenceKey = @"ATDeviceLastUpdatePreferenceKey";
@@ -66,7 +67,7 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 	[self cancel];
 	ATDeviceInfo *deviceInfo = [[ATDeviceInfo alloc] init];
 	self.sentDeviceJSON = deviceInfo.dictionaryRepresentation;
-	self.request = [[ATWebClient sharedClient] requestForUpdatingDevice:deviceInfo];
+	self.request = [[ATConnect sharedConnection].webClient requestForUpdatingDevice:deviceInfo];
 	self.request.delegate = self;
 	[self.request start];
 	deviceInfo = nil;

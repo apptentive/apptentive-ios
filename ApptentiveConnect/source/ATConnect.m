@@ -8,17 +8,18 @@
 
 #import "ATConnect.h"
 #import "ATConnect_Private.h"
-#import "ATConnect_Debugging.h"
 #import "ATBackend.h"
 #import "ATEngagementBackend.h"
 #import "ATInteraction.h"
 #import "ATUtilities.h"
 #import "ATAppConfigurationUpdater.h"
 #import "ATMessageSender.h"
+#import "ATWebClient.h"
 #if TARGET_OS_IPHONE
 #import "ATMessageCenterViewController.h"
 #import "ATBannerViewController.h"
 #import "ATUnreadMessagesBadgeView.h"
+#import "ATAboutViewController.h"
 #endif
 
 // Can't get CocoaPods to do the right thing for debug builds.
@@ -71,19 +72,23 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		_integrationConfiguration = [[NSMutableDictionary alloc] init];
 
 		ATLogInfo(@"Apptentive SDK Version %@", kATConnectVersionString);
-
-#if APPTENTIVE_DEBUG_LOG_VIEWER
-		self.debuggingOptions = ATConnectDebuggingOptionsShowDebugPanel;
-#endif
 	}
 	return self;
 }
 
 - (void)setApiKey:(NSString *)APIKey {
-	if (_apiKey != APIKey) {
-		_apiKey = APIKey;
-		[[ATBackend sharedBackend] setApiKey:self.apiKey];
+	if (![self.webClient.APIKey isEqualToString:APIKey]) {
+		_webClient = [[ATWebClient alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.apptentive.com"] APIKey:APIKey];
+
+		_backend = [[ATBackend alloc] init];
+		_engagementBackend = [[ATEngagementBackend alloc] init];
+
+		[self.backend startup];
 	}
+}
+
+- (NSString *)apiKey {
+	return self.webClient.APIKey;
 }
 
 - (NSString *)personName {
@@ -111,15 +116,15 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (void)sendAttachmentText:(NSString *)text {
-	[[ATBackend sharedBackend] sendTextMessageWithBody:text hiddenOnClient:YES];
+	[self.backend sendTextMessageWithBody:text hiddenOnClient:YES];
 }
 
 - (void)sendAttachmentImage:(UIImage *)image {
-	[[ATBackend sharedBackend] sendImageMessageWithImage:image hiddenOnClient:YES];
+	[self.backend sendImageMessageWithImage:image hiddenOnClient:YES];
 }
 
 - (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType {
-	[[ATBackend sharedBackend] sendFileMessageWithFileData:fileData andMimeType:mimeType hiddenOnClient:YES];
+	[self.backend sendFileMessageWithFileData:fileData andMimeType:mimeType hiddenOnClient:YES];
 }
 
 - (NSDictionary *)customPersonData {
@@ -224,7 +229,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		return;
 	}
 
-	[[ATEngagementBackend sharedBackend] engageApptentiveAppEvent:@"open_app_store_manually"];
+	[self.engagementBackend engageApptentiveAppEvent:@"open_app_store_manually"];
 
 	ATInteraction *appStoreInteraction = [[ATInteraction alloc] init];
 	appStoreInteraction.type = @"AppStoreRating";
@@ -234,7 +239,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	appStoreInteraction.configuration = @{ @"store_id": self.appID,
 		@"method": @"app_store" };
 
-	[[ATEngagementBackend sharedBackend] presentInteraction:appStoreInteraction fromViewController:nil];
+	[self.engagementBackend presentInteraction:appStoreInteraction fromViewController:nil];
 }
 
 - (NSDictionary *)integrationConfiguration {
@@ -284,7 +289,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 								ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
 								ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
 
-	[[ATConnect sharedConnection] addIntegration:integration withConfiguration:@{ @"token": token }];
+	[self addIntegration:integration withConfiguration:@{ @"token": token }];
 }
 
 - (void)removeIntegration:(NSString *)integration {
@@ -300,7 +305,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (BOOL)canShowInteractionForEvent:(NSString *)event {
-	return [[ATEngagementBackend sharedBackend] canShowInteractionForLocalEvent:event];
+	return [self.engagementBackend canShowInteractionForLocalEvent:event];
 }
 
 - (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController {
@@ -312,7 +317,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (BOOL)engage:(NSString *)event withCustomData:(NSDictionary *)customData withExtendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {
-	return [[ATEngagementBackend sharedBackend] engageLocalEvent:event userInfo:nil customData:customData extendedData:extendedData fromViewController:viewController];
+	return [self.engagementBackend engageLocalEvent:event userInfo:nil customData:customData extendedData:extendedData fromViewController:viewController];
 }
 
 + (NSDictionary *)extendedDataDate:(NSDate *)date {
@@ -411,11 +416,11 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (BOOL)canShowMessageCenter {
 	NSString *messageCenterCodePoint = [[ATInteraction apptentiveAppInteraction] codePointForEvent:ATEngagementMessageCenterEvent];
-	return [[ATEngagementBackend sharedBackend] canShowInteractionForCodePoint:messageCenterCodePoint];
+	return [self.engagementBackend canShowInteractionForCodePoint:messageCenterCodePoint];
 }
 
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController {
-	return [[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController];
+	return [self.backend presentMessageCenterFromViewController:viewController];
 }
 
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData {
@@ -425,7 +430,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		[self addCustomData:[customData objectForKey:key] withKey:key toCustomDataDictionary:allowedCustomMessageData];
 	}
 
-	return [[ATBackend sharedBackend] presentMessageCenterFromViewController:viewController withCustomData:allowedCustomMessageData];
+	return [self.backend presentMessageCenterFromViewController:viewController withCustomData:allowedCustomMessageData];
 }
 
 - (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController {
@@ -443,7 +448,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 				NSNumber *contentAvailable = userInfo[@"aps"][@"content-available"];
 				if (contentAvailable.boolValue) {
 					shouldCallCompletionHandler = NO;
-					[[ATBackend sharedBackend] fetchMessagesInBackground:completionHandler];
+					[self.backend fetchMessagesInBackground:completionHandler];
 				}
 				break;
 			}
@@ -460,7 +465,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 				if ([action isEqualToString:@"pmc"]) {
 					[self presentMessageCenterFromViewController:viewController];
 				} else {
-					[[ATBackend sharedBackend] checkForMessages];
+					[self.backend checkForMessages];
 				}
 				break;
 		}
@@ -474,39 +479,15 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (void)resetUpgradeData {
-	[[ATEngagementBackend sharedBackend] resetUpgradeVersionInfo];
-}
-
-- (NSArray *)engagementInteractions {
-	return [[ATEngagementBackend sharedBackend] allEngagementInteractions];
-}
-
-- (NSInteger)numberOfEngagementInteractions {
-	return [[self engagementInteractions] count];
-}
-
-- (NSString *)engagementInteractionNameAtIndex:(NSInteger)index {
-	ATInteraction *interaction = [[self engagementInteractions] objectAtIndex:index];
-
-	return [interaction.configuration objectForKey:@"name"] ?: [interaction.configuration objectForKey:@"title"] ?: @"Untitled Interaction";
-}
-
-- (NSString *)engagementInteractionTypeAtIndex:(NSInteger)index {
-	ATInteraction *interaction = [[self engagementInteractions] objectAtIndex:index];
-
-	return interaction.type;
-}
-
-- (void)presentInteractionAtIndex:(NSInteger)index fromViewController:(UIViewController *)viewController {
-	[[ATEngagementBackend sharedBackend] presentInteraction:[self.engagementInteractions objectAtIndex:index] fromViewController:viewController];
+	[self.engagementBackend resetUpgradeVersionInfo];
 }
 
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion {
-	[[ATBackend sharedBackend] dismissMessageCenterAnimated:animated completion:completion];
+	[self.backend dismissMessageCenterAnimated:animated completion:completion];
 }
 
 - (NSUInteger)unreadMessageCount {
-	return [[ATBackend sharedBackend] unreadMessageCount];
+	return [self.backend unreadMessageCount];
 }
 
 - (UIView *)unreadMessageCountAccessoryView:(BOOL)apptentiveHeart {
@@ -519,7 +500,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 #elif TARGET_OS_MAC
 - (IBAction)showFeedbackWindow:(id)sender {
-	if (![[ATBackend sharedBackend] currentFeedback]) {
+	if (![self.backend currentFeedback]) {
 		ATFeedback *feedback = [[ATFeedback alloc] init];
 		if (additionalFeedbackData && [additionalFeedbackData count]) {
 			[feedback addExtraDataFromDictionary:additionalFeedbackData];
@@ -530,13 +511,13 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		if (self.initialEmailAddress && [self.initialEmailAddress length] > 0) {
 			feedback.email = self.initialEmailAddress;
 		}
-		[[ATBackend sharedBackend] setCurrentFeedback:feedback];
+		[self.backend setCurrentFeedback:feedback];
 		[feedback release];
 		feedback = nil;
 	}
 
 	if (!feedbackWindowController) {
-		feedbackWindowController = [[ATFeedbackWindowController alloc] initWithFeedback:[[ATBackend sharedBackend] currentFeedback]];
+		feedbackWindowController = [[ATFeedbackWindowController alloc] initWithFeedback:[self.backend currentFeedback]];
 	}
 	[feedbackWindowController showWindow:self];
 }
@@ -579,7 +560,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 #pragma mark - Message notification banner
 
 - (void)showNotificationBannerForMessage:(ATCompoundMessage *)message {
-	if ([ATBackend sharedBackend].notificationPopupsEnabled && [message isKindOfClass:[ATCompoundMessage class]]) {
+	if (self.backend.notificationPopupsEnabled && [message isKindOfClass:[ATCompoundMessage class]]) {
 		// TODO: Display something if body is empty
 		ATCompoundMessage *textMessage = (ATCompoundMessage *)message;
 		NSURL *profilePhotoURL = textMessage.sender.profilePhotoURL ? [NSURL URLWithString:textMessage.sender.profilePhotoURL] : nil;
@@ -608,11 +589,30 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	return [UIStoryboard storyboardWithName:@"Apptentive" bundle:[ATConnect resourceBundle]];
 }
 
+#pragma mark - Debugging and diagnostics
+
+- (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL {
+	if (![APIKey isEqualToString:self.webClient.APIKey] || ![baseURL isEqual:self.webClient.baseURL]) {
+		_webClient = [[ATWebClient alloc] initWithBaseURL:baseURL APIKey:APIKey];
+
+		_backend = [[ATBackend alloc] init];
+		_engagementBackend = [[ATEngagementBackend alloc] init];
+
+		[self.backend startup];
+	}
+}
+
 @end
 
 
 @implementation ATNavigationController
 // Container to allow customization of Apptentive UI using UIAppearance
+
+- (void)pushAboutApptentiveViewController {
+	UIViewController *aboutViewController = [[ATConnect storyboard] instantiateViewControllerWithIdentifier:@"About"];
+	[self pushViewController:aboutViewController animated:YES];
+}
+
 @end
 
 NSString *ATLocalizedString(NSString *key, NSString *comment) {

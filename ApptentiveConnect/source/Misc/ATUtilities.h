@@ -18,10 +18,12 @@
 @interface ATUtilities : NSObject
 #if TARGET_OS_IPHONE
 + (UIViewController *)rootViewControllerForCurrentWindow;
-
++ (UIViewController *)topViewController;
++ (UIImage *)appIcon;
 #elif TARGET_OS_MAC
 + (NSData *)pngRepresentationOfImage:(NSImage *)image;
 #endif
+
 + (NSString *)currentMachineName;
 + (NSString *)currentSystemName;
 + (NSString *)currentSystemVersion;
@@ -31,10 +33,7 @@
 + (NSString *)stringByEscapingForPredicate:(NSString *)string;
 + (NSString *)randomStringOfLength:(NSUInteger)length;
 
-+ (void)uniquifyArray:(NSMutableArray *)array;
 + (NSString *)stringRepresentationOfDate:(NSDate *)date;
-+ (NSString *)stringRepresentationOfDate:(NSDate *)date timeZone:(NSTimeZone *)timeZone;
-+ (NSDate *)dateFromISO8601String:(NSString *)string;
 
 + (NSComparisonResult)compareVersionString:(NSString *)a toVersionString:(NSString *)b;
 + (BOOL)versionString:(NSString *)a isGreaterThanVersionString:(NSString *)b;
@@ -42,10 +41,9 @@
 + (BOOL)versionString:(NSString *)a isEqualToVersionString:(NSString *)b;
 
 + (NSArray *)availableAppLocalizations;
-+ (UIImage *)appIcon;
 
-/*! Yes if there is only an app version, rather than an app version + build number in standard Cocoa versioning. */
-+ (BOOL)bundleVersionIsMainVersion;
++ (NSString *)appBundleVersionString;
++ (NSString *)appBundleShortVersionString;
 + (NSString *)appVersionString;
 + (NSString *)buildNumberString;
 
@@ -54,23 +52,14 @@
 
 + (BOOL)dictionary:(NSDictionary *)a isEqualToDictionary:(NSDictionary *)b;
 + (NSTimeInterval)maxAgeFromCacheControlHeader:(NSString *)cacheControl;
-+ (BOOL)array:(NSArray *)a isEqualToArray:(NSArray *)b;
 + (NSDictionary *)diffDictionary:(NSDictionary *) new againstDictionary:(NSDictionary *)old;
 
-#if TARGET_OS_IPHONE
-+ (UIEdgeInsets)edgeInsetsOfView:(UIView *)view;
-
-+ (BOOL)osVersionGreaterThanOrEqualTo:(NSString *)version;
-#endif
-
 + (BOOL)emailAddressIsValid:(NSString *)emailAddress;
-
-+ (UIViewController *)topViewController;
 
 @end
 
 CGRect ATCGRectOfEvenSize(CGRect inRect);
 
-CGSize ATThumbnailSizeOfMaxSize(CGSize imageSize, CGSize maxSize);
-
-CGRect ATThumbnailCropRectForThumbnailSize(CGSize imageSize, CGSize thumbnailSize);
+//CGSize ATThumbnailSizeOfMaxSize(CGSize imageSize, CGSize maxSize);
+//
+//CGRect ATThumbnailCropRectForThumbnailSize(CGSize imageSize, CGSize thumbnailSize);

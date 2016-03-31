@@ -16,8 +16,7 @@
 @implementation ATWebClient (EngagementAdditions)
 
 - (ATAPIRequest *)requestForGettingEngagementManifest {
-	NSString *urlString = [NSString stringWithFormat:@"%@/interactions", [self baseURLString]];
-	ATURLConnection *conn = [self connectionToGet:[NSURL URLWithString:urlString]];
+	ATURLConnection *conn = [self connectionToGet:@"/interactions"];
 	conn.timeoutInterval = 20.0;
 
 	ATConversation *conversation = [ATConversationUpdater currentConversation];

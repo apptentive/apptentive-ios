@@ -37,10 +37,6 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 
 @implementation ATAboutViewController
 
-+ (instancetype)aboutViewControllerFromStoryboard {
-	return [[ATConnect storyboard] instantiateViewControllerWithIdentifier:@"About"];
-}
-
 - (NSString *)codePointForEvent:(NSString *)event {
 	return [ATEngagementBackend codePointForVendor:ATEngagementCodePointApptentiveVendorKey interactionType:ATInteractionAboutViewInteractionKey event:event];
 }
@@ -48,7 +44,7 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
-	[[ATEngagementBackend sharedBackend] engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelLaunch] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
+	[[ATConnect sharedConnection].engagementBackend engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelLaunch] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
 
 	self.imageView.image = [ATBackend imageNamed:@"at_apptentive_logo"];
 	// TODO: Look into localizing the storyboard instead
@@ -72,7 +68,7 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 
-	[[ATEngagementBackend sharedBackend] engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelClose] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
+	[[ATConnect sharedConnection].engagementBackend engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelClose] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
 }
 
 - (IBAction)learnMore:(id)sender {

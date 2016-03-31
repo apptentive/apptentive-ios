@@ -29,11 +29,20 @@ static ATHUDViewController *currentHUD;
 	self.view = [[UIView alloc] initWithFrame:CGRectZero];
 	self.view.backgroundColor = [UIColor clearColor];
 
-	self.HUDView = [[UIView alloc] initWithFrame:CGRectZero];
-	self.HUDView.translatesAutoresizingMaskIntoConstraints = NO;
+	UIView *contentView;
+	if ([UIVisualEffectView class]) {
+		UIVisualEffectView *blurView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark]];
+		self.HUDView = blurView;
+		contentView = blurView.contentView;
+	} else {
+		self.HUDView = [[UIView alloc] initWithFrame:CGRectZero];
+		self.HUDView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.75];
+		contentView = self.HUDView;
+	}
 
-	self.HUDView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.75];
+	self.HUDView.translatesAutoresizingMaskIntoConstraints = NO;
 	self.HUDView.layer.cornerRadius = 12.0;
+	self.HUDView.layer.masksToBounds = YES;
 
 	[self.view addSubview:self.HUDView];
 
@@ -51,8 +60,8 @@ static ATHUDViewController *currentHUD;
 	self.imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
 	self.imageView.translatesAutoresizingMaskIntoConstraints = NO;
 
-	[self.HUDView addSubview:self.textLabel];
-	[self.HUDView addSubview:self.imageView];
+	[contentView addSubview:self.textLabel];
+	[contentView addSubview:self.imageView];
 
 	NSDictionary *views = @{ @"image": self.imageView,
 		@"label": self.textLabel };
@@ -61,7 +70,7 @@ static ATHUDViewController *currentHUD;
 	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(>=44)-[image]-(>=44)-|" options:0 metrics:nil views:views]];
 	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(>=44)-[label]-(>=44)-|" options:0 metrics:nil views:views]];
 
-	[self.HUDView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hide:)]];
+	[contentView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hide:)]];
 }
 
 - (void)showInAlertWindow {

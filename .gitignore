@@ -9,6 +9,7 @@ build/*
 xcuserdata/*
 xcuserdata/
 *.xccheckout
+*.xcscmblueprint
 
 # OSX noise
 .DS_Store

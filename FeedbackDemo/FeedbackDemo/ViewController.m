@@ -11,7 +11,7 @@
 
 // The "ATConnect_Private" header is used only for testing purposes in the demo app.
 // Please do not use it in any live apps in the App Store.
-#import "ATConnect_Private.h"
+#import "ATConnect+Debugging.h"
 
 typedef NS_ENUM(NSInteger, TableViewSection) {
 	kMessageCenterSection,

@@ -26,7 +26,7 @@
 
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingSurveyResponseID == %@)", pendingID];
-		NSArray *results = [ApptentiveData findEntityNamed:@"ApptentiveSurveyResponse" withPredicate:fetchPredicate];
+		NSArray *results = [ApptentiveData findEntityNamed:@"ATSurveyResponse" withPredicate:fetchPredicate];
 		if (results && [results count] != 0) {
 			result = [results objectAtIndex:0];
 		}

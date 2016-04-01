@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "ATConnect.h"
+#import "Apptentive.h"
 
 
 @interface AppDelegate ()
@@ -26,11 +26,11 @@
 #warning Please set your API key and app ID before running.
 	// To find your API key, log into http://be.apptentive.com/,
 	// select your app, click Settings, and click API & Development.
-	[ATConnect sharedConnection].apiKey = @"ApptentiveApiKey";
+	[Apptentive sharedConnection].apiKey = @"edbf34735084c94fe345baaa93a408c655132984bde1a8fe75ddd15b79b771a3";
 
 	// To find your app ID, log into http://itunesconnect.apple.com/,
 	// click My Apps, select an app, and look for its Apple ID.
-	[ATConnect sharedConnection].appID = @"ExampleAppID";
+	[Apptentive sharedConnection].appID = @"ExampleAppID";
 
 	return YES;
 }
@@ -47,21 +47,21 @@
 
 	NSString *testFlightAPIKey = plist[@"ATTestFlightAPIKey"];
 	if (testFlightAPIKey) {
-		[ATConnect sharedConnection].apiKey = testFlightAPIKey;
+		[Apptentive sharedConnection].apiKey = testFlightAPIKey;
 
 		[self registerForRemoteNotifications];
 	}
 
 	NSString *testFlightAppID = plist[@"ATTestFlightAppIDKey"];
 	if (testFlightAppID) {
-		[ATConnect sharedConnection].appID = testFlightAppID;
+		[Apptentive sharedConnection].appID = testFlightAppID;
 	}
 
 	return (testFlightAPIKey != nil);
 }
 
 - (void)showAPIKeyWarning {
-	if ([[ATConnect sharedConnection].apiKey isEqualToString:@"ApptentiveApiKey"]) {
+	if ([[Apptentive sharedConnection].apiKey isEqualToString:@"ApptentiveApiKey"]) {
 		NSLog(@"---");
 		NSLog(@"---");
 		NSLog(@"Please set Apptentive API Key! This demo app will not work properly until you set your API key in AppDelegate.m");
@@ -69,7 +69,7 @@
 		NSLog(@"---");
 	}
 
-	if ([[ATConnect sharedConnection].appID isEqualToString:@"ExampleAppID"]) {
+	if ([[Apptentive sharedConnection].appID isEqualToString:@"ExampleAppID"]) {
 		NSLog(@"---");
 		NSLog(@"---");
 		NSLog(@"Please Set App ID! This demo app won't be able to show your app in the app store until you set your App ID in AppDelegate.m");
@@ -96,7 +96,7 @@
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 	// Enable Push Notifications for New Messages
-	[[ATConnect sharedConnection] setPushNotificationIntegration:ATPushProviderApptentive withDeviceToken:deviceToken];
+	[[Apptentive sharedConnection] setPushNotificationIntegration:ATPushProviderApptentive withDeviceToken:deviceToken];
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
@@ -106,7 +106,7 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
 	UIViewController *viewController = self.window.rootViewController;
 
-	BOOL apptentiveNotification = [[ATConnect sharedConnection] didReceiveRemoteNotification:userInfo fromViewController:viewController];
+	BOOL apptentiveNotification = [[Apptentive sharedConnection] didReceiveRemoteNotification:userInfo fromViewController:viewController];
 
 	if (!apptentiveNotification) {
 		// If the notification did not come from Apptentive, you should handle it yourself.
@@ -116,7 +116,7 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
 	UIViewController *viewController = self.window.rootViewController;
 
-	BOOL apptentiveNotification = [[ATConnect sharedConnection] didReceiveRemoteNotification:userInfo fromViewController:viewController fetchCompletionHandler:completionHandler];
+	BOOL apptentiveNotification = [[Apptentive sharedConnection] didReceiveRemoteNotification:userInfo fromViewController:viewController fetchCompletionHandler:completionHandler];
 
 	if (apptentiveNotification) {
 		// If the notification came from Apptentive, the `completionHandler` block will be called automatically.

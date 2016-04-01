@@ -15,6 +15,10 @@
 
 @implementation ApptentiveInteractionInvocation
 
++ (void)load {
+	[NSKeyedUnarchiver setClass:self forClassName:@"ATInteractionInvocation"];
+}
+
 + (ApptentiveInteractionInvocation *)invocationWithJSONDictionary:(NSDictionary *)jsonDictionary {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 	invocation.interactionID = jsonDictionary[@"interaction_id"];

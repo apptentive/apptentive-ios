@@ -25,6 +25,10 @@
 
 @implementation ApptentiveSurveyResponseTask
 
++ (void)load {
+	[NSKeyedUnarchiver setClass:self forClassName:@"ATSurveyResponseTask"];
+}
+
 - (id)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
 		int version = [coder decodeIntForKey:@"version"];

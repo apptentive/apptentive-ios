@@ -34,7 +34,7 @@ static ApptentiveTaskQueue *sharedTaskQueue = nil;
 	NSMutableArray *tasks;
 }
 
-+ (void)initialize {
++ (void)load {
 	[NSKeyedUnarchiver setClass:self forClassName:@"ATTaskQueue"];
 }
 

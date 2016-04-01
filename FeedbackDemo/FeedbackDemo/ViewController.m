@@ -7,11 +7,11 @@
 //
 
 #import "ViewController.h"
-#import "ATConnect.h"
+#import "Apptentive.h"
 
-// The "ATConnect_Private" header is used only for testing purposes in the demo app.
+// The "Apptentive_Private" header is used only for testing purposes in the demo app.
 // Please do not use it in any live apps in the App Store.
-#import "ATConnect+Debugging.h"
+#import "Apptentive+Debugging.h"
 
 typedef NS_ENUM(NSInteger, TableViewSection) {
 	kMessageCenterSection,
@@ -38,7 +38,7 @@ typedef NS_ENUM(NSInteger, TableViewSection) {
 
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unreadMessageCountChanged:) name:ATMessageCenterUnreadCountChangedNotification object:nil];
 
-	self.interactions = [ATConnect sharedConnection].engagementInteractions;
+	self.interactions = [Apptentive sharedConnection].engagementInteractions;
 
 #warning Add your own events below to trigger them from this app.
 	self.events = @[@"event_1", @"event_2", @"event_3", @"event_4", @"event_5"];
@@ -57,7 +57,7 @@ typedef NS_ENUM(NSInteger, TableViewSection) {
 #pragma mark - Actions
 
 - (IBAction)refreshInteractions:(id)sender {
-	self.interactions = [ATConnect sharedConnection].engagementInteractions;
+	self.interactions = [Apptentive sharedConnection].engagementInteractions;
 
 	[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kInteractionSection] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
@@ -71,10 +71,10 @@ typedef NS_ENUM(NSInteger, TableViewSection) {
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	if (buttonIndex != alertView.cancelButtonIndex) {
 		// Example of how to attach sales data to an event.
-		NSDictionary *commerceItem = [ATConnect extendedDataCommerceItemWithItemID:@"SKU_123" name:@"unlock_everything" category:@"in_app_purchase" price:@(4.99) quantity:@(1) currency:@"USD"];
-		NSDictionary *commerce = [ATConnect extendedDataCommerceWithTransactionID:@"123" affiliation:@"app_store" revenue:@(4.99) shipping:@(0) tax:@(1) currency:@"USD" commerceItems:@[commerceItem]];
-		NSArray *extendedData = @[[ATConnect extendedDataDate:[NSDate date]], [ATConnect extendedDataLocationForLatitude:14 longitude:10], commerce];
-		[[ATConnect sharedConnection] engage:@"event_with_data" withCustomData:@{ @"customDataKey": @"customDataValue" } withExtendedData:extendedData fromViewController:self];
+		NSDictionary *commerceItem = [Apptentive extendedDataCommerceItemWithItemID:@"SKU_123" name:@"unlock_everything" category:@"in_app_purchase" price:@(4.99) quantity:@(1) currency:@"USD"];
+		NSDictionary *commerce = [Apptentive extendedDataCommerceWithTransactionID:@"123" affiliation:@"app_store" revenue:@(4.99) shipping:@(0) tax:@(1) currency:@"USD" commerceItems:@[commerceItem]];
+		NSArray *extendedData = @[[Apptentive extendedDataDate:[NSDate date]], [Apptentive extendedDataLocationForLatitude:14 longitude:10], commerce];
+		[[Apptentive sharedConnection] engage:@"event_with_data" withCustomData:@{ @"customDataKey": @"customDataValue" } withExtendedData:extendedData fromViewController:self];
 	}
 }
 
@@ -106,7 +106,7 @@ typedef NS_ENUM(NSInteger, TableViewSection) {
 	switch (indexPath.section) {
 		case kMessageCenterSection:
 			cell = [tableView dequeueReusableCellWithIdentifier:@"MessageCenter" forIndexPath:indexPath];
-			cell.accessoryView = [[ATConnect sharedConnection] unreadMessageCountAccessoryView:YES];
+			cell.accessoryView = [[Apptentive sharedConnection] unreadMessageCountAccessoryView:YES];
 			break;
 
 		case kEventSection:
@@ -119,8 +119,8 @@ typedef NS_ENUM(NSInteger, TableViewSection) {
 			cell = [tableView dequeueReusableCellWithIdentifier:@"Interaction" forIndexPath:indexPath];
 
 			if (self.interactions.count > 0) {
-				cell.textLabel.text = [[ATConnect sharedConnection] engagementInteractionNameAtIndex:indexPath.row];
-				cell.detailTextLabel.text = [[ATConnect sharedConnection] engagementInteractionTypeAtIndex:indexPath.row];
+				cell.textLabel.text = [[Apptentive sharedConnection] engagementInteractionNameAtIndex:indexPath.row];
+				cell.detailTextLabel.text = [[Apptentive sharedConnection] engagementInteractionTypeAtIndex:indexPath.row];
 			} else {
 				cell.textLabel.text = @"Refresh Interactions…";
 				cell.detailTextLabel.text = nil;
@@ -150,7 +150,7 @@ typedef NS_ENUM(NSInteger, TableViewSection) {
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
 	if (section == kSectionCount - 1) {
-		return [NSString stringWithFormat:@"ApptentiveConnect v%@", kATConnectVersionString];
+		return [NSString stringWithFormat:@"ApptentiveConnect v%@", kApptentiveVersionString];
 	} else {
 		return nil;
 	}
@@ -162,16 +162,16 @@ typedef NS_ENUM(NSInteger, TableViewSection) {
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	switch (indexPath.section) {
 		case kMessageCenterSection:
-			[[ATConnect sharedConnection] presentMessageCenterFromViewController:self];
+			[[Apptentive sharedConnection] presentMessageCenterFromViewController:self];
 			break;
 
 		case kEventSection:
-			[[ATConnect sharedConnection] engage:self.events[indexPath.row] fromViewController:self];
+			[[Apptentive sharedConnection] engage:self.events[indexPath.row] fromViewController:self];
 			break;
 
 		case kInteractionSection:
 			if (self.interactions.count > 0) {
-				[[ATConnect sharedConnection] presentInteractionAtIndex:indexPath.row fromViewController:self];
+				[[Apptentive sharedConnection] presentInteractionAtIndex:indexPath.row fromViewController:self];
 			} else {
 				[self refreshInteractions:tableView];
 			}

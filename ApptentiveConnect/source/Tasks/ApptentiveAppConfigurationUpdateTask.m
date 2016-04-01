@@ -15,7 +15,7 @@
 	ApptentiveAppConfigurationUpdater *configurationUpdater;
 }
 
-+ (void)initialize {
++ (void)load {
 	[NSKeyedUnarchiver setClass:self forClassName:@"ATAppConfigurationUpdateTask"];
 }
 

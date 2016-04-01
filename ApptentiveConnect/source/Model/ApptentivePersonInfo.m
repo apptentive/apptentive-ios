@@ -20,7 +20,7 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 
 @implementation ApptentivePersonInfo
 
-+ (void)initialize {
++ (void)load {
 	[NSKeyedUnarchiver setClass:self forClassName:@"ATPersonInfo"];
 }
 

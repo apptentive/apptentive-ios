@@ -27,7 +27,7 @@
 
 @implementation ApptentiveLegacyRecord
 
-+ (void)initialize {
++ (void)load {
 	[NSKeyedUnarchiver setClass:self forClassName:@"ATLegacyRecord"];
 }
 

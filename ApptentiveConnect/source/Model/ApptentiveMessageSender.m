@@ -22,7 +22,7 @@
 @dynamic receivedMessages;
 
 + (instancetype)newInstanceWithID:(NSString *)apptentiveID {
-	ApptentiveMessageSender *result = (ApptentiveMessageSender *)[ApptentiveData newEntityNamed:@"ApptentiveMessageSender"];
+	ApptentiveMessageSender *result = (ApptentiveMessageSender *)[ApptentiveData newEntityNamed:@"ATMessageSender"];
 	result.apptentiveID = apptentiveID;
 
 	return result;
@@ -33,7 +33,7 @@
 
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(apptentiveID == %@)", apptentiveID];
-		NSArray *results = [ApptentiveData findEntityNamed:@"ApptentiveMessageSender" withPredicate:fetchPredicate];
+		NSArray *results = [ApptentiveData findEntityNamed:@"ATMessageSender" withPredicate:fetchPredicate];
 		if (results && [results count]) {
 			result = [results objectAtIndex:0];
 		}

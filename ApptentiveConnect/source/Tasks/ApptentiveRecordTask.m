@@ -25,7 +25,7 @@
 
 @implementation ApptentiveRecordTask
 
-+ (void)initialize {
++ (void)load {
 	[NSKeyedUnarchiver setClass:self forClassName:@"ATRecordTask"];
 }
 

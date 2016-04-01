@@ -30,7 +30,7 @@
 }
 
 + (instancetype)newInstanceWithLabel:(NSString *)label {
-	ApptentiveEvent *result = (ApptentiveEvent *)[ApptentiveData newEntityNamed:@"ApptentiveEvent"];
+	ApptentiveEvent *result = (ApptentiveEvent *)[ApptentiveData newEntityNamed:@"ATEvent"];
 	result.label = label;
 	[result setup];
 	return result;

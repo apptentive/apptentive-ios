@@ -13,7 +13,7 @@
 
 @implementation ApptentiveTask
 
-+ (void)initialize {
++ (void)load {
 	[NSKeyedUnarchiver setClass:self forClassName:@"ATTask"];
 }
 

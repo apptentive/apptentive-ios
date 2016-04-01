@@ -18,7 +18,7 @@
 
 @implementation ApptentiveConversation
 
-+ (void)initialize {
++ (void)load {
 	[NSKeyedUnarchiver setClass:self forClassName:@"ATConversation"];
 }
 

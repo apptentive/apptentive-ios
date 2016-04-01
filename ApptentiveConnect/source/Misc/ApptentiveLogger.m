@@ -30,7 +30,7 @@
 
 static dispatch_queue_t loggingQueue;
 
-+ (void)initialize {
++ (void)load {
 	ApptentiveLogger *logger = [ApptentiveLogger sharedLogger];
 	[logger startNewLog];
 }
